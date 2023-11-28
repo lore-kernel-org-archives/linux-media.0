@@ -1,223 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D70C4F200;
-	Tue, 28 Nov 2023 10:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UviENr0K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49ACC433CB;
-	Tue, 28 Nov 2023 10:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701167190;
-	bh=3B4cKJeyaHEA4qnMRAdXt6vbTh9xnPoZLjBoO+s6BVk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=UviENr0KU7qEqL8RRpEUOEGTsRHP+8x/a97x4AOGceNrPhzwqUozmS/ShjhNz+z5N
-	 Iklo9xyQxHGH51jVntqdKtGBdHs4jv1JKidhc9aYfssSpDHL9ykrpO7psGNMU85xWa
-	 VPBuFXhmXo+lD7C31YoUmuqWe+RSrjLTOM/UgrYEfGVt0pHPCbSD8qpldFJ/51YnMt
-	 2z3lZRPkApBp0mXsatxoB8WGTxmahn9GFsKMjS6eSW2nMgySZG0zzcVA8ZCQ7T7LJf
-	 /mGln/pjKoQBC8bqLFRKs6WGBQxtJ22+ufy9UtAJ9BVrHY2wjFbBhEpfy/A+nLfNTB
-	 iE6nbGPqrU22A==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 28 Nov 2023 11:24:56 +0100
-Subject: [PATCH v4 45/45] drm/sun4i: hdmi: Switch to HDMI connector
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fPSIAFQe"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6580F35AC;
+	Tue, 28 Nov 2023 02:26:45 -0800 (PST)
+Received: from [100.122.216.38] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: benjamin.gaignard)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D0EF6607295;
+	Tue, 28 Nov 2023 10:26:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1701167204;
+	bh=wnu068ECaNnR7zM2tCS6WGVU5g0Vyny4l5k0cqi5/Gk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fPSIAFQe+6bLt14IZnT7Oq4e2qP9zCUUu1mEtQ5CevwcHsIFRBtsaLBWGMyrc8y90
+	 evscUsbWNpKSG9kHvDOqeRl9iZUjmwzUgr9iKXjMG2EX0YcjrxnDZouGMEehWJe0Aa
+	 61o7FxguyZkUx7b51F3pHeLokSiqjzszdNZrin3Abt2joXa4YXnuMFA5GJT0NKkNqH
+	 IZ8T6bEuS6RlUSmFer/Jqkr6Pnv4f66UiMYWNj5Q9r+T3pn4abktqtXVXAgtmb798l
+	 5VbFKYCLbmeyOioDfpKiiYgsKC8QrpP75gwPYKYjqts7Eu39fSJQAtwESJQtClZpxT
+	 riuckDGEZN1qg==
+Message-ID: <995eb6c2-cc7f-4217-bc37-4ab1a32f36ee@collabora.com>
+Date: Tue, 28 Nov 2023 11:26:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-kms-hdmi-connector-state-v4-45-c7602158306e@kernel.org>
-References: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
-In-Reply-To: <20231128-kms-hdmi-connector-state-v4-0-c7602158306e@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
- Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org, 
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
- Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6185; i=mripard@kernel.org;
- h=from:subject:message-id; bh=3B4cKJeyaHEA4qnMRAdXt6vbTh9xnPoZLjBoO+s6BVk=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmp+y8vi7i530nsylKvjZdE7N2CNy/Sb58vsKApymPN+
- 2v9cRWcHaUsDGJcDLJiiiwxwuZL4k7Net3JxjcPZg4rE8gQBi5OAZhI3iKG/0nu7SqTZYRYr/Rv
- W2X0XvrR9aPu2Svk3k089GuJlwSj8AaGf9oMH5VW3zuXELvmwYQls4IyF3J6X9x2Tqjva0HlTC6
- DNlYA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/55] media: imx8-isi: Stop abusing of min_buffers_needed
+ field
+Content-Language: en-US
+To: Tomasz Figa <tfiga@chromium.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, hverkuil@xs4all.nl,
+ mchehab@kernel.org, m.szyprowski@samsung.com, matt.ranostay@konsulko.com,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-staging@lists.linux.dev, kernel@collabora.com,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
+References: <20231127165454.166373-1-benjamin.gaignard@collabora.com>
+ <20231127165454.166373-8-benjamin.gaignard@collabora.com>
+ <20231127170700.GC31314@pendragon.ideasonboard.com>
+ <6fa1ec09-3e30-475e-9718-29d23586753e@collabora.com>
+ <CAAFQd5DCVTLpPoKSp_OA6fe_Hqt-oV7=AsCZWSmkJORvLSgUiw@mail.gmail.com>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <CAAFQd5DCVTLpPoKSp_OA6fe_Hqt-oV7=AsCZWSmkJORvLSgUiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-The new HDMI connector infrastructure allows to remove some boilerplate,
-especially to generate infoframes. Let's switch to it.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c | 80 ++++++++++++++++++++++------------
- 1 file changed, 51 insertions(+), 29 deletions(-)
+Le 28/11/2023 à 10:35, Tomasz Figa a écrit :
+> On Tue, Nov 28, 2023 at 6:31 PM Benjamin Gaignard
+> <benjamin.gaignard@collabora.com> wrote:
+>>
+>> Le 27/11/2023 à 18:07, Laurent Pinchart a écrit :
+>>> Hi Benjamin,
+>>>
+>>> Thank you for the patch.
+>>>
+>>> On Mon, Nov 27, 2023 at 05:54:06PM +0100, Benjamin Gaignard wrote:
+>>>> 'min_buffers_needed' is suppose to be used to indicate the number
+>>>> of buffers needed by DMA engine to start streaming.
+>>>> imx8-isi driver doesn't use DMA engine and just want to specify
+>>> What do you mean, "doesn't use DMA engine" ? The ISI surely has DMA
+>>> engines :-)
+>> I have done assumption on drivers given if they use or dma_* functions.
+> I suspect the use of vb2_dma_sg_plane_desc() and
+> vb2_dma_contig_plane_dma_addr() may be more correlated to whether
+> there is a DMA involved or not. Usually V4L2 drivers don't really have
+> to deal with the DMA API explicitly, because the vb2 framework handles
+> most of the work.
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-index b7cf369b1906..8a9106a39f23 100644
---- a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-@@ -36,30 +36,24 @@
- #define drm_connector_to_sun4i_hdmi(c)		\
- 	container_of_const(c, struct sun4i_hdmi, connector)
- 
--static int sun4i_hdmi_setup_avi_infoframes(struct sun4i_hdmi *hdmi,
--					   struct drm_display_mode *mode)
-+static int sun4i_hdmi_write_infoframe(struct drm_connector *connector,
-+				      enum hdmi_infoframe_type type,
-+				      const u8 *buffer, size_t len)
- {
--	struct hdmi_avi_infoframe frame;
--	u8 buffer[17];
--	int i, ret;
-+	struct sun4i_hdmi *hdmi = drm_connector_to_sun4i_hdmi(connector);
-+	int i;
- 
--	ret = drm_hdmi_avi_infoframe_from_display_mode(&frame,
--						       &hdmi->connector, mode);
--	if (ret < 0) {
--		DRM_ERROR("Failed to get infoframes from mode\n");
--		return ret;
-+	if (type != HDMI_INFOFRAME_TYPE_AVI) {
-+		drm_err(connector->dev,
-+			"Unsupported infoframe type: %u\n", type);
-+		return 0;
- 	}
- 
--	ret = hdmi_avi_infoframe_pack(&frame, buffer, sizeof(buffer));
--	if (ret < 0) {
--		DRM_ERROR("Failed to pack infoframes\n");
--		return ret;
--	}
--
--	for (i = 0; i < sizeof(buffer); i++)
-+	for (i = 0; i < len; i++)
- 		writeb(buffer[i], hdmi->base + SUN4I_HDMI_AVI_INFOFRAME_REG(i));
- 
- 	return 0;
-+
- }
- 
- static void sun4i_hdmi_disable(struct drm_encoder *encoder,
-@@ -82,14 +76,18 @@ static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- {
- 	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
- 	struct sun4i_hdmi *hdmi = drm_encoder_to_sun4i_hdmi(encoder);
--	struct drm_display_info *display = &hdmi->connector.display_info;
-+	struct drm_connector *connector = &hdmi->connector;
-+	struct drm_display_info *display = &connector->display_info;
-+	struct drm_connector_state *conn_state =
-+		drm_atomic_get_new_connector_state(state, connector);
-+	unsigned long long tmds_rate = conn_state->hdmi.tmds_char_rate;
- 	unsigned int x, y;
- 	u32 val = 0;
- 
- 	DRM_DEBUG_DRIVER("Enabling the HDMI Output\n");
- 
--	clk_set_rate(hdmi->mod_clk, mode->crtc_clock * 1000);
--	clk_set_rate(hdmi->tmds_clk, mode->crtc_clock * 1000);
-+	clk_set_rate(hdmi->mod_clk, tmds_rate);
-+	clk_set_rate(hdmi->tmds_clk, tmds_rate);
- 
- 	/* Set input sync enable */
- 	writel(SUN4I_HDMI_UNKNOWN_INPUT_SYNC,
-@@ -142,7 +140,8 @@ static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- 
- 	clk_prepare_enable(hdmi->tmds_clk);
- 
--	sun4i_hdmi_setup_avi_infoframes(hdmi, mode);
-+	drm_atomic_helper_connector_hdmi_update_infoframes(connector, state);
-+
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(0, SUN4I_HDMI_PKT_AVI);
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(1, SUN4I_HDMI_PKT_END);
- 	writel(val, hdmi->base + SUN4I_HDMI_PKT_CTRL_REG(0));
-@@ -195,7 +194,7 @@ static int sun4i_hdmi_connector_atomic_check(struct drm_connector *connector,
- 	enum drm_mode_status status;
- 
- 	status = sun4i_hdmi_connector_clock_valid(connector, mode,
--						  mode->clock * 1000);
-+						  conn_state->hdmi.tmds_char_rate);
- 	if (status != MODE_OK)
- 		return -EINVAL;
- 
-@@ -206,8 +205,11 @@ static enum drm_mode_status
- sun4i_hdmi_connector_mode_valid(struct drm_connector *connector,
- 				struct drm_display_mode *mode)
- {
--	return sun4i_hdmi_connector_clock_valid(connector, mode,
--						mode->clock * 1000);
-+	unsigned long long rate =
-+		drm_connector_hdmi_compute_mode_clock(mode, 8,
-+						      HDMI_COLORSPACE_RGB);
-+
-+	return sun4i_hdmi_connector_clock_valid(connector, mode, rate);
- }
- 
- static int sun4i_hdmi_get_modes(struct drm_connector *connector)
-@@ -253,6 +255,11 @@ static struct i2c_adapter *sun4i_hdmi_get_ddc(struct device *dev)
- 	return ddc;
- }
- 
-+static const struct drm_connector_hdmi_funcs sun4i_hdmi_hdmi_connector_funcs = {
-+	.tmds_char_rate_valid	= sun4i_hdmi_connector_clock_valid,
-+	.write_infoframe	= sun4i_hdmi_write_infoframe,
-+};
-+
- static const struct drm_connector_helper_funcs sun4i_hdmi_connector_helper_funcs = {
- 	.atomic_check	= sun4i_hdmi_connector_atomic_check,
- 	.mode_valid	= sun4i_hdmi_connector_mode_valid,
-@@ -274,11 +281,17 @@ sun4i_hdmi_connector_detect(struct drm_connector *connector, bool force)
- 	return connector_status_connected;
- }
- 
-+static void sun4i_hdmi_connector_reset(struct drm_connector *connector)
-+{
-+	drm_atomic_helper_connector_reset(connector);
-+	__drm_atomic_helper_connector_hdmi_reset(connector, connector->state);
-+}
-+
- static const struct drm_connector_funcs sun4i_hdmi_connector_funcs = {
- 	.detect			= sun4i_hdmi_connector_detect,
- 	.fill_modes		= drm_helper_probe_single_connector_modes,
- 	.destroy		= drm_connector_cleanup,
--	.reset			= drm_atomic_helper_connector_reset,
-+	.reset			= sun4i_hdmi_connector_reset,
- 	.atomic_duplicate_state	= drm_atomic_helper_connector_duplicate_state,
- 	.atomic_destroy_state	= drm_atomic_helper_connector_destroy_state,
- };
-@@ -637,10 +650,19 @@ static int sun4i_hdmi_bind(struct device *dev, struct device *master,
- 
- 	drm_connector_helper_add(&hdmi->connector,
- 				 &sun4i_hdmi_connector_helper_funcs);
--	ret = drm_connector_init_with_ddc(drm, &hdmi->connector,
--					  &sun4i_hdmi_connector_funcs,
--					  DRM_MODE_CONNECTOR_HDMIA,
--					  hdmi->ddc_i2c);
-+	ret = drmm_connector_hdmi_init(drm, &hdmi->connector,
-+				       /*
-+					* NOTE: Those are likely to be
-+					* wrong, but I couldn't find the
-+					* actual ones in the BSP.
-+					*/
-+				       "AW", "HDMI",
-+				       &sun4i_hdmi_connector_funcs,
-+				       &sun4i_hdmi_hdmi_connector_funcs,
-+				       DRM_MODE_CONNECTOR_HDMIA,
-+				       hdmi->ddc_i2c,
-+				       BIT(HDMI_COLORSPACE_RGB),
-+				       8);
- 	if (ret) {
- 		dev_err(dev,
- 			"Couldn't initialise the HDMI connector\n");
+Unfortunately isn't not true either, for example verisilicon driver use
+these function but doesn't need DMA engine.
+I haven't found yet a 100% criteria to decide if driver use or not DMA engine
+so I plan to fix case by case given maintainers remarks.
 
--- 
-2.41.0
+Regards,
+Benjamin
 
+>
+> Best regards,
+> Tomasz
+>
+>> I have considers that all PCI drivers are using DMA engine and
+>> I don't know the design for each drivers so I hope to get this information
+>> from maintainers and fix that in v2.
+>> If imx8-isi driver needs a minimum number of buffers before start streaming
+>> I will do a v2 and use min_dma_buffers_needed instead.
+>>
+>> Regards,
+>> Benjamin
+>>
+>>>> the minimum number of buffers to allocate when calling VIDIOC_REQBUFS.
+>>>> That 'min_reqbufs_allocation' field purpose so use it.
+>>>>
+>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>> CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>>>> CC: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>>> CC: Shawn Guo <shawnguo@kernel.org>
+>>>> CC: Sascha Hauer <s.hauer@pengutronix.de>
+>>>> CC: Pengutronix Kernel Team <kernel@pengutronix.de>
+>>>> CC: Fabio Estevam <festevam@gmail.com>
+>>>> CC: NXP Linux Team <linux-imx@nxp.com>
+>>>> ---
+>>>>    drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
+>>>> index 49bca2b01cc6..81673ff9084b 100644
+>>>> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
+>>>> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-video.c
+>>>> @@ -1453,7 +1453,7 @@ int mxc_isi_video_register(struct mxc_isi_pipe *pipe,
+>>>>       q->mem_ops = &vb2_dma_contig_memops;
+>>>>       q->buf_struct_size = sizeof(struct mxc_isi_buffer);
+>>>>       q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+>>>> -    q->min_buffers_needed = 2;
+>>>> +    q->min_reqbufs_allocation = 2;
+>>>>       q->lock = &video->lock;
+>>>>       q->dev = pipe->isi->dev;
+>>>>
