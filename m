@@ -1,27 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 945DA1700;
-	Thu, 30 Nov 2023 09:32:41 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="6.04,239,1695654000"; 
-   d="scan'208";a="188746418"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Dec 2023 02:32:40 +0900
-Received: from localhost.localdomain (unknown [10.226.92.210])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id C734A401786F;
-	Fri,  1 Dec 2023 02:32:37 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	linux-media@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] media: v4l: async: Fix double pointer free on v4l2_async_unregister_subdev()
-Date: Thu, 30 Nov 2023 17:32:32 +0000
-Message-Id: <20231130173232.130731-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZjEyUVgs"
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABC410D9;
+	Thu, 30 Nov 2023 09:46:52 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EB2AAC0002;
+	Thu, 30 Nov 2023 17:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701366411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DuOimxQ6DUKmaHvnMFH38TfLPIgQNK2nzmxig1JzDG4=;
+	b=ZjEyUVgsPbIg6mMSGhjkkooxc0RDRlw8TFyZL9MneOJAmX3f2EIfNMhUD40mVX/kJ5jonW
+	1yE6ZTt0pmO3FbPXnGIMjG6U8/deNVp2qw1ri4tJ+urJKFLfhTliZAUgEsmH22MMglhNj+
+	5klo43pwN4GNA2c+iXsSnXt1HlFm91gDgcZeifgbLWYgNXqA80kg0DwVNMXRxF0HYzJeF/
+	mDjAB6y7sssKLKr5LUTJKFGsyOae3rKgSicQTWygW0q5oPWOILfaSgek0G+uGtHx6cAWkR
+	KQfQy+CA9bfS32mhPvwLz9WH3DAlAVbrZIoUXMYiVjJDzV9yq2nGYoa+qYQAXw==
+From: Mehdi Djait <mehdi.djait@bootlin.com>
+To: mchehab@kernel.org,
+	heiko@sntech.de,
+	hverkuil-cisco@xs4all.nl,
+	laurent.pinchart@ideasonboard.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	robh+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	thomas.petazzoni@bootlin.com,
+	alexandre.belloni@bootlin.com,
+	maxime.chevallier@bootlin.com,
+	paul.kocialkowski@bootlin.com,
+	Mehdi Djait <mehdi.djait@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH V10 1/3] dt-bindings: vendor-prefixes: Add techwell vendor prefix
+Date: Thu, 30 Nov 2023 18:46:45 +0100
+Message-ID: <158576c17cf260d2509c5ef5475f84b905bfac77.1701366233.git.mehdi.djait@bootlin.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1701366233.git.mehdi.djait@bootlin.com>
+References: <cover.1701366233.git.mehdi.djait@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -29,38 +47,29 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-GND-Sasl: mehdi.djait@bootlin.com
 
-The v4l2_async_unbind_subdev_one() deallocates the pointer
-&asc->asc_subdev_entry. The same pointer is again used to
-deallocate in list_del() leading to the below kernel crash.
+Add prefix for Techwell, Inc.
 
-Unable to handle kernel paging request at virtual address dead000000000108
-v4l2_async_unregister_subdev+0xf8/0x164
-rzg2l_csi2_remove+0x30/0x5c
-platform_remove+0x28/0x64
-device_remove+0x48/0x74
-device_release_driver_internal+0x1d8/0x234
-device_driver_detach+0x14/0x1c
-unbind_store+0xac/0xb0
-
-Fixes: 28a1295795d8 ("media: v4l: async: Allow multiple connections between entities")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
 ---
- drivers/media/v4l2-core/v4l2-async.c | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
-index 091e8cf4114b..8cfd593d293d 100644
---- a/drivers/media/v4l2-core/v4l2-async.c
-+++ b/drivers/media/v4l2-core/v4l2-async.c
-@@ -880,7 +880,6 @@ void v4l2_async_unregister_subdev(struct v4l2_subdev *sd)
- 				  &asc->notifier->waiting_list);
- 
- 			v4l2_async_unbind_subdev_one(asc->notifier, asc);
--			list_del(&asc->asc_subdev_entry);
- 		}
- 	}
- 
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 309b94c328c8..8cad34d81028 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1381,6 +1381,8 @@ patternProperties:
+     description: Technologic Systems
+   "^techstar,.*":
+     description: Shenzhen Techstar Electronics Co., Ltd.
++  "^techwell,.*":
++    description: Techwell, Inc.
+   "^teejet,.*":
+     description: TeeJet
+   "^teltonika,.*":
 -- 
-2.25.1
+2.41.0
 
