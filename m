@@ -1,42 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXIhISkY"
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E77D67;
-	Fri,  1 Dec 2023 04:39:42 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51f64817809so405482a12.1;
-        Fri, 01 Dec 2023 04:39:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="geK5fDe0"
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF8F1B4;
+	Fri,  1 Dec 2023 04:39:46 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cde4abdc06so385060b3a.0;
+        Fri, 01 Dec 2023 04:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701434382; x=1702039182; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vqdz1YfBNjc+eVrlN9o+0H4c20wVH3whTNBfac3uifs=;
-        b=cXIhISkY+1So0AJN2P9hRaf6kWbda+n3bNhZ2fYsR0Sr0B2aug2MmeNE/LwJhzbH8T
-         fSi0O8BKukFC8nNZhwqlRaVFfDg9WqZ4Rs/KY8ziGP7pSsBMgV4S02m/j7xVgjkE7XU2
-         OsOCXRAJrMHVerCtRHcfFuBFp7yKjoPPBqPHPtYUHIt2OcF7VHegUPE/mi4HSF67Dj45
-         j4MHZ9T85Fg2C19H2D3m6Vk6DD41mb93Qpa4eVRtvcJwyaajbjX3T9xTE8jL1W1qyfjS
-         X1mCjpy3DIPRKDY7mykyEjhY7cjBUGAOYTF5yTrJwZvwlRVPwrMER4eTKXlUA82uCTkg
-         RXJA==
+        d=gmail.com; s=20230601; t=1701434386; x=1702039186; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N43hwqTZKHanzUxHxh3RdBei5vKqq6OkL7nPoaO7H48=;
+        b=geK5fDe0JGyiWGvI7ueHvz1p8gazw7hOYcXTXAwh7+GWz2jn6eiJmHHpICV0/NMjW0
+         tGjHsVUq9dFRsOi375W5ShTmJQxRIG6BxssB3ZLMeBvtKFq+S33zaaFAMOM9tH4dEwKZ
+         uZuScC0gE3xBg6YvJIbn8L+Oj2NUocyT1OM+DooaMaSFYvAAgwRBYX4k02BUqh/O6Pv3
+         Bx4WKBSsrY3FPqGzK4c+3N2WAUrPrwjtcikJCEzRquTGlSryVmfddnjzPblNd8+G8z0L
+         McWC+VLPt2TIiOdSwZG0oU/223g/O0BH6LmFvCW03Yx5W+KL+/JNu7N0q6GS/0MOJIIy
+         Cpog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701434382; x=1702039182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vqdz1YfBNjc+eVrlN9o+0H4c20wVH3whTNBfac3uifs=;
-        b=ONmfh+oOe8Uun6Qi5Ec3kfqdbkpKvp4z4NMAfX9gDMKwUnhtEEV7FkKyQGUq5IWWze
-         PiPJvK0mr1mMCCn+1e/vM07kW4uGCkUYb2aVQXm1MAdXsT05oAIZzBKayXIkojzj7SxL
-         sfkpAYB1yNH6JXE+tAN0YGEo5N9fIrjjQq3puRjg94nZghMU80ZV4HodVdPHsBP4URUo
-         YT4unbNoZf4oN6yMsW0LQkud5357C+/yF+xq8sQ076HkmzYDlQu+Tsb1vAA/BM59OpoA
-         IxKuAxKR9/KDn1IB4sZ9jIOsAehjXYSCgQLc4Khhtf7oz6iXY2WjEKZuQr4xzi2wUBmD
-         arDQ==
-X-Gm-Message-State: AOJu0YzIFmhUjgyffSHGipz1VrTEuj6UvjU4BEIXxRPOidlWia4+k+k/
-	A+g74W1vtTPQYw9kV5U4Eg0=
-X-Google-Smtp-Source: AGHT+IEZ7W9IRYRll9h9uWqh5SBYAX/pBsQHL07rx8rNJF9nlyKVBicXRS2qfvHOD5ya0KhLo3JM0g==
-X-Received: by 2002:a05:6a21:187:b0:18b:feaf:36da with SMTP id le7-20020a056a21018700b0018bfeaf36damr6383766pzb.2.1701434381651;
-        Fri, 01 Dec 2023 04:39:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701434386; x=1702039186;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N43hwqTZKHanzUxHxh3RdBei5vKqq6OkL7nPoaO7H48=;
+        b=Jb8QRBCzUxR6+It8YP3fjtSTr2Yj1Qzzol9bU/tpxodhh8kg0gyxrfDwdatuo+i/0f
+         J98FgiQdZbjxVDxqObI8o6WjShnVI8nbaRQUfxHSfH5YJdGD+dPFRFKr2UeApaN+NiCU
+         Uh2dxE/P9mOSZFrsuHSITwaYhr4YuyF748TAdJJLQ3y1I9ce0k/ElTsidMl4IZ3Sca36
+         5+LP2TXbl2AWkr0W6bRp2VbhxJTAycHU1Pb6/TPXovgUR/YDYket5eRgaFvPdtewR/uG
+         3vIThlCpO89PphaOjtlbkmrkbtePZpd2YeHyOA4Cy4Y8iqhtOwIjGNK7sKYFLy14U8mU
+         zqaQ==
+X-Gm-Message-State: AOJu0Yxl69/d8DnyND3IjLdoQpQnyr9YWHep7GHQrKzNzZM08N5QXvrn
+	fR8+Q7HdAMSBRf/51cqecgA=
+X-Google-Smtp-Source: AGHT+IGWvtQghDY994aEJ+WCNsUHRzw1reHW9PX7alz7KaIjeVJh44ThlehqbM8iHeeP0jUCotyRaw==
+X-Received: by 2002:a05:6a00:3904:b0:68e:2fd4:288a with SMTP id fh4-20020a056a00390400b0068e2fd4288amr29463502pfb.3.1701434385686;
+        Fri, 01 Dec 2023 04:39:45 -0800 (PST)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:12b3:b1c7:121e:c465])
-        by smtp.gmail.com with ESMTPSA id gx21-20020a056a001e1500b006930db1e6cfsm2896155pfb.62.2023.12.01.04.39.38
+        by smtp.gmail.com with ESMTPSA id gx21-20020a056a001e1500b006930db1e6cfsm2896155pfb.62.2023.12.01.04.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 04:39:41 -0800 (PST)
+        Fri, 01 Dec 2023 04:39:45 -0800 (PST)
 From: Fabio Estevam <festevam@gmail.com>
 To: sakari.ailus@linux.intel.com
 Cc: rfoss@kernel.org,
@@ -48,11 +49,15 @@ Cc: rfoss@kernel.org,
 	devicetree@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	xji@analogixsemi.com,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v2 1/3] dt-bindings: drm/bridge: anx7625: Remove incorrect bus-type
-Date: Fri,  1 Dec 2023 09:39:33 -0300
-Message-Id: <20231201123935.1057929-1-festevam@gmail.com>
+	Fabio Estevam <festevam@denx.de>,
+	Rob Herring <robh@kernel.org>,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v2 2/3] media: dt-bindings: media: Introduce MEDIA_BUS_TYPE_DPI
+Date: Fri,  1 Dec 2023 09:39:34 -0300
+Message-Id: <20231201123935.1057929-2-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231201123935.1057929-1-festevam@gmail.com>
+References: <20231201123935.1057929-1-festevam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -63,30 +68,33 @@ Content-Transfer-Encoding: 8bit
 
 From: Fabio Estevam <festevam@denx.de>
 
-bus-type = <7> is incorrect as this is a DSI endpoint, not a DPI
-endpoint.
+Commit 18860529a599 ("media: dt-bindings: media: video-interfaces: Add
+new bus-type") introduced a new bus-type for DPI video bus.
 
-Reported-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Introduce MEDIA_BUS_TYPE_DPI into video-interfaces.h to complete
+the list of video interfaces.
+
 Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
 Changes since v1:
-- Newly introduced.
+- Collected tags.
 
- .../devicetree/bindings/display/bridge/analogix,anx7625.yaml     | 1 -
- 1 file changed, 1 deletion(-)
+ include/dt-bindings/media/video-interfaces.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-index a1ed1004651b..f043d57dd25a 100644
---- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-@@ -157,7 +157,6 @@ examples:
-                     reg = <0>;
-                     anx7625_in: endpoint {
-                         remote-endpoint = <&mipi_dsi>;
--                        bus-type = <7>;
-                         data-lanes = <0 1 2 3>;
-                     };
-                 };
+diff --git a/include/dt-bindings/media/video-interfaces.h b/include/dt-bindings/media/video-interfaces.h
+index 68ac4e05e37f..0dace694a18f 100644
+--- a/include/dt-bindings/media/video-interfaces.h
++++ b/include/dt-bindings/media/video-interfaces.h
+@@ -12,5 +12,6 @@
+ #define MEDIA_BUS_TYPE_CSI2_DPHY		4
+ #define MEDIA_BUS_TYPE_PARALLEL			5
+ #define MEDIA_BUS_TYPE_BT656			6
++#define MEDIA_BUS_TYPE_DPI			7
+ 
+ #endif /* __DT_BINDINGS_MEDIA_VIDEO_INTERFACES_H__ */
 -- 
 2.34.1
 
