@@ -1,274 +1,140 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailoo.org header.i=@mailoo.org header.b="VzgnDh5c"
-Received: from mailo.com (msg-1.mailo.com [213.182.54.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F93115;
-	Fri,  1 Dec 2023 10:14:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-	t=1701454445; bh=LBso1uZhHt0uj5YhUuRR61vXVMULnFH6NsONGw2NEpk=;
-	h=X-EA-Auth:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	b=VzgnDh5cI26kRDOulJEMi02YIIyNrzJ3ySeNexSc/p1u7r2U4dwxJ31HIWRuhaFQD
-	 ZaQM6REfkb/qpTcOW0/PXM9B/cFAwuKpUX3648ga17RiHjCgDtIsYhdJ+xiL5qEQ43
-	 44RI3fMMA/BAf/vGhC+cmfin6YfC8T4hKmBELb+U=
-Received: by b221-6.in.mailobj.net [192.168.90.26] with ESMTP
-	via ip-22.mailoo.org [213.182.54.22]
-	Fri,  1 Dec 2023 19:14:05 +0100 (CET)
-X-EA-Auth: wNN2j8v31ubmgWDts7TwNENjNsL7Af2Gz0y4d8MH0A1gYp9Tuc3v3G/ajOExFuYGjL6GItXot7p09v0A44vJjZemqAufFNdp3DcCh2bFGbs=
-From: Vincent Knecht <vincent.knecht@mailoo.org>
-To: Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Yassine Oudjana <y.oudjana@protonmail.com>,
-	linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Vincent Knecht <vincent.knecht@mailoo.org>
-Subject: [PATCH v2 1/3] media: i2c: ak7375: Prepare for supporting another chip
-Date: Fri,  1 Dec 2023 19:13:48 +0100
-Message-ID: <20231201181350.26454-1-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="B8e+7oFg"
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195E9F9
+	for <linux-media@vger.kernel.org>; Fri,  1 Dec 2023 10:18:00 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (80-248-247-191.cust.suomicom.net [80.248.247.191])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4ShhBF18R5z49Q33
+	for <linux-media@vger.kernel.org>; Fri,  1 Dec 2023 20:17:54 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1701454678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type;
+	bh=ygZj9mTLM8KyZe137fcpvxZ0hmQXIg2DGFyHmdSR9YQ=;
+	b=B8e+7oFg1hNTX1c3Vg53SyfxcHIpsPcB5OBlFO51gBnFJHvTrST/jhLb2WO0RT3cyUDSBz
+	N6b5ANXeyB1uyCnGyAwCO4HJhxlB0UamGtZ/3LzzRwfWVCEVV0y1KBYadM+koyxGDH2SyY
+	nPMXhlFNz1CqToR2BdrkRooT94lMKj+bsAVQuJO3yqe/fL7QhPEIpdwLR5LxRERJ6djLs8
+	UF47FSoKIAqdg3x77QjBJOn5sHck0e/tMSNOMcvRq1TTehUoAGiriEhJAMMDXICvBoyUz8
+	qGoj65BoDA3rpxhrjF24K8S16VU5PUjnEphC4v+FU0eaAfTCyrcgTgFr6vPDkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1701454678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type;
+	bh=ygZj9mTLM8KyZe137fcpvxZ0hmQXIg2DGFyHmdSR9YQ=;
+	b=lYqNUdD00R58F8FO6xlaqmWxfo9cES71gRZXASwXlTAT+lKABrGZjNhLvdkUGLilaAGZlY
+	RANYv2hfEXIzeVkbNRNbwmaO1yO27+MHp+3qcnNTT7C8UpWMU/pLAWhjbMTUQ6EqtMfqni
+	vmJ42rs25BWUT1fJRWb27WPWz5nn3NSlIplixh95c7VeVXGlKiZT3T6t3ATanEwWVdsOO+
+	7oqiTC9pObCds9dDrcopCNoDzGTEErZrNkd9T3yHXKv57QeJfp56IIRnPmBDlaYVvsgvJe
+	cqwpmouniDSAcjdhJSqZv0jweiyW3/9xl8L9FJu7/eVT3dMeCcGiM1SgLsV1cA==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1701454678; a=rsa-sha256;
+	cv=none;
+	b=B7WP0idcb2DLUdxD9ncAScoDrMEUE+dT0B0CHJcWn3YKhBLn/poEoxhyRcFFIlR+3TiNi1
+	Y+5cF7yKl9Omt9WbOnCcBocUo8/6ro1drWV5+lN5d88i+Hcuy9Z3K+3V4nYr/ThwlWRd8q
+	JG6i7X4gCIQQ3PQGAWjiCubT1VrmYUqGMS/ak6pqtOMZEHlVCUS849NaCOj2SBBQpm9WAW
+	XfskXHG9KEsoc8g9oHUI0Va3AgIPsoVg25W1kly1qEL958eik+aY/qBYt47ZnHV4wONpXp
+	Z2k388x+mgyyinW5jBbDJcLNfHARybd7vTp4HbuWd4w/FZkXM1ts3pXX82Hu1Q==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 1274C634C8F
+	for <linux-media@vger.kernel.org>; Fri,  1 Dec 2023 20:17:54 +0200 (EET)
+Date: Fri, 1 Dec 2023 18:17:53 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: linux-media@vger.kernel.org
+Subject: [GIT PULL v2 FOR 6.8] V4L2 cleanups and fixes
+Message-ID: <ZWojUQS_icPbhNQV@valkosipuli.retiisi.eu>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In view of adding support for at least one other chip,
-change the driver to move chip-specific properties and
-values in a common structure.
+Hi Hans, Mauro,
 
-No functional changes.
+Here's a small set of fixes and cleanups for 6.8. In particular, there are
+Runtime PM API usage fixes for a couple of drivers from Bingbu and myself,
+moving the CCS driver to use V4L2 CCI as well as a few random fixes and
+cleanups.
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
-v2: no change
----
- drivers/media/i2c/ak7375.c | 110 ++++++++++++++++++++++---------------
- 1 file changed, 66 insertions(+), 44 deletions(-)
+since v1:
 
-diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
-index 463b51d46320..3a14eff41531 100644
---- a/drivers/media/i2c/ak7375.c
-+++ b/drivers/media/i2c/ak7375.c
-@@ -10,30 +10,45 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- 
--#define AK7375_MAX_FOCUS_POS	4095
--/*
-- * This sets the minimum granularity for the focus positions.
-- * A value of 1 gives maximum accuracy for a desired focus position
-- */
--#define AK7375_FOCUS_STEPS	1
--/*
-- * This acts as the minimum granularity of lens movement.
-- * Keep this value power of 2, so the control steps can be
-- * uniformly adjusted for gradual lens movement, with desired
-- * number of control steps.
-- */
--#define AK7375_CTRL_STEPS	64
--#define AK7375_CTRL_DELAY_US	1000
--/*
-- * The vcm may take up 10 ms (tDELAY) to power on and start taking
-- * I2C messages. Based on AK7371 datasheet.
-- */
--#define AK7375_POWER_DELAY_US	10000
-+struct ak73xx_chipdef {
-+	u8 reg_position;
-+	u8 reg_cont;
-+	u8 shift_pos;
-+	u8 mode_active;
-+	u8 mode_standby;
-+	u16 focus_pos_max;
-+	/*
-+	 * This sets the minimum granularity for the focus positions.
-+	 * A value of 1 gives maximum accuracy for a desired focus position
-+	 */
-+	u16 focus_steps;
-+	/*
-+	 * This acts as the minimum granularity of lens movement.
-+	 * Keep this value power of 2, so the control steps can be
-+	 * uniformly adjusted for gradual lens movement, with desired
-+	 * number of control steps.
-+	 */
-+	u16 ctrl_steps;
-+	u16 ctrl_delay_us;
-+	/*
-+	 * The vcm may take time (tDELAY) to power on and start taking
-+	 * I2C messages.
-+	 */
-+	u16 power_delay_us;
-+};
- 
--#define AK7375_REG_POSITION	0x0
--#define AK7375_REG_CONT		0x2
--#define AK7375_MODE_ACTIVE	0x0
--#define AK7375_MODE_STANDBY	0x40
-+static const struct ak73xx_chipdef ak7375_cdef = {
-+	.reg_position	= 0x0,
-+	.reg_cont	= 0x2,
-+	.shift_pos	= 4,	/* 12 bits position values, need to << 4 */
-+	.mode_active	= 0x0,
-+	.mode_standby	= 0x40,
-+	.focus_pos_max	= 4095,
-+	.focus_steps	= 1,
-+	.ctrl_steps	= 64,
-+	.ctrl_delay_us	= 1000,
-+	.power_delay_us	= 10000,
-+};
- 
- static const char * const ak7375_supply_names[] = {
- 	"vdd",
-@@ -42,6 +57,7 @@ static const char * const ak7375_supply_names[] = {
- 
- /* ak7375 device structure */
- struct ak7375_device {
-+	const struct ak73xx_chipdef *cdef;
- 	struct v4l2_ctrl_handler ctrls_vcm;
- 	struct v4l2_subdev sd;
- 	struct v4l2_ctrl *focus;
-@@ -86,10 +102,11 @@ static int ak7375_i2c_write(struct ak7375_device *ak7375,
- static int ak7375_set_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct ak7375_device *dev_vcm = to_ak7375_vcm(ctrl);
-+	const struct ak73xx_chipdef *cdef = dev_vcm->cdef;
- 
- 	if (ctrl->id == V4L2_CID_FOCUS_ABSOLUTE)
--		return ak7375_i2c_write(dev_vcm, AK7375_REG_POSITION,
--					ctrl->val << 4, 2);
-+		return ak7375_i2c_write(dev_vcm, cdef->reg_position,
-+					ctrl->val << cdef->shift_pos, 2);
- 
- 	return -EINVAL;
- }
-@@ -128,11 +145,12 @@ static int ak7375_init_controls(struct ak7375_device *dev_vcm)
- {
- 	struct v4l2_ctrl_handler *hdl = &dev_vcm->ctrls_vcm;
- 	const struct v4l2_ctrl_ops *ops = &ak7375_vcm_ctrl_ops;
-+	const struct ak73xx_chipdef *cdef = dev_vcm->cdef;
- 
- 	v4l2_ctrl_handler_init(hdl, 1);
- 
- 	dev_vcm->focus = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_FOCUS_ABSOLUTE,
--		0, AK7375_MAX_FOCUS_POS, AK7375_FOCUS_STEPS, 0);
-+		0, cdef->focus_pos_max, cdef->focus_steps, 0);
- 
- 	if (hdl->error)
- 		dev_err(dev_vcm->sd.dev, "%s fail error: 0x%x\n",
-@@ -153,6 +171,8 @@ static int ak7375_probe(struct i2c_client *client)
- 	if (!ak7375_dev)
- 		return -ENOMEM;
- 
-+	ak7375_dev->cdef = device_get_match_data(&client->dev);
-+
- 	for (i = 0; i < ARRAY_SIZE(ak7375_supply_names); i++)
- 		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
- 
-@@ -206,30 +226,31 @@ static void ak7375_remove(struct i2c_client *client)
- 
- /*
-  * This function sets the vcm position, so it consumes least current
-- * The lens position is gradually moved in units of AK7375_CTRL_STEPS,
-+ * The lens position is gradually moved in units of ctrl_steps,
-  * to make the movements smoothly.
-  */
- static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
-+	const struct ak73xx_chipdef *cdef = ak7375_dev->cdef;
- 	int ret, val;
- 
- 	if (!ak7375_dev->active)
- 		return 0;
- 
--	for (val = ak7375_dev->focus->val & ~(AK7375_CTRL_STEPS - 1);
--	     val >= 0; val -= AK7375_CTRL_STEPS) {
--		ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
--				       val << 4, 2);
-+	for (val = ak7375_dev->focus->val & ~(cdef->ctrl_steps - 1);
-+	     val >= 0; val -= cdef->ctrl_steps) {
-+		ret = ak7375_i2c_write(ak7375_dev, cdef->reg_position,
-+				       val << cdef->shift_pos, 2);
- 		if (ret)
- 			dev_err_once(dev, "%s I2C failure: %d\n",
- 				     __func__, ret);
--		usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
-+		usleep_range(cdef->ctrl_delay_us, cdef->ctrl_delay_us + 10);
- 	}
- 
--	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
--			       AK7375_MODE_STANDBY, 1);
-+	ret = ak7375_i2c_write(ak7375_dev, cdef->reg_cont,
-+			       cdef->mode_standby, 1);
- 	if (ret)
- 		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
- 
-@@ -246,13 +267,14 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
- /*
-  * This function sets the vcm position to the value set by the user
-  * through v4l2_ctrl_ops s_ctrl handler
-- * The lens position is gradually moved in units of AK7375_CTRL_STEPS,
-+ * The lens position is gradually moved in units of ctrl_steps,
-  * to make the movements smoothly.
-  */
- static int __maybe_unused ak7375_vcm_resume(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ak7375_device *ak7375_dev = sd_to_ak7375_vcm(sd);
-+	const struct ak73xx_chipdef *cdef = ak7375_dev->cdef;
- 	int ret, val;
- 
- 	if (ak7375_dev->active)
-@@ -264,24 +286,24 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
- 		return ret;
- 
- 	/* Wait for vcm to become ready */
--	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 500);
-+	usleep_range(cdef->power_delay_us, cdef->power_delay_us + 500);
- 
--	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
--		AK7375_MODE_ACTIVE, 1);
-+	ret = ak7375_i2c_write(ak7375_dev, cdef->reg_cont,
-+			       cdef->mode_active, 1);
- 	if (ret) {
- 		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
- 		return ret;
- 	}
- 
--	for (val = ak7375_dev->focus->val % AK7375_CTRL_STEPS;
-+	for (val = ak7375_dev->focus->val % cdef->ctrl_steps;
- 	     val <= ak7375_dev->focus->val;
--	     val += AK7375_CTRL_STEPS) {
--		ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_POSITION,
--				       val << 4, 2);
-+	     val += cdef->ctrl_steps) {
-+		ret = ak7375_i2c_write(ak7375_dev, cdef->reg_position,
-+				       val << cdef->shift_pos, 2);
- 		if (ret)
- 			dev_err_ratelimited(dev, "%s I2C failure: %d\n",
- 						__func__, ret);
--		usleep_range(AK7375_CTRL_DELAY_US, AK7375_CTRL_DELAY_US + 10);
-+		usleep_range(cdef->ctrl_delay_us, cdef->ctrl_delay_us + 10);
- 	}
- 
- 	ak7375_dev->active = true;
-@@ -290,7 +312,7 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
- }
- 
- static const struct of_device_id ak7375_of_table[] = {
--	{ .compatible = "asahi-kasei,ak7375" },
-+	{ .compatible = "asahi-kasei,ak7375", .data = &ak7375_cdef, },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, ak7375_of_table);
+- Include Sebastian's v4l2-async fixes. The other one is cc'd to the stable
+  tree.
+
+Please pull.
+
+
+The following changes since commit 3b8551e73271fc375b15c887db54ad31686eb2ea:
+
+  media: wave5: add OF and V4L_MEM2MEM_DRIVERS dependencies (2023-11-24 14:11:22 +0100)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/sailus/media_tree.git tags/for-6.8-5.1-signed
+
+for you to fetch changes up to c44c7f880ba22a99424b556638a05c1c2bf2d3e8:
+
+  media: v4l: async: Drop useless list move operation (2023-12-01 13:06:27 +0200)
+
+----------------------------------------------------------------
+V4L2 patches for 6.8
+
+----------------------------------------------------------------
+Bingbu Cao (4):
+      media: imx355: Enable runtime PM before registering async sub-device
+      media: ov01a10: Enable runtime PM before registering async sub-device
+      media: ov13b10: Enable runtime PM before registering async sub-device
+      media: ov9734: Enable runtime PM before registering async sub-device
+
+Laurent Pinchart (2):
+      media: microchip-isc: Remove dead code in pipeline validation
+      media: v4l2-subdev: Fix indentation in v4l2-subdev.h
+
+Sakari Ailus (9):
+      media: ccs: Print ireal and float limits converted to integers
+      media: imx319: Enable runtime PM before registering async sub-device
+      media: Documentation: Initialisation finishes before subdev registration
+      media: v4l: cci: Include linux/bits.h
+      media: v4l: cci: Add driver-private bit definitions
+      media: v4l: cci: Add macros to obtain register width and address
+      media: ccs: Generate V4L2 CCI compliant register definitions
+      media: ccs: Better separate CCS static data access
+      media: ccs: Use V4L2 CCI for accessing sensor registers
+
+Sebastian Reichel (2):
+      media: v4l: async: Fix duplicated list deletion
+      media: v4l: async: Drop useless list move operation
+
+ Documentation/driver-api/media/camera-sensor.rst   |   3 +-
+ .../driver-api/media/drivers/ccs/mk-ccs-regs       | 104 ++-
+ Documentation/driver-api/media/v4l2-subdev.rst     |   7 +
+ drivers/media/i2c/ccs/ccs-core.c                   | 101 ++-
+ drivers/media/i2c/ccs/ccs-reg-access.c             | 213 +----
+ drivers/media/i2c/ccs/ccs-regs.h                   | 906 ++++++++++----------
+ drivers/media/i2c/ccs/ccs.h                        |   2 +
+ drivers/media/i2c/ccs/smiapp-reg-defs.h            | 951 +++++++++++----------
+ drivers/media/i2c/imx319.c                         |  12 +-
+ drivers/media/i2c/imx355.c                         |  12 +-
+ drivers/media/i2c/ov01a10.c                        |  18 +-
+ drivers/media/i2c/ov13b10.c                        |  14 +-
+ drivers/media/i2c/ov9734.c                         |  19 +-
+ .../media/platform/microchip/microchip-isc-base.c  |  41 -
+ drivers/media/v4l2-core/v4l2-async.c               |   4 -
+ drivers/media/v4l2-core/v4l2-cci.c                 |   8 +-
+ include/media/v4l2-cci.h                           |  11 +
+ include/uapi/linux/v4l2-subdev.h                   |   2 +-
+ 18 files changed, 1171 insertions(+), 1257 deletions(-)
+
 -- 
-2.43.0
-
-
-
+Sakari Ailus
