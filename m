@@ -1,70 +1,69 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="maYbr9WH"
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07658132
-	for <linux-media@vger.kernel.org>; Fri,  1 Dec 2023 18:27:13 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5a0dc313058so372825a12.0
-        for <linux-media@vger.kernel.org>; Fri, 01 Dec 2023 18:27:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701484032; x=1702088832; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=furwVr0NfCpLwSQ+vIVvucIjDPXc0YLegv7A1AU39h0=;
-        b=maYbr9WHCdfCg5AZlAL6cYe16IzeRrM0rOH/HcpkzI2hplS7f0YvE+KISYgwDgVs2g
-         lpWEroTw3kpQr5jvqq9eQmqEhwgVTi/gr8Z519l4oXJMsuANmEaJme+cRTv47cpCylIS
-         Sg4Y4dsR0yNtT3c1Fw2RyLPhhGPWU+tNscHFnuEIDeft4uAUUn9uXQfPzb27Zl1pQa6w
-         t9iC1zDY5Fcd48WwbGcsPcEiNwpx9C9uSZ6yjSH2NMeGa37wr56x8hLsjQigMkirKgaR
-         2rpjO4AQNZdkn2sVVaoZXwzPFmo0cceBmXNZYV3R7g1GIpqM57PIL/E5yC9N4LthTGlj
-         KBQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701484032; x=1702088832;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=furwVr0NfCpLwSQ+vIVvucIjDPXc0YLegv7A1AU39h0=;
-        b=W7A88/8sgEB9FDwQ+zK0y4ae4ukSx0G5tQtm/5+pzeufdwNQwStENdTVLJp3/iR5oR
-         9F1L2wZlnd4awODoWcjQdbm4imKJ+s7cf4mCs/mPqbx5vvTc+Yrz3Z0r9obrStDDUsZ/
-         IroeuOnX5lWfGV0feZ7IhXnkMUtdYMKwICebz0Opu9tIk3lbcnFXa7JoD3RVAihnZTnx
-         kSComqVONNxgBrXoXmaJmYWCp7UCgtmW17X2CA6El/TnnpLJGdn/3DDmj3qaVWXlKpv1
-         4M8rL+xfwpZKmbWXMtG5F5HZlIJZlM4lmHRrdMIQXz6fcSNtTHox3Vbl/ag1SpUJvCOn
-         a6LQ==
-X-Gm-Message-State: AOJu0YzFx1gvBgPhXVVU6BU1rGmS/tA7wT/paJBB7V63dmLysvUcSkpn
-	MNg+p95lP7iEMHe9fuhgT9KSTIJ5K5G4tuSbexo=
-X-Google-Smtp-Source: AGHT+IFs4buUB9srDnGvolWGDBX8fq+IrPphcGw9yapbd9HqlWJDMxzN97vCiHmu/lzWil1y2uzNyF57E0hHysM+NjU=
-X-Received: by 2002:a17:90b:1985:b0:286:4815:f727 with SMTP id
- mv5-20020a17090b198500b002864815f727mr6017777pjb.3.1701484032362; Fri, 01 Dec
- 2023 18:27:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="Nyljjt6r"
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23B610E4
+	for <linux-media@vger.kernel.org>; Fri,  1 Dec 2023 22:44:50 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id BE82F8642A;
+	Sat,  2 Dec 2023 07:44:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1701499488;
+	bh=foax5Btl+NKy2C91ZLd4ufX3QwCqu6cTYbXJBTN66d8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Nyljjt6rzMeRbOJ8pLRuLjHDJR6xQl/Oy1slpsgprBcfyJ75sK0hZialA24rRnGnB
+	 7Fqlq2kyW2t8nB5qZWD/RPFZpHYtv3x1E5vyJ/IZqW3oojZkG2j8x3kwOqV3xJL4q5
+	 maZ+ob2FZcNZIkhJuA85kgHh9mlsP9ndA5bKbj1qf6c/vpTZ++4dXe8S+6WzWwYCI0
+	 /IwE6GRq4yviC2FY6NUbGWab+8HoHjeCP1I3RysZS+wivPsP6UUTbQP1FgiL6jzgjh
+	 QKsDStCLUnTFX38p9XUFGuC7FuOa0ohGMin0IjH4Vjj4kzVmXhpjKAaY+92409hlKh
+	 3Ro+IlxkSO5Ug==
+Message-ID: <890ae113-7c7f-4214-9b00-ce00fc570567@denx.de>
+Date: Sat, 2 Dec 2023 07:44:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: nxp: isi: Check whether pad is non-NULL before
+ access
+To: Fabio Estevam <festevam@gmail.com>
+Cc: linux-media@vger.kernel.org,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ NXP Linux Team <linux-imx@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ linux-arm-kernel@lists.infradead.org
 References: <20231201150614.63300-1-marex@denx.de>
-In-Reply-To: <20231201150614.63300-1-marex@denx.de>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 1 Dec 2023 23:27:01 -0300
-Message-ID: <CAOMZO5BssVez71=uCYd0XhL02xd1TrUyTzCc1fq_sWfENLaoTA@mail.gmail.com>
-Subject: Re: [PATCH] media: nxp: isi: Check whether pad is non-NULL before access
-To: Marek Vasut <marex@denx.de>
-Cc: linux-media@vger.kernel.org, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, NXP Linux Team <linux-imx@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CAOMZO5BssVez71=uCYd0XhL02xd1TrUyTzCc1fq_sWfENLaoTA@mail.gmail.com>
+Content-Language: en-US
+From: Marek Vasut <marex@denx.de>
+In-Reply-To: <CAOMZO5BssVez71=uCYd0XhL02xd1TrUyTzCc1fq_sWfENLaoTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-On Fri, Dec 1, 2023 at 12:06=E2=80=AFPM Marek Vasut <marex@denx.de> wrote:
+On 12/2/23 03:27, Fabio Estevam wrote:
+> On Fri, Dec 1, 2023 at 12:06 PM Marek Vasut <marex@denx.de> wrote:
+> 
+>>          pad = media_pad_remote_pad_first(&xbar->pads[sink_pad]);
+>> -       sd = media_entity_to_v4l2_subdev(pad->entity);
+>> +       if (!pad) {
+>> +               dev_dbg(xbar->isi->dev,
+> 
+> Maybe dev_err() here instead?
 
->         pad =3D media_pad_remote_pad_first(&xbar->pads[sink_pad]);
-> -       sd =3D media_entity_to_v4l2_subdev(pad->entity);
-> +       if (!pad) {
-> +               dev_dbg(xbar->isi->dev,
+That dev_dbg() is aligned with the prints in the rest of the function 
+and it's not like kernel should do dev_err() into kernel log every time 
+userspace does something wrong.
 
-Maybe dev_err() here instead?
+> Anyway:
+> 
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-Anyway:
-
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Thanks !
