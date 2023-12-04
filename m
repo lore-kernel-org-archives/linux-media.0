@@ -1,12 +1,12 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3EA28DD7;
-	Mon,  4 Dec 2023 14:59:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62FB8C433C7;
-	Mon,  4 Dec 2023 14:59:04 +0000 (UTC)
-Message-ID: <e920d35c-dd2f-48f6-aad8-5c7dd4a4987d@xs4all.nl>
-Date: Mon, 4 Dec 2023 15:59:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72FB128E3B;
+	Mon,  4 Dec 2023 15:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBC4C433C8;
+	Mon,  4 Dec 2023 15:07:39 +0000 (UTC)
+Message-ID: <5dfeaf67-b6c6-45be-bc28-04751376ea26@xs4all.nl>
+Date: Mon, 4 Dec 2023 16:07:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -14,18 +14,17 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 25/36] media: aspeed: Fix misuse of min_buffers_needed
- field
+Subject: Re: [PATCH v2 31/36] media: starfive: Fix misuse of
+ min_buffers_needed field
 Content-Language: en-US, nl
 To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, mchehab@kernel.org,
  tfiga@chromium.org, m.szyprowski@samsung.com, matt.ranostay@konsulko.com
 Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
  linux-staging@lists.linux.dev, kernel@collabora.com,
- Eddie James <eajames@linux.ibm.com>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>, openbmc@lists.ozlabs.org,
- linux-aspeed@lists.ozlabs.org
+ Jack Zhu <jack.zhu@starfivetech.com>,
+ Changhuang Liang <changhuang.liang@starfivetech.com>
 References: <20231204132323.22811-1-benjamin.gaignard@collabora.com>
- <20231204132323.22811-26-benjamin.gaignard@collabora.com>
+ <20231204132323.22811-32-benjamin.gaignard@collabora.com>
 From: Hans Verkuil <hverkuil@xs4all.nl>
 Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  xsFNBFQ84W0BEAC7EF1iL4s3tY8cRTVkJT/297h0Hz0ypA+ByVM4CdU9sN6ua/YoFlr9k0K4
@@ -70,50 +69,41 @@ Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
  sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
  UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
-In-Reply-To: <20231204132323.22811-26-benjamin.gaignard@collabora.com>
+In-Reply-To: <20231204132323.22811-32-benjamin.gaignard@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/12/2023 14:23, Benjamin Gaignard wrote:
 > 'min_buffers_needed' is suppose to be used to indicate the number
 > of buffers needed by DMA engine to start streaming.
-> aspeed doesn't use DMA engine and just want to specify
+> starfive driver doesn't use DMA engine and just want to specify
 > the minimum number of buffers to allocate when calling VIDIOC_REQBUFS.
 > That 'min_reqbufs_allocation' field purpose so use it.
 > 
 > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Reviewed-by: Eddie James <eajames@linux.ibm.com>
-> CC: Joel Stanley <joel@jms.id.au> (supporter:ARM/ASPEED MACHINE SUPPORT)
-> CC: Andrew Jeffery <andrew@codeconstruct.com.au> (reviewer:ARM/ASPEED MACHINE SUPPORT)
-> CC: openbmc@lists.ozlabs.org (moderated list:ASPEED VIDEO ENGINE DRIVER)
-> CC: linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE SUPPORT)
+> CC: Jack Zhu <jack.zhu@starfivetech.com>
+> CC: Changhuang Liang <changhuang.liang@starfivetech.com>
 > ---
->  drivers/media/platform/aspeed/aspeed-video.c | 2 +-
+>  drivers/staging/media/starfive/camss/stf-video.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
-> index d08aa7f73d4f..c28b10808cda 100644
-> --- a/drivers/media/platform/aspeed/aspeed-video.c
-> +++ b/drivers/media/platform/aspeed/aspeed-video.c
-> @@ -2034,7 +2034,7 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
->  	vbq->drv_priv = video;
->  	vbq->buf_struct_size = sizeof(struct aspeed_video_buffer);
->  	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-> -	vbq->min_buffers_needed = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
-> +	vbq->min_reqbufs_allocation = ASPEED_VIDEO_V4L2_MIN_BUF_REQ;
+> diff --git a/drivers/staging/media/starfive/camss/stf-video.c b/drivers/staging/media/starfive/camss/stf-video.c
+> index 0b305f21eb53..25038e37e8a6 100644
+> --- a/drivers/staging/media/starfive/camss/stf-video.c
+> +++ b/drivers/staging/media/starfive/camss/stf-video.c
+> @@ -513,7 +513,7 @@ int stf_video_register(struct stfcamss_video *video,
+>  	q->buf_struct_size = sizeof(struct stfcamss_buffer);
+>  	q->dev = video->stfcamss->dev;
+>  	q->lock = &video->q_lock;
+> -	q->min_buffers_needed = STFCAMSS_MIN_BUFFERS;
+> +	q->min_reqbufs_allocation = STFCAMSS_MIN_BUFFERS;
+>  	ret = vb2_queue_init(q);
+>  	if (ret < 0) {
+>  		dev_err(video->stfcamss->dev,
 
-Looking at the start_streaming code I think min_buffers_needed should be 1, since
-otherwise start_streaming would return -EPROTO.
-
-But clearly the intent is also that 3 buffers minimum are allocated.
-
-So in this case both fields should be set.
+It's not clear to me if this driver can work without at least one buffer
+queued. This would need to be tested first.
 
 Regards,
 
 	Hans
-
->  
->  	rc = vb2_queue_init(vbq);
->  	if (rc) {
-
