@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Pbi5bF6Y"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0E919A9;
-	Mon,  4 Dec 2023 05:24:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BrCeCc7q"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD0B181;
+	Mon,  4 Dec 2023 05:24:28 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 517856607090;
-	Mon,  4 Dec 2023 13:24:23 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 0D230660715D;
+	Mon,  4 Dec 2023 13:24:26 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701696264;
-	bh=ORlm67uM5fv255axUnsY7LF5+NRgLL1FXRZ/tIF2QjU=;
+	s=mail; t=1701696266;
+	bh=PJOb0upzYk5sy+kA9Qk465u2DFL4NHA2Gb2jqg1/r/o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Pbi5bF6Y+KYs5YKI1S/bwWzcWq4rEoIhjVQhuizPnCrVxvAqKlVVQMhzVzTsHJHmQ
-	 LKxFor4iEZQHTxyGhn0BShMXGrQ+3+y+ee2miBCFH/cDiri2bhznfEFF0pInt9NmnW
-	 Ckr931qgtWKEBNvnTKolamn58mHqDp8QfNYKLjxrUGYLIQcFSu9aK6tEuaffTXB0Vn
-	 TX6+KEepBNhnRil5YxfJeTUjF4qZu2WrVqXe914jnFcbVJLlfb/Bh7sDb2IVRXgOEA
-	 5LTa+NFAfKJkvyH78BRkN5iNMt9cXsIkRng3oYaRzh11tpPmVfydCXV0h2R7hGZAa/
-	 0GTS4JiMTnFkA==
+	b=BrCeCc7qRmtQhFxZpNy//e47tTrDrrONVVN0Upa4UssbezXdbTueftYV+u6/mOS7/
+	 QwC847PPjD5sdBVNYaUTgtY3eSpItOHCf7FVIm3sd8Euz1IuixXqe4AAnfasXqPrYq
+	 ilf6D7iJmAoX2prua+vwEaYERnBbhfzIUPCtZXuRbub71zAg6i/bAzBt40ya2Tbtyp
+	 R5stB9RXoXUA7/Tp5j3456lPQ/DR2z80upofbFpiCJzUNim6aUg4CFV/EfnKW+JOB5
+	 hJnbCe31m9Mf1ntpRiEJmMUyvT5AxqmatoFddH0ylBT+HhpVmTNAwIsYQE3c4VTEMo
+	 GThhDniGrBlPQ==
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: hverkuil@xs4all.nl,
 	mchehab@kernel.org,
@@ -31,17 +31,14 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	kernel@collabora.com,
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>
-Subject: [PATCH v2 30/36] media: imx: Fix misuse of min_buffers_needed field
-Date: Mon,  4 Dec 2023 14:23:17 +0100
-Message-Id: <20231204132323.22811-31-benjamin.gaignard@collabora.com>
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	linux-tegra@vger.kernel.org
+Subject: [PATCH v2 32/36] media: tegra-video: Fix misuse of min_buffers_needed field
+Date: Mon,  4 Dec 2023 14:23:19 +0100
+Message-Id: <20231204132323.22811-33-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204132323.22811-1-benjamin.gaignard@collabora.com>
 References: <20231204132323.22811-1-benjamin.gaignard@collabora.com>
@@ -55,36 +52,33 @@ Content-Transfer-Encoding: 8bit
 
 'min_buffers_needed' is suppose to be used to indicate the number
 of buffers needed by DMA engine to start streaming.
-imx-media-capture driver doesn't use DMA engine and just want to specify
+tegra-video driver doesn't use DMA engine and just want to specify
 the minimum number of buffers to allocate when calling VIDIOC_REQBUFS.
 That 'min_reqbufs_allocation' field purpose so use it.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-CC: Steve Longerbeam <slongerbeam@gmail.com>
-CC: Philipp Zabel <p.zabel@pengutronix.de>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Shawn Guo <shawnguo@kernel.org>
-CC: Sascha Hauer <s.hauer@pengutronix.de>
-CC: Pengutronix Kernel Team <kernel@pengutronix.de>
-CC: Fabio Estevam <festevam@gmail.com>
-CC: NXP Linux Team <linux-imx@nxp.com>
+CC: Thierry Reding <thierry.reding@gmail.com>
+CC: Jonathan Hunter <jonathanh@nvidia.com>
+CC: Sowjanya Komatineni <skomatineni@nvidia.com>
+CC: Luca Ceresoli <luca.ceresoli@bootlin.com>
+CC: linux-tegra@vger.kernel.org
 ---
- drivers/staging/media/imx/imx-media-capture.c | 2 +-
+ drivers/staging/media/tegra-video/vi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index ce02199e7b1b..5bb1ebd35d89 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -1022,7 +1022,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
- 	vq->mem_ops = &vb2_dma_contig_memops;
- 	vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 	vq->lock = &priv->mutex;
--	vq->min_buffers_needed = 2;
-+	vq->min_reqbufs_allocation = 2;
- 	vq->dev = priv->dev;
- 
- 	ret = vb2_queue_init(vq);
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index e0bb59ee3c09..b8242c8c0497 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -1174,7 +1174,7 @@ static int tegra_channel_init(struct tegra_vi_channel *chan)
+ 	chan->queue.ops = &tegra_channel_queue_qops;
+ 	chan->queue.mem_ops = &vb2_dma_contig_memops;
+ 	chan->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-	chan->queue.min_buffers_needed = 2;
++	chan->queue.min_reqbufs_allocation = 2;
+ 	chan->queue.dev = vi->dev;
+ 	ret = vb2_queue_init(&chan->queue);
+ 	if (ret < 0) {
 -- 
 2.39.2
 
