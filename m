@@ -1,109 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b49jKz+e"
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CF018A
-	for <linux-media@vger.kernel.org>; Mon,  4 Dec 2023 04:41:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701693656;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vQbIf09VR9SngZSlmqAfqaoPYVOBA8CnZ7s8eB+OLuM=;
-	b=b49jKz+edyvrHlLTIIOPv8SOzZ3YZq1OqeUTa1BOTcseSxWGlELV/YiQlMkGzDAj/3DOfp
-	SWa+XL+eguuT1g2XQIb1u4/eJiKVMekOraHtnBqxqjk0gXJD73WhYYajDjfjWO6Zdv1sWG
-	k/HVpkEzN8KLxmfVq2YcDCzt6FKPlNY=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-27-JaFsKm3KOVu-tH3Gj8WUFg-1; Mon,
- 04 Dec 2023 07:40:16 -0500
-X-MC-Unique: JaFsKm3KOVu-tH3Gj8WUFg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E98723806721;
-	Mon,  4 Dec 2023 12:39:53 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.195.73])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 99B6C40C6EB9;
-	Mon,  4 Dec 2023 12:39:52 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Bingbu Cao <bingbu.cao@intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jVPAaYDy"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463C2A7;
+	Mon,  4 Dec 2023 05:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701695230; x=1733231230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UXznonBwZSh6vXkSOTRxTtrLALPBPOcd61xsNDWj4+I=;
+  b=jVPAaYDyH7Qfu6aYzAqic98Wlrl/0ukje+B8DWj5adDdPsVOjFd6rOmQ
+   N6Fa4B0+ed1pJbgXRY2UPuomb2L9xpb7l+SXLkp3SSBUdiywbj+TAbZrU
+   v8Seex1XCVqaxR6m/dOj7hd4hYLHR+v/vCg29WBMEmyUFECb/FGZkgMZC
+   NvRSQGrLNZA8Cah0to6uDHZ/lEpQ1zvY3+V4c7YXgvZH3R4n1TMiPIUoD
+   nfIEl+ieJZyXAr/847vedbdRgczqhqS5TuukfldvmQYaxsr0+OcVuJRv8
+   8Cbvyx0v487JQIsZ8hVaBAU59nTpQ2mRO1ig+CCOXLnrpYqC4xpawvmrP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="15274919"
+X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
+   d="scan'208";a="15274919"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 05:05:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="763935407"
+X-IronPort-AV: E=Sophos;i="6.04,249,1695711600"; 
+   d="scan'208";a="763935407"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 05:05:41 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rA8dl-00000001kpu-0ppK;
+	Mon, 04 Dec 2023 15:05:37 +0200
+Date: Mon, 4 Dec 2023 15:05:36 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Kate Hsuan <hpa@redhat.com>,
-	linux-media@vger.kernel.org
-Subject: [PATCH v4 3/9] media: ov2740: Move fwnode_graph_get_next_endpoint() call up
-Date: Mon,  4 Dec 2023 13:39:40 +0100
-Message-ID: <20231204123947.5754-4-hdegoede@redhat.com>
-In-Reply-To: <20231204123947.5754-1-hdegoede@redhat.com>
-References: <20231204123947.5754-1-hdegoede@redhat.com>
+	linux-media@vger.kernel.org, Jan Kara <jack@suse.cz>,
+	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+	Matthew Wilcox <willy@infradead.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
+	Alexey Klimov <klimov.linux@gmail.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH v2 27/35] media: em28xx: cx231xx: fix opencoded
+ find_and_set_bit()
+Message-ID: <ZW3OoLzNYe2IytMn@smile.fi.intel.com>
+References: <20231203192422.539300-1-yury.norov@gmail.com>
+ <20231203193307.542794-1-yury.norov@gmail.com>
+ <20231203193307.542794-26-yury.norov@gmail.com>
+ <40783b7c-4353-4366-ad49-95ac87c5f8be@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40783b7c-4353-4366-ad49-95ac87c5f8be@xs4all.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-If the bridge has not yet setup the fwnode-graph then
-the fwnode_property_read_u32("clock-frequency") call will fail.
+On Mon, Dec 04, 2023 at 09:39:59AM +0100, Hans Verkuil wrote:
+> On 03/12/2023 20:32, Yury Norov wrote:
+> > Functions in the media/usb drivers opencode find_and_set_bit() by
+> > polling on a found bit in a while-loop.
 
-Move the fwnode_graph_get_next_endpoint() call to above reading
-the clock-frequency.
+...
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v3:
-- Add fwnode_handle_put() in error-exit-paths
----
- drivers/media/i2c/ov2740.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+> It's a nice improvement.
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 653cd96bb156..06427e886d15 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -929,19 +929,27 @@ static int ov2740_check_hwcfg(struct device *dev)
- 	int ret;
- 	unsigned int i, j;
- 
--	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
--	if (ret)
--		return ret;
--
--	if (mclk != OV2740_MCLK)
--		return dev_err_probe(dev, -EINVAL,
--				     "external clock %d is not supported\n",
--				     mclk);
--
-+	/*
-+	 * Sometimes the fwnode graph is initialized by the bridge driver,
-+	 * wait for this.
-+	 */
- 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
- 	if (!ep)
- 		return -EPROBE_DEFER;
- 
-+	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-+	if (ret) {
-+		fwnode_handle_put(ep);
-+		return ret;
-+	}
-+
-+	if (mclk != OV2740_MCLK) {
-+		fwnode_handle_put(ep);
-+		return dev_err_probe(dev, -EINVAL,
-+				     "external clock %d is not supported\n",
-+				     mclk);
-+	}
-+
- 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
- 	fwnode_handle_put(ep);
- 	if (ret)
+Wouldn't it be even nicer to utilise IDA framework?
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
