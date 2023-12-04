@@ -1,32 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fkaVf1SO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B8BrvX0D"
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90D5101
-	for <linux-media@vger.kernel.org>; Mon,  4 Dec 2023 04:40:02 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF90AB
+	for <linux-media@vger.kernel.org>; Mon,  4 Dec 2023 04:40:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701693602;
+	s=mimecast20190719; t=1701693604;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2fVyd13P6go/xwzfiJa4aRN0zdl8tV/jDQrINzRwPvk=;
-	b=fkaVf1SODjWN0b7iUp4fuSaWhTAaM/OUcI3T3A9taov80CEDEboQH2+ai/SBB4o+px2YeB
-	hHy0lihRhfHkbURgt0RuOE9x7jr+0iwqX/7noA4I4KjwYPFq0KTVVaMK2Mi+i7F1sOL9se
-	a2NUIvnB3w1ykm3etzmR8wRB0BdY0+Q=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-335-TVohPLeZMCmRyHtabEELmw-1; Mon,
- 04 Dec 2023 07:39:58 -0500
-X-MC-Unique: TVohPLeZMCmRyHtabEELmw-1
+	bh=eAQRi7TX3DV1K0iwG2BZe1rMTh1DYqLJFpIzboUodBk=;
+	b=B8BrvX0DI0F9XvDJwK1aPCb3Y2slPkPg8F0ujzyvI5nM2CRZKhp8CCGS5kx3N65GC+fwvA
+	CkNR5gLTKNo2IYucaSdOQJhHyF2KLPxk1lhN40v0M9rq1Hzmi1wRfT/PpZofQoA+2rZkOg
+	1VXIfjlHaFy2B6Ib4gjGTpOzpgkXQks=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-219-GqnKb7ANNCO13Ix0ffaxiw-1; Mon, 04 Dec 2023 07:40:02 -0500
+X-MC-Unique: GqnKb7ANNCO13Ix0ffaxiw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8987038035B1;
-	Mon,  4 Dec 2023 12:39:58 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B84C982A633;
+	Mon,  4 Dec 2023 12:40:01 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.195.73])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5115940C6EB9;
-	Mon,  4 Dec 2023 12:39:57 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63F8D40C6EB9;
+	Mon,  4 Dec 2023 12:40:00 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tianshu Qiu <tian.shu.qiu@intel.com>,
@@ -35,9 +35,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Kate Hsuan <hpa@redhat.com>,
 	linux-media@vger.kernel.org
-Subject: [PATCH v4 6/9] media: ov2740: Check hwcfg after allocating the ov2740 struct
-Date: Mon,  4 Dec 2023 13:39:43 +0100
-Message-ID: <20231204123947.5754-7-hdegoede@redhat.com>
+Subject: [PATCH v4 8/9] media: ov2740: Add a sleep after resetting the sensor
+Date: Mon,  4 Dec 2023 13:39:45 +0100
+Message-ID: <20231204123947.5754-9-hdegoede@redhat.com>
 In-Reply-To: <20231204123947.5754-1-hdegoede@redhat.com>
 References: <20231204123947.5754-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -49,52 +49,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
 
-Alloc ov2740_data and set up the drvdata pointer before calling
-ov2740_check_hwcfg().
+Split the resetting of the sensor out of the link_freq_config reg_list
+and add a delay after this.
 
-This is a preparation patch to allow ov2740_check_hwcfg()
-to store some of the parsed data in the ov2740 struct.
+This hopefully fixes the stream sometimes not starting, this was
+taken from the ov2740 sensor driver in the out of tree IPU6 driver:
+
+https://github.com/intel/ipu6-drivers/
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov2740.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov2740.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 759e91f4169b..54e6f62414ff 100644
+index 3c58a6e0d7a0..552935ccb4a9 100644
 --- a/drivers/media/i2c/ov2740.c
 +++ b/drivers/media/i2c/ov2740.c
-@@ -1098,14 +1098,17 @@ static int ov2740_probe(struct i2c_client *client)
- 	bool full_power;
- 	int ret;
+@@ -128,7 +128,6 @@ struct ov2740_mode {
+ };
  
--	ret = ov2740_check_hwcfg(&client->dev);
--	if (ret)
--		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
--
- 	ov2740 = devm_kzalloc(&client->dev, sizeof(*ov2740), GFP_KERNEL);
- 	if (!ov2740)
- 		return -ENOMEM;
+ static const struct ov2740_reg mipi_data_rate_720mbps[] = {
+-	{0x0103, 0x01},
+ 	{0x0302, 0x4b},
+ 	{0x030d, 0x4b},
+ 	{0x030e, 0x02},
+@@ -137,7 +136,6 @@ static const struct ov2740_reg mipi_data_rate_720mbps[] = {
+ };
  
-+	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
-+	ov2740->sd.internal_ops = &ov2740_internal_ops;
+ static const struct ov2740_reg mipi_data_rate_360mbps[] = {
+-	{0x0103, 0x01},
+ 	{0x0302, 0x4b},
+ 	{0x0303, 0x01},
+ 	{0x030d, 0x4b},
+@@ -935,6 +933,15 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
+ 	if (ov2740->nvm)
+ 		ov2740_load_otp_data(ov2740->nvm);
+ 
++	/* Reset the sensor */
++	ret = ov2740_write_reg(ov2740, 0x0103, 1, 0x01);
++	if (ret) {
++		dev_err(&client->dev, "failed to reset\n");
++		return ret;
++	}
 +
-+	ret = ov2740_check_hwcfg(dev);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
++	usleep_range(10000, 15000);
 +
- 	ov2740->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
- 	if (IS_ERR(ov2740->reset_gpio))
- 		return dev_err_probe(dev, PTR_ERR(ov2740->reset_gpio),
-@@ -1116,8 +1119,6 @@ static int ov2740_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(ov2740->clk),
- 				     "failed to get clock\n");
- 
--	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
--	ov2740->sd.internal_ops = &ov2740_internal_ops;
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
- 		/* ACPI does not always clear the reset GPIO / enable the clock */
+ 	link_freq_index = ov2740->cur_mode->link_freq_index;
+ 	reg_list = &link_freq_configs[link_freq_index].reg_list;
+ 	ret = ov2740_write_reg_list(ov2740, reg_list);
 -- 
 2.43.0
 
