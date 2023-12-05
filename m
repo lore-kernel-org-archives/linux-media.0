@@ -1,58 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFFwe97a"
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FF8197;
-	Tue,  5 Dec 2023 03:49:42 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2866e4ac34bso3018067a91.1;
-        Tue, 05 Dec 2023 03:49:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fl0/f1fD"
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C56A7;
+	Tue,  5 Dec 2023 03:58:00 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1d0521554ddso25834435ad.2;
+        Tue, 05 Dec 2023 03:58:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701776982; x=1702381782; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701777480; x=1702382280; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AZT8TEnCg17hGz9D9aoXrHaxFJW7dZSsSL0dlLW7alA=;
-        b=mFFwe97aq+ILQKLPguySsTxa42fQPgD+JLNTuYiJBCZ6iNIXP6FGQ6zTXiiFX8vNAZ
-         14gBvXhNXodxkGavFwycVFP29RbVG+vMSLX1LDlaweIQQoexi+UYkbEjUzIIFf230Y26
-         A76FKUXhH2RCsrihsF6JJt6etSE9oJ0WJRiXi1L7eMjGWO4qMxDao5nuJ+rMM4C+Giz7
-         llmIP51ILndpuWl7Gz0EfhWKVpgpEOQ+qhocIzTehZMHJ2fXcCo6/Ash7YV06MFKrfek
-         qt97ORB0Kg7oZ08mXm7M5O6/JZUdvC+0S8qsLFx/Huzz6lHhkq+rFZON0dVv4P6vw0Wq
-         Lg/A==
+        bh=WAw5aOcHJcYASQz0eHH4lmIjL4FIKnv8jTkbUdzuwNM=;
+        b=fl0/f1fD3kfD69bhtf5c8SYyw+Xcb1D4b1O/n7/7ySQpstv68abbbHJJV3CHyRmRH6
+         vzP70bT9KRGR6KJPlT9nldFhyYNQwleTSIn2MsOrGwcP4nUeyP8xcs5TqzKPU0ERGHdR
+         mbmUmedX4ZvYBamL5S2VP0qn3GBShT0DiqnDYv3IqqbFrNlRoNNwetxSZoyEYN64QRF0
+         anU+zNCeumR4iJ4QuXobCzEOI662KNSjgCJnOg77s5MvWz8H8X9KyiINKJox65XrJs4G
+         TxiSyYCBac/F6byzCxBENCZQOGmxtDiOKp61TggC1hmKD6Q/kv1H0/wPraY1iz+CpD38
+         HExw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701776982; x=1702381782;
+        d=1e100.net; s=20230601; t=1701777480; x=1702382280;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AZT8TEnCg17hGz9D9aoXrHaxFJW7dZSsSL0dlLW7alA=;
-        b=EN9AGwhtYb1WrcIl42OlvaidqwOkHmsP2K86ChRbDpa7/kZavo2B6bJhK9XFyztpyv
-         6SpQ83fOrwegtiIZj5XrDiwoErqnm//X9qNmljHb99jCpb20lnyHlNWy/xf+fagEonEq
-         fii5cIIkj1fhB3AKH5P3lbQXUtQe767n6H4JNpDnj9FOwetECjPc6XZHm3ynN6EtxHc8
-         W7UsIkJXD9MGI0DbQgM8dow0gydU6NZIF1Y7Mh50tdH9pKQcbwoJHcp0fEoShocj46bX
-         /foMu9k3oeg2tDLg+dempSbW1P9bDV6ZIu2opad1gWh0a6+tv+VjqIaX4rHY9R12cqNr
-         iwhA==
-X-Gm-Message-State: AOJu0Yyr0nIReDhWzCr9i/CtAcW2vgm8X+PQrY/LwFO0Q+pbB++gSx7e
-	iUBaGyethzByVpexsZIESi4imGbTW2H2qyKFC8Y=
-X-Google-Smtp-Source: AGHT+IG903dRK3fpmzorknhqflxmGtrEN3N6ciA43936wmipN8Wx0WOb2f34obKGBajrjmRKTcYOuA9io5J79XOeZ40=
-X-Received: by 2002:a17:90b:3912:b0:285:fc67:6164 with SMTP id
- ob18-20020a17090b391200b00285fc676164mr1032342pjb.5.1701776981534; Tue, 05
- Dec 2023 03:49:41 -0800 (PST)
+        bh=WAw5aOcHJcYASQz0eHH4lmIjL4FIKnv8jTkbUdzuwNM=;
+        b=IoBdUVTGfYjfG8KLrd9QQFLuRiiyAiou1fsDqEHT2/UlFdAl9sZbRfyxUOwQ5Wysq0
+         XOF+ZsV0sHhUo5OdonAQQb+WiuWKXGG8abGakNEEhfDgA6JKr5dIooHFaHK5zRi251QE
+         tBrSJHMuK2QAHJEpcbKfx68krFOAcLSseHwWWI0nuoVlQNHZqx1Zn4Cb4cNy1yhov0ez
+         Qe1NJq5bgSMXLDvDx8PgAHnsppJBYOlJz+osF7qleb2eWDbFWHlr4lh4iq/haRymNK/+
+         8em+UVyxZTmYcrojHbHTT+7MZZrlvUcFtHFb+FA2kRlNyiv3brCCm9zrCkNR+/ubuEV/
+         sxRA==
+X-Gm-Message-State: AOJu0YxSRzLMKvEVlF/Zj0iTR8xoLAipQ2+DB7RtDXrxiZhZeZao8kKW
+	eNkjKWMdyaCKwXreEQXAfYbmy1Pfl+3uTTCPo26gP5vhgxxV/Q==
+X-Google-Smtp-Source: AGHT+IEjCRGNYqa5mnzUdPODZn87BAXipHow/pst6yJq3yWD1h01v8oSVDlhiOYM4SwKwmfR5Iibs6ibxS/IAEPecp4=
+X-Received: by 2002:a17:90b:1e41:b0:286:d1d6:9a61 with SMTP id
+ pi1-20020a17090b1e4100b00286d1d69a61mr854689pjb.7.1701777480051; Tue, 05 Dec
+ 2023 03:58:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231205-rkisp-irq-fix-v1-0-f4045c74ba45@ideasonboard.com>
- <20231205-rkisp-irq-fix-v1-3-f4045c74ba45@ideasonboard.com>
- <20231205082016.GA17394@pendragon.ideasonboard.com> <9b28dcf7-c9a0-4d68-9197-cdcdd9f0393b@ideasonboard.com>
-In-Reply-To: <9b28dcf7-c9a0-4d68-9197-cdcdd9f0393b@ideasonboard.com>
+References: <20231205-rkisp-irq-fix-v1-0-f4045c74ba45@ideasonboard.com> <20231205-rkisp-irq-fix-v1-2-f4045c74ba45@ideasonboard.com>
+In-Reply-To: <20231205-rkisp-irq-fix-v1-2-f4045c74ba45@ideasonboard.com>
 From: Adam Ford <aford173@gmail.com>
-Date: Tue, 5 Dec 2023 05:49:30 -0600
-Message-ID: <CAHCN7xKdCixYtFE=NrfLiLNjZrV5Xrg27fMMTrdA_7-Tg9Ujfg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] media: rkisp1: Fix IRQ handling due to shared interrupts
+Date: Tue, 5 Dec 2023 05:57:48 -0600
+Message-ID: <CAHCN7xJqw-hSD7rWfxFq5NWnF+=RrpCWR+js9358jAL0_WzVFw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] media: rkisp1: Fix IRQ handler return values
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Dafna Hirschfeld <dafna@fastmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, Paul Elder <paul.elder@ideasonboard.com>, 
+Cc: Dafna Hirschfeld <dafna@fastmail.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Paul Elder <paul.elder@ideasonboard.com>, 
 	Alexander Stein <alexander.stein@ew.tq-group.com>, kieran.bingham@ideasonboard.com, 
 	umang.jain@ideasonboard.com, linux-media@vger.kernel.org, 
 	linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
@@ -60,160 +59,78 @@ Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 5, 2023 at 2:27=E2=80=AFAM Tomi Valkeinen
+On Tue, Dec 5, 2023 at 2:10=E2=80=AFAM Tomi Valkeinen
 <tomi.valkeinen@ideasonboard.com> wrote:
 >
-> On 05/12/2023 10:20, Laurent Pinchart wrote:
-> > Hi Tomi,
-> >
-> > Thank you for the patch.
-> >
-> > On Tue, Dec 05, 2023 at 10:09:34AM +0200, Tomi Valkeinen wrote:
-> >> The driver requests the interrupts as IRQF_SHARED, so the interrupt
-> >> handlers can be called at any time. If such a call happens while the I=
-SP
-> >> is powered down, the SoC will hang as the driver tries to access the
-> >> ISP registers.
-> >
-> > Is IRQF_SHARED actually needed ?
+> The IRQ handler rkisp1_isr() calls sub-handlers, all of which returns an
+> irqreturn_t value, but rkisp1_isr() ignores those values and always
+> returns IRQ_HANDLED.
 >
-> I don't have any answer to that, but it seems to have always been there.
-> Dropping it would simplify the code, but we can only do that if we are
-> sure all the platforms the ISP is used on or will be used on won't share
-> the interrupt.
+> Fix this by collecting the return values, and returning IRQ_HANDLED or
+> IRQ_NONE as appropriate.
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 18 ++++++++++++++-=
+---
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/driver=
+s/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> index 76f93614b4cf..1d60f4b8bd09 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> @@ -445,17 +445,27 @@ static int rkisp1_entities_register(struct rkisp1_d=
+evice *rkisp1)
+>
+>  static irqreturn_t rkisp1_isr(int irq, void *ctx)
+>  {
+> +       irqreturn_t ret;
+> +
+>         /*
+>          * Call rkisp1_capture_isr() first to handle the frame that
+>          * potentially completed using the current frame_sequence number =
+before
+>          * it is potentially incremented by rkisp1_isp_isr() in the verti=
+cal
+>          * sync.
+>          */
+> -       rkisp1_capture_isr(irq, ctx);
+> -       rkisp1_isp_isr(irq, ctx);
+> -       rkisp1_csi_isr(irq, ctx);
+>
+> -       return IRQ_HANDLED;
+> +       ret =3D IRQ_NONE;
+> +
+> +       if (rkisp1_capture_isr(irq, ctx) =3D=3D IRQ_HANDLED)
+> +               ret =3D IRQ_HANDLED;
+> +
+> +       if (rkisp1_isp_isr(irq, ctx) =3D=3D IRQ_HANDLED)
+> +               ret =3D IRQ_HANDLED;
+> +
+> +       if (rkisp1_csi_isr(irq, ctx) =3D=3D IRQ_HANDLED)
+> +               ret =3D IRQ_HANDLED;
+> +
 
-I can't speak for the Rockchip, but from what I can see, the imx8mp
-has multiple causes for Interrupt 74 and  75, but they all appear to
-be ISP1 and ISP2 related.
+It seems like we're throwing away the value of ret each time the
+subsequent if statement is evaluated.  Whether or not they return
+didn't matter before, and the only one that seems using the return
+code is the last one.
+
+Wouldn't it be simpler to use ret =3D rkisp1_capture_isr(irq, ctx), ret
+=3D rkisp1_isp_isr(irq, ctx) and ret =3D rkisp1_csi_isr(irq, ctx) if we
+care about the return code?
+
+How do you expect this to return if one of the first two don't return
+IRQ_HANDLED?
 
 adam
+
+> +       return ret;
+>  }
 >
->   Tomi
+>  static const char * const px30_isp_clks[] =3D {
 >
-> >> Fix this by adding a new field, 'irqs_enabled', which is used to bail
-> >> out from the interrupt handler when the ISP is not operational.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> >> ---
-> >>   .../media/platform/rockchip/rkisp1/rkisp1-capture.c |  3 +++
-> >>   .../media/platform/rockchip/rkisp1/rkisp1-common.h  |  2 ++
-> >>   drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c |  3 +++
-> >>   drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 21 +++++++++++=
-++++++++++
-> >>   drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c |  3 +++
-> >>   5 files changed, 32 insertions(+)
-> >>
-> >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b=
-/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> >> index b50b044d22af..e92067897f28 100644
-> >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
-> >> @@ -779,6 +779,9 @@ irqreturn_t rkisp1_capture_isr(int irq, void *ctx)
-> >>      unsigned int i;
-> >>      u32 status;
-> >>
-> >> +    if (!rkisp1->irqs_enabled)
-> >> +            return IRQ_NONE;
-> >> +
-> >>      status =3D rkisp1_read(rkisp1, RKISP1_CIF_MI_MIS);
-> >>      if (!status)
-> >>              return IRQ_NONE;
-> >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/=
-drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> >> index ec28907d978e..7f97fdf6e24c 100644
-> >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-> >> @@ -465,6 +465,7 @@ struct rkisp1_debug {
-> >>    * @debug:    debug params to be exposed on debugfs
-> >>    * @info:     version-specific ISP information
-> >>    * @irqs:          IRQ line numbers
-> >> + * @irqs_enabled:  the hardware is enabled and can cause interrupts
-> >>    */
-> >>   struct rkisp1_device {
-> >>      void __iomem *base_addr;
-> >> @@ -488,6 +489,7 @@ struct rkisp1_device {
-> >>      struct rkisp1_debug debug;
-> >>      const struct rkisp1_info *info;
-> >>      int irqs[RKISP1_NUM_IRQS];
-> >> +    bool irqs_enabled;
-> >>   };
-> >>
-> >>   /*
-> >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c b/dri=
-vers/media/platform/rockchip/rkisp1/rkisp1-csi.c
-> >> index 47f4353a1784..f6b54654b435 100644
-> >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c
-> >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c
-> >> @@ -184,6 +184,9 @@ irqreturn_t rkisp1_csi_isr(int irq, void *ctx)
-> >>      struct rkisp1_device *rkisp1 =3D dev_get_drvdata(dev);
-> >>      u32 val, status;
-> >>
-> >> +    if (!rkisp1->irqs_enabled)
-> >> +            return IRQ_NONE;
-> >> +
-> >>      status =3D rkisp1_read(rkisp1, RKISP1_CIF_MIPI_MIS);
-> >>      if (!status)
-> >>              return IRQ_NONE;
-> >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/dri=
-vers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> >> index 1d60f4b8bd09..fbe03f7864e3 100644
-> >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
-> >> @@ -306,6 +306,23 @@ static int __maybe_unused rkisp1_runtime_suspend(=
-struct device *dev)
-> >>   {
-> >>      struct rkisp1_device *rkisp1 =3D dev_get_drvdata(dev);
-> >>
-> >> +    rkisp1->irqs_enabled =3D false;
-> >> +    /* Make sure the IRQ handler will see the above */
-> >> +    mb();
-> >> +
-> >> +    /*
-> >> +     * Wait until any running IRQ handler has returned. The IRQ handl=
-er
-> >> +     * may get called even after this (as it's a shared interrupt lin=
-e)
-> >> +     * but the 'irqs_enabled' flag will make the handler return immed=
-iately.
-> >> +     */
-> >> +    for (unsigned int i =3D 0; i < RKISP1_NUM_IRQS; ++i) {
-> >> +            if (rkisp1->irqs[i] =3D=3D -1)
-> >> +                    continue;
-> >> +
-> >> +            if (i =3D=3D 0 || rkisp1->irqs[i - 1] !=3D rkisp1->irqs[i=
-])
-> >> +                    synchronize_irq(rkisp1->irqs[i]);
-> >> +    }
-> >> +
-> >>      clk_bulk_disable_unprepare(rkisp1->clk_size, rkisp1->clks);
-> >>      return pinctrl_pm_select_sleep_state(dev);
-> >>   }
-> >> @@ -322,6 +339,10 @@ static int __maybe_unused rkisp1_runtime_resume(s=
-truct device *dev)
-> >>      if (ret)
-> >>              return ret;
-> >>
-> >> +    rkisp1->irqs_enabled =3D true;
-> >> +    /* Make sure the IRQ handler will see the above */
-> >> +    mb();
-> >> +
-> >>      return 0;
-> >>   }
-> >>
-> >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/dri=
-vers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> >> index dafbfd230542..d6b8786661ad 100644
-> >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
-> >> @@ -1082,6 +1082,9 @@ irqreturn_t rkisp1_isp_isr(int irq, void *ctx)
-> >>      struct rkisp1_device *rkisp1 =3D dev_get_drvdata(dev);
-> >>      u32 status, isp_err;
-> >>
-> >> +    if (!rkisp1->irqs_enabled)
-> >> +            return IRQ_NONE;
-> >> +
-> >>      status =3D rkisp1_read(rkisp1, RKISP1_CIF_ISP_MIS);
-> >>      if (!status)
-> >>              return IRQ_NONE;
-> >
+> --
+> 2.34.1
 >
