@@ -1,146 +1,190 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a771OJF3"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF7298
-	for <linux-media@vger.kernel.org>; Tue,  5 Dec 2023 03:58:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701777518; x=1733313518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fPeAcvfdU+TNNzNqrZlOEHkS1vgOvCMGwp7S8pVPa7o=;
-  b=a771OJF3sfWt2Q79PDGdoiVsc3Y5jos+6vUXyhl9VnE61wc4V4GSuu85
-   kdBimkAtsqZIhFIEK5EQVEpfn+mi7ywKen+nWUnQieSE6ivIpvMTHj0c5
-   1Tgl/hjRaBNaaMeIkvxRJhsxIZ+BMyDuiN+Q8aPkOtGHVCBgv05Yc7h2Z
-   D9XKGUyL3C+yv7niozhgUM/ineFHw/MheNlsaulFE691RuCIvT8V7Qith
-   9TGdNDuDEO8NKAIiCJoq1G8M4qf8+zUTe3tZ+45TfRXhZsGq1leMarz25
-   CI19whD2gIr9pv/eenrOsBb3HNaPONb4uiD0X51oOz47PNuUr72ewLh7h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="384281012"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="384281012"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 03:58:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="1018200375"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="1018200375"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Dec 2023 03:58:35 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAU4P-0008va-2n;
-	Tue, 05 Dec 2023 11:58:33 +0000
-Date: Tue, 5 Dec 2023 19:57:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="jee2wC3v"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B19098;
+	Tue,  5 Dec 2023 04:02:05 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 36EEE844;
+	Tue,  5 Dec 2023 13:01:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1701777683;
+	bh=bKZroPFsFtSdTPyHK0rJbVB9cPk+QtCuoUpKU4CunHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jee2wC3vSvY6cG7oCEtuQCbYH28IrZRKNXyIbJavutI6wA80Gy2Sm6o6cjQULbx5a
+	 M0SsPcBZFREcK+ZkNDNh13v/h4DHlS4XNrw2Xmk4OrPT6yn5HMFlQOfh2UlN/sZEjD
+	 nL3LaJ+XqCd35cYQ5mZorCOUYhcIbi1aF10XcdWY=
+Date: Tue, 5 Dec 2023 14:02:10 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Adam Ford <aford173@gmail.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Dafna Hirschfeld <dafna@fastmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [linux-next:master 2291/4884] drivers/media/i2c/saa6752hs.c:598:18:
- error: implicit declaration of function 'v4l2_subdev_state_get_format'
-Message-ID: <202312051913.e5iif8Qz-lkp@intel.com>
+	Heiko Stuebner <heiko@sntech.de>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	kieran.bingham@ideasonboard.com, umang.jain@ideasonboard.com,
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] media: rkisp1: Fix IRQ handling due to shared
+ interrupts
+Message-ID: <20231205120210.GC17394@pendragon.ideasonboard.com>
+References: <20231205-rkisp-irq-fix-v1-0-f4045c74ba45@ideasonboard.com>
+ <20231205-rkisp-irq-fix-v1-3-f4045c74ba45@ideasonboard.com>
+ <20231205082016.GA17394@pendragon.ideasonboard.com>
+ <9b28dcf7-c9a0-4d68-9197-cdcdd9f0393b@ideasonboard.com>
+ <CAHCN7xKdCixYtFE=NrfLiLNjZrV5Xrg27fMMTrdA_7-Tg9Ujfg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHCN7xKdCixYtFE=NrfLiLNjZrV5Xrg27fMMTrdA_7-Tg9Ujfg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0f5f12ac05f36f117e793656c3f560625e927f1b
-commit: bc0e8d91feec72b19199298dca470c5816a52105 [2291/4884] media: v4l: subdev: Switch to stream-aware state functions
-config: arc-randconfig-c031-20221114 (https://download.01.org/0day-ci/archive/20231205/202312051913.e5iif8Qz-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312051913.e5iif8Qz-lkp@intel.com/reproduce)
+On Tue, Dec 05, 2023 at 05:49:30AM -0600, Adam Ford wrote:
+> On Tue, Dec 5, 2023 at 2:27 AM Tomi Valkeinen wrote:
+> > On 05/12/2023 10:20, Laurent Pinchart wrote:
+> > > On Tue, Dec 05, 2023 at 10:09:34AM +0200, Tomi Valkeinen wrote:
+> > >> The driver requests the interrupts as IRQF_SHARED, so the interrupt
+> > >> handlers can be called at any time. If such a call happens while the ISP
+> > >> is powered down, the SoC will hang as the driver tries to access the
+> > >> ISP registers.
+> > >
+> > > Is IRQF_SHARED actually needed ?
+> >
+> > I don't have any answer to that, but it seems to have always been there.
+> > Dropping it would simplify the code, but we can only do that if we are
+> > sure all the platforms the ISP is used on or will be used on won't share
+> > the interrupt.
+> 
+> I can't speak for the Rockchip, but from what I can see, the imx8mp
+> has multiple causes for Interrupt 74 and  75, but they all appear to
+> be ISP1 and ISP2 related.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312051913.e5iif8Qz-lkp@intel.com/
+The ISP has multiple interrupt lines. In some SoCs, they're all wired to
+a single line of the IRQ controller (e.g. RK3399 and i.MX8MP), while
+other SoCs use separate interrupts (e.g. PX30). I have checked the PX30,
+RK3399 and i.MX8MP datasheets, and the ISP interrupts are not shared
+with any other peripheral. I think it's thus safe to drop IRQF_SHARED.
 
-All errors (new ones prefixed by >>):
-
-   drivers/media/i2c/saa6752hs.c: In function 'saa6752hs_set_fmt':
->> drivers/media/i2c/saa6752hs.c:598:18: error: implicit declaration of function 'v4l2_subdev_state_get_format' [-Werror=implicit-function-declaration]
-     598 |                 *v4l2_subdev_state_get_format(sd_state, 0) = *f;
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/saa6752hs.c:598:17: error: invalid type argument of unary '*' (have 'int')
-     598 |                 *v4l2_subdev_state_get_format(sd_state, 0) = *f;
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/v4l2_subdev_state_get_format +598 drivers/media/i2c/saa6752hs.c
-
-   564	
-   565	static int saa6752hs_set_fmt(struct v4l2_subdev *sd,
-   566			struct v4l2_subdev_state *sd_state,
-   567			struct v4l2_subdev_format *format)
-   568	{
-   569		struct v4l2_mbus_framefmt *f = &format->format;
-   570		struct saa6752hs_state *h = to_state(sd);
-   571		int dist_352, dist_480, dist_720;
-   572	
-   573		if (format->pad)
-   574			return -EINVAL;
-   575	
-   576		f->code = MEDIA_BUS_FMT_FIXED;
-   577	
-   578		dist_352 = abs(f->width - 352);
-   579		dist_480 = abs(f->width - 480);
-   580		dist_720 = abs(f->width - 720);
-   581		if (dist_720 < dist_480) {
-   582			f->width = 720;
-   583			f->height = 576;
-   584		} else if (dist_480 < dist_352) {
-   585			f->width = 480;
-   586			f->height = 576;
-   587		} else {
-   588			f->width = 352;
-   589			if (abs(f->height - 576) < abs(f->height - 288))
-   590				f->height = 576;
-   591			else
-   592				f->height = 288;
-   593		}
-   594		f->field = V4L2_FIELD_INTERLACED;
-   595		f->colorspace = V4L2_COLORSPACE_SMPTE170M;
-   596	
-   597		if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
- > 598			*v4l2_subdev_state_get_format(sd_state, 0) = *f;
-   599			return 0;
-   600		}
-   601	
-   602		/*
-   603		  FIXME: translate and round width/height into EMPRESS
-   604		  subsample type:
-   605	
-   606		  type   |   PAL   |  NTSC
-   607		  ---------------------------
-   608		  SIF    | 352x288 | 352x240
-   609		  1/2 D1 | 352x576 | 352x480
-   610		  2/3 D1 | 480x576 | 480x480
-   611		  D1     | 720x576 | 720x480
-   612		*/
-   613	
-   614		if (f->code != MEDIA_BUS_FMT_FIXED)
-   615			return -EINVAL;
-   616	
-   617		if (f->width == 720)
-   618			h->video_format = SAA6752HS_VF_D1;
-   619		else if (f->width == 480)
-   620			h->video_format = SAA6752HS_VF_2_3_D1;
-   621		else if (f->height == 576)
-   622			h->video_format = SAA6752HS_VF_1_2_D1;
-   623		else
-   624			h->video_format = SAA6752HS_VF_SIF;
-   625		return 0;
-   626	}
-   627	
+> > >> Fix this by adding a new field, 'irqs_enabled', which is used to bail
+> > >> out from the interrupt handler when the ISP is not operational.
+> > >>
+> > >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> > >> ---
+> > >>   .../media/platform/rockchip/rkisp1/rkisp1-capture.c |  3 +++
+> > >>   .../media/platform/rockchip/rkisp1/rkisp1-common.h  |  2 ++
+> > >>   drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c |  3 +++
+> > >>   drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 21 +++++++++++++++++++++
+> > >>   drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c |  3 +++
+> > >>   5 files changed, 32 insertions(+)
+> > >>
+> > >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > >> index b50b044d22af..e92067897f28 100644
+> > >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+> > >> @@ -779,6 +779,9 @@ irqreturn_t rkisp1_capture_isr(int irq, void *ctx)
+> > >>      unsigned int i;
+> > >>      u32 status;
+> > >>
+> > >> +    if (!rkisp1->irqs_enabled)
+> > >> +            return IRQ_NONE;
+> > >> +
+> > >>      status = rkisp1_read(rkisp1, RKISP1_CIF_MI_MIS);
+> > >>      if (!status)
+> > >>              return IRQ_NONE;
+> > >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> > >> index ec28907d978e..7f97fdf6e24c 100644
+> > >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> > >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
+> > >> @@ -465,6 +465,7 @@ struct rkisp1_debug {
+> > >>    * @debug:    debug params to be exposed on debugfs
+> > >>    * @info:     version-specific ISP information
+> > >>    * @irqs:          IRQ line numbers
+> > >> + * @irqs_enabled:  the hardware is enabled and can cause interrupts
+> > >>    */
+> > >>   struct rkisp1_device {
+> > >>      void __iomem *base_addr;
+> > >> @@ -488,6 +489,7 @@ struct rkisp1_device {
+> > >>      struct rkisp1_debug debug;
+> > >>      const struct rkisp1_info *info;
+> > >>      int irqs[RKISP1_NUM_IRQS];
+> > >> +    bool irqs_enabled;
+> > >>   };
+> > >>
+> > >>   /*
+> > >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c
+> > >> index 47f4353a1784..f6b54654b435 100644
+> > >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c
+> > >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-csi.c
+> > >> @@ -184,6 +184,9 @@ irqreturn_t rkisp1_csi_isr(int irq, void *ctx)
+> > >>      struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
+> > >>      u32 val, status;
+> > >>
+> > >> +    if (!rkisp1->irqs_enabled)
+> > >> +            return IRQ_NONE;
+> > >> +
+> > >>      status = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_MIS);
+> > >>      if (!status)
+> > >>              return IRQ_NONE;
+> > >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> > >> index 1d60f4b8bd09..fbe03f7864e3 100644
+> > >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> > >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> > >> @@ -306,6 +306,23 @@ static int __maybe_unused rkisp1_runtime_suspend(struct device *dev)
+> > >>   {
+> > >>      struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
+> > >>
+> > >> +    rkisp1->irqs_enabled = false;
+> > >> +    /* Make sure the IRQ handler will see the above */
+> > >> +    mb();
+> > >> +
+> > >> +    /*
+> > >> +     * Wait until any running IRQ handler has returned. The IRQ handler
+> > >> +     * may get called even after this (as it's a shared interrupt line)
+> > >> +     * but the 'irqs_enabled' flag will make the handler return immediately.
+> > >> +     */
+> > >> +    for (unsigned int i = 0; i < RKISP1_NUM_IRQS; ++i) {
+> > >> +            if (rkisp1->irqs[i] == -1)
+> > >> +                    continue;
+> > >> +
+> > >> +            if (i == 0 || rkisp1->irqs[i - 1] != rkisp1->irqs[i])
+> > >> +                    synchronize_irq(rkisp1->irqs[i]);
+> > >> +    }
+> > >> +
+> > >>      clk_bulk_disable_unprepare(rkisp1->clk_size, rkisp1->clks);
+> > >>      return pinctrl_pm_select_sleep_state(dev);
+> > >>   }
+> > >> @@ -322,6 +339,10 @@ static int __maybe_unused rkisp1_runtime_resume(struct device *dev)
+> > >>      if (ret)
+> > >>              return ret;
+> > >>
+> > >> +    rkisp1->irqs_enabled = true;
+> > >> +    /* Make sure the IRQ handler will see the above */
+> > >> +    mb();
+> > >> +
+> > >>      return 0;
+> > >>   }
+> > >>
+> > >> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> > >> index dafbfd230542..d6b8786661ad 100644
+> > >> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> > >> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+> > >> @@ -1082,6 +1082,9 @@ irqreturn_t rkisp1_isp_isr(int irq, void *ctx)
+> > >>      struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
+> > >>      u32 status, isp_err;
+> > >>
+> > >> +    if (!rkisp1->irqs_enabled)
+> > >> +            return IRQ_NONE;
+> > >> +
+> > >>      status = rkisp1_read(rkisp1, RKISP1_CIF_ISP_MIS);
+> > >>      if (!status)
+> > >>              return IRQ_NONE;
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+
+Laurent Pinchart
