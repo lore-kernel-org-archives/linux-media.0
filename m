@@ -1,30 +1,30 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="JFmHzEfR"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="byKvK2QS"
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4EBFA
-	for <linux-media@vger.kernel.org>; Tue,  5 Dec 2023 01:06:02 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1A11F
+	for <linux-media@vger.kernel.org>; Tue,  5 Dec 2023 01:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1701767162; x=1733303162;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KuDOk6Xf/GnHEv0tqTNVNp6Stwsy7PMvg8hwhOKR5xk=;
-  b=JFmHzEfRz0NAB0z/f/MrpllOMP9I7lkslnsgd2faODU//kPW9eRa7L1X
-   Enprrf+vpQRpMbCCPCN2IVgbXFqCApb87rroiyNPbNtlFEvjpyLrvwCL+
-   tliqSYAZ8kXeUs2wsDJIli8pQjfFP8QFfNHe/LWMJXxpStaK1vdVxIw70
-   wpqbsAfhqmDeG5nLzi3szSuWCqe50Jm5nRbsq4a6C41Ov30aoPsiqfKCg
-   YXtV+pUOZjaJWzno3AWHlpt+HJr9TrksdWqHgxi0eM1VDms3wtzBKaPYM
-   1Y32yPA9dxOI+6tUtHWohTTzUddvm/0yDc6NEGKliNy8SosAWWhp2nN+6
-   g==;
+  t=1701767169; x=1733303169;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wAXP5DIZf71Tb0PhxEKywLelpwpcgMXkVU6fg2yDVio=;
+  b=byKvK2QSy0xIeOh752IO/Mgn4aGl8POOxZmGsccDlXSQVa8azXzUMAiT
+   WnNAbB0KvazLDMlAtdUcsaNsIFD5b2pWuBx2OlrkBRs87YEp0HlyQzZPw
+   xkmvUi/Tz64rUkkU3ETNmfx6a1bQN2CoA9EODWsUgt0fNL2mUmnkEnZ+T
+   DjiFfRAsEdPlA9+751HZCx5XhBtOX5FlRv3kJGcOHVCoiUS4jXzzrgHuw
+   U7MUHeaQBWZqZJzi5vy8awX8PKRrj7igjXljtqVTNKFb4oHcL6dJUD3BB
+   +0EGYlHkSZ4QfbIt9s5HWxv8Vrswc9tjXALjusswjQh00QwdBZ9ZeaYDQ
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.04,251,1695679200"; 
-   d="scan'208";a="34328800"
+   d="scan'208";a="34328803"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 05 Dec 2023 10:06:00 +0100
 Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 230CE280075;
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 792F8280085;
 	Tue,  5 Dec 2023 10:06:00 +0100 (CET)
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -34,10 +34,12 @@ To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Gerald Loacker <gerald.loacker@wolfvision.net>
 Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux-media@vger.kernel.org
-Subject: [PATCH 0/3] media: imx415: Add more modes
-Date: Tue,  5 Dec 2023 10:05:54 +0100
-Message-Id: <20231205090557.298680-1-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 2/3] media: i2c: imx415: Add more clock configurations
+Date: Tue,  5 Dec 2023 10:05:56 +0100
+Message-Id: <20231205090557.298680-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231205090557.298680-1-alexander.stein@ew.tq-group.com>
+References: <20231205090557.298680-1-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -46,34 +48,308 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Complete the list from "INCK Setting" section in IMX415-AAQR-C
+(Rev. E19504, 2019/05/21)
 
-this small series converts the driver to using CCI helpers.
-On top of that more clock setups and modes are added to the driver.
-These are all taken from the datasheet. I suspect they all can be calculated
-dynamically later on.
-Tested on TQMa8MPxL + MBa8MPxL + ISP + Vision Components IMX415 camera.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/media/i2c/imx415.c | 255 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 255 insertions(+)
 
-While working on the driver I notived that imx415 sets mbus code to
-MEDIA_BUS_FMT_SGBRG10_1X10, while imx290 uses MEDIA_BUS_FMT_SRGGB10_1X10.
-But the datasheets show the same color coding pattern. But both settings seem
-to be correct, e.g. the resulting image has correct colors.
-
-I had to remove the identity check locally. I suspect that Vision Components
-interjects reading some registers.
-
-Best regards,
-Alexander
-
-Alexander Stein (3):
-  media: i2c: imx415: Convert to new CCI register access helpers
-  media: i2c: imx415: Add more clock configurations
-  media: i2c: imx415: Add more supported modes
-
- drivers/media/i2c/Kconfig  |    2 +
- drivers/media/i2c/imx415.c | 1013 +++++++++++++++++++++++++++---------
- 2 files changed, 779 insertions(+), 236 deletions(-)
-
+diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+index bb1a779defab..a222b9134aa2 100644
+--- a/drivers/media/i2c/imx415.c
++++ b/drivers/media/i2c/imx415.c
+@@ -128,6 +128,36 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+ 		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+ 	},
++	{
++		.lane_rate = 594000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x7 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x080 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x0 },
++		.regs[9] = { IMX415_INCKSEL7, 0x1 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0984 },
++	},
++	{
++		.lane_rate = 594000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x7 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x080 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x0 },
++		.regs[9] = { IMX415_INCKSEL7, 0x1 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
+ 	{
+ 		.lane_rate = 720000000,
+ 		.inck = 24000000,
+@@ -143,6 +173,21 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+ 		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+ 	},
++	{
++		.lane_rate = 720000000,
++		.inck = 72000000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0F8 },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B0 },
++		.regs[2] = { IMX415_SYS_MODE, 0x9 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0A0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x0 },
++		.regs[9] = { IMX415_INCKSEL7, 0x1 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1200 },
++	},
+ 	{
+ 		.lane_rate = 891000000,
+ 		.inck = 27000000,
+@@ -158,6 +203,36 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 		.regs[9] = { IMX415_INCKSEL7, 0x1 },
+ 		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+ 	},
++	{
++		.lane_rate = 891000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x5 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0C0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x0 },
++		.regs[9] = { IMX415_INCKSEL7, 0x1 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0948 },
++	},
++	{
++		.lane_rate = 891000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x5 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0C0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x0 },
++		.regs[9] = { IMX415_INCKSEL7, 0x1 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
+ 	{
+ 		.lane_rate = 1440000000,
+ 		.inck = 24000000,
+@@ -173,6 +248,21 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+ 		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0600 },
+ 	},
++	{
++		.lane_rate = 1440000000,
++		.inck = 72000000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0F8 },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B0 },
++		.regs[2] = { IMX415_SYS_MODE, 0x8 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0A0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1200 },
++	},
+ 	{
+ 		.lane_rate = 1485000000,
+ 		.inck = 27000000,
+@@ -188,6 +278,171 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 		.regs[9] = { IMX415_INCKSEL7, 0x0 },
+ 		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
+ 	},
++	{
++		.lane_rate = 1485000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x8 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0A0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0948 },
++	},
++	{
++		.lane_rate = 1485000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x8 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0A0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
++	{
++		.lane_rate = 1782000000,
++		.inck = 27000000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
++		.regs[2] = { IMX415_SYS_MODE, 0x4 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x23 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0C6 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
++		.regs[7] = { IMX415_INCKSEL5, 0x23 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
++	},
++	{
++		.lane_rate = 1782000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x4 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0C0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0948 },
++	},
++	{
++		.lane_rate = 1782000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x4 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0C0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
++	{
++		.lane_rate = 2079000000,
++		.inck = 27000000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
++		.regs[2] = { IMX415_SYS_MODE, 0x2 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x23 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0E7 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
++		.regs[7] = { IMX415_INCKSEL5, 0x23 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
++	},
++	{
++		.lane_rate = 2079000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x2 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0E0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0948 },
++	},
++	{
++		.lane_rate = 2079000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x2 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x0E0 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
++	{
++		.lane_rate = 2376000000,
++		.inck = 27000000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x05D },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x042 },
++		.regs[2] = { IMX415_SYS_MODE, 0x0 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x23 },
++		.regs[5] = { IMX415_INCKSEL3, 0x108 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E7 },
++		.regs[7] = { IMX415_INCKSEL5, 0x23 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x06C0 },
++	},
++	{
++		.lane_rate = 2376000000,
++		.inck = 37125000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x07F },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x05B },
++		.regs[2] = { IMX415_SYS_MODE, 0x0 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x24 },
++		.regs[5] = { IMX415_INCKSEL3, 0x100 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x24 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x0948 },
++	},
++	{
++		.lane_rate = 2376000000,
++		.inck = 74250000,
++		.regs[0] = { IMX415_BCWAIT_TIME, 0x0FF },
++		.regs[1] = { IMX415_CPWAIT_TIME, 0x0B6 },
++		.regs[2] = { IMX415_SYS_MODE, 0x0 },
++		.regs[3] = { IMX415_INCKSEL1, 0x00 },
++		.regs[4] = { IMX415_INCKSEL2, 0x28 },
++		.regs[5] = { IMX415_INCKSEL3, 0x100 },
++		.regs[6] = { IMX415_INCKSEL4, 0x0E0 },
++		.regs[7] = { IMX415_INCKSEL5, 0x28 },
++		.regs[8] = { IMX415_INCKSEL6, 0x1 },
++		.regs[9] = { IMX415_INCKSEL7, 0x0 },
++		.regs[10] = { IMX415_TXCLKESC_FREQ, 0x1290 },
++	},
+ };
+ 
+ /* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
 -- 
 2.34.1
 
