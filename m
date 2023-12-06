@@ -1,25 +1,25 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SRjSjvLD"
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC52134;
-	Wed,  6 Dec 2023 00:56:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BvOo3pMf"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6841B716;
+	Wed,  6 Dec 2023 00:56:19 -0800 (PST)
 Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F5D166072F1;
-	Wed,  6 Dec 2023 08:56:16 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8DDE8660732A;
+	Wed,  6 Dec 2023 08:56:17 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701852976;
-	bh=cAQGXK/DFzV/MsA9WE+7jJOIqA7DYcQgRektvIwug7M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SRjSjvLDcbd1BMuyp/l5qZFEEIpqwHu90To1u9YmvfxgZwSGgYSmz9Xj6YCgoVU6n
-	 9Ht8eQTlCrLt7WYv1+qUJEroAzDa/6ObX72X3KzF6xDB477Gii0Cx6aaVzDqoUqaHk
-	 p/7GWzxk9MrswYQaByh6Zol3QHfMQlfao/hSfcjx8hg86WZ4klgiGPlEdW6/G5H6Fi
-	 G8DNU/8AeFg1faPyaG6w4FtlDp11SbWRiqL7ahdLbPONwI3uu+/NO7gQnTIFW4ycDv
-	 3Up8/UNHas/TojmGzRsQpGY/XE9CWybMtJvetmJ5ylIQLhunRXCjF5Iheo3bFUDNh0
-	 aEf4mqjtVjIXg==
+	s=mail; t=1701852978;
+	bh=FTU8KzPND5ID0Hx3E+vk2e0gEDIDzN1LiyjU+EkE4jI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BvOo3pMftWfEYWWSJy44jD9zyzsPKAfR3zznUSvGY8ng4kAP8EMdKakgLzIBUVqlD
+	 xtr7Fcmu7+Z8ZfMWYwBVDFUwNewL5gaTkqJLK/lFnUMf420Nfs/6049NCBizwY3Jg3
+	 26JxiCzrYHzMu7Csl521xeSPP3UIcK8aiTQFDDgwCCAwm0zyzZiR3rfZ4lh9eYGUU8
+	 4VS+trLgkXcaSK01byLLNoodwoTmO7ta8eVRFDTPOdTcIFxG/MfujGg2MvzYf7WAPL
+	 elFDWvaDyenPG2qAYdi0b3eQGdZGBS5vm/lHbieOZ1EKvHPm/ONESn5efRoScwEVnG
+	 jQxJp5ngvuJpg==
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: hverkuil@xs4all.nl,
 	mchehab@kernel.org,
@@ -29,10 +29,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-staging@lists.linux.dev,
 	kernel@collabora.com,
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 0/2] Clean up min_buffers_needed misusages
-Date: Wed,  6 Dec 2023 09:56:06 +0100
-Message-Id: <20231206085608.33246-1-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 2/2] videobuf2: Add min_reqbufs_allocation field to vb2_queue structure
+Date: Wed,  6 Dec 2023 09:56:08 +0100
+Message-Id: <20231206085608.33246-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231206085608.33246-1-benjamin.gaignard@collabora.com>
+References: <20231206085608.33246-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,106 +43,54 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series implement Hans's RFC: https://www.spinics.net/lists/linux-media/msg244455.html
+Add 'min_reqbufs_allocation' field in vb2_queue structure so drivers
+can specificy the minimum number of buffers to allocate when calling
+VIDIOC_REQBUFS.
+If used this minimum should be higher than the minimum number of
+queued buffers needed to start streaming.
 
-To summarize Hans's proposal it is needed to distinguish two cases:
-- the minimal number of buffers to be allocated when calling
-  VIDIOC_REQBUFS.
-- the minimale number of queued buffers before start streaming.
-Until now drivers use vb2_queue min_buffers_needed field in the both
-cases but before introduce delete buffers we need to clarify for which
-usage each of them use min_buffers_needed field.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ drivers/media/common/videobuf2/videobuf2-core.c | 1 +
+ include/media/videobuf2-core.h                  | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-The branch with all patches is here:
-https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/clean_min_need_buffers_v3
-
-I have tested with this command line, I haven't notice issues:
-./test-media -kmemleak mc
-
-changes in version 3:
-- Just rename min_buffers_needed into min_queued_buffers everywhere
-  without trying to fix the drivers.
-- Introduce min_reqbufs_allocation field to be used when calling VIDIOC_REQBUFS.
-
-changes in version 2:
-- change min_buffers_needed into min_queues_buffers instead of min_dma_buffers_needed
-- patches order
-- only one patch to rename min_buffers_needed into min_queues_buffers.
-
-Benjamin Gaignard (2):
-  videobuf2: core: Rename min_buffers_needed field to vb2_queue
-  videobuf2: Add min_reqbufs_allocation field to vb2_queue structure
-
- drivers/input/touchscreen/atmel_mxt_ts.c      |  2 +-
- drivers/input/touchscreen/sur40.c             |  2 +-
- drivers/media/common/saa7146/saa7146_fops.c   |  2 +-
- .../media/common/videobuf2/videobuf2-core.c   | 23 ++++++++++---------
- drivers/media/dvb-core/dvb_vb2.c              |  2 +-
- drivers/media/i2c/video-i2c.c                 |  2 +-
- drivers/media/pci/bt8xx/bttv-driver.c         |  2 +-
- drivers/media/pci/cobalt/cobalt-v4l2.c        |  2 +-
- drivers/media/pci/cx18/cx18-streams.c         |  2 +-
- drivers/media/pci/cx23885/cx23885-417.c       |  2 +-
- drivers/media/pci/cx23885/cx23885-dvb.c       |  2 +-
- drivers/media/pci/cx23885/cx23885-video.c     |  4 ++--
- drivers/media/pci/cx25821/cx25821-video.c     |  2 +-
- drivers/media/pci/cx88/cx88-blackbird.c       |  2 +-
- drivers/media/pci/cx88/cx88-dvb.c             |  2 +-
- drivers/media/pci/cx88/cx88-video.c           |  4 ++--
- drivers/media/pci/dt3155/dt3155.c             |  2 +-
- drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  2 +-
- drivers/media/pci/mgb4/mgb4_vin.c             |  2 +-
- drivers/media/pci/mgb4/mgb4_vout.c            |  2 +-
- drivers/media/pci/tw5864/tw5864-video.c       |  2 +-
- drivers/media/pci/tw68/tw68-video.c           |  2 +-
- drivers/media/pci/tw686x/tw686x-video.c       |  2 +-
- drivers/media/pci/zoran/zoran_driver.c        |  5 +---
- drivers/media/platform/amphion/vpu_v4l2.c     |  4 ++--
- drivers/media/platform/aspeed/aspeed-video.c  |  2 +-
- drivers/media/platform/atmel/atmel-isi.c      |  2 +-
- .../platform/chips-media/coda/coda-common.c   |  2 +-
- .../platform/microchip/microchip-isc-base.c   |  2 +-
- drivers/media/platform/nuvoton/npcm-video.c   |  2 +-
- drivers/media/platform/nxp/imx7-media-csi.c   |  2 +-
- .../platform/nxp/imx8-isi/imx8-isi-video.c    |  2 +-
- drivers/media/platform/qcom/venus/vdec.c      |  4 ++--
- drivers/media/platform/qcom/venus/venc.c      |  4 ++--
- .../platform/renesas/rcar-vin/rcar-dma.c      |  2 +-
- drivers/media/platform/renesas/renesas-ceu.c  |  2 +-
- .../platform/renesas/rzg2l-cru/rzg2l-video.c  |  2 +-
- drivers/media/platform/renesas/sh_vou.c       |  2 +-
- .../platform/rockchip/rkisp1/rkisp1-capture.c |  2 +-
- drivers/media/platform/st/sti/hva/hva-v4l2.c  |  4 ++--
- drivers/media/platform/st/stm32/stm32-dcmi.c  |  2 +-
- .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c    |  4 ++--
- .../platform/sunxi/sun4i-csi/sun4i_dma.c      |  2 +-
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       |  2 +-
- .../media/platform/sunxi/sun8i-di/sun8i-di.c  |  4 ++--
- .../sunxi/sun8i-rotate/sun8i_rotate.c         |  4 ++--
- .../media/platform/ti/am437x/am437x-vpfe.c    |  2 +-
- drivers/media/platform/ti/cal/cal-video.c     |  2 +-
- .../media/platform/ti/davinci/vpif_capture.c  |  2 +-
- .../media/platform/ti/davinci/vpif_display.c  |  2 +-
- .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   |  2 +-
- drivers/media/platform/ti/omap/omap_vout.c    |  2 +-
- .../media/test-drivers/vimc/vimc-capture.c    |  2 +-
- drivers/media/test-drivers/vivid/vivid-core.c |  2 +-
- drivers/media/usb/cx231xx/cx231xx-417.c       |  2 +-
- drivers/media/usb/cx231xx/cx231xx-video.c     |  4 ++--
- drivers/media/usb/dvb-usb/cxusb-analog.c      |  2 +-
- drivers/media/usb/gspca/gspca.c               |  6 ++---
- .../media/deprecated/atmel/atmel-isc-base.c   |  2 +-
- drivers/staging/media/imx/imx-media-capture.c |  2 +-
- drivers/staging/media/ipu3/ipu3-v4l2.c        |  2 +-
- drivers/staging/media/meson/vdec/vdec.c       |  4 +---
- .../staging/media/starfive/camss/stf-video.c  |  2 +-
- .../media/sunxi/sun6i-isp/sun6i_isp_capture.c |  2 +-
- .../media/sunxi/sun6i-isp/sun6i_isp_params.c  |  2 +-
- drivers/staging/media/tegra-video/vi.c        |  2 +-
- include/media/videobuf2-core.h                | 10 ++++++--
- samples/v4l/v4l2-pci-skeleton.c               |  2 +-
- 68 files changed, 98 insertions(+), 96 deletions(-)
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 7b6d89641e66..3bc30d107308 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -866,6 +866,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	 * Make sure the requested values and current defaults are sane.
+ 	 */
+ 	num_buffers = max_t(unsigned int, *count, q->min_queued_buffers);
++	num_buffers = max_t(unsigned int, num_buffers, q->min_reqbufs_allocation);
+ 	num_buffers = min_t(unsigned int, num_buffers, q->max_num_buffers);
+ 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+ 	/*
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 6d11cb724e95..252d34cc47d3 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -550,6 +550,11 @@ struct vb2_buf_ops {
+  *		@start_streaming can be called. Used when a DMA engine
+  *		cannot be started unless at least this number of buffers
+  *		have been queued into the driver.
++ * @min_reqbufs_allocation: the minimum number of buffers allocated when
++ *		calling VIDIOC_REQBUFS. Used when drivers need a to
++ *		specify a minimum buffers allocation before setup a queue.
++ *		If min_queued_buffers < min_queued_buffers then min_queued_buffers
++ *		is the minimum.
+  */
+ /*
+  * Private elements (won't appear at the uAPI book):
+@@ -615,6 +620,7 @@ struct vb2_queue {
+ 	u32				timestamp_flags;
+ 	gfp_t				gfp_flags;
+ 	u32				min_queued_buffers;
++	u32				min_reqbufs_allocation;
+ 
+ 	struct device			*alloc_devs[VB2_MAX_PLANES];
+ 
 -- 
 2.39.2
 
