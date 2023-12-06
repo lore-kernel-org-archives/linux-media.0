@@ -1,171 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SRjSjvLD"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC52134;
+	Wed,  6 Dec 2023 00:56:18 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77F71A710;
-	Wed,  6 Dec 2023 08:58:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1200C433C8;
-	Wed,  6 Dec 2023 08:58:49 +0000 (UTC)
-Message-ID: <9ff761e0-380e-4e4b-ad82-b945a8155cc2@xs4all.nl>
-Date: Wed, 6 Dec 2023 09:58:47 +0100
+	(Authenticated sender: benjamin.gaignard)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F5D166072F1;
+	Wed,  6 Dec 2023 08:56:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1701852976;
+	bh=cAQGXK/DFzV/MsA9WE+7jJOIqA7DYcQgRektvIwug7M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SRjSjvLDcbd1BMuyp/l5qZFEEIpqwHu90To1u9YmvfxgZwSGgYSmz9Xj6YCgoVU6n
+	 9Ht8eQTlCrLt7WYv1+qUJEroAzDa/6ObX72X3KzF6xDB477Gii0Cx6aaVzDqoUqaHk
+	 p/7GWzxk9MrswYQaByh6Zol3QHfMQlfao/hSfcjx8hg86WZ4klgiGPlEdW6/G5H6Fi
+	 G8DNU/8AeFg1faPyaG6w4FtlDp11SbWRiqL7ahdLbPONwI3uu+/NO7gQnTIFW4ycDv
+	 3Up8/UNHas/TojmGzRsQpGY/XE9CWybMtJvetmJ5ylIQLhunRXCjF5Iheo3bFUDNh0
+	 aEf4mqjtVjIXg==
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: hverkuil@xs4all.nl,
+	mchehab@kernel.org,
+	tfiga@chromium.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 0/2] Clean up min_buffers_needed misusages
+Date: Wed,  6 Dec 2023 09:56:06 +0100
+Message-Id: <20231206085608.33246-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/7] media: v4l2-subdev: Add which field to struct
- v4l2_subdev_frame_interval
-Content-Language: en-US, nl
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- linux-media@vger.kernel.org
-Cc: Akinobu Mita <akinobu.mita@gmail.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Daniel Scally
- <djrscally@gmail.com>, Hans de Goede <hansg@kernel.org>,
- Jacopo Mondi <jacopo+renesas@jmondi.org>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
- Lars-Peter Clausen <lars@metafoo.de>, Leon Luo <leonl@leopardimaging.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
- Paul Elder <paul.elder@ideasonboard.com>, Pavel Machek <pavel@ucw.cz>,
- Philipp Zabel <p.zabel@pengutronix.de>, Ricardo Ribalda
- <ribalda@kernel.org>, Rui Miguel Silva <rmfrfs@gmail.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Sowjanya Komatineni <skomatineni@nvidia.com>,
- Steve Longerbeam <slongerbeam@gmail.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, linux-tegra@vger.kernel.org
-References: <20231205140810.22368-1-laurent.pinchart@ideasonboard.com>
- <20231205140810.22368-2-laurent.pinchart@ideasonboard.com>
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20231205140810.22368-2-laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/12/2023 15:08, Laurent Pinchart wrote:
-> Due to a historical mishap, the v4l2_subdev_frame_interval structure
-> is the only part of the V4L2 subdev userspace API that doesn't contain a
-> 'which' field. This prevents trying frame intervals using the subdev
-> 'TRY' state mechanism.
-> 
-> Adding a 'which' field is simple as the structure has 8 reserved fields.
-> This would however break userspace as the field is currently set to 0,
-> corresponding to V4L2_SUBDEV_FORMAT_TRY, while the corresponding ioctls
-> currently operate on the 'ACTIVE' state. We thus need to add a new
-> subdev client cap, V4L2_SUBDEV_CLIENT_CAP_WHICH_INTERVAL, to indicate
-> that userspace is aware of this new field.
-> 
-> All drivers that implement the subdev .get_frame_interval() and
-> .set_frame_interval() operations are updated to return -EINVAL when
-> operating on the TRY state, preserving the current behaviour.
-> 
-> While at it, fix a bad copy&paste in the documentation of the struct
-> v4l2_subdev_frame_interval_enum 'which' field.
-> 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de> # for imx-media
-> Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
->  .../media/v4l/vidioc-subdev-g-client-cap.rst  |  5 ++++
->  .../v4l/vidioc-subdev-g-frame-interval.rst    | 17 ++++++++-----
->  drivers/media/i2c/adv7180.c                   |  3 +++
->  drivers/media/i2c/et8ek8/et8ek8_driver.c      |  6 +++++
->  drivers/media/i2c/imx214.c                    |  3 +++
->  drivers/media/i2c/imx274.c                    |  6 +++++
->  drivers/media/i2c/max9286.c                   |  6 +++++
->  drivers/media/i2c/mt9m111.c                   |  6 +++++
->  drivers/media/i2c/mt9m114.c                   |  6 +++++
->  drivers/media/i2c/mt9v011.c                   |  6 +++++
->  drivers/media/i2c/mt9v111.c                   |  6 +++++
->  drivers/media/i2c/ov2680.c                    |  3 +++
->  drivers/media/i2c/ov5640.c                    |  6 +++++
->  drivers/media/i2c/ov5648.c                    |  3 +++
->  drivers/media/i2c/ov5693.c                    |  3 +++
->  drivers/media/i2c/ov6650.c                    |  6 +++++
->  drivers/media/i2c/ov7251.c                    |  6 +++++
->  drivers/media/i2c/ov7670.c                    |  4 +++
->  drivers/media/i2c/ov772x.c                    |  6 +++++
->  drivers/media/i2c/ov8865.c                    |  3 +++
->  drivers/media/i2c/ov9650.c                    |  6 +++++
->  drivers/media/i2c/s5c73m3/s5c73m3-core.c      |  6 +++++
->  drivers/media/i2c/s5k5baf.c                   |  6 +++++
->  drivers/media/i2c/tvp514x.c                   |  4 +++
->  drivers/media/v4l2-core/v4l2-subdev.c         | 25 ++++++++++++-------
->  .../media/atomisp/i2c/atomisp-gc0310.c        |  3 +++
->  .../media/atomisp/i2c/atomisp-gc2235.c        |  3 +++
->  .../media/atomisp/i2c/atomisp-mt9m114.c       |  3 +++
->  .../media/atomisp/i2c/atomisp-ov2722.c        |  3 +++
->  drivers/staging/media/imx/imx-ic-prp.c        |  6 +++++
->  drivers/staging/media/imx/imx-ic-prpencvf.c   |  6 +++++
->  drivers/staging/media/imx/imx-media-csi.c     |  6 +++++
->  drivers/staging/media/imx/imx-media-vdic.c    |  6 +++++
->  drivers/staging/media/tegra-video/csi.c       |  3 +++
->  include/uapi/linux/v4l2-subdev.h              | 13 ++++++++--
->  35 files changed, 192 insertions(+), 17 deletions(-)
-> 
+This series implement Hans's RFC: https://www.spinics.net/lists/linux-media/msg244455.html
 
-<snip>
+To summarize Hans's proposal it is needed to distinguish two cases:
+- the minimal number of buffers to be allocated when calling
+  VIDIOC_REQBUFS.
+- the minimale number of queued buffers before start streaming.
+Until now drivers use vb2_queue min_buffers_needed field in the both
+cases but before introduce delete buffers we need to clarify for which
+usage each of them use min_buffers_needed field.
 
-> diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-> index f0fbb4a7c150..cc2717f734e7 100644
-> --- a/include/uapi/linux/v4l2-subdev.h
-> +++ b/include/uapi/linux/v4l2-subdev.h
-> @@ -116,13 +116,15 @@ struct v4l2_subdev_frame_size_enum {
->   * @pad: pad number, as reported by the media API
->   * @interval: frame interval in seconds
->   * @stream: stream number, defined in subdev routing
-> + * @which: interval type (from enum v4l2_subdev_format_whence)
->   * @reserved: drivers and applications must zero this array
->   */
->  struct v4l2_subdev_frame_interval {
->  	__u32 pad;
->  	struct v4l2_fract interval;
->  	__u32 stream;
-> -	__u32 reserved[8];
-> +	__u32 which;
-> +	__u32 reserved[7];
->  };
->  
->  /**
-> @@ -133,7 +135,7 @@ struct v4l2_subdev_frame_interval {
->   * @width: frame width in pixels
->   * @height: frame height in pixels
->   * @interval: frame interval in seconds
-> - * @which: format type (from enum v4l2_subdev_format_whence)
-> + * @which: interval type (from enum v4l2_subdev_format_whence)
->   * @stream: stream number, defined in subdev routing
->   * @reserved: drivers and applications must zero this array
->   */
-> @@ -241,6 +243,13 @@ struct v4l2_subdev_routing {
->   */
->  #define V4L2_SUBDEV_CLIENT_CAP_STREAMS		(1ULL << 0)
->  
-> +/*
-> + * The client is aware of the struct v4l2_subdev_frame_interval which field. If
-> + * this is not set (which is the default), the which field is forced to
-> + * V4L2_SUBDEV_FORMAT_ACTIVE by the kernel.
-> + */
-> +#define V4L2_SUBDEV_CLIENT_CAP_WHICH_INTERVAL	(1U << 1)
+The branch with all patches is here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/clean_min_need_buffers_v3
 
-1U -> 1ULL
+I have tested with this command line, I haven't notice issues:
+./test-media -kmemleak mc
 
-I also think that the define should be renamed to _CAP_INTERVAL_WHICH.
-I keep reading "WHICH_INTERVAL" as "Which interval?" :-)
+changes in version 3:
+- Just rename min_buffers_needed into min_queued_buffers everywhere
+  without trying to fix the drivers.
+- Introduce min_reqbufs_allocation field to be used when calling VIDIOC_REQBUFS.
 
-Also, you generally first put the structure before the field name,
-so INTERVAL_WHICH feels much more logical to me.
+changes in version 2:
+- change min_buffers_needed into min_queues_buffers instead of min_dma_buffers_needed
+- patches order
+- only one patch to rename min_buffers_needed into min_queues_buffers.
 
-Or possibly: INTERVAL_USES_WHICH, which is even more descriptive.
+Benjamin Gaignard (2):
+  videobuf2: core: Rename min_buffers_needed field to vb2_queue
+  videobuf2: Add min_reqbufs_allocation field to vb2_queue structure
 
-Regards,
+ drivers/input/touchscreen/atmel_mxt_ts.c      |  2 +-
+ drivers/input/touchscreen/sur40.c             |  2 +-
+ drivers/media/common/saa7146/saa7146_fops.c   |  2 +-
+ .../media/common/videobuf2/videobuf2-core.c   | 23 ++++++++++---------
+ drivers/media/dvb-core/dvb_vb2.c              |  2 +-
+ drivers/media/i2c/video-i2c.c                 |  2 +-
+ drivers/media/pci/bt8xx/bttv-driver.c         |  2 +-
+ drivers/media/pci/cobalt/cobalt-v4l2.c        |  2 +-
+ drivers/media/pci/cx18/cx18-streams.c         |  2 +-
+ drivers/media/pci/cx23885/cx23885-417.c       |  2 +-
+ drivers/media/pci/cx23885/cx23885-dvb.c       |  2 +-
+ drivers/media/pci/cx23885/cx23885-video.c     |  4 ++--
+ drivers/media/pci/cx25821/cx25821-video.c     |  2 +-
+ drivers/media/pci/cx88/cx88-blackbird.c       |  2 +-
+ drivers/media/pci/cx88/cx88-dvb.c             |  2 +-
+ drivers/media/pci/cx88/cx88-video.c           |  4 ++--
+ drivers/media/pci/dt3155/dt3155.c             |  2 +-
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  2 +-
+ drivers/media/pci/mgb4/mgb4_vin.c             |  2 +-
+ drivers/media/pci/mgb4/mgb4_vout.c            |  2 +-
+ drivers/media/pci/tw5864/tw5864-video.c       |  2 +-
+ drivers/media/pci/tw68/tw68-video.c           |  2 +-
+ drivers/media/pci/tw686x/tw686x-video.c       |  2 +-
+ drivers/media/pci/zoran/zoran_driver.c        |  5 +---
+ drivers/media/platform/amphion/vpu_v4l2.c     |  4 ++--
+ drivers/media/platform/aspeed/aspeed-video.c  |  2 +-
+ drivers/media/platform/atmel/atmel-isi.c      |  2 +-
+ .../platform/chips-media/coda/coda-common.c   |  2 +-
+ .../platform/microchip/microchip-isc-base.c   |  2 +-
+ drivers/media/platform/nuvoton/npcm-video.c   |  2 +-
+ drivers/media/platform/nxp/imx7-media-csi.c   |  2 +-
+ .../platform/nxp/imx8-isi/imx8-isi-video.c    |  2 +-
+ drivers/media/platform/qcom/venus/vdec.c      |  4 ++--
+ drivers/media/platform/qcom/venus/venc.c      |  4 ++--
+ .../platform/renesas/rcar-vin/rcar-dma.c      |  2 +-
+ drivers/media/platform/renesas/renesas-ceu.c  |  2 +-
+ .../platform/renesas/rzg2l-cru/rzg2l-video.c  |  2 +-
+ drivers/media/platform/renesas/sh_vou.c       |  2 +-
+ .../platform/rockchip/rkisp1/rkisp1-capture.c |  2 +-
+ drivers/media/platform/st/sti/hva/hva-v4l2.c  |  4 ++--
+ drivers/media/platform/st/stm32/stm32-dcmi.c  |  2 +-
+ .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c    |  4 ++--
+ .../platform/sunxi/sun4i-csi/sun4i_dma.c      |  2 +-
+ .../sunxi/sun6i-csi/sun6i_csi_capture.c       |  2 +-
+ .../media/platform/sunxi/sun8i-di/sun8i-di.c  |  4 ++--
+ .../sunxi/sun8i-rotate/sun8i_rotate.c         |  4 ++--
+ .../media/platform/ti/am437x/am437x-vpfe.c    |  2 +-
+ drivers/media/platform/ti/cal/cal-video.c     |  2 +-
+ .../media/platform/ti/davinci/vpif_capture.c  |  2 +-
+ .../media/platform/ti/davinci/vpif_display.c  |  2 +-
+ .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   |  2 +-
+ drivers/media/platform/ti/omap/omap_vout.c    |  2 +-
+ .../media/test-drivers/vimc/vimc-capture.c    |  2 +-
+ drivers/media/test-drivers/vivid/vivid-core.c |  2 +-
+ drivers/media/usb/cx231xx/cx231xx-417.c       |  2 +-
+ drivers/media/usb/cx231xx/cx231xx-video.c     |  4 ++--
+ drivers/media/usb/dvb-usb/cxusb-analog.c      |  2 +-
+ drivers/media/usb/gspca/gspca.c               |  6 ++---
+ .../media/deprecated/atmel/atmel-isc-base.c   |  2 +-
+ drivers/staging/media/imx/imx-media-capture.c |  2 +-
+ drivers/staging/media/ipu3/ipu3-v4l2.c        |  2 +-
+ drivers/staging/media/meson/vdec/vdec.c       |  4 +---
+ .../staging/media/starfive/camss/stf-video.c  |  2 +-
+ .../media/sunxi/sun6i-isp/sun6i_isp_capture.c |  2 +-
+ .../media/sunxi/sun6i-isp/sun6i_isp_params.c  |  2 +-
+ drivers/staging/media/tegra-video/vi.c        |  2 +-
+ include/media/videobuf2-core.h                | 10 ++++++--
+ samples/v4l/v4l2-pci-skeleton.c               |  2 +-
+ 68 files changed, 98 insertions(+), 96 deletions(-)
 
-	Hans
-
-> +
->  /**
->   * struct v4l2_subdev_client_capability - Capabilities of the client accessing
->   *					  the subdev
+-- 
+2.39.2
 
