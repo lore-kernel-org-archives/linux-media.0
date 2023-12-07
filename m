@@ -1,236 +1,65 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425501428D;
+	Thu,  7 Dec 2023 06:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="LCNdqvkk"
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C50D10E7;
-	Wed,  6 Dec 2023 21:21:13 -0800 (PST)
-X-UUID: 6d141b4694c011eea5db2bebc7c28f94-20231207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=utKiulZ4UeB0jjmnBABZ5jIy2pn3SDZWABNtpqnuktQ=;
-	b=LCNdqvkkAPdH9gjJYCAvZM/nAYQLo0q4m9buV3fb7bhV0wzr79awWbRVbtz55Wji/13jlQRJ8CUtwpiJy+jQ1Tjx3KFpJ9drhvRzREc8CyCDO8mdiRqtRrFPwrnKKt/90wqbOZ87lfMKbiEWE5jH5G2njG4/N7mYgT7mS2AI2Ek=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:62cdf3ca-9a7b-414c-b4c0-50526e7dad57,IP:0,U
-	RL:25,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:0
-X-CID-META: VersionHash:5d391d7,CLOUDID:978662fd-4a48-46e2-b946-12f04f20af8c,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-	NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 6d141b4694c011eea5db2bebc7c28f94-20231207
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-	(envelope-from <zhi.mao@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 576576200; Thu, 07 Dec 2023 13:21:07 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 7 Dec 2023 13:21:05 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 7 Dec 2023 13:21:04 +0800
-From: Zhi Mao <zhi.mao@mediatek.com>
-To: <mchehab@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>
-CC: <shengnan.wang@mediatek.com>, <yaya.chang@mediatek.com>,
-	<10572168@qq.com>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<yunkec@chromium.org>, <conor+dt@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <jacopo.mondi@ideasonboard.com>,
-	<sakari.ailus@linux.intel.com>, <zhi.mao@mediatek.com>,
-	<hverkuil-cisco@xs4all.nl>, <heiko@sntech.de>, <jernej.skrabec@gmail.com>,
-	<macromorgan@hotmail.com>, <linus.walleij@linaro.org>,
-	<laurent.pinchart@ideasonboard.com>, <hdegoede@redhat.com>,
-	<tomi.valkeinen@ideasonboard.com>, <gerald.loacker@wolfvision.net>,
-	<andy.shevchenko@gmail.com>, <bingbu.cao@intel.com>,
-	<dan.scally@ideasonboard.com>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH 2/2] media: dt-bindings: media: i2c: Document GC08A3 bindings
-Date: Thu, 7 Dec 2023 13:20:16 +0800
-Message-ID: <20231207052016.25954-3-zhi.mao@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231207052016.25954-1-zhi.mao@mediatek.com>
-References: <20231207052016.25954-1-zhi.mao@mediatek.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hri+49dv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F73C433C9;
+	Thu,  7 Dec 2023 06:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1701931956;
+	bh=lPKwF3kdsIYd1OD7+HVH5a6Y8sFi9im8Lkn4cxRrJdA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hri+49dv5qf8qMtGvCIX9NcHBndIBYnZTtrH4TYEmSEF1NYiHP2AUWVZ3gZ/SRsmV
+	 SXTLOywSocUr+gb5xP+4Fxple9klI1Im1gaVzZGD+Et8KEXEti9yFq+p8vugpHSjZy
+	 byWo0wzOLXMoz8Wuyyh/MXRdP6zVWu0L1wFkgMqc=
+Date: Thu, 7 Dec 2023 11:39:07 +0900
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Umang Jain <umang.jain@ideasonboard.com>
+Cc: Stefan Wahren <wahrenst@gmx.net>, linux-staging@lists.linux.dev,
+	linux-rpi-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Stefan Wahren <stefan.wahren@i2se.com>,
+	Dan Carpenter <error27@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	"Ricardo B . Marliere" <ricardo@marliere.net>
+Subject: Re: [PATCH v3 1/4] staging: vc04_services: Drop vchiq_log_error() in
+ favour of dev_err
+Message-ID: <2023120750-engorge-wham-83a0@gregkh>
+References: <20231205084157.73819-1-umang.jain@ideasonboard.com>
+ <20231205084157.73819-2-umang.jain@ideasonboard.com>
+ <d6bf7115-dd15-43a0-b45a-41fc778ff160@gmx.net>
+ <6a8566c0-bd26-4ec1-9f7d-d58bbed8411c@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--5.435300-8.000000
-X-TMASE-MatchedRID: XAa2d/45j8SuhCBFl/b63gPZZctd3P4B9l9p8mNlkgk1LB46LFAAkkd0
-	Rzx07LDV96TYN1fO8g6y9AsAxk+TJQAwGIAo3Shb71Wx2uUbPLdbAoaK+wS4jee+ZCR6qEmPGAg
-	eo2y7APLoZcBNClQRIQGZLfTlpw3f9GlJz+74uGzr/EBmiNuXt/ZCh7IN8a4Ai093rJhkH8B0Ly
-	3sNBQaM6F8BNmSAz+6Zd7aQCHVPPQfE8yM4pjsDxZ4ylU2GwzAxEHRux+uk8jHUU+U0ACZwA/YF
-	L0mDf+MJZNBa6CeO+zb0JcacqI9akktgCd2BrHinqg/VrSZEiM=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--5.435300-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	47693002D59BB255A4E63C0C116B38D62A591E8EDE2CB8672FDBAF65BCD97B702000:8
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a8566c0-bd26-4ec1-9f7d-d58bbed8411c@ideasonboard.com>
 
-Add YAML device tree binding for GC08A3 CMOS image sensor,
-and the relevant MAINTAINERS entries.
+On Wed, Dec 06, 2023 at 10:57:59AM +0530, Umang Jain wrote:
+> Hi Stefan
+> 
+> On 12/6/23 1:02 AM, Stefan Wahren wrote:
+> > Hi Umang,
+> > 
+> > Am 05.12.23 um 09:41 schrieb Umang Jain:
+> > > Drop vchiq_log_error() macro which wraps dev_dbg(). Introduce the usage
+> > > of dev_err() directly.
+> > sorry, i missed to review the last change. So the change won't be that
+> > trivial.
+> 
+> All the changes you said are valid and I have taken a note of it.
+> 
+> However, I think it would best that if we can address them in a separate
+> series on top of this (and I will do it). It would seem to be streamlined on
+> top of this.
 
-Signed-off-by: Zhi Mao <zhi.mao@mediatek.com>
----
- .../bindings/media/i2c/galaxycore,gc08a3.yaml | 127 ++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- 2 files changed, 129 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/galaxycore,gc08a3.yaml
+Agreed, I'll merge this now so you can make forward progress here,
+thanks!
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/galaxycore,gc08a3.yaml b/Documentation/devicetree/bindings/media/i2c/galaxycore,gc08a3.yaml
-new file mode 100644
-index 000000000000..1802ff1c8a12
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/galaxycore,gc08a3.yaml
-@@ -0,0 +1,127 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2020 MediaTek Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/galaxycore,gc08a3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GalaxyCore gc08a3 1/4" 8M Pixel MIPI CSI-2 sensor
-+
-+maintainers:
-+  - Zhi Mao <zhi.mao@mediatek.com>
-+
-+description:
-+  The gc08a3 is a raw image sensor with an MIPI CSI-2 image data
-+  interface and CCI (I2C compatible) control bus. The output format
-+  is raw Bayer.
-+
-+properties:
-+  compatible:
-+    const: galaxycore,gc08a3
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    description:
-+      External clock for the sensor.
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the clock in Hz.
-+
-+  dovdd-supply: true
-+
-+  avdd-supply: true
-+
-+  dvdd-supply: true
-+
-+  enable-gpios:
-+    description: Reference to the GPIO connected to the RESETB pin. Active low.
-+    maxItems: 1
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
-+    description:
-+      Output port node, single endpoint describing the CSI-2 transmitter.
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          data-lanes:
-+            oneOf:
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+
-+          link-frequencies: true
-+
-+        required:
-+          - data-lanes
-+          - link-frequencies
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-frequency
-+  - dovdd-supply
-+  - avdd-supply
-+  - dvdd-supply
-+  - enable-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor0@31 {
-+            status = "okay";
-+            compatible = "galaxycore,gc08a3";
-+            reg = <0x31>;
-+
-+            clocks = <&gc08a3_clk>;
-+            clock-names = "xvclk";
-+            clock-frequency = <24000000>;
-+
-+            enable-gpios = <&pio 19 GPIO_ACTIVE_HIGH>;
-+
-+            avdd-supply = <&gc08a3_avdd>;
-+            dovdd-supply = <&ogc08a3_dovdd>;
-+            dvdd-supply = <&gc08a3_dvdd>;
-+
-+            port {
-+                sensor0_out_2: endpoint {
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <336000000 207000000>;
-+                    remote-endpoint = <&seninf_csi_port_0_in_2>;
-+                };
-+            };
-+        };
-+
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index b752f8902367..1a16a94fb202 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -502,6 +502,8 @@ patternProperties:
-     description: Fujitsu Ltd.
-   "^fxtec,.*":
-     description: FX Technology Ltd.
-+  "^galaxycore,.*":
-+    description: GalaxyCore Inc.
-   "^gardena,.*":
-     description: GARDENA GmbH
-   "^gateway,.*":
--- 
-2.25.1
-
+greg k-h
