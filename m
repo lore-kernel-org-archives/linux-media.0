@@ -1,28 +1,27 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PMgKHuhC"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="sFef0Kf+"
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD691D5E
-	for <linux-media@vger.kernel.org>; Thu,  7 Dec 2023 04:44:24 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649311985
+	for <linux-media@vger.kernel.org>; Thu,  7 Dec 2023 04:44:53 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24F90669;
-	Thu,  7 Dec 2023 13:43:42 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F5AE669;
+	Thu,  7 Dec 2023 13:44:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1701953022;
-	bh=U+GLK8hOLxjlGYRwhjp5AAe3PTdxxcbtlrKC9ohfqcs=;
+	s=mail; t=1701953050;
+	bh=gtDwbglrvA3fVGX5Y00vGoREOSqrPfWHQKahmtsUrgM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PMgKHuhCPENFuZUVkpp5/EbZAY6u8dbKtxDXY/Sc9Uy7gioiO224ZAQ8jgaK3JMrD
-	 f+bpGJP8OF5YagwVun2M+oED9MN9sty9PLV+CevBjRwj1SuBkXArqHrX65LtOzNh7g
-	 mYr9HRni8J/vcILLIuuuh2cTZhISMfUBFDsrPRLg=
-Date: Thu, 7 Dec 2023 14:44:29 +0200
+	b=sFef0Kf+4oau8nI5mQqoA2lfnPCba//YQxD9D8WKhcatsHQcyPlUg3vk968JREDpC
+	 1OeYRV2JxftH1pI5KXjc1YMy4hwbAEKWnJ5V1/Dk9ujbfW+K03HbnoMLbiSE3+j2sS
+	 +1c5iomGbkYhSr28iwuYtQrl0uUjkber3eggip1Q=
+Date: Thu, 7 Dec 2023 14:44:58 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: linux-media@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
 	hverkuil@xs4all.nl
-Subject: Re: [PATCH 1/6] media: saa6752hs: Don't set format in sub-device
- state
-Message-ID: <20231207124429.GC9675@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 2/6] media: adv7183: Don't set format in sub-device state
+Message-ID: <20231207124458.GD9675@pendragon.ideasonboard.com>
 References: <20231207120912.270716-1-sakari.ailus@linux.intel.com>
- <20231207120912.270716-2-sakari.ailus@linux.intel.com>
+ <20231207120912.270716-3-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -31,13 +30,13 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231207120912.270716-2-sakari.ailus@linux.intel.com>
+In-Reply-To: <20231207120912.270716-3-sakari.ailus@linux.intel.com>
 
 Hi Sakari,
 
 Thank you for the patch.
 
-On Thu, Dec 07, 2023 at 02:09:07PM +0200, Sakari Ailus wrote:
+On Thu, Dec 07, 2023 at 02:09:08PM +0200, Sakari Ailus wrote:
 > For the purpose of setting old non-pad based sub-device try format as a
 > basis for VIDIOC_TRY_FMT implementation, there is no need to set the
 > format in the sub-device state. Drop the assignment to the state, which
@@ -49,25 +48,22 @@ On Thu, Dec 07, 2023 at 02:09:07PM +0200, Sakari Ailus wrote:
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
 > ---
->  drivers/media/i2c/saa6752hs.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/media/i2c/adv7183.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/saa6752hs.c b/drivers/media/i2c/saa6752hs.c
-> index 51b62a97946a..897eaa669b86 100644
-> --- a/drivers/media/i2c/saa6752hs.c
-> +++ b/drivers/media/i2c/saa6752hs.c
-> @@ -594,10 +594,8 @@ static int saa6752hs_set_fmt(struct v4l2_subdev *sd,
->  	f->field = V4L2_FIELD_INTERLACED;
->  	f->colorspace = V4L2_COLORSPACE_SMPTE170M;
+> diff --git a/drivers/media/i2c/adv7183.c b/drivers/media/i2c/adv7183.c
+> index bcb99ba9a272..2a2cace4a153 100644
+> --- a/drivers/media/i2c/adv7183.c
+> +++ b/drivers/media/i2c/adv7183.c
+> @@ -442,8 +442,6 @@ static int adv7183_set_fmt(struct v4l2_subdev *sd,
+>  	}
+>  	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+>  		decoder->fmt = *fmt;
+> -	else
+> -		*v4l2_subdev_state_get_format(sd_state, 0) = *fmt;
+>  	return 0;
+>  }
 >  
-> -	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-> -		*v4l2_subdev_state_get_format(sd_state, 0) = *f;
-> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
->  		return 0;
-> -	}
->  
->  	/*
->  	  FIXME: translate and round width/height into EMPRESS
 
 -- 
 Regards,
