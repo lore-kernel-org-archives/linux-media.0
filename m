@@ -1,141 +1,96 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cSAFltPc"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D211724;
-	Fri,  8 Dec 2023 01:54:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702029263; x=1733565263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FEzV6DVjh/Ga3HaHooYTXKaezfC0C7UbGiGx01741DE=;
-  b=cSAFltPc2dnI3ZBwEBThccKs0yNEScJTTwPeUtgYakmmanb4/u6/cUwc
-   iiIFNIRuUkjwxMcP+WTsp02ra3K+TINOXDxYmTyFrmgObBtzd6COTYyrl
-   UCUnpwhlEqnqp/5M+GMwehmNt5KgyeWlwUSBVJCXFLOFO2ZXD8MgGo6Ln
-   oD1wLnOpX7YnqI/dKNh82+r20pu8nvqGA4xVRwKNVH2FU3rXzeyBSFc56
-   nqAGRv2UQWs2BAl/R30rQEJqYAuVAidDwI3Lvqj6vHZcsGD2f33StEkzc
-   PK85xSa2SrVTBFLy+sshclDgWgqW3plG7z1oEccQl2iNhgmsKJeFEsvxU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="393252575"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="393252575"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 01:54:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="806353117"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="806353117"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 01:54:14 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id C7C0011F995;
-	Fri,  8 Dec 2023 11:54:11 +0200 (EET)
-Date: Fri, 8 Dec 2023 09:54:11 +0000
-From: "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
-To: Zhi Mao =?utf-8?B?KOavm+aZuik=?= <zhi.mao@mediatek.com>
-Cc: "conor@kernel.org" <conor@kernel.org>,
-	"krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-	"heiko@sntech.de" <heiko@sntech.de>,
-	"tomi.valkeinen@ideasonboard.com" <tomi.valkeinen@ideasonboard.com>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"yunkec@chromium.org" <yunkec@chromium.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-	"gerald.loacker@wolfvision.net" <gerald.loacker@wolfvision.net>,
-	Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= <shengnan.wang@mediatek.com>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-	"andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-	Yaya Chang =?utf-8?B?KOW8tembhea4hSk=?= <Yaya.Chang@mediatek.com>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"jacopo.mondi@ideasonboard.com" <jacopo.mondi@ideasonboard.com>,
-	"jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	"bingbu.cao@intel.com" <bingbu.cao@intel.com>,
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	"10572168@qq.com" <10572168@qq.com>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"angelogioacchino.delregno@collabora.com" <angelogioacchino.delregno@collabora.com>,
-	"macromorgan@hotmail.com" <macromorgan@hotmail.com>
-Subject: Re: [PATCH 1/2] media: i2c: Add GC08A3 image sensor driver
-Message-ID: <ZXLnwzeD_DSuIyil@kekkonen.localdomain>
-References: <20231207052016.25954-1-zhi.mao@mediatek.com>
- <20231207052016.25954-2-zhi.mao@mediatek.com>
- <ZXGtqwjYruBQVaUr@kekkonen.localdomain>
- <129e3a8b-5e91-424a-8ff8-b015d5175f1a@linaro.org>
- <20231207-outcome-acclaim-d179c8c07fff@spud>
- <0580bc5be77c5e293770f42b661a41c80e1986dd.camel@mediatek.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QNChLG3C"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2FE1728;
+	Fri,  8 Dec 2023 02:39:18 -0800 (PST)
+Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: benjamin.gaignard)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F57366022D2;
+	Fri,  8 Dec 2023 10:39:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702031957;
+	bh=FTU8KzPND5ID0Hx3E+vk2e0gEDIDzN1LiyjU+EkE4jI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=QNChLG3Cd7dmkazS0LpWTdD/h0zPVtHSVak2JH6E9IfHxMxkOq/bHBxUwqAmAUKi0
+	 L3oWB7YIP3p73uKSlAhjz/0elhDsgrCmDyBuQnVyEDm5iI7zt4j2srjFoRqLncentA
+	 BtSYj2uX9gbKFN0WcKW3vehsgbbD2kS5fOJtRZIdF1AOc1WxG1+zTJEqfeSSrurE7r
+	 f4i1YvMQCdAkS07dHKIjTc4dIZos+UTh8gmRFfT7i+NtNIDk20NXLPNcwhmoN6OhP2
+	 SapJYYoeaKX+3z+Sa6Ublgv8HP9DTi6UhH1jlMikNME3BI3fx3WBbZ3+8ypuBBuFC0
+	 iRpsFglLQF2pg==
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: hverkuil@xs4all.nl,
+	mchehab@kernel.org,
+	tfiga@chromium.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 2/2] videobuf2: Add min_reqbufs_allocation field to vb2_queue structure
+Date: Fri,  8 Dec 2023 11:39:08 +0100
+Message-Id: <20231208103908.85874-3-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231208103908.85874-1-benjamin.gaignard@collabora.com>
+References: <20231208103908.85874-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0580bc5be77c5e293770f42b661a41c80e1986dd.camel@mediatek.com>
 
-Hi Zhi,
+Add 'min_reqbufs_allocation' field in vb2_queue structure so drivers
+can specificy the minimum number of buffers to allocate when calling
+VIDIOC_REQBUFS.
+If used this minimum should be higher than the minimum number of
+queued buffers needed to start streaming.
 
-On Fri, Dec 08, 2023 at 02:07:36AM +0000, Zhi Mao (毛智) wrote:
-> On Thu, 2023-12-07 at 17:44 +0000, Conor Dooley wrote:
-> > On Thu, Dec 07, 2023 at 01:30:35PM +0100, Krzysztof Kozlowski wrote:
-> > > On 07/12/2023 12:34, Sakari Ailus wrote:
-> > > > > +	ret = gc08a3_parse_fwnode(dev);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > > +
-> > > > > +	gc08a3 = devm_kzalloc(dev, sizeof(*gc08a3),
-> > > > > GFP_KERNEL);
-> > > > > +	if (!gc08a3)
-> > > > > +		return -ENOMEM;
-> > > > > +
-> > > > > +	gc08a3->dev = dev;
-> > > > > +
-> > > > > +	gc08a3->xclk = devm_clk_get(dev, NULL);
-> > > > > +	if (IS_ERR(gc08a3->xclk))
-> > > > > +		return dev_err_probe(dev, PTR_ERR(gc08a3-
-> > > > > >xclk),
-> > > > > +					 "failed to get
-> > > > > xclk\n");
-> > > > > +
-> > > > > +	ret = clk_set_rate(gc08a3->xclk,
-> > > > > GC08A3_DEFAULT_CLK_FREQ);
-> > > > 
-> > > > Please see:
-> > > > <URL:
-> > > > https://hverkuil.home.xs4all.nl/spec/driver-api/camera-sensor.html#devicetree>
-> > > > ;.
-> > > 
-> > > 
-> > > Oh, that's cool it was documented!
-> > > 
-> > > The canonical link would be:
-> > > 
-> https://www.kernel.org/doc/html/latest/driver-api/media/camera-sensor.html#devicetree
-> > 
-> > I believe this is that answer to the "why are these needed" that I
-> > asked
-> > on the previous version and never got a response to. Instead, they
-> > were
-> > just removed from the binding etc.
-> 
-> About "assigned-clocks" & "assigned-clock-rates" in v1 patch, as they
-> are not used in sensor driver, I have removed them in sensor dts-
-> bindind file. And "clock-names" & "clock-frequency" are also the same,
-> they will be removed in next version.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ drivers/media/common/videobuf2/videobuf2-core.c | 1 +
+ include/media/videobuf2-core.h                  | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-Ack. You should only need "clocks" there, indeed.
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 7b6d89641e66..3bc30d107308 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -866,6 +866,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	 * Make sure the requested values and current defaults are sane.
+ 	 */
+ 	num_buffers = max_t(unsigned int, *count, q->min_queued_buffers);
++	num_buffers = max_t(unsigned int, num_buffers, q->min_reqbufs_allocation);
+ 	num_buffers = min_t(unsigned int, num_buffers, q->max_num_buffers);
+ 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
+ 	/*
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 6d11cb724e95..252d34cc47d3 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -550,6 +550,11 @@ struct vb2_buf_ops {
+  *		@start_streaming can be called. Used when a DMA engine
+  *		cannot be started unless at least this number of buffers
+  *		have been queued into the driver.
++ * @min_reqbufs_allocation: the minimum number of buffers allocated when
++ *		calling VIDIOC_REQBUFS. Used when drivers need a to
++ *		specify a minimum buffers allocation before setup a queue.
++ *		If min_queued_buffers < min_queued_buffers then min_queued_buffers
++ *		is the minimum.
+  */
+ /*
+  * Private elements (won't appear at the uAPI book):
+@@ -615,6 +620,7 @@ struct vb2_queue {
+ 	u32				timestamp_flags;
+ 	gfp_t				gfp_flags;
+ 	u32				min_queued_buffers;
++	u32				min_reqbufs_allocation;
+ 
+ 	struct device			*alloc_devs[VB2_MAX_PLANES];
+ 
 -- 
-Regards,
+2.39.2
 
-Sakari Ailus
