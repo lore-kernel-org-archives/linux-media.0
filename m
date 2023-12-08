@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OQSBdrjy"
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D76199A;
-	Fri,  8 Dec 2023 07:08:03 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WC41vrzO"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2398D122;
+	Fri,  8 Dec 2023 07:08:09 -0800 (PST)
 Received: from umang.jain (unknown [103.251.226.108])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5467E512;
-	Fri,  8 Dec 2023 16:07:19 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id AB971552;
+	Fri,  8 Dec 2023 16:07:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702048040;
-	bh=XdE5oS+/0plOEZHGfKkHkn9BwZSH6QN5Lw//bCz3XJE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OQSBdrjy6cHooeV9AJTuEHYNizuvW912lQ2KtBflkt2DxTsgYk1qErrkivVwW3c6H
-	 U1xu1uEKOlc5QsuhmschNb0lKTB9zWGjWWAVkNEu3wwXB1uJmcQ2CV8OgwNK8gpkz9
-	 USjAi+O4UsPk++q6JnqdjnsDyyZnKH1WyRVi1ktQ=
+	s=mail; t=1702048045;
+	bh=z/kiy682Dt+Hkip6mn8zt4qO+eGw8bGSkyh8qcwql68=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WC41vrzOekFmPhEHVuCnAekMz/ew9e1H4kqHTWnFNX//zNFF6JetybSXsIe75nvoL
+	 7ceVRK4Ex8ic5o5I70b4qbKziezV/bI7blVhlgNFOphlruN/Ur4sDl89jEjp53GLTj
+	 PuRmewmFl8TQyCYNzRb1gNlEYCXudePy/rqt1W9o=
 From: Umang Jain <umang.jain@ideasonboard.com>
 To: devicetree@vger.kernel.org,
 	linux-media@vger.kernel.org
@@ -20,11 +20,29 @@ Cc: "Paul J . Murphy" <paul.j.murphy@intel.com>,
 	Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v3 0/8] media: Sony IMX335 improvements
-Date: Fri,  8 Dec 2023 20:37:46 +0530
-Message-ID: <20231208150756.124720-1-umang.jain@ideasonboard.com>
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 1/8] media: dt-bindings: media: imx335: Add supply bindings
+Date: Fri,  8 Dec 2023 20:37:47 +0530
+Message-ID: <20231208150756.124720-2-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231208150756.124720-1-umang.jain@ideasonboard.com>
+References: <20231208150756.124720-1-umang.jain@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -33,49 +51,49 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Sony IMX335 is not yet compatible with libcamera, as it is missing
-the get selection API call.
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
-It also misses a way to describe how to power on the sensor.
+Add the bindings for the supply references used on the IMX335.
 
-Now that I've got this camera functioning on Debix-SOM and Pi5, I expect
-to be able to do quite a bit more cleanup to the code here. But these
-patches should already be valid for consideration.
+Reviewed-by: Umang Jain <umang.jain@ideasonboard.com>
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../devicetree/bindings/media/i2c/sony,imx335.yaml  | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-The series provides the bindings required to reference the power
-supplies, and then performs some initial clean up to the driver for
-error reporting before adding the regulator enablement, implementing the
-get_selection api (as well as set selection, which returns the static
-configuration) and restricts the hblanking to match the configuration.
-
-v3:
- - Remove #define and use ARRAY_SIZE(imx335_supply_name) directly in 4/8
- - Add two new patches for 10-bit mode(7/8) and multiple link frequency
-   support(8/8)
-
-v2:
- - Supplies are no longer 'required'
- - media: i2c: imx335: Fix logging line endings - New patch
- - line endings are fixed
- - error paths are handled for the regulator in imx335_power_on
- - set_selection is defined alongside get_selection
-
-Kieran Bingham (6):
-  media: dt-bindings: media: imx335: Add supply bindings
-  media: i2c: imx335: Fix logging line endings
-  media: i2c: imx335: Improve configuration error reporting
-  media: i2c: imx335: Enable regulator supplies
-  media: i2c: imx335: Implement get selection API
-  media: i2c: imx335: Fix hblank min/max values
-
-Umang Jain (2):
-  media: i2c: imx335: Support 2592x1940 10-bit mode
-  media: i2c: imx335: Support multiple link frequency
-
- .../bindings/media/i2c/sony,imx335.yaml       |  13 +
- drivers/media/i2c/imx335.c                    | 297 ++++++++++++++----
- 2 files changed, 257 insertions(+), 53 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+index a167dcdb3a32..106c36ee966d 100644
+--- a/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml
+@@ -32,6 +32,15 @@ properties:
+     description: Clock frequency from 6 to 27 MHz, 37.125MHz, 74.25MHz
+     maxItems: 1
+ 
++  avdd-supply:
++    description: Analog power supply (2.9V)
++
++  ovdd-supply:
++    description: Interface power supply (1.8V)
++
++  dvdd-supply:
++    description: Digital power supply (1.2V)
++
+   reset-gpios:
+     description: Reference to the GPIO connected to the XCLR pin, if any.
+     maxItems: 1
+@@ -79,6 +88,10 @@ examples:
+             assigned-clock-parents = <&imx335_clk_parent>;
+             assigned-clock-rates = <24000000>;
+ 
++            avdd-supply = <&camera_vdda_2v9>;
++            ovdd-supply = <&camera_vddo_1v8>;
++            dvdd-supply = <&camera_vddd_1v2>;
++
+             port {
+                 imx335: endpoint {
+                     remote-endpoint = <&cam>;
 -- 
 2.41.0
 
