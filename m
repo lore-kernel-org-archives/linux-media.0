@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="k8bW4rWo"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="d4W1S/Ps"
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61305133
-	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 10:16:54 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B1B90
+	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 10:16:56 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6A1AA2B0E;
-	Fri,  8 Dec 2023 19:16:06 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 38F652B3A;
+	Fri,  8 Dec 2023 19:16:09 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702059366;
-	bh=eS3k+4MnPnp+SbGYcNIWwXIR4/XUKN+aIsudG5SSp8Y=;
+	s=mail; t=1702059369;
+	bh=1xjqHpmRqykMK4RmICtjr0smAKwZaiBW6TVZbC1mk1E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k8bW4rWofiWW8zgTaKgzqy9nDaAO4lKiOCbkJmjnCsyvqg5h7GLArFgxeZh73RgOX
-	 i4tSIzc/KeM+cJQ0PLtu9lgJ1shkASWOLJdb8tYirucoWOdcxlfH6auzAdPzfHmWlF
-	 sow1VA6W80Dv7NngMh3seXbfIH8y2CuGZyw6tD70=
+	b=d4W1S/Ps9/mnxpUzoC4ZKKAd7Q9j1yd9YlyFDsx7nXqCyomOYIeE+UId3HjqDIWZi
+	 /AwGHDmmXdl6wg+5WOM9hAZt4V9uly21bqK2bMxONIEVU2zY5cbHxDsUghJACwpsoc
+	 g+HpW1fF7jlx4i+GoKyKj700/yTG6p+M6kkoJGaA=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -22,9 +22,9 @@ Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Paul Elder <paul.elder@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v4 6/8] media: docs: uAPI: Expand error documentation for invalid 'which' value
-Date: Fri,  8 Dec 2023 20:16:46 +0200
-Message-ID: <20231208181648.13568-6-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 8/8] media: i2c: thp7312: Store frame interval in subdev state
+Date: Fri,  8 Dec 2023 20:16:48 +0200
+Message-ID: <20231208181648.13568-8-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
 References: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
@@ -36,81 +36,283 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Multiple subdev ioctls that take a 'which' field do not document the
-error returned when the field has an invalid value. Expand the
-documentation to fix this.
+Use the newly added storage for frame interval in the subdev state to
+simplify the driver.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../media/v4l/vidioc-subdev-enum-frame-interval.rst      | 9 ++++-----
- .../media/v4l/vidioc-subdev-enum-frame-size.rst          | 7 +++----
- .../media/v4l/vidioc-subdev-enum-mbus-code.rst           | 7 +++----
- .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst  | 5 +++--
- 4 files changed, 13 insertions(+), 15 deletions(-)
+ drivers/media/i2c/thp7312.c | 150 +++++++++++++++++++-----------------
+ 1 file changed, 81 insertions(+), 69 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
-index 8def4c05d3da..c935bacc3bc2 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
-@@ -107,8 +107,7 @@ appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/media/i2c/thp7312.c b/drivers/media/i2c/thp7312.c
+index 49eda07f1c96..2806887514dc 100644
+--- a/drivers/media/i2c/thp7312.c
++++ b/drivers/media/i2c/thp7312.c
+@@ -266,9 +266,6 @@ struct thp7312_device {
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	bool ctrls_applied;
  
- EINVAL
--    The struct
--    :c:type:`v4l2_subdev_frame_interval_enum`
--    ``pad`` references a non-existing pad, one of the ``code``,
--    ``width`` or ``height`` fields are invalid for the given pad or the
--    ``index`` field is out of bounds.
-+    The struct :c:type:`v4l2_subdev_frame_interval_enum` ``pad`` references a
-+    non-existing pad, the ``which`` field has an unsupported value, one of the
-+    ``code``, ``width`` or ``height`` fields are invalid for the given pad, or
-+    the ``index`` field is out of bounds.
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-index e3ae84df5486..65f0cfeca973 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-@@ -126,7 +126,6 @@ appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
+-	/* These are protected by v4l2 active state */
+-	const struct thp7312_mode_info *current_mode;
+-	const struct thp7312_frame_rate *current_rate;
+ 	s64 link_freq;
  
- EINVAL
--    The struct
--    :c:type:`v4l2_subdev_frame_size_enum`
--    ``pad`` references a non-existing pad, the ``code`` is invalid for
--    the given pad or the ``index`` field is out of bounds.
-+    The struct :c:type:`v4l2_subdev_frame_size_enum` ``pad`` references a
-+    non-existing pad, the ``which`` field has an unsupported value, the ``code``
-+    is invalid for the given pad, or the ``index`` field is out of bounds.
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-index 4ad7dec27e25..3050966b199f 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-@@ -158,7 +158,6 @@ appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
+ 	struct {
+@@ -310,6 +307,47 @@ static inline struct thp7312_device *to_thp7312_dev(struct v4l2_subdev *sd)
+ 	return container_of(sd, struct thp7312_device, sd);
+ }
  
- EINVAL
--    The struct
--    :c:type:`v4l2_subdev_mbus_code_enum`
--    ``pad`` references a non-existing pad, or the ``index`` field is out
--    of bounds.
-+    The struct :c:type:`v4l2_subdev_mbus_code_enum` ``pad`` references a
-+    non-existing pad, the ``which`` field has an unsupported value, or the
-+    ``index`` field is out of bounds.
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-index 72677a280cd6..791c1e628d5c 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-@@ -140,8 +140,9 @@ ENOSPC
-    all the available routes the subdevice exposes.
++static const struct thp7312_mode_info *
++thp7312_find_mode(unsigned int width, unsigned int height, bool nearest)
++{
++	const struct thp7312_mode_info *mode;
++
++	mode = v4l2_find_nearest_size(thp7312_mode_info_data,
++				      ARRAY_SIZE(thp7312_mode_info_data),
++				      width, height, width, height);
++
++	if (!nearest && (mode->width != width || mode->height != height))
++		return NULL;
++
++	return mode;
++}
++
++static const struct thp7312_frame_rate *
++thp7312_find_rate(const struct thp7312_mode_info *mode, unsigned int fps,
++		  bool nearest)
++{
++	const struct thp7312_frame_rate *best_rate = NULL;
++	const struct thp7312_frame_rate *rate;
++	unsigned int best_delta = UINT_MAX;
++
++	if (!mode)
++		return NULL;
++
++	for (rate = mode->rates; rate->fps && best_delta; ++rate) {
++		unsigned int delta = abs(rate->fps - fps);
++
++		if (delta <= best_delta) {
++			best_delta = delta;
++			best_rate = rate;
++		}
++	}
++
++	if (!nearest && best_delta)
++		return NULL;
++
++	return best_rate;
++}
++
+ /* -----------------------------------------------------------------------------
+  * Device Access & Configuration
+  */
+@@ -442,17 +480,30 @@ static int thp7312_set_framefmt(struct thp7312_device *thp7312,
+ static int thp7312_init_mode(struct thp7312_device *thp7312,
+ 			     struct v4l2_subdev_state *sd_state)
+ {
++	const struct thp7312_mode_info *mode;
++	const struct thp7312_frame_rate *rate;
+ 	struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_fract *interval;
+ 	int ret;
  
- EINVAL
--   The sink or source pad identifiers reference a non-existing pad, or reference
--   pads of different types (ie. the sink_pad identifiers refers to a source pad).
-+   The sink or source pad identifiers reference a non-existing pad or reference
-+   pads of different types (ie. the sink_pad identifiers refers to a source
-+   pad), or the ``which`` field has an unsupported value.
++	/*
++	 * TODO: The mode and rate should be cached in the subdev state, once
++	 * support for extending states will be available.
++	 */
+ 	fmt = v4l2_subdev_state_get_format(sd_state, 0);
++	interval = v4l2_subdev_state_get_interval(sd_state, 0);
++
++	mode = thp7312_find_mode(fmt->width, fmt->height, false);
++	rate = thp7312_find_rate(mode, interval->denominator, false);
++
++	if (WARN_ON(!mode || !rate))
++		return -EINVAL;
  
- E2BIG
-    The application provided ``num_routes`` for ``VIDIOC_SUBDEV_S_ROUTING`` is
+ 	ret = thp7312_set_framefmt(thp7312, fmt);
+ 	if (ret)
+ 		return ret;
+ 
+-	return thp7312_change_mode(thp7312, thp7312->current_mode,
+-				   thp7312->current_rate);
++	return thp7312_change_mode(thp7312, mode, rate);
+ }
+ 
+ static int thp7312_stream_enable(struct thp7312_device *thp7312, bool enable)
+@@ -621,28 +672,6 @@ static bool thp7312_find_bus_code(u32 code)
+ 	return false;
+ }
+ 
+-static const struct thp7312_mode_info *
+-thp7312_find_mode(unsigned int width, unsigned int height, bool nearest)
+-{
+-	const struct thp7312_mode_info *mode;
+-
+-	mode = v4l2_find_nearest_size(thp7312_mode_info_data,
+-				      ARRAY_SIZE(thp7312_mode_info_data),
+-				      width, height, width, height);
+-
+-	if (!nearest && (mode->width != width || mode->height != height))
+-		return NULL;
+-
+-	return mode;
+-}
+-
+-static void thp7312_set_frame_rate(struct thp7312_device *thp7312,
+-				   const struct thp7312_frame_rate *rate)
+-{
+-	thp7312->link_freq = rate->link_freq;
+-	thp7312->current_rate = rate;
+-}
+-
+ static int thp7312_enum_mbus_code(struct v4l2_subdev *sd,
+ 				  struct v4l2_subdev_state *sd_state,
+ 				  struct v4l2_subdev_mbus_code_enum *code)
+@@ -707,6 +736,7 @@ static int thp7312_set_fmt(struct v4l2_subdev *sd,
+ 	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
+ 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
+ 	struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_fract *interval;
+ 	const struct thp7312_mode_info *mode;
+ 
+ 	if (!thp7312_find_bus_code(mbus_fmt->code))
+@@ -726,25 +756,12 @@ static int thp7312_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	*mbus_fmt = *fmt;
+ 
+-	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+-		thp7312->current_mode = mode;
+-		thp7312_set_frame_rate(thp7312, &mode->rates[0]);
+-	}
++	interval = v4l2_subdev_state_get_interval(sd_state, 0);
++	interval->numerator = 1;
++	interval->denominator = mode->rates[0].fps;
+ 
+-	return 0;
+-}
+-
+-static int thp7312_get_frame_interval(struct v4l2_subdev *sd,
+-				      struct v4l2_subdev_state *sd_state,
+-				      struct v4l2_subdev_frame_interval *fi)
+-{
+-	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
+-
+-	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+-		return -EINVAL;
+-
+-	fi->interval.numerator = 1;
+-	fi->interval.denominator = thp7312->current_rate->fps;
++	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
++		thp7312->link_freq = mode->rates[0].link_freq;
+ 
+ 	return 0;
+ }
+@@ -755,34 +772,28 @@ static int thp7312_set_frame_interval(struct v4l2_subdev *sd,
+ {
+ 	struct thp7312_device *thp7312 = to_thp7312_dev(sd);
+ 	const struct thp7312_mode_info *mode;
+-	const struct thp7312_frame_rate *best_rate = NULL;
+ 	const struct thp7312_frame_rate *rate;
+-	unsigned int best_delta = UINT_MAX;
++	const struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_fract *interval;
+ 	unsigned int fps;
+ 
+-	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+-		return -EINVAL;
+-
+ 	/* Avoid divisions by 0, pick the highest frame if the interval is 0. */
+ 	fps = fi->interval.numerator
+ 	    ? DIV_ROUND_CLOSEST(fi->interval.denominator, fi->interval.numerator)
+ 	    : UINT_MAX;
+ 
+-	mode = thp7312->current_mode;
++	fmt = v4l2_subdev_state_get_format(sd_state, 0);
++	mode = thp7312_find_mode(fmt->width, fmt->height, false);
++	rate = thp7312_find_rate(mode, fps, true);
+ 
+-	for (rate = mode->rates; rate->fps && best_delta; ++rate) {
+-		unsigned int delta = abs(rate->fps - fps);
++	interval = v4l2_subdev_state_get_interval(sd_state, 0);
++	interval->numerator = 1;
++	interval->denominator = rate->fps;
+ 
+-		if (delta <= best_delta) {
+-			best_delta = delta;
+-			best_rate = rate;
+-		}
+-	}
++	if (fi->which == V4L2_SUBDEV_FORMAT_ACTIVE)
++		thp7312->link_freq = rate->link_freq;
+ 
+-	thp7312_set_frame_rate(thp7312, best_rate);
+-
+-	fi->interval.numerator = 1;
+-	fi->interval.denominator = best_rate->fps;
++	fi->interval = *interval;
+ 
+ 	return 0;
+ }
+@@ -842,8 +853,10 @@ static int thp7312_init_state(struct v4l2_subdev *sd,
+ {
+ 	const struct thp7312_mode_info *default_mode = &thp7312_mode_info_data[0];
+ 	struct v4l2_mbus_framefmt *fmt;
++	struct v4l2_fract *interval;
+ 
+ 	fmt = v4l2_subdev_state_get_format(sd_state, 0);
++	interval = v4l2_subdev_state_get_interval(sd_state, 0);
+ 
+ 	/*
+ 	 * default init sequence initialize thp7312 to
+@@ -858,6 +871,9 @@ static int thp7312_init_state(struct v4l2_subdev *sd,
+ 	fmt->height = default_mode->height;
+ 	fmt->field = V4L2_FIELD_NONE;
+ 
++	interval->numerator = 1;
++	interval->denominator = default_mode->rates[0].fps;
++
+ 	return 0;
+ }
+ 
+@@ -875,7 +891,7 @@ static const struct v4l2_subdev_pad_ops thp7312_pad_ops = {
+ 	.enum_mbus_code = thp7312_enum_mbus_code,
+ 	.get_fmt = v4l2_subdev_get_fmt,
+ 	.set_fmt = thp7312_set_fmt,
+-	.get_frame_interval = thp7312_get_frame_interval,
++	.get_frame_interval = v4l2_subdev_get_frame_interval,
+ 	.set_frame_interval = thp7312_set_frame_interval,
+ 	.enum_frame_size = thp7312_enum_frame_size,
+ 	.enum_frame_interval = thp7312_enum_frame_interval,
+@@ -1303,6 +1319,8 @@ static int thp7312_init_controls(struct thp7312_device *thp7312)
+ 			       V4L2_CID_POWER_LINE_FREQUENCY_60HZ, 0,
+ 			       V4L2_CID_POWER_LINE_FREQUENCY_50HZ);
+ 
++	thp7312->link_freq = thp7312_mode_info_data[0].rates[0].link_freq;
++
+ 	link_freq = v4l2_ctrl_new_int_menu(hdl, &thp7312_ctrl_ops,
+ 					   V4L2_CID_LINK_FREQ, 0, 0,
+ 					   &thp7312->link_freq);
+@@ -2072,7 +2090,6 @@ static int thp7312_parse_dt(struct thp7312_device *thp7312)
+ static int thp7312_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+-	struct v4l2_subdev_state *sd_state;
+ 	struct thp7312_device *thp7312;
+ 	int ret;
+ 
+@@ -2148,11 +2165,6 @@ static int thp7312_probe(struct i2c_client *client)
+ 		goto err_free_ctrls;
+ 	}
+ 
+-	sd_state = v4l2_subdev_lock_and_get_active_state(&thp7312->sd);
+-	thp7312->current_mode = &thp7312_mode_info_data[0];
+-	thp7312_set_frame_rate(thp7312, &thp7312->current_mode->rates[0]);
+-	v4l2_subdev_unlock_state(sd_state);
+-
+ 	/*
+ 	 * Enable runtime PM with autosuspend. As the device has been powered
+ 	 * manually, mark it as active, and increase the usage count without
 -- 
 Regards,
 
