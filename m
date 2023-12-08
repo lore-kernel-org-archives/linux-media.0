@@ -1,216 +1,221 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApNlseO6"
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE50F173F
-	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 06:34:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702046075; x=1733582075;
-  h=date:from:to:cc:subject:message-id;
-  bh=gPO6Qnabn6gn+t37vYMhKrBILoTYHt+UK5mOyIo/wSA=;
-  b=ApNlseO66Nc1qN96912SRR0lT1+cXkcjSMYvHH+hu+GOuUiehIXQT0sg
-   VK0/3zo59qdB72hwqW1nMrRxgndKAUugWvI11L5jyh4VcANCR/wIgH0k7
-   Sgbdr1Nu+zJE1zRzyP8d82KbuthzptEkDKjrgQUXoDX/zceRixQP2YhPV
-   faHni+tmNPuM2iB9ZymH+59qZnRq0BLe97/EHiETc1RJcXDFx2YxjhRmS
-   rOjRhAmjsx6uqsuj2KEpN1nukDhFjVp3Jx82+P/OzD1ZNuf/G3HZC0RtE
-   ph/cSgzU5a4Pd2JmqkLcZq/9eXHDzwxwHh8YE3k2I3kR+3XZtAu+gujRq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1235277"
-X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
-   d="scan'208";a="1235277"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 06:34:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="721879787"
-X-IronPort-AV: E=Sophos;i="6.04,261,1695711600"; 
-   d="scan'208";a="721879787"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Dec 2023 06:34:30 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBbvv-000DpH-1w;
-	Fri, 08 Dec 2023 14:34:27 +0000
-Date: Fri, 08 Dec 2023 22:34:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org
-Subject: [sailus-media-tree:stage-fixes] BUILD SUCCESS
- 04859a240c56886de9636859e13e8a39122c5f4f
-Message-ID: <202312082206.VrUZnMZX-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YDiUfj6O"
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF51987;
+	Fri,  8 Dec 2023 06:34:35 -0800 (PST)
+Received: from stla-brain-8255-1.home (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jmassot)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id B9EF966073BF;
+	Fri,  8 Dec 2023 14:34:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702046074;
+	bh=7C8S9wUBX9kINVCdVgDHBE/6mUidri+OM98J8BgkJMs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YDiUfj6OdYuDPX2KD9rOoMEjV5BxvK4bS/7bNMau556tpK3khw+oMBjA+Hqq9u6oM
+	 fIdVHwoJxYwlxfS4b5Ln8O81V07TKSQRR3SR2QiPKJTQlZIrxW+RrdyGMUEib5itxZ
+	 5p/TeAPnJY+eMJBG/hyfzpEnr1EJ+mFmJh2RlP6hFLoBtqF5SddVb2IWEbPe7QKLLs
+	 lpVh9foSAqxC+eWQ00Z9860Vsp+b/MxCyZsG6K6Sl3D8IxvkEa0rRlHNN8I0hKtiDb
+	 KBzTN2GqI5xfXaOxawc+NIHw1nGmHhHgnkJb1JMTXsDttG6pkm84ggAEvZWlWHg7l5
+	 AxmaggyUkiF1w==
+From: Julien Massot <julien.massot@collabora.com>
+To: devicetree@vger.kernel.org,
+	linux-media@vger.kernel.org
+Cc: kernel@collabora.com,
+	Julien Massot <julien.massot@collabora.com>
+Subject: [PATCH v2 1/4] dt-bindings: media: add Maxim MAX96714F GMSL2 Deserializer
+Date: Fri,  8 Dec 2023 15:33:56 +0100
+Message-ID: <20231208143359.469049-2-julien.massot@collabora.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231208143359.469049-1-julien.massot@collabora.com>
+References: <20231208143359.469049-1-julien.massot@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git stage-fixes
-branch HEAD: 04859a240c56886de9636859e13e8a39122c5f4f  media: ov9640: Don't set format in sub-device state
+Add DT bindings for Maxim MAX96714F GMSL2 Deserializer.
 
-elapsed time: 1465m
+Signed-off-by: Julien Massot <julien.massot@collabora.com>
+---
+ .../bindings/media/i2c/maxim,max96714f.yaml   | 163 ++++++++++++++++++
+ 1 file changed, 163 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/maxim,max96714f.yaml
 
-configs tested: 154
-configs skipped: 1
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                                 defconfig   gcc  
-arc                            hsdk_defconfig   gcc  
-arc                   randconfig-001-20231208   gcc  
-arc                   randconfig-002-20231208   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                       multi_v4t_defconfig   gcc  
-arm                        mvebu_v7_defconfig   gcc  
-arm                        realview_defconfig   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                           sama5_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231208   gcc  
-csky                  randconfig-002-20231208   gcc  
-hexagon                          allmodconfig   clang
-hexagon                          allyesconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386                                defconfig   gcc  
-i386                  randconfig-011-20231208   gcc  
-i386                  randconfig-012-20231208   gcc  
-i386                  randconfig-013-20231208   gcc  
-i386                  randconfig-014-20231208   gcc  
-i386                  randconfig-015-20231208   gcc  
-i386                  randconfig-016-20231208   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch             randconfig-001-20231208   gcc  
-loongarch             randconfig-002-20231208   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-nios2                         10m50_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231208   gcc  
-nios2                 randconfig-002-20231208   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231208   gcc  
-parisc                randconfig-002-20231208   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                      makalu_defconfig   gcc  
-powerpc                   motionpro_defconfig   gcc  
-powerpc                       ppc64_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231208   gcc  
-s390                  randconfig-002-20231208   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                    randconfig-001-20231208   gcc  
-sh                    randconfig-002-20231208   gcc  
-sh                          rsk7201_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231208   gcc  
-sparc64               randconfig-002-20231208   gcc  
-um                               allmodconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231208   clang
-x86_64       buildonly-randconfig-002-20231208   clang
-x86_64       buildonly-randconfig-003-20231208   clang
-x86_64       buildonly-randconfig-004-20231208   clang
-x86_64       buildonly-randconfig-005-20231208   clang
-x86_64       buildonly-randconfig-006-20231208   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20231208   clang
-x86_64                randconfig-012-20231208   clang
-x86_64                randconfig-013-20231208   clang
-x86_64                randconfig-014-20231208   clang
-x86_64                randconfig-015-20231208   clang
-x86_64                randconfig-016-20231208   clang
-x86_64                randconfig-071-20231208   clang
-x86_64                randconfig-072-20231208   clang
-x86_64                randconfig-073-20231208   clang
-x86_64                randconfig-074-20231208   clang
-x86_64                randconfig-075-20231208   clang
-x86_64                randconfig-076-20231208   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-xtensa                randconfig-001-20231208   gcc  
-xtensa                randconfig-002-20231208   gcc  
-xtensa                         virt_defconfig   gcc  
-xtensa                    xip_kc705_defconfig   gcc  
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max96714f.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max96714f.yaml
+new file mode 100644
+index 000000000000..8a2a06e7e279
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/maxim,max96714f.yaml
+@@ -0,0 +1,163 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2023 Collabora Ltd.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/maxim,max96714f.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GMSL2 to CSI-2 Deserializer
++
++maintainers:
++  - Julien Massot <julien.massot@collabora.com>
++
++description: |
++  The MAX96714F deserializer converts GMSL2 serial inputs into MIPI
++  CSI-2 D-PHY or C-PHY formatted output. The device allows the GMSL2 link to
++  simultaneously transmit bidirectional control-channel data while forward
++  video transmissions are in progress. The MAX96714F can connect to one
++  remotely located serializer using industry-standard coax or STP
++  interconnects. The device cans operate in pixel or tunnel mode. In pixel mode
++  the MAX96714F can select individual video stream, while the tunnel mode forward all
++  the MIPI data received by the serializer.
++
++  The GMSL2 serial link operates at a fixed rate of 3Gbps in the
++  forward direction and 187.5Mbps in the reverse direction.
++
++properties:
++  compatible:
++    const: maxim,max96714f
++
++  reg:
++    description: I2C device address
++    maxItems: 1
++
++  enable-gpios: true
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        unevaluatedProperties: false
++        description: GMSL Input
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++            description:
++              Endpoint for GMSL2-Link port.
++
++      port@1:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: CSI-2 Output
++
++        properties:
++          endpoint:
++            $ref: /schemas/media/video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes: true
++              bus-type:
++                enum:
++                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
++
++            required:
++              - data-lanes
++              - bus-type
++
++    required:
++      - port@1
++
++  i2c-gate:
++    $ref: /schemas/i2c/i2c-controller.yaml
++    unevaluatedProperties: false
++    description: |
++      The MAX96714 will pass through and forward the I2C requests from the
++      incoming I2C bus over the GMSL2 link. Therefore it supports an i2c-gate
++      subnode to configure a serializer.
++
++  port0-poc-supply:
++    description: Regulator providing Power over Coax for a particular port
++
++required:
++  - compatible
++  - reg
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/media/video-interfaces.h>
++
++    main_i2c2 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        gmsl-deserializer@28 {
++            compatible = "maxim,max96714f";
++            reg = <0x28>;
++            enable-gpios = <&main_gpio0 37 GPIO_ACTIVE_HIGH>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                port@0 {
++                    reg = <0>;
++                    max96714_gmsl_in: endpoint {
++                        remote-endpoint = <&max96917f_gmsl_out>;
++                    };
++                };
++
++                port@1 {
++                    reg = <1>;
++                    max96714_csi_out: endpoint {
++                        bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
++                        clock-lanes = <0>;
++                        data-lanes = <1 2 3 4>;
++                        link-frequencies = /bits/ 64 <400000000>;
++                        remote-endpoint = <&csi_in>;
++                    };
++                };
++            };
++
++            i2c-gate {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                gmsl-serializer@40 {
++                    compatible = "maxim,max96717f";
++                    reg = <0x40>;
++                    gpio-controller;
++                    #gpio-cells = <2>;
++                    #clock-cells = <0>;
++
++                    ports {
++                        #address-cells = <1>;
++                        #size-cells = <0>;
++
++                        port@0 {
++                            reg = <0>;
++                            max96717f_csi_in: endpoint {
++                                data-lanes = <1 2>;
++                                lane-polarities = <1 0 1>;
++                                remote-endpoint = <&vd5661_csi>;
++                            };
++                        };
++
++                        port@1 {
++                            reg = <1>;
++                            max96917f_gmsl_out: endpoint {
++                                remote-endpoint = <&max96714_gmsl_in>;
++                            };
++                        };
++                    };
++                };
++            };
++        };
++    };
++...
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
