@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="f3LdCCdH"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="r1ud2rMW"
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3573A11F
-	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 10:16:52 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6FD5C
+	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 10:16:54 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 14ED71435;
-	Fri,  8 Dec 2023 19:16:05 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2107E45;
+	Fri,  8 Dec 2023 19:16:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702059365;
-	bh=xxaJX4+7zmHB04A0VlFE/icGXvSrE3VkuNkkJvSKxgU=;
+	s=mail; t=1702059368;
+	bh=SfVmII1KkscBpgS7gomaUUxQp+APoc3mZTNh7VKo63k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f3LdCCdHXeFYtwBSI+zWqsaABQxvRKK4q0qfYJKCPK6HqrWJcIzfCnblykULg6AaP
-	 sYjENTDyarqCeZLF1R3P8AguALlr9km0w5uMLoainwLupkJortQanhFxxmwTCp2Kbe
-	 u+Jnxx1vODmPkzxTIBdhmrkA517toijRSXP/FF5c=
+	b=r1ud2rMWJ0e5bm9Ibq1rwsSaWW2mfYdqtbIPlFAmP8JnrxEEQx4Ucy9ldSZg1A2yF
+	 G+EHY/Y66X2aAbGXvvOAPttxIOKwMP9Ev2UBS0SZPYjcAhcUBihRJ7E9+J7ObIvZns
+	 Z+QCNs1Ok1KXoVq1AR3KKVbmBbN/fkYysd7UcuFc=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -22,9 +22,9 @@ Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Paul Elder <paul.elder@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v4 5/8] media: docs: uAPI: Clarify error documentation for invalid 'which' value
-Date: Fri,  8 Dec 2023 20:16:45 +0200
-Message-ID: <20231208181648.13568-5-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 7/8] media: docs: uAPI: Fix documentation of 'which' field for routing ioctls
+Date: Fri,  8 Dec 2023 20:16:47 +0200
+Message-ID: <20231208181648.13568-7-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
 References: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
@@ -36,94 +36,28 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Invalid values for the 'which' field of structures passed to multiple
-subdev ioctls result in an EINVAL error being returned. The
-documentation of the corresponding ioctls indicates this with sentences
-such as the following:
+The routing ioctls documentation incorrectly describes the 'which'
+field, due to a bad copy & paste. Fix it.
 
-    the ``which`` field references a non-existing format
-
-This is confusing. Clarify the documentation.
-
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: ea73eda50813 ("media: Documentation: Add GS_ROUTING documentation")
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/v4l/vidioc-subdev-g-crop.rst       | 7 +++----
- .../userspace-api/media/v4l/vidioc-subdev-g-fmt.rst        | 5 ++---
- .../media/v4l/vidioc-subdev-g-frame-interval.rst           | 7 +++----
- .../userspace-api/media/v4l/vidioc-subdev-g-selection.rst  | 7 +++----
- 4 files changed, 11 insertions(+), 15 deletions(-)
+ .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-crop.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-crop.rst
-index 1d267f7e7991..92d933631fda 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-crop.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-crop.rst
-@@ -118,10 +118,9 @@ EBUSY
-     ``VIDIOC_SUBDEV_S_CROP``
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+index 791c1e628d5c..26b5004bfe6d 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+@@ -72,7 +72,7 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
  
- EINVAL
--    The struct :c:type:`v4l2_subdev_crop` ``pad``
--    references a non-existing pad, the ``which`` field references a
--    non-existing format, or cropping is not supported on the given
--    subdev pad.
-+    The struct :c:type:`v4l2_subdev_crop` ``pad`` references a non-existing pad,
-+    the ``which`` field has an unsupported value, or cropping is not supported
-+    on the given subdev pad.
- 
- EPERM
-     The ``VIDIOC_SUBDEV_S_CROP`` ioctl has been called on a read-only subdevice
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-fmt.rst
-index ed253a1e44b7..4a2b4e4f0152 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-fmt.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-fmt.rst
-@@ -140,9 +140,8 @@ EBUSY
-     fix the problem first. Only returned by ``VIDIOC_SUBDEV_S_FMT``
- 
- EINVAL
--    The struct :c:type:`v4l2_subdev_format`
--    ``pad`` references a non-existing pad, or the ``which`` field
--    references a non-existing format.
-+    The struct :c:type:`v4l2_subdev_format` ``pad`` references a non-existing
-+    pad, or the ``which`` field has an unsupported value.
- 
- EPERM
-     The ``VIDIOC_SUBDEV_S_FMT`` ioctl has been called on a read-only subdevice
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-frame-interval.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-frame-interval.rst
-index 41e0e2c8ecc3..c8022809ac35 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-frame-interval.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-frame-interval.rst
-@@ -117,10 +117,9 @@ EBUSY
-     ``VIDIOC_SUBDEV_S_FRAME_INTERVAL``
- 
- EINVAL
--    The struct
--    :c:type:`v4l2_subdev_frame_interval`
--    ``pad`` references a non-existing pad, the ``which`` field references a
--    non-existing frame interval, or the pad doesn't support frame intervals.
-+    The struct :c:type:`v4l2_subdev_frame_interval` ``pad`` references a
-+    non-existing pad, the ``which`` field has an unsupported value, or the pad
-+    doesn't support frame intervals.
- 
- EPERM
-     The ``VIDIOC_SUBDEV_S_FRAME_INTERVAL`` ioctl has been called on a read-only
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-selection.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-selection.rst
-index 6b629c19168c..19e6c3e9c06d 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-selection.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-selection.rst
-@@ -116,10 +116,9 @@ EBUSY
-     ``VIDIOC_SUBDEV_S_SELECTION``
- 
- EINVAL
--    The struct :c:type:`v4l2_subdev_selection`
--    ``pad`` references a non-existing pad, the ``which`` field
--    references a non-existing format, or the selection target is not
--    supported on the given subdev pad.
-+    The struct :c:type:`v4l2_subdev_selection` ``pad`` references a
-+    non-existing pad, the ``which`` field has an unsupported value, or the
-+    selection target is not supported on the given subdev pad.
- 
- EPERM
-     The ``VIDIOC_SUBDEV_S_SELECTION`` ioctl has been called on a read-only
+     * - __u32
+       - ``which``
+-      - Format to modified, from enum
++      - Routing table to be accessed, from enum
+         :ref:`v4l2_subdev_format_whence <v4l2-subdev-format-whence>`.
+     * - struct :c:type:`v4l2_subdev_route`
+       - ``routes[]``
 -- 
 Regards,
 
