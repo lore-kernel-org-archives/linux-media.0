@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="r1ud2rMW"
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6FD5C
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="k8bW4rWo"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61305133
 	for <linux-media@vger.kernel.org>; Fri,  8 Dec 2023 10:16:54 -0800 (PST)
 Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2107E45;
-	Fri,  8 Dec 2023 19:16:07 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6A1AA2B0E;
+	Fri,  8 Dec 2023 19:16:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702059368;
-	bh=SfVmII1KkscBpgS7gomaUUxQp+APoc3mZTNh7VKo63k=;
+	s=mail; t=1702059366;
+	bh=eS3k+4MnPnp+SbGYcNIWwXIR4/XUKN+aIsudG5SSp8Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r1ud2rMWJ0e5bm9Ibq1rwsSaWW2mfYdqtbIPlFAmP8JnrxEEQx4Ucy9ldSZg1A2yF
-	 G+EHY/Y66X2aAbGXvvOAPttxIOKwMP9Ev2UBS0SZPYjcAhcUBihRJ7E9+J7ObIvZns
-	 Z+QCNs1Ok1KXoVq1AR3KKVbmBbN/fkYysd7UcuFc=
+	b=k8bW4rWofiWW8zgTaKgzqy9nDaAO4lKiOCbkJmjnCsyvqg5h7GLArFgxeZh73RgOX
+	 i4tSIzc/KeM+cJQ0PLtu9lgJ1shkASWOLJdb8tYirucoWOdcxlfH6auzAdPzfHmWlF
+	 sow1VA6W80Dv7NngMh3seXbfIH8y2CuGZyw6tD70=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -22,9 +22,9 @@ Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Paul Elder <paul.elder@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v4 7/8] media: docs: uAPI: Fix documentation of 'which' field for routing ioctls
-Date: Fri,  8 Dec 2023 20:16:47 +0200
-Message-ID: <20231208181648.13568-7-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v4 6/8] media: docs: uAPI: Expand error documentation for invalid 'which' value
+Date: Fri,  8 Dec 2023 20:16:46 +0200
+Message-ID: <20231208181648.13568-6-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
 References: <20231208181442.13356-1-laurent.pinchart@ideasonboard.com>
@@ -36,28 +36,81 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The routing ioctls documentation incorrectly describes the 'which'
-field, due to a bad copy & paste. Fix it.
+Multiple subdev ioctls that take a 'which' field do not document the
+error returned when the field has an invalid value. Expand the
+documentation to fix this.
 
-Fixes: ea73eda50813 ("media: Documentation: Add GS_ROUTING documentation")
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst         | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/v4l/vidioc-subdev-enum-frame-interval.rst      | 9 ++++-----
+ .../media/v4l/vidioc-subdev-enum-frame-size.rst          | 7 +++----
+ .../media/v4l/vidioc-subdev-enum-mbus-code.rst           | 7 +++----
+ .../userspace-api/media/v4l/vidioc-subdev-g-routing.rst  | 5 +++--
+ 4 files changed, 13 insertions(+), 15 deletions(-)
 
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
+index 8def4c05d3da..c935bacc3bc2 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-interval.rst
+@@ -107,8 +107,7 @@ appropriately. The generic error codes are described at the
+ :ref:`Generic Error Codes <gen-errors>` chapter.
+ 
+ EINVAL
+-    The struct
+-    :c:type:`v4l2_subdev_frame_interval_enum`
+-    ``pad`` references a non-existing pad, one of the ``code``,
+-    ``width`` or ``height`` fields are invalid for the given pad or the
+-    ``index`` field is out of bounds.
++    The struct :c:type:`v4l2_subdev_frame_interval_enum` ``pad`` references a
++    non-existing pad, the ``which`` field has an unsupported value, one of the
++    ``code``, ``width`` or ``height`` fields are invalid for the given pad, or
++    the ``index`` field is out of bounds.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
+index e3ae84df5486..65f0cfeca973 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
+@@ -126,7 +126,6 @@ appropriately. The generic error codes are described at the
+ :ref:`Generic Error Codes <gen-errors>` chapter.
+ 
+ EINVAL
+-    The struct
+-    :c:type:`v4l2_subdev_frame_size_enum`
+-    ``pad`` references a non-existing pad, the ``code`` is invalid for
+-    the given pad or the ``index`` field is out of bounds.
++    The struct :c:type:`v4l2_subdev_frame_size_enum` ``pad`` references a
++    non-existing pad, the ``which`` field has an unsupported value, the ``code``
++    is invalid for the given pad, or the ``index`` field is out of bounds.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+index 4ad7dec27e25..3050966b199f 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+@@ -158,7 +158,6 @@ appropriately. The generic error codes are described at the
+ :ref:`Generic Error Codes <gen-errors>` chapter.
+ 
+ EINVAL
+-    The struct
+-    :c:type:`v4l2_subdev_mbus_code_enum`
+-    ``pad`` references a non-existing pad, or the ``index`` field is out
+-    of bounds.
++    The struct :c:type:`v4l2_subdev_mbus_code_enum` ``pad`` references a
++    non-existing pad, the ``which`` field has an unsupported value, or the
++    ``index`` field is out of bounds.
 diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-index 791c1e628d5c..26b5004bfe6d 100644
+index 72677a280cd6..791c1e628d5c 100644
 --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
 +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-@@ -72,7 +72,7 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
+@@ -140,8 +140,9 @@ ENOSPC
+    all the available routes the subdevice exposes.
  
-     * - __u32
-       - ``which``
--      - Format to modified, from enum
-+      - Routing table to be accessed, from enum
-         :ref:`v4l2_subdev_format_whence <v4l2-subdev-format-whence>`.
-     * - struct :c:type:`v4l2_subdev_route`
-       - ``routes[]``
+ EINVAL
+-   The sink or source pad identifiers reference a non-existing pad, or reference
+-   pads of different types (ie. the sink_pad identifiers refers to a source pad).
++   The sink or source pad identifiers reference a non-existing pad or reference
++   pads of different types (ie. the sink_pad identifiers refers to a source
++   pad), or the ``which`` field has an unsupported value.
+ 
+ E2BIG
+    The application provided ``num_routes`` for ``VIDIOC_SUBDEV_S_ROUTING`` is
 -- 
 Regards,
 
