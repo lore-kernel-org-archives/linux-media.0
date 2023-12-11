@@ -1,151 +1,144 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QckOqAZY"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3502F30E0
-	for <linux-media@vger.kernel.org>; Mon, 11 Dec 2023 06:07:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702303633; x=1733839633;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Tbs2aUUKbCvYGJUY/jUQO9ZqhEn09NnTn5bfEh3WSfw=;
-  b=QckOqAZYttASPAgugmlbX5OPnjFNaVn62bMiTTYqtJmP2T8GexWJaZRW
-   UJ7e0uaIBEjlIYQBr4VMAJewoiJYwwtviDekwOYsFPmWHPU51nwtoID73
-   4Dyfx6VY2cp0j5kVSJdUBga9bEEu/uEZgs7m1lU+25zuQVkLPH6bIVGWG
-   dpqBLPzZWxu7HkGJqGCDAzK8H6tFqUd+j10BucApoLBeJGTzECIieaPtr
-   hhnTOSPmShIMJm9dILqgBxov9dXA5QKwsTuBnD77s/xfCBo7MM7zS+XXG
-   0GgNcc1DWZXHN0OzSkINUe0gwO4uwjKaqjJyMQd+ld4WO+GwHZibQVF2j
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="393523849"
-X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="393523849"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="863795250"
-X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="863795250"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:04 -0800
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 01DBF11FC35;
-	Mon, 11 Dec 2023 16:07:00 +0200 (EET)
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com,
-	jacopo.mondi@ideasonboard.com,
-	Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/4] media: imx334: Use v4l2_link_frequencies_to_bitmap helper
-Date: Mon, 11 Dec 2023 16:06:56 +0200
-Message-Id: <20231211140658.366268-3-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231211140658.366268-1-sakari.ailus@linux.intel.com>
-References: <20231211140658.366268-1-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FR6iqYo4"
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FEC5B89;
+	Mon, 11 Dec 2023 06:17:32 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-a1d93da3eb7so525087666b.0;
+        Mon, 11 Dec 2023 06:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702304251; x=1702909051; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xjgDoH5wpFTvBtjku8JEMjQ8hKrrQC8Hfkdc8NZQjks=;
+        b=FR6iqYo4r0ATlem3wbq4NcI62K62L4+Oom6+PvSCOn+jPjJnY+vUwt9cgQFu0EETQ5
+         57EqkROIKrr7aE9TOWQ6CmTZBEJiwdJoCUhsXfkK2xsJLM53cp+66859nrloFABybCza
+         osKVUfQ2ZGfbv4pgu9ZXiGmq7yaBnEaOKmuE8z1vsbxoz+7j4DpL5kR0swHGpfeTpANX
+         zhSJ5FhI/L5vPbHY243UGG3ehksjlxUGADF+G+4gm+a5FqXevtjc2njkf0dNbiiPkOHN
+         NqTdQjrA7T3IpBm6pRPa8jDHvM1VrUPfYNc3UZVYjGKtWVB1DS54PC6h3SB1f8AFf6Kc
+         5DbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702304251; x=1702909051;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xjgDoH5wpFTvBtjku8JEMjQ8hKrrQC8Hfkdc8NZQjks=;
+        b=PY380t9i3U4aglAXgA65ICNJoaFvP8sMYEyKJao9vBQuodToSpsSO06oP++sB1pZpQ
+         YXI8KpJ9ouc0pwu75p7qpSo1xmnbZPTJY0PqPdTXxrGzEfmAq78bA7nvM8vrtHhusk/A
+         1F/MgfdKhrF6pAvh9YBSU+JdIxnKVV8xyyn8FPVKeSlCLUR3O8RCeFN3jq0RlxqeRh6X
+         utx3a7EGkTzwUsQVv4pouyrNfgE2pUPsEVVELhvWxrnh7CTNfS5gQvjS5i3VIpq2omJa
+         cSR7GNtfl13b5F7Ddv0mqu6cisIlhrZjrwpMu1fQjezcBqitfalB8/wC3wrVXqJTFKnE
+         jl1Q==
+X-Gm-Message-State: AOJu0Ywf3MjpRodt/m7L78bAJuu+ZwhUelUhAOzVEKYjKYr7RuhVdh/W
+	xfidIJ0/hTOWra1sjVnp0X0=
+X-Google-Smtp-Source: AGHT+IGvtRp1DsOkZJ5XmsG/dnogTspAPXgW486VHcUzxU/sxVwTq6S7cWTfJRA7TFXSMcwnZYFJ4w==
+X-Received: by 2002:a17:906:512:b0:a19:a1ba:8cb6 with SMTP id j18-20020a170906051200b00a19a1ba8cb6mr2088159eja.84.1702304250718;
+        Mon, 11 Dec 2023 06:17:30 -0800 (PST)
+Received: from orome.fritz.box (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id vc11-20020a170907d08b00b00a1ce58e9fc7sm4849982ejc.64.2023.12.11.06.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 06:17:30 -0800 (PST)
+Date: Mon, 11 Dec 2023 15:17:28 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/4] pwm: bcm2835: allow pwm driver to be used in
+ atomic context
+Message-ID: <ZXcZ-D2Bc58ydsIn@orome.fritz.box>
+References: <cover.1701248996.git.sean@mess.org>
+ <179dc1ce85702a8b64b43c0e0df656b0c5e3ce30.1701248996.git.sean@mess.org>
+ <ZXNC3JYy7CTfYsyC@orome.fritz.box>
+ <ZXNL5upeUPc4gC1R@gofer.mess.org>
+ <20231208172040.mgw7aicmwlw6yjyb@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="gN2yPszgClY7v+2k"
+Content-Disposition: inline
+In-Reply-To: <20231208172040.mgw7aicmwlw6yjyb@pengutronix.de>
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-Use the v4l2_link_frequencies_to_bitmap() helper to figure out which
-driver-supported link frequencies can be used on a given system.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/imx334.c | 41 ++++++++++++--------------------------
- 1 file changed, 13 insertions(+), 28 deletions(-)
+--gN2yPszgClY7v+2k
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index 6725b3e2a73e..76b88bbcb40a 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -136,7 +136,7 @@ struct imx334_mode {
-  * @vblank: Vertical blanking in lines
-  * @cur_mode: Pointer to current selected sensor mode
-  * @mutex: Mutex for serializing sensor controls
-- * @menu_skip_mask: Menu skip mask for link_freq_ctrl
-+ * @link_freq_bitmap: Menu bitmap for link_freq_ctrl
-  * @cur_code: current selected format code
-  */
- struct imx334 {
-@@ -158,7 +158,7 @@ struct imx334 {
- 	u32 vblank;
- 	const struct imx334_mode *cur_mode;
- 	struct mutex mutex;
--	unsigned long menu_skip_mask;
-+	unsigned long link_freq_bitmap;
- 	u32 cur_code;
- };
- 
-@@ -954,9 +954,9 @@ static int imx334_init_state(struct v4l2_subdev *sd,
- 	imx334_fill_pad_format(imx334, imx334->cur_mode, &fmt);
- 
- 	__v4l2_ctrl_modify_range(imx334->link_freq_ctrl, 0,
--				 __fls(imx334->menu_skip_mask),
--				 ~(imx334->menu_skip_mask),
--				 __ffs(imx334->menu_skip_mask));
-+				 __fls(imx334->link_freq_bitmap),
-+				 ~(imx334->link_freq_bitmap),
-+				 __ffs(imx334->link_freq_bitmap));
- 
- 	mutex_unlock(&imx334->mutex);
- 
-@@ -1157,26 +1157,11 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
- 		goto done_endpoint_free;
- 	}
- 
--	if (!bus_cfg.nr_of_link_frequencies) {
--		dev_err(imx334->dev, "no link frequencies defined");
--		ret = -EINVAL;
--		goto done_endpoint_free;
--	}
--
--	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
--		for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
--			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
--				set_bit(j, &imx334->menu_skip_mask);
--				break;
--			}
--		}
--
--		if (j == ARRAY_SIZE(link_freq)) {
--			ret = dev_err_probe(imx334->dev, -EINVAL,
--					    "no supported link freq found\n");
--			goto done_endpoint_free;
--		}
--	}
-+	ret = v4l2_link_frequencies_to_bitmap(imx334->dev,
-+					      bus_cfg.link_frequencies,
-+					      bus_cfg.nr_of_link_frequencies,
-+					      link_freq, ARRAY_SIZE(link_freq),
-+					      &imx334->link_freq_bitmap);
- 
- done_endpoint_free:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
-@@ -1310,8 +1295,8 @@ static int imx334_init_controls(struct imx334 *imx334)
- 	imx334->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
- 							&imx334_ctrl_ops,
- 							V4L2_CID_LINK_FREQ,
--							__fls(imx334->menu_skip_mask),
--							__ffs(imx334->menu_skip_mask),
-+							__fls(imx334->link_freq_bitmap),
-+							__ffs(imx334->link_freq_bitmap),
- 							link_freq);
- 
- 	if (imx334->link_freq_ctrl)
-@@ -1386,7 +1371,7 @@ static int imx334_probe(struct i2c_client *client)
- 	}
- 
- 	/* Set default mode to max resolution */
--	imx334->cur_mode = &supported_modes[__ffs(imx334->menu_skip_mask)];
-+	imx334->cur_mode = &supported_modes[__ffs(imx334->link_freq_bitmap)];
- 	imx334->cur_code = imx334_mbus_codes[0];
- 	imx334->vblank = imx334->cur_mode->vblank;
- 
--- 
-2.39.2
+On Fri, Dec 08, 2023 at 06:20:40PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> On Fri, Dec 08, 2023 at 05:01:26PM +0000, Sean Young wrote:
+> > On Fri, Dec 08, 2023 at 05:22:52PM +0100, Thierry Reding wrote:
+> > > On Wed, Nov 29, 2023 at 09:13:36AM +0000, Sean Young wrote:
+> > > > clk_get_rate() may do a mutex lock. Fetch the clock rate once, and =
+prevent
+> > > > rate changes using clk_rate_exclusive_get().
+> > > >=20
+> > > > Signed-off-by: Sean Young <sean@mess.org>
+> > > > ---
+> > > >  drivers/pwm/pwm-bcm2835.c | 31 +++++++++++++++++++++----------
+> > > >  1 file changed, 21 insertions(+), 10 deletions(-)
+> > >=20
+> > > s/pwm/PWM/ in the subject. Although, I guess you could just drop the
+> > > "PWM" altogether because the subject prefix implies that this is for
+> > > PWM.
+> >=20
+> > $ git log --no-merges --oneline drivers/pwm/ | sed -r 's/^\w* ([^:]+): =
+=2E*/\1/' | sort | uniq -c
+> >    1197 pwm
+> >       1 PWM
+> >   ...
+> >=20
+> > The vast majority of the commits use pwm: as a prefix, only one uses PW=
+M:.=20
+> > In fact if you look across the tree almost everywhere lower case is used
+> > for the prefix.
+>=20
+> Thierry doesn't want you to change the subject prefix, but only the
+> second "pwm" to make it read:
+>=20
+> 	pwm: bcm2835: allow PWM driver to be used in atomic context
+>=20
+> While I understand Thierry here, I'm fine with a lowercase pwm here,
+> too. In my book a PWM in all uppercase is the type of hardware and pwm
+> in all lowercase is the framework's name. If you use "PWM driver" or
+> "pwm driver" then doesn't matter much.
 
+I'm not fine with a lowercase "pwm" in what is clearly text. Text should
+be grammatically correct and PWM being an abbreviation it should be all
+caps. The framework name is also PWM, not pwm. We use the lowercase pwm
+as prefix because it represents the directory where the subsystem lives
+and we usually don't use capitalization in file and directory names.
+
+Thierry
+
+--gN2yPszgClY7v+2k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmV3GfgACgkQ3SOs138+
+s6G4gQ/+JdOurEDhll7cImaJ6eu6WXI6EmxsPcFtvXqydrGyPaoLvSaw1eKq9cYU
+QUWpM6rdBZW3kQTlx+6766tmW5GMa4hK9LZiRUpH5wQfJrq+TMTyp+sOqq2pIw9C
+voiT2ShRE8Z5uYu4lRr+mp08Ws9RcL44wvIYOLXm6V+xNe4IS5kup9N3ObX+HvK6
+OIlbZKPgCLt4zmlDyYDOy0A5v7uAmaaejjx1jeVmBeDc9pIspK7CrNBZSmKS5jVY
+SNJydpNNmoDcGmkPhkTjzB3nyolXuo/UyqdaDGfd7YkCO7sIBhYoxIcXxyF7/6mQ
+1lPy5QM0WxhAjeU2ScfKoHXoPH9YATPYj2Mf2ZQp8ltchmmXnZGLX64WfPcgp8f2
+bJs19PfF24c52n5HvdHkVMVM0loWpbNp+ozY0o/wcKDna6UksuLNkEf2PJ8bS9gD
+vUoBH/uTVRFXtl7QXSRk1Vnbn20dwPoORFmLdBSGQI44K7hcEaUkQtS3/t5PXpBW
+bIOkYwMB5jyARmUgbnFld2wT/6t5FV7hNseEyRHszZc1CFn1gSiPz9j4TRkCAoE8
+CvlZ5QG/6BzU1haNEplHPn9wfsYKOdJ3k/GNfgYAEfWpB7Pi1gkgameq57TuUxSA
+B+Z7nhZCd3hWoNF+oRlqe1e0zH7CuTRIgQ3yBxjX9nNjeclKo5c=
+=FV2f
+-----END PGP SIGNATURE-----
+
+--gN2yPszgClY7v+2k--
