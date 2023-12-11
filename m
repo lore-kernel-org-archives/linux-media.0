@@ -1,42 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dE+UAmF9"
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BB7DB;
-	Mon, 11 Dec 2023 09:50:44 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c9fdf53abcso46204941fa.1;
-        Mon, 11 Dec 2023 09:50:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hShG54bi"
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD19793;
+	Mon, 11 Dec 2023 09:50:46 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50bf69afa99so6052929e87.3;
+        Mon, 11 Dec 2023 09:50:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702317042; x=1702921842; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXgQ3cwlEauWhm4w/5MumIv9AzGW6cuxTgfbxgjY3dg=;
-        b=dE+UAmF9KCD6sbThbCQTB4zPW5Eed66WfNKDEG9UdwvFLxPA6Y6VT0LlIc+f6U3+cz
-         7pwJM4bkz65OT6Ib9dLq0jbqhfk7xmKG8qluErTIuGg0vYPNpyO+0XDhkZoKmmv5ihPS
-         cYODRa0/B8eorFkIThoBYEYfM8p91wAgPJiOsSdOcf9KceeuzO+5QMyh5zztR5DEyk6O
-         58Cb1SZHg2JLKkvRAZxlPYZBjQiJji3M+CyD83MARCCL12GL3NT2BISNgEvdtsIy9p8t
-         z17yrve5ztGP2dUmVYgGhkLP+9cqDSwFBGussG17TNSx4RrAYv7lzrCbRupChvJK7BMy
-         Pp2w==
+        d=gmail.com; s=20230601; t=1702317044; x=1702921844; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tVL1A/XuQPswwKjRrHcQ3Q+mQNKL8W1neWWaIk0mGMo=;
+        b=hShG54bigAXEIv7Qbg2NHieK/LptHaQj8iXPKw2ocIY0kY/OBsIWqHrHBzmLsHg4gd
+         NkyLrxpJ54CsJr0MLtzZy3tFJXlOuBJ6bx032Do6iuV9yyZh0zSh79QIUwMhFQ/Jy+AI
+         uSpFC6hrYoF9fhNaGokKovO15he3hcTD/27esxBxVdJk9p16GFllz5RNLef7uQyUQdzj
+         PrMVzXPCtXnxhK2EwxPQhGzYWaWMdDoqLakqcY5QObQ9gLShlTeNNL1rtWC9zqlrwl58
+         wJcL1vOuiEzRSmhre9kzXpQ4pEh67u0SeO5OBf3N2V1Lxi6hpHs+2J7sNS5J/dWlUKzJ
+         uZog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702317042; x=1702921842;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXgQ3cwlEauWhm4w/5MumIv9AzGW6cuxTgfbxgjY3dg=;
-        b=lOVN8nkG6qVmpAsenihTfomZ9gdAFV65pcF4uIGbkT3sfsNQsqpr9SfKrdkVwUyxKX
-         Anj5jUAhoJq6A7KDLS7iU+208jVeHYY2/c6cHzA0WCI+AEjzHt/JVmamhLccmAGCcdUo
-         W/MYovls6kyko2/TgtXNLyo0r6HuWyvari7x2mcEedl2Qa07QF/zNYD+NJQhBPcLthe/
-         Uyy9GiEMXFYzuYMFBEDkUL5d6JsjajwKf6yKCJsouA8GtxlAMbBmn33UYmikL2WRSltd
-         DYVT1R1VJGQfL6pshini5ZOMJec5RqsoO3dJ3GsQL3l5WCbv6KngSJCjSNUOPnbwYqck
-         jPpA==
-X-Gm-Message-State: AOJu0Yxze40hwmp2Dlx77HtthHsgawYj/K5XvWzMHDSjlFCVMFVVZ9F1
-	ZNX7ejBhHRIs6SoND28bnfmO5k3fQoBgAeUS
-X-Google-Smtp-Source: AGHT+IEauNyodeTccBOVRJVKyjKv+RkLy8Cs/5HB00BieRqqHIwCWxKKvgs/7iA1S0pIP982Lh/J1Q==
-X-Received: by 2002:a2e:a544:0:b0:2c9:f643:d6d7 with SMTP id e4-20020a2ea544000000b002c9f643d6d7mr3851894ljn.8.1702317041605;
-        Mon, 11 Dec 2023 09:50:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702317044; x=1702921844;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tVL1A/XuQPswwKjRrHcQ3Q+mQNKL8W1neWWaIk0mGMo=;
+        b=B2v098CaDzrLzX2w0Ml1i97cc7+6Gw8JmWKu91MpDPoB7ZDCS8LjtonoJ0J8XoUYbe
+         BYwyG+AN488gWHz0ryvORyyhjA19UeA28ArW56UFrL/Eydv1e9I9Dy+2Fvct5v0PkT5q
+         82FxyD6coghrnus0itdZ75IgAbgm4zIJgfAKsPzH2pXYFdMLd6HkhMCS2npyybXU/OF1
+         c134/4NqSAa3zNBaetR1tZmY1ONtq31VlIyJ8DZgFpaf7hwwvDjt9iHwMKLhWHuhJj9T
+         ND+s7tLUw4LDIbqsxuTATBT+p7vqnRXq638qw7gHK7XIr8XR60+/335h5UYjTCYbcXq6
+         NqEw==
+X-Gm-Message-State: AOJu0Ywg5SsM98QQ78B4BmtTN/dCUF//TPG78A5r8JUWslTPiVgfo68n
+	kRXphV0qXKIASDqiJMsR4272yPTUbRo+v9R0
+X-Google-Smtp-Source: AGHT+IF4tVmQSQ35mI4v3I2tcKoJpRf6N0w6CjNwhrJYpIBT5hxg8+3fYQOJPj2vwq1zR49a8c7RVw==
+X-Received: by 2002:a05:6512:2316:b0:50b:f30b:5499 with SMTP id o22-20020a056512231600b0050bf30b5499mr3065839lfu.80.1702317044420;
+        Mon, 11 Dec 2023 09:50:44 -0800 (PST)
 Received: from localhost ([83.149.246.185])
-        by smtp.gmail.com with ESMTPSA id ce11-20020a2eab0b000000b002cb28360049sm1039631ljb.96.2023.12.11.09.50.40
+        by smtp.gmail.com with ESMTPSA id h4-20020a056512350400b0050d14ce3958sm1077170lfs.81.2023.12.11.09.50.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 09:50:41 -0800 (PST)
+        Mon, 11 Dec 2023 09:50:43 -0800 (PST)
 From: Mikhail Rudenko <mike.rudenko@gmail.com>
 To: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -48,10 +49,12 @@ Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH 00/19] Omnivision OV4689 refactoring and improvements
-Date: Mon, 11 Dec 2023 20:50:03 +0300
-Message-ID: <20231211175023.1680247-1-mike.rudenko@gmail.com>
+Subject: [PATCH 02/19] media: i2c: ov4689: Fix typo in a comment
+Date: Mon, 11 Dec 2023 20:50:05 +0300
+Message-ID: <20231211175023.1680247-3-mike.rudenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231211175023.1680247-1-mike.rudenko@gmail.com>
+References: <20231211175023.1680247-1-mike.rudenko@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -60,49 +63,26 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Fix a spelling error in a comment.
 
-This series contains refactoring and new features implementation for
-the Omnivision OV4689 sensor driver. Specifically, patches 1, 2, 4, 5,
-6, 9, 14, 15, 17, and 18 are refactorings, and are not supposed to
-introduce any functional change. Patches 3 and 7 perform migration to
-CCI helpers and subdevice active state respectively, and should not
-introduce any hardware- and/or user-visible change either.
+Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+---
+ drivers/media/i2c/ov4689.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patches 10-13 expose more sensor controls to the userspace, such as
-(read-write) HBLANK, VFLIP/HFLIP, digital gain, and color
-balance. Patch 16 implements configurable analogue crop rectangle via
-.set_selection callback. And finally, patch 19 enables 2x2 binning
-option. It should be noted that publicly available sensor
-documentation is lacking description of many registers and their value
-ranges, so a lot of values had to be found by experimentation.
-
-Any comments and reviews are welcome!
-
-Mikhail Rudenko (19):
-  media: i2c: ov4689: Clean up and annotate the register table
-  media: i2c: ov4689: Fix typo in a comment
-  media: i2c: ov4689: CCI conversion
-  media: i2c: ov4689: Remove i2c_client from ov4689 struct
-  media: i2c: ov4689: Refactor ov4689_set_ctrl
-  media: i2c: ov4689: Set gain in one 16 bit write
-  media: i2c: ov4689: Use sub-device active state
-  media: i2c: ov4689: Enable runtime PM before registering sub-device
-  media: i2c: ov4689: Remove max_fps field from struct ov4689_mode
-  media: i2c: ov4689: Make horizontal blanking configurable
-  media: i2c: ov4689: Implement vflip/hflip controls
-  media: i2c: ov4689: Implement digital gain control
-  media: i2c: ov4689: Implement manual color balance controls
-  media: i2c: ov4689: Move pixel array size out of struct ov4689_mode
-  media: i2c: ov4689: Set timing registers programmatically
-  media: i2c: ov4689: Configurable analogue crop
-  media: i2c: ov4689: Eliminate struct ov4689_mode
-  media: i2c: ov4689: Refactor ov4689_s_stream
-  media: i2c: ov4689: Implement 2x2 binning
-
- drivers/media/i2c/Kconfig  |   1 +
- drivers/media/i2c/ov4689.c | 951 ++++++++++++++++++++++---------------
- 2 files changed, 579 insertions(+), 373 deletions(-)
-
---
+diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
+index ff5213862974..53dcfc8685d4 100644
+--- a/drivers/media/i2c/ov4689.c
++++ b/drivers/media/i2c/ov4689.c
+@@ -692,7 +692,7 @@ static int ov4689_set_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 	switch (ctrl->id) {
+ 	case V4L2_CID_EXPOSURE:
+-		/* 4 least significant bits of expsoure are fractional part */
++		/* 4 least significant bits of exposure are fractional part */
+ 		ret = ov4689_write_reg(ov4689->client, OV4689_REG_EXPOSURE,
+ 				       OV4689_REG_VALUE_24BIT, ctrl->val << 4);
+ 		break;
+-- 
 2.43.0
+
