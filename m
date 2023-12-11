@@ -1,35 +1,35 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+bawBZh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QckOqAZY"
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45F29029
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3502F30E0
 	for <linux-media@vger.kernel.org>; Mon, 11 Dec 2023 06:07:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1702303633; x=1733839633;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Y7u1589u3IzL8cNUP1vBOOFbqMbJ+mg7XP6yO7oiRYk=;
-  b=E+bawBZhtowPPdq5zvkxIMZxrycmqpfeSdGzTQG2ZtjDrq676Q8zUo/G
-   pLzWlHhxWWfkPAeX90dPJB/ee1Or58YSz9x5QGrraB7O3X/XatyhiikDA
-   utIdPvy0irLxwXGC7NBDZ9q0SZEo+WQTRDAwj7KFHU6zB7wwxicfgut2L
-   1Tsnav27GgcX4enItfbaGPqCG+ViaaqXPoRYWYgObM8qzwr/hQaGeRJwr
-   B21k+g1GoK24Y+gGpDekaE9K6B7wPI/TDp+igz/R2ku2A2pLFCnd/835e
-   IzQmo7zmTl3ArzZlS9p6ZOJD1yVgGwcc3G0o3nLCDFQXAPqvb6enTcVkW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="393523864"
+  bh=Tbs2aUUKbCvYGJUY/jUQO9ZqhEn09NnTn5bfEh3WSfw=;
+  b=QckOqAZYttASPAgugmlbX5OPnjFNaVn62bMiTTYqtJmP2T8GexWJaZRW
+   UJ7e0uaIBEjlIYQBr4VMAJewoiJYwwtviDekwOYsFPmWHPU51nwtoID73
+   4Dyfx6VY2cp0j5kVSJdUBga9bEEu/uEZgs7m1lU+25zuQVkLPH6bIVGWG
+   dpqBLPzZWxu7HkGJqGCDAzK8H6tFqUd+j10BucApoLBeJGTzECIieaPtr
+   hhnTOSPmShIMJm9dILqgBxov9dXA5QKwsTuBnD77s/xfCBo7MM7zS+XXG
+   0GgNcc1DWZXHN0OzSkINUe0gwO4uwjKaqjJyMQd+ld4WO+GwHZibQVF2j
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="393523849"
 X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="393523864"
+   d="scan'208";a="393523849"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:07 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="863795259"
+X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="863795250"
 X-IronPort-AV: E=Sophos;i="6.04,268,1695711600"; 
-   d="scan'208";a="863795259"
+   d="scan'208";a="863795250"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:05 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 06:07:04 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id CB6E9120619;
-	Mon, 11 Dec 2023 16:07:02 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 01DBF11FC35;
+	Mon, 11 Dec 2023 16:07:00 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: laurent.pinchart@ideasonboard.com,
@@ -37,9 +37,9 @@ Cc: laurent.pinchart@ideasonboard.com,
 	Bingbu Cao <bingbu.cao@intel.com>,
 	Tianshu Qiu <tian.shu.qiu@intel.com>,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 4/4] media: imx355: Use v4l2_link_frequencies_to_bitmap helper
-Date: Mon, 11 Dec 2023 16:06:58 +0200
-Message-Id: <20231211140658.366268-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH 2/4] media: imx334: Use v4l2_link_frequencies_to_bitmap helper
+Date: Mon, 11 Dec 2023 16:06:56 +0200
+Message-Id: <20231211140658.366268-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231211140658.366268-1-sakari.ailus@linux.intel.com>
 References: <20231211140658.366268-1-sakari.ailus@linux.intel.com>
@@ -56,137 +56,95 @@ driver-supported link frequencies can be used on a given system.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/imx355.c | 53 ++++++++++----------------------------
- 1 file changed, 14 insertions(+), 39 deletions(-)
+ drivers/media/i2c/imx334.c | 41 ++++++++++++--------------------------
+ 1 file changed, 13 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/media/i2c/imx355.c b/drivers/media/i2c/imx355.c
-index 8c995c58743a..51e3f3ae53da 100644
---- a/drivers/media/i2c/imx355.c
-+++ b/drivers/media/i2c/imx355.c
-@@ -56,7 +56,7 @@
- #define IMX355_REG_ORIENTATION		0x0101
- 
- /* default link frequency and external clock */
--#define IMX355_LINK_FREQ_DEFAULT	360000000
-+#define IMX355_LINK_FREQ_DEFAULT	360000000LL
- #define IMX355_EXT_CLK			19200000
- #define IMX355_LINK_FREQ_INDEX		0
- 
-@@ -93,8 +93,7 @@ struct imx355_mode {
- 
- struct imx355_hwcfg {
- 	u32 ext_clk;			/* sensor external clk */
--	s64 *link_freqs;		/* CSI-2 link frequencies */
--	unsigned int nr_of_link_freqs;
+diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
+index 6725b3e2a73e..76b88bbcb40a 100644
+--- a/drivers/media/i2c/imx334.c
++++ b/drivers/media/i2c/imx334.c
+@@ -136,7 +136,7 @@ struct imx334_mode {
+  * @vblank: Vertical blanking in lines
+  * @cur_mode: Pointer to current selected sensor mode
+  * @mutex: Mutex for serializing sensor controls
+- * @menu_skip_mask: Menu skip mask for link_freq_ctrl
++ * @link_freq_bitmap: Menu bitmap for link_freq_ctrl
+  * @cur_code: current selected format code
+  */
+ struct imx334 {
+@@ -158,7 +158,7 @@ struct imx334 {
+ 	u32 vblank;
+ 	const struct imx334_mode *cur_mode;
+ 	struct mutex mutex;
+-	unsigned long menu_skip_mask;
 +	unsigned long link_freq_bitmap;
+ 	u32 cur_code;
  };
  
- struct imx355 {
-@@ -115,7 +114,6 @@ struct imx355 {
- 	const struct imx355_mode *cur_mode;
+@@ -954,9 +954,9 @@ static int imx334_init_state(struct v4l2_subdev *sd,
+ 	imx334_fill_pad_format(imx334, imx334->cur_mode, &fmt);
  
- 	struct imx355_hwcfg *hwcfg;
--	s64 link_def_freq;	/* CSI-2 link default frequency */
+ 	__v4l2_ctrl_modify_range(imx334->link_freq_ctrl, 0,
+-				 __fls(imx334->menu_skip_mask),
+-				 ~(imx334->menu_skip_mask),
+-				 __ffs(imx334->menu_skip_mask));
++				 __fls(imx334->link_freq_bitmap),
++				 ~(imx334->link_freq_bitmap),
++				 __ffs(imx334->link_freq_bitmap));
  
- 	/*
- 	 * Mutex for serialized access:
-@@ -879,7 +877,10 @@ static const char * const imx355_test_pattern_menu[] = {
- 	"Pseudorandom Sequence (PN9)",
- };
+ 	mutex_unlock(&imx334->mutex);
  
--/* supported link frequencies */
-+/*
-+ * When adding more than the one below, make sure the disallowed ones will
-+ * actually be disabled in the LINK_FREQ control.
-+ */
- static const s64 link_freq_menu_items[] = {
- 	IMX355_LINK_FREQ_DEFAULT,
- };
-@@ -1356,7 +1357,7 @@ imx355_set_pad_format(struct v4l2_subdev *sd,
- 		*framefmt = fmt->format;
- 	} else {
- 		imx355->cur_mode = mode;
--		pixel_rate = imx355->link_def_freq * 2 * 4;
-+		pixel_rate = IMX355_LINK_FREQ_DEFAULT * 2 * 4;
- 		do_div(pixel_rate, 10);
- 		__v4l2_ctrl_s_ctrl_int64(imx355->pixel_rate, pixel_rate);
- 		/* Update limits and set FPS to default */
-@@ -1543,7 +1544,7 @@ static int imx355_init_controls(struct imx355 *imx355)
- 		imx355->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 
- 	/* pixel_rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
--	pixel_rate = imx355->link_def_freq * 2 * 4;
-+	pixel_rate = IMX355_LINK_FREQ_DEFAULT * 2 * 4;
- 	do_div(pixel_rate, 10);
- 	/* By default, PIXEL_RATE is read only */
- 	imx355->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx355_ctrl_ops,
-@@ -1620,7 +1621,6 @@ static struct imx355_hwcfg *imx355_get_hwcfg(struct device *dev)
- 	};
- 	struct fwnode_handle *ep;
- 	struct fwnode_handle *fwnode = dev_fwnode(dev);
--	unsigned int i;
- 	int ret;
- 
- 	if (!fwnode)
-@@ -1652,24 +1652,14 @@ static struct imx355_hwcfg *imx355_get_hwcfg(struct device *dev)
- 		goto out_err;
+@@ -1157,26 +1157,11 @@ static int imx334_parse_hw_config(struct imx334 *imx334)
+ 		goto done_endpoint_free;
  	}
  
--	dev_dbg(dev, "num of link freqs: %d", bus_cfg.nr_of_link_frequencies);
 -	if (!bus_cfg.nr_of_link_frequencies) {
--		dev_warn(dev, "no link frequencies defined");
--		goto out_err;
+-		dev_err(imx334->dev, "no link frequencies defined");
+-		ret = -EINVAL;
+-		goto done_endpoint_free;
 -	}
 -
--	cfg->nr_of_link_freqs = bus_cfg.nr_of_link_frequencies;
--	cfg->link_freqs = devm_kcalloc(dev,
--				       bus_cfg.nr_of_link_frequencies + 1,
--				       sizeof(*cfg->link_freqs), GFP_KERNEL);
--	if (!cfg->link_freqs)
-+	ret = v4l2_link_frequencies_to_bitmap(dev, bus_cfg.link_frequencies,
-+					      bus_cfg.nr_of_link_frequencies,
-+					      link_freq_menu_items,
-+					      ARRAY_SIZE(link_freq_menu_items),
-+					      &cfg->link_freq_bitmap);
-+	if (ret)
- 		goto out_err;
- 
 -	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
--		cfg->link_freqs[i] = bus_cfg.link_frequencies[i];
--		dev_dbg(dev, "link_freq[%d] = %lld", i, cfg->link_freqs[i]);
--	}
+-		for (j = 0; j < ARRAY_SIZE(link_freq); j++) {
+-			if (bus_cfg.link_frequencies[i] == link_freq[j]) {
+-				set_bit(j, &imx334->menu_skip_mask);
+-				break;
+-			}
+-		}
 -
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
- 	fwnode_handle_put(ep);
- 	return cfg;
-@@ -1684,7 +1674,6 @@ static int imx355_probe(struct i2c_client *client)
- {
- 	struct imx355 *imx355;
- 	int ret;
--	u32 i;
- 
- 	imx355 = devm_kzalloc(&client->dev, sizeof(*imx355), GFP_KERNEL);
- 	if (!imx355)
-@@ -1709,20 +1698,6 @@ static int imx355_probe(struct i2c_client *client)
- 		goto error_probe;
- 	}
- 
--	imx355->link_def_freq = link_freq_menu_items[IMX355_LINK_FREQ_INDEX];
--	for (i = 0; i < imx355->hwcfg->nr_of_link_freqs; i++) {
--		if (imx355->hwcfg->link_freqs[i] == imx355->link_def_freq) {
--			dev_dbg(&client->dev, "link freq index %d matched", i);
--			break;
+-		if (j == ARRAY_SIZE(link_freq)) {
+-			ret = dev_err_probe(imx334->dev, -EINVAL,
+-					    "no supported link freq found\n");
+-			goto done_endpoint_free;
 -		}
 -	}
--
--	if (i == imx355->hwcfg->nr_of_link_freqs) {
--		dev_err(&client->dev, "no link frequency supported");
--		ret = -EINVAL;
--		goto error_probe;
--	}
--
++	ret = v4l2_link_frequencies_to_bitmap(imx334->dev,
++					      bus_cfg.link_frequencies,
++					      bus_cfg.nr_of_link_frequencies,
++					      link_freq, ARRAY_SIZE(link_freq),
++					      &imx334->link_freq_bitmap);
+ 
+ done_endpoint_free:
+ 	v4l2_fwnode_endpoint_free(&bus_cfg);
+@@ -1310,8 +1295,8 @@ static int imx334_init_controls(struct imx334 *imx334)
+ 	imx334->link_freq_ctrl = v4l2_ctrl_new_int_menu(ctrl_hdlr,
+ 							&imx334_ctrl_ops,
+ 							V4L2_CID_LINK_FREQ,
+-							__fls(imx334->menu_skip_mask),
+-							__ffs(imx334->menu_skip_mask),
++							__fls(imx334->link_freq_bitmap),
++							__ffs(imx334->link_freq_bitmap),
+ 							link_freq);
+ 
+ 	if (imx334->link_freq_ctrl)
+@@ -1386,7 +1371,7 @@ static int imx334_probe(struct i2c_client *client)
+ 	}
+ 
  	/* Set default mode to max resolution */
- 	imx355->cur_mode = &supported_modes[0];
+-	imx334->cur_mode = &supported_modes[__ffs(imx334->menu_skip_mask)];
++	imx334->cur_mode = &supported_modes[__ffs(imx334->link_freq_bitmap)];
+ 	imx334->cur_code = imx334_mbus_codes[0];
+ 	imx334->vblank = imx334->cur_mode->vblank;
  
 -- 
 2.39.2
