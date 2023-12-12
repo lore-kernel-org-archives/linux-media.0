@@ -1,285 +1,117 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P9RrNzpI"
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3775AF7;
-	Tue, 12 Dec 2023 04:31:37 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50bef9b7a67so6394142e87.1;
-        Tue, 12 Dec 2023 04:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702384295; x=1702989095; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=tjBIgE59AZZCjyo8NFLiQP+EMk9+biaAHMERFDbHj+c=;
-        b=P9RrNzpI6VFtMHAbF6eM46AUoxtWfDv4BgxVzxLoLcYu63aHK9bRecKDlrWUJwd/1T
-         hc1393UOT+g0qB8BmPGDnaDmlvfcPanu9P1Yc8UqdnCSpDbaCgInnIu8uj7LwbnYcSZ+
-         TxlJQOUDml139xk4PGXCZp1FsKbp6SiVr424H3fbU/Mw6YVQVCdJbZPBMLE7AlKichmw
-         3/82fCihBR9wjP6lGB7bKOZfXPAjHn8yIZAh8pi4c0RQ+rgLMLN2VUi3Lh2IPjdKc/Hg
-         rRkicxNodAP3vGlrWN5O97r0GaNUCj3FRoZpMXmMQ0j8ewmhSCUyeRYXMrCoJiZ5EhHE
-         LQAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702384295; x=1702989095;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tjBIgE59AZZCjyo8NFLiQP+EMk9+biaAHMERFDbHj+c=;
-        b=YtNdeiSDfUwFatvoRXtIUqy96em4GZKos+ilzziKYe2t1tczcahfXjNUj/szJqLJEk
-         2RRuTnFtDlRFOGUA4LwNjazbPCAq04LR0VyeYBmgx6FxnhTmjWVLhAS11MuRZDUZcOW9
-         qysjGfKqym5HWq7ThSKXRRW4CnfOcOxIDvbucsRkIgonIDGlMXm9Ix6/l3BU8Ua1S5du
-         GwOFu/bvceon0EakBE42QRmKkmnCOUrCTg9n/sO6N1wsfyuE8haQspEP4C2CHEERp//S
-         pPUfqnHBu2S/AljJL+NMFdNjq2bncvpOu+KixlcRSOlxI+S1Qdh+ERReJlIazKcD31xc
-         bg/g==
-X-Gm-Message-State: AOJu0YxQlPj2g+UFQmLdSEqry7OSpy1FtyBSSP4X69/hlvJJww16j+ag
-	AvZ+ZWautZ0r7ZWAk6LH/g8=
-X-Google-Smtp-Source: AGHT+IE7QTqtjR5Rws+/YWOVilRxR3pugs5ALociwjcdLOrSTzuhpE+dXfQg0eiKkeUpvxTxx+3NCg==
-X-Received: by 2002:a05:6512:3604:b0:50d:2f84:759c with SMTP id f4-20020a056512360400b0050d2f84759cmr1706732lfs.103.1702384295205;
-        Tue, 12 Dec 2023 04:31:35 -0800 (PST)
-Received: from razdolb (95-24-149-38.broadband.corbina.ru. [95.24.149.38])
-        by smtp.gmail.com with ESMTPSA id ep17-20020a056512485100b0050bf8e28d5dsm1332117lfb.223.2023.12.12.04.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 04:31:34 -0800 (PST)
-References: <20231211175023.1680247-1-mike.rudenko@gmail.com>
- <20231211175023.1680247-8-mike.rudenko@gmail.com>
- <20231211181526.GF27535@pendragon.ideasonboard.com>
-User-agent: mu4e 1.10.7; emacs 29.1
-From: Mikhail Rudenko <mike.rudenko@gmail.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Dave Stevenson
- <dave.stevenson@raspberrypi.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>
-Subject: Re: [PATCH 07/19] media: i2c: ov4689: Use sub-device active state
-Date: Tue, 12 Dec 2023 15:27:38 +0300
-In-reply-to: <20231211181526.GF27535@pendragon.ideasonboard.com>
-Message-ID: <87ttonppp5.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MFtjG3Rz"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA46394;
+	Tue, 12 Dec 2023 04:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702384499; x=1733920499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1t4WPBB2iV6mGz2IjxnelPLPuKPitQiGr3DtbVpwRDE=;
+  b=MFtjG3Rz4EdHyJ0cuYXccAnB/E9yqRaZ2D0IxWnhlcFv7XCPcm3UO/1M
+   VVzKiP7urUBvHAV8FjNLMtSuTaW+hUZPt7F2hT3JCTM5Ny1/zpDc0moK+
+   i0r/ses+hj3nbAflDTLdWlspLWFq4j4Wt12g7kQsYW6iKF1m6BW6+WdzC
+   C0XhYd4elvl0j9pVLN5Aa4vItLZRayv7g/tJd0Guoqr8r4tfuUyUr9IbH
+   Sm3eiq/D8nLv2WrtLtlJb+yRGAnOI5iWQwYFa2ZxIs3x0iu2X+FalohPB
+   r1yy0HueLrLL0Oqwx5NoYZTYet/fNh8Jtgfa99EeVWrtvngS91fs7zr6N
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="1951097"
+X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
+   d="scan'208";a="1951097"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 04:34:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10921"; a="896909252"
+X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
+   d="scan'208";a="896909252"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 04:34:52 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id BA8FD11F7E4;
+	Tue, 12 Dec 2023 14:34:49 +0200 (EET)
+Date: Tue, 12 Dec 2023 12:34:49 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tommaso Merciai <tomm.merciai@gmail.com>
+Cc: laurent.pinchart@ideasonboard.com, martin.hecht@avnet.eu,
+	michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+	mhecht73@gmail.com, christophe.jaillet@wanadoo.fr,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Gerald Loacker <gerald.loacker@wolfvision.net>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v15 3/3] media: i2c: Add support for alvium camera
+Message-ID: <ZXhTaaXZf2WMkAgr@kekkonen.localdomain>
+References: <20231204094719.190334-1-tomm.merciai@gmail.com>
+ <20231204094719.190334-4-tomm.merciai@gmail.com>
+ <ZXhGQuqTZogWTJ42@kekkonen.localdomain>
+ <ZXhHrhNQfn0uJMjk@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <ZXhIaB_NTDtSJmj5@kekkonen.localdomain>
+ <ZXhPabGpUDJNSgiZ@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZXhPabGpUDJNSgiZ@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 
+Hi Tommaso,
 
-On 2023-12-11 at 20:15 +02, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+On Tue, Dec 12, 2023 at 01:17:45PM +0100, Tommaso Merciai wrote:
+> Hi Sakari,
+> Just a clarification about the following warnings:
+> 
+> Fixed on my side with:
+> 
+> CHECK: Assignment operator '=' should be on the previous line
+> 
+> -       alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_8_LEG]
+> -                                 = avail_fmt->yuv420_8_leg;
+> +       alvium->is_mipi_fmt_avail[ALVIUM_BIT_YUV420_8_LEG] =
+> +                                 avail_fmt->yuv420_8_leg;
 
-> Hi Mikhail,
->
-> Thank you for the patch.
->
-> On Mon, Dec 11, 2023 at 08:50:10PM +0300, Mikhail Rudenko wrote:
->> Use sub-device active state. Employ control handler lock to
->> synchronize access to the active state and s_stream.
->>
->> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
->> ---
->>  drivers/media/i2c/ov4689.c | 68 +++++++++++++++-----------------------
->>  1 file changed, 27 insertions(+), 41 deletions(-)
->>
->> diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
->> index 5392f650960c..2eef64cd0070 100644
->> --- a/drivers/media/i2c/ov4689.c
->> +++ b/drivers/media/i2c/ov4689.c
->> @@ -86,7 +86,6 @@ struct ov4689 {
->>
->>  	u32 clock_rate;
->>
->> -	struct mutex mutex; /* lock to protect ctrls and cur_mode */
->>  	struct v4l2_ctrl_handler ctrl_handler;
->>  	struct v4l2_ctrl *exposure;
->>
->> @@ -319,19 +318,6 @@ static int ov4689_set_fmt(struct v4l2_subdev *sd,
->>  	return 0;
->>  }
->>
->> -static int ov4689_get_fmt(struct v4l2_subdev *sd,
->> -			  struct v4l2_subdev_state *sd_state,
->> -			  struct v4l2_subdev_format *fmt)
->> -{
->> -	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
->> -	struct ov4689 *ov4689 = to_ov4689(sd);
->> -
->> -	/* only one mode supported for now */
->> -	ov4689_fill_fmt(ov4689->cur_mode, mbus_fmt);
->> -
->> -	return 0;
->> -}
->> -
->>  static int ov4689_enum_mbus_code(struct v4l2_subdev *sd,
->>  				 struct v4l2_subdev_state *sd_state,
->>  				 struct v4l2_subdev_mbus_code_enum *code)
->> @@ -405,10 +391,11 @@ static int ov4689_get_selection(struct v4l2_subdev *sd,
->>  static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
->>  {
->>  	struct ov4689 *ov4689 = to_ov4689(sd);
->> +	struct v4l2_subdev_state *sd_state;
->>  	struct device *dev = ov4689->dev;
->>  	int ret = 0;
->>
->> -	mutex_lock(&ov4689->mutex);
->> +	sd_state = v4l2_subdev_lock_and_get_active_state(&ov4689->subdev);
->>
->>  	if (on) {
->>  		ret = pm_runtime_resume_and_get(dev);
->> @@ -443,7 +430,7 @@ static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
->>  	}
->>
->>  unlock_and_return:
->> -	mutex_unlock(&ov4689->mutex);
->> +	v4l2_subdev_unlock_state(sd_state);
->>
->>  	return ret;
->>  }
->> @@ -506,19 +493,15 @@ static int __maybe_unused ov4689_power_off(struct device *dev)
->>  	return 0;
->>  }
->>
->> -static int ov4689_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
->> +static int ov4689_init_cfg(struct v4l2_subdev *sd,
->> +			   struct v4l2_subdev_state *sd_state)
->>  {
->> -	struct ov4689 *ov4689 = to_ov4689(sd);
->> -	struct v4l2_mbus_framefmt *try_fmt;
->> -
->> -	mutex_lock(&ov4689->mutex);
->> +	struct v4l2_mbus_framefmt *try_fmt =
->> +		v4l2_subdev_state_get_format(sd_state, 0);
->>
->> -	try_fmt = v4l2_subdev_state_get_format(fh->state, 0);
->>  	/* Initialize try_fmt */
->
-> It's not necessarily a "try format" anymore, so you cand rop this
-> comment, and rename the variable from try_fmt to fmt.
+This one seems good.
 
-Ack, will rename it in v2.
+> 
+> CHECK: line length of 81 exceeds 80 columns
+> #1085: FILE: drivers/media/i2c/alvium-csi2.c:1085:
+> +		if (!alvium->is_mipi_fmt_avail[alvium_csi2_fmts[fmt].fmt_av_bit])
+> 
+> CHECK: line length of 81 exceeds 80 columns
+> #1102: FILE: drivers/media/i2c/alvium-csi2.c:1102:
+> +		if (!alvium->is_mipi_fmt_avail[alvium_csi2_fmts[fmt].fmt_av_bit])
+> 
+> 
+> Fixed on my side with:
+> 
+>         /* Create the alvium_csi2 fmt array from formats available */
+>         for (fmt = 0; fmt < ALVIUM_NUM_SUPP_MIPI_DATA_FMT; fmt++) {
+> -               if (!alvium->is_mipi_fmt_avail[alvium_csi2_fmts[fmt].fmt_av_bit])
+> +               if (!alvium->is_mipi_fmt_avail[alvium_csi2_fmts[fmt]
+> +                               .fmt_av_bit])
 
->
->>  	ov4689_fill_fmt(&supported_modes[OV4689_MODE_2688_1520], try_fmt);
->>
->> -	mutex_unlock(&ov4689->mutex);
->> -
->>  	return 0;
->>  }
->>
->> @@ -526,18 +509,15 @@ static const struct dev_pm_ops ov4689_pm_ops = {
->>  	SET_RUNTIME_PM_OPS(ov4689_power_off, ov4689_power_on, NULL)
->>  };
->>
->> -static const struct v4l2_subdev_internal_ops ov4689_internal_ops = {
->> -	.open = ov4689_open,
->> -};
->> -
->>  static const struct v4l2_subdev_video_ops ov4689_video_ops = {
->>  	.s_stream = ov4689_s_stream,
->>  };
->>
->>  static const struct v4l2_subdev_pad_ops ov4689_pad_ops = {
->> +	.init_cfg = ov4689_init_cfg,
->
-> Please rebase on top of the latest media tree for the next version, the
-> .init_cfg() operation has been renamed to .init_state() and moved to
-> v4l2_subdev_internal_ops.
+I wouldn't introduce a line break in these two cases.
 
-Thanks for the tip, will do it in v2.
+>                         continue;
+> 
+> Can be ok for you?
+> If yes I'm going to prepare the patch on top of your media_tree/master
+> branch.
 
-> Other than that, this patch looks good.
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->
->>  	.enum_mbus_code = ov4689_enum_mbus_code,
->>  	.enum_frame_size = ov4689_enum_frame_sizes,
->> -	.get_fmt = ov4689_get_fmt,
->> +	.get_fmt = v4l2_subdev_get_fmt,
->>  	.set_fmt = ov4689_set_fmt,
->>  	.get_selection = ov4689_get_selection,
->>  };
->> @@ -649,7 +629,6 @@ static int ov4689_initialize_controls(struct ov4689 *ov4689)
->>  	ret = v4l2_ctrl_handler_init(handler, 10);
->>  	if (ret)
->>  		return ret;
->> -	handler->lock = &ov4689->mutex;
->>
->>  	ctrl = v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ, 0, 0,
->>  				      link_freq_menu_items);
->> @@ -862,13 +841,14 @@ static int ov4689_probe(struct i2c_client *client)
->>  		return dev_err_probe(dev, ret,
->>  				     "Failed to get power regulators\n");
->>
->> -	mutex_init(&ov4689->mutex);
->> -
->>  	sd = &ov4689->subdev;
->>  	v4l2_i2c_subdev_init(sd, client, &ov4689_subdev_ops);
->> +
->>  	ret = ov4689_initialize_controls(ov4689);
->> -	if (ret)
->> -		goto err_destroy_mutex;
->> +	if (ret) {
->> +		dev_err(dev, "Failed to initialize controls\n");
->> +		return ret;
->> +	}
->>
->>  	ret = ov4689_power_on(dev);
->>  	if (ret)
->> @@ -878,19 +858,26 @@ static int ov4689_probe(struct i2c_client *client)
->>  	if (ret)
->>  		goto err_power_off;
->>
->> -	sd->internal_ops = &ov4689_internal_ops;
->>  	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->> +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
->>
->>  	ov4689->pad.flags = MEDIA_PAD_FL_SOURCE;
->> -	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
->>  	ret = media_entity_pads_init(&sd->entity, 1, &ov4689->pad);
->>  	if (ret < 0)
->>  		goto err_power_off;
->>
->> +	sd->state_lock = ov4689->ctrl_handler.lock;
->> +	ret = v4l2_subdev_init_finalize(sd);
->> +
->> +	if (ret) {
->> +		dev_err(dev, "Could not register v4l2 device\n");
->> +		goto err_clean_entity;
->> +	}
->> +
->>  	ret = v4l2_async_register_subdev_sensor(sd);
->>  	if (ret) {
->>  		dev_err(dev, "v4l2 async register subdev failed\n");
->> -		goto err_clean_entity;
->> +		goto err_clean_subdev;
->>  	}
->>
->>  	pm_runtime_set_active(dev);
->> @@ -899,14 +886,14 @@ static int ov4689_probe(struct i2c_client *client)
->>
->>  	return 0;
->>
->> +err_clean_subdev:
->> +	v4l2_subdev_cleanup(sd);
->>  err_clean_entity:
->>  	media_entity_cleanup(&sd->entity);
->>  err_power_off:
->>  	ov4689_power_off(dev);
->>  err_free_handler:
->>  	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
->> -err_destroy_mutex:
->> -	mutex_destroy(&ov4689->mutex);
->>
->>  	return ret;
->>  }
->> @@ -918,9 +905,8 @@ static void ov4689_remove(struct i2c_client *client)
->>
->>  	v4l2_async_unregister_subdev(sd);
->>  	media_entity_cleanup(&sd->entity);
->> -
->> +	v4l2_subdev_cleanup(sd);
->>  	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
->> -	mutex_destroy(&ov4689->mutex);
->>
->>  	pm_runtime_disable(&client->dev);
->>  	if (!pm_runtime_status_suspended(&client->dev))
+Ack.
 
-
---
-Best regards,
-Mikhail Rudenko
+-- 
+Sakari Ailus
