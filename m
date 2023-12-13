@@ -1,241 +1,121 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cc5VVtUZ"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4A0F3
-	for <linux-media@vger.kernel.org>; Wed, 13 Dec 2023 00:52:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702457560; x=1733993560;
-  h=date:from:to:cc:subject:message-id;
-  bh=t2NMC23jUcKu7j2gw/lZfy+QDa+O962SyL3rni1F300=;
-  b=Cc5VVtUZRf/80GszZ7QNU2ZPzE6JZuz8xZkZiEFDVx5DSR/4wxKRpIWd
-   /9SZ75bincTQxWbgBR/gT8EV1mM877TTGOltZ5iuifACN36NQpviFp2nL
-   A8wRdQqCQO7euK958JgjdRlJhjD0Ah44VqWps9yNcwHSj7zDEFxCYRoLU
-   Ennuz9OXi92ssUnS0g9XFxOe7GGiVQCqG5lmFmBi9dZ+S8XYUhsd3FS5y
-   mgC5oLoN54BsmM+YLts4OhrYX3BXTyusWBphqHsCPXcEfrrlm1GUjy3UK
-   qM4nW0lRmnfW5HnJmGqcA5l6xxEdrqCHOyUzxRm2x8/2rsAfhF2cWclq3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="8295375"
-X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="8295375"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 00:52:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="839781973"
-X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="839781973"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Dec 2023 00:52:38 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rDKyq-000KIg-0X;
-	Wed, 13 Dec 2023 08:52:36 +0000
-Date: Wed, 13 Dec 2023 16:52:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org
-Subject: [linuxtv-media-stage:master] BUILD SUCCESS
- c2a8653c197d67f8ad563f5417f2e9bcaad913f3
-Message-ID: <202312131627.J2BcEoO8-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGi+uK8f"
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07033F3;
+	Wed, 13 Dec 2023 01:05:30 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ca0715f0faso92367461fa.0;
+        Wed, 13 Dec 2023 01:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702458329; x=1703063129; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPVstSGHW2mJYYKDhOcbHVvFc6FCpsaEprPwYoO2QrU=;
+        b=MGi+uK8fNUmM0nhxy/iOse+UgOChkXpP3nyVErQc/+LI5+qhOuntIIHrgrEzY7EjIh
+         7RfkbwccMukM43/8rRjOIlmo8EPwzazbrK+ylS3Cwkjl8cva0qhM6JUgdUOtReByzEe1
+         cAhIPHLJ9MUpFThviTFoAzJJ8MXVJ0uGkQQRNgAhItdfJJZTkikyhX+kJXJPeHol95SI
+         /15h/nP244D+ak5DxfpZyJpTxrw+iwOUMMqY4m0HK4eqwQ0xLbwP7R2ztcxoujGiSPZh
+         H25CHVogBLxLF7Ph76klLrOViQuC7J4bQfYd8szgeN7mfGELRR7i3FZGqm2fJdJ43Tvc
+         BuBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702458329; x=1703063129;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPVstSGHW2mJYYKDhOcbHVvFc6FCpsaEprPwYoO2QrU=;
+        b=jNnCZTpJ5NStUFu+h/rdsydrP3b72bNeeWvnoL/HhTVIikNpe0m8VftCZUYXpaBlXf
+         x3Y2oBGl6u8sdcoEuT38x/2I8dFAjBGuLepqzwABtDDpxoq+CnhoPJAI8r6EUnSSZ4tZ
+         A8i7Xu0Fo0W9+2LyGELCobRQSA8xDRKUxayCAEWiNuFjF+fuIol9hEOrQegCzfarcaWA
+         SJkwCDVTfXflg8PKm1Ps2u+5tBYndnu5dBUMDKmgLCKs+tHW9/g2gwcCBHdj3oJJVAPM
+         YSb8hjPZZ5I6hjyLtExGQEhCrRexRRCG2xHz5CGEw4xLQaXCmCFdjwysMCOZwou10HwE
+         bpkA==
+X-Gm-Message-State: AOJu0YxrDsfm8vD+6M6ALUnQF2R7OmymhSatT+q8Lfqd1m9GmJEdsJwz
+	IywiUnS0iIA0jAeWLjjnhR4=
+X-Google-Smtp-Source: AGHT+IGWpeNIT+ctXpc3/nJZFateSOhCrGMOM+zwxTvVL6e43wnzc3r3OJ2tC/PYR81yyP2zfmy63A==
+X-Received: by 2002:a05:6512:38cf:b0:50c:5aa:83b4 with SMTP id p15-20020a05651238cf00b0050c05aa83b4mr2890212lft.114.1702458328719;
+        Wed, 13 Dec 2023 01:05:28 -0800 (PST)
+Received: from eldfell ([194.136.85.206])
+        by smtp.gmail.com with ESMTPSA id y18-20020a199152000000b0050be6326f2asm1597596lfj.64.2023.12.13.01.05.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 01:05:28 -0800 (PST)
+Date: Wed, 13 Dec 2023 11:05:17 +0200
+From: Pekka Paalanen <ppaalanen@gmail.com>
+To: Simon Ser <contact@emersion.fr>
+Cc: Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>, Sumit
+ Semwal <sumit.semwal@linaro.org>, christian.koenig@amd.com, Matthias
+ Brugger <matthias.bgg@gmail.com>, dri-devel@lists.freedesktop.org, John
+ Stultz <jstultz@google.com>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Jeffrey Kardatzke
+ <jkardatzke@google.com>, Benjamin Gaignard
+ <benjamin.gaignard@collabora.com>, Vijayanand Jitta
+ <quic_vjitta@quicinc.com>, Nicolas Dufresne <nicolas@ndufresne.ca>,
+ jianjiao.zeng@mediatek.com, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+ ckoenig.leichtzumerken@gmail.com, linaro-mm-sig@lists.linaro.org,
+ linux-mediatek@lists.infradead.org, Joakim Bech <joakim.bech@linaro.org>,
+ tjmercier@google.com, linux-arm-kernel@lists.infradead.org,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ kuohong.wang@mediatek.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] dma-buf: heaps: Add secure heap
+Message-ID: <20231213110517.6ce36aca@eldfell>
+In-Reply-To: <DPBmATfmfvSP8Cwjz99kj_JvCEiAqRfuMFJZEBF2aIgl8NZqWFR66eyPTX1E8bHyOlimBihEE3E80p9bfOJ-0SNu8pwoIzL9gD2Xae6r97g=@emersion.fr>
+References: <20231212024607.3681-1-yong.wu@mediatek.com>
+	<DPBmATfmfvSP8Cwjz99kj_JvCEiAqRfuMFJZEBF2aIgl8NZqWFR66eyPTX1E8bHyOlimBihEE3E80p9bfOJ-0SNu8pwoIzL9gD2Xae6r97g=@emersion.fr>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/DaWmOigQ7D9ggi2.WnkRpp3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-tree/branch: https://git.linuxtv.org/media_stage.git master
-branch HEAD: c2a8653c197d67f8ad563f5417f2e9bcaad913f3  media: venus: core: Set up secure memory ranges for SC7280
+--Sig_/DaWmOigQ7D9ggi2.WnkRpp3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 1465m
+On Tue, 12 Dec 2023 16:36:35 +0000
+Simon Ser <contact@emersion.fr> wrote:
 
-configs tested: 179
-configs skipped: 2
+> Is there a chance to pick a better name than "secure" here?
+>=20
+> "Secure" is super overloaded, it's not clear at all what it means from
+> just the name. Something like "restricted" would be an improvement.
+>=20
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+My thoughts exactly. Every time I see "secure" used for something that
+either gives you garbage, refuses to work, or crashes your whole machine
+*intentionally* when you try to do normal usual things to it in
+userspace (like use it for GL texturing, or try to use KMS writeback), I
+get an unscratchable itch.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231212   gcc  
-arc                   randconfig-002-20231212   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                          gemini_defconfig   gcc  
-arm                       imx_v6_v7_defconfig   gcc  
-arm                       multi_v4t_defconfig   gcc  
-arm                        neponset_defconfig   clang
-arm                   randconfig-001-20231212   gcc  
-arm                   randconfig-002-20231212   gcc  
-arm                   randconfig-003-20231212   gcc  
-arm                   randconfig-004-20231212   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231212   gcc  
-arm64                 randconfig-002-20231212   gcc  
-arm64                 randconfig-003-20231212   gcc  
-arm64                 randconfig-004-20231212   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231212   gcc  
-csky                  randconfig-002-20231212   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20231212   clang
-hexagon               randconfig-002-20231212   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231212   gcc  
-i386         buildonly-randconfig-002-20231212   gcc  
-i386         buildonly-randconfig-003-20231212   gcc  
-i386         buildonly-randconfig-004-20231212   gcc  
-i386         buildonly-randconfig-005-20231212   gcc  
-i386         buildonly-randconfig-006-20231212   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231212   gcc  
-i386                  randconfig-002-20231212   gcc  
-i386                  randconfig-003-20231212   gcc  
-i386                  randconfig-004-20231212   gcc  
-i386                  randconfig-005-20231212   gcc  
-i386                  randconfig-006-20231212   gcc  
-i386                  randconfig-011-20231212   clang
-i386                  randconfig-012-20231212   clang
-i386                  randconfig-013-20231212   clang
-i386                  randconfig-014-20231212   clang
-i386                  randconfig-015-20231212   clang
-i386                  randconfig-016-20231212   clang
-loongarch                        alldefconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231212   gcc  
-loongarch             randconfig-002-20231212   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5475evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                     cu1000-neo_defconfig   clang
-mips                      maltaaprp_defconfig   clang
-nios2                         3c120_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231212   gcc  
-nios2                 randconfig-002-20231212   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20231212   gcc  
-parisc                randconfig-002-20231212   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                       ebony_defconfig   clang
-powerpc                     ksi8560_defconfig   clang
-powerpc                 mpc8313_rdb_defconfig   clang
-powerpc               randconfig-001-20231212   gcc  
-powerpc               randconfig-002-20231212   gcc  
-powerpc               randconfig-003-20231212   gcc  
-powerpc                     tqm5200_defconfig   clang
-powerpc64             randconfig-001-20231212   gcc  
-powerpc64             randconfig-002-20231212   gcc  
-powerpc64             randconfig-003-20231212   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231212   gcc  
-riscv                 randconfig-002-20231212   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231212   clang
-s390                  randconfig-002-20231212   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20231212   gcc  
-sh                    randconfig-002-20231212   gcc  
-sh                   sh7770_generic_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231212   gcc  
-sparc64               randconfig-002-20231212   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231212   gcc  
-um                    randconfig-002-20231212   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231212   gcc  
-x86_64       buildonly-randconfig-002-20231212   gcc  
-x86_64       buildonly-randconfig-003-20231212   gcc  
-x86_64       buildonly-randconfig-004-20231212   gcc  
-x86_64       buildonly-randconfig-005-20231212   gcc  
-x86_64       buildonly-randconfig-006-20231212   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231212   clang
-x86_64                randconfig-002-20231212   clang
-x86_64                randconfig-003-20231212   clang
-x86_64                randconfig-004-20231212   clang
-x86_64                randconfig-005-20231212   clang
-x86_64                randconfig-006-20231212   clang
-x86_64                randconfig-011-20231212   gcc  
-x86_64                randconfig-012-20231212   gcc  
-x86_64                randconfig-013-20231212   gcc  
-x86_64                randconfig-014-20231212   gcc  
-x86_64                randconfig-015-20231212   gcc  
-x86_64                randconfig-016-20231212   gcc  
-x86_64                randconfig-071-20231212   gcc  
-x86_64                randconfig-072-20231212   gcc  
-x86_64                randconfig-073-20231212   gcc  
-x86_64                randconfig-074-20231212   gcc  
-x86_64                randconfig-075-20231212   gcc  
-x86_64                randconfig-076-20231212   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20231212   gcc  
-xtensa                randconfig-002-20231212   gcc  
+There is nothing "secure" from security perspective there for end users
+and developers. It's just inaccessible buffers.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I've been biting my lip until now, thinking it's too late.
+
+
+Thanks,
+pq
+
+--Sig_/DaWmOigQ7D9ggi2.WnkRpp3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmV5c80ACgkQI1/ltBGq
+qqdqdg/8DMTwQfWf/EfE0E0FOjM0IPMnzZreMPcRlHBqMJqgQA5miVL9CVE+novh
+ohRbfFYLwut7eqtK6Dzn+6hOIVFRMpGPkWe8qHfT+CJ8Wr3hD8Q23PKEveH/FENO
+G+XUbPzsnlDTDs5MB2Bb1TAiWQLS8Y1/nstMZ49l8mmW6Iim0Z+/xhyqUyLaHfpm
+zB7JRM7CSN8gyPhoqoAAITy+ZL4+yD7D28izgQA4YZD4JzkE1fYOUFzNb4QRA/T7
+GxPSExZlU7+CdIL5zAJvhqpHh9nxMdOUvaP3aQBzShcTKDVoet/TZ+0QuEOuD1QJ
+gHG05Hcp5gREsbjn9oytS2km0LcL7ZmR98NOrf9idl4jZDjVTEMQvV/FrSSwiyGv
+5whtFHkkDVy1nXjyYmgiGO7dvIptO+dNGgRtACt3xe0tdvu5ndP2+hG21ADVWebc
+fd2T4mnUoANro1gOjWATV5+0fzlOK5hFff70pvE9U2ATvqXo7i2I+kzW/EJFPilA
+4EqR7cIyLCaVRb7q/dC4CdWUu0NIxCp7+u22Z/B8pHFw2MnQZa0twIKV3GJokfrR
+A4PfZLAvpbSkfr7SalrN6eYFHhJOpcCJPHXCiQSnRT7DU5u6NhUr35IZgq/YuANC
+YrU/v7fiWv2v6I0I2FN8fBaH1baL6/SWpA5q43OECPVewbA/Uwg=
+=DQfN
+-----END PGP SIGNATURE-----
+
+--Sig_/DaWmOigQ7D9ggi2.WnkRpp3--
