@@ -1,107 +1,99 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="1QCd5B7U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="zTojNcPd"
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F5DD5;
-	Wed, 13 Dec 2023 03:23:31 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 306CD3200A55;
-	Wed, 13 Dec 2023 06:23:28 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 13 Dec 2023 06:23:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1702466607; x=1702553007; bh=/En5sEjt65
-	KfXO77kHPbHZOUSMJXhFCPZupqsrV3I3I=; b=1QCd5B7Ul9zvxrOYkMaupIByn6
-	sZrfv5IM5J4xPeN9RewN5+T5Ph157PHQMd2LgEohARrUFpGptQWoQhmBCAdtn8G1
-	W6j4y9uy6FPsk2dnZblrIACAYgaMXfO0t8WVc/scQuLWk7C8aKD/eg02947jbr8R
-	Sc/G7jpgAmUDynh85BuH0//d/pc9Kox7yVkDyu8jxPOskljBs9paxX2NUOyT6QDW
-	T5UfpkdnxI6/MRVOqZWozWp1QFMWpKSB0znN2IaRu7oN7nBQX6Qq7B7c2dh+AfSu
-	rkSRnO9bh99afDX2gqzE1Z4fV/1xoNQ4i/whb1aC2TT2yL9XvtN2/0fcsgvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1702466607; x=1702553007; bh=/En5sEjt65KfXO77kHPbHZOUSMJX
-	hFCPZupqsrV3I3I=; b=zTojNcPdIdLGTwVWFKlBVI93ESdIUubhizGqpSAICzFZ
-	cMDyMMRSU0fjtZEVd4Lu/YlbN1Hx07UqjPwyvzJNNTkcg0w2c10gsaTY6DYZc83Q
-	tQ0L5eqKJkPpOTBKJyhzaVmEfIhlWITGdaFrOyjW7MgW1KMF3rF872hf0JxB+JZu
-	H9kVjIn1Q5F2cEkfGQnIJ+y29JGi1Z3hZTiaRZtgWXH6KF43YH8NLBOGYZ4crv9G
-	CrVXeHLE+L5Nll/UpCnW7gwN2DKg/v2FwezvIi4HIpSdT4ysUJt6rwcnljopZtA/
-	tIccG3YNkJxmqb1/gMCkSfoK4jD12mS4pCmk+3XpNQ==
-X-ME-Sender: <xms:L5R5ZeR8zomKP5SvVJ1FSY7v2GPAllYE1qM4v9dc4z8LJK9XJ9kIcg>
-    <xme:L5R5ZTwhRlPD3slrSjbQUFIN54PBy7R-idkHe-cRgv7GclYm-Cr5b4DjtCtLz6GxQ
-    J58b0zs9YG7oHB0BgU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeliedgvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:L5R5Zb1maBlcKKzFKlfBvWULA6XU9a5bYICvMEOrNEYAO8FMfP08xQ>
-    <xmx:L5R5ZaD44H7kzj_j2ED_Kd7sVLU8mql1--OBGzed_Jbo3sW0vjQmog>
-    <xmx:L5R5ZXhg7VQGw3by-jhrFltxOrwxzMqwICmHATsHfbd8Z6liQa346A>
-    <xmx:L5R5ZQbII2yx4zYvuDk4x_--mplquSq2ESsCtu_mxQVXRbGN9T_kKA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 31533B6008D; Wed, 13 Dec 2023 06:23:27 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1283-g327e3ec917-fm-20231207.002-g327e3ec9
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="UuCFT1Qn"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B076310D;
+	Wed, 13 Dec 2023 03:36:40 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id DD41C4A9;
+	Wed, 13 Dec 2023 12:35:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1702467353;
+	bh=9SNuEfZLlJT5AlsFvY/gtkXYHwYDbd5a9YwB+YSaGK4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UuCFT1Qn6ZcuX8C+fg9wEvsrlUcfxqKRi1w/w7U9dekr+A7lF7FLZeoS9BruSD5n7
+	 D61gHByMqeLufQirxT+zx9UCeCJQBFxplnqUjpVYfqIGIGZduH4yaEAySfHKmBQfTj
+	 N/4k9OeHCrO8Sx5Bt6cCK1Dpr5IBr4uC2juouIUw=
+Date: Wed, 13 Dec 2023 13:36:45 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] media: i2c: mt9m114: use fsleep() in place of
+ udelay()
+Message-ID: <20231213113645.GA769@pendragon.ideasonboard.com>
+References: <20231213112322.1655236-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1992d665-cb98-4190-bee3-e5629c7d0e8d@app.fastmail.com>
-In-Reply-To: <20231213095849.GA2191@pendragon.ideasonboard.com>
-References: <20231212213625.3653558-1-arnd@kernel.org>
- <ZXlmnmGepRnMyNfr@kekkonen.localdomain>
- <97a826ab-cd68-4494-884e-f7bd512a7bef@app.fastmail.com>
- <ZXl0-8VgzF3YH18i@kekkonen.localdomain>
- <20231213095849.GA2191@pendragon.ideasonboard.com>
-Date: Wed, 13 Dec 2023 12:23:05 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
- "Sakari Ailus" <sakari.ailus@linux.intel.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Jacopo Mondi" <jacopo.mondi@ideasonboard.com>,
- "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Hans de Goede" <hdegoede@redhat.com>,
- "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] media: i2c: mt9m114: add CONFIG_COMMON_CLK dependency
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231213112322.1655236-1-arnd@kernel.org>
 
-On Wed, Dec 13, 2023, at 10:58, Laurent Pinchart wrote:
-> On Wed, Dec 13, 2023 at 09:10:19AM +0000, Sakari Ailus wrote:
->> On Wed, Dec 13, 2023 at 09:39:01AM +0100, Arnd Bergmann wrote:
->> > On Wed, Dec 13, 2023, at 09:09, Sakari Ailus wrote:
->> 
->> The datasheet says the input clock range is between 6 MHz and 54 MHz. We
->> could check that, and return an error if it's not in the range. The rate is
->> needed for other reasons, too, and the sensor is unlikely to work if it's
->> (more than little) off.
->> 
->> I wonder if this could address the Clang 16 issue, too? I'd replace
->> udelay() with fsleep() in any case, and at the very least Clang should be
->> happy with this.
->
-> I'm fine with both of those changes.
+Hi Arnd,
 
-I verified that the build failure is solved by either one.
-I would just do the fsleep() change in that case since that
-is a sensible change regardless of the undefined behavior.
+Thank you for the patch.
 
-I'll send a v2.
+On Wed, Dec 13, 2023 at 12:23:07PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With clang-16, building without COMMON_CLK triggers a range check on
+> udelay() because of a constant division-by-zero calculation:
+> 
+> ld.lld: error: undefined symbol: __bad_udelay
+> >>> referenced by mt9m114.c
+> >>>               drivers/media/i2c/mt9m114.o:(mt9m114_power_on) in archive vmlinux.a
+> 
+> In this configuration, the driver already fails to probe, before
+> this function gets called, so it's enough to suppress the assertion.
+> 
+> Do this by using fsleep(), which turns long delays into sleep() calls
+> in place of the link failure.
+> 
+> This is probably a good idea regardless to avoid overly long dynamic
+> udelay() calls on a slow clock.
 
-     Arnd
+The longest delay would be 16.66µs, which may not be worth a sleep, but
+I think that's fine. Using fsleep() by default is a good idea.
+
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Fixes: 24d756e914fc ("media: i2c: Add driver for onsemi MT9M114 camera sensor")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  drivers/media/i2c/mt9m114.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
+> index 0a22f328981d..68adaecaf481 100644
+> --- a/drivers/media/i2c/mt9m114.c
+> +++ b/drivers/media/i2c/mt9m114.c
+> @@ -2116,7 +2116,7 @@ static int mt9m114_power_on(struct mt9m114 *sensor)
+>  		duration = DIV_ROUND_UP(2 * 50 * 1000000, freq);
+>  
+>  		gpiod_set_value(sensor->reset, 1);
+> -		udelay(duration);
+> +		fsleep(duration);
+>  		gpiod_set_value(sensor->reset, 0);
+>  	} else {
+>  		/*
+
+-- 
+Regards,
+
+Laurent Pinchart
