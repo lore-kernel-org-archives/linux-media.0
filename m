@@ -1,117 +1,185 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="tWDjkBA4"
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2087.outbound.protection.outlook.com [40.107.102.87])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A541C10E;
-	Thu, 14 Dec 2023 00:48:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Of6kHC21SdPz+OvT/BWgZK6uyyGeoQLsrNTNrIBSkijWLo7or0llEORQKrelqAH2vrcrggUVsRTcCwShX4sxotIWi861jpx3iV0N7A1jwdVbqANv3sZK2jOGI0OZSaVS3S+gEk5g8OTgPiox2zi4+1S+rW5VSp8Hqg4HUEdfqoIjzo5tghwNZqDISmVHhCgcZfdY6ZM2V9i0PSguqZZCtCf7yw663vktB1trbApX/ivZaVINCAq3eKCSeY+ZxeGiF9bN79YkfdN7E77gDaav4fCy8XK6dVEH/7ZSgLOLQxWF2/m4Wy2W8SWpvvayHxXKkWI4OiaRS755atoGZ/ry9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kohp9aovBP8E9tYNNk7NuDHHzoSwuf/H4qwXvD+9frU=;
- b=VBc1GPgm/xVzI/rcbElwIuV+UGfBOZy3zY0xHMZHdnk/lk69UPhAJg0ki4NbdFmooDrCxaY0nZ2O/ei+TgXVgtlov8kG/PYxZjtbJiENEC0oa/utqCRpokmEg89TgqaDta+m1lRtdIH60yAjwAcB73KebIS8ILkJqDwCQ6MNIudEKjnk2JquaIgARXadkZ6VBjP8V78spJCqnhaZOIMA5euh3yL2nDt/H1hhQ0z/4bc8BFGC2Vc0TsDU1XtbwldI01i6u9x5qef69hrbBoJURQZf8LS9z0mb/AR3LAcwC/TjdHZWR5zybOT5BqykGkL6R7MehLUBMXR7pQ+1qdbiPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kohp9aovBP8E9tYNNk7NuDHHzoSwuf/H4qwXvD+9frU=;
- b=tWDjkBA45fEuiG3dGYiu8kNa/i71OhqiN07AP2lV3gf5LMwyOSTI2vPSFFvPeY1bjlfuGJmiXvfEfbCpkAdqHiz8IvRoGI99DYzpprL62Tt6CNkH5q+B6zi3XYHvobaBd7KS0Xl7MbKKqWlFGTB19+BNGazWOPnj3E1hktnafk8=
-Received: from SN7P220CA0009.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::14)
- by BL0PR12MB4932.namprd12.prod.outlook.com (2603:10b6:208:1c2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.28; Thu, 14 Dec
- 2023 08:48:13 +0000
-Received: from SA2PEPF000015CC.namprd03.prod.outlook.com
- (2603:10b6:806:123:cafe::d5) by SN7P220CA0009.outlook.office365.com
- (2603:10b6:806:123::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.28 via Frontend
- Transport; Thu, 14 Dec 2023 08:48:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF000015CC.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7091.26 via Frontend Transport; Thu, 14 Dec 2023 08:48:12 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Thu, 14 Dec
- 2023 02:48:11 -0600
-From: Michal Simek <michal.simek@amd.com>
-To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-	<michal.simek@xilinx.com>, <git@xilinx.com>
-CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-media@vger.kernel.org>
-Subject: [PATCH] media: platform: xilinx: Fix Kconfig indentation
-Date: Thu, 14 Dec 2023 09:47:24 +0100
-Message-ID: <72c40d216769a97973cac9a347e826b943f71d7f.1702543638.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oy4mhPVf"
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F36113
+	for <linux-media@vger.kernel.org>; Thu, 14 Dec 2023 01:17:05 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0CFD84A9;
+	Thu, 14 Dec 2023 10:16:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1702545377;
+	bh=UMAyuhxna5IVqKwGuTJ5qeLcLg4USkn/dGIkISs/gbA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oy4mhPVfSG8Sj+m+IH8etYfmUj8celHtOiYEQFey4J5O4GnyC0n0iLpRMP2iMJ3qt
+	 VM//Jy3BKvq+f7bfA+a/ZVfOkDJefthnIJuf6xg/hog94KX5cu7piZFL5X3/Xu2VLg
+	 Q3EnEca2W1KaoqyjTz0TarXZk24wT25Lj+oGXnv0=
+Date: Thu, 14 Dec 2023 11:17:10 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tommaso Merciai <tomm.merciai@gmail.com>
+Cc: linux-media@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v6 2/8] media: v4l2-subdev: Turn .[gs]_frame_interval
+ into pad operations
+Message-ID: <20231214091710.GA15238@pendragon.ideasonboard.com>
+References: <20231213150010.25593-1-laurent.pinchart@ideasonboard.com>
+ <20231213150010.25593-3-laurent.pinchart@ideasonboard.com>
+ <ZXq7a4nm03xrWYHF@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=889; i=michal.simek@amd.com; h=from:subject:message-id; bh=K/jzhQs4kxzyF5WmsxVmH5uT2t1DYAMkZam6F+ygK44=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtSqg+JRqz5Gnl9wN0VF5aHjMh/xSw3Gmkv5Lk4SXWG75 +R5rcyvHbEsDIJMDLJiiizSNlfO7K2cMUX44mE5mDmsTCBDGLg4BWAiz0UZFkysaV55Z9mp747x DwI8gzSF2t09XjLM07jXt3BhEVMH5yVuj4e260UYMtPTAQ==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015CC:EE_|BL0PR12MB4932:EE_
-X-MS-Office365-Filtering-Correlation-Id: a350f252-8f23-4f4b-4991-08dbfc81680a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	2nxfbaFGUnDXYvCsTtCMeEKFtX5VTC+lZKo/T1yzCu3SgJ9LezFQadlXSs8uvJySdBwfFITQ28m36KrxuzBeKXQtoRHsGDrf0ufSRv2uaJvWIeueJd7bdUR1EEPkncLQfX2oArnhj2QuM91BHiD+ONzYPWCFFJOZra03rDdjd15RoRJuSYFnT9gpaOxhVhYO/8fIl6iNFQUvQnHwBy9PZnv1jNjMklJQ0qtMFxVguXSVKBOdmN381CDGK7UccXEaWqOPNAb6RkfbA4q0nj+8ymIeS3QPmbOHxDkxQNe6D/oXR78zI4NqHG5IT3Nec3SM3u5sjIbJM7vWH1RXkjF7zfzI2iICJCKStlhTKlvu/d1rMrsyfqfgWcUvs2Q+41Qacv7ICiapqACT4idZTDGsCfvy2DPtSctDAdLhCPlGUlwGyCnIT1zW5sNJR6l3POlCykSdKnijO7RneZygOTYRneM7jGft0bA2KPu6JYVoMw71bkznA0sVMNPOwkBWoWQL0DispzbBTTNJZQMomV+Phy8P5C4HieuurYSwalmr274fLi+8vSiHAh2DhrOVVEYh2qWsDuIbbID7ZRHn8eV7E1+4FSYX29kos3Wa8EniSkpWNF/hs2f0akM9ieSY4HnchmbQPQ6EkgFrVxWAvDVxZCl/vdftt4CuChxQHDpfanG9CSz8VphsGtxETHQ3MGJhaEzwDoXz/pBIbRL5w/M395YR5pCSe+tQVET2ennLVzWJ5FEBk5o9KMusVnCwHOYHXmHgRIy5JLX+/yKH8DIqqEgCai3juv81QJqF+1asK6A=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(346002)(396003)(39860400002)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(82310400011)(36840700001)(46966006)(40470700004)(86362001)(356005)(36756003)(81166007)(316002)(70206006)(110136005)(70586007)(54906003)(26005)(336012)(426003)(83380400001)(16526019)(2616005)(5660300002)(4326008)(44832011)(8676002)(8936002)(6666004)(478600001)(36860700001)(41300700001)(4744005)(2906002)(47076005)(40460700003)(40480700001)(82740400003)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2023 08:48:12.8917
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a350f252-8f23-4f4b-4991-08dbfc81680a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF000015CC.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4932
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZXq7a4nm03xrWYHF@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 
-Use proper indentation for Kconfig fragments - help part.
+Hi Tommaso,
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+On Thu, Dec 14, 2023 at 09:23:07AM +0100, Tommaso Merciai wrote:
+> On Wed, Dec 13, 2023 at 05:00:04PM +0200, Laurent Pinchart wrote:
+> > The subdev .[gs]_frame_interval are video operations, but they operate
+> > on pads (and even on streams). Not only is this confusing, it causes
+> > practical issues for drivers as the operations don't receive a subdev
+> > state pointer, requiring manual state handling.
+> > 
+> > To improve the situation, turn the operations into pad operations, and
+> > extend them to receive a state pointer like other pad operations.
+> > 
+> > While at it, rename the operations to .[gs]et_frame_interval at the same
+> > time to match the naming scheme of other pad operations. This isn't
+> > strictly necessary, but given that all drivers using those operations
+> > need to be modified, handling the rename separately would generate more
+> > churn for very little gain (if at all).
+> > 
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de> # for imx-media
+> > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> # for tegra-video
+> > ---
+> > Changes since v5:
+> > 
+> > - Address the alvium-csi2 driver
+> > 
+> > Changes since v3:
+> > 
+> > - Address the thp7312 driver
+> > ---
+> >  drivers/media/i2c/adv7180.c                   |  7 ++-
+> >  drivers/media/i2c/alvium-csi2.c               | 11 ++--
+> >  drivers/media/i2c/et8ek8/et8ek8_driver.c      |  6 +-
+> >  drivers/media/i2c/imx214.c                    |  9 +--
+> >  drivers/media/i2c/imx274.c                    | 48 +++++---------
+> >  drivers/media/i2c/max9286.c                   | 14 +++--
+> >  drivers/media/i2c/mt9m111.c                   | 14 +++--
+> >  drivers/media/i2c/mt9m114.c                   | 14 +++--
+> >  drivers/media/i2c/mt9v011.c                   | 18 +++---
+> >  drivers/media/i2c/mt9v111.c                   | 16 ++---
+> >  drivers/media/i2c/ov2680.c                    |  7 ++-
+> >  drivers/media/i2c/ov5640.c                    | 16 ++---
+> >  drivers/media/i2c/ov5648.c                    | 59 ++++++++---------
+> >  drivers/media/i2c/ov5693.c                    |  7 ++-
+> >  drivers/media/i2c/ov6650.c                    | 16 ++---
+> >  drivers/media/i2c/ov7251.c                    |  6 +-
+> >  drivers/media/i2c/ov7670.c                    | 18 +++---
+> >  drivers/media/i2c/ov772x.c                    | 14 +++--
+> >  drivers/media/i2c/ov7740.c                    | 40 +++++-------
+> >  drivers/media/i2c/ov8865.c                    | 51 +++++++--------
+> >  drivers/media/i2c/ov9650.c                    | 14 +++--
+> >  drivers/media/i2c/s5c73m3/s5c73m3-core.c      | 14 +++--
+> >  drivers/media/i2c/s5k5baf.c                   | 20 +++---
+> >  drivers/media/i2c/thp7312.c                   | 22 +++----
+> >  drivers/media/i2c/tvp514x.c                   | 29 +++------
+> >  drivers/media/usb/em28xx/em28xx-video.c       |  6 +-
+> >  drivers/media/v4l2-core/v4l2-common.c         |  8 +--
+> >  drivers/media/v4l2-core/v4l2-subdev.c         | 63 +++++++++++--------
+> >  .../media/atomisp/i2c/atomisp-gc0310.c        |  7 ++-
+> >  .../media/atomisp/i2c/atomisp-gc2235.c        |  7 ++-
+> >  .../media/atomisp/i2c/atomisp-mt9m114.c       |  7 ++-
+> >  .../media/atomisp/i2c/atomisp-ov2722.c        |  7 ++-
+> >  .../staging/media/atomisp/pci/atomisp_cmd.c   |  4 +-
+> >  .../staging/media/atomisp/pci/atomisp_ioctl.c |  4 +-
+> >  drivers/staging/media/imx/imx-ic-prp.c        | 14 +++--
+> >  drivers/staging/media/imx/imx-ic-prpencvf.c   | 14 +++--
+> >  drivers/staging/media/imx/imx-media-capture.c |  6 +-
+> >  drivers/staging/media/imx/imx-media-csi.c     | 14 +++--
+> >  drivers/staging/media/imx/imx-media-vdic.c    | 14 +++--
+> >  drivers/staging/media/tegra-video/csi.c       |  9 +--
+> >  include/media/v4l2-common.h                   |  4 +-
+> >  include/media/v4l2-subdev.h                   | 22 ++++---
+> >  42 files changed, 352 insertions(+), 348 deletions(-)
 
- drivers/media/platform/xilinx/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[snip]
 
-diff --git a/drivers/media/platform/xilinx/Kconfig b/drivers/media/platform/xilinx/Kconfig
-index 93ef78bf62e6..601edd9acd5b 100644
---- a/drivers/media/platform/xilinx/Kconfig
-+++ b/drivers/media/platform/xilinx/Kconfig
-@@ -26,10 +26,10 @@ config VIDEO_XILINX_TPG
- 	depends on VIDEO_XILINX
- 	select VIDEO_XILINX_VTC
- 	help
--	   Driver for the Xilinx Video Test Pattern Generator
-+	  Driver for the Xilinx Video Test Pattern Generator
- 
- config VIDEO_XILINX_VTC
- 	tristate "Xilinx Video Timing Controller"
- 	depends on VIDEO_XILINX
- 	help
--	   Driver for the Xilinx Video Timing Controller
-+	  Driver for the Xilinx Video Timing Controller
+> > diff --git a/drivers/media/i2c/alvium-csi2.c b/drivers/media/i2c/alvium-csi2.c
+> > index c8827603eb23..a173abb0509f 100644
+> > --- a/drivers/media/i2c/alvium-csi2.c
+> > +++ b/drivers/media/i2c/alvium-csi2.c
+> > @@ -1649,6 +1649,7 @@ static int alvium_hw_init(struct alvium_dev *alvium)
+> >  /* --------------- Subdev Operations --------------- */
+> >  
+> >  static int alvium_g_frame_interval(struct v4l2_subdev *sd,
+> > +				   struct v4l2_subdev_state *sd_state,
+> >  				   struct v4l2_subdev_frame_interval *fi)
+> >  {
+> >  	struct alvium_dev *alvium = sd_to_alvium(sd);
+> > @@ -1696,23 +1697,19 @@ static int alvium_set_frame_interval(struct alvium_dev *alvium,
+> >  }
+> >  
+> >  static int alvium_s_frame_interval(struct v4l2_subdev *sd,
+> > +				   struct v4l2_subdev_state *sd_state,
+> >  				   struct v4l2_subdev_frame_interval *fi)
+> >  {
+> >  	struct alvium_dev *alvium = sd_to_alvium(sd);
+> > -	struct v4l2_subdev_state *state;
+> >  	int ret;
+> >  
+> >  	if (alvium->streaming)
+> >  		return -EBUSY;
+> >  
+> > -	state = v4l2_subdev_lock_and_get_active_state(sd);
+> > -
+> >  	ret = alvium_set_frame_interval(alvium, fi);
+> >  	if (!ret)
+> >  		ret = alvium_set_frame_rate(alvium);
+> >  
+> > -	v4l2_subdev_unlock_state(state);
+> > -
+> >  	return ret;
+> >  }
+> >  
+> > @@ -2238,8 +2235,6 @@ static const struct v4l2_subdev_core_ops alvium_core_ops = {
+> >  };
+> >  
+> >  static const struct v4l2_subdev_video_ops alvium_video_ops = {
+> > -	.g_frame_interval	= alvium_g_frame_interval,
+> > -	.s_frame_interval	= alvium_s_frame_interval,
+> >  	.s_stream		= alvium_s_stream,
+> >  };
+> >  
+> > @@ -2249,6 +2244,8 @@ static const struct v4l2_subdev_pad_ops alvium_pad_ops = {
+> >  	.set_fmt = alvium_set_fmt,
+> >  	.get_selection = alvium_get_selection,
+> >  	.set_selection = alvium_set_selection,
+> > +	.get_frame_interval = alvium_g_frame_interval,
+> > +	.set_frame_interval = alvium_s_frame_interval,
+> >  };
+> >  
+> >  static const struct v4l2_subdev_internal_ops alvium_internal_ops = {
+> 
+> Applied and tested on my side. From functional perspective
+> all is working properly on my hw. Hope this help.
+> 
+> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+
+Would you be able to send a patch on top of the media_stage master
+branch to support the TRY frame intervals in the alvium driver ?
+
+[snip]
+
 -- 
-2.36.1
+Regards,
 
+Laurent Pinchart
