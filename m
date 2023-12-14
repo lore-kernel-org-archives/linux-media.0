@@ -1,103 +1,90 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7986122;
+	Thu, 14 Dec 2023 08:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/uUSJEg"
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD19E3
-	for <linux-media@vger.kernel.org>; Thu, 14 Dec 2023 00:44:22 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40c60dfa5bfso6478935e9.0
-        for <linux-media@vger.kernel.org>; Thu, 14 Dec 2023 00:44:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702543460; x=1703148260; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nxa4OK+VJbygMlWzrcKVmRH3zv2mpgLim7r6Tj6GZ4A=;
-        b=F/uUSJEgAmlHU0ngrQIZ19x2RlYhcLUwT7S4hA8iEHhjiP4XBGMz46fZ8S2Oz4hCBX
-         svOXFKUnLXSlrtMZ0CHTpFgfOKhq37/TEGq/Ij8g96jG+YTWw7wGL6so2Lcv+AXG8VBt
-         G7qzD9zPnW+AGoa1Y4xVwTmwNtPM4XbY8ytdcAo9ZaoH1pB9eO4l3LDkmeb6Tv1Qu/FF
-         TfAjpUG5lqp2ANgbglBuBV4vQ926teYLcITRuZ/nJGlvxfRtcOVlAjRhjlv7IZ5/64Jj
-         FJjrbn7Pp8AbuOroDsI3nH7d50R5GT4vAgEkQn33oVmvBgkp0DktjLesxgTVI5M3wlru
-         tFBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702543460; x=1703148260;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nxa4OK+VJbygMlWzrcKVmRH3zv2mpgLim7r6Tj6GZ4A=;
-        b=vq5oTAoF3TQ0z+XER0RaO1ng0VSclHNlCoWKiQLexWEeA8BUrGLDoUqwvNojmLaojp
-         053gWBys34/oNl4qhASxt8SqX7Y4m3H704XMKzMWbZ610LejOxWmXakYSWznfC6eXlG1
-         96p+SiAv+IedIq1n+rp28ok0V0BxgqE1I1bfNiCNQ0f9wJHoCy9xrbTr8Dnflwq8Kff2
-         mgHI+GdR+fJN4/2TaDz4/NBO7tDmYe5D/hcu/ED8Wn0do1AoeZi0FGjuneF82YluRe20
-         0znJ9LZTF4cvLsipyaLXtKSyUTj8jkcjt9GeWB5RwhRtCeFZROM3jIo6OCLCZiRQSmFG
-         lOvA==
-X-Gm-Message-State: AOJu0YxRaS1Hpwo893cTw8EVyUaHCHL+7eWmCMwNemvsLoVDuncrctD8
-	QbX4S9RiKgU9TJllgjx9R3oaPmXQn4k=
-X-Google-Smtp-Source: AGHT+IHdx9vMWjImTqcXoiqouvFCLaK6bAtp00VG+95CVMcLK69/bHDVbFpnz2/KpkMQ2AD8IbXlkQ==
-X-Received: by 2002:a05:600c:601d:b0:40c:3e43:418e with SMTP id az29-20020a05600c601d00b0040c3e43418emr4948399wmb.20.1702543460245;
-        Thu, 14 Dec 2023 00:44:20 -0800 (PST)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-59-229.cust.vodafonedsl.it. [188.217.59.229])
-        by smtp.gmail.com with ESMTPSA id w10-20020a05600c474a00b0040b2c195523sm25951188wmo.31.2023.12.14.00.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 00:44:19 -0800 (PST)
-Date: Thu, 14 Dec 2023 09:44:18 +0100
-From: Tommaso Merciai <tomm.merciai@gmail.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH v6 4/8] media: v4l2-subdev: Store frame interval in
- subdev state
-Message-ID: <ZXrAYpx49Nh1gVO0@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20231213150010.25593-1-laurent.pinchart@ideasonboard.com>
- <20231213150010.25593-5-laurent.pinchart@ideasonboard.com>
- <ZXq8Gc+1gqVFbTAR@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <ZXq-oJovi7O7S6gF@kekkonen.localdomain>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pPD0dHul"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2380C433C8;
+	Thu, 14 Dec 2023 08:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702543685;
+	bh=bWHJ2nEewYvkEMXif5fsymjDtt1zbVHkI49YReVBsDQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pPD0dHulfnGTLBExOIGRTAfiqj1Qk7C1wGbXEFFA+Pt+rXyiZAj7vbwEaxmbG0WwT
+	 fXFFyJk+4cXRjuEuZOaIW2zJfaQWQVhtRrRRMs9UBCIfoOA/vwGoNjuOsMobs2oBCm
+	 /x6JnOvRPji6GrvOos2Yw0oUNQ7Twg7kRtElj5s2rVwBJyXcyMMHWXpshWSCkkceSt
+	 DYWU1oSq1eOTpMnCRdiI6PV+tNisgz0AazAxpQrLs1AbDcui/7JAAaAoEKbqsOi4RV
+	 TbFefK+3/aSdO1enpIiXwv3fnydWvBXHZc2tXzUZCp7iO2AVsS4o+JMKrdmlVqf3VR
+	 5MriRhjZBtS9w==
+Date: Thu, 14 Dec 2023 09:48:02 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Sandy Huang <hjc@rock-chips.com>, Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Hans Verkuil <hverkuil@xs4all.nl>, 
+	linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v5 18/44] drm/vc4: hdmi: Create destroy state
+ implementation
+Message-ID: <rr5wvkunjglkxozfsvf5zvffwzznq6zt5mzvxw5rx2rpyfzecb@kauuy72x43gj>
+References: <20231207-kms-hdmi-connector-state-v5-0-6538e19d634d@kernel.org>
+ <20231207-kms-hdmi-connector-state-v5-18-6538e19d634d@kernel.org>
+ <CAPY8ntBe9RfSjdnd5Smx23La5gQaR9WqY8ehXQyp=4D_11N55Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="34euckmdvwkupler"
+Content-Disposition: inline
+In-Reply-To: <CAPY8ntBe9RfSjdnd5Smx23La5gQaR9WqY8ehXQyp=4D_11N55Q@mail.gmail.com>
+
+
+--34euckmdvwkupler
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZXq-oJovi7O7S6gF@kekkonen.localdomain>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sakari,
+Hi Dave,
 
-On Thu, Dec 14, 2023 at 08:36:48AM +0000, Sakari Ailus wrote:
-> Hi Tommaso,
-> 
-> On Thu, Dec 14, 2023 at 09:26:01AM +0100, Tommaso Merciai wrote:
-> > Hi Laurent,
-> > 
-> > Applying this patch I received the following error from checkpatch.pl
-> > maybe is a false positive or maybe I miss somenthing. Btw hope this help. :)
-> > 
-> > Applying: media: v4l2-subdev: Store frame interval in subdev state
-> > No codespell typos will be found - file '/usr/share/codespell/dictionary.txt': No such file or directory
-> > ERROR: Macros with complex values should be enclosed in parentheses
-> > #135: FILE: include/media/v4l2-subdev.h:1411:
-> > +#define v4l2_subdev_state_get_interval(state, pad, ...)			\
-> > +	__v4l2_subdev_state_gen_call(interval, ##__VA_ARGS__, , _pad)	\
-> > +		(state, pad, ##__VA_ARGS__)
-> > 
-> > ERROR: space prohibited before that ',' (ctx:WxW)
-> > #136: FILE: include/media/v4l2-subdev.h:1412:
-> > +	__v4l2_subdev_state_gen_call(interval, ##__VA_ARGS__, , _pad)	\
-> 
-> Checkpatch can't handle well macros that do something as unusual as this
-> one and it's not really worth fixing it for a few rare cases. This macro
-> generates a name of the function (or macro) and the two consecutive commas
-> (separated by a space as they should, think of it as an empty argument) are
-> there intentionally.
+On Tue, Dec 12, 2023 at 11:40:26AM +0000, Dave Stevenson wrote:
+> On Thu, 7 Dec 2023 at 15:50, Maxime Ripard <mripard@kernel.org> wrote:
+> >
+> > Even though we were rolling our own custom state for the vc4 HDMI
+> > controller driver, we were still using the generic helper to destroy
+> > that state.
+> >
+> > It was mostly working since the underlying state is the first member of
+> > our state so the pointers are probably equal in all relevant cases, but
+> > it's still fragile so let's fix this properly.
+> >
+> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
+>=20
+> Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Thanks for the explanation,
+Thanks for the review, I've applied that patch now.
 
-Regards,
-Tommaso
+Could you also review the framework changes (patches 6 to 16) ?
 
-> 
-> -- 
-> Regards,
-> 
-> Sakari Ailus
+Thanks!
+Maxime
+
+--34euckmdvwkupler
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZXrBQgAKCRDj7w1vZxhR
+xRk8AQDdN5Neajg11B6buyB2iqOXxDC3Ad8XCWlmcjkK9I1jTQEAv+RIYp6M3cV0
+8PQqOi1QiT/3hX+WMjreXGSqFUgQCg8=
+=hVnz
+-----END PGP SIGNATURE-----
+
+--34euckmdvwkupler--
