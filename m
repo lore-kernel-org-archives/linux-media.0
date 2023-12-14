@@ -1,57 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EVnZVPpI"
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D783AE8;
-	Wed, 13 Dec 2023 22:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=VwDqvg57fzCjHeJdXQ7BKuFaBbLUlDwICUOjyFt1o7I=; b=EVnZVPpIbtKeIVxC8cbCE7CybH
-	N+cb0xIJOPkXPCIcA5H6+1skRis2ohr+DGrdC3+VNabal/xsWOulv3Uuzl4gDSgf+tAWYCX7K8m5C
-	+V2v4pp1sdxOhqm21zGTSXPi1RIaWc7XphvBq9SnftALgj80W2gVbdtk2ZI7icT6oa3CtUwvXwC8z
-	IjXmUVnVhZeRina4K/EqAFaXLXXoQmyTxQ6XjrpUDbeSi+dSdLV0qJUUv1RaRqfERvQR50KD5HHD+
-	M2fWRD2dfxjSJnmpmvRjDY5FBQ7UnQIsv/6fm48fZ+iIyp3VYKZlumWz9ndHkbCqOun8e92nBmZoV
-	ATVH3uPQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rDfWj-00H1dE-0o;
-	Thu, 14 Dec 2023 06:48:57 +0000
-Date: Wed, 13 Dec 2023 22:48:57 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, shailend@google.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, corbet@lwn.net, jeroendb@google.com,
-	pkaligineedi@google.com, hawk@kernel.org,
-	ilias.apalodimas@linaro.org, arnd@arndb.de, dsahern@kernel.org,
-	willemdebruijn.kernel@gmail.com, shuah@kernel.org,
-	sumit.semwal@linaro.org, christian.koenig@amd.com,
-	linyunsheng@huawei.com, hramamurthy@google.com, shakeelb@google.com
-Subject: Re: [net-next v1 00/16] Device Memory TCP
-Message-ID: <ZXqlWT2JYg0sa7IF@infradead.org>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <170253482786.28524.10625748175644260187.git-patchwork-notify@kernel.org>
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2596E8;
+	Wed, 13 Dec 2023 22:50:39 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+	by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9D252814B;
+	Thu, 14 Dec 2023 14:50:38 +0800 (CST)
+Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Dec
+ 2023 14:50:38 +0800
+Received: from ubuntu.mshome.net (113.72.145.168) by EXMBX062.cuchost.com
+ (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 14 Dec
+ 2023 14:50:35 +0800
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	"Marvin Lin" <milkfafa@gmail.com>, Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>, "Ming Qian" <ming.qian@nxp.com>, Laurent
+ Pinchart <laurent.pinchart@ideasonboard.com>, Nicolas Dufresne
+	<nicolas.dufresne@collabora.com>, Benjamin Gaignard
+	<benjamin.gaignard@collabora.com>, Tomi Valkeinen
+	<tomi.valkeinen+renesas@ideasonboard.com>, Mingjia Zhang
+	<mingjia.zhang@mediatek.com>, Geert Uytterhoeven <geert+renesas@glider.be>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Dan Carpenter
+	<dan.carpenter@linaro.org>
+CC: Jack Zhu <jack.zhu@starfivetech.com>, Changhuang Liang
+	<changhuang.liang@starfivetech.com>, <linux-media@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>
+Subject: [PATCH v1 4/9] staging: media: starfive: camss: Replace format index with pad
+Date: Wed, 13 Dec 2023 22:50:22 -0800
+Message-ID: <20231214065027.28564-5-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231214065027.28564-1-changhuang.liang@starfivetech.com>
+References: <20231214065027.28564-1-changhuang.liang@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <170253482786.28524.10625748175644260187.git-patchwork-notify@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX062.cuchost.com
+ (172.16.6.62)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 06:20:27AM +0000, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
-> 
-> This series was applied to netdev/net-next.git (main)
-> by Jakub Kicinski <kuba@kernel.org>:
+Replace format index with pad.
 
-Umm, this is still very broken in intraction with other subsystems.
-Please don't push ahead so quickly.
+Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+---
+ drivers/staging/media/starfive/camss/stf-isp.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.c b/drivers/sta=
+ging/media/starfive/camss/stf-isp.c
+index ac83f23842df..c3ae02cf6dd8 100644
+--- a/drivers/staging/media/starfive/camss/stf-isp.c
++++ b/drivers/staging/media/starfive/camss/stf-isp.c
+@@ -11,9 +11,6 @@
+=20
+ #include "stf-camss.h"
+=20
+-#define SINK_FORMATS_INDEX	0
+-#define SOURCE_FORMATS_INDEX	1
+-
+ static int isp_set_selection(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_state *state,
+ 			     struct v4l2_subdev_selection *sel);
+@@ -95,11 +92,7 @@ static void isp_try_format(struct stf_isp_dev *isp_dev=
+,
+ 		return;
+ 	}
+=20
+-	if (pad =3D=3D STF_ISP_PAD_SINK)
+-		formats =3D &isp_dev->formats[SINK_FORMATS_INDEX];
+-	else if (pad =3D=3D STF_ISP_PAD_SRC)
+-		formats =3D &isp_dev->formats[SOURCE_FORMATS_INDEX];
+-
++	formats =3D &isp_dev->formats[pad];
+ 	fmt->width =3D clamp_t(u32, fmt->width, STFCAMSS_FRAME_MIN_WIDTH,
+ 			     STFCAMSS_FRAME_MAX_WIDTH);
+ 	fmt->height =3D clamp_t(u32, fmt->height, STFCAMSS_FRAME_MIN_HEIGHT,
+@@ -124,7 +117,7 @@ static int isp_enum_mbus_code(struct v4l2_subdev *sd,
+ 		if (code->index >=3D ARRAY_SIZE(isp_formats_sink))
+ 			return -EINVAL;
+=20
+-		formats =3D &isp_dev->formats[SINK_FORMATS_INDEX];
++		formats =3D &isp_dev->formats[code->pad];
+ 		code->code =3D formats->fmts[code->index].code;
+ 	} else {
+ 		struct v4l2_mbus_framefmt *sink_fmt;
+--=20
+2.25.1
 
