@@ -1,29 +1,29 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA983EA82;
-	Fri, 15 Dec 2023 16:44:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF513FB10;
+	Fri, 15 Dec 2023 16:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Fvwiy3WF"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5OVSVWmE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702658696;
-	bh=o3gVuGEC1t10luwAtPg5Gfc/jxJ1FIFC2gthXJnlS6U=;
+	s=mail; t=1702658691;
+	bh=cD6t1rxsgYGFHEkBDR2c5LoiqA0V064keU5mnwqyNG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fvwiy3WFfv22/7ZWWXiJPGD0gVrH+FydOX/X0oYjY1yo99b3TSiaoo6KcQVD64VxA
-	 PVdFLMaMBhcPQE2YmQSGGs/dIS2jkrOtSrCtdR+j7E9dicdbWm6NQHqK2odxx6Gn80
-	 hcmiB7eoePOxyH92ofLFB16zr3Fu/YrP+3XdW/JfbE0IvqrHsTl7KR1+nuy1A8usEu
-	 wFfK2HqK0Fi+CKkFsVKMlWX3zR4QtXuJvdvYopFVo5q+pHbcSSvFTeUR3I2Oqi2ng0
-	 h1xmVfMEn5BsPd94Y4FQ3OwVn2vP2YpomwsU+HIB+rwYVkdzs+vMHeBM2GaTow2Nv7
-	 hd1gIOphY24ZA==
+	b=5OVSVWmErwG68J8XGHhC8ce9nUwI3D7oeThtnEafA4vf92gH/zYZNspuTtLISmpe1
+	 GYYeu6DlJMnDQ3RSHB5MX6H8OdEbS48Nv9NdxUaHkN0NeKr0ok2ls2SI/NZSyn2zK4
+	 G+WCDOkHMk35bkzkGgtOVjE4kmNVIjENiWMJid9bJ3h5VYgSN+D5SEPae5cNkRvGks
+	 N2+bFjwwaFNX7d0vrc+zZP1r3f7E+qBNIATnJDBXJ4gTGSyWtc6eNQXJoptlk1vZTi
+	 2tAyiz0JnI/aTm6Ux4tvEFavqOngpy2BAXmFGQZSV2XQclyLF/NKx37qvIdFJ/GlU0
+	 3a8Xtx+KfZU3A==
 Received: from arisu.mtl.collabora.ca (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id F276E3781FE9;
-	Fri, 15 Dec 2023 16:44:54 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 531FB3781FE3;
+	Fri, 15 Dec 2023 16:44:50 +0000 (UTC)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: linux-media@vger.kernel.org,
@@ -31,9 +31,9 @@ Cc: linux-media@vger.kernel.org,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
 	Detlev Casanova <detlev.casanova@collabora.com>
-Subject: [PATCH v4 4/4] visl: Add codec specific variability on output frames
-Date: Fri, 15 Dec 2023 11:42:58 -0500
-Message-ID: <20231215164447.743787-5-detlev.casanova@collabora.com>
+Subject: [PATCH v4 1/4] media: visl,vidtv: Set parameters permissions to 0444
+Date: Fri, 15 Dec 2023 11:42:55 -0500
+Message-ID: <20231215164447.743787-2-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231215164447.743787-1-detlev.casanova@collabora.com>
 References: <20231215164447.743787-1-detlev.casanova@collabora.com>
@@ -45,73 +45,146 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When running tests with different input data, the stable output frames
-could be too similar and hide possible issues.
+This avoids confusion with default values and lets userspace
+programs get the modules parameters values at run time.
 
-This commit adds variation by using some codec specific parameters.
-
-Only HEVC and H.264 support this.
+This can be useful when setting up a test suite.
 
 Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- drivers/media/test-drivers/visl/visl-dec.c | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ .../media/test-drivers/vidtv/vidtv_bridge.c   | 26 +++++++++----------
+ drivers/media/test-drivers/visl/visl-core.c   | 10 +++----
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
-index caed753e17d1..fb6f53d8dfd2 100644
---- a/drivers/media/test-drivers/visl/visl-dec.c
-+++ b/drivers/media/test-drivers/visl/visl-dec.c
-@@ -290,6 +290,35 @@ static void visl_tpg_fill_sequence(struct visl_ctx *ctx,
- 		  " top" : " bottom") : "none");
- }
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_bridge.c b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+index 8b04e12af286..613949df897d 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_bridge.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_bridge.c
+@@ -45,28 +45,28 @@
+ #define LNB_HIGH_FREQ		10600000	/* transition frequency */
  
-+static bool visl_tpg_fill_codec_specific(struct visl_ctx *ctx,
-+					 struct visl_run *run,
-+					 char buf[], size_t bufsz)
-+{
-+	/*
-+	 * To add variability, we need a value that is stable for a given
-+	 * input but is different than already shown fields.
-+	 * The pic order count value defines the display order of the frames
-+	 * (which can be different than the decoding order that is shown with
-+	 * the sequence number).
-+	 * Therefore it is stable for a given input and will add a different
-+	 * value that is more specific to the way the input is encoded.
-+	 */
-+	switch (ctx->current_codec) {
-+	case VISL_CODEC_H264:
-+		scnprintf(buf, bufsz,
-+			  "H264: %u", run->h264.dpram->pic_order_cnt_lsb);
-+		break;
-+	case VISL_CODEC_HEVC:
-+		scnprintf(buf, bufsz,
-+			  "HEVC: %d", run->hevc.dpram->pic_order_cnt_val);
-+		break;
-+	default:
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- {
- 	u8 *basep[TPG_MAX_PLANES][2];
-@@ -322,6 +351,13 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
- 	frame_dprintk(ctx->dev, run->dst->sequence, "");
- 	line++;
+ static unsigned int drop_tslock_prob_on_low_snr;
+-module_param(drop_tslock_prob_on_low_snr, uint, 0);
++module_param(drop_tslock_prob_on_low_snr, uint, 0444);
+ MODULE_PARM_DESC(drop_tslock_prob_on_low_snr,
+ 		 "Probability of losing the TS lock if the signal quality is bad");
  
-+	if (visl_tpg_fill_codec_specific(ctx, run, buf, TPG_STR_BUF_SZ)) {
-+		tpg_gen_text(&ctx->tpg, basep, line++ * line_height, 16, buf);
-+		frame_dprintk(ctx->dev, run->dst->sequence, "%s\n", buf);
-+		frame_dprintk(ctx->dev, run->dst->sequence, "");
-+		line++;
-+	}
-+
- 	visl_get_ref_frames(ctx, buf, TPG_STR_BUF_SZ, run);
+ static unsigned int recover_tslock_prob_on_good_snr;
+-module_param(recover_tslock_prob_on_good_snr, uint, 0);
++module_param(recover_tslock_prob_on_good_snr, uint, 0444);
+ MODULE_PARM_DESC(recover_tslock_prob_on_good_snr,
+ 		 "Probability recovering the TS lock when the signal improves");
  
- 	while ((line_str = strsep(&tmp, "\n")) && strlen(line_str)) {
+ static unsigned int mock_power_up_delay_msec;
+-module_param(mock_power_up_delay_msec, uint, 0);
++module_param(mock_power_up_delay_msec, uint, 0444);
+ MODULE_PARM_DESC(mock_power_up_delay_msec, "Simulate a power up delay");
+ 
+ static unsigned int mock_tune_delay_msec;
+-module_param(mock_tune_delay_msec, uint, 0);
++module_param(mock_tune_delay_msec, uint, 0444);
+ MODULE_PARM_DESC(mock_tune_delay_msec, "Simulate a tune delay");
+ 
+ static unsigned int vidtv_valid_dvb_t_freqs[NUM_VALID_TUNER_FREQS] = {
+ 	474000000
+ };
+ 
+-module_param_array(vidtv_valid_dvb_t_freqs, uint, NULL, 0);
++module_param_array(vidtv_valid_dvb_t_freqs, uint, NULL, 0444);
+ MODULE_PARM_DESC(vidtv_valid_dvb_t_freqs,
+ 		 "Valid DVB-T frequencies to simulate, in Hz");
+ 
+@@ -74,19 +74,19 @@ static unsigned int vidtv_valid_dvb_c_freqs[NUM_VALID_TUNER_FREQS] = {
+ 	474000000
+ };
+ 
+-module_param_array(vidtv_valid_dvb_c_freqs, uint, NULL, 0);
++module_param_array(vidtv_valid_dvb_c_freqs, uint, NULL, 0444);
+ MODULE_PARM_DESC(vidtv_valid_dvb_c_freqs,
+ 		 "Valid DVB-C frequencies to simulate, in Hz");
+ 
+ static unsigned int vidtv_valid_dvb_s_freqs[NUM_VALID_TUNER_FREQS] = {
+ 	11362000
+ };
+-module_param_array(vidtv_valid_dvb_s_freqs, uint, NULL, 0);
++module_param_array(vidtv_valid_dvb_s_freqs, uint, NULL, 0444);
+ MODULE_PARM_DESC(vidtv_valid_dvb_s_freqs,
+ 		 "Valid DVB-S/S2 frequencies to simulate at Ku-Band, in kHz");
+ 
+ static unsigned int max_frequency_shift_hz;
+-module_param(max_frequency_shift_hz, uint, 0);
++module_param(max_frequency_shift_hz, uint, 0444);
+ MODULE_PARM_DESC(max_frequency_shift_hz,
+ 		 "Maximum shift in HZ allowed when tuning in a channel");
+ 
+@@ -96,24 +96,24 @@ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nums);
+  * Influences the signal acquisition time. See ISO/IEC 13818-1 : 2000. p. 113.
+  */
+ static unsigned int si_period_msec = 40;
+-module_param(si_period_msec, uint, 0);
++module_param(si_period_msec, uint, 0444);
+ MODULE_PARM_DESC(si_period_msec, "How often to send SI packets. Default: 40ms");
+ 
+ static unsigned int pcr_period_msec = 40;
+-module_param(pcr_period_msec, uint, 0);
++module_param(pcr_period_msec, uint, 0444);
+ MODULE_PARM_DESC(pcr_period_msec,
+ 		 "How often to send PCR packets. Default: 40ms");
+ 
+ static unsigned int mux_rate_kbytes_sec = 4096;
+-module_param(mux_rate_kbytes_sec, uint, 0);
++module_param(mux_rate_kbytes_sec, uint, 0444);
+ MODULE_PARM_DESC(mux_rate_kbytes_sec, "Mux rate: will pad stream if below");
+ 
+ static unsigned int pcr_pid = 0x200;
+-module_param(pcr_pid, uint, 0);
++module_param(pcr_pid, uint, 0444);
+ MODULE_PARM_DESC(pcr_pid, "PCR PID for all channels: defaults to 0x200");
+ 
+ static unsigned int mux_buf_sz_pkts;
+-module_param(mux_buf_sz_pkts, uint, 0);
++module_param(mux_buf_sz_pkts, uint, 0444);
+ MODULE_PARM_DESC(mux_buf_sz_pkts,
+ 		 "Size for the internal mux buffer in multiples of 188 bytes");
+ 
+diff --git a/drivers/media/test-drivers/visl/visl-core.c b/drivers/media/test-drivers/visl/visl-core.c
+index 68dac896277b..12e93a7798d1 100644
+--- a/drivers/media/test-drivers/visl/visl-core.c
++++ b/drivers/media/test-drivers/visl/visl-core.c
+@@ -64,27 +64,27 @@ MODULE_PARM_DESC(visl_transtime_ms, " simulated process time in milliseconds.");
+  * particular number of frames
+  */
+ int visl_dprintk_frame_start = -1;
+-module_param(visl_dprintk_frame_start, int, 0);
++module_param(visl_dprintk_frame_start, int, 0444);
+ MODULE_PARM_DESC(visl_dprintk_frame_start,
+ 		 " a frame number to start tracing with dprintk");
+ 
+ unsigned int visl_dprintk_nframes;
+-module_param(visl_dprintk_nframes, uint, 0);
++module_param(visl_dprintk_nframes, uint, 0444);
+ MODULE_PARM_DESC(visl_dprintk_nframes,
+ 		 " the number of frames to trace with dprintk");
+ 
+ bool keep_bitstream_buffers;
+-module_param(keep_bitstream_buffers, bool, false);
++module_param(keep_bitstream_buffers, bool, 0444);
+ MODULE_PARM_DESC(keep_bitstream_buffers,
+ 		 " keep bitstream buffers in debugfs after streaming is stopped");
+ 
+ int bitstream_trace_frame_start = -1;
+-module_param(bitstream_trace_frame_start, int, 0);
++module_param(bitstream_trace_frame_start, int, 0444);
+ MODULE_PARM_DESC(bitstream_trace_frame_start,
+ 		 " a frame number to start dumping the bitstream through debugfs");
+ 
+ unsigned int bitstream_trace_nframes;
+-module_param(bitstream_trace_nframes, uint, 0);
++module_param(bitstream_trace_nframes, uint, 0444);
+ MODULE_PARM_DESC(bitstream_trace_nframes,
+ 		 " the number of frames to dump the bitstream through debugfs");
+ 
 -- 
 2.41.0
 
