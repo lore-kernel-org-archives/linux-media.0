@@ -1,24 +1,24 @@
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F157C31A68;
-	Sat, 16 Dec 2023 19:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EF423C7;
+	Sat, 16 Dec 2023 19:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ucw.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ucw.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="rVEOu3Pu"
+	dkim=pass (1024-bit key) header.d=ucw.cz header.i=@ucw.cz header.b="ayBnWqvm"
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id CBCC11C006B; Sat, 16 Dec 2023 20:22:22 +0100 (CET)
+	id 089ED1C006B; Sat, 16 Dec 2023 20:36:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-	t=1702754542;
+	t=1702755411;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=48TS7fFspkyRUVj7fHTaXs6eF4rnhuG1B3PrPjzxDxs=;
-	b=rVEOu3PuGhOOqC3TofZaZVWdPliObgE+zzuOw1Ml+ynDweXb9rRtnhA3AaBhoxTui9iFUL
-	fT799Xevn7RtaXvSC942lsLnQ4VofLORDPZc7qT4OL75nkcyAGbM1D1w61c3FvAotx1PQR
-	62gsxn7A5Po0A1wmMb2AZVA22iUlTlk=
-Date: Sat, 16 Dec 2023 20:22:22 +0100
+	bh=LBUZp3N8L4MJ5ZGOE6xga7KiiycmLyCj1RkGWg22FNs=;
+	b=ayBnWqvm7++RG8BJ+Asd6Z2oO/sOD1LQlYSs+GQ1HeYLRfYWVYMtI86OZ20xs544Sbc2to
+	7Dtj7MRRyaTTXdyZd4+woJrX9USowF2jBqLncrCVfkjfNbLz++KUCLRgE2ad/BJAqon7by
+	Ps6V7mzJbLJVed5fpgJ44yoSvgSUgQA=
+Date: Sat, 16 Dec 2023 20:36:50 +0100
 From: Pavel Machek <pavel@ucw.cz>
 To: Alain Volmat <alain.volmat@foss.st.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -28,14 +28,13 @@ Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
 	Rob Herring <robh@kernel.org>, linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] dt-bindings: media: i2c: add galaxycore,gc2145
- dt-bindings
-Message-ID: <ZX347j0PfHe3SV+b@duo.ucw.cz>
+Subject: Re: [PATCH v5 3/3] media: i2c: gc2145: Galaxy Core GC2145 sensor
+ support
+Message-ID: <ZX38UnAvBn45+y0W@duo.ucw.cz>
 References: <20231122075154.789431-1-alain.volmat@foss.st.com>
- <20231122075154.789431-3-alain.volmat@foss.st.com>
+ <20231122075154.789431-4-alain.volmat@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,37 +42,65 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="AACX42QGkFbBuH/N"
+	protocol="application/pgp-signature"; boundary="J/MO1rl1fQBm0I5V"
 Content-Disposition: inline
-In-Reply-To: <20231122075154.789431-3-alain.volmat@foss.st.com>
+In-Reply-To: <20231122075154.789431-4-alain.volmat@foss.st.com>
 
 
---AACX42QGkFbBuH/N
+--J/MO1rl1fQBm0I5V
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed 2023-11-22 08:51:48, Alain Volmat wrote:
-> Introduction of the Galaxy Core GC2145 XVGA CMOS camera sensor.
+Hi!
+
+> Addition of support for the Galaxy Core GC2145 XVGA sensor.
+> The sensor supports both DVP and CSI-2 interfaces however for
+> the time being only CSI-2 is implemented.
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Configurations are currently based on initialization scripts
+> coming from Galaxy Core and so for that purpose only 3 static
+> resolutions are supported:
+>  - 640x480
+>  - 1280x720
+>  - 1600x1200
+
+Also only limited subset of pixel formats is implemented? Would be
+worth mentioning in the changelog, but perhaps comment at the start of
+the file would be even better.
+
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -50,6 +50,16 @@ config VIDEO_AR0521
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called ar0521.
+> =20
+> +config VIDEO_GC2145
+> +	select V4L2_CCI_I2C
+> +	tristate "GalaxyCore GC2145 sensor support"
+> +	help
+> +	  This is a V4L2 sensor-level driver for GalaxyCore GC2145
+> +	  2 Mpixel camera.
+
+Normally tristate would go before select.
 
 Reviewed-by: Pavel Machek <pavel@ucw.cz>
 
-BR,
-								Pavel
+(But you probably want to solve the problems reported by the build
+bot).
+
+Thanks and best regards,
+							Pavel
 --=20
 People of Russia, stop Putin before his war on Ukraine escalates.
 
---AACX42QGkFbBuH/N
+--J/MO1rl1fQBm0I5V
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZX347gAKCRAw5/Bqldv6
-8o+YAJ9G22eeJf3KnGwV8ESc7SX5hjSEeACfXpbj/JZZZBVR57qgOXSgCtvakco=
-=ofcY
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZX38UgAKCRAw5/Bqldv6
+8rhpAJ96f/a2MmnMxqL586aG7j0Su5XwFACfUliE825R4b4S2aYyg3SopYMo9XU=
+=Ymzx
 -----END PGP SIGNATURE-----
 
---AACX42QGkFbBuH/N--
+--J/MO1rl1fQBm0I5V--
