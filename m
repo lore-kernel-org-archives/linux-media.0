@@ -1,29 +1,29 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EE4125B6
-	for <linux-media@vger.kernel.org>; Mon, 18 Dec 2023 09:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7061F125A3
+	for <linux-media@vger.kernel.org>; Mon, 18 Dec 2023 09:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RLM5BROm"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aVIleK3A"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702893401;
-	bh=uYTKJWHaZAhMGIVbyRGxE4c8rZ2fe97FvQLs3nZBIq0=;
+	s=mail; t=1702893399;
+	bh=aZxFvBCzVGWidU55REJGWf/K6aRmbdrMYFMczhY/jzM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RLM5BROm4WloAO6LJy90gKF9v/pyxcxnZD+4MFnlMroz3Sp4Kj9e++yo+OTEVA0+C
-	 G21RjdNGue7zt35eP1LuEFNLOsMxYflLwX2NCMbqWfu63oQULTv9JIC6xn0BNg5u93
-	 eKtFvO7Ze79b53MnvRKTAGl8B/xyOfDoOJWsMtRtxIpdWA6txfus3HIZ7o45+UQ7iU
-	 MW8E/DEc1nzqXJP+eyV6PXVo6h3IhKRbT0Sb3dzouEDzkyo9t9V2JRAv1h5QsExIte
-	 +kDt7Gq9L1VTCUBCqBaImj2H2rwmwSD8S4uilQd9OeLTtUIbLLSvHp4cMorAFBJnu0
-	 7WLs9Gv+tcZHQ==
+	b=aVIleK3ASDA5MRXCizrOeRBJTmmNfgDUB1qTO26mIJjrTMEGbouW3nbc9Y1L6ZJv9
+	 KUoNdVZAl88+KQTpGRIXnai9VSIfEGZS3e4bOzwgYQztQg1UBh0wDdQ/LPXg1j1/9y
+	 BoogXa8cYbdUDQ/g9FugsONUaZ0FdBDEPcbi15A38BqoNgPyXnspWRxRayfkOCxfFe
+	 lK82ialIYrnwMbT+ybRGWLkqcvrbgzCTe9VQj4esgfFC/uOIRvYRH5PBIByIuHReCZ
+	 dDdBZDA0Y6obhI9eZesE7ACOMOB9lGzt3H+8ugLg0LpuNcHoFQ41n7J2eg662Flw1n
+	 jAuEpVsFeokXQ==
 Received: from stla-brain-8255-1.home (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: jmassot)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A6783378149B;
-	Mon, 18 Dec 2023 09:56:40 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 13F74378143B;
+	Mon, 18 Dec 2023 09:56:39 +0000 (UTC)
 From: Julien Massot <julien.massot@collabora.com>
 To: j-luthra@ti.com,
 	mchehab@kernel.org,
@@ -32,9 +32,9 @@ To: j-luthra@ti.com,
 Cc: kernel@collabora.com,
 	linux-media@vger.kernel.org,
 	Julien Massot <julien.massot@collabora.com>
-Subject: [PATCH v2 3/5] media: ti: j721e-csi2rx: add GREY format
-Date: Mon, 18 Dec 2023 10:56:02 +0100
-Message-ID: <20231218095604.1950737-4-julien.massot@collabora.com>
+Subject: [PATCH v2 1/5] media: cadence: csi2rx: use match fwnode for media link
+Date: Mon, 18 Dec 2023 10:56:00 +0100
+Message-ID: <20231218095604.1950737-2-julien.massot@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218095604.1950737-1-julien.massot@collabora.com>
 References: <20231218095604.1950737-1-julien.massot@collabora.com>
@@ -46,33 +46,31 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Grey format to properly select RAW8 data type.
+On some subdev the fwnode is the device node and not the endpoint node.
+Using the subdev fwnode doesn't allow to fetch the subdev
+pad we are connected to when the remote subdev has multiple
+output pads.
 
-Tested with a ST VG5661 sensor.
-
+Fixes: 1fc3b37f34f69 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 Signed-off-by: Julien Massot <julien.massot@collabora.com>
-Acked-by: Jai Luthra <j-luthra@ti.com>
+Reviewed-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index 9518c78cee4a..6e58112957ce 100644
---- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-+++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -158,6 +158,12 @@ static const struct ti_csi2rx_fmt ti_csi2rx_formats[] = {
- 		.csi_dt			= MIPI_CSI2_DT_RAW8,
- 		.bpp			= 8,
- 		.size			= SHIM_DMACNTX_SIZE_8,
-+	}, {
-+		.fourcc			= V4L2_PIX_FMT_GREY,
-+		.code			= MEDIA_BUS_FMT_Y8_1X8,
-+		.csi_dt			= MIPI_CSI2_DT_RAW8,
-+		.bpp			= 8,
-+		.size			= SHIM_DMACNTX_SIZE_8,
- 	}, {
- 		.fourcc			= V4L2_PIX_FMT_SBGGR10,
- 		.code			= MEDIA_BUS_FMT_SBGGR10_1X10,
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 91ef22e9109a..e83b877c48da 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -467,7 +467,7 @@ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+ 	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
+ 
+ 	csi2rx->source_pad = media_entity_get_fwnode_pad(&s_subdev->entity,
+-							 s_subdev->fwnode,
++							 asd->match.fwnode,
+ 							 MEDIA_PAD_FL_SOURCE);
+ 	if (csi2rx->source_pad < 0) {
+ 		dev_err(csi2rx->dev, "Couldn't find output pad for subdev %s\n",
 -- 
 2.43.0
 
