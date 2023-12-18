@@ -1,47 +1,47 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738E272077;
-	Mon, 18 Dec 2023 17:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F2971477;
+	Mon, 18 Dec 2023 17:41:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgELI1Vk"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50e3cdcf010so1205263e87.2;
-        Mon, 18 Dec 2023 09:41:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PqvXmH1u"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50bf3efe2cbso3901608e87.2;
+        Mon, 18 Dec 2023 09:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702921263; x=1703526063; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702921266; x=1703526066; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GECqqIbmwZQzSgkD0rH9gtwmMolx6aq5Ff6gT7Rc18w=;
-        b=OgELI1Vk+W2KzNTapnFPdr9D1qPmDJ8YzbDGUXxuBHxtsb6SHVFA7KMb/IzD0c26f0
-         HV0E9ZyF9+iKFKFkbmAJPDs991h09PST2Sc2v6aBNiIrAkfhITDENq1OqqH/k0FOfiUj
-         5dGTWLqY6FwnD7zksSedN9p8ggbJdmdjCJYTwBCD8n0OJt+exWDOgBN4a1pC45Ci45AI
-         cFl0a5SDQppnm7o/vtb7TDB79rtVjEx9jCssLfQ2ijW9R63FpnJqY43CJqIOUmJrbK/c
-         sDWpcrzT6BxQxCrYq1yEK99YsJx/KwxJRvjUZ0ZMLY/NrCw+88OPr+lB9g223bLUnbkN
-         kXww==
+        bh=M0/5NCPPEP08dxHiHIezXLBrilHL+5rztH1UO29obAo=;
+        b=PqvXmH1uUnkEz93haJsEFNRHyvGppMKE/C31snNWw6Mp2zk47O8wZP1wcH4bHbjkIX
+         0qA81yYknYGq5sQJ9HWHX/qI82mBOhPSnjVWnv5UTIajDY7Q/V0060zW2U96H8MiNbYW
+         3iOMbj75ja5rQr6QOtEU3gzGZ5uLGSL5kzgWIUOPuH1VuFAf0+9ukeegFq7laIxcUQss
+         HNBLAHu4HL5ETFSkKgsgAKkPU9oT4qvlsSarJ+mIf4MmrHJ2y5qWHAh1lCCh18n3d2dB
+         n2VTlI/cK8gXT/fqituofYxwGA+XBkAzof1zj5CgbXdFNrrVkBo7RNlclIQZryh63Obk
+         5W5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702921263; x=1703526063;
+        d=1e100.net; s=20230601; t=1702921266; x=1703526066;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GECqqIbmwZQzSgkD0rH9gtwmMolx6aq5Ff6gT7Rc18w=;
-        b=nIAhzJaJk2rpnqyzpoYt7mE1kUGp4ecMmlRSIpv/N4XfjIasGDrkOyQIC0pk7liQws
-         ZdG1Wz7rtRMPP088Ju462kORd9EFxrAVGEIjeJvz+BYPetdkIL23BcrdImwApA4PWbFH
-         XWtHAatywOW4PShloEShOyNE+7073zDRppMLIaOSglR/EWjM/FOXnPd4pZx3l3lexbFs
-         2HUdHgI/V6aD9HCuR2l4W2xF6/Xd5+KlP6GBicdTKb8Bya/w4cGeCw0GGCod2J5QVjgL
-         us2SzfCX7Mz6m+1NdT2f1xvvasXPLtRcEu3sp6SEF29+y6hp0OYI0JCvrFvNLjrJmnp9
-         BecA==
-X-Gm-Message-State: AOJu0YxZcKsu3NR86QHP+06/1uizYD1+m4YLWCpSCJ/5uANQLujP4Gda
-	m6+4tykIa2l5Qy0+cQKxwmSjEMAznNSFWQ==
-X-Google-Smtp-Source: AGHT+IH+6Q93ikV/7PYO3Q+G/bwQHdgApa4/3jJQQUsD51UtW4bsyp0kRfsY8nvSS9xmtw39ltLtdA==
-X-Received: by 2002:a2e:a588:0:b0:2cb:3169:b348 with SMTP id m8-20020a2ea588000000b002cb3169b348mr4599390ljp.96.1702921263307;
-        Mon, 18 Dec 2023 09:41:03 -0800 (PST)
+        bh=M0/5NCPPEP08dxHiHIezXLBrilHL+5rztH1UO29obAo=;
+        b=o1pnAVNq/7bbzufwbMKt8P7MO03r85nJfqJLn7vqogwSvCF7rGYKkOf7ijt72KmJwV
+         vpPl0EkYnKUf5J1fPcRZ4rQ6G7mGZNdhKX1RhPTNhc/EOBHjFXnRg9mwDPu+mUPiECfF
+         I2Phe6mBthvxckYOhMzIyCOpetfqE+8sytZJ3PHgZBCm+kMAVZOT5WY55SZ4wffDk8yi
+         EA07YoRCqdt6/6wdomtOUnYJcGh/WF98R7FvE9ujJ8uYLULT+zmx1l4Lpw8Q5NioTXlh
+         OoL0VZbIjOxQEj3Vddm+wBvjRMc0dbE6B1B58nrtOHtIvf2mohWAO+8vAlG4ROD/8K6L
+         aYlw==
+X-Gm-Message-State: AOJu0Yw+8cETf0IrCn5BYJsllb8t6e8JVKUIIPCWvYyDxKCiO8IN0VlO
+	bFDtdjneZQuRi+DXWTwiuDR3OGQcbYpFdw==
+X-Google-Smtp-Source: AGHT+IF9ey4UQ6SUMpAGvUqYRTmdaHtMtctv+O6YHO1u0m2u4Rue0WRtBrlpVqU33PMFNKB4V2vFxg==
+X-Received: by 2002:a05:6512:1586:b0:50e:719:6feb with SMTP id bp6-20020a056512158600b0050e07196febmr4040180lfb.213.1702921266432;
+        Mon, 18 Dec 2023 09:41:06 -0800 (PST)
 Received: from localhost ([83.149.246.185])
-        by smtp.gmail.com with ESMTPSA id k9-20020a05651c10a900b002cc74569398sm363278ljn.15.2023.12.18.09.41.02
+        by smtp.gmail.com with ESMTPSA id f8-20020a193808000000b0050d12fe487bsm1077566lfa.277.2023.12.18.09.41.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 09:41:02 -0800 (PST)
+        Mon, 18 Dec 2023 09:41:06 -0800 (PST)
 From: Mikhail Rudenko <mike.rudenko@gmail.com>
 To: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -53,9 +53,9 @@ Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH v2 05/20] media: i2c: ov4689: Remove i2c_client from ov4689 struct
-Date: Mon, 18 Dec 2023 20:40:26 +0300
-Message-ID: <20231218174042.794012-6-mike.rudenko@gmail.com>
+Subject: [PATCH v2 07/20] media: i2c: ov4689: Use sub-device active state
+Date: Mon, 18 Dec 2023 20:40:28 +0300
+Message-ID: <20231218174042.794012-8-mike.rudenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218174042.794012-1-mike.rudenko@gmail.com>
 References: <20231218174042.794012-1-mike.rudenko@gmail.com>
@@ -67,166 +67,206 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The 'client' field within the 'ov4689' structure is solely used to
-access its 'dev' member. This commit removes the 'client' field and
-directly stores a pointer to the 'struct device'.
+Use sub-device active state. Employ control handler lock to
+synchronize access to the active state and s_stream.
 
 Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov4689.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ drivers/media/i2c/ov4689.c | 75 ++++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 43 deletions(-)
 
 diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
-index 6ea1c37323d1..3b20eba59c9c 100644
+index d42f5d1a1ba8..501901aad4ae 100644
 --- a/drivers/media/i2c/ov4689.c
 +++ b/drivers/media/i2c/ov4689.c
-@@ -74,7 +74,7 @@ struct ov4689_mode {
- };
+@@ -86,7 +86,6 @@ struct ov4689 {
  
- struct ov4689 {
--	struct i2c_client *client;
-+	struct device *dev;
- 	struct regmap *regmap;
- 	struct clk *xvclk;
- 	struct gpio_desc *reset_gpio;
-@@ -405,13 +405,13 @@ static int ov4689_get_selection(struct v4l2_subdev *sd,
+ 	u32 clock_rate;
+ 
+-	struct mutex mutex; /* lock to protect ctrls and cur_mode */
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	struct v4l2_ctrl *exposure;
+ 
+@@ -319,19 +318,6 @@ static int ov4689_set_fmt(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
+-static int ov4689_get_fmt(struct v4l2_subdev *sd,
+-			  struct v4l2_subdev_state *sd_state,
+-			  struct v4l2_subdev_format *fmt)
+-{
+-	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
+-	struct ov4689 *ov4689 = to_ov4689(sd);
+-
+-	/* only one mode supported for now */
+-	ov4689_fill_fmt(ov4689->cur_mode, mbus_fmt);
+-
+-	return 0;
+-}
+-
+ static int ov4689_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -405,10 +391,11 @@ static int ov4689_get_selection(struct v4l2_subdev *sd,
  static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
  {
  	struct ov4689 *ov4689 = to_ov4689(sd);
--	struct i2c_client *client = ov4689->client;
-+	struct device *dev = ov4689->dev;
++	struct v4l2_subdev_state *sd_state;
+ 	struct device *dev = ov4689->dev;
  	int ret = 0;
  
- 	mutex_lock(&ov4689->mutex);
+-	mutex_lock(&ov4689->mutex);
++	sd_state = v4l2_subdev_lock_and_get_active_state(&ov4689->subdev);
  
  	if (on) {
--		ret = pm_runtime_resume_and_get(&client->dev);
-+		ret = pm_runtime_resume_and_get(dev);
- 		if (ret < 0)
- 			goto unlock_and_return;
- 
-@@ -420,26 +420,26 @@ static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
- 					  ov4689->cur_mode->num_regs,
- 					  NULL);
- 		if (ret) {
--			pm_runtime_put(&client->dev);
-+			pm_runtime_put(dev);
- 			goto unlock_and_return;
- 		}
- 
- 		ret = __v4l2_ctrl_handler_setup(&ov4689->ctrl_handler);
- 		if (ret) {
--			pm_runtime_put(&client->dev);
-+			pm_runtime_put(dev);
- 			goto unlock_and_return;
- 		}
- 
- 		ret = cci_write(ov4689->regmap, OV4689_REG_CTRL_MODE,
- 				OV4689_MODE_STREAMING, NULL);
- 		if (ret) {
--			pm_runtime_put(&client->dev);
-+			pm_runtime_put(dev);
- 			goto unlock_and_return;
- 		}
- 	} else {
- 		cci_write(ov4689->regmap, OV4689_REG_CTRL_MODE,
- 			  OV4689_MODE_SW_STANDBY, NULL);
--		pm_runtime_put(&client->dev);
-+		pm_runtime_put(dev);
+ 		ret = pm_runtime_resume_and_get(dev);
+@@ -443,7 +430,7 @@ static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
  	}
  
  unlock_and_return:
-@@ -553,7 +553,6 @@ static const struct v4l2_subdev_ops ov4689_subdev_ops = {
-  */
- static int ov4689_map_gain(struct ov4689 *ov4689, int logical_gain, int *result)
- {
--	const struct device *dev = &ov4689->client->dev;
- 	const struct ov4689_gain_range *range;
- 	unsigned int n;
- 
-@@ -564,7 +563,8 @@ static int ov4689_map_gain(struct ov4689 *ov4689, int logical_gain, int *result)
- 	}
- 
- 	if (n == ARRAY_SIZE(ov4689_gain_ranges)) {
--		dev_warn_ratelimited(dev, "no mapping found for gain %d\n",
-+		dev_warn_ratelimited(ov4689->dev,
-+				     "no mapping found for gain %d\n",
- 				     logical_gain);
- 		return -EINVAL;
- 	}
-@@ -580,7 +580,7 @@ static int ov4689_set_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct ov4689 *ov4689 =
- 		container_of(ctrl->handler, struct ov4689, ctrl_handler);
--	struct i2c_client *client = ov4689->client;
-+	struct device *dev = ov4689->dev;
- 	int sensor_gain;
- 	s64 max_expo;
- 	int ret;
-@@ -597,7 +597,7 @@ static int ov4689_set_ctrl(struct v4l2_ctrl *ctrl)
- 		break;
- 	}
- 
--	if (!pm_runtime_get_if_in_use(&client->dev))
-+	if (!pm_runtime_get_if_in_use(dev))
- 		return 0;
- 
- 	switch (ctrl->id) {
-@@ -618,13 +618,13 @@ static int ov4689_set_ctrl(struct v4l2_ctrl *ctrl)
- 		ret = ov4689_enable_test_pattern(ov4689, ctrl->val);
- 		break;
- 	default:
--		dev_warn(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
-+		dev_warn(dev, "%s Unhandled id:0x%x, val:0x%x\n",
- 			 __func__, ctrl->id, ctrl->val);
- 		ret = -EINVAL;
- 		break;
- 	}
- 
--	pm_runtime_put(&client->dev);
-+	pm_runtime_put(dev);
+-	mutex_unlock(&ov4689->mutex);
++	v4l2_subdev_unlock_state(sd_state);
  
  	return ret;
  }
-@@ -689,8 +689,7 @@ static int ov4689_initialize_controls(struct ov4689 *ov4689)
+@@ -506,18 +493,13 @@ static int __maybe_unused ov4689_power_off(struct device *dev)
+ 	return 0;
+ }
  
- 	if (handler->error) {
- 		ret = handler->error;
--		dev_err(&ov4689->client->dev, "Failed to init controls(%d)\n",
--			ret);
-+		dev_err(ov4689->dev, "Failed to init controls(%d)\n", ret);
- 		goto err_free_handler;
+-static int ov4689_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
++static int ov4689_init_state(struct v4l2_subdev *sd,
++			     struct v4l2_subdev_state *sd_state)
+ {
+-	struct ov4689 *ov4689 = to_ov4689(sd);
+-	struct v4l2_mbus_framefmt *try_fmt;
+-
+-	mutex_lock(&ov4689->mutex);
+-
+-	try_fmt = v4l2_subdev_state_get_format(fh->state, 0);
+-	/* Initialize try_fmt */
+-	ov4689_fill_fmt(&supported_modes[OV4689_MODE_2688_1520], try_fmt);
++	struct v4l2_mbus_framefmt *fmt =
++		v4l2_subdev_state_get_format(sd_state, 0);
+ 
+-	mutex_unlock(&ov4689->mutex);
++	ov4689_fill_fmt(&supported_modes[OV4689_MODE_2688_1520], fmt);
+ 
+ 	return 0;
+ }
+@@ -526,10 +508,6 @@ static const struct dev_pm_ops ov4689_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(ov4689_power_off, ov4689_power_on, NULL)
+ };
+ 
+-static const struct v4l2_subdev_internal_ops ov4689_internal_ops = {
+-	.open = ov4689_open,
+-};
+-
+ static const struct v4l2_subdev_video_ops ov4689_video_ops = {
+ 	.s_stream = ov4689_s_stream,
+ };
+@@ -537,11 +515,15 @@ static const struct v4l2_subdev_video_ops ov4689_video_ops = {
+ static const struct v4l2_subdev_pad_ops ov4689_pad_ops = {
+ 	.enum_mbus_code = ov4689_enum_mbus_code,
+ 	.enum_frame_size = ov4689_enum_frame_sizes,
+-	.get_fmt = ov4689_get_fmt,
++	.get_fmt = v4l2_subdev_get_fmt,
+ 	.set_fmt = ov4689_set_fmt,
+ 	.get_selection = ov4689_get_selection,
+ };
+ 
++static const struct v4l2_subdev_internal_ops ov4689_internal_ops = {
++	.init_state = ov4689_init_state,
++};
++
+ static const struct v4l2_subdev_ops ov4689_subdev_ops = {
+ 	.video = &ov4689_video_ops,
+ 	.pad = &ov4689_pad_ops,
+@@ -648,7 +630,6 @@ static int ov4689_initialize_controls(struct ov4689 *ov4689)
+ 	ret = v4l2_ctrl_handler_init(handler, 10);
+ 	if (ret)
+ 		return ret;
+-	handler->lock = &ov4689->mutex;
+ 
+ 	ctrl = v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ, 0, 0,
+ 				      link_freq_menu_items);
+@@ -861,13 +842,15 @@ static int ov4689_probe(struct i2c_client *client)
+ 		return dev_err_probe(dev, ret,
+ 				     "Failed to get power regulators\n");
+ 
+-	mutex_init(&ov4689->mutex);
+-
+ 	sd = &ov4689->subdev;
+ 	v4l2_i2c_subdev_init(sd, client, &ov4689_subdev_ops);
++	sd->internal_ops = &ov4689_internal_ops;
++
+ 	ret = ov4689_initialize_controls(ov4689);
+-	if (ret)
+-		goto err_destroy_mutex;
++	if (ret) {
++		dev_err(dev, "Failed to initialize controls\n");
++		return ret;
++	}
+ 
+ 	ret = ov4689_power_on(dev);
+ 	if (ret)
+@@ -877,19 +860,26 @@ static int ov4689_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto err_power_off;
+ 
+-	sd->internal_ops = &ov4689_internal_ops;
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 
+ 	ov4689->pad.flags = MEDIA_PAD_FL_SOURCE;
+-	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	ret = media_entity_pads_init(&sd->entity, 1, &ov4689->pad);
+ 	if (ret < 0)
+ 		goto err_power_off;
+ 
++	sd->state_lock = ov4689->ctrl_handler.lock;
++	ret = v4l2_subdev_init_finalize(sd);
++
++	if (ret) {
++		dev_err(dev, "Could not register v4l2 device\n");
++		goto err_clean_entity;
++	}
++
+ 	ret = v4l2_async_register_subdev_sensor(sd);
+ 	if (ret) {
+ 		dev_err(dev, "v4l2 async register subdev failed\n");
+-		goto err_clean_entity;
++		goto err_clean_subdev;
  	}
  
-@@ -716,7 +715,7 @@ static int ov4689_initialize_controls(struct ov4689 *ov4689)
- static int ov4689_check_sensor_id(struct ov4689 *ov4689,
- 				  struct i2c_client *client)
- {
--	struct device *dev = &ov4689->client->dev;
-+	struct device *dev = ov4689->dev;
- 	u64 id = 0;
- 	int ret;
+ 	pm_runtime_set_active(dev);
+@@ -898,14 +888,14 @@ static int ov4689_probe(struct i2c_client *client)
  
-@@ -744,7 +743,7 @@ static int ov4689_configure_regulators(struct ov4689 *ov4689)
- 	for (i = 0; i < ARRAY_SIZE(ov4689_supply_names); i++)
- 		ov4689->supplies[i].supply = ov4689_supply_names[i];
+ 	return 0;
  
--	return devm_regulator_bulk_get(&ov4689->client->dev,
-+	return devm_regulator_bulk_get(ov4689->dev,
- 				       ARRAY_SIZE(ov4689_supply_names),
- 				       ov4689->supplies);
++err_clean_subdev:
++	v4l2_subdev_cleanup(sd);
+ err_clean_entity:
+ 	media_entity_cleanup(&sd->entity);
+ err_power_off:
+ 	ov4689_power_off(dev);
+ err_free_handler:
+ 	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
+-err_destroy_mutex:
+-	mutex_destroy(&ov4689->mutex);
+ 
+ 	return ret;
  }
-@@ -813,7 +812,8 @@ static int ov4689_probe(struct i2c_client *client)
- 	if (!ov4689)
- 		return -ENOMEM;
+@@ -917,9 +907,8 @@ static void ov4689_remove(struct i2c_client *client)
  
--	ov4689->client = client;
-+	ov4689->dev = dev;
-+
- 	ov4689->cur_mode = &supported_modes[OV4689_MODE_2688_1520];
+ 	v4l2_async_unregister_subdev(sd);
+ 	media_entity_cleanup(&sd->entity);
+-
++	v4l2_subdev_cleanup(sd);
+ 	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
+-	mutex_destroy(&ov4689->mutex);
  
- 	ov4689->xvclk = devm_clk_get_optional(dev, NULL);
+ 	pm_runtime_disable(&client->dev);
+ 	if (!pm_runtime_status_suspended(&client->dev))
 -- 
 2.43.0
 
