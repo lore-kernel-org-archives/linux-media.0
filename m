@@ -1,47 +1,47 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F38F7144B;
-	Mon, 18 Dec 2023 17:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20987740B2;
+	Mon, 18 Dec 2023 17:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xff4szit"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2cc690a3712so21501661fa.3;
-        Mon, 18 Dec 2023 09:41:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdadFdtp"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50e1112b95cso3689125e87.0;
+        Mon, 18 Dec 2023 09:41:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702921268; x=1703526068; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702921270; x=1703526070; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/lcZDt5QGRhe9n/LLDxuh6IIVZbIKKGFKFqVIvYPe3o=;
-        b=Xff4szitaYWeBor/vHoMfDqoUga6kFfxCFtVavBW2qNnhTwNPQkuakCopuNh4/o0Mx
-         aJ8RuJ9i+9+bZ3j4YxsMbh7jq1WaaJVIy6y+rhLZ+mVs6wUxybIj8z83ismvI84ZsQ4y
-         an0Ss8XfXziyKGKKoG7H/s7A3A4JGDLSRhQwp0s42KWwbrHwj/ckZJVo0SVIkjVm3SbK
-         yimKP/cDeTeMiFGHG4TdGP0hJNbfOAiumEb8xNMoxigzd9tSdnimnaU6Msq5yaBIv6ba
-         wlfwTmgVbQXhuq9yh1Bx/s3CkwdFiznydtwUKbWmv+o11eCnxyizxPTzJkhJ6nYENgmQ
-         WTqA==
+        bh=78C4018Wj6QQ6G/TMfHrY+9uEZBmbcTZYvwwuREmiaI=;
+        b=XdadFdtp/8+DeNh9A5xmVYAA3wh/UFHiyaXZTK+jVPAcXB1B+hpytXV/Q8lXTzoz9t
+         D/eOD+Tx4pCW5vpUE+PxEFewrLuhIUnYGYYNlVAPALgHm+q+mD+QwnctpfcpREcTRAwE
+         W36w0ESPMEk00qGn87u07KyHZFyAWa581BKd9c8LOlfWZbGiqReaAH3y5KwYfuQ/Qn6U
+         kc9Mx/vch3tAMSCq0mo/5tjEEiamA4id8BGeue2ywvUhAQtAxguqWxswm9GaV70DAp31
+         2lRrk8M53qmvoRPMTkN1iE4fRDUDqLvmKuGe+LHVGtikw0gUouDWJNWELtWnxWxnPK+h
+         xN3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702921268; x=1703526068;
+        d=1e100.net; s=20230601; t=1702921270; x=1703526070;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/lcZDt5QGRhe9n/LLDxuh6IIVZbIKKGFKFqVIvYPe3o=;
-        b=nS39qulgPNrkmM7DU+NVwroJm82ef0QG8/sArfoqz9pHRqh+AsfgylGgSFdZm8y/z1
-         5965BhKtQiXgXsbngcGzxxdvyVqWRzaReoq/OPoBPsqVWfm1q3EadbCsSSKbI61Y4Jib
-         Oal/yBteQ6px1ps3tDTMkeQlau1qibYQRWd3Own9G+OR0wgGxqNB9dI2CCDq+UrZW2fD
-         XV1C1E/LdFllJ2kkG42b7ZqSY6WMJOwHzmI6WUUXZyN7XujtshocW5hK+VR66uOBOsgF
-         pKClOeKaQ+5SnkZPxwL/50G5LYaVycbnnKBOox27c9jbbhZiT6y8uB3//YUggvQSShOG
-         44Mg==
-X-Gm-Message-State: AOJu0YzfFOQdaREyzEBvomdS9sVVQTNPTmMW+tkcvXSoLvj8dKTgJkYs
-	7dxXn618oiI4Gups4xRUSgCpZJK4L7PFkQ==
-X-Google-Smtp-Source: AGHT+IFJ7DMdENSn1mXdrbi/Y7ERcM2t2FtjbfFdZg9Evs/GZ/Fr4tWkWnnVSiXj7M98mEb+GPNomQ==
-X-Received: by 2002:a2e:9857:0:b0:2cc:7c8c:5748 with SMTP id e23-20020a2e9857000000b002cc7c8c5748mr18239ljj.63.1702921267816;
-        Mon, 18 Dec 2023 09:41:07 -0800 (PST)
+        bh=78C4018Wj6QQ6G/TMfHrY+9uEZBmbcTZYvwwuREmiaI=;
+        b=QxbC9w7o7zg99GzTi3ftpZb/AnQDEpA2dFaNzF2acGl9Ruq53hTOuZTskGUDqsva5x
+         cJjfI0cEHhTVhNUOry1QJBrmhg8rb7OFIQOJv+PBUJjE2q4ovbtB0l9pG6R1Y8fNr5BG
+         pVk6k2ZhW5SmK7ZbS9hW9ub/dCJEcAMKXhkxOdvBtVhh2mBr1IxhsGxyD+dDYbY7fihk
+         NMqviJ6SqTDVQBegTYUlWnskPUYwUasLSgDu9YKAM+Oi//g/S3a+Az8rAmLaFZW5Y78p
+         VCv0/wn34brVP9J9Pz+ytcWpx2PMqUY47YChOSo9+TB85C5PQm5G03Zoz4DsmAWmWgFk
+         buYg==
+X-Gm-Message-State: AOJu0YzvJ6T5eJGLy2L1Nh/s+GvW38FaDyP4GSXfgp4qs/kgina+6kqf
+	mdOxoNPRfOlFSju3vbbVOnTani9GGqMHcg==
+X-Google-Smtp-Source: AGHT+IHoW+UvwA10FafX4ZKJJjhDgqd1FlaW5EV33a76GpIWRud9d485W+bLdB7KmpgrDAKBtd49oQ==
+X-Received: by 2002:ac2:4e11:0:b0:50b:eadf:f175 with SMTP id e17-20020ac24e11000000b0050beadff175mr5774966lfr.91.1702921270413;
+        Mon, 18 Dec 2023 09:41:10 -0800 (PST)
 Received: from localhost ([83.149.246.185])
-        by smtp.gmail.com with ESMTPSA id z5-20020a2ebcc5000000b002cc259a574esm2497812ljp.117.2023.12.18.09.41.07
+        by smtp.gmail.com with ESMTPSA id g42-20020a0565123baa00b0050bfe7a602csm2978189lfv.74.2023.12.18.09.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 09:41:07 -0800 (PST)
+        Mon, 18 Dec 2023 09:41:10 -0800 (PST)
 From: Mikhail Rudenko <mike.rudenko@gmail.com>
 To: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -53,9 +53,9 @@ Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH v2 08/20] media: i2c: ov4689: Enable runtime PM before registering sub-device
-Date: Mon, 18 Dec 2023 20:40:29 +0300
-Message-ID: <20231218174042.794012-9-mike.rudenko@gmail.com>
+Subject: [PATCH v2 10/20] media: i2c: ov4689: Remove max_fps field from struct ov4689_mode
+Date: Mon, 18 Dec 2023 20:40:31 +0300
+Message-ID: <20231218174042.794012-11-mike.rudenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231218174042.794012-1-mike.rudenko@gmail.com>
 References: <20231218174042.794012-1-mike.rudenko@gmail.com>
@@ -67,46 +67,35 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As the sensor may be accessible right after its async sub-device is
-registered, enable runtime PM before doing so.
+max_fps field of struct ov4689_mode is unused in this driver, so
+remove it.
 
 Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ov4689.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/media/i2c/ov4689.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
-index 501901aad4ae..5300e621ff90 100644
+index 64cc6d9e48cc..cf1303744e7c 100644
 --- a/drivers/media/i2c/ov4689.c
 +++ b/drivers/media/i2c/ov4689.c
-@@ -876,19 +876,21 @@ static int ov4689_probe(struct i2c_client *client)
- 		goto err_clean_entity;
- 	}
- 
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+	pm_runtime_idle(dev);
-+
- 	ret = v4l2_async_register_subdev_sensor(sd);
- 	if (ret) {
- 		dev_err(dev, "v4l2 async register subdev failed\n");
--		goto err_clean_subdev;
-+		goto err_clean_subdev_pm;
- 	}
- 
--	pm_runtime_set_active(dev);
--	pm_runtime_enable(dev);
--	pm_runtime_idle(dev);
--
- 	return 0;
- 
--err_clean_subdev:
-+err_clean_subdev_pm:
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_suspended(dev);
- 	v4l2_subdev_cleanup(sd);
- err_clean_entity:
- 	media_entity_cleanup(&sd->entity);
+@@ -60,7 +60,6 @@ struct ov4689_mode {
+ 	enum ov4689_mode_id id;
+ 	u32 width;
+ 	u32 height;
+-	u32 max_fps;
+ 	u32 hts_def;
+ 	u32 vts_def;
+ 	u32 exp_def;
+@@ -237,7 +236,6 @@ static const struct ov4689_mode supported_modes[] = {
+ 		.sensor_height = 1536,
+ 		.crop_top = 8,
+ 		.crop_left = 16,
+-		.max_fps = 30,
+ 		.exp_def = 1536,
+ 		.hts_def = 4 * 2574,
+ 		.vts_def = 1554,
 -- 
 2.43.0
 
