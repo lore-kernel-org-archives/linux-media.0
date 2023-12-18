@@ -1,42 +1,42 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2E9374D7;
-	Mon, 18 Dec 2023 11:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE8839863;
+	Mon, 18 Dec 2023 11:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="N+0Eut/L"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="BwZrPQCo"
 Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BIArvvt003529;
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BIAto4o007911;
 	Mon, 18 Dec 2023 11:40:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references; s=
-	qcppdkim1; bh=vLyhCEyyM++iSdmMnhPhEeX/SePVJRxrjXz9jo/+Aj8=; b=N+
-	0Eut/LJZRxg02e4C1Pq0XZJWmA2o4pKqGbF+DGTm1hKe9dDm1I+C875LyLUgNZB4
-	i8u44/b2WaAbAmNEdlDHI7GbPhRL6YNcQq+tJ8TJmhTYG4FHg5jkFKuNdvpbEBAe
-	wElL0Yq6p3QhGVNRoE9liJ0OMbO9WzDOUGt8RcJ2cwQeAAZZSE02SRwvtrw8hGGt
-	zYEg+sCMeyTO+zlCCW1IwGXfjexNkArDAseOameOEc8qvVGpoNbLHyv2io+0kWFU
-	0ZXC572Z7yYF+I5vSMhjT/4rJGEo546GUg+ctAwD/1quxwM2T7pjPI4zLwUBI7gL
-	//9mXB1vkyhrXtG1+xXQ==
+	qcppdkim1; bh=DjeCHraDg5N5KWkgTBSLo6OX0aOTajhJqdyfe0iWaX8=; b=Bw
+	ZrPQCo3m2x7GTbnlBE5tsR4gOI7b2JwjOcFjV4XV/iWzQWLs2G5K6Jgw0Wwo4MVo
+	Ut/I85lEOtytVKtVOorkPTqlIDJ1lUX6xKpcs66SQAab4Tsafmz34Wqxc8HZHijC
+	F4jEntymbQ8xpq0iFXkYUJdy3uZGepHqmMGVP7/COmdm2a247xwj2ZuvdJSlvVb1
+	574hqMRLrZjB/mS5r5K68CxIrCn8TV7QyFrAGmPtb/B8jVreKG0MpLoJwvPow0jB
+	0YnyWDcAqBQXdgsL9YFVlh1YlSy0mJhHUx/13wqQxazBAtM+oAa3uNyM1vOvtZtO
+	gtz5VnTqCJCQaMxRbiBQ==
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v2mb9g4xw-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v2mb9g4xx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 18 Dec 2023 11:40:03 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX6PL029956;
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3BIBe0wv004854;
 	Mon, 18 Dec 2023 11:40:00 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3v14ym00ad-1;
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3v14ym00ag-1;
 	Mon, 18 Dec 2023 11:40:00 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX8rc030072;
-	Mon, 18 Dec 2023 11:36:09 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX8re030072;
+	Mon, 18 Dec 2023 11:36:10 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3BIBX853030069;
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3BIBX8rs030066;
 	Mon, 18 Dec 2023 11:36:09 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-	id 6C0E7238B; Mon, 18 Dec 2023 17:03:04 +0530 (+0530)
+	id 71B33238E; Mon, 18 Dec 2023 17:03:04 +0530 (+0530)
 From: Dikshita Agarwal <quic_dikshita@quicinc.com>
 To: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
@@ -44,9 +44,9 @@ To: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         mchehab@kernel.org, bryan.odonoghue@linaro.org
 Cc: linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
         Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 31/34] media: iris: add platform specific instance capabilities for encoder
-Date: Mon, 18 Dec 2023 17:02:26 +0530
-Message-Id: <1702899149-21321-32-git-send-email-quic_dikshita@quicinc.com>
+Subject: [PATCH v2 33/34] media: iris: add vb2 streaming and buffer ops for encoder
+Date: Mon, 18 Dec 2023 17:02:28 +0530
+Message-Id: <1702899149-21321-34-git-send-email-quic_dikshita@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
 References: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
@@ -54,8 +54,8 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jEWxbDd7IENax4tQu8kZHHd5C7UvPkHF
-X-Proofpoint-GUID: jEWxbDd7IENax4tQu8kZHHd5C7UvPkHF
+X-Proofpoint-ORIG-GUID: bnmkmXwdjsNr_IO3z2ssx7KfZtGHpn73
+X-Proofpoint-GUID: bnmkmXwdjsNr_IO3z2ssx7KfZtGHpn73
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
@@ -70,2555 +70,3217 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 
-Capabilities are set of video specifications and features supported
-by a specific platform(SOC). Each capability is defined with
-min, max, range, default value and corresponding HFI.
+During stream on, set some mandatory properties
+to firmware to start a session. Set all v4l2 properties set
+by client, to firmware prepared with the dependency graph.
+Also, configure the hardware internal buffers required
+for frame processing. Send HFI_CMD_START on capture and
+output planes to start the processing on respective planes.
+The instance state is changed accordingly.
 
-Also, platform data defines different resource details for
-a specific platform(SOC). This change defines resource tables
-for sm8550 platform data and use for initializing these resources.
+During stream off, send HFI_CMD_STOP to firmware which is
+a synchronous command. After the response is received from
+firmware, the session is closed on firmware and
+instance state is changed accordingly.
 
-Add Children, Set, Adjust functions for to each capability for
-Encoder.
+Buffers are submitted and received via HFI_CMD_BUFFER.
+
+Add Internal buffer size calculations for Encoder.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 ---
- .../media/platform/qcom/vcodec/iris/hfi_defines.h  | 128 ++-
- .../media/platform/qcom/vcodec/iris/iris_common.h  |   4 +
- .../media/platform/qcom/vcodec/iris/iris_ctrls.c   | 981 ++++++++++++++++++++-
- .../media/platform/qcom/vcodec/iris/iris_ctrls.h   |  35 +
- .../media/platform/qcom/vcodec/iris/iris_helpers.c |  16 +-
- drivers/media/platform/qcom/vcodec/iris/iris_hfi.c |  53 ++
- drivers/media/platform/qcom/vcodec/iris/iris_hfi.h |   7 +-
- .../platform/qcom/vcodec/iris/iris_hfi_packet.c    |  10 +-
- .../platform/qcom/vcodec/iris/iris_hfi_packet.h    |   5 +
- .../platform/qcom/vcodec/iris/iris_hfi_response.c  |   6 +
- .../platform/qcom/vcodec/iris/iris_instance.h      |   6 +
- .../platform/qcom/vcodec/iris/platform_common.h    |  74 +-
- .../platform/qcom/vcodec/iris/platform_sm8550.c    | 768 +++++++++++++++-
- .../platform/qcom/vcodec/iris/vpu_iris3_power.c    |   3 +
- 14 files changed, 2024 insertions(+), 72 deletions(-)
+ .../media/platform/qcom/vcodec/iris/hfi_defines.h  |  11 +
+ .../media/platform/qcom/vcodec/iris/iris_buffer.c  | 296 ++++++++--
+ .../media/platform/qcom/vcodec/iris/iris_ctrls.c   |  49 +-
+ .../media/platform/qcom/vcodec/iris/iris_ctrls.h   |   1 +
+ .../media/platform/qcom/vcodec/iris/iris_helpers.c | 169 +++++-
+ .../media/platform/qcom/vcodec/iris/iris_helpers.h |   6 +
+ drivers/media/platform/qcom/vcodec/iris/iris_hfi.c |  22 +-
+ .../platform/qcom/vcodec/iris/iris_hfi_packet.c    | 137 +++--
+ .../platform/qcom/vcodec/iris/iris_hfi_packet.h    |   9 +-
+ .../platform/qcom/vcodec/iris/iris_hfi_response.c  | 143 +++--
+ drivers/media/platform/qcom/vcodec/iris/iris_vb2.c |  62 +-
+ .../media/platform/qcom/vcodec/iris/iris_vdec.c    | 137 +----
+ .../media/platform/qcom/vcodec/iris/iris_venc.c    | 423 ++++++++++++++
+ .../media/platform/qcom/vcodec/iris/iris_venc.h    |   3 +
+ .../platform/qcom/vcodec/iris/platform_common.h    |   5 +
+ .../platform/qcom/vcodec/iris/platform_sm8550.c    |   2 +
+ .../platform/qcom/vcodec/iris/vpu_iris3_buffer.c   | 198 ++++++-
+ .../platform/qcom/vcodec/iris/vpu_iris3_buffer.h   | 624 +++++++++++++++++++++
+ .../platform/qcom/vcodec/iris/vpu_iris3_power.c    |   2 +-
+ 19 files changed, 1992 insertions(+), 307 deletions(-)
 
 diff --git a/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h b/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
-index 872674e..bc32c99 100644
+index bc32c99..59765de 100644
 --- a/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
 +++ b/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
-@@ -45,6 +45,8 @@ enum hfi_property_mode_type {
- #define HFI_BITMASK_BITSTREAM_WIDTH		0xffff0000
- #define HFI_BITMASK_BITSTREAM_HEIGHT		0x0000ffff
+@@ -284,6 +284,10 @@ enum hfi_picture_type {
  
-+#define HFI_LEVEL_NONE				0xFFFFFFFF
-+
- #define HFI_BITMASK_FRAME_MBS_ONLY_FLAG		0x00000001
+ #define HFI_PROP_NO_OUTPUT			0x0300016a
  
- #define HFI_TRUE				0x00000001
-@@ -68,14 +70,14 @@ enum hfi_codec_type {
- #define HFI_PROP_CODEC				0x03000100
- 
- enum hfi_color_format {
--	HFI_COLOR_FMT_OPAQUE        = 0,
--	HFI_COLOR_FMT_NV12          = 1,
--	HFI_COLOR_FMT_NV12_UBWC     = 2,
--	HFI_COLOR_FMT_P010          = 3,
--	HFI_COLOR_FMT_TP10_UBWC     = 4,
--	HFI_COLOR_FMT_RGBA8888      = 5,
--	HFI_COLOR_FMT_RGBA8888_UBWC = 6,
--	HFI_COLOR_FMT_NV21          = 7,
-+	HFI_COLOR_FMT_OPAQUE		= 0,
-+	HFI_COLOR_FMT_NV12		= 1,
-+	HFI_COLOR_FMT_NV12_UBWC		= 2,
-+	HFI_COLOR_FMT_P010		= 3,
-+	HFI_COLOR_FMT_TP10_UBWC		= 4,
-+	HFI_COLOR_FMT_RGBA8888		= 5,
-+	HFI_COLOR_FMT_RGBA8888_UBWC	= 6,
-+	HFI_COLOR_FMT_NV21		= 7,
- };
- 
- #define HFI_PROP_COLOR_FORMAT			0x03000101
-@@ -104,14 +106,108 @@ enum hfi_color_format {
- 
- #define HFI_PROP_CABAC_SESSION			0x03000121
- 
-+#define HFI_PROP_8X8_TRANSFORM                  0x03000122
++#define HFI_PROP_BUFFER_MARK			0x0300016c
 +
- #define HFI_PROP_BUFFER_HOST_MAX_COUNT		0x03000123
- 
- #define HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT	0x03000124
- 
- #define HFI_PROP_PIC_ORDER_CNT_TYPE		0x03000128
- 
-+enum hfi_syncframe_request_mode {
-+	HFI_SYNC_FRAME_REQUEST_WITHOUT_SEQ_HDR		= 0x00000001,
-+	HFI_SYNC_FRAME_REQUEST_WITH_PREFIX_SEQ_HDR	= 0x00000002,
-+};
++#define HFI_PROP_RAW_RESOLUTION			0x03000178
 +
-+enum hfi_rate_control {
-+	HFI_RC_VBR_CFR		= 0x00000000,
-+	HFI_RC_CBR_CFR		= 0x00000001,
-+	HFI_RC_CQ		= 0x00000002,
-+	HFI_RC_OFF		= 0x00000003,
-+	HFI_RC_CBR_VFR		= 0x00000004,
-+	HFI_RC_LOSSLESS		= 0x00000005,
-+};
-+
-+#define HFI_PROP_RATE_CONTROL			0x0300012a
-+
-+#define HFI_PROP_QP_PACKED			0x0300012e
-+
-+#define HFI_PROP_MIN_QP_PACKED			0x0300012f
-+
-+#define HFI_PROP_MAX_QP_PACKED			0x03000130
-+
-+enum hfi_layer_enc_type {
-+	HFI_HIER_P_SLIDING_WINDOW	= 0x1,
-+	HFI_HIER_P_HYBRID_LTR		= 0x2,
-+	HFI_HIER_B			= 0x3,
-+};
-+
-+#define HFI_PROP_IR_RANDOM_PERIOD		0x03000131
-+
-+#define HFI_PROP_MULTI_SLICE_MB_COUNT		0x03000132
-+
-+#define HFI_PROP_MULTI_SLICE_BYTES_COUNT	0x03000133
-+
-+#define HFI_PROP_LTR_COUNT			0x03000134
-+
-+#define HFI_PROP_LTR_MARK			0x03000135
-+
-+#define HFI_PROP_LTR_USE			0x03000136
-+
-+#define HFI_PROP_LAYER_ENCODING_TYPE		0x03000138
-+
-+#define HFI_PROP_LAYER_COUNT			0x03000139
-+
-+#define HFI_PROP_TOTAL_BITRATE			0x0300013b
-+
-+#define HFI_PROP_BITRATE_LAYER1			0x0300013c
-+
-+#define HFI_PROP_BITRATE_LAYER2			0x0300013d
-+
-+#define HFI_PROP_BITRATE_LAYER3			0x0300013e
-+
-+#define HFI_PROP_BITRATE_LAYER4			0x0300013f
-+
-+#define HFI_PROP_BITRATE_LAYER5			0x03000140
-+
-+#define HFI_PROP_BITRATE_LAYER6			0x03000141
-+
-+#define HFI_PROP_BASELAYER_PRIORITYID		0x03000142
-+
-+#define HFI_PROP_REQUEST_SYNC_FRAME		0x03000145
-+
-+#define HFI_PROP_MAX_GOP_FRAMES			0x03000146
-+
-+#define HFI_PROP_MAX_B_FRAMES			0x03000147
-+
- #define HFI_PROP_QUALITY_MODE			0x03000148
- 
-+enum hfi_seq_header_mode {
-+	HFI_SEQ_HEADER_SEPERATE_FRAME		= 0x00000001,
-+	HFI_SEQ_HEADER_JOINED_WITH_1ST_FRAME	= 0x00000002,
-+	HFI_SEQ_HEADER_PREFIX_WITH_SYNC_FRAME	= 0x00000004,
-+	HFI_SEQ_HEADER_METADATA			= 0x00000008,
-+};
-+
-+#define HFI_PROP_SEQ_HEADER_MODE		0x03000149
-+
-+enum hfi_rotation {
-+	HFI_ROTATION_NONE	= 0x00000000,
-+	HFI_ROTATION_90		= 0x00000001,
-+	HFI_ROTATION_180	= 0x00000002,
-+	HFI_ROTATION_270	= 0x00000003,
-+};
-+
-+#define HFI_PROP_ROTATION			0x0300014b
-+
-+enum hfi_flip {
-+	HFI_DISABLE_FLIP	= 0x00000000,
-+	HFI_HORIZONTAL_FLIP	= 0x00000001,
-+	HFI_VERTICAL_FLIP	= 0x00000002,
-+};
-+
-+#define HFI_PROP_FLIP				0x0300014c
-+
- enum hfi_color_primaries {
- 	HFI_PRIMARIES_RESERVED		= 0,
- 	HFI_PRIMARIES_BT709		= 1,
-@@ -182,7 +278,7 @@ enum hfi_picture_type {
- 
- #define HFI_PROP_PICTURE_TYPE			0x03000162
- 
--#define HFI_PROP_DEC_DEFAULT_HEADER             0x03000168
-+#define HFI_PROP_DEC_DEFAULT_HEADER		0x03000168
- 
- #define HFI_PROP_DEC_START_FROM_RAP_FRAME	0x03000169
- 
-@@ -190,6 +286,12 @@ enum hfi_picture_type {
- 
  #define HFI_PROP_DPB_LIST			0x0300017A
  
-+#define HFI_PROP_TOTAL_PEAK_BITRATE		0x0300017C
-+
-+#define HFI_PROP_MAINTAIN_MIN_QUALITY		0x0300017D
-+
-+#define HFI_PROP_IR_CYCLIC_PERIOD		0x0300017E
-+
- #define HFI_PROP_UBWC_STRIDE_SCANLINE		0x03000190
- 
- #define HFI_PROP_COMV_BUFFER_COUNT		0x03000193
-@@ -214,7 +316,7 @@ enum hfi_picture_type {
- 
- #define HFI_SYSTEM_ERROR_BEGIN			0x05000000
- 
--#define HFI_SYS_ERROR_WD_TIMEOUT                0x05000001
-+#define HFI_SYS_ERROR_WD_TIMEOUT		0x05000001
- 
- #define HFI_SYSTEM_ERROR_END			0x05FFFFFF
- 
-@@ -233,9 +335,9 @@ enum hfi_picture_type {
- #define HFI_INFORMATION_END			0x06FFFFFF
- 
- struct hfi_debug_header {
--	u32   size;
--	u32   debug_level;
--	u32   reserved[2];
-+	u32 size;
-+	u32 debug_level;
-+	u32 reserved[2];
+ #define HFI_PROP_TOTAL_PEAK_BITRATE		0x0300017C
+@@ -372,4 +376,11 @@ enum hfi_buffer_firmware_flags {
+ 	HFI_BUF_FW_FLAG_PSC_LAST	= 0x20000000,
  };
  
- enum hfi_buffer_type {
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_common.h b/drivers/media/platform/qcom/vcodec/iris/iris_common.h
-index b1273d0..ca5406a 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_common.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_common.h
-@@ -30,6 +30,10 @@
- 
- #define INPUT_TIMER_LIST_SIZE 30
- 
-+#define CABAC_MAX_BITRATE 160000000
++enum hfi_hevc_profile_type {
++	HFI_H265_PROFILE_MAIN			= 0,
++	HFI_H265_PROFILE_MAIN_STILL_PICTURE	= 1,
++	HFI_H265_PROFILE_MAIN_10		= 2,
++	HFI_H265_PROFILE_MAIN_10_STILL_PICTURE	= 3,
++};
 +
-+#define CAVLC_MAX_BITRATE 220000000
+ #endif
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_buffer.c b/drivers/media/platform/qcom/vcodec/iris/iris_buffer.c
+index f85b52c..18418e4e 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_buffer.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_buffer.c
+@@ -10,6 +10,7 @@
+ #include "hfi_defines.h"
+ #include "iris_hfi_packet.h"
+ #include "iris_instance.h"
++#include "vpu_iris3_buffer.h"
+ 
+ static const u32 dec_ip_int_buf_type[] = {
+ 	BUF_BIN,
+@@ -22,15 +23,51 @@ static const u32 dec_op_int_buf_type[] = {
+ 	BUF_DPB,
+ };
+ 
++static const u32 enc_ip_int_buf_type[] = {
++	BUF_VPSS,
++};
 +
- enum domain_type {
- 	ENCODER	= BIT(0),
- 	DECODER	= BIT(1),
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
-index 94fff74..a648cc1 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
-@@ -611,6 +611,45 @@ int prepare_dependency_list(struct iris_inst *inst)
++static const u32 enc_op_int_buf_type[] = {
++	BUF_BIN,
++	BUF_COMV,
++	BUF_NON_COMV,
++	BUF_LINE,
++	BUF_DPB,
++};
++
+ static int input_min_count(struct iris_inst *inst)
+ {
+-	return MIN_BUFFERS;
++	u32 input_min_count = 0;
++	u32 total_hb_layer = 0;
++
++	if (inst->domain == DECODER) {
++		input_min_count = MIN_BUFFERS;
++	} else if (inst->domain == ENCODER) {
++		total_hb_layer = is_hierb_type_requested(inst) ?
++			inst->cap[ENH_LAYER_COUNT].value + 1 : 0;
++		if (inst->codec == H264 &&
++		    !inst->cap[LAYER_ENABLE].value) {
++			total_hb_layer = 0;
++		}
++		input_min_count =
++			hfi_iris3_enc_min_input_buf_count(total_hb_layer);
++	} else {
++		return 0;
++	}
++
++	return input_min_count;
+ }
+ 
+ static int output_min_count(struct iris_inst *inst)
+ {
+ 	int output_min_count;
+ 
++	if (inst->domain != DECODER && inst->domain != ENCODER)
++		return 0;
++
++	if (inst->domain == ENCODER)
++		return MIN_BUFFERS;
++
+ 	/* fw_min_count > 0 indicates reconfig event has already arrived */
+ 	if (inst->fw_min_count) {
+ 		if (is_split_mode_enabled(inst) && inst->codec == VP9)
+@@ -83,16 +120,21 @@ static u32 internal_buffer_count(struct iris_inst *inst,
+ {
+ 	u32 count = 0;
+ 
+-	if (buffer_type == BUF_BIN || buffer_type == BUF_LINE ||
+-	    buffer_type == BUF_PERSIST) {
+-		count = 1;
+-	} else if (buffer_type == BUF_COMV || buffer_type == BUF_NON_COMV) {
+-		if (inst->codec == H264 || inst->codec == HEVC)
++	if (inst->domain == ENCODER)
++		return 1;
++
++	if (inst->domain == DECODER) {
++		if (buffer_type == BUF_BIN || buffer_type == BUF_LINE ||
++		    buffer_type == BUF_PERSIST) {
+ 			count = 1;
+-		else
++		} else if (buffer_type == BUF_COMV || buffer_type == BUF_NON_COMV) {
++			if (inst->codec == H264 || inst->codec == HEVC)
++				count = 1;
++			else
++				count = 0;
++		} else {
+ 			count = 0;
+-	} else {
+-		count = 0;
++		}
+ 	}
+ 
+ 	return count;
+@@ -102,6 +144,9 @@ static int dpb_count(struct iris_inst *inst)
+ {
+ 	int count = 0;
+ 
++	if (inst->domain == ENCODER)
++		return get_recon_buf_count(inst);
++
+ 	if (is_split_mode_enabled(inst)) {
+ 		count = inst->fw_min_count ?
+ 			inst->fw_min_count : inst->buffers.output.min_count;
+@@ -123,6 +168,7 @@ int iris_get_buf_min_count(struct iris_inst *inst,
+ 	case BUF_NON_COMV:
+ 	case BUF_LINE:
+ 	case BUF_PERSIST:
++	case BUF_ARP:
+ 		return internal_buffer_count(inst, buffer_type);
+ 	case BUF_DPB:
+ 		return dpb_count(inst);
+@@ -131,7 +177,7 @@ int iris_get_buf_min_count(struct iris_inst *inst,
+ 	}
+ }
+ 
+-static u32 input_buffer_size(struct iris_inst *inst)
++static u32 dec_input_buffer_size(struct iris_inst *inst)
+ {
+ 	u32 base_res_mbs = NUM_MBS_4k;
+ 	u32 frame_size, num_mbs;
+@@ -163,7 +209,7 @@ static u32 input_buffer_size(struct iris_inst *inst)
+ 	return ALIGN(frame_size, SZ_4K);
+ }
+ 
+-static u32 output_buffer_size(struct iris_inst *inst)
++static u32 dec_output_buffer_size(struct iris_inst *inst)
+ {
+ 	struct v4l2_format *f;
+ 	u32 size;
+@@ -175,17 +221,97 @@ static u32 output_buffer_size(struct iris_inst *inst)
+ 	return size;
+ }
+ 
++static u32 enc_input_buffer_size(struct iris_inst *inst)
++{
++	struct v4l2_format *f;
++	u32 size;
++
++	f = inst->fmt_src;
++
++	size = video_raw_buffer_size(f->fmt.pix_mp.pixelformat, f->fmt.pix_mp.width,
++				     f->fmt.pix_mp.height);
++	return size;
++}
++
++static inline
++u32 hfi_buffer_bitstream_enc(u32 frame_width, u32 frame_height,
++			     u32 rc_type, bool is_ten_bit)
++{
++	u32 aligned_width, aligned_height, bitstream_size, yuv_size;
++
++	aligned_width = ALIGN(frame_width, 32);
++	aligned_height = ALIGN(frame_height, 32);
++	bitstream_size = aligned_width * aligned_height * 3;
++	yuv_size = (aligned_width * aligned_height * 3) >> 1;
++	if (aligned_width * aligned_height > (4096 * 2176))
++		/* bitstream_size = 0.25 * yuv_size; */
++		bitstream_size = (bitstream_size >> 3);
++	else if (aligned_width * aligned_height > (1280 * 720))
++		/* bitstream_size = 0.5 * yuv_size; */
++		bitstream_size = (bitstream_size >> 2);
++
++	if ((rc_type == HFI_RC_CQ || rc_type == HFI_RC_OFF) &&
++	    bitstream_size < yuv_size)
++		bitstream_size = (bitstream_size << 1);
++
++	if (is_ten_bit)
++		bitstream_size = (bitstream_size) + (bitstream_size >> 2);
++
++	return ALIGN(bitstream_size, HFI_ALIGNMENT_4096);
++}
++
++static u32 enc_output_buffer_size(struct iris_inst *inst)
++{
++	u32 hfi_rc_type = HFI_RC_VBR_CFR;
++	enum codec_type codec;
++	int bitrate_mode, frame_rc;
++	bool is_ten_bit = false;
++	struct v4l2_format *f;
++	u32 frame_size;
++
++	f = inst->fmt_dst;
++	codec = v4l2_codec_to_driver(inst, f->fmt.pix_mp.pixelformat);
++	if (codec == HEVC)
++		is_ten_bit = true;
++
++	bitrate_mode = inst->cap[BITRATE_MODE].value;
++	frame_rc = inst->cap[FRAME_RC_ENABLE].value;
++	if (!frame_rc)
++		hfi_rc_type = HFI_RC_OFF;
++	else if (bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CQ)
++		hfi_rc_type = HFI_RC_CQ;
++
++	frame_size = hfi_buffer_bitstream_enc(f->fmt.pix_mp.width,
++					      f->fmt.pix_mp.height,
++					      hfi_rc_type, is_ten_bit);
++
++	return frame_size;
++}
++
+ int iris_get_buffer_size(struct iris_inst *inst,
+ 			 enum iris_buffer_type buffer_type)
+ {
+-	switch (buffer_type) {
+-	case BUF_INPUT:
+-		return input_buffer_size(inst);
+-	case BUF_OUTPUT:
+-		return output_buffer_size(inst);
+-	default:
+-		return 0;
++	if (inst->domain == DECODER) {
++		switch (buffer_type) {
++		case BUF_INPUT:
++			return dec_input_buffer_size(inst);
++		case BUF_OUTPUT:
++			return dec_output_buffer_size(inst);
++		default:
++			break;
++		}
++	} else if (inst->domain == ENCODER) {
++		switch (buffer_type) {
++		case BUF_INPUT:
++			return enc_input_buffer_size(inst);
++		case BUF_OUTPUT:
++			return enc_output_buffer_size(inst);
++		default:
++			break;
++		}
+ 	}
++
++	return 0;
+ }
+ 
+ struct iris_buffers *iris_get_buffer_list(struct iris_inst *inst,
+@@ -300,14 +426,30 @@ int iris_get_internal_buffers(struct iris_inst *inst,
+ 	int ret = 0;
+ 	u32 i = 0;
+ 
+-	if (plane == INPUT_MPLANE) {
+-		for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
+-			ret = iris_get_internal_buf_info(inst, dec_ip_int_buf_type[i]);
+-			if (ret)
+-				return ret;
++	if (inst->domain == DECODER) {
++		if (plane == INPUT_MPLANE) {
++			for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
++				ret = iris_get_internal_buf_info(inst, dec_ip_int_buf_type[i]);
++				if (ret)
++					return ret;
++			}
++		} else {
++			return iris_get_internal_buf_info(inst, BUF_DPB);
++		}
++	} else if (inst->domain == ENCODER) {
++		if (plane == INPUT_MPLANE) {
++			for (i = 0; i < ARRAY_SIZE(enc_ip_int_buf_type); i++) {
++				ret = iris_get_internal_buf_info(inst, enc_ip_int_buf_type[i]);
++				if (ret)
++					return ret;
++			}
++		} else {
++			for (i = 0; i < ARRAY_SIZE(enc_op_int_buf_type); i++) {
++				ret = iris_get_internal_buf_info(inst, enc_op_int_buf_type[i]);
++				if (ret)
++					return ret;
++			}
+ 		}
+-	} else {
+-		return iris_get_internal_buf_info(inst, BUF_DPB);
+ 	}
+ 
  	return ret;
- }
+@@ -377,10 +519,18 @@ int iris_create_input_internal_buffers(struct iris_inst *inst)
+ 	int ret = 0;
+ 	u32 i = 0;
  
-+static inline bool is_layer_bitrate_set(struct iris_inst *inst)
-+{
-+	u32 layer_br_caps[6] = {L0_BR, L1_BR, L2_BR, L3_BR, L4_BR, L5_BR};
-+	u32 cap_id = 0, i, enh_layer_count;
-+
-+	enh_layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+
-+	for (i = 0; i <= enh_layer_count; i++) {
-+		if (i >= ARRAY_SIZE(layer_br_caps))
-+			break;
-+
-+		cap_id = layer_br_caps[i];
-+		if (!(inst->cap[cap_id].flags & CAP_FLAG_CLIENT_SET))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+static inline u32 get_cumulative_bitrate(struct iris_inst *inst)
-+{
-+	u32 layer_br_caps[6] = {L0_BR, L1_BR, L2_BR, L3_BR, L4_BR, L5_BR};
-+	u32 cumulative_br = 0;
-+	s32 enh_layer_count;
-+	u32 cap_id = 0;
-+	int i;
-+
-+	enh_layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+
-+	for (i = 0; i <= enh_layer_count; i++) {
-+		if (i >= ARRAY_SIZE(layer_br_caps))
-+			break;
-+		cap_id = layer_br_caps[i];
-+		cumulative_br += inst->cap[cap_id].value;
-+	}
-+
-+	return cumulative_br;
-+}
-+
- int set_u32_enum(struct iris_inst *inst,
- 		 enum plat_inst_cap_type cap_id)
+-	for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
+-		ret = iris_create_internal_buffers(inst, dec_ip_int_buf_type[i]);
+-		if (ret)
+-			return ret;
++	if (inst->domain == DECODER) {
++		for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
++			ret = iris_create_internal_buffers(inst, dec_ip_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
++	} else if (inst->domain == ENCODER) {
++		for (i = 0; i < ARRAY_SIZE(enc_ip_int_buf_type); i++) {
++			ret = iris_create_internal_buffers(inst, enc_ip_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
+ 	}
+ 
+ 	return ret;
+@@ -388,7 +538,20 @@ int iris_create_input_internal_buffers(struct iris_inst *inst)
+ 
+ int iris_create_output_internal_buffers(struct iris_inst *inst)
  {
-@@ -635,6 +674,18 @@ int set_u32(struct iris_inst *inst,
- 				     &hfi_value, sizeof(u32));
- }
- 
-+int set_q16(struct iris_inst *inst,
-+	    enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_value = inst->cap[cap_id].value;
-+	u32 hfi_id = inst->cap[cap_id].hfi_id;
+-	return iris_create_internal_buffers(inst, BUF_DPB);
++	int ret = 0;
++	u32 i = 0;
 +
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_Q16,
-+				     &hfi_value, sizeof(u32));
-+}
-+
- int set_stage(struct iris_inst *inst,
- 	      enum plat_inst_cap_type cap_id)
- {
-@@ -662,7 +713,7 @@ int set_pipe(struct iris_inst *inst,
- {
- 	u32 work_route, hfi_id;
- 
--	work_route = inst->cap[PIPE].value;
-+	work_route = inst->cap[cap_id].value;
- 	hfi_id = inst->cap[cap_id].hfi_id;
- 
- 	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-@@ -671,6 +722,419 @@ int set_pipe(struct iris_inst *inst,
- 				     &work_route, sizeof(u32));
- }
- 
-+int set_level(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_value = inst->cap[cap_id].value;
-+	u32 hfi_id = inst->cap[cap_id].hfi_id;
-+
-+	if (!(inst->cap[cap_id].flags & CAP_FLAG_CLIENT_SET))
-+		hfi_value = HFI_LEVEL_NONE;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+					 get_port_info(inst, cap_id),
-+					 HFI_PAYLOAD_U32_ENUM,
-+					 &hfi_value, sizeof(u32));
-+}
-+
-+int set_req_sync_frame(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id, hfi_val;
-+	s32 prepend_sps_pps;
-+
-+	prepend_sps_pps = inst->cap[PREPEND_SPSPPS_TO_IDR].value;
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+
-+	if (prepend_sps_pps)
-+		hfi_val = HFI_SYNC_FRAME_REQUEST_WITH_PREFIX_SEQ_HDR;
-+	else
-+		hfi_val = HFI_SYNC_FRAME_REQUEST_WITHOUT_SEQ_HDR;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32_ENUM,
-+				     &hfi_val, sizeof(u32));
-+}
-+
-+int set_flip(struct iris_inst *inst,
-+	     enum plat_inst_cap_type cap_id)
-+{
-+	u32 hflip, vflip, ret = 0;
-+
-+	u32 hfi_value = HFI_DISABLE_FLIP;
-+	u32 hfi_id = inst->cap[cap_id].hfi_id;
-+
-+	hflip = inst->cap[HFLIP].value;
-+	vflip = inst->cap[VFLIP].value;
-+
-+	if (hflip)
-+		hfi_value |= HFI_HORIZONTAL_FLIP;
-+
-+	if (vflip)
-+		hfi_value |= HFI_VERTICAL_FLIP;
-+
-+	if (inst->vb2q_dst->streaming) {
-+		if (hfi_value != HFI_DISABLE_FLIP) {
-+			ret = set_req_sync_frame(inst, REQUEST_I_FRAME);
++	if (inst->domain == DECODER) {
++		return iris_create_internal_buffers(inst, BUF_DPB);
++	} else if (inst->domain == ENCODER) {
++		for (i = 0; i < ARRAY_SIZE(enc_op_int_buf_type); i++) {
++			ret = iris_create_internal_buffers(inst, enc_op_int_buf_type[i]);
 +			if (ret)
 +				return ret;
 +		}
 +	}
 +
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32_ENUM,
-+				     &hfi_value, sizeof(u32));
-+}
++	return ret;
+ }
+ 
+ static int set_num_comv(struct iris_inst *inst)
+@@ -413,7 +576,7 @@ static int iris_queue_internal_buffers(struct iris_inst *inst,
+ 	struct iris_buffers *buffers;
+ 	int ret = 0;
+ 
+-	if (buffer_type == BUF_COMV) {
++	if (inst->domain == DECODER && buffer_type == BUF_COMV) {
+ 		ret = set_num_comv(inst);
+ 		if (ret)
+ 			return ret;
+@@ -442,10 +605,18 @@ int iris_queue_input_internal_buffers(struct iris_inst *inst)
+ 	int ret = 0;
+ 	u32 i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
+-		ret = iris_queue_internal_buffers(inst, dec_ip_int_buf_type[i]);
+-		if (ret)
+-			return ret;
++	if (inst->domain == DECODER) {
++		for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
++			ret = iris_queue_internal_buffers(inst, dec_ip_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
++	} else if (inst->domain == ENCODER) {
++		for (i = 0; i < ARRAY_SIZE(enc_ip_int_buf_type); i++) {
++			ret = iris_queue_internal_buffers(inst, enc_ip_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
+ 	}
+ 
+ 	return ret;
+@@ -453,7 +624,20 @@ int iris_queue_input_internal_buffers(struct iris_inst *inst)
+ 
+ int iris_queue_output_internal_buffers(struct iris_inst *inst)
+ {
+-	return iris_queue_internal_buffers(inst, BUF_DPB);
++	int ret = 0;
++	u32 i = 0;
 +
-+int set_rotation(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id, hfi_val;
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+
-+	switch (inst->cap[cap_id].value) {
-+	case 0:
-+		hfi_val = HFI_ROTATION_NONE;
-+		break;
-+	case 90:
-+		hfi_val = HFI_ROTATION_90;
-+		break;
-+	case 180:
-+		hfi_val = HFI_ROTATION_180;
-+		break;
-+	case 270:
-+		hfi_val = HFI_ROTATION_270;
-+		break;
-+	default:
-+		hfi_val = HFI_ROTATION_NONE;
-+		break;
++	if (inst->domain == DECODER) {
++		return iris_queue_internal_buffers(inst, BUF_DPB);
++	} else if (inst->domain == ENCODER) {
++		for (i = 0; i < ARRAY_SIZE(enc_op_int_buf_type); i++) {
++			ret = iris_queue_internal_buffers(inst, enc_op_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
 +	}
 +
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_val, sizeof(u32));
-+}
++	return ret;
+ }
+ 
+ int iris_destroy_internal_buffer(struct iris_inst *inst,
+@@ -489,16 +673,26 @@ int iris_destroy_internal_buffers(struct iris_inst *inst,
+ {
+ 	struct iris_buffer *buf, *dummy;
+ 	struct iris_buffers *buffers;
+-	const u32 *internal_buf_type;
++	const u32 *internal_buf_type = NULL;
+ 	int ret = 0;
+-	u32 i, len;
+-
+-	if (plane == INPUT_MPLANE) {
+-		internal_buf_type = dec_ip_int_buf_type;
+-		len = ARRAY_SIZE(dec_ip_int_buf_type);
+-	} else {
+-		internal_buf_type = dec_op_int_buf_type;
+-		len = ARRAY_SIZE(dec_op_int_buf_type);
++	u32 i, len = 0;
 +
-+int set_header_mode(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 header_mode, hfi_id, hfi_val;
-+	s32 prepend_sps_pps;
++	if (inst->domain == DECODER) {
++		if (plane == INPUT_MPLANE) {
++			internal_buf_type = dec_ip_int_buf_type;
++			len = ARRAY_SIZE(dec_ip_int_buf_type);
++		} else {
++			internal_buf_type = dec_op_int_buf_type;
++			len = ARRAY_SIZE(dec_op_int_buf_type);
++		}
++	} else if (inst->domain == ENCODER) {
++		if (plane == INPUT_MPLANE) {
++			internal_buf_type = enc_ip_int_buf_type;
++			len = ARRAY_SIZE(enc_ip_int_buf_type);
++		} else {
++			internal_buf_type = enc_op_int_buf_type;
++			len = ARRAY_SIZE(enc_op_int_buf_type);
++		}
+ 	}
+ 
+ 	for (i = 0; i < len; i++) {
+@@ -552,10 +746,12 @@ static int iris_release_input_internal_buffers(struct iris_inst *inst)
+ 	int ret = 0;
+ 	u32 i = 0;
+ 
+-	for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
+-		ret = iris_release_internal_buffers(inst, dec_ip_int_buf_type[i]);
+-		if (ret)
+-			return ret;
++	if (inst->domain == DECODER) {
++		for (i = 0; i < ARRAY_SIZE(dec_ip_int_buf_type); i++) {
++			ret = iris_release_internal_buffers(inst, dec_ip_int_buf_type[i]);
++			if (ret)
++				return ret;
++		}
+ 	}
+ 
+ 	return ret;
+@@ -566,7 +762,7 @@ int iris_alloc_and_queue_session_int_bufs(struct iris_inst *inst,
+ {
+ 	int ret;
+ 
+-	if (buffer_type != BUF_PERSIST)
++	if (buffer_type != BUF_ARP && buffer_type != BUF_PERSIST)
+ 		return -EINVAL;
+ 
+ 	ret = iris_get_internal_buf_info(inst, buffer_type);
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
+index af99ac73..559b0dd 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.c
+@@ -723,11 +723,20 @@ int set_stage(struct iris_inst *inst,
+ 
+ 	hfi_id = inst->cap[cap_id].hfi_id;
+ 
+-	inp_f = inst->fmt_src;
+-	height = inp_f->fmt.pix_mp.height;
+-	width = inp_f->fmt.pix_mp.width;
+-	if (res_is_less_than(width, height, 1280, 720))
+-		work_mode = STAGE_1;
++	if (inst->domain == DECODER) {
++		inp_f = inst->fmt_src;
++		height = inp_f->fmt.pix_mp.height;
++		width = inp_f->fmt.pix_mp.width;
++		if (res_is_less_than(width, height, 1280, 720))
++			work_mode = STAGE_1;
++	} else if (inst->domain == ENCODER) {
++		if (inst->cap[SLICE_MODE].value ==
++		    V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES)
++			work_mode = STAGE_1;
 +
-+	prepend_sps_pps = inst->cap[PREPEND_SPSPPS_TO_IDR].value;
-+	header_mode = inst->cap[cap_id].value;
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+
-+	if (prepend_sps_pps)
-+		hfi_val = HFI_SEQ_HEADER_PREFIX_WITH_SYNC_FRAME;
-+	else if (header_mode == V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME)
-+		hfi_val = HFI_SEQ_HEADER_JOINED_WITH_1ST_FRAME;
-+	else
-+		hfi_val = HFI_SEQ_HEADER_SEPERATE_FRAME;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32_ENUM,
-+				     &hfi_val, sizeof(u32));
-+}
-+
-+int set_gop_size(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_value, hfi_id;
-+
-+	if (inst->vb2q_dst->streaming) {
-+		if (inst->hfi_layer_type == HFI_HIER_B)
-+			return 0;
++		if (!inst->cap[GOP_SIZE].value)
++			work_mode = STAGE_2;
++	}
+ 
+ 	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
+ 				     get_port_info(inst, cap_id),
+@@ -743,6 +752,12 @@ int set_pipe(struct iris_inst *inst,
+ 	work_route = inst->cap[cap_id].value;
+ 	hfi_id = inst->cap[cap_id].hfi_id;
+ 
++	if (inst->domain == ENCODER) {
++		if (inst->cap[SLICE_MODE].value ==
++		    V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES)
++			work_route = PIPE_1;
 +	}
 +
-+	hfi_value = inst->cap[GOP_SIZE].value;
-+	hfi_id = inst->cap[cap_id].hfi_id;
+ 	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
+ 				     get_port_info(inst, cap_id),
+ 				     HFI_PAYLOAD_U32,
+@@ -763,6 +778,30 @@ int set_level(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
+ 					 &hfi_value, sizeof(u32));
+ }
+ 
++int decide_quality_mode(struct iris_inst *inst)
++{
++	u32 fps, mbpf, mbps, max_hq_mbpf, max_hq_mbps;
++	u32 mode = POWER_SAVE_MODE;
++	struct iris_core *core;
 +
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_value, sizeof(u32));
++	if (inst->domain != ENCODER)
++		return 0;
++
++	mbpf = NUM_MBS_PER_FRAME(inst->crop.height, inst->crop.width);
++	fps = max3(inst->cap[QUEUED_RATE].value >> 16,
++		   inst->cap[FRAME_RATE].value >> 16,
++		   inst->cap[OPERATING_RATE].value >> 16);
++	mbps = mbpf * fps;
++	core = inst->core;
++	max_hq_mbpf = core->cap[MAX_MBPF_HQ].value;
++	max_hq_mbps = core->cap[MAX_MBPS_HQ].value;
++
++	if (mbpf <= max_hq_mbpf && mbps <= max_hq_mbps)
++		mode = MAX_QUALITY_MODE;
++
++	return mode;
 +}
 +
-+int set_bitrate(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id, hfi_val;
-+
-+	if (inst->cap[BIT_RATE].flags & CAP_FLAG_CLIENT_SET)
-+		goto set_total_bitrate;
-+
-+	if (inst->vb2q_dst->streaming)
-+		return 0;
-+
-+set_total_bitrate:
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_val = inst->cap[cap_id].value;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_val, sizeof(u32));
-+}
-+
-+int set_layer_bitrate(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_value = 0;
-+	u32 hfi_id;
-+
-+	if (!inst->vb2q_dst->streaming)
-+		return 0;
-+
-+	if (inst->cap[BIT_RATE].flags & CAP_FLAG_CLIENT_SET)
-+		return 0;
-+
-+	if (!inst->cap[ENH_LAYER_COUNT].max ||
-+	    !is_layer_bitrate_set(inst))
-+		return 0;
-+
-+	hfi_value = inst->cap[BIT_RATE].value;
-+	hfi_id = inst->cap[BIT_RATE].hfi_id;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_value, sizeof(u32));
-+}
-+
-+int set_peak_bitrate(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id, hfi_val;
-+	s32 rc_mode;
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_val = inst->cap[cap_id].value;
-+
-+	rc_mode = inst->cap[BITRATE_MODE].value;
-+	if (rc_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR)
-+		return 0;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_val, sizeof(u32));
-+}
-+
-+int set_use_and_mark_ltr(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id, hfi_val;
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_val = inst->cap[cap_id].value;
-+
-+	if (!inst->cap[LTR_COUNT].value ||
-+	    inst->cap[cap_id].value == INVALID_DEFAULT_MARK_OR_USE_LTR)
-+		return 0;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_val, sizeof(u32));
-+}
-+
-+int set_ir_period(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 hfi_id = 0, hfi_val;
-+
-+	hfi_val = inst->cap[cap_id].value;
-+
-+	if (inst->cap[IR_TYPE].value ==
-+	    V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) {
-+		hfi_id = HFI_PROP_IR_RANDOM_PERIOD;
-+	} else if (inst->cap[IR_TYPE].value ==
-+		   V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC) {
-+		hfi_id = HFI_PROP_IR_CYCLIC_PERIOD;
+ int set_req_sync_frame(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
+ {
+ 	u32 hfi_id, hfi_val;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
+index 5421d9f..404d98c 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
+@@ -33,6 +33,7 @@ int adjust_v4l2_properties(struct iris_inst *inst);
+ int ctrls_init(struct iris_inst *inst, bool init);
+ int set_q16(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
+ int set_level(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
++int decide_quality_mode(struct iris_inst *inst);
+ int set_req_sync_frame(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
+ int set_flip(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
+ int set_rotation(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
+index c84bb51..a770157 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
+@@ -44,15 +44,15 @@ u32 get_port_info(struct iris_inst *inst,
+ 	if (inst->cap[cap_id].flags & CAP_FLAG_INPUT_PORT &&
+ 	    inst->cap[cap_id].flags & CAP_FLAG_OUTPUT_PORT) {
+ 		if (inst->vb2q_dst->streaming)
+-			return get_hfi_port(INPUT_MPLANE);
++			return get_hfi_port(inst, INPUT_MPLANE);
+ 		else
+-			return get_hfi_port(OUTPUT_MPLANE);
++			return get_hfi_port(inst, OUTPUT_MPLANE);
+ 	}
+ 
+ 	if (inst->cap[cap_id].flags & CAP_FLAG_INPUT_PORT)
+-		return get_hfi_port(INPUT_MPLANE);
++		return get_hfi_port(inst, INPUT_MPLANE);
+ 	else if (inst->cap[cap_id].flags & CAP_FLAG_OUTPUT_PORT)
+-		return get_hfi_port(OUTPUT_MPLANE);
++		return get_hfi_port(inst, OUTPUT_MPLANE);
+ 	else
+ 		return HFI_PORT_NONE;
+ }
+@@ -86,9 +86,14 @@ int get_mbpf(struct iris_inst *inst)
+ 	int height = 0, width = 0;
+ 	struct v4l2_format *inp_f;
+ 
+-	inp_f = inst->fmt_src;
+-	width = max(inp_f->fmt.pix_mp.width, inst->crop.width);
+-	height = max(inp_f->fmt.pix_mp.height, inst->crop.height);
++	if (inst->domain == DECODER) {
++		inp_f = inst->fmt_src;
++		width = max(inp_f->fmt.pix_mp.width, inst->crop.width);
++		height = max(inp_f->fmt.pix_mp.height, inst->crop.height);
++	} else if (inst->domain == ENCODER) {
++		width = inst->crop.width;
++		height = inst->crop.height;
 +	}
+ 
+ 	return NUM_MBS_PER_FRAME(height, width);
+ }
+@@ -100,6 +105,9 @@ inline bool is_linear_colorformat(u32 colorformat)
+ 
+ bool is_split_mode_enabled(struct iris_inst *inst)
+ {
++	if (inst->domain != DECODER)
++		return false;
 +
-+	return iris_hfi_set_ir_period(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				      get_port_info(inst, cap_id),
-+				      HFI_PAYLOAD_U32,
-+				      &hfi_val, sizeof(u32));
+ 	if (is_linear_colorformat(inst->fmt_dst->fmt.pix_mp.pixelformat))
+ 		return true;
+ 
+@@ -118,6 +126,24 @@ inline bool is_8bit_colorformat(enum colorformat_type colorformat)
+ 		colorformat == FMT_NV21;
+ }
+ 
++inline bool is_scaling_enabled(struct iris_inst *inst)
++{
++	return inst->crop.left != inst->compose.left ||
++		inst->crop.top != inst->compose.top ||
++		inst->crop.width != inst->compose.width ||
++		inst->crop.height != inst->compose.height;
 +}
 +
-+int set_min_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
++inline bool is_hierb_type_requested(struct iris_inst *inst)
 +{
-+	s32 i_frame_qp = 0, p_frame_qp = 0, b_frame_qp = 0, min_qp_enable = 0;
-+	u32 i_qp_enable = 0, p_qp_enable = 0, b_qp_enable = 0;
-+	u32 client_qp_enable = 0, hfi_value = 0;
-+	u32 hfi_id;
-+
-+	if (inst->cap[MIN_FRAME_QP].flags & CAP_FLAG_CLIENT_SET)
-+		min_qp_enable = 1;
-+
-+	if (min_qp_enable ||
-+	    (inst->cap[I_FRAME_MIN_QP].flags & CAP_FLAG_CLIENT_SET))
-+		i_qp_enable = 1;
-+	if (min_qp_enable ||
-+	    (inst->cap[P_FRAME_MIN_QP].flags & CAP_FLAG_CLIENT_SET))
-+		p_qp_enable = 1;
-+	if (min_qp_enable ||
-+	    (inst->cap[B_FRAME_MIN_QP].flags & CAP_FLAG_CLIENT_SET))
-+		b_qp_enable = 1;
-+
-+	client_qp_enable = i_qp_enable | p_qp_enable << 1 | b_qp_enable << 2;
-+	if (!client_qp_enable)
-+		return 0;
-+
-+	i_frame_qp = max(inst->cap[I_FRAME_MIN_QP].value, inst->cap[MIN_FRAME_QP].value);
-+	p_frame_qp = max(inst->cap[P_FRAME_MIN_QP].value, inst->cap[MIN_FRAME_QP].value);
-+	b_frame_qp = max(inst->cap[B_FRAME_MIN_QP].value, inst->cap[MIN_FRAME_QP].value);
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_value = i_frame_qp | p_frame_qp << 8 | b_frame_qp << 16 |
-+		client_qp_enable << 24;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_32_PACKED,
-+				     &hfi_value, sizeof(u32));
++	return (inst->codec == H264 &&
++		inst->cap[LAYER_TYPE].value ==
++				V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B) ||
++		(inst->codec == HEVC &&
++		inst->cap[LAYER_TYPE].value ==
++				V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B);
 +}
 +
-+int set_max_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	s32 i_frame_qp = 0, p_frame_qp = 0, b_frame_qp = 0, max_qp_enable = 0;
-+	u32 i_qp_enable = 0, p_qp_enable = 0, b_qp_enable = 0;
-+	u32 client_qp_enable = 0, hfi_value = 0;
-+	u32 hfi_id;
-+
-+	if (inst->cap[MAX_FRAME_QP].flags & CAP_FLAG_CLIENT_SET)
-+		max_qp_enable = 1;
-+
-+	if (max_qp_enable ||
-+	    (inst->cap[I_FRAME_MAX_QP].flags & CAP_FLAG_CLIENT_SET))
-+		i_qp_enable = 1;
-+	if (max_qp_enable ||
-+	    (inst->cap[P_FRAME_MAX_QP].flags & CAP_FLAG_CLIENT_SET))
-+		p_qp_enable = 1;
-+	if (max_qp_enable ||
-+	    (inst->cap[B_FRAME_MAX_QP].flags & CAP_FLAG_CLIENT_SET))
-+		b_qp_enable = 1;
-+
-+	client_qp_enable = i_qp_enable | p_qp_enable << 1 | b_qp_enable << 2;
-+	if (!client_qp_enable)
-+		return 0;
-+
-+	i_frame_qp = min(inst->cap[I_FRAME_MAX_QP].value, inst->cap[MAX_FRAME_QP].value);
-+	p_frame_qp = min(inst->cap[P_FRAME_MAX_QP].value, inst->cap[MAX_FRAME_QP].value);
-+	b_frame_qp = min(inst->cap[B_FRAME_MAX_QP].value, inst->cap[MAX_FRAME_QP].value);
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_value = i_frame_qp | p_frame_qp << 8 | b_frame_qp << 16 |
-+		client_qp_enable << 24;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_32_PACKED,
-+				     &hfi_value, sizeof(u32));
-+}
-+
-+int set_frame_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
-+{
-+	u32 i_qp_enable = 0, p_qp_enable = 0, b_qp_enable = 0;
-+	u32 client_qp_enable = 0, hfi_value = 0;
-+	s32 i_frame_qp = 0, p_frame_qp = 0, b_frame_qp = 0;
-+	s32 rc_type = -1;
-+	u32 hfi_id;
-+
-+	rc_type = inst->hfi_rc_type;
-+	if (inst->vb2q_dst->streaming) {
-+		if (rc_type != HFI_RC_OFF)
-+			return 0;
+ u32 v4l2_codec_from_driver(struct iris_inst *inst, enum codec_type codec)
+ {
+ 	const struct codec_info *codec_info;
+@@ -319,17 +345,24 @@ static int check_resolution_supported(struct iris_inst *inst)
+ 	u32 width = 0, height = 0, min_width, min_height,
+ 		max_width, max_height;
+ 
+-	width = inst->fmt_src->fmt.pix_mp.width;
+-	height = inst->fmt_src->fmt.pix_mp.height;
++	if (inst->domain == DECODER) {
++		width = inst->fmt_src->fmt.pix_mp.width;
++		height = inst->fmt_src->fmt.pix_mp.height;
++	} else if (inst->domain == ENCODER) {
++		width = inst->crop.width;
++		height = inst->crop.height;
 +	}
-+
-+	if (rc_type == HFI_RC_OFF) {
-+		i_qp_enable = 1;
-+		p_qp_enable = 1;
-+		b_qp_enable = 1;
-+	} else {
-+		if (inst->cap[I_FRAME_QP].flags & CAP_FLAG_CLIENT_SET)
-+			i_qp_enable = 1;
-+		if (inst->cap[P_FRAME_QP].flags & CAP_FLAG_CLIENT_SET)
-+			p_qp_enable = 1;
-+		if (inst->cap[B_FRAME_QP].flags & CAP_FLAG_CLIENT_SET)
-+			b_qp_enable = 1;
+ 
+ 	min_width = inst->cap[FRAME_WIDTH].min;
+ 	max_width = inst->cap[FRAME_WIDTH].max;
+ 	min_height = inst->cap[FRAME_HEIGHT].min;
+ 	max_height = inst->cap[FRAME_HEIGHT].max;
+ 
+-	if (!(min_width <= width && width <= max_width) ||
+-	    !(min_height <= height && height <= max_height))
+-		return -EINVAL;
++	if (inst->domain == DECODER || inst->domain == ENCODER) {
++		if (!(min_width <= width && width <= max_width) ||
++		    !(min_height <= height && height <= max_height))
++			return -EINVAL;
 +	}
-+
-+	client_qp_enable = i_qp_enable | p_qp_enable << 1 | b_qp_enable << 2;
-+	if (!client_qp_enable)
-+		return 0;
-+
-+	i_frame_qp = inst->cap[I_FRAME_QP].value;
-+	p_frame_qp = inst->cap[P_FRAME_QP].value;
-+	b_frame_qp = inst->cap[B_FRAME_QP].value;
-+
-+	hfi_id = inst->cap[cap_id].hfi_id;
-+	hfi_value = i_frame_qp | p_frame_qp << 8 | b_frame_qp << 16 |
-+		client_qp_enable << 24;
-+
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, cap_id),
-+				     HFI_PAYLOAD_32_PACKED,
-+				     &hfi_value, sizeof(u32));
-+}
-+
-+int set_layer_count_and_type(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
+ 
+ 	return 0;
+ }
+@@ -470,7 +503,7 @@ int queue_buffer(struct iris_inst *inst, struct iris_buffer *buf)
+ {
+ 	int ret;
+ 
+-	if (buf->type == BUF_OUTPUT)
++	if (inst->domain == DECODER && buf->type == BUF_OUTPUT)
+ 		process_requeued_readonly_buffers(inst, buf);
+ 
+ 	ret = iris_hfi_queue_buffer(inst, buf);
+@@ -653,7 +686,7 @@ static int iris_flush_read_only_buffers(struct iris_inst *inst,
+ {
+ 	struct iris_buffer *ro_buf, *dummy;
+ 
+-	if (type != BUF_OUTPUT)
++	if (inst->domain != DECODER || type != BUF_OUTPUT)
+ 		return 0;
+ 
+ 	list_for_each_entry_safe(ro_buf, dummy, &inst->buffers.read_only.list, list) {
+@@ -899,6 +932,114 @@ int codec_change(struct iris_inst *inst, u32 v4l2_codec)
+ 	return ret;
+ }
+ 
++int process_streamon_input(struct iris_inst *inst)
 +{
-+	u32 hfi_layer_count, hfi_layer_type = 0;
-+	int ret, hfi_id;
++	enum iris_inst_sub_state set_sub_state = IRIS_INST_SUB_NONE;
++	int ret;
 +
-+	if (!inst->vb2q_dst->streaming) {
-+		hfi_layer_type = inst->hfi_layer_type;
-+		hfi_id = inst->cap[LAYER_TYPE].hfi_id;
++	iris_scale_power(inst);
 +
-+		ret = iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+					    get_port_info(inst, LAYER_TYPE),
-+					    HFI_PAYLOAD_U32_ENUM,
-+					    &hfi_layer_type, sizeof(u32));
++	ret = iris_hfi_start(inst, INPUT_MPLANE);
++	if (ret)
++		return ret;
++
++	if (inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
++		ret = iris_inst_change_sub_state(inst, IRIS_INST_SUB_INPUT_PAUSE, 0);
 +		if (ret)
 +			return ret;
-+	} else {
-+		if (inst->hfi_layer_type == HFI_HIER_B)
-+			return 0;
 +	}
 +
-+	hfi_id = inst->cap[ENH_LAYER_COUNT].hfi_id;
-+	hfi_layer_count = inst->cap[ENH_LAYER_COUNT].value + 1;
++	if (inst->sub_state & IRIS_INST_SUB_DRC ||
++	    inst->sub_state & IRIS_INST_SUB_DRAIN) {
++		if (!(inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE)) {
++			ret = iris_hfi_pause(inst, INPUT_MPLANE);
++			if (ret)
++				return ret;
++			set_sub_state = IRIS_INST_SUB_INPUT_PAUSE;
++		}
++	}
 +
-+	ret = iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				    get_port_info(inst, ENH_LAYER_COUNT),
-+				    HFI_PAYLOAD_U32,
-+				    &hfi_layer_count, sizeof(u32));
++	ret = iris_inst_state_change_streamon(inst, INPUT_MPLANE);
++	if (ret)
++		return ret;
++
++	ret = iris_inst_change_sub_state(inst, 0, set_sub_state);
 +
 +	return ret;
 +}
 +
-+int set_slice_count(struct iris_inst *inst, enum plat_inst_cap_type cap_id)
++int process_streamon_output(struct iris_inst *inst)
 +{
-+	u32 hfi_value = 0, set_cap_id = 0, hfi_id;
-+	s32 slice_mode = -1;
++	enum iris_inst_sub_state clear_sub_state = IRIS_INST_SUB_NONE;
++	bool drain_pending = false;
++	int ret;
 +
-+	slice_mode = inst->cap[SLICE_MODE].value;
++	iris_scale_power(inst);
 +
-+	if (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE)
-+		return 0;
++	if (inst->sub_state & IRIS_INST_SUB_DRC &&
++	    inst->sub_state & IRIS_INST_SUB_DRC_LAST)
++		clear_sub_state = IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRC_LAST;
 +
-+	if (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
-+		hfi_value = (inst->codec == HEVC) ?
-+			(inst->cap[SLICE_MAX_MB].value + 3) / 4 :
-+			inst->cap[SLICE_MAX_MB].value;
-+		set_cap_id = SLICE_MAX_MB;
-+	} else if (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
-+		hfi_value = inst->cap[SLICE_MAX_BYTES].value;
-+		set_cap_id = SLICE_MAX_BYTES;
++	if (inst->domain == DECODER && inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
++		ret = iris_alloc_and_queue_input_int_bufs(inst);
++		if (ret)
++			return ret;
++		ret = set_stage(inst, STAGE);
++		if (ret)
++			return ret;
++		ret = set_pipe(inst, PIPE);
++		if (ret)
++			return ret;
 +	}
 +
-+	hfi_id = inst->cap[set_cap_id].hfi_id;
++	drain_pending = inst->sub_state & IRIS_INST_SUB_DRAIN &&
++		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
 +
-+	return iris_hfi_set_property(inst, hfi_id, HFI_HOST_FLAGS_NONE,
-+				     get_port_info(inst, set_cap_id),
-+				     HFI_PAYLOAD_U32,
-+				     &hfi_value, sizeof(u32));
++	if (!drain_pending && inst->state == IRIS_INST_INPUT_STREAMING) {
++		if (inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
++			ret = iris_hfi_resume(inst, INPUT_MPLANE, HFI_CMD_SETTINGS_CHANGE);
++			if (ret)
++				return ret;
++			clear_sub_state |= IRIS_INST_SUB_INPUT_PAUSE;
++		}
++	}
++
++	ret = iris_hfi_start(inst, OUTPUT_MPLANE);
++	if (ret)
++		return ret;
++
++	if (inst->sub_state & IRIS_INST_SUB_OUTPUT_PAUSE)
++		clear_sub_state |= IRIS_INST_SUB_OUTPUT_PAUSE;
++
++	ret = iris_inst_state_change_streamon(inst, OUTPUT_MPLANE);
++	if (ret)
++		return ret;
++
++	ret = iris_inst_change_sub_state(inst, clear_sub_state, 0);
++
++	return ret;
 +}
 +
- int set_v4l2_properties(struct iris_inst *inst)
++int vb2_buffer_to_driver(struct vb2_buffer *vb2, struct iris_buffer *buf)
++{
++	struct vb2_v4l2_buffer *vbuf;
++
++	if (!vb2 || !buf)
++		return -EINVAL;
++
++	vbuf = to_vb2_v4l2_buffer(vb2);
++
++	buf->fd = vb2->planes[0].m.fd;
++	buf->data_offset = vb2->planes[0].data_offset;
++	buf->data_size = vb2->planes[0].bytesused - vb2->planes[0].data_offset;
++	buf->buffer_size = vb2->planes[0].length;
++	buf->timestamp = vb2->timestamp;
++	buf->flags = vbuf->flags;
++	buf->attr = 0;
++
++	return 0;
++}
++
+ int iris_pm_get(struct iris_core *core)
  {
- 	struct cap_entry *entry = NULL, *temp = NULL;
-@@ -723,8 +1187,7 @@ int adjust_profile(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
- 	u32 adjusted_value;
- 	s32 pix_fmt = -1;
+ 	int ret;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.h b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.h
+index 39cec8c..bf8448a 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.h
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.h
+@@ -31,7 +31,9 @@ int close_session(struct iris_inst *inst);
+ bool is_linear_colorformat(u32 colorformat);
+ bool is_10bit_colorformat(enum colorformat_type colorformat);
+ bool is_8bit_colorformat(enum colorformat_type colorformat);
++bool is_scaling_enabled(struct iris_inst *inst);
+ bool is_split_mode_enabled(struct iris_inst *inst);
++bool is_hierb_type_requested(struct iris_inst *inst);
+ int signal_session_msg_receipt(struct iris_inst *inst,
+ 			       enum signal_session_response cmd);
+ struct iris_inst *to_instance(struct iris_core *core, u32 session_id);
+@@ -54,6 +56,10 @@ void iris_destroy_buffers(struct iris_inst *inst);
+ int session_streamoff(struct iris_inst *inst, u32 plane);
+ int process_resume(struct iris_inst *inst);
+ int codec_change(struct iris_inst *inst, u32 v4l2_codec);
++int process_streamon_input(struct iris_inst *inst);
++int process_streamon_output(struct iris_inst *inst);
++int vb2_buffer_to_driver(struct vb2_buffer *vb2,
++			 struct iris_buffer *buf);
+ int iris_pm_get(struct iris_core *core);
+ int iris_pm_put(struct iris_core *core, bool autosuspend);
+ int iris_pm_get_put(struct iris_core *core);
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
+index 00e598d..4a54293 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
+@@ -356,7 +356,7 @@ int iris_hfi_session_set_default_header(struct iris_inst *inst)
+ 	ret = hfi_packet_session_property(inst,
+ 					  HFI_PROP_DEC_DEFAULT_HEADER,
+ 					  HFI_HOST_FLAGS_NONE,
+-					  get_hfi_port(INPUT_MPLANE),
++					  get_hfi_port(inst, INPUT_MPLANE),
+ 					  HFI_PAYLOAD_U32,
+ 					  &default_header,
+ 					  sizeof(u32));
+@@ -394,7 +394,7 @@ int iris_hfi_start(struct iris_inst *inst, u32 plane)
+ 					 HFI_CMD_START,
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_NONE,
+ 					 NULL,
+@@ -434,7 +434,7 @@ int iris_hfi_stop(struct iris_inst *inst, u32 plane)
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED |
+ 					 HFI_HOST_FLAGS_NON_DISCARDABLE),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_NONE,
+ 					 NULL,
+@@ -472,7 +472,7 @@ int iris_hfi_session_subscribe_mode(struct iris_inst *inst,
+ 					 cmd,
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 payload_type,
+ 					 payload,
+@@ -511,7 +511,7 @@ int iris_hfi_pause(struct iris_inst *inst, u32 plane)
+ 					 HFI_CMD_PAUSE,
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_NONE,
+ 					 NULL,
+@@ -550,7 +550,7 @@ int iris_hfi_resume(struct iris_inst *inst, u32 plane, u32 payload)
+ 					 HFI_CMD_RESUME,
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_U32,
+ 					 &payload,
+@@ -590,7 +590,7 @@ int iris_hfi_drain(struct iris_inst *inst, u32 plane)
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED |
+ 					 HFI_HOST_FLAGS_NON_DISCARDABLE),
+-					 get_hfi_port(plane),
++					 get_hfi_port(inst, plane),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_NONE,
+ 					 NULL,
+@@ -739,14 +739,14 @@ int iris_hfi_queue_buffer(struct iris_inst *inst,
+ 		goto unlock;
+ 	}
  
--	adjusted_value = ctrl ? ctrl->val :
--		inst->cap[PROFILE].value;
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[PROFILE].value;
+-	ret = get_hfi_buffer(buffer, &hfi_buffer);
++	ret = get_hfi_buffer(inst, buffer, &hfi_buffer);
+ 	if (ret)
+ 		goto unlock;
  
- 	pix_fmt = inst->cap[PIX_FMTS].value;
+ 	ret = hfi_packet_session_command(inst,
+ 					 HFI_CMD_BUFFER,
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED,
+-					 get_hfi_port_from_buffer_type(buffer->type),
++					 get_hfi_port_from_buffer_type(inst, buffer->type),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_STRUCTURE,
+ 					 &hfi_buffer,
+@@ -780,7 +780,7 @@ int iris_hfi_release_buffer(struct iris_inst *inst,
+ 		goto unlock;
+ 	}
  
-@@ -737,3 +1200,515 @@ int adjust_profile(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
+-	ret = get_hfi_buffer(buffer, &hfi_buffer);
++	ret = get_hfi_buffer(inst, buffer, &hfi_buffer);
+ 	if (ret)
+ 		goto unlock;
  
- 	return 0;
+@@ -790,7 +790,7 @@ int iris_hfi_release_buffer(struct iris_inst *inst,
+ 					 HFI_CMD_BUFFER,
+ 					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
+ 					 HFI_HOST_FLAGS_INTR_REQUIRED),
+-					 get_hfi_port_from_buffer_type(buffer->type),
++					 get_hfi_port_from_buffer_type(inst, buffer->type),
+ 					 inst->session_id,
+ 					 HFI_PAYLOAD_STRUCTURE,
+ 					 &hfi_buffer,
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
+index dd27fa4..e9f3749 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
+@@ -3,64 +3,108 @@
+  * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+  */
+ 
++#include "iris_common.h"
+ #include "iris_core.h"
+ #include "iris_helpers.h"
+ #include "iris_hfi_packet.h"
+ #include "hfi_defines.h"
+ 
+-u32 get_hfi_port_from_buffer_type(enum iris_buffer_type buffer_type)
++u32 get_hfi_port_from_buffer_type(struct iris_inst *inst, enum iris_buffer_type buffer_type)
+ {
+ 	u32 hfi_port = HFI_PORT_NONE;
+ 
+-	switch (buffer_type) {
+-	case BUF_INPUT:
+-	case BUF_BIN:
+-	case BUF_COMV:
+-	case BUF_NON_COMV:
+-	case BUF_LINE:
+-		hfi_port = HFI_PORT_BITSTREAM;
+-		break;
+-	case BUF_OUTPUT:
+-	case BUF_DPB:
+-		hfi_port = HFI_PORT_RAW;
+-		break;
+-	case BUF_PERSIST:
+-		hfi_port = HFI_PORT_NONE;
+-		break;
+-	default:
+-		break;
++	if (inst->domain == DECODER) {
++		switch (buffer_type) {
++		case BUF_INPUT:
++		case BUF_BIN:
++		case BUF_COMV:
++		case BUF_NON_COMV:
++		case BUF_LINE:
++			hfi_port = HFI_PORT_BITSTREAM;
++			break;
++		case BUF_OUTPUT:
++		case BUF_DPB:
++			hfi_port = HFI_PORT_RAW;
++			break;
++		case BUF_PERSIST:
++			hfi_port = HFI_PORT_NONE;
++			break;
++		default:
++			break;
++		}
++	} else if (inst->domain == ENCODER) {
++		switch (buffer_type) {
++		case BUF_INPUT:
++		case BUF_VPSS:
++			hfi_port = HFI_PORT_RAW;
++			break;
++		case BUF_OUTPUT:
++		case BUF_BIN:
++		case BUF_COMV:
++		case BUF_NON_COMV:
++		case BUF_LINE:
++		case BUF_DPB:
++			hfi_port = HFI_PORT_BITSTREAM;
++			break;
++		case BUF_ARP:
++			hfi_port = HFI_PORT_NONE;
++			break;
++		default:
++			break;
++		}
+ 	}
+ 
+ 	return hfi_port;
+ }
+ 
+-u32 get_hfi_port(u32 plane)
++u32 get_hfi_port(struct iris_inst *inst, u32 plane)
+ {
+ 	u32 hfi_port = HFI_PORT_NONE;
+ 
+-	switch (plane) {
+-	case INPUT_MPLANE:
+-		hfi_port = HFI_PORT_BITSTREAM;
+-		break;
+-	case OUTPUT_MPLANE:
+-		hfi_port = HFI_PORT_RAW;
+-		break;
+-	default:
+-		break;
++	if (inst->domain == DECODER) {
++		switch (plane) {
++		case INPUT_MPLANE:
++			hfi_port = HFI_PORT_BITSTREAM;
++			break;
++		case OUTPUT_MPLANE:
++			hfi_port = HFI_PORT_RAW;
++			break;
++		default:
++			break;
++		}
++	} else if (inst->domain == ENCODER) {
++		switch (plane) {
++		case INPUT_MPLANE:
++			hfi_port = HFI_PORT_RAW;
++			break;
++		case OUTPUT_MPLANE:
++			hfi_port = HFI_PORT_BITSTREAM;
++			break;
++		default:
++			break;
++		}
+ 	}
+ 
+ 	return hfi_port;
+ }
+ 
+-static u32 hfi_buf_type_from_driver(enum iris_buffer_type buffer_type)
++static u32 hfi_buf_type_from_driver(enum domain_type domain, enum iris_buffer_type buffer_type)
+ {
+ 	switch (buffer_type) {
+ 	case BUF_INPUT:
+-		return HFI_BUFFER_BITSTREAM;
++		if (domain == DECODER)
++			return HFI_BUFFER_BITSTREAM;
++		else
++			return HFI_BUFFER_RAW;
+ 	case BUF_OUTPUT:
+-		return HFI_BUFFER_RAW;
++		if (domain == DECODER)
++			return HFI_BUFFER_RAW;
++		else
++			return HFI_BUFFER_BITSTREAM;
+ 	case BUF_BIN:
+ 		return HFI_BUFFER_BIN;
++	case BUF_ARP:
++		return HFI_BUFFER_ARP;
+ 	case BUF_COMV:
+ 		return HFI_BUFFER_COMV;
+ 	case BUF_NON_COMV:
+@@ -76,13 +120,19 @@ static u32 hfi_buf_type_from_driver(enum iris_buffer_type buffer_type)
+ 	}
+ }
+ 
+-u32 hfi_buf_type_to_driver(enum hfi_buffer_type buf_type)
++u32 hfi_buf_type_to_driver(enum domain_type domain, enum hfi_buffer_type buf_type)
+ {
+ 	switch (buf_type) {
+ 	case HFI_BUFFER_BITSTREAM:
+-		return BUF_INPUT;
++		if (domain == DECODER)
++			return BUF_INPUT;
++		else
++			return BUF_OUTPUT;
+ 	case HFI_BUFFER_RAW:
+-		return BUF_OUTPUT;
++		if (domain == DECODER)
++			return BUF_OUTPUT;
++		else
++			return BUF_INPUT;
+ 	case HFI_BUFFER_BIN:
+ 		return BUF_BIN;
+ 	case HFI_BUFFER_ARP:
+@@ -108,9 +158,15 @@ u32 get_hfi_codec(struct iris_inst *inst)
+ {
+ 	switch (inst->codec) {
+ 	case H264:
+-		return HFI_CODEC_DECODE_AVC;
++		if (inst->domain == ENCODER)
++			return HFI_CODEC_ENCODE_AVC;
++		else
++			return HFI_CODEC_DECODE_AVC;
+ 	case HEVC:
+-		return HFI_CODEC_DECODE_HEVC;
++		if (inst->domain == ENCODER)
++			return HFI_CODEC_ENCODE_HEVC;
++		else
++			return HFI_CODEC_DECODE_HEVC;
+ 	case VP9:
+ 		return HFI_CODEC_DECODE_VP9;
+ 	default:
+@@ -337,10 +393,11 @@ u32 get_v4l2_matrix_coefficients(u32 hfi_coefficients)
+ 	return coefficients;
+ }
+ 
+-int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf)
++int get_hfi_buffer(struct iris_inst *inst,
++		   struct iris_buffer *buffer, struct hfi_buffer *buf)
+ {
+-	memset(buf, 0, sizeof(*buf));
+-	buf->type = hfi_buf_type_from_driver(buffer->type);
++	memset(buf, 0, sizeof(struct hfi_buffer));
++	buf->type = hfi_buf_type_from_driver(inst->domain, buffer->type);
+ 	buf->index = buffer->index;
+ 	buf->base_address = buffer->device_addr;
+ 	buf->addr_offset = 0;
+@@ -350,7 +407,7 @@ int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf)
+ 	 * buffer size otherwise it will truncate or ignore the data after 256
+ 	 * aligned size which may lead to error concealment
+ 	 */
+-	if (buffer->type == BUF_INPUT)
++	if (inst->domain == DECODER && buffer->type == BUF_INPUT)
+ 		buf->buffer_size = ALIGN(buffer->buffer_size, 256);
+ 	buf->data_offset = buffer->data_offset;
+ 	buf->data_size = buffer->data_size;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
+index 82148b7..734a070 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
+@@ -80,8 +80,8 @@ enum hfi_packet_port_type {
+ 	HFI_PORT_RAW		= 0x00000002,
+ };
+ 
+-u32 get_hfi_port_from_buffer_type(enum iris_buffer_type buffer_type);
+-u32 get_hfi_port(u32 plane);
++u32 get_hfi_port_from_buffer_type(struct iris_inst *inst, enum iris_buffer_type buffer_type);
++u32 get_hfi_port(struct iris_inst *inst, u32 plane);
+ u32 get_hfi_colorformat(u32 colorformat);
+ u32 get_hfi_codec(struct iris_inst *inst);
+ u32 get_hfi_color_primaries(u32 primaries);
+@@ -90,8 +90,9 @@ u32 get_hfi_matrix_coefficients(u32 coefficients);
+ u32 get_v4l2_color_primaries(u32 hfi_primaries);
+ u32 get_v4l2_transfer_char(u32 hfi_characterstics);
+ u32 get_v4l2_matrix_coefficients(u32 hfi_coefficients);
+-u32 hfi_buf_type_to_driver(enum hfi_buffer_type buf_type);
+-int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf);
++u32 hfi_buf_type_to_driver(enum domain_type domain, enum hfi_buffer_type buf_type);
++int get_hfi_buffer(struct iris_inst *inst,
++		   struct iris_buffer *buffer, struct hfi_buffer *buf);
+ 
+ int hfi_packet_sys_init(struct iris_core *core,
+ 			u8 *pkt, u32 pkt_size);
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
+index 1b667a5..08bdb8f 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
+@@ -71,7 +71,8 @@ static bool is_valid_hfi_buffer_type(u32 buffer_type)
+ static bool is_valid_hfi_port(u32 port, u32 buffer_type)
+ {
+ 	if (port == HFI_PORT_NONE &&
+-	    buffer_type != HFI_BUFFER_PERSIST)
++	    buffer_type != HFI_BUFFER_ARP &&
++		buffer_type != HFI_BUFFER_PERSIST)
+ 		return false;
+ 
+ 	if (port != HFI_PORT_BITSTREAM && port != HFI_PORT_RAW)
+@@ -103,8 +104,9 @@ static int get_driver_buffer_flags(struct iris_inst *inst, u32 hfi_flags)
+ 	if (inst->hfi_frame_info.overflow)
+ 		driver_flags |= BUF_FLAG_ERROR;
+ 
+-	if (hfi_flags & HFI_BUF_FW_FLAG_LAST ||
+-	    hfi_flags & HFI_BUF_FW_FLAG_PSC_LAST)
++	if ((inst->domain == ENCODER && (hfi_flags & HFI_BUF_FW_FLAG_LAST)) ||
++	    (inst->domain == DECODER && (hfi_flags & HFI_BUF_FW_FLAG_LAST ||
++					 hfi_flags & HFI_BUF_FW_FLAG_PSC_LAST)))
+ 		driver_flags |= BUF_FLAG_LAST;
+ 
+ 	return driver_flags;
+@@ -309,9 +311,12 @@ static int handle_session_close(struct iris_inst *inst,
+ static int handle_read_only_buffer(struct iris_inst *inst,
+ 				   struct iris_buffer *buf)
+ {
+-	struct iris_buffer *ro_buf, *iter;
++	struct iris_buffer *ro_buf, *iter = NULL;
+ 	bool found = false;
+ 
++	if (inst->domain != DECODER && inst->domain != ENCODER)
++		return 0;
++
+ 	list_for_each_entry(iter, &inst->buffers.read_only.list, list) {
+ 		if (iter->device_addr == buf->device_addr) {
+ 			found = true;
+@@ -344,6 +349,9 @@ static int handle_non_read_only_buffer(struct iris_inst *inst,
+ {
+ 	struct iris_buffer *ro_buf;
+ 
++	if (inst->domain != DECODER && inst->domain != ENCODER)
++		return 0;
++
+ 	list_for_each_entry(ro_buf, &inst->buffers.read_only.list, list) {
+ 		if (ro_buf->device_addr == buffer->base_address) {
+ 			ro_buf->attr &= ~BUF_ATTR_READ_ONLY;
+@@ -414,9 +422,9 @@ static int handle_input_buffer(struct iris_inst *inst,
+ static int handle_output_buffer(struct iris_inst *inst,
+ 				struct hfi_buffer *hfi_buffer)
+ {
+-	struct iris_buffers *buffers;
+ 	struct iris_buffer *buf, *iter;
+-	bool found;
++	struct iris_buffers *buffers;
++	bool found, fatal = false;
+ 	int ret = 0;
+ 
+ 	if (hfi_buffer->flags & HFI_BUF_FW_FLAG_LAST) {
+@@ -425,17 +433,19 @@ static int handle_output_buffer(struct iris_inst *inst,
+ 			return ret;
+ 	}
+ 
+-	if (hfi_buffer->flags & HFI_BUF_FW_FLAG_RELEASE_DONE)
+-		return handle_release_output_buffer(inst, hfi_buffer);
++	if (inst->domain == DECODER) {
++		if (hfi_buffer->flags & HFI_BUF_FW_FLAG_RELEASE_DONE)
++			return handle_release_output_buffer(inst, hfi_buffer);
+ 
+-	if (hfi_buffer->flags & HFI_BUF_FW_FLAG_PSC_LAST) {
+-		ret = iris_inst_sub_state_change_drc_last(inst);
+-		if (ret)
+-			return ret;
+-	}
++		if (hfi_buffer->flags & HFI_BUF_FW_FLAG_PSC_LAST) {
++			ret = iris_inst_sub_state_change_drc_last(inst);
++			if (ret)
++				return ret;
++		}
+ 
+-	if (!(hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY))
+-		ret = handle_non_read_only_buffer(inst, hfi_buffer);
++		if (!(hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY))
++			ret = handle_non_read_only_buffer(inst, hfi_buffer);
++	}
+ 
+ 	buffers = iris_get_buffer_list(inst, BUF_OUTPUT);
+ 	if (!buffers)
+@@ -446,9 +456,12 @@ static int handle_output_buffer(struct iris_inst *inst,
+ 		if (!(iter->attr & BUF_ATTR_QUEUED))
+ 			continue;
+ 
+-		found = (iter->index == hfi_buffer->index &&
+-				iter->device_addr == hfi_buffer->base_address &&
+-				iter->data_offset == hfi_buffer->data_offset);
++		if (inst->domain == DECODER)
++			found = (iter->index == hfi_buffer->index &&
++				 iter->device_addr == hfi_buffer->base_address &&
++				 iter->data_offset == hfi_buffer->data_offset);
++		else
++			found = iter->index == hfi_buffer->index;
+ 
+ 		if (found) {
+ 			buf = iter;
+@@ -465,14 +478,27 @@ static int handle_output_buffer(struct iris_inst *inst,
+ 	buf->attr &= ~BUF_ATTR_QUEUED;
+ 	buf->attr |= BUF_ATTR_DEQUEUED;
+ 
+-	if (inst->buffers.dpb.size && hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY)
+-		iris_inst_change_state(inst, IRIS_INST_ERROR);
++	if (inst->domain == ENCODER) {
++		if (inst->hfi_frame_info.data_corrupt)
++			fatal = true;
++		if (inst->hfi_frame_info.overflow) {
++			if (!hfi_buffer->data_size && inst->hfi_rc_type == HFI_RC_CBR_CFR)
++				fatal = true;
++		}
++		if (fatal)
++			iris_inst_change_state(inst, IRIS_INST_ERROR);
++	}
++
++	if (inst->domain == DECODER) {
++		if (inst->buffers.dpb.size && hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY)
++			iris_inst_change_state(inst, IRIS_INST_ERROR);
+ 
+-	if (hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY) {
+-		buf->attr |= BUF_ATTR_READ_ONLY;
+-		ret = handle_read_only_buffer(inst, buf);
+-	} else {
+-		buf->attr &= ~BUF_ATTR_READ_ONLY;
++		if (hfi_buffer->flags & HFI_BUF_FW_FLAG_READONLY) {
++			buf->attr |= BUF_ATTR_READ_ONLY;
++			ret = handle_read_only_buffer(inst, buf);
++		} else {
++			buf->attr &= ~BUF_ATTR_READ_ONLY;
++		}
+ 	}
+ 
+ 	buf->flags = get_driver_buffer_flags(inst, hfi_buffer->flags);
+@@ -521,7 +547,7 @@ static int handle_release_internal_buffer(struct iris_inst *inst,
+ 	int ret = 0;
+ 	bool found;
+ 
+-	buffers = iris_get_buffer_list(inst, hfi_buf_type_to_driver(buffer->type));
++	buffers = iris_get_buffer_list(inst, hfi_buf_type_to_driver(inst->domain, buffer->type));
+ 	if (!buffers)
+ 		return -EINVAL;
+ 
+@@ -550,12 +576,22 @@ static int handle_session_stop(struct iris_inst *inst,
+ 	int ret = 0;
+ 	enum signal_session_response signal_type = -1;
+ 
+-	if (pkt->port == HFI_PORT_RAW) {
+-		signal_type = SIGNAL_CMD_STOP_OUTPUT;
+-		ret = iris_inst_sub_state_change_pause(inst, OUTPUT_MPLANE);
+-	} else if (pkt->port == HFI_PORT_BITSTREAM) {
+-		signal_type = SIGNAL_CMD_STOP_INPUT;
+-		ret = iris_inst_sub_state_change_pause(inst, INPUT_MPLANE);
++	if (inst->domain == DECODER) {
++		if (pkt->port == HFI_PORT_RAW) {
++			signal_type = SIGNAL_CMD_STOP_OUTPUT;
++			ret = iris_inst_sub_state_change_pause(inst, OUTPUT_MPLANE);
++		} else if (pkt->port == HFI_PORT_BITSTREAM) {
++			signal_type = SIGNAL_CMD_STOP_INPUT;
++			ret = iris_inst_sub_state_change_pause(inst, INPUT_MPLANE);
++		}
++	} else if (inst->domain == ENCODER) {
++		if (pkt->port == HFI_PORT_RAW) {
++			signal_type = SIGNAL_CMD_STOP_INPUT;
++			ret = iris_inst_sub_state_change_pause(inst, INPUT_MPLANE);
++		} else if (pkt->port == HFI_PORT_BITSTREAM) {
++			signal_type = SIGNAL_CMD_STOP_OUTPUT;
++			ret = iris_inst_sub_state_change_pause(inst, OUTPUT_MPLANE);
++		}
+ 	}
+ 
+ 	if (signal_type != -1)
+@@ -571,7 +607,7 @@ static int handle_session_buffer(struct iris_inst *inst,
+ 	u32 hfi_handle_size = 0;
+ 	int i, ret = 0;
+ 	const struct iris_hfi_buffer_handle *hfi_handle_arr = NULL;
+-	static const struct iris_hfi_buffer_handle input_hfi_handle[] = {
++	static const struct iris_hfi_buffer_handle dec_input_hfi_handle[] = {
+ 		{HFI_BUFFER_BITSTREAM,      handle_input_buffer               },
+ 		{HFI_BUFFER_BIN,            handle_release_internal_buffer    },
+ 		{HFI_BUFFER_COMV,           handle_release_internal_buffer    },
+@@ -579,10 +615,24 @@ static int handle_session_buffer(struct iris_inst *inst,
+ 		{HFI_BUFFER_LINE,           handle_release_internal_buffer    },
+ 		{HFI_BUFFER_PERSIST,        handle_release_internal_buffer    },
+ 	};
+-	static const struct iris_hfi_buffer_handle output_hfi_handle[] = {
++	static const struct iris_hfi_buffer_handle dec_output_hfi_handle[] = {
+ 		{HFI_BUFFER_RAW,            handle_output_buffer              },
+ 		{HFI_BUFFER_DPB,            handle_release_internal_buffer    },
+ 	};
++	static const struct iris_hfi_buffer_handle enc_input_hfi_handle[] = {
++		{HFI_BUFFER_RAW,            handle_input_buffer               },
++		{HFI_BUFFER_VPSS,           handle_release_internal_buffer    },
++	};
++	static const struct iris_hfi_buffer_handle enc_output_hfi_handle[] = {
++		{HFI_BUFFER_BITSTREAM,      handle_output_buffer              },
++		{HFI_BUFFER_BIN,            handle_release_internal_buffer    },
++		{HFI_BUFFER_COMV,           handle_release_internal_buffer    },
++		{HFI_BUFFER_NON_COMV,       handle_release_internal_buffer    },
++		{HFI_BUFFER_LINE,           handle_release_internal_buffer    },
++		{HFI_BUFFER_ARP,            handle_release_internal_buffer    },
++		{HFI_BUFFER_DPB,            handle_release_internal_buffer    },
++	};
++
+ 
+ 	if (pkt->payload_info == HFI_PAYLOAD_NONE)
+ 		return 0;
+@@ -599,12 +649,22 @@ static int handle_session_buffer(struct iris_inst *inst,
+ 	if (!is_valid_hfi_port(pkt->port, buffer->type))
+ 		return 0;
+ 
+-	if (pkt->port == HFI_PORT_BITSTREAM) {
+-		hfi_handle_size = ARRAY_SIZE(input_hfi_handle);
+-		hfi_handle_arr = input_hfi_handle;
+-	} else if (pkt->port == HFI_PORT_RAW) {
+-		hfi_handle_size = ARRAY_SIZE(output_hfi_handle);
+-		hfi_handle_arr = output_hfi_handle;
++	if (inst->domain == DECODER) {
++		if (pkt->port == HFI_PORT_BITSTREAM) {
++			hfi_handle_size = ARRAY_SIZE(dec_input_hfi_handle);
++			hfi_handle_arr = dec_input_hfi_handle;
++		} else if (pkt->port == HFI_PORT_RAW) {
++			hfi_handle_size = ARRAY_SIZE(dec_output_hfi_handle);
++			hfi_handle_arr = dec_output_hfi_handle;
++		}
++	} else if (inst->domain == ENCODER) {
++		if (pkt->port == HFI_PORT_RAW) {
++			hfi_handle_size = ARRAY_SIZE(enc_input_hfi_handle);
++			hfi_handle_arr = enc_input_hfi_handle;
++		} else if (pkt->port == HFI_PORT_BITSTREAM) {
++			hfi_handle_size = ARRAY_SIZE(enc_output_hfi_handle);
++			hfi_handle_arr = enc_output_hfi_handle;
++		}
+ 	}
+ 
+ 	if (!hfi_handle_arr || !hfi_handle_size)
+@@ -693,6 +753,9 @@ static int handle_dpb_list_property(struct iris_inst *inst,
+ 	u8 *payload_start;
+ 	u32 payload_size;
+ 
++	if (inst->domain != DECODER)
++		return -EINVAL;
++
+ 	payload_size = pkt->size - sizeof(*pkt);
+ 	payload_start = (u8 *)((u8 *)pkt + sizeof(*pkt));
+ 	memset(inst->dpb_list_payload, 0, MAX_DPB_LIST_ARRAY_SIZE);
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_vb2.c b/drivers/media/platform/qcom/vcodec/iris/iris_vb2.c
+index c0878f1..1a434ff 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_vb2.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_vb2.c
+@@ -13,6 +13,7 @@
+ #include "iris_power.h"
+ #include "iris_vb2.h"
+ #include "iris_vdec.h"
++#include "iris_venc.h"
+ 
+ int iris_vb2_queue_setup(struct vb2_queue *q,
+ 			 unsigned int *num_buffers, unsigned int *num_planes,
+@@ -58,7 +59,8 @@ int iris_vb2_queue_setup(struct vb2_queue *q,
+ 			return ret;
+ 	}
+ 
+-	if (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
++	if ((inst->domain == DECODER && q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) ||
++	    (inst->domain == ENCODER && q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)) {
+ 		ret = adjust_v4l2_properties(inst);
+ 		if (ret)
+ 			return ret;
+@@ -112,6 +114,11 @@ int iris_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		goto error;
+ 	}
+ 
++	if (inst->domain != DECODER && inst->domain != ENCODER) {
++		ret = -EINVAL;
++		goto error;
++	}
++
+ 	ret = iris_pm_get(inst->core);
+ 	if (ret)
+ 		goto error;
+@@ -122,21 +129,34 @@ int iris_vb2_start_streaming(struct vb2_queue *q, unsigned int count)
+ 		if (ret)
+ 			goto err_pm_get;
+ 
+-		ret = iris_hfi_session_set_default_header(inst);
+-		if (ret)
+-			goto err_pm_get;
+-
+-		ret = iris_alloc_and_queue_session_int_bufs(inst, BUF_PERSIST);
+-		if (ret)
+-			goto err_pm_get;
++		if (inst->domain == ENCODER)  {
++			ret = iris_alloc_and_queue_session_int_bufs(inst, BUF_ARP);
++			if (ret)
++				goto err_pm_get;
++		} else if (inst->domain == DECODER) {
++			ret = iris_hfi_session_set_default_header(inst);
++			if (ret)
++				goto err_pm_get;
++
++			ret = iris_alloc_and_queue_session_int_bufs(inst, BUF_PERSIST);
++			if (ret)
++				goto err_pm_get;
++		}
+ 	}
+ 
+ 	iris_scale_power(inst);
+ 
+-	if (q->type == INPUT_MPLANE)
+-		ret = vdec_streamon_input(inst);
+-	else if (q->type == OUTPUT_MPLANE)
+-		ret = vdec_streamon_output(inst);
++	if (q->type == INPUT_MPLANE) {
++		if (inst->domain == DECODER)
++			ret = vdec_streamon_input(inst);
++		else if (inst->domain == ENCODER)
++			ret = venc_streamon_input(inst);
++	} else if (q->type == OUTPUT_MPLANE) {
++		if (inst->domain == DECODER)
++			ret = vdec_streamon_output(inst);
++		else if (inst->domain == ENCODER)
++			ret = venc_streamon_output(inst);
++	}
+ 	if (ret)
+ 		goto err_pm_get;
+ 
+@@ -179,6 +199,11 @@ void iris_vb2_stop_streaming(struct vb2_queue *q)
+ 	if (q->type != INPUT_MPLANE && q->type != OUTPUT_MPLANE)
+ 		goto error;
+ 
++	if (inst->domain != DECODER && inst->domain != ENCODER) {
++		ret = -EINVAL;
++		goto error;
++	}
++
+ 	ret = iris_pm_get_put(inst->core);
+ 	if (ret)
+ 		goto error;
+@@ -225,7 +250,10 @@ void iris_vb2_buf_queue(struct vb2_buffer *vb2)
+ 	if (ret)
+ 		goto exit;
+ 
+-	ret = vdec_qbuf(inst, vb2);
++	if (inst->domain == DECODER)
++		ret = vdec_qbuf(inst, vb2);
++	else if (inst->domain == ENCODER)
++		ret = venc_qbuf(inst, vb2);
+ 
+ exit:
+ 	if (ret) {
+@@ -270,7 +298,7 @@ void *iris_vb2_attach_dmabuf(struct vb2_buffer *vb, struct device *dev,
+ 	buf->inst = inst;
+ 	buf->dmabuf = dbuf;
+ 
+-	if (buf->type == BUF_OUTPUT) {
++	if (inst->domain == DECODER && buf->type == BUF_OUTPUT) {
+ 		list_for_each_entry_safe(ro_buf, dummy, &inst->buffers.read_only.list, list) {
+ 			if (ro_buf->dmabuf != buf->dmabuf)
+ 				continue;
+@@ -307,7 +335,7 @@ int iris_vb2_map_dmabuf(void *buf_priv)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (buf->type == BUF_OUTPUT) {
++	if (inst->domain == DECODER && buf->type == BUF_OUTPUT) {
+ 		list_for_each_entry_safe(ro_buf, dummy, &inst->buffers.read_only.list, list) {
+ 			if (ro_buf->dmabuf != buf->dmabuf)
+ 				continue;
+@@ -356,7 +384,7 @@ void iris_vb2_unmap_dmabuf(void *buf_priv)
+ 		return;
+ 	}
+ 
+-	if (buf->type == BUF_OUTPUT) {
++	if (inst->domain == DECODER && buf->type == BUF_OUTPUT) {
+ 		list_for_each_entry_safe(ro_buf, dummy, &inst->buffers.read_only.list, list) {
+ 			if (ro_buf->dmabuf != buf->dmabuf)
+ 				continue;
+@@ -393,7 +421,7 @@ void iris_vb2_detach_dmabuf(void *buf_priv)
+ 		buf->sg_table = NULL;
+ 	}
+ 
+-	if (buf->type == BUF_OUTPUT) {
++	if (inst->domain == DECODER && buf->type == BUF_OUTPUT) {
+ 		list_for_each_entry_safe(ro_buf, dummy, &inst->buffers.read_only.list, list) {
+ 			if (ro_buf->dmabuf != buf->dmabuf)
+ 				continue;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_vdec.c b/drivers/media/platform/qcom/vcodec/iris/iris_vdec.c
+index 300d0e9..b2d4739 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_vdec.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_vdec.c
+@@ -362,7 +362,7 @@ static int vdec_set_bitstream_resolution(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_BITSTREAM_RESOLUTION,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_U32,
+ 					&resolution,
+ 					sizeof(u32));
+@@ -388,7 +388,7 @@ static int vdec_set_crop_offsets(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_CROP_OFFSETS,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_64_PACKED,
+ 					&payload,
+ 					sizeof(u64));
+@@ -409,7 +409,7 @@ static int vdec_set_bit_depth(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_U32,
+ 					&bitdepth,
+ 					sizeof(u32));
+@@ -426,7 +426,7 @@ static int vdec_set_coded_frames(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_CODED_FRAMES,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_U32,
+ 					&coded_frames,
+ 					sizeof(u32));
+@@ -442,7 +442,7 @@ static int vdec_set_min_output_count(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_U32,
+ 					&min_output,
+ 					sizeof(u32));
+@@ -457,7 +457,7 @@ static int vdec_set_picture_order_count(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					HFI_PROP_PIC_ORDER_CNT_TYPE,
+ 					HFI_HOST_FLAGS_NONE,
+-					get_hfi_port(INPUT_MPLANE),
++					get_hfi_port(inst, INPUT_MPLANE),
+ 					HFI_PAYLOAD_U32,
+ 					&poc,
+ 					sizeof(u32));
+@@ -509,7 +509,7 @@ static int vdec_set_colorspace(struct iris_inst *inst)
+ 	ret = iris_hfi_set_property(inst,
+ 				    HFI_PROP_SIGNAL_COLOR_INFO,
+ 				    HFI_HOST_FLAGS_NONE,
+-				    get_hfi_port(INPUT_MPLANE),
++				    get_hfi_port(inst, INPUT_MPLANE),
+ 				    HFI_PAYLOAD_32_PACKED,
+ 				    &color_info,
+ 				    sizeof(u32));
+@@ -527,7 +527,7 @@ static int vdec_set_profile(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 				     HFI_PROP_PROFILE,
+ 				     HFI_HOST_FLAGS_NONE,
+-				     get_hfi_port(INPUT_MPLANE),
++				     get_hfi_port(inst, INPUT_MPLANE),
+ 				     HFI_PAYLOAD_U32_ENUM,
+ 				     &profile,
+ 				     sizeof(u32));
+@@ -543,7 +543,7 @@ static int vdec_set_level(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 				     HFI_PROP_LEVEL,
+ 				     HFI_HOST_FLAGS_NONE,
+-				     get_hfi_port(INPUT_MPLANE),
++				     get_hfi_port(inst, INPUT_MPLANE),
+ 				     HFI_PAYLOAD_U32_ENUM,
+ 				     &level,
+ 				     sizeof(u32));
+@@ -559,7 +559,7 @@ static int vdec_set_tier(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 				     HFI_PROP_TIER,
+ 				     HFI_HOST_FLAGS_NONE,
+-				     get_hfi_port(INPUT_MPLANE),
++				     get_hfi_port(inst, INPUT_MPLANE),
+ 				     HFI_PAYLOAD_U32_ENUM,
+ 				     &tier,
+ 				     sizeof(u32));
+@@ -811,7 +811,7 @@ static int vdec_set_colorformat(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					 HFI_PROP_COLOR_FORMAT,
+ 					 HFI_HOST_FLAGS_NONE,
+-					 get_hfi_port(OUTPUT_MPLANE),
++					 get_hfi_port(inst, OUTPUT_MPLANE),
+ 					 HFI_PAYLOAD_U32,
+ 					 &hfi_colorformat,
+ 					 sizeof(u32));
+@@ -839,7 +839,7 @@ static int vdec_set_linear_stride_scanline(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 					 HFI_PROP_LINEAR_STRIDE_SCANLINE,
+ 					 HFI_HOST_FLAGS_NONE,
+-					 get_hfi_port(OUTPUT_MPLANE),
++					 get_hfi_port(inst, OUTPUT_MPLANE),
+ 					 HFI_PAYLOAD_U64,
+ 					 &payload,
+ 					 sizeof(u64));
+@@ -887,7 +887,7 @@ static int vdec_set_ubwc_stride_scanline(struct iris_inst *inst)
+ 	return iris_hfi_set_property(inst,
+ 				     HFI_PROP_UBWC_STRIDE_SCANLINE,
+ 				     HFI_HOST_FLAGS_NONE,
+-				     get_hfi_port(OUTPUT_MPLANE),
++				     get_hfi_port(inst, OUTPUT_MPLANE),
+ 				     HFI_PAYLOAD_U32_ARRAY,
+ 				     &payload[0],
+ 				     sizeof(u32) * 4);
+@@ -1020,7 +1020,7 @@ static int vdec_subscribe_dst_change_param(struct iris_inst *inst)
+ 			ret = iris_hfi_set_property(inst,
+ 						    prop_type,
+ 						    HFI_HOST_FLAGS_NONE,
+-						    get_hfi_port(OUTPUT_MPLANE),
++						    get_hfi_port(inst, OUTPUT_MPLANE),
+ 						    payload_type,
+ 						    &payload,
+ 						    payload_size);
+@@ -1032,42 +1032,6 @@ static int vdec_subscribe_dst_change_param(struct iris_inst *inst)
+ 	return ret;
+ }
+ 
+-static int process_streamon_input(struct iris_inst *inst)
+-{
+-	enum iris_inst_sub_state set_sub_state = IRIS_INST_SUB_NONE;
+-	int ret;
+-
+-	iris_scale_power(inst);
+-
+-	ret = iris_hfi_start(inst, INPUT_MPLANE);
+-	if (ret)
+-		return ret;
+-
+-	if (inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+-		ret = iris_inst_change_sub_state(inst, IRIS_INST_SUB_INPUT_PAUSE, 0);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	if (inst->sub_state & IRIS_INST_SUB_DRC ||
+-	    inst->sub_state & IRIS_INST_SUB_DRAIN) {
+-		if (!(inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE)) {
+-			ret = iris_hfi_pause(inst, INPUT_MPLANE);
+-			if (ret)
+-				return ret;
+-			set_sub_state = IRIS_INST_SUB_INPUT_PAUSE;
+-		}
+-	}
+-
+-	ret = iris_inst_state_change_streamon(inst, INPUT_MPLANE);
+-	if (ret)
+-		return ret;
+-
+-	ret = iris_inst_change_sub_state(inst, 0, set_sub_state);
+-
+-	return ret;
+-}
+-
+ int vdec_streamon_input(struct iris_inst *inst)
+ {
+ 	int ret;
+@@ -1114,58 +1078,6 @@ int vdec_streamon_input(struct iris_inst *inst)
+ 	return ret;
+ }
+ 
+-static int process_streamon_output(struct iris_inst *inst)
+-{
+-	enum iris_inst_sub_state clear_sub_state = IRIS_INST_SUB_NONE;
+-	bool drain_pending = false;
+-	int ret;
+-
+-	iris_scale_power(inst);
+-
+-	if (inst->sub_state & IRIS_INST_SUB_DRC &&
+-	    inst->sub_state & IRIS_INST_SUB_DRC_LAST)
+-		clear_sub_state = IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRC_LAST;
+-
+-	if (inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+-		ret = iris_alloc_and_queue_input_int_bufs(inst);
+-		if (ret)
+-			return ret;
+-		ret = set_stage(inst, STAGE);
+-		if (ret)
+-			return ret;
+-		ret = set_pipe(inst, PIPE);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	drain_pending = inst->sub_state & IRIS_INST_SUB_DRAIN &&
+-		inst->sub_state & IRIS_INST_SUB_DRAIN_LAST;
+-
+-	if (!drain_pending && inst->state == IRIS_INST_INPUT_STREAMING) {
+-		if (inst->sub_state & IRIS_INST_SUB_INPUT_PAUSE) {
+-			ret = iris_hfi_resume(inst, INPUT_MPLANE, HFI_CMD_SETTINGS_CHANGE);
+-			if (ret)
+-				return ret;
+-			clear_sub_state |= IRIS_INST_SUB_INPUT_PAUSE;
+-		}
+-	}
+-
+-	ret = iris_hfi_start(inst, OUTPUT_MPLANE);
+-	if (ret)
+-		return ret;
+-
+-	if (inst->sub_state & IRIS_INST_SUB_OUTPUT_PAUSE)
+-		clear_sub_state |= IRIS_INST_SUB_OUTPUT_PAUSE;
+-
+-	ret = iris_inst_state_change_streamon(inst, OUTPUT_MPLANE);
+-	if (ret)
+-		return ret;
+-
+-	ret = iris_inst_change_sub_state(inst, clear_sub_state, 0);
+-
+-	return ret;
+-}
+-
+ int vdec_streamon_output(struct iris_inst *inst)
+ {
+ 	int ret;
+@@ -1220,27 +1132,6 @@ int vdec_streamon_output(struct iris_inst *inst)
+ 	return ret;
+ }
+ 
+-static int vb2_buffer_to_driver(struct vb2_buffer *vb2,
+-				struct iris_buffer *buf)
+-{
+-	struct vb2_v4l2_buffer *vbuf;
+-
+-	if (!vb2 || !buf)
+-		return -EINVAL;
+-
+-	vbuf = to_vb2_v4l2_buffer(vb2);
+-
+-	buf->fd = vb2->planes[0].m.fd;
+-	buf->data_offset = vb2->planes[0].data_offset;
+-	buf->data_size = vb2->planes[0].bytesused - vb2->planes[0].data_offset;
+-	buf->buffer_size = vb2->planes[0].length;
+-	buf->timestamp = vb2->timestamp;
+-	buf->flags = vbuf->flags;
+-	buf->attr = 0;
+-
+-	return 0;
+-}
+-
+ int vdec_qbuf(struct iris_inst *inst, struct vb2_buffer *vb2)
+ {
+ 	struct iris_buffer *buf = NULL;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_venc.c b/drivers/media/platform/qcom/vcodec/iris/iris_venc.c
+index 802db40..28c6b20 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_venc.c
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_venc.c
+@@ -13,6 +13,23 @@
+ #include "iris_power.h"
+ #include "iris_venc.h"
+ 
++#define SCALE_FACTOR 8
++#define UNSPECIFIED_COLOR_FORMAT 5
++
++static const u32 enc_input_properties[] = {
++	HFI_PROP_NO_OUTPUT,
++};
++
++static const u32 enc_output_properties[] = {
++	HFI_PROP_PICTURE_TYPE,
++	HFI_PROP_BUFFER_MARK,
++};
++
++struct venc_prop_type_handle {
++	u32 type;
++	int (*handle)(struct iris_inst *inst);
++};
++
+ int venc_inst_init(struct iris_inst *inst)
+ {
+ 	struct v4l2_format *f;
+@@ -523,3 +540,409 @@ int venc_stop_cmd(struct iris_inst *inst)
+ 
+ 	return ret;
  }
 +
-+int adjust_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
++int venc_qbuf(struct iris_inst *inst, struct vb2_buffer *vb2)
 +{
-+	u32 layer_br_caps[6] = {L0_BR, L1_BR, L2_BR, L3_BR, L4_BR, L5_BR};
-+	u32 adjusted_value, cumulative_bitrate, cap_id, cap_val, i;
-+	s32 layer_count, max_bitrate = 0, entropy_mode;
++	struct iris_buffer *buf = NULL;
++	int ret;
 +
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[BIT_RATE].value;
++	buf = get_driver_buf(inst, vb2->type, vb2->index);
++	if (!buf)
++		return -EINVAL;
 +
-+	if (inst->cap[BIT_RATE].flags & CAP_FLAG_CLIENT_SET) {
-+		inst->cap[BIT_RATE].value = adjusted_value;
++	ret = vb2_buffer_to_driver(vb2, buf);
++	if (ret)
++		return ret;
++
++	if (!allow_qbuf(inst, vb2->type)) {
++		buf->attr |= BUF_ATTR_DEFERRED;
 +		return 0;
 +	}
 +
-+	entropy_mode = inst->cap[ENTROPY_MODE].value;
++	iris_scale_power(inst);
 +
-+	if (inst->codec == HEVC)
-+		max_bitrate = CABAC_MAX_BITRATE;
++	return queue_buffer(inst, buf);
++}
 +
-+	if (inst->codec == H264) {
-+		if (entropy_mode == V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC)
-+			max_bitrate = CABAC_MAX_BITRATE;
-+		else
-+			max_bitrate = CAVLC_MAX_BITRATE;
-+	}
++static int check_scaling_supported(struct iris_inst *inst)
++{
++	u32 iwidth, owidth, iheight, oheight;
 +
-+	if (inst->cap[BIT_RATE].value > max_bitrate)
-+		inst->cap[BIT_RATE].value = max_bitrate;
-+
-+	layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+	if (!layer_count)
++	if (!(inst->crop.left != inst->compose.left ||
++	      inst->crop.top != inst->compose.top ||
++	      inst->crop.width != inst->compose.width ||
++	      inst->crop.height != inst->compose.height))
 +		return 0;
 +
-+	if (!is_layer_bitrate_set(inst))
-+		return 0;
++	iwidth = inst->crop.width;
++	iheight = inst->crop.height;
++	owidth = inst->compose.width;
++	oheight = inst->compose.height;
 +
-+	cumulative_bitrate = get_cumulative_bitrate(inst);
++	if (owidth > iwidth || oheight > iheight)
++		return -EINVAL;
 +
-+	if (cumulative_bitrate > max_bitrate) {
-+		u32 decrement_in_value = 0;
-+		u32 decrement_in_percent = ((cumulative_bitrate - max_bitrate) * 100) /
-+				max_bitrate;
-+
-+		cumulative_bitrate = 0;
-+		for (i = 0; i <= layer_count; i++) {
-+			if (i >= ARRAY_SIZE(layer_br_caps))
-+				break;
-+			cap_id = layer_br_caps[i];
-+			cap_val = inst->cap[cap_id].value;
-+			decrement_in_value = (cap_val * decrement_in_percent) / 100;
-+			cumulative_bitrate += (cap_val - decrement_in_value);
-+			inst->cap[cap_id].value = cap_val - decrement_in_value;
-+		}
-+		inst->cap[BIT_RATE].value = cumulative_bitrate;
-+	}
++	if (iwidth > owidth * SCALE_FACTOR || iheight > oheight * SCALE_FACTOR)
++		return -EINVAL;
 +
 +	return 0;
 +}
 +
-+int adjust_layer_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
++static int venc_set_colorformat(struct iris_inst *inst)
 +{
-+	u32 old_br = 0, new_br = 0, exceeded_br = 0;
-+	u32 client_set_cap_id = INST_CAP_NONE;
-+	u32 cumulative_bitrate = 0;
-+	s32 max_bitrate;
++	u32 hfi_colorformat;
++	u32 pixelformat;
 +
-+	if (!ctrl)
-+		return 0;
++	pixelformat = inst->fmt_src->fmt.pix_mp.pixelformat;
++	hfi_colorformat = get_hfi_colorformat(pixelformat);
 +
-+	if (inst->cap[BIT_RATE].flags & CAP_FLAG_CLIENT_SET ||
-+	    !inst->vb2q_dst->streaming)
-+		return 0;
-+
-+	if (!inst->cap[ENH_LAYER_COUNT].max)
-+		return -EINVAL;
-+
-+	if (!is_layer_bitrate_set(inst))
-+		return 0;
-+
-+	client_set_cap_id = get_cap_id(inst, ctrl->id);
-+	if (!is_valid_cap_id(client_set_cap_id))
-+		return -EINVAL;
-+
-+	cumulative_bitrate = get_cumulative_bitrate(inst);
-+	max_bitrate = inst->cap[BIT_RATE].max;
-+	old_br = inst->cap[client_set_cap_id].value;
-+	new_br = ctrl->val;
-+
-+	if ((cumulative_bitrate - old_br + new_br) > max_bitrate) {
-+		exceeded_br = (cumulative_bitrate - old_br + new_br) - max_bitrate;
-+		new_br = ctrl->val - exceeded_br;
-+	}
-+	inst->cap[client_set_cap_id].value = new_br;
-+
-+	inst->cap[BIT_RATE].value = get_cumulative_bitrate(inst);
-+
-+	return 0;
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_COLOR_FORMAT,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, INPUT_MPLANE),
++				     HFI_PAYLOAD_U32_ENUM,
++				     &hfi_colorformat,
++				     sizeof(u32));
 +}
 +
-+int adjust_peak_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
++static int venc_set_stride_scanline(struct iris_inst *inst)
 +{
-+	u32 adjusted_value;
-+	s32 rc_mode, bitrate;
++	u32 color_format, stride_y, scanline_y;
++	u32 stride_uv = 0, scanline_uv = 0;
++	u32 payload[2];
 +
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[PEAK_BITRATE].value;
-+
-+	rc_mode = inst->cap[BITRATE_MODE].value;
-+
-+	if (rc_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR)
++	color_format = inst->cap[PIX_FMTS].value;
++	if (!is_linear_colorformat(color_format))
 +		return 0;
 +
-+	bitrate = inst->cap[BIT_RATE].value;
++	stride_y = color_format == FMT_TP10C ?
++		ALIGN(inst->fmt_src->fmt.pix_mp.width, 192) :
++		ALIGN(inst->fmt_src->fmt.pix_mp.width, 128);
++	scanline_y = color_format == FMT_TP10C ?
++		ALIGN(inst->fmt_src->fmt.pix_mp.height, 16) :
++		ALIGN(inst->fmt_src->fmt.pix_mp.height, 32);
 +
-+	if (inst->cap[PEAK_BITRATE].flags & CAP_FLAG_CLIENT_SET) {
-+		if (adjusted_value < bitrate)
-+			adjusted_value = bitrate;
++	if (color_format == FMT_NV12 ||
++	    color_format == FMT_NV21) {
++		stride_uv = stride_y;
++		scanline_uv = scanline_y / 2;
++	}
++
++	payload[0] = stride_y << 16 | scanline_y;
++	payload[1] = stride_uv << 16 | scanline_uv;
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_LINEAR_STRIDE_SCANLINE,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, INPUT_MPLANE),
++				     HFI_PAYLOAD_64_PACKED,
++				     &payload,
++				     sizeof(u64));
++}
++
++static int venc_set_raw_resolution(struct iris_inst *inst)
++{
++	u32 resolution;
++
++	resolution = (inst->fmt_src->fmt.pix_mp.width << 16) |
++		inst->fmt_src->fmt.pix_mp.height;
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_RAW_RESOLUTION,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, INPUT_MPLANE),
++				     HFI_PAYLOAD_32_PACKED,
++				     &resolution,
++				     sizeof(u32));
++}
++
++static int venc_set_bitstream_resolution(struct iris_inst *inst)
++{
++	u32 resolution;
++
++	resolution = (inst->fmt_dst->fmt.pix_mp.width << 16) |
++		inst->fmt_dst->fmt.pix_mp.height;
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_BITSTREAM_RESOLUTION,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, OUTPUT_MPLANE),
++				     HFI_PAYLOAD_32_PACKED,
++				     &resolution,
++				     sizeof(u32));
++}
++
++static int venc_set_inp_crop_offsets(struct iris_inst *inst)
++{
++	u32 left_offset, top_offset, right_offset, bottom_offset;
++	u32 crop[2] = {0};
++	u32 width, height;
++
++	left_offset = inst->crop.left;
++	top_offset = inst->crop.top;
++	width = inst->crop.width;
++	height = inst->crop.height;
++
++	right_offset = (inst->fmt_src->fmt.pix_mp.width - width);
++	bottom_offset = (inst->fmt_src->fmt.pix_mp.height - height);
++
++	crop[0] = left_offset << 16 | top_offset;
++	crop[1] = right_offset << 16 | bottom_offset;
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_CROP_OFFSETS,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, INPUT_MPLANE),
++				     HFI_PAYLOAD_64_PACKED,
++				     &crop,
++				     sizeof(u64));
++}
++
++static int venc_set_out_crop_offsets(struct iris_inst *inst)
++{
++	u32 left_offset, top_offset, right_offset, bottom_offset;
++	u32 crop[2] = {0};
++	u32 width, height;
++
++	left_offset = inst->compose.left;
++	top_offset = inst->compose.top;
++	width = inst->compose.width;
++	height = inst->compose.height;
++	if (inst->cap[ROTATION].value == 90 || inst->cap[ROTATION].value == 270) {
++		width = inst->compose.height;
++		height = inst->compose.width;
++	}
++
++	right_offset = (inst->fmt_dst->fmt.pix_mp.width - width);
++	bottom_offset = (inst->fmt_dst->fmt.pix_mp.height - height);
++
++	crop[0] = left_offset << 16 | top_offset;
++	crop[1] = right_offset << 16 | bottom_offset;
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_CROP_OFFSETS,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, OUTPUT_MPLANE),
++				     HFI_PAYLOAD_64_PACKED,
++				     &crop,
++				     sizeof(u64));
++}
++
++static int venc_set_colorspace(struct iris_inst *inst)
++{
++	u32 video_signal_type_present_flag = 0, payload = 0;
++	u32 matrix_coeff = HFI_MATRIX_COEFF_RESERVED;
++	u32 video_format = UNSPECIFIED_COLOR_FORMAT;
++	struct v4l2_pix_format_mplane *pixmp = NULL;
++	u32 transfer_char = HFI_TRANSFER_RESERVED;
++	u32 colour_description_present_flag = 0;
++	u32 primaries = HFI_PRIMARIES_RESERVED;
++	u32 full_range = 0;
++
++	pixmp = &inst->fmt_src->fmt.pix_mp;
++	if (pixmp->colorspace != V4L2_COLORSPACE_DEFAULT ||
++	    pixmp->ycbcr_enc != V4L2_YCBCR_ENC_DEFAULT ||
++	    pixmp->xfer_func != V4L2_XFER_FUNC_DEFAULT) {
++		colour_description_present_flag = 1;
++		video_signal_type_present_flag = 1;
++		primaries = get_hfi_color_primaries(pixmp->colorspace);
++		matrix_coeff = get_hfi_matrix_coefficients(pixmp->ycbcr_enc);
++		transfer_char = get_hfi_transfer_char(pixmp->xfer_func);
++	}
++
++	if (pixmp->quantization != V4L2_QUANTIZATION_DEFAULT) {
++		video_signal_type_present_flag = 1;
++		full_range = pixmp->quantization ==
++			V4L2_QUANTIZATION_FULL_RANGE ? 1 : 0;
++	}
++
++	payload = (matrix_coeff & 0xFF) |
++		((transfer_char << 8) & 0xFF00) |
++		((primaries << 16) & 0xFF0000) |
++		((colour_description_present_flag << 24) & 0x1000000) |
++		((full_range << 25) & 0x2000000) |
++		((video_format << 26) & 0x1C000000) |
++		((video_signal_type_present_flag << 29) & 0x20000000);
++
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_SIGNAL_COLOR_INFO,
++				     HFI_HOST_FLAGS_NONE,
++				     get_hfi_port(inst, INPUT_MPLANE),
++				     HFI_PAYLOAD_32_PACKED,
++				     &payload,
++				     sizeof(u32));
++}
++
++static int venc_set_quality_mode(struct iris_inst *inst)
++{
++	u32 mode;
++
++	mode = decide_quality_mode(inst);
++	return iris_hfi_set_property(inst,
++				     HFI_PROP_QUALITY_MODE,
++				     HFI_HOST_FLAGS_NONE,
++				     HFI_PORT_BITSTREAM,
++				     HFI_PAYLOAD_U32_ENUM,
++				     &mode,
++				     sizeof(u32));
++}
++
++static int venc_set_input_properties(struct iris_inst *inst)
++{
++	int j, ret;
++	static const struct venc_prop_type_handle prop_type_handle_arr[] = {
++		{HFI_PROP_COLOR_FORMAT,               venc_set_colorformat                 },
++		{HFI_PROP_RAW_RESOLUTION,             venc_set_raw_resolution              },
++		{HFI_PROP_CROP_OFFSETS,               venc_set_inp_crop_offsets            },
++		{HFI_PROP_LINEAR_STRIDE_SCANLINE,     venc_set_stride_scanline             },
++		{HFI_PROP_SIGNAL_COLOR_INFO,          venc_set_colorspace                  },
++	};
++
++	for (j = 0; j < ARRAY_SIZE(prop_type_handle_arr); j++) {
++		ret = prop_type_handle_arr[j].handle(inst);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static int venc_property_subscription(struct iris_inst *inst, u32 plane)
++{
++	u32 payload[32] = {0};
++	u32 payload_size = 0;
++	u32 i;
++
++	payload[0] = HFI_MODE_PROPERTY;
++	if (plane == INPUT_MPLANE) {
++		for (i = 0; i < ARRAY_SIZE(enc_input_properties); i++)
++			payload[i + 1] = enc_input_properties[i];
++		payload_size = (ARRAY_SIZE(enc_input_properties) + 1) *
++				sizeof(u32);
++	} else if (plane == OUTPUT_MPLANE) {
++		for (i = 0; i < ARRAY_SIZE(enc_output_properties); i++)
++			payload[i + 1] = enc_output_properties[i];
++		payload_size = (ARRAY_SIZE(enc_output_properties) + 1) *
++				sizeof(u32);
 +	} else {
-+		adjusted_value = inst->cap[BIT_RATE].value;
++		return -EINVAL;
 +	}
 +
-+	inst->cap[PEAK_BITRATE].value = adjusted_value;
-+
-+	return 0;
++	return iris_hfi_session_subscribe_mode(inst,
++					       HFI_CMD_SUBSCRIBE_MODE,
++					       plane,
++					       HFI_PAYLOAD_U32_ARRAY,
++					       &payload[0],
++					       payload_size);
 +}
 +
-+int adjust_bitrate_mode(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
++int venc_streamon_input(struct iris_inst *inst)
 +{
-+	s32 frame_rc, bitrate_mode, frame_skip;
++	int ret;
 +
-+	bitrate_mode = inst->cap[BITRATE_MODE].value;
-+	frame_rc = inst->cap[FRAME_RC_ENABLE].value;
-+	frame_skip = inst->cap[FRAME_SKIP_MODE].value;
++	ret = check_session_supported(inst);
++	if (ret)
++		goto error;
 +
-+	if (!frame_rc) {
-+		inst->hfi_rc_type = HFI_RC_OFF;
-+		return 0;
++	ret = check_scaling_supported(inst);
++	if (ret)
++		goto error;
++
++	ret = venc_set_input_properties(inst);
++	if (ret)
++		goto error;
++
++	ret = iris_get_internal_buffers(inst, INPUT_MPLANE);
++	if (ret)
++		goto error;
++
++	ret = iris_destroy_internal_buffers(inst, INPUT_MPLANE);
++	if (ret)
++		goto error;
++
++	ret = iris_create_input_internal_buffers(inst);
++	if (ret)
++		goto error;
++
++	ret = iris_queue_input_internal_buffers(inst);
++	if (ret)
++		goto error;
++
++	ret = venc_property_subscription(inst, INPUT_MPLANE);
++	if (ret)
++		goto error;
++
++	ret = process_streamon_input(inst);
++	if (ret)
++		goto error;
++
++	return ret;
++
++error:
++	return ret;
++}
++
++static int venc_set_output_properties(struct iris_inst *inst)
++{
++	int j, ret;
++	static const struct venc_prop_type_handle prop_type_handle_arr[] = {
++		{HFI_PROP_BITSTREAM_RESOLUTION,       venc_set_bitstream_resolution    },
++		{HFI_PROP_CROP_OFFSETS,               venc_set_out_crop_offsets        },
++	};
++
++	for (j = 0; j < ARRAY_SIZE(prop_type_handle_arr); j++) {
++		ret = prop_type_handle_arr[j].handle(inst);
++		if (ret)
++			return ret;
 +	}
 +
-+	if (bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) {
-+		inst->hfi_rc_type = HFI_RC_VBR_CFR;
-+	} else if (bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CBR) {
-+		if (frame_skip)
-+			inst->hfi_rc_type = HFI_RC_CBR_VFR;
-+		else
-+			inst->hfi_rc_type = HFI_RC_CBR_CFR;
-+	} else if (bitrate_mode == V4L2_MPEG_VIDEO_BITRATE_MODE_CQ) {
-+		inst->hfi_rc_type = HFI_RC_CQ;
-+	}
-+
-+	return 0;
++	return ret;
 +}
 +
-+int adjust_gop_size(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
++int venc_streamon_output(struct iris_inst *inst)
 +{
-+	s32 adjusted_value, enh_layer_count;
-+	u32 min_gop_size, num_subgops;
++	int ret;
 +
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[GOP_SIZE].value;
++	ret = venc_set_output_properties(inst);
++	if (ret)
++		goto error;
 +
-+	enh_layer_count = inst->cap[ENH_LAYER_COUNT].value;
++	ret = set_v4l2_properties(inst);
++	if (ret)
++		goto error;
 +
-+	if (!enh_layer_count)
-+		goto exit;
++	ret = venc_set_quality_mode(inst);
++	if (ret)
++		goto error;
 +
-+	/*
-+	 * Layer encoding needs GOP size to be multiple of subgop size
-+	 * And subgop size is 2 ^ number of enhancement layers.
-+	 */
-+	min_gop_size = 1 << enh_layer_count;
-+	num_subgops = (adjusted_value + (min_gop_size >> 1)) / min_gop_size;
-+	if (num_subgops)
-+		adjusted_value = num_subgops * min_gop_size;
-+	else
-+		adjusted_value = min_gop_size;
++	ret = iris_get_internal_buffers(inst, OUTPUT_MPLANE);
++	if (ret)
++		goto error;
 +
-+exit:
-+	inst->cap[GOP_SIZE].value = adjusted_value;
++	ret = iris_destroy_internal_buffers(inst, OUTPUT_MPLANE);
++	if (ret)
++		goto error;
 +
-+	return 0;
++	ret = iris_create_output_internal_buffers(inst);
++	if (ret)
++		goto error;
++
++	ret = iris_queue_output_internal_buffers(inst);
++	if (ret)
++		goto error;
++
++	ret = venc_property_subscription(inst, OUTPUT_MPLANE);
++	if (ret)
++		goto error;
++
++	ret = process_streamon_output(inst);
++	if (ret)
++		goto error;
++
++	return ret;
++
++error:
++	session_streamoff(inst, OUTPUT_MPLANE);
++
++	return ret;
 +}
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_venc.h b/drivers/media/platform/qcom/vcodec/iris/iris_venc.h
+index 24da63f..b289750 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/iris_venc.h
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_venc.h
+@@ -20,5 +20,8 @@ int venc_subscribe_event(struct iris_inst *inst,
+ 			 const struct v4l2_event_subscription *sub);
+ int venc_start_cmd(struct iris_inst *inst);
+ int venc_stop_cmd(struct iris_inst *inst);
++int venc_qbuf(struct iris_inst *inst, struct vb2_buffer *vb2);
++int venc_streamon_input(struct iris_inst *inst);
++int venc_streamon_output(struct iris_inst *inst);
+ 
+ #endif
+diff --git a/drivers/media/platform/qcom/vcodec/iris/platform_common.h b/drivers/media/platform/qcom/vcodec/iris/platform_common.h
+index effecbb..42ac662 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/platform_common.h
++++ b/drivers/media/platform/qcom/vcodec/iris/platform_common.h
+@@ -71,6 +71,11 @@ enum pipe_type {
+ 	PIPE_4 = 4,
+ };
+ 
++enum quality_mode {
++	MAX_QUALITY_MODE = 0x1,
++	POWER_SAVE_MODE = 0x2,
++};
 +
-+int adjust_b_frame(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
+ extern struct platform_data sm8550_data;
+ 
+ struct bw_info {
+diff --git a/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c b/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
+index ef0aad7..17c5856 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
++++ b/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
+@@ -74,6 +74,8 @@ static struct plat_core_cap core_data_sm8550[] = {
+ 	{CP_SIZE, 0x25800000},
+ 	{CP_NONPIXEL_START, 0x01000000},
+ 	{CP_NONPIXEL_SIZE, 0x24800000},
++	{MAX_MBPF_HQ, 8160}, /* ((1920x1088)/256) */
++	{MAX_MBPS_HQ, 489600}, /* ((1920x1088)/256)@60fps */
+ };
+ 
+ static struct plat_inst_cap instance_cap_data_sm8550[] = {
+diff --git a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.c b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.c
+index 44f9342..9882f00 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.c
++++ b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.c
+@@ -163,6 +163,186 @@ static u32 dec_dpb_size_iris3(struct iris_inst *inst)
+ 	return size;
+ }
+ 
++static u32 enc_bin_size_iris3(struct iris_inst *inst)
 +{
-+	s32 adjusted_value, enh_layer_count = -1;
-+	const u32 max_bframe_size = 7;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[B_FRAME].value;
-+
-+	enh_layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+
-+	if (!enh_layer_count || inst->hfi_layer_type != HFI_HIER_B) {
-+		adjusted_value = 0;
-+		goto exit;
-+	}
-+
-+	adjusted_value = (1 << enh_layer_count) - 1;
-+
-+	if (adjusted_value > max_bframe_size)
-+		adjusted_value = max_bframe_size;
-+
-+exit:
-+	inst->cap[B_FRAME].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_ltr_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, rc_mode, pix_fmt;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[LTR_COUNT].value;
-+
-+	rc_mode = inst->cap[BITRATE_MODE].value;
-+
-+	if (rc_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR ||
-+	    inst->hfi_rc_type != HFI_RC_OFF)
-+		adjusted_value = 0;
-+
-+	pix_fmt = inst->cap[PIX_FMTS].value;
-+	if (is_10bit_colorformat(pix_fmt))
-+		adjusted_value = 0;
-+
-+	inst->cap[LTR_COUNT].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_use_ltr(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, ltr_count;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[USE_LTR].value;
-+
-+	ltr_count = inst->cap[LTR_COUNT].value;
-+	if (!ltr_count)
-+		return 0;
-+
-+	/*
-+	 * USE_LTR is bitmask value, hence should be
-+	 * > 0 and <= (2 ^ LTR_COUNT) - 1
-+	 */
-+	if (adjusted_value <= 0 ||
-+	    adjusted_value > (1 << ltr_count) - 1)
-+		return 0;
-+
-+	inst->cap[USE_LTR].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_mark_ltr(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, ltr_count;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[MARK_LTR].value;
-+
-+	ltr_count = inst->cap[LTR_COUNT].value;
-+	if (!ltr_count)
-+		return 0;
-+
-+	if (adjusted_value < 0 || adjusted_value > ltr_count - 1)
-+		return 0;
-+
-+	inst->cap[MARK_LTR].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_ir_period(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, pix_fmt, rc_mode;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[IR_PERIOD].value;
-+
-+	pix_fmt = inst->cap[PIX_FMTS].value;
-+	if (is_10bit_colorformat(pix_fmt))
-+		adjusted_value = 0;
-+
-+	rc_mode = inst->cap[BITRATE_MODE].value;
-+	if (rc_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_CBR)
-+		adjusted_value = 0;
-+
-+	inst->cap[IR_PERIOD].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_min_quality(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, pix_fmt, rc_mode, layer_count;
-+	u32 width, height, frame_rate;
++	u32 width, height, num_vpp_pipes, stage, profile;
++	struct iris_core *core;
 +	struct v4l2_format *f;
++	u32 size = 0;
 +
-+	if (inst->vb2q_dst->streaming)
-+		return 0;
++	core = inst->core;
 +
-+	adjusted_value = MAX_SUPPORTED_MIN_QUALITY;
++	num_vpp_pipes = core->cap[NUM_VPP_PIPE].value;
++	stage = inst->cap[STAGE].value;
++	f = inst->fmt_dst;
++	width = f->fmt.pix_mp.width;
++	height = f->fmt.pix_mp.height;
++	profile = inst->cap[PROFILE].value;
 +
-+	rc_mode = inst->cap[BITRATE_MODE].value;
-+	if (rc_mode != V4L2_MPEG_VIDEO_BITRATE_MODE_VBR)
-+		adjusted_value = 0;
++	if (inst->codec == H264)
++		size = hfi_buffer_bin_h264e(inst->hfi_rc_type, width, height,
++					    stage, num_vpp_pipes, profile);
++	else if (inst->codec == HEVC)
++		size = hfi_buffer_bin_h265e(inst->hfi_rc_type, width, height,
++					    stage, num_vpp_pipes, profile);
 +
-+	layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+	if (layer_count && inst->hfi_layer_type != HFI_HIER_B)
-+		adjusted_value = 0;
++	return size;
++}
 +
-+	pix_fmt = inst->cap[PIX_FMTS].value;
-+	if (is_10bit_colorformat(pix_fmt))
-+		adjusted_value = 0;
++u32 get_recon_buf_count(struct iris_inst *inst)
++{
++	s32 n_bframe, ltr_count, hp_layers = 0, hb_layers = 0;
++	bool is_hybrid_hp = false;
++	u32 num_buf_recon = 0;
++	u32 hfi_codec = 0;
 +
-+	frame_rate = inst->cap[FRAME_RATE].value >> 16;
++	n_bframe = inst->cap[B_FRAME].value;
++	ltr_count = inst->cap[LTR_COUNT].value;
++
++	if (inst->hfi_layer_type == HFI_HIER_B) {
++		hb_layers = inst->cap[ENH_LAYER_COUNT].value + 1;
++	} else {
++		hp_layers = inst->cap[ENH_LAYER_COUNT].value + 1;
++		if (inst->hfi_layer_type == HFI_HIER_P_HYBRID_LTR)
++			is_hybrid_hp = true;
++	}
++
++	if (inst->codec == H264)
++		hfi_codec = HFI_CODEC_ENCODE_AVC;
++	else if (inst->codec == HEVC)
++		hfi_codec = HFI_CODEC_ENCODE_HEVC;
++
++	num_buf_recon = hfi_iris3_enc_recon_buf_count(n_bframe, ltr_count,
++						      hp_layers, hb_layers,
++						      is_hybrid_hp, hfi_codec);
++
++	return num_buf_recon;
++}
++
++static u32 enc_comv_size_iris3(struct iris_inst *inst)
++{
++	u32 width, height, num_recon = 0;
++	struct v4l2_format *f;
++	u32 size = 0;
++
 +	f = inst->fmt_dst;
 +	width = f->fmt.pix_mp.width;
 +	height = f->fmt.pix_mp.height;
 +
-+	if (!res_is_less_than(width, height, 1920, 1080))
-+		adjusted_value = 0;
++	num_recon = get_recon_buf_count(inst);
++	if (inst->codec == H264)
++		size = hfi_buffer_comv_h264e(width, height, num_recon);
++	else if (inst->codec == HEVC)
++		size = hfi_buffer_comv_h265e(width, height, num_recon);
 +
-+	if (frame_rate > 60)
-+		adjusted_value = 0;
-+
-+	inst->cap[MIN_QUALITY].value = adjusted_value;
-+
-+	return 0;
++	return size;
 +}
 +
-+static int adjust_static_layer_count_and_type(struct iris_inst *inst, s32 layer_count)
++static u32 enc_non_comv_size_iris3(struct iris_inst *inst)
 +{
-+	bool hb_requested = false;
-+	s32 max_enh_count = 0;
-+
-+	if (!layer_count)
-+		goto exit;
-+
-+	if (inst->hfi_rc_type == HFI_RC_CQ) {
-+		layer_count = 0;
-+		goto exit;
-+	}
-+
-+	if (inst->codec == H264) {
-+		if (!inst->cap[LAYER_ENABLE].value) {
-+			layer_count = 0;
-+			goto exit;
-+		}
-+		hb_requested = inst->cap[LAYER_TYPE].value ==
-+				V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B;
-+	} else if (inst->codec == HEVC) {
-+		hb_requested = inst->cap[LAYER_TYPE].value ==
-+				V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B;
-+	}
-+
-+	if (hb_requested && inst->hfi_rc_type != HFI_RC_VBR_CFR) {
-+		layer_count = 0;
-+		goto exit;
-+	}
-+
-+	inst->hfi_layer_type = hb_requested ? HFI_HIER_B :
-+		(inst->codec == H264 && inst->hfi_rc_type == HFI_RC_VBR_CFR) ?
-+		HFI_HIER_P_HYBRID_LTR : HFI_HIER_P_SLIDING_WINDOW;
-+
-+	max_enh_count = inst->hfi_layer_type == HFI_HIER_B ? MAX_ENH_LAYER_HB :
-+		inst->hfi_layer_type == HFI_HIER_P_HYBRID_LTR ? MAX_AVC_ENH_LAYER_HYBRID_HP :
-+		inst->hfi_layer_type == HFI_HIER_P_SLIDING_WINDOW ?
-+		(inst->codec == H264 ? MAX_AVC_ENH_LAYER_SLIDING_WINDOW :
-+		 (inst->codec == HEVC && inst->hfi_rc_type == HFI_RC_VBR_CFR) ?
-+		 MAX_HEVC_VBR_ENH_LAYER_SLIDING_WINDOW :
-+		 MAX_HEVC_NON_VBR_ENH_LAYER_SLIDING_WINDOW) :
-+		layer_count;
-+
-+	layer_count = min(layer_count, max_enh_count);
-+
-+exit:
-+	inst->cap[ENH_LAYER_COUNT].value = layer_count;
-+	inst->cap[ENH_LAYER_COUNT].max = layer_count;
-+
-+	return 0;
-+}
-+
-+int adjust_layer_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 client_layer_count;
-+	int ret = 0;
-+
-+	client_layer_count = ctrl ? ctrl->val : inst->cap[ENH_LAYER_COUNT].value;
-+
-+	if (!inst->vb2q_dst->streaming) {
-+		ret = adjust_static_layer_count_and_type(inst, client_layer_count);
-+		if (ret)
-+			return ret;
-+	} else {
-+		if (inst->hfi_rc_type == HFI_RC_CBR_CFR ||
-+		    inst->hfi_rc_type == HFI_RC_CBR_VFR)
-+			return ret;
-+
-+		if (inst->hfi_layer_type == HFI_HIER_P_HYBRID_LTR ||
-+		    inst->hfi_layer_type == HFI_HIER_P_SLIDING_WINDOW)
-+			inst->cap[ENH_LAYER_COUNT].value =
-+				min(client_layer_count, inst->cap[ENH_LAYER_COUNT].max);
-+	}
-+
-+	return ret;
-+}
-+
-+int adjust_entropy_mode(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value;
-+	s32 profile = -1;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[ENTROPY_MODE].value;
-+
-+	profile = inst->cap[PROFILE].value;
-+	if (profile == V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE ||
-+	    profile == V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE)
-+		adjusted_value = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC;
-+
-+	inst->cap[ENTROPY_MODE].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_slice_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value, rc_type = -1, slice_mode, enh_layer_count = 0;
-+	u32 slice_val, mbpf = 0, mbps = 0, max_mbpf = 0, max_mbps = 0, bitrate = 0;
-+	u32 update_cap, max_avg_slicesize, output_width, output_height;
-+	u32 min_width, min_height, max_width, max_height, fps;
-+
-+	slice_mode = ctrl ? ctrl->val : inst->cap[SLICE_MODE].value;
-+	if (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE)
-+		return 0;
-+
-+	bitrate = inst->cap[BIT_RATE].value;
-+	enh_layer_count = inst->cap[ENH_LAYER_COUNT].value;
-+	if (enh_layer_count && is_layer_bitrate_set(inst))
-+		bitrate = get_cumulative_bitrate(inst);
-+
-+	rc_type = inst->hfi_rc_type;
-+	fps = inst->cap[FRAME_RATE].value >> 16;
-+	if (fps > MAX_SLICES_FRAME_RATE ||
-+	    (rc_type != HFI_RC_OFF && rc_type != HFI_RC_CBR_CFR &&
-+	     rc_type != HFI_RC_CBR_VFR && rc_type != HFI_RC_VBR_CFR)) {
-+		adjusted_value = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE;
-+		update_cap = SLICE_MODE;
-+		goto exit;
-+	}
-+
-+	output_width = inst->fmt_dst->fmt.pix_mp.width;
-+	output_height = inst->fmt_dst->fmt.pix_mp.height;
-+
-+	max_width = (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) ?
-+		MAX_MB_SLICE_WIDTH : MAX_BYTES_SLICE_WIDTH;
-+	max_height = (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) ?
-+		MAX_MB_SLICE_HEIGHT : MAX_BYTES_SLICE_HEIGHT;
-+	min_width = (inst->codec == HEVC) ?
-+		MIN_HEVC_SLICE_WIDTH : MIN_AVC_SLICE_WIDTH;
-+	min_height = MIN_SLICE_HEIGHT;
-+
-+	if (output_width < min_width || output_height < min_height ||
-+	    output_width > max_width || output_height > max_width) {
-+		adjusted_value = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE;
-+		update_cap = SLICE_MODE;
-+		goto exit;
-+	}
-+
-+	mbpf = NUM_MBS_PER_FRAME(output_height, output_width);
-+	mbps = mbpf * fps;
-+	max_mbpf = NUM_MBS_PER_FRAME(max_height, max_width);
-+	max_mbps = max_mbpf * MAX_SLICES_FRAME_RATE;
-+
-+	if (mbpf > max_mbpf || mbps > max_mbps) {
-+		adjusted_value = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE;
-+		update_cap = SLICE_MODE;
-+		goto exit;
-+	}
-+
-+	if (slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
-+		update_cap = SLICE_MAX_MB;
-+		slice_val = inst->cap[SLICE_MAX_MB].value;
-+		slice_val = max(slice_val, mbpf / MAX_SLICES_PER_FRAME);
-+	} else {
-+		slice_val = inst->cap[SLICE_MAX_BYTES].value;
-+		update_cap = SLICE_MAX_BYTES;
-+		if (rc_type != HFI_RC_OFF) {
-+			max_avg_slicesize =
-+				((bitrate / fps) / 8) / MAX_SLICES_PER_FRAME;
-+			slice_val = max(slice_val, max_avg_slicesize);
-+		}
-+	}
-+	adjusted_value = slice_val;
-+
-+exit:
-+	inst->cap[update_cap].value = adjusted_value;
-+
-+	return 0;
-+}
-+
-+int adjust_transform_8x8(struct iris_inst *inst, struct v4l2_ctrl *ctrl)
-+{
-+	s32 adjusted_value;
-+	s32 profile = -1;
-+
-+	adjusted_value = ctrl ? ctrl->val : inst->cap[TRANSFORM_8X8].value;
-+
-+	profile = inst->cap[PROFILE].value;
-+	if (profile != V4L2_MPEG_VIDEO_H264_PROFILE_HIGH &&
-+	    profile != V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
-+		adjusted_value = 0;
-+
-+	inst->cap[TRANSFORM_8X8].value = adjusted_value;
-+
-+	return 0;
-+}
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
-index 28ce767..5421d9f 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_ctrls.h
-@@ -31,5 +31,40 @@ int get_inst_capability(struct iris_inst *inst);
- int set_v4l2_properties(struct iris_inst *inst);
- int adjust_v4l2_properties(struct iris_inst *inst);
- int ctrls_init(struct iris_inst *inst, bool init);
-+int set_q16(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_level(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_req_sync_frame(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_flip(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_rotation(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_header_mode(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_gop_size(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_bitrate(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_layer_bitrate(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_peak_bitrate(struct iris_inst *inst,
-+		     enum plat_inst_cap_type cap_id);
-+int set_use_and_mark_ltr(struct iris_inst *inst,
-+			 enum plat_inst_cap_type cap_id);
-+int set_ir_period(struct iris_inst *inst,
-+		  enum plat_inst_cap_type cap_id);
-+int set_min_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_max_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_frame_qp(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_layer_count_and_type(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int set_slice_count(struct iris_inst *inst, enum plat_inst_cap_type cap_id);
-+int adjust_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_layer_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_peak_bitrate(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_bitrate_mode(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_gop_size(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_b_frame(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_ltr_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_use_ltr(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_mark_ltr(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_ir_period(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_min_quality(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_layer_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_entropy_mode(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_slice_count(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
-+int adjust_transform_8x8(struct iris_inst *inst, struct v4l2_ctrl *ctrl);
- 
- #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
-index 395a189..d9d22e2 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_helpers.c
-@@ -40,12 +40,20 @@ bool res_is_less_than(u32 width, u32 height,
- u32 get_port_info(struct iris_inst *inst,
- 		  enum plat_inst_cap_type cap_id)
- {
-+	if (inst->cap[cap_id].flags & CAP_FLAG_INPUT_PORT &&
-+	    inst->cap[cap_id].flags & CAP_FLAG_OUTPUT_PORT) {
-+		if (inst->vb2q_dst->streaming)
-+			return get_hfi_port(INPUT_MPLANE);
-+		else
-+			return get_hfi_port(OUTPUT_MPLANE);
-+	}
-+
- 	if (inst->cap[cap_id].flags & CAP_FLAG_INPUT_PORT)
--		return HFI_PORT_BITSTREAM;
-+		return get_hfi_port(INPUT_MPLANE);
- 	else if (inst->cap[cap_id].flags & CAP_FLAG_OUTPUT_PORT)
--		return HFI_PORT_RAW;
--
--	return HFI_PORT_NONE;
-+		return get_hfi_port(OUTPUT_MPLANE);
-+	else
-+		return HFI_PORT_NONE;
- }
- 
- enum iris_buffer_type v4l2_type_to_driver(u32 type)
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-index 2850fd5..00e598d 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-@@ -668,6 +668,59 @@ int iris_hfi_set_property(struct iris_inst *inst,
- 	return ret;
- }
- 
-+int iris_hfi_set_ir_period(struct iris_inst *inst,
-+			   u32 packet_type, u32 flag, u32 plane, u32 payload_type,
-+			   void *payload, u32 payload_size)
-+{
-+	u32 sync_frame_req = 0;
++	u32 width, height, num_vpp_pipes;
 +	struct iris_core *core;
-+	int ret;
++	struct v4l2_format *f;
++	u32 size = 0;
 +
 +	core = inst->core;
 +
-+	mutex_lock(&core->lock);
++	num_vpp_pipes = core->cap[NUM_VPP_PIPE].value;
++	f = inst->fmt_dst;
++	width = f->fmt.pix_mp.width;
++	height = f->fmt.pix_mp.height;
 +
-+	ret = hfi_create_header(inst->packet, inst->packet_size,
-+				inst->session_id, core->header_id++);
-+	if (ret)
-+		goto exit;
++	if (inst->codec == H264)
++		size = hfi_buffer_non_comv_h264e(width, height, num_vpp_pipes);
++	else if (inst->codec == HEVC)
++		size = hfi_buffer_non_comv_h265e(width, height, num_vpp_pipes);
 +
-+	if (!inst->ir_enabled) {
-+		inst->ir_enabled = ((*(u32 *)payload > 0) ? true : false);
-+		if (inst->ir_enabled && inst->vb2q_dst->streaming) {
-+			sync_frame_req = HFI_SYNC_FRAME_REQUEST_WITH_PREFIX_SEQ_HDR;
-+			ret = hfi_create_packet(inst->packet, inst->packet_size,
-+						HFI_PROP_REQUEST_SYNC_FRAME,
-+						HFI_HOST_FLAGS_NONE,
-+						HFI_PAYLOAD_U32_ENUM,
-+						HFI_PORT_BITSTREAM,
-+						core->packet_id++,
-+						&sync_frame_req,
-+						sizeof(u32));
-+			if (ret)
-+				goto exit;
-+		}
-+	}
-+
-+	ret = hfi_create_packet(inst->packet, inst->packet_size,
-+				packet_type,
-+				HFI_HOST_FLAGS_NONE,
-+				HFI_PAYLOAD_U32,
-+				plane,
-+				core->packet_id++,
-+				payload,
-+				sizeof(u32));
-+	if (ret)
-+		goto exit;
-+
-+	ret = iris_hfi_queue_cmd_write(inst->core, inst->packet);
-+
-+exit:
-+	mutex_unlock(&core->lock);
-+
-+	return ret;
++	return size;
 +}
 +
- int iris_hfi_queue_buffer(struct iris_inst *inst,
- 			  struct iris_buffer *buffer)
- {
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-index 465bfc5..95e0523 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-@@ -40,9 +40,8 @@ int prepare_pc(struct iris_core *core);
++static u32 enc_line_size_iris3(struct iris_inst *inst)
++{
++	u32 width, height, pixfmt, num_vpp_pipes;
++	struct iris_core *core;
++	bool is_tenbit = false;
++	struct v4l2_format *f;
++	u32 size = 0;
++
++	core = inst->core;
++	num_vpp_pipes = core->cap[NUM_VPP_PIPE].value;
++	pixfmt = inst->cap[PIX_FMTS].value;
++
++	f = inst->fmt_dst;
++	width = f->fmt.pix_mp.width;
++	height = f->fmt.pix_mp.height;
++	is_tenbit = (pixfmt == FMT_TP10C);
++
++	if (inst->codec == H264)
++		size = hfi_buffer_line_h264e(width, height, is_tenbit, num_vpp_pipes);
++	else if (inst->codec == HEVC)
++		size = hfi_buffer_line_h265e(width, height, is_tenbit, num_vpp_pipes);
++
++	return size;
++}
++
++static u32 enc_dpb_size_iris3(struct iris_inst *inst)
++{
++	u32 width, height, pixfmt;
++	struct v4l2_format *f;
++	bool is_tenbit;
++	u32 size = 0;
++
++	f = inst->fmt_dst;
++	width = f->fmt.pix_mp.width;
++	height = f->fmt.pix_mp.height;
++
++	pixfmt = inst->cap[PIX_FMTS].value;
++	is_tenbit = (pixfmt == FMT_TP10C);
++
++	if (inst->codec == H264)
++		size = hfi_buffer_dpb_h264e(width, height);
++	else if (inst->codec == HEVC)
++		size = hfi_buffer_dpb_h265e(width, height, is_tenbit);
++
++	return size;
++}
++
++static u32 enc_arp_size_iris3(struct iris_inst *inst)
++{
++	u32 size = 0;
++
++	HFI_BUFFER_ARP_ENC(size);
++
++	return size;
++}
++
++static u32 enc_vpss_size_iris3(struct iris_inst *inst)
++{
++	bool ds_enable = false, is_tenbit = false;
++	struct v4l2_format *f;
++	u32 width, height;
++	u32 size = 0;
++
++	ds_enable = is_scaling_enabled(inst);
++
++	f = inst->fmt_dst;
++	if (inst->cap[ROTATION].value == 90 ||
++	    inst->cap[ROTATION].value == 270) {
++		width = f->fmt.pix_mp.height;
++		height = f->fmt.pix_mp.width;
++	} else {
++		width = f->fmt.pix_mp.width;
++		height = f->fmt.pix_mp.height;
++	}
++
++	f = inst->fmt_src;
++	is_tenbit = is_10bit_colorformat(f->fmt.pix_mp.pixelformat);
++
++	size = hfi_buffer_vpss_enc(width, height, ds_enable, 0, is_tenbit);
++
++	return size;
++}
++
+ struct iris_buf_type_handle {
+ 	enum iris_buffer_type type;
+ 	u32 (*handle)(struct iris_inst *inst);
+@@ -183,9 +363,23 @@ int iris_int_buf_size_iris3(struct iris_inst *inst,
+ 		{BUF_PERSIST,         dec_persist_size_iris3      },
+ 		{BUF_DPB,             dec_dpb_size_iris3          },
+ 	};
++	static const struct iris_buf_type_handle enc_internal_buf_type_handle[] = {
++		{BUF_BIN,             enc_bin_size_iris3          },
++		{BUF_COMV,            enc_comv_size_iris3         },
++		{BUF_NON_COMV,        enc_non_comv_size_iris3     },
++		{BUF_LINE,            enc_line_size_iris3         },
++		{BUF_DPB,             enc_dpb_size_iris3          },
++		{BUF_ARP,             enc_arp_size_iris3          },
++		{BUF_VPSS,            enc_vpss_size_iris3         },
++	};
  
- irqreturn_t iris_hfi_isr(int irq, void *data);
- irqreturn_t iris_hfi_isr_handler(int irq, void *data);
--int iris_hfi_queue_buffer(struct iris_inst *inst,
--			  struct iris_buffer *buffer);
--int iris_hfi_release_buffer(struct iris_inst *inst,
--			    struct iris_buffer *buffer);
-+int iris_hfi_set_ir_period(struct iris_inst *inst,
-+			   u32 packet_type, u32 flag, u32 plane, u32 payload_type,
-+			   void *payload, u32 payload_size);
+-	buf_type_handle_size = ARRAY_SIZE(dec_internal_buf_type_handle);
+-	buf_type_handle_arr = dec_internal_buf_type_handle;
++	if (inst->domain == DECODER) {
++		buf_type_handle_size = ARRAY_SIZE(dec_internal_buf_type_handle);
++		buf_type_handle_arr = dec_internal_buf_type_handle;
++	} else if (inst->domain == ENCODER) {
++		buf_type_handle_size = ARRAY_SIZE(enc_internal_buf_type_handle);
++		buf_type_handle_arr = enc_internal_buf_type_handle;
++	}
  
- #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-index fab206cf..dd27fa4 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-@@ -364,8 +364,8 @@ int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf)
- 	return 0;
- }
+ 	if (!buf_type_handle_arr || !buf_type_handle_size)
+ 		return size;
+diff --git a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.h b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.h
+index b520c79..c63b3ac 100644
+--- a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.h
++++ b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_buffer.h
+@@ -14,8 +14,10 @@
  
--static int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
--			     u32 header_id)
-+int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
-+		      u32 header_id)
- {
- 	struct hfi_header *hdr = (struct hfi_header *)packet;
+ #define DMA_ALIGNMENT 256
  
-@@ -382,9 +382,9 @@ static int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
- 	return 0;
- }
++#define BUFFER_ALIGNMENT_4096_BYTES 4096
+ #define BUFFER_ALIGNMENT_512_BYTES 512
+ #define BUFFER_ALIGNMENT_256_BYTES 256
++#define BUFFER_ALIGNMENT_128_BYTES 128
+ #define BUFFER_ALIGNMENT_64_BYTES 64
+ #define BUFFER_ALIGNMENT_32_BYTES 32
+ #define BUFFER_ALIGNMENT_16_BYTES 16
+@@ -26,6 +28,8 @@
+ #define HFI_COL_FMT_NV12C_Y_TILE_WIDTH (32)
+ #define HFI_COL_FMT_NV12C_UV_TILE_HEIGHT (8)
+ #define HFI_COL_FMT_NV12C_UV_TILE_WIDTH (16)
++#define HFI_COL_FMT_TP10C_Y_TILE_HEIGHT (4)
++#define HFI_COL_FMT_TP10C_Y_TILE_WIDTH (48)
  
--static int hfi_create_packet(u8 *packet, u32 packet_size, u32 pkt_type,
--			     u32 pkt_flags, u32 payload_type, u32 port,
--			     u32 packet_id, void *payload, u32 payload_size)
-+int hfi_create_packet(u8 *packet, u32 packet_size, u32 pkt_type,
-+		      u32 pkt_flags, u32 payload_type, u32 port,
-+		      u32 packet_id, void *payload, u32 payload_size)
- {
- 	struct hfi_header *hdr;
- 	struct hfi_packet *pkt;
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-index 849b585..82148b7 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-@@ -108,5 +108,10 @@ int hfi_packet_sys_interframe_powercollapse(struct iris_core *core,
- 					    u8 *pkt, u32 pkt_size);
- int hfi_packet_sys_pc_prep(struct iris_core *core,
- 			   u8 *pkt, u32 pkt_size);
-+int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
-+		      u32 header_id);
-+int hfi_create_packet(u8 *packet, u32 packet_size, u32 pkt_type,
-+		      u32 pkt_flags, u32 payload_type, u32 port,
-+		      u32 packet_id, void *payload, u32 payload_size);
+ #define NUM_HW_PIC_BUF 32
+ #define SIZE_HW_PIC(size_per_buf) (NUM_HW_PIC_BUF * (size_per_buf))
+@@ -102,6 +106,27 @@
+ #define MAX_PE_NBR_DATA_LCU64_LINE_BUFFER_SIZE (64 * 2 * 3)
+ #define MAX_FE_NBR_DATA_LUMA_LINE_BUFFER_SIZE 640
  
- #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
-index a4d5d9c..1b667a5 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_response.c
-@@ -758,6 +758,12 @@ static int handle_session_property(struct iris_inst *inst,
- 	case HFI_PROP_PICTURE_TYPE:
- 		inst->hfi_frame_info.picture_type = payload_ptr[0];
- 		break;
-+	case HFI_PROP_CABAC_SESSION:
-+		if (payload_ptr[0] == 1)
-+			inst->cap[ENTROPY_MODE].value = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC;
++#define HFI_BUFFER_ARP_ENC(size) (size = 204800)
++
++#define HFI_MAX_COL_FRAME 6
++#define HFI_VENUS_WIDTH_ALIGNMENT 128
++#define HFI_VENUS_HEIGHT_ALIGNMENT 32
++#define VENUS_METADATA_STRIDE_MULTIPLE 64
++#define VENUS_METADATA_HEIGHT_MULTIPLE 16
++
++#ifndef SYSTEM_LAL_TILE10
++#define SYSTEM_LAL_TILE10 192
++#endif
++
++#define SIZE_SLICE_CMD_BUFFER (ALIGN(20480, BUFFER_ALIGNMENT_256_BYTES))
++#define SIZE_SPS_PPS_SLICE_HDR (2048 + 4096)
++
++#define SIZE_BSE_SLICE_CMD_BUF ((((8192 << 2) + 7) & (~7)) * 3)
++#define SIZE_LAMBDA_LUT (256 * 11)
++
++#define HFI_WORKMODE_1 1
++#define HFI_WORKMODE_2 2
++
+ static inline
+ u32 size_h264d_hw_bin_buffer(u32 frame_width, u32 frame_height,
+ 			     u32 num_vpp_pipes)
+@@ -842,4 +867,603 @@ u32 hfi_yuv420_tp10_ubwc_calc_buf_size(u32 y_stride, u32 y_buf_height,
+ int iris_int_buf_size_iris3(struct iris_inst *inst,
+ 			    enum iris_buffer_type buffer_type);
+ 
++static inline
++u32 hfi_iris3_enc_recon_buf_count(s32 n_bframe, s32 ltr_count,
++				  s32 _total_hp_layers,
++				  s32 _total_hb_layers,
++				  bool hybrid_hp,
++				  u32 codec_standard)
++{
++	u32 num_ref = 1;
++
++	if (n_bframe)
++		num_ref = 2;
++
++	if (_total_hp_layers > 1) {
++		if (hybrid_hp)
++			num_ref = (_total_hp_layers + 1) >> 1;
++		else if (codec_standard == HFI_CODEC_ENCODE_HEVC)
++			num_ref = (_total_hp_layers + 1) >> 1;
++		else if (codec_standard == HFI_CODEC_ENCODE_AVC &&
++			 _total_hp_layers < 4)
++			num_ref = (_total_hp_layers - 1);
 +		else
-+			inst->cap[ENTROPY_MODE].value = V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC;
-+		break;
- 	case HFI_PROP_DPB_LIST:
- 		ret = handle_dpb_list_property(inst, pkt);
- 		if (ret)
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_instance.h b/drivers/media/platform/qcom/vcodec/iris/iris_instance.h
-index 3c85e78..70f4c7d 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_instance.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_instance.h
-@@ -52,6 +52,9 @@
-  * @power: structure of power info
-  * @bus_data: structure of bus data
-  * @input_timer_list: list head of input timer
-+ * @ir_enabled: boolean for intra refresh
-+ * @hfi_rc_type: rate control type
-+ * @hfi_layer_type: type of HFI layer encoding
-  */
- 
- struct iris_inst {
-@@ -90,6 +93,9 @@ struct iris_inst {
- 	struct iris_inst_power		power;
- 	struct bus_vote_data		bus_data;
- 	struct list_head		input_timer_list;
-+	bool				ir_enabled;
-+	u32				hfi_rc_type;
-+	u32				hfi_layer_type;
- };
- 
++			num_ref = _total_hp_layers;
++	}
++
++	if (ltr_count)
++		num_ref = num_ref + ltr_count;
++
++	if (_total_hb_layers > 1) {
++		if (codec_standard == HFI_CODEC_ENCODE_HEVC)
++			num_ref = (_total_hb_layers);
++		else if (codec_standard == HFI_CODEC_ENCODE_AVC)
++			num_ref = (1 << (_total_hb_layers - 2)) + 1;
++	}
++
++	return num_ref + 1;
++}
++
++static inline
++u32 size_bin_bitstream_enc(u32 rc_type, u32 frame_width, u32 frame_height,
++			   u32 work_mode, u32 lcu_size, u32 profile)
++{
++	u32 size_aligned_width = 0, size_aligned_height = 0;
++	u32 bitstream_size_eval = 0;
++
++	size_aligned_width = ALIGN((frame_width), lcu_size);
++	size_aligned_height = ALIGN((frame_height), lcu_size);
++	if (work_mode == HFI_WORKMODE_2) {
++		if (rc_type == HFI_RC_CQ || rc_type == HFI_RC_OFF) {
++			bitstream_size_eval = (((size_aligned_width) *
++						(size_aligned_height) * 3) >> 1);
++		} else {
++			bitstream_size_eval = ((size_aligned_width) *
++					       (size_aligned_height) * 3);
++			if ((size_aligned_width * size_aligned_height) > (4096 * 2176))
++				bitstream_size_eval >>= 3;
++			else if ((size_aligned_width * size_aligned_height) > (480 * 320))
++				bitstream_size_eval >>= 2;
++
++			if (profile == HFI_H265_PROFILE_MAIN_10 ||
++			    profile == HFI_H265_PROFILE_MAIN_10_STILL_PICTURE)
++				bitstream_size_eval = (bitstream_size_eval * 5 >> 2);
++		}
++	} else {
++		bitstream_size_eval = size_aligned_width * size_aligned_height * 3;
++	}
++
++	return ALIGN(bitstream_size_eval, BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_enc_single_pipe(u32 rc_type, u32 bitbin_size, u32 num_vpp_pipes,
++			 u32 frame_width, u32 frame_height, u32 lcu_size)
++{
++	u32 size_single_pipe_eval = 0, sao_bin_buffer_size = 0;
++	u32 size_aligned_width = 0, size_aligned_height = 0;
++	u32 _padded_bin_sz = 0;
++
++	size_aligned_width = ALIGN((frame_width), lcu_size);
++	size_aligned_height = ALIGN((frame_height), lcu_size);
++	if ((size_aligned_width * size_aligned_height) > (3840 * 2160))
++		size_single_pipe_eval = (bitbin_size / num_vpp_pipes);
++	else if (num_vpp_pipes > 2)
++		size_single_pipe_eval = bitbin_size / 2;
++	else
++		size_single_pipe_eval = bitbin_size;
++
++	sao_bin_buffer_size =
++		(64 * ((((frame_width) + BUFFER_ALIGNMENT_32_BYTES) *
++			((frame_height) + BUFFER_ALIGNMENT_32_BYTES)) >> 10)) + 384;
++	_padded_bin_sz = ALIGN(size_single_pipe_eval, BUFFER_ALIGNMENT_256_BYTES);
++	size_single_pipe_eval = sao_bin_buffer_size + _padded_bin_sz;
++	size_single_pipe_eval = ALIGN(size_single_pipe_eval, BUFFER_ALIGNMENT_256_BYTES);
++
++	return size_single_pipe_eval;
++}
++
++static inline
++u32 hfi_buffer_bin_enc(u32 rc_type, u32 frame_width, u32 frame_height, u32 lcu_size,
++		       u32 work_mode, u32 num_vpp_pipes, u32 profile)
++{
++	u32 bitstream_size = 0, total_bitbin_buffers = 0;
++	u32 size_single_pipe = 0, bitbin_size = 0;
++	u32 _size = 0;
++
++	bitstream_size = size_bin_bitstream_enc(rc_type, frame_width,
++						frame_height, work_mode,
++						lcu_size, profile);
++
++	if (work_mode == HFI_WORKMODE_2) {
++		total_bitbin_buffers = 3;
++		bitbin_size = bitstream_size * 12 / 10;
++		bitbin_size = ALIGN(bitbin_size, BUFFER_ALIGNMENT_256_BYTES);
++	} else if ((lcu_size == 16) || (num_vpp_pipes > 1)) {
++		total_bitbin_buffers = 1;
++		bitbin_size = bitstream_size;
++	}
++
++	if (total_bitbin_buffers > 0) {
++		size_single_pipe = size_enc_single_pipe(rc_type, bitbin_size,
++							num_vpp_pipes, frame_width,
++							frame_height, lcu_size);
++		bitbin_size = size_single_pipe * num_vpp_pipes;
++		_size = ALIGN(bitbin_size, BUFFER_ALIGNMENT_256_BYTES) *
++			      total_bitbin_buffers + 512;
++	} else {
++		/* Avoid 512 Bytes allocation in case of 1Pipe HEVC Direct Mode*/
++		_size = 0;
++	}
++
++	return _size;
++}
++
++static inline
++u32 hfi_buffer_bin_h264e(u32 rc_type, u32 frame_width, u32 frame_height,
++			 u32 work_mode, u32 num_vpp_pipes, u32 profile)
++{
++	return hfi_buffer_bin_enc(rc_type, frame_width, frame_height, 16,
++				  work_mode, num_vpp_pipes, profile);
++}
++
++static inline
++u32 hfi_buffer_bin_h265e(u32 rc_type, u32 frame_width, u32 frame_height,
++			 u32 work_mode, u32 num_vpp_pipes, u32 profile)
++{
++	return hfi_buffer_bin_enc(rc_type, frame_width, frame_height, 32,
++				  work_mode, num_vpp_pipes, profile);
++}
++
++static inline
++u32 size_enc_slice_info_buf(u32 num_lcu_in_frame)
++{
++	return ALIGN((256 + (num_lcu_in_frame << 4)), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_line_buf_ctrl(u32 frame_width_coded)
++{
++	return ALIGN(frame_width_coded, BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_line_buf_ctrl_id2(u32 frame_width_coded)
++{
++	return ALIGN(frame_width_coded, BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_linebuff_data(bool is_ten_bit, u32 frame_width_coded)
++{
++	u32 _size = 0;
++
++	_size = is_ten_bit ?
++		(((((10 * (frame_width_coded) + 1024) + (BUFFER_ALIGNMENT_256_BYTES - 1)) &
++		   (~(BUFFER_ALIGNMENT_256_BYTES - 1))) * 1) +
++		 (((((10 * (frame_width_coded) + 1024) >> 1) + (BUFFER_ALIGNMENT_256_BYTES - 1)) &
++		   (~(BUFFER_ALIGNMENT_256_BYTES - 1))) * 2)) :
++		(((((8 * (frame_width_coded) + 1024) + (BUFFER_ALIGNMENT_256_BYTES - 1)) &
++		   (~(BUFFER_ALIGNMENT_256_BYTES - 1))) * 1) +
++		 (((((8 * (frame_width_coded) + 1024) >> 1) + (BUFFER_ALIGNMENT_256_BYTES - 1)) &
++		   (~(BUFFER_ALIGNMENT_256_BYTES - 1))) * 2));
++
++	return _size;
++}
++
++static inline
++u32 size_left_linebuff_ctrl(u32 standard, u32 frame_height_coded,
++			    u32 num_vpp_pipes_enc)
++{
++	u32 _size = 0;
++
++	_size = standard == HFI_CODEC_ENCODE_HEVC ?
++		(((frame_height_coded) +
++		 (BUFFER_ALIGNMENT_32_BYTES)) / BUFFER_ALIGNMENT_32_BYTES * 4 * 16) :
++		(((frame_height_coded) + 15) / 16 * 5 * 16);
++
++	if ((num_vpp_pipes_enc) > 1) {
++		_size += BUFFER_ALIGNMENT_512_BYTES;
++		_size = ALIGN(_size, BUFFER_ALIGNMENT_512_BYTES) *
++			num_vpp_pipes_enc;
++	}
++
++	return ALIGN(_size, BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_left_linebuff_recon_pix(bool is_ten_bit, u32 frame_height_coded,
++				 u32 num_vpp_pipes_enc)
++{
++	return (((is_ten_bit + 1) * 2 * (frame_height_coded) + BUFFER_ALIGNMENT_256_BYTES) +
++		(BUFFER_ALIGNMENT_256_BYTES << (num_vpp_pipes_enc - 1)) - 1) &
++		(~((BUFFER_ALIGNMENT_256_BYTES << (num_vpp_pipes_enc - 1)) - 1)) * 1;
++}
++
++static inline
++u32 size_top_linebuff_ctrl_fe(u32 frame_width_coded, u32 standard)
++{
++	u32 _size = 0;
++
++	_size = standard == HFI_CODEC_ENCODE_HEVC ?
++		(64 * ((frame_width_coded) >> 5)) :
++		(BUFFER_ALIGNMENT_256_BYTES + 16 * ((frame_width_coded) >> 4));
++
++	return ALIGN(_size, BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_left_linebuff_ctrl_fe(u32 frame_height_coded, u32 num_vpp_pipes_enc)
++{
++	return (((BUFFER_ALIGNMENT_256_BYTES + 64 * ((frame_height_coded) >> 4)) +
++		 (BUFFER_ALIGNMENT_256_BYTES << (num_vpp_pipes_enc - 1)) - 1) &
++		 (~((BUFFER_ALIGNMENT_256_BYTES << (num_vpp_pipes_enc - 1)) - 1)) * 1) *
++		num_vpp_pipes_enc;
++}
++
++static inline
++u32 size_left_linebuff_metadata_recon_y(u32 frame_height_coded,
++					bool is_ten_bit,
++					u32 num_vpp_pipes_enc)
++{
++	u32 _size = 0;
++
++	_size = ((BUFFER_ALIGNMENT_256_BYTES + 64 * ((frame_height_coded) /
++		  (8 * (is_ten_bit ? 4 : 8)))));
++	_size = ALIGN(_size, BUFFER_ALIGNMENT_256_BYTES);
++
++	return (_size * num_vpp_pipes_enc);
++}
++
++static inline
++u32 size_left_linebuff_metadata_recon_uv(u32 frame_height_coded,
++					 bool is_ten_bit,
++					 u32 num_vpp_pipes_enc)
++{
++	u32 _size = 0;
++
++	_size = ((BUFFER_ALIGNMENT_256_BYTES + 64 * ((frame_height_coded) /
++		  (4 * (is_ten_bit ? 4 : 8)))));
++	_size = ALIGN(_size, BUFFER_ALIGNMENT_256_BYTES);
++
++	return (_size * num_vpp_pipes_enc);
++}
++
++static inline
++u32 size_linebuff_recon_pix(bool is_ten_bit, u32 frame_width_coded)
++{
++	return ALIGN(((is_ten_bit ? 3 : 2) * (frame_width_coded)),
++		     BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_frame_rc_buf_size(u32 standard, u32 frame_height_coded,
++			   u32 num_vpp_pipes_enc)
++{
++	u32 _size = 0;
++
++	_size = (standard == HFI_CODEC_ENCODE_HEVC) ?
++		(256 + 16 * (14 + ((((frame_height_coded) >> 5) + 7) >> 3))) :
++		(256 + 16 * (14 + ((((frame_height_coded) >> 4) + 7) >> 3)));
++	_size *= 11;
++	if (num_vpp_pipes_enc > 1)
++		_size = ALIGN(_size, BUFFER_ALIGNMENT_256_BYTES) * num_vpp_pipes_enc;
++
++	return ALIGN(_size, BUFFER_ALIGNMENT_512_BYTES) * HFI_MAX_COL_FRAME;
++}
++
++static inline u32 enc_bitcnt_buf_size(u32 num_lcu_in_frame)
++{
++	return ALIGN((256 + (4 * (num_lcu_in_frame))), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline u32 enc_bitmap_buf_size(u32 num_lcu_in_frame)
++{
++	return ALIGN((256 + ((num_lcu_in_frame) >> 3)), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline u32 size_line_buf_sde(u32 frame_width_coded)
++{
++	return ALIGN((256 + (16 * ((frame_width_coded) >> 4))), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline u32 size_override_buf(u32 num_lcumb)
++{
++	return ALIGN(((16 * (((num_lcumb) + 7) >> 3))), BUFFER_ALIGNMENT_256_BYTES) * 2;
++}
++
++static inline u32 size_ir_buf(u32 num_lcu_in_frame)
++{
++	return ALIGN((((((num_lcu_in_frame) << 1) + 7) & (~7)) * 3), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_vpss_line_buf(u32 num_vpp_pipes_enc, u32 frame_height_coded,
++		       u32 frame_width_coded)
++{
++	return ALIGN(((((((8192) >> 2) << 5) * (num_vpp_pipes_enc)) + 64) +
++		      (((((max_t(u32, (frame_width_coded),
++				 (frame_height_coded)) + 3) >> 2) << 5) + 256) * 16)),
++		     BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 size_top_line_buf_first_stg_sao(u32 frame_width_coded)
++{
++	return ALIGN((16 * ((frame_width_coded) >> 5)), BUFFER_ALIGNMENT_256_BYTES);
++}
++
++static inline
++u32 hfi_buffer_line_enc(u32 frame_width, u32 frame_height, bool is_ten_bit,
++			u32 num_vpp_pipes_enc, u32 lcu_size, u32 standard)
++{
++	u32 line_buff_data_size = 0, left_line_buff_ctrl_size = 0;
++	u32 frame_width_coded = 0, frame_height_coded = 0;
++	u32 left_line_buff_metadata_recon__uv__size = 0;
++	u32 left_line_buff_metadata_recon__y__size = 0;
++	u32 width_in_lcus = 0, height_in_lcus = 0;
++	u32 left_line_buff_recon_pix_size = 0;
++	u32 top_line_buff_ctrl_fe_size = 0;
++	u32 line_buff_recon_pix_size = 0;
++
++	width_in_lcus = ((frame_width) + (lcu_size) - 1) / (lcu_size);
++	height_in_lcus = ((frame_height) + (lcu_size) - 1) / (lcu_size);
++	frame_width_coded = width_in_lcus * (lcu_size);
++	frame_height_coded = height_in_lcus * (lcu_size);
++	line_buff_data_size = size_linebuff_data(is_ten_bit, frame_width_coded);
++	left_line_buff_ctrl_size =
++		size_left_linebuff_ctrl(standard, frame_height_coded, num_vpp_pipes_enc);
++	left_line_buff_recon_pix_size =
++		size_left_linebuff_recon_pix(is_ten_bit, frame_height_coded,
++					     num_vpp_pipes_enc);
++	top_line_buff_ctrl_fe_size =
++		size_top_linebuff_ctrl_fe(frame_width_coded, standard);
++	left_line_buff_metadata_recon__y__size =
++		size_left_linebuff_metadata_recon_y(frame_height_coded, is_ten_bit,
++						    num_vpp_pipes_enc);
++	left_line_buff_metadata_recon__uv__size =
++		size_left_linebuff_metadata_recon_uv(frame_height_coded, is_ten_bit,
++						     num_vpp_pipes_enc);
++	line_buff_recon_pix_size = size_linebuff_recon_pix(is_ten_bit, frame_width_coded);
++
++	return size_line_buf_ctrl(frame_width_coded) +
++		size_line_buf_ctrl_id2(frame_width_coded) +
++		line_buff_data_size +
++		left_line_buff_ctrl_size +
++		left_line_buff_recon_pix_size +
++		top_line_buff_ctrl_fe_size +
++		left_line_buff_metadata_recon__y__size +
++		left_line_buff_metadata_recon__uv__size +
++		line_buff_recon_pix_size +
++		size_left_linebuff_ctrl_fe(frame_height_coded,
++					   num_vpp_pipes_enc) +
++		size_line_buf_sde(frame_width_coded) +
++		size_vpss_line_buf(num_vpp_pipes_enc, frame_height_coded,
++				   frame_width_coded) +
++		size_top_line_buf_first_stg_sao(frame_width_coded);
++}
++
++static inline
++u32 hfi_buffer_line_h264e(u32 frame_width, u32 frame_height, bool is_ten_bit,
++			  u32 num_vpp_pipes)
++{
++	return hfi_buffer_line_enc(frame_width, frame_height, 0,
++				   num_vpp_pipes, 16,
++				   HFI_CODEC_ENCODE_AVC);
++}
++
++static inline
++u32 hfi_buffer_line_h265e(u32 frame_width, u32 frame_height, bool is_ten_bit,
++			  u32 num_vpp_pipes)
++{
++	return hfi_buffer_line_enc(frame_width, frame_height,
++				   is_ten_bit, num_vpp_pipes, 32,
++				   HFI_CODEC_ENCODE_HEVC);
++}
++
++static inline
++u32 hfi_buffer_comv_enc(u32 frame_width, u32 frame_height, u32 lcu_size,
++			u32 num_recon, u32 standard)
++{
++	u32 width_in_lcus, height_in_lcus, num_lcu_in_frame;
++	u32 size_colloc_mv = 0, size_colloc_rc = 0;
++	u32 mb_height = ((frame_height) + 15) >> 4;
++	u32 mb_width = ((frame_width) + 15) >> 4;
++
++	width_in_lcus = ((frame_width) + (lcu_size) - 1) / (lcu_size);
++	height_in_lcus = ((frame_height) + (lcu_size) - 1) / (lcu_size);
++	num_lcu_in_frame = width_in_lcus * height_in_lcus;
++	size_colloc_mv = (standard == HFI_CODEC_ENCODE_HEVC) ?
++		(16 * ((num_lcu_in_frame << 2) + BUFFER_ALIGNMENT_32_BYTES)) :
++		(3 * 16 * (width_in_lcus * height_in_lcus + BUFFER_ALIGNMENT_32_BYTES));
++	size_colloc_mv = ALIGN(size_colloc_mv, BUFFER_ALIGNMENT_256_BYTES) * num_recon;
++	size_colloc_rc = (((mb_width + 7) >> 3) * 16 * 2 * mb_height);
++	size_colloc_rc = ALIGN(size_colloc_rc, BUFFER_ALIGNMENT_256_BYTES) * HFI_MAX_COL_FRAME;
++
++	return size_colloc_mv + size_colloc_rc;
++}
++
++static inline
++u32 hfi_buffer_comv_h264e(u32 frame_width, u32 frame_height, u32 num_recon)
++{
++	return hfi_buffer_comv_enc(frame_width, frame_height, 16,
++				   num_recon, HFI_CODEC_ENCODE_AVC);
++}
++
++static inline
++u32 hfi_buffer_comv_h265e(u32 frame_width, u32 frame_height, u32 num_recon)
++{
++	return hfi_buffer_comv_enc(frame_width, frame_height, 32,
++				   num_recon, HFI_CODEC_ENCODE_HEVC);
++}
++
++static inline
++u32 hfi_buffer_non_comv_enc(u32 frame_width, u32 frame_height,
++			    u32 num_vpp_pipes_enc, u32 lcu_size, u32 standard)
++{
++	u32 frame_width_coded = 0, frame_height_coded = 0;
++	u32 width_in_lcus = 0, height_in_lcus = 0;
++	u32 num_lcu_in_frame = 0, num_lcumb = 0;
++	u32 frame_rc_buf_size = 0;
++
++	width_in_lcus = ((frame_width) + (lcu_size) - 1) / (lcu_size);
++	height_in_lcus = ((frame_height) + (lcu_size) - 1) / (lcu_size);
++	num_lcu_in_frame = width_in_lcus * height_in_lcus;
++	frame_width_coded = width_in_lcus * (lcu_size);
++	frame_height_coded = height_in_lcus * (lcu_size);
++	num_lcumb = (frame_height_coded / lcu_size) *
++		((frame_width_coded + lcu_size * 8) / lcu_size);
++	frame_rc_buf_size =
++		size_frame_rc_buf_size(standard, frame_height_coded,
++				       num_vpp_pipes_enc);
++	return size_enc_slice_info_buf(num_lcu_in_frame) +
++		   SIZE_SLICE_CMD_BUFFER +
++		   SIZE_SPS_PPS_SLICE_HDR +
++		   frame_rc_buf_size +
++		   enc_bitcnt_buf_size(num_lcu_in_frame) +
++		   enc_bitmap_buf_size(num_lcu_in_frame) +
++		   SIZE_BSE_SLICE_CMD_BUF +
++		   SIZE_LAMBDA_LUT +
++		   size_override_buf(num_lcumb) +
++		   size_ir_buf(num_lcu_in_frame);
++}
++
++static inline
++u32 hfi_buffer_non_comv_h264e(u32 frame_width, u32 frame_height,
++			      u32 num_vpp_pipes_enc)
++{
++	return hfi_buffer_non_comv_enc(frame_width, frame_height,
++				       num_vpp_pipes_enc, 16,
++				       HFI_CODEC_ENCODE_AVC);
++}
++
++static inline
++u32 hfi_buffer_non_comv_h265e(u32 frame_width, u32 frame_height,
++			      u32 num_vpp_pipes_enc)
++{
++	return hfi_buffer_non_comv_enc(frame_width, frame_height,
++				       num_vpp_pipes_enc, 32,
++				       HFI_CODEC_ENCODE_HEVC);
++}
++
++static inline
++u32 size_enc_ref_buffer(u32 frame_width, u32 frame_height)
++{
++	u32 u_buffer_width = 0, u_buffer_height = 0;
++	u32 u_chroma_buffer_height = 0;
++
++	u_buffer_height = ALIGN(frame_height, HFI_VENUS_HEIGHT_ALIGNMENT);
++	u_chroma_buffer_height = frame_height >> 1;
++	u_chroma_buffer_height = ALIGN(u_chroma_buffer_height, HFI_VENUS_HEIGHT_ALIGNMENT);
++	u_buffer_width = ALIGN(frame_width, HFI_VENUS_WIDTH_ALIGNMENT);
++
++	return (u_buffer_height + u_chroma_buffer_height) * u_buffer_width;
++}
++
++static inline
++u32 size_enc_ten_bit_ref_buffer(u32 frame_width, u32 frame_height)
++{
++	u32 ref_buf_height = 0, ref_luma_stride_in_bytes = 0;
++	u32 chroma_size = 0, ref_buf_size = 0;
++	u32 u_ref_stride = 0, luma_size = 0;
++	u32 ref_chrm_height_in_bytes = 0;
++
++	ref_buf_height = (frame_height + (HFI_VENUS_HEIGHT_ALIGNMENT - 1)) &
++			(~(HFI_VENUS_HEIGHT_ALIGNMENT - 1));
++	ref_luma_stride_in_bytes = ((frame_width + SYSTEM_LAL_TILE10 - 1) / SYSTEM_LAL_TILE10) *
++		SYSTEM_LAL_TILE10;
++	u_ref_stride = 4 * (ref_luma_stride_in_bytes / 3);
++	u_ref_stride = (u_ref_stride + (BUFFER_ALIGNMENT_128_BYTES - 1)) &
++		(~(BUFFER_ALIGNMENT_128_BYTES - 1));
++	luma_size = ref_buf_height * u_ref_stride;
++	ref_chrm_height_in_bytes = (((frame_height + 1) >> 1) + (BUFFER_ALIGNMENT_32_BYTES - 1)) &
++		(~(BUFFER_ALIGNMENT_32_BYTES - 1));
++	chroma_size = u_ref_stride * ref_chrm_height_in_bytes;
++	luma_size = (luma_size + (BUFFER_ALIGNMENT_4096_BYTES - 1)) &
++		(~(BUFFER_ALIGNMENT_4096_BYTES - 1));
++	chroma_size = (chroma_size + (BUFFER_ALIGNMENT_4096_BYTES - 1)) &
++		(~(BUFFER_ALIGNMENT_4096_BYTES - 1));
++	ref_buf_size = luma_size + chroma_size;
++
++	return ref_buf_size;
++}
++
++static inline
++u32 hfi_buffer_dpb_enc(u32 frame_width, u32 frame_height, bool is_ten_bit)
++{
++	u32 metadata_stride, metadata_buf_height, meta_size_y, meta_size_c;
++	u32 ten_bit_ref_buf_size = 0, ref_buf_size = 0;
++	u32 _size = 0;
++
++	if (!is_ten_bit) {
++		ref_buf_size = size_enc_ref_buffer(frame_width, frame_height);
++		metadata_stride =
++			hfi_ubwc_calc_metadata_plane_stride(frame_width, 64,
++							    HFI_COL_FMT_NV12C_Y_TILE_WIDTH);
++		metadata_buf_height =
++			hfi_ubwc_metadata_plane_bufheight(frame_height, 16,
++							  HFI_COL_FMT_NV12C_Y_TILE_HEIGHT);
++		meta_size_y =
++			hfi_ubwc_metadata_plane_buffer_size(metadata_stride, metadata_buf_height);
++		meta_size_c =
++			hfi_ubwc_metadata_plane_buffer_size(metadata_stride, metadata_buf_height);
++		_size = ref_buf_size + meta_size_y + meta_size_c;
++	} else {
++		ten_bit_ref_buf_size = size_enc_ten_bit_ref_buffer(frame_width, frame_height);
++		metadata_stride =
++			hfi_ubwc_calc_metadata_plane_stride(frame_width,
++							    VENUS_METADATA_STRIDE_MULTIPLE,
++							    HFI_COL_FMT_TP10C_Y_TILE_WIDTH);
++		metadata_buf_height =
++			hfi_ubwc_metadata_plane_bufheight(frame_height,
++							  VENUS_METADATA_HEIGHT_MULTIPLE,
++							  HFI_COL_FMT_TP10C_Y_TILE_HEIGHT);
++		meta_size_y =
++			hfi_ubwc_metadata_plane_buffer_size(metadata_stride, metadata_buf_height);
++		meta_size_c =
++			hfi_ubwc_metadata_plane_buffer_size(metadata_stride, metadata_buf_height);
++		_size = ten_bit_ref_buf_size + meta_size_y + meta_size_c;
++	}
++
++	return _size;
++}
++
++static inline
++u32 hfi_buffer_dpb_h264e(u32 frame_width, u32 frame_height)
++{
++	return hfi_buffer_dpb_enc(frame_width, frame_height, 0);
++}
++
++static inline
++u32 hfi_buffer_dpb_h265e(u32 frame_width, u32 frame_height, bool is_ten_bit)
++{
++	return hfi_buffer_dpb_enc(frame_width, frame_height, is_ten_bit);
++}
++
++static inline
++u32 hfi_buffer_vpss_enc(u32 dswidth, u32 dsheight, bool ds_enable,
++			u32 blur, bool is_ten_bit)
++{
++	u32 vpss_size = 0;
++
++	if (ds_enable || blur)
++		vpss_size = hfi_buffer_dpb_enc(dswidth, dsheight, is_ten_bit);
++
++	return vpss_size;
++}
++
++static inline
++u32 hfi_iris3_enc_min_input_buf_count(u32 totalhblayers)
++{
++	u32 numinput = 3;
++
++	if (totalhblayers >= 2)
++		numinput = (1 << (totalhblayers - 1)) + 2;
++
++	return numinput;
++}
++
++u32 enc_output_buffer_size_iris3(struct iris_inst *inst);
++u32 get_recon_buf_count(struct iris_inst *inst);
++
  #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/platform_common.h b/drivers/media/platform/qcom/vcodec/iris/platform_common.h
-index 81de610..443894c 100644
---- a/drivers/media/platform/qcom/vcodec/iris/platform_common.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/platform_common.h
-@@ -20,9 +20,29 @@ struct iris_inst;
- #define BIT_DEPTH_8 (8 << 16 | 8)
- #define BIT_DEPTH_10 (10 << 16 | 10)
- 
--#define CODED_FRAMES_PROGRESSIVE 0x0
--#define CODED_FRAMES_INTERLACE 0x1
--#define MAX_NUM_CHILD         10
-+#define CODED_FRAMES_PROGRESSIVE			0x0
-+#define CODED_FRAMES_INTERLACE				0x1
-+#define MAX_NUM_CHILD					10
-+#define MAX_ENH_LAYER_HB				3
-+#define MAX_HEVC_VBR_ENH_LAYER_SLIDING_WINDOW		5
-+#define MAX_HEVC_NON_VBR_ENH_LAYER_SLIDING_WINDOW	3
-+#define MAX_AVC_ENH_LAYER_SLIDING_WINDOW		3
-+#define MAX_AVC_ENH_LAYER_HYBRID_HP			5
-+#define MAX_SLICES_FRAME_RATE				60
-+#define MAX_MB_SLICE_WIDTH				4096
-+#define MAX_MB_SLICE_HEIGHT				2160
-+#define MAX_BYTES_SLICE_WIDTH				1920
-+#define MAX_BYTES_SLICE_HEIGHT				1088
-+#define MIN_HEVC_SLICE_WIDTH				384
-+#define MIN_AVC_SLICE_WIDTH				192
-+#define MIN_SLICE_HEIGHT				128
-+#define MAX_SLICES_PER_FRAME				10
-+#define MIN_QP_8BIT					1
-+#define MIN_SLICE_BYTE_SIZE				512
-+#define MAX_SLICE_BYTE_SIZE				((MAX_BITRATE) >> 3)
-+#define MAX_SLICE_MB_SIZE				(((4096 + 15) >> 4) * ((2304 + 15) >> 4))
-+#define INVALID_DEFAULT_MARK_OR_USE_LTR			-1
-+#define MAX_SUPPORTED_MIN_QUALITY			70
- 
- #define DEFAULT_MAX_HOST_BUF_COUNT			64
- #define DEFAULT_MAX_HOST_BURST_BUF_COUNT		256
-@@ -128,12 +148,17 @@ enum plat_inst_cap_type {
- 	PIX_FMTS,
- 	MBPF,
- 	QUEUED_RATE,
-+	FRAME_RATE,
-+	OPERATING_RATE,
- 	MB_CYCLES_VSP,
- 	MB_CYCLES_VPP,
- 	MB_CYCLES_LP,
- 	MB_CYCLES_FW,
- 	MB_CYCLES_FW_VPP,
- 	NUM_COMV,
-+	ENTROPY_MODE,
-+	BASELAYER_PRIORITY,
-+	IR_TYPE,
- 	PROFILE,
- 	LEVEL,
- 	HEVC_TIER,
-@@ -148,6 +173,48 @@ enum plat_inst_cap_type {
- 	BIT_DEPTH,
- 	DEFAULT_HEADER,
- 	RAP_FRAME,
-+	MIN_FRAME_QP,
-+	MAX_FRAME_QP,
-+	B_FRAME,
-+	I_FRAME_QP,
-+	P_FRAME_QP,
-+	B_FRAME_QP,
-+	BIT_RATE,
-+	PEAK_BITRATE,
-+	BITRATE_MODE,
-+	FRAME_SKIP_MODE,
-+	FRAME_RC_ENABLE,
-+	GOP_SIZE,
-+	MIN_QUALITY,
-+	IR_PERIOD,
-+	LTR_COUNT,
-+	USE_LTR,
-+	MARK_LTR,
-+	I_FRAME_MIN_QP,
-+	P_FRAME_MIN_QP,
-+	B_FRAME_MIN_QP,
-+	I_FRAME_MAX_QP,
-+	P_FRAME_MAX_QP,
-+	B_FRAME_MAX_QP,
-+	LAYER_TYPE,
-+	LAYER_ENABLE,
-+	L0_BR,
-+	L1_BR,
-+	L2_BR,
-+	L3_BR,
-+	L4_BR,
-+	L5_BR,
-+	ENH_LAYER_COUNT,
-+	TRANSFORM_8X8,
-+	SLICE_MODE,
-+	SLICE_MAX_MB,
-+	SLICE_MAX_BYTES,
-+	HFLIP,
-+	VFLIP,
-+	ROTATION,
-+	HEADER_MODE,
-+	PREPEND_SPSPPS_TO_IDR,
-+	REQUEST_I_FRAME,
- 	INST_CAP_MAX,
- };
- 
-@@ -164,6 +231,7 @@ enum plat_inst_cap_flags {
- 
- struct plat_inst_cap {
- 	enum plat_inst_cap_type cap_id;
-+	enum domain_type domain;
- 	enum codec_type codec;
- 	s32 min;
- 	s32 max;
-diff --git a/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c b/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
-index 7ae9715..6d5192a 100644
---- a/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/platform_sm8550.c
-@@ -13,11 +13,19 @@
- #include "platform_common.h"
- #include "resources.h"
- 
--#define CODECS_ALL     (H264 | HEVC | VP9)
--
--#define DEFAULT_FPS        30
--#define MINIMUM_FPS         1
--#define MAXIMUM_FPS       480
-+#define CODECS_ALL	(H264 | HEVC | VP9)
-+#define ENC		ENCODER
-+#define DEC		DECODER
-+
-+#define DEFAULT_FPS			30
-+#define MINIMUM_FPS			1
-+#define MAXIMUM_FPS			480
-+#define MAX_BITRATE			245000000
-+#define DEFAULT_BITRATE			20000000
-+#define MAX_LTR_FRAME_COUNT		2
-+#define MAX_BASE_LAYER_PRIORITY_ID	63
-+#define MAX_QP				51
-+#define DEFAULT_QP			20
- 
- static struct codec_info codec_data_sm8550[] = {
- 	{
-@@ -68,21 +76,37 @@ static struct plat_core_cap core_data_sm8550[] = {
- };
- 
- static struct plat_inst_cap instance_cap_data_sm8550[] = {
--	{FRAME_WIDTH, CODECS_ALL, 96, 8192, 1, 1920},
-+	{FRAME_WIDTH, DEC, CODECS_ALL, 96, 8192, 1, 1920},
-+
-+	{FRAME_WIDTH, DEC, VP9, 96, 4096, 1, 1920},
-+
-+	{FRAME_WIDTH, ENC, CODECS_ALL, 128, 8192, 1, 1920},
- 
--	{FRAME_WIDTH, VP9, 96, 4096, 1, 1920},
-+	{FRAME_WIDTH, ENC, HEVC, 96, 8192, 1, 1920},
- 
--	{FRAME_HEIGHT, CODECS_ALL, 96, 8192, 1, 1080},
-+	{FRAME_HEIGHT, DEC, CODECS_ALL, 96, 8192, 1, 1080},
- 
--	{FRAME_HEIGHT, VP9, 96, 4096, 1, 1080},
-+	{FRAME_HEIGHT, DEC, VP9, 96, 4096, 1, 1080},
- 
--	{PIX_FMTS, H264,
-+	{FRAME_HEIGHT, ENC, CODECS_ALL, 128, 8192, 1, 1080},
-+
-+	{FRAME_HEIGHT, ENC, HEVC, 96, 8192, 1, 1080},
-+
-+	{PIX_FMTS, DEC, H264,
- 		FMT_NV12,
- 		FMT_NV12C,
- 		FMT_NV12 | FMT_NV21 | FMT_NV12C,
- 		FMT_NV12C},
- 
--	{PIX_FMTS, HEVC,
-+	{PIX_FMTS, ENC, H264,
-+		FMT_NV12,
-+		FMT_NV12C,
-+		FMT_NV12 | FMT_NV21 | FMT_NV12C,
-+		FMT_NV12C,
-+		0, 0,
-+		CAP_FLAG_NONE},
-+
-+	{PIX_FMTS, DEC, HEVC,
- 		FMT_NV12,
- 		FMT_TP10C,
- 		FMT_NV12 | FMT_NV21 | FMT_NV12C | FMT_TP10C,
-@@ -91,37 +115,73 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		CAP_FLAG_NONE,
- 		{PROFILE}},
- 
--	{PIX_FMTS, VP9,
-+	{PIX_FMTS, ENC, HEVC,
-+		FMT_NV12,
-+		FMT_TP10C,
-+		FMT_NV12 | FMT_NV21 | FMT_NV12C | FMT_TP10C,
-+		FMT_NV12C,
-+		0, 0,
-+		CAP_FLAG_NONE,
-+		{PROFILE, MIN_QUALITY, IR_PERIOD, LTR_COUNT}},
-+
-+	{PIX_FMTS, DEC, VP9,
- 		FMT_NV12,
- 		FMT_TP10C,
- 		FMT_NV12 | FMT_NV21 | FMT_NV12C | FMT_TP10C,
- 		FMT_NV12C},
- 
--	{MBPF, CODECS_ALL, 36, 138240, 1, 138240},
-+	{MBPF, DEC, CODECS_ALL, 36, 138240, 1, 138240},
- 
- 	/* (4096 * 2304) / 256 */
--	{MBPF, VP9, 36, 36864, 1, 36864},
-+	{MBPF, DEC, VP9, 36, 36864, 1, 36864},
-+
-+	/* (8192 * 4320) / 256 */
-+	{MBPF, ENC, CODECS_ALL, 64, 138240, 1, 138240},
-+
-+	{MBPF, ENC, HEVC, 36, 138240, 1, 138240},
- 
--	{QUEUED_RATE, CODECS_ALL,
-+	{QUEUED_RATE, DEC | ENC, CODECS_ALL,
- 		(MINIMUM_FPS << 16), INT_MAX,
- 		1, (DEFAULT_FPS << 16)},
- 
--	{MB_CYCLES_VSP, CODECS_ALL, 25, 25, 1, 25},
-+	{FRAME_RATE, ENC, CODECS_ALL,
-+		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
-+		1, (DEFAULT_FPS << 16),
-+		0,
-+		HFI_PROP_FRAME_RATE,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_q16},
-+
-+	{OPERATING_RATE, ENC, CODECS_ALL,
-+		(MINIMUM_FPS << 16), (MAXIMUM_FPS << 16),
-+		1, (DEFAULT_FPS << 16)},
-+
-+	{MB_CYCLES_VSP, DEC, CODECS_ALL, 25, 25, 1, 25},
-+
-+	{MB_CYCLES_VSP, DEC, VP9, 60, 60, 1, 60},
-+
-+	{MB_CYCLES_VSP, ENC, CODECS_ALL, 25, 25, 1, 25},
- 
--	{MB_CYCLES_VSP, VP9, 60, 60, 1, 60},
-+	{MB_CYCLES_VPP, DEC, CODECS_ALL, 200, 200, 1, 200},
- 
--	{MB_CYCLES_VPP, CODECS_ALL, 200, 200, 1, 200},
-+	{MB_CYCLES_VPP, ENC, CODECS_ALL, 675, 675, 1, 675},
- 
--	{MB_CYCLES_LP, CODECS_ALL, 200, 200, 1, 200},
-+	{MB_CYCLES_LP, DEC, CODECS_ALL, 200, 200, 1, 200},
- 
--	{MB_CYCLES_FW, CODECS_ALL, 489583, 489583, 1, 489583},
-+	{MB_CYCLES_LP, ENC, CODECS_ALL, 320, 320, 1, 320},
- 
--	{MB_CYCLES_FW_VPP, CODECS_ALL, 66234, 66234, 1, 66234},
-+	{MB_CYCLES_FW, DEC | ENC, CODECS_ALL, 489583, 489583, 1, 489583},
- 
--	{NUM_COMV, CODECS_ALL,
-+	{MB_CYCLES_FW_VPP, DEC, CODECS_ALL, 66234, 66234, 1, 66234},
-+
-+	{MB_CYCLES_FW_VPP, ENC, CODECS_ALL, 48405, 48405, 1, 48405},
-+
-+	{NUM_COMV, DEC, CODECS_ALL,
- 		0, INT_MAX, 1, 0},
- 
--	{PROFILE, H264,
-+	{PROFILE, DEC, H264,
- 		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
- 		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH,
- 		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-@@ -137,7 +197,23 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{PROFILE, HEVC,
-+	{PROFILE, ENC, H264,
-+		V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-+		V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH,
-+		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-+		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH) |
-+		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
-+		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-+		BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH),
-+		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-+		HFI_PROP_PROFILE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{ENTROPY_MODE, TRANSFORM_8X8},
-+		NULL,
-+		set_u32_enum},
-+
-+	{PROFILE, ENC | DEC, HEVC,
- 		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
- 		V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
- 		BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN) |
-@@ -151,7 +227,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		adjust_profile,
- 		set_u32_enum},
- 
--	{PROFILE, VP9,
-+	{PROFILE, DEC, VP9,
- 		V4L2_MPEG_VIDEO_VP9_PROFILE_0,
- 		V4L2_MPEG_VIDEO_VP9_PROFILE_2,
- 		BIT(V4L2_MPEG_VIDEO_VP9_PROFILE_0) |
-@@ -164,7 +240,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{LEVEL, H264,
-+	{LEVEL, DEC, H264,
- 		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
- 		V4L2_MPEG_VIDEO_H264_LEVEL_6_2,
- 		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-@@ -195,7 +271,36 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{LEVEL, HEVC,
-+	{LEVEL, ENC, H264,
-+		V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
-+		V4L2_MPEG_VIDEO_H264_LEVEL_6_0,
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
-+		BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0),
-+		V4L2_MPEG_VIDEO_H264_LEVEL_5_0,
-+		V4L2_CID_MPEG_VIDEO_H264_LEVEL,
-+		HFI_PROP_LEVEL,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{0},
-+		NULL,
-+		set_level},
-+
-+	{LEVEL, DEC, HEVC,
- 		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
- 		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
- 		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
-@@ -219,7 +324,31 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{LEVEL, VP9,
-+	{LEVEL, ENC, HEVC,
-+		V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
-+		V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2,
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_2_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_3_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_4_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_5_2) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_1) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_LEVEL_6_2),
-+		V4L2_MPEG_VIDEO_HEVC_LEVEL_5,
-+		V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
-+		HFI_PROP_LEVEL,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{0},
-+		NULL,
-+		set_level},
-+
-+	{LEVEL, DEC, VP9,
- 		V4L2_MPEG_VIDEO_VP9_LEVEL_1_0,
- 		V4L2_MPEG_VIDEO_VP9_LEVEL_6_0,
- 		BIT(V4L2_MPEG_VIDEO_VP9_LEVEL_1_0) |
-@@ -242,7 +371,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{HEVC_TIER, HEVC,
-+	{HEVC_TIER, DEC | ENC, HEVC,
- 		V4L2_MPEG_VIDEO_HEVC_TIER_MAIN,
- 		V4L2_MPEG_VIDEO_HEVC_TIER_HIGH,
- 		BIT(V4L2_MPEG_VIDEO_HEVC_TIER_MAIN) |
-@@ -255,7 +384,566 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32_enum},
- 
--	{DISPLAY_DELAY_ENABLE, CODECS_ALL,
-+	{HFLIP, ENC, CODECS_ALL,
-+		0, 1, 1, 0,
-+		V4L2_CID_HFLIP,
-+		HFI_PROP_FLIP,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_flip},
-+
-+	{VFLIP, ENC, CODECS_ALL,
-+		0, 1, 1, 0,
-+		V4L2_CID_VFLIP,
-+		HFI_PROP_FLIP,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_flip},
-+
-+	{ROTATION, ENC, CODECS_ALL,
-+		0, 270, 90, 0,
-+		V4L2_CID_ROTATE,
-+		HFI_PROP_ROTATION,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_rotation},
-+
-+	{HEADER_MODE, ENC, CODECS_ALL,
-+		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
-+		V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME,
-+		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE) |
-+		BIT(V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME),
-+		V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
-+		V4L2_CID_MPEG_VIDEO_HEADER_MODE,
-+		HFI_PROP_SEQ_HEADER_MODE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{0},
-+		NULL,
-+		set_header_mode},
-+
-+	{PREPEND_SPSPPS_TO_IDR, ENC, CODECS_ALL,
-+		0, 1, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR},
-+
-+	{REQUEST_I_FRAME, ENC, H264 | HEVC,
-+		0, 0, 0, 0,
-+		V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME,
-+		HFI_PROP_REQUEST_SYNC_FRAME,
-+		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_req_sync_frame},
-+
-+	{BIT_RATE, ENC, H264 | HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_BITRATE,
-+		HFI_PROP_TOTAL_BITRATE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{PEAK_BITRATE, L0_BR},
-+		adjust_bitrate,
-+		set_bitrate},
-+
-+	{PEAK_BITRATE, ENC, H264 | HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_BITRATE_PEAK,
-+		HFI_PROP_TOTAL_PEAK_BITRATE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_peak_bitrate,
-+		set_peak_bitrate},
-+
-+	{BITRATE_MODE, ENC, H264 | HEVC,
-+		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-+		V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
-+		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_VBR) |
-+		BIT(V4L2_MPEG_VIDEO_BITRATE_MODE_CBR),
-+		V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
-+		V4L2_CID_MPEG_VIDEO_BITRATE_MODE,
-+		HFI_PROP_RATE_CONTROL,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{LTR_COUNT, IR_PERIOD, I_FRAME_QP, P_FRAME_QP,
-+		 B_FRAME_QP, ENH_LAYER_COUNT, BIT_RATE,
-+		 MIN_QUALITY, PEAK_BITRATE, SLICE_MODE},
-+		adjust_bitrate_mode,
-+		set_u32_enum},
-+
-+	{FRAME_SKIP_MODE, ENC, H264 | HEVC,
-+		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
-+		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT,
-+		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED) |
-+		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_LEVEL_LIMIT) |
-+		BIT(V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_BUF_LIMIT),
-+		V4L2_MPEG_VIDEO_FRAME_SKIP_MODE_DISABLED,
-+		V4L2_CID_MPEG_VIDEO_FRAME_SKIP_MODE,
-+		0,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-+
-+	{FRAME_RC_ENABLE, ENC, H264 | HEVC,
-+		0, 1, 1, 1,
-+		V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE},
-+
-+	{GOP_SIZE, ENC, CODECS_ALL,
-+		0, INT_MAX, 1, 2 * DEFAULT_FPS - 1,
-+		V4L2_CID_MPEG_VIDEO_GOP_SIZE,
-+		HFI_PROP_MAX_GOP_FRAMES,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_gop_size,
-+		set_gop_size},
-+
-+	{B_FRAME, ENC, H264 | HEVC,
-+		0, 7, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_B_FRAMES,
-+		HFI_PROP_MAX_B_FRAMES,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		adjust_b_frame,
-+		set_u32},
-+
-+	{LTR_COUNT, ENC, H264 | HEVC,
-+		0, MAX_LTR_FRAME_COUNT, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_LTR_COUNT,
-+		HFI_PROP_LTR_COUNT,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		adjust_ltr_count,
-+		set_u32},
-+
-+	{USE_LTR, ENC, H264 | HEVC,
-+		0,
-+		((1 << MAX_LTR_FRAME_COUNT) - 1),
-+		0, 0,
-+		V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES,
-+		HFI_PROP_LTR_USE,
-+		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_use_ltr,
-+		set_use_and_mark_ltr},
-+
-+	{MARK_LTR, ENC, H264 | HEVC,
-+		INVALID_DEFAULT_MARK_OR_USE_LTR,
-+		(MAX_LTR_FRAME_COUNT - 1),
-+		1, INVALID_DEFAULT_MARK_OR_USE_LTR,
-+		V4L2_CID_MPEG_VIDEO_FRAME_LTR_INDEX,
-+		HFI_PROP_LTR_MARK,
-+		CAP_FLAG_INPUT_PORT | CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_mark_ltr,
-+		set_use_and_mark_ltr},
-+
-+	{BASELAYER_PRIORITY, ENC, H264,
-+		0, MAX_BASE_LAYER_PRIORITY_ID, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_BASELAYER_PRIORITY_ID,
-+		HFI_PROP_BASELAYER_PRIORITYID,
-+		CAP_FLAG_OUTPUT_PORT},
-+
-+	{IR_TYPE, ENC, H264 | HEVC,
-+		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-+		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
-+		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
-+		BIT(V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC),
-+		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM,
-+		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE,
-+		0,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU},
-+
-+	{IR_PERIOD, ENC, H264 | HEVC,
-+		0, INT_MAX, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD,
-+		0,
-+		CAP_FLAG_INPUT_PORT | CAP_FLAG_OUTPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_ir_period,
-+		set_ir_period},
-+
-+	{MIN_QUALITY, ENC, H264 | HEVC,
-+		0, MAX_SUPPORTED_MIN_QUALITY, 70, MAX_SUPPORTED_MIN_QUALITY,
-+		0,
-+		HFI_PROP_MAINTAIN_MIN_QUALITY,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		adjust_min_quality,
-+		set_u32},
-+
-+	{MIN_FRAME_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_H264_MIN_QP,
-+		HFI_PROP_MIN_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_min_qp},
-+
-+	{MIN_FRAME_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_HEVC_MIN_QP,
-+		HFI_PROP_MIN_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_min_qp},
-+
-+	{MAX_FRAME_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_MAX_QP,
-+		HFI_PROP_MAX_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_max_qp},
-+
-+	{MAX_FRAME_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_MAX_QP,
-+		HFI_PROP_MAX_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		NULL,
-+		set_max_qp},
-+
-+	{I_FRAME_MIN_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP},
-+
-+	{I_FRAME_MIN_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MIN_QP},
-+
-+	{P_FRAME_MIN_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP},
-+
-+	{P_FRAME_MIN_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MIN_QP},
-+
-+	{B_FRAME_MIN_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MIN_QP},
-+
-+	{B_FRAME_MIN_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MIN_QP_8BIT,
-+		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MIN_QP},
-+
-+	{I_FRAME_MAX_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP},
-+
-+	{I_FRAME_MAX_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_MAX_QP},
-+
-+	{P_FRAME_MAX_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP},
-+
-+	{P_FRAME_MAX_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_MAX_QP},
-+
-+	{B_FRAME_MAX_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_MAX_QP},
-+
-+	{B_FRAME_MAX_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, MAX_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_MAX_QP},
-+
-+	{I_FRAME_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_I_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{I_FRAME_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{P_FRAME_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_P_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{P_FRAME_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{B_FRAME_QP, ENC, HEVC,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_HEVC_B_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{B_FRAME_QP, ENC, H264,
-+		MIN_QP_8BIT, MAX_QP, 1, DEFAULT_QP,
-+		V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP,
-+		HFI_PROP_QP_PACKED,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		NULL,
-+		set_frame_qp},
-+
-+	{LAYER_TYPE, ENC, HEVC,
-+		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B,
-+		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
-+		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_B) |
-+		BIT(V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P),
-+		V4L2_MPEG_VIDEO_HEVC_HIERARCHICAL_CODING_P,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_TYPE,
-+		HFI_PROP_LAYER_ENCODING_TYPE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{LTR_COUNT}},
-+
-+	{LAYER_TYPE, ENC, H264,
-+		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B,
-+		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
-+		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_B) |
-+		BIT(V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P),
-+		V4L2_MPEG_VIDEO_H264_HIERARCHICAL_CODING_P,
-+		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_TYPE,
-+		HFI_PROP_LAYER_ENCODING_TYPE,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{LTR_COUNT}},
-+
-+	{LAYER_ENABLE, ENC, H264,
-+		0, 1, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING,
-+		HFI_PROP_LAYER_ENCODING_TYPE,
-+		CAP_FLAG_OUTPUT_PORT},
-+
-+	{LAYER_ENABLE, ENC, HEVC,
-+		0, 1, 1, 0,
-+		0,
-+		0,
-+		CAP_FLAG_OUTPUT_PORT},
-+
-+	{ENH_LAYER_COUNT, ENC, HEVC,
-+		0, 5, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_LAYER,
-+		HFI_PROP_LAYER_COUNT,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{GOP_SIZE, B_FRAME, BIT_RATE, MIN_QUALITY, SLICE_MODE,
-+		 LTR_COUNT},
-+		adjust_layer_count,
-+		set_layer_count_and_type},
-+
-+	{ENH_LAYER_COUNT, ENC, H264,
-+		0, 5, 1, 0,
-+		V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER,
-+		HFI_PROP_LAYER_COUNT,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{GOP_SIZE, B_FRAME, BIT_RATE, MIN_QUALITY, SLICE_MODE,
-+		 LTR_COUNT},
-+		adjust_layer_count,
-+		set_layer_count_and_type},
-+
-+	{L0_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L0_BR,
-+		HFI_PROP_BITRATE_LAYER1,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L1_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L0_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L0_BR,
-+		HFI_PROP_BITRATE_LAYER1,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L1_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L1_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L1_BR,
-+		HFI_PROP_BITRATE_LAYER2,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L2_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L1_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L1_BR,
-+		HFI_PROP_BITRATE_LAYER2,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L2_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L2_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L2_BR,
-+		HFI_PROP_BITRATE_LAYER3,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L3_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L2_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L2_BR,
-+		HFI_PROP_BITRATE_LAYER3,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L3_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L3_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L3_BR,
-+		HFI_PROP_BITRATE_LAYER4,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L4_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L3_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L3_BR,
-+		HFI_PROP_BITRATE_LAYER4,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L4_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L4_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L4_BR,
-+		HFI_PROP_BITRATE_LAYER5,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L5_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L4_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L4_BR,
-+		HFI_PROP_BITRATE_LAYER5,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{L5_BR},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L5_BR, ENC, H264,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_H264_HIER_CODING_L5_BR,
-+		HFI_PROP_BITRATE_LAYER6,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{L5_BR, ENC, HEVC,
-+		1, MAX_BITRATE, 1, DEFAULT_BITRATE,
-+		V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L5_BR,
-+		HFI_PROP_BITRATE_LAYER6,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_INPUT_PORT |
-+		CAP_FLAG_DYNAMIC_ALLOWED,
-+		{0},
-+		adjust_layer_bitrate,
-+		set_layer_bitrate},
-+
-+	{ENTROPY_MODE, ENC, H264,
-+		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC,
-+		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-+		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CAVLC) |
-+		BIT(V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC),
-+		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC,
-+		V4L2_CID_MPEG_VIDEO_H264_ENTROPY_MODE,
-+		HFI_PROP_CABAC_SESSION,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{BIT_RATE},
-+		adjust_entropy_mode,
-+		set_u32},
-+
-+	{SLICE_MODE, ENC, H264 | HEVC,
-+		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
-+		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
-+		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE) |
-+		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) |
-+		BIT(V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES),
-+		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
-+		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
-+		0,
-+		CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		{STAGE},
-+		adjust_slice_count,
-+		set_slice_count},
-+
-+	{SLICE_MAX_BYTES, ENC, H264 | HEVC,
-+		MIN_SLICE_BYTE_SIZE, MAX_SLICE_BYTE_SIZE,
-+		1, MIN_SLICE_BYTE_SIZE,
-+		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES,
-+		HFI_PROP_MULTI_SLICE_BYTES_COUNT,
-+		CAP_FLAG_OUTPUT_PORT},
-+
-+	{SLICE_MAX_MB, ENC, H264 | HEVC,
-+		1, MAX_SLICE_MB_SIZE, 1, 1,
-+		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB,
-+		HFI_PROP_MULTI_SLICE_MB_COUNT,
-+		CAP_FLAG_OUTPUT_PORT},
-+
-+	{TRANSFORM_8X8, ENC, H264,
-+		0, 1, 1, 1,
-+		V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM,
-+		HFI_PROP_8X8_TRANSFORM,
-+		CAP_FLAG_OUTPUT_PORT,
-+		{0},
-+		adjust_transform_8x8,
-+		set_u32},
-+
-+	{DISPLAY_DELAY_ENABLE, DEC, CODECS_ALL,
- 		0, 1, 1, 0,
- 		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY_ENABLE,
- 		HFI_PROP_DECODE_ORDER_OUTPUT,
-@@ -264,7 +952,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		NULL},
- 
--	{DISPLAY_DELAY, CODECS_ALL,
-+	{DISPLAY_DELAY, DEC, CODECS_ALL,
- 		0, 1, 1, 0,
- 		V4L2_CID_MPEG_VIDEO_DEC_DISPLAY_DELAY,
- 		HFI_PROP_DECODE_ORDER_OUTPUT,
-@@ -273,7 +961,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		NULL},
- 
--	{OUTPUT_ORDER, CODECS_ALL,
-+	{OUTPUT_ORDER, DEC, CODECS_ALL,
- 		0, 1, 1, 0,
- 		0,
- 		HFI_PROP_DECODE_ORDER_OUTPUT,
-@@ -282,7 +970,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		adjust_output_order,
- 		set_u32},
- 
--	{INPUT_BUF_HOST_MAX_COUNT, CODECS_ALL,
-+	{INPUT_BUF_HOST_MAX_COUNT, ENC | DEC, CODECS_ALL,
- 		DEFAULT_MAX_HOST_BUF_COUNT, DEFAULT_MAX_HOST_BURST_BUF_COUNT,
- 		1, DEFAULT_MAX_HOST_BUF_COUNT,
- 		0,
-@@ -292,7 +980,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_u32},
- 
--	{STAGE, CODECS_ALL,
-+	{STAGE, ENC | DEC, CODECS_ALL,
- 		STAGE_1,
- 		STAGE_2, 1,
- 		STAGE_2,
-@@ -303,7 +991,7 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_stage},
- 
--	{PIPE, CODECS_ALL,
-+	{PIPE, ENC | DEC, CODECS_ALL,
- 		PIPE_1,
- 		PIPE_4, 1,
- 		PIPE_4,
-@@ -314,26 +1002,26 @@ static struct plat_inst_cap instance_cap_data_sm8550[] = {
- 		NULL,
- 		set_pipe},
- 
--	{POC, H264, 0, 2, 1, 1,
-+	{POC, DEC, H264, 0, 2, 1, 1,
- 		0,
- 		HFI_PROP_PIC_ORDER_CNT_TYPE},
- 
--	{CODED_FRAMES, H264 | HEVC,
-+	{CODED_FRAMES, DEC, H264 | HEVC,
- 		CODED_FRAMES_PROGRESSIVE, CODED_FRAMES_PROGRESSIVE,
- 		0, CODED_FRAMES_PROGRESSIVE,
- 		0,
- 		HFI_PROP_CODED_FRAMES},
- 
--	{BIT_DEPTH, CODECS_ALL, BIT_DEPTH_8, BIT_DEPTH_10, 1, BIT_DEPTH_8,
-+	{BIT_DEPTH, DEC, CODECS_ALL, BIT_DEPTH_8, BIT_DEPTH_10, 1, BIT_DEPTH_8,
- 		0,
- 		HFI_PROP_LUMA_CHROMA_BIT_DEPTH},
- 
--	{DEFAULT_HEADER, CODECS_ALL,
-+	{DEFAULT_HEADER, DEC, CODECS_ALL,
- 		0, 1, 1, 0,
- 		0,
- 		HFI_PROP_DEC_DEFAULT_HEADER},
- 
--	{RAP_FRAME, CODECS_ALL,
-+	{RAP_FRAME, DEC, CODECS_ALL,
- 		0, 1, 1, 1,
- 		0,
- 		HFI_PROP_DEC_START_FROM_RAP_FRAME,
 diff --git a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_power.c b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_power.c
-index 5a02f24..58498af 100644
+index 58498af..2828227 100644
 --- a/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_power.c
 +++ b/drivers/media/platform/qcom/vcodec/iris/vpu_iris3_power.c
-@@ -42,6 +42,9 @@ u64 iris_calc_freq_iris3(struct iris_inst *inst, u32 data_size)
+@@ -54,7 +54,7 @@ u64 iris_calc_freq_iris3(struct iris_inst *inst, u32 data_size)
+ 	if (inst->cap[STAGE].value == STAGE_1)
+ 		vsp_cycles = vsp_cycles * 3;
  
- 	if (inst->codec == VP9) {
- 		vsp_cycles = div_u64(vsp_cycles * 170, 100);
-+	} else if (inst->cap[ENTROPY_MODE].value ==
-+		V4L2_MPEG_VIDEO_H264_ENTROPY_MODE_CABAC) {
-+		vsp_cycles = div_u64(vsp_cycles * 135, 100);
- 	} else {
- 		base_cycles = 0;
- 		vsp_cycles = div_u64(vsp_cycles, 2);
+-	vsp_cycles += mbs_per_second * base_cycles;
++		vsp_cycles += mbs_per_second * base_cycles;
+ 
+ 	freq = max3(vpp_cycles, vsp_cycles, fw_cycles);
+ 
 -- 
 2.7.4
 
