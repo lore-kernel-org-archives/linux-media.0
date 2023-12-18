@@ -1,364 +1,250 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30881A731;
-	Mon, 18 Dec 2023 11:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECDE1BDDD;
+	Mon, 18 Dec 2023 11:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="h6wv04H/"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BIBSDl9013281;
-	Mon, 18 Dec 2023 11:36:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references; s=
-	qcppdkim1; bh=AT6XCjkhjq3ISyvWWHdZVQ0FD6UCnq0F78em27ik0vU=; b=h6
-	wv04H/d/RwSFopH0Hr8u+mHOkwflTKOwvpRS1D0cgM1qU8FswZKKCVMtRMiVho4i
-	uJORx3/yMGj5pMoV/YNFqH2exuXZlybDr/lX1k4hqBvYwcaJv+XkOVmrf9ZjmsS9
-	NtT/SbHA+qByfQUGpLi4LOjRRYVKVFple16UkrN2j1csQ+q8Lv/Oy7uTEBGdHST2
-	t4CMrOkDDBGYfljOyF5UvFP9wwSR6Vn2UK2BuwSDVaKuSYLTNkFyvOeHdl9Wkw+6
-	UKNE/oAdHXxz6Pf6Wgmtq25agmnUbqHniatLYdDJIroNKwl1McV3fXDHavL8MHmt
-	JdUgpURVrKmUPuEzodQg==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v2jx0gbh9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Dec 2023 11:36:13 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX5MF029943;
-	Mon, 18 Dec 2023 11:36:09 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3v14ykyyju-1;
-	Mon, 18 Dec 2023 11:33:10 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX72t029995;
-	Mon, 18 Dec 2023 11:33:09 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3BIBX6B3029969;
-	Mon, 18 Dec 2023 11:33:09 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-	id 4EB74230B; Mon, 18 Dec 2023 17:03:04 +0530 (+0530)
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-To: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, bryan.odonoghue@linaro.org
-Cc: linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 19/34] media: iris: implement HFI to queue and release buffers
-Date: Mon, 18 Dec 2023 17:02:14 +0530
-Message-Id: <1702899149-21321-20-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DU0PAr79gSsWFZMPeAeSOdjevmmzDE0j
-X-Proofpoint-GUID: DU0PAr79gSsWFZMPeAeSOdjevmmzDE0j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- phishscore=0 priorityscore=1501 suspectscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312180083
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0Rzc4w+"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a233354c74aso261657766b.1;
+        Mon, 18 Dec 2023 03:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702899595; x=1703504395; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zcH0UIlZ9wGt+bB5pfsqVhB/iCTXynYZe0CCzCtVeWE=;
+        b=K0Rzc4w++NvpR2SUDCasEZRgttaV2KCnGlZoRN8Js0cuyoDlLaoF8lCcm7lVJL/NIR
+         p1UaewW6NyOrGkqJlufSP/xqubZk3obkxLq1sYoJFq2MZ7i1Pa6FWJSr8Y5Em2kU+9bh
+         0tK6WRqVnl48uPS9meve+8MuSiHL0vWJv586Fsi+9GjeUyQWbfgSXLRkKSDZKLhp9Qhf
+         hRHq7uBh/m+Y6N7Ld2dd5hA5vS608UN5aHlTDaVJhk/abWelkDLJDrSX0n4ZbMXEAG8/
+         iJMElI919qyG6udNDkphRIOV+JjA78kDNJm/+M7CQYBcQs8VR2sTa3PuoCNIZrFR9Csa
+         ybOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702899595; x=1703504395;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zcH0UIlZ9wGt+bB5pfsqVhB/iCTXynYZe0CCzCtVeWE=;
+        b=uIAhfTwjDq5shCy8jGgVaJN/swcWl+MqdnzTlvcQpO68WQG4vRyk3Q7xn9o0ngoVky
+         kZ/zWHzEMUGkRCTC9PG9TWjW89oCjjZ495P15bhTaZA2q+AfV3KI38EZnlwfguhzaJDF
+         rd43q3yiMQQRBETErmr+VjzdimkTqV2SqJjG1RUVJ0B82MsvB8j9pcJ5YJnEvOVxp09f
+         +JMWB0ot32otbiWKZyO+Yh7VlqiFdLwyu+KTalRa0cmnI7gAadEwz8MZe//OK7fZepQa
+         bXKsGuZH0o5XuWe6GZYA6gGOFn0Jd0+UtD0FgAuTTGg4InYl/ObLpjXVq4xShDYHXxt2
+         hhdw==
+X-Gm-Message-State: AOJu0Yx8987uo7WVUQEkN7eEkzucdTu6Y/ecyShbWDoUff5TNtsJ8HPq
+	CWU6+HHzuO2VRqQnaiIntuQ=
+X-Google-Smtp-Source: AGHT+IE7U9fV+RiDZTTEgZ9X1IIYI4BfahVLE+bQJjBadXhpoz8iEknnmreo+OAtK84Axb16JbXDGg==
+X-Received: by 2002:a17:906:af04:b0:a22:e827:fb7b with SMTP id lx4-20020a170906af0400b00a22e827fb7bmr10693418ejb.23.1702899595444;
+        Mon, 18 Dec 2023 03:39:55 -0800 (PST)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-59-229.cust.vodafonedsl.it. [188.217.59.229])
+        by smtp.gmail.com with ESMTPSA id vs6-20020a170907a58600b00a1fa6a70b8dsm10410753ejc.133.2023.12.18.03.39.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Dec 2023 03:39:55 -0800 (PST)
+Date: Mon, 18 Dec 2023 12:39:53 +0100
+From: Tommaso Merciai <tomm.merciai@gmail.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linuxfancy@googlegroups.com, sakari.ailus@linux.intel.com,
+	Martin Hecht <martin.hecht@avnet.eu>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] media: i2c: alvium: store frame interval in subdev
+ state
+Message-ID: <ZYAvifztnTGoQB51@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20231215082452.1720481-1-tomm.merciai@gmail.com>
+ <20231215082452.1720481-4-tomm.merciai@gmail.com>
+ <20231218025905.GJ5290@pendragon.ideasonboard.com>
+ <ZYAfThT/mHdzGdAh@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20231218110331.GQ5290@pendragon.ideasonboard.com>
+ <ZYAqyOEfKp/oiqs9@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20231218113618.GA21105@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231218113618.GA21105@pendragon.ideasonboard.com>
 
-Introduce and implement HFIs to queue and release
-all input, output and internal buffers to/from firmware.
+On Mon, Dec 18, 2023 at 01:36:18PM +0200, Laurent Pinchart wrote:
+> On Mon, Dec 18, 2023 at 12:19:36PM +0100, Tommaso Merciai wrote:
+> > On Mon, Dec 18, 2023 at 01:03:31PM +0200, Laurent Pinchart wrote:
+> > > On Mon, Dec 18, 2023 at 11:30:38AM +0100, Tommaso Merciai wrote:
+> > > > On Mon, Dec 18, 2023 at 04:59:05AM +0200, Laurent Pinchart wrote:
+> > > > > On Fri, Dec 15, 2023 at 09:24:52AM +0100, Tommaso Merciai wrote:
+> > > > > > Use the newly added storage for frame interval in the subdev state to
+> > > > > > simplify the driver.
+> > > > > > 
+> > > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > > > ---
+> > > > > >  drivers/media/i2c/alvium-csi2.c | 40 ++++++++++-----------------------
+> > > > > >  drivers/media/i2c/alvium-csi2.h |  2 --
+> > > > > >  2 files changed, 12 insertions(+), 30 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/media/i2c/alvium-csi2.c b/drivers/media/i2c/alvium-csi2.c
+> > > > > > index fde456357be1..81f683b3c849 100644
+> > > > > > --- a/drivers/media/i2c/alvium-csi2.c
+> > > > > > +++ b/drivers/media/i2c/alvium-csi2.c
+> > > > > > @@ -1643,25 +1643,6 @@ static int alvium_hw_init(struct alvium_dev *alvium)
+> > > > > >  }
+> > > > > >  
+> > > > > >  /* --------------- Subdev Operations --------------- */
+> > > > > > -
+> > > > > > -static int alvium_g_frame_interval(struct v4l2_subdev *sd,
+> > > > > > -				   struct v4l2_subdev_state *sd_state,
+> > > > > > -				   struct v4l2_subdev_frame_interval *fi)
+> > > > > > -{
+> > > > > > -	struct alvium_dev *alvium = sd_to_alvium(sd);
+> > > > > > -
+> > > > > > -	/*
+> > > > > > -	 * FIXME: Implement support for V4L2_SUBDEV_FORMAT_TRY, using the V4L2
+> > > > > > -	 * subdev active state API.
+> > > > > > -	 */
+> > > > > > -	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+> > > > > > -		return -EINVAL;
+> > > > > > -
+> > > > > > -	fi->interval = alvium->frame_interval;
+> > > > > > -
+> > > > > > -	return 0;
+> > > > > > -}
+> > > > > > -
+> > > > > >  static int alvium_s_frame_interval(struct v4l2_subdev *sd,
+> > > > > >  				   struct v4l2_subdev_state *sd_state,
+> > > > > >  				   struct v4l2_subdev_frame_interval *fi)
+> > > > > > @@ -1669,6 +1650,7 @@ static int alvium_s_frame_interval(struct v4l2_subdev *sd,
+> > > > > >  	struct alvium_dev *alvium = sd_to_alvium(sd);
+> > > > > >  	struct device *dev = &alvium->i2c_client->dev;
+> > > > > >  	u64 req_fr, dft_fr, min_fr, max_fr;
+> > > > > > +	struct v4l2_fract *interval;
+> > > > > >  	int ret;
+> > > > > >  
+> > > > > >  	/*
+> > > > > 
+> > > > > You should drop the FIXME comment here and the ACTIVE check...
+> > > > 
+> > > > Oks, thanks.
+> > > > 
+> > > > > 
+> > > > > > @@ -1701,9 +1683,10 @@ static int alvium_s_frame_interval(struct v4l2_subdev *sd,
+> > > > > >  	if (req_fr >= max_fr && req_fr <= min_fr)
+> > > > > >  		req_fr = dft_fr;
+> > > > > >  
+> > > > > > -	alvium->fr = req_fr;
+> > > > > > -	alvium->frame_interval.numerator = fi->interval.numerator;
+> > > > > > -	alvium->frame_interval.denominator = fi->interval.denominator;
+> > > > > > +	interval = v4l2_subdev_state_get_interval(sd_state, 0);
+> > > > > > +
+> > > > > > +	interval->numerator = fi->interval.numerator;
+> > > > > > +	interval->denominator = fi->interval.denominator;
+> > > > > >  
+> > > > > 
+> > > > > ... and here only call alvium_set_frame_rate() for the ACTIVE frame
+> > > > > interval.
+> > > > 
+> > > > I don't completely got this comment, can you give me more details about
+> > > > please. Thanks in advance!
+> > > 
+> > > alvium_s_frame_interval() can be called both for the TRY and ACTIVE
+> > > status. The hardware registers should be written only for the ACTIVE
+> > > state.
+> > 
+> > Do you think could be sufficient an if check like this?
+> > 
+> > -	return alvium_set_frame_rate(alvium, req_fr);
+> > +	if (fi->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+> > +		return alvium_set_frame_rate(alvium, req_fr);
+> > +
+> > +	return ret;
+> 
+> That's the idea, yes. The "return ret" can become "return 0". Or you
+> could write
+> 
+> 	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+> 		return 0;
+> 
+> 	return alvium_set_frame_rate(alvium, req_fr);
+> 
+> >  }
 
-HFI_CMD_BUFFER - to submit the buffer to firmware.
-HFI_CMD_BUFFER with HFI_BUF_HOST_FLAG_RELEASE - to request
-firmware to release the buffer.
+(This is my personal idea eh :) )
 
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- .../media/platform/qcom/vcodec/iris/hfi_defines.h  | 25 +++++++
- drivers/media/platform/qcom/vcodec/iris/iris_hfi.c | 85 ++++++++++++++++++++++
- drivers/media/platform/qcom/vcodec/iris/iris_hfi.h |  4 +
- .../platform/qcom/vcodec/iris/iris_hfi_packet.c    | 78 ++++++++++++++++++++
- .../platform/qcom/vcodec/iris/iris_hfi_packet.h    | 15 ++++
- 5 files changed, 207 insertions(+)
+Maybe better:
 
-diff --git a/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h b/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
-index 9dd5f11..c044f78 100644
---- a/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/hfi_defines.h
-@@ -13,6 +13,7 @@
- #define HFI_CMD_INIT				0x01000001
- #define HFI_CMD_OPEN				0x01000003
- #define HFI_CMD_CLOSE				0x01000004
-+#define HFI_CMD_BUFFER				0x01000009
- 
- #define HFI_PROP_IMAGE_VERSION			0x03000001
- 
-@@ -60,4 +61,28 @@ struct hfi_debug_header {
- 	u32   reserved[2];
- };
- 
-+enum hfi_buffer_type {
-+	HFI_BUFFER_BITSTREAM		= 0x00000001,
-+	HFI_BUFFER_RAW			= 0x00000002,
-+	HFI_BUFFER_METADATA		= 0x00000003,
-+	HFI_BUFFER_SUBCACHE		= 0x00000004,
-+	HFI_BUFFER_PARTIAL_DATA		= 0x00000005,
-+	HFI_BUFFER_DPB			= 0x00000006,
-+	HFI_BUFFER_BIN			= 0x00000007,
-+	HFI_BUFFER_LINE			= 0x00000008,
-+	HFI_BUFFER_ARP			= 0x00000009,
-+	HFI_BUFFER_COMV			= 0x0000000A,
-+	HFI_BUFFER_NON_COMV		= 0x0000000B,
-+	HFI_BUFFER_PERSIST		= 0x0000000C,
-+	HFI_BUFFER_VPSS			= 0x0000000D,
-+};
-+
-+enum hfi_buffer_host_flags {
-+	HFI_BUF_HOST_FLAG_NONE			= 0x00000000,
-+	HFI_BUF_HOST_FLAG_RELEASE		= 0x00000001,
-+	HFI_BUF_HOST_FLAG_READONLY		= 0x00000010,
-+	HFI_BUF_HOST_FLAG_CODEC_CONFIG		= 0x00000100,
-+	HFI_BUF_HOST_FLAGS_CB_NON_SECURE	= 0x00000200,
-+};
-+
- #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-index 24ddb98..8f1e456 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.c
-@@ -309,3 +309,88 @@ int iris_hfi_set_property(struct iris_inst *inst,
- 
- 	return ret;
- }
-+
-+int iris_hfi_queue_buffer(struct iris_inst *inst,
-+			  struct iris_buffer *buffer)
-+{
-+	struct hfi_buffer hfi_buffer;
-+	struct iris_core *core;
-+	int ret;
-+
-+	if (!inst->packet)
-+		return -EINVAL;
-+
-+	core = inst->core;
-+	mutex_lock(&core->lock);
-+
-+	if (!validate_session(core, inst)) {
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	ret = get_hfi_buffer(buffer, &hfi_buffer);
-+	if (ret)
-+		goto unlock;
-+
-+	ret = hfi_packet_session_command(inst,
-+					 HFI_CMD_BUFFER,
-+					 HFI_HOST_FLAGS_INTR_REQUIRED,
-+					 get_hfi_port_from_buffer_type(buffer->type),
-+					 inst->session_id,
-+					 HFI_PAYLOAD_STRUCTURE,
-+					 &hfi_buffer,
-+					 sizeof(hfi_buffer));
-+	if (ret)
-+		goto unlock;
-+
-+	ret = iris_hfi_queue_cmd_write(inst->core, inst->packet);
-+
-+unlock:
-+	mutex_unlock(&core->lock);
-+
-+	return ret;
-+}
-+
-+int iris_hfi_release_buffer(struct iris_inst *inst,
-+			    struct iris_buffer *buffer)
-+{
-+	struct hfi_buffer hfi_buffer;
-+	struct iris_core *core;
-+	int ret;
-+
-+	if (!inst->packet || !buffer)
-+		return -EINVAL;
-+
-+	core = inst->core;
-+	mutex_lock(&core->lock);
-+
-+	if (!validate_session(core, inst)) {
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	ret = get_hfi_buffer(buffer, &hfi_buffer);
-+	if (ret)
-+		goto unlock;
-+
-+	hfi_buffer.flags |= HFI_BUF_HOST_FLAG_RELEASE;
-+
-+	ret = hfi_packet_session_command(inst,
-+					 HFI_CMD_BUFFER,
-+					 (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
-+					 HFI_HOST_FLAGS_INTR_REQUIRED),
-+					 get_hfi_port_from_buffer_type(buffer->type),
-+					 inst->session_id,
-+					 HFI_PAYLOAD_STRUCTURE,
-+					 &hfi_buffer,
-+					 sizeof(hfi_buffer));
-+	if (ret)
-+		goto unlock;
-+
-+	ret = iris_hfi_queue_cmd_write(inst->core, inst->packet);
-+
-+unlock:
-+	mutex_unlock(&core->lock);
-+
-+	return ret;
-+}
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-index bf991bb..4aefdc4 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi.h
-@@ -19,5 +19,9 @@ int iris_hfi_set_property(struct iris_inst *inst,
- 
- irqreturn_t iris_hfi_isr(int irq, void *data);
- irqreturn_t iris_hfi_isr_handler(int irq, void *data);
-+int iris_hfi_queue_buffer(struct iris_inst *inst,
-+			  struct iris_buffer *buffer);
-+int iris_hfi_release_buffer(struct iris_inst *inst,
-+			    struct iris_buffer *buffer);
- 
- #endif
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-index 749d978..a3544d8 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.c
-@@ -4,9 +4,87 @@
-  */
- 
- #include "iris_core.h"
-+#include "iris_helpers.h"
- #include "iris_hfi_packet.h"
- #include "hfi_defines.h"
- 
-+u32 get_hfi_port_from_buffer_type(enum iris_buffer_type buffer_type)
-+{
-+	u32 hfi_port = HFI_PORT_NONE;
-+
-+	switch (buffer_type) {
-+	case BUF_INPUT:
-+	case BUF_BIN:
-+	case BUF_COMV:
-+	case BUF_NON_COMV:
-+	case BUF_LINE:
-+		hfi_port = HFI_PORT_BITSTREAM;
-+		break;
-+	case BUF_OUTPUT:
-+	case BUF_DPB:
-+		hfi_port = HFI_PORT_RAW;
-+		break;
-+	case BUF_PERSIST:
-+		hfi_port = HFI_PORT_NONE;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return hfi_port;
-+}
-+
-+static u32 hfi_buf_type_from_driver(enum iris_buffer_type buffer_type)
-+{
-+	switch (buffer_type) {
-+	case BUF_INPUT:
-+		return HFI_BUFFER_BITSTREAM;
-+	case BUF_OUTPUT:
-+		return HFI_BUFFER_RAW;
-+	case BUF_BIN:
-+		return HFI_BUFFER_BIN;
-+	case BUF_COMV:
-+		return HFI_BUFFER_COMV;
-+	case BUF_NON_COMV:
-+		return HFI_BUFFER_NON_COMV;
-+	case BUF_LINE:
-+		return HFI_BUFFER_LINE;
-+	case BUF_DPB:
-+		return HFI_BUFFER_DPB;
-+	case BUF_PERSIST:
-+		return HFI_BUFFER_PERSIST;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf)
-+{
-+	memset(buf, 0, sizeof(*buf));
-+	buf->type = hfi_buf_type_from_driver(buffer->type);
-+	buf->index = buffer->index;
-+	buf->base_address = buffer->device_addr;
-+	buf->addr_offset = 0;
-+	buf->buffer_size = buffer->buffer_size;
-+	/*
-+	 * for decoder input buffers, firmware (BSE HW) needs 256 aligned
-+	 * buffer size otherwise it will truncate or ignore the data after 256
-+	 * aligned size which may lead to error concealment
-+	 */
-+	if (buffer->type == BUF_INPUT)
-+		buf->buffer_size = ALIGN(buffer->buffer_size, 256);
-+	buf->data_offset = buffer->data_offset;
-+	buf->data_size = buffer->data_size;
-+	if (buffer->attr & BUF_ATTR_READ_ONLY)
-+		buf->flags |= HFI_BUF_HOST_FLAG_READONLY;
-+	if (buffer->attr & BUF_ATTR_PENDING_RELEASE)
-+		buf->flags |= HFI_BUF_HOST_FLAG_RELEASE;
-+	buf->flags |= HFI_BUF_HOST_FLAGS_CB_NON_SECURE;
-+	buf->timestamp = buffer->timestamp;
-+
-+	return 0;
-+}
-+
- static int hfi_create_header(u8 *packet, u32 packet_size, u32 session_id,
- 			     u32 header_id)
- {
-diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-index bea7ed9..bf18553 100644
---- a/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-+++ b/drivers/media/platform/qcom/vcodec/iris/iris_hfi_packet.h
-@@ -27,6 +27,19 @@ struct hfi_packet {
- 	u32 reserved[2];
- };
- 
-+struct hfi_buffer {
-+	u32 type;
-+	u32 index;
-+	u64 base_address;
-+	u32 addr_offset;
-+	u32 buffer_size;
-+	u32 data_offset;
-+	u32 data_size;
-+	u64 timestamp;
-+	u32 flags;
-+	u32 reserved[5];
-+};
-+
- enum hfi_packet_host_flags {
- 	HFI_HOST_FLAGS_NONE			= 0x00000000,
- 	HFI_HOST_FLAGS_INTR_REQUIRED		= 0x00000001,
-@@ -66,6 +79,8 @@ enum hfi_packet_port_type {
- 	HFI_PORT_RAW		= 0x00000002,
- };
- 
-+u32 get_hfi_port_from_buffer_type(enum iris_buffer_type buffer_type);
-+int get_hfi_buffer(struct iris_buffer *buffer, struct hfi_buffer *buf);
- int hfi_packet_sys_init(struct iris_core *core,
- 			u8 *pkt, u32 pkt_size);
- int hfi_packet_image_version(struct iris_core *core,
--- 
-2.7.4
+	if (fi->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+		ret = alvium_set_frame_rate(alvium, req_fr);
 
+	return ret;
+
+What do you think?
+
+Regards,
+Tommaso
+
+> > 
+> > > > > > @@ -1853,6 +1836,7 @@ static int alvium_init_state(struct v4l2_subdev *sd,
+> > > > > >  {
+> > > > > >  	struct alvium_dev *alvium = sd_to_alvium(sd);
+> > > > > >  	struct alvium_mode *mode = &alvium->mode;
+> > > > > > +	struct v4l2_fract *interval;
+> > > > > >  	struct v4l2_subdev_format sd_fmt = {
+> > > > > >  		.which = V4L2_SUBDEV_FORMAT_TRY,
+> > > > > >  		.format = alvium_csi2_default_fmt,
+> > > > > > @@ -1870,6 +1854,11 @@ static int alvium_init_state(struct v4l2_subdev *sd,
+> > > > > >  	*v4l2_subdev_state_get_crop(state, 0) = sd_crop.rect;
+> > > > > >  	*v4l2_subdev_state_get_format(state, 0) = sd_fmt.format;
+> > > > > >  
+> > > > > > +	/* Setup initial frame interval*/
+> > > > > > +	interval = v4l2_subdev_state_get_interval(state, 0);
+> > > > > > +	interval->numerator = 1;
+> > > > > > +	interval->denominator = ALVIUM_DEFAULT_FR_HZ;
+> > > > > > +
+> > > > > >  	return 0;
+> > > > > >  }
+> > > > > >  
+> > > > > > @@ -2239,7 +2228,7 @@ static const struct v4l2_subdev_pad_ops alvium_pad_ops = {
+> > > > > >  	.set_fmt = alvium_set_fmt,
+> > > > > >  	.get_selection = alvium_get_selection,
+> > > > > >  	.set_selection = alvium_set_selection,
+> > > > > > -	.get_frame_interval = alvium_g_frame_interval,
+> > > > > > +	.get_frame_interval = v4l2_subdev_get_frame_interval,
+> > > > > >  	.set_frame_interval = alvium_s_frame_interval,
+> > > > > >  };
+> > > > > >  
+> > > > > > @@ -2260,11 +2249,6 @@ static int alvium_subdev_init(struct alvium_dev *alvium)
+> > > > > >  	struct v4l2_subdev *sd = &alvium->sd;
+> > > > > >  	int ret;
+> > > > > >  
+> > > > > > -	/* Setup initial frame interval*/
+> > > > > > -	alvium->frame_interval.numerator = 1;
+> > > > > > -	alvium->frame_interval.denominator = ALVIUM_DEFAULT_FR_HZ;
+> > > > > > -	alvium->fr = ALVIUM_DEFAULT_FR_HZ;
+> > > > > > -
+> > > > > >  	/* Setup the initial mode */
+> > > > > >  	alvium->mode.fmt = alvium_csi2_default_fmt;
+> > > > > >  	alvium->mode.width = alvium_csi2_default_fmt.width;
+> > > > > > diff --git a/drivers/media/i2c/alvium-csi2.h b/drivers/media/i2c/alvium-csi2.h
+> > > > > > index a6529b28e7dd..f5e26257b042 100644
+> > > > > > --- a/drivers/media/i2c/alvium-csi2.h
+> > > > > > +++ b/drivers/media/i2c/alvium-csi2.h
+> > > > > > @@ -442,8 +442,6 @@ struct alvium_dev {
+> > > > > >  	s32 inc_sharp;
+> > > > > >  
+> > > > > >  	struct alvium_mode mode;
+> > > > > > -	struct v4l2_fract frame_interval;
+> > > > > > -	u64 fr;
+> > > > > 
+> > > > > The fr field should have been removed by a previous patch (the one that
+> > > > > will go between 1/3 an 2/3, see my review of 1/3) as shown by the fact
+> > > > > that this patch only removes two locations where the field is set but
+> > > > > none where it's read.
+> > > > > 
+> > > > > >  
+> > > > > >  	u8 h_sup_csi_lanes;
+> > > > > >  	u64 link_freq;
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
