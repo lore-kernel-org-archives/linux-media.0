@@ -1,209 +1,304 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79C21A29F;
-	Mon, 18 Dec 2023 11:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE1A199DB;
+	Mon, 18 Dec 2023 11:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KMSTqs4k"
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 027AA57E;
-	Mon, 18 Dec 2023 12:35:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1702899322;
-	bh=DlUn6WLQnav2qrM8BwYmTkQcr3nL09A9JB515SmTe/o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KMSTqs4k2m5ODqLXEqdda/ZLoGVuSKZBRE8jrJZYXFuxh3EXB4uRJXonukhhIov2y
-	 miTjnipnKKDQP7HEFabMuUfmHrY5xgU0PTkLceuAtGxOFyNECpvFOHazkzCRwBxFDs
-	 VSE1jSLhXX6Zo6L9X4mB0PurIk4nhRtTm9RR0j4I=
-Date: Mon, 18 Dec 2023 13:36:18 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Tommaso Merciai <tomm.merciai@gmail.com>
-Cc: linuxfancy@googlegroups.com, sakari.ailus@linux.intel.com,
-	Martin Hecht <martin.hecht@avnet.eu>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] media: i2c: alvium: store frame interval in subdev
- state
-Message-ID: <20231218113618.GA21105@pendragon.ideasonboard.com>
-References: <20231215082452.1720481-1-tomm.merciai@gmail.com>
- <20231215082452.1720481-4-tomm.merciai@gmail.com>
- <20231218025905.GJ5290@pendragon.ideasonboard.com>
- <ZYAfThT/mHdzGdAh@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20231218110331.GQ5290@pendragon.ideasonboard.com>
- <ZYAqyOEfKp/oiqs9@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZFmnun9K"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BIAsCGw032638;
+	Mon, 18 Dec 2023 11:36:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references; s=
+	qcppdkim1; bh=LX6X6WF6b2DnvVb0x9SqnHVvPQHNfSxl8FB6K8HP6sw=; b=ZF
+	mnun9KydsAw/asYajUI0JUh42vUrjSf+0MHeYm6RTwMPXdlHC4x7gaVHerzb1KP4
+	fPSnnQ5cYhW3siUfRYddUSOwSP7IarEXLy4wsgqKKGKpxfuzt2j9JZdyRHnJjV2C
+	qy1ZRRNWIRcwp6i7MFf9vL83N8fCyFhA4RATSx1hYTuNH4k1Oa42dkveDKsMwWzO
+	zU0dHaNWvvYv6NYSQyW/xk0dWaKumFmo375ZtyfV7QLfZ0Uzq/+Wv8QUMNDNfUlx
+	Q+Dr6aBVETfgFzEhbOdZjfyB7ktxnJkh+0oALHkWZaMVH77IA8CtpqcMKczhklt5
+	ngjdByKMM1+jYQDX89gQ==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v14xy44cs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Dec 2023 11:36:10 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3BIBVmpM028250;
+	Mon, 18 Dec 2023 11:36:07 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3v14ykyyhc-1;
+	Mon, 18 Dec 2023 11:33:07 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BIBX7XZ029998;
+	Mon, 18 Dec 2023 11:33:07 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3BIBX62X029968;
+	Mon, 18 Dec 2023 11:33:07 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+	id 2E22822C6; Mon, 18 Dec 2023 17:03:04 +0530 (+0530)
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+To: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mchehab@kernel.org, bryan.odonoghue@linaro.org
+Cc: linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH v2 06/34] media: iris: register video device to platform driver
+Date: Mon, 18 Dec 2023 17:02:01 +0530
+Message-Id: <1702899149-21321-7-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
+References: <1702899149-21321-1-git-send-email-quic_dikshita@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aYFzfkEloCRmcSdpA9dm31aQYrFM9uqY
+X-Proofpoint-ORIG-GUID: aYFzfkEloCRmcSdpA9dm31aQYrFM9uqY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
+ definitions=main-2312180083
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZYAqyOEfKp/oiqs9@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
 
-On Mon, Dec 18, 2023 at 12:19:36PM +0100, Tommaso Merciai wrote:
-> On Mon, Dec 18, 2023 at 01:03:31PM +0200, Laurent Pinchart wrote:
-> > On Mon, Dec 18, 2023 at 11:30:38AM +0100, Tommaso Merciai wrote:
-> > > On Mon, Dec 18, 2023 at 04:59:05AM +0200, Laurent Pinchart wrote:
-> > > > On Fri, Dec 15, 2023 at 09:24:52AM +0100, Tommaso Merciai wrote:
-> > > > > Use the newly added storage for frame interval in the subdev state to
-> > > > > simplify the driver.
-> > > > > 
-> > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > ---
-> > > > >  drivers/media/i2c/alvium-csi2.c | 40 ++++++++++-----------------------
-> > > > >  drivers/media/i2c/alvium-csi2.h |  2 --
-> > > > >  2 files changed, 12 insertions(+), 30 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/media/i2c/alvium-csi2.c b/drivers/media/i2c/alvium-csi2.c
-> > > > > index fde456357be1..81f683b3c849 100644
-> > > > > --- a/drivers/media/i2c/alvium-csi2.c
-> > > > > +++ b/drivers/media/i2c/alvium-csi2.c
-> > > > > @@ -1643,25 +1643,6 @@ static int alvium_hw_init(struct alvium_dev *alvium)
-> > > > >  }
-> > > > >  
-> > > > >  /* --------------- Subdev Operations --------------- */
-> > > > > -
-> > > > > -static int alvium_g_frame_interval(struct v4l2_subdev *sd,
-> > > > > -				   struct v4l2_subdev_state *sd_state,
-> > > > > -				   struct v4l2_subdev_frame_interval *fi)
-> > > > > -{
-> > > > > -	struct alvium_dev *alvium = sd_to_alvium(sd);
-> > > > > -
-> > > > > -	/*
-> > > > > -	 * FIXME: Implement support for V4L2_SUBDEV_FORMAT_TRY, using the V4L2
-> > > > > -	 * subdev active state API.
-> > > > > -	 */
-> > > > > -	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-> > > > > -		return -EINVAL;
-> > > > > -
-> > > > > -	fi->interval = alvium->frame_interval;
-> > > > > -
-> > > > > -	return 0;
-> > > > > -}
-> > > > > -
-> > > > >  static int alvium_s_frame_interval(struct v4l2_subdev *sd,
-> > > > >  				   struct v4l2_subdev_state *sd_state,
-> > > > >  				   struct v4l2_subdev_frame_interval *fi)
-> > > > > @@ -1669,6 +1650,7 @@ static int alvium_s_frame_interval(struct v4l2_subdev *sd,
-> > > > >  	struct alvium_dev *alvium = sd_to_alvium(sd);
-> > > > >  	struct device *dev = &alvium->i2c_client->dev;
-> > > > >  	u64 req_fr, dft_fr, min_fr, max_fr;
-> > > > > +	struct v4l2_fract *interval;
-> > > > >  	int ret;
-> > > > >  
-> > > > >  	/*
-> > > > 
-> > > > You should drop the FIXME comment here and the ACTIVE check...
-> > > 
-> > > Oks, thanks.
-> > > 
-> > > > 
-> > > > > @@ -1701,9 +1683,10 @@ static int alvium_s_frame_interval(struct v4l2_subdev *sd,
-> > > > >  	if (req_fr >= max_fr && req_fr <= min_fr)
-> > > > >  		req_fr = dft_fr;
-> > > > >  
-> > > > > -	alvium->fr = req_fr;
-> > > > > -	alvium->frame_interval.numerator = fi->interval.numerator;
-> > > > > -	alvium->frame_interval.denominator = fi->interval.denominator;
-> > > > > +	interval = v4l2_subdev_state_get_interval(sd_state, 0);
-> > > > > +
-> > > > > +	interval->numerator = fi->interval.numerator;
-> > > > > +	interval->denominator = fi->interval.denominator;
-> > > > >  
-> > > > 
-> > > > ... and here only call alvium_set_frame_rate() for the ACTIVE frame
-> > > > interval.
-> > > 
-> > > I don't completely got this comment, can you give me more details about
-> > > please. Thanks in advance!
-> > 
-> > alvium_s_frame_interval() can be called both for the TRY and ACTIVE
-> > status. The hardware registers should be written only for the ACTIVE
-> > state.
-> 
-> Do you think could be sufficient an if check like this?
-> 
-> -	return alvium_set_frame_rate(alvium, req_fr);
-> +	if (fi->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-> +		return alvium_set_frame_rate(alvium, req_fr);
-> +
-> +	return ret;
+Iris is a multi pipe based video acceleration hardware
+block that offloads video stream encoding and decoding
+from the application processor (AP). It supports H.264
+and H.265 encoding and decoding, as well as VP9 decoding.
+The AP communicates with hardware through a well defined
+protocol which provides fine-grained and asynchronous
+control over individual hardware features.
 
-That's the idea, yes. The "return ret" can become "return 0". Or you
-could write
+This patch introduces basic probe and remove functions.
+It handles setting up a video device as well as registering
+it with the V4L2 subsystem.
 
-	if (fi->which != V4L2_SUBDEV_FORMAT_ACTIVE)
-		return 0;
+Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+---
+ drivers/media/platform/qcom/Kconfig                |   1 +
+ drivers/media/platform/qcom/Makefile               |   1 +
+ drivers/media/platform/qcom/vcodec/iris/Kconfig    |  13 +++
+ drivers/media/platform/qcom/vcodec/iris/Makefile   |   3 +
+ .../media/platform/qcom/vcodec/iris/iris_core.h    |  34 +++++++
+ .../media/platform/qcom/vcodec/iris/iris_probe.c   | 111 +++++++++++++++++++++
+ 6 files changed, 163 insertions(+)
+ create mode 100644 drivers/media/platform/qcom/vcodec/iris/Kconfig
+ create mode 100644 drivers/media/platform/qcom/vcodec/iris/Makefile
+ create mode 100644 drivers/media/platform/qcom/vcodec/iris/iris_core.h
+ create mode 100644 drivers/media/platform/qcom/vcodec/iris/iris_probe.c
 
-	return alvium_set_frame_rate(alvium, req_fr);
-
->  }
-> 
-> > > > > @@ -1853,6 +1836,7 @@ static int alvium_init_state(struct v4l2_subdev *sd,
-> > > > >  {
-> > > > >  	struct alvium_dev *alvium = sd_to_alvium(sd);
-> > > > >  	struct alvium_mode *mode = &alvium->mode;
-> > > > > +	struct v4l2_fract *interval;
-> > > > >  	struct v4l2_subdev_format sd_fmt = {
-> > > > >  		.which = V4L2_SUBDEV_FORMAT_TRY,
-> > > > >  		.format = alvium_csi2_default_fmt,
-> > > > > @@ -1870,6 +1854,11 @@ static int alvium_init_state(struct v4l2_subdev *sd,
-> > > > >  	*v4l2_subdev_state_get_crop(state, 0) = sd_crop.rect;
-> > > > >  	*v4l2_subdev_state_get_format(state, 0) = sd_fmt.format;
-> > > > >  
-> > > > > +	/* Setup initial frame interval*/
-> > > > > +	interval = v4l2_subdev_state_get_interval(state, 0);
-> > > > > +	interval->numerator = 1;
-> > > > > +	interval->denominator = ALVIUM_DEFAULT_FR_HZ;
-> > > > > +
-> > > > >  	return 0;
-> > > > >  }
-> > > > >  
-> > > > > @@ -2239,7 +2228,7 @@ static const struct v4l2_subdev_pad_ops alvium_pad_ops = {
-> > > > >  	.set_fmt = alvium_set_fmt,
-> > > > >  	.get_selection = alvium_get_selection,
-> > > > >  	.set_selection = alvium_set_selection,
-> > > > > -	.get_frame_interval = alvium_g_frame_interval,
-> > > > > +	.get_frame_interval = v4l2_subdev_get_frame_interval,
-> > > > >  	.set_frame_interval = alvium_s_frame_interval,
-> > > > >  };
-> > > > >  
-> > > > > @@ -2260,11 +2249,6 @@ static int alvium_subdev_init(struct alvium_dev *alvium)
-> > > > >  	struct v4l2_subdev *sd = &alvium->sd;
-> > > > >  	int ret;
-> > > > >  
-> > > > > -	/* Setup initial frame interval*/
-> > > > > -	alvium->frame_interval.numerator = 1;
-> > > > > -	alvium->frame_interval.denominator = ALVIUM_DEFAULT_FR_HZ;
-> > > > > -	alvium->fr = ALVIUM_DEFAULT_FR_HZ;
-> > > > > -
-> > > > >  	/* Setup the initial mode */
-> > > > >  	alvium->mode.fmt = alvium_csi2_default_fmt;
-> > > > >  	alvium->mode.width = alvium_csi2_default_fmt.width;
-> > > > > diff --git a/drivers/media/i2c/alvium-csi2.h b/drivers/media/i2c/alvium-csi2.h
-> > > > > index a6529b28e7dd..f5e26257b042 100644
-> > > > > --- a/drivers/media/i2c/alvium-csi2.h
-> > > > > +++ b/drivers/media/i2c/alvium-csi2.h
-> > > > > @@ -442,8 +442,6 @@ struct alvium_dev {
-> > > > >  	s32 inc_sharp;
-> > > > >  
-> > > > >  	struct alvium_mode mode;
-> > > > > -	struct v4l2_fract frame_interval;
-> > > > > -	u64 fr;
-> > > > 
-> > > > The fr field should have been removed by a previous patch (the one that
-> > > > will go between 1/3 an 2/3, see my review of 1/3) as shown by the fact
-> > > > that this patch only removes two locations where the field is set but
-> > > > none where it's read.
-> > > > 
-> > > > >  
-> > > > >  	u8 h_sup_csi_lanes;
-> > > > >  	u64 link_freq;
-
+diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
+index e94142f..7c88837 100644
+--- a/drivers/media/platform/qcom/Kconfig
++++ b/drivers/media/platform/qcom/Kconfig
+@@ -4,3 +4,4 @@ comment "Qualcomm media platform drivers"
+ 
+ source "drivers/media/platform/qcom/camss/Kconfig"
+ source "drivers/media/platform/qcom/vcodec/venus/Kconfig"
++source "drivers/media/platform/qcom/vcodec/iris/Kconfig"
+diff --git a/drivers/media/platform/qcom/Makefile b/drivers/media/platform/qcom/Makefile
+index 3d2d82b..3c76969 100644
+--- a/drivers/media/platform/qcom/Makefile
++++ b/drivers/media/platform/qcom/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-y += camss/
+ obj-y += vcodec/venus/
++obj-y += vcodec/iris/
+diff --git a/drivers/media/platform/qcom/vcodec/iris/Kconfig b/drivers/media/platform/qcom/vcodec/iris/Kconfig
+new file mode 100644
+index 0000000..850a5b4
+--- /dev/null
++++ b/drivers/media/platform/qcom/vcodec/iris/Kconfig
+@@ -0,0 +1,13 @@
++config VIDEO_QCOM_IRIS
++        tristate "Qualcomm Iris V4L2 encoder/decoder driver"
++        depends on VIDEO_DEV
++        depends on ARCH_QCOM
++        select QCOM_MDT_LOADER if ARCH_QCOM
++        select QCOM_SCM
++        select DMABUF_HEAPS
++	select DMABUF_HEAPS_SYSTEM
++        help
++          This is a V4L2 driver for Qualcomm Iris video accelerator
++          hardware. It accelerates encoding and decoding operations
++          on various Qualcomm SoCs.
++          To compile this driver as a module choose m here.
+diff --git a/drivers/media/platform/qcom/vcodec/iris/Makefile b/drivers/media/platform/qcom/vcodec/iris/Makefile
+new file mode 100644
+index 0000000..5536ae0
+--- /dev/null
++++ b/drivers/media/platform/qcom/vcodec/iris/Makefile
+@@ -0,0 +1,3 @@
++iris-objs += iris_probe.o
++
++obj-$(CONFIG_VIDEO_QCOM_IRIS) += iris.o
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_core.h b/drivers/media/platform/qcom/vcodec/iris/iris_core.h
+new file mode 100644
+index 0000000..ab7fcee
+--- /dev/null
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_core.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _IRIS_CORE_H_
++#define _IRIS_CORE_H_
++
++#include <linux/types.h>
++#include <media/v4l2-device.h>
++
++/**
++ * struct iris_core - holds core parameters valid for all instances
++ *
++ * @dev: reference to device structure
++ * @reg_base: IO memory base address
++ * @irq: iris irq
++ * @v4l2_dev: a holder for v4l2 device structure
++ * @vdev_dec: iris video device structure for decoder
++ * @v4l2_file_ops: iris v4l2 file ops
++ * @v4l2_ioctl_ops: iris v4l2 ioctl ops
++ */
++
++struct iris_core {
++	struct device				*dev;
++	void __iomem				*reg_base;
++	int					irq;
++	struct v4l2_device			v4l2_dev;
++	struct video_device			*vdev_dec;
++	const struct v4l2_file_operations	*v4l2_file_ops;
++	const struct v4l2_ioctl_ops		*v4l2_ioctl_ops;
++};
++
++#endif
+diff --git a/drivers/media/platform/qcom/vcodec/iris/iris_probe.c b/drivers/media/platform/qcom/vcodec/iris/iris_probe.c
+new file mode 100644
+index 0000000..2e93118
+--- /dev/null
++++ b/drivers/media/platform/qcom/vcodec/iris/iris_probe.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++
++#include "iris_core.h"
++
++static int iris_register_video_device(struct iris_core *core)
++{
++	struct video_device *vdev;
++	int ret;
++
++	vdev = video_device_alloc();
++	if (!vdev)
++		return -ENOMEM;
++
++	strscpy(vdev->name, "qcom-iris-decoder", sizeof(vdev->name));
++	vdev->release = video_device_release;
++	vdev->fops = core->v4l2_file_ops;
++	vdev->ioctl_ops = core->v4l2_ioctl_ops;
++	vdev->vfl_dir = VFL_DIR_M2M;
++	vdev->v4l2_dev = &core->v4l2_dev;
++	vdev->device_caps = V4L2_CAP_VIDEO_M2M_MPLANE | V4L2_CAP_STREAMING;
++
++	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
++	if (ret)
++		goto err_vdev_release;
++
++	core->vdev_dec = vdev;
++	video_set_drvdata(vdev, core);
++
++	return ret;
++
++err_vdev_release:
++	video_device_release(vdev);
++
++	return ret;
++}
++
++static void iris_remove(struct platform_device *pdev)
++{
++	struct iris_core *core;
++
++	core = platform_get_drvdata(pdev);
++	if (!core)
++		return;
++
++	video_unregister_device(core->vdev_dec);
++
++	v4l2_device_unregister(&core->v4l2_dev);
++}
++
++static int iris_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct iris_core *core;
++	int ret;
++
++	core = devm_kzalloc(&pdev->dev, sizeof(*core), GFP_KERNEL);
++	if (!core)
++		return -ENOMEM;
++	core->dev = dev;
++
++	core->reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(core->reg_base))
++		return PTR_ERR(core->reg_base);
++
++	core->irq = platform_get_irq(pdev, 0);
++	if (core->irq < 0)
++		return core->irq;
++
++	ret = v4l2_device_register(dev, &core->v4l2_dev);
++	if (ret)
++		return ret;
++
++	ret = iris_register_video_device(core);
++	if (ret)
++		goto err_v4l2_unreg;
++
++	platform_set_drvdata(pdev, core);
++
++	return ret;
++
++err_v4l2_unreg:
++	v4l2_device_unregister(&core->v4l2_dev);
++
++	return ret;
++}
++
++static const struct of_device_id iris_dt_match[] = {
++	{ .compatible = "qcom,sm8550-iris", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, iris_dt_match);
++
++static struct platform_driver qcom_iris_driver = {
++	.probe = iris_probe,
++	.remove_new = iris_remove,
++	.driver = {
++		.name = "qcom-iris",
++		.of_match_table = iris_dt_match,
++	},
++};
++
++module_platform_driver(qcom_iris_driver);
++MODULE_DESCRIPTION("Qualcomm Iris video driver");
++MODULE_LICENSE("GPL");
 -- 
-Regards,
+2.7.4
 
-Laurent Pinchart
