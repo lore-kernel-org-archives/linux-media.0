@@ -1,72 +1,83 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A7713ADF;
-	Mon, 18 Dec 2023 09:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB87125A1;
+	Mon, 18 Dec 2023 09:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="oXRNqQij"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1702890125; bh=N7bSQjKB+Nqt9vDqsKQUJqGrXnPirrkscDlo7t38zU0=;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tN6LLOb4"
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7EBD357E;
+	Mon, 18 Dec 2023 10:15:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1702890931;
+	bh=sscAUNZitIjJpr6VsUmcITrudmZ/lgKq7hsyj3Gukj0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oXRNqQijmzM6RWM7tISRwu3m+pkVdxddfWPWQ5yR7J9QI30/ji0+/5yvg4P/n0ghn
-	 C7YsykIWpsqV1nVG8PlsS/bctTxM8Wz1+oAGIUMp41AqNiK5TkMIFAQCjsouXh0eAN
-	 9miwcfDvBOjBE7xYJXzaUsVqy3ces9AlmdngSYOXI8w0KdLelpJobODguf0ebpJWUB
-	 XwfqLymplXqKKK7CFVGjGK4kG03R9zWcv4294w4ApEBUFaUV1t3MJZzbh/U+hDRCTD
-	 GQliPlrcR8/5iUPcjSUrhA8k4E9j0TI8UnAS+py8FDOqDs+CkGIRBnkA9YbYdrDW7Q
-	 fKnQSO5uv2ANg==
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 3DBA11000FD; Mon, 18 Dec 2023 09:02:05 +0000 (GMT)
-Date: Mon, 18 Dec 2023 09:02:05 +0000
-From: Sean Young <sean@mess.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	linux-rpi-kernel@lists.infradead.org,
+	b=tN6LLOb4d3ZT1ULBijF6IjtiIzb8WrV3yrzSn0wdbaPQwPZR5CCkTiuR1FWrQ9LOq
+	 mloPNfvfcYQEJqN4bfCULUkUgPqxPlTU4y1kZRkmfUVInZK6vWAMLgzauzOB9Dl6wI
+	 MaoCb9GHkk03udvhOmgUFwHD/UgvvCCAzEClmmTM=
+Date: Mon, 18 Dec 2023 11:16:27 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Dafna Hirschfeld <dafna@fastmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Mikhail Rudenko <mike.rudenko@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 5/6] pwm: bcm2835: Allow PWM driver to be used in
- atomic context
-Message-ID: <ZYAKjTdr64GlCnxU@gofer.mess.org>
-References: <cover.1702369869.git.sean@mess.org>
- <e9e32c9789da3c90b5a2aa7d5a093120b76421fb.1702369869.git.sean@mess.org>
- <20231212160838.k4z4csy455a7qnje@pengutronix.de>
- <20231212181444.mw5kxff5ijz676qh@pengutronix.de>
+Subject: Re: [PATCH 1/2] Revert "media: rkisp1: Drop IRQF_SHARED"
+Message-ID: <20231218091627.GA26540@pendragon.ideasonboard.com>
+References: <20231218-rkisp-shirq-fix-v1-0-173007628248@ideasonboard.com>
+ <20231218-rkisp-shirq-fix-v1-1-173007628248@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231212181444.mw5kxff5ijz676qh@pengutronix.de>
+In-Reply-To: <20231218-rkisp-shirq-fix-v1-1-173007628248@ideasonboard.com>
 
-On Tue, Dec 12, 2023 at 07:14:44PM +0100, Uwe Kleine-König wrote:
-> Hello Sean,
+Hi Tomi,
+
+Thank you for the patch.
+
+On Mon, Dec 18, 2023 at 09:54:00AM +0200, Tomi Valkeinen wrote:
+> This reverts commit 85d2a31fe4d9be1555f621ead7a520d8791e0f74.
 > 
-> On Tue, Dec 12, 2023 at 05:08:38PM +0100, Uwe Kleine-König wrote:
-> > On Tue, Dec 12, 2023 at 08:34:04AM +0000, Sean Young wrote:
-> > > @@ -169,6 +179,7 @@ static int bcm2835_pwm_suspend(struct device *dev)
-> > >  {
-> > >  	struct bcm2835_pwm *pc = dev_get_drvdata(dev);
-> > >  
-> > > +	clk_rate_exclusive_put(pc->clk);
-> > >  	clk_disable_unprepare(pc->clk);
-> > 
-> > I thought this was the remove function, but that's suspend. Adding
-> > clk_rate_exclusive_put() there is wrong.
+> The rkisp1 does share interrupt lines on some platforms, after all. Thus
+> we need to revert this, and implement a fix for the rkisp1 shared irq
+> handling in a follow-up patch.
 > 
-> https://lore.kernel.org/linux-clk/744a6371f94fe96f527eea6e52a600914e6fb6b5.1702403904.git.u.kleine-koenig@pengutronix.de/
-> might be useful to fix this.
+> Reported-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+> Closes: https://lore.kernel.org/all/87o7eo8vym.fsf@gmail.com/
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-That does look useful, I suppose I can only use it once it's merged in
-pwm-next though. Leaving out for v9.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Thanks,
-Sean
+> ---
+>  drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> index f96f821a7b50..acc559652d6e 100644
+> --- a/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> +++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-dev.c
+> @@ -559,7 +559,7 @@ static int rkisp1_probe(struct platform_device *pdev)
+>  				rkisp1->irqs[il] = irq;
+>  		}
+>  
+> -		ret = devm_request_irq(dev, irq, info->isrs[i].isr, 0,
+> +		ret = devm_request_irq(dev, irq, info->isrs[i].isr, IRQF_SHARED,
+>  				       dev_driver_string(dev), dev);
+>  		if (ret) {
+>  			dev_err(dev, "request irq failed: %d\n", ret);
+
+-- 
+Regards,
+
+Laurent Pinchart
