@@ -1,39 +1,39 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0841CFB2;
-	Wed, 20 Dec 2023 08:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA30C1CAA6;
+	Wed, 20 Dec 2023 08:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="2Z3PhHjk"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BK8ZTqV029359;
-	Wed, 20 Dec 2023 09:46:46 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="pKWfcRA4"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BK60V9b015096;
+	Wed, 20 Dec 2023 09:47:53 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=sr+3zBBOyZ1rB6MCRzn+XuV35G6DJ6CNLI/Iw1vfcPM=; b=2Z
-	3PhHjkANiNdjpAYsU2h6u8giiOGeLXIwagpHjincrbd8hns7hsqvg/1EpSk0k2vO
-	fVNPHwWyNIqgw8+nNAiAgMhp9jTnxIzlADP6ZF+jVwE03Z+Ca4c+FAP0BOHU4wET
-	TLgq71Yf19le5d5T8fyyuQeamzHd6djRs1S4lHmX2xVzgAeQR/shxVzVatBomnem
-	cD7w3Ygs8ksXdglkKQKImqP4B9+wIKRnDesU+sIz+2Gq863FUfe8OLh6RLcLpNMi
-	CEUecIPnF5AbmIF1HqTz9H9jQ12xC6qRujNL6g/BfC7EPx8u8KqhpxsZWEry7VL7
-	bX1N8WQcO0UR+q3j9kRA==
+	selector1; bh=gOTJOkgkUXjyDgxkghIjHED6KsoYJ6xYXo9usGGB+Xk=; b=pK
+	WfcRA4k3TYYGTzstvSZGq3qzFqEcrKmVG1SRfSXZTldF/lnuwzDnSKnvHv3cw1WG
+	WsgLp6AOAmfwTp5ctFalIYxQcom2K8Wu0bC4jl/aliJ2TGsa03gawPq3ciQjPXeB
+	6gegEpGN6xn/DtNL7q8TNHAKJQm2A3GxgU7Oe4bnI3AYfJi0otSqPoQ3ujpbqGf/
+	3wjudhYSs/1gq02UbHLWABUKe2eL371k83aQHt1Gr1H+SlIFIcthrHicCIEHwTE4
+	oQES7SwoQ2EZ7hgNB0N0sJJppPxuA67ynDBPjMILfaFQXXaYTzL8Pxl+PcbJrI2Y
+	o4/Gl3WCtmGo5bxKJ/yg==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v11w901xc-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v1pb4p1h3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Dec 2023 09:46:46 +0100 (CET)
+	Wed, 20 Dec 2023 09:47:53 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 130B8100059;
-	Wed, 20 Dec 2023 09:46:46 +0100 (CET)
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 83015100057;
+	Wed, 20 Dec 2023 09:47:52 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0990B20A76D;
-	Wed, 20 Dec 2023 09:46:46 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 88E5A20A77D;
+	Wed, 20 Dec 2023 09:47:49 +0100 (CET)
 Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 20 Dec
- 2023 09:46:45 +0100
+ 2023 09:47:49 +0100
 From: Hugues Fruchet <hugues.fruchet@foss.st.com>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel
@@ -67,9 +67,9 @@ CC: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Marco Felsch
 	<m.felsch@pengutronix.de>,
         Adam Ford <aford173@gmail.com>
-Subject: [PATCH v3 1/5] dt-bindings: media: Document STM32MP25 VDEC & VENC video codecs
-Date: Wed, 20 Dec 2023 09:46:37 +0100
-Message-ID: <20231220084641.2076428-2-hugues.fruchet@foss.st.com>
+Subject: [PATCH v3 5/5] arm64: dts: st: add video encoder support to stm32mp255
+Date: Wed, 20 Dec 2023 09:46:41 +0100
+Message-ID: <20231220084641.2076428-6-hugues.fruchet@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231220084641.2076428-1-hugues.fruchet@foss.st.com>
 References: <20231220084641.2076428-1-hugues.fruchet@foss.st.com>
@@ -87,70 +87,49 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-20_02,2023-12-14_01,2023-05-22_02
 
-Add STM32MP25 VDEC video decoder & VENC video encoder bindings.
+Add VENC hardware video encoder support to STM32MP255.
 
 Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
 ---
- .../media/st,stm32mp25-video-codec.yaml       | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 ++++++
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
-new file mode 100644
-index 000000000000..e167e3b1bec3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/st,stm32mp25-video-codec.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 8fc7e9199499..5dd4f3580a60 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -58,6 +58,12 @@ ck_icn_p_vdec: ck-icn-p-vdec {
+ 			compatible = "fixed-clock";
+ 			clock-frequency = <200000000>;
+ 		};
 +
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/st,stm32mp25-video-codec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++		ck_icn_p_venc: ck-icn-p-venc {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <200000000>;
++		};
+ 	};
+ 
+ 	firmware {
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index aea5096dac3c..17f197c5b22b 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -14,6 +14,13 @@ vdec: vdec@480d0000 {
+ 				interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&ck_icn_p_vdec>;
+ 			};
 +
-+title: STMicroelectronics STM32MP25 VDEC video decoder & VENC video encoder
-+
-+maintainers:
-+  - Hugues Fruchet <hugues.fruchet@foss.st.com>
-+
-+description:
-+  The STMicroelectronics STM32MP25 SOCs embeds a VDEC video hardware
-+  decoder peripheral based on Verisilicon VC8000NanoD IP (former Hantro G1)
-+  and a VENC video hardware encoder peripheral based on Verisilicon
-+  VC8000NanoE IP (former Hantro H1).
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32mp25-vdec
-+      - st,stm32mp25-venc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    video-codec@580d0000 {
-+        compatible = "st,stm32mp25-vdec";
-+        reg = <0x580d0000 0x3c8>;
-+        interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ck_icn_p_vdec>;
-+    };
++			venc: venc@480e0000 {
++				compatible = "st,stm32mp25-venc";
++				reg = <0x480e0000 0x800>;
++				interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&ck_icn_ls_mcu>;
++			};
+ 		};
+ 	};
+ };
 -- 
 2.25.1
 
