@@ -1,60 +1,52 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37750374DA;
-	Wed, 20 Dec 2023 10:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A19A2030C;
+	Wed, 20 Dec 2023 10:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="qkSlkt3M"
-X-UUID: ca675fa69f1f11eeba30773df0976c77-20231220
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Uqc9QLJc"
+X-UUID: 252672be9f2111eea5db2bebc7c28f94-20231220
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=5QjcwvzrebWfLqJww9KhwNbe3Z1/pLAvIef2nvvVTbQ=;
-	b=qkSlkt3MtEjWc7Ki2wH8SrK6Yo2WXqgFPwz5Ntn5F4Oq6oD5ktUwSp7P0l/N9ak6na+FudaSlIVnufEy8iPgxGrYsZX5Oe0WDz2NMsSpH2pvRf2pOBwUnlDubyLsr2kPEk7SFsGRe9veFOyxK2KBZZ/5XdvJVqyGZNWMja3uu94=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xW752tpTPFMC17bGKgP0Se5gHibWuW19EVYb5yBViY0=;
+	b=Uqc9QLJcEqQ2EROJVrgyrsNDyY8zoP1p+cOxJfTz3oliTpo1qIyMpE1mL1qUO0ezpJmTIUAqSsK2zqav4+XEBiEoshiGMp4xaSDbIAPCsn4mhFN0SFc8UOHOtipZ9bMIixwJKX50/L6rhua8oY/9wTzsmat50dti+TUMkX+lU58=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:3ec8e272-191a-40a4-9f41-26606105510c,IP:0,U
-	RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:5d391d7,CLOUDID:5bc64b2e-1ab8-4133-9780-81938111c800,B
+X-CID-O-INFO: VERSION:1.1.35,REQID:a2b9478d-daef-405a-831f-01fec3aa7dc1,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:5d391d7,CLOUDID:2fda4b2e-1ab8-4133-9780-81938111c800,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-	NO,DKR:0,DKP:0,BRR:0,BRE:0
+	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+	DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: ca675fa69f1f11eeba30773df0976c77-20231220
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 252672be9f2111eea5db2bebc7c28f94-20231220
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
 	(envelope-from <moudy.ho@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1404044826; Wed, 20 Dec 2023 18:08:58 +0800
+	with ESMTP id 1081529620; Wed, 20 Dec 2023 18:18:40 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 20 Dec 2023 18:08:56 +0800
+ 15.2.1118.26; Wed, 20 Dec 2023 18:18:39 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 20 Dec 2023 18:08:56 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 20 Dec 2023 18:18:39 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
-	<p.zabel@pengutronix.de>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Hans Verkuil
-	<hverkuil-cisco@xs4all.nl>
-CC: <dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Moudy
- Ho" <moudy.ho@mediatek.com>
-Subject: [PATCH v10 09/16] dt-bindings: media: mediatek: mdp3: add component TCC for MT8195
-Date: Wed, 20 Dec 2023 18:08:46 +0800
-Message-ID: <20231220100853.20616-10-moudy.ho@mediatek.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v9 06/12] media: platform: mtk-mdp3: avoid multiple driver registrations
+Date: Wed, 20 Dec 2023 18:18:32 +0800
+Message-ID: <20231220101838.21510-7-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20231220100853.20616-1-moudy.ho@mediatek.com>
-References: <20231220100853.20616-1-moudy.ho@mediatek.com>
+In-Reply-To: <20231220101838.21510-1-moudy.ho@mediatek.com>
+References: <20231220101838.21510-1-moudy.ho@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -62,100 +54,78 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--7.626500-8.000000
-X-TMASE-MatchedRID: mSPDr4jZDFHoRPKKjGHPUxcqpH7D1rtQ6SXuwUgGH0j3dSKTMI31W4pb
-	wG9fIuITLSHDQi/tZU+OEmLXxEuoAga1NXbjqus0tw+xHnsmQjNr9+Kgn2XgeNzOQo7mTgA+apc
-	xcfGIwwyygic1mDySMHMPxAree1voSBiSH4+du3/J1E/nrJFED4EcpMn6x9cZWltirZ/iPP78/L
-	2o6LnOl6Q3zY1NMblWzA1TpsftrAZAXbiRmn1bD54CIKY/Hg3Am4n49vyf9XEvM/mydp5vVCq2r
-	l3dzGQ1ropAi/FV10zL1e8sURC8p7/zMsx+tBCWzRJ7qMxdWrq5TR54AAUwADflzkGcoK72
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--7.626500-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	7C91E7E3977F679A768A5E78CC02B31B3EC1C9BBB412000CA196C164DECA461A2000:8
 X-MTK: N
 
-Add the fundamental hardware configuration of component TCC,
-which is controlled by MDP3 on MT8195.
+The amount of MDP3 driver probes is determined by the registered
+clocks of MMSYS.
+Since MT8195 MDP3 utilizes VPPSYS0 and VPPSYS1, it's necessary to
+prevent multiple driver registrations.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/media/mediatek,mdp3-tcc.yaml     | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
+ drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c  | 1 +
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 8 ++++++++
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h | 1 +
+ 3 files changed, 10 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
-new file mode 100644
-index 000000000000..14ea556d4f82
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/mediatek,mdp3-tcc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
+index fe92c0474bfa..6f77c33074ec 100644
+--- a/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
++++ b/drivers/media/platform/mediatek/mdp3/mdp_cfg_data.c
+@@ -410,6 +410,7 @@ static const struct mdp_pipe_info mt8183_pipe_info[] = {
+ 
+ const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
+ 	.mdp_plat_id = MT8183,
++	.mdp_con_res = 0x14001000,
+ 	.mdp_probe_infra = mt8183_mdp_probe_infra,
+ 	.mdp_cfg = &mt8183_plat_cfg,
+ 	.mdp_mutex_table_idx = mt8183_mutex_idx,
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index 4802b20d7f20..6ddb5e075f5d 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -211,6 +211,7 @@ static int mdp_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct mdp_dev *mdp;
+ 	struct platform_device *mm_pdev;
++	struct resource *res;
+ 	int ret, i, mutex_id;
+ 
+ 	mdp = kzalloc(sizeof(*mdp), GFP_KERNEL);
+@@ -222,6 +223,12 @@ static int mdp_probe(struct platform_device *pdev)
+ 	mdp->pdev = pdev;
+ 	mdp->mdp_data = of_device_get_match_data(&pdev->dev);
+ 
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (res->start != mdp->mdp_data->mdp_con_res) {
++		platform_set_drvdata(pdev, mdp);
++		goto success_return;
++	}
 +
-+title: MediaTek Media Data Path 3 Tone Curve Conversion
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+
-+description:
-+  Tone Curve Conversion (TCC) is one of Media Profile Path 3 (MDP3) components.
-+  It is used to handle the tone mapping of various gamma curves in order to
-+  achieve HDR10 effects. This helps adapt the content to the color and
-+  brightness range that standard display devices typically support.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8195-mdp3-tcc
-+
-+  reg:
-+    maxItems: 1
-+
-+  mediatek,gce-client-reg:
-+    description:
-+      The register of display function block to be set by gce. There are 4 arguments,
-+      such as gce node, subsys id, offset and register size. The subsys id that is
-+      mapping to the register of display function blocks is defined in the gce header
-+      include/dt-bindings/gce/<chip>-gce.h of each chips.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      items:
-+        - description: phandle of GCE
-+        - description: GCE subsys id
-+        - description: register offset
-+        - description: register size
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - mediatek,gce-client-reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/mt8195-clk.h>
-+    #include <dt-bindings/gce/mt8195-gce.h>
-+
-+    display@1400b000 {
-+        compatible = "mediatek,mt8195-mdp3-tcc";
-+        reg = <0x1400b000 0x1000>;
-+        mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0xb000 0x1000>;
-+        clocks = <&vppsys0 CLK_VPP0_MDP_TCC>;
-+    };
+ 	ret = mdp_mm_subsys_deploy(mdp, MDP_INFRA_MMSYS);
+ 	if (ret)
+ 		goto err_destroy_device;
+@@ -311,6 +318,7 @@ static int mdp_probe(struct platform_device *pdev)
+ 		goto err_unregister_device;
+ 	}
+ 
++success_return:
+ 	dev_dbg(dev, "mdp-%d registered successfully\n", pdev->id);
+ 	return 0;
+ 
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+index ece6509666fd..22d1b17ef2fc 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
+@@ -71,6 +71,7 @@ enum mdp_pipe_id {
+ 
+ struct mtk_mdp_driver_data {
+ 	const int mdp_plat_id;
++	const resource_size_t mdp_con_res;
+ 	const struct of_device_id *mdp_probe_infra;
+ 	const struct mdp_platform_config *mdp_cfg;
+ 	const u32 *mdp_mutex_table_idx;
 -- 
 2.18.0
 
