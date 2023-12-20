@@ -1,39 +1,39 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519BA1CAA7;
-	Wed, 20 Dec 2023 08:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5391C1CAB3;
+	Wed, 20 Dec 2023 08:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="RV9+YWPZ"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BK6A9w9026700;
-	Wed, 20 Dec 2023 09:46:46 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="5J8MzLQa"
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BK6RIS2020454;
+	Wed, 20 Dec 2023 09:46:49 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=selector1; bh=cyfd0rf
-	aAV6O1iXqR5snIedqjSoG4Q/E7ZuiVTF+bro=; b=RV9+YWPZNrjlUyUfwrjs6dp
-	tC9o55EJlpBvVDrJ2j5X4D5E6W04WKwX4S9ArqGU3Yb5Vk+ecXG+X3M7OyB3CGCL
-	0G1pH4I40LTQMyn++6U4xWoomvJZe54POIw+id0elZ4w/79ucC4DO5bg2ZEX9H1Y
-	jEkD/T92ZAW+8606u+2YonNrnQ5aSIf+Ib1Fz9UBqz4QFSTvZxv3Tffc7xvqkebr
-	CiLKUVMj/6XXMlJlQTFJkrh2OMvzoCn1BivqcYFhn+2DeR+TZqmmAaIlT0S9BLLl
-	LUv7rm8XTTTnhzgJGlSgXQtyxZG5zP0ygAbsO9eSGhFxdoZ5lt/QngxMDd20xyA=
-	=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	selector1; bh=iSjyXXBlLU8CmpUXVSZCKnI2Y7L6CFxxoTsOMTlPK98=; b=5J
+	8MzLQaskAPjpHPUjACMentSOKS0dRg+7B3xagfMHCAJ70qk0rFdSA5I35VKvuk4A
+	GkYn6lbMuVVnIkKjfqVHk0MAErad8GZ0ptpv5yXo8hmZ7rgonwvmcjLzhO1UXuVK
+	KmJAlE+HwhAGM9FaBPzHx9n9vZFODyRvutBzVkqH5Cwz5H91Xk4XZD9YfIIJ/oUb
+	DMXgURNIhnu/5QZ4aP8ed/27HCq212hQeKzq7YfiInKTNaRpYn8NKfwgNXezDmyc
+	P/GQI7uBGRTPJpPVx7JPVs8pLBa8pTsf1BpCqUbOX66kc+8428ktqt/WR26Mosc0
+	uUzb+e1iP/0rARxK/44Q==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v11w901xb-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v14420a7n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Dec 2023 09:46:46 +0100 (CET)
+	Wed, 20 Dec 2023 09:46:49 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2C7BE100057;
-	Wed, 20 Dec 2023 09:46:45 +0100 (CET)
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B0220100063;
+	Wed, 20 Dec 2023 09:46:48 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0BF3E20A75C;
-	Wed, 20 Dec 2023 09:46:45 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A57E820A75C;
+	Wed, 20 Dec 2023 09:46:48 +0100 (CET)
 Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 20 Dec
- 2023 09:46:44 +0100
+ 2023 09:46:48 +0100
 From: Hugues Fruchet <hugues.fruchet@foss.st.com>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel
@@ -67,10 +67,12 @@ CC: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Marco Felsch
 	<m.felsch@pengutronix.de>,
         Adam Ford <aford173@gmail.com>
-Subject: [PATCH v3 0/4] Add support for video hardware codec of STMicroelectronics STM32 SoC series
-Date: Wed, 20 Dec 2023 09:46:36 +0100
-Message-ID: <20231220084641.2076428-1-hugues.fruchet@foss.st.com>
+Subject: [PATCH v3 4/5] arm64: dts: st: add video decoder support to stm32mp255
+Date: Wed, 20 Dec 2023 09:46:40 +0100
+Message-ID: <20231220084641.2076428-5-hugues.fruchet@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20231220084641.2076428-1-hugues.fruchet@foss.st.com>
+References: <20231220084641.2076428-1-hugues.fruchet@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -85,53 +87,50 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-20_02,2023-12-14_01,2023-05-22_02
 
-This patchset introduces support for VDEC video hardware decoder
-and VENC video hardware encoder of STMicroelectronics STM32MP25
-SoC series.
+Add VDEC hardware video decoder support to STM32MP255.
 
-This initial support implements H264 decoding, VP8 decoding and
-JPEG encoding.
+Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+---
+ arch/arm64/boot/dts/st/stm32mp251.dtsi |  6 ++++++
+ arch/arm64/boot/dts/st/stm32mp255.dtsi | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-This has been tested on STM32MP257F-EV1 evaluation board.
-
-===========
-= history =
-===========
-version 3:
-   - Fix remarks from Krzysztof Kozlowski:
-    - drop "items", we keep simple enum in such case
-    - drop second example - it is the same as the first
-   - Drop unused node labels as suggested by Conor Dooley
-   - Revisit min/max resolutions as suggested by Nicolas Dufresne
-
-version 2:
-   - Fix remarks from Krzysztof Kozlowski on v1:
-    - single video-codec binding for both VDEC/VENC
-    - get rid of "-names"
-    - use of generic node name "video-codec"
-
-version 1:
-  - Initial submission
-
-Hugues Fruchet (5):
-  dt-bindings: media: Document STM32MP25 VDEC & VENC video codecs
-  media: hantro: add support for STM32MP25 VDEC
-  media: hantro: add support for STM32MP25 VENC
-  arm64: dts: st: add video decoder support to stm32mp255
-  arm64: dts: st: add video encoder support to stm32mp255
-
- arch/arm64/boot/dts/st/stm32mp251.dtsi        |  12 ++
- arch/arm64/boot/dts/st/stm32mp255.dtsi        |  17 ++
- drivers/media/platform/verisilicon/Kconfig    |  14 +-
- drivers/media/platform/verisilicon/Makefile   |   4 +
- .../media/platform/verisilicon/hantro_drv.c   |   4 +
- .../media/platform/verisilicon/hantro_hw.h    |   2 +
- .../platform/verisilicon/stm32mp25_vdec_hw.c  |  92 +++++++++++
- .../platform/verisilicon/stm32mp25_venc_hw.c  | 147 ++++++++++++++++++
- 8 files changed, 289 insertions(+), 3 deletions(-)
- create mode 100644 drivers/media/platform/verisilicon/stm32mp25_vdec_hw.c
- create mode 100644 drivers/media/platform/verisilicon/stm32mp25_venc_hw.c
-
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 96859d098ef8..8fc7e9199499 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -52,6 +52,12 @@ ck_icn_ls_mcu: ck-icn-ls-mcu {
+ 			compatible = "fixed-clock";
+ 			clock-frequency = <200000000>;
+ 		};
++
++		ck_icn_p_vdec: ck-icn-p-vdec {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <200000000>;
++		};
+ 	};
+ 
+ 	firmware {
+diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+index e6fa596211f5..aea5096dac3c 100644
+--- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
+@@ -6,4 +6,14 @@
+ #include "stm32mp253.dtsi"
+ 
+ / {
++	soc@0 {
++		rifsc: rifsc-bus@42080000 {
++			vdec: vdec@480d0000 {
++				compatible = "st,stm32mp25-vdec";
++				reg = <0x480d0000 0x3c8>;
++				interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&ck_icn_p_vdec>;
++			};
++		};
++	};
+ };
 -- 
 2.25.1
 
