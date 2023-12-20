@@ -1,58 +1,60 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4191E21379;
-	Wed, 20 Dec 2023 10:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4805A2231C;
+	Wed, 20 Dec 2023 10:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lIBMkDL7"
-X-UUID: c8f85e0e9f1f11eeba30773df0976c77-20231220
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="A4sbYqYM"
+X-UUID: c96d351c9f1f11eeba30773df0976c77-20231220
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=BB/db8kwBAgYmnmKYFiiM6LqADno4HrExJ7cxr5YTxs=;
-	b=lIBMkDL7bs2HWDaru4WTJBYrxXDHxu4xeOtt3LVm1sJpFeWJnH2KYxbHSHRo5deRMtnsmr1s2wrGMpLO6XZs5HIyroFKuok4PpM/+jA8Rp3vd1dMRplVV4ck6WCvdB9bn59u/Y0ks5pK8liTpsTPPGLhL6MV/mo6UQz6laHg5IM=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3E3oH9it2snq+feJmOtJhpPs4tSb7On1BA+4yh3+JIQ=;
+	b=A4sbYqYMTrLIIzNEA16NLCfYSrmEtRv0yGJMSzoMNV7c1flqXE5wt8CpE+aiBoT67SYGKOfWz3QbpBBsplBD+FYcfe2Lei2O+13vPNlqSEmODWtjaxcB91mpSqvGwnIYgXUA4hS3Jplw3jVpqRR9GoFkbhNeptKKZZnUnlzQYJc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:280067e6-3abe-41db-9c37-c72000c4bb1f,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:5d391d7,CLOUDID:9b537a7e-4f93-4875-95e7-8c66ea833d57,B
+X-CID-O-INFO: VERSION:1.1.35,REQID:78fcc428-4b3b-4b23-a993-3d12d4e4b312,IP:0,U
+	RL:25,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:5d391d7,CLOUDID:49c64b2e-1ab8-4133-9780-81938111c800,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-	DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: c8f85e0e9f1f11eeba30773df0976c77-20231220
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+	NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: c96d351c9f1f11eeba30773df0976c77-20231220
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
 	(envelope-from <moudy.ho@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1194438982; Wed, 20 Dec 2023 18:08:55 +0800
+	with ESMTP id 114935694; Wed, 20 Dec 2023 18:08:56 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 20 Dec 2023 18:08:54 +0800
+ 15.2.1118.26; Wed, 20 Dec 2023 18:08:55 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 20 Dec 2023 18:08:54 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 20 Dec 2023 18:08:55 +0800
 From: Moudy Ho <moudy.ho@mediatek.com>
 To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
 	<p.zabel@pengutronix.de>, Maarten Lankhorst
 	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, "Matthias
+ Brugger" <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
 	<angelogioacchino.delregno@collabora.com>, Hans Verkuil
 	<hverkuil-cisco@xs4all.nl>
 CC: <dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, Moudy
- Ho <moudy.ho@mediatek.corp-partner.google.com>
-Subject: [PATCH v10 00/16] introduce more MDP3 components in MT8195
-Date: Wed, 20 Dec 2023 18:08:37 +0800
-Message-ID: <20231220100853.20616-1-moudy.ho@mediatek.com>
+	<linux-media@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Moudy
+ Ho" <moudy.ho@mediatek.com>
+Subject: [PATCH v10 02/16] dt-bindings: media: mediatek: mdp3: merge the indentical RDMA under display
+Date: Wed, 20 Dec 2023 18:08:39 +0800
+Message-ID: <20231220100853.20616-3-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20231220100853.20616-1-moudy.ho@mediatek.com>
+References: <20231220100853.20616-1-moudy.ho@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -60,116 +62,217 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--10.633600-8.000000
+X-TMASE-MatchedRID: /qtm/HvCCyP6W4x/FkbM/rg7LINv5Afgh8Ytn75ClDN03GAz54To+1jt
+	prj9/vncN+HT16szfKKIJs0Up7vkWEHeh2kdZPDc7spMO3HwKCAW40XiUkbrG/EJBoK3pfxuECM
+	3iFpuDiiHPPuXAmrjKSvG+CY9d4AKupptyy2mu+7iHyvyXeXh5m3eqxoVjgMEqiVpIcIW6utWPf
+	j/g9xP8xaxmhrgB4zxR7wbWUwlw6pOFGkXM6YcX8nUT+eskUQPgRykyfrH1xlaW2Ktn+I8/vz8v
+	ajouc6XpDfNjU0xuVbMDVOmx+2sBkBduJGafVsPCz1WR8KHe4AT28gbcGU2vaMwbOPeRq+ao8WM
+	kQWv6iVfx6Zf83Do5eTCMddcL/gjymsk/wUE4hoV2mQ/HE5Pbkp3yNYGG3owwXF5Ugr5BMd2zec
+	STLTuipluOY2svJYY
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--10.633600-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: A62A3C849CBA1F6BFEF2121248B0758E7E2273D00DCB3560D322FBABFFB364992000:8
 X-MTK: N
 
-From: Moudy Ho <moudy.ho@mediatek.corp-partner.google.com>
+To simplify maintenance and avoid branches, the identical component
+should be merged and placed in the path belonging to the MDP
+(from display/* to media/*).
 
-Changes since v9:
-- Rebase on linux-next.
-- Dependent dtsi files:
-  Message ID = 20231030094840.2479-1-moudy.ho@mediatek.com
-- Depends on:
-  Message ID = 20231214055847.4936-1-shawn.sung@mediatek.com
-- Include the missing compatible name 'mediatek,mt8188-vdo1-rdma' in
-  patch [2/16].
+In addition, currently only MDP utilizes RDMA through CMDQ, and the
+necessary properties for "mediatek,gce-events", and "mboxes" have been
+set up for this purpose.
+Within DISP, it directly receives component interrupt signals.
 
-Changes since v8:
-- Rebase on linux-next.
-- Dependent dtsi files:
-  https://patchwork.kernel.org/project/linux-mediatek/list/?series=797543
-- Depends on:
-  Message ID = 20231024130048.14749-9-shawn.sung@mediatek.com
-- Following Rob's suggestion, the number of 'clocks' and 'mboxes' items are
-  restricted using the 'minItems' in [2/16] and [3/16].
-- Revise the dependent mt8188 disp padding compatible name in [16/16].
-
-Changes since v7:
-- Rebase on linux-next.
-- Dependent dtsi files:
-  https://patchwork.kernel.org/project/linux-mediatek/list/?series=797543
-- Depends on:
-  Message ID = 20231024130048.14749-9-shawn.sung@mediatek.com
-- Correct the bindings of the four components: FG, TCC, TDSHP and HDR.
-  The names of the first three are expanded in the title, and
-  the descriptions of all four have been enhanced.
-
-Changes since v6:
-- Rebase on v6.6-rc5.
-- Dependent dtsi files:
-  https://patchwork.kernel.org/project/linux-mediatek/list/?series=792079
-- Depends on:
-  Message ID = 20231006073831.10402-5-shawn.sung@mediatek.com
-- Discard splitting RDMA's common properties and instead use 'allOf' to
-  isolate different platform features.
-- Revise the incorrect properties in FG, HDR, STITCH, TCC and TDAP bindings.
-- Adding SoC-specific compatible string to components, like WROT and RSZ,
-  that are inherited from MT8183.
-- Fixed typos in TCC patch and enhancing its hardware description.
-
-Changes since v5:
-- Rebase on v6.6-rc2.
-- Dependent dtsi files:
-  https://patchwork.kernel.org/project/linux-mediatek/list/?series=786511
-- Depends on:
-  Message ID = 20230911074233.31556-5-shawn.sung@mediatek.com
-- Split out common propertis for RDMA.
-- Split each component into independent patches.
-
-Changes since v4:
-- Rebase on v6.6-rc1
-- Organize identical hardware components into their respective files.
-
-Hi,
-
-The purpose of this patch is to separate the MDP3-related bindings from
-the original mailing list mentioned below:
-https://lore.kernel.org/all/20230208092209.19472-1-moudy.ho@mediatek.com/
-Those binding files describe additional components that
-are present in the mt8195.
-
-Moudy Ho (16):
-  dt-bindings: media: mediatek: mdp3: correct RDMA and WROT node with
-    generic names
-  dt-bindings: media: mediatek: mdp3: merge the indentical RDMA under
-    display
-  dt-bindings: media: mediatek: mdp3: add config for MT8195 RDMA
-  dt-bindings: media: mediatek: mdp3: add compatible for MT8195 RSZ
-  dt-bindings: media: mediatek: mdp3: add compatible for MT8195 WROT
-  dt-bindings: media: mediatek: mdp3: add component FG for MT8195
-  dt-bindings: media: mediatek: mdp3: add component HDR for MT8195
-  dt-bindings: media: mediatek: mdp3: add component STITCH for MT8195
-  dt-bindings: media: mediatek: mdp3: add component TCC for MT8195
-  dt-bindings: media: mediatek: mdp3: add component TDSHP for MT8195
-  dt-bindings: display: mediatek: aal: add compatible for MT8195
-  dt-bindings: display: mediatek: color: add compatible for MT8195
-  dt-bindings: display: mediatek: merge: add compatible for MT8195
-  dt-bindings: display: mediatek: ovl: add compatible for MT8195
-  dt-bindings: display: mediatek: split: add compatible for MT8195
-  dt-bindings: display: mediatek: padding: add compatible for MT8195
-
- .../display/mediatek/mediatek,aal.yaml        |  1 +
- .../display/mediatek/mediatek,color.yaml      |  1 +
- .../display/mediatek/mediatek,mdp-rdma.yaml   | 92 ------------------
- .../display/mediatek/mediatek,merge.yaml      |  1 +
- .../display/mediatek/mediatek,ovl.yaml        |  1 +
- .../display/mediatek/mediatek,padding.yaml    |  4 +-
- .../display/mediatek/mediatek,split.yaml      | 27 ++++++
- .../bindings/media/mediatek,mdp3-fg.yaml      | 61 ++++++++++++
- .../bindings/media/mediatek,mdp3-hdr.yaml     | 61 ++++++++++++
- .../bindings/media/mediatek,mdp3-rdma.yaml    | 93 ++++++++++++++++---
- .../bindings/media/mediatek,mdp3-rsz.yaml     |  6 +-
- .../bindings/media/mediatek,mdp3-stitch.yaml  | 61 ++++++++++++
- .../bindings/media/mediatek,mdp3-tcc.yaml     | 62 +++++++++++++
- .../bindings/media/mediatek,mdp3-tdshp.yaml   | 61 ++++++++++++
- .../bindings/media/mediatek,mdp3-wrot.yaml    | 29 ++++--
- 15 files changed, 442 insertions(+), 119 deletions(-)
+Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+---
+ .../display/mediatek/mediatek,mdp-rdma.yaml   | 92 -------------------
+ .../bindings/media/mediatek,mdp3-rdma.yaml    | 43 ++++++++-
+ 2 files changed, 40 insertions(+), 95 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-fg.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-hdr.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-stitch.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tcc.yaml
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mdp3-tdshp.yaml
 
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+deleted file mode 100644
+index 7570a0684967..000000000000
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
++++ /dev/null
+@@ -1,92 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/display/mediatek/mediatek,mdp-rdma.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: MediaTek MDP RDMA
+-
+-maintainers:
+-  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+-  - Philipp Zabel <p.zabel@pengutronix.de>
+-
+-description:
+-  The MediaTek MDP RDMA stands for Read Direct Memory Access.
+-  It provides real time data to the back-end panel driver, such as DSI,
+-  DPI and DP_INTF.
+-  It contains one line buffer to store the sufficient pixel data.
+-  RDMA device node must be siblings to the central MMSYS_CONFIG node.
+-  For a description of the MMSYS_CONFIG binding, see
+-  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml for details.
+-
+-properties:
+-  compatible:
+-    oneOf:
+-      - const: mediatek,mt8195-vdo1-rdma
+-      - items:
+-          - const: mediatek,mt8188-vdo1-rdma
+-          - const: mediatek,mt8195-vdo1-rdma
+-
+-  reg:
+-    maxItems: 1
+-
+-  interrupts:
+-    maxItems: 1
+-
+-  power-domains:
+-    maxItems: 1
+-
+-  clocks:
+-    items:
+-      - description: RDMA Clock
+-
+-  iommus:
+-    maxItems: 1
+-
+-  mediatek,gce-client-reg:
+-    description:
+-      The register of display function block to be set by gce. There are 4 arguments,
+-      such as gce node, subsys id, offset and register size. The subsys id that is
+-      mapping to the register of display function blocks is defined in the gce header
+-      include/dt-bindings/gce/<chip>-gce.h of each chips.
+-    $ref: /schemas/types.yaml#/definitions/phandle-array
+-    items:
+-      items:
+-        - description: phandle of GCE
+-        - description: GCE subsys id
+-        - description: register offset
+-        - description: register size
+-    maxItems: 1
+-
+-required:
+-  - compatible
+-  - reg
+-  - power-domains
+-  - clocks
+-  - iommus
+-  - mediatek,gce-client-reg
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    #include <dt-bindings/interrupt-controller/arm-gic.h>
+-    #include <dt-bindings/clock/mt8195-clk.h>
+-    #include <dt-bindings/power/mt8195-power.h>
+-    #include <dt-bindings/gce/mt8195-gce.h>
+-    #include <dt-bindings/memory/mt8195-memory-port.h>
+-
+-    soc {
+-        #address-cells = <2>;
+-        #size-cells = <2>;
+-
+-        rdma@1c104000 {
+-            compatible = "mediatek,mt8195-vdo1-rdma";
+-            reg = <0 0x1c104000 0 0x1000>;
+-            interrupts = <GIC_SPI 495 IRQ_TYPE_LEVEL_HIGH 0>;
+-            clocks = <&vdosys1 CLK_VDO1_MDP_RDMA0>;
+-            power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
+-            iommus = <&iommu_vdo M4U_PORT_L2_MDP_RDMA0>;
+-            mediatek,gce-client-reg = <&gce0 SUBSYS_1c10XXXX 0x4000 0x1000>;
+-        };
+-    };
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+index e1ffe7eb2cdf..e9955639ce19 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
+@@ -20,8 +20,12 @@ description: |
+ 
+ properties:
+   compatible:
+-    items:
++    oneOf:
+       - const: mediatek,mt8183-mdp3-rdma
++      - const: mediatek,mt8195-vdo1-rdma
++      - items:
++          - const: mediatek,mt8188-vdo1-rdma
++          - const: mediatek,mt8195-vdo1-rdma
+ 
+   reg:
+     maxItems: 1
+@@ -60,6 +64,7 @@ properties:
+     items:
+       - description: RDMA clock
+       - description: RSZ clock
++    minItems: 1
+ 
+   iommus:
+     maxItems: 1
+@@ -68,6 +73,10 @@ properties:
+     items:
+       - description: used for 1st data pipe from RDMA
+       - description: used for 2nd data pipe from RDMA
++    minItems: 1
++
++  interrupts:
++    maxItems: 1
+ 
+   '#dma-cells':
+     const: 1
+@@ -76,13 +85,41 @@ required:
+   - compatible
+   - reg
+   - mediatek,gce-client-reg
+-  - mediatek,gce-events
+   - power-domains
+   - clocks
+   - iommus
+-  - mboxes
+   - '#dma-cells'
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt8183-mdp3-rdma
++
++    then:
++      properties:
++        clocks:
++          minItems: 2
++
++        mboxes:
++          minItems: 2
++
++      required:
++        - mboxes
++        - mediatek,gce-events
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt8195-vdo1-rdma
++
++    then:
++      properties:
++        clocks:
++          maxItems: 1
++
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.18.0
 
