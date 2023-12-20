@@ -1,135 +1,86 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC25C405EF;
-	Wed, 20 Dec 2023 15:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB5347791;
+	Wed, 20 Dec 2023 16:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="RHjxNMA6"
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BKAf2YH011895;
-	Wed, 20 Dec 2023 16:28:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=gOTJOkgkUXjyDgxkghIjHED6KsoYJ6xYXo9usGGB+Xk=; b=RH
-	jxNMA6pwf3Oh7gds5r32LGVowam+bdSUMq+QvqZ8P4GbpbCVvh0YUvvA6to/oczM
-	6SkM7c+Zr66tofKFwkc+ZaEDTB/r/q33kgUa4Xs5iciAMoBkFTQHB4/qreu9C1gl
-	hKe+S5mC9bf/5yu5INzFmrs6/LZx2uAyZCX8FijJtTIbcUOkLSophylMsITwUi23
-	YiI/c9T7Fi3QPRAP4e2d0TTn66IIMFfmnaH+aOqn4s1dJ2+aQftQwn7ECFOkLy2f
-	QlaP/QATCJxal+tLtr1XV8KllRFW8tKKj6WZlHxVUJcUzO5VmWBUAUCXlhsi+Qfq
-	dTUx3ywdPFjhmNjxnYaQ==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v13nhhvuc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Dec 2023 16:28:39 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BB3C1100057;
-	Wed, 20 Dec 2023 16:28:38 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AF65121ED2E;
-	Wed, 20 Dec 2023 16:28:38 +0100 (CET)
-Received: from localhost (10.201.20.120) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 20 Dec
- 2023 16:28:38 +0100
-From: Hugues Fruchet <hugues.fruchet@foss.st.com>
-To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        Benjamin Gaignard
-	<benjamin.gaignard@collabora.com>,
-        Laurent Pinchart
-	<laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Almeida
-	<daniel.almeida@collabora.com>,
-        Benjamin Mugnier
-	<benjamin.mugnier@foss.st.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Mauro
- Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>
-CC: Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Marco Felsch
-	<m.felsch@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>
-Subject: [PATCH v4 5/5] arm64: dts: st: add video encoder support to stm32mp255
-Date: Wed, 20 Dec 2023 16:27:32 +0100
-Message-ID: <20231220152732.2138260-6-hugues.fruchet@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231220152732.2138260-1-hugues.fruchet@foss.st.com>
-References: <20231220152732.2138260-1-hugues.fruchet@foss.st.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U3NrEUho"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40c339d2b88so62444425e9.3;
+        Wed, 20 Dec 2023 08:06:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703088370; x=1703693170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7qhoRVks26Z2LPNmZUcy2Sm6yapbUomuWPvB4Kiie/Y=;
+        b=U3NrEUhodv2jL9Hlk71fOMTUrPNNm3gm7IHsMzpemdANc9hIOkXtYOjP94Dtvq1JYi
+         R/O7uMfkdltY2m/p4xFoA1Nj6CnprLsp9/juZuA65ZFd0he+6huO09VWrfpVGMUD9pu8
+         vvBMYmliM1c6VyxKUV2xd/LjfJw1eG3fHXKul977Ube2CvajpZMTKP617lgAJly9+nxN
+         zXqx45TUMYnGrFDhnI4yvh1S8IR3aGfUyRwmXN3BBXQhEGvGgitk2huSAPsgXPmBd6tg
+         awK55sg2D3WAIvxbX8p6YbQpYfY+rNqZH7JKLvhCUgMqG2zs2Cwe+05NmXY2+mtc+P90
+         v/+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703088370; x=1703693170;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7qhoRVks26Z2LPNmZUcy2Sm6yapbUomuWPvB4Kiie/Y=;
+        b=EKY/Yvn6+Ujwlo1mizV+OeC6IO5eX6gpJyvQFqhW+bxZWTOB9GdX/AHCkpCa8nBE6S
+         wK6oRvdIAfKHJFvRAJs+bfSEH4wZYhdIsuAgur7CAbI0aaPjlhKbTQ3mPyPRThRV7c2x
+         yP4C9LNMKbCYxOgvM8wSiK72XjnzfJqpfezyB3ZZDX457bC+Rlcml9qL02dO/Epu+fo5
+         fCL+spQy7ni28fY4AsQ5pPWxW9nuRZO6bLSg3qcw4vCsTreCzuHk045Cp3DtcQBduCc9
+         z2mVOtai/x9V+DyEs2zioCnHBl4Ue4fim1NlexXTDKN41EEpdEmGFUwIPnqEHLBwd5Eb
+         yaMw==
+X-Gm-Message-State: AOJu0YzM+mibT90Y+zNQgmhh27BgaTLOzL0IFvp03ZubZSWNEd6dlE+x
+	atcS8cjxZeHUtRU5WTE2xPH3p5TEaHk=
+X-Google-Smtp-Source: AGHT+IHZXS5ZnjT49Qe4Ctn0BFVUf3gGt8VkMurJYIfCTs/fadyMQnZr/bq3wmr169lxb6iT9DB08Q==
+X-Received: by 2002:a05:600c:6907:b0:40c:2dad:d394 with SMTP id fo7-20020a05600c690700b0040c2dadd394mr10473222wmb.149.1703088370256;
+        Wed, 20 Dec 2023 08:06:10 -0800 (PST)
+Received: from localhost (p200300e41f0fa600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:a600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id c10-20020a7bc2aa000000b0040b2b38a1fasm98946wmk.4.2023.12.20.08.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Dec 2023 08:06:10 -0800 (PST)
+From: Thierry Reding <thierry.reding@gmail.com>
+To: linux-media@vger.kernel.org,
+	linux-pwm@vger.kernel.org,
+	Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Sean Young <sean@mess.org>
+Subject: Re: (subset) [PATCH v10 0/6] Improve pwm-ir-tx precision
+Date: Wed, 20 Dec 2023 17:06:06 +0100
+Message-ID: <170308520277.565566.3116568532099401071.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1703003288.git.sean@mess.org>
+References: <cover.1703003288.git.sean@mess.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-20_09,2023-12-20_01,2023-05-22_02
 
-Add VENC hardware video encoder support to STM32MP255.
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
----
- arch/arm64/boot/dts/st/stm32mp251.dtsi | 6 ++++++
- arch/arm64/boot/dts/st/stm32mp255.dtsi | 7 +++++++
- 2 files changed, 13 insertions(+)
+On Tue, 19 Dec 2023 16:30:23 +0000, Sean Young wrote:
+> The pwm-ir-tx driver has to turn the pwm signal on and off, and suffers
+> from delays as this is done in process context. Make this work in atomic
+> context.
+> 
+> changes:
+> 
+> v10:
+>  - Uwe Kleine-König review comments/fixes
+> 
+> [...]
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index 8fc7e9199499..5dd4f3580a60 100644
---- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
-+++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -58,6 +58,12 @@ ck_icn_p_vdec: ck-icn-p-vdec {
- 			compatible = "fixed-clock";
- 			clock-frequency = <200000000>;
- 		};
-+
-+		ck_icn_p_venc: ck-icn-p-venc {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <200000000>;
-+		};
- 	};
- 
- 	firmware {
-diff --git a/arch/arm64/boot/dts/st/stm32mp255.dtsi b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-index aea5096dac3c..17f197c5b22b 100644
---- a/arch/arm64/boot/dts/st/stm32mp255.dtsi
-+++ b/arch/arm64/boot/dts/st/stm32mp255.dtsi
-@@ -14,6 +14,13 @@ vdec: vdec@480d0000 {
- 				interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&ck_icn_p_vdec>;
- 			};
-+
-+			venc: venc@480e0000 {
-+				compatible = "st,stm32mp25-venc";
-+				reg = <0x480e0000 0x800>;
-+				interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&ck_icn_ls_mcu>;
-+			};
- 		};
- 	};
- };
+Applied, thanks!
+
+[6/6] media: pwm-ir-tx: Trigger edges from hrtimer interrupt context
+      commit: 363d0e56285e80cda997d41d94c22313b673557d
+
+Best regards,
 -- 
-2.25.1
-
+Thierry Reding <thierry.reding@gmail.com>
