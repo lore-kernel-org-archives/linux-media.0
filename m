@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6500208CB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B2B208DF
 	for <linux-media@vger.kernel.org>; Wed, 20 Dec 2023 10:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CeYpKJnB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n08vFq4d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1703068641; x=1734604641;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0yFGytW7x2A6ZfvHtRLSwiouOMVOj1u806YhOcEW060=;
-  b=CeYpKJnBtvCC/4lwr01527aIqQreY/LlkOpeYEuOym8y1Phae1GOLRX2
-   6nVtBKp5lSpTWIvua0W1NDxY160J8WxMotq31bXKPI8q6+tYDem3jUsyG
-   aiDFPzBX0ayMA5XIKrJG+VfkcyL8GkBYktNHREu3NFC6gTU8PGD2K1NOW
-   ISNZVZmp68n0qayZKDDSuprA8CtRy63eojw4y1xPSZ4Xdzjqql/wQYYkU
-   p2C8htjd1Sl3H6aVZJmFPSV8dMhQSacBY8cCh3QLzRSv6U7sRxMmNUyEp
-   kFUvvTcwgS55kVSkia+TlVXoUS9ZdlP2mOt1DeF9Y0IaXndej6gIwrcUx
+  bh=fn5vdqTgrAwxvRPY8aEkpwtLLDHNckvF5vsntZp7xeE=;
+  b=n08vFq4dquIqyXkwV4tARzvC2JBNbMinLia5xRRa9+xjkyq1SxPbhtIA
+   sJklQJCrQokicqv//C2b4Pn1RZAEt6YPNLtGbCUagi9/Q+QkIZo8X1w3O
+   kyAKiQJ01Zno/WQxNi4AymHNvMs8ZUlpj0BUufh8lY2dzG+0a0pho+s06
+   OYaVQTQM3Mt9nOJrlZZS1SFMLJ2JdtIGKFVBFFn1osWBluSE/NLFhru23
+   00kYaBe4f8Y77cZJLlBqKyPP0FwXg0weYrRW5clgb1E/wTdSBFDRg78UH
+   IR43X/YYY2JPX2H18/g1b+G4uINCl7ENyQmR8tKzFGxkOzasUVCijWSfN
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="9174304"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="9174301"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="9174304"
+   d="scan'208";a="9174301"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 02:37:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="769544229"
+X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="769544226"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="769544229"
+   d="scan'208";a="769544226"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 02:37:17 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 299721201D0;
-	Wed, 20 Dec 2023 12:37:15 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 947F811FC49;
+	Wed, 20 Dec 2023 12:37:14 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: laurent.pinchart@ideasonboard.com,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 02/29] Revert "media: utilize new cdev_device_add helper function"
-Date: Wed, 20 Dec 2023 12:36:46 +0200
-Message-Id: <20231220103713.113386-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 01/29] Revert "[media] media: fix media devnode ioctl/syscall and unregister race"
+Date: Wed, 20 Dec 2023 12:36:45 +0200
+Message-Id: <20231220103713.113386-2-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231220103713.113386-1-sakari.ailus@linux.intel.com>
 References: <20231220103713.113386-1-sakari.ailus@linux.intel.com>
@@ -52,114 +52,118 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This reverts commit 857313e51006ff51524579bcd8808b70f9a80812. This patch is
-temporarily reverted for internal rework.
+This reverts commit 6f0dd24a084a ("[media] media: fix media devnode
+ioctl/syscall and unregister race"). The commit was part of an original
+patchset to avoid crashes when an unregistering device is in use.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/core/cec-core.c | 16 ++++++++++++----
- drivers/media/mc/mc-devnode.c     | 21 ++++++++++++++++-----
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ drivers/media/mc/mc-device.c  | 15 +++++++--------
+ drivers/media/mc/mc-devnode.c |  8 +-------
+ include/media/media-devnode.h | 16 ++--------------
+ 3 files changed, 10 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/media/cec/core/cec-core.c b/drivers/media/cec/core/cec-core.c
-index 7e153c5cad04..0645e68411fb 100644
---- a/drivers/media/cec/core/cec-core.c
-+++ b/drivers/media/cec/core/cec-core.c
-@@ -137,19 +137,26 @@ static int __must_check cec_devnode_register(struct cec_devnode *devnode,
- 
- 	/* Part 2: Initialize and register the character device */
- 	cdev_init(&devnode->cdev, &cec_devnode_fops);
-+	devnode->cdev.kobj.parent = &devnode->dev.kobj;
- 	devnode->cdev.owner = owner;
- 	kobject_set_name(&devnode->cdev.kobj, "cec%d", devnode->minor);
- 
- 	devnode->registered = true;
--	ret = cdev_device_add(&devnode->cdev, &devnode->dev);
--	if (ret) {
-+	ret = cdev_add(&devnode->cdev, devnode->dev.devt, 1);
-+	if (ret < 0) {
-+		pr_err("%s: cdev_add failed\n", __func__);
- 		devnode->registered = false;
--		pr_err("%s: cdev_device_add failed\n", __func__);
- 		goto clr_bit;
+diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+index c0dd4ae57227..6c569ecd4b3d 100644
+--- a/drivers/media/mc/mc-device.c
++++ b/drivers/media/mc/mc-device.c
+@@ -741,7 +741,6 @@ int __must_check __media_device_register(struct media_device *mdev,
+ 	if (ret < 0) {
+ 		/* devnode free is handled in media_devnode_*() */
+ 		mdev->devnode = NULL;
+-		media_devnode_unregister_prepare(devnode);
+ 		media_devnode_unregister(devnode);
+ 		return ret;
+ 	}
+@@ -797,9 +796,6 @@ void media_device_unregister(struct media_device *mdev)
+ 		return;
  	}
  
-+	ret = device_add(&devnode->dev);
-+	if (ret)
-+		goto cdev_del;
-+
- 	return 0;
+-	/* Clear the devnode register bit to avoid races with media dev open */
+-	media_devnode_unregister_prepare(mdev->devnode);
+-
+ 	/* Remove all entities from the media device */
+ 	list_for_each_entry_safe(entity, next, &mdev->entities, graph_obj.list)
+ 		__media_device_unregister_entity(entity);
+@@ -824,10 +820,13 @@ void media_device_unregister(struct media_device *mdev)
  
-+cdev_del:
-+	cdev_del(&devnode->cdev);
- clr_bit:
- 	mutex_lock(&cec_devnode_lock);
- 	clear_bit(devnode->minor, cec_devnode_nums);
-@@ -195,7 +202,8 @@ static void cec_devnode_unregister(struct cec_adapter *adap)
- 	cec_adap_enable(adap);
- 	mutex_unlock(&adap->lock);
+ 	dev_dbg(mdev->dev, "Media device unregistered\n");
  
--	cdev_device_del(&devnode->cdev, &devnode->dev);
-+	device_del(&devnode->dev);
-+	cdev_del(&devnode->cdev);
- 	put_device(&devnode->dev);
+-	device_remove_file(&mdev->devnode->dev, &dev_attr_model);
+-	media_devnode_unregister(mdev->devnode);
+-	/* devnode free is handled in media_devnode_*() */
+-	mdev->devnode = NULL;
++	/* Check if mdev devnode was registered */
++	if (media_devnode_is_registered(mdev->devnode)) {
++		device_remove_file(&mdev->devnode->dev, &dev_attr_model);
++		media_devnode_unregister(mdev->devnode);
++		/* devnode free is handled in media_devnode_*() */
++		mdev->devnode = NULL;
++	}
  }
+ EXPORT_SYMBOL_GPL(media_device_unregister);
  
 diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
-index 0ab33214d243..740573552e5d 100644
+index 680fbb3a9340..0ab33214d243 100644
 --- a/drivers/media/mc/mc-devnode.c
 +++ b/drivers/media/mc/mc-devnode.c
-@@ -240,23 +240,33 @@ int __must_check media_devnode_register(struct media_device *mdev,
- 	dev_set_name(&devnode->dev, "media%d", devnode->minor);
- 	device_initialize(&devnode->dev);
+@@ -267,7 +267,7 @@ int __must_check media_devnode_register(struct media_device *mdev,
+ 	return ret;
+ }
  
--	/* Part 2: Initialize the character device */
-+	/* Part 2: Initialize and register the character device */
- 	cdev_init(&devnode->cdev, &media_devnode_fops);
- 	devnode->cdev.owner = owner;
-+	devnode->cdev.kobj.parent = &devnode->dev.kobj;
- 	kobject_set_name(&devnode->cdev.kobj, "media%d", devnode->minor);
+-void media_devnode_unregister_prepare(struct media_devnode *devnode)
++void media_devnode_unregister(struct media_devnode *devnode)
+ {
+ 	/* Check if devnode was ever registered at all */
+ 	if (!media_devnode_is_registered(devnode))
+@@ -275,12 +275,6 @@ void media_devnode_unregister_prepare(struct media_devnode *devnode)
  
--	/* Part 3: Add the media and char device */
--	ret = cdev_device_add(&devnode->cdev, &devnode->dev);
-+	ret = cdev_add(&devnode->cdev, MKDEV(MAJOR(media_dev_t),
-+					     devnode->minor), 1);
- 	if (ret < 0) {
--		pr_err("%s: cdev_device_add failed\n", __func__);
-+		pr_err("%s: cdev_add failed\n", __func__);
- 		goto cdev_add_error;
- 	}
- 
-+	/* Part 3: Add the media device */
-+	ret = device_add(&devnode->dev);
-+	if (ret < 0) {
-+		pr_err("%s: device_add failed\n", __func__);
-+		goto device_add_error;
-+	}
-+
- 	/* Part 4: Activate this minor. The char device can now be used. */
- 	set_bit(MEDIA_FLAG_REGISTERED, &devnode->flags);
- 
- 	return 0;
- 
-+device_add_error:
-+	cdev_del(&devnode->cdev);
- cdev_add_error:
- 	mutex_lock(&media_devnode_lock);
- 	clear_bit(devnode->minor, media_devnode_nums);
-@@ -276,9 +286,10 @@ void media_devnode_unregister(struct media_devnode *devnode)
  	mutex_lock(&media_devnode_lock);
  	clear_bit(MEDIA_FLAG_REGISTERED, &devnode->flags);
+-	mutex_unlock(&media_devnode_lock);
+-}
+-
+-void media_devnode_unregister(struct media_devnode *devnode)
+-{
+-	mutex_lock(&media_devnode_lock);
  	/* Delete the cdev on this minor as well */
--	cdev_device_del(&devnode->cdev, &devnode->dev);
-+	cdev_del(&devnode->cdev);
+ 	cdev_device_del(&devnode->cdev, &devnode->dev);
  	devnode->media_dev = NULL;
- 	mutex_unlock(&media_devnode_lock);
-+	device_del(&devnode->dev);
+diff --git a/include/media/media-devnode.h b/include/media/media-devnode.h
+index d27c1c646c28..46f0d3ae44d1 100644
+--- a/include/media/media-devnode.h
++++ b/include/media/media-devnode.h
+@@ -115,19 +115,6 @@ int __must_check media_devnode_register(struct media_device *mdev,
+ 					struct media_devnode *devnode,
+ 					struct module *owner);
  
- 	put_device(&devnode->dev);
- }
+-/**
+- * media_devnode_unregister_prepare - clear the media device node register bit
+- * @devnode: the device node to prepare for unregister
+- *
+- * This clears the passed device register bit. Future open calls will be met
+- * with errors. Should be called before media_devnode_unregister() to avoid
+- * races with unregister and device file open calls.
+- *
+- * This function can safely be called if the device node has never been
+- * registered or has already been unregistered.
+- */
+-void media_devnode_unregister_prepare(struct media_devnode *devnode);
+-
+ /**
+  * media_devnode_unregister - unregister a media device node
+  * @devnode: the device node to unregister
+@@ -135,7 +122,8 @@ void media_devnode_unregister_prepare(struct media_devnode *devnode);
+  * This unregisters the passed device. Future open calls will be met with
+  * errors.
+  *
+- * Should be called after media_devnode_unregister_prepare()
++ * This function can safely be called if the device node has never been
++ * registered or has already been unregistered.
+  */
+ void media_devnode_unregister(struct media_devnode *devnode);
+ 
 -- 
 2.39.2
 
