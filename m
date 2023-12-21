@@ -1,34 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007217691C;
-	Thu, 21 Dec 2023 22:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0748171B3
+	for <linux-media@vger.kernel.org>; Thu, 21 Dec 2023 22:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQmpAzbQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227AAC433C8;
-	Thu, 21 Dec 2023 22:29:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703197774;
-	bh=3olSdqCH1RJ2MPrPxBn2yqWGIxPoGVfij5wrm0E4WBw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WQmpAzbQVhum7pt8MnB5a/VRcUcuMzWWOygOildljSPEjspTWsN83Xs3do5JEyt4B
-	 wOCQgDpqhdFiW0WB/4sfRaIcd+qt5e7eTZSHRVCWTIFXFmZWl3uUc4gJ5glMTBM9pC
-	 8opfAwrvBB5vm3T4T6bfmRyk3L3xtHbGRrKQgs+ztgCeb9W7qwzwX0LS/nQOPDFmk/
-	 1J9++p45KKmNAvXL4jeQgaDDYSYHdw4nnmacHwrGB/e20j87aqa572TAD0p2q4cdB8
-	 Q8cHuXjlwkKXyyGPSr03UR34eKjWumho6+z1zy94B2cm6b2v72lysJKg8LDsDKrji0
-	 zqwj9JXTs/AeA==
-Received: (nullmailer pid 205437 invoked by uid 1000);
-	Thu, 21 Dec 2023 22:29:32 -0000
-Date: Thu, 21 Dec 2023 16:29:32 -0600
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Moudy Ho <moudy.ho@mediatek.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v10 02/16] dt-bindings: media: mediatek: mdp3: merge the
- indentical RDMA under display
-Message-ID: <20231221222932.GA196757-robh@kernel.org>
-References: <20231220100853.20616-1-moudy.ho@mediatek.com>
- <20231220100853.20616-3-moudy.ho@mediatek.com>
- <250fead9-868b-4063-a054-4cb966dc4ba3@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IGP5veNl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703198440; x=1734734440;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YGzLxG5vjCRgG8iVeXfXAihADszuvbQ5QWXEoQsqDP4=;
+  b=IGP5veNlj0aiXVfF3ETwMwoEoKKDM9IPzY3jRlpmnoqWkai3v/55BVzs
+   TKQNGUtid+5l9NLrKbDKgMEztq5MKjcOj++UF/Xt4yuQ4Tea5ZlxA1+uv
+   6DFfIHKBdCH0e7EBEomHCYTCPnUVdFi7L9TjtepuCYp96T/nP2Ks04519
+   BiaDKX4zxUjECYzJVR0R4T4lxU08A4YNW4BK/VKq0izGZbIpdm1Uogh8z
+   Lh/82f+iwI633/LfzWFoeJSy3WFmrm49bKIZK5oNhh3Nf9lf1MK0JNeOm
+   WoclTteAHlE1lHMFlAktBDCy/a2i456G8Tk4Z2cH1OEREwLAskU4zAzMI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="14728634"
+X-IronPort-AV: E=Sophos;i="6.04,294,1695711600"; 
+   d="scan'208";a="14728634"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 14:40:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="753080207"
+X-IronPort-AV: E=Sophos;i="6.04,294,1695711600"; 
+   d="scan'208";a="753080207"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 Dec 2023 14:40:38 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rGRiQ-0008ok-2C;
+	Thu, 21 Dec 2023 22:40:33 +0000
+Date: Fri, 22 Dec 2023 06:39:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org
+Subject: [sailus-media-tree:media-ref 65/67] htmldocs: ./scripts/kernel-doc:
+ ./include/media/media-devnode.h:54: warning: Function parameter or struct
+ member 'release' not described in 'media_file_operations'
+Message-ID: <202312220620.kGlay5m9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,19 +50,25 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <250fead9-868b-4063-a054-4cb966dc4ba3@linaro.org>
 
-On Thu, Dec 21, 2023 at 10:28:52AM +0100, Krzysztof Kozlowski wrote:
-> On 20/12/2023 11:08, Moudy Ho wrote:
-> > To simplify maintenance and avoid branches, the identical component
-> > should be merged and placed in the path belonging to the MDP
-> > (from display/* to media/*).
-> 
-> Combining bindings into one bigger meta-binding makes it usually more
-> difficult to maintain and review.
+tree:   git://linuxtv.org/sailus/media_tree.git media-ref
+head:   9587641ab37e563866fb73acc04735eccd59a2d3
+commit: 2afdf22741b499ad0c798c891fab451a8da50ce0 [65/67] media: mc: Implement best effort media device removal safety sans refcount
+reproduce: (https://download.01.org/0day-ci/archive/20231222/202312220620.kGlay5m9-lkp@intel.com/reproduce)
 
-Yeah, but these mediatek blocks appear to be used for both display and 
-video codec pipelines. So having different bindings was probably wrong 
-to start with.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312220620.kGlay5m9-lkp@intel.com/
 
-Rob
+All warnings (new ones prefixed by >>):
+
+>> ./scripts/kernel-doc: ./include/media/media-devnode.h:54: warning: Function parameter or struct member 'release' not described in 'media_file_operations'
+>> ./scripts/kernel-doc: ./include/media/media-devnode.h:99: warning: Function parameter or struct member 'mcdev' not described in 'media_devnode_compat_ref'
+>> ./scripts/kernel-doc: ./include/media/media-devnode.h:99: warning: Excess struct member 'cdev' description in 'media_devnode_compat_ref'
+>> ./scripts/kernel-doc: ./include/media/media-devnode.h:155: warning: Function parameter or struct member 'mcdev' not described in 'media_devnode'
+>> ./scripts/kernel-doc: ./include/media/media-devnode.h:155: warning: Excess struct member 'cdev' description in 'media_devnode'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
