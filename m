@@ -1,31 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB541D6BD
-	for <linux-media@vger.kernel.org>; Thu, 21 Dec 2023 14:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144F13609A
+	for <linux-media@vger.kernel.org>; Thu, 21 Dec 2023 14:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CKXSo6yr"
-Message-ID: <df5406ae-aca4-459f-bf70-4a5efbf3864e@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xCoT8n1O"
+Message-ID: <bf45f0f7-8772-4f95-94b5-0078ac20b8b7@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1703169828;
+	t=1703170421;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xTV/q8RDwQu2LAWOhY4c4geyJjIHSwAWDVPGvEOOSYc=;
-	b=CKXSo6yrxKSN0Z8ODEsMtrBgLszB1j8X4f8dzgGkYKd2FeNBHAKA9hH3JBjYZwj8N4RTzm
-	WcJ0AkAOZ4JHapVZoAiuDoJBw71qorIYsCmlSj/KS5f7quMEZLvsu88Mz7iEvseAahRn2k
-	OjZh1xAZriJIFgVj7GQ/uTBoOc1BdrI=
-Date: Thu, 21 Dec 2023 22:43:39 +0800
+	bh=9DWCbTtactyPz1Ws+U8aJ3Iw5YuEjx40PPU3oVvJZrA=;
+	b=xCoT8n1ObOYoSEUUPhIGGLeX4YPTL/MN07zCk5cwewehpLQMiprAiSqmiJUrYxg+tvgz1x
+	cttuLlvMIbfbw1qezKnOW6X8vD8SyK+owcw+MwgYR9nJveI3rxseT2wm1g3kGs0obJobCJ
+	teGbrbyyerrrO2NcVfKtF1jkHyqU5Lc=
+Date: Thu, 21 Dec 2023 22:53:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [v5,41/44] drm/sun4i: hdmi: Move mode_set into enable
+Subject: Re: [v5,43/44] drm/sun4i: hdmi: Consolidate atomic_check and
+ mode_valid
 Content-Language: en-US
 To: Maxime Ripard <mripard@kernel.org>,
  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -39,10 +40,10 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  dri-devel@lists.freedesktop.org, Hans Verkuil <hverkuil@xs4all.nl>,
  linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-References: <20231207-kms-hdmi-connector-state-v5-41-6538e19d634d@kernel.org>
+References: <20231207-kms-hdmi-connector-state-v5-43-6538e19d634d@kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Sui Jingfeng <sui.jingfeng@linux.dev>
-In-Reply-To: <20231207-kms-hdmi-connector-state-v5-41-6538e19d634d@kernel.org>
+In-Reply-To: <20231207-kms-hdmi-connector-state-v5-43-6538e19d634d@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -51,8 +52,10 @@ Hi,
 
 
 On 2023/12/7 23:50, Maxime Ripard wrote:
-> We're not doing anything special in atomic_mode_set so we can simply
-> merge it into atomic_enable.
+> atomic_check and mode_valid do not check for the same things which can
+> lead to surprising result if the userspace commits a mode that didn't go
+> through mode_valid. Let's merge the two implementations into a function
+> called by both.
 >
 > Signed-off-by: Maxime Ripard <mripard@kernel.org>
 
