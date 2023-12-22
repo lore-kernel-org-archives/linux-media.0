@@ -1,211 +1,140 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA91D306;
-	Fri, 22 Dec 2023 04:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC1E6120;
+	Fri, 22 Dec 2023 05:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="eY6sUOpf"
-X-UUID: eaf843a4a08511eeba30773df0976c77-20231222
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Vo7/8SdJTy6PD+1QaQcWVlel/mcBE+WmrpBeWZ3cneU=;
-	b=eY6sUOpfqyatahaw++pVC3GYiWQy2Fnm/0hvpaa+q7USWTpWbv8kdifzzNNrRxNcIPiB2aCBJ21jAT3mkbUEN6z3QTjhICQNONEbI0C3lGsaQjvUU/uQirmISkrC1SojrUYM3zDhhprs7Kr1QzO0w8pof5jlp6/zEoOVupPFRPQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:c68073c6-e522-4887-ac6c-70643eeae8cc,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:5d391d7,CLOUDID:a4b8738d-e2c0-40b0-a8fe-7c7e47299109,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-	DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: eaf843a4a08511eeba30773df0976c77-20231222
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-	(envelope-from <jason-jh.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2030041288; Fri, 22 Dec 2023 12:52:32 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 22 Dec 2023 12:52:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 22 Dec 2023 12:52:31 +0800
-From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-To: Jassi Brar <jassisinghbrar@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Chun-Kuang Hu
-	<chunkuang.hu@kernel.org>
-CC: Conor Dooley <conor+dt@kernel.org>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	Jason-ch Chen <jason-ch.chen@mediatek.com>, Johnson Wang
-	<johnson.wang@mediatek.com>, "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
-	Singo Chang <singo.chang@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-	Shawn Sung <shawn.sung@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3 7/9] mailbox: mediatek: Move reuseable definition to header for secure driver
-Date: Fri, 22 Dec 2023 12:52:26 +0800
-Message-ID: <20231222045228.27826-8-jason-jh.lin@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20231222045228.27826-1-jason-jh.lin@mediatek.com>
-References: <20231222045228.27826-1-jason-jh.lin@mediatek.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ulf31DKf"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5cd8e2988ddso775647a12.3;
+        Thu, 21 Dec 2023 21:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703224252; x=1703829052; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRvRZykoJN1NoOnmO83DscFYZk386QocmmGOF7bdSo4=;
+        b=Ulf31DKf22AAHNMuGX3ZcNKvSsQN9jhOZiPNcaKBkVKFw/q04X2ir0gh6/5IAyCaiG
+         qn9P2vMzDWiEXEH3TFnFG41Omn6SuUV1zoPHjBNU4sJGXkKPCcOnUoVAWotZbL6Ec4B7
+         Ew1h/YHCDHes2KFGVOnDvPH/0SJ8zLvCkAwq0D7fpfVSQikAv8IREbSy/Me45yJ2Uw6w
+         QMaHilLrKdK8l1a8x+b+LoObFYKc3HPZUrOW6mJ1sVbZrQl8S+EIfay6gZ9+MLez4vXX
+         AT1khKVWYVDgmZ/uXwGMyo2BM5R54tu7ohXvzn3pQsWb9gkZdRJFiJddo1nzeDK69Mdm
+         IUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703224252; x=1703829052;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hRvRZykoJN1NoOnmO83DscFYZk386QocmmGOF7bdSo4=;
+        b=b8x9FyXK8+jCU39wQ1G5dJElZyxg4DUY25Qqu6YFoCxneoBwaJD2OKvH0d5BdbZRgZ
+         KaSrCAOKysdfS7Id4/thRH4MKF0wNRn6e7C4SWhduVIEM0vrSyhB1Jn0uUZ6YoAoPENm
+         Iv1XtABmWEzhoHA2L616Exl5FKtUSVaDAHNBim3/kcX98oi+rj+i9ehMNLMR4vst7yD6
+         F5rzcRBJlHKZYLwnivsrv3qvXBZQ6xJLTMyF6ZtJ8uG92QiznyNFPv8Djvl80vAbuwzH
+         v+jo5spJLOGUgTH6VHOCjLnYmxPewTBo1dIzicfA4Rb8pOtrMO7MHQdpcaJT2gK2Edqp
+         OXXQ==
+X-Gm-Message-State: AOJu0YzhBJwq4TchJVyARvthgJHhduTxpk0aoVdZ15WxWF2yLGFoQIUH
+	i00qU7I6J5pjpEx6RCP9Yts=
+X-Google-Smtp-Source: AGHT+IFi32YovJZtv8sUPvSWvhc0jwApw94pEtvhvqvOcLHW6vipl+8TUyuOSkDSjSYyW5i6DeS8zA==
+X-Received: by 2002:a05:6a21:a5a1:b0:194:eabe:cc23 with SMTP id gd33-20020a056a21a5a100b00194eabecc23mr595681pzc.98.1703224251881;
+        Thu, 21 Dec 2023 21:50:51 -0800 (PST)
+Received: from g2039B650.. ([106.39.42.144])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902b78c00b001bb750189desm2567135pls.255.2023.12.21.21.50.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 21:50:51 -0800 (PST)
+From: Gui-Dong Han <2045gemini@gmail.com>
+To: mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl,
+	mcgrof@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@outlook.com,
+	Gui-Dong Han <2045gemini@gmail.com>,
+	stable@vger.kernel.org,
+	BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH v2] [media] xc4000: Fix atomicity violation in xc4000_get_frequency
+Date: Fri, 22 Dec 2023 13:50:30 +0800
+Message-Id: <20231222055030.5237-1-2045gemini@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--8.411300-8.000000
-X-TMASE-MatchedRID: K02MXwpCiCtLbaTfilVXfTPDkSOzeDWWf6/Md8Lb2l/1gF7PCEF9bli5
-	r+TKtIsr64Ta3P14gV2y7ec+ITUwMzW+K/PcvqBra0aUozXm0DYh9mNF8ZPJ2Cz+5QCTrE/sgK6
-	qCGa1Z9euDlY3VLd7CFn74Xleqcq0QBI3/CURWxx05zsoB1UKTqk89YpdLgI7DpCUEeEFm7AtiD
-	c0qML5ZNwAFNNtZv2wtcF3I8fd45iXBXaJoB9JZxRFJJyf5BJe3QfwsVk0UbuGrPnef/I+eqzZI
-	n3r7BwhnZgsMwbJ9WzENc1hpwdtvClyqLZvurBwC8XKjsVbJjU=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--8.411300-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: ACEFB8A57DD322DB60FA41F160643FA22A28B778E24856E957B2F5837CA286092000:8
-X-MTK: N
+Content-Transfer-Encoding: 8bit
 
-To support CMDQ secure driver, move some reuseable definition to header.
-- define: e.g. CMDQ_GCE_NUM_MAX, CMDQ_THR_BASE, CMDQ_THR_SIZE.
-- struct: e.g. cmdq_thread, cmdq, cmdq_task.
-- include: e.g. <linux/clk.h>.
+In xc4000_get_frequency():
+	*freq = priv->freq_hz + priv->freq_offset;
+The code accesses priv->freq_hz and priv->freq_offset without holding any
+lock.
 
-Add "#include <linux/mailbox_controller.h>" for the function that takes
-"struct mbox_chan * chan" as a parameter. That may occur a build error
-if secure driver header includes the mtk-cmdq-mailbox.h.
-- function: e.g. cmdq_get_shift_pa(struct mbox_chan *chan).
+In xc4000_set_params():
+	// Code that updates priv->freq_hz and priv->freq_offset
+	...
 
-Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+xc4000_get_frequency() and xc4000_set_params() may execute concurrently,
+risking inconsistent reads of priv->freq_hz and priv->freq_offset. Since
+these related data may update during reading, it can result in incorrect
+frequency calculation, leading to atomicity violations.
+
+This possible bug is found by an experimental static analysis tool
+developed by our team, BassCheck[1]. This tool analyzes the locking APIs
+to extract function pairs that can be concurrently executed, and then
+analyzes the instructions in the paired functions to identify possible
+concurrency bugs including data races and atomicity violations. The above
+possible bug is reported when our tool analyzes the source code of
+Linux 6.2.
+
+To address this issue, it is proposed to add a mutex lock pair in
+xc4000_get_frequency() to ensure atomicity. With this patch applied, our
+tool no longer reports the possible bug, with the kernel configuration
+allyesconfig for x86_64. Due to the lack of associated hardware, we cannot
+test the patch in runtime testing, and just verify it according to the
+code logic.
+
+[1] https://sites.google.com/view/basscheck/
+
+Fixes: 4c07e32884ab6 ("[media] xc4000: Fix get_frequency()")
+Cc: stable@vger.kernel.org
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Gui-Dong Han <2045gemini@gmail.com>
 ---
- drivers/mailbox/mtk-cmdq-mailbox.c       | 30 ---------------------
- include/linux/mailbox/mtk-cmdq-mailbox.h | 33 ++++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 30 deletions(-)
+v2:
+* In this patch v2, we've added some information of the static analysis
+tool used, as per the researcher guidelines. Also, we've added a cc in the
+signed-off-by area, according to the stable-kernel-rules.
+  Thank Greg KH for helpful advice.
+---
+ drivers/media/tuners/xc4000.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index 5390b6488ebc..04321f7e10c3 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -3,7 +3,6 @@
- // Copyright (c) 2018 MediaTek Inc.
+diff --git a/drivers/media/tuners/xc4000.c b/drivers/media/tuners/xc4000.c
+index 57ded9ff3f04..29bc63021c5a 100644
+--- a/drivers/media/tuners/xc4000.c
++++ b/drivers/media/tuners/xc4000.c
+@@ -1515,10 +1515,10 @@ static int xc4000_get_frequency(struct dvb_frontend *fe, u32 *freq)
+ {
+ 	struct xc4000_priv *priv = fe->tuner_priv;
  
- #include <linux/bitops.h>
--#include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/dma-mapping.h>
- #include <linux/errno.h>
-@@ -22,13 +21,10 @@
++	mutex_lock(&priv->lock);
+ 	*freq = priv->freq_hz + priv->freq_offset;
  
- #define CMDQ_OP_CODE_MASK		(0xff << CMDQ_OP_CODE_SHIFT)
- #define CMDQ_NUM_CMD(t)			(t->cmd_buf_size / CMDQ_INST_SIZE)
--#define CMDQ_GCE_NUM_MAX		(2)
+ 	if (debug) {
+-		mutex_lock(&priv->lock);
+ 		if ((priv->cur_fw.type
+ 		     & (BASE | FM | DTV6 | DTV7 | DTV78 | DTV8)) == BASE) {
+ 			u16	snr = 0;
+@@ -1529,8 +1529,8 @@ static int xc4000_get_frequency(struct dvb_frontend *fe, u32 *freq)
+ 				return 0;
+ 			}
+ 		}
+-		mutex_unlock(&priv->lock);
+ 	}
++	mutex_unlock(&priv->lock);
  
- #define CMDQ_CURR_IRQ_STATUS		0x10
- #define CMDQ_SYNC_TOKEN_UPDATE		0x68
- #define CMDQ_THR_SLOT_CYCLES		0x30
--#define CMDQ_THR_BASE			0x100
--#define CMDQ_THR_SIZE			0x80
- #define CMDQ_THR_WARM_RESET		0x00
- #define CMDQ_THR_ENABLE_TASK		0x04
- #define CMDQ_THR_SUSPEND_TASK		0x08
-@@ -59,32 +55,6 @@
- #define CMDQ_JUMP_BY_OFFSET		0x10000000
- #define CMDQ_JUMP_BY_PA			0x10000001
+ 	dprintk(1, "%s()\n", __func__);
  
--struct cmdq_thread {
--	struct mbox_chan	*chan;
--	void __iomem		*base;
--	struct list_head	task_busy_list;
--	u32			priority;
--};
--
--struct cmdq_task {
--	struct cmdq		*cmdq;
--	struct list_head	list_entry;
--	dma_addr_t		pa_base;
--	struct cmdq_thread	*thread;
--	struct cmdq_pkt		*pkt; /* the packet sent from mailbox client */
--};
--
--struct cmdq {
--	struct mbox_controller	mbox;
--	void __iomem		*base;
--	int			irq;
--	u32			irq_mask;
--	const struct gce_plat	*pdata;
--	struct cmdq_thread	*thread;
--	struct clk_bulk_data	clocks[CMDQ_GCE_NUM_MAX];
--	bool			suspended;
--};
--
- struct gce_plat {
- 	u32 thread_nr;
- 	u8 shift;
-diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
-index f78a08e7c6ed..43eae45a08c9 100644
---- a/include/linux/mailbox/mtk-cmdq-mailbox.h
-+++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
-@@ -7,10 +7,17 @@
- #ifndef __MTK_CMDQ_MAILBOX_H__
- #define __MTK_CMDQ_MAILBOX_H__
- 
-+#include <linux/clk.h>
-+#include <linux/mailbox_controller.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- 
-+#define CMDQ_GCE_NUM_MAX		2
-+
-+#define CMDQ_THR_BASE			0x100
-+#define CMDQ_THR_SIZE			0x80
-+
- #define CMDQ_INST_SIZE			8 /* instruction is 64-bit */
- #define CMDQ_SUBSYS_SHIFT		16
- #define CMDQ_OP_CODE_SHIFT		24
-@@ -79,6 +86,32 @@ struct cmdq_pkt {
- 	bool			loop;
- };
- 
-+struct cmdq_thread {
-+	struct mbox_chan	*chan;
-+	void __iomem		*base;
-+	struct list_head	task_busy_list;
-+	u32			priority;
-+};
-+
-+struct cmdq {
-+	struct mbox_controller	mbox;
-+	void __iomem		*base;
-+	int			irq;
-+	u32			irq_mask;
-+	const struct gce_plat	*pdata;
-+	struct cmdq_thread	*thread;
-+	struct clk_bulk_data	clocks[CMDQ_GCE_NUM_MAX];
-+	bool			suspended;
-+};
-+
-+struct cmdq_task {
-+	struct cmdq		*cmdq;
-+	struct list_head	list_entry;
-+	dma_addr_t		pa_base;
-+	struct cmdq_thread	*thread;
-+	struct cmdq_pkt		*pkt; /* the packet sent from mailbox client */
-+};
-+
- u8 cmdq_get_shift_pa(struct mbox_chan *chan);
- 
- #endif /* __MTK_CMDQ_MAILBOX_H__ */
 -- 
-2.18.0
+2.34.1
 
