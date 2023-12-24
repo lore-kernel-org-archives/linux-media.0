@@ -1,45 +1,47 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B20023C3
-	for <linux-media@vger.kernel.org>; Sun, 24 Dec 2023 11:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9006A3FE6
+	for <linux-media@vger.kernel.org>; Sun, 24 Dec 2023 11:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aYixHiYJ"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a2340c803c6so364098166b.0
-        for <linux-media@vger.kernel.org>; Sun, 24 Dec 2023 03:49:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f0xhWpr9"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-554dbe1857dso1738a12.3
+        for <linux-media@vger.kernel.org>; Sun, 24 Dec 2023 03:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703418560; x=1704023360; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzCr6s+sUXGJX1TCqlhYC9rStKOi8VqlAp3Rk3HIOR0=;
-        b=aYixHiYJQ4MJKLPry86OaWhN8UifopydlOUmHLtWUrO7gEt0qfhNaOZaGhTqRxtyd4
-         jhEg9fdcEx57VGMg6YGMpO0tJEseNgjA9jCKXc5B8V9zPIfEthIdN3yY5oAeeww/8sTJ
-         011JU3WB2V00wWCevTQeqIt11D5/SntmO4dqB5u8ZIhZhEUnNH1g//LAohD3nhWRuCF8
-         AfcKM7p/Z+/+p/p3oQaAin6XB26xf7YPuSpc/Sj8Lz7Ef13n10naOZXyT5g8JL3RCSac
-         ne0DhpFYEtQlUR9NDPg6u44NG+Qi2Ui6beg7jfOQ/oOG4COURdO6kquTF/74TxQTnGOt
-         5JIg==
+        d=linaro.org; s=google; t=1703418563; x=1704023363; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+A2sLdMYd9jrOu4aUtIFiY1f/32swGwSuhGRSvbimyg=;
+        b=f0xhWpr9yAuT8pn3ZBNfas90r1lbC3N5IR7Gr0buY5B3uORUkmoPij2PA9MtJ2gGR4
+         r6c2w2uhg3KCEJTADH9QJ6ynr+J13UB+KBnI9j6b0+I5UI8iUC8otz43UhzNH4RIHP8q
+         gWX/5lSTNt0jihNQeVNvBgkKHQki1dMxjHra7LgqkHhjogWx9ZN7tzDZE4sVtZdubICR
+         xWzpZIfm5nkLE2yLTBkfBz8Lwgw7zlwNH86pYrl6w6LBu9pDVnLr94W+qmOYea49H31K
+         uh3hJIUzc1u1oeSHfTezjVIk4/E8jeDj1RLIyL5QRJnLpQVv/QnZhB9bq+FbLm6k7Rcv
+         nSgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703418560; x=1704023360;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzCr6s+sUXGJX1TCqlhYC9rStKOi8VqlAp3Rk3HIOR0=;
-        b=fqAosnQ9RED6fmb5uYVn9f3q4ufRFy92dG350ScprJCK2xWX+40ZjHCxoO62o/x2MM
-         SViZmAdmISshQAqyJTWCwYixQTXj74jjBRSJ8I3h0uP1Gql4Rhw5tDgqt6+SgDdwgQex
-         VQ1AeoL6/ejKuYx2NLy/oXl/8Fd5ymYJrSAxlXKcmL98M/GGt2vp4Q2I8fAx1DrVU45G
-         B1sRigdfYD88nzZF5Y0vCBVYtzuYTC7Mlo9otBWY9oSYLjTQs6AKuUnoATf5yVx/ag3z
-         f1NLKhEhrt03XaE7baCOE+92n7HWRqNErEpeuPSk87cJypR/Xkorur++XlAG1XqaU8hI
-         e1Xg==
-X-Gm-Message-State: AOJu0YxC0M67d8uGT8GBkKaVXrmsFnRK+pdzMmM6hUI2LuZPfv9gWb+9
-	5VKGRdWQMKTPqZqs7PB+FWNyyHv2kFaTsg==
-X-Google-Smtp-Source: AGHT+IGM0Y5645Zu1dPEnmVTVdZQEYcTnX/kb5UWJ1OjgBXkx1ByEUy4wQqaFm7kp+mEJGJUiKU+5Q==
-X-Received: by 2002:a50:d49b:0:b0:552:85f4:ed39 with SMTP id s27-20020a50d49b000000b0055285f4ed39mr2643458edi.38.1703418559839;
-        Sun, 24 Dec 2023 03:49:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703418563; x=1704023363;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+A2sLdMYd9jrOu4aUtIFiY1f/32swGwSuhGRSvbimyg=;
+        b=RN+b6aQwsZ+SAXCu5X0L11jIA3xTj8/4PtHwiXn1BmJvxmL/8hvm1tj6dKTLx9Ip7Y
+         B+IpTW/nZurtskGgb8/IFf14JPfvM29pc59pTWAiT7i+mCJz9IB64TvJUR887Cw4cPsP
+         C4MubjIkpv+r5JOjQ1svsQApLea3mANQVlyx9Plwh044t4bb8mK7SFGlKZEN1QVNVuSG
+         pcayX7X2HxTyi3PBMyMqAcWwSIaTiLZehnIApCWL/t8nqKk9m+OuMqAGAm5SvTGPpkzw
+         1TSQ4z0t0IYZtRASCsE1d5XemNyb9xGDxRQ02AuOG9tRQ/uhruHE0cDnMUAfpPrYJ4wD
+         IPNQ==
+X-Gm-Message-State: AOJu0Yy8hqGP+pOm/4kZp3o6umIpghl8n5c3Nb7c5EprqR7KUWs/+Z5h
+	iA5S1pva0ZVHM1Jj8yh1agdClofRDH5GIw==
+X-Google-Smtp-Source: AGHT+IFiO4BeiGCukyoTdsjS7Uq7esREyuxI/9413ugA/P7Cwu/jb+Dq6hBnXpvSUiCHMkV3mLBjXQ==
+X-Received: by 2002:aa7:cb50:0:b0:551:4f67:18df with SMTP id w16-20020aa7cb50000000b005514f6718dfmr2757054edt.59.1703418562841;
+        Sun, 24 Dec 2023 03:49:22 -0800 (PST)
 Received: from krzk-bin.. ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id z23-20020aa7c657000000b0054ccac03945sm4999771edr.12.2023.12.24.03.49.18
+        by smtp.gmail.com with ESMTPSA id z23-20020aa7c657000000b0054ccac03945sm4999771edr.12.2023.12.24.03.49.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Dec 2023 03:49:19 -0800 (PST)
+        Sun, 24 Dec 2023 03:49:22 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Sylwester Nawrocki <s.nawrocki@samsung.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -49,10 +51,12 @@ To: Sylwester Nawrocki <s.nawrocki@samsung.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 01/12] media: fimc-lite: drop unused flite_hw_set_camera_polarity()
-Date: Sun, 24 Dec 2023 12:49:05 +0100
-Message-Id: <20231224114916.111433-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 03/12] media: fimc-lite: constify pointers to v4l2_pix_format_mplane
+Date: Sun, 24 Dec 2023 12:49:07 +0100
+Message-Id: <20231224114916.111433-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231224114916.111433-1-krzysztof.kozlowski@linaro.org>
+References: <20231224114916.111433-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,27 +65,28 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Function flite_hw_set_camera_polarity() is not defined, so drop its
-declaration from the header.
+In few places functions do not modify pointed "struct
+v4l2_pix_format_mplane", thus the pointer can point to const data for
+additional safety and self-documenting intention of the function.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/samsung/exynos4-is/fimc-lite.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h b/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h
-index c5656e902750..3b8af3ce1838 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite-reg.h
-@@ -134,8 +134,6 @@ void flite_hw_capture_start(struct fimc_lite *dev);
- void flite_hw_capture_stop(struct fimc_lite *dev);
- void flite_hw_set_camera_bus(struct fimc_lite *dev,
- 			     struct fimc_source_info *s_info);
--void flite_hw_set_camera_polarity(struct fimc_lite *dev,
--				  struct fimc_source_info *cam);
- void flite_hw_set_window_offset(struct fimc_lite *dev, struct flite_frame *f);
- void flite_hw_set_source_format(struct fimc_lite *dev, struct flite_frame *f);
- 
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+index 7898c9bebb04..d1d860fa3454 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+@@ -738,7 +738,7 @@ static int fimc_lite_try_fmt_mplane(struct file *file, void *fh,
+ static int fimc_lite_s_fmt_mplane(struct file *file, void *priv,
+ 				  struct v4l2_format *f)
+ {
+-	struct v4l2_pix_format_mplane *pixm = &f->fmt.pix_mp;
++	const struct v4l2_pix_format_mplane *pixm = &f->fmt.pix_mp;
+ 	struct fimc_lite *fimc = video_drvdata(file);
+ 	struct flite_frame *frame = &fimc->out_frame;
+ 	const struct fimc_fmt *fmt = NULL;
 -- 
 2.34.1
 
