@@ -1,46 +1,47 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628F16FCB
-	for <linux-media@vger.kernel.org>; Thu, 28 Dec 2023 11:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB667477
+	for <linux-media@vger.kernel.org>; Thu, 28 Dec 2023 11:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LZaXJ7p6"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2cca5d81826so64360941fa.2
-        for <linux-media@vger.kernel.org>; Thu, 28 Dec 2023 03:42:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s0QJOvgV"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ccc5fca3f6so29126301fa.1
+        for <linux-media@vger.kernel.org>; Thu, 28 Dec 2023 03:42:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703763729; x=1704368529; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbh0l/OCUlD5uVSuXEGMcXjE9wl3eO27IjVISScAPlo=;
-        b=LZaXJ7p6c9EuH8ElUlfPZf/8XX8OUluDcLEJ4/mQSU1Ie578J8w2yeSnjXmLNPsFbI
-         LnI32SjSdYjxYTY3/QxC5HJc9JpG0OAzhBTKV0oDbzyVPlEI5NTl/eWDBdzkjNJxGSbL
-         LFOg5VvzKiWTRdT6ItQevwsBEvnLhKbwhicriB8sQoW9uy/GCVjwFZNX3qK96O7ys798
-         v8DzstZO+Krr4n0mt2JORu2zmh8opg6XmWhOU7dVsMbHWb2Id7OLKG1QOsuqMtfOtqF+
-         8L1QJSXpAPMmyh/+5GQDF+4L+iMPlYl9wjSv04xWNzH2z1aY0VZ6aq8OvLLjKBj+nfQS
-         jkww==
+        d=linaro.org; s=google; t=1703763732; x=1704368532; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yjZa9tE0ceD0rAWIgU+aMG5K2H2nDz2H19Wt+dz7aVw=;
+        b=s0QJOvgVQV1b9mJFcmbwLgjpVQpoMiqaa8JfWyG7jVegXsS89TXVseGhXuzLhGuHVc
+         J/SO6InQLRoKk0dlXzxygqks0l/RW6W/Qtjl5aMGHRmpvAVUX+6M93TustGHa4LvqnDO
+         RLTMDmkJ5Kl41jawIWjlP7ZhZ3OC9zfFfwX9JAH2xej12D+/LBZ6oYdNKE/nctzs5AgN
+         +2RwfNQnKcORsQt+HrdcRseezHHeXp9iqZ/43QsfanCiUL9TQ39mfQyGAjUoTvAZme5B
+         1Fr0WTzt0CI/pz//Jf2TmpcWJUk4cWB2Gpz9STHxgVzcJweIFFXAgL7tp6+8cVBzuxU5
+         Ye6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703763729; x=1704368529;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jbh0l/OCUlD5uVSuXEGMcXjE9wl3eO27IjVISScAPlo=;
-        b=Ky4/Rg4lQhTwgqEzbpeoYv5e1TgHTeoIobnyDrqTDzSwyZvKVFQZPlcQfe8yLlFq9S
-         0FSOKPwoTylBReobkzeiLvXHKlraTwVzajbGTwXHmDzpUnHKVheXneZRO8nlESulMXMp
-         oifG88NhEW1u9ZkFdNL+QID3Q+DBNyyG0UI2N/HN4/tmidb55VYSRFewnJHQ1NgbGTKt
-         XVTGsOT11yiIjv/XRQaXeMKVW+FVw/7CUUo/26Rov9ZNSgn+Rf87RC0CRjeiOG1TXZK5
-         rmS+BgtuDjZiRPALIHlopoRIwgcmy1PH0C9Kdc0AX/4af4LA/gJi4oLe+83SZ9ucO3Vo
-         1sKg==
-X-Gm-Message-State: AOJu0Yx7MTrMWRdheEJKPP5Vokqv7Jpw0BPlEppxTgJlyV2kpR7aIQAF
-	+v1LIc3OGaVvkANJmM+VTPca4uMUbSf9tA==
-X-Google-Smtp-Source: AGHT+IHSnOW4rpsICrtsFJGdeaeqXLcYGA//H43gyGrL38Vu+aM+ohhsDrXuAXLflLZoBD6Jm7JHIA==
-X-Received: by 2002:a2e:3c02:0:b0:2cc:69f5:de84 with SMTP id j2-20020a2e3c02000000b002cc69f5de84mr4762669lja.100.1703763729234;
-        Thu, 28 Dec 2023 03:42:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703763732; x=1704368532;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yjZa9tE0ceD0rAWIgU+aMG5K2H2nDz2H19Wt+dz7aVw=;
+        b=JNAAOiDWWClNGgzp9LAgSByIrJI99vnrFm7ROMsICM8qnZ5b8iFEGthpde7fFb3BZN
+         vP4Phv1B9+cARaq+OHQ7N7S7OgW3FmusHtk9Hx3DhW9EFORfqn6dRacixx1hEwZ+0vKa
+         hbAVU4fRs9L/lrN6GPoT5vvxIG4EmD3y8lUs3ssfQfm37LiNIPqKO5JOa0oux2pgPPE1
+         KoP1Tov+4Ht9l8KLeTs8f+ceXYShAR2gFl4rcTca4QBcQW/yIovykbb9hDa2S8uj2Cpt
+         bKY1Ke6MCc0z4JRI+g0zhb1Z4PekrJozBg/++ByUd/jsJqFRWcn8+l/H9Rc76N6EsF83
+         b7/w==
+X-Gm-Message-State: AOJu0YxWEhMGxcnzX6nBzXVNq69zf/bu0fcNKDI0hVPYQrMuOY5MhUMM
+	SaCiKTAdx6OTJ8JuIL6mtM9/k5kKMFR5BA==
+X-Google-Smtp-Source: AGHT+IEkg0SLbVn0GCOq/nH3aV+xIYolPgrqG8oo5borpKvHGKfCGBOh+OxPwwJXipPwx+k01DvLeA==
+X-Received: by 2002:a2e:bba3:0:b0:2cc:d030:1557 with SMTP id y35-20020a2ebba3000000b002ccd0301557mr1596210lje.107.1703763731986;
+        Thu, 28 Dec 2023 03:42:11 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id a4-20020a05651c210400b002cc32fbe2e5sm2792867ljq.51.2023.12.28.03.42.07
+        by smtp.gmail.com with ESMTPSA id a4-20020a05651c210400b002cc32fbe2e5sm2792867ljq.51.2023.12.28.03.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 03:42:08 -0800 (PST)
+        Thu, 28 Dec 2023 03:42:11 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,11 +59,16 @@ Cc: Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-remoteproc@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [PATCH 0/5] PM: domains: Add helpers for multi PM domains to avoid open-coding
-Date: Thu, 28 Dec 2023 12:41:52 +0100
-Message-Id: <20231228114157.104822-1-ulf.hansson@linaro.org>
+	linux-media@vger.kernel.org,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH 2/5] remoteproc: imx_dsp_rproc: Convert to dev_pm_domain_attach|detach_list()
+Date: Thu, 28 Dec 2023 12:41:54 +0100
+Message-Id: <20231228114157.104822-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231228114157.104822-1-ulf.hansson@linaro.org>
+References: <20231228114157.104822-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -71,53 +77,149 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Attaching/detaching of a device to multiple PM domains has started to become a
-common operation for many drivers, typically during ->probe() and ->remove().
-In most cases, this has lead to lots of boilerplate code in the drivers.
+Let's avoid the boilerplate code to manage the multiple PM domain case, by
+converting into using dev_pm_domain_attach|detach_list().
 
-This series adds a pair of helper functions to manage the attach/detach of a
-device to its multiple PM domains. Moreover, a couple of drivers have been
-converted to use the new helpers as a proof of concept.
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: <linux-remoteproc@vger.kernel.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/remoteproc/imx_dsp_rproc.c | 82 ++++--------------------------
+ 1 file changed, 9 insertions(+), 73 deletions(-)
 
-Note 1)
-The changes in the drivers have only been compile tested, while the helpers
-have been tested along with a couple of local dummy drivers that I have hacked
-up to model both genpd providers and genpd consumers.
-
-Note 2)
-I was struggling to make up mind if we should have a separate helper to attach
-all available power-domains described in DT, rather than providing "NULL" to the
-dev_pm_domain_attach_list(). I decided not to, but please let me know if you
-prefer the other option.
-
-Note 3)
-For OPP integration, as a follow up I am striving to make the
-dev_pm_opp_attach_genpd() redundant. Instead I think we should move towards
-using dev_pm_opp_set_config()->_opp_set_required_devs(), which would allow us to
-use the helpers that $subject series is adding.
-
-Kind regards
-Ulf Hansson
-
-Ulf Hansson (5):
-  PM: domains: Add helper functions to attach/detach multiple PM domains
-  remoteproc: imx_dsp_rproc: Convert to
-    dev_pm_domain_attach|detach_list()
-  remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
-  remoteproc: qcom_q6v5_adsp: Convert to
-    dev_pm_domain_attach|detach_list()
-  media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
-
- drivers/base/power/common.c                   | 133 +++++++++++++++
- drivers/media/platform/qcom/venus/core.c      |  12 +-
- drivers/media/platform/qcom/venus/core.h      |   7 +-
- .../media/platform/qcom/venus/pm_helpers.c    |  48 ++----
- drivers/remoteproc/imx_dsp_rproc.c            |  82 +--------
- drivers/remoteproc/imx_rproc.c                |  73 +-------
- drivers/remoteproc/qcom_q6v5_adsp.c           | 160 ++++++++----------
- include/linux/pm_domain.h                     |  38 +++++
- 8 files changed, 288 insertions(+), 265 deletions(-)
-
+diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+index 8fcda9b74545..0409b7c47d5c 100644
+--- a/drivers/remoteproc/imx_dsp_rproc.c
++++ b/drivers/remoteproc/imx_dsp_rproc.c
+@@ -103,12 +103,10 @@ enum imx_dsp_rp_mbox_messages {
+  * @tx_ch: mailbox tx channel handle
+  * @rx_ch: mailbox rx channel handle
+  * @rxdb_ch: mailbox rx doorbell channel handle
+- * @pd_dev: power domain device
+- * @pd_dev_link: power domain device link
++ * @pd_list: power domain list
+  * @ipc_handle: System Control Unit ipc handle
+  * @rproc_work: work for processing virtio interrupts
+  * @pm_comp: completion primitive to sync for suspend response
+- * @num_domains: power domain number
+  * @flags: control flags
+  */
+ struct imx_dsp_rproc {
+@@ -121,12 +119,10 @@ struct imx_dsp_rproc {
+ 	struct mbox_chan			*tx_ch;
+ 	struct mbox_chan			*rx_ch;
+ 	struct mbox_chan			*rxdb_ch;
+-	struct device				**pd_dev;
+-	struct device_link			**pd_dev_link;
++	struct dev_pm_domain_list		*pd_list;
+ 	struct imx_sc_ipc			*ipc_handle;
+ 	struct work_struct			rproc_work;
+ 	struct completion			pm_comp;
+-	int					num_domains;
+ 	u32					flags;
+ };
+ 
+@@ -954,74 +950,14 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+ static int imx_dsp_attach_pm_domains(struct imx_dsp_rproc *priv)
+ {
+ 	struct device *dev = priv->rproc->dev.parent;
+-	int ret, i;
+-
+-	priv->num_domains = of_count_phandle_with_args(dev->of_node,
+-						       "power-domains",
+-						       "#power-domain-cells");
+-
+-	/* If only one domain, then no need to link the device */
+-	if (priv->num_domains <= 1)
+-		return 0;
+-
+-	priv->pd_dev = devm_kmalloc_array(dev, priv->num_domains,
+-					  sizeof(*priv->pd_dev),
+-					  GFP_KERNEL);
+-	if (!priv->pd_dev)
+-		return -ENOMEM;
+-
+-	priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_domains,
+-					       sizeof(*priv->pd_dev_link),
+-					       GFP_KERNEL);
+-	if (!priv->pd_dev_link)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < priv->num_domains; i++) {
+-		priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
+-		if (IS_ERR(priv->pd_dev[i])) {
+-			ret = PTR_ERR(priv->pd_dev[i]);
+-			goto detach_pm;
+-		}
+-
+-		/*
+-		 * device_link_add will check priv->pd_dev[i], if it is
+-		 * NULL, then will break.
+-		 */
+-		priv->pd_dev_link[i] = device_link_add(dev,
+-						       priv->pd_dev[i],
+-						       DL_FLAG_STATELESS |
+-						       DL_FLAG_PM_RUNTIME);
+-		if (!priv->pd_dev_link[i]) {
+-			dev_pm_domain_detach(priv->pd_dev[i], false);
+-			ret = -EINVAL;
+-			goto detach_pm;
+-		}
+-	}
+-
+-	return 0;
+-
+-detach_pm:
+-	while (--i >= 0) {
+-		device_link_del(priv->pd_dev_link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
+-
+-	return ret;
+-}
+-
+-static int imx_dsp_detach_pm_domains(struct imx_dsp_rproc *priv)
+-{
+-	int i;
++	int ret;
+ 
+-	if (priv->num_domains <= 1)
++	/* A single PM domain is already attached. */
++	if (dev->pm_domain)
+ 		return 0;
+ 
+-	for (i = 0; i < priv->num_domains; i++) {
+-		device_link_del(priv->pd_dev_link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
+-
+-	return 0;
++	ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
++	return ret < 0 ? ret : 0;
+ }
+ 
+ /**
+@@ -1153,7 +1089,7 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ err_detach_domains:
+-	imx_dsp_detach_pm_domains(priv);
++	dev_pm_domain_detach_list(priv->pd_list);
+ err_put_rproc:
+ 	rproc_free(rproc);
+ 
+@@ -1167,7 +1103,7 @@ static void imx_dsp_rproc_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 	rproc_del(rproc);
+-	imx_dsp_detach_pm_domains(priv);
++	dev_pm_domain_detach_list(priv->pd_list);
+ 	rproc_free(rproc);
+ }
+ 
 -- 
 2.34.1
 
