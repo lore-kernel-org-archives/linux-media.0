@@ -1,159 +1,292 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F29E48780
-	for <linux-media@vger.kernel.org>; Wed, 10 Jan 2024 12:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE06320FD;
+	Wed, 10 Jan 2024 12:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mmXrVwgj"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a2821884a09so328276166b.2
-        for <linux-media@vger.kernel.org>; Wed, 10 Jan 2024 04:41:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyVWZSnu"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e54b2e437so10121895e9.2;
+        Wed, 10 Jan 2024 04:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704890495; x=1705495295; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7IHux4kEY0E6OoP+H6wK9dpZky0j7ZodV26PwHsv72I=;
-        b=mmXrVwgj4VTEAXKWKV51WxEb+JHijZ3pu9Ok/WgXHIWwVeVwOLIM4GFC5F2kBQLt4n
-         fJjqjvZp7x9l4Toxrv0HJNrRVCQm8/sCqIQM1DHP4arqu3eH5MbQcxWKIVi4aJz+gTgY
-         g9dtlYEoZB2/OT1WZwutulPFg+3+pqXspc2b8=
+        d=gmail.com; s=20230601; t=1704890783; x=1705495583; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SgQqWBAZ78pnY/o09hBIwm+rO4G8Bn5iK+qZratmwrU=;
+        b=TyVWZSnuDo6XEhBmDJZAJAqlQ4zg3Bny67gCfIXJ08/I+2qR8AnHdF0Bay8BKB9T5X
+         UDmTXiuuwzA9BxKImpxBaUMH6IaTM9NQ+GQurLK66Yba3jGIsi3ad/GhK5GoOPdIDSU0
+         uBQyXYD3zsjyWSchde+PzEK6RZJ3g2NOE7ppU7x3a4xzvyI+tX3mf+aPv0No6x4PwkEM
+         gHD8AiU3/tnnsbTCIqO9popyOlx8EsCHZsG+U/9G1t4Ehl4GYMZEU4m35wytUGgKQG/h
+         1txQrBYc8v8iVfzvcTsMTPmFbzBnzwaPs2qBfuTZ7qKx/rQW6qCfzSFVQq/zcgJr2lyL
+         hSmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704890495; x=1705495295;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7IHux4kEY0E6OoP+H6wK9dpZky0j7ZodV26PwHsv72I=;
-        b=K4crUzP8RAsarRTIiqsmycw8UjqagYfxezESZMRwS/aiciG7K+l17DDymo6/JwIj7J
-         8XfEkaLpPo4iqc1tGMxFVoMcApEaWEroCPZwGAnrTln0tidmKigzESSzd4ECD2fSr1oQ
-         5lEYglVYRkgg3NH4eQaBZTIJMICsZ8z5QaWowOc0ur7mEuPiCMan4okUDerzsgPBmJ1R
-         B2OhUTWNxLNvgIde/t32YOR/VKTAO6fyxMCba159BlZN4n2aPUUd53zNqCoadwOpO6fD
-         cXY4uHlpDV+yGeJFQRWDssdTCCAUheDiAyyO5aE56c/cjkTiGZI0ECnlNFooIzCQwZWv
-         6eQQ==
-X-Gm-Message-State: AOJu0YyGVryFJ6XA6JT8eEeI8BoQjOFrGzKqqAtg5yfb7By1Y8wbu530
-	EfeLSG8lMILM0C5iZbrYWCRVSB3zNX6CGK4Vkfiof+QWCN1C
-X-Google-Smtp-Source: AGHT+IGTpuZT7iPzAEJBTbVwQM3GtsyR5oW4zwhim6qk/IKGSVzrrb0g2TCmtxLwfCARyuwgrLA3NA==
-X-Received: by 2002:a17:906:4698:b0:a28:a36e:98ac with SMTP id a24-20020a170906469800b00a28a36e98acmr636193ejr.68.1704890495427;
-        Wed, 10 Jan 2024 04:41:35 -0800 (PST)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id m21-20020a170906235500b00a26ade46618sm2073934eja.99.2024.01.10.04.41.34
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 04:41:34 -0800 (PST)
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-336c8ab0b20so3745839f8f.1
-        for <linux-media@vger.kernel.org>; Wed, 10 Jan 2024 04:41:34 -0800 (PST)
-X-Received: by 2002:adf:fe02:0:b0:336:b937:3d0e with SMTP id
- n2-20020adffe02000000b00336b9373d0emr554897wrr.14.1704890494510; Wed, 10 Jan
- 2024 04:41:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704890783; x=1705495583;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SgQqWBAZ78pnY/o09hBIwm+rO4G8Bn5iK+qZratmwrU=;
+        b=KVgAqycaj82Q94Ifa9h/guVuSnFXE1dMrtStTeDI7T3lF8+nPfIjnn1KKpUmC5F9rb
+         gGoNweTvtsy8CQbbfA9mV9ppxv3aMJ/iGLtf/ilBz0aOeVm0Ku4FahQJAM0lXbqODqg6
+         c14isXa8K4l/0vrKmFcgMowypNUuG8x2OHsrKB1jzG370NQcggM5lE2D8mCUhnFgHpFp
+         s1bLcfRCdTASXmN5u3zbg2eNUbpam0CHuTYROzRInfQNKf1+a6i7v9Ubvupp3f2E2Xky
+         6IJlNxiyBd9Ax5wqX2wE1GclF7NBayhZZLqQWcrxk9CvOxwnVWKktHyJNtL+bQy51qlW
+         wDBQ==
+X-Gm-Message-State: AOJu0Yz7uDNjSbic+QHCtOnqsK5x7iE5LqJP3RZ6ju4P+ewDGIwMd7LS
+	Gsf1GN3xhtUv/QasT9s6gIQ=
+X-Google-Smtp-Source: AGHT+IGBE8qhWwUSqZ9fyeb/tCoo6YWg280TU5chPszAEzUlwDOBlWIx17cQdhBsf0NdEC6Khg2XOQ==
+X-Received: by 2002:a7b:c8d7:0:b0:40e:4e14:45bc with SMTP id f23-20020a7bc8d7000000b0040e4e1445bcmr528655wml.13.1704890782718;
+        Wed, 10 Jan 2024 04:46:22 -0800 (PST)
+Received: from localhost.localdomain ([5.2.194.157])
+        by smtp.gmail.com with ESMTPSA id az10-20020a05600c600a00b0040d772030c2sm2116543wmb.44.2024.01.10.04.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 04:46:22 -0800 (PST)
+From: Cosmin Tanislav <demonsingur@gmail.com>
+To: 
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Jacopo Mondi <jacopo+renesas@jmondi.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Cosmin Tanislav <demonsingur@gmail.com>
+Subject: [RFC PATCH] media: v4l: implement virtual channels
+Date: Wed, 10 Jan 2024 14:51:02 +0200
+Message-ID: <20240110125103.215267-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240105134020.34312-1-andrzej.p@collabora.com>
-In-Reply-To: <20240105134020.34312-1-andrzej.p@collabora.com>
-From: Tomasz Figa <tfiga@chromium.org>
-Date: Wed, 10 Jan 2024 21:41:13 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DEfvaGVLdPzjpfRwFMJcrXstp2QyTp-BJqzncXOxTvRQ@mail.gmail.com>
-Message-ID: <CAAFQd5DEfvaGVLdPzjpfRwFMJcrXstp2QyTp-BJqzncXOxTvRQ@mail.gmail.com>
-Subject: Re: [PATCH] media: videobuf2: Add missing doc comment for waiting_in_dqbuf
-To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: linux-media@vger.kernel.org, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 5, 2024 at 10:40=E2=80=AFPM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
->
-> While at it rearrange other comments to match the order of struct members=
-.
->
-> Fixes: d65842f7126a ("media: vb2: add waiting_in_dqbuf flag")
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> ---
->  include/media/videobuf2-core.h | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-cor=
-e.h
-> index e41204df19f0..5020e052eda0 100644
-> --- a/include/media/videobuf2-core.h
-> +++ b/include/media/videobuf2-core.h
-> @@ -72,6 +72,10 @@ struct vb2_buffer;
->   *              argument to other ops in this structure.
->   * @put_userptr: inform the allocator that a USERPTR buffer will no long=
-er
->   *              be used.
-> + * @prepare:   called every time the buffer is passed from userspace to =
-the
-> + *             driver, useful for cache synchronisation, optional.
-> + * @finish:    called every time the buffer is passed back from the driv=
-er
-> + *             to the userspace, also optional.
->   * @attach_dmabuf: attach a shared &struct dma_buf for a hardware operat=
-ion;
->   *                used for DMABUF memory types; dev is the alloc device
->   *                dbuf is the shared dma_buf; returns ERR_PTR() on failu=
-re;
-> @@ -86,10 +90,6 @@ struct vb2_buffer;
->   *             dmabuf.
->   * @unmap_dmabuf: releases access control to the dmabuf - allocator is n=
-otified
->   *               that this driver is done using the dmabuf for now.
-> - * @prepare:   called every time the buffer is passed from userspace to =
-the
-> - *             driver, useful for cache synchronisation, optional.
-> - * @finish:    called every time the buffer is passed back from the driv=
-er
-> - *             to the userspace, also optional.
->   * @vaddr:     return a kernel virtual address to a given memory buffer
->   *             associated with the passed private structure or NULL if n=
-o
->   *             such mapping exists.
-> @@ -484,7 +484,6 @@ struct vb2_buf_ops {
->   *             caller. For example, for V4L2, it should match
->   *             the types defined on &enum v4l2_buf_type.
->   * @io_modes:  supported io methods (see &enum vb2_io_modes).
-> - * @alloc_devs:        &struct device memory type/allocator-specific per=
--plane device
->   * @dev:       device to use for the default allocation context if the d=
-river
->   *             doesn't fill in the @alloc_devs array.
->   * @dma_attrs: DMA attributes to use for the DMA.
-> @@ -550,6 +549,7 @@ struct vb2_buf_ops {
->   *             @start_streaming can be called. Used when a DMA engine
->   *             cannot be started unless at least this number of buffers
->   *             have been queued into the driver.
-> + * @alloc_devs:        &struct device memory type/allocator-specific per=
--plane device
->   */
->  /*
->   * Private elements (won't appear at the uAPI book):
-> @@ -571,6 +571,8 @@ struct vb2_buf_ops {
->   * @waiting_for_buffers: used in poll() to check if vb2 is still waiting=
- for
->   *             buffers. Only set for capture queues if qbuf has not yet =
-been
->   *             called since poll() needs to return %EPOLLERR in that sit=
-uation.
-> + * @waiting_in_dqbuf: set whenever vb2_queue->lock is released while wai=
-ting for
-> + *             a buffer to arrive so that -EBUSY can be returned when ap=
-propriate
+With experimental support for multiple streams per pad being added, the
+pieces are in place to support a virtual channel id per stream.
 
-Appreciate documentation improvements. Thanks!
+This is necessary because stream ids cannot be directly mapped to a virtual
+channel id, since the same virtual channel id can be assigned to multiple
+streams of data, each with a different data type.
 
-Just one comment: Could we make it more clear who sets it? For example:
+To implement this, the following steps have been taken.
 
-    Set by the core for the duration of a blocking DQBUF, when it has
-to wait for
-    a buffer to become available with vb2_queue->lock released. Used to pre=
-vent
-    destroying the queue by other threads.
+Add subdev ioctls for getting and setting the virtual channel for a
+specific pad and stream.
 
-WDYT?
+Add pad .get_vc() and .set_vc() ops.
 
-Best regards,
-Tomasz
+Add the virtual channel to the stream config in V4L2 subdev central state.
+
+Add a default .get_vc() implementation that retrieves the virtual channel
+from the central state, or, if that is not supported, default to virtual
+channel 0.
+
+Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 57 +++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 39 ++++++++++++++++++
+ include/uapi/linux/v4l2-subdev.h      | 18 +++++++++
+ 3 files changed, 114 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index be86b906c985..8945bfd0fe12 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -535,6 +535,9 @@ subdev_ioctl_get_state(struct v4l2_subdev *sd, struct v4l2_subdev_fh *subdev_fh,
+ 	case VIDIOC_SUBDEV_S_ROUTING:
+ 		which = ((struct v4l2_subdev_routing *)arg)->which;
+ 		break;
++	case VIDIOC_SUBDEV_G_VC:
++	case VIDIOC_SUBDEV_S_VC:
++		which = ((struct v4l2_subdev_vc *)arg)->which;
+ 	}
+ 
+ 	return which == V4L2_SUBDEV_FORMAT_TRY ?
+@@ -969,6 +972,26 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+ 					routing->which, &krouting);
+ 	}
+ 
++	case VIDIOC_SUBDEV_G_VC: {
++		struct v4l2_subdev_vc *vc = arg;
++
++		if (!client_supports_streams)
++			vc->stream = 0;
++
++		memset(vc->reserved, 0, sizeof(vc->reserved));
++		return v4l2_subdev_call(sd, pad, get_vc, state, vc);
++	}
++
++	case VIDIOC_SUBDEV_S_VC: {
++		struct v4l2_subdev_vc *vc = arg;
++
++		if (!client_supports_streams)
++			vc->stream = 0;
++
++		memset(vc->reserved, 0, sizeof(vc->reserved));
++		return v4l2_subdev_call(sd, pad, set_vc, state, vc);
++	}
++
+ 	case VIDIOC_SUBDEV_G_CLIENT_CAP: {
+ 		struct v4l2_subdev_client_capability *client_cap = arg;
+ 
+@@ -1602,6 +1625,20 @@ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_get_fmt);
+ 
++int v4l2_subdev_get_vc(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
++		       struct v4l2_subdev_vc *vc)
++{
++	u32 vc_id = 0;
++
++	if (sd->flags & V4L2_SUBDEV_FL_STREAMS)
++		vc_id = v4l2_subdev_state_get_stream_vc(state, vc->pad, vc->stream);
++
++	vc->vc = vc_id;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_get_vc);
++
+ int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *state,
+ 			    const struct v4l2_subdev_krouting *routing)
+@@ -1745,6 +1782,26 @@ v4l2_subdev_state_get_stream_compose(struct v4l2_subdev_state *state,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_stream_compose);
+ 
++u32 v4l2_subdev_state_get_stream_vc(struct v4l2_subdev_state *state,
++				    unsigned int pad, u32 stream)
++{
++	struct v4l2_subdev_stream_configs *stream_configs;
++	unsigned int i;
++
++	lockdep_assert_held(state->lock);
++
++	stream_configs = &state->stream_configs;
++
++	for (i = 0; i < stream_configs->num_configs; ++i) {
++		if (stream_configs->configs[i].pad == pad &&
++		    stream_configs->configs[i].stream == stream)
++			return stream_configs->configs[i].vc;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_state_get_stream_vc);
++
+ int v4l2_subdev_routing_find_opposite_end(const struct v4l2_subdev_krouting *routing,
+ 					  u32 pad, u32 stream, u32 *other_pad,
+ 					  u32 *other_stream)
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index c1f90c1223a7..ed1fdd79c2bb 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -722,6 +722,7 @@ struct v4l2_subdev_stream_config {
+ 	u32 stream;
+ 	bool enabled;
+ 
++	u32 vc;
+ 	struct v4l2_mbus_framefmt fmt;
+ 	struct v4l2_rect crop;
+ 	struct v4l2_rect compose;
+@@ -858,6 +859,12 @@ struct v4l2_subdev_pad_ops {
+ 	int (*set_fmt)(struct v4l2_subdev *sd,
+ 		       struct v4l2_subdev_state *state,
+ 		       struct v4l2_subdev_format *format);
++	int (*get_vc)(struct v4l2_subdev *sd,
++		      struct v4l2_subdev_state *state,
++		      struct v4l2_subdev_vc *vc);
++	int (*set_vc)(struct v4l2_subdev *sd,
++		      struct v4l2_subdev_state *state,
++		      struct v4l2_subdev_vc *vc);
+ 	int (*get_selection)(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_state *state,
+ 			     struct v4l2_subdev_selection *sel);
+@@ -1494,6 +1501,23 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
+ int v4l2_subdev_get_fmt(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
+ 			struct v4l2_subdev_format *format);
+ 
++/**
++ * v4l2_subdev_get_vc() - Fill virtual channel based on state
++ * @sd: subdevice
++ * @state: subdevice state
++ * @vc: pointer to &struct v4l2_subdev_vc
++ *
++ * Fill @vc->vc field based on the information in the @vc struct.
++ *
++ * This function can be used by the subdev drivers which support active state to
++ * implement v4l2_subdev_pad_ops.get_vc if the subdev driver does not need to
++ * do anything special in their get_vc op.
++ *
++ * Returns 0 on success, error value otherwise.
++ */
++int v4l2_subdev_get_vc(struct v4l2_subdev *sd, struct v4l2_subdev_state *state,
++		       struct v4l2_subdev_vc *vc);
++
+ /**
+  * v4l2_subdev_set_routing() - Set given routing to subdev state
+  * @sd: The subdevice
+@@ -1585,6 +1609,21 @@ struct v4l2_rect *
+ v4l2_subdev_state_get_stream_compose(struct v4l2_subdev_state *state,
+ 				     unsigned int pad, u32 stream);
+ 
++/**
++ * v4l2_subdev_state_get_stream_vc() - Get the virtual channel of a stream
++ * @state: subdevice state
++ * @pad: pad id
++ * @stream: stream id
++ *
++ * This returns the virtual channel for the given pad + stream in the
++ * subdev state.
++ *
++ * If the state does not contain the given pad + stream, 0 is returned.
++ */
++u32
++v4l2_subdev_state_get_stream_vc(struct v4l2_subdev_state *state,
++				unsigned int pad, u32 stream);
++
+ /**
+  * v4l2_subdev_routing_find_opposite_end() - Find the opposite stream
+  * @routing: routing used to find the opposite side
+diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+index b383c2fe0cf3..8e90405bb1e6 100644
+--- a/include/uapi/linux/v4l2-subdev.h
++++ b/include/uapi/linux/v4l2-subdev.h
+@@ -187,6 +187,22 @@ struct v4l2_subdev_capability {
+ 	__u32 reserved[14];
+ };
+ 
++/**
++ * struct v4l2_subdev_vc - Pad-level virtual channel settings
++ * @which: format type (from enum v4l2_subdev_format_whence)
++ * @pad: pad number, as reported by the media API
++ * @vc: virtual channel
++ * @stream: stream number, defined in subdev routing
++ * @reserved: drivers and applications must zero this array
++ */
++struct v4l2_subdev_vc {
++	__u32 which;
++	__u32 pad;
++	__u32 vc;
++	__u32 stream;
++	__u32 reserved[7];
++};
++
+ /* The v4l2 sub-device video device node is registered in read-only mode. */
+ #define V4L2_SUBDEV_CAP_RO_SUBDEV		0x00000001
+ 
+@@ -268,6 +284,8 @@ struct v4l2_subdev_client_capability {
+ #define VIDIOC_SUBDEV_S_SELECTION		_IOWR('V', 62, struct v4l2_subdev_selection)
+ #define VIDIOC_SUBDEV_G_ROUTING			_IOWR('V', 38, struct v4l2_subdev_routing)
+ #define VIDIOC_SUBDEV_S_ROUTING			_IOWR('V', 39, struct v4l2_subdev_routing)
++#define VIDIOC_SUBDEV_G_VC			_IOWR('V', 40, struct v4l2_subdev_vc)
++#define VIDIOC_SUBDEV_S_VC			_IOWR('V', 41, struct v4l2_subdev_vc)
+ #define VIDIOC_SUBDEV_G_CLIENT_CAP		_IOR('V',  101, struct v4l2_subdev_client_capability)
+ #define VIDIOC_SUBDEV_S_CLIENT_CAP		_IOWR('V',  102, struct v4l2_subdev_client_capability)
+ 
+-- 
+2.43.0
+
