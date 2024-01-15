@@ -1,274 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B3E18626;
-	Mon, 15 Jan 2024 17:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqlK2dID"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF34CC433C7;
-	Mon, 15 Jan 2024 17:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705339386;
-	bh=JWnACth0LzK7HNW8h/dOlwEvzifFvKEPIk8Dim2dsV0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KqlK2dIDtCW6ZHgZAwO6Wv353sYnGQa+fSqmbp9c2bNiEs6pPbZtO5SvxWvFwNOT7
-	 OHwTXnG9uLG2H7H1WG1bwORxzfdbR6Uh7Vq+GY82ZF0+K5LdoJ9qEFE5CnNkjnyIwb
-	 u+RmS0odFVtlBW9pAaYtY/+i+NB73ZOHc3GhDdYp9AvB9/PStOi+XcTu/uJdOwwvSC
-	 0gE/96B8/Zk2/u71kgW49xvWckn44jfEKGweNafZr7E5uuFQgzbbfII3PKTUurY4zf
-	 7TxbjPKdb/xIAc2MZ8JwDU7Kupdyqh9v13Mqm1wC0yIuvLtgTXrTxkorZX70bkzMff
-	 Hcx7+r+vxUUzg==
-Date: Mon, 15 Jan 2024 17:23:00 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jason-JH Lin =?utf-8?B?KOael+edv+elpSk=?= <Jason-JH.Lin@mediatek.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	Johnson Wang =?utf-8?B?KOeOi+iBlumRqyk=?= <Johnson.Wang@mediatek.com>,
-	Singo Chang =?utf-8?B?KOW8teiIiOWciyk=?= <Singo.Chang@mediatek.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-	Jason-ch Chen =?utf-8?B?KOmZs+W7uuixqik=?= <Jason-ch.Chen@mediatek.com>,
-	Shawn Sung =?utf-8?B?KOWui+WtneismSk=?= <Shawn.Sung@mediatek.com>,
-	Nancy Lin =?utf-8?B?KOael+aso+ieoik=?= <Nancy.Lin@mediatek.com>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-	"jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
-	"angelogioacchino.delregno@collabora.com" <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: mailbox: mediatek: gce-mailbox: Add
- reference to gce-props.yaml
-Message-ID: <20240115-player-waltz-8efb5885a23f@spud>
-References: <20240110063532.14124-1-jason-jh.lin@mediatek.com>
- <20240110063532.14124-3-jason-jh.lin@mediatek.com>
- <20240110-grumbling-tattling-0202fc5e21f2@spud>
- <8c4004d5b6f68dc096aaf2a537e429c310b60c08.camel@mediatek.com>
- <20240111-anthology-dock-c60d28ac7f1c@spud>
- <5eaccb10853215a6399759a715d2f0356782bac9.camel@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B91199A1
+	for <linux-media@vger.kernel.org>; Mon, 15 Jan 2024 20:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSF-0004gq-2t; Mon, 15 Jan 2024 21:21:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSE-0005gP-MC; Mon, 15 Jan 2024 21:21:06 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rPTSE-000N7d-1x;
+	Mon, 15 Jan 2024 21:21:06 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-spi@vger.kernel.org,
+	kernel@pengutronix.de,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org
+Subject: [PATCH 09/33] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+Date: Mon, 15 Jan 2024 21:12:55 +0100
+Message-ID:  <a71f64cbd6da8670498e03cf2762f69d26738c95.1705348269.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wJ/jLXk4vNiM6iYD"
-Content-Disposition: inline
-In-Reply-To: <5eaccb10853215a6399759a715d2f0356782bac9.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2489; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=8dv/wBsJwJ3/ohbuVOHTuYVGhoSkMc8iB3lWpL8EkJg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlpZHLgzBKZildNpjvaT1coOoquLHRENs6MD3MT sOpsxNkZuaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZaWRywAKCRCPgPtYfRL+ TnGdB/9j2Yxl1DMrTjLF1q3TTyxA0r2zPaE3U9TaNmiEYp8U68CJ8iR8VvI8/45+QL86/IgXP4F 0ndN7yjs5BurQMxvy6UngvV1fyYAqiflO+65SzTIUq/jSIWUL6/2629tV2mLsemYhIgcXkVHknI lI0MgAwvBNih03dFteaqintOYZqts+HQkW7+rHQJtfpxjAD7KSTu1SBkP3nIU4fnJvm70hffWR6 qB/ti+qS8scoFPxA4IhWaNBVrZYf6pu0c1FNI0EzvXvhF7WxZ9sUU+WN8TTADl828z1A2hMF+TQ Jov1zWObQLr6wbQu5ifeUHREWqNWUbPTMm3fxIv7IujfVmkT
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
+In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+some functions and struct members were renamed. To not break all drivers
+compatibility macros were provided.
 
---wJ/jLXk4vNiM6iYD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+To be able to remove these compatibility macros push the renaming into
+v4l2_spi_new_subdev().
 
-On Fri, Jan 12, 2024 at 07:44:13AM +0000, Jason-JH Lin (=E6=9E=97=E7=9D=BF=
-=E7=A5=A5) wrote:
-> On Thu, 2024-01-11 at 17:31 +0000, Conor Dooley wrote:
-> > On Wed, Jan 10, 2024 at 04:36:20PM +0000, Jason-JH Lin (=E6=9E=97=E7=9D=
-=BF=E7=A5=A5) wrote:
-> > > Hi Conor,
-> > >=20
-> > > Thanks for the reviews.
-> > >=20
-> > > On Wed, 2024-01-10 at 10:36 +0000, Conor Dooley wrote:
-> > > > On Wed, Jan 10, 2024 at 02:35:30PM +0800, Jason-JH.Lin wrote:
-> > > > > 1. Add "Provider" to the title to make it clearer.
-> > > > > 2. Add reference to gce-props.yaml for adding mediatek,gce-
-> > > > > events
-> > > > > property.
-> > > >=20
-> > > > I can see this from the diff. There's still no explanation here
-> > > > as to
-> > > > why the mailbox provider needs to have a gce-event id. NAK until
-> > > > you
-> > > > can
-> > > > explain that.
-> > > >=20
-> > >=20
-> > > Sorry for missing the reason in commit message, I'll add it in the
-> > > next
-> > > version.
-> > >=20
-> > > There are 2 reasons why the mailbox provider needs gce-events:
-> > > 1. The mailbox provider here is CMDQ mailbox driver. It configures
-> > > GCE
-> > > hardware register by CPU directly. If we want to set the default
-> > > value
-> > > from 0 to 1 for specific gce-events during the initialization of
-> > > CMDQ
-> > > driver. We need to tell CMDQ driver what gce-events need to be set
-> > > and
-> > > I think such GCE hardware setting can get from its device node.
-> >=20
-> > Why would someone want to set it to 1 or 0?
->=20
-> GCE HW have an event table in SRAM. Each event ID has a boolean event
-> value and the default value is 0. There are 1024 event IDs (0~1023) in
-> the event table. The mediatek,gce-events is the property to get the
-> event IDs.
->=20
-> E.g.
-> In some camera suspend/resume use cases, the may set the event ID: 100
-> to 1 before suspend. When CMDQ driver resumes, all the event value of
-> event IDs will be clear to 0. But camera driver won't know the event
-> IDs:100 has been cleared to 0 and still send a cmd to wait for the
-> event ID:100. So CMDQ driver may need to keep the value of event ID:
-> 100 before suspend and set back the value to 1 after CMDQ driver
-> clearing all the event value of event IDs.
->=20
-> CMDQ driver will need to know which event IDs' values need to be
-> backupped and restored in that camera suspend/resume use case.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/media/v4l2-core/v4l2-spi.c | 4 ++--
+ include/media/v4l2-common.h        | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Unfortunately "some use case" doesn't really help me here, it is hard
-for me to tell whether these use cases are software policy or an
-attribute of the hardware. If I had the same exact camera but was using
-it for a different reason, might I set it to 1 before suspend in one
-case but not in the other?
+diff --git a/drivers/media/v4l2-core/v4l2-spi.c b/drivers/media/v4l2-core/v4l2-spi.c
+index eadecdff7349..a7092c3930d6 100644
+--- a/drivers/media/v4l2-core/v4l2-spi.c
++++ b/drivers/media/v4l2-core/v4l2-spi.c
+@@ -34,7 +34,7 @@ void v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
+ EXPORT_SYMBOL_GPL(v4l2_spi_subdev_init);
+ 
+ struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
+-					struct spi_master *master,
++					struct spi_controller *ctlr,
+ 					struct spi_board_info *info)
+ {
+ 	struct v4l2_subdev *sd = NULL;
+@@ -45,7 +45,7 @@ struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
+ 	if (info->modalias[0])
+ 		request_module(info->modalias);
+ 
+-	spi = spi_new_device(master, info);
++	spi = spi_new_device(ctlr, info);
+ 
+ 	if (!spi || !spi->dev.driver)
+ 		goto error;
+diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+index acf5be24a5ca..739b0f0fc1a0 100644
+--- a/include/media/v4l2-common.h
++++ b/include/media/v4l2-common.h
+@@ -278,13 +278,13 @@ static inline void v4l2_i2c_subdev_unregister(struct v4l2_subdev *sd)
+  *
+  *
+  * @v4l2_dev: pointer to &struct v4l2_device.
+- * @master: pointer to struct spi_master.
++ * @ctlr: pointer to struct spi_controller.
+  * @info: pointer to struct spi_board_info.
+  *
+  * returns a &struct v4l2_subdev pointer.
+  */
+ struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
+-		struct spi_master *master, struct spi_board_info *info);
++		struct spi_controller *ctlr, struct spi_board_info *info);
+ 
+ /**
+  * v4l2_spi_subdev_init - Initialize a v4l2_subdev with data from an
+@@ -308,7 +308,7 @@ void v4l2_spi_subdev_unregister(struct v4l2_subdev *sd);
+ 
+ static inline struct v4l2_subdev *
+ v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
+-		    struct spi_master *master, struct spi_board_info *info)
++		    struct spi_controller *ctlr, struct spi_board_info *info)
+ {
+ 	return NULL;
+ }
+-- 
+2.43.0
 
-I also don't really understand how having this property helps in this
-case either. If a camera is a mailbox consumer, it should have a
-gce-event property for the event ID that it is using in its node.
-
-Why is that not sufficient and a gce-event also needs to be present in
-the consumer node? It seems to me like having it in the consumer alone
-should be sufficient, and the registration process would inform the
-mailbox provider driver which gce-event ID was being used by the camera.
-
->=20
-> > At what level will that vary? Per SoC? Per board? Something else?
-> >=20
->=20
-> I think the SoC supports camera feature may need this property.
->=20
-> > > 2. We'll have the secure CMDQ mailbox driver in the future patch
-> > > [1].
-> > > It will request or reserve a mailbox channel, which is a dedicate
-> > > GCE
-> > > thread, as a secure IRQ handler. This GCE thread executes a looping
-> > > instruction set that keeps waiting for the gce-event set from
-> > > another
-> > > GCE thread in the secure world. So we also need to tell the CMDQ
-> > > driver
-> > > what gce-event need to be waited.
-> >=20
-> > Ditto here, what level does this vary at? Do different SoCs or
-> > different
-> > boards/platforms dictate the value?
->=20
-> It's a SoC level, the SoC supports secure feature will need this
-> property.
->=20
-> > Could this channel be determined from the soc-specific compatible?
-> >=20
-> > In other words, please explain in your commit message why this
-> > requires
-> > a property and is not detectable from any existing mechanism. From
-> > reading this I don't know what is preventing the secure mailbox
-> > channel
-> > from picking a "random" unused channel.
->=20
-> The secure channel could be dedicated from the soc-specific compatible,
-> but the event ID couldn't.
->=20
-> The same event signal corresponding event ID may changes in different
-> SoC.
-> E.g.
-> The HW event signal for CMDQ_EVENT_VDO0_MUTEX_STREAM_DONE_0 is
-> corresponding to GCE event ID: 574 in MT8188, but it's corresponding to
-> eventID: 597 in MT8195.
-
-Is it always 574 in MT8188 and always 597 in MT8195?
-
-Thanks,
-Conor.
-
-> I can take any of the "unused" mailbox channel for the secure irq
-> handler. But without the property mediatek,gce-events, the secure
-> channel might not know what event ID to wait for.
->=20
-> Regards,
-> Jason-JH.Lin
-> >=20
-> > Thanks,
-> > Conor.
-> >=20
-> > > [1] cmdq_sec_irq_notify_start() is where the GCE thread is
-> > > requested to
-> > > prepare a looping instruction set to wait for the gce-event.
-> > > -=20
-> > >=20
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20231222045228.=
-27826-9-jason-jh.lin@mediatek.com/
-> > >=20
-> > > Regards,
-> > > Jason-JH.Lin
-> > >=20
-> > > > Cheers,
-> > > > Conor.
-> > > >=20
-> > > > >=20
-> > > > > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > > > > ---
-> > > > >  .../devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml   |
-> > > > > 6
-> > > > > ++++--
-> > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > >=20
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/mailbox/mediatek,gce-
-> > > > > mailbox.yaml
-> > > > > b/Documentation/devicetree/bindings/mailbox/mediatek,gce-
-> > > > > mailbox.yaml
-> > > > > index cef9d7601398..728dc93117a6 100644
-> > > > > --- a/Documentation/devicetree/bindings/mailbox/mediatek,gce-
-> > > > > mailbox.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-
-> > > > > mailbox.yaml
-> > > > > @@ -4,7 +4,7 @@
-> > > > >  $id:=20
-> > > > >=20
-> http://devicetree.org/schemas/mailbox/mediatek,gce-mailbox.yaml#
-> > > > >  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > =20
-> > > > > -title: Mediatek Global Command Engine Mailbox
-> > > > > +title: MediaTek Global Command Engine Mailbox Provider
-> > > > > =20
-> > > > >  maintainers:
-> > > > >    - Houlong Wei <houlong.wei@mediatek.com>
-> > > > > @@ -57,6 +57,8 @@ required:
-> > > > >    - clocks
-> > > > > =20
-> > > > >  allOf:
-> > > > > +  - $ref: mediatek,gce-props.yaml
-> > > > > +
-> > > > >    - if:
-> > > > >        not:
-> > > > >          properties:
-> > > > > @@ -67,7 +69,7 @@ allOf:
-> > > > >        required:
-> > > > >          - clock-names
-> > > > > =20
-> > > > > -additionalProperties: false
-> > > > > +unevaluatedProperties: false
-> > > > > =20
-> > > > >  examples:
-> > > > >    - |
-> > > > > --=20
-> > > > > 2.18.0
-> > > > >=20
-
---wJ/jLXk4vNiM6iYD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZaVp9AAKCRB4tDGHoIJi
-0ucwAQDQ7iL6IxT5xeFFIgZmy1d8nErCc0ODiz9/qpKRG8QSgwEAuWPzmOA6EYym
-kg59jObX1MP438/COfKD75/g+zMofww=
-=x6aM
------END PGP SIGNATURE-----
-
---wJ/jLXk4vNiM6iYD--
