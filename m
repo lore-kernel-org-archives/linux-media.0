@@ -1,153 +1,167 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F8F4C632;
-	Fri, 19 Jan 2024 10:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994F433CE9;
+	Fri, 19 Jan 2024 13:11:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705661612; cv=none; b=ic35RpKix/Ykja2iPIb68g6mTmlrKYyx07V1hH9MqMR6zklUGdxg0eFj49F2cWwHDe03c5BC463GIWqz77r8qZ86bYvGOQdRYjcTFWWMfZfNPisg5R/0OIf4QaNIsEC5aHnGWFM7BgYsxGHgeukKaRcmnABSZ3ZNU+GeYiidMLo=
+	t=1705669869; cv=none; b=iPm6IR0Ap5OAKgGPB05UYIV0+EoUGNb/yRqicNhs+Vqhs9XapEz+ZYm0//xa73DMM0fRGBWgxaqscW/47RvUtvKxys4HzikmV5bRDc58KJEIMTutuL/qHMlgLRCzsgTt2CZYuawkCL5oaVwL1d+BRbj1MglP16k7Q6AhpOuE9s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705661612; c=relaxed/simple;
-	bh=CFyBN3hM6Icm5piROwxSXNJbjOUUSK0D7k+x7CC40aU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EusJohIYDrIfFluJ6kYlaAvrXu+4UXB7Fx3qL58YeeVjpI5T8JBAXmOoWpWpPRNrPJw66Z1EhKxJCTtYWkkAE4Y7HzWYm3bLmbUkdozCcF0Jd+dRz7xXX17qZT64OAlDQFKd0Ejc0jYkT3tueiFcwCtsM8SxS3gq2uCN37y3ToA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=avoTUk8W; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1705669869; c=relaxed/simple;
+	bh=J/z83Xg047XGvf3ennA+Sk+uHgqEASMgOJ1cSPBD8MU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FujAyaH/+fqV5aLho+I/esJTjDgADfBqz6HAKacDO84skOGHNuF2+4h5aXtgSEBUMfF8VxSWOO3aviOtM2zQaB1Z5ANwXTQlPW1ZfbL0zQLGybm3BNENleA4ljxpdjIU7MlV1GJp66V4D9crLZ7Uy10a+BuG9cD9JZ8iSdN6SCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H//34y5P; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="avoTUk8W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705661608;
-	bh=CFyBN3hM6Icm5piROwxSXNJbjOUUSK0D7k+x7CC40aU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=avoTUk8WRN/wl1do+O2nS/ru8pUagCwo4abnUWi1pX+a2UJBgBv/QnAf8ajcp/IRX
-	 rn7dvUSc6EWvANhphTJmt3tJaslmfHGyXq05qKFHILrnX3hQzV8EDK5PszgnmTvIc0
-	 M5cyBnu2ZLRTuJiqyIMvEUKNkiNoaLuuxpMNbf05/XvhVJjmy7Ji9Vbo7Bft8JW14f
-	 rkJZIpie5RTHZdSfoOCkWnrJ92vqbz34HZwxTy8EGfJ9Wts8CCASh/jwXUovDOgaBm
-	 Ee3tMs5+O+EndXRO7krQWzoKAKnYRoMF3o78oqyfHjMMBbHUdJg2MbzZLNApmb8gg1
-	 ZNvAuD/5vERSA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5EC20378202D;
-	Fri, 19 Jan 2024 10:53:27 +0000 (UTC)
-Message-ID: <30dca707-2b48-4309-8567-8c1297a75db5@collabora.com>
-Date: Fri, 19 Jan 2024 11:53:26 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H//34y5P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705669867; x=1737205867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J/z83Xg047XGvf3ennA+Sk+uHgqEASMgOJ1cSPBD8MU=;
+  b=H//34y5PgWC1Vla0/wUmWRlQtBE7+jNgXIgoda0QbONjMUK8PixK5MbQ
+   juWwMtjL4g+Fn177LQclu66PAyoWDSskd6LWy3ehUJAv3EO9bFgbdK5km
+   FdYmfpuv/RC026xYl7NfOfby/2Upk0VUJGLlTFjZiqtXb57p7xAykvgjF
+   o31XXVJLnuzV8XcNN6zThQT3cvTPYZrxx6KGFid2No4LZ1dkFdIt04eNE
+   DiXx25jMcRVWG1+HbcN0qJwdShSlK4eHTHeUcMpMrMgFq7KQgRyB+m0AI
+   Qn1X5uV7v/5wPZda3hLhmjqzIwTfU1aKajRW52f558mwZN/LBIgAMp0Tv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="7443367"
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="7443367"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2024 05:11:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10956"; a="785069304"
+X-IronPort-AV: E=Sophos;i="6.05,204,1701158400"; 
+   d="scan'208";a="785069304"
+Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Jan 2024 05:11:01 -0800
+Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rQoeA-00044W-37;
+	Fri, 19 Jan 2024 13:10:58 +0000
+Date: Fri, 19 Jan 2024 21:10:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Cercueil <paul@crapouillou.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, Paul Cercueil <paul@crapouillou.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	linux-doc@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import
+ interface
+Message-ID: <202401192043.6DTnLlKn-lkp@intel.com>
+References: <20240117122646.41616-4-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: mailbox: Add mediatek,gce-props.yaml
-Content-Language: en-US
-To: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, Jason-ch Chen <jason-ch.chen@mediatek.com>,
- Johnson Wang <johnson.wang@mediatek.com>,
- Singo Chang <singo.chang@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
- Shawn Sung <shawn.sung@mediatek.com>,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20240119063224.29671-1-jason-jh.lin@mediatek.com>
- <20240119063224.29671-2-jason-jh.lin@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240119063224.29671-2-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240117122646.41616-4-paul@crapouillou.net>
 
-Il 19/01/24 07:32, Jason-JH.Lin ha scritto:
-> Add mediatek,gce-props.yaml for common GCE properties that is used for
-> both mailbox providers and consumers. We place the common property
-> "mediatek,gce-events" in this binding currently.
-> 
-> The property "mediatek,gce-events" is used for GCE event ID corresponding
-> to a hardware event signal sent by the hardware or a sofware driver.
-> If the mailbox providers or consumers want to manipulate the value of
-> the event ID, they need to know the specific event ID.
-> 
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> ---
->   .../bindings/mailbox/mediatek,gce-props.yaml  | 52 +++++++++++++++++++
->   1 file changed, 52 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-props.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-props.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-props.yaml
-> new file mode 100644
-> index 000000000000..68b519ff089f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-props.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mailbox/mediatek,gce-props.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Global Command Engine Common Propertes
-> +
-> +maintainers:
-> +  - Houlong Wei <houlong.wei@mediatek.com>
-> +
-> +description:
-> +  The Global Command Engine (GCE) is an instruction based, multi-threaded,
-> +  single-core command dispatcher for MediaTek hardware. The Command Queue
-> +  (CMDQ) mailbox driver is a driver for GCE, implemented using the Linux
-> +  mailbox framework. It is used to receive messages from mailbox consumers
-> +  and configure GCE to execute the specified instruction set in the message.
-> +  We use mediatek,gce-mailbox.yaml to define the properties for CMDQ mailbox
-> +  driver. A device driver that uses the CMDQ driver to configure its hardware
-> +  registers is a mailbox consumer. The mailbox consumer can request a mailbox
-> +  channel corresponding to a GCE hardware thread to send a message, specifying
-> +  that the GCE thread to configure its hardware. The mailbox provider can also
-> +  reserved a mailbox channel to configure GCE hardware register by the spcific
-> +  GCE thread. This binding defines the common GCE properties for both mailbox
-> +  provider and consumers.
-> +
-> +properties:
-> +  mediatek,gce-events:
-> +    description:
-> +      GCE has an event table in SRAM, consisting of 1024 event IDs (0~1023).
-> +      Each event ID has a boolean event value with the default value 0.
-> +      The property mediatek,gce-events is used to obtain the event IDs.
-> +      Some gce-events are hardware-bound and cannot be changed by software.
-> +      For instance, in MT8195, when VDO0_MUTEX is stream done, VDO_MUTEX will
-> +      send an event signal to GCE, setting the value of event ID 597 to 1.
-> +      Similarly, in MT8188, the value of event ID 574 will be set to 1 when
-> +      VOD0_MUTEX is stream done.
-> +      On the other hand, some gce-events are not hardware-bound and can be
-> +      changed by software. For example, in MT8188, we can set the value of
-> +      event ID 855, which is not bound to any hardware, to 1 when the driver
-> +      in the secure world completes a task. However, in MT8195, event ID 855
-> +      is already bound to VDEC_LAT1, so we need to select another event ID to
-> +      achieve the same purpose. This event ID can be any ID that is not bound
-> +      to any hardware and is not yet used in any software driver.
-> +      To determine if the event ID is bound to the hardware or used by a
-> +      software driver, refer to the GCE header
-> +      include/dt-bindings/gce/<chip>-gce.h of each chip.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 1024
+Hi Paul,
 
-maxItems: 1024 seems to be a bit too many... this means that one devicetree node
-may have up to 1024 gce events, which is impossible! If a driver needed all of
-the 1024 events, this means that it's not an user of the GCE, but the GCE itself!
+kernel test robot noticed the following build errors:
 
-Imagine seeing a devicetree node with 1024 array entries for mediatek,gce-events...
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus lwn/docs-next linus/master v6.7 next-20240119]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'd set that to a more sensible value of 32 - eventually we can extend it later,
-if ever needed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20240117-203111
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240117122646.41616-4-paul%40crapouillou.net
+patch subject: [PATCH v4 3/4] usb: gadget: functionfs: Add DMABUF import interface
+config: arm-randconfig-r112-20240119 (https://download.01.org/0day-ci/archive/20240119/202401192043.6DTnLlKn-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce: (https://download.01.org/0day-ci/archive/20240119/202401192043.6DTnLlKn-lkp@intel.com/reproduce)
 
-Besides, nice job about all this documentation of the GCE and its events: love it!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401192043.6DTnLlKn-lkp@intel.com/
 
-Cheers,
-Angelo
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: dma_buf_get
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_detach
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: dma_fence_init
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_resv_add_fence
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_signal
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_dmabuf_io_complete) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_dmabuf_signal_done) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_release
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(dma_fence_put) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_dmabuf_unmap_work) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_put
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced 2 more times
+--
+>> ld.lld: error: undefined symbol: dma_buf_attach
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_fence_context_alloc
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_resv_test_signaled
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: dma_buf_map_attachment
+   >>> referenced by f_fs.c
+   >>>               drivers/usb/gadget/function/f_fs.o:(ffs_epfile_ioctl) in archive vmlinux.a
+..
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
