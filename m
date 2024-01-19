@@ -1,97 +1,224 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD4D3D0B5;
-	Fri, 19 Jan 2024 09:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A990DDA5;
+	Fri, 19 Jan 2024 10:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705657798; cv=none; b=bZ+nZBx1cvV1Jb0sUq1XZrjgVVHquH4rsKsDFbMIx6+LYrIP3+oyaHgI+Z4juD9jwNkiwbNPmmnqZy8dRdKtl/NlN0SEV+e4FJMuBzbQtW1Mptq1OXrlCVL9zTDZDHTz2BjHlkp4zOWzBavaaO3HDDB3zcwueAmqQ0D5GgoExDw=
+	t=1705659455; cv=none; b=sRnCtluJPQaQhqcFOE2q4Y9u+30z5lz+U39L7p9w6RkvWwsa9rAqyVhw5klhZz/2oUh7xMRpWgIT8u1LTZgFhr/guYJSwZwastVBiCUIIhfhhAN4I+YhaMJlTXNQmpoCR+5B8BddqPYXp/El7NhcKAPaSC9pHSIR7hJU9mSqtrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705657798; c=relaxed/simple;
-	bh=fLBUyGpx4ptCR4u0+nI0SI/vY0QxIITEt56gQ9tS950=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p5vnk9iYPVR4Cv2trjv4iCN3F/u2paNhvL4EpGFjM0R4CdcHho0ZrdrkusY4uNiGw4j6N5q3u19C1az+YOD3dN+xClUaFuzO2oIAIdkqgL9bO/twd2PuTz3omEbhfanhrgWTjljQyd5aTAhEXix602mYn34fC0UsN4fr+q2PRxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pg9chlwj; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1705659455; c=relaxed/simple;
+	bh=+LtMZPOF1yo585gqDoaAA6wOBqB5Aivtv5s5vcPOK50=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tZgQggmxaIBhZGPqiYcwvztH04qeQ76aP/dy1q2F/ZW2GOITmLUk6xgfsNHoXvSg+cMbbyNxQsT8KkKlCvoBJoKYnH7TefkEY2S16NUcB0vuArxuGPipXsraI7tCLo4EpP3OA32REhblT4c3CoTiZS/IFQHb8WKfRh/+l82v2m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=xoV+DeqE; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pg9chlwj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705657795;
-	bh=fLBUyGpx4ptCR4u0+nI0SI/vY0QxIITEt56gQ9tS950=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pg9chlwjoHyrTA2NiIAkcTF2jCfjWWhutFa1umFQ5ZOD2q7syOCUcOy8WMJMvxef6
-	 ubN9Snzzpa8fhPUdzzgaEUQ3mOFrX524oilX5DRPaJDzSfPN2QroPtAsWiq19PMu0U
-	 X3z9zgQpbasYGzF5zcKl5wkmNdZwALnkhXt6OtLA83yjFc9GWXypWpFulhxo6U6JgK
-	 FITi+0Q1TzyrSHDYI7xZPWwGMW03BnkMxJ0w4UM0CaKyI7k664jQsGqHSGUSuFl+cT
-	 CLQxTj+XMxw5cySyR0lRl6k2cuyuYZqD1CEP0Ptq39FyipDrQX0Df47MPuHq9u6u1u
-	 mfSELge+wfvQQ==
-Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: benjamin.gaignard)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EB2B33782081;
-	Fri, 19 Jan 2024 09:49:54 +0000 (UTC)
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To: hverkuil@xs4all.nl,
-	mchehab@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	kernel@collabora.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v17 8/8] media: verisilicon: Support deleting buffers on capture queue
-Date: Fri, 19 Jan 2024 10:49:44 +0100
-Message-Id: <20240119094944.26763-9-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240119094944.26763-1-benjamin.gaignard@collabora.com>
-References: <20240119094944.26763-1-benjamin.gaignard@collabora.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="xoV+DeqE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1705659453; x=1737195453;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+LtMZPOF1yo585gqDoaAA6wOBqB5Aivtv5s5vcPOK50=;
+  b=xoV+DeqE3CUXdy9URhQDrHmi8k+DbWw6DW7QFEgyuC22WxnMn7oJCnG8
+   s9FetOukohBy7Kks+rOAaRAcEFSyDKBxr0FF3tpeGZvnU6rsCiJ7+9rtb
+   /RMpbH7id1llCfK3YyXIMKep2HrLYdd4tM3x9+8fR7uHpbwtiO5DACAL7
+   g1wAxD7+KoLBRGhGApgsakHy2S9vKFFz9p6IAqxmH3c+J9cDZxNCVUE5W
+   cq9EzMZhGghFIeg3KXL6XfFBpRfjz2TedigQiNjkrJ6xVCnWmXGTruLMm
+   pK2gA1x33p9xf98ja9jQwOQO/pLt9Kbqe1UcSdv6/vIZH7fGi1r7iN21e
+   g==;
+X-CSE-ConnectionGUID: K82mF02xSm2dPv+Ypq+eGQ==
+X-CSE-MsgGUID: vERtogOnTAm69wiMAgHXnw==
+X-IronPort-AV: E=Sophos;i="6.05,204,1701154800"; 
+   d="asc'?scan'208";a="245712682"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jan 2024 03:17:26 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 19 Jan 2024 03:17:25 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Fri, 19 Jan 2024 03:17:23 -0700
+Date: Fri, 19 Jan 2024 10:16:46 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Changhuang Liang <changhuang.liang@starfivetech.com>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+	<robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Emil
+ Renner Berthing <kernel@esmil.dk>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Jack
+ Zhu <jack.zhu@starfivetech.com>, <linux-media@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<devicetree@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: media: starfive: Match driver and
+ yaml property names
+Message-ID: <20240119-despair-festival-59ab2d4d896b@wendy>
+References: <20240119100639.84029-1-changhuang.liang@starfivetech.com>
+ <20240119100639.84029-2-changhuang.liang@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="BFH1MedVdG7X979+"
+Content-Disposition: inline
+In-Reply-To: <20240119100639.84029-2-changhuang.liang@starfivetech.com>
 
-Allow to delete buffers on capture queue because it the one which
-own the decoded buffers. After a dynamic resolution change lot of
-them could remain allocated but won't be used anymore so deleting
-them save memory.
-Do not add this feature on output queue because the buffers are
-smaller, fewer and always recycled even after a dynamic resolution
-change.
+--BFH1MedVdG7X979+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/media/platform/verisilicon/hantro_drv.c  | 1 +
- drivers/media/platform/verisilicon/hantro_v4l2.c | 1 +
- 2 files changed, 2 insertions(+)
+On Fri, Jan 19, 2024 at 02:06:38AM -0800, Changhuang Liang wrote:
+> Drop some unused properties for clocks, resets and interrupts for
+> StarFive JH7110 camera subsystem.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index db3df6cc4513..f6b0a676a740 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -248,6 +248,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
- 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
- 	dst_vq->lock = &ctx->dev->vpu_mutex;
- 	dst_vq->dev = ctx->dev->v4l2_dev.dev;
-+	src_vq->supports_delete_bufs = true;
- 
- 	return vb2_queue_init(dst_vq);
- }
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 941fa23c211a..34eab90e8a42 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -756,6 +756,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
- 	.vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_delete_bufs = v4l2_m2m_ioctl_delete_bufs,
- 	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
- 
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
--- 
-2.40.1
+What do you mean "unused"?
 
+Do these clocks etc exist but are not used by the driver?
+
+Or do they not exist at all?
+
+The two are very different!
+
+Thanks,
+Conor.
+
+>=20
+> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+> Reviewed-by: Jack Zhu <jack.zhu@starfivetech.com>
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> ---
+>  .../bindings/media/starfive,jh7110-camss.yaml | 31 +++++--------------
+>  1 file changed, 8 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-cams=
+s.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> index c66586d90fa2..2504381058b3 100644
+> --- a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+> @@ -4,14 +4,14 @@
+>  $id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: Starfive SoC CAMSS ISP
+> +title: StarFive SoC CAMSS ISP
+> =20
+>  maintainers:
+>    - Jack Zhu <jack.zhu@starfivetech.com>
+>    - Changhuang Liang <changhuang.liang@starfivetech.com>
+> =20
+>  description:
+> -  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. =
+It
+> +  The StarFive CAMSS ISP is a Camera interface for StarFive JH7110 SoC. =
+It
+>    consists of a VIN controller (Video In Controller, a top-level control=
+ unit)
+>    and an ISP.
+> =20
+> @@ -28,26 +28,21 @@ properties:
+>        - const: isp
+> =20
+>    clocks:
+> -    maxItems: 7
+> +    maxItems: 3
+> =20
+>    clock-names:
+>      items:
+> -      - const: apb_func
+>        - const: wrapper_clk_c
+> -      - const: dvp_inv
+> -      - const: axiwr
+> -      - const: mipi_rx0_pxl
+>        - const: ispcore_2x
+>        - const: isp_axi
+> =20
+>    resets:
+> -    maxItems: 6
+> +    maxItems: 5
+> =20
+>    reset-names:
+>      items:
+>        - const: wrapper_p
+>        - const: wrapper_c
+> -      - const: axird
+>        - const: axiwr
+>        - const: isp_top_n
+>        - const: isp_top_axi
+> @@ -57,7 +52,7 @@ properties:
+>        - description: JH7110 ISP Power Domain Switch Controller.
+> =20
+>    interrupts:
+> -    maxItems: 4
+> +    maxItems: 3
+> =20
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+> @@ -125,34 +120,24 @@ examples:
+>          reg =3D <0x19840000 0x10000>,
+>                <0x19870000 0x30000>;
+>          reg-names =3D "syscon", "isp";
+> -        clocks =3D <&ispcrg 0>,
+> -                 <&ispcrg 13>,
+> -                 <&ispcrg 2>,
+> -                 <&ispcrg 12>,
+> -                 <&ispcrg 1>,
+> +        clocks =3D <&ispcrg 13>,
+>                   <&syscrg 51>,
+>                   <&syscrg 52>;
+> -        clock-names =3D "apb_func",
+> -                      "wrapper_clk_c",
+> -                      "dvp_inv",
+> -                      "axiwr",
+> -                      "mipi_rx0_pxl",
+> +        clock-names =3D "wrapper_clk_c",
+>                        "ispcore_2x",
+>                        "isp_axi";
+>          resets =3D <&ispcrg 0>,
+>                   <&ispcrg 1>,
+> -                 <&ispcrg 10>,
+>                   <&ispcrg 11>,
+>                   <&syscrg 41>,
+>                   <&syscrg 42>;
+>          reset-names =3D "wrapper_p",
+>                        "wrapper_c",
+> -                      "axird",
+>                        "axiwr",
+>                        "isp_top_n",
+>                        "isp_top_axi";
+>          power-domains =3D <&pwrc 5>;
+> -        interrupts =3D <92>, <87>, <88>, <90>;
+> +        interrupts =3D <92>, <87>, <90>;
+> =20
+>          ports {
+>              #address-cells =3D <1>;
+> --=20
+> 2.25.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+--BFH1MedVdG7X979+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZapMDgAKCRB4tDGHoIJi
+0lzdAP0XhGNQY1wQcLpLFfEc/Sj9meIVrA/jD1GxiMXgdQqWnQD/QUG80+qLfwIm
+6Glfk4ikQIoSAIG9e230u0TETuQEkQg=
+=ngD+
+-----END PGP SIGNATURE-----
+
+--BFH1MedVdG7X979+--
