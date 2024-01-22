@@ -1,47 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564A71353E7;
-	Mon, 22 Jan 2024 15:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18EC3FB21;
+	Mon, 22 Jan 2024 15:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936450; cv=none; b=sxAE2gGGcQTdJxLLCX5EBw5Bs8rCFTDJRGCbqjTOSSlGXAktxbLe+BxlfbNRHhfWkWu09rDVgtGYHAE9PJXYWeHvsKni+aXpyHCUqHfadPaom4BZ/oioIreB02heagAE+DSERtvuDotdDrBojnkR6tOAQnu7RSyu0mCuDLBQ9f4=
+	t=1705936554; cv=none; b=uNT2S0o5VTo528CMfkDXAqJuynw5QWQLHekQeh7sPRcAIQTkdsx84+Vn/1/fSBllH/C/AnHY7ZMoztwwC0MzAXCPyoKx5tAxwGue5KAG5Fr/tw0d1dJ/dPZbQSPp1rkOFNLPmZKvjh+dl0VQEE2SPpppkUxvTVz0gsELm8HBRuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936450; c=relaxed/simple;
-	bh=kV98eDgyXLfV4RiWgzkvQ2Yv8i26YS/c2nmW5HnR/jQ=;
+	s=arc-20240116; t=1705936554; c=relaxed/simple;
+	bh=VdRpCz7IZslD0fN6wOVHgHdqX/ObRo5Mos+NE/dFVaA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n3hm2AC716+G1+7t+fNNzPJ6f4iie4bx3NJTfNg3fjLYcWiFZxU5u/YOIgBJmZLiYDN0MApptj5QGrTZir5Q09XXAvuMV2Dr7A+QXePi+OO0DEYhUV9iWQpvBifayU43McJEut1N0ePsAFoEd3huIGnnSe7xqrrdLBYauGios54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XfV+3m7z; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=JJdSzjQWnqS0snLcv7fA+tOleOUieML47+RPvutyn/Oe2yZGowLOCYvCnxKZnB+d3fG9iL9c0akKwyYWAShZ1x3l8V6EEHZziEUIXNGiTnpsxaUBIc/isZZq5qwyPbwrKuvhK28Mitn7n40yvfl1F46q4CoN18Wz3kZ4s6SPfh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJVBF+Uw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XfV+3m7z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83C3C43399;
-	Mon, 22 Jan 2024 15:14:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJVBF+Uw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BEEC43394;
+	Mon, 22 Jan 2024 15:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705936450;
-	bh=kV98eDgyXLfV4RiWgzkvQ2Yv8i26YS/c2nmW5HnR/jQ=;
+	s=k20201202; t=1705936554;
+	bh=VdRpCz7IZslD0fN6wOVHgHdqX/ObRo5Mos+NE/dFVaA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XfV+3m7zhUNv98ySpfhkEU9PgMZGfy2/XfqszkfStbYuOhmOeoDqeAfeEjSTADN0s
-	 JzFYdXK+j80+DeeX5e21itzyi8XYz52i+zf8IlsnCku6WaHM04nAAemieCW9/gKXNX
-	 q8Pomsj+4abXMqb6KMz5o5GrYnGXp+noFe6ICaD3e+4dU/j/+Vy0GgmuEJ/ol+s/CM
-	 ensobMklcueGxNwrHMYNludabIYfpg9C3zrfLAPA0p1RX8Nszab/RFCPVdaI2aVsEO
-	 o4qD6P4/MgiLjj8oisyfd9kXZnRDRvBxpMYS/O3RA8R/JKcaq2BH3nAT0jEYMDwarR
-	 LNSySplRu/CQg==
+	b=TJVBF+UwkTsI+qoT/5ITonSnc0P6MLwMewm9TeMpgEE0+a0fJd21HPmw1v8IvbB/p
+	 I9s6IB5/rCFKnmBQIpw645GmxpLlMl4xGrubW1KaXzp2qxJ5oGoyskhFU/ACGIGrT0
+	 lNHm5snE7n3oFm6JyP/i2FZan17a9UaKMt6IRS1vykUGkP2DM2lKpXii3sKIQJY0f9
+	 GpA2XbEHTnAd+atXuKqL7mQglzTzkQQewCVj961uoJ+QSbpc70TesDA0JRBoq+sVGU
+	 EMHDksgEOZnolnUIcLs4dhIvVh8GwH03kBCnMjV9PBBAO1qayvcZNM1aeLU9pLCg0n
+	 kznCNS5LZUyNg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Umang Jain <umang.jain@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc: Ghanshyam Agrawal <ghanshyam1898@gmail.com>,
+	Phillip Potter <phil@philpotter.co.uk>,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Sasha Levin <sashal@kernel.org>,
+	ezequiel@vanguardiasur.com.ar,
 	mchehab@kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 24/35] media: i2c: imx335: Fix hblank min/max values
-Date: Mon, 22 Jan 2024 10:12:21 -0500
-Message-ID: <20240122151302.995456-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 13/28] media: stk1160: Fixed high volume of stk1160_dbg messages
+Date: Mon, 22 Jan 2024 10:14:39 -0500
+Message-ID: <20240122151521.996443-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122151302.995456-1-sashal@kernel.org>
-References: <20240122151302.995456-1-sashal@kernel.org>
+In-Reply-To: <20240122151521.996443-1-sashal@kernel.org>
+References: <20240122151521.996443-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,42 +50,48 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
+X-stable-base: Linux 5.10.208
 Content-Transfer-Encoding: 8bit
 
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+From: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
 
-[ Upstream commit d7b95ad7a8d56248dfc34f861e445fad7a4004f4 ]
+[ Upstream commit b3695e86d25aafbe175dd51f6aaf6f68d341d590 ]
 
-The V4L2_CID_HBLANK control is marked as readonly and can only be a
-single value.
+The function stk1160_dbg gets called too many times, which causes
+the output to get flooded with messages. Since stk1160_dbg uses
+printk, it is now replaced with printk_ratelimited.
 
-Set the minimum and maximum value to match the mode value.
-
-Reviewed-by: Umang Jain <umang.jain@ideasonboard.com>
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Suggested-by: Phillip Potter <phil@philpotter.co.uk>
+Signed-off-by: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/imx335.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/stk1160/stk1160-video.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index 410d6b86feb5..780eb68b1894 100644
---- a/drivers/media/i2c/imx335.c
-+++ b/drivers/media/i2c/imx335.c
-@@ -971,8 +971,8 @@ static int imx335_init_controls(struct imx335 *imx335)
- 	imx335->hblank_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
- 						&imx335_ctrl_ops,
- 						V4L2_CID_HBLANK,
--						IMX335_REG_MIN,
--						IMX335_REG_MAX,
-+						mode->hblank,
-+						mode->hblank,
- 						1, mode->hblank);
- 	if (imx335->hblank_ctrl)
- 		imx335->hblank_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+diff --git a/drivers/media/usb/stk1160/stk1160-video.c b/drivers/media/usb/stk1160/stk1160-video.c
+index 202b084f65a2..4cf540d1b250 100644
+--- a/drivers/media/usb/stk1160/stk1160-video.c
++++ b/drivers/media/usb/stk1160/stk1160-video.c
+@@ -107,8 +107,7 @@ void stk1160_copy_video(struct stk1160 *dev, u8 *src, int len)
+ 
+ 	/*
+ 	 * TODO: These stk1160_dbg are very spammy!
+-	 * We should 1) check why we are getting them
+-	 * and 2) add ratelimit.
++	 * We should check why we are getting them.
+ 	 *
+ 	 * UPDATE: One of the reasons (the only one?) for getting these
+ 	 * is incorrect standard (mismatch between expected and configured).
+@@ -151,7 +150,7 @@ void stk1160_copy_video(struct stk1160 *dev, u8 *src, int len)
+ 
+ 	/* Let the bug hunt begin! sanity checks! */
+ 	if (lencopy < 0) {
+-		stk1160_dbg("copy skipped: negative lencopy\n");
++		printk_ratelimited(KERN_DEBUG "copy skipped: negative lencopy\n");
+ 		return;
+ 	}
+ 
 -- 
 2.43.0
 
