@@ -1,16 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA395647B
-	for <linux-media@vger.kernel.org>; Mon, 22 Jan 2024 18:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D373604C4
+	for <linux-media@vger.kernel.org>; Mon, 22 Jan 2024 18:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705946905; cv=none; b=brinSypCnn9BZfEdF4+tyDOLSUMjhsyn5ho7MtwxMS+2zWMrbXKyjO8S8pok4pTSxQAygz3D3UGxq7SweCycg9KvMTLL9/hyq+ol8szC25UuGY341uDFNFyhOVAsWrSu3UF9681J2I4wK3og29IqInjvsUWr3n05Z5skDmhm3Kc=
+	t=1705946908; cv=none; b=aNZxyvujyt3Q2EF6C4ra6KQN1++owS1F3N/+Mxo/RWqW0x2nJdgLYaPXh+dB4CN5CBmL2UBto6tlhkhm7rhAqxbHB4k+4umP/e9mSQ51MkR1DpymLpa28BBh+b9GjNmMVbdCAfTK+LMb9NSwEdHefqu+A9dzdT8jHNMSlAXhTEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705946905; c=relaxed/simple;
-	bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=;
+	s=arc-20240116; t=1705946908; c=relaxed/simple;
+	bh=zq/qJ/QhNsYPPrMwXZxXmfl47w4IeV+ODr7f9syERGc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kAXxP6ZN9p93odRTs+ZqZLuCoiANd303hy9F2FFEXIQSuFExazu3vwYN4E5R+x5cd/tdxWFhVd4znr4Bt+JQTj787C1kPJd1Ye8hAwJZLVpCdVJ4WEQklwTUYxUQFwUXwpJIScvoIjGhSw+PEztgAs5b61RwZiCOPWMcMDh1Ygo=
+	 MIME-Version:Content-Type; b=asB8qoCLKAqTu7YWTRQkdqM/DHDLsmq5yrRfENZbfJP/ulXL2GkyueWPkfhMcB8eBv2BmnXvBdj+roaApk1BkFI6gZWSne36bf8VCMxDEhV9FlwiXT7o8gQdE/9MQ15+Yy0MYFL6vd5FDVWwpgrTmvOPLDMAlw2QKooJZU864Ug=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -18,27 +18,26 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiU-0001lr-V1; Mon, 22 Jan 2024 19:08:14 +0100
+	id 1rRyiU-0001oO-Pk; Mon, 22 Jan 2024 19:08:14 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiT-001ePX-Ue; Mon, 22 Jan 2024 19:08:13 +0100
+	id 1rRyiU-001ePe-CQ; Mon, 22 Jan 2024 19:08:14 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rRyiT-005Zx7-2o;
-	Mon, 22 Jan 2024 19:08:13 +0100
+	id 1rRyiU-005ZxF-0y;
+	Mon, 22 Jan 2024 19:08:14 +0100
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Mark Brown <broonie@kernel.org>
 Cc: kernel@pengutronix.de,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-spi@vger.kernel.org
-Subject: [PATCH v2 06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-Date: Mon, 22 Jan 2024 19:07:01 +0100
-Message-ID:  <250ee63915ba9989bab180200ad2d552e1a765a9.1705944943.git.u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2 08/33] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+Date: Mon, 22 Jan 2024 19:07:03 +0100
+Message-ID:  <b666aa9ea77e06e63b1cbff8040d668761708b59.1705944943.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
 References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
@@ -49,7 +48,7 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2411; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=5kp3Ks9t2Ea2aSTspz0TdIMs+rWMHy3IGA7GHyomVFQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7J1k1XKFTBqaic+XhNlH2OrYCv6WMwqGDjG Emt161au92JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uyQAKCRCPgPtYfRL+ TsYoCACT5+MRbues0ycMQqOGK5MIggyAH9tHi/k/T6TzPkQVDfrm/BcZviCRR2CHptqBQcspWda ib0cCWTR+klniVi2LzgMs/bilyahlav/ceotu3T2n+KNCUM/DOQT3dlXWx5R4LNeS3dWyHHqjlj 89rdMwT4vk7L23lmUfEb5DGFuJDCPN8SGZgbas1XJciQ8ulKy8L51GS5zyGUf1ex9/jlp4FqR/Y 2cbaP6kQPhWwueHyHRLctaL/Oy/93S9UiwKhWcjWlkFPRO7xhXmaNhqSYImDaTuUI24BxrgAu+P gvv5tJZAkOZIkJEuE/EuLlKg362SaGXP/lsbX2Fanwlw5GVj
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3895; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=zq/qJ/QhNsYPPrMwXZxXmfl47w4IeV+ODr7f9syERGc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7MyQtm95Z78AlId2rx6OCofZnNoQNH5RZaU cxk3NqKHv2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uzAAKCRCPgPtYfRL+ Tm+eB/9b9pLwClCQ8kIXH0ADcGCwCmzGT0KvKnp6SPDiPdw2qE3OvUIe3IoNF54Mwy/6nQSWf7B P2ns8tvH/iJQrsGf45V8RaFx7Z6QTWB9Py4bwzinJbcap2Px6u8KRu5XQYvA8ObVsF7Q6mJ7Fvi MVtDqD3yg+coF6FtIUKBdXzq2gEX4X+8ZQl4PbVnbQec/MSN+pvk6az+RQcws0mg2h7fu2oOHNW UDCj6jmIo7Itl/SxOrdY2o4ker1tChVsYjwJ+YZroWHYI4Wyp2jtj4HvU40yV0qy56+pubFNg+u UAdn9fKy6h+wIh+7ExY9cher3uXGXlwkcbqpCmI3p660oGvE
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -64,65 +63,117 @@ compatibility macros were provided.
 To be able to remove these compatibility macros push the renaming into
 this driver.
 
-Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/media/pci/mgb4/mgb4_core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/media/usb/msi2500/msi2500.c | 38 ++++++++++++++---------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
-index 5bfb8a06202e..9bcf10a77fd3 100644
---- a/drivers/media/pci/mgb4/mgb4_core.c
-+++ b/drivers/media/pci/mgb4/mgb4_core.c
-@@ -144,7 +144,7 @@ static int match_spi_adap(struct device *dev, void *data)
- 	return to_spi_device(dev) ? 1 : 0;
- }
- 
--static struct spi_master *get_spi_adap(struct platform_device *pdev)
-+static struct spi_controller *get_spi_adap(struct platform_device *pdev)
- {
- 	struct device *dev;
- 
-@@ -152,7 +152,7 @@ static struct spi_master *get_spi_adap(struct platform_device *pdev)
- 	dev = device_find_child(&pdev->dev, NULL, match_spi_adap);
- 	mutex_unlock(&pdev->dev.mutex);
- 
--	return dev ? container_of(dev, struct spi_master, dev) : NULL;
-+	return dev ? container_of(dev, struct spi_controller, dev) : NULL;
- }
- 
- static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
-@@ -179,7 +179,7 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 	};
- 	struct pci_dev *pdev = mgbdev->pdev;
- 	struct device *dev = &pdev->dev;
+diff --git a/drivers/media/usb/msi2500/msi2500.c b/drivers/media/usb/msi2500/msi2500.c
+index 9759996ee6a4..5138486abfa0 100644
+--- a/drivers/media/usb/msi2500/msi2500.c
++++ b/drivers/media/usb/msi2500/msi2500.c
+@@ -107,7 +107,7 @@ struct msi2500_dev {
+ 	struct video_device vdev;
+ 	struct v4l2_device v4l2_dev;
+ 	struct v4l2_subdev *v4l2_subdev;
 -	struct spi_master *master;
 +	struct spi_controller *ctlr;
- 	struct spi_device *spi_dev;
- 	u32 irq;
- 	int rv, id;
-@@ -207,8 +207,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
- 		return PTR_ERR(mgbdev->spi_pdev);
+ 
+ 	/* videobuf2 queue and queued buffers list */
+ 	struct vb2_queue vb_queue;
+@@ -574,7 +574,7 @@ static void msi2500_disconnect(struct usb_interface *intf)
+ 	dev->udev = NULL;
+ 	v4l2_device_disconnect(&dev->v4l2_dev);
+ 	video_unregister_device(&dev->vdev);
+-	spi_unregister_master(dev->master);
++	spi_unregister_controller(dev->ctlr);
+ 	mutex_unlock(&dev->v4l2_lock);
+ 	mutex_unlock(&dev->vb_queue_lock);
+ 
+@@ -1136,10 +1136,10 @@ static void msi2500_video_release(struct v4l2_device *v)
+ 	kfree(dev);
+ }
+ 
+-static int msi2500_transfer_one_message(struct spi_master *master,
++static int msi2500_transfer_one_message(struct spi_controller *ctlr,
+ 					struct spi_message *m)
+ {
+-	struct msi2500_dev *dev = spi_master_get_devdata(master);
++	struct msi2500_dev *dev = spi_controller_get_devdata(ctlr);
+ 	struct spi_transfer *t;
+ 	int ret = 0;
+ 	u32 data;
+@@ -1154,7 +1154,7 @@ static int msi2500_transfer_one_message(struct spi_master *master,
  	}
  
--	master = get_spi_adap(mgbdev->spi_pdev);
--	if (!master) {
-+	ctlr = get_spi_adap(mgbdev->spi_pdev);
-+	if (!ctlr) {
- 		dev_err(dev, "failed to get SPI adapter\n");
- 		rv = -EINVAL;
- 		goto err_pdev;
-@@ -242,8 +242,8 @@ static int init_spi(struct mgb4_dev *mgbdev, u32 devid)
+ 	m->status = ret;
+-	spi_finalize_current_message(master);
++	spi_finalize_current_message(ctlr);
+ 	return ret;
+ }
  
- 	spi_info.platform_data = &mgbdev->flash_data;
+@@ -1163,7 +1163,7 @@ static int msi2500_probe(struct usb_interface *intf,
+ {
+ 	struct msi2500_dev *dev;
+ 	struct v4l2_subdev *sd;
+-	struct spi_master *master;
++	struct spi_controller *ctlr;
+ 	int ret;
+ 	static struct spi_board_info board_info = {
+ 		.modalias		= "msi001",
+@@ -1220,30 +1220,30 @@ static int msi2500_probe(struct usb_interface *intf,
+ 	}
  
--	spi_dev = spi_new_device(master, &spi_info);
--	put_device(&master->dev);
-+	spi_dev = spi_new_device(ctlr, &spi_info);
-+	put_device(&ctlr->dev);
- 	if (!spi_dev) {
- 		dev_err(dev, "failed to create MTD device\n");
- 		rv = -EINVAL;
+ 	/* SPI master adapter */
+-	master = spi_alloc_master(dev->dev, 0);
+-	if (master == NULL) {
++	ctlr = spi_alloc_master(dev->dev, 0);
++	if (ctlr == NULL) {
+ 		ret = -ENOMEM;
+ 		goto err_unregister_v4l2_dev;
+ 	}
+ 
+-	dev->master = master;
+-	master->bus_num = -1;
+-	master->num_chipselect = 1;
+-	master->transfer_one_message = msi2500_transfer_one_message;
+-	spi_master_set_devdata(master, dev);
+-	ret = spi_register_master(master);
++	dev->ctlr = ctlr;
++	ctlr->bus_num = -1;
++	ctlr->num_chipselect = 1;
++	ctlr->transfer_one_message = msi2500_transfer_one_message;
++	spi_controller_set_devdata(ctlr, dev);
++	ret = spi_register_controller(ctlr);
+ 	if (ret) {
+-		spi_master_put(master);
++		spi_controller_put(ctlr);
+ 		goto err_unregister_v4l2_dev;
+ 	}
+ 
+ 	/* load v4l2 subdevice */
+-	sd = v4l2_spi_new_subdev(&dev->v4l2_dev, master, &board_info);
++	sd = v4l2_spi_new_subdev(&dev->v4l2_dev, ctlr, &board_info);
+ 	dev->v4l2_subdev = sd;
+ 	if (sd == NULL) {
+ 		dev_err(dev->dev, "cannot get v4l2 subdevice\n");
+ 		ret = -ENODEV;
+-		goto err_unregister_master;
++		goto err_unregister_controller;
+ 	}
+ 
+ 	/* Register controls */
+@@ -1276,8 +1276,8 @@ static int msi2500_probe(struct usb_interface *intf,
+ 	return 0;
+ err_free_controls:
+ 	v4l2_ctrl_handler_free(&dev->hdl);
+-err_unregister_master:
+-	spi_unregister_master(dev->master);
++err_unregister_controller:
++	spi_unregister_controller(dev->ctlr);
+ err_unregister_v4l2_dev:
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ err_free_mem:
 -- 
 2.43.0
 
