@@ -1,54 +1,55 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FD2EBB
-	for <linux-media@vger.kernel.org>; Mon, 22 Jan 2024 02:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5236AD7
+	for <linux-media@vger.kernel.org>; Mon, 22 Jan 2024 03:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705892126; cv=none; b=O1NJE7z3cycG9KxD9+J5h9vJ/mXgs8mVFbPE7QLDz+s9Lw4zYsic2UYcjpAozmus97D1oGkz+3R8TOZTnIpkpY5ixClV2OCxWTAr5mZHkqCti4h8Hk/qDxqqzs53ryVIJpmaPWrDK1144DTn/svpU/8dSYSxCexdZ7+4Tqe26Vo=
+	t=1705892589; cv=none; b=GHmvGVf/Na2/QbFC1IfaiwdVAFqtBZGIkOoPLiAprBGZpuff9biq6cylMg9UTu5yck8bDyUKD5bFrgABtGM+4VCBmby9zOMsPrzCMFKIR8ZwqzaP7u2RUFF8gMWLjA8z1uYFEPu6llTxFL6Y7bLEMhtC04NqVxDLg0WKFZ2z39M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705892126; c=relaxed/simple;
-	bh=/zEJgpG4O0GwCO3+FLxMndbCC0Ah7dHUjum9aCDozVA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q/xmfs9n4RyeqNEVP3GheKo/LGrc9YxK9Phcj+x/o84YN3N6iRK1EIBSlFYGDHg6rJNBRsYcxgcsAWGxqy4MWyMfVd1NuYty3NgmBf+OVfrQiILOXgwLQpmxscQJ8G9Zmmi0401zWNCuydszjcJUtU9WdVOs/Qh3LypYp++q3x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGkYQIcQ; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1705892589; c=relaxed/simple;
+	bh=oTAONWnfUiOJDtXZYULuS8SRBwS/9DbjAucflNEujoQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JCKJ6NjFzWI7fz/A6o4YO6CaOM7oq9M1ubspcKO2cUjoE0890l05HpnOnHSVVA1A0NPdGnKd4FdvxLi7qlKKbYdrC/vCJNqNcpVphKnGLlki5jQrERzkHxMUciZt854dWmhBLI2t+T1QnXE+nEK7+4OLREXYE3G+eo3x0ue2ZSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S8zpwc8q; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGkYQIcQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S8zpwc8q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705892124; x=1737428124;
+  t=1705892589; x=1737428589;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=/zEJgpG4O0GwCO3+FLxMndbCC0Ah7dHUjum9aCDozVA=;
-  b=OGkYQIcQHKWY7XzqxpfPLqo89zvSHuNxmxhhALndfKSKGYShVLPY5zo3
-   tesyTz9u/8R3wjQrEISk69LrY7Z1oziXDZuKcsAldelzflObaLCv9LLbe
-   B+nz5NzNZX0UDgRYjbE+V9J2zcPuXxT9YUvIfFEcq6Y2GeHAmqDXpDkRH
-   7zTMpuY/SJmPXhJj+A3SR71blkEqemkoFZE5dTE43S+59Zpfp6pU4u1Ov
-   4kpk1ti3PujFDzu+gkVr4i3udo7kWXkk2JYiNIuGPC4XqQ5OS5BrlEq+y
-   55LMQcbB91zORV5X2vURrT0KD8aINOkZh7gdqi9UPf5SD2+T65qIuc2s2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="19663866"
+  bh=oTAONWnfUiOJDtXZYULuS8SRBwS/9DbjAucflNEujoQ=;
+  b=S8zpwc8q+k3RuYjB226e1PcTe6HGFx9dfq1w+sBBSrB42nKxn+tWyX5w
+   Yj6AGT0TP0Drr317Rwe85sj9w0vRylsIpE3K8G4OHRilaj2SwQfRtJBWN
+   PRwaJ7OuyuvbJ9vOFEk96xRBvDKo9nRKmckVVZGYW2uJGb4rm2GiYufH9
+   lG2SPlAt34Ehz+aiW5g+MXnVsukYh3OcoADHBuhT5ZRmnprzqLdCrvSaJ
+   Qt2/U/Hvh5feFwYzhLdsz9/Z9gUxYLTgsvjqH2F0qsDqJv2Xkb1ZeEuIs
+   S25rp1pOTgbOiFdnm3e6wGNgjv1J1P87akwdQSTOK6mHsL9LPS5a1DtCi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="7768105"
 X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="19663866"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 18:55:23 -0800
+   d="scan'208";a="7768105"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2024 19:03:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="958612864"
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="761609263"
 X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="958612864"
+   d="scan'208";a="761609263"
 Received: from jasonz-ms-7d25.itwn.intel.com ([10.227.107.10])
-  by orsmga005.jf.intel.com with ESMTP; 21 Jan 2024 18:55:20 -0800
+  by orsmga006.jf.intel.com with ESMTP; 21 Jan 2024 19:03:05 -0800
 From: "Chen, Jason Z" <jason.z.chen@intel.com>
 To: linux-media@vger.kernel.org
 Cc: sakari.ailus@linux.intel.com,
 	andy.yeh@intel.com,
+	kieran.bingham@ideasonboard.com,
 	qingwu.zhang@intel.com,
 	bingbu.cao@linux.intel.com,
 	Jason Chen <jason.z.chen@intel.com>
-Subject: [PATCH v2] media: ov08x40: Avoid sensor probing in D0 state
-Date: Mon, 22 Jan 2024 10:54:34 +0800
-Message-Id: <20240122025434.3002620-1-jason.z.chen@intel.com>
+Subject: [PATCH v2] media: ov08x40: Add Signal Integration Adjustments for specific project
+Date: Mon, 22 Jan 2024 11:02:20 +0800
+Message-Id: <20240122030220.3009357-1-jason.z.chen@intel.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -60,103 +61,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Chen <jason.z.chen@intel.com>
 
-When the system enters the D0 state and attempt to probe the device,
-another component, such as LED, will also be pulled high due to the
-hardware design. It's advisable to keep the device being probed in
-a different D state.
+Due to certain MIPI hardware designs using overly long cables, there
+is a loss of signal strength, resulting in failed signal integration.
+The patch includes changes to adjust the driving strength in the register
+settings for a specific project.
 
 Signed-off-by: Jason Chen <jason.z.chen@intel.com>
 ---
- drivers/media/i2c/ov08x40.c | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/media/i2c/ov08x40.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/media/i2c/ov08x40.c b/drivers/media/i2c/ov08x40.c
-index ddcb4b6848b..4139efce42f 100644
+index 520ccd4aecf..ddcb4b6848b 100644
 --- a/drivers/media/i2c/ov08x40.c
 +++ b/drivers/media/i2c/ov08x40.c
-@@ -2453,6 +2453,9 @@ struct ov08x40 {
- 
- 	/* Mutex for serialized access */
- 	struct mutex mutex;
-+
-+	/* True if the device has been identified */
-+	bool identified;
+@@ -160,6 +160,18 @@ static const struct ov08x40_reg mipi_data_rate_800mbps[] = {
+ 	{0x6002, 0x2e},
  };
  
- #define to_ov08x40(_sd)	container_of(_sd, struct ov08x40, sd)
-@@ -2997,6 +3000,9 @@ static int ov08x40_identify_module(struct ov08x40 *ov08x)
- 	int ret;
- 	u32 val;
- 
-+	if (ov08x->identified)
-+		return 0;
++static const struct ov08x40_reg mipi_si_changed_regs[] = {
++	{0x481b, 0x2c}, /* HS Exit: Data Tx TEOT - reducing 8ns */
++	{0x4826, 0x42}, /* HS Entry: Data Tx TREOT - raising 8ns */
++	{0x4829, 0x54}, /* HS Exit: Data Tx TREOT - reducing 8ns */
++	{0x4885, 0x1f}, /* driving strength change */
++};
 +
- 	ret = ov08x40_read_reg(ov08x, OV08X40_REG_CHIP_ID,
- 			       OV08X40_REG_VALUE_24BIT, &val);
- 	if (ret)
-@@ -3005,9 +3011,11 @@ static int ov08x40_identify_module(struct ov08x40 *ov08x)
- 	if (val != OV08X40_CHIP_ID) {
- 		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
- 			OV08X40_CHIP_ID, val);
--		return -EIO;
-+		return -ENXIO;
++struct ov08x40_reg_list si_regs = {
++	.regs = mipi_si_changed_regs,
++	.num_of_regs = ARRAY_SIZE(mipi_si_changed_regs),
++};
++
+ static const struct ov08x40_reg mode_3856x2416_regs[] = {
+ 	{0x5000, 0x5d},
+ 	{0x5001, 0x20},
+@@ -2913,6 +2925,9 @@ static int ov08x40_start_streaming(struct ov08x40 *ov08x)
+ 		return ret;
  	}
  
-+	ov08x->identified = true;
++	/* Apply SI change to current project */
++	ov08x40_write_reg_list(ov08x, &si_regs);
 +
- 	return 0;
- }
- 
-@@ -3225,6 +3233,7 @@ static int ov08x40_probe(struct i2c_client *client)
- {
- 	struct ov08x40 *ov08x;
- 	int ret;
-+	bool full_power;
- 
- 	/* Check HW config */
- 	ret = ov08x40_check_hwcfg(&client->dev);
-@@ -3240,11 +3249,14 @@ static int ov08x40_probe(struct i2c_client *client)
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&ov08x->sd, client, &ov08x40_subdev_ops);
- 
--	/* Check module identity */
--	ret = ov08x40_identify_module(ov08x);
--	if (ret) {
--		dev_err(&client->dev, "failed to find sensor: %d\n", ret);
--		return ret;
-+	full_power = acpi_dev_state_d0(&client->dev);
-+	if (full_power) {
-+		/* Check module identity */
-+		ret = ov08x40_identify_module(ov08x);
-+		if (ret) {
-+			dev_err(&client->dev, "failed to find sensor: %d\n", ret);
-+			return ret;
-+		}
- 	}
- 
- 	/* Set default mode to max resolution */
-@@ -3272,11 +3284,8 @@ static int ov08x40_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		goto error_media_entity;
- 
--	/*
--	 * Device is already turned on by i2c-core with ACPI domain PM.
--	 * Enable runtime PM and turn off the device.
--	 */
--	pm_runtime_set_active(&client->dev);
-+	if (full_power)
-+		pm_runtime_set_active(&client->dev);
- 	pm_runtime_enable(&client->dev);
- 	pm_runtime_idle(&client->dev);
- 
-@@ -3320,6 +3329,7 @@ static struct i2c_driver ov08x40_i2c_driver = {
- 	},
- 	.probe = ov08x40_probe,
- 	.remove = ov08x40_remove,
-+	.flags = I2C_DRV_ACPI_WAIVE_D0_PROBE,
- };
- 
- module_i2c_driver(ov08x40_i2c_driver);
+ 	/* Apply default values of current mode */
+ 	reg_list = &ov08x->cur_mode->reg_list;
+ 	ret = ov08x40_write_reg_list(ov08x, reg_list);
 -- 
 2.34.1
 
