@@ -1,209 +1,81 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6797A707;
-	Thu, 25 Jan 2024 15:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B024876908;
+	Thu, 25 Jan 2024 16:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706197776; cv=none; b=a658ZMYhoV4UP8AnCs/fKQ+HqmNcKCppKE9irFdizelDIP+s4+lO2jZLaBnm9ih84F+CSrMyxvaMUuONFNpkS4ox/Ihu6ySrl8xTc48h8sTE5NsFzygLv0QTzrkQvZEvXfVMm6KIAEkl9arwv75gACykiuukflz4KxB8dD2QRrA=
+	t=1706198724; cv=none; b=VTUTSrLs8yK6iSKALu6YAa7IIx7OPCDjj2ekC5GpjFIKIYSzYyMD75HUelg7pimyM77uGzVAfz2F0PcBFn/C8ZPD3EfiSPHfU6TpWTAioXjOsMuN1vwh6sVF+NdAQfVoqrDMq6hTNWlwn0XqDymIp9KXh3ONZYyoGoVLYMw7oyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706197776; c=relaxed/simple;
-	bh=W1Z5z7CyCm6OJIhlRbgJ7qn8gVztgK3gJEzxblTd6J0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i/R976hNReNV8NH/tN61XCIgHIj/63aDxjx8P2GIp92Jy6Tt0pJkymfG+11FiLiR/acS/+AQFkfBaOOPZEPhysg+JWabCuhc02fVRgndCBY44KD6dbjn5mEjsnY9wV30sSsEg9ER1qb+C/7u93oE3aEIgCVQ4kPMrg5rG8/le34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=OZiRQtwq; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1706198724; c=relaxed/simple;
+	bh=TXVIXDCTKF6U5/eP+UDVBy27zgOIVAGO0MqhmuCJGV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mw6ppBsqsLhSR/fztGZees2ZyOHXoBtajqyx/a3syoPSJuDjaTocx2vWrrLo0C3GQAVphs5Pl07dhgPhh06L1242GezBlydJT02bj6JPfK/YnCrWC0GLQItHAcVfCyiqcx4XG4rmO6uaCUinL5bQQcVnLEMzD5bvcS/hY3FBzKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQweOO0N; arc=none smtp.client-ip=134.134.136.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OZiRQtwq"
-Received: from umang.jain (unknown [103.86.18.175])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id B760951A6;
-	Thu, 25 Jan 2024 16:48:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1706197695;
-	bh=W1Z5z7CyCm6OJIhlRbgJ7qn8gVztgK3gJEzxblTd6J0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OZiRQtwqP73QFH7tCmGmTedDWV1o1yIGO/87wKQ3AgVVk2nCEmP8YoZURugOc0zTa
-	 b1+Y+pItMc1UrCvsmQd5mcp1AcyfT/FW6Z12Mf5LKzCjVeI9VNvhOkInPCZ1xJzXeD
-	 PZTdq7DD3jacYG180ySdXqbm9iSs1ZgHB/WqhXjs=
-From: Umang Jain <umang.jain@ideasonboard.com>
-To: linux-media@vger.kernel.org
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQweOO0N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706198721; x=1737734721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TXVIXDCTKF6U5/eP+UDVBy27zgOIVAGO0MqhmuCJGV8=;
+  b=BQweOO0NAp+3EgvVe7AZNepe+GYrxuHxcvCVU6EaEQoEOXnTOS2gwuz9
+   GbIFPmIp684Z0WV1mK21KrBp2QRdV4uBnNnyXFadSpZ/qUEutkrugY47x
+   wsYM4jC/VHYXrdoz/lRuSWw6jgBO+fRt7jnr2DX/tDpHXZlefYG66y23p
+   iTmwWxTP14UmT7I7412VoJXxuQTcGIoGFxfNtmfYLY17itEJAzTXbKnoC
+   1IX9bt2A1Llf7m9qBShbXCfoKAWeKnrKSc3eTfkiXh16NA25+ycrAr8Z6
+   1Iyx9QCgnFkwJBIlqH/f1RQlrPcSpihxW4Sr6LGUPs/1aiVFpr8NO860T
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="466485711"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="466485711"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:05:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="905997017"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="905997017"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:05:20 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id F09CE11FB9B;
+	Thu, 25 Jan 2024 18:05:17 +0200 (EET)
+Date: Thu, 25 Jan 2024 16:05:17 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Umang Jain <umang.jain@ideasonboard.com>
+Cc: linux-media@vger.kernel.org,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Matthias Fend <matthias.fend@emfend.at>,
-	Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH 4/4] media: i2c: imx335: Add support for test pattern generator
-Date: Thu, 25 Jan 2024 21:19:08 +0530
-Message-ID: <20240125154908.465191-5-umang.jain@ideasonboard.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20240125154908.465191-1-umang.jain@ideasonboard.com>
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] media: i2c: imx335: Drop setting of 0x3a00 register
+Message-ID: <ZbKGvfoAwQTl0CvO@kekkonen.localdomain>
 References: <20240125154908.465191-1-umang.jain@ideasonboard.com>
+ <20240125154908.465191-2-umang.jain@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240125154908.465191-2-umang.jain@ideasonboard.com>
 
-From: Matthias Fend <matthias.fend@emfend.at>
+Hi Umang,
 
-Add support for the sensor's test pattern generator.
+On Thu, Jan 25, 2024 at 09:19:05PM +0530, Umang Jain wrote:
+> Register 0x3a00 is a reserved field as per the IMX335 datasheet,
+> hence shouldn't be set by the driver.
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
----
- drivers/media/i2c/imx335.c | 99 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 98 insertions(+), 1 deletion(-)
+How have you checked this has no effect on the device's operation?
 
-diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
-index e64ee99cbae4..f9a2337a80c0 100644
---- a/drivers/media/i2c/imx335.c
-+++ b/drivers/media/i2c/imx335.c
-@@ -45,6 +45,21 @@
- /* Group hold register */
- #define IMX335_REG_HOLD		0x3001
- 
-+/* Test pattern generator */
-+#define IMX335_REG_TPG		0x329e
-+#define IMX335_TPG_ALL_000	0
-+#define IMX335_TPG_ALL_FFF	1
-+#define IMX335_TPG_ALL_555	2
-+#define IMX335_TPG_ALL_AAA	3
-+#define IMX335_TPG_TOG_555_AAA	4
-+#define IMX335_TPG_TOG_AAA_555	5
-+#define IMX335_TPG_TOG_000_555	6
-+#define IMX335_TPG_TOG_555_000	7
-+#define IMX335_TPG_TOG_000_FFF	8
-+#define IMX335_TPG_TOG_FFF_000	9
-+#define IMX335_TPG_H_COLOR_BARS 10
-+#define IMX335_TPG_V_COLOR_BARS 11
-+
- /* Input clock rate */
- #define IMX335_INCLK_RATE	24000000
- 
-@@ -162,6 +177,38 @@ struct imx335 {
- };
- 
- 
-+static const char * const imx335_tpg_menu[] = {
-+	"Disabled",
-+	"All 000h",
-+	"All FFFh",
-+	"All 555h",
-+	"All AAAh",
-+	"Toggle 555/AAAh",
-+	"Toggle AAA/555h",
-+	"Toggle 000/555h",
-+	"Toggle 555/000h",
-+	"Toggle 000/FFFh",
-+	"Toggle FFF/000h",
-+	"Horizontal color bars",
-+	"Vertical color bars",
-+};
-+
-+static const int imx335_tpg_val[] = {
-+	IMX335_TPG_ALL_000,
-+	IMX335_TPG_ALL_000,
-+	IMX335_TPG_ALL_FFF,
-+	IMX335_TPG_ALL_555,
-+	IMX335_TPG_ALL_AAA,
-+	IMX335_TPG_TOG_555_AAA,
-+	IMX335_TPG_TOG_AAA_555,
-+	IMX335_TPG_TOG_000_555,
-+	IMX335_TPG_TOG_555_000,
-+	IMX335_TPG_TOG_000_FFF,
-+	IMX335_TPG_TOG_FFF_000,
-+	IMX335_TPG_H_COLOR_BARS,
-+	IMX335_TPG_V_COLOR_BARS,
-+};
-+
- /* Sensor mode registers */
- static const struct imx335_reg mode_2592x1940_regs[] = {
- 	{0x3000, 0x01},
-@@ -505,6 +552,46 @@ static int imx335_update_exp_gain(struct imx335 *imx335, u32 exposure, u32 gain)
- 	return ret;
- }
- 
-+static int imx335_update_test_pattern(struct imx335 *imx335, u32 pattern_index)
-+{
-+	int ret;
-+
-+	if (pattern_index >= ARRAY_SIZE(imx335_tpg_val))
-+		return -EINVAL;
-+
-+	if (pattern_index) {
-+		const struct imx335_reg tpg_enable_regs[] = {
-+			{ 0x3148, 0x10 },
-+			{ 0x3280, 0x00 },
-+			{ 0x329c, 0x01 },
-+			{ 0x32a0, 0x11 },
-+			{ 0x3302, 0x00 },
-+			{ 0x3303, 0x00 },
-+			{ 0x336c, 0x00 },
-+		};
-+
-+		ret = imx335_write_reg(imx335, IMX335_REG_TPG, 1, imx335_tpg_val[pattern_index]);
-+		if (ret)
-+			return ret;
-+
-+		ret = imx335_write_regs(imx335, tpg_enable_regs, ARRAY_SIZE(tpg_enable_regs));
-+	} else {
-+		const struct imx335_reg tpg_disable_regs[] = {
-+			{ 0x3148, 0x00 },
-+			{ 0x3280, 0x01 },
-+			{ 0x329c, 0x00 },
-+			{ 0x32a0, 0x10 },
-+			{ 0x3302, 0x32 },
-+			{ 0x3303, 0x00 },
-+			{ 0x336c, 0x01 },
-+		};
-+
-+		ret = imx335_write_regs(imx335, tpg_disable_regs, ARRAY_SIZE(tpg_disable_regs));
-+	}
-+
-+	return ret;
-+}
-+
- /**
-  * imx335_set_ctrl() - Set subdevice control
-  * @ctrl: pointer to v4l2_ctrl structure
-@@ -558,6 +645,10 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
- 
- 		ret = imx335_update_exp_gain(imx335, exposure, analog_gain);
- 
-+		break;
-+	case V4L2_CID_TEST_PATTERN:
-+		ret = imx335_update_test_pattern(imx335, ctrl->val);
-+
- 		break;
- 	default:
- 		dev_err(imx335->dev, "Invalid control %d\n", ctrl->id);
-@@ -1122,7 +1213,7 @@ static int imx335_init_controls(struct imx335 *imx335)
- 	u32 lpfr;
- 	int ret;
- 
--	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 6);
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 7);
- 	if (ret)
- 		return ret;
- 
-@@ -1156,6 +1247,12 @@ static int imx335_init_controls(struct imx335 *imx335)
- 						mode->vblank_max,
- 						1, mode->vblank);
- 
-+	v4l2_ctrl_new_std_menu_items(ctrl_hdlr,
-+				     &imx335_ctrl_ops,
-+				     V4L2_CID_TEST_PATTERN,
-+				     ARRAY_SIZE(imx335_tpg_menu) - 1,
-+				     0, 0, imx335_tpg_menu);
-+
- 	/* Read only controls */
- 	imx335->pclk_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
- 					      &imx335_ctrl_ops,
+It's not uncommon for sensor vendors to document some hush-hush registers
+as "reserved".
+
 -- 
-2.41.0
+Regards,
 
+Sakari Ailus
