@@ -1,72 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B335573177;
-	Thu, 25 Jan 2024 16:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A3519472;
+	Thu, 25 Jan 2024 16:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706200092; cv=none; b=iLn/TdK9YBE/aiHDqBpHTcFfktty1OU4sLicvIxrHH4XHOJI+ycwgJ+A+oOi7/p2dU5Mbk2KRDGnKvnIGRs80ZQZBV6m3pyFj736wldBxRfdgbhE8oQiBxTbTv/6vNeaIFr+BBp3LplHgI8jU8gaRffiMRWC3r+fGmf8rQV2l4A=
+	t=1706200557; cv=none; b=R6+3fPR+RgSuBDfS3DCT2pIdvRFFbuoLYzufg5/mgcskcwKYpQXsL6jdx1hxF2oxPXmXDidS0XRCo/KZOrXYzle4wozMSLSIpMnF8cYlwBbQ56qGfHjacB21JPub53rMT80nWSTBC3XW2XyCIvi6VpPqJ9A5+NbxxhMfD/aGQ8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706200092; c=relaxed/simple;
-	bh=CKkmBUyrGKT7WEXHgCcuZ9+Ns5iuzV63djC+5Ja6ZoU=;
+	s=arc-20240116; t=1706200557; c=relaxed/simple;
+	bh=9YTKm9bJOh7AgESo5uZMHfPE6MS+bUQJlQ0XWGia/i4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=leOczJezXoEqwpRd5ecJt6S4naWJRq9BjjAqHK88Bal/THJYw+YjNukXym4/2XKQkRnMTRUxS8AbyEYEBfV2sD1s9Vsg9ZAPx77vAEh1vVqR+G8aImHWnFPmxrv/pgxTrKl+L4UNCWLQ2iF4V+emhjgXoGQ1hueM1Ov7cv6NsWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hck4aF7H; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=D279R2MXJWgXJ8bZmCKKKSoYD9N9TTjhWN2V9yNctVccTfzF/HcpDYaJptQa2SamY4zS492aIQ84kaXDivbkdf3m+hYyQdAxzr7j6SwbFzO0pKGiIbDiH9Tdc/pNzyca4GgUqTrmMaZUEnSI0oErDhDqI+2ZIdclcjIlytb2Rqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S/qUzuqs; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hck4aF7H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S/qUzuqs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706200090; x=1737736090;
+  t=1706200555; x=1737736555;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CKkmBUyrGKT7WEXHgCcuZ9+Ns5iuzV63djC+5Ja6ZoU=;
-  b=Hck4aF7HffONCk7xZzKOVMv8A2Et6FAAypStGW1B9gmKodAbZo5lwXqc
-   9f/2b7rsKyYK9c6fosfuFrKT1VSawein1nwOCdqZDy01iQ8bm5fLUljCH
-   bZQAuvy6/M56OPkwRAocPriWurTVFsZaixNrreUOb3Q5holezVd76VbVs
-   BgfkZkEPYa9SkLoq9et32MKdjmj3SkqvByJqGdO7V2bEegi4Hskg0kbD+
-   O5ewLrwG4J751FgVbhOFAz+0BeOK2GcPT93YzIX3z7tc8EmZaPj55utRX
-   Svb+VHS4Sl5F1ruKPlOISwi9fR4BBXipYM687tROhtInSB3IjzxwGK7YD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="15575268"
+  bh=9YTKm9bJOh7AgESo5uZMHfPE6MS+bUQJlQ0XWGia/i4=;
+  b=S/qUzuqsAb8M5mKYotCQtwwwt/9ttFb56MrZ3DXHUGAyiIUXqW+x9Q0t
+   YqbdUpOSHd1dSBQEqy7fvl9RWCcBI4PyQKvX89VAyvvWNF5/a+Io76e9W
+   BVc4inUZDQXS7kQBG3lJCzmKdwvD/f4nT9m2vPhW5a7Zyv6xgeiBu2gcl
+   f0aByUbW56WLHr/HCdh1BrQlP7/j0F+iUytBQNRbpVAMmbYUuDL3YMSUs
+   cpedQPOOyvMq2eQL7omAWf4daZvOyRs1ncBwooH9iC1psCp2ReO1HFgYE
+   T8TwPX7QlkmCgCaGxPw78/ygAIE8Y+SNvI2ehn9B3bvW3O+SLAcFGMlFm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="9329623"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="15575268"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:28:10 -0800
+   d="scan'208";a="9329623"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:35:55 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="959894545"
 X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="2309411"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 25 Jan 2024 08:28:04 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rT2a9-0000C0-0i;
-	Thu, 25 Jan 2024 16:28:01 +0000
-Date: Fri, 26 Jan 2024 00:27:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
-	Frank Rowand <frowand.list@gmail.com>, Helge Deller <deller@gmx.de>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Mark Brown <broonie@kernel.org>,
+   d="scan'208";a="959894545"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:35:52 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id C4E4B11FAD4;
+	Thu, 25 Jan 2024 18:19:17 +0200 (EET)
+Date: Thu, 25 Jan 2024 16:19:17 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Umang Jain <umang.jain@ideasonboard.com>
+Cc: linux-media@vger.kernel.org,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>, Michal Simek <monstr@monstr.eu>,
-	Rob Herring <robh+dt@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Takashi Iwai <tiwai@suse.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 03/13] of: property: add of_graph_get_next_endpoint_raw()
-Message-ID: <202401260024.txulvo50-lkp@intel.com>
-References: <87fryoud8t.wl-kuninori.morimoto.gx@renesas.com>
+	open list <linux-kernel@vger.kernel.org>,
+	Matthias Fend <matthias.fend@emfend.at>
+Subject: Re: [PATCH 4/4] media: i2c: imx335: Add support for test pattern
+ generator
+Message-ID: <ZbKKBcf2PX8u3JGV@kekkonen.localdomain>
+References: <20240125154908.465191-1-umang.jain@ideasonboard.com>
+ <20240125154908.465191-5-umang.jain@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -75,66 +64,185 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87fryoud8t.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <20240125154908.465191-5-umang.jain@ideasonboard.com>
 
-Hi Kuninori,
+Hi Umang,
 
-kernel test robot noticed the following build warnings:
+On Thu, Jan 25, 2024 at 09:19:08PM +0530, Umang Jain wrote:
+> From: Matthias Fend <matthias.fend@emfend.at>
+> 
+> Add support for the sensor's test pattern generator.
+> 
+> Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  drivers/media/i2c/imx335.c | 99 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 98 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+> index e64ee99cbae4..f9a2337a80c0 100644
+> --- a/drivers/media/i2c/imx335.c
+> +++ b/drivers/media/i2c/imx335.c
+> @@ -45,6 +45,21 @@
+>  /* Group hold register */
+>  #define IMX335_REG_HOLD		0x3001
+>  
+> +/* Test pattern generator */
+> +#define IMX335_REG_TPG		0x329e
+> +#define IMX335_TPG_ALL_000	0
+> +#define IMX335_TPG_ALL_FFF	1
+> +#define IMX335_TPG_ALL_555	2
+> +#define IMX335_TPG_ALL_AAA	3
+> +#define IMX335_TPG_TOG_555_AAA	4
+> +#define IMX335_TPG_TOG_AAA_555	5
+> +#define IMX335_TPG_TOG_000_555	6
+> +#define IMX335_TPG_TOG_555_000	7
+> +#define IMX335_TPG_TOG_000_FFF	8
+> +#define IMX335_TPG_TOG_FFF_000	9
+> +#define IMX335_TPG_H_COLOR_BARS 10
+> +#define IMX335_TPG_V_COLOR_BARS 11
+> +
+>  /* Input clock rate */
+>  #define IMX335_INCLK_RATE	24000000
+>  
+> @@ -162,6 +177,38 @@ struct imx335 {
+>  };
+>  
+>  
+> +static const char * const imx335_tpg_menu[] = {
+> +	"Disabled",
+> +	"All 000h",
+> +	"All FFFh",
+> +	"All 555h",
+> +	"All AAAh",
+> +	"Toggle 555/AAAh",
+> +	"Toggle AAA/555h",
+> +	"Toggle 000/555h",
+> +	"Toggle 555/000h",
+> +	"Toggle 000/FFFh",
+> +	"Toggle FFF/000h",
+> +	"Horizontal color bars",
+> +	"Vertical color bars",
+> +};
+> +
+> +static const int imx335_tpg_val[] = {
+> +	IMX335_TPG_ALL_000,
+> +	IMX335_TPG_ALL_000,
+> +	IMX335_TPG_ALL_FFF,
+> +	IMX335_TPG_ALL_555,
+> +	IMX335_TPG_ALL_AAA,
+> +	IMX335_TPG_TOG_555_AAA,
+> +	IMX335_TPG_TOG_AAA_555,
+> +	IMX335_TPG_TOG_000_555,
+> +	IMX335_TPG_TOG_555_000,
+> +	IMX335_TPG_TOG_000_FFF,
+> +	IMX335_TPG_TOG_FFF_000,
+> +	IMX335_TPG_H_COLOR_BARS,
+> +	IMX335_TPG_V_COLOR_BARS,
+> +};
+> +
+>  /* Sensor mode registers */
+>  static const struct imx335_reg mode_2592x1940_regs[] = {
+>  	{0x3000, 0x01},
+> @@ -505,6 +552,46 @@ static int imx335_update_exp_gain(struct imx335 *imx335, u32 exposure, u32 gain)
+>  	return ret;
+>  }
+>  
+> +static int imx335_update_test_pattern(struct imx335 *imx335, u32 pattern_index)
+> +{
+> +	int ret;
+> +
+> +	if (pattern_index >= ARRAY_SIZE(imx335_tpg_val))
+> +		return -EINVAL;
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on drm-misc/drm-misc-next linus/master v6.8-rc1 next-20240125]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is unnecessary, the control framework ensures this already.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuninori-Morimoto/of-property-add-port-base-loop/20240123-081427
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/87fryoud8t.wl-kuninori.morimoto.gx%40renesas.com
-patch subject: [PATCH 03/13] of: property: add of_graph_get_next_endpoint_raw()
-config: i386-buildonly-randconfig-002-20240125 (https://download.01.org/0day-ci/archive/20240126/202401260024.txulvo50-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240126/202401260024.txulvo50-lkp@intel.com/reproduce)
+> +
+> +	if (pattern_index) {
+> +		const struct imx335_reg tpg_enable_regs[] = {
+> +			{ 0x3148, 0x10 },
+> +			{ 0x3280, 0x00 },
+> +			{ 0x329c, 0x01 },
+> +			{ 0x32a0, 0x11 },
+> +			{ 0x3302, 0x00 },
+> +			{ 0x3303, 0x00 },
+> +			{ 0x336c, 0x00 },
+> +		};
+> +
+> +		ret = imx335_write_reg(imx335, IMX335_REG_TPG, 1, imx335_tpg_val[pattern_index]);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401260024.txulvo50-lkp@intel.com/
+Can you do:
 
-All warnings (new ones prefixed by >>):
+	$ ./scripts/checkpatch.pl --strict --max-line-length=80
 
->> drivers/of/property.c:681: warning: Function parameter or struct member 'port' not described in 'of_graph_get_next_endpoint_raw'
->> drivers/of/property.c:681: warning: Excess function parameter 'parent' description in 'of_graph_get_next_endpoint_raw'
+on these?
 
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = imx335_write_regs(imx335, tpg_enable_regs, ARRAY_SIZE(tpg_enable_regs));
 
-vim +681 drivers/of/property.c
+Return already here.
 
-   670	
-   671	/**
-   672	 * of_graph_get_next_endpoint_raw() - get next endpoint node
-   673	 * @parent: pointer to the target port node
-   674	 * @endpoint: current endpoint node, or NULL to get first
-   675	 *
-   676	 * Return: An 'endpoint' node pointer with refcount incremented. Refcount
-   677	 * of the passed @prev node is decremented.
-   678	 */
-   679	struct device_node *of_graph_get_next_endpoint_raw(const struct device_node *port,
-   680							   struct device_node *endpoint)
- > 681	{
-   682		if (!port)
-   683			return NULL;
-   684	
-   685		do {
-   686			endpoint = of_get_next_child(port, endpoint);
-   687			if (!endpoint)
-   688				break;
-   689		} while (!of_node_name_eq(endpoint, "endpoint"));
-   690	
-   691		return endpoint;
-   692	}
-   693	EXPORT_SYMBOL(of_graph_get_next_endpoint_raw);
-   694	
+> +	} else {
+> +		const struct imx335_reg tpg_disable_regs[] = {
+> +			{ 0x3148, 0x00 },
+> +			{ 0x3280, 0x01 },
+> +			{ 0x329c, 0x00 },
+> +			{ 0x32a0, 0x10 },
+> +			{ 0x3302, 0x32 },
+> +			{ 0x3303, 0x00 },
+> +			{ 0x336c, 0x01 },
+> +		};
+> +
+> +		ret = imx335_write_regs(imx335, tpg_disable_regs, ARRAY_SIZE(tpg_disable_regs));
+
+And here.
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * imx335_set_ctrl() - Set subdevice control
+>   * @ctrl: pointer to v4l2_ctrl structure
+> @@ -558,6 +645,10 @@ static int imx335_set_ctrl(struct v4l2_ctrl *ctrl)
+>  
+>  		ret = imx335_update_exp_gain(imx335, exposure, analog_gain);
+>  
+> +		break;
+> +	case V4L2_CID_TEST_PATTERN:
+> +		ret = imx335_update_test_pattern(imx335, ctrl->val);
+> +
+>  		break;
+>  	default:
+>  		dev_err(imx335->dev, "Invalid control %d\n", ctrl->id);
+> @@ -1122,7 +1213,7 @@ static int imx335_init_controls(struct imx335 *imx335)
+>  	u32 lpfr;
+>  	int ret;
+>  
+> -	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 6);
+> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 7);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1156,6 +1247,12 @@ static int imx335_init_controls(struct imx335 *imx335)
+>  						mode->vblank_max,
+>  						1, mode->vblank);
+>  
+> +	v4l2_ctrl_new_std_menu_items(ctrl_hdlr,
+> +				     &imx335_ctrl_ops,
+> +				     V4L2_CID_TEST_PATTERN,
+> +				     ARRAY_SIZE(imx335_tpg_menu) - 1,
+> +				     0, 0, imx335_tpg_menu);
+> +
+>  	/* Read only controls */
+>  	imx335->pclk_ctrl = v4l2_ctrl_new_std(ctrl_hdlr,
+>  					      &imx335_ctrl_ops,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+
+Sakari Ailus
