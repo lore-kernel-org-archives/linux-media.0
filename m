@@ -1,155 +1,186 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD30986143;
-	Thu, 25 Jan 2024 16:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF28574E32
+	for <linux-media@vger.kernel.org>; Thu, 25 Jan 2024 16:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706199062; cv=none; b=vANzayhpyFTxyuGImUFE6TGnt64N6T6qMra2eHh53jfwW+jgSJ4Vgmh52rElOuR6UPV0h8ijvjzjjWEhhJgsVgNactvjIwrfmAiWX+WBr/V6PJs4Tg95s9Jqi0Hl59B5TNrQ3Ppk9HAK5HXl5gTy13fMWA/tXBnLhQhA0Kj8xIk=
+	t=1706200035; cv=none; b=rsV6OFoL62PlZnUyNikm5AMijrkEolw819RsqOT5SIvyM34P7uQEjaO10/xugOdMdzMEQSrX1lErbnSPiKTr0OhdjkkG1U4LrCdgAWhNEBsi+ppTY7+HXXoFzJgcGXuDHYE67+2Zi0RsTQnh90UyXbP7MG+FRDNDz6YnODB4aPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706199062; c=relaxed/simple;
-	bh=erA6r6+8c+fMm7TjsfyuG2K4tmIEaj6481Pqbo/gIRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eg61iM8gqKsw+CTvF5lHoLHfXibH18Zr7aoS7WUeo6eDJfnqjdN0hIWfFD7tglBpje6P/sbWKzdWrRZAmhtXgbAbW/CHx8Xip8/2XgHr9d7ZQN9W5xGy2eI3PNj05rLgE2f7dubEROXozwV0mkKFJQ/cvEPgfCImWvmVnSRuXk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UGsjEBlW; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1706200035; c=relaxed/simple;
+	bh=+GAO5YWuL7EqUjWOl2U03X6ovBfiXH4yE91ok6yjcAI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PRei5zVau7Swyh08biQdZwVLGgdsUUoxCysruoEnhUQZShxGbQt9U3VVwwRvT8WH9o67E49F2l8uUi3nbK2XirI8NRhnxQNcu27L1UjofLXPsPK8f834h1O4a68ERKpNCEvAYLhQjG61XpJihmfnbgF2KdEWKzR0gLaHhV5HzCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=h3bIBrka; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UGsjEBlW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706199061; x=1737735061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=erA6r6+8c+fMm7TjsfyuG2K4tmIEaj6481Pqbo/gIRU=;
-  b=UGsjEBlWD4hml9v1xNgHY6As2IYorXSB3+lIQR3W+kRa11R4pd1DJ5vf
-   MipegmtzJOh3uIqxEF0o5vDms+Mfq9yr6ndFMtpBIuqRMuWfmRB5a4hbo
-   kuarqa/3HqtLOlQqu9UBAsw2CGJwpaiP42IEumBt5ZDvdZBiUnjzj1AgY
-   Hrnkp7l/f8rYABkRBeUJSfbU13kFSTtuCNwRsdQuwc6/BZ5A+9aN4dxKT
-   qzGykkX2Mmp6REN9ErBTWgDtVT51GkLdgdgfhFipHL1bQNBxYo8L5O2z9
-   TV7gLxoyuUoMkNPy7wM+srX0bKPzNd7fk8ptabyMzAB56MEdGV/3cyJq/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="433358619"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="433358619"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:10:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="736372656"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="736372656"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2024 08:10:52 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 775ED11FAD4;
-	Thu, 25 Jan 2024 18:01:16 +0200 (EET)
-Date: Thu, 25 Jan 2024 16:01:16 +0000
-From: "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
-To: Zhi Mao =?utf-8?B?KOavm+aZuik=?= <zhi.mao@mediatek.com>
-Cc: "heiko@sntech.de" <heiko@sntech.de>,
-	"gerald.loacker@wolfvision.net" <gerald.loacker@wolfvision.net>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"yunkec@chromium.org" <yunkec@chromium.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	Shengnan Wang =?utf-8?B?KOeOi+Wco+eUtyk=?= <shengnan.wang@mediatek.com>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-	"andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-	Yaya Chang =?utf-8?B?KOW8tembhea4hSk=?= <Yaya.Chang@mediatek.com>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"jacopo.mondi@ideasonboard.com" <jacopo.mondi@ideasonboard.com>,
-	"jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	"bingbu.cao@intel.com" <bingbu.cao@intel.com>,
-	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"10572168@qq.com" <10572168@qq.com>,
-	"hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
-	"tomi.valkeinen@ideasonboard.com" <tomi.valkeinen@ideasonboard.com>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"angelogioacchino.delregno@collabora.com" <angelogioacchino.delregno@collabora.com>,
-	"macromorgan@hotmail.com" <macromorgan@hotmail.com>
-Subject: Re: [PATCH v3 2/2] media: i2c: Add GC08A3 image sensor driver
-Message-ID: <ZbKFzGxXhU0TABHZ@kekkonen.localdomain>
-References: <20240109022715.30278-1-zhi.mao@mediatek.com>
- <20240109022715.30278-3-zhi.mao@mediatek.com>
- <ZZ0dcTEqxjYCohac@kekkonen.localdomain>
- <42cf05ea80a2413aae588b762e67c3418b9514d4.camel@mediatek.com>
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="h3bIBrka"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7831362c9bcso458965585a.1
+        for <linux-media@vger.kernel.org>; Thu, 25 Jan 2024 08:27:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1706200033; x=1706804833; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0kuRjuJnX7Sn5l28ZUPlWUHDNHmw5kV8n1Gjblo8C3g=;
+        b=h3bIBrkaG5iAUhBtcu6/WlLzQW+v9gajshc3yWCN191Bgjl2NYPM8HkBRsjd38AYU8
+         AtxTdNI6v+uohLB37hsiGw1yOgCBoHVdUTLaAL2K8RJRVE73sG10xo27Mr0MRtrlELrH
+         iUVeb+NItcm5kbROKFNjDkBUjKQ7WzDxZS2id4GCX8HA/1FxqSuOyabzcXU4Mcg5Jexb
+         moFNuAMk8w9iKDIASPNnOSTYa3y1oTyJ6sajA/50tuKlC0YHvCjbd23S+UHxVGgXCcJo
+         8AFRAXoBZniGU6meZhcfIL42IzoJQDBf1uvl9xXuE5ftmuP/8kLO9Qn0RrDdo797IsrE
+         zAoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706200033; x=1706804833;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kuRjuJnX7Sn5l28ZUPlWUHDNHmw5kV8n1Gjblo8C3g=;
+        b=enEqoEy1XpB4Pt2QCoVq4oKB2GubPIg8CBxBLncSO5WqUBJexaQEV4pcFpGlXLU2SH
+         xxrjg4LCwexhkjifQNo5jJQcPRYupU9qIZTUH6i1FGkgEDjFwBic65bK9L4ofzRAQhmZ
+         ZEgR555601FpM+8snUPQUbMC2Z9q+n/tWCJQvEtJV5EDMyJD4pregex0fjyhsEsLpe0k
+         y5xa9NyllrJ+rJu0f9Q3mpyHVwMlKgeL3Xe3yUl05/5h9iPyWMDZQEiS8aitFoDOmCqD
+         GjvDDo7VBJae44dqxVgfTG2X7AI+E7gIoVbkOhLKPMuc2Cx/RFh9YEX9oDr1ft634hAa
+         ltgQ==
+X-Gm-Message-State: AOJu0YzI7MxTpzIQf/IvxFsqH81ZUyaOARBc/xeQSGTOFTEtAeNme45o
+	HYJk91jdP9GaNRznZjwaCWjTgXFPbfwaMRsrfBhynZJgLXOpdcsZkezwUu4e7Qg=
+X-Google-Smtp-Source: AGHT+IEfSHEzRRwCKfyojQNEbFEjLJQDcya+Vj7sVhdUOrj/IlMpqvmeK52ZursW0PGkcPCVI0027g==
+X-Received: by 2002:a05:6214:19ea:b0:686:ae8f:3ed3 with SMTP id q10-20020a05621419ea00b00686ae8f3ed3mr1500167qvc.66.1706200032714;
+        Thu, 25 Jan 2024 08:27:12 -0800 (PST)
+Received: from nicolas-tpx395.localdomain ([2606:6d00:11:3354::580])
+        by smtp.gmail.com with ESMTPSA id mv9-20020a056214338900b006869e0eed00sm3018044qvb.26.2024.01.25.08.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jan 2024 08:27:12 -0800 (PST)
+Message-ID: <7b7170ced40d8fce4456282a87c5f70b66606d9c.camel@ndufresne.ca>
+Subject: Re: [PATCH v17 8/8] media: verisilicon: Support deleting buffers on
+ capture queue
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, Hans Verkuil
+	 <hverkuil@xs4all.nl>, mchehab@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	kernel@collabora.com
+Date: Thu, 25 Jan 2024 11:27:10 -0500
+In-Reply-To: <1cd7c504-c384-4c9c-bedd-79cd8aed8484@collabora.com>
+References: <20240119094944.26763-1-benjamin.gaignard@collabora.com>
+	 <20240119094944.26763-9-benjamin.gaignard@collabora.com>
+	 <56c1410e-7a4c-4913-823d-83b8bc0ac002@xs4all.nl>
+	 <1cd7c504-c384-4c9c-bedd-79cd8aed8484@collabora.com>
+Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <42cf05ea80a2413aae588b762e67c3418b9514d4.camel@mediatek.com>
 
-Hi Zhi,
+Hi,
 
-On Thu, Jan 25, 2024 at 02:24:52AM +0000, Zhi Mao (毛智) wrote:
-> Hi Sakari
-> 
-> Thanks for your review code and comments.
-> 
-> On Tue, 2024-01-09 at 10:18 +0000, Sakari Ailus wrote:
-> >  	 
-> > External email : Please do not click links or open attachments until
-> > you have verified the sender or the content.
-> >  Hi Zhi,
-> > 
-> > Thanks for the update.
-> > 
-> > On Tue, Jan 09, 2024 at 10:27:15AM +0800, Zhi Mao wrote:
-> > > Add a V4L2 sub-device driver for Galaxycore GC08A3 image sensor.
-> > > 
-> > > Signed-off-by: Zhi Mao <zhi.mao@mediatek.com>
+Le mercredi 24 janvier 2024 =C3=A0 16:35 +0100, Benjamin Gaignard a =C3=A9c=
+rit=C2=A0:
+> Le 24/01/2024 =C3=A0 13:52, Hans Verkuil a =C3=A9crit=C2=A0:
+> > On 19/01/2024 10:49, Benjamin Gaignard wrote:
+> > > Allow to delete buffers on capture queue because it the one which
+> > > own the decoded buffers. After a dynamic resolution change lot of
+> > > them could remain allocated but won't be used anymore so deleting
+> > > them save memory.
+> > > Do not add this feature on output queue because the buffers are
+> > > smaller, fewer and always recycled even after a dynamic resolution
+> > > change.
+> > >=20
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 > > > ---
-> > >  drivers/media/i2c/Kconfig  |   10 +
-> > >  drivers/media/i2c/Makefile |    1 +
-> > >  drivers/media/i2c/gc08a3.c | 1467
-> > ++++++++++++++++++++++++++++++++++++
-> > >  3 files changed, 1478 insertions(+)
-> > >  create mode 100644 drivers/media/i2c/gc08a3.c
-> > > 
-> > > +for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
-> > > +for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {
-> > > +if (link_freq_menu_items[i] ==
-> > > +    bus_cfg.link_frequencies[j])
-> > > +break;
-> > > +}
-> > > +
-> > > +if (j == bus_cfg.nr_of_link_frequencies) {
-> > > +dev_err(dev,
-> > > +"no link frequency %lld supported, please check DT",
-> > > +link_freq_menu_items[i]);
-> > > +ret = -EINVAL;
-> > > +goto done;
-> > > +}
-> > > +}
-> > 
-> > Please use v4l2_link_freq_to_bitmap() available here
-> > <URL:
-> > https://lore.kernel.org/linux-media/20240108151805.55584-2-sakari.ailus@linux.intel.com/T/#u>
-> > ;.
-> > We'll then merge both at the same time.
-> > 
-> 
-> After got the latest linux kernel code base(tag: next-20240124), there
-> seems to be not new API:v4l2_link_freq_to_bitmap() still.
-> 
-> Would you please let me know, how about the status about this API?
+> > >   drivers/media/platform/verisilicon/hantro_drv.c  | 1 +
+> > >   drivers/media/platform/verisilicon/hantro_v4l2.c | 1 +
+> > >   2 files changed, 2 insertions(+)
+> > >=20
+> > > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/driver=
+s/media/platform/verisilicon/hantro_drv.c
+> > > index db3df6cc4513..f6b0a676a740 100644
+> > > --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> > > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> > > @@ -248,6 +248,7 @@ queue_init(void *priv, struct vb2_queue *src_vq, =
+struct vb2_queue *dst_vq)
+> > >   	dst_vq->timestamp_flags =3D V4L2_BUF_FLAG_TIMESTAMP_COPY;
+> > >   	dst_vq->lock =3D &ctx->dev->vpu_mutex;
+> > >   	dst_vq->dev =3D ctx->dev->v4l2_dev.dev;
+> > > +	src_vq->supports_delete_bufs =3D true;
+> > As I mentioned, I remain unconvinced by this. It is just making the API=
+ inconsistent
+> > since if you support delete_bufs, then why support it for one queue onl=
+y and not both?
+>=20
+> Because the both queues don't handle the same type of data.
+> For example for a stateless decoder, for me, it makes sense to allow dele=
+te decoded frames
+> if they won't be used anymore but that won't makes sense for bitstream bu=
+ffers.
 
-The patches are in my linuxtv.org tree's master branch now:
+I personally think that for stateless and stateful decoder bitstream queue =
+this
+can be useful. We currently guess the size we need, and there is no way to
+allocate bigger ones without the driver forgetting about reference frames.
 
-	https://git.linuxtv.org/sailus/media_tree.git/
+In stateful, some drivers allow to split the bitstream (I tested wave5 nota=
+bly),
+but I was told this is not always the case. A bit of a gray zone in that AP=
+I,
+with lack of capabilities to describe it. On stateless, the entire bitstrea=
+m
+slice must be in one buffer.
 
--- 
-Sakari Ailus
+Though, for the asymmetry, most stateful decoders won't allow delete bufs o=
+n
+capture, because the buffers are registered in the firmware ahead of time. =
+wave5
+can't even implement create_bufs on capture. We had an argument about havin=
+g
+create_bufs on only one queue for that specific driver, as we wanted someth=
+ing
+upstream, we flex to removing create bufs completely. I think the all or no=
+thing
+rule on per queue create/delete_bufs is not aligned with the reality.
+
+Nicolas
+>=20
+> >=20
+> > >  =20
+> > >   	return vb2_queue_init(dst_vq);
+> > >   }
+> > > diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drive=
+rs/media/platform/verisilicon/hantro_v4l2.c
+> > > index 941fa23c211a..34eab90e8a42 100644
+> > > --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> > > @@ -756,6 +756,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops =3D =
+{
+> > >   	.vidioc_dqbuf =3D v4l2_m2m_ioctl_dqbuf,
+> > >   	.vidioc_prepare_buf =3D v4l2_m2m_ioctl_prepare_buf,
+> > >   	.vidioc_create_bufs =3D v4l2_m2m_ioctl_create_bufs,
+> > > +	.vidioc_delete_bufs =3D v4l2_m2m_ioctl_delete_bufs,
+> > >   	.vidioc_expbuf =3D v4l2_m2m_ioctl_expbuf,
+> > >  =20
+> > >   	.vidioc_subscribe_event =3D v4l2_ctrl_subscribe_event,
+> > In my view setting vidioc_delete_bufs should enable this feature, and i=
+f
+> > for some strange reason only one queue support it, then make a wrapper
+> > callback that returns an error when used with the wrong queue.
+> >=20
+> > Also note that patch 6/8 never checks for q->supports_delete_bufs in
+> > vb2_core_delete_bufs(), which is wrong!
+>=20
+> I will fix that in next version.
+> Regards,
+> Benjamin
+>=20
+> >=20
+> > Regards,
+> >=20
+> > 	Hans
+> >=20
+>=20
+
