@@ -1,35 +1,35 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9304C60C
-	for <linux-media@vger.kernel.org>; Sun, 28 Jan 2024 23:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF24A335BC
+	for <linux-media@vger.kernel.org>; Sun, 28 Jan 2024 23:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706484832; cv=none; b=m1ICFudK6dhhGKEcJAAFhgO/cjXFWGV98k0C0iLnEdtAqB93AOULlYegdkCxSXE/YYQLT3xjI39ALOUF/HsjUk24AxXQlw3UXoZSrrQ4HhoH9t9mgrd+zYqJRI7TRdsA6FMpb48EJAwC9OqKaRkmBMAELqM1hQjvZbOnhTOkcww=
+	t=1706484833; cv=none; b=GErd/PyRNUTUCkhdEslEdbmiDnYqX2g+p38gK/rULiwf7y4bV7c+2c+Vv9m/5uy92pI12P0NrLx2fmVF72liP/UkqpfAlP59U/9eBWuw2KVQN2udUIvXHXOztCxBwTFSzq1cd3EcKRFljQTwfrCV1UhpZcfbvI4nd1KWlzekdQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706484832; c=relaxed/simple;
-	bh=DhSqolOh58HA52HSdY83ytbpZ01+iNSJ8UQ3NzlGgYU=;
+	s=arc-20240116; t=1706484833; c=relaxed/simple;
+	bh=RTSjYeCNSqWYtAfxfQJyFMQRH2o76daM99KR5iSO0H0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pym7lqWsmgHACjKdOVdhTAXFXfiOkEK+DzPQY2RFRCXPIYxzNj23jFxNcf/BLwx6e0HsgGi3iBiPIYcquwVGpcA+74AJVjE6RgH+70/MAAb8cmvxwWBpWKPsCUciXLOCNJcV3lLgMjy97ntsR3mIYEjmzYFqoBB+9SlGN4ZHWtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=JdZW72jZ; arc=none smtp.client-ip=212.227.15.19
+	 MIME-Version:Content-Type; b=XyAyMMfvPep8w9hVl/BNpKp/veYKZSByFpB5FJ4SLXybZUbm9c9hl2ALne/OCo/VcwIcG4i/9BgIWRAXy5kxUBEkVowdrdII79En88e+DauALCD1ZHPYymLNg2C7dBFXP0U6AobaPq7QMUrNCbhNxA9jZgxVDfYOptf+IXz3Nzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=E4to4+i8; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="JdZW72jZ"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="E4to4+i8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nurfuerspam.de;
 	s=s31663417; t=1706484820; x=1707089620; i=herdler@nurfuerspam.de;
-	bh=DhSqolOh58HA52HSdY83ytbpZ01+iNSJ8UQ3NzlGgYU=;
+	bh=RTSjYeCNSqWYtAfxfQJyFMQRH2o76daM99KR5iSO0H0=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
 	 References;
-	b=JdZW72jZkgqrzZDrK7QUAeHujDwnkcufhVn0VDQ2nUW+oCb+yEDePmH5XhQT6lhv
-	 MvvRM8xiF9Y7TYdGEszv02z7b9Q5H0xVbLYPOM5VMSzwB+ZB0NXGo9RkEI+zmGjkE
-	 Fs8MOzSQF34f/5/38YC0rxsL1IEej50Pv7Z1v1zNQ1FyHrDu7leyGpPmI4nRz2VI2
-	 wbSWTsdkVsNzn8X7AozPbIxUf2WggRXARmeNKSDdFHPFnm5qjRMu9drhoEu55qsS7
-	 p9UXEa88bT5qZTckaXmc6rYkE7dWuOlmA91iOMIQ+TJLv/qHWipJrFKC6DnQe75EH
-	 COvDqqibhBwYgRSQcQ==
+	b=E4to4+i8HQUdILHGu+TyfU0sj3AbPZstROfkqVPPuPXtmJn2JEkRGd/MYxHluKuQ
+	 EEw8BlJYGyUQUNUvXICb1KYPVXetIln+aRHQwIaugXv1mqMExvTb+R5Ty9eCtZa3Z
+	 Z305B6ik56ed1c+MzG64waSE6rZw3HspvCseuBL2NznudbvJD6v/OmXTALBGCaVgK
+	 0jc/v8Gt/vpTRqgQewlw/PBi03fqiak7NZHUMxYvOiXyKs08JrLW/dmvPRW/83Hqk
+	 ZpggHdTv/7nHYXFgwzQBmqFYLtOmMUBgRRvVOh1+cG7sp5U1Iydz25B7BulzSUJ0Z
+	 ApP9Pu+GAuNkXz8Qqg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([185.101.173.202]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWzk3-1rb28g47IX-00XHxq; Mon, 29
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUowV-1rdCw12I4n-00QhJi; Mon, 29
  Jan 2024 00:33:40 +0100
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: mchehab@kernel.org,
@@ -38,9 +38,9 @@ Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH v4 3/6] media: docs: uAPI: dvb/audio: completing the documentation (data types)
-Date: Mon, 29 Jan 2024 00:32:46 +0100
-Message-Id: <20240128233249.32794-4-herdler@nurfuerspam.de>
+Subject: [PATCH v4 5/6] media: docs: uAPI: dvb/video: completing the documentation (data types)
+Date: Mon, 29 Jan 2024 00:32:48 +0100
+Message-Id: <20240128233249.32794-6-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240128233249.32794-1-herdler@nurfuerspam.de>
 References: <20240128233249.32794-1-herdler@nurfuerspam.de>
@@ -52,26 +52,26 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:cZIir0we4dzcAKZXRMwzg7mgT+VoiZXUPoSmeZG5ww6QBpEmnT5
- k5wsRhGJZQhg3RllDVTLBgf8igVSMYzQgsZmWIvUs2eXfSGz4u4+zbxkYg7jKMAXP2dp8dd
- LkdRIqXzi96SlQtWFt3oN0PwWB1+6UJiYrMQhdzUXU+M1PUzsKAnvipC6GIIZdQjQt6zvM8
- xgB7qEB3Fm7ZexO81HpJg==
+X-Provags-ID: V03:K1:NqfoNDL9OqY4xoqUnq4gk5ePC7w/1EMdWm5IsIqLwO0glRUJCdD
+ qqu6CtRRYO9dKX2PpWHXggF00ID8mqIEEC5c3wgFoNCmSKGPPjNrrcWtY0t0pAI7S6ZQbsQ
+ U3ecPBbV1OK1YhC9h1PDIlwE1XExbIjO8Y3C+9QbLxwq9dcsSjn1Rak3p5josKSzOB2x3nh
+ vbt8fc4xt6UGP9100K9Rg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sCQD8kpEXG8=;+P2i05pzINgX/zEpEvnxARF7DyB
- cC/Wl79WCQQ2LrT9rDFa/E4rQStxPGXpUr5aIKUTmshIoaX4IjTkGpSLZytFHd/pNlZBs+Srk
- /odZk/0REaqXklikZ5YxHBqGJEhE2gtzcCWvU+rF0f01h4K9kay2eojd9EnyIDHUm0Gg67SP4
- JMeNT70Hjca4erF/6bs67+F6+svkdD/hLTj2/4pydBAskoNDj16ydlj0ApIy02GgRUiC8UE83
- 1Uw77IGu0xWUVU8ID8ViPuK0shfljBcGapkI33Vnc2fCmjb4KPkSQTD1mREqrNS813VZP16nK
- EYdkgPjUkLSNllFyxqQFOJ3k2iyvH1Ch+bWi2m/ugJNSectV/0wLj+hW+Bnx/FmRP+SL9dInY
- eL2xRXJV/k8ypXNKOiGWqSzZ/h0C4p7DI0aTc42eB8OSe4RJYuQwHSfv5zzn6lWVjYy/a9OBe
- QEeXp5YBt/GjBcTNdxweLlDvHFcmDe71phWk5SFHqxiQrtUHsBjd8uQ84lV9rlqn3hnHnFfxk
- 5kNGgImChBS14r+oW9R8teMsHPBjTYR1GQ1VqhKcgUI9pUqor8hd4DONcYef0lpD4hJgKh3hv
- Lnglbv+HZTnU9P7GrNBb6WbvMPVSW0dRlc7hnUH1oeHFbBWThWBvaR52kzRKR1ohDZAwQc7PO
- XTCz5FcBELW8Y6P1L2c+WaO4XhcSA80cUKleDWLWMWdx66UrGDKtSTlH6DZ0RiC71UStZd9bV
- nQsz8qAOQ+DVDpnjZRYc89mKvy9NqJkpu2G2nW+OKUhBGV6AGitO27HTdtas7T6h2aGY+cDTE
- 6KwSfCdwR/fU4VtF6hD8qz7wQnodNAi+QilmjpqFXHD3OSnaQp6qfD118B54u59RRX9hV+qXB
- qgzgn6mWGrujg772PO0ja67sspkUVdx6ykcOrW4zdbpbVnt6D+YsfDZV/fXwU4x+jvJ9xyRYt
- nzVj1e6hKe0nUgFKDCT8ww5+Er0=
+UI-OutboundReport: notjunk:1;M01:P0:gxt48r0+T1E=;fCP9/uN8wN2IB25mC/SqKXkGMX8
+ 7zzFBojpPRLLkmcVUoEB+ssPCUHk1Dq1GeeHKImhlqTG9nxKSPAUUIh04BIqKiqgYmC/mgO1J
+ RUALYkG/Pg6CsprkScYq2F6iWH+99Wu8RrbyhuSpVrK4eILLwxClCCrCBsEWp5fJvGr5o0+Cp
+ EqpVMyirbjPvfC5trpGLVimCqcULSee22HbttoYOeQuSw4QM9tzny0G2AGBZOmIEYC+TQvpRA
+ Xz2ulPdxjb2/CNz02IhOjAmCjTA7+qr/p9bq2uYr1GSb+srgPtBy4eRjGR/eCt2E0HSrK/fBL
+ lpnJAZGBu+E86sLflLQ/HuoUG+2+7b5o11GkKBZ8o6WssvP6UeFE+525EpJpIfmeVzwsm8jx+
+ 3o0Sps+JLDQEZqYs3ZwBOAEzpuxltAlnVIlsYoUIUZc5zFMCeQoApY2+8Z7e1eys1C6dTlR53
+ sFaPI2Aen5kWjtOvJYLpl4efVYXlmKnpjy2IbH+jv8NLY8Ea48ugJYyRBgeRFLFssWlDYcOzq
+ gwnRFfJpP0TLnYkRhLugl/6o354jZ271Rc/m3xbWIWk3FhK7mKFGMCEF7vtmmMHkDjhxrQ+zP
+ OOiAkE5WZshi6qYmfDPoGqNd2wDwdsFOIUQCVQRZTa2SBmb4tRCmcXAvG3+Uycl8E9HC+HdFo
+ QQl6auxkvreyKwUrEaXTb/vDVY/8zlrYigIvqvizY84tqQMApL/4WeejyLuCY7WtJAyvsMHxL
+ /kuIm55iSEGYzjMQKQvPrBsh4Y2bDFWJN5tkPzR4FOrUmoHotgi8B+x9bb+OVPUinPoXYl7v5
+ vI52ppIleLPtHCcS83Vr3aanwd4fIoTig7gcvXHI7LsU5sRZqVRXuE3YBOk444CRgUSK9dEWJ
+ nnhFyRof2Iyb1H1Ey692rie8dQg8rJb/vZn/z8M8N6bXNZ+eD817X8Z/ifrmXicv6eyPtqzcR
+ iwdyM1vXxNaDW3d22pgxRLB5b64=
 
 The existing documentation of the legacy DVB Decoder API was incomplete.
 
@@ -79,81 +79,188 @@ Revising the documentation, adding missing parts and arranging the
 documentation files new.
 
 This patch contains the documentation of the data types defined in
-audio.h.
+video.h.
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
 
 Changes since v3:
 * Adjust title and description to better match existing documentation.
-* Change reference from :c:enum:`dmx_output` to :c:type: to silence the
-  warning from the kernel test robot.
 
 
- .../media/dvb/legacy_dvb_audio.rst            | 447 ++++++++++++++++++
- 1 file changed, 447 insertions(+)
- create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_audio=
+[PATCH v3] ------------------------------------------------------------
+
+Possibly left overs from DVD-API ? :
+ video_attributes_t
+ VIDEO_CAP_SPU
+ VIDEO_CAP_NAVI
+ VIDEO_CAP_CSS
+The only thing which is not in the documentation yet!
+Can probably removed from header file too.
+
+>> +
+>> +video_stream_source_t
+>> +---------------------
+>> +
+>> +The video stream source is set through the `VIDEO_SELECT_SOURCE`_ call
+>> +and can take the following values, depending on whether we are replayi=
+ng
+>> +from an internal (demuxer) or external (user write) source.
+>> +
+>> +
+>> +.. code-block:: c
+>> +
+>> +    typedef enum {
+>> +	VIDEO_SOURCE_DEMUX, /* Select the demux as the main source */
+>> +	VIDEO_SOURCE_MEMORY /* If this source is selected, the stream
+>> +		       comes from the user through the write
+>> +		       system call */
+>> +    } video_stream_source_t;
+>
+> FYI, this carries the same problem as the audio one: this API is problem=
+atic
+> for modern hardware that has multiple tuners and demuxers. Setting up
+> pipelines for audio and video decoding on modern hardware require a lot
+> more than just demux/memory.
+
+This kind of limitations are pretty well known for a while now, even to
+normal users.
+A good solution would be widely appreciated, I think.
+Well, but back to topic ...
+
+
+In case of the decoder we are are maybe lucky. One decoder with multiple
+demuxers should theoretically already be possible without any changes.
+The data fed to the decoder can be controlled by the PID filter output
+selection DMX_OUT_DECODER.
+
+There are existing multi tuner systems with one decoder controlled by this
+API, but I don't know whether they do it this way or not.
+A quick search wasn't very successful and at least the AV7110 should have
+a hardware PID filter. More detailed research has to be done there to
+answer the question.
+However this topic is not directly part of the decoder API and I'm running
+out of time, so I had to stop at this point.
+
+
+
+ .../media/dvb/legacy_dvb_video.rst            | 798 ++++++++++++++++++
+ 1 file changed, 798 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/dvb/legacy_dvb_video=
 .rst
 
-diff --git a/Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst b/=
-Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst
+diff --git a/Documentation/userspace-api/media/dvb/legacy_dvb_video.rst b/=
+Documentation/userspace-api/media/dvb/legacy_dvb_video.rst
 new file mode 100644
-index 000000000000..4c994f8c97e5
+index 000000000000..165fd6005a07
 =2D-- /dev/null
-+++ b/Documentation/userspace-api/media/dvb/legacy_dvb_audio.rst
-@@ -0,0 +1,447 @@
++++ b/Documentation/userspace-api/media/dvb/legacy_dvb_video.rst
+@@ -0,0 +1,798 @@
 +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later OR GPL-2.0
 +
-+.. c:namespace:: dtv.legacy.audio
++.. c:namespace:: dtv.legacy.video
 +
-+.. _dvb_audio:
++.. _dvb_video:
 +
 +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+DVB Audio Device
++DVB Video Device
 +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 +
 +.. attention:: Do **not** use in new drivers!
 +             See: :ref:`legacy_dvb_decoder_notes`
 +
-+The DVB audio device controls the MPEG2 audio decoder of the DVB
-+hardware. It can be accessed through ``/dev/dvb/adapter?/audio?``. Data
++The DVB video device controls the MPEG2 video decoder of the DVB
++hardware. It can be accessed through ``/dev/dvb/adapter0/video0``. Data
 +types and ioctl definitions can be accessed by including
-+``linux/dvb/audio.h`` in your application.
++``linux/dvb/video.h`` in your application.
 +
-+Please note that most DVB cards don=E2=80=99t have their own MPEG decoder=
-, which
-+results in the omission of the audio and video device.
++Note that the DVB video device only controls decoding of the MPEG video
++stream, not its presentation on the TV or computer screen. On PCs this
++is typically handled by an associated video4linux device, e.g.
++``/dev/video``, which allows scaling and defining output windows.
++
++Most DVB cards don=E2=80=99t have their own MPEG decoder, which results i=
+n the
++omission of the audio and video device as well as the video4linux
++device.
 +
 +These ioctls were also used by V4L2 to control MPEG decoders implemented
 +in V4L2. The use of these ioctls for that purpose has been made obsolete
 +and proper V4L2 ioctls or controls have been created to replace that
-+functionality. Use :ref:`V4L2 ioctls<audio>` for new drivers!
++functionality. Use :ref:`V4L2 ioctls<video>` for new drivers!
 +
 +
-+Audio Data Types
++Video Data Types
 +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 +
-+This section describes the structures, data types and defines used when
-+talking to the audio device.
++
++
++video_format_t
++--------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    typedef enum {
++	VIDEO_FORMAT_4_3,
++	VIDEO_FORMAT_16_9,
++	VIDEO_FORMAT_221_1
++    } video_format_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``VIDEO_FORMAT_4_3``
++
++       -  Select 4:3 format.
++
++    -  ..
++
++       -  ``VIDEO_FORMAT_16_9``
++
++       -  Select 16:9 format.
++
++    -  ..
++
++       -  ``VIDEO_FORMAT_221_1``
++
++       -  Select 2.21:1 format.
++
++Description
++~~~~~~~~~~~
++
++The ``video_format_t`` data type
++is used in the `VIDEO_SET_FORMAT`_ function to tell the driver which
++aspect ratio the output hardware (e.g. TV) has. It is also used in the
++data structures `video_status`_ returned by `VIDEO_GET_STATUS`_
++and `video_event`_ returned by `VIDEO_GET_EVENT`_ which report
++about the display format of the current video stream.
 +
 +
 +-----
 +
 +
-+audio_stream_source_t
++video_displayformat_t
 +---------------------
 +
 +Synopsis
 +~~~~~~~~
 +
-+.. c:enum:: audio_stream_source_t
-+
 +.. code-block:: c
 +
 +    typedef enum {
-+    AUDIO_SOURCE_DEMUX,
-+    AUDIO_SOURCE_MEMORY
-+    } audio_stream_source_t;
++	VIDEO_PAN_SCAN,
++	VIDEO_LETTER_BOX,
++	VIDEO_CENTER_CUT_OUT
++    } video_displayformat_t;
 +
 +Constants
 +~~~~~~~~~
@@ -164,214 +271,47 @@ index 000000000000..4c994f8c97e5
 +
 +    -  ..
 +
-+       -  ``AUDIO_SOURCE_DEMUX``
++       -  ``VIDEO_PAN_SCAN``
 +
-+       -  :cspan:`1` Selects the demultiplexer (fed either by the fronten=
-d
-+          or the DVR device) as the source of the video stream.
++       -  Use pan and scan format.
 +
 +    -  ..
 +
-+       -  ``AUDIO_SOURCE_MEMORY``
++       -  ``VIDEO_LETTER_BOX``
 +
-+       -  Selects the stream from the application that comes through
-+          the `write()`_ system call.
++       -  Use letterbox format.
++
++    -  ..
++
++       -  ``VIDEO_CENTER_CUT_OUT``
++
++       -  Use center cut out format.
 +
 +Description
 +~~~~~~~~~~~
 +
-+The audio stream source is set through the `AUDIO_SELECT_SOURCE`_ call
-+and can take the following values, depending on whether we are replaying
-+from an internal (demux) or external (user write) source.
-+
-+The data fed to the decoder is also controlled by the PID-filter.
-+Output selection: :c:type:`dmx_output` ``DMX_OUT_DECODER``.
++In case the display format of the video stream and of the display
++hardware differ the application has to specify how to handle the
++cropping of the picture. This can be done using the
++`VIDEO_SET_DISPLAY_FORMAT`_ call which accepts this enum as argument.
 +
 +
 +-----
 +
 +
-+audio_play_state_t
-+------------------
-+
-+Synopsis
-+~~~~~~~~
-+
-+.. c:enum:: audio_play_state_t
-+
-+.. code-block:: c
-+
-+    typedef enum {
-+	AUDIO_STOPPED,
-+	AUDIO_PLAYING,
-+	AUDIO_PAUSED
-+    } audio_play_state_t;
-+
-+Constants
-+~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``AUDIO_STOPPED``
-+
-+       -  Audio is stopped.
-+
-+    -  ..
-+
-+       -  ``AUDIO_PLAYING``
-+
-+       -  Audio is currently playing.
-+
-+    -  ..
-+
-+       -  ``AUDIO_PAUSE``
-+
-+       -  Audio is frozen.
-+
-+Description
-+~~~~~~~~~~~
-+
-+This values can be returned by the `AUDIO_GET_STATUS`_ call
-+representing the state of audio playback.
-+
-+
-+-----
-+
-+
-+audio_channel_select_t
-+----------------------
-+
-+Synopsis
-+~~~~~~~~
-+
-+.. c:enum:: audio_channel_select_t
-+
-+.. code-block:: c
-+
-+    typedef enum {
-+	AUDIO_STEREO,
-+	AUDIO_MONO_LEFT,
-+	AUDIO_MONO_RIGHT,
-+	AUDIO_MONO,
-+	AUDIO_STEREO_SWAPPED
-+    } audio_channel_select_t;
-+
-+Constants
-+~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``AUDIO_STEREO``
-+
-+       -  Stereo.
-+
-+    -  ..
-+
-+       -  ``AUDIO_MONO_LEFT``
-+
-+       -  Mono, select left stereo channel as source.
-+
-+    -  ..
-+
-+       -  ``AUDIO_MONO_RIGHT``
-+
-+       -  Mono, select right stereo channel as source.
-+
-+    -  ..
-+
-+       -  ``AUDIO_MONO``
-+
-+       -  Mono source only.
-+
-+    -  ..
-+
-+       -  ``AUDIO_STEREO_SWAPPED``
-+
-+       -  Stereo, swap L & R.
-+
-+Description
-+~~~~~~~~~~~
-+
-+The audio channel selected via `AUDIO_CHANNEL_SELECT`_ is determined by
-+this values.
-+
-+
-+-----
-+
-+
-+audio_mixer_t
-+-------------
-+
-+Synopsis
-+~~~~~~~~
-+
-+.. c:struct:: audio_mixer
-+
-+.. code-block:: c
-+
-+    typedef struct audio_mixer {
-+	unsigned int volume_left;
-+	unsigned int volume_right;
-+    } audio_mixer_t;
-+
-+Variables
-+~~~~~~~~~
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    -  ..
-+
-+       -  ``unsigned int volume_left``
-+
-+       -  Volume left channel.
-+          Valid range: 0 ... 255
-+
-+    -  ..
-+
-+       -  ``unsigned int volume_right``
-+
-+       -  Volume right channel.
-+          Valid range: 0 ... 255
-+
-+Description
-+~~~~~~~~~~~
-+
-+This structure is used by the `AUDIO_SET_MIXER`_ call to set the
-+audio volume.
-+
-+
-+-----
-+
-+
-+audio_status
++video_size_t
 +------------
 +
 +Synopsis
 +~~~~~~~~
 +
-+.. c:struct:: audio_status
-+
 +.. code-block:: c
 +
-+    typedef struct audio_status {
-+	int AV_sync_state;
-+	int mute_state;
-+	audio_play_state_t play_state;
-+	audio_stream_source_t stream_source;
-+	audio_channel_select_t channel_select;
-+	int bypass_mode;
-+	audio_mixer_t mixer_state;
-+    } audio_status_t;
++    typedef struct {
++	int w;
++	int h;
++	video_format_t aspect_ratio;
++    } video_size_t;
 +
 +Variables
 +~~~~~~~~~
@@ -382,104 +322,44 @@ d
 +
 +    -  ..
 +
-+       -  :rspan:`2` ``int AV_sync_state``
++       -  ``int w``
 +
-+       -  :cspan:`1` Shows if A/V synchronization is ON or OFF.
-+
-+    -  ..
-+
-+       -  TRUE  ( !=3D 0 )
-+
-+       -  AV-sync ON.
++       -  Video width in pixels.
 +
 +    -  ..
 +
-+       -  FALSE ( =3D=3D 0 )
++       -  ``int h``
 +
-+       -  AV-sync OFF.
-+
-+    -  ..
-+
-+       -  :rspan:`2` ``int mute_state``
-+
-+       -  :cspan:`1` Indicates if audio is muted or not.
++       -  Video height in pixels.
 +
 +    -  ..
 +
-+       -  TRUE  ( !=3D 0 )
++       -  `video_format_t`_ ``aspect_ratio``
 +
-+       -  mute audio
-+
-+    -  ..
-+
-+       -  FALSE ( =3D=3D 0 )
-+
-+       -  unmute audio
-+
-+    -  ..
-+
-+       -  `audio_play_state_t`_ ``play_state``
-+
-+       -  Current playback state.
-+
-+    -  ..
-+
-+       -  `audio_stream_source_t`_ ``stream_source``
-+
-+       -  Current source of the data.
-+
-+    -  ..
-+
-+       -  :rspan:`2` ``int bypass_mode``
-+
-+       -  :cspan:`1` Is the decoding of the current Audio stream in
-+          the DVB subsystem enabled or disabled.
-+
-+    -  ..
-+
-+       -  TRUE  ( !=3D 0 )
-+
-+       -  Bypass disabled.
-+
-+    -  ..
-+
-+       -  FALSE ( =3D=3D 0 )
-+
-+       -  Bypass enabled.
-+
-+    -  ..
-+
-+       -  `audio_mixer_t`_ ``mixer_state``
-+
-+       -  Current volume settings.
++       -  Aspect ratio.
 +
 +Description
 +~~~~~~~~~~~
 +
-+The `AUDIO_GET_STATUS`_ call returns this structure as information
-+about various states of the playback operation.
++Used in the struct `video_event`_. It stores the resolution and
++aspect ratio of the video.
 +
 +
 +-----
 +
 +
-+audio encodings
-+---------------
++video_stream_source_t
++---------------------
 +
 +Synopsis
 +~~~~~~~~
 +
 +.. code-block:: c
 +
-+     #define AUDIO_CAP_DTS    1
-+     #define AUDIO_CAP_LPCM   2
-+     #define AUDIO_CAP_MP1    4
-+     #define AUDIO_CAP_MP2    8
-+     #define AUDIO_CAP_MP3   16
-+     #define AUDIO_CAP_AAC   32
-+     #define AUDIO_CAP_OGG   64
-+     #define AUDIO_CAP_SDDS 128
-+     #define AUDIO_CAP_AC3  256
++    typedef enum {
++	VIDEO_SOURCE_DEMUX,
++	VIDEO_SOURCE_MEMORY
++    } video_stream_source_t;
 +
 +Constants
 +~~~~~~~~~
@@ -490,67 +370,592 @@ d
 +
 +    -  ..
 +
-+       -  ``AUDIO_CAP_DTS``
++       -  ``VIDEO_SOURCE_DEMUX``
 +
-+       -  :cspan:`1` The hardware accepts DTS audio tracks.
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_LPCM``
-+
-+       -   The hardware accepts uncompressed audio with
-+           Linear Pulse-Code Modulation (LPCM)
++       -  :cspan:`1` Select the demux as the main source.
 +
 +    -  ..
 +
-+       -  ``AUDIO_CAP_MP1``
++       -  ``VIDEO_SOURCE_MEMORY``
 +
-+       -  The hardware accepts MPEG-1 Audio Layer 1.
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_MP2``
-+
-+       -  The hardware accepts MPEG-1 Audio Layer 2.
-+          Also known as MUSICAM.
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_MP3``
-+
-+       -  The hardware accepts MPEG-1 Audio Layer III.
-+          Commomly known as .mp3.
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_AAC``
-+
-+       -  The hardware accepts AAC (Advanced Audio Coding).
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_OGG``
-+
-+       -  The hardware accepts Vorbis audio tracks.
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_SDDS``
-+
-+       -  The hardware accepts Sony Dynamic Digital Sound (SDDS).
-+
-+    -  ..
-+
-+       -  ``AUDIO_CAP_AC3``
-+
-+       -  The hardware accepts Dolby Digital ATSC A/52 audio.
-+          Also known as AC-3.
++       -  If this source is selected, the stream
++          comes from the user through the write
++          system call.
 +
 +Description
 +~~~~~~~~~~~
 +
-+A call to `AUDIO_GET_CAPABILITIES`_ returns an unsigned integer with the
-+following bits set according to the hardwares capabilities.
++The video stream source is set through the `VIDEO_SELECT_SOURCE`_ call
++and can take the following values, depending on whether we are replaying
++from an internal (demuxer) or external (user write) source.
++VIDEO_SOURCE_DEMUX selects the demultiplexer (fed either by the
++frontend or the DVR device) as the source of the video stream. If
++VIDEO_SOURCE_MEMORY is selected the stream comes from the application
++through the `write()`_ system call.
++
++
++-----
++
++
++video_play_state_t
++------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    typedef enum {
++	VIDEO_STOPPED,
++	VIDEO_PLAYING,
++	VIDEO_FREEZED
++    } video_play_state_t;
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``VIDEO_STOPPED``
++
++       -  Video is stopped.
++
++    -  ..
++
++       -  ``VIDEO_PLAYING``
++
++       -  Video is currently playing.
++
++    -  ..
++
++       -  ``VIDEO_FREEZED``
++
++       -  Video is frozen.
++
++Description
++~~~~~~~~~~~
++
++This values can be returned by the `VIDEO_GET_STATUS`_ call
++representing the state of video playback.
++
++
++-----
++
++
++struct video_command
++--------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    struct video_command {
++	__u32 cmd;
++	__u32 flags;
++	union {
++	    struct {
++		__u64 pts;
++	    } stop;
++
++	    struct {
++		__s32 speed;
++		__u32 format;
++	    } play;
++
++	    struct {
++		__u32 data[16];
++	    } raw;
++	};
++    };
++
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``__u32 cmd``
++
++       -  `Decoder command`_
++
++    -  ..
++
++       -  ``__u32 flags``
++
++       -  Flags for the `Decoder command`_.
++
++    -  ..
++
++       -  ``struct stop``
++
++       -  ``__u64 pts``
++
++       -  MPEG PTS
++
++    -  ..
++
++       -  :rspan:`5` ``stuct play``
++
++       -  :rspan:`4` ``__s32 speed``
++
++       -   0 or 1000 specifies normal speed,
++
++    -  ..
++
++       -   1:  specifies forward single stepping,
++
++    -  ..
++
++       -   -1: specifies backward single stepping,
++
++    -  ..
++
++       -   >1: playback at speed / 1000 of the normal speed
++
++    -  ..
++
++       -   <-1: reverse playback at ( -speed / 1000 ) of the normal speed=
+.
++
++    -  ..
++
++       -  ``__u32 format``
++
++       -  `Play input formats`_
++
++    -  ..
++
++       -  ``__u32 data[16]``
++
++       -  Reserved
++
++Description
++~~~~~~~~~~~
++
++The structure must be zeroed before use by the application. This ensures
++it can be extended safely in the future.
++
++
++-----
++
++
++Predefined decoder commands and flags
++-------------------------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    #define VIDEO_CMD_PLAY                      (0)
++    #define VIDEO_CMD_STOP                      (1)
++    #define VIDEO_CMD_FREEZE                    (2)
++    #define VIDEO_CMD_CONTINUE                  (3)
++
++    #define VIDEO_CMD_FREEZE_TO_BLACK      (1 << 0)
++
++    #define VIDEO_CMD_STOP_TO_BLACK        (1 << 0)
++    #define VIDEO_CMD_STOP_IMMEDIATELY     (1 << 1)
++
++    #define VIDEO_PLAY_FMT_NONE                 (0)
++    #define VIDEO_PLAY_FMT_GOP                  (1)
++
++    #define VIDEO_VSYNC_FIELD_UNKNOWN           (0)
++    #define VIDEO_VSYNC_FIELD_ODD               (1)
++    #define VIDEO_VSYNC_FIELD_EVEN              (2)
++    #define VIDEO_VSYNC_FIELD_PROGRESSIVE       (3)
++
++Constants
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  :rspan:`3` _`Decoder command`
++
++       -  ``VIDEO_CMD_PLAY``
++
++       -  Start playback.
++
++    -  ..
++
++       -  ``VIDEO_CMD_STOP``
++
++       -  Stop playback.
++
++    -  ..
++
++       -  ``VIDEO_CMD_FREEZE``
++
++       -  Freeze playback.
++
++    -  ..
++
++       -  ``VIDEO_CMD_CONTINUE``
++
++       -  Continue playback after freeze.
++
++    -  ..
++
++       -  Flags for ``VIDEO_CMD_FREEZE``
++
++       -  ``VIDEO_CMD_FREEZE_TO_BLACK``
++
++       -  Show black picture on freeze.
++
++    -  ..
++
++       -  :rspan:`1` Flags for ``VIDEO_CMD_STOP``
++
++       -  ``VIDEO_CMD_STOP_TO_BLACK``
++
++       -  Show black picture on stop.
++
++    -  ..
++
++       -  ``VIDEO_CMD_STOP_IMMEDIATELY``
++
++       -  Stop immediately, without emptying buffers.
++
++    -  ..
++
++       -  :rspan:`1` _`Play input formats`
++
++       -  ``VIDEO_PLAY_FMT_NONE``
++
++       -  The decoder has no special format requirements
++
++    -  ..
++
++       -  ``VIDEO_PLAY_FMT_GOP``
++
++       -  The decoder requires full GOPs
++
++    -  ..
++
++       -  :rspan:`3` Field order
++
++       -  ``VIDEO_VSYNC_FIELD_UNKNOWN``
++
++       -  FIELD_UNKNOWN can be used if the hardware does not know
++          whether the Vsync is for an odd, even or progressive
++          (i.e. non-interlaced) field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_ODD``
++
++       -  Vsync is for an odd field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_EVEN``
++
++       -  Vsync is for an even field.
++
++    -  ..
++
++       -  ``VIDEO_VSYNC_FIELD_PROGRESSIVE``
++
++       -  progressive (i.e. non-interlaced)
++
++
++-----
++
++
++video_event
++-----------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    struct video_event {
++	__s32 type;
++    #define VIDEO_EVENT_SIZE_CHANGED        1
++    #define VIDEO_EVENT_FRAME_RATE_CHANGED  2
++    #define VIDEO_EVENT_DECODER_STOPPED     3
++    #define VIDEO_EVENT_VSYNC               4
++	long timestamp;
++	union {
++	    video_size_t size;
++	    unsigned int frame_rate;
++	    unsigned char vsync_field;
++	} u;
++    };
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  :rspan:`4` ``__s32 type``
++
++       -  :cspan:`1` Event type.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_SIZE_CHANGED``
++
++       -  Size changed.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_FRAME_RATE_CHANGED``
++
++       -  Framerate changed.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_DECODER_STOPPED``
++
++       -  Decoder stopped.
++
++    -  ..
++
++       -  ``VIDEO_EVENT_VSYNC``
++
++       -  Vsync occurred.
++
++    -  ..
++
++       -  ``long timestamp``
++
++       -  :cspan:`1` MPEG PTS at occurrence.
++
++    -  ..
++
++       -  :rspan:`2` ``union u``
++
++       -  `video_size_t`_ size
++
++       -  Resolution and aspect ratio of the video.
++
++    -  ..
++
++       -  ``unsigned int frame_rate``
++
++       -  in frames per 1000sec
++
++    -  ..
++
++       -  ``unsigned char vsync_field``
++
++       -  | unknown / odd / even / progressive
++          | See: `Predefined decoder commands and flags`_
++
++Description
++~~~~~~~~~~~
++
++This is the structure of a video event as it is returned by the
++`VIDEO_GET_EVENT`_ call. See there for more details.
++
++
++-----
++
++
++video_status
++------------
++
++Synopsis
++~~~~~~~~
++
++The `VIDEO_GET_STATUS`_ call returns the following structure informing
++about various states of the playback operation.
++
++.. code-block:: c
++
++    struct video_status {
++	int                    video_blank;
++	video_play_state_t     play_state;
++	video_stream_source_t  stream_source;
++	video_format_t         video_format;
++	video_displayformat_t  display_format;
++    };
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  :rspan:`2` ``int video_blank``
++
++       -  :cspan:`1` Show blank video on freeze?
++
++    -  ..
++
++       -  TRUE  ( !=3D 0 )
++
++       -  Blank screen when freeze.
++
++    -  ..
++
++       -  FALSE ( =3D=3D 0 )
++
++       -  Show last decoded frame.
++
++    -  ..
++
++       -  `video_play_state_t`_ ``play_state``
++
++       -  Current state of playback.
++
++    -  ..
++
++       -  `video_stream_source_t`_ ``stream_source``
++
++       -  Current source (demux/memory).
++
++    -  ..
++
++       -  `video_format_t`_ ``video_format``
++
++       -  Current aspect ratio of stream.
++
++    -  ..
++
++       -  `video_displayformat_t`_ ``display_format``
++
++       -  Applied cropping mode.
++
++Description
++~~~~~~~~~~~
++
++If ``video_blank`` is set ``TRUE`` video will be blanked out if the
++channel is changed or if playback is stopped. Otherwise, the last picture
++will be displayed. ``play_state`` indicates if the video is currently
++frozen, stopped, or being played back. The ``stream_source`` corresponds
++to the selected source for the video stream. It can come either from the
++demultiplexer or from memory. The ``video_format`` indicates the aspect
++ratio (one of 4:3 or 16:9) of the currently played video stream.
++Finally, ``display_format`` corresponds to the applied cropping mode in
++case the source video format is not the same as the format of the output
++device.
++
++
++-----
++
++
++video_still_picture
++-------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    struct video_still_picture {
++    char *iFrame;
++    int32_t size;
++    };
++
++Variables
++~~~~~~~~~
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``char *iFrame``
++
++       -  Pointer to a single iframe in memory.
++
++    -  ..
++
++       -  ``int32_t size``
++
++       -  Size of the iframe.
++
++
++Description
++~~~~~~~~~~~
++
++An I-frame displayed via the `VIDEO_STILLPICTURE`_ call is passed on
++within this structure.
++
++
++-----
++
++
++video capabilities
++------------------
++
++Synopsis
++~~~~~~~~
++
++.. code-block:: c
++
++    #define VIDEO_CAP_MPEG1   1
++    #define VIDEO_CAP_MPEG2   2
++    #define VIDEO_CAP_SYS     4
++    #define VIDEO_CAP_PROG    8
++
++Constants
++~~~~~~~~~
++Bit definitions for capabilities:
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    -  ..
++
++       -  ``VIDEO_CAP_MPEG1``
++
++       -  :cspan:`1` The hardware can decode MPEG1.
++
++    -  ..
++
++       -  ``VIDEO_CAP_MPEG2``
++
++       -  The hardware can decode MPEG2.
++
++    -  ..
++
++       -  ``VIDEO_CAP_SYS``
++
++       -  The video device accepts system stream.
++
++          You still have to open the video and the audio device
++          but only send the stream to the video device.
++
++    -  ..
++
++       -  ``VIDEO_CAP_PROG``
++
++       -  The video device accepts program stream.
++
++          You still have to open the video and the audio device
++          but only send the stream to the video device.
++
++Description
++~~~~~~~~~~~
++
++A call to `VIDEO_GET_CAPABILITIES`_ returns an unsigned integer with the
++following bits set according to the hardware's capabilities.
 =2D-
 2.34.0
 
