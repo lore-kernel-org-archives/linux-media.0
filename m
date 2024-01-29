@@ -1,132 +1,95 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069B6537ED;
-	Mon, 29 Jan 2024 11:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9925B5C5
+	for <linux-media@vger.kernel.org>; Mon, 29 Jan 2024 11:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706527146; cv=none; b=OGJY/CimG8QsCjP+SXOa3p0bLqwtKwmzEfRGuO7SH9DOMD0Edggbm1zcl9Y9ROSKjmyVhvL3G7jISBrc5730JeQZ95+hILseQ6R+nK/fk4yBd29kil6q/jjPzbG19Wjmz3VioNooNEPtbDF9MEPcz4buAFjV030lmeHhZEdYFyo=
+	t=1706527299; cv=none; b=iuy2KYsR200cvCdOSeP4UWhLJLmFk34fyJyNLFEELomJmyMaEQ4/FEBiCwstFH1wiPj0JuDAfac0gN3fVsuNH15ZBN3GtVIEEiygc93Gn/XyX2eZDRajxfgvOGuItnZhhaXizBfQu8sYy7NGOc6CO7lIwmb9DmKg7b2ui2Ee25g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706527146; c=relaxed/simple;
-	bh=yLOGBTgHsY29I1hO78KiXpoZtEairn+K3yOolLTw06E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hkzBYCLsvnIAkxD+v0+6Dus9zkkdk3oHGR2lNlSE1JrEIiB59ssQ2rNqoMVGT9hO8JZdXYRjwaOMxq45dJYWwVNK8MLoGWQFC/jgJFZCKC9xNPI+Qmhz3744ufuL98BUnMosOOooqr4Z8QGswkemyWsTfJYq9s1o7cOWmBn+F9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=bDrBdVPh; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1706527299; c=relaxed/simple;
+	bh=OkmFWCXfkswgKeEkNmgKaQvelzaCc0LaWu2O468wZLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CrzOx9LPSwCgdNOW68qOGcbaL8cCp68FvPNfEmZZpGaCe2PCljIypd+0k7gnet/5JNXKR/fusp4GfJWeRUPLqicsa4HGWlQMkUe8HbzDeosCTV+NLn1VrvuM6Fe13zCtNNuTrARTrJtEdiQ6Ot6BDGqfIgv9IniMfeAj4H3rnWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eEwW/BDT; arc=none smtp.client-ip=192.55.52.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bDrBdVPh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706527142;
-	bh=yLOGBTgHsY29I1hO78KiXpoZtEairn+K3yOolLTw06E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bDrBdVPhUdMv4lJG+ODzhQOnksbKEIC5ouN8rljgr3j0PmIVVyd0+IcNAfyFSid8n
-	 46gBMRGRqLu1XVBNZxTIRHc6Ftfk1Ra39qT08N6t3DigfYrIN4olucSqaM+vuKk9le
-	 xGEOn4Gej719qENCagRbATh+89tLyrdNQqLqvCMRQIkEV8n85V15zZRc8Ckv09Ghdh
-	 Yu4KDwnpx7WDtNuUVXV/K0KldJ1T2XBK275CU6lDfU8IXnJuG8CM2isQ982MXE3/oy
-	 ZtYbdYWqAlFKNWYlfYke9fyUN+3v3t5L+ytT/GID6pcQPEaOzGZsKRVfggDD1RivHG
-	 c/IcbTJ6aliEA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 08AB03780029;
-	Mon, 29 Jan 2024 11:19:00 +0000 (UTC)
-Message-ID: <df6c8b2b-df56-46c5-933d-e56bf704525f@collabora.com>
-Date: Mon, 29 Jan 2024 12:19:00 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eEwW/BDT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706527297; x=1738063297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OkmFWCXfkswgKeEkNmgKaQvelzaCc0LaWu2O468wZLw=;
+  b=eEwW/BDT8Re2HJ/+yzLZ2I2MgTQRcMcwyZ9l/X1xl1jGxb0Z+X9z+TPE
+   Rf2PMnziMXdElqRggoQnTaAEgMVCp/3bLjvyN4WRYvE7qOPfM8mFNY3TQ
+   +2mr8mhiotFrCKQZ6iOkwJ5hH4mrGrjbb58Omj++0BTm1VoZK5o+k3Fok
+   1GFbzyvUu61CFDvfi7SLIxq1cXbC8rj9gJYFF4peNpqM6orxrmMd7lKc4
+   1S7U6QVzmMgFyLkwlMMPjIKDfNM0qFg2D7Bxpj/bZxEmYp/9xN5Kx3hg2
+   QDzzA3GbXAiXP3Q4k/5bfxoaAziExPEsmzdsUvBNwKpQ1xi8Eks795TN8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10967"; a="401788327"
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="401788327"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 03:21:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,227,1701158400"; 
+   d="scan'208";a="22073403"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 03:21:36 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 4749C11F8D2;
+	Mon, 29 Jan 2024 13:12:04 +0200 (EET)
+Date: Mon, 29 Jan 2024 11:12:04 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: "Chen, Jason Z" <jason.z.chen@intel.com>
+Cc: andy.yeh@intel.com, linux-media@vger.kernel.org,
+	bingbu.cao@linux.intel.com, qingwu.zhang@intel.com
+Subject: Re: [PATCH v8] media: ov08x40: Modify the tline calculation in
+ different modes
+Message-ID: <ZbeIBAwqRkDvjgQP@kekkonen.localdomain>
+References: <20231018055841.1983430-1-jason.z.chen@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2,1/2] media: mediatek: vcodec: adding lock to protect
- decoder context list
-Content-Language: en-US
-To: Yunfei Dong <yunfei.dong@mediatek.com>,
- =?UTF-8?Q?N=C3=ADcolas_F_=2E_R_=2E_A_=2E_Prado?= <nfraprado@collabora.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Nathan Hebert <nhebert@chromium.org>, Irui Wang <irui.wang@mediatek.com>
-Cc: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
- Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20240129023153.28521-1-yunfei.dong@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240129023153.28521-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231018055841.1983430-1-jason.z.chen@intel.com>
 
-Il 29/01/24 03:31, Yunfei Dong ha scritto:
-> The ctx_list will be deleted when scp getting unexpected behavior, then the
-> ctx_list->next will be NULL, the kernel driver maybe access NULL pointer in
-> function vpu_dec_ipi_handler when going through each context, then reboot.
+Hi Jason,
+
+On Wed, Oct 18, 2023 at 01:58:41PM +0800, Chen, Jason Z wrote:
+> From: Jason Chen <jason.z.chen@intel.com>
 > 
-> Need to add lock to protect the ctx_list to make sure the ctx_list->next isn't
-> NULL pointer.
+> ov08x40 quad bayer sensor ISP has the following work modes:
+> - normal mode: full size
+> - 2x2 binned mode: binning size
 > 
-> Hardware name: Google juniper sku16 board (DT)
-> pstate: 20400005 (nzCv daif +PAN -UAO -TCO BTYPE=--)
-> pc : vpu_dec_ipi_handler+0x58/0x1f8 [mtk_vcodec_dec]
-> lr : scp_ipi_handler+0xd0/0x194 [mtk_scp]
-> sp : ffffffc0131dbbd0
-> x29: ffffffc0131dbbd0 x28: 0000000000000000
-> x27: ffffff9bb277f348 x26: ffffff9bb242ad00
-> x25: ffffffd2d440d3b8 x24: ffffffd2a13ff1d4
-> x23: ffffff9bb7fe85a0 x22: ffffffc0133fbdb0
-> x21: 0000000000000010 x20: ffffff9b050ea328
-> x19: ffffffc0131dbc08 x18: 0000000000001000
-> x17: 0000000000000000 x16: ffffffd2d461c6e0
-> x15: 0000000000000242 x14: 000000000000018f
-> x13: 000000000000004d x12: 0000000000000000
-> x11: 0000000000000001 x10: fffffffffffffff0
-> x9 : ffffff9bb6e793a8 x8 : 0000000000000000
-> x7 : 0000000000000000 x6 : 000000000000003f
-> x5 : 0000000000000040 x4 : fffffffffffffff0
-> x3 : 0000000000000020 x2 : ffffff9bb6e79080
-> x1 : 0000000000000010 x0 : ffffffc0131dbc08
-> Call trace:
-> vpu_dec_ipi_handler+0x58/0x1f8 [mtk_vcodec_dec (HASH:6c3f 2)]
-> scp_ipi_handler+0xd0/0x194 [mtk_scp (HASH:7046 3)]
-> mt8183_scp_irq_handler+0x44/0x88 [mtk_scp (HASH:7046 3)]
-> scp_irq_handler+0x48/0x90 [mtk_scp (HASH:7046 3)]
-> irq_thread_fn+0x38/0x94
-> irq_thread+0x100/0x1c0
-> kthread+0x140/0x1fc
-> ret_from_fork+0x10/0x30
-> Code: 54000088 f94ca50a eb14015f 54000060 (f9400108)
-> ---[ end trace ace43ce36cbd5c93 ]---
-> Kernel panic - not syncing: Oops: Fatal exception
-> SMP: stopping secondary CPUs
-> Kernel Offset: 0x12c4000000 from 0xffffffc010000000
-> PHYS_OFFSET: 0xffffffe580000000
-> CPU features: 0x08240002,2188200c
-> Memory Limit: none
+> In normal and binned modes, different tline calculations are
+> applied.
 > 
-> 'Fixes: 655b86e52eac ("media: mediatek: vcodec: Fix possible invalid memory access for decoder")'
-
-Hello Yunfei,
-
-You've sent two patches as a v2, but:
-  - The two patches are identical (!) apart from the commit message?!
-  - It's Fixes: xxxx , not 'Fixes: xxxx' (please remove the quotes!)
-  - There's no changelog from v1, so, what changed in v2?!
-
-Cheers,
-Angelo
-
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->   .../platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 4 ++--
->   .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c    | 5 +++++
->   .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h    | 2 ++
->   drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c | 2 ++
->   4 files changed, 11 insertions(+), 2 deletions(-)
+> - normal mode: Tline value needs to be doubled as per the
+> vendor's update.
 > 
+> Tline time = 2 * HTS / SCLK
+> Exposure unit : 1 * HTS = 0.5 Tline
+> 
+> - 2x2 binned mode:
+> 
+> Tline time = 1 * HTS / SCLK
+> Exposure unit : 1 * HTS = 1 Tline
+> 
+> Signed-off-by: Jason Chen <jason.z.chen@intel.com>
 
+I think this is good, apologies for missing the patch earlier (and feel
+free to ping me).
+
+-- 
+Regards,
+
+Sakari Ailus
