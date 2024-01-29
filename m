@@ -1,237 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F065604AA
-	for <linux-media@vger.kernel.org>; Mon, 29 Jan 2024 12:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE20604AA;
+	Mon, 29 Jan 2024 12:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706531080; cv=none; b=Bi4JSc0LN/YPmIchYVIN0JTGowodK7QEnElvBvzo+rbUHkB6GJGCX4hz47ptPMX8AhLnzL+Jttm0U7rZ6bWivkt5ZV5i74Yad0bdnjiLCJky1CBv6ZHhao2Kpp26u7VsfwwZSkrHze3X8uFrt1e4Ft9LJ4IbHWhzH8zAqOvAtzc=
+	t=1706531259; cv=none; b=jxc8M9/4b7Gg9SGj+W9iX9dL2xXf/b5hyXwgz1J5RNxuQxdaXDHWoe7yM5ZDR3dzhBe9W6Lm+fdry6yN02925HGlfPkiQwuY52BpJLUZKT1cv4EoJbT7dvAA2uAVdr15dbeD+381N2EjpYkuHgPzaJsuvje8wmK84p1IaPVM2HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706531080; c=relaxed/simple;
-	bh=mYVaOIh5WD9ED0yHOkZEOzEsVREEekh6TELfXwveZK0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oNGIDgmA4RNjvYd5cOj68bWmdR9VMsP/hsuxIcmaTApGrh+kJGNjHrqBNIsOTgc+G0FZEQ1MfEjROcXzvqh73nozqGOmIyzFm9+qgJXZMqMl42zl6dm0HYwKmdTaCIepiwvxRHRX8bAcgNplW1IZdKWJIHm+VzvlnlXLsp4SnSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EDWjnlQu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1706531259; c=relaxed/simple;
+	bh=LD9PXBHasMJZgGdP7dqL3EAkH+ae11rR+hI3U+UsZRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FuNQD7v4k/n7REasVtzdULXZuu4SsGQSBRZc9awfRS48FzNoCBsww2IF9nbi1n4TOgodt3MjWuMGghiMRBkm8ZTtcMxMC8FWSHjPPpyyrcUnoz8SwO4Gi6UJ+5UUiLc6CUMnmBBswPXGZH8sf2u+WL34jFuO7szeHwP0wSzscfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=hV0wfjbK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EDWjnlQu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706531076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X1ksDuyI6F7OY9uNe4BDl7jjPkqWULO0xbvI5CWWw+k=;
-	b=EDWjnlQuakimiv5Fy6FabHYsZmvtKbUP8RvZL1NtGu2Do+E3wohp7dzDrWVzJ5LWU3WlN3
-	MAqT3jCzHOatK3a/fl1nxXEhXg/i6cueKRQHRUzdhUydSjTYEgSS4B8YiPqgeqg04GGSIr
-	I4MTj9Kv7QsC9kPvmxY6tCzVhD2/8pQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-569-BAFwPFhNPEGxyYYrYS1K_g-1; Mon, 29 Jan 2024 07:24:35 -0500
-X-MC-Unique: BAFwPFhNPEGxyYYrYS1K_g-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-55a6e18fdb6so1412966a12.1
-        for <linux-media@vger.kernel.org>; Mon, 29 Jan 2024 04:24:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706531073; x=1707135873;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1ksDuyI6F7OY9uNe4BDl7jjPkqWULO0xbvI5CWWw+k=;
-        b=THe8Hkx7f2HLxuPAJ1GAGkrdy5JZOzEGdEeMdgu+atGsAysRiF6YV+JmWO5nP2ns/3
-         mETEBng9sJfQLixKdCGiG3RYhY/Q7NyBV7mjShVqeU7JSVS0IQPWqd46mBu66PjHpttr
-         a7drmsgJMZFp5d8sG3mWR5fBkl71dXOp1Qs1waZFkKGk6ESzEMR0DIoNoFln1EZ5SueN
-         L8yQrEmMxLjwOR5z+I7KL6e949txyUsWhsfhAw80gTrchUlK7xszcr/A0bJr/D2IRkFJ
-         MtHt16f85VewN44qdaqcG71JtL3EDoJK9AHl0hApYUODYrK1zo2+VlH7c8M3xBrcbEbq
-         Gfqw==
-X-Gm-Message-State: AOJu0Yx7/v2/k0KBS63q+X1mBshyQxvLcN7k4KQ9y6DNn665AOaIW5Q0
-	fB1WtYmNCDn6QCnenGlrVHI2v9VYnpQy8yuN/6h+jJ311vh3mn8Ln2CJw7I0ucw/OzSVu9UOIxj
-	gDklUbnbOE2rm01pTYhFoh13MX6PpuKXaz5BlfTr4SLb7XQF1i4YHIWs2AXGBQQj8KqIs
-X-Received: by 2002:a05:6402:b05:b0:55f:4bc:a74b with SMTP id bm5-20020a0564020b0500b0055f04bca74bmr1472798edb.2.1706531073044;
-        Mon, 29 Jan 2024 04:24:33 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFtWeEztXJiOSmIgPSxYJiuAJvuCy1Orm2Ild/y9vf3RaqkSSR2GsdzVi1Ceo/vVa/AtH2vHQ==
-X-Received: by 2002:a05:6402:b05:b0:55f:4bc:a74b with SMTP id bm5-20020a0564020b0500b0055f04bca74bmr1472788edb.2.1706531072674;
-        Mon, 29 Jan 2024 04:24:32 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056402400f00b0055eebd3db08sm1463524eda.66.2024.01.29.04.24.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 04:24:31 -0800 (PST)
-Message-ID: <c2a0c7ae-ac72-4e26-aa83-cdd0d7f02f90@redhat.com>
-Date: Mon, 29 Jan 2024 13:24:31 +0100
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="hV0wfjbK"
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9FFB91803;
+	Mon, 29 Jan 2024 13:26:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1706531178;
+	bh=LD9PXBHasMJZgGdP7dqL3EAkH+ae11rR+hI3U+UsZRI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hV0wfjbKo92FIVlElfyP/cM6PG/q2iFuoPQOkqKD4H3NktWYUgk5FXVekLTeYivzc
+	 tTxmPjr5npkZ3qHxiG2HqsVOTOqnaQGXBaEadpLTCeTgQWT7/jEU6BWRXnnYwubSAR
+	 Hcs6IoBoqPWgTocl3pr823q/zsNRkmRRalyMj2h4=
+Date: Mon, 29 Jan 2024 14:27:36 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: =?utf-8?B?IlV3ZSBLbGVpbmUtS8ODwrZuaWci?= <u.kleine-koenig@pengutronix.de>,
+	Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>, Helge Deller <deller@gmx.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Takashi Iwai <tiwai@suse.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+	linux-fbdev@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-sound@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH v2 00/13] of: property: add port base loop
+Message-ID: <20240129122736.GC8131@pendragon.ideasonboard.com>
+References: <87fryhklhb.wl-kuninori.morimoto.gx@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Weird default vblank value in ov5693
-Content-Language: en-US, nl
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Dan Scally <dan.scally@ideasonboard.com>,
- Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <0fa07550-80cb-40f2-87c8-23864af33642@redhat.com>
- <18f20014-44b8-4f83-915d-81f265369821@ideasonboard.com>
- <1ccf4d19-4db4-48fb-a6bf-17e29cbc5f3e@redhat.com>
- <vv37qd3rqy5x6343pkiltoyqw2eyozwakmf5dcisybqynme3or@rqy2ww6hr2oq>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <vv37qd3rqy5x6343pkiltoyqw2eyozwakmf5dcisybqynme3or@rqy2ww6hr2oq>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87fryhklhb.wl-kuninori.morimoto.gx@renesas.com>
 
-Hi Jacopo,
+Hello Morimoto-san,
 
-On 1/29/24 13:05, Jacopo Mondi wrote:
-> Hi Hans
+(CC'ing Sakari Ailus)
+
+On Mon, Jan 29, 2024 at 12:54:24AM +0000, Kuninori Morimoto wrote:
 > 
-> On Mon, Jan 29, 2024 at 11:30:33AM +0100, Hans de Goede wrote:
->> Hi Dan,
->>
->> On 1/29/24 10:53, Dan Scally wrote:
->>> Morning Hans
->>>
->>>
->>> On 28/01/2024 20:58, Hans de Goede wrote:
->>>> Hi All,
->>>>
->>>> While adding vblank ctrl support to the ov2680 driver I was looking
->>>> at the vblank ctrl code in the ov5693 and I noticed something
->>>> which I believe is weird / undesirable.
->>>>
->>>> When setting a new mode the ov5693 driver does not keep the current
->>>> vts value (adjusting vblank to keep vts and thus the framerare and
->>>> exposure unchanged).
->>>>
->>>> Instead it calculates a new vts value, resetting the framerate
->>>> to 30 fps; or 60 fps for smaller resolutions and then sets
->>>> vblank to the new (vts - new_mode->height) and adjusts
->>>> the exposure control-range to fit within the new vts, potentially
->>>> also changing the exposure value.
->>>>
->>>> This behavior of the ov5693 code means that switching resolution
->>>> also changes the framerate and the exposure value which seems
->>>> undesirable.
->>>
->>>
->>> I think I did it that way because I was hitting problems when changing the framesize exceeded the current VTS and it seemed cleaner to just reset it to a known situation. Really though the only thing it would affect would be the framerate; that would have to reduce if the VTS increased but exposure could stay the same (though the maximum would change). So probably it ought to work like:
->>>
->>>
->>> * if we change from a larger to a smaller framesize then we can just increase blanking to keep the same VTS and that should be fine
->>>
->>> * if we're going from a smaller to a larger framesize that fits within the currently configured VTS with minimum blanking, we can just reduce the blanking to keep the same VTS and that should be fine
->>>
->>> * if we're going from a smaller to a larger framesize that exceeds the currently configured VTS we drop blanking to a minimum so that the new framerate is as close to the old one as it can be
->>>
->>>
->>> Does that sound like more reasonable behaviour? If so, shall I patch it?
->>
->> This sounds more or like what I had in mind (keep VTS unchanged if possible),
->> so I have been looking more into this yesterday evening and
->> implementing this is a bit tricky (*).
->>
->> Combining this with your last point of "that the new framerate is as
->> close to the old one as it can be" I think I prefer a more KISS
->> approach.
->>
->> IMHO the best thing (principle of least surprise) would be to
->> on a set_fmt pad-op reset things to a default fps of say 30,
->> as Jacopo's doc patches suggest. My reasons for suggesting
->> this approach is:
->>
->> a) This is easier to implement and thus less likely to have bugs
->> b) It leads to consistent behavior where as your suggested try to
->> keep current vts approach leads to sometimes vts being kept, but
->> other times when going from smaller to higher resolutions vts
->> changing which will lead to hard to debug problems if userspace
->> relies on vts being kept.
->>
->> For the ov5693 driver this would mean dropping __ov5693_calc_vts()
->> replacing it with a DEFAULT_VTS define of:
->>
->> ALIGN_DOWN(OV5693_PIXEL_RATE / OV5693_FIXED_PPL / 30, 2)
->>
->> (does vts need to be a multiple of 2? We don't enforce that
->>  in the vblank control)
+> Hi Rob
 > 
-> Alternatively, we can reset blankings to their minimum. This is
-> 'predictable' but the end result (in example, possible higher fps)
-> might surprise applications. Please note the same reasoning applies
-> when using a vblank value that gives a known FPS as an application
-> running at 5fps might get 30fps after a set_fmt.
+> This is v2 of port base loop patch-set
 > 
-> The difference between the two approaches (min-blank vs.
-> known-fps-blank) is that sensors provide different FPS at different
-> resolutions, with full resolution modes sometime being limited to 5
-> fps or less, making difficult to define what the "standard fps" is for
-> all configurations.
-
-Good point about not all sensors being able to do 30 fps
-at their highest resolution.
-
-I'm not a fan of min-vblank as vblank default value since
-with low-height resolutions this will significantly limit
-the maximum exposure time.
-
-OTOH I do believe that we want a simple default for vblank which gets
-set on every set_mode call to keep things KISS.
-
-How about something like this: (based on your doc patch):
-
-"""
-The vblank control default value is reset so that the sensor runs
-at 30 fps. Except when 30 fps cannot be achieved, in that case
-the vblank control default value is reset to the control's minimum.
-
-After adjusting the range, the vblank control's value must be set to its
-new default value for consistent behavior after applying a new frame size.
-"""
-
->> What about enum/get/set frame_interval vs set_mode vs
->> vblank ctrl ?  Options:
->>
->> a) Sensor drivers MUST not implement enum/get/set frame_interval?
+> We have endpoint base functions
+> 	- of_graph_get_next_endpoint()
+> 	- of_graph_get_endpoint_count()
+> 	- for_each_endpoint_of_node()
 > 
-> Ideally they shouldn't, for RAW sensors at least.
+> But to handling "port" base things, it is not useful. We want to have
+> "port" base functions, too. This patch-set adds it.
 > 
-> For YUV/RGB sensors instead the high-level parameters used by
-> frame_interval might be ok as some of those sensors might not even
-> allow you to control blankings explicitly.
+> Because current existing drivers couldn't use "port" base functions,
+> it were implemented in a different way. This patch-set doesn't try
+> to full-replace to avoid unknown bug, try easy / quick replace only
+> for now, but easy to know how "port" base functions are needed.
 > 
-> Whenever the hardware allows that, blankings should always be
-> preferred over frame_interval imho.
-> 
->> b) enum/get/set frame_interval only enum/get/set the default
->>    frame_interval set by set_mode (e.g. fixed 30 fps).
->>    Any vblank changes made after the set_mode are not reflected
->>    by get_frame_interval and set_frame_interval only influences
->>    the next set_mode call, not the current mode ? Or maybe
->>    only allow set_frame_interval when not streaming and then
->>    have it set vblank to match the interval like it would
->>    have done when called before the last set_mode call ?
->> c) enum/get/set frame_interval are a second way to control
->>    hts (lets not go there just here for completeness sake)
->>
->> My own preference here would be to go with a) .
-> 
-> Mine as well, but as said for YUV/RGB sensors it might not even be
-> possible to control blankings explicitly. In this case
-> set_frame_interval can be used but if the driver registers the vblank
-> control the newly computed blanking value (in response to a
-> set_frame_interval) should be reflected there ?
+> Because I can't test the driver which I can't use, non-ASoC drivers
+> needs Tested-by, Acked-by.
 
-IMHO if the driver registers the vblank control then it *must not*
-implement enum/get/set frame_interval . Trying to support both at
-the same time is just going to cause pain.
+The strategy sounds good to me. However, I'm wondering if you shouldn't
+take one more step in the core, and implement these as fwnode
+operations. Or is there a reason why OF is special, and iterating over
+ports would be useful for drivers on OF systems but not on other types
+of systems ?
 
-Assuming a driver implementing vblank also implements hblank
-and pixelrate controls (we can make that mandatory I guess?)
-then there is no need for enum/get/set frame_interval, since
-userspace can then fully query / control the framerate
-through those controls + the frame size.
+> v1 -> v2
+> 	- tidyup function explain
+> 	- add missing header on each files
+> 
+> Kuninori Morimoto (13):
+>   of: property: add port base loop
+>   of: property: use of_graph_get_next_port() on of_graph_get_next_endpoint()
+>   of: property: add of_graph_get_next_endpoint_raw()
+>   drm: omapdrm: use of_graph_get_next_endpoint_raw()
+>   media: xilinx-tpg: use of_graph_get_next_endpoint_raw()
+>   ASoC: audio-graph-card: use of_graph_get_next_endpoint_raw()
+>   ASoC: audio-graph-card2: use of_graph_get_next_port()
+>   ASoC: audio-graph-card2: use of_graph_get_next_endpoint_raw()
+>   ASoC: test-component: use for_each_port_of_node()
+>   fbdev: omapfb: use of_graph_get_remote_port()
+>   fbdev: omapfb: use of_graph_get_next_port()
+>   fbdev: omapfb: use of_graph_get_next_endpoint_raw()
+>   fbdev: omapfb: use of_graph_get_next_endpoint()
+> 
+>  drivers/gpu/drm/omapdrm/dss/dpi.c             |   2 +-
+>  drivers/gpu/drm/omapdrm/dss/sdi.c             |   2 +-
+>  drivers/media/platform/xilinx/xilinx-tpg.c    |   2 +-
+>  drivers/of/property.c                         |  92 +++++++++++++---
+>  drivers/video/fbdev/omap2/omapfb/dss/dpi.c    |   3 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/dsi.c    |   3 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/dss-of.c | 101 +-----------------
+>  drivers/video/fbdev/omap2/omapfb/dss/dss.c    |   9 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/hdmi4.c  |   3 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/hdmi5.c  |   3 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/sdi.c    |   3 +-
+>  drivers/video/fbdev/omap2/omapfb/dss/venc.c   |   3 +-
+>  include/linux/of_graph.h                      |  23 ++++
+>  include/video/omapfb_dss.h                    |  11 --
+>  sound/soc/generic/audio-graph-card.c          |   2 +-
+>  sound/soc/generic/audio-graph-card2.c         |  31 ++----
+>  sound/soc/generic/test-component.c            |   2 +-
+>  17 files changed, 133 insertions(+), 162 deletions(-)
 
+-- 
 Regards,
 
-Hans
-
-
+Laurent Pinchart
