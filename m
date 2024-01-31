@@ -1,264 +1,88 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AAC69D19
-	for <linux-media@vger.kernel.org>; Wed, 31 Jan 2024 09:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6AD69963;
+	Wed, 31 Jan 2024 09:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706692049; cv=none; b=ECldPwaNUo8yovMzgNTKD2QZD2gRJW4Qs+CGMFWHJXdA06MQXwIo2os7RVJvCIWz2EMIkAPDS8m0OlNdgCKc4PH5AUfueGnDxy6cnd8HlZ1snpzfEdr91xt3NqNKWj7INgNT0LVLQVWhTz9E1LYokIu2wSHxOnIfFPY4kIlysGM=
+	t=1706694781; cv=none; b=XIVRS9b5M8L7d84s8YpQOoCb4oy/+npVnZF8AndKzc6PBg+WUKnZ0+yTVEV1GtGWkMppeXEO5B5vHnPGI0JNC3ciFLx2Ll9TZxYIl3XLRJS9nSzXhRAZa9NQbepzOsc0iKt5lkZQ7PRTO54iJsOo3mNVJpbbHV3rWNugwbDSObM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706692049; c=relaxed/simple;
-	bh=CNY1jwS//2OUw7TH3RtzNPnemi/+4THQBdABUHTcnXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OEjJCIuODiDxeCPpLYh4eEQYGJP7wgS306wfjhu2B4SqZ/9wxdLK14KxUwOkz0vk7snjm0vv0SXqbk+n6+z8vBi0tpNNvNVUxsYUs0hAXeknaeup/bnggDLOV4T+CSlNqrmbl2dmJfG8ukDbUBLkQxTdWVOX6CwkYqKyA6FqbUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=fb3O1GhV; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+	s=arc-20240116; t=1706694781; c=relaxed/simple;
+	bh=Ftbd28f3xfz4ylWrK77kAVD/OtXPv69zierfthVmEa0=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:To:
+	 Cc:Date:Message-ID; b=RNP8Kz2xBjJF0hhUlw/WkdgKZRSVz10oSRu8+yFJ8r3PTIDrZxcVOU/bWps5Bzv20yjCE/FpnsloVKxDNYnh/0JH97f6ltHdnKH8ImCckJaGsEpmR/Cg6wThSLwvmbDMvoW0/Az2Tn/WBMrxvG3780DH4kpJh0nro/oeLu70o9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=bXrCQ4IB; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="fb3O1GhV"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a3169f46d73so114426766b.1
-        for <linux-media@vger.kernel.org>; Wed, 31 Jan 2024 01:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1706692046; x=1707296846; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1nyHmju9XQ/E8K2Rl2IixeUYmuUjABoJpLGoEfLLyas=;
-        b=fb3O1GhVCOJIT0/NiqRye3fR1pgpFidpxGqY/qBpNLDo3E+0JhQ00juY/zoOSN7VFW
-         m6BkUzU4iRrgxwhKEWnM08asZwfgYJpwyLcZRUh2EfzKv/IMcw9StSb4gsZkoq/itJsc
-         h8IbKY6UihmNyFTMOkEcQUXGJa+9LSCfzjXoQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706692046; x=1707296846;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1nyHmju9XQ/E8K2Rl2IixeUYmuUjABoJpLGoEfLLyas=;
-        b=LNgGB/avEpVyKu0egwfdxcZks9J44CUH2BQx0o44+2OQB54X3K58ZIY7HIZMmIagEp
-         Gp1pli4HuO5hXi5yhkTeK1Guds/YK/5/3HQblI83jI8cndnd1xeg0+ZZxejN5HvZ7qW+
-         LL0OlQSgX3Vb2S/5pwgyk/AbxxYZYJbyo54t8PcS5OtvjlLTC/L84hCdHL3nL6eYNPmp
-         5QKBt/dNGYqSkw6x2gcRe2V/3yUmzS1n/iToxaD3ycT9WTlR8LJPwotZZIqp1/W72UHi
-         ozpCTAPwd1stP9ZeDWVZN4dQDp7JhYnt5CKl02/YX9xfkVRPa1vT6HEONKw4j1aRiPgJ
-         r7QQ==
-X-Forwarded-Encrypted: i=0; AJvYcCW6rfWtZiEmeJpecBepIomcfT+8Ol9vH+QvYETpgjMMxoXXM8wtzNxNn0o/obD9fuIzC1Yg5wFdXqlRs2CcGGMJ+wAuqXwSQwSU6WA=
-X-Gm-Message-State: AOJu0Yy9ISL8K/qN5AUwngJM28P0ogkq/MIiPEUwuytB9oR1Yr0/kuT6
-	42SdfZvOR3UJ0014is7a2SupP3NRQrwsrXRdMN6HXkoGZMReY4ISAYhClMudjjQ=
-X-Google-Smtp-Source: AGHT+IHB5eqCZmKzcjc2g7JPPAdNArJ7kHHK+OzqhPuyUPAp6vhMz/LdxOxvFmt5K7lTdhhiKUG0EQ==
-X-Received: by 2002:a17:906:4887:b0:a36:63d6:2886 with SMTP id v7-20020a170906488700b00a3663d62886mr583896ejq.3.1706692045444;
-        Wed, 31 Jan 2024 01:07:25 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id rs6-20020a170907890600b00a26d20a48dasm5966647ejc.125.2024.01.31.01.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 01:07:24 -0800 (PST)
-Date: Wed, 31 Jan 2024 10:07:22 +0100
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc: Paul Cercueil <paul@crapouillou.net>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	Christoph Hellwig <hch@lst.de>
-Subject: Re: [Linaro-mm-sig] Re: [PATCH v5 1/6] dma-buf: Add
- dma_buf_{begin,end}_access()
-Message-ID: <ZboNyju8h4vfSd7v@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	Christoph Hellwig <hch@lst.de>
-References: <577501f9-9d1c-4f8d-9882-7c71090e5ef3@amd.com>
- <7928c0866ac5b2bfaaa56ad3422bedc9061e0f7b.camel@crapouillou.net>
- <2ac7562c-d221-409a-bfee-1b3cfcc0f1c6@amd.com>
- <ZbKiCPhRvWaz4Icn@phenom.ffwll.local>
- <c97e38ee-b860-4990-87f1-3e59d7d9c999@amd.com>
- <Zbi6zQYtnfOZu5Wh@phenom.ffwll.local>
- <a2346244-e22b-4ff6-b6cd-1da7138725ae@amd.com>
- <7eec45a95808afe94ac65a8518df853356ecf117.camel@crapouillou.net>
- <ZbjSJi07gQhZ4WMC@phenom.ffwll.local>
- <1d912523-b980-4386-82b2-8d79808398c1@amd.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bXrCQ4IB"
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6406F3D9;
+	Wed, 31 Jan 2024 10:51:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1706694698;
+	bh=Ftbd28f3xfz4ylWrK77kAVD/OtXPv69zierfthVmEa0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=bXrCQ4IBz8nOwukWdfFuX4hngg6FAt8xwdk8+tK8Fl+Q3/y1CuZrKE1T0KF1wzH7g
+	 83IYoFoc0O6vhuf0pmfLwjxZj7U4ohNPPG2NMadf+qatnqOd0jhBKEZbhmCamFJOo6
+	 cCnT30EA8kRo03ohaKoAU6h3IhjiHklJazoEcJMs=
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d912523-b980-4386-82b2-8d79808398c1@amd.com>
-X-Operating-System: Linux phenom 6.6.11-amd64 
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240131055208.170934-2-umang.jain@ideasonboard.com>
+References: <20240131055208.170934-1-umang.jain@ideasonboard.com> <20240131055208.170934-2-umang.jain@ideasonboard.com>
+Subject: Re: [PATCH v2 1/5] media: i2c: imx335: Drop setting of 0x3a00 register
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+To: Umang Jain <umang.jain@ideasonboard.com>, linux-media@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, open list <linux-kernel@vger.kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, Umang Jain <umang.jain@ideasonboard.com>, Matthias Fend <matthias.fend@emfend.at>,
+Date: Wed, 31 Jan 2024 09:52:54 +0000
+Message-ID: <170669477439.1011926.18210850208916698098@ping.linuxembedded.co.uk>
+User-Agent: alot/0.10
 
-On Tue, Jan 30, 2024 at 02:09:45PM +0100, Christian König wrote:
-> Am 30.01.24 um 11:40 schrieb Daniel Vetter:
-> > On Tue, Jan 30, 2024 at 10:48:23AM +0100, Paul Cercueil wrote:
-> > > Le mardi 30 janvier 2024 à 10:23 +0100, Christian König a écrit :
-> > > >   I would say we start with the DMA-API by getting away from sg_tables
-> > > > to something cleaner and state oriented.
-> > > FYI I am already adding a 'dma_vec' object in my IIO DMABUF patchset,
-> > > which is just a dead simple
-> > > 
-> > > struct dma_vec {
-> > >    dma_addr_t addr;
-> > >    size_t len;
-> > > };
-> > > 
-> > > (The rationale for introducing it in the IIO DMABUF patchset was that
-> > > the "scatterlist" wouldn't allow me to change the transfer size.)
-> > > 
-> > > So I believe a new "sg_table"-like could just be an array of struct
-> > > dma_vec + flags.
-> > Yeah that's pretty much the proposal I've seen, split the sg table into
-> > input data (struct page + len) and output data (which is the dma_addr_t +
-> > len you have above).
-> 
-> I would extend that a bit and say we have an array with
-> dma_addr+power_of_two_order and a header structure with lower bit offset and
-> some DMA transaction flags.
-> 
-> But this is something which can be worked as an optimization later on. For a
-> start this proposal here looks good to me as well.
-> 
-> > The part I don't expect to ever happen, because it hasn't the past 20 or
-> > so years, is that the dma-api will give us information about what is
-> > needed to keep the buffers coherency between various devices and the cpu.
-> 
-> Well maybe that's what we are doing wrong.
-> 
-> Instead of asking the dma-api about the necessary information we should give
-> the API the opportunity to work for us.
-> 
-> In other words we don't need the information about buffer coherency what we
-> need is that the API works for as and fulfills the requirements we have.
-> 
-> So the question is really what should we propose to change on the DMA-api
-> side to get this working as expected?
+Hi Umang,
 
-So one thing I've been pondering, kinda picking up your point about CXL,
-is that we do make the coherency protocol more explicit by adding a
-coherency mode to dma_buf that the exporter sets. Some ideas for values
-this could have:
++ Cc: Matthias
 
-- ATTOMIC_COHERENT: Fully cache coherent, including device/cpu atomis.
-  This would be for CXL. Non-CXL devices could still participate with the
-  old model using explicit devices flushes, but must at comply with
-  CPU_COHERENT.
+Quoting Umang Jain (2024-01-31 05:52:04)
+> Register 0x3a00 is a reserved field as per the IMX335 datasheet,
+> hence shouldn't be set by the driver.
 
-  There's also the power9-only nvlink that would fit here, but I guess
-  going forward CXL (and cache-coherent integrated gpu) would really be
-  the only users of this flag.
+We still need to explain more about why we're dropping this register
+write, and what effects it causes.
 
-  Peer2peer would have the same rules, otherwise doesn't really make
-  sense. Also we might want to forbib non-CXL imports for these buffers
-  maybe even? Not sure on that.
+Matthias - I believe this stemmed from the work you did, and I think I
+recall that you stated this register write broke the CSI2 configuration?
 
-- CPU_COHERENT: device transactions do snoop cpu devices caches, but
-  devices might do their own caching which isn't snooped by the cpu and
-  needs explicit device-side invalidate/flushing. This means pcie
-  importers are not allowed to use pcie no-snoop transactions, intel igpu
-  wouldn't be allowed to use MOCS that do the same, similar for arm
-  integrated devices.
+Can you clarify anything here for us please?
 
-  Importers can skip all explicit cache management apis like
-  dma_buf_begin/end_cpu_access, or the newly proposed
-  dma_buf_begin/end_device_access here.
+--
+Kieran
 
-  We'd need to figure out what exactly this means for peer2peer
-  transactions, I have no idea whether the no-snoop flag even does
-  anything for those.
 
-  We might also want to split up CPU_COHERENT into CPU_COHERENT_WB and
-  CPU_WOHERENT_WC, so that importers know whether cpu reads are going to
-  be crawling or not.
-
-- MEMORY_COHERENT: devices transactions do not snoop any caches, but
-  promise that all transactions are fully flushed to system memory. Any
-  devices transactions which do fill cpu caches must call the proposed
-  dma_buf_begin/end_device_access functions proposed here. Any cpu access
-  must be braketed by calls to dma_buf_begin/end_cpu_access.
-
-  If your device does fill cpu caches, then essentially you'd not be able
-  to import such buffers. Not sure whether we need to put the
-  responsibility of checking that onto importers or exporters. Ideally
-  core dma-buf.c code would check this.
-
-  Also maybe the cpu WC mapping mode would actually need to be a sub-mode
-  for MEMORY_COHERENT, because all cpu wc achieves is to avoid the need to
-  call dma_buf_begin/end_cpu_access, you would still need your devices to
-  be memory coherent. And if they're not, then you cannot use that
-  dma-buf.
-
-  Or maybe alternatively we need to guarantee that exporters which set
-  MEMORY_COHERENT implement dma_buf_begin/end_device_access to make things
-  work for these cpu-coherent but not memory-coherent devices. This
-  becomes very tricky with device/arch/bus specific details I think.
-
-- DMA_API_COHERENT: The memory is allocated or mapped by the dma-api, and
-  the exact coherency mode is not know. Importers _must_ braket all cpu
-  and device access with the respective dma_buf functions. This is
-  essentially the "we have no idea" default.
-
-  Note that exporters might export memory allocated with dma_map_alloc
-  with MEMORY_COHERENT or CPU_COHERENT if they know how the memory exactly
-  works. E.g. for most arm soc gpu/display drivers we can assume that the
-  dma-api gives us MEMORY_COHERENT or CPU_COHERENT_WC, and just use that.
-  Essentially this would make the current implicit assumptions explicit.
-
-  udmabuf would need to set this, definitely if Paul's patches to add the
-  explicit device flushes land.
-
-- DEFAULT_COHERENT: This would be the backwards compat legacy yolo
-  behvaior. I'm not sure whether we should alias that with
-  DMA_API_COHERENT or leave it as a special value to mark exporters which
-  haven't been updated for the much more explicit coherency handling yet.
-
-  The specification for this coherency mode would be a flat out "who
-  knows, just don't break existing use-cases with actual users".
-  Essentially the only reason we'd have this would be to make sure we can
-  avoid regressions of these existing use-cases, by keeping whatever
-  horrible heuristics we have in current exporters.
-
-  It would also allow us to convert exporters and importers on a case by
-  case basis.
-
-Note that all these coherency modes are defined in terms of bus-sepecific
-device access and in terms of dma_buf apis the importer must call or can
-skip. This way we'd avoid having to change the dma-api in a first step,
-and if this all works out properly we could then use the resulting dma-api
-as a baseline to propose dma-api extensions.
-
-I think starting right out with designing dma-api extension is a few
-bridges too far. Both from a "how do we convince upstream" pov, but maybe
-even more from a "how do we figure out what we even need" pov.
-
-> Regards,
-> Christian.
-> 
-> 
-> 
-> 
-> 
-> > -Sima
-> 
-> _______________________________________________
-> Linaro-mm-sig mailing list -- linaro-mm-sig@lists.linaro.org
-> To unsubscribe send an email to linaro-mm-sig-leave@lists.linaro.org
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+>=20
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  drivers/media/i2c/imx335.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/media/i2c/imx335.c b/drivers/media/i2c/imx335.c
+> index 7a37eb327ff4..927b4806a5d7 100644
+> --- a/drivers/media/i2c/imx335.c
+> +++ b/drivers/media/i2c/imx335.c
+> @@ -249,7 +249,6 @@ static const struct imx335_reg mode_2592x1940_regs[] =
+=3D {
+>         {0x3794, 0x7a},
+>         {0x3796, 0xa1},
+>         {0x37b0, 0x36},
+> -       {0x3a00, 0x01},
+>  };
+> =20
+>  static const struct imx335_reg raw10_framefmt_regs[] =3D {
+> --=20
+> 2.41.0
+>
