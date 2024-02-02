@@ -1,95 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA7C15B1;
-	Fri,  2 Feb 2024 12:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1462C187F;
+	Fri,  2 Feb 2024 12:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706877541; cv=none; b=gAHDxO3XTIOStdXsH0TfiGYbUp0I70buzIL0BIRVM9yAzh9GqSpfL6HtZM+FENwAYHSxMBRo59gTGvK4d9UxewIV57Nc5eSDBW7wfFs1mipwY+my+kGuL1rBlFgB15YDQ37T+fiifHWJa2vYyOo1HCDHGLrj5TM01TR8XHk0HUE=
+	t=1706878388; cv=none; b=m4VVdhRaK6vf31vYPYVW0ci/iKiPSWFOUBoTo94kPie4jBCt6CaWpoBZhIdACvvfYUf85peYYX1DE562ZrqdDRpyA53mNsmX/xJzoyF7pwN4mzwX+fnGl3KCXfm0ZhGHtVicYQezMFu4F45IBEUUsen0z/WVTgfICfgxjt129mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706877541; c=relaxed/simple;
-	bh=OoPjnrPr8StiPXaPppH3fvGIRnVAs2DNEdph0pRPOO8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qx77xmE8mwhIEhwvvn7YYHW3y+FE9timPOUKQa5fQZHh+dLAxgkdDruXdQIz7inY97gYcgGEuzWC1gPw2lP9/xXujxkoFHEt7gqpvE2jMzjFMnFIryv1VJaWZ+EcruP3xKWHKXpmIw4aH0N2KKx+x5aMW2gq7jVKUokyNkx1mHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VtemBZru; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1706878388; c=relaxed/simple;
+	bh=aI6tdoMPLKlxeu03PJwY+6PTUmy8/t1n/2qpRcDuYbY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rhs8lQzpvaDoQzYfdiyOohHZaTeO9/yg7/0x+nNoo8kBA4utz1SMvpIwRDUclUx39pXnW6LOLkBs2AGWB+5H/UF9wpHtLeOKp6t8yVmiGOI2eOnD3Pu+RJhnCFZ8r3CSA0rLqf0khQPNuevHmHq8bI6pG7XPWq26lj5DsaW3h4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FaSRF19T; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VtemBZru"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706877539; x=1738413539;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OoPjnrPr8StiPXaPppH3fvGIRnVAs2DNEdph0pRPOO8=;
-  b=VtemBZruukhEu1Jgkk5hOGGpB6U8CdgH0XIg3VFI5PYlwEs+A+H/R8xd
-   ah9AgSb62z9zCrL85f/0ZvzFfTKTmKK/ZdU2mlUSXoqp1OBGI/hCzBY0O
-   WbJXzN9H2c7z+Ij+ypTUlDpz0Kq7nhLpQNgoovWJLusng7POFlveFEm3u
-   JK/DcOb0z5LI4E3FGgFUyi37l7J/YcZT+mqQGPs7snws7GdhBKPgvMW8k
-   toxK/ncNcrczkTgdW5QEmU79voh2edpZ2Tuglp2+usuQDmb8GPk2vxcLv
-   OJk/YP8B1mNb0QMVsM9GRXeZUmfEUOVbh/2yWR/lVHb2jkqbyZv8rYEzU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="64235"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="64235"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 04:38:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="37500256"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 04:38:55 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 94F661205D0;
-	Fri,  2 Feb 2024 08:40:17 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1rVnDl-000D9R-1r;
-	Fri, 02 Feb 2024 08:40:17 +0200
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org
-Subject: [PATCH 1/1] media: v4l: Fix link frequency helper's kernel-doc
-Date: Fri,  2 Feb 2024 08:40:07 +0200
-Message-Id: <20240202064007.50545-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240202145412.336db5b2@canb.auug.org.au>
-References: <20240202145412.336db5b2@canb.auug.org.au>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FaSRF19T"
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 412CqwUO085110;
+	Fri, 2 Feb 2024 06:52:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1706878378;
+	bh=NT2KkZYcchRC7YCcmd8jd30rJ0gLMf93hNnBIQa0it4=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=FaSRF19TRdwnHT6XWwPncK4IBMLtU3SNUZk4gAsvTl576KBa25FrQGIFT7ebY5uaS
+	 vgD2gZ34pfBZcU+GAxht+hdAACl/6FBVDP5gzoOHOfXpLNl9UWaJlYAjhDVN7BOtaw
+	 00MbkdNGc1MeMUdKq1nFElywhz5h8UFgfA7nHJk4=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 412CqwvE047001
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 2 Feb 2024 06:52:58 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
+ Feb 2024 06:52:57 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 2 Feb 2024 06:52:57 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 412CqvPA009693;
+	Fri, 2 Feb 2024 06:52:57 -0600
+Date: Fri, 2 Feb 2024 06:52:57 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Brandon Brnich <b-brnich@ti.com>, Nas Chung <nas.chung@chipsnmedia.com>,
+        Jackson Lee <jackson.lee@chipsnmedia.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Darren
+ Etheridge <detheridge@ti.com>
+Subject: Re: [PATCH v2] dt-bindings: media: Add sram-size Property for Wave5
+Message-ID: <20240202125257.p4astjuxpzr5ltjs@dragster>
+References: <20240201184238.2542695-1-b-brnich@ti.com>
+ <1209b7cf-5be2-4107-aa6b-d67a32ea3737@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1209b7cf-5be2-4107-aa6b-d67a32ea3737@linaro.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Fix kernel-doc indentation for v4l2_link_freq_to_bitmap().
+On 11:47-20240202, Krzysztof Kozlowski wrote:
+> On 01/02/2024 19:42, Brandon Brnich wrote:
+> > Wave521c has capability to use SRAM carveout to store reference data with
+> > purpose of reducing memory bandwidth. To properly use this pool, the driver
+> > expects to have an sram and sram-size node. Without sram-size node, driver
+> > will default value to zero, making sram node irrelevant.
+> 
+> I am sorry, but what driver expects should not be rationale for new
+> property. This justification suggests clearly it is not a property for DT.
+> 
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: a68e88e2cf9e ("media: v4l: Add a helper for setting up link-frequencies control")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-Thanks for reporting this, Stephen.
+Yup, the argumentation in the commit message is from the wrong
+perspective. bindings are OS agnostic hardware description, and what
+driver does with the description is driver's problem.
 
- include/media/v4l2-common.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I will at least paraphrase my understanding:
+In this case, however, the hardware block will limp along with
+the usage of DDR (as is the current description), due to the
+latencies involved for DDR accesses. However, the hardware block
+has capability to use a substantially lower latency SRAM to provide
+proper performance and hence for example, deal with higher resolution
+data streams. This SRAM is instantiated at SoC level rather than
+embedded within the hardware block itself.
 
-diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-index cd2163f24f8a..602738f7741e 100644
---- a/include/media/v4l2-common.h
-+++ b/include/media/v4l2-common.h
-@@ -563,7 +563,7 @@ u32 v4l2_fraction_to_interval(u32 numerator, u32 denominator);
-  * Return values:
-  *	0: Success
-  *	-ENOENT: No match found between driver-supported link frequencies and
-- *		 those available in firmware.
-+ *	those available in firmware.
-  *	-ENODATA: No link frequencies were specified in firmware.
-  */
- int v4l2_link_freq_to_bitmap(struct device *dev, const u64 *fw_link_freqs,
+
 -- 
-2.39.2
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
