@@ -1,192 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632853A8F9
-	for <linux-media@vger.kernel.org>; Mon,  5 Feb 2024 15:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0192E635;
+	Mon,  5 Feb 2024 15:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707147168; cv=none; b=fUc1Zjxbi7uggXoyl/9HHM9vk9s0pr6kbc8ugk4kJ+k/4mtVntcZ727G1aeMoCcYAvaD1How+NjbRL472gMXFt0qkdW1SvUkAV6LnnlC8GZigdlYSeq8HXSKL2yTuWsnHLRZtgOJ7iqD82zr3SBvQRtEb5HiWStyolIZ60HpaWQ=
+	t=1707147577; cv=none; b=GlsZ3RzGHimavFg5EzmyFpA+XoZc/c29Vu8P+ZeHj3cTN6AcPOEpNEBwvVnFJXDvWQxZoGrG3O8v0NpczRgCJAZcs5m2IVW1bppjacMXPqoJHnPIb19v0xY7xdZmjP1iR0BDMA4lA34lB3+hbszKQAV69TE1PRnaAH/GZdhP20I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707147168; c=relaxed/simple;
-	bh=QDd5nvWSX5soexgL9aySIZGZKOLJRjsEhtUGUcnXsj0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zegyv8ZTK2skOAVuIyVuQ5zW65uEB0/XPHszVHfYW3uX8oGK9YtLmfkZdQUkiMvEFP6Ah1wgY/iMx7w0ZzcmcJDlmMUwnXFoXaH0b0NPPTsxkgGaax/blZADQlclDk323VH7XzcAjoyAZeznL9222dwtnnbOKx8V29jJjRAcSMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9BBC433C7;
-	Mon,  5 Feb 2024 15:32:46 +0000 (UTC)
-Message-ID: <659634d3-64c0-45fa-b816-4e32f9035a06@xs4all.nl>
-Date: Mon, 5 Feb 2024 16:32:44 +0100
+	s=arc-20240116; t=1707147577; c=relaxed/simple;
+	bh=Rv8CV7EZj9twbDgExrfO0rqgaNqI6EazAjEyAvqafJ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xh4EnYX4vxwkOzHcOCSa/3NPxB52LR2vDjF4Wl5GmTKP1mscvN1OPvJYzWqnoMhfYpmMj37ldO31sXnI5JBKSQfgshLw0+QgWcu0vYeTeFTyXrZwfqzhPI0MdZdrYdmc6sEFQohLEVoeQfrcNitw7E3oxoz5/9ad9wgfGwiSvVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XSKqBAGJ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XSKqBAGJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707147576; x=1738683576;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rv8CV7EZj9twbDgExrfO0rqgaNqI6EazAjEyAvqafJ0=;
+  b=XSKqBAGJZV6zCROXf4SDEQcqsTtwpA4TTPxY7wz0KD+8uzebasq4Aj4o
+   oXxj2RXl/09ECfITYIvn9S3ONr6ilAHGzo2DgZoiK5ITnR77fkI69oqH/
+   zMor1LsRfhMykBfZLosG0M9Che+6asbvLInZEIj/T85hhnNwCjMbnuBDR
+   EHNrNQBUAwQsk330orzkM3I6iE93gR/+bFrv6BGc0v7oRILYrENq7KVLz
+   ne2tr3sTbapsBQkpgFZNTkh87yKnoGb37Llp/lWVFGVyFAuupXg5dOQIe
+   9Nz0whGdTbGjAoeo4BCIk5ayPm/RWk8rLjR8GOMPEkMRNDwnK6bphM1m2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="17966630"
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="17966630"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 07:39:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="31830670"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 07:39:25 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id B935D11FADC;
+	Mon,  5 Feb 2024 12:53:10 +0200 (EET)
+Date: Mon, 5 Feb 2024 10:53:10 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Bin Liu <bin.liu@mediatek.com>,
+	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-amlogic@lists.infradead.org,
+	Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH 17/17] linux: v4l2-vp9.h: Fix kerneldoc
+Message-ID: <ZcC-FjF5pJUKz9Ir@kekkonen.localdomain>
+References: <20240126-gix-mtk-warnings-v1-0-eed7865fce18@chromium.org>
+ <20240126-gix-mtk-warnings-v1-17-eed7865fce18@chromium.org>
+ <ZbTTb-SdK-EubGdc@valkosipuli.retiisi.eu>
+ <201ae1d1-1e03-40e2-9cc4-49df70abb8da@xs4all.nl>
+ <8f3bab1f-8697-40c0-91f2-de934b4b9ddb@infradead.org>
+ <e565f8bd-19d2-4574-8c6d-5573733a8185@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 26/29] media: mc: Maintain a list of open file handles
- in a media device
-Content-Language: en-US, nl
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-References: <20231220103713.113386-1-sakari.ailus@linux.intel.com>
- <20231220103713.113386-27-sakari.ailus@linux.intel.com>
- <84475ab9-e644-4254-81f6-db4da6a3e12e@xs4all.nl>
- <20240205151602.GA8645@pendragon.ideasonboard.com>
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20240205151602.GA8645@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e565f8bd-19d2-4574-8c6d-5573733a8185@xs4all.nl>
 
-On 05/02/2024 16:16, Laurent Pinchart wrote:
-> On Mon, Feb 05, 2024 at 04:11:43PM +0100, Hans Verkuil wrote:
->> On 20/12/2023 11:37, Sakari Ailus wrote:
->>> The list of file handles is needed to deliver media events as well as for
->>> other purposes in the future.
->>>
->>> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->>> ---
->>>  drivers/media/mc/mc-device.c  | 23 ++++++++++++++++++++++-
->>>  drivers/media/mc/mc-devnode.c |  2 +-
->>>  include/media/media-devnode.h |  4 +++-
->>>  3 files changed, 26 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
->>> index 67a39cb63f89..9cc055deeec9 100644
->>> --- a/drivers/media/mc/mc-device.c
->>> +++ b/drivers/media/mc/mc-device.c
->>> @@ -45,9 +45,11 @@ static inline void __user *media_get_uptr(__u64 arg)
->>>  	return (void __user *)(uintptr_t)arg;
->>>  }
->>>  
->>> -static int media_device_open(struct file *filp)
->>> +static int media_device_open(struct media_devnode *devnode, struct file *filp)
->>>  {
->>> +	struct media_device *mdev = to_media_device(devnode);
->>>  	struct media_device_fh *fh;
->>> +	unsigned long flags;
->>>  
->>>  	fh = kzalloc(sizeof(*fh), GFP_KERNEL);
->>>  	if (!fh)
->>> @@ -55,12 +57,23 @@ static int media_device_open(struct file *filp)
->>>  
->>>  	filp->private_data = &fh->fh;
->>>  
->>> +	spin_lock_irqsave(&mdev->fh_list_lock, flags);
->>
->> The only reason for using the irqsave variant is because we want
->> to support events in the future, and those can be sent in irq context.
+Hi Hans,
+
+On Mon, Feb 05, 2024 at 11:44:13AM +0100, Hans Verkuil wrote:
+> On 05/02/2024 11:39, Randy Dunlap wrote:
+> > 
+> > 
+> > On 2/5/24 02:29, Hans Verkuil wrote:
+> >> On 27/01/2024 10:57, Sakari Ailus wrote:
+> >>> Hi Ricardo,
+> >>>
+> >>> On Fri, Jan 26, 2024 at 11:16:16PM +0000, Ricardo Ribalda wrote:
+> >>>> Kerneldoc cannot understand arrays defined like
+> >>>> v4l2_frame_symbol_counts.
+> >>>>
+> >>>> Adding an asterisk to the name does do the trick.
+> >>>>
+> >>>> Disable the kerneldoc notation for now, it is already ignored:
+> >>>> https://docs.kernel.org/search.html?q=v4l2_vp9_frame_symbol_counts
+> >>>
+> >>> Wouldn't it be nicer to fix kerneldoc instead? It might not be difficult at
+> >>> all.
+> >>>
+> >>> Feel free to, but I can also give it a try.
+> >>>
+> >>
+> >> It would be nice to have this fixed in kerneldoc itself. I'm holding this
+> >> patch back for two weeks to see if someone wants to work on kerneldoc.
+> >>
+> >> If not, then I'll take this anyway to fix the noise in our build.
+> >>
+> >> Note that while this header is indeed ignored in the documentation, that
+> >> is really more a bug and it would be nice to actually include this header
+> >> somewhere in our documentation. So fixing these kerneldoc warnings one way
+> >> or another is something that we should do.
+> >>
+> > 
+> > It's just waiting for Jon to apply it: (from Sakari)
+> > 
+> > https://lore.kernel.org/all/20240131084934.191226-1-sakari.ailus@linux.intel.com/
 > 
-> Even in that case, would media_device_open() ever be called from
-> interrupt context ? spin_lock_irqsave() is only needed if you don't know
-> which context the function can be called from. If we know we'll be
-> called from interruptible context only, you can use spin_lock_irq()
-> instead.
+> Ah, that patch was CCed to me but not to linux-media, and I only searched linux-media
+> for it so I missed it. Good news that this is fixed in the right place.
 
-Someone can call open() while at the same time the kernel sends a
-media event from interrupt context. Such an event function will walk
-over the fh_list. The irqsave here is meant to ensure that no event
-interrupt can run while we add our fh to the fh list.
+My bad, somehow I missed linux-media from the distribution. :-(
 
-But without interrupts that access fh_list the irqsave variant is
-confusing.
+> 
+> I marked this 17/17 patch as Obsoleted in patchwork.
 
+Thank you!
+
+-- 
 Regards,
 
-	Hans
-
-> 
->> But it is confusing to see this being used here when it is not yet
->> needed.
->>
->> At minimum this should be explained in the commit log.
->>
->>> +	list_add(&fh->mdev_list, &mdev->fh_list);
->>> +	spin_unlock_irqrestore(&mdev->fh_list_lock, flags);
->>> +
->>>  	return 0;
->>>  }
->>>  
->>>  static int media_device_close(struct file *filp)
->>>  {
->>> +	struct media_devnode *devnode = media_devnode_data(filp);
->>> +	struct media_device *mdev = to_media_device(devnode);
->>>  	struct media_device_fh *fh = media_device_fh(filp);
->>> +	unsigned long flags;
->>> +
->>> +	spin_lock_irqsave(&mdev->fh_list_lock, flags);
->>> +	list_del(&fh->mdev_list);
->>> +	spin_unlock_irqrestore(&mdev->fh_list_lock, flags);
->>>  
->>>  	kfree(fh);
->>>  
->>> @@ -769,11 +782,13 @@ void media_device_init(struct media_device *mdev)
->>>  	INIT_LIST_HEAD(&mdev->pads);
->>>  	INIT_LIST_HEAD(&mdev->links);
->>>  	INIT_LIST_HEAD(&mdev->entity_notify);
->>> +	INIT_LIST_HEAD(&mdev->fh_list);
->>>  
->>>  	mutex_init(&mdev->req_queue_mutex);
->>>  	mutex_init(&mdev->graph_mutex);
->>>  	ida_init(&mdev->entity_internal_idx);
->>>  	atomic_set(&mdev->request_id, 0);
->>> +	spin_lock_init(&mdev->fh_list_lock);
->>>  
->>>  	mdev->devnode.release = media_device_release;
->>>  	media_devnode_init(&mdev->devnode);
->>> @@ -824,6 +839,8 @@ EXPORT_SYMBOL_GPL(__media_device_register);
->>>  
->>>  void media_device_unregister(struct media_device *mdev)
->>>  {
->>> +	unsigned long flags;
->>> +
->>>  	if (mdev == NULL)
->>>  		return;
->>>  
->>> @@ -834,6 +851,10 @@ void media_device_unregister(struct media_device *mdev)
->>>  	}
->>>  	mutex_unlock(&mdev->graph_mutex);
->>>  
->>> +	spin_lock_irqsave(&mdev->fh_list_lock, flags);
->>> +	list_del_init(&mdev->fh_list);
->>> +	spin_unlock_irqrestore(&mdev->fh_list_lock, flags);
->>> +
->>>  	device_remove_file(&mdev->devnode.dev, &dev_attr_model);
->>>  	dev_dbg(mdev->dev, "Media device unregistering\n");
->>>  	media_devnode_unregister(&mdev->devnode);
->>> diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
->>> index 04d376015526..0b5c24828e24 100644
->>> --- a/drivers/media/mc/mc-devnode.c
->>> +++ b/drivers/media/mc/mc-devnode.c
->>> @@ -171,7 +171,7 @@ static int media_open(struct inode *inode, struct file *filp)
->>>  	get_device(&devnode->dev);
->>>  	mutex_unlock(&media_devnode_lock);
->>>  
->>> -	ret = devnode->fops->open(filp);
->>> +	ret = devnode->fops->open(devnode, filp);
->>>  	if (ret) {
->>>  		put_device(&devnode->dev);
->>>  		return ret;
->>> diff --git a/include/media/media-devnode.h b/include/media/media-devnode.h
->>> index b0efdde4ffd8..840f7ae852d3 100644
->>> --- a/include/media/media-devnode.h
->>> +++ b/include/media/media-devnode.h
->>> @@ -21,6 +21,8 @@
->>>  #include <linux/device.h>
->>>  #include <linux/cdev.h>
->>>  
->>> +struct media_devnode;
->>> +
->>>  /*
->>>   * Flag to mark the media_devnode struct as registered. Drivers must not touch
->>>   * this flag directly, it will be set and cleared by media_devnode_register and
->>> @@ -49,7 +51,7 @@ struct media_file_operations {
->>>  	__poll_t (*poll) (struct file *, struct poll_table_struct *);
->>>  	long (*ioctl) (struct file *, unsigned int, unsigned long);
->>>  	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
->>> -	int (*open) (struct file *);
->>> +	int (*open) (struct media_devnode *, struct file *);
->>>  	int (*release) (struct file *);
->>>  };
->>>  
-> 
-
+Sakari Ailus
