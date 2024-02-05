@@ -1,26 +1,26 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2097.outbound.protection.partner.outlook.cn [139.219.17.97])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2110.outbound.protection.partner.outlook.cn [139.219.17.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A05412B84;
-	Mon,  5 Feb 2024 09:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FC512B93;
+	Mon,  5 Feb 2024 09:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.110
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707124769; cv=fail; b=eHaQNPTKviojof9UVpaABUhjuC3fJn/uECbI4ucCih/NK8NP7Hzu6v4lVvKWwIkU4LFhtaAAKg18dzxGJq5qI+08S3sQp5RnXuxZUCMBM/RqVK3P5a3Cscc4ceO/GYFYJ/orGx0mbX4CVE2LCvM8J/dwTRWJRr4OfcVyrwAGtUI=
+	t=1707124822; cv=fail; b=HV8OzYQ4chYEyP1UnX9TpmpllvnKmZc8aO7fOQUBkBfmyqcxRUZwK6x+3vXsHt3QFCMHq8snDFcwlHnVzOXzF04dpM5aJmLrivfU7esqTc4CmAtWik1N6mvfRIQBVKEooRNapKD1Ops6uXBhBLeWQewl5kwzjYiOAvTq4DfsDgk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707124769; c=relaxed/simple;
-	bh=+1D7IvLRJBTd04sDwZpOplB3rB5YLSzF/fM/IdO+03U=;
+	s=arc-20240116; t=1707124822; c=relaxed/simple;
+	bh=RSyL+aweMP3bUyvi8stMkrxlcJdwRksv+mZYJTY7s6s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z2ACH+RtXbMwpj0V7khWrsHQJSfdWSj6FHFC3uXr2MZX8KPxBkMwrkkUoQe+gFO/uwB5scbukUp5ZmKnYFVdzaH91g3SfI/ZtzDYsz6EwKTPPmBtYihpYRX4rSvrP7Ig9IGli1BBOnyHawyVhwL73piMe+pl2pvMgvgBnUK5qD4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.97
+	 Content-Type:MIME-Version; b=Sl54Z4HeB5aoq1VLJmuLyArnZIAzaE3OykktxFOfYcM3xjPHq1ZuRH5Sff65nhz/vKWdi3Rqfeif6e4XboejUuy+dRqxmSWnmgz31Lfuo3nvD4igZoPJ1oW2lQPpHFWlDj9HcvzGDDrBXyFRHkJqoZNfhOBJjRyIIxxX5Den9qs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.110
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m3QxqBnQ12dXc/YXHxU71K2uF8wJ4uFivT3NqvPs/rB/S6a55nNPs0zdpKi6DCwB5za+xgedpOqdwCD07QK+AbUgIxjTWeUZvdVjYtzpfIuw/fvsQ243wFhA8fm5FlaDtVxBIx2TAYuvY4EPaIeFIhRzxmMjew4wsFfTwIN7xvdLW9Jy1e+Oe8OlmboBu5MfDfOHxilnUV76KPB28ABskNCxn6D0GHhmtuFOcNnkfp9hxN1l3i3gMaBgVOW5f0nhNCDF0Fou0JCCKucQjdG0by1Hq1SKPS+CwEj/FHEV71qR5z4/+3emucgRXTGuEPw/CSojRzljCVBkBUE4frFd9A==
+ b=nF7rdnTPKi1lHDwfj3iSuX0vvU0fMuXKFRFZPsWZE02o1OhXDDR4OT9y2px+WEC1lDhKJljzZ/vpRzQju0oRjvyaKOaC1yo71ZKni7uWKPeFtWtV4m5J5r9OevI0Th7WzjVHCMVNJlx4sRbYSzmrrqh0/U8QL4m0/8W7bycV0Xk9xmzOcIxURRuAOvs0EVwmOEz/EFjhzE6miKJKHuHfOFum4Udc2/Wy19ushykZmoKCl+g2dcWf8/4Bz2FRo1qh8R3PfV0hGqSGJRqq1R4hGVykreDcMe90fpa2ISJ+GU+PO8v6VFSp9wzrJAhVK0wYj5LdQGN+xoEwnXlO93rz+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QBKebo5g8nQNZpo/7QeoJbRcWRwazmkDu4kDf3PuBJQ=;
- b=CLP64KgnxRjMqpSlBsGY2xGAGPrMe8TQnG12l8xXYt2rFaxyFqghHTmXcifD4RwROf38z1yuvRWo4+WsYsAmWmyVqhHyPEeReDPSkEsZT4KEpd1mwt/utWhJ/6z9wUt7N4lN73U+eClJzWp8hPjlzTtKSBVHcXCufOPkobovF4IkT1gmhHCMvJnJqZZPuAB3TING+343HKNI90cauQGceyzSvmsg4MS2TfVGgRHL77TB6LWvSE1arq0oNjhzp4c+4yiNyNzBSkRvE6jfMM/FDO+Dju2EivQ1g2K6NGvPJITs7ekS6LaugTpNsOjyQX3aQFIXDhgjQ9ez25K1uvELog==
+ bh=jbrQo/s0w1VWC/wynUGuXozVgj4oEPkEu40VFXe3aSo=;
+ b=Hz/MqBqLUsheoltL4Gds7Ci7OEcCriy6SLTWqpmIVqdH7CNlfUobTPegr0D3FPV96TSKY6Ic68ZnfSDjqPRM24IUYqDlCrTYbpUzJbe9MU5a/zkPLem8HcNO7fvtkXFRp6YCWDqnQMJc5J7E+LnRb1M3pILL42cz3vXQKMAzq4uDbd3hop4M6CJFJWBUDQ/jROKbLaLw5zHcM5P0wAPBViAMqnH3YvXmn9mJwlTuriUAW0c0MjLhXt43xSJtfVbeDzXeydGOb/LQ5a8zwwLyVtSXNQFmmzBcGb88Wjg1ry0BZwQ+5EXhRIy6rPGiR+Va62Y+Hm9wnl+NVSPY8rOp1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=starfivetech.com; dmarc=pass action=none
  header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
@@ -30,11 +30,11 @@ Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
  (2406:e500:c311:25::10) by SHXPR01MB0815.CHNPR01.prod.partner.outlook.cn
  (2406:e500:c311:26::21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.34; Mon, 5 Feb
- 2024 09:04:43 +0000
+ 2024 09:04:48 +0000
 Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
  ([fe80::b0af:4c9d:2058:a344]) by
  SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%6])
- with mapi id 15.20.7249.025; Mon, 5 Feb 2024 09:04:43 +0000
+ with mapi id 15.20.7249.025; Mon, 5 Feb 2024 09:04:48 +0000
 From: Changhuang Liang <changhuang.liang@starfivetech.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -51,9 +51,9 @@ Cc: Jack Zhu <jack.zhu@starfivetech.com>,
 	linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: [PATCH v3 06/13] staging: media: starfive: Separate buffer be a common file
-Date: Mon,  5 Feb 2024 01:04:17 -0800
-Message-Id: <20240205090424.40302-7-changhuang.liang@starfivetech.com>
+Subject: [PATCH v3 09/13] staging: media: starfive: Update ISP initialise config for 3A
+Date: Mon,  5 Feb 2024 01:04:20 -0800
+Message-Id: <20240205090424.40302-10-changhuang.liang@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240205090424.40302-1-changhuang.liang@starfivetech.com>
 References: <20240205090424.40302-1-changhuang.liang@starfivetech.com>
@@ -70,574 +70,147 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0815:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7097c64d-ed3b-4b8a-4adc-08dc26297e45
+X-MS-Office365-Filtering-Correlation-Id: b78b2912-a11e-4340-a416-08dc26298136
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	5A/NgJEFOrBl6hJUejIi/7trHEYgBof68a0VkR5gk2450ZstyBWzx7VQ9SfSBqJ1lwh6F0zApIJo2HFCVsYaqyUKaCBCcbdh9kEUhcgzzK4cmTTGEUMBlmLd2VAZON+gOuiGJUiG4ZpJ/26JFk7Bg4uE7KlOG/En+XVKTS+mkZSVpT0bRtz7DC0Ef+P28nnZ4u7n9zuYclLf3Bk/MjbpQoDxsXz5y+Cs2YG45U7zBu5Y/jhW7yZHBmGHIJLSh5nPb6ergSDmS4XPchfFKbWyBVHQ0Nts9tJy9lI7ssWCgOgWpHLoFTL9STsx79XoAIMTD9+eRKXKbzSbLI2kXl5qgiD7CrRky6mpH0kh2ZygYr8JALe0eMKZEwIf9s2PJnhD/B4m5420X8WpIpJPWOOzfqW29E3qrlFLVg97ZHZiNOwWPdBFF6xdkyGfhlWkHunMpzpTqX1hPEOtdZVYFZren5evlinhFD7r9i9otmEpEVlt4lGZkPXOKZg2TfQ9afZQIX3PlTc3GDWy6feBenphD8CYkBFCDWbfbHy60wesDCKOgZyI8U9auUZo8yLnwiNB1s8+kLHKEvP3DnlAhLb9LA==
+	KOHFFXQofriPGRAC0QktC/Wemhg+yTSwUJ5ZVLlFb911w2JW5BXW/Ko+d8J34CqzHduSc2IIHdciRQODPJl6lm+GQIcdOWyK6HT4zU6Oz5K45CVkOPH3DXqEfCMa00abbAgHgSQGcSubcZWseyvvaf7U0f5a+veHpoXaRO9okCsjnHCCwiq+owRBH6OQ3tvjkNVBK4jsUKUdS+63UzBwL7a2NhF0OqKiDEuDDj+aamZXdM0V5RH2Zcsq6rg/Ms01M/AHIVi2vOgG0AteVNrJN2pxqbfQnInxzbukosU4+JUlyOBB9dOGKuF0hTMh/EmG50dLk1Q1c79P91uWrRFpypjM/GITu34Fypoc+vrs8BWPAZqKg2ISR1Ink6kaXnIRfZvBc65LUwjyAxf6pYhhyOSZgvBMcO6BjAj/S1d6SSA+/6lMNP/Ra9u+vqeOMPvDP085MDPZlimU3ZWtyZHb6wC1cMPEoJnibVXPM+IsjgsSIMfoch+mjQ1r+YIYYyO6hqjbDv9xJQ2Z//5eD5T1VIHYnPqVTwE8djeXQvhHvRKAT22gNBdaLgdckv0Ir6MFhs2LBw9tfJ1kY5f0F+juqQ==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(39830400003)(366004)(396003)(346002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(41320700001)(6666004)(52116002)(36756003)(40180700001)(508600001)(38350700005)(40160700002)(38100700002)(2616005)(1076003)(26005)(83380400001)(86362001)(5660300002)(2906002)(7416002)(30864003)(8936002)(8676002)(4326008)(110136005)(44832011)(54906003)(66946007)(66556008)(66476007)(41300700001)(921011);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(39830400003)(366004)(396003)(346002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(41320700001)(6666004)(52116002)(36756003)(40180700001)(508600001)(38350700005)(40160700002)(38100700002)(2616005)(1076003)(26005)(86362001)(5660300002)(2906002)(7416002)(8936002)(8676002)(4326008)(110136005)(44832011)(54906003)(66946007)(66556008)(66476007)(41300700001)(921011);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?h2xcPNG/aaWbor7zF0vwAJ9CDyJziQ5PVxFsbyF6gcog8ImkDfRcuT1LxgJK?=
- =?us-ascii?Q?44nbsqNjlsei2gAvojlNP98U6DQ3CMXMaslYi9Ho6M5FUef43T87hp5+rPIC?=
- =?us-ascii?Q?ecCcEPoHB9TCzhnb4DIKx8o8NhIuYtk7qd8QVWH7cXh79L2fTfVZyNaIQj9W?=
- =?us-ascii?Q?LzJIvKBRBqUDvZPpAvjUyHFWrZL2HMyM1yn/AOiGCc2+GpJ5eUWOLMU7DD5e?=
- =?us-ascii?Q?1+aQ2lWtnjzDIbMJoX5y7vV2Lz+CW/a4G9VCYE/mYrkvKCByCFFjFDa/eGBV?=
- =?us-ascii?Q?qVEmdZ1g21qP6ha+W4RFd7NsZqLNvD2fz6Z8zbFftjDKC1QyHJTEhk8UHDtT?=
- =?us-ascii?Q?rev9wjl8ElxqL+KrIiRT8Mfv+fQiy/u+hqN29K3Tf53XKtPWOkdY5rNo4LqP?=
- =?us-ascii?Q?OOKMxB4S5e2+C6lxq3uirUai2Jr3ksyKmECin76f3APzHYrHuUj9wZjHV9VO?=
- =?us-ascii?Q?j0R9XpNrwFOMjZyBeEHOWtRom163fCowVa0NpvkIYAjXMYOAxBGQgrEOAXuG?=
- =?us-ascii?Q?7B12/rx0oFBovWhPgujtiDAByFTCKlE9fgaHZTwg2DDY9WBcOu4si+N/N7rd?=
- =?us-ascii?Q?0WM67NpYyXNKu+x4CahZhWehwRnb67ioa7hBmbH1aWlzJ6fRt+poR1PjRCvv?=
- =?us-ascii?Q?s0Ja+fSP0tndwDcV/9vtGlP65kk17NK5O2c6r4H8GoGIEvOUjhY0ojzrz6en?=
- =?us-ascii?Q?9NuZT5euAwpYUSG8ko8mo0JLhmmU4SxHrIvWarIEoIkzoPX3+bJic7XfW4kg?=
- =?us-ascii?Q?N9yPqC7peq+QNsW7cbIPIysVlLwFMwpVsTLjJ0vJ7MvPo60oeJVq/iVtn0U1?=
- =?us-ascii?Q?5I+5CRPM6Hrgkdiy2BBZNO8Tin0mfDAj6lTgWIQB1AGReQXI4EAVtbEeFsQE?=
- =?us-ascii?Q?MNJAS63+A5aImaW9NBUoSwKGNtFMUCNTi6LLlsGt1DxCVTt/xViXbiACNovw?=
- =?us-ascii?Q?xQtqV2ItF2Npjudee5HxrQoAsP9kzZtjOT1po54FBkfA7WYGzjcrWCd4MEqt?=
- =?us-ascii?Q?+89Y7qJEw1CGkhHJNazLNmnpdskBZqA6YzPUzxcWJn5ahfx1pJV3MeHHAXB7?=
- =?us-ascii?Q?rSzI3/SEsViSNoVfdizvV3KISoOVOBjITCnK/48e4FNGVO9qXjCKFd/ki5pS?=
- =?us-ascii?Q?t6FPNb98vHsy8/XfJ5jn4vME7OCvDJjBNkFOr7/EQEL/cudKNlsBWUpXRsNF?=
- =?us-ascii?Q?HniRkwhkww6rKSZrpEkQw/aNYPGgN6DRwf4vla0WLUsEkFjYWYvX6fUSAKQB?=
- =?us-ascii?Q?XkSWeL6GOGtC5zPJeXd0AKuhJHdYSgiLm7VDXUbPWbYqZ9WSRnxWPTpb0yzg?=
- =?us-ascii?Q?amGCfKi80xM2voN3nlzxobuRy8Rov97lmZ18ULVIR6eB5WURhs3yN13Uh00o?=
- =?us-ascii?Q?eN0qhvAghk829FS2bTlmFZ2zpS0vZC5G9KFaLzz/e8CD1hzkZUwyh/YCPh+I?=
- =?us-ascii?Q?puResBEpRSIuXUzszaSlmwdzNWqiDhH3fjHAKwm8Cr0N0zY/zLYe27Yyoo74?=
- =?us-ascii?Q?MT6rLKGhv8+DMKA9gZKgmZBICF1hcIbKMweDQ7BV3ziFObt3IzcqqqznsWpr?=
- =?us-ascii?Q?rZCtd8HxspxOtU3BUm6MGO66RYocHQES27OTh2kF5Hnj/lVnc1YI0eFOob81?=
- =?us-ascii?Q?fcoZwR5R03FVZALx8GbeLX8=3D?=
+	=?us-ascii?Q?vyFxjdOqO6EDAyP7tRUKOjRKRX9K40G0yP3OJVnigfkIoCs3Gh2GWfnAEP2D?=
+ =?us-ascii?Q?foeIq7re3TIVQD++t81z6MDAtRSmJ/cJWyUmE+oGvI07mUKqc1yb52C92HAv?=
+ =?us-ascii?Q?PlDYj+mOD3iICKuA4e7kJBm9QxJgC3Cc5OnEWgV7f2HNqAFAXCpxZKSSffg/?=
+ =?us-ascii?Q?QEzlcIFP2SG9yWAr443cz/VqH8OexUJgPAhQbDfqEXNAlrTXhfZ0WJxkCMOC?=
+ =?us-ascii?Q?hWNFG6m1aTFzGf4Jx4zXhgkvhLhJ2iPZtmr0f6PhkcO7KnxLl9eJEd815+Dp?=
+ =?us-ascii?Q?E/VGVhWCJjiBLiSzVnkzspyst33+AWk0UzqMkffPYFUSm/tFkE0MtI7WWKoD?=
+ =?us-ascii?Q?B5pAI5GlZPVk8Xw4eNl5a2r4lUTah37+QA1zA+ddEKH5Na6qmYKi1ZZyUDZX?=
+ =?us-ascii?Q?L7I7xkr1aDm1OD3ekuhMrtmAC3RPZpdYYOFA1BMJj95Vu3jRXH/B6MkvMe4a?=
+ =?us-ascii?Q?+2U8zqWqcwAoC166S4jGKzF4MzIgUyL0r/KIye+GSfvPrtO7M8n1TPfTJyeq?=
+ =?us-ascii?Q?Dd+KalpX9x9fhHvxPvyWN8qzmqgwT95cjzwLdqwYKffdjrc8V67mK5GJkb7K?=
+ =?us-ascii?Q?3sbPaAFFS3R5igAZzbKExLv51t1MEEkQIsbl4ZiIgB32oYAUo32iqdn7GTd9?=
+ =?us-ascii?Q?FHV8M/ol9XD7UTiwRnGwz32tIpI2c9RiT3Kdj/qcJaVjp/FSQYqhZzWk917t?=
+ =?us-ascii?Q?P5IDs+l3WagxqpXIJ3pN0ju0ZNuG64I45lOlkkbfQv1j91avmfY1C84Ihj/6?=
+ =?us-ascii?Q?LhWyGHOJgqpetglKrzznieGJAlbEY9H6jbRWaKi63tmnsm4GLpMPwVljFkbp?=
+ =?us-ascii?Q?eofTxk6PYxN06HYONYv0cr29P5ViZmq9nsNOpabTsHhf8ywfWOK7/RlWgrqz?=
+ =?us-ascii?Q?cu6AX0tqp3YNv4VBy41n9ZeElzGQaVRjNHhrL0xgzLx1rnXJJjb2+1aiHfU9?=
+ =?us-ascii?Q?DioTl2CdHov089BPrgUAX+CgbaDDtL90S0RxSUWSs1jU/I1FNBb366Wmqn/+?=
+ =?us-ascii?Q?FrpROSTLGDiYWIurtY8AbEnqyOvy04SDtRd+WrTve+PGyzFj0yxhc6wJgaC0?=
+ =?us-ascii?Q?0hRmVgH1VCkSyKzyYDp8KSrR22h6Tq9UeigMkB469BlMiyqzai989meb0/WZ?=
+ =?us-ascii?Q?qPEZvMkmA1z1RrWwSJQsy6rAVZjRhvN0MihMeRqr8AYyGIA6Wjy4jm+GeCmT?=
+ =?us-ascii?Q?CBiWCybXRGGA+SSrilf0QWmydhuKPiw0aK0XIRdmC5fDwvTluAeaFax9kQXX?=
+ =?us-ascii?Q?oxmyJFRXopTYH64ssRuD1r0M5FFIMImm0JpktSR33bysXv7Y4p+OiJkZmoc5?=
+ =?us-ascii?Q?b+xtzT45cW9rmAAArWME7uwNl7c4uJgWHyJqe9atjp08vupI1qdaiLYBH4AC?=
+ =?us-ascii?Q?jBsBDTcp+JHXlZY2YfDowJj67j9o0WPzPvD+BcwJJ4o/+hGcK1h+mUKu00xp?=
+ =?us-ascii?Q?u8osCiIfZdaIy28LWm/CjUUXDfqf1kMGT3cVAPH51pRq3PYaboj/V2DpLljl?=
+ =?us-ascii?Q?C0No6uqtUCPF36RO9Ijr76SwrKXWIwKWQ+Q6poyX5TBV7VdJPnjTF+pw8fSw?=
+ =?us-ascii?Q?bfGU77ig2WTM8c9Cu/r4s0akzvJ/Qu6ltvqXGpeO9PFmyVkG0axb9xryk8vs?=
+ =?us-ascii?Q?mcrtOqWIKTDKs4OzTcytNJ0=3D?=
 X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7097c64d-ed3b-4b8a-4adc-08dc26297e45
+X-MS-Exchange-CrossTenant-Network-Message-Id: b78b2912-a11e-4340-a416-08dc26298136
 X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 09:04:43.4908
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 09:04:48.4525
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mx9pV1aUOUj4jeKMYXYwxbRoSWMCV6bhzV7z1IEQRDbBprZa82pAGawhxLrWLjjWIXhInmF3U4Px2El8MIH6NfEwPrQFsjK/1juQxFiCHdkjlCJd/5AecnwdtMxAS//t
+X-MS-Exchange-CrossTenant-UserPrincipalName: sIrU2VKZP6MtJhQU6t7xdQiMoaCFMmCQ/bTp5nJi3Jv5IL5STb/tiUAPmDszZvOywR5leeCZsm6Rf0AxErPW4LjwnQxd5Sa6qcAp3xJSd1//7Qvni+EBhA2HpeCi18DC
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0815
 
-Buffer operations is not only applicable to capture device, also
-can use for output device. So separating it be a common file.
+Upadte ISP initialise for 3A statistics collection data.
 
 Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 ---
- drivers/staging/media/starfive/camss/Makefile |   1 +
- .../staging/media/starfive/camss/stf-buffer.c | 166 ++++++++++++++++++
- .../staging/media/starfive/camss/stf-buffer.h |  52 ++++++
- .../staging/media/starfive/camss/stf-camss.h  |   1 +
- .../media/starfive/camss/stf-capture.c        | 158 -----------------
- .../media/starfive/camss/stf-capture.h        |  22 ---
- .../staging/media/starfive/camss/stf-video.h  |  10 +-
- 7 files changed, 222 insertions(+), 188 deletions(-)
- create mode 100644 drivers/staging/media/starfive/camss/stf-buffer.c
- create mode 100644 drivers/staging/media/starfive/camss/stf-buffer.h
+ .../media/starfive/camss/stf-isp-hw-ops.c     | 23 +++++++++++++++++++
+ .../staging/media/starfive/camss/stf-isp.h    | 21 +++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/drivers/staging/media/starfive/camss/Makefile b/drivers/staging/media/starfive/camss/Makefile
-index 005790202e7b..411b45f3fb52 100644
---- a/drivers/staging/media/starfive/camss/Makefile
-+++ b/drivers/staging/media/starfive/camss/Makefile
-@@ -4,6 +4,7 @@
- #
- 
- starfive-camss-objs += \
-+		stf-buffer.o \
- 		stf-camss.o \
- 		stf-capture.o \
- 		stf-isp.o \
-diff --git a/drivers/staging/media/starfive/camss/stf-buffer.c b/drivers/staging/media/starfive/camss/stf-buffer.c
-new file mode 100644
-index 000000000000..7272b5ab9eb5
---- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-buffer.c
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StarFive Camera Subsystem - buffer common
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ */
-+
-+#include "stf-camss.h"
-+
-+void stf_buf_add_pending(struct stf_v_buf *output,
-+			 struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->pending_bufs);
-+}
-+
-+struct stfcamss_buffer *stf_buf_get_pending(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
-+
-+	if (!list_empty(&output->pending_bufs)) {
-+		buffer = list_first_entry(&output->pending_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
-+
-+	return buffer;
-+}
-+
-+void stf_buf_add_ready(struct stf_v_buf *output,
-+		       struct stfcamss_buffer *buffer)
-+{
-+	INIT_LIST_HEAD(&buffer->queue);
-+	list_add_tail(&buffer->queue, &output->ready_bufs);
-+}
-+
-+struct stfcamss_buffer *stf_buf_get_ready(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *buffer = NULL;
-+
-+	if (!list_empty(&output->ready_bufs)) {
-+		buffer = list_first_entry(&output->ready_bufs,
-+					  struct stfcamss_buffer,
-+					  queue);
-+		list_del(&buffer->queue);
-+	}
-+
-+	return buffer;
-+}
-+
-+static void stf_buf_update_on_last(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->state = STF_OUTPUT_SINGLE;
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+		output->state = STF_OUTPUT_STOPPING;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void stf_buf_update_on_next(struct stf_v_buf *output)
-+{
-+	switch (output->state) {
-+	case STF_OUTPUT_CONTINUOUS:
-+		output->active_buf = !output->active_buf;
-+		break;
-+	case STF_OUTPUT_SINGLE:
-+	default:
-+		break;
-+	}
-+}
-+
-+void stf_buf_flush(struct stf_v_buf *output, enum vb2_buffer_state state)
-+{
-+	struct stfcamss_buffer *buf;
-+	struct stfcamss_buffer *t;
-+
-+	list_for_each_entry_safe(buf, t, &output->pending_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+	list_for_each_entry_safe(buf, t, &output->ready_bufs, queue) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->queue);
-+	}
-+}
-+
-+struct stfcamss_buffer *stf_change_buffer(struct stf_v_buf *output)
-+{
-+	struct stf_capture *cap = container_of(output, struct stf_capture,
-+					       buffers);
-+	struct stfcamss *stfcamss = cap->video.stfcamss;
-+	struct stfcamss_buffer *ready_buf;
-+	unsigned long flags;
-+	u32 active_index;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_STOPPING ||
-+	    output->state == STF_OUTPUT_RESERVED ||
-+	    output->state == STF_OUTPUT_IDLE)
-+		return NULL;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	active_index = output->active_buf;
-+
-+	ready_buf = output->buf[active_index];
-+	if (!ready_buf) {
-+		dev_dbg(stfcamss->dev, "missing ready buf %d %d.\n",
-+			active_index, output->state);
-+		active_index = !active_index;
-+		ready_buf = output->buf[active_index];
-+		if (!ready_buf) {
-+			dev_dbg(stfcamss->dev,
-+				"missing ready buf2 %d %d.\n",
-+				active_index, output->state);
-+			goto out_unlock;
-+		}
-+	}
-+
-+	/* Get next buffer */
-+	output->buf[active_index] = stf_buf_get_pending(output);
-+	if (!output->buf[active_index])
-+		stf_buf_update_on_last(output);
-+	else
-+		stf_buf_update_on_next(output);
-+
-+	if (output->state == STF_OUTPUT_STOPPING)
-+		output->last_buffer = ready_buf;
-+	else
-+		stf_buf_add_ready(output, ready_buf);
-+
-+out_unlock:
-+	spin_unlock_irqrestore(&output->lock, flags);
-+
-+	return output->buf[active_index];
-+}
-+
-+struct stfcamss_buffer *stf_buf_done(struct stf_v_buf *output)
-+{
-+	struct stfcamss_buffer *ready_buf;
-+	u64 ts = ktime_get_ns();
-+	unsigned long flags;
-+
-+	if (output->state == STF_OUTPUT_OFF ||
-+	    output->state == STF_OUTPUT_RESERVED)
-+		return NULL;
-+
-+	spin_lock_irqsave(&output->lock, flags);
-+
-+	ready_buf = stf_buf_get_ready(output);
-+	if (ready_buf) {
-+		ready_buf->vb.vb2_buf.timestamp = ts;
-+		ready_buf->vb.sequence = output->sequence++;
-+	}
-+
-+	spin_unlock_irqrestore(&output->lock, flags);
-+
-+	return ready_buf;
-+}
-diff --git a/drivers/staging/media/starfive/camss/stf-buffer.h b/drivers/staging/media/starfive/camss/stf-buffer.h
-new file mode 100644
-index 000000000000..9d1670fb05ed
---- /dev/null
-+++ b/drivers/staging/media/starfive/camss/stf-buffer.h
-@@ -0,0 +1,52 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * StarFive Camera Subsystem - buffer common
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ */
-+
-+#ifndef STF_BUFFER_H
-+#define STF_BUFFER_H
-+
-+#include <linux/list.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+enum stf_v_state {
-+	STF_OUTPUT_OFF,
-+	STF_OUTPUT_RESERVED,
-+	STF_OUTPUT_SINGLE,
-+	STF_OUTPUT_CONTINUOUS,
-+	STF_OUTPUT_IDLE,
-+	STF_OUTPUT_STOPPING
-+};
-+
-+struct stfcamss_buffer {
-+	struct vb2_v4l2_buffer vb;
-+	dma_addr_t addr[2];
-+	struct list_head queue;
-+};
-+
-+struct stf_v_buf {
-+	int active_buf;
-+	struct stfcamss_buffer *buf[2];
-+	struct stfcamss_buffer *last_buffer;
-+	struct list_head pending_bufs;
-+	struct list_head ready_bufs;
-+	enum stf_v_state state;
-+	unsigned int sequence;
-+	/* protects the above member variables */
-+	spinlock_t lock;
-+	atomic_t frame_skip;
-+};
-+
-+void stf_buf_add_pending(struct stf_v_buf *output,
-+			 struct stfcamss_buffer *buffer);
-+struct stfcamss_buffer *stf_buf_get_pending(struct stf_v_buf *output);
-+void stf_buf_add_ready(struct stf_v_buf *output,
-+		       struct stfcamss_buffer *buffer);
-+struct stfcamss_buffer *stf_buf_get_ready(struct stf_v_buf *output);
-+void stf_buf_flush(struct stf_v_buf *output, enum vb2_buffer_state state);
-+struct stfcamss_buffer *stf_change_buffer(struct stf_v_buf *output);
-+struct stfcamss_buffer *stf_buf_done(struct stf_v_buf *output);
-+
-+#endif /* STF_BUFFER_H */
-diff --git a/drivers/staging/media/starfive/camss/stf-camss.h b/drivers/staging/media/starfive/camss/stf-camss.h
-index e2b0cfb437bd..ae49c7031ab7 100644
---- a/drivers/staging/media/starfive/camss/stf-camss.h
-+++ b/drivers/staging/media/starfive/camss/stf-camss.h
-@@ -18,6 +18,7 @@
- #include <media/v4l2-async.h>
- #include <media/v4l2-device.h>
- 
-+#include "stf-buffer.h"
- #include "stf-isp.h"
- #include "stf-capture.h"
- 
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.c b/drivers/staging/media/starfive/camss/stf-capture.c
-index 367bdc924fb7..5cbafac46ee6 100644
---- a/drivers/staging/media/starfive/camss/stf-capture.c
-+++ b/drivers/staging/media/starfive/camss/stf-capture.c
-@@ -93,20 +93,6 @@ static void stf_init_addrs(struct stfcamss_video *video)
- 		stf_set_yuv_addr(video->stfcamss, addr0, addr1);
+diff --git a/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
+index ae88668e5798..c778251e0024 100644
+--- a/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
++++ b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
+@@ -300,6 +300,25 @@ static void stf_isp_config_sat(struct stfcamss *stfcamss)
+ 	stf_isp_reg_write(stfcamss, ISP_REG_YADJ1, YOMAX(0x3ff) | YOMIN(0x1));
  }
  
--static struct stfcamss_buffer *stf_buf_get_pending(struct stf_v_buf *output)
--{
--	struct stfcamss_buffer *buffer = NULL;
--
--	if (!list_empty(&output->pending_bufs)) {
--		buffer = list_first_entry(&output->pending_bufs,
--					  struct stfcamss_buffer,
--					  queue);
--		list_del(&buffer->queue);
--	}
--
--	return buffer;
--}
--
- static void stf_cap_s_cfg(struct stfcamss_video *video)
- {
- 	struct stf_capture *cap = to_stf_capture(video);
-@@ -263,61 +249,6 @@ static void stf_capture_init(struct stfcamss *stfcamss, struct stf_capture *cap)
- 	}
- }
- 
--static void stf_buf_add_ready(struct stf_v_buf *output,
--			      struct stfcamss_buffer *buffer)
--{
--	INIT_LIST_HEAD(&buffer->queue);
--	list_add_tail(&buffer->queue, &output->ready_bufs);
--}
--
--static struct stfcamss_buffer *stf_buf_get_ready(struct stf_v_buf *output)
--{
--	struct stfcamss_buffer *buffer = NULL;
--
--	if (!list_empty(&output->ready_bufs)) {
--		buffer = list_first_entry(&output->ready_bufs,
--					  struct stfcamss_buffer,
--					  queue);
--		list_del(&buffer->queue);
--	}
--
--	return buffer;
--}
--
--static void stf_buf_add_pending(struct stf_v_buf *output,
--				struct stfcamss_buffer *buffer)
--{
--	INIT_LIST_HEAD(&buffer->queue);
--	list_add_tail(&buffer->queue, &output->pending_bufs);
--}
--
--static void stf_buf_update_on_last(struct stf_v_buf *output)
--{
--	switch (output->state) {
--	case STF_OUTPUT_CONTINUOUS:
--		output->state = STF_OUTPUT_SINGLE;
--		output->active_buf = !output->active_buf;
--		break;
--	case STF_OUTPUT_SINGLE:
--		output->state = STF_OUTPUT_STOPPING;
--		break;
--	default:
--		break;
--	}
--}
--
--static void stf_buf_update_on_next(struct stf_v_buf *output)
--{
--	switch (output->state) {
--	case STF_OUTPUT_CONTINUOUS:
--		output->active_buf = !output->active_buf;
--		break;
--	case STF_OUTPUT_SINGLE:
--	default:
--		break;
--	}
--}
--
- static void stf_buf_update_on_new(struct stfcamss_video *video,
- 				  struct stfcamss_buffer *new_buf)
- {
-@@ -353,95 +284,6 @@ static void stf_buf_update_on_new(struct stfcamss_video *video,
- 	}
- }
- 
--static void stf_buf_flush(struct stf_v_buf *output, enum vb2_buffer_state state)
--{
--	struct stfcamss_buffer *buf;
--	struct stfcamss_buffer *t;
--
--	list_for_each_entry_safe(buf, t, &output->pending_bufs, queue) {
--		vb2_buffer_done(&buf->vb.vb2_buf, state);
--		list_del(&buf->queue);
--	}
--	list_for_each_entry_safe(buf, t, &output->ready_bufs, queue) {
--		vb2_buffer_done(&buf->vb.vb2_buf, state);
--		list_del(&buf->queue);
--	}
--}
--
--static struct stfcamss_buffer *stf_buf_done(struct stf_v_buf *output)
--{
--	struct stfcamss_buffer *ready_buf;
--	u64 ts = ktime_get_ns();
--	unsigned long flags;
--
--	if (output->state == STF_OUTPUT_OFF ||
--	    output->state == STF_OUTPUT_RESERVED)
--		return NULL;
--
--	spin_lock_irqsave(&output->lock, flags);
--
--	ready_buf = stf_buf_get_ready(output);
--	if (ready_buf) {
--		ready_buf->vb.vb2_buf.timestamp = ts;
--		ready_buf->vb.sequence = output->sequence++;
--	}
--
--	spin_unlock_irqrestore(&output->lock, flags);
--
--	return ready_buf;
--}
--
--static struct stfcamss_buffer *stf_change_buffer(struct stf_v_buf *output)
--{
--	struct stf_capture *cap = container_of(output, struct stf_capture,
--					       buffers);
--	struct stfcamss *stfcamss = cap->video.stfcamss;
--	struct stfcamss_buffer *ready_buf;
--	unsigned long flags;
--	u32 active_index;
--
--	if (output->state == STF_OUTPUT_OFF ||
--	    output->state == STF_OUTPUT_STOPPING ||
--	    output->state == STF_OUTPUT_RESERVED ||
--	    output->state == STF_OUTPUT_IDLE)
--		return NULL;
--
--	spin_lock_irqsave(&output->lock, flags);
--
--	active_index = output->active_buf;
--
--	ready_buf = output->buf[active_index];
--	if (!ready_buf) {
--		dev_dbg(stfcamss->dev, "missing ready buf %d %d.\n",
--			active_index, output->state);
--		active_index = !active_index;
--		ready_buf = output->buf[active_index];
--		if (!ready_buf) {
--			dev_dbg(stfcamss->dev,
--				"missing ready buf2 %d %d.\n",
--				active_index, output->state);
--			goto out_unlock;
--		}
--	}
--
--	/* Get next buffer */
--	output->buf[active_index] = stf_buf_get_pending(output);
--	if (!output->buf[active_index])
--		stf_buf_update_on_last(output);
--	else
--		stf_buf_update_on_next(output);
--
--	if (output->state == STF_OUTPUT_STOPPING)
--		output->last_buffer = ready_buf;
--	else
--		stf_buf_add_ready(output, ready_buf);
--
--out_unlock:
--	spin_unlock_irqrestore(&output->lock, flags);
--
--	return output->buf[active_index];
--}
--
- irqreturn_t stf_wr_irq_handler(int irq, void *priv)
- {
- 	struct stfcamss *stfcamss = priv;
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.h b/drivers/staging/media/starfive/camss/stf-capture.h
-index 2f9740b7e500..fe2489d55090 100644
---- a/drivers/staging/media/starfive/camss/stf-capture.h
-+++ b/drivers/staging/media/starfive/camss/stf-capture.h
-@@ -48,28 +48,6 @@
- #define U0_VIN_P_I_MIPI_HAEDER_EN0_MASK		BIT(12)
- #define U0_VIN_PIX_NUM_MASK			GENMASK(16, 13)
- 
--enum stf_v_state {
--	STF_OUTPUT_OFF,
--	STF_OUTPUT_RESERVED,
--	STF_OUTPUT_SINGLE,
--	STF_OUTPUT_CONTINUOUS,
--	STF_OUTPUT_IDLE,
--	STF_OUTPUT_STOPPING
--};
--
--struct stf_v_buf {
--	int active_buf;
--	struct stfcamss_buffer *buf[2];
--	struct stfcamss_buffer *last_buffer;
--	struct list_head pending_bufs;
--	struct list_head ready_bufs;
--	enum stf_v_state state;
--	unsigned int sequence;
--	/* protects the above member variables */
--	spinlock_t lock;
--	atomic_t frame_skip;
--};
--
- struct stf_capture {
- 	struct stfcamss_video video;
- 	struct stf_v_buf buffers;
-diff --git a/drivers/staging/media/starfive/camss/stf-video.h b/drivers/staging/media/starfive/camss/stf-video.h
-index 8052b77e3ad8..59799b65cbe5 100644
---- a/drivers/staging/media/starfive/camss/stf-video.h
-+++ b/drivers/staging/media/starfive/camss/stf-video.h
-@@ -10,13 +10,13 @@
- #ifndef STF_VIDEO_H
- #define STF_VIDEO_H
- 
--#include <linux/list.h>
- #include <linux/mutex.h>
- #include <linux/videodev2.h>
- #include <media/v4l2-dev.h>
- #include <media/v4l2-fh.h>
- #include <media/v4l2-ioctl.h>
--#include <media/videobuf2-v4l2.h>
++static void stf_isp_config_sc(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_SCD_CFG_1, AXI_ID(0));
++	stf_isp_reg_write(stfcamss, ISP_REG_SC_CFG_0, HSTART(0) | VSTART(0xc));
++	stf_isp_reg_write(stfcamss, ISP_REG_SC_CFG_1,
++			  SC_WIDTH(0x1d) | SC_HEIGHT(0x15) |
++			  AWB_PS_GRB_BA(0x10) | SEL_TYPE(0x3));
++}
 +
-+#include "stf-buffer.h"
++static void stf_isp_config_yhist(struct stfcamss *stfcamss)
++{
++	stf_isp_reg_write(stfcamss, ISP_REG_YHIST_CFG_0, 0);
++	stf_isp_reg_write(stfcamss, ISP_REG_YHIST_CFG_1,
++			  YH_WIDTH(0x77f) | YH_HEIGHT(0x437));
++	stf_isp_reg_write(stfcamss, ISP_REG_YHIST_CFG_2,
++			  YH_DEC_ETW(2) | YH_DEC_ETH(1));
++	stf_isp_reg_write(stfcamss, ISP_REG_YHIST_CFG_3, 0);
++}
++
+ int stf_isp_reset(struct stf_isp_dev *isp_dev)
+ {
+ 	stf_isp_reg_set_bit(isp_dev->stfcamss, ISP_REG_ISP_CTRL_0,
+@@ -332,7 +351,11 @@ void stf_isp_init_cfg(struct stf_isp_dev *isp_dev)
+ 	stf_isp_config_sharpen(isp_dev->stfcamss);
+ 	stf_isp_config_dnyuv(isp_dev->stfcamss);
+ 	stf_isp_config_sat(isp_dev->stfcamss);
++	stf_isp_config_sc(isp_dev->stfcamss);
++	stf_isp_config_yhist(isp_dev->stfcamss);
  
- #define STFCAMSS_FRAME_MIN_WIDTH		64
- #define STFCAMSS_FRAME_MAX_WIDTH		1920
-@@ -40,12 +40,6 @@ enum stf_capture_type {
- 	STF_CAPTURE_NUM,
- };
++	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_DUMP_CFG_1,
++			  DUMP_BURST_LEN(3) | DUMP_SD(0xb80));
+ 	stf_isp_reg_write(isp_dev->stfcamss, ISP_REG_CSI_MODULE_CFG,
+ 			  CSI_DUMP_EN | CSI_SC_EN | CSI_AWB_EN |
+ 			  CSI_LCCF_EN | CSI_OECF_EN | CSI_OBC_EN | CSI_DEC_EN);
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.h b/drivers/staging/media/starfive/camss/stf-isp.h
+index 0af7b367e57a..eca3ba1ade75 100644
+--- a/drivers/staging/media/starfive/camss/stf-isp.h
++++ b/drivers/staging/media/starfive/camss/stf-isp.h
+@@ -110,9 +110,19 @@
  
--struct stfcamss_buffer {
--	struct vb2_v4l2_buffer vb;
--	dma_addr_t addr[2];
--	struct list_head queue;
--};
--
- struct fract {
- 	u8 numerator;
- 	u8 denominator;
+ #define ISP_REG_SCD_CFG_0			0x098
+ 
++#define ISP_REG_SCD_CFG_1			0x09c
++#define AXI_ID(n)				((n) << 24)
++
++#define ISP_REG_SC_CFG_0			0x0b8
++#define VSTART(n)				((n) << 16)
++#define HSTART(n)				((n) << 0)
++
+ #define ISP_REG_SC_CFG_1			0x0bc
+ #define ISP_SC_SEL_MASK				GENMASK(31, 30)
+ #define SEL_TYPE(n)				((n) << 30)
++#define AWB_PS_GRB_BA(n)			((n) << 16)
++#define SC_HEIGHT(n)				((n) << 8)
++#define SC_WIDTH(n)				((n) << 0)
+ 
+ #define ISP_REG_LCCF_CFG_2			0x0e0
+ #define ISP_REG_LCCF_CFG_3			0x0e4
+@@ -312,6 +322,17 @@
+ #define DNRM_F(n)				((n) << 16)
+ #define CCM_M_DAT(n)				((n) << 0)
+ 
++#define ISP_REG_YHIST_CFG_0			0xcc8
++
++#define ISP_REG_YHIST_CFG_1			0xccc
++#define YH_HEIGHT(n)				((n) << 16)
++#define YH_WIDTH(n)				((n) << 0)
++
++#define ISP_REG_YHIST_CFG_2			0xcd0
++#define YH_DEC_ETH(n)				((n) << 16)
++#define YH_DEC_ETW(n)				((n) << 0)
++
++#define ISP_REG_YHIST_CFG_3			0xcd4
+ #define ISP_REG_YHIST_CFG_4			0xcd8
+ 
+ #define ISP_REG_YHIST_ACC_0			0xd00
 -- 
 2.25.1
 
