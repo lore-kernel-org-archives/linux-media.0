@@ -1,108 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBACC2C1AF
-	for <linux-media@vger.kernel.org>; Mon,  5 Feb 2024 14:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FDC2C859
+	for <linux-media@vger.kernel.org>; Mon,  5 Feb 2024 14:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707144868; cv=none; b=HqIHlPKRjf+UheKvfjK2TnFZBgUR6spKN6X10mV9WgM+4cQmPQ7J7S8FE8g+mtHcxWJl4XI1unSbXGdK6ir/KgRjVe7jRdm81XKW+21pjCrVI8TAQMtxvPDIq+b9oyUMXYInwCpbj6ho9bPLoj/KgSb5tmuz/Vprf+b5uJT8Hy8=
+	t=1707144985; cv=none; b=lXy8iUN0ppu3Rk6tq8Lc1G4+jM/awk9HBnZR+hTz5YLj3hP1RFkgJw008okGmklB1EN2p+EwO10ydZq+RdDvJ579xz0vfVpmJD9AmaHRft2wKhUBNPjW4Fue9Dj8FM9NWW3yBkPUMIPL+DRvRHnJTJuT5mWSFjCl9cLUcWquz8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707144868; c=relaxed/simple;
-	bh=qKyXNNPPbwrzAOCrEKd4284T0HqPCUowkiBaonsY500=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YCzryKDca69roI9hmSAMoyTR75v1LKpyxDYmrpgCdhCkvnNYf+OC59FJXVkdeKs1cJL3uUqsD0UbTV8Bn8buOdo3uizUyJs3uLmGCr1znht80xzBcUSHn5NR1qUtKt0ZK7DjjwRniuefiETsE3WJiMva6FE8HAI2BEOjkSOAtyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M7WGG+9Q; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M7WGG+9Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707144867; x=1738680867;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qKyXNNPPbwrzAOCrEKd4284T0HqPCUowkiBaonsY500=;
-  b=M7WGG+9QQ1WZPn1regkccDg+VlImkndo0LHvTJ7xRNOacnx0TWtdJxo/
-   Z7MDWdMVAVVD8/+/q31nz4liihgR5JfqWkSWKZx3/Zu7KZcqvGYUPeuyw
-   W+CSAfOQdDZ+p/1Xn1zGRpKaE4MWXY+5bzvRt+TL86Wcq/uO5XmSyEVqQ
-   ahYYz8v/1Mq6wlpd5Zfx6Lu+bYogVQ5u9+cUX3VWoOgrVvnRxygvzgho+
-   8EIvvpumQv2MFtwgm3xEjoZGjX/UMkBMymFPqxP2vkop9nzkquhtCHSaV
-   gj4smjF06kncLTd26B5nvYN2AiG5M52c2Ioq6AlQKKSfFpwcD7nT12ZNe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="11182385"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="11182385"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 06:54:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="933172658"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="933172658"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 06:54:24 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 66E4211F89A;
-	Mon,  5 Feb 2024 12:08:01 +0200 (EET)
-Date: Mon, 5 Feb 2024 10:08:01 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH 1/2] media: dt-bindings: Revert changes to
- video-interfaces.yaml
-Message-ID: <ZcCzgbmyGo5TlyLD@kekkonen.localdomain>
-References: <20240204210642.693958-1-sakari.ailus@linux.intel.com>
- <ffce7362-f3ee-492d-92b7-a8cee846b692@kernel.org>
+	s=arc-20240116; t=1707144985; c=relaxed/simple;
+	bh=4xtRQkuiPqyu6TyLwdlTOSwth1b8ntrgFb54HjrouaQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nKQnNuFWwsaSOlkswA2UoulQOsuvJ4KsDzoH0ZHtgm7MRAFmSDZUi3E1pueOSIJR8nK5Z6MsUcsjqEOfabdTDH9Q+17tCZ8mX+Kg0Mv0TXzVf9f/0FOwmdxfjT2hCRvik3HroB2sIp0g106dgb+BIe9PDXdkwd8BqfvMGWHSDxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1112C433C7;
+	Mon,  5 Feb 2024 14:56:23 +0000 (UTC)
+Message-ID: <2708ec26-3156-4269-85ae-d9e783dc3bd1@xs4all.nl>
+Date: Mon, 5 Feb 2024 15:56:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffce7362-f3ee-492d-92b7-a8cee846b692@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 17/29] media: v4l: Acquire a reference to the media
+ device for every video device
+Content-Language: en-US, nl
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Cc: laurent.pinchart@ideasonboard.com
+References: <20231220103713.113386-1-sakari.ailus@linux.intel.com>
+ <20231220103713.113386-18-sakari.ailus@linux.intel.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20231220103713.113386-18-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
-
-On Mon, Feb 05, 2024 at 09:35:02AM +0100, Krzysztof Kozlowski wrote:
-> On 04/02/2024 22:06, Sakari Ailus wrote:
-> > Commit feb8831be9d4 ("media: ov08x40: Reduce start streaming time")
-> > introduced an unintentional change to
-> > Documentation/devicetree/bindings/media/video-interfaces.yaml. Revert this
-> > change now.
-> > 
-> > Reported-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Fixes: feb8831be9d4 ("media: ov08x40: Reduce start streaming time")
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+On 20/12/2023 11:37, Sakari Ailus wrote:
+> The video device depends on the existence of its media device --- if there
+> is one. Acquire a reference to it.
 > 
-> Even if it is simple, it still should be tested...
+> Note that when the media device release callback is used, then the V4L2
+> device release callback is ignored and a warning is issued if both are
+> set.
 > 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC. It might happen, that command when run on an older
-> kernel, gives you outdated entries. Therefore please be sure you base
-> your patches on recent Linux kernel.
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/media/v4l2-core/v4l2-dev.c | 51 ++++++++++++++++++++----------
+>  1 file changed, 34 insertions(+), 17 deletions(-)
 > 
-> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-> people, so fix your workflow. Tools might also fail if you work on some
-> ancient tree (don't, instead use mainline), work on fork of kernel
-> (don't, instead use mainline) or you ignore some maintainers (really
-> don't). Just use b4 and everything should be fine, although remember
-> about `b4 prep --auto-to-cc` if you added new patches to the patchset.
-> 
-> You missed at least devicetree list (maybe more), so this won't be
-> tested by automated tooling. Performing review on untested code might be
-> a waste of time, thus I will skip this patch entirely till you follow
-> the process allowing the patch to be tested.
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index d13954bd31fd..c1e4995eaf5c 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -176,6 +176,11 @@ static void v4l2_device_release(struct device *cd)
+>  {
+>  	struct video_device *vdev = to_video_device(cd);
+>  	struct v4l2_device *v4l2_dev = vdev->v4l2_dev;
+> +	bool v4l2_dev_has_release = v4l2_dev->release;
+> +#ifdef CONFIG_MEDIA_CONTROLLER
+> +	struct media_device *mdev = v4l2_dev->mdev;
+> +	bool mdev_has_release = mdev && mdev->ops && mdev->ops->release;
+> +#endif
+>  
+>  	mutex_lock(&videodev_lock);
+>  	if (WARN_ON(video_devices[vdev->minor] != vdev)) {
+> @@ -198,8 +203,8 @@ static void v4l2_device_release(struct device *cd)
+>  
+>  	mutex_unlock(&videodev_lock);
+>  
+> -#if defined(CONFIG_MEDIA_CONTROLLER)
+> -	if (v4l2_dev->mdev && vdev->vfl_dir != VFL_DIR_M2M) {
+> +#ifdef CONFIG_MEDIA_CONTROLLER
+> +	if (mdev && vdev->vfl_dir != VFL_DIR_M2M) {
+>  		/* Remove interfaces and interface links */
+>  		media_devnode_remove(vdev->intf_devnode);
+>  		if (vdev->entity.function != MEDIA_ENT_F_UNKNOWN)
+> @@ -207,23 +212,31 @@ static void v4l2_device_release(struct device *cd)
+>  	}
+>  #endif
+>  
+> -	/* Do not call v4l2_device_put if there is no release callback set.
+> -	 * Drivers that have no v4l2_device release callback might free the
+> -	 * v4l2_dev instance in the video_device release callback below, so we
+> -	 * must perform this check here.
+> -	 *
+> -	 * TODO: In the long run all drivers that use v4l2_device should use the
+> -	 * v4l2_device release callback. This check will then be unnecessary.
+> -	 */
+> -	if (v4l2_dev->release == NULL)
+> -		v4l2_dev = NULL;
+> -
+>  	/* Release video_device and perform other
+>  	   cleanups as needed. */
+>  	vdev->release(vdev);
+>  
+> -	/* Decrease v4l2_device refcount */
+> -	if (v4l2_dev)
+> +#ifdef CONFIG_MEDIA_CONTROLLER
+> +	if (mdev)
+> +		media_device_put(mdev);
+> +
+> +	/*
+> +	 * Generally both struct media_device and struct v4l2_device are
+> +	 * embedded in the same driver's context struct so having a release
+> +	 * callback in both is a bug.
+> +	 */
+> +	WARN_ON(v4l2_dev_has_release && mdev_has_release);
 
-We decided to revert the original patch in its entirety. Note that merging
-this (or the full revert of the original patch) reverts the changes
-that were previously merged unintentionally. Not doing so will break
-video-interfaces.yaml and omap3-n9.dts.
+How about:
 
-I didn't cc the devicetree list or DT maintainers as I viewed addressing
-this problem internal to the media tree.
+	if (WARN_ON(v4l2_dev_has_release && mdev_has_release))
+		v4l2_dev_has_release = false;
 
--- 
-Kind regards,
+> +#endif
+> +
+> +	/*
+> +	 * Decrease v4l2_device refcount, but only if the media device doesn't
+> +	 * have a release callback.
+> +	 */
+> +	if (v4l2_dev_has_release
+> +#ifdef CONFIG_MEDIA_CONTROLLER
+> +	    && !mdev_has_release
+> +#endif
+> +	    )
 
-Sakari Ailus
+Then this change is no longer needed.
+
+General question: do we have drivers today that set both release functions?
+Because that would now cause a WARN in the kernel log with this patch.
+
+>  		v4l2_device_put(v4l2_dev);
+>  }
+>  
+> @@ -792,11 +805,14 @@ static int video_register_media_controller(struct video_device *vdev)
+>  	u32 intf_type;
+>  	int ret;
+>  
+> -	/* Memory-to-memory devices are more complex and use
+> +	/*
+> +	 * Memory-to-memory devices are more complex and use
+>  	 * their own function to register its mc entities.
+>  	 */
+> -	if (!vdev->v4l2_dev->mdev || vdev->vfl_dir == VFL_DIR_M2M)
+> +	if (!vdev->v4l2_dev->mdev || vdev->vfl_dir == VFL_DIR_M2M) {
+> +		media_device_get(vdev->v4l2_dev->mdev);
+>  		return 0;
+> +	}
+>  
+>  	vdev->entity.obj_type = MEDIA_ENTITY_TYPE_VIDEO_DEVICE;
+>  	vdev->entity.function = MEDIA_ENT_F_UNKNOWN;
+> @@ -875,6 +891,7 @@ static int video_register_media_controller(struct video_device *vdev)
+>  
+>  	/* FIXME: how to create the other interface links? */
+>  
+> +	media_device_get(vdev->v4l2_dev->mdev);
+>  #endif
+>  	return 0;
+>  }
+
+Regards,
+
+	Hans
