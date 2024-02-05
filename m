@@ -1,161 +1,152 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2110.outbound.protection.partner.outlook.cn [139.219.17.110])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54FF1428A;
-	Mon,  5 Feb 2024 09:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.110
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707125987; cv=fail; b=DuONBQpbfW97pZ6Nyc3KgTO1cFbeX535eIbQYDjAVg4L9L21oiH9TBgi61FOkNUhBKTMXYVgksRH3358wUwHxJWUJnjgR6f8XHkHAYCpdPNqSkk/fpiRAMlqJs7XwzuNa+g6NJNtYXLoLIDiAAGpKE6LxvrXqNVPWYspOW0il+Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707125987; c=relaxed/simple;
-	bh=aF1sm0c+Cm00QwaRg87Dac2kr0QT5QtcMJoADOoVzQs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rjq/9SV6ploy76GxJqQN5RBOI9R1FzOcTV++DSstF8VNxo/1YQRXdqK7il4iG1z7p7JTV1nDak9RfXBcG95VJo1tm8v49PVDNd7Jh6GuTZ0B88RBJGY+dYAvWiyuK6DM5pIBhAhUEIOFNKw+KOOXW4JL15TUZNlaBDKGWaSMzQI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OmQv7L99p3UmO1ZwBl6sCTJsZBhzhE7iYX4+6YnDadKLvUjWBqJcPKRDYhkKjn6MkOd17hI1aqqPDhMUzJf1Wc0VXAwF1NIY8+7Kx0hPWd3Da8In1KjIcXNo1Hqe5hwsHmmlcZ5AolHnuNklA5gZGMNwRewHFOI9yM675QSzm7sEeqKssDebA1l/dPFOEIVvyWbytMGd8/OoXX4XjG3LpS1Ze4/gpXqb3AnfF9HnCcXixflOG81WSNHN8YmYejlRTHfJCTpv60m1pA4dY9PguvxqEC6PQpmdxb13FnH0jwxkn4dihaaIZtY4pOAXrGGMxWLDf4L4x0OG7GJlzI4OwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tys5cIxMnn7dQx/nl7KwEcmxWT/25exDuxXWIufoanU=;
- b=DLcqOgx6PW39N1HglyVFwscIXokhXg/Orf74NqV9V6AI2CnUlouX4so7qsAvCpzPuMeyODsiorw1LC8YDozv+fkYUFjwzsOdWcWmEMe35Oak/8/+rC2y481Co+IyL7kvrtnhILQuJdXTCMKJafnL9Nsvbo/0ua8bTA6dQoHJGMCp1fYRzl/qtsehmSTfAoDycnTKumPW1EK010B8CHnmJtTFcWAVletoeNRMFNk2IG8mQRPCCo6UH7z3gB+XjPc+BsUJUnPnOquT/dO2SHH343vmRSdMyB6Po2EdwJSdcZqYCszBHkAtxFcD0XiWZrSY0OEhfm3gfB4Fcv5A7bFSIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10) by SHXPR01MB0815.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:26::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.34; Mon, 5 Feb
- 2024 09:04:38 +0000
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- ([fe80::b0af:4c9d:2058:a344]) by
- SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%6])
- with mapi id 15.20.7249.025; Mon, 5 Feb 2024 09:04:38 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Ming Qian <ming.qian@nxp.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	Mingjia Zhang <mingjia.zhang@mediatek.com>
-Cc: Jack Zhu <jack.zhu@starfivetech.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v3 03/13] media: videodev2.h, v4l2-ioctl: Add StarFive ISP meta buffer format
-Date: Mon,  5 Feb 2024 01:04:14 -0800
-Message-Id: <20240205090424.40302-4-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240205090424.40302-1-changhuang.liang@starfivetech.com>
-References: <20240205090424.40302-1-changhuang.liang@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZQ0PR01CA0022.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:2::23) To SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24DD12E75;
+	Mon,  5 Feb 2024 09:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707126976; cv=none; b=c0/3whFlzsQzqix64aGkIrp9HLp32k2LYyU/NrPmDuk5eu8aVLsve8E1mp5smb0puBgpHpQX9157hiOLNLxgXCT2bGlfEytT3EaajIAikxEbdKf8yMbkk3cgKJl6Vtdx8LSSt7AZhOCKvBj3CkPwy5AzyhTt7W4m+09jXS1BWrQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707126976; c=relaxed/simple;
+	bh=u3UHw68fN7+IkE23kchq6FnkTdKNYPKXZ66IvYNi2es=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gn9s3D+XX4Z4yygFl0ETI/q66K9kFin7E/HpjwM8jJnH1WiXfjZvoZGWgYX75VIYzY3lc2RPaRXoPWKH9Wo0+nDvdF7eXlA5oudVK2lJzjSXRaqZi5xvKkVdmCgzlrlsRZI9Xf9nq9JCJO5vwnBgKdnYFF78bxWvlpR1wcI2zAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B14C433F1;
+	Mon,  5 Feb 2024 09:56:15 +0000 (UTC)
+Message-ID: <cffd5052-9314-424d-872c-07796feb7ce9@xs4all.nl>
+Date: Mon, 5 Feb 2024 10:56:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0815:EE_
-X-MS-Office365-Filtering-Correlation-Id: d98cec9c-a628-40a4-5401-08dc26297b56
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	gfKV8D1hEmX5ILmZin4DU2uz8X9HRrEMcwHYRHdWFg9sY6rih7huYnq9fKhbJ3VVAamz7Kr/+PcOqETv44xf4IIp5RmInP2QuehTR/qnXk86hB0M6Yw+opYPaAldQvYqq9zjXMR6AFoOStcV7L9uoGhtqPALc4Xu41BRtO0XyWFezLNYqngE9REPd7Q4xde3rcvtRxi2dG07PpP3CZCFma28wCTYZOeKFfom2VUm/TxzVvW9eTravaXo2apI5AxbG0WDRy7jA5iRCRfibOwFMe97mb48hXJ7LxY1Ca5SX7KK/HO6UklSQEIepk7FJyI2mnnS+3aaH1bVW4GtWYBRU6RiVfQ6uej3lPqQsdH8ZvTliCj/IYqceNoavBnnHxp6hTw95NyWXzlPo0O4toa9D4mo14oiZyJTUuijC3rm6rx8tGc6EwjvFogGYEiZ9eMepfGzlSAfShVajdVJYNZ5MtOc4mxnBOjWJ/v6xlhM3UOd8a0wJByYsfFBNAAzSefw37IGqbkiCRPGaSVEx/z44qTG2MpasvX9m3e/ShLGnY/HfPaIP3nGdp1k+hMbbKgW0R0yRpkHFmwmFUH2F6CyNw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(39830400003)(366004)(396003)(346002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(41320700001)(6666004)(52116002)(36756003)(40180700001)(508600001)(38350700005)(40160700002)(38100700002)(2616005)(1076003)(26005)(86362001)(5660300002)(2906002)(7416002)(8936002)(8676002)(4326008)(110136005)(44832011)(54906003)(66946007)(66556008)(66476007)(41300700001)(921011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aHeRldoO9l0o1hPAnS+kxGlC8WcAbgFTwVFaPGdVR6mrcp93wzfCWqH4l1iQ?=
- =?us-ascii?Q?cC9bjWXY+Oumt/gtGhV/Uuu5y9yXKe7LZ/bo/p9m+HlgEAgpDOYvzRh0Lgxu?=
- =?us-ascii?Q?C3+3O5fjumQVCCKkKD189KCcaveXi1yuCPTpEgXgqzuBZov/x9Zp3M2yrd+O?=
- =?us-ascii?Q?2/5JR7+CYeNA8jOuJURxTepBZm0cqPDSvD40X+eA7D0RKckuCDXCRk6KgBhR?=
- =?us-ascii?Q?j299xPUWouovCxkYEM4jdvBZwPPWC10sEAveTtYyXh2/erKPjeCNlaTftqxL?=
- =?us-ascii?Q?iLS/tGVhTgz3s4DK901P6b0GolpZYxclVn2MHJdVJkKd18SdhzbSRLJxUmy2?=
- =?us-ascii?Q?VIjEIN8+0G2jm40W1RCWyluhdIHGaQ04P5J5nuMYjaQ1lZ0ESLLapTXL3qFo?=
- =?us-ascii?Q?BaM7buk/kZ4+oG6dMJucZBTxX8sA/EncmlPry+ShZScQWXjcE7zMfwFs+yVa?=
- =?us-ascii?Q?nGwKQzyDyPEZDYTcDN+o9n7fq1aYpLNaqhFYkA3gC2ihMQCbh7zsfWh+3WEu?=
- =?us-ascii?Q?j0Wr+TI6J07f7t5GyP+gQlhNavU6QzQB7IN8PR3isL0OqMj3EmChQ5cOfScG?=
- =?us-ascii?Q?vCmfKdmnEFg4V6JGrKDIpD0+EL4XCTqej1c2K4wkny2OfMeSZYDBlSpCXJ++?=
- =?us-ascii?Q?zvvFtqup6H5pe7/YU1egtvIM/BfoTdgKlElj2yRtEsHuVvR2fjA3fbaOV/yI?=
- =?us-ascii?Q?+pM7wW8up8ip+2VbU7clMoh8pNSVxydmb0rA4Akcprnm+26bpSLAuT3QxGD1?=
- =?us-ascii?Q?N3v+zizEI5F6AY3lbvqnYejptsZZNsJOKkdPwCCJVeYNbOjcckXUJn1bNRWD?=
- =?us-ascii?Q?RPuzkDiymC6yzlFLBPDWKuX+cbSE/G6dKtn2Bf7C+lDdEYT34ejvyRFHyqYg?=
- =?us-ascii?Q?Jsw7hNp12PrXt2FQrnMHyOj+mWpBhCji8pq/J2z/iqsqjQuxd4mLoLApL1Il?=
- =?us-ascii?Q?oxhJXAlTXvSz2pvroW0xMlqzn2bhCNSqJY871Qp9VX9Ooyx7oUhhxCxql8jd?=
- =?us-ascii?Q?zoWFB6vuVARJ1Jd/fKiWQ3Xgv2FZECY8UIlutfPygKbEAMx6eExq2dA1Y3IV?=
- =?us-ascii?Q?n3mPBVnA6vSl/nm4OCHhmRS2U4kk3CJzf9MVeFoEUK91u3VejpBE/ZXz16GB?=
- =?us-ascii?Q?zZLuJDy1X/ooqT54i8pQbZ4sOqM2qe5hip9tW9s2TsYWisrdC/jltuIwCD+N?=
- =?us-ascii?Q?JKla0n6beQ8LQWakM5pc1WhMzWigh6RRTiquPr2QtD0Fb8NollwxGd8+7HZC?=
- =?us-ascii?Q?AwTuVBcO54/0A3ZBQTn0dAZ0VnL6TZ7KROtQUo1pCFk8lCikUBh6HOP4NPO2?=
- =?us-ascii?Q?PZ+S47T2JpZBA1NWJjW6We3UbiUf3005Nv6oz1vjKFAuhFP5rgteJ0nPjf9q?=
- =?us-ascii?Q?kw8lv+hqWzr+S0nFXo1+nh8GEE609y6/puMCqfNyuua7PYGOyz+DlGi846Fu?=
- =?us-ascii?Q?yIai26C5UwiSxXFekAGFjJ1h7bpT1J8v3SnjkpZYJT50myKZb9iZ2M6OkDf5?=
- =?us-ascii?Q?PYA3krz4lZSp3USPYi0PWGZqDw1YMlP5flBCgjBXRchM9YrGk7FLQGtYF2+f?=
- =?us-ascii?Q?a1aAUnaO5NMhk10QZHBH7YcWGXMehW9fU42DQeSB/bo2nr35rtVxivxTyufG?=
- =?us-ascii?Q?Y7evLmQWvQzCkhWGyBFHhas=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d98cec9c-a628-40a4-5401-08dc26297b56
-X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 09:04:38.5795
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CoAvukeq/cGYoYDA/PBIXjLY3xKa3MBnWdSkL4clQw35n/zx6OZbUPlZkltir1c3AwEMZTLxcs60L+yKzq4ZwrE3AZPZWcn34V0c3R74dJ2tr9KJ3SG2fnatBRE9o+ji
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0815
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: usb: hackrf: add null ptr check in hackrf_ctrl_msg
+Content-Language: en-US, nl
+To: Mingxuan Xiang <mx_xiang@hust.edu.cn>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Dongliang Mu <dzm91@hust.edu.cn>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240122112210.424698-1-mx_xiang@hust.edu.cn>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20240122112210.424698-1-mx_xiang@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the StarFive ISP specific metadata format
-V4L2_META_FMT_STF_ISP_PARAMS & V4L2_META_FMT_STF_ISP_STAT_3A for 3A.
+On 22/01/2024 12:22, Mingxuan Xiang wrote:
+> If the user yanks out the cable before closing the file,
+> dev->udev would be set to NULL therefore causing a null-ptr-deref
+> in hackrf_ctrl_msg issued by hackrf_stop_streaming.
+> 
+> This patch adds a check in hackrf_ctrl_msg before using
+> dev->udev.
+> 
+> Found by modified syzkaller.
+> 
+> BUG: KASAN: null-ptr-deref in hackrf_ctrl_msg+0x6d/0x180 drivers/media/usb/hackrf/hackrf.c:195
+> Read of size 4 at addr 0000000000000000 by task syz-executor/579
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x5e/0x7c lib/dump_stack.c:106
+>  print_report.cold+0x49a/0x6bb mm/kasan/report.c:436
+>  kasan_report+0xa8/0x130 mm/kasan/report.c:495
+>  hackrf_ctrl_msg+0x6d/0x180 drivers/media/usb/hackrf/hackrf.c:195
+>  hackrf_stop_streaming+0x45/0x140 drivers/media/usb/hackrf/hackrf.c:869
+>  __vb2_queue_cancel+0x5c/0x550 drivers/media/common/videobuf2/videobuf2-core.c:1992
+>  vb2_core_streamoff+0x2f/0xb0 drivers/media/common/videobuf2/videobuf2-core.c:2149
+>  __vb2_cleanup_fileio+0x3e/0xa0 drivers/media/common/videobuf2/videobuf2-core.c:2710
+>  vb2_core_queue_release+0x1a/0x50 drivers/media/common/videobuf2/videobuf2-core.c:2430
+>  vb2_queue_release drivers/media/common/videobuf2/videobuf2-v4l2.c:947 [inline]
+>  _vb2_fop_release+0x110/0x140 drivers/media/common/videobuf2/videobuf2-v4l2.c:1132
+>  v4l2_release+0x1b9/0x1e0 drivers/media/v4l2-core/v4l2-dev.c:459
+>  __fput+0x12d/0x4b0 fs/file_table.c:320
+>  task_work_run+0xa8/0xf0 kernel/task_work.c:177
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+>  exit_to_user_mode_prepare+0x123/0x130 kernel/entry/common.c:201
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+>  syscall_exit_to_user_mode+0x22/0x50 kernel/entry/common.c:294
+>  do_syscall_64+0x48/0x90 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Signed-off-by: Mingxuan Xiang <mx_xiang@hust.edu.cn>
+> ---
+>  drivers/media/usb/hackrf/hackrf.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/media/usb/hackrf/hackrf.c b/drivers/media/usb/hackrf/hackrf.c
+> index 9c0ecd5f056c..9588b8aa6e98 100644
+> --- a/drivers/media/usb/hackrf/hackrf.c
+> +++ b/drivers/media/usb/hackrf/hackrf.c
+> @@ -186,6 +186,11 @@ static int hackrf_ctrl_msg(struct hackrf_dev *dev, u8 request, u16 value,
+>  	unsigned int pipe;
+>  	u8 requesttype;
+>  
+> +	if (!dev->udev) {
+> +		pr_err("udev is null in %s\n", __func__);
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
- include/uapi/linux/videodev2.h       | 4 ++++
- 2 files changed, 6 insertions(+)
+Just replace this with:
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 33076af4dfdb..12c2104a3626 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1445,6 +1445,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
- 	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
- 	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A Statistics"; break;
-+	case V4L2_META_FMT_STF_ISP_PARAMS:	descr = "StarFive ISP 3A Parameters"; break;
-+	case V4L2_META_FMT_STF_ISP_STAT_3A:	descr = "StarFive ISP 3A Statistics"; break;
- 	case V4L2_PIX_FMT_NV12_8L128:	descr = "NV12 (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12M_8L128:	descr = "NV12M (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr = "10-bit NV12 (8x128 Linear, BE)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 68e7ac178cc2..349bb8efe28a 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -839,6 +839,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
- #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
- 
-+/* Vendor specific - used for StarFive JH7110 ISP camera sub-system */
-+#define V4L2_META_FMT_STF_ISP_PARAMS	v4l2_fourcc('S', 'T', 'F', 'P') /* StarFive ISP 3A Parameters */
-+#define V4L2_META_FMT_STF_ISP_STAT_3A	v4l2_fourcc('S', 'T', 'F', 'S') /* StarFive ISP 3A Statistics */
-+
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
- 
--- 
-2.25.1
+	if (!dev->udev)
+		return -ENODEV;
+
+-ENODEV is the correct error code for this situation, and the error
+message is overkill here, I think.
+
+Regards,
+
+	Hans
+
+>  	switch (request) {
+>  	case CMD_SET_TRANSCEIVER_MODE:
+>  	case CMD_SET_FREQ:
 
