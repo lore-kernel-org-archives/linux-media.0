@@ -1,105 +1,144 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C641F128818
-	for <linux-media@vger.kernel.org>; Tue,  6 Feb 2024 07:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7921012AAD6;
+	Tue,  6 Feb 2024 08:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707205785; cv=none; b=dJPkry1Q+6CwBo34CeO1AW/Gbl6iChkjmNlNRur/cH0Ptdf2P08/kXoNuxGpRUfdUHFaLiMhLPfTrErmZXrNFeDBf1MGzJBbMm83Yd0ML96cu6pT2ROfq82yT/e6RMNjeg52VRolrjT9YuKc906T59OcHB4do+kTzWVNUw/qPfg=
+	t=1707206555; cv=none; b=AGMdyfJCk8D31dA33GgfINspoep19tC8daGnIbWcBVaMRmAn1HYfO7t0THr22htnrPCb3XydLWN+5bCR+REHBQjGEKc6ZqtTlVakIkQ7Q4oGhP2DsEsQmKWBgHDY6jpYP21dHphc0B+OpfWEmgxofQHTHdh57ZSj+3dtbFcx0Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707205785; c=relaxed/simple;
-	bh=OK5lRA7V7FsFnorYgS3IOSgU4KdjRhWcO5SvFbUkZsg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=g4yE5oqBof4rOKAeKD3tW7q7nbGh/jSR+JlPQ8O/FzWWVZvOahzbljT4ubDUtj4o4bHSsWFRaYwzRheLdqV/mjrb8TzNktJT4craATdhnFEI3Eugm5llcAS1ekBKwsQ0Mcf/RFRHfeTiE3G5PflyBqrduoKyViw2y7me5Q3dnwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=quanta.corp-partner.google.com; spf=pass smtp.mailfrom=quanta.corp-partner.google.com; dkim=pass (2048-bit key) header.d=quanta-corp-partner-google-com.20230601.gappssmtp.com header.i=@quanta-corp-partner-google-com.20230601.gappssmtp.com header.b=kO9nWSKW; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=quanta.corp-partner.google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quanta.corp-partner.google.com
+	s=arc-20240116; t=1707206555; c=relaxed/simple;
+	bh=AQHxJDxHKybI6Oypj2MDAORaS7KhOD0Zjids4metyrc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jwJoDOmgSNX7KbR8cYH76oe+doEb5+cSFMAJBJUUQW1IuCEmFiCcPNLM8GlpVMnY2knlu1c4GmPumDpK/ZV6UwL565TGsMzTMxdUdDgiY5epsbJuqL9QJ+9UjfP91fI4SH3wvn9/GlWSkGDzA89r0sRAZ4whTED83mCOWFMpSMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=H7dsqrDZ; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quanta-corp-partner-google-com.20230601.gappssmtp.com header.i=@quanta-corp-partner-google-com.20230601.gappssmtp.com header.b="kO9nWSKW"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d91397bd22so4166515ad.0
-        for <linux-media@vger.kernel.org>; Mon, 05 Feb 2024 23:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20230601.gappssmtp.com; s=20230601; t=1707205783; x=1707810583; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3BkzWidJIUO6a5Li3rvGAaKQcBMxM0YR6nza1WJwCE=;
-        b=kO9nWSKWQv/wasE3YQPBEOWCkH+shhX72CCQH6ZkHKx52cClMQqh2AaCp546w/ebx6
-         tK/h3DsYXnvV3gzv/+jF6E/zZKQ2lo67WqmZSLj2NUwM40iTrjbdKrkUS9QlB7F/dCzZ
-         6NLIBQU3r4xSfq4p+18SRzd5L+lPOjQrAhD4d/x5UXHeHbFxgc5VjJCKY53I6GZhEaG8
-         CEJz7YvlW6oCg21nkbw3bdZdZzGJ8VXwDF8evHOC64FbH6+/GhEkNeK5xJ0XswkXvWuc
-         R/+qg7CiljV5nHv32Iu2CAWY3QL2bB/jpFlPvQVyNFtuT9aWt01b5RlvLBgkywlIP3rK
-         SN7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707205783; x=1707810583;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V3BkzWidJIUO6a5Li3rvGAaKQcBMxM0YR6nza1WJwCE=;
-        b=fygCTGUIT4pkJreCRabFgVxbhgMcHsdByM5jaCi1o05vCFBRz5JrWonJ0o6o1uxwHg
-         CJn+QqwSR+a0SiqHi8uxKbFypO5MtZrN6oGTMt1XzyiA3l+68GlPNHqC2w9bBw/0tm8b
-         HQYXqsPZo6Ig2hqIhYBE7V9t6ssUrUGBtuB3eFcCOALp2QVnquuRpA0WCEC29WIeBYoK
-         EN3VtewkT7ZKcS4FFbkmYQYDiJpzSU/OEGfseQ2ZmJHMZhy755Sgt1xiT5Fo7cN61Neg
-         VXG2pqSflSPAAM7zxpwHc4dDAIb7uJU37S1CuY3upYLdLzUTUCh06pd9ri0GySGo+Q+n
-         EoTQ==
-X-Gm-Message-State: AOJu0YxoSGxmVMp0SOsyBGBQuEBMLObZAWOUyarszQ1cMgpOqjQ4cDYv
-	WHJbWcGnLD27Q+kU/yjiOEI4xQg5m8G/e1ffslsUjwC13AFaGVvoVbDXwizfiMk=
-X-Google-Smtp-Source: AGHT+IFDevANh84iQ1483ULm4E0yqwag9AtHapByfK7FNk/QEDKBINLaUH9tPZNYc2pM/dNHJSnWag==
-X-Received: by 2002:a17:902:fc84:b0:1d8:f129:a0bc with SMTP id mf4-20020a170902fc8400b001d8f129a0bcmr1083908plb.13.1707205783032;
-        Mon, 05 Feb 2024 23:49:43 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUlYLAD2TI0URNOjz1VP3E2L0Tm8XPfE+3jlygdTA3W/OaqPBY+ELn5r7O804/7e1oEqu4ngclAOcg+4SHooCRmTfWMx6MTsWYOB9MG95zlsEH9U/D0OqAMMWKAyDagTWhd7TkI8vpjrd8R6LkQmmsyW9Zgan/OUucupBSVmvobJ672nU4KFzXKHC5Cf/BnAphl2Or3aUTDMUPABi9I+6bsh4s13ZtEGsYJiI1tOmmO9X49okYlmF5nnz25J/0N2aGYc5rG7W7zI9dNdTZHUozUeY4V9rkWrKIdwNE+BM7Kxt3PtaQcdy8uyZ1S4uI+jFGwF7+Yck4+7heO9ORVMqPbJtoz7YQx8YjYteKVJsogs8hCQ8SE8ogeCfuKN18TjedPJqYAH/te7PEq2qpoGvy38JiBB4q/YpiJgd+C8kWTs+Nz4kJ5980TjAvhs0I224O9yLAfBwriz9TLTfh8HljPJGdXK50DGNlG62o4mhlSngGdS/93HC/Wb9DPL74sqq6sicdLntsrJLRJLu5lmAO5gX46
-Received: from kells-TravelMate-P414P-53G.mshome.net (211-75-10-161.hinet-ip.hinet.net. [211.75.10.161])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170903018300b001d9773a1993sm1163819plg.213.2024.02.05.23.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 23:49:42 -0800 (PST)
-From: Kells Ping <kells.ping@quanta.corp-partner.google.com>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: groeck@chromium.org,
-	Kells Ping <kells.ping@quanta.corp-partner.google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Ken Lin <kenlin5@quanta.corp-partner.google.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Reka Norman <rekanorman@chromium.org>,
-	Ricky Chang <rickytlchang@chromium.org>,
-	Sam McNally <sammc@chromium.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="H7dsqrDZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707206546;
+	bh=AQHxJDxHKybI6Oypj2MDAORaS7KhOD0Zjids4metyrc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=H7dsqrDZ1+rK1UjFTCAMma+ggxJXdZesfw16ZQXhOzppQYKm8oZFePOfei2maOt8T
+	 r9pqrAxpxQj8drKeXNVVmhU4Xo9kD1ZOBE6ZgxHzZTDj54p7voUBchOn2gRy1LtXxO
+	 KQ/eJRtcfVICoOPmEDZvQW/9fWadbTLBZHpKQPeljJyJXQZ/+06SLDhMWKcJ20+ap3
+	 /i7qYaAAKlAY9PPM+HQud5aeFLK47qFVSHy5s7BV0Sti42/D4t6LN0JueUiZRsz27e
+	 fFr/Q77iuEHLiCHk6/JGXTHz9eTj6etdlbUnA1J+prXlQe2hkysBDAwQ1HdaRpVWxO
+	 GqXoBNLEyqyGA==
+Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: benjamin.gaignard)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A796D3780C21;
+	Tue,  6 Feb 2024 08:02:25 +0000 (UTC)
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: hverkuil@xs4all.nl,
+	mchehab@kernel.org
+Cc: linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	"rasheed.hsueh" <rasheed.hsueh@lcfc.corp-partner.google.com>
-Subject: [PATCH] media: platform: cros-ec: Add Dita to the match table
-Date: Tue,  6 Feb 2024 15:49:26 +0800
-Message-Id: <20240206154554.1.Ic01f1c2400bac3dc97ff0ec232a5da41c0578554@changeid>
-X-Mailer: git-send-email 2.34.1
+	kernel@collabora.com,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v19 1/9] media: videobuf2: Update vb2_is_busy() logic
+Date: Tue,  6 Feb 2024 09:02:11 +0100
+Message-Id: <20240206080219.11951-2-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20240206080219.11951-1-benjamin.gaignard@collabora.com>
+References: <20240206080219.11951-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Google Dita device uses the same approach as the Google Brask
-which enables the HDMI CEC via the cros-ec-cec driver.
+Do not rely on the number of allocated buffers to know if the
+queue is busy but on a flag set when at least buffer has been allocated
+by REQBUFS or CREATE_BUFS ioctl.
+The flag is reset when REQBUFS is called with count = 0 or the file
+handle is closed.
+This is needed because delete buffers feature will be able to remove
+all the buffers from a queue while streaming so relying on the number
+of allocated buffers in the queue won't be possible.
 
-Signed-off-by: Kells Ping <kells.ping@quanta.corp-partner.google.com>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
+version 19:
+- Add q->is_busy = 0 in vb2_core_queue_release()
+- Fix q->is_busy usage in vb2_core_reqbufs()
+- Reword commit message.
 
- drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/common/videobuf2/videobuf2-core.c | 4 ++++
+ include/media/videobuf2-core.h                  | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 488147b71338..9340d117314b 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -309,6 +309,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
- 	{ "Google", "Taranza", "0000:00:02.0", port_db_conns },
- 	/* Google Dexi */
- 	{ "Google", "Dexi", "0000:00:02.0", port_db_conns },
-+	/* Google Dita */↲
-+	{ "Google", "Dita", "0000:00:02.0", port_db_conns },
- };
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index b6bf8f232f48..d8b3c04cb3b5 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -854,6 +854,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		__vb2_queue_free(q, q_num_bufs);
+ 		mutex_unlock(&q->mmap_lock);
  
- static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
++		q->is_busy = 0;
+ 		/*
+ 		 * In case of REQBUFS(0) return immediately without calling
+ 		 * driver's queue_setup() callback and allocating resources.
+@@ -966,6 +967,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	 */
+ 	*count = allocated_buffers;
+ 	q->waiting_for_buffers = !q->is_output;
++	q->is_busy = 1;
+ 
+ 	return 0;
+ 
+@@ -1091,6 +1093,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	 * to the userspace.
+ 	 */
+ 	*count = allocated_buffers;
++	q->is_busy = 1;
+ 
+ 	return 0;
+ 
+@@ -2555,6 +2558,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+ 	__vb2_queue_free(q, vb2_get_num_buffers(q));
+ 	kfree(q->bufs);
+ 	q->bufs = NULL;
++	q->is_busy = 0;
+ 	mutex_unlock(&q->mmap_lock);
+ }
+ EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 56719a26a46c..b317286a7b08 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -579,6 +579,7 @@ struct vb2_buf_ops {
+  *		called since poll() needs to return %EPOLLERR in that situation.
+  * @is_multiplanar: set if buffer type is multiplanar
+  * @is_output:	set if buffer type is output
++ * @is_busy:	set if at least one buffer has been allocated at some time.
+  * @copy_timestamp: set if vb2-core should set timestamps
+  * @last_buffer_dequeued: used in poll() and DQBUF to immediately return if the
+  *		last decoded buffer was already dequeued. Set for capture queues
+@@ -644,6 +645,7 @@ struct vb2_queue {
+ 	unsigned int			waiting_in_dqbuf:1;
+ 	unsigned int			is_multiplanar:1;
+ 	unsigned int			is_output:1;
++	unsigned int			is_busy:1;
+ 	unsigned int			copy_timestamp:1;
+ 	unsigned int			last_buffer_dequeued:1;
+ 
+@@ -1163,7 +1165,7 @@ static inline unsigned int vb2_get_num_buffers(struct vb2_queue *q)
+  */
+ static inline bool vb2_is_busy(struct vb2_queue *q)
+ {
+-	return vb2_get_num_buffers(q) > 0;
++	return !!q->is_busy;
+ }
+ 
+ /**
 -- 
-2.34.1
+2.40.1
 
