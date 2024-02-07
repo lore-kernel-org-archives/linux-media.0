@@ -1,145 +1,92 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD011B297
-	for <linux-media@vger.kernel.org>; Wed,  7 Feb 2024 11:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F735A0F1;
+	Wed,  7 Feb 2024 13:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707306018; cv=none; b=Koca01d6AQ34Q+knTCjHf0xXRxMia+FXN5BnvruYZ2tf6f8PX1S5ESy/agBPRT/J6grqzIAu948RCdn3fq2wt4grAyTJPwnDMLiIRawza3C7ieBemhqJpHEghWpwtWcorayrn6SI4cicSJk7OB/9A2edDTKc3weKxDCMrRXu0kg=
+	t=1707311678; cv=none; b=UaUCHlnC6V+Hnn8GD+0EC5k1K8afCptELrXyBdbhNjmbjgx8B9i2vTpyYUJXUTjO8L+pdNtQ64FnVWBCrE58gGD61mSkxkW9tN+GpjBYYPoEAVGrcKeXUPeEXObuq+ZmohtaZ3cIkcBEmr3Lw5MihIJloUcc0mysbGTNA39egSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707306018; c=relaxed/simple;
-	bh=j2hucPWlt4QARh6EpWCHZVZmiT27JEZfL87REB11SSM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DYtb30wNmWpWkqpApfbvDwJl5KnGRGaRHD/diWGdGgLD48/jS6dW0xmjF6iLXVvyuDDjcfhmFpBDA7ZQJIQG0SUJz7hdtbXpOeC5wgcvZjkCRMCyJgh3UigqPefZ549I4qXbxPDtParDum8268zxeXLFEk7xavMjsQ3oVchumQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C13xIH7T; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C13xIH7T"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-60406f4e1d0so4958657b3.1
-        for <linux-media@vger.kernel.org>; Wed, 07 Feb 2024 03:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707306014; x=1707910814; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGulZCD6+zMcYgPZs795MTY99+l/D3vsNxyEgcJw+h8=;
-        b=C13xIH7T3/Dq+QRnt/A4mqHwsZtbVadlk1ady5NDtyOg0bUlIQUuj/iuVUKH/3lBx9
-         04qGXSf5tWeNVXKzot/q6rHR4zXyxR6mdCeohT/ANOKsAWHhdMn13c0Z0Ms80CG2UU/z
-         esaVWnu4eIbvfKcZj0ITfLhZkJfhtFyW0UdMr6h5jn3PfHts5RlEsf5T9JRQ/zOEZcn5
-         ar5ufFsEaa3pxzXwO3hD982agh6gjma7LJ08B9+wqRVnEHgcOOu0aSLTw1hg/gnTQ7SG
-         OBQeQggZlxzWdf5HXrFmYznwxlbynZV8iBrLkpjzsWxMAhqaUUDNoINV8LNpFo4727lo
-         7aUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707306014; x=1707910814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGulZCD6+zMcYgPZs795MTY99+l/D3vsNxyEgcJw+h8=;
-        b=ZskVGM1L73Ucp/lKyvVKgGQCb87lWwx/qoCAiA5B9bWDpcWITHNYTMWkFcsq6i27m+
-         bBVqy14J97b2SB+aygHd67KXA/3xEWum5zT/U25JoAQukSnHCakZwnYTgPKyCriZVHC+
-         6v5BZUHwInebuN7c6+xYekIEaY93CM1pp/1lGj15q2pEkYCPUslZkABP7qibzusOKRev
-         S4mKWaImszAkG8F2tdx4SXPWwVreZhg8v1oZTrQCi7JWWWzTlr5N0CP3EetKS2w2uM3w
-         V+Cj+mWfToIK038qU9Jp8T14dsZZTfx9XP61H3q2fl/RGirD/VekBddp4Icfho/h45t8
-         BJCA==
-X-Gm-Message-State: AOJu0YyTg8QZDpTuhqnT9gZpZ9fia36HWTKgQVWmJm15vTA+ozlx0yoA
-	UmUO2ySLHlWqBhw14aIMJHSsA/ZgDdnY8aNvvBbqCVOv467y4PanTjXcIy+D1TZaoc09cRi9ijF
-	m0Nz0K7jdJdlklLQIx39aJoJKrB9IQ3qnKQ0+rg==
-X-Google-Smtp-Source: AGHT+IHcJYp0WTpeyXfA6/v0KQqS2+K+bFf4BMoXAxddY+rgyz/NFtVQ2CSaJeYh5kLZrQX4DemLxRgcf++7/oAjGa4=
-X-Received: by 2002:a81:9b4b:0:b0:604:926b:94a9 with SMTP id
- s72-20020a819b4b000000b00604926b94a9mr1274134ywg.26.1707306014489; Wed, 07
- Feb 2024 03:40:14 -0800 (PST)
+	s=arc-20240116; t=1707311678; c=relaxed/simple;
+	bh=49JTY3sNMNqzNRYaGD0Us16tlkRQVcvuPjaeHDJ9xuc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FEG5Y9u5Te5MVJPnJ9QTzwBsF7yTauhw42mubV8J0fApSqwr0dITyOavU0285/m3XKk5q3HjcOMgsE3j4mOJUcJMgjmg4nevDWkft7wbhF2wCeGa4giZbeH30R/Rgv5jfunh0kgYohLvzN6WwseCA1qz3P0jPkY/2CiZoIJR9yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+	by ni.piap.pl (Postfix) with ESMTPS id 9C86DC3F2A7D;
+	Wed,  7 Feb 2024 14:14:33 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 9C86DC3F2A7D
+From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,  Kuninori Morimoto
+ <kuninori.morimoto.gx@renesas.com>,  "Lad, Prabhakar"
+ <prabhakar.csengg@gmail.com>,  Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@pengutronix.de>,  Alexandre Belloni
+ <alexandre.belloni@bootlin.com>,  Alexandre Torgue
+ <alexandre.torgue@foss.st.com>,  Alexey Brodkin <abrodkin@synopsys.com>,
+  Alim Akhtar <alim.akhtar@samsung.com>,  Andrzej Hajda
+ <andrzej.hajda@intel.com>,  Biju Das <biju.das.jz@bp.renesas.com>,
+  Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,  Claudiu Beznea
+ <claudiu.beznea@tuxon.dev>,  Daniel Vetter <daniel@ffwll.ch>,  Dave
+ Stevenson <dave.stevenson@raspberrypi.com>,  David Airlie
+ <airlied@gmail.com>,  Eugen Hristev <eugen.hristev@collabora.com>,
+  Florian Fainelli <florian.fainelli@broadcom.com>,  Helge Deller
+ <deller@gmx.de>,  Hugues Fruchet <hugues.fruchet@foss.st.com>,  Jacopo
+ Mondi <jacopo@jmondi.org>,  Jessica Zhang <quic_jesszhan@quicinc.com>,
+  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,  Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>,  Mauro Carvalho Chehab
+ <mchehab@kernel.org>,  Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+  Maxime Ripard <mripard@kernel.org>,  Neil Armstrong
+ <neil.armstrong@linaro.org>,  Nicolas Ferre <nicolas.ferre@microchip.com>,
+  Russell King <linux@armlinux.org.uk>,  Sakari Ailus
+ <sakari.ailus@linux.intel.com>,  Sam Ravnborg <sam@ravnborg.org>,
+  Sylwester Nawrocki <s.nawrocki@samsung.com>,  Thomas Zimmermann
+ <tzimmermann@suse.de>,  Tim Harvey <tharvey@gateworks.com>,
+  dri-devel@lists.freedesktop.org,  linux-arm-kernel@lists.infradead.org,
+  linux-fbdev@vger.kernel.org,  linux-media@vger.kernel.org,
+  linux-omap@vger.kernel.org,  linux-rpi-kernel@lists.infradead.org,
+  linux-samsung-soc@vger.kernel.org,
+  linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 2/4] media: i2c: replace of_graph_get_next_endpoint()
+In-Reply-To: <9d1e99b0-892d-4a72-a9b3-886b8ed094b0@xs4all.nl> (Hans Verkuil's
+	message of "Tue, 6 Feb 2024 15:44:45 +0100")
+References: <87ttmmnvzh.wl-kuninori.morimoto.gx@renesas.com>
+	<87r0hqnvxc.wl-kuninori.morimoto.gx@renesas.com>
+	<20240206134155.GB2827@pendragon.ideasonboard.com>
+	<9d1e99b0-892d-4a72-a9b3-886b8ed094b0@xs4all.nl>
+Sender: khalasa@piap.pl
+Date: Wed, 07 Feb 2024 14:14:33 +0100
+Message-ID: <m3eddoza9y.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130123951.236243-1-ulf.hansson@linaro.org>
-In-Reply-To: <20240130123951.236243-1-ulf.hansson@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 7 Feb 2024 12:39:38 +0100
-Message-ID: <CAPDyKFruKJhOLRLbxibF3ChDGMcJDvdOmCekRNTDYunbnKgQpw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] PM: domains: Add helpers for multi PM domains to
- avoid open-coding
-To: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
 
-On Tue, 30 Jan 2024 at 13:39, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> Rafael, my plan is queue up this series via my pmdomain tree. Please let me know
-> if you see any issues with that, especially around patch1.
->
-> Updates in v3:
->         - Added tested-by, reviewed-by and suggested-by tags. No other changes
->         have been made.
->
-> Updates in v2:
->         - Ccing Daniel Baluta and Iuliana Prodan the NXP remoteproc patches to
->         requests help with testing.
->         - Fixed NULL pointer bug in patch1, pointed out by Nikunj.
->         - Added some tested/reviewed-by tags.
->
-> Attaching/detaching of a device to multiple PM domains has started to become a
-> common operation for many drivers, typically during ->probe() and ->remove().
-> In most cases, this has lead to lots of boilerplate code in the drivers.
->
-> This series adds a pair of helper functions to manage the attach/detach of a
-> device to its multiple PM domains. Moreover, a couple of drivers have been
-> converted to use the new helpers as a proof of concept.
->
-> Note 1)
-> The changes in the drivers have only been compile tested, while the helpers
-> have been tested along with a couple of local dummy drivers that I have hacked
-> up to model both genpd providers and genpd consumers.
->
-> Note 2)
-> I was struggling to make up mind if we should have a separate helper to attach
-> all available power-domains described in DT, rather than providing "NULL" to the
-> dev_pm_domain_attach_list(). I decided not to, but please let me know if you
-> prefer the other option.
->
-> Note 3)
-> For OPP integration, as a follow up I am striving to make the
-> dev_pm_opp_attach_genpd() redundant. Instead I think we should move towards
-> using dev_pm_opp_set_config()->_opp_set_required_devs(), which would allow us to
-> use the helpers that $subject series is adding.
->
-> Kind regards
-> Ulf Hansson
->
-> Ulf Hansson (5):
->   PM: domains: Add helper functions to attach/detach multiple PM domains
->   remoteproc: imx_dsp_rproc: Convert to
->     dev_pm_domain_attach|detach_list()
->   remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
->   remoteproc: qcom_q6v5_adsp: Convert to
->     dev_pm_domain_attach|detach_list()
->   media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
->
->  drivers/base/power/common.c                   | 134 +++++++++++++++
->  drivers/media/platform/qcom/venus/core.c      |  12 +-
->  drivers/media/platform/qcom/venus/core.h      |   7 +-
->  .../media/platform/qcom/venus/pm_helpers.c    |  48 ++----
->  drivers/remoteproc/imx_dsp_rproc.c            |  82 +--------
->  drivers/remoteproc/imx_rproc.c                |  73 +-------
->  drivers/remoteproc/qcom_q6v5_adsp.c           | 160 ++++++++----------
->  include/linux/pm_domain.h                     |  38 +++++
->  8 files changed, 289 insertions(+), 265 deletions(-)
->
->
+Hans,
 
-I have now applied this to my next branch to my pmdomain tree, to get
-it more tested in linux-next.
+Hans Verkuil <hverkuil-cisco@xs4all.nl> writes:
 
-Please let me know if there are objections to this or if any of you
-want to provide an ack/tested/reviewed-by tag, thanks!
+> Ideally someone would have to actually test this, perhaps with one of tho=
+se
+> Renesas boards. While I do have one, it got bricked after I attempted a
+> u-boot update :-(
 
-Kind regards
-Uffe
+May be reversible, though.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa
