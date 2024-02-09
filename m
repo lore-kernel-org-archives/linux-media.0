@@ -1,117 +1,152 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0388976047
-	for <linux-media@vger.kernel.org>; Fri,  9 Feb 2024 16:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0A07691B
+	for <linux-media@vger.kernel.org>; Fri,  9 Feb 2024 16:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707494482; cv=none; b=bdfvjiptyXT63ETtvTZeQ7WEo1AfKKMa6ycLfzvgTEIDR8GNIXms5fd9tb9NsFZKCoXslW8IadiIgn+1sWfbn0aJ68wbZAz1gJQRdRbKTnUnE+lqmn6bU+fHgaBlrkPUkGGT9k7ibM3EtfXcm8buUWD6Ppoxrm8R7eA5qW1zjN8=
+	t=1707497331; cv=none; b=VdE+Lwh8wNWpM3KbDl/TsQ6hH7KZkKQ1A2u4PYScJ5mfQaPe60WRZd6YlHCVVMRW2V8Skoet+XdgkudS6hqJMoJhPcLfCZH694QTJbiwXOTWkosqwuUkd7rhi0kaFouLLI7NIClLj80gEehUNB7S8k087ZKtkJPmwq4Wt9k/J8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707494482; c=relaxed/simple;
-	bh=kRSvUDc1g8P33OgCwZQcBF7eR90soEpnIOELLAR4YDU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iMxceP3P/bx8f28gGqzNnK+e3edTr5l9riwiOO3jARjNLzWakB9eSOHr2zJd5+X108wsHCLtdyJ8Ep77nXBXz8F+xvG3qodXYSSZ0cy3Sik8zzie9z6ftNWQW78VlcNdzhQB2yWHScLAFOQT+v4sir82eU4UfhrjNVZhPQv8RVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=pCB6p/su; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
+	s=arc-20240116; t=1707497331; c=relaxed/simple;
+	bh=ZGU1VA9GBaD+RhQlH+sll9LBO9QBQ0ojmgtgWRLM5zg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nyKp/VvuWRozAnC8xgDMuUz8/Q7MwZojOGthe6+BOBwF2CMnXgdXg/n8V1aDqNOdYbX/ESONU53MDHpxXwmvPAeCXWtlgRWZ5dJMNl7wa/DVn+eBKYkOMjisi7/DhMmvsBNpMJaGBxIxE6cWxdmQpGLzhhVM6ku5qRXuh0NiXEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=th9YduPC; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="pCB6p/su"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d751bc0c15so10768435ad.2
-        for <linux-media@vger.kernel.org>; Fri, 09 Feb 2024 08:01:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1707494480; x=1708099280; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SqIoJcIV0BS1J4vZSQyB7poxgeO52uakFCxg/oqBK+U=;
-        b=pCB6p/sufdjTHpHDhNlHOhNlsCXiBDo67PazhXPFpPV3U6jwDRHAgJslAYfuSrFDN7
-         lo9WFq98IiKo8t5HM6ov6/2S7JDvihd0bVw1/ryddweD5QziOWKvcWs01hf/ZR5pkc4A
-         4JSB3lSPGB1Z7NC2G1WQ5eL+NiwhY8U82L4HxoludWmtYdAG6ooIfw6l6FZCqZwz1dFp
-         xR/HFykJUkRYyOm4FmoD2qjKZFThX/92qcqYaAgu6mE5r5WabkknrZF+lFXrO0WS0HaU
-         Yr119VJpQCNQSW1RqKY8uKDkOaJ6wH0npKIb3ZyLY84WM8Fg7zYx8yqX1c7CP2erFOLp
-         lHtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707494480; x=1708099280;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SqIoJcIV0BS1J4vZSQyB7poxgeO52uakFCxg/oqBK+U=;
-        b=Pr80jJdr3ITiGFhto1NX99npQ3bah7+R3D+FdpVp/GQWOYU8jD6Phy7ReGYORYEZG7
-         RbSDap6PWUDiYufC28nYkuaknwtwm1UQLZAtR+GwGevYCllJB7AsXK5dYL0MBXMktBSy
-         0JBXn2IvuwAbPXOLVYnyAngWt8ZINNBbbzD3zG+9lpHeFKG1ptd+5oNObAtmDX48BlhV
-         L2on5Knu7Ijms73fFeIKd2ucVtjeF4ce3lYpowG/rKFZX5SE0Jn/Mlbatq9KHpfDHEBS
-         ipZfCfUIbXwWzM1jThN87lsHSgIfRCHI87YRaPTYE0/dSRoLAkEMYHLk2jGjynSKsMMJ
-         Q01w==
-X-Forwarded-Encrypted: i=1; AJvYcCUG9iNh8QVRrxEb+9bkjIo9oLoxUhruR7bN2bIJrh6p2znsZp8zYyTVuocfKQbT9cM18nPAFrJJ0lYh7BuPBxsIpSLMOBjR86yqcwI=
-X-Gm-Message-State: AOJu0Ywqde1SkDhgBP5wLZx5zGavSbnfupcY3YXsb1ZdphiDVmkZVEh2
-	T1BJLquMyGdzwvJPsamVwNfG+4xmYv9GmCzHH/UjtEPtoiC5P1CtryvweUvEAMOVSvzRcTYHr1P
-	3
-X-Google-Smtp-Source: AGHT+IHCxiwdq1AqyICEWgcxOd8oL2fEzv3LOmLoXYFg9YH6feEbBZ8B+k56z1ZqW0vKl49eSmixBQ==
-X-Received: by 2002:a17:90a:a405:b0:296:c78e:c0bc with SMTP id y5-20020a17090aa40500b00296c78ec0bcmr2217128pjp.9.1707494480384;
-        Fri, 09 Feb 2024 08:01:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXysckvy8ylEXjkzNR3bgCqJX9vpGRerf6U0c9/vp2sCWJ4U9dlzXQOH3xBl6oKHYqSDoFTEDbsPiTLWr9CHpS3JzllCvM8enB/h4k=
-Received: from nicolas-tpx395.localdomain ([2606:6d00:11:3354::7a9])
-        by smtp.gmail.com with ESMTPSA id pf12-20020a056214498c00b0068c8be959a0sm933976qvb.111.2024.02.09.08.01.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Feb 2024 08:01:19 -0800 (PST)
-Message-ID: <f381fcc8a3daa88d822969d014eef5309fb6e3bf.camel@ndufresne.ca>
-Subject: Re: [PATCHv2 2/2] media: atomisp: don't use sizeof(NULL)
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Linux Media Mailing List
-	 <linux-media@vger.kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Date: Fri, 09 Feb 2024 11:01:18 -0500
-In-Reply-To: <30f42c75-5a36-4ed0-90af-77764308f267@xs4all.nl>
-References: <30f42c75-5a36-4ed0-90af-77764308f267@xs4all.nl>
-Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="th9YduPC"
+Received: from localhost.localdomain (unknown [IPv6:2001:b07:5d2e:52c9:cc1e:e404:491f:e6ea])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D5BDCD01;
+	Fri,  9 Feb 2024 17:47:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1707497240;
+	bh=ZGU1VA9GBaD+RhQlH+sll9LBO9QBQ0ojmgtgWRLM5zg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=th9YduPC72ScDIdHI0U7aP5vuJJSQ6dENbuDrwIhb16r4r8v/7T291MmTi6se0WF8
+	 GUz1ywPflX7ZbS6B8NEcVaXMTaj6uAAoN6l21DYdNQ5w8tZWEkVXq8UomfBlR+Dll4
+	 Ogc+KDFB5kcVx/3ZgqYA7uqL/Zf4vJRpigd6dLSs=
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	David Plowman <david.plowman@raspberrypi.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 1/8] media: Add a pixel format for MIPI packed 12bit luma only.
+Date: Fri,  9 Feb 2024 17:48:16 +0100
+Message-ID: <20240209164825.166800-2-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240209164825.166800-1-jacopo.mondi@ideasonboard.com>
+References: <20240209164825.166800-1-jacopo.mondi@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Le vendredi 02 f=C3=A9vrier 2024 =C3=A0 11:17 +0100, Hans Verkuil a =C3=A9c=
-rit=C2=A0:
-> Check the size of another pointer instead of NULL. This fixes this
-> smatch warning:
->=20
-> drivers/staging/media/atomisp/pci/sh_css.c:3609 ia_css_pipe_enqueue_buffe=
-r() warn: sizeof(NUMBER)?
->=20
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Fixes: ad85094b293e ("Revert "media: staging: atomisp: Remove driver"")
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-You sent v2 the same day. Please have a look at my comment in the v1.
+This is the format used by monochrome 12bit image sensors.
 
-cheers,
-Nicolas
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+ .../userspace-api/media/v4l/pixfmt-y12p.rst   | 38 +++++++++++++++++++
+ .../userspace-api/media/v4l/yuv-formats.rst   |  1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+ include/uapi/linux/videodev2.h                |  1 +
+ 4 files changed, 41 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-y12p.rst
 
-> ---
-> Changes since v1: replace NULL by void *, that's better than using a poin=
-ter variable.
-> ---
->  drivers/staging/media/atomisp/pci/sh_css.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging=
-/media/atomisp/pci/sh_css.c
-> index 1d1fbda75da1..938a4ea89c59 100644
-> --- a/drivers/staging/media/atomisp/pci/sh_css.c
-> +++ b/drivers/staging/media/atomisp/pci/sh_css.c
-> @@ -3606,7 +3606,7 @@ ia_css_pipe_enqueue_buffer(struct ia_css_pipe *pipe=
-,
->=20
->  	assert(pipeline || pipe_id =3D=3D IA_CSS_PIPE_ID_COPY);
->=20
-> -	assert(sizeof(NULL) <=3D sizeof(ddr_buffer.kernel_ptr));
-> +	assert(sizeof(void *) <=3D sizeof(ddr_buffer.kernel_ptr));
->  	ddr_buffer.kernel_ptr =3D HOST_ADDRESS(NULL);
->  	ddr_buffer.cookie_ptr =3D buffer->driver_cookie;
->  	ddr_buffer.timing_data =3D buffer->timing_data;
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-y12p.rst b/Documentation/userspace-api/media/v4l/pixfmt-y12p.rst
+new file mode 100644
+index 000000000000..b2eb4a72724d
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/pixfmt-y12p.rst
+@@ -0,0 +1,38 @@
++.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
++
++.. _V4L2-PIX-FMT-Y12P:
++
++******************************
++V4L2_PIX_FMT_Y12P ('Y12P')
++******************************
++
++Grey-scale image as a MIPI RAW12 packed array
++
++
++Description
++===========
++
++This is a packed grey-scale image format with a depth of 12 bits per
++pixel. Two consecutive pixels are packed into 3 bytes. The first 2 bytes
++contain the 8 high order bits of the pixels, and the 3rd byte contains the 4
++least significants bits of each pixel, in the same order.
++
++**Byte Order.**
++Each cell is one byte.
++
++.. tabularcolumns:: |p{2.2cm}|p{1.2cm}|p{1.2cm}|p{3.1cm}|
++
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       2 1 1 1
++
++
++    -  -  start + 0:
++       -  Y'\ :sub:`00high`
++       -  Y'\ :sub:`01high`
++       -  Y'\ :sub:`01low`\ (bits 7--4)
++
++          Y'\ :sub:`00low`\ (bits 3--0)
++
+diff --git a/Documentation/userspace-api/media/v4l/yuv-formats.rst b/Documentation/userspace-api/media/v4l/yuv-formats.rst
+index 24b34cdfa6fe..7c9ccfdd94cd 100644
+--- a/Documentation/userspace-api/media/v4l/yuv-formats.rst
++++ b/Documentation/userspace-api/media/v4l/yuv-formats.rst
+@@ -267,6 +267,7 @@ image.
+     pixfmt-packed-yuv
+     pixfmt-yuv-planar
+     pixfmt-yuv-luma
++    pixfmt-y12p
+     pixfmt-y8i
+     pixfmt-y12i
+     pixfmt-uv8
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 33076af4dfdb..483498c55899 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1311,6 +1311,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_Y16_BE:	descr = "16-bit Greyscale BE"; break;
+ 	case V4L2_PIX_FMT_Y10BPACK:	descr = "10-bit Greyscale (Packed)"; break;
+ 	case V4L2_PIX_FMT_Y10P:		descr = "10-bit Greyscale (MIPI Packed)"; break;
++	case V4L2_PIX_FMT_Y12P:		descr = "12-bit Greyscale (MIPI Packed)"; break;
+ 	case V4L2_PIX_FMT_IPU3_Y10:	descr = "10-bit greyscale (IPU3 Packed)"; break;
+ 	case V4L2_PIX_FMT_Y8I:		descr = "Interleaved 8-bit Greyscale"; break;
+ 	case V4L2_PIX_FMT_Y12I:		descr = "Interleaved 12-bit Greyscale"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index a8015e5e7fa4..11ebf9b22ccb 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -598,6 +598,7 @@ struct v4l2_pix_format {
+ /* Grey bit-packed formats */
+ #define V4L2_PIX_FMT_Y10BPACK    v4l2_fourcc('Y', '1', '0', 'B') /* 10  Greyscale bit-packed */
+ #define V4L2_PIX_FMT_Y10P    v4l2_fourcc('Y', '1', '0', 'P') /* 10  Greyscale, MIPI RAW10 packed */
++#define V4L2_PIX_FMT_Y12P    v4l2_fourcc('Y', '1', '2', 'P') /* 12  Greyscale, MIPI RAW12 packed */
+ #define V4L2_PIX_FMT_IPU3_Y10		v4l2_fourcc('i', 'p', '3', 'y') /* IPU3 packed 10-bit greyscale */
+ 
+ /* Palette formats */
+-- 
+2.43.0
 
