@@ -1,231 +1,314 @@
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C884D5B4
-	for <linux-media@vger.kernel.org>; Mon, 12 Feb 2024 13:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C084EB3C;
+	Mon, 12 Feb 2024 13:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707743681; cv=none; b=CcLwlOxF56Uzg8upnDWWc3Pf/CGqo46TUh7t5OmkIdVLd1Y5nxAVSDBeIJEMe2FlBXnPE4MtCt2/xmH8sg2JCB7tYLWT0WREMRgyCPrnLVB17Po9VeSF8OU3x9QxN04QCjlEPj3ZnTii2dJYentYjWtpb9TGz3HZKqQUTy6kLq0=
+	t=1707743683; cv=none; b=ew2gh34SIMy938qdpUOg6jL7/z+JIgRdyfrOBBcCm8jD3jsWl3XMMSho8Gr5KF4WgQAD1ho4q2jz9Lk8AGZSYuR7mIgCYzETyXXooAgqyXZseKGhNRl6lrpJXu6tTlfSEoGb8INqIBYJOSoQzxofBrggnUBmPMOCZs9vvaEjdys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707743681; c=relaxed/simple;
-	bh=gcqzXqPvCid0bdGkdQCOqBvfMk4/JJEe5ZxnNjAwSB8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=A/ioiu1M6+WccpNi8gOAONRgWc/12ZhN09RhLs8JMqQr6OH7kH4+U/D6ivvR6qYNzHF+KrD4QSxTkO7WuekIxK7CfT0Isqty05OqxzcJuiAs6OTnYyU3Z0UXZgHKa6vasLNNMyH+0h3z4A57xpYH+hVp8sOlVq7k16ph1XdyG3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--panikiel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jRqmHLtg; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--panikiel.bounces.google.com
+	s=arc-20240116; t=1707743683; c=relaxed/simple;
+	bh=IVSHDl4cjCeykLbWUFJ4biJKnyiAeL4Zfa9XQY6iuNk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iQOJbBBowRAKZHRkN5Hz010ykGBoCkAKDJ9n+w2+uPEG0UYJoGFJtirp8Ry1X9jqFZzr5WCSuESEjb6Q1XLve+xyigXstryTKUHzwvnEvlfxQeZqwCuW80OGQHaNbv739+/xmzLdTvAupFqfwheUXu1neta2qaJfmwwZlw6J+Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZHM1/Y/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jRqmHLtg"
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-33b5192599bso1238835f8f.0
-        for <linux-media@vger.kernel.org>; Mon, 12 Feb 2024 05:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1707743678; x=1708348478; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oX2+cr2GJmybLTxSkR2z2RsI+0zR7H0TC6zqB4mg2qY=;
-        b=jRqmHLtg7k4CXJvCxsRaBZ0K5UWhwRRGzTE7xsjyWHSWN3Xr/T2M9uxJ3/SGl2zrS5
-         QkVlOeaKv7TrrkDA+O1PJ17mEOX85b2ZZAcLnKkJqLVhfBXeFYmD0DvXUr77rs76oK8l
-         WQNDu/67fg3/36L2ZlFGOxvoAaa+4npg2sZm1Zynkaisr/H/WouGMdMiSllVBfuyB8Hf
-         qeF4bAMzi53gOEvEDYngOrgQ7Te55ZyrNgWfhbwSoqRTs965FLqMkBFFuPtH5xrKIPi7
-         avkBKr0a+Yu9J7pRcrJl7j0L097/rw2hnhmON1PdHdBkz4BJrOFlSsmJkAGannDM2dWi
-         QLfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707743678; x=1708348478;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oX2+cr2GJmybLTxSkR2z2RsI+0zR7H0TC6zqB4mg2qY=;
-        b=GS9OsAuNT/LtW0gtW296kTpMxEz5JqB/DhU2929y39euyb7L0qavfn0OAYK4/t+cLv
-         37hCDJ+mDse2EFqED/MyC9isZCNQFJBclWWbP/ZcLHJ9zs5yLZQpnCD8YOuYannYwyHm
-         9BQSJBqE4hjBytu4zO+W1lloMcTyfdcSTYjPFfjc5iHR1iN0YQv7DG6GoJQafKMRO+xq
-         WJgYj2sG8xyrt1sn4eq1dfWtY869KyllSV1L7/pB5uTuuR8ykEjPu4ncxxuUpDNgUR8g
-         fQ+w51YbIZxumlpFkjJ/leFQZZMXHLMew2YsrGd285+moJAvLtwsMlCp3LUskJ4O5Xij
-         JXOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWvGHANHx0yIewGWv/uAQa/UZudUPmXBNU1wEfJc61MXIU6fw9obDLt/KV55n+xKikmmERbx5pLacNwbSbTtcaWSBITn+lajIhqCW8=
-X-Gm-Message-State: AOJu0YyC3KbftKGSVftlnvep/UlFTDVZedM9yx23N0cWo0n1YMSbiAkD
-	2DJtBPJQ85noApljFZwCzsluhxfw1008FtZD5jqFZuEqIVtoffcXC8HbL3aoxYqzom7Xvda5Uyf
-	MGMCMUFe5oQ==
-X-Google-Smtp-Source: AGHT+IFkFcklODkA+IZce15OW7imyMehYzYa0bp9Q+4UUqUKMp1QHbHOQZVoAphFa93JEGMlAaRIokbaJqszdw==
-X-Received: from szatan.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2d83])
- (user=panikiel job=sendgmr) by 2002:a05:6000:1751:b0:33b:8f6:2a77 with SMTP
- id m17-20020a056000175100b0033b08f62a77mr15650wrf.2.1707743677947; Mon, 12
- Feb 2024 05:14:37 -0800 (PST)
-Date: Mon, 12 Feb 2024 13:13:23 +0000
-In-Reply-To: <20240212131323.2162161-1-panikiel@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZHM1/Y/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767C3C4AF1E;
+	Mon, 12 Feb 2024 13:14:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707743683;
+	bh=IVSHDl4cjCeykLbWUFJ4biJKnyiAeL4Zfa9XQY6iuNk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=hZHM1/Y/Qhm3Jc86nlf8RRdGpE846KResz9eq4OveOzuwv+XLZGCnA5GcxbQeYqx/
+	 4kKuDV4ATCZ8JedYawHybcengyla17eCeg1F7dcFxOx5CTTqAb/HFkKeVkK//BVwis
+	 w4u9R+E6FOBmegg5OpzqR3dtxCk9HjEVPF0dyrpT0Q6DONnGX5YMiXgDZ9AeY+F5P3
+	 Yc9Ui4XyhB9GZeWpcR7Q8cicYrXWudsJ9k+4Vlq2FPgzs0UhgQlzXGtJvDYCd3Roug
+	 gjnWIMxCPhM+mTF7/3JkerSWiVyepf/IAkJLcrlUbLfPP9N+FhgT5VTstZBMPgUWvT
+	 EnOwHGVXY5/yA==
+From: Maxime Ripard <mripard@kernel.org>
+Date: Mon, 12 Feb 2024 14:13:09 +0100
+Subject: [PATCH v6 26/36] drm/tests: Add infoframes test
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240212131323.2162161-1-panikiel@google.com>
-X-Mailer: git-send-email 2.43.0.687.g38aa6559b0-goog
-Message-ID: <20240212131323.2162161-10-panikiel@google.com>
-Subject: [PATCH 9/9] ARM: dts: chameleonv3: Add video device nodes
-From: "=?UTF-8?q?Pawe=C5=82=20Anikiel?=" <panikiel@google.com>
-To: airlied@gmail.com, akpm@linux-foundation.org, conor+dt@kernel.org, 
-	daniel@ffwll.ch, dinguyen@kernel.org, hverkuil-cisco@xs4all.nl, 
-	krzysztof.kozlowski+dt@linaro.org, maarten.lankhorst@linux.intel.com, 
-	mchehab@kernel.org, mripard@kernel.org, robh+dt@kernel.org, 
-	tzimmermann@suse.de
-Cc: devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	chromeos-krk-upstreaming@google.com, ribalda@chromium.org, 
-	"=?UTF-8?q?Pawe=C5=82=20Anikiel?=" <panikiel@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240212-kms-hdmi-connector-state-v6-26-f4bcdc979e6f@kernel.org>
+References: <20240212-kms-hdmi-connector-state-v6-0-f4bcdc979e6f@kernel.org>
+In-Reply-To: <20240212-kms-hdmi-connector-state-v6-0-f4bcdc979e6f@kernel.org>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+ Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
+ Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org, 
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+ Maxime Ripard <mripard@kernel.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8417; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=IVSHDl4cjCeykLbWUFJ4biJKnyiAeL4Zfa9XQY6iuNk=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmnJPNK6g+/DRJIMi3oTKjK0BU3fvPq/ZyEgm91u00M7
+ 4uqMTt2lLIwiHExyIopssQImy+JOzXrdScb3zyYOaxMIEMYuDgFYCJhpxkZlqRt0JFYvaPSq9ij
+ 8qISU17GsUMpOz+lV/C52nNVVDx+ysgw+1mZSpVzrlzUt9sJO9e8OjBrm+LfdZc+NVzwV8v+bMT
+ PCAA=
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-Add device nodes for the video system present on the Chameleon v3.
-It consists of six framebuffers and two Intel Displayport receivers.
+The previous patch added the generation of the infoframes matching an
+HDMI connector state. Let's add a few tests to make sure it works as
+expected.
 
-Signed-off-by: Pawe=C5=82 Anikiel <panikiel@google.com>
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- .../socfpga/socfpga_arria10_chameleonv3.dts   | 130 ++++++++++++++++++
- 1 file changed, 130 insertions(+)
+ drivers/gpu/drm/tests/drm_connector_test.c | 219 +++++++++++++++++++++++++++++
+ 1 file changed, 219 insertions(+)
 
-diff --git a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dt=
-s b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-index 422d00cd4c74..9bc0c1672b18 100644
---- a/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-+++ b/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_chameleonv3.dts
-@@ -10,6 +10,136 @@ / {
- 	compatible =3D "google,chameleon-v3", "enclustra,mercury-aa1",
- 		     "altr,socfpga-arria10", "altr,socfpga";
-=20
-+	soc {
-+		fb0: video@c0060500 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060500 0x100>,
-+			      <0xc0060f20 0x10>;
-+			interrupts =3D <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-+			google,legacy-format;
-+			google,no-endpoint;
-+		};
+diff --git a/drivers/gpu/drm/tests/drm_connector_test.c b/drivers/gpu/drm/tests/drm_connector_test.c
+index b9c80d282380..07066b704b36 100644
+--- a/drivers/gpu/drm/tests/drm_connector_test.c
++++ b/drivers/gpu/drm/tests/drm_connector_test.c
+@@ -219,6 +219,217 @@ static void drm_test_connector_hdmi_init_null_ddc(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ }
+ 
++/*
++ * Test that the registration of an HDMI connector with a NULL vendor
++ * fails.
++ */
++static void drm_test_connector_hdmi_init_null_vendor(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	int ret;
 +
-+		fb_mst0: video@c0060600 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060600 0x100>,
-+			      <0xc0060f30 0x10>;
-+			interrupts =3D <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       NULL, "Product",
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
 +
-+			port {
-+				fb_mst0_0: endpoint {
-+					remote-endpoint =3D <&dprx_mst_0>;
-+				};
-+			};
-+		};
++/*
++ * Test that the registration of an HDMI connector with a NULL product
++ * fails.
++ */
++static void drm_test_connector_hdmi_init_null_product(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	int ret;
 +
-+		fb_mst1: video@c0060700 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060700 0x100>,
-+			      <0xc0060f40 0x10>;
-+			interrupts =3D <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       "Vendor", NULL,
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
 +
-+			port {
-+				fb_mst1_0: endpoint {
-+					remote-endpoint =3D <&dprx_mst_1>;
-+				};
-+			};
-+		};
-+
-+		fb_mst2: video@c0060800 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060800 0x100>,
-+			      <0xc0060f50 0x10>;
-+			interrupts =3D <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			port {
-+				fb_mst2_0: endpoint {
-+					remote-endpoint =3D <&dprx_mst_2>;
-+				};
-+			};
-+		};
-+
-+		fb_mst3: video@c0060900 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060900 0x100>,
-+			      <0xc0060f60 0x10>;
-+			interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			port {
-+				fb_mst3_0: endpoint {
-+					remote-endpoint =3D <&dprx_mst_3>;
-+				};
-+			};
-+		};
-+
-+		fb_sst: video@c0060a00 {
-+			compatible =3D "google,chv3-fb";
-+			reg =3D <0xc0060a00 0x100>,
-+			      <0xc0060f70 0x10>;
-+			interrupts =3D <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			port {
-+				fb_sst_0: endpoint {
-+					remote-endpoint =3D <&dprx_sst_0>;
-+				};
-+			};
-+		};
-+
-+		dprx_mst: dprx@c0062000 {
-+			compatible =3D "intel,dprx";
-+			reg =3D <0xc0062000 0x800>,
-+			      <0xc0060f80 0x10>;
-+			interrupts =3D <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-+			intel,has-mst;
-+
-+			ports {
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+
-+				port@0 {
-+					reg =3D <0>;
-+					dprx_mst_0: endpoint {
-+						remote-endpoint =3D <&fb_mst0_0>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg =3D <1>;
-+					dprx_mst_1: endpoint {
-+						remote-endpoint =3D <&fb_mst1_0>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg =3D <2>;
-+					dprx_mst_2: endpoint {
-+						remote-endpoint =3D <&fb_mst2_0>;
-+					};
-+				};
-+
-+				port@3 {
-+					reg =3D <3>;
-+					dprx_mst_3: endpoint {
-+						remote-endpoint =3D <&fb_mst3_0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		dprx_sst: dprx@c0064000 {
-+			compatible =3D "intel,dprx";
-+			reg =3D <0xc0064000 0x800>,
-+			      <0xc0060fe0 0x10>;
-+			interrupts =3D <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			port {
-+				dprx_sst_0: endpoint {
-+					remote-endpoint =3D <&fb_sst_0>;
-+				};
-+			};
-+		};
++/*
++ * Test that the registration of a connector with a valid, shorter than
++ * the max length, product name succeeds, and is stored padded with 0.
++ */
++static void drm_test_connector_hdmi_init_product_valid(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const unsigned char expected_product[DRM_CONNECTOR_HDMI_PRODUCT_LEN] = {
++		'P', 'r', 'o', 'd',
 +	};
++	const char *product_name = "Prod";
++	int ret;
 +
- 	aliases {
- 		serial0 =3D &uart0;
- 		i2c0 =3D &i2c0;
---=20
-2.43.0.687.g38aa6559b0-goog
++	KUNIT_ASSERT_LT(test, strlen(product_name), DRM_CONNECTOR_HDMI_PRODUCT_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       "Vendor", product_name,
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_MEMEQ(test,
++			   priv->connector.hdmi.product,
++			   expected_product,
++			   sizeof(priv->connector.hdmi.product));
++}
++
++/*
++ * Test that the registration of a connector with a valid, at max
++ * length, product name succeeds, and is stored padded without any
++ * trailing \0.
++ */
++static void drm_test_connector_hdmi_init_product_length_exact(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const unsigned char expected_product[DRM_CONNECTOR_HDMI_PRODUCT_LEN] = {
++		'P', 'r', 'o', 'd', 'u', 'c', 't',
++		'P', 'r', 'o', 'd', 'u', 'c', 't',
++		'P', 'r',
++	};
++	const char *product_name = "ProductProductPr";
++	int ret;
++
++	KUNIT_ASSERT_EQ(test, strlen(product_name), DRM_CONNECTOR_HDMI_PRODUCT_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       "Vendor", product_name,
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_MEMEQ(test,
++			   priv->connector.hdmi.product,
++			   expected_product,
++			   sizeof(priv->connector.hdmi.product));
++}
++
++/*
++ * Test that the registration of a connector with a product name larger
++ * than the maximum length fails.
++ */
++static void drm_test_connector_hdmi_init_product_length_too_long(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const char *product_name = "ProductProductProduct";
++	int ret;
++
++	KUNIT_ASSERT_GT(test, strlen(product_name), DRM_CONNECTOR_HDMI_PRODUCT_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       "Vendor", product_name,
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
++
++/*
++ * Test that the registration of a connector with a vendor name smaller
++ * than the maximum length succeeds, and is stored padded with zeros.
++ */
++static void drm_test_connector_hdmi_init_vendor_valid(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const char expected_vendor[DRM_CONNECTOR_HDMI_VENDOR_LEN] = {
++		'V', 'e', 'n', 'd',
++	};
++	const char *vendor_name = "Vend";
++	int ret;
++
++	KUNIT_ASSERT_LT(test, strlen(vendor_name), DRM_CONNECTOR_HDMI_VENDOR_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       vendor_name, "Product",
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_MEMEQ(test,
++			   priv->connector.hdmi.vendor,
++			   expected_vendor,
++			   sizeof(priv->connector.hdmi.vendor));
++}
++
++/*
++ * Test that the registration of a connector with a vendor name at the
++ * maximum length succeeds, and is stored padded without the trailing
++ * zero.
++ */
++static void drm_test_connector_hdmi_init_vendor_length_exact(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const char expected_vendor[DRM_CONNECTOR_HDMI_VENDOR_LEN] = {
++		'V', 'e', 'n', 'd', 'o', 'r',
++		'V', 'e',
++	};
++	const char *vendor_name = "VendorVe";
++	int ret;
++
++	KUNIT_ASSERT_EQ(test, strlen(vendor_name), DRM_CONNECTOR_HDMI_VENDOR_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       vendor_name, "Product",
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_MEMEQ(test,
++			   priv->connector.hdmi.vendor,
++			   expected_vendor,
++			   sizeof(priv->connector.hdmi.vendor));
++}
++
++/*
++ * Test that the registration of a connector with a vendor name larger
++ * than the maximum length fails.
++ */
++static void drm_test_connector_hdmi_init_vendor_length_too_long(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	const char *vendor_name = "VendorVendor";
++	int ret;
++
++	KUNIT_ASSERT_GT(test, strlen(vendor_name), DRM_CONNECTOR_HDMI_VENDOR_LEN);
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       vendor_name, "Product",
++				       &dummy_funcs,
++				       &dummy_hdmi_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       BIT(HDMI_COLORSPACE_RGB),
++				       8);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
++
+ /*
+  * Test that the registration of a connector with an invalid maximum bpc
+  * count fails.
+@@ -499,6 +710,14 @@ static struct kunit_case drmm_connector_hdmi_init_tests[] = {
+ 	KUNIT_CASE(drm_test_connector_hdmi_init_formats_empty),
+ 	KUNIT_CASE(drm_test_connector_hdmi_init_formats_no_rgb),
+ 	KUNIT_CASE(drm_test_connector_hdmi_init_null_ddc),
++	KUNIT_CASE(drm_test_connector_hdmi_init_null_product),
++	KUNIT_CASE(drm_test_connector_hdmi_init_null_vendor),
++	KUNIT_CASE(drm_test_connector_hdmi_init_product_length_exact),
++	KUNIT_CASE(drm_test_connector_hdmi_init_product_length_too_long),
++	KUNIT_CASE(drm_test_connector_hdmi_init_product_valid),
++	KUNIT_CASE(drm_test_connector_hdmi_init_vendor_length_exact),
++	KUNIT_CASE(drm_test_connector_hdmi_init_vendor_length_too_long),
++	KUNIT_CASE(drm_test_connector_hdmi_init_vendor_valid),
+ 	KUNIT_CASE_PARAM(drm_test_connector_hdmi_init_type_valid,
+ 			 drm_connector_hdmi_init_type_valid_gen_params),
+ 	KUNIT_CASE_PARAM(drm_test_connector_hdmi_init_type_invalid,
+
+-- 
+2.43.0
 
