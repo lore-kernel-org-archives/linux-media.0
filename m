@@ -1,232 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D14D53810;
-	Mon, 12 Feb 2024 13:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927E136B08;
+	Mon, 12 Feb 2024 14:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707743711; cv=none; b=o1GrIR4RLHPaUcNkI4h6ZYzpcOzFN+yo5jdshwyE1Ig/h8xUO486/8aVsE1xK9/cjGRliEta5jn3ga31xHzwryJJehYQLsN6m2TYBZesAf1ahFi+rxvaXzeQ8uvoyoxjg9poFlMJfe3FwiVotCU7dU0tAkBKI1k3qvpRGoOw45s=
+	t=1707748548; cv=none; b=uQh8oCxwG5s3d38gmpm+4VWC4mjh3jjVzIhmsyYCeamyl34zE/iU729RsgeTuzaNoexptOyCrwibsXxaOn+DONgJOeraD7hwWPM+w7KURM4YFcTr64MfwYA3YnXvu+lrP0VdJhSnKCvERzM+5f9EkX5SffHYa2wWq5Xm3UU4zCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707743711; c=relaxed/simple;
-	bh=jFJZOzfWjLZ2zEQYriox+hHfpbIA1hm9BhGPRAYICP0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XEUQIXCPA6V1jWv0PkO3VcZdL3wHsO0dISAocPY24WUJzY98Jof1puvrShRW1U/V1xj2b6aeg8n7V4CR3IqpY7nXHqvHIQOa3Lh5OO/7UNwra7WJaiG/looL2GgaFGxgEkiHtHlaKkownKXXZfdnU19jJLadmdlm+BJVPZXXYSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rYYVQ48W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1707748548; c=relaxed/simple;
+	bh=FEZEKqY3PEPBoYpj0jiC+YPZPIyblBQmDkJBM9b5JJo=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=r4rp9lD9ra1s+R5F/avLTvhEyqtyK8blGGTaOwOviOmDjnotqef6sEd8ko1j+Ku5PvSVBKoNxwKBNZkcidyxR/zu9gzY9tvKqDiCJBRLDcRlwmukRMdxCUPipCeDlwbI/tRaTuHtULWCEpMCpKBndoz32qOvDA2l3y1B1+OrF/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aa66Rotz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rYYVQ48W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA5EC43399;
-	Mon, 12 Feb 2024 13:15:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aa66Rotz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E1EC433C7;
+	Mon, 12 Feb 2024 14:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707743711;
-	bh=jFJZOzfWjLZ2zEQYriox+hHfpbIA1hm9BhGPRAYICP0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rYYVQ48WM5WoX2UZp8zvyb4xIs+WOd4GGc3TSOOsio+iMNZOv4TPiG0Lqp0Zq91jm
-	 lXUSu61Tl935PQHqZ20aj+2U0O61X5YMPevPCP+HZWALeargn0QOEZjUTMxT1nqeYN
-	 UZRc/AabDlMubEbBnVF6LLBTewrwVMEYqgKBD/UbmCNW29Nk1jHGz5TIEr6gZsbMGQ
-	 xAOf3208m+Ourr+hv5hO0i822AIKMlqI9rcqiLbdqbuMCEr7njQpONHDjQ+6FyCjWz
-	 uifmG1isS1IWNoQ4uN9/5oOfNdPkjtZGQWK0UeIEzHcJkiMaLYDokPaxPIEauPhdbH
-	 hZk32iGzp0IgA==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 12 Feb 2024 14:13:19 +0100
-Subject: [PATCH v6 36/36] drm/sun4i: hdmi: Switch to HDMI connector
+	s=k20201202; t=1707748548;
+	bh=FEZEKqY3PEPBoYpj0jiC+YPZPIyblBQmDkJBM9b5JJo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=Aa66RotzZ/7KLs3BaxzMWXwX8lDZZJHKqICiSM3w/tEa0lRoqjGhYM7Io5qB3Ndl5
+	 USyP07zjAul+LXOyPLKpyGBrX5IvaOe5uJeBMJPdOD0RbPFEZx+8gr8Zl0Td7e+Y3h
+	 Zx/Wxb60iLlGys9Tj8qop6N56kwjz6C1ZfOykK/6cgvJKDiGVRo1ESoZbl0x4n28s9
+	 gjTGnU5Bvz1r2U9SNgyU+4bI4yO2WR70qY75tysgz95BBKKVk34LWRBbO4Ht2FmNKw
+	 W3EFeqXbOr5q0zMvTj/ULtV6fiHBB/dDHP/3GGK6KR3sjFjBNEtToY28mw4v0Yy/Sf
+	 hBtu6c2wFExrQ==
+Date: Mon, 12 Feb 2024 08:35:46 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240212-kms-hdmi-connector-state-v6-36-f4bcdc979e6f@kernel.org>
-References: <20240212-kms-hdmi-connector-state-v6-0-f4bcdc979e6f@kernel.org>
-In-Reply-To: <20240212-kms-hdmi-connector-state-v6-0-f4bcdc979e6f@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
- Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, dri-devel@lists.freedesktop.org, 
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
- Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6185; i=mripard@kernel.org;
- h=from:subject:message-id; bh=jFJZOzfWjLZ2zEQYriox+hHfpbIA1hm9BhGPRAYICP0=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDKmnJEsP6sxfslW0I8Rk6k31fjNl8y/vatOOzH9T57i3b
- QPHh3TNjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAExkoTzD/9oHG859STrm6pqc
- Jsh7YcXdptKyFMlZFZ7X5LyvOBctkWb4Z+TQLnLY2LtXhutS4eLtB1urt7B9M3bRTPRfUmZp4/y
- bHQA=
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+From: Rob Herring <robh@kernel.org>
+To: =?utf-8?q?Pawe=C5=82_Anikiel?= <panikiel@google.com>
+Cc: chromeos-krk-upstreaming@google.com, tzimmermann@suse.de, 
+ maarten.lankhorst@linux.intel.com, hverkuil-cisco@xs4all.nl, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ mchehab@kernel.org, ribalda@chromium.org, robh+dt@kernel.org, 
+ mripard@kernel.org, airlied@gmail.com, linux-media@vger.kernel.org, 
+ akpm@linux-foundation.org, dinguyen@kernel.org, devicetree@vger.kernel.org, 
+ daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+In-Reply-To: <20240212131323.2162161-8-panikiel@google.com>
+References: <20240212131323.2162161-1-panikiel@google.com>
+ <20240212131323.2162161-8-panikiel@google.com>
+Message-Id: <170774854498.294434.14234480400138512065.robh@kernel.org>
+Subject: Re: [PATCH 7/9] media: dt-bindings: Add Chameleon v3 framebuffer
 
-The new HDMI connector infrastructure allows to remove some boilerplate,
-especially to generate infoframes. Let's switch to it.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c | 80 ++++++++++++++++++++++------------
- 1 file changed, 51 insertions(+), 29 deletions(-)
+On Mon, 12 Feb 2024 13:13:21 +0000, Paweł Anikiel wrote:
+> The Chameleon v3 uses the framebuffer IP core to take the video signal
+> from different sources and directly write frames into memory.
+> 
+> Signed-off-by: Paweł Anikiel <panikiel@google.com>
+> ---
+>  .../bindings/media/google,chv3-fb.yaml        | 77 +++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/google,chv3-fb.yaml
+> 
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-index b7cf369b1906..8a9106a39f23 100644
---- a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-@@ -36,30 +36,24 @@
- #define drm_connector_to_sun4i_hdmi(c)		\
- 	container_of_const(c, struct sun4i_hdmi, connector)
- 
--static int sun4i_hdmi_setup_avi_infoframes(struct sun4i_hdmi *hdmi,
--					   struct drm_display_mode *mode)
-+static int sun4i_hdmi_write_infoframe(struct drm_connector *connector,
-+				      enum hdmi_infoframe_type type,
-+				      const u8 *buffer, size_t len)
- {
--	struct hdmi_avi_infoframe frame;
--	u8 buffer[17];
--	int i, ret;
-+	struct sun4i_hdmi *hdmi = drm_connector_to_sun4i_hdmi(connector);
-+	int i;
- 
--	ret = drm_hdmi_avi_infoframe_from_display_mode(&frame,
--						       &hdmi->connector, mode);
--	if (ret < 0) {
--		DRM_ERROR("Failed to get infoframes from mode\n");
--		return ret;
-+	if (type != HDMI_INFOFRAME_TYPE_AVI) {
-+		drm_err(connector->dev,
-+			"Unsupported infoframe type: %u\n", type);
-+		return 0;
- 	}
- 
--	ret = hdmi_avi_infoframe_pack(&frame, buffer, sizeof(buffer));
--	if (ret < 0) {
--		DRM_ERROR("Failed to pack infoframes\n");
--		return ret;
--	}
--
--	for (i = 0; i < sizeof(buffer); i++)
-+	for (i = 0; i < len; i++)
- 		writeb(buffer[i], hdmi->base + SUN4I_HDMI_AVI_INFOFRAME_REG(i));
- 
- 	return 0;
-+
- }
- 
- static void sun4i_hdmi_disable(struct drm_encoder *encoder,
-@@ -82,14 +76,18 @@ static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- {
- 	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
- 	struct sun4i_hdmi *hdmi = drm_encoder_to_sun4i_hdmi(encoder);
--	struct drm_display_info *display = &hdmi->connector.display_info;
-+	struct drm_connector *connector = &hdmi->connector;
-+	struct drm_display_info *display = &connector->display_info;
-+	struct drm_connector_state *conn_state =
-+		drm_atomic_get_new_connector_state(state, connector);
-+	unsigned long long tmds_rate = conn_state->hdmi.tmds_char_rate;
- 	unsigned int x, y;
- 	u32 val = 0;
- 
- 	DRM_DEBUG_DRIVER("Enabling the HDMI Output\n");
- 
--	clk_set_rate(hdmi->mod_clk, mode->crtc_clock * 1000);
--	clk_set_rate(hdmi->tmds_clk, mode->crtc_clock * 1000);
-+	clk_set_rate(hdmi->mod_clk, tmds_rate);
-+	clk_set_rate(hdmi->tmds_clk, tmds_rate);
- 
- 	/* Set input sync enable */
- 	writel(SUN4I_HDMI_UNKNOWN_INPUT_SYNC,
-@@ -142,7 +140,8 @@ static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- 
- 	clk_prepare_enable(hdmi->tmds_clk);
- 
--	sun4i_hdmi_setup_avi_infoframes(hdmi, mode);
-+	drm_atomic_helper_connector_hdmi_update_infoframes(connector, state);
-+
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(0, SUN4I_HDMI_PKT_AVI);
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(1, SUN4I_HDMI_PKT_END);
- 	writel(val, hdmi->base + SUN4I_HDMI_PKT_CTRL_REG(0));
-@@ -195,7 +194,7 @@ static int sun4i_hdmi_connector_atomic_check(struct drm_connector *connector,
- 	enum drm_mode_status status;
- 
- 	status = sun4i_hdmi_connector_clock_valid(connector, mode,
--						  mode->clock * 1000);
-+						  conn_state->hdmi.tmds_char_rate);
- 	if (status != MODE_OK)
- 		return -EINVAL;
- 
-@@ -206,8 +205,11 @@ static enum drm_mode_status
- sun4i_hdmi_connector_mode_valid(struct drm_connector *connector,
- 				struct drm_display_mode *mode)
- {
--	return sun4i_hdmi_connector_clock_valid(connector, mode,
--						mode->clock * 1000);
-+	unsigned long long rate =
-+		drm_connector_hdmi_compute_mode_clock(mode, 8,
-+						      HDMI_COLORSPACE_RGB);
-+
-+	return sun4i_hdmi_connector_clock_valid(connector, mode, rate);
- }
- 
- static int sun4i_hdmi_get_modes(struct drm_connector *connector)
-@@ -253,6 +255,11 @@ static struct i2c_adapter *sun4i_hdmi_get_ddc(struct device *dev)
- 	return ddc;
- }
- 
-+static const struct drm_connector_hdmi_funcs sun4i_hdmi_hdmi_connector_funcs = {
-+	.tmds_char_rate_valid	= sun4i_hdmi_connector_clock_valid,
-+	.write_infoframe	= sun4i_hdmi_write_infoframe,
-+};
-+
- static const struct drm_connector_helper_funcs sun4i_hdmi_connector_helper_funcs = {
- 	.atomic_check	= sun4i_hdmi_connector_atomic_check,
- 	.mode_valid	= sun4i_hdmi_connector_mode_valid,
-@@ -274,11 +281,17 @@ sun4i_hdmi_connector_detect(struct drm_connector *connector, bool force)
- 	return connector_status_connected;
- }
- 
-+static void sun4i_hdmi_connector_reset(struct drm_connector *connector)
-+{
-+	drm_atomic_helper_connector_reset(connector);
-+	__drm_atomic_helper_connector_hdmi_reset(connector, connector->state);
-+}
-+
- static const struct drm_connector_funcs sun4i_hdmi_connector_funcs = {
- 	.detect			= sun4i_hdmi_connector_detect,
- 	.fill_modes		= drm_helper_probe_single_connector_modes,
- 	.destroy		= drm_connector_cleanup,
--	.reset			= drm_atomic_helper_connector_reset,
-+	.reset			= sun4i_hdmi_connector_reset,
- 	.atomic_duplicate_state	= drm_atomic_helper_connector_duplicate_state,
- 	.atomic_destroy_state	= drm_atomic_helper_connector_destroy_state,
- };
-@@ -637,10 +650,19 @@ static int sun4i_hdmi_bind(struct device *dev, struct device *master,
- 
- 	drm_connector_helper_add(&hdmi->connector,
- 				 &sun4i_hdmi_connector_helper_funcs);
--	ret = drm_connector_init_with_ddc(drm, &hdmi->connector,
--					  &sun4i_hdmi_connector_funcs,
--					  DRM_MODE_CONNECTOR_HDMIA,
--					  hdmi->ddc_i2c);
-+	ret = drmm_connector_hdmi_init(drm, &hdmi->connector,
-+				       /*
-+					* NOTE: Those are likely to be
-+					* wrong, but I couldn't find the
-+					* actual ones in the BSP.
-+					*/
-+				       "AW", "HDMI",
-+				       &sun4i_hdmi_connector_funcs,
-+				       &sun4i_hdmi_hdmi_connector_funcs,
-+				       DRM_MODE_CONNECTOR_HDMIA,
-+				       hdmi->ddc_i2c,
-+				       BIT(HDMI_COLORSPACE_RGB),
-+				       8);
- 	if (ret) {
- 		dev_err(dev,
- 			"Couldn't initialise the HDMI connector\n");
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-2.43.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/media/google,chv3-fb.example.dts:28.27-28 syntax error
+FATAL ERROR: Unable to parse input tree
+make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/media/google,chv3-fb.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1428: dt_binding_check] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240212131323.2162161-8-panikiel@google.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
