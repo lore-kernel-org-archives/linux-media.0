@@ -1,140 +1,134 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB91171AF;
-	Tue, 13 Feb 2024 07:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE9E1B7F3
+	for <linux-media@vger.kernel.org>; Tue, 13 Feb 2024 08:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707811084; cv=none; b=O4CIIeFkwj6LuJLUr9O6WJ9HUHo3g6kWbsFEBa2lWA3WLxvA7GfEyOlqcibEodWP/xaXVe1o2nHYq67+oauF410euObsgiH4lB+I+CQzVD76FL+duG/r22wyKir4pZFigX8UkI6tjGbVJG9dc0oQ1xG80PY0cURJG+UJOrG52HY=
+	t=1707812375; cv=none; b=IDZbuWP5FGHG7m/NkDjufT97o+DNJVZVWwFgdWMCl9NHNhcGY3FFDjgAxa0KXmh2DGdh0Nuvrikp/jPWmaCUNS5RJZ2IOR8jJZCZTq0D05/KhbuxEBEcCQrKSwKU3azhnmyQCh0McpFWuKck/LSqsNbiiJgqraPXDjOgr6rkJFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707811084; c=relaxed/simple;
-	bh=IlQIXZ0vuPM9VYTcGTSz+/Mswdp4GxOR03Z3jQ0NPR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3dBPWoh5xxLAPrG0D3YrIEmjCM+p+qg0PnDQLxNF+EGDkBlwJS7lBrBF8zbPmcmSzgXv7MZh+PSJ26MKTQGOeB6ZGLRdRYLI4tqaG41xgcw4kcWWMnOh3SELAe/1M3p2pDAHyTuWRIcJl97I/3x7mHoyrrgjM9BzJloahdNGY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=mflom04T; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1707812375; c=relaxed/simple;
+	bh=a9KpPEigrsX1iLMABeTlXtvEaBlx5SwQTXXvUiczMB0=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=sa5jrE37BR/VoOPevzivUeI9J4X5QQS+mNKMw4Yf2B2coEWhRemFpto3IuXJyBFiqIMZGYBXPwLTy9tBaMXxbc5/hlIMaa1CgPudHyTs+1JNpDWvhAbRVHMB5WHLS89K2uEBZYgNqq7HTbfHYiu5e8u8hAAwwt3CWr6FPnah1R0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=n45jA2m5; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mflom04T"
-Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 67C3D675;
-	Tue, 13 Feb 2024 08:57:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1707811078;
-	bh=IlQIXZ0vuPM9VYTcGTSz+/Mswdp4GxOR03Z3jQ0NPR4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mflom04T5WlZzuwSJm2AoS6RELf0vijDmcDQcZbVO6mXARMijzqJBGhNs8InrLZNK
-	 m+Y4EgjXgzTrTsd6/2Lk0zeOq5Qe5gR2j/Dm3hxSNBFFeBr5vlwuVD/9BvpYyXKFpo
-	 uo5dGwau13HrsPshiMXfH1YjDhqg6/jGeSi/U+qA=
-Date: Tue, 13 Feb 2024 08:57:56 +0100
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, Linux Media Mailing List <linux-media@vger.kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, David Plowman <david.plowman@raspberrypi.com>, 
-	Naushir Patuck <naush@raspberrypi.com>, Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Sakari Ailus <sakari.ailus@iki.fi>, 
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	devicetree@vger.kernel.org
-Subject: Re: Re: [PATCH 6/8] media: dt-bindings: Add bindings for Raspberry
- Pi PiSP Back End
-Message-ID: <n4hxdf4clbsbvjau4khozf2p4kdgygvktriuo7knlv6xl3dncg@bcpaqag4fsgg>
-References: <20240209164825.166800-1-jacopo.mondi@ideasonboard.com>
- <20240209164825.166800-7-jacopo.mondi@ideasonboard.com>
- <7f7979af-8eda-48cd-a334-bb64ddf5b9b8@linaro.org>
- <myfjzqh4wqa3lf4dcrgaswrarlh7sril6vz3mtnbz646rwxylt@oz75b5j5srot>
- <b55f4d1e-2e77-4539-8d18-8d8f2185b501@linaro.org>
- <5db2c830-2615-4416-9bb1-18fcd2a3a980@ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="n45jA2m5"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240213081929epoutp0327451920c8215691d2dbb6445a0b27d9~zXk03NRW51818318183epoutp03b
+	for <linux-media@vger.kernel.org>; Tue, 13 Feb 2024 08:19:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240213081929epoutp0327451920c8215691d2dbb6445a0b27d9~zXk03NRW51818318183epoutp03b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1707812369;
+	bh=H1tmDljItywEqFTrCeVCWWEvSW1ptNZPOJ2e9OZtBDU=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=n45jA2m5Khgp+gF6RFYFySgSlZT9CDOxAOUd4ycn9dYHvn7FygcCV9OEL4NqevpOH
+	 JsOGGtvhe6DUebUjL5GEhy4TTaQCfnsHLWnHsBMQHtJIUaZAt8PGh8Nvdxzkcr9yLm
+	 0lFnNhsHM6MF5Na8YatpJi20iO09915MH0DHvyT4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20240213081928epcas5p335b1317d210ea234c717440690a8224d~zXk0Zpb9U1947019470epcas5p3-;
+	Tue, 13 Feb 2024 08:19:28 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4TYvPW1Rzyz4x9Pw; Tue, 13 Feb
+	2024 08:19:27 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	8B.49.10009.F062BC56; Tue, 13 Feb 2024 17:19:27 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240213045739epcas5p49f28920efda3cb80351b1fcae580b21e~zU0mg__Ak3076530765epcas5p4j;
+	Tue, 13 Feb 2024 04:57:39 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240213045739epsmtrp195d85b4c2bfb9a6608a56432f75f2021~zU0mf7ZVQ2138221382epsmtrp1U;
+	Tue, 13 Feb 2024 04:57:39 +0000 (GMT)
+X-AuditID: b6c32a4a-261fd70000002719-78-65cb260f034a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	4D.0C.07368.3C6FAC56; Tue, 13 Feb 2024 13:57:39 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+	[107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240213045736epsmtip1f0d0b60a43c700a19890074823abd3b6~zU0kNhaz_0854708547epsmtip1E;
+	Tue, 13 Feb 2024 04:57:36 +0000 (GMT)
+From: Aakarsh Jain <aakarsh.jain@samsung.com>
+To: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc: m.szyprowski@samsung.com, andrzej.hajda@intel.com, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	linux-samsung-soc@vger.kernel.org, andi@etezian.org, gost.dev@samsung.com,
+	alim.akhtar@samsung.com, pankaj.dubey@samsung.com, aakarsh.jain@samsung.com
+Subject: [Patch v2] dt-bindings: media: s5p-mfc: Remove s5p-mfc.txt binding
+Date: Tue, 13 Feb 2024 10:27:33 +0530
+Message-Id: <20240213045733.63876-1-aakarsh.jain@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEJsWRmVeSWpSXmKPExsWy7bCmui6/2ulUg7aDHBZPd8xktXgwbxub
+	xeIfz5ks7i/+zGKxZu85Jov5R86xWtw8sJPJ4uLMuywWfS8eMltsenyN1eLyrjlsFj0btrJa
+	zDi/j8li7ZG77BbLNv1hsli09Qu7ReveI+wOgh7Xl3xi9li85yWTx6ZVnWwed67tYfPYvKTe
+	o2/LKkaPz5vkPE59/cwewBGVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCX
+	mJtqq+TiE6DrlpkD9IaSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4
+	NC9dLy+1xMrQwMDIFKgwITtj4Y60gn2sFfPerGdrYHzK0sXIySEhYCJx9csU1i5GLg4hgd2M
+	Esc33IRyPjFKXL+5jQXC+cYo0fhzJSNMy6OpF5kgEnsZJTbdPcoO4bQySZyc8J65i5GDg01A
+	V+Ls9hyQBhGBRkaJxx0lIDazwHkmiQudKSC2sIC3xLX1D9lBbBYBVYldzw4zg9i8ArYS06Zf
+	YodYJi+xesMBZpD5EgK9HBLX2s5DHe4iMXvfMWYIW1ji1fEtUA1SEi/726DsZInHi15C1eRI
+	rN8zBarXXuLAlTksIHcyC2hKrN+lDxGWlZh6ah0TxJ18Er2/nzBBxHkldsyDsdUk5tz5wQph
+	y0gcXr0UGigeEi3vH4KtEhKIldh/9S7bBEbZWQgbFjAyrmKUTC0ozk1PLTYtMMpLLYfHU3J+
+	7iZGcOLU8trB+PDBB71DjEwcjIcYJTiYlUR4L804kSrEm5JYWZValB9fVJqTWnyI0RQYZhOZ
+	pUST84GpO68k3tDE0sDEzMzMxNLYzFBJnPd169wUIYH0xJLU7NTUgtQimD4mDk6pBqZtsjzT
+	OzgvM76/aWrY7LSFsckhPJKxwP2nS4fP+nzGTzf8lhw0v3Rst96SuY35sfYKS/gmLCzyP8c2
+	U3zve+0/n/T0Gdjv3eza9ajReYvETOdfz7c6fvlYz1tx4n9e/IH29nshJ3b6GioGqaVM2rtg
+	qbhSVfzHhTNM3v+QuRX8UF//9j1/b0Xvuv3NSnc/n3RbyK5Uv9zA7O3h0zyRnZf9K3gPH+0w
+	Efr990ue5eWury+3my4PvVQrzl3Kkr/nyjGOFZdFz+ioei1k7DAyXrJG76GFjdSarbPP2ymu
+	qQtymL9sxQP+/6b6k06n3rrxf9Kmay2y2f/uVe7d7sD24+WtXZnyNktqsv53yZR3Gv9WYinO
+	SDTUYi4qTgQAlmfW9iUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPLMWRmVeSWpSXmKPExsWy7bCSnO7hb6dSDS7ME7R4umMmq8WDedvY
+	LBb/eM5kcX/xZxaLNXvPMVnMP3KO1eLmgZ1MFhdn3mWx6HvxkNli0+NrrBaXd81hs+jZsJXV
+	Ysb5fUwWa4/cZbdYtukPk8WirV/YLVr3HmF3EPS4vuQTs8fiPS+ZPDat6mTzuHNtD5vH5iX1
+	Hn1bVjF6fN4k53Hq62f2AI4oLpuU1JzMstQifbsEroyFO9IK9rFWzHuznq2B8SlLFyMnh4SA
+	icSjqReZuhi5OIQEdjNKdL7bBpWQkfjfdowdwhaWWPnvOTtEUTOTxMab+4E6ODjYBHQlzm7P
+	AYmLCLQySlxf2Qk2iVngPpPElYm3WUG6hQW8Ja6tfwg2iUVAVWLXs8PMIDavgK3EtOmXoDbI
+	S6zecIB5AiPPAkaGVYySqQXFuem5yYYFhnmp5XrFibnFpXnpesn5uZsYwWGspbGD8d78f3qH
+	GJk4GA8xSnAwK4nwXppxIlWINyWxsiq1KD++qDQntfgQozQHi5I4r+GM2SlCAumJJanZqakF
+	qUUwWSYOTqkGJuUJE7kuvcjiX8GapGAVZWNzl+eHYOujiOIjBdOfKpSVvjaQ//86htf52M6d
+	RbxnLJ9GrUirTUqYwVb8pT1vxYvYhv7Nwga9iWfe6TvJR71zUTCp3a3FP0H0dz1n8JGaLqfP
+	LNnGKZE7BC6f0ma6mj2nfs+UpE+60hv+LvZcueLwl9dKsd86lS0WVBZaVad0lmQcer52UsLC
+	zsdLTRtvuvrVCbLbqSn0b4vVWPB489LerGnvzuc7avMder51jf/XYsvJUn/V7LsvyWs58GUr
+	mDzpn33JtLjd/sZX/9zZr+ITfk9plr05J+kkB/vFHQ6//77L+seyumvRmxtnmB9NmtS1Wzg0
+	vzj2a8KxM85KSizFGYmGWsxFxYkAY8iUUNICAAA=
+X-CMS-MailID: 20240213045739epcas5p49f28920efda3cb80351b1fcae580b21e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240213045739epcas5p49f28920efda3cb80351b1fcae580b21e
+References: <CGME20240213045739epcas5p49f28920efda3cb80351b1fcae580b21e@epcas5p4.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5db2c830-2615-4416-9bb1-18fcd2a3a980@ideasonboard.com>
 
-Hi Tomi
+commit "538af6e5856b" which convert s5p-mfc bindings to
+json-schema is already merged. Remove "s5p-mfc.txt" file.
 
-On Tue, Feb 13, 2024 at 09:28:33AM +0200, Tomi Valkeinen wrote:
-> Hi,
->
-> On 12/02/2024 11:05, Krzysztof Kozlowski wrote:
-> > On 12/02/2024 09:50, Jacopo Mondi wrote:
-> >
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: raspberrypi,pispbe
-> > > >
-> > > > Nothing more specific? No model name, no version? It's quite generic
-> > > > compatible which in general should not be allowed. I would assume that
-> > > > at least version of Pi could denote some sort of a model... unless
-> > > > version is detectable?
-> > > >
-> > >
-> > > The driver matches on a version register and that should be enough to
-> > > handle quirks which are specific to an IP revision in the driver
-> > > itself.
-> > >
-> > > Considering how minimal the integration with the SoC is (one clock, one
-> > > interrupt and one optional iommu reference) even if we'll get future
-> > > revisions of the SoC I don't think there will be any need to match on
-> > > a dedicated compatible for bindings-validation purposes.
-> > >
-> > > However I understand that to be future-proof it's good practice to
-> > > allow a more flexible scheme, so we can have a generic fallback and a
-> > > revision-specific entry.
-> > >
-> > > Would
-> > >
-> > >    compatible:
-> > >      items:
-> > >        - enum:
-> > >          - raspberrypi,pipspbe-bcm2712
-> >
-> > bcm2712 is manufactured by Broadcom, not Raspberry Pi, so it should be
-> > rather Pi model?
->
-> Indeed, this is something I don't get. If the BE is in the bcm2712, is it
-> not a broadcom IP? Why is raspberrypi in the compatible name at all?
->
-> Naush, Dave?
->
-> > >        - const: raspberrypi,pispbe
-> > >
-> > > do in this case ?
-> > >
-> > > Also, let's see what RPi think as they are certainly more informed
-> > > than me on what a good revision-specific match could be
-> >
-> > I am fine with auto-detection, though.
-> >
-> > ...
-> >
-> > > > > +
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > > > +
-> > > > > +    rpi1 {
-> > > >
-> > > > soc {
-> > > >
-> > >
-> > > Are you sure ? This will only ever live in the 'rp1' node.
-> >
-> > What is "rp1" node? Does not look like a generic name.
->
-> I don't think this is right. RP1 is a separate chip, an IO controller, on
-> raspberrypi 5. BE is not in the RP1.
->
+Fixes: 538af6e5856b ("dt-bindings: media: s5p-mfc: convert
+bindings to json-schema")
+Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+---
+changelog:
+v1->v2
+Add Fixes tag suggested by Krzysztof
+ Documentation/devicetree/bindings/media/s5p-mfc.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/s5p-mfc.txt
 
-Ah yes indeed, bad copy and paste from me. I'll s/rpi/soc as suggested
-by Krzysztof
+diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+deleted file mode 100644
+index e69de29bb2d1..000000000000
+-- 
+2.17.1
 
->  Tomi
->
->
