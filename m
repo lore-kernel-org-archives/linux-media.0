@@ -1,133 +1,98 @@
 Received: from mail.damsy.net (mail.damsy.net [85.90.245.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD9C5FBB4;
-	Wed, 14 Feb 2024 16:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4620A604AA;
+	Wed, 14 Feb 2024 16:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.90.245.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707929312; cv=none; b=TXmx7G45afSPwTCdjyl8M+Sxl5o5zmP3AMg/3unK9BgDkrsz+F8XLU9+Tbjn3veOVe1+fIcCJr/hMhjlR7ade2DHSe4g8e2IdQcB5n/KNJyUt9g3ftKwaCcfJujim6a5h6SLkPed0wvFAcvyZh5oJbxXck9WFN5bYl7kVj8XAww=
+	t=1707929694; cv=none; b=oiVJooyr2W8agYRXpySkB78O81qrisXbLuTrH8YErbqkav/P7JBqHPIEq3V27pOrW64AIm26L0ohUz0ygRI0DZFPBrnG8RfYQFPd7nUXfIwhfk4z36Wp3fEg+3td9TwXf3IrMCdjIBLZMr5aDkjyeYLfgN3D1nXHA9BdiuGZoug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707929312; c=relaxed/simple;
-	bh=4+I1x2NkZD4hYAGELFFtjJaRZEhgtnZojCZSmJ/wj0k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=cA3xGK2T5iBxKRBJ+e8QCD3ovZGVqK40on0D05iY0S03E84flmopPaLmP9cBWU9RRsAd4aIZsm201gjdjPLmSiJuKjkVe0qkkp9yTc3IvrrcINcq+3teL9hq7KIT0X+K2RFnc2BFpKKkO0krD2+s1NBPA0zr2Bl5lFa57FGiGGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=gljod815; arc=none smtp.client-ip=85.90.245.9
+	s=arc-20240116; t=1707929694; c=relaxed/simple;
+	bh=g/kxWZe49evQ9fXPrBwG290l6vZLeGrk5CcEjO7UbcM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J3iWboP2/dz4aCmE2LAtX9f+WBxpmxu6ULtSpNovn8k0EbBZc30P8NfhIUSIN1A7POJti1NHYipR3QMQFmMe8atvGQQobXBopzZlUHY4lqVhAr4EQsb+bhmJIQsQe/WeWEz9t/+yQX0hUEizYoqz/MjiCvNpTX9AegV6OUKIOqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=bom7zw32; arc=none smtp.client-ip=85.90.245.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=damsy.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=damsy.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="gljod815"
-Message-ID: <37984611-fe53-4088-be32-0a2d825ff47a@damsy.net>
+	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="bom7zw32"
+Message-ID: <645c241d-21ae-4b03-82e0-84eac1355269@damsy.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=damsy.net; s=201803;
-	t=1707928704;
+	t=1707929689;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=a5zubDY98X+TX50Yu/vbLG7DhE8XYQA2aDFd8gxtg2Q=;
-	b=gljod815VpL2iekXxaZRiKkNpfWckp7OU3jvQGSZsaFHyBnTW3Wbi/oxShJlj7ItB0Dj45
-	MIzQaoXHoDwh7uNhPW7WbIzaa/mf58G1MFuqrt5xVq7ZW34BFVARYB2tJWNnl7jwOmxyg5
-	J5LbAiXs30dMJdPU8xlt3zsM7D96zBlWgbdXkNemyGGpxuqa8HT3Y8cpWpAL4xurZEdLlk
-	ATt2DPSNsP8LiN/5fwOKhisT8GTFK4vrXdYdVxomKqnLvrJtpdbQShNaCAF12tQWSGbbkg
-	KV0/gNszohR2PPpjwZPdyAtCPgKnbzYYpWfJsQtEr053I8GkOlg1fE/qyoABSA==
-Date: Wed, 14 Feb 2024 17:38:23 +0100
+	bh=2nboMYgNDy9pIH3TJ4ZbKU0pYFKnkSMT1bkJGnsLyAY=;
+	b=bom7zw32pw8EoI/diDAPtBDqNqg2+pOmnom/tAJUIZQtXdqMGASvlqnKbRkkb+4uHVjMJw
+	PRr/eUK6Z2pHq5QDVv4IKWUMpH/SY0kzZpxVizw1eNnc7VAbimrcU9a9gYYBCFy6aAAyB9
+	JQZ7fnBX6zI7Bcwymv4EdUOsRI2ar6rpLpu2GiqDQu8aEo5y0P01idDCmYDDMkfDt+PHrG
+	eT+hV8GUX2Wv568vs7TJ7NHpmyjGXy4Ja+/8dRG9ryLHFvHx+vucwoGM5OE1eyjNobZGNf
+	9HRTFIhbdUAdNdFyqb9kS95IXv2PQVW0O95GfXmlPyW5QNDU7fmX1FT4A2mdRg==
+Date: Wed, 14 Feb 2024 17:54:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 5/6] drm/amdgpu: add a amdgpu_cs_ioctl2 event
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+Subject: Re: [PATCH v2 1/6] tracing, dma-buf: add a trace_dma_fence_sync_to
+ event
+Content-Language: fr
+To: Steven Rostedt <rostedt@goodmis.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
  Sumit Semwal <sumit.semwal@linaro.org>, Gustavo Padovan
- <gustavo@padovan.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
+ <gustavo@padovan.org>, Masami Hiramatsu <mhiramat@kernel.org>,
  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org, Alex Deucher
  <alexander.deucher@amd.com>, amd-gfx@lists.freedesktop.org
 References: <20240117184329.479554-1-pierre-eric.pelloux-prayer@amd.com>
  <20240213155112.156537-1-pierre-eric.pelloux-prayer@amd.com>
- <20240213155112.156537-6-pierre-eric.pelloux-prayer@amd.com>
- <2a6a473a-3e87-4838-83eb-400bde712e91@amd.com>
-Content-Language: fr
+ <20240213155112.156537-2-pierre-eric.pelloux-prayer@amd.com>
+ <137e8d79-bf19-4782-918e-0c09b029e3aa@amd.com>
+ <20240214101041.2fbf9b87@gandalf.local.home>
 From: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>
-In-Reply-To: <2a6a473a-3e87-4838-83eb-400bde712e91@amd.com>
+In-Reply-To: <20240214101041.2fbf9b87@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-
-Le 14/02/2024 à 13:09, Christian König a écrit :
-> Am 13.02.24 um 16:50 schrieb Pierre-Eric Pelloux-Prayer:
->> amdgpu_cs_ioctl already exists but serves a different
->> purpose.
+Le 14/02/2024 à 16:10, Steven Rostedt a écrit :
+> On Wed, 14 Feb 2024 13:00:16 +0100
+> Christian König <christian.koenig@amd.com> wrote:
+> 
+>>> +DEFINE_EVENT(dma_fence_from, dma_fence_sync_to,
 >>
->> amdgpu_cs_ioctl2 marks the beginning of the kernel processing of
->> the ioctl which is useful for tools to map which events belong to
->> the same submission (without this, the first event would be the
->> amdgpu_bo_set_list ones).
+>> For a single event you should probably use TRACE_EVENT() instead of
+>> declaring a class. A class is only used if you have multiple events with
+>> the same parameters.
 > 
-> That's not necessary a good justification for the naming. What exactly was the original trace_amdgpu_cs_ioctl() doing?
+> FYI, TRACE_EVENT() is actually defined as:
 > 
+> #define TRACE_EVENT(name, proto, args, tstruct, assign, print) \
+> 	DECLARE_EVENT_CLASS(name,			       \
+> 			     PARAMS(proto),		       \
+> 			     PARAMS(args),		       \
+> 			     PARAMS(tstruct),		       \
+> 			     PARAMS(assign),		       \
+> 			     PARAMS(print));		       \
+> 	DEFINE_EVENT(name, name, PARAMS(proto), PARAMS(args));
+> 
+> So basically, you could really just declare one TRACE_EVENT() and add
+> DEFINE_EVENT()s on top of it ;)
+> 
+> I never recommended that because I thought it would be confusing.
 
-trace_amdgpu_cs_ioctl is used right before drm_sched_entity_push_job is called so in a sense it's a duplicate
-of trace_drm_sched_job.
 
-That being said, it's used by gpuvis so I chose to not modify it.
+Thanks Steve and Christian for your feedback.
 
-As for the new event: initially I named it "amdgpu_cs_parser_init", but since the intent is to mark the
-beginning of the amdgpu_cs_submit I've renamed it.
+I'm integrating your suggestions in my branch and will re-send the series
+after more testing.
 
-Any suggestion for a better name?
 
-Thanks,
 Pierre-Eric
 
 
-
-> Regards,
-> Christian.
 > 
->>
->> Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c    |  2 ++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h | 12 ++++++++++++
->>   2 files changed, 14 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> index 6830892383c3..29e43a66d0d6 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> @@ -1402,6 +1402,8 @@ int amdgpu_cs_ioctl(struct drm_device *dev, void *data, struct drm_file *filp)
->>           return r;
->>       }
->> +    trace_amdgpu_cs_ioctl2(data);
->> +
->>       r = amdgpu_cs_pass1(&parser, data);
->>       if (r)
->>           goto error_fini;
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
->> index e8ea1cfe7027..24e95560ede5 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
->> @@ -189,6 +189,18 @@ TRACE_EVENT(amdgpu_cs_ioctl,
->>                 __entry->seqno, __get_str(ring), __entry->num_ibs)
->>   );
->> +TRACE_EVENT(amdgpu_cs_ioctl2,
->> +        TP_PROTO(union drm_amdgpu_cs *cs),
->> +        TP_ARGS(cs),
->> +        TP_STRUCT__entry(
->> +                 __field(uint32_t, ctx_id)
->> +        ),
->> +        TP_fast_assign(
->> +               __entry->ctx_id = cs->in.ctx_id;
->> +        ),
->> +        TP_printk("context=%u", __entry->ctx_id)
->> +);
->> +
->>   TRACE_EVENT(amdgpu_sched_run_job,
->>           TP_PROTO(struct amdgpu_job *job),
->>           TP_ARGS(job),
-> 
+> -- Steve
