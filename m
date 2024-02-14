@@ -1,89 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B5317552;
-	Wed, 14 Feb 2024 10:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5836517543;
+	Wed, 14 Feb 2024 10:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707906284; cv=none; b=X0p13Q0O50BRsA4NnkbumW3H38mrD36ADVV0yB2SnHf3BokNndb7CettSoMaTrLzMagL1mAi62iIVo54MUrFbkTbEGNlH1Pw9ZiWw2IpFgtT9qzTc5G06C7Xl7N0UEUtYrCKyeZ/sG96YDs9+urUgy0i919wgqF1kgOWkZvZDGk=
+	t=1707906811; cv=none; b=MR24gySduKDv3xfxSLPCs1iUEm3jaD2xVBJBED0JWZVYUTrGjdY9g4SG8nHl37iumF6zNa7/8Dq3FF1g0PMrjxrda+EgbX5UFy4oTRfk5jCzI5CH5DOzFfzjcG5Rl7jlVKJV5ivDt/1P0p9b3UI4NYtKslR9CJPB25f1oSGwbyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707906284; c=relaxed/simple;
-	bh=L/qyyXzgC6hYYYA38GAe52ZNx6yR11HINzKT0BfZ7dc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hrVD9XHSD6oB5s3auWuv4fEQcjST6He3HxW3k5lw1Vz506JBfJEunUFe16lo3iO9uZb6S1wtnl4W44sMHlK1lUG2y5HFtzi9iUBBLbEkhk2uyrU6rMTsHkopsiI3oHFBDZxZlYiX1uhvbVxRDokLUhvylXN/zPsxK2NJR2YXWQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E62E3C433F1;
-	Wed, 14 Feb 2024 10:24:42 +0000 (UTC)
-Message-ID: <24cbf7b2-a091-440e-92cc-5c9828d52260@xs4all.nl>
-Date: Wed, 14 Feb 2024 11:24:41 +0100
+	s=arc-20240116; t=1707906811; c=relaxed/simple;
+	bh=mFfgmz4+wXh0UjEUmA4Dg2GD0XWAvkVAjB6kDsPql70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=axo5eGkH7WkyCoG7TsOj5blOh3xhMFKXb81Up4zRIJDYlrER9QorXN+Q3k2Xmf6WJnjWrrU/xTaG28aEPvjuHtnTD4r2TBGpqeRyA+Xpv5A0FZIy7uRLQnLreunoru1yZcnNizB/yHIleRfsdiKQFL992JmkNYVmvPnGwAHG53Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hox9PoyA; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hox9PoyA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707906810; x=1739442810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mFfgmz4+wXh0UjEUmA4Dg2GD0XWAvkVAjB6kDsPql70=;
+  b=hox9PoyArnTWZ/HJblzFcSSC/xxAefGsN7Ff1ceyVuxE6vCbJxesfTrL
+   SjgPQh44BIQlT2h4I0mnfre4aj8QSlDECm5nb9jKUB6rG3jv+/Q79I3fF
+   MwwWNaHwdA3eSSsIzqoKkVHGDybPBfF9iwvg2JkEvychYK2H5wtBhQs+1
+   6v3ERDAXCL5QPCOMIyPixJwEyDL/sFgrMAATnv4BDkCKjBwd4Q5vYTIvk
+   Yd0b7X6THAI2HTWyJL4/P9cfJfUIXcHxKV3twwb6s2vLFr5BWStVXCdlJ
+   Xg9kp5cuTCLi1Zu0fzjwgpksuo5kK5Q+GVVT3RGsnrS7k/TqvzwrPNmXH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1813393"
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="1813393"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:33:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="3316050"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:33:26 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 5501A11F86A;
+	Wed, 14 Feb 2024 12:33:23 +0200 (EET)
+Date: Wed, 14 Feb 2024 10:33:23 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH] media: v4l: marvell: select CONFIG_V4L2_ASYNC where
+ needed
+Message-ID: <ZcyW8zn14iIbn45X@kekkonen.localdomain>
+References: <20240213095555.454392-1-arnd@kernel.org>
+ <24cbf7b2-a091-440e-92cc-5c9828d52260@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: v4l: marvell: select CONFIG_V4L2_ASYNC where
- needed
-Content-Language: en-US, nl
-To: Arnd Bergmann <arnd@kernel.org>,
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20240213095555.454392-1-arnd@kernel.org>
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20240213095555.454392-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24cbf7b2-a091-440e-92cc-5c9828d52260@xs4all.nl>
 
-Arnd, Sakari,
+Hi Hans, Arnd,
 
-Is this something that needs to go to v6.8? Or just v6.9?
+On Wed, Feb 14, 2024 at 11:24:41AM +0100, Hans Verkuil wrote:
+> Arnd, Sakari,
+> 
+> Is this something that needs to go to v6.8? Or just v6.9?
+> 
+> Do we need a Fixes tag?
 
-Do we need a Fixes tag?
+The patch seems to be related to this:
+<URL:https://lore.kernel.org/oe-kbuild-all/202402130955.f6uxzdCA-lkp@intel.com/>.
 
+So most likely yes, and Cc: stable, too.
+
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> On 13/02/2024 10:55, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > Drivers that call v4l2_async_nf_init() need to select the corresponding
+> > Kconfig symbol:
+> > 
+> > ERROR: modpost: "v4l2_async_nf_init" [drivers/media/platform/marvell/cafe_ccic.ko] undefined!
+> > ERROR: modpost: "__v4l2_async_nf_add_i2c" [drivers/media/platform/marvell/cafe_ccic.ko] undefined!
+> > ERROR: modpost: "v4l2_async_nf_unregister" [drivers/media/platform/marvell/mcam-core.ko] undefined!
+> > ERROR: modpost: "v4l2_async_nf_init" [drivers/media/platform/marvell/mmp_camera.ko] undefined!
+> > ERROR: modpost: "__v4l2_async_nf_add_fwnode_remote" [drivers/media/platform/marvell/mmp_camera.ko] undefined!
+> > 
+> > I checked all v4l2 drivers to see if anything else has the same
+> > bug, but these two appear to be the only ones.
+> > 
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  drivers/media/platform/marvell/Kconfig | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/media/platform/marvell/Kconfig b/drivers/media/platform/marvell/Kconfig
+> > index d6499ffe30e8..d31f4730f2a3 100644
+> > --- a/drivers/media/platform/marvell/Kconfig
+> > +++ b/drivers/media/platform/marvell/Kconfig
+> > @@ -7,6 +7,7 @@ config VIDEO_CAFE_CCIC
+> >  	depends on V4L_PLATFORM_DRIVERS
+> >  	depends on PCI && I2C && VIDEO_DEV
+> >  	depends on COMMON_CLK
+> > +	select V4L2_ASYNC
+> >  	select VIDEO_OV7670 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
+> >  	select VIDEOBUF2_VMALLOC
+> >  	select VIDEOBUF2_DMA_CONTIG
+> > @@ -24,6 +25,7 @@ config VIDEO_MMP_CAMERA
+> >  	depends on COMMON_CLK
+> >  	select VIDEO_OV7670 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
+> >  	select I2C_GPIO
+> > +	select V4L2_ASYNC
+> >  	select VIDEOBUF2_VMALLOC
+> >  	select VIDEOBUF2_DMA_CONTIG
+> >  	select VIDEOBUF2_DMA_SG
+> 
+
+-- 
 Regards,
 
-	Hans
-
-On 13/02/2024 10:55, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Drivers that call v4l2_async_nf_init() need to select the corresponding
-> Kconfig symbol:
-> 
-> ERROR: modpost: "v4l2_async_nf_init" [drivers/media/platform/marvell/cafe_ccic.ko] undefined!
-> ERROR: modpost: "__v4l2_async_nf_add_i2c" [drivers/media/platform/marvell/cafe_ccic.ko] undefined!
-> ERROR: modpost: "v4l2_async_nf_unregister" [drivers/media/platform/marvell/mcam-core.ko] undefined!
-> ERROR: modpost: "v4l2_async_nf_init" [drivers/media/platform/marvell/mmp_camera.ko] undefined!
-> ERROR: modpost: "__v4l2_async_nf_add_fwnode_remote" [drivers/media/platform/marvell/mmp_camera.ko] undefined!
-> 
-> I checked all v4l2 drivers to see if anything else has the same
-> bug, but these two appear to be the only ones.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/media/platform/marvell/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/media/platform/marvell/Kconfig b/drivers/media/platform/marvell/Kconfig
-> index d6499ffe30e8..d31f4730f2a3 100644
-> --- a/drivers/media/platform/marvell/Kconfig
-> +++ b/drivers/media/platform/marvell/Kconfig
-> @@ -7,6 +7,7 @@ config VIDEO_CAFE_CCIC
->  	depends on V4L_PLATFORM_DRIVERS
->  	depends on PCI && I2C && VIDEO_DEV
->  	depends on COMMON_CLK
-> +	select V4L2_ASYNC
->  	select VIDEO_OV7670 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
->  	select VIDEOBUF2_VMALLOC
->  	select VIDEOBUF2_DMA_CONTIG
-> @@ -24,6 +25,7 @@ config VIDEO_MMP_CAMERA
->  	depends on COMMON_CLK
->  	select VIDEO_OV7670 if MEDIA_SUBDRV_AUTOSELECT && VIDEO_CAMERA_SENSOR
->  	select I2C_GPIO
-> +	select V4L2_ASYNC
->  	select VIDEOBUF2_VMALLOC
->  	select VIDEOBUF2_DMA_CONTIG
->  	select VIDEOBUF2_DMA_SG
-
+Sakari Ailus
