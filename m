@@ -1,56 +1,56 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13668125C3
-	for <linux-media@vger.kernel.org>; Wed, 14 Feb 2024 09:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A9710A35
+	for <linux-media@vger.kernel.org>; Wed, 14 Feb 2024 09:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707902294; cv=none; b=sAtLm41SGebVNo3CvztX4sBJfO4g0TuhmFBhBEjm76u1leePfpmALGEyx56oIifi+LhMTldi0qKXPxf9pJ3hYF3ub6Qq5Tj/lkitjiqufmKJMfZDQQ5b/FJlV2v2JPmC0EFoyX1GtL9Jbo9qj/HMNaLMFouRKZtb0d7+bLZVWXI=
+	t=1707902294; cv=none; b=tAnszx6++d4stN6sCVOXi6DdUwV9cV5DD8q2aclINDnLagrvDQuEDYdMUjHQl8Evc36ti0JVfsQxSlbSAKOF2SyS1sHlLs6MzaNQnhtnXWY4tTSenvwNSN18fWo2FlEdwKwrCkJuQgeCKvFENpIEOyPp8OxdFTcNb2ukAKGY7aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1707902294; c=relaxed/simple;
-	bh=Uhh3mxWZGmejQJ96IaMaKBX24BqSqQCwgOvIMSvGj3Y=;
+	bh=GhQ4v9FKklhnme+bSakScBV6O1udJH7XQ5qP4SPESvE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nLjfSFkBK0FP4zS60K9LnVQ3+scEOME/cVvgyUAIxPDmp84bk5qehnU2I3i2YwziV2NcIX649A0grI08EXCEI/fzfL2uC1u/Ej62xgMJzUPUyesOXhlbuIMxo5RVSiHwD5ZgvaA1Owuycn4rrN9Xzo3RNvO/Y+ol35bOqFChxaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePH8HDEE; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=ApSC6gt3GkyBUioHpchzDDJO5ZfSBU68mM2gAUxKWV+VmME1Qtdh3gG/bnkYWAhypPh4E22zxpq1DkNIw8ZZ6auVCpDFRmyu0AlAdEpWPy39PbW4AcN/xvms5IYfts18rjSsYhSC+02ZTh2E+LDK+WbYFTi0axz5ZhQ+gGhaVYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UCXkKkE6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePH8HDEE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UCXkKkE6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1707902292; x=1739438292;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Uhh3mxWZGmejQJ96IaMaKBX24BqSqQCwgOvIMSvGj3Y=;
-  b=ePH8HDEE7TxQgsXpdunp+IjUD+sRbxN9a8LJYqvYLKNVeNLmR9TAJbwF
-   PPDf9PKbo1KUaf2fsbRkBbuH/sT7JkUP+TjqMJbLjgygKU/zzhVO/GDBY
-   9KtjX7/G9pt5UDa3rW6YQyVFSrs2PpNtEkjf31JrVtfI3tu1a2H/5Mtk/
-   vyUGndyBQyXF/aJkwWIIL4oD9MTDtQ3si0YmnFdWL+UGGjIWr/f6ni2TU
-   yR5LmgxqMwRmuCEbDA0g+RHKxgHxPIbTNfY/NlKK78WhhXzXqnsrcf8LT
-   VAh7Gdw/q46NbZyvZpoh9Bq5q04mI5qmz8kh8iKFklxE81VVXl/GmAtIm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2301717"
+  bh=GhQ4v9FKklhnme+bSakScBV6O1udJH7XQ5qP4SPESvE=;
+  b=UCXkKkE6hKlT/74EBDnlza+LAIcfKu9HA9u9fRAixpO8AfEYS1rKi/0A
+   4GvlCdxC2feTjO4jGW36Nhh2CyMd1hEoB/zK/ggBsOGhlklHUtIH4vdng
+   NAUDYVNI002p1VFrsb2wtOV0zYZRG8XPg3fa7b8IDqCYUlUsuQaLMOj1k
+   cV27M/GNdXOSfeNo9MgSfkRsbHL+yxovZA3GC2lzNEp2oVnOvVEMomZad
+   sehMUhSNsgu4K0ecLaoxc1e/75GQN0zq2q9MMHiZAkVGu+Nzkg6B7eufZ
+   K3fCuqdTAYrceM7/QKUxjDeepP4q6Ur8xeqxB9fvGQvVaKQGF8s4WNYyk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="2301724"
 X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="2301717"
+   d="scan'208";a="2301724"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 01:18:07 -0800
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 01:18:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935605013"
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935605021"
 X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="935605013"
+   d="scan'208";a="935605021"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 01:18:04 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 01:18:07 -0800
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 926EC1204F8;
-	Wed, 14 Feb 2024 11:17:56 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id B45F212055E;
+	Wed, 14 Feb 2024 11:17:57 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: Hans de Goede <hdegoede@redhat.com>,
 	Daniel Scally <dan.scally@ideasonboard.com>,
 	Bingbu Cao <bingbu.cao@intel.com>
-Subject: [PATCH v3 3/5] media: ipu-bridge: Serialise calls to IPU bridge init
-Date: Wed, 14 Feb 2024 11:17:52 +0200
-Message-Id: <20240214091754.399340-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 5/5] media: ivsc: csi: Use IPU bridge
+Date: Wed, 14 Feb 2024 11:17:54 +0200
+Message-Id: <20240214091754.399340-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240214091754.399340-1-sakari.ailus@linux.intel.com>
 References: <20240214091754.399340-1-sakari.ailus@linux.intel.com>
@@ -62,36 +62,73 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The IPU bridge initialisation will be called from multiple locations in
-the future. Serialise the access to devices' fwnodes in this context.
+Use IPU bridge to instantiate software nodes for IPU6 related devices. If
+the IPU6 device is probed before the MEI CSI device is created, neither
+will probe unless there are further devices probed successfully which
+triggers re-probe of both IPU6 and MEI CSI.
+
+This patch ensures the necessary software nodes are in place when the MEI
+CSI driver is probed.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu-bridge.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/pci/intel/ivsc/mei_csi.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index 735c62c37c22..e994db4f4d91 100644
---- a/drivers/media/pci/intel/ipu-bridge.c
-+++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -766,6 +766,8 @@ static int ipu_bridge_check_fwnode_graph(struct fwnode_handle *fwnode)
- 	return ipu_bridge_check_fwnode_graph(fwnode->secondary);
- }
+diff --git a/drivers/media/pci/intel/ivsc/mei_csi.c b/drivers/media/pci/intel/ivsc/mei_csi.c
+index 15b905f66ab7..b3f39c9a60d2 100644
+--- a/drivers/media/pci/intel/ivsc/mei_csi.c
++++ b/drivers/media/pci/intel/ivsc/mei_csi.c
+@@ -19,12 +19,15 @@
+ #include <linux/mei_cl_bus.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
++#include <linux/pci.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ #include <linux/units.h>
+ #include <linux/uuid.h>
+ #include <linux/workqueue.h>
  
-+static DEFINE_MUTEX(ipu_bridge_mutex);
-+
- int ipu_bridge_init(struct device *dev,
- 		    ipu_parse_sensor_fwnode_t parse_sensor_fwnode)
++#include <media/ipu-bridge.h>
++#include <media/ipu6-pci-table.h>
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-fwnode.h>
+@@ -716,11 +719,23 @@ static int mei_csi_probe(struct mei_cl_device *cldev,
+ 			 const struct mei_cl_device_id *id)
  {
-@@ -774,6 +776,8 @@ int ipu_bridge_init(struct device *dev,
- 	unsigned int i;
+ 	struct device *dev = &cldev->dev;
++	struct pci_dev *ipu;
+ 	struct mei_csi *csi;
++	unsigned int i;
  	int ret;
  
-+	guard(mutex)(&ipu_bridge_mutex);
+-	if (!dev_fwnode(dev))
+-		return -EPROBE_DEFER;
++	for (i = 0, ipu = NULL; !ipu && ipu6_pci_tbl[i].vendor; i++)
++		ipu = pci_get_device(ipu6_pci_tbl[i].vendor,
++				     ipu6_pci_tbl[i].device, NULL);
 +
- 	if (!ipu_bridge_check_fwnode_graph(dev_fwnode(dev)))
- 		return 0;
++	if (!ipu)
++		return -ENODEV;
++
++	ret = ipu_bridge_init(&ipu->dev, ipu_bridge_parse_ssdb);
++	if (ret < 0)
++		return ret;
++	if (WARN_ON(!dev_fwnode(dev)))
++		return -ENXIO;
  
+ 	csi = devm_kzalloc(dev, sizeof(struct mei_csi), GFP_KERNEL);
+ 	if (!csi)
+@@ -841,6 +856,7 @@ static struct mei_cl_driver mei_csi_driver = {
+ 
+ module_mei_cl_driver(mei_csi_driver);
+ 
++MODULE_IMPORT_NS(INTEL_IPU_BRIDGE);
+ MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
+ MODULE_AUTHOR("Zhifeng Wang <zhifeng.wang@intel.com>");
+ MODULE_DESCRIPTION("Device driver for IVSC CSI");
 -- 
 2.39.2
 
