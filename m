@@ -1,127 +1,188 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5486169DF0;
-	Thu, 15 Feb 2024 10:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356D112F394
+	for <linux-media@vger.kernel.org>; Thu, 15 Feb 2024 10:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707992993; cv=none; b=mtNXoYtHMaTTDRbEVhUztX6y3HH67phcWFGNtocXk0wDerZkLMZ8DkavWonkWHNgKK5v0F65+kgNklWKIv2T+fu2P1KU/yWJjb7qk7vd21YcKeJ3fZX3ZncEqYI9KjFfTdsEwzviZX8OHcJs3ZqRKg3vNJOW2YjOd+hBmnRscGE=
+	t=1707993500; cv=none; b=SwyQQSaOO7tzgBI6D70e8p7I/xeMGCUhO65R6G8lvRKVjvODOsM+mY57vpWxKuKwCtMYAngUT1GSHByxccjUGfG6nDQnZik0W1xat0XinEnwShSEtxRVcXAXrmehMaj0UNdXmnIfyv5KQbAilw2hcxp0hih47WDUpLCA386Jin8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707992993; c=relaxed/simple;
-	bh=lCKAiQ1BgMuFxaAEpE7w6O8TyAdEMRj0SufRx1KfSQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IECVQNsISilyOGDd8fkIN+TQiYjrFm9jf+qBRzsZ9uqhiiNbwLMmk7l9iF5/YEDH06fLORX7bIXDqWdVwIANFVfdMeNOUFPyTfkEAJCcYKvOkyq2R0uT7ez2zoUtuCD8BKipZxqAMo7pJep1tQMuxGodqFNM1vy1Og7aXQkfDAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=vdRLr0SL; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1707993500; c=relaxed/simple;
+	bh=0f+Rr2ugPcTMQEfdhGolV0JMpe2FgJ3z0B0ODjdBfJ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W61daEFf6ThYFbadCeOdXEHyNKWtf/yUW7WuNUwB1mV8dLW9tGnpYiH/itn5is6Mr2Meo8P+oOhPNHMmTZUls/ApgGWGfgb85ZVQturDdr4JN8BSnmaThIahZOQ6c3V26tOI40dgMUNF9fPDBGGiak/zU3PAjm6yKs5MaGHH7pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=jwDBCuG9; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="vdRLr0SL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1707992983;
-	bh=lCKAiQ1BgMuFxaAEpE7w6O8TyAdEMRj0SufRx1KfSQ4=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=vdRLr0SLlXy+WD9tG1YIsF9FZLOC9Ck90t/SzhMX1YTkqmHPhs3662tv1zeYOqzbP
-	 gYtysHX1iaaVtaO/quHSWYrygrR/LZnsDrz2jmC2XeFBBTMJQGMVeRlMy+k2mI27yH
-	 b5D8CRBLTfu3XdhTzjoQox4Ip+SS+xFBhwK/S9MEYK9VIPQIptvPEoB5bk6Ng7xvKY
-	 bISZqW458jcqsXYHaX5zaRxjaw4fz1lgmf0kUQOI+5YJ+u8z2VqBbh/dL3D8S5nTnp
-	 ZGO1hMVhNcG6Kat2SZ1QQGw0OEypsUHoGLTyD2uURgDOsSRpsrYzmFfV5MVgNtYaUq
-	 MmVdQ4+9Z39ZA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 178123780FC7;
-	Thu, 15 Feb 2024 10:29:43 +0000 (UTC)
-Message-ID: <4dcfaf49-aaac-4980-a149-02fec3109f31@collabora.com>
-Date: Thu, 15 Feb 2024 11:29:42 +0100
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="jwDBCuG9"
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc6d24737d7so613977276.0
+        for <linux-media@vger.kernel.org>; Thu, 15 Feb 2024 02:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1707993497; x=1708598297; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAM28l5o98xVt9RYIOmgdI1hVsJ6dvelMAChtEmib00=;
+        b=jwDBCuG9Enxbx2tldVZTKA69rWxuNfavbUbyaoj/RIwHC1kDsvgcl9GRgfJaPg2tLr
+         4XxFzCHmcpAk5bWqYRqPehn9Rye6b0wkulwIw4vzi3+ciStQvhK765X1R+CggOF005nY
+         nY5RfkcsCOV8OvwUCkUJ2gEa60ZTjalzoG+6f//8J1Eon2xtwmJfxZyxw5hRelZi7GaV
+         wSATIqKDWeG492dbPVJvMUnmZjJrVQddSViFXgCYvM0DqDua3k402VAKW7fP83kqxEFX
+         DL9pMqG4SsqYl0ffxiu388yh7oIA9Na6M5IpmAxbwrKZXmOhR2Mwd1ya0U55bDfP6DN3
+         efTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707993497; x=1708598297;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XAM28l5o98xVt9RYIOmgdI1hVsJ6dvelMAChtEmib00=;
+        b=sP9Zzd+Q2TE1R6B8ovRN+N8xWxI4zw7a2yn0pMNTwgKpZ6BfzSljomgxJCuJFd2c7J
+         EUDsVv6nUezR8K5oR+VRSVB2AwHzZ3MGxYn8E6v80db+9ZnbzWCRt9qpSrfCuv5g3hkg
+         qgo7iP959VIPZ9kn/WOhrx99ZKcRjcyGda/vm7OyZpTFMh4+LZYio0FxbX4kVW6m3XWb
+         +HJYDcyrA/CI8NUOiGDg/fOufuIway9nYjgcBAiQspxIBJTwsLA9ELljeVz9F39YkPzM
+         CiB2uucFktrCz2ZjfeZNmPRLKbTuL/bBLtZ0AsB05Qj9jt4J50R3VM0alcGz7SiNxzTG
+         qRLA==
+X-Gm-Message-State: AOJu0YwSh4t3TY/zWpvXA+zij8oNk6Om5A2bdsxcWi7k/QN5SSsHl2cp
+	VfJ9xfDF9AX3CIq6Vz+p84zGMTHV9B7gikycaM6Xjx+Ps7D66qThoIGAuOJOIaSBnBDzitDyHTp
+	p7ghHurj67GAVOXhUxwFtJi+gd/q3rPJdYDlJtw==
+X-Google-Smtp-Source: AGHT+IE8628/ryJcq0jWqgiyCOYnICNChe4Van+UHIOQKbeMZY6cksJTLZHkBsvo1UEa8l7Vdw0ft2CbehPS82QKEek=
+X-Received: by 2002:a05:6902:1ac2:b0:dcd:8a5:d5b8 with SMTP id
+ db2-20020a0569021ac200b00dcd08a5d5b8mr1319483ybb.49.1707993497024; Thu, 15
+ Feb 2024 02:38:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/9] media: platform: mtk-mdp3: drop calling
- cmdq_pkt_finalize()
-Content-Language: en-US
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- Moudy Ho <moudy.ho@mediatek.com>
-References: <20240215004931.3808-1-chunkuang.hu@kernel.org>
- <20240215004931.3808-7-chunkuang.hu@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240215004931.3808-7-chunkuang.hu@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240209164825.166800-1-jacopo.mondi@ideasonboard.com> <20240209164825.166800-4-jacopo.mondi@ideasonboard.com>
+In-Reply-To: <20240209164825.166800-4-jacopo.mondi@ideasonboard.com>
+From: Naushir Patuck <naush@raspberrypi.com>
+Date: Thu, 15 Feb 2024 10:37:41 +0000
+Message-ID: <CAEmqJPrEynj=XEyE=Gi-ZQSt-yBFsLBE8dxn=wfWTaa42ALNbA@mail.gmail.com>
+Subject: Re: [PATCH 3/8] media: Add a pixel format for BRG48 and RGB48
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	David Plowman <david.plowman@raspberrypi.com>, 
+	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Kieran Bingham <kieran.bingham@ideasonboard.com>, Sakari Ailus <sakari.ailus@iki.fi>, 
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Il 15/02/24 01:49, Chun-Kuang Hu ha scritto:
-> Because client driver has the information of struct cmdq_client, so
-> it's not necessary to store struct cmdq_client in struct cmdq_pkt.
-> cmdq_pkt_finalize() use struct cmdq_client in struct cmdq_pkt, so it's
-> going to be abandoned. Therefore, use cmdq_pkt_eoc() and cmdq_pkt_nop()
-> to replace cmdq_pkt_finalize().
+Hi Jacopo,
 
-No, it's not because cmdq_pkt_finalize() has cmdq_client, but because we want
-finer grain control over the CMDQ packets, as not all cases require the NOP
-packet to be appended after EOC.
+Thank you for your patch.
 
-Besides, honestly I'm not even sure if the NOP is always required in MDP3, so...
-
-...Moudy, you know the MDP3 way better than anyone else - can you please
-check if NOP is actually needed here?
-
-Thanks!
-Angelo
-
-> 
-> Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+On Fri, 9 Feb 2024 at 16:48, Jacopo Mondi <jacopo.mondi@ideasonboard.com> wrote:
+>
+> Add BGR48 and RGB48 16-bit per component image formats.
+>
+> Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 > ---
->   drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c | 3 ++-
->   drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c | 2 ++
->   drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h | 1 +
->   3 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-> index 6adac857a477..a420d492d879 100644
-> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-> @@ -471,7 +471,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
->   		dev_err(dev, "mdp_path_config error\n");
->   		goto err_free_path;
->   	}
-> -	cmdq_pkt_finalize(&cmd->pkt);
-> +	cmdq_pkt_eoc(&cmd->pkt);
-> +	cmdq_pkt_nop(&cmd->pkt, mdp->cmdq_shift_pa);
->   
->   	for (i = 0; i < num_comp; i++)
->   		memcpy(&comps[i], path->comps[i].comp,
-> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-> index 94f4ed78523b..2214744c937c 100644
-> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-> @@ -231,6 +231,8 @@ static int mdp_probe(struct platform_device *pdev)
->   		goto err_put_scp;
->   	}
->   
-> +	mdp->cmdq_shift_pa = cmdq_get_shift_pa(mdp->cmdq_clt->chan);
+>  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 39 +++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-common.c         |  2 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>  include/uapi/linux/videodev2.h                |  4 ++
+>  4 files changed, 47 insertions(+)
+>
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> index b71b80d634d6..458308ae4eb8 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> @@ -996,6 +996,45 @@ arranged in little endian order.
+>
+>      \normalsize
+>
+> +16 Bits Per Component
+> +=====================
 > +
->   	init_waitqueue_head(&mdp->callback_wq);
->   	ida_init(&mdp->mdp_ida);
->   	platform_set_drvdata(pdev, mdp);
-> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-> index 7e21d226ceb8..ed61e0bb69ee 100644
-> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-> @@ -83,6 +83,7 @@ struct mdp_dev {
->   	u32					id_count;
->   	struct ida				mdp_ida;
->   	struct cmdq_client			*cmdq_clt;
-> +	u8					cmdq_shift_pa;
->   	wait_queue_head_t			callback_wq;
->   
->   	struct v4l2_device			v4l2_dev;
+> +These formats store an RGB triplet in six bytes, with 16 bits per component.
+> +
+> +.. raw:: latex
+> +
+> +    \small
+> +
+> +.. flat-table:: RGB Formats With 16 Bits Per Component
+> +    :header-rows:  1
+> +
+> +    * - Identifier
+> +      - Code
+> +      - Byte 1-0
+> +      - Byte 3-2
+> +      - Byte 5-4
+> +    * .. _V4L2-PIX-FMT-BGR48:
+> +
+> +      - ``V4L2_PIX_FMT_BGR48``
+> +      - 'BGR6'
+> +
+> +      - B\ :sub:`15-0`
+> +      - G\ :sub:`15-0`
+> +      - R\ :sub:`15-0`
+> +      -
+> +    * .. _V4L2-PIX-FMT-RGB48:
+> +
+> +      - ``V4L2_PIX_FMT_RGB48``
+> +      - 'RGB6'
+> +
+> +      - R\ :sub:`15-0`
+> +      - G\ :sub:`15-0`
+> +      - B\ :sub:`15-0`
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+>  Deprecated RGB Formats
+>  ======================
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index d34d210908d9..ff4b4d2de9d2 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -253,6 +253,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>                 { .format = V4L2_PIX_FMT_RGB555,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+>                 { .format = V4L2_PIX_FMT_BGR666,  .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+>                 { .format = V4L2_PIX_FMT_BGR48_12, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+> +               { .format = V4L2_PIX_FMT_BGR48, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+> +               { .format = V4L2_PIX_FMT_RGB48, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+>                 { .format = V4L2_PIX_FMT_ABGR64_12, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 8, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+>                 { .format = V4L2_PIX_FMT_RGBA1010102, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+>                 { .format = V4L2_PIX_FMT_RGBX1010102, .pixel_enc = V4L2_PIXEL_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index 24f52485e59c..3c9b5b2f456c 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1298,6 +1298,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>         case V4L2_PIX_FMT_RGBX1010102:  descr = "32-bit RGBX 10-10-10-2"; break;
+>         case V4L2_PIX_FMT_RGBA1010102:  descr = "32-bit RGBA 10-10-10-2"; break;
+>         case V4L2_PIX_FMT_ARGB2101010:  descr = "32-bit ARGB 2-10-10-10"; break;
+> +       case V4L2_PIX_FMT_BGR48:        descr = "48-bit BGR 16-16-16"; break;
+> +       case V4L2_PIX_FMT_RGB48:        descr = "48-bit RGB 16-16-16"; break;
+>         case V4L2_PIX_FMT_BGR48_12:     descr = "12-bit Depth BGR"; break;
+>         case V4L2_PIX_FMT_ABGR64_12:    descr = "12-bit Depth BGRA"; break;
+>         case V4L2_PIX_FMT_GREY:         descr = "8-bit Greyscale"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 94a0373e8234..2782c7962974 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -584,6 +584,10 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_BGR48_12    v4l2_fourcc('B', '3', '1', '2') /* 48  BGR 12-bit per component */
+>  #define V4L2_PIX_FMT_ABGR64_12   v4l2_fourcc('B', '4', '1', '2') /* 64  BGRA 12-bit per component */
+>
+> +/* RGB formats (6 bytes per pixel) */
 
+s/6/16/
+
+Reviewed-by: Naushir Patuck <naush@raspberrypi.com>
+
+> +#define V4L2_PIX_FMT_BGR48 v4l2_fourcc('B', 'G', 'R', '6') /* 16  BGR-16-16-16 */
+> +#define V4L2_PIX_FMT_RGB48 v4l2_fourcc('R', 'G', 'B', '6') /* 16  RGB-16-16-16 */
+> +
+>  /* Grey formats */
+>  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Greyscale     */
+>  #define V4L2_PIX_FMT_Y4      v4l2_fourcc('Y', '0', '4', ' ') /*  4  Greyscale     */
+> --
+> 2.43.0
+>
