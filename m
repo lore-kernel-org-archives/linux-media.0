@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03898129A69;
-	Thu, 15 Feb 2024 10:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C2117581;
+	Thu, 15 Feb 2024 11:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707994401; cv=none; b=lBdd3gzNzbzj5otZiEdJGJJrtYOJPi4/NRZVda7aJ6JP49A9HUnaHh8IwD81tHhTzbaS2tGQQfi7zNCCOy18LAL4qDGYwj/TdRSzAhIhOG3NHPJOXivyyeakIh1bIrdp+huUVt+foh6ZvQcuUbshQgNmezl8Z2Zp2MCiyMYZPSw=
+	t=1707994804; cv=none; b=Lg7lhnELP7IS3274rbgCy5DFF5o7FZ90hrP2Pap4QJi+0y5Nc/2MplqffVAiOTC68nLp3kbag3eHH+U9U0ZtufRiTdWvfrgMDvbp7jSzxDbzi//7eRlwKvX//apsB9isF05rvq15q0xO0Q/bf0tHfhhal8YUTzTccdy0nKEmrFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707994401; c=relaxed/simple;
-	bh=LzgZDdmJi87vl79IYM/Q5hPaD+AShpw1nj8TBggZ0Ew=;
+	s=arc-20240116; t=1707994804; c=relaxed/simple;
+	bh=Ljo22OLLV1jsYk36eFmaaPdGKB/DzUQf8sEwgakSRIE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NOkCXtQ2vv7A4x5fuwUoTdLt4DGYOVcGGi7JpRDDY0Ud0Qy4Jt4BJtUYvbmY6b1/To/MHcBqMKgtQu9Y/WPU+WiuRr1pREcEU96uYo0v6tVZu+IlxkImAQlKuC/Rt4tg7l8sz+5rVLYqtp+3RKbHKL28Hfa+VxpqAB8cjQMHsnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAvZvcYk; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yo1o47SY+k5xn+YmZIb6/MK9OWsPRRBKwkNIH74CcoL6sNaBiRJVSpqdDPnliPT7m9px8+hYakFdBKtcgrzHBoeC3UQGuS3dyJKri04zUvyT49Aoy0FoevZdpD4aDpzjeoL7RxyHVj2N2AHrWrUeUo6uKnyELtf71htsXcvxxLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjCNBHd3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAvZvcYk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C24DC433F1;
-	Thu, 15 Feb 2024 10:53:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjCNBHd3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC5BC433C7;
+	Thu, 15 Feb 2024 11:00:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707994400;
-	bh=LzgZDdmJi87vl79IYM/Q5hPaD+AShpw1nj8TBggZ0Ew=;
+	s=k20201202; t=1707994804;
+	bh=Ljo22OLLV1jsYk36eFmaaPdGKB/DzUQf8sEwgakSRIE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iAvZvcYkWQYQQip1hTxBWcsJdV+g319REl+SkMeXoSFei7HVnjzPdxp0EA4jJgz24
-	 6e+JREhHhhz93fd1VBWmNVX++vaD7QcdUM6MFSD1mhtxAJYNO0LgOyQo0Zce4a3a6X
-	 jcr5cbrC7w13FErx0BhzU2wORl9DNq3CU3CAxBOuDJpmAR8jcWfV85LpqwehSy2+LN
-	 edtTn7GMJ01s0SAmq9Hi4XXQtFEyCGrihvuUsjs++8SH8fq77JBid6y08jAosnevkp
-	 BSN3HNuFX2MNCyaFYhl57P/E97DIa2RkA5uiCiyBFpwS5kknFVycPm9RA0hllF649D
-	 8vs3JTLT5lDhg==
-Date: Thu, 15 Feb 2024 11:53:17 +0100
+	b=QjCNBHd3MZI6fRfVp7a6EoNWM616T5+u1n3Gf4bZLB4kjTRfsQTP8F/kWttSSeKv9
+	 QburFf6ryiGXRiidxyJZCgfnhAX4P7ArXA8rqrziRC6lA619UHo1/phVHn5v/HdVjD
+	 nOhC/aBrya8y9SfT6a4CuZ3+xdiIKmjI0Ozpd6rIIbT8y5sl/LJFQvI+7mxPA08NhX
+	 lsquCp+j3U8h7mXjn7+mDQHcleMtdEc8sp5/uflqTrlWTEO4QHtuMo4VUhyZIVLVLF
+	 mYmN81mQ12sZngJ2Y9Wws0QKIPlsc9vp8yvm2+LolXIRSwxyzLpT031jL2rhqPxCTD
+	 DOK1Tcdk4tRsA==
+Date: Thu, 15 Feb 2024 12:00:01 +0100
 From: Maxime Ripard <mripard@kernel.org>
-To: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc: Sebastian Wick <sebastian.wick@redhat.com>, 
+To: Sebastian Wick <sebastian.wick@redhat.com>
+Cc: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
 	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
 	Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
@@ -40,7 +40,7 @@ Cc: Sebastian Wick <sebastian.wick@redhat.com>,
 	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
 Subject: Re: Re: Re: Re: Re: Re: Re: [PATCH v5 08/44] drm/connector: hdmi:
  Add Broadcast RGB property
-Message-ID: <dti6zcuzszhut5m4g2bxiwfogwctfhktv2mwuqlij7wtvh3bny@ry4mxpiqidmt>
+Message-ID: <2mih3humepuedtli7ge52ncom4uffkqravdpalncgfyucmwdzc@bp5o7i3ky77a>
 References: <73peztbeeikb3fg6coxu3punxllgtyrmgco34tnxkojtsjbr3s@26bud3sjbcez>
  <Zb0M_2093UwPXK8y@intel.com>
  <hez2m57ogqx3yyqk45tzdkvxvhrbdepgm244i4m2aty2xhf5b5@acqgvmxhmmvr>
@@ -50,7 +50,7 @@ References: <73peztbeeikb3fg6coxu3punxllgtyrmgco34tnxkojtsjbr3s@26bud3sjbcez>
  <ahfl6f72lpgpsbnrbgvbsh4db4npr2hh36kua2c6krh544hv5r@dndw4hz2mu2g>
  <Zco-DQaXqae7B1jt@intel.com>
  <yx2t7xltxxgsngdsxamsfq6y7dze3wzegxcqwmsb5yrxen73x6@u3vilqhpci4w>
- <ZcsqoPCJDjA5PJUF@intel.com>
+ <20240212170618.GA1372043@toolbox>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -58,27 +58,27 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="n6osyj5ryoqybs6l"
+	protocol="application/pgp-signature"; boundary="7ujblr6jhcr73aj6"
 Content-Disposition: inline
-In-Reply-To: <ZcsqoPCJDjA5PJUF@intel.com>
+In-Reply-To: <20240212170618.GA1372043@toolbox>
 
 
---n6osyj5ryoqybs6l
-Content-Type: text/plain; charset=utf-8
+--7ujblr6jhcr73aj6
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 10:38:56AM +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
+On Mon, Feb 12, 2024 at 06:06:18PM +0100, Sebastian Wick wrote:
 > On Mon, Feb 12, 2024 at 05:53:48PM +0100, Maxime Ripard wrote:
-> > On Mon, Feb 12, 2024 at 05:49:33PM +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
+> > On Mon, Feb 12, 2024 at 05:49:33PM +0200, Ville Syrj=E4l=E4 wrote:
 > > > On Mon, Feb 12, 2024 at 11:01:07AM +0100, Maxime Ripard wrote:
 > > > > On Fri, Feb 09, 2024 at 09:34:35PM +0100, Sebastian Wick wrote:
 > > > > > On Mon, Feb 05, 2024 at 10:39:38AM +0100, Maxime Ripard wrote:
-> > > > > > On Fri, Feb 02, 2024 at 06:37:52PM +0200, Ville Syrj=C3=A4l=C3=
-=A4 wrote:
+> > > > > > On Fri, Feb 02, 2024 at 06:37:52PM +0200, Ville Syrj=E4l=E4 wro=
+te:
 > > > > > > > On Fri, Feb 02, 2024 at 04:59:30PM +0100, Maxime Ripard wrote:
-> > > > > > > > On Fri, Feb 02, 2024 at 05:40:47PM +0200, Ville Syrj=C3=A4l=
-=C3=A4 wrote:
+> > > > > > > > On Fri, Feb 02, 2024 at 05:40:47PM +0200, Ville Syrj=E4l=E4=
+ wrote:
 > > > > > > > > > On Fri, Feb 02, 2024 at 02:01:39PM +0100, Maxime Ripard w=
 rote:
 > > > > > > > > > > Hi,
@@ -205,33 +205,45 @@ ill on
 > >=20
 > > And that part is just moving goalposts.
 >=20
-> No. Allowing users to get correct colors with broken displays
-> is the sole reason why this property even exists.
+> But it's really not.
 
-HDMI 1.4, Section 6.6 - Video Quantization Ranges:
+It really is. This whole discussion started by "well it would be nice if
+we made that property handled by the core", and we're now at the "we
+need to deal with broken YCbCr displays and i915 opinion about them"
+stage. After creating documentation, unit tests, etc. It's the textbook
+definition of moving goalposts. And while i915 won't be affected by all
+that work.
 
-  If the sink=E2=80=99s EDID declares a selectable YCC Quantization Range
-  (QY=3D1), then it shall expect limited range pixel values if it receives
-  AVI YQ=3D0 and it shall expect full range pixel values if it receives
-  AVI YQ=3D1. For other values of YQ, the sink shall expect pixel values
-  with the default range for the transmitted video format.
+That series has been stuck for multiple iterations on pointless and
+mundane debates while the biggest part and whole point of it is not
+getting any review. So yeah, sorry, it's frustrating.
 
-So, the only concern you have is if the EDID has QY set to 1 but the
-monitor doesn't actually support it? If so, could we qualify the monitor
-as a "broken display" and thus would require that property to apply to
-YUV too?
+> The Broadcast RGB property kind of works from a user space perspective
+> because it's a workaround for broken sinks. If a sink expects limited
+> range we can force full range. If this however affects YCbCr modes as
+> well, then this isn't a workaround for broken RGB range anymore
+> because it now breaks YCbCr.
+
+Or, you know, it's a workaround for broken YCbCr display.
+
+> Sorry, but vc4 just has to change.
+>=20
+> And again: let's please stop trying to improve the property.
+
+I'm not. I'm super close to just dropping that patch entirely and keep
+the current situation that seems to work fine for everyone.
 
 Maxime
 
---n6osyj5ryoqybs6l
+--7ujblr6jhcr73aj6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZc3tHQAKCRDj7w1vZxhR
-xbBYAP9ZltKFtiZtVibhzK531scwE2+TBHIUt6gHc1GZlUgg6gEA7bQXDY/gyU5H
-uzPISsemHv3JMSR4hBL2y5Ql8gCJfgk=
-=pR0a
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZc3usAAKCRDj7w1vZxhR
+xUOcAPsFDv7RLl3qbYbEO9cMd3YT0Mx2eLivHvf3dB/UGMSz0QEAqPyXmKeZnkyC
+qKM4LbWO65EO3EMbSppQ/HMoRyV2CAg=
+=aE2T
 -----END PGP SIGNATURE-----
 
---n6osyj5ryoqybs6l--
+--7ujblr6jhcr73aj6--
