@@ -1,78 +1,105 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F951420B8;
-	Fri, 16 Feb 2024 22:00:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4777A14A087
+	for <linux-media@vger.kernel.org>; Fri, 16 Feb 2024 22:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708120817; cv=none; b=jg7mfvUzp4Acx1CEG6ZelhanXwep0cJFElDAoy+XJeY9ntIlIV7jSbxQyeXjEMTZGc6KgbC9aVRHgctU31LZZqXlhbvqfszJlOo7mGLhUK/wGlIfKxAL5mEZ9uIknrnc1HkEV8e0V1LNNq6AOPmOen6WXvYG5c1qmu1zI5H/WFg=
+	t=1708122775; cv=none; b=pW6LoHhHcSuLs5rGU0JNQZYYGzcBXGeEbq3vlKv5PXzI5c1J5zvLboINt6Nl0/B1ZejNfeYUgHegqmKDl2GA7SYJSlsv42ZYSzuCBba7vrtz0m9db9lj+mCrbxbD6qng2mh18Gv9ZCJSO4APBMK0yXAjz2XSXt85h/hTPP9psT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708120817; c=relaxed/simple;
-	bh=s1PztsoaAS6bKzE1vI/kpR473yyf1hFs5q2agrpurKg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ef8NCcfN9fbg8XkiSkDyzm4+McQpVaqOSToWNGu11+MNHS0LlcYdR7jh/55JZ5n/uGNzzjkhwd0VcLV0r5yhcivLl6CTVxS5N1XVPey/gJrqGKo3rjuUd/bnFHqruSYJvq5AA471PCuCCOrj/WDgTCC5iuSphbAFi0WZnJjnzis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UUFbtcGA; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1708122775; c=relaxed/simple;
+	bh=esIHiklqqdNqq1t9nZRMIIspEB1zhp+pp8O8d2C83JU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Fcw03kS+QBehr61AIZ3vqSNuiZH4KRSwD5f+RUTvjDErFuN8cB71oIG6DS/mMgHyJCSJDNWbhyyPFTWWQ2Qs99hMf2fpwwFvt2YKd+2QSvdD+l4o3hLNLllkyqrAhFgvJlVNeF2CNezC1V7Orav513awhZYBOzN3UzUHfdfx5q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KDY0lyU9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UUFbtcGA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=IbOOvyf/VtBQOm/QRF/nFNwrg7I56H1FVAmWCAbZCNs=; b=UUFbtcGAsv+Y1MpwPwG2BZfN98
-	bSSzq+3uVyfXTDozqup1yhsIYazbFi5EPD5d4DgYA0phIcoCO2gLGy7cPIkdhhQTl8FDFtN1/+aVG
-	kKq0Q/7ImdK2kTCYa6iq9fdP3ONMRbOg/odsfe0bXU1AhIG/LkbVAakwX//Tc7DteLzhjAabnAvCt
-	O39ZdtUo8mW245V/6n2eRYUTYKkcEmA6VD5LAMLGmKgJGiAIRlyRe6pD/e8cTLdbOBXM2su1GnfdN
-	qVffC1ocBtUi50Dc2vbB8mpgSeefOeyT0uAZoh1lR0Q5NlYpgtuy9TNEJtZGHj9I4+0rlBTCmb3tF
-	OmZIPXyA==;
-Received: from [50.53.50.0] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rb6Fi-00000003rsI-1uaB;
-	Fri, 16 Feb 2024 22:00:14 +0000
-Message-ID: <e53c52fb-c413-4192-9e41-53ace873839e@infradead.org>
-Date: Fri, 16 Feb 2024 14:00:11 -0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KDY0lyU9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708122771;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4Anb4cQar2NZFHV2i+Vcira5rrL8Em0cQqwH9RFem+A=;
+	b=KDY0lyU9oJcGYOLZT6ZAabckk1oj37OZcIIPLPwBC96GOUWriRxuPdVRKNn1wKtCW5+EqT
+	PdjDzfFzztB3eL/nOtorwM2g0g0lkR6YVuSwhXiU7RNOmJmqQr9QX6trLAV7/EpvIVLq6u
+	PleXmkgfpAcaw5dTSDIGBcZFMF31vLs=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-690-hXHDKpB7PrKJ0_Chyhp12A-1; Fri,
+ 16 Feb 2024 17:32:48 -0500
+X-MC-Unique: hXHDKpB7PrKJ0_Chyhp12A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1264C280A9AC;
+	Fri, 16 Feb 2024 22:32:48 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.193.87])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4C872C03380;
+	Fri, 16 Feb 2024 22:32:47 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Rui Miguel Silva <rmfrfs@gmail.com>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org
+Subject: [PATCH 1/5] media: ov2680: Stop sending more data then requested
+Date: Fri, 16 Feb 2024 23:32:33 +0100
+Message-ID: <20240216223237.326523-2-hdegoede@redhat.com>
+In-Reply-To: <20240216223237.326523-1-hdegoede@redhat.com>
+References: <20240216223237.326523-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Writing the first patch correcting the spelling mistake.
-Content-Language: en-US
-To: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>, skhan@linuxfoundation.org
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240216194126.13336-1-pvkumar5749404@gmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20240216194126.13336-1-pvkumar5749404@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
+There is no reason to send OV2680_END_MARGIN extra columns on top of
+the mode width and the same for sending extra lines over the mode height.
 
+This sending of extra lines/columns was inherited from the atomisp
+ov2680 driver, it is unclear why this was done and this complicates
+adding V4L2_CID_VBLANK support, so remove it.
 
-On 2/16/24 11:41, Prabhav Kumar Vaish wrote:
-> Signed-off-by: Prabhav Kumar Vaish <pvkumar5749404@gmail.com>
-> ---
->  Documentation/bpf/verifier.rst               | 10 +++++-----
->  Documentation/process/submitting-patches.rst | 12 ++++++------
->  2 files changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-> index 66029999b587..34a68836aa60 100644
-> --- a/Documentation/process/submitting-patches.rst
-> +++ b/Documentation/process/submitting-patches.rst
-> @@ -5,7 +5,7 @@ Submitting patches: the essential guide to getting your code into the kernel
->  
->  For a person or company who wishes to submit a change to the Linux
->  kernel, the process can sometimes be daunting if you're not familiar
-> -with "the system."  This text is a collection of suggestions which
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/media/i2c/ov2680.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-The original (above) is correct punctuation.
-
-> +with "the system". This text is a collection of suggestions which
->  can greatly increase the chances of your change being accepted.
->  
-
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 39d321e2b7f9..5b04c6c0554a 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -86,9 +86,6 @@
+ #define OV2680_PIXELS_PER_LINE			1704
+ #define OV2680_LINES_PER_FRAME			1294
+ 
+-/* If possible send 16 extra rows / lines to the ISP as padding */
+-#define OV2680_END_MARGIN			16
+-
+ /* Max exposure time is VTS - 8 */
+ #define OV2680_INTEGRATION_TIME_MARGIN		8
+ 
+@@ -359,11 +356,9 @@ static void ov2680_calc_mode(struct ov2680_dev *sensor)
+ 	sensor->mode.v_start = (sensor->mode.crop.top +
+ 				(sensor->mode.crop.height - height) / 2) & ~1;
+ 	sensor->mode.h_end =
+-		min(sensor->mode.h_start + width + OV2680_END_MARGIN - 1,
+-		    OV2680_NATIVE_WIDTH - 1);
++		min(sensor->mode.h_start + width - 1, OV2680_NATIVE_WIDTH - 1);
+ 	sensor->mode.v_end =
+-		min(sensor->mode.v_start + height + OV2680_END_MARGIN - 1,
+-		    OV2680_NATIVE_HEIGHT - 1);
++		min(sensor->mode.v_start + height - 1, OV2680_NATIVE_HEIGHT - 1);
+ 	sensor->mode.h_output_size = orig_width;
+ 	sensor->mode.v_output_size = orig_height;
+ 	sensor->mode.hts = OV2680_PIXELS_PER_LINE;
 -- 
-#Randy
+2.43.0
+
