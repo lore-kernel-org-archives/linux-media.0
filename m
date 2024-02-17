@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C8826AE0
-	for <linux-media@vger.kernel.org>; Sat, 17 Feb 2024 15:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3E97C6D2
+	for <linux-media@vger.kernel.org>; Sat, 17 Feb 2024 16:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708185444; cv=none; b=nNkxXJRE5DCQsDvsFtDgG39mfuavJN6iEYLdSKkE1+iprSikD4BVyOv/C3QklokUmZkoKH/WbW2UOjPigEmtNZUXrH+Ca+idllyrJw+71ehA9G5j60l03LfCbl3IFKXQqkB/mZH3si05AM3V/k7Dugrp1WkwjgJMf+u894R+8R4=
+	t=1708185613; cv=none; b=sr8opseyVOBmC66CgI+8vuuLrdXxhA2NvlcRMYwuWTt23QEUhQhkzUOVI0h3E70COHpvQkxUV/xU8Z5vEvr9JPAwEsxEjfcspEZQCBwfz8PL3RiwXDX5jC+vtm9TcLY6deOCi87gm8ZdhgQZwt49jtxv3I4iBSPJszmYYRpGF5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708185444; c=relaxed/simple;
-	bh=h02pqtbC/GzkGGnHWdOU7K+B+VEdf4GZEurOMI+nXzs=;
+	s=arc-20240116; t=1708185613; c=relaxed/simple;
+	bh=tcmVjcmYkBwgueRO+vmbHnHJZNEwAI7lNK5doJdSTeo=;
 	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=s+EnkJ1wmgKdTqAdeR84keBjRpZGeOjo144XKr98sxHgCQZAbaOob5wycBN0QUiDtzRWdPW0WbHtBnz8zeGB+7urvOhFdik+11JiIC6Dd0m8tSaMvewECqC1jQ1HnMAqRO6WpULRZGNDynabzDoklGMbdcCs2k4LNrjFbFBxyyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=TvTKbur7; arc=none smtp.client-ip=213.167.242.64
+	 To:Date:Message-ID; b=A9LNc6foEUuCGkUVMj897QhrViCCJheSLaBJxtRE3xRzxc9WYzNk8agGr12VYfmI49pek5BjRjqizvKs0kdJQCtaXE143vlyi7AJ7W1t2moU2I3rrA40/iy6WRhbLHV9RTpGU1OU/26gVZOzv4rdxl41JeNZd5UiXxS6bZVVgFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Ub09LUBa; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="TvTKbur7"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Ub09LUBa"
 Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE5336B3;
-	Sat, 17 Feb 2024 16:57:15 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A080D13AC;
+	Sat, 17 Feb 2024 17:00:04 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1708185435;
-	bh=h02pqtbC/GzkGGnHWdOU7K+B+VEdf4GZEurOMI+nXzs=;
+	s=mail; t=1708185604;
+	bh=tcmVjcmYkBwgueRO+vmbHnHJZNEwAI7lNK5doJdSTeo=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=TvTKbur7da2rZFX0cjv17Fc+MVErkfWPBOvQjJLxRC1DSfdWQRqdDB8sUf6kwzL0h
-	 Z89p7a5jC5Ik3K+aYToezdUyLSL87DXsRRcrqJpBwz0h7Q/RcuNRDtoyEuJYqxaus2
-	 Kb6C3OGVUQ7jO06QdUbA8rWd1WGKv9f55sHa/22A=
+	b=Ub09LUBaFWCssTZJ0dnL0J89lSZUN1TPPQxHNvrTB9jDsP7NKECKlVG2isBRH2cby
+	 eRUWJCrKsmsR51F1N6pzvfZIbjz09NT1gomF/R8sTWs6fx1m2e3pcrv+8emFJdsshc
+	 v2xbYMYycUD0JCmIx3DfWoztyWGRfmPD2w46iigs=
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -34,59 +34,49 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240216223237.326523-6-hdegoede@redhat.com>
-References: <20240216223237.326523-1-hdegoede@redhat.com> <20240216223237.326523-6-hdegoede@redhat.com>
-Subject: Re: [PATCH 5/5] media: ov2680: Add camera orientation and sensor rotation controls
+In-Reply-To: <20240217112438.15240-8-hdegoede@redhat.com>
+References: <20240217112438.15240-1-hdegoede@redhat.com> <20240217112438.15240-8-hdegoede@redhat.com>
+Subject: Re: [PATCH 7/9] media: atomisp: Change ISP subdev name to "ATOM ISP"
 From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
-To: Hans de Goede <hdegoede@redhat.com>, Rui Miguel Silva <rmfrfs@gmail.com>, Sakari Ailus <sakari.ailus@linux.intel.com>
-Date: Sat, 17 Feb 2024 15:57:18 +0000
-Message-ID: <170818543830.1206667.13974348410813582954@ping.linuxembedded.co.uk>
+Cc: Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>, Tsuchiya Yuto <kitakar@gmail.com>, Yury Luneff <yury.lunev@gmail.com>, Nable <nable.maininbox@googlemail.com>, andrey.i.trufanov@gmail.com, Fabio Aiuto <fabioaiuto83@gmail.com>, linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+To: Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Sat, 17 Feb 2024 16:00:07 +0000
+Message-ID: <170818560760.1206667.14199319396527835603@ping.linuxembedded.co.uk>
 User-Agent: alot/0.10
 
-Quoting Hans de Goede (2024-02-16 22:32:37)
-> Add camera orientation and sensor rotation controls using
-> the v4l2_fwnode_device_parse() and v4l2_ctrl_new_fwnode_properties()
-> helpers.
+Quoting Hans de Goede (2024-02-17 11:24:36)
+> Change the generic "ATOMISP_SUBDEV" name to "ATOM ISP" to make clear
+> that this is the subdev for the ISP itself.
 >=20
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/staging/media/atomisp/pci/atomisp_subdev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers=
+/staging/media/atomisp/pci/atomisp_subdev.c
+> index 8253b6faf8cd..822fe7d129e2 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
+> @@ -799,7 +799,7 @@ static int isp_subdev_init_entities(struct atomisp_su=
+b_device *asd)
+>         int ret;
+> =20
+>         v4l2_subdev_init(sd, &isp_subdev_v4l2_ops);
+> -       sprintf(sd->name, "ATOMISP_SUBDEV");
+> +       sprintf(sd->name, "ATOM ISP");
 
+Pure bikeshedding, but I'd probably lower the shouting to just=20
+	"Atom ISP"
+
+Either way saying it's a subdev on a subdev isn't much of a value add so=20
 
 Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
-> ---
->  drivers/media/i2c/ov2680.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-> index fef9e11ee141..bcd031882a37 100644
-> --- a/drivers/media/i2c/ov2680.c
-> +++ b/drivers/media/i2c/ov2680.c
-> @@ -946,6 +946,7 @@ static int ov2680_v4l2_register(struct ov2680_dev *se=
-nsor)
->         const struct v4l2_ctrl_ops *ops =3D &ov2680_ctrl_ops;
->         struct ov2680_ctrls *ctrls =3D &sensor->ctrls;
->         struct v4l2_ctrl_handler *hdl =3D &ctrls->handler;
-> +       struct v4l2_fwnode_device_properties props;
->         int def, max, ret =3D 0;
+>         v4l2_set_subdevdata(sd, asd);
+>         sd->flags |=3D V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEV=
+NODE;
 > =20
->         v4l2_i2c_subdev_init(&sensor->sd, client, &ov2680_subdev_ops);
-> @@ -1000,6 +1001,14 @@ static int ov2680_v4l2_register(struct ov2680_dev =
-*sensor)
->                 goto cleanup_entity;
->         }
-> =20
-> +       ret =3D v4l2_fwnode_device_parse(sensor->dev, &props);
-> +       if (ret)
-> +               goto cleanup_entity;
-> +
-> +       ret =3D v4l2_ctrl_new_fwnode_properties(hdl, ops, &props);
-> +       if (ret)
-> +               goto cleanup_entity;
-> +
->         ctrls->vflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
->         ctrls->hflip->flags |=3D V4L2_CTRL_FLAG_MODIFY_LAYOUT;
->         ctrls->link_freq->flags |=3D V4L2_CTRL_FLAG_READ_ONLY;
 > --=20
 > 2.43.0
 >
