@@ -1,57 +1,57 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2DE82D88
-	for <linux-media@vger.kernel.org>; Wed, 21 Feb 2024 16:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7184583CD0
+	for <linux-media@vger.kernel.org>; Wed, 21 Feb 2024 16:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708531363; cv=none; b=uVcw3BMtKS5bqTJAhtwFvekLxVrY+JBtY2zXVmfTqTnX7wj60TnUjzKq49kgrPioSp43YbigUVO4D4NFbTY8e9LgCUKz+alSL/wxfF15ho9kv/5QPOTRNI5rS9uBNH28J36M+PO9TdmgoRNeKurNRhKrB7sKjpDBFDPhm/LaXqI=
+	t=1708531368; cv=none; b=qbo1TnPwjvxwSxMIBIkOgKQm+3G3G7ptpHPZ3dq5KGPcJk64Znws/qHpQQItH1iUTbydqms62qYP29jl3d2j0AZKbbu/CjDOGKybkvSxTXeowI7W6xeEZbE6wcJZN7/M/I5YV4KucGkMGPc2Agu2Lke1ux8H23MZ81B+INvgvME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708531363; c=relaxed/simple;
-	bh=e7qm5eiW5ti8yJrl72MZC/g4CHZO9+imwD4cHOXfYkk=;
+	s=arc-20240116; t=1708531368; c=relaxed/simple;
+	bh=CaYboc1XswJbQ3g9eMR+UOvFXPujQMCgvGjX8ZAWPVw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lm7GrA2sal7YlCMHwIs1nl9ISzVaWq8PFHugByAVUo3OmXWoQ2VXIImbFyPEB7W/PIhtS77LDIO9IqVJKnADPLnzrPyHdZa4rLniWttvq9glWFAdbyd1djTIw+Fy8158EylusxN1ozScrBa04711U+UlzGFABSskRTmbwm3r5iQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--panikiel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cgLboe9B; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=PHTjp8W7u6L0YIqX2fnGfi3uF2F4eevWgAU7P8TxsWdol4/jXbA0NU6tPQiiYcG24H9ChZT09DPZBIhYwlG3aUyHWoUEBkWfoL3T4HYkDgaJv9+YMDUzxDkhVhKIUCPVWtBxv40IPwxzqYF2oP5PfGgKk8R6jF3+380lEAQtttk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--panikiel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R6hXu2AG; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--panikiel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cgLboe9B"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-40d62d3ae0cso3965895e9.2
-        for <linux-media@vger.kernel.org>; Wed, 21 Feb 2024 08:02:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R6hXu2AG"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6ceade361so1568536276.0
+        for <linux-media@vger.kernel.org>; Wed, 21 Feb 2024 08:02:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708531361; x=1709136161; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1708531365; x=1709136165; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jnqnjQDU6WxVzzZ+ac7V7PyPPfIa26jAPZrzYY3D8HM=;
-        b=cgLboe9BX/f5X5344EogEbINt5fc+NHzcXiiFTuYRq/U46Ulu0ljPZnOGpRmq7VseC
-         LBTOq0XQF3c2ics9lNjOhtJJ7YrsAGBay9SHnIjldbQL7xhA0yO15TfEoxISkOZKLU3k
-         1Bi8RyAs9EQAROmZEBN996+bumWE8Ggp8W9Dav0QmCaS4kaCZZTzqnOuoKorc8ymYLbN
-         p4OZc0jv7YLxN/DDwXF5J+yxJYyb9vFJeK/l+/S6fiLk8RswFZDhUx+Et2Y8r9yeAN2J
-         vJTtXsNZskjt8PfENXnO4xiEabMqrkm1NFxn604H/Q3HGvTCC+5A9tcfxwA2Ndf+SQ5r
-         sXJA==
+        bh=QGg5dBp+TAqi4Vih9jNxwVmFa4RIBnviXwiga7aX/Pg=;
+        b=R6hXu2AGCp/oZu9Szu+N7FMrF7/CBtoPSMGUMJmUfuqxqs9U2FgIbCCcCircMdCuIp
+         s70t7MhRipZZeu2d5nYSSi3SD5ZmGVM1RbhdphlASwm+ihq0J98QY3u1tuNNCWMDhI8u
+         Gwfhor3I9By1Vf8db4nVbWqr0/RTQ8Ba5/sXosmfAEh9RzGsz1FM8T4VsgX2Wh1pMy36
+         B19x2vgxq+njSrVw46Md8A78XVtzVQcrdoqswMgOSh2sEdSzxQhwqHt8g2WfkTbMXgaV
+         z3Y3fxBrnB2FATji08SnCzuPE+37VCPaOa9X0WYo7H+/gRvrTfb7CPrdS03coDU2vs4B
+         Vr6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708531361; x=1709136161;
+        d=1e100.net; s=20230601; t=1708531365; x=1709136165;
         h=content-transfer-encoding:cc:to:from:subject:message-id:references
          :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=jnqnjQDU6WxVzzZ+ac7V7PyPPfIa26jAPZrzYY3D8HM=;
-        b=FfNyEf8kzjdE7I5RL8A1jNIzc8asjJ0QR1knmWRRF17X7RRed62mfA2U2ZqSKdHCYb
-         dhx5PUjWKPVsZjn4Je3S8fturf/AP+TdlyyBSVl3y5PX2neWciw+Ci29TZyY9IxNgDmu
-         yvPhuGw55f3meCARkTlA0XX0ijB+kYwbARxdS7Vz8d6KBomM7Ys+EHqhpBzUNhlyEvd2
-         4RgUcldd9Fn/NxkAo7pzibvohdqupo6qRtva1WdvlXTDbmMfPgw2fL1OCp/4n68Q+1G2
-         zS6DXJ7MGSpXrUOQNT+GfZZqu/Q6z8rHjJrO42NqX6WNmjhC28QVrEPX+FbeUsSHuOHH
-         EILA==
-X-Forwarded-Encrypted: i=1; AJvYcCX+fFOQ5nNoul2595r7d/nWu+BZH2EynoCyiSm+w0dZC2/ID3+Q+ddZ//ReUaNWzygKQpPt6o1TtT9vy4h6YKcX9aqEQv5ZyLb+0D4=
-X-Gm-Message-State: AOJu0Yx5Jr+zWH313IjacKusXNBTNL1yyTvKlxnzWvlHmcNdsjK1Ioth
-	0RGFKWGcTbOJ+OgKQgMgfqK7As7ttp8hOv3hVFFWdMZr3SLipvCDvBXhzzy2OKgZLCGEghtxwkg
-	HPF8E/epYew==
-X-Google-Smtp-Source: AGHT+IGyGabF+LHiG1n4tuK6dy+R8/udpYeRM3SpXuvYBxKMLaSa38Huig22OKd177ctxAO306bDTgPWtaTLDQ==
+        bh=QGg5dBp+TAqi4Vih9jNxwVmFa4RIBnviXwiga7aX/Pg=;
+        b=egi6Rf/P+IH/MRSoMpig3n4ZCcWGKnqrm3ZitbCDZnQe/rpLJqDwi9O5cw6Vm5YzOk
+         RYOBzZuiqqcc9GxSKcvMx0tU35ylg2Vm5fFqDG/x1mYzZ8R9jRGzh9ED7DrNHHWGMKCX
+         f1MObg3CK6VNoKj9AojXJhm54yTAJSYlsCaLOWgLOZQJONTVBVDb6Q+91oOPdrFvAFps
+         O8loVt4UlWK44d4fC8fx9QqdiecOSb3cSiv6ww1cXWf7Z+ctQyxouikqehVW4KgsNRTY
+         H/HdVCOXQkWCdgr8zqnpuApYg2zQZ4i5fnQK3BYQ2PQXL20NKc/wJ0KDXymlFnNafFCt
+         ismQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVttGrlPf0m8Wkbi0g125mn1NE/IazKKjlKAkG2WvFB0Or1wlIajE1XdJKkUhCPkvH6dbL7EeLUO7WctxvrH/mMHKSp90+/JV2zes=
+X-Gm-Message-State: AOJu0Yx6+2WtfeogBjMGKFBxPJF/zatIJYO9Ppkik6/LyeO4+cxzD2oy
+	50JWQBMk7vl7v4YpZ3U1Sr12C0Ih3a4rFkd+u/FvZT3MEhyDvGPTVzEwCcGwpTBmntI+Wqyqw3s
+	PuJETgn4rFA==
+X-Google-Smtp-Source: AGHT+IERn86P5KS/OR61g38fGAjjdWCXiWCh3x4Ja6a6T5iRxgeFp3D1CzEXxLwcRg/zQIfOar9r4nDwwSo3xA==
 X-Received: from szatan.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2d83])
- (user=panikiel job=sendgmr) by 2002:a05:600c:a399:b0:411:efec:cf6d with SMTP
- id hn25-20020a05600ca39900b00411efeccf6dmr101907wmb.3.1708531360602; Wed, 21
- Feb 2024 08:02:40 -0800 (PST)
-Date: Wed, 21 Feb 2024 16:02:11 +0000
+ (user=panikiel job=sendgmr) by 2002:a05:6902:1209:b0:dc6:9e4a:f950 with SMTP
+ id s9-20020a056902120900b00dc69e4af950mr4645277ybu.3.1708531365611; Wed, 21
+ Feb 2024 08:02:45 -0800 (PST)
+Date: Wed, 21 Feb 2024 16:02:13 +0000
 In-Reply-To: <20240221160215.484151-1-panikiel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -61,9 +61,8 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240221160215.484151-1-panikiel@google.com>
 X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221160215.484151-6-panikiel@google.com>
-Subject: [PATCH v2 5/9] drm/display: Add mask definitions for
- DP_PAYLOAD_ALLOCATE_* registers
+Message-ID: <20240221160215.484151-8-panikiel@google.com>
+Subject: [PATCH v2 7/9] media: dt-bindings: Add Chameleon v3 framebuffer
 From: "=?UTF-8?q?Pawe=C5=82=20Anikiel?=" <panikiel@google.com>
 To: airlied@gmail.com, akpm@linux-foundation.org, conor+dt@kernel.org, 
 	daniel@ffwll.ch, dinguyen@kernel.org, hverkuil-cisco@xs4all.nl, 
@@ -77,40 +76,90 @@ Cc: devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Each of these registers contains a single value, but not the entire
-8 bits:
-
-DP_PAYLOAD_ALLOCATE_SET - Bit 7 Reserved
-DP_PAYLOAD_ALLOCATE_START_TIME_SLOT - Bits 7:6 Reserved
-DP_PAYLOAD_ALLOCATE_TIME_SLOT_COUNT - Bits 7:6 Reserved
-
-Add definitions to properly mask off values read from these registers.
+The Chameleon v3 uses the framebuffer IP core to take the video signal
+from different sources and directly write frames into memory.
 
 Signed-off-by: Pawe=C5=82 Anikiel <panikiel@google.com>
 ---
- include/drm/display/drm_dp.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ .../bindings/media/google,chv3-fb.yaml        | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/google,chv3-fb.=
+yaml
 
-diff --git a/include/drm/display/drm_dp.h b/include/drm/display/drm_dp.h
-index 3731828825bd..9dee30190f14 100644
---- a/include/drm/display/drm_dp.h
-+++ b/include/drm/display/drm_dp.h
-@@ -733,8 +733,13 @@
- # define DP_PANEL_REPLAY_SU_ENABLE                      (1 << 6)
-=20
- #define DP_PAYLOAD_ALLOCATE_SET		    0x1c0
--#define DP_PAYLOAD_ALLOCATE_START_TIME_SLOT 0x1c1
--#define DP_PAYLOAD_ALLOCATE_TIME_SLOT_COUNT 0x1c2
-+# define DP_PAYLOAD_ALLOCATE_SET_MASK	    0x7f
+diff --git a/Documentation/devicetree/bindings/media/google,chv3-fb.yaml b/=
+Documentation/devicetree/bindings/media/google,chv3-fb.yaml
+new file mode 100644
+index 000000000000..7961c0ab66ec
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/google,chv3-fb.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/google,chv3-fb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#define DP_PAYLOAD_ALLOCATE_START_TIME_SLOT		0x1c1
-+# define DP_PAYLOAD_ALLOCATE_START_TIME_SLOT_MASK	0x3f
++title: Google Chameleon v3 video framebuffer
 +
-+#define DP_PAYLOAD_ALLOCATE_TIME_SLOT_COUNT		0x1c2
-+# define DP_PAYLOAD_ALLOCATE_TIME_SLOT_COUNT_MASK	0x3f
-=20
- /* Link/Sink Device Status */
- #define DP_SINK_COUNT			    0x200
++maintainers:
++  - Pawe=C5=82 Anikiel <panikiel@google.com>
++
++properties:
++  compatible:
++    const: google,chv3-fb
++
++  reg:
++    items:
++      - description: core registers
++      - description: irq registers
++
++  interrupts:
++    maxItems: 1
++
++  google,legacy-format:
++    type: boolean
++    description: The incoming video stream is in 32-bit padded mode.
++
++  port:
++    $ref: /schemas/graph.yaml#/properties/port
++    description:
++      Connection to the video receiver - optional. If this isn't present,
++      the video interface still works on its own, but EDID control is
++      unavailable and DV timing information only reports the active
++      video width/height.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    video@c0060500 {
++        compatible =3D "google,chv3-fb";
++        reg =3D <0xc0060500 0x100>,
++              <0xc0060f20 0x10>;
++        interrupts =3D <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
++        google,legacy-format;
++    };
++
++  - |
++    video@c0060600 {
++        compatible =3D "google,chv3-fb";
++        reg =3D <0xc0060600 0x100>,
++              <0xc0060f30 0x10>;
++        interrupts =3D <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
++
++        port {
++            fb_mst0_0: endpoint {
++                remote-endpoint =3D <&dprx_mst_0>;
++            };
++        };
++    };
 --=20
 2.44.0.rc0.258.g7320e95886-goog
 
