@@ -1,203 +1,299 @@
-Received: from mail.damsy.net (mail.damsy.net [85.90.245.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AADE13A245;
-	Thu, 22 Feb 2024 13:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.90.245.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B62B12FF74;
+	Thu, 22 Feb 2024 13:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708607710; cv=none; b=lQoaAE1zbxVofpDYXyVlayaA7SW1IjwGfKKoPu+Po+QP1lRvh2BocfRZUNe2uLqD5JQp/W7YveLA+QghQUEVAzG9zAGfe+ePbLoF0Q0UcqXkOIDS741oqDPyhDNxrhQMkz4l2AsAfEmPI/ROKElxw8Uo5JiKO/Pc7++kPifKFj4=
+	t=1708608053; cv=none; b=Tj1cDN2MN1j/q27Q9bWJ+snMM74KMi0jkLi58fj6q587sDbMAicm+doYSlQ3cgpmZTIJRndOWUUra1+3OJrU/dK4EBtRdvOW+Tn9ojRJhHyos4OO3zXxAr0sCZxMmJpZ2ler8YNGW6nZIQPaT93ZM5Kz+DTtApdP7zuTkRPsKRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708607710; c=relaxed/simple;
-	bh=veO8KXSoveS60aha/VPrYTpEY2ldAL2U9sjvxFFrAMU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JmjiUsFewzyUwKVAzShFR7TmY0v4TH5zFM7L5FPd9YjxLNj44CShgIcBFAxW8f1FTjbsMlO0em6xJqGOqEyEHcQg15aVVHu7v6x5vS+TxO0QiBmzl1qdX86JI3so0XX5RKSTPX6ydM/tg8mW8xDiJyjltAHMt1OK/7EYoTDyFnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=damsy.net; spf=pass smtp.mailfrom=damsy.net; dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b=hcedB2s1; arc=none smtp.client-ip=85.90.245.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=damsy.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=damsy.net
+	s=arc-20240116; t=1708608053; c=relaxed/simple;
+	bh=Zu7T88OQKLjnCfKYveIU790NUrfbhEaWjmTCXZYnncA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gNtQ1ng5ixnXs4zEodUnb4v7s5rGERkXlPhT7QPNXHzZ1AaqePyIf5kIzVr0hHAtgB0NHPiGQGZs27o+DxvZjCWSh7fNED7GV0HMM+ENxtCZS1bpy7SrS8821R6g1wtjUFty/VAeR0doBCst1iyrli+wu/q2jLgZm0SXQhD/MKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M0WEOm8k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=damsy.net header.i=@damsy.net header.b="hcedB2s1"
-Message-ID: <55e420d4-0c9c-4255-9b2d-8d68f1afc5ab@damsy.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=damsy.net; s=201803;
-	t=1708607110;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wYUSbGOEmfAVx7b/dFhgsrpPqsuJWC/57g3jbSD5G6I=;
-	b=hcedB2s17daKEmtlqmq2H2RmhTIAM94EWOtLQZNlBpVY4fgjzNKYJ6f92e4Hpmz8RUFbzv
-	r8FFVzu9x6M1yDPxNfALmSj2OXT2Bt9c3RpZzb902nmM6Vzhy+cU05RKezkQR7oJh8THgh
-	4GUX+EOFQRqjGZ9Dxh9Gub9vIKIEmHGMb8ZP4IhNkDoLcj1kwTfpp15VJTnV0LuzZs3q69
-	uUPt7bs0oGCceAhxzKntPAyLJO+kICDQpjSil2KeTb1r1cWl90n+UQKKhptowFf6zq89r/
-	dJC5xDF9SjXLGRyjSTEmkSTAYYV04BXqcNAnjmKYT4XPtviUDkV251p0Ca/rjg==
-Date: Thu, 22 Feb 2024 14:05:09 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M0WEOm8k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3265DC433F1;
+	Thu, 22 Feb 2024 13:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708608052;
+	bh=Zu7T88OQKLjnCfKYveIU790NUrfbhEaWjmTCXZYnncA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M0WEOm8ktKGlyWLacF5Eq1chGM6nr37qP9xBp8Ka3xn4FV0USBItMRkpg5davyEDR
+	 i7hd5f9rPQhrU9qLcZEr9ZkBmkyEzuiMvdXWJrU6qIaNCtMX4Pv5Bri+IvvSBT9eNJ
+	 R30zOLoUEJtZYT88fo7qS96vyaW4RNP+B/Q0R6TTt8n20wvvjWFebgWLnI3TK78xu7
+	 hWDtONcnJbzb1GmEp7XrmUgYzGLDSORugYi3RB57zioad41pS0OMVfY8jVD3Al/OZs
+	 giIWtZJtXo924svaDlRRvGibfVoVwwckTcaHTVi1KwWopCvrYpqw0+Bc7SPP6IcE8W
+	 Cd2/y5xQ8erxA==
+Date: Thu, 22 Feb 2024 14:20:49 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc: Sebastian Wick <sebastian.wick@redhat.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>, 
+	Jonathan Corbet <corbet@lwn.net>, Sandy Huang <hjc@rock-chips.com>, 
+	Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	Hans Verkuil <hverkuil@xs4all.nl>, linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v5 08/44] drm/connector: hdmi: Add Broadcast RGB property
+Message-ID: <cf6mfm7naqdgnr3ab2tkix7b2s2frpsamlgylwiwcgbsy6ngd7@iq6ezpdnehbf>
+References: <zml6j27skvjmbrfyz7agy5waxajv4p4asbemeexelm3wuv4o7j@xkd2wvnxhbuc>
+ <20240209203435.GB996172@toolbox>
+ <ahfl6f72lpgpsbnrbgvbsh4db4npr2hh36kua2c6krh544hv5r@dndw4hz2mu2g>
+ <Zco-DQaXqae7B1jt@intel.com>
+ <yx2t7xltxxgsngdsxamsfq6y7dze3wzegxcqwmsb5yrxen73x6@u3vilqhpci4w>
+ <20240212170618.GA1372043@toolbox>
+ <2mih3humepuedtli7ge52ncom4uffkqravdpalncgfyucmwdzc@bp5o7i3ky77a>
+ <20240219140144.GB1956149@toolbox>
+ <euaujtp4jyyoud3ccg5qhyvixyq2p6vir4ojlzoky6kep754rj@wruidyfxssry>
+ <ZddFBe4A-galsO91@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 6/8] drm: add drm_mode_atomic_commit event
-To: =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
- Gustavo Padovan <gustavo@padovan.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Alex Deucher
- <alexander.deucher@amd.com>, amd-gfx@lists.freedesktop.org
-References: <20240216151006.475077-1-pierre-eric.pelloux-prayer@amd.com>
- <20240216151006.475077-7-pierre-eric.pelloux-prayer@amd.com>
- <Zc-MLQZ1bby_vKal@intel.com>
-Content-Language: fr
-From: Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>
-In-Reply-To: <Zc-MLQZ1bby_vKal@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tbiepc54hbczafix"
+Content-Disposition: inline
+In-Reply-To: <ZddFBe4A-galsO91@intel.com>
 
 
+--tbiepc54hbczafix
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Le 16/02/2024 à 17:24, Ville Syrjälä a écrit :
-> On Fri, Feb 16, 2024 at 04:09:55PM +0100, Pierre-Eric Pelloux-Prayer wrote:
->> With this and the dma_fence_used_as_dependency event, a tool can draw the
->> relationship between the compositing draw, the atomic commit, and vblank.
->>
->> An example on a 2 monitors system look like this:
->>
->> gnome-shell-1638    [018] .....  2571.905124: drm_mode_atomic_commit: file=00000000245c3f0c, pid=    1165, flags=00000201, crtcs={0x1}
->> gnome-shell-1638    [018] .....  2571.905147: dma_fence_used_as_dependency: driver=drm_sched timeline=gfx_0.0.0 context=270 seqno=73240 reason=dma_fence_chain_init
->> gnome-shell-1638    [018] .....  2571.913226: drm_mode_atomic_commit: file=00000000245c3f0c, pid=    1165, flags=00000201, crtcs={0x0}
->> gnome-shell-1638    [018] .....  2571.913250: dma_fence_used_as_dependency: driver=drm_sched timeline=gfx_0.0.0 context=270 seqno=73241 reason=dma_fence_chain_init
->>      <idle>-0       [018] d.h3.  2571.915687: drm_vblank_event: crtc=1, seq=155747, time=2571916093743, high-prec=true
->>      <idle>-0       [018] d.h3.  2571.915968: drm_vblank_event: crtc=0, seq=153862, time=2571916377180, high-prec=true
->>
->> v2: fix unchecked memory allocation
->>
->> Signed-off-by: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
->> ---
->>   drivers/gpu/drm/drm_atomic_uapi.c | 21 +++++++++++++++++++++
->>   drivers/gpu/drm/drm_trace.h       | 23 +++++++++++++++++++++++
->>   2 files changed, 44 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
->> index 29d4940188d4..f31b5c6f870b 100644
->> --- a/drivers/gpu/drm/drm_atomic_uapi.c
->> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
->> @@ -41,6 +41,7 @@
->>   #include <linux/file.h>
->>   
->>   #include "drm_crtc_internal.h"
->> +#include "drm_trace.h"
->>   
->>   /**
->>    * DOC: overview
->> @@ -1503,6 +1504,26 @@ int drm_mode_atomic_ioctl(struct drm_device *dev,
->>   		drm_mode_object_put(obj);
->>   	}
->>   
->> +	if (trace_drm_mode_atomic_commit_enabled()) {
->> +		struct drm_crtc_state *crtc_state;
->> +		struct drm_crtc *crtc;
->> +		int *crtcs;
->> +		int i, num_crtcs;
->> +
->> +		crtcs = kcalloc(dev->mode_config.num_crtc, sizeof(int),
->> +				GFP_KERNEL);
->> +
->> +		if (crtcs) {
->> +			num_crtcs = 0;
->> +			for_each_new_crtc_in_state(state, crtc, crtc_state, i)
->> +				crtcs[num_crtcs++] = drm_crtc_index(crtc);
->> +
->> +			trace_drm_mode_atomic_commit(file_priv, crtcs, num_crtcs, arg->flags);
->> +
->> +			kfree(crtcs);
->> +		}
->> +	}
-> 
-> I think the current drm trace events are sort of semi-useless.
-> The problems are:
-> - no device id in the events so good luck with multi gpu systems
-> - vblank trace events are only emitted from some vblank
->    codepaths but not others
-> 
-> I'm also not sure putting an event straight into the atomic ioctl is
-> particularly useful.
-> 
-> First of all it means that any commit not initiated by the atomic
-> ioctl will not be traced.
-> 
-> It would also seem more useful to me if the driver can emit the
-> trace just before it commits the frame to the hardware, so that
-> we can also observe the latency between userspace submitting
-> the frame vs. when the hardware will actually see it.
-> 
-> Also if we want tools to use these I think we're going to have to
-> make some kind of abi promises about the events, so we should make
-> sure they are as future proof as we can make them (eg. regarding
-> mutli-gpu systems/etc.).
+On Thu, Feb 22, 2024 at 02:58:45PM +0200, Ville Syrj=E4l=E4 wrote:
+> On Thu, Feb 22, 2024 at 11:54:04AM +0100, Maxime Ripard wrote:
+> > On Mon, Feb 19, 2024 at 03:01:44PM +0100, Sebastian Wick wrote:
+> > > On Thu, Feb 15, 2024 at 12:00:01PM +0100, Maxime Ripard wrote:
+> > > > On Mon, Feb 12, 2024 at 06:06:18PM +0100, Sebastian Wick wrote:
+> > > > > On Mon, Feb 12, 2024 at 05:53:48PM +0100, Maxime Ripard wrote:
+> > > > > > On Mon, Feb 12, 2024 at 05:49:33PM +0200, Ville Syrj=E4l=E4 wro=
+te:
+> > > > > > > On Mon, Feb 12, 2024 at 11:01:07AM +0100, Maxime Ripard wrote:
+> > > > > > > > On Fri, Feb 09, 2024 at 09:34:35PM +0100, Sebastian Wick wr=
+ote:
+> > > > > > > > > On Mon, Feb 05, 2024 at 10:39:38AM +0100, Maxime Ripard w=
+rote:
+> > > > > > > > > > On Fri, Feb 02, 2024 at 06:37:52PM +0200, Ville Syrj=E4=
+l=E4 wrote:
+> > > > > > > > > > > On Fri, Feb 02, 2024 at 04:59:30PM +0100, Maxime Ripa=
+rd wrote:
+> > > > > > > > > > > > On Fri, Feb 02, 2024 at 05:40:47PM +0200, Ville Syr=
+j=E4l=E4 wrote:
+> > > > > > > > > > > > > On Fri, Feb 02, 2024 at 02:01:39PM +0100, Maxime =
+Ripard wrote:
+> > > > > > > > > > > > > > Hi,
+> > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > On Mon, Jan 15, 2024 at 03:37:20PM +0100, Sebas=
+tian Wick wrote:
+> > > > > > > > > > > > > > > > >  /**
+> > > > > > > > > > > > > > > > >   * DOC: HDMI connector properties
+> > > > > > > > > > > > > > > > >   *
+> > > > > > > > > > > > > > > > > + * Broadcast RGB
+> > > > > > > > > > > > > > > > > + *      Indicates the RGB Quantization R=
+ange (Full vs Limited) used.
+> > > > > > > > > > > > > > > > > + *      Infoframes will be generated acc=
+ording to that value.
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > > > + *      The value of this property can b=
+e one of the following:
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > > > + *      Automatic:
+> > > > > > > > > > > > > > > > > + *              RGB Range is selected au=
+tomatically based on the mode
+> > > > > > > > > > > > > > > > > + *              according to the HDMI sp=
+ecifications.
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > > > + *      Full:
+> > > > > > > > > > > > > > > > > + *              Full RGB Range is forced.
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > > > + *      Limited 16:235:
+> > > > > > > > > > > > > > > > > + *              Limited RGB Range is for=
+ced. Unlike the name suggests,
+> > > > > > > > > > > > > > > > > + *              this works for any numbe=
+r of bits-per-component.
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > > > + *      Drivers can set up this property=
+ by calling
+> > > > > > > > > > > > > > > > > + *      drm_connector_attach_broadcast_r=
+gb_property().
+> > > > > > > > > > > > > > > > > + *
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > This is a good time to document this in mor=
+e detail. There might be two
+> > > > > > > > > > > > > > > > different things being affected:
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > 1. The signalling (InfoFrame/SDP/...)
+> > > > > > > > > > > > > > > > 2. The color pipeline processing
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > All values of Broadcast RGB always affect t=
+he color pipeline processing
+> > > > > > > > > > > > > > > > such that a full-range input to the CRTC is=
+ converted to either full- or
+> > > > > > > > > > > > > > > > limited-range, depending on what the monito=
+r is supposed to accept.
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > When automatic is selected, does that mean =
+that there is no signalling,
+> > > > > > > > > > > > > > > > or that the signalling matches what the mon=
+itor is supposed to accept
+> > > > > > > > > > > > > > > > according to the spec? Also, is this really=
+ HDMI specific?
+> > > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > > When full or limited is selected and the mo=
+nitor doesn't support the
+> > > > > > > > > > > > > > > > signalling, what happens?
+> > > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > > Forgot to mention: user-space still has no co=
+ntrol over RGB vs YCbCr on
+> > > > > > > > > > > > > > > the cable, so is this only affecting RGB? If =
+not, how does it affect
+> > > > > > > > > > > > > > > YCbCr?
+> > > > > > > > > > > > > >=20
+> > > > > > > > > > > > > > So I dug a bit into both the i915 and vc4 drive=
+rs, and it looks like if
+> > > > > > > > > > > > > > we're using a YCbCr format, i915 will always us=
+e a limited range while
+> > > > > > > > > > > > > > vc4 will follow the value of the property.
+> > > > > > > > > > > > >=20
+> > > > > > > > > > > > > The property is literally called "Broadcast *RGB*=
+".
+> > > > > > > > > > > > > That should explain why it's only affecting RGB.
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > Right. And the limited range option is called "Limi=
+ted 16:235" despite
+> > > > > > > > > > > > being usable on bpc > 8 bits. Naming errors occurs,=
+ and history happens
+> > > > > > > > > > > > to make names inconsistent too, that's fine and not=
+ an argument in
+> > > > > > > > > > > > itself.
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > > Full range YCbCr is a much rarer beast so we've n=
+ever bothered
+> > > > > > > > > > > > > to enable it.
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > vc4 supports it.
+> > > > > > > > > > >=20
+> > > > > > > > > > > Someone implemented it incorrectly then.
+> > > > > > > > > >=20
+> > > > > > > > > > Incorrectly according to what documentation / specifica=
+tion? I'm sorry,
+> > > > > > > > > > but I find it super ironic that i915 gets to do its own=
+ thing, not
+> > > > > > > > > > document any of it, and when people try to clean things=
+ up they get told
+> > > > > > > > > > that we got it all wrong.
+> > > > > > > > >=20
+> > > > > > > > > FWIW, this was an i915 property and if another driver use=
+s the same
+> > > > > > > > > property name it must have the same behavior. Yes, it isn=
+'t standardized
+> > > > > > > > > and yes, it's not documented (hence this effort here) but=
+ it's still on
+> > > > > > > > > vc4 to make the property compatible.
+> > > > > > > >=20
+> > > > > > > > How is it not compatible? It's a superset of what i915 prov=
+ides, but
+> > > > > > > > it's strictly compatible with it.
+> > > > > > >=20
+> > > > > > > No it is not.
+> > > > > >=20
+> > > > > > The property is compatible with i915 interpretation of it, whet=
+her you
+> > > > > > like it or not. And that's what Sebastian was referring to.
+> > > > > >=20
+> > > > > > > Eg. what happens if you set the thing to full range for RGB (=
+which you
+> > > > > > > must on many broken monitors), and then the kernel automagica=
+lly
+> > > > > > > switches to YCbCr (for whatever reason) but the monitor doesn=
+'t
+> > > > > > > support full range YCbCr? Answer: you get crap output.
+> > > > > >=20
+> > > > > > And that part is just moving goalposts.
+> > > > >=20
+> > > > > But it's really not.
+> > > >=20
+> > > > It really is. This whole discussion started by "well it would be ni=
+ce if
+> > > > we made that property handled by the core", and we're now at the "we
+> > > > need to deal with broken YCbCr displays and i915 opinion about them"
+> > > > stage. After creating documentation, unit tests, etc. It's the text=
+book
+> > > > definition of moving goalposts. And while i915 won't be affected by=
+ all
+> > > > that work.
+> > >=20
+> > > Sorry, but what you're saying is just not true.
+> > >=20
+> > > The Broadcast RGB property is an Intel specific property.
+> >=20
+> > No, it's not. vc4 has been using it for a year now.
+> >=20
+> > > It lacked documentation but the user space contract exists and it
+> > > based on how i915 implemented it. By changing the semantics you're
+> > > breaking user space. The documentation has to document the current
+> > > contract between i915 and user space, not whatever you want the
+> > > property to be like.
+> > >=20
+> > > I get that you're frustrated that you have to do work while i915 does=
+n't
+> > > but none of that is relevant for what the property is and how user sp=
+ace
+> > > expects it to work.
+> >=20
+> > That's not it, really. I don't mind doing the work. I do mind losing
+> > functionalities on something that was working fine. And getting the
+> > blame for something that is, at best, just as much of an documentation
+> > issue on i915 devs.
+>=20
+> We've had a couple of these cases recently where people have taken
+> some old property implemented by i915 and implemented it differently
+> in some other driver. Dunno if the reason was that people didn't try
+> to understand what i915 is doing and why, or they misundestood it,
+> or they understood it but decided to ignore it anyway.
 
-Thanks for your feedback.
+I can't tell for the other cases, but in this particular case it's
+definitely in the misunderstanding category. And implying that we didn't
+even try to understand it, or that we didn't consult anyone when the
+patches were posted on the ML for months doesn't seem fair either.
 
-This series was also discussed on IRC with Sima [1], and the conclusion was
-that it would be good to rework the series with the following goals in
-mind:
-* make sure the events are useful for any drivers using the core drm code,
-not just amdgpu
-* add new events or extend existing ones so that all the required information is
-there (= no guessing needed)
-* document the updated tracepoints (as UAPI?): how they should be interpreted
-by tools (eg: how to reconstruct fence dependencies? how to measure latency? etc)
+> Unfortunately having undocumented corners in the uapi is simply
+> a fact of life when dealing with a >15 year old legacy codebase.
+> Also there were basically no rules regarding properties in the
+> past, so everyone just added random properties whenever they=20
+> felt like it.
+>=20
+> I think going forward we should probably lay down some extra
+> ground rules; if an old undocumented uapi is being extended
+> to cover more than one driver we must first figure out what
+> the de facto semantics are, and document things properly
+> before anything else gets done.
 
+That sounds reasonable, but you (not you personally, but the i915 team
+in general) also have to engage, you can't just impose that on everyone
+else, and then just hope they will figure it out perfectly without your
+help.
 
-Pierre-Eric
+I think that whole story is a testament to that.
 
+Maxime
 
-[1]: https://dri.freedesktop.org/~cbrill/dri-log/?channel=dri-devel&date=2024-02-16
+--tbiepc54hbczafix
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZddKMQAKCRDj7w1vZxhR
+xQZ0AP9xIjID3WRjPO9YmF5lo+fbKpeIUuu3c3a+WG/PCA+kOAD/d6a9EMFe7j7G
+LSSIf9ENRHhLQi1d/PbumiFAR9PLeQM=
+=aA2v
+-----END PGP SIGNATURE-----
 
-
-> 
->> +
->>   	ret = prepare_signaling(dev, state, arg, file_priv, &fence_state,
->>   				&num_fences);
->>   	if (ret)
->> diff --git a/drivers/gpu/drm/drm_trace.h b/drivers/gpu/drm/drm_trace.h
->> index 11c6dd577e8e..63489923c289 100644
->> --- a/drivers/gpu/drm/drm_trace.h
->> +++ b/drivers/gpu/drm/drm_trace.h
->> @@ -66,6 +66,29 @@ TRACE_EVENT(drm_vblank_event_delivered,
->>   		      __entry->seq)
->>   );
->>   
->> +TRACE_EVENT(drm_mode_atomic_commit,
->> +	    TP_PROTO(struct drm_file *file, int *crtcs, int ncrtcs, uint32_t flags),
->> +	    TP_ARGS(file, crtcs, ncrtcs, flags),
->> +	    TP_STRUCT__entry(
->> +		    __field(struct drm_file *, file)
->> +		    __dynamic_array(u32, crtcs, ncrtcs)
->> +		    __field(uint32_t, ncrtcs)
->> +		    __field(uint32_t, flags)
->> +		    ),
->> +	    TP_fast_assign(
->> +		    unsigned int i;
->> +
->> +		    __entry->file = file;
->> +		    for (i = 0; i < ncrtcs; i++)
->> +			((u32 *)__get_dynamic_array(crtcs))[i] = crtcs[i];
->> +		    __entry->ncrtcs = ncrtcs;
->> +		    __entry->flags = flags;
->> +		    ),
->> +	    TP_printk("file=%p, pid=%8d, flags=%08x, crtcs=%s", __entry->file,
->> +		      pid_nr(__entry->file->pid), __entry->flags,
->> +		      __print_array(__get_dynamic_array(crtcs), __entry->ncrtcs, 4))
->> +);
->> +
->>   #endif /* _DRM_TRACE_H_ */
->>   
->>   /* This part must be outside protection */
->> -- 
->> 2.40.1
-> 
+--tbiepc54hbczafix--
