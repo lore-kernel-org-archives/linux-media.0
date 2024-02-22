@@ -1,166 +1,196 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2856225DF
-	for <linux-media@vger.kernel.org>; Thu, 22 Feb 2024 08:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DAF374CF;
+	Thu, 22 Feb 2024 09:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708590623; cv=none; b=p9A6QF8qtzhyIp51eur0MBXSR9kD7nwqlloG5eiVrWarhY8CfDsSGHTIlg/PPW9IaTVxO7P7W/hLXkQRfFVQhlJKksP2ApP2oDac1PE9aQsPQ+dtu9RvZTEKunP4emqgTcAPZ+ZSkgPscKsM2GqjYFnh8DRxPtTXwHTmbZeFE+U=
+	t=1708593981; cv=none; b=HsNRElhIFhGOuDd1I+gr9ejL8p0l0JXyOmu/mn+TOtU/v7dYZBBarCPxFK+7dAlKmSZhL/VnmSRc89YghSamZLk2+NHHdLAghOKf0yGDmYGKTs+JLbHLNkshLAlzHb5pjRTcFV0uM/3dzCd+l0KF4EXb/Vc+HGFbzHra2mQf5wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708590623; c=relaxed/simple;
-	bh=TDVHbHmjOOuwKIGXLipXVMrG/xOSgCHdDWJzigXFsD0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iuhE75uxTrhJBVzbhIZ5k0SXQw5UEXZum2s2svup0XThWzXHlK2oSf6Qmjjk+VmwaSMxOaqZpGck/VV/GKXfE792Ih1beYRfkRFt/ZReEIXb1LRhCoBqMQaSnzATQprIXIaMg7B/1nebGKV4eNc9e7XXFQftr6wxaqE7kBNwBno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Lnst1hBl; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1708593981; c=relaxed/simple;
+	bh=SW8HCbObOpZxYAlIiibFXJvrhFaztmcqCY1/TtinxbA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fkCeUsfdaJlxZrElY5N1KddxBD52OP5r2VMGdmO8uhsjHA8FbDVzqOQtS9VcOCoVWHVRRLmOyEbnIifgMTNqTxwKP5BriGrffxfVRZBWb+Cwdihgy21Nw2AzK0Xh6XiRE1zWgZlxD7ULFb1qIZ8MASxgkZLMB3E23HjvHABJk90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=YxbBei7u; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Lnst1hBl"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3d484a58f6so206576766b.3
-        for <linux-media@vger.kernel.org>; Thu, 22 Feb 2024 00:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708590620; x=1709195420; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JfFl6Nv53g+4pvBn47IPDnhewZ3IGGDlWpzdfZ97p5g=;
-        b=Lnst1hBlLD79YokojBGfNqPw7HJcFf4vvVBdE+pIzLrxhHctNfj329ygaH3sIwgQvl
-         vRKF53P/lMlNwVhSrHhT8NHh2OrkPphIbvkF64H/v11UgnQGYt0MrFSjTKFcFlIydKRw
-         JnvMzzdu13lJpfs2PDot9fKjbkCHGj03RDkUb7Pyy4TOuceEbBC6kSbsx805xsBOt0+Y
-         o1VVdEyZD+IbWsCvxnT6yZMNBUsVs8eKlJR1gHy3rFFaupC/T1fxehmeJO4w2l3H43Jd
-         6UrJqI+V3WLNzetouS3T76Nsp5Go7eZz52i9s/OfFaP1E2qxjUNAPzPi3qecsy2gXnpX
-         hwDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708590620; x=1709195420;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JfFl6Nv53g+4pvBn47IPDnhewZ3IGGDlWpzdfZ97p5g=;
-        b=dGvB/ARUsJ1a1f6Yvc2QJv1Kc/q80lE4eQhpB8yLDDw1cUo3uK1wLmgfKDZGQhUW/y
-         X4J4YI0zOrNVRzkFtAB0Jz7GUYc5yv+odjgEc6mI+stZLMaUyKr7rlYCwaWF3dITzPEB
-         kYtQsQBXP64ngHG5BEnHpBW0GSVBg3Ez4mXT6e/HBGvxngwacmHO75sEpIbPr/IdeCns
-         orp4ORO1DJIlQTEWYVacgqEXJ7mcbL3k+0PcbE05C/lEA9Je6nKF6e7jAcQ3tJ79zBHU
-         Bf6oaVxUDULwQW0ZfFF1rBqJCDadwFQCRGSVzMh8hP6U3nI+tIvQEtNhDy+gng+3M1cx
-         4vYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmLknnGXzg3zQIpZLoC2YVNGG+428DbCX5aJdAMuFV6c9OFHHAxTKRy3v2imJ7+kKbhU8WGTbW0i9878x5xa4XuEUp731Br2RPbQQ=
-X-Gm-Message-State: AOJu0YzVep3KKcaLGm/jq7kWHQT1bIra6Y110IvI2Xssnq4Pnv0cCme3
-	ftzQpJDwIU0RQYpWrhQVTTZI1dkLrZQn3Ken/LLT9vveu24vs+Bq6QKEu8g883g=
-X-Google-Smtp-Source: AGHT+IGImmTMlOFAe/o1JwcZ1T7azTD8kxUe9dHesVYTOfpnRc19tZTN5OeMe5epAEbcaB63z54uMw==
-X-Received: by 2002:a17:906:d8a8:b0:a3f:4596:c3c8 with SMTP id qc8-20020a170906d8a800b00a3f4596c3c8mr2238058ejb.53.1708590620255;
-        Thu, 22 Feb 2024 00:30:20 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id wg4-20020a17090705c400b00a3d99415705sm5698736ejb.73.2024.02.22.00.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 00:30:19 -0800 (PST)
-Message-ID: <efee9c66-cb84-4f02-91b6-53f2db874b3b@linaro.org>
-Date: Thu, 22 Feb 2024 09:30:16 +0100
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="YxbBei7u"
+X-UUID: 6c6d3a20d16411eea4ad694c3f9da370-20240222
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=eJTIY6UNZ0Nfx/g9QDbHJIH8P8OdAqgDMBNw/656Zic=;
+	b=YxbBei7uLVFFCMaoTLKGMEYDDdzY9yL0HgAYaZqVcAUR1RoeFsEJ/0DZWbUmybjWb8xI0Ck/G8ouamJqYGQDij79oGWOLsOJYUyRuh5rYzD6sxC6FtmpHfawmTtcESpF1usUImlU09FCYOp344ZePStOB5PIIsh888ezqOn5PmY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:90bb2322-2a4e-4be0-be4e-90a41c77caad,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:-30,RT:1,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-54
+X-CID-META: VersionHash:6f543d0,CLOUDID:f1fb968f-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+	L:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:
+	1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 6c6d3a20d16411eea4ad694c3f9da370-20240222
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+	(envelope-from <yunfei.dong@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 739078227; Thu, 22 Feb 2024 17:26:14 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 22 Feb 2024 17:26:12 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 22 Feb 2024 17:26:11 +0800
+From: Yunfei Dong <yunfei.dong@mediatek.com>
+To: =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
+	<nfraprado@collabora.com>, Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Benjamin Gaignard
+	<benjamin.gaignard@collabora.com>, Nathan Hebert <nhebert@chromium.org>,
+	"Irui Wang" <irui.wang@mediatek.com>
+CC: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
+	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, "Yunfei
+ Dong" <yunfei.dong@mediatek.com>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3,2/2] media: mediatek: vcodec: adding lock to protect encoder context list
+Date: Thu, 22 Feb 2024 17:26:09 +0800
+Message-ID: <20240222092609.31382-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240222092609.31382-1-yunfei.dong@mediatek.com>
+References: <20240222092609.31382-1-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: media: Document bindings for HDMI RX
- Controller
-Content-Language: en-US
-To: Shreeya Patel <shreeya.patel@collabora.com>
-Cc: heiko@sntech.de, mchehab@kernel.org, robh@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
- jose.abreu@synopsys.com, nelson.costa@synopsys.com,
- dmitry.osipenko@collabora.com, sebastian.reichel@collabora.com,
- shawn.wen@rock-chips.com, kernel@collabora.com,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-dt@vger.kernel.org, linux-arm@lists.infradead.org
-References: <20240216094922.257674-1-shreeya.patel@collabora.com>
- <20240216094922.257674-3-shreeya.patel@collabora.com>
- <fd3b7ab7-3702-412f-947a-95396dbe1f4c@linaro.org>
- <1048c3-65d66380-b-49a25c80@188726434>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1048c3-65d66380-b-49a25c80@188726434>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--13.615200-8.000000
+X-TMASE-MatchedRID: z0G37ECbopzUzvcPSorAlMNrWpY804TG5Y0kb0hqatxh2fnHe1cil9Qt
+	cQ4PjYUQWKuGHPyQzf50EP8QGYj3VpDE8A8BMmXzmqt7FrgJsRCwR/wKmchi2aBp/T5dSs2TMQ3
+	Kf7SbGZLTsNEaOlKWV4gmzRSnu+RY6fubsV+A+k905zsoB1UKTnyzymMiw5QHuqWf6Nh7tmHWYa
+	Evasc9F84usm+jBqu+p0J7CJ90iKY3+hnFgqdP4p4CIKY/Hg3AGdQnQSTrKGPEQdG7H66TyF82M
+	XkEdQ777fmqcpTCdReCJk/mYjdcY8w8AudgejtsTF2ek+d25cneGbUoqusrqg==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--13.615200-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	D2B56A85D2E6446A874314D740850C81EF227FBBD0D1DB6E97D6695CCA6B71062000:8
+X-MTK: N
 
-On 21/02/2024 21:55, Shreeya Patel wrote:
->>> +  - hdmirx-5v-detection-gpios
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/rockchip,rk3588-cru.h>
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>> +    #include <dt-bindings/power/rk3588-power.h>
->>> +    #include <dt-bindings/reset/rockchip,rk3588-cru.h>
->>> +    hdmirx_ctrler: hdmirx-controller@fdee0000 {
->>
->> What is hdmirx-controller? Isn't this just hdmi@?
->>
-> 
-> Writing just hdmi would imply hdmi output I think so that name
-> will not be appropriate here.
-> 
->> Node names should be generic. See also an explanation and list of
->> examples (not exhaustive) in DT specification:
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->>
-> 
-> This documentation doesn't have any generic name for HDMI INPUT
-> but maybe we can use the name hdmi-receiver like some other existing
-> binding has it here :-
-> Documentation/devicetree/bindings/media/i2c/tda1997x.txt
+The ctx_list will be deleted when scp getting unexpected behavior, then the
+ctx_list->next will be NULL, the kernel driver maybe access NULL pointer in
+function vpu_enc_ipi_handler when going through each context, then reboot.
 
-Yes, it is fine. You did not respond to other comments, so I assume you
-agree with them.
+Need to add lock to protect the ctx_list to make sure the ctx_list->next isn't
+NULL pointer.
 
-Best regards,
-Krzysztof
+Fixes: 1972e32431ed ("media: mediatek: vcodec: Fix possible invalid memory access for encoder")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ .../platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 4 ++--
+ .../platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c    | 5 +++++
+ .../platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h    | 2 ++
+ drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c | 2 ++
+ 4 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
+index 9a11a2c248045..8d578b6902148 100644
+--- a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
+@@ -73,12 +73,12 @@ static void mtk_vcodec_vpu_reset_enc_handler(void *priv)
+ 
+ 	dev_err(&dev->plat_dev->dev, "Watchdog timeout!!");
+ 
+-	mutex_lock(&dev->dev_mutex);
++	mutex_lock(&dev->dev_ctx_lock);
+ 	list_for_each_entry(ctx, &dev->ctx_list, list) {
+ 		ctx->state = MTK_STATE_ABORT;
+ 		mtk_v4l2_vdec_dbg(0, ctx, "[%d] Change to state MTK_STATE_ABORT", ctx->id);
+ 	}
+-	mutex_unlock(&dev->dev_mutex);
++	mutex_unlock(&dev->dev_ctx_lock);
+ }
+ 
+ static const struct mtk_vcodec_fw_ops mtk_vcodec_vpu_msg = {
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
+index 5db2bf3db4c54..29524cd59ce8b 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
+@@ -177,7 +177,9 @@ static int fops_vcodec_open(struct file *file)
+ 	mtk_v4l2_venc_dbg(2, ctx, "Create instance [%d]@%p m2m_ctx=%p ",
+ 			  ctx->id, ctx, ctx->m2m_ctx);
+ 
++	mutex_lock(&dev->dev_ctx_lock);
+ 	list_add(&ctx->list, &dev->ctx_list);
++	mutex_unlock(&dev->dev_ctx_lock);
+ 
+ 	mutex_unlock(&dev->dev_mutex);
+ 	mtk_v4l2_venc_dbg(0, ctx, "%s encoder [%d]", dev_name(&dev->plat_dev->dev),
+@@ -212,7 +214,9 @@ static int fops_vcodec_release(struct file *file)
+ 	v4l2_fh_exit(&ctx->fh);
+ 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+ 
++	mutex_lock(&dev->dev_ctx_lock);
+ 	list_del_init(&ctx->list);
++	mutex_unlock(&dev->dev_ctx_lock);
+ 	kfree(ctx);
+ 	mutex_unlock(&dev->dev_mutex);
+ 	return 0;
+@@ -294,6 +298,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+ 
+ 	mutex_init(&dev->enc_mutex);
+ 	mutex_init(&dev->dev_mutex);
++	mutex_init(&dev->dev_ctx_lock);
+ 	spin_lock_init(&dev->irqlock);
+ 
+ 	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name), "%s",
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+index a042f607ed8d1..0bd85d0fb379a 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+@@ -178,6 +178,7 @@ struct mtk_vcodec_enc_ctx {
+  *
+  * @enc_mutex: encoder hardware lock.
+  * @dev_mutex: video_device lock
++ * @dev_ctx_lock: the lock of context list
+  * @encode_workqueue: encode work queue
+  *
+  * @enc_irq: h264 encoder irq resource
+@@ -205,6 +206,7 @@ struct mtk_vcodec_enc_dev {
+ 	/* encoder hardware mutex lock */
+ 	struct mutex enc_mutex;
+ 	struct mutex dev_mutex;
++	struct mutex dev_ctx_lock;
+ 	struct workqueue_struct *encode_workqueue;
+ 
+ 	int enc_irq;
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+index 84ad1cc6ad171..51bb7ee141b9e 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+@@ -47,12 +47,14 @@ static bool vpu_enc_check_ap_inst(struct mtk_vcodec_enc_dev *enc_dev, struct ven
+ 	struct mtk_vcodec_enc_ctx *ctx;
+ 	int ret = false;
+ 
++	mutex_lock(&enc_dev->dev_ctx_lock);
+ 	list_for_each_entry(ctx, &enc_dev->ctx_list, list) {
+ 		if (!IS_ERR_OR_NULL(ctx) && ctx->vpu_inst == vpu) {
+ 			ret = true;
+ 			break;
+ 		}
+ 	}
++	mutex_unlock(&enc_dev->dev_ctx_lock);
+ 
+ 	return ret;
+ }
+-- 
+2.18.0
 
