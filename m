@@ -1,50 +1,50 @@
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE494C615;
-	Thu, 22 Feb 2024 11:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641B04CB47;
+	Thu, 22 Feb 2024 11:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708601619; cv=none; b=GC+ik3t2K8vzNDGR3h+pVbwQsly2ieXRMmjXzT0A4r8A851D82rHaX/OhprOZ/yFcSet8AZdi8fR41Ie2riGHsrtQeJoUWENSBaQbOvSsyoKWwvjqRvLSXMWPn8uZm9s1jNQjzjGtqZ5IVMAbPhPAauiGD4QJavpDMncItLtcz4=
+	t=1708601620; cv=none; b=DNYXidQm5qkRy4BwD3KyVQOCtAG1FQ0O0GZ/nVIovo4RJ2C++lfLbvvdmZfV4C597Vmzfl249r0kpuaHruGYRdFMLerNbBfaY+bviArC9WPd6Dwe2uumN4yceA107QWClPaHJzhtWegMctDT9P7dUbdBnjWk7NU5uKwmw0PO+yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708601619; c=relaxed/simple;
-	bh=NkuknAzJS/tKWohPGjD0ggsJ9LC//lHX1riPoRArDVA=;
+	s=arc-20240116; t=1708601620; c=relaxed/simple;
+	bh=IJkveWM6BGN6FdJe2ONhxr2YmPcTsQQBqQhGtpl3Y/U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=igC8O3SHt+87TMyS7weeOsFpxp/1CqnFvmuVkQEMCkQI5XRxXh1UHc1vL9qQVSgyu3UxhF+8a1KPhFRZomjp9sIhdRIls2s9eDDoADfr3hpAitRQppHVXlIL8Zt0OQIrN0eVnZbnhA++7wqDUdOEp+pi01Ib1looqmwt4DQIQlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=HnHxeBrR; arc=none smtp.client-ip=198.47.19.142
+	 In-Reply-To:To:CC; b=NJmbiVVBvLEnOyekZeL3XqkkM4DOf4RXRGcB8aMUlgtom2Ja8livSdbFDkVqZmK4z5VB5Qormqg5n7zHcpEGHuGB+n7duP9Uxsk6htJPu7TfOVWthHc8to+7Mt2jQgFv3nRDTKRUrucfpg8bZJoOhFnBS25/ZFGajzaZUyRTE78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=hA7x9eCu; arc=none smtp.client-ip=198.47.23.248
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="HnHxeBrR"
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41MBXJoU027794;
-	Thu, 22 Feb 2024 05:33:19 -0600
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hA7x9eCu"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41MBXPNU018069;
+	Thu, 22 Feb 2024 05:33:25 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1708601599;
-	bh=hjMUTlmpymMtXih2bSHWH48S62epqs0t4UUSlAQaSfc=;
+	s=ti-com-17Q1; t=1708601605;
+	bh=EeqeNLJCo+T2og6j8I0EcRbq+KaLZvEdxwzz07GzA3c=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=HnHxeBrRL1m60sAWYTmXMZm1gU+wEB5s002vTWa5hj68MRZi38olVoRpFU4VqUwbE
-	 nkxDhv5Su5+d4l6TMxDGSooU8LUErYZVN/7T1LqDhBF7in0r+0wfe/YEGDrJeADNP+
-	 PSeYSo/0CKOxF7EYDuwE+MFXLQea+ssozng/Bl5A=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41MBXJIa014107
+	b=hA7x9eCu5xFogOE9XphtBoCRguY2G3CL4ezXXgbv6lqB5i/AUSq4hWRtbKytyPzle
+	 v5PxgLQ7h+T/v0F24Ss8MNDDPHK3osy79xMjqvBaXfpI1c4+HZvAqw5/F8wqDBy8F3
+	 I5dl893+EVrtB1kfIxEgnn5v4lAguSGCtHU/xQ48=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41MBXPL6057238
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 22 Feb 2024 05:33:19 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 22 Feb 2024 05:33:25 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 22
- Feb 2024 05:33:19 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2024 05:33:24 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 22 Feb 2024 05:33:19 -0600
+ Frontend Transport; Thu, 22 Feb 2024 05:33:24 -0600
 Received: from localhost (jluthra.dhcp.ti.com [172.24.227.217])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41MBXI4I091205;
-	Thu, 22 Feb 2024 05:33:18 -0600
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41MBXNla091279;
+	Thu, 22 Feb 2024 05:33:24 -0600
 From: Jai Luthra <j-luthra@ti.com>
-Date: Thu, 22 Feb 2024 17:01:23 +0530
-Subject: [PATCH RFC 07/21] media: ti: j721e-csi2rx: allocate DMA channel
- based on context index
+Date: Thu, 22 Feb 2024 17:01:26 +0530
+Subject: [PATCH RFC 10/21] media: ti: j721e-csi2rx: get number of contexts
+ from device tree
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240222-multistream-v1-7-1837ed916eeb@ti.com>
+Message-ID: <20240222-multistream-v1-10-1837ed916eeb@ti.com>
 References: <20240222-multistream-v1-0-1837ed916eeb@ti.com>
 In-Reply-To: <20240222-multistream-v1-0-1837ed916eeb@ti.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -79,59 +79,162 @@ CC: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Julien Massot <julien.massot@collabora.com>,
         Jayshri Pawar <jpawar@cadence.com>, Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1393; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=j/FVZDj0NTL0RooVFkoPWVyiLPQWJuy0qgzy23a+DCk=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBl1zDgjkgKNhaK9vvGfp6LiC19Sop3UFGjD99R6
- Vw3ghcnJV2JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZdcw4AAKCRBD3pH5JJpx
- RcBoEAC8/QUsQHYZ0+ro1rkl3HbyiG2cKH3JNb922sofqqly+8FiQQ1yGD6+QfdxUEY8Brfqd3J
- NQRl88JCwstd6E+F66sTTbFeoTHq5MtflkqdJLLzRr8kDQBhFYx+0+/P5sVqhAZtbJhJb7R4Lxi
- CmKRBz1NjPx5ATtvDK74+dEinWCx1Z9A6/YwnHF9dMdTTTlRtUIehaSVUZMCoFYfsXcw8vNEIw1
- yiC9gIXVtyJHH/EUKFLxWKGSubCqlQJMG264SLVMSimMofCIPt808tbijPrMKWUlqwU0pegbzj+
- UrNdR+rZl7yO4f/LX4GUxOLn3SyJY9vpFiIGiI6Vvxr6OXjdYoz2RSRpPnftQ1huIgrbtuU3qUD
- lH50g8AEzsC0iIkp9oPbTs2bg3mbo15/YDk8mmS79yN1ilWRmmq3fXs18fCFe1UNQkCByoxvdUG
- IQpAluicWKsyE8NmPBB2nmMCrQIMPF+7zLQLBm25dsAbtEddTzsAy/Bq8W/KgbTHHM+qy9HLmye
- UTqJaN/kuzLanNpFLYgi/cpzUT2oEIm3FLtr+myh6wDSf4MxPvrNite13goNMCN9UzcBwgbejnw
- XYKG9LPfDO6EEooK3vNXqCTRlcgBxJL5TB5+mW6xDOvgHx9HHNPyyPc0QdFN1XePE20/vssjC7K
- onTcapLpySzFOiA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4858; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=kxUrddGc08+EUx2GSspOKVpHM0K4NnSviF9UJ67LSDI=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBl1zDj2oBGiQHvwcIQqe0aQL4C4Gy6R1o7Gwp2p
+ wNerGedfQaJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZdcw4wAKCRBD3pH5JJpx
+ Rf13D/9d1JbYOzqd6/JpppkxEah4e41VjPtb6gOk9G16KLVPUYwxXGgs2woXe+ry2fZJpqp4V5d
+ pNUgV7YwCGoaDuqjWRiAlRr1NG6YLTPXwD7d2g0XxAflFd5nP+03gaZT7Qe9uQ67TkOopm6VwPL
+ GlEaH3TOGt8VAVy34aE2onaQqWYoj+dFZoScbxhMW0BYGxx9XYPPbDhTn/+/3k4BaMbU2tqP9iY
+ 2AO79qzjVvNLAvwYfVBPw+MLwGkokv5PKmgsyvNAXLqeTYU8bYrds81OzIf+40WLYUPqjnNXKKm
+ c5xF0zygAh3Vb2nh70GXKY79mQ8ylmo6JfXdUdphA108YibdJ4kV0YvPuIwwfM6uSrjSkEC7STR
+ B6A6h6H7sGzTtqhr6hGQf0oabu6zRn3fI3d4BT9kYjIIefnWayIMvyWvId4yKY05N5RU3g14tiY
+ fWyyMb9I6BGXoCCx/NnLP3VsSX0+93sojC4gnEE0kgWksHCX4+IXgOEU43c1GQ3iQa9ipoPTTsQ
+ Q9+67GQ0HBKNjWD58UJ1LDLFD7yU1Jzx1yZsnaTsw8CciUDdZQ4wpc1FwjDdrhgZUe3E+0nInhy
+ L2HH5r/dltEmxyeBGXZzJ8z4doZUElJR+uDekxH8tX6KHhtssRtMi32xgxdb663qofEzVMorLRZ
+ ZgVgTszaKoyvL7Q==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-With multiple contexts, there needs to be a different DMA channel for
-each context. Earlier, the DMA channel name was hard coded to "rx0" for
-the sake of simplicity. Generate the DMA channel name based on its index
-and get the channel corresponding to the context.
+Different platforms that use this driver might have different number of
+DMA channels allocated for CSI. So only as many DMA contexts can be used
+as the number of DMA channels available. Get the number of channels
+provided via device tree and only configure that many contexts, and
+hence only that many pads.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Co-developed-by: Jai Luthra <j-luthra@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../media/platform/ti/j721e-csi2rx/j721e-csi2rx.c  | 44 ++++++++++++++++------
+ 1 file changed, 32 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index e42941d8c457..80d7066100bf 100644
+index 1443338f4134..f6045888eed0 100644
 --- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
 +++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -1051,6 +1051,7 @@ static int ti_csi2rx_init_dma(struct ti_csi2rx_ctx *ctx)
- 	struct dma_slave_config cfg = {
- 		.src_addr_width = DMA_SLAVE_BUSWIDTH_16_BYTES,
- 	};
-+	char name[32];
- 	int ret;
+@@ -40,7 +40,7 @@
+ #define SHIM_PSI_CFG0_DST_TAG		GENMASK(31, 16)
  
- 	INIT_LIST_HEAD(&ctx->dma.queue);
-@@ -1059,7 +1060,8 @@ static int ti_csi2rx_init_dma(struct ti_csi2rx_ctx *ctx)
+ #define PSIL_WORD_SIZE_BYTES		16
+-#define TI_CSI2RX_NUM_CTX		1
++#define TI_CSI2RX_MAX_CTX		32
  
- 	ctx->dma.state = TI_CSI2RX_DMA_STOPPED;
+ /*
+  * There are no hard limits on the width or height. The DMA engine can handle
+@@ -53,8 +53,8 @@
  
--	ctx->dma.chan = dma_request_chan(ctx->csi->dev, "rx0");
-+	snprintf(name, sizeof(name), "rx%u", ctx->idx);
-+	ctx->dma.chan = dma_request_chan(ctx->csi->dev, name);
- 	if (IS_ERR(ctx->dma.chan))
- 		return PTR_ERR(ctx->dma.chan);
+ #define TI_CSI2RX_PAD_SINK		0
+ #define TI_CSI2RX_PAD_FIRST_SOURCE	1
+-#define TI_CSI2RX_NUM_SOURCE_PADS	1
+-#define TI_CSI2RX_NUM_PADS		(1 + TI_CSI2RX_NUM_SOURCE_PADS)
++#define TI_CSI2RX_MAX_SOURCE_PADS	TI_CSI2RX_MAX_CTX
++#define TI_CSI2RX_MAX_PADS		(1 + TI_CSI2RX_MAX_SOURCE_PADS)
  
+ #define DRAIN_TIMEOUT_MS		50
+ #define DRAIN_BUFFER_SIZE		SZ_32K
+@@ -112,14 +112,15 @@ struct ti_csi2rx_dev {
+ 	void __iomem			*shim;
+ 	struct mutex			mutex; /* To serialize ioctls. */
+ 	unsigned int			enable_count;
++	unsigned int			num_ctx;
+ 	struct v4l2_device		v4l2_dev;
+ 	struct media_device		mdev;
+ 	struct media_pipeline		pipe;
+-	struct media_pad		pads[TI_CSI2RX_NUM_PADS];
++	struct media_pad		pads[TI_CSI2RX_MAX_PADS];
+ 	struct v4l2_async_notifier	notifier;
+ 	struct v4l2_subdev		*source;
+ 	struct v4l2_subdev		subdev;
+-	struct ti_csi2rx_ctx		ctx[TI_CSI2RX_NUM_CTX];
++	struct ti_csi2rx_ctx		ctx[TI_CSI2RX_MAX_CTX];
+ 	/* Buffer to drain stale data from PSI-L endpoint */
+ 	struct {
+ 		void			*vaddr;
+@@ -473,7 +474,7 @@ static int csi_async_notifier_complete(struct v4l2_async_notifier *notifier)
+ 		return ret;
+ 
+ 	/* Create and link video nodes for all DMA contexts */
+-	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
++	for (i = 0; i < csi->num_ctx; i++) {
+ 		struct ti_csi2rx_ctx *ctx = &csi->ctx[i];
+ 		struct video_device *vdev = &ctx->vdev;
+ 
+@@ -1255,10 +1256,12 @@ static int ti_csi2rx_v4l2_init(struct ti_csi2rx_dev *csi)
+ 
+ 	csi->pads[TI_CSI2RX_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+ 
+-	for (i = TI_CSI2RX_PAD_FIRST_SOURCE; i < TI_CSI2RX_NUM_PADS; i++)
++	for (i = TI_CSI2RX_PAD_FIRST_SOURCE;
++	     i < TI_CSI2RX_PAD_FIRST_SOURCE + csi->num_ctx; i++)
+ 		csi->pads[i].flags = MEDIA_PAD_FL_SOURCE;
+ 
+-	ret = media_entity_pads_init(&sd->entity, ARRAY_SIZE(csi->pads),
++	ret = media_entity_pads_init(&sd->entity,
++				     TI_CSI2RX_PAD_FIRST_SOURCE + csi->num_ctx,
+ 				     csi->pads);
+ 	if (ret)
+ 		goto unregister_media;
+@@ -1344,8 +1347,9 @@ static int ti_csi2rx_init_ctx(struct ti_csi2rx_ctx *ctx)
+ 
+ static int ti_csi2rx_probe(struct platform_device *pdev)
+ {
++	struct device_node *np = pdev->dev.of_node;
+ 	struct ti_csi2rx_dev *csi;
+-	int ret, i;
++	int ret, i, count;
+ 
+ 	csi = devm_kzalloc(&pdev->dev, sizeof(*csi), GFP_KERNEL);
+ 	if (!csi)
+@@ -1367,13 +1371,29 @@ static int ti_csi2rx_probe(struct platform_device *pdev)
+ 	if (!csi->drain.vaddr)
+ 		return -ENOMEM;
+ 
++	/* Only use as many contexts as the number of DMA channels allocated. */
++	count = of_property_count_strings(np, "dma-names");
++	if (count < 0) {
++		dev_err(csi->dev, "Failed to get DMA channel count: %d\n",
++			count);
++		return count;
++	}
++
++	csi->num_ctx = count;
++	if (csi->num_ctx > TI_CSI2RX_MAX_CTX) {
++		dev_warn(csi->dev,
++			 "%u DMA channels passed. Maximum is %u. Ignoring the rest.\n",
++			 csi->num_ctx, TI_CSI2RX_MAX_CTX);
++		csi->num_ctx = TI_CSI2RX_MAX_CTX;
++	}
++
+ 	mutex_init(&csi->mutex);
+ 
+ 	ret = ti_csi2rx_v4l2_init(csi);
+ 	if (ret)
+ 		goto err_v4l2;
+ 
+-	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
++	for (i = 0; i < csi->num_ctx; i++) {
+ 		csi->ctx[i].idx = i;
+ 		csi->ctx[i].csi = csi;
+ 		ret = ti_csi2rx_init_ctx(&csi->ctx[i]);
+@@ -1412,12 +1432,12 @@ static int ti_csi2rx_remove(struct platform_device *pdev)
+ 	struct ti_csi2rx_dev *csi = platform_get_drvdata(pdev);
+ 	int i;
+ 
+-	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
++	for (i = 0; i < csi->num_ctx; i++) {
+ 		if (vb2_is_busy(&csi->ctx[i].vidq))
+ 			return -EBUSY;
+ 	}
+ 
+-	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++)
++	for (i = 0; i < csi->num_ctx; i++)
+ 		ti_csi2rx_cleanup_ctx(&csi->ctx[i]);
+ 
+ 	ti_csi2rx_cleanup_notifier(csi);
 
 -- 
 2.43.0
