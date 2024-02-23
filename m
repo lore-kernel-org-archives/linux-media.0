@@ -1,92 +1,242 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB4D224D8
-	for <linux-media@vger.kernel.org>; Fri, 23 Feb 2024 15:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D254128829
+	for <linux-media@vger.kernel.org>; Fri, 23 Feb 2024 16:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708701410; cv=none; b=iDKio3Rnc5ATzi0nYcpU0OtZ413s5dP2zL64wSC1cCCb4kxMMpFWaCOMcXKBduS+CfF+29Z7hpiV3rMur6evPUEvHY2lU+cZMptDcBGY7gb9aec7C5ryr0iEqi5yXy7js1zMDYhC+99MO9LWsw2/oHgSOM8j89e4gMdxhBgwSFA=
+	t=1708705851; cv=none; b=VcsTj1WSeh/Ws6UgFyE8Uy6qKHHS/JPx97/FUupSfsp0JK7/WC6XvbP4PHBivBzMLPd+VCZJ8mlVRCgr8M6KNXoF47MELyHmpKhi2PsgSux8XDXaB6/VBfUF9hxojLOQu06pvJenseQswW9traAfUXjK3PXd1KleDgCAn8O4lUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708701410; c=relaxed/simple;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SDNMXyESg04zMW13lUGp31ixt4j3ZrFLGIllJIDwn1KhEkC48gieJzpImBrdauc9EDqEvjAMPby0Q3cwbOIATRdg3E3YfOcVxUg7M0PWP7siat6ZmLXRLX2v/uLg1IcL9NclKuFtel/FXIMHCBeyjg5WDeronhKhVVK4puASFrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=wKegyywy; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
+	s=arc-20240116; t=1708705851; c=relaxed/simple;
+	bh=vyHsZLyltvAI581p/fIlTv1R0A+g2aiv2Iu2VCrUqzk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ihmc0OaDtLgS4UR644Fa1rWYihRAuVaTuzopWV9OW5NeK3fd+jlo+r6jzbV41DXCE+Xd/Q2sdc/2VI9OwlF1F3HHxMoJG06bNYsU7Sau0pVq+HVwLhkwtrdfTU2PV2+346hsh+qKNTeW5jhfhiRoCxggxnx6PoQb0iHOA2TEKxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=J6Jgbirq; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="wKegyywy"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-68f41af71ebso8816786d6.1
-        for <linux-media@vger.kernel.org>; Fri, 23 Feb 2024 07:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1708701408; x=1709306208; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=wKegyywyvzxBCMpEH6mg7fnlvwzdf+n7bZC70hQubDz6uov5tYL9r7Q12sAFrxbsne
-         x1yzMfag/puLpbkAw1n6L3NFcgG/wwZ+OiHFaC1U1eZwp7hgHl9AzMKwGc1CbyjuymKW
-         U9gW1rO3TO1QENZpgy/XWYT4Dy+l0SKnoFTv80RO/1yp6RhRgtXbxuLfSoX0pxiWaqfC
-         nd9RkZz6LLfoSoMQhEv0OGRGQWA3FoHth8didD1kxsvlzo6OD5trzN5WV3iJzdOKamxc
-         vHzLIckLR2onGU4xVuyxlkT0Bj0IpWIuI1orZb8P+cr6s9pe9BCQv1cNxmabN2afxbRJ
-         i6bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708701408; x=1709306208;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=D6xMjiLcPRt81/F7HmRkfOgUuHX922BY3TtzZ+OBYgMqlf0AKOGQTSFUgUCKMstiYR
-         AjE6edi2m8k9q1zl9UjJEzfir5Tq+nOldeDmca9eKAANvnfbkV2QL/wP6g+Oa1qN2KPZ
-         SS7uSY20eyqMONQ7ZUZRgBagh5EwzHdbRrHi+Zpzms0dnV3mTgNqvkslShZHgEAQbTp6
-         rbMnPRKzuqp3/Wh7rsATttikc0iHjzmMI2iQmq2+YTU7bDFHp1lhcW7aZ2/fM8QirSe2
-         LWKhJaaQyzCxvMqkJrjYcQ0Lhr+sYJbbAxda5k+iY/g5MK4iXLsp5RE5aQdsnSnZBapi
-         P0Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCXRIYMJqkW1p64Lg5MB1pc5ig5t3egwVRH9Ax7u66q9vzNW5UafhXiIVAVXPseUcMT6BH+0CNnnoJ8qBTlSPyK5dSPyUQsJiOkWvgw=
-X-Gm-Message-State: AOJu0YyfVQzH4x6CfxLKm0vBvx8qh1xLC0ghoFhLVwuzFAvQLL2zlRSt
-	d2XhjRMO6K00XT3h91oTwPm/2wbZW/kM0UncPmD5esEG5t7C/l0kcCXAgwUHwhw=
-X-Google-Smtp-Source: AGHT+IEOArsqxbbDXi0CJq2UV4huYHW/irLfo3OkqSuAjmKgi+/HuqzouPtNizFJz8rOHJy08Qp9yA==
-X-Received: by 2002:a05:6214:2b8a:b0:68f:ac2c:883c with SMTP id kr10-20020a0562142b8a00b0068fac2c883cmr116917qvb.52.1708701408215;
-        Fri, 23 Feb 2024 07:16:48 -0800 (PST)
-Received: from nicolas-tpx395.localdomain ([2606:6d00:11:3354::7a9])
-        by smtp.gmail.com with ESMTPSA id lb25-20020a056214319900b0068f9bb1a247sm4094941qvb.19.2024.02.23.07.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Feb 2024 07:16:47 -0800 (PST)
-Message-ID: <8c9099470cfaee67bf89f393b0d681ac18d3f333.camel@ndufresne.ca>
-Subject: Re: [RESEND PATCH v0 3/5] wave5 : Support runtime suspend/resume.
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: "jackson.lee" <jackson.lee@chipsnmedia.com>, "mchehab@kernel.org"
-	 <mchehab@kernel.org>, "linux-media@vger.kernel.org"
-	 <linux-media@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>, Nas Chung <nas.chung@chipsnmedia.com>
-Cc: "lafley.kim" <lafley.kim@chipsnmedia.com>, "b-brnich@ti.com"
-	 <b-brnich@ti.com>
-Date: Fri, 23 Feb 2024 10:16:47 -0500
-In-Reply-To: <SE1P216MB130310210B09C0EBE3B901C8ED552@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-References: <20240131013046.15687-1-jackson.lee@chipsnmedia.com>
-	 <20240131013046.15687-4-jackson.lee@chipsnmedia.com>
-	 <efe24b949a60034bf618eb3b8a8ba82e8a5dc99c.camel@ndufresne.ca>
-	 <SE1P216MB130326E2C4BA7E723A8955C9ED512@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <20489b01f1ac9ab3e434ea4c17b4e0ccd84afa36.camel@ndufresne.ca>
-	 <SE1P216MB1303CEEF6DFAB5FA7C69D645ED502@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <d5546b48ea829316a8dbd2ecc27bbf05e70e8188.camel@ndufresne.ca>
-	 <SE1P216MB1303932A0D3FC399179115D9ED572@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <be5ce95b023bcff24f53fdae55763bf4a3f6b1d7.camel@ndufresne.ca>
-	 <SE1P216MB13038F3890F8B4597465B394ED562@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <SE1P216MB13035B8E53454881C87059B9ED562@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <060d634c4c707c9ed93f0d97816407b0195daace.camel@ndufresne.ca>
-	 <SE1P216MB130310210B09C0EBE3B901C8ED552@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-User-Agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="J6Jgbirq"
+Received: from localhost.localdomain (unknown [IPv6:2001:b07:5d2e:52c9:cc1e:e404:491f:e6ea])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C4679CA;
+	Fri, 23 Feb 2024 17:30:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1708705837;
+	bh=vyHsZLyltvAI581p/fIlTv1R0A+g2aiv2Iu2VCrUqzk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=J6JgbirqTpJLW1D3wb7izcA053Pv1pgYjzG2fXBS8Dr7qqzx6xR10f65dPlOJd9PE
+	 bvkTHBHfJ1GUfxLec3BoWTQuLH9EawEbtyW13hpAlUoVww6mPiA01RMIkC1K44ECGQ
+	 MpaVgpUrQ8EHbt/UH6D4Mo6oVGuXoW9Y805cv/4Q=
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	David Plowman <david.plowman@raspberrypi.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v2 0/9] media: raspberrypi: Add support for PiSP Back End
+Date: Fri, 23 Feb 2024 17:30:02 +0100
+Message-ID: <20240223163012.300763-1-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+v1->v2:
+- Add Y12P and Y14P formats to yuv-luma.rst instead of documenting them
+  separately
+- Fix typos in formats and documentation
+- Adjust bindings as suggested during review
+- Fix admin-guide with an up-to-media media graph (remove the HOG node)
+- Add a patch to the driver to safely clean-up the video devices buffer queues
+  in case of errors
+  https://github.com/raspberrypi/linux/commit/9fcfb8ee070ecc2ca9b4fcf4629c4545f9cf178e
+
+
+Add support for the Raspberry Pi PiSP Back End memory-2-memory ISP.
+Documentation available at:
+https://datasheets.raspberrypi.com/camera/raspberry-pi-image-signal-processor-specification.pdf
+
+The PiSP Back End is the memory-2-memory ISP found on Raspberry Pi 5. In
+conjunction with the PiSP Front End, for which a driver is expected to
+hit mainline in the next weeks, it implements the Raspberry Pi 5 camera
+system.
+
+The ISP is fully supported in the Raspberry Pi libcamera version and once
+patches for the PiSP Front End will hit mainline the support will land in
+mainline libcamera as well.
+
+Patch based on media-stage master branch.
+
+A branch is available at
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git
+#pispbe/media-staging/be-upstream
+
+-------------------- Hans' build scripts build summary ------------------------
+date:                   Fri Feb  9 14:29:10 CET 2024
+media-tree git repo:    git://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git
+media-tree git branch:  jmondi/pispbe/media-staging/be-upstream
+media-tree git hash:    728775b95062efdecedad4df4013a8db5382d470
+v4l-utils git hash:     4a6a3725dd192759c2998311b00440b84c60df57
+edid-decode git hash:   5f723267e04deb3aa9610483514a02bcee10d9c2
+gcc version:            i686-linux-gcc (GCC) 13.1.0
+ccache version:         ccache version 4.7.5
+smatch/sparse repo:     git://repo.or.cz/smatch.git
+smatch version:         v0.5.0-8575-g7162b9ec
+sparse version:         v0.5.0-8575-g7162b9ec
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 745fc7cf5ba1a1a841374c61e8470852232584c1
+host hardware:          x86_64
+host os:                6.1.0-10-amd64
+
+linux-git-arm: OK
+linux-git-arm64: OK
+linux-git-powerpc64: OK
+linux-git-i686: OK
+linux-git-x86_64: OK
+no-acpi.config: OK
+no-of.config: OK
+no-pm.config: OK
+no-pm-sleep.config: OK
+no-debug-fs.config: OK
+sparse: WARNINGS:
+
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+
+smatch: WARNINGS:
+
+drivers/media/i2c/adv7180.c:1526 adv7180_probe() warn: 'client->irq' from request_threaded_irq() not released on lines: 1526.
+drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
+drivers/media/platform/st/sti/hva/hva-hw.c:412 hva_hw_probe() warn: 'hva->clk' from clk_prepare() not released on lines: 412.
+
+COMPILE_TEST: OK
+strcpy/strncpy/strlcpy: OK
+abi-compliance: ABI OK
+pahole: ABI OK
+spec-git: OK
+kerneldoc: WARNINGS:
+
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'partition' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'skip' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'intra_inter' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'tx32p' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'tx16p' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'tx8p' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'y_mode' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'uv_mode' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'comp' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'comp_ref' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'single_ref' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'mv_mode' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'filter' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'mv_joint' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'sign' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'classes' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'class0' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'bits' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'class0_fp' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'fp' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'class0_hp' description in 'v4l2_vp9_frame_symbol_counts'
+include/media/v4l2-vp9.h:144: warning: Excess struct member 'hp' description in 'v4l2_vp9_frame_symbol_counts'
+
+
+date:                   Fri Feb  9 15:38:02 CET 2024
+-------------------------------------------------------------------------------
+
+--------------------------- V4L2 compliance -----------------------------------
+pi@raspberrypi:~/v4l-utils$ ./build/utils/v4l2-compliance/v4l2-compliance -d /dev/video4
+v4l2-compliance 1.27.0-5174, 64 bits, 64-bit time_t
+v4l2-compliance SHA: d700deb14368 2024-01-18 12:19:05
+
+Compliance test for pispbe device /dev/video0:
+Total for pispbe device /dev/video4: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video1:
+Total for pispbe device /dev/video4: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video2:
+Total for pispbe device /dev/video4: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video3:
+Total for pispbe device /dev/video4: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video4:
+Total for pispbe device /dev/video4: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video5:
+Total for pispbe device /dev/video0: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video6:
+Total for pispbe device /dev/video0: 47, Succeeded: 47, Failed: 0, Warnings: 0
+
+Compliance test for pispbe device /dev/video7:
+Total for pispbe device /dev/video0: 47, Succeeded: 47, Failed: 0, Warnings: 0
+-------------------------------------------------------------------------------
+*** BLURB HERE ***
+
+Dave Stevenson (2):
+  media: uapi: Add MIPI packed 12bit luma
+  media: uapi: Add MIPI packed 14bit luma
+
+Jacopo Mondi (6):
+  media: uapi: pixfmt-luma: Document MIPI CSI-2 packing
+  media: uapi: Add a pixel format for BGR48 and RGB48
+  media: uapi: Add meta pixel format for PiSP BE config
+  media: uapi: Add PiSP Compressed RAW Bayer formats
+  media: dt-bindings: Add bindings for Raspberry Pi PiSP Back End
+  media: admin-guide: Document the Raspberry Pi PiSP BE
+
+Naushir Patuck (1):
+  media: raspberrypi: Add support for PiSP BE
+
+ .../admin-guide/media/raspberrypi-pisp-be.dot |   20 +
+ .../admin-guide/media/raspberrypi-pisp-be.rst |  112 +
+ .../admin-guide/media/v4l-drivers.rst         |    1 +
+ .../bindings/media/raspberrypi,pispbe.yaml    |   63 +
+ .../userspace-api/media/v4l/meta-formats.rst  |    1 +
+ .../media/v4l/metafmt-pisp-be.rst             |   46 +
+ .../userspace-api/media/v4l/pixfmt-bayer.rst  |    1 +
+ .../media/v4l/pixfmt-pisp-comp-rggb.rst       |   70 +
+ .../userspace-api/media/v4l/pixfmt-rgb.rst    |   39 +
+ .../media/v4l/pixfmt-yuv-luma.rst             |   52 +
+ MAINTAINERS                                   |    8 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/raspberrypi/Kconfig    |    5 +
+ drivers/media/platform/raspberrypi/Makefile   |    3 +
+ .../platform/raspberrypi/pisp_be/Kconfig      |   13 +
+ .../platform/raspberrypi/pisp_be/Makefile     |    6 +
+ .../platform/raspberrypi/pisp_be/pisp_be.c    | 1859 +++++++++++++++++
+ .../raspberrypi/pisp_be/pisp_be_formats.h     |  519 +++++
+ drivers/media/v4l2-core/v4l2-common.c         |    2 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   15 +
+ .../linux/media/raspberrypi/pisp_be_config.h  |  531 +++++
+ .../linux/media/raspberrypi/pisp_common.h     |  199 ++
+ include/uapi/linux/videodev2.h                |   21 +
+ 24 files changed, 3588 insertions(+)
+ create mode 100644 Documentation/admin-guide/media/raspberrypi-pisp-be.dot
+ create mode 100644 Documentation/admin-guide/media/raspberrypi-pisp-be.rst
+ create mode 100644 Documentation/devicetree/bindings/media/raspberrypi,pispbe.yaml
+ create mode 100644 Documentation/userspace-api/media/v4l/metafmt-pisp-be.rst
+ create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-pisp-comp-rggb.rst
+ create mode 100644 drivers/media/platform/raspberrypi/Kconfig
+ create mode 100644 drivers/media/platform/raspberrypi/Makefile
+ create mode 100644 drivers/media/platform/raspberrypi/pisp_be/Kconfig
+ create mode 100644 drivers/media/platform/raspberrypi/pisp_be/Makefile
+ create mode 100644 drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
+ create mode 100644 drivers/media/platform/raspberrypi/pisp_be/pisp_be_formats.h
+ create mode 100644 include/uapi/linux/media/raspberrypi/pisp_be_config.h
+ create mode 100644 include/uapi/linux/media/raspberrypi/pisp_common.h
+
+--
+2.43.0
 
