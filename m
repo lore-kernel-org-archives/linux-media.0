@@ -1,83 +1,148 @@
-Received: from new-mail.astralinux.ru (new-mail.astralinux.ru [51.250.53.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CD422339;
-	Mon, 26 Feb 2024 09:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.250.53.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F22C129A75
+	for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 09:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708938820; cv=none; b=jDeqqnpXUVbR7mPyYMZYaNrwdu9QKlc4KgFEXHKFgXGngq1RX8xcKiiDZDlmswLFhahUPcAn0A9Tb5aRgBMFQ7hh6EIf+R8ohf9sY9IqC2FdFF0eVmLfC++TavNCUJEFh6wZ+KiKM8v3IejfdnhZJLLH2c0NrqGoDiSuylPzhV8=
+	t=1708938920; cv=none; b=ZR4b9p70hbNhoqpL2zKbzZnd+6XtEgSQg+o0D2LKMst6SWr6P1OmCQIlio/rlsLoy09/YuBLdVcvxcGRo0aeizZqLFTfX5JjvdB7toiizWfJUnHIHhPCH4Z+ddKB1/q40JWSktCIiPa2hiMkE4MHwaGCRVLKn519EORyMhKdDmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708938820; c=relaxed/simple;
-	bh=6Rh0/f6Q0JKY6bLRR8SKhYzN82pnSyVW5t4yFwbYTJE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LTqcnWcd6FuL0nYQrVgYmR4IFCj6sk7t78tdW9Svi2un/liREwbyHNcjIR9cJ5xCGQa/6AtBSyTXcWynDFgL1JlABu2avpUfRQl3f4qwgZe1v/HrGcZIQgO6ISqQdSSJKgdelrDEgdvxGYFZcmA2upzhaajR3yO6tzu3nPgXuTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=51.250.53.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from rbta-msk-lt-302690.astralinux.ru (unknown [10.177.232.106])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4TjvnF43hVzqSN2;
-	Mon, 26 Feb 2024 12:04:17 +0300 (MSK)
-From: Alexandra Diupina <adiupina@astralinux.ru>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexandra Diupina <adiupina@astralinux.ru>,
-	stable@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Martiros Shakhzadyan <vrzh@vrzh.net>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH 5.15] media: atomisp: sh_css: check ia_css_pipeline_create_and_add_stage() return code
-Date: Mon, 26 Feb 2024 12:03:23 +0300
-Message-Id: <20240226090323.21799-1-adiupina@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1708938920; c=relaxed/simple;
+	bh=G566LV+/F51/W9KYFln95LPDYYcArDHrm4mzHyYxoZ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u2nO6n3WPViV+lCsEgkcZRtP/1QL3Mu+gj3khta7Pg6Fq4KNVMh9Pl+t9Ib32gsBDCgrDzEF/JO83Dv+rqL2r+1o2SJLcBWFH8zCRsqt+ht7AEzrGcQHhJYhv7Pr+uxVKesTThq3C7oXXRe+LM9RVE/RZo21SgVft29eO2/5bjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rzmvm2gp; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rzmvm2gp"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5655c7dd3b1so4408596a12.0
+        for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 01:15:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708938917; x=1709543717; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wlH1Ter4o/LuhmUGIySGl8jfbKhW6NJPyE0QFDQ/6s4=;
+        b=rzmvm2gpLi5FHXiOATNBh0HPBz6oZK3tydPONzg486EPi+f+whxmorKHyAtJCQgihS
+         waGCktYzu1er1GADpg9n5pLevWKBJlwlxC8weJkbQtOCifNuGOq3a5KhzZad7gjedCyo
+         +lgMyZ3g7rxBGrOgnYDCeSyT0eBz0Vi6S6IXVBs2OvYnihxMHkFxaLL19g9YzkJR6mye
+         RsixNiZZ9zIPc293Rq6jkJD6WUaYd0tO/GSgychq79NUPetImQU6weoikR8qiiVflAeb
+         OYmkLfYGwr0/Diz36Vdv/QeGAyW3JWo8yV0HgHmGSv3Y77LCnx4VnhUvwDe4ZMEAfdZf
+         whsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708938917; x=1709543717;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wlH1Ter4o/LuhmUGIySGl8jfbKhW6NJPyE0QFDQ/6s4=;
+        b=JqgLw/nL0Pz2LnZujZs3g3ZpX2O6sBK5NiLhD8CVvJw1cYrb2xd08amngWBobW+Nd3
+         MqQJgN2nm7GTh9DibTupvJlGsjRIR+AjcTmxWgeKBDTlYowiw7epzaH3WCQ+Gu7GOdMn
+         eISOyvdMhDKGF1Q8Aa97CVQv6mb9vBE0sU6Ot4xBfdBOu8CAcgTl2DpILaSNuuI/hijn
+         PWrRmbpddHBYfAHbtqg9rNn9QixNKqkSxpSm49ktC8y5JhfZHvMZRGgxDGM/F2o1kHEt
+         slTXUKXXgC7l75ztI6/vQ2slWD7EC72dGsgwgYpN0jsWYOsgTbSrNssbgbCmEiIRCpFJ
+         H0DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXu8Ifdt3GCbBn5nzMdl4sWjXWH/FCOqX3ZPNYIRDcKYApZsGet0fVHETUFPcdnCmo8Fb/DjyWrQw1dCVn4BtbWHZA2NFLG6uc7rRo=
+X-Gm-Message-State: AOJu0YyvSBVjMitkYY2iA12pQZ0mPGGRR9gFyrAaIQTwLGz+g6VFlm2h
+	iC4CqkAI/dFSzXohXZ8GMxNYXqs0EHEtozKmMPY3nVt3v+2IdBfv8gipA2k3C1U=
+X-Google-Smtp-Source: AGHT+IEXUVR/N8Ym4kzVlbEuwaD2lWsgOYP5/F36Su6nMdyWMJ//J8As/t2DKFX23EsFXq+ZVVEfZg==
+X-Received: by 2002:a17:906:1745:b0:a3f:2168:214b with SMTP id d5-20020a170906174500b00a3f2168214bmr5890928eje.1.1708938916861;
+        Mon, 26 Feb 2024 01:15:16 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id tl18-20020a170907c31200b00a437d3e975esm167009ejc.210.2024.02.26.01.15.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Feb 2024 01:15:16 -0800 (PST)
+Message-ID: <310cefcb-a4d5-4f4f-a482-ba2ff08a57f6@linaro.org>
+Date: Mon, 26 Feb 2024 10:15:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 9/9] ARM: dts: chameleonv3: Add video device nodes
+Content-Language: en-US
+To: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <panikiel@google.com>, airlied@gmail.com,
+ akpm@linux-foundation.org, conor+dt@kernel.org, daniel@ffwll.ch,
+ dinguyen@kernel.org, hverkuil-cisco@xs4all.nl,
+ krzysztof.kozlowski+dt@linaro.org, maarten.lankhorst@linux.intel.com,
+ mchehab@kernel.org, mripard@kernel.org, robh+dt@kernel.org,
+ tzimmermann@suse.de
+Cc: devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ chromeos-krk-upstreaming@google.com, ribalda@chromium.org
+References: <20240221160215.484151-1-panikiel@google.com>
+ <20240221160215.484151-10-panikiel@google.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240221160215.484151-10-panikiel@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-DrWeb-SpamScore: -100
-X-DrWeb-SpamState: legit
-X-DrWeb-SpamDetail: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgtddvucetufdoteggodetrfcurfhrohhfihhlvgemucfftfghgfeunecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeetlhgvgigrnhgurhgrucffihhuphhinhgruceorgguihhuphhinhgrsegrshhtrhgrlhhinhhugidrrhhuqeenucggtffrrghtthgvrhhnpeduleetfeehffekueeuffektefgudfgffeutdefudfghedvieffheehleeuieehteenucffohhmrghinheplhhinhhugihtvghsthhinhhgrdhorhhgnecukfhppedutddrudejjedrvdefvddruddtieenucfrrghrrghmpehhvghloheprhgsthgrqdhmshhkqdhlthdqfedtvdeiledtrdgrshhtrhgrlhhinhhugidrrhhupdhinhgvthepuddtrddujeejrddvfedvrddutdeimeegkedukeekpdhmrghilhhfrhhomheprgguihhuphhinhgrsegrshhtrhgrlhhinhhugidrrhhupdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopegrughiuhhpihhnrgesrghsthhrrghlihhnuhigrdhruhdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrg
- hkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehvrhiihhesvhhriihhrdhnvghtpdhrtghpthhtohephhhvvghrkhhuihhlqdgtihhstghoseigshegrghllhdrnhhlpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsthgrghhinhhgsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhvtgdqphhrohhjvggttheslhhinhhugihtvghsthhinhhgrdhorhhg
-X-DrWeb-SpamVersion: Vade Retro 01.423.251#02 AS+AV+AP Profile: DRWEB; Bailout: 300
-X-AntiVirus: Checked by Dr.Web [MailD: 11.1.19.2307031128, SE: 11.1.12.2210241838, Core engine: 7.00.62.01180, Virus records: 12425787, Updated: 2024-Feb-26 07:45:37 UTC]
 
-commit 912680064f94 ("media: atomisp: make sh_css similar to Intel Aero driver")
-removes the affected code, but in versions
-tags/v5.8-rc1~10^2~220 - tags/v5.17-rc1~114^2~261
-there is no check for the return value of the
-ia_css_pipeline_create_and_add_stage() function.
+On 21/02/2024 17:02, Paweł Anikiel wrote:
+> Add device nodes for the video system present on the Chameleon v3.
+> It consists of six framebuffers and two Intel Displayport receivers.
+> 
+> Signed-off-by: Paweł Anikiel <panikiel@google.com>
+> ---
 
-ia_css_pipeline_create_and_add_stage() may return an
-error code, so check and return it on error.
+...
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> +		dprx_sst: dp-receiver@c0064000 {
+> +			compatible = "intel,dprx-20.0.1";
+> +			reg = <0xc0064000 0x800>;
+> +			interrupt-parent = <&dprx_sst_irq>;
+> +			interrupts = <0 IRQ_TYPE_EDGE_RISING>;
+> +			intel,max-link-rate = <0x1e>;
 
-Fixes: 7796e455170e ("media: staging: media: atomisp: Fix alignment and line length issues")
-Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
----
- drivers/staging/media/atomisp/pci/sh_css.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Rate is not in hex! Rate is in Hz, at least usually...
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css.c b/drivers/staging/media/atomisp/pci/sh_css.c
-index ba25d0da8b81..8502adb75a5a 100644
---- a/drivers/staging/media/atomisp/pci/sh_css.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css.c
-@@ -7912,6 +7912,10 @@ create_host_regular_capture_pipeline(struct ia_css_pipe *pipe)
- 						   out_frames, in_frame, NULL);
- 		err = ia_css_pipeline_create_and_add_stage(me, &stage_desc,
- 							   NULL);
-+		if (err) {
-+			IA_CSS_LEAVE_ERR_PRIVATE(err);
-+			return err;
-+		}
- 	} else if (need_pp && current_stage) {
- 		in_frame = current_stage->args.out_frame[0];
- 		err = add_capture_pp_stage(pipe, me, in_frame,
--- 
-2.30.2
+Fix your bindings...
+
+Best regards,
+Krzysztof
 
