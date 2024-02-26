@@ -1,159 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D90208B6
-	for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 10:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B761CFB6
+	for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 10:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708944525; cv=none; b=OYdSfMeTublAGJhcZgrKl7OG8BBPIKv4eL+wimUoG7Q48MaNZLqHuIql8qZGQSo6GPVghWmCOiMxWtho/JALhDwXWoevQRJKJe8L6FLzAW8ZvRhf6y2ZaRyInuarBKxsPx+yOINpvCSAflGN/HwdPYgvjX52lIhZr9+LNZ2WqZ8=
+	t=1708945196; cv=none; b=W1kxw8cD1YcZBi7/F3h1dEnIl4e9XAFhoWrirkwZAO7chwT1Rc7IJ1RtdRB8QxyVeEjOOycnPscU6qCbR9qPAYxw4sW9A2VtGaU1tjnZkVlT/f5agST8fnY1V3fFOTGd2HbUWsSbowNpnRyvOD2eWNZWENhKwuMFWVgeDazvfuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708944525; c=relaxed/simple;
-	bh=CgLSVjg8YzV7wsZ4kQ2CtgEGGOtghXgQ/KD7jkKWfsc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nF2/kqaKlzlDnytkgIEdveFdyk+yM7ifSzrGHzGfAW5i5b4Jnqi3sTbgjYKyVe7oNMzf6SltIWYFZ08o6X6u19IuSwsUfdQDTU5KhiPdx1s8YgJdovr9JvcSZKVqulpQGLMCdO2E1bRhEFQkDS2WHm8Zb02akHg65ZCj1wgxIZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DOwwVIS8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1708945196; c=relaxed/simple;
+	bh=Gr4SEf1HRZuWiHK525jc8aBUZa59KPy1tNkRmXagChc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eiFgTZV53LE4iwb/CYnhDol8oxjX2efPpr9UgXWs/Ll0nKTYG8c1Kwz6BBZh8i9M1NYcan8I2hQKebSxwLC9ZVmeEqfCm1Tt7ht0/2wuXQMZb2Ik0pdOoqyy5CJgrXX/uKMJ0OWAQHMviTfeSMENjtaIFQB/fA97zSjeDVuJeMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1Zl/3znj; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DOwwVIS8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708944522;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5OE8GoZ9j6WhBuZWvbJNk/RKp/M9fLXpjDr094aLbX0=;
-	b=DOwwVIS8+oCQ0PYOhfMqauWyLyd5lIA1A+P2Vnyyt2cwC4s04rHZdi8Wg8e9zx+IcUEbn3
-	rL2P2hPzDyOPWTWsDgwLO8BU/Ux4/dRlwL++ua8+srkSf5fqwOPiCkJSnPYXv317z9IDLB
-	97C4tsG3DvOAKP812A0E6c5J4DoFOPc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-142-uoENT9lbOtWlbf2wrzj7FA-1; Mon, 26 Feb 2024 05:48:41 -0500
-X-MC-Unique: uoENT9lbOtWlbf2wrzj7FA-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a3e6f366aceso152971666b.3
-        for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 02:48:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1Zl/3znj"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7c7db34d162so2008139f.2
+        for <linux-media@vger.kernel.org>; Mon, 26 Feb 2024 02:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1708945193; x=1709549993; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9HBNX3ZrqYqah+wR2ZXlErwOwwFl2gjzLKDMAIKzAXQ=;
+        b=1Zl/3znj1NiuInaDNmsNiSi8tg/90EYPECXbL9Y1xGrO2QVBptLOwVfjLuA8AM0/xr
+         eK3LNtRs15Th37cUzECuItOgaCjdg/CU5duq0PR77dvF/xeLI5oWG8Snqh+aAw3weY4o
+         NARwRoMz8FvNwR3Luzf7f2/9kpmOkIW4TLQgqjB+5U49Zo2xLdyiraAChsPbjTT1eowD
+         Rj8/zRgpi9zDl6hDo+3OajYdp+bJ7Wd0OVqEwMFIuBtz4lOkjbXyfVNDerRHOgo91Hu1
+         0HanJryWyu3cJv/uftLN6vgvlgiVnam4Jp/qNQJs5p1CfCceksAL1uxZV7KjqRdI8/9J
+         /htA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708944520; x=1709549320;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OE8GoZ9j6WhBuZWvbJNk/RKp/M9fLXpjDr094aLbX0=;
-        b=b49MTjWyyiMfmSra67vQqjpblD+QRYtW7syq8kQvKzJh2uBFTIBm0I8v/YHwgeYunA
-         RcEWET+PEI4AJYmab3m14mVN8dgs9YH5q2N67JMDUCFirUDyKXpWTvKJMX1Atnh/fEJT
-         BsUb7k9o4uBkmvPB1YTUVg8n5O9ymaXYQp/D0ffpGLr6Yt9E2LNONkOzHsT9JPsfMbQ8
-         Mjv3n6tyoB5A95IASAXR8LvFn3BrHFvah5qDe9YwFiTjlxdoBeh0PleOfAIc6pXc7jH4
-         XWvj4K5g+X80l2uAnu0geTl3f0O3HI9LvCZsYbH+SS4jsRQ+3zs9yFoh6XQVWPgsKYZV
-         /KZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWk8T7tQb2jwkBLrTNgPEw+nBkKIC+fareiYad6gE18Tki8ABsPUwPrmCuuFUOwPibc15t10CwdRPg4UsvvhbhVsDLy8OG0GYNpaTg=
-X-Gm-Message-State: AOJu0YygyB+qaCRsxZsAwiklJTbOKsipyDrFoU+B1ksBcj89U1soJgOO
-	cPWvKi+oiePTUl0S4uwhTCJO4HeC7RxWRhQZCFcrQTGiuUMBtrLKSW3nrstUmpZ3ltSnJm7LAhb
-	fYiTAt1U0iCHQ3+TYBOPUQLMboI0tIzSANnDkZYEuehnw9JYCUHVuE6Kye6Lh
-X-Received: by 2002:a17:906:5609:b0:a43:7df:1ad0 with SMTP id f9-20020a170906560900b00a4307df1ad0mr2785211ejq.10.1708944520267;
-        Mon, 26 Feb 2024 02:48:40 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFG00i0E8QDj4z2oVxDIc+1nq6MzBGh9+dsfWWEcglt6+KLB0qC1ou2UUdnvPuYHPSpzRDLnw==
-X-Received: by 2002:a17:906:5609:b0:a43:7df:1ad0 with SMTP id f9-20020a170906560900b00a4307df1ad0mr2785200ejq.10.1708944520040;
-        Mon, 26 Feb 2024 02:48:40 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id rf14-20020a1709076a0e00b00a4339b8b1bbsm1143238ejc.212.2024.02.26.02.48.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Feb 2024 02:48:39 -0800 (PST)
-Message-ID: <182c1e88-0bc2-48a8-89d8-5b0e4b68c6b9@redhat.com>
-Date: Mon, 26 Feb 2024 11:48:38 +0100
+        d=1e100.net; s=20230601; t=1708945193; x=1709549993;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9HBNX3ZrqYqah+wR2ZXlErwOwwFl2gjzLKDMAIKzAXQ=;
+        b=OOEzxlcU2Rki/bV64+cR6njIGHiCdf8mYAHI/oB+BSSR4L8t/ngfP6RGeuy/54q7cX
+         kG0WaDFFsfba0ZjvXBo3kqTlDR6XK+QGbctUQzaM9WkFMgOE13JvQo3pvWp/Ly73Y6LI
+         2nOF35QaSWwf7y4SKWYcCd/00MPR42tuZXECL3Y/pYuVnTl4Fq9C7iRyvXrc3rusFQjK
+         NMFAeacO8Q6uD/R1jZMfbYCO5QnNjzanPijCl2LQl7FlZzFsnrHTbDtkvvxShbd4Rke/
+         NzUCNKsIofPxaCAnmGpbVULjsM+4HcUSAdg2yJVOkA2Fx6FlSnwuFiXgni46gcGHKd9p
+         iP1w==
+X-Forwarded-Encrypted: i=1; AJvYcCXYFOFIYajvqvZyCPenVQBgVuFGG+Bo/BMHIUiN5ZQCL2kb3TlGvYO1X+Czkj/ALZIp5Z/79Tps4sogzd+ZfVrqugX3Nc2A7WbGOj0=
+X-Gm-Message-State: AOJu0YyFE7bu46evWiRCqVvK87aTOGcej79XWBq91aEPX35+8OiLBgpm
+	oTbijkKnRGKZ9g/3vofikh1kmRPn6A62NsiRbS39NyHeHmxPomz/qLNIzy/3FFiGM7Cg+grvy8V
+	DgtFB2kX3pzpv8dNUmulPrr95KlcC+H1nwRmd
+X-Google-Smtp-Source: AGHT+IGPWqkD9tP0s2DR5YozsFzpUTq3DqbX3426VLgw1SJtB5jrdYmWVGilTio3nCJ+QrJqqp33UcQOcDrbUDfAfdM=
+X-Received: by 2002:a05:6e02:348e:b0:363:c1ce:1a6 with SMTP id
+ bp14-20020a056e02348e00b00363c1ce01a6mr8258336ilb.13.1708945193051; Mon, 26
+ Feb 2024 02:59:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] staging: media: atomisp: Fix formatting issues and minor
- code issue
-Content-Language: en-US
-To: Jonathan Bergh <bergh.jonathan@gmail.com>
-Cc: mchehab@kernel.org, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240225155359.41435-1-bergh.jonathan@gmail.com>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240225155359.41435-1-bergh.jonathan@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240221160215.484151-1-panikiel@google.com> <20240221160215.484151-9-panikiel@google.com>
+ <13aeb2ff-72f4-49d9-b65e-ddc31569a936@linaro.org>
+In-Reply-To: <13aeb2ff-72f4-49d9-b65e-ddc31569a936@linaro.org>
+From: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <panikiel@google.com>
+Date: Mon, 26 Feb 2024 11:59:42 +0100
+Message-ID: <CAM5zL5q0oKoTMR0jSwYVAChCOJ9iKYPRFiU1vH4qDqhHALKz4w@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] media: dt-bindings: Add Intel Displayport RX IP
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: airlied@gmail.com, akpm@linux-foundation.org, conor+dt@kernel.org, 
+	daniel@ffwll.ch, dinguyen@kernel.org, hverkuil-cisco@xs4all.nl, 
+	krzysztof.kozlowski+dt@linaro.org, maarten.lankhorst@linux.intel.com, 
+	mchehab@kernel.org, mripard@kernel.org, robh+dt@kernel.org, 
+	tzimmermann@suse.de, devicetree@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, chromeos-krk-upstreaming@google.com, 
+	ribalda@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jonathan,
+On Mon, Feb 26, 2024 at 10:13=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/02/2024 17:02, Pawe=C5=82 Anikiel wrote:
+> > The Intel Displayport RX IP is a part of the DisplayPort Intel FPGA IP
+> > Core. It implements a DisplayPort 1.4 receiver capable of HBR3 video
+> > capture and Multi-Stream Transport. The user guide can be found here:
+> >
+> > https://www.intel.com/programmable/technical-pdfs/683273.pdf
+> >
+> > Signed-off-by: Pawe=C5=82 Anikiel <panikiel@google.com>
+> > ---
+> >  .../devicetree/bindings/media/intel,dprx.yaml | 160 ++++++++++++++++++
+> >  1 file changed, 160 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/intel,dprx.=
+yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/intel,dprx.yaml b/=
+Documentation/devicetree/bindings/media/intel,dprx.yaml
+> > new file mode 100644
+> > index 000000000000..31025f2d5dcd
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/intel,dprx.yaml
+> > @@ -0,0 +1,160 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/intel,dprx.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Intel DisplayPort RX IP
+> > +
+> > +maintainers:
+> > +  - Pawe=C5=82 Anikiel <panikiel@google.com>
+> > +
+> > +description: |
+> > +  The Intel Displayport RX IP is a part of the DisplayPort Intel FPGA =
+IP
+> > +  Core. It implements a DisplayPort 1.4 receiver capable of HBR3 video
+> > +  capture and Multi-Stream Transport.
+> > +
+> > +  The IP features a large number of configuration parameters, found at=
+:
+> > +  https://www.intel.com/content/www/us/en/docs/programmable/683273/23-=
+3-20-0-1/sink-parameters.html
+> > +
+> > +  The following parameters have to be enabled:
+> > +    - Support DisplayPort sink
+> > +    - Enable GPU control
+> > +  The following parameters' values have to be set in the devicetree:
+> > +    - RX maximum link rate
+> > +    - Maximum lane count
+> > +    - Support MST
+> > +    - Max stream count (only if Support MST is enabled)
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: intel,dprx-20.0.1
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  intel,max-link-rate:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Max link rate configuration parameter
+>
+> Please do not duplicate property name in description. It's useless.
+> Instead explain what is this responsible for.
+>
+> Why max-link-rate would differ for the same dprx-20.0.1? And why
+> standard properties cannot be used?
+>
+> Same for all questions below.
 
-On 2/25/24 16:53, Jonathan Bergh wrote:
-> This patch fixes the following code style and formatting issues:
->  * Ensure multiline block comments are correctly formatted
->  * Remove extra braces not required for single line conditional statements
-> 
-> Signed-off-by: Jonathan Bergh <bergh.jonathan@gmail.com>
+These four properties are the IP configuration parameters mentioned in
+the device description. When generating the IP core you can set these
+parameters, which could make them differ for the same dprx-20.0.1.
+They are documented in the user guide, for which I also put a link in
+the description. Is that enough? Or should I also document these
+parameters here?
 
+>
+> > +
+> > +  intel,max-lane-count:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Max lane count configuration parameter
+> > +
+> > +  intel,multi-stream-support:
+> > +    type: boolean
+> > +    description: Multi-Stream Transport support configuration paramete=
+r
+> > +
+> > +  intel,max-stream-count:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Max stream count configuration parameter
+> > +
+> > +  port:
+> > +    $ref: /schemas/graph.yaml#/properties/port
+> > +    description: SST main link
+>
+> I don't understand why you have both port and ports. Shouldn't this be
+> under ports?
 
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-(I'll apply this to my atomisp-branch the next time I'm working on that branch).
-
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/staging/media/atomisp/pci/atomisp_drvfs.c         | 2 +-
->  drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c | 7 +++----
->  drivers/staging/media/atomisp/pci/atomisp_subdev.c        | 3 ++-
->  3 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-> index 1df534bf54d3..8ef25d2f8b87 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-> @@ -34,7 +34,7 @@
->   *        bit 0: binary list
->   *        bit 1: running binary
->   *        bit 2: memory statistic
-> -*/
-> + */
->  struct _iunit_debug {
->  	struct device_driver	*drv;
->  	struct atomisp_device	*isp;
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> index 139ad7ad1dcf..804ffff245f3 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-> @@ -1416,13 +1416,12 @@ static int gmin_get_config_var(struct device *maindev,
->  	if (efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
->  		status = efi.get_variable(var16, &GMIN_CFG_VAR_EFI_GUID, NULL,
->  					  (unsigned long *)out_len, out);
-> -	if (status == EFI_SUCCESS) {
-> +	if (status == EFI_SUCCESS)
->  		dev_info(maindev, "found EFI entry for '%s'\n", var8);
-> -	} else if (is_gmin) {
-> +	else if (is_gmin)
->  		dev_info(maindev, "Failed to find EFI gmin variable %s\n", var8);
-> -	} else {
-> +	else
->  		dev_info(maindev, "Failed to find EFI variable %s\n", var8);
-> -	}
->  
->  	return ret;
->  }
-> diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.c b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> index a87fc74159e2..f8efaef2c055 100644
-> --- a/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> +++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.c
-> @@ -394,7 +394,8 @@ int atomisp_subdev_set_selection(struct v4l2_subdev *sd,
->  			 * (of the desired captured image before
->  			 * scaling, or 1 / 6 of what we get from the
->  			 * sensor) in both width and height. Remove
-> -			 * it. */
-> +			 * it.
-> +			 */
->  			crop[pad]->width = roundup(crop[pad]->width * 5 / 6,
->  						   ATOM_ISP_STEP_WIDTH);
->  			crop[pad]->height = roundup(crop[pad]->height * 5 / 6,
-
+I put both so that you can use the shorter port property when the
+device only has one port (i.e. no MST support). It would work fine
+without it. If you think that's unnecessary, I can remove it (and use
+the ports property even if there is only one).
