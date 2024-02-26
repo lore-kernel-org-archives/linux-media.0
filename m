@@ -1,176 +1,123 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40016605B6;
-	Mon, 26 Feb 2024 08:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA6278662;
+	Mon, 26 Feb 2024 09:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708937478; cv=none; b=MZlBg2WdbPIUG5bKLfrnCtp5XRDKbmkSZ+5mzxZQU1auT30QI6IqDc6KDjXMP4QYx8GYUehh99nswPfxuLnC6SuiXdmmv1gHFNmbI+ra1pV7d8zuz14oNjgH6inJEt98fHNrrhP/+lUcigPFsxi/yV3KE2DlR3zlprBqaAip5z0=
+	t=1708938200; cv=none; b=HP9zVWDG7ythrn6s9ExZPF9ws6fSYxpF4x/Xww76X6UwqgamtaV+8QWClTGpcKWz+c15/UUtKsvqDfJ3qE4Ikbk9SP77huasoe3CY99e/bGnpp6tWfGnIyKoaFcLxxBpsz87inSjiuGxSF3zLmWeyeXXl5tiZV2kZ+koCA5wPac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708937478; c=relaxed/simple;
-	bh=69Yw1aGUDbMiByJ8bXl1a+YybdcLlKVKJyaZh3sjvBQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YpO3FGPBfHs1C7ZXyDXiIF5sOWLOequslojU6F/eKRfTupGVnEoiGPaj2yeQ4zYBBeYFcaXS1Gu8fVx+bGa9zL/a9YCqeR5BLX8qNO91pQnsUPo0444KCv4dfLrVcpZRRzf6Vrq5IkebgHKK16fDxMCXkFCZWD5pZF3BG9BCFUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lvHN8dC1; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lvHN8dC1"
-X-UUID: 2b425bf2d48411eea528b71b88a53856-20240226
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=TI4Sub82GKGYrfNFpRmeVDDz0BTTgCAOx01Ilx4UOG8=;
-	b=lvHN8dC1VADtvi06Nb2og9B/iWgSrhLrqu/z/7LJzVCW+KzPN6HOgITzsKA34Ar1WNfMpM/XuU3Mo4AEIWFy40JCh2jJQSfIoLB1A7trcMkD1EzlPydVbgXo1pWhwnGZj3/pEVV+UZLNwKAwl2XFWbPRKsRH1/hjdKmWgQebbDk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:b66c7613-e79b-48c2-b444-b90f0ccf81e0,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6f543d0,CLOUDID:a55137ff-c16b-4159-a099-3b9d0558e447,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2b425bf2d48411eea528b71b88a53856-20240226
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-	(envelope-from <shawn.sung@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 590960795; Mon, 26 Feb 2024 16:51:02 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 26 Feb 2024 16:51:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 26 Feb 2024 16:51:01 +0800
-From: Shawn Sung <shawn.sung@mediatek.com>
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?q?Christian=20K=C3=B6nig?=
-	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
-	<linaro-mm-sig@lists.linaro.org>, Hsiao Chien Sung
-	<shawn.sung@mediatek.corp-partner.google.com>
-Subject: [PATCH 08/11] drm/mediatek: Rename files "mtk_drm_plane.*" to "mtk_plane.*"
-Date: Mon, 26 Feb 2024 16:50:56 +0800
-Message-ID: <20240226085059.26850-9-shawn.sung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240226085059.26850-1-shawn.sung@mediatek.com>
-References: <20240226085059.26850-1-shawn.sung@mediatek.com>
+	s=arc-20240116; t=1708938200; c=relaxed/simple;
+	bh=J1KT8GnwQs/4uWEXvCjHmvjMvN5a8ew6jtWQPjQ2muQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H6F4l5LIT7zsEOpLqaxlAZm2DDEQbFj9kTMN7cctRn0oRcTlk1hzR6BOCMqXk9kDyu+J/w1LF644YCG6EUKrzQNxlmlccIB6Cv0dJkE+kep+dPk1Q6ekfPbI/sBiD5TBvURX1LadF+XdgihBI5x4up+YINjkX8fUQF9Y7AAs358=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2EA7C433C7;
+	Mon, 26 Feb 2024 09:03:19 +0000 (UTC)
+Message-ID: <c8fa257a-5259-4f4a-99dd-6a277899f6a6@xs4all.nl>
+Date: Mon, 26 Feb 2024 10:03:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] em28xx-dvb: fix DVB adapter device name
+Content-Language: en-US, nl
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+References: <cover.1708422122.git.mchehab@kernel.org>
+ <973f454413c31ba5b6464c289ee24b01465abaff.1708422122.git.mchehab@kernel.org>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <973f454413c31ba5b6464c289ee24b01465abaff.1708422122.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Hsiao Chien Sung <shawn.sung@mediatek.corp-partner.google.com>
+Hi Mauro,
 
-Rename files mtk_drm_plane.* to mtk_plane.*.
+On 20/02/2024 10:46, Mauro Carvalho Chehab wrote:
+> This will be used for uevent, so it needs to be filled with the
+> device name, and not with it's parent ID.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>  drivers/media/usb/em28xx/em28xx-dvb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/em28xx/em28xx-dvb.c b/drivers/media/usb/em28xx/em28xx-dvb.c
+> index 9fce59979e3b..759c04fbd8cf 100644
+> --- a/drivers/media/usb/em28xx/em28xx-dvb.c
+> +++ b/drivers/media/usb/em28xx/em28xx-dvb.c
+> @@ -980,7 +980,7 @@ static int em28xx_register_dvb(struct em28xx_dvb *dvb, struct module *module,
+>  
+>  	/* register adapter */
+>  	result = dvb_register_adapter(&dvb->adapter,
+> -				      dev_name(&dev->intf->dev), module,
+> +				      em28xx_boards[dev->model].name, module,
 
-Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.corp-partner.google.com>
----
- drivers/gpu/drm/mediatek/Makefile                         | 2 +-
- drivers/gpu/drm/mediatek/mtk_crtc.c                       | 2 +-
- drivers/gpu/drm/mediatek/mtk_crtc.h                       | 2 +-
- drivers/gpu/drm/mediatek/mtk_ddp_comp.c                   | 2 +-
- drivers/gpu/drm/mediatek/mtk_disp_drv.h                   | 2 +-
- drivers/gpu/drm/mediatek/{mtk_drm_plane.c => mtk_plane.c} | 2 +-
- drivers/gpu/drm/mediatek/{mtk_drm_plane.h => mtk_plane.h} | 0
- 7 files changed, 6 insertions(+), 6 deletions(-)
- rename drivers/gpu/drm/mediatek/{mtk_drm_plane.c => mtk_plane.c} (99%)
- rename drivers/gpu/drm/mediatek/{mtk_drm_plane.h => mtk_plane.h} (100%)
+It is not clear what the 'adapter name' should be: looking at how this is
+used today it is either the name of the card or the name of the driver module
+(KBUILD_MODNAME or a hardcoded string).
 
-diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index bbdf1e59ed84..0e198c00c6f2 100644
---- a/drivers/gpu/drm/mediatek/Makefile
-+++ b/drivers/gpu/drm/mediatek/Makefile
-@@ -12,7 +12,7 @@ mediatek-drm-y := mtk_disp_aal.o \
- 		  mtk_ddp_comp.o \
- 		  mtk_drm_drv.o \
- 		  mtk_drm_gem.o \
--		  mtk_drm_plane.o \
-+		  mtk_plane.o \
- 		  mtk_dsi.o \
- 		  mtk_dpi.o \
- 		  mtk_ethdr.o \
-diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.c b/drivers/gpu/drm/mediatek/mtk_crtc.c
-index 7bc4f76718e5..96af194d0d49 100644
---- a/drivers/gpu/drm/mediatek/mtk_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_crtc.c
-@@ -23,7 +23,7 @@
- #include "mtk_crtc.h"
- #include "mtk_ddp_comp.h"
- #include "mtk_drm_gem.h"
--#include "mtk_drm_plane.h"
-+#include "mtk_plane.h"
- 
- /*
-  * struct mtk_crtc - MediaTek specific crtc structure.
-diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.h b/drivers/gpu/drm/mediatek/mtk_crtc.h
-index 5865e4955471..cc8ca7c2056c 100644
---- a/drivers/gpu/drm/mediatek/mtk_crtc.h
-+++ b/drivers/gpu/drm/mediatek/mtk_crtc.h
-@@ -9,7 +9,7 @@
- #include <drm/drm_crtc.h>
- #include "mtk_ddp_comp.h"
- #include "mtk_drm_drv.h"
--#include "mtk_drm_plane.h"
-+#include "mtk_plane.h"
- 
- #define MTK_MAX_BPC	10
- #define MTK_MIN_BPC	3
-diff --git a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
-index 98398993500f..ab846a9f98c5 100644
---- a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
-+++ b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
-@@ -16,7 +16,7 @@
- 
- #include "mtk_disp_drv.h"
- #include "mtk_drm_drv.h"
--#include "mtk_drm_plane.h"
-+#include "mtk_plane.h"
- #include "mtk_ddp_comp.h"
- #include "mtk_crtc.h"
- 
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-index 90e64467ea8f..d9b5a6ad3bea 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-@@ -9,7 +9,7 @@
- #include <linux/soc/mediatek/mtk-cmdq.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
--#include "mtk_drm_plane.h"
-+#include "mtk_plane.h"
- #include "mtk_mdp_rdma.h"
- 
- int mtk_aal_clk_enable(struct device *dev);
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_plane.c
-similarity index 99%
-rename from drivers/gpu/drm/mediatek/mtk_drm_plane.c
-rename to drivers/gpu/drm/mediatek/mtk_plane.c
-index 63a7a24468c1..95a4328a9b0b 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
-+++ b/drivers/gpu/drm/mediatek/mtk_plane.c
-@@ -17,7 +17,7 @@
- #include "mtk_ddp_comp.h"
- #include "mtk_drm_drv.h"
- #include "mtk_drm_gem.h"
--#include "mtk_drm_plane.h"
-+#include "mtk_plane.h"
- 
- static const u64 modifiers[] = {
- 	DRM_FORMAT_MOD_LINEAR,
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.h b/drivers/gpu/drm/mediatek/mtk_plane.h
-similarity index 100%
-rename from drivers/gpu/drm/mediatek/mtk_drm_plane.h
-rename to drivers/gpu/drm/mediatek/mtk_plane.h
--- 
-2.18.0
+This driver appears to be the only one that uses dev_name, but I did not
+do an exhaustive search, so there may be more.
 
+In any case, I think this should be consistent and documented somewhere.
+
+Personally, I think using the model/card name would be best.
+
+But how does this relate to the name reported by FE_GET_INFO? Is it
+supposed to be the same name? Is that handled correctly or documented
+somewhere?
+
+Regards,
+
+	Hans
+
+>  				      device, adapter_nr);
+>  	if (result < 0) {
+>  		dev_warn(&dev->intf->dev,
