@@ -1,95 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F00E79B79;
-	Wed, 28 Feb 2024 18:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8565F4C63;
+	Thu, 29 Feb 2024 02:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709146461; cv=none; b=THHDO+1ush0JD7QuaE99CDW7LCEMUvo/ZfuO4kBVlYizdheZVzTiE1hFyCA3jhnxbNXVVRbcykesZZGZeQM2wSfm9fQAR+Ot957SpVvxnod+ty6CkrbqMRyWWJgBg93q3Hy32YKH6TvRaf6m09gpjft/giUlFLmETIsH1tarrko=
+	t=1709174135; cv=none; b=X4dljd7uzf4nrdqopHLUnyWJ+f8nSfQhsuH7xFAiPEX6u9aqDQqwstewcwb2MmUayUnGXk0Mnm25+pjFQpApCIKO78XIyzKGusWiuEn26L+37cm2eTB/vkqHnn/O1PDksjGTwC23AV8zP42f+oZUH9eLStf/UsahPmEarFcE5CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709146461; c=relaxed/simple;
-	bh=UUQNFDIoLGj8E8dC+r/j0MRZe+6zHvZowh5kECkoeHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DsUF2wblztxqzlEmIyn9pmbbOrMxUINnqtvbg4aJCXbKZmBl5vTlChRGHnQRatdaeDQco2Ve82cn9Y4J9KNN5eQS6itKupWXY6MKDz9irBeREC93HfushxR3PWXg+11QwmoDI3eQPXCvgLdhQK1EWe9LMRs8B8boiJ67/GAopek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLw0kHgZ; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1709174135; c=relaxed/simple;
+	bh=DsAyPJ37OxxoBvZR0yBQGZ3qATSDJP1looy5w/QK7K4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PtL9NbIUlagBBqRJIfHl5Xfp/cPcTDClMMMs6xww9Feezk6SWfq8aTrcB66kjKuGhjUlJu/GDIAGZ0R1u0GwtxOiNdiMSKKMENfGzBD18RqdvCZQp2Lnrgzhv32ley0KNpqtjlvj0YRR1e7RtLYLvg37yLvx5bApN2vttyR7jrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=qzRo017Z; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLw0kHgZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709146460; x=1740682460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UUQNFDIoLGj8E8dC+r/j0MRZe+6zHvZowh5kECkoeHE=;
-  b=cLw0kHgZVt4Zf/Jb9OboIRX44RHxTDiwyN9XblB6ffJT6PoXbDaVVUF6
-   0LG98xkhyHJ7TXTjo0Pq+lSi906AV7PUMC3PVzs0XZx2ymFhTNc+2DUDj
-   7mYjfay94dfj0qDSynam6f9kP0ro42e2lnDM7KCB3m5QWMvmA2uaz3hLA
-   YGMfHaGO5T65CKQE+ctj5tDYXQm9S2f/K7H89Ngo5/xEDkYxaQAKTjeS4
-   0TFz8QK/+DRvfJklVgg9/EpLkyOGNw0AzaZntmpr1KA42mtKpXKy1Khcf
-   OetPGcemwIq+M1fPT79Y1LfJ1wGqh4QhfYJQFHCoXu7giS19d6WUOIEIg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10998"; a="26035563"
-X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
-   d="scan'208";a="26035563"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 10:54:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,191,1705392000"; 
-   d="scan'208";a="7584476"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2024 10:54:17 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 0815F11F855;
-	Wed, 28 Feb 2024 20:54:14 +0200 (EET)
-Date: Wed, 28 Feb 2024 18:54:14 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: tomas.winkler@intel.com, mchehab@kernel.org, wentong.wu@intel.com,
-	hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: v6.8.0-rc6: mei_ace_probe / mei_vsc_probe: do not call blocking
- ops when !TASK_RUNNING
-Message-ID: <Zd-BVmoFOiCxA632@kekkonen.localdomain>
-References: <Zd9wUv1zSJ59WS8i@shine.dominikbrodowski.net>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="qzRo017Z"
+X-UUID: 31f81170d6ab11eeb8927bc1f75efef4-20240229
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=XaVzzEKLqlVT7sak1W3gpXJYjbW2WBJmYyNteM6/XIA=;
+	b=qzRo017ZhtAtQEAEiH9V5M3Bu2iOnqoqnDxpLbNM+uLqSdIRmeMxmy7Xf7Jx0mFYFOi/4fpMqEo51gx8qKFnFP13U3HoUCS+pmGeuzQ3Zr0rttP/CJnbMYPZk1OewkrLuuK03QyUml/NubfZXehtXmrSg9fJRF+hiHbu0hIYatw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:400ac54b-6d3f-4d38-adb7-56a2aa67a05c,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6f543d0,CLOUDID:cbded48f-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 31f81170d6ab11eeb8927bc1f75efef4-20240229
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 457524622; Thu, 29 Feb 2024 10:35:26 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 29 Feb 2024 10:35:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 29 Feb 2024 10:35:24 +0800
+From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>
+CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-media@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, Jason-ch Chen <jason-ch.chen@mediatek.com>,
+	Johnson Wang <johnson.wang@mediatek.com>, "Jason-JH . Lin"
+	<jason-jh.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, Nancy
+ Lin <nancy.lin@mediatek.com>, Shawn Sung <shawn.sung@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Fei Shao
+	<fshao@chromium.org>
+Subject: [PATCH 3/3] drm/mediatek: Add gamma support for MT8195
+Date: Thu, 29 Feb 2024 10:35:22 +0800
+Message-ID: <20240229023522.15870-4-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240229023522.15870-1-jason-jh.lin@mediatek.com>
+References: <20240229023522.15870-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zd9wUv1zSJ59WS8i@shine.dominikbrodowski.net>
+Content-Type: text/plain
+X-MTK: N
 
-Hi Dominik,
+Since MT8195 compatible is in the single enum group, we have to add its
+compatible into mediatek-drm component binding table to ensure that
+it can be bound as a ddp_comp.
 
-On Wed, Feb 28, 2024 at 06:41:38PM +0100, Dominik Brodowski wrote:
-> Hi,
-> 
-> thanks for your work getting the Intel IPU6 camera system - such as found
-> within my Dell Inc. XPS 9315 - to work with an upstream kernel. Much
-> appreciated!
-> 
-> On Linux 6.8.0-rc6+ (as of this morning, HEAD is at cf1182944c7c), though,
-> I get the following warning during boot with everything built into the
-> kernel:
-> 
-> ------------[ cut here ]------------
-> do not call blocking ops when !TASK_RUNNING; state=2 set at [<000000003688dc79>] prepare_to_wait_event+0x54/0x1a0
-> WARNING: CPU: 5 PID: 122 at kernel/sched/core.c:10099 __might_sleep+0x59/0x60
-> Modules linked in:
-> CPU: 5 PID: 122 Comm: kworker/u24:3 Tainted: G                T  6.8.0-rc6+ #2
-> Hardware name: Dell Inc. XPS 9315/00KRKP, BIOS 1.1.3 05/11/2022
-> Workqueue: events_unbound deferred_probe_work_func
-> RIP: 0010:__might_sleep+0x59/0x60
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The issue should be fixed by this patch:
-<URL:https://git.linuxtv.org/sailus/media_tree.git/commit/?h=ipu6&id=e2dc122949ce2efd05910c0c78617534c3258158>.
-
-I've posted to the LKML, too, so hopefully we have it merged soon.
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index 14a1e0157cc4..93303bff8f34 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -707,6 +707,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+ 	  .data = (void *)MTK_DISP_GAMMA, },
+ 	{ .compatible = "mediatek,mt8183-disp-gamma",
+ 	  .data = (void *)MTK_DISP_GAMMA, },
++	{ .compatible = "mediatek,mt8195-disp-gamma",
++	  .data = (void *)MTK_DISP_GAMMA, },
+ 	{ .compatible = "mediatek,mt8195-disp-merge",
+ 	  .data = (void *)MTK_DISP_MERGE },
+ 	{ .compatible = "mediatek,mt2701-disp-mutex",
 -- 
-Regards,
+2.18.0
 
-Sakari Ailus
