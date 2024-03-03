@@ -1,107 +1,110 @@
 Received: from mail.rmail.be (mail.rmail.be [85.234.218.189])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B7B67A19
-	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D349067C45
+	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.234.218.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709479632; cv=none; b=ejQPvBu5atP7y0QLvWnV386cMioG+EgHMlDpglpJWaMPX1squ4/gynrW6Ou/Q67UzmUaZJdGuIMFVoejFo0nIBcdgVQJEFSr5HDMQ4f1eIUrcezArckTdYrbIMw/HieO8OBl5AVihsy1pygtlKWKicslJOWtKIrpWEkWIrUCVL0=
+	t=1709479634; cv=none; b=muzOUeYBUpWsS3iFL1Nmzzhe/cgMbhIMnI6kedIil2tJC5c1Zu0RumrkZQeinVZ94eWGzxBLnscezKKjeq6MyDQc5jOH4xKVpIOUgFfaMaFaFYxwyeAiuSUFh1r3CGZazljHYcV5XL6aZYTpPNW0qb2UcC70YRLRUaRfIHxxAJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709479632; c=relaxed/simple;
-	bh=OGhdpW6OcJjwHh5QITNmyo1TrTirXVsBVYaeSrASBn8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IVD6qZFeJZjB5WHsTBX8nxQnk4uaXNYAelXK+fSXEdDUMUDhJWHmjNSqNTjWohmLkINt5UXgfHuRlJA+PBt9xOYYkJN8MJ+m0okQLXJFatmnI9yEpLbQHwQi7Z0YEn1vTaGmRrhw+Sl5Ku9Z6J6AXcji84cEwi2pBWyegoZAIFY=
+	s=arc-20240116; t=1709479634; c=relaxed/simple;
+	bh=hVD+MQ3Nmyg00kdJ/KfUXqYT3S7rGc2znPVcIZPzNHs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rRyQ2zpKN+8x4cTBnW19kHB12oEgE9picq3mbSMcHgZQc3DmF4OW/Fzn23JLyR6pyMWijTk8ZQLpV8pkSzhPnuQ1yVqEA759bNgUx+ivMm+9TSRI4Y71Avqqfxe2AT8MmGdW5oGYJbNFMhC37VD75HVFSNP9A2Jhs0Tr+Yz/E3M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be; spf=pass smtp.mailfrom=rmail.be; arc=none smtp.client-ip=85.234.218.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rmail.be
 Received: from localhost.rmail.be (unknown [10.238.9.208])
-	by mail.rmail.be (Postfix) with ESMTP id 80F154C074;
-	Sun,  3 Mar 2024 16:26:59 +0100 (CET)
+	by mail.rmail.be (Postfix) with ESMTP id AA0504C07C;
+	Sun,  3 Mar 2024 16:27:09 +0100 (CET)
 From: Maarten Vanraes <maarten@rmail.be>
 To: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
 	linux-media@vger.kernel.org
 Cc: Kieran Bingham <kbingham@kernel.org>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Umang Jain <umang.jain@ideasonboard.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Maarten Vanraes <maarten@rmail.be>
-Subject: [RFC PATCH 00/13] bcm2835-codec: driver for HW codecs
-Date: Sun,  3 Mar 2024 16:09:55 +0100
-Message-ID: <20240303152635.2762696-1-maarten@rmail.be>
+Subject: [RFC PATCH 02/13] staging: mmal-vchiq: Update mmal_parameters.h with recently defined params
+Date: Sun,  3 Mar 2024 16:09:57 +0100
+Message-ID: <20240303152635.2762696-3-maarten@rmail.be>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20240303152635.2762696-1-maarten@rmail.be>
+References: <20240303152635.2762696-1-maarten@rmail.be>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-These patches add a bcm2835-codec driver in order to use the hw codecs.
-This makes eg playing a h264 1080p movie playable with some cpu cycles
-to spare, instead of dropping frames and 100% cpu usage.
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-I tested with ffmpeg encode and decode, and I'm using it on my RPI4
-mediabox.
+mmal_parameters.h hasn't been updated to reflect additions made
+over the last few years. Update it to reflect the currently
+supported parameters.
 
-I cherry-picked some patches from the rpi kernel and put these on top of
-Umang's git tree (to have bcm2835-isp driver) and then rebased the whole
-thing to media_stage and then squashed it a bit to these 13 patches.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-The reason I put this on top of Umang's patches for bcm2835-isp is
-because of common dependencies.
+staging: vc04_services: mmal-vchiq: Update parameters list
 
-I know that this will not be accepted until the vchiq is unstaged, but
-I'd like some comments on these patches in order to have this accepted
-faster after vchiq is unstaged.
+Adds in a couple of new MMAL parameter defines.
 
-Umang's git tree I based it on: https://git.uk.ideasonboard.com/uajain/linux/src/branch/uajain/rpi4/staging-next/isp
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maarten Vanraes <maarten@rmail.be>
+---
+ .../vchiq-mmal/mmal-parameters.h              | 38 ++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-I pushed my work on github if anyone wishes to try it out: https://github.com/alien999999999/linux/tree/rpi4-codec/media_stage/v1
-
-Thanks in advance for any comment,
-
-Maarten Vanraes (AL13N on #linux-media )
-
-
-Dave Stevenson (11):
-  staging: mmal-vchiq: Avoid use of bool in structures
-  staging: mmal-vchiq: Update mmal_parameters.h with recently defined
-    params
-  staging: mmal-vchiq: Fix memory leak in error path
-  media: videodev2.h: Add a format for column YUV4:2:0 modes
-  staging/vchiq-mmal: Add buffer flags for interlaced video
-  staging/vchiq-mmal: Add parameters for interlaced video support
-  staging/vchiq-mmal: Add the deinterlace image effects enums
-  staging/mmal-vchiq: Rationalise included headers
-  staging: mmal-vchiq: Reset buffers_with_vpu on port_enable
-  vc04_services: vchiq-mmal: Add defines for mmal_es_format flags
-  staging: vc04_services: Add a V4L2 M2M codec driver
-
-Phil Elwell (1):
-  staging: vchiq_arm: Add 36-bit address support
-
-detule (1):
-  staging: vchiq_arm: Usa a DMA pool for small bulks
-
- .../media/v4l/pixfmt-nv12-col128.rst          |  215 +
- .../media/v4l/pixfmt-yuv-planar.rst           |   12 +
- .../userspace-api/media/v4l/yuv-formats.rst   |   19 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |    2 +
- drivers/staging/vc04_services/Kconfig         |    2 +
- drivers/staging/vc04_services/Makefile        |    2 +
- .../vc04_services/bcm2835-codec/Kconfig       |   11 +
- .../vc04_services/bcm2835-codec/Makefile      |    5 +
- .../bcm2835-codec/bcm2835-v4l2-codec.c        | 3973 +++++++++++++++++
- .../interface/vchiq_arm/vchiq_arm.c           |  147 +-
- .../vchiq-mmal/mmal-msg-format.h              |   10 +
- .../vc04_services/vchiq-mmal/mmal-msg.h       |   19 +
- .../vchiq-mmal/mmal-parameters.h              |   86 +-
- .../vc04_services/vchiq-mmal/mmal-vchiq.c     |   40 +-
- include/uapi/linux/videodev2.h                |    4 +
- 15 files changed, 4509 insertions(+), 38 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/pixfmt-nv12-col128.rst
- create mode 100644 drivers/staging/vc04_services/bcm2835-codec/Kconfig
- create mode 100644 drivers/staging/vc04_services/bcm2835-codec/Makefile
- create mode 100644 drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c
-
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
+index 5e6276aca143..26373b92a6b4 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
+@@ -634,7 +634,43 @@ enum mmal_parameter_video_type {
+ 	MMAL_PARAMETER_VIDEO_ENCODE_H264_LOW_DELAY_HRD_FLAG,
+ 
+ 	/**< @ref MMAL_PARAMETER_BOOLEAN_T */
+-	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER
++	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER,
++
++	/**< Take a @ref MMAL_PARAMETER_BOOLEAN_T. */
++	MMAL_PARAMETER_VIDEO_ENCODE_SEI_ENABLE,
++
++	/**< Take a @ref MMAL_PARAMETER_BOOLEAN_T. */
++	MMAL_PARAMETER_VIDEO_ENCODE_INLINE_VECTORS,
++
++	/**< Take a @ref MMAL_PARAMETER_VIDEO_RENDER_STATS_T. */
++	MMAL_PARAMETER_VIDEO_RENDER_STATS,
++
++	/**< Take a @ref MMAL_PARAMETER_VIDEO_INTERLACE_TYPE_T. */
++	MMAL_PARAMETER_VIDEO_INTERLACE_TYPE,
++
++	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_VIDEO_INTERPOLATE_TIMESTAMPS,
++
++	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_VIDEO_ENCODE_SPS_TIMING,
++
++	/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_VIDEO_MAX_NUM_CALLBACKS,
++
++	/**< Takes a @ref MMAL_PARAMETER_SOURCE_PATTERN_T */
++	MMAL_PARAMETER_VIDEO_SOURCE_PATTERN,
++
++	/**< Takes a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_VIDEO_ENCODE_SEPARATE_NAL_BUFS,
++
++	/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
++	MMAL_PARAMETER_VIDEO_DROPPABLE_PFRAME_LENGTH,
++
++	/**< Take a @ref MMAL_PARAMETER_VIDEO_STALL_T */
++	MMAL_PARAMETER_VIDEO_STALL_THRESHOLD,
++
++	/**< Take a @ref MMAL_PARAMETER_BOOLEAN_T */
++	MMAL_PARAMETER_VIDEO_ENCODE_HEADERS_WITH_FRAME,
+ };
+ 
+ /** Valid mirror modes */
 -- 
 2.41.0
 
