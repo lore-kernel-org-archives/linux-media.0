@@ -1,20 +1,20 @@
 Received: from mail.rmail.be (mail.rmail.be [85.234.218.189])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736F22EB09
-	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A1D67C49
+	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.234.218.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709479643; cv=none; b=InlJog5rIiy8Oy7/gTU6W0dnnu27p7uWklhYraxHy3USl4yIUUPdEv4UfX/FrJIEx/RchADoy420w4KvIlbPPudWlnVQss0O6niOgjlaF1RJAwIPaBbVKRPvA7Vh9fqaMOh3+1LgwuE4TnIhq3ksYAEc+/iF7BneGazNPYUOc68=
+	t=1709479645; cv=none; b=lLF9wquLb0F2pzx3PD08hA3En0jX7vaWXKKVJaH+mUslfrfBa97gzie40GtgEXojm/M5jrhbkz7EbvKEqzfV5rVykRgNMtWKDmaelbusS7mP7Vw/I9oGMk3zlBeJOzQAbce7EhUU/CpBaaVtFaxmsTNhAw8d0bxyQy4j6Ud+lHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709479643; c=relaxed/simple;
-	bh=w9WmCbD3q7Vjy7dkeJ6CkfEegzqD6uqlfkFhcSSTb8A=;
+	s=arc-20240116; t=1709479645; c=relaxed/simple;
+	bh=tYRWwbzaEotAmfjxD4oBBKEJGTz8aeo760EuaV5ozX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Baod7fEMaap7SNXgV79boFpP60sE3tnrw+rbs1kmK94/18YvcIEex+cnEtiRSrXj3BbRSG+P3tq1NCnTb2uTNSd/3yqFZjbxyOzUDn+2bamTMxJxT7HrI7Wd1v+KdOQU3I9apF4SkhwOtd+1rIj/C5gwCNUJL2pqUyvWiaDQw9o=
+	 MIME-Version; b=iPNST6J0D96PhDEyTIr4x8OhLPa5Nw5XO9w1HQV6GWT6cUPybfrAi6gR9EGw5f0ovyuqs3oRdbH5xSyq6WaPm1rJgzPQ3rLimKAgBQwIp7YkjeepaMGzU3jJ3+d1HN6eJ/ASLVKICKl9wVIQ8IaYMZX/d00akVE7CBm7zEWHD1E=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be; spf=pass smtp.mailfrom=rmail.be; arc=none smtp.client-ip=85.234.218.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rmail.be
 Received: from localhost.rmail.be (unknown [10.238.9.208])
-	by mail.rmail.be (Postfix) with ESMTP id AA8314C098;
-	Sun,  3 Mar 2024 16:27:21 +0100 (CET)
+	by mail.rmail.be (Postfix) with ESMTP id BB0A74C09D;
+	Sun,  3 Mar 2024 16:27:22 +0100 (CET)
 From: Maarten Vanraes <maarten@rmail.be>
 To: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
 	linux-media@vger.kernel.org
@@ -23,9 +23,9 @@ Cc: Kieran Bingham <kbingham@kernel.org>,
 	Umang Jain <umang.jain@ideasonboard.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Maarten Vanraes <maarten@rmail.be>
-Subject: [RFC PATCH 09/13] staging/vchiq-mmal: Add the deinterlace image effects enums
-Date: Sun,  3 Mar 2024 16:10:04 +0100
-Message-ID: <20240303152635.2762696-10-maarten@rmail.be>
+Subject: [RFC PATCH 10/13] staging/mmal-vchiq: Rationalise included headers
+Date: Sun,  3 Mar 2024 16:10:05 +0100
+Message-ID: <20240303152635.2762696-11-maarten@rmail.be>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20240303152635.2762696-1-maarten@rmail.be>
 References: <20240303152635.2762696-1-maarten@rmail.be>
@@ -39,29 +39,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-As we're wanting to wrap the image_fx component for deinterlacing,
-add the deinterlace algorithm values to enum mmal_parameter_imagefx
+The list of includes was slightly over generic, and wasn't
+in alphabetical order. Clean it up.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Maarten Vanraes <maarten@rmail.be>
 ---
- drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-index 73319a9b4b90..5007625981a7 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-@@ -393,6 +393,9 @@ enum mmal_parameter_imagefx {
- 	MMAL_PARAM_IMAGEFX_COLOURPOINT,
- 	MMAL_PARAM_IMAGEFX_COLOURBALANCE,
- 	MMAL_PARAM_IMAGEFX_CARTOON,
-+	MMAL_PARAM_IMAGEFX_DEINTERLACE_DOUBLE,
-+	MMAL_PARAM_IMAGEFX_DEINTERLACE_ADV,
-+	MMAL_PARAM_IMAGEFX_DEINTERLACE_FAST,
- };
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+index 1209b7db8f30..479b8114dcdb 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+@@ -15,15 +15,14 @@
  
- enum MMAL_PARAM_FLICKERAVOID {
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/completion.h>
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
++#include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+-#include <linux/mm.h>
+-#include <linux/slab.h>
+-#include <linux/completion.h>
+ #include <linux/vmalloc.h>
+-#include <media/videobuf2-vmalloc.h>
++#include <media/videobuf2-v4l2.h>
+ 
+ #include "../include/linux/raspberrypi/vchiq.h"
+ #include "mmal-common.h"
 -- 
 2.41.0
 
