@@ -1,20 +1,20 @@
 Received: from mail.rmail.be (mail.rmail.be [85.234.218.189])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531E667E8F
-	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7192467C68
+	for <linux-media@vger.kernel.org>; Sun,  3 Mar 2024 15:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.234.218.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709479645; cv=none; b=NTuohtp6JkDYwkE7hZTPe/lTh2xFTVq58pz0dQKje2L37r+NJAJPbOIzs5yIlBxh6snUuQArfiiC33aK2+rzczmvZjx9+KlrwTCOqRp8oVcXFoiIF2v4XziwTwVtCrIfCWKoaB5Sxq5N944g/FIP/F3V0czrRkA0VlXTOTuasFk=
+	t=1709479646; cv=none; b=YAZrVtj8Po5FhLI3s+JLnhO9a7RgrxfhNieYT5o0YJQu+Iu+irlngU0NCnsJgYSCHpwl/zaRCd0sfujTX+69647JPhoXprPjCMur28ui5a+pQfKp/rYl/FbFAIOoNdfAAL9yclFHxK3CaFrQsEqT1TsU3a6ytko8QjqZhxmCxy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709479645; c=relaxed/simple;
-	bh=QwdwSU/d9FhSaKQR08q4ciSFD9jZv6xlFVBANiIQH/w=;
+	s=arc-20240116; t=1709479646; c=relaxed/simple;
+	bh=ttDhTK8CGSPaiH1ZKTAzsPzmtLCKJIPdk6u/z18PORg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=twq3XVAlE/UXbOu12CQQkjYiyfy6/zmEJu7G6iZ+Gs3dZzsnvYSu8XZZUShb5H+XcWLMj7L+7ajR32Xj4LqC5JExJVRCEcUmw4BiBqTulLigVgEqzpUZL37SqNXGF1yGZ308p61mf2sUcdsed8MPec88YIo6X02ammU3TIVDJr4=
+	 MIME-Version; b=oYg6ruLD/yQIgKIF8Dp06L1bsIXUWouGihL3DvxtGcc/FnDMr0n9HaeBewrXZVmjC7lw7XulUZNEXIqB8QaM8ahTQw3JFjgYoPZnB/Gr4dssgIuayzPIYSUo94NexANcjeA3+qQ5vOzp8P6KP851U4Wj8B5/teNpmoCwhKYvgj0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be; spf=pass smtp.mailfrom=rmail.be; arc=none smtp.client-ip=85.234.218.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rmail.be
 Received: from localhost.rmail.be (unknown [10.238.9.208])
-	by mail.rmail.be (Postfix) with ESMTP id 6652C4C0A1;
-	Sun,  3 Mar 2024 16:27:23 +0100 (CET)
+	by mail.rmail.be (Postfix) with ESMTP id 921E34C0A5;
+	Sun,  3 Mar 2024 16:27:24 +0100 (CET)
 From: Maarten Vanraes <maarten@rmail.be>
 To: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
 	linux-media@vger.kernel.org
@@ -23,9 +23,9 @@ Cc: Kieran Bingham <kbingham@kernel.org>,
 	Umang Jain <umang.jain@ideasonboard.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Maarten Vanraes <maarten@rmail.be>
-Subject: [RFC PATCH 11/13] staging: mmal-vchiq: Reset buffers_with_vpu on port_enable
-Date: Sun,  3 Mar 2024 16:10:06 +0100
-Message-ID: <20240303152635.2762696-12-maarten@rmail.be>
+Subject: [RFC PATCH 12/13] vc04_services: vchiq-mmal: Add defines for mmal_es_format flags
+Date: Sun,  3 Mar 2024 16:10:07 +0100
+Message-ID: <20240303152635.2762696-13-maarten@rmail.be>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20240303152635.2762696-1-maarten@rmail.be>
 References: <20240303152635.2762696-1-maarten@rmail.be>
@@ -39,34 +39,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Should we go through the timeout failure case with port_disable
-not returning all buffers for whatever reason, the
-buffers_with_vpu counter gets left at a non-zero value, which
-will cause reference counting issues should the instance be
-reused.
-
-Reset the count when the port is enabled again, but before
-any buffers have been sent to the VPU.
+There is a flags field in struct mmal_es_format, but the defines
+for what the bits meant weren't included in the headers.
+For V4L2_PIX_FMT_NV12_COL128 support we need them, so add them in.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Maarten Vanraes <maarten@rmail.be>
 ---
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../staging/vc04_services/vchiq-mmal/mmal-msg-format.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 479b8114dcdb..14ecb8e5e2ee 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -1483,6 +1483,8 @@ static int port_enable(struct vchiq_mmal_instance *instance,
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
+index 5569876d8c7d..e8f5ca85a7c4 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
+@@ -53,6 +53,16 @@ union mmal_es_specific_format {
+ 	struct mmal_subpicture_format subpicture;
+ };
  
- 	port->enabled = true;
- 
-+	atomic_set(&port->buffers_with_vpu, 0);
++/* The elementary stream will already be framed */
++#define MMAL_ES_FORMAT_FLAG_FRAMED				BIT(0)
++/*
++ * For column formats we ideally want to pass in the column stride. This hasn't
++ * been the past behaviour, so require a new flag to be set should
++ * es->video.width be the column stride (in lines) instead of an ignored width
++ * value.
++ */
++#define MMAL_ES_FORMAT_FLAG_COL_FMTS_WIDTH_IS_COL_STRIDE	BIT(1)
 +
- 	if (port->buffer_cb) {
- 		/* send buffer headers to videocore */
- 		hdr_count = 1;
+ /* Definition of an elementary stream format (MMAL_ES_FORMAT_T) */
+ struct mmal_es_format_local {
+ 	u32 type;	/* enum mmal_es_type */
 -- 
 2.41.0
 
