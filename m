@@ -1,129 +1,181 @@
-Received: from butterbrot.org (butterbrot.org [176.9.106.16])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356C9EC2
-	for <linux-media@vger.kernel.org>; Tue,  5 Mar 2024 14:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.106.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAAC61F95E;
+	Tue,  5 Mar 2024 14:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709649723; cv=none; b=grPamvdPBoiz8CIkfxjCGEs4AmQ5f7m+Ydz6m8337PH79tAP+aiYXSDmMBJioQvfIOZzqJTe2U1xRoeMpV56f+1InaBkS40IFR58npY48nhqO+1cWa+P9aoTdqsc7RfUv78sQ4nqh8PmpYDDcO5vp+71haWhTwDxxJsjQ1/lvd0=
+	t=1709650195; cv=none; b=UJ9JVrSYY3mTB8uCJf1m/0WhHNNxIMACURxHrJ2t+7fOL1HFJVBeTvpmCCY+a7Uk1AoxutsAeAmHlms5uBVrBt2ln0zaVqgL/wfE3U5ZAi6ydBXET8M859oDWl0mrGnJOCxj4WomJ2GFP+gmFx+6Rnkfqwz4SKGKk/y4AvK2B88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709649723; c=relaxed/simple;
-	bh=NvTLTtcNycMLwYpCec8N6lFk7J1pesXh1XnZUdWa6yY=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=KxbCg3ZBmgn09wkskSJu+Wtb0IoTVOweIg9BCQZMAFms1yXz0+m6UeaaOz6OfpDGZ7+q6fN1afn266Hzzsfn2UoBwOzXyQdXsW6MupQa9CQdGGqYVuVAwn+TjpHcUXLXjrcJ6Hy+E/QMQPBiVxtpnrAnCWflturhpgafb6DsR9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=butterbrot.org; spf=pass smtp.mailfrom=butterbrot.org; dkim=pass (2048-bit key) header.d=butterbrot.org header.i=@butterbrot.org header.b=KfhZnLr4; arc=none smtp.client-ip=176.9.106.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=butterbrot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=butterbrot.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=butterbrot.org header.i=@butterbrot.org header.b="KfhZnLr4"
-Received: from [192.168.1.48] (unknown [85.191.184.137])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by butterbrot.org (Postfix) with ESMTPSA id E714F4B4F756
-	for <linux-media@vger.kernel.org>; Tue,  5 Mar 2024 15:36:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=butterbrot.org;
-	s=202303; t=1709649389;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	to:to:cc:mime-version:mime-version:content-type:content-type:autocrypt:autocrypt;
-	bh=NvTLTtcNycMLwYpCec8N6lFk7J1pesXh1XnZUdWa6yY=;
-	b=KfhZnLr48RWzeDNdSPMCn60vM3hP51Sm7JkUF7veZNgmgQTIO3D3Lp49EhBTtL95CEV+av
-	VEBO4/qVbbFUp56V/19mivbsF9pScMBq11zgEKlpk0XQFRIv3Sm14jt30wBgtym36+TUlD
-	BFVLonqJSlvQ8yIjJ0W0lVvrWQ6il5a5CnKox/Gx1mC8ENp7bTlq7V70bJJF2yqdAgc6nb
-	ac8HsG/OAAtR9A7gH6cJRSu6NvWzLupxJYkLT8s+0BhdNIsto5ZT2kIPCaqpFbniosh9MI
-	viwKoGAdfmlZp3+n1QTv3cFM+k0gQ+nd6CixWTzvsXUeBHfRSmUYE6h0CkeKtA==
-Message-ID: <920db340-bbd5-4fcc-94e1-f11983b7d874@butterbrot.org>
-Date: Tue, 5 Mar 2024 15:36:27 +0100
+	s=arc-20240116; t=1709650195; c=relaxed/simple;
+	bh=JrCH6EgXFgvmU54XTv3OGayoRVJM9AhD1jxlXOStzVg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i2JN4QmpyuocRYHMfYPzLgRA/dorJe0atwUTzV/WfbjZ/SZCmaE10QCH5cw23Yg0KzE2V6ptt3d8DYpqYoWi4bVg5jMNMaac1C3HhZrvMUnXiia/wqL2kj7supMW3IkmMQ577hYbzIoAHaRC6QQNeqit+I9K18B+BCfYFAYpcRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875a9e.versanet.de ([83.135.90.158] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1rhVVj-0006jN-HS; Tue, 05 Mar 2024 15:11:15 +0100
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+ p.zabel@pengutronix.de, jose.abreu@synopsys.com, nelson.costa@synopsys.com,
+ dmitry.osipenko@collabora.com, sebastian.reichel@collabora.com,
+ shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com, hverkuil@xs4all.nl,
+ hverkuil-cisco@xs4all.nl, Shreeya Patel <shreeya.patel@collabora.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-arm@lists.infradead.org,
+ Shreeya Patel <shreeya.patel@collabora.com>
+Subject:
+ Re: [PATCH v2 4/6] arm64: dts: rockchip: Add device tree support for HDMI RX
+ Controller
+Date: Tue, 05 Mar 2024 15:11:14 +0100
+Message-ID: <7657358.31r3eYUQgx@diego>
+In-Reply-To: <20240305123648.8847-5-shreeya.patel@collabora.com>
+References:
+ <20240305123648.8847-1-shreeya.patel@collabora.com>
+ <20240305123648.8847-5-shreeya.patel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-media@vger.kernel.org
-Content-Language: en-GB, da
-From: Florian Echtler <floe@butterbrot.org>
-Subject: Using the videobuf2 framework for USB bulk transfers?
-Autocrypt: addr=floe@butterbrot.org; keydata=
- xsDiBDuvTgcRBAD3yCehD8VSv9/5ALV2PGNpRyPd/H7y4E0nh/fNHjOtq/Iy822ZQgPxP9+a
- nbtC7KMzT0JIr5ontFH4TuMxikeE92ID+h0a755FiHAtSACXzNcLY370YfRJuTQMBANEwf/T
- ozY7clf8uZc9emk0TLQJ7ZFksRAxd2Ql3lyGlM+jEQCg/6aPMk/pV3Jjfz01dckZH65DSb0E
- AKcZOV/KpQwPqRE1L7yEax19p1+38InBhGQg5ZORsPDXNDKAx5TovSM/4H68DzVjCTtb1Qig
- E2InSlT4qxOZq2hTIwsbUrl4YrOLG0msYeB+1avaVCxkjEs4e6fYX9VvJxUdgkYSmwWxzSGK
- wiEeRlbcNGdKeVKYezNyjRKO5OnSBACb3t89sJsqaotwh+CO4cwgKbjIgHnIjH5TminqiGt9
- chYXGA+IjkVef+Q/pWRzXj4IDC1gubW5GELuMa6WO+aMchJKfD4VDflvdUqWTuXKj6qjwxnY
- qtX/3O7QwVFoVgkPqsl8goAPSGk5lWHIvKJJUSMFgjWG+BafnppZs/R+Bc0lRmxvcmlhbiBF
- Y2h0bGVyIDxmbG9lQGJ1dHRlcmJyb3Qub3JnPsJjBBMRAgAjAhsDBgsJCAcDAgQVAggDBBYC
- AwECHgECF4AFAk47tRkCGQEACgkQ7CzyshGvatgVzgCg9kkfrcPWEmqSADhAX4Bj83gZQEgA
- n1PrIrMQE85069aGgJE/kuMyWUJczsFNBDuvTggQCAD2Qle3CH8IF3KiutapQvMF6PlTETlP
- tvFuuUs4INoBp1ajFOmPQFXz0AfGy0OplK33TGSGSfgMg71l6RfUodNQ+PVZX9x2Uk89PY3b
- zpnhV5JZzf24rnRPxfx2vIPFRzBhznzJZv8V+bv9kV7HAarTW56NoKVyOtQa8L9GAFgr5fSI
- /VhOSdvNILSd5JEHNmszbDgNRR0PfIizHHxbLY7288kjwEPwpVsYjY67VYy4XTjTNP18F1dD
- ox0YbN4zISy1Kv884bEpQBgRjXyEpwpy1obEAxnIByl6ypUM2Zafq9AKUJsCRtMIPWakXUGf
- nHy9iUsiGSa6q6Jew1XpMgs7AAICCACB1zq0sSVcye/cvwTnHZyGvILT6VU8+xUxvmG9ota2
- yuk9A+0GSnDpjNxyBkmDBVQkLLvW8lBErPYvaq9pFMeYntOhYwRP31e7rbsWh48QjfkL5M/X
- Q5kFCTO4jVXHXYJ034x0vXamDDzFbAdUg/V/zN+KRIcEZcs8foIgC7BR6i/TsCsFHN3OHAmk
- hZ8NRB//UIJXxq3CcBXLiu2OGFrfoSvpAp5OzMyrWneMCaySmN/i3wSYl6h3Nl4YRMH6Yx+E
- RnNF5/cy3xUZODG1JHnEw+owc0dl3ch+oQe0t3zN5LGAznf7hYmOYl27xvym/FVA/skTD1wM
- MZhfxLVyis75wlQEGBECAAwFAjuvTggFGwwAAAAAEgkQ7CzyshGvatgHZUdQRwABASUVAKC7
- c7SIc/xurEhWVpzt1wPPsPOQ2wCglsSZ1yg7JIMh4o+a178IK9ozwQY=
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------m9RZLfGbbybS1vCpnQ5cuOQA"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------m9RZLfGbbybS1vCpnQ5cuOQA
-Content-Type: multipart/mixed; boundary="------------BRpm14fi1BtCRiFlH9kndBJ3";
- protected-headers="v1"
-From: Florian Echtler <floe@butterbrot.org>
-To: linux-media@vger.kernel.org
-Message-ID: <920db340-bbd5-4fcc-94e1-f11983b7d874@butterbrot.org>
-Subject: Using the videobuf2 framework for USB bulk transfers?
+Hi,
 
---------------BRpm14fi1BtCRiFlH9kndBJ3
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-SGVsbG8gZXZlcnlvbmUsDQoNCkknbSB0YWtpbmcgYW5vdGhlciBzdGFiIGF0IGZpeGluZyB0
-aGUgRE1BIGJ1ZyBpbiB0aGUgc3VyNDAgZHJpdmVyIHdoaWNoIGhhcyBiZWVuIA0KcHJlc2Vu
-dCBmb3Igc29tZSB0aW1lIG5vdy4NCg0KVGhlIGJ1ZyB3YXMgaW50cm9kdWNlZCBhcyBhIHNp
-ZGUgZWZmZWN0IG9mIHRoaXMgY29tbWl0OiANCmh0dHBzOi8vZ2l0aHViLmNvbS90b3J2YWxk
-cy9saW51eC9jb21taXQvNmViMDIzM2VjMmQwZGYyODhmZTg1MTVkNWIwYjJiMTU1NjJlMDVi
-Yg0KDQpUaGUgc3VyNDAgaXMgYSBiaXQgb2YgYW4gb2RkIGR1Y2sgd2hpY2ggdXNlcyBVU0Ig
-YnVsayB0cmFuc2ZlcnMgZm9yIHZpZGVvIGRhdGEsIA0Kc28gQUZBSUNUIHRoZXJlIGlzIG5v
-IG90aGVyIGRyaXZlciBJIGNvdWxkIHVzZSBhcyBhbiBleGFtcGxlIGZvciB0aGlzIGNvbWJp
-bmF0aW9uLg0KDQpJJ3ZlIHRyaWVkIHRoZSBmb2xsb3dpbmcgdmFyaWFudHM6DQoNCi0gdmlk
-ZW9idWYyLWRtYS1zZyAodGhpcyBpcyB0aGUgY3VycmVudGx5IGJyb2tlbiBpbi1rZXJuZWwg
-dmVyc2lvbik6DQoNCiAgIEZhaWxzIHdpdGggZXJyb3IgLTIyIChFSU5WQUwpIGluIHVzYl9z
-Z19pbml0LCBiZWNhdXNlIHNndC0+bmVudHMgaXMgMC4gQ2FuJ3QNCiAgIHRlbGwgd2hhdCB0
-aGUgcm9vdCBjYXVzZSBpcywgYnV0IGJhc2VkIG9uIHRoZSBtZXNzYWdlIG9mIHRoZSBicmVh
-a2luZyBjb21taXQsDQogICBJIHdvdWxkIGFzc3VtZSB0aGF0IHVzaW5nIGRtYS1zZyBkaXJl
-Y3RseSBmb3IgVVNCIGRldmljZXMgaXMgc2ltcGx5IG5vdA0KICAgc3VwcG9ydGVkPw0KDQot
-IHZpZGVvYnVmMi12bWFsbG9jOg0KDQogICBGYWlscyB3aXRoIGRtZXNnIGVycm9yOiBlaGNp
-LXBjaTogcmVqZWN0aW5nIERNQSBtYXAgb2Ygdm1hbGxvYyBtZW1vcnkgKHRoaXMgaXMNCiAg
-IHNvcnQgb2YgdW5kZXJzdGFuZGFibGUsIEkgZ3Vlc3MsIGp1c3Qgd2FudGVkIHRvIGJlIHN1
-cmUpLg0KDQotIHZpZGVvYnVmMi1kbWEtY29udGlnOg0KDQogICBGYWlscyB3aXRoIGRtZXNn
-IGVycm9yOiBkbWEgYWxsb2Mgb2Ygc2l6ZSA1MjAxOTIgZmFpbGVkLiBUaGlzIHNlZW1zIHF1
-aXRlIGxvdywNCiAgIGl0IHNob3VsZG4ndCBiZSBhbiBpc3N1ZSB0byBtYXAgNTAwayBvZiBj
-b250aWd1b3VzIG1lbW9yeSBzb21ld2hlcmU/DQoNClNvLCBpbiBzdW1tYXJ5LCBteSBxdWVz
-dGlvbiBpczogaG93IHNob3VsZCBJIHVzZSB0aGUgdmlkZW9idWYyIGZyYW1ld29yayB0byBn
-ZXQgDQpVU0IgYnVsayBkYXRhIGludG8gVjRMMiBidWZmZXJzIGFzIGVmZmljaWVudGx5IGFz
-IHBvc3NpYmxlPyBCZWNhdXNlIGl0IGRvZXMgc2VlbSANCnRoYXQgbm9uZSBvZiB0aGUgIm9i
-dmlvdXMiIHNvbHV0aW9ucyB3b3Jrcy4uLg0KDQpUaGFuayB5b3UgYW5kIGJlc3QsIEZsb3Jp
-YW4NCi0tIA0KU0VOVCBGUk9NIE1ZIERFQyBWVDUwIFRFUk1JTkFMDQo=
+Am Dienstag, 5. M=E4rz 2024, 13:36:46 CET schrieb Shreeya Patel:
+> Add device tree support for Synopsys DesignWare HDMI RX
+> Controller.
+>=20
+> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Co-developed-by: Dingxian Wen <shawn.wen@rock-chips.com>
+> Signed-off-by: Dingxian Wen <shawn.wen@rock-chips.com>
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> ---
+> Changes in v2 :-
+>   - Fix some of the checkpatch errors and warnings
+>   - Rename resets, vo1-grf and HPD
+>   - Move hdmirx_cma node to the rk3588.dtsi file
+>=20
+>  .../boot/dts/rockchip/rk3588-pinctrl.dtsi     | 41 ++++++++++++++
+>  arch/arm64/boot/dts/rockchip/rk3588.dtsi      | 55 +++++++++++++++++++
+>  2 files changed, 96 insertions(+)
 
---------------BRpm14fi1BtCRiFlH9kndBJ3--
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588.dtsi b/arch/arm64/boot/d=
+ts/rockchip/rk3588.dtsi
+> index 5519c1430cb7..8adb98b99701 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3588.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
+> @@ -7,6 +7,24 @@
+>  #include "rk3588-pinctrl.dtsi"
+> =20
+>  / {
+> +	reserved-memory {
+> +		#address-cells =3D <2>;
+> +		#size-cells =3D <2>;
+> +		ranges;
 
---------------m9RZLfGbbybS1vCpnQ5cuOQA
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+add blank line here
 
------BEGIN PGP SIGNATURE-----
+> +		/*
+> +		 * The 4k HDMI capture controller works only with 32bit
+> +		 * phys addresses and doesn't support IOMMU. HDMI RX CMA
+> +		 * must be reserved below 4GB.
+> +		 */
+> +		hdmirx_cma: hdmirx_cma {
 
-wmMEABEIACMWIQST4FP0cQIAgRXjMjXsLPKyEa9q2AUCZect7AUDAAAAAAAKCRDsLPKyEa9q2Ecd
-AKDc0xDyhRTWz0sX3FLaSoRBkJiTQACg2Q35bd7UTk7ghTUR2naSQUBVT0w=
-=k+gw
------END PGP SIGNATURE-----
+phandles use "_", but node-names "-"
 
---------------m9RZLfGbbybS1vCpnQ5cuOQA--
+> +			compatible =3D "shared-dma-pool";
+> +			alloc-ranges =3D <0x0 0x0 0x0 0xffffffff>;
+> +			size =3D <0x0 (160 * 0x100000)>; /* 160MiB */
+
+The comment above that node, could elaborate where the value of 160MB
+originates from. I assume it is to hold n-times of 4K frames or whatever,
+but it would be helpful for people to be able to read that.
+
+
+> +			no-map;
+> +			status =3D "disabled";
+> +		};
+> +	};
+> +
+>  	pcie30_phy_grf: syscon@fd5b8000 {
+>  		compatible =3D "rockchip,rk3588-pcie3-phy-grf", "syscon";
+>  		reg =3D <0x0 0xfd5b8000 0x0 0x10000>;
+> @@ -85,6 +103,38 @@ i2s10_8ch: i2s@fde00000 {
+>  		status =3D "disabled";
+>  	};
+> =20
+> +	hdmi_receiver: hdmi-receiver@fdee0000 {
+
+Maybe rename the label to "hdmirx:" ... that way in a board enabling the
+cma region, both nodes would stay close to each other?
+
+
+> +		compatible =3D "rockchip,rk3588-hdmirx-ctrler", "snps,dw-hdmi-rx";
+> +		reg =3D <0x0 0xfdee0000 0x0 0x6000>;
+> +		power-domains =3D <&power RK3588_PD_VO1>;
+> +		rockchip,grf =3D <&sys_grf>;
+> +		rockchip,vo1-grf =3D <&vo1_grf>;
+> +		interrupts =3D <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH 0>,
+> +			     <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH 0>,
+> +			     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH 0>;
+> +		interrupt-names =3D "cec", "hdmi", "dma";
+> +		clocks =3D <&cru ACLK_HDMIRX>,
+> +			 <&cru CLK_HDMIRX_AUD>,
+> +			 <&cru CLK_CR_PARA>,
+> +			 <&cru PCLK_HDMIRX>,
+> +			 <&cru CLK_HDMIRX_REF>,
+> +			 <&cru PCLK_S_HDMIRX>,
+> +			 <&cru HCLK_VO1>;
+> +		clock-names =3D "aclk",
+> +			      "audio",
+> +			      "cr_para",
+> +			      "pclk",
+> +			      "ref",
+> +			      "hclk_s_hdmirx",
+> +			      "hclk_vo1";
+
+the driver uses of_reserved_mem_device_init(), so doesn't this node need
+a "memory-region =3D <&hdmirx_cma>; or similar?
+
+
+> +		resets =3D <&cru SRST_A_HDMIRX>, <&cru SRST_P_HDMIRX>,
+> +			 <&cru SRST_HDMIRX_REF>, <&cru SRST_A_HDMIRX_BIU>;
+> +		reset-names =3D "axi", "apb", "ref", "biu";
+> +		pinctrl-0 =3D <&hdmim1_rx>;
+> +		pinctrl-names =3D "default";
+> +		status =3D "disabled";
+> +	};
+> +
+>  	pcie3x4: pcie@fe150000 {
+>  		compatible =3D "rockchip,rk3588-pcie", "rockchip,rk3568-pcie";
+>  		#address-cells =3D <3>;
+> @@ -339,3 +389,8 @@ pcie30phy: phy@fee80000 {
+>  		status =3D "disabled";
+>  	};
+>  };
+> +
+> +&hdmirx_cma {
+> +	status =3D "okay";
+> +};
+
+I'd assume a board that enables &hdmi_receiver would also enable hdmirx_cma
+and not the soc dtsi for _all_ boards?
+
+
+Thanks
+Heiko
+
+
