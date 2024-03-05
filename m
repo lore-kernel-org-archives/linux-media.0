@@ -1,27 +1,27 @@
 Received: from mail.rmail.be (mail.rmail.be [85.234.218.189])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A59416427
-	for <linux-media@vger.kernel.org>; Tue,  5 Mar 2024 18:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4848817BBA
+	for <linux-media@vger.kernel.org>; Tue,  5 Mar 2024 18:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.234.218.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709661663; cv=none; b=krmBAVgU8VfGYg3LFtf/+eHJskhNYBbEcNaXfIqks9/vaYHPTt4Rm1Bcut9tYVugWXBr0ZkoMKBIIc8fcxwTuUTMs07sOQ4fQu+bIyS7+h3ByT955hbmwy5AX2bTp+XFNL2RqvmcwJPaCKvi/X7F05siylKk4Q1AapvCLLR7H34=
+	t=1709661745; cv=none; b=ArMNxKZ6Cq2ut4/mIcjLowU5RZs113oeKF4Io52bKsTHgdBwdYSN90UjzqtSeP3mgxVHRW3msGSPKrSruhdhknOdVgfX0IL2kK+aQein8QP2hq5MpsPyRgfOzuUn3NHuymlU9ofY0XVAE/4i02GhZj0U3G8tcTIKoCDd57Mnpeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709661663; c=relaxed/simple;
-	bh=anH0/+RhzMzfmy0RPDfbpHz+ykEmbx2U9eJWAcdQu64=;
+	s=arc-20240116; t=1709661745; c=relaxed/simple;
+	bh=Zt9FUREBgNwzIKHTcqSxqrrpNp/9rYwu28rbbSOxcf8=;
 	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=jf0sg47rmzrhG20mlwGiH5J5tFpqXoHhzXMMfwNPiU/GR1GKNWcluB/i07BSEMgQ5nmzzfleU9wPGkELX+TG3xuAOc7Dt+R2LNYbTmOe27NjZVZrphrruutaiRy2iiQtILkBzB9HlPxlRJkz1QRHOVrR1hQ3nBnZG24B/T9Aevw=
+	 Message-ID:Content-Type; b=b7KGd9jZ4QUZhKx5/GZG8dxqdhaWGjFVbTxpKkBJgrGWsrrY1h2olGCaen2u2tSFuJpznNmtANLZ8zdkSagME35QHIxG1ue8lGds42AbH8fPGYi/BpqDn7JeyBf6SJNwlx5R7Ef0iDMvOfBXVGUfEtSOc3XY/cgCHaVneyCLjPc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be; spf=pass smtp.mailfrom=rmail.be; arc=none smtp.client-ip=85.234.218.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rmail.be
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rmail.be
 Received: from mail.rmail.be (domotica.rmail.be [10.238.9.4])
-	by mail.rmail.be (Postfix) with ESMTP id 5C3404C6F3;
-	Tue,  5 Mar 2024 19:00:51 +0100 (CET)
+	by mail.rmail.be (Postfix) with ESMTP id 3DB524C6F5;
+	Tue,  5 Mar 2024 19:02:20 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 05 Mar 2024 19:00:51 +0100
+Date: Tue, 05 Mar 2024 19:02:20 +0100
 From: Maarten <maarten@rmail.be>
 To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Cc: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
@@ -29,58 +29,119 @@ Cc: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
  Pinchart <laurent.pinchart@ideasonboard.com>, Umang Jain
  <umang.jain@ideasonboard.com>, Dave Stevenson
  <dave.stevenson@raspberrypi.org>
-Subject: Re: [RFC PATCH 01/13] staging: mmal-vchiq: Avoid use of bool in
- structures
-In-Reply-To: <4d24fc4c-5e55-48c7-874c-a5138b5d284f@collabora.com>
+Subject: Re: [RFC PATCH 03/13] staging: mmal-vchiq: Fix memory leak in error
+ path
+In-Reply-To: <00f3c02e-a71b-4e41-a50b-f0494ce1a73d@collabora.com>
 References: <20240303152635.2762696-1-maarten@rmail.be>
- <20240303152635.2762696-2-maarten@rmail.be>
- <4d24fc4c-5e55-48c7-874c-a5138b5d284f@collabora.com>
-Message-ID: <b51baf410b45d7fb065fa176db1d8fde@rmail.be>
+ <20240303152635.2762696-4-maarten@rmail.be>
+ <00f3c02e-a71b-4e41-a50b-f0494ce1a73d@collabora.com>
+Message-ID: <cf98c79782d53d44d7f8be182aff8a57@rmail.be>
 X-Sender: maarten@rmail.be
 Content-Type: text/plain; charset=UTF-8;
  format=flowed
 Content-Transfer-Encoding: 8bit
 
-Andrzej Pietrasiewicz schreef op 2024-03-04 08:30:
+Andrzej Pietrasiewicz schreef op 2024-03-04 08:38:
 > Hi Maarten,
 > 
 > W dniu 3.03.2024 o 16:09, Maarten Vanraes pisze:
 >> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 >> 
->> Fixes up a checkpatch error "Avoid using bool structure members
->> because of possible alignment issues".
+>> On error, vchiq_mmal_component_init could leave the
+>> event context allocated for ports.
+>> Clean them up in the error path.
 >> 
-> 
-> This commit message might be confusing, because...
-> 
+>> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+>> 
+>> staging: mmal-vchiq: Free the event context for control ports
+>> 
+>> vchiq_mmal_component_init calls init_event_context for the
+>> control port, but vchiq_mmal_component_finalise didn't free
+>> it, causing a memory leak..
+>> 
+>> Add the free call.
+>> 
 >> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 >> Signed-off-by: Maarten Vanraes <maarten@rmail.be>
 >> ---
->>   drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>   .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 29 
+>> ++++++++++++++-----
+>>   1 file changed, 22 insertions(+), 7 deletions(-)
 >> 
 >> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c 
 >> b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> index 890669f874d9..2e616604943d 100644
+>> index 2e616604943d..1209b7db8f30 100644
 >> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
 >> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
->> @@ -1983,7 +1983,7 @@ int vchiq_mmal_component_enable(struct 
+>> @@ -1825,9 +1825,26 @@ static void free_event_context(struct 
+>> vchiq_mmal_port *port)
+>>   {
+>>   	struct mmal_msg_context *ctx = port->event_context;
+>>   +	if (!ctx)
+>> +		return;
+>> +
+>>   	kfree(ctx->u.bulk.buffer->buffer);
+>>   	kfree(ctx->u.bulk.buffer);
+>>   	release_msg_context(ctx);
+>> +	port->event_context = NULL;
+>> +}
+>> +
+>> +static void release_all_event_contexts(struct vchiq_mmal_component 
+>> *component)
+>> +{
+>> +	int idx;
+>> +
+>> +	for (idx = 0; idx < component->inputs; idx++)
+>> +		free_event_context(&component->input[idx]);
+>> +	for (idx = 0; idx < component->outputs; idx++)
+>> +		free_event_context(&component->output[idx]);
+>> +	for (idx = 0; idx < component->clocks; idx++)
+>> +		free_event_context(&component->clock[idx]);
+>> +	free_event_context(&component->control);
+>>   }
+>>     /* Initialise a mmal component and its ports
+>> @@ -1925,6 +1942,7 @@ int vchiq_mmal_component_init(struct 
 >> vchiq_mmal_instance *instance,
->>     	ret = enable_component(instance, component);
->>   	if (ret == 0)
->> -		component->enabled = true;
->> +		component->enabled = 1;
+>>     release_component:
+>>   	destroy_component(instance, component);
+>> +	release_all_event_contexts(component);
+>>   unlock:
+>>   	if (component)
+>>   		component->in_use = false;
+>> @@ -1940,7 +1958,7 @@ EXPORT_SYMBOL_GPL(vchiq_mmal_component_init);
+>>   int vchiq_mmal_component_finalise(struct vchiq_mmal_instance 
+>> *instance,
+>>   				  struct vchiq_mmal_component *component)
+>>   {
+>> -	int ret, idx;
+>> +	int ret;
+>>     	if (mutex_lock_interruptible(&instance->vchiq_mutex))
+>>   		return -EINTR;
+>> @@ -1952,12 +1970,9 @@ int vchiq_mmal_component_finalise(struct 
+>> vchiq_mmal_instance *instance,
+>>     	component->in_use = false;
+>>   -	for (idx = 0; idx < component->inputs; idx++)
+>> -		free_event_context(&component->input[idx]);
+>> -	for (idx = 0; idx < component->outputs; idx++)
+>> -		free_event_context(&component->output[idx]);
+>> -	for (idx = 0; idx < component->clocks; idx++)
+>> -		free_event_context(&component->clock[idx]);
+>> +	release_all_event_contexts(component);
 > 
-> ... what the patch changes is not a structure member, it is the value
-> assigned (with a potential implicit cast) to a structure member.
+> The way I understand this chunk is that you factor out the 3 "for" 
+> loops into
+> the new function "release_all_event_contexts()", because it is then
+> reused elsewhere. "release_all_event_contexts()" already contains
+> invocation of
+> "free_event_context(&component->control)"...
 > 
-> Regards,
+>> +
+>> +	free_event_context(&component->control);
 > 
-> Andrzej
-> 
->>     	mutex_unlock(&instance->vchiq_mutex);
->> 
+> ... but it is repeated here. Why?
 
-I guess it's due to the "checkpatch", but I'll adapt the message in v2.
+
+I'm sorry, I messed up in squashing 2 patches, that definately does not 
+belong there, will fix in v2.
 
 Thanks!
