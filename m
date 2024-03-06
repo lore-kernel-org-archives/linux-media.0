@@ -1,144 +1,124 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F31D2F7;
-	Wed,  6 Mar 2024 02:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AAED530
+	for <linux-media@vger.kernel.org>; Wed,  6 Mar 2024 02:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709691154; cv=none; b=nVx+ZqyzvfJvoY4+T/cJxxqq8bxziheeWmckYN+xhSnEkD4LSR/pPCli66R7Uethu9bPMRZWmlMfSdYH1fZuU40d8Gkixh0dIGa77DQ5TAGcoUDazx1qF2Y5377g7Ece5Lh9/u+pk5Dh8eHXDTfu3s5x0GJa6tEev1elpqYOxoA=
+	t=1709692137; cv=none; b=SjCkmFX3jLi9y6Vtz1Y4a5l5gEJSA0l+una4IeK04k4C8EuiUlbyljKNzW4l5EJ2eSPxMu0cHmck1Pf4dHLqjilxcYN9nLNXssTM+sE35i1jDFDA3Qz9vT2p2HvWrzwXHhW3GEMviIM8lqdGwMgo2TLtIgGW+K+yPz6Yf3ZF66s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709691154; c=relaxed/simple;
-	bh=FDdSKs8osnmu3BSbByUHCZN+J1ekfCyTC2ZQLn86zmg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G0WXz266halw488cGegRGZZOJk4j6qZJ2s9/NAiRfeCQ68o+eu8JID7/BaML4UKy3sxfKPoiXfMDNpGpp+yMGxmp786vf+SHnmYw7vGGPU0Q33i9teywTSYtaIwwuSJXoWOs+ufNOfjL92dJrB3pHQWsj0petX+4o6g6lyynZZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=IT8a+wLt; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1709692137; c=relaxed/simple;
+	bh=m/4/IJpnreuZGBCjDFZuh5CJChe0Zp0mf+/fUUyVNyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b4qc9ryw0zxLu71TYErVa03pId6e7JK9iUfFc0tvMgcXrqZWOoviePbXgeM6l7GuzWIniBvTj+5EL+ZV/aRIz9v9nQOPsImsBs6xQSTidJnZ0ValWmt737tvk+zSO+ZcdWloC119UPGIRz4RPLVF2JwpdjZMa5IlmLZe0rqJrYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=tXzN2w3m; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="IT8a+wLt"
-X-UUID: fabbc0b8db5e11ee935d6952f98a51a9-20240306
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=77P3giULlv83SXb4JB8L4IRfGqmm3Ld83AhH+UMtJzk=;
-	b=IT8a+wLtQXw8PaIJBZq/QqW9d+2YGnLoNEBmiLPsHZMum8Witp6i3hc6mW0l23PbL0nMHXlclsvs0mtKcy7c19E0i8+RhzfWePDxMMO9kfEVf2dg8qiCuU91Cetm7dHXuEEhoFgcCzeVzRTeaqET0uxyz2o5g8DloGhvJyliRLw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:b4cda8d8-738f-4374-86a2-230e3c84f04a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6f543d0,CLOUDID:87fb0f90-e2c0-40b0-a8fe-7c7e47299109,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: fabbc0b8db5e11ee935d6952f98a51a9-20240306
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-	(envelope-from <irui.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1199237248; Wed, 06 Mar 2024 10:12:27 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 6 Mar 2024 10:12:26 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 6 Mar 2024 10:12:25 +0800
-From: Irui Wang <irui.wang@mediatek.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Tiffany Lin <tiffany.lin@mediatek.com>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>,
-	<nicolas.dufresne@collabora.com>, Yunfei Dong <yunfei.dong@mediatek.com>,
-	Longfei Wang <longfei.wang@mediatek.com>, Maoguang Meng
-	<maoguang.meng@mediatek.com>, <sebastian.fricke@collabora.com>
-CC: Irui Wang <irui.wang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v3] media: mediatek: vcodec: Handle VP9 superframe bitstream with 8 sub-frames
-Date: Wed, 6 Mar 2024 10:12:23 +0800
-Message-ID: <20240306021223.14417-1-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="tXzN2w3m"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-21edca2a89dso254017fac.3
+        for <linux-media@vger.kernel.org>; Tue, 05 Mar 2024 18:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1709692133; x=1710296933; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n9CloCqaM+25WoaR2YknpneBnZb2s33DuZ5EXKAJgUk=;
+        b=tXzN2w3mIA42+kxiYmI+IfLVus4l/QCyp13ANiYCaN2AX0ORMGh8eFZyBZrHwi5+ui
+         zNdIkjkiBk4A/hgNMWzvhoZCVZgub5eQsDzmq3IH7LIsjQRrvMfh2CRMGVf8ialf+Rus
+         nghzApmYQfTLUlMYRSXbb4x6B6akvEuK4rNb6WwQoK4aLQOK0EG+oA4Ab7xlOOeaibDg
+         nJSUHhZ9ODRVCyFEvPMgBTKDGO9DRMtkgCfGe4EIFAsUKHZm1wpITxZLA3udaKd58MVY
+         6IouXTOA0w+XUEzqhiMWwJtLgVug5qR8dVcL0sonjarAz3MYOIYP8a1XnRJ4sV8i2/vC
+         ncEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709692133; x=1710296933;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n9CloCqaM+25WoaR2YknpneBnZb2s33DuZ5EXKAJgUk=;
+        b=AwEoefRFILyitWMUJTHneiF6aMzjIGr8H81xzokhUpX3daAdSB8RVveD4exUq3RF4f
+         9SEpqHS0ysnxS0vxlTkvJmvdW6z2DEUk8lXH+WvG6ha7mrnWyuLbJbASFVQZVsqAoloU
+         R3gUlb2HYthcPrOupWyN6fo41JTaRJCy66V9zOy3eSctIIOp82azQJYIYIA8eUgKGjKu
+         8Rg8UxZnbl5cBINN0ha5oI1YjbxnM2gciP5xiJxfq4jttQl1LrdgH/77zerzVMCQdT+G
+         v3tE4ngRLTvsMcA/drhXXd9DZAIFNJHoFW5ZPOqBV8R+9omQ+t7FUlpSw7jlSiyZMAjs
+         S1lw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCbGvAVKJ+k/TZrBLp7Bf+x6Zq+znD810Jquoly7JZXb88uxE6kVF9YjnpH+I1WU14XGsItab0rn0fyZUofpBss/8/b9541XlG5Tw=
+X-Gm-Message-State: AOJu0Yy54n3sbBkSyTuo5kB+SIdnPlL8OvV+0vNtF1g78VpjgZZiXL55
+	naU99CG3wytgu5oAdQZEsmPZ+eWBkdb4+5gAUgwzMyEmHE8tMo0Hbz/bNjJLpmY=
+X-Google-Smtp-Source: AGHT+IHKixed8Mkgk+0mpRfXfdBzYVdPnWZ0ptxrRYAk7Gk8YnML1zfyWGAr7RcPhYJE96tLslzelg==
+X-Received: by 2002:a05:6870:1786:b0:220:8d17:6ebd with SMTP id r6-20020a056870178600b002208d176ebdmr3863595oae.42.1709692133363;
+        Tue, 05 Mar 2024 18:28:53 -0800 (PST)
+Received: from [192.168.1.24] (71-212-18-124.tukw.qwest.net. [71.212.18.124])
+        by smtp.gmail.com with ESMTPSA id x35-20020a056a0018a300b006e5bdc19842sm7873904pfh.73.2024.03.05.18.28.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Mar 2024 18:28:52 -0800 (PST)
+Message-ID: <383c4870-167f-4123-bbf3-928db1463e01@davidwei.uk>
+Date: Tue, 5 Mar 2024 18:28:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--6.704300-8.000000
-X-TMASE-MatchedRID: 61qs6S/TXDLsgU6kU4VK+KKa0xB73sAAgDRlwc+wR6edCqKtxM6bhy2f
-	RWXvh9E9X3E2fHKxS5KuhFLSFG7xdxdAkyS/8v/XA9lly13c/gGH7D1bP/FcOtM2my+Pv+HL0c8
-	aNDRHFani8zVgXoAltsIJ+4gwXrEtec3QM3secWbczxMp1BlefbKx6BptLBaOTuz1STu0jwnIP0
-	9yQZcG688DF2M8b0VflExlQIQeRG0=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--6.704300-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 5EBF45FC3B78C1905E70C4BACA90B4BFA1BABC8770E7EF027E79EB4560DC7DAF2000:8
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v6 09/15] memory-provider: dmabuf devmem
+ memory provider
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-10-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240305020153.2787423-10-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The VP9 bitstream uses superframes, which each contain 8 sub-frames,
-enable accessing the last superframe by increasing the range of the index
-vaidation as the maximum number of superframes is 8 and not 7, so that the
-last sub-frame can be decoded normally with stateful vp9 decoder.
+On 2024-03-04 18:01, Mina Almasry wrote:
+> +	if (pool->p.queue)
+> +		binding = READ_ONCE(pool->p.queue->binding);
+> +
+> +	if (binding) {
+> +		pool->mp_ops = &dmabuf_devmem_ops;
+> +		pool->mp_priv = binding;
+> +	}
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
-changed with v2:
- - update commit message only.
+This is specific to TCP devmem. For ZC Rx we will need something more
+generic to let us pass our own memory provider backend down to the page
+pool.
 
-changed with v1:
- - add a new define 'VP9_MAX_SUPER_FRAMES_NUM' for superframes.
----
- .../mediatek/vcodec/decoder/vdec/vdec_vp9_if.c        | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_if.c
-index 55355fa70090..039082f600c8 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_if.c
-@@ -16,6 +16,7 @@
- #include "../vdec_drv_base.h"
- #include "../vdec_vpu_if.h"
- 
-+#define VP9_MAX_SUPER_FRAMES_NUM 8
- #define VP9_SUPER_FRAME_BS_SZ 64
- #define MAX_VP9_DPB_SIZE	9
- 
-@@ -133,11 +134,11 @@ struct vp9_sf_ref_fb {
-  */
- struct vdec_vp9_vsi {
- 	unsigned char sf_bs_buf[VP9_SUPER_FRAME_BS_SZ];
--	struct vp9_sf_ref_fb sf_ref_fb[VP9_MAX_FRM_BUF_NUM-1];
-+	struct vp9_sf_ref_fb sf_ref_fb[VP9_MAX_SUPER_FRAMES_NUM];
- 	int sf_next_ref_fb_idx;
- 	unsigned int sf_frm_cnt;
--	unsigned int sf_frm_offset[VP9_MAX_FRM_BUF_NUM-1];
--	unsigned int sf_frm_sz[VP9_MAX_FRM_BUF_NUM-1];
-+	unsigned int sf_frm_offset[VP9_MAX_SUPER_FRAMES_NUM];
-+	unsigned int sf_frm_sz[VP9_MAX_SUPER_FRAMES_NUM];
- 	unsigned int sf_frm_idx;
- 	unsigned int sf_init;
- 	struct vdec_fb fb;
-@@ -526,7 +527,7 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
- 	/* if this super frame and it is not last sub-frame, get next fb for
- 	 * sub-frame decode
- 	 */
--	if (vsi->sf_frm_cnt > 0 && vsi->sf_frm_idx != vsi->sf_frm_cnt - 1)
-+	if (vsi->sf_frm_cnt > 0 && vsi->sf_frm_idx != vsi->sf_frm_cnt)
- 		vsi->sf_next_ref_fb_idx = vp9_get_sf_ref_fb(inst);
- }
- 
-@@ -735,7 +736,7 @@ static void get_free_fb(struct vdec_vp9_inst *inst, struct vdec_fb **out_fb)
- 
- static int validate_vsi_array_indexes(struct vdec_vp9_inst *inst,
- 		struct vdec_vp9_vsi *vsi) {
--	if (vsi->sf_frm_idx >= VP9_MAX_FRM_BUF_NUM - 1) {
-+	if (vsi->sf_frm_idx > VP9_MAX_SUPER_FRAMES_NUM) {
- 		mtk_vdec_err(inst->ctx, "Invalid vsi->sf_frm_idx=%u.", vsi->sf_frm_idx);
- 		return -EIO;
- 	}
--- 
-2.18.0
-
+What about storing ops and priv void ptr in struct netdev_rx_queue
+instead? Then we can both use it.
