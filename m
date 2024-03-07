@@ -1,75 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578A5839F6
-	for <linux-media@vger.kernel.org>; Thu,  7 Mar 2024 10:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF5A126F39;
+	Thu,  7 Mar 2024 11:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709809060; cv=none; b=DB/DuYxXMiv1AANzhkvM74kPDkdzoTUbLP3V7aiOEEKpSwL/fyKqtowlDiip5ePGfqvKhllVyfCqLDx4ycCJG1vxP+dAWR5zErLhH+Z+VqsiUoSionTpHgHQS8rAjGA82v18ilUIQ+jc6g3hAOwkTzsL+ZnPCPXYVpMzTyVAowQ=
+	t=1709810313; cv=none; b=k2L0jKCiUWHqQBgcx/0gON3WB+PPlVpVatM5xRRMQgf/FAzIfRQ8pHylYQQ9KfuyeV28lflPCMalyvGhENxreqGBv321XFui/W+pm9/O7bQmXb/nr/5z1Mtquy0YJ9LcXijWWa6sCha1hSfpPe2tBJvv7iLg65A6l38BpAgFDCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709809060; c=relaxed/simple;
-	bh=4kkaTvLOfyKxtFzv27mzmlSZVwTwkruOHUJ0QgCzuQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IWdmKXba6XLn5J0HyRXiIPMmpeWZFiw9/R/qmVwWWvYqUuDjoaoTdPPBglHH22fvqPU/w6Iuy/SyhxbgbxOtdvSsLNHzUfh+lxzO+/hlGzQ+QGiEw8uBSVCq1Db13oW+3r6lMwSM+3JjCYX/J1OmDEVAxkQhp29QcTnaf0uLsRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RlfhpVwt; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RlfhpVwt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709809060; x=1741345060;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4kkaTvLOfyKxtFzv27mzmlSZVwTwkruOHUJ0QgCzuQE=;
-  b=RlfhpVwt5pY0fLmawUgfMZA/BeP4fQnovVl0SbBATubnfWMW+ZduUtZg
-   /IzdDPFsZcoEGPwexWTNl/4knwKC9C+q95Zdz2oo9dvAhg6jCHSskdojP
-   wnNyDd5uI3Y9BUgnqPWN10H9PXKPuavIr1Z29iB6NjX6M7LjywXaADYWF
-   G190oPqkInLJnYw9HHgqIHE+YABMVpL5ScsLQzWky9pNRpNhhSm67uoDj
-   E2qdcROoTrikqspwbtdWuQRqlAU5zLnUEwqmiu/gJ6VG8XlZwzCEn+nLI
-   ZVWO+EGYEFHdfope/P221kHp9LQO2nV6bRJkb7Ikk97lrBm3MfnAHMzXD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11005"; a="26945784"
-X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
-   d="scan'208";a="26945784"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 02:57:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,211,1705392000"; 
-   d="scan'208";a="10151189"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2024 02:57:38 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id E5EAD11F819;
-	Thu,  7 Mar 2024 12:57:34 +0200 (EET)
-Date: Thu, 7 Mar 2024 10:57:34 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH v2 00/29] Media device lifetime management
-Message-ID: <ZemdnvJt0Qw_wk0D@kekkonen.localdomain>
-References: <20231220103713.113386-1-sakari.ailus@linux.intel.com>
- <20240207105500.GL23702@pendragon.ideasonboard.com>
+	s=arc-20240116; t=1709810313; c=relaxed/simple;
+	bh=aEMdaw+FdJ5XiHb4gvJSi2VE3ixTC3PMFF5KDiB8Vsc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P6AKjXD630DkTbvyTXH/dlj47upZ9+Y3R2oc1ay9zjWMUBQKgppZhqRBSTn7mEmYfShjYhC8j93Md2MaymrgxEhvKgQEQ8Ii21AbaxfcjwS6eXNl3k4XDFbmmUuN9kyq6qLzNMwjoZyYMpWzNMEkAXtkp1YFLCo1XEjR/2lF+WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
+Received: from mgb4.digiteq.red (unknown [62.77.71.229])
+	by mx.gpxsee.org (Postfix) with ESMTPSA id B56594BC55;
+	Thu,  7 Mar 2024 12:18:23 +0100 (CET)
+From: tumic@gpxsee.org
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
+Subject: [PATCH v2 0/2] media: mgb4: YUV and variable framerate support
+Date: Thu,  7 Mar 2024 13:18:20 +0100
+Message-ID: <20240307121822.1852-1-tumic@gpxsee.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240207105500.GL23702@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 07, 2024 at 12:55:00PM +0200, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> I've just noticed that I send multiple Reviewed-by tags for this series
-> using Laurent Pinchart <laurent.pinchart@ideasonboard.com> when I meant
-> Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>. Could you
-> replace the e-mail address when picking up the tags ?Sorry about the
-> inconvenience.
+From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-No problem. I'll do it for v3.
+Recent mgb4 FW update added support for the YUV image format and variable
+framerates independent of the signal framerate. The following patches extend
+the mgb4 driver with support for both features.
 
+Changes in V2:
+- Added missing stride limit
+
+Martin Tůma (2):
+  media: mgb4: Add support for YUV image formats
+  media: mgb4: Add support for V4L2_CAP_TIMEPERFRAME
+
+ Documentation/admin-guide/media/mgb4.rst |   8 +-
+ drivers/media/pci/mgb4/mgb4_core.c       |   2 +-
+ drivers/media/pci/mgb4/mgb4_core.h       |   2 +
+ drivers/media/pci/mgb4/mgb4_io.h         |  28 +-
+ drivers/media/pci/mgb4/mgb4_sysfs_out.c  |   9 +-
+ drivers/media/pci/mgb4/mgb4_vin.c        | 205 ++++++++++++---
+ drivers/media/pci/mgb4/mgb4_vin.h        |   3 +-
+ drivers/media/pci/mgb4/mgb4_vout.c       | 322 ++++++++++++++++++++---
+ drivers/media/pci/mgb4/mgb4_vout.h       |   5 +-
+ 9 files changed, 504 insertions(+), 80 deletions(-)
+
+
+base-commit: 65e6a2773d655172143cc0b927cdc89549842895
 -- 
-Sakari Ailus
+2.44.0
+
