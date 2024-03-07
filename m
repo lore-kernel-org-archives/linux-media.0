@@ -1,446 +1,314 @@
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF2386AE9;
-	Thu,  7 Mar 2024 11:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6B01292CA;
+	Thu,  7 Mar 2024 12:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709810314; cv=none; b=V/CWA+JIZjgd3GYoYKZWOU2kde3xFVra2GR8m53urh0p/YSOdWGrpeEDtwHDZvgCSSZMwtG/x2wjU2HJCTekmcJCI052KuOu+/LiGTUhTxXbztSwxpe71gW0hFf5NTx1SqiDna6ZnNkaE+NK/GnWBvoRmxeCk3LdSY7a2I7kUrE=
+	t=1709813110; cv=none; b=PS8PmbOCwml+hGsX/b9vb9drsUCUAf8RYh/LJsaqtgtU/bfYAN9Arc3HKl4XFQ9+5jmGFFJ+ShXyM8Z5NcBYmi1CkDVCO2azEt30m91hyH01p66zw1HIXsy5SqDSBubwGya1S+JPNKb+MpqZQjTwlDlW2g/P1+ipNkgp0jUhYjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709810314; c=relaxed/simple;
-	bh=z7uHi44jazTy+1QLYDTQDu8HlqDYjCoKrSPOoXI9JVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bvyJiEAsCCOv7lBtAZx5QtaQJs+Ra8AHoLLaFLSLann5FjwH18kOsEa3k0eWGhuAvjARr3GZW67tJA0Si35qxLwa6/qG2AqLH43CL26mvW8WS7cfajDTxiu8i3eVXzA05nMGfElvv0HB4JXPFLDLrBvQ4rIgao+tbPd3DtO2+Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
-Received: from mgb4.digiteq.red (unknown [62.77.71.229])
-	by mx.gpxsee.org (Postfix) with ESMTPSA id C2D554B87E;
-	Thu,  7 Mar 2024 12:18:23 +0100 (CET)
-From: tumic@gpxsee.org
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-Subject: [PATCH v2 1/2] media: mgb4: Add support for YUV image formats
-Date: Thu,  7 Mar 2024 13:18:21 +0100
-Message-ID: <20240307121822.1852-2-tumic@gpxsee.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240307121822.1852-1-tumic@gpxsee.org>
-References: <20240307121822.1852-1-tumic@gpxsee.org>
+	s=arc-20240116; t=1709813110; c=relaxed/simple;
+	bh=kj4HQyfT3WFQLLlxTNmlTRhaXCYFdnAPE/4QIQ+oOtw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k/R6QBu2kguH8QLonwJAIjxD08ik3KbZUfiFFEg2W0LMJ84CppANB0O69JUa1M3o5ZKXIR3HXHpZiDIjbgb9tnt0Q0CnMmCLaQSnzoww+1BrXegzNhfR4Cc2aiBX2TKxbZ8GyNcupweVsOmktUMR3PFC4Q41NeIOr9dMzI6nhjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=b04+cBfa; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="b04+cBfa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1709813106;
+	bh=kj4HQyfT3WFQLLlxTNmlTRhaXCYFdnAPE/4QIQ+oOtw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b04+cBfavTyfpg+DMzBYKNqZO2+p4GDPcOrXeiS/Wx5pttAnWzDEExTD+f4ZVVoA+
+	 5YbC/pyM/voOC1yhmWeKuTqaqMToJavcLcW4ER/1r96EfCYalUCv+bL4s9nlpTTGzE
+	 g59zD7ccM1YdltjA+bgnPx2f916/d7pMzY7pa2p8Arzx61s/DOGIkdpLZBeQzT1P5Y
+	 KdWddg6PBCDfnuEPCJ6lxy2nX8/yJbKJup7wHAJ3ERlMcEEP6WoqRaIny3QPcD8808
+	 1aYr08zIhVz462yLOoz4WhZYYWlGxykAsUKZEAw3PB56F7vL50u4c1Upvq1zNqZIOL
+	 9CF3g2ZW9HoOg==
+Received: from localhost (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sebastianfricke)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 604AA378148F;
+	Thu,  7 Mar 2024 12:05:06 +0000 (UTC)
+Date: Thu, 7 Mar 2024 13:05:05 +0100
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+To: Devarsh Thakkar <devarsht@ti.com>
+Cc: mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, hverkuil-cisco@xs4all.nl,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, benjamin.gaignard@collabora.com,
+	laurent.pinchart@ideasonboard.com, praneeth@ti.com, nm@ti.com,
+	vigneshr@ti.com, a-bhatia1@ti.com, j-luthra@ti.com, b-brnich@ti.com,
+	detheridge@ti.com, p-mantena@ti.com, vijayp@ti.com,
+	andrzej.p@collabora.com, nicolas@ndufresne.ca, afd@ti.com,
+	milkfafa@gmail.com
+Subject: Re: [PATCH v6 1/3] media: dt-bindings: Add Imagination E5010 JPEG
+ Encoder
+Message-ID: <20240307120505.kkliw7qejzfjhqkg@basti-XPS-13-9310>
+References: <20240228141140.3530612-1-devarsht@ti.com>
+ <20240228141140.3530612-2-devarsht@ti.com>
+ <20240229102623.ihwhbba4qwzvxzzq@basti-XPS-13-9310>
+ <7a83fe91-5afa-6aee-a8a4-44f6e3d713c2@ti.com>
+ <20240229133046.64h2f4n27emvdhnq@basti-XPS-13-9310>
+ <eff7080b-42e9-19ae-6022-bfbcc337b4a0@ti.com>
+ <20240301170611.tknj7ncwvgqjwkx5@basti-XPS-13-9310>
+ <9b4c9321-bc3a-95a2-fe9b-f739b5d12598@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <9b4c9321-bc3a-95a2-fe9b-f739b5d12598@ti.com>
 
-From: Martin Tůma <martin.tuma@digiteqautomotive.com>
+Hey Devarsh,
 
-Recent mgb4 firmwares support YUV in addition to the RGB image format. Enable
-YUV in the driver when the FW supports it.
+On 06.03.2024 21:27, Devarsh Thakkar wrote:
+>Hi Sebastian,
+>
+>On 01/03/24 22:36, Sebastian Fricke wrote:
+>> Hey Devarsh,
+>>
+>> On 01.03.2024 22:02, Devarsh Thakkar wrote:
+>>> Hi Sebastian,
+>>>
+>>> On 29/02/24 19:00, Sebastian Fricke wrote:
+>>>> Hey Devarsh,
+>>>>
+>>>> On 29.02.2024 16:50, Devarsh Thakkar wrote:
+>>>>> Hi Sebastian,
+>>>>>
+>>>>> Thanks for the review.
+>>>>>
+>>>>> On 29/02/24 15:56, Sebastian Fricke wrote:
+>>>>>> Hey Devarsh,
+>>>>>>
+>>>>>> On 28.02.2024 19:41, Devarsh Thakkar wrote:
+>>>>>>> Add dt-bindings for Imagination E5010 JPEG Encoder [1] which is implemented
+>>>>>>> as stateful V4L2 M2M driver.
+>>>>>>>
+>>>>>>> The device supports baseline encoding with two different quantization
+>>>>>>> tables and compression ratio as demanded.
+>>>>>>>
+>>>>>>> Minimum resolution supported is 64x64 and Maximum resolution supported is
+>>>>>>> 8192x8192.
+>>>>>>>
+>>>>>>> [1]:  AM62A TRM (Section 7.6 is for JPEG Encoder)
+>>>>>>> Link: https://www.ti.com/lit/pdf/spruj16
+>>>>>>>
+>>>>>>> Co-developed-by: David Huang <d-huang@ti.com>
+>>>>>>> Signed-off-by: David Huang <d-huang@ti.com>
+>>>>>>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+>>>>>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>>>>
+>>>>>> hmmm when did Rob give his reviewed by on this patch? (As this is not a
+>>>>>> DT binding I find that odd)
+>>>>>
+>>>>> [PATCH v6 1/3] media: dt-bindings: Add Imagination E5010 JPEG Encoder : This
+>>>>> is indeed the dt-binding patch. Also As shared in version history it is at V4
+>>>>> where Rob Herring added a Reviewed-By as seen here [0]
+>>>>>
+>>>>>> And where is the Reviewed by tag from Benjamin that he provided on V5?
+>>>>>>
+>>>>>
+>>>>> As captured in patch version history here [1] I thought to remove the
+>>>>> Reviewed-By since the Reviewed-By tag was on V5 and with V6 the driver got
+>>>>> updated with some changes to handle reported sparse warnings and so I have
+>>>>> asked Benjamin to check the range-diff and help with a quick review again if
+>>>>> possible.
+>>>>>
+>>>>> Kindly let me know if I missed something or anything needs to be done from
+>>>>> my end.
+>>>>
+>>>> Yes thanks I was a bit too swift to write here, sorry for the noise.
+>>>> We'll have a look.
+>>>>
+>>>
+>>> Sorry for the back and forth, but on the hindsight and re-looking at the
+>>> kernel patch guidelines [0] they suggest that Reviewed-By tag should only be
+>>> removed if substantial changes were made in further revisions.
+>>>
+>>> So looks to me in-fact it was a mistake on my part to remove the Reviewed-by
+>>> considering the change made in the following patch series was not a
+>>> substantial one as seen in the range-diff [1].
+>>>
+>>> Considering this, just wanted to check with you if it's possible for you to
+>>> consider the Reviewed-by tag :
+>>> `Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com`
+>>> if it helps consolidate things faster to get this series in given we are close
+>>> to final RC's ?
+>>
+>> Yup I think we can keep it as the changes are very minor. Otherwise the
+>> series is pretty much good to go, I'll prepare the PR asap.
+>>
+>
+>Thanks, so I assume this could still make it to 6.9 merge window if it gets
+>pulled in before 6.8 rc8 ? Also do you think it would be possible to pull in
+>https://lore.kernel.org/all/20240305160529.4152865-1-devarsht@ti.com/ as here
+>too nothing much has changed w.r.t initial posting apart from commit message.
 
-Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
----
- drivers/media/pci/mgb4/mgb4_io.h   |   7 ++
- drivers/media/pci/mgb4/mgb4_vin.c  | 116 ++++++++++++++++++++++++-----
- drivers/media/pci/mgb4/mgb4_vout.c | 116 ++++++++++++++++++++++++-----
- 3 files changed, 203 insertions(+), 36 deletions(-)
+Yes I'd assume so but I sadly got sick this week, I'll get to this as
+soon as I can.
 
-diff --git a/drivers/media/pci/mgb4/mgb4_io.h b/drivers/media/pci/mgb4/mgb4_io.h
-index 8698db1be4a9..204613a6685c 100644
---- a/drivers/media/pci/mgb4/mgb4_io.h
-+++ b/drivers/media/pci/mgb4/mgb4_io.h
-@@ -30,4 +30,11 @@ static inline struct mgb4_frame_buffer *to_frame_buffer(struct vb2_v4l2_buffer *
- 	return container_of(vbuf, struct mgb4_frame_buffer, vb);
- }
- 
-+static inline bool has_yuv(struct mgb4_regs *video)
-+{
-+	u32 status = mgb4_read_reg(video, 0xD0);
-+
-+	return (status & (1U << 8));
-+}
-+
- #endif
-diff --git a/drivers/media/pci/mgb4/mgb4_vin.c b/drivers/media/pci/mgb4/mgb4_vin.c
-index 2cd78c539889..19692e4dfb59 100644
---- a/drivers/media/pci/mgb4/mgb4_vin.c
-+++ b/drivers/media/pci/mgb4/mgb4_vin.c
-@@ -186,8 +186,11 @@ static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
- 		       struct device *alloc_devs[])
- {
- 	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(q);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
-+	u32 config = mgb4_read_reg(video, vindev->config->regs.config);
-+	u32 pixelsize = (config & (1U << 16)) ? 2 : 4;
- 	unsigned int size = (vindev->timings.bt.width + vindev->padding)
--	 * vindev->timings.bt.height * 4;
-+			    * vindev->timings.bt.height * pixelsize;
- 
- 	/*
- 	 * If I/O reconfiguration is in process, do not allow to start
-@@ -220,9 +223,12 @@ static int buffer_init(struct vb2_buffer *vb)
- static int buffer_prepare(struct vb2_buffer *vb)
- {
- 	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(vb->vb2_queue);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
- 	struct device *dev = &vindev->mgbdev->pdev->dev;
-+	u32 config = mgb4_read_reg(video, vindev->config->regs.config);
-+	u32 pixelsize = (config & (1U << 16)) ? 2 : 4;
- 	unsigned int size = (vindev->timings.bt.width + vindev->padding)
--	 * vindev->timings.bt.height * 4;
-+			    * vindev->timings.bt.height * pixelsize;
- 
- 	if (vb2_plane_size(vb, 0) < size) {
- 		dev_err(dev, "buffer too small (%lu < %u)\n",
-@@ -359,22 +365,33 @@ static int vidioc_querycap(struct file *file, void *priv,
- static int vidioc_enum_fmt(struct file *file, void *priv,
- 			   struct v4l2_fmtdesc *f)
- {
--	if (f->index != 0)
--		return -EINVAL;
-+	struct mgb4_vin_dev *vindev = video_drvdata(file);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
- 
--	f->pixelformat = V4L2_PIX_FMT_ABGR32;
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
- 
--	return 0;
-+	if (f->index == 0) {
-+		f->pixelformat = V4L2_PIX_FMT_ABGR32;
-+		return 0;
-+	} else if (f->index == 1 && has_yuv(video)) {
-+		f->pixelformat = V4L2_PIX_FMT_YUYV;
-+		return 0;
-+	} else {
-+		return -EINVAL;
-+	}
- }
- 
- static int vidioc_enum_frameintervals(struct file *file, void *priv,
- 				      struct v4l2_frmivalenum *ival)
- {
- 	struct mgb4_vin_dev *vindev = video_drvdata(file);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
- 
- 	if (ival->index != 0)
- 		return -EINVAL;
--	if (ival->pixel_format != V4L2_PIX_FMT_ABGR32)
-+	if (!(ival->pixel_format == V4L2_PIX_FMT_ABGR32 ||
-+	      ((has_yuv(video) && ival->pixel_format == V4L2_PIX_FMT_YUYV))))
- 		return -EINVAL;
- 	if (ival->width != vindev->timings.bt.width ||
- 	    ival->height != vindev->timings.bt.height)
-@@ -393,13 +410,32 @@ static int vidioc_enum_frameintervals(struct file *file, void *priv,
- static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vin_dev *vindev = video_drvdata(file);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
-+	u32 config = mgb4_read_reg(video, vindev->config->regs.config);
-+
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
- 
--	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
- 	f->fmt.pix.width = vindev->timings.bt.width;
- 	f->fmt.pix.height = vindev->timings.bt.height;
- 	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
--	f->fmt.pix.bytesperline = (f->fmt.pix.width + vindev->padding) * 4;
-+
-+	if (config & (1U << 16)) {
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
-+		if (config & (1U << 20)) {
-+			f->fmt.pix.colorspace = V4L2_COLORSPACE_REC709;
-+		} else {
-+			if (config & (1U << 19))
-+				f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
-+			else
-+				f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+		}
-+		f->fmt.pix.bytesperline = (f->fmt.pix.width + vindev->padding) * 2;
-+	} else {
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
-+		f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
-+		f->fmt.pix.bytesperline = (f->fmt.pix.width + vindev->padding) * 4;
-+	}
- 	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
- 
- 	return 0;
-@@ -408,14 +444,33 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vin_dev *vindev = video_drvdata(file);
-+	struct mgb4_regs *video = &vindev->mgbdev->video;
-+	u32 pixelsize;
-+
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return -EINVAL;
- 
--	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
- 	f->fmt.pix.width = vindev->timings.bt.width;
- 	f->fmt.pix.height = vindev->timings.bt.height;
- 	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
--	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
--				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
-+
-+	if (has_yuv(video) && f->fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
-+		pixelsize = 2;
-+		if (!(f->fmt.pix.colorspace == V4L2_COLORSPACE_REC709 ||
-+		      f->fmt.pix.colorspace == V4L2_COLORSPACE_SMPTE170M))
-+			f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+	} else {
-+		pixelsize = 4;
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
-+		f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
-+	}
-+
-+	if (f->fmt.pix.bytesperline > f->fmt.pix.width * pixelsize
-+	    && f->fmt.pix.bytesperline < f->fmt.pix.width * pixelsize * 2)
-+		f->fmt.pix.bytesperline = ALIGN(f->fmt.pix.bytesperline,
-+						pixelsize);
-+	else
-+		f->fmt.pix.bytesperline = f->fmt.pix.width * pixelsize;
- 	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
- 
- 	return 0;
-@@ -425,13 +480,39 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vin_dev *vindev = video_drvdata(file);
- 	struct mgb4_regs *video = &vindev->mgbdev->video;
-+	u32 config, pixelsize;
-+	int ret;
- 
- 	if (vb2_is_busy(&vindev->queue))
- 		return -EBUSY;
- 
--	vidioc_try_fmt(file, priv, f);
-+	ret = vidioc_try_fmt(file, priv, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	config = mgb4_read_reg(video, vindev->config->regs.config);
-+	if (f->fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
-+		pixelsize = 2;
-+		config |= 1U << 16;
-+
-+		if (f->fmt.pix.colorspace == V4L2_COLORSPACE_REC709) {
-+			config |= 1U << 20;
-+			config |= 1U << 19;
-+		} else if (f->fmt.pix.colorspace == V4L2_COLORSPACE_SMPTE170M) {
-+			config &= ~(1U << 20);
-+			config |= 1U << 19;
-+		} else {
-+			config &= ~(1U << 20);
-+			config &= ~(1U << 19);
-+		}
-+	} else {
-+		pixelsize = 4;
-+		config &= ~(1U << 16);
-+	}
-+	mgb4_write_reg(video, vindev->config->regs.config, config);
- 
--	vindev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width * 4)) / 4;
-+	vindev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width
-+			   * pixelsize)) / pixelsize;
- 	mgb4_write_reg(video, vindev->config->regs.padding, vindev->padding);
- 	set_loopback_padding(vindev, vindev->padding);
- 
-@@ -467,7 +548,8 @@ static int vidioc_enum_framesizes(struct file *file, void *fh,
- {
- 	struct mgb4_vin_dev *vindev = video_drvdata(file);
- 
--	if (fsize->index != 0 || fsize->pixel_format != V4L2_PIX_FMT_ABGR32)
-+	if (fsize->index != 0 || !(fsize->pixel_format == V4L2_PIX_FMT_ABGR32 ||
-+				   fsize->pixel_format == V4L2_PIX_FMT_YUYV))
- 		return -EINVAL;
- 
- 	fsize->discrete.width = vindev->timings.bt.width;
-diff --git a/drivers/media/pci/mgb4/mgb4_vout.c b/drivers/media/pci/mgb4/mgb4_vout.c
-index 241353ee77a5..243fbeaaceb9 100644
---- a/drivers/media/pci/mgb4/mgb4_vout.c
-+++ b/drivers/media/pci/mgb4/mgb4_vout.c
-@@ -59,7 +59,11 @@ static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
- 		       struct device *alloc_devs[])
- {
- 	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(q);
--	unsigned int size;
-+	struct mgb4_regs *video = &voutdev->mgbdev->video;
-+	u32 config = mgb4_read_reg(video, voutdev->config->regs.config);
-+	u32 pixelsize = (config & (1U << 16)) ? 2 : 4;
-+	unsigned int size = (voutdev->width + voutdev->padding) * voutdev->height
-+			    * pixelsize;
- 
- 	/*
- 	 * If I/O reconfiguration is in process, do not allow to start
-@@ -69,8 +73,6 @@ static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
- 	if (test_bit(0, &voutdev->mgbdev->io_reconfig))
- 		return -EBUSY;
- 
--	size = (voutdev->width + voutdev->padding) * voutdev->height * 4;
--
- 	if (*nplanes)
- 		return sizes[0] < size ? -EINVAL : 0;
- 	*nplanes = 1;
-@@ -93,9 +95,11 @@ static int buffer_prepare(struct vb2_buffer *vb)
- {
- 	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(vb->vb2_queue);
- 	struct device *dev = &voutdev->mgbdev->pdev->dev;
--	unsigned int size;
--
--	size = (voutdev->width + voutdev->padding) * voutdev->height * 4;
-+	struct mgb4_regs *video = &voutdev->mgbdev->video;
-+	u32 config = mgb4_read_reg(video, voutdev->config->regs.config);
-+	u32 pixelsize = (config & (1U << 16)) ? 2 : 4;
-+	unsigned int size = (voutdev->width + voutdev->padding) * voutdev->height
-+			    * pixelsize;
- 
- 	if (vb2_plane_size(vb, 0) < size) {
- 		dev_err(dev, "buffer too small (%lu < %u)\n",
-@@ -194,24 +198,53 @@ static int vidioc_querycap(struct file *file, void *priv,
- static int vidioc_enum_fmt(struct file *file, void *priv,
- 			   struct v4l2_fmtdesc *f)
- {
--	if (f->index != 0)
--		return -EINVAL;
-+	struct mgb4_vin_dev *voutdev = video_drvdata(file);
-+	struct mgb4_regs *video = &voutdev->mgbdev->video;
- 
--	f->pixelformat = V4L2_PIX_FMT_ABGR32;
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
- 
--	return 0;
-+	if (f->index == 0) {
-+		f->pixelformat = V4L2_PIX_FMT_ABGR32;
-+		return 0;
-+	} else if (f->index == 1 && has_yuv(video)) {
-+		f->pixelformat = V4L2_PIX_FMT_YUYV;
-+		return 0;
-+	} else {
-+		return -EINVAL;
-+	}
- }
- 
- static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vout_dev *voutdev = video_drvdata(file);
-+	struct mgb4_regs *video = &voutdev->mgbdev->video;
-+	u32 config = mgb4_read_reg(video, voutdev->config->regs.config);
-+
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
- 
--	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
- 	f->fmt.pix.width = voutdev->width;
- 	f->fmt.pix.height = voutdev->height;
- 	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
--	f->fmt.pix.bytesperline = (f->fmt.pix.width + voutdev->padding) * 4;
-+
-+	if (config & (1U << 16)) {
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
-+		if (config & (1U << 20)) {
-+			f->fmt.pix.colorspace = V4L2_COLORSPACE_REC709;
-+		} else {
-+			if (config & (1U << 19))
-+				f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
-+			else
-+				f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+		}
-+		f->fmt.pix.bytesperline = (f->fmt.pix.width + voutdev->padding) * 2;
-+	} else {
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
-+		f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
-+		f->fmt.pix.bytesperline = (f->fmt.pix.width + voutdev->padding) * 4;
-+	}
-+
- 	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
- 
- 	return 0;
-@@ -220,14 +253,33 @@ static int vidioc_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vout_dev *voutdev = video_drvdata(file);
-+	struct mgb4_regs *video = &voutdev->mgbdev->video;
-+	u32 pixelsize;
-+
-+	if (f->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
- 
--	f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
- 	f->fmt.pix.width = voutdev->width;
- 	f->fmt.pix.height = voutdev->height;
- 	f->fmt.pix.field = V4L2_FIELD_NONE;
--	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
--	f->fmt.pix.bytesperline = max(f->fmt.pix.width * 4,
--				      ALIGN_DOWN(f->fmt.pix.bytesperline, 4));
-+
-+	if (has_yuv(video) && f->fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
-+		pixelsize = 2;
-+		if (!(f->fmt.pix.colorspace == V4L2_COLORSPACE_REC709 ||
-+		      f->fmt.pix.colorspace == V4L2_COLORSPACE_SMPTE170M))
-+			f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+	} else {
-+		pixelsize = 4;
-+		f->fmt.pix.pixelformat = V4L2_PIX_FMT_ABGR32;
-+		f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
-+	}
-+
-+	if (f->fmt.pix.bytesperline > f->fmt.pix.width * pixelsize
-+	    && f->fmt.pix.bytesperline < f->fmt.pix.width * pixelsize * 2)
-+		f->fmt.pix.bytesperline = ALIGN(f->fmt.pix.bytesperline,
-+						pixelsize);
-+	else
-+		f->fmt.pix.bytesperline = f->fmt.pix.width * pixelsize;
- 	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
- 
- 	return 0;
-@@ -237,13 +289,39 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct mgb4_vout_dev *voutdev = video_drvdata(file);
- 	struct mgb4_regs *video = &voutdev->mgbdev->video;
-+	u32 config, pixelsize;
-+	int ret;
- 
- 	if (vb2_is_busy(&voutdev->queue))
- 		return -EBUSY;
- 
--	vidioc_try_fmt(file, priv, f);
-+	ret = vidioc_try_fmt(file, priv, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	config = mgb4_read_reg(video, voutdev->config->regs.config);
-+	if (f->fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
-+		pixelsize = 2;
-+		config |= 1U << 16;
-+
-+		if (f->fmt.pix.colorspace == V4L2_COLORSPACE_REC709) {
-+			config |= 1U << 20;
-+			config |= 1U << 19;
-+		} else if (f->fmt.pix.colorspace == V4L2_COLORSPACE_SMPTE170M) {
-+			config &= ~(1U << 20);
-+			config |= 1U << 19;
-+		} else {
-+			config &= ~(1U << 20);
-+			config &= ~(1U << 19);
-+		}
-+	} else {
-+		pixelsize = 4;
-+		config &= ~(1U << 16);
-+	}
-+	mgb4_write_reg(video, voutdev->config->regs.config, config);
- 
--	voutdev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width * 4)) / 4;
-+	voutdev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width
-+			    * pixelsize)) / pixelsize;
- 	mgb4_write_reg(video, voutdev->config->regs.padding, voutdev->padding);
- 
- 	return 0;
--- 
-2.44.0
+>
+>Regards
+>Devarsh
 
+Greetings,
+Sebastian
+
+>
+>> Greetings,
+>> Sebastian
+>>
+>>>
+>>> [0]:
+>>> https://docs.kernel.org/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes:~:text=changed%20substantially
+>>>
+>>> [1]: https://gist.github.com/devarsht/c89180ac2b0d2814614f2b59d0705c19
+>>>
+>>> Regards
+>>> Devarsh
+>>>
+>>>>
+>>>> Greetings,
+>>>> Sebastian
+>>>>
+>>>>>
+>>>>> [0] :
+>>>>> https://lore.kernel.org/all/170716378412.295212.11603162949482063011.robh@kernel.org/
+>>>>> [1] : https://lore.kernel.org/all/20240228141140.3530612-4-devarsht@ti.com/
+>>>>>
+>>>>>
+>>>>> Regards
+>>>>> Devarsh
+>>>>>>> ---
+>>>>>>> V2: No change
+>>>>>>> V3:
+>>>>>>> - Add vendor specific compatible
+>>>>>>> - Update reg names
+>>>>>>> - Update clocks to 1
+>>>>>>> - Fix dts example with proper naming
+>>>>>>> V4:
+>>>>>>> - Use ti-specific compatible ti,am62a-jpeg-enc as secondary one
+>>>>>>> - Update commit message and title
+>>>>>>> - Remove clock-names as only single clock
+>>>>>>> V5:
+>>>>>>> - Add Reviewed-By tag
+>>>>>>> V6:
+>>>>>>> - No change
+>>>>>>>
+>>>>>>> .../bindings/media/img,e5010-jpeg-enc.yaml    | 75 +++++++++++++++++++
+>>>>>>> MAINTAINERS                                   |  5 ++
+>>>>>>> 2 files changed, 80 insertions(+)
+>>>>>>> create mode 100644
+>>>>>>> Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>>>>>>
+>>>>>>> diff --git
+>>>>>>> a/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>>>>>> b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>>>>>> new file mode 100644
+>>>>>>> index 000000000000..085020cb9e61
+>>>>>>> --- /dev/null
+>>>>>>> +++ b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>>>>>> @@ -0,0 +1,75 @@
+>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>>>> +%YAML 1.2
+>>>>>>> +---
+>>>>>>> +$id: http://devicetree.org/schemas/media/img,e5010-jpeg-enc.yaml#
+>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>>> +
+>>>>>>> +title: Imagination E5010 JPEG Encoder
+>>>>>>> +
+>>>>>>> +maintainers:
+>>>>>>> +  - Devarsh Thakkar <devarsht@ti.com>
+>>>>>>> +
+>>>>>>> +description: |
+>>>>>>> +  The E5010 is a JPEG encoder from Imagination Technologies implemented on
+>>>>>>> +  TI's AM62A SoC. It is capable of real time encoding of YUV420 and YUV422
+>>>>>>> +  inputs to JPEG and M-JPEG. It supports baseline JPEG Encoding up to
+>>>>>>> +  8Kx8K resolution.
+>>>>>>> +
+>>>>>>> +properties:
+>>>>>>> +  compatible:
+>>>>>>> +    oneOf:
+>>>>>>> +      - items:
+>>>>>>> +          - const: ti,am62a-jpeg-enc
+>>>>>>> +          - const: img,e5010-jpeg-enc
+>>>>>>> +      - const: img,e5010-jpeg-enc
+>>>>>>> +
+>>>>>>> +  reg:
+>>>>>>> +    items:
+>>>>>>> +      - description: The E5010 core register region
+>>>>>>> +      - description: The E5010 mmu register region
+>>>>>>> +
+>>>>>>> +  reg-names:
+>>>>>>> +    items:
+>>>>>>> +      - const: core
+>>>>>>> +      - const: mmu
+>>>>>>> +
+>>>>>>> +  power-domains:
+>>>>>>> +    maxItems: 1
+>>>>>>> +
+>>>>>>> +  resets:
+>>>>>>> +    maxItems: 1
+>>>>>>> +
+>>>>>>> +  clocks:
+>>>>>>> +    maxItems: 1
+>>>>>>> +
+>>>>>>> +  interrupts:
+>>>>>>> +    maxItems: 1
+>>>>>>> +
+>>>>>>> +required:
+>>>>>>> +  - compatible
+>>>>>>> +  - reg
+>>>>>>> +  - reg-names
+>>>>>>> +  - interrupts
+>>>>>>> +  - clocks
+>>>>>>> +
+>>>>>>> +additionalProperties: false
+>>>>>>> +
+>>>>>>> +examples:
+>>>>>>> +  - |
+>>>>>>> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+>>>>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>>>>>> +
+>>>>>>> +    soc {
+>>>>>>> +      #address-cells = <2>;
+>>>>>>> +      #size-cells = <2>;
+>>>>>>> +      jpeg-encoder@fd20000 {
+>>>>>>> +          compatible = "img,e5010-jpeg-enc";
+>>>>>>> +          reg = <0x00 0xfd20000 0x00 0x100>,
+>>>>>>> +                <0x00 0xfd20200 0x00 0x200>;
+>>>>>>> +          reg-names = "core", "mmu";
+>>>>>>> +          clocks = <&k3_clks 201 0>;
+>>>>>>> +          power-domains = <&k3_pds 201 TI_SCI_PD_EXCLUSIVE>;
+>>>>>>> +          interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +      };
+>>>>>>> +    };
+>>>>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>>>>> index e1475ca38ff2..6b34ee8d92b5 100644
+>>>>>>> --- a/MAINTAINERS
+>>>>>>> +++ b/MAINTAINERS
+>>>>>>> @@ -10572,6 +10572,11 @@ S:    Maintained
+>>>>>>> F:    Documentation/devicetree/bindings/auxdisplay/img,ascii-lcd.yaml
+>>>>>>> F:    drivers/auxdisplay/img-ascii-lcd.c
+>>>>>>>
+>>>>>>> +IMGTEC JPEG ENCODER DRIVER
+>>>>>>> +M:    Devarsh Thakkar <devarsht@ti.com>
+>>>>>>> +S:    Supported
+>>>>>>> +F:    Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+>>>>>>> +
+>>>>>>> IMGTEC IR DECODER DRIVER
+>>>>>>> S:    Orphan
+>>>>>>> F:    drivers/media/rc/img-ir/
+>>>>>>> -- 
+>>>>>>> 2.39.1
+>>>>>>>
