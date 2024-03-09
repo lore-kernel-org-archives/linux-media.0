@@ -1,171 +1,101 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A9C40879;
-	Sat,  9 Mar 2024 15:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DBA2C853
+	for <linux-media@vger.kernel.org>; Sat,  9 Mar 2024 15:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709996933; cv=none; b=QB54d6lduU22WAYRtLbJ5NXjKnXCrSknIibNGvxz1l/x23ZyvCBp97ZHzLdoy8zJwSc2wDXAgvp7/tSb3xp524M6efh/Dkl8k6X0u12Gz8yqPT84VUYEDlIDRYbBJi1WPTQa1PsSlpYpJaxPC5wjHAqcWXbk8hfAI4SRlsU94Bk=
+	t=1709997332; cv=none; b=MAoE2nAdX+XCc14hXpkkpfioAGAAUpOmptzP8mkTf0tgx4iXYzdvV07gvcQvOCJ435IMIsTTB4qBGUjNpGWuY+HTG4/zf3mUal/LP6bWJSK5NXmc1JhtmNdP7TSKsI1A8U0FNLgfx9cSYrGOeNUq6BF0LM8nestIPcxifuEQz7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709996933; c=relaxed/simple;
-	bh=qTEqGKNFjaYsuV/phc8ORQVbsab7C8DxOC4Q/kxtGZo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o4HYr8cNCtaKQRjR+ZFyQLnC+xfq11yoKm9UA8JNNUzOembNZ9/bysGI649+faECdsMmQZ+JmzIBOq3kgW6+j9N5mvglVxo48zpkH0718Ue6W/Y7NqG4+a7oF8aSKcCSn8IHpPy9FS5kFKaL7qMsV492MZgi+/epR/lB1NvLHBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LC9Yl0AS; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1709997332; c=relaxed/simple;
+	bh=Emx6ojdwuVF9J+umH6hC9sen8fN1D5xWROxjVikzX3k=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CnoShkh+vkHSu2kxgkZ6p3+qsZqKjk/L6uaJmoRupBtG0nIuBqlA/XWeXmBQ5TKj6/AqDyNsJO47uQsnhhAomHAyC4ko/+oAd6UeG5CijTVJXPJriV1ur+Ny4ulnFNlp/DH6RkawNRTcp1EoRVcKIZkMWrER70Qr6ndUhUfFIJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GqdYyw6F; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LC9Yl0AS"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GqdYyw6F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1709996923;
-	bh=qTEqGKNFjaYsuV/phc8ORQVbsab7C8DxOC4Q/kxtGZo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LC9Yl0ASKsa/CrK1czdWcr/62wJZA8AxMjkFJKCzFtsdBXqD/HHpjZuQ9dVxpwAKR
-	 2PIBATnledzYqRbGG7SWlmzYrO8cv9ZtKvi/qzcUGAbfLIJtnuy0l3epdARjqpd2Mf
-	 tOnIfF2nCCH0LxWU302IE9Me1He2Izi8jmevYZ4HTQbFmUVQN1LBCdxR9ikfEsS5DA
-	 oUFxOF38J/dKX/zjxHdccFt7nXLOgpckZbd3a8MUeadTTlnMDDRkD+5eIVOKDW/z5g
-	 vU7EQRsDOUPNVhnJOmiE0Xw8PYf7XDoS950qSY4byKGxT6ullTrVkMHCHsCg1HHa8Q
-	 /uo5XZO6oHWoQ==
+	s=mail; t=1709997329;
+	bh=Emx6ojdwuVF9J+umH6hC9sen8fN1D5xWROxjVikzX3k=;
+	h=Date:From:To:Subject:From;
+	b=GqdYyw6FeLqz+3VgVFzMTeCcY1jwEUeRRGy5EuxWGnQQaMYi3bJezFqcbriZ+AnHA
+	 MeOcCwVhPCFfu5Y+sX3a4h8qQdLYF8j9F1jf3FasIXtnJzfV2f54ZHgmIMnd5uITBQ
+	 f+27YuXcsYCxGOLqzT7OBfaMZgWaVG28PktFLiCDovMnkRZ/60743ZnercmTqPP1Xh
+	 7yceUYJ6FCpMwbpFXrqHkgNIOCd/zzRnm8Pli0782XWNFHKL2XVjsSNxyJ9fN12PUW
+	 5DSEgua2mQsUZNJzteH8g4dxAfhG68GFnD5IQyaQaThE8u/DMvTBI3BAFPHrffxPMB
+	 6w7eKVXIJFqlg==
 Received: from localhost (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sebastianfricke)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E33443782043;
-	Sat,  9 Mar 2024 15:08:42 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 7FD803781FE9
+	for <linux-media@vger.kernel.org>; Sat,  9 Mar 2024 15:15:29 +0000 (UTC)
+Date: Sat, 9 Mar 2024 16:15:28 +0100
 From: Sebastian Fricke <sebastian.fricke@collabora.com>
-Date: Sat, 09 Mar 2024 16:08:38 +0100
-Subject:
- [PATCH 2/3] media: mediatek: vcodec: Improve wording & fix grammatic issues
+To: linux-media@vger.kernel.org
+Subject: [GIT PULL FOR 6.9] Imagination E5010 JPEG encoder
+Message-ID: <20240309151528.ayphvdpnj2crvycv@basti-XPS-13-9310>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240309-mediatek-typos-v1-2-fa4aeb59306c@collabora.com>
-References: <20240309-mediatek-typos-v1-0-fa4aeb59306c@collabora.com>
-In-Reply-To: <20240309-mediatek-typos-v1-0-fa4aeb59306c@collabora.com>
-To: Tiffany Lin <tiffany.lin@mediatek.com>,
- Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
- Yunfei Dong <yunfei.dong@mediatek.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- kernel@collabora.com, Sebastian Fricke <sebastian.fricke@collabora.com>
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1709996919; l=5849;
- i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
- bh=qTEqGKNFjaYsuV/phc8ORQVbsab7C8DxOC4Q/kxtGZo=;
- b=rKIInxf1pNxiLqElpsLEecHpA9fojcvJ0hoVMqp5YWocqN/Ve0kgtFxy+Smr1ZCN6obDvVV9IZdK
- K8fYAIdoD0L+bPnjpAMFIsMWjnqNc/Qoxiku51mQKswcIA8Blq63
-X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
- pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 
-Multiple issues detected while scanning the code by far not a complete
-list of required changes but some small improvements.
+Hey Hans & Mauro,
 
-Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
----
- drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   | 2 +-
- .../media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_if.c    | 2 +-
- .../platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c    | 2 +-
- .../platform/mediatek/vcodec/decoder/vdec/vdec_hevc_req_multi_if.c    | 2 +-
- drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_if.c     | 4 ++--
- drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_req_if.c | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+These patches add support for the Imagination E5010 JPEG encoder.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-index a0451116f2e4..f975db4293da 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
-@@ -71,7 +71,7 @@ enum mtk_vdec_hw_arch {
-  * @fb_sz: bitstream size of each plane
-  * E.g. suppose picture size is 176x144,
-  *      buffer size will be aligned to 176x160.
-- * @cap_fourcc: fourcc number(may changed when resolution change)
-+ * @cap_fourcc: fourcc number(may change on a resolution change)
-  * @reserved: align struct to 64-bit in order to adjust 32-bit and 64-bit os.
-  */
- struct vdec_pic_info {
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_if.c
-index 37c41b673876..668e87bf30e8 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_if.c
-@@ -27,7 +27,7 @@ struct mtk_h264_dec_slice_param {
- /**
-  * struct vdec_h264_dec_info - decode information
-  * @dpb_sz		: decoding picture buffer size
-- * @resolution_changed  : resolution change happend
-+ * @resolution_changed  : flag to notify that a resolution change happend
-  * @realloc_mv_buf	: flag to notify driver to re-allocate mv buffer
-  * @cap_num_planes	: number planes of capture buffer
-  * @bs_dma		: Input bit-stream buffer dma address
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-index d5224c9584b6..c4ac6b6f7acf 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
-@@ -131,7 +131,7 @@ struct vdec_h264_slice_share_info {
- /**
-  * struct vdec_h264_slice_inst - h264 decoder instance
-  *
-- * @slice_dec_num:	how many picture be decoded
-+ * @slice_dec_num:	how many pictures to be decoded
-  * @ctx:		point to mtk_vcodec_dec_ctx
-  * @pred_buf:		HW working prediction buffer
-  * @mv_buf:		HW working motion vector buffer
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_hevc_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_hevc_req_multi_if.c
-index a44db6139ff2..349b510d355a 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_hevc_req_multi_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_hevc_req_multi_if.c
-@@ -342,7 +342,7 @@ struct vdec_hevc_slice_share_info {
- /**
-  * struct vdec_hevc_slice_inst - hevc decoder instance
-  *
-- * @slice_dec_num:      how many picture be decoded
-+ * @slice_dec_num:      how many pictures to be decoded
-  * @ctx:                point to mtk_vcodec_dec_ctx
-  * @mv_buf:             HW working motion vector buffer
-  * @vpu:                VPU instance
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_if.c
-index 19407f9bc773..9649f4ec1f2a 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_if.c
-@@ -56,7 +56,7 @@
-  * @cur_c_fb_dma      : current plane C frame buffer dma address
-  * @bs_dma	      : bitstream dma address
-  * @bs_sz	      : bitstream size
-- * @resolution_changed: resolution change flag 1 - changed,  0 - not change
-+ * @resolution_changed: resolution change flag 1 - changed,  0 - not changed
-  * @show_frame	      : display this frame or not
-  * @wait_key_frame    : wait key frame coming
-  */
-@@ -109,7 +109,7 @@ struct vdec_vp8_hw_reg_base {
- /**
-  * struct vdec_vp8_vpu_inst - VPU instance for VP8 decode
-  * @wq_hd	: Wait queue to wait VPU message ack
-- * @signaled	: 1 - Host has received ack message from VPU, 0 - not receive
-+ * @signaled	: 1 - Host has received ack message from VPU, 0 - not received
-  * @failure	: VPU execution result status 0 - success, others - fail
-  * @inst_addr	: VPU decoder instance address
-  */
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_req_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_req_if.c
-index f677e499fefa..e27e728f392e 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_req_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp8_req_if.c
-@@ -35,7 +35,7 @@
-  * @cur_c_fb_dma:	current plane C frame buffer dma address
-  * @bs_dma:		bitstream dma address
-  * @bs_sz:		bitstream size
-- * @resolution_changed:resolution change flag 1 - changed,  0 - not change
-+ * @resolution_changed:resolution change flag 1 - changed,  0 - not changed
-  * @frame_header_type:	current frame header type
-  * @crc:		used to check whether hardware's status is right
-  * @reserved:		reserved, currently unused
+Please pull.
 
--- 
-2.25.1
+The following changes since commit b14257abe7057def6127f6fb2f14f9adc8acabdb:
+
+   media: rcar-isp: Disallow unbind of devices (2024-03-07 16:35:13 +0100)
+
+are available in the Git repository at:
+
+   https://gitlab.collabora.com/sebastianfricke/linux.git tags/for-6.9-e5010-jpeg-encoder
+
+for you to fetch changes up to 146a5dc5f8baee4178a1cdfa483aa3c94273ce5e:
+
+   media: imagination: Add E5010 JPEG Encoder driver (2024-03-09 16:10:43 +0100)
+
+----------------------------------------------------------------
+Adds support for the E5010-JPEG-encoder
+
+----------------------------------------------------------------
+Devarsh Thakkar (3):
+       media: dt-bindings: Add Imagination E5010 JPEG Encoder
+       media: jpeg: Add reference quantization and huffman tables
+       media: imagination: Add E5010 JPEG Encoder driver
+
+  .../bindings/media/img,e5010-jpeg-enc.yaml         |   75 +
+  MAINTAINERS                                        |    7 +
+  drivers/media/platform/Kconfig                     |    1 +
+  drivers/media/platform/Makefile                    |    1 +
+  drivers/media/platform/imagination/Kconfig         |   12 +
+  drivers/media/platform/imagination/Makefile        |    3 +
+  .../media/platform/imagination/e5010-core-regs.h   |  585 ++++++++
+  .../media/platform/imagination/e5010-jpeg-enc-hw.c |  267 ++++
+  .../media/platform/imagination/e5010-jpeg-enc-hw.h |   42 +
+  .../media/platform/imagination/e5010-jpeg-enc.c    | 1553 ++++++++++++++++++++
+  .../media/platform/imagination/e5010-jpeg-enc.h    |  169 +++
+  .../media/platform/imagination/e5010-mmu-regs.h    |  311 ++++
+  include/media/jpeg-enc-reftables.h                 |  112 ++
+  include/media/jpeg.h                               |    4 +
+  14 files changed, 3142 insertions(+)
+  create mode 100644 Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+  create mode 100644 drivers/media/platform/imagination/Kconfig
+  create mode 100644 drivers/media/platform/imagination/Makefile
+  create mode 100644 drivers/media/platform/imagination/e5010-core-regs.h
+  create mode 100644 drivers/media/platform/imagination/e5010-jpeg-enc-hw.c
+  create mode 100644 drivers/media/platform/imagination/e5010-jpeg-enc-hw.h
+  create mode 100644 drivers/media/platform/imagination/e5010-jpeg-enc.c
+  create mode 100644 drivers/media/platform/imagination/e5010-jpeg-enc.h
+  create mode 100644 drivers/media/platform/imagination/e5010-mmu-regs.h
+  create mode 100644 include/media/jpeg-enc-reftables.h
