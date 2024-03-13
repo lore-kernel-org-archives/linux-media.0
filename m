@@ -1,139 +1,225 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DFE4120B;
-	Wed, 13 Mar 2024 13:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB21C4438F;
+	Wed, 13 Mar 2024 13:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710337535; cv=none; b=dJs9EnGPoIjgVkNNTLowRMIPWt3rLN1M0IULFr3x6tna/5N2MX/x+DMw7nSSPzI3SKpwm3nKiy748HzfBhdeW5iNe4GfPGxbSbWWqYgQm9dEuiFoYQZ4mS4oYHZUcgRMSUJyvm/sy9ove5uAUDrXSFMmzh/WWMlJIOrr/mmI+yo=
+	t=1710337620; cv=none; b=A/HwzAedjKeQAZGmRGPjCI89/hH1vFID7TrQXOxEb9wWq8waUPb91zdu5CCBomfCpOdDwNpMcQ3iyRUQGKJOXcVhsNcb5azw9Y511pJ/7KoaYm3AaPyHsY2NsB7+dOXrMR41+qLCJ91qTwX1reTpdJmAnSm/BTeQVPnZcbXur28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710337535; c=relaxed/simple;
-	bh=WeOGJedFmOM2Tgb4d1S3JinQzz4nZviTh118O1gKX1M=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rKunXNDvuxL4uL1cWxIE4isq/NNCSbpHbM1JL/2EAvgPY5RDmN/A5mPApEnOkd4SzK0UulDH080d4K1eOyVL9AwA+gsYFPsq3ZAr1mkdgjvNRo1235gc5fwIyku9pYG6alr09VDin/BTL8TTBQvQMOM5mSUaBD5tByHIfoTWPyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=aiFrZAyj; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1710337620; c=relaxed/simple;
+	bh=tFC1LjN/c/2WfKnIaEgh2D1GzcV4H+gxaOkYGxItpss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZtfqDmo4X+EY4ZtlPUsGyVjXqgz/ULLHXi1P0kXpBgDI2HvbLWKNibNnSRkgtO6w+qVrMVq3uSyOiT+nIZYP7zRjhZC65bW2p93tBb5fK2XxKWQLXSAclMFzJgE9c0iOPG1LMbM/5qtIIxbBvgWVb0w17N/gPdO1ILplSuLPILY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qFnVBFU7; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="aiFrZAyj"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42DCnvlb016200;
-	Wed, 13 Mar 2024 06:44:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pfpt0220; bh=VwuvIBp1UpDExbuSxSKOlP
-	wsFLpAOE9AYw6mEBoQvp8=; b=aiFrZAyj1AcWXCRSRkWzRXR9iU7achTNcubWf/
-	HnaZBig1tmq8DhuJhVS8RNmEColRN5JxuwFTRTMFVJ2Y4I/vwvXdSpNp7oMIb/Ka
-	ADrchOCED650x9vCEVM2FhN38jqAyMuZc8YGdxbjlrkWKK/yJmqJiSYKJDkABpRW
-	5YfZW4RXfDF3mjJMhYNgwMfqS7sc/UngRNGCm5TcNC/UjUn41uIC+qBVOo0tnU1c
-	brBmMVL/4CpdDtywZjUqG4poI8gfuRSRb8c4EsCpirh4HDWglDB3l0q3e9DpOjP2
-	7qVgnG997jmN8ytlJ0kcko012RMiDVJiDKfsO3CBGALNLUrg==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3wucg2r6nn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 06:44:49 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.12; Wed, 13 Mar 2024 06:44:48 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
- Transport; Wed, 13 Mar 2024 06:44:48 -0700
-Received: from maili.marvell.com (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id 5879A3F704F;
-	Wed, 13 Mar 2024 06:44:42 -0700 (PDT)
-Date: Wed, 13 Mar 2024 19:14:41 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Julien Panis <jpanis@baylibre.com>
-CC: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov
-	<ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard
- Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sumit
- Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?=
-	<christian.koenig@amd.com>,
-        Simon Horman <horms@kernel.org>, Andrew Lunn
-	<andrew@lunn.ch>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH v4 0/3] Add minimal XDP support to TI AM65 CPSW Ethernet
- driver
-Message-ID: <20240313134441.GA1263398@maili.marvell.com>
-References: <20240223-am65-cpsw-xdp-basic-v4-0-38361a63a48b@baylibre.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qFnVBFU7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1710337617;
+	bh=tFC1LjN/c/2WfKnIaEgh2D1GzcV4H+gxaOkYGxItpss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qFnVBFU7WjNRn7y7twAoCNwkAnDX3XVb3JGj4ip1QqsEeUwoxHisKNyhj2Ih1mAYp
+	 yHukGMJo8MfoQ2WGxVRbWyj64as2qvMRqeQStIsxnXD0yQiXuAgd6oTsxDehZDMJld
+	 MrDBbYCO4LRaOOpiqbPjMyAXjn1fsdaLlbDyyZP4srCRaxdeKQ3+CLRmL4HzBPEv1H
+	 jKnnNuM0i92eOTdO5bheuJXRaWIeXH2YMPhZd5tI0AnyNPIOVwrHtk56eZbcEmsYdn
+	 6txf4bfb+juxAa2VKlr8l3wPgD4Z1DG61j+eMDJ86/ILh/cpTH+Q9CArMrkFmMXmaR
+	 jurXpxlSMDHsg==
+Received: from localhost (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sebastianfricke)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A3EBB37820C6;
+	Wed, 13 Mar 2024 13:46:56 +0000 (UTC)
+Date: Wed, 13 Mar 2024 14:46:52 +0100
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+To: Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: =?utf-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4=?= Prado <nfraprado@collabora.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Nathan Hebert <nhebert@chromium.org>,
+	Irui Wang <irui.wang@mediatek.com>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	Fritz Koenig <frkoenig@chromium.org>,
+	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v3,1/2] media: mediatek: vcodec: adding lock to protect
+ decoder context list
+Message-ID: <20240313134652.gj4kwlbmiqu5hxdu@basti-XPS-13-9310>
+References: <20240222092609.31382-1-yunfei.dong@mediatek.com>
+ <20240222092609.31382-2-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240223-am65-cpsw-xdp-basic-v4-0-38361a63a48b@baylibre.com>
-X-Proofpoint-ORIG-GUID: G5PU32WzbO9uPZplymCr0TA-d_XXXYnV
-X-Proofpoint-GUID: G5PU32WzbO9uPZplymCr0TA-d_XXXYnV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-13_08,2024-03-12_01,2023-05-22_02
+In-Reply-To: <20240222092609.31382-2-yunfei.dong@mediatek.com>
 
-On 2024-03-12 at 18:52:39, Julien Panis (jpanis@baylibre.com) wrote:
-> This patch adds XDP support to TI AM65 CPSW Ethernet driver.
+Hey Yunfei,
 
-is this a net-next item ?
+On 22.02.2024 17:26, Yunfei Dong wrote:
+>The ctx_list will be deleted when scp getting unexpected behavior, then the
+>ctx_list->next will be NULL, the kernel driver maybe access NULL pointer in
+>function vpu_dec_ipi_handler when going through each context, then reboot.
 
 >
-> The following features are implemented: NETDEV_XDP_ACT_BASIC,
-> NETDEV_XDP_ACT_REDIRECT, and NETDEV_XDP_ACT_NDO_XMIT.
+>Need to add lock to protect the ctx_list to make sure the ctx_list->next isn't
+>NULL pointer.
+
+Same here as with the encoder changes.
+
+Greetings,
+Sebastian
+
 >
-> Zero-copy and non-linear XDP buffer supports are NOT implemented.
+>Hardware name: Google juniper sku16 board (DT)
+>pstate: 20400005 (nzCv daif +PAN -UAO -TCO BTYPE=--)
+>pc : vpu_dec_ipi_handler+0x58/0x1f8 [mtk_vcodec_dec]
+>lr : scp_ipi_handler+0xd0/0x194 [mtk_scp]
+>sp : ffffffc0131dbbd0
+>x29: ffffffc0131dbbd0 x28: 0000000000000000
+>x27: ffffff9bb277f348 x26: ffffff9bb242ad00
+>x25: ffffffd2d440d3b8 x24: ffffffd2a13ff1d4
+>x23: ffffff9bb7fe85a0 x22: ffffffc0133fbdb0
+>x21: 0000000000000010 x20: ffffff9b050ea328
+>x19: ffffffc0131dbc08 x18: 0000000000001000
+>x17: 0000000000000000 x16: ffffffd2d461c6e0
+>x15: 0000000000000242 x14: 000000000000018f
+>x13: 000000000000004d x12: 0000000000000000
+>x11: 0000000000000001 x10: fffffffffffffff0
+>x9 : ffffff9bb6e793a8 x8 : 0000000000000000
+>x7 : 0000000000000000 x6 : 000000000000003f
+>x5 : 0000000000000040 x4 : fffffffffffffff0
+>x3 : 0000000000000020 x2 : ffffff9bb6e79080
+>x1 : 0000000000000010 x0 : ffffffc0131dbc08
+>Call trace:
+>vpu_dec_ipi_handler+0x58/0x1f8 [mtk_vcodec_dec (HASH:6c3f 2)]
+>scp_ipi_handler+0xd0/0x194 [mtk_scp (HASH:7046 3)]
+>mt8183_scp_irq_handler+0x44/0x88 [mtk_scp (HASH:7046 3)]
+>scp_irq_handler+0x48/0x90 [mtk_scp (HASH:7046 3)]
+>irq_thread_fn+0x38/0x94
+>irq_thread+0x100/0x1c0
+>kthread+0x140/0x1fc
+>ret_from_fork+0x10/0x30
+>Code: 54000088 f94ca50a eb14015f 54000060 (f9400108)
+>---[ end trace ace43ce36cbd5c93 ]---
+>Kernel panic - not syncing: Oops: Fatal exception
+>SMP: stopping secondary CPUs
+>Kernel Offset: 0x12c4000000 from 0xffffffc010000000
+>PHYS_OFFSET: 0xffffffe580000000
+>CPU features: 0x08240002,2188200c
+>Memory Limit: none
 >
-> Besides, the page pool memory model is used to get better performance.
+>Fixes: 655b86e52eac ("media: mediatek: vcodec: Fix possible invalid memory access for decoder")
+>Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+>---
+> .../platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c      | 4 ++--
+> .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c    | 5 +++++
+> .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h    | 2 ++
+> drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c | 2 ++
+> 4 files changed, 11 insertions(+), 2 deletions(-)
 >
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> ---
-> Changes in v4:
-> - Add skb_mark_for_recycle() in am65_cpsw_nuss_rx_packets() function.
-> - Specify napi page pool parameter in am65_cpsw_create_xdp_rxqs() function.
-> - Add benchmark numbers (with VS without page pool) in the commit description.
-> - Add xdp_do_flush() in am65_cpsw_run_xdp() function for XDP_REDIRECT case.
-> - Link to v3: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v3-0-5d944a9d84a0@baylibre.com
+>diff --git a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
+>index 9f6e4b59455da..9a11a2c248045 100644
+>--- a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
+>+++ b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_vpu.c
+>@@ -58,12 +58,12 @@ static void mtk_vcodec_vpu_reset_dec_handler(void *priv)
 >
-> Changes in v3:
-> - Fix a potential issue with TX buffer type, which is now set for each buffer.
-> - Link to v2: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com
+> 	dev_err(&dev->plat_dev->dev, "Watchdog timeout!!");
 >
-> Changes in v2:
-> - Use page pool memory model instead of MEM_TYPE_PAGE_ORDER0.
-> - In am65_cpsw_alloc_skb(), release reference on the page pool page
-> in case of error returned by build_skb().
-> - [nit] Cleanup am65_cpsw_nuss_common_open/stop() functions.
-> - [nit] Arrange local variables in reverse xmas tree order.
-> - Link to v1: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v1-1-9f0b6cbda310@baylibre.com
+>-	mutex_lock(&dev->dev_mutex);
+>+	mutex_lock(&dev->dev_ctx_lock);
+> 	list_for_each_entry(ctx, &dev->ctx_list, list) {
+> 		ctx->state = MTK_STATE_ABORT;
+> 		mtk_v4l2_vdec_dbg(0, ctx, "[%d] Change to state MTK_STATE_ABORT", ctx->id);
+> 	}
+>-	mutex_unlock(&dev->dev_mutex);
+>+	mutex_unlock(&dev->dev_ctx_lock);
+> }
 >
-> ---
-> Julien Panis (3):
->       net: ethernet: ti: Add accessors for struct k3_cppi_desc_pool members
->       net: ethernet: ti: Add desc_infos member to struct k3_cppi_desc_pool
->       net: ethernet: ti: am65-cpsw: Add minimal XDP support
+> static void mtk_vcodec_vpu_reset_enc_handler(void *priv)
+>diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+>index ad9b68380692f..d69c9fe2af6f3 100644
+>--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+>+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+>@@ -267,7 +267,9 @@ static int fops_vcodec_open(struct file *file)
 >
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c    | 536 +++++++++++++++++++++++++---
->  drivers/net/ethernet/ti/am65-cpsw-nuss.h    |  13 +
->  drivers/net/ethernet/ti/k3-cppi-desc-pool.c |  36 ++
->  drivers/net/ethernet/ti/k3-cppi-desc-pool.h |   4 +
->  4 files changed, 539 insertions(+), 50 deletions(-)
-> ---
-> base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
-> change-id: 20240223-am65-cpsw-xdp-basic-4db828508b48
+> 	ctx->dev->vdec_pdata->init_vdec_params(ctx);
 >
-> Best regards,
-> --
-> Julien Panis <jpanis@baylibre.com>
+>+	mutex_lock(&dev->dev_ctx_lock);
+> 	list_add(&ctx->list, &dev->ctx_list);
+>+	mutex_unlock(&dev->dev_ctx_lock);
+> 	mtk_vcodec_dbgfs_create(ctx);
+>
+> 	mutex_unlock(&dev->dev_mutex);
+>@@ -310,7 +312,9 @@ static int fops_vcodec_release(struct file *file)
+> 	v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
+>
+> 	mtk_vcodec_dbgfs_remove(dev, ctx->id);
+>+	mutex_lock(&dev->dev_ctx_lock);
+> 	list_del_init(&ctx->list);
+>+	mutex_unlock(&dev->dev_ctx_lock);
+> 	kfree(ctx);
+> 	mutex_unlock(&dev->dev_mutex);
+> 	return 0;
+>@@ -403,6 +407,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+> 	for (i = 0; i < MTK_VDEC_HW_MAX; i++)
+> 		mutex_init(&dev->dec_mutex[i]);
+> 	mutex_init(&dev->dev_mutex);
+>+	mutex_init(&dev->dev_ctx_lock);
+> 	spin_lock_init(&dev->irqlock);
+>
+> 	snprintf(dev->v4l2_dev.name, sizeof(dev->v4l2_dev.name), "%s",
+>diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+>index 849b89dd205c2..85b2c0d3d8bcd 100644
+>--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+>+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+>@@ -241,6 +241,7 @@ struct mtk_vcodec_dec_ctx {
+>  *
+>  * @dec_mutex: decoder hardware lock
+>  * @dev_mutex: video_device lock
+>+ * @dev_ctx_lock: the lock of context list
+>  * @decode_workqueue: decode work queue
+>  *
+>  * @irqlock: protect data access by irq handler and work thread
+>@@ -282,6 +283,7 @@ struct mtk_vcodec_dec_dev {
+> 	/* decoder hardware mutex lock */
+> 	struct mutex dec_mutex[MTK_VDEC_HW_MAX];
+> 	struct mutex dev_mutex;
+>+	struct mutex dev_ctx_lock;
+> 	struct workqueue_struct *decode_workqueue;
+>
+> 	spinlock_t irqlock;
+>diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
+>index 82e57ae983d55..da6be556727bb 100644
+>--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
+>+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec_vpu_if.c
+>@@ -77,12 +77,14 @@ static bool vpu_dec_check_ap_inst(struct mtk_vcodec_dec_dev *dec_dev, struct vde
+> 	struct mtk_vcodec_dec_ctx *ctx;
+> 	int ret = false;
+>
+>+	mutex_lock(&dec_dev->dev_ctx_lock);
+> 	list_for_each_entry(ctx, &dec_dev->ctx_list, list) {
+> 		if (!IS_ERR_OR_NULL(ctx) && ctx->vpu_inst == vpu) {
+> 			ret = true;
+> 			break;
+> 		}
+> 	}
+>+	mutex_unlock(&dec_dev->dev_ctx_lock);
+>
+> 	return ret;
+> }
+>-- 
+>2.18.0
+>
 >
