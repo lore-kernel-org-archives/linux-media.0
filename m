@@ -1,47 +1,47 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F0C1B965
-	for <linux-media@vger.kernel.org>; Wed, 13 Mar 2024 07:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFFB1BC47
+	for <linux-media@vger.kernel.org>; Wed, 13 Mar 2024 07:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710314760; cv=none; b=IKEgq/uStkmvoGt3gvam0oq6GtFNiozSjfK1tzp4VG+NnoOCwu5vyNGdaYCikbFSEmAqBUv5yWBTS4ko3S3in0h5hwzwvbktxwn9DsP3f7SM/SNQ7qh+ap79jtvdbfZZO4s7WMsyhjRdmlNkSDgO6oLsBoJCnBDZfRy5QqwJgVI=
+	t=1710314760; cv=none; b=eyOjjgaiDIXzrUo8/q8CLu82RTUYxtRm25LIOQGGDmyyj6/EeYphkMW9+VwmxjoywKNGFzHeQtuqRobTKP5g62kvvAUyPQKCIqgoFe73RspP/IbJpe+ERY5RZ/JMKdsF4RhDNzPxGKZ1KKkXnZSVlmJ8YGfMjnpxOzWp6aQT6Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1710314760; c=relaxed/simple;
-	bh=sdD8HgpMjXXdvgqgk4cOGZdtUpHb9Foa4imG8muURoI=;
+	bh=mRGTBp/Efh3RIrAjT9y+yY83yw7/WGlU18VRj20tPpw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZiqPxhgSK74Bqb0H6Xr3yTYB7yAhE4zVB0beFTfASZ1ToHABRfpFB6wlrihNZku47tSwXMjkW+0Wosmc8kSJQRcH22pLXVkFiTl0LGhT63YQDHOojlNo+7iIOVritCdFJHiEpmMSb4s/3ZciOkoVSVcIfKctF4D84rwXuBx7cfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G7NP1KUT; arc=none smtp.client-ip=192.198.163.8
+	 MIME-Version; b=PM3ClDkgsWs8uEYS9SCNny0MCm9ndlOcjqMIEH+w+OF8Xlp/jXYF/w9sCSNiXfa/FISi8mp2qu+OGAO8foFgDT+vrxCWCabGEmyIBbYSugJQn3PZoNorxpCZxT41J+Sz1cbOShQUdXJ5Qcvjr5i5pFbXJIwBV9KG0AV3ueO+D/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hv1axl7P; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7NP1KUT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hv1axl7P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1710314759; x=1741850759;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sdD8HgpMjXXdvgqgk4cOGZdtUpHb9Foa4imG8muURoI=;
-  b=G7NP1KUT4cMhVbWIcuVYkz/gXI2lRsw1lQSJIRd1CBYMQwfAY37RlwgY
-   LhGeuYGddUWt2RI1APgvWPdQakjL/5m2Avya/PhYXHDXKO3jmEUxYJfsE
-   OfoOicl+1ZTrbYE2/2hInoGBieHn+7XlQIWspQSg34FqUP22LY8pbnKMZ
-   a0nxWMWxo+hDZgR9Irhy/kwyVz8/D/NEyk3Ku60bKE3GSlMRgjlhqJc2b
-   CNADXdf1swW/5aYTw4WN2oJwwAZNIgkmaTsjjQOykzfrgFjpmagEOeUn0
-   Y4blZ8jPq7AIlZEeYeR+m1i0UISxvKyqUv+Ni6lr0HsG1UFuklEZmJHt4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="22575605"
+  bh=mRGTBp/Efh3RIrAjT9y+yY83yw7/WGlU18VRj20tPpw=;
+  b=Hv1axl7PTNj4vq0x+6NG51riISaTuqimH2uGA8mxIxw9P/ItD1PF+lou
+   aMO+PZdnVG8Y+5WMhGu0pFzBjgczQ9jOh+J4DnrRBg1fRHKO5UoHkVFub
+   9QSsSEsgJMwtHAkkAb3A6CqWg2xVl9iHBwPO6wqqhajwb76HoFUXz4KpY
+   fKN4/HLVyAGx7GPZqps4vzYn62TqS/cQkn2Ndxe64cTHJfW0AzRYV9tPq
+   VZUpWD0wPxJz9uGzKsYKkybnf0RKBcF+oHUAalar2frJ/39YOZLxn36s8
+   bXLhIaNLfaqElpFSqFjedLdXRE68S1xIDtFWf6eWHX2xDNxb8ZBGeX9nT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="22575615"
 X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="22575605"
+   d="scan'208";a="22575615"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 00:25:47 -0700
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 00:25:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
-   d="scan'208";a="42816439"
+   d="scan'208";a="42816452"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 00:25:45 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2024 00:25:47 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 979401204F6;
-	Wed, 13 Mar 2024 09:25:41 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5A37511FB94;
+	Wed, 13 Mar 2024 09:25:44 +0200 (EET)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -54,9 +54,9 @@ Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Dmitry Perchanov <dmitry.perchanov@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
 	Alain Volmat <alain.volmat@foss.st.com>
-Subject: [PATCH v8 16/38] media: v4l: subdev: Allow a larger number of routes than there's room for
-Date: Wed, 13 Mar 2024 09:24:54 +0200
-Message-Id: <20240313072516.241106-17-sakari.ailus@linux.intel.com>
+Subject: [PATCH v8 18/38] media: ccs: No need to set streaming to false in power off
+Date: Wed, 13 Mar 2024 09:24:56 +0200
+Message-Id: <20240313072516.241106-19-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240313072516.241106-1-sakari.ailus@linux.intel.com>
 References: <20240313072516.241106-1-sakari.ailus@linux.intel.com>
@@ -68,61 +68,27 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On VIDIOC_SUBDEV_[GS]_ROUTING, only return as many routes back to the user
-as there's room. Do not consider it an error if more routes existed.
-Simply inform the user there are more routes.
+Streaming will have been stopped by the sensor is powered off, and so
+sensor->streaming is also false already. Do not set it as part of the
+runtime suspend callback.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/v4l/vidioc-subdev-g-routing.rst              |  4 ----
- drivers/media/v4l2-core/v4l2-subdev.c                  | 10 +++-------
- 2 files changed, 3 insertions(+), 11 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-index 6eb6a59570dc..08b8d17cef3f 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-@@ -147,10 +147,6 @@ On success 0 is returned, on error -1 and the ``errno`` variable is set
- appropriately. The generic error codes are described at the
- :ref:`Generic Error Codes <gen-errors>` chapter.
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index e21287d50c15..671540a8ab6a 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1710,7 +1710,6 @@ static int ccs_power_off(struct device *dev)
+ 	usleep_range(5000, 5000);
+ 	regulator_bulk_disable(ARRAY_SIZE(ccs_regulators),
+ 			       sensor->regulators);
+-	sensor->streaming = false;
  
--ENOSPC
--   The application provided ``num_routes`` is not big enough to contain
--   all the available routes the subdevice exposes.
--
- EINVAL
-    The sink or source pad identifiers reference a non-existing pad or reference
-    pads of different types (ie. the sink_pad identifiers refers to a source
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index a357ce318192..a6107e440ef0 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -964,7 +964,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 
- 		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
- 		       state->routing.routes,
--		       state->routing.num_routes *
-+		       min(state->routing.num_routes, routing->len_routes)  *
- 		       sizeof(*state->routing.routes));
- 		routing->num_routes = state->routing.num_routes;
- 
-@@ -985,14 +985,10 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
- 
- 		krouting = &state->routing;
- 
--		if (routing->len_routes < krouting->num_routes) {
--			routing->num_routes = krouting->num_routes;
--			return -ENOSPC;
--		}
--
- 		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
- 		       krouting->routes,
--		       krouting->num_routes * sizeof(*krouting->routes));
-+		       min(krouting->num_routes, routing->len_routes) *
-+		       sizeof(*krouting->routes));
- 		routing->num_routes = krouting->num_routes;
- 
- 		return 0;
+ 	return 0;
+ }
 -- 
 2.39.2
 
