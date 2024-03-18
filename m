@@ -1,155 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBA552F8D
-	for <linux-media@vger.kernel.org>; Mon, 18 Mar 2024 15:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1696524CF;
+	Mon, 18 Mar 2024 15:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710776825; cv=none; b=JlwnH9VHUw8ssCZ/fUMX/1PRqwRrRn4jtJYVbAs6zuGtoRDKLfLp0IUPkU7B6uoPVRlapp6znD1Ddi8VDycSuEaklyreXg5R6r0uYM9e8i3CzoRx0y2R3d7FmSUDpPtWSA4TF69AMItE3mxGTrMqn7wH+9AT/zOvc1FWsHj53A0=
+	t=1710777071; cv=none; b=fgcm6rw5hQ55lAfxvgHtjXNYRMc4ZonvNaaxc+ACjJfUOzlImm3YK4HzSnd0fL5GbXZ65zc/yyjLWSTWnjhmH8OFuTDzMgWFjZUh1bZgKBb98qUIH+vaZ0on5hyMr7IbySQAjNRpPOBjxPacWaLbTizfnz10o8PwsK5ABcIhx9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710776825; c=relaxed/simple;
-	bh=4LjiOhO/axNK1vsLhxc8ozfKaMLxSdo3m+e7FUWILcQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=PYc/zZ0A2Iit5aZRo50rlyU9fkuLhmxlJzS8Hwtw9ajOO+SWik+HVybzwOo/X7Ch6tH1CmJGyA+0IKSB9GIOKpSJefhWX1cG5SaRDkiK89ELozil6jL8qOGA09HWQVQfQ9IL4A5wQhAQZ6FjzmqbrVAK359IL7rUW4yN3i4G6GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13058C43390;
-	Mon, 18 Mar 2024 15:47:03 +0000 (UTC)
-Message-ID: <60427350-38b9-40f1-b31e-b2990b46cbed@xs4all.nl>
-Date: Mon, 18 Mar 2024 16:47:02 +0100
+	s=arc-20240116; t=1710777071; c=relaxed/simple;
+	bh=vFEF/OGYpnkktObt7GRCXvKVIPiNuH/3wZneowmoO2I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TYVPwOLC68JMEP+sr3mgfDhDIM8dUs/sCqXHmryqXtszVeTJVH8dOSuY/pLteYyE58JQ0ENbKJWytumEs8zLLYjhzASNubhomZafroUq7N1ZbxrQcRgdZ1iYUB7PjtEYv1zO9wwSbB+Uc6IVRIIftxz1REcxpkE66ypfYUBZpHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Z8+NyVtn; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Z8+NyVtn"
+Received: from [127.0.1.1] (91-154-34-181.elisa-laajakaista.fi [91.154.34.181])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D8BC11B1C;
+	Mon, 18 Mar 2024 16:50:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1710777041;
+	bh=vFEF/OGYpnkktObt7GRCXvKVIPiNuH/3wZneowmoO2I=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Z8+NyVtn4em2i8blDUKcsmGRiU2QTA1dCqc9g/+vwZwvB2kX90wnbaFEA8aGp7QD5
+	 1lxa7Z2SJO2sai/M87Xs761h0XkLnO1r3I9u8Hsg+R7nt7kHdDLD5N7sNnDR7Bifu1
+	 rTdXPWHb3O3gL/IV1FDgHuzlVlW0lnFNN1MaOE2g=
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Mon, 18 Mar 2024 17:49:56 +0200
+Subject: [PATCH 1/4] media: uapi: Add meta formats for PiSP FE config and
+ stats
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, nl
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v6.10] Add REMOVE_BUF ioctl
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-To: Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Nicolas Dufresne <nicolas.dufresne@collabora.com>,
- Sebastian Fricke <sebastian.fricke@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240318-rp1-cfe-v1-1-ac6d960ff22d@ideasonboard.com>
+References: <20240318-rp1-cfe-v1-0-ac6d960ff22d@ideasonboard.com>
+In-Reply-To: <20240318-rp1-cfe-v1-0-ac6d960ff22d@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Naushir Patuck <naush@raspberrypi.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4239;
+ i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
+ bh=vFEF/OGYpnkktObt7GRCXvKVIPiNuH/3wZneowmoO2I=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBl+GLoQiGKkmp9T7eCWGA0g1jd2pCFPuauIw9ss
+ DsaPZybQv2JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZfhi6AAKCRD6PaqMvJYe
+ 9Tx1D/oCn/zaGnZu1Jl5GazYhG6+m1v2p2UYXJ9gKHErKw3w8Ni1zRRN+PuXU/SLqkApEDY+4ez
+ ww/b87Royxd6h8nQK5CCVef65kVWn0lBMoNKhb/YVNlEYGlDvwez/dowkhzCfQrU1k0RRJVAFl2
+ EEKIV4g/1EkZEwritusWQ8ST9F9KOf5hCY5F+2/DPd3zaqSJKhbr5nOSxedBjqp+cHtj5tngGqS
+ 92nA9vnnR6i0UbtkPGjFbLzmC0Ap+oKjGISvcSSpXZLuIQh1GKgJtfFzC0NEkHj0YJ3vCd9s0nO
+ c1V/BwZUqqa/4HMBInwvaD1JIcLgFJxIXtOfL8Sk9NwRNAsuyjaUx4f4/GMLkRnpViq8j2H/5b9
+ qm9kNZm2wzLlrDenS3KWSEd0lJhM04FZCtNw3yUvme4oOq2mRpCYI+8BHdqUZnNZ8HHU6DQUkFF
+ 95IKT8tRkPELM4OVm1nkH7Rzw3w3e2F8NOXPpLDLM50Bi4coWvmLnGraCEWvi0tTO1K/n3nDJZU
+ RkaTFeeBB3h4Unxf5W0p5yHDxzE0Qkw4qkBcYHXVQDHMfwkht21hanbA4ULSHv98Mty9nVzSFUP
+ ndzXIAoB7zUPou9Hjc/Yt0J45o8NVNmWHDBoTWIqRSw5UKBgyLYoaZ+akm79mzl87DHu05PIn0E
+ aBEIVfH1Fgp2mvA==
+X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
+ fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-Hi Mauro,
+Add two meta formats for PiSP FE: V4L2_META_FMT_RPI_FE_CFG and
+V4L2_META_FMT_RPI_FE_STATS. The former is used to provide configuration
+for the FE and the latter is used to read the statistics from the FE.
 
-This pull request introduces the new VIDIOC_REMOVE_BUFS ioctl, the
-counterpart of VIDIOC_CREATE_BUFS. This makes it possible to remove
-buffers, and so make it much easier to support dynamic resolution changes
-for m2m devices and codecs in particular.
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+ .../userspace-api/media/v4l/meta-formats.rst       |  1 +
+ .../userspace-api/media/v4l/metafmt-pisp-fe.rst    | 39 ++++++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c               |  2 ++
+ include/uapi/linux/videodev2.h                     |  2 ++
+ 4 files changed, 44 insertions(+)
 
-This PR contains v21 of the patch series:
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index d82a5a9cbd2f..19493c579a8c 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -15,6 +15,7 @@ These formats are used for the :ref:`metadata` interface only.
+     metafmt-d4xx
+     metafmt-intel-ipu3
+     metafmt-pisp-be
++    metafmt-pisp-fe
+     metafmt-rkisp1
+     metafmt-uvc
+     metafmt-vsp1-hgo
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-pisp-fe.rst b/Documentation/userspace-api/media/v4l/metafmt-pisp-fe.rst
+new file mode 100644
+index 000000000000..fddeada83e4a
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/metafmt-pisp-fe.rst
+@@ -0,0 +1,39 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. _v4l2-meta-fmt-rpi-fe-cfg:
++
++************************
++V4L2_META_FMT_RPI_FE_CFG
++************************
++
++Raspberry Pi PiSP Front End configuration format
++================================================
++
++The Raspberry Pi PiSP Front End image signal processor is configured by
++userspace by providing a buffer of configuration parameters to the
++`rp1-cfe-fe-config` output video device node using the
++:c:type:`v4l2_meta_format` interface.
++
++The `Raspberry Pi PiSP technical specification
++<https://datasheets.raspberrypi.com/camera/raspberry-pi-image-signal-processor-specification.pdf>`_
++provide detailed description of the Front End configuration and programming
++model.
++
++.. _v4l2-meta-fmt-rpi-fe-stats:
++
++**************************
++V4L2_META_FMT_RPI_FE_STATS
++**************************
++
++Raspberry Pi PiSP Front End statistics format
++=============================================
++
++The Raspberry Pi PiSP Front End image signal processor provides statistics data
++by writing to a buffer provided via the `rp1-cfe-fe-stats` capture video device
++node using the
++:c:type:`v4l2_meta_format` interface.
++
++The `Raspberry Pi PiSP technical specification
++<https://datasheets.raspberrypi.com/camera/raspberry-pi-image-signal-processor-specification.pdf>`_
++provide detailed description of the Front End configuration and programming
++model.
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 0b4f5372c217..1d44303b7e81 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1465,6 +1465,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_META_FMT_GENERIC_CSI2_20:	descr = "8b Generic Meta, 20b CSI-2"; break;
+ 	case V4L2_META_FMT_GENERIC_CSI2_24:	descr = "8b Generic Meta, 24b CSI-2"; break;
+ 	case V4L2_META_FMT_RPI_BE_CFG:	descr = "RPi PiSP BE Config format"; break;
++	case V4L2_META_FMT_RPI_FE_CFG: descr = "RPi PiSP FE Config format"; break;
++	case V4L2_META_FMT_RPI_FE_STATS: descr = "RPi PiSP FE Statistics format"; break;
+ 
+ 	default:
+ 		/* Compressed formats */
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 1eb60baeb3ea..ad1a519eefe5 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -865,6 +865,8 @@ struct v4l2_pix_format {
+ 
+ /* Vendor specific - used for RaspberryPi PiSP */
+ #define V4L2_META_FMT_RPI_BE_CFG v4l2_fourcc('R', 'P', 'B', 'C') /* PiSP BE configuration */
++#define V4L2_META_FMT_RPI_FE_CFG v4l2_fourcc('R', 'P', 'F', 'C')
++#define V4L2_META_FMT_RPI_FE_STATS v4l2_fourcc('R', 'P', 'F', 'S')
+ 
+ /* priv field value to indicates that subsequent fields are valid. */
+ #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
 
-https://patchwork.linuxtv.org/project/linux-media/list/?series=12431
+-- 
+2.34.1
 
-With an updated patch 3/9:
-
-https://patchwork.linuxtv.org/project/linux-media/patch/20240318134856.110687-1-benjamin.gaignard@collabora.com/
-
-The patch adding the v4l2-compliance tests for this feature is here:
-
-https://patchwork.linuxtv.org/project/linux-media/patch/20240314153415.197534-3-benjamin.gaignard@collabora.com/
-
-Besides adding support for this to the media test drivers, this also adds this
-feature to the verisilicon hantro driver.
-
-Many thanks to Benjamin Gaignard for working on this. It's a long desired
-feature, so it is nice to see this finally land.
-
-Regards,
-
-	Hans
-
-The following changes since commit b14257abe7057def6127f6fb2f14f9adc8acabdb:
-
-  media: rcar-isp: Disallow unbind of devices (2024-03-07 16:35:13 +0100)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-rmbufs
-
-for you to fetch changes up to 763bcbde2b37d5aba799b7da45f4f2231b302a04:
-
-  media: verisilicon: Support removing buffers on capture queue (2024-03-18 15:32:51 +0100)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Benjamin Gaignard (9):
-      media: videobuf2: Update vb2_is_busy() logic
-      media: videobuf2: Add min_reqbufs_allocation field to vb2_queue structure
-      media: test-drivers: Set REQBUFS minimum number of buffers
-      media: core: Rework how create_buf index returned value is computed
-      media: core: Add bitmap manage bufs array entries
-      media: core: Free range of buffers
-      media: v4l2: Add REMOVE_BUFS ioctl
-      media: v4l2: Add mem2mem helpers for REMOVE_BUFS ioctl
-      media: verisilicon: Support removing buffers on capture queue
-
- Documentation/userspace-api/media/v4l/user-func.rst          |   1 +
- Documentation/userspace-api/media/v4l/vidioc-remove-bufs.rst |  85 ++++++++++++++++++++
- Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst     |   1 +
- drivers/media/common/videobuf2/videobuf2-core.c              | 223 +++++++++++++++++++++++++++++++++++++----------------
- drivers/media/common/videobuf2/videobuf2-v4l2.c              |  34 ++++++--
- drivers/media/platform/verisilicon/hantro_v4l2.c             |   1 +
- drivers/media/test-drivers/vicodec/vicodec-core.c            |   1 +
- drivers/media/test-drivers/vimc/vimc-capture.c               |   3 +-
- drivers/media/test-drivers/visl/visl-video.c                 |   1 +
- drivers/media/test-drivers/vivid/vivid-core.c                |   9 ++-
- drivers/media/test-drivers/vivid/vivid-meta-out.c            |   4 -
- drivers/media/test-drivers/vivid/vivid-touch-cap.c           |   4 -
- drivers/media/v4l2-core/v4l2-dev.c                           |   3 +
- drivers/media/v4l2-core/v4l2-ioctl.c                         |  30 +++++++
- drivers/media/v4l2-core/v4l2-mem2mem.c                       |  15 ++++
- include/media/v4l2-ioctl.h                                   |   4 +
- include/media/v4l2-mem2mem.h                                 |   2 +
- include/media/videobuf2-core.h                               |  52 ++++++++++---
- include/media/videobuf2-v4l2.h                               |   2 +
- include/uapi/linux/videodev2.h                               |  17 ++++
- 20 files changed, 396 insertions(+), 96 deletions(-)
- create mode 100644 Documentation/userspace-api/media/v4l/vidioc-remove-bufs.rst
