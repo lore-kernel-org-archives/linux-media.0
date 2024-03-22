@@ -1,75 +1,75 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E05A15BB;
-	Fri, 22 Mar 2024 05:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C975BA27;
+	Fri, 22 Mar 2024 05:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711085866; cv=none; b=m6Sn8H26FrKTqpUiOdiV1BZkT7yxdaVDHVdYp10tCXtDwX+nigJWiYYfYzyQB9yreRATy8VeJr/vrBOvFOnXUsCr2VhIo/b20VZ4tG5cJt0+9PcGNu0y0lR6rZTQIH170/2dxUfpbhRwi5RX5hI+oSaDKA/uYglqKkbWGnxeaPg=
+	t=1711086144; cv=none; b=ECJtsdrt7gvT2gLZnN3LsG9DA03hbrKHgU6ewMP5EbQcIY2OZe3l5TLoFjVm+cAddpETe5M1VUW1h/2b+cXn+1sd8stlZo+I0S2CxilAAFOSJIXoVxUO9+LSJbT63cUI1fyjPqv457SBa9N0Q0SlnCToCDdhzGueOWKjULP/LWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711085866; c=relaxed/simple;
-	bh=MWGc29WSPBB/IpnV1FyWJ0ZHvlcHfhVPz2mwglSK5lg=;
+	s=arc-20240116; t=1711086144; c=relaxed/simple;
+	bh=syQU4MzVCz7AvYGIe8yfFD1S+gjF2dNgawBt5pjfbVU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fK1DycvOw/3v4tIdho+d6+Fny4PwIBL2yuRapoSaphaocImmppw8oAZ9drIWjOR5yBv8bxXdLY6nTh2gTgyyRhBUT3FEPKXkbKXPizjSNz7rT9HM6MZ2Z8hI7HbWS8C2ViuN6SLMhGdr1zJtAcjC3KH6X6PXL/QS2RtmcFnEyHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DHLL1jRP; arc=none smtp.client-ip=209.85.222.177
+	 MIME-Version; b=rv88AbUce7ErofKRUu3ilXrzFZytrL6WppvvFIhvFkMB62jk2eRHaFLYIuQmJldugPtgaxLn4zefGqY/Gt6x4H3ZCBA6kMJcndr8YwSmFx//7gYr0Gv8ar0XuGb5e/KgkWDjfUYLLoJkegr7DveokVdwPe3JJlMxWk5Frbx6fxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cs9RY5WC; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHLL1jRP"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-789e209544eso104494785a.0;
-        Thu, 21 Mar 2024 22:37:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cs9RY5WC"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc6dcd9124bso1795543276.1;
+        Thu, 21 Mar 2024 22:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711085862; x=1711690662; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711086142; x=1711690942; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bF5xw9X6amOuhqITJZtEhEpaZ8akuZjX7z9t1wAP4CI=;
-        b=DHLL1jRP64uWmEAeycEJGXzpVbXAp9TXvluytcYsXBvoGwVOqU4epMw1OEwqswZX4E
-         2/LTVLkL5GE+ZWRm4ZdUP5QOG/OmcPif67VHOf2dWfnnSkvkP8IeRBfoc7Vp1H/P30mP
-         UqKDaeavqTG7oUGGmSZm21yoI+s7+J21ytzPOBePveH/nzFIZkdEemhqFowvwLOoE1HN
-         gijs+h460DMC0i+AO9ejcqW7EMJIcKIv4SfVleKvNBUyuSXDXgsGRRQEfo1FT84FfSLy
-         Oq5oTHEzzKJVHhW2on1WhED1G0+C7qw+Bu/SHAKge6KqKwz1ThJQbWLEuCF43Bhp8a9V
-         S8jg==
+        bh=syQU4MzVCz7AvYGIe8yfFD1S+gjF2dNgawBt5pjfbVU=;
+        b=cs9RY5WCm4eCBU24y9zpR/v5QX8Ap1+KtR/R+xBW+nKgJmBnNxlLvEf6QvfaAhErOf
+         Ofj/UIyGSyiEH9TUmqDqbdhq3TpW07gjj1Rcj8+7nl54exR/9381ogbwh/CTtBfS5B1+
+         rrZzQTV4bm2PA/KptB8j9WKN4l/Io3IRD6RqKy8l7ahDm02/oiGWMD1uDD/saOome1s0
+         qQv722YjfdqZbaTzZ6jcK5qBrQ8tI4iDXf4g+oLzl3JTrPFKjwDy+z55MS8ZUAgx9bOw
+         wYbKGfAV4in6n6O5Ry0cmngUSLrB7AWSq1q2gyg3d7H2X/Y9RZl9ANNmSgJ9qE3CpI4l
+         mtdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711085862; x=1711690662;
+        d=1e100.net; s=20230601; t=1711086142; x=1711690942;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bF5xw9X6amOuhqITJZtEhEpaZ8akuZjX7z9t1wAP4CI=;
-        b=JSuoyPljjvw61+oP+gIxkDnsES/2vUjV96yNXpDeGCw8R8vOtjrAepFsGqxIZGuiNB
-         kdLzMrQudgqAFvCMohhvpslTgOhWlaHIxofHcqKYDUXQGCGpm+MNv4tCDPmWm/tfIpsO
-         uIseHZ9dDJisYnaqml7HdfnISf/dRTAKDBqOgH+OMPmMyfZKPm6E0eYri+komioHWjdD
-         uJHVrcBW3T2QPu3J3qlqbLqNu714lkh3G9lXevpo641acd30ye2bgw0Y059/womFiaQh
-         WRB/AgeczsrwqGw99BDPVCk1Mi/mVw+YFVBPN19sD633UggXk2GCXdFiippVcvJser6n
-         8Ebw==
-X-Forwarded-Encrypted: i=1; AJvYcCXKE9mf5ZPIuoGFhBKU84NzxOpKObrxdUXpLWrbHo5xTBxxTkEGGp/iBKjC5yHguDNimr/5z4rOvViOvBz8OHYn6gaf/svN892fen52Is5MGgZu88lRAr+RKTzWe1AC+xwV0v0IIo32rac=
-X-Gm-Message-State: AOJu0Yzn2K5Pk+2C9k5sOd950ZO67y+OWyeZdcyoi9pECXX568UOI3IL
-	cE2DvfChDXK8aac/foXHla/ftwgz9MVhKYC9vIftPGjkuDgrWI/twjQVytiJdfLMVA==
-X-Google-Smtp-Source: AGHT+IGxMakEwV87bA32ET778M6bt37FiWJX59Li7fZ2bCXT0Apviw7VPVvoELjZWzEV4kvaYuJ36Q==
-X-Received: by 2002:a05:6a21:1f1e:b0:1a3:4204:2529 with SMTP id ry30-20020a056a211f1e00b001a342042529mr1519681pzb.31.1711085383582;
-        Thu, 21 Mar 2024 22:29:43 -0700 (PDT)
+        bh=syQU4MzVCz7AvYGIe8yfFD1S+gjF2dNgawBt5pjfbVU=;
+        b=lfKtlW4Lq4eLuNSa6b+ILXD7obvEZf+bdp9gZD5zOhu2SMmI8oGA8FV9sBKr92Mnsv
+         d1ABWeAIw5/LZnasq75Ws0kK2Ch7ZScuhTF6eyrDj70nTj/+jfePiZnueg1Ox295nrlt
+         e+ReVlLe/1a0hOYudoJGz7heozlTEcduafYSprp6tJP36J+OfB5TWfSpLuIBtfhA4f/3
+         csgL8QDqQA+GCFsM2j6Gyix4HfZo5EnwaJK7ZDkTsT6QZ+KpLjLHqXqPVo1nw2bEovCF
+         qpQtItbXNaYVACyqmWNXggcGT/jhbOMEzupA4IFbcq9DS504Mm4Lq4njFlw+G8q8+8Hf
+         9haw==
+X-Forwarded-Encrypted: i=1; AJvYcCX30n6mkhqL6ZWws3ZfaknzJWVVKq+90oN9Q9Pditgym2kPmNtxmcZ6nof9MqPdy5gz9MG0lBvXUSiGy+tA6tddu7fkCx5ccHQUNju7PHfKuLZBP1juL3N0yTtDdUaprCyueMdEZ95t3qK0l8XRmYGnO4h81/pQ2XOmIvLNWhTe8BSEJImq
+X-Gm-Message-State: AOJu0YxvpgLqeUGlSQqJFxO6i31s7dTv8fgJUCVjFR4GzVIDkMlzITgI
+	D0Eghmp1u31pMGDRt8Valwk0aqqbVAIG6nrEdh3GH+LLEm66G7RMBTbb4v+pEvJiWQ==
+X-Google-Smtp-Source: AGHT+IG5/HFcpIVuILl2KkuQ/ocANf+70Zxb3vvKytmJwJpKn2jAkIblj8+2Ctb2nem9pOzNcGOVVQ==
+X-Received: by 2002:a25:2644:0:b0:dcc:79ab:e51a with SMTP id m65-20020a252644000000b00dcc79abe51amr1239785ybm.57.1711086142078;
+        Thu, 21 Mar 2024 22:42:22 -0700 (PDT)
 Received: from localhost.localdomain ([221.220.133.103])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902d38500b001dffa622527sm882978pld.225.2024.03.21.22.29.39
+        by smtp.gmail.com with ESMTPSA id w11-20020a63af0b000000b005dc884e9f5bsm813831pge.38.2024.03.21.22.42.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 22:29:43 -0700 (PDT)
+        Thu, 21 Mar 2024 22:42:21 -0700 (PDT)
 From: Jianfeng Liu <liujianfeng1994@gmail.com>
-To: devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Cc: robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
+To: liujianfeng1994@gmail.com
+Cc: conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	ezequiel@vanguardiasur.com.ar,
 	heiko@sntech.de,
 	jacob-chen@iotwrt.com,
-	ezequiel@vanguardiasur.com.ar,
+	krzysztof.kozlowski+dt@linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
 	mchehab@kernel.org,
-	liujianfeng1994@gmail.com,
+	robh@kernel.org,
 	sfr@canb.auug.org.au
-Subject: [PATCH v1 1/2] dt-bindings: media: rockchip-rga: add rockchip,rk3588-rga
-Date: Fri, 22 Mar 2024 13:29:14 +0800
-Message-Id: <20240322052915.3507937-2-liujianfeng1994@gmail.com>
+Subject: Re: [PATCH v1 0/2] media: rockchip: rga: Add rk3568 support
+Date: Fri, 22 Mar 2024 13:42:11 +0800
+Message-Id: <20240322054211.3508301-1-liujianfeng1994@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240322052915.3507937-1-liujianfeng1994@gmail.com>
 References: <20240322052915.3507937-1-liujianfeng1994@gmail.com>
@@ -81,27 +81,8 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new compatible for the rk3588 Rockchip SoC, which also features an
-RGA, which is called RGA2 in the TRM Part2. It is the same core as used
-on the rk3288 and rk3568, which documents the same RGA2.
+I am really sorry guys, this patch is for rk3588, I wrote a wrong title.
+Do I need to send a v2 patch just changing title of the cover letter?
 
-Signed-off-by: Jianfeng Liu <liujianfeng1994@gmail.com>
----
- Documentation/devicetree/bindings/media/rockchip-rga.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/media/rockchip-rga.yaml b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-index ea2342222..ac17cda65 100644
---- a/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-@@ -24,6 +24,7 @@ properties:
-           - enum:
-               - rockchip,rk3228-rga
-               - rockchip,rk3568-rga
-+              - rockchip,rk3588-rga
-           - const: rockchip,rk3288-rga
- 
-   reg:
--- 
-2.34.1
-
+Regards,
+Jianfeng
