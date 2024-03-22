@@ -1,282 +1,357 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E674C376;
-	Fri, 22 Mar 2024 00:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C0165C;
+	Fri, 22 Mar 2024 01:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711067799; cv=none; b=qBcJiF5dEnRYnjbKDVTFA2mr4oSvH+tgekp30sPaXXxMphpcHfePpPqFFhS5EQFtVIYk/m3RRRJmEaGvt/T7rR7xnfrd/ACoXFRQplMel1OHwMkGaNFRRS4HSCt2Quf7tGwVL/9bCt2tOZl6V1giULH4dfnZxV/B+0ufotn8HKg=
+	t=1711070905; cv=none; b=qofnAjKpp/QJScMNZvNQqEp84qpTIBYai6aUjDxaSiq9tsionGw+hmlCpb/yWywGTBOqlmq9Z3H59BajIIGfRIQsnktN9gG4esd5d8nfaz7wh4GJtFgRvSVhoZLILC88wyk6lYrwP2wlittoGFCkHXHx3AAa9dPtB+SBtokAU40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711067799; c=relaxed/simple;
-	bh=8kXxlTmJUzH3MtoAtcY/OmCWO5ge1T7DAHf4NDWaW3c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PmyIpau/4iyLMphDopVTPAGA6ztZQJ7/wggodrhM3s/dAR57c05zsc/9AInfJnW+Gve0romPw++OXFiBV5a2IV5Qvpx8Rre31PYeNjWtERS5mQf5tR4Q51J9RBzOugxBqnP/D8N+ZsNtAvtXiz19HLtZdj40pIAL9Aj7KbcA4Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=R8Dtj8Is; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1711070905; c=relaxed/simple;
+	bh=jH1o/GMcwVUT/vVq3X9vuZi0bryF7eIWnZzz8LNJjp8=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VtFh9bbAR47ODi4lcVaomAUAVwrD3Ng7dXAY4aPzbP8Vd0DFwirfGIgpcsiUnckH/zbWO1th2cQ97MQdo13yhfzP7BktGx3qgn1qsoa5R+tl5KM9j9gzbGgmBCTcswMSq1En6/3GUWUaVl1ByW2zGC0rVeeDiIj19fflFwMqwj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=rkHfM8r3; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="R8Dtj8Is"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D84AABEB;
-	Fri, 22 Mar 2024 01:36:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1711067768;
-	bh=8kXxlTmJUzH3MtoAtcY/OmCWO5ge1T7DAHf4NDWaW3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R8Dtj8Is6HZCHdBBnYniJuhImlg+HszLh3ZW7R7WsLuZH5Zgt0rvmQzk+eobOcYNk
-	 RdWvPKgPZgxc+5hWBLIu+exejN2nkwNAVSv0RQOp32z+Vxz9LFQNlLHD8P6ct6P9nU
-	 aEaezeHBT04MZPODOv4rSHcFxAkBfbvq80SBIEjM=
-Date: Fri, 22 Mar 2024 02:36:31 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
-	linux-media@vger.kernel.org
-Subject: Re: [PATCH v9 5/6] media: uvcvideo: Refactor clock circular buffer
-Message-ID: <20240322003631.GE20938@pendragon.ideasonboard.com>
-References: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
- <20220920-resend-hwtimestamp-v9-5-55a89f46f6be@chromium.org>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="rkHfM8r3"
+X-UUID: 720e09e4e7eb11ee935d6952f98a51a9-20240322
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=uIejdunjEp+YtPj5JdHmQGRFpoIjE1nNU5EUs8fsESE=;
+	b=rkHfM8r3bn91/7i/cx7OAOy2yKdSGVkF1mS4aTZVAN0Olzqs7YL4jMs57yiC+ardbBIQzqDgYEB5Az+cF8m1wz1PjtHSJFwExOANouaCeFc0T/Irj9kGAozZj+xkcIAPqclYNoqr9Sv7oCsMlt8qYfa1DiUxuKGTVMQ8YspjrbU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:2ef96249-236e-44ce-bd3b-282926df7f5e,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6f543d0,CLOUDID:14184a85-8d4f-477b-89d2-1e3bdbef96d1,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULN,TF_CID_SPAM_SNR
+X-UUID: 720e09e4e7eb11ee935d6952f98a51a9-20240322
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+	(envelope-from <shawn.sung@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1152393663; Fri, 22 Mar 2024 09:28:11 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 22 Mar 2024 09:28:10 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 22 Mar 2024 09:28:10 +0800
+From: Shawn Sung <shawn.sung@mediatek.com>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?q?Christian=20K=C3=B6nig?=
+	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, Hsiao Chien Sung
+	<shawn.sung@mediatek.corp-partner.google.com>
+Subject: [PATCH v4 08/14] drm/mediatek: Rename files "mtk_drm_ddp_comp.h" to "mtk_ddp_comp.h"
+Date: Fri, 22 Mar 2024 09:28:02 +0800
+Message-ID: <20240322012808.26234-9-shawn.sung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240322012808.26234-1-shawn.sung@mediatek.com>
+References: <20240322012808.26234-1-shawn.sung@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920-resend-hwtimestamp-v9-5-55a89f46f6be@chromium.org>
+Content-Type: text/plain
+X-MTK: N
 
-Hi Ricardo,
+From: Hsiao Chien Sung <shawn.sung@mediatek.corp-partner.google.com>
 
-Thank you for the patch.
+Rename files mtk_drm_ddp_comp.h to mtk_ddp_comp.h.
 
-On Wed, Mar 15, 2023 at 02:30:16PM +0100, Ricardo Ribalda wrote:
-> Isolate all the changes related to the clock circular buffer to its own
-> function, that way we can make changes easier to the buffer logic.
-> 
-> Also simplify the lock, by removing the circular buffer clock handling
-> from uvc_video_clock_decode().
-> 
-> And now that we are at it, unify the API of the clock functions.
-> 
-> Tested-by: HungNien Chen <hn.chen@sunplusit.com>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 84 ++++++++++++++++++---------------------
->  1 file changed, 38 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 6d0243ea0e07..1db0d1bc80e6 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -466,19 +466,30 @@ static inline ktime_t uvc_video_get_time(void)
->  		return ktime_get_real();
->  }
->  
-> +static void uvc_video_clock_add_sample(struct uvc_clock *clock,
-> +				       const struct uvc_clock_sample *sample)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&clock->lock, flags);
-> +
-> +	memcpy(&clock->samples[clock->head], sample, sizeof(*sample));
+Reviewed-by: AngeloGiaocchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.corp-partner.google.com>
+---
+ drivers/gpu/drm/mediatek/mtk_crtc.c                             | 2 +-
+ drivers/gpu/drm/mediatek/mtk_crtc.h                             | 2 +-
+ drivers/gpu/drm/mediatek/{mtk_drm_ddp_comp.h => mtk_ddp_comp.h} | 0
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c                         | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ccorr.c                       | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_color.c                       | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c                       | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c                       | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c                         | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c                 | 2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c                        | 2 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c                              | 2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c                     | 2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c                          | 2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h                          | 2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_plane.c                        | 2 +-
+ drivers/gpu/drm/mediatek/mtk_dsi.c                              | 2 +-
+ drivers/gpu/drm/mediatek/mtk_ethdr.c                            | 2 +-
+ drivers/gpu/drm/mediatek/mtk_padding.c                          | 2 +-
+ 19 files changed, 18 insertions(+), 18 deletions(-)
+ rename drivers/gpu/drm/mediatek/{mtk_drm_ddp_comp.h => mtk_ddp_comp.h} (100%)
 
-How about
-
-	clock->samples[clock->head] = *sample;
-
-?
-
-> +	clock->head = (clock->head + 1) % clock->size;
-> +	clock->count = min(clock->count + 1, clock->size);
-> +
-> +	spin_unlock_irqrestore(&clock->lock, flags);
-> +
-> +	clock->last_sof = sample->dev_sof;
-
-Strictly speaking I wonder if this counts as "adding a sample". Any
-objection against keeping it in the caller ?
-
-> +}
-> +
->  static void
->  uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
->  		       const u8 *data, int len)
->  {
-> -	struct uvc_clock_sample *sample;
-> +	struct uvc_clock_sample sample;
->  	unsigned int header_size;
->  	bool has_pts = false;
->  	bool has_scr = false;
-> -	unsigned long flags;
-> -	ktime_t time;
-> -	u16 host_sof;
-> -	u16 dev_sof;
-> -	u32 dev_stc;
->  
->  	switch (data[1] & (UVC_STREAM_PTS | UVC_STREAM_SCR)) {
->  	case UVC_STREAM_PTS | UVC_STREAM_SCR:
-> @@ -523,11 +534,11 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
->  	 * all the data packets of the same frame contains the same SOF. In that
->  	 * case only the first one will match the host_sof.
->  	 */
-> -	dev_sof = get_unaligned_le16(&data[header_size - 2]);
-> -	if (dev_sof == stream->clock.last_sof)
-> +	sample.dev_sof = get_unaligned_le16(&data[header_size - 2]);
-> +	if (sample.dev_sof == stream->clock.last_sof)
->  		return;
->  
-> -	dev_stc = get_unaligned_le32(&data[header_size - 6]);
-> +	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
->  
->  	/*
->  	 * STC (Source Time Clock) is the clock used by the camera. The UVC 1.5
-> @@ -541,21 +552,19 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
->  	 * and stc and sof are zero.
->  	 */
->  	if (buf && buf->bytesused == 0 && len == header_size &&
-> -	    dev_stc == 0 && dev_sof == 0)
-> +	    sample.dev_stc == 0 && sample.dev_sof == 0)
->  		return;
->  
-> -	stream->clock.last_sof = dev_sof;
-> -
-> -	host_sof = usb_get_current_frame_number(stream->dev->udev);
-> +	sample.host_sof = usb_get_current_frame_number(stream->dev->udev);
->  
->  	/*
->  	 * On some devices, like the Logitech C922, the device SOF does not run
->  	 * at a stable rate of 1kHz. For those devices use the host SOF instead.
->  	 */
->  	if (stream->dev->quirks & UVC_QUIRK_INVALID_DEVICE_SOF)
-> -		dev_sof = host_sof;
-> +		sample.dev_sof = sample.host_sof;
->  
-> -	time = uvc_video_get_time();
-> +	sample.host_time = uvc_video_get_time();
->  
->  	/*
->  	 * The UVC specification allows device implementations that can't obtain
-> @@ -578,46 +587,29 @@ uvc_video_clock_decode(struct uvc_streaming *stream, struct uvc_buffer *buf,
->  	 * the 8 LSBs of the delta are kept.
->  	 */
->  	if (stream->clock.sof_offset == (u16)-1) {
-> -		u16 delta_sof = (host_sof - dev_sof) & 255;
-> +		u16 delta_sof = (sample.host_sof - sample.dev_sof) & 255;
->  		if (delta_sof >= 10)
->  			stream->clock.sof_offset = delta_sof;
->  		else
->  			stream->clock.sof_offset = 0;
->  	}
->  
-> -	dev_sof = (dev_sof + stream->clock.sof_offset) & 2047;
-> -
-> -	spin_lock_irqsave(&stream->clock.lock, flags);
-> -
-> -	sample = &stream->clock.samples[stream->clock.head];
-> -	sample->dev_stc = dev_stc;
-> -	sample->dev_sof = dev_sof;
-> -	sample->host_sof = host_sof;
-> -	sample->host_time = time;
-> -
-> -	/* Update the sliding window head and count. */
-> -	stream->clock.head = (stream->clock.head + 1) % stream->clock.size;
-> +	sample.dev_sof = (sample.dev_sof + stream->clock.sof_offset) & 2047;
-> +	sample.dev_stc = get_unaligned_le32(&data[header_size - 6]);
-
-This is already done above.
-
-With these small issues addressed,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  
-> -	if (stream->clock.count < stream->clock.size)
-> -		stream->clock.count++;
-> -
-> -	spin_unlock_irqrestore(&stream->clock.lock, flags);
-> +	uvc_video_clock_add_sample(&stream->clock, &sample);
->  }
->  
-> -static void uvc_video_clock_reset(struct uvc_streaming *stream)
-> +static void uvc_video_clock_reset(struct uvc_clock *clock)
->  {
-> -	struct uvc_clock *clock = &stream->clock;
-> -
->  	clock->head = 0;
->  	clock->count = 0;
->  	clock->last_sof = -1;
->  	clock->sof_offset = -1;
->  }
->  
-> -static int uvc_video_clock_init(struct uvc_streaming *stream)
-> +static int uvc_video_clock_init(struct uvc_clock *clock)
->  {
-> -	struct uvc_clock *clock = &stream->clock;
-> -
->  	spin_lock_init(&clock->lock);
->  	clock->size = 32;
->  
-> @@ -626,15 +618,15 @@ static int uvc_video_clock_init(struct uvc_streaming *stream)
->  	if (clock->samples == NULL)
->  		return -ENOMEM;
->  
-> -	uvc_video_clock_reset(stream);
-> +	uvc_video_clock_reset(clock);
->  
->  	return 0;
->  }
->  
-> -static void uvc_video_clock_cleanup(struct uvc_streaming *stream)
-> +static void uvc_video_clock_cleanup(struct uvc_clock *clock)
->  {
-> -	kfree(stream->clock.samples);
-> -	stream->clock.samples = NULL;
-> +	kfree(clock->samples);
-> +	clock->samples = NULL;
->  }
->  
->  /*
-> @@ -2108,7 +2100,7 @@ int uvc_video_resume(struct uvc_streaming *stream, int reset)
->  
->  	stream->frozen = 0;
->  
-> -	uvc_video_clock_reset(stream);
-> +	uvc_video_clock_reset(&stream->clock);
->  
->  	if (!uvc_queue_streaming(&stream->queue))
->  		return 0;
-> @@ -2257,7 +2249,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
->  {
->  	int ret;
->  
-> -	ret = uvc_video_clock_init(stream);
-> +	ret = uvc_video_clock_init(&stream->clock);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -2275,7 +2267,7 @@ int uvc_video_start_streaming(struct uvc_streaming *stream)
->  error_video:
->  	usb_set_interface(stream->dev->udev, stream->intfnum, 0);
->  error_commit:
-> -	uvc_video_clock_cleanup(stream);
-> +	uvc_video_clock_cleanup(&stream->clock);
->  
->  	return ret;
->  }
-> @@ -2303,5 +2295,5 @@ void uvc_video_stop_streaming(struct uvc_streaming *stream)
->  		usb_clear_halt(stream->dev->udev, pipe);
->  	}
->  
-> -	uvc_video_clock_cleanup(stream);
-> +	uvc_video_clock_cleanup(&stream->clock);
->  }
-> 
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.c b/drivers/gpu/drm/mediatek/mtk_crtc.c
+index d9f7febd24a6d..97b5e0f186a1d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_crtc.c
+@@ -20,8 +20,8 @@
+ #include <drm/drm_vblank.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_gem.h"
+ #include "mtk_drm_plane.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.h b/drivers/gpu/drm/mediatek/mtk_crtc.h
+index 2d9f28f436aea..fd6c006f0c169 100644
+--- a/drivers/gpu/drm/mediatek/mtk_crtc.h
++++ b/drivers/gpu/drm/mediatek/mtk_crtc.h
+@@ -7,7 +7,7 @@
+ #define MTK_CRTC_H
+ 
+ #include <drm/drm_crtc.h>
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_drm_plane.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_ddp_comp.h
+similarity index 100%
+rename from drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+rename to drivers/gpu/drm/mediatek/mtk_ddp_comp.h
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+index ba926e797af8a..92acdaddd648d 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+@@ -12,8 +12,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_AAL_EN				0x0000
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+index 79bcd3c487563..975ee45a0f72c 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ccorr.c
+@@ -11,8 +11,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_CCORR_EN				0x0000
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_color.c b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+index 4aa41b1ff2602..91e7837a32c86 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_color.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_color.c
+@@ -11,8 +11,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_COLOR_CFG_MAIN			0x0400
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+index 1a1ee77127ee9..51ae4f947c714 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+@@ -12,8 +12,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_GAMMA_EN				0x0000
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+index 32a29924bd54c..3b1e04ecb9d45 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
+@@ -10,7 +10,7 @@
+ #include <linux/reset.h>
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_disp_drv.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index 7f2219c0119be..0ebeaf9830d83 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -16,8 +16,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_REG_OVL_INTEN			0x0004
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+index 542dc2a20ea90..d957f5c8ccf92 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+@@ -18,8 +18,8 @@
+ #include <linux/soc/mediatek/mtk-mutex.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_ethdr.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+index 04f584372214f..f06b048c12479 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+@@ -14,8 +14,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DISP_REG_RDMA_INT_ENABLE		0x0000
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index beb7d9d08e971..fbf63e0441337 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -26,9 +26,9 @@
+ #include <drm/drm_of.h>
+ #include <drm/drm_simple_kms_helper.h>
+ 
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+ #include "mtk_dpi_regs.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ enum mtk_dpi_out_bit_num {
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+index 24389c6c3561f..ab96b1001de3e 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+@@ -15,10 +15,10 @@
+ #include <drm/drm_print.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_drm_plane.h"
+-#include "mtk_drm_ddp_comp.h"
+ 
+ 
+ #define DISP_REG_DITHER_EN			0x0000
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index 7be3b0546d3df..113fdbaac5a14 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -25,7 +25,7 @@
+ #include <drm/drm_vblank.h>
+ 
+ #include "mtk_crtc.h"
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_drm_gem.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.h b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+index 24c4d59085bd6..78d698ede1bf8 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
+@@ -7,7 +7,7 @@
+ #define MTK_DRM_DRV_H
+ 
+ #include <linux/io.h>
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ 
+ #define MAX_CONNECTOR	2
+ #define DDP_COMPONENT_DRM_OVL_ADAPTOR (DDP_COMPONENT_ID_MAX + 1)
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+index 720f6b4b08215..63a7a24468c13 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+@@ -14,7 +14,7 @@
+ #include <linux/align.h>
+ 
+ #include "mtk_crtc.h"
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_drm_gem.h"
+ #include "mtk_drm_plane.h"
+diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+index ec9d96396d7b2..e29c37fb5be09 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+@@ -28,8 +28,8 @@
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_simple_kms_helper.h>
+ 
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ 
+ #define DSI_START		0x00
+diff --git a/drivers/gpu/drm/mediatek/mtk_ethdr.c b/drivers/gpu/drm/mediatek/mtk_ethdr.c
+index 41efaafe26f1a..9b0264bd5e731 100644
+--- a/drivers/gpu/drm/mediatek/mtk_ethdr.c
++++ b/drivers/gpu/drm/mediatek/mtk_ethdr.c
+@@ -15,7 +15,7 @@
+ #include <linux/soc/mediatek/mtk-mmsys.h>
+ 
+ #include "mtk_crtc.h"
+-#include "mtk_drm_ddp_comp.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_drm_drv.h"
+ #include "mtk_ethdr.h"
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_padding.c b/drivers/gpu/drm/mediatek/mtk_padding.c
+index ff6a5c695128c..1f91805cd9aac 100644
+--- a/drivers/gpu/drm/mediatek/mtk_padding.c
++++ b/drivers/gpu/drm/mediatek/mtk_padding.c
+@@ -12,8 +12,8 @@
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ 
+ #include "mtk_crtc.h"
++#include "mtk_ddp_comp.h"
+ #include "mtk_disp_drv.h"
+-#include "mtk_drm_ddp_comp.h"
+ 
+ #define PADDING_CONTROL_REG	0x00
+ #define PADDING_BYPASS			BIT(0)
 -- 
-Regards,
+2.18.0
 
-Laurent Pinchart
