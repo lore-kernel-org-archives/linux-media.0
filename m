@@ -1,153 +1,129 @@
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298A33F8F0;
-	Fri, 22 Mar 2024 11:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D403EA8E
+	for <linux-media@vger.kernel.org>; Fri, 22 Mar 2024 11:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711106058; cv=none; b=bqJ101UVq4MnYZlzJNRH6tLM7k6cLxnNtLsYdhQaxDkXIEaFqZVM7FH3QyH6lHS40EyyQbe2GZ11oYvAlJAPqOz0S6Q91JTwNnN3uejStvSQJE2OKPy8uwiFlbrnSG8rQ5iXNxvSLX5sru14proBuy2PhnKmwahhVkglzRnrK/Y=
+	t=1711106909; cv=none; b=r2oQTSWyKMUuwAiT9AtV9LxLFlFC2Vbx0Na7DFin8ANPcxudwVRkwHV+qQVKBYZqxPwZKtnIRmEB1w5hjfXJ/G2pacJCsBOsl8RLe3B2CNOGOV0CEb1xbjQ2in2MdxawAF8BPUBFlUVRBsQirmlwBccVOJy7+3WZmTiP78VcDEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711106058; c=relaxed/simple;
-	bh=qsj5SJJLL3hn/E7WHUBIXUNo9Zm2xRwmM/UmQy0kVxc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOoe6c5Vsl5VGR/cfBsCR0EU32QhZey6PewS4QBOEkyFK+DwW0ZP0GA5FaT4bYrNgotCkV2N7AIWD3n8FaK5vtbyN7HqWNOvw3yy9SzAeSXbH91mj/YyznV1JkTpGnYxczYNkpFrrdq6BzD4/bWcUren/gDEBlHZDahGOVvw/p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TumINdaO; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1711106909; c=relaxed/simple;
+	bh=CknH/9xSPoJ1WEhhL4MAsXBaxhXJfc/14SdBokj/AFE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ubB+El+VuEQLtWR+WVCcZrAJEtvAIEQ85dz1hkXcfJk6FZS1ZnbZQn/GimZbSPWDMhlqfvRMybNkhEYr7/29EpaeDDrdS1IB2Oc3AsEVKtI5/7F+yxo1+Z0naxprcjFINcmNz3MukHDMpp/pEAFO31bw/jVMj1DqYv8hKvruKFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IIB1jlFb; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TumINdaO"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 42MBDnxp028164;
-	Fri, 22 Mar 2024 06:13:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1711106029;
-	bh=qsj5SJJLL3hn/E7WHUBIXUNo9Zm2xRwmM/UmQy0kVxc=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=TumINdaOvBTjZebAaKy0IAZ63sODcUYxwldp2AghLFJcC8YfqCC5oZglvgWpIZXau
-	 XiArng8WmN+6fv1G1eWBEjpxatclL+iapDGPYolSaP3r9m5Ae4VV/GpIn9IdzE1IpQ
-	 MQWxYGHYNt6byGHpa07ZFvzE/vsw+xfbOMI3cDjo=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 42MBDn0d112805
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 22 Mar 2024 06:13:49 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 22
- Mar 2024 06:13:49 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 22 Mar 2024 06:13:49 -0500
-Received: from localhost (jluthra.dhcp.ti.com [172.24.227.217])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 42MBDmAv056703;
-	Fri, 22 Mar 2024 06:13:49 -0500
-Date: Fri, 22 Mar 2024 16:43:48 +0530
-From: Jai Luthra <j-luthra@ti.com>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-CC: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans
- Verkuil <hverkuil-cisco@xs4all.nl>,
-        Vaishnav Achath <vaishnav.a@ti.com>,
-        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Aradhya
- Bhatia <a-bhatia1@ti.com>, Devarsh Thakkar <devarsht@ti.com>,
-        Jack Zhu
-	<jack.zhu@starfivetech.com>,
-        Julien Massot <julien.massot@collabora.com>,
-        Jayshri Pawar <jpawar@cadence.com>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQw==?= =?utf-8?Q?H?= RFC 03/21] media:
- cadence: csi2rx: Support runtime PM
-Message-ID: <eymalpqyxgp3qa35fzvqahny4sg7xibzuvgoks2wp5wujrlltf@76i6d764npmt>
-References: <20240222-multistream-v1-0-1837ed916eeb@ti.com>
- <20240222-multistream-v1-3-1837ed916eeb@ti.com>
- <SHXPR01MB0671C565B12032569CFACD6EF231A@SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IIB1jlFb"
+Message-ID: <6ea523f5-2628-4269-9194-dfb6bf07f4db@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1711106904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uNC0CCmpYhCcH8TuokVlW8ASQZ45O/eH5PrkVa66tCA=;
+	b=IIB1jlFbZEqqghgVkJSf3iJOkGODQW2yz0EtVMKFmrmwi5YI2/k1T2ZNs9yLzICh1yGzfQ
+	b1OTU/sKMALlLoLwIIS9N1aYn9LrVET8//z8YRlHr6aB6o3zKvgaSyCkjkTc47+pKf+/tF
+	FzT2awU6tMmBerhJCJI7vciw4oeFL34=
+Date: Fri, 22 Mar 2024 19:28:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="itm27ryyihoirz6k"
-Content-Disposition: inline
-In-Reply-To: <SHXPR01MB0671C565B12032569CFACD6EF231A@SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Subject: Re: [v10,20/27] drm/connector: hdmi: Add Infoframes generation
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>,
+ Sandy Huang <hjc@rock-chips.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?=
+ <heiko@sntech.de>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>,
+ Sebastian Wick <sebastian.wick@redhat.com>,
+ =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-sunxi@lists.linux.dev
+References: <20240321-kms-hdmi-connector-state-v10-20-e6c178361898@kernel.org>
+ <07125064-2a78-4515-bb48-655f2aec140f@linux.dev> <87sf0iliyh.fsf@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sui Jingfeng <sui.jingfeng@linux.dev>
+In-Reply-To: <87sf0iliyh.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
---itm27ryyihoirz6k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi Changhuang,
 
-On Mar 22, 2024 at 09:26:22 +0000, Changhuang Liang wrote:
-> Hi, Jai
->=20
-> > [PATCH RFC 03/21] media: cadence: csi2rx: Support runtime PM
-> >=20
-> > From: Jayshri Pawar <jpawar@cadence.com>
-> >=20
-> > Use runtime power management hooks to save power when CSI-RX is not in
-> > use. Also stop/start any in-progress streams, which might happen during=
- a
-> > system suspend/resume cycle.
-> >=20
-> > Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
-> > Co-developed-by: Jai Luthra <j-luthra@ti.com>
-> > Signed-off-by: Jai Luthra <j-luthra@ti.com>
->=20
-> I want to send a series containing this patch, So I want to help you send=
- this patch,
-> What about your opinion?
+On 2024/3/22 17:22, Jani Nikula wrote:
+> On Fri, 22 Mar 2024, Sui Jingfeng <sui.jingfeng@linux.dev> wrote:
+>> Hi,
+>>
+>>
+>> On 2024/3/21 23:29, Maxime Ripard wrote:
+>>> Infoframes in KMS is usually handled by a bunch of low-level helpers
+>>> that require quite some boilerplate for drivers. This leads to
+>>> discrepancies with how drivers generate them, and which are actually
+>>> sent.
+>>>
+>>> Now that we have everything needed to generate them in the HDMI
+>>> connector state, we can generate them in our common logic so that
+>>> drivers can simply reuse what we precomputed.
+>>>
+>>> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+>>> ---
+>>>    drivers/gpu/drm/Kconfig                            |   1 +
+>>>    drivers/gpu/drm/drm_atomic_state_helper.c          | 338 +++++++++++++++++++++
+>>>    drivers/gpu/drm/drm_connector.c                    |  14 +
+>>>    .../gpu/drm/tests/drm_atomic_state_helper_test.c   |   1 +
+>>>    drivers/gpu/drm/tests/drm_connector_test.c         |  12 +
+>>>    include/drm/drm_atomic_state_helper.h              |   8 +
+>>>    include/drm/drm_connector.h                        | 109 +++++++
+>>>    7 files changed, 483 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+>>> index 16029435b750..3d3193c7aa5f 100644
+>>> --- a/drivers/gpu/drm/Kconfig
+>>> +++ b/drivers/gpu/drm/Kconfig
+>>> @@ -97,10 +97,11 @@ config DRM_KUNIT_TEST
+>>>    	  If in doubt, say "N".
+>>>    
+>>>    config DRM_KMS_HELPER
+>>>    	tristate
+>>>    	depends on DRM
+>>> +	select DRM_DISPLAY_HDMI_HELPER
+>> Should we select DRM_DISPLAY_HELPER here? Otherwise there will have some compile error
+>> emerged with default config.
+> Can we stop abusing select instead of adding more selects to paper over
+> the issues?
+>
+> Use select only for non-visible symbols (no prompts anywhere) and for
+> symbols with no dependencies.
 
-Not sure I understood exactly - but yes please feel free to post this=20
-patch as part of your series.
 
-That will be appreciated in fact, as this change is not related to the=20
-multi-stream support anyway.
+OK, fine.
 
->=20
-> Regards,
-> Changhuang
+You probably want to tell us a concrete method, then we will follow.
+But I guess that is up to Maxime will adopt it or not. Probably need
+some discussion then.
 
---=20
-Thanks,
-Jai
 
-GPG Fingerprint: 4DE0 D818 E5D5 75E8 D45A AFC5 43DE 91F9 249A 7145
+>
+> BR,
+> Jani.
+>
 
---itm27ryyihoirz6k
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+-- 
+Best regards,
+Sui
 
-iQIzBAABCAAdFiEETeDYGOXVdejUWq/FQ96R+SSacUUFAmX9Z+kACgkQQ96R+SSa
-cUVrqQ/+OPUiGMHr7g5ovZS6euRkhPyWXNaM0BGqFtLD5S75tiX7y7Pet5GQ6aZg
-2m9+FcFC86zvIcF99C44op7tWRTuDtNcf3YGXnxFV7/izC8Z8YGjLEhdlybPj89u
-MHZuB6W2GVpWqLof0W+cBu/vXsifQmUAKtQXPe4FglJVaN25J+Q85jdzwy0sDIVI
-beCoWF5Dwjk+g3R4aodvNZCfQZ8g37nbRh5/72KAKDv8kcG590lRDCuHkBYVpowW
-XsJ5k1cci24XNsF5lzB83ScmsL1NVm8zj5XSwBbdAJjzIU0qVJe0U+w3kEMIhVFh
-45EYyAggEoaG2QotO91hS1uQ5PfbDGyYZp0OLvjzt8WIzBFbZLRUlIgE0sasWH9l
-EhEhjmEtSgIHpukYPt7BuEGU2VvxHLI5Wk+UYLJ3sQxxJk1sh0H70WTkYfcsB1Vr
-/SXsCt3p/FqkLobeQ5WXTy56rfqMTx25fk6m/FePK56ya97UHHp825IGCHgY/akh
-cyvuix3LOz9EsNF5FL7AKytbuo+wdmYZ1fP/jP2jRf4yVhWKoRa22zd0rLPckL+j
-Z537fVpVkcWTx/f4OFPxxXNPG2WP+qfv5J6ZZpI1wWSSa6n0Js/T7nXTERflHa/F
-nyHcxI8P43u82loUxoK6Jt955G1Ee/VTZdMOpKdUj7aAX1+CeQI=
-=dxEU
------END PGP SIGNATURE-----
-
---itm27ryyihoirz6k--
