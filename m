@@ -1,129 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC244E1C4;
-	Sat, 23 Mar 2024 19:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4951625
+	for <linux-media@vger.kernel.org>; Sun, 24 Mar 2024 00:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711220891; cv=none; b=j1q723jb71rVwRiwTYsCrwYTpJk+/INFevNU/sND20624IpvDUss/BX6WvTkSage9q8fFJ01Huvpvz6cSlAkIs+zuc4XexMymxzkf4FXpd+1BjOVZFdOBPl5Y/CfhLTz7/VrSYdInCjMporfwq3I26dBCSxL8ewOBuigsbu11qM=
+	t=1711241098; cv=none; b=hTEWtmJz5DiNhWKHOVvWS5zM3NkLk5bwi3oQuPK5tx9DgH+m+OrEmGreMbndqIgLBl82Vbdy6OKf1NLs1VaO90Ob2gL4yU+yA9ZCqEPp+A3meN6dCazPlIaNI7AHoxBmT57NNZDGDxVHToYfKJsGcCnBOdYfsajG28xL7Kn20SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711220891; c=relaxed/simple;
-	bh=9+sQO6Zyazf3riHAPr4vw0wfA2CTMxeeqFat8In/BUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fALujtLUF0jwveFURXQ+LvXPGexJvhzv0XohL3mWua9sFBxxCAuJf7eQ/gCDCEXVqmQjGVXKKuRiuuUAqpOPN+jRxmw3AvWti/dpvvNDc8xzg/DQTV4MVxk6JsMFR9meij5M5JoQ9tVAwgf6JSCELdpqJCLYIS4t8mOSS/zoQwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYGj3MjQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711241098; c=relaxed/simple;
+	bh=iaatkivhxlH9naAXzFTEN6dbcjm4bhD8vnO4kDFsUbI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fPWdgHHiwBJS11vJigvPqXSCOK/3AikgZwIH507shk0Ep9iUST15dg5lOQrnsCDRzBZ4fTpBhNIoOuwgMrY3Fq6sVjmeww3/MX1lB8F0rjxgeUSRt3dgGY3vrOOWUPATmCNBEs/ApadzrXASRsBIKykEkWgHQVnYp50bmpILLwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=H7ePD2UT; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYGj3MjQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE15C433C7;
-	Sat, 23 Mar 2024 19:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711220890;
-	bh=9+sQO6Zyazf3riHAPr4vw0wfA2CTMxeeqFat8In/BUI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZYGj3MjQ8L+ziQ43RKGtutkhb+qszI4YtjRXG5l2kQ6elGdn5A992hi3tuVRtt+3C
-	 DE86Amtg0TbggEFZfqUNSdEMQPiaTVRr8Hdlo7hSzuJ4TjyTHoychCuKOieoBQytKD
-	 sB4qd3fOrtb153vcs1V3slc19OLe7xXlDWFPx+suildW95BS+tWER1ao7B+/bnSfB1
-	 U8oZ7Vdnx+viv0HJyryrin35TqF+H0qALo4AkiOtOPuAhRS2oaw69rPKSJiJs6/l+f
-	 t15sYcoN3eEBIan1sxuWTqVSqG8c45Qy17nrHzuWS9Efl3LJyYInADtoeaS227xC5M
-	 2AvNHlTgPA3NA==
-Date: Sat, 23 Mar 2024 19:08:04 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Anatoliy Klymenko <anatoliy.klymenko@amd.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Michal Simek <michal.simek@amd.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] dt-bindings: xlnx: Add VTC and TPG bindings
-Message-ID: <20240323-kennel-mousiness-f8fc12777cf9@spud>
-References: <20240321-dp-live-fmt-v3-0-d5090d796b7e@amd.com>
- <20240321-dp-live-fmt-v3-8-d5090d796b7e@amd.com>
- <a82d525c-737a-4ac4-9d71-e88f4ba69ea1@linaro.org>
- <20240322-absence-endurable-dee8a25643b7@spud>
- <4439d51f-072a-4b0f-a6e4-b95192eac83b@linaro.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="H7ePD2UT"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C09C4989;
+	Sun, 24 Mar 2024 01:44:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1711241065;
+	bh=iaatkivhxlH9naAXzFTEN6dbcjm4bhD8vnO4kDFsUbI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=H7ePD2UTQU80uWDfX5qUqPg/BmAHh/wuKoVuk3CX6BFKdFEQqvfmB67PBJV3vh8+7
+	 CI8zO9V8p+/UE8LACqEORcyoa+ZsaXfRTmY05ebq/z+C8H1Dk05fsMOpKugpu17YnZ
+	 KP/+/elPZou8Y0sopXE3NS3KpIouHfVZzQfllnPg=
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: linux-media@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: [raw2rgbpnm] [PATCH 2/2] Add YUVA32 and YUVX32 4:4:4 packed pixel formats support
+Date: Sun, 24 Mar 2024 02:44:40 +0200
+Message-ID: <20240324004447.3399-2-laurent.pinchart@ideasonboard.com>
+X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240324004447.3399-1-laurent.pinchart@ideasonboard.com>
+References: <20240324004447.3399-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="APHpANq/M0OjDKgl"
-Content-Disposition: inline
-In-Reply-To: <4439d51f-072a-4b0f-a6e4-b95192eac83b@linaro.org>
+Content-Transfer-Encoding: 8bit
 
+From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
---APHpANq/M0OjDKgl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The YUVA32 and YUVX32 formats are permutations of other YUV 4:4:4 packed
+pixel formats. Support them.
 
-On Sat, Mar 23, 2024 at 11:22:22AM +0100, Krzysztof Kozlowski wrote:
-> On 22/03/2024 19:05, Conor Dooley wrote:
-> > On Fri, Mar 22, 2024 at 06:59:18AM +0100, Krzysztof Kozlowski wrote:
-> >> On 21/03/2024 21:43, Anatoliy Klymenko wrote:
-> >>> diff --git a/include/dt-bindings/media/media-bus-format.h b/include/d=
-t-bindings/media/media-bus-format.h
-> >>> new file mode 100644
-> >>> index 000000000000..60fc6e11dabc
-> >>> --- /dev/null
-> >>> +++ b/include/dt-bindings/media/media-bus-format.h
-> >>> @@ -0,0 +1,177 @@
-> >>> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
-> >>> +/*
-> >>> + * Media Bus API header
-> >>> + *
-> >>> + * Copyright (C) 2009, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
-> >>> + *
-> >>> + * This program is free software; you can redistribute it and/or mod=
-ify
-> >>> + * it under the terms of the GNU General Public License version 2 as
-> >>> + * published by the Free Software Foundation.
-> >>
-> >> That's not true. Your SPDX tells something entirely different.
-> >>
-> >> Anyway, you did not explain why you need to copy anything anywhere.
-> >=20
-> > I assume by "copy anything anywhere" you mean "why did you copy a linux
-> > uapi header into the bindings?
->=20
-> Yes, I trimmed context too much.
->=20
-> The reasoning of copying some UAPI and claiming it is a binding was:
-> "Copy media-bus-formats.h into dt-bindings/media to suplement TPG DT node=
-=2E"
-> so as seen *there is no reason*.
->=20
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+---
+ raw2rgbpnm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> Commit msg should explain why we are doing things.
+diff --git a/raw2rgbpnm.c b/raw2rgbpnm.c
+index 6cada340776f..a2e278975d90 100644
+--- a/raw2rgbpnm.c
++++ b/raw2rgbpnm.c
+@@ -76,6 +76,8 @@ static const struct format_info {
+ 	{ V4L2_PIX_FMT_XYUV32,	32, 8,  "XYUV32 (32-bit XYUV 8-8-8-8)", 1, 2, 3 },
+ 	{ V4L2_PIX_FMT_VUYA32,	32, 8,  "VUYA32 (32-bit VUYA 8-8-8-8)", 2, 1, 0 },
+ 	{ V4L2_PIX_FMT_VUYX32,	32, 8,  "VUYX32 (32-bit VUYX 8-8-8-8)", 2, 1, 0 },
++	{ V4L2_PIX_FMT_YUVA32,	32, 8,  "YUVA32 (32-bit YUVA 8-8-8-8)", 0, 1, 2 },
++	{ V4L2_PIX_FMT_YUVX32,	32, 8,  "YUVX32 (32-bit YUVX 8-8-8-8)", 0, 1, 2 },
+ 	{ V4L2_PIX_FMT_YUV411P,	12, 8,  "YUV411P (12 YUV 4:1:1 planar)", 0, 0, 1 },
+ 	{ V4L2_PIX_FMT_YUV420,	12, 8,  "YUV420P (12 YUV 4:2:0 planar)", 0, 0, 1 },
+ 	{ V4L2_PIX_FMT_YVU420,	12, 8,  "YVU420P (12 YVU 4:2:2 planar)", 0, 1, 0 },
+@@ -267,7 +269,9 @@ static void raw_to_rgb(const struct format_info *info,
+ 	case V4L2_PIX_FMT_AYUV32:
+ 	case V4L2_PIX_FMT_XYUV32:
+ 	case V4L2_PIX_FMT_VUYA32:
+-	case V4L2_PIX_FMT_VUYX32:		/* Packed YUV 4:4:4 */
++	case V4L2_PIX_FMT_VUYX32:
++	case V4L2_PIX_FMT_YUVA32:
++	case V4L2_PIX_FMT_YUVX32:	/* Packed YUV 4:4:4 */
+ 		y_pos = info->y_pos;
+ 		cb_pos = info->cb_pos;
+ 		cr_pos = info->cr_pos;
+-- 
+Regards,
 
-Oh for sure. I was just wondering if you were complaining about the UAPI
-header or if that comment was about the copyright notice. If it had been
-the latter I was gonna point out the former :)
+Laurent Pinchart
 
---APHpANq/M0OjDKgl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZf8okwAKCRB4tDGHoIJi
-0uqqAP9b69AYr5D7FhDNnL/D8l5mnPP/f42epRSDhGpCwvmQwAD+P/S/aI8e14av
-MPfETCx+sejBWrcfF0p6HK7BDCtvTAg=
-=4lmD
------END PGP SIGNATURE-----
-
---APHpANq/M0OjDKgl--
