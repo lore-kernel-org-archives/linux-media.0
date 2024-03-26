@@ -1,175 +1,188 @@
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2100.outbound.protection.partner.outlook.cn [139.219.146.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B88C29B0;
-	Tue, 26 Mar 2024 04:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711428661; cv=none; b=qxW98Q5VSjQLAOma2CtHYY5uQvp3cMA8XQH4da/HLV9BKruoA4gQyRzlQ6+4vFOv+Q0bvm4cr/XZRHusKqNSLcayy6zG6TJIePpEuM2z+wPr73V/6+XgBktqgvHg1zRrt6SkkQivUf/p7CqnhvIeRCiAAUtpo+qUuqwvkGGQr+s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711428661; c=relaxed/simple;
-	bh=F5JKSRogf2llIBkzzf0hpoa6S0VY2RBJ8xYm+J6GbQI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GrVs5QGsnVlzzSTUYBEhQPQNgOnLm3i3uy8jGdpAm44vYWVblFgammmf6jnM29LCdbd3i49ZV5l2ChoiwbkI1izxBDL9ufUJHBkGXqn340nAg+9ass6mNuU+jIvFPcsDmAA2SF8KnswLjFnbRVompgwKm/wNHhwf8Ql81apK3NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=RoW+3/ZK; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="RoW+3/ZK"
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42PMIxAe009321;
-	Mon, 25 Mar 2024 21:50:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pfpt0220; bh=9EyZHpQZPtNoiJ0ASAEMb+
-	9ZjiK6Us0t8XuxBxb61RY=; b=RoW+3/ZKAryUcbnF//1Pwcp2mZD0LhFslGpJgq
-	DNVQNxquyUWqj0Fcdw5wqxwPk7zv6dgrF7uSnuI5HQ8wC0RAbYZdUVOA2ADajE9v
-	quCZEkVPiJQDY/EmKFOqutsjsDIGFxRHycGJ5FkySb+inBrs/9F0SZUFNqfxOvRv
-	I/ERMQZPLNgWds1t+XiFj+9eZ2usURlzwV24EerF2lkogF+xv6CdWL+opNBwJNZI
-	EPVxsf/KPp4VXiWUArLFEkILZY6s0SGPFhrHAN6eWE5WfruSVc7PN5hbmCHRfbD6
-	N9v5lEwK64LSExoNJ2BCtT0dFkV8ZV0CV5DPZmQVwFHG0NgA==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3x3hy1s47q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 21:50:12 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 25 Mar 2024 21:50:11 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Mon, 25 Mar 2024 21:50:11 -0700
-Received: from maili.marvell.com (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id A7E6E3F703F;
-	Mon, 25 Mar 2024 21:50:05 -0700 (PDT)
-Date: Tue, 26 Mar 2024 10:20:04 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Julien Panis <jpanis@baylibre.com>
-CC: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov
-	<ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard
- Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sumit
- Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?=
-	<christian.koenig@amd.com>,
-        Simon Horman <horms@kernel.org>, Andrew Lunn
-	<andrew@lunn.ch>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH net-next v4 2/3] net: ethernet: ti: Add desc_infos member
- to struct k3_cppi_desc_pool
-Message-ID: <20240326045004.GA1362097@maili.marvell.com>
-References: <20240223-am65-cpsw-xdp-basic-v4-0-2e45e5dec048@baylibre.com>
- <20240223-am65-cpsw-xdp-basic-v4-2-2e45e5dec048@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01707446BA;
+	Tue, 26 Mar 2024 05:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.100
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711432107; cv=fail; b=AADCef7Kfgftk0JLqhjA2e/cYm3OHmVMw3gD8RFhV5ndKBykz4+R9X1b1uM8N/G+R6f6i32TaChHppZMvzsPpDPTV/GD7RGs/76zgrlRT+rQO8ShN0mFX9bkBSga8Ck/xaQPEI5kfkYnGiNw5RhxqgL9/8cX171X++nCMCFW1MQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711432107; c=relaxed/simple;
+	bh=QGRjzjjGTYBKckhCEqrNImTO8Jpp+RmJTSfXNR5n9us=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mTV+RTVKnFCafLibxzWIGUotL3SOpKy8OBv4z7aYnHNEU9WYI9oqu3n2JDtFgJFu1bkZamvkPgOTDe3lMLyt0eFPdRWx66Zwa9gs/nSl2N7kLa77f4vr918ytWRPbhC+JpHmQmECtH5bvEnV/JQL4zzkWe6oFzHnxsk8J1n/qBg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OnQvr/slHOx+59KODpxAiaR0VDWbsBEj3rwvAAYa7Fz/lIxvtQ5eT7DTzafkFgyv/ubgkTy/ISWBd30oKvDHG8CwUi4lnycZePdlCZ2/r5Yi+CpuAvLr8sG9fHiuGJsGzLyFQmjeeZvMYT6EuG8sDaGxSIe8VyyfougRPeFUdhvgQEzWi2A+SuXd+VU7i+YDXcMPHJiyw0AJx6NqiDRpD4QhROZLv++Wc7BCB0XCksMJNSnXGgz0KxerebH027mQzQXEtWQaYcOi9AvnMWZaxNXPmX2EOgR2SD/k2URgIUfB/j6HaRUo544TJLXVAL6KKhgedFhszAzN0GSwAi/21w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JWrr15+a/R++OP67DBJn3f/Wax9UB7Rprnm4RAROmdM=;
+ b=LFnpyRajK73UIFBSyHR1h+rwGptIQT1HMNYGUtegfKTK/wL0lE/WrwmQcsivST6xIio5Yn0feEMVBcw7SQi4Migw5nA68sey1jQosIrky0nmUaEbGPz9Av4bbH7pQ3arU/o3tqoKvn6dTve0LWw+tv4EVYkv8me36GmIixeC4nkfYV9yjU41fdLrs2Q5R4N3P6eOkiHWFM6AAtujmBfAkOkJTp265ok4fxotxpaGPthYXYYw/3nfNQAN38iAqnLZXgrUkHDf0eEEYcsWZIfXRtnuzuHGu0HFNQGsi5xBYw11upxFBgrkkfU7n2ds6QdmM5hKwJHf3CmBe9kz5UWWdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:25::10) by SHXPR01MB0622.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:1f::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.30; Tue, 26 Mar
+ 2024 03:12:49 +0000
+Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ ([fe80::b0af:4c9d:2058:a344]) by
+ SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%6])
+ with mapi id 15.20.7249.041; Tue, 26 Mar 2024 03:12:49 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Jack Zhu <jack.zhu@starfivetech.com>,
+	Changhuang Liang <changhuang.liang@starfivetech.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Jayshri Pawar <jpawar@cadence.com>,
+	Jai Luthra <j-luthra@ti.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: [PATCH v1 3/4] staging: media: starfive: Extract the ISP stream on as a helper function
+Date: Mon, 25 Mar 2024 20:12:36 -0700
+Message-Id: <20240326031237.25331-4-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240326031237.25331-1-changhuang.liang@starfivetech.com>
+References: <20240326031237.25331-1-changhuang.liang@starfivetech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0018.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:5::15) To SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:25::10)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240223-am65-cpsw-xdp-basic-v4-2-2e45e5dec048@baylibre.com>
-X-Proofpoint-GUID: IFJZH7V3Fi2mQzI6h7hsUbbGIVLBJOBJ
-X-Proofpoint-ORIG-GUID: IFJZH7V3Fi2mQzI6h7hsUbbGIVLBJOBJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-26_02,2024-03-21_02,2023-05-22_02
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0622:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14d41e54-b6c4-494a-487a-08dc4d429e2a
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	wnlNuriiQ52wA0qwL8HVFWztHb1RTMXq5M5O0R7Yb8XB6p0Ekzn17qOKIJhxSr9fH/9DRm1fkM0yeFyQ2lUM3lCromfa3qx3/BXRR2HTfJR2LiLYb7Ii0Q4Q7wdvcWI5IDtd4Op/g7m/cYo54+7iJJQRWl3LjmAcLWX5b7ntJZKWskyvf8UxR09CtxL8Hl5Htol7zanztkhXPuiH8NUrf90ZWiO45kM0ru3BNEaoqhag13eFIkf/zm3uf8g5OgJFzXFPr/wuRPnU97Pg2mDD4NIXkAqdHuNpRM5gbyDzG3bYBv56ERtlqo81k8EyUtG//Bka8RkYpRDlER3ptXPENRTgjZzllSCWmrBHgZ5umEH6EzT4mlq+nEZ+fKbx057+ETKOA7l6f0WGFykapKllYbHsJkalPPkBt4X6jgNFowstqt17JkgvoPN4AAvzbq7dGNTqyaFBjZOfe7PYFPHC6BJo9wkb/gqHtKvGnSR4WdInbWi/pmqV2oxVeSxfuzfH6qQE8OUPBiLXPWzYkhYzXTIt+Ko3BVyxwgeInvzPqr/vp3Eq0NzSG41Yyqv5iuYKsK/x7d6cvxO+Q/2R4mmcGPBLmcSVccf/SZEp+hHpO3ZkXEsGSu7ka/Lb/1kwTSW5
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(366007)(52116005)(1800799015)(41320700004)(7416005)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Du0TNGZycnJwf/3flUeZTL7JNL3gS119i6Di859quh9LWWO/PEpk9yVWfUsV?=
+ =?us-ascii?Q?IckYDr1jhRTuLyy2ccIekCOLqKz0bbZI7JsBIapA4an6l8m2UYTIa0iEvMsE?=
+ =?us-ascii?Q?zLwPj0Ro6FNNnmPsCR6LEIc2qQ+ppBamAAKEbtsCzDP1wi4DAkV5DZ8Ru7ex?=
+ =?us-ascii?Q?LpBJIgn2VfkHLy7Q7BJ7MyZSLdkJHmunbcVIIgWk+xMfR5iBnvxWK5bazOSE?=
+ =?us-ascii?Q?6gCLEDiVDZx8TduLSTGTcTlNFLZw0jw5zGvOS3EigdNathB7JA698qQxUfGo?=
+ =?us-ascii?Q?tJQHfDCfvM5WARaQ0A2HQ/vTDRg6xM/r3t1Qr3GgmtS9GBf8E2Isx6yLWHoE?=
+ =?us-ascii?Q?eYnayNKXNfY2db3h3z18IVTPPA1Efu8TifkMWycXtfx//Yln9pOvpaDnv6Dm?=
+ =?us-ascii?Q?zPU0J1rZrGfwJyqwq619lZn/dLKOsLVhMnwDuVKXqKjAVp+qZGwy1a2+ywdS?=
+ =?us-ascii?Q?wJ+Dp8j2GMli27v8hNiTi05csQ74itbLwP+L2EHwffE1/bOcXq4vhZ012V/e?=
+ =?us-ascii?Q?LIqIBcIzJKmjiMklCpWS6XV2OW9n9ZtYDWYbIipQRjVuHZizwh3NeTOXFK5G?=
+ =?us-ascii?Q?y5ljrA0//jKHfcMAyU2m4gvI/q4rFyDE80F0Xdov535d4GSbcxSjocnkf6fz?=
+ =?us-ascii?Q?XgVrNx/jtbjbx8Qw5tOdT/6PTSxbhbfct4Ze7DpDjqEk+/fgH/O2QSTqN+dM?=
+ =?us-ascii?Q?LdBNBP+TPVZ6P8hr/K6TtxaIoAUZaqnPxxnsyg6JvFxI8QS0a+9Mafj3dZV5?=
+ =?us-ascii?Q?cr+7JE1G0bYx6/gOBAy17tOgYkFVFDMG7bKxI/vwMJbQt4mnoXMhA95ljwPt?=
+ =?us-ascii?Q?hyWoMhsP/BnyQmzhmyL2eizoqhdQVXUZGwgBrprX5Jtb8E42MvnQBfuYG1Jt?=
+ =?us-ascii?Q?JCJl6ERnkI+fI4YrqrwebMZUBJW4XjOO7TUSZQGSoXfEwuTES24SNtQLq7SD?=
+ =?us-ascii?Q?EiubCn61vMAXjkFNEx6LaPdlKLuaeHMHseWEAn5O/uuyL1k7pOAvqDorKTMd?=
+ =?us-ascii?Q?qx3GufTj+uHgUMo3dLGvvrHo8+2BQB+V8NVEGwaVhox83Fc2LH2auVMaUAie?=
+ =?us-ascii?Q?fJBdpz0EFZWFdMYAhJNLBoTKLtxx6jDdmUFHpEA0POm1HlQmnRL2yQcCRias?=
+ =?us-ascii?Q?xtXi6Wc/FldNClXDcIXpUh7CqWurQq6O3QGEg4cole6Jj9bj3wd2nZHVgVqo?=
+ =?us-ascii?Q?FHs75PXRijhBrgtvfKde6KcuaqwHO6s1egreC6GgwH6vecHVTidzUyWJcPSb?=
+ =?us-ascii?Q?4dAfS6VH5enwz0LHFAgWdlSJxe+csPo1Rf/cWyuhX+CC0aNFLSrmfhvtj+IO?=
+ =?us-ascii?Q?ek2Da2EXALDo2+hysgTnsffSlM7MZ4n/iLMvWEanvPOVU3YXPjH6veH6usAK?=
+ =?us-ascii?Q?S8kIn3dtKZDEKfmQSOHxFCjLT7g1u70L+pIaZDNdDIGgxcenklMpqHfkg8k6?=
+ =?us-ascii?Q?/DVTVxDi68pX/8PHhOLys4Nf7BpgNnjDFFxv4mD3dgCb643oFwI4Ty8E+KJ2?=
+ =?us-ascii?Q?IjtkXFPbo3RDRJ5mbrhi+4/trXzsLMbjOlnhwTzLPkkPkNhFM4478DbrKMjR?=
+ =?us-ascii?Q?VJECAY6kKYNAw5AKfPllFU6S3KjPgmbYONDHdMMT3Ki6Du11rMItk6eow66c?=
+ =?us-ascii?Q?efv7MUdESmdLk10olQSL75I=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14d41e54-b6c4-494a-487a-08dc4d429e2a
+X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2024 03:12:49.7974
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yNIGL0i6gjjxT6XAIhGR7YdJ/rUHlqMWs/j+jUoqHqUquHx/pCer9p/l2F8kNf1CrnMZVFzZQxqaw5dx2yZ66C+OYfnUGbO2gUqonn4UXo7CBYok7EgZw2CHmzQVEyeC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0622
 
-On 2024-03-25 at 21:30:36, Julien Panis (jpanis@baylibre.com) wrote:
-> This patch introduces a member and the related accessors which can be
-> used to store descriptor specific additional information. This member
-> can store, for instance, an ID to differentiate a skb TX buffer type
-> from a xdpf TX buffer type.
->
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> ---
->  drivers/net/ethernet/ti/k3-cppi-desc-pool.c | 24 ++++++++++++++++++++++++
->  drivers/net/ethernet/ti/k3-cppi-desc-pool.h |  2 ++
->  2 files changed, 26 insertions(+)
->
-> diff --git a/drivers/net/ethernet/ti/k3-cppi-desc-pool.c b/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
-> index fe8203c05731..d0c68d722ef2 100644
-> --- a/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
-> +++ b/drivers/net/ethernet/ti/k3-cppi-desc-pool.c
-> @@ -22,6 +22,7 @@ struct k3_cppi_desc_pool {
->  	size_t			mem_size;
->  	size_t			num_desc;
->  	struct gen_pool		*gen_pool;
-> +	void			**desc_infos;
->  };
->
->  void k3_cppi_desc_pool_destroy(struct k3_cppi_desc_pool *pool)
-> @@ -72,6 +73,15 @@ k3_cppi_desc_pool_create_name(struct device *dev, size_t size,
->  		goto gen_pool_create_fail;
->  	}
->
-> +	pool->desc_infos = devm_kcalloc(dev, pool->num_desc,
-> +					sizeof(*pool->desc_infos), GFP_KERNEL);
-This should be freed as well, right ?
-.set_channels() in ethtool ops cleans pools; but not this. This wont
-result in memory leak ? s/devm_kcalloc/kcalloc if my comment
-is correct.
+Extract the ISP stream on as a helper function and open it, Let the
+other files can use it.
 
-> +	if (!pool->desc_infos) {
-> +		ret = -ENOMEM;
-> +		dev_err(pool->dev, "pool descriptor infos alloc failed %d\n", ret);
-> +		kfree_const(pool_name);
-> +		goto gen_pool_desc_infos_alloc_fail;
-> +	}
-> +
->  	pool->gen_pool->name = pool_name;
->
->  	pool->cpumem = dma_alloc_coherent(pool->dev, pool->mem_size,
-> @@ -94,6 +104,8 @@ k3_cppi_desc_pool_create_name(struct device *dev, size_t size,
->  	dma_free_coherent(pool->dev, pool->mem_size, pool->cpumem,
->  			  pool->dma_addr);
->  dma_alloc_fail:
-> +	devm_kfree(pool->dev, pool->desc_infos);
-> +gen_pool_desc_infos_alloc_fail:
->  	gen_pool_destroy(pool->gen_pool);	/* frees pool->name */
->  gen_pool_create_fail:
->  	devm_kfree(pool->dev, pool);
-> @@ -144,5 +156,17 @@ void *k3_cppi_desc_pool_cpuaddr(struct k3_cppi_desc_pool *pool)
->  }
->  EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_cpuaddr);
->
-> +void k3_cppi_desc_pool_desc_info_set(struct k3_cppi_desc_pool *pool, int desc_idx, void *info)
-> +{
-> +	pool->desc_infos[desc_idx] = info;
-> +}
-> +EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_desc_info_set);
-> +
-> +void *k3_cppi_desc_pool_desc_info(struct k3_cppi_desc_pool *pool, int desc_idx)
-> +{
-> +	return pool->desc_infos[desc_idx];
-> +}
-> +EXPORT_SYMBOL_GPL(k3_cppi_desc_pool_desc_info);
-> +
->  MODULE_LICENSE("GPL");
->  MODULE_DESCRIPTION("TI K3 CPPI5 descriptors pool API");
-> diff --git a/drivers/net/ethernet/ti/k3-cppi-desc-pool.h b/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
-> index 149d5579a5e2..0076596307e7 100644
-> --- a/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
-> +++ b/drivers/net/ethernet/ti/k3-cppi-desc-pool.h
-> @@ -28,5 +28,7 @@ void k3_cppi_desc_pool_free(struct k3_cppi_desc_pool *pool, void *addr);
->  size_t k3_cppi_desc_pool_avail(struct k3_cppi_desc_pool *pool);
->  size_t k3_cppi_desc_pool_desc_size(struct k3_cppi_desc_pool *pool);
->  void *k3_cppi_desc_pool_cpuaddr(struct k3_cppi_desc_pool *pool);
-> +void k3_cppi_desc_pool_desc_info_set(struct k3_cppi_desc_pool *pool, int desc_idx, void *info);
-> +void *k3_cppi_desc_pool_desc_info(struct k3_cppi_desc_pool *pool, int desc_idx);
->
->  #endif /* K3_CPPI_DESC_POOL_H_ */
->
-> --
-> 2.37.3
->
+Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+---
+ .../staging/media/starfive/camss/stf-isp.c    | 27 ++++++++++++-------
+ .../staging/media/starfive/camss/stf-isp.h    |  2 ++
+ 2 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.c b/drivers/staging/media/starfive/camss/stf-isp.c
+index d50616ef351e..16694b502e56 100644
+--- a/drivers/staging/media/starfive/camss/stf-isp.c
++++ b/drivers/staging/media/starfive/camss/stf-isp.c
+@@ -58,23 +58,30 @@ int stf_isp_init(struct stfcamss *stfcamss)
+ 	return 0;
+ }
+ 
+-static int isp_set_stream(struct v4l2_subdev *sd, int enable)
++void stf_isp_stream_on(struct stf_isp_dev *isp_dev,
++		       struct v4l2_subdev_state *sd_state)
+ {
+-	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
+-	struct v4l2_subdev_state *sd_state;
+ 	struct v4l2_mbus_framefmt *fmt;
+ 	struct v4l2_rect *crop;
+ 
+-	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+ 	fmt = v4l2_subdev_state_get_format(sd_state, STF_ISP_PAD_SINK);
+ 	crop = v4l2_subdev_state_get_crop(sd_state, STF_ISP_PAD_SRC);
+ 
+-	if (enable) {
+-		stf_isp_reset(isp_dev);
+-		stf_isp_init_cfg(isp_dev);
+-		stf_isp_settings(isp_dev, crop, fmt->code);
+-		stf_isp_stream_set(isp_dev);
+-	}
++	stf_isp_reset(isp_dev);
++	stf_isp_init_cfg(isp_dev);
++	stf_isp_settings(isp_dev, crop, fmt->code);
++	stf_isp_stream_set(isp_dev);
++}
++
++static int isp_set_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct stf_isp_dev *isp_dev = v4l2_get_subdevdata(sd);
++	struct v4l2_subdev_state *sd_state;
++
++	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
++
++	if (enable)
++		stf_isp_stream_on(isp_dev, sd_state);
+ 
+ 	v4l2_subdev_call(isp_dev->source_subdev, video, s_stream, enable);
+ 
+diff --git a/drivers/staging/media/starfive/camss/stf-isp.h b/drivers/staging/media/starfive/camss/stf-isp.h
+index 955cbb048363..1a3e8cf7859c 100644
+--- a/drivers/staging/media/starfive/camss/stf-isp.h
++++ b/drivers/staging/media/starfive/camss/stf-isp.h
+@@ -421,6 +421,8 @@ void stf_isp_init_cfg(struct stf_isp_dev *isp_dev);
+ void stf_isp_settings(struct stf_isp_dev *isp_dev,
+ 		      struct v4l2_rect *crop, u32 mcode);
+ void stf_isp_stream_set(struct stf_isp_dev *isp_dev);
++void stf_isp_stream_on(struct stf_isp_dev *isp_dev,
++		       struct v4l2_subdev_state *sd_state);
+ int stf_isp_init(struct stfcamss *stfcamss);
+ int stf_isp_register(struct stf_isp_dev *isp_dev, struct v4l2_device *v4l2_dev);
+ int stf_isp_unregister(struct stf_isp_dev *isp_dev);
+-- 
+2.25.1
+
