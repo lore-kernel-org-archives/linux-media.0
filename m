@@ -1,40 +1,40 @@
-Received: from mail-108-mta200.mxroute.com (mail-108-mta200.mxroute.com [136.175.108.200])
+Received: from mail-108-mta162.mxroute.com (mail-108-mta162.mxroute.com [136.175.108.162])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2315F1552E9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266351552EB
 	for <linux-media@vger.kernel.org>; Wed, 27 Mar 2024 23:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.162
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711581496; cv=none; b=CcdSikvdnKdagvcUesdhbobsQbkcqMUn3bnvWotJcXzLIdu5+64iP5ieQedTdTMWtX1+agteb0RzwE2k21cfATHNIL7eETgQqM+YYvoUdFZ2nhn1K2M7lbdAopG+0Tg7ayY6lXcW/APeXvtdzW+GKpycyYczMZg2MpGlFFywyDQ=
+	t=1711581496; cv=none; b=T/E+Ew1Mj6MQDpFQz8P7fdfejqSpEuevi0F0nVkZN7LI9p7jbzJDYkeRaRKQISORCDhF3YLlAhgxYzZmxVV4C0ueD7IWcd3GiLIv29JfepMFo11PAj3RyTPStmIjDDoAsTYKkgqVEoMFqnEQEr/X+e7JPxXHwluvm8R24Xt/Avs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711581496; c=relaxed/simple;
-	bh=9hZyUhA7ALR2iNhCG6D4FOZenGSfNB9notOMRAjuHdc=;
+	bh=6+2wz7C48VzI3IyZhlih65O+oIcytRh3P8S1DW3VqYU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yvmz6m9jiwbK5CXSsatZG63olo0kitotMZvUZuzhvYf4KWmmB6E2WG27lDA9UM2gzuvbN+YvSxNCaKJdcqpBMJM7JTxsqv4HmBF38STb75VBGjVL3m6abMgqrMb3xfOp0HQQG1iv0RiF58mXvyB3/tDgtfoiD4aEysYppUgy2io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=djhh2rrX; arc=none smtp.client-ip=136.175.108.200
+	 MIME-Version; b=VYP7Ll6fGNs58h05b9LlayGKsBovquQRBIEiwOBeknMOy4M/z0JM3xm1/8zm77BTENlGjCw0h4t4jnlkzjSy4GUl5WM587+HcW2vCD/wKqh88UpCql++PsQEbWEv7GYhGNkHAa/3EsL8aNcjlaDhGh2DWGCsyz5JY6WqA48QP7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=HJ1eg5oN; arc=none smtp.client-ip=136.175.108.162
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="djhh2rrX"
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="HJ1eg5oN"
 Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta200.mxroute.com (ZoneMTA) with ESMTPSA id 18e823479e90003bea.010
+ by mail-108-mta162.mxroute.com (ZoneMTA) with ESMTPSA id 18e823488ac0003bea.010
  for <linux-media@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 27 Mar 2024 23:17:40 +0000
-X-Zone-Loop: f6e26a6b21d949335dca9c2618e95d99c9bdb2a5a971
+ Wed, 27 Mar 2024 23:17:44 +0000
+X-Zone-Loop: bb189efbe9e8fe33821fee4151bdfd426f9a000b93dc
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=luigi311.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=tzcV6O++Ljt/ASIa7w8Ii7uMMQ256AACbEeevdXTGDg=; b=djhh2rrX3hxdfDjlQEENfp23cx
-	zokz16x08OytLp/F1wdlcqU2RMg/d6ljHM9/UscMtrhOQH3XMvFqh3EdW/chepAH+ap4f5irAuv0K
-	tvA31jQwWZWGyHcuzZspjStuLSqejaIsMtFJM8i3vHgxZelEm0Tp4kAM45hPYl0nuE8vralmqQdfc
-	MPooWcU9DOPe5tZ6K6FnqEWVdb1HaR9M1HTY8Kx3Sg77LKiSCPoqBxGcShT3B2RELa/JIID+Q5FV0
-	xH2QuutihoPfJWdDSKUU5nPif9uuElSX/qtUpZlUzEX7M4keU8PDGvF+a+XGsvrIKoSUK2ynMDePa
-	Y7G5zxHw==;
+	bh=MWmmMzvpB7rAQwa1TAxwPfh+Zj5RVzbFzB4BAQpgxHA=; b=HJ1eg5oNFBw6ptNnK6DZzTUMzV
+	eizEzmCukzFA5ZssZ1MdX5BAte3cGofJ/hqCj6uVuVQxWdTOIcAB6FGDKE420+IytRo4HNswQy6FN
+	QQADfHQLAFNW88ni8/35rUCXtevGG3wkSdJK5pAfyDJMbTpTd5RI3/bhay2IZ3FQA7bkxvabqSlx+
+	Yu2Gy8YQnWQauI3NjagAnxbq/LJlYm3VrFd3rVRaiTMrMnUvrTzeCLfwdC1qakl1Y3LHSgiGoJFVH
+	CxcosMAqcgoF1xgeaL3Js5On987dUVbavhEkf4YpNn4jsogebyYaEjxb3q9lwlbmMvhrJAiok8oFr
+	EOelcVUg==;
 From: git@luigi311.com
 To: linux-media@vger.kernel.org
 Cc: dave.stevenson@raspberrypi.com,
@@ -52,9 +52,9 @@ Cc: dave.stevenson@raspberrypi.com,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 12/23] media: i2c: imx258: Allow configuration of clock lane behaviour
-Date: Wed, 27 Mar 2024 17:16:58 -0600
-Message-ID: <20240327231710.53188-13-git@luigi311.com>
+Subject: [PATCH 14/23] media: i2c: imx258: Issue reset before starting streaming
+Date: Wed, 27 Mar 2024 17:17:00 -0600
+Message-ID: <20240327231710.53188-15-git@luigi311.com>
 In-Reply-To: <20240327231710.53188-1-git@luigi311.com>
 References: <20240327231710.53188-1-git@luigi311.com>
 Precedence: bulk
@@ -68,63 +68,45 @@ X-Authenticated-Id: personal@luigi311.com
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-The sensor supports the clock lane either remaining in HS mode
-during frame blanking, or dropping to LP11.
-
-Add configuration of the mode via V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK.
+Whilst not documented, register 0x0103 bit 0 is the soft
+reset for the sensor, so send it before trying to configure
+the sensor.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/i2c/imx258.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/media/i2c/imx258.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
-index 979ac7872249..85c2f1ccaea1 100644
+index c2c5e819ddc0..a62ed8c26663 100644
 --- a/drivers/media/i2c/imx258.c
 +++ b/drivers/media/i2c/imx258.c
-@@ -72,6 +72,8 @@
- /* Test Pattern Control */
- #define IMX258_REG_TEST_PATTERN		0x0600
+@@ -20,6 +20,8 @@
+ #define IMX258_MODE_STANDBY		0x00
+ #define IMX258_MODE_STREAMING		0x01
  
-+#define IMX258_CLK_BLANK_STOP		0x4040
++#define IMX258_REG_RESET		0x0103
 +
- /* Orientation */
- #define REG_MIRROR_FLIP_CONTROL		0x0101
- #define REG_CONFIG_MIRROR_FLIP		0x03
-@@ -639,6 +641,7 @@ struct imx258 {
- 	const struct imx258_link_freq_config *link_freq_configs;
- 	const s64 *link_freq_menu_items;
- 	unsigned int nlanes;
-+	unsigned int csi2_flags;
+ /* Chip ID */
+ #define IMX258_REG_CHIP_ID		0x0016
+ #define IMX258_CHIP_ID			0x0258
+@@ -1059,6 +1061,16 @@ static int imx258_start_streaming(struct imx258 *imx258)
+ 	const struct imx258_link_freq_config *link_freq_cfg;
+ 	int ret, link_freq_index;
  
- 	/*
- 	 * Mutex for serialized access:
-@@ -1073,6 +1076,15 @@ static int imx258_start_streaming(struct imx258 *imx258)
- 		return ret;
- 	}
- 
-+	ret = imx258_write_reg(imx258, IMX258_CLK_BLANK_STOP,
-+			       IMX258_REG_VALUE_08BIT,
-+			       imx258->csi2_flags & V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK ?
-+			       1 : 0);
++	ret = imx258_write_reg(imx258, IMX258_REG_RESET, IMX258_REG_VALUE_08BIT,
++			       0x01);
 +	if (ret) {
-+		dev_err(&client->dev, "%s failed to set clock lane mode\n", __func__);
++		dev_err(&client->dev, "%s failed to reset sensor\n", __func__);
 +		return ret;
 +	}
 +
- 	/* Apply default values of current mode */
- 	reg_list = &imx258->cur_mode->reg_list;
- 	ret = imx258_write_regs(imx258, reg_list->regs, reg_list->num_of_regs);
-@@ -1445,6 +1457,8 @@ static int imx258_probe(struct i2c_client *client)
- 		goto error_endpoint_free;
- 	}
- 
-+	imx258->csi2_flags = ep.bus.mipi_csi2.flags;
++	/* 12ms is required from poweron to standby */
++	fsleep(12000);
 +
- 	/* Initialize subdev */
- 	v4l2_i2c_subdev_init(&imx258->sd, client, &imx258_subdev_ops);
- 
+ 	/* Setup PLL */
+ 	link_freq_index = imx258->cur_mode->link_freq_index;
+ 	link_freq_cfg = &imx258->link_freq_configs[link_freq_index];
 -- 
 2.42.0
 
