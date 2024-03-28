@@ -1,56 +1,97 @@
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A256213777B;
-	Thu, 28 Mar 2024 18:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4816137908;
+	Thu, 28 Mar 2024 18:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711652068; cv=none; b=GGPL5XpFv3AKOTlXbSkyPH95n9LjKgcVEXYmOqqUkQ+vI89OdF3K964wIFGVjIlmtLOUgzD8X1dSekLm6co3DwDul29VKTUS6DX+ZVd3IfZKPW3qV1AVlqm09eY3/SsJ1M3UGW0YfPDhvl2PP1+7Gi3p/9XD+eVA/zYJABYSG1o=
+	t=1711652129; cv=none; b=tYfsZEs0fvQlSU0zyUKXftG9sDOjX9L1mQiUZIujRTJYb1LdfBYW5NEXFmCtJzLc99WBWki0acuIbrmMyjeiKOG79zKpx2zipfq+FvbmqWcU77koa+8MaHs61/yx8gYYGUoNw4fiLFyBzj2vz3/KEa+zPxyC+XHHMBhvXxsoXZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711652068; c=relaxed/simple;
-	bh=8JJ9p6lY9P8w8IbBioVbNGfdfLpZkqX+ZuL2awuKSIM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cC76m5I0KDM8srswL7Os9fBzJSRu48s6kZVJYvkln4K0T+VvMbURzpkYbbVr1pOtXrghgAIPjGnRyY31dpyjCMD7kqbB21cmwG4HW5vxLtEqbknFnAM5ccgZ8l/1r+ZQz5QKnLyoIPPYOeLV3auH2SaIw5vyEuWgqVnULNyj3nI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=emersion.fr; spf=pass smtp.mailfrom=emersion.fr; dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b=5bMzjLzW; arc=none smtp.client-ip=185.70.40.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=emersion.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emersion.fr
+	s=arc-20240116; t=1711652129; c=relaxed/simple;
+	bh=O6RUd0FiuATOUi3p2Fr6EOtVM8/VxTL6vhWICc/xTtE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAhlguzQ4pNbykAHftW19X/Rvj6WgzATmqbD+McapbIUhxoquMGI4DmOAADDE9V7wBdL36YD0XenDTuOEb2xClA7Jk9Nky/LmPzbuW3TdfkKerZgJFQKCyMz9Xlrx6TW7lK8if5q+MQbdyg9GrF15OlyYFqUiEUeovSIslznmZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMVJ+HLg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b="5bMzjLzW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-	s=protonmail3; t=1711652058; x=1711911258;
-	bh=8JJ9p6lY9P8w8IbBioVbNGfdfLpZkqX+ZuL2awuKSIM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=5bMzjLzWWcja+ZA1U8Sd4z+g+N8734Qk+FmP8GfAmatOwHanX6qEioeHz+S7kaV6F
-	 HIo2tInlvJg/uWInypz7H2Iudeh661OPc/YU0E+q/5tRyT3i07tTdz+Xybnp7Q4S5B
-	 g5WFOYvC/49xjm6nPtp42MXmsHb+YVKWne/CQZ0gltKn/P4Y41P/e2as+Rb00fkxLo
-	 UxJQtAobRaXfKaqBWW41lb4NYL/DSEuD48HimbrlIz+yAbTpibpzHUjO3A5duwnoDP
-	 0Dc4NF0zLx4qGJsMqAfIENmVPw06BXWNGhRY14OOFEA9fIFxwHylSLdf2ohGdZUX6H
-	 yhGezeSAIhDlQ==
-Date: Thu, 28 Mar 2024 18:54:10 +0000
-To: Rob Clark <robdclark@gmail.com>
-From: Simon Ser <contact@emersion.fr>
-Cc: dri-devel@lists.freedesktop.org, Rob Clark <robdclark@chromium.org>, Dominik Behr <dbehr@chromium.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] drm/prime: Unbreak virtgpu dma-buf export
-Message-ID: <y5mjLoUp9fKwSNrAEOQJtfqfDZ5cYtsf_KcbNCWQieZE-uJXQJE6bQhC6oLfS6aBZRimZSarDjUmeakjwYZmtQZWPM_3lAENdY17K-VyGsc=@emersion.fr>
-In-Reply-To: <CAF6AEGvUsP7fjqFH9Co1vE0ZGRmMXmFBCrNc3hCQwxky3mME3A@mail.gmail.com>
-References: <20240322214801.319975-1-robdclark@gmail.com> <1Wwj_q3RYer6np0Orz0wJd9dlF82iBSX-PIVSlhCgJbpfVBMHF_CF04gHojkvqnvz9NXH6kACZGXQG9yXwtkbjIzLmdi-GNDkO5Nz2E-J9Y=@emersion.fr> <CAF6AEGvUsP7fjqFH9Co1vE0ZGRmMXmFBCrNc3hCQwxky3mME3A@mail.gmail.com>
-Feedback-ID: 1358184:user:proton
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMVJ+HLg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285F8C433F1;
+	Thu, 28 Mar 2024 18:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711652128;
+	bh=O6RUd0FiuATOUi3p2Fr6EOtVM8/VxTL6vhWICc/xTtE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rMVJ+HLghR8zyz+qCC2JJP7kQGIEGPxr5Ml98x4dA7YSvWIuBNBkAKz5BVNnt1cKC
+	 U4X26lSPrv66WvoaSs7HO7Wjv4vJagUioEMbZYr1bzr4fbuCXEYXLEBlrzMCUfI9oK
+	 7Q8cOeQUyi5lfFD2idby9yZOvPuqWB7rhehfUD0c5e1jbcPeMeCUWGyKB7TWceDNYH
+	 NiCdtRDgKp5SrrIGkWBPfkU55FKLpe/A0hGW9al8izHQTEQemTRp611vGqDyI+9lvW
+	 uC+e9g+wberfvYWj6IomFhK8s2kj1mbgF965VRhIRBkGAHahwkwi0j++Am1kna3fJ5
+	 EFVYHhWqdN2Nw==
+Date: Thu, 28 Mar 2024 13:55:26 -0500
+From: Rob Herring <robh@kernel.org>
+To: git@luigi311.com
+Cc: linux-media@vger.kernel.org, dave.stevenson@raspberrypi.com,
+	jacopo.mondi@ideasonboard.com, mchehab@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com, sakari.ailus@linux.intel.com,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 18/23] dt-bindings: media: imx258: Add alternate
+ compatible strings
+Message-ID: <20240328185526.GA88354-robh@kernel.org>
+References: <20240327231710.53188-1-git@luigi311.com>
+ <20240327231710.53188-19-git@luigi311.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240327231710.53188-19-git@luigi311.com>
 
-On Thursday, March 28th, 2024 at 19:47, Rob Clark <robdclark@gmail.com> wro=
-te:
+On Wed, Mar 27, 2024 at 05:17:04PM -0600, git@luigi311.com wrote:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> 
+> There are a number of variants of the imx258 modules that can not
+> be differentiated at runtime, so add compatible strings for them.
 
-> any chance I could talk you into pushing to drm-misc-fixes?
+But you are only adding 1 variant.
 
-Oh sorry, I thought you had access=E2=80=A6 Pushed with a minor edit to rem=
-ove
-unnecessary parentheses to make checkpatch happy!
+> 
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Signed-off-by: Luigi311 <git@luigi311.com>
+> ---
+>  .../devicetree/bindings/media/i2c/sony,imx258.yaml          | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+> index bee61a443b23..c7856de15ba3 100644
+> --- a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+> +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
+> @@ -14,10 +14,14 @@ description: |-
+>    type stacked image sensor with a square pixel array of size 4208 x 3120. It
+>    is programmable through I2C interface.  Image data is sent through MIPI
+>    CSI-2.
+> +  There are a number of variants of the sensor which cannot be detected at
+> +  runtime, so multiple compatible strings are required to differentiate these.
+
+That's more reasoning/why for the patch than description of the h/w.
+
+>  properties:
+>    compatible:
+> -    const: sony,imx258
+> +    - enum:
+> +        - sony,imx258
+> +        - sony,imx258-pdaf
+
+How do I know which one to use? Please define what PDAF means somewhere 
+as well as perhaps what the original/default variant is or isn't.
+
+>  
+>    assigned-clocks: true
+>    assigned-clock-parents: true
+> -- 
+> 2.42.0
+> 
