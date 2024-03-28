@@ -1,144 +1,82 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CAA2555B
-	for <linux-media@vger.kernel.org>; Thu, 28 Mar 2024 02:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CD0A92E
+	for <linux-media@vger.kernel.org>; Thu, 28 Mar 2024 02:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711591576; cv=none; b=Q1z4QrTQhGAXvFZESqumUML/sQN3ujya960qDy6F9h6XFAWrFgQJAMnR4Lgtu/NDjmTBGbSjWEIItIcaoynFjiO9DPFYMhnttNxEV61/ZIhnq/qggW4d0FatpGTvv16rfwK6v2POVvuLpMEGVBa8FoWH6l4r3zoIHUTQrAJNFQk=
+	t=1711594455; cv=none; b=XP/45mdS2FsHWlc8M3VSHI2wpHt4xQROHeUmjo2KIKGfQe72vp1xiH+piDGbSw3iQLkZWqb3tBrRHBmCiOaqMNNm8KxKubfWI16FGf5ybWc1WyaAxaoUD8CXtZfSSHv0/FL4tEVgqha9zLn4u9qUWbLoNlyYZaV96KEPFkPHfn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711591576; c=relaxed/simple;
-	bh=7T0ReUL8BGnd6CiDw8i9IpjzM4PrgljDQF0phkNiJLk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XiThBqYNt6l5oKced24zmyh3Em3iHzCRBLyi2leuW8I6BWgKLyUPxlzPiI8nVTmztMb8Ro9aSMafM4CyExwCrT7ncb4dNtUdoUgPc0WLq0/0fPb5IsWhsaUrrEhF7/2n2wKDAtOXPT3wk5dCBKPo55stkffnx1JfC47Au1Zrkvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=Wps7U1JV; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
+	s=arc-20240116; t=1711594455; c=relaxed/simple;
+	bh=fcsWoAlG9AUcYkfoX6l7dV9D19l1Ugcs/HrDGlSOCtE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=E6LxBHNMhy+HiPSRAyxsQqvcxpv4HNGbc43vKIZlIdhFXPxaRx8Omdz+baFo+AVSHnDJoYnIxfdmFSPbZ7LKPjklny/NQK6USeSKDemdyHiMeCvhHGa+VgiyyUfDECr7Z6wrrNHSM/skihWoT8AAEF0qs/1U/3ia/jSBEwFmGRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+qYwAko; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="Wps7U1JV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
-	s=s31663417; t=1711591568; x=1712196368; i=herdler@nurfuerspam.de;
-	bh=zO2Xox0HB7IS3rD+nkdyh5wz8seL2jCmE3CW7kvEmjA=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=Wps7U1JVRdLOn8zOwGVJIH/+IRYXSnESmoKy6Kb+lu2YyxqBOvmGql6n5yTfUl0j
-	 Blgm0kQI232p2Paz50XxlVsOM4NBD+ZJBYU34cLVcqU6ek54e7VYTGokaArObeZ/K
-	 yuzuZsDKwYeEjBI6dQSzXL/GIu5EZ+qYLWKlB2odg5l/el3hHu/63baQ6HUQHZ+Em
-	 t9dVCbfg92vIipssJxcC2/eIP4+3MW60BxMt1grpVAd52fJ0m/4gQzQOnakKX6zOF
-	 6rwCo7hT2fHQYsL18yLoiRxu+ZDq7OTErW7RaU1b2n9VwbB9b2TyX2j2Kg9Z+5kI7
-	 gFy2fG8OjccTT383+A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from astro.haus ([217.113.190.197]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1sk5l02lLK-00wzAS; Thu, 28
- Mar 2024 03:06:08 +0100
-From: Stefan Herdler <herdler@nurfuerspam.de>
-To: hverkuil-cisco@xs4all.nl
-Cc: linux-media@vger.kernel.org,
-	smoch@web.de,
-	tmn505@gmail.com,
-	vinschen@redhat.com
-Subject: [PATCH 08/11] media: ttpci: checkpatch fixes: constant_comparsation
-Date: Thu, 28 Mar 2024 03:05:19 +0100
-Message-Id: <20240328020522.50995-9-herdler@nurfuerspam.de>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20240328020522.50995-1-herdler@nurfuerspam.de>
-References: <20240328020522.50995-1-herdler@nurfuerspam.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+qYwAko"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5cfcf509fbdso80201a12.1
+        for <linux-media@vger.kernel.org>; Wed, 27 Mar 2024 19:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711594453; x=1712199253; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fcsWoAlG9AUcYkfoX6l7dV9D19l1Ugcs/HrDGlSOCtE=;
+        b=H+qYwAko9zjTlZeezM2xAd7/9GGXZS7HwW9YT4+pBA0qOA//uUzhvMCZTLeHjfCDr9
+         ramvikmbPRXG+16ItU5YtoZdhTSOiYO+8LWrw1TVD0JiDIgx5PNGKEPO0q219Tr240gL
+         LyvLHPEfR0sCxZGTcobvk0vjSvirVpvCj3dXwx7GVdhfEgnSZ3zAC0gbFiO0uIUUjp0X
+         vbORSL4sqdfmLydlkNTLTyB+b6W8mB/AwhKpJ2zMdSUWlucJiYjK4INjn8qFTFxCoKuJ
+         TLikcz76WC8QzQ8uf/qgkvqozHo3a+PEE/S0EYs+I9WWRUvNuelorABeczqSz82Hr7wK
+         i8YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711594453; x=1712199253;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fcsWoAlG9AUcYkfoX6l7dV9D19l1Ugcs/HrDGlSOCtE=;
+        b=S38uwfjDbu9Bq1UIElU5Jnv6ddhJ67nb/MMdxxB0kv0J/4hm6zI4bc4/SLCF8z2fxg
+         qdXIQdE368aFzHt6Z/ZsaVaq6qZyC473PPEogfCX4ch3qz5wjdlXryz60TV8dcr8xJ62
+         b/BdQGijrlsvpwXk66SBIfE1Z18jIdrIvf1Ino+zYYpKDms2siTYJKWhSSJvnBpNo0WD
+         ToB58+ZK4P2ZISKlf2+KuqaCjuJ8nm365NjSimfoYTp35eaNsXZuom2JFC2aCA8C5tpM
+         6eLygaOB2fROVMYh+/lTXtdk2Qhgz/JBCZ1RUSPZ55AAwjFDJ3Z98G0AKzZHBh7ow0Ew
+         Beew==
+X-Forwarded-Encrypted: i=1; AJvYcCWcGXFd5HNA9WV/WDo7jYzDRtxHyqEAcTaxtUfBEZwm0Pc0Un28bmLAWetWluJBr1YqlsocAqzNL0dXqsZWWB8iX/p/rraVVhueiEM=
+X-Gm-Message-State: AOJu0YxaVNTw87gg1JVoMcO/+iMauBF8bBt+JrHV9kkJvZgz8lCgb6Kv
+	TsuYdZ+VZtGskyyJCRFzehxEqKCSdugCfF5UwgJah2oDi4RBAoQ6Qtd2h6yegl+MTkEoRyprnHd
+	PvhdatuV9xxFrhqpcN0NUYhT/GVs=
+X-Google-Smtp-Source: AGHT+IH9BxxROAof0FHHstmQFihGp98nUiuEBUEj77/nNBS1+Sh+LmpF1+yXDS4HHhMCMigIWGL/NF8NpeRRK4b7J6E=
+X-Received: by 2002:a05:6a21:a593:b0:1a5:69bb:116d with SMTP id
+ gd19-20020a056a21a59300b001a569bb116dmr1838093pzc.3.1711594453449; Wed, 27
+ Mar 2024 19:54:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:nsBvZbu5kYE7fORE4gbtwNExM4YHBiMIVNnfEkOFY78/gFRfQfZ
- Wt9CYxjzldmQmBGMGZxg7T4SHTYNrccb/9+qYbQQz0Zi9lxAX2jDQKQW0LHoHipzve692Sd
- ecz4ecv78jmoEP7SDG+9DKsuFgVjdStVqcWNq9gVOTM/Bttz55BOg34U9khMAm2iaqzGh2t
- W4F9RC0EN7YL4c3exONAw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:37HOcrPcbzQ=;M3Lei6lG3+EHAxtmPKKALKIywQV
- GFj3yrJEnt3ipmgZJsf+nL2KMpHCrcrAA4Fxq6UEFNeDdFjqKAVN7KRNaDw1EPIvniJU1s7jV
- Xtw8hVseMvMK45IQxEvAW88Kqwp5kT7OPGORuoSMxKRGVWTDzFiQfrp8PvNqz2IVrxq/8aTVE
- 9M87v7MmbZiJ9mD3ISGwZAY3Opo318x0FVDFTOIDCTldSABLlpDwaYGMyOO8rttVJXRq4BCmi
- Tyi5fjcCN+hPTODrJcYT6X7mShqqJvSGNgmKebBiypzJJm2nahSysd2ppln3IO/JlQdiHv8Ki
- dfFBqXfKYtDSCPLzQ0RSokdDScaP4/ZTOxFlTg+27q3V0wsyGsHMArjWro2iozLSuFwq9QvOw
- +kONWJvFhfRYDK2LGp7xdS+vioEfQ1EoLLu1Cpq7wdIlCapzXFyN7LG1OIbjRvmsNZwU1j0dt
- cGxrNPwM9FBAcKRYGeoxRdmglfcn9LdlUH2D5eFT6mGw7nOLvn/Ww09m0+jb6pIPSazX7gD9A
- qzUHKyRoDcC6souku93KbpsJYAx7TQNHd4ywnAhxCT3Rmgdra4J94MPAVnh2VwYAEZSBpU+tv
- MxBoktYcj9KS6e6fg2dvJPP5Tc6N7WKKa0/7aGiqywkTTG/66rxRsw1387w/A3VFX4kWS10NE
- mzaVgnEyBezbwEY5lUqPvYuepeM3dLN3nxzk+wHcHXe2IykXb+SLWb9tLcL8VHVbiZhMvAR8U
- LNZXfH4DpCdQkWUVIDWlGPdX0W2jYiyA6bv8Du12tiMrsPg+3Neo91Dwy1vKPsJrh56HTWfc5
- sBlj0pNxdog8MOMlyX5ePDwvk5+YqcwOpQ/e5gXkoPWKQ=
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 27 Mar 2024 23:54:01 -0300
+Message-ID: <CAOMZO5CGzjQPbYznKuLqVi3izMyqF9x7rV7Prmt=s2Z+A66P5g@mail.gmail.com>
+Subject: ov2680: Fail to probe on imx7s-warp
+To: Hans de Goede <hdegoede@redhat.com>, Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-This patch fixes the following checkpatch warnings:
+Hi,
 
-WARNING:CONSTANT_COMPARISON: Comparisons should place the constant on the =
-right side of the test
+Currently, the ov2680 fails to probe on a imx7s-warp board:
 
+ov2680 1-0036: error -EINVAL: supported link freq 330000000 not found
+ov2680 1-0036: probe with driver ov2680 failed with error -2
 
-Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
-=2D--
+Reverting 63b0cd30b78e ("media: ov2680: Add bus-cfg / endpoint
+property verification")
+makes it probe again:
 
- drivers/media/pci/ttpci/budget-av.c   | 4 ++--
- drivers/media/pci/ttpci/budget-core.c | 2 +-
- drivers/media/pci/ttpci/budget.c      | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ov2680 1-0036: sensor_revision id = 0x2680, rev= 0
 
-diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci=
-/budget-av.c
-index 06d08cf98..2781548b9 100644
-=2D-- a/drivers/media/pci/ttpci/budget-av.c
-+++ b/drivers/media/pci/ttpci/budget-av.c
-@@ -442,7 +442,7 @@ static int saa7113_setinput(struct budget_av *budget_a=
-v, int input)
- {
- 	struct budget *budget =3D &budget_av->budget;
+Any ideas on how to fix this regression?
 
--	if (1 !=3D budget_av->has_saa7113)
-+	if (budget_av->has_saa7113 !=3D 1)
- 		return -ENODEV;
+Thanks,
 
- 	if (input =3D=3D 1) {
-@@ -1365,7 +1365,7 @@ static int budget_av_detach(struct saa7146_dev *dev)
-
- 	dprintk(2, "dev: %p\n", dev);
-
--	if (1 =3D=3D budget_av->has_saa7113) {
-+	if (budget_av->has_saa7113 =3D=3D 1) {
- 		saa7146_setgpio(dev, 0, SAA7146_GPIO_OUTLO);
-
- 		msleep(200);
-diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttp=
-ci/budget-core.c
-index dc8b2de30..101695c71 100644
-=2D-- a/drivers/media/pci/ttpci/budget-core.c
-+++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -516,7 +516,7 @@ int ttpci_budget_init(struct budget *budget, struct sa=
-a7146_dev *dev,
- 	ttpci_eeprom_parse_mac(&budget->i2c_adap, budget->dvb_adapter.proposed_m=
-ac);
-
- 	budget->grabbing =3D saa7146_vmalloc_build_pgtable(dev->pci, budget->buf=
-fer_size, &budget->pt);
--	if (NULL =3D=3D budget->grabbing) {
-+	if (budget->grabbing =3D=3D NULL) {
- 		ret =3D -ENOMEM;
- 		goto err_del_i2c;
- 	}
-diff --git a/drivers/media/pci/ttpci/budget.c b/drivers/media/pci/ttpci/bu=
-dget.c
-index 76cc554d5..f14b90de6 100644
-=2D-- a/drivers/media/pci/ttpci/budget.c
-+++ b/drivers/media/pci/ttpci/budget.c
-@@ -790,7 +790,7 @@ static int budget_attach(struct saa7146_dev *dev, stru=
-ct saa7146_pci_extension_d
- 	int err;
-
- 	budget =3D kmalloc(sizeof(struct budget), GFP_KERNEL);
--	if (NULL =3D=3D budget)
-+	if (budget =3D=3D NULL)
- 		return -ENOMEM;
-
- 	dprintk(2, "dev:%p, info:%p, budget:%p\n", dev, info, budget);
-=2D-
-2.34.0
-
+Fabio Estevam
