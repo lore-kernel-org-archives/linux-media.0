@@ -1,35 +1,35 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB00923767
-	for <linux-media@vger.kernel.org>; Thu, 28 Mar 2024 02:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D9822EED
+	for <linux-media@vger.kernel.org>; Thu, 28 Mar 2024 02:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711591574; cv=none; b=owad1fiAihz4T0oAQYQN0t6qfO7ZjKrt0kM5FmVIrrr1//Gf52T9S7NVByklCK9lTH9dCPYQgFll7r8VIlNSrrzKebd2SiLiCaehH+6r8iyhyYwZtl6dDsHKBSEHNnMPxacXHce579ugeQleBZ470Fv1NFOd+oKDg6fZ5CW9+wI=
+	t=1711591574; cv=none; b=HWD3v4qdjGyZHMBb+dQfUl70nwYkGvwN1dzcuzaq0nC4vmlclwZHarfsmfHGvPJqPkgutBjWr8H9F2otd7ssboJxHbYr1uPseU0qzQW/V0JMA+W8HMGhrdp7SEhAl3TcTi3ozMTm8Jk4X7Gu62H+giAMisCoOeYsZiH1S8Dtw7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1711591574; c=relaxed/simple;
-	bh=u5TpN1lnVeoR51OQ9IRi4StuIv6xz7BL3gIc2qV3RRg=;
+	bh=IaO7ZI4UXJtPj3wwfONskD865kzg5SnwtlCBXUqSN0o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i9JurGo8Bse4axBNXNBh4oGCwEkJKZZzujISfR3KJdinwL4fWQLpjIG1tSTr/jWegnGcUuGJ0NENh5sy9KmhlGTR1x/b6P05Qxbvq86WRoTCunNNIhrrHojGzkxAE0pG4Vn6bKdF3dJbpKhz8o9eeeo9vikj1HocnkwPmyoTyXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=jkAGzV62; arc=none smtp.client-ip=212.227.17.21
+	 MIME-Version; b=Gc3fwoLuJneRP2/CgPjiTvrt6/XRaM0HQOpohKR6GDO/mzmw+7aj88dL4d4Rd9vtdkGHmsN/9EPNLtLZ3zlo6m7cPqEIINC2s4TU1Cs2nrU+q0CnRaZESJUr1U/z+S55J6RR8qrLFVh8bjtnPhi5onAgSjve3iRTQgvvELUbWKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=qp/VxAWq; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="jkAGzV62"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="qp/VxAWq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
 	s=s31663417; t=1711591567; x=1712196367; i=herdler@nurfuerspam.de;
-	bh=en3/820mvAh2GW7lvOR5Ylv874LfJJlE3EL17YG2CZU=;
+	bh=WzcbaxvF9EXqQthqRHiHnhJvTEw5DR6CSRKhlVRmBGg=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
 	 References;
-	b=jkAGzV62ROmItOxuocVkhGH97PDsdmvp71GEgeUooBGKgpWQhLphxx34M7JKLpNC
-	 xp3Hu/eK8GHlmuUzg6z6IBz5sPwjPojatW4vNelpDTpErD+Ej3OPBfWeO3BdC4EaG
-	 qKXu6/mlZezP+Ykm4LX3G4fsFFZ3Tsb6DJHKYZhTSg9qeCvy56qOR8zmEVtNyNK2z
-	 smuNFFO0tFiQa8p/cHxfecphwNkV1OUes+g8V/eNE0dwHV7TirK7Q8qHsjm6xFUTK
-	 D45CwlOy6fpKF615HmBW+ZsIpnJgmNSxo+iWVAcolKvw1ZfiIYE54DUK2CSaStw4c
-	 NKtonGC29sCHUQwysA==
+	b=qp/VxAWq1UAvtXaTKjkjaketw2bgGZl2TA54K+pkbpzTtCqO0ursJrS1Nd0ZDsB1
+	 ciBM7jLaIeaGcJDPCrIKJ+nvPqU7z8LnoDYCRh5KhTTeDf7Q2/igXJUGlGMZKHlUy
+	 vTWrDgu71AauXfgMj3fGdxqiLU4YVVyNHQXh8vBoihnozJZu2VnCkMAT4AypgE7dv
+	 9jzQ6bbMqnRLnr/h/WbvzyD09sFYH5fFjxiErBPYawNJ0ZdBhIG+XNzE/Dl25jTcG
+	 6pqtUBgK7M8PWYCd3EvW2xF6ZYNnLkX+4uWzuPRK2sD4k8rpnoGSf/EWjgFXOSdTp
+	 fF0nMJwZphqZeTV3oQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([217.113.190.197]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgNh1-1sV2un3lKZ-00hwM1; Thu, 28
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvY8-1sKPSp1oqO-00UpsQ; Thu, 28
  Mar 2024 03:06:07 +0100
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
@@ -37,9 +37,9 @@ Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH 01/11] media: ttpci: checkpatch fixes: whitespace and newlines
-Date: Thu, 28 Mar 2024 03:05:12 +0100
-Message-Id: <20240328020522.50995-2-herdler@nurfuerspam.de>
+Subject: [PATCH 03/11] media: ttpci: checkpatch fixes: comments
+Date: Thu, 28 Mar 2024 03:05:14 +0100
+Message-Id: <20240328020522.50995-4-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240328020522.50995-1-herdler@nurfuerspam.de>
 References: <20240328020522.50995-1-herdler@nurfuerspam.de>
@@ -50,625 +50,209 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:A7XAon6Uo5xj4Rb9We7q9YnpNe9fgQJfPfCpileDEjG/q9nRBtR
- csCbH8pAt1X7fJI/FxCuiAY2MjylQbtlSbDwn9Bs9iCk3Q7qwxiIHa1T8jwvRlENU5J7Z31
- aUuVl/l50zTDy6qwrwMbCwuOXsaJcHrbYEoK8QMnqdi5V4ID8r/fqXJ5QMZ3pY5AKRAw1rf
- +/Xl5zt4Bf0OIF/I6r9Bw==
+X-Provags-ID: V03:K1:5pmpVAbdKsJoTrEuBotOxXZ7nzgejW1R/4G3oqkjqJLpcCJMPri
+ agyDHgrj3GKzddPPo4n4pDHf+1EsZVO/heDgo8PCtDaN6OAsrI4RSRf3Fruupjmsv3Vo83R
+ ZaigWNTlwQ5FCN6CA6OClRBOKw+k8442aEgkJvGqKL8Wi+8EkdN8LKaOEAwZt+J7uh1CU6C
+ oYP+r2pI8BLMNeuHHoJsQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:QO2Xl2ApvD0=;7I1FCgPXwcZhoAY6QsHAuj3dfzj
- nCBGnVlxvC7f1jiHfS+qsykjwM5dhWj+q4AojV2GJeYOMbP1ulPuYITpoAt4lNVpyCIC1QiqC
- EhQPAjcYSUNBv1J+GboIZDirAveNydt6I5dSeaS/pdYjJ6veGgRjOCUm9bdL+fsKSLP5pTg/F
- o6ceSVu4bCLU1F24Sjv+uo15zPilpieRzLVGbeIW8unm+A212zkhcKbcRGQzM3tovz5GDVS3V
- iGqeB8YNHHIW7y35X5Fb9brljOwmak1DU7zG4LP/C6eUOT17fQvXTSJtJ3ld1QtTburxAc8el
- NSfQ8Da2JsEqmcQb6pOvwsb/yr4yrb/71oHFJ+yKLrj3pjFJ1qDwnOOdp1WfWsKruF9SE86j5
- EBLEdi8frV4R8vIPps3SBgYAZyGJCSa6sh3n0fuop01P4EYHJ0MS4Rw1XxDUIiZZRHcjvs+qG
- 8nFGlRkiR03Qe6ULeMfoLFexXnLsjF2s7rouNKYdNQRMoT27VUhb6VA7ieFjbrYCVDKT9pkx9
- j41Hc+YCdIPezN+r8qe5hB1FiFRRbZDYDJDLLr8s2KhsuREgJOdGB627Jvmzq/jDQXpVV3ikB
- B8zmYx1UJogMv+B08KENkIBjT6VDFVFABCM2euHoPALvzm1qpDOfU2QvD2nBayzO1LafYTiGF
- WLpjHTrfqrHM8yjhiYkVm/zetlneUw3NTzrS3xCDpvhkp7SRNgPhO9pUQr5Eq2ITppZFKlsfx
- GjHgu8ue+wrrGnO92lXH7RfZygHGbn1no7CiU5p4tPpATm2m6D6ad69VjJZjJPCLxNcGdKtZ+
- Fy+O3u+r9HHMkbeHKPcTmkRdeenazNn5N8nHopzXzCT3A=
+UI-OutboundReport: notjunk:1;M01:P0:8Zfz3IQcEEQ=;cBZrVTX36XwKxcPkV6aoxqFJPSN
+ VC1YniBA/UdzGHmYhXUCIlQ10WIgDr3CO3qpTUKr0DeuJ4W2FB8SML80PpkPvmp+tkd9zub4+
+ Wi+Lz0QhhJVOT+bMu4fNejc1gIWywo8jOlZaHjBH2eksbLk2ZOzOebkzbERPuEuK9tDFLJxVf
+ po13yMk8xTw9J2sRs4/Q2ro5/oPp9/wpQ0dC+Zmnh5UfUiK6Wab/yARrgG/8QuJHD1QfQs/m1
+ Ki6crpKxkarc/ojkpAd4TFlB2h8YFYrR4BqlJA+0I7AjyOqYr4fK30B0VB6VtW8hVRfPvXiSk
+ K+5gO39fqg6Am/u5GyDoHvTpQjemGmAcOc908ag8Pttz/MR6XaPVlrGmPwsjobZFGRmKWgz6D
+ yIxgUpDcYWaKoTJrLbxjj7W+xDbYZaoU7LBk6r+ZBUjAbMDGEl27i4z3jHNW/o5L64Z3Xmnxs
+ okTJLrKAqj82wn5yUhFCEhuziyOPFSEDnf/wh2eBaMyHjpOD8/xkMqErMxbxVUnTYypSpTKgU
+ HtUZmLT5R66+sgMoKxMgRdjlsC1Yc6GNEoyANDO4/n96MBMxxAECsXauZ2VwKHf/59FaV9C6z
+ 3I1bsyZrapNxiq0H1y1ORXuZFbynHRQ8pJzhqs7CoSWk7aMO4rUF00/KEnLplyjHhm/Ek/nR1
+ RLHNVPOqAC7GeiglEcp6VuYPAcVvfeF1NsfGyhL1u1yNHTfKfrHwWOy99rFKXUnj/Rie6rmLG
+ RyzODc5rlm4gLS8DChkIwOTEDdNPsC9IctEkr2b5uDUT8jetJRjGlupEWgi9b7k35lUQGTxVv
+ sVFRVOl/f5U5k2nxLEEz64yAaId68TuDFBP28yNUhI98w=
 
-This patch fixes the following checkpatch warnings and errors:
+This patch fixes the following checkpatch warnings:
 
-ERROR:POINTER_LOCATION: "foo * bar" should be "foo *bar"
-ERROR:POINTER_LOCATION: "foo* bar" should be "foo *bar"
-ERROR:SPACING: space prohibited after that open parenthesis '('
-ERROR:SPACING: space prohibited before that close parenthesis ')'
-ERROR:SPACING: space prohibited before that ',' (ctx:WxW)
-ERROR:SPACING: space required after that ',' (ctx:VxV)
-ERROR:SPACING: space required before that '-' (ctx:OxV)
-ERROR:SPACING: space required before the open parenthesis '('
-ERROR:SPACING: spaces required around that '!=3D' (ctx:VxO)
-ERROR:SPACING: spaces required around that '<' (ctx:VxV)
-ERROR:SPACING: spaces required around that '=3D' (ctx:VxV)
-ERROR:SPACING: spaces required around that '>=3D' (ctx:VxV)
-WARNING:SPACING: space prohibited between function name and open parenthes=
-is '('
-WARNING:TABSTOP: Statements should start on a tabstop
-WARNING:LEADING_SPACE: please, no spaces at the start of a line
-WARNING:SUSPECT_CODE_INDENT: suspect code indent for conditional statement=
-s
-WARNING:LINE_SPACING: Missing a blank line after declarations
+WARNING:BLOCK_COMMENT_STYLE: Block comments use * on subsequent lines
+WARNING:BLOCK_COMMENT_STYLE: Block comments use a trailing */ on a separat=
+e line
+WARNING: It's generally not useful to have the filename in the file
 
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
 
-Whitespace changes only.
-"diff -w" shows only 4 empty newlines.
-"diff -B" shows files are identical.
-
- drivers/media/pci/ttpci/budget-av.c   | 30 +++++------
- drivers/media/pci/ttpci/budget-ci.c   | 14 ++---
- drivers/media/pci/ttpci/budget-core.c |  6 +--
- drivers/media/pci/ttpci/budget.c      | 74 ++++++++++++++-------------
- drivers/media/pci/ttpci/budget.h      |  8 +--
- 5 files changed, 68 insertions(+), 64 deletions(-)
+ drivers/media/pci/ttpci/budget-av.c   | 20 ++++++++++++--------
+ drivers/media/pci/ttpci/budget-ci.c   |  3 ++-
+ drivers/media/pci/ttpci/budget-core.c |  8 +++++---
+ drivers/media/pci/ttpci/budget.c      | 27 +++++++++++++++++----------
+ 4 files changed, 36 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci=
 /budget-av.c
-index a47c5850e..72ba9d3c3 100644
+index b9efcd3cc..dbd4ef40e 100644
 =2D-- a/drivers/media/pci/ttpci/budget-av.c
 +++ b/drivers/media/pci/ttpci/budget-av.c
-@@ -95,12 +95,12 @@ static u8 i2c_readreg(struct i2c_adapter *i2c, u8 id, =
-u8 reg)
- 	return mm2[0];
- }
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * budget-av.c: driver for the SAA7146 based Budget DVB cards
+- *              with analog video in
++ * budget-av.ko: driver for the SAA7146 based Budget DVB cards
++ *               with analog video input (and optionally with CI)
+  *
+  * Compiled from various sources by Michael Hunold <michael@mihu.de>
+  *
+@@ -63,8 +63,8 @@ struct budget_av {
 
--static int i2c_readregs(struct i2c_adapter *i2c, u8 id, u8 reg, u8 * buf,=
- u8 len)
-+static int i2c_readregs(struct i2c_adapter *i2c, u8 id, u8 reg, u8 *buf, =
-u8 len)
- {
- 	u8 mm1[] =3D { reg };
- 	struct i2c_msg msgs[2] =3D {
--		{.addr =3D id / 2,.flags =3D 0,.buf =3D mm1,.len =3D 1},
--		{.addr =3D id / 2,.flags =3D I2C_M_RD,.buf =3D buf,.len =3D len}
-+		{.addr =3D id / 2, .flags =3D 0, .buf =3D mm1, .len =3D 1},
-+		{.addr =3D id / 2, .flags =3D I2C_M_RD, .buf =3D buf, .len =3D len}
- 	};
+ static int ciintf_slot_shutdown(struct dvb_ca_en50221 *ca, int slot);
 
- 	if (i2c_transfer(i2c, msgs, 2) !=3D 2)
-@@ -492,7 +492,7 @@ static int philips_su1278_ty_ci_tuner_set_params(struc=
-t dvb_frontend *fe)
- 	u32 div;
- 	u8 buf[4];
- 	struct budget *budget =3D fe->dvb->priv;
--	struct i2c_msg msg =3D {.addr =3D 0x61,.flags =3D 0,.buf =3D buf,.len =
-=3D sizeof(buf) };
-+	struct i2c_msg msg =3D {.addr =3D 0x61, .flags =3D 0, .buf =3D buf, .len=
- =3D sizeof(buf) };
-
- 	if ((c->frequency < 950000) || (c->frequency > 2150000))
+-
+-/* GPIO Connections:
++/*
++ * GPIO Connections:
+  * 0 - Vcc/Reset (Reset is controlled by capacitor). Resets the frontend =
+*AS WELL*!
+  * 1 - CI memory select 0=3D>IO memory, 1=3D>Attribute Memory
+  * 2 - CI Card Enable (Active Low)
+@@ -267,8 +267,10 @@ static int ciintf_poll_slot_status(struct dvb_ca_en50=
+221 *ca, int slot, int open
+ 	if (slot !=3D 0)
  		return -EINVAL;
-@@ -606,7 +606,7 @@ static int philips_cu1216_tuner_set_params(struct dvb_=
-frontend *fe)
- 	struct dtv_frontend_properties *c =3D &fe->dtv_property_cache;
- 	struct budget *budget =3D fe->dvb->priv;
- 	u8 buf[6];
--	struct i2c_msg msg =3D {.addr =3D 0x60,.flags =3D 0,.buf =3D buf,.len =
-=3D sizeof(buf) };
-+	struct i2c_msg msg =3D {.addr =3D 0x60, .flags =3D 0, .buf =3D buf, .len=
- =3D sizeof(buf) };
- 	int i;
 
- #define CU1216_IF 36125000
-@@ -670,7 +670,7 @@ static int philips_tu1216_tuner_init(struct dvb_fronte=
-nd *fe)
- {
- 	struct budget *budget =3D fe->dvb->priv;
- 	static u8 tu1216_init[] =3D { 0x0b, 0xf5, 0x85, 0xab };
--	struct i2c_msg tuner_msg =3D {.addr =3D 0x60,.flags =3D 0,.buf =3D tu121=
-6_init,.len =3D sizeof(tu1216_init) };
-+	struct i2c_msg tuner_msg =3D {.addr =3D 0x60, .flags =3D 0, .buf =3D tu1=
-216_init, .len =3D sizeof(tu1216_init) };
-
- 	// setup PLL configuration
- 	if (fe->ops.i2c_gate_ctrl)
-@@ -687,7 +687,7 @@ static int philips_tu1216_tuner_set_params(struct dvb_=
-frontend *fe)
- 	struct dtv_frontend_properties *c =3D &fe->dtv_property_cache;
- 	struct budget *budget =3D fe->dvb->priv;
- 	u8 tuner_buf[4];
--	struct i2c_msg tuner_msg =3D {.addr =3D 0x60,.flags =3D 0,.buf =3D tuner=
-_buf,.len =3D
-+	struct i2c_msg tuner_msg =3D {.addr =3D 0x60, .flags =3D 0, .buf =3D tun=
-er_buf, .len =3D
- 			sizeof(tuner_buf) };
- 	int tuner_frequency =3D 0;
- 	u8 band, cp, filter;
-@@ -865,7 +865,7 @@ static int philips_sd1878_ci_set_symbol_rate(struct dv=
-b_frontend *fe,
-
- static const struct stv0299_config philips_sd1878_config =3D {
- 	.demod_address =3D 0x68,
--     .inittab =3D philips_sd1878_inittab,
-+	.inittab =3D philips_sd1878_inittab,
- 	.mclk =3D 88000000UL,
- 	.invert =3D 0,
- 	.skip_reinit =3D 0,
-@@ -1153,8 +1153,8 @@ static u8 read_pwm(struct budget_av *budget_av)
- {
- 	u8 b =3D 0xff;
- 	u8 pwm;
--	struct i2c_msg msg[] =3D { {.addr =3D 0x50,.flags =3D 0,.buf =3D &b,.len=
- =3D 1},
--	{.addr =3D 0x50,.flags =3D I2C_M_RD,.buf =3D &pwm,.len =3D 1}
-+	struct i2c_msg msg[] =3D { {.addr =3D 0x50, .flags =3D 0, .buf =3D &b, .=
-len =3D 1},
-+	{.addr =3D 0x50, .flags =3D I2C_M_RD, .buf =3D &pwm, .len =3D 1}
- 	};
-
- 	if ((i2c_transfer(&budget_av->budget.i2c_adap, msg, 2) !=3D 2)
-@@ -1196,8 +1196,8 @@ static u8 read_pwm(struct budget_av *budget_av)
-
- static void frontend_init(struct budget_av *budget_av)
- {
--	struct saa7146_dev * saa =3D budget_av->budget.dev;
--	struct dvb_frontend * fe =3D NULL;
-+	struct saa7146_dev *saa =3D budget_av->budget.dev;
-+	struct dvb_frontend *fe =3D NULL;
-
- 	/* Enable / PowerON Frontend */
- 	saa7146_setgpio(saa, 0, SAA7146_GPIO_OUTLO);
-@@ -1351,7 +1351,7 @@ static void frontend_init(struct budget_av *budget_a=
+-	/* test the card detect line - needs to be done carefully
+-	 * since it never goes high for some CAMs on this interface (e.g. topupt=
+v) */
++	/*
++	 * test the card detect line - needs to be done carefully
++	 * since it never goes high for some CAMs on this interface (e.g. topupt=
 v)
- }
++	 */
+ 	if (budget_av->slot_status =3D=3D SLOTSTATUS_NONE) {
+ 		saa7146_setgpio(saa, 3, SAA7146_GPIO_INPUT);
+ 		udelay(1);
+@@ -281,12 +283,14 @@ static int ciintf_poll_slot_status(struct dvb_ca_en5=
+0221 *ca, int slot, int open
+ 		saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTLO);
+ 	}
 
-
--static void budget_av_irq(struct saa7146_dev *dev, u32 * isr)
-+static void budget_av_irq(struct saa7146_dev *dev, u32 *isr)
- {
- 	struct budget_av *budget_av =3D dev->ext_priv;
-
-@@ -1532,8 +1532,8 @@ static struct saa7146_ext_vv vv_data =3D {
- static struct saa7146_extension budget_extension;
-
- MAKE_BUDGET_INFO(knc1s, "KNC1 DVB-S", BUDGET_KNC1S);
--MAKE_BUDGET_INFO(knc1s2,"KNC1 DVB-S2", BUDGET_KNC1S2);
--MAKE_BUDGET_INFO(sates2,"Satelco EasyWatch DVB-S2", BUDGET_KNC1S2);
-+MAKE_BUDGET_INFO(knc1s2, "KNC1 DVB-S2", BUDGET_KNC1S2);
-+MAKE_BUDGET_INFO(sates2, "Satelco EasyWatch DVB-S2", BUDGET_KNC1S2);
- MAKE_BUDGET_INFO(knc1c, "KNC1 DVB-C", BUDGET_KNC1C);
- MAKE_BUDGET_INFO(knc1t, "KNC1 DVB-T", BUDGET_KNC1T);
- MAKE_BUDGET_INFO(kncxs, "KNC TV STAR DVB-S", BUDGET_TVSTAR);
+-	/* We also try and read from IO memory to work round the above detection=
+ bug. If
++	/*
++	 * We also try and read from IO memory to work round the above detection=
+ bug. If
+ 	 * there is no CAM, we will get a timeout. Only done if there is no cam
+ 	 * present, since this test actually breaks some cams :(
+ 	 *
+ 	 * if the CI interface is not open, we also do the above test since we
+-	 * don't care if the cam has problems - we'll be resetting it on open() =
+anyway */
++	 * don't care if the cam has problems - we'll be resetting it on open() =
+anyway
++	 */
+ 	if ((budget_av->slot_status =3D=3D SLOTSTATUS_NONE) || (!open)) {
+ 		saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTLO);
+ 		result =3D ttpci_budget_debiread(&budget_av->budget, DEBICICAM, 0, 1, 0=
+, 1);
 diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci=
 /budget-ci.c
-index 66e1a004e..569e8915a 100644
+index 2859b8ab8..ebf340417 100644
 =2D-- a/drivers/media/pci/ttpci/budget-ci.c
 +++ b/drivers/media/pci/ttpci/budget-ci.c
-@@ -551,7 +551,7 @@ static void ciintf_deinit(struct budget_ci *budget_ci)
- 	saa7146_write(saa, MC1, MASK_27);
- }
-
--static void budget_ci_irq(struct saa7146_dev *dev, u32 * isr)
-+static void budget_ci_irq(struct saa7146_dev *dev, u32 *isr)
- {
- 	struct budget_ci *budget_ci =3D dev->ext_priv;
-
-@@ -651,7 +651,7 @@ static int philips_su1278_tt_tuner_set_params(struct d=
-vb_frontend *fe)
- 	struct budget_ci *budget_ci =3D fe->dvb->priv;
- 	u32 div;
- 	u8 buf[4];
--	struct i2c_msg msg =3D {.addr =3D 0x60,.flags =3D 0,.buf =3D buf,.len =
-=3D sizeof(buf) };
-+	struct i2c_msg msg =3D {.addr =3D 0x60, .flags =3D 0, .buf =3D buf, .len=
- =3D sizeof(buf) };
-
- 	if ((p->frequency < 950000) || (p->frequency > 2150000))
- 		return -EINVAL;
-@@ -701,7 +701,7 @@ static int philips_tdm1316l_tuner_init(struct dvb_fron=
-tend *fe)
- 	struct budget_ci *budget_ci =3D fe->dvb->priv;
- 	static u8 td1316_init[] =3D { 0x0b, 0xf5, 0x85, 0xab };
- 	static u8 disable_mc44BC374c[] =3D { 0x1d, 0x74, 0xa0, 0x68 };
--	struct i2c_msg tuner_msg =3D {.addr =3D budget_ci->tuner_pll_address,.fl=
-ags =3D 0,.buf =3D td1316_init,.len =3D
-+	struct i2c_msg tuner_msg =3D {.addr =3D budget_ci->tuner_pll_address, .f=
-lags =3D 0, .buf =3D td1316_init, .len =3D
- 			sizeof(td1316_init) };
-
- 	// setup PLL configuration
-@@ -731,7 +731,7 @@ static int philips_tdm1316l_tuner_set_params(struct dv=
-b_frontend *fe)
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
- 	struct budget_ci *budget_ci =3D fe->dvb->priv;
- 	u8 tuner_buf[4];
--	struct i2c_msg tuner_msg =3D {.addr =3D budget_ci->tuner_pll_address,.fl=
-ags =3D 0,.buf =3D tuner_buf,.len =3D sizeof(tuner_buf) };
-+	struct i2c_msg tuner_msg =3D {.addr =3D budget_ci->tuner_pll_address, .f=
-lags =3D 0, .buf =3D tuner_buf, .len =3D sizeof(tuner_buf) };
- 	int tuner_frequency =3D 0;
- 	u8 band, cp, filter;
-
-@@ -1427,8 +1427,8 @@ static void frontend_init(struct budget_ci *budget_c=
-i)
- 					budget_ci->budget.dvb_frontend =3D NULL;
- 				}
- 			} else {
--					dvb_frontend_detach(budget_ci->budget.dvb_frontend);
--					budget_ci->budget.dvb_frontend =3D NULL;
-+				dvb_frontend_detach(budget_ci->budget.dvb_frontend);
-+				budget_ci->budget.dvb_frontend =3D NULL;
- 			}
- 		}
- 		break;
-@@ -1538,7 +1538,7 @@ static const struct pci_device_id pci_tbl[] =3D {
- 	MAKE_EXTENSION_PCI(ttbs1500b, 0x13c2, 0x101b),
- 	{
- 	 .vendor =3D 0,
--	 }
-+	}
- };
-
- MODULE_DEVICE_TABLE(pci, pci_tbl);
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * budget-ci.c: driver for the SAA7146 based Budget DVB cards
++ * budget-ci.ko: driver for the SAA7146 based Budget DVB cards
++ *               with CI (but without analog video input)
+  *
+  * Compiled from various sources by Michael Hunold <michael@mihu.de>
+  *
 diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttp=
 ci/budget-core.c
-index 25f44c3ee..ffa659be1 100644
+index ffa659be1..f41f4eea7 100644
 =2D-- a/drivers/media/pci/ttpci/budget-core.c
 +++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -80,7 +80,7 @@ static int start_ts_capture(struct budget *budget)
- 	 *      Pitch: 188, NumBytes3: 188, NumLines3: 1024
- 	 */
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * budget-core.c: driver for the SAA7146 based Budget DVB cards
++ * budget-core.ko: base-driver for the SAA7146 based Budget DVB cards
+  *
+  * Compiled from various sources by Michael Hunold <michael@mihu.de>
+  *
+@@ -491,8 +491,10 @@ int ttpci_budget_init(struct budget *budget, struct s=
+aa7146_dev *dev,
+ 	spin_lock_init(&budget->feedlock);
+ 	spin_lock_init(&budget->debilock);
 
--	switch(budget->card->type) {
-+	switch (budget->card->type) {
- 	case BUDGET_FS_ACTIVY:
- 		saa7146_write(dev, DD1_INIT, 0x04000000);
- 		saa7146_write(dev, MC2, (MASK_09 | MASK_25));
-@@ -423,7 +423,7 @@ int ttpci_budget_init(struct budget *budget, struct sa=
-a7146_dev *dev,
- 	budget->card =3D bi;
- 	budget->dev =3D (struct saa7146_dev *) dev;
-
--	switch(budget->card->type) {
-+	switch (budget->card->type) {
- 	case BUDGET_FS_ACTIVY:
- 		budget->buffer_width =3D TS_WIDTH_ACTIVY;
- 		max_bufsize =3D TS_MAX_BUFSIZE_K_ACTIVY;
-@@ -568,7 +568,7 @@ int ttpci_budget_deinit(struct budget *budget)
- 	return 0;
- }
-
--void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 * isr)
-+void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 *isr)
- {
- 	struct budget *budget =3D dev->ext_priv;
+-	/* the Siemens DVB needs this if you want to have the i2c chips
+-	   get recognized before the main driver is loaded */
++	/*
++	 * the Siemens DVB needs this if you want to have the i2c chips
++	 * get recognized before the main driver is loaded
++	 */
+ 	if (bi->type !=3D BUDGET_FS_ACTIVY)
+ 		saa7146_write(dev, GPIO_CTRL, 0x500000);	/* GPIO 3 =3D 1 */
 
 diff --git a/drivers/media/pci/ttpci/budget.c b/drivers/media/pci/ttpci/bu=
 dget.c
-index b76a1b330..aab94c4d7 100644
+index faa2a3561..9fe087add 100644
 =2D-- a/drivers/media/pci/ttpci/budget.c
 +++ b/drivers/media/pci/ttpci/budget.c
-@@ -42,9 +42,10 @@ MODULE_PARM_DESC(diseqc_method, "Select DiSEqC method f=
-or subsystem id 13c2:1003
-
- DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
-
--static void Set22K (struct budget *budget, int state)
-+static void Set22K(struct budget *budget, int state)
- {
--	struct saa7146_dev *dev=3Dbudget->dev;
-+	struct saa7146_dev *dev =3D budget->dev;
-+
- 	dprintk(2, "budget: %p\n", budget);
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * budget.c: driver for the SAA7146 based Budget DVB cards
++ * budget.ko: driver for the SAA7146 based Budget DVB cards
++ *            without analog video input or CI
+  *
+  * Compiled from various sources by Michael Hunold <michael@mihu.de>
+  *
+@@ -50,9 +51,11 @@ static void Set22K(struct budget *budget, int state)
  	saa7146_setgpio(dev, 3, (state ? SAA7146_GPIO_OUTHI : SAA7146_GPIO_OUTLO=
 ));
  }
-@@ -53,9 +54,10 @@ static void Set22K (struct budget *budget, int state)
- /* taken from the Skyvision DVB driver by
-    Ralph Metzler <rjkm@metzlerbros.de> */
 
--static void DiseqcSendBit (struct budget *budget, int data)
-+static void DiseqcSendBit(struct budget *budget, int data)
+-/* Diseqc functions only for TT Budget card */
+-/* taken from the Skyvision DVB driver by
+-   Ralph Metzler <rjkm@metzlerbros.de> */
++/*
++ * Diseqc functions only for TT Budget card
++ * taken from the Skyvision DVB driver by
++ * Ralph Metzler <rjkm@metzlerbros.de>
++ */
+
+ static void DiseqcSendBit(struct budget *budget, int data)
  {
--	struct saa7146_dev *dev=3Dbudget->dev;
-+	struct saa7146_dev *dev =3D budget->dev;
-+
- 	dprintk(2, "budget: %p\n", budget);
+@@ -675,9 +678,11 @@ static void frontend_init(struct budget *budget)
+ 					tt1600_stv090x_config.tuner_set_refclk	  =3D ctl->tuner_set_refclk;
+ 					tt1600_stv090x_config.tuner_get_status	  =3D ctl->tuner_get_status;
 
- 	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTHI);
-@@ -64,13 +66,13 @@ static void DiseqcSendBit (struct budget *budget, int =
-data)
- 	udelay(data ? 1000 : 500);
- }
+-					/* call the init function once to initialize
+-					   tuner's clock output divider and demod's
+-					   master clock */
++					/*
++					 * call the init function once to initialize
++					 * tuner's clock output divider and demod's
++					 * master clock
++					 */
+ 					if (budget->dvb_frontend->ops.init)
+ 						budget->dvb_frontend->ops.init(budget->dvb_frontend);
 
--static void DiseqcSendByte (struct budget *budget, int data)
-+static void DiseqcSendByte(struct budget *budget, int data)
- {
--	int i, par=3D1, d;
-+	int i, par =3D 1, d;
+@@ -730,9 +735,11 @@ static void frontend_init(struct budget *budget)
+ 					tt1600_stv090x_config.tuner_set_refclk	  =3D ctl->tuner_set_refclk;
+ 					tt1600_stv090x_config.tuner_get_status	  =3D ctl->tuner_get_status;
 
- 	dprintk(2, "budget: %p\n", budget);
+-					/* call the init function once to initialize
+-					   tuner's clock output divider and demod's
+-					   master clock */
++					/*
++					 * call the init function once to initialize
++					 * tuner's clock output divider and demod's
++					 * master clock
++					 */
+ 					if (budget->dvb_frontend->ops.init)
+ 						budget->dvb_frontend->ops.init(budget->dvb_frontend);
 
--	for (i=3D7; i>=3D0; i--) {
-+	for (i =3D 7; i >=3D 0; i--) {
- 		d =3D (data>>i)&1;
- 		par ^=3D d;
- 		DiseqcSendBit(budget, d);
-@@ -79,9 +81,9 @@ static void DiseqcSendByte (struct budget *budget, int d=
-ata)
- 	DiseqcSendBit(budget, par);
- }
-
--static int SendDiSEqCMsg (struct budget *budget, int len, u8 *msg, unsign=
-ed long burst)
-+static int SendDiSEqCMsg(struct budget *budget, int len, u8 *msg, unsigne=
-d long burst)
- {
--	struct saa7146_dev *dev=3Dbudget->dev;
-+	struct saa7146_dev *dev =3D budget->dev;
- 	int i;
-
- 	dprintk(2, "budget: %p\n", budget);
-@@ -89,12 +91,12 @@ static int SendDiSEqCMsg (struct budget *budget, int l=
-en, u8 *msg, unsigned long
- 	saa7146_setgpio(dev, 3, SAA7146_GPIO_OUTLO);
- 	mdelay(16);
-
--	for (i=3D0; i<len; i++)
-+	for (i =3D 0; i < len; i++)
- 		DiseqcSendByte(budget, msg[i]);
-
- 	mdelay(16);
-
--	if (burst!=3D-1) {
-+	if (burst !=3D -1) {
- 		if (burst)
- 			DiseqcSendByte(budget, 0xff);
- 		else {
-@@ -118,7 +120,7 @@ static int SendDiSEqCMsg (struct budget *budget, int l=
-en, u8 *msg, unsigned long
- static int SetVoltage_Activy(struct budget *budget,
- 			     enum fe_sec_voltage voltage)
- {
--	struct saa7146_dev *dev=3Dbudget->dev;
-+	struct saa7146_dev *dev =3D budget->dev;
-
- 	dprintk(2, "budget: %p\n", budget);
-
-@@ -146,7 +148,7 @@ static int siemens_budget_set_voltage(struct dvb_front=
-end *fe,
- {
- 	struct budget *budget =3D fe->dvb->priv;
-
--	return SetVoltage_Activy (budget, voltage);
-+	return SetVoltage_Activy(budget, voltage);
- }
-
- static int budget_set_tone(struct dvb_frontend *fe,
-@@ -156,11 +158,11 @@ static int budget_set_tone(struct dvb_frontend *fe,
-
- 	switch (tone) {
- 	case SEC_TONE_ON:
--		Set22K (budget, 1);
-+		Set22K(budget, 1);
- 		break;
-
- 	case SEC_TONE_OFF:
--		Set22K (budget, 0);
-+		Set22K(budget, 0);
- 		break;
-
- 	default:
-@@ -170,11 +172,11 @@ static int budget_set_tone(struct dvb_frontend *fe,
- 	return 0;
- }
-
--static int budget_diseqc_send_master_cmd(struct dvb_frontend* fe, struct =
-dvb_diseqc_master_cmd* cmd)
-+static int budget_diseqc_send_master_cmd(struct dvb_frontend *fe, struct =
-dvb_diseqc_master_cmd *cmd)
- {
- 	struct budget *budget =3D fe->dvb->priv;
-
--	SendDiSEqCMsg (budget, cmd->msg_len, cmd->msg, 0);
-+	SendDiSEqCMsg(budget, cmd->msg_len, cmd->msg, 0);
-
- 	return 0;
- }
-@@ -184,7 +186,7 @@ static int budget_diseqc_send_burst(struct dvb_fronten=
-d *fe,
- {
- 	struct budget *budget =3D fe->dvb->priv;
-
--	SendDiSEqCMsg (budget, 0, NULL, minicmd);
-+	SendDiSEqCMsg(budget, 0, NULL, minicmd);
-
- 	return 0;
- }
-@@ -220,7 +222,7 @@ static int alps_bsrv2_tuner_set_params(struct dvb_fron=
-tend *fe)
-
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
- 	return 0;
- }
-
-@@ -248,7 +250,7 @@ static int alps_tdbe2_tuner_set_params(struct dvb_fron=
-tend *fe)
-
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
- 	return 0;
- }
-
-@@ -303,7 +305,7 @@ static int grundig_29504_401_tuner_set_params(struct d=
-vb_frontend *fe)
-
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
- 	return 0;
- }
-
-@@ -333,7 +335,7 @@ static int grundig_29504_451_tuner_set_params(struct d=
-vb_frontend *fe)
-
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
- 	return 0;
- }
-
-@@ -365,7 +367,7 @@ static int s5h1420_tuner_set_params(struct dvb_fronten=
-d *fe)
-
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&budget->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-
- 	return 0;
- }
-@@ -422,12 +424,12 @@ static int i2c_readreg(struct i2c_adapter *i2c, u8 a=
-dr, u8 reg)
- 	return (i2c_transfer(i2c, msg, 2) !=3D 2) ? -EIO : val;
- }
-
--static u8 read_pwm(struct budget* budget)
-+static u8 read_pwm(struct budget *budget)
- {
- 	u8 b =3D 0xff;
- 	u8 pwm;
--	struct i2c_msg msg[] =3D { { .addr =3D 0x50,.flags =3D 0,.buf =3D &b,.le=
-n =3D 1 },
--				 { .addr =3D 0x50,.flags =3D I2C_M_RD,.buf =3D &pwm,.len =3D 1} };
-+	struct i2c_msg msg[] =3D { { .addr =3D 0x50, .flags =3D 0, .buf =3D &b, =
-.len =3D 1 },
-+				 { .addr =3D 0x50, .flags =3D I2C_M_RD, .buf =3D &pwm, .len =3D 1} };
-
- 	if ((i2c_transfer(&budget->i2c_adap, msg, 2) !=3D 2) || (pwm =3D=3D 0xff=
-))
- 		pwm =3D 0x48;
-@@ -478,7 +480,7 @@ static void frontend_init(struct budget *budget)
- {
- 	(void)alps_bsbe1_config; /* avoid warning */
-
--	switch(budget->dev->pci->subsystem_device) {
-+	switch (budget->dev->pci->subsystem_device) {
- 	case 0x1003: // Hauppauge/TT Nova budget (stv0299/ALPS BSRU6(tsa5059) OR=
- ves1893/ALPS BSRV2(sp5659))
- 	case 0x1013:
- 		// try the ALPS BSRV2 first of all
-@@ -642,6 +644,7 @@ static void frontend_init(struct budget *budget)
-
- 	case 0x101c: { /* TT S2-1600 */
- 			const struct stv6110x_devctl *ctl;
-+
- 			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTLO);
- 			msleep(50);
- 			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTHI);
-@@ -695,6 +698,7 @@ static void frontend_init(struct budget *budget)
-
- 	case 0x1020: { /* Omicom S2 */
- 			const struct stv6110x_devctl *ctl;
-+
- 			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTLO);
- 			msleep(50);
- 			saa7146_setgpio(budget->dev, 2, SAA7146_GPIO_OUTHI);
-@@ -769,13 +773,13 @@ static void frontend_init(struct budget *budget)
- 	return;
- }
-
--static int budget_attach (struct saa7146_dev* dev, struct saa7146_pci_ext=
-ension_data *info)
-+static int budget_attach(struct saa7146_dev *dev, struct saa7146_pci_exte=
-nsion_data *info)
- {
- 	struct budget *budget =3D NULL;
- 	int err;
-
- 	budget =3D kmalloc(sizeof(struct budget), GFP_KERNEL);
--	if( NULL =3D=3D budget ) {
-+	if (NULL =3D=3D budget) {
- 		return -ENOMEM;
- 	}
-
-@@ -786,7 +790,7 @@ static int budget_attach (struct saa7146_dev* dev, str=
-uct saa7146_pci_extension_
- 	err =3D ttpci_budget_init(budget, dev, info, THIS_MODULE, adapter_nr);
- 	if (err) {
- 		printk("=3D=3D> failed\n");
--		kfree (budget);
-+		kfree(budget);
- 		return err;
- 	}
-
-@@ -798,7 +802,7 @@ static int budget_attach (struct saa7146_dev* dev, str=
-uct saa7146_pci_extension_
- 	return 0;
- }
-
--static int budget_detach (struct saa7146_dev* dev)
-+static int budget_detach(struct saa7146_dev *dev)
- {
- 	struct budget *budget =3D dev->ext_priv;
- 	int err;
-@@ -808,9 +812,9 @@ static int budget_detach (struct saa7146_dev* dev)
- 		dvb_frontend_detach(budget->dvb_frontend);
- 	}
-
--	err =3D ttpci_budget_deinit (budget);
-+	err =3D ttpci_budget_deinit(budget);
-
--	kfree (budget);
-+	kfree(budget);
- 	dev->ext_priv =3D NULL;
-
- 	return err;
-@@ -839,8 +843,8 @@ static const struct pci_device_id pci_tbl[] =3D {
- 	MAKE_EXTENSION_PCI(ttbs,  0x13c2, 0x1016),
- 	MAKE_EXTENSION_PCI(ttbs1401, 0x13c2, 0x1018),
- 	MAKE_EXTENSION_PCI(tt1600, 0x13c2, 0x101c),
--	MAKE_EXTENSION_PCI(fsacs1,0x1131, 0x4f60),
--	MAKE_EXTENSION_PCI(fsacs0,0x1131, 0x4f61),
-+	MAKE_EXTENSION_PCI(fsacs1, 0x1131, 0x4f60),
-+	MAKE_EXTENSION_PCI(fsacs0, 0x1131, 0x4f61),
- 	MAKE_EXTENSION_PCI(fsact1, 0x1131, 0x5f60),
- 	MAKE_EXTENSION_PCI(fsact, 0x1131, 0x5f61),
- 	MAKE_EXTENSION_PCI(omicom, 0x14c4, 0x1020),
-diff --git a/drivers/media/pci/ttpci/budget.h b/drivers/media/pci/ttpci/bu=
-dget.h
-index bd87432e6..4579243c2 100644
-=2D-- a/drivers/media/pci/ttpci/budget.h
-+++ b/drivers/media/pci/ttpci/budget.h
-@@ -83,10 +83,10 @@ struct budget {
- 	void *priv;
- };
-
--#define MAKE_BUDGET_INFO(x_var,x_name,x_type) \
-+#define MAKE_BUDGET_INFO(x_var, x_name, x_type) \
- static struct budget_info x_var ## _info =3D { \
--	.name=3Dx_name,	\
--	.type=3Dx_type };	\
-+	.name =3D x_name,	\
-+	.type =3D x_type };	\
- static struct saa7146_pci_extension_data x_var =3D { \
- 	.ext_priv =3D &x_var ## _info, \
- 	.ext =3D &budget_extension };
-@@ -119,7 +119,7 @@ extern int ttpci_budget_init(struct budget *budget, st=
-ruct saa7146_dev *dev,
- 			     struct module *owner, short *adapter_nums);
- extern void ttpci_budget_init_hooks(struct budget *budget);
- extern int ttpci_budget_deinit(struct budget *budget);
--extern void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 * isr=
-);
-+extern void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 *isr)=
-;
- extern void ttpci_budget_set_video_port(struct saa7146_dev *dev, int vide=
-o_port);
- extern int ttpci_budget_debiread(struct budget *budget, u32 config, int a=
-ddr, int count,
- 				 int uselocks, int nobusyloop);
 =2D-
 2.34.0
 
