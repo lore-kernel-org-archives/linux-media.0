@@ -1,162 +1,136 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2124.outbound.protection.partner.outlook.cn [139.219.17.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0095D749;
-	Tue,  2 Apr 2024 10:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712052953; cv=fail; b=KRCdpwdpUhWwnmioEvjW4qs375EXSl4JX9t0tHzboOCXeHblnU5XsRdsBhZ5+NglT1P4GdX/R5LRPQAlyi2/pZVhjMVv4KtIHgk4oYary5lc8zmrEXwKosWN7yll+kBe1i9X56BIRMO6ECHyT7jrGbpX2ytAtF1RSVGomxJHlFU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712052953; c=relaxed/simple;
-	bh=BPOTdn9PqZIjRRaxsBjsW0oQegeY1gBtb92b60WIuSk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mWWTfwCHYYkJBpGXAb8xU5b1MceL4olEmujGZW0JSIPWi4nzGjq7sSdfsRakDGksOpZC16BDr4cw7CiO9WV1jVlTUwz/BEal1NHl3AHDohqwNTIEDIMKhqGV2I7PnnFoaFV7AXaTEmIFqwz0EhZIodKdpYVezseSkFVAG98nWAU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XeK3rzgt+VzdggXrkZvk1KbSu3bYshYVIUjCm+XicYGvGg9fQCl477FI+irIAuwkr58ePmy/fmvrOX5aTh8Ktq6Qy6uY5xZqniOX4mqMnNVNz7A1SxHt7FAQHAEUvanhKo7rKyQ9439Iw3aV5PE8luRzg9CHv8L6Q9VjdaBX1SpQ9ITtZRsC5PyRdzCu+ZL9yVQzRuGmRy97HEue3jVClRCZL4eOECyPGeymmbAnXxloC4osUxPJjz2dgApeZw4yF9+mJbnqzuYgblG7bM/uvpRJvXFVcIFY0jx+UVFRJiuk7plsByesaPcfKDFqe9I7p2AYLI6aXStCyNPVthmdOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2+3pg0h1rxF1CLiHTkvZO7Y0N4g9pCr1wHeur26bsDQ=;
- b=czbWBaoCsz6ibTIT/fz815GHKja8HRmM9kNBquoM08iX72uHlHdjVGSgtz8sJFls7gez0L5pI4NUc0wJ+uik/EQo7wyyOo8wQCsYYgcxKHEZVhHyqBRAORDQmVrt7IEiwMolef6jmjdKRmK6x+oGUrlZTZywSeC2lbayspQ1gA6Jf6vx13XweHjeggiXZy/AjCnqhAfqGyk+rCQmcUbknya4lo4GT12MJCNpICKVu7j25BB+84Ai2Gw3LBTJOlhRJQTEqxH+XE5k7rebJZk4h9XRHpXoRdww6HZ8xEHirAkNWI/NKUSvxSYQuGy05ge8sq2uVi7daoydYVnzd5LzVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10) by SHXPR01MB0669.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:27::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.40; Tue, 2 Apr
- 2024 10:00:25 +0000
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- ([fe80::b0af:4c9d:2058:a344]) by
- SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%7])
- with mapi id 15.20.7409.038; Tue, 2 Apr 2024 10:00:25 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Ming Qian <ming.qian@nxp.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	Mingjia Zhang <mingjia.zhang@mediatek.com>,
-	Marvin Lin <milkfafa@gmail.com>
-Cc: Jack Zhu <jack.zhu@starfivetech.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v4 03/13] media: videodev2.h, v4l2-ioctl: Add StarFive ISP meta buffer format
-Date: Tue,  2 Apr 2024 03:00:01 -0700
-Message-Id: <20240402100011.13480-4-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
-References: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZQ0PR01CA0005.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:5::11) To SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BF95A4E1
+	for <linux-media@vger.kernel.org>; Tue,  2 Apr 2024 10:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712052985; cv=none; b=t4Mh0oi0Yx3MzGZrZMjJL5Gez2YOcupd4+IYHBNNotPo06OMvHbMDz17SveGDmK2q3mmxS5xUSO1bElvwI8/rtJ6cL3y81F7aPE/yA9c411t/YREVZ9kZwf/fOyQb+WYShS1SNqP7Djsf94oMmN7Y4lWMIGJAx0Izzk7Ny2cas0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712052985; c=relaxed/simple;
+	bh=uzac7wtIrnnrBvtOLPs8xaD+ikoHcCxqEerEJoMcBFs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=enKEthlKOwcNauN8MDr+6X7d9b9mD9umVC4GrGEzifQRfuB/JkhR5HqqB8JJoJQ0wYz1JUy8W4YzGTCjAJH6psfUTnew5/3h0TXcYYF+CTcflRDsrWSuaVkjOvCvDxhq0NLmI/gfEa98F3mSWCdKu7K/5+9xLDXGmYsCOhGP1zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=P/19zu7H; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="P/19zu7H"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc74435c428so4760661276.2
+        for <linux-media@vger.kernel.org>; Tue, 02 Apr 2024 03:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712052982; x=1712657782; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzac7wtIrnnrBvtOLPs8xaD+ikoHcCxqEerEJoMcBFs=;
+        b=P/19zu7HhxbqaSZ6tddIYer72gYo22iX74gtm9EbTCsCnmBPVJH56wwx8ina7pHQt+
+         p316gGtpPFNSmMfwYWkooiGf4ik567MMKWJ1fJRb+NnesXmt8S3KOmo1hW/O3yH2uIjf
+         F3SkY7DH8iAQRrcIIOMQyR6tAgVMpinRoEFcTiHyz/45wguXP951zWOOFOEZRV1uWbyn
+         hNrtfhYos8BjukR2a9x7YTIu1mvVMtxWlxNTeXM3ZTuCTXqrHvRkpW0RunoXYl2P2zer
+         H5n509H2Aw3xqdmsadb2X73YaIOldxZWd5/O5TrVs5Wt5fl9C6M1vCFRqYXRh0oRA0v7
+         HRhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712052982; x=1712657782;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzac7wtIrnnrBvtOLPs8xaD+ikoHcCxqEerEJoMcBFs=;
+        b=pCdAhWL2r5zpDYEtDR4tfz1UPzE+4vu2ZwdWWuTnY4Kf/ClwMwwHoyduZ8rJ3W0CVq
+         ssgEegpvi5hAMtlouERAGKnAyLbamuv8yIAYzcUrYpWOXKaVnOkgJ2odCpqgniCbANZ6
+         i2ofOQaKNjenQOd0CaEtRg+6RbW8pG8NGCWVTbc9p0+MTOVrFwy/mAlc5WsTjoBpBw6l
+         M36Ns1I1Z+AOInG3WwjH9XGWHYG70ZaAW0Jp+Z8IhppMK8bZQMFxjGtzGiulmozciwcn
+         AkRfcAafKCojgIm8/0Vs1NIwel7kj2o2hN2b859xCopmkwZAglTRPOJrHBsbc5V7rjyv
+         BMLw==
+X-Forwarded-Encrypted: i=1; AJvYcCWEOcYST/KUpNukTZC0JQ0B6vlucLigXBfURxKZLgrPPFV5BVwbYFz+fCdNj+h8BzSA6rkGoLs4+LoG6H+IIjCFsMQiwgqy7RcXep4=
+X-Gm-Message-State: AOJu0YzzaoJFgodF+rjEIZYta5X/DezlpyXjv05hKvxDgZUm3oMfbXVI
+	PDJ7oy2SsJ4TDV5xbIwR8/mrZgnXKHQtQmn9b7HfQWMdhcRlHrrVsp9phd/v5e6MjBvfRzDylKa
+	nFIx35dIzoipT4PJS6xj3L0XXcfexs8c6Ddv2yg==
+X-Google-Smtp-Source: AGHT+IHzjYx5u+Am4EzQhN6aMsFTdxF/7ehGqP9AXe12JTbN0HclFOy9oE6Q1Tva+ZRKMaaQSSepEoCeBcfLH2AuW+A=
+X-Received: by 2002:a25:b191:0:b0:dcd:b034:b504 with SMTP id
+ h17-20020a25b191000000b00dcdb034b504mr9487652ybj.27.1712052982018; Tue, 02
+ Apr 2024 03:16:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0669:EE_
-X-MS-Office365-Filtering-Correlation-Id: 659f9687-1706-4c94-b2cd-08dc52fbb7e8
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	QiWF6RtaDeKUhn6jGssstwLXPgDOmE5aRWE58zRTEa498zUuphAGAe9PBqCqefvpAEh5ob8EgwT4F0Gkx12DGVTRO4ysotUkrJDdMTvXGESNMC2fGZJiRlq+x3BjL0HKBsfP+H/Gv+hmix4QPBVgUjvQvaaCshyfdgeVZxxdBkym28thwSxcg8QJg2t0W6Kcw7PJcTlk6L/LMPGu8Y6ZZAz6tlDZ5MPPT3pzNxdxL0xNAEJmQBUTcMqS/XDwAFpxYzJet54dLFYDIGXv6RdxSxD9XkUeAOetTSQBGhjQilX8BfF45pIgZk8XsXed97Sze0JVPYH3gOhEtzdT6Xq12UT14Vi8JIKsQul75bBZeQkl4quyctlkHEduuJMXvKK2BPhBl8bGncmyEpXFtFEmjX6XuozlKiAFU3Bu0VInvVKzZXhjI47Ef9bBf8Asj8TAYI9WAT2wlvkEHmZx6vtf7HLSGGToNzQtLToPRjQzBbw9TvPwKPDMswAvKmFNQLkIHa+MEzMxqaT26HJ+l4KbS8GuzPqglRc0GZa3zCt/qlND4pb5HopCzl8MgYc0rkCCy8r6Fpx0is9NN7xm8DyXDGEFOi0aAbmmHg1+nEOWDEuuAPUKm03w+qzuEfL/1SNXtpAn2dQAhGaI9NcxhgyjgA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(41320700004)(366007)(1800799015)(52116005)(7416005)(921011)(38350700005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IufWn+1Fm0xmqg5rnAcSChSm4S72AokLQ5xL0gqV0h7xNN6wMiOLCXiEtxY+?=
- =?us-ascii?Q?Bf2FhNjZfMEXl35iiROtq7l8+gTpEHecV20O8UeJXEPrMeZ7MRzOXMiM2ot5?=
- =?us-ascii?Q?d/VlYlyVQ2r+IiAmbIrYSqQGmlG0Xsjpl+qBgZUnGTESMRDVNH2P1E1+I5it?=
- =?us-ascii?Q?648eu0EkOI1yWjqH6/pAFm3Tlz7NPDafaAxShAkUOSqBaizGHK8uEJMcMaeE?=
- =?us-ascii?Q?xTITts7e73VW1OUUGsuGx83DyV93RdmwGYAxSMsxWD2ACIX5Jz2t5ttQ9Dze?=
- =?us-ascii?Q?KxfXS5az2j4hHDn08i47Uoez4Ol7MJ78MWSJTvuBb1vKE6BDiXy8rnbzHBiv?=
- =?us-ascii?Q?4RgXuhEQx+CD7fhjtBScKGaGrGzG+M9VnLam9UIaY2TrW/GDhI/Wyp6dqvwG?=
- =?us-ascii?Q?viogW/GUzv49d7GDqEPZWpEGn+b9hXJTHijsGtGY4QvqAELHuY1j63FWIdWp?=
- =?us-ascii?Q?pV5teLDkKyYWrYuAT2dR0kYHlbwhcTduUln0DccmxXlUP2nrIGeDDYocnI+n?=
- =?us-ascii?Q?XWLjptQWIMaoGgUoV1iqx+HG3PdzGII692XyrDSeVPFUONkjousP9FdC/lhM?=
- =?us-ascii?Q?5khvGOdH+WxDA4V8cIBPDuk6iCaI2lhtEs9GfjKwFS/ekey/mYBEQTjX4X82?=
- =?us-ascii?Q?DOE7+dgOepujFEuNjzQYaf5wf9gsLZ1WPUV2CD2afgpM4Su4KB2p4+dFbpsD?=
- =?us-ascii?Q?BeqZHc9h2gD+ErKpUi+8Apcu+q6VTVAAzTcuR4eD+cLrFLmB7vzmilL3Ma2q?=
- =?us-ascii?Q?yWaauMtU/p/bpYt9eKesRxIO0lZxpQYz+GSq9ZZ3g2d7MFaxlrZCWrmxz031?=
- =?us-ascii?Q?s/34z+N9Udglifb7eqvsmrQ/EW3DYFQnVHPi9lj3zuTCTDJVlmVuE17lkgVm?=
- =?us-ascii?Q?L7y73qlDwL1/4dADpFfoCJq2HgfIwhHrJR9QCLzxwIYrwc9pE2D2CGEQhwnr?=
- =?us-ascii?Q?3rLv9/7NH61mgzqLIJPb6L+muxIcjJjezv8vm7Nb/FZfy4LpgX/VXM9A6iKK?=
- =?us-ascii?Q?1D7II/z7Zi184EjRDNv9U3mmMQYTtq1RIkajOhdqNwSpL9obHMkidAw7qJAF?=
- =?us-ascii?Q?QHEhcgPnd6VUqQ9ATE+kE3vo7qmvyU4CWdhiLIh+4kA2ET+RUGFAtvI/qWWM?=
- =?us-ascii?Q?bdQIpylrp/XbrS5ID71j/wgeSx0CcrPimi48T54iZel1+gyPQZ+uHVKCkvDh?=
- =?us-ascii?Q?C0zGTWondO5f3vKOkx2omZn7bEokzZQf0x2nToxxcU2qiFZBAQBG3EE8YRo3?=
- =?us-ascii?Q?UuD/cDSoqgg/6Lf+/M9Ubpk2fdV6q8di8Tj5Y2B4Vl8GPtSQZZ24XGliALUN?=
- =?us-ascii?Q?01FXu4sMClf4tH3K2G5eMTIKumTJoA4UDK+QUJYzntqY/iWkf5o6NFBb+I3G?=
- =?us-ascii?Q?B9mYbAoUXlEDJOfHo8O45y/O5ig4FcxK8f0vOfDhscuvszHNybPO4FH9gMo2?=
- =?us-ascii?Q?OukQmvI0jV3/gyV3bBTHN2IXRi7kxiqST37CwaWRn99wom1TxICnqrluJxNo?=
- =?us-ascii?Q?mxbQNcd72o1gu+tq4eYJGsG96dJfTLy955OcKW724gLOVIUtx0j5cFEWkXIE?=
- =?us-ascii?Q?3Aq1pJBA2glC0Tg53fmK6e9ZZVEPXS1lpgNOaj4Cz1Mlg0To+XRcB1epHp9H?=
- =?us-ascii?Q?afYJo6gqGB5/A3k8Vwn7lYo=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 659f9687-1706-4c94-b2cd-08dc52fbb7e8
-X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2024 10:00:25.6831
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ojEgmDFL+M7xr2DmqvtQ05nWASj+IJBc+hBZSuTnWv95T0CB8zynMjxBeoGDkmYAhrufzQtePnDRTj6sT0la2O+DAxLztaF4gOppJGz4pnuzn/+4aRrNHdWZjEPawsi9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0669
+References: <20240327160314.9982-1-apais@linux.microsoft.com>
+ <20240327160314.9982-10-apais@linux.microsoft.com> <CAPDyKFpuKadPQv6+61C2pE4x4FE-DUC5W6WCCPu9Nb2DnDB56g@mail.gmail.com>
+ <ZgWZDtNU4tCwqyeu@slm.duckdns.org>
+In-Reply-To: <ZgWZDtNU4tCwqyeu@slm.duckdns.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 2 Apr 2024 12:15:45 +0200
+Message-ID: <CAPDyKFp5KET0HR+8MwO4cf0O6W2kyFqHoKcVf5jbgBuLuQUcFA@mail.gmail.com>
+Subject: Re: [PATCH 9/9] mmc: Convert from tasklet to BH workqueue
+To: Tejun Heo <tj@kernel.org>
+Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org, 
+	keescook@chromium.org, vkoul@kernel.org, marcan@marcan.st, sven@svenpeter.dev, 
+	florian.fainelli@broadcom.com, rjui@broadcom.com, sbranden@broadcom.com, 
+	paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com, 
+	manivannan.sadhasivam@linaro.org, vireshk@kernel.org, Frank.Li@nxp.com, 
+	leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com, 
+	haijie1@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	sean.wang@mediatek.com, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, afaerber@suse.de, 
+	logang@deltatee.com, daniel@zonque.org, haojian.zhuang@gmail.com, 
+	robert.jarzmik@free.fr, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	orsonzhai@gmail.com, baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com, 
+	patrice.chotard@foss.st.com, linus.walleij@linaro.org, wens@csie.org, 
+	jernej.skrabec@gmail.com, peter.ujfalusi@gmail.com, kys@microsoft.com, 
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, 
+	jassisinghbrar@gmail.com, mchehab@kernel.org, maintainers@bluecherrydvr.com, 
+	aubin.constans@microchip.com, manuel.lauss@gmail.com, mirq-linux@rere.qmqm.pl, 
+	jh80.chung@samsung.com, oakad@yahoo.com, hayashi.kunihiko@socionext.com, 
+	mhiramat@kernel.org, brucechang@via.com.tw, HaraldWelte@viatech.com, 
+	pierre@ossman.eu, duncan.sands@free.fr, stern@rowland.harvard.edu, 
+	oneukum@suse.com, openipmi-developer@lists.sourceforge.net, 
+	dmaengine@vger.kernel.org, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-mediatek@lists.infradead.org, 
+	linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-tegra@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add the StarFive ISP specific metadata format
-V4L2_META_FMT_STF_ISP_PARAMS & V4L2_META_FMT_STF_ISP_STAT_3A for 3A.
+On Thu, 28 Mar 2024 at 17:21, Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Thu, Mar 28, 2024 at 01:53:25PM +0100, Ulf Hansson wrote:
+> > At this point we have suggested to drivers to switch to use threaded
+> > irq handlers (and regular work queues if needed too). That said,
+> > what's the benefit of using the BH work queue?
+>
+> BH workqueues should behave about the same as tasklets which have more
+> limited interface and is subtly broken in an expensive-to-fix way (around
+> freeing in-flight work item), so the plan is to replace tasklets with BH
+> workqueues and remove tasklets from the kernel.
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
- include/uapi/linux/videodev2.h       | 4 ++++
- 2 files changed, 6 insertions(+)
+Seems like a good approach!
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 5aeff5519407..9fb8f9c510a9 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1453,6 +1453,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_META_FMT_VIVID:       descr = "Vivid Metadata"; break;
- 	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
- 	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A Statistics"; break;
-+	case V4L2_META_FMT_STF_ISP_PARAMS:	descr = "StarFive ISP 3A Parameters"; break;
-+	case V4L2_META_FMT_STF_ISP_STAT_3A:	descr = "StarFive ISP 3A Statistics"; break;
- 	case V4L2_PIX_FMT_NV12_8L128:	descr = "NV12 (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12M_8L128:	descr = "NV12M (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr = "10-bit NV12 (8x128 Linear, BE)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 2663213b76a4..8fb9f2f20832 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -839,6 +839,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
- #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
- 
-+/* Vendor specific - used for StarFive JH7110 ISP camera sub-system */
-+#define V4L2_META_FMT_STF_ISP_PARAMS	v4l2_fourcc('S', 'T', 'F', 'P') /* StarFive ISP 3A Parameters */
-+#define V4L2_META_FMT_STF_ISP_STAT_3A	v4l2_fourcc('S', 'T', 'F', 'S') /* StarFive ISP 3A Statistics */
-+
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
- 
--- 
-2.25.1
+>
+> The [dis]advantages of BH workqueues over threaded IRQs or regular threaded
+> workqueues are the same as when you compare them to tasklets. No thread
+> switching overhead, so latencies will be a bit tighter. Wheteher that
+> actually matters really depends on the use case. Here, the biggest advantage
+> is that it's mostly interchangeable with tasklets and can thus be swapped
+> easily.
 
+Right, thanks for clarifying!
+
+However, the main question is then - if/when it makes sense to use the
+BH workqueue for an mmc host driver. Unless there are some HW
+limitations, a threaded irq handler should be sufficient, I think.
+
+That said, moving to threaded irq handlers is a different topic and
+doesn't prevent us from moving to BH workqueues as it seems like a
+step in the right direction.
+
+Kind regards
+Uffe
