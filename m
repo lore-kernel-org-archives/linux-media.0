@@ -1,95 +1,87 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CC212BF20;
-	Tue,  2 Apr 2024 20:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644651E4AE;
+	Tue,  2 Apr 2024 20:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712091125; cv=none; b=NVJlQ6R1Ly6m0kP20RuUulSizBgFSKmuXvhq5Nr/wd8Tr+sbwKTxNr50zJDRN08ADMiBB2pDQ23LyOQ31PACECIVWllj2bULv0E/A9g68UCMHj8Q+4uMKAqAtZe77ZJkVs5uqKstHHxs+VR91hKtwqoA3JFZAxzi8HC+JaVDOA8=
+	t=1712091204; cv=none; b=Av0lv40tVJUpsXzGVqU6XV+00vTcMQiDSjcnpRtKSZs4Jf5IzAJPL2ZnI5o6lMK10B7xblxVzJw3vU7lYU3IERgXLlQemodDdttcvi8azcbZExwk13mO9dxBFmIi0vuMvYtiQRmEPAHmjaekknJZ9kP7/kcHkmpV4EXNqyI4WN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712091125; c=relaxed/simple;
-	bh=LwKYC+SZUn0nHRmzO7S4TAKdn59+AOuO2pF9oNCk7ig=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XmD5lrv4DEMlH7NQXHOawqztoaXKj4ea0P2zfZfp9zWdPuSQlzNe2KmJS+Y62ioS2QnxnYD2OPFLsL4jRej+dbNMu8CcXKZhw02obBWnbHr4xOUuUGsh+rQ1P2dch0v7pCKvcaPhFjSCIoequWDSOWDItPVAGmbnlIFcJfuGzHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=IcrhyIA5; arc=none smtp.client-ip=192.19.144.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1712091204; c=relaxed/simple;
+	bh=WppgNJ/DzpDuUDT9XQja7RmtEtoOgEF0AQPxet5ENT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=us0juYG8ymolbDUsqwI7PR77RJAoMtwNuMg0zL7Q9ePKnfZyZZprwYTKosyn8C/tvI4d9m7uHYS7c9uRYSM0nbqnJ9ejfwGynvSDGd91EmXCqgRxfBX5qxIeHEmN0XRWK5EOZojRntivV+oibnxklQCTy/qb/kDMRl1M/eNNhjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=cELZSDB3; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="IcrhyIA5"
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 4954CC0000E4;
-	Tue,  2 Apr 2024 13:45:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 4954CC0000E4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1712090750;
-	bh=LwKYC+SZUn0nHRmzO7S4TAKdn59+AOuO2pF9oNCk7ig=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IcrhyIA5gUQT2ev/qUNmmH+1nLTsOCb9htDgftgQ2/dMb7VSSyaPGRHSlWmEzNgt1
-	 MnMsXtuQRFdvo+0ss5ReY0LoVxNqTWuEFHyYUpWIlA1Wqsy4tkalWsomcwomkJbK7n
-	 j/puujrwTkynGgCgLypj2Qr/Izns/5AuJfVaGbd0=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 658D418041CAC4;
-	Tue,  2 Apr 2024 13:45:48 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Uwe =?iso-8859-1?q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cELZSDB3"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id EBCEF1A2;
+	Tue,  2 Apr 2024 22:52:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1712091164;
+	bh=WppgNJ/DzpDuUDT9XQja7RmtEtoOgEF0AQPxet5ENT0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cELZSDB3Ogfj2I6kuvdvVL5zy7zoj+PwzrEBddoSH90yyt4s1ne/CIofjMqHrnH7g
+	 Zx7ePtUNJ8yjjVtag4piWjJpBcqbx/dLJh6h790jItLhQ0EV+amvL04oh56x02WLq3
+	 bNMyizZwNtgrxiOpSt9j1tqHSoIbgoJlYlrI4jq0=
+Date: Tue, 2 Apr 2024 23:53:10 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: linux-media@vger.kernel.org,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	David Plowman <david.plowman@raspberrypi.com>,
 	Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
 	Naushir Patuck <naush@raspberrypi.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	kernel-list@raspberrypi.com,
-	linux-rpi-kernel@lists.infradead.org,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
+	kernel-list@raspberrypi.com, linux-rpi-kernel@lists.infradead.org,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
 	Conor Dooley <conor+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 07/10] ARM: dts: bcm2711-rpi: Add pinctrl-based multiplexing for I2C0
-Date: Tue,  2 Apr 2024 13:45:49 -0700
-Message-Id: <20240402204549.2519879-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240402000424.4650-8-laurent.pinchart@ideasonboard.com>
-References: <20240402000424.4650-1-laurent.pinchart@ideasonboard.com> <20240402000424.4650-8-laurent.pinchart@ideasonboard.com>
+	Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 00/10] media: Add driver for the Raspberry Pi <5 CSI-2
+ receiver
+Message-ID: <20240402205310.GC16740@pendragon.ideasonboard.com>
+References: <20240402000424.4650-1-laurent.pinchart@ideasonboard.com>
+ <20240402001111.GA4761@pendragon.ideasonboard.com>
+ <0f5bc6e1-a8d8-4067-bd02-b3ec570f2936@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0f5bc6e1-a8d8-4067-bd02-b3ec570f2936@broadcom.com>
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+On Tue, Apr 02, 2024 at 01:46:44PM -0700, Florian Fainelli wrote:
+> Hello Laurent,
+> 
+> On 4/1/24 17:11, Laurent Pinchart wrote:
+> > Hi Florian,
+> > 
+> > I think patches 05/10 ("ARM: dts: bcm2835-rpi: Move duplicate
+> > firmware-clocks to bcm2835-rpi.dtsi"), 07/10 ("ARM: dts: bcm2711-rpi:
+> > Add pinctrl-based multiplexing for I2C0"), 08/10 ("ARM: dts:
+> > bcm2711-rpi-cm4-io: Add RTC on I2C0") and 09/10 ("ARM: dts:
+> > bcm2711-rpi-4-b: Add CAM1 regulator") are ready for you to merge. This
+> > would help reducing further iterations of this series.
+> 
+> I could not locate the base commit this series was posted against 
+> (58abf3672a73558149fa567eafff8d5b1cc0446b), so patch 5 unfortunately did 
+> not apply cleanly due to v6.9-rc1 still having a "dma-ranges" property, 
+> fixed that up and the rest applied fine.
 
-On Tue,  2 Apr 2024 03:04:14 +0300, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
-> From: Uwe Kleine-König <uwe@kleine-koenig.org>
-> 
-> BCM2711-based Raspberry Pi boards (4B, CM4 and 400) multiplex the I2C0
-> controller over two sets of pins, GPIO0+1 and GPIO44+45. The former is
-> exposed on the 40-pin header, while the latter is used for the CSI and
-> DSI connectors.
-> 
-> Add a pinctrl-based I2C bus multiplexer to bcm2711-rpi.dtsi to model
-> this multiplexing. The two child buses are named i2c0_0 and i2c0_1.
-> 
-> Note that if you modified the dts before to add devices to the i2c bus
-> appearing on pins gpio0 + gpio1 (either directly in the dts or using an
-> overlay), you have to put these into the i2c0_0 node introduced here
-> now.
-> 
-> Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
-> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> ---
+The base is in the rpi/v6.9/unicam/next branch of
+https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git.
+This series applies on top of the 3 DT drive-by fixes I've sent
+separately.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+-- 
+Regards,
+
+Laurent Pinchart
