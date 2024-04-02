@@ -1,231 +1,146 @@
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2099.outbound.protection.partner.outlook.cn [139.219.17.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B83960266;
-	Tue,  2 Apr 2024 11:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712057493; cv=none; b=q8KewrLXbqvUM7HRYDYyMxKD4kasCzWVdwwxBm4Q4lsIu9DAoTYrQ2UnvOOqvsBgfpEKaN8qy7YWaj9cbEWPal2rIA0oKU5EFBlZX4opOHVVcKY6S985rouZPbNXzgIUUtkRx3d0x0pX2zB5zggG9nxj8YR8zQ3kktqNR7QMPVs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712057493; c=relaxed/simple;
-	bh=4G0sNbKcdCOvjHdR2aysek6guxhi8tnhqOLrZUNq+Ig=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cZw0Q3H+8Yttmoo5arm2jTKytAiM9W9pQu1eq/Cc+M3KKWj8nCqUypTNUk/k9W/uVESe1vFKMRzpAsXoTMceE6IUeLJMqVN8KipnuoezZ3CyBHbYLBg6HlTecPlInMBm1oXJXd2AMJQQVuEtcWgNmOBhM7Qq7tpC9hI1ukQvMZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=3+PWiZnt; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="3+PWiZnt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1712057487;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=RACmCVo3oQizc0IV4xsfh1Yt5T/9H2Y8ArFlx9eSREM=;
-	b=3+PWiZntDUNpIPR9lZJONsKTr7S7V+JfwELyvJim7PbDNPejxbk9kNjwARkaSGeRA35wRu
-	V5DfyIBRIglj7tKbU+PHJ+/asCCVIxK5QV+R5y3Erlo69ehIchvfFuPpaCD8kHqTkHZOnB
-	ULIVfZ6QwtCtP+4iRZjRzESWmMKPAqo=
-Message-ID: <599394c0220079b7b42dc732be817ca8a1eb4214.camel@crapouillou.net>
-Subject: Re: [PATCH v9 1/6] dmaengine: Add API function
- dmaengine_prep_peripheral_dma_vec()
-From: Paul Cercueil <paul@crapouillou.net>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Jonathan Cameron <jic23@kernel.org>, Christian =?ISO-8859-1?Q?K=F6nig?=
- <christian.koenig@amd.com>, Jonathan Corbet <corbet@lwn.net>, Lars-Peter
- Clausen <lars@metafoo.de>, Sumit Semwal <sumit.semwal@linaro.org>, Nuno Sa
- <nuno.sa@analog.com>,  Michael Hennerich <michael.hennerich@analog.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- dmaengine@vger.kernel.org, linux-iio@vger.kernel.org, 
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linaro-mm-sig@lists.linaro.org
-Date: Tue, 02 Apr 2024 13:31:25 +0200
-In-Reply-To: <ZgUM1LFEWs3lwoAU@matsya>
-References: <20240310124836.31863-1-paul@crapouillou.net>
-	 <20240310124836.31863-2-paul@crapouillou.net> <ZgUM1LFEWs3lwoAU@matsya>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
- qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
- JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
- 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
- X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
- AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
- Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
- Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
- McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
- 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
- LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4536996E;
+	Tue,  2 Apr 2024 11:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.99
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712057666; cv=fail; b=U3rqN8+310x+lC1g0riHZNlPfhYbaHG1WzJdAU6NaN2B+5EBGC5vjS0A8LrsNusVqNx4vwoVcFng1BsnuY9Pt8+eiyZcg6r8CvGoEtd0sQMN2qnbgODFYGsQe7Odp6l02HztennMLFSPuWkJB8aIpjYOOhTBPqoZBdMnP05tpzg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712057666; c=relaxed/simple;
+	bh=ZqS10ZAMwMKng4bCcyIYliSH0HU2nzc9NUI+fmHqPks=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HAoFBt1AzQVfk6UIQ0DE3hOndAwMprk/Tykk2Dje1ajsuSkkbMZBr0n4CK2XN62fhrFsNa3uuu6qz1sEYIsAYFZibMUqZzbNWiyPhCGEagnB3ke55IavUeYwj5jDKaKtd5MywMoD1vawl2/NTxODeNjwWXMGBPhDzYu2LA4u4w8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=daYlQVy0dvMGPWZ7c8gBbo/98HrnklsMOMLfAQR06P9O+LKwIetX5rTzLBMl+LxlOGagDNSA2cxOvs89EMyu7ujtYm9lYj3gPZci3o+XAmZLB9X7MK8GAWot5q4nWW1g+Uw/KiznEPy+FqeFbe7QpN1eZptTtaNU0axhjCDRxZw9wkkzvFuC9PQp7htHvH+i46GA6r4un0plgrugE49CnyFMwvoAeMU735UY08bMKo73r9/7I6cLz2M+T4tj4U0Iusd6zz+af8QgZa0y5i24R2jU8nUzLIJzRkkhqg/t75kdoUOTtB8y2jU61kv2MMFtpAfmziYALIfk9DM2hKVu+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IpYS+v+cBn1HqDAmhXTHJL+v2aLemV00fes8PvGvKzM=;
+ b=YD8DStXGF3TibSz/ydKCXpnkOFbP1pKPYh7az9HwpM6gTSgvPXo8cgVsEad77RhqqkLygWwkuyT8ojApFDafym4tz7gTAE5IHqo993co+qHsuUmHRLPYq/jjBhDV4ROWvkqTfM+mjS6fH33apSjKp3nNjLCnANxcORWPhi8SBmjU8GULmoELw661ljKtYl00pnkwq7NBLIOjmxqLNRKgAxdWx6tBIbSnY9BqUO09xlsoc6ZNI4IlkaHaImHV9ugkSn80+iPf3035Ko45PI528gHF330KlvC0uFqXcKvJBkevawzX42aO2zIcTRAhe7/QtUHgXNwInsUDWya1+pHITQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:25::10) by SHXPR01MB0462.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:1e::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 2 Apr
+ 2024 10:00:38 +0000
+Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ ([fe80::b0af:4c9d:2058:a344]) by
+ SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%7])
+ with mapi id 15.20.7409.038; Tue, 2 Apr 2024 10:00:37 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Ming Qian <ming.qian@nxp.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+	Mingjia Zhang <mingjia.zhang@mediatek.com>,
+	Marvin Lin <milkfafa@gmail.com>
+Cc: Jack Zhu <jack.zhu@starfivetech.com>,
+	Changhuang Liang <changhuang.liang@starfivetech.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: [PATCH v4 10/13] staging: media: starfive: Add V4L2_CAP_IO_MC capability
+Date: Tue,  2 Apr 2024 03:00:08 -0700
+Message-Id: <20240402100011.13480-11-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
+References: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0005.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:5::11) To SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:25::10)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0462:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19475ed6-e837-4fe2-7130-08dc52fbbf37
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	jC2asqYZDPvM7257TdOE38s6girr4yTXNr+Z1FQdqcOSxSl4+vD2PdQ+UXut/nc/h7Yj73Ch0Bt2BBO10t3/UjiUhtC8nhcG5EfLPlC1Zv1eWPHq7Vn6wWID/vpdaVxFXsa7g31rJScXftHEGBV8a910XuGm80v5Ocm7xv/fnCjveuJExxQ8n/kJcf4D8LsNpoDH+1dLDjXI3LUDX8OYXszoaOn0tVom3pfB0oeepnWUtluA9Xkb2BmK31ubLDs13PTM6t9Ypx40ddCWiRSfENkbbI6RSavz6ayit0gUDozwLNqg0Vcg3k1tuU4WeeJOil08//PfTGf6eL7JdPx7gMeQyDERimxI7IbKW/GpOda9roNyNRo+d/WcFfjZay3WSy0XefRhzGW0NLA23pzCuSFNSvg87pXMQ7oyRZx/wSQImf/79NunB1LET44TmbnKSCqo+q7XpGV8dnzlht9R2vXSVX+YKAPp0dbHcyrJNPSRN6M88vm/JBN6P0cphNzWrohEBBigK2mFZYrfAVA57HiSVFL3RKfjnJKbY05erDAITHFd9qbof0J8TDj/ia+CJLwwjVr3dQ1prQAsafeWW86h6wWJPIEDj7LFJq4BpHNyhF7TvYhHCBdXVty8MBLhdMjyriLv/r3Cj7CueTOYZA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(52116005)(7416005)(41320700004)(366007)(38350700005)(921011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TtLTMtOAhQ3yKSjXXB2ZSmv4xrSpfNMoekM7kO6NoPEJSJd10koWCiED79Jv?=
+ =?us-ascii?Q?l93V+sqYxpaMLZdT/ZttzXbXYKd6xhq0Ji5nD7TWfhPPGYFY9whSCLhKZ90U?=
+ =?us-ascii?Q?TVuD5yfvp4s5GupgIM5lhHK4/nUgL2rNGNAQpCt6dYgxNYiZuWLidSRGq4cW?=
+ =?us-ascii?Q?5mfgllO2tvQPSEbCUHrmRZ+bBaWwJcDKNq2ycGmiJPQp4hu5GyGxy5dZqLR8?=
+ =?us-ascii?Q?y4Ooz3Xe3pCoPrx04zh577GavvMZUf5t9ZWEhGk2mmXUoJAi68BoiDlsh01T?=
+ =?us-ascii?Q?JrS+V/0QkIwLdxJy1sb2UzxYxmV8m96lNnjSSlOnLrp7Y9EhsClXRPqX7Vtr?=
+ =?us-ascii?Q?5zuCP2a2L6F88CG/ocaT3GRq0/pbVAvipKuSUXJuYlyDXcgeGvZkB9s/DNVR?=
+ =?us-ascii?Q?KYeCeVJbPV7T28PVHk/gTtBeUHCHwL9kpneJkBOVLzfzVivulzSKpSgUvWCE?=
+ =?us-ascii?Q?xN74pP1doDjKr2FVsd0DmgklpbDaofjTMmUdI4NURzpWNub5om4UHbGrXjFv?=
+ =?us-ascii?Q?fW+cFi5CC3Bxj7LIIAIOvzeOU/OmPPSYFCnp15PM3t8QajD8G68HuBP77fcQ?=
+ =?us-ascii?Q?D5bAAiWaQQ5RD4dXd05n2ZepaBmquIlST8bprN2d5d5HMqmO5q0XkUnCrqe/?=
+ =?us-ascii?Q?MMtHvqvyUS7YQES9dNLJsIjRDGBgA408pyUF8LveFEt8wWSvDysnZIUU49HP?=
+ =?us-ascii?Q?xobv11o9oNV3po81Ew5HkOtfmEp/mPECxF81OMB8WeynnwkZ0j+bAmmJXZZp?=
+ =?us-ascii?Q?HmAxr5F/z5rwfTPg6O5hyM8LUzS07xNs1RLm/qdNS1ULSsds+HcIxqtcE4lW?=
+ =?us-ascii?Q?7gd3XBngvO+sS77fYSJz/ARKzJeA30z9OXqODcNjI1P1Vk+cjPHssrDWUHNn?=
+ =?us-ascii?Q?moBeREnUndTjtvNKqRydAXKsItQpv0UvHLLi3/RXf1FhTcYxi63NJ3UGOfdT?=
+ =?us-ascii?Q?Clt2ncZPUK05xhwI3A9i3q4XWx1YREsbUr8hI24awK+RWBQcybtKdPS6xmQa?=
+ =?us-ascii?Q?D12W7bz1/i91bu8XKH66ELBQG0O1kpjCIjxHQ92FCb3MDq1TA8NrSRBlDIVO?=
+ =?us-ascii?Q?jKjIOyY20KiWB33+gjnPdKXVmBkJr4nXYl0/e4egZkBCnMrBSEsIvGn0QLA0?=
+ =?us-ascii?Q?5EpF/IEaPAd0Rf1GehffvgGCdrYys5VbUYwXdaNAM9OcOrznS2aMXd4AlpGB?=
+ =?us-ascii?Q?Hjde0bBGAbg0YDRpDQa0+PfshlB7abcZNV0DbS2Yw3E7LbDaCflNB35tlcU+?=
+ =?us-ascii?Q?Af56rOB9HXebprZVl6Nz3tplVAIAsdBT1XMJ4W+NZb36cQOsadXX6oVyJnAM?=
+ =?us-ascii?Q?J1CDCclhS7oZGkMIWObTZV0DOgrj2VbbItVx3XirP9OMoX9QMONtgfglEbrQ?=
+ =?us-ascii?Q?02/6/1bloUTipuuxAqIiLeb4Y133HKpiAsNSV5afsAvzMI+TWBBKmO/mRQNp?=
+ =?us-ascii?Q?YfTrHVptIHiE5QW9Gi2IeFG0DbSuqYefWipJsKqr3C3QoJ/aq3Ex1w6QvJvz?=
+ =?us-ascii?Q?iW1bcI20XJn+ETGeojZeyOkdF460V5zCbuvVMpSI3mYWR0hxqKR2khrrc5YD?=
+ =?us-ascii?Q?yT2rXFZMsnnYND3mknKMo6ke+FOvNBJjaZzcOnZSxBwUV09S5ds7v9lC2uEy?=
+ =?us-ascii?Q?xt7JCIa9yo3BwXgZ+7lJZT0=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19475ed6-e837-4fe2-7130-08dc52fbbf37
+X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2024 10:00:37.9349
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V4h5e6lKJaPFZk5uVM0u8Ch3dT2aehoqFcS641D6ZiqVo+Hncu7rP5CniAWpfHe85Kbw8WF2Bpu7W1dgmC6izRIhT3M49s6UabvY95FpADQWTXFU/jR/JmpyYHtEKa71
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0462
 
-Hi Vinod,
+Add V4L2_CAP_IO_MC capabality for video device. User space can enumerate
+formats by mbus code.
 
-Le jeudi 28 mars 2024 =C3=A0 11:53 +0530, Vinod Koul a =C3=A9crit=C2=A0:
-> On 10-03-24, 13:48, Paul Cercueil wrote:
-> > This function can be used to initiate a scatter-gather DMA
-> > transfer,
-> > where the address and size of each segment is located in one entry
-> > of
-> > the dma_vec array.
-> >=20
-> > The major difference with dmaengine_prep_slave_sg() is that it
-> > supports
-> > specifying the lengths of each DMA transfer; as trying to override
-> > the
-> > length of the transfer with dmaengine_prep_slave_sg() is a very
-> > tedious
-> > process. The introduction of a new API function is also justified
-> > by the
-> > fact that scatterlists are on their way out.
-> >=20
-> > Note that dmaengine_prep_interleaved_dma() is not helpful either in
-> > that
-> > case, as it assumes that the address of each segment will be higher
-> > than
-> > the one of the previous segment, which we just cannot guarantee in
-> > case
-> > of a scatter-gather transfer.
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > Signed-off-by: Nuno Sa <nuno.sa@analog.com>
-> >=20
-> > ---
-> > v3: New patch
-> >=20
-> > v5: Replace with function dmaengine_prep_slave_dma_vec(), and
-> > struct
-> > =C2=A0=C2=A0=C2=A0 'dma_vec'.
-> > =C2=A0=C2=A0=C2=A0 Note that at some point we will need to support cycl=
-ic
-> > transfers
-> > =C2=A0=C2=A0=C2=A0 using dmaengine_prep_slave_dma_vec(). Maybe with a n=
-ew "flags"
-> > =C2=A0=C2=A0=C2=A0 parameter to the function?
-> >=20
-> > v7:
-> > =C2=A0 - Renamed *device_prep_slave_dma_vec() ->
-> > device_prep_peripheral_dma_vec();
-> > =C2=A0 - Added a new flag parameter to the function as agreed between
-> > Paul
-> > =C2=A0=C2=A0=C2=A0 and Vinod. I renamed the first parameter to prep_fla=
-gs as it's
-> > supposed to
-> > =C2=A0=C2=A0=C2=A0 be used (I think) with enum dma_ctrl_flags. I'm not =
-really sure
-> > how that API
-> > =C2=A0=C2=A0=C2=A0 can grow but I was thinking in just having a bool cy=
-clic
-> > parameter (as the
-> > =C2=A0=C2=A0=C2=A0 first intention of the flags is to support cyclic tr=
-ansfers)
-> > but ended up
-> > =C2=A0=C2=A0=C2=A0 "respecting" the previously agreed approach.
-> > ---
-> > =C2=A0include/linux/dmaengine.h | 27 +++++++++++++++++++++++++++
-> > =C2=A01 file changed, 27 insertions(+)
-> >=20
-> > diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-> > index 752dbde4cec1..856df8cd9a4e 100644
-> > --- a/include/linux/dmaengine.h
-> > +++ b/include/linux/dmaengine.h
-> > @@ -160,6 +160,16 @@ struct dma_interleaved_template {
-> > =C2=A0	struct data_chunk sgl[];
-> > =C2=A0};
-> > =C2=A0
-> > +/**
-> > + * struct dma_vec - DMA vector
-> > + * @addr: Bus address of the start of the vector
-> > + * @len: Length in bytes of the DMA vector
-> > + */
-> > +struct dma_vec {
-> > +	dma_addr_t addr;
-> > +	size_t len;
-> > +};
-> > +
-> > =C2=A0/**
-> > =C2=A0 * enum dma_ctrl_flags - DMA flags to augment operation
-> > preparation,
-> > =C2=A0 *=C2=A0 control completion, and communicate status.
-> > @@ -910,6 +920,10 @@ struct dma_device {
-> > =C2=A0	struct dma_async_tx_descriptor
-> > *(*device_prep_dma_interrupt)(
-> > =C2=A0		struct dma_chan *chan, unsigned long flags);
-> > =C2=A0
-> > +	struct dma_async_tx_descriptor
-> > *(*device_prep_peripheral_dma_vec)(
-> > +		struct dma_chan *chan, const struct dma_vec *vecs,
-> > +		size_t nents, enum dma_transfer_direction
-> > direction,
-> > +		unsigned long prep_flags, unsigned long flags);
-> > =C2=A0	struct dma_async_tx_descriptor *(*device_prep_slave_sg)(
-> > =C2=A0		struct dma_chan *chan, struct scatterlist *sgl,
-> > =C2=A0		unsigned int sg_len, enum dma_transfer_direction
-> > direction,
-> > @@ -973,6 +987,19 @@ static inline struct dma_async_tx_descriptor
-> > *dmaengine_prep_slave_single(
-> > =C2=A0						=C2=A0 dir, flags,
-> > NULL);
-> > =C2=A0}
-> > =C2=A0
-> > +static inline struct dma_async_tx_descriptor
-> > *dmaengine_prep_peripheral_dma_vec(
-> > +	struct dma_chan *chan, const struct dma_vec *vecs, size_t
-> > nents,
-> > +	enum dma_transfer_direction dir, unsigned long prep_flags,
-> > +	unsigned long flags)
-> > +{
-> > +	if (!chan || !chan->device || !chan->device-
-> > >device_prep_peripheral_dma_vec)
-> > +		return NULL;
-> > +
-> > +	return chan->device->device_prep_peripheral_dma_vec(chan,
-> > vecs, nents,
-> > +							=C2=A0=C2=A0=C2=A0 dir,
-> > prep_flags,
-> > +							=C2=A0=C2=A0=C2=A0
-> > flags);
-> > +}
->=20
-> API looks good to me, thanks
-> Few nits though:
-> - Can we add kernel-doc for this new API please
-> - Also update the documentation adding this new api
-> - Lastly, we seem to have two flags, I know you have added a comment
-> but
-> =C2=A0 I dont seem to recall the discussion (looked at old threads for
-> clue
-> =C2=A0 as well), can you please remind me why we need both? And in your
-> case,
-> =C2=A0 what is the intended usage of these flags, i would prefer single
-> =C2=A0 clean one...
->=20
+Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+---
+ drivers/staging/media/starfive/camss/stf-video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The "prep_flags" is a mask of "enum dma_ctrl_flags".
+diff --git a/drivers/staging/media/starfive/camss/stf-video.c b/drivers/staging/media/starfive/camss/stf-video.c
+index d9e51d4e2004..4ca889a7b757 100644
+--- a/drivers/staging/media/starfive/camss/stf-video.c
++++ b/drivers/staging/media/starfive/camss/stf-video.c
+@@ -665,7 +665,7 @@ int stf_video_register(struct stfcamss_video *video,
+ 	}
+ 
+ 	vdev->fops = &stf_vid_fops;
+-	vdev->device_caps |= V4L2_CAP_STREAMING;
++	vdev->device_caps |= V4L2_CAP_STREAMING | V4L2_CAP_IO_MC;
+ 	vdev->entity.ops = &stf_media_ops;
+ 	vdev->vfl_dir = VFL_DIR_RX;
+ 	vdev->release = stf_video_release;
+-- 
+2.25.1
 
-The second "flags" was supposed to be specific to this function, and
-was to future-proof the API as we eventually want to have a "cyclic"
-flag, which would emulate a cyclic transfer by linking the SG hardware
-descriptors accordingly.
-
-However - I think we can already do that with DMA_PREP_REPEAT and
-DMA_PREP_LOAD_EOT, right? So we can probably drop the second "flags".
-
-Cheers,
--Paul
