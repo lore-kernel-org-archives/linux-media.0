@@ -1,146 +1,181 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2099.outbound.protection.partner.outlook.cn [139.219.17.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4536996E;
-	Tue,  2 Apr 2024 11:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712057666; cv=fail; b=U3rqN8+310x+lC1g0riHZNlPfhYbaHG1WzJdAU6NaN2B+5EBGC5vjS0A8LrsNusVqNx4vwoVcFng1BsnuY9Pt8+eiyZcg6r8CvGoEtd0sQMN2qnbgODFYGsQe7Odp6l02HztennMLFSPuWkJB8aIpjYOOhTBPqoZBdMnP05tpzg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712057666; c=relaxed/simple;
-	bh=ZqS10ZAMwMKng4bCcyIYliSH0HU2nzc9NUI+fmHqPks=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HAoFBt1AzQVfk6UIQ0DE3hOndAwMprk/Tykk2Dje1ajsuSkkbMZBr0n4CK2XN62fhrFsNa3uuu6qz1sEYIsAYFZibMUqZzbNWiyPhCGEagnB3ke55IavUeYwj5jDKaKtd5MywMoD1vawl2/NTxODeNjwWXMGBPhDzYu2LA4u4w8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=daYlQVy0dvMGPWZ7c8gBbo/98HrnklsMOMLfAQR06P9O+LKwIetX5rTzLBMl+LxlOGagDNSA2cxOvs89EMyu7ujtYm9lYj3gPZci3o+XAmZLB9X7MK8GAWot5q4nWW1g+Uw/KiznEPy+FqeFbe7QpN1eZptTtaNU0axhjCDRxZw9wkkzvFuC9PQp7htHvH+i46GA6r4un0plgrugE49CnyFMwvoAeMU735UY08bMKo73r9/7I6cLz2M+T4tj4U0Iusd6zz+af8QgZa0y5i24R2jU8nUzLIJzRkkhqg/t75kdoUOTtB8y2jU61kv2MMFtpAfmziYALIfk9DM2hKVu+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IpYS+v+cBn1HqDAmhXTHJL+v2aLemV00fes8PvGvKzM=;
- b=YD8DStXGF3TibSz/ydKCXpnkOFbP1pKPYh7az9HwpM6gTSgvPXo8cgVsEad77RhqqkLygWwkuyT8ojApFDafym4tz7gTAE5IHqo993co+qHsuUmHRLPYq/jjBhDV4ROWvkqTfM+mjS6fH33apSjKp3nNjLCnANxcORWPhi8SBmjU8GULmoELw661ljKtYl00pnkwq7NBLIOjmxqLNRKgAxdWx6tBIbSnY9BqUO09xlsoc6ZNI4IlkaHaImHV9ugkSn80+iPf3035Ko45PI528gHF330KlvC0uFqXcKvJBkevawzX42aO2zIcTRAhe7/QtUHgXNwInsUDWya1+pHITQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10) by SHXPR01MB0462.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:1e::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 2 Apr
- 2024 10:00:38 +0000
-Received: from SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- ([fe80::b0af:4c9d:2058:a344]) by
- SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn ([fe80::b0af:4c9d:2058:a344%7])
- with mapi id 15.20.7409.038; Tue, 2 Apr 2024 10:00:37 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Ming Qian <ming.qian@nxp.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	Mingjia Zhang <mingjia.zhang@mediatek.com>,
-	Marvin Lin <milkfafa@gmail.com>
-Cc: Jack Zhu <jack.zhu@starfivetech.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v4 10/13] staging: media: starfive: Add V4L2_CAP_IO_MC capability
-Date: Tue,  2 Apr 2024 03:00:08 -0700
-Message-Id: <20240402100011.13480-11-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
-References: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZQ0PR01CA0005.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:5::11) To SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:25::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4E32032C
+	for <linux-media@vger.kernel.org>; Tue,  2 Apr 2024 11:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712058854; cv=none; b=mrqcbfpaGFH/aYgZPRMftHZoWHs6lxpjlSmWIsC1/MfdrQTxQsqbSoyFuFLTye7asLayXt/5tkReXpJRDZL/3RtUVqyLtpeJKWIct6Y846cbsW3ciKiUcwx6LyzZ0+4i6pYLLfvkwiQ8u8w+a2ijMGp81TobuK6Wwv+yDvpD/HM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712058854; c=relaxed/simple;
+	bh=Se/I7Y5JnZQb/yv46fjeYpcBq8EX4h+IXo2QmYqhaLk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bn+HcATBzlnqcdWGgX3y5a/kFrNKEASRBeFyqXrW9hqBq/vioLXyZFyj99ysuFJLEF+bZwUN0smUOlC/Kso7DsHfcrE3EZdB1ChTxnlp2IZ89Rjku1R2rE0mq71vpBtGmHJa2I+O/a7qIO5Td7bCFymh3pt41MC+iO3A3SC7C5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nYoq6rMr; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nYoq6rMr"
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-22200c78d4fso2930023fac.1
+        for <linux-media@vger.kernel.org>; Tue, 02 Apr 2024 04:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1712058850; x=1712663650; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+tHVM1BhEEgMtmWgfi7Hpgb2iPhmeBdqYyZc0u0XaA=;
+        b=nYoq6rMrFKep79AbzR5AzXjydhtaLeiEypoCC3Y6KXG2CUuylVvfnibUI9E+vO7xJo
+         o2D8nHkBfDpcBPkLphobojWJ6eKWQll4yF0m9AvSE85WYofKa3K2QcVx2nbTTe11izoD
+         xdoKTU3MFtRDL/OifghDaV9kU5YJbQxCBkH28=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712058850; x=1712663650;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D+tHVM1BhEEgMtmWgfi7Hpgb2iPhmeBdqYyZc0u0XaA=;
+        b=rhgdrstOt95OlIaREB39rQphNLimdLn8GTpLYU9kH4dBWQ/jLlutq2xKy5Me+2rTUx
+         Law6+aRTU9NnH7xXPpO57PZtcUrbj4qFMm3aR4JJOPYjqXjXI4hymmpe+PLjpWOJlM1p
+         nqO7ue4cuNuaBRDtAwyQFglVCtiU0rbhFMU6nk1CPpFFbhRtB+Wlawk9/lTJUVKstIC6
+         Oguf2vWHm4ZiQp2T3NT51q31AlGc2pgQeUTgdtaPLW+F1/88XQvvDKDQS4oJWhdYFzm4
+         TwVqdqgjeCs/7r44EzJsOarI2AE83GGX0IuBSOT2Kto/uajG7fMbe+klOV4w5vcnhQrJ
+         Q6yw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZYgUGeauFESAcPK3I0oOSqrk3E2XOg4JV5ndW68EK15tvCXTi6d55UjfPTsQ0p/xpc3kH0lgksCcOeag/s31Y0TEIS4qnpjqns8w=
+X-Gm-Message-State: AOJu0Yxuw+jjnzsz9X2DAIu+WmiaWPMa3wwLb87Cd2A+UaKpVLvSXsTe
+	DKLxI/ECrHMMuoFTf6GI05djxIoedp4mjwtsq65JA++jUvWPzHu+y81Lj4bBWQ4BJfVprN8Esa9
+	SEQ==
+X-Google-Smtp-Source: AGHT+IFyAuZRHfqStsI58WckdUJS99Uvd07M1IT8Wx5MClxTwYnipKerp9xl05VyqNf3TpNuKbkPYA==
+X-Received: by 2002:a05:6870:3052:b0:220:a138:f59f with SMTP id u18-20020a056870305200b00220a138f59fmr12176118oau.31.1712058850465;
+        Tue, 02 Apr 2024 04:54:10 -0700 (PDT)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
+        by smtp.gmail.com with ESMTPSA id uw4-20020a056870ae8400b0022158506852sm3442784oab.54.2024.04.02.04.54.09
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Apr 2024 04:54:10 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6e50e8dcc72so2551675a34.3
+        for <linux-media@vger.kernel.org>; Tue, 02 Apr 2024 04:54:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVsUUq1+w++YgNzEiMSaQxmf89ZgBI8644gCt1KGqxrWKt9tZ0NJQmAQ69ShEAXfOqODzzbcvHG2ofPLzyd/jxTo7AHVFJa/cZL1a0=
+X-Received: by 2002:a05:6830:1bc9:b0:6e8:a28e:8d5 with SMTP id
+ v9-20020a0568301bc900b006e8a28e08d5mr4483126ota.1.1712058849319; Tue, 02 Apr
+ 2024 04:54:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SHXPR01MB0671:EE_|SHXPR01MB0462:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19475ed6-e837-4fe2-7130-08dc52fbbf37
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	jC2asqYZDPvM7257TdOE38s6girr4yTXNr+Z1FQdqcOSxSl4+vD2PdQ+UXut/nc/h7Yj73Ch0Bt2BBO10t3/UjiUhtC8nhcG5EfLPlC1Zv1eWPHq7Vn6wWID/vpdaVxFXsa7g31rJScXftHEGBV8a910XuGm80v5Ocm7xv/fnCjveuJExxQ8n/kJcf4D8LsNpoDH+1dLDjXI3LUDX8OYXszoaOn0tVom3pfB0oeepnWUtluA9Xkb2BmK31ubLDs13PTM6t9Ypx40ddCWiRSfENkbbI6RSavz6ayit0gUDozwLNqg0Vcg3k1tuU4WeeJOil08//PfTGf6eL7JdPx7gMeQyDERimxI7IbKW/GpOda9roNyNRo+d/WcFfjZay3WSy0XefRhzGW0NLA23pzCuSFNSvg87pXMQ7oyRZx/wSQImf/79NunB1LET44TmbnKSCqo+q7XpGV8dnzlht9R2vXSVX+YKAPp0dbHcyrJNPSRN6M88vm/JBN6P0cphNzWrohEBBigK2mFZYrfAVA57HiSVFL3RKfjnJKbY05erDAITHFd9qbof0J8TDj/ia+CJLwwjVr3dQ1prQAsafeWW86h6wWJPIEDj7LFJq4BpHNyhF7TvYhHCBdXVty8MBLhdMjyriLv/r3Cj7CueTOYZA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(52116005)(7416005)(41320700004)(366007)(38350700005)(921011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TtLTMtOAhQ3yKSjXXB2ZSmv4xrSpfNMoekM7kO6NoPEJSJd10koWCiED79Jv?=
- =?us-ascii?Q?l93V+sqYxpaMLZdT/ZttzXbXYKd6xhq0Ji5nD7TWfhPPGYFY9whSCLhKZ90U?=
- =?us-ascii?Q?TVuD5yfvp4s5GupgIM5lhHK4/nUgL2rNGNAQpCt6dYgxNYiZuWLidSRGq4cW?=
- =?us-ascii?Q?5mfgllO2tvQPSEbCUHrmRZ+bBaWwJcDKNq2ycGmiJPQp4hu5GyGxy5dZqLR8?=
- =?us-ascii?Q?y4Ooz3Xe3pCoPrx04zh577GavvMZUf5t9ZWEhGk2mmXUoJAi68BoiDlsh01T?=
- =?us-ascii?Q?JrS+V/0QkIwLdxJy1sb2UzxYxmV8m96lNnjSSlOnLrp7Y9EhsClXRPqX7Vtr?=
- =?us-ascii?Q?5zuCP2a2L6F88CG/ocaT3GRq0/pbVAvipKuSUXJuYlyDXcgeGvZkB9s/DNVR?=
- =?us-ascii?Q?KYeCeVJbPV7T28PVHk/gTtBeUHCHwL9kpneJkBOVLzfzVivulzSKpSgUvWCE?=
- =?us-ascii?Q?xN74pP1doDjKr2FVsd0DmgklpbDaofjTMmUdI4NURzpWNub5om4UHbGrXjFv?=
- =?us-ascii?Q?fW+cFi5CC3Bxj7LIIAIOvzeOU/OmPPSYFCnp15PM3t8QajD8G68HuBP77fcQ?=
- =?us-ascii?Q?D5bAAiWaQQ5RD4dXd05n2ZepaBmquIlST8bprN2d5d5HMqmO5q0XkUnCrqe/?=
- =?us-ascii?Q?MMtHvqvyUS7YQES9dNLJsIjRDGBgA408pyUF8LveFEt8wWSvDysnZIUU49HP?=
- =?us-ascii?Q?xobv11o9oNV3po81Ew5HkOtfmEp/mPECxF81OMB8WeynnwkZ0j+bAmmJXZZp?=
- =?us-ascii?Q?HmAxr5F/z5rwfTPg6O5hyM8LUzS07xNs1RLm/qdNS1ULSsds+HcIxqtcE4lW?=
- =?us-ascii?Q?7gd3XBngvO+sS77fYSJz/ARKzJeA30z9OXqODcNjI1P1Vk+cjPHssrDWUHNn?=
- =?us-ascii?Q?moBeREnUndTjtvNKqRydAXKsItQpv0UvHLLi3/RXf1FhTcYxi63NJ3UGOfdT?=
- =?us-ascii?Q?Clt2ncZPUK05xhwI3A9i3q4XWx1YREsbUr8hI24awK+RWBQcybtKdPS6xmQa?=
- =?us-ascii?Q?D12W7bz1/i91bu8XKH66ELBQG0O1kpjCIjxHQ92FCb3MDq1TA8NrSRBlDIVO?=
- =?us-ascii?Q?jKjIOyY20KiWB33+gjnPdKXVmBkJr4nXYl0/e4egZkBCnMrBSEsIvGn0QLA0?=
- =?us-ascii?Q?5EpF/IEaPAd0Rf1GehffvgGCdrYys5VbUYwXdaNAM9OcOrznS2aMXd4AlpGB?=
- =?us-ascii?Q?Hjde0bBGAbg0YDRpDQa0+PfshlB7abcZNV0DbS2Yw3E7LbDaCflNB35tlcU+?=
- =?us-ascii?Q?Af56rOB9HXebprZVl6Nz3tplVAIAsdBT1XMJ4W+NZb36cQOsadXX6oVyJnAM?=
- =?us-ascii?Q?J1CDCclhS7oZGkMIWObTZV0DOgrj2VbbItVx3XirP9OMoX9QMONtgfglEbrQ?=
- =?us-ascii?Q?02/6/1bloUTipuuxAqIiLeb4Y133HKpiAsNSV5afsAvzMI+TWBBKmO/mRQNp?=
- =?us-ascii?Q?YfTrHVptIHiE5QW9Gi2IeFG0DbSuqYefWipJsKqr3C3QoJ/aq3Ex1w6QvJvz?=
- =?us-ascii?Q?iW1bcI20XJn+ETGeojZeyOkdF460V5zCbuvVMpSI3mYWR0hxqKR2khrrc5YD?=
- =?us-ascii?Q?yT2rXFZMsnnYND3mknKMo6ke+FOvNBJjaZzcOnZSxBwUV09S5ds7v9lC2uEy?=
- =?us-ascii?Q?xt7JCIa9yo3BwXgZ+7lJZT0=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19475ed6-e837-4fe2-7130-08dc52fbbf37
-X-MS-Exchange-CrossTenant-AuthSource: SHXPR01MB0671.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2024 10:00:37.9349
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4h5e6lKJaPFZk5uVM0u8Ch3dT2aehoqFcS641D6ZiqVo+Hncu7rP5CniAWpfHe85Kbw8WF2Bpu7W1dgmC6izRIhT3M49s6UabvY95FpADQWTXFU/jR/JmpyYHtEKa71
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SHXPR01MB0462
+References: <20240328-uvc-fix-relative-ptz-speed-v1-0-17373eb8b2be@securitylive.com>
+ <20240328-uvc-fix-relative-ptz-speed-v1-1-17373eb8b2be@securitylive.com>
+In-Reply-To: <20240328-uvc-fix-relative-ptz-speed-v1-1-17373eb8b2be@securitylive.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 2 Apr 2024 13:53:53 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsyj-Zfzo+1Sxgzz_fQ4Df9rjc_Cj66Bokni_6oJk41Fg@mail.gmail.com>
+Message-ID: <CANiDSCsyj-Zfzo+1Sxgzz_fQ4Df9rjc_Cj66Bokni_6oJk41Fg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] media: uvcvideo: UVC minimum relative pan/tilt/zoom
+ speed fix
+To: johnebgood@securitylive.com
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linh.tp.vu@gmail.com, soyer@irl.hu
+Content-Type: text/plain; charset="UTF-8"
 
-Add V4L2_CAP_IO_MC capabality for video device. User space can enumerate
-formats by mbus code.
+Hi John
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- drivers/staging/media/starfive/camss/stf-video.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe you could add a function like
 
-diff --git a/drivers/staging/media/starfive/camss/stf-video.c b/drivers/staging/media/starfive/camss/stf-video.c
-index d9e51d4e2004..4ca889a7b757 100644
---- a/drivers/staging/media/starfive/camss/stf-video.c
-+++ b/drivers/staging/media/starfive/camss/stf-video.c
-@@ -665,7 +665,7 @@ int stf_video_register(struct stfcamss_video *video,
- 	}
- 
- 	vdev->fops = &stf_vid_fops;
--	vdev->device_caps |= V4L2_CAP_STREAMING;
-+	vdev->device_caps |= V4L2_CAP_STREAMING | V4L2_CAP_IO_MC;
- 	vdev->entity.ops = &stf_media_ops;
- 	vdev->vfl_dir = VFL_DIR_RX;
- 	vdev->release = stf_video_release;
+
+static bool is_relative_ptz_ctr(__u32 id)
+{
+          switch (xctrl->id) {
+           case V4L2_CID_ZOOM_CONTINUOUS:
+           case V4L2_CID_PAN_SPEED:
+            case V4L2_CID_TILT_SPEED:
+                     return true;
+          }
+          return false;
+}
+
+to figure out if a control is relative or not, and avoid code duplication.
+
+
+
+On Fri, 29 Mar 2024 at 00:18, John Bauer via B4 Relay
+<devnull+johnebgood.securitylive.com@kernel.org> wrote:
+>
+> From: John Bauer <johnebgood@securitylive.com>
+>
+> The minimum UVC control value for the relative pan/tilt/zoom speeds
+> cannot be probed as the implementation condenses the pan and tilt
+> direction and speed into two 16 bit values. The minimum cannot be
+> set at probe time because it is probed first and the maximum is not
+> yet known. With this fix if a relative speed control is queried
+> or set the minimum is set and checked based on the additive inverse of
+> the maximum at that time.
+>
+> Signed-off-by: John Bauer <johnebgood@securitylive.com>
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c | 37 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index e59a463c2761..b389ab3ee05d 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1322,9 +1322,25 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+>                 break;
+>         }
+>
+> -       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN)
+> -               v4l2_ctrl->minimum = mapping->get(mapping, UVC_GET_MIN,
+> -                                    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+> +       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN) {
+> +               switch (v4l2_ctrl->id) {
+> +               case V4L2_CID_ZOOM_CONTINUOUS:
+> +               case V4L2_CID_PAN_SPEED:
+> +               case V4L2_CID_TILT_SPEED:
+> +                       /*
+> +                        * For the relative speed implementation the minimum
+> +                        * value cannot be probed so it becomes the additive
+> +                        * inverse of maximum.
+> +                        */
+> +                       v4l2_ctrl->minimum = -1 * mapping->get(mapping, UVC_GET_MAX,
+> +                                               uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+> +                       break;
+> +               default:
+> +                       v4l2_ctrl->minimum = mapping->get(mapping, UVC_GET_MIN,
+> +                                               uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+> +                       break;
+> +               }
+> +       }
+>
+>         if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MAX)
+>                 v4l2_ctrl->maximum = mapping->get(mapping, UVC_GET_MAX,
+> @@ -1914,6 +1930,21 @@ int uvc_ctrl_set(struct uvc_fh *handle,
+>                                    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
+>                 max = mapping->get(mapping, UVC_GET_MAX,
+>                                    uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
+> +
+> +               /*
+> +                * For the relative speed implementation the minimum
+> +                * value cannot be probed so it becomes the additive
+> +                * inverse of maximum.
+> +                */
+> +               switch (xctrl->id) {
+> +               case V4L2_CID_ZOOM_CONTINUOUS:
+> +               case V4L2_CID_PAN_SPEED:
+> +               case V4L2_CID_TILT_SPEED:
+> +                       min = max * -1;
+> +               default:
+> +                       break;
+> +               }
+> +
+>                 step = mapping->get(mapping, UVC_GET_RES,
+>                                     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
+>                 if (step == 0)
+>
+> --
+> 2.34.1
+>
+>
+
+
 -- 
-2.25.1
-
+Ricardo Ribalda
