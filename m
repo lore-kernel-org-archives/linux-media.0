@@ -1,189 +1,385 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CD91C683;
-	Wed,  3 Apr 2024 12:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935B61EEF9
+	for <linux-media@vger.kernel.org>; Wed,  3 Apr 2024 13:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712147975; cv=none; b=CauaBvQN/sGjmfB26ys+nFkja71njZmAQLaJZm5Us3eSuWw845RUWo+wkrzHAQz/GhK3f2kQ1K/pK7baEknK5AmgAYYiVSP5HAB9Dml7vBefjUzHCSeG7hyLWRAOaDFfP3RynIVJYr+QroWIyhdYdDJVTdRCrJ0O2XMBpWtttDk=
+	t=1712149536; cv=none; b=fV4ZOhEs9WD22NyKKjCIJAcDbK/2lXKEmgWEDtRXnDEwMF3wVD+lLJcZUaDTQqhP5vnpV/ZD0apaCIz/WhuqHZ8SxHuLrOhYyJ/kf8KPfYGlugzN9+OXHQCVFADtSH71kGNsCY/F6l6DRyI6G4/gxOuyNoM7LF5/8G/xXcCt7Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712147975; c=relaxed/simple;
-	bh=56cFVVN36vdvA9j0k6U4c9Yyi7PsljXwFIP8sKfDAn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZPIWcFRd3dp1PjmeYMy3nTYvYtoUPLeXR0v4edGJYoDOVsiIJR+sZn6DWS8wFI3lhU3XHQHUINBR0DpTcBzfywvkX3A23qRZqfrO4qzyLJlJYJ4M2OBHs95Tw6qdn5Lc4ZNAptDkNbW26GTqbP5eVgxQJlJJlJ6U6ocoIRlZ3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=B2u3Aj7J; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1712149536; c=relaxed/simple;
+	bh=yJFfk8iKMdWI1JZlWLFW1SUyq2DjiFK2WrYXGgsrvhY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Cw3CPUrkDtl1c5J6x4U/yOu/aAvd56fr9qt2zRnlcZxiPzlSxbKWc6BhPwqLc783MdVPGlokRCyPXsQGmW4s+lMq5wA4QpxqWRU87GKDe0X5hOs23N4q6U688JHKffiBot3K/r5ZZxPsAAEOY5DL+kGiEgcA66s+/espN6G2UxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=z94YHzoU; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="B2u3Aj7J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1712147972;
-	bh=56cFVVN36vdvA9j0k6U4c9Yyi7PsljXwFIP8sKfDAn4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B2u3Aj7JWJ8T2VlEkSysWrQyL+7YwxPLSHmUGGV4BCQp8UFuxEVhBu/+jKSjZtaER
-	 vCqPQtjmwNfKZQbcMUePtxgVz+Kj6lPlMzM07fINBNnFf+6jGU+LlFRayM31Mee6jO
-	 XuvzckZb1w9G7nOLmdyKUFnydK0J1mornC2SEZ+eBKyBG9MGasDoorQ1E6ijzyLNs6
-	 ynJ4qR7K9G5Ho7qktbwUev0m2NHYsNYnU5F7PhHp6POrq4/5xNyXLkKGSkgt0Mib4z
-	 YVajJb6UlXXb08K4lXDsHnTQ0hmKMZpZoRKAcrJ4tXGDyyYDrL77NcPxfclDI4Ercj
-	 shje3a066P9Qw==
-Received: from localhost (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sebastianfricke)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C26C6378200D;
-	Wed,  3 Apr 2024 12:39:31 +0000 (UTC)
-Date: Wed, 3 Apr 2024 14:39:30 +0200
-From: Sebastian Fricke <sebastian.fricke@collabora.com>
-To: Yunfei Dong <yunfei.dong@mediatek.com>
-Cc: =?utf-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4=?= Prado <nfraprado@collabora.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Nathan Hebert <nhebert@chromium.org>,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Fritz Koenig <frkoenig@chromium.org>,
-	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH] media: mediatek: vcodec: fix the error sizeimage for
- 10bit bitstream
-Message-ID: <20240403123930.wkzgxb6lymzb7hng@basti-XPS-13-9310>
-References: <20240403093018.13168-1-yunfei.dong@mediatek.com>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="z94YHzoU"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 433AMQxL019566;
+	Wed, 3 Apr 2024 14:26:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=AM1e38nSHiOMckC9tX0EhPMShfKIZQAQAMMPzCocEFc=; b=z9
+	4YHzoU8sy/Dns7VA5+OGXZIsh6XEYmmo9ROqhrV0/1tl8Os94w6RosPlFO36UZ/3
+	XlPb6V8Sj5QzC23BB8zTQ7BdUeds8yzJ6L/Et4258jmr2erSJ0a/8W8pjNQD5pcp
+	gWN0iEldkZRRPQLpUgarvyR/fDN86jfOWUzQ8t5C9NDlJfNrI8Boh1DYclCMDAUh
+	2HCzpKznHoA9VwUKdkKWMF7h9EiBMcTbasLbbUO48lxGsyA0ncIVAVJLfoTuuy9B
+	fXpLEeaVpFOcfVF0VMGXmI39AkgWh+8Co1PuXmvHjMrmYwZsNiYjLdu0f/NcfA9Z
+	Dhm/BvRj6LTNYdrgTIpQ==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3x6w65714b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Apr 2024 14:26:54 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E112E40044;
+	Wed,  3 Apr 2024 14:26:50 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AEA64218633;
+	Wed,  3 Apr 2024 14:26:29 +0200 (CEST)
+Received: from [10.130.72.241] (10.130.72.241) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 3 Apr
+ 2024 14:26:29 +0200
+Message-ID: <b6cda7fa-c62c-45ed-9c1f-b2acfae1e249@foss.st.com>
+Date: Wed, 3 Apr 2024 14:26:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20240403093018.13168-1-yunfei.dong@mediatek.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] media: i2c: st-vgxy61: Add support for embedded data
+To: Julien Massot <julien.massot@collabora.com>, <mchehab@kernel.org>,
+        <sakari.ailus@linux.intel.com>, <sylvain.petinot@foss.st.com>
+CC: <linux-media@vger.kernel.org>, <kernel@collabora.com>
+References: <20240315085158.1213159-1-julien.massot@collabora.com>
+ <20240315085158.1213159-3-julien.massot@collabora.com>
+Content-Language: en-US
+From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+In-Reply-To: <20240315085158.1213159-3-julien.massot@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_10,2024-04-03_01,2023-05-22_02
 
-Hey Yunfei,
+Hi Julien,
 
-On 03.04.2024 17:30, Yunfei Dong wrote:
->The sizeimage of each plane are calculated the same way for 8bit and
+On 3/15/24 09:51, Julien Massot wrote:
+> Add support for embedded data. This introduces two internal pads for pixel
+> and embedded data streams. The sensor can send ISL data at the begginning
 
-s/The sizeimage of each plane are/The sizeimage for each plane is/
+Typo 'beginning'.
 
->10bit bitstream. Need to enlarge the sizeimage with simeimage*5/4 for
->10bit bitstream when try and set fmt.
+> of each frame.
+> 
+> The ISL data contains information related to the current frame such as:
+> ROI, cropping and orientation, gains, thermal sensors values,
+> frame counter..
+> 
+> The Intelligent Status Line follows the CCS embedded data format definition
+> regarding the tagged data but not for the registers address, therefore the
+> format code is MEDIA_BUS_FMT_META_8 and not MEDIA_BUS_FMT_CCS_EMBEDDED.
+> 
+> Signed-off-by: Julien Massot <julien.massot@collabora.com>
+> ---
+>  drivers/media/i2c/st-vgxy61.c | 172 +++++++++++++++++++++++++++++++---
+>  1 file changed, 160 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/st-vgxy61.c b/drivers/media/i2c/st-vgxy61.c
+> index 733713f909cf..e8302456a8d9 100644
+> --- a/drivers/media/i2c/st-vgxy61.c
+> +++ b/drivers/media/i2c/st-vgxy61.c
+> @@ -88,11 +88,16 @@
+>  #define VGXY61_REG_PATGEN_SHORT_DATA_B			CCI_REG16_LE(0x0954)
+>  #define VGXY61_REG_PATGEN_SHORT_DATA_GB			CCI_REG16_LE(0x0956)
+>  #define VGXY61_REG_BYPASS_CTRL				CCI_REG8(0x0a60)
+> +#define VGXY61_ISL_BYPASS				BIT(3)
+> +#define VGXY61_ASIL_BYPASS				BIT(2)
+>  
+>  #define VGX661_WIDTH					1464
+>  #define VGX661_HEIGHT					1104
+>  #define VGX761_WIDTH					1944
+>  #define VGX761_HEIGHT					1204
+> +/* two status lines (ISL), of 256 bytes each */
+> +#define VGXY61_META_WIDTH				256
+> +#define VGXY61_META_HEIGHT				2
+>  #define VGX661_DEFAULT_MODE				1
+>  #define VGX761_DEFAULT_MODE				1
+>  #define VGX661_SHORT_ROT_TERM				93
+> @@ -112,6 +117,18 @@
+>  #define VGXY61_FWPATCH_REVISION_MINOR			0
+>  #define VGXY61_FWPATCH_REVISION_MICRO			5
+>  
+> +enum {
+> +	VGXY61_PAD_SOURCE,
+> +	VGXY61_PAD_PIXEL,
+> +	VGXY61_PAD_META,
+> +	VGXY61_NUM_PADS,
+> +};
+> +
+> +enum {
+> +	VGXY61_STREAM_PIXEL,
+> +	VGXY61_STREAM_META,
+> +};
+> +
+>  static const u8 patch_array[] = {
+>  	0xbf, 0x00, 0x05, 0x20, 0x06, 0x01, 0xe0, 0xe0, 0x04, 0x80, 0xe6, 0x45,
+>  	0xed, 0x6f, 0xfe, 0xff, 0x14, 0x80, 0x1f, 0x84, 0x10, 0x42, 0x05, 0x7c,
+> @@ -382,7 +399,7 @@ struct vgxy61_dev {
+>  	struct i2c_client *i2c_client;
+>  	struct regmap *regmap;
+>  	struct v4l2_subdev sd;
+> -	struct media_pad pad;
+> +	struct media_pad pads[VGXY61_NUM_PADS];
+>  	struct regulator_bulk_data supplies[ARRAY_SIZE(vgxy61_supply_name)];
+>  	struct gpio_desc *reset_gpio;
+>  	struct clk *xclk;
+> @@ -655,6 +672,13 @@ static int vgxy61_get_selection(struct v4l2_subdev *sd,
+>  {
+>  	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+>  
+> +	/*
+> +	 * The embedded data stream doesn't support selection rectangles,
+> +	 * neither on the embedded data pad nor on the source pad.
+> +	 */
+> +	if (sel->pad == VGXY61_PAD_META)
+> +		return -EINVAL;
+> +
+>  	switch (sel->target) {
+>  	case V4L2_SEL_TGT_CROP:
+>  		sel->r = sensor->current_mode->crop;
+> @@ -676,6 +700,16 @@ static int vgxy61_enum_mbus_code(struct v4l2_subdev *sd,
+>  				 struct v4l2_subdev_state *sd_state,
+>  				 struct v4l2_subdev_mbus_code_enum *code)
+>  {
+> +	if (code->pad == VGXY61_PAD_META ||
+> +	    (code->pad == VGXY61_PAD_SOURCE &&
+> +	     code->stream == VGXY61_STREAM_META)) {
+> +		if (code->index > 0)
+> +			return -EINVAL;
+> +
+> +		code->code = MEDIA_BUS_FMT_META_8;
+> +		return 0;
+> +	}
+> +
+>  	if (code->index >= ARRAY_SIZE(vgxy61_supported_codes))
+>  		return -EINVAL;
+>  
+> @@ -703,6 +737,19 @@ static int vgxy61_enum_frame_size(struct v4l2_subdev *sd,
+>  {
+>  	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+>  
+> +	if (fse->pad == VGXY61_PAD_META ||
+> +	    (fse->pad == VGXY61_PAD_SOURCE &&
+> +	     fse->stream == VGXY61_STREAM_META)) {
+> +		if (fse->index > 0)
+> +			return -EINVAL;
+> +
+> +		fse->min_width = VGXY61_META_WIDTH;
+> +		fse->max_width = VGXY61_META_WIDTH;
+> +		fse->min_height = VGXY61_META_HEIGHT;
+> +		fse->max_height = VGXY61_META_HEIGHT;
+> +		return 0;
+> +	}
+> +
+>  	if (fse->index >= sensor->sensor_modes_nb)
+>  		return -EINVAL;
+>  
+> @@ -1159,24 +1206,54 @@ static int vgxy61_s_stream(struct v4l2_subdev *sd, int enable)
+>  	return ret;
+>  }
+>  
+> -static int vgxy61_set_fmt(struct v4l2_subdev *sd,
+> -			  struct v4l2_subdev_state *sd_state,
+> -			  struct v4l2_subdev_format *format)
+> +static int __vgxy61_set_fmt(struct v4l2_subdev *sd,
+> +			    struct v4l2_subdev_state *sd_state,
+> +			    struct v4l2_mbus_framefmt *format,
+> +			    enum v4l2_subdev_format_whence which,
+> +			    unsigned int pad, unsigned int stream)
+>  {
+>  	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+> +	struct v4l2_mbus_framefmt *src_pix_fmt, *src_meta_fmt, *pix_fmt,
+> +		*meta_fmt;
+>  	const struct vgxy61_mode_info *new_mode;
+>  	int ret;
+>  
+>  	if (sensor->streaming)
+>  		return -EBUSY;
+>  
+> -	ret = vgxy61_try_fmt_internal(sd, &format->format, &new_mode);
+> +	/*
+> +	 * Allow setting format on internal pixel pad as well as the source
+> +	 * pad's pixel stream (for compatibility).
+> +	 */
+> +	if ((pad == VGXY61_PAD_SOURCE && stream == VGXY61_STREAM_META) ||
+> +	    pad == VGXY61_PAD_META) {
+> +		*format = *v4l2_subdev_state_get_format(sd_state, pad, stream);
+> +		return 0;
+> +	}
+> +
+> +	pix_fmt = v4l2_subdev_state_get_format(sd_state, VGXY61_PAD_PIXEL, 0);
+> +	meta_fmt = v4l2_subdev_state_get_format(sd_state, VGXY61_PAD_META, 0);
+> +	src_pix_fmt = v4l2_subdev_state_get_format(sd_state, VGXY61_PAD_SOURCE,
+> +						   VGXY61_STREAM_PIXEL);
+> +	src_meta_fmt = v4l2_subdev_state_get_format(sd_state, VGXY61_PAD_SOURCE,
+> +						    VGXY61_STREAM_META);
+> +
+> +	ret = vgxy61_try_fmt_internal(sd, format, &new_mode);
+>  	if (ret)
+>  		return ret;
+>  
+> -	*v4l2_subdev_state_get_format(sd_state, format->pad) = format->format;
+> +	pix_fmt->width = format->width;
+> +	pix_fmt->height = format->height;
+> +	pix_fmt->code = format->code;
+> +	pix_fmt->field = V4L2_FIELD_NONE;
+> +
+> +	*format = *src_pix_fmt = *pix_fmt;
+> +	meta_fmt->code = MEDIA_BUS_FMT_META_8;
+> +	meta_fmt->width = VGXY61_META_WIDTH;
+> +	meta_fmt->height = VGXY61_META_HEIGHT;
+> +	*src_meta_fmt = *meta_fmt;
+>  
+> -	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+> +	if (which == V4L2_SUBDEV_FORMAT_TRY)
+>  		return 0;
+>  
+>  	sensor->current_mode = new_mode;
+> @@ -1202,16 +1279,78 @@ static int vgxy61_set_fmt(struct v4l2_subdev *sd,
+>  	return ret;
+>  }
+>  
+> +static int vgxy61_set_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *sd_state,
+> +			  struct v4l2_subdev_format *fmt)
+> +{
+> +	return __vgxy61_set_fmt(sd, sd_state, &fmt->format, fmt->which,
+> +				fmt->pad, fmt->stream);
+> +}
+> +
+> +static int vgxy61_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +				 struct v4l2_mbus_frame_desc *desc)
+> +{
+> +	struct v4l2_subdev_state *sd_state;
+> +	struct v4l2_mbus_framefmt *fmt;
+> +
+> +	desc->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
+> +	desc->num_entries = 2;
+> +
+> +	sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+> +	fmt = v4l2_subdev_state_get_format(sd_state, VGXY61_PAD_SOURCE,
+> +					   VGXY61_STREAM_PIXEL);
+> +	v4l2_subdev_unlock_state(sd_state);
+> +
+> +	desc->entry[0].stream = VGXY61_STREAM_PIXEL;
+> +	desc->entry[0].pixelcode = fmt->code;
+> +	desc->entry[0].bus.csi2.dt = get_data_type_by_code(fmt->code);
+> +
+> +	desc->entry[1].stream = VGXY61_STREAM_META;
+> +	desc->entry[1].pixelcode = MEDIA_BUS_FMT_META_8;
+> +	desc->entry[1].bus.csi2.dt = MIPI_CSI2_DT_EMBEDDED_8B;
+> +
+> +	return 0;
+> +}
+> +
+>  static int vgxy61_init_state(struct v4l2_subdev *sd,
+>  			     struct v4l2_subdev_state *sd_state)
+>  {
+>  	struct vgxy61_dev *sensor = to_vgxy61_dev(sd);
+>  	struct v4l2_subdev_format fmt = { 0 };
+> +	struct v4l2_subdev_route routes[] = {
+> +		{
+> +			.sink_pad = VGXY61_PAD_PIXEL,
+> +			.source_pad = VGXY61_PAD_SOURCE,
+> +			.source_stream = VGXY61_STREAM_PIXEL,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE |
+> +				 V4L2_SUBDEV_ROUTE_FL_IMMUTABLE,
+> +		}, {
+> +			.sink_pad = VGXY61_PAD_META,
+> +			.source_pad = VGXY61_PAD_SOURCE,
+> +			.source_stream = VGXY61_STREAM_META,
+> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+> +		},
+> +	};
+> +	struct v4l2_subdev_krouting routing = {
+> +		.routes = routes,
+> +		.num_routes = ARRAY_SIZE(routes),
+> +	};
+> +	struct v4l2_subdev_state *active_state;
+> +	int ret;
+> +
+> +	ret = v4l2_subdev_set_routing(sd, sd_state, &routing);
+> +	if (ret)
+> +		return ret;
+> +
+> +	active_state = v4l2_subdev_get_locked_active_state(sd);
+>  
+>  	vgxy61_fill_framefmt(sensor, sensor->current_mode, &fmt.format,
+>  			     VGXY61_MEDIA_BUS_FMT_DEF);
+>  
+> -	return vgxy61_set_fmt(sd, sd_state, &fmt);
+> +	return __vgxy61_set_fmt(sd, sd_state, &fmt.format,
+> +				active_state == sd_state ?
+> +				V4L2_SUBDEV_FORMAT_ACTIVE :
+> +				V4L2_SUBDEV_FORMAT_TRY, VGXY61_PAD_PIXEL, 0);
+>  }
+>  
+>  static int vgxy61_s_ctrl(struct v4l2_ctrl *ctrl)
+> @@ -1364,6 +1503,7 @@ static const struct v4l2_subdev_pad_ops vgxy61_pad_ops = {
+>  	.enum_mbus_code = vgxy61_enum_mbus_code,
+>  	.get_fmt = v4l2_subdev_get_fmt,
+>  	.set_fmt = vgxy61_set_fmt,
+> +	.get_frame_desc = vgxy61_get_frame_desc,
+>  	.get_selection = vgxy61_get_selection,
+>  	.enum_frame_size = vgxy61_enum_frame_size,
+>  };
+> @@ -1478,7 +1618,8 @@ static int vgxy61_configure(struct vgxy61_dev *sensor)
+>  	cci_write(sensor->regmap, VGXY61_REG_CLK_SYS_PLL_MULT, mult, &ret);
+>  	cci_write(sensor->regmap, VGXY61_REG_OIF_CTRL, sensor->oif_ctrl, &ret);
+>  	cci_write(sensor->regmap, VGXY61_REG_FRAME_CONTENT_CTRL, 0, &ret);
+> -	cci_write(sensor->regmap, VGXY61_REG_BYPASS_CTRL, 4, &ret);
+> +	cci_write(sensor->regmap, VGXY61_REG_BYPASS_CTRL, VGXY61_ASIL_BYPASS,
+> +		  &ret);
+>  	if (ret)
+>  		return ret;
+>  	vgxy61_update_gpios_strobe_polarity(sensor, sensor->gpios_polarity);
+> @@ -1743,8 +1884,14 @@ static int vgxy61_probe(struct i2c_client *client)
+>  	v4l2_i2c_subdev_init(&sensor->sd, client, &vgxy61_subdev_ops);
+>  	sensor->sd.internal_ops = &vgxy61_internal_ops;
+>  	sensor->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> -			    V4L2_SUBDEV_FL_HAS_EVENTS;
+> -	sensor->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +			    V4L2_SUBDEV_FL_HAS_EVENTS |
+> +			    V4L2_SUBDEV_FL_STREAMS;
+> +	sensor->pads[VGXY61_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> +	sensor->pads[VGXY61_PAD_PIXEL].flags =
+> +		MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL;
+> +	sensor->pads[VGXY61_PAD_META].flags =
+> +		MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL;
+> +
+>  	sensor->sd.entity.ops = &vgxy61_subdev_entity_ops;
+>  	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+>  
+> @@ -1778,7 +1925,8 @@ static int vgxy61_probe(struct i2c_client *client)
+>  		goto error_power_off;
+>  	}
+>  
+> -	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
+> +	ret = media_entity_pads_init(&sensor->sd.entity,
+> +				     ARRAY_SIZE(sensor->pads), sensor->pads);
+>  	if (ret) {
+>  		dev_err(&client->dev, "pads init failed %d\n", ret);
+>  		goto error_handler_free;
 
-s/bitstream/bistreams/
-s/Need to enlarge the sizeimage with simeimage*5/4 for 10bit bitstream when try and set fmt./
-   Scale up the sizeimage by 25% for 10-bit bitstreams in try_fmt./
+-- 
+Regards,
 
->
->Fixes: 9d86be9bda6c ("media: mediatek: vcodec: Add driver to support 10bit")
->Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
->---
-> .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  | 47 ++++++++++++++-----
-> 1 file changed, 34 insertions(+), 13 deletions(-)
->
->diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
->index 9107707de6c4..45209894f1fe 100644
->--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
->+++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
->@@ -259,6 +259,7 @@ static int vidioc_try_fmt(struct mtk_vcodec_dec_ctx *ctx, struct v4l2_format *f,
-> 		pix_fmt_mp->num_planes = 1;
-> 		pix_fmt_mp->plane_fmt[0].bytesperline = 0;
-> 	} else if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
->+		unsigned int dram_y, dram_c, dram_y_10bit, dram_c_10bit;
-> 		int tmp_w, tmp_h;
->
-> 		/*
->@@ -280,22 +281,42 @@ static int vidioc_try_fmt(struct mtk_vcodec_dec_ctx *ctx, struct v4l2_format *f,
-> 		    (pix_fmt_mp->height + 64) <= frmsize->max_height)
-> 			pix_fmt_mp->height += 64;
->
->-		mtk_v4l2_vdec_dbg(0, ctx,
->-				  "before resize wxh=%dx%d, after resize wxh=%dx%d, sizeimage=%d",
->-				  tmp_w, tmp_h, pix_fmt_mp->width, pix_fmt_mp->height,
->-				  pix_fmt_mp->width * pix_fmt_mp->height);
->+		dram_y = pix_fmt_mp->width * pix_fmt_mp->height;
->+		dram_c = dram_y / 2;
->+
->+		dram_y_10bit = dram_y * 5 / 4;
->+		dram_c_10bit = dram_y_10bit / 2;
-
-I'd skip the two 10 bit variables (dram_y_10bit & dram_c_10bit) and
-instead do it like this:
-
-```
-   dram_stride = pix_fmt_mp->width;
-   if (ctx->is_10bit_bitstream)
-     dram_stride = dram_stride * 5 / 4;
-
-   dram_y = dram_stride * pix_fmt_mp->height;
-   dram_c = dram_y / 2;
-
-   if (pix_fmt_mp->num_planes == 1) {
-     pix_fmt_mp->plane_fmt[0].bytesperline = dram_stride;
-     pix_fmt_mp->plane_fmt[0].sizeimage = dram_y + dram_c;
-   } else {
-     pix_fmt_mp->plane_fmt[0].bytesperline = dram_stride;
-     pix_fmt_mp->plane_fmt[1].bytesperline = dram_stride;
-     pix_fmt_mp->plane_fmt[0].sizeimage = dram_y;
-     pix_fmt_mp->plane_fmt[1].sizeimage = dram_c;
-     ...
-   }
-```
-
-Also, why do you call all the variables dram?
-
-Please this isn't tested, but shows the general direction to repeat a
-lot less code.
-
-Greetings,
-Sebastian
-
->
-> 		pix_fmt_mp->num_planes = fmt->num_planes;
->-		pix_fmt_mp->plane_fmt[0].sizeimage =
->-				pix_fmt_mp->width * pix_fmt_mp->height;
->-		pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
->-
->-		if (pix_fmt_mp->num_planes == 2) {
->-			pix_fmt_mp->plane_fmt[1].sizeimage =
->-				(pix_fmt_mp->width * pix_fmt_mp->height) / 2;
->-			pix_fmt_mp->plane_fmt[1].bytesperline =
->-				pix_fmt_mp->width;
->+		if (pix_fmt_mp->num_planes == 1) {
->+			if (ctx->is_10bit_bitstream) {
->+				pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width * 5 / 4;
->+				pix_fmt_mp->plane_fmt[0].sizeimage = dram_y_10bit + dram_c_10bit;
->+			} else {
->+				pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
->+				pix_fmt_mp->plane_fmt[0].sizeimage = dram_y + dram_c;
->+			}
->+		} else {
->+			if (ctx->is_10bit_bitstream) {
->+				pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width * 5 / 4;
->+				pix_fmt_mp->plane_fmt[1].bytesperline = pix_fmt_mp->width * 5 / 4;
->+
->+				pix_fmt_mp->plane_fmt[0].sizeimage = dram_y_10bit;
->+				pix_fmt_mp->plane_fmt[1].sizeimage = dram_c_10bit;
->+			} else {
->+				pix_fmt_mp->plane_fmt[0].bytesperline = pix_fmt_mp->width;
->+				pix_fmt_mp->plane_fmt[1].bytesperline = pix_fmt_mp->width;
->+
->+				pix_fmt_mp->plane_fmt[0].sizeimage = dram_y;
->+				pix_fmt_mp->plane_fmt[1].sizeimage = dram_c;
->+			}
-> 		}
->+
->+		mtk_v4l2_vdec_dbg(0, ctx,
->+				  "before resize:%dx%d, after resize:%dx%d, sizeimage=0x%x_0x%x",
->+				  tmp_w, tmp_h, pix_fmt_mp->width, pix_fmt_mp->height,
->+				  pix_fmt_mp->plane_fmt[0].sizeimage,
->+				  pix_fmt_mp->plane_fmt[1].sizeimage);
-> 	}
->
-> 	pix_fmt_mp->flags = 0;
->-- 
->2.25.1
->
+Benjamin
