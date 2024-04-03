@@ -1,184 +1,114 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A97656B9E;
-	Wed,  3 Apr 2024 07:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDB34D133;
+	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712128066; cv=none; b=PqdPH+OxYJoaRpZRAg6InP2bOQdnVN87D7XZsuFLuLKuSqH51YnULGftbogto7UbP+6z+CghGMbyjkyb5vD6EbXZq95Egufuf1H86gwWesYGG2Oa0fG8E8We30qGWjuUoS+uwMJmiJ0VWHIcbmVutrdDY77ptUz2SENXz5ru/qs=
+	t=1712128827; cv=none; b=JBGhuDAR4Bx8juI4iQ+efe/z1ILTtsragkY/T8EGs87IW71saTzaMUflwTZQakXD9bOtWdF492rbYIfZ0xibWYFBhCXFakPRAZ9d0mKPSE9N2uLx6y+OpRGG8kLfGjZTpKeKqZLlfao6d7xjSyK7H37vYzMUS06wTr66W5wwv9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712128066; c=relaxed/simple;
-	bh=gUc8ZxfqbwyO7IUWoIIsh7AjL01Yq8Z3hs8wwrRJNG0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oz6sPgeAhlbdcRBuRt7WGFdRAFFb/rGkNdTEwdDVccsQO1ULDpNeleQ8h8Ta0yr4Lplpmv0QGottF0TPEKNFtwc70OKPeZanHYefef6s57bzwxD0UGdTvPuuGMmeOS9hOENS68g6OwFAJLPrjWowBqeEtBlxsb/s3zpO4dHQjME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Mv3zcQez; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1712128827; c=relaxed/simple;
+	bh=+ye0ANlJ3AJBgvzVY9w5v2SVeZwz8u+XeZZr7JXa8yQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qwf/I29g+xyF2yR0210oJSAf2vXElfm2SG5PSWyhHvmUP8XMVjCpoB5ewgyuRI2JIzuR6de7RFuLvQ7A+GuX6Ki5NeGnLINgaSCi2qQdxwKi9sfidZBJCSaHOEKYV21GrE0OgWZaEcNmoOkbSMZa6EAnQiepxV6b0SvXx8N4dWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1qg+8I9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Mv3zcQez"
-X-UUID: d8ad35fcf18811eeb8927bc1f75efef4-20240403
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ut87YCMpGiLKr5P9aLD+HP7GJ2FoyM+iTiw6ikmp5rQ=;
-	b=Mv3zcQez8xjjD/6B8jZdGsmGa16tL4kDyIu6IaiFAIagztXw8AAK7K7plW9NM8HvlxAb9eD7RzdNy02wK6E36o6wIPR1UnZdwD9VXCWx3kEL5UcsdaCRC6Nu6gUlX+f1A/28njmSDZvZcbUUv2PMaz2+inCgsxi80xSl4Oo85BQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:9d325e0c-ab87-4adf-bd2c-2947075841c2,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6f543d0,CLOUDID:24f74282-4f93-4875-95e7-8c66ea833d57,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: d8ad35fcf18811eeb8927bc1f75efef4-20240403
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-	(envelope-from <shawn.sung@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1621767391; Wed, 03 Apr 2024 15:07:34 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 3 Apr 2024 15:07:33 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 3 Apr 2024 15:07:33 +0800
-From: Shawn Sung <shawn.sung@mediatek.com>
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Sumit Semwal
-	<sumit.semwal@linaro.org>, =?UTF-8?q?Christian=20K=C3=B6nig?=
-	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
-	<linaro-mm-sig@lists.linaro.org>, Hsiao Chien Sung
-	<shawn.sung@mediatek.corp-partner.google.com>
-Subject: [PATCH v4 0/9] Add mediate-drm secure flow for SVP
-Date: Wed, 3 Apr 2024 15:07:23 +0800
-Message-ID: <20240403070732.22085-1-shawn.sung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1qg+8I9"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D27DC433F1;
+	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712128826;
+	bh=+ye0ANlJ3AJBgvzVY9w5v2SVeZwz8u+XeZZr7JXa8yQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=D1qg+8I9Meq1gWuzmyCbX4jtvHi/dBLn4GGYDCLGGaZs5xp4Auq/NFEyxa9Ph1o1Y
+	 qWhiXcwxf9NG6v6l07IIjI04GUqEipwFVgZEx32tIE7ukfO5Rz8brl4g1jGgb4hgRL
+	 BfdtMRJlaaVKkJcJVJ1gTiNSOI/3YheE6wOjqa8WJWHKtbKdEktsWcAn6BRvtquMVH
+	 wXOsnXakNmxTnsw9IHakAhf0Rhms220TNXHv3673cZaVCMJWRFaP0Uv48mizJD97va
+	 VLz/8a+/ebY1NU1scfuRGM8QriPQtqgMJ9iHLCQNfYjYEqIisdiiEF/P2GoHLWAY6a
+	 VYjN8k6uUcFUw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4C2A0C43168;
+	Wed,  3 Apr 2024 07:20:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/18] platform/chrome: provide ID table for avoiding fallback
+ match
+From: patchwork-bot+chrome-platform@kernel.org
+Message-Id: 
+ <171212882630.6261.5572341363969592219.git-patchwork-notify@kernel.org>
+Date: Wed, 03 Apr 2024 07:20:26 +0000
+References: <20240329075630.2069474-1-tzungbi@kernel.org>
+In-Reply-To: <20240329075630.2069474-1-tzungbi@kernel.org>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: bleung@chromium.org, groeck@chromium.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, hverkuil-cisco@xs4all.nl, mchehab@kernel.org, sre@kernel.org,
+ alexandre.belloni@bootlin.com, chrome-platform@lists.linux.dev,
+ pmalani@chromium.org, linux-gpio@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rtc@vger.kernel.org, krzk@kernel.org
 
-From: Hsiao Chien Sung <shawn.sung@mediatek.corp-partner.google.com>
+Hello:
 
-Memory Definitions:
-secure memory - Memory allocated in the TEE (Trusted Execution
-Environment) which is inaccessible in the REE (Rich Execution
-Environment, i.e. linux kernel/userspace).
-secure handle - Integer value which acts as reference to 'secure
-memory'. Used in communication between TEE and REE to reference
-'secure memory'.
-secure buffer - 'secure memory' that is used to store decrypted,
-compressed video or for other general purposes in the TEE.
-secure surface - 'secure memory' that is used to store graphic buffers.
+This series was applied to chrome-platform/linux.git (for-kernelci)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Memory Usage in SVP:
-The overall flow of SVP starts with encrypted video coming in from an
-outside source into the REE. The REE will then allocate a 'secure
-buffer' and send the corresponding 'secure handle' along with the
-encrypted, compressed video data to the TEE. The TEE will then decrypt
-the video and store the result in the 'secure buffer'. The REE will
-then allocate a 'secure surface'. The REE will pass the 'secure
-handles' for both the 'secure buffer' and 'secure surface' into the
-TEE for video decoding. The video decoder HW will then decode the
-contents of the 'secure buffer' and place the result in the 'secure
-surface'. The REE will then attach the 'secure surface' to the overlay
-plane for rendering of the video.
+On Fri, 29 Mar 2024 15:56:12 +0800 you wrote:
+> Inspired by [1].  Turn all MODULE_ALIAS() in ChromeOS EC platform drivers into
+> proper platform_device_id table and MODULE_DEVICE_TABLE().
+> 
+> The series is basically looking for drivers from:
+> - `struct mfd_cell` in drivers/mfd/cros_ec_dev.c.
+> - grep -R MODULE_ALIAS drivers/platform/chrome/.
+> 
+> [...]
 
-Everything relating to ensuring security of the actual contents of the
-'secure buffer' and 'secure surface' is out of scope for the REE and
-is the responsibility of the TEE.
+Here is the summary with links:
+  - [01/18] media: platform: cros-ec: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [02/18] gpio: cros-ec: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [03/18] rtc: cros-ec: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [04/18] platform/chrome: cros_ec_sensorhub: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [05/18] power: supply: cros_usbpd: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [06/18] platform/chrome: cros_usbpd_logger: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [07/18] platform/chrome: cros_usbpd_notify: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [08/18] platform/chrome: cros_ec_chardev: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [09/18] platform/chrome: cros_ec_debugfs: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [10/18] platform/chrome: cros_ec_sysfs: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [11/18] power: supply: cros_pchg: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [12/18] platform/chrome: cros_ec_lightbar: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [13/18] platform/chrome: cros_ec_vbc: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [14/18] platform/chrome: cros_kbd_led_backlight: provide ID table for avoiding fallback match
+    https://git.kernel.org/chrome-platform/c/d91ca83599cd
+  - [15/18] platform/chrome: wilco_ec: telemetry: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [16/18] platform/chrome: wilco_ec: debugfs: provide ID table for avoiding fallback match
+    (no matching commit)
+  - [17/18] platform/chrome: wilco_ec: event: remove redundant MODULE_ALIAS
+    (no matching commit)
+  - [18/18] platform/chrome/wilco_ec: core: provide ID table for avoiding fallback match
+    (no matching commit)
 
-DRM driver handles allocation of gem objects that are backed by a 'secure
-surface' and for displaying a 'secure surface' on the overlay plane.
-This introduces a new flag for object creation called
-DRM_MTK_GEM_CREATE_ENCRYPTED which indicates it should be a 'secure
-surface'. All changes here are in MediaTek specific code.
----
-TODO:
-1) Remove get sec larb port interface in ddp_comp, ovl and ovl_adaptor.
-2) Verify instruction for enabling/disabling dapc and larb port in TEE
-   drop the sec_engine flags in normal world and.
-3) Move DISP_REG_OVL_SECURE setting to secure world for mtk_disp_ovl.c.
-4) Change the parameter register address in mtk_ddp_sec_write()
-   from "u32 addr" to "struct cmdq_client_reg *cmdq_reg".
-5) Implement setting mmsys routing table in the secure world series.
----
-Based on 5 series and 1 patch:
-[1] v3 dma-buf: heaps: Add MediaTek secure heap
-- https://patchwork.kernel.org/project/linux-mediatek/list/?series=809023
-[2] v3 add driver to support secure video decoder
-- https://patchwork.kernel.org/project/linux-mediatek/list/?series=807308
-[3] v4 soc: mediatek: Add register definitions for GCE
-- https://patchwork.kernel.org/project/linux-mediatek/patch/20231212121957.19231-2-shawn.sung@mediatek.com/
-[4] v2 Add CMDQ driver support for mt8188
-- https://patchwork.kernel.org/project/linux-mediatek/list/?series=810302
-[5] Add mediatek,gce-events definition to mediatek,gce-mailbox bindings
-- https://patchwork.kernel.org/project/linux-mediatek/list/?series=810938
-[6] v3 Add CMDQ secure driver for SVP
-- https://patchwork.kernel.org/project/linux-mediatek/list/?series=812379
----
-Changes in v4:
-1. Rebase on mediatek-drm-next(278640d4d74cd) and fix the conflicts
-2. This series is based on 20240129063025.29251-1-yunfei.dong@mediatek.com
-3. This series is based on 20240322052829.9893-1-shawn.sung@mediatek.com
-4. This series is based on 20240403065603.21920-1-shawn.sung@mediatek.com
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Changes in v3:
-1. fix kerneldoc problems
-2. fix typo in title and commit message
-3. adjust naming for secure variable
-4. add the missing part for is_suecure plane implementation
-5. use BIT_ULL macro to replace bit shifting
-6. move modification of ovl_adaptor part to the correct patch
-7. add TODO list in commit message
-8. add commit message for using share memory to store execute count
-
-Changes in v2:
-
-1. remove the DRIVER_RDNDER flag for mtk_drm_ioctl
-2. move cmdq_insert_backup_cookie into client driver
-3. move secure gce node define from mt8195-cherry.dtsi to mt8195.dtsi
----
-CK Hu (1):
-  drm/mediatek: Add interface to allocate MediaTek GEM buffer.
-
-Jason-JH.Lin (9):
-  drm/mediatek/uapi: Add DRM_MTK_GEM_CREATE_ENCRYPTED flag
-  drm/mediatek: Add secure buffer control flow to mtk_drm_gem
-  drm/mediatek: Add secure identify flag and funcution to mtk_drm_plane
-  drm/mediatek: Add mtk_ddp_sec_write to config secure buffer info
-  drm/mediatek: Add get_sec_port interface to mtk_ddp_comp
-  drm/mediatek: Add secure layer config support for ovl_adaptor
-  drm/mediatek: Add secure layer config support for ovl
-  drm/mediatek: Add secure flow support to mediatek-drm
-  drm/mediatek: Add cmdq_insert_backup_cookie before secure pkt finalize
-
- drivers/gpu/drm/mediatek/mtk_crtc.c           | 273 +++++++++++++++++-
- drivers/gpu/drm/mediatek/mtk_crtc.h           |   1 +
- drivers/gpu/drm/mediatek/mtk_ddp_comp.c       |  16 +
- drivers/gpu/drm/mediatek/mtk_ddp_comp.h       |  13 +
- drivers/gpu/drm/mediatek/mtk_disp_drv.h       |   3 +
- drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |  30 +-
- .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   |  15 +
- drivers/gpu/drm/mediatek/mtk_gem.c            |  85 +++++-
- drivers/gpu/drm/mediatek/mtk_gem.h            |   4 +
- drivers/gpu/drm/mediatek/mtk_mdp_rdma.c       |  11 +-
- drivers/gpu/drm/mediatek/mtk_mdp_rdma.h       |   2 +
- drivers/gpu/drm/mediatek/mtk_plane.c          |  25 ++
- drivers/gpu/drm/mediatek/mtk_plane.h          |   2 +
- include/uapi/drm/mediatek_drm.h               |   1 +
- 14 files changed, 465 insertions(+), 16 deletions(-)
-
---
-2.18.0
 
