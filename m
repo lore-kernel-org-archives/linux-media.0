@@ -1,166 +1,129 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156A313698B
-	for <linux-media@vger.kernel.org>; Wed,  3 Apr 2024 10:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79E5139CF5;
+	Wed,  3 Apr 2024 10:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712139783; cv=none; b=BDJqi5+VXCQNJEBOG0ih26nEU3EfcAKas+xqyTQa6H1wj4ns6tDLY5WVeyXTcpHyj9fuY0H2zGejldztfFRjFt6sn0KwmBNr3iIXojo27pdE5ODkRkoxT5mlymgHzdpHvQyeIhlbt7/2iWpXHvE+UfD9fOltWbBSR1CRUO/wsLg=
+	t=1712140031; cv=none; b=Vw3bChz4C61FQvMJVDxmhhu82KpioQqGKOBEQdZmlESy/tDaw1e3EoKc/QekPE2/rwNtMEnT1jCFUnkrwxFf8LlKIMvAI5WRZymEEls+q5Wn6dnQz37FH+kGEiv1cnTX2bAX4GJYCtamnDp/yfLDd7b9tx+XTCBjTRd/RAkCpOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712139783; c=relaxed/simple;
-	bh=Rj0Jsh8YxSWt3uMZSfSlxmzf0XSYrPzXk30gRPPxkz8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TklIqTowbLQW/1mpuE5qturstOaWfmns+QYTiEG8vDTIMjIm/m2g1R96UxDGwvgNdzsJVzSQ1Hqa7QVk8cVp83hyTq3hAYefaxfoR+MxIzjxAEKb6c92acI2GbTESpZLull2117MAJBi6QzrhD7dHyMiywyKkJsXjqyDh6FD650=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=exP4EdVA; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1712140031; c=relaxed/simple;
+	bh=46Z8Sy6Vqnm4R8nWlAFl1PCN9lvniRy9+NTt1BffqWo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=skLBDaGwR0ReJb6t3QLae/G91waFeMkbkiVs/4cw5k7KzIQ0aWn5gGZr6aJaYBINOlzkL1bf9b95x3NtViN5jdxvIw9lq47MWJullyHBm16Sj/K1JrQXY//TV41R44XlwF6VZ1JtPMjvppmtI+KWPCcTdYBSekTquDiEJS0bM2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WvZthqpm; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="exP4EdVA"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-56dfba6ae21so1252837a12.1
-        for <linux-media@vger.kernel.org>; Wed, 03 Apr 2024 03:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712139780; x=1712744580; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HsoRFwc62TubYqg849tDBMhvYLUZpOn9BCroZEJYYio=;
-        b=exP4EdVAjdfkiSkfkk8oGrSkM0SEOLzmDHxCDQnCjXMbVqkROETfWIrX8TV8mi8ECP
-         fJETwsv2Oy3UM4y7ny4EPR4IS7V86RJAkSmDm24Qp47vx/xNbcd/AQAgOOFamlgcweVZ
-         WOmgbhPjeUcjTLDy9TUOJXw4KO0KhxRgeE/VgpjppNDvYSwntjI2/VocFWN/Y+Je+5hG
-         XdvcGSsvpYHo9JTjUr/4pA+jUfchjyxy2Ns69L4DUdLQUnrOsapQ9MT/ijAMWgCDFQ0t
-         POC1xLKfv9rxqTqGrmVyaRpzdNVWV13QZ2/5ZGIoAIV6lxy03JxTv+QClyggv4zqVGfx
-         8Ucg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712139780; x=1712744580;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HsoRFwc62TubYqg849tDBMhvYLUZpOn9BCroZEJYYio=;
-        b=hZnqFnmdhUyxn3wj1PfzT9je8ZG7cQwfAZTVSy/WbNGUPAiWwTents1sBbGDamYvrU
-         VL62SCID0H2+qg7jllNkE1liC4P9Cay+emfw9ieut4/YtkeXdbn5/VUwOETkA4Tdq/QV
-         b0IhAqsmK7ik7W4kz3qTJARNjIp1uod/mhgpKnBTD2PCnHbPQrd6fDSxfG20OtSnCbZ4
-         lBt5VIFgFeb5oi/5LqhD0Fw6owCj6dMpAXZtdI8PomSWEKhc0Ze6XyFz1NKz/BVnqw3B
-         cC8g+AUyCqV0bfbXYz0hIwVQAKukqFRPzKJcVw9jPz6y9L7HW5DGg+zD7y0fWLnUDyMh
-         1xSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXam1qekWoWLLpW4K33Dp+WVPZYqVWu+b5AtXzRwg8hADYnbjKrkWO+od0kV9pkEuqZLZUIoe6OfZGMNuHnfZ4LDWNT1a1KhK5lu4=
-X-Gm-Message-State: AOJu0YyB2ulXf0i51weSWX/D9rcEWHAUwPbzdlSHLP2nfFttsJZ9uHHG
-	zam8XNyrPsghzvErql8YCdYrP0JB/ysbPztStIRfeceN82TlAIfhswURcEAlIyY=
-X-Google-Smtp-Source: AGHT+IEMd2qY7HaeJ+Fxj3CC5iJW78JeSnJFgE3zvGwQSDJJVxBpSADaDpp09/VoAm7rqc/a73kH3g==
-X-Received: by 2002:a05:6402:3506:b0:56b:cecb:a4c8 with SMTP id b6-20020a056402350600b0056bcecba4c8mr14911177edd.39.1712139780444;
-        Wed, 03 Apr 2024 03:23:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05640205d100b0056c55252b1csm7476094edx.41.2024.04.03.03.22.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Apr 2024 03:22:59 -0700 (PDT)
-Message-ID: <f51da8d9-95e5-4935-9ad7-49a5ddde9dc3@linaro.org>
-Date: Wed, 3 Apr 2024 12:22:57 +0200
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WvZthqpm"
+X-UUID: b782a06cf1a411ee935d6952f98a51a9-20240403
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=lo4lDmVfE2uO4XA7Sc+H4dQlxZJDmRsnTUJ/N8Cz8P0=;
+	b=WvZthqpmnWWAJblBn0ICu2oJ1q1MRDnublK33t9jklNcsvm7r1fxXR5z51usuUxZRXD87d74DcpJFQNgeTXSScvVYBjsS9FrkTSoKLQw8cx2EBB0vQOVH7Q6bouH+aBOYiqZ6mW2hJkcA62YSwUm9p9u8NF/yn4/6iT7GcFYKe4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:78541afe-cb58-4e5d-ae10-a55ec15a583e,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:6f543d0,CLOUDID:939d2c91-e2c0-40b0-a8fe-7c7e47299109,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: b782a06cf1a411ee935d6952f98a51a9-20240403
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+	(envelope-from <shawn.sung@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 838507489; Wed, 03 Apr 2024 18:27:05 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 3 Apr 2024 18:27:03 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 3 Apr 2024 18:27:03 +0800
+From: Shawn Sung <shawn.sung@mediatek.com>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Sumit Semwal
+	<sumit.semwal@linaro.org>, =?UTF-8?q?Christian=20K=C3=B6nig?=
+	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, Jason-JH.Lin <jason-jh.lin@mediatek.com>,
+	Hsiao Chien Sung <shawn.sung@mediatek.com>
+Subject: [PATCH v5 9/9] drm/mediatek: Add cmdq_insert_backup_cookie before secure pkt finalize
+Date: Wed, 3 Apr 2024 18:27:01 +0800
+Message-ID: <20240403102701.369-10-shawn.sung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240403102701.369-1-shawn.sung@mediatek.com>
+References: <20240403102701.369-1-shawn.sung@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] arm64: dts: rockchip: Add device tree support for
- HDMI RX Controller
-To: Shreeya Patel <shreeya.patel@collabora.com>, heiko@sntech.de,
- mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- p.zabel@pengutronix.de, jose.abreu@synopsys.com, nelson.costa@synopsys.com,
- dmitry.osipenko@collabora.com, sebastian.reichel@collabora.com,
- shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com,
- hverkuil@xs4all.nl, hverkuil-cisco@xs4all.nl
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-arm@lists.infradead.org
-References: <20240327225057.672304-1-shreeya.patel@collabora.com>
- <20240327225057.672304-5-shreeya.patel@collabora.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240327225057.672304-5-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--9.964300-8.000000
+X-TMASE-MatchedRID: DpePiNkRMProb/hVdrvnXjPDkSOzeDWW+eBf9ovw8I27eXIF2U7rKy+8
+	OxujShyxE/UmhJjBrzZC3mgca9yt8kttpN+KVVd9syNb+yeIRArvJY9pBzgg1P+RKQghHjkeBgH
+	mCxujQvyORmg3vGx7V9sIe/TXUbL1GClvwc20fT5gS3HnT6jvf4iuaoNXJrK/fmHrLgoJIlxLR6
+	I6ytdxOLBCNZjB5OVeh+gv6XmqORNRbbZ0jxgFOp4CIKY/Hg3AGdQnQSTrKGPEQdG7H66TyMdRT
+	5TQAJnA4zjUu/hzMaXvKCvoWLGqrJA2OYWJIR3ArCVg7MtbdbieqD9WtJkSIw==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--9.964300-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	BB83068C8A2923A221CC6DA4A0919189003744023CC932CD209D04F2D18548492000:8
+X-MTK: N
 
-On 27/03/2024 23:50, Shreeya Patel wrote:
-> Add device tree support for Synopsys DesignWare HDMI RX
-> Controller.
-> 
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Co-developed-by: Dingxian Wen <shawn.wen@rock-chips.com>
-> Signed-off-by: Dingxian Wen <shawn.wen@rock-chips.com>
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> ---
-> Changes in v3 :-
->   - Rename cma node and phandle names
->   - Elaborate the comment to explain 160MiB calculation
->   - Move &hdmi_receiver_cma to the rock5b dts file
-> 
-> Changes in v2 :-
->   - Fix some of the checkpatch errors and warnings
->   - Rename resets, vo1-grf and HPD
->   - Move hdmirx_cma node to the rk3588.dtsi file
-> 
->  .../boot/dts/rockchip/rk3588-pinctrl.dtsi     | 41 ++++++++++++++
->  .../boot/dts/rockchip/rk3588-rock-5b.dts      | 19 +++++++
->  arch/arm64/boot/dts/rockchip/rk3588.dtsi      | 56 +++++++++++++++++++
+From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
 
-Please do not engage multiple subsystems in one patchset, if not
-necessary. Especially do not mix DTS into media or USB subsystems. And
-do not put DTS in the middle!
+Add cmdq_insert_backup_cookie to append some commands before EOC:
+1. Get GCE HW thread execute count from the GCE HW register.
+2. Add 1 to the execute count and then store into a shared memory.
+3. Set a software event siganl as secure irq to GCE HW.
 
-This is not a correct way to upstream DTS. DTS is independent of
-drivers, so your drivers cannot be based on this.
+Since the value of execute count + 1 is stored in a shared memory,
+CMDQ driver in the normal world can use it to handle task done in irq
+handler and CMDQ driver in the secure world will use it to schedule
+the task slot for each secure thread.
 
-Please reach to your experienced colleagues to explain you how
-submission of patches should look like.
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_crtc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.c b/drivers/gpu/drm/mediatek/mtk_crtc.c
+index 8a3c204d48d2b..8a70d731f2ee2 100644
+--- a/drivers/gpu/drm/mediatek/mtk_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_crtc.c
+@@ -186,7 +186,7 @@ void mtk_crtc_disable_secure_state(struct drm_crtc *crtc)
+ 		sec_scn = CMDQ_SEC_SCNR_SUB_DISP_DISABLE;
+ 
+ 	cmdq_sec_pkt_set_data(&mtk_crtc->sec_cmdq_handle, sec_engine, sec_engine, sec_scn);
+-
++	cmdq_sec_insert_backup_cookie(&mtk_crtc->sec_cmdq_handle);
+ 	cmdq_pkt_finalize(&mtk_crtc->sec_cmdq_handle);
+ 	dma_sync_single_for_device(mtk_crtc->sec_cmdq_client.chan->mbox->dev,
+ 				   mtk_crtc->sec_cmdq_handle.pa_base,
+@@ -812,6 +812,8 @@ static void mtk_crtc_update_config(struct mtk_crtc *mtk_crtc, bool needs_vblank)
+ 		cmdq_pkt_clear_event(cmdq_handle, mtk_crtc->cmdq_event);
+ 		cmdq_pkt_wfe(cmdq_handle, mtk_crtc->cmdq_event, false);
+ 		mtk_crtc_ddp_config(crtc, cmdq_handle);
++		if (cmdq_handle->sec_data)
++			cmdq_sec_insert_backup_cookie(cmdq_handle);
+ 		cmdq_pkt_finalize(cmdq_handle);
+ 		dma_sync_single_for_device(cmdq_client.chan->mbox->dev,
+ 					   cmdq_handle->pa_base,
+-- 
+2.18.0
 
