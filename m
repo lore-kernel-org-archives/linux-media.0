@@ -1,48 +1,48 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527F554744;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0985A7A3;
 	Wed,  3 Apr 2024 07:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712128064; cv=none; b=fFZOd8WFbampASHZt8upvBRi1IXGfKKwvdzJe16BjMiQIbusYL08AaLbfo0KkL9i7F7iZXzKZTemtCRjsIjJqmWX24WJfjZHf38LqbQvHf/Lsx4NE6ENmZ7fUc3DesP26AYLnYsicxkp17Akqa/VLCZl8c5PkGysiuN6+jLozwk=
+	t=1712128064; cv=none; b=LYDsYHtZSiMOTrezYOr/y+ZgRivbDQx01YY+OQJ6MHaLqpzyGVF9sMfatBje33OHjFWO2L/hVXzxtR8i+e5xlsCaGapMsqtPWSkMgU7Dfx2+76YdiW8smDpIDS0ooNTpEQq877GBpVZLEM93863nxM5MV/g8UEdqNFPgc5zTgRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712128064; c=relaxed/simple;
-	bh=cLlT4mqLupS99QTm5ar5iofcvuefHY3z1LknhXp46uI=;
+	bh=aHzVWvencb7GcRrxIV1bQid9W8wp89zGZ8yo/9zweCg=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FkSrgaoLESmyQn8GrnJEK64RtoUtKsXZkBnc4WwS6eCdnaZd01lYDjuxvC/sJ/KDg5dcJci0Teu8b0ReZcdUHGbRyi5VHhEFCvuiGk6+TQyT9ucroPPaRXXwCnsDPu1/WnPKgzA0RIOqcpsKGs7NmK6rspvNHgEF5MWAlLw1OUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Gvrh3iWa; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=pc/R+4cgGm0YABc3fzym/hzxB1F0KaZRxYRimZ7RwjhjY01dU5X15ZA9D4DXt4k84rPRUNJ6BH3g5WGCCuAdSqRo5viIv0hCGDRMc0kv/QTamQgN0F9ATY+ThFhkyGnLv2ZDv1WNuf+aciGUdMi/tBh4c9uPMUIokM0IrGxQj4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=k+5XfIN/; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Gvrh3iWa"
-X-UUID: d9cc8424f18811ee935d6952f98a51a9-20240403
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="k+5XfIN/"
+X-UUID: d9cfe308f18811ee935d6952f98a51a9-20240403
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=pT+mAS1Yst5bND9qW5seLF2kjpLuzM8HwxDsfPgehOI=;
-	b=Gvrh3iWaPUeoUFiObBUmivw+l9uqxdo7DZyidid1Ab9uLrMrgmfV62JgKHVzzz9PE+iDfSHRWC7JXNi1JUF4oj+zn/Y6hOImtDmOR9Gdd51qr5hp51dnG1iaZsSKtkPgWgNcGn0jy7osr4mUybyCVKHZ/859nk8FKjGgRsR/DKw=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=9ZI7/pXXIfMVUwwL9gDcIXkjnc3ElhWVGoudYOvTMYU=;
+	b=k+5XfIN/9wGj/658eMqucAoM+x+R4wIUtU7AiohxxE1R5NZ0lHjKJXGr02Ns+Ta+UZUOGM/Xdy5EGapgZcGqTYrzgs5li4abSC943JdQBcqXr6aCROGj5aEvi1RNbGvBQ1t901bRr1qirVLsbe5ZmQvb4HIZUzdeWlS3SM6jcqE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:e0545fd3-0966-495c-8611-a856000b5d3c,IP:0,U
+X-CID-O-INFO: VERSION:1.1.37,REQID:74a077c0-0c43-4f20-891b-34ec33d20509,IP:0,U
 	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
 	N:release,TS:-25
-X-CID-META: VersionHash:6f543d0,CLOUDID:5e10a800-c26b-4159-a099-3b9d0558e447,B
+X-CID-META: VersionHash:6f543d0,CLOUDID:509fc385-8d4f-477b-89d2-1e3bdbef96d1,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
 	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d9cc8424f18811ee935d6952f98a51a9-20240403
+X-UUID: d9cfe308f18811ee935d6952f98a51a9-20240403
 Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
 	(envelope-from <shawn.sung@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1980470507; Wed, 03 Apr 2024 15:07:36 +0800
+	with ESMTP id 112173314; Wed, 03 Apr 2024 15:07:36 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
  MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 3 Apr 2024 15:07:35 +0800
+ 15.2.1118.26; Wed, 3 Apr 2024 15:07:33 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 3 Apr 2024 15:07:34 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 3 Apr 2024 15:07:33 +0800
 From: Shawn Sung <shawn.sung@mediatek.com>
 To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
@@ -56,9 +56,9 @@ CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
 	<linaro-mm-sig@lists.linaro.org>, Jason-JH.Lin <jason-jh.lin@mediatek.com>,
 	Hsiao Chien Sung <shawn.sung@mediatek.com>
-Subject: [PATCH v4 9/9] drm/mediatek: Add cmdq_insert_backup_cookie before secure pkt finalize
-Date: Wed, 3 Apr 2024 15:07:32 +0800
-Message-ID: <20240403070732.22085-10-shawn.sung@mediatek.com>
+Subject: [PATCH v4 2/9] drm/mediatek: Add secure buffer control flow to mtk_drm_gem
+Date: Wed, 3 Apr 2024 15:07:25 +0800
+Message-ID: <20240403070732.22085-3-shawn.sung@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20240403070732.22085-1-shawn.sung@mediatek.com>
 References: <20240403070732.22085-1-shawn.sung@mediatek.com>
@@ -70,69 +70,178 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--9.712500-8.000000
-X-TMASE-MatchedRID: YXgS1C6OPWzob/hVdrvnXjPDkSOzeDWW+eBf9ovw8I27eXIF2U7rKy+8
-	OxujShyxE/UmhJjBrzZC3mgca9yt8kttpN+KVVd9syNb+yeIRArvJY9pBzgg1AdskglgNB06Wrv
-	rtnfQ0ritv1Ljw57Roa8VyW/hymUcP+blzYfeoH5DiyuN5FvFNkJfxXUWJFGS31GU/N5W5BBGrI
-	LfHhGdpOCvXbSo8NyzsBVstGxQO24YBLhRVmu+NuG5dRZCgxC3NACnndLvXwdnuv8pVwMzSaPFj
-	JEFr+olwXCBO/GKkVqOhzOa6g8KrZ6dUK0lcRRnJjV8ViTOjGoY/N7Roz/q3K0gT4tKfSqMWMHU
-	JHy0CyZDDKa3G4nrLQ==
+X-TM-AS-Result: No-10--6.866000-8.000000
+X-TMASE-MatchedRID: XAa2d/45j8QXSulpnju2HwNJ3EDwuUClKx5ICGp/WtFLgo8+IIHbcJh8
+	90SylZrlwPiYYkBDBMc9ab9SerZV2iUtdpGicV4RH5YQyOg71ZZCX8V1FiRRkt9RlPzeVuQQost
+	SmZzTxtrZoTly3PGW4OyVvSGEffbDb6wZx1ul0pzJ5W6OZe5hhS7te75+XjKBv8D7QPW2jo8ARd
+	T81SrHjvetcOpa0TfdcBOyDww4NUgfE8yM4pjsD7j1D7wMfbaSxEHRux+uk8h+ICquNi0WJBHOT
+	tYy/TINSJhtH623y8Dcj7PZMEnlwBRhFweaMehmftwZ3X11IV0=
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--9.712500-8.000000
+X-TMASE-Result: 10--6.866000-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
 X-TM-SNTS-SMTP:
-	CBDB9CEA1B0D281A6C149F54596BA3FCB12C109C78A272B3F183B48BF64A7A792000:8
+	FD86E8BD817DA32466FAA0471EB4BF2D837E27964864AA52689A82C46C7512152000:8
 X-MTK: N
 
 From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
 
-Add cmdq_insert_backup_cookie to append some commands before EOC:
-1. Get GCE HW thread execute count from the GCE HW register.
-2. Add 1 to the execute count and then store into a shared memory.
-3. Set a software event siganl as secure irq to GCE HW.
+Add secure buffer control flow to mtk_drm_gem.
 
-Since the value of execute count + 1 is stored in a shared memory,
-CMDQ driver in the normal world can use it to handle task done in irq
-handler and CMDQ driver in the secure world will use it to schedule
-the task slot for each secure thread.
-
-The reason why we use shared memory to record execute count here is:
-1. normal world can not access the register of secure GCE thread in
-normal world.
-2. calling TEE invoke cmd in the irq handler would be expensive and not
-stable. I've tested that a single TEE invloke cmd to CMDQ PTA costs
-19~53 us. Maybe it would cost more during the scenario that needs more
-CPU loading.
+When user space takes DRM_MTK_GEM_CREATE_ENCRYPTED flag and size
+to create a mtk_drm_gem object, mtk_drm_gem will find a matched size
+dma buffer from secure dma-heap and bind it to mtk_drm_gem object.
 
 Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_crtc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/mediatek/mtk_gem.c | 85 +++++++++++++++++++++++++++++-
+ drivers/gpu/drm/mediatek/mtk_gem.h |  4 ++
+ 2 files changed, 88 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.c b/drivers/gpu/drm/mediatek/mtk_crtc.c
-index a6ba9965500f0..2fb52928a3055 100644
---- a/drivers/gpu/drm/mediatek/mtk_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_crtc.c
-@@ -186,7 +186,7 @@ void mtk_crtc_disable_secure_state(struct drm_crtc *crtc)
- 		sec_scn = CMDQ_SEC_SCNR_SUB_DISP_DISABLE;
+diff --git a/drivers/gpu/drm/mediatek/mtk_gem.c b/drivers/gpu/drm/mediatek/mtk_gem.c
+index e59e0727717b7..ec34d02c14377 100644
+--- a/drivers/gpu/drm/mediatek/mtk_gem.c
++++ b/drivers/gpu/drm/mediatek/mtk_gem.c
+@@ -4,6 +4,8 @@
+  */
  
- 	cmdq_sec_pkt_set_data(&mtk_crtc->sec_cmdq_handle, sec_engine, sec_engine, sec_scn);
--
-+	cmdq_sec_insert_backup_cookie(&mtk_crtc->sec_cmdq_handle);
- 	cmdq_pkt_finalize(&mtk_crtc->sec_cmdq_handle);
- 	dma_sync_single_for_device(mtk_crtc->sec_cmdq_client.chan->mbox->dev,
- 				   mtk_crtc->sec_cmdq_handle.pa_base,
-@@ -810,6 +810,8 @@ static void mtk_crtc_update_config(struct mtk_crtc *mtk_crtc, bool needs_vblank)
- 		cmdq_pkt_clear_event(cmdq_handle, mtk_crtc->cmdq_event);
- 		cmdq_pkt_wfe(cmdq_handle, mtk_crtc->cmdq_event, false);
- 		mtk_crtc_ddp_config(crtc, cmdq_handle);
-+		if (cmdq_handle->sec_data)
-+			cmdq_sec_insert_backup_cookie(cmdq_handle);
- 		cmdq_pkt_finalize(cmdq_handle);
- 		dma_sync_single_for_device(cmdq_client.chan->mbox->dev,
- 					   cmdq_handle->pa_base,
+ #include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
++#include <uapi/linux/dma-heap.h>
+ #include <drm/mediatek_drm.h>
+ 
+ #include <drm/drm.h>
+@@ -102,6 +104,81 @@ struct mtk_gem_obj *mtk_gem_create(struct drm_device *dev,
+ 	return ERR_PTR(ret);
+ }
+ 
++struct mtk_gem_obj *mtk_gem_create_from_heap(struct drm_device *dev,
++					     const char *heap, size_t size)
++{
++	struct mtk_drm_private *priv = dev->dev_private;
++	struct mtk_gem_obj *mtk_gem;
++	struct drm_gem_object *obj;
++	struct dma_heap *dma_heap;
++	struct dma_buf *dma_buf;
++	struct dma_buf_attachment *attach;
++	struct sg_table *sgt;
++	struct iosys_map map = {};
++	int ret;
++
++	mtk_gem = mtk_gem_init(dev, size);
++	if (IS_ERR(mtk_gem))
++		return ERR_CAST(mtk_gem);
++
++	obj = &mtk_gem->base;
++
++	dma_heap = dma_heap_find(heap);
++	if (!dma_heap) {
++		DRM_ERROR("heap find fail\n");
++		goto err_gem_free;
++	}
++	dma_buf = dma_heap_buffer_alloc(dma_heap, size,
++					O_RDWR | O_CLOEXEC, DMA_HEAP_VALID_HEAP_FLAGS);
++	if (IS_ERR(dma_buf)) {
++		DRM_ERROR("buffer alloc fail\n");
++		dma_heap_put(dma_heap);
++		goto err_gem_free;
++	}
++	dma_heap_put(dma_heap);
++
++	attach = dma_buf_attach(dma_buf, priv->dma_dev);
++	if (IS_ERR(attach)) {
++		DRM_ERROR("attach fail, return\n");
++		dma_buf_put(dma_buf);
++		goto err_gem_free;
++	}
++
++	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
++	if (IS_ERR(sgt)) {
++		DRM_ERROR("map failed, detach and return\n");
++		dma_buf_detach(dma_buf, attach);
++		dma_buf_put(dma_buf);
++		goto err_gem_free;
++	}
++	obj->import_attach = attach;
++	mtk_gem->dma_addr = sg_dma_address(sgt->sgl);
++	mtk_gem->sg = sgt;
++	mtk_gem->size = dma_buf->size;
++
++	if (!strcmp(heap, "mtk_svp") || !strcmp(heap, "mtk_svp_cma")) {
++		/* secure buffer can not be mapped */
++		mtk_gem->secure = true;
++	} else {
++		ret = dma_buf_vmap(dma_buf, &map);
++		mtk_gem->kvaddr = map.vaddr;
++		if (ret) {
++			DRM_ERROR("map failed, ret=%d\n", ret);
++			dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
++			dma_buf_detach(dma_buf, attach);
++			dma_buf_put(dma_buf);
++			mtk_gem->kvaddr = NULL;
++		}
++	}
++
++	return mtk_gem;
++
++err_gem_free:
++	drm_gem_object_release(obj);
++	kfree(mtk_gem);
++	return ERR_PTR(-ENOMEM);
++}
++
+ void mtk_gem_free_object(struct drm_gem_object *obj)
+ {
+ 	struct mtk_gem_obj *mtk_gem = to_mtk_gem_obj(obj);
+@@ -229,7 +306,9 @@ struct drm_gem_object *mtk_gem_prime_import_sg_table(struct drm_device *dev,
+ 	if (IS_ERR(mtk_gem))
+ 		return ERR_CAST(mtk_gem);
+ 
++	mtk_gem->secure = !sg_page(sg->sgl);
+ 	mtk_gem->dma_addr = sg_dma_address(sg->sgl);
++	mtk_gem->size = attach->dmabuf->size;
+ 	mtk_gem->sg = sg;
+ 
+ 	return &mtk_gem->base;
+@@ -304,7 +383,11 @@ int mtk_gem_create_ioctl(struct drm_device *dev, void *data,
+ 	struct drm_mtk_gem_create *args = data;
+ 	int ret;
+ 
+-	mtk_gem = mtk_gem_create(dev, args->size, false);
++	if (args->flags & DRM_MTK_GEM_CREATE_ENCRYPTED)
++		mtk_gem = mtk_gem_create_from_heap(dev, "mtk_svp_cma", args->size);
++	else
++		mtk_gem = mtk_gem_create(dev, args->size, false);
++
+ 	if (IS_ERR(mtk_gem))
+ 		return PTR_ERR(mtk_gem);
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_gem.h b/drivers/gpu/drm/mediatek/mtk_gem.h
+index 4d7598220ca8f..e1d3537a55ecb 100644
+--- a/drivers/gpu/drm/mediatek/mtk_gem.h
++++ b/drivers/gpu/drm/mediatek/mtk_gem.h
+@@ -27,9 +27,11 @@ struct mtk_gem_obj {
+ 	void			*cookie;
+ 	void			*kvaddr;
+ 	dma_addr_t		dma_addr;
++	size_t			size;
+ 	unsigned long		dma_attrs;
+ 	struct sg_table		*sg;
+ 	struct page		**pages;
++	bool			secure;
+ };
+ 
+ #define to_mtk_gem_obj(x) container_of(x, struct mtk_gem_obj, base)
+@@ -39,6 +41,8 @@ struct mtk_gem_obj *mtk_gem_create(struct drm_device *dev, size_t size,
+ 				   bool alloc_kmap);
+ int mtk_gem_dumb_create(struct drm_file *file_priv, struct drm_device *dev,
+ 			struct drm_mode_create_dumb *args);
++struct mtk_gem_obj *mtk_gem_create_from_heap(struct drm_device *dev,
++					     const char *heap, size_t size);
+ struct sg_table *mtk_gem_prime_get_sg_table(struct drm_gem_object *obj);
+ struct drm_gem_object *mtk_gem_prime_import_sg_table(struct drm_device *dev,
+ 			struct dma_buf_attachment *attach, struct sg_table *sg);
 -- 
 2.18.0
 
