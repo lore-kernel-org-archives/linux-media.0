@@ -1,108 +1,112 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B57548FD
-	for <linux-media@vger.kernel.org>; Wed,  3 Apr 2024 07:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541B255E4C;
+	Wed,  3 Apr 2024 07:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712127693; cv=none; b=HwmRfWbNnZqO07X2IkFUBeYgR/bafy3eYFYW6OaxllV+otJ+bPv1Uttf/XPphgw0+JMI7n+iCWo/U9xOK3ALQahesr3XFvaIy8fOSEz5E0GxJj81Lk4fjaDa8XnLd5QkaSYArQ4OnLNt/pKkDh7oefMYerDlZAxCdUzbQ/3cHKA=
+	t=1712128061; cv=none; b=OZfxHWrIU8EQe/Ylt7ZllaAVSSkMUjM2uyvSmadxJxHBIEuscRph9iuuGJI4CGUeuV384xlxIBCzVG9o2xhLfNkJG8HZBkJ/NX6BBGMOEhekhchj4QOQZXFIm3NUTQ5sN2LX6837nCBxAQ4Rk5CrgwNDjg/xKVier41ewAWcFx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712127693; c=relaxed/simple;
-	bh=txFtA9KM1Ry7MTHWFveEbwhK7K4JAL0WUu/+qt4pOKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ntjpcv2Jx9en26kP7ITbXnDE09zDSkC28aHFEMA0k7mygigDLqN8ONKrtW3ZCn15kNgeUPmtsM+BKSbJzMaUR+b8z85ww5sI082A98dPh+W5OuWzegrrcgD06wS7Bsxbd6a/OZbK/ATxEG2HNOgIYo2fMeCWma/ome/Rx4vd0qQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=iHQv9DZW; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1712128061; c=relaxed/simple;
+	bh=c7xTobvxNcUoi+22SqLi61QDBjn/V6GU1bryobi7w58=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tOo8rX7xIRIDASUpwuIm+Phkuka1Uz6QxTdhUC/snDiSrFUWYPHr9s9EGS0+SlPzmvTN9+qC5aOoZETwmmatdR3PRuL5PZH/Pzdx21s5SUcnYIz4Geq46jFHqYjLVL4F9e6HabpvSs8UP+Ez4QTpz5dyTlI/7LFCZpEmRMfx42c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=JqK+SNTC; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iHQv9DZW"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 15F96674;
-	Wed,  3 Apr 2024 09:00:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1712127653;
-	bh=txFtA9KM1Ry7MTHWFveEbwhK7K4JAL0WUu/+qt4pOKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iHQv9DZW4gC2WvFpAqJ3Uzat6erm3Q7L/bIWv3o8Vh+i9I3tjbtOyIqN0o36pwhct
-	 +VSKhiJCBDbt7WKH7KZ5QOPqjYrxpX6afJFf9b0mBBldAH7lNOwDVNBlmrUArdI2bM
-	 LY+TQ7r/IOwPOVslW8drdpJschx1PaG6U+w6kw4g=
-Date: Wed, 3 Apr 2024 10:01:19 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH] media: v4l2-subdev: Fix stream handling for crop API
-Message-ID: <20240403070119.GI16740@pendragon.ideasonboard.com>
-References: <20240401233725.2401-1-laurent.pinchart@ideasonboard.com>
- <Zgu_xhcadm2F1Rxl@valkosipuli.retiisi.eu>
- <20240402084407.GC10288@pendragon.ideasonboard.com>
- <ZgvF1wi2UpkUTC9-@valkosipuli.retiisi.eu>
- <d5f3af05-77e7-4647-877a-ffddfd9a2623@ideasonboard.com>
- <Zgwi14Z7tciTBlIG@valkosipuli.retiisi.eu>
- <20240402201137.GB32172@pendragon.ideasonboard.com>
- <86075433-94d7-422c-bef2-65875faeaedb@ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="JqK+SNTC"
+X-UUID: d92b874af18811eeb8927bc1f75efef4-20240403
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ZryZl/fS6pc78wdeFePflYUHBIKbUg/O9hvHU797WQA=;
+	b=JqK+SNTCe+gLRpH4kWbJGmA45yMN5tNhzCWMW+gwY8z76GbFiQszeKlFclynxiuxL7mpPP+1zp3T1iv1stYbi8GrMxySn3GNHc4pToWdyR9GZgku9cb2jqzrEZqBGqoiCdIatI9kgsa1tJJBSLk3pLQOZOfa67aXBWAuXHcuxMk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:f4570555-7e4b-494b-a9d9-aa218b93b1eb,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6f543d0,CLOUDID:23f74282-4f93-4875-95e7-8c66ea833d57,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: d92b874af18811eeb8927bc1f75efef4-20240403
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+	(envelope-from <shawn.sung@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1423718062; Wed, 03 Apr 2024 15:07:35 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 3 Apr 2024 15:07:33 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 3 Apr 2024 15:07:33 +0800
+From: Shawn Sung <shawn.sung@mediatek.com>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC: Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Sumit Semwal
+	<sumit.semwal@linaro.org>, =?UTF-8?q?Christian=20K=C3=B6nig?=
+	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, Jason-JH.Lin <jason-jh.lin@mediatek.com>,
+	Hsiao Chien Sung <shawn.sung@mediatek.com>
+Subject: [PATCH v4 1/9] drm/mediatek/uapi: Add DRM_MTK_GEM_CREATE_ENCRYPTED flag
+Date: Wed, 3 Apr 2024 15:07:24 +0800
+Message-ID: <20240403070732.22085-2-shawn.sung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20240403070732.22085-1-shawn.sung@mediatek.com>
+References: <20240403070732.22085-1-shawn.sung@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <86075433-94d7-422c-bef2-65875faeaedb@ideasonboard.com>
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--4.654100-8.000000
+X-TMASE-MatchedRID: k8Cd32tj8sGXFGyE5q3nYI6MisxJraxHkKAa/khZ3iT3bBqxmjinTUbj
+	B8LDWKj2XQfL6gqs5ORuLPg+qB+4FrzGV3ndBhcIG5mg0pzqmX59LQinZ4QefCP/VFuTOXUT3n8
+	eBZjGmUzkwjHXXC/4I66NVEWSRWybH0KLWoaLjsDRxtpMgfkOquxoY1VGElyx7qk6/CriHFCXDB
+	DaofGNbVFVCdf1vKsB2h1guZKcWd06Bd5qdQ0mGA6codyJ3/ShjofsMjQaxVwyYjbiqIQ3Csykh
+	tyXcigD6rVdgBjDT2r1nXJavJVNag==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--4.654100-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	DFB5D2C452CDE2450E4298B873C27F88EAE4766363A37B3850650FDF66FEB9B82000:8
+X-MTK: N
 
-On Wed, Apr 03, 2024 at 09:51:01AM +0300, Tomi Valkeinen wrote:
-> On 02/04/2024 23:11, Laurent Pinchart wrote:
-> > On Tue, Apr 02, 2024 at 03:23:03PM +0000, Sakari Ailus wrote:
-> >> On Tue, Apr 02, 2024 at 12:11:30PM +0300, Tomi Valkeinen wrote:
-> >>> On 02/04/2024 11:46, Sakari Ailus wrote:
-> >>>> On Tue, Apr 02, 2024 at 11:44:07AM +0300, Laurent Pinchart wrote:
-> >>>>> On Tue, Apr 02, 2024 at 08:20:22AM +0000, Sakari Ailus wrote:
-> >>>>>> Moi,
-> >>>>>>
-> >>>>>> On Tue, Apr 02, 2024 at 02:37:25AM +0300, Laurent Pinchart wrote:
-> >>>>>>> When support for streams was added to the V4L2 subdev API, the
-> >>>>>>> v4l2_subdev_crop structure was extended with a stream field, but the
-> >>>>>>> field was not handled in the core code that translates the
-> >>>>>>> VIDIOC_SUBDEV_[GS]_CROP ioctls to the selection API. Fix it.
-> >>>>>>
-> >>>>>> The field is indeed in the UAPI headers. But do we want to support the CROP
-> >>>>>> IOCTL for streams? Shouldn't the callers be using the [GS]_SELECTION
-> >>>>>> instead?
-> >>>>>
-> >>>>> They should, but if the field is there, we should support it :-) The
-> >>>>> alternative is to remove it. It will cause failures in v4l2-compliance
-> >>>>> that we'll need to handle though.
-> >>>>
-> >>>> I'd prefer to stick to selections here, this is new functionality so
-> >>>> [GS]_CROP support isn't required. I don't have a strong opinion on the
-> >>>> matter though.
-> >>>
-> >>> Maybe it's easier to just support the stream field, instead of making
-> >>> [GS]_CROP the odd case which looks like it should support streams, but then
-> >>> doesn't...
-> >>
-> >> It's an old IOCTL already replaced by the [GS]_SELECTION. I mainly write
-> >> kernel space software but overall I think it's better if we can provide a
-> >> single API for controlling cropping instead of two with similar
-> >> functionality, of which the user then should choose from.
-> >>
-> >> It should be also documented in this context if we choose support
-> >> [GS]_CROP.
-> >>
-> >> So I believe we have less work to do and have a better result if we just
-> >> drop the stream field there. :-)
-> > 
-> > I tend to agree, even if that's only a slight preference. Tomi, if
-> > you're fine with this, I'll update the patch.
-> 
-> I'm fine with it. So we now should move the 'stream' field back to 
-> reserved, and add documentation saying that [GS]_CROP works differently 
-> than the other ioctls?
+From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
 
-That's the idea. I'll send patches.
+Add DRM_MTK_GEM_CREATE_ENCRYPTED flag to allow user to allocate
+a secure buffer to support secure video path feature.
 
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+---
+ include/uapi/drm/mediatek_drm.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/uapi/drm/mediatek_drm.h b/include/uapi/drm/mediatek_drm.h
+index b0dea00bacbc4..e9125de3a24ad 100644
+--- a/include/uapi/drm/mediatek_drm.h
++++ b/include/uapi/drm/mediatek_drm.h
+@@ -54,6 +54,7 @@ struct drm_mtk_gem_map_off {
+ 
+ #define DRM_MTK_GEM_CREATE		0x00
+ #define DRM_MTK_GEM_MAP_OFFSET		0x01
++#define DRM_MTK_GEM_CREATE_ENCRYPTED	0x02
+ 
+ #define DRM_IOCTL_MTK_GEM_CREATE	DRM_IOWR(DRM_COMMAND_BASE + \
+ 		DRM_MTK_GEM_CREATE, struct drm_mtk_gem_create)
 -- 
-Regards,
+2.18.0
 
-Laurent Pinchart
