@@ -1,183 +1,178 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956FD13D265;
-	Fri,  5 Apr 2024 09:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3851115FCE2;
+	Fri,  5 Apr 2024 09:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712308754; cv=none; b=m61ECbSloj83aIaQKgQvk+2J+xpmydUOmsvh1mnsf4rB78s2yXELe1ZQhP5NVJbgW65sqg+BXW4hc33sHOoFj35FgH5QbZttkrFqloBvagrHM3VsCmu0Yu5h/P1zZl/sgA9O/G5MANm3pzedllAfDGpT4RJnXFscSwwYZsFBHRw=
+	t=1712309394; cv=none; b=HDZzeVuMzou43LzFfJyO8zpmAV8Os8lxrkKhXjEkjMV3nKGURejou4hzNuwu8SFknvUTSo+3UVD1haW8wfU6uX7cAcvTgOBH7hs6IeM17y59Jpa2EnSwKziGd7ceZ43xB1Xu4S5jcH2Rt46OgBYmS0FZANMAXsiDeJsLsAm04k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712308754; c=relaxed/simple;
-	bh=RMmTgTiM6AekMReGIHsGkEpQVtvna/w6We09nnKfFLg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=W/gWvkBW7Bugy9xqQnWvr6eMmgBnPaQQiXljOA0FPObxROL/Len7CsulmndOTF+eyyo9W58ekt/rwJK66kFujupMQDuQdDNJqFHllaQtfUAF6gbKioyXTVigaG1o2qgtOEGAMvNRUNthb51Fw4ngNpK5eLojEXqOK5JrZmCPHWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MJmfTMOY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1712309394; c=relaxed/simple;
+	bh=1XOKZGXshsQ///KoTh0XHfCQcdhzM+EgFmJYlctb1iY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mv7hVfWFjNkwnV8DDATJK5wxSBZtdK9nWaJWCawa02Jj+5ilCad7UEZqSyIwQ27zqs/iFK35bi095EazChrxzL44MV3wsSaMhbQ/NlGRvXKaTE2L7SCK15AsCAf/z085zPFTGHC+21AHT7WdjPvVQwWl4PxL7ipYSY8JaMLxTFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=5RUoa4u7; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MJmfTMOY"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4356cSFK027558;
-	Fri, 5 Apr 2024 09:19:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=Yht7Xcc05+Ym6Fmdn8oyFxXQHLV5+oEHVmmq7hXQb9o=; b=MJ
-	mfTMOYhFiFLi7dBBpNcVNBaOkeLqytcppXHE/uUjiQ0N9NEzgN+aidKpLDYv0esh
-	NfClPWMZ7OI3gjSQSenApD/WEPazs2xvsi2b4bBTqAsOtn5Y9p+k4XjUnDvZ7pQK
-	Rp7c4x86OTniXPAEMQK1OjWkT7YwwWli1bYmtpCKTDBjcdeOLmfLUeY8+xg4VDIN
-	EG7viIXhhQmkmgHOG9EvHu2TmogDubu74+Glk7ZSfUMgE7t21Mas5yuyaqbOQoHZ
-	Jf6kFzAp6nrZtuwdgZWtIG6QiUeUNXU8Sk04J8K+VY5bgWBJpA9BraRvJMp/Q4FL
-	9+cjTLKzusY8wAO3g3qw==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xa1gx9e87-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 09:19:02 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4359J1GQ010157
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 5 Apr 2024 09:19:01 GMT
-Received: from [10.216.11.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 5 Apr 2024
- 02:18:56 -0700
-Message-ID: <704e4a60-ae8b-e951-87c0-3b0aa4cf26d6@quicinc.com>
-Date: Fri, 5 Apr 2024 14:48:51 +0530
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5RUoa4u7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1712309391;
+	bh=1XOKZGXshsQ///KoTh0XHfCQcdhzM+EgFmJYlctb1iY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=5RUoa4u77q8qb4bYxjP5FFYd8uzH/rCVesLHzZoDTFNxy2tZoPZ8eGkUr+4RUeO7C
+	 QSQMpQMh87gUg88C9ZU8X9EQTOupiPPVH5s6yAz1k0wQFB+EbDiIfwQAlrkAhphGP1
+	 vLZg9o0GaeDYcfuEdNFI3LqGv1I9oYrgqAQ9kg3P4EeA1KsbRMDcHn4yHsnEIPTIWJ
+	 VcCb2dajWYbJFVxRp1dMSv/X4BgJf0LrIYRTKXWSgkkPn27lCxeSTCaYhirUafeiGh
+	 lSp1iyZFIFp3klvcjneUG8h21mP8tDgWystHbsBp0mKn0vqUA844nt3qwlfvCXKbh5
+	 oWwV7lC1aZf5w==
+Received: from localhost (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sebastianfricke)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4152B3781116;
+	Fri,  5 Apr 2024 09:29:51 +0000 (UTC)
+Date: Fri, 5 Apr 2024 11:29:50 +0200
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+To: Ivan Bornyakov <brnkv.i1@gmail.com>
+Cc: Nas Chung <nas.chung@chipsnmedia.com>,
+	Jackson Lee <jackson.lee@chipsnmedia.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] media: chips-media: wave5: separate irq setup
+ routine
+Message-ID: <20240405092950.wt5cvhvhiujicc5h@basti-XPS-13-9310>
+References: <20240325064102.9278-1-brnkv.i1@gmail.com>
+ <20240325064102.9278-4-brnkv.i1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 08/19] media: venus: core: Get rid of vcodec_num
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross
-	<agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Mauro Carvalho
- Chehab" <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC: Marijn Suijten <marijn.suijten@somainline.org>,
-        Stanimir Varbanov
-	<stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab
-	<mchehab+huawei@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230911-topic-mars-v3-0-79f23b81c261@linaro.org>
- <20230911-topic-mars-v3-8-79f23b81c261@linaro.org>
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <20230911-topic-mars-v3-8-79f23b81c261@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MdkkAsO5D-Pr1RBt7OrM3WeHgL_UyTq0
-X-Proofpoint-GUID: MdkkAsO5D-Pr1RBt7OrM3WeHgL_UyTq0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-05_08,2024-04-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404050068
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240325064102.9278-4-brnkv.i1@gmail.com>
 
+Hey Ivan,
 
+On 25.03.2024 09:40, Ivan Bornyakov wrote:
+>Separate interrupts setup routine to reduce code duplication. Also
 
-On 3/27/2024 11:38 PM, Konrad Dybcio wrote:
-> That field was only introduced to differentiate between the legacy and
-> non-legacy SDM845 binding. Get rid of it.
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/media/platform/qcom/venus/core.c       | 5 -----
->  drivers/media/platform/qcom/venus/core.h       | 1 -
->  drivers/media/platform/qcom/venus/pm_helpers.c | 2 +-
->  3 files changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-> index 5e7cb54e6088..26a0c264685a 100644
-> --- a/drivers/media/platform/qcom/venus/core.c
-> +++ b/drivers/media/platform/qcom/venus/core.c
-> @@ -651,7 +651,6 @@ static const struct venus_resources sdm660_res = {
->  	.vcodec0_clks = { "vcodec0_core" },
->  	.vcodec1_clks = { "vcodec0_core" },
->  	.vcodec_clks_num = 1,
-> -	.vcodec_num = 1,
->  	.max_load = 1036800,
->  	.hfi_version = HFI_VERSION_3XX,
->  	.vmem_id = VIDC_RESOURCE_NONE,
-> @@ -725,7 +724,6 @@ static const struct venus_resources sdm845_res_v2 = {
->  	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0", "vcodec1" },
->  	.vcodec_pmdomains_num = 3,
->  	.opp_pmdomain = pd_names_cx,
-> -	.vcodec_num = 2,
->  	.max_load = 3110400,	/* 4096x2160@90 */
->  	.hfi_version = HFI_VERSION_4XX,
->  	.vpu_version = VPU_VERSION_AR50,
-> @@ -774,7 +772,6 @@ static const struct venus_resources sc7180_res = {
->  	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
->  	.vcodec_pmdomains_num = 2,
->  	.opp_pmdomain = pd_names_cx,
-> -	.vcodec_num = 1,
->  	.hfi_version = HFI_VERSION_4XX,
->  	.vpu_version = VPU_VERSION_AR50,
->  	.vmem_id = VIDC_RESOURCE_NONE,
-> @@ -831,7 +828,6 @@ static const struct venus_resources sm8250_res = {
->  	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
->  	.vcodec_pmdomains_num = 2,
->  	.opp_pmdomain = pd_names_mx,
-> -	.vcodec_num = 1,
->  	.max_load = 7833600,
->  	.hfi_version = HFI_VERSION_6XX,
->  	.vpu_version = VPU_VERSION_IRIS2,
-> @@ -890,7 +886,6 @@ static const struct venus_resources sc7280_res = {
->  	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
->  	.vcodec_pmdomains_num = 2,
->  	.opp_pmdomain = pd_names_cx,
-> -	.vcodec_num = 1,
->  	.hfi_version = HFI_VERSION_6XX,
->  	.vpu_version = VPU_VERSION_IRIS2_1,
->  	.num_vpp_pipes = 1,
-> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-> index 6a77de374454..376de1161114 100644
-> --- a/drivers/media/platform/qcom/venus/core.h
-> +++ b/drivers/media/platform/qcom/venus/core.h
-> @@ -74,7 +74,6 @@ struct venus_resources {
->  	const char **vcodec_pmdomains;
->  	unsigned int vcodec_pmdomains_num;
->  	const char **opp_pmdomain;
-> -	unsigned int vcodec_num;
->  	const char * const resets[VIDC_RESETS_NUM_MAX];
->  	unsigned int resets_num;
->  	enum hfi_version hfi_version;
-> diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-> index 5b2a40a2f524..ba63e6427eb9 100644
-> --- a/drivers/media/platform/qcom/venus/pm_helpers.c
-> +++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-> @@ -622,7 +622,7 @@ min_loaded_core(struct venus_inst *inst, u32 *min_coreid, u32 *min_load, bool lo
->  			VIDC_CORE_ID_1 : VIDC_CORE_ID_2;
->  	*min_load = min(core1_load, core2_load);
->  
-> -	if (cores_max < VIDC_CORE_ID_2 || core->res->vcodec_num < 2> +	if (cores_max < VIDC_CORE_ID_2 || legacy_binding) {
-core->res->vcodec_num < 2 doesn't mean legacy binding.
-7180, 8250 and 7280 have vcodec num as 1 but they don't follow legacy
-binding and they still have one core which is VIDC_CORE_ID_1.
->  		*min_coreid = VIDC_CORE_ID_1;
->  		*min_load = core1_load;
->  	}
-> 
+s/Separate interrupts setup routine/Implement a separate setup routine for interrupts/
 
-Thanks,
-Dikshita
+>enable interrupts based on vpu_attr->support_encoders and
+>vpu_attr->support_decoders fields to facilitate other Wave5xx IPs
+>support, because not all of them are both encoders and decoders.
+
+s/other Wave5xx IPs support/support for other Wave5xx IPs/
+
+The rest looks good to me.
+
+Greetings,
+Sebastian
+
+>
+>Signed-off-by: Ivan Bornyakov <brnkv.i1@gmail.com>
+>---
+> .../platform/chips-media/wave5/wave5-hw.c     | 53 +++++++++----------
+> 1 file changed, 24 insertions(+), 29 deletions(-)
+>
+>diff --git a/drivers/media/platform/chips-media/wave5/wave5-hw.c b/drivers/media/platform/chips-media/wave5/wave5-hw.c
+>index 2d82791f575e..cdd0a0948a94 100644
+>--- a/drivers/media/platform/chips-media/wave5/wave5-hw.c
+>+++ b/drivers/media/platform/chips-media/wave5/wave5-hw.c
+>@@ -299,6 +299,27 @@ static int wave5_send_query(struct vpu_device *vpu_dev, struct vpu_instance *ins
+> 	return wave5_vpu_firmware_command_queue_error_check(vpu_dev, NULL);
+> }
+>
+>+static void setup_wave5_interrupts(struct vpu_device *vpu_dev)
+>+{
+>+	u32 reg_val = 0;
+>+
+>+	if (vpu_dev->attr.support_encoders) {
+>+		/* Encoder interrupt */
+>+		reg_val |= BIT(INT_WAVE5_ENC_SET_PARAM);
+>+		reg_val |= BIT(INT_WAVE5_ENC_PIC);
+>+		reg_val |= BIT(INT_WAVE5_BSBUF_FULL);
+>+	}
+>+
+>+	if (vpu_dev->attr.support_decoders) {
+>+		/* Decoder interrupt */
+>+		reg_val |= BIT(INT_WAVE5_INIT_SEQ);
+>+		reg_val |= BIT(INT_WAVE5_DEC_PIC);
+>+		reg_val |= BIT(INT_WAVE5_BSBUF_EMPTY);
+>+	}
+>+
+>+	return vpu_write_reg(vpu_dev, W5_VPU_VINT_ENABLE, reg_val);
+>+}
+>+
+> static int setup_wave5_properties(struct device *dev)
+> {
+> 	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
+>@@ -340,6 +361,8 @@ static int setup_wave5_properties(struct device *dev)
+> 	p_attr->support_vcpu_backbone = FIELD_GET(FEATURE_VCPU_BACKBONE, hw_config_def0);
+> 	p_attr->support_vcore_backbone = FIELD_GET(FEATURE_VCORE_BACKBONE, hw_config_def0);
+>
+>+	setup_wave5_interrupts(vpu_dev);
+>+
+> 	return 0;
+> }
+>
+>@@ -417,16 +440,6 @@ int wave5_vpu_init(struct device *dev, u8 *fw, size_t size)
+> 	wave5_fio_writel(vpu_dev, W5_BACKBONE_AXI_PARAM, 0);
+> 	vpu_write_reg(vpu_dev, W5_SEC_AXI_PARAM, 0);
+>
+>-	/* Encoder interrupt */
+>-	reg_val = BIT(INT_WAVE5_ENC_SET_PARAM);
+>-	reg_val |= BIT(INT_WAVE5_ENC_PIC);
+>-	reg_val |= BIT(INT_WAVE5_BSBUF_FULL);
+>-	/* Decoder interrupt */
+>-	reg_val |= BIT(INT_WAVE5_INIT_SEQ);
+>-	reg_val |= BIT(INT_WAVE5_DEC_PIC);
+>-	reg_val |= BIT(INT_WAVE5_BSBUF_EMPTY);
+>-	vpu_write_reg(vpu_dev, W5_VPU_VINT_ENABLE, reg_val);
+>-
+> 	reg_val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
+> 	if (FIELD_GET(FEATURE_BACKBONE, reg_val)) {
+> 		reg_val = ((WAVE5_PROC_AXI_ID << 28) |
+>@@ -1034,16 +1047,6 @@ int wave5_vpu_re_init(struct device *dev, u8 *fw, size_t size)
+> 		wave5_fio_writel(vpu_dev, W5_BACKBONE_AXI_PARAM, 0);
+> 		vpu_write_reg(vpu_dev, W5_SEC_AXI_PARAM, 0);
+>
+>-		/* Encoder interrupt */
+>-		reg_val = BIT(INT_WAVE5_ENC_SET_PARAM);
+>-		reg_val |= BIT(INT_WAVE5_ENC_PIC);
+>-		reg_val |= BIT(INT_WAVE5_BSBUF_FULL);
+>-		/* Decoder interrupt */
+>-		reg_val |= BIT(INT_WAVE5_INIT_SEQ);
+>-		reg_val |= BIT(INT_WAVE5_DEC_PIC);
+>-		reg_val |= BIT(INT_WAVE5_BSBUF_EMPTY);
+>-		vpu_write_reg(vpu_dev, W5_VPU_VINT_ENABLE, reg_val);
+>-
+> 		reg_val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
+> 		if (FIELD_GET(FEATURE_BACKBONE, reg_val)) {
+> 			reg_val = ((WAVE5_PROC_AXI_ID << 28) |
+>@@ -1134,15 +1137,7 @@ static int wave5_vpu_sleep_wake(struct device *dev, bool i_sleep_wake, const uin
+> 		wave5_fio_writel(vpu_dev, W5_BACKBONE_AXI_PARAM, 0);
+> 		vpu_write_reg(vpu_dev, W5_SEC_AXI_PARAM, 0);
+>
+>-		/* Encoder interrupt */
+>-		reg_val = BIT(INT_WAVE5_ENC_SET_PARAM);
+>-		reg_val |= BIT(INT_WAVE5_ENC_PIC);
+>-		reg_val |= BIT(INT_WAVE5_BSBUF_FULL);
+>-		/* Decoder interrupt */
+>-		reg_val |= BIT(INT_WAVE5_INIT_SEQ);
+>-		reg_val |= BIT(INT_WAVE5_DEC_PIC);
+>-		reg_val |= BIT(INT_WAVE5_BSBUF_EMPTY);
+>-		vpu_write_reg(vpu_dev, W5_VPU_VINT_ENABLE, reg_val);
+>+		setup_wave5_interrupts(vpu_dev);
+>
+> 		reg_val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
+> 		if (FIELD_GET(FEATURE_BACKBONE, reg_val)) {
+>-- 
+>2.44.0
+>
+>
