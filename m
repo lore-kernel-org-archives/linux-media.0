@@ -1,100 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-108-mta112.mxroute.com (mail-108-mta112.mxroute.com [136.175.108.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD20733C9
-	for <linux-media@vger.kernel.org>; Sat,  6 Apr 2024 01:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487BD22EF3
+	for <linux-media@vger.kernel.org>; Sat,  6 Apr 2024 05:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712367886; cv=none; b=kCoILsWhlG/XCaw1tXUS/N69O4m8tVkQeqEcta07PppNsFw1HxVH+xJTbk/CxuViyfERGh1tJZ8k337tUtg+td316VM9Af/PdbSEXYxHizRBW5pA8sQ2FFqfe1IDKDiXYwwZCY8ORwrBfDQ/W02CyEpkV+w8gC1QibESdGd9M/8=
+	t=1712381156; cv=none; b=Cr/R7UQHBPRYoRqnnccAbflLyElgc5QDv/wkb2MGVwzCDqvCm2NWkMVT+SnU3RF71nePEAa3qLEADATDxce7wvvrx96e8jIze24p7o6nmtWhzAHcUG/n96lCGFmy23WeXt+jtTv8fLzJDLlcFlq+6t/K7fPaKJjK5ydrND4+qb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712367886; c=relaxed/simple;
-	bh=SxYYUHN+pG0KPJiVOE/kD36680oKHpsa6LLkjYtjvNQ=;
-	h=Date:From:To:Subject:Message-Id; b=SE+JiYr4YM6uWFrAmhoNiPCSnQ9JZI4K8pBxr7He6NEFMrH/B3WRbeLG9AYgYcIUKH+oI6XUxigbu0WxZHt2PLt9fUdgTdX6XBxCf8w6FHe+tAv1DnTFcp0Q0691s/1xkOszFa0sEOwD7/DzMqV2PFWcgXvJ3PpLaSKvKwAxfrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E83C433F1
-	for <linux-media@vger.kernel.org>; Sat,  6 Apr 2024 01:44:45 +0000 (UTC)
-Date: Sat, 06 Apr 2024 03:44:43 +0200
-From: "Hans Verkuil" <hverkuil-cisco@xs4all.nl>
-To: linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-Message-Id: <20240406014445.97E83C433F1@smtp.kernel.org>
+	s=arc-20240116; t=1712381156; c=relaxed/simple;
+	bh=PcVc0enR4j7Fu4qIcJTJAGfb9eIbRBk+MbR+x31n5Z4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gZTAZhadm3llKe58GfNHXPSgTXyPYvlABkWCcmJAJlF/6Buwvzj7/4kf0SN517eopunc4ypyJzNcCX1s3ZuWs9nvQNdWJqROzTDWDyiT7LHQjd8VxyIreL6PuJ3B2ZwdYh1wrMd+BFW28JsDzj3lCMHY/0RfChpoas74syoeHPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=yRxZ3zyb; arc=none smtp.client-ip=136.175.108.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="yRxZ3zyb"
+Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta112.mxroute.com (ZoneMTA) with ESMTPSA id 18eb1deb1d70003bea.011
+ for <linux-media@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 06 Apr 2024 05:25:45 +0000
+X-Zone-Loop: 0812d2876e3d564a7520d9051c874cab35e5df42216c
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=luigi311.com; s=x; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+	From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=sz1o3+H/QzcFhJgMgxzNEIq38+fbX0fuDgjyR3Z3QQc=; b=yRxZ3zybwPCDOXYc6dTeGjFcrD
+	oJ/ez3YSCH/U3R+W7HZ+fcllfTNo6nDrKK/J6LtIS+6pGlvAFrg1BKy+05tElSeHU+XVi9lLN7Jjq
+	N9wWf/YR2FfU3yz4kxdskDLVFCSxd7zRrbZErNyZKiZ8MEh3oScdzDZhatOoB/q3+riVjlqTrkRy7
+	Hqeh+nMcad2X60AuJoWOblCKmKuwLSR4xq2i1LF1f++LiJf/cQxwpQUlP0h1QbgLNhKUUez/MFVEI
+	p5YxnOGH1HDkg3IQGhGvjSPxDKypqt8FcRQbW50njJ2QApLlk+PAT2yoMCtocDpSVBdl4iJWE7/by
+	Vyq36ttA==;
+Message-ID: <803b0bd3-e615-41c1-888e-69b6ecca0b8a@luigi311.com>
+Date: Fri, 5 Apr 2024 23:25:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 09/25] media: i2c: imx258: Add support for running on 2
+ CSI data lanes
+To: Pavel Machek <pavel@ucw.cz>
+Cc: linux-media@vger.kernel.org, dave.stevenson@raspberrypi.com,
+ jacopo.mondi@ideasonboard.com, mchehab@kernel.org, robh@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ sakari.ailus@linux.intel.com, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org
+References: <20240403150355.189229-1-git@luigi311.com>
+ <20240403150355.189229-10-git@luigi311.com> <Zg2jvUDFnY83drlg@duo.ucw.cz>
+Content-Language: en-US
+From: Luis Garcia <git@luigi311.com>
+In-Reply-To: <Zg2jvUDFnY83drlg@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Id: git@luigi311.com
 
-This message is generated daily by a cron job that builds media_tree for
-the architectures in the list below.
+On 4/3/24 12:45, Pavel Machek wrote:
+> Hi!
+> 
+>> +/*
+>> + * 4208x3120 @ 30 fps needs 1267Mbps/lane, 4 lanes.
+>> + * To avoid further computation of clock settings, adopt the same per
+>> + * lane data rate when using 2 lanes, thus allowing a maximum of 15fps.
+>> + */
+>> +static const struct imx258_reg mipi_1267mbps_19_2mhz_2l[] = {
+>> +	{ 0x0136, 0x13 },
+>> +	{ 0x0137, 0x33 },
+>> +	{ 0x0301, 0x0A },
+>> +	{ 0x0303, 0x02 },
+>> +	{ 0x0305, 0x03 },
+>> +	{ 0x0306, 0x00 },
+>> +	{ 0x0307, 0xC6 },
+>> +	{ 0x0309, 0x0A },
+>> +	{ 0x030B, 0x01 },
+>> +	{ 0x030D, 0x02 },
+>> +	{ 0x030E, 0x00 },
+>> +	{ 0x030F, 0xD8 },
+>> +	{ 0x0310, 0x00 },
+>> +
+>> +	{ 0x0114, 0x01 },
+>> +	{ 0x0820, 0x09 },
+>> +	{ 0x0821, 0xa6 },
+>> +	{ 0x0822, 0x66 },
+>> +	{ 0x0823, 0x66 },
+>> +};
+>> +
+>> +static const struct imx258_reg mipi_1267mbps_19_2mhz_4l[] = {
+>>  	{ 0x0136, 0x13 },
+>>  	{ 0x0137, 0x33 },
+>>  	{ 0x0301, 0x05 },
+> 
+> I wish we did not have to copy all the magic values like this.
+> 
+> Best regards,
+> 								Pavel
+> 								
 
-Results of the daily build of media_tree:
-
-date:			Sat Apr  6 03:00:12 CEST 2024
-media-tree git repo:	git://linuxtv.org/hverkuil/media_tree.git
-media-tree git branch:	media_stage/master
-media-tree git hash:	b82779648dfd3814df4e381f086326ec70fd791f
-v4l-utils git hash:	62f1c6833e12f22c81750529761410621aa54830
-edid-decode git hash:	3d635499e4aca3319f0796ba787213c981c5a770
-gcc version:		i686-linux-gcc (GCC) 13.2.0
-smatch/sparse repo:     git://repo.or.cz/smatch.git
-smatch version:		v0.5.0-8613-g721ca29e
-sparse version:		v0.5.0-8613-g721ca29e
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: a7ebc7863dd57d9fa70443fa9f071ca22da90b8c
-host hardware:		x86_64
-host os:		6.5.0-26-generic
-
-linux-git-arm: OK
-linux-git-powerpc64: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-x86_64: OK
-no-acpi.config: OK
-no-of.config: OK
-no-pm-sleep.config: OK
-no-pm.config: OK
-no-debug-fs.config: OK
-sparse: WARNINGS:
-
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-
-smatch: WARNINGS:
-
-drivers/media/spi/cxd2880-spi.c:391 cxd2880_start_feed() warn: Please consider using kzalloc instead of kmalloc
-drivers/media/i2c/adv7180.c:1526 adv7180_probe() warn: 'client->irq' from request_threaded_irq() not released on lines: 1526.
-drivers/media/usb/siano/smsusb.c:53:38: warning: array of flexible structures
-drivers/media/v4l2-core/v4l2-ctrls-api.c:1091 v4l2_query_ext_ctrl() warn: iterator used outside loop: 'ref'
-drivers/media/platform/st/sti/hva/hva-hw.c:412 hva_hw_probe() warn: 'hva->clk' from clk_prepare() not released on lines: 412.
-
-COMPILE_TEST: OK
-strcpy/strncpy/strlcpy: OK
-abi-compliance: ABI OK
-pahole: ABI OK
-utils: OK
-spec-git: OK
-kerneldoc: OK
-
-date:			Sat Apr  6 03:13:41 CEST 2024
-virtme-64: WARNINGS: Final Summary: 3350, Succeeded: 3350, Failed: 0, Warnings: 4
-virtme-32: WARNINGS: Final Summary: 3482, Succeeded: 3482, Failed: 0, Warnings: 4
-
-date:			Sat Apr  6 03:43:45 CEST 2024
-
-Detailed results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-64.log
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-64-dmesg.log
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32.log
-https://hverkuil.home.xs4all.nl/logs/Saturday-test-media-32-dmesg.log
-
-Full logs are available here:
-
-https://hverkuil.home.xs4all.nl/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-https://hverkuil.home.xs4all.nl/spec/index.html
+no kidding, magic values everywhere.... it makes it annoying
+for me to move things around because they all start to look
+similar. Down the line we added in more defined names so its
+not as bad but still its bad lol.
