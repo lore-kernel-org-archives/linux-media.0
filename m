@@ -1,42 +1,42 @@
-Received: from mail-108-mta170.mxroute.com (mail-108-mta170.mxroute.com [136.175.108.170])
+Received: from mail-108-mta158.mxroute.com (mail-108-mta158.mxroute.com [136.175.108.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1648F1EB5E
-	for <linux-media@vger.kernel.org>; Sat,  6 Apr 2024 05:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868D6816
+	for <linux-media@vger.kernel.org>; Sat,  6 Apr 2024 06:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712381341; cv=none; b=eX2xcJ+yGGnSwRW3nyCppo2b2ttyvoWzIXIEghwpxf5MFujdwY9vxmTqOLAKg8ySXAFXdkvBUY4l2ITEvlMhbRbysALIEmWzwbzTNY8BTFY0iyomF6ZSKRcruYtn/AMuF6vc/Y65gqd72rRM9vzfLCb1qqJQg1+2lkc/YmrsszM=
+	t=1712385724; cv=none; b=eJU8HpRBjYpqIeiLibnbtjyWEkj6Gis6AOfBJ431eD0bsnO8FxZdagTcnY8iw34dEhg2jk94EpAB5EwZly9Pk1O2A8Z8Ira5iHhoYcWH0fMp92y0fkuPVFLc93CX4uGtBoF3IJtYK8HjdI1xJzNOK1b8xYl1VDOqvx7Bcfv1ExY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712381341; c=relaxed/simple;
-	bh=XvGGiaKjAp46vAegdWKN0fVnxmrfC1H1J6zN0QKFTrw=;
+	s=arc-20240116; t=1712385724; c=relaxed/simple;
+	bh=OxraREhf6GRED2LQephjdnm0ObJkCkvoK147D6T36ys=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b18wrU10kKIR7ztROAhRGkeO7L7pLnXngdfB4FaI83Cm0HJG6rU/AbffJza9V9LDmCwaPpNfYXOO1ZkpB5CCF0HxRunrrHUTcqAuOFYjPrTnzlvZpxhlya6E/iepBUffQuiMdvGIiO4JslI7CAm6DoAh/aVmBO1349uTBMGWMiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=RU30JmeZ; arc=none smtp.client-ip=136.175.108.170
+	 In-Reply-To:Content-Type; b=hKcY127GBHJhY0mFMgQw0k0i9lNs+s1A1nbz+KGHE/JG43JPz6VGEIRjtMWC5uGPsX4s69i9mgzlHklnr4NPVYnYp/3CrwHMt0mYShVMOGcANpcFijw327a9/k22HwvnR/WpV1bmyHwP6Q9X/NlwFmZ7c5CykofcaeyDAKJ2fXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=WPhbq6ZE; arc=none smtp.client-ip=136.175.108.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="RU30JmeZ"
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="WPhbq6ZE"
 Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta170.mxroute.com (ZoneMTA) with ESMTPSA id 18eb1dce0660003bea.011
+ by mail-108-mta158.mxroute.com (ZoneMTA) with ESMTPSA id 18eb21fcaf10003bea.011
  for <linux-media@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 06 Apr 2024 05:23:46 +0000
-X-Zone-Loop: 9a9ba47788bce267b6043d87b456303d67594a390ebc
+ Sat, 06 Apr 2024 06:36:51 +0000
+X-Zone-Loop: ec82345cf8a274a8b9a1121be544e353b74380e44112
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=luigi311.com; s=x; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
 	From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ZmuhkTALxM8lf0cfAvP+7dJ0PJ20DaBe8z1ii1wZ960=; b=RU30JmeZw8NfKZujRbkVuhHZc7
-	Wdnson/TB15EBa0BLASqHxyQNxUo4sK/fpaxMJHvihEmZLBTATxOJV2BXo3NfWsttfvLKNJJWHRsE
-	CeKtDYAyQP6Ppj2blTGdGqOtuua7XHqeODzZls2nZUb2ZPnnyrjg5+IiMbLf1veOem4ZcIE6FulIa
-	cFzdxpC9SCQ77SbyAmHMfGhhZKRZBLnK2b3qt+pu5WL3NOdQhoD4Sx3PAD7JyD1tpsiBRFs/Iw5M2
-	WYtRtpD/Nl5uPmjzU7acJ0j6ti7PD2GE0ijqjph2h/9H2Iu3mWHFgIpfSZoj8eNzC+j+RW3r4jlbG
-	IjfS1GLw==;
-Message-ID: <bbf7c8c3-ca67-43a1-88d0-199cc9299c6d@luigi311.com>
-Date: Fri, 5 Apr 2024 23:23:42 -0600
+	bh=P6oz8jLcfNyvGaOUeOoCwlqC8Ij6mtZ6/gKuz1gexug=; b=WPhbq6ZEa+mQTnijWaBY6xxs/H
+	cfHYUnpSRs8fOhOb/O4yJffkApW8GbdCsZ9fgpCJBUMa3pysrcREVULO1R/UkyRqIiPc9mObnfXPv
+	YmP7o/tAqB0ayOqkRLxs5fQtXrUia6yJroEUCCB+ckUFpQp8RHDB0YyE7tXXD9rJenqQZDa30Cqkj
+	soLpFl0b5rnHDmjMNbaU+mvK6HOXuMsdAhCIuIT3xhAYVnT6i+9TrIfSP7p+3tjqrOm0eD3oFmOvb
+	FE0z2dqpWXi9w++3zacDwlhzLX9akXx4T0C5yl6+Qkahp/SWJ/+9Q9RvAIcOuf71zbchDNERWMcas
+	kIvWVcdg==;
+Message-ID: <91621b30-dc6f-49cb-878c-96d39e38d994@luigi311.com>
+Date: Sat, 6 Apr 2024 00:36:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -44,7 +44,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/25] media: i2c: imx258: Add regulator control
+Subject: Re: [PATCH v3 11/25] media: i2c: imx258: Add get_selection for pixel
+ array information
 To: Pavel Machek <pavel@ucw.cz>
 Cc: linux-media@vger.kernel.org, dave.stevenson@raspberrypi.com,
  jacopo.mondi@ideasonboard.com, mchehab@kernel.org, robh@kernel.org,
@@ -54,36 +55,40 @@ Cc: linux-media@vger.kernel.org, dave.stevenson@raspberrypi.com,
  imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org
 References: <20240403150355.189229-1-git@luigi311.com>
- <20240403150355.189229-6-git@luigi311.com> <Zg2jgmmqw0nXDYcF@duo.ucw.cz>
+ <20240403150355.189229-12-git@luigi311.com> <Zg2kHYc6kdiZEAFD@duo.ucw.cz>
 Content-Language: en-US
 From: Luis Garcia <git@luigi311.com>
-In-Reply-To: <Zg2jgmmqw0nXDYcF@duo.ucw.cz>
+In-Reply-To: <Zg2kHYc6kdiZEAFD@duo.ucw.cz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Authenticated-Id: git@luigi311.com
 
-On 4/3/24 12:44, Pavel Machek wrote:
+On 4/3/24 12:46, Pavel Machek wrote:
 > Hi!
 > 
->> The device tree bindings define the relevant regulators for the
->> sensor, so update the driver to request the regulators and control
->> them at the appropriate times.
+>> Libcamera requires the cropping information for each mode, so
+>> add this information to the driver.
 > 
->> @@ -995,9 +1007,19 @@ static int imx258_power_on(struct device *dev)
->>  	struct imx258 *imx258 = to_imx258(sd);
->>  	int ret;
->>  
->> +	ret = regulator_bulk_enable(IMX258_NUM_SUPPLIES,
->> +				    imx258->supplies);
->> +	if (ret) {
+>> @@ -116,6 +124,9 @@ struct imx258_mode {
+>>  	u32 link_freq_index;
+>>  	/* Default register values */
+>>  	struct imx258_reg_list reg_list;
+>> +
+>> +	/* Analog crop rectangle. */
 > 
-> Will this make it fail for all current users?
+> No need for "." at the end, as it is not above.
+> 
+
+Done
+
+>> +	struct v4l2_rect crop;
+>>  };
+> 
+> If the crop is same in all modes, should we have it in common place?
 > 
 > Best regards,
 > 								Pavel
-> 								
 
-It shouldn't affect current users as this was added in by dave for
-a completely different sensor and it still works on my ppp. Looking
-at the dmesg for imx258 it does reference the regulators that the
-ppp doesnt have but it still works.
+I see the imx219 made a similar change where it was changed from using
+that .crop format to just setting it in the set_pad_format function
+so we can do something similar here.
