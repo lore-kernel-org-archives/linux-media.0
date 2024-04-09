@@ -1,137 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6687524AF
-	for <linux-media@vger.kernel.org>; Tue,  9 Apr 2024 06:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FDC79CC;
+	Tue,  9 Apr 2024 06:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712643523; cv=none; b=Y8kZ9Rk/2H6btKtLRhAoB5OJZtH+58FUlintxHDh78++eK91tX8LMwmeZT+6rQpcVxJ5gU/NKeI2nfD34XTiqrGfcNuro3meJsv8YfJLbtOwO6E3I5YHZ0WvYulfWsYb7OrdzG66G+Nq9+rL2kWKHWhbGpYFNN3MQzDmPPXTlLU=
+	t=1712645087; cv=none; b=S14CdeBE42AnGCIBpkorL6fTsqbDS4+qihJuZwWhYy/venGEILgAeIdb+o4D23wtGUCaNbuot5rlfmP7yJv6Nh9eu8IeBsWr7W1rIjSlcltk2jdZU538Q9AWun1BmUcZI/1ins0kcpOdXMZaCZYMmPHrJVKNFuK6fCWBuTHX4vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712643523; c=relaxed/simple;
-	bh=QRQvht6jAa/wKzsxQ3REzMiaEhQ+2BfyQyf8LTO5Fyk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=K/en6chqknRbeg5IVpOqbWqkROfpLe6dsfGF91ZC6OIppluuEmzXziXidZ1At7++ir1F07HrtDUaXqj+5EiDJTN1eUPAiXj17wocMhhgjIRJPVxITjDfdFTOWxbhT7VrxZXG5zS24u00Gq0xj9Nr9aNb6m4MUoFqhJT6xuRRofo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 042E2C433C7;
-	Tue,  9 Apr 2024 06:18:42 +0000 (UTC)
-Message-ID: <4f15e083-3c6a-4e98-ad02-2be2bd13359d@xs4all.nl>
-Date: Tue, 9 Apr 2024 08:18:41 +0200
+	s=arc-20240116; t=1712645087; c=relaxed/simple;
+	bh=c3rf2lftDQ48adYR6wNs4gJ4G6FOyKLWwDg6qawkDzQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fEUbNF0AkYtzOYFZCW1t/UFTsPHxS47yQwDF/a47TEyZLOY7NjRbSIKAEK4W7uu08BzM4twCBkYhvxOwgBKQrXJ/JVAKPuF2Hu4ShTyPMP/crm1SbZNdvvOQ/X2ah2WeQ/eRkt1jk84Mc2xkSyoedFaqYEeh4e4AqYZH/jahONk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=kTALjyBL; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="kTALjyBL"
+X-UUID: a0ab2ebcf63c11eeb8927bc1f75efef4-20240409
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=FlanlqfqVTCvu/sF5l5Vn/ngeI2/kVbcfoNHwjNRZw4=;
+	b=kTALjyBLBfQj7YKSKLgHbrlBxdokFvyry2uhjhaNzY5+qMMqR13ZzqF+y5Y5PT1T2IfhacJBObrwtVaPFcTi1925GRfGzciwRlXBJVGyLMQ+P26e+Z6hbxvkAOUFSlLktLfgXxnQrbNJ6GphjOXPoWuXAvSSomzWMUiX9KlnMSk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:79ebc5f3-3cd5-4aac-a1f0-4ada53d9b2bd,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-30
+X-CID-META: VersionHash:6f543d0,CLOUDID:6f02f585-8d4f-477b-89d2-1e3bdbef96d1,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: a0ab2ebcf63c11eeb8927bc1f75efef4-20240409
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <yunfei.dong@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1704572196; Tue, 09 Apr 2024 14:44:34 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 9 Apr 2024 14:44:33 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 9 Apr 2024 14:44:32 +0800
+From: Yunfei Dong <yunfei.dong@mediatek.com>
+To: =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
+	<nfraprado@collabora.com>, Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Benjamin Gaignard
+	<benjamin.gaignard@collabora.com>, Nathan Hebert <nhebert@chromium.org>,
+	Sebastian Fricke <sebastian.fricke@collabora.com>
+CC: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
+	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, Yunfei
+ Dong <yunfei.dong@mediatek.com>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2,1/5] media: mediatek: vcodec: fix incorrect MT2T format information
+Date: Tue, 9 Apr 2024 14:44:27 +0800
+Message-ID: <20240409064431.16909-2-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240409064431.16909-1-yunfei.dong@mediatek.com>
+References: <20240409064431.16909-1-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, nl
-To: Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc: =?UTF-8?Q?Pawe=C5=82_Anikiel?= <panikiel@google.com>
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v6.10] Switch subdev dv timing callbacks to pad ops
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- xsFNBFQ84W0BEAC7EF1iL4s3tY8cRTVkJT/297h0Hz0ypA+ByVM4CdU9sN6ua/YoFlr9k0K4
- BFUlg7JzJoUuRbKxkYb8mmqOe722j7N3HO8+ofnio5cAP5W0WwDpM0kM84BeHU0aPSTsWiGR
- yw55SOK2JBSq7hueotWLfJLobMWhQii0Zd83hGT9SIt9uHaHjgwmtTH7MSTIiaY6N14nw2Ud
- C6Uykc1va0Wqqc2ov5ihgk/2k2SKa02ookQI3e79laOrbZl5BOXNKR9LguuOZdX4XYR3Zi6/
- BsJ7pVCK9xkiVf8svlEl94IHb+sa1KrlgGv3fn5xgzDw8Z222TfFceDL/2EzUyTdWc4GaPMC
- E/c1B4UOle6ZHg02+I8tZicjzj5+yffv1lB5A1btG+AmoZrgf0X2O1B96fqgHx8w9PIpVERN
- YsmkfxvhfP3MO3oHh8UY1OLKdlKamMneCLk2up1Zlli347KMjHAVjBAiy8qOguKF9k7HOjif
- JCLYTkggrRiEiE1xg4tblBNj8WGyKH+u/hwwwBqCd/Px2HvhAsJQ7DwuuB3vBAp845BJYUU3
- 06kRihFqbO0vEt4QmcQDcbWINeZ2zX5TK7QQ91ldHdqJn6MhXulPKcM8tCkdD8YNXXKyKqNl
- UVqXnarz8m2JCbHgjEkUlAJCNd6m3pfESLZwSWsLYL49R5yxIwARAQABzSFIYW5zIFZlcmt1
- aWwgPGh2ZXJrdWlsQHhzNGFsbC5ubD7CwZUEEwECACgFAlQ84W0CGwMFCRLMAwAGCwkIBwMC
- BhUIAgkKCwQWAgMBAh4BAheAACEJEL0tYUhmFDtMFiEEBSzee8IVBTtonxvKvS1hSGYUO0wT
- 7w//frEmPBAwu3OdvAk9VDkH7X+7RcFpiuUcJxs3Xl6jpaA+SdwtZra6W1uMrs2RW8eXXiq/
- 80HXJtYnal1Y8MKUBoUVhT/+5+KcMyfVQK3VFRHnNxCmC9HZV+qdyxAGwIscUd4hSlweuU6L
- 6tI7Dls6NzKRSTFbbGNZCRgl8OrF01TBH+CZrcFIoDgpcJA5Pw84mxo+wd2BZjPA4TNyq1od
- +slSRbDqFug1EqQaMVtUOdgaUgdlmjV0+GfBHoyCGedDE0knv+tRb8v5gNgv7M3hJO3Nrl+O
- OJVoiW0G6OWVyq92NNCKJeDy8XCB1yHCKpBd4evO2bkJNV9xcgHtLrVqozqxZAiCRKN1elWF
- 1fyG8KNquqItYedUr+wZZacqW+uzpVr9pZmUqpVCk9s92fzTzDZcGAxnyqkaO2QTgdhPJT2m
- wpG2UwIKzzi13tmwakY7OAbXm76bGWVZCO3QTHVnNV8ku9wgeMc/ZGSLUT8hMDZlwEsW7u/D
- qt+NlTKiOIQsSW7u7h3SFm7sMQo03X/taK9PJhS2BhhgnXg8mOa6U+yNaJy+eU0Lf5hEUiDC
- vDOI5x++LD3pdrJVr/6ZB0Qg3/YzZ0dk+phQ+KlP6HyeO4LG662toMbFbeLcBjcC/ceEclII
- 90QNEFSZKM6NVloM+NaZRYVO3ApxWkFu+1mrVTXOwU0EVDzhbQEQANzLiI6gHkIhBQKeQaYs
- p2SSqF9c++9LOy5x6nbQ4s0X3oTKaMGfBZuiKkkU6NnHCSa0Az5ScRWLaRGu1PzjgcVwzl5O
- sDawR1BtOG/XoPRNB2351PRp++W8TWo2viYYY0uJHKFHML+ku9q0P+NkdTzFGJLP+hn7x0RT
- DMbhKTHO3H2xJz5TXNE9zTJuIfGAz3ShDpijvzYieY330BzZYfpgvCllDVM5E4XgfF4F/N90
- wWKu50fMA01ufwu+99GEwTFVG2az5T9SXd7vfSgRSkzXy7hcnxj4IhOfM6Ts85/BjMeIpeqy
- TDdsuetBgX9DMMWxMWl7BLeiMzMGrfkJ4tvlof0sVjurXibTibZyfyGR2ricg8iTbHyFaAzX
- 2uFVoZaPxrp7udDfQ96sfz0hesF9Zi8d7NnNnMYbUmUtaS083L/l2EDKvCIkhSjd48XF+aO8
- VhrCfbXWpGRaLcY/gxi2TXRYG9xCa7PINgz9SyO34sL6TeFPSZn4bPQV5O1j85Dj4jBecB1k
- z2arzwlWWKMZUbR04HTeAuuvYvCKEMnfW3ABzdonh70QdqJbpQGfAF2p4/iCETKWuqefiOYn
- pR8PqoQA1DYv3t7y9DIN5Jw/8Oj5wOeEybw6vTMB0rrnx+JaXvxeHSlFzHiD6il/ChDDkJ9J
- /ejCHUQIl40wLSDRABEBAAHCwXwEGAECAA8FAlQ84W0CGwwFCRLMAwAAIQkQvS1hSGYUO0wW
- IQQFLN57whUFO2ifG8q9LWFIZhQ7TA1WD/9yxJvQrpf6LcNrr8uMlQWCg2iz2q1LGt1Itkuu
- KaavEF9nqHmoqhSfZeAIKAPn6xuYbGxXDrpN7dXCOH92fscLodZqZtK5FtbLvO572EPfxneY
- UT7JzDc/5LT9cFFugTMOhq1BG62vUm/F6V91+unyp4dRlyryAeqEuISykhvjZCVHk/woaMZv
- c1Dm4Uvkv0Ilelt3Pb9J7zhcx6sm5T7v16VceF96jG61bnJ2GFS+QZerZp3PY27XgtPxRxYj
- AmFUeF486PHx/2Yi4u1rQpIpC5inPxIgR1+ZFvQrAV36SvLFfuMhyCAxV6WBlQc85ArOiQZB
- Wm7L0repwr7zEJFEkdy8C81WRhMdPvHkAIh3RoY1SGcdB7rB3wCzfYkAuCBqaF7Zgfw8xkad
- KEiQTexRbM1sc/I8ACpla3N26SfQwrfg6V7TIoweP0RwDrcf5PVvwSWsRQp2LxFCkwnCXOra
- gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
- sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
- UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-This is needed in preparation for the Chameleon v3 driver, and
-it is not a bad thing to have anyway.
+Changing the bpp and hdiv values to make sure the bytesperline
+of plane[0] and plane[1] are the same. The width and height are
+64 align.
 
-I plan to merge this tomorrow if there are no objections.
+Fixes: 6afcc2b0aebf ("media: mediatek: vcodec: Add capture format to support 10bit tile mode")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ drivers/media/v4l2-core/v4l2-common.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index d34d210908d9..8587cd14741c 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -265,8 +265,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		{ .format = V4L2_PIX_FMT_VYUY,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_Y212,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 2, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_YUV48_12, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 6, 0, 0, 0 }, .bpp_div = { 1, 1, 1, 1 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_MT2110T, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 2,
+-		  .block_w = { 16, 8, 0, 0 }, .block_h = { 32, 16, 0, 0 }},
++		{ .format = V4L2_PIX_FMT_MT2110T, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 1, .vdiv = 2,
++		  .block_w = { 64, 64, 0, 0 }, .block_h = { 64, 64, 0, 0 }},
+ 		{ .format = V4L2_PIX_FMT_MT2110R, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 5, 10, 0, 0 }, .bpp_div = { 4, 4, 1, 1 }, .hdiv = 2, .vdiv = 2,
+ 		  .block_w = { 16, 8, 0, 0 }, .block_h = { 32, 16, 0, 0 }},
+ 
+-- 
+2.18.0
 
-	Hans
-
-The following changes since commit b82779648dfd3814df4e381f086326ec70fd791f:
-
-  Merge tag 'v6.9-rc2' into media_stage (2024-04-01 10:08:18 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v6.10d
-
-for you to fetch changes up to 23de199e4ddc64e0ae9a7e71333d3a87f4504811:
-
-  media: v4l2-subdev: Remove non-pad dv timing callbacks (2024-04-09 07:54:16 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Paweł Anikiel (17):
-      media: v4l2-subdev: Add pad versions of dv timing subdev calls
-      media: i2c: adv748x: Switch dv timing callbacks to pad ops
-      media: i2c: adv7511: Switch dv timing callbacks to pad ops
-      media: i2c: adv7604: Switch dv timing callbacks to pad ops
-      media: i2c: adv7842: Switch dv timing callbacks to pad ops
-      media: i2c: tc358743: Switch dv timing callbacks to pad ops
-      media: i2c: tda1997x: Switch dv timing callbacks to pad ops
-      media: i2c: ths7303: Switch dv timing callbacks to pad ops
-      media: i2c: ths8200: Switch dv timing callbacks to pad ops
-      media: i2c: tvp7002: Switch dv timing callbacks to pad ops
-      media: spi: gs1662: Switch dv timing callbacks to pad ops
-      media: cobalt: Use pad variant of dv timing subdev calls
-      media: rcar-vin: Use pad variant of dv timing subdev calls
-      media: vpif_capture: Use pad variant of dv timing subdev calls
-      media: vpif_display: Use pad variant of dv timing subdev calls
-      media: tegra-video: Use pad variant of dv timing subdev calls
-      media: v4l2-subdev: Remove non-pad dv timing callbacks
-
- drivers/media/i2c/adv748x/adv748x-hdmi.c            | 16 ++++++++--------
- drivers/media/i2c/adv7511-v4l2.c                    | 16 +++++++++++-----
- drivers/media/i2c/adv7604.c                         | 20 ++++++++++----------
- drivers/media/i2c/adv7842.c                         | 25 +++++++++++++++++--------
- drivers/media/i2c/tc358743.c                        | 25 +++++++++++++++++--------
- drivers/media/i2c/tda1997x.c                        | 14 +++++++-------
- drivers/media/i2c/ths7303.c                         | 10 +++++++---
- drivers/media/i2c/ths8200.c                         | 14 ++++++++++----
- drivers/media/i2c/tvp7002.c                         | 32 +++++++++++++++++++++-----------
- drivers/media/pci/cobalt/cobalt-v4l2.c              | 12 ++++++------
- drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c |  9 ++++++---
- drivers/media/platform/ti/davinci/vpif_capture.c    |  4 ++--
- drivers/media/platform/ti/davinci/vpif_display.c    |  2 +-
- drivers/media/spi/gs1662.c                          | 27 ++++++++++++++++++---------
- drivers/media/v4l2-core/v4l2-subdev.c               | 39 ++++++++++++++++++++++++++++++++++++---
- drivers/staging/media/tegra-video/vi.c              | 12 ++++++------
- include/media/v4l2-subdev.h                         | 28 ++++++++++++++--------------
- 17 files changed, 197 insertions(+), 108 deletions(-)
