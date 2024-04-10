@@ -1,101 +1,127 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6342837B
-	for <linux-media@vger.kernel.org>; Wed, 10 Apr 2024 11:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C7615957C;
+	Wed, 10 Apr 2024 11:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712747674; cv=none; b=spz7OEauv1n7wd4FP+eO3ely3RMUkRlI8u2NvT+3Cqfqsehl55+JVM/JmMHSfi66R7gWpTZk0U8YIV21fVoQlLSP6cV6a6e12LfSe6xk8LSOw9fFbSmPLJrJENshmiO4ZB7AqMDBZj10hUw3Z0/eaisowuwWuLiU6yFmdloUwio=
+	t=1712747847; cv=none; b=qN6yI+AqQOSVowOydKxwoRL5NZ7mePVs8MEGK1zts+0XTOrQE86DmMQnycmU95jCCTlLv+2EcKC0AYpQHFow9UENsxfDblxdDdukMgw/ujCWg9DuFoRUWxafIkS3Jzdhxu0JjtJB8qAd1uUi3EJYglsREL/edgRT19GtXMjtXN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712747674; c=relaxed/simple;
-	bh=ErNPG/b8cdlMk2AHLkfMjsFKULHHbUnwMF3BBXeU8J8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uGFtR+VQEekzgE3qEDdBkwPqE8yrYLxOXCSx7ALNjsZgHXQElNfaDq6A+C4GBNvR5j9wzWJQY/+Y1O/ZThDEq5oTiEfiq83IyC0tgtOFiTjpsgfOMJYK1Nlu/G31sylFdYk9nmz4IQT64lKcowhLekFNbRsP7kM3laRk8TMVbQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=VVpmsGNk; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1712747847; c=relaxed/simple;
+	bh=pER0NM4vYBrvd5XYubWKnRCsZIKjQJ16u1XGT5yrFT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=me942siNDx7SkVnUqlxxZ9v+qmASqNx/0gw1pue7DjjnfPnzPTiBUJfC09tBITp1rj7ngY8bqkZSiaL0YV9nQIxTnWNNG2dZjm6zTuUffCVJ/BCqaSu4FbHRt6XjZoY4HeZTrncS+rPnDr3LlbjJFxj5T2m30hZFUtC3igE9gis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ezlcjtmD; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="VVpmsGNk"
-X-UUID: 7df0db0cf72b11ee935d6952f98a51a9-20240410
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=k2vJZvzXPWAch/3DrDdHKVno+X2M7Z03bzv0+J14OPA=;
-	b=VVpmsGNkpprCLcHsYuxZaAF2IP1m2K2dfGLZvaRabzwWfS6oF3/F2lvf4pmF7ysa5e85gaDX7GQbdTrLk4Xsc1+/JqJJ6UU9Co5gpI6uJqwhH80CQdJ2YvCA+rSBCgk3xy5nKZhEGRNMP/7oFMPROrH1NO86sFHmDupTbONj2O4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:00f2367f-d7a7-4b9a-9614-fa7b5f49da77,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6f543d0,CLOUDID:2011c0fa-ed05-4274-9204-014369d201e8,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 50,UGT
-X-CID-BAS: 50,UGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: 7df0db0cf72b11ee935d6952f98a51a9-20240410
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-	(envelope-from <irui.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1302845419; Wed, 10 Apr 2024 19:14:26 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 Apr 2024 19:14:19 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 10 Apr 2024 19:14:18 +0800
-From: Irui Wang <irui.wang@mediatek.com>
-To: <linux-firmware@kernel.org>
-CC: <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
-	<Longfei.Wang@mediatek.com>, <Yunfei.Dong@mediatek.com>,
-	<Andrew-CT.Chen@mediatek.com>, <tiffany.lin@mediatek.com>,
-	<irui.wang@mediatek.com>, <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: pull request: linux-firmware: mediatek: Update MT8173 VPU firmware to v1.1.9 
-Date: Wed, 10 Apr 2024 19:14:15 +0800
-Message-ID: <20240410111416.2204-1-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ezlcjtmD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712747846; x=1744283846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pER0NM4vYBrvd5XYubWKnRCsZIKjQJ16u1XGT5yrFT4=;
+  b=ezlcjtmD/ktM6A92Py7vXB7YFnk1c6cdDfeOBpHDfbA+wwGqPx9W8qta
+   6zcTrCwQGG8oPzEewnKcnbkmgUKJTEqVlcfVuWjoZgsfIP3CqRUEo/9kY
+   vR8L2BbkyRRg8qFzCX58ZvqPJLWi7iQLG694Ah1F+fk1OlSW26NDxQO1g
+   JOqmKhI76pBighwbRjpqrkicDWoriHADgX7zW6kT5rX8y7SDMAQGifs9J
+   8pBNVbrptXfDnBbAEYbU/jz1lj3sAqFgwuCx1nXcIS7kY6Ktf9rKQpJJV
+   fF82IlVyiM1pZTwjsMTLroW7iBeGqR9thp3S8poamNqxaHpZOCpDzDn4S
+   A==;
+X-CSE-ConnectionGUID: xXbGhC6MSze6amyX8fKQTA==
+X-CSE-MsgGUID: MrYdJLMeRXuqA6InNhIaDw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="18816381"
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="18816381"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 04:17:25 -0700
+X-CSE-ConnectionGUID: C7AjCQ9rTfCAdoyAp2k11Q==
+X-CSE-MsgGUID: 3r34T1WgR5imCm5yu/AUJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,190,1708416000"; 
+   d="scan'208";a="20414713"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2024 04:17:23 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 4FAAC1203E6;
+	Wed, 10 Apr 2024 14:17:20 +0300 (EEST)
+Date: Wed, 10 Apr 2024 11:17:20 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/9] media: subdev: Refactor
+ v4l2_subdev_enable/disable_streams()
+Message-ID: <ZhZ1QNAaRtplcero@kekkonen.localdomain>
+References: <20240405-enable-streams-impro-v2-0-22bca967665d@ideasonboard.com>
+ <20240405-enable-streams-impro-v2-8-22bca967665d@ideasonboard.com>
+ <ZhZmNC4hQv1leL-y@kekkonen.localdomain>
+ <ec113029-bf85-44c7-9e56-d242e5eecba0@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--2.122600-8.000000
-X-TMASE-MatchedRID: lT3Pays+ayfPOb61tmLEGoSvKOGqLLPK/kqO2xYqX5aqG/oAv7EtlT3O
-	m/10wG4m94kvTNM1tWePFrrIuZSCCl/ag3kgZsCOngIgpj8eDcBpkajQR5gb3savT21DsLD/UEh
-	Wy9W70AFYF3qW3Je6+5hOxoM3JPyDViork/Gnty5YDTpkwiF+IbKEF54avyFSFjGYDTSgk1Ilyt
-	ehiG+vxvLpWv+Ui6RSioz9IaWL7lI2eTwdZT29r4SVUZZHNLr+RgV6Hsqyx11QaONuZ6Jr4g9k3
-	l8EaYIcovpDXVQHzIN+3BndfXUhXQ==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--2.122600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	F31CA27B66CB61F2B24F8A3F80638668CD75F6C8AB4F1C27A8621BFD9E74AACF2000:8
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec113029-bf85-44c7-9e56-d242e5eecba0@ideasonboard.com>
 
-Dear linux-firmware maintainers,
+On Wed, Apr 10, 2024 at 01:35:41PM +0300, Tomi Valkeinen wrote:
+> On 10/04/2024 13:13, Sakari Ailus wrote:
+> > Moi,
+> > 
+> > Thank you for working on this.
+> > 
+> > On Fri, Apr 05, 2024 at 12:14:26PM +0300, Tomi Valkeinen wrote:
+> > > Add two internal helper functions, v4l2_subdev_collect_streams() and
+> > > v4l2_subdev_set_streams_enabled(), which allows us to refactor
+> > > v4l2_subdev_enable/disable_streams() functions.
+> > > 
+> > > This (I think) makes the code a bit easier to read, and lets us more
+> > > easily add new functionality in the helper functions in the following
+> > > patch.
+> > > 
+> > > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> > > ---
+> > >   drivers/media/v4l2-core/v4l2-subdev.c | 111 +++++++++++++++++++---------------
+> > >   1 file changed, 62 insertions(+), 49 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> > > index 015f2fb423c9..6c3c9069f1e2 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > > @@ -2099,6 +2099,44 @@ int v4l2_subdev_routing_validate(struct v4l2_subdev *sd,
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(v4l2_subdev_routing_validate);
+> > > +static void v4l2_subdev_collect_streams(struct v4l2_subdev *sd,
+> > > +					struct v4l2_subdev_state *state,
+> > > +					u32 pad, u64 streams_mask,
+> > > +					u64 *found_streams,
+> > > +					u64 *enabled_streams)
+> > > +{
+> > > +	*found_streams = 0;
+> > > +	*enabled_streams = 0;
+> > > +
+> > > +	for (unsigned int i = 0; i < state->stream_configs.num_configs; ++i) {
+> > > +		const struct v4l2_subdev_stream_config *cfg;
+> > > +
+> > > +		cfg = &state->stream_configs.configs[i];
+> > 
+> > You can do the assignment in declaration.
+> 
+> I can, but you want the lines to be split at 80, so that'll end up being in
+> two lines, which, I think, looks messier than the one above.
+> 
+> Usually I think doing initialization when declaring the variable is best
+> done if it fits into one line.
 
-The following changes since commit 1addd7dca2d953a5484c3e3c08dbd7dc253058dd:
+I don't consider a line break being an issue here (or almost anywhere else,
+except possibly for arrays of definitions).
 
-  Merge branch 'rtw' into 'main' (2024-04-09 12:30:28 +0000)
-
-are available in the Git repository at:
-
-  https://github.com/irui-wang/linux_fw_vpu_v1.1.9.git v1.1.9
-
-for you to fetch changes up to c81f094c847d934c0ffe0870fa5cf861c62e3451:
-
-  linux-firmware: mediatek: Update MT8173 VPU firmware to v1.1.9 (2024-04-10 18:36:10 +0800)
-
-----------------------------------------------------------------
-Irui Wang (1):
-      linux-firmware: mediatek: Update MT8173 VPU firmware to v1.1.9
-
- mediatek/mt8173/vpu_d.bin | Bin 2977184 -> 2977184 bytes
- mediatek/mt8173/vpu_p.bin | Bin 131380 -> 131380 bytes
- 2 files changed, 0 insertions(+), 0 deletions(-)
-
-
+-- 
+Sakari Ailus
