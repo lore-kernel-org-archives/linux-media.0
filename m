@@ -1,45 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728B06BB54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9A16BFC5
 	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 12:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713182574; cv=none; b=VxwdhcWVnxgfW0ms+uDRsj51hyRLvg06Hfo81rOw2JmWylGjKIv4dFpcW5k811qiGrYZMyh+yiDpuc8Z9sMfO4dH2oP9dIUsw7/jn2lultOEIRCHutlFbvo5HCm7Qbajp6KZO6UUtluVKczo+cuI1Uew+mTsRscVXs6I4/4u+tk=
+	t=1713182575; cv=none; b=DlTtXpCXI+b3HBRH6Enu1BNSLAvMz7jNHyCONvXJWi7nxcjLCMGmN+RG2UPTdojUnmdBLabJLRXM/J+O4u8mby6m/4O7uNNd6a90AAcAqXibfCYek98gi1ZlWb40dTgsAhrsdSk6QuJL4Q3XQKDeZIWjSt+XFHlF/LIWqTz1CTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713182574; c=relaxed/simple;
-	bh=TyvtyYWLVLteFRLJofQYoGhX4EBIYlVcQvdNAJOt1U8=;
+	s=arc-20240116; t=1713182575; c=relaxed/simple;
+	bh=/2KJ/TsMOZJB6hH86nftC0fSo3cHqvgpF5KdM3jdmtc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=d7mOt/gBXaxQ3as0p17sG5sFAUeyeyDl35dlD2dm6sTDCaCOtYZNJ2Q8Hfb2j2GmSQCOgJaa0p9i8buPNQZwQKKHsd1w5uzJPDLTSB89/scCBRv+ANphyLwX8v108apO4JCvLetDb1K7sxhrNC6ZH3WbX5Y2zzJA33SX865Hgaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R+t7oSkL; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=LqxyHd4SUM8+Z6fTpk+0Y9hcftHuhQACU2A7OTCJcY8EnJxXrukByRf7Z+BWjqEDpAjMAQGqq0PyCBvrxkAK+2SUs/A216q1kYDAHZnvo4aMbsKXuvIx/vWXwAmMl85sszB3eB5TbzOA3nGoLw/FtAAUP9qNXsJ47VsK/XycHYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=auaEFygo; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R+t7oSkL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="auaEFygo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1713182572;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oY80KwTzoqhoG9HboYfuMAuXhGbSeDqny1msoJyxThg=;
-	b=R+t7oSkLO/IAHStuHERZlkioOEceZeOQ9X7XixKwtqZ4QaP7uMmbNW/p2KLHOzvfHflmR+
-	Bc0bWFFBaol4ZqmxBNeEaXwi/cvFGfbSXLe3sMH5QCRgK8c15H3npGeXxGqTtbbTPeYKAc
-	pcA19LcJ4IGC6ICBTrYnmivh+dT5ngk=
+	bh=oHHrJR8HiRcRSBbFDuzyUMs/wZE2RbsTa3jSRIQeRbo=;
+	b=auaEFygoRUU1G8YjopStAOQ5wUc0mvSaiBuVFjxYvfS7TQkppdK5vWCzusX//Egq8YtDGB
+	SlWXMjxpO3+uPfDFpGyxKsr5aKJhFkmK8sAMHPN8D9pM6/B8x/WbvIDBtGDoOIe2FJrkRK
+	Tv0pNOsP83ajlTT+azS3kl2KbcwLhIc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-331-_6SAe04KNyuULr8ktd3SHQ-1; Mon, 15 Apr 2024 08:02:49 -0400
-X-MC-Unique: _6SAe04KNyuULr8ktd3SHQ-1
+ us-mta-490-vTy0ymoRMKuhzaK2IVM07A-1; Mon, 15 Apr 2024 08:02:47 -0400
+X-MC-Unique: vTy0ymoRMKuhzaK2IVM07A-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9877B802A6F;
-	Mon, 15 Apr 2024 12:02:48 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3D1780171E;
+	Mon, 15 Apr 2024 12:02:45 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.195.17])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 601F5C01594;
-	Mon, 15 Apr 2024 12:02:47 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7CE7BC13FA1;
+	Mon, 15 Apr 2024 12:02:44 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Andy Shevchenko <andy@kernel.org>
@@ -50,9 +50,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Fabio Aiuto <fabioaiuto83@gmail.com>,
 	linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: [PATCH 10/23] media: atomisp: ov2722: Remove power on sensor from set_fmt() callback
-Date: Mon, 15 Apr 2024 14:02:07 +0200
-Message-ID: <20240415120220.219480-11-hdegoede@redhat.com>
+Subject: [PATCH 08/23] media: atomisp: Call media_pipeline_alloc_start() in stream start
+Date: Mon, 15 Apr 2024 14:02:05 +0200
+Message-ID: <20240415120220.219480-9-hdegoede@redhat.com>
 In-Reply-To: <20240415120220.219480-1-hdegoede@redhat.com>
 References: <20240415120220.219480-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -64,85 +64,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-The atomisp driver now properly ensures s_power(1) is called before calling
-the set_fmt() callback, so this workaround is no longer necessary.
+Call media_pipeline_alloc_start() from atomisp_start_streaming() to mark
+all involved subdevs as busy so that the links cannot be changed through
+the media-controller APIs while streaming.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-ov2722.c | 12 ------------
- drivers/staging/media/atomisp/i2c/ov2722.h         |  1 -
- 2 files changed, 13 deletions(-)
+ drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 15 +++++++++++++++
+ .../staging/media/atomisp/pci/atomisp_subdev.h    |  1 +
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-index 133e346ae51b..d60630ea16df 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2722.c
-@@ -528,9 +528,6 @@ static int power_up(struct v4l2_subdev *sd)
- 		return -ENODEV;
- 	}
- 
--	if (dev->power_on == 1)
--		return 0; /* Already on */
--
- 	/* power control */
- 	ret = power_ctrl(sd, 1);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index c16942051cfb..8ef8cbc3b7a7 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -902,6 +902,20 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
  	if (ret)
-@@ -555,7 +552,6 @@ static int power_up(struct v4l2_subdev *sd)
- 	/* according to DS, 20ms is needed between PWDN and i2c access */
- 	msleep(20);
+ 		goto out_unlock;
  
--	dev->power_on = 1;
- 	return 0;
++	/*
++	 * When running a classic v4l2 app after a media-controller aware
++	 * app, the CSI-receiver -> ISP link for the current sensor may be
++	 * disabled. Fix this up before marking the pipeline as started.
++	 */
++	mutex_lock(&isp->media_dev.graph_mutex);
++	atomisp_setup_input_links(isp);
++	ret = __media_pipeline_start(&asd->video_out.vdev.entity.pads[0], &asd->video_out.pipe);
++	mutex_unlock(&isp->media_dev.graph_mutex);
++	if (ret) {
++		dev_err(isp->dev, "Error starting mc pipline: %d\n", ret);
++		goto out_unlock;
++	}
++
+ 	/* Input system HW workaround */
+ 	atomisp_dma_burst_len_cfg(asd);
  
- fail_clk:
-@@ -579,9 +575,6 @@ static int power_down(struct v4l2_subdev *sd)
- 		return -ENODEV;
- 	}
- 
--	if (dev->power_on == 0)
--		return 0; /* Already off */
--
- 	ret = dev->platform_data->flisclk_ctrl(sd, 0);
+@@ -1054,6 +1068,7 @@ void atomisp_stop_streaming(struct vb2_queue *vq)
  	if (ret)
- 		dev_err(&client->dev, "flisclk failed\n");
-@@ -599,7 +592,6 @@ static int power_down(struct v4l2_subdev *sd)
- 	if (ret)
- 		dev_err(&client->dev, "vprog failed.\n");
+ 		dev_warn(isp->dev, "Recreating streams failed: %d\n", ret);
  
--	dev->power_on = 0;
- 	return ret;
++	media_pipeline_stop(&asd->video_out.vdev.entity.pads[0]);
+ 	mutex_unlock(&isp->mutex);
  }
  
-@@ -677,9 +669,6 @@ static int ov2722_set_fmt(struct v4l2_subdev *sd,
- 
- 	mutex_lock(&dev->input_lock);
- 
--	/* s_power has not been called yet for std v4l2 clients (camorama) */
--	power_up(sd);
--
- 	dev->pixels_per_line = dev->res->pixels_per_line;
- 	dev->lines_per_frame = dev->res->lines_per_frame;
- 
-@@ -978,7 +967,6 @@ static int ov2722_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	mutex_init(&dev->input_lock);
--	dev->power_on = -1;
- 
- 	dev->res = &ov2722_res_preview[0];
- 	v4l2_i2c_subdev_init(&dev->sd, client, &ov2722_ops);
-diff --git a/drivers/staging/media/atomisp/i2c/ov2722.h b/drivers/staging/media/atomisp/i2c/ov2722.h
-index 640d3ffcaa5c..5920a4d45d06 100644
---- a/drivers/staging/media/atomisp/i2c/ov2722.h
-+++ b/drivers/staging/media/atomisp/i2c/ov2722.h
-@@ -198,7 +198,6 @@ struct ov2722_device {
- 	struct ov2722_resolution *res;
- 
- 	struct camera_sensor_platform_data *platform_data;
--	int power_on;
- 	u16 pixels_per_line;
- 	u16 lines_per_frame;
- 	u8 type;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_subdev.h b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
+index 9c1703bf439c..bcfa829dbf61 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_subdev.h
++++ b/drivers/staging/media/atomisp/pci/atomisp_subdev.h
+@@ -49,6 +49,7 @@ struct atomisp_video_pipe {
+ 	struct video_device vdev;
+ 	enum v4l2_buf_type type;
+ 	struct media_pad pad;
++	struct media_pipeline pipe;
+ 	struct vb2_queue vb_queue;
+ 	/* Lock for vb_queue, when also taking isp->mutex this must be taken first! */
+ 	struct mutex vb_queue_mutex;
 -- 
 2.44.0
 
