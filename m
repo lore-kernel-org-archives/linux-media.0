@@ -1,79 +1,156 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CFE1AACA
-	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 06:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8566D512;
+	Mon, 15 Apr 2024 06:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713161533; cv=none; b=AfAkdKLfzxCgDR4anvciMrOh1Nt7gD2RbmHlfgoVuq99L/Irr4sGRthnKHQU8P3nPZHgJ+oGT0LPwcWtoM1LmVDJ3TAMYf64RN6zzGyY1xv8mpbVvKUMg/rYVyG6B6Ti6HGZMSbIfaiBnNgbPaIbBAz2YBuLTJmnJUYnKfecWRc=
+	t=1713162322; cv=none; b=u56DWjC+RtewlBB6j3JUGGE4SX2VDAlARvNYmmgYjK2CoDMc5HyFYS8fLo/2Ot1W7uzIcR3Z2fMwwrs73Dac75AoOYnu5MgHbNprEowdRlNJKgeef4C1ov0zSNuzR4Xr5eg40//msw9Td80AGS1GI3W3tmbtrpYTvo5fjrIjkak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713161533; c=relaxed/simple;
-	bh=raM3aT4krfnP+7l1/1TUBe83larEYgrxqxrtjr6vNsM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lKIFB8blL3XiiL44m9uBqvuOvBWRq0mncTbWq4IUJXlI4vm84kqjoRA2+/IOsqgO3nzDbJ1uQCjR/ie3QSnGXPBFINThq/TrMvy7wYaOPEiQOcJeooTuTkUE4JpjdBghA0Y+16xGK4TYTI1RrDl6KVZX5yMH+XGsjqjT1afMdLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=AsUijs+F; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1713162322; c=relaxed/simple;
+	bh=p2fP606xv4U0DOJltPozS/D8ubtXpwBUB2FkueNSUcs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QLhdZYbUmSHpY9J7jHQVfjx/evSe6WjZUoJAY4YwTeSrQ/DgxLOFTk+ZJCUj8D6T8vqjyWTtIgp2gotxXqi/HF+pgT0MQUoW3T2SmMHvLW2dlsbBkVXQDBPc6xUTGRg3yK9JD4694q2YAwMSpjRCqzHha/CBgL/Pegkba4zgXmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Odsyr3hl; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=nsW9DsEl reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="AsUijs+F"
-Received: from [192.168.1.105] (unknown [103.86.18.210])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A736B5B2;
-	Mon, 15 Apr 2024 08:11:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1713161478;
-	bh=raM3aT4krfnP+7l1/1TUBe83larEYgrxqxrtjr6vNsM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AsUijs+F6iInPDQG3k+l91YTUJ7UwDlxlRBm6vfnby28apor8axVuNGgtGkrVpdoc
-	 Ec2DAsycC8WZIfyO46Hom2/6djY9NyKiIrgFtq/GhYpHDau8DLooA5cGT7X7Za+enr
-	 lOEI/mHlzHtDVTHgmSriQ99sk0GqDEL7Nf5QgPYg=
-Message-ID: <7c75f677-c8d3-43c8-8315-482928f2d38f@ideasonboard.com>
-Date: Mon, 15 Apr 2024 11:41:58 +0530
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Odsyr3hl";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="nsW9DsEl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1713162318; x=1744698318;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4MYF8UVl2/Wof6SEkKATDBTMGuXNeURXeKLVHjyphjo=;
+  b=Odsyr3hlpCLAZAWMrZzYQDwE3IuUqJN+IVZ39PsZaFrOAJpX1M0N547T
+   RmEB1seHGI9teZd5m5zjpuJnIilpgk1iDcBKI2X5FgNuzNgYUT/vO3kuF
+   HDiJa7ySyDN47U+VulGuqBJxHtYf36kOM3Zk8VOZhs0vsJ9A1YUmxKHyd
+   x/60kveyRHxpLlXsjmhCRUvYkj91ePNF6GK28zodv7UhvfgQq1iRuCi28
+   FZOebApY/RAfwyf69E++yIouJ/f4Zi6IJuHdDEQrn6hLrGsDOsBEfClvT
+   fRkt4MF++6dxjKcmMS44k1nxi+RxC6A9l7rAK6DGt7SK8PrUW2VZ8lfzt
+   A==;
+X-IronPort-AV: E=Sophos;i="6.07,202,1708383600"; 
+   d="scan'208";a="36406968"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 15 Apr 2024 08:25:09 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F176C1729F0;
+	Mon, 15 Apr 2024 08:25:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1713162305;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=4MYF8UVl2/Wof6SEkKATDBTMGuXNeURXeKLVHjyphjo=;
+	b=nsW9DsElJ7LZTy3dH+eQKzMOk5fCwlMVjaWP9pjbKcsM0MyrAt7vLSAlTooGeodXM+jebA
+	frWdwaOMSUKv9K7mjIEr86cxDNKCDL8lIgpgSv1n73Dbhz4HC3+NVlawWuehe8fjuPYgEH
+	VWFNQvN8rfHooipltYEj7057virkWjKOMOgOm8em8+lyXYyZX4u3i2mqifnNuE8cyQ3Gi7
+	cWx9ZPsTbe0g8xfFqw8gDXf3zlTSV48aPFFUxKztwYdDJJShXd+08UVIxgLMi89eNCTNl3
+	dmlNY6gHuBs7IZ8JSP9lyAP01+KaezavJfjwJY8BqC6HZ7arW3ca2me1ji2n+g==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: linux-media@vger.kernel.org, git@luigi311.com
+Cc: dave.stevenson@raspberrypi.com, jacopo.mondi@ideasonboard.com, mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, sakari.ailus@linux.intel.com, devicetree@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, pavel@ucw.cz, phone-devel@vger.kernel.org, Luis Garcia <git@luigi311.com>
+Subject: Re: [PATCH v4 02/25] media: i2c: imx258: Make image geometry meet sensor requirements
+Date: Mon, 15 Apr 2024 08:25:02 +0200
+Message-ID: <6041186.lOV4Wx5bFT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20240414203503.18402-3-git@luigi311.com>
+References: <20240414203503.18402-1-git@luigi311.com> <20240414203503.18402-3-git@luigi311.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] media: v4l2-ctrls: Return handler error in creating
- new fwnode properties
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-Cc: hverkuil@xs4all.nl
-References: <20240412130901.849869-1-sakari.ailus@linux.intel.com>
-Content-Language: en-US
-From: Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <20240412130901.849869-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Sakari,
+Hi,
 
-On 12/04/24 6:39 pm, Sakari Ailus wrote:
-> If the control handler is in an error state, return that error immediately
-> in v4l2_ctrl_new_fwnode_properties(). Effectively the change here is that
-> the same error code (handler's error) is returned in all cases instead of
-> possibly returning -EINVAL.
->
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-Reviewed-by: Umang Jain <umang.jain@ideasonboard.com>
-
+Am Sonntag, 14. April 2024, 22:34:40 CEST schrieb git@luigi311.com:
+> From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+>=20
+> The output image is defined as being 4208x3118 pixels in size.
+> Y_ADD_STA register was set to 0, and Y_ADD_END to 3118, giving
+> 3119 lines total.
+>=20
+> The datasheet lists a requirement for Y_ADD_STA to be a multiple
+> of a power of 2 depending on binning/scaling mode (2 for full pixel,
+> 4 for x2-bin/scale, 8 for (x2-bin)+(x2-subsample) or x4-bin, or 16
+> for (x4-bin)+(x2-subsample)).
+> (Y_ADD_END =E2=80=93 Y_ADD_STA + 1) also has to be a similar power of 2.
+>=20
+> The current configuration for the full res modes breaks that second
+> requirement, and we can't increase Y_ADD_STA to 1 to retain exactly
+> the same field of view as that then breaks the first requirement.
+> For the binned modes, they are worse off as 3118 is not a multiple of
+> 4.
+>=20
+> Increase the main mode to 4208x3120 so that it is the same FOV as the
+> binned modes, with Y_ADD_STA at 0.
+> Fix Y_ADD_STA and Y_ADD_END for the binned modes so that they meet the
+> sensor requirements.
+>=20
+> This does change the Bayer order as the default configuration is for
+> H&V flips to be enabled, so readout is from Y_STA_END to Y_ADD_STA,
+> and this patch has changed Y_STA_END.
+>=20
+> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> Signed-off-by: Luis Garcia <git@luigi311.com>
+> Reviewed-by: Pavel Machek <pavel@ucw.cz>
 > ---
->   drivers/media/v4l2-core/v4l2-ctrls-core.c | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> index c4d995f32191..670325ca995e 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -2564,6 +2564,9 @@ int v4l2_ctrl_new_fwnode_properties(struct v4l2_ctrl_handler *hdl,
->   				    const struct v4l2_ctrl_ops *ctrl_ops,
->   				    const struct v4l2_fwnode_device_properties *p)
->   {
-> +	if (hdl->error)
-> +		return hdl->error;
-> +
->   	if (p->orientation != V4L2_FWNODE_PROPERTY_UNSET) {
->   		u32 orientation_ctrl;
->   
+>  drivers/media/i2c/imx258.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+> index 2dbafd21dd70..4a7048d834c6 100644
+> --- a/drivers/media/i2c/imx258.c
+> +++ b/drivers/media/i2c/imx258.c
+> [snip]
+> @@ -707,7 +707,7 @@ static int imx258_open(struct v4l2_subdev *sd, struct=
+ v4l2_subdev_fh *fh)
+>  	/* Initialize try_fmt */
+>  	try_fmt->width =3D supported_modes[0].width;
+>  	try_fmt->height =3D supported_modes[0].height;
+> -	try_fmt->code =3D MEDIA_BUS_FMT_SGRBG10_1X10;
+> +	try_fmt->code =3D MEDIA_BUS_FMT_SBGGR10_1X10;
+
+Does someone have access to the data sheet? I am wondering how the
+arrangement of the pixel array is shown. I've the following (identical)
+array for these sensors:
+* imx290/imx327
+* imx219
+* imx415
+
+G B G B
+R G R G
+G B G B
+R G R G
+
+Yet each driver configures a different bus format:
+
+* imx290.c: MEDIA_BUS_FMT_SRGGB10_1X10
+* imx415.c: MEDIA_BUS_FMT_SGBRG10_1X10
+* imx219.c: MEDIA_BUS_FMT_SRGGB10_1X10 (no flip)
+
+imx219 actually defines all 4 10 Bit Bayer patterns and the comment
+indicates this depends on how v or h flip is configured.
+Reading the commit message apparently the same is true for this driver.
+
+Still this is confusing as I would have expected flipping to be disabled by
+default, expecting the same Bayer pattern order for all drivers. Can someone
+shed some light?
+
+Best regards,
+Alexander
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
 
