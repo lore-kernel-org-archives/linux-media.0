@@ -1,37 +1,37 @@
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D84848D
-	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 02:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06C7134C4
+	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 02:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713147879; cv=none; b=UZUX/c+Zkfw3eDUFP37nbufFg2BnluS6zJVE/VijcsNZbKu1ti6UjebF3+/dAYBbjDJ5kuBIXR7KlupU4PLrlfM49tByJze7f0+K594N4iLrmsOBB3NWpog9IqPkpiadkuPmbMbZMSzr0uYad0KKHMNBuFBGOK1X0HbRdZ9jLQU=
+	t=1713147879; cv=none; b=RE4Vaps56JCEoApHylZjb4pzc+L4mTwrjIjPoiA6x7BvL8dr29TLEwYQtSzAy2mBE0TEPt5seqzABF2fs3x3Z9j5DojrHPTk+MpONjwf1UxymaOdVlgFvibz2ftIp4mgLRUy09HsREGuXnbCdQeKcm8pH0uCo7RvmgMfaJYJZx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713147879; c=relaxed/simple;
-	bh=Vtx4SPw+kf4WnbF4QEd91gh5ktah5wK6WAX0utsmhPQ=;
+	bh=eWOLzsMR2pMy0JI2FWWaaD6uRUOD8tcuCsc+TJUghok=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tCLHtx8Tean9Ztze5Y0eUIg4K1DZxzpFgrdjgeCYZtTlzni5grH6+yFiiIULEvLeA3IfGw14kiOL1H1jgvt7kf8HQnpPhYT/3h9BuDkUr3T36A/m58hYgPxxjJ5yDT/rF/vAM1TUuq4FbW9OYhJ9mJr/4nIBnHkPwtltOEgIAKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=k41ER2Wh; arc=none smtp.client-ip=212.227.15.18
+	 MIME-Version; b=HSYNjY0J3M1Uh/VHnK3QHM7dZ8gNjj4M0Ll01u7IHTQ6p9wtTcA3oCfAUjv0tw4uScqQPNU5Fu1fPAD96RgdwaYqxJv0SkRQNfHcBXokFmokxkZyNzcvBXpkyq1hn3sHu6SlSf7siS7/eQ9pqXHB4KnA7r08cgPkYY9FrSuRwx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=nZ3ByFhh; arc=none smtp.client-ip=212.227.15.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="k41ER2Wh"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="nZ3ByFhh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
 	s=s31663417; t=1713147872; x=1713752672; i=herdler@nurfuerspam.de;
-	bh=Uc3+xXW8rR96TkY6gqCE9zzIBx9Ap/E1B02SoMaFhO0=;
+	bh=KERqsaDe8mBnJAH1hJupvsL01dEJ4nhSUBGKMlmZd8I=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=k41ER2WhzceitdFZOm72GL9AF9EEExTGLFWzNGYDP25icgsQsJLTkYga5a2eWAV4
-	 Ba7fzkYxfaIMOOgYXisCUKWEzGib9zl3kFZRaHpuUrylrr88OFG8gIbpxg0rPKW42
-	 Za6VOoxIdmy2CShyi/pLdA7HUOzxrkbRn4lz8qkRYSfeYD5aL0TqmWHM6D8IZvXBY
-	 AoHqM5RZVQQmtXlYeierugLLAV8evuiMP5LV3/zjE1ZCI3u6Ex9VY3pNU31wsk9NW
-	 +vn4PsRi8dQTfUZod+5fh95gDL6+yeQgTjrTDVll4K5epuO3ApiLxjE+JiL71VOLL
-	 HlDro3fWzHWwRrXmdA==
+	b=nZ3ByFhhaQFVbLCXTxsGQvftjkVwmlZHgnsZglUeUCb1w8Ow1zJvY0RMZOBq/Rqt
+	 gJRhEB6VflyvupK0gScRSCYSM/V1N6hFrd4ct1EB6aAGIVUR6qAMUsDjwwOViOJF4
+	 ZE6nNKj726GACsF9YAYp4qciB03mtnI+FIVK2qyhc4M+QejSnO7+Pvt7nE1BGWg0Y
+	 NhPdl8zpkIZ4VxlucdhW2C/00QzDHMOQXl7MAH5BNMiwue8ljrrCB36j92MmzV253
+	 WYQyWdYEQr+1FLQKT8OOcm0jCaYawiJ/5Fxzp2yqHc6vHrxWW7XC7jPrzFlxnwD0a
+	 UEwDhNnKndO7g35VZw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([91.132.223.107]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MA7Ka-1s3Mkc1CfK-00BbMq; Mon, 15
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MTRR0-1sJNhU2wlo-00TpEw; Mon, 15
  Apr 2024 04:24:32 +0200
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
@@ -39,9 +39,9 @@ Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH v2 03/10] media: ttpci: coding style fixes: comments
-Date: Mon, 15 Apr 2024 04:24:04 +0200
-Message-Id: <20240415022411.234580-4-herdler@nurfuerspam.de>
+Subject: [PATCH v2 05/10] media: ttpci: coding style fixes: export_symbol
+Date: Mon, 15 Apr 2024 04:24:06 +0200
+Message-Id: <20240415022411.234580-6-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240415022411.234580-1-herdler@nurfuerspam.de>
 References: <20240415022411.234580-1-herdler@nurfuerspam.de>
@@ -52,31 +52,29 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZVCHWH0vi0pnOVyjh1v9Nuva7fwxbNeK4oFa7GQJksqm/H/SwMQ
- 101+Z7T7UcdqvB4oo4OCq/fuNX6P3b57TrLSrTojHUlrg3uM+SNwWyADFOb9xicYEb0G8R4
- NUWrqeiBztk6TKXHZJURzVkeg4hIObvzrDfMYQr2H/Zi6p8BjhRGZxdbAUKDSfYknu7i3kH
- OwvECCec6QMUOk96Yzpgg==
+X-Provags-ID: V03:K1:pzHJthLxH1t7GaYWErumx6x3o1G2hIV2D9jNprVbPsI1mSKkxRq
+ atDKZqeYEcQO3WiYUp2hvfQzgzrMEjAfKHMwxySOXvFmr3/rzUSfynvVd8d4qTHaQOV38VV
+ MAn6HClSoovrndPHtFQpV0SBfpygW0Ms1lNGIl+Ls4aSRGSGiVGsgkVFHSX9VUTCPdxOIWJ
+ QXHMt9Cg+2QMEwPxeCdsQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:h2J8Be3V9Mw=;RefS/XqpPHnhwqQu3BmMWZVcg27
- eT4k8u1C+40LIfnG/dWXcB5L19MIUFe0gkGqOGdTTPIEDM2ZfgNbyCkPF4t1X3eUo5K6Mh2/2
- xtNP532fpYC6ZRGYOOShOEBNxM1IdsISr5K03ovsxc8QWUJohiJJj2Z5x/JjkL0DqmzclnuvZ
- IZxtPDzAmpKRVhWZSkfNjyTGTt/ptv9IEB823PeelB5GibF2oA9Rvvrlby+Aq/lGMuPsBMzuE
- c0V0Soptw5udOpzVdLRMG04Wbgv00SosdnIpjJNzVvthcfLxUW9CoSXtJH+xLRB+Z+SZMpX8y
- gFEqO7cZLRFCHvUm0UeFmu3CVdBN/JJEhsRq6CoZcJSC4vwzOAJHDAg7YriwcNCgW0XeP5ihp
- UzY8Y1cvanH4+jfzGL7iMc5zsTIXe3MnNYM9TKY/8nCQJGEzBV3kwffidT2rCOxXRjUy1H3+2
- JKUx/sVd2poMCaCXLAXry6CmlW11xb72xcCHOqa4zsCQYSsNag7a4kcKj0cnJ1VmfpYiwi6q0
- GEy5TEDxXI0GYXDt4RYahMjIw2uAE97+yxEKoZPWhvQQTq0ZRExriy8lyCy36FVbnopbZH9Jb
- F5GZqKyR7Zh9ZydOkSox6k6mYFVq5vH2uvMXO1BbCoSx/bMSAWNXDVD0EE25McpJ2ozAQMdd+
- zQ5GCDkhSL9/gyZj0OA3NH4nVUVoGjToGlYr6uXXfbk3zu2j+bQ/MNvoS2SpxjrYc723UsfMY
- skQDRFZom2U5AKRz+PN1HCPOlRYP/L58asHLAPGYmywOMU6aD1FvggdAV1uWdQuLPcidAhosB
- lvtmCDcyiWjrN2xcdKsNuhrsa/s1lznlbOipdjgZtlJEE=
+UI-OutboundReport: notjunk:1;M01:P0:HE+zI3o+xiw=;2KG0Vu2ay5DtGNkiS2fdKYBBKqm
+ 3v5wcOyf47BXa9tZivhy1Gz3PvhEJ73X7Q+wbMpVeKRFhFtDqnwJ8fyeo42Uy1A5nZ+CPXN4u
+ l9Pne3aMoMHStIVFvHG5ppXeV/KQdEyURMczVnl0D6HaMoD+hiDkfMk9wkoWO7rbFKhJiufgK
+ 1Gk07a0gAatLDcXh+9D+XNpdgDmjekqIlFsgwZdjiRFJfL2qK/1Q1ZC+vvxjQ2oAHKiAbSI7V
+ cpCHFAy3Kui9mIbrLNg0No3iRrzy1e9HB8pKPu5nZsy0shHU846qPGQi7RECJcC0YfqRgB31m
+ H8YHEv7JS9AzZMiUbHAfecaxNtigGvfM1SozB5QR5onPZeO5Jk1+NJ53tcotmPstEof+h+Mf/
+ //GWdHgMtVbE8P8st0sWQ8JI6KyBbg1zlqL7NRgkHilylPE/o5Y4+lzQaRSQprhztVqJzDAJA
+ tahW0+TCh25SGYX7JkA+xZ93tRwxB4W908twswS0Hc9jr+Lf++yAJkD/tqg3KgWbyK50NW7T6
+ 9Jf9hDLg2EUL3KYkhBZNdJi/S/sMfsy3YnmKuU8unIFlYrICPMFIoSr7c5qCFHKEPsab6aLpw
+ Ls0RnvGk1d/YJT7vfz5wIXJLlMJjsYWimYkkUFU5b2kyyXOqXVWEfvL0k/L6UIrAJ4CBRpcEg
+ WfFBlhno5HDYw1OfgjIRFTx8aBUMKLn8MzVQvWe1itlhrOOk2W9z490wVfE2Q4WKiY81Pma2i
+ 3vE/ZDEY6usoSsJ1c/wEjWv3RexXIdzh4RnrNcYXMuq205CB9LgiEEi1N9xJyG78TmaM78Ei9
+ 2rSyQTtMplwsYUyLGL5cybil26Mx0fxIE6XCdZopN0pok=
 
 This patch fixes the following checkpatch warnings:
 
-WARNING:BLOCK_COMMENT_STYLE: Block comments use * on subsequent lines
-WARNING:BLOCK_COMMENT_STYLE: Block comments use a trailing */ on a separat=
-e line
-WARNING: It's generally not useful to have the filename in the file
+WARNING:EXPORT_SYMBOL: EXPORT_SYMBOL(foo); should immediately follow its f=
+unction/variable
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
@@ -92,179 +90,92 @@ Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D
 
- drivers/media/pci/ttpci/budget-av.c   | 20 ++++++++++++--------
- drivers/media/pci/ttpci/budget-ci.c   |  3 ++-
- drivers/media/pci/ttpci/budget-core.c |  8 +++++---
- drivers/media/pci/ttpci/budget.c      | 27 +++++++++++++++++----------
- 4 files changed, 36 insertions(+), 22 deletions(-)
+ drivers/media/pci/ttpci/budget-core.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci=
-/budget-av.c
-index b9efcd3cc..dbd4ef40e 100644
-=2D-- a/drivers/media/pci/ttpci/budget-av.c
-+++ b/drivers/media/pci/ttpci/budget-av.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * budget-av.c: driver for the SAA7146 based Budget DVB cards
-- *              with analog video in
-+ * budget-av.ko: driver for the SAA7146 based Budget DVB cards
-+ *               with analog video input (and optionally with CI)
-  *
-  * Compiled from various sources by Michael Hunold <michael@mihu.de>
-  *
-@@ -63,8 +63,8 @@ struct budget_av {
-
- static int ciintf_slot_shutdown(struct dvb_ca_en50221 *ca, int slot);
-
--
--/* GPIO Connections:
-+/*
-+ * GPIO Connections:
-  * 0 - Vcc/Reset (Reset is controlled by capacitor). Resets the frontend =
-*AS WELL*!
-  * 1 - CI memory select 0=3D>IO memory, 1=3D>Attribute Memory
-  * 2 - CI Card Enable (Active Low)
-@@ -267,8 +267,10 @@ static int ciintf_poll_slot_status(struct dvb_ca_en50=
-221 *ca, int slot, int open
- 	if (slot !=3D 0)
- 		return -EINVAL;
-
--	/* test the card detect line - needs to be done carefully
--	 * since it never goes high for some CAMs on this interface (e.g. topupt=
-v) */
-+	/*
-+	 * test the card detect line - needs to be done carefully
-+	 * since it never goes high for some CAMs on this interface (e.g. topupt=
-v)
-+	 */
- 	if (budget_av->slot_status =3D=3D SLOTSTATUS_NONE) {
- 		saa7146_setgpio(saa, 3, SAA7146_GPIO_INPUT);
- 		udelay(1);
-@@ -281,12 +283,14 @@ static int ciintf_poll_slot_status(struct dvb_ca_en5=
-0221 *ca, int slot, int open
- 		saa7146_setgpio(saa, 3, SAA7146_GPIO_OUTLO);
- 	}
-
--	/* We also try and read from IO memory to work round the above detection=
- bug. If
-+	/*
-+	 * We also try and read from IO memory to work round the above detection=
- bug. If
- 	 * there is no CAM, we will get a timeout. Only done if there is no cam
- 	 * present, since this test actually breaks some cams :(
- 	 *
- 	 * if the CI interface is not open, we also do the above test since we
--	 * don't care if the cam has problems - we'll be resetting it on open() =
-anyway */
-+	 * don't care if the cam has problems - we'll be resetting it on open() =
-anyway
-+	 */
- 	if ((budget_av->slot_status =3D=3D SLOTSTATUS_NONE) || (!open)) {
- 		saa7146_setgpio(budget_av->budget.dev, 1, SAA7146_GPIO_OUTLO);
- 		result =3D ttpci_budget_debiread(&budget_av->budget, DEBICICAM, 0, 1, 0=
-, 1);
-diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci=
-/budget-ci.c
-index 2859b8ab8..ebf340417 100644
-=2D-- a/drivers/media/pci/ttpci/budget-ci.c
-+++ b/drivers/media/pci/ttpci/budget-ci.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * budget-ci.c: driver for the SAA7146 based Budget DVB cards
-+ * budget-ci.ko: driver for the SAA7146 based Budget DVB cards
-+ *               with CI (but without analog video input)
-  *
-  * Compiled from various sources by Michael Hunold <michael@mihu.de>
-  *
 diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttp=
 ci/budget-core.c
-index ffa659be1..f41f4eea7 100644
+index f41f4eea7..20bcdd26f 100644
 =2D-- a/drivers/media/pci/ttpci/budget-core.c
 +++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * budget-core.c: driver for the SAA7146 based Budget DVB cards
-+ * budget-core.ko: base-driver for the SAA7146 based Budget DVB cards
-  *
-  * Compiled from various sources by Michael Hunold <michael@mihu.de>
-  *
-@@ -491,8 +491,10 @@ int ttpci_budget_init(struct budget *budget, struct s=
-aa7146_dev *dev,
- 	spin_lock_init(&budget->feedlock);
- 	spin_lock_init(&budget->debilock);
+@@ -34,6 +34,7 @@
+ #define BUFFER_WARNING_WAIT	(30*HZ)
 
--	/* the Siemens DVB needs this if you want to have the i2c chips
--	   get recognized before the main driver is loaded */
-+	/*
-+	 * the Siemens DVB needs this if you want to have the i2c chips
-+	 * get recognized before the main driver is loaded
-+	 */
- 	if (bi->type !=3D BUDGET_FS_ACTIVY)
- 		saa7146_write(dev, GPIO_CTRL, 0x500000);	/* GPIO 3 =3D 1 */
-
-diff --git a/drivers/media/pci/ttpci/budget.c b/drivers/media/pci/ttpci/bu=
-dget.c
-index faa2a3561..9fe087add 100644
-=2D-- a/drivers/media/pci/ttpci/budget.c
-+++ b/drivers/media/pci/ttpci/budget.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * budget.c: driver for the SAA7146 based Budget DVB cards
-+ * budget.ko: driver for the SAA7146 based Budget DVB cards
-+ *            without analog video input or CI
-  *
-  * Compiled from various sources by Michael Hunold <michael@mihu.de>
-  *
-@@ -50,9 +51,11 @@ static void Set22K(struct budget *budget, int state)
- 	saa7146_setgpio(dev, 3, (state ? SAA7146_GPIO_OUTHI : SAA7146_GPIO_OUTLO=
-));
+ int budget_debug;
++EXPORT_SYMBOL_GPL(budget_debug);
+ static int dma_buffer_size =3D TS_MIN_BUFSIZE_K;
+ module_param_named(debug, budget_debug, int, 0644);
+ module_param_named(bufsize, dma_buffer_size, int, 0444);
+@@ -259,6 +260,7 @@ int ttpci_budget_debiread(struct budget *budget, u32 c=
+onfig, int addr, int count
+ 	return ttpci_budget_debiread_nolock(budget, config, addr,
+ 					    count, nobusyloop);
  }
++EXPORT_SYMBOL_GPL(ttpci_budget_debiread);
 
--/* Diseqc functions only for TT Budget card */
--/* taken from the Skyvision DVB driver by
--   Ralph Metzler <rjkm@metzlerbros.de> */
-+/*
-+ * Diseqc functions only for TT Budget card
-+ * taken from the Skyvision DVB driver by
-+ * Ralph Metzler <rjkm@metzlerbros.de>
-+ */
+ static int ttpci_budget_debiwrite_nolock(struct budget *budget, u32 confi=
+g,
+ 		int addr, int count, u32 value, int nobusyloop)
+@@ -299,6 +301,7 @@ int ttpci_budget_debiwrite(struct budget *budget, u32 =
+config, int addr,
+ 	return ttpci_budget_debiwrite_nolock(budget, config, addr,
+ 					     count, value, nobusyloop);
+ }
++EXPORT_SYMBOL_GPL(ttpci_budget_debiwrite);
 
- static void DiseqcSendBit(struct budget *budget, int data)
+
+ /************************************************************************=
+****
+@@ -542,6 +545,7 @@ int ttpci_budget_init(struct budget *budget, struct sa=
+a7146_dev *dev,
+
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ttpci_budget_init);
+
+ void ttpci_budget_init_hooks(struct budget *budget)
  {
-@@ -675,9 +678,11 @@ static void frontend_init(struct budget *budget)
- 					tt1600_stv090x_config.tuner_set_refclk	  =3D ctl->tuner_set_refclk;
- 					tt1600_stv090x_config.tuner_get_status	  =3D ctl->tuner_get_status;
+@@ -550,6 +554,7 @@ void ttpci_budget_init_hooks(struct budget *budget)
+ 		budget->dvb_frontend->ops.read_status =3D budget_read_fe_status;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(ttpci_budget_init_hooks);
 
--					/* call the init function once to initialize
--					   tuner's clock output divider and demod's
--					   master clock */
-+					/*
-+					 * call the init function once to initialize
-+					 * tuner's clock output divider and demod's
-+					 * master clock
-+					 */
- 					if (budget->dvb_frontend->ops.init)
- 						budget->dvb_frontend->ops.init(budget->dvb_frontend);
+ int ttpci_budget_deinit(struct budget *budget)
+ {
+@@ -569,6 +574,7 @@ int ttpci_budget_deinit(struct budget *budget)
 
-@@ -730,9 +735,11 @@ static void frontend_init(struct budget *budget)
- 					tt1600_stv090x_config.tuner_set_refclk	  =3D ctl->tuner_set_refclk;
- 					tt1600_stv090x_config.tuner_get_status	  =3D ctl->tuner_get_status;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(ttpci_budget_deinit);
 
--					/* call the init function once to initialize
--					   tuner's clock output divider and demod's
--					   master clock */
-+					/*
-+					 * call the init function once to initialize
-+					 * tuner's clock output divider and demod's
-+					 * master clock
-+					 */
- 					if (budget->dvb_frontend->ops.init)
- 						budget->dvb_frontend->ops.init(budget->dvb_frontend);
+ void ttpci_budget_irq10_handler(struct saa7146_dev *dev, u32 *isr)
+ {
+@@ -579,6 +585,7 @@ void ttpci_budget_irq10_handler(struct saa7146_dev *de=
+v, u32 *isr)
+ 	if (*isr & MASK_10)
+ 		tasklet_schedule(&budget->vpe_tasklet);
+ }
++EXPORT_SYMBOL_GPL(ttpci_budget_irq10_handler);
 
+ void ttpci_budget_set_video_port(struct saa7146_dev *dev, int video_port)
+ {
+@@ -592,14 +599,6 @@ void ttpci_budget_set_video_port(struct saa7146_dev *=
+dev, int video_port)
+ 	}
+ 	spin_unlock(&budget->feedlock);
+ }
+-
+-EXPORT_SYMBOL_GPL(ttpci_budget_debiread);
+-EXPORT_SYMBOL_GPL(ttpci_budget_debiwrite);
+-EXPORT_SYMBOL_GPL(ttpci_budget_init);
+-EXPORT_SYMBOL_GPL(ttpci_budget_init_hooks);
+-EXPORT_SYMBOL_GPL(ttpci_budget_deinit);
+-EXPORT_SYMBOL_GPL(ttpci_budget_irq10_handler);
+ EXPORT_SYMBOL_GPL(ttpci_budget_set_video_port);
+-EXPORT_SYMBOL_GPL(budget_debug);
+
+ MODULE_LICENSE("GPL");
 =2D-
 2.34.0
 
