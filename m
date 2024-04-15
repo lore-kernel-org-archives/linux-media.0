@@ -1,47 +1,45 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC9C168C7
-	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 02:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B20E14F6C
+	for <linux-media@vger.kernel.org>; Mon, 15 Apr 2024 02:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713147880; cv=none; b=mBeaMMGxZxZu5wt+xQVb1RXswwQ9ZrbsAN5af+DU+wYqkQBkyNFoiFnPPuHkaGf50Dn8/FVXMLcaajIFxP1p9GviJsI0IV/q1XPzjso1WnS+zWGftxFc98b383z9Nh+G1nsObsBcCv0ZAANmsvUUJe/JU8mNDVhXe//1xlDPmW4=
+	t=1713147880; cv=none; b=oksT6eY7xNdHN2eB6iwI0G/0bEHjiR3sT4Fj51Hq0wy0RIU8PlEPSJIZNTPYBt7AHyJKT/uquxfrNVv4MVlD3XK/ajpt0jgd0yAmwJYSk8THw97Q9kb53ingZ2xt4Ucp+Hp4w8yGTi4W7Q+jEL08o87UMpyBFSG/+nHxZourVVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713147880; c=relaxed/simple;
-	bh=+fy2X1pVT+jXud3Ov7mWj+B/J+M93Qa1meWgDAzFWB8=;
+	bh=FsJn7rwGGXc/4VooFV2NmRktxXoxlWrzNZiH9FAAEzI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Betlu6YbSvE9OgQDN+aBPrBOyRm0XOY0uJtYDdgOAqKmJWOptC16ZaVIv8K+Aj9NkGAjC9b2UHQvR4mzraZfLo+KjfCJZdYGEUKiw4mKHH23aA6jYk5nYwc9NcnwVnnQWFjTlTjin/7FuzEBWg0CByJV91U8mRMV6fXkeoSNyFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=GGHMo1Wb; arc=none smtp.client-ip=212.227.15.18
+	 MIME-Version; b=G2N2LAoGzbQGuQkokofgxgiS5fAU0Q+YAayoPHnzy4jX5UJoUeXvRPzQGZJikHV+WhDYqmk2kcqNPoBRu9xIuMS10ge5diF9VKEqm+HqmGy8++LtnuHe2OrR7IHIGsL+Ye/AQpqSoAgQ0Uc5aGFbwAcevh+7UqHSJlGigGgkkbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=KEFcGakg; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="GGHMo1Wb"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="KEFcGakg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
 	s=s31663417; t=1713147873; x=1713752673; i=herdler@nurfuerspam.de;
-	bh=VqR+tx/OV7+F4CCxw9lZxOl7Q+RfXmRYGoPGVnjSYro=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=GGHMo1WbGJlYD06g9cqe608ho/hswhi5DnBngwn1tbipYMcOG0cWEu7wgGg+mbua
-	 RV2hdVKIS+io082fqLS3awmuHGtcXRndIHCElB6QY3oFp0SuPVnB1ahUfEaC3qPe4
-	 scxTXL6iHTtiBHoHknEA/rL9PJV2Jg+lJBDW8bEyFzOrE2afGIQ2jTlL8qOfy/5FD
-	 dE5we7IBsyqnSymuOgFLQgvsMYrpCuGdHfQ6A4urLXY1CFCVDULq87Z+FxGC4PZ1W
-	 JJalYCz0niPQnFwrEhsAiKADSwUyXse9xqaZ5g1EwUn7ovZnODkncIYkhlfVmagCX
-	 b7MQHwhbeW0mENOTAw==
+	bh=4kQ+DCcP5itV7P51mxkLyc5BwVPu366vCeoFX4v2HT8=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
+	 References;
+	b=KEFcGakgDlIVEOk8glULaPTXddUIAkSFanXaDG2IAZ0QTQLBEpkdJXpCcwQT15bs
+	 kc9Y26PSmtjwgu1MjvARjCvzXoeykhw4re02/m+CWRMMRXxVbc8Z7vqGcIpaSOS+q
+	 2EszqZ9tM3bOu9z2AL99hIgVWAfbApqeZwf4yAmQ5X2wWJ3AV6+M2wuSSe2NHTVSJ
+	 x7ZFwTo3+VV+20+KyQIQDwAflW9TFk+e+IOBO/slLAs/I07aY1DzgVWbHVYvQgk9F
+	 MAgdRvtKeIAnsPrNNm7XRnzoHp0US8lRhqWVPdKe9GFwobIHNmhyIyHk8efqqNUup
+	 nyUtUk4ZoSMxdao6Cw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([91.132.223.107]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mv31W-1smv691Itk-00r1zC; Mon, 15
- Apr 2024 04:24:33 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfpOd-1sOw4P3nWj-00gDAd; Mon, 15
+ Apr 2024 04:24:32 +0200
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
 Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH v2 08/10] media: ttpci: coding style fixes: constant_comparsation
-Date: Mon, 15 Apr 2024 04:24:09 +0200
-Message-Id: <20240415022411.234580-9-herdler@nurfuerspam.de>
+Subject: [PATCH v2 06/10] media: ttpci: coding style fixes: assign_in_if
+Date: Mon, 15 Apr 2024 04:24:07 +0200
+Message-Id: <20240415022411.234580-7-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240415022411.234580-1-herdler@nurfuerspam.de>
 References: <20240415022411.234580-1-herdler@nurfuerspam.de>
@@ -52,29 +50,28 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:iTL1ZJX6382euxib/lvqdIypFCjzTO/2VytxzaQcnqsKmJTTj0z
- qKIbvtUXaJGIpm0yRx/pAl+9+ZvmwF19+pAVvv29Xhc3IDZpfPH9Q6sd4dVrNL/ApTUEyft
- fM9MAlyJ9LmeIVNdJgSkJ+RtypNXfy44ezSr0ymA6KnvUKj3fpE2balbNnzdmEGE3GqPYSA
- 4ZOfb/D+aUJMhe9UIlKJA==
+X-Provags-ID: V03:K1:aaaTXqxGXLNf4k0rQWDhqNA8ccFFam40qfE74q8dXWFiZZ3TFxZ
+ GtlPBORH4FMDt5CSX1rqlrs5BCZVQ1XSjWGjN5kQxTxMMuDTx5JZhb+2TEesKX0jebwVJ6h
+ Tz8jkPl1MkvZcHzhubGBgj04oZeELMNm3Y/SRzLLx2YGtivpuYqHpIuShzDk6KkwoU1AXQh
+ 26Sk/AsKtS7Qoh3FCe4/w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:MUKci2UfHqA=;bN2pVfSHpl6Wcxw+S7OWoq5dHMs
- khpbspC4x1pUojUVL6V6dFtg3NCP24Dg3p5xghIxvCw44hpafuvNc+8SSvMjLmdwvZDGmJeKT
- gTAZBBKNW3O+8dmfn7TrwOpiYELN1empEvyVrA8FYqkAN87xoxOcY5y5G/pIDsKNzEZrrBmwl
- 0VSkrmXZL0bhvCi2PoFY+0CY+IZxrlGpHJpTH4AXjz72symXA1Nt3YJxlPZRdO42Em5+2EpoB
- hMn6kLJBbMvysReea1bEQ1rwAePydovLvp3oaVygW8bKMEzG3Q74nb/FMK/yXBrWxd1aN3zoE
- UqtPqOOmMJwUzOCtB1z58gDWVaTVSiXTtlx/zpjhxT2SoaodhZmBkeWfRYEcb0sb1qlhic7vs
- N3lFZZWL9PzliQwgEsB47iwaB8dqys7kPeYfdOZNCZAMUqc4TuiTXn9Z1bc9poiA4lpCHzb8n
- xSGmRz8ee+7MTqEoROtnLV92Xrv/+Qn94UhzHEgK4RaH/NLS6i8mQXJSlwqlh56Ybefoov2El
- o8untUYQjqSNm5U430kn9wn1SrwCAhPQ9bXxhg5F0ABTgSJyiRxMEOYqbLAlEpnbi+jLA3Qfo
- ZdnMFbZHmlhc4hmdpEftDVOrp1937EbKobG0RrrBFUgb/wtJ0U2eRq8fklFbhG78GNKXWDp/j
- wsztLVqk0XtWng/u90EFWgH+mysmhzcXN32FUgVQ/ccCAQG997lmKPvJclHRpr27BoQEY4DF2
- s4sfHraJH6N457YrYJQ23P/JRGcix42bjFJJLDlEter0wKVLGMmMhrdwQXvRT/STHtMZpFH34
- z2vL5nPOQ9XgxAkWD37eRJqYhf1qE4CgXWCUD3Q1NoPyU=
+UI-OutboundReport: notjunk:1;M01:P0:GxrChvLwbK4=;iQigpMuQoTYb6fdVxAdT6be+FKk
+ p/wxmeJHoU0e7Kc9P/ehJv5EC+KppbAU9MPQRVQy861fTd70Gz3yvAsS+THVFTrgOTRZ5qs2U
+ aVuMQbui7vCrSmw9uu8qptUUtlLL7/QAydmEZ2gb+vjD+FlQYQkywAvpKBRzem4gtcS/ssAty
+ 1bbosunzAK3+vkrWzk/SthB+Wuq2ZttxWt/3+q02/N2wEbe2wrrAgbN84HI7UGxeRMf0SBPHs
+ XAwIPjhB87sedbY4+hT7c4AP+WFUnwTtQZ92VA7pWY+XWa/sRm6WqaQ6rATa1PT6eA5/u48RI
+ vTVKWKb7wL2TJv/pqit1pT0gigMiTi6eTlon+uuLX5n9g7lUCC1jar/y2BmE5gVsRoCZZVE2w
+ DdGw40U3MFfOlOYKJH6ZdlPK9EppMKJ1fS5Hpv6thcasr+LbwsSI5GzBFeoeEqj3HqFjKA4pU
+ 9+6ptcIZnfZPgFiOr5pfSe2UzSMwy/Vv1qhuQq2ejyYDisz7V5Nrrf+0i18TZd0gv+CUcEoYc
+ 3I7aOvpyEC86dyxaNGClz6pLWqs8mzv0jTFUwbUPFJ02YZ5zB9VF5UvCRNAV6k6G+BOqGxNAn
+ /97E0VMCaLZy1NON4iozqOLCBXPUuuedyZxbfG/7aws6meD+rObAd94S61tOJfsAbh4hjv2KD
+ w0P3gElZfokgz8CR5My/ZFyK5cS5BUOQ/zhw3Bl1eab9Q1vJoVRzHV47+tthrm3wbnjn+nO6L
+ gEs7MzCuVNCaIeMCVFMsFTIvYWQZyxDro2jUbeQd5CKmTDX/NqdK3BYC1Mbe4jNpdjE36FgoG
+ YTbRs/E6ymt+tipCo1jCdB+L7f3anWf7J7rnIV0dhlYGA=
 
-This patch fixes the following checkpatch warnings:
+This patch fixes the following checkpatch errors:
 
-WARNING:CONSTANT_COMPARISON: Comparisons should place the constant on the =
-right side of the test
+ERROR:ASSIGN_IN_IF: do not use assignment in if condition
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
@@ -90,67 +87,102 @@ Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D
 
- drivers/media/pci/ttpci/budget-av.c   | 4 ++--
- drivers/media/pci/ttpci/budget-core.c | 2 +-
- drivers/media/pci/ttpci/budget.c      | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/pci/ttpci/budget-av.c   | 14 +++++++++-----
+ drivers/media/pci/ttpci/budget-ci.c   |  7 ++++---
+ drivers/media/pci/ttpci/budget-core.c |  3 ++-
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/pci/ttpci/budget-av.c b/drivers/media/pci/ttpci=
 /budget-av.c
-index 9549e385a..76660d22f 100644
+index acac9bae4..9549e385a 100644
 =2D-- a/drivers/media/pci/ttpci/budget-av.c
 +++ b/drivers/media/pci/ttpci/budget-av.c
-@@ -442,7 +442,7 @@ static int saa7113_setinput(struct budget_av *budget_a=
-v, int input)
- {
- 	struct budget *budget =3D &budget_av->budget;
+@@ -351,8 +351,9 @@ static int ciintf_init(struct budget_av *budget_av)
+ 	budget_av->budget.ci_present =3D 1;
+ 	budget_av->slot_status =3D SLOTSTATUS_NONE;
 
--	if (1 !=3D budget_av->has_saa7113)
-+	if (budget_av->has_saa7113 !=3D 1)
- 		return -ENODEV;
+-	if ((result =3D dvb_ca_en50221_init(&budget_av->budget.dvb_adapter,
+-					  &budget_av->ca, 0, 1)) !=3D 0) {
++	result =3D dvb_ca_en50221_init(&budget_av->budget.dvb_adapter,
++				     &budget_av->ca, 0, 1);
++	if (result !=3D 0) {
+ 		pr_err("ci initialisation failed\n");
+ 		goto error;
+ 	}
+@@ -1270,7 +1271,8 @@ static void frontend_init(struct budget_av *budget_a=
+v)
+ 	case SUBID_DVBS2_KNC1_OEM:
+ 	case SUBID_DVBS2_EASYWATCH:
+ 		budget_av->reinitialise_demod =3D 1;
+-		if ((fe =3D dvb_attach(stb0899_attach, &knc1_dvbs2_config, &budget_av->=
+budget.i2c_adap)))
++		fe =3D dvb_attach(stb0899_attach, &knc1_dvbs2_config, &budget_av->budge=
+t.i2c_adap);
++		if (fe)
+ 			dvb_attach(tda8261_attach, fe, &sd1878c_config, &budget_av->budget.i2c=
+_adap);
 
- 	if (input =3D=3D 1) {
-@@ -1366,7 +1366,7 @@ static int budget_av_detach(struct saa7146_dev *dev)
+ 		break;
+@@ -1435,7 +1437,8 @@ static int budget_av_attach(struct saa7146_dev *dev,=
+ struct saa7146_pci_extensio
 
  	dprintk(2, "dev: %p\n", dev);
 
--	if (1 =3D=3D budget_av->has_saa7113) {
-+	if (budget_av->has_saa7113 =3D=3D 1) {
- 		saa7146_setgpio(dev, 0, SAA7146_GPIO_OUTLO);
-
- 		msleep(200);
-diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttp=
-ci/budget-core.c
-index dc8b2de30..101695c71 100644
-=2D-- a/drivers/media/pci/ttpci/budget-core.c
-+++ b/drivers/media/pci/ttpci/budget-core.c
-@@ -516,7 +516,7 @@ int ttpci_budget_init(struct budget *budget, struct sa=
-a7146_dev *dev,
- 	ttpci_eeprom_parse_mac(&budget->i2c_adap, budget->dvb_adapter.proposed_m=
-ac);
-
- 	budget->grabbing =3D saa7146_vmalloc_build_pgtable(dev->pci, budget->buf=
-fer_size, &budget->pt);
--	if (NULL =3D=3D budget->grabbing) {
-+	if (budget->grabbing =3D=3D NULL) {
- 		ret =3D -ENOMEM;
- 		goto err_del_i2c;
- 	}
-diff --git a/drivers/media/pci/ttpci/budget.c b/drivers/media/pci/ttpci/bu=
-dget.c
-index 28a479ce0..36aef9303 100644
-=2D-- a/drivers/media/pci/ttpci/budget.c
-+++ b/drivers/media/pci/ttpci/budget.c
-@@ -791,7 +791,7 @@ static int budget_attach(struct saa7146_dev *dev, stru=
-ct saa7146_pci_extension_d
- 	int err;
-
- 	budget =3D kmalloc(sizeof(struct budget), GFP_KERNEL);
--	if (NULL =3D=3D budget)
-+	if (budget =3D=3D NULL)
+-	if (!(budget_av =3D kzalloc(sizeof(struct budget_av), GFP_KERNEL)))
++	budget_av =3D kzalloc(sizeof(struct budget_av), GFP_KERNEL);
++	if (!budget_av)
  		return -ENOMEM;
 
- 	dprintk(2, "dev:%p, info:%p, budget:%p\n", dev, info, budget);
+ 	budget_av->has_saa7113 =3D 0;
+@@ -1468,7 +1471,8 @@ static int budget_av_attach(struct saa7146_dev *dev,=
+ struct saa7146_pci_extensio
+ 		vv_data.vid_ops.vidioc_g_input =3D vidioc_g_input;
+ 		vv_data.vid_ops.vidioc_s_input =3D vidioc_s_input;
+
+-		if ((err =3D saa7146_register_device(&budget_av->vd, dev, "knc1", VFL_T=
+YPE_VIDEO))) {
++		err =3D saa7146_register_device(&budget_av->vd, dev, "knc1", VFL_TYPE_V=
+IDEO);
++		if (err) {
+ 			saa7146_vv_release(dev);
+ 			ttpci_budget_deinit(&budget_av->budget);
+ 			kfree(budget_av);
+diff --git a/drivers/media/pci/ttpci/budget-ci.c b/drivers/media/pci/ttpci=
+/budget-ci.c
+index 2a51febdb..062dc14a7 100644
+=2D-- a/drivers/media/pci/ttpci/budget-ci.c
++++ b/drivers/media/pci/ttpci/budget-ci.c
+@@ -481,9 +481,10 @@ static int ciintf_init(struct budget_ci *budget_ci)
+ 	budget_ci->ca.slot_ts_enable =3D ciintf_slot_ts_enable;
+ 	budget_ci->ca.poll_slot_status =3D ciintf_poll_slot_status;
+ 	budget_ci->ca.data =3D budget_ci;
+-	if ((result =3D dvb_ca_en50221_init(&budget_ci->budget.dvb_adapter,
+-					  &budget_ci->ca,
+-					  ca_flags, 1)) !=3D 0) {
++
++	result =3D dvb_ca_en50221_init(&budget_ci->budget.dvb_adapter,
++				     &budget_ci->ca, ca_flags, 1);
++	if (result !=3D 0) {
+ 		printk("budget_ci: CI interface detected, but initialisation failed.\n"=
+);
+ 		goto error;
+ 	}
+diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttp=
+ci/budget-core.c
+index 20bcdd26f..dc8b2de30 100644
+=2D-- a/drivers/media/pci/ttpci/budget-core.c
++++ b/drivers/media/pci/ttpci/budget-core.c
+@@ -531,7 +531,8 @@ int ttpci_budget_init(struct budget *budget, struct sa=
+a7146_dev *dev,
+ 	if (bi->type !=3D BUDGET_FS_ACTIVY)
+ 		saa7146_setgpio(dev, 2, SAA7146_GPIO_OUTHI);
+
+-	if ((ret =3D budget_register(budget)) =3D=3D 0)
++	ret =3D budget_register(budget);
++	if (ret =3D=3D 0)
+ 		return 0; /* Everything OK */
+
+ 	/* An error occurred, cleanup resources */
 =2D-
 2.34.0
 
