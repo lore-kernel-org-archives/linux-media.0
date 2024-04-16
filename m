@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9125D13B2A2
-	for <linux-media@vger.kernel.org>; Tue, 16 Apr 2024 19:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A0713B2B9
+	for <linux-media@vger.kernel.org>; Tue, 16 Apr 2024 19:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713296057; cv=none; b=iboz5i3iTzBHMxBYuJ7tPnmmq76jB3pTERMMqul7PzCmPXuAPC3Qe6eC1rU07birYHyTPmxc6YHo7blhNtP41jr/H544WLOLIcQSMbG89eBfoz4Nnb8PmLCwT/YE534KKMIktVjq82Ri7r9PmzKX7JkPZfPkF041bS4p0Ggn/bA=
+	t=1713296058; cv=none; b=OYi4OBlHPCYp50KryJ2JbdKxMYmG/xnie8d64uvPy+DZLWND84VJuLYDfIIT/41TuVcLgWQEdjd7WwJ5lL0ySK1iTX+moM3HRo62i2mRTYDmcRewAYGmTdqc80RntWHkrXgwVEWTdveTuN6qVlcdmXMlqX7syYz1Q5eyKD4gIwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713296057; c=relaxed/simple;
-	bh=VseC5ZEVpd8Y3HMrTxnUxiJzqqyabBAr8R5/lBopHaY=;
+	s=arc-20240116; t=1713296058; c=relaxed/simple;
+	bh=KtWTNYs3S1+1R24cPYsU9UGlREtHrZ7YrJ1oxem5NzI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bsvc3HwZ3eMOID++/rR9gxQxGNKKxlH8/SD4oa4rg8Hu96jeKE57jPotSqs+ti3S2u3UKIYOYYiartdKbT7oafK8jZZJJtfa4RWS+IdpOvhpvbYysHS5Lk8GJfzdkak1ji6Bx1iXzHUkfYtE+LOBeA1TglT7KZ5j6ikQtPZttCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yr/hejd0; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=GLa2igh5M0y9afx1ia5x9sX9SAt3Sh336G44o+FNBWtk+fXyeqxlAnSMz4oLFVplOKnRxJBLgjItwcnbIpvJa4VkCJdRMgTd+ka16MHdltEThRgr2pxMEK8BTargQsf/a6g+tkwqpGJm40pVwh74pz+BMP2U43mYv/QzMmLSHug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1l8ZGbo; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yr/hejd0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1l8ZGbo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713296056; x=1744832056;
+  t=1713296057; x=1744832057;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VseC5ZEVpd8Y3HMrTxnUxiJzqqyabBAr8R5/lBopHaY=;
-  b=Yr/hejd017IXTU/9vljaX6naAyc3ITsIkPOJCq0EnQrBjhdlLn1kGW8P
-   2c3uD3bdYvMJIHwHmIMfvYZSjBaxPb2kBzT0j9G3KKs4g611+jsFein1R
-   4vLCviQWAMkxFDPe9TaY3kCYMKjnK7IYU51rfSKNF3xW5m0z1QGIvYOEb
-   3nDpOkCTPWcu7snLIpC9la9Lx/ZM2drInY3TjXX3F18EdPGgGQVZxZRrn
-   8kXWQRzmzBoPWP7iZ0nzn9CWUhnINGtWf3Git8nz6IBrq/C13jKtofqU3
-   WwRD7gJYqR1WmeYXaVf4A3svYnaXKvVwNgVG55Ulx7/4iCN84lEfz8H0H
+  bh=KtWTNYs3S1+1R24cPYsU9UGlREtHrZ7YrJ1oxem5NzI=;
+  b=T1l8ZGboyZr3ElkqGfy6NCBTHmOj+hMx0RgedVEKCg8fxzX7NARN1gFm
+   hFW7bKEM6y+5I7EjqVdRyYZJ1kz0QSI/jk3cb/K0Q1EMyMzhpQeVNiJaW
+   DsnF4JRhyuo8Z1QEYY4NhYC5eekeGWjqSRXTvGX1rYnXSOhpYsVJV+edG
+   5OxOI7Fa+kwSa0K9ykWPWg36nEqvsZtkzM26lD/d6GVrHj0Zdm9/aXPaM
+   r3+MFoWq85MVVuVUqquwsCa95dMkT1AC0vkt9yOmhqCT2nmJtjZPU1fyW
+   8m6Wz32XRbgN3zYzZBMWUFl0p5FtyxJ86wsepyn2wZCFtD4QrUJgSoszP
    A==;
-X-CSE-ConnectionGUID: mDpWB9SsQm69ZKR5NTlABg==
-X-CSE-MsgGUID: TzuxF3A+Qh2e9lBq0+cz/A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8929867"
+X-CSE-ConnectionGUID: CaZvxtqlRuWgOo3NTohwYw==
+X-CSE-MsgGUID: OtKynXl0RCG1sDeuPEhn6A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="8929877"
 X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="8929867"
+   d="scan'208";a="8929877"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:34:14 -0700
-X-CSE-ConnectionGUID: QlZmTjp5RD6X9jSV0rjiSg==
-X-CSE-MsgGUID: uNMFb56DQeOa4Wh4cSz9DA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:34:16 -0700
+X-CSE-ConnectionGUID: GV9m8k6vRmCaGP69g7jU5w==
+X-CSE-MsgGUID: UHvOVpTNS/2EJJlHVN6OkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
-   d="scan'208";a="22380247"
+   d="scan'208";a="22380255"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:34:11 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 12:34:13 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 3216611F879;
-	Tue, 16 Apr 2024 22:34:07 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 535941204F6;
+	Tue, 16 Apr 2024 22:34:10 +0300 (EEST)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -58,9 +58,9 @@ Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Dmitry Perchanov <dmitry.perchanov@intel.com>,
 	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
 	Alain Volmat <alain.volmat@foss.st.com>
-Subject: [PATCH v9 33/46] media: ccs: Compute binning configuration from sub-device state
-Date: Tue, 16 Apr 2024 22:33:06 +0300
-Message-Id: <20240416193319.778192-34-sakari.ailus@linux.intel.com>
+Subject: [PATCH v9 35/46] media: ccs: Remove which parameter from ccs_propagate
+Date: Tue, 16 Apr 2024 22:33:08 +0300
+Message-Id: <20240416193319.778192-36-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240416193319.778192-1-sakari.ailus@linux.intel.com>
 References: <20240416193319.778192-1-sakari.ailus@linux.intel.com>
@@ -72,147 +72,73 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Calculate binning configuration from sub-device state so the state related
-configuration can be removed from the driver's device context struct.
+ccs_propagate() no longer stores information in the driver's context
+struct. The which parameter can thus be removed.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 56 +++++++++++++++++++-------------
- drivers/media/i2c/ccs/ccs.h      |  3 --
- 2 files changed, 33 insertions(+), 26 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index f82f3ec37c7c..08e719d611fb 100644
+index 541faa7d84a6..0f68e64a4042 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -511,13 +511,36 @@ static int ccs_pll_try(struct ccs_sensor *sensor, struct ccs_pll *pll)
- 	return ccs_pll_calculate(&client->dev, &lim, pll);
- }
+@@ -2288,8 +2288,7 @@ static int ccs_get_format(struct v4l2_subdev *subdev,
  
-+static void
-+ccs_get_binning(struct ccs_sensor *sensor, u8 *binning_mode, u8 *binh, u8 *binv)
-+{
-+	struct v4l2_subdev_state *state =
-+		v4l2_subdev_get_locked_active_state(&sensor->binner->sd);
-+	const struct v4l2_rect *sink_crop =
-+		v4l2_subdev_state_get_crop(state, CCS_PAD_SINK,
-+					   CCS_STREAM_PIXEL);
-+	const struct v4l2_rect *sink_comp =
-+		v4l2_subdev_state_get_compose(state, CCS_PAD_SINK,
-+					      CCS_STREAM_PIXEL);
-+
-+	if (binning_mode)
-+		*binning_mode =	sink_crop->width == sink_comp->width &&
-+				sink_crop->height == sink_comp->height ? 0 : 1;
-+
-+	*binh = sink_crop->width / sink_comp->width;
-+	*binv = sink_crop->height / sink_comp->height;
-+}
-+
- static int ccs_pll_update(struct ccs_sensor *sensor)
+ /* Changes require propagation only on sink pad. */
+ static void ccs_propagate(struct v4l2_subdev *subdev,
+-			  struct v4l2_subdev_state *sd_state, int which,
+-			  int target)
++			  struct v4l2_subdev_state *sd_state, int target)
  {
- 	struct ccs_pll *pll = &sensor->pll;
-+	u8 binh, binv;
- 	int rval;
+ 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
+ 	struct v4l2_rect *comp, *crop;
+@@ -2498,7 +2497,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
+ 	crop->top = 0;
+ 	crop->width = fmt->format.width;
+ 	crop->height = fmt->format.height;
+-	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
++	ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_CROP);
  
--	pll->binning_horizontal = sensor->binning_horizontal;
--	pll->binning_vertical = sensor->binning_vertical;
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
-+
-+	pll->binning_horizontal = binh;
-+	pll->binning_vertical = binv;
- 	pll->link_freq =
- 		sensor->link_freq->qmenu_int[sensor->link_freq->val];
- 	pll->scale_m = sensor->scale_m;
-@@ -1241,8 +1264,11 @@ static void ccs_update_blanking(struct ccs_sensor *sensor,
- 	struct v4l2_ctrl *hblank = sensor->hblank;
- 	u16 min_fll, max_fll, min_llp, max_llp, min_lbp;
- 	int min, max;
-+	u8 binh, binv;
-+
-+	ccs_get_binning(sensor, NULL, &binh, &binv);
+ 	return 0;
+ }
+@@ -2706,7 +2705,7 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
+ 		ccs_set_compose_scaler(subdev, sd_state, sel, sink_crop);
  
--	if (sensor->binning_vertical > 1 || sensor->binning_horizontal > 1) {
-+	if (binv > 1 || binh > 1) {
- 		min_fll = CCS_LIM(sensor, MIN_FRAME_LENGTH_LINES_BIN);
- 		max_fll = CCS_LIM(sensor, MAX_FRAME_LENGTH_LINES_BIN);
- 		min_llp = CCS_LIM(sensor, MIN_LINE_LENGTH_PCK_BIN);
-@@ -1814,7 +1840,7 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		v4l2_subdev_state_get_crop(src_state, CCS_PAD_SRC,
- 					   CCS_STREAM_PIXEL);
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	unsigned int binning_mode;
-+	u8 binning_mode, binh, binv;
- 	int rval;
+ 	*comp = sel->r;
+-	ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_COMPOSE);
++	ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_COMPOSE);
  
- 	if (pad != CCS_PAD_SRC)
-@@ -1836,19 +1862,12 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 		goto err_pm_put;
+ 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+ 		return ccs_pll_blanking_update(sensor);
+@@ -2797,7 +2796,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
+ 	*crop = sel->r;
  
- 	/* Binning configuration */
--	if (sensor->binning_horizontal == 1 &&
--	    sensor->binning_vertical == 1) {
--		binning_mode = 0;
--	} else {
--		u8 binning_type =
--			(sensor->binning_horizontal << 4)
--			| sensor->binning_vertical;
-+	ccs_get_binning(sensor,	&binning_mode, &binh, &binv);
+ 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
+-		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
++		ccs_propagate(subdev, sd_state, V4L2_SEL_TGT_CROP);
  
--		rval = ccs_write(sensor, BINNING_TYPE, binning_type);
-+	if (binning_mode) {
-+		rval = ccs_write(sensor, BINNING_TYPE, (binh << 4) | binv);
- 		if (rval < 0)
- 			goto err_pm_put;
--
--		binning_mode = 1;
- 	}
- 	rval = ccs_write(sensor, BINNING_MODE, binning_mode);
- 	if (rval < 0)
-@@ -2254,9 +2273,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 				sensor->scaling_mode =
- 					CCS_SCALING_MODE_NO_SCALING;
--			} else if (ssd == sensor->binner) {
--				sensor->binning_horizontal = 1;
--				sensor->binning_vertical = 1;
- 			}
- 		}
- 		fallthrough;
-@@ -2530,10 +2546,6 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- 			best = this;
- 		}
- 	}
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		sensor->binning_vertical = binv;
--		sensor->binning_horizontal = binh;
--	}
+ 	return 0;
+ }
+@@ -3316,7 +3315,6 @@ static int ccs_init_state(struct v4l2_subdev *sd,
+ 		v4l2_subdev_state_get_format(sd_state, pad, CCS_STREAM_PIXEL);
+ 	struct v4l2_rect *crop =
+ 		v4l2_subdev_state_get_crop(sd_state, pad, CCS_STREAM_PIXEL);
+-	bool is_active = !sd->active_state || sd->active_state == sd_state;
  
- 	sel->r.width = (sink_crop->width / binh) & ~1;
- 	sel->r.height = (sink_crop->height / binv) & ~1;
-@@ -3715,8 +3727,6 @@ static int ccs_probe(struct i2c_client *client)
- 				sensor->binning_subtypes[i].vertical);
- 		}
- 	}
--	sensor->binning_horizontal = 1;
--	sensor->binning_vertical = 1;
+ 	ccs_get_native_size(ssd, crop);
  
- 	if (device_create_file(&client->dev, &dev_attr_ident) != 0) {
- 		dev_err(&client->dev, "sysfs ident entry creation failed\n");
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index dcca3f88ea67..aadbd4302607 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -237,9 +237,6 @@ struct ccs_sensor {
- 	u32 embedded_mbus_code;
- 	u8 emb_data_ctrl;
+@@ -3334,7 +3332,7 @@ static int ccs_init_state(struct v4l2_subdev *sd,
+ 		sensor->csi_format->code : sensor->internal_csi_format->code;
+ 	fmt->field = V4L2_FIELD_NONE;
  
--	u8 binning_horizontal;
--	u8 binning_vertical;
--
- 	u8 scale_m;
- 	u8 scaling_mode;
+-	ccs_propagate(sd, sd_state, is_active, V4L2_SEL_TGT_CROP);
++	ccs_propagate(sd, sd_state, V4L2_SEL_TGT_CROP);
  
+ 	return 0;
+ }
 -- 
 2.39.2
 
