@@ -1,45 +1,46 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2067.outbound.protection.outlook.com [40.107.93.67])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7363A182B9;
-	Tue, 16 Apr 2024 20:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED32B40877;
+	Tue, 16 Apr 2024 20:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713299517; cv=fail; b=okCHC69+9nTgseeEO4jRdoudTF1aPU0aHIIgWtco3hOW9r7RjMrWCQxLrCN/LQrnYhlMjA9zE30A5Sgh0YYLmEn+8zg6rcL3/QXfQLPPDepv7YC3aNo/U9bpI95oMLJdky+oSzKRJToAwfwi5bFh9uaXV9nWLuDwICc92rL/QPo=
+	t=1713299522; cv=fail; b=b4IF1dyU7W1gHk4lg0mn1INwBz/a5RDq4aI4UHIqiqPB1ORQv2l+l6titnKLe/q0p0rf36A5eCdPq5NsUiKFz/mrT4C85TmHf5tpecUItG4nGYopE0zwB5RoXQRhf6EUfG+EvxoVZVRJ3qgJzNVoEBT2svDKy3NQ6AgEUo8To64=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713299517; c=relaxed/simple;
-	bh=c/wOBx1vwKGmGm0QQNeznzyEKeTbhgssxtqJvwqviXg=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=tezbl/t89MmlLbXtRZdkqE8BQdqdtCcjYQ4UUpZ6vANfv1cmzqie4lb7Md5YwRjveapOBGZZHjujwIjw0lEMYgXn9TwYS/68yQXSkWcn04edKj5vYfeMAZmzso5sojpYqIJFpDnaUYLFLYLPqsJCW7MDdSl6RVokcqFpvbYwggk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=vj4pNM3h; arc=fail smtp.client-ip=40.107.93.67
+	s=arc-20240116; t=1713299522; c=relaxed/simple;
+	bh=9BuqJuSolqdH5O6DzB/sQjTwZbgJXbpKtShf8wih7RQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=o+0+EDIY3F+6Dhq3nxkbhR5VA02V0Yx6oUY71gpsPtNJgiHvr7vgfdLSQI0A88nbAZwd2DwhMXzQr6/MWKaXqPrJmMFUwYSHFtW5TrXzueDgBtxCw3DzLKqPv45JzeGtkBcDEDpPqeKCSrJWhpra3w8upG9ZLrhzhn/RIt/L+I4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HPzXMUro; arc=fail smtp.client-ip=40.107.244.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vj4pNM3h"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HPzXMUro"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CdkGkRM4B6vGP9kfqi+1VTCAdLOgOGrI3BwCeI8ta8knBBPK6dN8MG/kq17pWLmQztz9ypxizwSwGigMZIvIaYMaNoXgHQrFrVRZK2870p00SSALbVy4ArHAC7xOtsUOtnTDYJaknJbuusQyXCM55Jaqr1toUsAexWMCGbcbNXJvi+vwmPO+E1uaTbZUl5kPd2BfeLAWQxVtiC4GQunq0tZhxFj7TWCpP9uJFVsC6k2SnX8uGJvU05QWDvsC98d9QnfWEekHp2SxL9d2hHBGRgX6xtBwiz9kdX/D0PGcO5F8hjcRzVK9Avb68BDAzcLxfL2S6QZ4/pFgdnR0dwDIcA==
+ b=gADZ7wfsFzF9QnieQD0WKuCmp56dTnKi+sWm0luf1E8yoItgVtylg91xw931Vo4Xep3xTcJuhh2BWsi+fnHlJhMSqD2Ug8BF0xMD0+8jCNuGSTY1v9z1q2uGfFdjsnj7NvOSbp9kqvVK0u0ytvFWYaUQYZOB+bHypszaIdyNaEFsDHXAxe2rva21ZUv3lGqw7eCHfHZsCB8O13/17IrXkSsWtTdlvlmDt/TFLJSo+ytiRhH+l+ggbxCvrxycSahH3uD+i/hf7a+r8IA9L4BXDjo+O1icsGmA2S1vGB+ylFHFcr6z5dGv+BIEv73zWg3cEcbaji2u0zd3qVIdoDhVoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9vsch8lBPn05eQqKoGjMdg/0WdyN2jO5IGZeTMVGJ7A=;
- b=KTsyslBlmjc4oZJ1ewsw/JF3qrohu+NORnaPsQuNi3L0xVUdrF5hTFGaspWKJZnO9sSbLwOtXQhUG8ZVig8/q04YKZuukIcgblJOuVW1ffab+KAX4vkduZg2H1JmwzEpM+aXi+FEmkv1q4ZMuPD62mlDZhZtHd/KxT+cdIFgfshGftFUz8GnKhrt5raAb6kJF42pHu4WS83WpmCPbtAVNUpkkulk2v9FFE+Lp9U8p2zIh+6zDxNUe1p1WmyhR2IyYxZscLfikxAl0As5vqrQ4jkrBpl5jeubzI+I12IenJ76HeQ71h6blbozBMrlEYAKxL0SiR4xNMxJuf05RUMljg==
+ bh=SwSfwu+mLADPdCZDXGU6Dt5Ba6S34HX3cnX0JXk+hpU=;
+ b=ajdPIjScZq+iiYMlkK8UqIIZUQJqP88Q0wzs7BdVNC6ej80MvQB8RRtGx231H/ZcxIp00ymAyI+rLN7tLKxj1e+FoaqobAHFObAe+8MNy9YNjSXpLaVw8/P3hujGBH3MO4detZq5pOTjsp6kvj+51+7+w847PWYrklAbpIa8yfOyPdEqChj9J1nOKouGth0zBo9FEFGMNssxHy0nHg6UeEDMJ9SIxrYjvpUsjM26cKcQSYJS1UlU6TWMa9iccCKZaua5IMBYw/V52gEIE6RLnRi/gFJNrXFR2D7NeQjmFY5bxuFgaxTca66NdGKgiCLitVt8gqZctW5oUbRiwu17+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9vsch8lBPn05eQqKoGjMdg/0WdyN2jO5IGZeTMVGJ7A=;
- b=vj4pNM3hIDhX0D+c6NUYGOHRLR+QNTgTUKRjdHK0ffPzkILTHGsG307bkBomZ2DNcNhI8gs7GWqkJPOyJdQKfLh1bfFLuXkHzAiRrJJhbYAB/9meqL9HfOoIj3YwU2vqA2OJi7nxt/Z5IXNOnfmTKY8g/x8FVagF7sRV9ZJmD7c=
-Received: from CH2PR18CA0001.namprd18.prod.outlook.com (2603:10b6:610:4f::11)
- by SN7PR12MB6929.namprd12.prod.outlook.com (2603:10b6:806:263::11) with
+ bh=SwSfwu+mLADPdCZDXGU6Dt5Ba6S34HX3cnX0JXk+hpU=;
+ b=HPzXMUroPY9gs/8yY0kL1tIm5XqvKehCmoeF/hWPZPoYeJ2mCSr4vOPQVJZnhc8rdQfzRQ5jVUUFByVDhuS75bCH2WZnYZDKh20ImspUrcpUvievydQzJYDWwICMNamM3tNaDlpsictw17bMdqAWwMo6Uplqqi5Pv1oB7dkmhYo=
+Received: from CH2PR10CA0010.namprd10.prod.outlook.com (2603:10b6:610:4c::20)
+ by CYXPR12MB9386.namprd12.prod.outlook.com (2603:10b6:930:de::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Tue, 16 Apr
- 2024 20:31:51 +0000
-Received: from CH2PEPF0000009B.namprd02.prod.outlook.com
- (2603:10b6:610:4f:cafe::87) by CH2PR18CA0001.outlook.office365.com
- (2603:10b6:610:4f::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.34 via Frontend
- Transport; Tue, 16 Apr 2024 20:31:51 +0000
+ 2024 20:31:56 +0000
+Received: from CH2PEPF0000009A.namprd02.prod.outlook.com
+ (2603:10b6:610:4c:cafe::17) by CH2PR10CA0010.outlook.office365.com
+ (2603:10b6:610:4c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39 via Frontend
+ Transport; Tue, 16 Apr 2024 20:31:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,20 +48,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH2PEPF0000009B.mail.protection.outlook.com (10.167.244.23) with Microsoft
+ CH2PEPF0000009A.mail.protection.outlook.com (10.167.244.22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7452.22 via Frontend Transport; Tue, 16 Apr 2024 20:31:51 +0000
+ 15.20.7452.22 via Frontend Transport; Tue, 16 Apr 2024 20:31:56 +0000
 Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 16 Apr
- 2024 15:31:50 -0500
+ 2024 15:31:55 -0500
 Received: from xsjanatoliy50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 16 Apr 2024 15:31:49 -0500
+ Transport; Tue, 16 Apr 2024 15:31:54 -0500
 From: Anatoliy Klymenko <anatoliy.klymenko@amd.com>
-Subject: [PATCH v4 0/7] Managing live video input format for ZynqMP DPSUB
-Date: Tue, 16 Apr 2024 13:31:35 -0700
-Message-ID: <20240416-dp-live-fmt-v4-0-c7f379b7168e@amd.com>
+Date: Tue, 16 Apr 2024 13:31:38 -0700
+Subject: [PATCH v4 3/7] drm: xlnx: zynqmp_dpsub: Add connected live layer
+ helper
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,10 +70,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACjgHmYC/23MSw6DIBSF4a00jEsDFwHpqPtoOkAuVpL6CBrSx
- rj3ohNr0uE5yffPZPQx+JFcTzOJPoUx9F0exflEXGO7p6cB8ybAoGAAiuJAXyF5WrcTVQWXWot
- KWlWSLIbo6/DeavdH3k0Ypz5+tnji6/u/kzhltNKlE7UyzmB5sy1eXN+StZJgl4LDUUKW1jgh0
- UknGR6l+JHAj1JkiZIZhtqoSvtdLsvyBdl6mskYAQAA
+Message-ID: <20240416-dp-live-fmt-v4-3-c7f379b7168e@amd.com>
+References: <20240416-dp-live-fmt-v4-0-c7f379b7168e@amd.com>
+In-Reply-To: <20240416-dp-live-fmt-v4-0-c7f379b7168e@amd.com>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Maarten Lankhorst
 	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
@@ -93,141 +93,105 @@ Received-SPF: None (SATLEXMB04.amd.com: anatoliy.klymenko@amd.com does not
  designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000009B:EE_|SN7PR12MB6929:EE_
-X-MS-Office365-Filtering-Correlation-Id: e39d1907-4831-4f87-3000-08dc5e543f4a
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000009A:EE_|CYXPR12MB9386:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c41dcce-124a-49ed-4c68-08dc5e5442a2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	/UukadpY3W33qoHHNTe4tRRR/ldZQjRLthR0ihtr7nwEpNv9cE63mtztwOwbKNoBjNXsLQ4u0up63qGpPG5CGe/2pPWbw4OBkG9/hDqtXUbV+PVJbYTU88DXrctYP+q1KqI6pwYhqj8Zloe5xKfiKunDDsnQpTod0E9DQKV7sAg63qO927VqTDaCDVgOBROQKGMN1hWrxOl3ZNucCCy455reNXOHS9997Jd3BCvsBbIMA9qhB2z2Vw5tb6SaQ/ooKZMy1kSWEpSCpN4VPLdaMSBvmiCxsL0wiwOJ8KVpQegha4ca4SSdc3hn+isg+PE/F6iCyM+QW5HCC6lSgiFNslMO1rJX8QLMer43dG/YfLWovuLskN8eBN9Vh5dAZqCwwLEh9qqx2XXMw2DL2DRRWpN9SiLbFy0Xpj6gGF/vlqY31xO/t83R3/zyUIxcUiimZptY1mom4GaWKjC/eim65wKrY3cRfIrq/9DC095fG3boldDKyUPsgXdqBYR3BJKt3i7gvhFk7rs6nBYOuMcYvCIpyMei1fzTOXB+rde5zrzKSF5vGqSb4lmbxXuoKj9mW0PKmSQsPX+mcGb52YvdU/X6rrp+H2BPi4CcsC+07x3tq+OqThsCS5xfapMKgbvMjr0S1HsEBYsTXVrC5e7vGvcz0+qhtWDaVsA+KWc8ze8VSWOkmSPgs5BwMgxkfxWTbPsFCBPwCbQ4T2n3SDkqtrUczMMXc5YVm2aPjiR72Cs69wVr0bh+/mVqGzSXNus69ti704uzWfB2J728yrggNVQQcGSBPQnQSifGPrBf0aY=
+	s+3lSBZHv44eqHItZ7JrikSq7+38vZ3InvjXQ9pnZNCSb32SBmouOpyP18UjQC9UvLrvUCCiOb7Ap4JIYQewrdp/HwbZ/xVPFyvwDh9xAX1n1LPSTL5UP68R+aiAVFNwmFTyCiVcGKif3+IQwrAHRPBcIQLoh5viIrZ/I+XLEMWo9eRdPSFic+SWeGnee4e/LqiiQXhWJn6Cnlj/mFOZnUocH+UdecYbtYp7JGNlyuB/vYxYCjGFzCNoPmMT+TxAlUr+oc1LQ6++v9LId3hWh74VQ2UInCcuIpK7JNwfb7fRX60iu98pEoqv55arevPYy+JRRpDdsbERQ5ElFpqB9pd0cMWBgjIQrIEVwV03FfPfemaL0ecMhjcZCRydrT9uBbIjXjCAoCEYkUL9POSbeLzUjGWXDn3G9OeF9iUGpRM7pTVt4hFQWhg1K8wke+mLoRNhyHqZ4sRfy/1jm9l5vM8mXvPSKaTKHLOI8RLIUCKjxWEZrcBLoLwt9k+4lM/NMFLKtK56z4rjqSqVHWiURf8t72C5u47FDdHJQufWiBtVt5OWjZz/BdtQIOcvElSW4LZbHckWUPOKQ/t/4cPcoo+Bu+WDlnYL+Fhe+JVDdTYNLqHG7yoXqp72sViA7t1qHgpUvSiAlX3RwMFXBZrqxVb3acqtMjxJZfVwhh2jv0Q4eNzEEzQ6TrEfAaVMCaiQraiBKajoOxUr88YFmv6YSr+f72lHy4lupOqLyRlEguVOYbbXdkFPsb3Z7g6KiFyGgpelhG25+r+LN5TWH1nYEw==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(7416005)(82310400014)(1800799015)(921011);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(7416005)(376005)(36860700004)(82310400014)(1800799015)(921011);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 20:31:51.1233
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2024 20:31:56.7339
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e39d1907-4831-4f87-3000-08dc5e543f4a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c41dcce-124a-49ed-4c68-08dc5e5442a2
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF0000009B.namprd02.prod.outlook.com
+	CH2PEPF0000009A.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6929
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9386
 
-Implement live video input format setting for ZynqMP DPSUB.
+Add a helper function capturing the first connected live display layer
+discovery logic.
 
-ZynqMP DPSUB can operate in 2 modes: DMA-based and live.
-
-In the live mode, DPSUB receives a live video signal from FPGA-based CRTC.
-DPSUB acts as a DRM encoder bridge in such a scenario. To properly tune
-into the incoming video signal, DPSUB should be programmed with the proper
-media bus format. This patch series addresses this task.
-
-Patch 1/7: Set the DPSUB layer mode of operation prior to enabling the
-layer. Allows to use layer operational mode before its enablement.
-
-Patch 2/7: Update some IP register defines.
-
-Patch 3/7: Factor out some code into a helper function.
-
-Patch 4/7: Announce supported input media bus formats via
-drm_bridge_funcs.atomic_get_input_bus_fmts callback.
-
-Patch 5/7: Minimize usage of a global flag. Minor improvement.
-
-Patch 6/7: Program DPSUB live video input format based on selected bus
-config in the new atomic bridge state.
-
-Patch 7/7: New optional CRTC atomic helper proposal that will allow to
-negotiate video signal format between CRTC and connected encoder.
-Incorporate this callback into the DRM bridge format negotiation process.
-Save negotiated output format in drm_crtc_state. Reference usage of this
-API is available here:
-https://github.com/onotole/linux/tree/dpsub-live-in
-
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-To: Maxime Ripard <mripard@kernel.org>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-To: David Airlie <airlied@gmail.com>
-To: Daniel Vetter <daniel@ffwll.ch>
-To: Michal Simek <michal.simek@amd.com>
-To: Andrzej Hajda <andrzej.hajda@intel.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-To: Robert Foss <rfoss@kernel.org>
-To: Jonas Karlman <jonas@kwiboo.se>
-To: Jernej Skrabec <jernej.skrabec@gmail.com>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Conor Dooley <conor+dt@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-media@vger.kernel.org
 Signed-off-by: Anatoliy Klymenko <anatoliy.klymenko@amd.com>
-
-Changes in v4:
-- Replace controversial reference driver patches with the private
-  repository link.
-- Split display layer format manipulation functions into 2 separate cases
-  for diferet layer modes.
-- Address misc review comments (typos, comments, etc.)
-
-Link to v3: https://lore.kernel.org/r/20240321-dp-live-fmt-v3-0-d5090d796b7e@amd.com
-
-Changes in v3:
-- Add connected live layer helper
-- Include reference DRM format in zynqmp_disp_format for live layerss.
-- Add default bus format list for non-live case.
-- Explain removal of redundant checks in the commit message.
-- Minor fixes and improvements from review comments.
-
-Link to v2: https://lore.kernel.org/r/20240312-dp-live-fmt-v2-0-a9c35dc5c50d@amd.com
-
-Changes in v2:
-- Factor out register defines update into separate patch.
-- Add some improvements minimizing ithe usage of a global flag.
-- Reuse existing format setting API instead of introducing new versions.
-- Add warning around NULL check on new bridge state within atomic enable
-  callback.
-- Add drm_helper_crtc_select_output_bus_format() that wraps
-  drm_crtc_helper_funcs.select_output_bus_format().
-- Update API comments per review recommendations.
-- Address some minor review comments.
-- Add reference CRTC driver that demonstrates the usage of the proposed
-  drm_crtc_helper_funcs.select_output_bus_format() API.
-
-- Link to v1: https://lore.kernel.org/r/20240226-dp-live-fmt-v1-0-b78c3f69c9d8@amd.com
-
+Reviewed-by: Tomi Valkeinen <tomi.valkainen@ideasonboard.com>
 ---
-Anatoliy Klymenko (7):
-      drm: xlnx: zynqmp_dpsub: Set layer mode during creation
-      drm: xlnx: zynqmp_dpsub: Update live format defines
-      drm: xlnx: zynqmp_dpsub: Add connected live layer helper
-      drm: xlnx: zynqmp_dpsub: Anounce supported input formats
-      drm: xlnx: zynqmp_dpsub: Minimize usage of global flag
-      drm: xlnx: zynqmp_dpsub: Set input live format
-      drm/atomic-helper: Add select_output_bus_format callback
+ drivers/gpu/drm/xlnx/zynqmp_dp.c | 37 +++++++++++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
- drivers/gpu/drm/drm_bridge.c             |  14 +-
- drivers/gpu/drm/drm_crtc_helper.c        |  38 +++++
- drivers/gpu/drm/xlnx/zynqmp_disp.c       | 231 +++++++++++++++++++++++++++----
- drivers/gpu/drm/xlnx/zynqmp_disp.h       |  17 +--
- drivers/gpu/drm/xlnx/zynqmp_disp_regs.h  |   8 +-
- drivers/gpu/drm/xlnx/zynqmp_dp.c         |  81 ++++++++---
- drivers/gpu/drm/xlnx/zynqmp_kms.c        |   2 +-
- include/drm/drm_crtc.h                   |  11 ++
- include/drm/drm_crtc_helper.h            |   5 +
- include/drm/drm_modeset_helper_vtables.h |  30 ++++
- 10 files changed, 372 insertions(+), 65 deletions(-)
----
-base-commit: bfa4437fd3938ae2e186e7664b2db65bb8775670
-change-id: 20240226-dp-live-fmt-6415773b5a68
+diff --git a/drivers/gpu/drm/xlnx/zynqmp_dp.c b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+index 04b6bcac3b07..7faeb010e1ae 100644
+--- a/drivers/gpu/drm/xlnx/zynqmp_dp.c
++++ b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+@@ -1276,28 +1276,40 @@ static void zynqmp_dp_encoder_mode_set_stream(struct zynqmp_dp *dp,
+  * DISP Configuration
+  */
+ 
++/**
++ * zynqmp_dp_disp_connected_live_layer - Return the first connected live layer
++ * @dp: DisplayPort IP core structure
++ *
++ * Return: The first connected live display layer or NULL if none of the live
++ * layers are connected.
++ */
++static struct zynqmp_disp_layer *
++zynqmp_dp_disp_connected_live_layer(struct zynqmp_dp *dp)
++{
++	if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_VIDEO))
++		return dp->dpsub->layers[ZYNQMP_DPSUB_LAYER_VID];
++	else if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_GFX))
++		return dp->dpsub->layers[ZYNQMP_DPSUB_LAYER_GFX];
++	else
++		return NULL;
++}
++
+ static void zynqmp_dp_disp_enable(struct zynqmp_dp *dp,
+ 				  struct drm_bridge_state *old_bridge_state)
+ {
+-	enum zynqmp_dpsub_layer_id layer_id;
+ 	struct zynqmp_disp_layer *layer;
+ 	const struct drm_format_info *info;
+ 
+-	if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_VIDEO))
+-		layer_id = ZYNQMP_DPSUB_LAYER_VID;
+-	else if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_GFX))
+-		layer_id = ZYNQMP_DPSUB_LAYER_GFX;
+-	else
++	layer = zynqmp_dp_disp_connected_live_layer(dp);
++	if (!layer)
+ 		return;
+ 
+-	layer = dp->dpsub->layers[layer_id];
+-
+ 	/* TODO: Make the format configurable. */
+ 	info = drm_format_info(DRM_FORMAT_YUV422);
+ 	zynqmp_disp_layer_set_format(layer, info);
+ 	zynqmp_disp_layer_enable(layer);
+ 
+-	if (layer_id == ZYNQMP_DPSUB_LAYER_GFX)
++	if (layer == dp->dpsub->layers[ZYNQMP_DPSUB_LAYER_GFX])
+ 		zynqmp_disp_blend_set_global_alpha(dp->dpsub->disp, true, 255);
+ 	else
+ 		zynqmp_disp_blend_set_global_alpha(dp->dpsub->disp, false, 0);
+@@ -1310,11 +1322,8 @@ static void zynqmp_dp_disp_disable(struct zynqmp_dp *dp,
+ {
+ 	struct zynqmp_disp_layer *layer;
+ 
+-	if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_VIDEO))
+-		layer = dp->dpsub->layers[ZYNQMP_DPSUB_LAYER_VID];
+-	else if (dp->dpsub->connected_ports & BIT(ZYNQMP_DPSUB_PORT_LIVE_GFX))
+-		layer = dp->dpsub->layers[ZYNQMP_DPSUB_LAYER_GFX];
+-	else
++	layer = zynqmp_dp_disp_connected_live_layer(dp);
++	if (!layer)
+ 		return;
+ 
+ 	zynqmp_disp_disable(dp->dpsub->disp);
 
-Best regards,
 -- 
-Anatoliy Klymenko <anatoliy.klymenko@amd.com>
+2.25.1
 
