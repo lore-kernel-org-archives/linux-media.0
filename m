@@ -1,251 +1,128 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4945313F449;
-	Wed, 17 Apr 2024 13:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1E31411C6;
+	Wed, 17 Apr 2024 14:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713360980; cv=none; b=CiIt2kNm0B7YXX6UgRhOBE1T1qA/U1DGYZFxGb7L6oouRwndH6Ao7AZ+pBdKV4sBQaAPEzHUL9lcnCTbF+c3dXwFwvAIXD+2N69IwPdlKMDY+7+Ra3xA3cZebjh8YerC7WDMCNxEpFOvy/H0/1EpFX9rVQBakUL46ascIElDwFo=
+	t=1713362459; cv=none; b=SGFe9B6vlynXmg8zEUeAWcW7/B/a3q+TNGHbqRMzCRk4HDUCFrqKkYtLcB5h8TbCe8NZJF7WW5bT2o4RPX9seZlRiM4mC2x5MHPMQOKQ9hrLRS6qRPOoYvZoZyDuNbxlejFwFRd67H0lO8tu3IBgMiOau8UF2c7OSSK82qLtDHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713360980; c=relaxed/simple;
-	bh=5G8pe7MP76r9XFSp6obY0JufOD1w28dhrg0c/jHU/4s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L2yMMqjZGniYSj++xq+KPGJzczzYSVCbZcUcC+KJq31HQsK8JGNJ6/c5zBODgbwsoM5Cw1WxOraQ+mUps/K1UvzdlBVSc8UuHeASwneJdsEuQ0TDYcpYM6cUeiMU2rfd+2rolzPuIJKjB4hfXQkJno4xUkL0V/AFRSWYzKoaAek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=hhPr0E0l; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1713362459; c=relaxed/simple;
+	bh=XXSBrpKeFBW0Wr5Obr1HrJ42x0q+ZIDydmMbpFUeZJo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EL0P+zqFxRAFwxf3DUPujA4tv4DvYw8NH1HV/ka71vy7ZOIvPCtT4xsumU7o2uxHK4K+leCe8sgeZQ6V0RKWauT3PiFHozD9tGaTL+17ObuQj99OPhX1YBI3UoIaca0fPTgr1/XcOEWWb3lScceVlHJOIOwIHjxzdCYV8tLCRa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=NLVL4IPY; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="hhPr0E0l"
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43HCiwkp020736;
-	Wed, 17 Apr 2024 15:35:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=selector1; bh=snhd86so2C8glVh9gr9S
-	qBVtFEYqqmDhCpWp72NXfrU=; b=hhPr0E0lBRJznAI3Jfnv+h1rtaZkgjaRK/f/
-	hmLSHX8SGZe7jT2AMmPPnLvqpUCKG05h0BLsU9FB+kS8DZETSnJeP8AeySPZwg9s
-	kCbrf/BdJYwPujXZAZXkWr4HF5++izv45k+7J0pMUDslpUrVmcn+C2M1l5dEPV8f
-	VhhLZPbObzTx+xbAaDCa540W68yS/MrXblT8+o70Ohk0DGvTcpkzo/y22FpZKYQy
-	P8mxCk0HSixrX+vRA4MgBYK9hJV5b0A0SVSv8jPDE+qK/aIUKpA4cdgRpTjJVpvG
-	d6IJ9/sDEquSax3oWfccFMZ2yi7UKArsXZVuD5hewTstg+haOg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3xg3m0qys3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Apr 2024 15:35:59 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 70D0D4002D;
-	Wed, 17 Apr 2024 15:35:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B6AFD216831;
-	Wed, 17 Apr 2024 15:35:26 +0200 (CEST)
-Received: from localhost (10.130.72.242) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 17 Apr
- 2024 15:35:26 +0200
-From: Sylvain Petinot <sylvain.petinot@foss.st.com>
-To: <benjamin.mugnier@foss.st.com>, <sylvain.petinot@foss.st.com>,
-        <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/2] media: dt-bindings: Add ST VD56G3 camera sensor binding
-Date: Wed, 17 Apr 2024 15:34:52 +0200
-Message-ID: <20240417133453.17406-2-sylvain.petinot@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240417133453.17406-1-sylvain.petinot@foss.st.com>
-References: <20240417133453.17406-1-sylvain.petinot@foss.st.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NLVL4IPY"
+Received: from [192.168.1.105] (unknown [103.251.226.7])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99AA9182C;
+	Wed, 17 Apr 2024 16:00:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1713362404;
+	bh=XXSBrpKeFBW0Wr5Obr1HrJ42x0q+ZIDydmMbpFUeZJo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NLVL4IPYAXZL7hCQkg+pADK/52DfGJelKFUFhCQXfXYZynagJ2FBdnqY/Cvhbxf7J
+	 QWqBz4aHGxrW8NcAt4k5m4u5TXpdrkfbUFfNohIshteXcGLflmxQGkLLNUKsT2yqPy
+	 YaU/1Ya/gtgRmouKBUpgVymYTE8UPkYUWxQZVIws=
+Message-ID: <17f78148-f534-47fe-b59e-d6474b0dd62e@ideasonboard.com>
+Date: Wed, 17 Apr 2024 19:30:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-17_10,2024-04-16_01,2023-05-22_02
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/10] media: subdev: Improve stream enable/disable
+ machinery
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil
+ <hverkuil@xs4all.nl>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240416-enable-streams-impro-v5-0-bd5fcea49388@ideasonboard.com>
+Content-Language: en-US
+From: Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <20240416-enable-streams-impro-v5-0-bd5fcea49388@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add devicetree bindings Documentation for ST VD56G3 & ST VD66GY camera
-sensors. Update MAINTAINERS file.
+Hi Tomi,
 
-Signed-off-by: Sylvain Petinot <sylvain.petinot@foss.st.com>
----
- .../bindings/media/i2c/st,st-vd56g3.yaml      | 143 ++++++++++++++++++
- MAINTAINERS                                   |   9 ++
- 2 files changed, 152 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
+On 16/04/24 7:25 pm, Tomi Valkeinen wrote:
+> This series works on the .s_stream, .enable_streams, .disable_streams
+> related code. The main feature introduced here, in the last two patchs,
+> is adding support for .enable/disable_streams() for subdevs that do not
+> implement full streams support.
+>
+> Additionally we add support for the privacy led when
+> v4l2_subdev_enable/disable_streams() is used.
+>
+> I have tested this on RPi5.
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
-new file mode 100644
-index 000000000000..6792c02fea5c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
-@@ -0,0 +1,143 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2024 STMicroelectronics SA.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/st,st-vd56g3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics VD56G3 Global Shutter Image Sensor
-+
-+maintainers:
-+  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-+  - Sylvain Petinot <sylvain.petinot@foss.st.com>
-+
-+description: |-
-+  The STMicroelectronics VD56G3 is a 1.5 M pixel global shutter image sensor
-+  with an active array size of 1124 x 1364 (portrait orientation).
-+  It is programmable through I2C, the address is fixed to 0x10.
-+  The sensor output is available via CSI-2, which is configured as either 1 or
-+  2 data lanes.
-+  The sensor provides 8 GPIOS that can be used for either
-+    - frame synchronization (Master: out-sync or Slave: in-sync)
-+    - external LED signal (synchronized with sensor integration periods)
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,st-vd56g3
-+      - st,st-vd66gy
-+    description:
-+      Two variants are availables; VD56G3 is a monochrome sensor while VD66GY
-+      is a colour variant.
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  VCORE-supply:
-+    description: Digital core power supply (1.15V)
-+
-+  VDDIO-supply:
-+    description: Digital IO power supply (1.8V)
-+
-+  VANA-supply:
-+    description: Analog power supply (2.8V)
-+
-+  reset-gpios:
-+    description: Sensor reset active low GPIO (XSHUTDOWN)
-+    maxItems: 1
-+
-+  st,leds:
-+    description:
-+      Sensor's GPIOs used for external LED control.
-+      Signal being the enveloppe of the integration time.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 1
-+    maxItems: 8
-+    items:
-+      minimum: 0
-+      maximum: 7
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          clock-lanes:
-+            const: 0
-+
-+          data-lanes:
-+            minItems: 1
-+            maxItems: 2
-+            items:
-+              enum: [1, 2]
-+
-+          link-frequencies:
-+            minItems: 1
-+            maxItems: 1
-+            items:
-+              enum: [402000000, 750000000]
-+
-+          lane-polarities:
-+            minItems: 1
-+            maxItems: 3
-+            items:
-+              enum: [0, 1]
-+            description: Any lane can be inverted or not.
-+
-+        required:
-+          - clock-lanes
-+          - data-lanes
-+          - link-frequencies
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - VCORE-supply
-+  - VDDIO-supply
-+  - VANA-supply
-+  - reset-gpios
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        vd56g3: camera-sensor@10 {
-+            compatible = "st,st-vd56g3";
-+            reg = <0x10>;
-+
-+            clocks = <&camera_clk_12M>;
-+
-+            VCORE-supply = <&camera_vcore_v1v15>;
-+            VDDIO-supply = <&camera_vddio_v1v8>;
-+            VANA-supply = <&camera_vana_v2v8>;
-+
-+            reset-gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
-+            st,leds = <6>;
-+
-+            port {
-+                vd56g3_ep: endpoint {
-+                    clock-lanes = <0>;
-+                    data-lanes = <1 2>;
-+                    link-frequencies =
-+                      /bits/ 64 <402000000>;
-+                    remote-endpoint = <&csiphy0_ep>;
-+                };
-+            };
-+        };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c121493f43d..991e65627e18 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20868,6 +20868,15 @@ S:	Maintained
- F:	Documentation/hwmon/stpddc60.rst
- F:	drivers/hwmon/pmbus/stpddc60.c
- 
-+ST VD56G3 DRIVER
-+M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-+M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
-+F:	drivers/media/i2c/st-vd56g3.c
-+
- ST VGXY61 DRIVER
- M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
- M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
--- 
-2.17.1
+I have also tested the series on i.MX8MP with IMX283 hence,
+
+Tested-by: Umang Jain <umang.jain@ideasonboard.com>
+>
+>   Tomi
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+> Changes in v5:
+> - Fix issues with non-routing case:
+>    - Always set 'found_streams' variable instead of leaving it
+>      uninitialized in "Support single-stream case in
+>      v4l2_subdev_enable/disable_streams()"
+>    - Fix the "implicit" stream from bit 1 to bit 0 in "Support
+>      non-routing subdevs in v4l2_subdev_s_stream_helper()"
+> - Link to v4: https://lore.kernel.org/r/20240416-enable-streams-impro-v4-0-1d370c9c2b6d@ideasonboard.com
+>
+> Changes in v4:
+> - Added Rb tags
+> - Rename 'streaming_enabled' to 's_stream_enabled'
+> - Cosmetic changes (comments / patch descs)
+> - Added new patch "media: subdev: Support non-routing subdevs in  v4l2_subdev_s_stream_helper()".
+> - Link to v3: https://lore.kernel.org/r/20240410-enable-streams-impro-v3-0-e5e7a5da7420@ideasonboard.com
+>
+> Changes in v3:
+> - Rebased on top of "[PATCH v2 1/1] media: v4l: Don't turn on privacy LED if streamon fails"
+> - Drop extra "!!" in "media: subdev: Fix use of sd->enabled_streams in  call_s_stream()"
+> - Enable privacy LED after a succesfull stream enable in  "media: subdev: Support privacy led in v4l2_subdev_enable/disable_streams()"
+> - Init 'cfg' variable when declaring in "media: subdev: Refactor v4l2_subdev_enable/disable_streams()"
+> - Link to v2: https://lore.kernel.org/r/20240405-enable-streams-impro-v2-0-22bca967665d@ideasonboard.com
+>
+> Changes in v2:
+> - New patches for privacy led
+> - Use v4l2_subdev_has_op()
+> - Use BITS_PER_BYTE instead of 8
+> - Fix 80+ line issues
+> - Fix typos
+> - Check for pad < 64 also in the non-routing .enable/disable_streams code path
+> - Dropped "media: subdev: Support enable/disable_streams for non-streams
+>    subdevs", which is implemented in a different way in new patches in this series
+> - Link to v1: https://lore.kernel.org/r/20240404-enable-streams-impro-v1-0-1017a35bbe07@ideasonboard.com
+>
+> ---
+> Tomi Valkeinen (10):
+>        media: subdev: Add privacy led helpers
+>        media: subdev: Use v4l2_subdev_has_op() in v4l2_subdev_enable/disable_streams()
+>        media: subdev: Add checks for subdev features
+>        media: subdev: Fix use of sd->enabled_streams in call_s_stream()
+>        media: subdev: Improve v4l2_subdev_enable/disable_streams_fallback
+>        media: subdev: Add v4l2_subdev_is_streaming()
+>        media: subdev: Support privacy led in v4l2_subdev_enable/disable_streams()
+>        media: subdev: Refactor v4l2_subdev_enable/disable_streams()
+>        media: subdev: Support single-stream case in v4l2_subdev_enable/disable_streams()
+>        media: subdev: Support non-routing subdevs in v4l2_subdev_s_stream_helper()
+>
+>   drivers/media/v4l2-core/v4l2-subdev.c | 378 ++++++++++++++++++++--------------
+>   include/media/v4l2-subdev.h           |  25 ++-
+>   2 files changed, 245 insertions(+), 158 deletions(-)
+> ---
+> base-commit: 6547a87b1ffc9b3c3a17f20f71016de98c169bbb
+> change-id: 20240404-enable-streams-impro-db8bcd898471
+>
+> Best regards,
 
