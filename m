@@ -1,68 +1,153 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25CE38D
-	for <linux-media@vger.kernel.org>; Fri, 19 Apr 2024 09:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627AB7C081
+	for <linux-media@vger.kernel.org>; Fri, 19 Apr 2024 09:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713519824; cv=none; b=jDSblMeGQVgJ7a5hk5cbhLvceipMdVNmAaoiJhdfsbupwjVrfeF3IvFoUNAd5jUljqMrHidkv7Yr0tkiMsJmg7WCmgH+Ct67leLa/I2Mof35bAeSWh199+ZHZW0+mhBLXbA4ousxSDkxrUyeKXy4Iekf5/vCTXMxwlImKDyO6wM=
+	t=1713520162; cv=none; b=ENjJU1SH8EWbnD7we7VfxzTC58zwfjMz95HOOt3RLutwa/WSLJFajAvEn8Fohf/Xhs/mbbf+XNPHd46REboCfvggM79P14ktodPNzT2E6vkE0iKAHWpxlFLM9+lo03fj7ej42593H/JFo5HWcKt+yx3IQDv8QwNuMtVUNOsrmgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713519824; c=relaxed/simple;
-	bh=8ISrqGdtGSPrN9SuCrNdbXF3h8cKtTD8Iq+UkiOI07w=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=c8vRSeDiMbd16F1pCnoPTz8NbbBw87GY7mqayiuq6tWWXgJgSAdVxCb6SDUDAURvPyGz9FXfPsHVvymgraKshd1yK7q6iBDtbkTjs5+tqgb19hpV42e2Mfu7oh7qHdPEixfaPV8ZZvR7b58rpO9AZQzvhucLescX+xaySbAcRpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=dLzsJEFx; arc=none smtp.client-ip=88.97.38.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1713520162; c=relaxed/simple;
+	bh=9zM0Hr1EOWa9tBCrj0oU1BEsI1sH0P8oKQcejd+0WUE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=oZVn47B51DVk/SPnXZJaWH+TMLOA1McrxZE6Ev/f0xbdBMIOOoAuT/uQcNn2XHdm/Q+jfqAJcbqrV2imZly398yffag6EZUd1rqfe6fNkEnh50foowqfMpr+4RSMaaHfImXEm7KCLsBxQJLp7EvyU4TVtCHYLuuE1idmn1vnCUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=B9uGfTE4; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="dLzsJEFx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1713519396; bh=8ISrqGdtGSPrN9SuCrNdbXF3h8cKtTD8Iq+UkiOI07w=;
-	h=From:To:Subject:Date:From;
-	b=dLzsJEFxi3PjSUsMefioDVGgdhG611sqyxZ0e2P1k7Rbm/LQut+p28pJrWECjn8EZ
-	 i2eDuarHylXzEGzfDAZFM+SJrSbHLrhnHQicHLVbDxOMpJMKvugFRyWIV3/cZclZnm
-	 YxYCOCzSRAmjrBOODOuAHee06bY4be4rkivurAOKgsvWpEsfqLaY8MklmpKCHvoNoX
-	 Bi2jnr7uScBLrGmgGZOks6qZbAiQp2iEGIbwO70qJa23AfkrkdRrw3nH6pJDngbFSR
-	 Mqiagk9ChN6xnBYtNy8Mm1LO+KSUULG61iWSJe3DnVA39j8H3L7+Y4JKOKIX4zY3vr
-	 0U94cf3X4tTcw==
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 82BAD1000C4; Fri, 19 Apr 2024 10:36:36 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org
-Subject: [PATCH v4l-utils] ir-ctl: correct max_size for rc5 and rc5_sz
-Date: Fri, 19 Apr 2024 10:36:36 +0100
-Message-Id: <20240419093636.223925-1-sean@mess.org>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="B9uGfTE4"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-78f02c96c52so109303285a.1
+        for <linux-media@vger.kernel.org>; Fri, 19 Apr 2024 02:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1713520159; x=1714124959; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TtlViaUk+ppF2YvB3wdQyftKniyUzK8Ej92YBlwMILc=;
+        b=B9uGfTE4vZBZ3DPOwWlD57mgs6r6jG/NwE89YV7tCii8zx4DvyKV0q/n9O5zialAJU
+         gAnsyMlQr7f0my8BExqqelEGCw/lHxIajmUPfaYuzQ+deGaGJDxLJYaLxLpmIQSGkY+C
+         V4q7j46jToCXVXnEGVhOLVbQ6ixsoF4NlPMOk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713520159; x=1714124959;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TtlViaUk+ppF2YvB3wdQyftKniyUzK8Ej92YBlwMILc=;
+        b=K0U7JzoLMPWEC6FieAk5NeA5VlnEbHdBmwodEZyyZXLaRVQMcQpBy8AMVT//WE4TKM
+         yUukNaUjCRJYxg6nxurCVboi/SUvuv3ctJKqjkgNfdPWB/mS4uLL753WMZnNYMyPpQ0W
+         PrGCgK50o+aMxVh7opnGuUqJ85VGCBBfH+kV69NgWheD/YUOA+BOMFxHEZWAKzXA5IuQ
+         6Plg8v9xMO91ZkGH1AD8LeYcGAW6ubDKwa7THra3Xblf2x0FzHUMTSkRm5z+Yn35ZnBf
+         jY6BmgnsvAtmgJYohXOyxpbHaSPO8p9KhT27z4oJrkYZi1DTjzTPhH33SsuqvT6rxKVf
+         RLTw==
+X-Gm-Message-State: AOJu0YygDStWPmjQv5vaxy8zM4Hf9d7mYlNnLBSPM6/ZhRMRNZ5zrMpX
+	KlzIWSFZzK0yGQWZYJQ95beIQP+ZS+CyRQ58kLczLyaQ0jbptI1LRhQWLogW6Q==
+X-Google-Smtp-Source: AGHT+IHcSLXPGR/K0waZNqFgMaXNzaf95X9YYFUFUCHgvEpSUHJvLAV/8QVHrr+4o4OmwTvG9tzrkg==
+X-Received: by 2002:a05:620a:1da6:b0:78d:5065:c5df with SMTP id pj38-20020a05620a1da600b0078d5065c5dfmr1595944qkn.18.1713520159351;
+        Fri, 19 Apr 2024 02:49:19 -0700 (PDT)
+Received: from denia.c.googlers.com (114.152.245.35.bc.googleusercontent.com. [35.245.152.114])
+        by smtp.gmail.com with ESMTPSA id dt14-20020a05620a478e00b0078d735ca917sm1434532qkb.123.2024.04.19.02.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Apr 2024 02:49:18 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Fri, 19 Apr 2024 09:47:47 +0000
+Subject: [PATCH v2 01/26] media: pci: mgb4: Refactor struct resources
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20240419-fix-cocci-v2-1-2119e692309c@chromium.org>
+References: <20240419-fix-cocci-v2-0-2119e692309c@chromium.org>
+In-Reply-To: <20240419-fix-cocci-v2-0-2119e692309c@chromium.org>
+To: Martin Tuma <martin.tuma@digiteqautomotive.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hugues Fruchet <hugues.fruchet@foss.st.com>, 
+ Alain Volmat <alain.volmat@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Paul Kocialkowski <paul.kocialkowski@bootlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Sowjanya Komatineni <skomatineni@nvidia.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, Sergey Kozlov <serjk@netup.ru>, 
+ Abylay Ospan <aospan@netup.ru>, 
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Dmitry Osipenko <digetx@gmail.com>, 
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
+ Sylvain Petinot <sylvain.petinot@foss.st.com>, 
+ Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, 
+ Vikash Garodia <quic_vgarodia@quicinc.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev, 
+ linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
+ linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.12.4
 
-These protocols can produce more edges.
+The struct resource end field is inclusive not exclusive, this is, the
+size is (end - start) +1.
 
-Signed-off-by: Sean Young <sean@mess.org>
+Update the definitions and use the generic resource_size() function.
+
+Fixes cocci check:
+drivers/media/pci/mgb4/mgb4_regs.c:13:22-25: WARNING: Suspicious code. resource_size is maybe missing with res
+
+Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- utils/common/ir-encode.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/pci/mgb4/mgb4_core.c | 4 ++--
+ drivers/media/pci/mgb4/mgb4_regs.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/common/ir-encode.c b/utils/common/ir-encode.c
-index 4d43eb9d..5501778d 100644
---- a/utils/common/ir-encode.c
-+++ b/utils/common/ir-encode.c
-@@ -379,9 +379,9 @@ static const struct {
- } protocols[] = {
- 	[RC_PROTO_UNKNOWN] = { "unknown" },
- 	[RC_PROTO_OTHER] = { "other" },
--	[RC_PROTO_RC5] = { "rc5", 0x1f7f, 24, 36000, rc5_encode },
-+	[RC_PROTO_RC5] = { "rc5", 0x1f7f, 25, 36000, rc5_encode },
- 	[RC_PROTO_RC5X_20] = { "rc5x_20", 0x1f7f3f, 40, 36000, rc5_encode },
--	[RC_PROTO_RC5_SZ] = { "rc5_sz", 0x2fff, 26, 36000, rc5_encode },
-+	[RC_PROTO_RC5_SZ] = { "rc5_sz", 0x2fff, 27, 36000, rc5_encode },
- 	[RC_PROTO_SONY12] = { "sony12", 0x1f007f, 25, 40000, sony_encode },
- 	[RC_PROTO_SONY15] = { "sony15", 0xff007f, 31, 40000, sony_encode },
- 	[RC_PROTO_SONY20] = { "sony20", 0x1fff7f, 41, 40000, sony_encode },
+diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+index 9bcf10a77fd3..60498a5abebf 100644
+--- a/drivers/media/pci/mgb4/mgb4_core.c
++++ b/drivers/media/pci/mgb4/mgb4_core.c
+@@ -493,13 +493,13 @@ static int mgb4_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	struct mgb4_dev *mgbdev;
+ 	struct resource video = {
+ 		.start	= 0x0,
+-		.end	= 0x100,
++		.end	= 0xff,
+ 		.flags	= IORESOURCE_MEM,
+ 		.name	= "mgb4-video",
+ 	};
+ 	struct resource cmt = {
+ 		.start	= 0x1000,
+-		.end	= 0x1800,
++		.end	= 0x17ff,
+ 		.flags	= IORESOURCE_MEM,
+ 		.name	= "mgb4-cmt",
+ 	};
+diff --git a/drivers/media/pci/mgb4/mgb4_regs.c b/drivers/media/pci/mgb4/mgb4_regs.c
+index 53d4e4503a74..31befd722d72 100644
+--- a/drivers/media/pci/mgb4/mgb4_regs.c
++++ b/drivers/media/pci/mgb4/mgb4_regs.c
+@@ -10,7 +10,7 @@
+ int mgb4_regs_map(struct resource *res, struct mgb4_regs *regs)
+ {
+ 	regs->mapbase = res->start;
+-	regs->mapsize = res->end - res->start;
++	regs->mapsize = resource_size(res);
+ 
+ 	if (!request_mem_region(regs->mapbase, regs->mapsize, res->name))
+ 		return -EINVAL;
+
 -- 
-2.44.0
+2.44.0.769.g3c40516874-goog
 
