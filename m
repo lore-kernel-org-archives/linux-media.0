@@ -1,48 +1,77 @@
-Received: from forward204c.mail.yandex.net (forward204c.mail.yandex.net [178.154.239.217])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE7313FD9E
-	for <linux-media@vger.kernel.org>; Tue, 23 Apr 2024 19:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD4413D884;
+	Tue, 23 Apr 2024 19:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713900093; cv=none; b=nSvWPj5gabUylVNwWmLUSOldIF2X6SLDQGXYstXSryJg/Z0VSCnPYM9Mx0AB62vIq7Or7NIbtFIkjaE7iX30sbBXwrD9jKsBvhdfCPmzXTUc4uurIqV3gqj/hOGGVR1hfCVr5PpTuFvctWRIQ9kOiMOIjNkSotaBn05GA1jLIfw=
+	t=1713900338; cv=none; b=ndz1iI5ApTp6ESAH48tE1x3SywoE8ktqebduPgQoOBHUvz7KRYfGE1/8NDCmT/bhWPOsGf8f2oKCHhGYOx10FZzIkzDjkln2mKjJYleZLG7+8cpXMLORdzmR0W5dNYLdqXJWPvdiH8XnrdDjSbVcPZXAvme1cPw8rt/Jta4CSo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713900093; c=relaxed/simple;
-	bh=kjvhhljX2lPQ078qSyN97XGReivHZEDzVYujybo01GU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uyo4CrzgFPLmW/KeK7G/c9mAQP6H3JTmj1VLRZFVbRMiPQmDQ6g5l7O+BZN+cELJ9TBKs7umZAq8/5qMqLflEaJD4ozCFrw6lU0c/iQMejYz+DeUMQxA0LMHa5rmbp6f/W+Fb6k3ASyDuBLYygczYXN6qBUl/Lz4WXuX2N1Fy/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=bzDQ0x6Z; arc=none smtp.client-ip=178.154.239.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+	s=arc-20240116; t=1713900338; c=relaxed/simple;
+	bh=GFgvUWu7beexxqgqYJWuWc2RAm6vGMhqSdFbjSi68w0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CNNi7Ta6Xs67MwvTqRbzC+n6zvKcHQBWlNq28vSCoyDE0JRBu0sT2mqCv46WWALt48M3Sb6sqp8cMV+87hY6+t/v7TeMcCV/Lw8U6E5jyscVBfNuh45YLhePUIUcxUpNMmJya6jGv9gKTIT9wH/DRu7rvpmOwVf47iE6tIZkOhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DHlBiw4v; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="bzDQ0x6Z"
-Received: from forward103c.mail.yandex.net (forward103c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d103])
-	by forward204c.mail.yandex.net (Yandex) with ESMTPS id 05F5561AA8
-	for <linux-media@vger.kernel.org>; Tue, 23 Apr 2024 22:13:46 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:1699:0:640:fad2:0])
-	by forward103c.mail.yandex.net (Yandex) with ESMTPS id 1AE3C608F2;
-	Tue, 23 Apr 2024 22:13:38 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id aDQ1Y2KV04Y0-2XDCZw09;
-	Tue, 23 Apr 2024 22:13:37 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1713899617; bh=m8rHljVzEMT49ON9+udmCkXCxIYBV78xM53MloEwSVg=;
-	h=Message-ID:Date:Cc:Subject:To:From;
-	b=bzDQ0x6ZF12N0ud7Slsp9GrH9ITSqPAo2r2k+XXWXExf++djG65wpSwIgDjo1w6zy
-	 jACK33lfOLEIeG2SSK7GTiRGaClpZRgLCwNs2KzvmHTobV8vdVmCEtFGdg+rW03be4
-	 /88zq9IR+dyqpHpxNc03SGG6eo+Q5QXcDZFKdOfU=
-Authentication-Results: mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From: Dmitry Antipov <dmantipov@yandex.ru>
-To: Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	lvc-project@linuxtesting.org,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	syzbot+5d4cb6b4409edfd18646@syzkaller.appspotmail.com
-Subject: [PATCH] [RFC] dma-buf: fix race condition between poll and close
-Date: Tue, 23 Apr 2024 22:13:10 +0300
-Message-ID: <20240423191310.19437-1-dmantipov@yandex.ru>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DHlBiw4v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713900337; x=1745436337;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=GFgvUWu7beexxqgqYJWuWc2RAm6vGMhqSdFbjSi68w0=;
+  b=DHlBiw4vf02vsEvsF8I6FhcM/pEEct8JHd7/v9x+apFGQSW2saWXXKy+
+   dteeswAkUcjMGsQ9U5oaJWvnjxX/f0SrWO688+BCeNFgyy8Kn2nvGd+c/
+   sBiRS2nuSTL8RSL6idNzVeF7pp6tAd5MAa+NsrYxy+ICFMZjZSluxAAK+
+   BBHWplhngeC0MBA2VhZtCPrQTxZi5TJN1hHomcULobzCQ8z5WMH8gRgqQ
+   GdmobycfEx9bXupAQeCUR18sRHIcjg34kjq2ahrzJyC3cU+LgAty2yvUd
+   GGoFlsv+l7xpKfCmVUzSJ384hmAwtZB/lVhCaZSx0v7XZ3QKVB3woFATL
+   Q==;
+X-CSE-ConnectionGUID: mkWbkA5gSyO/eT0jNF5QBQ==
+X-CSE-MsgGUID: VT8eihNSSXaDIn6FazOguQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9669104"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="9669104"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 12:25:36 -0700
+X-CSE-ConnectionGUID: LIxgFSoYQRiMXQah94XU/Q==
+X-CSE-MsgGUID: uRkgrTKnQBm24ipxZkoGzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="61923095"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa001.jf.intel.com with ESMTP; 23 Apr 2024 12:25:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id BB7F9142; Tue, 23 Apr 2024 22:25:30 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rob Herring <robh@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	linux-sunxi@lists.linux.dev
+Cc: Alain Volmat <alain.volmat@foss.st.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Sean Young <sean@mess.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Stefani Seibold <stefani@seibold.net>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2 1/3] media: rc: Add missing io.h
+Date: Tue, 23 Apr 2024 22:23:08 +0300
+Message-ID: <20240423192529.3249134-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+In-Reply-To: <20240423192529.3249134-1-andriy.shevchenko@linux.intel.com>
+References: <20240423192529.3249134-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,67 +80,66 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Syzbot has found the race condition where 'fput()' is in progress
-when 'dma_buf_poll()' makes an attempt to hold the 'struct file'
-with zero 'f_count'. So use explicit 'atomic_long_inc_not_zero()'
-to detect such a case and cancel an undergoing poll activity with
-EPOLLERR.
+In many remote control drivers the io.h is implied by others.
+This is not good as it prevents from cleanups done in other headers.
+Add missing include.
 
-Reported-by: syzbot+5d4cb6b4409edfd18646@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=5d4cb6b4409edfd18646
-Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/dma-buf/dma-buf.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ drivers/media/rc/mtk-cir.c   | 1 +
+ drivers/media/rc/serial_ir.c | 1 +
+ drivers/media/rc/st_rc.c     | 1 +
+ drivers/media/rc/sunxi-cir.c | 1 +
+ 4 files changed, 4 insertions(+)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 8fe5aa67b167..39eb75d23219 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -266,8 +266,17 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
- 		spin_unlock_irq(&dmabuf->poll.lock);
+diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
+index 4e294e59d3cb..b2f82b2d1c8d 100644
+--- a/drivers/media/rc/mtk-cir.c
++++ b/drivers/media/rc/mtk-cir.c
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
++#include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
+diff --git a/drivers/media/rc/serial_ir.c b/drivers/media/rc/serial_ir.c
+index 96ae0294ac10..fc5fd3927177 100644
+--- a/drivers/media/rc/serial_ir.c
++++ b/drivers/media/rc/serial_ir.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
+ #include <linux/errno.h>
+ #include <linux/interrupt.h>
++#include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/serial_reg.h>
+ #include <linux/types.h>
+diff --git a/drivers/media/rc/st_rc.c b/drivers/media/rc/st_rc.c
+index 28477aa95563..988b09191c4c 100644
+--- a/drivers/media/rc/st_rc.c
++++ b/drivers/media/rc/st_rc.c
+@@ -6,6 +6,7 @@
+ #include <linux/kernel.h>
+ #include <linux/clk.h>
+ #include <linux/interrupt.h>
++#include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+diff --git a/drivers/media/rc/sunxi-cir.c b/drivers/media/rc/sunxi-cir.c
+index bf58c965ead8..b49df8355e6b 100644
+--- a/drivers/media/rc/sunxi-cir.c
++++ b/drivers/media/rc/sunxi-cir.c
+@@ -12,6 +12,7 @@
  
- 		if (events & EPOLLOUT) {
--			/* Paired with fput in dma_buf_poll_cb */
--			get_file(dmabuf->file);
-+			/*
-+			 * Catch the case when fput() is in progress
-+			 * (e.g. due to close() from another thread).
-+			 * Otherwise the paired fput() will be issued
-+			 * from dma_buf_poll_cb().
-+			 */
-+			if (unlikely(!atomic_long_inc_not_zero(&file->f_count))) {
-+				events = EPOLLERR;
-+				dcb->active = 0;
-+				goto out;
-+			}
- 
- 			if (!dma_buf_poll_add_cb(resv, true, dcb))
- 				/* No callback queued, wake up any other waiters */
-@@ -289,8 +298,12 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
- 		spin_unlock_irq(&dmabuf->poll.lock);
- 
- 		if (events & EPOLLIN) {
--			/* Paired with fput in dma_buf_poll_cb */
--			get_file(dmabuf->file);
-+			/* See above */
-+			if (unlikely(!atomic_long_inc_not_zero(&file->f_count))) {
-+				events = EPOLLERR;
-+				dcb->active = 0;
-+				goto out;
-+			}
- 
- 			if (!dma_buf_poll_add_cb(resv, false, dcb))
- 				/* No callback queued, wake up any other waiters */
-@@ -299,7 +312,7 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
- 				events &= ~EPOLLIN;
- 		}
- 	}
--
-+out:
- 	dma_resv_unlock(resv);
- 	return events;
- }
+ #include <linux/clk.h>
+ #include <linux/interrupt.h>
++#include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
 -- 
-2.44.0
+2.43.0.rc1.1336.g36b5255a03ac
 
