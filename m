@@ -1,337 +1,849 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2903F71747
-	for <linux-media@vger.kernel.org>; Tue, 23 Apr 2024 10:45:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C4884FB9;
+	Tue, 23 Apr 2024 10:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713869163; cv=none; b=NPUeolRBLke0zjR6+aKNeoVPIW1HfuB2DYMsm5Gm9z3vKYpYCmGS5tiCBrt3i4DmSVslYC94Y+dnmN0xgTDgXMVlTh+/puhAzMtZbvx9ICMcNXOE33dEGCn+usVibeD30IBr0j//vrexp3daE0SmCdz4WgOBdl+M+3jm965EZZs=
+	t=1713869164; cv=none; b=Fla1SVQ103PcUPo9vDlIbsLv8pnPJ3ltNpbegCYDbNLzZgYbjW3Ri7H8KuLD7BmzGN15+2GBWWYvU1Shp5cvM/vRHyW6bmucKqKO4eoW/ujs2ziUWZP1bJPBjJ17U1f72qfq1sj12orH8q3X3K3mLEnJeUHf5KgUlTVv29XudFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713869163; c=relaxed/simple;
-	bh=WHvOy7Ovaib+CP5njj3H0xQJYVJLXNBOBKUd/NvLOwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOuK9QQvEnU9fxT4LBNRU0JLCb6DSQbNCQtYHVgOLSHHJS4G44SCFMB8zLnTPkLGRnjXmv0xYFhji7sxBzquV966D5mHpfsE92F92yWqCLdv2y4lnxgcHvxsmKBbaSZbYEgQTkZltLpJZYd6Ym1TKqVOTvpHqwmo+Y4qeQGr8nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tc2vuAet; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1713869164; c=relaxed/simple;
+	bh=gJ8GNpF0o3n0Xg/MgtqYRvyann/9ykxdhPFhut5kWcU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Jo+8kGVrl4R2JyHvu6ehm8kkQ51Lj3M/VsmeMrc3cBZer3D5qp9aDuu9OIJQumK0ElDfgpkAvP5/21bR8LbST/3E0OGwuFtr5xpttWlhpMRKh6a69CZf5b8Q1IhapCU1NExCumlFWNnyWYucALlwcDve/NRE3hD3UCu1WxP1Elo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kj1M4T8O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tc2vuAet"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713869161; x=1745405161;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WHvOy7Ovaib+CP5njj3H0xQJYVJLXNBOBKUd/NvLOwE=;
-  b=Tc2vuAet7EKL1dbwnM5HDpkmLSeyx+ILn0TNFC2cng6XX6TLHcvntN9X
-   dFTsQmauMvuzLjrcyL8iqKc4B+C4puGl0DnQcJsFd5i++rfKYYbxmyalT
-   hP4DzlERBsTbMneMDsK82BiseqszlPW68vUQ1FlKrg9SiusngHX8pm/45
-   jGfxwiltfiIm8BjJMvUrhY87v31j4zwFVnRJ8/GVWBjfbS7X6R82JwxZX
-   lbjRdGN1uHcs6GRaeyzY1W2We6g3hcMsjLxvFvgJkgHzDIjQv18rtQzdj
-   VaCbgJug0DwTr/MS+0aCi6Y7LfW8bm7dNmuyxxqmSz9Ba8eoqBx39/2Js
-   Q==;
-X-CSE-ConnectionGUID: 0EtERtcdS1CGr1ZaXmlxWA==
-X-CSE-MsgGUID: dWSkOjJ5TwqjlDIUWNjQQw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="34843842"
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="34843842"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 03:45:59 -0700
-X-CSE-ConnectionGUID: X8fR8FwxRvqlDoqe9lH9fQ==
-X-CSE-MsgGUID: qIEJ002ZSX2Y/fgbVekPQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="24392876"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 03:45:57 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 8895211FCCF;
-	Tue, 23 Apr 2024 13:45:54 +0300 (EEST)
-Date: Tue, 23 Apr 2024 10:45:54 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-	bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
-	Andrey Konovalov <andrey.konovalov@linaro.org>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Dmitry Perchanov <dmitry.perchanov@intel.com>,
-	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
-	Alain Volmat <alain.volmat@foss.st.com>
-Subject: Re: [PATCH v9 15/46] media: v4l: subdev: Add len_routes field to
- struct v4l2_subdev_routing
-Message-ID: <ZieRYpg6zVjXOo2G@kekkonen.localdomain>
-References: <20240416193319.778192-1-sakari.ailus@linux.intel.com>
- <20240416193319.778192-16-sakari.ailus@linux.intel.com>
- <20240419224519.GJ6414@pendragon.ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kj1M4T8O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EC6C32783;
+	Tue, 23 Apr 2024 10:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713869163;
+	bh=gJ8GNpF0o3n0Xg/MgtqYRvyann/9ykxdhPFhut5kWcU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Kj1M4T8O4mISMBKjQybv2wBu5SQwpez1o9qMQHuSvizapvaG0YdQYLtdjOtRDOmBG
+	 T2gTasKtqFwG5QShCFM5yCkVAV+kQG+fdmyqaPSXMqiL7TW3+5xZhuh2dIdZvPmlX7
+	 DSFf+DlTFzqzNayxFe2N4p2O7UlsSHNnNXqmjRFr+PIikCKUls1bfDCBVnej8BBql3
+	 l8a9mLIwZFI1CL0RgjuWiygzJR1NiCfe4KAQHvQbNypfVSiT9ZfaEC0vd0p5sjFq7M
+	 7fT2m6Q1IAl6M6HA/PSlCHxksLOpMWx/Ji4a5mCq0OncGB5TMApDFYCMGp3wrXc9M2
+	 EN+QBuuXJPxNQ==
+From: Maxime Ripard <mripard@kernel.org>
+Date: Tue, 23 Apr 2024 12:45:35 +0200
+Subject: [PATCH v12 06/28] drm/tests: Add output bpc tests
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240419224519.GJ6414@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240423-kms-hdmi-connector-state-v12-6-3338e4c0b189@kernel.org>
+References: <20240423-kms-hdmi-connector-state-v12-0-3338e4c0b189@kernel.org>
+In-Reply-To: <20240423-kms-hdmi-connector-state-v12-0-3338e4c0b189@kernel.org>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+ Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, 
+ Sandy Huang <hjc@rock-chips.com>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Andy Yan <andy.yan@rock-chips.com>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>, 
+ Sebastian Wick <sebastian.wick@redhat.com>, 
+ =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
+ dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, Maxime Ripard <mripard@kernel.org>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=27109; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=gJ8GNpF0o3n0Xg/MgtqYRvyann/9ykxdhPFhut5kWcU=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDGnqE33ZlC99LmqRaLMTjP6v+mPinq7bs1+u9mnY5Bia+
+ 7mI8W9vx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjI2xTGhv1rixIXbVdwOHbi
+ 0PkT4qfnTWSKSGba6qepd29ZxxQHp6TSttigyp73z7jOHXT93JsozthwNnihdNKC96K3Phjocy/
+ auS/Y79KZn9/MxJhe33n9dX69E++27QYOVp3a15ZXNGhzHZQAAA==
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-Hi Laurent,
+Now that we're tracking the output bpc count in the connector state,
+let's add a few tests to make sure it works as expected.
 
-On Sat, Apr 20, 2024 at 01:45:19AM +0300, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Apr 16, 2024 at 10:32:48PM +0300, Sakari Ailus wrote:
-> > The len_routes field is used to tell the size of the routes array in
-> > struct v4l2_subdev_routing. This way the number of routes returned from
-> > S_ROUTING IOCTL may be larger than the number of routes provided, in case
-> > there are more routes returned by the driver.
-> > 
-> > Note that this uAPI is still disabled in the code, so this change can
-> > safely be done. Anyone who manually patched the code to enable this uAPI
-> > must update their code.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  .../media/v4l/vidioc-subdev-g-routing.rst     | 50 +++++++++++++------
-> >  drivers/media/v4l2-core/v4l2-ioctl.c          |  4 +-
-> >  drivers/media/v4l2-core/v4l2-subdev.c         | 12 ++---
-> >  include/media/v4l2-subdev.h                   |  2 +
-> >  include/uapi/linux/v4l2-subdev.h              |  9 ++--
-> >  5 files changed, 52 insertions(+), 25 deletions(-)
-> > 
-> > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> > index 26b5004bfe6d..27eb4c82a0e1 100644
-> > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
-> > @@ -43,23 +43,42 @@ The routing configuration determines the flows of data inside an entity.
-> >  Drivers report their current routing tables using the
-> >  ``VIDIOC_SUBDEV_G_ROUTING`` ioctl and application may enable or disable routes
-> >  with the ``VIDIOC_SUBDEV_S_ROUTING`` ioctl, by adding or removing routes and
-> > -setting or clearing flags of the  ``flags`` field of a
-> > -struct :c:type:`v4l2_subdev_route`.
-> > +setting or clearing flags of the ``flags`` field of a struct
-> > +:c:type:`v4l2_subdev_route`.
-> >  
-> > -All stream configurations are reset when ``VIDIOC_SUBDEV_S_ROUTING`` is called. This
-> > -means that the userspace must reconfigure all streams after calling the ioctl
-> > -with e.g. ``VIDIOC_SUBDEV_S_FMT``.
-> > +All stream configurations are reset when ``VIDIOC_SUBDEV_S_ROUTING`` is called.
-> > +This means that the userspace must reconfigure all stream formats and selections
-> > +after calling the ioctl with e.g. ``VIDIOC_SUBDEV_S_FMT``.
-> >  
-> >  Only subdevices which have both sink and source pads can support routing.
-> >  
-> > -When inspecting routes through ``VIDIOC_SUBDEV_G_ROUTING`` and the application
-> > -provided ``num_routes`` is not big enough to contain all the available routes
-> > -the subdevice exposes, drivers return the ENOSPC error code and adjust the
-> > -value of the ``num_routes`` field. Application should then reserve enough memory
-> > -for all the route entries and call ``VIDIOC_SUBDEV_G_ROUTING`` again.
-> > -
-> > -On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
-> > -``num_routes`` field to reflect the actual number of routes returned.
-> > +The ``len_routes`` field indicates the number of routes that can fit in the
-> > +``routes`` array allocated by userspace. It is set by applications for both
-> > +ioctls to indicate how many routes the kernel can return, and is never modified
-> > +by the kernel.
-> > +
-> > +The ``num_routes`` field, when returned from the kernel on both IOCTLs,
-> > +indicates the number of routes in the subdevice routing table and when calling
-> > +``VIDIOC_SUBDEV_S_ROUTING``, it is set by userspace to the number of routes that
-> > +the application stored in the ``routes`` array. The value returned by the kernel
-> > +may be smaller or larger than the value of ``num_routes`` set by the application
-> > +for ``VIDIOC_SUBDEV_S_ROUTING``, as drivers may adjust the requested routing
-> > +table.
-> 
-> I still think the proposal I made when reviewing the previous version is
-> clearer :-)
-> 
-> ----
-> The ``num_routes`` field indicates the number of routes in the subdevice routing
-> table. For ``VIDIOC_SUBDEV_S_ROUTING``, it is set by userspace to the number of
-> routes that the application stored in the ``routes`` array. For both ioctls, it
-> is returned by the kernel and indicates how many routes are stored in the
-> subdevice routing table. This may be smaller or larger than the value of
-> ``num_routes`` set by the application for ``VIDIOC_SUBDEV_S_ROUTING``, as
-> drivers may adjust the requested routing table.
-> ----
-> 
-> You replied that
-> 
-> > For S_ROUTING this is the number of routes in the IOCTL argument. The
-> > routing table may contain more (static routes).
-> 
-> and that's right, but, even when set by userspace for S_ROUTING, the
-> num_routes fields is the number of routes that userspace tries to set in
-> the routing table. I think starting with a first sentence that describes
-> what the field contains, and then explaining how it's used for the
-> different ioctls by userspace and kernel space, is clearer.
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+---
+ drivers/gpu/drm/Kconfig                            |   1 +
+ drivers/gpu/drm/tests/Makefile                     |   1 +
+ drivers/gpu/drm/tests/drm_connector_test.c         | 140 +++++++
+ drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c | 438 +++++++++++++++++++++
+ drivers/gpu/drm/tests/drm_kunit_edid.h             | 106 +++++
+ 5 files changed, 686 insertions(+)
 
-The problem with your suggestion is that it's not entirely correct:
-num_routes is indeed used for two different purposes. Removing " in the
-subdevice routing table" in the first sentence would be a simple fix.
-
-> 
-> > +
-> > +The kernel can return a ``num_routes`` value larger than ``len_routes`` from
-> > +both ioctls. This indicates thare are more routes in the routing table than fits
-> > +the ``routes`` array. In this case, the ``routes`` array is filled by the kernel
-> > +with the first ``len_routes`` entries of the subdevice routing table. This is
-> > +not considered to be an error, and the ioctl call succeeds. If the applications
-> > +wants to retrieve the missing routes, it can issue a new
-> > +``VIDIOC_SUBDEV_G_ROUTING`` call with a large enough ``routes`` array.
-> > +
-> > +indicate there are more routes than fits to the ``routes`` array. In this
-> > +case first ``len_routes`` were returned back to the userspace in the
-> > +``routes`` array. This is not considered as an error.
-> 
-> I think these 3 lines are a leftover.
-
-Yes, I'll remove them.
-
-> 
-> > +
-> > +Also ``VIDIOC_SUBDEV_S_ROUTING`` may return more route than the user provided in
-> 
-> s/Also //
-> s/route/routes/
-
-Yes.
-
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Thanks!
-
-> 
-> > +``num_routes`` field due to e.g. hardware properties.
-> >  
-> >  .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
-> >  
-> > @@ -74,6 +93,9 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
-> >        - ``which``
-> >        - Routing table to be accessed, from enum
-> >          :ref:`v4l2_subdev_format_whence <v4l2-subdev-format-whence>`.
-> > +    * - __u32
-> > +      - ``len_routes``
-> > +      - The length of the array (as in memory reserved for the array)
-> >      * - struct :c:type:`v4l2_subdev_route`
-> >        - ``routes[]``
-> >        - Array of struct :c:type:`v4l2_subdev_route` entries
-> > @@ -81,7 +103,7 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
-> >        - ``num_routes``
-> >        - Number of entries of the routes array
-> >      * - __u32
-> > -      - ``reserved``\ [5]
-> > +      - ``reserved``\ [11]
-> >        - Reserved for future extensions. Applications and drivers must set
-> >  	the array to zero.
-> >  
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > index 1863ecae9ec9..f30f61c008c7 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -3185,13 +3185,13 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
-> >  	case VIDIOC_SUBDEV_S_ROUTING: {
-> >  		struct v4l2_subdev_routing *routing = parg;
-> >  
-> > -		if (routing->num_routes > 256)
-> > +		if (routing->len_routes > 256)
-> >  			return -E2BIG;
-> >  
-> >  		*user_ptr = u64_to_user_ptr(routing->routes);
-> >  		*kernel_ptr = (void **)&routing->routes;
-> >  		*array_size = sizeof(struct v4l2_subdev_route)
-> > -			    * routing->num_routes;
-> > +			    * routing->len_routes;
-> >  		ret = 1;
-> >  		break;
-> >  	}
-> > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> > index 2ba11e5343f0..904378007a79 100644
-> > --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> > @@ -927,6 +927,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >  		if (routing->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
-> >  			return -EPERM;
-> >  
-> > +		if (routing->num_routes > routing->len_routes)
-> > +			return -EINVAL;
-> > +
-> >  		memset(routing->reserved, 0, sizeof(routing->reserved));
-> >  
-> >  		for (i = 0; i < routing->num_routes; ++i) {
-> > @@ -953,6 +956,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >  		}
-> >  
-> >  		krouting.num_routes = routing->num_routes;
-> > +		krouting.len_routes = routing->len_routes;
-> >  		krouting.routes = routes;
-> >  
-> >  		return v4l2_subdev_call(sd, pad, set_routing, state,
-> > @@ -973,14 +977,10 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
-> >  
-> >  		krouting = &state->routing;
-> >  
-> > -		if (routing->num_routes < krouting->num_routes) {
-> > -			routing->num_routes = krouting->num_routes;
-> > -			return -ENOSPC;
-> > -		}
-> > -
-> >  		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
-> >  		       krouting->routes,
-> > -		       krouting->num_routes * sizeof(*krouting->routes));
-> > +		       min(krouting->num_routes, routing->len_routes) *
-> > +		       sizeof(*krouting->routes));
-> >  		routing->num_routes = krouting->num_routes;
-> >  
-> >  		return 0;
-> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> > index 9cce48365975..1df6b963a1c9 100644
-> > --- a/include/media/v4l2-subdev.h
-> > +++ b/include/media/v4l2-subdev.h
-> > @@ -728,12 +728,14 @@ struct v4l2_subdev_stream_configs {
-> >  /**
-> >   * struct v4l2_subdev_krouting - subdev routing table
-> >   *
-> > + * @len_routes: length of routes array, in routes
-> >   * @num_routes: number of routes
-> >   * @routes: &struct v4l2_subdev_route
-> >   *
-> >   * This structure contains the routing table for a subdev.
-> >   */
-> >  struct v4l2_subdev_krouting {
-> > +	unsigned int len_routes;
-> >  	unsigned int num_routes;
-> >  	struct v4l2_subdev_route *routes;
-> >  };
-> > diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
-> > index 81a24bd38003..6a39128d0606 100644
-> > --- a/include/uapi/linux/v4l2-subdev.h
-> > +++ b/include/uapi/linux/v4l2-subdev.h
-> > @@ -228,15 +228,18 @@ struct v4l2_subdev_route {
-> >   * struct v4l2_subdev_routing - Subdev routing information
-> >   *
-> >   * @which: configuration type (from enum v4l2_subdev_format_whence)
-> > - * @num_routes: the total number of routes in the routes array
-> > + * @len_routes: the length of the routes array, in routes
-> >   * @routes: pointer to the routes array
-> > + * @num_routes: the total number of routes, possibly more than fits in the
-> > + *		routes array
-> >   * @reserved: drivers and applications must zero this array
-> >   */
-> >  struct v4l2_subdev_routing {
-> >  	__u32 which;
-> > -	__u32 num_routes;
-> > +	__u32 len_routes;
-> >  	__u64 routes;
-> > -	__u32 reserved[6];
-> > +	__u32 num_routes;
-> > +	__u32 reserved[11];
-> >  };
-> >  
-> >  /*
-> 
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index 959b19a04101..c51d023088d8 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -74,10 +74,11 @@ config DRM_KUNIT_TEST_HELPERS
+ 
+ config DRM_KUNIT_TEST
+ 	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
+ 	depends on DRM
+ 	depends on DRM_DISPLAY_DP_HELPER
++	depends on DRM_DISPLAY_HDMI_STATE_HELPER
+ 	depends on DRM_DISPLAY_HELPER
+ 	depends on KUNIT
+ 	depends on MMU
+ 	select DRM_BUDDY
+ 	select DRM_EXEC
+diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+index d6183b3d7688..56dab563abd7 100644
+--- a/drivers/gpu/drm/tests/Makefile
++++ b/drivers/gpu/drm/tests/Makefile
+@@ -12,10 +12,11 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+ 	drm_exec_test.o \
+ 	drm_format_helper_test.o \
+ 	drm_format_test.o \
+ 	drm_framebuffer_test.o \
+ 	drm_gem_shmem_test.o \
++	drm_hdmi_state_helper_test.o \
+ 	drm_managed_test.o \
+ 	drm_mm_test.o \
+ 	drm_modes_test.o \
+ 	drm_plane_helper_test.o \
+ 	drm_probe_helper_test.o \
+diff --git a/drivers/gpu/drm/tests/drm_connector_test.c b/drivers/gpu/drm/tests/drm_connector_test.c
+index 2661eb64a5cd..2519b91de95e 100644
+--- a/drivers/gpu/drm/tests/drm_connector_test.c
++++ b/drivers/gpu/drm/tests/drm_connector_test.c
+@@ -10,10 +10,12 @@
+ #include <drm/drm_drv.h>
+ #include <drm/drm_kunit_helpers.h>
+ 
+ #include <kunit/test.h>
+ 
++#include "../drm_crtc_internal.h"
++
+ struct drm_connector_init_priv {
+ 	struct drm_device drm;
+ 	struct drm_connector connector;
+ 	struct i2c_adapter ddc;
+ };
+@@ -204,10 +206,143 @@ static void drm_test_connector_hdmi_init_null_ddc(struct kunit *test)
+ 				       NULL,
+ 				       8);
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ }
+ 
++/*
++ * Test that the registration of a connector with an invalid maximum bpc
++ * count fails.
++ */
++static void drm_test_connector_hdmi_init_bpc_invalid(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	int ret;
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       &dummy_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       9);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
++
++/*
++ * Test that the registration of a connector with a null maximum bpc
++ * count fails.
++ */
++static void drm_test_connector_hdmi_init_bpc_null(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	int ret;
++
++	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
++				       &dummy_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       0);
++	KUNIT_EXPECT_LT(test, ret, 0);
++}
++
++/*
++ * Test that the registration of a connector with a maximum bpc count of
++ * 8 succeeds, registers the max bpc property, but doesn't register the
++ * HDR output metadata one.
++ */
++static void drm_test_connector_hdmi_init_bpc_8(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	struct drm_connector *connector = &priv->connector;
++	struct drm_property *prop;
++	uint64_t val;
++	int ret;
++
++	ret = drmm_connector_hdmi_init(&priv->drm, connector,
++				       &dummy_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       8);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	prop = connector->max_bpc_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NOT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++
++	ret = drm_object_property_get_value(&connector->base, prop, &val);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, val, 8);
++
++	prop = priv->drm.mode_config.hdr_output_metadata_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++}
++
++/*
++ * Test that the registration of a connector with a maximum bpc count of
++ * 10 succeeds and registers the max bpc and HDR output metadata
++ * properties.
++ */
++static void drm_test_connector_hdmi_init_bpc_10(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	struct drm_connector *connector = &priv->connector;
++	struct drm_property *prop;
++	uint64_t val;
++	int ret;
++
++	ret = drmm_connector_hdmi_init(&priv->drm, connector,
++				       &dummy_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       10);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	prop = connector->max_bpc_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NOT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++
++	ret = drm_object_property_get_value(&connector->base, prop, &val);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, val, 10);
++
++	prop = priv->drm.mode_config.hdr_output_metadata_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NOT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++}
++
++/*
++ * Test that the registration of a connector with a maximum bpc count of
++ * 12 succeeds and registers the max bpc and HDR output metadata
++ * properties.
++ */
++static void drm_test_connector_hdmi_init_bpc_12(struct kunit *test)
++{
++	struct drm_connector_init_priv *priv = test->priv;
++	struct drm_connector *connector = &priv->connector;
++	struct drm_property *prop;
++	uint64_t val;
++	int ret;
++
++	ret = drmm_connector_hdmi_init(&priv->drm, connector,
++				       &dummy_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       &priv->ddc,
++				       12);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	prop = connector->max_bpc_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NOT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++
++	ret = drm_object_property_get_value(&connector->base, prop, &val);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, val, 12);
++
++	prop = priv->drm.mode_config.hdr_output_metadata_property;
++	KUNIT_ASSERT_NOT_NULL(test, prop);
++	KUNIT_EXPECT_NOT_NULL(test, drm_mode_obj_find_prop_id(&connector->base, prop->base.id));
++}
++
+ /*
+  * Test that the registration of an HDMI connector with an HDMI
+  * connector type succeeds.
+  */
+ static void drm_test_connector_hdmi_init_type_valid(struct kunit *test)
+@@ -282,10 +417,15 @@ KUNIT_ARRAY_PARAM(drm_connector_hdmi_init_type_invalid,
+ 		  drm_connector_hdmi_init_type_invalid_tests,
+ 		  drm_connector_hdmi_init_type_desc);
+ 
+ static struct kunit_case drmm_connector_hdmi_init_tests[] = {
+ 	KUNIT_CASE(drm_test_connector_hdmi_init_valid),
++	KUNIT_CASE(drm_test_connector_hdmi_init_bpc_8),
++	KUNIT_CASE(drm_test_connector_hdmi_init_bpc_10),
++	KUNIT_CASE(drm_test_connector_hdmi_init_bpc_12),
++	KUNIT_CASE(drm_test_connector_hdmi_init_bpc_invalid),
++	KUNIT_CASE(drm_test_connector_hdmi_init_bpc_null),
+ 	KUNIT_CASE(drm_test_connector_hdmi_init_null_ddc),
+ 	KUNIT_CASE_PARAM(drm_test_connector_hdmi_init_type_valid,
+ 			 drm_connector_hdmi_init_type_valid_gen_params),
+ 	KUNIT_CASE_PARAM(drm_test_connector_hdmi_init_type_invalid,
+ 			 drm_connector_hdmi_init_type_invalid_gen_params),
+diff --git a/drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c b/drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c
+new file mode 100644
+index 000000000000..3ecae50ef47f
+--- /dev/null
++++ b/drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c
+@@ -0,0 +1,438 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Kunit test for drm_hdmi_state_helper functions
++ */
++
++#include <drm/drm_atomic.h>
++#include <drm/drm_atomic_state_helper.h>
++#include <drm/drm_atomic_uapi.h>
++#include <drm/drm_drv.h>
++#include <drm/drm_edid.h>
++#include <drm/drm_connector.h>
++#include <drm/drm_fourcc.h>
++#include <drm/drm_kunit_helpers.h>
++#include <drm/drm_managed.h>
++#include <drm/drm_modeset_helper_vtables.h>
++#include <drm/drm_print.h>
++#include <drm/drm_probe_helper.h>
++
++#include <drm/display/drm_hdmi_state_helper.h>
++
++#include "../drm_crtc_internal.h"
++
++#include <kunit/test.h>
++
++#include "drm_kunit_edid.h"
++
++struct drm_atomic_helper_connector_hdmi_priv {
++	struct drm_device drm;
++	struct drm_plane *plane;
++	struct drm_crtc *crtc;
++	struct drm_encoder encoder;
++	struct drm_connector connector;
++
++	const char *current_edid;
++	size_t current_edid_len;
++};
++
++#define connector_to_priv(c) \
++	container_of_const(c, struct drm_atomic_helper_connector_hdmi_priv, connector)
++
++static struct drm_display_mode *find_preferred_mode(struct drm_connector *connector)
++{
++	struct drm_device *drm = connector->dev;
++	struct drm_display_mode *mode, *preferred;
++
++	mutex_lock(&drm->mode_config.mutex);
++	preferred = list_first_entry(&connector->modes, struct drm_display_mode, head);
++	list_for_each_entry(mode, &connector->modes, head)
++		if (mode->type & DRM_MODE_TYPE_PREFERRED)
++			preferred = mode;
++	mutex_unlock(&drm->mode_config.mutex);
++
++	return preferred;
++}
++
++static int light_up_connector(struct kunit *test,
++			      struct drm_device *drm,
++			      struct drm_crtc *crtc,
++			      struct drm_connector *connector,
++			      struct drm_display_mode *mode,
++			      struct drm_modeset_acquire_ctx *ctx)
++{
++	struct drm_atomic_state *state;
++	struct drm_connector_state *conn_state;
++	struct drm_crtc_state *crtc_state;
++	int ret;
++
++	state = drm_kunit_helper_atomic_state_alloc(test, drm, ctx);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, state);
++
++	conn_state = drm_atomic_get_connector_state(state, connector);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, conn_state);
++
++	ret = drm_atomic_set_crtc_for_connector(conn_state, crtc);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	crtc_state = drm_atomic_get_crtc_state(state, crtc);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_state);
++
++	ret = drm_atomic_set_mode_for_crtc(crtc_state, mode);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	crtc_state->enable = true;
++	crtc_state->active = true;
++
++	ret = drm_atomic_commit(state);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	return 0;
++}
++
++static int set_connector_edid(struct kunit *test, struct drm_connector *connector,
++			      const char *edid, size_t edid_len)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv =
++		connector_to_priv(connector);
++	struct drm_device *drm = connector->dev;
++	int ret;
++
++	priv->current_edid = edid;
++	priv->current_edid_len = edid_len;
++
++	mutex_lock(&drm->mode_config.mutex);
++	ret = connector->funcs->fill_modes(connector, 4096, 4096);
++	mutex_unlock(&drm->mode_config.mutex);
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	return 0;
++}
++
++static int dummy_connector_get_modes(struct drm_connector *connector)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv =
++		connector_to_priv(connector);
++	const struct drm_edid *edid;
++	unsigned int num_modes;
++
++	edid = drm_edid_alloc(priv->current_edid, priv->current_edid_len);
++	if (!edid)
++		return -EINVAL;
++
++	drm_edid_connector_update(connector, edid);
++	num_modes = drm_edid_connector_add_modes(connector);
++
++	drm_edid_free(edid);
++
++	return num_modes;
++}
++
++static const struct drm_connector_helper_funcs dummy_connector_helper_funcs = {
++	.atomic_check	= drm_atomic_helper_connector_hdmi_check,
++	.get_modes	= dummy_connector_get_modes,
++};
++
++static void dummy_hdmi_connector_reset(struct drm_connector *connector)
++{
++	drm_atomic_helper_connector_reset(connector);
++	__drm_atomic_helper_connector_hdmi_reset(connector, connector->state);
++}
++
++static const struct drm_connector_funcs dummy_connector_funcs = {
++	.atomic_destroy_state	= drm_atomic_helper_connector_destroy_state,
++	.atomic_duplicate_state	= drm_atomic_helper_connector_duplicate_state,
++	.fill_modes		= drm_helper_probe_single_connector_modes,
++	.reset			= dummy_hdmi_connector_reset,
++};
++
++static
++struct drm_atomic_helper_connector_hdmi_priv *
++drm_atomic_helper_connector_hdmi_init(struct kunit *test,
++				      unsigned int max_bpc)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_connector *conn;
++	struct drm_encoder *enc;
++	struct drm_device *drm;
++	struct device *dev;
++	int ret;
++
++	dev = drm_kunit_helper_alloc_device(test);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	priv = drm_kunit_helper_alloc_drm_device(test, dev,
++						 struct drm_atomic_helper_connector_hdmi_priv, drm,
++						 DRIVER_MODESET | DRIVER_ATOMIC);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	test->priv = priv;
++
++	drm = &priv->drm;
++	priv->plane = drm_kunit_helper_create_primary_plane(test, drm,
++							    NULL,
++							    NULL,
++							    NULL, 0,
++							    NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->plane);
++
++	priv->crtc = drm_kunit_helper_create_crtc(test, drm,
++						  priv->plane, NULL,
++						  NULL,
++						  NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->crtc);
++
++	enc = &priv->encoder;
++	ret = drmm_encoder_init(drm, enc, NULL, DRM_MODE_ENCODER_TMDS, NULL);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	enc->possible_crtcs = drm_crtc_mask(priv->crtc);
++
++	conn = &priv->connector;
++	ret = drmm_connector_hdmi_init(drm, conn,
++				       &dummy_connector_funcs,
++				       DRM_MODE_CONNECTOR_HDMIA,
++				       NULL,
++				       max_bpc);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	drm_connector_helper_add(conn, &dummy_connector_helper_funcs);
++	drm_connector_attach_encoder(conn, enc);
++
++	drm_mode_config_reset(drm);
++
++	ret = set_connector_edid(test, conn,
++				 test_edid_hdmi_1080p_rgb_max_200mhz,
++				 ARRAY_SIZE(test_edid_hdmi_1080p_rgb_max_200mhz));
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	return priv;
++}
++
++/*
++ * Test that if we change the maximum bpc property to a different value,
++ * we trigger a mode change on the connector's CRTC, which will in turn
++ * disable/enable the connector.
++ */
++static void drm_test_check_output_bpc_crtc_mode_changed(struct kunit *test)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_modeset_acquire_ctx *ctx;
++	struct drm_connector_state *old_conn_state;
++	struct drm_connector_state *new_conn_state;
++	struct drm_crtc_state *crtc_state;
++	struct drm_atomic_state *state;
++	struct drm_display_mode *preferred;
++	struct drm_connector *conn;
++	struct drm_device *drm;
++	struct drm_crtc *crtc;
++	int ret;
++
++	priv = drm_atomic_helper_connector_hdmi_init(test, 10);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++
++	ctx = drm_kunit_helper_acquire_ctx_alloc(test);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++
++	conn = &priv->connector;
++	preferred = find_preferred_mode(conn);
++	KUNIT_ASSERT_NOT_NULL(test, preferred);
++
++	drm = &priv->drm;
++	crtc = priv->crtc;
++	ret = light_up_connector(test, drm, crtc, conn, preferred, ctx);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	state = drm_kunit_helper_atomic_state_alloc(test, drm, ctx);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, state);
++
++	new_conn_state = drm_atomic_get_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, new_conn_state);
++
++	old_conn_state = drm_atomic_get_old_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, old_conn_state);
++
++	new_conn_state->hdmi.output_bpc = 8;
++
++	KUNIT_ASSERT_NE(test,
++			old_conn_state->hdmi.output_bpc,
++			new_conn_state->hdmi.output_bpc);
++
++	ret = drm_atomic_check_only(state);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	old_conn_state = drm_atomic_get_old_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, old_conn_state);
++
++	new_conn_state = drm_atomic_get_new_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, new_conn_state);
++
++	KUNIT_ASSERT_NE(test,
++			old_conn_state->hdmi.output_bpc,
++			new_conn_state->hdmi.output_bpc);
++
++	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_state);
++	KUNIT_EXPECT_TRUE(test, crtc_state->mode_changed);
++}
++
++/*
++ * Test that if we set the output bpc property to the same value, we
++ * don't trigger a mode change on the connector's CRTC and leave the
++ * connector unaffected.
++ */
++static void drm_test_check_output_bpc_crtc_mode_not_changed(struct kunit *test)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_modeset_acquire_ctx *ctx;
++	struct drm_connector_state *old_conn_state;
++	struct drm_connector_state *new_conn_state;
++	struct drm_crtc_state *crtc_state;
++	struct drm_atomic_state *state;
++	struct drm_display_mode *preferred;
++	struct drm_connector *conn;
++	struct drm_device *drm;
++	struct drm_crtc *crtc;
++	int ret;
++
++	priv = drm_atomic_helper_connector_hdmi_init(test, 10);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++
++	ctx = drm_kunit_helper_acquire_ctx_alloc(test);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++
++	conn = &priv->connector;
++	preferred = find_preferred_mode(conn);
++	KUNIT_ASSERT_NOT_NULL(test, preferred);
++
++	drm = &priv->drm;
++	crtc = priv->crtc;
++	ret = light_up_connector(test, drm, crtc, conn, preferred, ctx);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	state = drm_kunit_helper_atomic_state_alloc(test, drm, ctx);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, state);
++
++	new_conn_state = drm_atomic_get_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, new_conn_state);
++
++	old_conn_state = drm_atomic_get_old_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, old_conn_state);
++
++	KUNIT_ASSERT_EQ(test,
++			new_conn_state->hdmi.output_bpc,
++			old_conn_state->hdmi.output_bpc);
++
++	ret = drm_atomic_check_only(state);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	old_conn_state = drm_atomic_get_old_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, old_conn_state);
++
++	new_conn_state = drm_atomic_get_new_connector_state(state, conn);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, new_conn_state);
++
++	KUNIT_EXPECT_EQ(test,
++			old_conn_state->hdmi.output_bpc,
++			new_conn_state->hdmi.output_bpc);
++
++	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_state);
++	KUNIT_EXPECT_FALSE(test, crtc_state->mode_changed);
++}
++
++static struct kunit_case drm_atomic_helper_connector_hdmi_check_tests[] = {
++	KUNIT_CASE(drm_test_check_output_bpc_crtc_mode_changed),
++	KUNIT_CASE(drm_test_check_output_bpc_crtc_mode_not_changed),
++	{ }
++};
++
++static struct kunit_suite drm_atomic_helper_connector_hdmi_check_test_suite = {
++	.name		= "drm_atomic_helper_connector_hdmi_check",
++	.test_cases	= drm_atomic_helper_connector_hdmi_check_tests,
++};
++
++/*
++ * Test that if the connector was initialised with a maximum bpc of 8,
++ * the value of the max_bpc and max_requested_bpc properties out of
++ * reset are also set to 8, and output_bpc is set to 0 and will be
++ * filled at atomic_check time.
++ */
++static void drm_test_check_bpc_8_value(struct kunit *test)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_connector_state *conn_state;
++	struct drm_connector *conn;
++
++	priv = drm_atomic_helper_connector_hdmi_init(test, 8);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++
++	conn = &priv->connector;
++	conn_state = conn->state;
++	KUNIT_EXPECT_EQ(test, conn_state->max_bpc, 8);
++	KUNIT_EXPECT_EQ(test, conn_state->max_requested_bpc, 8);
++	KUNIT_EXPECT_EQ(test, conn_state->hdmi.output_bpc, 0);
++}
++
++/*
++ * Test that if the connector was initialised with a maximum bpc of 10,
++ * the value of the max_bpc and max_requested_bpc properties out of
++ * reset are also set to 10, and output_bpc is set to 0 and will be
++ * filled at atomic_check time.
++ */
++static void drm_test_check_bpc_10_value(struct kunit *test)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_connector_state *conn_state;
++	struct drm_connector *conn;
++
++	priv = drm_atomic_helper_connector_hdmi_init(test, 10);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++
++	conn = &priv->connector;
++	conn_state = conn->state;
++	KUNIT_EXPECT_EQ(test, conn_state->max_bpc, 10);
++	KUNIT_EXPECT_EQ(test, conn_state->max_requested_bpc, 10);
++	KUNIT_EXPECT_EQ(test, conn_state->hdmi.output_bpc, 0);
++}
++
++/*
++ * Test that if the connector was initialised with a maximum bpc of 12,
++ * the value of the max_bpc and max_requested_bpc properties out of
++ * reset are also set to 12, and output_bpc is set to 0 and will be
++ * filled at atomic_check time.
++ */
++static void drm_test_check_bpc_12_value(struct kunit *test)
++{
++	struct drm_atomic_helper_connector_hdmi_priv *priv;
++	struct drm_connector_state *conn_state;
++	struct drm_connector *conn;
++
++	priv = drm_atomic_helper_connector_hdmi_init(test, 12);
++	KUNIT_ASSERT_NOT_NULL(test, priv);
++
++	conn = &priv->connector;
++	conn_state = conn->state;
++	KUNIT_EXPECT_EQ(test, conn_state->max_bpc, 12);
++	KUNIT_EXPECT_EQ(test, conn_state->max_requested_bpc, 12);
++	KUNIT_EXPECT_EQ(test, conn_state->hdmi.output_bpc, 0);
++}
++
++static struct kunit_case drm_atomic_helper_connector_hdmi_reset_tests[] = {
++	KUNIT_CASE(drm_test_check_bpc_8_value),
++	KUNIT_CASE(drm_test_check_bpc_10_value),
++	KUNIT_CASE(drm_test_check_bpc_12_value),
++	{ }
++};
++
++static struct kunit_suite drm_atomic_helper_connector_hdmi_reset_test_suite = {
++	.name		= "drm_atomic_helper_connector_hdmi_reset",
++	.test_cases 	= drm_atomic_helper_connector_hdmi_reset_tests,
++};
++
++kunit_test_suites(
++	&drm_atomic_helper_connector_hdmi_check_test_suite,
++	&drm_atomic_helper_connector_hdmi_reset_test_suite,
++);
++
++MODULE_AUTHOR("Maxime Ripard <mripard@kernel.org>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/gpu/drm/tests/drm_kunit_edid.h b/drivers/gpu/drm/tests/drm_kunit_edid.h
+new file mode 100644
+index 000000000000..0366dd29c820
+--- /dev/null
++++ b/drivers/gpu/drm/tests/drm_kunit_edid.h
+@@ -0,0 +1,106 @@
++#ifndef DRM_KUNIT_EDID_H_
++#define DRM_KUNIT_EDID_H_
++
++/*
++ * edid-decode (hex):
++ *
++ * 00 ff ff ff ff ff ff 00 31 d8 2a 00 00 00 00 00
++ * 00 21 01 03 81 a0 5a 78 02 00 00 00 00 00 00 00
++ * 00 00 00 20 00 00 01 01 01 01 01 01 01 01 01 01
++ * 01 01 01 01 01 01 02 3a 80 18 71 38 2d 40 58 2c
++ * 45 00 40 84 63 00 00 1e 00 00 00 fc 00 54 65 73
++ * 74 20 45 44 49 44 0a 20 20 20 00 00 00 fd 00 32
++ * 46 1e 46 0f 00 0a 20 20 20 20 20 20 00 00 00 10
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 92
++ *
++ * 02 03 1b 81 e3 05 00 20 41 10 e2 00 4a 6d 03 0c
++ * 00 12 34 00 28 20 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
++ * 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 d0
++ *
++ * ----------------
++ *
++ * Block 0, Base EDID:
++ *   EDID Structure Version & Revision: 1.3
++ *   Vendor & Product Identification:
++ *     Manufacturer: LNX
++ *     Model: 42
++ *     Made in: 2023
++ *   Basic Display Parameters & Features:
++ *     Digital display
++ *     DFP 1.x compatible TMDS
++ *     Maximum image size: 160 cm x 90 cm
++ *     Gamma: 2.20
++ *     Monochrome or grayscale display
++ *     First detailed timing is the preferred timing
++ *   Color Characteristics:
++ *     Red  : 0.0000, 0.0000
++ *     Green: 0.0000, 0.0000
++ *     Blue : 0.0000, 0.0000
++ *     White: 0.0000, 0.0000
++ *   Established Timings I & II:
++ *     DMT 0x04:   640x480    59.940476 Hz   4:3     31.469 kHz     25.175000 MHz
++ *   Standard Timings: none
++ *   Detailed Timing Descriptors:
++ *     DTD 1:  1920x1080   60.000000 Hz  16:9     67.500 kHz    148.500000 MHz (1600 mm x 900 mm)
++ *                  Hfront   88 Hsync  44 Hback  148 Hpol P
++ *                  Vfront    4 Vsync   5 Vback   36 Vpol P
++ *     Display Product Name: 'Test EDID'
++ *     Display Range Limits:
++ *       Monitor ranges (GTF): 50-70 Hz V, 30-70 kHz H, max dotclock 150 MHz
++ *     Dummy Descriptor:
++ *   Extension blocks: 1
++ * Checksum: 0x92
++ *
++ * ----------------
++ *
++ * Block 1, CTA-861 Extension Block:
++ *   Revision: 3
++ *   Underscans IT Video Formats by default
++ *   Native detailed modes: 1
++ *   Colorimetry Data Block:
++ *     sRGB
++ *   Video Data Block:
++ *     VIC  16:  1920x1080   60.000000 Hz  16:9     67.500 kHz    148.500000 MHz
++ *   Video Capability Data Block:
++ *     YCbCr quantization: No Data
++ *     RGB quantization: Selectable (via AVI Q)
++ *     PT scan behavior: No Data
++ *     IT scan behavior: Always Underscanned
++ *     CE scan behavior: Always Underscanned
++ *   Vendor-Specific Data Block (HDMI), OUI 00-0C-03:
++ *     Source physical address: 1.2.3.4
++ *     Maximum TMDS clock: 200 MHz
++ *     Extended HDMI video details:
++ * Checksum: 0xd0  Unused space in Extension Block: 100 bytes
++ */
++static const unsigned char test_edid_hdmi_1080p_rgb_max_200mhz[] = {
++  0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x31, 0xd8, 0x2a, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x21, 0x01, 0x03, 0x81, 0xa0, 0x5a, 0x78,
++  0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20,
++  0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
++  0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x3a, 0x80, 0x18, 0x71, 0x38,
++  0x2d, 0x40, 0x58, 0x2c, 0x45, 0x00, 0x40, 0x84, 0x63, 0x00, 0x00, 0x1e,
++  0x00, 0x00, 0x00, 0xfc, 0x00, 0x54, 0x65, 0x73, 0x74, 0x20, 0x45, 0x44,
++  0x49, 0x44, 0x0a, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0xfd, 0x00, 0x32,
++  0x46, 0x00, 0x00, 0xc4, 0x00, 0x0a, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
++  0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x41, 0x02, 0x03, 0x1b, 0x81,
++  0xe3, 0x05, 0x00, 0x20, 0x41, 0x10, 0xe2, 0x00, 0x4a, 0x6d, 0x03, 0x0c,
++  0x00, 0x12, 0x34, 0x00, 0x28, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0xd0
++};
++
++#endif // DRM_KUNIT_EDID_H_
 
 -- 
-Regards,
+2.44.0
 
-Sakari Ailus
