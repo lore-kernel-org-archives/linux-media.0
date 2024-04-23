@@ -1,315 +1,337 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07168405F;
-	Tue, 23 Apr 2024 10:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2903F71747
+	for <linux-media@vger.kernel.org>; Tue, 23 Apr 2024 10:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713869160; cv=none; b=cP9IgmUkoc2JmLjSPQrZV+LxJ+PuK2gr0U/AXZ9mxG503riDSnREUXU2j8/9eM/uCVsHGysAZZUrc8hvSYQb4wMTwL0fjE65p80c2Mpj2XPQpnKokFNyZLi/Al7vUfgJ/qNUAhNmQvEzPkvmaVNfzYZY12pXdYF+/GtDmlcvCws=
+	t=1713869163; cv=none; b=NPUeolRBLke0zjR6+aKNeoVPIW1HfuB2DYMsm5Gm9z3vKYpYCmGS5tiCBrt3i4DmSVslYC94Y+dnmN0xgTDgXMVlTh+/puhAzMtZbvx9ICMcNXOE33dEGCn+usVibeD30IBr0j//vrexp3daE0SmCdz4WgOBdl+M+3jm965EZZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713869160; c=relaxed/simple;
-	bh=xU0t0ffxei42X5g08RneD4Lf71jaHUVI2yMR3kE9Ao8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qReyRzElMFb+kZOCosKb6BEuD47sw6bQJVT3f8UYwEs94do3o38xSVdxqNv4Q/ZTqCb9TRoloYhE8yzcIL47NndkSxhoxGNC1quY288QFRS7B1NxBicowy1ZbeG3aIYx5hfYULLJ3yN4Vi/YR/HLuMNleSuzXZ8xuHSI6wT3AmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RVYTgiJP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713869163; c=relaxed/simple;
+	bh=WHvOy7Ovaib+CP5njj3H0xQJYVJLXNBOBKUd/NvLOwE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mOuK9QQvEnU9fxT4LBNRU0JLCb6DSQbNCQtYHVgOLSHHJS4G44SCFMB8zLnTPkLGRnjXmv0xYFhji7sxBzquV966D5mHpfsE92F92yWqCLdv2y4lnxgcHvxsmKBbaSZbYEgQTkZltLpJZYd6Ym1TKqVOTvpHqwmo+Y4qeQGr8nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tc2vuAet; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RVYTgiJP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F2F8C116B1;
-	Tue, 23 Apr 2024 10:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713869160;
-	bh=xU0t0ffxei42X5g08RneD4Lf71jaHUVI2yMR3kE9Ao8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RVYTgiJPqLJR+AdNcBotmmpzbrk9Cyvslyx8Oj9alCnyvrwLQNjnYvVlWcKBZFLiS
-	 THVIokKjv9jiOxTHpoih3xBrIjdzkQYCsvz7AieS7a985BOU6uzC9A043I2OsRVcyy
-	 eCOuf2R90w1Zy6LGBY7Mafx2YkqMlJNFcPrDQHVrZx8Np8ENzLEisN/CZfN0FPsdOq
-	 CGLCngB+r7tcqZU53ClGtyu8fiCxVC0onmrLuDfxMvMNZLA5PUxJg45tJ2hPNK4Ncm
-	 5xCQFQwla1FtMgA/WeFCFc2ZvA08tlECJHbwGtK6NpOqysJJbSA0Sk5dlwHWG9/ZUb
-	 1az7Q0x/5nDrg==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 23 Apr 2024 12:45:34 +0200
-Subject: [PATCH v12 05/28] drm/connector: hdmi: Add output BPC to the
- connector state
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tc2vuAet"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713869161; x=1745405161;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WHvOy7Ovaib+CP5njj3H0xQJYVJLXNBOBKUd/NvLOwE=;
+  b=Tc2vuAet7EKL1dbwnM5HDpkmLSeyx+ILn0TNFC2cng6XX6TLHcvntN9X
+   dFTsQmauMvuzLjrcyL8iqKc4B+C4puGl0DnQcJsFd5i++rfKYYbxmyalT
+   hP4DzlERBsTbMneMDsK82BiseqszlPW68vUQ1FlKrg9SiusngHX8pm/45
+   jGfxwiltfiIm8BjJMvUrhY87v31j4zwFVnRJ8/GVWBjfbS7X6R82JwxZX
+   lbjRdGN1uHcs6GRaeyzY1W2We6g3hcMsjLxvFvgJkgHzDIjQv18rtQzdj
+   VaCbgJug0DwTr/MS+0aCi6Y7LfW8bm7dNmuyxxqmSz9Ba8eoqBx39/2Js
+   Q==;
+X-CSE-ConnectionGUID: 0EtERtcdS1CGr1ZaXmlxWA==
+X-CSE-MsgGUID: dWSkOjJ5TwqjlDIUWNjQQw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="34843842"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="34843842"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 03:45:59 -0700
+X-CSE-ConnectionGUID: X8fR8FwxRvqlDoqe9lH9fQ==
+X-CSE-MsgGUID: qIEJ002ZSX2Y/fgbVekPQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24392876"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 03:45:57 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 8895211FCCF;
+	Tue, 23 Apr 2024 13:45:54 +0300 (EEST)
+Date: Tue, 23 Apr 2024 10:45:54 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
+	bingbu.cao@intel.com, hongju.wang@intel.com, hverkuil@xs4all.nl,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Dmitry Perchanov <dmitry.perchanov@intel.com>,
+	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
+	Alain Volmat <alain.volmat@foss.st.com>
+Subject: Re: [PATCH v9 15/46] media: v4l: subdev: Add len_routes field to
+ struct v4l2_subdev_routing
+Message-ID: <ZieRYpg6zVjXOo2G@kekkonen.localdomain>
+References: <20240416193319.778192-1-sakari.ailus@linux.intel.com>
+ <20240416193319.778192-16-sakari.ailus@linux.intel.com>
+ <20240419224519.GJ6414@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240423-kms-hdmi-connector-state-v12-5-3338e4c0b189@kernel.org>
-References: <20240423-kms-hdmi-connector-state-v12-0-3338e4c0b189@kernel.org>
-In-Reply-To: <20240423-kms-hdmi-connector-state-v12-0-3338e4c0b189@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, 
- Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, Andy Yan <andy.yan@rock-chips.com>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, 
- Sebastian Wick <sebastian.wick@redhat.com>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, Maxime Ripard <mripard@kernel.org>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8958; i=mripard@kernel.org;
- h=from:subject:message-id; bh=xU0t0ffxei42X5g08RneD4Lf71jaHUVI2yMR3kE9Ao8=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDGnqE31ucOXeLP/huka5c8Xy9a13sj+/XjvNKPh4tIbl5
- AvO6e1vO6ayMAhzMsiKKbI8kQk7vbx9cZWD/cofMHNYmUCGMHBxCsBEpgsyNtyQ8919nckk6bf1
- VqVrf7j0L0YyC+yZulNVIu2aw9XSzH8ftk/gCMgz/W4sU8N6lk1jHWPDp70V7teyVe7d7qhYsHz
- 1L4drs171p62V1LlrklTzSDhHO9zQQo31oklfZ2z2kivWZksA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240419224519.GJ6414@pendragon.ideasonboard.com>
 
-We'll add automatic selection of the output BPC in a following patch,
-but let's add it to the HDMI connector state already.
+Hi Laurent,
 
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/display/drm_hdmi_state_helper.c | 20 ++++++++++++++++++++
- drivers/gpu/drm/drm_atomic.c                    |  5 +++++
- drivers/gpu/drm/drm_connector.c                 | 20 +++++++++++++++++++-
- drivers/gpu/drm/tests/drm_connector_test.c      | 12 ++++++++----
- include/drm/drm_connector.h                     | 12 +++++++++++-
- 5 files changed, 63 insertions(+), 6 deletions(-)
+On Sat, Apr 20, 2024 at 01:45:19AM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Apr 16, 2024 at 10:32:48PM +0300, Sakari Ailus wrote:
+> > The len_routes field is used to tell the size of the routes array in
+> > struct v4l2_subdev_routing. This way the number of routes returned from
+> > S_ROUTING IOCTL may be larger than the number of routes provided, in case
+> > there are more routes returned by the driver.
+> > 
+> > Note that this uAPI is still disabled in the code, so this change can
+> > safely be done. Anyone who manually patched the code to enable this uAPI
+> > must update their code.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  .../media/v4l/vidioc-subdev-g-routing.rst     | 50 +++++++++++++------
+> >  drivers/media/v4l2-core/v4l2-ioctl.c          |  4 +-
+> >  drivers/media/v4l2-core/v4l2-subdev.c         | 12 ++---
+> >  include/media/v4l2-subdev.h                   |  2 +
+> >  include/uapi/linux/v4l2-subdev.h              |  9 ++--
+> >  5 files changed, 52 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > index 26b5004bfe6d..27eb4c82a0e1 100644
+> > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-g-routing.rst
+> > @@ -43,23 +43,42 @@ The routing configuration determines the flows of data inside an entity.
+> >  Drivers report their current routing tables using the
+> >  ``VIDIOC_SUBDEV_G_ROUTING`` ioctl and application may enable or disable routes
+> >  with the ``VIDIOC_SUBDEV_S_ROUTING`` ioctl, by adding or removing routes and
+> > -setting or clearing flags of the  ``flags`` field of a
+> > -struct :c:type:`v4l2_subdev_route`.
+> > +setting or clearing flags of the ``flags`` field of a struct
+> > +:c:type:`v4l2_subdev_route`.
+> >  
+> > -All stream configurations are reset when ``VIDIOC_SUBDEV_S_ROUTING`` is called. This
+> > -means that the userspace must reconfigure all streams after calling the ioctl
+> > -with e.g. ``VIDIOC_SUBDEV_S_FMT``.
+> > +All stream configurations are reset when ``VIDIOC_SUBDEV_S_ROUTING`` is called.
+> > +This means that the userspace must reconfigure all stream formats and selections
+> > +after calling the ioctl with e.g. ``VIDIOC_SUBDEV_S_FMT``.
+> >  
+> >  Only subdevices which have both sink and source pads can support routing.
+> >  
+> > -When inspecting routes through ``VIDIOC_SUBDEV_G_ROUTING`` and the application
+> > -provided ``num_routes`` is not big enough to contain all the available routes
+> > -the subdevice exposes, drivers return the ENOSPC error code and adjust the
+> > -value of the ``num_routes`` field. Application should then reserve enough memory
+> > -for all the route entries and call ``VIDIOC_SUBDEV_G_ROUTING`` again.
+> > -
+> > -On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
+> > -``num_routes`` field to reflect the actual number of routes returned.
+> > +The ``len_routes`` field indicates the number of routes that can fit in the
+> > +``routes`` array allocated by userspace. It is set by applications for both
+> > +ioctls to indicate how many routes the kernel can return, and is never modified
+> > +by the kernel.
+> > +
+> > +The ``num_routes`` field, when returned from the kernel on both IOCTLs,
+> > +indicates the number of routes in the subdevice routing table and when calling
+> > +``VIDIOC_SUBDEV_S_ROUTING``, it is set by userspace to the number of routes that
+> > +the application stored in the ``routes`` array. The value returned by the kernel
+> > +may be smaller or larger than the value of ``num_routes`` set by the application
+> > +for ``VIDIOC_SUBDEV_S_ROUTING``, as drivers may adjust the requested routing
+> > +table.
+> 
+> I still think the proposal I made when reviewing the previous version is
+> clearer :-)
+> 
+> ----
+> The ``num_routes`` field indicates the number of routes in the subdevice routing
+> table. For ``VIDIOC_SUBDEV_S_ROUTING``, it is set by userspace to the number of
+> routes that the application stored in the ``routes`` array. For both ioctls, it
+> is returned by the kernel and indicates how many routes are stored in the
+> subdevice routing table. This may be smaller or larger than the value of
+> ``num_routes`` set by the application for ``VIDIOC_SUBDEV_S_ROUTING``, as
+> drivers may adjust the requested routing table.
+> ----
+> 
+> You replied that
+> 
+> > For S_ROUTING this is the number of routes in the IOCTL argument. The
+> > routing table may contain more (static routes).
+> 
+> and that's right, but, even when set by userspace for S_ROUTING, the
+> num_routes fields is the number of routes that userspace tries to set in
+> the routing table. I think starting with a first sentence that describes
+> what the field contains, and then explaining how it's used for the
+> different ioctls by userspace and kernel space, is clearer.
 
-diff --git a/drivers/gpu/drm/display/drm_hdmi_state_helper.c b/drivers/gpu/drm/display/drm_hdmi_state_helper.c
-index 1e92c1108d23..82293d93b5f8 100644
---- a/drivers/gpu/drm/display/drm_hdmi_state_helper.c
-+++ b/drivers/gpu/drm/display/drm_hdmi_state_helper.c
-@@ -16,10 +16,14 @@
-  * drm_atomic_helper_connector_reset().
-  */
- void __drm_atomic_helper_connector_hdmi_reset(struct drm_connector *connector,
- 					      struct drm_connector_state *new_conn_state)
- {
-+	unsigned int max_bpc = connector->max_bpc;
-+
-+	new_conn_state->max_bpc = max_bpc;
-+	new_conn_state->max_requested_bpc = max_bpc;
- }
- EXPORT_SYMBOL(__drm_atomic_helper_connector_hdmi_reset);
- 
- /**
-  * drm_atomic_helper_connector_hdmi_check() - Helper to check HDMI connector atomic state
-@@ -34,8 +38,24 @@ EXPORT_SYMBOL(__drm_atomic_helper_connector_hdmi_reset);
-  * Zero on success, or an errno code otherwise.
-  */
- int drm_atomic_helper_connector_hdmi_check(struct drm_connector *connector,
- 					   struct drm_atomic_state *state)
- {
-+	struct drm_connector_state *old_conn_state =
-+		drm_atomic_get_old_connector_state(state, connector);
-+	struct drm_connector_state *new_conn_state =
-+		drm_atomic_get_new_connector_state(state, connector);
-+
-+	if (old_conn_state->hdmi.output_bpc != new_conn_state->hdmi.output_bpc) {
-+		struct drm_crtc *crtc = new_conn_state->crtc;
-+		struct drm_crtc_state *crtc_state;
-+
-+		crtc_state = drm_atomic_get_crtc_state(state, crtc);
-+		if (IS_ERR(crtc_state))
-+			return PTR_ERR(crtc_state);
-+
-+		crtc_state->mode_changed = true;
-+	}
-+
- 	return 0;
- }
- EXPORT_SYMBOL(drm_atomic_helper_connector_hdmi_check);
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index a91737adf8e7..4e11cfb4518b 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -1141,10 +1141,15 @@ static void drm_atomic_connector_print_state(struct drm_printer *p,
- 	drm_printf(p, "\tcrtc=%s\n", state->crtc ? state->crtc->name : "(null)");
- 	drm_printf(p, "\tself_refresh_aware=%d\n", state->self_refresh_aware);
- 	drm_printf(p, "\tmax_requested_bpc=%d\n", state->max_requested_bpc);
- 	drm_printf(p, "\tcolorspace=%s\n", drm_get_colorspace_name(state->colorspace));
- 
-+	if (connector->connector_type == DRM_MODE_CONNECTOR_HDMIA ||
-+	    connector->connector_type == DRM_MODE_CONNECTOR_HDMIB) {
-+		drm_printf(p, "\toutput_bpc=%u\n", state->hdmi.output_bpc);
-+	}
-+
- 	if (connector->connector_type == DRM_MODE_CONNECTOR_WRITEBACK)
- 		if (state->writeback_job && state->writeback_job->fb)
- 			drm_printf(p, "\tfb=%d\n", state->writeback_job->fb->base.id);
- 
- 	if (connector->funcs->atomic_print_state)
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index d9961cce8245..da51a2bcb978 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -457,10 +457,11 @@ EXPORT_SYMBOL(drmm_connector_init);
-  * @dev: DRM device
-  * @connector: A pointer to the HDMI connector to init
-  * @funcs: callbacks for this connector
-  * @connector_type: user visible type of the connector
-  * @ddc: optional pointer to the associated ddc adapter
-+ * @max_bpc: Maximum bits per char the HDMI connector supports
-  *
-  * Initialises a preallocated HDMI connector. Connectors can be
-  * subclassed as part of driver connector objects.
-  *
-  * Cleanup is automatically handled with a call to
-@@ -473,22 +474,39 @@ EXPORT_SYMBOL(drmm_connector_init);
-  */
- int drmm_connector_hdmi_init(struct drm_device *dev,
- 			     struct drm_connector *connector,
- 			     const struct drm_connector_funcs *funcs,
- 			     int connector_type,
--			     struct i2c_adapter *ddc)
-+			     struct i2c_adapter *ddc,
-+			     unsigned int max_bpc)
- {
- 	int ret;
- 
- 	if (!(connector_type == DRM_MODE_CONNECTOR_HDMIA ||
- 	      connector_type == DRM_MODE_CONNECTOR_HDMIB))
- 		return -EINVAL;
- 
-+	if (!(max_bpc == 8 || max_bpc == 10 || max_bpc == 12))
-+		return -EINVAL;
-+
- 	ret = drmm_connector_init(dev, connector, funcs, connector_type, ddc);
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * drm_connector_attach_max_bpc_property() requires the
-+	 * connector to have a state.
-+	 */
-+	if (connector->funcs->reset)
-+		connector->funcs->reset(connector);
-+
-+	drm_connector_attach_max_bpc_property(connector, 8, max_bpc);
-+	connector->max_bpc = max_bpc;
-+
-+	if (max_bpc > 8)
-+		drm_connector_attach_hdr_output_metadata_property(connector);
-+
- 	return 0;
- }
- EXPORT_SYMBOL(drmm_connector_hdmi_init);
- 
- /**
-diff --git a/drivers/gpu/drm/tests/drm_connector_test.c b/drivers/gpu/drm/tests/drm_connector_test.c
-index 261d4109946d..2661eb64a5cd 100644
---- a/drivers/gpu/drm/tests/drm_connector_test.c
-+++ b/drivers/gpu/drm/tests/drm_connector_test.c
-@@ -182,11 +182,12 @@ static void drm_test_connector_hdmi_init_valid(struct kunit *test)
- 	int ret;
- 
- 	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
- 				       &dummy_funcs,
- 				       DRM_MODE_CONNECTOR_HDMIA,
--				       &priv->ddc);
-+				       &priv->ddc,
-+				       8);
- 	KUNIT_EXPECT_EQ(test, ret, 0);
- }
- 
- /*
-  * Test that the registration of a connector without a DDC adapter
-@@ -198,11 +199,12 @@ static void drm_test_connector_hdmi_init_null_ddc(struct kunit *test)
- 	int ret;
- 
- 	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
- 				       &dummy_funcs,
- 				       DRM_MODE_CONNECTOR_HDMIA,
--				       NULL);
-+				       NULL,
-+				       8);
- 	KUNIT_EXPECT_EQ(test, ret, 0);
- }
- 
- /*
-  * Test that the registration of an HDMI connector with an HDMI
-@@ -215,11 +217,12 @@ static void drm_test_connector_hdmi_init_type_valid(struct kunit *test)
- 	int ret;
- 
- 	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
- 				       &dummy_funcs,
- 				       connector_type,
--				       &priv->ddc);
-+				       &priv->ddc,
-+				       8);
- 	KUNIT_EXPECT_EQ(test, ret, 0);
- }
- 
- static const unsigned int drm_connector_hdmi_init_type_valid_tests[] = {
- 	DRM_MODE_CONNECTOR_HDMIA,
-@@ -246,11 +249,12 @@ static void drm_test_connector_hdmi_init_type_invalid(struct kunit *test)
- 	int ret;
- 
- 	ret = drmm_connector_hdmi_init(&priv->drm, &priv->connector,
- 				       &dummy_funcs,
- 				       connector_type,
--				       &priv->ddc);
-+				       &priv->ddc,
-+				       8);
- 	KUNIT_EXPECT_LT(test, ret, 0);
- }
- 
- static const unsigned int drm_connector_hdmi_init_type_invalid_tests[] = {
- 	DRM_MODE_CONNECTOR_Unknown,
-diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-index 000a2a156619..d4d2ae15bc1e 100644
---- a/include/drm/drm_connector.h
-+++ b/include/drm/drm_connector.h
-@@ -1035,10 +1035,14 @@ struct drm_connector_state {
- 	/**
- 	 * @hdmi: HDMI-related variable and properties. Filled by
- 	 * @drm_atomic_helper_connector_hdmi_check().
- 	 */
- 	struct {
-+		/**
-+		 * @output_bpc: Bits per color channel to output.
-+		 */
-+		unsigned int output_bpc;
- 	} hdmi;
- };
- 
- /**
-  * struct drm_connector_funcs - control connectors on a given device
-@@ -1680,10 +1684,15 @@ struct drm_connector {
- 	 * DRM blob property data for the DP MST path property. This should only
- 	 * be updated by calling drm_connector_set_path_property().
- 	 */
- 	struct drm_property_blob *path_blob_ptr;
- 
-+	/**
-+	 * @max_bpc: Maximum bits per color channel the connector supports.
-+	 */
-+	unsigned int max_bpc;
-+
- 	/**
- 	 * @max_bpc_property: Default connector property for the max bpc to be
- 	 * driven out of the connector.
- 	 */
- 	struct drm_property *max_bpc_property;
-@@ -1913,11 +1922,12 @@ int drmm_connector_init(struct drm_device *dev,
- 			struct i2c_adapter *ddc);
- int drmm_connector_hdmi_init(struct drm_device *dev,
- 			     struct drm_connector *connector,
- 			     const struct drm_connector_funcs *funcs,
- 			     int connector_type,
--			     struct i2c_adapter *ddc);
-+			     struct i2c_adapter *ddc,
-+			     unsigned int max_bpc);
- void drm_connector_attach_edid_property(struct drm_connector *connector);
- int drm_connector_register(struct drm_connector *connector);
- void drm_connector_unregister(struct drm_connector *connector);
- int drm_connector_attach_encoder(struct drm_connector *connector,
- 				      struct drm_encoder *encoder);
+The problem with your suggestion is that it's not entirely correct:
+num_routes is indeed used for two different purposes. Removing " in the
+subdevice routing table" in the first sentence would be a simple fix.
+
+> 
+> > +
+> > +The kernel can return a ``num_routes`` value larger than ``len_routes`` from
+> > +both ioctls. This indicates thare are more routes in the routing table than fits
+> > +the ``routes`` array. In this case, the ``routes`` array is filled by the kernel
+> > +with the first ``len_routes`` entries of the subdevice routing table. This is
+> > +not considered to be an error, and the ioctl call succeeds. If the applications
+> > +wants to retrieve the missing routes, it can issue a new
+> > +``VIDIOC_SUBDEV_G_ROUTING`` call with a large enough ``routes`` array.
+> > +
+> > +indicate there are more routes than fits to the ``routes`` array. In this
+> > +case first ``len_routes`` were returned back to the userspace in the
+> > +``routes`` array. This is not considered as an error.
+> 
+> I think these 3 lines are a leftover.
+
+Yes, I'll remove them.
+
+> 
+> > +
+> > +Also ``VIDIOC_SUBDEV_S_ROUTING`` may return more route than the user provided in
+> 
+> s/Also //
+> s/route/routes/
+
+Yes.
+
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+Thanks!
+
+> 
+> > +``num_routes`` field due to e.g. hardware properties.
+> >  
+> >  .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+> >  
+> > @@ -74,6 +93,9 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
+> >        - ``which``
+> >        - Routing table to be accessed, from enum
+> >          :ref:`v4l2_subdev_format_whence <v4l2-subdev-format-whence>`.
+> > +    * - __u32
+> > +      - ``len_routes``
+> > +      - The length of the array (as in memory reserved for the array)
+> >      * - struct :c:type:`v4l2_subdev_route`
+> >        - ``routes[]``
+> >        - Array of struct :c:type:`v4l2_subdev_route` entries
+> > @@ -81,7 +103,7 @@ On a successful ``VIDIOC_SUBDEV_G_ROUTING`` call the driver updates the
+> >        - ``num_routes``
+> >        - Number of entries of the routes array
+> >      * - __u32
+> > -      - ``reserved``\ [5]
+> > +      - ``reserved``\ [11]
+> >        - Reserved for future extensions. Applications and drivers must set
+> >  	the array to zero.
+> >  
+> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > index 1863ecae9ec9..f30f61c008c7 100644
+> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> > @@ -3185,13 +3185,13 @@ static int check_array_args(unsigned int cmd, void *parg, size_t *array_size,
+> >  	case VIDIOC_SUBDEV_S_ROUTING: {
+> >  		struct v4l2_subdev_routing *routing = parg;
+> >  
+> > -		if (routing->num_routes > 256)
+> > +		if (routing->len_routes > 256)
+> >  			return -E2BIG;
+> >  
+> >  		*user_ptr = u64_to_user_ptr(routing->routes);
+> >  		*kernel_ptr = (void **)&routing->routes;
+> >  		*array_size = sizeof(struct v4l2_subdev_route)
+> > -			    * routing->num_routes;
+> > +			    * routing->len_routes;
+> >  		ret = 1;
+> >  		break;
+> >  	}
+> > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> > index 2ba11e5343f0..904378007a79 100644
+> > --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > @@ -927,6 +927,9 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+> >  		if (routing->which != V4L2_SUBDEV_FORMAT_TRY && ro_subdev)
+> >  			return -EPERM;
+> >  
+> > +		if (routing->num_routes > routing->len_routes)
+> > +			return -EINVAL;
+> > +
+> >  		memset(routing->reserved, 0, sizeof(routing->reserved));
+> >  
+> >  		for (i = 0; i < routing->num_routes; ++i) {
+> > @@ -953,6 +956,7 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+> >  		}
+> >  
+> >  		krouting.num_routes = routing->num_routes;
+> > +		krouting.len_routes = routing->len_routes;
+> >  		krouting.routes = routes;
+> >  
+> >  		return v4l2_subdev_call(sd, pad, set_routing, state,
+> > @@ -973,14 +977,10 @@ static long subdev_do_ioctl(struct file *file, unsigned int cmd, void *arg,
+> >  
+> >  		krouting = &state->routing;
+> >  
+> > -		if (routing->num_routes < krouting->num_routes) {
+> > -			routing->num_routes = krouting->num_routes;
+> > -			return -ENOSPC;
+> > -		}
+> > -
+> >  		memcpy((struct v4l2_subdev_route *)(uintptr_t)routing->routes,
+> >  		       krouting->routes,
+> > -		       krouting->num_routes * sizeof(*krouting->routes));
+> > +		       min(krouting->num_routes, routing->len_routes) *
+> > +		       sizeof(*krouting->routes));
+> >  		routing->num_routes = krouting->num_routes;
+> >  
+> >  		return 0;
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index 9cce48365975..1df6b963a1c9 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -728,12 +728,14 @@ struct v4l2_subdev_stream_configs {
+> >  /**
+> >   * struct v4l2_subdev_krouting - subdev routing table
+> >   *
+> > + * @len_routes: length of routes array, in routes
+> >   * @num_routes: number of routes
+> >   * @routes: &struct v4l2_subdev_route
+> >   *
+> >   * This structure contains the routing table for a subdev.
+> >   */
+> >  struct v4l2_subdev_krouting {
+> > +	unsigned int len_routes;
+> >  	unsigned int num_routes;
+> >  	struct v4l2_subdev_route *routes;
+> >  };
+> > diff --git a/include/uapi/linux/v4l2-subdev.h b/include/uapi/linux/v4l2-subdev.h
+> > index 81a24bd38003..6a39128d0606 100644
+> > --- a/include/uapi/linux/v4l2-subdev.h
+> > +++ b/include/uapi/linux/v4l2-subdev.h
+> > @@ -228,15 +228,18 @@ struct v4l2_subdev_route {
+> >   * struct v4l2_subdev_routing - Subdev routing information
+> >   *
+> >   * @which: configuration type (from enum v4l2_subdev_format_whence)
+> > - * @num_routes: the total number of routes in the routes array
+> > + * @len_routes: the length of the routes array, in routes
+> >   * @routes: pointer to the routes array
+> > + * @num_routes: the total number of routes, possibly more than fits in the
+> > + *		routes array
+> >   * @reserved: drivers and applications must zero this array
+> >   */
+> >  struct v4l2_subdev_routing {
+> >  	__u32 which;
+> > -	__u32 num_routes;
+> > +	__u32 len_routes;
+> >  	__u64 routes;
+> > -	__u32 reserved[6];
+> > +	__u32 num_routes;
+> > +	__u32 reserved[11];
+> >  };
+> >  
+> >  /*
+> 
 
 -- 
-2.44.0
+Regards,
 
+Sakari Ailus
