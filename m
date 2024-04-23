@@ -1,105 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F28D1420BE;
-	Tue, 23 Apr 2024 19:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713900340; cv=none; b=EDIfdMyY958IaAdiVfPKhtsHvB0XJJwlgqMyPKKPvyYUZTvKtzhKf9sQwKzC8H3P07i1TpBqP+05MHBTkYyetQOO3jx5G5cTV2hWHMaKoM+QgRFMuDMjCOcecDOSKGDk8EjpHoqasQTT162eTkpfcEVvWItm0PB+D8R3klm31Mo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713900340; c=relaxed/simple;
-	bh=HTsoFANv6JLEmjESsOo2isIzkzhPyuPDbVVy0uob3Zc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dUahyauUKbXZJtvamDuR3BRSG0mek4KtCQZICaq4HWF3nkqCRrOmlPFMCIZOyzqfnRiOnQpg0hHnafG02NnxyIZysD0X1zAiSs3ZzxHK4Pl+/nEsLBO4epNCF5pevZQpnmj8fugDrefO8T53VdXIIdbBlC0We+iqlFx9fzNz09w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dd9HRWcZ; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9886145B06;
+	Tue, 23 Apr 2024 21:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713908615; cv=pass; b=fv/asxhwogFTgO0Q9ypeDdsQyeDR5/HxDz1jrTJfwyJ7Csr2c1bemX/ShdixGlknkFCZWzBQS82+/ZShtHK6gRiOKx/9vbD0L9vrklWzW+tXG33wLiS99LskqNomL7aqyTq+66gL8AveWncZTc3YaxHXRHI3+M4lvw6Iewqd6hs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713908615; c=relaxed/simple;
+	bh=lZmTtkNLtHoyI684P55R2eGce23W5SDipF7n66IgUMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JaAwImYBo/PCo+KiODxQZluXTjnAbOGAYiR3isPDkzOcgo0HyssV2AI7ApuJqAjTbJV5zRFIqdt5tjSxruRsOPhTM1IjzH29vH5KgPYgrNFW8CAsiWffZUbFG44G0ipIZZwtf6fNgTpfT0Y5fi0MKbPGcZ7p6nj1HLAjV4c6Opo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=jPxOIJhR; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dd9HRWcZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713900339; x=1745436339;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HTsoFANv6JLEmjESsOo2isIzkzhPyuPDbVVy0uob3Zc=;
-  b=dd9HRWcZX3/ms1aRbxakX1QOj6C0zCAqtSh/v4JHZfmSOO4eDq7gui7b
-   N33atfrgcTDjoZZrlh2HYVeVNMmHqJpHrS5Rf5MLxjKdt42YaYBmnrw7p
-   rED8yiD8vKyMeGt7GPIcIgUu/Qbk4Zf+Ht+u0G0UV5WRmEYEVfzPNNQ4S
-   9uK75N8QZBHVSDqXmmt/I0XAcenw3SJxd8uQNVAW1cpgP+NJEpDe4P/lz
-   qacHf97ctaOH8ZPuFopmEd+GNVfOJEvyzxzR/8y/Q9P6v8KtVGgfC3to3
-   AssZqeqFgb5DEmhFmlzfN5Gfgv7UOqCiQvBY3ciBhRIeDMLHHbnwiJp75
-   A==;
-X-CSE-ConnectionGUID: ScO76M7gR3utAaHi4ZSHBw==
-X-CSE-MsgGUID: foEDc1I6SsmLfBo1RI8mtg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="9613689"
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="9613689"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 12:25:36 -0700
-X-CSE-ConnectionGUID: jU9dTxssRxCDT9Y4mI+TiA==
-X-CSE-MsgGUID: owZMSlD9QfSf3MU/LQ5KuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="24440743"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 23 Apr 2024 12:25:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id CA0E244E; Tue, 23 Apr 2024 22:25:30 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rob Herring <robh@kernel.org>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Cc: Alain Volmat <alain.volmat@foss.st.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Sean Young <sean@mess.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Stefani Seibold <stefani@seibold.net>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 2/3] media: stih-cec: Add missing io.h
-Date: Tue, 23 Apr 2024 22:23:09 +0300
-Message-ID: <20240423192529.3249134-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240423192529.3249134-1-andriy.shevchenko@linux.intel.com>
-References: <20240423192529.3249134-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="jPxOIJhR"
+Received: from hillosipuli.retiisi.eu (80-248-247-191.cust.suomicom.net [80.248.247.191])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4VPFwq32vVz49Q05;
+	Wed, 24 Apr 2024 00:43:23 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1713908604;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OLqMEJxoaWFasN2MCsFBWnfqPLspdvp7bGhu9Pbap4g=;
+	b=jPxOIJhRkaSVTPHtwmPjyp+Q5vajhxCS9fRVxhQJWQYQDNWto33afXvHlu8/mZzHm01qiG
+	uhGNt2j7n+LcINKPE9PbmXvtZv2ddgxFS6psywd1rocS8VJW5DsWPT3U3whSIQgqKv74f3
+	/vVTflu0zQcqLPwjnFphJRa+fk/OELriVgs01OSESbY+RzZ0lM4EsWxZjVi6vJZBJd/PRY
+	C4Ve0wfBmSuZcuYfS7mEmwRixDGxGwhIRzRcJ7Lf6Bi7UPeVluSTXYjJjvuaIS5SZLMRmJ
+	Q7ylQDyNX9dgr0sZIovstxKvF0aKavJ6gFGhVsS4Ryj5BlinaJrNTt1t9W9lKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1713908604;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OLqMEJxoaWFasN2MCsFBWnfqPLspdvp7bGhu9Pbap4g=;
+	b=M6zUs/EfUIPYgvaq1nPxdq+0GrLsk1Y2xjmDep+Ag7vSNnFdg+QiuIzWeGo9Jv7oSFEW8r
+	KI9j7cqu0mobbSetMMnjsujDmw4oLrvR85QlB1U11XbrhjpFdIwY8rCa4jC3H1bwjsurHu
+	gG4MCEsmsriJXk2q2RwJxneRdpCnuwSatEnJkL+U8kzdTwFmOG4LHVb+bvvsJs1AEIo7f3
+	1R6i0F/wFDNuUDfBlqIB5QmCTLG44LgETeljEGk9bnrjLnD910h7IOAoTrbDKfdgoLpRJy
+	mFvwlgENBRoucLCUN0weT8yE93P6pVK+EYB8yr1m4W1i6rd4RBp4J7YIxzlS5A==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1713908604; a=rsa-sha256;
+	cv=none;
+	b=BytMvg5F1jRL6Ol5e3nsjLiTikopKfbBfes1/GXjWaBynT+Ruq1M7sv3Nwl9MLpzLnv/6U
+	QfdLODRu8NQaBBSegVFN5IpE53EK1m8rfxFuo20YrnhJWyjPKrt075eH4hc4Sao7QwuFtn
+	FLaRaNCUpKnUYECuVqrY8e8oc3QmbKBvCzsuMUSb7I3VduiYELdm1FzXBvwVhzQ7y1bkJ4
+	xLsH9H89nNRPTEaYHLvmUu6kFABHaiynnB5ezrTP7qKh2CP9KuntykpufPD2Zvsmo8a3NI
+	Rg3H7AUG9CuwjwYRi0FWM/bWgOEIojqQ7sXDD4lTyGz5LX/lNy60sZM8NB40fg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 14EE2634C96;
+	Wed, 24 Apr 2024 00:43:23 +0300 (EEST)
+Date: Tue, 23 Apr 2024 21:43:22 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Julien Massot <julien.massot@collabora.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	kernel@collabora.com, linux-kernel@vger.kernel.org,
+	mchehab@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Subject: Re: [PATCH v6 1/4] dt-bindings: media: add Maxim MAX96717 GMSL2
+ Serializer
+Message-ID: <Zigrei9JB9L2XUEO@valkosipuli.retiisi.eu>
+References: <20240325131634.165361-1-julien.massot@collabora.com>
+ <20240325131634.165361-2-julien.massot@collabora.com>
+ <ZhkWqEAN4RozmPlT@valkosipuli.retiisi.eu>
+ <f5a178b9-2eeb-4737-a051-b43cde9fae20@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5a178b9-2eeb-4737-a051-b43cde9fae20@collabora.com>
 
-In the driver the io.h is implied by others. This is not good as
-it prevents from cleanups done in other headers. Add missing include.
+Hi Julien,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/media/cec/platform/sti/stih-cec.c | 1 +
- 1 file changed, 1 insertion(+)
+On Tue, Apr 23, 2024 at 03:36:39PM +0200, Julien Massot wrote:
+> > > +            properties:
+> > > +              data-lanes:
+> > > +                minItems: 1
+> > > +                maxItems: 4
+> > > +
+> > > +              lane-polarities:
+> > > +                minItems: 1
+> > > +                maxItems: 5
+> > > +
+> > > +              bus-type:
+> > > +                enum:
+> > > +                  - 1 # MEDIA_BUS_TYPE_CSI2_CPHY
+> > > +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+> > 
+> > Now that you have C-PHY here, does the hardware support data line order
+> > mapping? Just wondering. The bindings can be added without that and support
+> > added later on---that's what the video-interfaces.yaml is currently
+> > missing.
+> > 
+> > lane-polarities is only valid for D-PHY. What about the data-lanes, the
+> > maximum is probably different for C-PHY?
+> My mistake here; MAX96717 doesn't support C-PHY; I think I was confused by
+> some of the schemas implying a deserializer with C-PHY support.
+> I will drop the bus-type property in v7.
 
-diff --git a/drivers/media/cec/platform/sti/stih-cec.c b/drivers/media/cec/platform/sti/stih-cec.c
-index a20fc5c0c88d..99978a7c8d9b 100644
---- a/drivers/media/cec/platform/sti/stih-cec.c
-+++ b/drivers/media/cec/platform/sti/stih-cec.c
-@@ -6,6 +6,7 @@
-  */
- #include <linux/clk.h>
- #include <linux/interrupt.h>
-+#include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
+Ack, thanks!
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+Sakari Ailus
