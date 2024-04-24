@@ -1,122 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7081158A04
-	for <linux-media@vger.kernel.org>; Wed, 24 Apr 2024 11:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DB815959E
+	for <linux-media@vger.kernel.org>; Wed, 24 Apr 2024 12:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713959287; cv=none; b=IMtOo1M1dN1R6k5QOslfwOMNTknDRhidoCU8mVvKhn248ZPJNl/rJCOpMJNxNEhrYaf4leDETOnX1O/e5rQhlyQAK1nDdGUTwr+Zv/APFlBriEBeOIz6suM2kcKkZMaTpUk3TZ0mUH4nmgcG5a+mR6low7FCKckHtg8/+g5uc+0=
+	t=1713961366; cv=none; b=EkSfIfjZJabUjvJM+GRvb3SuIfrtSqkKL64wZT9TOPPWHn+upD4kjz8qF4clF6gdnWlN7rOWFUtsEHMyoHOLLj2O/QdYgp1SXfnd7dihAEta93VY2EGKUCw+QwShabNDA5b6xWIkfxC4EsfQNTb56m7oNk2zHeDnq1r7sCpnlyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713959287; c=relaxed/simple;
-	bh=K9cZ1OMq+qtyNpCTw3jswkFT/HvSJwz0ICxVTuyxP+I=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=CzgI/STjICtzwcGy6kDwfXKZktv8cdKFXBI7KNw+nZ8/DtAf1+a3UKVVv2ZKA91Q/h2dOTXn26dH90qorrJOhj+yLpx909aNrKDKXvdsr+bbEFUORyQmj+peNXGb0N8568nDAyzjeRL8yJhQilXRji/A05YN0SRfX+t+UvACBMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778EBC113CE;
-	Wed, 24 Apr 2024 11:48:06 +0000 (UTC)
-Message-ID: <eafd2ebe-ed0b-43f4-b067-2ea5a26e4585@xs4all.nl>
-Date: Wed, 24 Apr 2024 13:48:04 +0200
+	s=arc-20240116; t=1713961366; c=relaxed/simple;
+	bh=d8/Vh+hc+vRWu3jECz3FuvtE8Bz6omN8hWTdTt7bDlM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iranw7USOa4RMDKuUPJ1iKCMb1dvSg6V6MtXXrlgQFgFWKa7dodh/0yrR1fTOXUG2pti4bNyxdN2MAySXVFjpSv+9cKIqhEurfqgs0o2f8gG4Su8qvLJtxkLfoxUEd0XxtoGPStO5w8Wyf51HYwH7jaEIu44iM7J9BKkKwFCZCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YO+q6anp; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YO+q6anp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713961364; x=1745497364;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=d8/Vh+hc+vRWu3jECz3FuvtE8Bz6omN8hWTdTt7bDlM=;
+  b=YO+q6anpFr7yRsbiDFflrCBewoYQnpoBRMN3V15OUryZAu+egjwsLl3s
+   3FTwJlN2r1hf12tbbv5L06oCPI7zXakmsN32fz+LMGrFa6KQdXI9b6BF+
+   meMO/02IxwGBgQh2VpzAVUeNWUW1GjwVITf9Cfzr74jtSARuBj5ZCH5Ug
+   dd9u2Oqvo8bCgZ55rfQ6yGjBd2xspjz77Ua0IKe4FMDf5u7VKxD3xcGxN
+   5v7fEdH+T2wV+qfFZXWJmAgie7IH6y/wr0n4ryJ+fJFfsDurOmgwqhGqD
+   TAMY5eWjq+L7qREKnRgIa0FgexhOi/3s8DeXSUvAIqtlN8i3QP7/rG6xz
+   Q==;
+X-CSE-ConnectionGUID: XdLwhDCnQo6EqtQvv+7Adw==
+X-CSE-MsgGUID: 2xvLRWrSQRism9BN9C4h+g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="12522883"
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="12522883"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 05:22:43 -0700
+X-CSE-ConnectionGUID: ZFq3Loq/Qw6qb0XbeliiuQ==
+X-CSE-MsgGUID: n1HVNVm+RiSmSd5ty60IMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,226,1708416000"; 
+   d="scan'208";a="29348877"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2024 05:22:41 -0700
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9614011F855;
+	Wed, 24 Apr 2024 15:22:37 +0300 (EEST)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	tomi.valkeinen@ideasonboard.com,
+	bingbu.cao@intel.com,
+	hongju.wang@intel.com,
+	hverkuil@xs4all.nl,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Dmitry Perchanov <dmitry.perchanov@intel.com>,
+	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
+	Alain Volmat <alain.volmat@foss.st.com>
+Subject: [PATCH 00/14] Generic line based metadata, without sensor API changes
+Date: Wed, 24 Apr 2024 15:22:23 +0300
+Message-Id: <20240424122237.875000-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, nl
-To: Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Dan Carpenter <dan.carpenter@oracle.com>, Fabio Estevam <festevam@gmail.com>
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v6.10] media: various fixes
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-If there are no objections, then I plan to push this tomorrow.
+Hello everyone,
 
-Regards,
+I've split these patches off the metadata set [1], it'll still take more
+time to merge the internal pad support as it is evident we need to
+properly define the recommended sensor APIs to merge the drivers that are
+using them.
 
-	Hans
+In the meantime, these should be good to be merged for 6.10.
 
-The following changes since commit e42a204f0519a2540f1507ac2798be2aeaa76bee:
+The patches include changes to the routing API before the internal pads.
 
-  Merge tag 'tags/media-next-uvc-20240419' of git://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git into media_stage (2024-04-22 13:32:03 +0200)
+[1] <URL:https://lore.kernel.org/linux-media/20240420100518.GA5618@pendragon.ideasonboard.com/T/#t>
 
-are available in the Git repository at:
+changes since v9 metadata set:
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v6.10h
+- Fix metadata format documentation.
 
-for you to fetch changes up to ebdaf6f650b5547ddfac32b00ed95dec113f8e8f:
+- Improve language of struct v4l2_subdev_format field documentation when
+  it comes to metadata.
 
-  media: stih-cec: Add missing io.h (2024-04-24 12:26:32 +0200)
+- Improved documentation for routing API.
 
-----------------------------------------------------------------
-Tag branch
+- Set (and unset) the V4L2_FMT_FLAG_META_LINE_BASED flag in the framework
+  based on the format, don't rely on the driver to do it. Added a comment
+  to the format list to remind developers to update v4l_fill_fmtdesc when
+  adding new metadata formats.
 
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      media: stih-cec: Add missing io.h
+- Drop the patch that moved G_ROUTING below S_ROUTING handling in
+  v4l2-subdev.c. It's no longer needed.
 
-Dan Carpenter (1):
-      media: stk1160: fix bounds checking in stk1160_copy_video()
+Laurent Pinchart (1):
+  media: v4l2-subdev: Clearly document that the crop API won't be
+    extended
 
-Fabio Estevam (1):
-      media: dt-bindings: nxp,imx8-jpeg: Add clocks entries
+Sakari Ailus (13):
+  media: Documentation: Add "stream" into glossary
+  media: uapi: Add generic serial metadata mbus formats
+  media: uapi: Document which mbus format fields are valid for metadata
+  media: uapi: v4l: Add generic 8-bit metadata format definitions
+  media: v4l: Support line-based metadata capture
+  media: v4l: Set line based metadata flag in V4L2 core
+  media: Documentation: Additional streams generally don't harm capture
+  media: Documentation: Document S_ROUTING behaviour
+  media: v4l: subdev: Add a function to lock two sub-device states, use
+    it
+  media: v4l: subdev: Copy argument back to user also for S_ROUTING
+  media: v4l: subdev: Add len_routes field to struct v4l2_subdev_routing
+  media: v4l: subdev: Return routes set using S_ROUTING
+  media: v4l: subdev: Add trivial set_routing support
 
-Hans Verkuil (4):
-      media: v4l2-core: hold videodev_lock until dev reg, finishes
-      media: cec: return -ENODEV instead of -ENXIO if unregistered
-      doc: media: v4l/func-open.rst: ENXIO should be ENODEV
-      media: videobuf2: improve max_num_buffers sanity checks
+ .../userspace-api/media/glossary.rst          |  15 +
+ .../userspace-api/media/v4l/dev-meta.rst      |  21 ++
+ .../userspace-api/media/v4l/dev-subdev.rst    |  31 +-
+ .../userspace-api/media/v4l/meta-formats.rst  |   3 +-
+ .../media/v4l/metafmt-generic.rst             | 343 ++++++++++++++++++
+ .../media/v4l/subdev-formats.rst              | 270 +++++++++++++-
+ .../media/v4l/vidioc-enum-fmt.rst             |   7 +
+ .../media/v4l/vidioc-subdev-g-crop.rst        |   6 +-
+ .../media/v4l/vidioc-subdev-g-routing.rst     |  51 ++-
+ .../media/videodev2.h.rst.exceptions          |   1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  41 ++-
+ drivers/media/v4l2-core/v4l2-subdev.c         |  50 ++-
+ include/media/v4l2-subdev.h                   |  42 +++
+ include/uapi/linux/media-bus-format.h         |   9 +
+ include/uapi/linux/v4l2-mediabus.h            |  18 +-
+ include/uapi/linux/v4l2-subdev.h              |  13 +-
+ include/uapi/linux/videodev2.h                |  22 ++
+ 17 files changed, 880 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/metafmt-generic.rst
 
- Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml | 11 +++++++++++
- Documentation/userspace-api/media/cec/cec-func-open.rst    |  4 ++--
- Documentation/userspace-api/media/v4l/func-open.rst        |  4 ++--
- drivers/media/cec/core/cec-core.c                          |  4 ++--
- drivers/media/cec/platform/sti/stih-cec.c                  |  1 +
- drivers/media/common/videobuf2/videobuf2-core.c            |  8 +++++++-
- drivers/media/usb/stk1160/stk1160-video.c                  | 20 +++++++++++++++-----
- drivers/media/v4l2-core/v4l2-dev.c                         |  3 +++
- 8 files changed, 43 insertions(+), 12 deletions(-)
+-- 
+2.39.2
+
