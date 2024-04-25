@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F6A155751
-	for <linux-media@vger.kernel.org>; Thu, 25 Apr 2024 21:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B24155A34
+	for <linux-media@vger.kernel.org>; Thu, 25 Apr 2024 21:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714081745; cv=none; b=fNA5U1eRClux2Ve9MpD4ffPlIG2E3hX3B+pH1xhhdJjyNFkYGsbWy7YVSu50wlFhYooss0lPdxidt0Ihhh9u0nWrdbvxvITFYviDbmcknHIuBi1LxRqtN9fQ/niL2fGRA48mLl5erggADJ492au6/9cxFh2G6OZm1QiQ6fSKXXU=
+	t=1714081746; cv=none; b=Le+68Cdkecw7raNCkzcK1z4Ydq7tGnc8bC3r60DeHbDVQwOvly5wUYNfgnfC9Wt3uDlzoUSGMN/RiUpf6ZuGnmbmkQUcASWsrYHuKPv6PRSkV2EXvjKJU3m4EzhYkV4N6+DU4HoMMjfBCvKoGotEASQ86TaEnSWBGd4DjpttBi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714081745; c=relaxed/simple;
-	bh=onvAkJYzZN/ZqhEMHjFPVslQ5V/a5adn35aNd49ioO8=;
+	s=arc-20240116; t=1714081746; c=relaxed/simple;
+	bh=a8N+9lxo9FCMs+bvtZ0hVRv/BnUmo9ZSI2vk5zS50H0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uSVlHXnEsp7PQMY4KOS6mrpgTZPSpFRRk6rI1SYhHHl+RJNkz45L4iLsmEfltikIXRB13a4qAi1wZD61Jpg4jxDM8jRxTJK8YwxI5BaO9Msi6yYnx4rue8I3ybv7O54ryEIsQGxADBoLtccdKtuQ8yTqKJdQValBxM8DrWsqbeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aoZ9g+lZ; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=i/Ec2qswfU6eYT7yubajU7I4BFD6vkAlbl6qKqBSr2R15dJrcGutHVcxi1Z5o/XS8zMs7F4PKS3DYKecNgf1cAAcnx3zsrWxp1wruqZecoliVXW9E0kzNa2MhhRXtDqKw4OfOnVz8Zjqkxcl8YF2Sg3l92T/guGN3QhOqMjjFZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nkHW9Fw/; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aoZ9g+lZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nkHW9Fw/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714081743; x=1745617743;
+  t=1714081745; x=1745617745;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=onvAkJYzZN/ZqhEMHjFPVslQ5V/a5adn35aNd49ioO8=;
-  b=aoZ9g+lZjreHbHO/jj/KJ4+0hrt64HCCsYMaZTJhBzA8vrggiZjhiQBs
-   tZySps6iev0WsjqNuNrLzw9DFNffe3kiaJ3U4DWzT8aMt1F/dKOPNvfNp
-   euYNfzpTTaE1ZQpAJu9NLYNSC3zkEgAFUUyuMq5DxlfTKIAuVnvz5hItA
-   LbG3d5PW2EqaPwevIoAF0f9RJ5Df34jwn2RdAeiMJfpJVHmo+xd65vYlW
-   xF+R57bAJKgjok+s8x/gteNU594C2Q4HubH6dK5aI6v6kWRoyWDk68K0T
-   7g1Z2fsVICGi0r4/xhOs4K9Bvz0481cYQjnAfa+fL7OWPxEaIAg824edA
+  bh=a8N+9lxo9FCMs+bvtZ0hVRv/BnUmo9ZSI2vk5zS50H0=;
+  b=nkHW9Fw/HVfNASbDaAsA+19OlO6Sj2RiLaVoLuzlv6Rdn0GK3uWI65Ys
+   lLeQXKCf5Ypa2L5rg3T8p796kaYBgfO3JFXUrWbLNblR7RZMwbrlBIT2Q
+   rBwI6ijHoQjAP9Vw/fSXiuWGxCwH+k9wAMFQEBwOAH3cTfWvi/Vvs7GHN
+   tSkUZDVHAayZpvlTUEmgBNBmj8cTjSY3MTzZLDxygKzOJRZogMXedktYY
+   mmqfHJ8G74osEYoAIdQmPqnF15Wvu2x+m2533oyyoS0mi+lli5EW7iTZ4
+   0RdunHvo5PZpvj4hbQY3PZY3u6WI+9KTjHvlXarE6mcq8ht5oPRiOBVlf
    Q==;
-X-CSE-ConnectionGUID: brmyWP7tTTmM6eLlkVC4Ig==
-X-CSE-MsgGUID: foRlcib6TQeKtXVIrWnTtw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="10335995"
+X-CSE-ConnectionGUID: 4qs7bsUTS16WTUnYetIujg==
+X-CSE-MsgGUID: IfFDE9OnSdiyD9Rz5ApRlA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="10336018"
 X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="10335995"
+   d="scan'208";a="10336018"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 14:49:00 -0700
-X-CSE-ConnectionGUID: f2EMhUW0SmKscV5W1y+UqQ==
-X-CSE-MsgGUID: 0F0feT7fQBu6AkJG12z2bg==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 14:49:05 -0700
+X-CSE-ConnectionGUID: tTY2u9BMSROz1j9b/41eqg==
+X-CSE-MsgGUID: huOnR/9GTZ+E6cTr9hqu/w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,230,1708416000"; 
-   d="scan'208";a="25712212"
+   d="scan'208";a="25712223"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 14:48:57 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 14:49:01 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 504DC120768;
-	Fri, 26 Apr 2024 00:48:52 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 848D612027E;
+	Fri, 26 Apr 2024 00:48:56 +0300 (EEST)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: bingbu.cao@intel.com,
@@ -61,9 +61,9 @@ Cc: bingbu.cao@intel.com,
 	bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	hongju.wang@intel.com
-Subject: [PATCH v5 16/18] media: intel/ipu6: support line-based metadata capture support
-Date: Fri, 26 Apr 2024 00:48:07 +0300
-Message-Id: <20240425214809.930227-17-sakari.ailus@linux.intel.com>
+Subject: [PATCH v5 18/18] media: Documentation: add documentation of Intel IPU6 driver and hardware overview
+Date: Fri, 26 Apr 2024 00:48:09 +0300
+Message-Id: <20240425214809.930227-19-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240425214809.930227-1-sakari.ailus@linux.intel.com>
 References: <20240425214809.930227-1-sakari.ailus@linux.intel.com>
@@ -77,736 +77,240 @@ Content-Transfer-Encoding: 8bit
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-Some camera sensor can output the embedded data in specific data type.
-This patch adds the support for metadata capture in IPU6 ISYS driver.
+Add a documentation for an overview of IPU6 hardware and describe the main
+the components of IPU6 driver.
 
-Signed-off-by: Hongju Wang <hongju.wang@intel.com>
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |   5 +
- .../media/pci/intel/ipu6/ipu6-isys-queue.c    |  45 +--
- .../media/pci/intel/ipu6/ipu6-isys-subdev.c   |   5 +
- .../media/pci/intel/ipu6/ipu6-isys-video.c    | 311 +++++++++++++-----
- .../media/pci/intel/ipu6/ipu6-isys-video.h    |  11 +-
- drivers/media/pci/intel/ipu6/ipu6-isys.c      |   1 -
- 6 files changed, 273 insertions(+), 105 deletions(-)
+ .../driver-api/media/drivers/index.rst        |   1 +
+ .../driver-api/media/drivers/ipu6.rst         | 205 ++++++++++++++++++
+ 2 files changed, 206 insertions(+)
+ create mode 100644 Documentation/driver-api/media/drivers/ipu6.rst
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-index e8d93aa7fc6d..b9ce4324996d 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-@@ -42,6 +42,11 @@ static const u32 csi2_supported_codes[] = {
- 	MEDIA_BUS_FMT_SGBRG8_1X8,
- 	MEDIA_BUS_FMT_SGRBG8_1X8,
- 	MEDIA_BUS_FMT_SRGGB8_1X8,
-+	MEDIA_BUS_FMT_META_8,
-+	MEDIA_BUS_FMT_META_10,
-+	MEDIA_BUS_FMT_META_12,
-+	MEDIA_BUS_FMT_META_16,
-+	MEDIA_BUS_FMT_META_24,
- 	0
- };
+diff --git a/Documentation/driver-api/media/drivers/index.rst b/Documentation/driver-api/media/drivers/index.rst
+index c4123a16b5f9..7f6f3dcd5c90 100644
+--- a/Documentation/driver-api/media/drivers/index.rst
++++ b/Documentation/driver-api/media/drivers/index.rst
+@@ -26,6 +26,7 @@ Video4Linux (V4L) drivers
+ 	vimc-devel
+ 	zoran
+ 	ccs/ccs
++	ipu6
  
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-index b011293ad615..f8b5b96b21f0 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-@@ -28,7 +28,7 @@ static int queue_setup(struct vb2_queue *q, unsigned int *num_buffers,
- 	struct ipu6_isys_queue *aq = vb2_queue_to_isys_queue(q);
- 	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
- 	struct device *dev = &av->isys->adev->auxdev.dev;
--	u32 size = av->pix_fmt.sizeimage;
-+	u32 size = ipu6_isys_get_data_size(av);
  
- 	/* num_planes == 0: we're being called through VIDIOC_REQBUFS */
- 	if (!*num_planes) {
-@@ -50,17 +50,17 @@ static int ipu6_isys_buf_prepare(struct vb2_buffer *vb)
- 	struct ipu6_isys_queue *aq = vb2_queue_to_isys_queue(vb->vb2_queue);
- 	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
- 	struct device *dev = &av->isys->adev->auxdev.dev;
-+	u32 bytesperline = ipu6_isys_get_bytes_per_line(av);
-+	u32 height = ipu6_isys_get_frame_height(av);
-+	u32 size = ipu6_isys_get_data_size(av);
- 
- 	dev_dbg(dev, "buffer: %s: configured size %u, buffer size %lu\n",
--		av->vdev.name, av->pix_fmt.sizeimage,
--		vb2_plane_size(vb, 0));
-+		av->vdev.name, size, vb2_plane_size(vb, 0));
- 
--	if (av->pix_fmt.sizeimage > vb2_plane_size(vb, 0))
-+	if (size > vb2_plane_size(vb, 0))
- 		return -EINVAL;
- 
--	vb2_set_plane_payload(vb, 0, av->pix_fmt.bytesperline *
--			      av->pix_fmt.height);
--	vb->planes[0].data_offset = 0;
-+	vb2_set_plane_payload(vb, 0, bytesperline * height);
- 
- 	return 0;
- }
-@@ -329,15 +329,12 @@ static void buf_queue(struct vb2_buffer *vb)
- 	struct isys_fw_msgs *msg;
- 	unsigned long flags;
- 	dma_addr_t dma;
--	unsigned int i;
- 	int ret;
- 
- 	dev_dbg(dev, "queue buffer %u for %s\n", vb->index, av->vdev.name);
- 
--	for (i = 0; i < vb->num_planes; i++) {
--		dma = vb2_dma_contig_plane_dma_addr(vb, i);
--		dev_dbg(dev, "iova: plane %u iova %pad\n", i, &dma);
--	}
-+	dma = vb2_dma_contig_plane_dma_addr(vb, 0);
-+	dev_dbg(dev, "iova: iova %pad\n", &dma);
- 
- 	spin_lock_irqsave(&aq->lock, flags);
- 	list_add(&ib->head, &aq->incoming);
-@@ -410,7 +407,7 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
- 	struct media_pad *remote_pad =
- 		media_pad_remote_pad_first(av->vdev.entity.pads);
- 	struct v4l2_subdev *sd;
--	u32 r_stream;
-+	u32 r_stream, code;
- 	int ret;
- 
- 	if (!remote_pad)
-@@ -428,17 +425,19 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
- 		return ret;
- 	}
- 
--	if (format.width != av->pix_fmt.width ||
--	    format.height != av->pix_fmt.height) {
--		dev_dbg(dev, "wrong width or height %ux%u (%ux%u expected)\n",
--			av->pix_fmt.width, av->pix_fmt.height,
--			format.width, format.height);
-+	if (format.width != ipu6_isys_get_frame_width(av) ||
-+	    format.height != ipu6_isys_get_frame_height(av)) {
-+		dev_err(dev, "wrong width or height %ux%u (%ux%u expected)\n",
-+			ipu6_isys_get_frame_width(av),
-+			ipu6_isys_get_frame_height(av), format.width,
-+			format.height);
- 		return -EINVAL;
- 	}
- 
--	if (format.code != av->pfmt->code) {
-+	code = ipu6_isys_get_isys_format(ipu6_isys_get_format(av))->code;
-+	if (format.code != code) {
- 		dev_dbg(dev, "wrong mbus code 0x%8.8x (0x%8.8x expected)\n",
--			av->pfmt->code, format.code);
-+			code, format.code);
- 		return -EINVAL;
- 	}
- 
-@@ -510,14 +509,16 @@ static int start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct ipu6_isys_queue *aq = vb2_queue_to_isys_queue(q);
- 	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
- 	struct device *dev = &av->isys->adev->auxdev.dev;
-+	const struct ipu6_isys_pixelformat *pfmt =
-+		ipu6_isys_get_isys_format(ipu6_isys_get_format(av));
- 	struct ipu6_isys_buffer_list __bl, *bl = NULL;
- 	struct ipu6_isys_stream *stream;
- 	struct media_entity *source_entity = NULL;
- 	int nr_queues, ret;
- 
- 	dev_dbg(dev, "stream: %s: width %u, height %u, css pixelformat %u\n",
--		av->vdev.name, av->pix_fmt.width, av->pix_fmt.height,
--		av->pfmt->css_pixelformat);
-+		av->vdev.name, ipu6_isys_get_frame_width(av),
-+		ipu6_isys_get_frame_height(av), pfmt->css_pixelformat);
- 
- 	ret = ipu6_isys_setup_video(av, &source_entity, &nr_queues);
- 	if (ret < 0) {
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-index cb2ef1572562..0a06de5c739c 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
-@@ -20,25 +20,30 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
- {
- 	switch (code) {
- 	case MEDIA_BUS_FMT_RGB888_1X24:
-+	case MEDIA_BUS_FMT_META_24:
- 		return 24;
- 	case MEDIA_BUS_FMT_RGB565_1X16:
- 	case MEDIA_BUS_FMT_UYVY8_1X16:
- 	case MEDIA_BUS_FMT_YUYV8_1X16:
-+	case MEDIA_BUS_FMT_META_16:
- 		return 16;
- 	case MEDIA_BUS_FMT_SBGGR12_1X12:
- 	case MEDIA_BUS_FMT_SGBRG12_1X12:
- 	case MEDIA_BUS_FMT_SGRBG12_1X12:
- 	case MEDIA_BUS_FMT_SRGGB12_1X12:
-+	case MEDIA_BUS_FMT_META_12:
- 		return 12;
- 	case MEDIA_BUS_FMT_SBGGR10_1X10:
- 	case MEDIA_BUS_FMT_SGBRG10_1X10:
- 	case MEDIA_BUS_FMT_SGRBG10_1X10:
- 	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+	case MEDIA_BUS_FMT_META_10:
- 		return 10;
- 	case MEDIA_BUS_FMT_SBGGR8_1X8:
- 	case MEDIA_BUS_FMT_SGBRG8_1X8:
- 	case MEDIA_BUS_FMT_SGRBG8_1X8:
- 	case MEDIA_BUS_FMT_SRGGB8_1X8:
-+	case MEDIA_BUS_FMT_META_8:
- 		return 8;
- 	default:
- 		WARN_ON(1);
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-index 35cf1d234bd6..37b744a8a0b9 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-@@ -85,6 +85,14 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
- 	  IPU6_FW_ISYS_FRAME_FORMAT_RGB565 },
- 	{ V4L2_PIX_FMT_BGR24, 24, 24, MEDIA_BUS_FMT_RGB888_1X24,
- 	  IPU6_FW_ISYS_FRAME_FORMAT_RGBA888 },
-+	{ V4L2_META_FMT_GENERIC_8, 8, 8, MEDIA_BUS_FMT_META_8,
-+	  IPU6_FW_ISYS_FRAME_FORMAT_RAW8, true },
-+	{ V4L2_META_FMT_GENERIC_CSI2_10, 10, 10, MEDIA_BUS_FMT_META_10,
-+	  IPU6_FW_ISYS_FRAME_FORMAT_RAW10, true },
-+	{ V4L2_META_FMT_GENERIC_CSI2_12, 12, 12, MEDIA_BUS_FMT_META_12,
-+	  IPU6_FW_ISYS_FRAME_FORMAT_RAW12, true },
-+	{ V4L2_META_FMT_GENERIC_CSI2_16, 16, 16, MEDIA_BUS_FMT_META_16,
-+	  IPU6_FW_ISYS_FRAME_FORMAT_RAW16, true },
- };
- 
- static int video_open(struct file *file)
-@@ -104,8 +112,8 @@ static int video_open(struct file *file)
- 	return v4l2_fh_open(file);
- }
- 
--static const struct ipu6_isys_pixelformat *
--ipu6_isys_get_pixelformat(u32 pixelformat)
-+const struct ipu6_isys_pixelformat *
-+ipu6_isys_get_isys_format(u32 pixelformat)
- {
- 	unsigned int i;
- 
-@@ -133,27 +141,27 @@ static int ipu6_isys_vidioc_querycap(struct file *file, void *fh,
- static int ipu6_isys_vidioc_enum_fmt(struct file *file, void *fh,
- 				     struct v4l2_fmtdesc *f)
- {
--	unsigned int i, found = 0;
-+	unsigned int i, num_found;
- 
--	if (f->index >= ARRAY_SIZE(ipu6_isys_pfmts))
--		return -EINVAL;
--
--	if (!f->mbus_code) {
--		f->flags = 0;
--		f->pixelformat = ipu6_isys_pfmts[f->index].pixelformat;
--		return 0;
--	}
-+	for (i = 0, num_found = 0; i < ARRAY_SIZE(ipu6_isys_pfmts); i++) {
-+		if ((ipu6_isys_pfmts[i].is_meta ||
-+		     f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE) &&
-+		    (!ipu6_isys_pfmts[i].is_meta ||
-+		     f->type != V4L2_BUF_TYPE_META_CAPTURE))
-+			continue;
- 
--	for (i = 0; i < ARRAY_SIZE(ipu6_isys_pfmts); i++) {
--		if (f->mbus_code != ipu6_isys_pfmts[i].code)
-+		if (f->mbus_code && f->mbus_code != ipu6_isys_pfmts[i].code)
- 			continue;
- 
--		if (f->index == found) {
--			f->flags = 0;
--			f->pixelformat = ipu6_isys_pfmts[i].pixelformat;
--			return 0;
-+		if (num_found < f->index) {
-+			num_found++;
-+			continue;
- 		}
--		found++;
+ Digital TV drivers
+diff --git a/Documentation/driver-api/media/drivers/ipu6.rst b/Documentation/driver-api/media/drivers/ipu6.rst
+new file mode 100644
+index 000000000000..6e1dd19b36fb
+--- /dev/null
++++ b/Documentation/driver-api/media/drivers/ipu6.rst
+@@ -0,0 +1,205 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+		f->flags = 0;
-+		f->pixelformat = ipu6_isys_pfmts[i].pixelformat;
++==================
++Intel IPU6 Driver
++==================
 +
-+		return 0;
- 	}
- 
- 	return -EINVAL;
-@@ -185,40 +193,43 @@ static int ipu6_isys_vidioc_enum_framesizes(struct file *file, void *fh,
- 	return -EINVAL;
- }
- 
--static int vidioc_g_fmt_vid_cap(struct file *file, void *fh,
--				struct v4l2_format *fmt)
-+static int ipu6_isys_vidioc_g_fmt_vid_cap(struct file *file, void *fh,
-+				      struct v4l2_format *f)
- {
- 	struct ipu6_isys_video *av = video_drvdata(file);
- 
--	fmt->fmt.pix = av->pix_fmt;
-+	f->fmt.pix = av->pix_fmt;
- 
- 	return 0;
- }
- 
--static const struct ipu6_isys_pixelformat *
--ipu6_isys_video_try_fmt_vid(struct ipu6_isys_video *av,
--			    struct v4l2_pix_format *pix)
-+static int ipu6_isys_vidioc_g_fmt_meta_cap(struct file *file, void *fh,
-+					   struct v4l2_format *f)
- {
--	const struct ipu6_isys_pixelformat *pfmt =
--		ipu6_isys_get_pixelformat(pix->pixelformat);
-+	struct ipu6_isys_video *av = video_drvdata(file);
++Author: Bingbu Cao <bingbu.cao@intel.com>
 +
-+	f->fmt.meta = av->meta_fmt;
++Overview
++=========
 +
-+	return 0;
-+}
- 
--	pix_fmt->pixelformat = pfmt->pixelformat;
--	pix_fmt->num_planes = 1;
-+static void ipu6_isys_try_fmt_cap(struct ipu6_isys_video *av, u32 type,
-+				  u32 *format, u32 *width, u32 *height,
-+				  u32 *bytesperline, u32 *sizeimage)
-+{
-+	const struct ipu6_isys_pixelformat *pfmt =
-+		ipu6_isys_get_isys_format(*format);
- 
--	pix_fmt->width = clamp(pix_fmt->width, IPU6_ISYS_MIN_WIDTH,
--			    IPU6_ISYS_MAX_WIDTH);
--	pix_fmt->height = clamp(pix_fmt->height, IPU6_ISYS_MIN_HEIGHT,
--			     IPU6_ISYS_MAX_HEIGHT);
-+	*format = pfmt->pixelformat;
-+	*width = clamp(*width, IPU6_ISYS_MIN_WIDTH, IPU6_ISYS_MAX_WIDTH);
-+	*height = clamp(*height, IPU6_ISYS_MIN_HEIGHT, IPU6_ISYS_MAX_HEIGHT);
- 
- 	if (pfmt->bpp != pfmt->bpp_packed)
--		pix_fmt->bytesperline =
--			pix_fmt->width * DIV_ROUND_UP(pfmt->bpp, BITS_PER_BYTE);
-+		*bytesperline = *width * DIV_ROUND_UP(pfmt->bpp, BITS_PER_BYTE);
- 	else
--		pix_fmt->bytesperline =
--			DIV_ROUND_UP(pix_fmt->width * pfmt->bpp, BITS_PER_BYTE);
-+		*bytesperline = DIV_ROUND_UP(*width * pfmt->bpp, BITS_PER_BYTE);
- 
--	pix_fmt->bytesperline = ALIGN(pix_fmt->bytesperline,
--						av->isys->line_align);
-+	*bytesperline = ALIGN(*bytesperline, av->isys->line_align);
- 
- 	/*
- 	 * (height + 1) * bytesperline due to a hardware issue: the DMA unit
-@@ -229,48 +240,110 @@ ipu6_isys_video_try_fmt_vid(struct ipu6_isys_video *av,
- 	 * resolution it gives a bigger number. Use larger one to avoid
- 	 * memory corruption.
- 	 */
--	pix_fmt->sizeimage =
--		max(pix_fmt->sizeimage,
--		    pix_fmt->bytesperline * pix_fmt->height +
--		    max(pix_fmt->bytesperline,
--			av->isys->pdata->ipdata->isys_dma_overshoot));
-+	*sizeimage = *bytesperline * *height +
-+		max(*bytesperline,
-+		    av->isys->pdata->ipdata->isys_dma_overshoot);
-+}
++Intel IPU6 is the sixth generation of Intel Image Processing Unit used in some
++Intel Chipsets such as Tiger Lake, Jasper Lake, Alder Lake, Raptor Lake and
++Meteor Lake. IPU6 consists of two major systems: Input System (ISYS) and
++Processing System (PSYS). IPU6 are visible on the PCI bus as a single device, it
++can be found by ``lspci``:
 +
-+static void __ipu6_isys_vidioc_try_fmt_vid_cap(struct ipu6_isys_video *av,
-+					       struct v4l2_format *f)
-+{
-+	ipu6_isys_try_fmt_cap(av, f->type, &f->fmt.pix.pixelformat,
-+			      &f->fmt.pix.width, &f->fmt.pix.height,
-+			      &f->fmt.pix.bytesperline, &f->fmt.pix.sizeimage);
++``0000:00:05.0 Multimedia controller: Intel Corporation Device xxxx (rev xx)``
 +
-+	f->fmt.pix.field = V4L2_FIELD_NONE;
-+	f->fmt.pix.colorspace = V4L2_COLORSPACE_RAW;
-+	f->fmt.pix.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	f->fmt.pix.quantization = V4L2_QUANTIZATION_DEFAULT;
-+	f->fmt.pix.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+}
- 
--	memset(pix_fmt->reserved, 0, sizeof(pix_fmt->reserved));
-+static int ipu6_isys_vidioc_try_fmt_vid_cap(struct file *file, void *fh,
-+					    struct v4l2_format *f)
-+{
-+	struct ipu6_isys_video *av = video_drvdata(file);
++IPU6 has a 16 MB BAR in PCI configuration Space for MMIO registers which is
++visible for driver.
 +
-+	__ipu6_isys_vidioc_try_fmt_vid_cap(av, f);
- 
--	pix_fmt->field = V4L2_FIELD_NONE;
-+	return 0;
-+}
- 
--	pix_fmt->colorspace = V4L2_COLORSPACE_RAW;
--	pix_fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
--	pix_fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
--	pix_fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+static int __ipu6_isys_vidioc_try_fmt_meta_cap(struct ipu6_isys_video *av,
-+					       struct v4l2_format *f)
-+{
-+	ipu6_isys_try_fmt_cap(av, f->type, &f->fmt.meta.dataformat,
-+			      &f->fmt.meta.width, &f->fmt.meta.height,
-+			      &f->fmt.meta.bytesperline,
-+			      &f->fmt.meta.buffersize);
- 
--	return pfmt;
-+	return 0;
- }
- 
--static int vidioc_s_fmt_vid_cap(struct file *file, void *fh,
--				struct v4l2_format *f)
-+static int ipu6_isys_vidioc_try_fmt_meta_cap(struct file *file, void *fh,
-+					     struct v4l2_format *f)
- {
- 	struct ipu6_isys_video *av = video_drvdata(file);
- 
--	if (av->aq.vbq.streaming)
--		return -EBUSY;
-+	__ipu6_isys_vidioc_try_fmt_meta_cap(av, f);
++Buttress
++=========
 +
-+	return 0;
-+}
++The IPU6 is connecting to the system fabric with Buttress which is enabling host
++driver to control the IPU6, it also allows IPU6 access the system memory to
++store and load frame pixel streams and any other metadata.
 +
-+static int ipu6_isys_vidioc_s_fmt_vid_cap(struct file *file, void *fh,
-+				      struct v4l2_format *f)
-+{
-+	struct ipu6_isys_video *av = video_drvdata(file);
- 
--	av->pfmt = ipu6_isys_video_try_fmt_vid(av, &f->fmt.pix);
-+	ipu6_isys_vidioc_try_fmt_vid_cap(file, fh, f);
- 	av->pix_fmt = f->fmt.pix;
- 
- 	return 0;
- }
- 
--static int vidioc_try_fmt_vid_cap(struct file *file, void *fh,
--				  struct v4l2_format *f)
-+static int ipu6_isys_vidioc_s_fmt_meta_cap(struct file *file, void *fh,
-+					   struct v4l2_format *f)
- {
- 	struct ipu6_isys_video *av = video_drvdata(file);
- 
--	ipu6_isys_video_try_fmt_vid(av, &f->fmt.pix);
-+	ipu6_isys_vidioc_try_fmt_meta_cap(file, fh, f);
-+	av->meta_fmt = f->fmt.meta;
- 
- 	return 0;
- }
- 
-+static int ipu6_isys_vidioc_reqbufs(struct file *file, void *priv,
-+				    struct v4l2_requestbuffers *p)
-+{
-+	struct ipu6_isys_video *av = video_drvdata(file);
-+	int ret;
++Buttress mainly manages several system functionalities: power management,
++interrupt handling, firmware authentication and global timer sync.
 +
-+	av->aq.vbq.is_multiplanar = V4L2_TYPE_IS_MULTIPLANAR(p->type);
-+	av->aq.vbq.is_output = V4L2_TYPE_IS_OUTPUT(p->type);
++ISYS and PSYS Power flow
++------------------------
 +
-+	ret = vb2_queue_change_type(&av->aq.vbq, p->type);
-+	if (ret)
-+		return ret;
++IPU6 driver initialize the ISYS and PSYS power up or down request by setting the
++Buttress frequency control register for ISYS and PSYS
++(``IPU6_BUTTRESS_REG_IS_FREQ_CTL`` and ``IPU6_BUTTRESS_REG_PS_FREQ_CTL``) in
++function:
 +
-+	return vb2_ioctl_reqbufs(file, priv, p);
-+}
++.. c:function:: int ipu6_buttress_power(...)
 +
-+static int ipu6_isys_vidioc_create_bufs(struct file *file, void *priv,
-+					struct v4l2_create_buffers *p)
-+{
-+	struct ipu6_isys_video *av = video_drvdata(file);
-+	int ret;
++Buttress forwards the request to Punit, after Punit execute the power up flow,
++Buttress indicates driver that ISYS or PSYS is powered up by updating the power
++status registers.
 +
-+	av->aq.vbq.is_multiplanar = V4L2_TYPE_IS_MULTIPLANAR(p->format.type);
-+	av->aq.vbq.is_output = V4L2_TYPE_IS_OUTPUT(p->format.type);
++.. Note:: ISYS power up needs take place prior to PSYS power up, ISYS power down
++	  needs take place after PSYS power down due to hardware limitation.
 +
-+	ret = vb2_queue_change_type(&av->aq.vbq, p->format.type);
-+	if (ret)
-+		return ret;
++Interrupt
++---------
 +
-+	return vb2_ioctl_create_bufs(file, priv, p);
-+}
++IPU6 interrupt can be generated as MSI or INTA, interrupt will be triggered when
++ISYS, PSYS, Buttress event or error happen, driver can get the interrupt cause
++by reading the interrupt status register ``BUTTRESS_REG_ISR_STATUS``, driver
++clears the irq status and then calls specific ISYS or PSYS irq handler.
 +
- static int link_validate(struct media_link *link)
- {
- 	struct ipu6_isys_video *av =
-@@ -280,7 +353,7 @@ static int link_validate(struct media_link *link)
- 	struct v4l2_subdev *s_sd;
- 	struct v4l2_mbus_framefmt *s_fmt;
- 	struct media_pad *s_pad;
--	u32 s_stream;
-+	u32 s_stream, code;
- 	int ret = -EPIPE;
- 
- 	if (!link->source->entity)
-@@ -306,11 +379,15 @@ static int link_validate(struct media_link *link)
- 		goto unlock;
- 	}
- 
--	if (s_fmt->width != av->pix_fmt.width ||
--	    s_fmt->height != av->pix_fmt.height || s_fmt->code != av->pfmt->code) {
-+	code = ipu6_isys_get_isys_format(ipu6_isys_get_format(av))->code;
++.. c:function:: irqreturn_t ipu6_buttress_isr(int irq, ...)
 +
-+	if (s_fmt->width != ipu6_isys_get_frame_width(av) ||
-+	    s_fmt->height != ipu6_isys_get_frame_height(av) ||
-+	    s_fmt->code != code) {
- 		dev_dbg(dev, "format mismatch %dx%d,%x != %dx%d,%x\n",
- 			s_fmt->width, s_fmt->height, s_fmt->code,
--			av->pix_fmt.width, av->pix_fmt.height, av->pfmt->code);
-+			ipu6_isys_get_frame_width(av),
-+			ipu6_isys_get_frame_height(av), code);
- 		goto unlock;
- 	}
- 
-@@ -351,6 +428,8 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
- 	struct ipu6_isys_stream *stream = av->stream;
- 	struct ipu6_isys_queue *aq = &av->aq;
- 	struct v4l2_mbus_framefmt fmt;
-+	const struct ipu6_isys_pixelformat *pfmt =
-+		ipu6_isys_get_isys_format(ipu6_isys_get_format(av));
- 	struct v4l2_rect v4l2_crop;
- 	struct ipu6_isys *isys = av->isys;
- 	struct device *dev = &isys->adev->auxdev.dev;
-@@ -378,11 +457,11 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
- 	input_pin->input_res.width = fmt.width;
- 	input_pin->input_res.height = fmt.height;
- 	input_pin->dt = av->dt;
--	input_pin->bits_per_pix = av->pfmt->bpp_packed;
-+	input_pin->bits_per_pix = pfmt->bpp_packed;
- 	input_pin->mapped_dt = 0x40; /* invalid mipi data type */
- 	input_pin->mipi_decompression = 0;
- 	input_pin->capture_mode = IPU6_FW_ISYS_CAPTURE_MODE_REGULAR;
--	input_pin->mipi_store_mode = av->pfmt->bpp == av->pfmt->bpp_packed ?
-+	input_pin->mipi_store_mode = pfmt->bpp == pfmt->bpp_packed ?
- 		IPU6_FW_ISYS_MIPI_STORE_MODE_DISCARD_LONG_HEADER :
- 		IPU6_FW_ISYS_MIPI_STORE_MODE_NORMAL;
- 	input_pin->crop_first_and_last_lines = v4l2_crop.top & 1;
-@@ -394,15 +473,15 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
- 
- 	output_pin = &cfg->output_pins[output_pins];
- 	output_pin->input_pin_id = input_pins;
--	output_pin->output_res.width = av->pix_fmt.width;
--	output_pin->output_res.height = av->pix_fmt.height;
-+	output_pin->output_res.width = ipu6_isys_get_frame_width(av);
-+	output_pin->output_res.height = ipu6_isys_get_frame_height(av);
- 
--	output_pin->stride = av->pix_fmt.bytesperline;
--	if (av->pfmt->bpp != av->pfmt->bpp_packed)
-+	output_pin->stride = ipu6_isys_get_bytes_per_line(av);
-+	if (pfmt->bpp != pfmt->bpp_packed)
- 		output_pin->pt = IPU6_FW_ISYS_PIN_TYPE_RAW_SOC;
- 	else
- 		output_pin->pt = IPU6_FW_ISYS_PIN_TYPE_MIPI;
--	output_pin->ft = av->pfmt->css_pixelformat;
-+	output_pin->ft = pfmt->css_pixelformat;
- 	output_pin->send_irq = 1;
- 	memset(output_pin->ts_offsets, 0, sizeof(output_pin->ts_offsets));
- 	output_pin->s2m_pixel_soc_pixel_remapping =
-@@ -664,8 +743,8 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
- 
- 	esd = media_entity_to_v4l2_subdev(av->stream->source_entity);
- 
--	av->watermark.width = av->pix_fmt.width;
--	av->watermark.height = av->pix_fmt.height;
-+	av->watermark.width = ipu6_isys_get_frame_width(av);
-+	av->watermark.height = ipu6_isys_get_frame_height(av);
- 	av->watermark.sram_gran_shift = isys->pdata->ipdata->sram_gran_shift;
- 	av->watermark.sram_gran_size = isys->pdata->ipdata->sram_gran_size;
- 
-@@ -701,7 +780,8 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
- static void calculate_stream_datarate(struct ipu6_isys_video *av)
- {
- 	struct video_stream_watermark *watermark = &av->watermark;
--	u32 bpp = av->pfmt->bpp;
-+	const struct ipu6_isys_pixelformat *pfmt =
-+		ipu6_isys_get_isys_format(ipu6_isys_get_format(av));
- 	u32 pages_per_line, pb_bytes_per_line, pixels_per_line, bytes_per_line;
- 	u64 line_time_ns, stream_data_rate;
- 	u16 shift, size;
-@@ -712,7 +792,7 @@ static void calculate_stream_datarate(struct ipu6_isys_video *av)
- 	pixels_per_line = watermark->width + watermark->hblank;
- 	line_time_ns =  div_u64(pixels_per_line * NSEC_PER_SEC,
- 				watermark->pixel_rate);
--	bytes_per_line = watermark->width * bpp / 8;
-+	bytes_per_line = watermark->width * pfmt->bpp / 8;
- 	pages_per_line = DIV_ROUND_UP(bytes_per_line, size);
- 	pb_bytes_per_line = pages_per_line << shift;
- 	stream_data_rate = div64_u64(pb_bytes_per_line * 1000, line_time_ns);
-@@ -990,11 +1070,14 @@ static const struct v4l2_ioctl_ops ipu6_v4l2_ioctl_ops = {
- 	.vidioc_querycap = ipu6_isys_vidioc_querycap,
- 	.vidioc_enum_fmt_vid_cap = ipu6_isys_vidioc_enum_fmt,
- 	.vidioc_enum_framesizes = ipu6_isys_vidioc_enum_framesizes,
--	.vidioc_g_fmt_vid_cap = vidioc_g_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap = vidioc_s_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap = vidioc_try_fmt_vid_cap,
--	.vidioc_reqbufs = vb2_ioctl_reqbufs,
--	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_g_fmt_vid_cap = ipu6_isys_vidioc_g_fmt_vid_cap,
-+	.vidioc_s_fmt_vid_cap = ipu6_isys_vidioc_s_fmt_vid_cap,
-+	.vidioc_try_fmt_vid_cap = ipu6_isys_vidioc_try_fmt_vid_cap,
-+	.vidioc_g_fmt_meta_cap = ipu6_isys_vidioc_g_fmt_meta_cap,
-+	.vidioc_s_fmt_meta_cap = ipu6_isys_vidioc_s_fmt_meta_cap,
-+	.vidioc_try_fmt_meta_cap = ipu6_isys_vidioc_try_fmt_meta_cap,
-+	.vidioc_reqbufs = ipu6_isys_vidioc_reqbufs,
-+	.vidioc_create_bufs = ipu6_isys_vidioc_create_bufs,
- 	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
- 	.vidioc_querybuf = vb2_ioctl_querybuf,
- 	.vidioc_qbuf = vb2_ioctl_qbuf,
-@@ -1093,6 +1176,8 @@ void ipu6_isys_fw_close(struct ipu6_isys *isys)
- int ipu6_isys_setup_video(struct ipu6_isys_video *av,
- 			  struct media_entity **source_entity, int *nr_queues)
- {
-+	const struct ipu6_isys_pixelformat *pfmt =
-+		ipu6_isys_get_isys_format(ipu6_isys_get_format(av));
- 	struct device *dev = &av->isys->adev->auxdev.dev;
- 	struct v4l2_mbus_frame_desc_entry entry;
- 	struct v4l2_subdev_route *route = NULL;
-@@ -1144,7 +1229,7 @@ int ipu6_isys_setup_video(struct ipu6_isys_video *av,
- 					     *source_entity, &entry);
- 	if (ret == -ENOIOCTLCMD) {
- 		av->vc = 0;
--		av->dt = ipu6_isys_mbus_code_to_mipi(av->pfmt->code);
-+		av->dt = ipu6_isys_mbus_code_to_mipi(pfmt->code);
- 	} else if (!ret) {
- 		dev_dbg(dev, "Framedesc: stream %u, len %u, vc %u, dt %#x\n",
- 			entry.stream, entry.length, entry.bus.csi2.vc,
-@@ -1192,11 +1277,18 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
- 			.height = 1080,
- 		},
- 	};
-+	struct v4l2_format format_meta = {
-+		.type = V4L2_BUF_TYPE_META_CAPTURE,
-+		.fmt.pix = {
-+			.width = 1920,
-+			.height = 4,
-+		},
-+	};
- 	int ret;
- 
- 	mutex_init(&av->mutex);
- 	av->vdev.device_caps = V4L2_CAP_STREAMING | V4L2_CAP_IO_MC |
--			       V4L2_CAP_VIDEO_CAPTURE;
-+			       V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_META_CAPTURE;
- 	av->vdev.vfl_dir = VFL_DIR_RX;
- 
- 	ret = ipu6_isys_queue_init(&av->aq);
-@@ -1217,8 +1309,10 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
- 	av->vdev.queue = &av->aq.vbq;
- 	av->vdev.lock = &av->mutex;
- 
--	ipu6_isys_video_try_fmt_vid(av, &format.fmt.pix);
-+	__ipu6_isys_vidioc_try_fmt_vid_cap(av, &format);
- 	av->pix_fmt = format.fmt.pix;
-+	__ipu6_isys_vidioc_try_fmt_meta_cap(av, &format_meta);
-+	av->meta_fmt = format_meta.fmt.meta;
- 
- 	set_bit(V4L2_FL_USES_V4L2_FH, &av->vdev.flags);
- 	video_set_drvdata(&av->vdev, av);
-@@ -1248,3 +1342,58 @@ void ipu6_isys_video_cleanup(struct ipu6_isys_video *av)
- 	media_entity_cleanup(&av->vdev.entity);
- 	mutex_destroy(&av->mutex);
- }
++Security and firmware authentication
++-------------------------------------
 +
-+u32 ipu6_isys_get_format(struct ipu6_isys_video *av)
-+{
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return av->pix_fmt.pixelformat;
++To address the IPU6 firmware security concerns, the IPU6 firmware needs to
++undergo an authentication process before it is allowed to executed on the IPU6
++internal processors. The IPU6 driver will work with Converged Security Engine
++(CSE) to complete authentication process. The CSE is responsible of
++authenticating the IPU6 firmware. The authenticated firmware binary is copied
++into an isolated memory region. Firmware authentication process is implemented
++by CSE following an IPC handshake with the IPU6 driver. There are some Buttress
++registers used by the CSE and the IPU6 driver to communicate with each other via
++IPC.
 +
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_META_CAPTURE)
-+		return av->meta_fmt.dataformat;
++.. c:function:: int ipu6_buttress_authenticate(...)
 +
-+	return 0;
-+}
++Global timer sync
++-----------------
 +
-+u32 ipu6_isys_get_data_size(struct ipu6_isys_video *av)
-+{
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return av->pix_fmt.sizeimage;
++The IPU6 driver initiates a Hammock Harbor synchronization flow each time it
++starts camera operation. The IPU6 will synchronizes an internal counter in the
++Buttress with a copy of the SoC time, this counter maintains the up-to-date time
++until camera operation is stopped. The IPU6 driver can use this time counter to
++calibrate the timestamp based on the timestamp in response event from firmware.
 +
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_META_CAPTURE)
-+		return av->meta_fmt.buffersize;
++.. c:function:: int ipu6_buttress_start_tsc_sync(...)
 +
-+	return 0;
-+}
++DMA and MMU
++============
 +
-+u32 ipu6_isys_get_bytes_per_line(struct ipu6_isys_video *av)
-+{
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return av->pix_fmt.bytesperline;
++The IPU6 has its own scalar processor where the firmware run at and an internal
++32-bit virtual address space. The IPU6 has MMU address translation hardware to
++allow that scalar processors to access the internal memory and external system
++memory through IPU6 virtual address. The address translation is based on two
++levels of page lookup tables stored in system memory which are maintained by the
++IPU6 driver. The IPU6 driver sets the level-1 page table base address to MMU
++register and allows MMU to perform page table lookups.
 +
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_META_CAPTURE)
-+		return av->meta_fmt.bytesperline;
++The IPU6 driver exports its own DMA operations. The IPU6 driver will update the
++page table entries for each DMA operation and invalidate the MMU TLB after each
++unmap and free.
 +
-+	return 0;
-+}
++.. code-block:: none
 +
-+u32 ipu6_isys_get_frame_width(struct ipu6_isys_video *av)
-+{
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return av->pix_fmt.width;
++    const struct dma_map_ops ipu6_dma_ops = {
++	   .alloc = ipu6_dma_alloc,
++	   .free = ipu6_dma_free,
++	   .mmap = ipu6_dma_mmap,
++	   .map_sg = ipu6_dma_map_sg,
++	   .unmap_sg = ipu6_dma_unmap_sg,
++	   ...
++    };
 +
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_META_CAPTURE)
-+		return av->meta_fmt.width;
++.. Note:: IPU6 MMU works behind IOMMU so for each IPU6 DMA ops, driver will call
++	  generic PCI DMA ops to ask IOMMU to do the additional mapping if VT-d
++	  enabled.
 +
-+	return 0;
-+}
++Firmware file format
++====================
 +
-+u32 ipu6_isys_get_frame_height(struct ipu6_isys_video *av)
-+{
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		return av->pix_fmt.height;
++The IPU6 firmware is in Code Partition Directory (CPD) file format. The CPD
++firmware contains a CPD header, several CPD entries and components. The CPD
++component includes 3 entries - manifest, metadata and module data. Manifest and
++metadata are defined by CSE and used by CSE for authentication. Module data is
++specific to IPU6 which holds the binary data of firmware called package
++directory. The IPU6 driver (``ipu6-cpd.c`` in particular) parses and validates
++the CPD firmware file and gets the package directory binary data of the IPU6
++firmware, copies it to specific DMA buffer and sets its base address to Buttress
++``FW_SOURCE_BASE`` register. Finally the CSE will do authentication for this
++firmware binary.
 +
-+	if (av->aq.vbq.type == V4L2_BUF_TYPE_META_CAPTURE)
-+		return av->meta_fmt.height;
 +
-+	return 0;
-+}
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.h b/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
-index 7b4e80678fec..fbc3c54da473 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
-@@ -29,6 +29,7 @@ struct ipu6_isys_pixelformat {
- 	u32 bpp_packed;
- 	u32 code;
- 	u32 css_pixelformat;
-+	bool is_meta;
- };
- 
- struct sequence_info {
-@@ -91,7 +92,7 @@ struct ipu6_isys_video {
- 	struct media_pad pad;
- 	struct video_device vdev;
- 	struct v4l2_pix_format pix_fmt;
--	const struct ipu6_isys_pixelformat *pfmt;
-+	struct v4l2_meta_format meta_fmt;
- 	struct ipu6_isys *isys;
- 	struct ipu6_isys_csi2 *csi2;
- 	struct ipu6_isys_stream *stream;
-@@ -108,6 +109,8 @@ struct ipu6_isys_video {
- extern const struct ipu6_isys_pixelformat ipu6_isys_pfmts[];
- extern const struct ipu6_isys_pixelformat ipu6_isys_pfmts_packed[];
- 
-+const struct ipu6_isys_pixelformat *
-+ipu6_isys_get_isys_format(u32 pixelformat);
- int ipu6_isys_video_prepare_stream(struct ipu6_isys_video *av,
- 				   struct media_entity *source_entity,
- 				   int nr_queues);
-@@ -129,4 +132,10 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
- 					  bool state);
- void ipu6_isys_update_stream_watermark(struct ipu6_isys_video *av, bool state);
- 
-+u32 ipu6_isys_get_format(struct ipu6_isys_video *av);
-+u32 ipu6_isys_get_data_size(struct ipu6_isys_video *av);
-+u32 ipu6_isys_get_bytes_per_line(struct ipu6_isys_video *av);
-+u32 ipu6_isys_get_frame_width(struct ipu6_isys_video *av);
-+u32 ipu6_isys_get_frame_height(struct ipu6_isys_video *av);
++Syscom interface
++================
 +
- #endif /* IPU6_ISYS_VIDEO_H */
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys.c b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-index d3918e26f631..5992138c7290 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys.c
-@@ -249,7 +249,6 @@ static int isys_register_video_devices(struct ipu6_isys *isys)
- 			av->isys = isys;
- 			av->aq.vbq.buf_struct_size =
- 				sizeof(struct ipu6_isys_video_buffer);
--			av->pfmt = &ipu6_isys_pfmts[0];
- 
- 			ret = ipu6_isys_video_init(av);
- 			if (ret)
++The IPU6 driver communicates with firmware via the Syscom ABI. Syscom is an
++inter-processor communication mechanism between the IPU scalar processors and
++the CPU. There are a number of resources shared between firmware and software.
++A system memory region where the message queues reside, firmware can access the
++memory region via the IPU MMU. The Syscom queues are FIFO fixed depth queues
++with a configurable number of tokens (messages). There are also common IPU6 MMIO
++registers where the queue read and write indices reside. Software and firmware
++function as producer and consumer of tokens in the queues and update the write
++and read indices separately when sending or receiving each message.
++
++The IPU6 driver must prepare and configure the number of input and output
++queues, configure the count of tokens per queue and the size of per token before
++initiating and starting the communication with firmware. Firmware and software
++must use same configurations. The IPU6 Buttress has a number of firmware boot
++parameter registers which can be used to store the address of configuration and
++initialise the Syscom state, then driver can request firmware to start and run via
++setting the scalar processor control status register.
++
++Input System
++============
++
++IPU6 input system consists of MIPI D-PHY and several CSI-2 receivers.  It can
++capture image pixel data from camera sensors or other MIPI CSI-2 output devices.
++
++D-PHYs and CSI-2 ports lane mapping
++-----------------------------------
++
++The IPU6 integrates different D-PHY IPs on different SoCs, on Tiger Lake and
++Alder Lake, IPU6 integrates MCD10 D-PHY, IPU6SE on Jasper Lake integrates JSL
++D-PHY and IPU6EP on Meteor Lake integrates a Synopsys DWC D-PHY. There is an
++adaptional layer between D-PHY and CSI-2 receiver controller which includes port
++configuration, PHY wrapper or private test interfaces for D-PHY. There are 3
++D-PHY drivers ``ipu6-isys-mcd-phy.c``, ``ipu6-isys-jsl-phy.c`` and
++``ipu6-isys-dwc-phy.c`` program the above 3 D-PHYs in IPU6.
++
++Different IPU6 versions have different D-PHY lanes mappings, On Tiger Lake,
++there are 12 data lanes and 8 clock lanes, IPU6 support maximum 8 CSI-2 ports,
++see the PPI mmapping in ``ipu6-isys-mcd-phy.c`` for more information. On Jasper
++Lake and Alder Lake, D-PHY has 8 data lanes and 4 clock lanes, the IPU6 supports
++maximum 4 CSI-2 ports. For Meteor Lake, D-PHY has 12 data lanes and 6 clock
++lanes so IPU6 support maximum 6 CSI-2 ports.
++
++.. Note:: Each pair of CSI-2 two ports is a single unit that can share the data
++	  lanes. For example, for CSI-2 port 0 and 1, CSI-2 port 0 support
++	  maximum 4 data lanes, CSI-2 port 1 support maximum 2 data lanes, CSI-2
++	  port 0 with 2 data lanes can work together with CSI-2 port 1 with 2
++	  data lanes. If trying to use CSI-2 port 0 with 4 lanes, CSI-2 port 1
++	  will not be available as the 4 data lanes are shared by CSI-2 port 0
++	  and 1. The same applies to CSI ports 2/3, 4/5 and 7/8.
++
++ISYS firmware ABIs
++------------------
++
++The IPU6 firmware implements a series of ABIs for software access. In general,
++software firstly prepares the stream configuration ``struct
++ipu6_fw_isys_stream_cfg_data_abi`` and sends the configuration to firmware via
++sending ``STREAM_OPEN`` command. Stream configuration includes input pins and
++output pins, input pin ``struct ipu6_fw_isys_input_pin_info_abi`` defines the
++resolution and data type of input source, output pin ``struct
++ipu6_fw_isys_output_pin_info_abi`` defines the output resolution, stride and
++frame format, etc.
++
++Once the driver gets the interrupt from firmware that indicates stream open
++successfully, the driver will send the ``STREAM_START`` and ``STREAM_CAPTURE``
++command to request firmware to start capturing image frames. ``STREAM_CAPTURE``
++command queues the buffers to firmware with ``struct
++ipu6_fw_isys_frame_buff_set``, software then waits for the interrupt and
++response from firmware, ``PIN_DATA_READY`` means a buffer is ready on a specific
++output pin and then software can return the buffer to user.
++
++.. Note:: See :ref:`Examples<ipu6_isys_capture_examples>` about how to do
++	  capture by IPU6 ISYS driver.
 -- 
 2.39.2
 
