@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C56140E23
-	for <linux-media@vger.kernel.org>; Fri, 26 Apr 2024 09:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA25140E25
+	for <linux-media@vger.kernel.org>; Fri, 26 Apr 2024 09:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714125528; cv=none; b=tdO0BBudxPgLX/KE6weN0CjCa1Wdf25eGBpXNx2veoVT1gnF4HL09jZgUO8xFKoADx/GQNJcZKhc8Y0FC6/yjKvijtOgPCGno8+xmgO8lkyKlOvbRLMCUac9Vsmn2IDVzf7Tl6yxEbfC3cigKh8n0HoTePVfH9wpq4E0USGn7go=
+	t=1714125529; cv=none; b=Opqno7G4lq3Bt8eCXG+HQOSf4DqMXHFeURJ7Tw8eVN2VPNRwS7BPY7C4L+da3rzJHxraVE7/5DLAlwxOnXwLKWqIxlSCV8qYCa96zv4pHbQTevYyKrM+29ENUZRkU26gSJOMbFOWyLJ0/ZFimfQ1MVK93+hwBDZpLKQ/QGppsmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714125528; c=relaxed/simple;
-	bh=YNDBI0WqZCgLQDUT0wVvirmhC3TyzJ4cltDYNLegVi0=;
+	s=arc-20240116; t=1714125529; c=relaxed/simple;
+	bh=7+NEIbdvMTw+YVo+wmnIbY+l5jcg93nPM6aMzFppkNY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MEQpyI51KOIxrP3tQe2dVUo6586yoFI0tItNLCZsCy1k/sfqCKjoFx6/eVf50lQ8xbIGcN0GBjhRRotrS5cMkQTQeuQOZGjr0oaegyfdefhg5eSBtWIXjj8gwIrnh8f7F6WGsB0ymF+RZ+vyc6A9C/n4e9MFrVTlv9YpVwrNSWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MD3bPaBc; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version; b=cAMiPKuQ9VJW+zL68nbJnwq1vY0T6AsjUuplqU9inFJQEMEu/uDFUYpyut5P/BYX677f7CtR4OKIbG9W6Bf6COZf5KbAw4fiF5dmG15bCBEcswIvl0DMD4BV4i42J+oewlnnA13tJHkmD9qP2RI0l3lHcnadP8oyMJZNsC7nXvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a40eq+OF; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MD3bPaBc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a40eq+OF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714125526; x=1745661526;
+  t=1714125527; x=1745661527;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YNDBI0WqZCgLQDUT0wVvirmhC3TyzJ4cltDYNLegVi0=;
-  b=MD3bPaBcMTfWX+eoxlK02/3GyBjY5QiJj1T6tVFnuMEOENGCOgvvTZC8
-   B9rzJFnJHGhvggJUAhQP7R7WXlExkPC2giXLU5g5iWp2ObvKh2lHvU1dR
-   Ts9FK76Ic7XqXAXJP2FBepWVHAGgWVeSh8ymRONjwXLeOgzGLbfXfbkJz
-   /O6IoXmLubFH49DOVuDOadpl92hxULKdp0NM5tT0gSREXnlL0mruq/aGj
-   hzoLL1steiEnaKpFm/pxKkYvdWP1CdAeAaxIpFN40zdgBcoT36nkGQcUI
-   fKZWOe1Mt31/9WrYiCfkP9ojdQDA0yD/S9idOXWr/J7pwHvljs9RJ5S0B
-   A==;
-X-CSE-ConnectionGUID: 7H2LNy/0TpictcYXPQvSBA==
-X-CSE-MsgGUID: x5XEhuKuSbCffsfJKYDFYg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="9722819"
+  bh=7+NEIbdvMTw+YVo+wmnIbY+l5jcg93nPM6aMzFppkNY=;
+  b=a40eq+OFg/nmRzk27JIf4WxuOEky6MfMsm5i/rDVsFGWtgxi91IfF+JW
+   DCji/c269dchUPrzCy3opbvw2o9CiXJ3GMdzfPPml1Q7LNoNRT/degn9T
+   50Niv2mI9QKHgQwXFPkXaDkPzmhjgmuT5gjryLZC23nHEe+Z1IQkMvB/i
+   WPnA3vfPlTJaH907pIE/N/gKV1TmrhZMCls9SJtk0Jp3ThNCDGXoa2a+7
+   QPjh1kQKyd2pEi4Fb8pRo8/XCFYkmeFIL5Z8051AJc9jOX35kfQbMCIxF
+   V1Jhw2rfez+3c75Z3hm9vQ6uswiko3+APD7PcxQSCRFJs85KJv9oZ5C1V
+   Q==;
+X-CSE-ConnectionGUID: /sZIGZ0zRYKHzGm0q2n9pw==
+X-CSE-MsgGUID: AEFvqQmESN+ukLCrouyCVw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="9722837"
 X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="9722819"
+   d="scan'208";a="9722837"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:42 -0700
-X-CSE-ConnectionGUID: 4KdaRmBRTGyraQtsHT0rXQ==
-X-CSE-MsgGUID: /JR5CaijTkezoQqVJTIWCQ==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:46 -0700
+X-CSE-ConnectionGUID: F1DXb6laTeCdrVw36dJNhg==
+X-CSE-MsgGUID: ARGSMv4PRvODOntC1jywpg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="56303353"
+   d="scan'208";a="56303364"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:38 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:43 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D91A711F855;
-	Fri, 26 Apr 2024 12:58:33 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 16E6E120358;
+	Fri, 26 Apr 2024 12:58:38 +0300 (EEST)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: bingbu.cao@intel.com,
@@ -61,9 +61,9 @@ Cc: bingbu.cao@intel.com,
 	bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	hongju.wang@intel.com
-Subject: [PATCH v6 05/18] media: intel/ipu6: add IPU6 buttress interface driver
-Date: Fri, 26 Apr 2024 12:58:09 +0300
-Message-Id: <20240426095822.946453-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 07/18] media: intel/ipu6: add IPU6 DMA mapping API and MMU table
+Date: Fri, 26 Apr 2024 12:58:11 +0300
+Message-Id: <20240426095822.946453-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240426095822.946453-1-sakari.ailus@linux.intel.com>
 References: <20240426095822.946453-1-sakari.ailus@linux.intel.com>
@@ -77,1271 +77,1489 @@ Content-Transfer-Encoding: 8bit
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-The IPU6 buttress is the interface between IPU device (input system and
-processing system) with rest of the SoC. It contains overall IPU hardware
-control registers, these control registers are used as the interfaces with
-the Intel Converged Security Engine and Punit to do firmware
-authentication and power management.
+The Intel IPU6 has internal microcontrollers (scalar processor, SP) which
+are used to execute the firmware. The SPs can access IPU internal memory
+and system DRAM mapped to its an internal 32-bit virtual address space.
+
+This patch adds a driver for the IPU MMU and a DMA mapping implementation
+using the internal MMU. The system IOMMU may be used besides the IPU MMU.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-buttress.c  | 912 ++++++++++++++++++
- drivers/media/pci/intel/ipu6/ipu6-buttress.h  |  92 ++
- .../intel/ipu6/ipu6-platform-buttress-regs.h  | 226 +++++
- 3 files changed, 1230 insertions(+)
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-buttress.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-buttress.h
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-platform-buttress-regs.h
+ drivers/media/pci/intel/ipu6/ipu6-dma.c | 502 ++++++++++++++
+ drivers/media/pci/intel/ipu6/ipu6-dma.h |  19 +
+ drivers/media/pci/intel/ipu6/ipu6-mmu.c | 845 ++++++++++++++++++++++++
+ drivers/media/pci/intel/ipu6/ipu6-mmu.h |  73 ++
+ 4 files changed, 1439 insertions(+)
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-dma.c
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-dma.h
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-mmu.c
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-mmu.h
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-buttress.c b/drivers/media/pci/intel/ipu6/ipu6-buttress.c
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-dma.c b/drivers/media/pci/intel/ipu6/ipu6-dma.c
 new file mode 100644
-index 000000000000..dbcf1aa87872
+index 000000000000..92530a1cc90f
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-buttress.c
-@@ -0,0 +1,912 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-dma.c
+@@ -0,0 +1,502 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2013--2024 Intel Corporation
 + */
 +
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/completion.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
++#include <linux/cacheflush.h>
 +#include <linux/dma-mapping.h>
-+#include <linux/firmware.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
-+#include <linux/math64.h>
++#include <linux/iova.h>
++#include <linux/list.h>
 +#include <linux/mm.h>
-+#include <linux/mutex.h>
-+#include <linux/pci.h>
-+#include <linux/pfn.h>
-+#include <linux/pm_runtime.h>
++#include <linux/vmalloc.h>
 +#include <linux/scatterlist.h>
 +#include <linux/slab.h>
-+#include <linux/time64.h>
++#include <linux/types.h>
 +
 +#include "ipu6.h"
 +#include "ipu6-bus.h"
-+#include "ipu6-buttress.h"
-+#include "ipu6-platform-buttress-regs.h"
++#include "ipu6-dma.h"
++#include "ipu6-mmu.h"
 +
-+#define BOOTLOADER_STATUS_OFFSET       0x15c
-+
-+#define BOOTLOADER_MAGIC_KEY		0xb00710ad
-+
-+#define ENTRY	BUTTRESS_IU2CSECSR_IPC_PEER_COMP_ACTIONS_RST_PHASE1
-+#define EXIT	BUTTRESS_IU2CSECSR_IPC_PEER_COMP_ACTIONS_RST_PHASE2
-+#define QUERY	BUTTRESS_IU2CSECSR_IPC_PEER_QUERIED_IP_COMP_ACTIONS_RST_PHASE
-+
-+#define BUTTRESS_TSC_SYNC_RESET_TRIAL_MAX	10
-+
-+#define BUTTRESS_POWER_TIMEOUT_US		(200 * USEC_PER_MSEC)
-+
-+#define BUTTRESS_CSE_BOOTLOAD_TIMEOUT_US	(5 * USEC_PER_SEC)
-+#define BUTTRESS_CSE_AUTHENTICATE_TIMEOUT_US	(10 * USEC_PER_SEC)
-+#define BUTTRESS_CSE_FWRESET_TIMEOUT_US		(100 * USEC_PER_MSEC)
-+
-+#define BUTTRESS_IPC_TX_TIMEOUT_MS		MSEC_PER_SEC
-+#define BUTTRESS_IPC_RX_TIMEOUT_MS		MSEC_PER_SEC
-+#define BUTTRESS_IPC_VALIDITY_TIMEOUT_US	(1 * USEC_PER_SEC)
-+#define BUTTRESS_TSC_SYNC_TIMEOUT_US		(5 * USEC_PER_MSEC)
-+
-+#define BUTTRESS_IPC_RESET_RETRY		2000
-+#define BUTTRESS_CSE_IPC_RESET_RETRY	4
-+#define BUTTRESS_IPC_CMD_SEND_RETRY	1
-+
-+#define BUTTRESS_MAX_CONSECUTIVE_IRQS	100
-+
-+static const u32 ipu6_adev_irq_mask[2] = {
-+	BUTTRESS_ISR_IS_IRQ,
-+	BUTTRESS_ISR_PS_IRQ
++struct vm_info {
++	struct list_head list;
++	struct page **pages;
++	dma_addr_t ipu6_iova;
++	void *vaddr;
++	unsigned long size;
 +};
 +
-+int ipu6_buttress_ipc_reset(struct ipu6_device *isp,
-+			    struct ipu6_buttress_ipc *ipc)
++static struct vm_info *get_vm_info(struct ipu6_mmu *mmu, dma_addr_t iova)
 +{
-+	unsigned int retries = BUTTRESS_IPC_RESET_RETRY;
-+	struct ipu6_buttress *b = &isp->buttress;
-+	u32 val = 0, csr_in_clr;
++	struct vm_info *info, *save;
 +
-+	if (!isp->secure_mode) {
-+		dev_dbg(&isp->pdev->dev, "Skip IPC reset for non-secure mode");
-+		return 0;
++	list_for_each_entry_safe(info, save, &mmu->vma_list, list) {
++		if (iova >= info->ipu6_iova &&
++		    iova < (info->ipu6_iova + info->size))
++			return info;
 +	}
 +
-+	mutex_lock(&b->ipc_mutex);
++	return NULL;
++}
 +
-+	/* Clear-by-1 CSR (all bits), corresponding internal states. */
-+	val = readl(isp->base + ipc->csr_in);
-+	writel(val, isp->base + ipc->csr_in);
++static void __dma_clear_buffer(struct page *page, size_t size,
++			       unsigned long attrs)
++{
++	void *ptr;
 +
-+	/* Set peer CSR bit IPC_PEER_COMP_ACTIONS_RST_PHASE1 */
-+	writel(ENTRY, isp->base + ipc->csr_out);
++	if (!page)
++		return;
 +	/*
-+	 * Clear-by-1 all CSR bits EXCEPT following
-+	 * bits:
-+	 * A. IPC_PEER_COMP_ACTIONS_RST_PHASE1.
-+	 * B. IPC_PEER_COMP_ACTIONS_RST_PHASE2.
-+	 * C. Possibly custom bits, depending on
-+	 * their role.
++	 * Ensure that the allocated pages are zeroed, and that any data
++	 * lurking in the kernel direct-mapped region is invalidated.
 +	 */
-+	csr_in_clr = BUTTRESS_IU2CSECSR_IPC_PEER_DEASSERTED_REG_VALID_REQ |
-+		BUTTRESS_IU2CSECSR_IPC_PEER_ACKED_REG_VALID |
-+		BUTTRESS_IU2CSECSR_IPC_PEER_ASSERTED_REG_VALID_REQ | QUERY;
++	ptr = page_address(page);
++	memset(ptr, 0, size);
++	if ((attrs & DMA_ATTR_SKIP_CPU_SYNC) == 0)
++		clflush_cache_range(ptr, size);
++}
 +
-+	do {
-+		usleep_range(400, 500);
-+		val = readl(isp->base + ipc->csr_in);
-+		switch (val) {
-+		case ENTRY | EXIT:
-+		case ENTRY | EXIT | QUERY:
-+			/*
-+			 * 1) Clear-by-1 CSR bits
-+			 * (IPC_PEER_COMP_ACTIONS_RST_PHASE1,
-+			 * IPC_PEER_COMP_ACTIONS_RST_PHASE2).
-+			 * 2) Set peer CSR bit
-+			 * IPC_PEER_QUERIED_IP_COMP_ACTIONS_RST_PHASE.
-+			 */
-+			writel(ENTRY | EXIT, isp->base + ipc->csr_in);
-+			writel(QUERY, isp->base + ipc->csr_out);
-+			break;
-+		case ENTRY:
-+		case ENTRY | QUERY:
-+			/*
-+			 * 1) Clear-by-1 CSR bits
-+			 * (IPC_PEER_COMP_ACTIONS_RST_PHASE1,
-+			 * IPC_PEER_QUERIED_IP_COMP_ACTIONS_RST_PHASE).
-+			 * 2) Set peer CSR bit
-+			 * IPC_PEER_COMP_ACTIONS_RST_PHASE1.
-+			 */
-+			writel(ENTRY | QUERY, isp->base + ipc->csr_in);
-+			writel(ENTRY, isp->base + ipc->csr_out);
-+			break;
-+		case EXIT:
-+		case EXIT | QUERY:
-+			/*
-+			 * Clear-by-1 CSR bit
-+			 * IPC_PEER_COMP_ACTIONS_RST_PHASE2.
-+			 * 1) Clear incoming doorbell.
-+			 * 2) Clear-by-1 all CSR bits EXCEPT following
-+			 * bits:
-+			 * A. IPC_PEER_COMP_ACTIONS_RST_PHASE1.
-+			 * B. IPC_PEER_COMP_ACTIONS_RST_PHASE2.
-+			 * C. Possibly custom bits, depending on
-+			 * their role.
-+			 * 3) Set peer CSR bit
-+			 * IPC_PEER_COMP_ACTIONS_RST_PHASE2.
-+			 */
-+			writel(EXIT, isp->base + ipc->csr_in);
-+			writel(0, isp->base + ipc->db0_in);
-+			writel(csr_in_clr, isp->base + ipc->csr_in);
-+			writel(EXIT, isp->base + ipc->csr_out);
++static struct page **__dma_alloc_buffer(struct device *dev, size_t size,
++					gfp_t gfp, unsigned long attrs)
++{
++	int count = PHYS_PFN(size);
++	int array_size = count * sizeof(struct page *);
++	struct page **pages;
++	int i = 0;
 +
-+			/*
-+			 * Read csr_in again to make sure if RST_PHASE2 is done.
-+			 * If csr_in is QUERY, it should be handled again.
-+			 */
-+			usleep_range(200, 300);
-+			val = readl(isp->base + ipc->csr_in);
-+			if (val & QUERY) {
-+				dev_dbg(&isp->pdev->dev,
-+					"RST_PHASE2 retry csr_in = %x\n", val);
-+				break;
-+			}
-+			mutex_unlock(&b->ipc_mutex);
-+			return 0;
-+		case QUERY:
-+			/*
-+			 * 1) Clear-by-1 CSR bit
-+			 * IPC_PEER_QUERIED_IP_COMP_ACTIONS_RST_PHASE.
-+			 * 2) Set peer CSR bit
-+			 * IPC_PEER_COMP_ACTIONS_RST_PHASE1
-+			 */
-+			writel(QUERY, isp->base + ipc->csr_in);
-+			writel(ENTRY, isp->base + ipc->csr_out);
-+			break;
-+		default:
-+			dev_warn_ratelimited(&isp->pdev->dev,
-+					     "Unexpected CSR 0x%x\n", val);
-+			break;
++	pages = kvzalloc(array_size, GFP_KERNEL);
++	if (!pages)
++		return NULL;
++
++	gfp |= __GFP_NOWARN;
++
++	while (count) {
++		int j, order = __fls(count);
++
++		pages[i] = alloc_pages(gfp, order);
++		while (!pages[i] && order)
++			pages[i] = alloc_pages(gfp, --order);
++		if (!pages[i])
++			goto error;
++
++		if (order) {
++			split_page(pages[i], order);
++			j = 1 << order;
++			while (j--)
++				pages[i + j] = pages[i] + j;
 +		}
-+	} while (retries--);
 +
-+	mutex_unlock(&b->ipc_mutex);
-+	dev_err(&isp->pdev->dev, "Timed out while waiting for CSE\n");
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static void ipu6_buttress_ipc_validity_close(struct ipu6_device *isp,
-+					     struct ipu6_buttress_ipc *ipc)
-+{
-+	writel(BUTTRESS_IU2CSECSR_IPC_PEER_DEASSERTED_REG_VALID_REQ,
-+	       isp->base + ipc->csr_out);
-+}
-+
-+static int
-+ipu6_buttress_ipc_validity_open(struct ipu6_device *isp,
-+				struct ipu6_buttress_ipc *ipc)
-+{
-+	unsigned int mask = BUTTRESS_IU2CSECSR_IPC_PEER_ACKED_REG_VALID;
-+	void __iomem *addr;
-+	int ret;
-+	u32 val;
-+
-+	writel(BUTTRESS_IU2CSECSR_IPC_PEER_ASSERTED_REG_VALID_REQ,
-+	       isp->base + ipc->csr_out);
-+
-+	addr = isp->base + ipc->csr_in;
-+	ret = readl_poll_timeout(addr, val, val & mask, 200,
-+				 BUTTRESS_IPC_VALIDITY_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "CSE validity timeout 0x%x\n", val);
-+		ipu6_buttress_ipc_validity_close(isp, ipc);
++		__dma_clear_buffer(pages[i], PAGE_SIZE << order, attrs);
++		i += 1 << order;
++		count -= 1 << order;
 +	}
 +
-+	return ret;
++	return pages;
++error:
++	while (i--)
++		if (pages[i])
++			__free_pages(pages[i], 0);
++	kvfree(pages);
++	return NULL;
 +}
 +
-+static void ipu6_buttress_ipc_recv(struct ipu6_device *isp,
-+				   struct ipu6_buttress_ipc *ipc, u32 *ipc_msg)
++static void __dma_free_buffer(struct device *dev, struct page **pages,
++			      size_t size, unsigned long attrs)
 +{
-+	if (ipc_msg)
-+		*ipc_msg = readl(isp->base + ipc->data0_in);
-+	writel(0, isp->base + ipc->db0_in);
-+}
-+
-+static int ipu6_buttress_ipc_send_bulk(struct ipu6_device *isp,
-+				       enum ipu6_buttress_ipc_domain ipc_domain,
-+				       struct ipu6_ipc_buttress_bulk_msg *msgs,
-+				       u32 size)
-+{
-+	unsigned long tx_timeout_jiffies, rx_timeout_jiffies;
-+	unsigned int i, retry = BUTTRESS_IPC_CMD_SEND_RETRY;
-+	struct ipu6_buttress *b = &isp->buttress;
-+	struct ipu6_buttress_ipc *ipc;
-+	u32 val;
-+	int ret;
-+	int tout;
-+
-+	ipc = ipc_domain == IPU6_BUTTRESS_IPC_CSE ? &b->cse : &b->ish;
-+
-+	mutex_lock(&b->ipc_mutex);
-+
-+	ret = ipu6_buttress_ipc_validity_open(isp, ipc);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "IPC validity open failed\n");
-+		goto out;
-+	}
-+
-+	tx_timeout_jiffies = msecs_to_jiffies(BUTTRESS_IPC_TX_TIMEOUT_MS);
-+	rx_timeout_jiffies = msecs_to_jiffies(BUTTRESS_IPC_RX_TIMEOUT_MS);
-+
-+	for (i = 0; i < size; i++) {
-+		reinit_completion(&ipc->send_complete);
-+		if (msgs[i].require_resp)
-+			reinit_completion(&ipc->recv_complete);
-+
-+		dev_dbg(&isp->pdev->dev, "bulk IPC command: 0x%x\n",
-+			msgs[i].cmd);
-+		writel(msgs[i].cmd, isp->base + ipc->data0_out);
-+		val = BUTTRESS_IU2CSEDB0_BUSY | msgs[i].cmd_size;
-+		writel(val, isp->base + ipc->db0_out);
-+
-+		tout = wait_for_completion_timeout(&ipc->send_complete,
-+						   tx_timeout_jiffies);
-+		if (!tout) {
-+			dev_err(&isp->pdev->dev, "send IPC response timeout\n");
-+			if (!retry--) {
-+				ret = -ETIMEDOUT;
-+				goto out;
-+			}
-+
-+			/* Try again if CSE is not responding on first try */
-+			writel(0, isp->base + ipc->db0_out);
-+			i--;
-+			continue;
-+		}
-+
-+		retry = BUTTRESS_IPC_CMD_SEND_RETRY;
-+
-+		if (!msgs[i].require_resp)
-+			continue;
-+
-+		tout = wait_for_completion_timeout(&ipc->recv_complete,
-+						   rx_timeout_jiffies);
-+		if (!tout) {
-+			dev_err(&isp->pdev->dev, "recv IPC response timeout\n");
-+			ret = -ETIMEDOUT;
-+			goto out;
-+		}
-+
-+		if (ipc->nack_mask &&
-+		    (ipc->recv_data & ipc->nack_mask) == ipc->nack) {
-+			dev_err(&isp->pdev->dev,
-+				"IPC NACK for cmd 0x%x\n", msgs[i].cmd);
-+			ret = -EIO;
-+			goto out;
-+		}
-+
-+		if (ipc->recv_data != msgs[i].expected_resp) {
-+			dev_err(&isp->pdev->dev,
-+				"expected resp: 0x%x, IPC response: 0x%x ",
-+				msgs[i].expected_resp, ipc->recv_data);
-+			ret = -EIO;
-+			goto out;
-+		}
-+	}
-+
-+	dev_dbg(&isp->pdev->dev, "bulk IPC commands done\n");
-+
-+out:
-+	ipu6_buttress_ipc_validity_close(isp, ipc);
-+	mutex_unlock(&b->ipc_mutex);
-+	return ret;
-+}
-+
-+static int
-+ipu6_buttress_ipc_send(struct ipu6_device *isp,
-+		       enum ipu6_buttress_ipc_domain ipc_domain,
-+		       u32 ipc_msg, u32 size, bool require_resp,
-+		       u32 expected_resp)
-+{
-+	struct ipu6_ipc_buttress_bulk_msg msg = {
-+		.cmd = ipc_msg,
-+		.cmd_size = size,
-+		.require_resp = require_resp,
-+		.expected_resp = expected_resp,
-+	};
-+
-+	return ipu6_buttress_ipc_send_bulk(isp, ipc_domain, &msg, 1);
-+}
-+
-+static irqreturn_t ipu6_buttress_call_isr(struct ipu6_bus_device *adev)
-+{
-+	irqreturn_t ret = IRQ_WAKE_THREAD;
-+
-+	if (!adev || !adev->auxdrv || !adev->auxdrv_data)
-+		return IRQ_NONE;
-+
-+	if (adev->auxdrv_data->isr)
-+		ret = adev->auxdrv_data->isr(adev);
-+
-+	if (ret == IRQ_WAKE_THREAD && !adev->auxdrv_data->isr_threaded)
-+		ret = IRQ_NONE;
-+
-+	return ret;
-+}
-+
-+irqreturn_t ipu6_buttress_isr(int irq, void *isp_ptr)
-+{
-+	struct ipu6_device *isp = isp_ptr;
-+	struct ipu6_bus_device *adev[] = { isp->isys, isp->psys };
-+	struct ipu6_buttress *b = &isp->buttress;
-+	u32 reg_irq_sts = BUTTRESS_REG_ISR_STATUS;
-+	irqreturn_t ret = IRQ_NONE;
-+	u32 disable_irqs = 0;
-+	u32 irq_status;
-+	u32 i, count = 0;
-+
-+	pm_runtime_get_noresume(&isp->pdev->dev);
-+
-+	irq_status = readl(isp->base + reg_irq_sts);
-+	if (!irq_status) {
-+		pm_runtime_put_noidle(&isp->pdev->dev);
-+		return IRQ_NONE;
-+	}
-+
-+	do {
-+		writel(irq_status, isp->base + BUTTRESS_REG_ISR_CLEAR);
-+
-+		for (i = 0; i < ARRAY_SIZE(ipu6_adev_irq_mask); i++) {
-+			irqreturn_t r = ipu6_buttress_call_isr(adev[i]);
-+
-+			if (!(irq_status & ipu6_adev_irq_mask[i]))
-+				continue;
-+
-+			if (r == IRQ_WAKE_THREAD) {
-+				ret = IRQ_WAKE_THREAD;
-+				disable_irqs |= ipu6_adev_irq_mask[i];
-+			} else if (ret == IRQ_NONE && r == IRQ_HANDLED) {
-+				ret = IRQ_HANDLED;
-+			}
-+		}
-+
-+		if ((irq_status & BUTTRESS_EVENT) && ret == IRQ_NONE)
-+			ret = IRQ_HANDLED;
-+
-+		if (irq_status & BUTTRESS_ISR_IPC_FROM_CSE_IS_WAITING) {
-+			dev_dbg(&isp->pdev->dev,
-+				"BUTTRESS_ISR_IPC_FROM_CSE_IS_WAITING\n");
-+			ipu6_buttress_ipc_recv(isp, &b->cse, &b->cse.recv_data);
-+			complete(&b->cse.recv_complete);
-+		}
-+
-+		if (irq_status & BUTTRESS_ISR_IPC_FROM_ISH_IS_WAITING) {
-+			dev_dbg(&isp->pdev->dev,
-+				"BUTTRESS_ISR_IPC_FROM_ISH_IS_WAITING\n");
-+			ipu6_buttress_ipc_recv(isp, &b->ish, &b->ish.recv_data);
-+			complete(&b->ish.recv_complete);
-+		}
-+
-+		if (irq_status & BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE) {
-+			dev_dbg(&isp->pdev->dev,
-+				"BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE\n");
-+			complete(&b->cse.send_complete);
-+		}
-+
-+		if (irq_status & BUTTRESS_ISR_IPC_EXEC_DONE_BY_ISH) {
-+			dev_dbg(&isp->pdev->dev,
-+				"BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE\n");
-+			complete(&b->ish.send_complete);
-+		}
-+
-+		if (irq_status & BUTTRESS_ISR_SAI_VIOLATION &&
-+		    ipu6_buttress_get_secure_mode(isp))
-+			dev_err(&isp->pdev->dev,
-+				"BUTTRESS_ISR_SAI_VIOLATION\n");
-+
-+		if (irq_status & (BUTTRESS_ISR_IS_FATAL_MEM_ERR |
-+				  BUTTRESS_ISR_PS_FATAL_MEM_ERR))
-+			dev_err(&isp->pdev->dev,
-+				"BUTTRESS_ISR_FATAL_MEM_ERR\n");
-+
-+		if (irq_status & BUTTRESS_ISR_UFI_ERROR)
-+			dev_err(&isp->pdev->dev, "BUTTRESS_ISR_UFI_ERROR\n");
-+
-+		if (++count == BUTTRESS_MAX_CONSECUTIVE_IRQS) {
-+			dev_err(&isp->pdev->dev, "too many consecutive IRQs\n");
-+			ret = IRQ_NONE;
-+			break;
-+		}
-+
-+		irq_status = readl(isp->base + reg_irq_sts);
-+	} while (irq_status);
-+
-+	if (disable_irqs)
-+		writel(BUTTRESS_IRQS & ~disable_irqs,
-+		       isp->base + BUTTRESS_REG_ISR_ENABLE);
-+
-+	pm_runtime_put(&isp->pdev->dev);
-+
-+	return ret;
-+}
-+
-+irqreturn_t ipu6_buttress_isr_threaded(int irq, void *isp_ptr)
-+{
-+	struct ipu6_device *isp = isp_ptr;
-+	struct ipu6_bus_device *adev[] = { isp->isys, isp->psys };
-+	const struct ipu6_auxdrv_data *drv_data = NULL;
-+	irqreturn_t ret = IRQ_NONE;
++	int count = PHYS_PFN(size);
 +	unsigned int i;
 +
-+	for (i = 0; i < ARRAY_SIZE(ipu6_adev_irq_mask) && adev[i]; i++) {
-+		drv_data = adev[i]->auxdrv_data;
-+		if (!drv_data)
-+			continue;
-+
-+		if (drv_data->wake_isr_thread &&
-+		    drv_data->isr_threaded(adev[i]) == IRQ_HANDLED)
-+			ret = IRQ_HANDLED;
++	for (i = 0; i < count && pages[i]; i++) {
++		__dma_clear_buffer(pages[i], PAGE_SIZE, attrs);
++		__free_pages(pages[i], 0);
 +	}
 +
-+	writel(BUTTRESS_IRQS, isp->base + BUTTRESS_REG_ISR_ENABLE);
-+
-+	return ret;
++	kvfree(pages);
 +}
 +
-+int ipu6_buttress_power(struct device *dev, struct ipu6_buttress_ctrl *ctrl,
-+			bool on)
++static void ipu6_dma_sync_single_for_cpu(struct device *dev,
++					 dma_addr_t dma_handle,
++					 size_t size,
++					 enum dma_data_direction dir)
 +{
-+	struct ipu6_device *isp = to_ipu6_bus_device(dev)->isp;
-+	u32 pwr_sts, val;
++	void *vaddr;
++	u32 offset;
++	struct vm_info *info;
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++
++	info = get_vm_info(mmu, dma_handle);
++	if (WARN_ON(!info))
++		return;
++
++	offset = dma_handle - info->ipu6_iova;
++	if (WARN_ON(size > (info->size - offset)))
++		return;
++
++	vaddr = info->vaddr + offset;
++	clflush_cache_range(vaddr, size);
++}
++
++static void ipu6_dma_sync_sg_for_cpu(struct device *dev,
++				     struct scatterlist *sglist,
++				     int nents, enum dma_data_direction dir)
++{
++	struct scatterlist *sg;
++	int i;
++
++	for_each_sg(sglist, sg, nents, i)
++		clflush_cache_range(page_to_virt(sg_page(sg)), sg->length);
++}
++
++static void *ipu6_dma_alloc(struct device *dev, size_t size,
++			    dma_addr_t *dma_handle, gfp_t gfp,
++			    unsigned long attrs)
++{
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	struct pci_dev *pdev = to_ipu6_bus_device(dev)->isp->pdev;
++	dma_addr_t pci_dma_addr, ipu6_iova;
++	struct vm_info *info;
++	unsigned long count;
++	struct page **pages;
++	struct iova *iova;
++	unsigned int i;
 +	int ret;
 +
-+	if (!ctrl)
-+		return 0;
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
++	if (!info)
++		return NULL;
 +
-+	mutex_lock(&isp->buttress.power_mutex);
++	size = PAGE_ALIGN(size);
++	count = PHYS_PFN(size);
 +
-+	if (!on) {
-+		val = 0;
-+		pwr_sts = ctrl->pwr_sts_off << ctrl->pwr_sts_shift;
-+	} else {
-+		val = BUTTRESS_FREQ_CTL_START |
-+			FIELD_PREP(BUTTRESS_FREQ_CTL_RATIO_MASK,
-+				   ctrl->ratio) |
-+			FIELD_PREP(BUTTRESS_FREQ_CTL_QOS_FLOOR_MASK,
-+				   ctrl->qos_floor) |
-+			BUTTRESS_FREQ_CTL_ICCMAX_LEVEL;
++	iova = alloc_iova(&mmu->dmap->iovad, count,
++			  PHYS_PFN(dma_get_mask(dev)), 0);
++	if (!iova)
++		goto out_kfree;
 +
-+		pwr_sts = ctrl->pwr_sts_on << ctrl->pwr_sts_shift;
++	pages = __dma_alloc_buffer(dev, size, gfp, attrs);
++	if (!pages)
++		goto out_free_iova;
++
++	dev_dbg(dev, "dma_alloc: size %zu iova low pfn %lu, high pfn %lu\n",
++		size, iova->pfn_lo, iova->pfn_hi);
++	for (i = 0; iova->pfn_lo + i <= iova->pfn_hi; i++) {
++		pci_dma_addr = dma_map_page_attrs(&pdev->dev, pages[i], 0,
++						  PAGE_SIZE, DMA_BIDIRECTIONAL,
++						  attrs);
++		dev_dbg(dev, "dma_alloc: mapped pci_dma_addr %pad\n",
++			&pci_dma_addr);
++		if (dma_mapping_error(&pdev->dev, pci_dma_addr)) {
++			dev_err(dev, "pci_dma_mapping for page[%d] failed", i);
++			goto out_unmap;
++		}
++
++		ret = ipu6_mmu_map(mmu->dmap->mmu_info,
++				   PFN_PHYS(iova->pfn_lo + i), pci_dma_addr,
++				   PAGE_SIZE);
++		if (ret) {
++			dev_err(dev, "ipu6_mmu_map for pci_dma[%d] %pad failed",
++				i, &pci_dma_addr);
++			dma_unmap_page_attrs(&pdev->dev, pci_dma_addr,
++					     PAGE_SIZE, DMA_BIDIRECTIONAL,
++					     attrs);
++			goto out_unmap;
++		}
 +	}
 +
-+	writel(val, isp->base + ctrl->freq_ctl);
++	info->vaddr = vmap(pages, count, VM_USERMAP, PAGE_KERNEL);
++	if (!info->vaddr)
++		goto out_unmap;
 +
-+	ret = readl_poll_timeout(isp->base + BUTTRESS_REG_PWR_STATE,
-+				 val, (val & ctrl->pwr_sts_mask) == pwr_sts,
-+				 100, BUTTRESS_POWER_TIMEOUT_US);
-+	if (ret)
-+		dev_err(&isp->pdev->dev,
-+			"Change power status timeout with 0x%x\n", val);
++	*dma_handle = PFN_PHYS(iova->pfn_lo);
 +
-+	ctrl->started = !ret && on;
++	info->pages = pages;
++	info->ipu6_iova = *dma_handle;
++	info->size = size;
++	list_add(&info->list, &mmu->vma_list);
 +
-+	mutex_unlock(&isp->buttress.power_mutex);
++	return info->vaddr;
 +
-+	return ret;
++out_unmap:
++	while (i--) {
++		ipu6_iova = PFN_PHYS(iova->pfn_lo + i);
++		pci_dma_addr = ipu6_mmu_iova_to_phys(mmu->dmap->mmu_info,
++						     ipu6_iova);
++		dma_unmap_page_attrs(&pdev->dev, pci_dma_addr, PAGE_SIZE,
++				     DMA_BIDIRECTIONAL, attrs);
++
++		ipu6_mmu_unmap(mmu->dmap->mmu_info, ipu6_iova, PAGE_SIZE);
++	}
++
++	__dma_free_buffer(dev, pages, size, attrs);
++
++out_free_iova:
++	__free_iova(&mmu->dmap->iovad, iova);
++out_kfree:
++	kfree(info);
++
++	return NULL;
 +}
 +
-+bool ipu6_buttress_get_secure_mode(struct ipu6_device *isp)
++static void ipu6_dma_free(struct device *dev, size_t size, void *vaddr,
++			  dma_addr_t dma_handle,
++			  unsigned long attrs)
 +{
-+	u32 val;
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	struct pci_dev *pdev = to_ipu6_bus_device(dev)->isp->pdev;
++	struct iova *iova = find_iova(&mmu->dmap->iovad, PHYS_PFN(dma_handle));
++	dma_addr_t pci_dma_addr, ipu6_iova;
++	struct vm_info *info;
++	struct page **pages;
++	unsigned int i;
 +
-+	val = readl(isp->base + BUTTRESS_REG_SECURITY_CTL);
++	if (WARN_ON(!iova))
++		return;
 +
-+	return val & BUTTRESS_SECURITY_CTL_FW_SECURE_MODE;
++	info = get_vm_info(mmu, dma_handle);
++	if (WARN_ON(!info))
++		return;
++
++	if (WARN_ON(!info->vaddr))
++		return;
++
++	if (WARN_ON(!info->pages))
++		return;
++
++	list_del(&info->list);
++
++	size = PAGE_ALIGN(size);
++
++	pages = info->pages;
++
++	vunmap(vaddr);
++
++	for (i = 0; i < PHYS_PFN(size); i++) {
++		ipu6_iova = PFN_PHYS(iova->pfn_lo + i);
++		pci_dma_addr = ipu6_mmu_iova_to_phys(mmu->dmap->mmu_info,
++						     ipu6_iova);
++		dma_unmap_page_attrs(&pdev->dev, pci_dma_addr, PAGE_SIZE,
++				     DMA_BIDIRECTIONAL, attrs);
++	}
++
++	ipu6_mmu_unmap(mmu->dmap->mmu_info, PFN_PHYS(iova->pfn_lo),
++		       PFN_PHYS(iova_size(iova)));
++
++	__dma_free_buffer(dev, pages, size, attrs);
++
++	mmu->tlb_invalidate(mmu);
++
++	__free_iova(&mmu->dmap->iovad, iova);
++
++	kfree(info);
 +}
 +
-+bool ipu6_buttress_auth_done(struct ipu6_device *isp)
++static int ipu6_dma_mmap(struct device *dev, struct vm_area_struct *vma,
++			 void *addr, dma_addr_t iova, size_t size,
++			 unsigned long attrs)
 +{
-+	u32 val;
-+
-+	if (!isp->secure_mode)
-+		return true;
-+
-+	val = readl(isp->base + BUTTRESS_REG_SECURITY_CTL);
-+	val = FIELD_GET(BUTTRESS_SECURITY_CTL_FW_SETUP_MASK, val);
-+
-+	return val == BUTTRESS_SECURITY_CTL_AUTH_DONE;
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_auth_done, INTEL_IPU6);
-+
-+int ipu6_buttress_reset_authentication(struct ipu6_device *isp)
-+{
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	size_t count = PHYS_PFN(PAGE_ALIGN(size));
++	struct vm_info *info;
++	size_t i;
 +	int ret;
-+	u32 val;
 +
-+	if (!isp->secure_mode) {
-+		dev_dbg(&isp->pdev->dev, "Skip auth for non-secure mode\n");
-+		return 0;
++	info = get_vm_info(mmu, iova);
++	if (!info)
++		return -EFAULT;
++
++	if (!info->vaddr)
++		return -EFAULT;
++
++	if (vma->vm_start & ~PAGE_MASK)
++		return -EINVAL;
++
++	if (size > info->size)
++		return -EFAULT;
++
++	for (i = 0; i < count; i++) {
++		ret = vm_insert_page(vma, vma->vm_start + PFN_PHYS(i),
++				     info->pages[i]);
++		if (ret < 0)
++			return ret;
 +	}
-+
-+	writel(BUTTRESS_FW_RESET_CTL_START, isp->base +
-+	       BUTTRESS_REG_FW_RESET_CTL);
-+
-+	ret = readl_poll_timeout(isp->base + BUTTRESS_REG_FW_RESET_CTL, val,
-+				 val & BUTTRESS_FW_RESET_CTL_DONE, 500,
-+				 BUTTRESS_CSE_FWRESET_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev,
-+			"Time out while resetting authentication state\n");
-+		return ret;
-+	}
-+
-+	dev_dbg(&isp->pdev->dev, "FW reset for authentication done\n");
-+	writel(0, isp->base + BUTTRESS_REG_FW_RESET_CTL);
-+	/* leave some time for HW restore */
-+	usleep_range(800, 1000);
 +
 +	return 0;
 +}
 +
-+int ipu6_buttress_map_fw_image(struct ipu6_bus_device *sys,
-+			       const struct firmware *fw, struct sg_table *sgt)
++static void ipu6_dma_unmap_sg(struct device *dev,
++			      struct scatterlist *sglist,
++			      int nents, enum dma_data_direction dir,
++			      unsigned long attrs)
 +{
-+	struct page **pages;
-+	const void *addr;
-+	unsigned long n_pages;
-+	unsigned int i;
-+	int ret;
++	struct pci_dev *pdev = to_ipu6_bus_device(dev)->isp->pdev;
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	struct iova *iova = find_iova(&mmu->dmap->iovad,
++				      PHYS_PFN(sg_dma_address(sglist)));
++	int i, npages, count;
++	struct scatterlist *sg;
++	dma_addr_t pci_dma_addr;
 +
-+	n_pages = PHYS_PFN(PAGE_ALIGN(fw->size));
++	if (!nents)
++		return;
 +
-+	pages = kmalloc_array(n_pages, sizeof(*pages), GFP_KERNEL);
-+	if (!pages)
-+		return -ENOMEM;
++	if (WARN_ON(!iova))
++		return;
 +
-+	addr = fw->data;
-+	for (i = 0; i < n_pages; i++) {
-+		struct page *p = vmalloc_to_page(addr);
++	if ((attrs & DMA_ATTR_SKIP_CPU_SYNC) == 0)
++		ipu6_dma_sync_sg_for_cpu(dev, sglist, nents, DMA_BIDIRECTIONAL);
 +
-+		if (!p) {
-+			ret = -ENOMEM;
-+			goto out;
++	/* get the nents as orig_nents given by caller */
++	count = 0;
++	npages = iova_size(iova);
++	for_each_sg(sglist, sg, nents, i) {
++		if (sg_dma_len(sg) == 0 ||
++		    sg_dma_address(sg) == DMA_MAPPING_ERROR)
++			break;
++
++		npages -= PHYS_PFN(PAGE_ALIGN(sg_dma_len(sg)));
++		count++;
++		if (npages <= 0)
++			break;
++	}
++
++	/*
++	 * Before IPU6 mmu unmap, return the pci dma address back to sg
++	 * assume the nents is less than orig_nents as the least granule
++	 * is 1 SZ_4K page
++	 */
++	dev_dbg(dev, "trying to unmap concatenated %u ents\n", count);
++	for_each_sg(sglist, sg, count, i) {
++		dev_dbg(dev, "ipu unmap sg[%d] %pad\n", i, &sg_dma_address(sg));
++		pci_dma_addr = ipu6_mmu_iova_to_phys(mmu->dmap->mmu_info,
++						     sg_dma_address(sg));
++		dev_dbg(dev, "return pci_dma_addr %pad back to sg[%d]\n",
++			&pci_dma_addr, i);
++		sg_dma_address(sg) = pci_dma_addr;
++	}
++
++	dev_dbg(dev, "ipu6_mmu_unmap low pfn %lu high pfn %lu\n",
++		iova->pfn_lo, iova->pfn_hi);
++	ipu6_mmu_unmap(mmu->dmap->mmu_info, PFN_PHYS(iova->pfn_lo),
++		       PFN_PHYS(iova_size(iova)));
++
++	mmu->tlb_invalidate(mmu);
++
++	dma_unmap_sg_attrs(&pdev->dev, sglist, nents, dir, attrs);
++
++	__free_iova(&mmu->dmap->iovad, iova);
++}
++
++static int ipu6_dma_map_sg(struct device *dev, struct scatterlist *sglist,
++			   int nents, enum dma_data_direction dir,
++			   unsigned long attrs)
++{
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	struct pci_dev *pdev = to_ipu6_bus_device(dev)->isp->pdev;
++	struct scatterlist *sg;
++	struct iova *iova;
++	size_t npages = 0;
++	unsigned long iova_addr;
++	int i, count;
++
++	for_each_sg(sglist, sg, nents, i) {
++		if (sg->offset) {
++			dev_err(dev, "Unsupported non-zero sg[%d].offset %x\n",
++				i, sg->offset);
++			return -EFAULT;
 +		}
-+		pages[i] = p;
-+		addr += PAGE_SIZE;
 +	}
 +
-+	ret = sg_alloc_table_from_pages(sgt, pages, n_pages, 0, fw->size,
-+					GFP_KERNEL);
-+	if (ret) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	ret = dma_map_sgtable(&sys->auxdev.dev, sgt, DMA_TO_DEVICE, 0);
-+	if (ret < 0) {
-+		ret = -ENOMEM;
-+		sg_free_table(sgt);
-+		goto out;
-+	}
-+
-+	dma_sync_sgtable_for_device(&sys->auxdev.dev, sgt, DMA_TO_DEVICE);
-+
-+out:
-+	kfree(pages);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_map_fw_image, INTEL_IPU6);
-+
-+void ipu6_buttress_unmap_fw_image(struct ipu6_bus_device *sys,
-+				  struct sg_table *sgt)
-+{
-+	dma_unmap_sgtable(&sys->auxdev.dev, sgt, DMA_TO_DEVICE, 0);
-+	sg_free_table(sgt);
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_unmap_fw_image, INTEL_IPU6);
-+
-+int ipu6_buttress_authenticate(struct ipu6_device *isp)
-+{
-+	struct ipu6_buttress *b = &isp->buttress;
-+	struct ipu6_psys_pdata *psys_pdata;
-+	u32 data, mask, done, fail;
-+	int ret;
-+
-+	if (!isp->secure_mode) {
-+		dev_dbg(&isp->pdev->dev, "Skip auth for non-secure mode\n");
++	dev_dbg(dev, "pci_dma_map_sg trying to map %d ents\n", nents);
++	count  = dma_map_sg_attrs(&pdev->dev, sglist, nents, dir, attrs);
++	if (count <= 0) {
++		dev_err(dev, "pci_dma_map_sg %d ents failed\n", nents);
 +		return 0;
 +	}
 +
-+	psys_pdata = isp->psys->pdata;
++	dev_dbg(dev, "pci_dma_map_sg %d ents mapped\n", count);
 +
-+	mutex_lock(&b->auth_mutex);
++	for_each_sg(sglist, sg, count, i)
++		npages += PHYS_PFN(PAGE_ALIGN(sg_dma_len(sg)));
 +
-+	if (ipu6_buttress_auth_done(isp)) {
-+		ret = 0;
-+		goto out_unlock;
-+	}
++	iova = alloc_iova(&mmu->dmap->iovad, npages,
++			  PHYS_PFN(dma_get_mask(dev)), 0);
++	if (!iova)
++		return 0;
 +
-+	/*
-+	 * Write address of FIT table to FW_SOURCE register
-+	 * Let's use fw address. I.e. not using FIT table yet
-+	 */
-+	data = lower_32_bits(isp->psys->pkg_dir_dma_addr);
-+	writel(data, isp->base + BUTTRESS_REG_FW_SOURCE_BASE_LO);
++	dev_dbg(dev, "dmamap: iova low pfn %lu, high pfn %lu\n", iova->pfn_lo,
++		iova->pfn_hi);
 +
-+	data = upper_32_bits(isp->psys->pkg_dir_dma_addr);
-+	writel(data, isp->base + BUTTRESS_REG_FW_SOURCE_BASE_HI);
-+
-+	/*
-+	 * Write boot_load into IU2CSEDATA0
-+	 * Write sizeof(boot_load) | 0x2 << CLIENT_ID to
-+	 * IU2CSEDB.IU2CSECMD and set IU2CSEDB.IU2CSEBUSY as
-+	 */
-+	dev_info(&isp->pdev->dev, "Sending BOOT_LOAD to CSE\n");
-+
-+	ret = ipu6_buttress_ipc_send(isp, IPU6_BUTTRESS_IPC_CSE,
-+				     BUTTRESS_IU2CSEDATA0_IPC_BOOT_LOAD,
-+				     1, true,
-+				     BUTTRESS_CSE2IUDATA0_IPC_BOOT_LOAD_DONE);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "CSE boot_load failed\n");
-+		goto out_unlock;
-+	}
-+
-+	mask = BUTTRESS_SECURITY_CTL_FW_SETUP_MASK;
-+	done = BUTTRESS_SECURITY_CTL_FW_SETUP_DONE;
-+	fail = BUTTRESS_SECURITY_CTL_AUTH_FAILED;
-+	ret = readl_poll_timeout(isp->base + BUTTRESS_REG_SECURITY_CTL, data,
-+				 ((data & mask) == done ||
-+				  (data & mask) == fail), 500,
-+				 BUTTRESS_CSE_BOOTLOAD_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "CSE boot_load timeout\n");
-+		goto out_unlock;
-+	}
-+
-+	if ((data & mask) == fail) {
-+		dev_err(&isp->pdev->dev, "CSE auth failed\n");
-+		ret = -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	ret = readl_poll_timeout(psys_pdata->base + BOOTLOADER_STATUS_OFFSET,
-+				 data, data == BOOTLOADER_MAGIC_KEY, 500,
-+				 BUTTRESS_CSE_BOOTLOAD_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "Unexpected magic number 0x%x\n",
-+			data);
-+		goto out_unlock;
-+	}
-+
-+	/*
-+	 * Write authenticate_run into IU2CSEDATA0
-+	 * Write sizeof(boot_load) | 0x2 << CLIENT_ID to
-+	 * IU2CSEDB.IU2CSECMD and set IU2CSEDB.IU2CSEBUSY as
-+	 */
-+	dev_info(&isp->pdev->dev, "Sending AUTHENTICATE_RUN to CSE\n");
-+	ret = ipu6_buttress_ipc_send(isp, IPU6_BUTTRESS_IPC_CSE,
-+				     BUTTRESS_IU2CSEDATA0_IPC_AUTH_RUN,
-+				     1, true,
-+				     BUTTRESS_CSE2IUDATA0_IPC_AUTH_RUN_DONE);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "CSE authenticate_run failed\n");
-+		goto out_unlock;
-+	}
-+
-+	done = BUTTRESS_SECURITY_CTL_AUTH_DONE;
-+	ret = readl_poll_timeout(isp->base + BUTTRESS_REG_SECURITY_CTL, data,
-+				 ((data & mask) == done ||
-+				  (data & mask) == fail), 500,
-+				 BUTTRESS_CSE_AUTHENTICATE_TIMEOUT_US);
-+	if (ret) {
-+		dev_err(&isp->pdev->dev, "CSE authenticate timeout\n");
-+		goto out_unlock;
-+	}
-+
-+	if ((data & mask) == fail) {
-+		dev_err(&isp->pdev->dev, "CSE boot_load failed\n");
-+		ret = -EINVAL;
-+		goto out_unlock;
-+	}
-+
-+	dev_info(&isp->pdev->dev, "CSE authenticate_run done\n");
-+
-+out_unlock:
-+	mutex_unlock(&b->auth_mutex);
-+
-+	return ret;
-+}
-+
-+static int ipu6_buttress_send_tsc_request(struct ipu6_device *isp)
-+{
-+	u32 val, mask, done;
-+	int ret;
-+
-+	mask = BUTTRESS_PWR_STATE_HH_STATUS_MASK;
-+
-+	writel(BUTTRESS_FABRIC_CMD_START_TSC_SYNC,
-+	       isp->base + BUTTRESS_REG_FABRIC_CMD);
-+
-+	val = readl(isp->base + BUTTRESS_REG_PWR_STATE);
-+	val = FIELD_GET(mask, val);
-+	if (val == BUTTRESS_PWR_STATE_HH_STATE_ERR) {
-+		dev_err(&isp->pdev->dev, "Start tsc sync failed\n");
-+		return -EINVAL;
-+	}
-+
-+	done = BUTTRESS_PWR_STATE_HH_STATE_DONE;
-+	ret = readl_poll_timeout(isp->base + BUTTRESS_REG_PWR_STATE, val,
-+				 FIELD_GET(mask, val) == done, 500,
-+				 BUTTRESS_TSC_SYNC_TIMEOUT_US);
-+	if (ret)
-+		dev_err(&isp->pdev->dev, "Start tsc sync timeout\n");
-+
-+	return ret;
-+}
-+
-+int ipu6_buttress_start_tsc_sync(struct ipu6_device *isp)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < BUTTRESS_TSC_SYNC_RESET_TRIAL_MAX; i++) {
-+		u32 val;
++	iova_addr = iova->pfn_lo;
++	for_each_sg(sglist, sg, count, i) {
 +		int ret;
 +
-+		ret = ipu6_buttress_send_tsc_request(isp);
-+		if (ret != -ETIMEDOUT)
-+			return ret;
++		dev_dbg(dev, "mapping entry %d: iova 0x%llx phy %pad size %d\n",
++			i, PFN_PHYS(iova_addr), &sg_dma_address(sg),
++			sg_dma_len(sg));
 +
-+		val = readl(isp->base + BUTTRESS_REG_TSW_CTL);
-+		val = val | BUTTRESS_TSW_CTL_SOFT_RESET;
-+		writel(val, isp->base + BUTTRESS_REG_TSW_CTL);
-+		val = val & ~BUTTRESS_TSW_CTL_SOFT_RESET;
-+		writel(val, isp->base + BUTTRESS_REG_TSW_CTL);
++		ret = ipu6_mmu_map(mmu->dmap->mmu_info, PFN_PHYS(iova_addr),
++				   sg_dma_address(sg),
++				   PAGE_ALIGN(sg_dma_len(sg)));
++		if (ret)
++			goto out_fail;
++
++		sg_dma_address(sg) = PFN_PHYS(iova_addr);
++
++		iova_addr += PHYS_PFN(PAGE_ALIGN(sg_dma_len(sg)));
 +	}
 +
-+	dev_err(&isp->pdev->dev, "TSC sync failed (timeout)\n");
++	if ((attrs & DMA_ATTR_SKIP_CPU_SYNC) == 0)
++		ipu6_dma_sync_sg_for_cpu(dev, sglist, nents, DMA_BIDIRECTIONAL);
 +
-+	return -ETIMEDOUT;
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_start_tsc_sync, INTEL_IPU6);
++	return count;
 +
-+void ipu6_buttress_tsc_read(struct ipu6_device *isp, u64 *val)
-+{
-+	u32 tsc_hi_1, tsc_hi_2, tsc_lo;
-+	unsigned long flags;
++out_fail:
++	ipu6_dma_unmap_sg(dev, sglist, i, dir, attrs);
 +
-+	local_irq_save(flags);
-+	tsc_hi_1 = readl(isp->base + BUTTRESS_REG_TSC_HI);
-+	tsc_lo = readl(isp->base + BUTTRESS_REG_TSC_LO);
-+	tsc_hi_2 = readl(isp->base + BUTTRESS_REG_TSC_HI);
-+	if (tsc_hi_1 == tsc_hi_2) {
-+		*val = (u64)tsc_hi_1 << 32 | tsc_lo;
-+	} else {
-+		/* Check if TSC has rolled over */
-+		if (tsc_lo & BIT(31))
-+			*val = (u64)tsc_hi_1 << 32 | tsc_lo;
-+		else
-+			*val = (u64)tsc_hi_2 << 32 | tsc_lo;
-+	}
-+	local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_tsc_read, INTEL_IPU6);
-+
-+u64 ipu6_buttress_tsc_ticks_to_ns(u64 ticks, const struct ipu6_device *isp)
-+{
-+	u64 ns = ticks * 10000;
-+
-+	/*
-+	 * converting TSC tick count to ns is calculated by:
-+	 * Example (TSC clock frequency is 19.2MHz):
-+	 * ns = ticks * 1000 000 000 / 19.2Mhz
-+	 *    = ticks * 1000 000 000 / 19200000Hz
-+	 *    = ticks * 10000 / 192 ns
-+	 */
-+	return div_u64(ns, isp->buttress.ref_clk);
-+}
-+EXPORT_SYMBOL_NS_GPL(ipu6_buttress_tsc_ticks_to_ns, INTEL_IPU6);
-+
-+void ipu6_buttress_restore(struct ipu6_device *isp)
-+{
-+	struct ipu6_buttress *b = &isp->buttress;
-+
-+	writel(BUTTRESS_IRQS, isp->base + BUTTRESS_REG_ISR_CLEAR);
-+	writel(BUTTRESS_IRQS, isp->base + BUTTRESS_REG_ISR_ENABLE);
-+	writel(b->wdt_cached_value, isp->base + BUTTRESS_REG_WDT);
++	return 0;
 +}
 +
-+int ipu6_buttress_init(struct ipu6_device *isp)
++/*
++ * Create scatter-list for the already allocated DMA buffer
++ */
++static int ipu6_dma_get_sgtable(struct device *dev, struct sg_table *sgt,
++				void *cpu_addr, dma_addr_t handle, size_t size,
++				unsigned long attrs)
 +{
-+	int ret, ipc_reset_retry = BUTTRESS_CSE_IPC_RESET_RETRY;
-+	struct ipu6_buttress *b = &isp->buttress;
-+	u32 val;
++	struct ipu6_mmu *mmu = to_ipu6_bus_device(dev)->mmu;
++	struct vm_info *info;
++	int n_pages;
++	int ret = 0;
 +
-+	mutex_init(&b->power_mutex);
-+	mutex_init(&b->auth_mutex);
-+	mutex_init(&b->cons_mutex);
-+	mutex_init(&b->ipc_mutex);
-+	init_completion(&b->ish.send_complete);
-+	init_completion(&b->cse.send_complete);
-+	init_completion(&b->ish.recv_complete);
-+	init_completion(&b->cse.recv_complete);
++	info = get_vm_info(mmu, handle);
++	if (!info)
++		return -EFAULT;
 +
-+	b->cse.nack = BUTTRESS_CSE2IUDATA0_IPC_NACK;
-+	b->cse.nack_mask = BUTTRESS_CSE2IUDATA0_IPC_NACK_MASK;
-+	b->cse.csr_in = BUTTRESS_REG_CSE2IUCSR;
-+	b->cse.csr_out = BUTTRESS_REG_IU2CSECSR;
-+	b->cse.db0_in = BUTTRESS_REG_CSE2IUDB0;
-+	b->cse.db0_out = BUTTRESS_REG_IU2CSEDB0;
-+	b->cse.data0_in = BUTTRESS_REG_CSE2IUDATA0;
-+	b->cse.data0_out = BUTTRESS_REG_IU2CSEDATA0;
++	if (!info->vaddr)
++		return -EFAULT;
 +
-+	/* no ISH on IPU6 */
-+	memset(&b->ish, 0, sizeof(b->ish));
-+	INIT_LIST_HEAD(&b->constraints);
++	if (WARN_ON(!info->pages))
++		return -ENOMEM;
 +
-+	isp->secure_mode = ipu6_buttress_get_secure_mode(isp);
-+	dev_info(&isp->pdev->dev, "IPU6 in %s mode touch 0x%x mask 0x%x\n",
-+		 isp->secure_mode ? "secure" : "non-secure",
-+		 readl(isp->base + BUTTRESS_REG_SECURITY_TOUCH),
-+		 readl(isp->base + BUTTRESS_REG_CAMERA_MASK));
++	n_pages = PHYS_PFN(PAGE_ALIGN(size));
 +
-+	b->wdt_cached_value = readl(isp->base + BUTTRESS_REG_WDT);
-+	writel(BUTTRESS_IRQS, isp->base + BUTTRESS_REG_ISR_CLEAR);
-+	writel(BUTTRESS_IRQS, isp->base + BUTTRESS_REG_ISR_ENABLE);
-+
-+	/* get ref_clk frequency by reading the indication in btrs control */
-+	val = readl(isp->base + BUTTRESS_REG_BTRS_CTRL);
-+	val = FIELD_GET(BUTTRESS_REG_BTRS_CTRL_REF_CLK_IND, val);
-+
-+	switch (val) {
-+	case 0x0:
-+		b->ref_clk = 240;
-+		break;
-+	case 0x1:
-+		b->ref_clk = 192;
-+		break;
-+	case 0x2:
-+		b->ref_clk = 384;
-+		break;
-+	default:
-+		dev_warn(&isp->pdev->dev,
-+			 "Unsupported ref clock, use 19.2Mhz by default.\n");
-+		b->ref_clk = 192;
-+		break;
-+	}
-+
-+	/* Retry couple of times in case of CSE initialization is delayed */
-+	do {
-+		ret = ipu6_buttress_ipc_reset(isp, &b->cse);
-+		if (ret) {
-+			dev_warn(&isp->pdev->dev,
-+				 "IPC reset protocol failed, retrying\n");
-+		} else {
-+			dev_dbg(&isp->pdev->dev, "IPC reset done\n");
-+			return 0;
-+		}
-+	} while (ipc_reset_retry--);
-+
-+	dev_err(&isp->pdev->dev, "IPC reset protocol failed\n");
-+
-+	mutex_destroy(&b->power_mutex);
-+	mutex_destroy(&b->auth_mutex);
-+	mutex_destroy(&b->cons_mutex);
-+	mutex_destroy(&b->ipc_mutex);
++	ret = sg_alloc_table_from_pages(sgt, info->pages, n_pages, 0, size,
++					GFP_KERNEL);
++	if (ret)
++		dev_warn(dev, "IPU6 get sgt table failed\n");
 +
 +	return ret;
 +}
 +
-+void ipu6_buttress_exit(struct ipu6_device *isp)
-+{
-+	struct ipu6_buttress *b = &isp->buttress;
-+
-+	writel(0, isp->base + BUTTRESS_REG_ISR_ENABLE);
-+
-+	mutex_destroy(&b->power_mutex);
-+	mutex_destroy(&b->auth_mutex);
-+	mutex_destroy(&b->cons_mutex);
-+	mutex_destroy(&b->ipc_mutex);
-+}
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-buttress.h b/drivers/media/pci/intel/ipu6/ipu6-buttress.h
++const struct dma_map_ops ipu6_dma_ops = {
++	.alloc = ipu6_dma_alloc,
++	.free = ipu6_dma_free,
++	.mmap = ipu6_dma_mmap,
++	.map_sg = ipu6_dma_map_sg,
++	.unmap_sg = ipu6_dma_unmap_sg,
++	.sync_single_for_cpu = ipu6_dma_sync_single_for_cpu,
++	.sync_single_for_device = ipu6_dma_sync_single_for_cpu,
++	.sync_sg_for_cpu = ipu6_dma_sync_sg_for_cpu,
++	.sync_sg_for_device = ipu6_dma_sync_sg_for_cpu,
++	.get_sgtable = ipu6_dma_get_sgtable,
++};
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-dma.h b/drivers/media/pci/intel/ipu6/ipu6-dma.h
 new file mode 100644
-index 000000000000..9b6f56958be7
+index 000000000000..847ea5b7c925
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-buttress.h
-@@ -0,0 +1,92 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-dma.h
+@@ -0,0 +1,19 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/* Copyright (C) 2013--2024 Intel Corporation */
 +
-+#ifndef IPU6_BUTTRESS_H
-+#define IPU6_BUTTRESS_H
++#ifndef IPU6_DMA_H
++#define IPU6_DMA_H
 +
-+#include <linux/completion.h>
-+#include <linux/irqreturn.h>
++#include <linux/dma-map-ops.h>
++#include <linux/iova.h>
++
++struct ipu6_mmu_info;
++
++struct ipu6_dma_mapping {
++	struct ipu6_mmu_info *mmu_info;
++	struct iova_domain iovad;
++};
++
++extern const struct dma_map_ops ipu6_dma_ops;
++
++#endif /* IPU6_DMA_H */
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-mmu.c b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+new file mode 100644
+index 000000000000..98a4bf9ca267
+--- /dev/null
++++ b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+@@ -0,0 +1,845 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2013--2024 Intel Corporation
++ */
++#include <asm/barrier.h>
++
++#include <linux/align.h>
++#include <linux/atomic.h>
++#include <linux/bitops.h>
++#include <linux/bits.h>
++#include <linux/bug.h>
++#include <linux/cacheflush.h>
++#include <linux/dma-mapping.h>
++#include <linux/err.h>
++#include <linux/gfp.h>
++#include <linux/io.h>
++#include <linux/iova.h>
++#include <linux/math.h>
++#include <linux/minmax.h>
++#include <linux/mm.h>
++#include <linux/pfn.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++#include <linux/types.h>
++
++#include "ipu6.h"
++#include "ipu6-dma.h"
++#include "ipu6-mmu.h"
++#include "ipu6-platform-regs.h"
++
++#define ISP_PAGE_SHIFT		12
++#define ISP_PAGE_SIZE		BIT(ISP_PAGE_SHIFT)
++#define ISP_PAGE_MASK		(~(ISP_PAGE_SIZE - 1))
++
++#define ISP_L1PT_SHIFT		22
++#define ISP_L1PT_MASK		(~((1U << ISP_L1PT_SHIFT) - 1))
++
++#define ISP_L2PT_SHIFT		12
++#define ISP_L2PT_MASK		(~(ISP_L1PT_MASK | (~(ISP_PAGE_MASK))))
++
++#define ISP_L1PT_PTES           1024
++#define ISP_L2PT_PTES           1024
++
++#define ISP_PADDR_SHIFT		12
++
++#define REG_TLB_INVALIDATE	0x0000
++
++#define REG_L1_PHYS		0x0004	/* 27-bit pfn */
++#define REG_INFO		0x0008
++
++#define TBL_PHYS_ADDR(a)	((phys_addr_t)(a) << ISP_PADDR_SHIFT)
++
++static void tlb_invalidate(struct ipu6_mmu *mmu)
++{
++	unsigned long flags;
++	unsigned int i;
++
++	spin_lock_irqsave(&mmu->ready_lock, flags);
++	if (!mmu->ready) {
++		spin_unlock_irqrestore(&mmu->ready_lock, flags);
++		return;
++	}
++
++	for (i = 0; i < mmu->nr_mmus; i++) {
++		/*
++		 * To avoid the HW bug induced dead lock in some of the IPU6
++		 * MMUs on successive invalidate calls, we need to first do a
++		 * read to the page table base before writing the invalidate
++		 * register. MMUs which need to implement this WA, will have
++		 * the insert_read_before_invalidate flags set as true.
++		 * Disregard the return value of the read.
++		 */
++		if (mmu->mmu_hw[i].insert_read_before_invalidate)
++			readl(mmu->mmu_hw[i].base + REG_L1_PHYS);
++
++		writel(0xffffffff, mmu->mmu_hw[i].base +
++		       REG_TLB_INVALIDATE);
++		/*
++		 * The TLB invalidation is a "single cycle" (IOMMU clock cycles)
++		 * When the actual MMIO write reaches the IPU6 TLB Invalidate
++		 * register, wmb() will force the TLB invalidate out if the CPU
++		 * attempts to update the IOMMU page table (or sooner).
++		 */
++		wmb();
++	}
++	spin_unlock_irqrestore(&mmu->ready_lock, flags);
++}
++
++#ifdef DEBUG
++static void page_table_dump(struct ipu6_mmu_info *mmu_info)
++{
++	u32 l1_idx;
++
++	dev_dbg(mmu_info->dev, "begin IOMMU page table dump\n");
++
++	for (l1_idx = 0; l1_idx < ISP_L1PT_PTES; l1_idx++) {
++		u32 l2_idx;
++		u32 iova = (phys_addr_t)l1_idx << ISP_L1PT_SHIFT;
++
++		if (mmu_info->l1_pt[l1_idx] == mmu_info->dummy_l2_pteval)
++			continue;
++		dev_dbg(mmu_info->dev,
++			"l1 entry %u; iovas 0x%8.8x-0x%8.8x, at %pa\n",
++			l1_idx, iova, iova + ISP_PAGE_SIZE,
++			TBL_PHYS_ADDR(mmu_info->l1_pt[l1_idx]));
++
++		for (l2_idx = 0; l2_idx < ISP_L2PT_PTES; l2_idx++) {
++			u32 *l2_pt = mmu_info->l2_pts[l1_idx];
++			u32 iova2 = iova + (l2_idx << ISP_L2PT_SHIFT);
++
++			if (l2_pt[l2_idx] == mmu_info->dummy_page_pteval)
++				continue;
++
++			dev_dbg(mmu_info->dev,
++				"\tl2 entry %u; iova 0x%8.8x, phys %pa\n",
++				l2_idx, iova2,
++				TBL_PHYS_ADDR(l2_pt[l2_idx]));
++		}
++	}
++
++	dev_dbg(mmu_info->dev, "end IOMMU page table dump\n");
++}
++#endif /* DEBUG */
++
++static dma_addr_t map_single(struct ipu6_mmu_info *mmu_info, void *ptr)
++{
++	dma_addr_t dma;
++
++	dma = dma_map_single(mmu_info->dev, ptr, PAGE_SIZE, DMA_BIDIRECTIONAL);
++	if (dma_mapping_error(mmu_info->dev, dma))
++		return 0;
++
++	return dma;
++}
++
++static int get_dummy_page(struct ipu6_mmu_info *mmu_info)
++{
++	void *pt = (void *)get_zeroed_page(GFP_ATOMIC | GFP_DMA32);
++	dma_addr_t dma;
++
++	if (!pt)
++		return -ENOMEM;
++
++	dev_dbg(mmu_info->dev, "dummy_page: get_zeroed_page() == %p\n", pt);
++
++	dma = map_single(mmu_info, pt);
++	if (!dma) {
++		dev_err(mmu_info->dev, "Failed to map dummy page\n");
++		goto err_free_page;
++	}
++
++	mmu_info->dummy_page = pt;
++	mmu_info->dummy_page_pteval = dma >> ISP_PAGE_SHIFT;
++
++	return 0;
++
++err_free_page:
++	free_page((unsigned long)pt);
++	return -ENOMEM;
++}
++
++static void free_dummy_page(struct ipu6_mmu_info *mmu_info)
++{
++	dma_unmap_single(mmu_info->dev,
++			 TBL_PHYS_ADDR(mmu_info->dummy_page_pteval),
++			 PAGE_SIZE, DMA_BIDIRECTIONAL);
++	free_page((unsigned long)mmu_info->dummy_page);
++}
++
++static int alloc_dummy_l2_pt(struct ipu6_mmu_info *mmu_info)
++{
++	u32 *pt = (u32 *)get_zeroed_page(GFP_ATOMIC | GFP_DMA32);
++	dma_addr_t dma;
++	unsigned int i;
++
++	if (!pt)
++		return -ENOMEM;
++
++	dev_dbg(mmu_info->dev, "dummy_l2: get_zeroed_page() = %p\n", pt);
++
++	dma = map_single(mmu_info, pt);
++	if (!dma) {
++		dev_err(mmu_info->dev, "Failed to map l2pt page\n");
++		goto err_free_page;
++	}
++
++	for (i = 0; i < ISP_L2PT_PTES; i++)
++		pt[i] = mmu_info->dummy_page_pteval;
++
++	mmu_info->dummy_l2_pt = pt;
++	mmu_info->dummy_l2_pteval = dma >> ISP_PAGE_SHIFT;
++
++	return 0;
++
++err_free_page:
++	free_page((unsigned long)pt);
++	return -ENOMEM;
++}
++
++static void free_dummy_l2_pt(struct ipu6_mmu_info *mmu_info)
++{
++	dma_unmap_single(mmu_info->dev,
++			 TBL_PHYS_ADDR(mmu_info->dummy_l2_pteval),
++			 PAGE_SIZE, DMA_BIDIRECTIONAL);
++	free_page((unsigned long)mmu_info->dummy_l2_pt);
++}
++
++static u32 *alloc_l1_pt(struct ipu6_mmu_info *mmu_info)
++{
++	u32 *pt = (u32 *)get_zeroed_page(GFP_ATOMIC | GFP_DMA32);
++	dma_addr_t dma;
++	unsigned int i;
++
++	if (!pt)
++		return NULL;
++
++	dev_dbg(mmu_info->dev, "alloc_l1: get_zeroed_page() = %p\n", pt);
++
++	for (i = 0; i < ISP_L1PT_PTES; i++)
++		pt[i] = mmu_info->dummy_l2_pteval;
++
++	dma = map_single(mmu_info, pt);
++	if (!dma) {
++		dev_err(mmu_info->dev, "Failed to map l1pt page\n");
++		goto err_free_page;
++	}
++
++	mmu_info->l1_pt_dma = dma >> ISP_PADDR_SHIFT;
++	dev_dbg(mmu_info->dev, "l1 pt %p mapped at %llx\n", pt, dma);
++
++	return pt;
++
++err_free_page:
++	free_page((unsigned long)pt);
++	return NULL;
++}
++
++static u32 *alloc_l2_pt(struct ipu6_mmu_info *mmu_info)
++{
++	u32 *pt = (u32 *)get_zeroed_page(GFP_ATOMIC | GFP_DMA32);
++	unsigned int i;
++
++	if (!pt)
++		return NULL;
++
++	dev_dbg(mmu_info->dev, "alloc_l2: get_zeroed_page() = %p\n", pt);
++
++	for (i = 0; i < ISP_L1PT_PTES; i++)
++		pt[i] = mmu_info->dummy_page_pteval;
++
++	return pt;
++}
++
++static int l2_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		  phys_addr_t paddr, size_t size)
++{
++	u32 l1_idx = iova >> ISP_L1PT_SHIFT;
++	u32 iova_start = iova;
++	u32 *l2_pt, *l2_virt;
++	unsigned int l2_idx;
++	unsigned long flags;
++	dma_addr_t dma;
++	u32 l1_entry;
++
++	dev_dbg(mmu_info->dev,
++		"mapping l2 page table for l1 index %u (iova %8.8x)\n",
++		l1_idx, (u32)iova);
++
++	spin_lock_irqsave(&mmu_info->lock, flags);
++	l1_entry = mmu_info->l1_pt[l1_idx];
++	if (l1_entry == mmu_info->dummy_l2_pteval) {
++		l2_virt = mmu_info->l2_pts[l1_idx];
++		if (likely(!l2_virt)) {
++			l2_virt = alloc_l2_pt(mmu_info);
++			if (!l2_virt) {
++				spin_unlock_irqrestore(&mmu_info->lock, flags);
++				return -ENOMEM;
++			}
++		}
++
++		dma = map_single(mmu_info, l2_virt);
++		if (!dma) {
++			dev_err(mmu_info->dev, "Failed to map l2pt page\n");
++			free_page((unsigned long)l2_virt);
++			spin_unlock_irqrestore(&mmu_info->lock, flags);
++			return -EINVAL;
++		}
++
++		l1_entry = dma >> ISP_PADDR_SHIFT;
++
++		dev_dbg(mmu_info->dev, "page for l1_idx %u %p allocated\n",
++			l1_idx, l2_virt);
++		mmu_info->l1_pt[l1_idx] = l1_entry;
++		mmu_info->l2_pts[l1_idx] = l2_virt;
++		clflush_cache_range((void *)&mmu_info->l1_pt[l1_idx],
++				    sizeof(mmu_info->l1_pt[l1_idx]));
++	}
++
++	l2_pt = mmu_info->l2_pts[l1_idx];
++
++	dev_dbg(mmu_info->dev, "l2_pt at %p with dma 0x%x\n", l2_pt, l1_entry);
++
++	paddr = ALIGN(paddr, ISP_PAGE_SIZE);
++
++	l2_idx = (iova_start & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT;
++
++	dev_dbg(mmu_info->dev, "l2_idx %u, phys 0x%8.8x\n", l2_idx,
++		l2_pt[l2_idx]);
++	if (l2_pt[l2_idx] != mmu_info->dummy_page_pteval) {
++		spin_unlock_irqrestore(&mmu_info->lock, flags);
++		return -EINVAL;
++	}
++
++	l2_pt[l2_idx] = paddr >> ISP_PADDR_SHIFT;
++
++	clflush_cache_range((void *)&l2_pt[l2_idx], sizeof(l2_pt[l2_idx]));
++	spin_unlock_irqrestore(&mmu_info->lock, flags);
++
++	dev_dbg(mmu_info->dev, "l2 index %u mapped as 0x%8.8x\n", l2_idx,
++		l2_pt[l2_idx]);
++
++	return 0;
++}
++
++static int __ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++			  phys_addr_t paddr, size_t size)
++{
++	u32 iova_start = round_down(iova, ISP_PAGE_SIZE);
++	u32 iova_end = ALIGN(iova + size, ISP_PAGE_SIZE);
++
++	dev_dbg(mmu_info->dev,
++		"mapping iova 0x%8.8x--0x%8.8x, size %zu at paddr 0x%10.10llx\n",
++		iova_start, iova_end, size, paddr);
++
++	return l2_map(mmu_info, iova_start, paddr, size);
++}
++
++static size_t l2_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		       phys_addr_t dummy, size_t size)
++{
++	u32 l1_idx = iova >> ISP_L1PT_SHIFT;
++	u32 iova_start = iova;
++	unsigned int l2_idx;
++	size_t unmapped = 0;
++	unsigned long flags;
++	u32 *l2_pt;
++
++	dev_dbg(mmu_info->dev, "unmapping l2 page table for l1 index %u (iova 0x%8.8lx)\n",
++		l1_idx, iova);
++
++	spin_lock_irqsave(&mmu_info->lock, flags);
++	if (mmu_info->l1_pt[l1_idx] == mmu_info->dummy_l2_pteval) {
++		spin_unlock_irqrestore(&mmu_info->lock, flags);
++		dev_err(mmu_info->dev,
++			"unmap iova 0x%8.8lx l1 idx %u which was not mapped\n",
++			iova, l1_idx);
++		return 0;
++	}
++
++	for (l2_idx = (iova_start & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT;
++	     (iova_start & ISP_L1PT_MASK) + (l2_idx << ISP_PAGE_SHIFT)
++		     < iova_start + size && l2_idx < ISP_L2PT_PTES; l2_idx++) {
++		l2_pt = mmu_info->l2_pts[l1_idx];
++		dev_dbg(mmu_info->dev,
++			"unmap l2 index %u with pteval 0x%10.10llx\n",
++			l2_idx, TBL_PHYS_ADDR(l2_pt[l2_idx]));
++		l2_pt[l2_idx] = mmu_info->dummy_page_pteval;
++
++		clflush_cache_range((void *)&l2_pt[l2_idx],
++				    sizeof(l2_pt[l2_idx]));
++		unmapped++;
++	}
++	spin_unlock_irqrestore(&mmu_info->lock, flags);
++
++	return unmapped << ISP_PAGE_SHIFT;
++}
++
++static size_t __ipu6_mmu_unmap(struct ipu6_mmu_info *mmu_info,
++			       unsigned long iova, size_t size)
++{
++	return l2_unmap(mmu_info, iova, 0, size);
++}
++
++static int allocate_trash_buffer(struct ipu6_mmu *mmu)
++{
++	unsigned int n_pages = PHYS_PFN(PAGE_ALIGN(IPU6_MMUV2_TRASH_RANGE));
++	struct iova *iova;
++	unsigned int i;
++	dma_addr_t dma;
++	unsigned long iova_addr;
++	int ret;
++
++	/* Allocate 8MB in iova range */
++	iova = alloc_iova(&mmu->dmap->iovad, n_pages,
++			  PHYS_PFN(mmu->dmap->mmu_info->aperture_end), 0);
++	if (!iova) {
++		dev_err(mmu->dev, "cannot allocate iova range for trash\n");
++		return -ENOMEM;
++	}
++
++	dma = dma_map_page(mmu->dmap->mmu_info->dev, mmu->trash_page, 0,
++			   PAGE_SIZE, DMA_BIDIRECTIONAL);
++	if (dma_mapping_error(mmu->dmap->mmu_info->dev, dma)) {
++		dev_err(mmu->dmap->mmu_info->dev, "Failed to map trash page\n");
++		ret = -ENOMEM;
++		goto out_free_iova;
++	}
++
++	mmu->pci_trash_page = dma;
++
++	/*
++	 * Map the 8MB iova address range to the same physical trash page
++	 * mmu->trash_page which is already reserved at the probe
++	 */
++	iova_addr = iova->pfn_lo;
++	for (i = 0; i < n_pages; i++) {
++		ret = ipu6_mmu_map(mmu->dmap->mmu_info, PFN_PHYS(iova_addr),
++				   mmu->pci_trash_page, PAGE_SIZE);
++		if (ret) {
++			dev_err(mmu->dev,
++				"mapping trash buffer range failed\n");
++			goto out_unmap;
++		}
++
++		iova_addr++;
++	}
++
++	mmu->iova_trash_page = PFN_PHYS(iova->pfn_lo);
++	dev_dbg(mmu->dev, "iova trash buffer for MMUID: %d is %u\n",
++		mmu->mmid, (unsigned int)mmu->iova_trash_page);
++	return 0;
++
++out_unmap:
++	ipu6_mmu_unmap(mmu->dmap->mmu_info, PFN_PHYS(iova->pfn_lo),
++		       PFN_PHYS(iova_size(iova)));
++	dma_unmap_page(mmu->dmap->mmu_info->dev, mmu->pci_trash_page,
++		       PAGE_SIZE, DMA_BIDIRECTIONAL);
++out_free_iova:
++	__free_iova(&mmu->dmap->iovad, iova);
++	return ret;
++}
++
++int ipu6_mmu_hw_init(struct ipu6_mmu *mmu)
++{
++	struct ipu6_mmu_info *mmu_info;
++	unsigned long flags;
++	unsigned int i;
++
++	mmu_info = mmu->dmap->mmu_info;
++
++	/* Initialise the each MMU HW block */
++	for (i = 0; i < mmu->nr_mmus; i++) {
++		struct ipu6_mmu_hw *mmu_hw = &mmu->mmu_hw[i];
++		unsigned int j;
++		u16 block_addr;
++
++		/* Write page table address per MMU */
++		writel((phys_addr_t)mmu_info->l1_pt_dma,
++		       mmu->mmu_hw[i].base + REG_L1_PHYS);
++
++		/* Set info bits per MMU */
++		writel(mmu->mmu_hw[i].info_bits,
++		       mmu->mmu_hw[i].base + REG_INFO);
++
++		/* Configure MMU TLB stream configuration for L1 */
++		for (j = 0, block_addr = 0; j < mmu_hw->nr_l1streams;
++		     block_addr += mmu->mmu_hw[i].l1_block_sz[j], j++) {
++			if (block_addr > IPU6_MAX_LI_BLOCK_ADDR) {
++				dev_err(mmu->dev, "invalid L1 configuration\n");
++				return -EINVAL;
++			}
++
++			/* Write block start address for each streams */
++			writel(block_addr, mmu_hw->base +
++			       mmu_hw->l1_stream_id_reg_offset + 4 * j);
++		}
++
++		/* Configure MMU TLB stream configuration for L2 */
++		for (j = 0, block_addr = 0; j < mmu_hw->nr_l2streams;
++		     block_addr += mmu->mmu_hw[i].l2_block_sz[j], j++) {
++			if (block_addr > IPU6_MAX_L2_BLOCK_ADDR) {
++				dev_err(mmu->dev, "invalid L2 configuration\n");
++				return -EINVAL;
++			}
++
++			writel(block_addr, mmu_hw->base +
++			       mmu_hw->l2_stream_id_reg_offset + 4 * j);
++		}
++	}
++
++	if (!mmu->trash_page) {
++		int ret;
++
++		mmu->trash_page = alloc_page(GFP_KERNEL);
++		if (!mmu->trash_page) {
++			dev_err(mmu->dev, "insufficient memory for trash buffer\n");
++			return -ENOMEM;
++		}
++
++		ret = allocate_trash_buffer(mmu);
++		if (ret) {
++			__free_page(mmu->trash_page);
++			mmu->trash_page = NULL;
++			dev_err(mmu->dev, "trash buffer allocation failed\n");
++			return ret;
++		}
++	}
++
++	spin_lock_irqsave(&mmu->ready_lock, flags);
++	mmu->ready = true;
++	spin_unlock_irqrestore(&mmu->ready_lock, flags);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_mmu_hw_init, INTEL_IPU6);
++
++static struct ipu6_mmu_info *ipu6_mmu_alloc(struct ipu6_device *isp)
++{
++	struct ipu6_mmu_info *mmu_info;
++	int ret;
++
++	mmu_info = kzalloc(sizeof(*mmu_info), GFP_KERNEL);
++	if (!mmu_info)
++		return NULL;
++
++	mmu_info->aperture_start = 0;
++	mmu_info->aperture_end = DMA_BIT_MASK(isp->secure_mode ?
++					      IPU6_MMU_ADDR_BITS :
++					      IPU6_MMU_ADDR_BITS_NON_SECURE);
++	mmu_info->pgsize_bitmap = SZ_4K;
++	mmu_info->dev = &isp->pdev->dev;
++
++	ret = get_dummy_page(mmu_info);
++	if (ret)
++		goto err_free_info;
++
++	ret = alloc_dummy_l2_pt(mmu_info);
++	if (ret)
++		goto err_free_dummy_page;
++
++	mmu_info->l2_pts = vzalloc(ISP_L2PT_PTES * sizeof(*mmu_info->l2_pts));
++	if (!mmu_info->l2_pts)
++		goto err_free_dummy_l2_pt;
++
++	/*
++	 * We always map the L1 page table (a single page as well as
++	 * the L2 page tables).
++	 */
++	mmu_info->l1_pt = alloc_l1_pt(mmu_info);
++	if (!mmu_info->l1_pt)
++		goto err_free_l2_pts;
++
++	spin_lock_init(&mmu_info->lock);
++
++	dev_dbg(mmu_info->dev, "domain initialised\n");
++
++	return mmu_info;
++
++err_free_l2_pts:
++	vfree(mmu_info->l2_pts);
++err_free_dummy_l2_pt:
++	free_dummy_l2_pt(mmu_info);
++err_free_dummy_page:
++	free_dummy_page(mmu_info);
++err_free_info:
++	kfree(mmu_info);
++
++	return NULL;
++}
++
++void ipu6_mmu_hw_cleanup(struct ipu6_mmu *mmu)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&mmu->ready_lock, flags);
++	mmu->ready = false;
++	spin_unlock_irqrestore(&mmu->ready_lock, flags);
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_mmu_hw_cleanup, INTEL_IPU6);
++
++static struct ipu6_dma_mapping *alloc_dma_mapping(struct ipu6_device *isp)
++{
++	struct ipu6_dma_mapping *dmap;
++
++	dmap = kzalloc(sizeof(*dmap), GFP_KERNEL);
++	if (!dmap)
++		return NULL;
++
++	dmap->mmu_info = ipu6_mmu_alloc(isp);
++	if (!dmap->mmu_info) {
++		kfree(dmap);
++		return NULL;
++	}
++
++	init_iova_domain(&dmap->iovad, SZ_4K, 1);
++	dmap->mmu_info->dmap = dmap;
++
++	dev_dbg(&isp->pdev->dev, "alloc mapping\n");
++
++	iova_cache_get();
++
++	return dmap;
++}
++
++phys_addr_t ipu6_mmu_iova_to_phys(struct ipu6_mmu_info *mmu_info,
++				  dma_addr_t iova)
++{
++	phys_addr_t phy_addr;
++	unsigned long flags;
++	u32 *l2_pt;
++
++	spin_lock_irqsave(&mmu_info->lock, flags);
++	l2_pt = mmu_info->l2_pts[iova >> ISP_L1PT_SHIFT];
++	phy_addr = (phys_addr_t)l2_pt[(iova & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT];
++	phy_addr <<= ISP_PAGE_SHIFT;
++	spin_unlock_irqrestore(&mmu_info->lock, flags);
++
++	return phy_addr;
++}
++
++static size_t ipu6_mmu_pgsize(unsigned long pgsize_bitmap,
++			      unsigned long addr_merge, size_t size)
++{
++	unsigned int pgsize_idx;
++	size_t pgsize;
++
++	/* Max page size that still fits into 'size' */
++	pgsize_idx = __fls(size);
++
++	if (likely(addr_merge)) {
++		/* Max page size allowed by address */
++		unsigned int align_pgsize_idx = __ffs(addr_merge);
++
++		pgsize_idx = min(pgsize_idx, align_pgsize_idx);
++	}
++
++	pgsize = (1UL << (pgsize_idx + 1)) - 1;
++	pgsize &= pgsize_bitmap;
++
++	WARN_ON(!pgsize);
++
++	/* pick the biggest page */
++	pgsize_idx = __fls(pgsize);
++	pgsize = 1UL << pgsize_idx;
++
++	return pgsize;
++}
++
++size_t ipu6_mmu_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		      size_t size)
++{
++	size_t unmapped_page, unmapped = 0;
++	unsigned int min_pagesz;
++
++	/* find out the minimum page size supported */
++	min_pagesz = 1 << __ffs(mmu_info->pgsize_bitmap);
++
++	/*
++	 * The virtual address and the size of the mapping must be
++	 * aligned (at least) to the size of the smallest page supported
++	 * by the hardware
++	 */
++	if (!IS_ALIGNED(iova | size, min_pagesz)) {
++		dev_err(NULL, "unaligned: iova 0x%lx size 0x%zx min_pagesz 0x%x\n",
++			iova, size, min_pagesz);
++		return -EINVAL;
++	}
++
++	/*
++	 * Keep iterating until we either unmap 'size' bytes (or more)
++	 * or we hit an area that isn't mapped.
++	 */
++	while (unmapped < size) {
++		size_t pgsize = ipu6_mmu_pgsize(mmu_info->pgsize_bitmap,
++						iova, size - unmapped);
++
++		unmapped_page = __ipu6_mmu_unmap(mmu_info, iova, pgsize);
++		if (!unmapped_page)
++			break;
++
++		dev_dbg(mmu_info->dev, "unmapped: iova 0x%lx size 0x%zx\n",
++			iova, unmapped_page);
++
++		iova += unmapped_page;
++		unmapped += unmapped_page;
++	}
++
++	return unmapped;
++}
++
++int ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		 phys_addr_t paddr, size_t size)
++{
++	unsigned long orig_iova = iova;
++	unsigned int min_pagesz;
++	size_t orig_size = size;
++	int ret = 0;
++
++	if (mmu_info->pgsize_bitmap == 0UL)
++		return -ENODEV;
++
++	/* find out the minimum page size supported */
++	min_pagesz = 1 << __ffs(mmu_info->pgsize_bitmap);
++
++	/*
++	 * both the virtual address and the physical one, as well as
++	 * the size of the mapping, must be aligned (at least) to the
++	 * size of the smallest page supported by the hardware
++	 */
++	if (!IS_ALIGNED(iova | paddr | size, min_pagesz)) {
++		dev_err(mmu_info->dev,
++			"unaligned: iova %lx pa %pa size %zx min_pagesz %x\n",
++			iova, &paddr, size, min_pagesz);
++		return -EINVAL;
++	}
++
++	dev_dbg(mmu_info->dev, "map: iova 0x%lx pa %pa size 0x%zx\n",
++		iova, &paddr, size);
++
++	while (size) {
++		size_t pgsize = ipu6_mmu_pgsize(mmu_info->pgsize_bitmap,
++						iova | paddr, size);
++
++		dev_dbg(mmu_info->dev,
++			"mapping: iova 0x%lx pa %pa pgsize 0x%zx\n",
++			iova, &paddr, pgsize);
++
++		ret = __ipu6_mmu_map(mmu_info, iova, paddr, pgsize);
++		if (ret)
++			break;
++
++		iova += pgsize;
++		paddr += pgsize;
++		size -= pgsize;
++	}
++
++	/* unroll mapping in case something went wrong */
++	if (ret)
++		ipu6_mmu_unmap(mmu_info, orig_iova, orig_size - size);
++
++	return ret;
++}
++
++static void ipu6_mmu_destroy(struct ipu6_mmu *mmu)
++{
++	struct ipu6_dma_mapping *dmap = mmu->dmap;
++	struct ipu6_mmu_info *mmu_info = dmap->mmu_info;
++	struct iova *iova;
++	u32 l1_idx;
++
++	if (mmu->iova_trash_page) {
++		iova = find_iova(&dmap->iovad, PHYS_PFN(mmu->iova_trash_page));
++		if (iova) {
++			/* unmap and free the trash buffer iova */
++			ipu6_mmu_unmap(mmu_info, PFN_PHYS(iova->pfn_lo),
++				       PFN_PHYS(iova_size(iova)));
++			__free_iova(&dmap->iovad, iova);
++		} else {
++			dev_err(mmu->dev, "trash buffer iova not found.\n");
++		}
++
++		mmu->iova_trash_page = 0;
++		dma_unmap_page(mmu_info->dev, mmu->pci_trash_page,
++			       PAGE_SIZE, DMA_BIDIRECTIONAL);
++		mmu->pci_trash_page = 0;
++		__free_page(mmu->trash_page);
++	}
++
++	for (l1_idx = 0; l1_idx < ISP_L1PT_PTES; l1_idx++) {
++		if (mmu_info->l1_pt[l1_idx] != mmu_info->dummy_l2_pteval) {
++			dma_unmap_single(mmu_info->dev,
++					 TBL_PHYS_ADDR(mmu_info->l1_pt[l1_idx]),
++					 PAGE_SIZE, DMA_BIDIRECTIONAL);
++			free_page((unsigned long)mmu_info->l2_pts[l1_idx]);
++		}
++	}
++
++	vfree(mmu_info->l2_pts);
++	free_dummy_page(mmu_info);
++	dma_unmap_single(mmu_info->dev, TBL_PHYS_ADDR(mmu_info->l1_pt_dma),
++			 PAGE_SIZE, DMA_BIDIRECTIONAL);
++	free_page((unsigned long)mmu_info->dummy_l2_pt);
++	free_page((unsigned long)mmu_info->l1_pt);
++	kfree(mmu_info);
++}
++
++struct ipu6_mmu *ipu6_mmu_init(struct device *dev,
++			       void __iomem *base, int mmid,
++			       const struct ipu6_hw_variants *hw)
++{
++	struct ipu6_device *isp = pci_get_drvdata(to_pci_dev(dev));
++	struct ipu6_mmu_pdata *pdata;
++	struct ipu6_mmu *mmu;
++	unsigned int i;
++
++	if (hw->nr_mmus > IPU6_MMU_MAX_DEVICES)
++		return ERR_PTR(-EINVAL);
++
++	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return ERR_PTR(-ENOMEM);
++
++	for (i = 0; i < hw->nr_mmus; i++) {
++		struct ipu6_mmu_hw *pdata_mmu = &pdata->mmu_hw[i];
++		const struct ipu6_mmu_hw *src_mmu = &hw->mmu_hw[i];
++
++		if (src_mmu->nr_l1streams > IPU6_MMU_MAX_TLB_L1_STREAMS ||
++		    src_mmu->nr_l2streams > IPU6_MMU_MAX_TLB_L2_STREAMS)
++			return ERR_PTR(-EINVAL);
++
++		*pdata_mmu = *src_mmu;
++		pdata_mmu->base = base + src_mmu->offset;
++	}
++
++	mmu = devm_kzalloc(dev, sizeof(*mmu), GFP_KERNEL);
++	if (!mmu)
++		return ERR_PTR(-ENOMEM);
++
++	mmu->mmid = mmid;
++	mmu->mmu_hw = pdata->mmu_hw;
++	mmu->nr_mmus = hw->nr_mmus;
++	mmu->tlb_invalidate = tlb_invalidate;
++	mmu->ready = false;
++	INIT_LIST_HEAD(&mmu->vma_list);
++	spin_lock_init(&mmu->ready_lock);
++
++	mmu->dmap = alloc_dma_mapping(isp);
++	if (!mmu->dmap) {
++		dev_err(dev, "can't alloc dma mapping\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	return mmu;
++}
++
++void ipu6_mmu_cleanup(struct ipu6_mmu *mmu)
++{
++	struct ipu6_dma_mapping *dmap = mmu->dmap;
++
++	ipu6_mmu_destroy(mmu);
++	mmu->dmap = NULL;
++	iova_cache_put();
++	put_iova_domain(&dmap->iovad);
++	kfree(dmap);
++}
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-mmu.h b/drivers/media/pci/intel/ipu6/ipu6-mmu.h
+new file mode 100644
+index 000000000000..21cdb0f146eb
+--- /dev/null
++++ b/drivers/media/pci/intel/ipu6/ipu6-mmu.h
+@@ -0,0 +1,73 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (C) 2013--2024 Intel Corporation */
++
++#ifndef IPU6_MMU_H
++#define IPU6_MMU_H
++
++#define ISYS_MMID 1
++#define PSYS_MMID 0
++
 +#include <linux/list.h>
-+#include <linux/mutex.h>
++#include <linux/spinlock_types.h>
++#include <linux/types.h>
 +
 +struct device;
-+struct firmware;
-+struct ipu6_device;
-+struct ipu6_bus_device;
++struct page;
++struct ipu6_hw_variants;
 +
-+#define BUTTRESS_PS_FREQ_STEP		25U
-+#define BUTTRESS_MIN_FORCE_PS_FREQ	(BUTTRESS_PS_FREQ_STEP * 8)
-+#define BUTTRESS_MAX_FORCE_PS_FREQ	(BUTTRESS_PS_FREQ_STEP * 32)
++struct ipu6_mmu_info {
++	struct device *dev;
 +
-+#define BUTTRESS_IS_FREQ_STEP		25U
-+#define BUTTRESS_MIN_FORCE_IS_FREQ	(BUTTRESS_IS_FREQ_STEP * 8)
-+#define BUTTRESS_MAX_FORCE_IS_FREQ	(BUTTRESS_IS_FREQ_STEP * 22)
++	u32 *l1_pt;
++	u32 l1_pt_dma;
++	u32 **l2_pts;
 +
-+struct ipu6_buttress_ctrl {
-+	u32 freq_ctl, pwr_sts_shift, pwr_sts_mask, pwr_sts_on, pwr_sts_off;
-+	unsigned int ratio;
-+	unsigned int qos_floor;
-+	bool started;
++	u32 *dummy_l2_pt;
++	u32 dummy_l2_pteval;
++	void *dummy_page;
++	u32 dummy_page_pteval;
++
++	dma_addr_t aperture_start;
++	dma_addr_t aperture_end;
++	unsigned long pgsize_bitmap;
++
++	spinlock_t lock;	/* Serialize access to users */
++	struct ipu6_dma_mapping *dmap;
 +};
 +
-+struct ipu6_buttress_ipc {
-+	struct completion send_complete;
-+	struct completion recv_complete;
-+	u32 nack;
-+	u32 nack_mask;
-+	u32 recv_data;
-+	u32 csr_out;
-+	u32 csr_in;
-+	u32 db0_in;
-+	u32 db0_out;
-+	u32 data0_out;
-+	u32 data0_in;
++struct ipu6_mmu {
++	struct list_head node;
++
++	struct ipu6_mmu_hw *mmu_hw;
++	unsigned int nr_mmus;
++	unsigned int mmid;
++
++	phys_addr_t pgtbl;
++	struct device *dev;
++
++	struct ipu6_dma_mapping *dmap;
++	struct list_head vma_list;
++
++	struct page *trash_page;
++	dma_addr_t pci_trash_page; /* IOVA from PCI DMA services (parent) */
++	dma_addr_t iova_trash_page; /* IOVA for IPU6 child nodes to use */
++
++	bool ready;
++	spinlock_t ready_lock;	/* Serialize access to bool ready */
++
++	void (*tlb_invalidate)(struct ipu6_mmu *mmu);
 +};
 +
-+struct ipu6_buttress {
-+	struct mutex power_mutex, auth_mutex, cons_mutex, ipc_mutex;
-+	struct ipu6_buttress_ipc cse;
-+	struct ipu6_buttress_ipc ish;
-+	struct list_head constraints;
-+	u32 wdt_cached_value;
-+	bool force_suspend;
-+	u32 ref_clk;
-+};
-+
-+enum ipu6_buttress_ipc_domain {
-+	IPU6_BUTTRESS_IPC_CSE,
-+	IPU6_BUTTRESS_IPC_ISH,
-+};
-+
-+struct ipu6_ipc_buttress_bulk_msg {
-+	u32 cmd;
-+	u32 expected_resp;
-+	bool require_resp;
-+	u8 cmd_size;
-+};
-+
-+int ipu6_buttress_ipc_reset(struct ipu6_device *isp,
-+			    struct ipu6_buttress_ipc *ipc);
-+int ipu6_buttress_map_fw_image(struct ipu6_bus_device *sys,
-+			       const struct firmware *fw,
-+			       struct sg_table *sgt);
-+void ipu6_buttress_unmap_fw_image(struct ipu6_bus_device *sys,
-+				  struct sg_table *sgt);
-+int ipu6_buttress_power(struct device *dev, struct ipu6_buttress_ctrl *ctrl,
-+			bool on);
-+bool ipu6_buttress_get_secure_mode(struct ipu6_device *isp);
-+int ipu6_buttress_authenticate(struct ipu6_device *isp);
-+int ipu6_buttress_reset_authentication(struct ipu6_device *isp);
-+bool ipu6_buttress_auth_done(struct ipu6_device *isp);
-+int ipu6_buttress_start_tsc_sync(struct ipu6_device *isp);
-+void ipu6_buttress_tsc_read(struct ipu6_device *isp, u64 *val);
-+u64 ipu6_buttress_tsc_ticks_to_ns(u64 ticks, const struct ipu6_device *isp);
-+
-+irqreturn_t ipu6_buttress_isr(int irq, void *isp_ptr);
-+irqreturn_t ipu6_buttress_isr_threaded(int irq, void *isp_ptr);
-+int ipu6_buttress_init(struct ipu6_device *isp);
-+void ipu6_buttress_exit(struct ipu6_device *isp);
-+void ipu6_buttress_csi_port_config(struct ipu6_device *isp,
-+				   u32 legacy, u32 combo);
-+void ipu6_buttress_restore(struct ipu6_device *isp);
-+#endif /* IPU6_BUTTRESS_H */
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-platform-buttress-regs.h b/drivers/media/pci/intel/ipu6/ipu6-platform-buttress-regs.h
-new file mode 100644
-index 000000000000..20f27011df43
---- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-platform-buttress-regs.h
-@@ -0,0 +1,226 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (C) 2023--2024 Intel Corporation */
-+
-+#ifndef IPU6_PLATFORM_BUTTRESS_REGS_H
-+#define IPU6_PLATFORM_BUTTRESS_REGS_H
-+
-+#include <linux/bits.h>
-+
-+/* IS_WORKPOINT_REQ */
-+#define IPU6_BUTTRESS_REG_IS_FREQ_CTL		0x34
-+/* PS_WORKPOINT_REQ */
-+#define IPU6_BUTTRESS_REG_PS_FREQ_CTL		0x38
-+
-+/* should be tuned for real silicon */
-+#define IPU6_IS_FREQ_CTL_DEFAULT_RATIO		0x08
-+#define IPU6SE_IS_FREQ_CTL_DEFAULT_RATIO	0x0a
-+#define IPU6_PS_FREQ_CTL_DEFAULT_RATIO		0x0d
-+
-+#define IPU6_IS_FREQ_CTL_DEFAULT_QOS_FLOOR_RATIO	0x10
-+#define IPU6_PS_FREQ_CTL_DEFAULT_QOS_FLOOR_RATIO	0x0708
-+
-+#define IPU6_BUTTRESS_PWR_STATE_IS_PWR_SHIFT	3
-+#define IPU6_BUTTRESS_PWR_STATE_IS_PWR_MASK	GENMASK(4, 3)
-+
-+#define IPU6_BUTTRESS_PWR_STATE_PS_PWR_SHIFT	6
-+#define IPU6_BUTTRESS_PWR_STATE_PS_PWR_MASK	GENMASK(7, 6)
-+
-+#define IPU6_BUTTRESS_PWR_STATE_DN_DONE		0x0
-+#define IPU6_BUTTRESS_PWR_STATE_UP_PROCESS	0x1
-+#define IPU6_BUTTRESS_PWR_STATE_DN_PROCESS	0x2
-+#define IPU6_BUTTRESS_PWR_STATE_UP_DONE		0x3
-+
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_0	0x270
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_1	0x274
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_2	0x278
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_3	0x27c
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_4	0x280
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_5	0x284
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_6	0x288
-+#define IPU6_BUTTRESS_REG_FPGA_SUPPORT_7	0x28c
-+
-+#define BUTTRESS_REG_WDT			0x8
-+#define BUTTRESS_REG_BTRS_CTRL			0xc
-+#define BUTTRESS_REG_BTRS_CTRL_STALL_MODE_VC0	BIT(0)
-+#define BUTTRESS_REG_BTRS_CTRL_STALL_MODE_VC1	BIT(1)
-+#define BUTTRESS_REG_BTRS_CTRL_REF_CLK_IND	GENMASK(9, 8)
-+
-+#define BUTTRESS_REG_FW_RESET_CTL	0x30
-+#define BUTTRESS_FW_RESET_CTL_START	BIT(0)
-+#define BUTTRESS_FW_RESET_CTL_DONE	BIT(1)
-+
-+#define BUTTRESS_REG_IS_FREQ_CTL	0x34
-+#define BUTTRESS_REG_PS_FREQ_CTL	0x38
-+
-+#define BUTTRESS_FREQ_CTL_START		BIT(31)
-+#define BUTTRESS_FREQ_CTL_ICCMAX_LEVEL		GENMASK(19, 16)
-+#define BUTTRESS_FREQ_CTL_QOS_FLOOR_MASK	GENMASK(15, 8)
-+#define BUTTRESS_FREQ_CTL_RATIO_MASK	GENMASK(7, 0)
-+
-+#define BUTTRESS_REG_PWR_STATE	0x5c
-+
-+#define BUTTRESS_PWR_STATE_RESET		0x0
-+#define BUTTRESS_PWR_STATE_PWR_ON_DONE		0x1
-+#define BUTTRESS_PWR_STATE_PWR_RDY		0x3
-+#define BUTTRESS_PWR_STATE_PWR_IDLE		0x4
-+
-+#define BUTTRESS_PWR_STATE_HH_STATUS_MASK	GENMASK(12, 11)
-+
-+enum {
-+	BUTTRESS_PWR_STATE_HH_STATE_IDLE,
-+	BUTTRESS_PWR_STATE_HH_STATE_IN_PRGS,
-+	BUTTRESS_PWR_STATE_HH_STATE_DONE,
-+	BUTTRESS_PWR_STATE_HH_STATE_ERR,
-+};
-+
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_MASK	GENMASK(23, 19)
-+
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_IDLE			0x0
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_PLL_CMP		0x1
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_CLKACK		0x2
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_PG_ACK		0x3
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_RST_ASSRT_CYCLES		0x4
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_STOP_CLK_CYCLES1		0x5
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_STOP_CLK_CYCLES2		0x6
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_RST_DEASSRT_CYCLES	0x7
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_FUSE_WR_CMP	0x8
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_BRK_POINT			0x9
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_IS_RDY			0xa
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_HALT_HALTED		0xb
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_RST_DURATION_CNT3		0xc
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_CLKACK_PD		0xd
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_PD_BRK_POINT		0xe
-+#define BUTTRESS_PWR_STATE_IS_PWR_FSM_WAIT_4_PD_PG_ACK0		0xf
-+
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_MASK	GENMASK(28, 24)
-+
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_IDLE			0x0
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PU_PLL_IP_RDY	0x1
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_RO_PRE_CNT_EXH	0x2
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PU_VGI_PWRGOOD	0x3
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_RO_POST_CNT_EXH	0x4
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WR_PLL_RATIO		0x5
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PU_PLL_CMP		0x6
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PU_CLKACK		0x7
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_RST_ASSRT_CYCLES		0x8
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_STOP_CLK_CYCLES1		0x9
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_STOP_CLK_CYCLES2		0xa
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_RST_DEASSRT_CYCLES	0xb
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_PU_BRK_PNT		0xc
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_FUSE_ACCPT		0xd
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_PS_PWR_UP			0xf
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_4_HALTED		0x10
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_RESET_CNT3		0x11
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PD_CLKACK		0x12
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_PD_OFF_IND		0x13
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_DVFS_PH4		0x14
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_DVFS_PLL_CMP		0x15
-+#define BUTTRESS_PWR_STATE_PS_PWR_FSM_WAIT_DVFS_CLKACK		0x16
-+
-+#define BUTTRESS_REG_SECURITY_CTL	0x300
-+#define BUTTRESS_REG_SKU		0x314
-+#define BUTTRESS_REG_SECURITY_TOUCH	0x318
-+#define BUTTRESS_REG_CAMERA_MASK	0x84
-+
-+#define BUTTRESS_SECURITY_CTL_FW_SECURE_MODE	BIT(16)
-+#define BUTTRESS_SECURITY_CTL_FW_SETUP_MASK	GENMASK(4, 0)
-+
-+#define BUTTRESS_SECURITY_CTL_FW_SETUP_DONE		BIT(0)
-+#define BUTTRESS_SECURITY_CTL_AUTH_DONE			BIT(1)
-+#define BUTTRESS_SECURITY_CTL_AUTH_FAILED		BIT(3)
-+
-+#define BUTTRESS_REG_FW_SOURCE_BASE_LO	0x78
-+#define BUTTRESS_REG_FW_SOURCE_BASE_HI	0x7C
-+#define BUTTRESS_REG_FW_SOURCE_SIZE	0x80
-+
-+#define BUTTRESS_REG_ISR_STATUS		0x90
-+#define BUTTRESS_REG_ISR_ENABLED_STATUS	0x94
-+#define BUTTRESS_REG_ISR_ENABLE		0x98
-+#define BUTTRESS_REG_ISR_CLEAR		0x9C
-+
-+#define BUTTRESS_ISR_IS_IRQ			BIT(0)
-+#define BUTTRESS_ISR_PS_IRQ			BIT(1)
-+#define BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE	BIT(2)
-+#define BUTTRESS_ISR_IPC_EXEC_DONE_BY_ISH	BIT(3)
-+#define BUTTRESS_ISR_IPC_FROM_CSE_IS_WAITING	BIT(4)
-+#define BUTTRESS_ISR_IPC_FROM_ISH_IS_WAITING	BIT(5)
-+#define BUTTRESS_ISR_CSE_CSR_SET		BIT(6)
-+#define BUTTRESS_ISR_ISH_CSR_SET		BIT(7)
-+#define BUTTRESS_ISR_SPURIOUS_CMP		BIT(8)
-+#define BUTTRESS_ISR_WATCHDOG_EXPIRED		BIT(9)
-+#define BUTTRESS_ISR_PUNIT_2_IUNIT_IRQ		BIT(10)
-+#define BUTTRESS_ISR_SAI_VIOLATION		BIT(11)
-+#define BUTTRESS_ISR_HW_ASSERTION		BIT(12)
-+#define BUTTRESS_ISR_IS_CORRECTABLE_MEM_ERR	BIT(13)
-+#define BUTTRESS_ISR_IS_FATAL_MEM_ERR		BIT(14)
-+#define BUTTRESS_ISR_IS_NON_FATAL_MEM_ERR	BIT(15)
-+#define BUTTRESS_ISR_PS_CORRECTABLE_MEM_ERR	BIT(16)
-+#define BUTTRESS_ISR_PS_FATAL_MEM_ERR		BIT(17)
-+#define BUTTRESS_ISR_PS_NON_FATAL_MEM_ERR	BIT(18)
-+#define BUTTRESS_ISR_PS_FAST_THROTTLE		BIT(19)
-+#define BUTTRESS_ISR_UFI_ERROR			BIT(20)
-+
-+#define BUTTRESS_REG_IU2CSEDB0	0x100
-+
-+#define BUTTRESS_IU2CSEDB0_BUSY		BIT(31)
-+#define BUTTRESS_IU2CSEDB0_IPC_CLIENT_ID_VAL	2
-+
-+#define BUTTRESS_REG_IU2CSEDATA0	0x104
-+
-+#define BUTTRESS_IU2CSEDATA0_IPC_BOOT_LOAD		1
-+#define BUTTRESS_IU2CSEDATA0_IPC_AUTH_RUN		2
-+#define BUTTRESS_IU2CSEDATA0_IPC_AUTH_REPLACE		3
-+#define BUTTRESS_IU2CSEDATA0_IPC_UPDATE_SECURE_TOUCH	16
-+
-+#define BUTTRESS_CSE2IUDATA0_IPC_BOOT_LOAD_DONE			BIT(0)
-+#define BUTTRESS_CSE2IUDATA0_IPC_AUTH_RUN_DONE			BIT(1)
-+#define BUTTRESS_CSE2IUDATA0_IPC_AUTH_REPLACE_DONE		BIT(2)
-+#define BUTTRESS_CSE2IUDATA0_IPC_UPDATE_SECURE_TOUCH_DONE	BIT(4)
-+
-+#define BUTTRESS_REG_IU2CSECSR		0x108
-+
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_COMP_ACTIONS_RST_PHASE1		BIT(0)
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_COMP_ACTIONS_RST_PHASE2		BIT(1)
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_QUERIED_IP_COMP_ACTIONS_RST_PHASE	BIT(2)
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_ASSERTED_REG_VALID_REQ		BIT(3)
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_ACKED_REG_VALID			BIT(4)
-+#define BUTTRESS_IU2CSECSR_IPC_PEER_DEASSERTED_REG_VALID_REQ		BIT(5)
-+
-+#define BUTTRESS_REG_CSE2IUDB0		0x304
-+#define BUTTRESS_REG_CSE2IUCSR		0x30C
-+#define BUTTRESS_REG_CSE2IUDATA0	0x308
-+
-+/* 0x20 == NACK, 0xf == unknown command */
-+#define BUTTRESS_CSE2IUDATA0_IPC_NACK      0xf20
-+#define BUTTRESS_CSE2IUDATA0_IPC_NACK_MASK GENMASK(15, 0)
-+
-+#define BUTTRESS_REG_ISH2IUCSR		0x50
-+#define BUTTRESS_REG_ISH2IUDB0		0x54
-+#define BUTTRESS_REG_ISH2IUDATA0	0x58
-+
-+#define BUTTRESS_REG_IU2ISHDB0		0x10C
-+#define BUTTRESS_REG_IU2ISHDATA0	0x110
-+#define BUTTRESS_REG_IU2ISHDATA1	0x114
-+#define BUTTRESS_REG_IU2ISHCSR		0x118
-+
-+#define BUTTRESS_REG_FABRIC_CMD		0x88
-+
-+#define BUTTRESS_FABRIC_CMD_START_TSC_SYNC	BIT(0)
-+#define BUTTRESS_FABRIC_CMD_IS_DRAIN		BIT(4)
-+
-+#define BUTTRESS_REG_TSW_CTL		0x120
-+#define BUTTRESS_TSW_CTL_SOFT_RESET	BIT(8)
-+
-+#define BUTTRESS_REG_TSC_LO	0x164
-+#define BUTTRESS_REG_TSC_HI	0x168
-+
-+#define BUTTRESS_IRQS		(BUTTRESS_ISR_IPC_FROM_CSE_IS_WAITING | \
-+				 BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE |    \
-+				 BUTTRESS_ISR_IS_IRQ | BUTTRESS_ISR_PS_IRQ)
-+
-+#define BUTTRESS_EVENT		 (BUTTRESS_ISR_IPC_FROM_CSE_IS_WAITING | \
-+				  BUTTRESS_ISR_IPC_FROM_ISH_IS_WAITING | \
-+				  BUTTRESS_ISR_IPC_EXEC_DONE_BY_CSE |    \
-+				  BUTTRESS_ISR_IPC_EXEC_DONE_BY_ISH |    \
-+				  BUTTRESS_ISR_SAI_VIOLATION)
-+#endif /* IPU6_PLATFORM_BUTTRESS_REGS_H */
++struct ipu6_mmu *ipu6_mmu_init(struct device *dev,
++			       void __iomem *base, int mmid,
++			       const struct ipu6_hw_variants *hw);
++void ipu6_mmu_cleanup(struct ipu6_mmu *mmu);
++int ipu6_mmu_hw_init(struct ipu6_mmu *mmu);
++void ipu6_mmu_hw_cleanup(struct ipu6_mmu *mmu);
++int ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		 phys_addr_t paddr, size_t size);
++size_t ipu6_mmu_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
++		      size_t size);
++phys_addr_t ipu6_mmu_iova_to_phys(struct ipu6_mmu_info *mmu_info,
++				  dma_addr_t iova);
++#endif
 -- 
 2.39.2
 
