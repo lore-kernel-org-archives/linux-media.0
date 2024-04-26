@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C791411CD
-	for <linux-media@vger.kernel.org>; Fri, 26 Apr 2024 09:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C87F1422AD
+	for <linux-media@vger.kernel.org>; Fri, 26 Apr 2024 09:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714125525; cv=none; b=UolJRAGnj7j0KV2d+1jtqCB3SyiWbV1NJJaOtVBJmEw8CzHEt4GtBwlf7uKO+gdDgTH69AXw2RnQVgSWpMZUaU25/8iZRWMrVyFWNUiXjn9Po2nyQqFBNOhCA0ZvWaNsrIx4SJy+FsMrHM37sQYzgfgxoFBJEPAp9sX0gwPKnP0=
+	t=1714125527; cv=none; b=aVeAgipSmTGH/hVbVhqTaAFCgp1j4H+CpScORDwcEJNPGQdiJQn+ICKoee1qJaNvBiIgvQcU7lo7cfehldrf8FdvqzGo6A/13y4Sr3q/ZXWqs9PkJ4nVhyXlMkVI1U3GbvWk6X4EkeNprtZbajjz2hBZwERcXHcyu2K4WyZfpC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714125525; c=relaxed/simple;
-	bh=sObaXCu+MzG3lsVN+aus7qV3e7qFX/lAK++U72gJwM4=;
+	s=arc-20240116; t=1714125527; c=relaxed/simple;
+	bh=KDhXotckrfr/AcQIGLRSRzyb4mSjPdZ00+05PBFAw+0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Vg4On+RIV2JNDxiWi/LuJ6c1S64pzWoLd8XQP15Big84+PsZJUF+5igmQI+knP7Yykl66BC0BgXeKHszKtZgO9cqbbZxXMHbJmLpoKotpJz0NZXHmHsYOaz01A7NinphRcONnHlpNsrjpGYPoU2IB6aWocdvkGrSUU110lHxWVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LAhn/Dns; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version; b=bUuAgmoZ0+HFCd4NpeqH4Tg7niUtM+4Lb7uQyNN5IXIZbfL0Dnrx9DavbnGlJZmPebRaIrhYGBaSsKqfW13HRAB/iPRzzGpxSTU7Zwa/auW7yvyJrJUpI5pNCyuy2JB8Bv3t7vRBixwBtu2LvpA3r+fJVUXgZPZ03+FXxZxwe4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZhQdV2k; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LAhn/Dns"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZhQdV2k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714125524; x=1745661524;
+  t=1714125526; x=1745661526;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sObaXCu+MzG3lsVN+aus7qV3e7qFX/lAK++U72gJwM4=;
-  b=LAhn/DnsC2Mjym4ArMwUI6xIL0PUF7Z0fjR1Tk0Dc9CflzBajv7UCqlJ
-   I4U7tTJc1sFFWBmYTtY50n5CAD4aXHF9OPXLp0/gq3Qqdxnyi1xxtRczB
-   ah0V+eVcbBbSSJakLKmTHAj3HSrOtfq0bqAKE/F4cZHmbQDSoAjn36+7x
-   3Cw5v00UNzgknD+1nhSQfnfnfexQPUUfpDhSTWnsED7ki6pOsW3adQ6PC
-   ti+dJNiwqnxEfLOJBPjADBN+cIQcASxbpHUIN9BFJFT3G5Zb0U5opumOv
-   uxbvjr02S7aHeQ//Unw2rnFauNeq/vxt2AAMv72bAUcG9S0tuhtm94Prk
-   w==;
-X-CSE-ConnectionGUID: l2GzDj+0R+ml2t7wwSNCOw==
-X-CSE-MsgGUID: xuie37ZQQfqcn9ElDHuFqQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="9722814"
+  bh=KDhXotckrfr/AcQIGLRSRzyb4mSjPdZ00+05PBFAw+0=;
+  b=iZhQdV2kT6OXuF3Men1lNbtZ6OitOHDEOQxbuei1ROb/mTmQJdvOYD61
+   DJci0D88SqC1w986QOehi/orf4WPJXxEYCGPzGhDzDvv6LK1OOnlsKkmM
+   so7DvwZ2w21aSl8CfXaZKGzchJLG9W2s2wjp76F5GUun5uSD8A7XIdpPT
+   vNYKF4W/dFZw+9B5VEPSuPOs9Kq93demnsmU0cWLQkxaIeYrANYIuzX9Q
+   MfhBVC4lopu3l4kJqsxA+Zr0EqLiF5hmHd8z5d6qu/rzlpNFfCE/PvrJc
+   hTdtcbEXdUMBUgGfVVmophbqT7goTjjlLN4QowNfDsuDQGmCeA2xX9Mrm
+   A==;
+X-CSE-ConnectionGUID: thv+2E9/SXuOIUi2PgFNzA==
+X-CSE-MsgGUID: RtnPMIqDQmaUW8vy/nV/Mw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="9722827"
 X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="9722814"
+   d="scan'208";a="9722827"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:39 -0700
-X-CSE-ConnectionGUID: ef9E8At9SQaUVgGQFfP9Rw==
-X-CSE-MsgGUID: 6KRY3WcIShG4PnStm5w6Og==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:43 -0700
+X-CSE-ConnectionGUID: 9K1SQvQ0SAaD36xVG+KUgQ==
+X-CSE-MsgGUID: Uv23Q/2TRwmNTnYm8wEcpg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="56303350"
+   d="scan'208";a="56303357"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:36 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 02:58:40 -0700
 Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id B48C712067F;
-	Fri, 26 Apr 2024 12:58:31 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id EE5C611FA8A;
+	Fri, 26 Apr 2024 12:58:35 +0300 (EEST)
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: bingbu.cao@intel.com,
@@ -61,9 +61,9 @@ Cc: bingbu.cao@intel.com,
 	bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	hongju.wang@intel.com
-Subject: [PATCH v6 04/18] media: intel/ipu6: add IPU auxiliary devices
-Date: Fri, 26 Apr 2024 12:58:08 +0300
-Message-Id: <20240426095822.946453-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v6 06/18] media: intel/ipu6: CPD parsing for get firmware components
+Date: Fri, 26 Apr 2024 12:58:10 +0300
+Message-Id: <20240426095822.946453-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240426095822.946453-1-sakari.ailus@linux.intel.com>
 References: <20240426095822.946453-1-sakari.ailus@linux.intel.com>
@@ -77,260 +77,500 @@ Content-Transfer-Encoding: 8bit
 
 From: Bingbu Cao <bingbu.cao@intel.com>
 
-Even though the IPU input system and processing system are in a single PCI
-device, each system has its own power sequence. Powering up the processing
-system depends on first powering up the input system.
-
-Besides, both the input and processing systems have their own MMU hardware
-for IPU DMA address mapping.
-
-Register the IS/PS devices on auxiliary bus and attach power domain to
-implement the power sequence dependency.
+For IPU6, firmware is generated and released as signed Code Partition
+Directory (CPD) format file which is aligned with the SPI flash code
+partition definition. The CPD format includes CPD header, manifest,
+metadata and module data. The driver parses them according to the CPD
+layout to acquire each component.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu6/ipu6-bus.c | 165 ++++++++++++++++++++++++
- drivers/media/pci/intel/ipu6/ipu6-bus.h |  58 +++++++++
- 2 files changed, 223 insertions(+)
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-bus.c
- create mode 100644 drivers/media/pci/intel/ipu6/ipu6-bus.h
+ drivers/media/pci/intel/ipu6/ipu6-cpd.c | 362 ++++++++++++++++++++++++
+ drivers/media/pci/intel/ipu6/ipu6-cpd.h | 105 +++++++
+ 2 files changed, 467 insertions(+)
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.c
+ create mode 100644 drivers/media/pci/intel/ipu6/ipu6-cpd.h
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-bus.c b/drivers/media/pci/intel/ipu6/ipu6-bus.c
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-cpd.c b/drivers/media/pci/intel/ipu6/ipu6-cpd.c
 new file mode 100644
-index 000000000000..149ec098cdbf
+index 000000000000..715b21ab4b8e
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-bus.c
-@@ -0,0 +1,165 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-cpd.c
+@@ -0,0 +1,362 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Copyright (C) 2013 - 2024 Intel Corporation
++ * Copyright (C) 2013--2024 Intel Corporation
 + */
 +
-+#include <linux/auxiliary_bus.h>
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
 +#include <linux/err.h>
-+#include <linux/list.h>
-+#include <linux/mutex.h>
-+#include <linux/pci.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/slab.h>
++#include <linux/dma-mapping.h>
++#include <linux/gfp_types.h>
++#include <linux/math64.h>
++#include <linux/sizes.h>
++#include <linux/types.h>
 +
 +#include "ipu6.h"
 +#include "ipu6-bus.h"
-+#include "ipu6-buttress.h"
-+#include "ipu6-dma.h"
++#include "ipu6-cpd.h"
 +
-+static int bus_pm_runtime_suspend(struct device *dev)
++/* 15 entries + header*/
++#define MAX_PKG_DIR_ENT_CNT		16
++/* 2 qword per entry/header */
++#define PKG_DIR_ENT_LEN			2
++/* PKG_DIR size in bytes */
++#define PKG_DIR_SIZE			((MAX_PKG_DIR_ENT_CNT) *	\
++					 (PKG_DIR_ENT_LEN) * sizeof(u64))
++/* _IUPKDR_ */
++#define PKG_DIR_HDR_MARK		0x5f4955504b44525fULL
++
++/* $CPD */
++#define CPD_HDR_MARK			0x44504324
++
++#define MAX_MANIFEST_SIZE		(SZ_2K * sizeof(u32))
++#define MAX_METADATA_SIZE		SZ_64K
++
++#define MAX_COMPONENT_ID		127
++#define MAX_COMPONENT_VERSION		0xffff
++
++#define MANIFEST_IDX	0
++#define METADATA_IDX	1
++#define MODULEDATA_IDX	2
++/*
++ * PKG_DIR Entry (type == id)
++ * 63:56        55      54:48   47:32   31:24   23:0
++ * Rsvd         Rsvd    Type    Version Rsvd    Size
++ */
++#define PKG_DIR_SIZE_MASK	GENMASK(23, 0)
++#define PKG_DIR_VERSION_MASK	GENMASK(47, 32)
++#define PKG_DIR_TYPE_MASK	GENMASK(54, 48)
++
++static inline const struct ipu6_cpd_ent *ipu6_cpd_get_entry(const void *cpd,
++							    u8 idx)
 +{
-+	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
-+	int ret;
++	const struct ipu6_cpd_hdr *cpd_hdr = cpd;
++	const struct ipu6_cpd_ent *ent;
 +
-+	ret = pm_generic_runtime_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = ipu6_buttress_power(dev, adev->ctrl, false);
-+	if (!ret)
-+		return 0;
-+
-+	dev_err(dev, "power down failed!\n");
-+
-+	/* Powering down failed, attempt to resume device now */
-+	ret = pm_generic_runtime_resume(dev);
-+	if (!ret)
-+		return -EBUSY;
-+
-+	return -EIO;
++	ent = (const struct ipu6_cpd_ent *)((const u8 *)cpd + cpd_hdr->hdr_len);
++	return ent + idx;
 +}
 +
-+static int bus_pm_runtime_resume(struct device *dev)
++#define ipu6_cpd_get_manifest(cpd) ipu6_cpd_get_entry(cpd, MANIFEST_IDX)
++#define ipu6_cpd_get_metadata(cpd) ipu6_cpd_get_entry(cpd, METADATA_IDX)
++#define ipu6_cpd_get_moduledata(cpd) ipu6_cpd_get_entry(cpd, MODULEDATA_IDX)
++
++static const struct ipu6_cpd_metadata_cmpnt_hdr *
++ipu6_cpd_metadata_get_cmpnt(struct ipu6_device *isp, const void *metadata,
++			    unsigned int metadata_size, u8 idx)
 +{
-+	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
-+	int ret;
++	size_t extn_size = sizeof(struct ipu6_cpd_metadata_extn);
++	size_t cmpnt_count = metadata_size - extn_size;
 +
-+	ret = ipu6_buttress_power(dev, adev->ctrl, true);
-+	if (ret)
-+		return ret;
++	cmpnt_count = div_u64(cmpnt_count, isp->cpd_metadata_cmpnt_size);
 +
-+	ret = pm_generic_runtime_resume(dev);
-+	if (ret)
-+		goto out_err;
-+
-+	return 0;
-+
-+out_err:
-+	ipu6_buttress_power(dev, adev->ctrl, false);
-+
-+	return -EBUSY;
-+}
-+
-+static struct dev_pm_domain ipu6_bus_pm_domain = {
-+	.ops = {
-+		.runtime_suspend = bus_pm_runtime_suspend,
-+		.runtime_resume = bus_pm_runtime_resume,
-+	},
-+};
-+
-+static DEFINE_MUTEX(ipu6_bus_mutex);
-+
-+static void ipu6_bus_release(struct device *dev)
-+{
-+	struct ipu6_bus_device *adev = to_ipu6_bus_device(dev);
-+
-+	kfree(adev->pdata);
-+	kfree(adev);
-+}
-+
-+struct ipu6_bus_device *
-+ipu6_bus_initialize_device(struct pci_dev *pdev, struct device *parent,
-+			   void *pdata, struct ipu6_buttress_ctrl *ctrl,
-+			   char *name)
-+{
-+	struct auxiliary_device *auxdev;
-+	struct ipu6_bus_device *adev;
-+	struct ipu6_device *isp = pci_get_drvdata(pdev);
-+	int ret;
-+
-+	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-+	if (!adev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	adev->dma_mask = DMA_BIT_MASK(isp->secure_mode ? IPU6_MMU_ADDR_BITS :
-+				      IPU6_MMU_ADDR_BITS_NON_SECURE);
-+	adev->isp = isp;
-+	adev->ctrl = ctrl;
-+	adev->pdata = pdata;
-+	auxdev = &adev->auxdev;
-+	auxdev->name = name;
-+	auxdev->id = (pci_domain_nr(pdev->bus) << 16) |
-+		      PCI_DEVID(pdev->bus->number, pdev->devfn);
-+
-+	auxdev->dev.parent = parent;
-+	auxdev->dev.release = ipu6_bus_release;
-+	auxdev->dev.dma_ops = &ipu6_dma_ops;
-+	auxdev->dev.dma_mask = &adev->dma_mask;
-+	auxdev->dev.dma_parms = pdev->dev.dma_parms;
-+	auxdev->dev.coherent_dma_mask = adev->dma_mask;
-+
-+	ret = auxiliary_device_init(auxdev);
-+	if (ret < 0) {
-+		dev_err(&isp->pdev->dev, "auxiliary device init failed (%d)\n",
-+			ret);
-+		kfree(adev);
-+		return ERR_PTR(ret);
++	if (idx > MAX_COMPONENT_ID || idx >= cmpnt_count) {
++		dev_err(&isp->pdev->dev, "Component index out of range (%d)\n",
++			idx);
++		return ERR_PTR(-EINVAL);
 +	}
 +
-+	dev_pm_domain_set(&auxdev->dev, &ipu6_bus_pm_domain);
-+
-+	pm_runtime_forbid(&adev->auxdev.dev);
-+	pm_runtime_enable(&adev->auxdev.dev);
-+
-+	return adev;
++	return metadata + extn_size + idx * isp->cpd_metadata_cmpnt_size;
 +}
 +
-+int ipu6_bus_add_device(struct ipu6_bus_device *adev)
++static u32 ipu6_cpd_metadata_cmpnt_version(struct ipu6_device *isp,
++					   const void *metadata,
++					   unsigned int metadata_size, u8 idx)
 +{
-+	struct auxiliary_device *auxdev = &adev->auxdev;
++	const struct ipu6_cpd_metadata_cmpnt_hdr *cmpnt;
++
++	cmpnt = ipu6_cpd_metadata_get_cmpnt(isp, metadata, metadata_size, idx);
++	if (IS_ERR(cmpnt))
++		return PTR_ERR(cmpnt);
++
++	return cmpnt->ver;
++}
++
++static int ipu6_cpd_metadata_get_cmpnt_id(struct ipu6_device *isp,
++					  const void *metadata,
++					  unsigned int metadata_size, u8 idx)
++{
++	const struct ipu6_cpd_metadata_cmpnt_hdr *cmpnt;
++
++	cmpnt = ipu6_cpd_metadata_get_cmpnt(isp, metadata, metadata_size, idx);
++	if (IS_ERR(cmpnt))
++		return PTR_ERR(cmpnt);
++
++	return cmpnt->id;
++}
++
++static int ipu6_cpd_parse_module_data(struct ipu6_device *isp,
++				      const void *module_data,
++				      unsigned int module_data_size,
++				      dma_addr_t dma_addr_module_data,
++				      u64 *pkg_dir, const void *metadata,
++				      unsigned int metadata_size)
++{
++	const struct ipu6_cpd_module_data_hdr *module_data_hdr;
++	const struct ipu6_cpd_hdr *dir_hdr;
++	const struct ipu6_cpd_ent *dir_ent;
++	unsigned int i;
++	u8 len;
++
++	if (!module_data)
++		return -EINVAL;
++
++	module_data_hdr = module_data;
++	dir_hdr = module_data + module_data_hdr->hdr_len;
++	len = dir_hdr->hdr_len;
++	dir_ent = (const struct ipu6_cpd_ent *)(((u8 *)dir_hdr) + len);
++
++	pkg_dir[0] = PKG_DIR_HDR_MARK;
++	/* pkg_dir entry count = component count + pkg_dir header */
++	pkg_dir[1] = dir_hdr->ent_cnt + 1;
++
++	for (i = 0; i < dir_hdr->ent_cnt; i++, dir_ent++) {
++		u64 *p = &pkg_dir[PKG_DIR_ENT_LEN *  (1 + i)];
++		int ver, id;
++
++		*p++ = dma_addr_module_data + dir_ent->offset;
++		id = ipu6_cpd_metadata_get_cmpnt_id(isp, metadata,
++						    metadata_size, i);
++		if (id < 0 || id > MAX_COMPONENT_ID) {
++			dev_err(&isp->pdev->dev, "Invalid CPD component id\n");
++			return -EINVAL;
++		}
++
++		ver = ipu6_cpd_metadata_cmpnt_version(isp, metadata,
++						      metadata_size, i);
++		if (ver < 0 || ver > MAX_COMPONENT_VERSION) {
++			dev_err(&isp->pdev->dev,
++				"Invalid CPD component version\n");
++			return -EINVAL;
++		}
++
++		*p = FIELD_PREP(PKG_DIR_SIZE_MASK, dir_ent->len) |
++			FIELD_PREP(PKG_DIR_TYPE_MASK, id) |
++			FIELD_PREP(PKG_DIR_VERSION_MASK, ver);
++	}
++
++	return 0;
++}
++
++int ipu6_cpd_create_pkg_dir(struct ipu6_bus_device *adev, const void *src)
++{
++	dma_addr_t dma_addr_src = sg_dma_address(adev->fw_sgt.sgl);
++	const struct ipu6_cpd_ent *ent, *man_ent, *met_ent;
++	struct device *dev = &adev->auxdev.dev;
++	struct ipu6_device *isp = adev->isp;
++	unsigned int man_sz, met_sz;
++	void *pkg_dir_pos;
 +	int ret;
 +
-+	ret = auxiliary_device_add(auxdev);
++	man_ent = ipu6_cpd_get_manifest(src);
++	man_sz = man_ent->len;
++
++	met_ent = ipu6_cpd_get_metadata(src);
++	met_sz = met_ent->len;
++
++	adev->pkg_dir_size = PKG_DIR_SIZE + man_sz + met_sz;
++	adev->pkg_dir = dma_alloc_attrs(dev, adev->pkg_dir_size,
++					&adev->pkg_dir_dma_addr, GFP_KERNEL, 0);
++	if (!adev->pkg_dir)
++		return -ENOMEM;
++
++	/*
++	 * pkg_dir entry/header:
++	 * qword | 63:56 | 55   | 54:48 | 47:32 | 31:24 | 23:0
++	 * N         Address/Offset/"_IUPKDR_"
++	 * N + 1 | rsvd  | rsvd | type  | ver   | rsvd  | size
++	 *
++	 * We can ignore other fields that size in N + 1 qword as they
++	 * are 0 anyway. Just setting size for now.
++	 */
++
++	ent = ipu6_cpd_get_moduledata(src);
++
++	ret = ipu6_cpd_parse_module_data(isp, src + ent->offset,
++					 ent->len, dma_addr_src + ent->offset,
++					 adev->pkg_dir, src + met_ent->offset,
++					 met_ent->len);
 +	if (ret) {
-+		auxiliary_device_uninit(auxdev);
++		dev_err(&isp->pdev->dev, "Failed to parse module data\n");
++		dma_free_attrs(dev, adev->pkg_dir_size,
++			       adev->pkg_dir, adev->pkg_dir_dma_addr, 0);
 +		return ret;
 +	}
 +
-+	mutex_lock(&ipu6_bus_mutex);
-+	list_add(&adev->list, &adev->isp->devices);
-+	mutex_unlock(&ipu6_bus_mutex);
++	/* Copy manifest after pkg_dir */
++	pkg_dir_pos = adev->pkg_dir + PKG_DIR_ENT_LEN * MAX_PKG_DIR_ENT_CNT;
++	memcpy(pkg_dir_pos, src + man_ent->offset, man_sz);
 +
-+	pm_runtime_allow(&auxdev->dev);
++	/* Copy metadata after manifest */
++	pkg_dir_pos += man_sz;
++	memcpy(pkg_dir_pos, src + met_ent->offset, met_sz);
++
++	dma_sync_single_range_for_device(dev, adev->pkg_dir_dma_addr,
++					 0, adev->pkg_dir_size, DMA_TO_DEVICE);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_cpd_create_pkg_dir, INTEL_IPU6);
++
++void ipu6_cpd_free_pkg_dir(struct ipu6_bus_device *adev)
++{
++	dma_free_attrs(&adev->auxdev.dev, adev->pkg_dir_size, adev->pkg_dir,
++		       adev->pkg_dir_dma_addr, 0);
++}
++EXPORT_SYMBOL_NS_GPL(ipu6_cpd_free_pkg_dir, INTEL_IPU6);
++
++static int ipu6_cpd_validate_cpd(struct ipu6_device *isp, const void *cpd,
++				 unsigned long cpd_size,
++				 unsigned long data_size)
++{
++	const struct ipu6_cpd_hdr *cpd_hdr = cpd;
++	const struct ipu6_cpd_ent *ent;
++	unsigned int i;
++	u8 len;
++
++	len = cpd_hdr->hdr_len;
++
++	/* Ensure cpd hdr is within moduledata */
++	if (cpd_size < len) {
++		dev_err(&isp->pdev->dev, "Invalid CPD moduledata size\n");
++		return -EINVAL;
++	}
++
++	/* Sanity check for CPD header */
++	if ((cpd_size - len) / sizeof(*ent) < cpd_hdr->ent_cnt) {
++		dev_err(&isp->pdev->dev, "Invalid CPD header\n");
++		return -EINVAL;
++	}
++
++	/* Ensure that all entries are within moduledata */
++	ent = (const struct ipu6_cpd_ent *)(((const u8 *)cpd_hdr) + len);
++	for (i = 0; i < cpd_hdr->ent_cnt; i++, ent++) {
++		if (data_size < ent->offset ||
++		    data_size - ent->offset < ent->len) {
++			dev_err(&isp->pdev->dev, "Invalid CPD entry (%d)\n", i);
++			return -EINVAL;
++		}
++	}
 +
 +	return 0;
 +}
 +
-+void ipu6_bus_del_devices(struct pci_dev *pdev)
++static int ipu6_cpd_validate_moduledata(struct ipu6_device *isp,
++					const void *moduledata,
++					u32 moduledata_size)
 +{
-+	struct ipu6_device *isp = pci_get_drvdata(pdev);
-+	struct ipu6_bus_device *adev, *save;
++	const struct ipu6_cpd_module_data_hdr *mod_hdr = moduledata;
++	int ret;
 +
-+	mutex_lock(&ipu6_bus_mutex);
-+
-+	list_for_each_entry_safe(adev, save, &isp->devices, list) {
-+		pm_runtime_disable(&adev->auxdev.dev);
-+		list_del(&adev->list);
-+		auxiliary_device_delete(&adev->auxdev);
-+		auxiliary_device_uninit(&adev->auxdev);
++	/* Ensure moduledata hdr is within moduledata */
++	if (moduledata_size < sizeof(*mod_hdr) ||
++	    moduledata_size < mod_hdr->hdr_len) {
++		dev_err(&isp->pdev->dev, "Invalid CPD moduledata size\n");
++		return -EINVAL;
 +	}
 +
-+	mutex_unlock(&ipu6_bus_mutex);
++	dev_info(&isp->pdev->dev, "FW version: %x\n", mod_hdr->fw_pkg_date);
++	ret = ipu6_cpd_validate_cpd(isp, moduledata + mod_hdr->hdr_len,
++				    moduledata_size - mod_hdr->hdr_len,
++				    moduledata_size);
++	if (ret) {
++		dev_err(&isp->pdev->dev, "Invalid CPD in moduledata\n");
++		return ret;
++	}
++
++	return 0;
 +}
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-bus.h b/drivers/media/pci/intel/ipu6/ipu6-bus.h
++
++static int ipu6_cpd_validate_metadata(struct ipu6_device *isp,
++				      const void *metadata, u32 meta_size)
++{
++	const struct ipu6_cpd_metadata_extn *extn = metadata;
++
++	/* Sanity check for metadata size */
++	if (meta_size < sizeof(*extn) || meta_size > MAX_METADATA_SIZE) {
++		dev_err(&isp->pdev->dev, "Invalid CPD metadata\n");
++		return -EINVAL;
++	}
++
++	/* Validate extension and image types */
++	if (extn->extn_type != IPU6_CPD_METADATA_EXTN_TYPE_IUNIT ||
++	    extn->img_type != IPU6_CPD_METADATA_IMAGE_TYPE_MAIN_FIRMWARE) {
++		dev_err(&isp->pdev->dev,
++			"Invalid CPD metadata descriptor img_type (%d)\n",
++			extn->img_type);
++		return -EINVAL;
++	}
++
++	/* Validate metadata size multiple of metadata components */
++	if ((meta_size - sizeof(*extn)) % isp->cpd_metadata_cmpnt_size) {
++		dev_err(&isp->pdev->dev, "Invalid CPD metadata size\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int ipu6_cpd_validate_cpd_file(struct ipu6_device *isp, const void *cpd_file,
++			       unsigned long cpd_file_size)
++{
++	const struct ipu6_cpd_hdr *hdr = cpd_file;
++	const struct ipu6_cpd_ent *ent;
++	int ret;
++
++	ret = ipu6_cpd_validate_cpd(isp, cpd_file, cpd_file_size,
++				    cpd_file_size);
++	if (ret) {
++		dev_err(&isp->pdev->dev, "Invalid CPD in file\n");
++		return ret;
++	}
++
++	/* Check for CPD file marker */
++	if (hdr->hdr_mark != CPD_HDR_MARK) {
++		dev_err(&isp->pdev->dev, "Invalid CPD header\n");
++		return -EINVAL;
++	}
++
++	/* Sanity check for manifest size */
++	ent = ipu6_cpd_get_manifest(cpd_file);
++	if (ent->len > MAX_MANIFEST_SIZE) {
++		dev_err(&isp->pdev->dev, "Invalid CPD manifest size\n");
++		return -EINVAL;
++	}
++
++	/* Validate metadata */
++	ent = ipu6_cpd_get_metadata(cpd_file);
++	ret = ipu6_cpd_validate_metadata(isp, cpd_file + ent->offset, ent->len);
++	if (ret) {
++		dev_err(&isp->pdev->dev, "Invalid CPD metadata\n");
++		return ret;
++	}
++
++	/* Validate moduledata */
++	ent = ipu6_cpd_get_moduledata(cpd_file);
++	ret = ipu6_cpd_validate_moduledata(isp, cpd_file + ent->offset,
++					   ent->len);
++	if (ret)
++		dev_err(&isp->pdev->dev, "Invalid CPD moduledata\n");
++
++	return ret;
++}
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-cpd.h b/drivers/media/pci/intel/ipu6/ipu6-cpd.h
 new file mode 100644
-index 000000000000..b26c6aee1621
+index 000000000000..e0e4fdeca902
 --- /dev/null
-+++ b/drivers/media/pci/intel/ipu6/ipu6-bus.h
-@@ -0,0 +1,58 @@
++++ b/drivers/media/pci/intel/ipu6/ipu6-cpd.h
+@@ -0,0 +1,105 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (C) 2013 - 2024 Intel Corporation */
++/* Copyright (C) 2015--2024 Intel Corporation */
 +
-+#ifndef IPU6_BUS_H
-+#define IPU6_BUS_H
++#ifndef IPU6_CPD_H
++#define IPU6_CPD_H
 +
-+#include <linux/auxiliary_bus.h>
-+#include <linux/container_of.h>
-+#include <linux/device.h>
-+#include <linux/irqreturn.h>
-+#include <linux/list.h>
-+#include <linux/scatterlist.h>
-+#include <linux/types.h>
++struct ipu6_device;
++struct ipu6_bus_device;
 +
-+struct firmware;
-+struct pci_dev;
++#define IPU6_CPD_SIZE_OF_FW_ARCH_VERSION	7
++#define IPU6_CPD_SIZE_OF_SYSTEM_VERSION		11
++#define IPU6_CPD_SIZE_OF_COMPONENT_NAME		12
 +
-+#define IPU6_BUS_NAME	IPU6_NAME "-bus"
++#define IPU6_CPD_METADATA_EXTN_TYPE_IUNIT	0x10
 +
-+struct ipu6_buttress_ctrl;
++#define IPU6_CPD_METADATA_IMAGE_TYPE_RESERVED		0
++#define IPU6_CPD_METADATA_IMAGE_TYPE_BOOTLOADER		1
++#define IPU6_CPD_METADATA_IMAGE_TYPE_MAIN_FIRMWARE	2
 +
-+struct ipu6_bus_device {
-+	struct auxiliary_device auxdev;
-+	struct auxiliary_driver *auxdrv;
-+	const struct ipu6_auxdrv_data *auxdrv_data;
-+	struct list_head list;
-+	void *pdata;
-+	struct ipu6_mmu *mmu;
-+	struct ipu6_device *isp;
-+	struct ipu6_buttress_ctrl *ctrl;
-+	u64 dma_mask;
-+	const struct firmware *fw;
-+	struct sg_table fw_sgt;
-+	u64 *pkg_dir;
-+	dma_addr_t pkg_dir_dma_addr;
-+	unsigned int pkg_dir_size;
-+};
++#define IPU6_CPD_PKG_DIR_PSYS_SERVER_IDX	0
++#define IPU6_CPD_PKG_DIR_ISYS_SERVER_IDX	1
 +
-+struct ipu6_auxdrv_data {
-+	irqreturn_t (*isr)(struct ipu6_bus_device *adev);
-+	irqreturn_t (*isr_threaded)(struct ipu6_bus_device *adev);
-+	bool wake_isr_thread;
-+};
++#define IPU6_CPD_PKG_DIR_CLIENT_PG_TYPE		3
 +
-+#define to_ipu6_bus_device(_dev) \
-+	container_of(to_auxiliary_dev(_dev), struct ipu6_bus_device, auxdev)
-+#define auxdev_to_adev(_auxdev) \
-+	container_of(_auxdev, struct ipu6_bus_device, auxdev)
-+#define ipu6_bus_get_drvdata(adev) dev_get_drvdata(&(adev)->auxdev.dev)
++#define IPU6_CPD_METADATA_HASH_KEY_SIZE		48
++#define IPU6SE_CPD_METADATA_HASH_KEY_SIZE	32
 +
-+struct ipu6_bus_device *
-+ipu6_bus_initialize_device(struct pci_dev *pdev, struct device *parent,
-+			   void *pdata, struct ipu6_buttress_ctrl *ctrl,
-+			   char *name);
-+int ipu6_bus_add_device(struct ipu6_bus_device *adev);
-+void ipu6_bus_del_devices(struct pci_dev *pdev);
++struct ipu6_cpd_module_data_hdr {
++	u32 hdr_len;
++	u32 endian;
++	u32 fw_pkg_date;
++	u32 hive_sdk_date;
++	u32 compiler_date;
++	u32 target_platform_type;
++	u8 sys_ver[IPU6_CPD_SIZE_OF_SYSTEM_VERSION];
++	u8 fw_arch_ver[IPU6_CPD_SIZE_OF_FW_ARCH_VERSION];
++	u8 rsvd[2];
++} __packed;
 +
-+#endif
++/*
++ * ipu6_cpd_hdr structure updated as the chksum and
++ * sub_partition_name is unused on host side
++ * CSE layout version 1.6 for IPU6SE (hdr_len = 0x10)
++ * CSE layout version 1.7 for IPU6 (hdr_len = 0x14)
++ */
++struct ipu6_cpd_hdr {
++	u32 hdr_mark;
++	u32 ent_cnt;
++	u8 hdr_ver;
++	u8 ent_ver;
++	u8 hdr_len;
++} __packed;
++
++struct ipu6_cpd_ent {
++	u8 name[IPU6_CPD_SIZE_OF_COMPONENT_NAME];
++	u32 offset;
++	u32 len;
++	u8 rsvd[4];
++} __packed;
++
++struct ipu6_cpd_metadata_cmpnt_hdr {
++	u32 id;
++	u32 size;
++	u32 ver;
++} __packed;
++
++struct ipu6_cpd_metadata_cmpnt {
++	struct ipu6_cpd_metadata_cmpnt_hdr hdr;
++	u8 sha2_hash[IPU6_CPD_METADATA_HASH_KEY_SIZE];
++	u32 entry_point;
++	u32 icache_base_offs;
++	u8 attrs[16];
++} __packed;
++
++struct ipu6se_cpd_metadata_cmpnt {
++	struct ipu6_cpd_metadata_cmpnt_hdr hdr;
++	u8 sha2_hash[IPU6SE_CPD_METADATA_HASH_KEY_SIZE];
++	u32 entry_point;
++	u32 icache_base_offs;
++	u8 attrs[16];
++} __packed;
++
++struct ipu6_cpd_metadata_extn {
++	u32 extn_type;
++	u32 len;
++	u32 img_type;
++	u8 rsvd[16];
++} __packed;
++
++struct ipu6_cpd_client_pkg_hdr {
++	u32 prog_list_offs;
++	u32 prog_list_size;
++	u32 prog_desc_offs;
++	u32 prog_desc_size;
++	u32 pg_manifest_offs;
++	u32 pg_manifest_size;
++	u32 prog_bin_offs;
++	u32 prog_bin_size;
++} __packed;
++
++int ipu6_cpd_create_pkg_dir(struct ipu6_bus_device *adev, const void *src);
++void ipu6_cpd_free_pkg_dir(struct ipu6_bus_device *adev);
++int ipu6_cpd_validate_cpd_file(struct ipu6_device *isp, const void *cpd_file,
++			       unsigned long cpd_file_size);
++#endif /* IPU6_CPD_H */
 -- 
 2.39.2
 
