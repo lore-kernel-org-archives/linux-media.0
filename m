@@ -1,59 +1,59 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700818289E;
-	Mon, 29 Apr 2024 16:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12B182D69
+	for <linux-media@vger.kernel.org>; Mon, 29 Apr 2024 16:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714406562; cv=none; b=q26WlqhHjjOeUWpOhUHMGZvNFWnZIMHv8LDTunWmDXxI45/JR4XZapuQnCbTNU6Vah4KtetD6B2yIAV0sJYkqDC/tkTmv1Zp+D8gut/dhngJmQk9QT6vwSqnj05EChA1g8solqq9/8Q08s42eOo6iWZnwlHD+H8pz6UyXeYiR28=
+	t=1714407678; cv=none; b=QFk+NZDOVTSI+RTtT8A96T8ynf3P20BbUhMvf4Qd4AYVAGzLwMYT5pRg3FNvJQd1PWwSwKQpK40Wcj207JCkEvvy7qnMd8LQWOZ9VytLOLHqw/NI1R5PZfR6W/BqfwlhZffpS/XlOGECoZ1zk4bov3kXxUD+CtlUEsYvUxpmRT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714406562; c=relaxed/simple;
-	bh=20Ns4wgNAJKSSn/3JhX/2hs3/vVgUpIKj/FYouQuJuY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hlFWechYao+j8ZDTKMEkx3rFGNbl1Yjt+CpAx4JgehjScfchHfB7qffWY/65WeaSpIqprV4xFVwt1KwBueqA5uIxpCsYTb1SbXdfZx9AbJK5Gq3pBAmydsH6Hdku4NgbcYYv7UXEPKOLj+XW/xqRG9ah7vpu8NK4v6uiiJUNoKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lM2Okhzo; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714407678; c=relaxed/simple;
+	bh=448Pv/ahY1sG5cFxUnu1qKmuWBj7tjQc+RZ/nKg2f1Y=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=T2uaZ96E/7UOK9ArtPtKR5QgCz0fdKRL41Jhk60lg7oz4MmgXzNi9JEIeA+N0FD3newrEG1CwVtmyPv0m9pnzGuYS8+rgSc4wsVGK+XekoTF41X9Uj4R1nDOz9lsAiyxMy1yCD8SOqlJ+g+UROeqKXnzHpwHdgD/prTgZO88pQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=JjpJ8Ghd; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lM2Okhzo"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e4266673bbso41378305ad.2;
-        Mon, 29 Apr 2024 09:02:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="JjpJ8Ghd"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-41b9dff6be8so22121295e9.3
+        for <linux-media@vger.kernel.org>; Mon, 29 Apr 2024 09:21:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714406561; x=1715011361; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XElcZBZlENfzNj4boLjR3y7e5I4/X7cqaLkM/HBBcyc=;
-        b=lM2OkhzoI1GKtUlcv2n7hVl4sCilpAE8P2J9xbsvzKGzuIKulVGJVHJUv7TIO78twW
-         aiOdVVt6QNcEWpxF8BcxCVzI57dfQ2FeCe0mfWnmJlo0SxwFBYQ8KsQmclcy87ICEHrM
-         7JwV+AWe0RlCUPKvX0W4vyaz9Gx2C/cTyKwDBJhr19yz3jHi91T2nUsLD7BtbTIy02+M
-         EdPc0pgkzBXaqzxeRC68ECHfKRF47VVEZhVMIaNqjcLoonyiIRLU2VGmvktEguyZbmMN
-         okkOEIAcntzKtI4Rtp9sA9kk2lZu2TKO20KzqqcLhwgLOIb3fO3NyctLgrjW6fgjiAFa
-         02Mg==
+        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1714407674; x=1715012474; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Wi+vNP8uVDwUtAt75IkqcVC5kSDI3EMTYuGjoYXVsxg=;
+        b=JjpJ8GhdsTS2G0EgAkg+2PC97maxHzxmAzYKCIBntFkUPsmkv3P+F21dUNsp7xSEHV
+         FUcpAtC7d6Dcv+Hj35pq/Rn3YRAM0AL3R8YhG1NluyLud7TpI3qozA+p49fSZltO0ZFf
+         Qt5B7avHMZECopcef8pakxMgPr8DutnulLPokZ2qP6RiqU7fuY/7prEP8mtMw6NfUo2L
+         +wGedBOLS2YEIf/+6wioGW4wotonosjnBgKWqaAZWQ+/RvqJx7bvuE09ntvmPP+svvfc
+         r6EpVol+/qPHGANIDD/5J/7phH6C/mJ4iOnbjlxUHIghwuNqGi/qCA3xXmexl+ZeYfNm
+         te+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714406561; x=1715011361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1714407674; x=1715012474;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XElcZBZlENfzNj4boLjR3y7e5I4/X7cqaLkM/HBBcyc=;
-        b=arUY89YDRQBfOQnkISpm1/z9ZBhzRX5HeosZh6zf2iUh6sOVta6DVtKxOITGDX/myr
-         hQIXQQQFsIr8Dhve/ny7h8XR9x/lOAALqShxJtuaq5yfdJZxa3xkuXl/ein9+YK7P+TB
-         WszerkE9NNlAMuqpaAMMmHraeosaI6Qd7d8koSAEbpFLG9hZx/dgLqFCNLz1Jrr7bu1i
-         43ub/rCmHSpeJcXfgG1d96Di1iSmMehHtEFozyMwAGQCbgctZXIV+cDc4OrvDDVF8UCv
-         1pctfFasiXOV1C6G1DuHCxX+I1/wSr42g8xHCw/6Om1EK8tw5PGhH2mySLpXEJ7YUkWz
-         WXag==
-X-Forwarded-Encrypted: i=1; AJvYcCXMyaNLmgsGVHgBHwHO/w325YTS7QmdVgd5vAOAOdHi81tnzj09aLkfN7ro8d81UkFMi1JvInl2WQUVre9wTIzL1+Ety/fZ8UdtNs3N
-X-Gm-Message-State: AOJu0YxDM1UQlkLu+CyMyXNMF11K/0O1oVGCaMDXCPBrB/Fyag0+eE8X
-	X8nepKDItBcjC07X/7YXWPEuTvlTrN9wkUNqK99a0Yimwcp2hDLg
-X-Google-Smtp-Source: AGHT+IEmTiLTD64Ac2EM7arnV5w9aPxywPkYhj2PhF+2vVvr6wC++LqVM+oVSCMVMxR+T9W/EHlOrA==
-X-Received: by 2002:a17:903:11c5:b0:1e4:362b:17d5 with SMTP id q5-20020a17090311c500b001e4362b17d5mr12287816plh.4.1714406560634;
-        Mon, 29 Apr 2024 09:02:40 -0700 (PDT)
-Received: from ?IPV6:2402:e280:214c:86:9744:8dfe:8ee3:9c0a? ([2402:e280:214c:86:9744:8dfe:8ee3:9c0a])
-        by smtp.gmail.com with ESMTPSA id x7-20020a1709027c0700b001e2c8bc6bebsm20598614pll.81.2024.04.29.09.02.37
+        bh=Wi+vNP8uVDwUtAt75IkqcVC5kSDI3EMTYuGjoYXVsxg=;
+        b=rQ1efhYgKSxIU1PGWhVBSxBTWafdxcVlJ8pbFrQRLSV/R134GylxINrYrqIMs/Dizk
+         JdLb+lkuz3RM9xjvnaFGqokiUkSh/E6tdwiRMTYfzF/CGBtdP5BC7BYUUDf5QG1qEGe9
+         5BE/FcmtSGK6+Nz6gEJNOVhdCT1r1BRvoJArtyhqUwPEjGNImeG263Qx5AldAECZkbwl
+         K7UifqOos2nczSfGly5aUDlPakt8to0+fGaLyMUwnu1pDQtACe/lXm5mQKmNjxnMe3UM
+         aG8MD7GG5a2CQjF5jYuP8eLY16659oxUmQpsH4MpC8GqBRF3gBPt4VZ2VxN88/NzQqSP
+         oJLw==
+X-Forwarded-Encrypted: i=1; AJvYcCWo1pP8COj1Tr/eh6hgEMT1xoZd8S0wD4zBVaivT2rQz0dU8WDVPUrGchdKdpivvh5Jnd9CXfOS8C0BNwkWBtvl6mzgsv4LedgMeL8=
+X-Gm-Message-State: AOJu0YznCd7LdbcmzAX7c+lbVluWilgmtTGbyxGROzNDJ+Hz7Cu9C4PE
+	mOnh1AaZQPbvT9+ud3JnQ8VbPxiP3dOQs+rYzlbTFdpnaXjyK79aWSOg/c5TFig=
+X-Google-Smtp-Source: AGHT+IF0+ORUjbbUuOqYIzVcdO3gi+Ake7y2ADN5ItaGlQod+k3RC42E14nq1ywvHbm+GlTrwH+Rlw==
+X-Received: by 2002:a05:600c:3d12:b0:41b:da7b:9b94 with SMTP id bh18-20020a05600c3d1200b0041bda7b9b94mr5841025wmb.2.1714407674286;
+        Mon, 29 Apr 2024 09:21:14 -0700 (PDT)
+Received: from [192.168.108.81] (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05600c199400b0041c012ca327sm7469761wmq.45.2024.04.29.09.21.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Apr 2024 09:02:40 -0700 (PDT)
-Message-ID: <92648cb3-5b7c-47a8-ab0e-a7a4fe5f7c27@gmail.com>
-Date: Mon, 29 Apr 2024 21:32:35 +0530
+        Mon, 29 Apr 2024 09:21:14 -0700 (PDT)
+Message-ID: <4ea494cf-134e-4380-aea1-4c166a626561@freebox.fr>
+Date: Mon, 29 Apr 2024 18:15:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,130 +61,195 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux-next] media: i2c: st-mipid02: replace of_node_put()
- with __free
-To: Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
- sylvain.petinot@foss.st.com, mchehab@kernel.org,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com,
- Julia Lawall <julia.lawall@inria.fr>
-References: <20240427095643.11486-1-prosunofficial@gmail.com>
- <d2432381-827f-4825-a450-9954f8291576@foss.st.com>
+Subject: [PATCH v1 1/3] dt-bindings: media: add qcom,msm8998-venus
+From: Marc Gonzalez <mgonzalez@freebox.fr>
+To: Bjorn Andersson <andersson@kernel.org>,
+ Jeffrey Hugo <quic_jhugo@quicinc.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Bryan O Donoghue <bryan.odonoghue@linaro.org>
+Cc: MSM <linux-arm-msm@vger.kernel.org>,
+ linux-media <linux-media@vger.kernel.org>, DT <devicetree@vger.kernel.org>,
+ Pierre-Hugues Husson <phhusson@freebox.fr>, Arnaud Vrac <avrac@freebox.fr>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+References: <2b21b160-a530-486a-9404-c5bf8863ffed@freebox.fr>
 Content-Language: en-US
-From: R Sundar <prosunofficial@gmail.com>
-In-Reply-To: <d2432381-827f-4825-a450-9954f8291576@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <2b21b160-a530-486a-9404-c5bf8863ffed@freebox.fr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/04/24 14:22, Benjamin Mugnier wrote:
-> Hi,
-> 
-> Thank you for your patch.
-> 
-> On 4/27/24 11:56, R Sundar wrote:
->> Use the new cleanup magic to replace of_node_put() with
->> __free(device_node) marking to auto release and to simplify the error
->> paths.
->>
->> Suggested-by: Julia Lawall <julia.lawall@inria.fr>
->> Signed-off-by: R Sundar <prosunofficial@gmail.com>
-> 
-> I was not aware of this kind of auto release mechanism. Thanks for
-> bringing that to my eyes.
-> 
-> Now I looked in /drivers/media and couldn't find such structure. All
-> drivers seem to follow the goto error_of_node_put style.
-> As I'm unsure if we want to introduce such magic, could either Laurent
-> or Sakari comment on this ?
-> 
->> ---
->>   drivers/media/i2c/st-mipid02.c | 37 +++++++++-------------------------
->>   1 file changed, 9 insertions(+), 28 deletions(-)
->>
->> diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
->> index f250640729ca..d42a306530f3 100644
->> --- a/drivers/media/i2c/st-mipid02.c
->> +++ b/drivers/media/i2c/st-mipid02.c
->> @@ -715,31 +715,28 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
->>   	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
->>   	struct i2c_client *client = bridge->i2c_client;
->>   	struct v4l2_async_connection *asd;
->> -	struct device_node *ep_node;
->>   	int ret;
->>   
->>   	/* parse rx (endpoint 0) */
->> -	ep_node = of_graph_get_endpoint_by_regs(bridge->i2c_client->dev.of_node,
->> -						0, 0);
->> +	struct device_node *ep_node __free(device_node) =
->> +		of_graph_get_endpoint_by_regs(bridge->i2c_client->dev.of_node, 0, 0);
->>   	if (!ep_node) {
->>   		dev_err(&client->dev, "unable to find port0 ep");
->> -		ret = -EINVAL;
->> -		goto error;
->> +		return -EINVAL;
->>   	}
->>   
->>   	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep_node), &ep);
->>   	if (ret) {
->>   		dev_err(&client->dev, "Could not parse v4l2 endpoint %d\n",
->>   			ret);
->> -		goto error_of_node_put;
->> +		return ret;
->>   	}
->>   
->>   	/* do some sanity checks */
->>   	if (ep.bus.mipi_csi2.num_data_lanes > 2) {
->>   		dev_err(&client->dev, "max supported data lanes is 2 / got %d",
->>   			ep.bus.mipi_csi2.num_data_lanes);
->> -		ret = -EINVAL;
->> -		goto error_of_node_put;
->> +		return -EINVAL;
->>   	}
->>   
->>   	/* register it for later use */
->> @@ -750,7 +747,6 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
->>   	asd = v4l2_async_nf_add_fwnode_remote(&bridge->notifier,
->>   					      of_fwnode_handle(ep_node),
->>   					      struct v4l2_async_connection);
->> -	of_node_put(ep_node);
->>   
->>   	if (IS_ERR(asd)) {
->>   		dev_err(&client->dev, "fail to register asd to notifier %ld",
->> @@ -764,46 +760,31 @@ static int mipid02_parse_rx_ep(struct mipid02_dev *bridge)
->>   		v4l2_async_nf_cleanup(&bridge->notifier);
->>   
->>   	return ret;
->> -
->> -error_of_node_put:
->> -	of_node_put(ep_node);
->> -error:
->> -
->> -	return ret;
->>   }
->>   
->>   static int mipid02_parse_tx_ep(struct mipid02_dev *bridge)
->>   {
->>   	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_PARALLEL };
->>   	struct i2c_client *client = bridge->i2c_client;
->> -	struct device_node *ep_node;
->>   	int ret;
->>   
->>   	/* parse tx (endpoint 2) */
->> -	ep_node = of_graph_get_endpoint_by_regs(bridge->i2c_client->dev.of_node,
->> -						2, 0);
->> +	struct device_node *ep_node =
->> +		of_graph_get_endpoint_by_regs(bridge->i2c_client->dev.of_node, 2, 0);
-> 
-> Shouldn't there be a '__free' here too ?
-> 
+Add YAML binding for Qualcomm MSM8998 Venus HW video encode and decode.
+(Based on qcom,msm8996-venus.yaml)
 
-my Bad.
-Yes, It should come here also. Thanks!!
-Will update the patch.
+Signed-off-by: Marc Gonzalez <mgonzalez@freebox.fr>
+---
+ Documentation/devicetree/bindings/media/qcom,msm8998-venus.yaml | 155 ++++++++++++++++++++++++++++
+ 1 file changed, 155 insertions(+)
 
-Thanks,
-Sundar
-
+diff --git a/Documentation/devicetree/bindings/media/qcom,msm8998-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8998-venus.yaml
+new file mode 100644
+index 0000000000000..86a20954cb354
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/qcom,msm8998-venus.yaml
+@@ -0,0 +1,155 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/qcom,msm8998-venus.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm MSM8998 Venus video encode and decode accelerators
++
++maintainers:
++  - Stanimir Varbanov <stanimir.varbanov@linaro.org>
++
++description: |
++  The Venus IP is a video encode and decode accelerator present
++  on Qualcomm platforms
++
++allOf:
++  - $ref: qcom,venus-common.yaml#
++
++properties:
++  compatible:
++    const: qcom,msm8998-venus
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    maxItems: 4
++
++  clock-names:
++    items:
++      - const: core
++      - const: iface
++      - const: bus
++      - const: mbus
++
++  interconnects:
++    maxItems: 2
++
++  interconnect-names:
++    items:
++      - const: video-mem
++      - const: cpu-cfg
++
++  iommus:
++    maxItems: 20
++
++  video-decoder:
++    type: object
++
++    properties:
++      compatible:
++        const: venus-decoder
++
++      clocks:
++        maxItems: 1
++
++      clock-names:
++        items:
++          - const: core
++
++      power-domains:
++        maxItems: 1
++
++    required:
++      - compatible
++      - clocks
++      - clock-names
++      - power-domains
++
++    additionalProperties: false
++
++  video-encoder:
++    type: object
++
++    properties:
++      compatible:
++        const: venus-encoder
++
++      clocks:
++        maxItems: 1
++
++      clock-names:
++        items:
++          - const: core
++
++      power-domains:
++        maxItems: 1
++
++    required:
++      - compatible
++      - clocks
++      - clock-names
++      - power-domains
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - iommus
++  - video-decoder
++  - video-encoder
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/qcom,mmcc-msm8998.h>
++
++    video-codec@cc00000 {
++        compatible = "qcom,msm8998-venus";
++        reg = <0x0cc00000 0xff000>;
++        interrupts = <GIC_SPI 287 IRQ_TYPE_LEVEL_HIGH>;
++        power-domains = <&mmcc VIDEO_TOP_GDSC>;
++        clocks = <&mmcc VIDEO_CORE_CLK>,
++                 <&mmcc VIDEO_AHB_CLK>,
++                 <&mmcc VIDEO_AXI_CLK>,
++                 <&mmcc VIDEO_MAXI_CLK>;
++        clock-names = "core", "iface", "bus", "mbus";
++        iommus = <&mmss_smmu 0x400>,
++                 <&mmss_smmu 0x401>,
++                 <&mmss_smmu 0x40a>,
++                 <&mmss_smmu 0x407>,
++                 <&mmss_smmu 0x40e>,
++                 <&mmss_smmu 0x40f>,
++                 <&mmss_smmu 0x408>,
++                 <&mmss_smmu 0x409>,
++                 <&mmss_smmu 0x40b>,
++                 <&mmss_smmu 0x40c>,
++                 <&mmss_smmu 0x40d>,
++                 <&mmss_smmu 0x410>,
++                 <&mmss_smmu 0x421>,
++                 <&mmss_smmu 0x428>,
++                 <&mmss_smmu 0x429>,
++                 <&mmss_smmu 0x42b>,
++                 <&mmss_smmu 0x42c>,
++                 <&mmss_smmu 0x42d>,
++                 <&mmss_smmu 0x411>,
++                 <&mmss_smmu 0x431>;
++        memory-region = <&venus_mem>;
++
++        video-decoder {
++            compatible = "venus-decoder";
++            clocks = <&mmcc VIDEO_SUBCORE0_CLK>;
++            clock-names = "core";
++            power-domains = <&mmcc VIDEO_SUBCORE0_GDSC>;
++        };
++
++        video-encoder {
++            compatible = "venus-encoder";
++            clocks = <&mmcc VIDEO_SUBCORE1_CLK>;
++            clock-names = "core";
++            power-domains = <&mmcc VIDEO_SUBCORE1_GDSC>;
++        };
++    };
+-- 
+2.34.1
 
