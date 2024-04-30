@@ -1,117 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3669538396
-	for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 07:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF873F9C2
+	for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 07:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714462269; cv=none; b=n/0DCbnIlP6QSBZp/CKkWpOuW2vOm2SB8xNVv8nob+52b+f8z9YkP1J3UrIyYCDqKGcBi3YXAMBPvrIct5f4Urd+6pGg5m6rb8twJE3z485pZBMZYvlNLZmBdAyEquTbM0Gcu5psRGwg9Nms8qEYJ5REoM8e4EJbSk1d0ybRGzc=
+	t=1714463494; cv=none; b=LJ2QJyimF9gT3vAZsR2HHNAFy5d1H/PO9CZNqG+uhYXjgWRh+k+9gkR8tXhO/tHqQSW4v4Y0G0zZ+/LZMSjczEOux2liGZ0A+iX55JwpUQoz7O0Rqw3kZVXO/5Eu004tKIUldwhIebSbYaLBlD+B2A9q7lFip8KfIQZXohuLgIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714462269; c=relaxed/simple;
-	bh=uh/ztwXauYiWMGDZ5AmgKSI4O/xu0BLVOREQSuEho1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZS/Tt/6l5KLJvdJSUgj82Qj+0ZaqRNZy+EA1JjmXbO/I/nxqPxesdasilvuxQyIc9luEb5IY5IJkMhrtLJtC+dBKrxmsKGA6nDDQnT1qGm/2Q6eyF4u0kaRe6RjLzboFpG8fxhqrd5ejxelPh5p2nHP5p1S+YR4L1yaJWnZS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wa8ibWt9; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1714463494; c=relaxed/simple;
+	bh=0jzk6sPYQEC59SApxornkivyRflmoI1pFn43nf2gouQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=kDWzbbUYq61N3qbw7DUK/1gtQIEbRMGPl465hrUQ8Ot7SAL5BMhSWl8ARhwMcaao2lmPChJhc9pyWr9mLrNdaRCs3E8ZokrqbmmIQks4lLuZNdRcX7XZwY7KbkeGfdxBmTiy9fuuB8gNLA/I6tCBtQVUFOskj9S/vAX6Z4csXv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Cz1p0bF0; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wa8ibWt9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714462267; x=1745998267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uh/ztwXauYiWMGDZ5AmgKSI4O/xu0BLVOREQSuEho1g=;
-  b=Wa8ibWt93eQiCkjuE84Hi0AX/z3by0ghlpPAmFfsRon/R5aW7dw4VTt7
-   c2ZIEjM2wqpta0FwDP8iLO1K4o0X38z2fCfZGQDUHflXQiL1/r8660Gpa
-   GNQQOq14zzAPv1u9bajhpdQByHukMlrp+3hYzuyVEosb6c5JF3xg+Dx3V
-   RvEMJvpgMeGPMp5v46BquLwEqz0ibX/xbwjVMfdkGmgKNY/C3STa8YoBg
-   OviQ+P3tBrRrt6RcPjLRq6QBli80SHcViwZ1XJZyKgfZu6JQMCYEZz0YF
-   gRz5ipjIC2eyLAUBtsWMVgc5fsoBOhWKPowPVRLYrncc57DeIMz4rgmbd
-   w==;
-X-CSE-ConnectionGUID: OqA3jKkeQAKHy32nQXvSlA==
-X-CSE-MsgGUID: yU15OjSTQJOkyVj2wN9H2w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="10307821"
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="10307821"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 00:31:06 -0700
-X-CSE-ConnectionGUID: vbVT3FVBTCuIyjjykSn9oA==
-X-CSE-MsgGUID: djAgA1sxRamsOQFN/gsIxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,241,1708416000"; 
-   d="scan'208";a="31172578"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 00:31:05 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id D487311F830;
-	Tue, 30 Apr 2024 10:31:01 +0300 (EEST)
-Date: Tue, 30 Apr 2024 07:31:01 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-	laurent.pinchart@ideasonboard.com,
-	Wentong Wu <wentong.wu@intel.com>
-Subject: Re: [PATCH v4 3/4] media: Documentation: Update link frequency
- driver documentation
-Message-ID: <ZjCeNcF1nkt6WKUS@kekkonen.localdomain>
-References: <20240429190852.1008003-1-sakari.ailus@linux.intel.com>
- <20240429190852.1008003-4-sakari.ailus@linux.intel.com>
- <ojsquq4vgzyxubla4uv6ntgm4p7zoqpn5vqqza5dmevxlosy6l@2icfz6thrffp>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Cz1p0bF0"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-43ade9223c0so7755741cf.2
+        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 00:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1714463492; x=1715068292; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R57CjkbkLkl8A/VUwKtkzF9x/otNALa5HeVqDryNHrA=;
+        b=Cz1p0bF0cZvCsMjrTIPFVt1HLmBH2HIu0+NPp5S5+5XMPA6hq/jvHGd2sbCx3WW4Cw
+         WayJuW+VPXpMjYTkZ8IckXhTb11K5TmkYfrZWHGhGHVrJ751HsA//31qXDOXEoijddfz
+         fti++wGjM8MPX4Ysf9zMhlXke1d+6Mr1Urp7s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714463492; x=1715068292;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R57CjkbkLkl8A/VUwKtkzF9x/otNALa5HeVqDryNHrA=;
+        b=JB+biweenmKpnmTZS2Gz0ilZA54EyRldEkhXAK81kknV7AADYzbK0YTMNZdB/a8SA0
+         Of5z/H4VKqSRjjHsYmiYdYHxTNX1FDxYfEi4h1Lv+OnhpH9jJqFtley64s71zAzE8HJi
+         9Q/nGx7ffZbztbjsrekBUWwTD+GCCOlPS6mCYHBoYWgtiCubXlHppMPNF7iR5xcaBnTb
+         Lfw0N+F4kBoznCy+tnefgqUQ5MCEgWY7DVQDrFLfNultu4ct6aHIhos9NkzYXWxQ0ITq
+         xpdozEEtXZ/1vrfr79j3KSpUiWTafrvc31A8sidpE383GroZJgjokv2FYzUIirVWy2xe
+         +EGA==
+X-Gm-Message-State: AOJu0Yx074piHz4r8GU5LVMwzEnDXtxCZGXTbdIVV5wnxopnV0lPFXmA
+	biW2KM2D+qp+LvUvM86F79d/yXC8gZbGCw/3Tc3iKsTDecROiRm99Esqo5bg8g==
+X-Google-Smtp-Source: AGHT+IFox+JJPaIDfnbJPXdvKCOIVMCsX59wRzBpWnMawbJcnJD3u85NhlKUJm+Q/1EmXzvmqcrFDg==
+X-Received: by 2002:a05:622a:1b86:b0:43b:dd6:82c0 with SMTP id bp6-20020a05622a1b8600b0043b0dd682c0mr3500422qtb.33.1714463492092;
+        Tue, 30 Apr 2024 00:51:32 -0700 (PDT)
+Received: from denia.c.googlers.com (114.152.245.35.bc.googleusercontent.com. [35.245.152.114])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05622a124b00b00437b4048972sm10634547qtx.18.2024.04.30.00.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Apr 2024 00:51:31 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 30 Apr 2024 07:51:26 +0000
+Subject: [PATCH 1/3] media: bcm2835-unicam: Fix error handling for
+ platform_get_irq
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ojsquq4vgzyxubla4uv6ntgm4p7zoqpn5vqqza5dmevxlosy6l@2icfz6thrffp>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240430-fix-broad-v1-1-cf3b81bf97ff@chromium.org>
+References: <20240430-fix-broad-v1-0-cf3b81bf97ff@chromium.org>
+In-Reply-To: <20240430-fix-broad-v1-0-cf3b81bf97ff@chromium.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>
+Cc: linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Hans Verkuil <hverkuil@xs4all.nl>, Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.12.4
 
-Hi Jacopo,
+platform_get_irq() cannot return the value 0.
 
-On Tue, Apr 30, 2024 at 09:23:52AM +0200, Jacopo Mondi wrote:
-> Hi Sakari
-> 
-> On Mon, Apr 29, 2024 at 10:08:51PM +0300, Sakari Ailus wrote:
-> > Add the get_mbus_config() as the means for conveying the link frequency
-> > towards the receiver drivers.
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  Documentation/driver-api/media/tx-rx.rst | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
-> > index 29d66a47b56e..2f22a1534da9 100644
-> > --- a/Documentation/driver-api/media/tx-rx.rst
-> > +++ b/Documentation/driver-api/media/tx-rx.rst
-> > @@ -49,6 +49,10 @@ Link frequency
-> >  The :ref:`V4L2_CID_LINK_FREQ <v4l2-cid-link-freq>` control is used to tell the
-> >  receiver the frequency of the bus (i.e. it is not the same as the symbol rate).
-> >
-> > +For devices where the link frequency is read-only, the link_freq field of struct
-> 
-> A control can be 'read-only' as well.
-> 
-> What about something along the lines of:
-> 
-> For devices where the link frequency doesn't need to be exposed to userspace,
-> the link_freq field of struct
+If it returns -EPROBE_DEFER, we need to populate the error code upwards
+to retry probing once the irq handler is ready.
 
-I think we could use something like that. The LINK_FREQ control indeed
-allows choosing this from the user space but other than that it has little
-use AFAIU.
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/platform/broadcom/bcm2835-unicam.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> 
-> > +v4l2_mbus_config is recommended over controls for conveying the link frequency
-> > +to the downstream driver in the pipeline.
-> > +
-> >  ``.s_stream()`` callback
-> >  ^^^^^^^^^^^^^^^^^^^^^^^^
-> >
+diff --git a/drivers/media/platform/broadcom/bcm2835-unicam.c b/drivers/media/platform/broadcom/bcm2835-unicam.c
+index bd2bbb53070e..2a3a27ac70ba 100644
+--- a/drivers/media/platform/broadcom/bcm2835-unicam.c
++++ b/drivers/media/platform/broadcom/bcm2835-unicam.c
+@@ -2660,9 +2660,10 @@ static int unicam_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = platform_get_irq(pdev, 0);
+-	if (ret <= 0) {
++	if (ret < 0) {
+ 		dev_err(&pdev->dev, "No IRQ resource\n");
+-		ret = -EINVAL;
++		if (ret != -EPROBE_DEFER)
++			ret = -EINVAL;
+ 		goto err_unicam_put;
+ 	}
+ 
 
 -- 
-Kind regards,
+2.44.0.769.g3c40516874-goog
 
-Sakari Ailus
