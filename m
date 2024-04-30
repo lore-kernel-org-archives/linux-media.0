@@ -1,112 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFCC1527A4;
-	Tue, 30 Apr 2024 14:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E507152799;
+	Tue, 30 Apr 2024 15:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714488366; cv=none; b=LdamtPPw8GL/rweQY6Bx27USDHW4xh1ve9rnVkdkVDp/PfrFPl5ptG/N249TANabJCPrA/R2bcoMIjB9E6642cU0/YoeQNdF9ti0vLJu3sGLayxBeL/DdSGT9ixDqOEs3fEkXFmWFo/7g1Y0N5VIPyohDrLhRb6Jiah5i6SpJ+c=
+	t=1714489644; cv=none; b=Xl/Qv1ofJV2IzCN/JrjRvSyu58tgfiHrjsaXg4lGYfYD1XuPUtax/q9RERRegXSaTNWxVzpOSsJa/BnrgM5K/DnwIWmkUivYZyJZi+J2laS8xT4Xm6Rqn0bw4MOl57NnBg+hKgpQdb7BKx5Y6ItJ84vzkMGic4DZEn+JsZUbqIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714488366; c=relaxed/simple;
-	bh=sBXF+gjdjkRUhUS5Q4VYAIn7ZZ0+/7CQzrsCxXjL5dU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhpBoW0G5zbpiGyGtk5+IxtO8wvxOmt1rz4CpbEt9+4rRkDJkQZZGDNu2tYy9fdmNmlKIvbIjV7MdAdJTpbdUCtboQF8Y2K/V0JEbh8kcOZnbZu3HB1G2oBc9rQGYjuJ8MHDEEtJ1R7l1tOxApxFbp/AsCPJlK0l2xmlyEb0JOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRoXQHpF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714489644; c=relaxed/simple;
+	bh=P1Yb9UHx7qGFrtffHgDWXFAhgYxkjfHOuo9CX+hCpI4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IRkG2yisznq3Gz2NGaEfuAs8HoYfiB9wLdh5b4DuG9slMg4jN4BwCd6o7tF5tKgen0jXt5w8Kw7JqJV8LEcso7Sj/hBTahIy4duniwIOrM7UEkwtsOkKzcxADjwP68KckN8Ok36t4Fw1kKQbm3Nz5eUN8AgwqfPPWohXcWfJey8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=bvNQyhix; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=TVaBAxDq; arc=none smtp.client-ip=88.97.38.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRoXQHpF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AA7C2BBFC;
-	Tue, 30 Apr 2024 14:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714488365;
-	bh=sBXF+gjdjkRUhUS5Q4VYAIn7ZZ0+/7CQzrsCxXjL5dU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HRoXQHpFRApacG9ybBX6B95wKslmuE4UrGaFexMEbtIm4t0uAJWO5tcrZym/VeE6c
-	 /S830uVslcO9IbwPhqveybIosTrozBqM7h3wLkepcAlo/OU8tSPtYbhSNFrRkBmJoY
-	 coUyqlE3pvWN7L+ZADP0BArwUBwm0ZuPyscvkM+nbLTP2FFxQjOkqSGzrLP0nmF59c
-	 HpkI+8ke0LG7xCL9EukPGz03r7pzDIngxJliSGTTyZzTiGidd9jyzpgZOskOd14X1g
-	 RsWX+jRkJXkQXTcPdZpK1YXzqklzIBXOuEYb0AbCkvsNf+KksxsobnCLpsLMJhDf6m
-	 zrcNcrPKbwG0Q==
-Date: Tue, 30 Apr 2024 23:46:03 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc: Shengjiu Wang <shengjiu.wang@nxp.com>, hverkuil@xs4all.nl,
-	sakari.ailus@iki.fi, tfiga@chromium.org, m.szyprowski@samsung.com,
-	mchehab@kernel.org, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com,
-	Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-	lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v15 00/16] Add audio support in v4l2 framework
-Message-ID: <ZjEEKyvb02CWz3l4@finisterre.sirena.org.uk>
-References: <1710834674-3285-1-git-send-email-shengjiu.wang@nxp.com>
- <20240430082112.jrovosb6lgblgpfg@basti-XPS-13-9310>
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="bvNQyhix";
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="TVaBAxDq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1714489595; bh=P1Yb9UHx7qGFrtffHgDWXFAhgYxkjfHOuo9CX+hCpI4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bvNQyhixOJxDveSCSESDcnJXpADudXP+EY3U3UiW+drSxGzfBtS4WR8+qzvQalPbN
+	 kRcoFsm/hGV0p4geuzGMHgmIM+Dhf/rTLHPqKzcS1TDbsdt1h+H8hjmjSlzBWAggAY
+	 9sj/A+F7p/jnix7XILY9Lu9wJnCPAOYUYJ9AJMAjLOlxrpPBjY06enfBReQ8DmFAjH
+	 lUvSrEfqtdE27cv70BtHWbaXZ04eAif1evWmRyhQpv792NcyTnq51a02BTxSNlVfT+
+	 NaWTy2zqSgWK2ZcYOnh2wkSVw6GBiiv6eFaFl2MnZBgKVWT4KCw4l5eMQAnozJbUE2
+	 A/cN7Meii3GFw==
+Received: by gofer.mess.org (Postfix, from userid 501)
+	id CB49C1000C2; Tue, 30 Apr 2024 16:06:35 +0100 (BST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1714489594; bh=P1Yb9UHx7qGFrtffHgDWXFAhgYxkjfHOuo9CX+hCpI4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TVaBAxDqrqd1HfdhBISAYP1yj0KARVCrzP8aUHr/A1f5nFwVMpDnlzY7d3G/d7Atw
+	 i0Gy0pCi18M5VkxttJbCh7Dj8BMSLv2ulBFLzjZmDhreTRjAQDqkVQt0UWitc2pB+A
+	 S3z9leuhqjZ3DysXu7DqEyjj8epZJHsDbKrUfvYjEZSdyjbWZORljECXWZ6D6X/Yu+
+	 qMhDlhBw7AiVF/cLd0MHARO5PD/mQstzfYBS4Bcb/zUOR8+rXtpipJ05J8GX2fy6Fb
+	 N8ZC13RBU/o087Y7S/L4Brk+gOXFBNhf/tmV7oTFN6f4uSgRhzz/XZ0o5VYvGs51Jy
+	 PKVs4COS55+wQ==
+Received: from localhost.localdomain (bigcore.local [IPv6:2a02:8011:d000:212:bc3c:1b4a:a6fa:362f])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gofer.mess.org (Postfix) with ESMTPSA id A3A1D10005B;
+	Tue, 30 Apr 2024 16:06:34 +0100 (BST)
+From: Sean Young <sean@mess.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: mceusb: No need for vendor/product ID in name
+Date: Tue, 30 Apr 2024 16:06:22 +0100
+Message-ID: <20240430150623.2910-1-sean@mess.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8QM/NXLseGhLxhjD"
-Content-Disposition: inline
-In-Reply-To: <20240430082112.jrovosb6lgblgpfg@basti-XPS-13-9310>
-X-Cookie: lisp, v.:
+Content-Transfer-Encoding: 8bit
 
+This is available in other places and doesn't belong in the name
+of the rc device.
 
---8QM/NXLseGhLxhjD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ drivers/media/rc/mceusb.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-On Tue, Apr 30, 2024 at 10:21:12AM +0200, Sebastian Fricke wrote:
+diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+index c76ba24c1f55..615f48898300 100644
+--- a/drivers/media/rc/mceusb.c
++++ b/drivers/media/rc/mceusb.c
+@@ -494,7 +494,6 @@ struct mceusb_dev {
+ 	u32 carrier;
+ 	unsigned char tx_mask;
+ 
+-	char name[128];
+ 	char phys[64];
+ 	enum mceusb_model_type model;
+ 
+@@ -1591,16 +1590,10 @@ static struct rc_dev *mceusb_init_rc_dev(struct mceusb_dev *ir)
+ 		goto out;
+ 	}
+ 
+-	snprintf(ir->name, sizeof(ir->name), "%s (%04x:%04x)",
+-		 mceusb_model[ir->model].name ?
+-			mceusb_model[ir->model].name :
+-			"Media Center Ed. eHome Infrared Remote Transceiver",
+-		 le16_to_cpu(ir->usbdev->descriptor.idVendor),
+-		 le16_to_cpu(ir->usbdev->descriptor.idProduct));
+-
+ 	usb_make_path(ir->usbdev, ir->phys, sizeof(ir->phys));
+ 
+-	rc->device_name = ir->name;
++	rc->device_name = mceusb_model[ir->model].name ? :
++		"Media Center Ed. eHome Infrared Remote Transceiver";
+ 	rc->input_phys = ir->phys;
+ 	usb_to_input_id(ir->usbdev, &rc->input_id);
+ 	rc->dev.parent = dev;
+-- 
+2.44.0
 
-> first of all thanks for all of this work and I am very sorry for only
-> emerging this late into the series, I sadly didn't notice it earlier.
-
-It might be worth checking out the discussion on earlier versions...
-
-> 1. The biggest objection is, that the Linux Kernel has a subsystem
-> specifically targeted for audio devices, adding support for these
-> devices in another subsystem are counterproductive as they work around
-> the shortcomings of the audio subsystem while forcing support for a
-> device into a subsystem that was never designed for such devices.
-> Instead, the audio subsystem has to be adjusted to be able to support
-> all of the required workflows, otherwise, the next audio driver with
-> similar requirements will have to move to the media subsystem as well,
-> the audio subsystem would then never experience the required change and
-> soon we would have two audio subsystems.
-
-The discussion around this originally was that all the audio APIs are
-very much centered around real time operations rather than completely
-async memory to memory operations and that it's not clear that it's
-worth reinventing the wheel simply for the sake of having things in
-ALSA when that's already pretty idiomatic for the media subsystem.  It
-wasn't the memory to memory bit per se, it was the disconnection from
-any timing.
-
-> So instead of hammering a driver into the wrong destination, I would
-> suggest bundling our forces and implementing a general memory-to-memory
-> framework that both the media and the audio subsystem can use, that
-> addresses the current shortcomings of the implementation and allows you
-> to upload the driver where it is supposed to be.
-
-That doesn't sound like an immediate solution to maintainer overload
-issues...  if something like this is going to happen the DRM solution
-does seem more general but I'm not sure the amount of stop energy is
-proportionate.
-
---8QM/NXLseGhLxhjD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYxBCsACgkQJNaLcl1U
-h9Cv4gf/cXnSe2CcRqekxdvf3QpCLrReELvBj5Ryx0es6jh5p0iXtGjTAa+m1l2U
-Qn6JhhdVxr6YDApk3yXTkGvTElhB2RPjdxhHGklWqfXFTwKhZtFYKmx2GqfKxLXZ
-6N4OhJv/OYSeLGuGQDh3WLEJW44PKKQUfDg6zdCCu2xeTqt42IeZOPA4NLU9lBvm
-6vzvRoB9ddXzdqIJ5tPx89c3PXrCKBHhFIz9FQ1QLpE9p/26fkpsjYkB9cTQhAGq
-kMvWcqfITh7e8JEEPsVzlYMNOcsCCegJqJwniSw2OV3fQDBUDoHaO/I1hYidAzVS
-IndFbuEtQpfHjpRlfXAsGrrxDysAfw==
-=/WXD
------END PGP SIGNATURE-----
-
---8QM/NXLseGhLxhjD--
