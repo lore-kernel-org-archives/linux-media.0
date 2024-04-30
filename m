@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4B912C49D;
-	Tue, 30 Apr 2024 10:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9BD12C473;
+	Tue, 30 Apr 2024 10:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714473636; cv=none; b=ECxrzXsLr2P6c6aR5RwDnTsBbJ7DYyYv3+f3hxghrjcbqV5wBIHxEktL4IAe7ve/BSulhhH32VoUzBKEubw977bRABT0Pm31swnPsFCzEXE0MrvIOK8YDwvtbU/g88dfNb1bbJYxKKipwu3LwfKqTPOJERzBmEBm/zS+QCS9+mA=
+	t=1714473639; cv=none; b=FJm4rjI5qPFrr0a01DdqsWP20acJk9I6etOID0ucngP+w0f3iPAwHj3RZr6zt9L70DOb+Y1KpFLAijKJy2HmanQVUIkLA/d0Oh23JtLmCuJaaRJSvXWT1ugTznQ+uy7x6OEg0KPMtjfC6qx5f6k2bV1BUZvqq1HrSQXLemZ00Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714473636; c=relaxed/simple;
-	bh=aHNOEa4NUUVZSf59ce2/tFJ4/4rn+zCYOxeoU2vjNSg=;
+	s=arc-20240116; t=1714473639; c=relaxed/simple;
+	bh=Wxbe8p9hvaCBdbXirJUZKwQh08SGBKt5X5UI6CQi8hE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DRarRs6Fs/+nS/BWBIVyZeWTt8s8pLBubiA38VN0ETvPSbwvS5zpQ6nU64Neo8XwWyfGxogR78/ASe6GxR7LE95McJ7e8doGZ71w13cvVSi+vgq5sRGpTi9RBICNY2I9vHb50cy1Pfa9Zt9skD8jbfq+NCC+LgUuhV/CqT8LznE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=rLO9MGl5; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=MUjAB2wwiWoCXDonLyLaqICxG62cRJrlT+ChK38Duu2Y64D6hZlCzaCmDgXQysRErFHyVxeYPOkhvhVA2XczglIFnpd0eRpSh7Wc+Nxj6jPuZcA4PcOPOHb7FTlVG+tB4q1FVNZyrcqv1/2s6/BwCfu/9Jv1j5tcYkeN0F4bI9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Hke8nULh; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rLO9MGl5"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Hke8nULh"
 Received: from localhost.localdomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 687362B62;
-	Tue, 30 Apr 2024 12:39:24 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A63E7E45;
+	Tue, 30 Apr 2024 12:39:25 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1714473564;
-	bh=aHNOEa4NUUVZSf59ce2/tFJ4/4rn+zCYOxeoU2vjNSg=;
+	s=mail; t=1714473566;
+	bh=Wxbe8p9hvaCBdbXirJUZKwQh08SGBKt5X5UI6CQi8hE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rLO9MGl5abBOLS51XeTVidT1Y0OOnPXivfxMAD33R3f7VDtHGYteUO2NfgYVPFp7B
-	 5DFsXayg7zq8HWN/DaSaaC9PuJrdnk/iR4Fx3fCFgH2ZhcO3YmMrOvwl0Ue0GV6iYj
-	 AuZ8vHycW73zwyEiEEGh4gpToayAMWmlGyZFpfik=
+	b=Hke8nULh9pPAi2drkaj8FIWKpI1mElDEiMRk4MmG9mGT0XtHzr7vW/+7YXsaBv29/
+	 fd84QjZUUqHUvQ1f4Zx4zpGBx0DRTos9ejcAMqMEy9LfqOr0ML+1GGQEv4gjNcaVqU
+	 FApFnSOh8CSsctIz0tf56/cBWxD0WNPssK4GE05U=
 From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
@@ -35,9 +35,9 @@ To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	linux-media@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 15/19] media: rcar-csi2: Add support for multiplexed streams
-Date: Tue, 30 Apr 2024 12:39:51 +0200
-Message-ID: <20240430103956.60190-16-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH 17/19] media: rcar-csi2: Store format in the subdev state
+Date: Tue, 30 Apr 2024 12:39:53 +0200
+Message-ID: <20240430103956.60190-18-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240430103956.60190-1-jacopo.mondi@ideasonboard.com>
 References: <20240430103956.60190-1-jacopo.mondi@ideasonboard.com>
@@ -49,140 +49,139 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Create and initialize the v4l2_subdev_state for the R-Car CSI-2 receiver
-in order to prepare to support multiplexed transmitters.
+Store the format in the subdevice state. Disallow setting format
+on the source pads, as formats are set on the sink pad streams and
+propagated to the source streams.
 
-Create the subdevice state with v4l2_subdev_init_finalize() and
-implement the init_state() operation to guarantee the state is initialized.
-
-The routing table within the R-Car CSI-2 receiver is fixed, streams
-received on source_stream X will be directed to pad (X + 1) by default.
-Initialize a static routing table with such routes set as active.
-
-While at it, disable runtime_pm() in the probe() function error path.
+Now that the driver doesn't store the active format in the
+driver-specific structure, also remove the mutex and use the lock
+associated with the state.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-csi2.c | 74 +++++++++++++++++++++-
- 1 file changed, 72 insertions(+), 2 deletions(-)
+ drivers/media/platform/renesas/rcar-csi2.c | 54 +++++++---------------
+ 1 file changed, 16 insertions(+), 38 deletions(-)
 
 diff --git a/drivers/media/platform/renesas/rcar-csi2.c b/drivers/media/platform/renesas/rcar-csi2.c
-index 582d5e35db0e..82dc0b92b8d3 100644
+index ffb73272543b..ed818a6fa655 100644
 --- a/drivers/media/platform/renesas/rcar-csi2.c
 +++ b/drivers/media/platform/renesas/rcar-csi2.c
-@@ -1226,6 +1226,65 @@ static const struct v4l2_subdev_ops rcar_csi2_subdev_ops = {
- 	.pad	= &rcar_csi2_pad_ops,
+@@ -621,8 +621,6 @@ struct rcar_csi2 {
+ 
+ 	int channel_vc[4];
+ 
+-	struct mutex lock; /* Protects mf and stream_count. */
+-	struct v4l2_mbus_framefmt mf;
+ 	int stream_count;
+ 
+ 	bool cphy;
+@@ -1263,43 +1261,28 @@ static int rcsi2_s_stream(struct v4l2_subdev *sd, int enable)
+ }
+ 
+ static int rcsi2_set_pad_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_state *sd_state,
++				struct v4l2_subdev_state *state,
+ 				struct v4l2_subdev_format *format)
+ {
+-	struct rcar_csi2 *priv = sd_to_csi2(sd);
+-	struct v4l2_mbus_framefmt *framefmt;
++	struct v4l2_mbus_framefmt *fmt;
+ 
+-	mutex_lock(&priv->lock);
++	/*
++	 * Format is propagated from sink streams to source streams, so
++	 * disallow setting format on the source pads.
++	 */
++	if (format->pad > RCAR_CSI2_SINK)
++		return -EINVAL;
+ 
+ 	if (!rcsi2_code_to_fmt(format->format.code))
+ 		format->format.code = rcar_csi2_formats[0].code;
+ 
+-	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+-		priv->mf = format->format;
+-	} else {
+-		framefmt = v4l2_subdev_state_get_format(sd_state, 0);
+-		*framefmt = format->format;
+-	}
+ 
+-	mutex_unlock(&priv->lock);
++	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
++	*fmt = format->format;
+ 
+-	return 0;
+-}
+-
+-static int rcsi2_get_pad_format(struct v4l2_subdev *sd,
+-				struct v4l2_subdev_state *sd_state,
+-				struct v4l2_subdev_format *format)
+-{
+-	struct rcar_csi2 *priv = sd_to_csi2(sd);
+-
+-	mutex_lock(&priv->lock);
+-
+-	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+-		format->format = priv->mf;
+-	else
+-		format->format = *v4l2_subdev_state_get_format(sd_state, 0);
+-
+-	mutex_unlock(&priv->lock);
++	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
++							   format->stream);
++	*fmt = format->format;
+ 
+ 	return 0;
+ }
+@@ -1310,7 +1293,7 @@ static const struct v4l2_subdev_video_ops rcar_csi2_video_ops = {
+ 
+ static const struct v4l2_subdev_pad_ops rcar_csi2_pad_ops = {
+ 	.set_fmt = rcsi2_set_pad_format,
+-	.get_fmt = rcsi2_get_pad_format,
++	.get_fmt = v4l2_subdev_get_fmt,
  };
  
-+static int rcsi2_init_state(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *state)
-+{
-+	/*
-+	 * Routing is fixed for this device: streams sent on sink_stream X
-+	 * are directed to pad (X + 1). Which streams goes to the next
-+	 * processing block (VIN) is controlled by link enablement between the
-+	 * CSI-2 and the VIN itself and not by the CSI-2 routing table.
-+	 *
-+	 * The routing table is then fixed, as stream X will be directed to
-+	 * csi:(X + 1)/0 and will be transmitted to VINs the on media link
-+	 * csi2:(x + 1)->vin:0.
-+	 *
-+	 * For example, to route stream #3 to VIN #1 : "csi2:4/0 -> vin1:0" and
-+	 * to route stream #2 to VIN #4 : "csi2:3/0 -> vin4:0".
-+	 */
-+	struct v4l2_subdev_route routes[] = {
-+		{
-+			.sink_pad = RCAR_CSI2_SINK,
-+			.sink_stream = 0,
-+			.source_pad = RCAR_CSI2_SOURCE_VC0,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+		{
-+			.sink_pad = RCAR_CSI2_SINK,
-+			.sink_stream = 1,
-+			.source_pad = RCAR_CSI2_SOURCE_VC1,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+		{
-+			.sink_pad = RCAR_CSI2_SINK,
-+			.sink_stream = 2,
-+			.source_pad = RCAR_CSI2_SOURCE_VC2,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+		{
-+			.sink_pad = RCAR_CSI2_SINK,
-+			.sink_stream = 3,
-+			.source_pad = RCAR_CSI2_SOURCE_VC3,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+	};
-+
-+	struct v4l2_subdev_krouting routing = {
-+		.num_routes = ARRAY_SIZE(routes),
-+		.routes = routes,
-+	};
-+
-+	return v4l2_subdev_set_routing(sd, state, &routing);
-+}
-+
-+static const struct v4l2_subdev_internal_ops rcar_csi2_internal_ops = {
-+	.init_state = rcsi2_init_state,
-+};
-+
- static irqreturn_t rcsi2_irq(int irq, void *data)
- {
- 	struct rcar_csi2 *priv = data;
-@@ -1887,11 +1946,13 @@ static int rcsi2_probe(struct platform_device *pdev)
+ static const struct v4l2_subdev_ops rcar_csi2_subdev_ops = {
+@@ -2031,20 +2014,19 @@ static int rcsi2_probe(struct platform_device *pdev)
+ 
+ 	priv->dev = &pdev->dev;
+ 
+-	mutex_init(&priv->lock);
+ 	priv->stream_count = 0;
+ 
+ 	ret = rcsi2_probe_resources(priv, pdev);
+ 	if (ret) {
+ 		dev_err(priv->dev, "Failed to get resources\n");
+-		goto error_mutex;
++		return ret;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, priv);
+ 
+ 	ret = rcsi2_parse_dt(priv);
+ 	if (ret)
+-		goto error_mutex;
++		return ret;
  
  	priv->subdev.owner = THIS_MODULE;
  	priv->subdev.dev = &pdev->dev;
-+	priv->subdev.internal_ops = &rcar_csi2_internal_ops;
- 	v4l2_subdev_init(&priv->subdev, &rcar_csi2_subdev_ops);
- 	v4l2_set_subdevdata(&priv->subdev, &pdev->dev);
- 	snprintf(priv->subdev.name, sizeof(priv->subdev.name), "%s %s",
- 		 KBUILD_MODNAME, dev_name(&pdev->dev));
--	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	priv->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE |
-+			     V4L2_SUBDEV_FL_STREAMS;
- 
- 	priv->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
- 	priv->subdev.entity.ops = &rcar_csi2_entity_ops;
-@@ -1912,14 +1973,22 @@ static int rcsi2_probe(struct platform_device *pdev)
- 
- 	pm_runtime_enable(&pdev->dev);
- 
-+	ret = v4l2_subdev_init_finalize(&priv->subdev);
-+	if (ret)
-+		goto error_pm_runtime;
-+
- 	ret = v4l2_async_register_subdev(&priv->subdev);
- 	if (ret < 0)
--		goto error_async;
-+		goto error_subdev;
- 
- 	dev_info(priv->dev, "%d lanes found\n", priv->lanes);
- 
- 	return 0;
- 
-+error_subdev:
-+	v4l2_subdev_cleanup(&priv->subdev);
-+error_pm_runtime:
-+	pm_runtime_disable(&pdev->dev);
+@@ -2094,8 +2076,6 @@ static int rcsi2_probe(struct platform_device *pdev)
  error_async:
  	v4l2_async_nf_unregister(&priv->notifier);
  	v4l2_async_nf_cleanup(&priv->notifier);
-@@ -1936,6 +2005,7 @@ static void rcsi2_remove(struct platform_device *pdev)
- 	v4l2_async_nf_unregister(&priv->notifier);
- 	v4l2_async_nf_cleanup(&priv->notifier);
- 	v4l2_async_unregister_subdev(&priv->subdev);
-+	v4l2_subdev_cleanup(&priv->subdev);
+-error_mutex:
+-	mutex_destroy(&priv->lock);
+ 
+ 	return ret;
+ }
+@@ -2110,8 +2090,6 @@ static void rcsi2_remove(struct platform_device *pdev)
+ 	v4l2_subdev_cleanup(&priv->subdev);
  
  	pm_runtime_disable(&pdev->dev);
+-
+-	mutex_destroy(&priv->lock);
+ }
  
+ static struct platform_driver rcar_csi2_pdrv = {
 -- 
 2.44.0
 
