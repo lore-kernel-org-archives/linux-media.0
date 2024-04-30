@@ -1,56 +1,56 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D89E17109A
-	for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 12:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63930171E68
+	for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 12:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714481748; cv=none; b=ojPjD5EUccoKVB6g3qUamKacoFXPh0r4cIT87EguxTwmQAbaffXu0dnE82lSoNrbNFjHyZKGklGpfFeIflw0TD5o9GM2MeVhRwPvHWg2ljbmpztB3rYIIC88WEKspFHkpclLsZVm8eoiXIzIaKFOXPBNtspKmCnE0U8TaH4vOZ0=
+	t=1714481751; cv=none; b=UlA/lNRdohkZJb9+awn5LNSnG6OjapQ+H97Z04BZjFrMTXZNdafxg0pAW8d/VVe2uox9TYBeazLIB0VvMZwhpBKGTl7Q6xPHrgsK+Xt9K19I6lBkQ9KBOVVUde9u2vhE3Y1MlB1r6dsjUNYH3l/LYecgadUuu35E1tqN/OAUVC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714481748; c=relaxed/simple;
-	bh=oYyX5A2u0qlsJz3Khs22Q9EKJnbR1seZtA56i5V7sUo=;
+	s=arc-20240116; t=1714481751; c=relaxed/simple;
+	bh=xV1K4KLPnklnDF7lOie2R6AQ5cvRhbfpv/8EnvxSB74=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=s5f0g6HzXcY71C2DWgQB+uhoNe17l+L2b/whY6hZ4Dm13vP7pMR9ACPpPqO8NAFSpDcmV2P7oiwvoyD5hMjEuyVC6oHaqKK5UwIyOpFqkItynGzN5pfoshCU8mv13NDGhLlQWqg1Jy3sOsLfY0RkN5DxgvFqspDW2CB5gpDjlFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=S4CF5NqS; arc=none smtp.client-ip=209.85.210.49
+	 In-Reply-To:To:Cc; b=IAwIwU1sECQOus9XybXOofewFAx6aLdA9DnHpz5CR8fGahZTY4B+Z7jmShqkABcNwZBFOH8GjP8ZHGU7c3YzafqiXutA2/eQ8qMlJEMLCQPEctq9YjrxF0di4UPQRAsNTaNkNUyxE4tnNJxQ8HTi3GuhY+2SngCqwxGkLTIzEv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KdBCq68q; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="S4CF5NqS"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6eb55942409so2686191a34.1
-        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 05:55:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KdBCq68q"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-78f02298dc6so477635285a.1
+        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2024 05:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1714481746; x=1715086546; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1714481749; x=1715086549; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cjV8GfCP2WHHQ01Aqc8mQQXzl2eD7DwGYj59FGy18+c=;
-        b=S4CF5NqSV/7sgOb3QnBMrMwTsDvF2yVdSw75bDWzsB7HH/rCZpRYZROh2fl3msiXyh
-         vr0teOHwY0GR+uCv2QaZ6kTgSRL9p2Ya7yMzlJvPJBNgUJISeAMlhFk5wlFllXp9ZEHY
-         1UQpbe0SRJoTRkYZHcq54R+0JNI+rYZdFpduM=
+        bh=/GcAbiNwsFkaasnu7HjDiQ9YZzAJwofieKdp6b+SC5I=;
+        b=KdBCq68qghDeddcHy9merFA2tKDmVR5kcetHWX+YIP9xGutiSSmBcEsFwdD+SLZyTe
+         nz5NYdloKrNOwHaP3uJVAr72LY5nhi50lrCBm7EgJRWvev7sJXBxvInIUW9GLi0AO7Mp
+         4dFMJ8oqmmxNWCG6ZZBd5hmcMn+JPjkyG1VA8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714481746; x=1715086546;
+        d=1e100.net; s=20230601; t=1714481749; x=1715086549;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cjV8GfCP2WHHQ01Aqc8mQQXzl2eD7DwGYj59FGy18+c=;
-        b=akdAh92DLtXhVE0MPW0seSdMncuua/dY957QRcCMgweWLGNJ59hoceuauWMiKvvAx0
-         tx19hax2FuTkvOPyI6i/f1m0j5284aQ5WYNx3kqpyaLAjOH8zkx0gsCfDBMWYIstkgXE
-         ajKM8rUwHC54lqkNCx+vj3DofsXnWeqGvVZSAu/GBAwK5nZKOfpqjVNZG3foBcMDbWWu
-         1dnaNcDxsNjky9WXJ/xijw32/w8cqehuwo4DY94wHPDYv5Js3e3ttp/EtAFFwU0oyEel
-         2RkrG1VXO8rnt/ejNBhlJBg98+EInANzF4Yt3e3bt9Ap6dbJzf/2ZcTVw7kxOlur5UH3
-         vSWw==
-X-Gm-Message-State: AOJu0Yy2jYhbncKS04zWY6J/oSoRf62KlFUOSk4rsFFns41ksuomdOYo
-	Ep8LY9xHYwsfksIEcl9+U55brn84iOQyxPK88HkRm5VppFqI5S18Pt/idSkLgw==
-X-Google-Smtp-Source: AGHT+IEgUWZ5sviYRGNJaeAywK807QZ4gEbNChyUYkiHWKS+u2I4svAfqrFMNl4wY8mlmeEBL/dfjQ==
-X-Received: by 2002:a9d:7dd5:0:b0:6eb:e0a2:bbb4 with SMTP id k21-20020a9d7dd5000000b006ebe0a2bbb4mr2938580otn.16.1714481746548;
-        Tue, 30 Apr 2024 05:55:46 -0700 (PDT)
+        bh=/GcAbiNwsFkaasnu7HjDiQ9YZzAJwofieKdp6b+SC5I=;
+        b=b0ujowMszN1CmQ8vyRxbKci9F0pyovpY47mR6Gk/pGWKASo5QTKcbxN/jgDYuIQBTV
+         xiuqdcjN8QukTUiz/mnwfXAd5Q6oibC/SW6ANmY7GLVfekBSOPw0uY1yoblBzzNMft+9
+         E+FQMTpXQXigU4j+GyvBtUdK+2PYcq+4oBVGBPiFDrC1IQ43jtd+KPLxlOCDkSFEM7Pm
+         QauLb7YOq+SmXHh8FHle1IrmH1fWSePAKC1bJa2weanMmxEqgI8BLRbq3r/1kUEvW4zV
+         ZttIfRf/CEdEgdlMwTZg/mXfkNNXzbYgrMCaYLOBYiocfD9R8ZmraXOyGd05nhBKA7P6
+         lNJA==
+X-Gm-Message-State: AOJu0Ywd8IJnYkKkuEcRWNsQFL8x3towBINJuyoh4CVGCuxMfWLrzjdZ
+	GhISfe2xGAlngIFLd6n8WDAalk/ZZSX3g7iYM+KBZ70mxeSTGjVwsOWco7Aglw==
+X-Google-Smtp-Source: AGHT+IHNUD/YiHktyxC/S/O2UQl0N67mb9RwGDBuz8dW13b6LjI/xcWOtt6224r6GWtpcizS5VcWeQ==
+X-Received: by 2002:a05:620a:40c1:b0:790:77d4:5e7a with SMTP id g1-20020a05620a40c100b0079077d45e7amr4364674qko.20.1714481749374;
+        Tue, 30 Apr 2024 05:55:49 -0700 (PDT)
 Received: from denia.c.googlers.com (114.152.245.35.bc.googleusercontent.com. [35.245.152.114])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a111000b00790f90ffc32sm1553667qkk.22.2024.04.30.05.55.45
+        by smtp.gmail.com with ESMTPSA id o16-20020a05620a111000b00790f90ffc32sm1553667qkk.22.2024.04.30.05.55.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 05:55:45 -0700 (PDT)
+        Tue, 30 Apr 2024 05:55:48 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 30 Apr 2024 12:55:33 +0000
-Subject: [PATCH 1/4] media: bcm2835-unicam: Fix build with !PM
+Date: Tue, 30 Apr 2024 12:55:35 +0000
+Subject: [PATCH 3/4] media: intel/ipu6: Fix direct dependency Kconfig error
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -58,8 +58,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240430-fix-ipu6-v1-1-9b31fbbce6e4@chromium.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240430-fix-ipu6-v1-3-9b31fbbce6e4@chromium.org>
 References: <20240430-fix-ipu6-v1-0-9b31fbbce6e4@chromium.org>
 In-Reply-To: <20240430-fix-ipu6-v1-0-9b31fbbce6e4@chromium.org>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -73,30 +73,34 @@ Cc: linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
  Hans Verkuil <hverkuil@xs4all.nl>, Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.12.4
 
-The driver can only match the device vide the DT table, so the table
-should always be used, of_match_ptr does not make sense here.
+VIDEO_INTEL_IPU6 selects IPU6_BRIDGE, but they have different set of
+dependencies.
 
 Fixes:
-drivers/media/platform/broadcom/bcm2835-unicam.c:2724:34: warning: ‘unicam_of_match’ defined but not used [-Wunused-const-variable=]
+WARNING: unmet direct dependencies detected for IPU_BRIDGE
+  Depends on [n]: MEDIA_SUPPORT [=y] && PCI [=y] && MEDIA_PCI_SUPPORT [=y] && I2C [=y] && ACPI [=n]
+  Selected by [y]:
+  - VIDEO_INTEL_IPU6 [=y] && MEDIA_SUPPORT [=y] && PCI [=y] && MEDIA_PCI_SUPPORT [=y] && (ACPI [=n] || COMPILE_TEST [=y]) && VIDEO_DEV [=y] && X86 [=y] && X86_64 [=y] && HAS_DMA [=y]
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/platform/broadcom/bcm2835-unicam.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/intel/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/broadcom/bcm2835-unicam.c b/drivers/media/platform/broadcom/bcm2835-unicam.c
-index bd2bbb53070e..c590e26fe2cf 100644
---- a/drivers/media/platform/broadcom/bcm2835-unicam.c
-+++ b/drivers/media/platform/broadcom/bcm2835-unicam.c
-@@ -2733,7 +2733,7 @@ static struct platform_driver unicam_driver = {
- 	.driver = {
- 		.name	= UNICAM_MODULE_NAME,
- 		.pm	= pm_ptr(&unicam_pm_ops),
--		.of_match_table = of_match_ptr(unicam_of_match),
-+		.of_match_table = unicam_of_match,
- 	},
- };
+diff --git a/drivers/media/pci/intel/Kconfig b/drivers/media/pci/intel/Kconfig
+index 04cb3d253486..d9fcddce028b 100644
+--- a/drivers/media/pci/intel/Kconfig
++++ b/drivers/media/pci/intel/Kconfig
+@@ -6,7 +6,8 @@ source "drivers/media/pci/intel/ivsc/Kconfig"
  
+ config IPU_BRIDGE
+ 	tristate "Intel IPU Bridge"
+-	depends on I2C && ACPI
++	depends on ACPI || COMPILE_TEST
++	depends on I2C
+ 	help
+ 	  The IPU bridge is a helper library for Intel IPU drivers to
+ 	  function on systems shipped with Windows.
 
 -- 
 2.44.0.769.g3c40516874-goog
