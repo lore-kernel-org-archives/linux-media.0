@@ -1,40 +1,40 @@
-Received: from mail-108-mta20.mxroute.com (mail-108-mta20.mxroute.com [136.175.108.20])
+Received: from mail-108-mta158.mxroute.com (mail-108-mta158.mxroute.com [136.175.108.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B0D130A5D
-	for <linux-media@vger.kernel.org>; Wed,  1 May 2024 15:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315A0130AD7
+	for <linux-media@vger.kernel.org>; Wed,  1 May 2024 15:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714577512; cv=none; b=SrLEsESyex0US5m80caW9YZfMACYQKN9P2ynJQIslfJCvMQIm0IFP8eR2eVPyMhARqZKh4CioTYQ+RJZ1usVXLwO5zDzmhUhxglDSpzyqrJkhyeiRyz9JXEc7WzIVRW9+xZL66LIuGtiUTk5O/r24OtWyW3NNWbcvgDNDRsa14k=
+	t=1714577519; cv=none; b=fq3q+3gf9hhFRGmhK+dBoeEDEnlmI30rvCG3781b1ISJuAdCacDMntb5nNhr8jIqt5ZjsXlfAzinoLNg/oWmY4KKjl4tt4t+vM2tO4XZphTGBjirgxECoarB6/zyfRj3ntNAenykePjk8PT82P63oBSqeHzOGSaaB2x8f7pyQ6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714577512; c=relaxed/simple;
-	bh=liAeCOCis53oq3GtruCxMWUheY7cl+d70gOgO+0PYV8=;
+	s=arc-20240116; t=1714577519; c=relaxed/simple;
+	bh=cuxeD9nspba5A5YYP0u3xeWbqdSoqR0pPllRyYusAi8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DqnnIRCtrC/iKFHV16org47pwMDsHb+O2qcWMx+ymhQtzv3yF+lwhOO8Dg1uJJ48Y00PRNk5S5xbourGSnfZ3pPwTX/FESnboDS68IMYpfwT083RV3i1kyN48m8mX85TyDxJwfekBrThBBFZ/bP5klpsxN6G/oY4ATSJEOjCjGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=izN5/8E+; arc=none smtp.client-ip=136.175.108.20
+	 MIME-Version; b=MBlfS7ca8jeNelrRMLp5VNCvU3XGYzjS/GYWsNtAv/5f6SUhvahj/BooR1IpeBIiLcu3q3Hz2tfDqRTWGQruQ+5pX3URfTneTnXXoanW7ERW8r5kO0yOrGynNzdkoOzcIpNa2W5wbfbqOGUafexv8isn91I5MmOccPQT9KqEnVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=e3YpDVoS; arc=none smtp.client-ip=136.175.108.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="izN5/8E+"
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="e3YpDVoS"
 Received: from filter006.mxroute.com ([136.175.111.2] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta20.mxroute.com (ZoneMTA) with ESMTPSA id 18f34c2c3b10008ca2.012
+ by mail-108-mta158.mxroute.com (ZoneMTA) with ESMTPSA id 18f34c2fc9c0008ca2.012
  for <linux-media@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 01 May 2024 15:25:30 +0000
-X-Zone-Loop: 3962a706dd0e34d2c53129f6b80af6e9a75a3f58f48d
+ Wed, 01 May 2024 15:25:44 +0000
+X-Zone-Loop: c5056ae162aac259e8c0ec5bbc9ce5ba3b7e377f4eb6
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=luigi311.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=PzT4xTOEeVDL66kJK8reXjWQ9fp0oEJkeO2UsrLAT0g=; b=izN5/8E+EHY5iywXRGikzZ/FES
-	t/NYOc+jhjgS2/X0Fl1sr5Tfv5YThU1A4d89T0JiOcbyWMVTOy7NMlaCbjPid6Oji+jprVKwT6jKw
-	Nwt/lpKCbU7Av/592TCiMnL9QopQvSsuU6g27+pvS69cZ7shmbYOrAfQzhNmGKUuSA07R1UAp4dYZ
-	qDGnK/Nez1yLP+h0wvO1ck47+toWHgy8K1K6HfWHE+b06hBPzEaYD/vJRHDSDnl25rM4XQPzzO2gq
-	4JsEaCcMrnu/bzjUHG4VQVbIR79IszftuO+hKjLGZWWCfLThmfI069bl65PbGXCm2VzNItWsxyGt5
-	E8nf6MYA==;
+	bh=Rj85ZDGBsJ3+/OmSU/Kn4T2SJ0OalVMVn4FMD/UJ3Qk=; b=e3YpDVoSQV2SUprQn29PFHkC+T
+	R0+j87OkUk8I3BLbc1gxdki3ERCUVtpFeQJ00SmJqe4k82mN6cybzwZ2ERmQOI55XXopoX69eHi4f
+	E+uyvpLishijbYS77kYsKjifadGkWy1rydn00sz0evTj4USA0S2i+WEA6TN1EsaMgIBwCoexjtpQQ
+	1136WJbkia2s6eRGIcqyuNPIcXJxmwdc5rqI156t1K8MkYeZCagRgxfsnwF0vQ5enQvPHnkb+fpUS
+	VaKAM0SBOxxNggf0/siOfg3+KaQ0bdLYczevPCwVbYXfwyDi7ZBPiAWlo9dyYNvcXuXtYwKP0akEz
+	ylpODuOw==;
 From: git@luigi311.com
 To: linux-media@vger.kernel.org
 Cc: dave.stevenson@raspberrypi.com,
@@ -55,10 +55,10 @@ Cc: dave.stevenson@raspberrypi.com,
 	pavel@ucw.cz,
 	phone-devel@vger.kernel.org,
 	Luis Garcia <git@luigi311.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v5 18/25] dt-bindings: media: imx258: Add alternate compatible strings
-Date: Wed,  1 May 2024 09:24:35 -0600
-Message-ID: <20240501152442.1072627-19-git@luigi311.com>
+	Tommaso Merciai <tomm.merciai@gmail.com>
+Subject: [PATCH v5 24/25] media: i2c: imx258: Use v4l2_link_freq_to_bitmap helper
+Date: Wed,  1 May 2024 09:24:41 -0600
+Message-ID: <20240501152442.1072627-25-git@luigi311.com>
 In-Reply-To: <20240501152442.1072627-1-git@luigi311.com>
 References: <20240501152442.1072627-1-git@luigi311.com>
 Precedence: bulk
@@ -70,44 +70,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: personal@luigi311.com
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Luis Garcia <git@luigi311.com>
 
-There are a number of variants of the imx258 modules that can not
-be differentiated at runtime, so add compatible strings for the
-PDAF variant.
+Use the v4l2_link_freq_to_bitmap() helper to figure out which
+driver-supported link freq can be used on a given system.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Luis Garcia <git@luigi311.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Pavel Machek <pavel@ucw.cz>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Tommaso Merciai <tomm.merciai@gmail.com>
 ---
- .../devicetree/bindings/media/i2c/sony,imx258.yaml       | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx258.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-index bee61a443b23..c978abc0cdb3 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-@@ -13,11 +13,16 @@ description: |-
-   IMX258 is a diagonal 5.867mm (Type 1/3.06) 13 Mega-pixel CMOS active pixel
-   type stacked image sensor with a square pixel array of size 4208 x 3120. It
-   is programmable through I2C interface.  Image data is sent through MIPI
--  CSI-2.
-+  CSI-2. The sensor exists in two different models, a standard variant
-+  (IMX258) and a variant with phase detection autofocus (IMX258-PDAF).
-+  The camera module does not expose the model through registers, so the
-+  exact model needs to be specified.
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 74a8f3ed1ab5..d7a1cc143bae 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -693,6 +693,7 @@ struct imx258 {
+ 	/* Current mode */
+ 	const struct imx258_mode *cur_mode;
  
- properties:
-   compatible:
--    const: sony,imx258
-+    enum:
-+      - sony,imx258
-+      - sony,imx258-pdaf
++	unsigned long link_freq_bitmap;
+ 	const struct imx258_link_freq_config *link_freq_configs;
+ 	const s64 *link_freq_menu_items;
+ 	unsigned int lane_mode_idx;
+@@ -1551,6 +1552,17 @@ static int imx258_probe(struct i2c_client *client)
+ 		return ret;
+ 	}
  
-   assigned-clocks: true
-   assigned-clock-parents: true
++	ret = v4l2_link_freq_to_bitmap(&client->dev,
++				       ep.link_frequencies,
++				       ep.nr_of_link_frequencies,
++				       imx258->link_freq_menu_items,
++				       ARRAY_SIZE(link_freq_menu_items_19_2),
++				       &imx258->link_freq_bitmap);
++	if (ret) {
++		dev_err(&client->dev, "Link frequency not supported\n");
++		goto error_endpoint_free;
++	}
++
+ 	/* Get number of data lanes */
+ 	switch (ep.bus.mipi_csi2.num_data_lanes) {
+ 	case 2:
 -- 
 2.44.0
 
