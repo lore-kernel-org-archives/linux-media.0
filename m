@@ -1,243 +1,222 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14331474AB;
-	Fri,  3 May 2024 07:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480D912B89;
+	Fri,  3 May 2024 07:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714721979; cv=none; b=pQz1hGCQXS2f6LsijHEq74e4k02q4D9Z5RwdqvjtRvA/mBliP7ldZZDLRBDt12+nWXI/HHS32cS9Uaz+Rq2xyvSIc2Bv+r/iIMTwxRRjrn/ORODnsuo9Z3aXkC/Y9lnawFDnwBFdBeELHX+g48j2242pkjqrNTgk7AFQmzkfHt0=
+	t=1714722914; cv=none; b=kW5ne/+kkXwlLeGpzzPmEYZM7lL9BOiLheBrSYHSvgAxSX7UBgZ3t0pDYIKy9jfAk/IYkhBP+7BNLn727E6Aa9y/E6mXnhgQGN4LjP+rRWXKh/PPRlXYgmdOdgubx3TslOqx884M92BWoXhfaozaZooZ71GEoU/jDUXzGWSf3mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714721979; c=relaxed/simple;
-	bh=GQBew1/qJlvNTkgxM4kDUOeCxcM8UIukTDBqToT6Fbk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CIpQWAVJaHF/SqI6fWkeF0HJ5wl38VVZ6O9v2iZwagtpMuU4pp2gr4YCGqXP5EJn1p00XkuJZz7CEYYH3t9GlZ7+lHvAY2G4VDabAwSwvy/5Y9D/vovMzz4l+OOnmpxK3RCzvAtxO8Yd49WIaMj4PKK2qEBn5tlJaekGpzYAgKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=l1WAHkFt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WugzJKS8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=z+pKQcos; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=b1FkdEyV; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1714722914; c=relaxed/simple;
+	bh=U0mKYSQM+iT4Ik304apKIeqKnUTFT1ZibgFP5UMGmAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OvSx3q4amdcYsPBRM1kk38cfK6+tbbBDJP07keYXhetu7Lq46QpmgtBMFRl/S0YUC6IZVytK1ELqrsOQN1eCsIrBjZhgVM+VFL/lChmhF5tpBxOLAdAfR4D4f7E0G871pmgALnCITnPIcSgJ/clmlz105HhTTlGC3SfygS24bqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=aZg74kC0; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="l1WAHkFt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WugzJKS8";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="z+pKQcos";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="b1FkdEyV"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EC3D122B72;
-	Fri,  3 May 2024 07:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714721976; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=l1WAHkFtzff0Oi1c7MksftylSip13XAhH4VQNnKW4CvonoMIP/x3yN6AtWOvWRj5kToJVL
-	QMjyx8ywHcelra0n4bmMrNXUh+wDpOKCFr+Ef9bZocseOaXQxd+3Fh6zsUr6vXZ/rYzA/a
-	6sgt2qWdKSYnSLm/hptwGXKwJwoFzzU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714721976;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=WugzJKS82ovy1MgZm3UqVt3p4qhDofDMmmRaTt8k18I0ecI+Ths+TIRQQxqjgstOSgaqTn
-	G0FlmF4AuVIiXoDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=z+pKQcos;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=b1FkdEyV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714721975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=z+pKQcos0Tld6Da6Fm8P+48qV7IvUHlNuLUJRwhN8nZSApr7JXhJeCaf1XKIUTONmvrfHy
-	LV3bse4K9zcE0VA7gI3S8rv6BRsqTNXkeDb3T7Y9JtQxjb+8ww7Vlb6fBMYzAjsLibPWFI
-	6fv0TZzYKGmB7yJbLjEa7mH0yYNa1EE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714721975;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=b1FkdEyVIqEA9KzBsgkLfnGrLxatk7E0y0n/8TwK/h1copLY7D18TuZkj2fEpOD0aRpinu
-	SRPPz36nEQT8fwDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 977A3139CB;
-	Fri,  3 May 2024 07:39:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id U2nQI7eUNGbqCwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Fri, 03 May 2024 07:39:35 +0000
-Message-ID: <f1eccd9d-885f-4508-9325-3454ecc35eae@suse.de>
-Date: Fri, 3 May 2024 09:39:35 +0200
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="aZg74kC0"
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id F09803A3;
+	Fri,  3 May 2024 09:54:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1714722852;
+	bh=U0mKYSQM+iT4Ik304apKIeqKnUTFT1ZibgFP5UMGmAs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aZg74kC0JxbZwUYUcOud7rDgaH8+DlKEHETc7RYQt+MSTB7a+PZgn+V6Dgk2NQ5GY
+	 FSD/BbEKNl6OBD77VW0xvmTVmrjLRveTrl+IElCPknpxxYBZz0Vd4H2kGYMqiziSeA
+	 E75Ejv4rvPVJZL0tK9F+GLVrXqqniURsHroxNqQE=
+Date: Fri, 3 May 2024 09:55:07 +0200
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 01/19] media: adv748x: Add support for active state
+Message-ID: <vnfopqtz2mziczzovjrdnkmlwvh5jlywtmtw7rf7ezghlmt2nv@upkno4eaeeuh>
+References: <20240430103956.60190-1-jacopo.mondi@ideasonboard.com>
+ <20240430103956.60190-2-jacopo.mondi@ideasonboard.com>
+ <20240502173430.GF15807@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 12/12] fbdev/viafb: Make I2C terminology more inclusive
-To: Easwar Hariharan <eahariha@linux.microsoft.com>,
- Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
- Helge Deller <deller@gmx.de>,
- "open list:VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER"
- <linux-fbdev@vger.kernel.org>,
- "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
- open list <linux-kernel@vger.kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>,
- "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
- "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>
-References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
- <20240430173812.1423757-13-eahariha@linux.microsoft.com>
- <271ad513-0ea1-45df-ba0f-51582474ff34@suse.de>
- <076e0a0d-ad26-490e-9784-300ed52637ca@linux.microsoft.com>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <076e0a0d-ad26-490e-9784-300ed52637ca@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -5.00
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: EC3D122B72
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-5.00 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_TO(0.00)[linux.microsoft.com,gmx.de,vger.kernel.org,lists.freedesktop.org];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_DN_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[renesas];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email]
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240502173430.GF15807@pendragon.ideasonboard.com>
 
-Hi
+Hi Laurent
 
-Am 03.05.24 um 00:26 schrieb Easwar Hariharan:
-> On 5/2/2024 3:46 AM, Thomas Zimmermann wrote:
->>
->> Am 30.04.24 um 19:38 schrieb Easwar Hariharan:
->>> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
->>> with more appropriate terms. Inspired by and following on to Wolfram's
->>> series to fix drivers/i2c/[1], fix the terminology for users of
->>> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
->>> in the specification.
->>>
->>> Compile tested, no functionality changes intended
->>>
->>> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
->>>
->>> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
->> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
->>
-> Thanks for the ack! I had been addressing feedback as I got it on the v0 series, and it seems
-> I missed out on updating viafb and smscufx to spec-compliant controller/target terminology like
-> the v0->v1 changelog calls out before posting v1.
+On Thu, May 02, 2024 at 08:34:30PM GMT, Laurent Pinchart wrote:
+> Hi Jacopo,
 >
-> For smscufx, I feel phrasing the following line (as an example)
+> Thank you for the patch.
 >
->> -/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, host,
->> +/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, *controller*,
-> would actually impact readability negatively, so I propose to leave smscufx as is.
-
-Why? I don't see much of a difference.
-
+> On Tue, Apr 30, 2024 at 12:39:37PM +0200, Jacopo Mondi wrote:
+> > Initialize and use the subdev active state to store the subdevice
+> > format.
+> >
+> > This simplifies the implementation of the get_fmt and set_fmt pad
+> > operations.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > ---
+> >  drivers/media/i2c/adv748x/adv748x-csi2.c | 69 ++++--------------------
+> >  drivers/media/i2c/adv748x/adv748x.h      |  1 -
+> >  2 files changed, 11 insertions(+), 59 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+> > index 5b265b722394..435b0909bbef 100644
+> > --- a/drivers/media/i2c/adv748x/adv748x-csi2.c
+> > +++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+> > @@ -139,78 +139,26 @@ static const struct v4l2_subdev_video_ops adv748x_csi2_video_ops = {
+> >   * But we must support setting the pad formats for format propagation.
+> >   */
+> >
+> > -static struct v4l2_mbus_framefmt *
+> > -adv748x_csi2_get_pad_format(struct v4l2_subdev *sd,
+> > -			    struct v4l2_subdev_state *sd_state,
+> > -			    unsigned int pad, u32 which)
+> > -{
+> > -	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
+> > -
+> > -	if (which == V4L2_SUBDEV_FORMAT_TRY)
+> > -		return v4l2_subdev_state_get_format(sd_state, pad);
+> > -
+> > -	return &tx->format;
+> > -}
+> > -
+> > -static int adv748x_csi2_get_format(struct v4l2_subdev *sd,
+> > -				   struct v4l2_subdev_state *sd_state,
+> > -				   struct v4l2_subdev_format *sdformat)
+> > -{
+> > -	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
+> > -	struct adv748x_state *state = tx->state;
+> > -	struct v4l2_mbus_framefmt *mbusformat;
+> > -
+> > -	mbusformat = adv748x_csi2_get_pad_format(sd, sd_state, sdformat->pad,
+> > -						 sdformat->which);
+> > -	if (!mbusformat)
+> > -		return -EINVAL;
+> > -
+> > -	mutex_lock(&state->mutex);
+> > -
+> > -	sdformat->format = *mbusformat;
+> > -
+> > -	mutex_unlock(&state->mutex);
+> > -
+> > -	return 0;
+> > -}
+> > -
+> >  static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
+> >  				   struct v4l2_subdev_state *sd_state,
+> >  				   struct v4l2_subdev_format *sdformat)
+> >  {
+> > -	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
+> > -	struct adv748x_state *state = tx->state;
+> >  	struct v4l2_mbus_framefmt *mbusformat;
+> > -	int ret = 0;
+> > -
+> > -	mbusformat = adv748x_csi2_get_pad_format(sd, sd_state, sdformat->pad,
+> > -						 sdformat->which);
+> > -	if (!mbusformat)
+> > -		return -EINVAL;
+> >
+> > -	mutex_lock(&state->mutex);
+> > +	mbusformat = v4l2_subdev_state_get_format(sd_state, sdformat->pad);
+> >
+> > +	/* Format on the source pad is always copied from the sink one. */
+> >  	if (sdformat->pad == ADV748X_CSI2_SOURCE) {
+> >  		const struct v4l2_mbus_framefmt *sink_fmt;
+> >
+> > -		sink_fmt = adv748x_csi2_get_pad_format(sd, sd_state,
+> > -						       ADV748X_CSI2_SINK,
+> > -						       sdformat->which);
+> > -
+> > -		if (!sink_fmt) {
+> > -			ret = -EINVAL;
+> > -			goto unlock;
+> > -		}
+> > -
+> > +		sink_fmt = v4l2_subdev_state_get_format(sd_state,
+> > +							ADV748X_CSI2_SINK);
+> >  		sdformat->format = *sink_fmt;
 >
-> For viafb, I propose making it compliant with the spec using the controller/target terminology and
-> posting a v2 respin (which I can send out as soon as you say) and ask you to review again.
+> That's not the right way to do it. You should propagate the format from
+> sink to source when pad == ADV748X_CSI2_SINK, and return
+> adv748x_csi2_get_format() when pad == ADV748X_CSI2_SOURCE. Otherwise
+
+I think it's done later and this patch doesn't change the currently
+implemented behaviour, doesn't it ?
+
+Anyway, I got that you would prefer to squash the first patches in a
+single one, so this will be solved
+
+
+> setting the format on the sink pad will not update the state of the
+> source pad, and a get format call on the source pad will return an
+> incorrect format.
 >
-> What do you think?
-
-I think we should adopt the spec's language everywhere. That makes it 
-possible to grep the spec for terms used in the source code. Using 
-'host' in smscufx appears to introduce yet another term. If you are 
-worried about using 'I2C controller' and 'controller' in the same 
-sentence, you can replace 'I2C controller' with 'DDC channel'. That's 
-even more precise about the purpose of this code.
-
-Best regards
-Thomas
-
+> >  	}
+> >
+> >  	*mbusformat = sdformat->format;
+> >
+> > -unlock:
+> > -	mutex_unlock(&state->mutex);
+> > -
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >
+> >  static int adv748x_csi2_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
+> > @@ -228,7 +176,7 @@ static int adv748x_csi2_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad
+> >  }
+> >
+> >  static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
+> > -	.get_fmt = adv748x_csi2_get_format,
+> > +	.get_fmt = v4l2_subdev_get_fmt,
+> >  	.set_fmt = adv748x_csi2_set_format,
+> >  	.get_mbus_config = adv748x_csi2_get_mbus_config,
+> >  };
+> > @@ -320,6 +268,11 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+> >  	if (ret)
+> >  		goto err_cleanup_subdev;
+> >
+> > +	tx->sd.state_lock = tx->ctrl_hdl.lock;
 >
-> Thanks,
-> Easwar
->
->>> ---
->>>    drivers/video/fbdev/via/chip.h    |  8 ++++----
->>>    drivers/video/fbdev/via/dvi.c     | 24 ++++++++++++------------
->>>    drivers/video/fbdev/via/lcd.c     |  6 +++---
->>>    drivers/video/fbdev/via/via_aux.h |  2 +-
->>>    drivers/video/fbdev/via/via_i2c.c | 12 ++++++------
->>>    drivers/video/fbdev/via/vt1636.c  |  6 +++---
->>>    6 files changed, 29 insertions(+), 29 deletions(-)
->>>
-> <snip>
->
+> Maybe that's addressed in subsequent patches, but do we need a
+> device-wide lock ? The code you replace above uses the
 
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
+device-wide as global to the CSI-2, the HDMI and the AFE subdevices ?
 
+> adv748x_state.mutex lock, which covers all subdevs. I don't think this
+> patch introduces race conditions, so this could possibly be handled on
+> top.
+>
+> > +	ret = v4l2_subdev_init_finalize(&tx->sd);
+> > +	if (ret)
+> > +		goto err_free_ctrl;
+> > +
+> >  	ret = v4l2_async_register_subdev(&tx->sd);
+> >  	if (ret)
+> >  		goto err_free_ctrl;
+> > diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
+> > index d2b5e722e997..9bc0121d0eff 100644
+> > --- a/drivers/media/i2c/adv748x/adv748x.h
+> > +++ b/drivers/media/i2c/adv748x/adv748x.h
+> > @@ -75,7 +75,6 @@ enum adv748x_csi2_pads {
+> >
+> >  struct adv748x_csi2 {
+> >  	struct adv748x_state *state;
+> > -	struct v4l2_mbus_framefmt format;
+> >  	unsigned int page;
+> >  	unsigned int port;
+> >  	unsigned int num_lanes;
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
