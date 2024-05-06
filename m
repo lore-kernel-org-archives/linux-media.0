@@ -1,59 +1,65 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D017FBC3
-	for <linux-media@vger.kernel.org>; Mon,  6 May 2024 13:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB2881721
+	for <linux-media@vger.kernel.org>; Mon,  6 May 2024 14:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715003314; cv=none; b=CipB7GESaRnpJicg1PaxhFikrGHQpw784rCX86ypPyZZzxBR9cHYx0dfdwHnrVR9Rq6pO20qq8kbspvWKAl6Av6JkciI8rLLG8YU9sjK0WR+voG3JjDc0GxEZhhTqpP3ryihtahWnMwufh8aw/x0ANlZ0aIHstVhbzlTGl34J3s=
+	t=1715004233; cv=none; b=kTA1G+jTa0phWGKMEI9S+O85iAgXMQzscnUzokMNCIVG6R4MZJCduPhVNqxLLEFFBcS7K9iJJuDMD5AUCKN7I2fXg/TY949i5N+TjaQLMooUTdtotGXSSbnppsBOV4G4OBzSAPMz85XkVTewYIc80nNDLXIFHiz2XvO/1S84mUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715003314; c=relaxed/simple;
-	bh=MPXbvZewmO/D2DEHW1XiJWvSM8CPq85XDTvUbnZY4DQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=OSX6NEpyzv31I6T8Mo4Jbgz6cpuE0gw6QyFmDkxSc7pQlDv3KaN2U3pOAwBfol3pAUbtOQUCf2nBhv9nkQck4eesmJqFz31Vc9Sp4SNN4MN1fL/dROxVIMJF1pOPnTk3noUlBDEvZ9E0r52odCK12/XxbyQ+a82ORwPOVmrQpuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=FP5aLMyU; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
+	s=arc-20240116; t=1715004233; c=relaxed/simple;
+	bh=QdBWMUSn7gZXmXCHj2RcAdJODiJKBW/D4uMUKrPsQ9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=icnQrtTz8ReAfL0Mvp8geLptmagQY/ek9/zhXfZNnPKIgspRihurAOJpUz42K41VQ0IvLCI94bMPrXdaNoHXBLz0oU0yo2RKXEfXm/6SgGkavJ/jMoSBW7dHX1elJKbdjXAr88/WZC0K0U+2RhwGMPlvxOtYNvmnr5ZR+muAHEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hdazetS1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="FP5aLMyU"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2e242b1df60so24050031fa.1
-        for <linux-media@vger.kernel.org>; Mon, 06 May 2024 06:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1715003309; x=1715608109; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QyXdN6gxvZfSyDlB/uI/J3a7zD0pJvSdTF4inS8BuAY=;
-        b=FP5aLMyUebHboGynTcrqRWNgvYNAHe6WccQU3+6ga5YuOiHtLHeI/8BNxpHzqtPxjE
-         F3tGgbbAyze0d1Vf3pxY4ODkUSwRSkdrMNt7kVFpFLepoToFE7z8VgddB3qd0EcpX1C/
-         exVa1dxIYpEABg+jhIUYnvH2+NSXb2vadJsTyFJEvqs9t0+JvRSJS+CrdE5A6acXNQpf
-         vElj/RgOBwmK3/vBgK4RX14IgsBI+H6r8MM/oelYh8GEoO+KOK6wbevNBzvMOOvtMq1F
-         6G5tZypSujyM1RSIbqR/M6slrkdPPdKiIyZM2pvU8aBz2C6E+0uPHL/fSFoJAUia3QJD
-         fF6Q==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hdazetS1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715004216;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oa4YbBmlzkI63abCw2z4fEd9n5o3yLiXeNXHymLCUuE=;
+	b=hdazetS1rh6Zk14lxWk+K3D7bTBbAyDxuxvav+EeuWJhbvBJeddS+KnjOKA65zFrsoMVUY
+	+iRCSSI+1pEejgdHdJy1N2HzNGI2sv83gq5rjAyl+O9ttcTtfTDI4PraM8HTGsvgzg+2Tn
+	qpfIc01/+e87uxRWJ8uKLPpGt+P/xcs=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-696-0I0r0MRkNdSAowhmkqHb3Q-1; Mon, 06 May 2024 10:01:52 -0400
+X-MC-Unique: 0I0r0MRkNdSAowhmkqHb3Q-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-572ad77d634so666913a12.1
+        for <linux-media@vger.kernel.org>; Mon, 06 May 2024 07:01:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715003309; x=1715608109;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1715004104; x=1715608904;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QyXdN6gxvZfSyDlB/uI/J3a7zD0pJvSdTF4inS8BuAY=;
-        b=GON9JiB7Li/EVyBEc00ArPXbq8qP4CErxJjSpMGfnwQ/2mIKCFpn64tDyd6dXrBsjo
-         s861IKgEoajbcxNKpP1V5Jt0uTOp57IbjfGV12wHll8xZnc2QFHjdyu5WH6r5QY3UN6M
-         0WMjKVC11yqZv/APQILBsVxaatIYbzxrD8CV82n6WIja3wqqRt3w1pH11bQkwxIOf4oh
-         X5P1k47hESpXmOH7kHWmfuFqxk6dmlqS5wCPewdPcu/1+ZCOeTled28AbKfuvhqx3OcS
-         IMbP3PrKRCkIj2l9zu/fkvG6M3JoyIFmQf0vjFM3EwbBNrvGGze1uP5hF5XGWxCEcHk4
-         G2/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUwA5gUZq5na/X4ubm+qwnDbopdg0dEaFSKhxKhaIIdvJCsp6QBIELtWeT307oQi4GeZhDVw4PcZYXnDwmhxKn6pjLtGagNHbMYoYE=
-X-Gm-Message-State: AOJu0Yz06BIBu52SPkIJhQWEauR4+ENg/sIt2DWEEZSYfJ7FLCdYOnd6
-	MtYZlC6Qc+lHF6VINmF3MLA7geCsHxtLHn+DNdJ8NhR0i4a+SzYClZgHWRPEFXA=
-X-Google-Smtp-Source: AGHT+IEalc1xHQQV1lP6Ojgfs0WPNcHeEAEZZRYOqpD+rd2saelIZkJRzrjQzJzjZ4NoHZwjp0FoNQ==
-X-Received: by 2002:a2e:a488:0:b0:2e0:4216:6fa8 with SMTP id h8-20020a2ea488000000b002e042166fa8mr8960460lji.39.1715003309480;
-        Mon, 06 May 2024 06:48:29 -0700 (PDT)
-Received: from [192.168.108.81] (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id je8-20020a05600c1f8800b0041bf28aa11dsm16131973wmb.42.2024.05.06.06.48.29
+        bh=oa4YbBmlzkI63abCw2z4fEd9n5o3yLiXeNXHymLCUuE=;
+        b=EKnvvBmwZpGPx7UdYvmw3D3Ntcyx9ZfF+rzUJjgGyPZUqZUsZ60XUQXVEx5WThElz+
+         hr9hLtocJt5laRjwIW7vdYVXjGcXlSuNljztXiBruFqwUeyfJlQuKdzE6HCl4PRl18fd
+         7b6EowHi2qeqc1JWLp5UVR48qqg06yWJ8QgMqp1u42bFL/LOIETDJSVxMYxmruwP5tQA
+         zF0qV66u1Csd4S/Yol91HGZIzhh5x/slLkihxnWGswCc9mpegZD3Kprcpblk80ULptP0
+         348cVjMP3dUjuP6OePBGmOIPTAYrJwJXSYg72Vchkwsy6LZupErLX8NE6/9zV90Z1agT
+         ab7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXFtEqF1sEylI8WXMx/XmSkwFJq5YtYxKfFcebDESMMFnn7VUfROz4up7rVymZ7EQK5W3PxfHc8Z/G46yif5IVGZFr4VC9mzNWkmzo=
+X-Gm-Message-State: AOJu0YyDy9GgmZY6kn9GyWnbtsvs164WQQDEwiYrK25arCc+v5QCvUqt
+	FXQ8/q8W7VN3p5FAmckm3TSJ5GD83YlZoXJgQeIXIGng0N8eBagmfG0xwtu6sCwe/orxF+FGovX
+	ZiplrdSQQ/vX24Q2j27NAhmgXn8r+Pgp/wiun77hANBcrM7SPonHXFtQKb+BB
+X-Received: by 2002:a50:9513:0:b0:570:5b70:3407 with SMTP id u19-20020a509513000000b005705b703407mr8444047eda.10.1715004104181;
+        Mon, 06 May 2024 07:01:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGqtTHezMetmGx7QkF/7UHxNmAFJAxewY94xyi4UnLpcMz8eE3WVuF2BLvBhkQkOqr8E1iw4Q==
+X-Received: by 2002:a50:9513:0:b0:570:5b70:3407 with SMTP id u19-20020a509513000000b005705b703407mr8444031eda.10.1715004103794;
+        Mon, 06 May 2024 07:01:43 -0700 (PDT)
+Received: from [10.40.98.157] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id z5-20020aa7c645000000b00572b0a44e42sm5224207edr.26.2024.05.06.07.01.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 May 2024 06:48:29 -0700 (PDT)
-Message-ID: <c24f14d4-c996-4150-99ce-66a5c4409dcf@freebox.fr>
-Date: Mon, 6 May 2024 15:46:36 +0200
+        Mon, 06 May 2024 07:01:43 -0700 (PDT)
+Message-ID: <cbe5a743-d8be-4b0e-99c4-e804fbadc099@redhat.com>
+Date: Mon, 6 May 2024 16:01:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,96 +67,113 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v3 2/3] arm64: dts: qcom: msm8998: add venus node
-From: Marc Gonzalez <mgonzalez@freebox.fr>
-To: Bjorn Andersson <andersson@kernel.org>,
- Jeffrey Hugo <quic_jhugo@quicinc.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Bryan O Donoghue <bryan.odonoghue@linaro.org>
-Cc: MSM <linux-arm-msm@vger.kernel.org>,
- linux-media <linux-media@vger.kernel.org>, DT <devicetree@vger.kernel.org>,
- Pierre-Hugues Husson <phhusson@freebox.fr>, Arnaud Vrac <avrac@freebox.fr>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <72860c1d-7434-4be6-8c1d-9ea177602802@freebox.fr>
+Subject: Re: Safety of opening up /dev/dma_heap/* to physically present users
+ (udev uaccess tag) ?
+To: Maxime Ripard <mripard@redhat.com>, Sumit Semwal
+ <sumit.semwal@linaro.org>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
+ "T.J. Mercier" <tjmercier@google.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Lennart Poettering <mzxreary@0pointer.de>,
+ Robert Mader <robert.mader@collabora.com>,
+ Sebastien Bacher <sebastien.bacher@canonical.com>,
+ Linux Media Mailing List <linux-media@vger.kernel.org>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ linaro-mm-sig@lists.linaro.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Milan Zamazal <mzamazal@redhat.com>,
+ Andrey Konovalov <andrey.konovalov.ynk@gmail.com>
+References: <bb372250-e8b8-4458-bc99-dd8365b06991@redhat.com>
+ <20240506-dazzling-nippy-rhino-eabccd@houat>
+ <ZjjdUBYYKXJ1EPr5@phenom.ffwll.local>
 Content-Language: en-US
-In-Reply-To: <72860c1d-7434-4be6-8c1d-9ea177602802@freebox.fr>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZjjdUBYYKXJ1EPr5@phenom.ffwll.local>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-From: Pierre-Hugues Husson <phhusson@freebox.fr>
+Hi Sima,
 
-Now that the venus clocks are fixed, we can add the DT node.
+On 5/6/24 3:38 PM, Daniel Vetter wrote:
+> On Mon, May 06, 2024 at 02:05:12PM +0200, Maxime Ripard wrote:
+>> Hi,
+>>
+>> On Mon, May 06, 2024 at 01:49:17PM GMT, Hans de Goede wrote:
+>>> Hi dma-buf maintainers, et.al.,
+>>>
+>>> Various people have been working on making complex/MIPI cameras work OOTB
+>>> with mainline Linux kernels and an opensource userspace stack.
+>>>
+>>> The generic solution adds a software ISP (for Debayering and 3A) to
+>>> libcamera. Libcamera's API guarantees that buffers handed to applications
+>>> using it are dma-bufs so that these can be passed to e.g. a video encoder.
+>>>
+>>> In order to meet this API guarantee the libcamera software ISP allocates
+>>> dma-bufs from userspace through one of the /dev/dma_heap/* heaps. For
+>>> the Fedora COPR repo for the PoC of this:
+>>> https://hansdegoede.dreamwidth.org/28153.html
+>>
+>> For the record, we're also considering using them for ARM KMS devices,
+>> so it would be better if the solution wasn't only considering v4l2
+>> devices.
+>>
+>>> I have added a simple udev rule to give physically present users access
+>>> to the dma_heap-s:
+>>>
+>>> KERNEL=="system", SUBSYSTEM=="dma_heap", TAG+="uaccess"
+>>>
+>>> (and on Rasperry Pi devices any users in the video group get access)
+>>>
+>>> This was just a quick fix for the PoC. Now that we are ready to move out
+>>> of the PoC phase and start actually integrating this into distributions
+>>> the question becomes if this is an acceptable solution; or if we need some
+>>> other way to deal with this ?
+>>>
+>>> Specifically the question is if this will have any negative security
+>>> implications? I can certainly see this being used to do some sort of
+>>> denial of service attack on the system (1). This is especially true for
+>>> the cma heap which generally speaking is a limited resource.
+>>
+>> There's plenty of other ways to exhaust CMA, like allocating too much
+>> KMS or v4l2 buffers. I'm not sure we should consider dma-heaps
+>> differently than those if it's part of our threat model.
+> 
+> So generally for an arm soc where your display needs cma, your render node
+> doesn't. And user applications only have access to the later, while only
+> the compositor gets a kms fd through logind. At least in drm aside from
+> vc4 there's really no render driver that just gives you access to cma and
+> allows you to exhaust that, you need to be a compositor with drm master
+> access to the display.
+> 
+> Which means we're mostly protected against bad applications, and that's
+> not a threat the "user physically sits in front of the machine accounts
+> for", and which giving cma access to everyone would open up. And with
+> flathub/snaps/... this is very much an issue.
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Pierre-Hugues Husson <phhusson@freebox.fr>
-Signed-off-by: Marc Gonzalez <mgonzalez@freebox.fr>
----
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+I agree that bad applications are an issue, but not for the flathub / snaps
+case. Flatpacks / snaps run sandboxed and don't have access to a full /dev
+so those should not be able to open /dev/dma_heap/* independent of
+the ACLs on /dev/dma_heap/*. The plan is for cameras using the
+libcamera software ISP to always be accessed through pipewire and
+the camera portal, so in this case pipewere is taking the place of
+the compositor in your kms vs render node example.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index 5f5b90a6e2bf1..3d3b1f61c0690 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -3010,6 +3010,54 @@ mdss_dsi1_phy: phy@c996400 {
- 			};
- 		};
- 
-+		venus: video-codec@cc00000 {
-+			compatible = "qcom,msm8998-venus";
-+			reg = <0x0cc00000 0xff000>;
-+			interrupts = <GIC_SPI 287 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&mmcc VIDEO_TOP_GDSC>;
-+			clocks = <&mmcc VIDEO_CORE_CLK>,
-+				 <&mmcc VIDEO_AHB_CLK>,
-+				 <&mmcc VIDEO_AXI_CLK>,
-+				 <&mmcc VIDEO_MAXI_CLK>;
-+			clock-names = "core", "iface", "bus", "mbus";
-+			iommus = <&mmss_smmu 0x400>,
-+				 <&mmss_smmu 0x401>,
-+				 <&mmss_smmu 0x40a>,
-+				 <&mmss_smmu 0x407>,
-+				 <&mmss_smmu 0x40e>,
-+				 <&mmss_smmu 0x40f>,
-+				 <&mmss_smmu 0x408>,
-+				 <&mmss_smmu 0x409>,
-+				 <&mmss_smmu 0x40b>,
-+				 <&mmss_smmu 0x40c>,
-+				 <&mmss_smmu 0x40d>,
-+				 <&mmss_smmu 0x410>,
-+				 <&mmss_smmu 0x421>,
-+				 <&mmss_smmu 0x428>,
-+				 <&mmss_smmu 0x429>,
-+				 <&mmss_smmu 0x42b>,
-+				 <&mmss_smmu 0x42c>,
-+				 <&mmss_smmu 0x42d>,
-+				 <&mmss_smmu 0x411>,
-+				 <&mmss_smmu 0x431>;
-+			memory-region = <&venus_mem>;
-+			status = "disabled";
-+
-+			video-decoder {
-+				compatible = "venus-decoder";
-+				clocks = <&mmcc VIDEO_SUBCORE0_CLK>;
-+				clock-names = "core";
-+				power-domains = <&mmcc VIDEO_SUBCORE0_GDSC>;
-+			};
-+
-+			video-encoder {
-+				compatible = "venus-encoder";
-+				clocks = <&mmcc VIDEO_SUBCORE1_CLK>;
-+				clock-names = "core";
-+				power-domains = <&mmcc VIDEO_SUBCORE1_GDSC>;
-+			};
-+		};
-+
- 		mmss_smmu: iommu@cd00000 {
- 			compatible = "qcom,msm8998-smmu-v2", "qcom,smmu-v2";
- 			reg = <0x0cd00000 0x40000>;
--- 
-2.34.1
+So this reduces the problem to bad apps packaged by regular distributions
+and if any of those misbehave the distros should fix that.
+
+So I think that for the denial of service side allowing physical
+present users (but not sandboxed apps running as those users) to
+access /dev/dma_heap/* should be ok.
+
+My bigger worry is if dma_heap (u)dma-bufs can be abused in other
+ways then causing a denial of service.
+
+I guess that the answer there is that causing other security issues
+should not be possible ?
+
+Regards,
+
+Hans
 
