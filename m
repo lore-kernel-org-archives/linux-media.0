@@ -1,77 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B35C6CDAC;
-	Mon,  6 May 2024 08:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043AC433BC;
+	Mon,  6 May 2024 08:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714985135; cv=none; b=lCIbM550VK17YX4egchPYfRsw9cQXAIsl5eFKxsZTALPxKYfGlS5k1c8IIZa1mQZZRSY2b3cbB8MHtHFu3p2rYFwTbIFtKKgqaIxoo/io0orZFAQU2lI+1GXFdMvue6sd4iRalZt6F+0nbi34V8aHImnzzZdbOF2q8A4fDZ0Ato=
+	t=1714985384; cv=none; b=QMXfLdh1CJln8L2MtkV/hJsGpkwHkIOrW6h7r18PqvxNx+6tVJtpelP1JUTA0nRX+2yznfkIra/15dfyU6r2qV2xxLVKyBC4SlwfQVINgCDRcTaDoZC+YMGNG05JHZFf0rys6iNiGWA8A6pYk4bC3//WBSQ3CjFgm4oz5cJUU7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714985135; c=relaxed/simple;
-	bh=dJ9zuyrdQMElrOzde31P4H08+N2W3DV9j7dWCbVqR4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pn0glFOlCOoWG/hthTj35BPtSPdxAb3AHtVAW5MMWdN0kmrCKQuFQ3HMdgy/5SYgu17es+2jzMYz1g9Pjj5+qVYB1YiQ4N0t/Q1oaMc24LqZi2gI0tSiLVsw6pdvgqX2RSOTSR9RFpvjfEanoMRpPNeSIJ/VH7+DsNyXBxrC/oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WiQEaAXK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714985384; c=relaxed/simple;
+	bh=enOnhfQCgQ2RbMQ1kTNuTC4OOeXUIY658Bnehe2M/Xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rWHzY/PGdMY3GlkqTeLQPoLZwS5BbI6PuWWBr/nwjqAztdmkWhixhBNp84uD1S0guGYbndjxYXX6CLq9QmY48yqvJf4PbZIXBx2Bzi105dyXyQMohJ3gmtyRCB9PGkNLnZnDIiiVVurU0sGKXlqU5Z7jQCvgYAYb+A7QrC6Fric=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICGU1nvR; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WiQEaAXK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E24BC116B1;
-	Mon,  6 May 2024 08:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714985135;
-	bh=dJ9zuyrdQMElrOzde31P4H08+N2W3DV9j7dWCbVqR4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WiQEaAXK+d3VZO4xZnfaaIE7Sfh/pbjnMpO2gmWdDzHwWYp4rCrmzMwXPbAuSq2D8
-	 fH+uA4HbPL5yqyI2GI4Xc1nJoimiQWf+O2OZbhl4eYWFSaH6g9e91opm+dSgDUUjAo
-	 cG3n3hq8hLlCm6ZsuoLuvkOvcM+NPydIKO2b4EhgiC3t07V0qaT/mPyvfrKo2du0XH
-	 JKiCZbDEcy7JnFsbVJDyor6eEcRM3VC21/p2XQujBcHzxcTTufWj4iOIv1ZXu3TpfD
-	 Gedh6JD88bRDWqWtwfa4IVCiDN3PyGp/pVOTPWZ2724+lohSOjT706b6NsDbMz5iyb
-	 wPCurUHMEdlsw==
-Date: Mon, 6 May 2024 10:45:27 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, keescook@chromium.org, 
-	axboe@kernel.dk, christian.koenig@amd.com, dri-devel@lists.freedesktop.org, 
-	io-uring@vger.kernel.org, jack@suse.cz, laura@labbott.name, linaro-mm-sig@lists.linaro.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	minhquangbui99@gmail.com, sumit.semwal@linaro.org, 
-	syzbot+045b454ab35fd82a35fb@syzkaller.appspotmail.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] epoll: try to be a _bit_ better about file lifetimes
-Message-ID: <20240506-injizieren-administration-f5900157566a@brauner>
-References: <202405031110.6F47982593@keescook>
- <20240503211129.679762-2-torvalds@linux-foundation.org>
- <20240503212428.GY2118490@ZenIV>
- <CAHk-=wjpsTEkHgo1uev3xGJ2bQXYShaRf3GPEqDWNgUuKx0JFw@mail.gmail.com>
- <20240504-wohngebiet-restwert-6c3c94fddbdd@brauner>
- <CAHk-=wj_Fu1FkMFrjivQ=MGkwkKXZBuh0f4BEhcZHD5WCvHesw@mail.gmail.com>
- <CAHk-=wirxPSQgRV1u7t4qS1t4ED7w7OeehdUSC-LYZXspqa49w@mail.gmail.com>
- <20240505-gelehnt-anfahren-8250b487da2c@brauner>
- <CAHk-=wgMzzfPwKc=8yBdXwSkxoZMZroTCiLZTYESYD3BC_7rhQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICGU1nvR"
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-36c7004daecso12228545ab.0;
+        Mon, 06 May 2024 01:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714985382; x=1715590182; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d+P/KjeibrFZWEkv6+L8YPxuHh9mJNgbeY/rfKylmy8=;
+        b=ICGU1nvRPCC+uBp095Ek2iRGMXSerDIUKPHnY1z7QUHrzoXO3cvPz1MEBanAvjflot
+         moun/iwPbDE9ZFkbZRnRNcEhKyzUs7H+OLeBU1ZxLyR48Z9mSdCbriFszJb6HhBJBMmg
+         EgpQc9wEO+UOtKT8YWj1b6Iz4VZnmquo9WyjrVlfK1ijkDqMmh1Dit3DcezVnGio3VJf
+         EwaOZ8RcT5IwCJKw6akXCETytJneCIltGkhLAVezEXtJmCTG6NPWgjs+qDGJ68hN5GCe
+         uwHttDr1Aa+nUhOvEYc5g7Uzl297Xqi1aBiFoMgjX0FXfjQl7N5IpgoDThAj2SGd3xRz
+         FjVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714985382; x=1715590182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d+P/KjeibrFZWEkv6+L8YPxuHh9mJNgbeY/rfKylmy8=;
+        b=FWKnDQbm75usYwg/8TMIhIPDAaacszDN8JPZ9AmkebEHhXU5ClohCH0sXqI0tqCYUx
+         HWSwFLvFxgZMWSkNTcoijuXGys2RnBfx6ZGnlPamxjbDYtjgF7wL71nAPFv6F4sPV8Ev
+         +PRjpHAF4nIGs1vkjO0YCAXIA+7lrDrbvIIZkdS9H5YF27JgIMFWmZvwG4bvMgfDALFb
+         LTUGttONLwyI48UckotDICbDhdbUGHXKBCq0LVTMkbOgGFv9luADcCyqgYHwFhfYsL7D
+         1O5ZZWuuCLfYSySVOkaaF3Bh7+gyAsHdHDkSHNdc1n7o70eJjFYdoEdIc64EmB1zlNc7
+         Bn/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWuLprFj8JDib3503hAemXF57+OszXI7tGNsVpIqL7wX4KLpcd9GetJ4VEZ2L301IrTglq8bgTyrd0ssoDo+Zaqg/SWTjNrjMUujys9fza+8IUMvyCnJlAZijj/IwByEQkqaDM8Dv6ChkQ=
+X-Gm-Message-State: AOJu0Yx7E6KqIKoEWU7gN1lANdyYO355o6LWIJu3Yit59BlMyf0LjRF1
+	b6RVwFTVXZBNOM4wjIsR5lr85LoMw5GTArDg9wMVvXWIDz7AMgybVr2CMD2TyWGOEMNBO+UH/Wy
+	bBpBZoctRMN2BMiLuNgJPcpj8cpI=
+X-Google-Smtp-Source: AGHT+IGeec60Vp1v6lhrn7gTHN4m70j+7lgJkd7vr44lhHOV5xgWp2a2fsbD89DvpBkVDZJvLlaoq3wNcAZT4wuEZSs=
+X-Received: by 2002:a05:6e02:1c0d:b0:36b:aae:613 with SMTP id
+ l13-20020a056e021c0d00b0036b0aae0613mr10103474ilh.10.1714985382163; Mon, 06
+ May 2024 01:49:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgMzzfPwKc=8yBdXwSkxoZMZroTCiLZTYESYD3BC_7rhQ@mail.gmail.com>
+References: <1710834674-3285-1-git-send-email-shengjiu.wang@nxp.com>
+ <20240430082112.jrovosb6lgblgpfg@basti-XPS-13-9310> <ZjEEKyvb02CWz3l4@finisterre.sirena.org.uk>
+ <20240430172752.20ffcd56@sal.lan> <ZjGhPz-bokg6ZbDJ@finisterre.sirena.org.uk>
+ <87sez0k661.wl-tiwai@suse.de> <20240502095956.0a8c5b26@sal.lan>
+ <20240502102643.4ee7f6c2@sal.lan> <ZjRCJ2ZcmKOIo7_p@finisterre.sirena.org.uk> <20240503094225.47fe4836@sal.lan>
+In-Reply-To: <20240503094225.47fe4836@sal.lan>
+From: Shengjiu Wang <shengjiu.wang@gmail.com>
+Date: Mon, 6 May 2024 16:49:31 +0800
+Message-ID: <CAA+D8APfM3ayXHAPadHLty52PYE9soQM6o780=mZs+R4px-AOQ@mail.gmail.com>
+Subject: Re: [PATCH v15 00/16] Add audio support in v4l2 framework
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>, 
+	Sebastian Fricke <sebastian.fricke@collabora.com>, Shengjiu Wang <shengjiu.wang@nxp.com>, 
+	hverkuil@xs4all.nl, sakari.ailus@iki.fi, tfiga@chromium.org, 
+	m.szyprowski@samsung.com, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Xiubo.Lee@gmail.com, festevam@gmail.com, 
+	nicoleotsuka@gmail.com, lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com, 
+	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> The fact is, it's not dma-buf that is violating any rules. It's epoll.
+On Fri, May 3, 2024 at 4:42=E2=80=AFPM Mauro Carvalho Chehab <mchehab@kerne=
+l.org> wrote:
+>
+> Em Fri, 3 May 2024 10:47:19 +0900
+> Mark Brown <broonie@kernel.org> escreveu:
+>
+> > On Thu, May 02, 2024 at 10:26:43AM +0100, Mauro Carvalho Chehab wrote:
+> > > Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
+> >
+> > > > There are still time control associated with it, as audio and video
+> > > > needs to be in sync. This is done by controlling the buffers size
+> > > > and could be fine-tuned by checking when the buffer transfer is don=
+e.
+> >
+> > ...
+> >
+> > > Just complementing: on media, we do this per video buffer (or
+> > > per half video buffer). A typical use case on cameras is to have
+> > > buffers transferred 30 times per second, if the video was streamed
+> > > at 30 frames per second.
+> >
+> > IIRC some big use case for this hardware was transcoding so there was a
+> > desire to just go at whatever rate the hardware could support as there
+> > is no interactive user consuming the output as it is generated.
+>
+> Indeed, codecs could be used to just do transcoding, but I would
+> expect it to be a border use case. See, as the chipsets implementing
+> codecs are typically the ones used on mobiles, I would expect that
+> the major use cases to be to watch audio and video and to participate
+> on audio/video conferences.
+>
+> Going further, the codec API may end supporting not only transcoding
+> (which is something that CPU can usually handle without too much
+> processing) but also audio processing that may require more
+> complex algorithms - even deep learning ones - like background noise
+> removal, echo detection/removal, volume auto-gain, audio enhancement
+> and such.
+>
+> On other words, the typical use cases will either have input
+> or output being a physical hardware (microphone or speaker).
+>
 
-I agree that epoll() not taking a reference on the file is at least
-unexpected and contradicts the usual code patterns for the sake of
-performance and that it very likely is the case that most callers of
-f_op->poll() don't know this.
+All, thanks for spending time to discuss, it seems we go back to
+the start point of this topic again.
 
-Note, I cleary wrote upthread that I'm ok to do it like you suggested
-but raised two concerns a) there's currently only one instance of
-prolonged @file lifetime in f_op->poll() afaict and b) that there's
-possibly going to be some performance impact on epoll().
+Our main request is that there is a hardware sample rate converter
+on the chip, so users can use it in user space as a component like
+software sample rate converter. It mostly may run as a gstreamer plugin.
+so it is a memory to memory component.
 
-So it's at least worth discussing what's more important because epoll()
-is very widely used and it's not that we haven't favored performance
-before.
+I didn't find such API in ALSA for such purpose, the best option for this
+in the kernel is the V4L2 memory to memory framework I found.
+As Hans said it is well designed for memory to memory.
 
-But you've already said that you aren't concerned with performance on
-epoll() upthread. So afaict then there's really not a lot more to
-discuss other than take the patch and see whether we get any complaints.
+And I think audio is one of 'media'.  As I can see that part of Radio
+function is in ALSA, part of Radio function is in V4L2. part of HDMI
+function is in DRM, part of HDMI function is in ALSA...
+So using V4L2 for audio is not new from this point of view.
+
+Even now I still think V4L2 is the best option, but it looks like there
+are a lot of rejects.  If develop a new ALSA-mem2mem, it is also
+a duplication of code (bigger duplication that just add audio support
+in V4L2 I think).
+
+Best regards
+Shengjiu Wang.
+
+> > > I would assume that, on an audio/video stream, the audio data
+> > > transfer will be programmed to also happen on a regular interval.
+> >
+> > With audio the API is very much "wake userspace every Xms".
