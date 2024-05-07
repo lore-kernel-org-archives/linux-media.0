@@ -1,50 +1,47 @@
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BBB8828
-	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C104679D0
+	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715041533; cv=none; b=K4AG6nDzRNfg/4T3KmwzmppUoJL85CXU8lx3oN0E+FRMR+EO6FM6cXAC/1L02k/0HspbUungg6FAOxheIc6F/S3rNE1/FZNYYNf2OUTYKuHNgx0diyaK5ZBV25ZHtHyZf32zK80Yd0pIcEkfp/axiMDk3G81tqSkDlpNd90R9YA=
+	t=1715041533; cv=none; b=A+Drl7Xcd8buwAWVALCpbqLt79F/FoiLX47cQVPgBhn4uX8l6Ui5jZLEHsamfTc4+cvO80KnKRAnPdrfWg/DD6hHIl7cHQ7fHounn8I7t/nCF68uCU727dmzMyVS/rc3AEIx0WqxGJN8xJx35YUf3ZfaHvx/i9erAVCI6cl2W4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715041533; c=relaxed/simple;
-	bh=mAcaCbDBSwSqqFm9IRIPQohaUd6EpcA+uJ86WmyVmgk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GYtPPp2kEGCMiWPKd6ndbwY2e0OizKLMgMhOx2k1qkAJCgbSalHovoMRxVZTP7ZoGbRdN0ca68CVj+ybJqujjzhjzodWmuYvIQ09Z2EBIlgDe9P4RwZ9kDYxDU/kgiwj8w70NMfGw6Rn6otXFcQAXCIcVnxf0i77NyXJcov6hd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=HbSTOkUb; arc=none smtp.client-ip=212.227.17.21
+	bh=71Ipe14Xb2K2xCzmMlr+5xKMDUW0z/7R72994PKYCAI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rHs7qSTnvFU4KQf+xTbZ8I19p+XxHXbhuxnqR/w2BiB0hqF0QUuofBdvunugUy06FIvna2Lf/ZdShNKcdxaCMxuafzpF/4wBkkI+xA48MiIZv3Yv7r8gE7ILD+Fs1RR17iQ/vGf9CxRTZ6ENcm/fmOQiyerNXuKQEQN5QjEfiuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=lJa3tcU0; arc=none smtp.client-ip=212.227.17.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="HbSTOkUb"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="lJa3tcU0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
-	s=s31663417; t=1715041527; x=1715646327; i=herdler@nurfuerspam.de;
-	bh=n4P60J14blsG6NGd+zwl2z2Wj1wWSU9jfikHqVg/5xc=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1715041525; x=1715646325; i=herdler@nurfuerspam.de;
+	bh=4Mpf2TPp7vZL8NyrXrDFvhaQHC3KOMHx0cMtc6iYyew=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=HbSTOkUbaQl1pzQkIo2eB+fvZd+Oj4/wD08GxZmWCaXl7uchz82ClrCKK5EGLGm+
-	 8mn85PJryrDC6svUF4YdfNl/dgaUb33lvbaftS5RPMA+OfHiw+fj318Bez0mtXBDp
-	 ccfc87L6GUrQdePyKHhyFDgYWDvHwq8YiW9oYp3RNzjP7DrovjspITVLnVazpm1+d
-	 EYLtXHh9EVfcnARXrtdB95hpxH6jV9ZkjajU7Ll4EGMdqVKYmmy0xrfBNxqoOOFaa
-	 xpz5cXRkHuQAT/D1VGisy4lOpGiQA1dPrZmyT+oqrSWborAu0D84Ei7KQ1ONIElla
-	 k0MJFbhH2f1cd3E/DQ==
+	b=lJa3tcU0yXX6dLTB7+wDZ+mT+X0mcQuT6wZRMUIJM5x5JYhYNrxzfy4k29Uyvoyx
+	 UKGjYmoTjCmnJ9Ruvkuy/LWR3gpBYGY22UYrNtrmwAcJvOh3P7ffZ4dCCxGpOIX4v
+	 sRXwG8lpLZOYzIAtH1YqJxxFO5zAK4CYiUas7KMCqOtRrX8DsWlflhfwhBku9Zc2m
+	 lkrPAT99WZJByMUZMW8DC8t5sJeIoR/9tmlGQq3ohXqi9DezrSKcaHAOAY0z+BmM/
+	 t0LTsJrTHjHNoSj9Bb27CKI1iK5oyuEMf8YDHf5SUpyuyDhzfCwOOlpBHr/XhBu10
+	 fOzczzxH82BYgDj5oA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([185.101.174.109]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUXtY-1sCpnD2nJI-00QWnf; Tue, 07
- May 2024 02:25:27 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlXK-1sWHqs46JK-00jqrp; Tue, 07
+ May 2024 02:25:25 +0200
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
 Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH 10/21] media: av7110: coding style fixes: newline
-Date: Tue,  7 May 2024 02:24:49 +0200
-Message-Id: <20240507002500.81867-11-herdler@nurfuerspam.de>
+Subject: [PATCH 00/21] media: av7110: make chackpatch happier
+Date: Tue,  7 May 2024 02:24:39 +0200
+Message-Id: <20240507002500.81867-1-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20240507002500.81867-1-herdler@nurfuerspam.de>
-References: <20240507002500.81867-1-herdler@nurfuerspam.de>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -52,370 +49,250 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5kg04sIOdi3zO42ul+epWkqJV7FN0AwfiC1UAAZv/MAkWgsQ2uL
- a4LnuUbDYU/fJ7y/XQ0qBjRgpK0DD05d8AOzzfq4JrW/dMkQebXy0PvJEawmhFFh0ss/Eb3
- Jrt49WkXXU6z0fxvgl0zCBcqh5bbprA/xGc2JaACgqGk0tj0hlC+xYhm/2eS04EQLgxdvR2
- Nwn3ySubcvl/He4UF342g==
+X-Provags-ID: V03:K1:nVbF0uCDJJzMLfT65kpbxjYWQVibZx2jGK2n4VQLRN2d5lWNeW3
+ 4tXqubdAv/pgXQN0FxAoaaFh2rtx5AV6uhfbMUGdqRs38VTOmJEvDv3kxNszzJ9QrCmMavz
+ ptdM9z1roFNbVDF8qf3gL2AcANfN0yxDFbon8gRjx2LnqO37DQrAhsLDFObkNHFKLq9nih6
+ 8PKe1fIsGrzM2DGnsQ4YQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Fzycp3VQgqA=;FwsUGRS+tGqf3vXmOkz1LTQLCdg
- Ol1oY55SLqqTzISuC/m5rfnXEAUDLPYLYRlL5tEMp7cdjjKrEsQhQPBOnSBFG9qlyRs26H3Km
- vqoamZKcLjlT2m8X1tFF71+Lp/JvCe32EDzOEE5nsZhyt4u4LdzINze/ep+5+NvfD/C2fjMgr
- YoonhjiEY8j0pTzZvukq4J2UdW+mXLmsx6Rup/J3s93Zvz+NpytmlyinWP0XTZgH5SmHwgOvB
- THjU9r7sN4M+DvJAypsw6E+9Kt0revb8Xkj+AR9u/1q1K7zeY+h7Bv8J4cR8GKRMQeSIIf2Gp
- tR7X3C5rzTkKZRqpv+RjAFK6+WhNl1Qwr2pXXV3f+IUMQWrTxNXeGtys7FLWpyFUiCL92Xx/a
- a9IO3/ADSTYXdEOn+U/mjGZkGgxpN7malBhZfaLhJ+iG85EROJipxndB21Y45aRiEcLxAenET
- L04CdOLifs2rfQl3MkXMFQqL3VTItUTQRRLim48Ibs0Nmmn9fBi7DfxCQGIFvLDJdKULnml5R
- 6mMI/PjTBSWl4Vs6rUPJW4LeXMo0qbmvTgUgD4NQbinvY5Gha8oW4DvTN9IIbSS8PMv+EYgcY
- 3uliyvcs9z80qaPS4x03es8iziq06ee/HB27DdlLDRrExdqg20FQEJEIVxxlBKwzhDy46/dgg
- cuZHyPsdGaAqlqeEf9gji2FQONf6HoAlQSAuP1ImWd7VJH9X0Q8joRahJb1G/RVbgE7mMHuq/
- 5olQGgEMs4+nj0NvjhgRwF/NbWQ0NibGNOaRJeMBF6kSMwFil0SbWNmPtjiHisyNOp5U+gXce
- I+NlDdPnh49wjqhPo0z+Sy825pJ1eDUVwJ9ZO7tmdzKSE=
+UI-OutboundReport: notjunk:1;M01:P0:OnYNuHxOmu4=;U6Wkm09PlYSKuiJlpevmce+g/yE
+ ncO8dJJ7RCVfPAYBhTVS8ruoKlyPBh8zAWSpTX4a5xcuzuphUHIcrDvm4DOcNzKiIYWPJqi7D
+ kkh8iwl+tf1+e+0Zkqa4SeefrK9htwHj/HJEt8ZHXTjObERtwaqG0ClDHcFF9UKUeS5lz0lvV
+ rILK7FJG6McswWWuNF7EHnK2+l1Ih2X8DbBLFsWpKzrDQfzY42leqJ+MAWnGRqC2mgTmmH9XL
+ 65H0aJ3TwoMJedgCqJt12Y+5jKp/hAoxQVgnSvdNwuGU0L8/0nFhtHWDtW/8UiX58elz1MVGQ
+ 3XE7wG1GZqwJ4/Bv4QbNPin2U7OeDoebLYway3x+mFfTU0vRYRg02gZXm6Qf9WcvU1/8tdp9H
+ S6o2KXCzFRAbvy64MK8wJz8+Tsq3/F1OKa9NhnhkxBSkydsH5j0EHy139xN7wOoRmu3gRPDX7
+ qbaIDYw6UpuwphK7fo2oIqh8ofulxA/NslqRni33+umwVKWKfJc9a31XG9irs314KUvUhoE9M
+ Ze7Sy3zXZqIkhusYyEe4HI5SdSQlwL0xhIw4G0K21Airf6N+R1M3+fTmNtxxYb2SOtGY2k/7y
+ T3l7ER5qXwuRHc1FrG/OCLDY7quNpobP81+ecuKfQp94eEwadmp2WAiBdCCzisOicS9KYLS3i
+ GEegUzjJBZBlt8H2WDtiL7nOWm6RZhV/9A3Yyxy1pUra+/bAQsgjkYgXKPGMd6+PJGDbeZ4Mu
+ Jkvv3wGW1+IKmIitoLHRYjjQTELsHJmhfTj4DG6oHhCvoc55IZ4R+K1nG4Ie7IDFLJ4A+X/D2
+ hlHmzxtgSn/WVCxgXb0RW9mcx7GVoA4BD7lg4nLV5wWtY=
 
-This patch fixes the following checkpatch warnings:
+Hi Hans,
 
-ERROR:ELSE_AFTER_BRACE: else should follow close brace '}'
-ERROR:OPEN_BRACE: open brace '{' following enum go on the same line
-ERROR:OPEN_BRACE: open brace '{' following struct go on the same line
-ERROR:OPEN_BRACE: that open brace { should be on the previous line
-ERROR:TRAILING_STATEMENTS: trailing statements should be on next line
-CHECK:LOGICAL_CONTINUATIONS: Logical continuations should be on the previo=
-us line
+this is next patch set of the SAA7146 chackpatch series.
+A pretty big one, I'm sorry, but there was a lot to fix.
 
-Newline and whitespace changes only.
+I have tried to keep the patch set as small as possible. Every line
+is modified only once (except very few exceptions).
+White space fixes are incorporated in the later patches if necessary.
 
-Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
-=2D--
- drivers/staging/media/av7110/av7110.c       | 22 +++++++-------
- drivers/staging/media/av7110/av7110_av.c    |  9 ++++--
- drivers/staging/media/av7110/av7110_hw.c    |  9 ++----
- drivers/staging/media/av7110/av7110_hw.h    | 13 ++++----
- drivers/staging/media/av7110/av7110_ipack.c |  8 ++---
- drivers/staging/media/av7110/av7110_v4l.c   | 12 ++++----
- drivers/staging/media/av7110/dvb_filter.c   | 33 ++++++++++++---------
- 7 files changed, 54 insertions(+), 52 deletions(-)
+Patches 01 and 02 are "general cleanup".
+(Further details are in the description in the patch mails.)
+Both patches are independent from each other and from the rest.
 
-diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media=
-/av7110/av7110.c
-index 557f42352..8a4e7bd82 100644
-=2D-- a/drivers/staging/media/av7110/av7110.c
-+++ b/drivers/staging/media/av7110/av7110.c
-@@ -161,13 +161,11 @@ static void init_av7110_av(struct av7110 *av7110)
- 		 */
- 	} else if (0 =3D=3D av7110_init_analog_module(av7110)) {
- 		/* done. */
--	}
--	else if (dev->pci->subsystem_vendor =3D=3D 0x110a) {
-+	} else if (dev->pci->subsystem_vendor =3D=3D 0x110a) {
- 		printk("dvb-ttpci: DVB-C w/o analog module @ card %d detected\n",
- 			av7110->dvb_adapter.num);
- 		av7110->adac_type =3D DVB_ADAC_NONE;
--	}
--	else {
-+	} else {
- 		av7110->adac_type =3D adac;
- 		printk("dvb-ttpci: adac type set to %d @ card %d\n",
- 			av7110->adac_type, av7110->dvb_adapter.num);
-@@ -504,8 +502,7 @@ static void gpioirq(struct tasklet_struct *t)
- 		event.type =3D VIDEO_EVENT_SIZE_CHANGED;
- 		event.u.size.w =3D av7110->video_size.w;
- 		event.u.size.h =3D av7110->video_size.h;
--		switch ((h_ar >> 12) & 0xf)
--		{
-+		switch ((h_ar >> 12) & 0xf) {
- 		case 3:
- 			av7110->video_size.aspect_ratio =3D VIDEO_FORMAT_16_9;
- 			event.u.size.aspect_ratio =3D VIDEO_FORMAT_16_9;
-@@ -576,8 +573,8 @@ static void gpioirq(struct tasklet_struct *t)
- 			len =3D av7110_pes_play(av7110->debi_virt, &av7110->aout, 2048);
- 			spin_unlock(&av7110->aout.lock);
- 		}
--		if (len <=3D 0 && (av7110->debitype & 0x200)
--		    &&av7110->videostate.play_state !=3D VIDEO_FREEZED) {
-+		if (len <=3D 0 && (av7110->debitype & 0x200) &&
-+		    av7110->videostate.play_state !=3D VIDEO_FREEZED) {
- 			spin_lock(&av7110->avout.lock);
- 			len =3D av7110_pes_play(av7110->debi_virt, &av7110->avout, 2048);
- 			spin_unlock(&av7110->avout.lock);
-@@ -874,8 +871,7 @@ static int dvb_feed_start_pid(struct dvb_demux_feed *d=
-vbdmxfeed)
- 	}
+Patches 03 - 06 are for the sp8870 driver.
+They are independent from the other patches.
+The sp8870 driver is separated, because I can't test the patches.
+I don't have the hardware.
 
- 	if (dvbdmxfeed->pes_type < 2 && npids[0])
--		if (av7110->fe_synced)
--		{
-+		if (av7110->fe_synced) {
- 			ret =3D av7110_fw_cmd(av7110, COMTYPE_PIDFILTER, Scan, 0);
- 			if (ret)
- 				return ret;
-@@ -1823,7 +1819,8 @@ static int nexusca_stv0297_tuner_set_params(struct d=
-vb_frontend *fe)
- 		if (fe->ops.i2c_gate_ctrl)
- 			fe->ops.i2c_gate_ctrl(fe, 1);
- 		if (i2c_transfer(&av7110->i2c_adap, &readmsg, 1) =3D=3D 1)
--			if (data[0] & 0x40) break;
-+			if (data[0] & 0x40)
-+				break;
- 		msleep(10);
- 	}
+Patches 07 - 21 are for the AV7110 (dvb-ttpci) driver.
+They are again independent from the other patches.
 
-@@ -1875,7 +1872,8 @@ static int grundig_29504_401_tuner_set_params(struct=
- dvb_frontend *fe)
 
- 	if (fe->ops.i2c_gate_ctrl)
- 		fe->ops.i2c_gate_ctrl(fe, 1);
--	if (i2c_transfer (&av7110->i2c_adap, &msg, 1) !=3D 1) return -EIO;
-+	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) !=3D 1)
-+		return -EIO;
- 	return 0;
- }
+There are a few LONG_LINE warnings in some of the patches.
+I was a little generous at the pr*() and dprintk() lines, if it was
+possible to avoid line wrapping. The strings shouldn't be wrapped anyway
+and a dangling "__func__" in the next line is somehow odd.
+And well, almost all lines chackpach complains about, are already shorter
+then before the patch :-).
 
-diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/me=
-dia/av7110/av7110_av.c
-index 0b384e832..56fa1f180 100644
-=2D-- a/drivers/staging/media/av7110/av7110_av.c
-+++ b/drivers/staging/media/av7110/av7110_av.c
-@@ -1043,13 +1043,16 @@ static int play_iframe(struct av7110 *av7110, char=
- __user *buf, unsigned int len
- 			continue;
- 		}
- 		switch (match++) {
--		case 2: if (c =3D=3D 0x01)
-+		case 2:
-+			if (c =3D=3D 0x01)
- 				continue;
- 			break;
--		case 3: if (c =3D=3D 0xb5)
-+		case 3:
-+			if (c =3D=3D 0xb5)
- 				continue;
- 			break;
--		case 4: if ((c & 0xf0) =3D=3D 0x10)
-+		case 4:
-+			if ((c & 0xf0) =3D=3D 0x10)
- 				continue;
- 			break;
- 		}
-diff --git a/drivers/staging/media/av7110/av7110_hw.c b/drivers/staging/me=
-dia/av7110/av7110_hw.c
-index d7439c522..d3aa524f6 100644
-=2D-- a/drivers/staging/media/av7110/av7110_hw.c
-+++ b/drivers/staging/media/av7110/av7110_hw.c
-@@ -440,8 +440,7 @@ static int __av7110_send_fw_cmd(struct av7110 *av7110,=
- u16 *buf, int length)
- 	if (stat & GPMQOver) {
- 		printk(KERN_ERR "dvb-ttpci: %s(): GPMQOver\n", __func__);
- 		return -ENOSPC;
--	}
--	else if (stat & OSDQOver) {
-+	} else if (stat & OSDQOver) {
- 		printk(KERN_ERR "dvb-ttpci: %s(): OSDQOver\n", __func__);
- 		return -ENOSPC;
- 	}
-@@ -511,8 +510,7 @@ int av7110_send_ci_cmd(struct av7110 *av7110, u8 subco=
-m, u8 *buf, u8 len)
 
- 	dprintk(4, "%p\n", av7110);
+Remaining checkpatch warnings after completely applying this patch set:
 
--	for (i =3D 0; i < len && i < 32; i++)
--	{
-+	for (i =3D 0; i < len && i < 32; i++) {
- 		if (i % 2 =3D=3D 0)
- 			cmd[(i / 2) + 2] =3D (u16)(buf[i]) << 8;
- 		else
-@@ -588,8 +586,7 @@ int av7110_fw_request(struct av7110 *av7110, u16 *requ=
-est_buf,
- 		printk(KERN_ERR "%s: GPMQOver\n", __func__);
- 		mutex_unlock(&av7110->dcomlock);
- 		return -1;
--	}
--	else if (stat & OSDQOver) {
-+	} else if (stat & OSDQOver) {
- 		printk(KERN_ERR "%s: OSDQOver\n", __func__);
- 		mutex_unlock(&av7110->dcomlock);
- 		return -1;
-diff --git a/drivers/staging/media/av7110/av7110_hw.h b/drivers/staging/me=
-dia/av7110/av7110_hw.h
-index 3aff5db56..39488c2fc 100644
-=2D-- a/drivers/staging/media/av7110/av7110_hw.h
-+++ b/drivers/staging/media/av7110/av7110_hw.h
-@@ -14,15 +14,14 @@
- #define ARM_WAIT_SHAKE (HZ/5)
- #define ARM_WAIT_OSD (HZ)
+      1 CHECK:AVOID_BUG: Do not crash the kernel unless ...
+    118 CHECK:CAMELCASE: Avoid CamelCase: ...
+      3 CHECK:LONG_LINE_COMMENT: line length of ... exceeds 100 columns
+     47 CHECK:LONG_LINE: line length of ... exceeds 100 columns
+      1 CHECK:MACRO_ARG_REUSE: Macro argument reuse 'fe_func' ...
+      3 CHECK:UNCOMMENTED_DEFINITION: spinlock_t definition without commen=
+t
+      4 CHECK:UNCOMMENTED_DEFINITION: struct mutex definition without comm=
+ent
+     13 CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses around ...
+      1 CHECK:USLEEP_RANGE: usleep_range is preferred over udelay ...
+      2 WARNING:DEEP_INDENTATION: Too many leading tabs ...
+      2 WARNING:IF_0: Consider removing the code enclosed ...
+     11 WARNING:MSLEEP: msleep < 20ms can sleep for up to 20ms ...
+      3 WARNING:VOLATILE: Use of volatile is usually wrong ...
+  =3D=3D=3D=3D=3D=3D=3D
+  Total:     0 ERROR;     18 WARNING;    191 CHECK
+(Before:   459 ERROR;    343 WARNING;    621 CHECK)
 
--enum av7110_bootstate
--{
-+enum av7110_bootstate {
- 	BOOTSTATE_BUFFER_EMPTY	=3D 0,
- 	BOOTSTATE_BUFFER_FULL	=3D 1,
- 	BOOTSTATE_AV7110_BOOT_COMPLETE	=3D 2
- };
+The UNNECESSARY_PARENTHESES haven't been changed by intention.
+They often appear in pretty long statements and seem to be sensible
+placed. IMHO they increase human readability.
 
--enum av7110_type_rec_play_format
--{	RP_None,
-+enum av7110_type_rec_play_format {
-+	RP_None,
- 	AudioPES,
- 	AudioMp2,
- 	AudioPCM,
-@@ -30,8 +29,7 @@ enum av7110_type_rec_play_format
- 	AV_PES
- };
+The most and worst LONG_LINE warnings are in the frontend_init() function,
+exactly like in the budget drivers too. It makes probably sense to take a
+look at all of them at once, I think.
 
--enum av7110_osd_palette_type
--{
-+enum av7110_osd_palette_type {
- 	NoPalet =3D  0,	   /* No palette */
- 	Pal1Bit =3D  2,	   /* 2 colors for 1 Bit Palette    */
- 	Pal2Bit =3D  4,	   /* 4 colors for 2 bit palette    */
-@@ -50,8 +48,7 @@ enum av7110_osd_palette_type
- #define FB_ON	SAA7146_GPIO_OUTHI  /* FastBlank on  (RGB-Mode) */
- #define FB_LOOP	SAA7146_GPIO_INPUT  /* FastBlank loop-through (PC graphic=
-s ???) */
+And then the CAMELCASEs, I'm still not sure if it is worth to deal with
+them. The fix will probably pretty easy script able. But the resulting
+patch set for 118 different variables, with multiple occurrences, would be
+huge, no matter what I do.
+Well, maybe I just try to script it an see what happens ...
 
--enum av7110_video_output_mode
--{
-+enum av7110_video_output_mode {
- 	NO_OUT	     =3D 0,		/* disable analog output */
- 	CVBS_RGB_OUT =3D 1,
- 	CVBS_YC_OUT  =3D 2,
-diff --git a/drivers/staging/media/av7110/av7110_ipack.c b/drivers/staging=
-/media/av7110/av7110_ipack.c
-index fc953db36..ac00bff44 100644
-=2D-- a/drivers/staging/media/av7110/av7110_ipack.c
-+++ b/drivers/staging/media/av7110/av7110_ipack.c
-@@ -80,8 +80,8 @@ static void send_ipack(struct ipack *p)
- 		p->buf[7] =3D 0x00;
- 		p->buf[8] =3D 0x00;
- 		p->count =3D 9;
--		if (p->repack_subids && p->cid =3D=3D PRIVATE_STREAM1
--		    && (streamid & 0xf8) =3D=3D 0x80) {
-+		if (p->repack_subids && p->cid =3D=3D PRIVATE_STREAM1 &&
-+		    (streamid & 0xf8) =3D=3D 0x80) {
- 			p->count +=3D 4;
- 			p->buf[9] =3D streamid;
- 			p->buf[10] =3D (ac3_off >> 8) & 0xff;
-@@ -144,8 +144,8 @@ int av7110_ipack_instant_repack(const u8 *buf, int cou=
-nt, struct ipack *p)
+That's what I can do for now. The remaining rest will need more time,
+either for investigation, or testing. (And this patch set is long enough
+anyway. ;-))
+I hope it is sufficient to bring the driver back mainline.
 
- 	while (c < count && (p->mpeg =3D=3D 0 ||
- 			     (p->mpeg =3D=3D 1 && p->found < 7) ||
--			     (p->mpeg =3D=3D 2 && p->found < 9))
--	       &&  (p->found < 5 || !p->done)) {
-+			     (p->mpeg =3D=3D 2 && p->found < 9)) &&
-+			     (p->found < 5 || !p->done)) {
- 		switch (p->found) {
- 		case 0:
- 		case 1:
-diff --git a/drivers/staging/media/av7110/av7110_v4l.c b/drivers/staging/m=
-edia/av7110/av7110_v4l.c
-index c494e940d..202a05561 100644
-=2D-- a/drivers/staging/media/av7110/av7110_v4l.c
-+++ b/drivers/staging/media/av7110/av7110_v4l.c
-@@ -729,13 +729,16 @@ int av7110_init_analog_module(struct av7110 *av7110)
- 	} else {
- 		u8 *i =3D saa7113_init_regs;
+This patch set has been tested on a rev. 1.3 DVB-S card with full-ts mod.
 
--		if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x110a) && (av7110->dev-=
->pci->subsystem_device =3D=3D 0x0000)) {
-+		if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x110a) &&
-+		    (av7110->dev->pci->subsystem_device =3D=3D 0x0000)) {
- 			/* Fujitsu/Siemens DVB-Cable */
- 			av7110->analog_tuner_flags |=3D ANALOG_TUNER_VES1820;
--		} else if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x13c2) && (av711=
-0->dev->pci->subsystem_device =3D=3D 0x0002)) {
-+		} else if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x13c2) &&
-+			   (av7110->dev->pci->subsystem_device =3D=3D 0x0002)) {
- 			/* Hauppauge/TT DVB-C premium */
- 			av7110->analog_tuner_flags |=3D ANALOG_TUNER_VES1820;
--		} else if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x13c2) && (av711=
-0->dev->pci->subsystem_device =3D=3D 0x000A)) {
-+		} else if ((av7110->dev->pci->subsystem_vendor =3D=3D 0x13c2) &&
-+			   (av7110->dev->pci->subsystem_device =3D=3D 0x000A)) {
- 			/* Hauppauge/TT DVB-C premium */
- 			av7110->analog_tuner_flags |=3D ANALOG_TUNER_STV0297;
- 		}
-@@ -912,8 +915,7 @@ static int std_callback(struct saa7146_dev *dev, struc=
-t saa7146_standard *std)
- 	if (std->id & V4L2_STD_PAL) {
- 		av7110->vidmode =3D AV7110_VIDEO_MODE_PAL;
- 		av7110_set_vidmode(av7110, av7110->vidmode);
--	}
--	else if (std->id & V4L2_STD_NTSC) {
-+	} else if (std->id & V4L2_STD_NTSC) {
- 		av7110->vidmode =3D AV7110_VIDEO_MODE_NTSC;
- 		av7110_set_vidmode(av7110, av7110->vidmode);
- 	}
-diff --git a/drivers/staging/media/av7110/dvb_filter.c b/drivers/staging/m=
-edia/av7110/dvb_filter.c
-index 4f1f92290..4c41682ff 100644
-=2D-- a/drivers/staging/media/av7110/dvb_filter.c
-+++ b/drivers/staging/media/av7110/dvb_filter.c
-@@ -6,17 +6,19 @@
+Regards
+Stefan
 
- static u32 freq[4] =3D {480, 441, 320, 0};
 
--static unsigned int ac3_bitrates[32] =3D
--    {32,40,48,56,64,80,96,112,128,160,192,224,256,320,384,448,512,576,640=
-,
--     0,0,0,0,0,0,0,0,0,0,0,0,0};
--
--static u32 ac3_frames[3][32] =3D
--    {{64,80,96,112,128,160,192,224,256,320,384,448,512,640,768,896,1024,
--      1152,1280,0,0,0,0,0,0,0,0,0,0,0,0,0},
--     {69,87,104,121,139,174,208,243,278,348,417,487,557,696,835,975,1114,
--      1253,1393,0,0,0,0,0,0,0,0,0,0,0,0,0},
--     {96,120,144,168,192,240,288,336,384,480,576,672,768,960,1152,1344,
--      1536,1728,1920,0,0,0,0,0,0,0,0,0,0,0,0,0}};
-+static unsigned int ac3_bitrates[32] =3D {
-+	32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448,=
- 512, 576, 640,
-+	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-+};
-+
-+static u32 ac3_frames[3][32] =3D {
-+	{64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 640, 768,=
- 896, 1024,
-+	 1152, 1280, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-+	{69, 87, 104, 121, 139, 174, 208, 243, 278, 348, 417, 487, 557, 696, 835=
-, 975, 1114,
-+	 1253, 1393, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-+	{96, 120, 144, 168, 192, 240, 288, 336, 384, 480, 576, 672, 768, 960, 11=
-52, 1344,
-+	 1536, 1728, 1920, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-+};
+Stefan Herdler (21):
+  media: av7110: remove old documentation files
+  media: av7110: remove budget-patch driver
+  media: sp8870: coding style fixes: whitespace
+  media: sp8870: coding style fixes: newline, comments and braces
+  media: sp8870: coding style fixes: miscellaneous
+  media: sp8870: coding style fixes: logging
+  media: av7110: coding style fixes: pointer_location
+  media: av7110: coding style fixes: blank lines
+  media: av7110: coding style fixes: whitespace
+  media: av7110: coding style fixes: newline
+  media: av7110: coding style fixes: whitespace (strict)
+  media: av7110: coding style fixes: comments
+  media: av7110: coding style fixes: braces
+  media: av7110: coding style fixes: assignments
+  media: av7110: coding style fixes: comparsations
+  media: av7110: coding style fixes: sizeof
+  media: av7110: coding style fixes: variable types
+  media: av7110: coding style fixes: miscellaneous
+  media: av7110: coding style fixes: deep_indentation
+  media: av7110: coding style fixes: logging
+  media: av7110: coding style fixes: avoid_externs
 
- int dvb_filter_get_ac3info(u8 *mbuf, int count, struct dvb_audio_info *ai=
-, int pr)
- {
-@@ -36,12 +38,14 @@ int dvb_filter_get_ac3info(u8 *mbuf, int count, struct=
- dvb_audio_info *ai, int p
- 		}
- 	}
+ drivers/staging/media/av7110/Kconfig          |  22 -
+ drivers/staging/media/av7110/Makefile         |   2 -
+ drivers/staging/media/av7110/TODO             |   3 -
+ .../av7110/audio-bilingual-channel-select.rst |  58 --
+ .../media/av7110/audio-channel-select.rst     |  57 --
+ .../media/av7110/audio-clear-buffer.rst       |  48 --
+ .../staging/media/av7110/audio-continue.rst   |  48 --
+ drivers/staging/media/av7110/audio-fclose.rst |  51 --
+ drivers/staging/media/av7110/audio-fopen.rst  | 103 ---
+ drivers/staging/media/av7110/audio-fwrite.rst |  79 ---
+ .../media/av7110/audio-get-capabilities.rst   |  54 --
+ .../staging/media/av7110/audio-get-status.rst |  54 --
+ drivers/staging/media/av7110/audio-pause.rst  |  49 --
+ drivers/staging/media/av7110/audio-play.rst   |  48 --
+ .../media/av7110/audio-select-source.rst      |  56 --
+ .../media/av7110/audio-set-av-sync.rst        |  58 --
+ .../media/av7110/audio-set-bypass-mode.rst    |  62 --
+ drivers/staging/media/av7110/audio-set-id.rst |  59 --
+ .../staging/media/av7110/audio-set-mixer.rst  |  53 --
+ .../staging/media/av7110/audio-set-mute.rst   |  62 --
+ .../media/av7110/audio-set-streamtype.rst     |  66 --
+ drivers/staging/media/av7110/audio-stop.rst   |  48 --
+ drivers/staging/media/av7110/audio.rst        |  27 -
+ .../staging/media/av7110/audio_data_types.rst | 116 ---
+ .../media/av7110/audio_function_calls.rst     |  30 -
+ drivers/staging/media/av7110/av7110.c         | 496 +++++++------
+ drivers/staging/media/av7110/av7110.h         |  50 +-
+ drivers/staging/media/av7110/av7110_av.c      | 234 +++---
+ drivers/staging/media/av7110/av7110_av.h      |  37 +-
+ drivers/staging/media/av7110/av7110_ca.c      |  43 +-
+ drivers/staging/media/av7110/av7110_ca.h      |  12 +-
+ drivers/staging/media/av7110/av7110_hw.c      | 230 +++---
+ drivers/staging/media/av7110/av7110_hw.h      |  79 +--
+ drivers/staging/media/av7110/av7110_ipack.c   | 282 ++++----
+ drivers/staging/media/av7110/av7110_ipack.h   |  12 +-
+ drivers/staging/media/av7110/av7110_ir.c      |   3 +-
+ drivers/staging/media/av7110/av7110_v4l.c     | 102 +--
+ drivers/staging/media/av7110/budget-patch.c   | 665 ------------------
+ drivers/staging/media/av7110/dvb_filter.c     | 116 +--
+ drivers/staging/media/av7110/dvb_filter.h     |  22 +-
+ drivers/staging/media/av7110/sp8870.c         | 200 +++---
+ drivers/staging/media/av7110/sp8870.h         |  24 +-
+ .../media/av7110/video-clear-buffer.rst       |  54 --
+ .../staging/media/av7110/video-command.rst    |  96 ---
+ .../staging/media/av7110/video-continue.rst   |  57 --
+ .../media/av7110/video-fast-forward.rst       |  72 --
+ drivers/staging/media/av7110/video-fclose.rst |  51 --
+ drivers/staging/media/av7110/video-fopen.rst  | 111 ---
+ drivers/staging/media/av7110/video-freeze.rst |  61 --
+ drivers/staging/media/av7110/video-fwrite.rst |  79 ---
+ .../media/av7110/video-get-capabilities.rst   |  61 --
+ .../staging/media/av7110/video-get-event.rst  | 105 ---
+ .../media/av7110/video-get-frame-count.rst    |  65 --
+ .../staging/media/av7110/video-get-pts.rst    |  69 --
+ .../staging/media/av7110/video-get-size.rst   |  69 --
+ .../staging/media/av7110/video-get-status.rst |  72 --
+ drivers/staging/media/av7110/video-play.rst   |  57 --
+ .../media/av7110/video-select-source.rst      |  76 --
+ .../staging/media/av7110/video-set-blank.rst  |  64 --
+ .../media/av7110/video-set-display-format.rst |  60 --
+ .../staging/media/av7110/video-set-format.rst |  82 ---
+ .../media/av7110/video-set-streamtype.rst     |  61 --
+ .../staging/media/av7110/video-slowmotion.rst |  72 --
+ .../media/av7110/video-stillpicture.rst       |  61 --
+ drivers/staging/media/av7110/video-stop.rst   |  74 --
+ .../media/av7110/video-try-command.rst        |  66 --
+ drivers/staging/media/av7110/video.rst        |  36 -
+ .../media/av7110/video_function_calls.rst     |  35 -
+ drivers/staging/media/av7110/video_types.rst  | 248 -------
+ 69 files changed, 943 insertions(+), 4991 deletions(-)
+ delete mode 100644 drivers/staging/media/av7110/TODO
+ delete mode 100644 drivers/staging/media/av7110/audio-bilingual-channel-s=
+elect.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-channel-select.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-clear-buffer.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-continue.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-fclose.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-fopen.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-fwrite.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-get-capabilities.rs=
+t
+ delete mode 100644 drivers/staging/media/av7110/audio-get-status.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-pause.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-play.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-select-source.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-av-sync.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-bypass-mode.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-id.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-mixer.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-mute.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-set-streamtype.rst
+ delete mode 100644 drivers/staging/media/av7110/audio-stop.rst
+ delete mode 100644 drivers/staging/media/av7110/audio.rst
+ delete mode 100644 drivers/staging/media/av7110/audio_data_types.rst
+ delete mode 100644 drivers/staging/media/av7110/audio_function_calls.rst
+ delete mode 100644 drivers/staging/media/av7110/budget-patch.c
+ delete mode 100644 drivers/staging/media/av7110/video-clear-buffer.rst
+ delete mode 100644 drivers/staging/media/av7110/video-command.rst
+ delete mode 100644 drivers/staging/media/av7110/video-continue.rst
+ delete mode 100644 drivers/staging/media/av7110/video-fast-forward.rst
+ delete mode 100644 drivers/staging/media/av7110/video-fclose.rst
+ delete mode 100644 drivers/staging/media/av7110/video-fopen.rst
+ delete mode 100644 drivers/staging/media/av7110/video-freeze.rst
+ delete mode 100644 drivers/staging/media/av7110/video-fwrite.rst
+ delete mode 100644 drivers/staging/media/av7110/video-get-capabilities.rs=
+t
+ delete mode 100644 drivers/staging/media/av7110/video-get-event.rst
+ delete mode 100644 drivers/staging/media/av7110/video-get-frame-count.rst
+ delete mode 100644 drivers/staging/media/av7110/video-get-pts.rst
+ delete mode 100644 drivers/staging/media/av7110/video-get-size.rst
+ delete mode 100644 drivers/staging/media/av7110/video-get-status.rst
+ delete mode 100644 drivers/staging/media/av7110/video-play.rst
+ delete mode 100644 drivers/staging/media/av7110/video-select-source.rst
+ delete mode 100644 drivers/staging/media/av7110/video-set-blank.rst
+ delete mode 100644 drivers/staging/media/av7110/video-set-display-format.=
+rst
+ delete mode 100644 drivers/staging/media/av7110/video-set-format.rst
+ delete mode 100644 drivers/staging/media/av7110/video-set-streamtype.rst
+ delete mode 100644 drivers/staging/media/av7110/video-slowmotion.rst
+ delete mode 100644 drivers/staging/media/av7110/video-stillpicture.rst
+ delete mode 100644 drivers/staging/media/av7110/video-stop.rst
+ delete mode 100644 drivers/staging/media/av7110/video-try-command.rst
+ delete mode 100644 drivers/staging/media/av7110/video.rst
+ delete mode 100644 drivers/staging/media/av7110/video_function_calls.rst
+ delete mode 100644 drivers/staging/media/av7110/video_types.rst
 
--	if (!found) return -1;
-+	if (!found)
-+		return -1;
- 	if (pr)
- 		printk(KERN_DEBUG "Audiostream: AC3");
-
- 	ai->off =3D c;
--	if (c+5 >=3D count) return -1;
-+	if (c + 5 >=3D count)
-+		return -1;
-
- 	ai->layer =3D 0;  // 0 for AC3
- 	headr =3D mbuf+c+2;
-@@ -59,7 +63,8 @@ int dvb_filter_get_ac3info(u8 *mbuf, int count, struct d=
-vb_audio_info *ai, int p
- 		printk(KERN_CONT "  Freq: %d Hz\n", (int) ai->frequency);
-
- 	ai->framesize =3D ac3_frames[fr][frame >> 1];
--	if ((frame & 1) &&  (fr =3D=3D 1)) ai->framesize++;
-+	if ((frame & 1) && (fr =3D=3D 1))
-+		ai->framesize++;
- 	ai->framesize =3D ai->framesize << 1;
- 	if (pr)
- 		printk(KERN_DEBUG "  Framesize %d\n", (int) ai->framesize);
 =2D-
 2.34.0
 
