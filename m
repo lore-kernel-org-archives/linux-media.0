@@ -1,47 +1,47 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC9B8830
-	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8A537C
+	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715041534; cv=none; b=Yhjz5e+rvqWknY2Use8WTTMENpftcKkzz8ei6TE6cfunbRmjfaB+fIL+TVmI9G/5fQs3Ipgv6Ltoisi1YsbvtxJaZ5w98m6cmvHfOOUT08ajIwmewPdZsb+NXzxT7hXyThJQc6qtOMUHJlkYyCnqeSvPwPrTdvkjmxIzdz8BAvA=
+	t=1715041535; cv=none; b=VoyvXq1XWctMFY58+GOBfZzP54ta+8Qf+WjM0FowBre9QHlhULtEicKLenYEl5aB/imC3s5XooZgem95WJQ3PcMFw3IjZxRYc88vV2A7SxMmuGprDgi9fHT2SyPFRJZyzTBai8Alc5IBOwUmuGET8vN5NYDw0svUlxhxxyA1dZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715041534; c=relaxed/simple;
-	bh=jxRZWzoRHzhZKxQ7TkMaZtl4uNBwCyNlMvu8bZ7ydUQ=;
+	s=arc-20240116; t=1715041535; c=relaxed/simple;
+	bh=EjU7si92ubn2nOI/nwiunaQe5jl0YB4Wm2cRPHVSMP8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HE0P5PrEGwZux/4J7XCy6n1nGFpfzdryi1Ns9Bt8KTy2teOqJqMzyE9xtqBxVyKAJ4Qg6bOEd7vLVzss2CrXETxwbNBirxs/X6sr3aFs9NvskWHH73sCKs11evh3cl3+XCGCUHua4RHFusbBHdU/XZaZro5ckeTE3fvxssprBJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=L0fjY5YF; arc=none smtp.client-ip=212.227.17.20
+	 MIME-Version; b=kn9F6JQb9rIbO6yZgU4DeZrMQXkM5ZOhVQ6q5jZ+H1gDiXK5ONQwHmVkjyfQckkZga5VJMRXWdMB+ZX2fpsWD4oziB3vOsx6tq2sNYX026W+/iJZct44hoEi0vzXUIDJCBo3G0VCduVBZO9c0tZ/wp4cdEK898ciVGvH84S/x0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=nptKWk1x; arc=none smtp.client-ip=212.227.17.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="L0fjY5YF"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="nptKWk1x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
-	s=s31663417; t=1715041527; x=1715646327; i=herdler@nurfuerspam.de;
-	bh=mE/rSrWRng8CAXkTgHJJT8nyxFf3VT4MNRDLPXr4la4=;
+	s=s31663417; t=1715041529; x=1715646329; i=herdler@nurfuerspam.de;
+	bh=a3gxFHemFYUxxJgVHcPHp5ApB6BblJkedmmGhhsf534=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=L0fjY5YFWlUuAjNhyIfos8bXAfKsmNRBGDM3cdbgU5YyVi3y5YGcZmL7W2elJm60
-	 rYm45RvUj2akjEjXqjj6jHNAkdabwS9O+RA4BAvLMB9FMtAvDdQsl1FhhXjPPhY+c
-	 fw2fRKWnEuydPmzrcECp+Rk4E5haZtzBzpgGgNwAueDxbyi1t6PK6MFIr+fnBYt9u
-	 7qoQFe/p19EhV+BOpsduWewbgkOlwszsc2D6QojVtqqLQYP6Iei5xPzWkPghFw/AJ
-	 Gux5f6XphdrFeuPrKFYMQC8nIayK3ljLwiQXkPVal5LaSKHNomvCby0/ddvcjKwfx
-	 pigxYxs9TX73Btredg==
+	b=nptKWk1xKNMfHHagiWNSnohxNWZXeHI/jFf0yJ1pazHSlATnXV2b5uKyuqKK6sVp
+	 5jiCEfHiatFIeQqSpnL6Pi0fDa0o5YaN6vXcQW+j50pkuZBkI9IHus17zzNMLReDy
+	 vUrmYA0CEVfThcJ/lBnDQQx1wo3eLA9JtDAA7GaISxcoB31zKkYAU8Erp/wDPvLE7
+	 wuVztesiU9ukXPVXCioGpLKxaJfMusg059WDD+oyayxYZXI2nBQBhfHynaWwcLR8+
+	 +2SxXta/bK/gq1qj95HFP6j7Tj8AkWZrgr2mYBCueuPGJ9NwxorLis8SfYWujpt3I
+	 sl/mTEO+364sPXmXWw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([185.101.174.109]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7b2T-1ryLsp3eIv-007yji; Tue, 07
- May 2024 02:25:26 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOiDX-1sGQxr3zAN-00QCLI; Tue, 07
+ May 2024 02:25:29 +0200
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
 Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH 07/21] media: av7110: coding style fixes: pointer_location
-Date: Tue,  7 May 2024 02:24:46 +0200
-Message-Id: <20240507002500.81867-8-herdler@nurfuerspam.de>
+Subject: [PATCH 15/21] media: av7110: coding style fixes: comparsations
+Date: Tue,  7 May 2024 02:24:54 +0200
+Message-Id: <20240507002500.81867-16-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240507002500.81867-1-herdler@nurfuerspam.de>
 References: <20240507002500.81867-1-herdler@nurfuerspam.de>
@@ -52,564 +52,150 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CvP/ll2xmEDJMmTUBypgZpRPH2b+BwVQ7iMGOk2x+oLI8GTSpBQ
- mCm2H+8lENuwxs4ltoI6/DO62jmcYaV9bdHf76EG7ODRyEqdkF5pCq1OG7SjLGU57aMYq5i
- DDZOaAkbxXV0i5lxyR+AycBs3aI06FYz+lJ+j7ULxbva9YDcaOczlb3bi1Aq4vsJis0S18K
- XN7Z65v7mFvGT+HO7hDLg==
+X-Provags-ID: V03:K1:LD3Q1mer/EWhYp82YC6Z98ufMDTVuKYCn++p6aIRWqhtYBTt47o
+ NYcCCvtyhS8hR8fkl+x+EhIJKbusnuIFKirDEMNsrkPIUUz8pWHGksHDMOu4JwZydzkY15y
+ SNr8qukzLocJ2J9AKh4mF8gZ4eEzl7Khosc46yWTS3Sq0xZXLSfYZ7XC2MY+jbfRz0nU9Hf
+ Kbj8xfyV2x53nudSgbFaw==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:82E7FQFv/zU=;LRw6tanlbnqlCbVDUTb0RDww/L5
- vQqOhX928yu/KnwjEYqq2uVnF9rtsiH1c7FzzT9SoAxfTpbACexiNdc29bYvZOdi8dRHuAaDE
- 5RQZw5sZLnkj7/HLWJ7/kpyikDSl7lZRSF9qLO6NM8BAgCOIIaQVq06DuUqJND0dlQNfEWMIf
- 8vG7fMhRhWd+0FbS8yguPpwiRfQzZhEmTcvPtj5HpnCoVD4gBjT2bczeNxpUnnbPkx6F1KpSl
- AfNcKm6vOeMMv7WhA5TE6hZqCCSbIUxM3y97BhO5swkSIWAOOugA+V85erLuhJBTbm5bcs+dW
- duEgl8avm95bP5IBpKgbjGHQX/LKoqeD4OGvaJMNx4JXCew/Ie1hmQFNmUlHAxfYysAgnH5lF
- jq6odnQhBHvZJFPNmPcSizI6SZx/Hb7aMMjgVVpTzPAkK3EJCg+Yrn8j1wAdpOwVcnsmciPiM
- jzj5sLSiKZ1vt8huQKdTcOidMrbrJnzgVGKESqL6ibMUvJxcV13PzRVS6W8FAbUp5/57/WRzb
- MNmKuY6RiMUidvbTgN86Sx69/qtGxYrRB2inSu3urrKdsJTt9PXdd2KKYHQoaw7Fx4+IhcIPo
- WNn81xkDNtUfKcKNOIPuggqWLWawQKn3FRmniWtSxzcAUmGQPpYt4ephY7VyHeC31zlzIEUUD
- slVTLaaDcn2jgvtjxGiRphbCw3UiKUvsJlPs1K3x63RMoXwEaV1o5sNtozz7JTwD8kViZOUfL
- 2U0bFMhEiyYxvtUHaSWDNQkracI2QQNWRv/lFDPvZ1L/ELk/nJYfWSmDMfffyVf3qEX4d8e7F
- fsewE3hQopXoHKUS+gAZdlVyzEQuada2zHVDFJqnzyYzA=
+UI-OutboundReport: notjunk:1;M01:P0:7cJ2Uhhl1aw=;1krqXmFzpqShp92UxuHfx7szEtq
+ oucuwmM0UiKITfcJSNJPxMrci1K4sKTkBIZk6JvrgGtqIaT7UDrp8chYEpoMQuseD1amtvZ9D
+ t4cD2mZ6a6uEmQDjq59FEb108xlSHJHhPY0GG2XD8jA1wCNBNcsBzrFVoocrDA3kWkfXsNpss
+ djyeSVCsjySUpXpZ6+SWdujnzXRaj29uv3q20VhLj5UnvRmOg/xiVTKEcX5FdZrr0drLA0UmU
+ n01KLprZpGbxXNb9BMB6OrnROnxH6JpTZR2cDiOUM/6APQu0jfch2Nrc7rgATtHelFwt/pE88
+ JVETVYIAUE721SXgcfvV77Pc2Q7mSK5gBWSoSlzUJxbUXYGt6+tUAeeMRRJBPSOHQMzejk2Cc
+ WEoPwHN2hTgx1NPrSpHqm3NumlA6Fayv/B+bb7Bv7EmcinS2DyH6enoAmFQ9iN8q9j8wNne83
+ YEWat5oh+7d4vHpU1mhvXMtPHIH4sRfZlKc05DmpjEG3K2gYHNAaX/Xts7C7NGMiRKnzrvnto
+ 4HMYU9+4OgzUnpqL+Zapc65Nl7TOxgAaxsc9DA/E6BZJdWLUazIl7g7Lo1tl7tntC6awAC7u9
+ Kifj4UKK0lBtTirvpId6iQ3JQqF6ym/NLqNiVh+lVaC6Oo1cFjiqr6wOzOhd1HsgbW/X5acBt
+ qTzvwKD2gKDua1UhcmTS1ncbJ1L1jCc0x1IPDbIyg1nBH/DiMIxLRASgGnVcBa31R9UCxuSnL
+ VddG2kAypZf0ScmFcMDlJmy/9KMV/1jKIhbuAGck5q/+JhCcuUMYWA/teBMkjUs9RUarIr3LX
+ FPT9DhK6vjITzplkjhOVIWmlhguXx7KiKKlmXB4cHdpTM=
 
 This patch fixes the following checkpatch warnings:
 
-ERROR:POINTER_LOCATION: "foo * bar" should be "foo *bar"
-ERROR:POINTER_LOCATION: "foo* bar" should be "foo *bar"
-ERROR:POINTER_LOCATION: "(foo*)" should be "(foo *)"
-
-Whitespace changes only.
-"git diff -w" shows no changes.
+WARNING:CONSTANT_COMPARISON: Comparisons should place the constant on the =
+right side of the test
+CHECK:COMPARISON_TO_NULL: Comparison to NULL could be written ...
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
- drivers/staging/media/av7110/av7110.c     | 78 +++++++++++------------
- drivers/staging/media/av7110/av7110.h     |  6 +-
- drivers/staging/media/av7110/av7110_ca.c  |  6 +-
- drivers/staging/media/av7110/av7110_hw.c  | 12 ++--
- drivers/staging/media/av7110/av7110_v4l.c | 14 ++--
- 5 files changed, 58 insertions(+), 58 deletions(-)
+ drivers/staging/media/av7110/av7110.c     | 10 +++++-----
+ drivers/staging/media/av7110/av7110_hw.c  |  2 +-
+ drivers/staging/media/av7110/av7110_v4l.c |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media=
 /av7110/av7110.c
-index a5a431c14..eb1dc64bc 100644
+index fac774dc6..de9476154 100644
 =2D-- a/drivers/staging/media/av7110/av7110.c
 +++ b/drivers/staging/media/av7110/av7110.c
-@@ -429,7 +429,7 @@ static void debiirq(struct tasklet_struct *t)
- 		break;
+@@ -104,7 +104,7 @@ static int av7110_num;
 
- 	case DATA_DEBUG_MESSAGE:
--		((s8*)av7110->debi_virt)[Reserved_SIZE - 1] =3D 0;
-+		((s8 *)av7110->debi_virt)[Reserved_SIZE - 1] =3D 0;
- 		printk("%s\n", (s8 *) av7110->debi_virt);
- 		xfer =3D RX_BUFF;
- 		break;
-@@ -1143,7 +1143,7 @@ static int dvb_get_stc(struct dmx_demux *demux, unsi=
-gned int num,
+ #define FE_FUNC_OVERRIDE(fe_func, av7110_copy, av7110_func) \
+ {\
+-	if (fe_func !=3D NULL) { \
++	if (fe_func) { \
+ 		av7110_copy =3D fe_func; \
+ 		fe_func =3D av7110_func; \
+ 	} \
+@@ -159,7 +159,7 @@ static void init_av7110_av(struct av7110 *av7110)
+ 		/**
+ 		 * some special handling for the Siemens DVB-C cards...
+ 		 */
+-	} else if (0 =3D=3D av7110_init_analog_module(av7110)) {
++	} else if (av7110_init_analog_module(av7110) =3D=3D 0) {
+ 		/* done. */
+ 	} else if (dev->pci->subsystem_vendor =3D=3D 0x110a) {
+ 		printk("dvb-ttpci: DVB-C w/o analog module @ card %d detected\n",
+@@ -1386,7 +1386,7 @@ static void dvb_unregister(struct av7110 *av7110)
+ 	dvb_dmxdev_release(&av7110->dmxdev);
+ 	dvb_dmx_release(&av7110->demux);
 
- static int av7110_set_tone(struct dvb_frontend *fe, enum fe_sec_tone_mode=
- tone)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	switch (tone) {
- 	case SEC_TONE_ON:
-@@ -1157,18 +1157,18 @@ static int av7110_set_tone(struct dvb_frontend *fe=
-, enum fe_sec_tone_mode tone)
+-	if (av7110->fe !=3D NULL) {
++	if (av7110->fe) {
+ 		dvb_unregister_frontend(av7110->fe);
+ 		dvb_frontend_detach(av7110->fe);
  	}
- }
+@@ -1518,7 +1518,7 @@ static int get_firmware(struct av7110 *av7110)
 
--static int av7110_diseqc_send_master_cmd(struct dvb_frontend* fe,
--					 struct dvb_diseqc_master_cmd* cmd)
-+static int av7110_diseqc_send_master_cmd(struct dvb_frontend *fe,
-+					 struct dvb_diseqc_master_cmd *cmd)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	return av7110_diseqc_send(av7110, cmd->msg_len, cmd->msg, -1);
- }
-
--static int av7110_diseqc_send_burst(struct dvb_frontend* fe,
-+static int av7110_diseqc_send_burst(struct dvb_frontend *fe,
- 				    enum fe_sec_mini_cmd minicmd)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	return av7110_diseqc_send(av7110, 0, NULL, minicmd);
- }
-@@ -1440,7 +1440,7 @@ u8 i2c_readreg(struct av7110 *av7110, u8 id, u8 reg)
-  ************************************************************************=
-****/
-
-
--static int check_firmware(struct av7110* av7110)
-+static int check_firmware(struct av7110 *av7110)
- {
- 	u32 crc =3D 0, len =3D 0;
- 	unsigned char *ptr;
-@@ -1491,12 +1491,12 @@ static int check_firmware(struct av7110* av7110)
- 	return 0;
- }
-
--static void put_firmware(struct av7110* av7110)
-+static void put_firmware(struct av7110 *av7110)
- {
- 	vfree(av7110->bin_fw);
- }
-
--static int get_firmware(struct av7110* av7110)
-+static int get_firmware(struct av7110 *av7110)
- {
- 	int ret;
- 	const struct firmware *fw;
-@@ -1540,7 +1540,7 @@ static int get_firmware(struct av7110* av7110)
- static int alps_bsrv2_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u8 pwr =3D 0;
- 	u8 buf[4];
- 	struct i2c_msg msg =3D { .addr =3D 0x61, .flags =3D 0, .buf =3D buf, .le=
-n =3D sizeof(buf) };
-@@ -1583,7 +1583,7 @@ static struct ves1x93_config alps_bsrv2_config =3D {
- static int alps_tdbe2_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div;
- 	u8 data[4];
- 	struct i2c_msg msg =3D { .addr =3D 0x62, .flags =3D 0, .buf =3D data, .l=
-en =3D sizeof(data) };
-@@ -1615,7 +1615,7 @@ static struct ves1820_config alps_tdbe2_config =3D {
- static int grundig_29504_451_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div;
- 	u8 data[4];
- 	struct i2c_msg msg =3D { .addr =3D 0x61, .flags =3D 0, .buf =3D data, .l=
-en =3D sizeof(data) };
-@@ -1642,7 +1642,7 @@ static struct tda8083_config grundig_29504_451_confi=
-g =3D {
- static int philips_cd1516_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div;
- 	u32 f =3D p->frequency;
- 	u8 data[4];
-@@ -1674,7 +1674,7 @@ static struct ves1820_config philips_cd1516_config =
-=3D {
- static int alps_tdlb7_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div, pwr;
- 	u8 data[4];
- 	struct i2c_msg msg =3D { .addr =3D 0x60, .flags =3D 0, .buf =3D data, .l=
-en =3D sizeof(data) };
-@@ -1698,10 +1698,10 @@ static int alps_tdlb7_tuner_set_params(struct dvb_=
-frontend *fe)
- 	return 0;
- }
-
--static int alps_tdlb7_request_firmware(struct dvb_frontend* fe, const str=
-uct firmware **fw, char* name)
-+static int alps_tdlb7_request_firmware(struct dvb_frontend *fe, const str=
-uct firmware **fw, char *name)
- {
- #if IS_ENABLED(CONFIG_DVB_SP8870)
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	return request_firmware(fw, name, &av7110->dev->pci->dev);
- #else
-@@ -1812,7 +1812,7 @@ static u8 nexusca_stv0297_inittab[] =3D {
- static int nexusca_stv0297_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div;
- 	u8 data[4];
- 	struct i2c_msg msg =3D { .addr =3D 0x63, .flags =3D 0, .buf =3D data, .l=
-en =3D sizeof(data) };
-@@ -1868,7 +1868,7 @@ static struct stv0297_config nexusca_stv0297_config =
-=3D {
- static int grundig_29504_401_tuner_set_params(struct dvb_frontend *fe)
- {
- 	struct dtv_frontend_properties *p =3D &fe->dtv_property_cache;
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
- 	u32 div;
- 	u8 cfg, cpump, band_select;
- 	u8 data[4];
-@@ -1956,7 +1956,7 @@ static int av7110_fe_lock_fix(struct av7110 *av7110,=
- enum fe_status status)
-
- static int av7110_fe_set_frontend(struct dvb_frontend *fe)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret)
-@@ -1965,9 +1965,9 @@ static int av7110_fe_set_frontend(struct dvb_fronten=
-d *fe)
- 	return ret;
- }
-
--static int av7110_fe_init(struct dvb_frontend* fe)
-+static int av7110_fe_init(struct dvb_frontend *fe)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret)
-@@ -1978,7 +1978,7 @@ static int av7110_fe_init(struct dvb_frontend* fe)
- static int av7110_fe_read_status(struct dvb_frontend *fe,
- 				 enum fe_status *status)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	/* call the real implementation */
- 	int ret =3D av7110->fe_read_status(fe, status);
-@@ -1988,9 +1988,9 @@ static int av7110_fe_read_status(struct dvb_frontend=
- *fe,
- 	return ret;
- }
-
--static int av7110_fe_diseqc_reset_overload(struct dvb_frontend* fe)
-+static int av7110_fe_diseqc_reset_overload(struct dvb_frontend *fe)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret)
-@@ -1998,10 +1998,10 @@ static int av7110_fe_diseqc_reset_overload(struct =
-dvb_frontend* fe)
- 	return ret;
- }
-
--static int av7110_fe_diseqc_send_master_cmd(struct dvb_frontend* fe,
--					    struct dvb_diseqc_master_cmd* cmd)
-+static int av7110_fe_diseqc_send_master_cmd(struct dvb_frontend *fe,
-+					    struct dvb_diseqc_master_cmd *cmd)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret) {
-@@ -2014,7 +2014,7 @@ static int av7110_fe_diseqc_send_master_cmd(struct d=
-vb_frontend* fe,
- static int av7110_fe_diseqc_send_burst(struct dvb_frontend *fe,
- 				       enum fe_sec_mini_cmd minicmd)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret) {
-@@ -2027,7 +2027,7 @@ static int av7110_fe_diseqc_send_burst(struct dvb_fr=
-ontend *fe,
- static int av7110_fe_set_tone(struct dvb_frontend *fe,
- 			      enum fe_sec_tone_mode tone)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret) {
-@@ -2040,7 +2040,7 @@ static int av7110_fe_set_tone(struct dvb_frontend *f=
-e,
- static int av7110_fe_set_voltage(struct dvb_frontend *fe,
- 				 enum fe_sec_voltage voltage)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret) {
-@@ -2050,9 +2050,9 @@ static int av7110_fe_set_voltage(struct dvb_frontend=
- *fe,
- 	return ret;
- }
-
--static int av7110_fe_dishnetwork_send_legacy_command(struct dvb_frontend*=
- fe, unsigned long cmd)
-+static int av7110_fe_dishnetwork_send_legacy_command(struct dvb_frontend =
-*fe, unsigned long cmd)
- {
--	struct av7110* av7110 =3D fe->dvb->priv;
-+	struct av7110 *av7110 =3D fe->dvb->priv;
-
- 	int ret =3D av7110_fe_lock_fix(av7110, 0);
- 	if (!ret)
-@@ -2060,7 +2060,7 @@ static int av7110_fe_dishnetwork_send_legacy_command=
-(struct dvb_frontend* fe, un
- 	return ret;
- }
-
--static void dvb_s_recover(struct av7110* av7110)
-+static void dvb_s_recover(struct av7110 *av7110)
- {
- 	av7110_fe_init(av7110->fe);
-
-@@ -2077,7 +2077,7 @@ static void dvb_s_recover(struct av7110* av7110)
- 	av7110_fe_set_frontend(av7110->fe);
- }
-
--static u8 read_pwm(struct av7110* av7110)
-+static u8 read_pwm(struct av7110 *av7110)
- {
- 	u8 b =3D 0xff;
- 	u8 pwm;
-@@ -2346,7 +2346,7 @@ static int frontend_init(struct av7110 *av7110)
-  * The same behaviour of missing VSYNC can be duplicated on budget
-  * cards, by setting DD1_INIT trigger mode 7 in 3rd nibble.
-  */
--static int av7110_attach(struct saa7146_dev* dev,
-+static int av7110_attach(struct saa7146_dev *dev,
- 			 struct saa7146_pci_extension_data *pci_ext)
- {
- 	const int length =3D TS_WIDTH * TS_HEIGHT;
-@@ -2453,7 +2453,7 @@ static int av7110_attach(struct saa7146_dev* dev,
+ 	/* check if the firmware is available */
+ 	av7110->bin_fw =3D vmalloc(fw->size);
+-	if (NULL =3D=3D av7110->bin_fw) {
++	if (!av7110->bin_fw) {
+ 		dprintk(1, "out of memory\n");
+ 		release_firmware(fw);
  		return -ENOMEM;
- 	}
+@@ -2233,7 +2233,7 @@ static int frontend_init(struct av7110 *av7110)
+ 				av7110->fe->ops.tuner_ops.set_params =3D alps_bsbe1_tuner_set_params;
+ 				av7110->fe->tuner_priv =3D &av7110->i2c_adap;
 
--	av7110->card_name =3D (char*) pci_ext->ext_priv;
-+	av7110->card_name =3D (char *)pci_ext->ext_priv;
- 	av7110->dev =3D dev;
- 	dev->ext_priv =3D av7110;
-
-@@ -2746,7 +2746,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 	goto out;
- }
-
--static int av7110_detach(struct saa7146_dev* saa)
-+static int av7110_detach(struct saa7146_dev *saa)
- {
- 	struct av7110 *av7110 =3D saa->ext_priv;
- 	dprintk(4, "%p\n", av7110);
-@@ -2803,7 +2803,7 @@ static int av7110_detach(struct saa7146_dev* saa)
- }
-
-
--static void av7110_irq(struct saa7146_dev* dev, u32 *isr)
-+static void av7110_irq(struct saa7146_dev *dev, u32 *isr)
- {
- 	struct av7110 *av7110 =3D dev->ext_priv;
-
-diff --git a/drivers/staging/media/av7110/av7110.h b/drivers/staging/media=
-/av7110/av7110.h
-index 809d938ae..e251f989e 100644
-=2D-- a/drivers/staging/media/av7110/av7110.h
-+++ b/drivers/staging/media/av7110/av7110.h
-@@ -260,19 +260,19 @@ struct av7110 {
- 	unsigned char *bin_root;
- 	unsigned long size_root;
-
--	struct dvb_frontend* fe;
-+	struct dvb_frontend *fe;
- 	enum fe_status fe_status;
-
- 	struct mutex ioctl_mutex;
-
- 	/* crash recovery */
--	void				(*recover)(struct av7110* av7110);
-+	void				(*recover)(struct av7110 *av7110);
- 	enum fe_sec_voltage		saved_voltage;
- 	enum fe_sec_tone_mode		saved_tone;
- 	struct dvb_diseqc_master_cmd	saved_master_cmd;
- 	enum fe_sec_mini_cmd		saved_minicmd;
-
--	int (*fe_init)(struct dvb_frontend* fe);
-+	int (*fe_init)(struct dvb_frontend *fe);
- 	int (*fe_read_status)(struct dvb_frontend *fe, enum fe_status *status);
- 	int (*fe_diseqc_reset_overload)(struct dvb_frontend *fe);
- 	int (*fe_diseqc_send_master_cmd)(struct dvb_frontend *fe,
-diff --git a/drivers/staging/media/av7110/av7110_ca.c b/drivers/staging/me=
-dia/av7110/av7110_ca.c
-index c1338e074..9ff5bd6f5 100644
-=2D-- a/drivers/staging/media/av7110/av7110_ca.c
-+++ b/drivers/staging/media/av7110/av7110_ca.c
-@@ -294,7 +294,7 @@ static int dvb_ca_ioctl(struct file *file, unsigned in=
-t cmd, void *parg)
-
- 	case CA_SET_DESCR:
- 	{
--		struct ca_descr *descr =3D (struct ca_descr*) parg;
-+		struct ca_descr *descr =3D (struct ca_descr *)parg;
-
- 		if (descr->index >=3D 16 || descr->parity > 1) {
- 			mutex_unlock(&av7110->ioctl_mutex);
-@@ -369,12 +369,12 @@ void av7110_ca_unregister(struct av7110 *av7110)
- 	dvb_unregister_device(av7110->ca_dev);
- }
-
--int av7110_ca_init(struct av7110* av7110)
-+int av7110_ca_init(struct av7110 *av7110)
- {
- 	return ci_ll_init(&av7110->ci_rbuffer, &av7110->ci_wbuffer, 8192);
- }
-
--void av7110_ca_exit(struct av7110* av7110)
-+void av7110_ca_exit(struct av7110 *av7110)
- {
- 	ci_ll_release(&av7110->ci_rbuffer, &av7110->ci_wbuffer);
- }
+-				if (dvb_attach(lnbp21_attach, av7110->fe, &av7110->i2c_adap, 0, 0) =
+=3D=3D NULL) {
++				if (!dvb_attach(lnbp21_attach, av7110->fe, &av7110->i2c_adap, 0, 0)) =
+{
+ 					printk("dvb-ttpci: LNBP21 not found!\n");
+ 					if (av7110->fe->ops.release)
+ 						av7110->fe->ops.release(av7110->fe);
 diff --git a/drivers/staging/media/av7110/av7110_hw.c b/drivers/staging/me=
 dia/av7110/av7110_hw.c
-index a0be37717..714a4438b 100644
+index 52290a500..5a4de3e3e 100644
 =2D-- a/drivers/staging/media/av7110/av7110_hw.c
 +++ b/drivers/staging/media/av7110/av7110_hw.c
-@@ -318,7 +318,7 @@ int av7110_wait_msgstate(struct av7110 *av7110, u16 fl=
-ags)
- 	return 0;
- }
+@@ -390,7 +390,7 @@ static int __av7110_send_fw_cmd(struct av7110 *av7110,=
+ u16 *buf, int length)
+ 		break;
+ 	}
 
--static int __av7110_send_fw_cmd(struct av7110 *av7110, u16* buf, int leng=
-th)
-+static int __av7110_send_fw_cmd(struct av7110 *av7110, u16 *buf, int leng=
-th)
- {
- 	int i;
- 	unsigned long start;
-@@ -453,7 +453,7 @@ static int __av7110_send_fw_cmd(struct av7110 *av7110,=
- u16* buf, int length)
- 	return 0;
- }
-
--static int av7110_send_fw_cmd(struct av7110 *av7110, u16* buf, int length=
-)
-+static int av7110_send_fw_cmd(struct av7110 *av7110, u16 *buf, int length=
-)
- {
- 	int ret;
-
-@@ -606,7 +606,7 @@ int av7110_fw_request(struct av7110 *av7110, u16 *requ=
-est_buf,
- 	return 0;
- }
-
--static int av7110_fw_query(struct av7110 *av7110, u16 tag, u16* buf, s16 =
-length)
-+static int av7110_fw_query(struct av7110 *av7110, u16 tag, u16 *buf, s16 =
-length)
- {
- 	int ret;
- 	ret =3D av7110_fw_request(av7110, &tag, 0, buf, length);
-@@ -851,7 +851,7 @@ static inline int WaitUntilBmpLoaded(struct av7110 *av=
-7110)
- }
-
- static inline int LoadBitmap(struct av7110 *av7110,
--			     u16 dx, u16 dy, int inc, u8 __user * data)
-+			     u16 dx, u16 dy, int inc, u8 __user *data)
- {
- 	u16 format;
- 	int bpp;
-@@ -960,7 +960,7 @@ static int OSDSetColor(struct av7110 *av7110, u8 color=
-, u8 r, u8 g, u8 b, u8 ble
- 	return ret;
- }
-
--static int OSDSetPalette(struct av7110 *av7110, u32 __user * colors, u8 f=
-irst, u8 last)
-+static int OSDSetPalette(struct av7110 *av7110, u32 __user *colors, u8 fi=
-rst, u8 last)
- {
- 	int i;
- 	int length =3D last - first + 1;
-@@ -986,7 +986,7 @@ static int OSDSetPalette(struct av7110 *av7110, u32 __=
-user * colors, u8 first, u
- }
-
- static int OSDSetBlock(struct av7110 *av7110, int x0, int y0,
--		       int x1, int y1, int inc, u8 __user * data)
-+		       int x1, int y1, int inc, u8 __user *data)
- {
- 	uint w, h, bpp, bpl, size, lpb, bnum, brest;
- 	int i;
+-	if (type !=3D NULL) {
++	if (type) {
+ 		/* non-immediate COMMAND type */
+ 		start =3D jiffies;
+ 		for (;;) {
 diff --git a/drivers/staging/media/av7110/av7110_v4l.c b/drivers/staging/m=
 edia/av7110/av7110_v4l.c
-index ed2c60580..2c4707a60 100644
+index f19e50537..0ccc34f3d 100644
 =2D-- a/drivers/staging/media/av7110/av7110_v4l.c
 +++ b/drivers/staging/media/av7110/av7110_v4l.c
-@@ -175,7 +175,7 @@ static int ves1820_set_tv_freq(struct saa7146_dev *dev=
-, u32 freq)
+@@ -128,7 +128,7 @@ static int ves1820_writereg(struct saa7146_dev *dev, u=
+8 addr, u8 reg, u8 data)
 
- static int stv0297_set_tv_freq(struct saa7146_dev *dev, u32 freq)
- {
--	struct av7110 *av7110 =3D (struct av7110*)dev->ext_priv;
-+	struct av7110 *av7110 =3D (struct av7110 *)dev->ext_priv;
- 	u32 div;
- 	u8 data[4];
+ 	dprintk(4, "dev: %p\n", dev);
 
-@@ -215,7 +215,7 @@ static const struct v4l2_audio msp3400_v4l2_audio =3D =
-{
+-	if (1 !=3D i2c_transfer(&av7110->i2c_adap, &msg, 1))
++	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) !=3D 1)
+ 		return -1;
+ 	return 0;
+ }
+@@ -140,7 +140,7 @@ static int tuner_write(struct saa7146_dev *dev, u8 add=
+r, u8 data[4])
 
- static int av7110_dvb_c_switch(struct saa7146_dev *dev)
- {
--	struct av7110 *av7110 =3D (struct av7110*)dev->ext_priv;
-+	struct av7110 *av7110 =3D (struct av7110 *)dev->ext_priv;
- 	u16 adswitch;
- 	int source, sync;
+ 	dprintk(4, "dev: %p\n", dev);
 
-@@ -610,7 +610,7 @@ static int vidioc_s_fmt_sliced_vbi_out(struct file *fi=
-le, void *fh,
- static ssize_t av7110_vbi_write(struct file *file, const char __user *dat=
-a, size_t count, loff_t *ppos)
- {
- 	struct saa7146_dev *dev =3D video_drvdata(file);
--	struct av7110 *av7110 =3D (struct av7110*) dev->ext_priv;
-+	struct av7110 *av7110 =3D (struct av7110 *)dev->ext_priv;
- 	struct v4l2_sliced_vbi_data d;
- 	int rc;
+-	if (1 !=3D i2c_transfer(&av7110->i2c_adap, &msg, 1))
++	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) !=3D 1)
+ 		return -1;
+ 	return 0;
+ }
+@@ -221,7 +221,7 @@ static int av7110_dvb_c_switch(struct saa7146_dev *dev=
+)
 
-@@ -795,7 +795,7 @@ int av7110_init_analog_module(struct av7110 *av7110)
+ 	dprintk(4, "%p\n", av7110);
 
- int av7110_init_v4l(struct av7110 *av7110)
- {
--	struct saa7146_dev* dev =3D av7110->dev;
-+	struct saa7146_dev *dev =3D av7110->dev;
- 	struct saa7146_ext_vv *vv_data;
- 	int ret;
+-	if (0 !=3D av7110->current_input) {
++	if (av7110->current_input !=3D 0) {
+ 		dprintk(1, "switching to analog TV:\n");
+ 		adswitch =3D 1;
+ 		source =3D SAA7146_HPS_SOURCE_PORT_B;
+@@ -409,7 +409,7 @@ static int vidioc_s_frequency(struct file *file, void =
+*fh, const struct v4l2_fre
+ 	if (!av7110->analog_tuner_flags || av7110->current_input !=3D 1)
+ 		return -EINVAL;
 
-@@ -853,7 +853,7 @@ int av7110_init_v4l(struct av7110 *av7110)
+-	if (V4L2_TUNER_ANALOG_TV !=3D f->type)
++	if (f->type !=3D V4L2_TUNER_ANALOG_TV)
+ 		return -EINVAL;
 
- int av7110_exit_v4l(struct av7110 *av7110)
- {
--	struct saa7146_dev* dev =3D av7110->dev;
-+	struct saa7146_dev *dev =3D av7110->dev;
-
- 	saa7146_unregister_device(&av7110->v4l_dev, av7110->dev);
- 	saa7146_unregister_device(&av7110->vbi_dev, av7110->dev);
-@@ -909,9 +909,9 @@ static struct saa7146_standard dvb_standard[] =3D {
- 	}
- };
-
--static int std_callback(struct saa7146_dev* dev, struct saa7146_standard =
-*std)
-+static int std_callback(struct saa7146_dev *dev, struct saa7146_standard =
-*std)
- {
--	struct av7110 *av7110 =3D (struct av7110*) dev->ext_priv;
-+	struct av7110 *av7110 =3D (struct av7110 *)dev->ext_priv;
-
- 	if (std->id & V4L2_STD_PAL) {
- 		av7110->vidmode =3D AV7110_VIDEO_MODE_PAL;
+ 	msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0xffe0); /* fast mute */
 =2D-
 2.34.0
 
