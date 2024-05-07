@@ -1,59 +1,31 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m127102.qiye.163.com (mail-m127102.qiye.163.com [115.236.127.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD21C14E2CC
-	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 09:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25C4F894;
+	Tue,  7 May 2024 09:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715074292; cv=none; b=MRPRqA4OjPg0D1ypgX2xGSYKS1JA0AvIF0pFuu0WgopwL0NI3dRihvoCSN7jIa6NVvXSyMjbxWVJIkK7YKSRGx/+8aBxroIBrATMsIPPQugDgcZcRsUBvyDTS00KOG202Wz6SERFW/EizDW6dB4KtT9QfXhspeTtDgNJdeOPzgc=
+	t=1715075419; cv=none; b=MxKgRwFrOD/Ze9XSPTsjnkJvhGfxSr19l3KDsTYNAJUGKX/dKpvWeqN9Df7hs4iaBRN2qOBi6gm7tt+Eiv38Mb58hw+AL8nPl8OE2Pd1OMqgVXs+K5bqd9rroD5qv2RQgclYLe1YW83hgeghQJptP2TThwrb5D0cFwugnS697cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715074292; c=relaxed/simple;
-	bh=MPXbvZewmO/D2DEHW1XiJWvSM8CPq85XDTvUbnZY4DQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GG5TDnsTc/RVwj3K7I1dZQN/BFUipQZNusRop5OFnkFsFsFfHPOiZIdFpvXgWxxQhsmi2AZ0H54NQmAQdEbnUbmrr2fwlgdQu9we1qmhynIVDTux0yGNi7UZaAlF6rjZ/jWT5HT3xNunASUUpqM9Pljl9ko/SjRSpas9iznPVA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=YhAQC/GN; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
+	s=arc-20240116; t=1715075419; c=relaxed/simple;
+	bh=ik7otHDJmq2Tk97tlY36+mTtqzuQS3rBj0pENGE7aBE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PJCsjIKQqE27y3Iu847eLjKy+iumqt1TEoBRkvwJL4tWFp6AC9QGPLsqhDFZRhxBrTGvNFtQpbJYlY5F9ImiCbc3GjvHFlqrHxDK7UhX8T0bb7LI/3ESZDWBZlxFWKhQNCcNoOvYBI3YZ5CVytHK1qDZkf1I1EcORo77PlhHlgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=QD7wbqQE; arc=none smtp.client-ip=115.236.127.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="YhAQC/GN"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-34ddc9fe4a1so2018836f8f.0
-        for <linux-media@vger.kernel.org>; Tue, 07 May 2024 02:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1715074279; x=1715679079; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QyXdN6gxvZfSyDlB/uI/J3a7zD0pJvSdTF4inS8BuAY=;
-        b=YhAQC/GN/jW5NaNLPJclFChPJC1mz06ncdQPUfv2SirY3NZoGnANlCoIJzr4f9xwK3
-         vKl4SFM/my9Eta98ihtW+3lpeMFkRHCkT2IiggLgpwwzFV1edIi9yx8j1KvM4iNU3+4R
-         1Le9yuaXUCgYySwsq2nF2FkgJNIyv8lJAgixWXXf+X+sXHFD7W7c1EKN7xwWzJVz5BhL
-         tZ/w3Ep8CWQ22/6nCgiEVGShRKCwGPVxGG07SPpxZRkzKdiOQYl/ek9nyWKB4/SaoElj
-         9Awovj7eKEMGt8mndhythXC+V1169yvUZGgW99DFiUEfDGZdsUp0U+NZZD76c/hK4Dgp
-         /dOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715074279; x=1715679079;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QyXdN6gxvZfSyDlB/uI/J3a7zD0pJvSdTF4inS8BuAY=;
-        b=e9V8uun4ZPcMOdpxMoX7AJ8k7o09qZTNHhJTsSUZywDOvJlQGYtdzlDo7mEcM4e9/U
-         wJ7dXQCD3i2j3XlFj42+DgYo+NbfC+vNaRY2eVJSrNXQjxxtt4IloiBGSDyGRB/1V5PS
-         yzSOUCogufgQNwl3OQvM4Gxk7twQy2jWYeaHTk0i0gPLnNb9/Zf4sfhzcTFPqexobLhz
-         C7hfPNIYOOrRBMyOjq+ELdbDTQbKPDXfw+hUH+mROODgYqoo8kN4uZHGD3Sf4DiEFPxA
-         MgeKzZELE8gW1UKrhFR02lYyk7JqLIw7zXK+dIskQx9+kfqLh7VWlaVei+IBPj7XIEZt
-         tBow==
-X-Forwarded-Encrypted: i=1; AJvYcCX2QC5KRFJXyQ89fbMo5/gF34PqMCJp4C5RsmYbvdbDeIr5OsaC5Md4Oc7DmOZQ8+/92/0g4CycJ7nA45M+Rg0JUTW33IfuA3jonZc=
-X-Gm-Message-State: AOJu0YzeB7PZBzbitEQW2V4LGncKQjS9M55E7pMrTOMYVhmu9Zh3n1mt
-	xEhq94mkU9vKLKFPYyZMGBY1KuIQTxxdu0gDXysNv2kaXB5+QznPJCVvQQN/EmA=
-X-Google-Smtp-Source: AGHT+IEbF4B96xPtnD9KzivYdLyGQTnX3z26aVSw5JySkazStzElYqb1R7jUdZoog7s+4m3fqc2E/Q==
-X-Received: by 2002:adf:ed8e:0:b0:34c:925d:fa77 with SMTP id c14-20020adfed8e000000b0034c925dfa77mr7102080wro.41.1715074279714;
-        Tue, 07 May 2024 02:31:19 -0700 (PDT)
-Received: from [192.168.108.81] (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id f3-20020adfb603000000b0034dced2c5bdsm12517710wre.80.2024.05.07.02.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 May 2024 02:31:19 -0700 (PDT)
-Message-ID: <c2fca6c7-2421-42b4-a43d-68b251daf9b4@freebox.fr>
-Date: Tue, 7 May 2024 11:29:09 +0200
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="QD7wbqQE"
+DKIM-Signature: a=rsa-sha256;
+	b=QD7wbqQEud+fYkWN/Q7FNR38iFCkbtRNXWfbUQA1u9rbZv3g9C98+Wzdl3+GV215VkPYS6py3dmniAu6pIJctsBM81fUogbc5cjAt7i1ME65s2FeYSU/Ufljs3Vjd/rMOc+TwXoH+7cXFdwVG3Q8lZEcWSVgCH7IfjHZ4AFko/c=;
+	c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=HAJvQdLYmyL3qiXfsvwfss35CTvFlv7T9/m66zcsIFU=;
+	h=date:mime-version:subject:message-id:from;
+Received: from [172.16.12.141] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id B408A8401F9;
+	Tue,  7 May 2024 09:32:16 +0800 (CST)
+Message-ID: <d1f29354-c187-46b9-a167-7a54762ecfa0@rock-chips.com>
+Date: Tue, 7 May 2024 09:32:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,96 +33,100 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v4 2/3] arm64: dts: qcom: msm8998: add venus node
-From: Marc Gonzalez <mgonzalez@freebox.fr>
-To: Bjorn Andersson <andersson@kernel.org>,
- Jeffrey Hugo <quic_jhugo@quicinc.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Bryan O Donoghue <bryan.odonoghue@linaro.org>
-Cc: MSM <linux-arm-msm@vger.kernel.org>,
- linux-media <linux-media@vger.kernel.org>, DT <devicetree@vger.kernel.org>,
- Pierre-Hugues Husson <phhusson@freebox.fr>, Arnaud Vrac <avrac@freebox.fr>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <1cf08b56-a247-431b-a24b-69f563f49240@freebox.fr>
+Subject: Re: [PATCH v12 27/28] drm/rockchip: inno_hdmi: Switch to HDMI
+ connector
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>,
+ Sandy Huang <hjc@rock-chips.com>, =?UTF-8?Q?Heiko_St=C3=BCbner?=
+ <heiko@sntech.de>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, Hans Verkuil <hverkuil@xs4all.nl>,
+ Sebastian Wick <sebastian.wick@redhat.com>,
+ =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ linux-sunxi@lists.linux.dev
+References: <20240423-kms-hdmi-connector-state-v12-0-3338e4c0b189@kernel.org>
+ <20240423-kms-hdmi-connector-state-v12-27-3338e4c0b189@kernel.org>
+ <68eba0ec-bf9c-4d76-a362-5304a4cb61d5@rock-chips.com>
+ <20240506-eccentric-wren-of-peace-819aad@houat>
 Content-Language: en-US
-In-Reply-To: <1cf08b56-a247-431b-a24b-69f563f49240@freebox.fr>
-Content-Type: text/plain; charset=UTF-8
+From: Andy Yan <andy.yan@rock-chips.com>
+In-Reply-To: <20240506-eccentric-wren-of-peace-819aad@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUpDQ1ZPGkJITk1NTB1OSxlVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSk1PSU5IVUpLS1VKQk
+	tLWQY+
+X-HM-Tid: 0a8f50ae181203a4kunmb408a8401f9
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pxg6GSo6MTMDCBVKDi8yNTQW
+	OC8KFE9VSlVKTEpOS09OTkhDSU9MVTMWGhIXVRoVHwJVAhoVOwkUGBBWGBMSCwhVGBQWRVlXWRIL
+	WUFZTkNVSUlVTFVKSk9ZV1kIAVlBTU1JSzcG
 
-From: Pierre-Hugues Husson <phhusson@freebox.fr>
+Hi Maxime,
 
-Now that the venus clocks are fixed, we can add the DT node.
+On 5/6/24 15:59, Maxime Ripard wrote:
+> Hi Andy,
+> 
+> Thanks a lot for giving it a try
+> 
+> All the issues you raised in your review are fixed.
+> 
+> On Sat, Apr 27, 2024 at 06:44:54PM GMT, Andy Yan wrote:
+>> And after this whole series applied on linux 6.9-rc4, the display on rk3036 kylin is lost, I get
+>> the following error:
+>> [  178.999421] rockchip-drm display-subsystem: [drm:drm_atomic_check_only] checking 87b7fbde
+>> [  178.999471] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] [CRTC:35:crtc-0] mode changed
+>> [  178.999498] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] [CRTC:35:crtc-0] enable changed
+>> [  178.999521] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] [CRTC:35:crtc-0] active changed
+>> [  178.999547] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] Updating routing for [CONNECTOR:37:HDMI-A-1]
+>> [  178.999575] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] [CONNECTOR:37:HDMI-A-1] using [ENCODER:36:TMDS-36] on [CRTC:35:crtc-0]
+>> [  178.999604] rockchip-drm display-subsystem: [drm:drm_atomic_helper_connector_hdmi_check] Trying with a 8 bpc output
+>> [  178.999636] rockchip-drm display-subsystem: [drm:drm_atomic_helper_connector_hdmi_check] Trying RGB output format
+>> [  178.999730] rockchip-drm display-subsystem: [drm:drm_atomic_helper_connector_hdmi_check] RGB Format, checking the constraints.
+>> [  178.999757] rockchip-drm display-subsystem: [drm:drm_atomic_helper_connector_hdmi_check] RGB output format not supported with 8 bpc
+>> [  178.999783] rockchip-drm display-subsystem: [drm:drm_atomic_helper_connector_hdmi_check] Failed. No Format Supported for that bpc count.
+>> [  178.999810] rockchip-drm display-subsystem: [drm:drm_atomic_helper_check_modeset] [CONNECTOR:37:HDMI-A-1] driver check failed
+>> [  178.999836] rockchip-drm display-subsystem: [drm:drm_atomic_check_only] atomic driver check for 87b7fbde failed: -22
+>> [  178.999868] rockchip-drm display-subsystem: [drm:drm_atomic_state_default_clear] Clearing atomic state 87b7fbde
+>> [  178.999898] [drm:drm_mode_object_put] OBJ ID: 37 (4)
+>> [  178.999922] [drm:drm_mode_object_put] OBJ ID: 37 (3)
+>> [  178.999944] [drm:drm_mode_object_put] OBJ ID: 40 (1)
+>> [  178.999971] [drm:drm_mode_object_put] OBJ ID: 39 (2)
+> 
+> Which kind of display are you testing with? The only reason it could do
+> so is if the display claim it doesn't support RGB in its EDID which is
+> contradicting the HDMI spec. Are you using an Analog display by any
+> chance? or the built-in EDIDs through the drm.edid_firmware mechanism?
+> 
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Pierre-Hugues Husson <phhusson@freebox.fr>
-Signed-off-by: Marc Gonzalez <mgonzalez@freebox.fr>
----
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+It is because there is something wrong(I still don't know why) with the DDC on my board.
+It always failed to read edid when it first bootup, that means inno_hdmi_connector_get_modes
+will return 0.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index 5f5b90a6e2bf1..3d3b1f61c0690 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -3010,6 +3010,54 @@ mdss_dsi1_phy: phy@c996400 {
- 			};
- 		};
- 
-+		venus: video-codec@cc00000 {
-+			compatible = "qcom,msm8998-venus";
-+			reg = <0x0cc00000 0xff000>;
-+			interrupts = <GIC_SPI 287 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&mmcc VIDEO_TOP_GDSC>;
-+			clocks = <&mmcc VIDEO_CORE_CLK>,
-+				 <&mmcc VIDEO_AHB_CLK>,
-+				 <&mmcc VIDEO_AXI_CLK>,
-+				 <&mmcc VIDEO_MAXI_CLK>;
-+			clock-names = "core", "iface", "bus", "mbus";
-+			iommus = <&mmss_smmu 0x400>,
-+				 <&mmss_smmu 0x401>,
-+				 <&mmss_smmu 0x40a>,
-+				 <&mmss_smmu 0x407>,
-+				 <&mmss_smmu 0x40e>,
-+				 <&mmss_smmu 0x40f>,
-+				 <&mmss_smmu 0x408>,
-+				 <&mmss_smmu 0x409>,
-+				 <&mmss_smmu 0x40b>,
-+				 <&mmss_smmu 0x40c>,
-+				 <&mmss_smmu 0x40d>,
-+				 <&mmss_smmu 0x410>,
-+				 <&mmss_smmu 0x421>,
-+				 <&mmss_smmu 0x428>,
-+				 <&mmss_smmu 0x429>,
-+				 <&mmss_smmu 0x42b>,
-+				 <&mmss_smmu 0x42c>,
-+				 <&mmss_smmu 0x42d>,
-+				 <&mmss_smmu 0x411>,
-+				 <&mmss_smmu 0x431>;
-+			memory-region = <&venus_mem>;
-+			status = "disabled";
-+
-+			video-decoder {
-+				compatible = "venus-decoder";
-+				clocks = <&mmcc VIDEO_SUBCORE0_CLK>;
-+				clock-names = "core";
-+				power-domains = <&mmcc VIDEO_SUBCORE0_GDSC>;
-+			};
-+
-+			video-encoder {
-+				compatible = "venus-encoder";
-+				clocks = <&mmcc VIDEO_SUBCORE1_CLK>;
-+				clock-names = "core";
-+				power-domains = <&mmcc VIDEO_SUBCORE1_GDSC>;
-+			};
-+		};
-+
- 		mmss_smmu: iommu@cd00000 {
- 			compatible = "qcom,msm8998-smmu-v2", "qcom,smmu-v2";
- 			reg = <0x0cd00000 0x40000>;
--- 
-2.34.1
+and in function
 
+drm_helper_probe_single_connector_modes:
+
+         count = drm_helper_probe_get_modes(connector);
+
+         if (count == 0 && (connector->status == connector_status_connected ||
+                            connector->status == connector_status_unknown)) {
+                 count = drm_add_modes_noedid(connector, 1024, 768);
+
+                 /*
+                  * Section 4.2.2.6 (EDID Corruption Detection) of the DP 1.4a
+                  * Link CTS specifies that 640x480 (the official "failsafe"
+                  * mode) needs to be the default if there's no EDID.
+                  */
+                 if (connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort)
+                         drm_set_preferred_mode(connector, 640, 480);
+         }
+drm_add_modes_noedid will not initialize display_info.
+
+> Maxime
