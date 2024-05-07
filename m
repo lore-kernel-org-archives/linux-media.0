@@ -1,287 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F501C0DE4;
-	Tue,  7 May 2024 13:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC5916C86A
+	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 13:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715087943; cv=none; b=cOo+ISyX7cYZeetX3trdlJ62FKSc3xJ5IePV3EZrV1ANTvJXz4bdQqJL3xHAB3DnhaqlryGORLVmZIk1SCaYaUGYBxfpASePbK7AkClg6sSWru52mKnnJjAmfDEQQVTlwlCTqtovW9hc2EgctUE8Y3bCc/Q3wm00QllTZ9uwbyQ=
+	t=1715088744; cv=none; b=XrQp5kARtDJr53ntJ10gjW71cuv+BBjHWmNty0YyGAwLSRLO0uCEi3VDE5L9BIcIPaarfUs9L+1qyWuv6/bhOnXfePQvggUXgMpOGbFZyeDTeYXN1DTegpoVa2mgbNF3Fh+7v5g4YlkpLjcc24xgM/3x+1cv0sYzEV75q3OJ4wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715087943; c=relaxed/simple;
-	bh=zPGAazY1u9qYna183Z1tT1mvzEzSQ6HXQjNF0q4fp6A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZpZ1g1gDJFk8o18FqioBI6yFglmaSar3JdWBULMY5CHf3MHYf4ykV/MITHbQv23STGC7BrYwKtxuKD9oIwTWAvr/Dlbaz49zioSBtv16MGGbixfbQ/ksj5iJnyyTyYsqnSmRWjy9ee8+s10c7JmucGPSOLS2RcbQFUklKoKAy4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FkIfHv5D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715088744; c=relaxed/simple;
+	bh=UJlF2bhHHChbK6u5/+NFiBJBntvOiOhalI3jj92AG7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KHTXWCL+5pki6YHQPmyHFEa5K9Vs7rl8szIXJ3CCfL3ToTRdJb1OFfTO45179+v1o1RWWih/pabrB7vjXG+sjz4Wjs+t086rGKOv95MTroaiTcH1H0fo1qQky8igVt6DTuz2k3aJWithadr8ODOfTYRq4+SnbL/CMCMhiL8OHaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U/ZtlBcD; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FkIfHv5D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33320C2BBFC;
-	Tue,  7 May 2024 13:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715087942;
-	bh=zPGAazY1u9qYna183Z1tT1mvzEzSQ6HXQjNF0q4fp6A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=FkIfHv5DsQ0AGPqjVRq9lJ5MAXUZDQkmafEK4Z3HUl1UwPWLHK+zyPadHQ0ZFRLI1
-	 7Rqg2s29V3724WuSEmhpv5U1UlJxAM7qxjG8Xq5tkOwpPysuzevhczHSuXgStvZOqG
-	 0KU60wtZVObq3/Yv++pYmHZujR2S3rJ10/hSn5pk4C7kH0iPDguGi/N8wQWNT+G6Sv
-	 yCn/S/jVJ73ttrzGFoFPyfgYC+8Xur8FirYz9YYcRgI7sZge5GVijHTLS80ppF9c5F
-	 Yotjtlw3NuiSnzQ7lCPoXpDJW8oxbhO5kniaUjowvSLiLn1qQ+cFQa35OA2T3kxM2l
-	 2Y4OqLJf2WIAg==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 07 May 2024 15:17:46 +0200
-Subject: [PATCH v13 28/28] drm/sun4i: hdmi: Switch to HDMI connector
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U/ZtlBcD"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2e3e18c240fso11508011fa.0
+        for <linux-media@vger.kernel.org>; Tue, 07 May 2024 06:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715088741; x=1715693541; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=huJibqJN85r8uyZHaWnhr5W8KxIdUNVSaNrUGy1RNcA=;
+        b=U/ZtlBcDMKQwr+oxdoDKvKuQAfz/338KvF5K7MizbQYLET5G6KLOA2qNQXC/1nGyHR
+         GxZ8UzFM9KzoJOB+Qbr3FEYqi28C5l7cERzs1z3jK2UPT0S9xViJDXogz3+8QcdUJFyM
+         tRzXsjFVD5qb/ixF3Kt9LMKzgb9fyBP8vEco50tLty34vKexEM2TzXeku81NX/I0zEHZ
+         yZjCab5cvE8kBXj/sBEAtHr2pSV9dMhqb8EzxP0D3PJFtv/TUPBGQ4yt90xFd5IK3O3U
+         cDgYZKpj6FfSxeY5Binj66HBJG2tAki/0oKtZyC87ITvr0u27wBkyBTDeWfnPTAhg+z0
+         mVwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715088741; x=1715693541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=huJibqJN85r8uyZHaWnhr5W8KxIdUNVSaNrUGy1RNcA=;
+        b=jvlPuWP7vpULPmnrxmYszDpG2RVCeAMtVJLF2rKt5x4h+BVpMYfa+Nx/WCIjwupsyd
+         FBYAifpcB4ympljRtJHc9Me5lSiAyKInd69CXAUPY0xN9k80AkrF3pRZu1wGyAhBxbAi
+         j9NaGwmeUzF3tuJfmeIYfqsOnAjs4olfeswCZLQCZwJidddf+tZFglsGt5h4OHfGB5j/
+         ilNX8MZACUX19X+LiTRam41iCzeFeEotQ/hzeRu/+8Nd5GgrtFhVKKKD66S1lb5pnh23
+         OPb/3cUFHg7MHmOqICFTyiwS3COi7pJbJM27uaN7c+eIeM9Y6GUJqfipdlu+kXuxVs1p
+         wKhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpoT0ARh4XUXN92+beifmSOSrMxCosKwm0LqwWg1S58JPJpom6pHGvEWDnK/+i98TNHIbdC+gTMbn4K3X7QgxlkMM220f7hkg67no=
+X-Gm-Message-State: AOJu0YzY/74/gWLrTA8e3V4PZrsKkq1yIBJH4B7/iesi/40J0Yz5/1aX
+	uobG17Qqtc7HC2YtF2SEUP7ghpE7gUF6ZaRuHTbpJghY5MxCwYBktKgdheRlqD0=
+X-Google-Smtp-Source: AGHT+IGD/JeQgTpquE7MLFJE26/XO1UVjUN5TKpuK/IVcoLAzeSx3fB3SA/M1rPKsXsUuic7yU+dKQ==
+X-Received: by 2002:a05:651c:20a:b0:2df:dea1:5378 with SMTP id y10-20020a05651c020a00b002dfdea15378mr10307465ljn.16.1715088740904;
+        Tue, 07 May 2024 06:32:20 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id i6-20020a2ea366000000b002e2b229d8d5sm1403183ljn.83.2024.05.07.06.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 May 2024 06:32:20 -0700 (PDT)
+Date: Tue, 7 May 2024 16:32:19 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Lennart Poettering <mzxreary@0pointer.de>, 
+	Robert Mader <robert.mader@collabora.com>, Sebastien Bacher <sebastien.bacher@canonical.com>, 
+	Linux Media Mailing List <linux-media@vger.kernel.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Milan Zamazal <mzamazal@redhat.com>, Maxime Ripard <mripard@redhat.com>, 
+	Andrey Konovalov <andrey.konovalov.ynk@gmail.com>
+Subject: Re: Safety of opening up /dev/dma_heap/* to physically present users
+ (udev uaccess tag) ?
+Message-ID: <ojduxo54lpcbfg2wfuhqhy7k3phncamtklh65z7gvttcwztmhk@zkifewcy4ovi>
+References: <bb372250-e8b8-4458-bc99-dd8365b06991@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-kms-hdmi-connector-state-v13-28-8fafc5efe8be@kernel.org>
-References: <20240507-kms-hdmi-connector-state-v13-0-8fafc5efe8be@kernel.org>
-In-Reply-To: <20240507-kms-hdmi-connector-state-v13-0-8fafc5efe8be@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, 
- Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, Andy Yan <andy.yan@rock-chips.com>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, 
- Sebastian Wick <sebastian.wick@redhat.com>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, Maxime Ripard <mripard@kernel.org>, 
- Sui Jingfeng <sui.jingfeng@linux.dev>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7714; i=mripard@kernel.org;
- h=from:subject:message-id; bh=zPGAazY1u9qYna183Z1tT1mvzEzSQ6HXQjNF0q4fp6A=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDGlWmp+9rR4lPXyTIVq1fafy1ktKjgWei/eEGL5/cSBc/
- OKz79qCHVNZGIQ5GWTFFFmeyISdXt6+uMrBfuUPmDmsTCBDGLg4BWAiFmcYGxpueSr5OO/muZKw
- LOye0eHUAA55AUGeMy8frmGYs3JqdRh7SsbS204VtTyWersjuhTVGRs2Fom2nJ+TKVd0jO1gwwu
- PeM2Ih6FSbOI5px/ufes5uXuCVKbXXiW/F+p3jL6lPez6PwEA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb372250-e8b8-4458-bc99-dd8365b06991@redhat.com>
 
-The new HDMI connector infrastructure allows to remove some boilerplate,
-especially to generate infoframes. Let's switch to it.
+On Mon, May 06, 2024 at 01:49:17PM +0200, Hans de Goede wrote:
+> Hi dma-buf maintainers, et.al.,
+> 
+> Various people have been working on making complex/MIPI cameras work OOTB
+> with mainline Linux kernels and an opensource userspace stack.
+> 
+> The generic solution adds a software ISP (for Debayering and 3A) to
+> libcamera. Libcamera's API guarantees that buffers handed to applications
+> using it are dma-bufs so that these can be passed to e.g. a video encoder.
+> 
+> In order to meet this API guarantee the libcamera software ISP allocates
+> dma-bufs from userspace through one of the /dev/dma_heap/* heaps. For
+> the Fedora COPR repo for the PoC of this:
+> https://hansdegoede.dreamwidth.org/28153.html
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Acked-by: Sui Jingfeng <sui.jingfeng@linux.dev>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/sun4i/Kconfig          |  3 ++
- drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c | 81 +++++++++++++++++++++-------------
- 2 files changed, 54 insertions(+), 30 deletions(-)
+Is there any reason for allocating DMA buffers for libcamera through
+/dev/dma_heap/ rather than allocating them via corresponding media
+device and then giving them away to DRM / VPU / etc?
 
-diff --git a/drivers/gpu/drm/sun4i/Kconfig b/drivers/gpu/drm/sun4i/Kconfig
-index 4741d9f6544c..4037e085430e 100644
---- a/drivers/gpu/drm/sun4i/Kconfig
-+++ b/drivers/gpu/drm/sun4i/Kconfig
-@@ -16,10 +16,13 @@ config DRM_SUN4I
- if DRM_SUN4I
- 
- config DRM_SUN4I_HDMI
- 	tristate "Allwinner A10/A10s/A20/A31 HDMI Controller Support"
- 	depends on ARM || COMPILE_TEST
-+	select DRM_DISPLAY_HDMI_HELPER
-+	select DRM_DISPLAY_HDMI_STATE_HELPER
-+	select DRM_DISPLAY_HELPER
- 	default DRM_SUN4I
- 	help
- 	  Choose this option if you have an Allwinner A10/A10s/A20/A31
- 	  SoC with an HDMI controller.
- 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-index 1c6cda2bfb14..0e652dd480c9 100644
---- a/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c
-@@ -38,34 +38,28 @@
- 	container_of_const(e, struct sun4i_hdmi, encoder)
- 
- #define drm_connector_to_sun4i_hdmi(c)		\
- 	container_of_const(c, struct sun4i_hdmi, connector)
- 
--static int sun4i_hdmi_setup_avi_infoframes(struct sun4i_hdmi *hdmi,
--					   struct drm_display_mode *mode)
-+static int sun4i_hdmi_write_infoframe(struct drm_connector *connector,
-+				      enum hdmi_infoframe_type type,
-+				      const u8 *buffer, size_t len)
- {
--	struct hdmi_avi_infoframe frame;
--	u8 buffer[17];
--	int i, ret;
-+	struct sun4i_hdmi *hdmi = drm_connector_to_sun4i_hdmi(connector);
-+	int i;
- 
--	ret = drm_hdmi_avi_infoframe_from_display_mode(&frame,
--						       &hdmi->connector, mode);
--	if (ret < 0) {
--		DRM_ERROR("Failed to get infoframes from mode\n");
--		return ret;
-+	if (type != HDMI_INFOFRAME_TYPE_AVI) {
-+		drm_err(connector->dev,
-+			"Unsupported infoframe type: %u\n", type);
-+		return 0;
- 	}
- 
--	ret = hdmi_avi_infoframe_pack(&frame, buffer, sizeof(buffer));
--	if (ret < 0) {
--		DRM_ERROR("Failed to pack infoframes\n");
--		return ret;
--	}
--
--	for (i = 0; i < sizeof(buffer); i++)
-+	for (i = 0; i < len; i++)
- 		writeb(buffer[i], hdmi->base + SUN4I_HDMI_AVI_INFOFRAME_REG(i));
- 
- 	return 0;
-+
- }
- 
- static void sun4i_hdmi_disable(struct drm_encoder *encoder,
- 			       struct drm_atomic_state *state)
- {
-@@ -84,18 +78,22 @@ static void sun4i_hdmi_disable(struct drm_encoder *encoder,
- static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- 			      struct drm_atomic_state *state)
- {
- 	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
- 	struct sun4i_hdmi *hdmi = drm_encoder_to_sun4i_hdmi(encoder);
--	struct drm_display_info *display = &hdmi->connector.display_info;
-+	struct drm_connector *connector = &hdmi->connector;
-+	struct drm_display_info *display = &connector->display_info;
-+	struct drm_connector_state *conn_state =
-+		drm_atomic_get_new_connector_state(state, connector);
-+	unsigned long long tmds_rate = conn_state->hdmi.tmds_char_rate;
- 	unsigned int x, y;
- 	u32 val = 0;
- 
- 	DRM_DEBUG_DRIVER("Enabling the HDMI Output\n");
- 
--	clk_set_rate(hdmi->mod_clk, mode->crtc_clock * 1000);
--	clk_set_rate(hdmi->tmds_clk, mode->crtc_clock * 1000);
-+	clk_set_rate(hdmi->mod_clk, tmds_rate);
-+	clk_set_rate(hdmi->tmds_clk, tmds_rate);
- 
- 	/* Set input sync enable */
- 	writel(SUN4I_HDMI_UNKNOWN_INPUT_SYNC,
- 	       hdmi->base + SUN4I_HDMI_UNKNOWN_REG);
- 
-@@ -144,11 +142,12 @@ static void sun4i_hdmi_enable(struct drm_encoder *encoder,
- 
- 	writel(val, hdmi->base + SUN4I_HDMI_VID_TIMING_POL_REG);
- 
- 	clk_prepare_enable(hdmi->tmds_clk);
- 
--	sun4i_hdmi_setup_avi_infoframes(hdmi, mode);
-+	drm_atomic_helper_connector_hdmi_update_infoframes(connector, state);
-+
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(0, SUN4I_HDMI_PKT_AVI);
- 	val |= SUN4I_HDMI_PKT_CTRL_TYPE(1, SUN4I_HDMI_PKT_END);
- 	writel(val, hdmi->base + SUN4I_HDMI_PKT_CTRL_REG(0));
- 
- 	val = SUN4I_HDMI_VID_CTRL_ENABLE;
-@@ -197,23 +196,26 @@ static int sun4i_hdmi_connector_atomic_check(struct drm_connector *connector,
- 	struct drm_crtc_state *crtc_state = crtc->state;
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
- 	enum drm_mode_status status;
- 
- 	status = sun4i_hdmi_connector_clock_valid(connector, mode,
--						  mode->clock * 1000);
-+						  conn_state->hdmi.tmds_char_rate);
- 	if (status != MODE_OK)
- 		return -EINVAL;
- 
- 	return 0;
- }
- 
- static enum drm_mode_status
- sun4i_hdmi_connector_mode_valid(struct drm_connector *connector,
- 				struct drm_display_mode *mode)
- {
--	return sun4i_hdmi_connector_clock_valid(connector, mode,
--						mode->clock * 1000);
-+	unsigned long long rate =
-+		drm_connector_hdmi_compute_mode_clock(mode, 8,
-+						      HDMI_COLORSPACE_RGB);
-+
-+	return sun4i_hdmi_connector_clock_valid(connector, mode, rate);
- }
- 
- static int sun4i_hdmi_get_modes(struct drm_connector *connector)
- {
- 	struct sun4i_hdmi *hdmi = drm_connector_to_sun4i_hdmi(connector);
-@@ -259,10 +261,15 @@ static struct i2c_adapter *sun4i_hdmi_get_ddc(struct device *dev)
- 		return ERR_PTR(-EPROBE_DEFER);
- 
- 	return ddc;
- }
- 
-+static const struct drm_connector_hdmi_funcs sun4i_hdmi_hdmi_connector_funcs = {
-+	.tmds_char_rate_valid	= sun4i_hdmi_connector_clock_valid,
-+	.write_infoframe	= sun4i_hdmi_write_infoframe,
-+};
-+
- static const struct drm_connector_helper_funcs sun4i_hdmi_connector_helper_funcs = {
- 	.atomic_check	= sun4i_hdmi_connector_atomic_check,
- 	.mode_valid	= sun4i_hdmi_connector_mode_valid,
- 	.get_modes	= sun4i_hdmi_get_modes,
- };
-@@ -280,15 +287,20 @@ sun4i_hdmi_connector_detect(struct drm_connector *connector, bool force)
- 	}
- 
- 	return connector_status_connected;
- }
- 
-+static void sun4i_hdmi_connector_reset(struct drm_connector *connector)
-+{
-+	drm_atomic_helper_connector_reset(connector);
-+	__drm_atomic_helper_connector_hdmi_reset(connector, connector->state);
-+}
-+
- static const struct drm_connector_funcs sun4i_hdmi_connector_funcs = {
- 	.detect			= sun4i_hdmi_connector_detect,
- 	.fill_modes		= drm_helper_probe_single_connector_modes,
--	.destroy		= drm_connector_cleanup,
--	.reset			= drm_atomic_helper_connector_reset,
-+	.reset			= sun4i_hdmi_connector_reset,
- 	.atomic_duplicate_state	= drm_atomic_helper_connector_duplicate_state,
- 	.atomic_destroy_state	= drm_atomic_helper_connector_destroy_state,
- };
- 
- #ifdef CONFIG_DRM_SUN4I_HDMI_CEC
-@@ -643,14 +655,23 @@ static int sun4i_hdmi_bind(struct device *dev, struct device *master,
- 	       hdmi->base + SUN4I_HDMI_CEC);
- #endif
- 
- 	drm_connector_helper_add(&hdmi->connector,
- 				 &sun4i_hdmi_connector_helper_funcs);
--	ret = drm_connector_init_with_ddc(drm, &hdmi->connector,
--					  &sun4i_hdmi_connector_funcs,
--					  DRM_MODE_CONNECTOR_HDMIA,
--					  hdmi->ddc_i2c);
-+	ret = drmm_connector_hdmi_init(drm, &hdmi->connector,
-+				       /*
-+					* NOTE: Those are likely to be
-+					* wrong, but I couldn't find the
-+					* actual ones in the BSP.
-+					*/
-+				       "AW", "HDMI",
-+				       &sun4i_hdmi_connector_funcs,
-+				       &sun4i_hdmi_hdmi_connector_funcs,
-+				       DRM_MODE_CONNECTOR_HDMIA,
-+				       hdmi->ddc_i2c,
-+				       BIT(HDMI_COLORSPACE_RGB),
-+				       8);
- 	if (ret) {
- 		dev_err(dev,
- 			"Couldn't initialise the HDMI connector\n");
- 		goto err_cleanup_connector;
- 	}
+At least this should solve the permission usecase: if the app can open
+camera device, it can allocate a buffer.
+
+> I have added a simple udev rule to give physically present users access
+> to the dma_heap-s:
+> 
+> KERNEL=="system", SUBSYSTEM=="dma_heap", TAG+="uaccess"
+> 
+> (and on Rasperry Pi devices any users in the video group get access)
+> 
+> This was just a quick fix for the PoC. Now that we are ready to move out
+> of the PoC phase and start actually integrating this into distributions
+> the question becomes if this is an acceptable solution; or if we need some
+> other way to deal with this ?
+> 
+> Specifically the question is if this will have any negative security
+> implications? I can certainly see this being used to do some sort of
+> denial of service attack on the system (1). This is especially true for
+> the cma heap which generally speaking is a limited resource.
+> 
+> But devices tagged for uaccess are only opened up to users who are 
+> physcially present behind the machine and those can just hit
+> the powerbutton, so I don't believe that any *on purpose* DOS is part of
+> the thread model. Any accidental DOS would be a userspace stack bug.
+> 
+> Do you foresee any other negative security implications from allowing
+> physically present non root users to create (u)dma-bufs ?
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 1) There are some limits in drivers/dma-buf/udmabuf.c and distributions
+> could narrow these.
+> 
+> 
 
 -- 
-2.45.0
-
+With best wishes
+Dmitry
