@@ -1,47 +1,47 @@
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8A537C
-	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A29EA23
+	for <linux-media@vger.kernel.org>; Tue,  7 May 2024 00:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715041535; cv=none; b=VoyvXq1XWctMFY58+GOBfZzP54ta+8Qf+WjM0FowBre9QHlhULtEicKLenYEl5aB/imC3s5XooZgem95WJQ3PcMFw3IjZxRYc88vV2A7SxMmuGprDgi9fHT2SyPFRJZyzTBai8Alc5IBOwUmuGET8vN5NYDw0svUlxhxxyA1dZQ=
+	t=1715041535; cv=none; b=R8Td7MdigyKA8/XlAHkLkbiEN3LfRpb9yvXrwNg2017PsdJvQ1breiajp0VMlRy/n7gydJDVpP+DANnkSd6ASTgICRd+7qufe4QNOmEDgCfDBV/elScToSGwYutRfHCOouiQlCZ2YcsPUm0KQU6WRDEA3cZo426SRYDc5ruI0Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715041535; c=relaxed/simple;
-	bh=EjU7si92ubn2nOI/nwiunaQe5jl0YB4Wm2cRPHVSMP8=;
+	bh=ceXJ+hHasLwkjwmMQviQbGxn8Y6E93LTfUEGou+Rm7Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kn9F6JQb9rIbO6yZgU4DeZrMQXkM5ZOhVQ6q5jZ+H1gDiXK5ONQwHmVkjyfQckkZga5VJMRXWdMB+ZX2fpsWD4oziB3vOsx6tq2sNYX026W+/iJZct44hoEi0vzXUIDJCBo3G0VCduVBZO9c0tZ/wp4cdEK898ciVGvH84S/x0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=nptKWk1x; arc=none smtp.client-ip=212.227.17.21
+	 MIME-Version; b=G1lk1CzQtYJ3NmPp60t8gilGCwcdWLobxMEkSG+h5Matxrcg3gGLBVXYQE3gJT7WadqIJEphX2yJEurUvshYfd7E3TOnVBXjQEzlulpH5zKviNVCemzzhXpnla3URDHk/jIBZ5xpzRFoS/wmMNBg/O+MLSxawfCDyxBHpClsHok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de; spf=pass smtp.mailfrom=nurfuerspam.de; dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b=IxLrg0G/; arc=none smtp.client-ip=212.227.17.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nurfuerspam.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="nptKWk1x"
+	dkim=pass (2048-bit key) header.d=nurfuerspam.de header.i=herdler@nurfuerspam.de header.b="IxLrg0G/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nurfuerspam.de;
-	s=s31663417; t=1715041529; x=1715646329; i=herdler@nurfuerspam.de;
-	bh=a3gxFHemFYUxxJgVHcPHp5ApB6BblJkedmmGhhsf534=;
+	s=s31663417; t=1715041530; x=1715646330; i=herdler@nurfuerspam.de;
+	bh=UrD7/HzS21qEJde6ivImb9os6Ry5t2qmBcUKm4FOVEA=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=nptKWk1xKNMfHHagiWNSnohxNWZXeHI/jFf0yJ1pazHSlATnXV2b5uKyuqKK6sVp
-	 5jiCEfHiatFIeQqSpnL6Pi0fDa0o5YaN6vXcQW+j50pkuZBkI9IHus17zzNMLReDy
-	 vUrmYA0CEVfThcJ/lBnDQQx1wo3eLA9JtDAA7GaISxcoB31zKkYAU8Erp/wDPvLE7
-	 wuVztesiU9ukXPVXCioGpLKxaJfMusg059WDD+oyayxYZXI2nBQBhfHynaWwcLR8+
-	 +2SxXta/bK/gq1qj95HFP6j7Tj8AkWZrgr2mYBCueuPGJ9NwxorLis8SfYWujpt3I
-	 sl/mTEO+364sPXmXWw==
+	b=IxLrg0G/jQLHLWv8xzRndO506xZi5lbWnunSrYAzv2jbmD1no/15T1fvz4Fbola1
+	 3AzCMvj9MtrM1LVPfIesJS6dC0dw+bpVMLUEhNDC/Qw7YXjPnWeRLWuVScMhlzcC1
+	 Axe+dziN0IfPIeXd37mvlgNA5MBEkNuyyu02Qstgar6RF6D8SrLamtha7UDq2iTuy
+	 YABWTF3Uv/XxLmv0isjqA0JjUTDNaJrgjWotBxp0lqjUVwzzSqrX5/kf1reoxZu4A
+	 nYBMo6PKv9t+rM+u+VUa5/bI4mljS8gdaGRj5dPXPjwjGNVFQkzP5/1i7GoU+WTdR
+	 yqD4UYN1Px1HWh5KcQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from astro.haus ([185.101.174.109]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOiDX-1sGQxr3zAN-00QCLI; Tue, 07
- May 2024 02:25:29 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MS3il-1sAvBK3vVT-00TXsC; Tue, 07
+ May 2024 02:25:30 +0200
 From: Stefan Herdler <herdler@nurfuerspam.de>
 To: hverkuil-cisco@xs4all.nl
 Cc: linux-media@vger.kernel.org,
 	smoch@web.de,
 	tmn505@gmail.com,
 	vinschen@redhat.com
-Subject: [PATCH 15/21] media: av7110: coding style fixes: comparsations
-Date: Tue,  7 May 2024 02:24:54 +0200
-Message-Id: <20240507002500.81867-16-herdler@nurfuerspam.de>
+Subject: [PATCH 19/21] media: av7110: coding style fixes: deep_indentation
+Date: Tue,  7 May 2024 02:24:58 +0200
+Message-Id: <20240507002500.81867-20-herdler@nurfuerspam.de>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20240507002500.81867-1-herdler@nurfuerspam.de>
 References: <20240507002500.81867-1-herdler@nurfuerspam.de>
@@ -52,150 +52,321 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LD3Q1mer/EWhYp82YC6Z98ufMDTVuKYCn++p6aIRWqhtYBTt47o
- NYcCCvtyhS8hR8fkl+x+EhIJKbusnuIFKirDEMNsrkPIUUz8pWHGksHDMOu4JwZydzkY15y
- SNr8qukzLocJ2J9AKh4mF8gZ4eEzl7Khosc46yWTS3Sq0xZXLSfYZ7XC2MY+jbfRz0nU9Hf
- Kbj8xfyV2x53nudSgbFaw==
+X-Provags-ID: V03:K1:xLq78zlf2k6yk6NKlG0VMjM0XVQ9QoCD6p3W2YCHlZ8oZqp5EUl
+ sziavTBSTwfixjRvpzMg14lHYaIuK6TNw8tRA9OoTVURj6IluhRtXV//nK8/Ar8BefHTNHK
+ f5Bc0yAhDgap6HKFqFYh4F39Tw/kqBAac+Qv4WjtqFCtLObjw6kRhP0oj7L0O4gCNF2wa3J
+ 0KqDPQpCrM7uEDrM10J2A==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:7cJ2Uhhl1aw=;1krqXmFzpqShp92UxuHfx7szEtq
- oucuwmM0UiKITfcJSNJPxMrci1K4sKTkBIZk6JvrgGtqIaT7UDrp8chYEpoMQuseD1amtvZ9D
- t4cD2mZ6a6uEmQDjq59FEb108xlSHJHhPY0GG2XD8jA1wCNBNcsBzrFVoocrDA3kWkfXsNpss
- djyeSVCsjySUpXpZ6+SWdujnzXRaj29uv3q20VhLj5UnvRmOg/xiVTKEcX5FdZrr0drLA0UmU
- n01KLprZpGbxXNb9BMB6OrnROnxH6JpTZR2cDiOUM/6APQu0jfch2Nrc7rgATtHelFwt/pE88
- JVETVYIAUE721SXgcfvV77Pc2Q7mSK5gBWSoSlzUJxbUXYGt6+tUAeeMRRJBPSOHQMzejk2Cc
- WEoPwHN2hTgx1NPrSpHqm3NumlA6Fayv/B+bb7Bv7EmcinS2DyH6enoAmFQ9iN8q9j8wNne83
- YEWat5oh+7d4vHpU1mhvXMtPHIH4sRfZlKc05DmpjEG3K2gYHNAaX/Xts7C7NGMiRKnzrvnto
- 4HMYU9+4OgzUnpqL+Zapc65Nl7TOxgAaxsc9DA/E6BZJdWLUazIl7g7Lo1tl7tntC6awAC7u9
- Kifj4UKK0lBtTirvpId6iQ3JQqF6ym/NLqNiVh+lVaC6Oo1cFjiqr6wOzOhd1HsgbW/X5acBt
- qTzvwKD2gKDua1UhcmTS1ncbJ1L1jCc0x1IPDbIyg1nBH/DiMIxLRASgGnVcBa31R9UCxuSnL
- VddG2kAypZf0ScmFcMDlJmy/9KMV/1jKIhbuAGck5q/+JhCcuUMYWA/teBMkjUs9RUarIr3LX
- FPT9DhK6vjITzplkjhOVIWmlhguXx7KiKKlmXB4cHdpTM=
+UI-OutboundReport: notjunk:1;M01:P0:V3x/cXGdtMw=;ZLckh4G28OkdmNT0xNzWD1Ne5M6
+ CAf8t7DisEsNFvyD9T94N3DmYEgox5e9+AgPUp5WSqDpvFCVzzuzgKMkXuIQHYojTbX3Ikvi0
+ aH8T36Jz/6641yoi1uqFeZuoNSemhLGyX2SNtK9zVA8JEzzgC9q6w1WciYDe1Ymu2xA4dMGAF
+ frqXiQGxZl4jZSA7yl0Qi9NYWN6ijZGOp8+ugRAN+HTJM2XzMO6TkqxxFFryqkn49zuy5xEWB
+ PPqqmncHH+HDanrcFmQqqBYulHoilS96AZLk3W2Lm30pMRM3XvqkRgJxdvprWdN1PML+bpamp
+ akYX4EKuHKqHkuh7ngL+p1GQ6By6bbpY086c1tv9wK9MB93umEOhoNhxM96Sim+frcPEkhf72
+ bmGA12OrMy0S1bsZbUhP95dQRgrh36KI66IhVVhYRd1xZNZ2IXaYNEaIDx21I2zbKRUu9b13H
+ FmsyBKC2EJ0ZwlQrTJXo704AJocUpijvgq9w6Z4elLBqRXWtKmKf5RJ09t7EuKzd2PDDUBc94
+ 6854aRcLMwgOmHdPub3aW3OS+Zy/R0t1Hadlb1Vfd5u8Z+YcHVR1XOxKUA0OIAa+5Tw5DkooO
+ sQyzNBEH52sq6PaIFrCxuWwqCcwKbM9/1vRDaJxWk+c80FyHimERJscsmTQaf64scs6cIg4AB
+ LUreNy+9uDKFAhRUtMDxl7LK20mnGU2UJIKp18hN+OL4OFsx3jl/IQPtFAnLD9l/4RQvVYk9o
+ qm9aB+d7cbT4/oudOdJPKXuz6s7pSRziS7NePFrSHQyTNM950uQwUXrf+xtp8cB5lsKoXi67Z
+ MqxtuJOVCkbNQx4lRPUkgXTwVQM2Wc6ZgAm2mnK6Ch1rs=
 
-This patch fixes the following checkpatch warnings:
+This patch fixes most the following checkpatch warnings:
 
-WARNING:CONSTANT_COMPARISON: Comparisons should place the constant on the =
-right side of the test
-CHECK:COMPARISON_TO_NULL: Comparison to NULL could be written ...
+WARNING:DEEP_INDENTATION: Too many leading tabs - consider code refactorin=
+g
+
+Invert "if" statement to reduce indention level by 1.
 
 Signed-off-by: Stefan Herdler <herdler@nurfuerspam.de>
 =2D--
- drivers/staging/media/av7110/av7110.c     | 10 +++++-----
- drivers/staging/media/av7110/av7110_hw.c  |  2 +-
- drivers/staging/media/av7110/av7110_v4l.c |  8 ++++----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
 
-diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media=
-/av7110/av7110.c
-index fac774dc6..de9476154 100644
-=2D-- a/drivers/staging/media/av7110/av7110.c
-+++ b/drivers/staging/media/av7110/av7110.c
-@@ -104,7 +104,7 @@ static int av7110_num;
+The patch is surprisingly confusing, compared to the little changes.
 
- #define FE_FUNC_OVERRIDE(fe_func, av7110_copy, av7110_func) \
- {\
--	if (fe_func !=3D NULL) { \
-+	if (fe_func) { \
- 		av7110_copy =3D fe_func; \
- 		fe_func =3D av7110_func; \
- 	} \
-@@ -159,7 +159,7 @@ static void init_av7110_av(struct av7110 *av7110)
- 		/**
- 		 * some special handling for the Siemens DVB-C cards...
- 		 */
--	} else if (0 =3D=3D av7110_init_analog_module(av7110)) {
-+	} else if (av7110_init_analog_module(av7110) =3D=3D 0) {
- 		/* done. */
- 	} else if (dev->pci->subsystem_vendor =3D=3D 0x110a) {
- 		printk("dvb-ttpci: DVB-C w/o analog module @ card %d detected\n",
-@@ -1386,7 +1386,7 @@ static void dvb_unregister(struct av7110 *av7110)
- 	dvb_dmxdev_release(&av7110->dmxdev);
- 	dvb_dmx_release(&av7110->demux);
+"git diff -b HEAD~2 HEAD~3" shows the 3 really modifies lines.
 
--	if (av7110->fe !=3D NULL) {
-+	if (av7110->fe) {
- 		dvb_unregister_frontend(av7110->fe);
- 		dvb_frontend_detach(av7110->fe);
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+
+ drivers/staging/media/av7110/av7110_ipack.c | 234 ++++++++++----------
+ 1 file changed, 117 insertions(+), 117 deletions(-)
+
+diff --git a/drivers/staging/media/av7110/av7110_ipack.c b/drivers/staging=
+/media/av7110/av7110_ipack.c
+index 9631aae71..4be6e225f 100644
+=2D-- a/drivers/staging/media/av7110/av7110_ipack.c
++++ b/drivers/staging/media/av7110/av7110_ipack.c
+@@ -249,146 +249,146 @@ int av7110_ipack_instant_repack(const u8 *buf, int=
+ count, struct ipack *p)
+ 	if (!p->plength)
+ 		p->plength =3D MMAX_PLENGTH - 6;
+
+-	if (p->done || ((p->mpeg =3D=3D 2 && p->found >=3D 9) ||
+-			(p->mpeg =3D=3D 1 && p->found >=3D 7))) {
+-		switch (p->cid) {
+-		case AUDIO_STREAM_S ... AUDIO_STREAM_E:
+-		case VIDEO_STREAM_S ... VIDEO_STREAM_E:
+-		case PRIVATE_STREAM1:
+-			if (p->mpeg =3D=3D 2 && p->found =3D=3D 9) {
+-				write_ipack(p, &p->flag1, 1);
+-				write_ipack(p, &p->flag2, 1);
+-				write_ipack(p, &p->hlength, 1);
++	if (!(p->done || ((p->mpeg =3D=3D 2 && p->found >=3D 9) ||
++			  (p->mpeg =3D=3D 1 && p->found >=3D 7))))
++		return count;
++
++	switch (p->cid) {
++	case AUDIO_STREAM_S ... AUDIO_STREAM_E:
++	case VIDEO_STREAM_S ... VIDEO_STREAM_E:
++	case PRIVATE_STREAM1:
++		if (p->mpeg =3D=3D 2 && p->found =3D=3D 9) {
++			write_ipack(p, &p->flag1, 1);
++			write_ipack(p, &p->flag2, 1);
++			write_ipack(p, &p->hlength, 1);
++		}
++
++		if (p->mpeg =3D=3D 1 && p->found =3D=3D 7)
++			write_ipack(p, &p->flag1, 1);
++
++		if (p->mpeg =3D=3D 2 && (p->flag2 & PTS_ONLY) && p->found < 14) {
++			while (c < count && p->found < 14) {
++				p->pts[p->found - 9] =3D buf[c];
++				write_ipack(p, buf + c, 1);
++				c++;
++				p->found++;
+ 			}
++			if (c =3D=3D count)
++				return count;
++		}
+
+-			if (p->mpeg =3D=3D 1 && p->found =3D=3D 7)
+-				write_ipack(p, &p->flag1, 1);
++		if (p->mpeg =3D=3D 1 && p->which < 2000) {
++			if (p->found =3D=3D 7) {
++				p->check =3D p->flag1;
++				p->hlength =3D 1;
++			}
+
+-			if (p->mpeg =3D=3D 2 && (p->flag2 & PTS_ONLY) &&
+-			    p->found < 14) {
+-				while (c < count && p->found < 14) {
+-					p->pts[p->found - 9] =3D buf[c];
+-					write_ipack(p, buf + c, 1);
+-					c++;
+-					p->found++;
+-				}
+-				if (c =3D=3D count)
+-					return count;
++			while (!p->which && c < count && p->check =3D=3D 0xff) {
++				p->check =3D buf[c];
++				write_ipack(p, buf + c, 1);
++				c++;
++				p->found++;
++				p->hlength++;
+ 			}
+
+-			if (p->mpeg =3D=3D 1 && p->which < 2000) {
+-				if (p->found =3D=3D 7) {
+-					p->check =3D p->flag1;
+-					p->hlength =3D 1;
+-				}
++			if (c =3D=3D count)
++				return count;
+
+-				while (!p->which && c < count &&
+-				       p->check =3D=3D 0xff){
+-					p->check =3D buf[c];
+-					write_ipack(p, buf + c, 1);
+-					c++;
+-					p->found++;
+-					p->hlength++;
+-				}
++			if ((p->check & 0xc0) =3D=3D 0x40 && !p->which) {
++				p->check =3D buf[c];
++				write_ipack(p, buf + c, 1);
++				c++;
++				p->found++;
++				p->hlength++;
+
++				p->which =3D 1;
++				if (c =3D=3D count)
++					return count;
++				p->check =3D buf[c];
++				write_ipack(p, buf + c, 1);
++				c++;
++				p->found++;
++				p->hlength++;
++				p->which =3D 2;
+ 				if (c =3D=3D count)
+ 					return count;
++			}
+
+-				if ((p->check & 0xc0) =3D=3D 0x40 && !p->which) {
+-					p->check =3D buf[c];
+-					write_ipack(p, buf + c, 1);
+-					c++;
+-					p->found++;
+-					p->hlength++;
++			if (p->which =3D=3D 1) {
++				p->check =3D buf[c];
++				write_ipack(p, buf + c, 1);
++				c++;
++				p->found++;
++				p->hlength++;
++				p->which =3D 2;
++				if (c =3D=3D count)
++					return count;
++			}
+
+-					p->which =3D 1;
+-					if (c =3D=3D count)
+-						return count;
+-					p->check =3D buf[c];
+-					write_ipack(p, buf + c, 1);
+-					c++;
+-					p->found++;
+-					p->hlength++;
+-					p->which =3D 2;
+-					if (c =3D=3D count)
+-						return count;
+-				}
++			if ((p->check & 0x30) && p->check !=3D 0xff) {
++				p->flag2 =3D (p->check & 0xf0) << 2;
++				p->pts[0] =3D p->check;
++				p->which =3D 3;
++			}
+
+-				if (p->which =3D=3D 1) {
+-					p->check =3D buf[c];
+-					write_ipack(p, buf + c, 1);
+-					c++;
+-					p->found++;
+-					p->hlength++;
+-					p->which =3D 2;
++			if (c =3D=3D count)
++				return count;
++			if (p->which > 2) {
++				if ((p->flag2 & PTS_DTS_FLAGS) =3D=3D PTS_ONLY) {
++					while (c < count && p->which < 7) {
++						p->pts[p->which - 2] =3D buf[c];
++						write_ipack(p, buf + c, 1);
++						c++;
++						p->found++;
++						p->which++;
++						p->hlength++;
++					}
+ 					if (c =3D=3D count)
+ 						return count;
+-				}
+-
+-				if ((p->check & 0x30) && p->check !=3D 0xff) {
+-					p->flag2 =3D (p->check & 0xf0) << 2;
+-					p->pts[0] =3D p->check;
+-					p->which =3D 3;
+-				}
+-
+-				if (c =3D=3D count)
+-					return count;
+-				if (p->which > 2) {
+-					if ((p->flag2 & PTS_DTS_FLAGS) =3D=3D PTS_ONLY) {
+-						while (c < count && p->which < 7) {
++				} else if ((p->flag2 & PTS_DTS_FLAGS) =3D=3D PTS_DTS) {
++					while (c < count && p->which < 12) {
++						if (p->which < 7)
+ 							p->pts[p->which - 2] =3D buf[c];
+-							write_ipack(p, buf + c, 1);
+-							c++;
+-							p->found++;
+-							p->which++;
+-							p->hlength++;
+-						}
+-						if (c =3D=3D count)
+-							return count;
+-					} else if ((p->flag2 & PTS_DTS_FLAGS) =3D=3D PTS_DTS) {
+-						while (c < count && p->which < 12) {
+-							if (p->which < 7)
+-								p->pts[p->which - 2] =3D buf[c];
+-							write_ipack(p, buf + c, 1);
+-							c++;
+-							p->found++;
+-							p->which++;
+-							p->hlength++;
+-						}
+-						if (c =3D=3D count)
+-							return count;
++						write_ipack(p, buf + c, 1);
++						c++;
++						p->found++;
++						p->which++;
++						p->hlength++;
+ 					}
+-					p->which =3D 2000;
++					if (c =3D=3D count)
++						return count;
+ 				}
++				p->which =3D 2000;
+ 			}
+-
+-			while (c < count && p->found < p->plength + 6) {
+-				l =3D count - c;
+-				if (l + p->found > p->plength + 6)
+-					l =3D p->plength + 6 - p->found;
+-				write_ipack(p, buf + c, l);
+-				p->found +=3D l;
+-				c +=3D l;
+-			}
+-			break;
+ 		}
+
+-		if (p->done) {
+-			if (p->found + count - c < p->plength + 6) {
+-				p->found +=3D count - c;
+-				c =3D count;
+-			} else {
+-				c +=3D p->plength + 6 - p->found;
+-				p->found =3D p->plength + 6;
+-			}
++		while (c < count && p->found < p->plength + 6) {
++			l =3D count - c;
++			if (l + p->found > p->plength + 6)
++				l =3D p->plength + 6 - p->found;
++			write_ipack(p, buf + c, l);
++			p->found +=3D l;
++			c +=3D l;
+ 		}
++		break;
++	}
+
+-		if (p->plength && p->found =3D=3D p->plength + 6) {
+-			send_ipack(p);
+-			av7110_ipack_reset(p);
+-			if (c < count)
+-				av7110_ipack_instant_repack(buf + c, count - c, p);
++	if (p->done) {
++		if (p->found + count - c < p->plength + 6) {
++			p->found +=3D count - c;
++			c =3D count;
++		} else {
++			c +=3D p->plength + 6 - p->found;
++			p->found =3D p->plength + 6;
+ 		}
  	}
-@@ -1518,7 +1518,7 @@ static int get_firmware(struct av7110 *av7110)
-
- 	/* check if the firmware is available */
- 	av7110->bin_fw =3D vmalloc(fw->size);
--	if (NULL =3D=3D av7110->bin_fw) {
-+	if (!av7110->bin_fw) {
- 		dprintk(1, "out of memory\n");
- 		release_firmware(fw);
- 		return -ENOMEM;
-@@ -2233,7 +2233,7 @@ static int frontend_init(struct av7110 *av7110)
- 				av7110->fe->ops.tuner_ops.set_params =3D alps_bsbe1_tuner_set_params;
- 				av7110->fe->tuner_priv =3D &av7110->i2c_adap;
-
--				if (dvb_attach(lnbp21_attach, av7110->fe, &av7110->i2c_adap, 0, 0) =
-=3D=3D NULL) {
-+				if (!dvb_attach(lnbp21_attach, av7110->fe, &av7110->i2c_adap, 0, 0)) =
-{
- 					printk("dvb-ttpci: LNBP21 not found!\n");
- 					if (av7110->fe->ops.release)
- 						av7110->fe->ops.release(av7110->fe);
-diff --git a/drivers/staging/media/av7110/av7110_hw.c b/drivers/staging/me=
-dia/av7110/av7110_hw.c
-index 52290a500..5a4de3e3e 100644
-=2D-- a/drivers/staging/media/av7110/av7110_hw.c
-+++ b/drivers/staging/media/av7110/av7110_hw.c
-@@ -390,7 +390,7 @@ static int __av7110_send_fw_cmd(struct av7110 *av7110,=
- u16 *buf, int length)
- 		break;
- 	}
-
--	if (type !=3D NULL) {
-+	if (type) {
- 		/* non-immediate COMMAND type */
- 		start =3D jiffies;
- 		for (;;) {
-diff --git a/drivers/staging/media/av7110/av7110_v4l.c b/drivers/staging/m=
-edia/av7110/av7110_v4l.c
-index f19e50537..0ccc34f3d 100644
-=2D-- a/drivers/staging/media/av7110/av7110_v4l.c
-+++ b/drivers/staging/media/av7110/av7110_v4l.c
-@@ -128,7 +128,7 @@ static int ves1820_writereg(struct saa7146_dev *dev, u=
-8 addr, u8 reg, u8 data)
-
- 	dprintk(4, "dev: %p\n", dev);
-
--	if (1 !=3D i2c_transfer(&av7110->i2c_adap, &msg, 1))
-+	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) !=3D 1)
- 		return -1;
- 	return 0;
++
++	if (p->plength && p->found =3D=3D p->plength + 6) {
++		send_ipack(p);
++		av7110_ipack_reset(p);
++		if (c < count)
++			av7110_ipack_instant_repack(buf + c, count - c, p);
++	}
++
+ 	return count;
  }
-@@ -140,7 +140,7 @@ static int tuner_write(struct saa7146_dev *dev, u8 add=
-r, u8 data[4])
-
- 	dprintk(4, "dev: %p\n", dev);
-
--	if (1 !=3D i2c_transfer(&av7110->i2c_adap, &msg, 1))
-+	if (i2c_transfer(&av7110->i2c_adap, &msg, 1) !=3D 1)
- 		return -1;
- 	return 0;
- }
-@@ -221,7 +221,7 @@ static int av7110_dvb_c_switch(struct saa7146_dev *dev=
-)
-
- 	dprintk(4, "%p\n", av7110);
-
--	if (0 !=3D av7110->current_input) {
-+	if (av7110->current_input !=3D 0) {
- 		dprintk(1, "switching to analog TV:\n");
- 		adswitch =3D 1;
- 		source =3D SAA7146_HPS_SOURCE_PORT_B;
-@@ -409,7 +409,7 @@ static int vidioc_s_frequency(struct file *file, void =
-*fh, const struct v4l2_fre
- 	if (!av7110->analog_tuner_flags || av7110->current_input !=3D 1)
- 		return -EINVAL;
-
--	if (V4L2_TUNER_ANALOG_TV !=3D f->type)
-+	if (f->type !=3D V4L2_TUNER_ANALOG_TV)
- 		return -EINVAL;
-
- 	msp_writereg(av7110, MSP_WR_DSP, 0x0000, 0xffe0); /* fast mute */
 =2D-
 2.34.0
 
