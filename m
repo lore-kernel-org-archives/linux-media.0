@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A5A16F8E9;
-	Thu,  9 May 2024 16:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B14116F84B;
+	Thu,  9 May 2024 16:14:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715271265; cv=none; b=TZZDw8zglfZoQ659rCZP+8YnBSAq62XVeDlKUOkrFBNtTaXot4/Ofm2CbIqnpm2/nqqiZpuN1ntCBD8HsMylLhKAOK2h0zYqQ6uyHk2VHS2D9brhEZlUcCzcK2flC2UEjtut/yX5M1w/4xMn2tr4nhcfh/FrDa8QUancBnpXW4c=
+	t=1715271268; cv=none; b=u3BJskjhNgpwIYgs7034TOdxDXHam6vu6Wi4cM0dSRWO3yvchAMaIDW/CI+7xaX+dL3VJ+egHUQRcCF09QWfSdaA/zZK6tB6V5N5eYtk5Us5gf8RUBbC+jV4hKtZhguCkAQ2nLm9ZfoP8IDa8uMAtKrMIsZ0TuNodJmEKW2axag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715271265; c=relaxed/simple;
-	bh=tUZeqYY51KElB36hTFc/HucDTocP75BzYf6Iw+gImbE=;
+	s=arc-20240116; t=1715271268; c=relaxed/simple;
+	bh=iViq08jUNSHgBicLYycSVq+/7nVBFXjEyG3kM8K4YF4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ha/+NtutqRG6qITtmdhhXq9k8w2WGZhEYifiYoY4ebjkKjDUbeGlNj9HcMMJt4l3DwW1LdQ7V0l4N0XnL/DMBUxqCKqtIcFyGoDGLX4Z0BIvPXhPa6Zh9Pz8fWCysYL3pnZjfhPMG81HOdO8JvtT601Q+SDzV0/ZaySZPTTjtlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=YxSBKFWy; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=awazqUIoEeWhJmXkWoSJIbzsKvSkq81JqpEj/dsn84HHmx6/GAis672Os0fuAy50CBE7A5OFRaFLtAPFMQNtDIKNg7kmcW3C1581eMpt5h+yCTta9OHGcMPA8DBZqpAm/CKDCcYsW8h5RbdOtI0ZzlPT4LO6HweQS+rPFQOzIMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WW4HZJ7h; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="YxSBKFWy"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WW4HZJ7h"
 Received: from localhost.localdomain (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 056042D54;
-	Thu,  9 May 2024 18:14:15 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 445062F95;
+	Thu,  9 May 2024 18:14:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1715271256;
-	bh=tUZeqYY51KElB36hTFc/HucDTocP75BzYf6Iw+gImbE=;
+	s=mail; t=1715271257;
+	bh=iViq08jUNSHgBicLYycSVq+/7nVBFXjEyG3kM8K4YF4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YxSBKFWyWVCZbTzSUwb4TNmd7w22DFW8FvxEACMD2Y+ChVFa7UfwT59jJvN0hkMRV
-	 NKKQ6MIu7pWP+N7oBQrS5/vIeKqSZ7+VNt3XmBAB/t7OLDySlLF7f6XfvflLCZqx75
-	 vR8+QrehF6tjhy6M0h2hLsiMcKYiXyE66OC8DtXs=
+	b=WW4HZJ7hvp/izEoqiC4rN/W3l9D/3w6mrI8v20rWzl1MKyOdxFFMdd4o07kECTbRC
+	 8BZQBKgmXxULf2z5y0UXotfem3/GGDCd6nR2bmm5Pzg9YtQc2SQbZusR4czKRbK00j
+	 YLXR4mFLfqn2H6tTpEjtXyGrGqoxqKQ/mtbPW9ps=
 From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
@@ -34,11 +34,10 @@ To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	linux-media@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v3 03/11] media: rcar-csi2: Cleanup subdevice in remove()
-Date: Thu,  9 May 2024 18:13:53 +0200
-Message-ID: <20240509161403.111789-4-jacopo.mondi@ideasonboard.com>
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3 05/11] media: adv748x-csi2: Implement enum_mbus_codes
+Date: Thu,  9 May 2024 18:13:55 +0200
+Message-ID: <20240509161403.111789-6-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240509161403.111789-1-jacopo.mondi@ideasonboard.com>
 References: <20240509161403.111789-1-jacopo.mondi@ideasonboard.com>
@@ -50,29 +49,89 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cleanup the V4L2 subdevice in the driver's remove function to
-ensure its async connection are freed, and guarantee in future that
-the subdev active state is cleaned up.
+Define a list of supported mbus codes for the TXA and TXB CSI-2
+transmitters and implement the enum_mbus_code operation.
 
-Fixes: 769afd212b16 ("media: rcar-csi2: add Renesas R-Car MIPI CSI-2 receiver driver")
+The TXB transmitter only support YUV422 while the TXA one supports
+multiple formats as reported by the chip's manual in section 9.7.
+but the HDMI and AFE subdevices only provide RGB888 and YUV422, so only
+list those ones here.
+
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-csi2.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 45 ++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/drivers/media/platform/renesas/rcar-csi2.c b/drivers/media/platform/renesas/rcar-csi2.c
-index 249e58c77176..2d464e43a5be 100644
---- a/drivers/media/platform/renesas/rcar-csi2.c
-+++ b/drivers/media/platform/renesas/rcar-csi2.c
-@@ -1938,6 +1938,7 @@ static void rcsi2_remove(struct platform_device *pdev)
- 	v4l2_async_nf_unregister(&priv->notifier);
- 	v4l2_async_nf_cleanup(&priv->notifier);
- 	v4l2_async_unregister_subdev(&priv->subdev);
-+	v4l2_subdev_cleanup(&priv->subdev);
+diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+index 5b265b722394..29b18b6c8b0e 100644
+--- a/drivers/media/i2c/adv748x/adv748x-csi2.c
++++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+@@ -14,6 +14,15 @@
  
- 	pm_runtime_disable(&pdev->dev);
+ #include "adv748x.h"
  
++static const unsigned int adv748x_csi2_txa_fmts[] = {
++	MEDIA_BUS_FMT_UYVY8_1X16,
++	MEDIA_BUS_FMT_RGB888_1X24,
++};
++
++static const unsigned int adv748x_csi2_txb_fmts[] = {
++	MEDIA_BUS_FMT_UYVY8_1X16,
++};
++
+ int adv748x_csi2_set_virtual_channel(struct adv748x_csi2 *tx, unsigned int vc)
+ {
+ 	return tx_write(tx, ADV748X_CSI_VC_REF, vc << ADV748X_CSI_VC_REF_SHIFT);
+@@ -139,6 +148,41 @@ static const struct v4l2_subdev_video_ops adv748x_csi2_video_ops = {
+  * But we must support setting the pad formats for format propagation.
+  */
+ 
++static int adv748x_csi2_enum_mbus_code(struct v4l2_subdev *sd,
++				       struct v4l2_subdev_state *sd_state,
++				       struct v4l2_subdev_mbus_code_enum *code)
++{
++	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
++	const unsigned int *codes = is_txa(tx) ?
++				    adv748x_csi2_txa_fmts :
++				    adv748x_csi2_txb_fmts;
++	size_t num_fmts = is_txa(tx) ? ARRAY_SIZE(adv748x_csi2_txa_fmts)
++				     : ARRAY_SIZE(adv748x_csi2_txb_fmts);
++
++	/*
++	 * The format available on the source pad is the one applied on the sink
++	 * pad.
++	 */
++	if (code->pad == ADV748X_CSI2_SOURCE) {
++		struct v4l2_mbus_framefmt *fmt;
++
++		if (code->index)
++			return -EINVAL;
++
++		fmt = v4l2_subdev_state_get_format(sd_state, ADV748X_CSI2_SINK);
++		code->code = fmt->code;
++
++		return 0;
++	}
++
++	if (code->index >= num_fmts)
++		return -EINVAL;
++
++	code->code = codes[code->index];
++
++	return 0;
++}
++
+ static struct v4l2_mbus_framefmt *
+ adv748x_csi2_get_pad_format(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *sd_state,
+@@ -228,6 +272,7 @@ static int adv748x_csi2_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad
+ }
+ 
+ static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
++	.enum_mbus_code = adv748x_csi2_enum_mbus_code,
+ 	.get_fmt = adv748x_csi2_get_format,
+ 	.set_fmt = adv748x_csi2_set_format,
+ 	.get_mbus_config = adv748x_csi2_get_mbus_config,
 -- 
 2.44.0
 
