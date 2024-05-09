@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D15C2ED
-	for <linux-media@vger.kernel.org>; Thu,  9 May 2024 18:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D561F1A2C09;
+	Thu,  9 May 2024 18:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715279638; cv=none; b=Ld8yWwRya98ZypENBZ7Ss2v93qdYfC+TZ01MOWgz4YlBQme3H1mFiaQlSHcSxbUxDnL0SurMu6w/+PYaNaL0EUG1ElZdRjxh3b3KOWrySX0uLDs5Bo3CVODSny+h5KxIeLfOYhmDpDGB5ZHzSlpiSXRTIE1hEPlckyw+euTHzrY=
+	t=1715279953; cv=none; b=Zd09rOGVYu5WXrCGsnfdyqAI7NM5838iMqB6EpAo1S83irxCsVYeRddvxifHQtJaWJpVYTxXJyG/l4O+Lx751nydZKFzKx5ckqCK2uQGK/vLuILBciCd/dYI4tT3Ee+9ps/dfU1kxphbbXOP4vo6rREz4d2j+Wuv7PXruE7Mwqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715279638; c=relaxed/simple;
-	bh=GBIngwQnBwInOu3pKMgdJPg7gzgsSk0bro3PQaaz/JM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MWTAH+r5pv8YIsxBaEuyKAHdxenIMLjahLd42GdTur3XWBxnyzqZ2j/wO70SnBzd8hRtsEhXSKIRvwJh+OsJACHjCAZMpl9AJtHS2MjIPKeG3cEsvtXCslE2sRhsE95nKnt5fcezxJ3kay3FjvMtmFqWBEu6MZwq6b1vp50AtEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cVFmwDd4; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1715279953; c=relaxed/simple;
+	bh=Th/MNqgPiNDw0WzqEWeeybcUPLMcePATe5G9KwRXADQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p24j91pDqYskvWUWK2Vf7fjphzBH8Kv06mXnk7RT6Rj4vNJGLOvxHpVX/GYONx1ei1j5eLnQAsmDy0BSq6n5+O8QdQYV2jqimIlgRS2Nqr7vE70mXY1eWNm1DR9Svwub+SZiUObctMu5VExctPelMdL/I8fh2b4cLfheL/pUSz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=yfWa02jj; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVFmwDd4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715279637; x=1746815637;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GBIngwQnBwInOu3pKMgdJPg7gzgsSk0bro3PQaaz/JM=;
-  b=cVFmwDd4mZdcdk1DhfvcfyDjH/RWCl9KG1D9eXcNFy+rH5203nvGhdUe
-   6ZNMQ9rq7MaA1ygaT+ONo0Z29JxUMIiLK4AYHgUbLwVCt/tl9mBscOhlw
-   S1cpZb3eOaGlxF7G0w7eqSbpCAs7kk2bBfNvK4ZRw/F4GXD1ZZPQfb8jv
-   1viyg1ZtbBB7ZzJv+9GHCks9e/KO6wTlAnPSwLysr11sRd3h9Qsnx7sny
-   KKGoLOAESqblta/h56cvG2HZVSLAdq836nB57PLJZarI/F8DICd8MFNd7
-   AggbHaxwZkuTKClS1TtszluX0lzrET3ryzotndLAeexZPK1Pv0o0YPX8c
-   A==;
-X-CSE-ConnectionGUID: rTMYcWChS+mFX8XhOMlqVw==
-X-CSE-MsgGUID: ax2fNHAgRO6HaHuLAe+r6Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="15054709"
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="15054709"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 11:33:56 -0700
-X-CSE-ConnectionGUID: 1lflmClqQsirNbG3IBuZkQ==
-X-CSE-MsgGUID: lyGCoOSPTcijxN2my1qgWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,148,1712646000"; 
-   d="scan'208";a="29294262"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2024 11:33:55 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0EB4E11F9C0;
-	Thu,  9 May 2024 21:33:52 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1s58aV-003vLI-39;
-	Thu, 09 May 2024 21:33:51 +0300
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: Bingbu Cao <bingbu.cao@intel.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>
-Subject: [PATCH 1/1] media: intel/ipu6: Don't print user-triggerable errors to kernel log
-Date: Thu,  9 May 2024 21:33:41 +0300
-Message-Id: <20240509183341.935400-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="yfWa02jj"
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 449Id0lH081748;
+	Thu, 9 May 2024 13:39:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1715279940;
+	bh=RrQgSOOB0K/kPhInsXq/vXswdEz0kzfHdTfIqv6m4Mo=;
+	h=From:To:CC:Subject:Date;
+	b=yfWa02jjcYzF/osgpJ0mJZdUssh7tei0B7qA39MGTbBiFhWZb5b4pkre5F41HCcfq
+	 NOQ/uR09TDsQxuz1GH2nYVtFzcjrDSgbPiAV8Ii44anuB5FqHQFxIGrSbhiwFe0/Uj
+	 CAh7u3fYZKiW1hVlHlozolT8sU5ch9n2Ndl+bInA=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 449Id0V1002794
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 9 May 2024 13:39:00 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 9
+ May 2024 13:39:00 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 9 May 2024 13:38:59 -0500
+Received: from localhost (ti.dhcp.ti.com [172.24.227.95] (may be forged))
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 449Icxfo095268;
+	Thu, 9 May 2024 13:38:59 -0500
+From: Devarsh Thakkar <devarsht@ti.com>
+To: <mchehab@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <hverkuil-cisco@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <benjamin.gaignard@collabora.com>, <sebastian.fricke@collabora.com>
+CC: <laurent.pinchart@ideasonboard.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
+        <b-brnich@ti.com>, <detheridge@ti.com>, <p-mantena@ti.com>,
+        <vijayp@ti.com>, <andrzej.p@collabora.com>, <nicolas@ndufresne.ca>
+Subject: [PATCH v7 1/8] media: dt-bindings: Add Imagination E5010 JPEG Encoder
+Date: Fri, 10 May 2024 00:08:58 +0530
+Message-ID: <20240509183858.4061100-1-devarsht@ti.com>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -64,63 +61,145 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Use dev_dbg() for printing messages on user-triggerable coditions that
-have no relation to driver or hardware issues.
+Add dt-bindings for Imagination E5010 JPEG Encoder [1] which is implemented
+as stateful V4L2 M2M driver.
 
-Fixes: 3c1dfb5a69cf ("media: intel/ipu6: input system video nodes and buffer queues")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+The device supports baseline encoding with two different quantization
+tables and compression ratio as demanded.
+
+Minimum resolution supported is 64x64 and Maximum resolution supported is
+8192x8192.
+
+[1]:  AM62A TRM (Section 7.6 is for JPEG Encoder)
+Link: https://www.ti.com/lit/pdf/spruj16
+
+Co-developed-by: David Huang <d-huang@ti.com>
+Signed-off-by: David Huang <d-huang@ti.com>
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/media/pci/intel/ipu6/ipu6-isys-queue.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+V2: No change
+V3:
+- Add vendor specific compatible
+- Update reg names
+- Update clocks to 1
+- Fix dts example with proper naming
+V4:
+ - Use ti-specific compatible ti,am62a-jpeg-enc as secondary one
+ - Update commit message and title
+ - Remove clock-names as only single clock
+V5:
+ - Add Reviewed-By tag
+V6:
+ - No change
+V7:
+ - No change
+---
+ .../bindings/media/img,e5010-jpeg-enc.yaml    | 75 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 80 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
 
-diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-index 11cd2c977abe..40a8ebfcfce2 100644
---- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-+++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
-@@ -34,7 +34,7 @@ static int queue_setup(struct vb2_queue *q, unsigned int *num_buffers,
- 	if (!*num_planes) {
- 		sizes[0] = size;
- 	} else if (sizes[0] < size) {
--		dev_err(dev, "%s: queue setup: size %u < %u\n",
-+		dev_dbg(dev, "%s: queue setup: size %u < %u\n",
- 			av->vdev.name, sizes[0], size);
- 		return -EINVAL;
- 	}
-@@ -359,7 +359,7 @@ static void buf_queue(struct vb2_buffer *vb)
- 	 */
- 	ret = buffer_list_get(stream, &bl);
- 	if (ret < 0) {
--		dev_warn(dev, "No buffers available\n");
-+		dev_dbg(dev, "No buffers available\n");
- 		goto out;
- 	}
+diff --git a/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+new file mode 100644
+index 000000000000..085020cb9e61
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/img,e5010-jpeg-enc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Imagination E5010 JPEG Encoder
++
++maintainers:
++  - Devarsh Thakkar <devarsht@ti.com>
++
++description: |
++  The E5010 is a JPEG encoder from Imagination Technologies implemented on
++  TI's AM62A SoC. It is capable of real time encoding of YUV420 and YUV422
++  inputs to JPEG and M-JPEG. It supports baseline JPEG Encoding up to
++  8Kx8K resolution.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: ti,am62a-jpeg-enc
++          - const: img,e5010-jpeg-enc
++      - const: img,e5010-jpeg-enc
++
++  reg:
++    items:
++      - description: The E5010 core register region
++      - description: The E5010 mmu register region
++
++  reg-names:
++    items:
++      - const: core
++      - const: mmu
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      jpeg-encoder@fd20000 {
++          compatible = "img,e5010-jpeg-enc";
++          reg = <0x00 0xfd20000 0x00 0x100>,
++                <0x00 0xfd20200 0x00 0x200>;
++          reg-names = "core", "mmu";
++          clocks = <&k3_clks 201 0>;
++          power-domains = <&k3_pds 201 TI_SCI_PD_EXCLUSIVE>;
++          interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c675fc296b19..6f0f077e0427 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10762,6 +10762,11 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/auxdisplay/img,ascii-lcd.yaml
+ F:	drivers/auxdisplay/img-ascii-lcd.c
  
-@@ -426,7 +426,7 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
- 
- 	if (format.width != ipu6_isys_get_frame_width(av) ||
- 	    format.height != ipu6_isys_get_frame_height(av)) {
--		dev_err(dev, "wrong width or height %ux%u (%ux%u expected)\n",
-+		dev_dbg(dev, "wrong width or height %ux%u (%ux%u expected)\n",
- 			ipu6_isys_get_frame_width(av),
- 			ipu6_isys_get_frame_height(av), format.width,
- 			format.height);
-@@ -521,13 +521,13 @@ static int start_streaming(struct vb2_queue *q, unsigned int count)
- 
- 	ret = ipu6_isys_setup_video(av, &source_entity, &nr_queues);
- 	if (ret < 0) {
--		dev_err(dev, "failed to setup video\n");
-+		dev_dbg(dev, "failed to setup video\n");
- 		goto out_return_buffers;
- 	}
- 
- 	ret = ipu6_isys_link_fmt_validate(aq);
- 	if (ret) {
--		dev_err(dev,
-+		dev_dbg(dev,
- 			"%s: link format validation failed (%d)\n",
- 			av->vdev.name, ret);
- 		goto out_pipeline_stop;
++IMGTEC JPEG ENCODER DRIVER
++M:	Devarsh Thakkar <devarsht@ti.com>
++S:	Supported
++F:	Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
++
+ IMGTEC IR DECODER DRIVER
+ S:	Orphan
+ F:	drivers/media/rc/img-ir/
 -- 
-2.39.2
+2.39.1
 
