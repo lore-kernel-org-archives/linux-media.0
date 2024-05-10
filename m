@@ -1,118 +1,154 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD7B15FA62;
-	Fri, 10 May 2024 10:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6F0165FDC;
+	Fri, 10 May 2024 10:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715335863; cv=none; b=gytQz1fbsTAc8wso96mZpSGvjLNrDd08E5AtVcjJxpBHKUf/nfOlz7rm4FgM/iKakE0HFnMZCuyzbcSMYTRhuinmXnZoD63ryReFKV6YhhZopeqxrBBUTSPW8bMT/grudIiqSitTL7kmfpmKWMOjDLSmnxj3YBRR3tO58CXHuZM=
+	t=1715336038; cv=none; b=l7jwTAIpvJFafkT3PWxRcjiQX8YfuUlmzCR8to0IyxGQm7MhIfRsaaOCtZsCyZn8oQzh1wAtVrbBCedBTiHpC1izzAsMwmgK/A0UmOuEXILG1FRHwOnMwsfiyxDGysA+9CMuz55s2jEltwdxz2kCS3kRBdtvAqxEp3lBH2T9+1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715335863; c=relaxed/simple;
-	bh=ZMLWh8Qj4mJWhLapzw2DXD+cmGmkXcA9W7KIGpEo4lg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VG5u/0iiCRcdG3weNcgbDuc4IUcfWdTydbNPwR4pTOFe/LFYHU67GjyI6GiL4X7fmhqQusJNKfn7bR//YuoHjA68jye8fkIbPR0pUvCe6MumXPQ01vSLXiVOUWNH0+o/kVUNugW51BGOipnPdnIYqT1UwbPJrwh4ssEgs9W/k1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=db7NsSpJ; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715336038; c=relaxed/simple;
+	bh=Zz5xsLLA2yKO/jmoajp3ttU17Tlv0yLtd31mifiBwZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fa1S2PTrcUfmgv15YRkY4gjlyp+hrtufqHQip4PabPV3/gVYxjp+ZoSINW0fBbl2mQ3E51ZGuiHbmxkRaAiIWW8iGabwX0DIh1BV9hYQVZ1EAKEbtFIf9jOqVU1tHtbwQMNiESqNP+IPByAwZwKYDxq+2uKJOZfR46XCMo+iw68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tLOBnQLt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="db7NsSpJ"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-792b8ebc4eeso127652085a.1;
-        Fri, 10 May 2024 03:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715335860; x=1715940660; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qmNXjtQqInK2DrYq2plkekwqQKtx06eUbKR+MF8j63Q=;
-        b=db7NsSpJH2tOG7yChlNBH/LBRRQep9N+MtF+GB/ZvweC1uzuuJtXi2JTYzzuGX6w7y
-         S9fTNepUcVNoz2QJ5PYxnnPz0EKUV78Gn/PAn1nS9Lzdpjvd/SUwm7HlWT9BGUTg2enD
-         8U8ro92siKdko6pPcYZdtMdizKfVSUjwUfBJp137azl24fDoIWq7hYq3i5X5kTX87imV
-         KPey2j9OyM3QZDHuqEOgeMrUvWBaclY+1MEOWTVpEKpfgGxPz9DI72YwuupyV0VgMqrE
-         1T3bU50HpknTkRXp1epMYw7Pzs/tfSvKOthk8BS1r5NRVbCT+fg4qMJYfztFSLL3FSkz
-         wtxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715335860; x=1715940660;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qmNXjtQqInK2DrYq2plkekwqQKtx06eUbKR+MF8j63Q=;
-        b=F4TYCZtEQf7Zma0l1nCap99615ID0q8KhLwu2vQr+fzsd9RLPksl3IQStOUVPyBQQY
-         8CiiSTRVwn884K6Iaq8DNE2vPKSBDq2FdnK/nX+bu+VHHf/5u1DC95BQ27T6izEwo4zF
-         yGqX644K5A3kw0C2PStaqB3BiDnB4xB9Z1y6Iq7UcTceKQTPa29wP4nR7F7iZ36j1uWY
-         T4Sgf5pI/XrX7eEPuu2qnx8BZLIEwtNRIygqh5Ih/F98X9LO1wcFu3cxrzE/USjJZTIG
-         cB9m29FMwUuK9IKsi9381QJfXlf2B/v7aHb8Qn2Co4/OKyDs5cTcbKIC+R4Hq7Nr654Y
-         lc4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWYITPveQXr1YvawrBfWERTK42wqGV5ITxCoEymCiBs95Y1+dGlTeqBkX31l3K2DaQIiJ8TtH/E4Hg8iZWJwEi/3kJG0oZGSOBZRV5jDNdMhGx8YrMWQSMIHtkzELe6FT0XD2EGsDH0yjY=
-X-Gm-Message-State: AOJu0YxEtJKRZWTWm1ra5BiBmcbbUQUPM1O0/i4l1Ky/Dj9/0WfTdfN2
-	zxATHLjL1hxd36bVca41GfP62H4GgX/WRViQWDXG3p4VzAmsXbaB
-X-Google-Smtp-Source: AGHT+IHx6PD8MXyuK4ND+nNLwcCP8oPAW9GAQy4H7bRXw63mJxSR03olceHdYeSFseK083XTIGi4yQ==
-X-Received: by 2002:a05:620a:a45:b0:790:e65f:915f with SMTP id af79cd13be357-792c75ac087mr225689585a.41.1715335860198;
-        Fri, 10 May 2024 03:11:00 -0700 (PDT)
-Received: from debug-VirtualBox.phub.net.cable.rogers.com (pool-174-114-162-125.cpe.net.cable.rogers.com. [174.114.162.125])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-792bf2fd1a6sm164060385a.91.2024.05.10.03.10.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 03:10:59 -0700 (PDT)
-From: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
-To: sakari.ailus@linux.intel.com,
-	dave.stevenson@raspberrypi.com,
-	jacopo@jmondi.org,
-	mchehab@kernel.org,
-	julia.lawall@inria.fr
-Cc: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com
-Subject: [PATCH] media: i2c: replacing of_node_put with __free(device_node)
-Date: Fri, 10 May 2024 06:03:24 -0400
-Message-Id: <20240510100324.5961-1-abdulrasaqolawani@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tLOBnQLt"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D0CAB289;
+	Fri, 10 May 2024 12:13:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1715336025;
+	bh=Zz5xsLLA2yKO/jmoajp3ttU17Tlv0yLtd31mifiBwZ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tLOBnQLtBKoc42pAMyWc93bBOxlfWuV2zs/xKdHOrppa+nh5PeOCfUXDDZ0OOr/nH
+	 Ny3dSpSt4YGc91v0oaMdOkNL7j34h7H0hSAccasrWC9fdWLbizoMjnWIjTZV6CPFE5
+	 wtTkGPufUuv6WGoj9SZ84JjBvRYZJSqFUbofPjsE=
+Date: Fri, 10 May 2024 13:13:40 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] media: staging: max96712: Store format in subdev active
+ state
+Message-ID: <20240510101340.GG6407@pendragon.ideasonboard.com>
+References: <20240510100347.102392-1-niklas.soderlund+renesas@ragnatech.se>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240510100347.102392-1-niklas.soderlund+renesas@ragnatech.se>
 
-Replaced instance of of_node_put with __free(device_node)
-to protect against any memory leaks due to future changes
-in control flow.
+Hi Niklas,
 
-Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-Signed-off-by: Abdulrasaq Lawani <abdulrasaqolawani@gmail.com>
----
- drivers/media/i2c/ov5647.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Thank you for the patch.
 
-diff --git a/drivers/media/i2c/ov5647.c b/drivers/media/i2c/ov5647.c
-index 7e1ecdf2485f..d593dba092e3 100644
---- a/drivers/media/i2c/ov5647.c
-+++ b/drivers/media/i2c/ov5647.c
-@@ -1360,23 +1360,19 @@ static int ov5647_parse_dt(struct ov5647 *sensor, struct device_node *np)
- 	struct v4l2_fwnode_endpoint bus_cfg = {
- 		.bus_type = V4L2_MBUS_CSI2_DPHY,
- 	};
--	struct device_node *ep;
-+	struct device_node *ep __free(device_node) = of_graph_get_endpoint_by_regs(np, 0, -1);
- 	int ret;
- 
--	ep = of_graph_get_endpoint_by_regs(np, 0, -1);
- 	if (!ep)
- 		return -EINVAL;
- 
- 	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &bus_cfg);
- 	if (ret)
--		goto out;
-+		return ret;
- 
- 	sensor->clock_ncont = bus_cfg.bus.mipi_csi2.flags &
- 			      V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK;
- 
--out:
--	of_node_put(ep);
--
- 	return ret;
- }
- 
+On Fri, May 10, 2024 at 12:03:47PM +0200, Niklas Söderlund wrote:
+> Create and store the subdevice format in the subdevices active state.
+> This change do not have a huge effect on the driver as it do not yet
+> support changing the format.
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> ---
+> Hello,
+> 
+> This change is mostly to align all driver used in the R-Car VIN pipeline
+> to use the same set of API and to make it easier to extend them in
+> tandem going forward.
+> 
+> This should be seen as a compliment to Jacopo's larger work in "[PATCH
+> v3 00/11] media: renesas: rcar-csi2: Use the subdev active state" which
+> updates other drivers in the VIN pipeline to use the active state.
+> ---
+>  drivers/staging/media/max96712/max96712.c | 36 +++++++++++++++++------
+>  1 file changed, 27 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/staging/media/max96712/max96712.c b/drivers/staging/media/max96712/max96712.c
+> index c44145284aa1..2da65ccd2c57 100644
+> --- a/drivers/staging/media/max96712/max96712.c
+> +++ b/drivers/staging/media/max96712/max96712.c
+> @@ -242,21 +242,34 @@ static const struct v4l2_subdev_video_ops max96712_video_ops = {
+>  	.s_stream = max96712_s_stream,
+>  };
+>  
+> -static int max96712_get_pad_format(struct v4l2_subdev *sd,
+> -				   struct v4l2_subdev_state *sd_state,
+> -				   struct v4l2_subdev_format *format)
+> +static int max96712_init_state(struct v4l2_subdev *sd,
+> +			       struct v4l2_subdev_state *state)
+>  {
+> -	format->format.width = 1920;
+> -	format->format.height = 1080;
+> -	format->format.code = MEDIA_BUS_FMT_RGB888_1X24;
+> -	format->format.field = V4L2_FIELD_NONE;
+> +	static const struct v4l2_mbus_framefmt default_fmt = {
+> +		.width          = 1920,
+> +		.height         = 1080,
+> +		.code           = MEDIA_BUS_FMT_RGB888_1X24,
+> +		.colorspace     = V4L2_COLORSPACE_SRGB,
+> +		.field          = V4L2_FIELD_NONE,
+> +		.ycbcr_enc      = V4L2_YCBCR_ENC_DEFAULT,
+> +		.quantization   = V4L2_QUANTIZATION_DEFAULT,
+> +		.xfer_func      = V4L2_XFER_FUNC_DEFAULT,
+> +	};
+> +	struct v4l2_mbus_framefmt *fmt;
+> +
+> +	fmt = v4l2_subdev_state_get_format(state, 0);
+> +	*fmt = default_fmt;
+>  
+>  	return 0;
+>  }
+>  
+> +static const struct v4l2_subdev_internal_ops max96712_internal_ops = {
+> +	.init_state = max96712_init_state,
+> +};
+> +
+>  static const struct v4l2_subdev_pad_ops max96712_pad_ops = {
+> -	.get_fmt = max96712_get_pad_format,
+> -	.set_fmt = max96712_get_pad_format,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+> +	.set_fmt = v4l2_subdev_get_fmt,
+>  };
+>  
+>  static const struct v4l2_subdev_ops max96712_subdev_ops = {
+> @@ -293,6 +306,7 @@ static int max96712_v4l2_register(struct max96712_priv *priv)
+>  	long pixel_rate;
+>  	int ret;
+>  
+> +	priv->sd.internal_ops = &max96712_internal_ops;
+>  	v4l2_i2c_subdev_init(&priv->sd, priv->client, &max96712_subdev_ops);
+>  	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+>  	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
+> @@ -324,6 +338,10 @@ static int max96712_v4l2_register(struct max96712_priv *priv)
+>  
+>  	v4l2_set_subdevdata(&priv->sd, priv);
+>  
+
+I think it would be nice to already use the control handler lock as the
+active state lock. Apart from that, the patch looks good to me.
+
+> +	ret = v4l2_subdev_init_finalize(&priv->sd);
+> +	if (ret)
+> +		goto error;
+> +
+>  	ret = v4l2_async_register_subdev(&priv->sd);
+>  	if (ret < 0) {
+>  		dev_err(&priv->client->dev, "Unable to register subdevice\n");
+
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
