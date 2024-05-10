@@ -1,125 +1,100 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D526A7E58F
-	for <linux-media@vger.kernel.org>; Fri, 10 May 2024 13:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A1817106E;
+	Fri, 10 May 2024 14:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715348618; cv=none; b=MbWspuOBkFqAhfumqMcLLoAezuZ32B+muVVycvvsZdFEZh1gYMyGk3e3bVAehC7njITEDChUqwRczuY35BohHqsdEP6jTa0Br4Zaw1nBZ966lX1UTWinplVCfoZKPzQku/cc6yP0kYrkgulL7snYDtzPJhxcoxpRklVRoUfcftw=
+	t=1715352922; cv=none; b=kMN8RX2UIDCrN64cGNf4AXZuTVF3Hu9ioRXD4jR2WwoVxu8jWWxjjCikiX0q71icnZhi7gYeswB5dLd/vCfB7lTBoyDnfChTaLdtnozPmjLVfb1YwpvQtgfsC/5F9I9zncoaQ7e4TADdyDLq3wNgU26wPt9IMS3dUjasZ/xzhNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715348618; c=relaxed/simple;
-	bh=BoLQvBVJOoCjk+iZrCEftQdwEpUcH5Vtc6iOYEj5zqs=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YcCy6w3XQuAiyc/C5pxnY/MqGGR0fiA2XTlqmxW3ySfdNJ00Z0gypDyDgT395+R6kUfdGGcUhcwtmu3AWwSs9aYsKK+M+Z4ysScwL05OHkW4q/G5Ev24d2Jfl/blkGZSCr/NT9YwQ0U6mC/LFprfh7lLwezXAkwKOXUhqgE63mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KD61kaEB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715352922; c=relaxed/simple;
+	bh=bpcTd66QCrqPbkU8DpdDZoGNAxlz51z4EqF2NnOZKrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rio0qnnRG6Cwyp71XJ/PtVRrvyg5xwDkWqbGdt0yUJEoDEWvGSCTbpWbKe8SB5wQck3LW6Fz3hVn+CHOkDdaDgeTPd2bJUX8F+Ed6cduk+QDsilhyrZ0eEyA0hWDK6SmdfPBqqm3V1kcoQBBYx7Hkk65XcCJYZjgbZtIqpR8L/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MaRxi373; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KD61kaEB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715348615;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=EGPFRAm20EF2gNKmn5OIm+wKsmkKPz5p/hST/VOsK7U=;
-	b=KD61kaEBMUKk0D0NY3QIztfrlLY6w4nEBiA/oOaEqWlqev6tmJW3TCnZV0jpGAVKXr4uXq
-	0oy8FCSHmlKvbuhdZgT6FYtFDIQckNbM+FTKYyAy9AmEjxuYzNdPaB7XyladD0mE8vU6+s
-	l7Iz4G1fdMmffTyw4p5NiQeyQrYiLuI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-630-RkAVSjXyMYCP04LLMGCxHw-1; Fri, 10 May 2024 09:43:22 -0400
-X-MC-Unique: RkAVSjXyMYCP04LLMGCxHw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E746E800656;
-	Fri, 10 May 2024 13:43:21 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.45.224.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CDB475751BE;
-	Fri, 10 May 2024 13:43:18 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-To: virtio-dev@lists.oasis-open.org
-Cc: cohuck@redhat.com,
-	alex.bennee@linaro.org,
-	changyeon@google.com,
-	daniel.almeida@collabora.com,
-	mst@redhat.com,
-	virtio-comment@lists.oasis-open.org,
-	linux-media@vger.kernel.org,
-	eballetb@redhat.com,
-	gurchetansingh@google.com,
-	nicolas.dufresne@collabora.com,
-	acourbot@chromium.org,
-	Alexander.Gordeev@opensynergy.com,
-	Albert Esteve <aesteve@redhat.com>
-Subject: [PATCH 0/1] virtio-media: Add device specification
-Date: Fri, 10 May 2024 15:43:16 +0200
-Message-ID: <20240510134317.3201746-1-aesteve@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MaRxi373"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715352922; x=1746888922;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bpcTd66QCrqPbkU8DpdDZoGNAxlz51z4EqF2NnOZKrc=;
+  b=MaRxi373Xj+T+ENi86sw5nmH6CjoMDD0Cobk9crTgKv+Puo3j08O6A82
+   WoZ0ar/W7djC/MBZjq5wjrc/kwBH1paJSDW+KBq33PwtGi0/HlQ7hRZmg
+   zsL8ZzDm8EvEmbhdFws8CVuSEWSus14jqYkPtB1hUrOWSy1yrc3Zr1FIZ
+   Eqpdn8N+fPRMpf2HE3NJpc0SfSxUg10G0Nm0+dOsd3c6d3qyJz+3zu2MX
+   IaVg5MHA1+XW79G7bzsdMmIb4OMRq6Eh8E2+lKPAZCiK1HEQ6tXuFXd2c
+   V0IASZs4UtV1XSduUSKHmSqY633jlhPqU92bxQtASSfOd7vEAEv8wYJg8
+   A==;
+X-CSE-ConnectionGUID: nWc46PdOSPOjeOFhyoQQhA==
+X-CSE-MsgGUID: hGeimp1QQeCFCWCdAVxcOA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="15170026"
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="15170026"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 07:55:21 -0700
+X-CSE-ConnectionGUID: s50Lh8JFRIGHTT0f+bQ46Q==
+X-CSE-MsgGUID: 1fYDxZKuRv+WCeOt5FRj5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="34078575"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 07:55:13 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s5ReP-000000068S4-2BgO;
+	Fri, 10 May 2024 17:55:09 +0300
+Date: Fri, 10 May 2024 17:55:09 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Devarsh Thakkar <devarsht@ti.com>
+Cc: mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, hverkuil-cisco@xs4all.nl,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, benjamin.gaignard@collabora.com,
+	sebastian.fricke@collabora.com, laurent.pinchart@ideasonboard.com,
+	praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
+	j-luthra@ti.com, b-brnich@ti.com, detheridge@ti.com,
+	p-mantena@ti.com, vijayp@ti.com, andrzej.p@collabora.com,
+	nicolas@ndufresne.ca, akpm@linux-foundation.org,
+	gregkh@linuxfoundation.org, adobriyan@gmail.com,
+	p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+	jani.nikula@intel.com, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v7 0/8] [PATCH v7 0/8] Add V4L2 M2M Driver for E5010 JPEG
+ Encoder
+Message-ID: <Zj41TZllCRvEdYsW@smile.fi.intel.com>
+References: <20240509183849.4060521-1-devarsht@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240509183849.4060521-1-devarsht@ti.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi,
+On Fri, May 10, 2024 at 12:08:49AM +0530, Devarsh Thakkar wrote:
+> This adds support for V4L2 M2M based driver for E5010 JPEG Encoder
+> which is a stateful JPEG encoder from Imagination technologies
+> and is present in TI AM62A SoC.
+> 
+> While adding support for it, following additional framework changes were
+> made:
+>  - Moved reference quantization and huffman tables provided in
+>    ITU-T-REC-T.81 to v4l2-jpeg.c as suggested in mailing list [1].
+>  - Add macros to round to closest integer (either higher or lower) while
+>    rounding in order of 2.
 
-This a formal attempt of including virtio-media
-device specification.
-
-Virtio-media came from a discussion on virtio-dev
-mailing list, which lead to presenting virtio-v4l2[1]
-specification as an alternative to virtio-video.
-
-Later, virtio-v4l2 was renamed to virtio-media[2]
-and published through:
-
-https://github.com/chromeos/virtio-media
-
-The repository above includes a guest V4L2 driver able
-to pass v4l2-compliance when proxying the vivid/vicodec
-virtual devices or an actual UVC camera using the
-crosvm V4L2 proxy device. Steps to reproduce are
-also detailed[3].
-
-There is some overlap with virtio-video in regards
-to which devices it can handle. However,
-as virtio-media will likely be the virtualization
-solution for ChromeOS (already landed into the chromeos
-organization) and possibly other Google projects for
-media devices, it would be desirable to include the
-specification in the next virtio release despite
-the aforementioned overlap.
-
-The device ID in this document differs from
-the ID in the virtio-media project repository.
-And it will probably need some discussion on which
-would be the correct definitive ID.
-
-Full PDF: https://drive.google.com/file/d/1PG1YxzbSvQHPphFhbUKyKKdvuwO6shyi/view?usp=sharing
-PDF with the media section only: https://drive.google.com/file/d/1Y7kAGzlUfl30VIUx9wQtz5sFTkWnBiyA/view?usp=sharing
-
-[1] https://mail.google.com/mail/u/0?ui=2&ik=73ebd65ebd&attid=0.1&permmsgid=msg-f:1767388565327924962&th=1887068940754ee2&view=att&disp=inline&realattid=f_libalimc0
-[2] https://www.mail-archive.com/virtio-dev@lists.oasis-open.org/msg12665.html
-[3] https://github.com/chromeos/virtio-media/blob/main/TRY_IT_OUT.md
-
-Albert Esteve (1):
-  virtio-media: Add virtio media device specification
-
- conformance.tex                           |  13 +-
- content.tex                               |   1 +
- device-types/media/description.tex        | 574 ++++++++++++++++++++++
- device-types/media/device-conformance.tex |  11 +
- device-types/media/driver-conformance.tex |   9 +
- 5 files changed, 604 insertions(+), 4 deletions(-)
- create mode 100644 device-types/media/description.tex
- create mode 100644 device-types/media/device-conformance.tex
- create mode 100644 device-types/media/driver-conformance.tex
+You have a problem with your emails. Either you missed --thread when preparing
+the series, or something wrong with your email setup / email servers you are
+using.
 
 -- 
-2.44.0
+With Best Regards,
+Andy Shevchenko
+
 
