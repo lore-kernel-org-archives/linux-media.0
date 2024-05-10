@@ -1,190 +1,121 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E89C173348;
-	Fri, 10 May 2024 15:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C28117166C;
+	Fri, 10 May 2024 15:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715354865; cv=none; b=stNQWdTpQgIa9JzOtvh74ZRPzwyR2s4uEdtjjJmppXVPxpkDxnWmDHs/YrJjWYGil+p+55sdLIzSHjt+kAPzCY6VoQ26uiBKIkGV2ppH1uoxIGf7hbdF37KGE4M3GlxWuw+42KA+xhxAdPRZugkluOYtIvrx48qHNfRvMy8z3Y0=
+	t=1715354943; cv=none; b=mpFO5yRKXLdmTifSPAyiHByF1lt2/61BL6dRSuNmyhx3USjAdcP2i2X+vsAWPmxhSR65lS4C1QW7D+rRJOGEVv2deY68gFrEwC4VtwtINpbSbwiUA92SIWzPYPdXTE/ybN3+fBCa6FmoP5twiJP0+VY/NTfrnLtFXIIiCYwO+y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715354865; c=relaxed/simple;
-	bh=HtbqmLUZz/ngyjRLWPxq0lgnSYUAb9OCTTlLybCIDZA=;
+	s=arc-20240116; t=1715354943; c=relaxed/simple;
+	bh=glm6K5/Xk0wjpLSBdU0Yd+zs1pppGMGVEKiFN3HdM7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hKQ1QA/T9IuQfJYPcDXYvuqAkX34Ogz0Dl+aIBp6u3wBKxpzORPiiDabbhY1ACotVegVpILonvcVZ4mZCRzQbmgWidnboeffQ1QSGxX2GJbXglYZSsOOrwHCDLbd+qy7MiNGoMKHW0wU62uVEdd1LSfB8thzosHEme4sEcOJHV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=oaKJw+K5; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=QE+c6PJ3tqP3kwbbJ41gEL3HeJ4NU8DCbZju0mcHO77A+2WKgt0sUzIVyn1B/wAoehFhZfETvQy/Cip/C9JznKYSNdfFToYUd7FOacVH/ZNvTA+fAFwEwUhcn41gDa4N97W5Yexz5LqCBXGIqwoVtl3ywEWuqs3FMMoy1zSGIpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V0oBaUaS; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oaKJw+K5"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B6639EC;
-	Fri, 10 May 2024 17:27:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1715354848;
-	bh=HtbqmLUZz/ngyjRLWPxq0lgnSYUAb9OCTTlLybCIDZA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oaKJw+K5hNcs4YE5Iw8FSMvpMH0SqskSvg2n2jxT3Dtp+Ur+5iFo7nAMWqdX7jKYe
-	 e82NhLLKL0OTrLm9Fyul4UDf7hLAOE1Pa943/neZJJc3KF7PxBGRcBcMlWntMisEAt
-	 REnlXZGsZYb4Jn0jnQCWf8S3M7HdrEPM7fncdxuU=
-Date: Fri, 10 May 2024 18:27:24 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] media: staging: max96712: Store format in subdev active
- state
-Message-ID: <20240510152724.GB17158@pendragon.ideasonboard.com>
-References: <20240510100347.102392-1-niklas.soderlund+renesas@ragnatech.se>
- <20240510101340.GG6407@pendragon.ideasonboard.com>
- <20240510103656.GB2165064@ragnatech.se>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V0oBaUaS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715354943; x=1746890943;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=glm6K5/Xk0wjpLSBdU0Yd+zs1pppGMGVEKiFN3HdM7c=;
+  b=V0oBaUaSq3vQI6HDPV+CA0n861nzJC4MGRiWQsUiRx0NcHb9icvRPJgs
+   apUVxpX+B8GJs6qBcDPizB740Qm3uu1jrZFMtop2fHJhQuBL42Wv0ZYn5
+   RfXarzGduYNhrQq01bHBMLvEiWQQ/2Cpug1PgWkHfy7jLZexlYAyK6Ndx
+   Sy5wE5yjJs97zHnYlYupx8X4wMGiHwIHO7wb6aL0STvRPhmptcqzFn17+
+   v185yoCnHeNJewDeuMmIV8VEDS/kFQvhR+1osCfJtxN8pZElIkw0dsjSl
+   zWkN8Xwq/erC1AG1rtJO4fqD7W4Xw9SbYQBKBlDa4uBYk7DuhHddWIUS5
+   w==;
+X-CSE-ConnectionGUID: slOd/0rbQv6iHU+LDk9rog==
+X-CSE-MsgGUID: eaxgiOpLSC2a3dsBtg7FnQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="28825463"
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="28825463"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:29:03 -0700
+X-CSE-ConnectionGUID: ww4RHDtNREOiGbN3Z/4+6Q==
+X-CSE-MsgGUID: YuXYbDQITCqLG7bhB9KUqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
+   d="scan'208";a="29757874"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:28:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s5SB2-0000000695W-188w;
+	Fri, 10 May 2024 18:28:52 +0300
+Date: Fri, 10 May 2024 18:28:51 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: Devarsh Thakkar <devarsht@ti.com>, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, benjamin.gaignard@collabora.com,
+	sebastian.fricke@collabora.com, akpm@linux-foundation.org,
+	gregkh@linuxfoundation.org, adobriyan@gmail.com,
+	p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+	dri-devel@lists.freedesktop.org, laurent.pinchart@ideasonboard.com,
+	praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
+	j-luthra@ti.com, b-brnich@ti.com, detheridge@ti.com,
+	p-mantena@ti.com, vijayp@ti.com, andrzej.p@collabora.com,
+	nicolas@ndufresne.ca
+Subject: Re: [PATCH v7 6/8] math.h Add macros to round to closest specified
+ power of 2
+Message-ID: <Zj49M4ZwSChNRuXs@smile.fi.intel.com>
+References: <20240509183952.4064331-1-devarsht@ti.com>
+ <Zj42vTpyH71TWeTk@smile.fi.intel.com>
+ <87fruphf55.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240510103656.GB2165064@ragnatech.se>
+In-Reply-To: <87fruphf55.fsf@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Niklas,
-
-On Fri, May 10, 2024 at 12:36:56PM +0200, Niklas Söderlund wrote:
-> On 2024-05-10 13:13:40 +0300, Laurent Pinchart wrote:
-> > On Fri, May 10, 2024 at 12:03:47PM +0200, Niklas Söderlund wrote:
-> > > Create and store the subdevice format in the subdevices active state.
-> > > This change do not have a huge effect on the driver as it do not yet
-> > > support changing the format.
-> > > 
-> > > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> > > ---
-> > > Hello,
-> > > 
-> > > This change is mostly to align all driver used in the R-Car VIN pipeline
-> > > to use the same set of API and to make it easier to extend them in
-> > > tandem going forward.
-> > > 
-> > > This should be seen as a compliment to Jacopo's larger work in "[PATCH
-> > > v3 00/11] media: renesas: rcar-csi2: Use the subdev active state" which
-> > > updates other drivers in the VIN pipeline to use the active state.
-> > > ---
-> > >  drivers/staging/media/max96712/max96712.c | 36 +++++++++++++++++------
-> > >  1 file changed, 27 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/media/max96712/max96712.c b/drivers/staging/media/max96712/max96712.c
-> > > index c44145284aa1..2da65ccd2c57 100644
-> > > --- a/drivers/staging/media/max96712/max96712.c
-> > > +++ b/drivers/staging/media/max96712/max96712.c
-> > > @@ -242,21 +242,34 @@ static const struct v4l2_subdev_video_ops max96712_video_ops = {
-> > >  	.s_stream = max96712_s_stream,
-> > >  };
-> > >  
-> > > -static int max96712_get_pad_format(struct v4l2_subdev *sd,
-> > > -				   struct v4l2_subdev_state *sd_state,
-> > > -				   struct v4l2_subdev_format *format)
-> > > +static int max96712_init_state(struct v4l2_subdev *sd,
-> > > +			       struct v4l2_subdev_state *state)
-> > >  {
-> > > -	format->format.width = 1920;
-> > > -	format->format.height = 1080;
-> > > -	format->format.code = MEDIA_BUS_FMT_RGB888_1X24;
-> > > -	format->format.field = V4L2_FIELD_NONE;
-> > > +	static const struct v4l2_mbus_framefmt default_fmt = {
-> > > +		.width          = 1920,
-> > > +		.height         = 1080,
-> > > +		.code           = MEDIA_BUS_FMT_RGB888_1X24,
-> > > +		.colorspace     = V4L2_COLORSPACE_SRGB,
-> > > +		.field          = V4L2_FIELD_NONE,
-> > > +		.ycbcr_enc      = V4L2_YCBCR_ENC_DEFAULT,
-> > > +		.quantization   = V4L2_QUANTIZATION_DEFAULT,
-> > > +		.xfer_func      = V4L2_XFER_FUNC_DEFAULT,
-> > > +	};
-> > > +	struct v4l2_mbus_framefmt *fmt;
-> > > +
-> > > +	fmt = v4l2_subdev_state_get_format(state, 0);
-> > > +	*fmt = default_fmt;
-> > >  
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static const struct v4l2_subdev_internal_ops max96712_internal_ops = {
-> > > +	.init_state = max96712_init_state,
-> > > +};
-> > > +
-> > >  static const struct v4l2_subdev_pad_ops max96712_pad_ops = {
-> > > -	.get_fmt = max96712_get_pad_format,
-> > > -	.set_fmt = max96712_get_pad_format,
-> > > +	.get_fmt = v4l2_subdev_get_fmt,
-> > > +	.set_fmt = v4l2_subdev_get_fmt,
-> > >  };
-> > >  
-> > >  static const struct v4l2_subdev_ops max96712_subdev_ops = {
-> > > @@ -293,6 +306,7 @@ static int max96712_v4l2_register(struct max96712_priv *priv)
-> > >  	long pixel_rate;
-> > >  	int ret;
-> > >  
-> > > +	priv->sd.internal_ops = &max96712_internal_ops;
-> > >  	v4l2_i2c_subdev_init(&priv->sd, priv->client, &max96712_subdev_ops);
-> > >  	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> > >  	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-> > > @@ -324,6 +338,10 @@ static int max96712_v4l2_register(struct max96712_priv *priv)
-> > >  
-> > >  	v4l2_set_subdevdata(&priv->sd, priv);
-> > >  
-> > 
-> > I think it would be nice to already use the control handler lock as the
-> > active state lock. Apart from that, the patch looks good to me.
+On Fri, May 10, 2024 at 06:15:34PM +0300, Jani Nikula wrote:
+> On Fri, 10 May 2024, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > On Fri, May 10, 2024 at 12:09:52AM +0530, Devarsh Thakkar wrote:
+> >> Add macros to round to nearest specified power of 2.
+> >
+> > This is not what they are doing. For the above we already have macros defined.
+> >
+> >> Two macros are added :
+> >
+> > (Yes, after I wrapped to comment this line looks better on its own,
+> >  so whatever will be the first sentence, this line should be separated
+> >  from.)
+> >
+> >> round_closest_up and round_closest_down which round up to nearest multiple
+> >
+> > round_closest_up() and round_closest_down()
+> >
+> >
+> >> of 2 with a preference to round up or round down respectively if there are
+> >> two possible nearest values to the given number.
+> >
+> > You should reformulate, because AFAICS there is the crucial difference
+> > from these and existing round_*_pow_of_two().
 > 
-> I also worked on this to learn a bit more about the active state API. I 
-> assume what you are asking for here is ?
-> 
->     priv->sd.state_lock = priv->ctrl_handler.lock;
+> Moreover, I think the naming of round_up() and round_down() should have
+> reflected the fact that they operate on powers of 2. It's unfortunate
+> that the difference to roundup() and rounddown() is just the underscore!
+> That's just a trap.
 
-That's right.
+FYI:
+https://stackoverflow.com/questions/58139219/difference-of-align-and-round-up-macro-in-the-linux-kernel
 
-> What is the rational for using the control handler lock over the default 
-> state lock?
+> So let's perhaps not repeat the same with round_closest_up() and
+> round_closest_down()?
 
-When there are interactions between controls and formats, using separate
-locks can lead to AB/BA deadlocks if you need to access controls from a
-context where the state is locked (e.g. calling
-v4l2_ctrl_handler_setup() at stream enable time), and access the active
-state from a context where the control handler is locked (e.g. accessing
-the state in .s_ctrl()). Using the same lock helps there, you can then
-call __v4l2_ctrl_handler_setup() at stream enable time, and get the
-state without locking it in .s_ctrl().
-
-At some point in the not too distant future I would like to move storage
-of controls to the state. I don't know how painful that will be though,
-the control framework has grown to be a very complex beast, with lots of
-features that are not useful for MC-based drivers (such as control
-handler inheritance). I'm worried that we'll need a full rewrite...
-We'll see :-)
-
-> I checked Jacopo's series when working on this and there he 
-> uses no lock for the R-Car CSI-2 driver and a private driver global 
-> state lock for ADV748x.
-
-For the CSI-2 RX driver, that's because it doesn't have a control
-handler. For the ADV748x driver, that's because the control handler is
-configured to use the device-wide mutex.
-
-> > > +	ret = v4l2_subdev_init_finalize(&priv->sd);
-> > > +	if (ret)
-> > > +		goto error;
-> > > +
-> > >  	ret = v4l2_async_register_subdev(&priv->sd);
-> > >  	if (ret < 0) {
-> > >  		dev_err(&priv->client->dev, "Unable to register subdevice\n");
 
 -- 
-Regards,
+With Best Regards,
+Andy Shevchenko
 
-Laurent Pinchart
+
