@@ -1,55 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640151E502;
-	Fri, 10 May 2024 15:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103A2171E45
+	for <linux-media@vger.kernel.org>; Fri, 10 May 2024 15:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715354309; cv=none; b=jvsBJJE9ZyPo/FI1ptjifLYAOL5HbN8WOAkMhlNGZIpBhKdDsXcXIO/7Rl9wEHNs/T4gYyGXq+XUnSsu3vRunDLHwRgtyJqEOYIQmafKgKMqtU38hmN4Psw3EE1CfmDJ2LV99ldVklyzP2y/WDBjN3gl82GjMXf0H7SLDt+3yCg=
+	t=1715354864; cv=none; b=OhlWYnVNM1uDISf2UoBeKlKQFHoNQCnFjg/l4IwzvbRR4t4Q06Gzu8AoemzJtdM4IJcLBYlAkRTLrZaLlOJvtuEzqf8l9zVKxQISWoVBYTPR0XlpizHFnw0yauXv9B3+UAParS5qM1lvSXZvyqMIVm4MbbVgDAsE5PSy2Rs8i8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715354309; c=relaxed/simple;
-	bh=rSpp9aZXpk0b/X8SmDDzpBXyot1jyDyExublcRfwLco=;
+	s=arc-20240116; t=1715354864; c=relaxed/simple;
+	bh=Jzdc2H2hNULa1a9dJybZhyaGjAWp+NC8/yUTJ8Z3H5o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T7Y4WAgLy5i9/hjjWHewTFMbai3ekuXtYtfeJfwwKQJYUSlEQwjBJ9tXC/Qq/4XuaViBfWpeQKfuYRYZJiLUTrPX8nBCu2kNZKRaR/tt7U7V70qcTN8/02sEnCXtycSGhW/9S25Yo8rrvdYnVYEwqwrp2tWV/IQ+WAwE6Gb8ev4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R5PDoiv+; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qAZflcr487HSxwP3FfAuNkdGeZXksVCDA0RD2tgrEPSOFUCOZnl8bDpetxaYWO5jK2tCIV9nbh94pbqLgInQpD+Bn88u0ZxOoZz7EraoBIELYIYPhKTGnfLIbpywUZB/P/ceUdUS+tMjZUbeENsRuTfWFW5/cH3SxLYzjRcyg78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=faBOMB8o; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R5PDoiv+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715354308; x=1746890308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rSpp9aZXpk0b/X8SmDDzpBXyot1jyDyExublcRfwLco=;
-  b=R5PDoiv+Sgccs/l2yW5DuwuX/QhZGpbv4oZKBSWJufFKk45TXUwXsRRV
-   lreZFg8qhC9aZrUiAZ4FqRH6Lyb5qIpYFCqJ5NYb8m6gbO/nkI0+fYSve
-   Dmx9s9vI+A6JAtyoj/38v8kFv3Z46CdoSCKq5dB8zAQMMPYdnlvxsUMJv
-   jlyqP9smL5JaoZZe5CQllVsX8rFzGX+B9VCSPGM+k6nU/cGZDwtMJ8TD2
-   JPYwqXeU33thbMMQvfjlcxWpO99gI6itf6MrVkem08Ym+U7651vfp2GmH
-   66fDl91AchCIThFDbHWgEhDc6CCsgAVJXzaHpy/v3VasJaZ6cDs1H8XjE
-   A==;
-X-CSE-ConnectionGUID: bNeKkaZOQXK+6sQ+zaBdwg==
-X-CSE-MsgGUID: XDi4BYGqTj6NKeuY4wt80g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11068"; a="11554511"
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="11554511"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:18:28 -0700
-X-CSE-ConnectionGUID: 6AKYIFleQ/q2QT3bBLmBIg==
-X-CSE-MsgGUID: 858xGBudSU+dIZFGTPxjHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,151,1712646000"; 
-   d="scan'208";a="29654699"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 08:18:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s5S0s-000000068qL-3Xwd;
-	Fri, 10 May 2024 18:18:22 +0300
-Date: Fri, 10 May 2024 18:18:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="faBOMB8o"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-51fb14816f6so2688762e87.0
+        for <linux-media@vger.kernel.org>; Fri, 10 May 2024 08:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715354854; x=1715959654; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5FOttH9EQLp2QP0x59iAJre7V/D35J8XRWRgV60AP8=;
+        b=faBOMB8o6QE81pOcKmx0/FRnSBMxxpDIhA0Wq/pd5m8P6lNAVaMjIL6AD0jAFA6FHS
+         hiP6IcpyjBUdLL0qg6Bd3liXJ8yZrUpQba38xyf3jXZ15YWgtjH35imQPJJOItmXXb88
+         UHW5TRX0b3HtZPDNBIcn5GKMYC01FUfXdpKdZ4qRMR7yrH93LALT369PYJF4nvsSvatX
+         mvt2bCzP6Td172qdgBNG1Q92K0Di4rORIWuCi0Ea2ox4iXhJJhT7NmIVEAWkcGDOoa7P
+         Rr1t5ObpwJ/egOVxY2cVbQU8510scxMk1xS+MRY60A1u4EJaYp48+v/Y0WJCG3DpgWGi
+         HoNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715354854; x=1715959654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a5FOttH9EQLp2QP0x59iAJre7V/D35J8XRWRgV60AP8=;
+        b=LJDGpy0dLqi1BLZ5Z+JcaXbbac3sfZeBKG81rG+1T/S4F0U8K8CmrE25dUa9Cqha8Q
+         0CWMus8PYLQhchXOTOlvj20WVnRZ71tqPWFmYIousti8jqYncu6fjyCxv7KEwNtSjn8E
+         wjiFJ8krw6Ng8NsbbchhMDVGZF5GrS6g6DYcKLeo1PTFi3Gf/OyX9DjPN5qHp3N6+W0d
+         ofh+OQlf4Gq5+rD1ruZ4/RabC5q8wYF2xVv7wvjTsBLSb7BJcmgIrnU5gZwZsEwuY1hx
+         53mjwR3bSshcOhLJHQXzYgf+e1cWo61XeA9Dnfb72tXVAQvM+eHtf5/rhhHW37snbXZz
+         OPFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUp8GhpIOwJk3FzOV3tQDfG9Dmcl0lSzxjhIN3FacYSV8XAXfT99AILnt1FwEW8OwncUBWC9NqE+iUP9jKO7sn0ZKbewiJ+NjpCiE=
+X-Gm-Message-State: AOJu0YzHP6CsQzdXrlQbtDD1uHVSMkxfA97YJ+oEMAwg0OUX99GEFrf+
+	au+Xl84n/9/PpyI8fz8HZ0TFN8t9IPJCJuQ+kTjYr3ehQf9wwqJQ1Nyv6hNbhQM=
+X-Google-Smtp-Source: AGHT+IEMgujKR3JXFlI9/r1eu8jHtRxxNrK/qiE+3cimxYuBLDPv4NYPwk0taMgIyW3VjMHaTPlVFA==
+X-Received: by 2002:a19:a40f:0:b0:522:f6:9268 with SMTP id 2adb3069b0e04-5220fc7eed8mr1735865e87.31.1715354853669;
+        Fri, 10 May 2024 08:27:33 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a5a1781d553sm195973166b.43.2024.05.10.08.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 May 2024 08:27:33 -0700 (PDT)
+Date: Fri, 10 May 2024 18:27:30 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Bingbu Cao <bingbu.cao@intel.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -58,8 +62,9 @@ Cc: Bingbu Cao <bingbu.cao@intel.com>,
 	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
 	kernel-janitors@vger.kernel.org
 Subject: Re: [PATCH] media: ipu-bridge: fix error code in ipu_bridge_init()
-Message-ID: <Zj46vpwTbfde4YX2@smile.fi.intel.com>
+Message-ID: <4ade89f8-cbd3-4dbf-81fb-0e9a4269dc0f@moroto.mountain>
 References: <71dad56e-0e2f-48ba-90bc-75096112a1ba@moroto.mountain>
+ <Zj46vpwTbfde4YX2@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,34 +73,36 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <71dad56e-0e2f-48ba-90bc-75096112a1ba@moroto.mountain>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <Zj46vpwTbfde4YX2@smile.fi.intel.com>
 
-On Fri, May 10, 2024 at 06:10:37PM +0300, Dan Carpenter wrote:
-> Return -EINVAL if "bridge->n_sensors == 0".  Don't return success.
+On Fri, May 10, 2024 at 06:18:22PM +0300, Andy Shevchenko wrote:
+> On Fri, May 10, 2024 at 06:10:37PM +0300, Dan Carpenter wrote:
+> > Return -EINVAL if "bridge->n_sensors == 0".  Don't return success.
+> 
+> ...
+> 
+> >  	ret = ipu_bridge_connect_sensors(bridge);
+> > -	if (ret || bridge->n_sensors == 0)
+> > +	if (ret || bridge->n_sensors == 0) {
+> > +		ret = ret ?: -EINVAL;
+> >  		goto err_unregister_ipu;
+> > +	}
+> 
+> I would split:
+> 
+> 	ret = ipu_bridge_connect_sensors(bridge);
+> 	if (ret)
+> 		goto err_unregister_ipu;
+> 
+> 	if (bridge->n_sensors == 0) {
+> 		ret = -EINVAL;
+> 		goto err_unregister_ipu;
+> 	}
 
-...
+It's always hard to know which way to go on these...  I wrote it that
+way in my first draft.  It's my prefered way as well but not everyone
+agrees.  I'll resend.
 
->  	ret = ipu_bridge_connect_sensors(bridge);
-> -	if (ret || bridge->n_sensors == 0)
-> +	if (ret || bridge->n_sensors == 0) {
-> +		ret = ret ?: -EINVAL;
->  		goto err_unregister_ipu;
-> +	}
-
-I would split:
-
-	ret = ipu_bridge_connect_sensors(bridge);
-	if (ret)
-		goto err_unregister_ipu;
-
-	if (bridge->n_sensors == 0) {
-		ret = -EINVAL;
-		goto err_unregister_ipu;
-	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+regards,
+dan carpenter
 
