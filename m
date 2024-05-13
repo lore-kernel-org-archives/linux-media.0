@@ -1,104 +1,152 @@
-Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0661474BB
-	for <linux-media@vger.kernel.org>; Mon, 13 May 2024 14:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.41.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB9815381E
+	for <linux-media@vger.kernel.org>; Mon, 13 May 2024 14:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715608877; cv=none; b=s8HvbN0q9xobRMGcslEgNkENybEb/EC7Ycfujlv+vAQAeUV1fz/5W9vc/lYwS12+bDYzDSDGbDe+LOUdHBay1uI8ujUKvl7377TCdEuv4gSItvzSjRUWUoN1wyGssJCKNkPuDSg06Lk3laUYe55Ictg+w2WuL7UMiaJcXx0daaI=
+	t=1715609647; cv=none; b=S0v3emaPS2Zash2cEINSnQI8qi6qKq8jMmfNnOodJ9Y0snRdLUvJzWc97ULh0jRLnUZrrzZWbjQMKE7ZBdeLsvvUwg28RUsTBHMiMMK1bxGsJScWJ1MGjwAJcEEUxCmEhXTRtshfTrvU54TFKXH3dKQM//giw1hV0iVCE/ONFEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715608877; c=relaxed/simple;
-	bh=rCp4a/BDWi17CHMvgY5xOFl3QoPKRxwfeBuT/Fb98Nk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FEz+eyHK6mdOXKUuTQPV0Pw/PtvnjFSFlqXQfI4bpmvm8+sj6i5iCz6acybrV0+80nSDAENujNR1euE/QvN5RcG5zslVbdhfyxpvfRhc93dDAhHneFaNhsKNfGks2wF730a0pCnQ6vbx1EzU7pSNaPhjI7CiKAWNXkgG1kbxJFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=emersion.fr; spf=pass smtp.mailfrom=emersion.fr; dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b=aWKGTxcY; arc=none smtp.client-ip=185.70.41.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=emersion.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emersion.fr
+	s=arc-20240116; t=1715609647; c=relaxed/simple;
+	bh=jlJal8SYd2i17p2UBb9eq6fm30hJKgO/pZI9iWerNak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSboYG0tsRPgvrQHWNhbYkKUpCo8hcsgQz6jdpkdaDx9wjXLm6QdKVF9FCvRlMi0GW9SFaD6/hrw2Y7z5yhJeckIb7M8DGCsqTgWY8+8n5cBidR89YBZER6JLkMtOQFFOfb/gqMZY/eT7F2cFMGka1q1kyhSTLMRE9W2JQvYlVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=XJO9XN5Q; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=emersion.fr header.i=@emersion.fr header.b="aWKGTxcY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-	s=protonmail3; t=1715608289; x=1715867489;
-	bh=rCp4a/BDWi17CHMvgY5xOFl3QoPKRxwfeBuT/Fb98Nk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=aWKGTxcY4wKQzfazyx23U28lrFiumZcz/zIWjprWPjlb+90HEZ3QinH0QcLZhB0w1
-	 AU+tYlAaAjNrUCRfki7nrcCXtQjCFzjBSva5vjijed5vbJr6GWsUQlPalvQJ5y97Rt
-	 hOddSllCePkYcy/13GUkJzkFK4K4f5X4V/AkRM+Oj/Fb5m4h9mGAeYfzGiElsKBUSS
-	 Ne2uofSfC78mYkVdNUrDxiZpK5IMOdrgD2qV6pT7wO7I5IoSJ2IVqiRfPQvcPeF5bg
-	 w4B9PkQd4Pt96uvhvTkfJt2RJUYEAKdGj4GKMpLuYSzLfAzHL6UWqPQV0ypt4Ie8yZ
-	 LS37it/d2kEgw==
-Date: Mon, 13 May 2024 13:51:23 +0000
-To: Daniel Vetter <daniel@ffwll.ch>
-From: Simon Ser <contact@emersion.fr>
-Cc: Daniel Stone <daniel@fooishbar.org>, Hans de Goede <hdegoede@redhat.com>, Maxime Ripard <mripard@redhat.com>, Sumit Semwal <sumit.semwal@linaro.org>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Lennart Poettering <mzxreary@0pointer.de>, Robert Mader <robert.mader@collabora.com>, Sebastien Bacher <sebastien.bacher@canonical.com>, Linux Media Mailing List <linux-media@vger.kernel.org>, "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Milan Zamazal <mzamazal@redhat.com>, Andrey Konovalov <andrey.konovalov.ynk@gmail.com>
-Subject: Re: Safety of opening up /dev/dma_heap/* to physically present users (udev uaccess tag) ?
-Message-ID: <IXDM2ci-eGvU9RQkT6a52vcV66vr8d0ywbDRFY8gBjjNuMyv8RDgdJS0PvvfnKuPR1fXINPUjOBkKx4vIcshSb2Y11xd3DjfDQ-Np8VIFgQ=@emersion.fr>
-In-Reply-To: <Zjue98r4ZgGbMN5K@phenom.ffwll.local>
-References: <bb372250-e8b8-4458-bc99-dd8365b06991@redhat.com> <20240506-dazzling-nippy-rhino-eabccd@houat> <ZjjdUBYYKXJ1EPr5@phenom.ffwll.local> <cbe5a743-d8be-4b0e-99c4-e804fbadc099@redhat.com> <ZjoNTw-TkPnnWLTG@phenom.ffwll.local> <CAPj87rN3uSZoHpWLSQqz1SW9YMZNj9fkoA_EDEE_bzv-Tw8tSw@mail.gmail.com> <Zjs42PGvilLlF0Cg@phenom.ffwll.local> <CAPj87rN-wSbGSAoB8y3MXCS20_MAQvfpWSeUKYR6XzQ+Oh0FZA@mail.gmail.com> <Zjue98r4ZgGbMN5K@phenom.ffwll.local>
-Feedback-ID: 1358184:user:proton
-X-Pm-Message-ID: d2a6e70754ffedf294a79e2c65504e513c8e9b24
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="XJO9XN5Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=jlJa
+	l8SYd2i17p2UBb9eq6fm30hJKgO/pZI9iWerNak=; b=XJO9XN5Q7CPiPUGC4vat
+	Lb8eZwOYw9kdc26MrFtTkkddag0HFeyIJ7qNTNsuz0+tt45Nd6puxrxtmLarm8xl
+	wlen9O8o8gtZQdvfnptxz0ngAZrpR+w2RVk//4X4HORXsj/+81kap2ns++XrNg0D
+	GyvZTHhI4kotws5rPjEXXn7qVSYh5loHD+pKWSifW2snnrD25lprGF6kF1Rz98ec
+	2Izw5FblLRz4e3w2RTlJFHiTHrrMeWYcG1E2OMmjNw1yGN9H1cCbYGq2BJegSQim
+	XmCFhMdKCVJEPNJ25Jaz0Kxs7rElzBYeNXysARUWQHT4LPGo2ucWb3+7XyjKoufW
+	cQ==
+Received: (qmail 2174713 invoked from network); 13 May 2024 16:14:01 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 May 2024 16:14:01 +0200
+X-UD-Smtp-Session: l3s3148p1@ino7f1YYqLZehhtP
+Date: Mon, 13 May 2024 16:14:00 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+	Peter Korsgaard <peter.korsgaard@barco.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Vadim Pasternak <vadimp@nvidia.com>,
+	Michael Shych <michaelsh@nvidia.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo+renesas@jmondi.org>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	"open list:AMD KFD" <dri-devel@lists.freedesktop.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	linux-media@vger.kernel.org,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] i2c: mux: Remove class argument from
+ i2c_mux_add_adapter()
+Message-ID: <20240513141400.xgpy3euacuxj5i4b@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+	Peter Korsgaard <peter.korsgaard@barco.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Vadim Pasternak <vadimp@nvidia.com>,
+	Michael Shych <michaelsh@nvidia.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo+renesas@jmondi.org>,
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	"open list:AMD KFD" <dri-devel@lists.freedesktop.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	linux-media@vger.kernel.org,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <17145dc5-e68e-4566-bedf-251bebe36ebb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6wk7u7gqu25scqer"
+Content-Disposition: inline
+In-Reply-To: <17145dc5-e68e-4566-bedf-251bebe36ebb@gmail.com>
+
+
+--6wk7u7gqu25scqer
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wednesday, May 8th, 2024 at 17:49, Daniel Vetter <daniel@ffwll.ch> wrote=
-:
+On Thu, Apr 18, 2024 at 10:55:39PM +0200, Heiner Kallweit wrote:
+> 99a741aa7a2d ("i2c: mux: gpio: remove support for class-based device
+> instantiation") removed the last call to i2c_mux_add_adapter() with a
+> non-null class argument. Therefore the class argument can be removed.
+>=20
+> Note: Class-based device instantiation is a legacy mechanism which
+> shouldn't be used in new code, so we can rule out that this argument
+> may be needed again in the future.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-> On Wed, May 08, 2024 at 09:38:33AM +0100, Daniel Stone wrote:
->=20
-> > On Wed, 8 May 2024 at 09:33, Daniel Vetter daniel@ffwll.ch wrote:
-> >=20
-> > > On Wed, May 08, 2024 at 06:46:53AM +0100, Daniel Stone wrote:
-> > >=20
-> > > > That would have the unfortunate side effect of making sandboxed app=
-s
-> > > > less efficient on some platforms, since they wouldn't be able to do
-> > > > direct scanout anymore ...
-> > >=20
-> > > I was assuming that everyone goes through pipewire, and ideally that =
-is
-> > > the only one that can even get at these special chardev.
-> > >=20
-> > > If pipewire is only for sandboxed apps then yeah this aint great :-/
-> >=20
-> > No, PipeWire is fine, I mean graphical apps.
-> >=20
-> > Right now, if your platform requires CMA for display, then the app
-> > needs access to the GPU render node and the display node too, in order
-> > to allocate buffers which the compositor can scan out directly. If it
-> > only has access to the render nodes and not the display node, it won't
-> > be able to allocate correctly, so its content will need a composition
-> > pass, i.e. performance penalty for sandboxing. But if it can allocate
-> > correctly, then hey, it can exhaust CMA just like heaps can.
-> >=20
-> > Personally I think we'd be better off just allowing access and
-> > figuring out cgroups later. It's not like the OOM story is great
-> > generally, and hey, you can get there with just render nodes ...
->=20
-> Imo the right fix is to ask the compositor to allocate the buffers in thi=
-s
-> case, and then maybe have some kind of revoke/purge behaviour on these
-> buffers. Compositor has an actual idea of who's a candidate for direct
-> scanout after all, not the app. Or well at least force migrate the memory
-> from cma to shmem.
->=20
-> If you only whack cgroups on this issue you're still stuck in the world
-> where either all apps together can ddos the display or no one can
-> realistically direct scanout.
->=20
-> So yeah on the display side the problem isn't solved either, but we knew
-> that already.
+Applied to for-next (meaning for 6.10), thanks!
 
-What makes scanout memory so special?
 
-The way I see it, any kind of memory will always be a limited resource:
-regular programs can exhaust system memory, as well as GPU VRAM, as well
-as scanout memory. I think we need to have ways to limit/control/arbiter
-the allocations regardless, and I don't think scanout memory should be a
-special case here.
+--6wk7u7gqu25scqer
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZCICgACgkQFA3kzBSg
+Kbbe8w//cwbm6f8+HGi4nQvOvL3JrgaLg4ZnhG9F8mVOVa0qOigbq9Xm63XB+Bwb
+eWOWzDsFfN5Pew2UN93LWZJ3hkdZE8swa5XePLn8N70E0nXGM6LtDdeWLp0Bcov6
+fhIHD7GumaCgsmE2Cb3Scl9W0RoGkd2SKhcglPZirYVHhzq+uxoESEf4+Xu4DuTS
+yUJymE20haysSkWQ0IU52CCl6O/ydL4TO8lhVFH2PtpMtsLfM4ABUHbFuYV9eObI
+I3kO4WDHRpw9YpBolhVL8gqolwYPvviv+ry9v7XuGmlZWCOty+gngCA42pvE5+Ns
+aenK/c5Q/eQ99qjZgbZr0Zg+NbsCyHW4/Ye+3AlkcwoGYXweaxEwssvpeODwoGLC
+Txjs1XzzE+c7OPPmjlLcLh0Hq9jKlqRzbFyF5834yLVb/Rqkx8eohrFDP5TSLlE2
+Lw1NoLgqYyXjX+OpU2ZWIl/rxM4EB1RAOgW2yaV5x+B+dAQwuKY7ilapSNNQQOGl
+bHKpuF462TB2eyrixx2Ns+IBT7CaCLYmxzV/QAW9VW9VPWSpjM5x8SiOSs/cE4zf
+w7FskHexCXqEMau+UCXP0htz+haZ2cZSdIVOYphXgNNzhRb/i0EQu9HMiDBBRZns
+gh4yy9eGV31++lc+iD8wFODnmjkbw+vDEvv980jTG7G2W7xqC+c=
+=dQwU
+-----END PGP SIGNATURE-----
+
+--6wk7u7gqu25scqer--
