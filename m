@@ -1,59 +1,40 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407875F876
-	for <linux-media@vger.kernel.org>; Wed, 15 May 2024 10:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEB15D738;
+	Wed, 15 May 2024 10:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715768395; cv=none; b=p21PB9tgYArU7IqHNa2AB65A6UJO/xpZ7/1jvAHX6lRabsudoDsN8uo+2WHbaEHqsOXEgeA6cnpzd3VOsin2YjnO8xIA1Z4Imy3af7lhB3+R5PBzmeRuetEqvhp1SFjlGFzJWUj9zufLD2uqoFggPS0vBTi0qykifV1AbfafosA=
+	t=1715770008; cv=none; b=XDe3ZJNY4g+NeQ9QuBDX7h2Y16mZobSt7LU7blWFuGuxfPhPjs/rQQm8SEJXLz77PcuPNq6s3pI8i4r8+K1XPMN9H41aGgXrlqGmoeqwvQvvHY3+Bhen09Jl51uy4AJTZ+o0yrQ22lXIhJl9+Zfdo42/t+siCxqeTjFP1zhYiAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715768395; c=relaxed/simple;
-	bh=+EMK6b7qfktIFvrX/yoLCEmiPgCxTGiziO7yYK3P3rU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LHRwecfeBD6AYxEOvf2MGQYFmZSllmXGXXppMWmfVi6o5QNi8H4YsT8BOwrLYaDVGXWnD000Q2sAKSzokIw9TJrVv7R/kTf6DZhqXzNeSOALIz8G9h58K/I00Xi/+aVeHfcdV/kCGbHergfwIiAZeeFaYSgKPub52Kjt1Hoh0WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=DK+gEtqm; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	s=arc-20240116; t=1715770008; c=relaxed/simple;
+	bh=Q4+Nii8csKgMfhuQxtX4PRb051LbYjs1O8cLWVVvROk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Us/1H6llygiwltOMVAukFcOi+Eyw2UFvJbSwicI5fhX/KJNycO5epcWBelsDqss69zZEPlGNsdKrDBEWTg+e6DqOeQFpLw/aXrkhywtJyGnd+dsRSqpEHLPLc4w/6m78lYcNoJK9XLV74CHVsARuVXANgP65DKv6mB8WJExsWPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=iGeHzCOJ; arc=none smtp.client-ip=77.48.224.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="DK+gEtqm"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-572e48f91e9so1566819a12.0
-        for <linux-media@vger.kernel.org>; Wed, 15 May 2024 03:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1715768391; x=1716373191; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
-        b=DK+gEtqmkb0jZ/CHh7UFa0VObjCqX95pEIy9AVKWg8R9+uBAQeX1wq1kySemn5w3pJ
-         0k9SCtvjvzqxKGOAZKIQaSUiQlw/2yQ4e13tjG9Q+SL1gECZK5IzNkOCLLXybSi6QDmr
-         yUqNDnXq7FbT9kkRg3qgpIOdVsAmgeGaSzsfm2qyrDNgDJTa1YPWz8fhKcqKqGLu5lZu
-         TaTYgVSAMqtgIczhmzHNK2pu1kQqag85ESBXKoX+eVPkXy2wAFkr9UQGJRkCh8bRVbnA
-         Pbz/mZLWkbtj2rebXLzLoMhm+rQiiremoorBu9eXu0nPNa7FIhkhLZ6OLaoOfcZuNqtJ
-         WOoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715768391; x=1716373191;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdHvJkxYgHA+IRrFREj5QbL1lv8V1e57nVmevFIQbVs=;
-        b=VMTAIniYQitSNfnifkjr6QHWxjoJIxG+SIL+AqG5knzhSvxODv1LdzJ7z/TBNFlVoZ
-         LK3fAsZBoe09wTcMN9b81z5pjKsZZD9tA3X/6a2gkLViDWAdB61ZYsEThG3S5apsurOi
-         51yhjReAkB1kTnRMLbnfPRQAIRRTbXmQeQ83iu0TQ/715FsXNSPo5UzBbBD3HtV8AKUh
-         kBBqjIydJqH9yHlCqrpe/NGiZqhsaPcarl1un2y3XWQKSPb2WtCBT0yKRHuQY2jruTkO
-         O1NayQvq05gg8O8vnVdy2+yTmj7a+ENqRx7Gq6ihFYXXut3CFmlsZ/IAh7ZtHkQp1+wU
-         Mo2A==
-X-Forwarded-Encrypted: i=1; AJvYcCX8aCPHzU+76WzQ8/4/oWVlhOqVk7w4EOcYeG9htLkaN6uvniUWnU52r9Ase6Yvhr1/oVbFn2pfyNvilCUZ5VrH/efxyOVKA2Y3I6Q=
-X-Gm-Message-State: AOJu0YzvCEGt1GpWyIaVKTiWxn8BX3SFTN/hCF9t957o1qqCPXj2IxUf
-	CPoRoBiwwYpmL2FfPTjkPLATceNK7itLOT+nzPPFQlMdlDG5BmreSk/uwx2Df/w=
-X-Google-Smtp-Source: AGHT+IHWaSA/H+4L2d0rsT1ymvAysPmXQv4l8zitT6YQF2Rw+C8vn0POfuJW4lu+DIxHSNpoY53xBA==
-X-Received: by 2002:a50:d59d:0:b0:572:7e7e:4296 with SMTP id 4fb4d7f45d1cf-5734d5c152dmr11481093a12.3.1715768391400;
-        Wed, 15 May 2024 03:19:51 -0700 (PDT)
-Received: from [192.168.0.245] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-574b18dff66sm6291338a12.27.2024.05.15.03.19.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 May 2024 03:19:50 -0700 (PDT)
-Message-ID: <f9a8f912-5cb7-4184-be2d-187052c04e2e@blackwall.org>
-Date: Wed, 15 May 2024 13:19:47 +0300
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="iGeHzCOJ"
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id DFE7145BF;
+	Wed, 15 May 2024 12:46:39 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz DFE7145BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+	t=1715769999; bh=XXOqLAWWRGuyFhS40r5V6s/LmOYYtDla+WSjRwZ7M6Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iGeHzCOJ6XGrMTV9X4eNzJEpAxb3m3GmpR/0Adx4MT6Bay3LgiB9cVIlSbqw3fzlF
+	 cKiPnmeTuJ6wpT7xjYDA/1nDgFtQ+Wrd0dqhJ9Ee84VTGHO2+y/2ZgMGgoSehS/5td
+	 PhE3A+D5BHQXjJ23w8ouP8hYCoBIpZei3rf+LYR4=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: perex)
+	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+	Wed, 15 May 2024 12:46:19 +0200 (CEST)
+Message-ID: <e63ec6c8-7da7-4b87-b7ff-a71ff12dcfc1@perex.cz>
+Date: Wed, 15 May 2024 12:46:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,208 +42,179 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 04/14] netdev: support binding dma-buf to
- netdevice
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-5-almasrymina@google.com>
- <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
+Subject: Re: [PATCH v15 00/16] Add audio support in v4l2 framework
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>, Shengjiu Wang
+ <shengjiu.wang@gmail.com>,
+ =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
+ <amadeuszx.slawinski@linux.intel.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Sebastian Fricke <sebastian.fricke@collabora.com>,
+ Shengjiu Wang <shengjiu.wang@nxp.com>, sakari.ailus@iki.fi,
+ tfiga@chromium.org, m.szyprowski@samsung.com, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Xiubo.Lee@gmail.com, festevam@gmail.com,
+ nicoleotsuka@gmail.com, lgirdwood@gmail.com, tiwai@suse.com,
+ alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org
+References: <1710834674-3285-1-git-send-email-shengjiu.wang@nxp.com>
+ <87sez0k661.wl-tiwai@suse.de> <20240502095956.0a8c5b26@sal.lan>
+ <20240502102643.4ee7f6c2@sal.lan> <ZjRCJ2ZcmKOIo7_p@finisterre.sirena.org.uk>
+ <20240503094225.47fe4836@sal.lan>
+ <CAA+D8APfM3ayXHAPadHLty52PYE9soQM6o780=mZs+R4px-AOQ@mail.gmail.com>
+ <22d94c69-7e9f-4aba-ae71-50cc2e5dd8ab@xs4all.nl>
+ <51408e79-646d-4d23-bc5b-cd173d363327@linux.intel.com>
+ <CAA+D8AM7+SvXBi=LKRqvJkLsrYW=nkHTfFe957z2Qzm89bc48g@mail.gmail.com>
+ <cd71e8e8-b4dc-40ed-935e-a84c222997e6@linux.intel.com>
+ <CAA+D8AMpLB0N++_iLWLN_qettNz-gKGQz2c2yLsY8qSycibkYg@mail.gmail.com>
+ <2f771fe9-7c09-4e74-9b04-de52581133fd@linux.intel.com>
+ <CAA+D8AMJKPVR99jzYCR5EsbMa8P95jQrDL=4ayYMuz+Cu1d2mQ@mail.gmail.com>
+ <28d423b1-49d8-4180-8394-622b1afd9cd9@perex.cz>
+ <850a80b2-d952-4c14-bd0b-98cb5a5c0233@perex.cz>
+ <c5dbb765-8c93-4050-84e1-c0f63b43d6c2@xs4all.nl>
+ <8a6f84ac-5813-4954-b852-84f5118e607c@perex.cz> <87o7975qcw.wl-tiwai@suse.de>
+From: Jaroslav Kysela <perex@perex.cz>
 Content-Language: en-US
-In-Reply-To: <59b1ec87-03dc-4336-8ce1-cb97e5abb7d6@blackwall.org>
-Content-Type: text/plain; charset=UTF-8
+Autocrypt: addr=perex@perex.cz; keydata=
+ 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
+In-Reply-To: <87o7975qcw.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 15/05/2024 13:01, Nikolay Aleksandrov wrote:
-> On 11/05/2024 02:21, Mina Almasry wrote:
->> Add a netdev_dmabuf_binding struct which represents the
->> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
->> rx queues on the netdevice. On the binding, the dma_buf_attach
->> & dma_buf_map_attachment will occur. The entries in the sg_table from
->> mapping will be inserted into a genpool to make it ready
->> for allocation.
+On 15. 05. 24 12:19, Takashi Iwai wrote:
+> On Wed, 15 May 2024 11:50:52 +0200,
+> Jaroslav Kysela wrote:
 >>
->> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
->> holds the dma-buf offset of the base of the chunk and the dma_addr of
->> the chunk. Both are needed to use allocations that come from this chunk.
+>> On 15. 05. 24 11:17, Hans Verkuil wrote:
+>>> Hi Jaroslav,
+>>>
+>>> On 5/13/24 13:56, Jaroslav Kysela wrote:
+>>>> On 09. 05. 24 13:13, Jaroslav Kysela wrote:
+>>>>> On 09. 05. 24 12:44, Shengjiu Wang wrote:
+>>>>>>>> mem2mem is just like the decoder in the compress pipeline. which is
+>>>>>>>> one of the components in the pipeline.
+>>>>>>>
+>>>>>>> I was thinking of loopback with endpoints using compress streams,
+>>>>>>> without physical endpoint, something like:
+>>>>>>>
+>>>>>>> compress playback (to feed data from userspace) -> DSP (processing) ->
+>>>>>>> compress capture (send data back to userspace)
+>>>>>>>
+>>>>>>> Unless I'm missing something, you should be able to process data as fast
+>>>>>>> as you can feed it and consume it in such case.
+>>>>>>>
+>>>>>>
+>>>>>> Actually in the beginning I tried this,  but it did not work well.
+>>>>>> ALSA needs time control for playback and capture, playback and capture
+>>>>>> needs to synchronize.  Usually the playback and capture pipeline is
+>>>>>> independent in ALSA design,  but in this case, the playback and capture
+>>>>>> should synchronize, they are not independent.
+>>>>>
+>>>>> The core compress API core no strict timing constraints. You can eventually0
+>>>>> have two half-duplex compress devices, if you like to have really independent
+>>>>> mechanism. If something is missing in API, you can extend this API (like to
+>>>>> inform the user space that it's a producer/consumer processing without any
+>>>>> relation to the real time). I like this idea.
+>>>>
+>>>> I was thinking more about this. If I am right, the mentioned use in gstreamer
+>>>> is supposed to run the conversion (DSP) job in "one shot" (can be handled
+>>>> using one system call like blocking ioctl).  The goal is just to offload the
+>>>> CPU work to the DSP (co-processor). If there are no requirements for the
+>>>> queuing, we can implement this ioctl in the compress ALSA API easily using the
+>>>> data management through the dma-buf API. We can eventually define a new
+>>>> direction (enum snd_compr_direction) like SND_COMPRESS_CONVERT or so to allow
+>>>> handle this new data scheme. The API may be extended later on real demand, of
+>>>> course.
+>>>>
+>>>> Otherwise all pieces are already in the current ALSA compress API
+>>>> (capabilities, params, enumeration). The realtime controls may be created
+>>>> using ALSA control API.
+>>>
+>>> So does this mean that Shengjiu should attempt to use this ALSA approach first?
 >>
->> We create a new type that represents an allocation from the genpool:
->> net_iov. We setup the net_iov allocation size in the
->> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
->> allocated by the page pool and given to the drivers.
+>> I've not seen any argument to use v4l2 mem2mem buffer scheme for this
+>> data conversion forcefully. It looks like a simple job and ALSA APIs
+>> may be extended for this simple purpose.
 >>
->> The user can unbind the dmabuf from the netdevice by closing the netlink
->> socket that established the binding. We do this so that the binding is
->> automatically unbound even if the userspace process crashes.
->>
->> The binding and unbinding leaves an indicator in struct netdev_rx_queue
->> that the given queue is bound, but the binding doesn't take effect until
->> the driver actually reconfigures its queues, and re-initializes its page
->> pool.
->>
->> The netdev_dmabuf_binding struct is refcounted, and releases its
->> resources only when all the refs are released.
->>
->> Signed-off-by: Willem de Bruijn <willemb@google.com>
->> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
->> Signed-off-by: Mina Almasry <almasrymina@google.com>
->>
->> ---
->>
->> v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
->> - Removed net_devmem_restart_rx_queues and put it in its own patch
->>   (David).
->>
->> v8:
->> - move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
->>   build error.
->>
->> v7:
->> - Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
->>   value.
->> - Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
->> - DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
->> - Added a comment around recovering of the old rx queue in
->>   net_devmem_restart_rx_queue(), and added freeing of old_mem if the
->>   restart of the old queue fails. (Yunsheng).
->> - Use kernel-family sock-priv (Jakub).
->> - Put pp_memory_provider_params in netdev_rx_queue instead of the
->>   dma-buf specific binding (Pavel & David).
->> - Move queue management ops to queue_mgmt_ops instead of netdev_ops
->>   (Jakub).
->> - Remove excess whitespaces (Jakub).
->> - Use genlmsg_iput (Jakub).
->>
->> v6:
->> - Validate rx queue index
->> - Refactor new functions into devmem.c (Pavel)
->>
->> v5:
->> - Renamed page_pool_iov to net_iov, and moved that support to devmem.h
->>   or netmem.h.
->>
->> v1:
->> - Introduce devmem.h instead of bloating netdevice.h (Jakub)
->> - ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
->> - Remove unneeded rcu protection for binding->list (rtnl protected)
->> - Removed extraneous err_binding_put: label.
->> - Removed dma_addr += len (Paolo).
->> - Don't override err on netdev_bind_dmabuf_to_queue failure.
->> - Rename devmem -> dmabuf (David).
->> - Add id to dmabuf binding (David/Stan).
->> - Fix missing xa_destroy bound_rq_list.
->> - Use queue api to reset bound RX queues (Jakub).
->> - Update netlink API for rx-queue type (tx/re) (Jakub).
->>
->> RFC v3:
->> - Support multi rx-queue binding
->>
->> ---
->>  Documentation/netlink/specs/netdev.yaml |   4 +
->>  include/net/devmem.h                    | 111 +++++++++++
->>  include/net/netdev_rx_queue.h           |   2 +
->>  include/net/netmem.h                    |  10 +
->>  include/net/page_pool/types.h           |   5 +
->>  net/core/Makefile                       |   2 +-
->>  net/core/dev.c                          |   3 +
->>  net/core/devmem.c                       | 254 ++++++++++++++++++++++++
->>  net/core/netdev-genl-gen.c              |   4 +
->>  net/core/netdev-genl-gen.h              |   4 +
->>  net/core/netdev-genl.c                  | 105 +++++++++-
->>  11 files changed, 501 insertions(+), 3 deletions(-)
->>  create mode 100644 include/net/devmem.h
->>  create mode 100644 net/core/devmem.c
->>
-> [snip]
->> +/* Protected by rtnl_lock() */
->> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
->> +
->> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
->> +{
->> +	struct netdev_rx_queue *rxq;
->> +	unsigned long xa_idx;
->> +	unsigned int rxq_idx;
->> +
->> +	if (!binding)
->> +		return;
->> +
->> +	if (binding->list.next)
->> +		list_del(&binding->list);
->> +
+>> Shengjiu, what are your requirements for gstreamer support? Would be a
+>> new blocking ioctl enough for the initial support in the compress ALSA
+>> API?
 > 
-> minor nit:
-> In theory list.next can still be != null if it's poisoned (e.g. after del). You can
-> use the list api here (!list_empty(&binding->list) -> list_del_init(&binding->list))
-> if you initialize it in net_devmem_bind_dmabuf(), then you'll also get nice list
-> debugging.
+> If it works with compress API, it'd be great, yeah.
+> So, your idea is to open compress-offload devices for read and write,
+> then and let them convert a la batch jobs without timing control?
 > 
+> For full-duplex usages, we might need some more extensions, so that
+> both read and write parameters can be synchronized.  (So far the
+> compress stream is a unidirectional, and the runtime buffer for a
+> single stream.)
+> 
+> And the buffer management is based on the fixed size fragments.  I
+> hope this doesn't matter much for the intended operation?
 
-On second thought nevermind this, sorry for the noise.
+It's a question, if the standard I/O is really required for this case. My 
+quick idea was to just implement a new "direction" for this job supporting 
+only one ioctl for the data processing which will execute the job in "one 
+shot" at the moment. The I/O may be handled through dma-buf API (which seems 
+to be standard nowadays for this purpose and allows future chaining).
 
->> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
->> +		if (rxq->mp_params.mp_priv == binding) {
->> +			/* We hold the rtnl_lock while binding/unbinding
->> +			 * dma-buf, so we can't race with another thread that
->> +			 * is also modifying this value. However, the page_pool
->> +			 * may read this config while it's creating its
->> +			 * rx-queues. WRITE_ONCE() here to match the
->> +			 * READ_ONCE() in the page_pool.
->> +			 */
->> +			WRITE_ONCE(rxq->mp_params.mp_ops, NULL);
->> +			WRITE_ONCE(rxq->mp_params.mp_priv, NULL);
->> +
->> +			rxq_idx = get_netdev_rx_queue_index(rxq);
->> +
->> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
->> +		}
->> +	}
->> +
->> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
->> +
->> +	net_devmem_dmabuf_binding_put(binding);
->> +}
-> [snip]
-> 
-> Cheers,
->  Nik
-> 
+So something like:
+
+struct dsp_job {
+    int source_fd;     /* dma-buf FD with source data - for dma_buf_get() */
+    int target_fd;     /* dma-buf FD for target data - for dma_buf_get() */
+    ... maybe some extra data size members here ...
+    ... maybe some special parameters here ...
+};
+
+#define SNDRV_COMPRESS_DSPJOB _IOWR('C', 0x60, struct dsp_job)
+
+This ioctl will be blocking (thus synced). My question is, if it's feasible 
+for gstreamer or not. For this particular case, if the rate conversion is 
+implemented in software, it will block the gstreamer data processing, too.
+
+						Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
 
