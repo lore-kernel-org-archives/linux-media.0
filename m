@@ -1,40 +1,40 @@
 Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E46826ACA;
-	Thu, 16 May 2024 14:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043051E491;
+	Thu, 16 May 2024 14:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.48.224.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715871076; cv=none; b=QX5HULTHOD+m3hUNQBIFRVecY0RZrfrmecUpxchcBrs/CcQjZvIu7VCNTCi/qmgNBwg27d03Wh3PdOKi4SJQa7mhF9ArGKbW2rw3HuT5r5bA2lU6cJ3H2n+86Fdu3HfJEY7HUc3iHCU+v/cLIr8I2LAotFynOoAs13bt36H/oz8=
+	t=1715871559; cv=none; b=nxQO4vnQqkMB4p7+W1nADitSZVoqaNccxnnL0/bNuTRYlQN79nnXLMjdekW7YGgUbgBVRtYST3RbBSDpsdvVIhLVJIi/w15yE66DXnpEMZwmIvJupWkzakPBS1F9z91yxldB6cyy+cQTLkhSlFRPfXmEfaeaAALMaZ6Ak/obTWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715871076; c=relaxed/simple;
-	bh=7+WGl4qwJpTyPTpUWeD6hXve1hktly7Kg58xogeIOJM=;
+	s=arc-20240116; t=1715871559; c=relaxed/simple;
+	bh=TEgyeOIBIyfhuIOv446q/MbgUveg9VV8KhGybk9xzWs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j3glNzebxq1Z8LzFLE85R4WornC+9rch/a1PB5+Ajt7zeOJvDUmCz0mJgMJhytEyFNOREWk2HsBhNggxNUqyN0NQOPOkce7QAJB4Rf93ZOik1bSBl5BHmI2uvAlfC6zjkan0a7WAGoyf3WlTNBx7zVNyRloN3e6tkR5jSItBg5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=C2tVvhB0; arc=none smtp.client-ip=77.48.224.245
+	 In-Reply-To:Content-Type; b=SVo+uxbjzve8XhD+PcAYGmz0YiXk7ZuAKxG2BfkbrSvQ21IHCOTmo7/A5HtTx4Px461BskeLSX0YZNUHgLBsdbmAgvrJ2oVzQsGwd5bnpQXeLUfa8msGOejGMvraDXGlGmJVhEyzwARG1Uf5FErpzwq7SIKIyO60CbMbwshjh70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz; spf=pass smtp.mailfrom=perex.cz; dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b=s0RsLqQM; arc=none smtp.client-ip=77.48.224.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=perex.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perex.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="C2tVvhB0"
+	dkim=pass (1024-bit key) header.d=perex.cz header.i=@perex.cz header.b="s0RsLqQM"
 Received: from mail1.perex.cz (localhost [127.0.0.1])
-	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id B313645B5;
-	Thu, 16 May 2024 16:51:01 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz B313645B5
+	by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id C6EBE45B9;
+	Thu, 16 May 2024 16:59:13 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz C6EBE45B9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-	t=1715871062; bh=vd5m65i8q/dcDshCpdZxqE51XS5GvkCD5cFuKYkovLw=;
+	t=1715871553; bh=E37t/wiEilpJfGfz1Kzwd27xayIRgTZoOH7EN27Xj+4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C2tVvhB04LcKiEIyl5kYj3qgRnwLPIYlK94nbSF4CO68fdWuv0ZZ1HmOH2JEoxKSH
-	 ahb6NKXAUk8Uc0uGjSX7hYLcvlkQMdTXX+u8ZxJ/J4q4ijnyrPN+YGKfBLnRZJ+lER
-	 YO2R4l4IkXKbO/9DfVyHkcw1//iNZMk7kjku+4w4=
+	b=s0RsLqQM9urENxnM8KAiNXP8CShGtnlMYrnsgJoWIw6isubrtP6i5c+t4YpgsyT3W
+	 8ORHoDKqpEZCKAgzm4PDejj2mPlUwVzRBoOUSk/wQBELCvfT0b+7+Kx2JSGnykXeZE
+	 LSefVBMKHI+lkm7fO0lpZx4Hz2vI5CMD7Br1H5m0=
 Received: from [192.168.100.98] (unknown [192.168.100.98])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: perex)
 	by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-	Thu, 16 May 2024 16:50:40 +0200 (CEST)
-Message-ID: <3b9c9649-c657-4636-b4ef-31df82c58bba@perex.cz>
-Date: Thu, 16 May 2024 16:50:39 +0200
+	Thu, 16 May 2024 16:58:53 +0200 (CEST)
+Message-ID: <2411016f-2289-4a2b-8bf8-39ab2f9f1571@perex.cz>
+Date: Thu, 16 May 2024 16:58:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,9 +43,8 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v15 00/16] Add audio support in v4l2 framework
-To: Nicolas Dufresne <nicolas@ndufresne.ca>, Takashi Iwai <tiwai@suse.de>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, Shengjiu Wang
- <shengjiu.wang@gmail.com>,
+To: Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.de>, Hans Verkuil <hverkuil@xs4all.nl>,
  =?UTF-8?Q?Amadeusz_S=C5=82awi=C5=84ski?=
  <amadeuszx.slawinski@linux.intel.com>,
  Mauro Carvalho Chehab <mchehab@kernel.org>, Mark Brown <broonie@kernel.org>,
@@ -70,7 +69,7 @@ References: <1710834674-3285-1-git-send-email-shengjiu.wang@nxp.com>
  <c5dbb765-8c93-4050-84e1-c0f63b43d6c2@xs4all.nl>
  <8a6f84ac-5813-4954-b852-84f5118e607c@perex.cz> <87o7975qcw.wl-tiwai@suse.de>
  <e63ec6c8-7da7-4b87-b7ff-a71ff12dcfc1@perex.cz>
- <a60ee3505e551f3def6cdd7c76942d0fd74bc656.camel@ndufresne.ca>
+ <CAA+D8AOj2ZkiSg2sXfQypg-xc4f8dMykENu5GoGMx6REGu+WBQ@mail.gmail.com>
 From: Jaroslav Kysela <perex@perex.cz>
 Content-Language: en-US
 Autocrypt: addr=perex@perex.cz; keydata=
@@ -116,16 +115,13 @@ Autocrypt: addr=perex@perex.cz; keydata=
  k8vz1gDNeG7HOIh46GnKIrQiUXVzAuUvM5vI9YaW3YRNTcn3pguQRt+Tl9Y6G+j+yvuLL173
  m4zRUU6DOygmpQAVYSOJvKAJ07AhQGaWAAi5msM6BcTU4YGcpW7FHr6+xaFDlRHzf1lkvavX
  WoxP1IA1DFuBMeYMzfyi4qDWjXc+C51ZaQd39EulYMh+JVaWRoY=
-In-Reply-To: <a60ee3505e551f3def6cdd7c76942d0fd74bc656.camel@ndufresne.ca>
+In-Reply-To: <CAA+D8AOj2ZkiSg2sXfQypg-xc4f8dMykENu5GoGMx6REGu+WBQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 15. 05. 24 22:33, Nicolas Dufresne wrote:
-> Hi,
-> 
-> GStreamer hat on ...
-> 
-> Le mercredi 15 mai 2024 à 12:46 +0200, Jaroslav Kysela a écrit :
+On 15. 05. 24 15:34, Shengjiu Wang wrote:
+> On Wed, May 15, 2024 at 6:46 PM Jaroslav Kysela <perex@perex.cz> wrote:
+>>
 >> On 15. 05. 24 12:19, Takashi Iwai wrote:
 >>> On Wed, 15 May 2024 11:50:52 +0200,
 >>> Jaroslav Kysela wrote:
@@ -217,26 +213,33 @@ On 15. 05. 24 22:33, Nicolas Dufresne wrote:
 >> This ioctl will be blocking (thus synced). My question is, if it's feasible
 >> for gstreamer or not. For this particular case, if the rate conversion is
 >> implemented in software, it will block the gstreamer data processing, too.
+>>
 > 
-> Yes, GStreamer threading is using a push-back model, so blocking for the time of
-> the processing is fine. Note that the extra simplicity will suffer from ioctl()
-> latency.
+> Thanks.
 > 
-> In GFX, they solve this issue with fences. That allow setting up the next
-> operation in the chain before the data has been produced.
+> I have several questions:
+> 1.  Compress API alway binds to a sound card.  Can we avoid that?
+>       For ASRC, it is just one component,
 
-The fences look really nicely and seem more modern. It should be possible with 
-dma-buf/sync_file.c interface to handle multiple jobs simultaneously and share 
-the state between user space and kernel driver.
+Is this a real issue? Usually, I would expect a sound hardware (card) presence 
+when ASRC is available, or not? Eventually, a separate sound card with one 
+compress device may be created, too. For enumeration - the user space may just 
+iterate through all sound cards / compress devices to find ASRC in the system.
 
-In this case, I think that two non-blocking ioctls should be enough - add a 
-new job with source/target dma buffers guarded by one fence and abort (flush) 
-all active jobs.
+The devices/interfaces in the sound card are independent. Also, USB MIDI 
+converters offer only one serial MIDI interface for example, too.
 
-I'll try to propose an API extension for the ALSA's compress API in the 
-linux-sound mailing list soon.
+> 2.  Compress API doesn't seem to support mmap().  Is this a problem
+>       for sending and getting data to/from the driver?
 
-					Jaroslav
+I proposed to use dma-buf for I/O (separate source and target buffer).
+
+> 3. How does the user get output data from ASRC after each conversion?
+>     it should happen every period.
+
+target dma-buf
+
+				Jaroslav
 
 -- 
 Jaroslav Kysela <perex@perex.cz>
