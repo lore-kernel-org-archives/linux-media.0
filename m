@@ -1,156 +1,240 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CADA7F49F;
-	Tue, 21 May 2024 16:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B1A17556;
+	Tue, 21 May 2024 16:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716308303; cv=none; b=Sc+7cSmDitSZwNKPAvBfsczKmA+OrICgR2tuSAovnZvZam9JNUFrfDUxv8r+9A3XEtr0B5yaQdnUFzfGfsKz9GveCIQzjEL6hnNj9lsTdVIrMdanMuan43o7RDHOQ6K+RlMCqbRyLjHARXU174FmyUDn9ZNk2cI0ZaaN4//OVM4=
+	t=1716309066; cv=none; b=d0OqI9bf+1XHDrBlfMjI+p7hDXBPuAhOMKY097sajCQeyRdu2YDMPIAheii5Qd4ZWV21X8Gw2Zl0ej7h11GJO2S0H0UVR9IrQ+7BariqaB/LnxBmCy1cf6BMi2Msu5bVYGpQHBuUGlmctkrnzJUr9I2GLkA/59QmCw62sSk7o4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716308303; c=relaxed/simple;
-	bh=bA0tI6GGwwdaer6m/e4cegaAzkbPrHmQiPYZHjJJzSU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fjTt8nY3o5N/8otwMkrGPjTiF2TJAyUkpSjGYA9swiSnFJlbrmC+412knuMSMxQOgDRKaDW9VdkwDYMl7cHUCsfz5uJ7v+6oNebOXt4GJoKUugHnOVn2buRz6bBy/OnCAzSCa+07xjiq2KsneEU8xRGTYPiHPdA/LEZKnj0zogI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=2ePbt1cS; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1716309066; c=relaxed/simple;
+	bh=vKGOTT1yBBRyHhWvN3uok2skglokzqEQ67BbRlFR580=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FZgkRQSyEIjB/z+uplw5DSIFW0WOshOfdFnUeaIm/Sv/enRsYXKokRBXpyVmC2aQ64kEFhC9cpvQ1rHf7HYVBXnsm+xLsi8KFMbkJsVq6kHHP9MKuRqL7BqTm0PxBqrOHcpKcYb1w/2UWdr6zLuHXD1lkwYIv+rphYz5R/enQRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=WKpHZGwR; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="2ePbt1cS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716308299;
-	bh=bA0tI6GGwwdaer6m/e4cegaAzkbPrHmQiPYZHjJJzSU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=2ePbt1cSLye6Jut4LJ0iwx44sKk10UDJ0K45HFlR+YX01ZdJ2OJMQL6bPnCbWCCJx
-	 nTpvL4+zoaCMwbbjDu5Zz3iyUbz8xlNJr/vbYwOPPdm6OADtHRFTfzKVM3+F6psMqP
-	 ED6Db6iBbhIfUibCyhCTgC7ZmR/sgEu0zzFmXed1M5Sj4mUqcCNHaelaz6qNyB4Vyi
-	 fJm6lqYE3YE53jAlwer7wlKeh7laXL7qCLulSYCCsD+s8xcFmI6UxKD0vYPrUa8/ii
-	 6m1Z9p0/4XnxTv0kNMmZ5MWt5gOuTP+3RtOVJnjqedeZ45rQq2LhVRW5EBVIqRBbNi
-	 zqtoKAx+wZwlw==
-Received: from localhost (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A7BE5378001E;
-	Tue, 21 May 2024 16:18:18 +0000 (UTC)
-Date: Tue, 21 May 2024 18:18:17 +0200
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: =?UTF-8?B?QWRyacOhbg==?= Larumbe <adrian.larumbe@collabora.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>, Qiang Yu <yuq825@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, David Airlie <airlied@gmail.com>, Daniel Vetter
- <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>, Steven Price
- <steven.price@arm.com>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- Koenig= <christian.koenig@amd.com>, Dmitry Osipenko
- <dmitry.osipenko@collabora.com>, Zack Rusin <zack.rusin@broadcom.com>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- lima@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v3 0/2] drm: Fix dma_resv deadlock at drm object pin
- time
-Message-ID: <20240521181817.097af5e1@collabora.com>
-In-Reply-To: <t64xneene7m7x2akecvrmr44yottiicy2mle7e5fimg7vacb4n@n4cjdf7g3nlp>
-References: <20240501065650.2809530-1-adrian.larumbe@collabora.com>
-	<84a5f7b6-d20a-4c69-83a8-d8394fea2b68@suse.de>
-	<20240502135941.136ad639@collabora.com>
-	<20240502140012.68e88831@collabora.com>
-	<d520ea1b-e399-4c3d-8546-87c68e480cbc@suse.de>
-	<t64xneene7m7x2akecvrmr44yottiicy2mle7e5fimg7vacb4n@n4cjdf7g3nlp>
-Organization: Collabora
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="WKpHZGwR"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44LGIegf023007;
+	Tue, 21 May 2024 18:30:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-type; s=selector1; bh=ITGLkU6HTHqFtjoyA5kj
+	iBnTyFGlt6kPKc0wp2BTy68=; b=WKpHZGwRnWUMX+hq8UrnhKBMf3FwVp0vY9+Y
+	+/GzuoDSWXlmyYWaanvIjy+J7PvWQb3paqcQEnTeb4lZDbkb6jGNCrSeowSTr90o
+	hV5IXDWp7gErkwHL/Ps/zeuGLmWgv397ZOPsPFjKkniK7mofdNYeiuWybFJhZ5co
+	uzc7nPnNkV5Ep7HXemuCb8UFTi5Or2N+/uVgXBWC3+HvYF8vQoO2sjLBotJi79Z8
+	sHw6UNU51f6rDnXfY3j65hKkIfcX+KxXiGyJjwH7Zb7L3hdUOzhZD1KVxj5FSttx
+	UF7mbFLp2VxPA+i2geSR0YCDNZXwUaj/8fUv+PBxaVctFPs0Qg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y8vqh8nn4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 May 2024 18:30:57 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 4133340045;
+	Tue, 21 May 2024 18:30:53 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 76E9F226FDA;
+	Tue, 21 May 2024 18:30:23 +0200 (CEST)
+Received: from localhost (10.130.72.242) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 21 May
+ 2024 18:30:23 +0200
+From: Sylvain Petinot <sylvain.petinot@foss.st.com>
+To: <benjamin.mugnier@foss.st.com>, <sylvain.petinot@foss.st.com>,
+        <mchehab@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/2] media: dt-bindings: Add ST VD56G3 camera sensor binding
+Date: Tue, 21 May 2024 18:29:49 +0200
+Message-ID: <20240521162950.6987-2-sylvain.petinot@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240521162950.6987-1-sylvain.petinot@foss.st.com>
+References: <20240521162950.6987-1-sylvain.petinot@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_10,2024-05-21_01,2024-05-17_01
 
-On Fri, 17 May 2024 19:16:21 +0100
-Adri=C3=A1n Larumbe <adrian.larumbe@collabora.com> wrote:
+Add devicetree bindings Documentation for ST VD56G3 & ST VD66GY camera
+sensors. Update MAINTAINERS file.
 
-> Hi Boris and Thomas,
->=20
-> On 02.05.2024 14:18, Thomas Zimmermann wrote:
-> > Hi
-> >=20
-> > Am 02.05.24 um 14:00 schrieb Boris Brezillon: =20
-> > > On Thu, 2 May 2024 13:59:41 +0200
-> > > Boris Brezillon <boris.brezillon@collabora.com> wrote:
-> > >  =20
-> > > > Hi Thomas,
-> > > >=20
-> > > > On Thu, 2 May 2024 13:51:16 +0200
-> > > > Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> > > >  =20
-> > > > > Hi,
-> > > > >=20
-> > > > > ignoring my r-b on patch 1, I'd like to rethink the current patch=
-es in
-> > > > > general.
-> > > > >=20
-> > > > > I think drm_gem_shmem_pin() should become the locked version of _=
-pin(),
-> > > > > so that drm_gem_shmem_object_pin() can call it directly. The exis=
-ting
-> > > > > _pin_unlocked() would not be needed any longer. Same for the _unp=
-in()
-> > > > > functions. This change would also fix the consistency with the se=
-mantics
-> > > > > of the shmem _vmap() functions, which never take reservation lock=
-s.
-> > > > >=20
-> > > > > There are only two external callers of drm_gem_shmem_pin(): the t=
-est
-> > > > > case and panthor. These assume that drm_gem_shmem_pin() acquires =
-the
-> > > > > reservation lock. The test case should likely call drm_gem_pin()
-> > > > > instead. That would acquire the reservation lock and the test wou=
-ld
-> > > > > validate that shmem's pin helper integrates well into the overall=
- GEM
-> > > > > framework. The way panthor uses drm_gem_shmem_pin() looks wrong t=
-o me.
-> > > > > For now, it could receive a wrapper that takes the lock and that'=
-s it. =20
-> > > > I do agree that the current inconsistencies in the naming is
-> > > > troublesome (sometimes _unlocked, sometimes _locked, with the versi=
-on
-> > > > without any suffix meaning either _locked or _unlocked depending on
-> > > > what the suffixed version does), and that's the very reason I asked
-> > > > Dmitry to address that in his shrinker series [1]. So, ideally I'd
-> > > > prefer if patches from Dmitry's series were applied instead of
-> > > > trying to fix that here (IIRC, we had an ack from Maxime). =20
-> > > With the link this time :-).
-> > >=20
-> > > [1]https://lore.kernel.org/lkml/20240105184624.508603-1-dmitry.osipen=
-ko@collabora.com/T/ =20
-> >=20
-> > Thanks. I remember these patches. Somehow I thought they would have been
-> > merged already. I wasn't super happy about the naming changes in patch =
-5,
-> > because the names of the GEM object callbacks do no longer correspond w=
-ith
-> > their implementations. But anyway.
-> >=20
-> > If we go that direction, we should here simply push drm_gem_shmem_pin()=
- and
-> > drm_gem_shmem_unpin() into panthor and update the shmem tests with
-> > drm_gem_pin(). Panfrost and lima would call drm_gem_shmem_pin_locked().=
- IMHO
-> > we should not promote the use of drm_gem_shmem_object_*() functions, as=
- they
-> > are meant to be callbacks for struct drm_gem_object_funcs. (Auto-genera=
-ting
-> > them would be nice.) =20
->=20
-> I'll be doing this in the next patch series iteration, casting the pin fu=
-nction's
-> drm object parameter to an shmem object.
->=20
-> Also for the sake of leaving things in a consistent state, and against Bo=
-ris' advice,
-> I think I'll leave the drm WARN statement inside drm_gem_shmem_pin_locked.
+Signed-off-by: Sylvain Petinot <sylvain.petinot@foss.st.com>
+---
+ .../bindings/media/i2c/st,st-vd56g3.yaml      | 132 ++++++++++++++++++
+ MAINTAINERS                                   |   9 ++
+ 2 files changed, 141 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
 
-Sure, that's fine.
+diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml b/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
+new file mode 100644
+index 000000000000..22cb2557e311
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
+@@ -0,0 +1,132 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (c) 2024 STMicroelectronics SA.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/st,st-vd56g3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics VD56G3 Global Shutter Image Sensor
++
++maintainers:
++  - Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++  - Sylvain Petinot <sylvain.petinot@foss.st.com>
++
++description: |-
++  The STMicroelectronics VD56G3 is a 1.5 M pixel global shutter image sensor
++  with an active array size of 1124 x 1364 (portrait orientation). It is
++  programmable through I2C, the address is fixed to 0x10. The sensor output is
++  available via CSI-2, which is configured as either 1 or 2 data lanes. The
++  sensor provides 8 GPIOS that can be used for external LED signal
++  (synchronized with sensor integration periods)
++
++properties:
++  compatible:
++    enum:
++      - st,st-vd56g3
++      - st,st-vd66gy
++    description:
++      Two variants are availables; VD56G3 is a monochrome sensor while VD66GY
++      is a colour variant.
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  vcore-supply:
++    description: Digital core power supply (1.15V)
++
++  vddio-supply:
++    description: Digital IO power supply (1.8V)
++
++  vana-supply:
++    description: Analog power supply (2.8V)
++
++  reset-gpios:
++    description: Sensor reset active low GPIO (XSHUTDOWN)
++    maxItems: 1
++
++  st,leds:
++    description:
++      Sensor's GPIOs used for external LED control. Signal being the enveloppe
++      of the integration time.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 8
++    items:
++      minimum: 0
++      maximum: 7
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            minItems: 1
++            maxItems: 2
++            items:
++              enum: [1, 2]
++
++          link-frequencies:
++            minItems: 1
++            maxItems: 1
++            items:
++              enum: [402000000, 750000000]
++
++          lane-polarities:
++            minItems: 1
++            maxItems: 3
++            description: Any lane can be inverted or not.
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - vcore-supply
++  - vddio-supply
++  - vana-supply
++  - reset-gpios
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        camera-sensor@10 {
++            compatible = "st,st-vd56g3";
++            reg = <0x10>;
++
++            clocks = <&camera_clk_12M>;
++
++            vcore-supply = <&camera_vcore_v1v15>;
++            vddio-supply = <&camera_vddio_v1v8>;
++            vana-supply = <&camera_vana_v2v8>;
++
++            reset-gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
++            st,leds = <6>;
++
++            port {
++                endpoint {
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <402000000>;
++                    remote-endpoint = <&csiphy0_ep>;
++                };
++            };
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ef6be9d95143..554e6861425b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20885,6 +20885,15 @@ S:	Maintained
+ F:	Documentation/hwmon/stpddc60.rst
+ F:	drivers/hwmon/pmbus/stpddc60.c
+ 
++ST VD56G3 DRIVER
++M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
++M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/st,st-vd56g3.yaml
++F:	drivers/media/i2c/st-vd56g3.c
++
+ ST VGXY61 DRIVER
+ M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+ M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
+-- 
+2.17.1
+
