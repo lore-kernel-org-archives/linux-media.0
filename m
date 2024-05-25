@@ -1,48 +1,48 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2783127E34;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D61B127B72;
 	Sat, 25 May 2024 23:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716679781; cv=none; b=RxrH6gF+ThdWSB6I0EUOEuS5ELVpgjAX+jc3hrE9PnUQAf5Sg6iySY7LYbIFRD4l191aZUT7umn24IiqRVUNsoehKZSqukbQUmHWx+gKKi06o5UYEC80FkIfTa9JX7TOQuLqkzbRGE3OlxT16h8MSOJnKIOufC41FR79IQvME3E=
+	t=1716679781; cv=none; b=PxuEE5BFkkEloNq06nezjHPegv7edYYtU+A4XdipjtqKz6IZrABRXMerioA14YMV7uJqroqQTWLLcS0gosGEbKE+ucBSGa6h7k/XFHM2XYbYMJKF3COO01KewRmkTsh/cimtRe38ChEu/NP6v5SJhAkkiRF4Scv0k0uk7uWfj8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1716679781; c=relaxed/simple;
-	bh=PBNn0jdNfUp4z8i6OCekSOpLNXWwmbOY9aEsHfW/x5E=;
+	bh=urA5OjiuiLf2SwTXOyf3d6P+nrvogt4tvGAl0OwGZvo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xd0fq7UR+eDDP+nboAoE8+dgJVWtmEZxPd4olw6dRxUdzpXGReLEKJth4N7An8f1x+u5chqin1lfP92L6cm4mCDrtnNIaueqhOlglLhSKq3ejisIiYIOCTEZKjo8HKzeEPhu+iekEzWI1VQdLsSlv8bxZeUCx+Pbh2F2H615HY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=M99oINRF; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=QEzbBAk9idilo0oX7qjI0Dx+VZ7m6NhKmHVCOAkmSUx8Nzt5r7tFvlgRNH2i28mqF7S2R9bPvLOLFS8oRXTxu3o5aAyr9ikbNiFqLQmGdySlpnuXQ8bMbHE6BH6g53vrfhHvHz6XuOeku/8rsD4uNAzr9zQSr40T2/RTPcmtW2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FBqDSKQs; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="M99oINRF"
-X-UUID: a452f6a41aee11ef8c37dd7afa272265-20240526
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FBqDSKQs"
+X-UUID: a39b35fa1aee11efbfff99f2466cf0b4-20240526
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Tl2QN13jl/RXNBMTp3Wzf+yLZtDlERtwTZOrjciV6eA=;
-	b=M99oINRFyM9yICI92W0c3g6n6V1A4krihoJGlUgqEXeDep49dmgcE9n1oZdSF7slV+67OTq1Hzo5SoG2w3Y8tFGb+61GrInuRwDdVXQOg9FuaBddUB9hAd57M9EmgnceCRUxyVaPA20y/cAiL3zBCES2kUbGvg8pyLPIdOl9oNg=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dLzIMiXjUsZV9PSNPeZ0kbP79lmdw9z9EWXzOS2nUKg=;
+	b=FBqDSKQsaOchysu0FxmxngC4zquuxQe3gKubXLar2knG65150kVxZD/4TiM5vnlTf82tEZDZSu2QFew3ZRSMWtrEcdac94OzrEJZDPj4Yr/3WFFVF93DOAw1E8e+QAWOrlUziKy7JPhGU4mppoBWGZaKunEuTfpPrMrZGh4CAUQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:7915aedf-e663-40c8-a289-c5881c836dad,IP:0,U
+X-CID-O-INFO: VERSION:1.1.38,REQID:c79dd11f-2451-48f2-8ddc-52bc1df055ae,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:82c5f88,CLOUDID:e060cd43-4544-4d06-b2b2-d7e12813c598,B
+X-CID-META: VersionHash:82c5f88,CLOUDID:68d53693-e2c0-40b0-a8fe-7c7e47299109,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
 	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: a452f6a41aee11ef8c37dd7afa272265-20240526
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+X-UUID: a39b35fa1aee11efbfff99f2466cf0b4-20240526
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
 	(envelope-from <jason-jh.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1552233013; Sun, 26 May 2024 07:29:33 +0800
+	with ESMTP id 1894434324; Sun, 26 May 2024 07:29:32 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Sun, 26 May 2024 07:29:31 +0800
+ 15.2.1118.26; Sun, 26 May 2024 07:29:30 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Sun, 26 May 2024 07:29:31 +0800
+ 15.2.1118.26 via Frontend Transport; Sun, 26 May 2024 07:29:30 +0800
 From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 To: Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
 	<angelogioacchino.delregno@collabora.com>, Maxime Ripard <mripard@kernel.org>
@@ -50,15 +50,15 @@ CC: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
 	Matthias Brugger <matthias.bgg@gmail.com>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
-	<linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>, "Jason-ch
- Chen" <jason-ch.chen@mediatek.com>, "Jason-JH . Lin"
-	<jason-jh.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, "Nancy
- Lin" <nancy.lin@mediatek.com>, Shawn Sung <shawn.sung@mediatek.com>,
+	<linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>, Jason-ch
+ Chen <jason-ch.chen@mediatek.com>, "Jason-JH . Lin"
+	<jason-jh.lin@mediatek.com>, Singo Chang <singo.chang@mediatek.com>, Nancy
+ Lin <nancy.lin@mediatek.com>, Shawn Sung <shawn.sung@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Jeffrey Kardatzke
 	<jkardatzke@google.com>
-Subject: [PATCH v6 7/7] drm/mediatek: Add cmdq_insert_backup_cookie before secure pkt finalize
-Date: Sun, 26 May 2024 07:29:28 +0800
-Message-ID: <20240525232928.5524-8-jason-jh.lin@mediatek.com>
+Subject: [PATCH v6 5/7] drm/mediatek: Add mtk_ddp_sec_write() to config secure buffer info
+Date: Sun, 26 May 2024 07:29:26 +0800
+Message-ID: <20240525232928.5524-6-jason-jh.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20240525232928.5524-1-jason-jh.lin@mediatek.com>
 References: <20240525232928.5524-1-jason-jh.lin@mediatek.com>
@@ -69,58 +69,140 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--11.595200-8.000000
-X-TMASE-MatchedRID: XAa2d/45j8Tob/hVdrvnXjPDkSOzeDWW+eBf9ovw8I27eXIF2U7rKy+8
-	OxujShyxE/UmhJjBrzZC3mgca9yt8kttpN+KVVd9syNb+yeIRArvJY9pBzgg1P+RKQghHjkeBgH
-	mCxujQvyjmrD+IUq29hI7tf+6KnxtiBoFctaOhN8jRwcsjqWGAgrefVId6fzVCqIJhrrDy2/jZY
-	67L74Lw7o3/co+ykK6UFTYnego7LJccQ8eam5EfRRFJJyf5BJe3QfwsVk0UbtuRXh7bFKB7gRuY
-	qpRzYwt5tYzjYMxVNFdPwsV1FdNCbaRD1c+EJMdvuvB6gAgryg=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--11.595200-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	9AEA3DB8CB88483491FE005922C30F1CE0AE72AEC367029CE1464088C652F4422000:8
 X-MTK: N
 
-Add cmdq_insert_backup_cookie to append some commands before EOC:
-1. Get GCE HW thread execute count from the GCE HW register.
-2. Add 1 to the execute count and then store into a shared memory.
-3. Set a software event siganl as secure irq to GCE HW.
+Add mtk_ddp_sec_write() to configure secure buffer information to
+cmdq secure packet data and send to the secure world.
 
-Since the value of execute count + 1 is stored in a shared memory,
-CMDQ driver in the normal world can use it to handle task done in irq
-handler and CMDQ driver in the secure world will use it to schedule
-the task slot for each secure thread.
+OVL and OVL_ADAPTOR need to use mtk_ddp_sec_write() instead of original
+mtk_ddp_write() because the address in plane is secure handle not the real
+buffer address.
+
+The secure buffer information will be used to translate the secure handle
+to the curresponding secure buffer address and then the secure handle in
+instruction generated by OVL or OVL_ADPATOR will be replaced to the real
+address in secure world.
 
 Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 ---
- drivers/gpu/drm/mediatek/mtk_crtc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/mediatek/mtk_ddp_comp.c         | 14 ++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_ddp_comp.h         |  5 +++++
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c         |  9 +++++++--
+ drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c |  1 +
+ drivers/gpu/drm/mediatek/mtk_mdp_rdma.c         |  8 ++++++--
+ drivers/gpu/drm/mediatek/mtk_mdp_rdma.h         |  1 +
+ 6 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_crtc.c b/drivers/gpu/drm/mediatek/mtk_crtc.c
-index 59f6263ae806..0df9bf695f65 100644
---- a/drivers/gpu/drm/mediatek/mtk_crtc.c
-+++ b/drivers/gpu/drm/mediatek/mtk_crtc.c
-@@ -178,6 +178,7 @@ void mtk_crtc_disable_secure_state(struct drm_crtc *crtc)
+diff --git a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
+index 17b036411292..dc2b36a8bdd6 100644
+--- a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
+@@ -111,6 +111,20 @@ void mtk_ddp_write_mask(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ #endif
+ }
  
- 	cmdq_sec_pkt_set_data(&mtk_crtc->sec_cmdq_handle, sec_scn);
++void mtk_ddp_sec_write(struct cmdq_pkt *cmdq_pkt,
++		       enum cmdq_iwc_addr_metadata_type type,
++		       unsigned int base, unsigned int base_offset,
++		       struct cmdq_client_reg *cmdq_reg, unsigned int offset)
++{
++#if IS_REACHABLE(CONFIG_MTK_CMDQ)
++	if (!cmdq_pkt)
++		return;
++
++	cmdq_sec_pkt_write(cmdq_pkt, cmdq_reg->subsys, cmdq_reg->offset + offset,
++			   type, base, base_offset);
++#endif
++}
++
+ static int mtk_ddp_clk_enable(struct device *dev)
+ {
+ 	struct mtk_ddp_comp_dev *priv = dev_get_drvdata(dev);
+diff --git a/drivers/gpu/drm/mediatek/mtk_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_ddp_comp.h
+index 26236691ce4c..792fd1b004ee 100644
+--- a/drivers/gpu/drm/mediatek/mtk_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_ddp_comp.h
+@@ -7,6 +7,7 @@
+ #define MTK_DDP_COMP_H
  
-+	cmdq_sec_insert_backup_cookie(&mtk_crtc->sec_cmdq_handle);
- 	cmdq_pkt_finalize(&mtk_crtc->sec_cmdq_handle);
- 	dma_sync_single_for_device(mtk_crtc->sec_cmdq_client.chan->mbox->dev,
- 				   mtk_crtc->sec_cmdq_handle.pa_base,
-@@ -795,6 +796,8 @@ static void mtk_crtc_update_config(struct mtk_crtc *mtk_crtc, bool needs_vblank)
- 		cmdq_pkt_clear_event(cmdq_handle, mtk_crtc->cmdq_event);
- 		cmdq_pkt_wfe(cmdq_handle, mtk_crtc->cmdq_event, false);
- 		mtk_crtc_ddp_config(crtc, cmdq_handle);
-+		if (cmdq_handle->sec_data)
-+			cmdq_sec_insert_backup_cookie(cmdq_handle);
- 		cmdq_pkt_finalize(cmdq_handle);
- 		dma_sync_single_for_device(cmdq_client.chan->mbox->dev,
- 					   cmdq_handle->pa_base,
+ #include <linux/io.h>
++#include <linux/mailbox/mtk-cmdq-sec-mailbox.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/soc/mediatek/mtk-cmdq.h>
+ #include <linux/soc/mediatek/mtk-mmsys.h>
+@@ -339,4 +340,8 @@ void mtk_ddp_write_relaxed(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ void mtk_ddp_write_mask(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ 			struct cmdq_client_reg *cmdq_reg, void __iomem *regs,
+ 			unsigned int offset, unsigned int mask);
++void mtk_ddp_sec_write(struct cmdq_pkt *cmdq_pkt,
++		       enum cmdq_iwc_addr_metadata_type type,
++		       unsigned int base, unsigned int base_offset,
++		       struct cmdq_client_reg *cmdq_reg, unsigned int offset);
+ #endif /* MTK_DDP_COMP_H */
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index b552a02d7eae..5f518c9c63dc 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -449,8 +449,13 @@ void mtk_ovl_layer_config(struct device *dev, unsigned int idx,
+ 			      DISP_REG_OVL_SRC_SIZE(idx));
+ 	mtk_ddp_write_relaxed(cmdq_pkt, offset, &ovl->cmdq_reg, ovl->regs,
+ 			      DISP_REG_OVL_OFFSET(idx));
+-	mtk_ddp_write_relaxed(cmdq_pkt, addr, &ovl->cmdq_reg, ovl->regs,
+-			      DISP_REG_OVL_ADDR(ovl, idx));
++
++	if (pending->is_secure)
++		mtk_ddp_sec_write(cmdq_pkt, CMDQ_IWC_H_2_MVA, pending->addr, 0,
++				  &ovl->cmdq_reg, DISP_REG_OVL_ADDR(ovl, idx));
++	else
++		mtk_ddp_write_relaxed(cmdq_pkt, addr, &ovl->cmdq_reg, ovl->regs,
++				      DISP_REG_OVL_ADDR(ovl, idx));
+ 
+ 	if (is_afbc) {
+ 		mtk_ddp_write_relaxed(cmdq_pkt, hdr_addr, &ovl->cmdq_reg, ovl->regs,
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+index 02dd7dcdfedb..5db8711f21c2 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+@@ -188,6 +188,7 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
+ 	rdma_config.pitch = pending->pitch;
+ 	rdma_config.fmt = pending->format;
+ 	rdma_config.color_encoding = pending->color_encoding;
++	rdma_config.is_secure = state->pending.is_secure;
+ 	mtk_mdp_rdma_config(rdma_l, &rdma_config, cmdq_pkt);
+ 
+ 	if (use_dual_pipe) {
+diff --git a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
+index 925cbb7471ec..961189e16aab 100644
+--- a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
++++ b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
+@@ -199,8 +199,12 @@ void mtk_mdp_rdma_config(struct device *dev, struct mtk_mdp_rdma_cfg *cfg,
+ 		mtk_ddp_write_mask(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
+ 				   MDP_RDMA_SRC_CON, FLD_OUTPUT_ARGB);
+ 
+-	mtk_ddp_write_mask(cmdq_pkt, cfg->addr0, &priv->cmdq_reg, priv->regs,
+-			   MDP_RDMA_SRC_BASE_0, FLD_SRC_BASE_0);
++	if (cfg->is_secure)
++		mtk_ddp_sec_write(cmdq_pkt, CMDQ_IWC_H_2_MVA, cfg->addr0, 0,
++				  &priv->cmdq_reg, MDP_RDMA_SRC_BASE_0);
++	else
++		mtk_ddp_write_mask(cmdq_pkt, cfg->addr0, &priv->cmdq_reg, priv->regs,
++				   MDP_RDMA_SRC_BASE_0, FLD_SRC_BASE_0);
+ 
+ 	mtk_ddp_write_mask(cmdq_pkt, src_pitch_y, &priv->cmdq_reg, priv->regs,
+ 			   MDP_RDMA_MF_BKGD_SIZE_IN_BYTE, FLD_MF_BKGD_WB);
+diff --git a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.h b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
+index 9943ee3aac31..fcd9b3a934d0 100644
+--- a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
++++ b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.h
+@@ -15,6 +15,7 @@ struct mtk_mdp_rdma_cfg {
+ 	unsigned int	y_top;
+ 	int		fmt;
+ 	int		color_encoding;
++	bool		is_secure;
+ };
+ 
+ #endif // __MTK_MDP_RDMA_H__
 -- 
 2.18.0
 
