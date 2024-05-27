@@ -1,139 +1,270 @@
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E207646B9A;
-	Mon, 27 May 2024 07:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243782030B
+	for <linux-media@vger.kernel.org>; Mon, 27 May 2024 08:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716796710; cv=pass; b=msfhg1Us3lRrYakYEUxpF4SwuBPN4EmkAInO4nUypEXmnzF4Apq4iit+k6ZzxUCc6KxpkqBH4PiRq767bX1fREHJvKV+GY1IN1XRCzm+JcpEbJ0ydnpuYe6/1pDKaMlZV19gQ+0PRBtW6i628KwwwIsn4gDbbt22UQm+kTh2l18=
+	t=1716797821; cv=pass; b=dJYKXEKdP+xqfh8Qe3AU+x2VQMIBr2BZc1AUjXSZR+mDL5e+wFg2Twz70XRlj0pbX+HFn2BXkQGaCPg/TMW/fnXl+EIuLSeyHiwg0UNZuOyfbPyQS6pH+hDk6pm025VGbQI7RxVeKNOM78Tyxlk/oVqs9Ew91YC/D9QEimZ/hGM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716796710; c=relaxed/simple;
-	bh=vwS+AuD8UVfLnVXDMH1Bl8rSrqLGxrRX5xZXy2fk1aU=;
+	s=arc-20240116; t=1716797821; c=relaxed/simple;
+	bh=ZYqc67LXkNKG5cx18KQRwCKvcK+so9kbdSqEc7otyTI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P8OXIbL5fPKgYtCT90/ibJVPIXjaOVSdVI8xS4fxz48txABl+INz/lBON5lh1mE5TZgPEWoP43z+1bjdECXPQPoT8+ZPmDVgabCXR3QME+62hbrZcFVWDSG+VHPrZeVyYD+5+MYUzXaNvRm1v+nF2Uoaz6CFigEujNFMdefODwU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=mobTZUzZ; arc=pass smtp.client-ip=195.140.195.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OKnqw1it60oMuwguLBA51788ltkt6H2JvMRoKAQfOLof0t3MAwi/jw2qkQa1ai02AbXU7nuzuiT7suPmFz6+V4LcY69QmdkHF6QLi+nvS/ti8gcx9Dyzth1qSQcAfdssmApXfpThvnSHBxw+F+fGp9wLTPtmWgQcw0n2Q+h14sA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=I44hA0n9; arc=pass smtp.client-ip=185.185.170.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="mobTZUzZ"
-Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-c641-1eff-feae-163c.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:c641:1eff:feae:163c])
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="I44hA0n9"
+Received: from hillosipuli.retiisi.eu (80-248-247-191.cust.suomicom.net [80.248.247.191])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sailus)
-	by meesny.iki.fi (Postfix) with ESMTPSA id 4Vnp1G1H51zyTl;
-	Mon, 27 May 2024 10:58:26 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-	t=1716796706;
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4VnpQc07nCz49Pyq;
+	Mon, 27 May 2024 11:16:55 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1716797816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x23DknOkOB4RXlSRdLWdfv1URkvosOteVrdvSet2Ipw=;
-	b=mobTZUzZ15XSt7HuoAWzNUb+i1fJXmNR/gs6OxF5LqV/9E650i/uNpQ9SvdRxOB8fLdzan
-	afVRpBl0UkoV0weNa2RiXrmLbCM6xItNiYFANbYLcf7TAqRL4kz8iHJr8qiQ0IjFYi3uQS
-	g923Np2HbJOqXksQO5HzoZ2LS/EOmqw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=meesny; t=1716796706;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x23DknOkOB4RXlSRdLWdfv1URkvosOteVrdvSet2Ipw=;
-	b=KpJqFlmwOwyrXx034SsC8NCjE6uROGzTfBJuJAlRDO2q8izyDAimKKXNQlhGsPgfXM0vNN
-	NgAFPh/YhF6AegU34aD8cyCNiOYoS8UX75WKnJuP2Nl5EnZKsD54+beq9ENnrCurAY+YoA
-	i45+1L46mbEjAWtuo/fi+Fbg1oPhhEY=
+	bh=Q/45sqEO6rx3bOnUjplv9JALMi18Z1kCzNOPyT+nWek=;
+	b=I44hA0n9AKA/Mji2uTB22192uyRjs21QRd318NCccyr/K7Atlr/4nOX49MkZx2iU19xmo5
+	pIZ5W+j1Sig/EM09ujYP3uqSvu0E2deXrvZDDwGjAtH3S7Gp4SuHw2BghfmF9nG2ZMEM1l
+	1qsL2AKn0ss9ZI6nbYN5RZnFkwuSJEdPQPJ+1ngWMHb4WFb6IufCFDNh8sGHRpdq9lQntq
+	1R4plIx4yW99jLQ5CGtbn/925Q06u3FxYueSARz38qjN2hsMHKEav4bUgwNBC2Es0G69s+
+	XEbJBfZvRz1MmUhJOaCsjI9G1JMjNgbL6GivlkQ2m1S1KcuhtRIFGgqfeCU1bw==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1716797816; a=rsa-sha256;
+	cv=none;
+	b=li82scXBmHomD7hqz6Y8z3kYQFi6RCFb/v/PoVVFmxPy2u/Lfln2/i5gNdkJWUYoOsc3p1
+	XNBKG05OB815tIpL3wRo/FaD/ZgAPVMrjAqF4oOYTJbfqPAfvDm0AKzCCh/AJ2tXpc14gi
+	OpSfRw5pEoIyVBOMuqSNC0d2KWFpSsbFNdSfgxq/9ZZCbuwZiSIPLxwxWqEAh9brJ7/rfu
+	SL1q65+R9hh4sq51sPC3ucr2Pq3DNl6Tf67PoHH4Dzeb5JFqOEI85zM781NlQp7B4Lr3e5
+	6lVCFS71WdnKaxs38vXK3uhmwr8C5OiReHGUE8P3X+zgKbgiUAChYTKI6YxQUw==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1716796706; a=rsa-sha256; cv=none;
-	b=dFgTAqntdpL85p0FWoXQDa20advQZAU0/1ZGuqeh+mrYm5BuxIq2ab4npfD2D7tZsYCzYI
-	YR+aAUvPuFfbkp0CktcigGldCjimwq509l8yWlG12BD+h87eI2Me2WQt/VQJ96ArAgYOS+
-	Yvl+g1HYSSwx8IkBGN4LUspAww2ZUsE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1716797816;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q/45sqEO6rx3bOnUjplv9JALMi18Z1kCzNOPyT+nWek=;
+	b=Ptf2JkmYI1PWTfFoV11IpFNmCOps+pD/jUAo77I+AWoW0Vv8PpBtPuWiYhjQ1CGDAig1b2
+	ZIH401avkxhgBTkbOABpldzdoNa7Yb+/I3Ywvr1dWhzgGEBJkKVILmpwlCcJ8C+GNnYOnk
+	FWog0K/Zh7tpVyyv4u6TBK55kZBos5KCqNC2sDcT6tt+M5qo375mjC/mVAZcJuYapM7Vww
+	N6dM2X+I8wvFBTwL92rRoDqSQdxP/4dW8Gg5SDK+e9GFlCdYW/2yWcXG15Q5amVnKH/8HI
+	Pd83GcNB6I9WVopgB/UbwRzUErwNNCL4IJS+A0CExKCVFPT8kX3at8xa8adLsA==
 Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 66993634C93;
-	Mon, 27 May 2024 10:55:28 +0300 (EEST)
-Date: Mon, 27 May 2024 07:55:28 +0000
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id BF178634C93;
+	Mon, 27 May 2024 11:14:00 +0300 (EEST)
+Date: Mon, 27 May 2024 08:14:00 +0000
 From: Sakari Ailus <sakari.ailus@iki.fi>
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, jacopo.mondi@ideasonboard.com,
-	nayden.kanchev@arm.com, robh+dt@kernel.org, mchehab@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com,
-	laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH v4 3/5] media: mali-c55: Add Mali-C55 ISP driver
-Message-ID: <ZlQ8cOK718ha5ABw@valkosipuli.retiisi.eu>
-References: <20240418090825.624747-1-dan.scally@ideasonboard.com>
- <20240418090825.624747-4-dan.scally@ideasonboard.com>
- <Zk74ZZqn568-Wa3M@valkosipuli.retiisi.eu>
- <4ea66114-37a4-413f-b672-43ec3d4631c6@ideasonboard.com>
- <Zk-tyxjm-6R-66JO@valkosipuli.retiisi.eu>
- <8fe3bfb9-73d6-445f-bc90-d33b5c192507@ideasonboard.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Linux Media Mailing List <linux-media@vger.kernel.org>,
+	David Plowman <david.plowman@raspberrypi.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v7 7/8] media: raspberrypi: Add support for PiSP BE
+Message-ID: <ZlRAyMCduqsxYaQu@valkosipuli.retiisi.eu>
+References: <20240524140024.161313-1-jacopo.mondi@ideasonboard.com>
+ <20240524140024.161313-8-jacopo.mondi@ideasonboard.com>
+ <ZlOimSRFNNt1fdN3@valkosipuli.retiisi.eu>
+ <lqo77pdefh6f5ynxu32s24paj2qa22rc6pih623mhywifgr4pw@kt4iic67ljfz>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8fe3bfb9-73d6-445f-bc90-d33b5c192507@ideasonboard.com>
+In-Reply-To: <lqo77pdefh6f5ynxu32s24paj2qa22rc6pih623mhywifgr4pw@kt4iic67ljfz>
 
-Hi Dan,
+Hi Jacopo,
 
-On Fri, May 24, 2024 at 11:31:28AM +0100, Dan Scally wrote:
-> Hi Sakari
+On Mon, May 27, 2024 at 09:56:00AM +0200, Jacopo Mondi wrote:
+> > > +#include <linux/media/raspberrypi/pisp_be_config.h>
+> >
+> > Where is the header included from? If it's just this driver, then I'd put
+> > it in the driver's directory.
+> >
 > 
-> On 23/05/2024 21:57, Sakari Ailus wrote:
-> > Hi Dan,
-> > 
-> > On Thu, May 23, 2024 at 03:27:36PM +0100, Dan Scally wrote:
-> > > Hi Sakari - sorry, one part I missed...
-> > > 
-> > > On 23/05/2024 09:03, Sakari Ailus wrote:
-> > > > > +
-> > > > > +int mali_c55_isp_s_stream(struct mali_c55_isp *isp, int enable)
-> > > > Have you considered {enable,disable}_streams? All new drivers should use
-> > > > these instead of s_stream() now.
-> > > 
-> > > Although named s_stream this is actually a purely internal function - it's
-> > > not exposed as part of the subdev video ops. The resizer subdevices
-> > > similarly don't expose an .s_stream() operation, they're simply started in
-> > > the callpath of mali_c55_vb2_start_streaming(). I'll split the stop
-> > > functionality into mali_c55_isp_stop_stream() and rename this
-> > > mali_c55_isp_start_stream() to make that less confusing.
-> > Ack. But this might require some rework, depending on based on what
-> > streaming is actually started. I'm referring to the discussion elsewhere
-> > in the same thread.
-> > 
-> > > 
-> > > The TPG subdevice on the other hand does expose an .s_stream() operation,
-> > > since the intention was to model it exactly like a connected external
-> > > subdevice. I can switch to the .enable_streams() operation there.
-> > Sounds good.
-> 
-> 
-> Actually, not sure about this...the TPG just has a single source pad, so
-> there's no _routing_ to set and as far as I can tell that means there's also
-> no _streams_ to set since they depend on the routing -
-> v4l2_subdev_enable_streams() checks the state's stream_configs to make sure
-> the stream you're asking to enable exists, and those stream_configs get
-> created when routing is created - so I  think for now that the TPG has to
-> stay as .s_stream().
+> It's the uAPI header file. Or did I miss your question ?
 
-With Tomi's patches
-<URL:https://lore.kernel.org/linux-media/20240424-enable-streams-impro-v6-0-5fb14c20147d@ideasonboard.com/>
-you no longer need routes to use {enable,disable}_streams.
+If it's uapi, then you should have uapi in its header path. I.e.
+
+#include <uapi/linux...>
+
+> > > +	/* Everything else is as supplied by the user. */
+> > > +	begin =	offsetof(struct pisp_be_config, global.bayer_order)
+> > > +	      / sizeof(u32);
+> >
+> > The slash should be on the previous line. Same elsewhere.
+> >
+> 
+> Please, this is highly subjective and other people (like Laurent) often
+> ask for the contrary. Without any polemic intent, I encourage reviewers
+> (myself included) in considering how much time we spend (and
+> demand) on such subjective issues. Even more when other reviewers might have
+> different opinions, with the end result of pulling contributors in
+> different directions.
+
+Having binary operators at the beginning of a statement split on multiple
+lines is simply uncommon, perhaps around 10 % of the cases in the media
+tree based on a quick look. Keeping the coding style consistent is
+beneficial for us all.
+
+...
+
+> > > +static void pispbe_xlate_addrs(dma_addr_t addrs[N_HW_ADDRESSES],
+> > > +			       u32 hw_enables[N_HW_ENABLES],
+> > > +			       struct pisp_be_tiles_config *config,
+> > > +			       struct pispbe_buffer *buf[PISPBE_NUM_NODES],
+> > > +			       struct pispbe_node_group *node_group)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	/* Take a copy of the "enable" bitmaps so we can modify them. */
+> > > +	hw_enables[0] = config->config.global.bayer_enables;
+> > > +	hw_enables[1] = config->config.global.rgb_enables;
+> >
+> > I wonder if hw_enables would be better declared as a struct.
+> 
+> struct hw_enable {
+>         u32 bayer_enable;
+>         u32 rgb_enable;
+> };
+> 
+> ?
+
+You currently  have an array of struct hw_enable here.
 
 > 
+> >
+> > > +
+> > > +	/*
+> > > +	 * Main input first. There are 3 address pointers, corresponding to up
+> > > +	 * to 3 planes.
+> > > +	 */
+> > > +	ret = pispbe_get_planes_addr(addrs, buf[MAIN_INPUT_NODE],
+> > > +				     &node_group->node[MAIN_INPUT_NODE]);
+> > > +	if (ret <= 0) {
+> > > +		/*
+> > > +		 * This shouldn't happen; pispbe_schedule_internal should insist
+> > > +		 * on an input.
+> > > +		 */
+> > > +		dev_warn(node_group->pispbe->dev, "ISP-BE missing input\n");
+> > > +		hw_enables[0] = 0;
+> > > +		hw_enables[1] = 0;
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * Now TDN/Stitch inputs and outputs. These are single-plane and only
+> > > +	 * used with Bayer input. Input enables must match the requirements
+> > > +	 * of the processing stages, otherwise the hardware can lock up!
+> > > +	 */
+> > > +	if (hw_enables[0] & PISP_BE_BAYER_ENABLE_INPUT) {
+> > > +		addrs[3] = pispbe_get_addr(buf[TDN_INPUT_NODE]);
+> > > +		if (addrs[3] == 0 ||
+> > > +		    !(hw_enables[0] & PISP_BE_BAYER_ENABLE_TDN_INPUT) ||
+> > > +		    !(hw_enables[0] & PISP_BE_BAYER_ENABLE_TDN) ||
+> > > +		    (config->config.tdn.reset & 1)) {
+> > > +			hw_enables[0] &= ~(PISP_BE_BAYER_ENABLE_TDN_INPUT |
+> > > +					   PISP_BE_BAYER_ENABLE_TDN_DECOMPRESS);
+> > > +			if (!(config->config.tdn.reset & 1))
+> > > +				hw_enables[0] &= ~PISP_BE_BAYER_ENABLE_TDN;
+> > > +		}
+> > > +
+> > > +		addrs[4] = pispbe_get_addr(buf[STITCH_INPUT_NODE]);
+> > > +		if (addrs[4] == 0 ||
+> > > +		    !(hw_enables[0] & PISP_BE_BAYER_ENABLE_STITCH_INPUT) ||
+> > > +		    !(hw_enables[0] & PISP_BE_BAYER_ENABLE_STITCH)) {
+> > > +			hw_enables[0] &=
+> > > +				~(PISP_BE_BAYER_ENABLE_STITCH_INPUT |
+> > > +				  PISP_BE_BAYER_ENABLE_STITCH_DECOMPRESS |
+> > > +				  PISP_BE_BAYER_ENABLE_STITCH);
+> > > +		}
+> > > +
+> > > +		addrs[5] = pispbe_get_addr(buf[TDN_OUTPUT_NODE]);
+> > > +		if (addrs[5] == 0)
+> > > +			hw_enables[0] &= ~(PISP_BE_BAYER_ENABLE_TDN_COMPRESS |
+> > > +					   PISP_BE_BAYER_ENABLE_TDN_OUTPUT);
+> > > +
+> > > +		addrs[6] = pispbe_get_addr(buf[STITCH_OUTPUT_NODE]);
+> > > +		if (addrs[6] == 0)
+> > > +			hw_enables[0] &=
+> > > +				~(PISP_BE_BAYER_ENABLE_STITCH_COMPRESS |
+> > > +				  PISP_BE_BAYER_ENABLE_STITCH_OUTPUT);
+> > > +	} else {
+> > > +		/* No Bayer input? Disable entire Bayer pipe (else lockup) */
+> > > +		hw_enables[0] = 0;
+> > > +	}
+> > > +
+> > > +	/* Main image output channels. */
+> > > +	for (unsigned int i = 0; i < PISP_BACK_END_NUM_OUTPUTS; i++) {
+> > > +		ret = pispbe_get_planes_addr(addrs + 7 + 3 * i,
+> > > +					     buf[OUTPUT0_NODE + i],
+> > > +					     &node_group->node[OUTPUT0_NODE + i]);
+> > > +		if (ret <= 0)
+> > > +			hw_enables[1] &= ~(PISP_BE_RGB_ENABLE_OUTPUT0 << i);
+> > > +	}
+> > > +}
+
+...
+
+> > > +static void pispbe_node_def_fmt(struct pispbe_node *node)
+> > > +{
+> > > +	if (NODE_IS_META(node) && NODE_IS_OUTPUT(node)) {
+> > > +		/* Config node */
+> > > +		struct v4l2_format *f = &node->format;
+> > > +
+> > > +		f->fmt.meta.dataformat = V4L2_META_FMT_RPI_BE_CFG;
+> > > +		f->fmt.meta.buffersize = sizeof(struct pisp_be_tiles_config);
+> > > +		f->type = node->buf_type;
+> > > +	} else {
+> > > +		struct v4l2_format f = {0};
+> > > +
+> > > +		f.fmt.pix_mp.pixelformat = V4L2_PIX_FMT_YUV420;
+> > > +		f.fmt.pix_mp.width = 1920;
+> > > +		f.fmt.pix_mp.height = 1080;
+> > > +		f.type = node->buf_type;
+> >
+> > You can assign these in the declaration. The same above.
 > 
-> In the isp subdevice I can switch to v4l2_subdev_[enable|disable]_streams()
-> and let it fallback to .s_stream() for the tpg - that part's fine.
+> Here indeed I can. Above I don't think I can (if you mean in the if()
+> branch)
+
+Ack.
+
+...
+
+> > > +	/* Hardware initialisation */
+> > > +	pm_runtime_set_autosuspend_delay(pispbe->dev, 200);
+> > > +	pm_runtime_use_autosuspend(pispbe->dev);
+> > > +	pm_runtime_enable(pispbe->dev);
+> > > +
+> > > +	ret = pm_runtime_resume_and_get(pispbe->dev);
+> >
+> > You'll need to call the driver's resume function manually instead. The
+> > above depends on CONFIG_PM.
+> >
+> 
+> The driver selects CONFIG_PM, doesn't it ?
+
+It depends on PM.
+
+It'd be trivial to remove that dependency.
 
 -- 
 Regards,
