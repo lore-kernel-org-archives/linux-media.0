@@ -1,94 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBFE16B737
-	for <linux-media@vger.kernel.org>; Tue, 28 May 2024 10:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA57A161314;
+	Tue, 28 May 2024 10:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716891753; cv=none; b=fqHTZSCLh7LDhn70883xzYqk9dBaOcOrl/wCm/fcGEwjLB5rFRyagAc2LtolUtFlOZzpZVxUHi9r/4GUPKpBSPQyCvpx7Oxq3pv6o8ljlXprOhUhVp2JQ6njgEq6oHwO+TVwMsomA5MKZ3geTWzIVjOwJl2wjrShiy9QpTOWjHY=
+	t=1716892021; cv=none; b=uLZpZnlUj1RKx1hJP7BrW1RJgEEXRZ60udykJQsRtDLnVpKHwwug3gn6gQI9KSYRN8fVoBDh/eDycx52vMBrevGMDpKRNgw+6GJsa7gpAjGOp+pGAG5z91q5E48nDiTHO8yMzARcO1rHvpCnkzNZ8Rm9rPkHQu+BlIIlIizIUDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716891753; c=relaxed/simple;
-	bh=UNrszc699w64xqgsiqwyHkSTg+/CB5VqS4wmTdiLudY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CTW27c6V4y3ZWuL3HTf0rhBfInsKaiz3r5NgPJwtzsr0/gl4KD6fNqSnGUAjXD0daRfqTVdSDY+Tb4jKym2BHthfpSdOBGJDJGapAFSA9Dz/8WxIuZJeBjXHKtoxcnUtkFvIXf+bJu8NiAkqlyzvlR7tF7hWKImVM8w/4Knm/tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mGk7jASP; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1716892021; c=relaxed/simple;
+	bh=ShbB0egsqc+viF42q6rsRBuCb+8DgZ4kwsWT9hgU0u8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NRuqkaqr36ZiQJ81r5aqPORTMbHb1PDRoPRmwF8u2Vd2UBcIz91B4jvOJoUbuH/LYiVo8hHX9riN8BbpsuK1qH0NW2XP9KblSQXmbzj1ybZg/baqffglImG1pATip/5xzX9XqBV011Nm8do5oQkBB0sEE9OGGEXMiDTATkCICVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qo0ABDpD; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mGk7jASP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716891752; x=1748427752;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UNrszc699w64xqgsiqwyHkSTg+/CB5VqS4wmTdiLudY=;
-  b=mGk7jASPp1AI1TDD8wJA9aizDW7HJQim5ulM6qH7Lfao9mXlhEwRF+UT
-   mpEoAn4w0UZz2uXRnpvpiKz8x8oUmPJSnUVlR4DkGi+B/B9SVnmwdWrPE
-   QC6W7QUoEzQX1xQcfQZFV6MiPQFYE+ZuqpNFtRyyPmDs00xy2VOraNISn
-   AgngqAWZ2tDb5rjpRsRPipn/AALQKAaQR5rje5nV7j2rS5X1ZbnLphwoU
-   DlHAEeaAefNiobVR/+/Woy/gxAuYjhHccIAKpRZMSymhfa1WrUAo/24MC
-   KdiV6d7cXRxsJvjmNatJkKNlnhOH17Vp8CouxOuWzHnT+IlhMoy3gvji0
-   A==;
-X-CSE-ConnectionGUID: Tx0mJtkQReaVxxfit5JJiQ==
-X-CSE-MsgGUID: NlhfFFcASoy1DOQjdoIW1Q==
-X-IronPort-AV: E=McAfee;i="6600,9927,11085"; a="17061058"
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="17061058"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 03:22:28 -0700
-X-CSE-ConnectionGUID: h4bD/JQ2SH2vmPKkmQLBQA==
-X-CSE-MsgGUID: wbWtjv+yShCn8UuP8yTjLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,195,1712646000"; 
-   d="scan'208";a="35525099"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2024 03:22:26 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D4B3311FB11;
-	Tue, 28 May 2024 13:22:23 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1sBtyJ-00CCXv-2f;
-	Tue, 28 May 2024 13:22:23 +0300
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: wentong.wu@intel.com,
-	bingbu.cao@linux.intel.com
-Subject: [PATCH 1/2] media: mei: csi: Put the IPU device reference
-Date: Tue, 28 May 2024 13:22:12 +0300
-Message-Id: <20240528102213.2908148-2-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240528102213.2908148-1-sakari.ailus@linux.intel.com>
-References: <20240528102213.2908148-1-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qo0ABDpD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1716892018;
+	bh=ShbB0egsqc+viF42q6rsRBuCb+8DgZ4kwsWT9hgU0u8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qo0ABDpDeGyeb5AM6CvxMAHNti9En+O5JJ7JH2bf5Kz7yu4heP+HUSyNzNLBu9l4v
+	 r6G+r6Xjl5Q34vGGu+TXIib93qalmPg7v5r7lyS330vgVmLB7adu2KP8H+lX7rrfIu
+	 zJzxuXF37jfduvnRfRK/e8nQU1J25bdFgPMWSPOB7M3qUfMJFNBYvZoUeVe2eDL7OI
+	 IhiyY4tRqs1ePuvCQhmrTEcAjzVzMjtN3LeaZzlImY/eHCHvRfjLs4jdpNhm0HiC1L
+	 MeJYVO6vs3cdX8W6jVn4un+D6X7h+XF5EW/FG6J2SfjzNJDaYpsv4bglD9wNkfq/7P
+	 tdkzEA4zshBBg==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D4030378215E;
+	Tue, 28 May 2024 10:26:56 +0000 (UTC)
+Message-ID: <430cf0a6-4d8c-4819-8a95-d436eb044eec@collabora.com>
+Date: Tue, 28 May 2024 12:26:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] dt-bindings: mailbox: Add mediatek,gce-props.yaml
+To: =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= <Jason-JH.Lin@mediatek.com>,
+ "jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
+ "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+ "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+ "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+ =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= <Singo.Chang@mediatek.com>,
+ =?UTF-8?B?Sm9obnNvbiBXYW5nICjnjovogZbpkasp?= <Johnson.Wang@mediatek.com>,
+ "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+ "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ =?UTF-8?B?SmFzb24tY2ggQ2hlbiAo6Zmz5bu66LGqKQ==?=
+ <Jason-ch.Chen@mediatek.com>, =?UTF-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?=
+ <Shawn.Sung@mediatek.com>, =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?=
+ <Nancy.Lin@mediatek.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ Project_Global_Chrome_Upstream_Group
+ <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "fshao@chromium.org" <fshao@chromium.org>
+References: <20240124011459.12204-1-jason-jh.lin@mediatek.com>
+ <20240124011459.12204-2-jason-jh.lin@mediatek.com>
+ <f91d3ac1-0a7d-4ca2-bf0f-c5e471c2f6bb@collabora.com>
+ <2a2a939c9cb56de0383ec3e42db9bcf8e8518775.camel@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <2a2a939c9cb56de0383ec3e42db9bcf8e8518775.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The mei csi's probe function obtains a reference to the IPU device but
-never puts that reference. Do that now.
+Il 26/05/24 17:04, Jason-JH Lin (林睿祥) ha scritto:
+> Hi Angelo, Jassi,
+> 
+> Could you help me apply this series?
+> Thanks!
+> 
 
-Fixes: 33116eb12c6b ("media: ivsc: csi: Use IPU bridge")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/pci/intel/ivsc/mei_csi.c | 1 +
- 1 file changed, 1 insertion(+)
+That's not me, it's Jassi - green light from me, btw.
 
-diff --git a/drivers/media/pci/intel/ivsc/mei_csi.c b/drivers/media/pci/intel/ivsc/mei_csi.c
-index 89b582a221ab..53151d016188 100644
---- a/drivers/media/pci/intel/ivsc/mei_csi.c
-+++ b/drivers/media/pci/intel/ivsc/mei_csi.c
-@@ -677,6 +677,7 @@ static int mei_csi_probe(struct mei_cl_device *cldev,
- 		return -ENODEV;
- 
- 	ret = ipu_bridge_init(&ipu->dev, ipu_bridge_parse_ssdb);
-+	put_device(&ipu->dev);
- 	if (ret < 0)
- 		return ret;
- 	if (WARN_ON(!dev_fwnode(dev)))
--- 
-2.39.2
+Cheers,
+Angelo
+
+> Regards,
+> Jason-JH.Lin
+> 
+> On Wed, 2024-01-24 at 09:57 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 24/01/24 02:14, Jason-JH.Lin ha scritto:
+>>> Add mediatek,gce-props.yaml for common GCE properties that is used
+>>> for
+>>> both mailbox providers and consumers. We place the common property
+>>> "mediatek,gce-events" in this binding currently.
+>>>
+>>> The property "mediatek,gce-events" is used for GCE event ID
+>>> corresponding
+>>> to a hardware event signal sent by the hardware or a software
+>>> driver.
+>>> If the mailbox providers or consumers want to manipulate the value
+>>> of
+>>> the event ID, they need to know the specific event ID.
+>>>
+>>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Reviewed-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>>
+> 
+
 
