@@ -1,101 +1,100 @@
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B73216C852;
-	Tue, 28 May 2024 11:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A5816ABC1
+	for <linux-media@vger.kernel.org>; Tue, 28 May 2024 11:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716895922; cv=none; b=JWjUL34VDloE6IFs8hKlbI6EmJJi3PuWAGhvQ8ueqEHzKkvC4VgJg+i67RWKf20ejChRvMNXwMpin2XRh3XdL8zgT4zPzpm7wFbicIqKkEYke1C0R8mnoKgg2ekBqYuh+1m/gMF4vjbWbqV0ugP6qJmAU5xeWR97Gpn22u0sABQ=
+	t=1716897108; cv=none; b=a2WmzGSGFb2siuNwUOoP5VZxrUPNbZ+ufjNmgzbaq7birEWGzALmzntUdKNO3dU4VLz0kbdIBa6O+E4Bw5i8tjBdT/OBTwAQl56I9HUCsW0d03DV2QLlAhdP9hwj+24/8iPCXNUWGwVVaOHnT40j1U2GLHzRv1H7HGjdK8tPNug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716895922; c=relaxed/simple;
-	bh=s9zJsE3/1kg/YHUe1X0gPbq/JexKL+o52CjjXo5/REE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=WYWQrJWO8Z4KcLsDTrWlTjodSxI6F8gP6SJmf4Q9mFNKWoByFmdclElDBrIbPo5eLxuKEhbOfS/+IDkTexBNVKJNyrsHQwsTRrM+1DusmjTYX+EqRyber1CngrBPq+x9NS4WwJMxolDT1Z0YqYpRwOqT9HH0CAmU4D7CGbppdmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TmK2Z8ez; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1716897108; c=relaxed/simple;
+	bh=36uSHoMgxGER9AyqV5VeBnVW6VIdtXGcTbVwtzyKn44=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p10Oxz/wqA2Cm7gmKtvancSgQ6oRiozJdQ4cpJvsXkOZAc0nL+T9CVoHFK/V0pb87wBbkItUhEW6YRNz78lhp9Ni70Jt9OyvWTG2RxbxyhJ8urDdPPx/vjGcXzLVOxTuBI08Nseecp/pCmRtqTJ38tv8gElDYNbXiplzCxjmyic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dQFdbWeh; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TmK2Z8ez"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 44SBVenp062222;
-	Tue, 28 May 2024 06:31:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1716895900;
-	bh=VpSNru19mBz9l4/n9K1fomuoEtlk8IP8cCmAhFDqj9k=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=TmK2Z8ezSKCZDHjB/iSRmrlXraznKS7RMMA+qdqEiftotR/sCS9Vzjzc4zgo24O0s
-	 h2JSxOhqLRvw3+8fYE1FAJ2tykEIoHb9RwtN/GyjQ8jrhMhuhk0epVj+Dk/W4bbQsA
-	 ndHKMSvNYdQqNRncDgz+G+cgH4zgu1fDoe/BJOdQ=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 44SBVect036639
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 28 May 2024 06:31:40 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 28
- May 2024 06:31:40 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 28 May 2024 06:31:40 -0500
-Received: from [172.24.227.193] (devarsht.dhcp.ti.com [172.24.227.193] (may be forged))
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 44SBVVrb076827;
-	Tue, 28 May 2024 06:31:32 -0500
-Message-ID: <9c88bc47-35f0-86ed-2df7-dd83640d9997@ti.com>
-Date: Tue, 28 May 2024 17:01:31 +0530
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dQFdbWeh"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-529597d77b4so885308e87.0
+        for <linux-media@vger.kernel.org>; Tue, 28 May 2024 04:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1716897104; x=1717501904; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SR0swcG5+QwWCJaol74s1Py1ngSe4OivircoLN7dDJU=;
+        b=dQFdbWehASHf/tLujjkM/47lteoefuZtqD5HGb60XiOhOQk+YBzrjbSqixd/SLTKQ1
+         RL72TDdx7kDYyJLlmdY8HYfNRUK2QmX2TuqaTDvBiB/gHhu0nIXLqhKXXa+JU4lgyTwv
+         uVvMzpuAAsbhJVxkZ4o1eubOW4vr/Orp7wSU5izS6Xqpf6rrEenleC4pIDKTP+fRMVkL
+         nZewdk3MqlcfHd+ehT+LhP/UKPjkX8pdry9kofOM4YagsyjszdAka9JtqalmsPgeAKJp
+         LPG/4+T7I2nkS+k6DOAZDILc0E/MSZQTcbh/yBrIQCT8+KV+iOdl8pD0Felfob8xRrTQ
+         zl3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716897104; x=1717501904;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SR0swcG5+QwWCJaol74s1Py1ngSe4OivircoLN7dDJU=;
+        b=E1iqizYLpa6BBZ6f7FWvrFVhCHaF44BWWZst0RzWXOmVAOP4dhXZGB7YUHjrUhStp7
+         QaP48fguH0ZnvJ/zQ78m1+xB5aB9HO4IWMzEQkjsy36JIBue33ObtE8WnhwACKMHj37M
+         PAdUz1HKhGZqXaZbxiYq/WyfasuWww182aFRIXKJvkOZpo7WJ5sWLaYhH34YXC0aK3gk
+         v1Oa2omVPJzvx1CwJChGk/GIjyssetWrauc2NIFHxCIPxEQdlHfmcOeumJljEiA20TII
+         8FpMXhO94gP0fAMcw5xQc+NfEcoLWILtu8PehgTygJE9kGHXhK7kfKLeAxfa0BsxAnOm
+         kTUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUo2fSujVk/0jPW1CcvJSsp++I6XT/3ak/T2bKLIOZ5euMyMsotzqW7XNGqohZ+MeA3nvGc1DACOp7/Ik1EsTNU5Vu9gXqwmDqu/R4=
+X-Gm-Message-State: AOJu0Ywez9RR0QiifJWKrbtKh4dLU0ncT9vEp6N79EDYj6v03tgKZK3h
+	lB8b40i8xgQpCJz+kL5/iumvUqnKYmCyiOQpzFytZJ1mO2G01wGM09IpDvvW/mQ=
+X-Google-Smtp-Source: AGHT+IGtydr8Q+QTfb3HjbwnRs05//k8mxj1FHunYO466H8ygyz2l7N2XNJD5XCJREFfSTK3smXiaQ==
+X-Received: by 2002:a05:6512:3448:b0:51f:4096:dbca with SMTP id 2adb3069b0e04-52966ca92d9mr6185096e87.62.1716897104488;
+        Tue, 28 May 2024 04:51:44 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5297066b68csm941610e87.132.2024.05.28.04.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 04:51:44 -0700 (PDT)
+Date: Tue, 28 May 2024 14:51:42 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Marc Gonzalez <mgonzalez@freebox.fr>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+	Jeffrey Hugo <quic_jhugo@quicinc.com>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	Bryan O Donoghue <bryan.odonoghue@linaro.org>, MSM <linux-arm-msm@vger.kernel.org>, 
+	linux-media <linux-media@vger.kernel.org>, Pierre-Hugues Husson <phhusson@freebox.fr>, 
+	Arnaud Vrac <avrac@freebox.fr>
+Subject: Re: [PATCH v4 2/3] arm64: dts: qcom: msm8998: add venus node
+Message-ID: <xlsho2uayeay2yzws77donp7xrhwxndv6t6ehobevaszah23l2@risstyo3vhhv>
+References: <1cf08b56-a247-431b-a24b-69f563f49240@freebox.fr>
+ <c2fca6c7-2421-42b4-a43d-68b251daf9b4@freebox.fr>
+ <e187c5ab-0241-4a45-8d74-a33ec12deec6@freebox.fr>
+ <b4a71be9-b888-4396-9eef-28c4a4f2b149@freebox.fr>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v9 07/10] lib: add basic KUnit test for lib/math
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <benjamin.gaignard@collabora.com>, <sebastian.fricke@collabora.com>,
-        <akpm@linux-foundation.org>, <gregkh@linuxfoundation.org>,
-        <adobriyan@gmail.com>, <jani.nikula@intel.com>,
-        <p.zabel@pengutronix.de>, <airlied@gmail.com>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <laurent.pinchart@ideasonboard.com>,
-        <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>, <a-bhatia1@ti.com>,
-        <j-luthra@ti.com>, <b-brnich@ti.com>, <detheridge@ti.com>,
-        <p-mantena@ti.com>, <vijayp@ti.com>, <andrzej.p@collabora.com>,
-        <nicolas@ndufresne.ca>, <davidgow@google.com>, <dlatypov@google.com>
-References: <20240526175655.1093707-1-devarsht@ti.com>
- <20240526180933.1126116-1-devarsht@ti.com>
- <ZlTu_9orsuosNiGk@smile.fi.intel.com> <ZlTvLS8oTPcvZKQN@smile.fi.intel.com>
-From: Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <ZlTvLS8oTPcvZKQN@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4a71be9-b888-4396-9eef-28c4a4f2b149@freebox.fr>
 
-
-
-On 28/05/24 02:08, Andy Shevchenko wrote:
-> On Mon, May 27, 2024 at 11:37:20PM +0300, Andy Shevchenko wrote:
->> On Sun, May 26, 2024 at 11:39:33PM +0530, Devarsh Thakkar wrote:
+On Tue, May 28, 2024 at 12:49:54PM +0200, Marc Gonzalez wrote:
+> On 13/05/2024 10:51, Marc Gonzalez wrote:
 > 
-> ...
+> > On 07/05/2024 11:29, Marc Gonzalez wrote:
+> > 
+> > Hello Bjorn,
+> > 
+> > This patch is supposed to be merged through one of your trees, right?
 > 
->>> +MODULE_LICENSE("GPL");
->>
->> modpost validator won't be happy about this, i.e. missing MODULE_DESCRIPTION().
+> Bjorn, would you take patches 1 and 2 in your tree?
 > 
-> And obviously + module.h in the inclusion block.
-> 
+> Who would take patch 3?
 
-The module.h is already included under include/kunit/test.h and that's the
-reason compiler did not give any error. But I can still include it under
-math.h for better readability as you suggested as anyway compiler will not
-re-include if already included by another header file.
+Per MAINTAINERS:
 
-Also I see we were missing a dependency between math_kunit and kunit modules,
-so adding a dependency there too.
+Mauro Carvalho Chehab <mchehab@kernel.org> (maintainer:MEDIA INPUT INFRASTRUCTURE (V4L/DVB))
+linux-media@vger.kernel.org (open list:QUALCOMM VENUS VIDEO ACCELERATOR DRIVER)
 
-Regards
-Devarsh
+
+-- 
+With best wishes
+Dmitry
