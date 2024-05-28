@@ -1,117 +1,81 @@
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A5516DED4
-	for <linux-media@vger.kernel.org>; Tue, 28 May 2024 15:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B594171657
+	for <linux-media@vger.kernel.org>; Tue, 28 May 2024 16:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716911350; cv=none; b=EN+PzQUdXKm+XlaxqYIvnaWhWpPHXazjTE100XRtrZAIiXlM6k+rQ4DkGhGhMA8yo28QZ/ylGLZGOMTOO//6PzkOOT1oXSgr/XNyprtouUWhAQRLxwTKEv4Qg+jiVvQbxWjQX9NnwQFxLRwcCi5uWkR94NYsL1xbGUxmKs+Kyic=
+	t=1716912277; cv=none; b=dIY63kNiMUpZ6liPCWp65YMAFSgXe/q2B92jfPJfjv3LDXrtlqp4Blys31txV74J3dd4lJ4KbqrmPg+UYrkyn+Xis5iS1IpF8k9NFNXrpdmGKgsL2wUunLyu/mtX5crtcQW/xas/t0Pbg71Av4BCvr+71KO+dPHXsyF8GKWD54A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716911350; c=relaxed/simple;
-	bh=PA6ldRRGZPR55Vspgpvc2gbgSYz0hwE9+QO/CCHWNs8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NHxC7hO/3u7WTZi6AvO0LZ3sBSvahgHb8q3/P+5TEZAS6wBtDgJaH7W78gAX2SCcV5lnZ+l0yxt3t4ctQ6cRrnTmrS+tPliC+4EFX74rMJ/5kVvOZ0rMtlaZGo9+hxx8FWSEqlowKPLv/aRfWu3dowLcy+b8YAyV9QWo/yPQmQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UZQ8dRjg; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1716912277; c=relaxed/simple;
+	bh=2dgXvafGvTEPd95LArAWLb+y763AZEuKr1hUv/2T0sg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=beVV9Tz7BOpbMUoih8/U3brYo4Zr4g2QExxRyWDhp164+dBscQ+HY55QGjC+3UEVTBKugXdwaDtxpmyfBvZGXaTA18xhk6LMUw+jx0F5QZXuVQPitL60V9/hoJdozd5a/u2BWiqfsgIZbSS1puDRxT+tQWT9fPFLdKopXuv7S/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=joYmAUEz; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UZQ8dRjg"
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7ea34e637a6so4535539f.2
-        for <linux-media@vger.kernel.org>; Tue, 28 May 2024 08:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1716911348; x=1717516148; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cE3Oipmag/ieav6BFoSRNBz1laxZ2exyEi2fIqACAww=;
-        b=UZQ8dRjgET6XB3SqY5EXFfJdXmoULwZgqI0WGQJXY6H5uxipfySIw+T41xCBguk5kJ
-         tXW/gEpLsZLbzO/JNIKLllfTNB6AZA09oUK2DdaC82jejaM51+JqKp8N/8CIGMrBe3/0
-         Cxcs4haAo+QEkQNNzQJUWdxnmXb2RXTQl/wIM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716911348; x=1717516148;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cE3Oipmag/ieav6BFoSRNBz1laxZ2exyEi2fIqACAww=;
-        b=YKy9maMHO63DcuTUsYCkF1F5LO6TvBXXF4NO/+j/tn7mBbjISMGoSHteOFgzSjc3tV
-         oLPuvae22XZU0rPdZhMNrSvLX/2r+tXzbV5FhZJ+ushlcQhwLzq/DQ/4T+iyarDFaIxq
-         Dkm3PyjFlAC3yxrlUcHd+Ymcm7iPyV8cTFkprGW5slW1FztWO1/lOtYc39t1tz1P2e++
-         jH0cIGY3Kvig1BI/5414z3QYkGBRybXCHohh7OGgQIeSJ8YkgjspqEln9ocxn1/T/u7Z
-         DW7WbR95R3Ne9WQ/yfl1hA5xW5Z6UdlkMJUiMaHpJ6TEmmZe3a0YARVovgPameAZaLwv
-         t/2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUR4IEZC3qETY7N3N5CljCkQMCFxbSwIrmfRQcQibr3OgDur88kEWHeLCiJST0e18j9qfaxHXYv9xLMOJxkA55SSuJEPHvjqcifeVw=
-X-Gm-Message-State: AOJu0YxuH3MOm50ubHWa04nN/leuDzY5qif2+07R39qEsH2Hr7Idykw9
-	bWN4o9+WEhOWIo1bQiocxcdRfzCE3Ak7DjEZ9jQ2O2Nj6it3rKqDDCKWEloKBJSp3A5VOm7iB8s
-	O
-X-Google-Smtp-Source: AGHT+IHkjizk1lmfz+GG6haHtYEqXyvabAjlKAlTX1IbxEwCYNFbBUWUNm8rJx49cBEaGWik0t8cTA==
-X-Received: by 2002:a6b:7d43:0:b0:7de:e04b:42c3 with SMTP id ca18e2360f4ac-7e8c1adcaa7mr1344715639f.0.1716911348103;
-        Tue, 28 May 2024 08:49:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-7e903e0b783sm212004739f.4.2024.05.28.08.49.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 08:49:07 -0700 (PDT)
-Message-ID: <f7f43200-17f0-47bb-8a5b-3a5534948067@linuxfoundation.org>
-Date: Tue, 28 May 2024 09:49:06 -0600
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="joYmAUEz"
+Received: from localhost.localdomain (unknown [IPv6:2001:b07:5d2e:52c9:cc1e:e404:491f:e6ea])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A8C2DB53;
+	Tue, 28 May 2024 18:04:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1716912270;
+	bh=2dgXvafGvTEPd95LArAWLb+y763AZEuKr1hUv/2T0sg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=joYmAUEz6ijWvtDKuqvLzN1NTCeiSU+l+vm1r5GNHBKVczS3vTsenIXAJguSq1PlA
+	 pFzcAaDVS2Ve9sbKKcQ9Rp+Y/yLZryN263DSkqwk3rM3rxm0MemVxwj8yVu/We7QtP
+	 OPPkyA06nrFmdWs+Zxh+NVlMA1SQnHAC/BUXZBZg=
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	David Plowman <david.plowman@raspberrypi.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	Nick Hollinghurst <nick.hollinghurst@raspberrypi.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@iki.fi>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v8 1/8] media: uapi: pixfmt-luma: Document MIPI CSI-2 packing
+Date: Tue, 28 May 2024 18:03:59 +0200
+Message-ID: <20240528160407.304178-2-jacopo.mondi@ideasonboard.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240528160407.304178-1-jacopo.mondi@ideasonboard.com>
+References: <20240528160407.304178-1-jacopo.mondi@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/9] media: vimc improvements
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- linux-media@vger.kernel.org
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240424235741.17093-1-laurent.pinchart@ideasonboard.com>
- <20240505203648.GA25270@pendragon.ideasonboard.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240505203648.GA25270@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/5/24 14:36, Laurent Pinchart wrote:
-> Hello,
-> 
-> On Thu, Apr 25, 2024 at 02:57:32AM +0300, Laurent Pinchart wrote:
->> Hello,
->>
->> This patch series cleans up and improves the vimc driver, with the end
->> goal of converting it to the V4L2 subdev active state API. The goal of
->> this exercise is to make the API used by a virtual test driver, to
->> increase test coverage.
->>
->> The series starts with 4 random cleanups, to avoid unnecessary
->> iterations (1/9), constify structures (2/9 and 3/9) and rename a
->> weirdly-named enum (4/9). Patch 5/9 then centralizes the subdev
->> internal_ops initialization to prepare for the switch to the active
->> state API. The remaining patches (6/9 to 9/9) convert the vimc entities
->> to the new API one by one.
->>
->> The result has been tested using the libcamera unit tests, which make
->> extensive use of the vimc driver, as well as with v4l2-compliance. The
->> latter reports 4 errors, but they occur already with the latest stage
->> master branch.
-> 
-> Any comment about this patch series ? Shuah, do you plan to give it a
-> look ? If you don't have much time for vimc these days that's OK, I can
-> work with Kieran to get the patches reviewed.
-> 
+The Y10P, Y12P and Y14P format variants are packed according to
+the RAW10, RAW12 and RAW14 formats as defined by the MIPI CSI-2
+specification. Document it.
 
-Sorry for the delay. I will take a look and apply them for the next
-release.
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Naushir Patuck <naush@raspberrypi.com>
+---
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> On a related note, I would like to modify the MC pipeline of the vimc
-> driver to make it look more like a real ISP. This would help with unit
-> testing and compliance testing in libcamera. I briefly discussed this
-> with Hans on IRC who had no objection. If anyone has any issue or
-> concern with this plan, I would appreciate if you could let me know.
-> 
-
-I am good with the plan.
-
-thanks,
--- Shuah
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+index b3c5779521d8..f02e6cf3516a 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+@@ -209,3 +209,7 @@ are often referred to as greyscale formats.
+     For Y012 and Y12 formats, Y012 places its data in the 12 high bits, with
+     padding zeros in the 4 low bits, in contrast to the Y12 format, which has
+     its padding located in the most significant bits of the 16 bit word.
++
++    The 'P' variations of the Y10, Y12 and Y14 formats are packed according to
++    the RAW10, RAW12 and RAW14 packing scheme as defined by the MIPI CSI-2
++    specification.
+-- 
+2.45.1
 
