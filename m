@@ -1,196 +1,330 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-108-mta77.mxroute.com (mail-108-mta77.mxroute.com [136.175.108.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A032663B8
-	for <linux-media@vger.kernel.org>; Sun,  2 Jun 2024 17:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B336F076
+	for <linux-media@vger.kernel.org>; Sun,  2 Jun 2024 20:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717348616; cv=none; b=dw+nMyYI/CzEja+zeJt9iRyIr0k50lHu7V+1yuBZtSXLLuYLYGyxbItvFxJ/NrKNZ4wDhAOnGfqVxXaxpeYYvCYDPlknpw42kjQw6nYJxrUUinlCjggB/sO0axnCtBYv6FwK9340sRIF2XmhkTCSPh5747GSCWytQCbw4fEYNqw=
+	t=1717359329; cv=none; b=NO5dflA/+PIeoXPpOG4k1+Gfryry+swSE9LrfyVpBj0w+MI0jcmHgOezlCr+SWsdXM/s/Sv+4V1Vu9uvWamee23gGdp0KT82pXNtI6ltFPtAPhAfeEQxBfno/Hm5xenUj9Az9XpmwR4qQeapFqnS8nV1U0EgIR+G0NrU1xjTQ2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717348616; c=relaxed/simple;
-	bh=dPf6B5T1s47H4oZEF9JcvaGar5LM+nrenbuusF/fwho=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aFuje5L1FHcLcxmBltmjbUL9IAv1mdw/fKkV4K1O11JbjYNL8aj++8vDHGkDLwVjnmdD7HPyrIOZq128KhASD89Oj5mgOV5ktzCsKbnstQ0pasyzeDJMNCJWC7BchJ6k3M4HFXPBtskwExQTgayE7cDSPEvez4POHmQAzB7bNaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=TPRERmzB; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1717359329; c=relaxed/simple;
+	bh=I3T/lCPdevgrOcR3xPwtxnA4gw3nQz1x9KY5fcsy8To=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VIjUWZ43uBXOj1uvOIsUun5IVV3AW83Dhd/Cphyev6pL6kWZWiZlTmvHvuOn+lRN5ff2JSDFEnlx2braPkL0H/AzGg068gZzDAAPP+5g4+TkZ7RXud9FuGNPTWBsIt9Z5O8+C9WAnuntt7ln0KVZBjdVPeGIdzp4tcHmC/s5LOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=bEKDIGGU; arc=none smtp.client-ip=136.175.108.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="TPRERmzB"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3AA2E4CA;
-	Sun,  2 Jun 2024 19:16:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1717348606;
-	bh=dPf6B5T1s47H4oZEF9JcvaGar5LM+nrenbuusF/fwho=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TPRERmzBGNAw3Az3aNmGy02+aLLVeoSxsduT5p3f5GMeRX9zlkzOC35SoqyEXumEh
-	 R93Rsli/406FLmDinDlNmHPVUhCw3EWcdMLbsM4JejZkCmtGo//9zKoyBcLvChFdrz
-	 fDwFn+0n82kyQlmK3IGqXaMABQ0fhSvzNjOUH8XM=
-Date: Sun, 2 Jun 2024 20:16:38 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: RFC: V4L2 subdev states and controls
-Message-ID: <20240602171638.GA9310@pendragon.ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="bEKDIGGU"
+Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta77.mxroute.com (ZoneMTA) with ESMTPSA id 18fda96cf62000e2b6.011
+ for <linux-media@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 02 Jun 2024 20:14:27 +0000
+X-Zone-Loop: 0ea1e16b6c04b9ea01fc0ed26a3bd00ae76e57c19a07
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=luigi311.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=EFzXdN4zyGmKI62joi8Oa6Yx3cvCDJALGQogxvGhr58=; b=bEKDIGGUqyNa60KpIpVkpav/y1
+	pd3o/TGtWSjYBSRt5MkEdbPdhz0brbuyQrKpyQ2BOsyXCMxrYgp8+tCrJBXcQEYHL6HQVuXE4Dzhf
+	JlbI+cMzjBOun5E6kGw1R9Yc2c/LMdG9f+qWgK1HcbEwxHDdNNqvBLh3u5Fy4HZrIM6GT7dfXWHTd
+	pKu2OZnt0NZRJ4PEdezrnu6A+gAVbeztlI4nkEV4HbLiNM1nvxAaAWOsUapOMH3Y/YcyqtrKKbdq6
+	ja2pWstbNcw3o3CKU7a31OPcEBrC/yNSxJfInTwNIa+VJjNL4Wb5NvuZ+wbsoHXUhJXyxeXwGPzhE
+	37S3Xxxg==;
+From: git@luigi311.com
+To: linux-media@vger.kernel.org
+Cc: dave.stevenson@raspberrypi.com,
+	jacopo.mondi@ideasonboard.com,
+	mchehab@kernel.org,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	sakari.ailus@linux.intel.com,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	pavel@ucw.cz,
+	phone-devel@vger.kernel.org,
+	Luis Garcia <git@luigi311.com>
+Subject: [PATCH v6 16/23] media: i2c: imx258: Support faster pixel rate on binned modes
+Date: Sun,  2 Jun 2024 14:13:38 -0600
+Message-ID: <20240602201345.328737-17-git@luigi311.com>
+In-Reply-To: <20240602201345.328737-1-git@luigi311.com>
+References: <20240602201345.328737-1-git@luigi311.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Id: personal@luigi311.com
 
-Hello Hans,
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-I've mentioned a few times in the past that I would like to see tighter
-integration of V4L2 controls for subdevs and the subdev states. Other
-developments related to subdev states were of higher priority,
-preventing me from diving into this topic. Now that we've merged quite a
-few state-related patch series, it's time to get back to controls.
+With the binned modes, there is little point in faithfully
+reproducing the horizontal line length of 5352 pixels on the CSI2
+bus, and the FIFO between the pixel array and MIPI serialiser
+allows us to remove that dependency.
 
-I'll try to explain here what I envision, focussing on the goals, to
-start brainstorming possible solutions.
+Allow the pixel array to run with the normal settings, with the MIPI
+serialiser at half the rate. This requires some additional
+information for the link frequency to pixel rate function that
+needs to be added to the configuration tables.
 
-# Background
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Luis Garcia <git@luigi311.com>
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
+---
+ drivers/media/i2c/imx258.c | 109 ++++++++++++++++++++++++-------------
+ 1 file changed, 71 insertions(+), 38 deletions(-)
 
-First, some background, to make sure every participant in this
-conversation understands what we're talking about.
-
-## Userspace API
-
-Historically, the V4L2 API has modelled controls, formats and selection
-rectangles using a GET/SET/TRY API. This is still what the API exposes
-today on video devices. The TRY and SET calls update the requested
-format, selection rectangle and controls identically before returning
-them to userspace. The TRY calls then discard the values without
-affecting the hardware configuration, while the SET calls apply the
-values to the device.
-
-For subdevs, controls are handled the same way as on video devices, with
-GET/SET/TRY operations. Formats and selection rectangles, on the other
-hand, are instead handled with GET/SET operations only, but with the
-ability to operate on different device states. The API defines two
-states, the ACTIVE and TRY states. As for video devices, the GET/SET
-operations update the values requested by userspace in the same way. SET
-stores the value in the specified state, and GET retrieves the current
-value from the state.
-
-The ACTIVE state corresponds to the hardware state. There is a single
-ACTIVE state, and modifying it affects the hardware. The TRY state does
-not affect the hardware. It offers a storage space for formats and
-selection rectangles. This allows trying different combinations of
-formats and selection rectangles on different pads of a subdev, without
-affecting the hardware state. There is one TRY state per open file
-handle of a subdev, allowing different applications to try subdev
-configurations without affecting each other. When a subdev file handle
-is closed, the corresponding TRY state is destroyed.
-
-## Kernel API
-
-Subdev states are modelled in the kernel by a v4l2_subdev_state
-structure. The structure stores formats and selection rectangles (as
-well as routing tables) for all pads of the subdev. A pointer to the
-state is passed to all subdev operations. This simplifies implementation
-of drivers, as they don't have to handle configuration storage manually,
-and can more easily implement common GET/SET handlers for the ACTIVE and
-TRY states.
-
-Controls are handled by the V4L2 control framework. Subdev drivers
-create an instance of the v4l2_ctrl_handler structure, add controls to
-the control handler, and implement a few control operations, mostly
-.s_ctrl(). The control framework handles the V4L2 control userspace API
-with all its legacy and extended ioctls, and implements all the complex
-validation and userspace-visible behaviour.
-
-# Issues and next steps
-
-As described above, subdevs and formats and selection rectangles on one
-hand, and controls on the other hand, in very different ways. While
-userspace can test combinations of formats and selection rectangles on
-different subdev pads, it can only do so separately from trying
-controls. For most controls that is not an issue, but some controls
-affect or are affected by formats or selection rectangles. Those include
-(but are not limited to)
-
-- V4L2_CID_HFLIP and V4L2_CID_VFLIP that may affect the Bayer pattern
-  produced by a raw sensor
-
-- V4L2_CID_HBLANK and V4L2_CID_VBLANK whose higher limits typically
-  depend on the format and selection rectangles, as those values are
-  often expressed at the hardware level as total horizontal/vertical
-  sizes (i.e. active + blanking)
-
-- V4L2_CID_PIXEL_RATE and V4L2_CID_LINK_FREQ, as link frequencies and
-  pixel rates affect the achievable throughput, and thus the usable
-  sensor resolutions and frame rates
-
-Other controls may also be affected.
-
-The subdev .set_fmt(), .set_selection() and .s_ctrl() operations need to
-handle those dependencies, and not only is this cumbersome for drivers,
-it is also impossible for userspace applications to try combinations of
-formats, selection rectangles and controls without modifying the active
-value of the controls.
-
-One way to improve the situation could be to modify some of those
-controls to make them independent from the format and selection
-rectangles. For instance, we could deprecate the HBLANK and VBLANK
-controls and introduce HTOTAL and VTOTAL controls whose maximum value
-wouldn't depend on the sensor output resolution (this has been proposed
-already, see https://lore.kernel.org/all/20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com/).
-This would however likely trade one problem for another, as the minimum
-value of the HTOTAL and VTOTAL controls would then depend on the sensor
-output resolution. In any case, not all control can be made independent
-of the formats and selection rectangles.
-
-Another option would be to create a completely new API to configure
-subdevs, tailored to specific use cases. I'm personally focussing on
-drivers for raw camera sensors, and we could create an API that focusses
-on that. The obvious downsides are that userspace would need to learn a
-completely different API, that API would duplicate features of existing
-APIs, and we would anyway be facing the same issues in the API design.
-The kernel-side implementation would be cumbersome too if we want to
-handle interoperability of different APIs. While we may consider this
-option in the long term, I don't think it's a good solution today.
-
-I would like to explore moving storage of control values to the
-v4l2_subdev_state, the same way we store formats and selection
-rectangles. Subdev drivers would still create control globally, at probe
-time, but the stored value would be duplicated in each state. Control
-ioctls would need to gain a 'which' argument to select the ACTIVE or TRY
-state (ACTIVE would need to be the default for backward compatibility).
-
-On the kernel side, I think it could help to split the existing
-.s_ctrl() operation in two, with one operation to update (e.g. round)
-the control value, and the limits of other related controls, and one
-operation to apply controls to the hardware. The former would be called
-for both the ACTIVE and TRY states, while the latter would only be
-called for the ACTIVE state.
-
-Control limits would also likely need to be stored in the subdev state,
-as they will change when formats and selection rectangles change. I wish
-we could avoid this though, as it will make both the implementation and
-the specification of the userspace API behaviour more complex, but I'm
-not sure we can get away without storing limits in the state too. Still,
-control values and control limits are different, and I have a feeling we
-should handle them somehow differently.
-
-Storing control values in the subdev state will also enable future API
-evolutions in V4L2. I'm thinking in particular about usage of the
-request API with subdevs. If we can store the whole subdev state in the
-v4l2_subdev_state structure, we will be able to construct state
-instances per request, and nicely extend the request API to a whole MC
-device. There will be quite some work to achieve that, but it's a
-direction I'd like to take.
-
-Now the stage is yours. All constructive feedback is welcome. Patches
-would be amaazing, but I think we need to discuss this further first.
-
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index 4eb5f2eba491..32267d36b8f3 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -99,6 +99,11 @@ struct imx258_reg_list {
+ 	const struct imx258_reg *regs;
+ };
+ 
++struct imx258_link_cfg {
++	unsigned int lf_to_pix_rate_factor;
++	struct imx258_reg_list reg_list;
++};
++
+ enum {
+ 	IMX258_2_LANE_MODE,
+ 	IMX258_4_LANE_MODE,
+@@ -109,8 +114,8 @@ enum {
+ struct imx258_link_freq_config {
+ 	u32 pixels_per_line;
+ 
+-	/* PLL registers for this link frequency */
+-	struct imx258_reg_list reg_list[IMX258_LANE_CONFIGS];
++	/* Configuration for this link frequency / num lanes selection */
++	struct imx258_link_cfg link_cfg[IMX258_LANE_CONFIGS];
+ };
+ 
+ /* Mode : resolution and related config&values */
+@@ -273,7 +278,7 @@ static const struct imx258_reg mipi_640mbps_19_2mhz_4l[] = {
+ static const struct imx258_reg mipi_642mbps_24mhz_2l[] = {
+ 	{ 0x0136, 0x18 },
+ 	{ 0x0137, 0x00 },
+-	{ 0x0301, 0x0A },
++	{ 0x0301, 0x05 },
+ 	{ 0x0303, 0x02 },
+ 	{ 0x0305, 0x04 },
+ 	{ 0x0306, 0x00 },
+@@ -479,14 +484,22 @@ enum {
+ };
+ 
+ /*
+- * pixel_rate = link_freq * data-rate * nr_of_lanes / bits_per_sample
+- * data rate => double data rate;
+- * number of lanes => (configurable 2 or 4);
+- * bits per pixel => 10
++ * Pixel rate does not necessarily relate to link frequency on this sensor as
++ * there is a FIFO between the pixel array pipeline and the MIPI serializer.
++ * The recommendation from Sony is that the pixel array is always run with a
++ * line length of 5352 pixels, which means that there is a large amount of
++ * blanking time for the 1048x780 mode. There is no need to replicate this
++ * blanking on the CSI2 bus, and the configuration of register 0x0301 allows the
++ * divider to be altered.
++ *
++ * The actual factor between link frequency and pixel rate is in the
++ * imx258_link_cfg, so use this to convert between the two.
++ * bits per pixel being 10, and D-PHY being DDR is assumed by this function, so
++ * the value is only the combination of number of lanes and pixel clock divider.
+  */
+-static u64 link_freq_to_pixel_rate(u64 f, unsigned int nlanes)
++static u64 link_freq_to_pixel_rate(u64 f, const struct imx258_link_cfg *link_cfg)
+ {
+-	f *= 2 * nlanes;
++	f *= 2 * link_cfg->lf_to_pix_rate_factor;
+ 	do_div(f, 10);
+ 
+ 	return f;
+@@ -504,31 +517,33 @@ static const s64 link_freq_menu_items_24[] = {
+ 	321000000ULL,
+ };
+ 
++#define REGS(_list) { .num_of_regs = ARRAY_SIZE(_list), .regs = _list, }
++
+ /* Link frequency configs */
+ static const struct imx258_link_freq_config link_freq_configs_19_2[] = {
+ 	[IMX258_LINK_FREQ_1267MBPS] = {
+ 		.pixels_per_line = IMX258_PPL_DEFAULT,
+-		.reg_list = {
++		.link_cfg = {
+ 			[IMX258_2_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_1267mbps_19_2mhz_2l),
+-				.regs = mipi_1267mbps_19_2mhz_2l,
++				.lf_to_pix_rate_factor = 2 * 2,
++				.reg_list = REGS(mipi_1267mbps_19_2mhz_2l),
+ 			},
+ 			[IMX258_4_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_1267mbps_19_2mhz_4l),
+-				.regs = mipi_1267mbps_19_2mhz_4l,
++				.lf_to_pix_rate_factor = 4,
++				.reg_list = REGS(mipi_1267mbps_19_2mhz_4l),
+ 			},
+ 		}
+ 	},
+ 	[IMX258_LINK_FREQ_640MBPS] = {
+ 		.pixels_per_line = IMX258_PPL_DEFAULT,
+-		.reg_list = {
++		.link_cfg = {
+ 			[IMX258_2_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_640mbps_19_2mhz_2l),
+-				.regs = mipi_640mbps_19_2mhz_2l,
++				.lf_to_pix_rate_factor = 2,
++				.reg_list = REGS(mipi_640mbps_19_2mhz_2l),
+ 			},
+ 			[IMX258_4_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_640mbps_19_2mhz_4l),
+-				.regs = mipi_640mbps_19_2mhz_4l,
++				.lf_to_pix_rate_factor = 4,
++				.reg_list = REGS(mipi_640mbps_19_2mhz_4l),
+ 			},
+ 		}
+ 	},
+@@ -537,27 +552,27 @@ static const struct imx258_link_freq_config link_freq_configs_19_2[] = {
+ static const struct imx258_link_freq_config link_freq_configs_24[] = {
+ 	[IMX258_LINK_FREQ_1267MBPS] = {
+ 		.pixels_per_line = IMX258_PPL_DEFAULT,
+-		.reg_list = {
++		.link_cfg = {
+ 			[IMX258_2_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_1272mbps_24mhz_2l),
+-				.regs = mipi_1272mbps_24mhz_2l,
++				.lf_to_pix_rate_factor = 2,
++				.reg_list = REGS(mipi_1272mbps_24mhz_2l),
+ 			},
+ 			[IMX258_4_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_1272mbps_24mhz_4l),
+-				.regs = mipi_1272mbps_24mhz_4l,
++				.lf_to_pix_rate_factor = 4,
++				.reg_list = REGS(mipi_1272mbps_24mhz_4l),
+ 			},
+ 		}
+ 	},
+ 	[IMX258_LINK_FREQ_640MBPS] = {
+ 		.pixels_per_line = IMX258_PPL_DEFAULT,
+-		.reg_list = {
++		.link_cfg = {
+ 			[IMX258_2_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_642mbps_24mhz_2l),
+-				.regs = mipi_642mbps_24mhz_2l,
++				.lf_to_pix_rate_factor = 2 * 2,
++				.reg_list = REGS(mipi_642mbps_24mhz_2l),
+ 			},
+ 			[IMX258_4_LANE_MODE] = {
+-				.num_of_regs = ARRAY_SIZE(mipi_642mbps_24mhz_4l),
+-				.regs = mipi_642mbps_24mhz_4l,
++				.lf_to_pix_rate_factor = 4,
++				.reg_list = REGS(mipi_642mbps_24mhz_4l),
+ 			},
+ 		}
+ 	},
+@@ -635,7 +650,7 @@ struct imx258 {
+ 
+ 	const struct imx258_link_freq_config *link_freq_configs;
+ 	const s64 *link_freq_menu_items;
+-	unsigned int nlanes;
++	unsigned int lane_mode_idx;
+ 	unsigned int csi2_flags;
+ 
+ 	/*
+@@ -945,8 +960,10 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_format *fmt)
+ {
+ 	struct imx258 *imx258 = to_imx258(sd);
+-	const struct imx258_mode *mode;
++	const struct imx258_link_freq_config *link_freq_cfgs;
++	const struct imx258_link_cfg *link_cfg;
+ 	struct v4l2_mbus_framefmt *framefmt;
++	const struct imx258_mode *mode;
+ 	s32 vblank_def;
+ 	s32 vblank_min;
+ 	s64 h_blank;
+@@ -970,7 +987,11 @@ static int imx258_set_pad_format(struct v4l2_subdev *sd,
+ 		__v4l2_ctrl_s_ctrl(imx258->link_freq, mode->link_freq_index);
+ 
+ 		link_freq = imx258->link_freq_menu_items[mode->link_freq_index];
+-		pixel_rate = link_freq_to_pixel_rate(link_freq, imx258->nlanes);
++		link_freq_cfgs =
++			&imx258->link_freq_configs[mode->link_freq_index];
++
++		link_cfg = &link_freq_cfgs->link_cfg[imx258->lane_mode_idx];
++		pixel_rate = link_freq_to_pixel_rate(link_freq, link_cfg);
+ 		__v4l2_ctrl_modify_range(imx258->pixel_rate, pixel_rate,
+ 					 pixel_rate, 1, pixel_rate);
+ 		/* Update limits and set FPS to default */
+@@ -1068,7 +1089,8 @@ static int imx258_start_streaming(struct imx258 *imx258)
+ 	/* Setup PLL */
+ 	link_freq_index = imx258->cur_mode->link_freq_index;
+ 	link_freq_cfg = &imx258->link_freq_configs[link_freq_index];
+-	reg_list = &link_freq_cfg->reg_list[imx258->nlanes == 2 ? 0 : 1];
++
++	reg_list = &link_freq_cfg->link_cfg[imx258->lane_mode_idx].reg_list;
+ 	ret = imx258_write_regs(imx258, reg_list->regs, reg_list->num_of_regs);
+ 	if (ret) {
+ 		dev_err(&client->dev, "%s failed to set plls\n", __func__);
+@@ -1257,9 +1279,11 @@ static const struct v4l2_subdev_internal_ops imx258_internal_ops = {
+ static int imx258_init_controls(struct imx258 *imx258)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&imx258->sd);
++	const struct imx258_link_freq_config *link_freq_cfgs;
+ 	struct v4l2_fwnode_device_properties props;
+-	struct v4l2_ctrl_handler *ctrl_hdlr;
+ 	struct v4l2_ctrl *vflip, *hflip;
++	struct v4l2_ctrl_handler *ctrl_hdlr;
++	const struct imx258_link_cfg *link_cfg;
+ 	s64 vblank_def;
+ 	s64 vblank_min;
+ 	s64 pixel_rate;
+@@ -1293,8 +1317,11 @@ static int imx258_init_controls(struct imx258 *imx258)
+ 	if (vflip)
+ 		vflip->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
++	link_freq_cfgs = &imx258->link_freq_configs[0];
++	link_cfg = link_freq_cfgs[imx258->lane_mode_idx].link_cfg;
+ 	pixel_rate = link_freq_to_pixel_rate(imx258->link_freq_menu_items[0],
+-					     imx258->nlanes);
++					     link_cfg);
++
+ 	/* By default, PIXEL_RATE is read only */
+ 	imx258->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &imx258_ctrl_ops,
+ 				V4L2_CID_PIXEL_RATE,
+@@ -1448,10 +1475,16 @@ static int imx258_probe(struct i2c_client *client)
+ 	}
+ 
+ 	/* Get number of data lanes */
+-	imx258->nlanes = ep.bus.mipi_csi2.num_data_lanes;
+-	if (imx258->nlanes != 2 && imx258->nlanes != 4) {
++	switch (ep.bus.mipi_csi2.num_data_lanes) {
++	case 2:
++		imx258->lane_mode_idx = IMX258_2_LANE_MODE;
++		break;
++	case 4:
++		imx258->lane_mode_idx = IMX258_4_LANE_MODE;
++		break;
++	default:
+ 		dev_err(&client->dev, "Invalid data lanes: %u\n",
+-			imx258->nlanes);
++			ep.bus.mipi_csi2.num_data_lanes);
+ 		ret = -EINVAL;
+ 		goto error_endpoint_free;
+ 	}
 -- 
-Regards,
+2.44.0
 
-Laurent Pinchart
