@@ -1,40 +1,40 @@
-Received: from mail-108-mta55.mxroute.com (mail-108-mta55.mxroute.com [136.175.108.55])
+Received: from mail-108-mta56.mxroute.com (mail-108-mta56.mxroute.com [136.175.108.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6586485286
-	for <linux-media@vger.kernel.org>; Sun,  2 Jun 2024 20:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D328593D
+	for <linux-media@vger.kernel.org>; Sun,  2 Jun 2024 20:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717359650; cv=none; b=hre+08JH4bq7QTUWPDoaMpk1buDITJoMWzPpM//dsgIfCATBg8bH+fEYJtNfT1317vhv32kBpSkUvbBOpeDxKTB63hivNYx/Sb1TJXhHRjTilGsnYK26Vou4moXT4UzlAyBHn/DFJHu+eXxHWllaGTtDd1r2ZDrehFWiSYy9DwE=
+	t=1717359655; cv=none; b=pqzHcBvHcscRMvUby6e3miIeI0kRM3zA3vcAgyiYpCf2meKuRr3vMgyIpCcQjxHuS//FQ4ADRrNwZulkFZcwV6QX218mc1Oj8Cc7p8TyIKA3/bUFmIe+56d+t8pvc8hE4TOfZScWwCu6hJQIN7aeUA431LrA0BKCz6aYvZnfXvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717359650; c=relaxed/simple;
-	bh=liAeCOCis53oq3GtruCxMWUheY7cl+d70gOgO+0PYV8=;
+	s=arc-20240116; t=1717359655; c=relaxed/simple;
+	bh=dqyM9Z9VYN6ZFqUOEdi2X52oaA72CYezLlG4kpMzZnc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PKDxYKpMSYz4ZgKeq/cEnp1MVzFOibe3ZesiYdICB2k2VvLuGGzBno5r8Z5PtPhI49VznMHIRZJYriFdP+Mn9Y62l9YYJ7jRX1RB3/JOpTNktK5f5BQjUmV2qyvUm9pzX/rmxejmSZty7POnOZmY9vTGNFddZjDXcIqyZZVZvxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=tTvuGlY2; arc=none smtp.client-ip=136.175.108.55
+	 MIME-Version; b=Pmg134KRdfk8zPr2sKHQS0OzGGHr/ZF4dUkqa43e2Aj9jsQUbuagFNzmOxj5/ZR/OhBVBFb9EdO4PXv9jCR18YN/af6Fdu4h2phYp8++XktLASkJ0ZBqMB+NAk2GZEvT7Xvi4cZSBUKUNJ4fOdVNaGnV5Pl1X/trCvLArjaqKIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com; spf=pass smtp.mailfrom=luigi311.com; dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b=X/weH5KZ; arc=none smtp.client-ip=136.175.108.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=luigi311.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="tTvuGlY2"
+	dkim=pass (2048-bit key) header.d=luigi311.com header.i=@luigi311.com header.b="X/weH5KZ"
 Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta55.mxroute.com (ZoneMTA) with ESMTPSA id 18fda96e095000e2b6.012
+ by mail-108-mta56.mxroute.com (ZoneMTA) with ESMTPSA id 18fda97004d000e2b6.013
  for <linux-media@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 02 Jun 2024 20:14:32 +0000
-X-Zone-Loop: 340636c6352228ac6e35dcda1d198362dbe4d435dd41
+ Sun, 02 Jun 2024 20:14:40 +0000
+X-Zone-Loop: 9ad75901c48fe0152e1f0a5beb3c3964c5c0e3f5009f
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=luigi311.com; s=x; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=PzT4xTOEeVDL66kJK8reXjWQ9fp0oEJkeO2UsrLAT0g=; b=tTvuGlY2R/yvA8ERPzoTDtgZ6I
-	FUy0FdxvmaYyVNxmLqegOkq+sAY5FHGlaL5r99/LJtJqt+4ZOGkTntUNaz6yHqitfMaNXJ4bNkF+a
-	N0jg3DKgq6PiWo3Vs+fhPpasirB2xOeaKKex461ShwZCVntTqceMSG97yJ26hb3gjdd50Zrh2CeLb
-	WhPWFupwfjYy89IkpQrMf0aKZkM1NXfJQnlycbOwSD/eebB9DO8fPT4PbqOmSwyD2Xb9ONM1kyO5Q
-	PZ9Xp9rxByYL1hlyzqLM6ZqPdYDFGBHHex9XF5jmDSPjf9kj/L1VqBI4GTA3b6kGw/2qMRVbvlECn
-	/StAqmRA==;
+	bh=4COuKPQHOipeJ03Bp2DqJuNGbhMNq4ef6Yfoeygk1Yg=; b=X/weH5KZgDfXUAB+/ltW3CxIER
+	D2K54dVjZlm8OXDZuzROejiF2p+vH/f0SzbbcGYUVOeO789dSlXhxFKEmXvFUVIG6UZ6S/TSNtMSl
+	ytdCziI75r0er5EXlmmvneXj2hPHUF8EmyLz3MDaFy1qImF6wdJ9vBX4FPGJK8i5xRMR73ivsBF3r
+	ySMrUX+7QUdnFTwW7BwIIYM0bPu4JJu0N603jDskSYBX/3zcyOF4qw20/lbRRjIlPLkVcARl1X4GI
+	JXi2BNTgOklVzUFy3HatfyLG8yhQzdqLr4BHJxTcHBL7n1+NX20ihGFu67WrX40LAg2tr4ogPFdgU
+	NG4yR8Tw==;
 From: git@luigi311.com
 To: linux-media@vger.kernel.org
 Cc: dave.stevenson@raspberrypi.com,
@@ -54,11 +54,13 @@ Cc: dave.stevenson@raspberrypi.com,
 	linux-kernel@vger.kernel.org,
 	pavel@ucw.cz,
 	phone-devel@vger.kernel.org,
+	Ondrej Jirman <megi@xff.cz>,
+	Ondrej Jirman <megous@megous.com>,
 	Luis Garcia <git@luigi311.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v6 18/23] dt-bindings: media: imx258: Add alternate compatible strings
-Date: Sun,  2 Jun 2024 14:13:40 -0600
-Message-ID: <20240602201345.328737-19-git@luigi311.com>
+	Tommaso Merciai <tomm.merciai@gmail.com>
+Subject: [PATCH v6 21/23] media: i2c: imx258: Add support for reset gpio
+Date: Sun,  2 Jun 2024 14:13:43 -0600
+Message-ID: <20240602201345.328737-22-git@luigi311.com>
 In-Reply-To: <20240602201345.328737-1-git@luigi311.com>
 References: <20240602201345.328737-1-git@luigi311.com>
 Precedence: bulk
@@ -70,44 +72,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: personal@luigi311.com
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Ondrej Jirman <megi@xff.cz>
 
-There are a number of variants of the imx258 modules that can not
-be differentiated at runtime, so add compatible strings for the
-PDAF variant.
+It was documented in DT, but not implemented.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Ondrej Jirman <megous@megous.com>
 Signed-off-by: Luis Garcia <git@luigi311.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Pavel Machek <pavel@ucw.cz>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Tommaso Merciai <tomm.merciai@gmail.com>
 ---
- .../devicetree/bindings/media/i2c/sony,imx258.yaml       | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx258.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-index bee61a443b23..c978abc0cdb3 100644
---- a/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/sony,imx258.yaml
-@@ -13,11 +13,16 @@ description: |-
-   IMX258 is a diagonal 5.867mm (Type 1/3.06) 13 Mega-pixel CMOS active pixel
-   type stacked image sensor with a square pixel array of size 4208 x 3120. It
-   is programmable through I2C interface.  Image data is sent through MIPI
--  CSI-2.
-+  CSI-2. The sensor exists in two different models, a standard variant
-+  (IMX258) and a variant with phase detection autofocus (IMX258-PDAF).
-+  The camera module does not expose the model through registers, so the
-+  exact model needs to be specified.
+diff --git a/drivers/media/i2c/imx258.c b/drivers/media/i2c/imx258.c
+index f043200e336e..671fe176c64c 100644
+--- a/drivers/media/i2c/imx258.c
++++ b/drivers/media/i2c/imx258.c
+@@ -698,6 +698,8 @@ struct imx258 {
+ 	unsigned int lane_mode_idx;
+ 	unsigned int csi2_flags;
  
- properties:
-   compatible:
--    const: sony,imx258
-+    enum:
-+      - sony,imx258
-+      - sony,imx258-pdaf
++	struct gpio_desc *reset_gpio;
++
+ 	/*
+ 	 * Mutex for serialized access:
+ 	 * Protect sensor module set pad format and start/stop streaming safely.
+@@ -1245,7 +1247,10 @@ static int imx258_power_on(struct device *dev)
+ 		regulator_bulk_disable(IMX258_NUM_SUPPLIES, imx258->supplies);
+ 	}
  
-   assigned-clocks: true
-   assigned-clock-parents: true
+-	return ret;
++	gpiod_set_value_cansleep(imx258->reset_gpio, 0);
++	usleep_range(400, 500);
++
++	return 0;
+ }
+ 
+ static int imx258_power_off(struct device *dev)
+@@ -1254,6 +1259,9 @@ static int imx258_power_off(struct device *dev)
+ 	struct imx258 *imx258 = to_imx258(sd);
+ 
+ 	clk_disable_unprepare(imx258->clk);
++
++	gpiod_set_value_cansleep(imx258->reset_gpio, 1);
++
+ 	regulator_bulk_disable(IMX258_NUM_SUPPLIES, imx258->supplies);
+ 
+ 	return 0;
+@@ -1559,6 +1567,12 @@ static int imx258_probe(struct i2c_client *client)
+ 	if (!imx258->variant_cfg)
+ 		imx258->variant_cfg = &imx258_cfg;
+ 
++	/* request optional reset pin */
++	imx258->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
++						     GPIOD_OUT_HIGH);
++	if (IS_ERR(imx258->reset_gpio))
++		return PTR_ERR(imx258->reset_gpio);
++
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&imx258->sd, client, &imx258_subdev_ops);
+ 
 -- 
 2.44.0
 
