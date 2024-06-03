@@ -1,134 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FC16BFA7;
-	Mon,  3 Jun 2024 09:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9547E777
+	for <linux-media@vger.kernel.org>; Mon,  3 Jun 2024 09:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717406353; cv=none; b=DfBK+y+o1CVQQO6CKErQ5IUMQxtvMaWSnNyg/0IxUirVWYnfReFmxQS1DyCwLQk1p3YgFcx0r8XSmf8bVmfTFilwG88kqM1rcQnZiWsQ8yct/208x4iCrtvVTUPmLWlF8UEwAxkJjZKiLr1Br+SpsnfsmTjWPKnwDvtFzl66+dg=
+	t=1717406931; cv=none; b=vF7YoOvvycmB478QKRrKE6uy8/nAkm3G3Jvm4jkEyoeyXrTaMau2TmlJrxXqz4ue3TKBDZPF7PL7GWEz+lqcjsmICQpjC2RmgSBQ/iLS8eSjl37mR4KlMwCZViliXUjb6vEoyj2BW94mANM+Qu9XA9F1VlCmgCfzZrRdtdjmpvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717406353; c=relaxed/simple;
-	bh=8xgDdE1s0Sy7MSL/lvwJ5vd91bhOXjXzA/bKRupcguk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XytZNeyD/DO2DPqZVSARejMfMj2sOmxMCJeks9DKSy4TUIOMRmJK+NIjHd8kDSMG+WDYwNF1hLVwhcpg92JXOwjjGQKqT5zm3dogvr42x9VPGLCqEAgFktedWaMuDCZmBuh5ktayIf6MeFqDIFb/JSAt7NfplbdBAI5Hm5jGE1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NKWfADtT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1717406931; c=relaxed/simple;
+	bh=x9r0dvx+56ChurBzQtcPwM6yk15IGheGZCWCnh6mNHA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q7uvIgVRfFd/bVd+w3aQ1NOixJ4CA1XDCVniOMv+scPA6C73rcbgKCE2cz68zfxvdVpJymPlEXcOdFpVIbj4rOywpOYQSD+lYbrmHaLhLrEhf0kOmlPLY9EtMLb8Uj7CB1ctIL9T7S5+kj7RuxDNVuholX93xFIBODrf6N76/9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=T070ACYu; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NKWfADtT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53725C2BD10;
-	Mon,  3 Jun 2024 09:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717406352;
-	bh=8xgDdE1s0Sy7MSL/lvwJ5vd91bhOXjXzA/bKRupcguk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NKWfADtTehZuSolnbCX4vpsNlZ7jbsxupSZd4OJekHLJoq5v46n8U4bLUwjSuVGhP
-	 yHhW+Fr3gs3RjmXj0ctGg/HqXwmXF8N8oQ8ic4hwW+q2XrTYwmoX1go5s7WJVULgbA
-	 K1xOIoq2LrQAwb/zVdnUSnmRMLhyUDmH3z0IhwPxIRXr7HyVU3E6iFQh5cUmE+ep3h
-	 nldVKWnC7OeSLj3E4quZram4nv3gkRqS+NDgRB+M6KvOvluAdoGIo7YrTc+yRbVzz4
-	 5R6LfuFWKVYuhynKmG/Y2a/z5bwzwa3eeVc+DVhL0NfxxlF6gVa6LOwtF+P0SzYYHP
-	 vPJKPDho5gMxA==
-Date: Mon, 3 Jun 2024 11:19:10 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, 
-	Sandy Huang <hjc@rock-chips.com>, Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Andy Yan <andy.yan@rock-chips.com>, 
-	Hans Verkuil <hverkuil@xs4all.nl>, Sebastian Wick <sebastian.wick@redhat.com>, 
-	Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, dri-devel@lists.freedesktop.org, 
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Sui Jingfeng <sui.jingfeng@linux.dev>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Pekka Paalanen <pekka.paalanen@collabora.com>, 
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Andy Yan <andyshrk@163.com>
-Subject: Re: [PATCH v15 00/29] drm/connector: Create HDMI Connector
- infrastructure
-Message-ID: <20240603-nippy-ludicrous-caracara-e02e3c@houat>
-References: <20240527-kms-hdmi-connector-state-v15-0-c5af16c3aae2@kernel.org>
- <874jadesaj.fsf@intel.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="T070ACYu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=iFHQTiqeEFBKGd3rXHXp+vfm+qP+/anhPmfCS1jdQd0=; b=T070AC
+	Yufs91XsFUkr/ELMMEqHsbPILzNjkR7rWGeS6jHFW4J7rl+9RbDnsxxuH8uGxbtC
+	ogmYFstDR8L4X7Sy5UWLlEUtBRChLRqeqOa5ent6sg/tX2bKV3PztASsPY7wiDYC
+	Z13IVD81ZU9dYRl8a3XS3S9/mJr2ty2UF0nqt6TWrkOeE1AduhRMFH1DcRgdgKhK
+	r09nPqP7eV62Q9NzevD4OzPPGLxT2M/5ljWjCxTJqel0cZknO0gFPVbjmozH7EPP
+	bhFJ8nBbeWjiZi1/iKO9uJheZKSevpsJhrDkVYtNNkHDGHafRnkafnJFZIzshKhb
+	L215QOyW1KOQk7Zw==
+Received: (qmail 1903109 invoked from network); 3 Jun 2024 11:28:47 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2024 11:28:47 +0200
+X-UD-Smtp-Session: l3s3148p1@nYzW9fgZIpEgAwDPXzLGAH1eNELjOc3g
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-kernel@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Michael Tretter <m.tretter@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org
+Subject: [PATCH 1/8] media: allegro: use 'time_left' variable with wait_for_completion_timeout()
+Date: Mon,  3 Jun 2024 11:28:32 +0200
+Message-ID: <20240603092841.9500-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
+References: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="vh7l4xzntgu42oo4"
-Content-Disposition: inline
-In-Reply-To: <874jadesaj.fsf@intel.com>
+Content-Transfer-Encoding: 8bit
 
+There is a confusing pattern in the kernel to use a variable named 'timeout' to
+store the result of wait_for_completion_timeout() causing patterns like:
 
---vh7l4xzntgu42oo4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	timeout = wait_for_completion_timeout(...)
+	if (!timeout) return -ETIMEDOUT;
 
-Hi Jani,
+with all kinds of permutations. Use 'time_left' as a variable to make the code
+self explaining.
 
-On Fri, May 31, 2024 at 09:43:16PM GMT, Jani Nikula wrote:
-> On Mon, 27 May 2024, Maxime Ripard <mripard@kernel.org> wrote:
-> > Let me know what you think,
->=20
-> Sorry to report that this series generates a bunch of kernel-doc
-> warnings in include/drm/drm_connector.h. Documenting nested struct
-> members doesn't work as smoothly as you'd expect:
->
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'broad=
-cast_rgb' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'infof=
-rames' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'avi' =
-description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'hdr_d=
-rm' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'spd' =
-description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'vendo=
-r' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'is_li=
-mited_range' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'outpu=
-t_bpc' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'outpu=
-t_format' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'tmds_=
-char_rate' description in 'drm_connector_state'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'vendo=
-r' description in 'drm_connector'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'produ=
-ct' description in 'drm_connector'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'suppo=
-rted_formats' description in 'drm_connector'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'infof=
-rames' description in 'drm_connector'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'lock'=
- description in 'drm_connector'
-> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'audio=
-' description in 'drm_connector'
->=20
-> Noticed this when I was rebasing [1]. Having that merged would find
-> issues in headers at build time instead of 'make htmldocs'.
->=20
-> In the mean time, this is the quick reproducer:
->=20
-> $ scripts/kernel-doc -none include/drm/drm_connector.h
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ .../media/platform/allegro-dvt/allegro-core.c    | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Thanks for the report and the reproducer. I have to admit I have no idea
-how to fix it, do you have a suggestion?
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/allegro-core.c
+index da61f9beb6b4..4016aef5fdb9 100644
+--- a/drivers/media/platform/allegro-dvt/allegro-core.c
++++ b/drivers/media/platform/allegro-dvt/allegro-core.c
+@@ -2481,14 +2481,14 @@ static void allegro_mcu_interrupt(struct allegro_dev *dev)
+ static void allegro_destroy_channel(struct allegro_channel *channel)
+ {
+ 	struct allegro_dev *dev = channel->dev;
+-	unsigned long timeout;
++	unsigned long time_left;
+ 
+ 	if (channel_exists(channel)) {
+ 		reinit_completion(&channel->completion);
+ 		allegro_mcu_send_destroy_channel(dev, channel);
+-		timeout = wait_for_completion_timeout(&channel->completion,
+-						      msecs_to_jiffies(5000));
+-		if (timeout == 0)
++		time_left = wait_for_completion_timeout(&channel->completion,
++							msecs_to_jiffies(5000));
++		if (time_left == 0)
+ 			v4l2_warn(&dev->v4l2_dev,
+ 				  "channel %d: timeout while destroying\n",
+ 				  channel->mcu_channel_id);
+@@ -2544,7 +2544,7 @@ static void allegro_destroy_channel(struct allegro_channel *channel)
+ static int allegro_create_channel(struct allegro_channel *channel)
+ {
+ 	struct allegro_dev *dev = channel->dev;
+-	unsigned long timeout;
++	unsigned long time_left;
+ 
+ 	if (channel_exists(channel)) {
+ 		v4l2_warn(&dev->v4l2_dev,
+@@ -2595,9 +2595,9 @@ static int allegro_create_channel(struct allegro_channel *channel)
+ 
+ 	reinit_completion(&channel->completion);
+ 	allegro_mcu_send_create_channel(dev, channel);
+-	timeout = wait_for_completion_timeout(&channel->completion,
+-					      msecs_to_jiffies(5000));
+-	if (timeout == 0)
++	time_left = wait_for_completion_timeout(&channel->completion,
++						msecs_to_jiffies(5000));
++	if (time_left == 0)
+ 		channel->error = -ETIMEDOUT;
+ 	if (channel->error)
+ 		goto err;
+-- 
+2.43.0
 
-Maxime
-
---vh7l4xzntgu42oo4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZl2KjgAKCRAnX84Zoj2+
-dnjdAYCh58HSx5UyDwrdyTzw/8fwdR9giynUz0iYzk+dNWJEo48JrCLQ4Oc8ASYX
-u5pApZIBf0v8uDQCp2JLsoeGPjt70PJzOz8ltjERxngYWkCqY3lGDMjCu5zl4oIm
-efWmURI3ow==
-=SmU7
------END PGP SIGNATURE-----
-
---vh7l4xzntgu42oo4--
