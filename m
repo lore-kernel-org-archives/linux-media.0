@@ -1,102 +1,136 @@
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6540C84A36
-	for <linux-media@vger.kernel.org>; Mon,  3 Jun 2024 09:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03A184FD0;
+	Mon,  3 Jun 2024 09:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717406939; cv=none; b=EfLYaFbWGUxYvbIfKIzPxlEjpr+Y4Vwo+Jx7CNOHdHPCpaPy5OAGmeQD1b/xFBymQI7tvqnhLJ7GywP5ydNRcsOFNpSuWKK3wa7/NCv+2kMQXlK3FHo7spFU10m+O1/c17ftQsThvtv0nO9PVB6HMNW2CVc/emNYctsOicNTt2c=
+	t=1717406946; cv=none; b=AKkyemBnzMke2tYvbwlzWFFojKap+ndUiZ9JAIeqtiMq7Xng5EOO5JbqKWNhTHnWW2txQyQ07mmeG4TkfVm0kKQoZrDHgFQLjdW6uW1jGp8eEigX3D3i0GTBguQ6cT9TUHpxwTrOQK4H+xHXrsJl3IWKkB+n+odovdv0JjOxJN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717406939; c=relaxed/simple;
-	bh=C/9KYYddj4qZHqa8y2yNasr0MNOy2tpH9zFMadog84M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qRmVoGPwl2MDCCWR3V7xTPwBS2H0SrDN3ymk6rBRV4ZCOIdpW6Vrlo92DadkZEhtppgzTFFSsGOG5AvYg8tnCSKaBEnVAYh0Ojq0WBJUKImT3mDRkAjUk0rEx0j5bTz6iABDiSWosWWpdFGLSLT5DCykuF/LE71uVdAqqtTGFJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MBAb4wq6; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1717406946; c=relaxed/simple;
+	bh=j4w9K5djQp5xn5C5Ueh22RoGjSGi1Sn90cfAUmAMli4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hn1GpXlDpekCemwUwWcF5Es6pC7i5CcPe34v6cW5eXZb9twHqjIR6qRhDUwcmbIdjsjXw70t/Wi0JLdO5g4P6FUwqDgHSvNcRbJuGnqNDYThFXzwbRRW66s2h+cZGRgvgbtp6waLppNpMAM/YAO7HGU3bW+50icCHjC1d2l+O5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFilpSOG; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MBAb4wq6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=ytP13Gl64JFAwriGV8x2mCJjir2yJaQn5QnGdupCrjA=; b=MBAb4w
-	q69zxA+YcZZEOrgzDEnFtr6xBSFn364fpPZ6+qK6Y/su7ZXQFcmRwJIFNww3OzwF
-	RAUa94ILtECzH37bOtAQu37FdSUImWbUcfU7p0BjjFiEQq0Ab8ab1IpBH8AEFvP8
-	kVcz6xUCj4+/40Q2q8Sh/1aBUtDtTB1Ki0Z+uuwlUMHO3n+g99NRrbjOW4a0CDh3
-	deVPj18S4Ym2IlHtrHdJDEMLBmmTpJdvFHDcSOMa5TzJKe+qewd7KQInb0LH6s1m
-	fN8aC4iwhdUo/khS/xSVkI/0k2K6i1OFAb791YJDTqRMBQ+uDzMbVziamd0m7wZI
-	c9L5H/3ullyFP1Wg==
-Received: (qmail 1903270 invoked from network); 3 Jun 2024 11:28:51 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2024 11:28:51 +0200
-X-UD-Smtp-Session: l3s3148p1@HZUS9vgZPNcgAwDPXzLGAH1eNELjOc3g
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-kernel@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
-	Anton Sviridenko <anton@corp.bluecherry.net>,
-	Andrey Utkin <andrey_utkin@fastmail.com>,
-	Ismael Luceno <ismael@iodev.co.uk>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Subject: [PATCH 6/8] media: solo6x10: use 'time_left' variable with wait_for_completion_timeout()
-Date: Mon,  3 Jun 2024 11:28:37 +0200
-Message-ID: <20240603092841.9500-7-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
-References: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFilpSOG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717406945; x=1748942945;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=j4w9K5djQp5xn5C5Ueh22RoGjSGi1Sn90cfAUmAMli4=;
+  b=lFilpSOGxrfLNOKxpc/CNnfBwzqocMvPZR4dSypSOU3DjhubFaCLzd8N
+   4Z7n5+YKAuLe4z8KUXvdYUTBQ6Yvk3JcUwQZ/6gzH2Pay74xm22hd4s4F
+   csy/NN8tK+Gwao6uYf4N1+Uv85fh3m5aNklZ7uyAKdkW1nLr+joPJhgpN
+   CFFEqfIpPUrYqJCNkfDwWRn0uXfaFAR15xWRj5ktXGkAcmhNPS6hGyqgJ
+   RnKUU2uifJm+4SB4ysKZS1a0CpdEhoqeCFFo5aq5IPt5+GEr/wLBkF01d
+   GemgXgIKWj7isaMD0wROVkhlCKy33U3qOeOD8KdOFBAAffA+cQ8FVfAjx
+   w==;
+X-CSE-ConnectionGUID: ukm52QiCTa+NpmU/vXCI3Q==
+X-CSE-MsgGUID: pSBL4CKcRxSDAxLyy8fRPQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11091"; a="17731587"
+X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
+   d="scan'208";a="17731587"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 02:29:04 -0700
+X-CSE-ConnectionGUID: eWA6METETtCUr4cLJQgSJw==
+X-CSE-MsgGUID: MRakdQpsR5CfCmhg/Ux7PQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,211,1712646000"; 
+   d="scan'208";a="37444940"
+Received: from slindbla-desk.ger.corp.intel.com (HELO localhost) ([10.245.246.39])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 02:28:54 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+ <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter
+ <daniel@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, Sandy Huang
+ <hjc@rock-chips.com>, Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+ Chen-Yu Tsai
+ <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+ <samuel@sholland.org>, Andy Yan <andy.yan@rock-chips.com>, Hans Verkuil
+ <hverkuil@xs4all.nl>, Sebastian Wick <sebastian.wick@redhat.com>, Ville
+ =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+ dri-devel@lists.freedesktop.org,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev, Dave
+ Stevenson <dave.stevenson@raspberrypi.com>, Sui Jingfeng
+ <sui.jingfeng@linux.dev>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Pekka Paalanen <pekka.paalanen@collabora.com>, =?utf-8?Q?Ma=C3=ADra?= Canal
+ <mcanal@igalia.com>, Andy Yan <andyshrk@163.com>
+Subject: Re: [PATCH v15 00/29] drm/connector: Create HDMI Connector
+ infrastructure
+In-Reply-To: <20240603-nippy-ludicrous-caracara-e02e3c@houat>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240527-kms-hdmi-connector-state-v15-0-c5af16c3aae2@kernel.org>
+ <874jadesaj.fsf@intel.com>
+ <20240603-nippy-ludicrous-caracara-e02e3c@houat>
+Date: Mon, 03 Jun 2024 12:28:51 +0300
+Message-ID: <87zfs2cr3g.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-There is a confusing pattern in the kernel to use a variable named 'timeout' to
-store the result of wait_for_completion_timeout() causing patterns like:
+On Mon, 03 Jun 2024, Maxime Ripard <mripard@kernel.org> wrote:
+> Hi Jani,
+>
+> On Fri, May 31, 2024 at 09:43:16PM GMT, Jani Nikula wrote:
+>> On Mon, 27 May 2024, Maxime Ripard <mripard@kernel.org> wrote:
+>> > Let me know what you think,
+>> 
+>> Sorry to report that this series generates a bunch of kernel-doc
+>> warnings in include/drm/drm_connector.h. Documenting nested struct
+>> members doesn't work as smoothly as you'd expect:
+>>
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'broadcast_rgb' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'infoframes' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'avi' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'hdr_drm' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'spd' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'vendor' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'is_limited_range' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'output_bpc' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'output_format' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:1138: warning: Excess struct member 'tmds_char_rate' description in 'drm_connector_state'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'vendor' description in 'drm_connector'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'product' description in 'drm_connector'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'supported_formats' description in 'drm_connector'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'infoframes' description in 'drm_connector'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'lock' description in 'drm_connector'
+>> ../include/drm/drm_connector.h:2112: warning: Excess struct member 'audio' description in 'drm_connector'
+>> 
+>> Noticed this when I was rebasing [1]. Having that merged would find
+>> issues in headers at build time instead of 'make htmldocs'.
+>> 
+>> In the mean time, this is the quick reproducer:
+>> 
+>> $ scripts/kernel-doc -none include/drm/drm_connector.h
+>
+> Thanks for the report and the reproducer. I have to admit I have no idea
+> how to fix it, do you have a suggestion?
 
-	timeout = wait_for_completion_timeout(...)
-	if (!timeout) return -ETIMEDOUT;
+Some of them can be fixed by adding the parent struct name, like so:
 
-with all kinds of permutations. Use 'time_left' as a variable to make the code
-self explaining.
+-                * @broadcast_rgb: Connector property to pass the
++                * @hdmi.broadcast_rgb: Connector property to pass the
 
-Fix to the proper variable type 'unsigned long' while here.
+but I think even that falls apart at some point. :(
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/media/pci/solo6x10/solo6x10-p2m.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+In the end might be easier to separate the struct definitions to reduce
+nesting.
 
-diff --git a/drivers/media/pci/solo6x10/solo6x10-p2m.c b/drivers/media/pci/solo6x10/solo6x10-p2m.c
-index ca70a864a3ef..5f100e5e03d9 100644
---- a/drivers/media/pci/solo6x10/solo6x10-p2m.c
-+++ b/drivers/media/pci/solo6x10/solo6x10-p2m.c
-@@ -57,7 +57,7 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
- 		      int desc_cnt)
- {
- 	struct solo_p2m_dev *p2m_dev;
--	unsigned int timeout;
-+	unsigned long time_left;
- 	unsigned int config = 0;
- 	int ret = 0;
- 	unsigned int p2m_id = 0;
-@@ -99,12 +99,12 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
- 			       desc[1].ctrl);
- 	}
- 
--	timeout = wait_for_completion_timeout(&p2m_dev->completion,
--					      solo_dev->p2m_jiffies);
-+	time_left = wait_for_completion_timeout(&p2m_dev->completion,
-+						solo_dev->p2m_jiffies);
- 
- 	if (WARN_ON_ONCE(p2m_dev->error))
- 		ret = -EIO;
--	else if (timeout == 0) {
-+	else if (time_left == 0) {
- 		solo_dev->p2m_timeouts++;
- 		ret = -EAGAIN;
- 	}
+
+BR,
+Jani.
+
+
 -- 
-2.43.0
-
+Jani Nikula, Intel
