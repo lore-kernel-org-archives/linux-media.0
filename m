@@ -1,115 +1,93 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723AB133993
-	for <linux-media@vger.kernel.org>; Mon,  3 Jun 2024 16:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6714313664B;
+	Mon,  3 Jun 2024 16:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.189.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717430528; cv=none; b=jauN9YlUbU8Y/ffNX0dv1YRIOJ2jngj4JBF2SCkHnmmM6mc9x3SPgw0GIg/9TORbntZToaXd6JNMDz6Ih5cqWtKcFGUNNkzZ4uiQ39wNzd1yBeyVKAlRJVcp8RtE0TNRczVYQ5GGDBhGODzdMahmXEuZMYsOMRDb0WEU9nb3hGk=
+	t=1717432117; cv=none; b=qTim4ydLnesTr7Xy2QYVHkzOiV9t9mtpa9IL12foYjNks/ygOM8M7sI66wjV/4M3SMFwr0Pz/rG/KpzJME7wkuzQvZIpO3hutjAey2o8ExuflNDzM4S2n1FknrtdzHg4fSsruye5R3YX19A9YrUMYBaFdKxjUxVaDsCNV+ReuxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717430528; c=relaxed/simple;
-	bh=3pPvxS6gC0j0wLGI+tY2V3qvQ3+8OtijuhMmjKJ6yQo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RabJ3kDAqyjVNugjMnIWuM9VzAKNM1ASyOCpkte+Tbt63HCN6yuRiINNAKEMsBBs4Kk9aR6Fwao7VRB7UmkrjgGmt1g29idjgs++Dlg75Sl8z7XaXBmcfGKCBZCwIuyHLR3jgaecJBfKh1OBF+W9RjoTR4+felf6zNxsxsgX7gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p5eETr/E; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p5eETr/E"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57a16f4b8bfso23963a12.0
-        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2024 09:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1717430525; x=1718035325; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3pPvxS6gC0j0wLGI+tY2V3qvQ3+8OtijuhMmjKJ6yQo=;
-        b=p5eETr/E07844d7vd35bqJhYdG0vUZVgUqAIwededZOWY6Vmm9gOs7PsYdk8hFYphP
-         6r8I+BNvRqo1Y7tMPa+PTld0bupt1nkxTh/Gi+eLh01ZeFgbh8bLw3c0WDcBLW8NB+EQ
-         J68I0YieIvQRUw5T7GjO2CEz0D3kGAKGaIYhIjRdQo0R8V6JSX59XZjT5ORD3XvOk4D2
-         ZKvsLrnzcvssY8mC/Gh6h9p7K7gfogOzIXPbr1Ed8WI7RYjMoVFnyKpKhSqc0vUjUgBV
-         AzI/21WCYBkGKUN43lmug5QJXB949K3WNDxyxybU0keTgs/zVW8JTofEV23cZyLvpmFG
-         z/6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717430525; x=1718035325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3pPvxS6gC0j0wLGI+tY2V3qvQ3+8OtijuhMmjKJ6yQo=;
-        b=ryTnGG9nxW1pUUFo29otho4BLo2V4NCdy58yPRKjsTiM7ZfXXKKp77J3RbGLfW2YmT
-         Iew+SWHX0a5ZePQ3jADz6H65kRXS5BiV9l4IsxCW9Dni+DcFH8RE5kMZ9R26CD17z8tE
-         XWXQzuOZRZsQBn1Xx9jAhLvHy06q1w+vntrycEpP/vrk3523Uy/q6goqeqMhWl6rYtDU
-         rOyJJ47h65K5hAklzfkf1y56dgCWkb3bWgvWWYa2TkT8scVXdIb1hvSrWzjFqsiNPwej
-         p/lf8XTB5zRCiAd8lKjwkNQJqiBMjBhoyekSDk5gPHut9Bg3SDCrzhZQOCFpIJbdMrHR
-         zryQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWOqwBKtDyM/sH4sPsNvb2yBJGckZjmZmJuSoHwnKPnjsRxdiRfMJnCfqw066wvq3F4OYe32mewaIcRsAazj2D88S8/cxYcLSoZCd0=
-X-Gm-Message-State: AOJu0YwCAmal2P3HkdMXEpKwL0YKZge9iGE3BTJ5q94YEqE6dxnBLSVY
-	8fWX0lPlJlhpjFsztVwjIaoHffuW4k5GOo5VStyF+1pDAhqmlqD+z7EEwUFK5bhKx8FPEyLF8yz
-	Jo3enGQtLbVYdpHZwrK8jliRNc3XBgMTFZg8=
-X-Google-Smtp-Source: AGHT+IE2ygUL2gxko1zx9nZ3F9o7d4GPZHrXPzUVa/BVxhglHJFXHF4Y/LFsOuSgzTNV+PzRLjHurcbX0Q3lsDSwxtg=
-X-Received: by 2002:a05:6402:1803:b0:572:e6fb:ab07 with SMTP id
- 4fb4d7f45d1cf-57a49645b32mr266898a12.7.1717430524539; Mon, 03 Jun 2024
- 09:02:04 -0700 (PDT)
+	s=arc-20240116; t=1717432117; c=relaxed/simple;
+	bh=S41KtMNy578ooBZOlpzT9d0b338WCUrzYp5MEJGF7PE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4t/KUjVxm301QzuuMUktFzY2+CWiSH2eN6wynzcAPVgMzuBBgYq1Hzh1puYKBeBCnVzYvez0dDK+im4K4eZnja+8D5CXsGzA5UH5TAegeJK45sGAB/68psdNfNw4h/ojV3eppRLcloz5V/Zt4GuU+wSq0iU5V23FsBtKT2gCVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iodev.co.uk; spf=pass smtp.mailfrom=iodev.co.uk; arc=none smtp.client-ip=46.30.189.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iodev.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iodev.co.uk
+Received: from pirotess (222.red-83-46-228.dynamicip.rima-tde.net [83.46.228.222])
+	by iodev.co.uk (Postfix) with ESMTPSA id 1C0222EF964;
+	Mon, 03 Jun 2024 18:28:34 +0200 (CEST)
+Date: Mon, 3 Jun 2024 18:28:32 +0200
+From: Ismael Luceno <ismael@iodev.co.uk>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-kernel@vger.kernel.org,
+	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
+	Anton Sviridenko <anton@corp.bluecherry.net>,
+	Andrey Utkin <andrey_utkin@fastmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH 6/8] media: solo6x10: use 'time_left' variable with
+ wait_for_completion_timeout()
+Message-ID: <Zl3vMKEbsCFFwOAe@pirotess>
+References: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
+ <20240603092841.9500-7-wsa+renesas@sang-engineering.com>
+ <Zl3ujm4KEBviJIWP@pirotess>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240603114008.16235-1-hailong.liu@oppo.com>
-In-Reply-To: <20240603114008.16235-1-hailong.liu@oppo.com>
-From: John Stultz <jstultz@google.com>
-Date: Mon, 3 Jun 2024 09:01:52 -0700
-Message-ID: <CANDhNCq50zPB+TS+_Oo0HY0aUuBAdik2KrC8eJRTygbis293sw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] dma-buf: heaps: move the verification of
- heap_flags to the corresponding heap
-To: hailong.liu@oppo.com
-Cc: Sumit Semwal <sumit.semwal@linaro.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	"T.J. Mercier" <tjmercier@google.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	21cnbao@gmail.com, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zl3ujm4KEBviJIWP@pirotess>
 
-On Mon, Jun 3, 2024 at 4:40=E2=80=AFAM <hailong.liu@oppo.com> wrote:
->
-> From: "Hailong.Liu" <hailong.liu@oppo.com>
->
-> This help module use heap_flags to determine the type of dma-buf,
-> so that some mechanisms can be used to speed up allocation, such as
-> memory_pool, to optimize the allocation time of dma-buf.
+On 03/Jun/2024 18:25, Ismael Luceno wrote:
+> On 03/Jun/2024 11:28, Wolfram Sang wrote:
+> > There is a confusing pattern in the kernel to use a variable named 'timeout' to
+> > store the result of wait_for_completion_timeout() causing patterns like:
+> > 
+> > 	timeout = wait_for_completion_timeout(...)
+> > 	if (!timeout) return -ETIMEDOUT;
+> > 
+> > with all kinds of permutations. Use 'time_left' as a variable to make the code
+> > self explaining.
+> > 
+> > Fix to the proper variable type 'unsigned long' while here.
+> > 
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > ---
+> >  drivers/media/pci/solo6x10/solo6x10-p2m.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/media/pci/solo6x10/solo6x10-p2m.c b/drivers/media/pci/solo6x10/solo6x10-p2m.c
+> > index ca70a864a3ef..5f100e5e03d9 100644
+> > --- a/drivers/media/pci/solo6x10/solo6x10-p2m.c
+> > +++ b/drivers/media/pci/solo6x10/solo6x10-p2m.c
+> > @@ -57,7 +57,7 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
+> >  		      int desc_cnt)
+> >  {
+> >  	struct solo_p2m_dev *p2m_dev;
+> > -	unsigned int timeout;
+> > +	unsigned long time_left;
+> >  	unsigned int config = 0;
+> >  	int ret = 0;
+> >  	unsigned int p2m_id = 0;
+> > @@ -99,12 +99,12 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
+> >  			       desc[1].ctrl);
+> >  	}
+> >  
+> > -	timeout = wait_for_completion_timeout(&p2m_dev->completion,
+> > -					      solo_dev->p2m_jiffies);
+> > +	time_left = wait_for_completion_timeout(&p2m_dev->completion,
+> > +						solo_dev->p2m_jiffies);
+> >  
+> >  	if (WARN_ON_ONCE(p2m_dev->error))
+> >  		ret = -EIO;
+> > -	else if (timeout == 0) {
+> > +	else if (time_left == 0) {
+> >  		solo_dev->p2m_timeouts++;
+> >  		ret = -EAGAIN;
+> >  	}
+> 
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 
-This feels like it's trying to introduce heap specific flags, but
-doesn't introduce any details about what those flags might be?
-
-This seems like it would re-allow the old opaque vendor specific heap
-flags that we saw in the ION days, which was problematic as different
-userspaces would use the same interface with potentially colliding
-heap flags with different meanings. Resulting in no way to properly
-move to an upstream solution.
-
-With the dma-heaps interface, we're trying to make sure it is well
-defined. One can register a number of heaps with different behaviors,
-and the heap name is used to differentiate the behavior. Any flags
-introduced will need to be well defined and behaviorally consistent
-between heaps. That way when an upstream solution lands, if necessary
-we can provide backwards compatibility via symlinks.
-
-So I don't think this is a good direction to go for dma-heaps.
-
-It would be better if you were able to clarify what flag requirements
-you need, so we can better understand how they might apply to other
-heaps, and see if it was something we would want to define as a flag
-(see the discussion here for similar thoughts:
-https://lore.kernel.org/lkml/CANDhNCoOKwtpstFE2VDcUvzdXUWkZ-Zx+fz6xrdPWTyci=
-VXMXQ@mail.gmail.com/
-)
-
-But if your vendor heap really needs some sort of flags argument that
-you can't generalize, you can always implement your own dmabuf
-exporter driver with whatever ioctl interface you'd prefer.
-
-thanks
--john
+Sorry, I meant Acked-by.
