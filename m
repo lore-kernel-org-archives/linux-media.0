@@ -1,43 +1,46 @@
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF46181730
-	for <linux-media@vger.kernel.org>; Mon,  3 Jun 2024 09:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6540C84A36
+	for <linux-media@vger.kernel.org>; Mon,  3 Jun 2024 09:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717406939; cv=none; b=qP5pxxHECGzBSFU3s9UuRonqYtrW43Fqw4TyeWZWIydpF5sfwdAjp1MwNl8zmLQTyEDZ33h6+dDqR/tSE2BRX355G/9DRcaLq5JUnaWDH3n74NtK5/qJd5ewf2Y0sgd4I8uNERt3LJWWP60+9Frdo4JakGLOprW9kbZL4+462ME=
+	t=1717406939; cv=none; b=EfLYaFbWGUxYvbIfKIzPxlEjpr+Y4Vwo+Jx7CNOHdHPCpaPy5OAGmeQD1b/xFBymQI7tvqnhLJ7GywP5ydNRcsOFNpSuWKK3wa7/NCv+2kMQXlK3FHo7spFU10m+O1/c17ftQsThvtv0nO9PVB6HMNW2CVc/emNYctsOicNTt2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717406939; c=relaxed/simple;
-	bh=Mnmt1ogL9b7vULUwW/DFVNwc/+O/QYY2bGNMf1Qj9Zk=;
+	bh=C/9KYYddj4qZHqa8y2yNasr0MNOy2tpH9zFMadog84M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pOHc1mTro0TSz2TKymnYMF7s5hCrHoVRV2NfF/8gU/heF90OPshfZSHnWTET27cA58F2HCc8xzqJvzK/2ziYbTk+2ofnFZxIIvjY+juZri6EgOe+jP3TpIe7f87U5n+scBWBpMcye9jaUoV6/CCbxyaJ+JGWTH1E49a3ZHQ57AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ikqnVyD0; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=qRmVoGPwl2MDCCWR3V7xTPwBS2H0SrDN3ymk6rBRV4ZCOIdpW6Vrlo92DadkZEhtppgzTFFSsGOG5AvYg8tnCSKaBEnVAYh0Ojq0WBJUKImT3mDRkAjUk0rEx0j5bTz6iABDiSWosWWpdFGLSLT5DCykuF/LE71uVdAqqtTGFJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MBAb4wq6; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ikqnVyD0"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MBAb4wq6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=A8oaKiWsS3ONtbUCaXMsPkJITTTFUHiuQzwOzERPisU=; b=ikqnVy
-	D0A3MUpqKSyfow3btR4Hat4yA9Ct8sqzLtY7C4EtypSFiV4mhzzQwdPl6XuHMc3j
-	+6IW793Kbud9/v+HoiZSdbn0nf51seTj6ACROWLEx4BMFo6g+cBcljouIe2ACkRu
-	Ju7k1xeK8ZQe4XUdLc1wK3R1FcTWLjbQdzioXYlYaqndd0gP+EHONgNqX3qFvxDD
-	58kWi5A1QUR2KE5gP02NrH9TPKqjrBWk4l9h9/gLr0/kqwkGvgP/CI//J/x89gg+
-	auRMZsQJ76BUwJv2ic0P/h9ig7d4EA4/OD66XlePb5BjkkHdublFgcXpRk9o0cFW
-	Me/tDDPJ3bZ8NuyA==
-Received: (qmail 1903325 invoked from network); 3 Jun 2024 11:28:53 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2024 11:28:53 +0200
-X-UD-Smtp-Session: l3s3148p1@v/sr9vgZUNcgAwDPXzLGAH1eNELjOc3g
+	 s=k1; bh=ytP13Gl64JFAwriGV8x2mCJjir2yJaQn5QnGdupCrjA=; b=MBAb4w
+	q69zxA+YcZZEOrgzDEnFtr6xBSFn364fpPZ6+qK6Y/su7ZXQFcmRwJIFNww3OzwF
+	RAUa94ILtECzH37bOtAQu37FdSUImWbUcfU7p0BjjFiEQq0Ab8ab1IpBH8AEFvP8
+	kVcz6xUCj4+/40Q2q8Sh/1aBUtDtTB1Ki0Z+uuwlUMHO3n+g99NRrbjOW4a0CDh3
+	deVPj18S4Ym2IlHtrHdJDEMLBmmTpJdvFHDcSOMa5TzJKe+qewd7KQInb0LH6s1m
+	fN8aC4iwhdUo/khS/xSVkI/0k2K6i1OFAb791YJDTqRMBQ+uDzMbVziamd0m7wZI
+	c9L5H/3ullyFP1Wg==
+Received: (qmail 1903270 invoked from network); 3 Jun 2024 11:28:51 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Jun 2024 11:28:51 +0200
+X-UD-Smtp-Session: l3s3148p1@HZUS9vgZPNcgAwDPXzLGAH1eNELjOc3g
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-kernel@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Benoit Parrot <bparrot@ti.com>,
+	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
+	Anton Sviridenko <anton@corp.bluecherry.net>,
+	Andrey Utkin <andrey_utkin@fastmail.com>,
+	Ismael Luceno <ismael@iodev.co.uk>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: [PATCH 8/8] media: ti: cal: use 'time_left' variable with wait_event_timeout()
-Date: Mon,  3 Jun 2024 11:28:39 +0200
-Message-ID: <20240603092841.9500-9-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 6/8] media: solo6x10: use 'time_left' variable with wait_for_completion_timeout()
+Date: Mon,  3 Jun 2024 11:28:37 +0200
+Message-ID: <20240603092841.9500-7-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
 References: <20240603092841.9500-1-wsa+renesas@sang-engineering.com>
@@ -50,44 +53,49 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 There is a confusing pattern in the kernel to use a variable named 'timeout' to
-store the result of wait_event_timeout() causing patterns like:
+store the result of wait_for_completion_timeout() causing patterns like:
 
-	timeout = wait_event_timeout(...)
+	timeout = wait_for_completion_timeout(...)
 	if (!timeout) return -ETIMEDOUT;
 
 with all kinds of permutations. Use 'time_left' as a variable to make the code
 self explaining.
 
+Fix to the proper variable type 'unsigned long' while here.
+
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/platform/ti/cal/cal.c | 8 ++++----
+ drivers/media/pci/solo6x10/solo6x10-p2m.c | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/ti/cal/cal.c b/drivers/media/platform/ti/cal/cal.c
-index 528909ae4bd6..5c2c04142aee 100644
---- a/drivers/media/platform/ti/cal/cal.c
-+++ b/drivers/media/platform/ti/cal/cal.c
-@@ -549,7 +549,7 @@ void cal_ctx_start(struct cal_ctx *ctx)
- void cal_ctx_stop(struct cal_ctx *ctx)
+diff --git a/drivers/media/pci/solo6x10/solo6x10-p2m.c b/drivers/media/pci/solo6x10/solo6x10-p2m.c
+index ca70a864a3ef..5f100e5e03d9 100644
+--- a/drivers/media/pci/solo6x10/solo6x10-p2m.c
++++ b/drivers/media/pci/solo6x10/solo6x10-p2m.c
+@@ -57,7 +57,7 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
+ 		      int desc_cnt)
  {
- 	struct cal_camerarx *phy = ctx->phy;
--	long timeout;
-+	long time_left;
+ 	struct solo_p2m_dev *p2m_dev;
+-	unsigned int timeout;
++	unsigned long time_left;
+ 	unsigned int config = 0;
+ 	int ret = 0;
+ 	unsigned int p2m_id = 0;
+@@ -99,12 +99,12 @@ int solo_p2m_dma_desc(struct solo_dev *solo_dev,
+ 			       desc[1].ctrl);
+ 	}
  
- 	WARN_ON(phy->vc_enable_count[ctx->vc] == 0);
+-	timeout = wait_for_completion_timeout(&p2m_dev->completion,
+-					      solo_dev->p2m_jiffies);
++	time_left = wait_for_completion_timeout(&p2m_dev->completion,
++						solo_dev->p2m_jiffies);
  
-@@ -565,9 +565,9 @@ void cal_ctx_stop(struct cal_ctx *ctx)
- 	ctx->dma.state = CAL_DMA_STOP_REQUESTED;
- 	spin_unlock_irq(&ctx->dma.lock);
- 
--	timeout = wait_event_timeout(ctx->dma.wait, cal_ctx_wr_dma_stopped(ctx),
--				     msecs_to_jiffies(500));
--	if (!timeout) {
-+	time_left = wait_event_timeout(ctx->dma.wait, cal_ctx_wr_dma_stopped(ctx),
-+				       msecs_to_jiffies(500));
-+	if (!time_left) {
- 		ctx_err(ctx, "failed to disable dma cleanly\n");
- 		cal_ctx_wr_dma_disable(ctx);
+ 	if (WARN_ON_ONCE(p2m_dev->error))
+ 		ret = -EIO;
+-	else if (timeout == 0) {
++	else if (time_left == 0) {
+ 		solo_dev->p2m_timeouts++;
+ 		ret = -EAGAIN;
  	}
 -- 
 2.43.0
