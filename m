@@ -1,112 +1,132 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E1433F6;
-	Tue,  4 Jun 2024 16:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BF1148847;
+	Tue,  4 Jun 2024 16:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717518873; cv=none; b=KXh3ErTgdb1OKEOGxZrHZthZJRiEp2qP5dVQjqaK/lKrETBb8McKDuAfbMm8ObEzEXG9Tee6eR0SFjNVD/nsBa6jtM9ZqMDvAp07lmHTgpnse6pTWGKXog7DRaosAuqScoIl85CB7Ok7tINOOiOPceOEjRTOvkfJazlvI1AhO3U=
+	t=1717519384; cv=none; b=OlCJephw07T+5wvKsyAOGxJ1edQZ/0O0T6Y4aSahpKs3XXLgB03Fo+dCHRuNOCx2SbBWc2QED+gY7rnW3Nb8Qr0ECi8rFyhe6Ct6drLDYTpekI5vclA07hkBXtZPPeKs3SYvXYjMBTR0/n5ofKPveqKYvqlldfXp50K6aOzmi1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717518873; c=relaxed/simple;
-	bh=zmPcYywpT0TiqF/rEIjNoHFtMmn6xWYn3vYuYJRLROM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NttNHA7RE5H3EHh6AAJn8Q07I2Vceb01ZWSQ9vDe3hP/luobIPe/VYz3hnEWNRr76/haIJgUJSdS0SiioVM4waZ58u7YCm5sCJ8ubEHEV2dPpngaCbJeA41QSGR5ZPBIdZS+L+1/bjhafIBDbCUpFMpHz5Vxvd9VtfvHheg6tSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YXVvwGEk; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YXVvwGEk"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f64ecb1766so11560875ad.1;
-        Tue, 04 Jun 2024 09:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717518871; x=1718123671; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zEkM+k4VgfiBUB1eDmq+e8NhhEFahgsAVBFkVD8WSHM=;
-        b=YXVvwGEkm/1qzYDrIM4pp03g+1owSwato3ALaeyGVEetKi9dXiqJTODNsG4Y+tREdo
-         orSKOvTjGtMo4I2CsPGuICWEu+GbqbPkkQKLGW9cKbVQvUUBMiRG4YmaSXdXV5dRJnTx
-         2njCrGQOGlfZ/eGIWHZ3pJFTnvQ5gBFrWOIWJ54KW2Iddh0p2CuBSiDJ/tYYcZzi2hMR
-         B7s+cfWCzT2Juaze1ekvtfHk9IshIHM+XAa/t2v9VpINv7oAJBjav4wt5QR5XWiJ6RiZ
-         bLY07+V/ELm4UvdBUUIQZ5wHdesq5X42hClpGyIJ7W45ZIm/ZjejO+Xf96LXp8g0jqPw
-         Szmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717518871; x=1718123671;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zEkM+k4VgfiBUB1eDmq+e8NhhEFahgsAVBFkVD8WSHM=;
-        b=CcAqfYYnEoRXD+XEyikmJjCIerDJPfM+nLCaak8+B+BSgFZf/CRXTWdDXlla6ayif7
-         xatelS7Mz5qOlZujrB9ifUxZ6PhOOJ5CAfS8ny3mGFfLQrJTF6xhyV3F6okTVTC5Qw9K
-         fXPqUgvmESPpOd6XlmjVTqx9qaqkC3l+JH0ILRqVmMT3CkEk40U5GggONtS9sQONUNNg
-         pftPaHHhGEUgGupuZRJBg3glvweiDZ6/OWdQaKGVY59gj07qzA9DBNb8YbYy4euh4Gak
-         6s4A+BIlAygO72ChwWCm/uwO7exHVv3xZ/+b5X/3TAa4/kTQESStSJSyATxJYofZ8YQD
-         zMWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUscljpf74hSnkcKcVK3qC7DDOyhxWI8R/izY0Xwxp7XRNPqbzMnzu+m2C8f/vpN1BbCnP80ezyV25AQUazPTFmTGD7wfmJNi5QNL3srQsNwQ6SripCHT/ueKLibnjRNHXHILUUASoPF1FY27RwV8OGbreq6xtzrHyi4knxwSIoXjmPBy3x
-X-Gm-Message-State: AOJu0YwQAubWEmBY6xRIHCC0TEe6mthAfI7Q7bWtX9dweeODLg3P40Ov
-	fEYcaRCvrOaDDxH2fHI3xDCe1jpnSA9Po3QBU52rQwlzT9opRs9K
-X-Google-Smtp-Source: AGHT+IFx+0w4koH+2lh7oQEJiiGnGW3l5n2kEVeCTbZcpsxeFN7yHxa0KGGLds7mR/2miOe42TWtnA==
-X-Received: by 2002:a17:902:dc84:b0:1f6:326b:cde0 with SMTP id d9443c01a7336-1f6a5a25c39mr340275ad.31.1717518870722;
-        Tue, 04 Jun 2024 09:34:30 -0700 (PDT)
-Received: from localhost.localdomain ([221.220.133.99])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f63235561csm85463445ad.70.2024.06.04.09.34.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 09:34:30 -0700 (PDT)
-From: Jianfeng Liu <liujianfeng1994@gmail.com>
-To: linux-rockchip@lists.infradead.org
-Cc: Diederik de Haas <didi.debian@cknow.org>,
-	Jianfeng Liu <liujianfeng1994@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Jacob Chen <jacob-chen@iotwrt.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: media: rockchip-rga: add rockchip,rk3588-rga
-Date: Wed,  5 Jun 2024 00:34:06 +0800
-Message-Id: <20240604163408.1863080-2-liujianfeng1994@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240604163408.1863080-1-liujianfeng1994@gmail.com>
-References: <20240604163408.1863080-1-liujianfeng1994@gmail.com>
+	s=arc-20240116; t=1717519384; c=relaxed/simple;
+	bh=oPp4w96Wn+D5XlEch5Zme9OLK7LhiUVGAGTFRFKOodA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CWbYMHgM1cifiFHLmlbP09OUtTS+Ry8+r19Gr0bqFWtyd+wPaV/Cj+EygfiwmeegBBZjSvzaTldp5y96y09bPFf2cXFMEAHQQqZy3rolER7p7J/LM4AbixTbhjCSsP8BJ4KQaNo1UqHfzC91m503+RhV/tS+fKrrcNewc+/KBnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BBAC2BBFC;
+	Tue,  4 Jun 2024 16:42:46 +0000 (UTC)
+Date: Tue, 4 Jun 2024 12:42:43 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Paolo Abeni <pabeni@redhat.com>, Mina Almasry <almasrymina@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
+ =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Pavel Begunkov
+ <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v10 05/14] netdev: netdevice devmem allocator
+Message-ID: <20240604124243.66203a46@gandalf.local.home>
+In-Reply-To: <20240604163158.GB21513@ziepe.ca>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+	<20240530201616.1316526-6-almasrymina@google.com>
+	<bea8b8bf1630309bb004f614e4a3c7f684a6acb6.camel@redhat.com>
+	<20240604121551.07192993@gandalf.local.home>
+	<20240604163158.GB21513@ziepe.ca>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add a new compatible for the rk3588 Rockchip SoC, which also features an
-RGA, which is called RGA2 in the TRM Part2. It is the same core as used
-on the rk3288 and rk3568, which documents the same RGA2.
+On Tue, 4 Jun 2024 13:31:58 -0300
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-Signed-off-by: Jianfeng Liu <liujianfeng1994@gmail.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
----
+> On Tue, Jun 04, 2024 at 12:15:51PM -0400, Steven Rostedt wrote:
+> > On Tue, 04 Jun 2024 12:13:15 +0200
+> > Paolo Abeni <pabeni@redhat.com> wrote:
+> >   
+> > > On Thu, 2024-05-30 at 20:16 +0000, Mina Almasry wrote:  
+> > > > diff --git a/net/core/devmem.c b/net/core/devmem.c
+> > > > index d82f92d7cf9ce..d5fac8edf621d 100644
+> > > > --- a/net/core/devmem.c
+> > > > +++ b/net/core/devmem.c
+> > > > @@ -32,6 +32,14 @@ static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
+> > > >  	kfree(owner);
+> > > >  }
+> > > >  
+> > > > +static inline dma_addr_t net_devmem_get_dma_addr(const struct net_iov *niov)    
+> > > 
+> > > Minor nit: please no 'inline' keyword in c files.  
+> > 
+> > I'm curious. Is this a networking rule? I use 'inline' in my C code all the
+> > time.  
+> 
+> It mostly comes from Documentation/process/coding-style.rst:
+> 
+> 15) The inline disease
+> ----------------------
+> 
+> There appears to be a common misperception that gcc has a magic "make me
+> faster" speedup option called ``inline``. While the use of inlines can be
+> appropriate (for example as a means of replacing macros, see Chapter 12), it
+> very often is not. Abundant use of the inline keyword leads to a much bigger
+> kernel, which in turn slows the system as a whole down, due to a bigger
+> icache footprint for the CPU and simply because there is less memory
+> available for the pagecache. Just think about it; a pagecache miss causes a
+> disk seek, which easily takes 5 milliseconds. There are a LOT of cpu cycles
+> that can go into these 5 milliseconds.
+> 
+> A reasonable rule of thumb is to not put inline at functions that have more
+> than 3 lines of code in them. An exception to this rule are the cases where
+> a parameter is known to be a compiletime constant, and as a result of this
+> constantness you *know* the compiler will be able to optimize most of your
+> function away at compile time. For a good example of this later case, see
+> the kmalloc() inline function.
+> 
+> Often people argue that adding inline to functions that are static and used
+> only once is always a win since there is no space tradeoff. While this is
+> technically correct, gcc is capable of inlining these automatically without
+> help, and the maintenance issue of removing the inline when a second user
+> appears outweighs the potential value of the hint that tells gcc to do
+> something it would have done anyway.
+> 
 
-(no changes since v1)
+Interesting, as I sped up the ftrace ring buffer by a substantial amount by
+adding strategic __always_inline, noinline, likely() and unlikely()
+throughout the code. It had to do with what was considered the fast path
+and slow path, and not actually the size of the function. gcc got it
+horribly wrong.
 
- Documentation/devicetree/bindings/media/rockchip-rga.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/media/rockchip-rga.yaml b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-index ea234222240..ac17cda6519 100644
---- a/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-rga.yaml
-@@ -24,6 +24,7 @@ properties:
-           - enum:
-               - rockchip,rk3228-rga
-               - rockchip,rk3568-rga
-+              - rockchip,rk3588-rga
-           - const: rockchip,rk3288-rga
- 
-   reg:
--- 
-2.34.1
-
+-- Steve
