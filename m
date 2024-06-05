@@ -1,70 +1,68 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDA019149D;
-	Wed,  5 Jun 2024 10:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388B71946D3
+	for <linux-media@vger.kernel.org>; Wed,  5 Jun 2024 11:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717585025; cv=none; b=N4s04DNYYVqqjDhqvmtMEBPyTyDfxD4so3HJFQ5Se1LKIfX2w9kVAZ13w1DggxgSiVxPEDpGM7ZdjG8FgettYV6s87OXdxGeB3mYwBlIPFrE9Bd9YOYGy0bCVhR/ZJVU/RU4dTekUwnWz9AoWNyGfhGmSTpN6h6B9zw+mMxxkkU=
+	t=1717585756; cv=none; b=mHP3+nBKndVN154e+1iyc7zK9n0faefB736OzQ+wQ4y0yUC5yAufWkDwUmBDoSuabcqI1bN97L8pMo1z2aq0C5XsCbsToyKoFCNRnolj/fmpDLYzVfVwEMrA1E6RVf4zFKVV3wVK1VJYLCj6rOz6X0wn0YIH8iWjFtEO+ffkXdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717585025; c=relaxed/simple;
-	bh=UIF6n9v2z4NusDXbnWWpxcphnJKJzJg5m3pHHR0PZKI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I3YhN4urYxSvSYJB6vh7AAg/HUuLqmtDN8NFSeOxFwqIK7B7tvjExfX4itZPy80A1JKtOGWTPOVbnciqC73xCBTXSvh1nqvZib3YKJ0PJpirZCgJm+/9ptjTLKTHe4817llwCMgD0CEvUfrdrshdlBBWJ+sFDn1kkKn1RT35cos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FhQ+a9XR; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1717585756; c=relaxed/simple;
+	bh=8Xx1ouwwexCtSNH14UOczjxunvtAa6ek+PdnfDHEF/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f4FGU8ICLFruN/jfMtbjT73qQt/lMz6qJdo1TxAtC5ik+Y5z1YXQ1U8OodG3wYhWXyC+3j17KcmkWGChnSU4Mbo0AUx5r6Q6m+tb9yxtHbZtfAy5AOSALlYhKYfwpHvQYxDESduiYVnJKQaQpHQ4nztxkQqMITwK0se4M85da3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ffAS1vBu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FhQ+a9XR"
-X-UUID: 544d4a44232a11efbace61486a71fe2b-20240605
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=T7mIr+t/6d/0mox7UxZ9GqbaTZMq4mpqJIVQyRs3Ilc=;
-	b=FhQ+a9XRK5dDSxdrY1EOQ6qAQ0p9GCNI7ssQhQg1iM6na+oOzaMTabJQx+p9mNHMElskFfbDEKO/+y+OwSJQ+lmbFgoHF3caXl4v1dSnrB+OvskaTI9XRQEjhyCplvU1AOCsJk35Q679/Kg3J76T+bA3AI0NuNZd/217h/XI1XM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.39,REQID:3d153932-31ea-4f8c-a359-49f188227441,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:393d96e,CLOUDID:2e443c44-4544-4d06-b2b2-d7e12813c598,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 544d4a44232a11efbace61486a71fe2b-20240605
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <zhi.mao@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 544189323; Wed, 05 Jun 2024 18:56:58 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 5 Jun 2024 18:56:56 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 5 Jun 2024 18:56:55 +0800
-From: Zhi Mao <zhi.mao@mediatek.com>
-To: <mchehab@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <sakari.ailus@linux.intel.com>
-CC: <laurent.pinchart@ideasonboard.com>, <shengnan.wang@mediatek.com>,
-	<yaya.chang@mediatek.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, <yunkec@chromium.org>,
-	<conor+dt@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <jacopo.mondi@ideasonboard.com>,
-	<zhi.mao@mediatek.com>, <10572168@qq.com>, <hverkuil-cisco@xs4all.nl>,
-	<heiko@sntech.de>, <jernej.skrabec@gmail.com>, <macromorgan@hotmail.com>,
-	<linus.walleij@linaro.org>, <hdegoede@redhat.com>,
-	<tomi.valkeinen@ideasonboard.com>, <gerald.loacker@wolfvision.net>,
-	<andy.shevchenko@gmail.com>, <bingbu.cao@intel.com>,
-	<dan.scally@ideasonboard.com>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v5 3/3] MAINTAINERS: Add entry for GC05A2 image sensor
-Date: Wed, 5 Jun 2024 18:55:40 +0800
-Message-ID: <20240605105540.17937-4-zhi.mao@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240605105540.17937-1-zhi.mao@mediatek.com>
-References: <20240605105540.17937-1-zhi.mao@mediatek.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ffAS1vBu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1717585754;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tncC1Ez6NP/HHqgcRSeNYywzHgA1laaS8gNo9KdTqbI=;
+	b=ffAS1vBu5hYs3pR8XqtgAaDaNR0K5lcK7L82Gk4mUvZOwaGJlcUyhnzLO2GzO+sCNi5IZR
+	vI5O5006SvqDxcUNcLAZFn2kNvs0qqwmSS8pFnEl0EYMzvoR0basouXpd80gjCWwdq4ajn
+	BwZFAV2Ujtz9E6lo4EwUz3sv/anE/Wg=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-sKZnt866ND2m4CtqHN9HhA-1; Wed, 05 Jun 2024 07:09:12 -0400
+X-MC-Unique: sKZnt866ND2m4CtqHN9HhA-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7951f93b044so100750385a.1
+        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2024 04:09:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717585751; x=1718190551;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tncC1Ez6NP/HHqgcRSeNYywzHgA1laaS8gNo9KdTqbI=;
+        b=K6+wFx6BDMdzBUG16Kvs6LsiRVho6B35tJ5z1yPRC5/cvkq+7cpBDg9Y1FQTj6fCMn
+         jPHeOO3iWCoRvcFT0f7klZKD3xFrTxa41FBxaZX0tqJHWj43loFm6akXvsZmLyX9EhNx
+         mGddWCUN1dRRD+C2sks91NrmNJXqJD7i/5ErAXWT47qYpiyGoMd0Ei2JdqaYwkPiro+N
+         KFxKnL72Fr+UE6abkQAgSc46aO/1TsGW14+e37u1EMeFtSHqniI8XCqEQwtRom1UDqtk
+         IyeFUsHS/0QRRDALemnqv8Dd2nj1BYoaRmlaiywUbXgfOehv1aOagHwWqHRfyLGBitwm
+         zWRw==
+X-Gm-Message-State: AOJu0Yy22uFtZ2WcG9ilPmFBrTL2WBGqzjj10aOO5IBtSMBIq0Ts07Dy
+	WaMJRWoqlxsa1u2CSOv28naxEE+GXyy4CufmNBg65A6N22P7sDwUsYoogwsR1+Vu6qICH3C+xPN
+	oGp6fj22/JL5TYrbratOilSg0eL6XDzYbOfUG9KptJ1puB0kvMvQ0tnZVShDR0g96SsnIlgIsYz
+	B6Q0rWczKYo97RJEQxCKio2DRXZKQjiYlZghMTEg+XuieU5zahaO8gtLc=
+X-Received: by 2002:a05:6214:3da1:b0:6ad:9cc3:4e0a with SMTP id 6a1803df08f44-6b030a86602mr22245826d6.58.1717585750907;
+        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEeUoMOpT6N8jHTEiIoA//pq3/H+gTrcVWJpuhNcN7bglDP9qYU60nE4P/hUHBHlVwZ55aOKQ==
+X-Received: by 2002:a05:6214:3da1:b0:6ad:9cc3:4e0a with SMTP id 6a1803df08f44-6b030a86602mr22245676d6.58.1717585750445;
+        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
+Received: from toolbox.redhat.com ([2001:9e8:89ab:ee00:9c20:c1a3:e856:8e0e])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44004d1d721sm41751251cf.76.2024.06.05.04.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
+From: Sebastian Wick <sebastian.wick@redhat.com>
+To: linux-media@vger.kernel.org
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 1/3] edid-decode: build: compile with -Wno-variadic-macros
+Date: Wed,  5 Jun 2024 13:09:01 +0200
+Message-ID: <20240605110907.621053-1-sebastian.wick@redhat.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -72,34 +70,24 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-Add maintain entry for GC05A2 image sensor
-
-Signed-off-by: Zhi Mao <zhi.mao@mediatek.com>
+Signed-off-by: Sebastian Wick <sebastian.wick@redhat.com>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ meson.build | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bb9f8077b37d..e2ef7a57c0e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9099,6 +9099,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/media/i2c/galaxycore,gc0308.yaml
- F:	drivers/media/i2c/gc0308.c
+diff --git ./meson.build ../meson.build
+index ca57652..80f810f 100644
+--- ./meson.build
++++ ../meson.build
+@@ -7,6 +7,7 @@ edid_decode_args = [
+ 	'-Wno-missing-field-initializers',
+ 	'-Wno-unused-parameter',
+ 	'-Wimplicit-fallthrough',
++	'-Wno-variadic-macros',
+ ]
+ edid_decode_link_args = []
  
-+GALAXYCORE GC05a2 CAMERA SENSOR DRIVER
-+M:	Zhi Mao <zhi.mao@mediatek.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/galaxycore,gc05a2.yaml
-+F:	drivers/media/i2c/gc05a2.c
-+
- GALAXYCORE GC2145 SENSOR DRIVER
- M:	Alain Volmat <alain.volmat@foss.st.com>
- L:	linux-media@vger.kernel.org
 -- 
-2.25.1
+2.45.0
 
