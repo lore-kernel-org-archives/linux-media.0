@@ -1,68 +1,52 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388B71946D3
-	for <linux-media@vger.kernel.org>; Wed,  5 Jun 2024 11:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893D6190490;
+	Wed,  5 Jun 2024 11:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717585756; cv=none; b=mHP3+nBKndVN154e+1iyc7zK9n0faefB736OzQ+wQ4y0yUC5yAufWkDwUmBDoSuabcqI1bN97L8pMo1z2aq0C5XsCbsToyKoFCNRnolj/fmpDLYzVfVwEMrA1E6RVf4zFKVV3wVK1VJYLCj6rOz6X0wn0YIH8iWjFtEO+ffkXdE=
+	t=1717585757; cv=none; b=rhFXlgsDFebldskGJ5ncHfqIa+GT98EhOxtGxwm8Lk8T10nlCW78ZRypRZT57k1JqlQOL1KlSIHsmu7PtjBozuI/yLlMOJ5Q4YUyI6pv9ShqbAdmGZVX9ScHlklsRFq51QackKwocpGrihBPbM7xvX5YJnsfzQujUzFrE9ZYxX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717585756; c=relaxed/simple;
-	bh=8Xx1ouwwexCtSNH14UOczjxunvtAa6ek+PdnfDHEF/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f4FGU8ICLFruN/jfMtbjT73qQt/lMz6qJdo1TxAtC5ik+Y5z1YXQ1U8OodG3wYhWXyC+3j17KcmkWGChnSU4Mbo0AUx5r6Q6m+tb9yxtHbZtfAy5AOSALlYhKYfwpHvQYxDESduiYVnJKQaQpHQ4nztxkQqMITwK0se4M85da3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ffAS1vBu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1717585757; c=relaxed/simple;
+	bh=u1AIWsnttLSRKtpaWK94JbuZszg9FRkieNFLz9/mkVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OqeYzXR+u+dAQuDjRdlPxbKL6lejuuAx07le0gUCBXx/FrGdYpWc64h3Ol3Yo78ELp7QK/Vis6cSArUcGRD0iqE/B7OEteVDba5rS6kRw+H7lIrOL7MbuiNp6d5B/44QtgwqkIzoQ1PMsLQko7YRCLD2NZ5sfbXfkfjYMzM5yH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=duOEvwmL; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ffAS1vBu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717585754;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="duOEvwmL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1717585739;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tncC1Ez6NP/HHqgcRSeNYywzHgA1laaS8gNo9KdTqbI=;
-	b=ffAS1vBu5hYs3pR8XqtgAaDaNR0K5lcK7L82Gk4mUvZOwaGJlcUyhnzLO2GzO+sCNi5IZR
-	vI5O5006SvqDxcUNcLAZFn2kNvs0qqwmSS8pFnEl0EYMzvoR0basouXpd80gjCWwdq4ajn
-	BwZFAV2Ujtz9E6lo4EwUz3sv/anE/Wg=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-sKZnt866ND2m4CtqHN9HhA-1; Wed, 05 Jun 2024 07:09:12 -0400
-X-MC-Unique: sKZnt866ND2m4CtqHN9HhA-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7951f93b044so100750385a.1
-        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2024 04:09:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717585751; x=1718190551;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tncC1Ez6NP/HHqgcRSeNYywzHgA1laaS8gNo9KdTqbI=;
-        b=K6+wFx6BDMdzBUG16Kvs6LsiRVho6B35tJ5z1yPRC5/cvkq+7cpBDg9Y1FQTj6fCMn
-         jPHeOO3iWCoRvcFT0f7klZKD3xFrTxa41FBxaZX0tqJHWj43loFm6akXvsZmLyX9EhNx
-         mGddWCUN1dRRD+C2sks91NrmNJXqJD7i/5ErAXWT47qYpiyGoMd0Ei2JdqaYwkPiro+N
-         KFxKnL72Fr+UE6abkQAgSc46aO/1TsGW14+e37u1EMeFtSHqniI8XCqEQwtRom1UDqtk
-         IyeFUsHS/0QRRDALemnqv8Dd2nj1BYoaRmlaiywUbXgfOehv1aOagHwWqHRfyLGBitwm
-         zWRw==
-X-Gm-Message-State: AOJu0Yy22uFtZ2WcG9ilPmFBrTL2WBGqzjj10aOO5IBtSMBIq0Ts07Dy
-	WaMJRWoqlxsa1u2CSOv28naxEE+GXyy4CufmNBg65A6N22P7sDwUsYoogwsR1+Vu6qICH3C+xPN
-	oGp6fj22/JL5TYrbratOilSg0eL6XDzYbOfUG9KptJ1puB0kvMvQ0tnZVShDR0g96SsnIlgIsYz
-	B6Q0rWczKYo97RJEQxCKio2DRXZKQjiYlZghMTEg+XuieU5zahaO8gtLc=
-X-Received: by 2002:a05:6214:3da1:b0:6ad:9cc3:4e0a with SMTP id 6a1803df08f44-6b030a86602mr22245826d6.58.1717585750907;
-        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEeUoMOpT6N8jHTEiIoA//pq3/H+gTrcVWJpuhNcN7bglDP9qYU60nE4P/hUHBHlVwZ55aOKQ==
-X-Received: by 2002:a05:6214:3da1:b0:6ad:9cc3:4e0a with SMTP id 6a1803df08f44-6b030a86602mr22245676d6.58.1717585750445;
-        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
-Received: from toolbox.redhat.com ([2001:9e8:89ab:ee00:9c20:c1a3:e856:8e0e])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44004d1d721sm41751251cf.76.2024.06.05.04.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 04:09:10 -0700 (PDT)
-From: Sebastian Wick <sebastian.wick@redhat.com>
-To: linux-media@vger.kernel.org
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/3] edid-decode: build: compile with -Wno-variadic-macros
-Date: Wed,  5 Jun 2024 13:09:01 +0200
-Message-ID: <20240605110907.621053-1-sebastian.wick@redhat.com>
-X-Mailer: git-send-email 2.45.0
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A+bpo9IhXlSNnyxVxTZI9wza03doX2paj+5rtqcioR4=;
+	b=duOEvwmLl9bd8EXe/ieWKxDYIPVHIJVs32vqQ7hYjjmYfzNxBznCUE+9V8uZc71TGgu4Pg
+	C8LTXVDnrE1tyki4Wf0IC1mRKHVwafp94PNFRK6SHnTinxWx+IM+xPSClfUHJCohKHIt+w
+	XpMPyzrHCKx5/6AhZYsBzzyvtZ7db5Y=
+From: Paul Cercueil <paul@crapouillou.net>
+To: Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Nuno Sa <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v10 1/6] dmaengine: Add API function dmaengine_prep_peripheral_dma_vec()
+Date: Wed,  5 Jun 2024 13:08:40 +0200
+Message-ID: <20240605110845.86740-2-paul@crapouillou.net>
+In-Reply-To: <20240605110845.86740-1-paul@crapouillou.net>
+References: <20240605110845.86740-1-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -71,23 +55,107 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Sebastian Wick <sebastian.wick@redhat.com>
----
- meson.build | 1 +
- 1 file changed, 1 insertion(+)
+This function can be used to initiate a scatter-gather DMA transfer,
+where the address and size of each segment is located in one entry of
+the dma_vec array.
 
-diff --git ./meson.build ../meson.build
-index ca57652..80f810f 100644
---- ./meson.build
-+++ ../meson.build
-@@ -7,6 +7,7 @@ edid_decode_args = [
- 	'-Wno-missing-field-initializers',
- 	'-Wno-unused-parameter',
- 	'-Wimplicit-fallthrough',
-+	'-Wno-variadic-macros',
- ]
- edid_decode_link_args = []
+The major difference with dmaengine_prep_slave_sg() is that it supports
+specifying the lengths of each DMA transfer; as trying to override the
+length of the transfer with dmaengine_prep_slave_sg() is a very tedious
+process. The introduction of a new API function is also justified by the
+fact that scatterlists are on their way out.
+
+Note that dmaengine_prep_interleaved_dma() is not helpful either in that
+case, as it assumes that the address of each segment will be higher than
+the one of the previous segment, which we just cannot guarantee in case
+of a scatter-gather transfer.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+
+---
+v3: New patch
+
+v5: Replace with function dmaengine_prep_slave_dma_vec(), and struct
+    'dma_vec'.
+    Note that at some point we will need to support cyclic transfers
+    using dmaengine_prep_slave_dma_vec(). Maybe with a new "flags"
+    parameter to the function?
+
+v7:
+  - Renamed *device_prep_slave_dma_vec() -> device_prep_peripheral_dma_vec();
+  - Added a new flag parameter to the function as agreed between Paul
+    and Vinod. I renamed the first parameter to prep_flags as it's supposed to
+    be used (I think) with enum dma_ctrl_flags. I'm not really sure how that API
+    can grow but I was thinking in just having a bool cyclic parameter (as the
+    first intention of the flags is to support cyclic transfers) but ended up
+    "respecting" the previously agreed approach.
+
+v10:
+  - Add kernel doc to dmaengine_prep_peripheral_dma_vec()
+  - Remove extra flags parameter
+---
+ include/linux/dmaengine.h | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+index 752dbde4cec1..9fc03068cabc 100644
+--- a/include/linux/dmaengine.h
++++ b/include/linux/dmaengine.h
+@@ -160,6 +160,16 @@ struct dma_interleaved_template {
+ 	struct data_chunk sgl[];
+ };
  
++/**
++ * struct dma_vec - DMA vector
++ * @addr: Bus address of the start of the vector
++ * @len: Length in bytes of the DMA vector
++ */
++struct dma_vec {
++	dma_addr_t addr;
++	size_t len;
++};
++
+ /**
+  * enum dma_ctrl_flags - DMA flags to augment operation preparation,
+  *  control completion, and communicate status.
+@@ -910,6 +920,10 @@ struct dma_device {
+ 	struct dma_async_tx_descriptor *(*device_prep_dma_interrupt)(
+ 		struct dma_chan *chan, unsigned long flags);
+ 
++	struct dma_async_tx_descriptor *(*device_prep_peripheral_dma_vec)(
++		struct dma_chan *chan, const struct dma_vec *vecs,
++		size_t nents, enum dma_transfer_direction direction,
++		unsigned long flags);
+ 	struct dma_async_tx_descriptor *(*device_prep_slave_sg)(
+ 		struct dma_chan *chan, struct scatterlist *sgl,
+ 		unsigned int sg_len, enum dma_transfer_direction direction,
+@@ -973,6 +987,25 @@ static inline struct dma_async_tx_descriptor *dmaengine_prep_slave_single(
+ 						  dir, flags, NULL);
+ }
+ 
++/**
++ * dmaengine_prep_peripheral_dma_vec() - Prepare a DMA scatter-gather descriptor
++ * @chan: The channel to be used for this descriptor
++ * @vecs: The array of DMA vectors that should be transferred
++ * @nents: The number of DMA vectors in the array
++ * @dir: Specifies the direction of the data transfer
++ * @flags: DMA engine flags
++ */
++static inline struct dma_async_tx_descriptor *dmaengine_prep_peripheral_dma_vec(
++	struct dma_chan *chan, const struct dma_vec *vecs, size_t nents,
++	enum dma_transfer_direction dir, unsigned long flags)
++{
++	if (!chan || !chan->device || !chan->device->device_prep_peripheral_dma_vec)
++		return NULL;
++
++	return chan->device->device_prep_peripheral_dma_vec(chan, vecs, nents,
++							    dir, flags);
++}
++
+ static inline struct dma_async_tx_descriptor *dmaengine_prep_slave_sg(
+ 	struct dma_chan *chan, struct scatterlist *sgl,	unsigned int sg_len,
+ 	enum dma_transfer_direction dir, unsigned long flags)
 -- 
-2.45.0
+2.43.0
 
