@@ -1,72 +1,52 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0A7192B7E
-	for <linux-media@vger.kernel.org>; Wed,  5 Jun 2024 11:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E515F1922EE;
+	Wed,  5 Jun 2024 11:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717585759; cv=none; b=mouX7iKycD6vrSRexqV5k9MH7O9jHHkgPxJ9UI8tif7kYlpsYXgxZ96JzmT9UDgdqX21v9LqcAP2nsT6fkEawkv+FIRZYXPEfO762pXD44/j7qGa/BPA4AP5LVOrPlbzdZGLiVC1ufWruuRq12wNJaTt9OuZXfbKZpjD8WHfhyU=
+	t=1717585765; cv=none; b=e0yNwZzafHA/LFwB2KPvlkg9J6zbL2u08nBcOf3IqCq5w9gu/qR32n1/P2khvKrI0JEChtclDSDtmg8aHdgJ1muFjxgh894xCXjflAhF9vE642suuBuqZmRE4FTrV5N/3Db5h0kAoKOJ+EUau+JdDJUFP9jECWs1vkSq+/I8FKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717585759; c=relaxed/simple;
-	bh=iImGoKeFjJfWzgVTBUsLo958ohMslXbCGsb7K9S05tU=;
+	s=arc-20240116; t=1717585765; c=relaxed/simple;
+	bh=1gk6+q2m6wj2ue0Uabh2pGZEJQXAHRQC/hxrkHHjz2s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pkfi8Ddn9RuNlyOh0+FDfMRmR5R2qS8g9vIB8jm+mvSoF9GHZKO231uRvY9Tqyj5a0GeI9nID3MPKaoXEVYGbhs6RtQzR0RkrHhcTenXoS5u+aF3zbGXXHkLRJOKlJUa5XB+3SI7IuxuQ/x3IYq/Lbw+qto9lDLQ92nNWzyfffQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F2joNWnH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 MIME-Version; b=h4aSK+n7ZLvIz/7UG/20klLjIxn6eL4K1MVFan4heAjZhCM2Syc2+93MQm/Kd5y6mGTsxxk6tI2pkcyvEhuL52g44qcCau2cbzeuqnHYIvdXhMj3v6NZdTL4vVADX3jbpaEtpZygb9kr6EgjWtnWbjAQVLsMqWQt/E5xzGlz5Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=Tj8ZZwCv; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F2joNWnH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1717585757;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="Tj8ZZwCv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1717585740;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lV7Ow1TdzpOe7xTt5RFUvyWpCObgZAo3DQb2a1qFqI8=;
-	b=F2joNWnHoIsDd2jQqgO7SUv6qdEJ1CAel3VCUBPire3FxRBImeU822rKig/x50OIPcpJ2q
-	bp37mP5Zsf6rDRNi1rvj3myDsxYohbN3ggbVpQXxW5AxmUXT9SgWibKonhqenVmX9yIhSe
-	z1keORqSddo9bLJdzIeiE43oP0yKBLs=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-558-1GIAo8BHMJiuW_zTny7Xtg-1; Wed, 05 Jun 2024 07:09:16 -0400
-X-MC-Unique: 1GIAo8BHMJiuW_zTny7Xtg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-43fb0a1c81eso60848221cf.3
-        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2024 04:09:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717585755; x=1718190555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lV7Ow1TdzpOe7xTt5RFUvyWpCObgZAo3DQb2a1qFqI8=;
-        b=FKE3Q4H5enmnsVc7tSWpkxmkNwdmNZcKjGLDv2qazQuFkGNwJmm8wIsmvGOEr9QTur
-         LVGIef6b6IqFCtQ07iscuT8ZAruiSM0oheq76l4y2MYYEfAZZK+BxyAh4Vc18FfY0cFj
-         dp9e27paI1xqOC7ofXCdPRqQm19Cg2AIWMxklCFoylyLsVqlzMg1JDroVwNCcDYLKzw4
-         pO9vjPlZBlhlx5Z+eI7+frib4FGgN3NDprFUUx0plBeLS+tx8rKTohtRKQ2KwFV5ItzX
-         p3wu0MLxxYJag9SnDg+VoP/O5SW7iwRKJFQtp03PAI4UJO6k6LUhEQKw5doAUKUoJ2V9
-         ywnA==
-X-Gm-Message-State: AOJu0YxU437MOoWlRYbvbW0ALIkEca3kOaa60JjsbFh8X7BeBmFOdOna
-	4Y6BIKe14VzpT9uun0lyDaKQbO8Mcdh/77BEnFjJNLTnmMOkanj1ya1Hok2B+Di0iQrk7hy77fT
-	2f4+yahqys9E21u4xu6xIsVYY6UvMKl9K9iUOkQyjF7m2Yo5OvVoL99vcjW4d4UZP2HCkTZIO99
-	fCj3y0OGNK4SiH5Eg3pQfOC8xg+gdeqgkjcWyVL/O0r3Nh6TcKoL/BaNc=
-X-Received: by 2002:ac8:5e08:0:b0:43f:f10b:6cd3 with SMTP id d75a77b69052e-4402b64b6d5mr22626941cf.28.1717585754628;
-        Wed, 05 Jun 2024 04:09:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH7Q7xKgVqeuPf96tBjlyMU0OsJQfSTbXTV/ekhJXqoxrRkBhf01TQK5XzFSIIIH58+lRBZ2w==
-X-Received: by 2002:ac8:5e08:0:b0:43f:f10b:6cd3 with SMTP id d75a77b69052e-4402b64b6d5mr22626721cf.28.1717585754211;
-        Wed, 05 Jun 2024 04:09:14 -0700 (PDT)
-Received: from toolbox.redhat.com ([2001:9e8:89ab:ee00:9c20:c1a3:e856:8e0e])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44004d1d721sm41751251cf.76.2024.06.05.04.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 04:09:13 -0700 (PDT)
-From: Sebastian Wick <sebastian.wick@redhat.com>
-To: linux-media@vger.kernel.org
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/3] edid-decode: build: Use override_find_program to help subproject usage
-Date: Wed,  5 Jun 2024 13:09:03 +0200
-Message-ID: <20240605110907.621053-3-sebastian.wick@redhat.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20240605110907.621053-1-sebastian.wick@redhat.com>
-References: <20240605110907.621053-1-sebastian.wick@redhat.com>
+	bh=0rExFYS6khdsCSlBR5bP9i537aaNkMfpn8D9ODCG2PM=;
+	b=Tj8ZZwCvftzO8JbVDVmyY4HqlhTZ0aaTOKnXTxi/4be4/131J/+GFEZ/ykctz+RVKZpH/j
+	eZSbt1KvObg94HhXp0SuK+ujdmsUszUdkRnav2vBvFdqhndeEAJFP+efnRpyXxWtt60MKK
+	+Ax+mkEg3PGmyhkEbqIiZy/4ZbCpyKU=
+From: Paul Cercueil <paul@crapouillou.net>
+To: Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Nuno Sa <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v10 2/6] dmaengine: dma-axi-dmac: Implement device_prep_peripheral_dma_vec
+Date: Wed,  5 Jun 2024 13:08:41 +0200
+Message-ID: <20240605110845.86740-3-paul@crapouillou.net>
+In-Reply-To: <20240605110845.86740-1-paul@crapouillou.net>
+References: <20240605110845.86740-1-paul@crapouillou.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -75,32 +55,84 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This makes the following possible when edid-decode is a subproject:
+Add implementation of the .device_prep_peripheral_dma_vec() callback.
 
-    subproject('edid-decode')
-    edid_decode = find_program('edid-decode')
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Nuno Sa <nuno.sa@analog.com>
 
-Signed-off-by: Sebastian Wick <sebastian.wick@redhat.com>
 ---
- meson.build | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+v3: New patch
 
-diff --git ./meson.build ../meson.build
-index e61d544..a3f4512 100644
---- ./meson.build
-+++ ../meson.build
-@@ -67,4 +67,9 @@ edid_decode = executable(
- 	install: true,
- )
+v5: Implement .device_prep_slave_dma_vec() instead of v3's
+    .device_prep_slave_dma_array().
+
+v6: Use new prototype for axi_dmac_alloc_desc() as it changed upstream.
+
+v7: Adapted patch for the changes made in patch 1.
+
+v10: Use the new function prototype (without the extra prep_flags).
+---
+ drivers/dma/dma-axi-dmac.c | 40 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/drivers/dma/dma-axi-dmac.c b/drivers/dma/dma-axi-dmac.c
+index bdb752f11869..36943b0c6d60 100644
+--- a/drivers/dma/dma-axi-dmac.c
++++ b/drivers/dma/dma-axi-dmac.c
+@@ -620,6 +620,45 @@ static struct axi_dmac_sg *axi_dmac_fill_linear_sg(struct axi_dmac_chan *chan,
+ 	return sg;
+ }
  
--install_man('edid-decode.1')
-\ No newline at end of file
-+meson.override_find_program(
-+	'edid-decode',
-+	edid_decode,
-+)
++static struct dma_async_tx_descriptor *
++axi_dmac_prep_peripheral_dma_vec(struct dma_chan *c, const struct dma_vec *vecs,
++				 size_t nb, enum dma_transfer_direction direction,
++				 unsigned long flags)
++{
++	struct axi_dmac_chan *chan = to_axi_dmac_chan(c);
++	struct axi_dmac_desc *desc;
++	unsigned int num_sgs = 0;
++	struct axi_dmac_sg *dsg;
++	size_t i;
 +
-+install_man('edid-decode.1')
++	if (direction != chan->direction)
++		return NULL;
++
++	for (i = 0; i < nb; i++)
++		num_sgs += DIV_ROUND_UP(vecs[i].len, chan->max_length);
++
++	desc = axi_dmac_alloc_desc(chan, num_sgs);
++	if (!desc)
++		return NULL;
++
++	dsg = desc->sg;
++
++	for (i = 0; i < nb; i++) {
++		if (!axi_dmac_check_addr(chan, vecs[i].addr) ||
++		    !axi_dmac_check_len(chan, vecs[i].len)) {
++			kfree(desc);
++			return NULL;
++		}
++
++		dsg = axi_dmac_fill_linear_sg(chan, direction, vecs[i].addr, 1,
++					      vecs[i].len, dsg);
++	}
++
++	desc->cyclic = false;
++
++	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
++}
++
+ static struct dma_async_tx_descriptor *axi_dmac_prep_slave_sg(
+ 	struct dma_chan *c, struct scatterlist *sgl,
+ 	unsigned int sg_len, enum dma_transfer_direction direction,
+@@ -1061,6 +1100,7 @@ static int axi_dmac_probe(struct platform_device *pdev)
+ 	dma_dev->device_tx_status = dma_cookie_status;
+ 	dma_dev->device_issue_pending = axi_dmac_issue_pending;
+ 	dma_dev->device_prep_slave_sg = axi_dmac_prep_slave_sg;
++	dma_dev->device_prep_peripheral_dma_vec = axi_dmac_prep_peripheral_dma_vec;
+ 	dma_dev->device_prep_dma_cyclic = axi_dmac_prep_dma_cyclic;
+ 	dma_dev->device_prep_interleaved_dma = axi_dmac_prep_interleaved;
+ 	dma_dev->device_terminate_all = axi_dmac_terminate_all;
 -- 
-2.45.0
+2.43.0
 
