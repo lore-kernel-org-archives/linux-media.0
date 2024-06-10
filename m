@@ -1,97 +1,134 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7651E4A0;
-	Mon, 10 Jun 2024 15:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1758D14372B;
+	Mon, 10 Jun 2024 15:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718032491; cv=none; b=WqaJKtD+rjldkebKadzffIZyCHjmBflwVpji9sbRvHc508WC36Zexz6bXwDFrkhtiN45X6RTu3ZmLRIL3dDD78BDpR1xeHp4v3O/PGvVqwp9reOcbtonOgpU9iOTH1QPQKfCbD5lDh0oWe1bxLvJwApBjcQPt3GzzOrEbg/f3i8=
+	t=1718032608; cv=none; b=ZhYILebKFCMEgzSN4EGBu+fvUU5Pw6mpMCH2wztUqfRDD+DM5kxAl4Stq6eg+jkffrA6eC7VnVoj0e2lqEuV9MPPxurzMfxcXRT7MNQKfkW4sgz348FIFW26ZLlbykX1I5iDcp9wf9THCKVWRl5eRCHgHW0mAwOncAZHrKGjdmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718032491; c=relaxed/simple;
-	bh=IjlJcW2rpcpR2AhzMpx2AVjJOXObCUBp5FaDLv7xw4M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Op7Ljwc486bI4rtP5u9w9iHeORyaZo6B+vauES8uoqL9aEZ3G0fYtTbI0ok337rNsaaM2mVB2RGtc2FHB8gAN52GA24KVujCx5QTjdJ6HqHvcRjtazF5jB593M8Jh0ayUnlZJnbiJ8fVNgyjnTAP+rjaUqQwkIGYMKuPGPKXpfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=1H0IFhza; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1718032608; c=relaxed/simple;
+	bh=O4K2WVyffh0yFu7MqI9zVOz6iOMDjKw5eu0ZI4dIaVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XUvcn3DdELyY03D87REYHx1VY9vm+OUjg+iJsv8rYbaod2/+9Gdqt7xWt/A0+cZiZOOvSKB2wGQbjqc3c8cgdIzBKmFbKcnhjoeAG9Q+swGp7HDTQw7C8J8IME/9ne9nrJW9x6l8JWLAJJIfM96tA9lauerGIrl6OHn4OF1pdJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETS5HpY/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="1H0IFhza"
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ACQhJW012970;
-	Mon, 10 Jun 2024 17:14:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	NW9V2p3c6jEdfWsts/AzRAESe219hPF54H1y4m1f7Hk=; b=1H0IFhzamhX0Dprg
-	4UXoYUi8bj956wyWORsaplevL7RVsSYmXr62lwovRdP884aIiv8ldwaN2Mz2AhZo
-	QsknU78+knd5BoVhPGK0Qmr4GqF1dVOeIDWD8RhTrhoovkaeosDIuYLYXCuiOepg
-	OCvn1JN18ufLjTScuQ2kJWTU7BYXGBRJjoh4qWTqVqbmmTvnYfLD4osSirF4E1az
-	Lma+2RCe3w6q2WYDAcHhH8cmWBNGBE3L3vG2CoBoEBeUHH+MOF2x8bm+o7xP+LyB
-	gYoeOkZBLVLMyPkN5voQ/zKOX96TrcxkkN+ZNWkYMorT4xuEC/QCGjXkcwtbT/gD
-	J/CZZg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ymcqgfsee-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Jun 2024 17:14:41 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 74D774002D;
-	Mon, 10 Jun 2024 17:14:24 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9F61921B53E;
-	Mon, 10 Jun 2024 17:13:48 +0200 (CEST)
-Received: from localhost (10.130.72.241) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 10 Jun
- 2024 17:13:48 +0200
-From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>
-CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Benjamin Mugnier
-	<benjamin.mugnier@foss.st.com>
-Subject: [PATCH 3/3] media: vgxy61: Add MODULE_ALIAS()
-Date: Mon, 10 Jun 2024 17:08:15 +0200
-Message-ID: <20240610150815.228790-4-benjamin.mugnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240610150815.228790-1-benjamin.mugnier@foss.st.com>
-References: <20240610150815.228790-1-benjamin.mugnier@foss.st.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETS5HpY/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17272C32786;
+	Mon, 10 Jun 2024 15:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718032607;
+	bh=O4K2WVyffh0yFu7MqI9zVOz6iOMDjKw5eu0ZI4dIaVk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ETS5HpY/0Kf6xf4RQ1EeQ5ezwwa3Hu3a2SFdCj67odD7KI2UYD7Fs2d1r5g7y6wIf
+	 vTIqROSJQNRXs1n9kJDCdzxcS7+nLskAscR53y6Tg+D3s6zi6S/mSwJ7junGgMfPGz
+	 cFVN88hW7TnVgKXnCw7asGpLrZreR7IS4oFRMy+H9qtpSq3cfrL6cdUOlH8XQCjevL
+	 VdpqhB/9QWwIUedEYRuh4MevTomxzXE6ulQ6FOvNli9X5RdARoFkmIdzyPoMwtaZ2o
+	 jqiLoW+RrYZ9fTS86/FAROafJwR54RozEVCGgmVDPux00UDvaj3N87ZaAfFbOkWXsm
+	 4oYGUGuuH8ZZQ==
+Message-ID: <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
+Date: Mon, 10 Jun 2024 09:16:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-10_02,2024-06-10_01,2024-05-17_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>, Mina Almasry <almasrymina@google.com>,
+ Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org>
+ <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
+ <20240610121625.GI791043@ziepe.ca>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20240610121625.GI791043@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Preserve user space retro compatibility after the device rename.
+On 6/10/24 6:16 AM, Jason Gunthorpe wrote:
+> On Mon, Jun 10, 2024 at 02:07:01AM +0100, Pavel Begunkov wrote:
+>> On 6/10/24 01:37, David Wei wrote:
+>>> On 2024-06-07 17:52, Jason Gunthorpe wrote:
+>>>> IMHO it seems to compose poorly if you can only use the io_uring
+>>>> lifecycle model with io_uring registered memory, and not with DMABUF
+>>>> memory registered through Mina's mechanism.
+>>>
+>>> By this, do you mean io_uring must be exclusively used to use this
+>>> feature?
+>>>
+>>> And you'd rather see the two decoupled, so userspace can register w/ say
+>>> dmabuf then pass it to io_uring?
+>>
+>> Personally, I have no clue what Jason means. You can just as
+>> well say that it's poorly composable that write(2) to a disk
+>> cannot post a completion into a XDP ring, or a netlink socket,
+>> or io_uring's main completion queue, or name any other API.
+> 
+> There is no reason you shouldn't be able to use your fast io_uring
+> completion and lifecycle flow with DMABUF backed memory. Those are not
+> widly different things and there is good reason they should work
+> together.
+> 
+> Pretending they are totally different just because two different
+> people wrote them is a very siloed view.
+> 
+>> The devmem TCP callback can implement it in a way feasible to
+>> the project, but it cannot directly post events to an unrelated
+>> API like io_uring. And devmem attaches buffers to a socket,
+>> for which a ring for returning buffers might even be a nuisance.
+> 
+> If you can't compose your io_uring completion mechanism with a DMABUF
+> provided backing store then I think it needs more work.
+> 
 
-Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
----
- drivers/media/i2c/vgxy61.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/i2c/vgxy61.c b/drivers/media/i2c/vgxy61.c
-index ca3b43608dad..c85f356946ca 100644
---- a/drivers/media/i2c/vgxy61.c
-+++ b/drivers/media/i2c/vgxy61.c
-@@ -1898,3 +1898,4 @@ MODULE_AUTHOR("Mickael Guene <mickael.guene@st.com>");
- MODULE_AUTHOR("Sylvain Petinot <sylvain.petinot@foss.st.com>");
- MODULE_DESCRIPTION("VGXY61 camera subdev driver");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:st-vgxy61");
--- 
-2.25.1
+exactly. io_uring, page_pool, dmabuf - all kernel building blocks for
+solutions. This why I was pushing for Mina's set not to be using the
+name `devmem` - it is but one type of memory and with dmabuf it should
+not matter if it is gpu or host (or something else later on - cxl?).
 
