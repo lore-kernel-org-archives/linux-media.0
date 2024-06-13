@@ -1,130 +1,139 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B8CDF71;
-	Thu, 13 Jun 2024 01:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFC617C72;
+	Thu, 13 Jun 2024 02:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718243097; cv=none; b=eI3nr/NON+y8NrMozl5/ul2UuhDbKAKoFdXUt6Hcwr7c/37+o3xacC29A/gMC0RzHo7zweA0Qr/dmiYPpgDzixXzJutPyrpGSFNIvzGsggFfgHJbijzxQGElaXvk5QOaKuNbTFrLyK2kbax/F0jfmgv7dgI78TgxsMTHMJ9hdVA=
+	t=1718244392; cv=none; b=rsQdJDnxalYKy3lerHvExSUp51hQHHUXXDYchxZuXHziaDw2E1UFoy5Os5ZHKy4YmSzLe1oREycOjrBb5DQ2WuoH8NMHULY9iAK4vWM/tXb58lREmBlONlFmo46ma2f+ZHexw8ev+S3icF6hAXHd35RUGdEftlMa8GISR70ZRrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718243097; c=relaxed/simple;
-	bh=JApacLBSnTiOxd/MDGkRAN1Y3sRYhlmQq2aTWoRE4bE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WdoeKLtn358RvcCZ5pExg4p+b67qjG2ObQ7+RYlKfZgSZva0l+cRmXzZPQ6FYEmWZNzb5Ha4krXD6Q7ZtsDt4mYO6VoOIixb6KnE6psJIuwl7r7/E+bZJn+f/ggRQhMgMwYOrJmfizn2C+e1S4v+Hn8ikaaAn2TxQNjX0qN+TF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=Y4G9Lj7Y; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+	s=arc-20240116; t=1718244392; c=relaxed/simple;
+	bh=8sFmvQ7Z83X7NLUoXzzUfw6X3sNAVrct6codoq1wV7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ahN4vHTQZX/E29ojOqaqH00WW3uXfg6WRp4BA5txMLpg/lDvyU+3df4HZrbnyFQO7fJjZQM+e+yo1hOGwMneVpGFaip7AUaZNz5ohs14bQ9a1f6WljkIJ9uCrTVHnmtMCpZahhy4hYWfY/8MeAIKAjYTT6aTTICD9hNeZTtXyXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FeSl3aPj; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="Y4G9Lj7Y"
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id B6DDC88889;
-	Thu, 13 Jun 2024 03:44:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1718243087;
-	bh=8D0zdflsI+96R7w3bD5NSguq6bh8HmskkbvDsqKuIjI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y4G9Lj7YZyz826W8kg8SLmzz9PcBNKaX50qQDykFrdDIxPA84jt+DMD0TQ4JsPO+j
-	 rehvu3K1/7z8DtyBOriAYXVMhgx3/yQEqgnIjrR8xCbK0lPc90qHiLZmfl2f4c9oHR
-	 8+UvmkJsqFwwVliqIfSe2ebT3yxhYbsAIxvmItvr/Ce5qHRBz5cSmddPyFr1qpNYNf
-	 IH+4sRid03mnPXH5mcJKe0o8g+U7E4ChhwVGn4N/3NBJsfHve2Xw57vyjQdq4ru8Wg
-	 4PGYoXOL5W4kEysH9T3a1Y5xwccL4lQoVIq5Iiv78FBrv7gWDQFkpYjiViBOuwR6A6
-	 7omnv3C+2ppwg==
-Message-ID: <3cc52973-61b0-4698-98b7-402634f2b620@denx.de>
-Date: Thu, 13 Jun 2024 03:10:24 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FeSl3aPj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718244391; x=1749780391;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8sFmvQ7Z83X7NLUoXzzUfw6X3sNAVrct6codoq1wV7Q=;
+  b=FeSl3aPjOjZFmnCKj9Sfa4taT7g0EXtP7ZvmJ3dBSfVbZjhjpisYgt/i
+   H1QwLVH4WAf6wWP0DA4vrMmpI/ceWvokH6AeVCEyA9on2Okz8XMQ4CvWd
+   MPkjG7qBcP23BD+/g8HmhLOl6+sAiZu8x+Xk9L4MmM3pvi5ssCk/C5Nsp
+   iRohLlX3Iees3RD6pp2fKjbP7dId1DZpqquKNUa3QeM9bb7pWRLsqn/93
+   um7uRHeiDEwCncXhYnzyYPA6QLHtGQY9de+GHuzPvM2vWH1XPf3BGJ9as
+   NQUuNfzeUdSUPt1u+j44ctJxJ8BkoIVWWe3p99redMnftwDCemYJ1fHF4
+   g==;
+X-CSE-ConnectionGUID: WYbSL4Q3QZa2HulvPGK6oQ==
+X-CSE-MsgGUID: P75acOM5TCSmz+MfFGhNRw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="15194300"
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="15194300"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 19:06:30 -0700
+X-CSE-ConnectionGUID: S0kNdoNXTeaDmFV2fIXYpQ==
+X-CSE-MsgGUID: 6aVpmYIvR1+lJTRSNmEW5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="44427853"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Jun 2024 19:06:24 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sHZr4-000270-15;
+	Thu, 13 Jun 2024 02:06:22 +0000
+Date: Thu, 13 Jun 2024 10:05:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomeu Vizoso <tomeu@tomeuvizoso.net>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Tomeu Vizoso <tomeu.vizoso@tomeuvizoso.net>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH 6/9] accel/rocket: Add a new driver for Rockchip's NPU
+Message-ID: <202406130901.oiofrkFe-lkp@intel.com>
+References: <20240612-6-10-rocket-v1-6-060e48eea250@tomeuvizoso.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] arm64: dts: imx8mp: Add DT nodes for the two ISPs
-To: Peng Fan <peng.fan@nxp.com>, Adam Ford <aford173@gmail.com>,
- Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- Paul Elder <paul.elder@ideasonboard.com>, Conor Dooley
- <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Rob Herring <robh@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Shawn Guo <shawnguo@kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-References: <20240325151339.19041-1-laurent.pinchart@ideasonboard.com>
- <4879631.GXAFRqVoOG@steina-w>
- <20240325204924.GY18799@pendragon.ideasonboard.com>
- <2929432.e9J7NaK4W3@steina-w>
- <CAHCN7xLFjJUZQZwPbj5xyxnprwAV3TOvd_6A6sBwOPK+V6uQPA@mail.gmail.com>
- <AM6PR04MB59412D143AA8C20AFB479E8F88C72@AM6PR04MB5941.eurprd04.prod.outlook.com>
- <6ba1db19-32d6-4d25-824d-731bea65b583@denx.de>
- <AM6PR04MB594198421BCC895B506C408A88C72@AM6PR04MB5941.eurprd04.prod.outlook.com>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <AM6PR04MB594198421BCC895B506C408A88C72@AM6PR04MB5941.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240612-6-10-rocket-v1-6-060e48eea250@tomeuvizoso.net>
 
-On 6/11/24 5:01 AM, Peng Fan wrote:
+Hi Tomeu,
 
-[...]
+kernel test robot noticed the following build errors:
 
->>>> According to the i.MX8MP Data sheet, the nominal speed for
->>>> MEDIA_ISP_CLOCL_ROOT is 400MHZ with 500MHz being allowed in
->> overdrive
->>>> mode.
->>>>
->>>> I think this clock rate should drop to  the nominal value of 400MHz
->>>> and those boards who support overdrive can increase it to 500MHz to
->>>> avoid stiability issues and/or running out of spec.  I created an
->>>> imx8mm and imx8mn- overdrive.dtsi file.  If there is interest, I can do the
->> same for the 8MP as well.
->>>>
->>>> I haven't gone through all the clocks to determine if/what clocks are
->>>> being overdriven.
->>>
->>> Shouldn't the bootloader take the work to runtime update the freq?
->>> Why need introduce an extra overdrive.dtsi?
->>
->> Shouldn't the overdrive/non-overdrive decision be done in board DT instead ?
-> 
-> It is bootloader configure voltage to nominal, then bootloader should use
-> nominal device tree or runtime update dtb.
-> If bootloader configure voltage to over-drive, bootloader could use
-> nominal or over-drive dtb
+[auto build test ERROR on 83a7eefedc9b56fe7bfeff13b6c7356688ffa670]
 
-I think the bootloader should always configure the minimal common 
-configuration, i.e. nominal voltage, nominal clock, so that it would 
-achieve maximum compatibility with any SoC in that SoC line up.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomeu-Vizoso/iommu-rockchip-Add-compatible-for-rockchip-rk3588-iommu/20240612-215814
+base:   83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+patch link:    https://lore.kernel.org/r/20240612-6-10-rocket-v1-6-060e48eea250%40tomeuvizoso.net
+patch subject: [PATCH 6/9] accel/rocket: Add a new driver for Rockchip's NPU
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20240613/202406130901.oiofrkFe-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240613/202406130901.oiofrkFe-lkp@intel.com/reproduce)
 
-If the user does need overdrive configuration, they should specify that 
-in their board DT.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406130901.oiofrkFe-lkp@intel.com/
 
-Keep in mind, the kernel is easy to update (including kernel DT), the 
-bootloader is not easy to update (esp. in field, bootloader update may 
-render a system unbootable if it fails). I would say, it is better to 
-keep the complicated things out of the bootloader if at all possible.
+All errors (new ones prefixed by >>):
 
-> If introduce x.dtsi and x-overdrive.dtsi, how to let board choose which dtsi
-> to include?
+   In file included from arch/loongarch/include/asm/processor.h:17,
+                    from arch/loongarch/include/asm/thread_info.h:15,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:6,
+                    from ./arch/loongarch/include/generated/asm/current.h:1,
+                    from include/linux/mutex.h:14,
+                    from include/linux/notifier.h:14,
+                    from include/linux/clk.h:14,
+                    from drivers/accel/rocket/rocket_core.c:6:
+>> arch/loongarch/include/uapi/asm/ptrace.h:25:25: error: expected identifier before '(' token
+      25 | #define PC              (GPR_END + 2)
+         |                         ^
+   drivers/accel/rocket/rocket_registers.h:53:9: note: in expansion of macro 'PC'
+      53 |         PC = 0x00000100,
+         |         ^~
 
-#include "x.dtsi"
-or
-#include "x-overdrive.dtsi"
 
-But I think your question is -- how to do that at runtime ?
+vim +25 arch/loongarch/include/uapi/asm/ptrace.h
 
-U-Boot can apply DT overlays onto DT that is passed to Linux, so if the 
-user has board variants where they need both nonoverdrive/overdrive 
-options, they can apply DT overlay which enables the overdrive mode on 
-boards which need it. This can be done from U-Boot boot.scr or similar 
-boot script, which can again be easily updated, without the need to 
-update the bootloader itself (if something goes wrong or needs to be 
-changed in the future).
+803b0fc5c3f2ba Huacai Chen 2022-05-31  16  
+803b0fc5c3f2ba Huacai Chen 2022-05-31  17  /*
+803b0fc5c3f2ba Huacai Chen 2022-05-31  18   * For PTRACE_{POKE,PEEK}USR. 0 - 31 are GPRs,
+803b0fc5c3f2ba Huacai Chen 2022-05-31  19   * 32 is syscall's original ARG0, 33 is PC, 34 is BADVADDR.
+803b0fc5c3f2ba Huacai Chen 2022-05-31  20   */
+803b0fc5c3f2ba Huacai Chen 2022-05-31  21  #define GPR_BASE	0
+803b0fc5c3f2ba Huacai Chen 2022-05-31  22  #define GPR_NUM		32
+803b0fc5c3f2ba Huacai Chen 2022-05-31  23  #define GPR_END		(GPR_BASE + GPR_NUM - 1)
+803b0fc5c3f2ba Huacai Chen 2022-05-31  24  #define ARG0		(GPR_END + 1)
+803b0fc5c3f2ba Huacai Chen 2022-05-31 @25  #define PC		(GPR_END + 2)
+803b0fc5c3f2ba Huacai Chen 2022-05-31  26  #define BADVADDR	(GPR_END + 3)
+803b0fc5c3f2ba Huacai Chen 2022-05-31  27  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
