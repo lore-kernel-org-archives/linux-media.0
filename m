@@ -1,45 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AB8145A05
-	for <linux-media@vger.kernel.org>; Fri, 14 Jun 2024 06:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE28148316
+	for <linux-media@vger.kernel.org>; Fri, 14 Jun 2024 06:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718347090; cv=none; b=mLbyRisVqn9tlGoUCQFA+fYZ280FVaL43Ixmxi3P9q4BYmbNVWTz7sKUjPPlCkQ0rzfgGd6pcU/L9s0veKIPKIE4Jx6StkdQtCnVz22jGbHUIcwu8LUnFN+pAduqeqqLgXklZo/+0gnVTDCzhbMk2FMWvsotxjWIwKN5iWW/yRA=
+	t=1718347913; cv=none; b=P8RxSyir72QpCb/sclw2PXLL/EaZJxGrAw1uNkESc34jjn3E+B8MbdfF+1q1uF6IOPKuPAzqdqopvTB5aNV3T/YnEVwQPay+6pjbUdX4LmfAqQPrLoh0MvyZQLlR1r2aafUU8diREV2whEIGfvdTcoOUOnOSaUkPQgpWWpR+4rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718347090; c=relaxed/simple;
-	bh=wtltpJnO+mS2p0DNASwQFqMjmhmw4nmjCsradui+/Mc=;
+	s=arc-20240116; t=1718347913; c=relaxed/simple;
+	bh=dIlL/a9nos8oalZD5FzUJgvOo4j3F5avaDI8AcJ5R7o=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oCk5bNddNXC5XzuM567pG3KP/JO9YIyPmZGK+Gd9itYRVQX5wHRoS4oBsz9Cgd5whcHCDe4Lk2WXGekBDXF1jxDqIWSyrarG0zArCrbAJmLj6QP7mPm4YRIU69fiGWXQQQDVSDi0cp8Lbe0Uzjdweor0k8Rmm3mvPjLENc7mvKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSuK7eth; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=bU4QKQ0Q6XynGN80jVqBNd4SxMt/t2IzAK5SIhJXWcGsrBkMG7MKmaj4Na8FNiui6MJY0qbSnnQbp62tHrqJeVD9LDWWmMrmARUEUI5xoGsnNQHowLVBbHVhI3MKC96x1KZ4t9J0hA+KoR77K8TbOLMOqxevAN0JNQeJaRjINKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVsCQ+qf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSuK7eth"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B200C2BD10;
-	Fri, 14 Jun 2024 06:38:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVsCQ+qf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D0FC2BD10;
+	Fri, 14 Jun 2024 06:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718347088;
-	bh=wtltpJnO+mS2p0DNASwQFqMjmhmw4nmjCsradui+/Mc=;
+	s=k20201202; t=1718347913;
+	bh=dIlL/a9nos8oalZD5FzUJgvOo4j3F5avaDI8AcJ5R7o=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NSuK7ethMpl6jsxxSplYFvUdbGFsvAJvuWdp5HYDlqNhVxLa4GAB9tU9RSH269CZT
-	 fz5bWDmei3SMew/mMesoE5csQBsEMy8Zz3YzmUQj1SxSunx/azH07FGqP0qET6c5Bp
-	 Kv6GlU8xOS9F6YUgYCEGWXmLfBXXGXC+hsDSiDbQRgVFpLSKaS8vATW7sdGua10EB7
-	 612jdrGYsbn4zeniziKJneQygfivpEEDOIQnGRo/OWI9QU4R7qANl4mL5MmRHlipOa
-	 kPXFRzBfrDrMoFmx/kNwoGhvi7REeWV9Wh+xvfxm2F8DLnYIENJF9AteXW6I32ly0c
-	 Qkuzq8/K4/A+w==
-Date: Fri, 14 Jun 2024 08:38:04 +0200
+	b=YVsCQ+qf2IeGrd/6dNzA4WwewIbEKi+M7Iv+PwMRDuK/eRY+qxgmDmBq+3gmc7gwo
+	 tdt8z4sW+ktsDUqDe/dJa38XcNLf2BrwPxMFvP8Cm+Q4WkW9ugxT3z5soonW+IuCsY
+	 kAdXxFEY8kkr+kEaapjcu8KNiZRvj9i54NrSxkeFquxrw2pgTzOvf5+1uSOxv+pnGg
+	 YrIyOuPE7Mm4JCnneDxkA/GtcStpGvqXubG9HHSYA5OJPVZ/bkSqqJxh5RMbHGxTyA
+	 KWN07b8NgSsJWeYps+EAPy+Hs2hAcIj3+hvrhmQBVsYjELy74DZrFpaJ2pbckdQ1vt
+	 EdLbZHqOFWzFg==
+Date: Fri, 14 Jun 2024 08:51:48 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>, Hans Verkuil
- <hverkuil@xs4all.nl>, Linux Media Mailing List
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>, Linux Media Mailing List
  <linux-media@vger.kernel.org>, Umang Jain <umang.jain@ideasonboard.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Laurent Pinchart
+ <laurent.pinchart@ideasonboard.com>
 Subject: Re: [PATCH] media: imx283: drop CENTERED_RECTANGLE due to clang
  failure
-Message-ID: <20240614083754.62ebe6ba@coco.lan>
-In-Reply-To: <ZmsTiONeON0ijKfk@kekkonen.localdomain>
+Message-ID: <20240614085148.2bca27f5@coco.lan>
+In-Reply-To: <171829240304.2248009.15616094068000525791@ping.linuxembedded.co.uk>
 References: <ff7a05e2-2908-4da0-817a-1d7c271e788a@xs4all.nl>
 	<171829240304.2248009.15616094068000525791@ping.linuxembedded.co.uk>
-	<ZmsTiONeON0ijKfk@kekkonen.localdomain>
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -50,57 +49,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Em Thu, 13 Jun 2024 15:43:04 +0000
-Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
+Em Thu, 13 Jun 2024 16:26:43 +0100
+Kieran Bingham <kieran.bingham@ideasonboard.com> escreveu:
 
-> Hi Kieran, Hans,
+> Quoting Hans Verkuil (2024-06-13 16:19:08)
+> > The CENTERED_RECTANGLE define fails to compile on clang and old gcc
+> > versions. Just drop it and fill in the crop rectangles explicitly.  
 > 
-> Thanks for working on this.
+> So back when I was playing around with this I thought it would have got
+> dropped during review / upstreaming before now - because I couldn't find
+> a way to make sure the macro args were guaranteed to be used only once,
+> by putting some locals in the macro (because of the initialisation).
 > 
-> On Thu, Jun 13, 2024 at 04:26:43PM +0100, Kieran Bingham wrote:
-> > Quoting Hans Verkuil (2024-06-13 16:19:08)  
-> > > The CENTERED_RECTANGLE define fails to compile on clang and old gcc
-> > > versions. Just drop it and fill in the crop rectangles explicitly.  
-> > 
-> > So back when I was playing around with this I thought it would have got
-> > dropped during review / upstreaming before now - because I couldn't find
-> > a way to make sure the macro args were guaranteed to be used only once,
-> > by putting some locals in the macro (because of the initialisation).
-> > 
-> > So I'm not surprised that it needs to be removed, but I am surprised
-> > that it wasn't for the reason I expected ;-)
-> > 
-> > Anyway - maybe later I'll experiement with more common helpers perhaps -
-> > but not if it hits compile errors..  
+> So I'm not surprised that it needs to be removed, but I am surprised
+> that it wasn't for the reason I expected ;-)
 > 
-> Or once clang before ~ 17 is deprecated? :-)
+> Anyway - maybe later I'll experiement with more common helpers perhaps -
+> but not if it hits compile errors..
 
+IMO, a helper just makes it worse for humans. I mean, just looking at:
 
-It is not deprecated for Kernel builds. See Documentation/process/changes.rst:
+	.crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
 
-<snip>
-Current Minimal Requirements
-****************************
+I can't tell what values for top/left would be used.
 
-Upgrade to at **least** these software revisions before thinking you've
-encountered a bug!  If you're unsure what version you're currently
-running, the suggested command should tell you.
+> I do recall using v4l2_rects to define the active area so they could be
+> used collectively rather than initialising things as
+> 	.width = WIDTH,
+> 	.height = HEIGHT,
 
-Again, keep in mind that this list assumes you are already functionally
-running a Linux kernel.  Also, not all tools are necessary on all
-systems; obviously, if you don't have any PC Card hardware, for example,
-you probably needn't concern yourself with pcmciautils.
+Using defines for the minimum/maximum visible area makes sense,
+e. g. something similar to this:
 
-====================== ===============  ========================================
-        Program        Minimal version       Command to check the version
-====================== ===============  ========================================
-GNU C                  5.1              gcc --version
-Clang/LLVM (optional)  13.0.1           clang --version
-</snip>
+               .crop = {
+                      .top = MIN_VISIBLE_TOP,
+                      .left = MIN_VISIBLE_LEFT,
+                      .width = MAX_WIDTH,
+                      .height = MAX_HEIGHT,
+               },
 
-Regards,
-Mauro
+would also be fine, as it would be clear that the crop region is
+the one containing the hardware limits.
 
+> So - perhaps this could be (if it compiles):
+>	.crop = imx283_active_area,
+
+This should equally work, but maybe you could do, instead:
+
+	.crop = &imx283_active_area,	// e.g. using a pointer
+
+to avoid duplicating for every supported mode.
 
 Thanks,
 Mauro
