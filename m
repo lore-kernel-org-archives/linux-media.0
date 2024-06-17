@@ -1,21 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA6E19306B
-	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 09:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5831946BA
+	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 09:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718617797; cv=none; b=sIf8AXu6JUkv5okFYmEUAQCWpIHdOadqages8mWZip715r4UM1Qu+uyI4HmInjSc99gfsSuKNep/9j04mJATFgGryHMM8CYH5N79f6Vf3bEOqGChJ9lXdjbxbhhLTtMbxiUZgD/LIE5mBwLxEPQsNahkY2AskCG/O8FfgSIfD50=
+	t=1718617873; cv=none; b=FV/citlK5CzjOvHRw7WYwt5us6VMCGiVHqubb4vm4vaXY/+UcdgFB4yvtlMy/v/a80xuK4Gi1YWnfAr+UYhKUfjW2nu8grtqNASg+0pHnvhJdDDpTRH8D2syUiqGbY/wOCkVW27m/ax2yAneiCBr+TJZQgHln0l+OUrQkQupux8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718617797; c=relaxed/simple;
-	bh=j1IlzpNex6/q6d6UqtsdqSqpz9J4hJYGm6SE+cQrQlU=;
+	s=arc-20240116; t=1718617873; c=relaxed/simple;
+	bh=1y73eQPVodwTMu2gDWLc1JeFO6mTtScZeSbIX23T2UU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LhYbjYd9EJd0I4PVinfT8oEFZIGE8TeiIUgZrV5e1maGhSUCER6u5EoJVlv1hPh8X9AaAKIbFdGEdAw2vYProYiBy6VFVoSwngnm7wwXbTZWLS96QTg5dr4Ve8PaQ3jlMHh1SQNmUcv86BhkGZOpC/kf17wDHWNNhKovM7FYJIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8283BC2BD10;
-	Mon, 17 Jun 2024 09:49:56 +0000 (UTC)
-Message-ID: <a7be89a1-3049-4513-bb58-e372138c7f81@xs4all.nl>
-Date: Mon, 17 Jun 2024 11:49:54 +0200
+	 In-Reply-To:Content-Type; b=BIKNP78xgIb6o489mrolWH8Y5RQWLBdkREkr6zNQNXKYgZEqdgG2UaDf97BDUnSVc7YvsxvX7g9gvwwGZnZDHFY07vVhksO+0NtX9BxwVBJXYR10vy6NzDEb0Xxqq5XEBJublgJSxZ0RH+W8ossCle0yrgnPzyFtX0KOXa5x0mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m3bEcuMU; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m3bEcuMU"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3609565a1bdso627590f8f.1
+        for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 02:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718617870; x=1719222670; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mJ4Sf0Qpnpg0mNfJe0dZM5ooebC8zr2HkLzZYiJ9KxY=;
+        b=m3bEcuMU0t1ZUPPdLrWRWZMxlotDXFbQBtRCwViGnZKuwSbr+uL0ZfYubZp1GNfOxX
+         xbaLjzNOh5TYw4p7+PtQYy8CBPsjMs7e0arxigXFQtAmE5XDynMy/LoQoVWb9MVvr7Pt
+         qUyKbBALunTzuZg6pNhGS+adLzjkqM6hxnPSgyamvZ+sWi8PBJxry7iXR2N2ConeyudG
+         lrUHs2ioOFhtGRfk1+NBiTLuLMDVqOIFHWU6fNmaItTis2+Zij8AV3i3JoZ+eUsVJaDV
+         6zVb5lB6Pj9PzQJt0iRMNuclzsDpdvOMXqt4+nND3at4SpWoCLtQHVVA9NDXPEOmjVQb
+         DVwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718617870; x=1719222670;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mJ4Sf0Qpnpg0mNfJe0dZM5ooebC8zr2HkLzZYiJ9KxY=;
+        b=mevZHs5br1bOnyuNI/eAYVz1mL1AHL9LXSN2QwvKEZs6miwjKv9LE6iv12HI+kRcrY
+         r0dw2h8sLUTw2f0nIRtPYdPV9kHaTrcgbURWADz7jBZbL9OqmM6dx/H1naQRpFkAa32f
+         MpI7OHhw2smPEVNbOFwTd7C3xBd2H/sKFnVSs16SfCGN0EfD+EnwWWrIwv28lD7Jb9sR
+         a0nGNIKF/1BxAfgCEAfdRCFrODGY4OxSLVgSAnnW90eaiNQIXy2Go1ozoPEWjxY/0Spt
+         2364uUOHtgUnTf725aDBoCZ0RFeJ4iXR0Fl3jpfdZfHqFgOBC974xPa91taaKjSqyl0c
+         ZC0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXbrN6huO+6nvMdaX2pOEUkLmRd9e/EI7IrdYg/QxAQTmdV2wDzMUO5TNciElc3TGyv79/0xky5cCrno3/FE6VN/AT5G9XUCQO92bo=
+X-Gm-Message-State: AOJu0YwQIBJqU7YsuH1Sg0fwWOcloLYRRCX8by+2HRd3Un4uP1kwHE5z
+	kaGkQ0UJpuVix6LMnWBEEUpkf6dO9v4ePkOpKSfCeNY33v8OWZzfX2qZEN3TK8I=
+X-Google-Smtp-Source: AGHT+IG9PUbxCPf1bgdr95dC5Am+XNjIYf8nW+qqKLMvGs09SVCiTZEntEjWJwmp7GgG/3LuhbnIqw==
+X-Received: by 2002:a5d:64ea:0:b0:360:8589:37c0 with SMTP id ffacd0b85a97d-3608589385dmr7022782f8f.8.1718617870085;
+        Mon, 17 Jun 2024 02:51:10 -0700 (PDT)
+Received: from [192.168.0.3] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-360750ad20bsm11420396f8f.54.2024.06.17.02.51.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Jun 2024 02:51:09 -0700 (PDT)
+Message-ID: <01041302-120b-4f9d-87f2-bd841dcd227a@linaro.org>
+Date: Mon, 17 Jun 2024 10:51:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -23,146 +61,112 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 19/26] media: vimc: Release resources on media device
- release
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com
-References: <20240610100530.1107771-1-sakari.ailus@linux.intel.com>
- <20240610100530.1107771-20-sakari.ailus@linux.intel.com>
-Content-Language: en-US, nl
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <20240610100530.1107771-20-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
+ dev_pm_genpd_set_hwmode to switch GDSC mode on V6
+To: Jagadeesh Kona <quic_jkona@quicinc.com>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+ Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andy Gross <agross@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Abel Vesa <abel.vesa@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+ Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>,
+ Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20240413152013.22307-1-quic_jkona@quicinc.com>
+ <20240413152013.22307-6-quic_jkona@quicinc.com>
+ <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
+ <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
+ <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
+ <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
+ <621dbaaa-6b86-45b5-988e-a6d9c39b13d7@linaro.org>
+ <d36c1163-a3f0-4034-a430-91986e5bbce8@linaro.org>
+ <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
+ <d2e55523-f8fd-4cbe-909c-57de241107e8@linaro.org>
+ <1df48a42-3b4e-4eb4-971b-cd4be001ba27@quicinc.com>
+ <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/06/2024 12:05, Sakari Ailus wrote:
-> Release all the resources when the media device is released, moving away
-> from the struct v4l2_device used for that purpose. This is done to
-> exemplify the use of the media device's release callback.
+On 17/06/2024 03:31, Jagadeesh Kona wrote:
 > 
-> Switch to container_of_const(), too, while we're changing the code anyway.
 > 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/test-drivers/vimc/vimc-core.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+> On 5/31/2024 5:26 PM, Jagadeesh Kona wrote:
+>>
+>>
+>> On 5/10/2024 6:31 PM, Bryan O'Donoghue wrote:
+>>> On 01/05/2024 10:14, Bryan O'Donoghue wrote:
+>>>> On 30/04/2024 21:01, Konrad Dybcio wrote:
+>>>>> On 24.04.2024 11:50 AM, Bryan O'Donoghue wrote:
+>>>>>> On 24/04/2024 10:45, Jagadeesh Kona wrote:
+>>>>>>>
+>>>>>>> Thanks Bryan for testing this series. Can you please confirm if 
+>>>>>>> this issue is observed in every run or only seen during the first 
+>>>>>>> run? Also please let me know on which platform this issue is 
+>>>>>>> observed?
+>>>>>>>
+>>>>>>> Thanks,
+>>>>>>> Jagadeesh
+>>>>>>
+>>>>>> rb5/sm8250
+>>>>>>
+>>>>>> My observation was on a previous _boot_ the stuttering was worse. 
+>>>>>> There is in the video capture three times that I count where the 
+>>>>>> video halts briefly, I guess we need to vote or set an OPP so the 
+>>>>>> firmware knows not to power-collapse quite so aggressively.
+>>>>>
+>>>>> We seem to be having some qualcomm-wide variance on perf/pwr usage 
+>>>>> on some
+>>>>> odd boots.. Any chance you could try like 5 times and see if it was 
+>>>>> a fluke?
+>>>>>
+>>>>> Konrad
+>>>>
+>>>> Sure.
+>>>>
+>>>> The first time I tried it, it was much worse.
+>>>>
+>>>> The second time, captured in the video is only noticeable because I 
+>>>> was *looking* for this specific error i.e. I don't think I would 
+>>>> have noticed the error on the second run, had I not seen the first run.
+>>>>
+>>>> I'll find some time to do 5x with and 5x without.
+>>>>
+>>>> ---
+>>>> bod
+>>>
+>>> ping bod please remember to do this thanks
+>>>
+>>
+>> Hi Bryan, Could you please let me know if you got a chance to check 
+>> the above? Thank you!
+>>
 > 
-> diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/test-drivers/vimc/vimc-core.c
-> index af127476e920..3e59f8c256c7 100644
-> --- a/drivers/media/test-drivers/vimc/vimc-core.c
-> +++ b/drivers/media/test-drivers/vimc/vimc-core.c
-> @@ -264,13 +264,12 @@ static int vimc_add_subdevs(struct vimc_device *vimc)
->  	return 0;
->  }
->  
-> -static void vimc_v4l2_dev_release(struct v4l2_device *v4l2_dev)
-> +static void vimc_mdev_release(struct media_device *mdev)
->  {
->  	struct vimc_device *vimc =
-> -		container_of(v4l2_dev, struct vimc_device, v4l2_dev);
-> +		container_of_const(mdev, struct vimc_device, mdev);
+> Hi Bryan, Kindly can you please help confirm if this is a real issue or 
+> observed as a fluke? so we can go ahead and mainline these changes.
+> 
+> Thanks,
+> Jagadeesh
 
-Please don't mix this in. It makes no sense here since vimc is never
-const. Such a change doesn't belong in this series. So just leave it
-at container_of and update the commit log.
+So I'm happier with this patchset when I run gstreamer instead of ffmpeg.
 
-With that change you can add my:
+There doesn't appear to be a discernable difference between before/after 
+on framerate or subjective UX with/without this set.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+gst-launch-1.0 -vvv -e filesrc location=sample-5s.mp4 ! qtdemux ! 
+parsebin ! v4l2h264dec ! autovideosink
 
-Regards,
-
-	Hans
-
->  
->  	vimc_release_subdevs(vimc);
-> -	media_device_cleanup(&vimc->mdev);
->  	kfree(vimc->ent_devs);
->  	kfree(vimc);
->  }
-> @@ -336,6 +335,10 @@ static int vimc_register_devices(struct vimc_device *vimc)
->  	return ret;
->  }
->  
-> +static const struct media_device_ops vimc_mdev_ops = {
-> +	.release = vimc_mdev_release,
-> +};
-> +
->  static int vimc_probe(struct platform_device *pdev)
->  {
->  	const struct font_desc *font = find_font("VGA8x16");
-> @@ -369,12 +372,12 @@ static int vimc_probe(struct platform_device *pdev)
->  	snprintf(vimc->mdev.bus_info, sizeof(vimc->mdev.bus_info),
->  		 "platform:%s", VIMC_PDEV_NAME);
->  	vimc->mdev.dev = &pdev->dev;
-> +	vimc->mdev.ops = &vimc_mdev_ops;
->  	media_device_init(&vimc->mdev);
->  
->  	ret = vimc_register_devices(vimc);
->  	if (ret) {
-> -		media_device_cleanup(&vimc->mdev);
-> -		kfree(vimc);
-> +		media_device_put(&vimc->mdev);
->  		return ret;
->  	}
->  	/*
-> @@ -382,7 +385,6 @@ static int vimc_probe(struct platform_device *pdev)
->  	 * if the registration fails, we release directly from probe
->  	 */
->  
-> -	vimc->v4l2_dev.release = vimc_v4l2_dev_release;
->  	platform_set_drvdata(pdev, vimc);
->  	return 0;
->  }
-> @@ -397,6 +399,7 @@ static void vimc_remove(struct platform_device *pdev)
->  	media_device_unregister(&vimc->mdev);
->  	v4l2_device_unregister(&vimc->v4l2_dev);
->  	v4l2_device_put(&vimc->v4l2_dev);
-> +	media_device_put(&vimc->mdev);
->  }
->  
->  static void vimc_dev_release(struct device *dev)
-
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
