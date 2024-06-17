@@ -1,59 +1,21 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5831946BA
-	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 09:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7DF1922D3
+	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 09:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718617873; cv=none; b=FV/citlK5CzjOvHRw7WYwt5us6VMCGiVHqubb4vm4vaXY/+UcdgFB4yvtlMy/v/a80xuK4Gi1YWnfAr+UYhKUfjW2nu8grtqNASg+0pHnvhJdDDpTRH8D2syUiqGbY/wOCkVW27m/ax2yAneiCBr+TJZQgHln0l+OUrQkQupux8=
+	t=1718618243; cv=none; b=cWOF2oTZuPXVUUv/6CnuJb0J6ergxi0O47QZUv7YbT97GBZGAwD/NvrWqPj1FwV2GVXUkknHEZMPqRh3+7Lj/hz1Orz6uc+RbNxqUeGM6tgFb8VivOsrXIFf293daxszSZ54pUp7yhTMlE2AxgMSXUCd0XIrhqi3xAlvzvlorBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718617873; c=relaxed/simple;
-	bh=1y73eQPVodwTMu2gDWLc1JeFO6mTtScZeSbIX23T2UU=;
+	s=arc-20240116; t=1718618243; c=relaxed/simple;
+	bh=iDqLfYP5HgHzW47RjEJEG0uPxtFSJFH7h42H/Ju33P4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BIKNP78xgIb6o489mrolWH8Y5RQWLBdkREkr6zNQNXKYgZEqdgG2UaDf97BDUnSVc7YvsxvX7g9gvwwGZnZDHFY07vVhksO+0NtX9BxwVBJXYR10vy6NzDEb0Xxqq5XEBJublgJSxZ0RH+W8ossCle0yrgnPzyFtX0KOXa5x0mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m3bEcuMU; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m3bEcuMU"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3609565a1bdso627590f8f.1
-        for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 02:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718617870; x=1719222670; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mJ4Sf0Qpnpg0mNfJe0dZM5ooebC8zr2HkLzZYiJ9KxY=;
-        b=m3bEcuMU0t1ZUPPdLrWRWZMxlotDXFbQBtRCwViGnZKuwSbr+uL0ZfYubZp1GNfOxX
-         xbaLjzNOh5TYw4p7+PtQYy8CBPsjMs7e0arxigXFQtAmE5XDynMy/LoQoVWb9MVvr7Pt
-         qUyKbBALunTzuZg6pNhGS+adLzjkqM6hxnPSgyamvZ+sWi8PBJxry7iXR2N2ConeyudG
-         lrUHs2ioOFhtGRfk1+NBiTLuLMDVqOIFHWU6fNmaItTis2+Zij8AV3i3JoZ+eUsVJaDV
-         6zVb5lB6Pj9PzQJt0iRMNuclzsDpdvOMXqt4+nND3at4SpWoCLtQHVVA9NDXPEOmjVQb
-         DVwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718617870; x=1719222670;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJ4Sf0Qpnpg0mNfJe0dZM5ooebC8zr2HkLzZYiJ9KxY=;
-        b=mevZHs5br1bOnyuNI/eAYVz1mL1AHL9LXSN2QwvKEZs6miwjKv9LE6iv12HI+kRcrY
-         r0dw2h8sLUTw2f0nIRtPYdPV9kHaTrcgbURWADz7jBZbL9OqmM6dx/H1naQRpFkAa32f
-         MpI7OHhw2smPEVNbOFwTd7C3xBd2H/sKFnVSs16SfCGN0EfD+EnwWWrIwv28lD7Jb9sR
-         a0nGNIKF/1BxAfgCEAfdRCFrODGY4OxSLVgSAnnW90eaiNQIXy2Go1ozoPEWjxY/0Spt
-         2364uUOHtgUnTf725aDBoCZ0RFeJ4iXR0Fl3jpfdZfHqFgOBC974xPa91taaKjSqyl0c
-         ZC0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXbrN6huO+6nvMdaX2pOEUkLmRd9e/EI7IrdYg/QxAQTmdV2wDzMUO5TNciElc3TGyv79/0xky5cCrno3/FE6VN/AT5G9XUCQO92bo=
-X-Gm-Message-State: AOJu0YwQIBJqU7YsuH1Sg0fwWOcloLYRRCX8by+2HRd3Un4uP1kwHE5z
-	kaGkQ0UJpuVix6LMnWBEEUpkf6dO9v4ePkOpKSfCeNY33v8OWZzfX2qZEN3TK8I=
-X-Google-Smtp-Source: AGHT+IG9PUbxCPf1bgdr95dC5Am+XNjIYf8nW+qqKLMvGs09SVCiTZEntEjWJwmp7GgG/3LuhbnIqw==
-X-Received: by 2002:a5d:64ea:0:b0:360:8589:37c0 with SMTP id ffacd0b85a97d-3608589385dmr7022782f8f.8.1718617870085;
-        Mon, 17 Jun 2024 02:51:10 -0700 (PDT)
-Received: from [192.168.0.3] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-360750ad20bsm11420396f8f.54.2024.06.17.02.51.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 02:51:09 -0700 (PDT)
-Message-ID: <01041302-120b-4f9d-87f2-bd841dcd227a@linaro.org>
-Date: Mon, 17 Jun 2024 10:51:08 +0100
+	 In-Reply-To:Content-Type; b=t1hCTdlMnVhgX4/Blei8vQn4to5ySHY8v9JDqwRqEBH3dZ3qPJ6spIsJoRoNB4UV9qF55aqehQ653GoMuUPbnrVaUvbBUfagIHinA6jNlqJicyGPYwwIMhKqf06CEYZEkuVERyvRE+UJgUBMfBDnnrPLFzzT0boauiXKdzQNZV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED895C4AF1D;
+	Mon, 17 Jun 2024 09:57:21 +0000 (UTC)
+Message-ID: <20c3243e-9bd4-457a-9b1d-d6c65cf31a58@xs4all.nl>
+Date: Mon, 17 Jun 2024 11:57:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,112 +23,176 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
- dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-To: Jagadeesh Kona <quic_jkona@quicinc.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>,
- Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Gross <agross@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abel Vesa <abel.vesa@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
- Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-6-quic_jkona@quicinc.com>
- <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
- <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
- <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
- <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
- <621dbaaa-6b86-45b5-988e-a6d9c39b13d7@linaro.org>
- <d36c1163-a3f0-4034-a430-91986e5bbce8@linaro.org>
- <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
- <d2e55523-f8fd-4cbe-909c-57de241107e8@linaro.org>
- <1df48a42-3b4e-4eb4-971b-cd4be001ba27@quicinc.com>
- <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v4 22/26] media: mc: Maintain a list of open file handles
+ in a media device
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Cc: laurent.pinchart@ideasonboard.com
+References: <20240610100530.1107771-1-sakari.ailus@linux.intel.com>
+ <20240610100530.1107771-23-sakari.ailus@linux.intel.com>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20240610100530.1107771-23-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/06/2024 03:31, Jagadeesh Kona wrote:
+On 10/06/2024 12:05, Sakari Ailus wrote:
+> The list of file handles is needed to deliver media events as well as for
+> other purposes in the future.
 > 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/media/mc/mc-device.c  | 19 ++++++++++++++++++-
+>  drivers/media/mc/mc-devnode.c |  2 +-
+>  include/media/media-devnode.h |  4 +++-
+>  3 files changed, 22 insertions(+), 3 deletions(-)
 > 
-> On 5/31/2024 5:26 PM, Jagadeesh Kona wrote:
->>
->>
->> On 5/10/2024 6:31 PM, Bryan O'Donoghue wrote:
->>> On 01/05/2024 10:14, Bryan O'Donoghue wrote:
->>>> On 30/04/2024 21:01, Konrad Dybcio wrote:
->>>>> On 24.04.2024 11:50 AM, Bryan O'Donoghue wrote:
->>>>>> On 24/04/2024 10:45, Jagadeesh Kona wrote:
->>>>>>>
->>>>>>> Thanks Bryan for testing this series. Can you please confirm if 
->>>>>>> this issue is observed in every run or only seen during the first 
->>>>>>> run? Also please let me know on which platform this issue is 
->>>>>>> observed?
->>>>>>>
->>>>>>> Thanks,
->>>>>>> Jagadeesh
->>>>>>
->>>>>> rb5/sm8250
->>>>>>
->>>>>> My observation was on a previous _boot_ the stuttering was worse. 
->>>>>> There is in the video capture three times that I count where the 
->>>>>> video halts briefly, I guess we need to vote or set an OPP so the 
->>>>>> firmware knows not to power-collapse quite so aggressively.
->>>>>
->>>>> We seem to be having some qualcomm-wide variance on perf/pwr usage 
->>>>> on some
->>>>> odd boots.. Any chance you could try like 5 times and see if it was 
->>>>> a fluke?
->>>>>
->>>>> Konrad
->>>>
->>>> Sure.
->>>>
->>>> The first time I tried it, it was much worse.
->>>>
->>>> The second time, captured in the video is only noticeable because I 
->>>> was *looking* for this specific error i.e. I don't think I would 
->>>> have noticed the error on the second run, had I not seen the first run.
->>>>
->>>> I'll find some time to do 5x with and 5x without.
->>>>
->>>> ---
->>>> bod
->>>
->>> ping bod please remember to do this thanks
->>>
->>
->> Hi Bryan, Could you please let me know if you got a chance to check 
->> the above? Thank you!
->>
-> 
-> Hi Bryan, Kindly can you please help confirm if this is a real issue or 
-> observed as a fluke? so we can go ahead and mainline these changes.
-> 
-> Thanks,
-> Jagadeesh
+> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+> index a9505ab4412d..46d1b0c9d8be 100644
+> --- a/drivers/media/mc/mc-device.c
+> +++ b/drivers/media/mc/mc-device.c
+> @@ -45,8 +45,9 @@ static inline void __user *media_get_uptr(__u64 arg)
+>  	return (void __user *)(uintptr_t)arg;
+>  }
+>  
+> -static int media_device_open(struct file *filp)
+> +static int media_device_open(struct media_devnode *devnode, struct file *filp)
+>  {
+> +	struct media_device *mdev = to_media_device(devnode);
+>  	struct media_device_fh *fh;
+>  
+>  	fh = kzalloc(sizeof(*fh), GFP_KERNEL);
+> @@ -55,13 +56,23 @@ static int media_device_open(struct file *filp)
+>  
+>  	filp->private_data = &fh->fh;
+>  
+> +	spin_lock_irq(&mdev->fh_list_lock);
+> +	list_add(&fh->mdev_list, &mdev->fh_list);
+> +	spin_unlock_irq(&mdev->fh_list_lock);
+> +
+>  	return 0;
+>  }
+>  
+>  static int media_device_close(struct file *filp)
+>  {
+> +	struct media_devnode *devnode = media_devnode_data(filp);
+> +	struct media_device *mdev = to_media_device(devnode);
+>  	struct media_device_fh *fh = media_device_fh(filp);
+>  
+> +	spin_lock_irq(&mdev->fh_list_lock);
+> +	list_del(&fh->mdev_list);
+> +	spin_unlock_irq(&mdev->fh_list_lock);
+> +
+>  	kfree(fh);
+>  
+>  	return 0;
+> @@ -769,11 +780,13 @@ void media_device_init(struct media_device *mdev)
+>  	INIT_LIST_HEAD(&mdev->pads);
+>  	INIT_LIST_HEAD(&mdev->links);
+>  	INIT_LIST_HEAD(&mdev->entity_notify);
+> +	INIT_LIST_HEAD(&mdev->fh_list);
+>  
+>  	mutex_init(&mdev->req_queue_mutex);
+>  	mutex_init(&mdev->graph_mutex);
+>  	ida_init(&mdev->entity_internal_idx);
+>  	atomic_set(&mdev->request_id, 0);
+> +	spin_lock_init(&mdev->fh_list_lock);
+>  
+>  	mdev->devnode.release = media_device_release;
+>  	media_devnode_init(&mdev->devnode);
+> @@ -830,6 +843,10 @@ void media_device_unregister(struct media_device *mdev)
+>  	if (!media_devnode_is_registered(&mdev->devnode))
+>  		return;
+>  
+> +	spin_lock_irq(&mdev->fh_list_lock);
+> +	list_del_init(&mdev->fh_list);
+> +	spin_unlock_irq(&mdev->fh_list_lock);
 
-So I'm happier with this patchset when I run gstreamer instead of ffmpeg.
+Huh? This doesn't make sense to me. Unregistering the media device
+makes no difference to the list of open filehandles.
 
-There doesn't appear to be a discernable difference between before/after 
-on framerate or subjective UX with/without this set.
+> +
+>  	device_remove_file(&mdev->devnode.dev, &dev_attr_model);
+>  	dev_dbg(mdev->dev, "Media device unregistering\n");
+>  	media_devnode_unregister(&mdev->devnode);
+> diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
+> index 26491daaba96..617156963911 100644
+> --- a/drivers/media/mc/mc-devnode.c
+> +++ b/drivers/media/mc/mc-devnode.c
+> @@ -154,7 +154,7 @@ static int media_open(struct inode *inode, struct file *filp)
+>  	get_device(&devnode->dev);
+>  	mutex_unlock(&media_devnode_lock);
+>  
+> -	ret = devnode->fops->open(filp);
+> +	ret = devnode->fops->open(devnode, filp);
+>  	if (ret) {
+>  		put_device(&devnode->dev);
+>  		return ret;
+> diff --git a/include/media/media-devnode.h b/include/media/media-devnode.h
+> index e4e8552598eb..898fa67ca090 100644
+> --- a/include/media/media-devnode.h
+> +++ b/include/media/media-devnode.h
+> @@ -21,6 +21,8 @@
+>  #include <linux/device.h>
+>  #include <linux/cdev.h>
+>  
+> +struct media_devnode;
+> +
+>  /*
+>   * Flag to mark the media_devnode struct as registered. Drivers must not touch
+>   * this flag directly, it will be set and cleared by media_devnode_register and
+> @@ -49,7 +51,7 @@ struct media_file_operations {
+>  	__poll_t (*poll) (struct file *, struct poll_table_struct *);
+>  	long (*ioctl) (struct file *, unsigned int, unsigned long);
+>  	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
+> -	int (*open) (struct file *);
+> +	int (*open) (struct media_devnode *, struct file *);
+>  	int (*release) (struct file *);
+>  };
+>  
 
-gst-launch-1.0 -vvv -e filesrc location=sample-5s.mp4 ! qtdemux ! 
-parsebin ! v4l2h264dec ! autovideosink
+Regards,
 
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+	Hans
