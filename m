@@ -1,21 +1,21 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1606D61FCA
-	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 10:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F344194A69
+	for <linux-media@vger.kernel.org>; Mon, 17 Jun 2024 10:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718620834; cv=none; b=VdoJh1hVOeQTGbzZgEf/QBBNtACtOj2bmSg3TbhJ1y8vj7KO2L0xCh7iySdWeUYcwHb96PxWZmTHW2bhcxySdUNDT76T09OAvgsaplBqgDnlXxTnOJP/DfzIJwuXNnDjLIanrWvQhNQl7AvaiXW042I6ljQwE6v+w7cIfNGc6UI=
+	t=1718620925; cv=none; b=XD0FBuQ0JvZeuvI0OIZfD3FO7KZdvyMBcAFOszPffFfMxczoXIrTzUfjZH/E/CgpBwGJLhI+czpkI91VAbyONEwN0eap/awL2mai53YBBVpZC78vqeV58dGbZBFoHgfs3TgVCiXyTK0D3DE/pavrr59vMHIaUQKE7YMBy0nElmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718620834; c=relaxed/simple;
-	bh=/Lc9YKl1Zg9UoZ/0BYPdXq+23RGG0YxwBVYUd+INvoc=;
+	s=arc-20240116; t=1718620925; c=relaxed/simple;
+	bh=evXM8MsjOAgkU+H2UfRyWMhnQREISp3DgX0waHKMSrE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d7+oH1WlI+AdssbRRg4q8VDKBm0R5omujQMxX3oAy3beU+y60CwlhgVh8cDMSEmpJDS+zUqKlzh6/KyDJHL/v5Y59VMcB9G/41UguhSs/No0/3xc4Pi0d5nWVsqpFCWKtbdr3hHriAhQJVz+GJvB13WMmtdnM6rI9Jxr5RPV2Ks=
+	 In-Reply-To:Content-Type; b=rqRXmv9TY2sO3TOMSF+axVbas1bokwPpPoTP/xOZZFpaXle34KbjZZSIa7/GPhhngoQNq0YdAHlvD9wzxAI2aH6EJ3/elTIGtAJipk+IqeVeY3tfNdrJkBochg12tig2Oi8PIDJRygiVKZBNLIeQiKmdv85L3LjyRaFGca8BeSg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA88C4AF1A;
-	Mon, 17 Jun 2024 10:40:32 +0000 (UTC)
-Message-ID: <4aa8d1e2-4863-465e-a0f9-e25d88f35c5a@xs4all.nl>
-Date: Mon, 17 Jun 2024 12:40:31 +0200
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3361FC4AF1A;
+	Mon, 17 Jun 2024 10:42:04 +0000 (UTC)
+Message-ID: <85b8a8d5-eb84-40ee-95c7-497bd2e7b110@xs4all.nl>
+Date: Mon, 17 Jun 2024 12:42:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -23,12 +23,11 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 24/26] media: mc: Warn about drivers not releasing
- media device safely
+Subject: Re: [PATCH v4 25/26] media: mc: Enforce one-time registration
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
 Cc: laurent.pinchart@ideasonboard.com
 References: <20240610100530.1107771-1-sakari.ailus@linux.intel.com>
- <20240610100530.1107771-25-sakari.ailus@linux.intel.com>
+ <20240610100530.1107771-26-sakari.ailus@linux.intel.com>
 Content-Language: en-US, nl
 From: Hans Verkuil <hverkuil@xs4all.nl>
 Autocrypt: addr=hverkuil@xs4all.nl; keydata=
@@ -74,43 +73,54 @@ Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  gYmkrmv0duG1FStpY+IIQn1TOkuXrciTVfZY1cZD0aVxwlxXBnUNZZNslldvXFtndxR0SFat
  sflovhDxKyhFwXOP0Rv8H378/+14TaykknRBIKEc0+lcr+EMOSUR5eg4aURb8Gc3Uc7fgQ6q
  UssTXzHPyj1hAyDpfu8DzAwlh4kKFTodxSsKAjI45SLjadSc94/5Gy8645Y1KgBzBPTH7Q==
-In-Reply-To: <20240610100530.1107771-25-sakari.ailus@linux.intel.com>
+In-Reply-To: <20240610100530.1107771-26-sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/06/2024 12:05, Sakari Ailus wrote:
-> The media device and associated resources may be released only when its
-> memory is no longer used. Warn about drivers not doing this, but instead
-> releasing the resources at driver unbind time.
+> A media devnode may be registered only once. Enforce this by setting the
+> minor to -1 in init.
+> 
+> Registration initialises the character device and sets up the device name.
+> These should take place only once during the lifetime of the media device.
 
-I think this should be folded in the previous patch.
+This has nothing to do with patch 23/26, right?
+
+I would move this to before that patch.
 
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/mc/mc-device.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-> index 8cdd0d46e865..51836faa6d1a 100644
-> --- a/drivers/media/mc/mc-device.c
-> +++ b/drivers/media/mc/mc-device.c
-> @@ -822,6 +822,9 @@ int __must_check __media_device_register(struct media_device *mdev,
->  		ref = kzalloc(sizeof(*mdev->devnode.ref), GFP_KERNEL);
->  		if (!ref)
->  			return -ENOMEM;
-> +
-> +		dev_warn(mdev->dev,
-> +			 "Set mdev release op to safely release resources!\n");
 
-I think this needs a comment as well. Basically stating the same as the
-commit log message.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 Regards,
 
 	Hans
 
->  	}
+> ---
+>  drivers/media/mc/mc-devnode.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/media/mc/mc-devnode.c b/drivers/media/mc/mc-devnode.c
+> index 8cb4e0eec17f..758971f310c3 100644
+> --- a/drivers/media/mc/mc-devnode.c
+> +++ b/drivers/media/mc/mc-devnode.c
+> @@ -240,6 +240,7 @@ void media_devnode_init(struct media_devnode *devnode)
+>  {
+>  	device_initialize(&devnode->dev);
+>  	devnode->dev.release = media_devnode_release;
+> +	devnode->minor = -1;
+>  }
 >  
->  	/* Register the device node. */
+>  int __must_check media_devnode_register(struct media_devnode *devnode,
+> @@ -251,6 +252,9 @@ int __must_check media_devnode_register(struct media_devnode *devnode,
+>  	int minor;
+>  	int ret;
+>  
+> +	if (devnode->minor != -1)
+> +		return -EINVAL;
+> +
+>  	/* Part 1: Find a free minor number */
+>  	mutex_lock(&media_devnode_lock);
+>  	minor = find_first_zero_bit(media_devnode_nums, MEDIA_NUM_DEVICES);
 
