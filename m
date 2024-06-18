@@ -1,119 +1,125 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D104D9E9;
-	Tue, 18 Jun 2024 06:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77345153BF5;
+	Tue, 18 Jun 2024 07:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718693009; cv=none; b=ndqwo70nFhbeeiZJ/NeA7X1PQ6ABSApEugC0yR3G1mKUweLTKSDWbzwAkJTgDSBmFpeoq4WRQzOxpjWxLmLA1N5/LP9N1mNyLgf6KzS7P2sUEbqKwb6E7LF9K3R7Pc3JVOeSa0PhqetAAPCgoSCBwN7IPm5oU8P/35o9rfHM2Pg=
+	t=1718695403; cv=none; b=TAuNS9uHAZ1DonsivNZ/OuYq0j1J46IXU3xCo8kCchslzUjFd79fpEK7P3PX7UOJ5Z9xP+qNdJf2LWWWeQPbazBd8WqlwzOK7IxPj/bteKZfG3EtFqhhbRpSary90FJA5JzlAELYMMcTEgHyZIWzAiQid7l6pl/MELSjesZZ0dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718693009; c=relaxed/simple;
-	bh=VpgJPad+08pstL0ZoWCCeKae7OP1hyR3SvT9SVEit8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V1S9Ml0ETnhzxiWDRsN3PDrwZJlH7MXJTuMEHFUPfFqNv7I7Z3L198yjSOTx4YBJEZWzRBCtF/Te3o5EEUNoUCCLcbzXrGZ7Prw4gqwAyf51bV0gwEnSnRYmvBnBZls8XICaBQ3nfnpuEVoP3pxEaQatAfzDRQ6/v++zoZ3BRus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L0vABP1f; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1718695403; c=relaxed/simple;
+	bh=gomqLja6oB518XBfskwiAXXhfVP2n488gnbUGW/bzMc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=D1C6842SSFtecRr4z+fx786a5I58rUolSsP8NVc0c1dmUonZhJoz9UCtAq0x7ekpw1DsdbT+hU6MKxVtriXtWgIahJtPgfqluBN5Dg753lXHM9A5tG7L3Hrmb+/IgqpnLQPFw4Mh+xvbqb24L8vtQFasCTEsgN9YZdg0oUXcTU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZAaxwRlr; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L0vABP1f"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xIkCb0DXrPi2i+bQKQrhJv9RbtgOZyK9PyIWQ2EUHTE=; b=L0vABP1f825b9Xo3raJ9hulo7A
-	Uo4uoOV2vhy7muoBeOW/TB5V/l0+kHaLHQUt8KX+GAt5Yj7YUqmyxPlhKYuf2lTo2JtLbVsZ+YVsj
-	QDPFYKr34JiZXCBcVZawwjtADj1qK6BHJJ9KCkk7nauvWFPo4H28zswTZmzR+elu7xmP5o8OgPJE/
-	VXRo151WFZrse5FpNgbTZ0TUQoMKvf6i3fmi1+rDXvDP3xbW4odddxZfbMBKD4jbqRY01eGdJOaYS
-	nj5A1ODp12D2/vsnP8NnbsAW27Om+ZgazSCXtrr3rm5KnhqNG/JGBFlIPcQTcR7OWaXaJ5CJGPTqd
-	NS3QCLmQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sJSYo-0000000DqmO-2M4P;
-	Tue, 18 Jun 2024 06:43:18 +0000
-Date: Mon, 17 Jun 2024 23:43:18 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZnEshp0VICflc6Bg@infradead.org>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <ZmAgszZpSrcdHtyl@infradead.org>
- <ee9a55cd-7541-4865-ab2a-9e860b88c9e4@gmail.com>
- <Zmfv6_uWAVavYJNj@infradead.org>
- <8ca3e144-75f3-4e57-9ae0-cc88f245094e@gmail.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZAaxwRlr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1718695349; x=1719300149; i=markus.elfring@web.de;
+	bh=Bg3TIL3KzmjNs9lk8+SASEJZvZeUEBVqupiovsiTnss=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ZAaxwRlrcDx0PCUvBtnXqrsiSNHNscYtnpXW3gtMAuUSGj7pQhStYq/XKutIVp56
+	 UaFzrLJLtCiY1/L81xaJ4vLb2HjBan605/HVBJBYM9pg6nSlIj3IxVmPOLj0ewt1r
+	 a8XLes3LhC9PEuCL+Fo4OKaN0q6+9jIIqhuiJw7XG70oVWcxB/cDGEk74bjQaHLnw
+	 gN0gS1F71wo6DWYzC9OrL7H5+IewSLK8mc338mARjN91R3JXgQqpkUqHgKjgN/8Fz
+	 rpGu+drIIOhV2cNX7JjNgi9tLPmUVTleoQmaUFKVJosUhyHWq7/4icxlisnYRJZA3
+	 9ccHftpWfRUSzN8f2A==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mtgyp-1ser2g39mZ-010pwq; Tue, 18
+ Jun 2024 09:22:29 +0200
+Message-ID: <ad8716ac-cff3-4fe5-86e1-f5f188e8b6b1@web.de>
+Date: Tue, 18 Jun 2024 09:22:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ca3e144-75f3-4e57-9ae0-cc88f245094e@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+To: John Stultz <jstultz@google.com>, "T. J. Mercier" <tjmercier@google.com>,
+ Yong Wu <yong.wu@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>,
+ Project_Global_Chrome_Upstream_Group@mediatek.com,
+ linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
+ Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+ Jeffrey Kardatzke <jkardatzke@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Nathan Hebert <nhebert@chromium.org>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Sebastian Fricke <sebastian.fricke@collabora.com>,
+ Tomasz Figa <tfiga@chromium.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Brian Starkey
+ <Brian.Starkey@arm.com>, Chen-Yu Tsai <wenst@chromium.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Daniel Vetter <daniel@ffwll.ch>, =?UTF-8?Q?Fritz_K=C3=B6nig?=
+ <frkoenig@chromium.org>, Hsin-Yi Wang <hsinyi@chromium.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Simon Horman <horms@kernel.org>,
+ Steve Cho <stevecho@chromium.org>, Sumit Semwal <sumit.semwal@linaro.org>
+References: <20240516122102.16379-7-yunfei.dong@mediatek.com>
+Subject: Re: [PATCH v6 06/24] dma-heap: Add proper kref handling on dma-buf
+ heaps
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240516122102.16379-7-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/+1vL2hF7w7/U6j+yJ4izBj1AbDZAVu4X1KpoJgdg2qMKCHU9BN
+ Ifzm7y0IJZmLWnGCgmLUXzMukVIIELPS2EhhatKYzu6tegs4kxeySDupbDGTrWDASOQJbOg
+ w9mOFs8Z1DfRanYvPSUkCR/gV8N0LYIh/MMX5DaY5G2apsoDTwnw29KpsyxShh4kisbe83Z
+ 9Cw/fKtyKjptSRJf//RyA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:U8P0/GzVv8g=;JqrQtoY7YisOf6G5dLTpAxpmI8u
+ UFlogheq71vxQwctu+U17hGJGx1e0HgWjuqEj2EXCNpHlvCP8TBGwWMaQoHnE1mMJqYTmm7RO
+ Hhc94KlC1DelubZ5B+fXFdo+h/FkZpOUrd69UF8y2tCbPaV+zInRsxLq1UqQ358gU/EAHdehr
+ TjsysmHaHnK00+gSR7hSY5BYGSrzuZBrX6viwHhtKSUHGi4+L0l6Aozpec8jLoGYUcbkQeMm9
+ uhzGvk1yY8Av24P33qsqMjQwn01CAyTWSxyiuGuzMF4GtF38lOU8xjEug2UvzTDMRZNyVLhUT
+ U+I0ydY/tuZRz8NpxgoWlaNzkUw5uJSTFxzO5oxtKD78/hfpLtUBzE0qKH6hhYMYnZquucjI1
+ ghhamIqV+LBcwq2feNe1NOyfGfFX7aR8vS1H4jgAX09nYH2XXYg7tYqNsHmvZK2C86GhtVuKS
+ w1mocZ4vHdgG1L0fQxKce3KZ4p9Br4Ebys5u5+zT6y/bPJ2dzke/SE8f9vlhyBYJalm0Qhjk4
+ DXLfQt7zZFbLrK7DcoFO6CQ4X/ohCwOndeGEORneIy6/n8HBP+elbGyy7Y25+SoHccXmgbcuc
+ b3FNLH4GZWv9XmhHn1HiUwWAShJla3r/9Lawn065g0aNjsLCShH8yU3EPUM1aFIwHz4OrDOWa
+ I09c9SFF/tEcnNinSpKIT73FSejNr4NxRapyYFCYkYODb6rW62DeXWoR79XEvl9Q2KQpqGpLG
+ iMikMNBnwC3zVIuFmmy4OjMH0oyAP5JmcqLOy2OZxqFHk1S9JwKgbzYHNIFOgdGwd3+WDmEJc
+ Qxb+EpsaK7s31isNgGSIQIiL2vfV4oPG+DtW8o2JotqH0=
 
-On Mon, Jun 17, 2024 at 07:04:43PM +0100, Pavel Begunkov wrote:
-> > There should be no other memory source other than the page allocator
-> > and dmabuf.  If you need different life time control for your
-> > zero copy proposal don't mix that up with the contol of the memory
-> > source.
-> 
-> No idea how I'm mixing it up when I was explaining exactly this
-> all along as well as that the callback (and presumably the call
-> site in general) you was so eager to nack is used exactly to
-> implement the life time control.
+> Add proper refcounting on the dma_heap structure.
 
-And that's exactly my point.  You want to use one callback to mix
-allocation source and life time control.  That's the perfect recipe
-to create an un-extensible un-composable mess.
+             reference counting?
 
+
+> While existing heaps are built-in, we may eventually
+> have heaps loaded from modules, and we'll need to be
+> able to properly handle the references to the heaps
+
+You may occasionally put more than 52 characters into text lines
+of such a change description.
+
+
+=E2=80=A6
+> +++ b/drivers/dma-buf/dma-heap.c
+=E2=80=A6
+> +static void dma_heap_release(struct kref *ref)
+> +{
+=E2=80=A6
+> +	mutex_lock(&heap_list_lock);
+> +	list_del(&heap->list);
+> +	mutex_unlock(&heap_list_lock);
+=E2=80=A6
+
+Would you become interested to apply a statement like =E2=80=9Cguard(mutex=
+)(&heap_list_lock);=E2=80=9D?
+https://elixir.bootlin.com/linux/v6.10-rc4/source/include/linux/mutex.h#L1=
+96
+
+Regards,
+Markus
