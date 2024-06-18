@@ -1,39 +1,40 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10E72139C6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A9015E5CF;
 	Tue, 18 Jun 2024 18:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718735901; cv=none; b=rWu/41OX80DpSyZVV6M9vl6d1etHT9sDCimit0J9i3nFNdz+uJn0+yOJBmpunPmu9NEONKXXjRkl3p/vJ5pMHK+VM71pGhhuT/mE1p3J18VCaZhtbE3zRdy47AVZUh72cWTVCFHNQy8ve+u2pcUVMs56TVmhaYgUQjjzmNXy2JM=
+	t=1718735901; cv=none; b=cwSm7pus5ZvmelH3zV1eiT0nVJ1kgG4K1PkwN5RDdpkS4c9NGuLvcCzYIK17wNbDdOCBbEUgCc8O2b2dx+GWqpfTqm75Vmf4CkmEhnEcQaVp5K8rJT7ud/KoRQH5cZfypKvy+kFrOxLosbTaeTzVZTJq2j8fjUbQbhKFnL+jkGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718735901; c=relaxed/simple;
-	bh=9iZR6qfhdq2inBfR21miynRAFj2tcgSizdsoz74Q7C0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kWNSnwYR/UcS243YrRlAPv7V6KJ+jT0PXGOwCBII9w9FWiKwe0ObUxY7srQ28knwRfDMe2rVjm37i9ChMa5japVU2DHyZhGo/SxmpMyHKzm1x+ECrDnNPDgSOSG6hgSgwiRrnSw7BV7LJ4zqkzNwKkYHgUoBhF1fDqOIg4Awar0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NS89/eA9; arc=none smtp.client-ip=46.235.227.194
+	bh=pgX34qM//hg5kqXfNWtX3zkJ2uIiYClJs5SfTuN4s/I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=imiRLidcRf6J8GjdPQcXbeBuqH+n9YpKZkeV7ZA6Yf42Tn5EZB+B4yijJN8Ov/o0zejDdhc0Ds5UOOlzyZZ2UohkVfEUsHRj0iXa/tYFObWF2lWoiiMM8pfvRpPoHwZta/0+qau82Bp1UUX0NpJTjV8JVyzD6j95tMPYZphXFQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ye9sOwwJ; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NS89/eA9"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ye9sOwwJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1718735897;
-	bh=9iZR6qfhdq2inBfR21miynRAFj2tcgSizdsoz74Q7C0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=NS89/eA9OrJeKUWAjWeVXDiTwGODlZRi/gQdOEt1zpb8O6WhLOoeqHZLFQ09MleWX
-	 s1yBPsNUtBDO5QwUdd3jVIp9A264e9Q00yZVKYw5EMhMKbAztbX/S+u6orsN6YcFrr
-	 1OVoRFg/yQhCtCpQUQJG5eXC2DJ1jb/CM9dC2HR0IO0MqKczoeYesXI6MVtg/gd1Gg
-	 j0V7dZo2VPYd7c+BkebElRrDczuLJpplg2wTTe5uY6bMqoHZlVnjeiPDCW+0kLcZi3
-	 vGlTjHnWlS/bqoU1qYEECNRckuEZ93Fd0C7MJaAf9pZ3NTpV3wU++72Vt6qugYOmcD
-	 vm2oTrf4s3wrw==
+	bh=pgX34qM//hg5kqXfNWtX3zkJ2uIiYClJs5SfTuN4s/I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Ye9sOwwJzUb0wqRSYgfAMOB/II/ka0Ctx/xNJPTxxwtgTXCDNSgmRHnrJ8Z6A7VDa
+	 Is1NEM1EwVwEEnOKBqQW2XMwIoUlvMbRt6e9xKDPvcX4xriBdhZCgK9CXi1rhUKYcA
+	 NLSy0vTYvxlpG03XJkBEY0ZkGPKxjBykq5a4EtgqPlmMrqwI63KPOH582n4M+qa+Mu
+	 phlBLrnKW23fIUzFp0XEprtOaptJDZIls2paRSpwCntmIU0IJ47qV7sSJdbB0ET6H3
+	 5Ujsf3tUZxDgC31xmLp38EXfurrruOL1ILItmEHyHqfqCtBHTl8OMnpi5z7lWihH15
+	 31ZqOVdL32yDg==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8105B3780BFE;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A510E378219A;
 	Tue, 18 Jun 2024 18:38:17 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 2ABA24800C9; Tue, 18 Jun 2024 20:38:17 +0200 (CEST)
+	id 2FE4E4800CE; Tue, 18 Jun 2024 20:38:17 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
@@ -51,10 +52,12 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v7 0/6] RK3588 VEPU121/VPU121 support
-Date: Tue, 18 Jun 2024 20:18:31 +0200
-Message-ID: <20240618183816.77597-1-sebastian.reichel@collabora.com>
+Subject: [PATCH v7 3/6] media: hantro: Disable multicore support
+Date: Tue, 18 Jun 2024 20:18:34 +0200
+Message-ID: <20240618183816.77597-4-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240618183816.77597-1-sebastian.reichel@collabora.com>
+References: <20240618183816.77597-1-sebastian.reichel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -63,77 +66,85 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Avoid exposing equal Hantro video codecs to userspace. Equal video
+codecs allow scheduling work between the cores. For that kernel support
+is required, which does not yet exist. Until that is implemented avoid
+exposing each core separately to userspace so that multicore can be
+added in the future without breaking userspace ABI.
 
-This series enables Hantro support for RK3588. It is based on these two
-previous series from Emmanuel Gil Peyrot and Jianfeng Liu, which looked
-stalled to me. Considering the full driver is already upstream, I think
-this low hanging fruit should be enabled in 6.11:
+This was written with Rockchip RK3588 in mind (which has 4 Hantro H1
+cores), but applies to all SoCs.
 
- * https://lore.kernel.org/all/20240316071100.2419369-1-liujianfeng1994@gmail.com/
- * https://lore.kernel.org/linux-rockchip/20240412151515.837824-1-linkmauve@linkmauve.fr/
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ .../media/platform/verisilicon/hantro_drv.c   | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-Their series got some feedback from Nicolas Dufresne, that there should be a
-plan how multi-core processing will be handled once it is supported in the
-kernel. I had a look (and internal discussion with Nicolas) and came up with a
-patch, which allows describing all the Hantro IP in DT. The driver will only
-probe for the first instance. This involves dropping the RK3568 compatible
-for the VEPU121, so that only kernels with the driver change will try to
-handle these IP. Once the kernel is capable of multi-core support, the same
-technique to disable cores 1-3 can be used to combine them all into one
-cluster.
-
-We also discussed, if they should be described as a cluster (e.g. by creating
-some kind of virtual bus for the 4 encoders in DT). Apparently the VSI doc
-describes the grouping of up to 4 instances. But there is no obvious reason
-why only these groups can be used as a cluster. It seems that even the 5th
-encoder from the combo VPU121 could be used together with the other clustered
-cores in theory. In practice this is probably a bad idea because of the shared
-cache of that encoder. Since that is handled with a different compatible, this
-can be thought about at a later point of time and handled in the kernel. Thus
-no special cluster description is needed in DT.
-
-Changes since PATCHv6:
- * Collected Acked-by for RK3588 VEPU121 DT binding from Conor Dooley
- * Fix resource leak of DT node in hantro_disable_multicore()
- * Support disabled nodes in hantro_disable_multicore()
- * Use correct match data (RK3568 VEPU instead of VPU) for RK3588 VEPU121
-
-Changes since PATCHv5:
- * Fix binding for vepu121 (use enum)
- * split hantro driver patch (multicore / vepu121 compatible)
- * move video-codec@fdb50000 node to correct position
- * change "jpeg_enc*" alias to "vepu121_*"
- * change "vpu_*" alias to "vpu121_*" (to be consistent)
-
-Changes since PATCHv3 (VEPU121) / PATCHv4 (VPU121)
- * combine both patchsets, since there is some overleap
- * add patch to disable multi-core handling in the hantro driver
- * drop the RK3568 fallback compatible for VEPU (see above for the reason)
- * describe all RK3588 VEPU cores (possible because of driver change)
-
-Greetings,
-
--- Sebastian
-
-Emmanuel Gil Peyrot (2):
-  media: dt-bindings: rk3568-vepu: Add RK3588 VEPU121
-  arm64: dts: rockchip: Add VEPU121 to RK3588
-
-Jianfeng Liu (2):
-  media: dt-bindings: rockchip-vpu: Add RK3588 VPU121
-  arm64: dts: rockchip: Add VPU121 support for RK3588
-
-Sebastian Reichel (2):
-  media: hantro: Disable multicore support
-  media: hantro: Add RK3588 VEPU121
-
- .../bindings/media/rockchip,rk3568-vepu.yaml  |   1 +
- .../bindings/media/rockchip-vpu.yaml          |   3 +
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 101 ++++++++++++++++++
- .../media/platform/verisilicon/hantro_drv.c   |  48 +++++++++
- 4 files changed, 153 insertions(+)
-
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index 34b123dafd89..748187623990 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -992,6 +992,49 @@ static const struct media_device_ops hantro_m2m_media_ops = {
+ 	.req_queue = v4l2_m2m_request_queue,
+ };
+ 
++/*
++ * Some SoCs, like RK3588 have multiple identical Hantro cores, but the
++ * kernel is currently missing support for multi-core handling. Exposing
++ * separate devices for each core to userspace is bad, since that does
++ * not allow scheduling tasks properly (and creates ABI). With this workaround
++ * the driver will only probe for the first core and early exit for the other
++ * cores. Once the driver gains multi-core support, the same technique
++ * for detecting the main core can be used to cluster all cores together.
++ */
++static int hantro_disable_multicore(struct hantro_dev *vpu)
++{
++	struct device_node *node = NULL;
++	const char *compatible;
++	bool is_main_core;
++	int ret;
++
++	/* Intentionally ignores the fallback strings */
++	ret = of_property_read_string(vpu->dev->of_node, "compatible", &compatible);
++	if (ret)
++		return ret;
++
++	/* The first compatible and available node found is considered the main core */
++	do {
++		node = of_find_compatible_node(node, NULL, compatible);
++		if (of_device_is_available(node))
++			break;
++	} while (node);
++
++	if (!node)
++		return -EINVAL;
++
++	is_main_core = (vpu->dev->of_node == node);
++
++	of_node_put(node);
++
++	if (!is_main_core) {
++		dev_info(vpu->dev, "missing multi-core support, ignoring this instance\n");
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
+ static int hantro_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *match;
+@@ -1011,6 +1054,10 @@ static int hantro_probe(struct platform_device *pdev)
+ 	match = of_match_node(of_hantro_match, pdev->dev.of_node);
+ 	vpu->variant = match->data;
+ 
++	ret = hantro_disable_multicore(vpu);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Support for nxp,imx8mq-vpu is kept for backwards compatibility
+ 	 * but it's deprecated. Please update your DTS file to use
 -- 
 2.43.0
 
