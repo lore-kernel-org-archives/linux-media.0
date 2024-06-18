@@ -1,181 +1,206 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7719447773;
-	Tue, 18 Jun 2024 18:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A99C158DBA;
+	Tue, 18 Jun 2024 19:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718736815; cv=none; b=G931xo6cgNxAKw6Ss5cADVPoxsESxlI+uC7Hsa2UuwDg6PwimuV3AscayM+DiNUlh67rV2iv6D4kyr2vKuXZkAyG6Bwdg2oJaPQjDXg05XHygvpOUWUOWxkacS7kI+Av2dsBHSiSDsbx1RkIpzDcHdV+E6v0+hl/UZI237UvSQE=
+	t=1718739427; cv=none; b=BFvBNMu1oja3Na9rTNKFr0fhQ9Y7YagN/7cKaRueQVcsChvdECwxlnAswPT/QIHYFv0Lds08fANKNai/pNlbwNPtGksFF2GytT+C9rUhiMsiYqrmgDuMMPND2HsQf4AvdcA+cUt2eUYE2r4i7PUlSNBN12vcpMhxYqG0gCwiz74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718736815; c=relaxed/simple;
-	bh=bwoT6LMzH1JDjMzmFUxQt80KgMc/nmK7HU+qeoWR5Zs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=o63NgsDyJ+1N77c4FNpe8scdfMPQ/e7FhPRf2dgROAuMDs19n6pBpg3ycNGETf2g72lzM+s3AU0M/xaHhoSECZgXqu31p/lQq/syQDiv35AgaUGSkHcpIdTNwhmKBEOBSfXgVfo+sLv21kVlsCG5xU9iRulRzv6uaGz1IM+eOxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Crfb2kcN; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1718739427; c=relaxed/simple;
+	bh=ZwJ9DLP7t3B8Oip+A2WzRaeL8y20P3++jyuDiLN4I0o=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PtRVrWlg9Ul5AByAT5T22Sovo1nIY5nPwY6FFXMbgpSC5d0muiwbuV/ZSkjjvT6LvBuXJWoQUVuo1eNjB2iLN3uwBTRPXrCLfSfJZ4L6yj5uWWWLCbOgM1yE42whlw0T7w54ATOsAyFyC46rJdq/9hlyAmuMYsxZYwiNS5HVoQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=F2hAnEaa; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Crfb2kcN"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45IBi8OH005389;
-	Tue, 18 Jun 2024 18:53:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	QZvRQmOykjPoqtQl5DoIFiafK6zeV6NpHViuVW7Yszc=; b=Crfb2kcNM8V8AlyP
-	dyY08IhUWD313JjAhcj6ykImrMY4sdgCWJ4z0ffEy0RcQCDbPEea/+AKGEkSdJIM
-	hF8hX/mIwB5Ca1ibg/jKAGjXz8tUBWGiXiXzn0pRInwvJHW493hG9PRIHlAOdV9c
-	trQGzAUTqlprFgqMQ2RKtSEkLkWdk6IH+PTCKkYRmIP6cfwMImOIxon97NlLg5nJ
-	cLjrM2/7kc0HeyCVN8UrBo3fdHz9gKxaoUgIB1wW380HLZkix4whV83F48gDAzfQ
-	txxOhHn3Br/9lJZHYy8rjufkx839BhRZQfER1DMQOVfo3hXiNs6MEnx9Zu0DnpK3
-	LchaQQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yu9m6s3gu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 18:53:17 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45IIrG7p013594
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 18:53:16 GMT
-Received: from [10.216.29.175] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 18 Jun
- 2024 11:53:11 -0700
-Message-ID: <41cb9314-293a-a2b2-9d7e-d44a0cde78d2@quicinc.com>
-Date: Wed, 19 Jun 2024 00:23:07 +0530
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="F2hAnEaa"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45IJasDP075749;
+	Tue, 18 Jun 2024 14:36:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718739414;
+	bh=FF3fwWVsTA6Pl5vQOmtuwHZIFVL/z+Bn2HRLdP84EoU=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=F2hAnEaa5BNtcseBfwdM1eoOO1n7Tzsb99UXKSO1oJ7jPG97MJ410J8maJyCxcY91
+	 u9uG3+wW5T/2YqzOaL0IvWUArby8+f8JDWHRS4hzWafzfojy2pNEzqWNkzV1T7OkeF
+	 JvxW5qP75kCURZopGgqm8XBgx7CkfzCM4UkeCQaY=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45IJasoS111403
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 18 Jun 2024 14:36:54 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 18
+ Jun 2024 14:36:54 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 18 Jun 2024 14:36:54 -0500
+Received: from localhost (ti.dhcp.ti.com [172.24.227.95] (may be forged))
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45IJarQ5010482;
+	Tue, 18 Jun 2024 14:36:53 -0500
+From: Devarsh Thakkar <devarsht@ti.com>
+To: <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rockchip@lists.infradead.org>,
+        <benjamin.gaignard@collabora.com>, <sebastian.fricke@collabora.com>
+CC: <laurent.pinchart@ideasonboard.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
+        <b-brnich@ti.com>, <detheridge@ti.com>, <p-mantena@ti.com>,
+        <vijayp@ti.com>, <devarsht@ti.com>, <andrzej.p@collabora.com>,
+        <nicolas@ndufresne.ca>, <afd@ti.com>
+Subject: [PATCH v14 1/6] media: dt-bindings: Add Imagination E5010 JPEG Encoder
+Date: Wed, 19 Jun 2024 01:06:46 +0530
+Message-ID: <20240618193651.2771478-2-devarsht@ti.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20240618193651.2771478-1-devarsht@ti.com>
+References: <20240618193651.2771478-1-devarsht@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 00/18] media: Fix the last set of coccinelle warnings
-Content-Language: en-US
-To: Ricardo Ribalda <ribalda@chromium.org>
-CC: Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team
-	<kernel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent
- Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michal Simek
-	<michal.simek@amd.com>,
-        Andy Walls <awalls@md.metrocast.net>,
-        Stanimir
- Varbanov <stanimir.k.varbanov@gmail.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad
- Dybcio <konrad.dybcio@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-References: <20240527-cocci-flexarray-v3-0-cda09c535816@chromium.org>
- <3f7baafb-82c7-3955-e871-687fafe8048c@quicinc.com>
- <CANiDSCszoUyZW85qaCrkkfNR73dXBrAURayWD8_jpV6Er6fOsg@mail.gmail.com>
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <CANiDSCszoUyZW85qaCrkkfNR73dXBrAURayWD8_jpV6Er6fOsg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GDVLdWpMd9VoiJswGp4eXC689-JVGUrI
-X-Proofpoint-ORIG-GUID: GDVLdWpMd9VoiJswGp4eXC689-JVGUrI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- spamscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406180140
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Ricardo,
+Add dt-bindings for Imagination E5010 JPEG Encoder [1] which is implemented
+as stateful V4L2 M2M driver.
 
-On 6/18/2024 6:06 PM, Ricardo Ribalda wrote:
-> Hi Vikash
-> 
-> On Tue, 18 Jun 2024 at 14:34, Vikash Garodia <quic_vgarodia@quicinc.com> wrote:
->>
->> Hi Ricardo,
->>
->> On 5/28/2024 2:38 AM, Ricardo Ribalda wrote:
->>> With this set we are done with all the cocci warning/errors.
->>>
->>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->>> ---
->>> Changes in v3:
->>> - Do not rename structure fields. (Thanks Bryan)
->>> - Link to v2: https://lore.kernel.org/r/20240507-cocci-flexarray-v2-0-7aea262cf065@chromium.org
->>>
->>> Changes in v2:
->>> - allegro: Replace hard coded 1 with a define. (Thanks Michael)
->>> - Link to v1: https://lore.kernel.org/r/20240507-cocci-flexarray-v1-0-4a421c21fd06@chromium.org
->>>
->>> ---
->>> Ricardo Ribalda (18):
->>>       media: allegro: nal-hevc: Replace array[1] with arrray[N]
->>>       media: xilinx: Refactor struct xvip_dma
->>>       media: dvb-frontend/mxl5xx: Refactor struct MBIN_FILE_T
->>>       media: dvb-frontend/mxl5xx: Use flex array for MBIN_SEGMENT_T
->>>       media: pci: cx18: Use flex arrays for struct cx18_scb
->>>       media: siano: Refactor struct sms_msg_data
->>>       media: siano: Remove unused structures
->>>       media: siano: Use flex arrays for sms_firmware
->>>       media: venus: Remove unused structs
->>>       media: venus: Use flex array for hfi_session_release_buffer_pkt
->>>       media: venus: Refactor struct hfi_uncompressed_plane_info
->>>       media: venus: Refactor struct hfi_session_get_property_pkt
->>>       media: venus: Refactor struct hfi_uncompressed_format_supported
->>>       media: venus: Refactor hfi_session_empty_buffer_uncompressed_plane0_pkt
->>>       media: venus: Refactor hfi_session_empty_buffer_compressed_pkt
->>>       media: venus: Refactor hfi_sys_get_property_pkt
->>>       media: venus: Refactor hfi_session_fill_buffer_pkt
->>>       media: venus: Refactor hfi_buffer_alloc_mode_supported
->>>
->>>  drivers/media/common/siano/smscoreapi.c        | 10 +++---
->>>  drivers/media/common/siano/smscoreapi.h        | 18 ++---------
->>>  drivers/media/common/siano/smsdvb-main.c       |  4 +--
->>>  drivers/media/common/siano/smsendian.c         |  8 +++--
->>>  drivers/media/dvb-frontends/mxl5xx.c           |  2 +-
->>>  drivers/media/dvb-frontends/mxl5xx_defs.h      |  4 +--
->>>  drivers/media/pci/cx18/cx18-scb.h              |  2 +-
->>>  drivers/media/platform/allegro-dvt/nal-hevc.h  |  7 ++--
->>>  drivers/media/platform/qcom/venus/hfi_cmds.c   |  8 ++---
->>>  drivers/media/platform/qcom/venus/hfi_cmds.h   | 38 ++++------------------
->>>  drivers/media/platform/qcom/venus/hfi_helper.h | 45 ++------------------------
->>>  drivers/media/platform/qcom/venus/hfi_parser.c |  2 +-
->>>  drivers/media/platform/xilinx/xilinx-dma.c     |  4 +--
->>>  drivers/media/platform/xilinx/xilinx-dma.h     |  2 +-
->>>  14 files changed, 39 insertions(+), 115 deletions(-)
->>> ---
->>> base-commit: 48259b90973718d2277db27b5e510f0fe957eaa0
->>> change-id: 20240507-cocci-flexarray-9a807a8e108e
->>>
->>> Best regards,
->>
->> Could you also mention if you have run any video usecase on any of the boards
->> with these changes ?
-> 
-> I have only compile tested this series. If you have access to any of
-> the hardware it would be great if you could test it out :)
-I have tested the series on RB5 as well as SC7180 board and looks good. I was
-looking for one round of validation on db410c (having issues with my db410c setup).
+The device supports baseline encoding with two different quantization
+tables and compression ratio as demanded.
 
-Regards,
-Vikash
-> 
-> Regards!
-> 
->>
->> Regards,
->> Vikash
-> 
-> 
-> 
+Minimum resolution supported is 64x64 and Maximum resolution supported is
+8192x8192.
+
+Link: https://www.ti.com/lit/pdf/spruj16 [1] (Section 7.6 JPEG Encoder)
+Co-developed-by: David Huang <d-huang@ti.com>
+Signed-off-by: David Huang <d-huang@ti.com>
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+V14: No change
+V13: Update commit message to use Link: syntax
+V6->V12: No change
+V5:
+ - Add Reviewed-By tag
+V4:
+ - Use ti-specific compatible ti,am62a-jpeg-enc as secondary one
+ - Update commit message and title
+ - Remove clock-names as only single clock
+V3:
+- Add vendor specific compatible
+- Update reg names
+- Update clocks to 1
+- Fix dts example with proper naming
+V2: No change
+
+ .../bindings/media/img,e5010-jpeg-enc.yaml    | 75 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 80 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+new file mode 100644
+index 000000000000..085020cb9e61
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
+@@ -0,0 +1,75 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/img,e5010-jpeg-enc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Imagination E5010 JPEG Encoder
++
++maintainers:
++  - Devarsh Thakkar <devarsht@ti.com>
++
++description: |
++  The E5010 is a JPEG encoder from Imagination Technologies implemented on
++  TI's AM62A SoC. It is capable of real time encoding of YUV420 and YUV422
++  inputs to JPEG and M-JPEG. It supports baseline JPEG Encoding up to
++  8Kx8K resolution.
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: ti,am62a-jpeg-enc
++          - const: img,e5010-jpeg-enc
++      - const: img,e5010-jpeg-enc
++
++  reg:
++    items:
++      - description: The E5010 core register region
++      - description: The E5010 mmu register region
++
++  reg-names:
++    items:
++      - const: core
++      - const: mmu
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      jpeg-encoder@fd20000 {
++          compatible = "img,e5010-jpeg-enc";
++          reg = <0x00 0xfd20000 0x00 0x100>,
++                <0x00 0xfd20200 0x00 0x200>;
++          reg-names = "core", "mmu";
++          clocks = <&k3_clks 201 0>;
++          power-domains = <&k3_pds 201 TI_SCI_PD_EXCLUSIVE>;
++          interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4f09bdb5657e..b5376c04bcfc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10818,6 +10818,11 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/auxdisplay/img,ascii-lcd.yaml
+ F:	drivers/auxdisplay/img-ascii-lcd.c
+ 
++IMGTEC JPEG ENCODER DRIVER
++M:	Devarsh Thakkar <devarsht@ti.com>
++S:	Supported
++F:	Documentation/devicetree/bindings/media/img,e5010-jpeg-enc.yaml
++
+ IMGTEC IR DECODER DRIVER
+ S:	Orphan
+ F:	drivers/media/rc/img-ir/
+-- 
+2.39.1
+
