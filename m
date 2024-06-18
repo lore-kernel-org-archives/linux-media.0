@@ -1,33 +1,34 @@
 Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5994A15E5C3
-	for <linux-media@vger.kernel.org>; Tue, 18 Jun 2024 19:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59C7176AB2
+	for <linux-media@vger.kernel.org>; Tue, 18 Jun 2024 19:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718740044; cv=none; b=QoN+PIlixjfmxMevUhvBRnMPJ3gWBUSkWKPZQCpS6EL0ozTtJT/abeDg7PqgwFu7jXv7gS8f3mNIOYaTggt+XzpIjpPhtZoQ8JolXKFQkLv5JJ61ueuWN5vHrCYfHe/evfRD6yEEH4vsr/y/lVeP6ZZhbiEDx9ZCRB3TgU6NlEg=
+	t=1718740060; cv=none; b=A7nEjSKLgbZ6SVlkm/hE2EWcrqKaf6XzD+ikagmcWLUM5cwqo6DCMC0MJvL2iBLudimjoCsuDFg6lsf5gU9u1OWpxN+9C4GNh5/boZt5cpCFvIUf/Qv8GqbcSVloS0+8cxFglPqZ/GotE7Y24mCjiP6ydWxqmcuIvWhER14sh1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718740044; c=relaxed/simple;
-	bh=ebV/XqmTJBV2qr6WY+LpZiNUBYoPi3SbUHc7dUlxhlY=;
+	s=arc-20240116; t=1718740060; c=relaxed/simple;
+	bh=Qh8AdjS4ngXJ9v45ESBuH58r0izmWZpA9ETBlIq0EHg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fzlplee97pNU5YKgllAe+YgL03SqO5Dg0Y52hsp0XuTmRaCVz4/kHmkycBnzSQfj4UzhoaV1s9+2U9iyfbWthggX4+m2bqxQmcF83si/GavRuSccJmFz77IA/EWVqoB2MqLkug962WzzudVNx0hu5WMCuu+f50oDmfqJ8/C7KNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=HXO0CXhA; arc=none smtp.client-ip=149.28.215.223
+	 MIME-Version; b=sevLCHrVZafPT/a/wMhGhUoETLxxZET7/IbaQXVBjwRDop6QLCqz97mRAJSmgMjp18brw1aQwl0USG285OCjtueDONMBPEhVBQzdvs4N+JTpzlBJ8bcw2CcBEQMxLURK3r67NfyK4ptfuOnIOKAkM2JzBU+TrWiSPvhJ7m6gce4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=Wa9xinY/; arc=none smtp.client-ip=149.28.215.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="HXO0CXhA"
+	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="Wa9xinY/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
  h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
  Message-ID: Date: Subject: Cc: To: From; q=dns/txt; s=fe-e1b5cab7be;
- t=1718740021; bh=XP+PQQpBG4wSocp1mSz4RzoXp8YVq7y4W8nQ4GpBj2g=;
- b=HXO0CXhAa9Ny8vvBFFYE3H06AAAp2Cp0AcxaogMXz6bkwrpTRDrX6yGgY+KRlK5hW3ne7jMot
- Lsjv0H6WXD/HHY8kvtWW5Qv2CH2n0s/PBbN5BG4F2mUXRqiOirCHbgHutjulTpJr35gosuAE6Im
- tw8HNNmcCIU4FcUP8V7l3c5lyFtg6Vw4VNMQQ3Kcn2FW+kzHssqUfns1dqOSFBDKiPVS0ueweSp
- DncomTCi7kK/ESwxDFapxd9Bn378GYi/K0re52FUJfsBuSgoyFfOWdwCa4JUXopKyVAo3+2SJmM
- gVxJmmbqnAe6eXaHn0/PQVf4RvMF4Ta1gtG067oNQ8sQ==
+ t=1718740035; bh=cSv0Y1BnoDAoVs4qW1oCzHu3mFidb6wxsTUaMwSm0e0=;
+ b=Wa9xinY/u1/b0Bo/UAewJZG3InX7D3BO8WzdSp4kfJxCzaJHunAsJB8i2TMrj4UmnCqCBQPqv
+ bsggkkfBt+h8kRiPpptyZcCZ2l4M/WHAAx/h3wvvA0OgHX+8ZJC2r9aMp5+DmMK9KDjFEGhidHO
+ SH41rw+pz47lyYZslveBIawb7xvMvS/7y4gnl2nCRNcvC+dn+n+kgXf3qq5UifFEMfBhSN0Fmqh
+ JILcjYsdDGsjxTldvQMHIN67nLXpJe828enc88Loocd4i9kRpXnD5futkuWcwpl7kVEZFLudR2z
+ 5Q69iYfB2AArj4ILmal58mJ88dWbVGrSCXm3KCQz2K1g==
 From: Jonas Karlman <jonas@kwiboo.se>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Hans Verkuil <hverkuil-cisco@xs4all.nl>
+ <mchehab@kernel.org>, Hans Verkuil <hverkuil-cisco@xs4all.nl>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: Alex Bee <knaerzche@gmail.com>, Nicolas Dufresne
  <nicolas.dufresne@collabora.com>, Benjamin Gaignard
  <benjamin.gaignard@collabora.com>, Sebastian Fricke
@@ -36,9 +37,9 @@ Cc: Alex Bee <knaerzche@gmail.com>, Nicolas Dufresne
  <detlev.casanova@collabora.com>, linux-media@vger.kernel.org,
  linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
  linux-kernel@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v5 01/10] media: v4l2-common: Add helpers to calculate bytesperline and sizeimage
-Date: Tue, 18 Jun 2024 19:46:25 +0000
-Message-ID: <20240618194647.742037-2-jonas@kwiboo.se>
+Subject: [PATCH v5 03/10] media: rkvdec: h264: Use bytesperline and buffer height as virstride
+Date: Tue, 18 Jun 2024 19:46:27 +0000
+Message-ID: <20240618194647.742037-4-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240618194647.742037-1-jonas@kwiboo.se>
 References: <20240618194647.742037-1-jonas@kwiboo.se>
@@ -55,139 +56,69 @@ X-Complaints-To: abuse@forwardemail.net
 X-ForwardEmail-Version: 0.4.40
 X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
  149.28.215.223
-X-ForwardEmail-ID: 6671e43264ade33c90059f78
+X-ForwardEmail-ID: 6671e43b64ade33c90059f9e
 
-Add helper functions to calculate plane bytesperline and sizeimage,
-these new helpers consider bpp div, block width and height when
-calculating plane bytesperline and sizeimage.
+Use bytesperline and buffer height to calculate the strides configured.
+
+This does not really change anything other than ensuring the
+bytesperline that is signaled to userspace matches what is configured
+in HW.
 
 Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Tested-by: Christopher Obbard <chris.obbard@collabora.com>
 ---
 v5:
-- Collect t-b tags
+- Collect r-b and t-b tags
 
 v4:
 - No change
 
 v3:
-- Consider bpp_div in calculation
+- Remove unnecessary yuv_virstride +=
 
- drivers/media/v4l2-core/v4l2-common.c | 78 +++++++++++++--------------
- 1 file changed, 39 insertions(+), 39 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-h264.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 4165c815faef..9f749384a4f5 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -355,6 +355,34 @@ static inline unsigned int v4l2_format_block_height(const struct v4l2_format_inf
- 	return info->block_h[plane];
- }
+diff --git a/drivers/staging/media/rkvdec/rkvdec-h264.c b/drivers/staging/media/rkvdec/rkvdec-h264.c
+index 4fc167b42cf0..7a1e76d423df 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-h264.c
++++ b/drivers/staging/media/rkvdec/rkvdec-h264.c
+@@ -896,9 +896,9 @@ static void config_registers(struct rkvdec_ctx *ctx,
+ 	dma_addr_t rlc_addr;
+ 	dma_addr_t refer_addr;
+ 	u32 rlc_len;
+-	u32 hor_virstride = 0;
+-	u32 ver_virstride = 0;
+-	u32 y_virstride = 0;
++	u32 hor_virstride;
++	u32 ver_virstride;
++	u32 y_virstride;
+ 	u32 yuv_virstride = 0;
+ 	u32 offset;
+ 	dma_addr_t dst_addr;
+@@ -909,16 +909,16 @@ static void config_registers(struct rkvdec_ctx *ctx,
  
-+static inline unsigned int v4l2_format_plane_width(const struct v4l2_format_info *info, int plane,
-+						   unsigned int width)
-+{
-+	unsigned int hdiv = plane ? info->hdiv : 1;
-+	unsigned int aligned_width =
-+		ALIGN(width, v4l2_format_block_width(info, plane));
-+
-+	return DIV_ROUND_UP(aligned_width, hdiv) *
-+	       info->bpp[plane] / info->bpp_div[plane];
-+}
-+
-+static inline unsigned int v4l2_format_plane_height(const struct v4l2_format_info *info, int plane,
-+						    unsigned int height)
-+{
-+	unsigned int vdiv = plane ? info->vdiv : 1;
-+	unsigned int aligned_height =
-+		ALIGN(height, v4l2_format_block_height(info, plane));
-+
-+	return DIV_ROUND_UP(aligned_height, vdiv);
-+}
-+
-+static inline unsigned int v4l2_format_plane_size(const struct v4l2_format_info *info, int plane,
-+						  unsigned int width, unsigned int height)
-+{
-+	return v4l2_format_plane_width(info, plane, width) *
-+	       v4l2_format_plane_height(info, plane, height);
-+}
-+
- void v4l2_apply_frmsize_constraints(u32 *width, u32 *height,
- 				    const struct v4l2_frmsize_stepwise *frmsize)
- {
-@@ -390,37 +418,19 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
+ 	f = &ctx->decoded_fmt;
+ 	dst_fmt = &f->fmt.pix_mp;
+-	hor_virstride = (sps->bit_depth_luma_minus8 + 8) * dst_fmt->width / 8;
+-	ver_virstride = round_up(dst_fmt->height, 16);
++	hor_virstride = dst_fmt->plane_fmt[0].bytesperline;
++	ver_virstride = dst_fmt->height;
+ 	y_virstride = hor_virstride * ver_virstride;
  
- 	if (info->mem_planes == 1) {
- 		plane = &pixfmt->plane_fmt[0];
--		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0] / info->bpp_div[0];
-+		plane->bytesperline = v4l2_format_plane_width(info, 0, width);
- 		plane->sizeimage = 0;
+ 	if (sps->chroma_format_idc == 0)
+ 		yuv_virstride = y_virstride;
+ 	else if (sps->chroma_format_idc == 1)
+-		yuv_virstride += y_virstride + y_virstride / 2;
++		yuv_virstride = y_virstride + y_virstride / 2;
+ 	else if (sps->chroma_format_idc == 2)
+-		yuv_virstride += 2 * y_virstride;
++		yuv_virstride = 2 * y_virstride;
  
--		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--			plane->sizeimage += info->bpp[i] *
--				DIV_ROUND_UP(aligned_width, hdiv) *
--				DIV_ROUND_UP(aligned_height, vdiv) / info->bpp_div[i];
--		}
-+		for (i = 0; i < info->comp_planes; i++)
-+			plane->sizeimage +=
-+				v4l2_format_plane_size(info, i, width, height);
- 	} else {
- 		for (i = 0; i < info->comp_planes; i++) {
--			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--			unsigned int aligned_width;
--			unsigned int aligned_height;
--
--			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
- 			plane = &pixfmt->plane_fmt[i];
- 			plane->bytesperline =
--				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv) / info->bpp_div[i];
--			plane->sizeimage =
--				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-+				v4l2_format_plane_width(info, i, width);
-+			plane->sizeimage = plane->bytesperline *
-+				v4l2_format_plane_height(info, i, height);
- 		}
- 	}
- 	return 0;
-@@ -444,22 +454,12 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
- 	pixfmt->width = width;
- 	pixfmt->height = height;
- 	pixfmt->pixelformat = pixelformat;
--	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0] / info->bpp_div[0];
-+	pixfmt->bytesperline = v4l2_format_plane_width(info, 0, width);
- 	pixfmt->sizeimage = 0;
- 
--	for (i = 0; i < info->comp_planes; i++) {
--		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
--		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
--		unsigned int aligned_width;
--		unsigned int aligned_height;
--
--		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
--		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--		pixfmt->sizeimage += info->bpp[i] *
--			DIV_ROUND_UP(aligned_width, hdiv) *
--			DIV_ROUND_UP(aligned_height, vdiv) / info->bpp_div[i];
--	}
-+	for (i = 0; i < info->comp_planes; i++)
-+		pixfmt->sizeimage +=
-+			v4l2_format_plane_size(info, i, width, height);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+ 	reg = RKVDEC_Y_HOR_VIRSTRIDE(hor_virstride / 16) |
+ 	      RKVDEC_UV_HOR_VIRSTRIDE(hor_virstride / 16) |
 -- 
 2.45.2
 
