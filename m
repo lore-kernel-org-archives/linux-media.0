@@ -1,40 +1,40 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC5B15E5D1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1137156F25;
 	Tue, 18 Jun 2024 18:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718735901; cv=none; b=VH31qyE9WPFeAAw6N3N4rRfjlkfn1pbtuhoINZvTyek0RXguBqbpb5eyfzrp7LGVYH6nmPhG17d9dQC1Qe71KWoGyUsR8rdJT4mnCIX8SiLgwn2JffqQ/9e9NVnPEyVM+warwSeHGvhEdGncrxNMU0vr620mcXbjT68psvh21FE=
+	t=1718735902; cv=none; b=KTJAJuwKvQqk9GGNa/nJ8z6K8OHiMsQGTafi+Kj+NG+B2k2FwNXmuidb/qt/Raaj2lywhE8rtrEB6cGZ5F2OdoRQc+0ySw8vSwZw4JqZRwwiBq6LSUin/H+co4grNXMKRQYHnm3cB/fLMRhYejCKrJcPsvlTzMlLPNz71BX8AK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718735901; c=relaxed/simple;
-	bh=MFNRvjjOnL3WyEggZraz6UQzsDlOzpQ/AuHM8WKL9bw=;
+	s=arc-20240116; t=1718735902; c=relaxed/simple;
+	bh=ewO028FP+/fLIGrTwi46vVYeQqRp4FQ65WxGYZ1bq94=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PNhydD5OItPL+7bsrhY8imTjAFgPpeyirSABkoG4uRCLOfz9ekXxbhE/SYY99iHreHR6js6gfYBTB2Hzu6YgB2QkkhIB8pXklxHewh03dqgFEOyBktWRFfa/jI/3uqv9Is0k8YcdsjqA497sto9RZMAy71cZ6qwPt/YYv8HvGmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=P/uqjpOb; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=NUKTzFsE67o7+w06WK/j/g7AYs6ZpQHUtcmuYKKPBqljTX5nyeXbxrr0zsafJlnEw9dhAwxf+Tq1bEaCQqWa3qHb5WXpoBJLcTf/jYNsiqReCAgkLokw0Kq98CpiDH/H+GU4bImmYdLhomSjkzfoct/OcsyYuJmS79ePsTdHF4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=cNu4QMr4; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="P/uqjpOb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cNu4QMr4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1718735897;
-	bh=MFNRvjjOnL3WyEggZraz6UQzsDlOzpQ/AuHM8WKL9bw=;
+	bh=ewO028FP+/fLIGrTwi46vVYeQqRp4FQ65WxGYZ1bq94=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P/uqjpObsCm+ulQU4wZsplU14ylDkRchw7eGdqdlT2uNHRMUIruyv/z5jW4L8qb8B
-	 vH1mgFRta+TpEtT8hMhISLWI2ub22ANtMQLM1P8g1vw6UvFagRsxyp2zP18EyT7Gxz
-	 1AKRnFFtElcMtqRz03K0Vj/U7KWoMVv5Ptact/deehc1exvHOq8Zr9OmN85g+qBg4K
-	 hKvXRPc2qrx9Rhg0eU5y+tnY+o2lsGqDe1xiV2WC3L1ODVWf9NoGW5SA3js0hm5Ggf
-	 khynaCHsVsvmTD7E7DJPN0hR5gQyNAuYzk7FmVQ4jJKFeze3E1qo6sn/WrKFcerMG1
-	 +aegEDxW3PbOg==
+	b=cNu4QMr4W6+iL0HYbR8gw5sDoyO1SbWARXZq6VmtX3p3M/ahMCS/ysaOF27bSTDez
+	 zZXyNDWhE4T24bE22Y61KNCwd8p1e04YAE8WdkMUH+FgmuFKsIPqAUW2RdM467duMd
+	 kStKyMPSjSIiXwoW8pFTgJgDF45uSYvCm7wtfV4oW+RcZXL9c55gn98fQIfGGIjfnd
+	 ZfI80k/HiO7p+LYV4ntHtTx4E33zswntOnC4Hx9hEhzh0h2z8b7YcBNOtpw+4HqG7x
+	 +9df9up0g9YDicRnk5xBmChLCguB6ZeW2QlScUzhAxJXjb9i+PxAiIWUO01sAEwZNO
+	 Yarbm3ZqxLwpw==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AA831378219B;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 99EA53782196;
 	Tue, 18 Jun 2024 18:38:17 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 31DE24800CF; Tue, 18 Jun 2024 20:38:17 +0200 (CEST)
+	id 2BFCC4800C7; Tue, 18 Jun 2024 20:38:17 +0200 (CEST)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
@@ -50,11 +50,12 @@ Cc: Rob Herring <robh@kernel.org>,
 	linux-rockchip@lists.infradead.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	kernel@collabora.com
-Subject: [PATCH v7 4/6] media: hantro: Add RK3588 VEPU121
-Date: Tue, 18 Jun 2024 20:18:35 +0200
-Message-ID: <20240618183816.77597-5-sebastian.reichel@collabora.com>
+	kernel@collabora.com,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH v7 1/6] media: dt-bindings: rk3568-vepu: Add RK3588 VEPU121
+Date: Tue, 18 Jun 2024 20:18:32 +0200
+Message-ID: <20240618183816.77597-2-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240618183816.77597-1-sebastian.reichel@collabora.com>
 References: <20240618183816.77597-1-sebastian.reichel@collabora.com>
@@ -66,28 +67,33 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RK3588 handling is exactly the same as RK3568. This is not
-handled using fallback compatibles to avoid exposing multiple
-video devices on kernels not having the multicore disable
-patch.
+From: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
 
+This encoder-only device is present four times on this SoC, and should
+support everything the rk3568 vepu supports (so JPEG, H.264 and VP8
+encoding). No fallback compatible has been added, since the operating
+systems might already support RK3568 VEPU and want to avoid registering
+four of them separately considering they can be used as a cluster.
+
+Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/media/platform/verisilicon/hantro_drv.c | 1 +
+ .../devicetree/bindings/media/rockchip,rk3568-vepu.yaml          | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 748187623990..05bbac853c4f 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -722,6 +722,7 @@ static const struct of_device_id of_hantro_match[] = {
- 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
- 	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
- 	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
-+	{ .compatible = "rockchip,rk3588-vepu121", .data = &rk3568_vepu_variant, },
- 	{ .compatible = "rockchip,rk3588-av1-vpu", .data = &rk3588_vpu981_variant, },
- #endif
- #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
+index 9d90d8d0565a..947ad699cc5e 100644
+--- a/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
++++ b/Documentation/devicetree/bindings/media/rockchip,rk3568-vepu.yaml
+@@ -17,6 +17,7 @@ properties:
+   compatible:
+     enum:
+       - rockchip,rk3568-vepu
++      - rockchip,rk3588-vepu121
+ 
+   reg:
+     maxItems: 1
 -- 
 2.43.0
 
