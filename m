@@ -1,43 +1,42 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23C01DA53
-	for <linux-media@vger.kernel.org>; Tue, 18 Jun 2024 15:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51FB17BB5
+	for <linux-media@vger.kernel.org>; Tue, 18 Jun 2024 15:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718723688; cv=none; b=ODvNiZSYxlpoVt43ac6egaRXvJJZYBVVbZhTZb8AwvuFdCPE31fs+/1Yed1Ggxy4kkEGa0giJl+yq5l0AQV5fr8zM32Dd8v9pxdKy7qm4zHoKBd+OhORomhAJXUgL1C/18l0hCXJMvcGzUqyvBjn7E8tM0a9oLlrUVbi+Ac7dQ8=
+	t=1718724334; cv=none; b=nji84vnTI021eDBsVXR0x7x4OmucJNXPuJfw7jmoOPl61B6IRHfINZvYsSRYG0Ze1Z3el5VjElF2S96oiAL4pjAjLu/Vb/uCHBVVtvoZYeNyoov+KEqjdem4w3F1LVixuRcN/lRc+xWJakzvh7xDmMq08p7WwWm8L0yz7/cDN40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718723688; c=relaxed/simple;
-	bh=UC74Sgo3DdupjFWAcEXfPpj0OkaNM1m83CJC2lz0pFI=;
+	s=arc-20240116; t=1718724334; c=relaxed/simple;
+	bh=SwNa6208+UjoievRzjlLoKSMEnr2dsyDl9NJKwfiNV0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZG1EtGkUxM7nrK1xmBYTyAhjKhO02AKrYRboszbUc9zz8Pr6BY3EygvsFaTMBpV3/SxMHN+aw1sht5LKuzowcbH6cuT7FLbR4sQ6WJD1gi8P1T8ViFVVyWBST7uIVSWBGGPaaqjs5jE1+MI+MHYFUWj/arDltaLUthTajO0pyX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=whx/m/r3; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=mgWnAKluxm3tJkl23WPNLJcIHPPmc3Em+1tNBsnEflZQzIwACw6Y8yANhxk7qpL4JSSqGHtwfS6NjMMhVJtVVxxasjHh2AxTS4uGA65JUv4KlclqtQC6Bt68aP/u4Uw9icwEJSck3Eg+XgGFDIc/6EGA4r7wyhJQFzpFzYqBJeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=cpYUfQxe; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="whx/m/r3"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cpYUfQxe"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F815908;
-	Tue, 18 Jun 2024 17:14:27 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6E629908;
+	Tue, 18 Jun 2024 17:25:13 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1718723667;
-	bh=UC74Sgo3DdupjFWAcEXfPpj0OkaNM1m83CJC2lz0pFI=;
+	s=mail; t=1718724313;
+	bh=SwNa6208+UjoievRzjlLoKSMEnr2dsyDl9NJKwfiNV0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=whx/m/r3t7Wei++PVvuZpHxspZM1pVXVuYl8eR1Bg64FgXGVbLj7g3nHMXjJTVddJ
-	 ZzugriK9lszST54ib68/2pjAdUu3+TumxLihiIgG/auX3VlydOgZwqLtL4lxOmGbiH
-	 fvU/4FeSC/J0n6uIXEBHzIrrOa+qIUgSTIpJAyzY=
-Date: Tue, 18 Jun 2024 18:14:21 +0300
+	b=cpYUfQxe/B5CIHdaP+EWwyBciQ/pVjH+EJVIOqS7LRzXBhn6BCUoNkK2cJSJCVda3
+	 VpjCfjcgcZm1qXzucNzWGEkZnN5uMpfbLQOQAMW3Ip0qwnk2IjDUUU4+ihQV47Bp6B
+	 x18LjtPLA+O6PeEkVq79ZM+3goND17SLJ2L0pvbk=
+Date: Tue, 18 Jun 2024 18:25:08 +0300
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@iki.fi>
-Cc: linux-media@vger.kernel.org,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, Sakari Ailus <sakari.ailus@iki.fi>,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH v1 1/2] media: v4l2-subdev: Drop unreacheable warning
-Message-ID: <20240618151421.GD22767@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v1 2/2] media: v4l2-subdev: Relax warnings in link
+ validation
+Message-ID: <20240618152508.GA32669@pendragon.ideasonboard.com>
 References: <20231113101718.6098-1-laurent.pinchart+renesas@ideasonboard.com>
- <20231113101718.6098-2-laurent.pinchart+renesas@ideasonboard.com>
- <ZVH9iO5XPay8In_R@valkosipuli.retiisi.eu>
- <20231113105016.GA24338@pendragon.ideasonboard.com>
+ <20231113101718.6098-3-laurent.pinchart+renesas@ideasonboard.com>
+ <f542bb33-57fb-4ce1-bb08-85b69a8cd40a@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -46,52 +45,116 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231113105016.GA24338@pendragon.ideasonboard.com>
+In-Reply-To: <f542bb33-57fb-4ce1-bb08-85b69a8cd40a@ideasonboard.com>
 
-Hi Sakari,
-
-On Mon, Nov 13, 2023 at 12:50:16PM +0200, Laurent Pinchart wrote:
-> On Mon, Nov 13, 2023 at 10:42:16AM +0000, Sakari Ailus wrote:
-> > On Mon, Nov 13, 2023 at 12:17:17PM +0200, Laurent Pinchart wrote:
-> > > The v4l2_subdev_link_validate_get_format() function warns if the pad
-> > > given as argument belongs to a non-subdev entity. This can't happen, as
-> > > the function is called from v4l2_subdev_link_validate() only (indirectly
-> > > through v4l2_subdev_link_validate_locked()), and that function ensures
-> > > that both ends of the link are subdevs.
-> > > 
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > > ---
-> > >  drivers/media/v4l2-core/v4l2-subdev.c | 8 --------
-> > >  1 file changed, 8 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > index be86b906c985..67d43206ce32 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > @@ -1184,14 +1184,6 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
-> > >  	struct v4l2_subdev *sd;
-> > >  	int ret;
-> > >  
-> > > -	if (!is_media_entity_v4l2_subdev(pad->entity)) {
-> > > -		WARN(pad->entity->function != MEDIA_ENT_F_IO_V4L,
-> > > -		     "Driver bug! Wrong media entity type 0x%08x, entity %s\n",
-> > > -		     pad->entity->function, pad->entity->name);
-> > > -
-> > > -		return -EINVAL;
-> > > -	}
-> > > -
-> > >  	sd = media_entity_to_v4l2_subdev(pad->entity);
-> > 
-> > It'd be good to check sd is non-NULL here, although pad presumably is
-> > always a pad of a sub-device entity.
+On Mon, Nov 13, 2023 at 03:03:39PM +0200, Tomi Valkeinen wrote:
+> On 13/11/2023 12:17, Laurent Pinchart wrote:
+> > Before v6.3, the v4l2_subdev_link_validate() helper would ignore links
+> > whose source was a video device and sink a subdev. The helper was (and
 > 
-> It's guaranteed by the caller. Is there a specific reason you think a
-> check would be good ?
+> Didn't it also ignore links where the sink is a video device?
 
-Would you still want a check ?
+__media_pipeline_start() calls .link_validate() to validate links on the
+sink side of the subdev only, so video devices connected to a source pad
+don't cause any issue.
 
-> > >  
-> > >  	fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
+> > still is) used by drivers in such cases, in particular for subdevs with
+> > multiple sink pads, some connected to video devices and some to other
+> > subdevs.
+> > 
+> > Then, commit a6b995ed03ff ("media: subdev: use streams in
+> > v4l2_subdev_link_validate()") assumed the entities on the two sides of a
+> > link are both subdevs, and caused crashes in drivers that use the helper
+> > with subdev sink pads connected to video devices. Commit 55f1ecb11990
+> > ("media: v4l: subdev: Make link validation safer"), merged in v6.4,
+> > fixed the crash by adding an explicit check with a pr_warn_once(),
+> > mentioning a driver bug.
+> > 
+> > Links between a subdev and a video device need to be validated, and
+> > v4l2_subdev_link_validate() can't handle that. Drivers typically handle
+> > this validation manually at stream start time (either in the .streamon()
+> > ioctl handler, or in the .start_streaming() vb2 queue operation),
+> > instead of implementing a custom .link_validate() handler. Forbidding
+> > usage of v4l2_subdev_link_validate() as the .link_validate() handler
+> > would thus force all subdev drivers that mix source links to subdev and
+> > video devices to implement a custom .link_validate() handler that
+> > returns immediately for the video device links and call
+> > v4l2_subdev_link_validate() for subdev links. This would create lots of
+> > duplicated code for no real gain. Instead, relax the check in
+> > v4l2_ctrl_modify_range() to ignore links from a video device to a subdev
+> 
+> v4l2_ctrl_modify_range? copy-paste error?
+
+Yes that's a nince one, I wonder how I managed to get it wrong :-)
+
+> Should the check also be relaxed wrt. video device as a sink?
+
+See above.
+
+> > without printing any warning.
+> 
+> As Sakari said, it would make sense to use .link_validate() to validate 
+> all links.
+
+I think I could get convinced to do so. I'll reply to Sakari's other
+e-mail in the thread.
+
+> But if this warning is getting printed at the moment, then I think this 
+> is a valid fix (maybe with the sink side handled too, if needed).
+
+If we decide it's really a driver issue, then I suppose keeping a
+pr_warn_once() could help getting things fixed. That's how I noticed the
+problem.
+
+> > Fixes: a6b995ed03ff ("media: subdev: use streams in v4l2_subdev_link_validate()")
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > ---
+> >   drivers/media/v4l2-core/v4l2-subdev.c | 30 ++++++++++++++++++++-------
+> >   1 file changed, 23 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> > index 67d43206ce32..b00be1d57e05 100644
+> > --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > @@ -1356,15 +1356,31 @@ int v4l2_subdev_link_validate(struct media_link *link)
+> >   	struct v4l2_subdev *source_sd, *sink_sd;
+> >   	struct v4l2_subdev_state *source_state, *sink_state;
+> >   	bool states_locked;
+> > +	bool is_sink_subdev;
+> > +	bool is_source_subdev;
+> >   	int ret;
+> >   
+> > -	if (!is_media_entity_v4l2_subdev(link->sink->entity) ||
+> > -	    !is_media_entity_v4l2_subdev(link->source->entity)) {
+> > -		pr_warn_once("%s of link '%s':%u->'%s':%u is not a V4L2 sub-device, driver bug!\n",
+> > -			     !is_media_entity_v4l2_subdev(link->sink->entity) ?
+> > -			     "sink" : "source",
+> > -			     link->source->entity->name, link->source->index,
+> > -			     link->sink->entity->name, link->sink->index);
+> > +	is_sink_subdev = is_media_entity_v4l2_subdev(link->sink->entity);
+> > +	is_source_subdev = is_media_entity_v4l2_subdev(link->source->entity);
+> > +
+> > +	if (!is_sink_subdev || !is_source_subdev) {
+> > +		/*
+> > +		 * Do not print the warning if the source is a video device and
+> > +		 * the sink a subdev. This is a valid use case, to allow usage
+> > +		 * of this helper by subdev drivers that have multiple sink
+> > +		 * pads, some connected to video devices and some connected to
+> > +		 * other subdevs. The video device to subdev link is typically
+> > +		 * validated manually by the driver at stream start time in such
+> > +		 * cases.
+> > +		 */
+> > +		if (!is_sink_subdev ||
+> > +		    !is_media_entity_v4l2_video_device(link->source->entity))
+> > +			pr_warn_once("%s of link '%s':%u->'%s':%u is not a V4L2 sub-device, driver bug!\n",
+> > +				     !is_sink_subdev ? "sink" : "source",
+> > +				     link->source->entity->name,
+> > +				     link->source->index,
+> > +				     link->sink->entity->name,
+> > +				     link->sink->index);
+> >   		return 0;
+> >   	}
+> >   
 
 -- 
 Regards,
