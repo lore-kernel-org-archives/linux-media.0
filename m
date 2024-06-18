@@ -1,43 +1,43 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1417D3DBB7;
-	Tue, 18 Jun 2024 15:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23C01DA53
+	for <linux-media@vger.kernel.org>; Tue, 18 Jun 2024 15:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718723517; cv=none; b=rqIIuDEWtAYwBkNLaI0ewfAaaB5d5jrR+lleqe6chTGULbtUZ6zJO+Kp6dFCn0qSTIje0M8R5d5yC8Zw1RXYursUuv+lagTedgPKvsi/yo0Pz1O5SFahbHdElZ7C0OJjhKD3I5pz+lAf4hdsWRDTqg4sKOktUK5/8zMUEhrmCSA=
+	t=1718723688; cv=none; b=ODvNiZSYxlpoVt43ac6egaRXvJJZYBVVbZhTZb8AwvuFdCPE31fs+/1Yed1Ggxy4kkEGa0giJl+yq5l0AQV5fr8zM32Dd8v9pxdKy7qm4zHoKBd+OhORomhAJXUgL1C/18l0hCXJMvcGzUqyvBjn7E8tM0a9oLlrUVbi+Ac7dQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718723517; c=relaxed/simple;
-	bh=5/8KXGO0PH1RFt/sKwfKQYjBbvvo5Q6jQ85zOGqIbME=;
+	s=arc-20240116; t=1718723688; c=relaxed/simple;
+	bh=UC74Sgo3DdupjFWAcEXfPpj0OkaNM1m83CJC2lz0pFI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NOe0GwZdEcvOhkBeHiLm9I4r+fju5GvEB9F7ZHWbAHW4p7GAgJU05aoY7ZxBxuv8Ajz2FvtvgjMCyYb8ByTaxdqh/zWL1SKNYIyBE9ctdMy4jLwYLUcfMYt7tI8QOI7CKiseI+80c7rVePm4wJOw3m9/HhZmFjOFCIeE/cjF/Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=IDvVcH2y; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZG1EtGkUxM7nrK1xmBYTyAhjKhO02AKrYRboszbUc9zz8Pr6BY3EygvsFaTMBpV3/SxMHN+aw1sht5LKuzowcbH6cuT7FLbR4sQ6WJD1gi8P1T8ViFVVyWBST7uIVSWBGGPaaqjs5jE1+MI+MHYFUWj/arDltaLUthTajO0pyX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=whx/m/r3; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IDvVcH2y"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="whx/m/r3"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A23EA908;
-	Tue, 18 Jun 2024 17:11:36 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F815908;
+	Tue, 18 Jun 2024 17:14:27 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1718723496;
-	bh=5/8KXGO0PH1RFt/sKwfKQYjBbvvo5Q6jQ85zOGqIbME=;
+	s=mail; t=1718723667;
+	bh=UC74Sgo3DdupjFWAcEXfPpj0OkaNM1m83CJC2lz0pFI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IDvVcH2yvZ0GxItcIjXhU2SuvQdzWTTGl7F4tBMSmtCorZVGjXsjPvUNdfkH5hG32
-	 W+9opoSp9CQ2spyut/KeLpEid4N/I4NLbMMoerqAJGfdPt3f3t2idlCEGwNaUGJz1m
-	 jHHeeEt3Tq5sHHwAhQbS29ADGnwOwVhdVficyJNs=
-Date: Tue, 18 Jun 2024 18:11:30 +0300
+	b=whx/m/r3t7Wei++PVvuZpHxspZM1pVXVuYl8eR1Bg64FgXGVbLj7g3nHMXjJTVddJ
+	 ZzugriK9lszST54ib68/2pjAdUu3+TumxLihiIgG/auX3VlydOgZwqLtL4lxOmGbiH
+	 fvU/4FeSC/J0n6uIXEBHzIrrOa+qIUgSTIpJAyzY=
+Date: Tue, 18 Jun 2024 18:14:21 +0300
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+To: Sakari Ailus <sakari.ailus@iki.fi>
+Cc: linux-media@vger.kernel.org,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v4 00/11] media: renesas: rcar-csi2: Use the subdev
- active state
-Message-ID: <20240618151130.GC22767@pendragon.ideasonboard.com>
-References: <20240617161135.130719-1-jacopo.mondi@ideasonboard.com>
+	Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [PATCH v1 1/2] media: v4l2-subdev: Drop unreacheable warning
+Message-ID: <20240618151421.GD22767@pendragon.ideasonboard.com>
+References: <20231113101718.6098-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20231113101718.6098-2-laurent.pinchart+renesas@ideasonboard.com>
+ <ZVH9iO5XPay8In_R@valkosipuli.retiisi.eu>
+ <20231113105016.GA24338@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -46,69 +46,52 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240617161135.130719-1-jacopo.mondi@ideasonboard.com>
+In-Reply-To: <20231113105016.GA24338@pendragon.ideasonboard.com>
 
-Hi Jacopo,
+Hi Sakari,
 
-I've taken the series in my tree and I'm running some tests. If all goes
-well I'll send a pull request shortly.
+On Mon, Nov 13, 2023 at 12:50:16PM +0200, Laurent Pinchart wrote:
+> On Mon, Nov 13, 2023 at 10:42:16AM +0000, Sakari Ailus wrote:
+> > On Mon, Nov 13, 2023 at 12:17:17PM +0200, Laurent Pinchart wrote:
+> > > The v4l2_subdev_link_validate_get_format() function warns if the pad
+> > > given as argument belongs to a non-subdev entity. This can't happen, as
+> > > the function is called from v4l2_subdev_link_validate() only (indirectly
+> > > through v4l2_subdev_link_validate_locked()), and that function ensures
+> > > that both ends of the link are subdevs.
+> > > 
+> > > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > > ---
+> > >  drivers/media/v4l2-core/v4l2-subdev.c | 8 --------
+> > >  1 file changed, 8 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+> > > index be86b906c985..67d43206ce32 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > > @@ -1184,14 +1184,6 @@ v4l2_subdev_link_validate_get_format(struct media_pad *pad, u32 stream,
+> > >  	struct v4l2_subdev *sd;
+> > >  	int ret;
+> > >  
+> > > -	if (!is_media_entity_v4l2_subdev(pad->entity)) {
+> > > -		WARN(pad->entity->function != MEDIA_ENT_F_IO_V4L,
+> > > -		     "Driver bug! Wrong media entity type 0x%08x, entity %s\n",
+> > > -		     pad->entity->function, pad->entity->name);
+> > > -
+> > > -		return -EINVAL;
+> > > -	}
+> > > -
+> > >  	sd = media_entity_to_v4l2_subdev(pad->entity);
+> > 
+> > It'd be good to check sd is non-NULL here, although pad presumably is
+> > always a pad of a sub-device entity.
+> 
+> It's guaranteed by the caller. Is there a specific reason you think a
+> check would be good ?
 
-On Mon, Jun 17, 2024 at 06:11:23PM +0200, Jacopo Mondi wrote:
-> v3->v4:
-> - Add tags
-> - Re-sort patches as suggested by Niklas to avoid breaking bisection
-> 
-> v2->v3:
-> - rcar-csi2: Collect v2.2 of [4/11]
-> - adv748x: enum_mbus_code: reduce the number of formats to the ones supported
->   by the HDMI and Analog front ends;
-> - adv748x: enum_mbus_code: enumerate all formats on sink pad; enumerate the
->   active format on the source pad
-> - max9286: Apply the format to all pads to enforce all links to have the same
->   format
-> - max9286: Remove max9286_set_fsync_period() from setup
-> 
-> v2->v1:
->   - Remove "media: adv748x-csi2: Initialize subdev format"
->   - Add "media: adv748x-afe: Use 1X16 media bus code"
->   - Tested with CVBS
->   - address comments from Laurent and Niklas
-> 
-> A branch is available at
-> https://git.kernel.org/pub/scm/linux/kernel/git/jmondi/linux.git/
-> jmondi/renesas-drivers-2024-06-11-v6.10-rc3/multistream-subdev-active-state
-> 
-> As a follow-up to the recently sent
-> "media: renesas: rcar-csi2: Support multiple streams" series, this smaller
-> version collects some fixes and implement usage of the subdev active state
-> to simplify the R-Car CSI-2, ADV748x and MAX9286 drivers implementations.
-> 
-> Tested with GMSL on Eagle V3M
-> Tested with HDMI on Salvator-X
-> Tested with CVBS on Salvator-X
-> Boot tested on WhiteHawk V4H
-> 
-> 
-> Jacopo Mondi (11):
->   media: rcar-vin: Fix YUYV8_1X16 handling for CSI-2
->   media: rcar-csi2: Disable runtime_pm in probe error
->   media: rcar-csi2: Cleanup subdevice in remove()
->   media: rcar-csi2: Use the subdev active state
->   media: adv748x-csi2: Implement enum_mbus_codes
->   media: adv748x-afe: Use 1X16 media bus code
->   media: adv748x-csi2: Validate the image format
->   media: adv748x-csi2: Use the subdev active state
->   media: max9286: Fix enum_mbus_code
->   media: max9286: Use the subdev active state
->   media: max9286: Use frame interval from subdev state
-> 
->  drivers/media/i2c/adv748x/adv748x-afe.c       |   4 +-
->  drivers/media/i2c/adv748x/adv748x-csi2.c      | 145 +++++++++-----
->  drivers/media/i2c/adv748x/adv748x.h           |   1 -
->  drivers/media/i2c/max9286.c                   | 181 +++++++-----------
->  drivers/media/platform/renesas/rcar-csi2.c    | 155 +++++++++------
->  .../platform/renesas/rcar-vin/rcar-dma.c      |  16 +-
->  6 files changed, 271 insertions(+), 231 deletions(-)
+Would you still want a check ?
+
+> > >  
+> > >  	fmt->which = V4L2_SUBDEV_FORMAT_ACTIVE;
 
 -- 
 Regards,
