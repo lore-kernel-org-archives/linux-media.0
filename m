@@ -1,104 +1,139 @@
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from smtp2c.hosting90.cz (smtp2c.hosting90.cz [130.193.12.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5214114601E;
-	Wed, 19 Jun 2024 13:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756A8147C6E
+	for <linux-media@vger.kernel.org>; Wed, 19 Jun 2024 13:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.193.12.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718803759; cv=none; b=WhmEN4ljzDxhbLOltjNwGCAr+BUkIwi4Z7tQVwx5Azzj3li57BIzDWJK/HZtlKm86u96uH/IQ2J/cPJlPRxqd8LDbRvEpXUWxw/ivAg6BSonIQKPct7m5lZxEgn7eUS40SdjCjg6MyRm32F3o8iLsPK1nurdPBQrUqrm2g/tvpk=
+	t=1718803763; cv=none; b=ojk+0fZqxsWsEHKttbG6Iwf/rEP+eahukyUL1Bbb0fvI+MgcgqXcTKegAYIjMvYjL35o4svIW5T+5PgdygeZx7wxLAqkScfZdfxFtvszK2/6dwEEf9ZJyYN1fVRhfaST79EufsUAykhhcIkYwlXIoLnK9gqdIABtfwHTA2lH66M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718803759; c=relaxed/simple;
-	bh=dmUopKpgxEYeprNgTnMdC5f05WlDYqe8aQuoCu7zLfk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NLIQrx3Thd6MAqLCFMkxU4QJy1rwxcO4rT2R8o3AGByeYa4TKNjU3Msk8+oncb1GF7aOxOd/kV6xQDHi+TCQpEsGF6vlMefaBLFc5L+PWaWi36M0DpHLvAvTsnZnzjVrrQZ5k8JglELpG2/vBBc/SlKOES0WB1J1g90O7ySPPJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ZcRSyda3; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ZcRSyda3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1718803725; x=1719408525; i=markus.elfring@web.de;
-	bh=Cqv24v/8lPgdG+NBHkh3HOkG7c3WtsIJpUILM4XYcKM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=ZcRSyda3HljeeSrPJsg9pt/SRxpkFHlcTRi7289KIbREzjXnwYJjEL1b4ikYNyW0
-	 cwW2t0z/i+PgBzGJZiJi0DglhseueROUNz0HG4pwc3qldtuJ5jRI7MgUspvcwEA3Q
-	 MEaj14Balwr38BcHKbT0+yUpLht6u+kQ+r4IDeFaZXNtOO0AQXYYbfNxM1qdX061D
-	 1CZw7uJVV1rqnUvKEzkbkzyPiVj9foILjLYAyrYxm1dD0qgfhIop+nwagQxHXKbps
-	 T51aMnsKpdNl7/gt5I2+nGV4TaZbgsg3SrNmjqkGylvMem0EgtWxIruVS6lNFpi8U
-	 4NS5T70OYGbFOvl1NQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.83.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MUl9H-1rtlXw0E0f-00K0rd; Wed, 19
- Jun 2024 15:28:45 +0200
-Message-ID: <d8d4cca1-031f-4ea7-89da-573e0863c3ec@web.de>
-Date: Wed, 19 Jun 2024 15:28:43 +0200
+	s=arc-20240116; t=1718803763; c=relaxed/simple;
+	bh=X90c3INjkoF/YP1eYr3bmpDFbFs1i6pao90jA8KsZC4=;
+	h=From:Subject:To:Message-ID:Date:MIME-Version:Content-Type; b=cTCkKOeoa4Ftjv5FiNprD/O5dlE0r7kBFS9iyXIX6sjZ8RV16y833k1K6QUuqeMup6P4hCY0pj/Cz36Z0FypV2ELQGP+BH22bCkDFcMcmpy8wMdUGfy802RokH8q25Pqx24OTTjy7cGe7jRI8ALGbQyNuyJVUu/Dd02xJwXFjLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=valek.net; spf=pass smtp.mailfrom=tutr.cz; arc=none smtp.client-ip=130.193.12.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=valek.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tutr.cz
+Received: from 88-102-246-26.rch.o2.cz ([88.102.246.26] helo=[192.168.200.17])
+	by smtp2.hosting90.cz with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94)
+	(envelope-from <tutr@tutr.cz>)
+	id 1sJvG2-0001Z6-9j
+	for linux-media@vger.kernel.org; Wed, 19 Jun 2024 15:21:50 +0200
+From: =?UTF-8?B?T25kxZllaiBWw6FsZWs=?= <ondrej@valek.net>
+Subject: Updated DVB scan tables for cz-All
+To: linux-media@vger.kernel.org
+Message-ID: <846e7968-292d-5e96-b2a4-1e2e6b131fe3@tutr.cz>
+Date: Wed, 19 Jun 2024 15:21:51 +0200
+User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 3/7] iio: core: Add new DMABUF interface
- infrastructure
-To: Paul Cercueil <paul@crapouillou.net>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, linux-iio@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Sumit Semwal
- <sumit.semwal@linaro.org>, Vinod Koul <vkoul@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>
-References: <20240618100302.72886-4-paul@crapouillou.net>
- <fc3045c5-d542-4a6c-906d-84f72e776e9c@web.de>
- <8d536bb864c145340a15f496ad3b89e08a847718.camel@crapouillou.net>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <8d536bb864c145340a15f496ad3b89e08a847718.camel@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MrJKaxOVCei/mZBzi2PVNabKJ6tVMvGyFZ5xYhMj5+zLLOoWPW9
- RP1yEleiWkMbS2BUGrEkH6qWN74vGTCeozUL9FB2tABigS/1SKC/gRb6PjhqDjkxi8TvibN
- DirViL6WNMQC8mFjztRZzggJYPP4XdQPTe30mSzWbulcYWwh8hlHd6aXs+ESjHDzKU9+Y0k
- FHer/BM6ZfIttjr8bzCaQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:l/XCafQtm8M=;bwyV0boUcJejmr0awi4VkGYb3GT
- 8KvUhYW4dlBpvKPcQb+UN/Q6hCIjR0DKLLpUkvsRqwzuV/on4SZSWw+QLa+duVi1FfiJlqb4C
- 4Baj1bsgCB6QeLRkJHaYQPVlgPWz+mC9yWM3C1TR10W3ERu+mGsut1HSrqDA+zVsmR+nMgaWB
- 4nmIhoyOe1U2LhuNyCgfpx0Q5q6DF9SPHNghAdilUKEQXIE7kfG3QlBNcBOZNuGo5hxDArrBq
- wRPnl2z2PbR47TkcBmRlcdomU92Z2m26JLjSPGFyUniY2OhmqMwvCbI1e+9GtlIal/IP/HbHV
- LasZf5HRKoj7imJCZzUoiUsVIsA9RE6g2LZE3ouH8fPLRKUYFbW2raRX+HXia/M0HfNJxbyk8
- +wgDRNi1Fx6i2L97JYOtjcRybz8qDuCv7X+im9g5L635DLibimhTJlvF9dfFVF/PTmkPbptkO
- yAwbbKSw9Z/IfYCZ6d7+lh2vLZt5VLbngU1JZJ/Pz+qj6o8xaCthpCzf6FilfNut0xIxKNYY6
- 9IqKEL5scAjXRhIDv5ieh2WZNLMFvT5iIi37u3lXrnp1N995MVRm5rBraB4wQU/CqLh7HeOQL
- mQ+HezzE1Qcv6bfS44m7WB7ZkXiefpwrcEpcieQI54mwmNl4+wUlhCWa7+WVnM9AbGUTad4c8
- 4Uymo0kUl6sV4dIsl4YxsR1+5XDMEFvyOk4fxvHjKUarsn1dkXHKmqy90J/ujrKCnfI/6DsVk
- WgZBx38VO5Exv1Urg8H4ZBlAYDVCJA1aWy4kKNi2t1+wRAxKNCU3EE//+oEbjR4qmFP3MLGtN
- SoQmH7zNnqvoZRGShO1xA+cixFbbN9Nst1Yo9Qg2EQWSbULpnDszsWJ1lusLMDb2Dz
+Content-Type: multipart/mixed;
+ boundary="------------E54D23702A4E9BB21535740A"
+Content-Language: cs
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: 0cc0cc2392a151b0b817c14764c8f447
+X-Authenticated-Id: tutr@tutr.cz
 
->> =E2=80=A6
->>> +++ b/drivers/iio/industrialio-buffer.c
->> =E2=80=A6
->>> +static void iio_buffer_dmabuf_release(struct kref *ref)
->>> +{
->> =E2=80=A6
->>> +	dma_resv_lock(dmabuf->resv, NULL);
->>> +	dma_buf_unmap_attachment(attach, priv->sgt, priv->dir);
->>> +	dma_resv_unlock(dmabuf->resv);
->> =E2=80=A6
->>
->> Under which circumstances will another lock guard become applicable?
->> https://elixir.bootlin.com/linux/v6.10-rc4/source/include/linux/cleanup=
-.h#L179
->
-> As soon as "struct dma_resv" gets a DEFINE_GUARD().
+This is a multi-part message in MIME format.
+--------------E54D23702A4E9BB21535740A
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Would any contributor like to add a macro call accordingly?
+Hello,
+I'm sending updated version of DVB-T scan tables for Czech Republic 
+(according to instructions at 
+https://git.linuxtv.org/dtv-scan-tables.git/about/)
 
-Regards,
-Markus
+It has been some years already that we have only DVB-T2 (no analog, no 
+DVB-T), so the scan tables do not work at all and it has to be set up 
+manually.
+
+The file in the attachment therefore replaces whole file 
+https://git.linuxtv.org/dtv-scan-tables.git/tree/dvb-t/cz-All .
+
+Please let me know if the file format is ok.
+
+Thank you.
+
+Ondřej Válek,
+Czechia
+
+
+
+--------------E54D23702A4E9BB21535740A
+Content-Type: text/plain; charset=UTF-8;
+ name="cz-All"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cz-All"
+
+IyBDemVjaCBSZXB1YmxpYywgd2hvbGUgY291bnRyeSAodXBkYXRlZCB0byByZWd1bGF0b3J5
+IE1heSAyMDIyKSAtIERWQlQyIGNoYW5uZWxzIDIxLTQ4ICg0NzQtNjkwIE1IeikKIyBTb3Vy
+Y2U6IGh0dHBzOi8vc3Bla3RydW0uY3R1Lmdvdi5jei9lbi9iYW5kLzQ3MC02OTQtbWh6CiMg
+U291cmNlOiBodHRwczovL2N0dS5nb3YuY3ovc2l0ZXMvZGVmYXVsdC9maWxlcy9vYnNhaC9j
+dHUvc2RlbGVuaS1vLXZ5ZGFuaS1vcGF0cmVuaS1vYmVjbmUtcG92YWh5LWNhc3RpLXBsYW51
+LXZ5dXppdGktcmFkaW92ZWhvLXNwZWt0cmEtYy5wdi1wLzEwLzA1LjIwMjItNC1wcm8ta21p
+dG9jdG92ZS1wYXNtby00NzAtOTYwLW1oei9vYnJhemt5LzIwMjJwdnJzMTBwb2tvcjJwLnBk
+ZgojIE92ZXJ2aWV3IG9mIGluZGl2aWR1YWwgbGljZW5jZXMgKGN1cnJlbnQgVFYtdHJhbnNt
+aXR0ZXJzKTogaHR0cHM6Ly93d3cuY3R1LmN6L3Z5aGxlZGF2YWNpLWRhdGFiYXplL3ByZWhs
+ZWQtdGVsZXZpem5pY2gtdnlzaWxhY3Uvb3ByYXZuZW5pCgpbQ0hBTk5FTF0KICAgICAgICBE
+RUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDQ3NDAwMDAwMAog
+ICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAKCltDSEFOTkVMXQogICAgICAgIERFTElW
+RVJZX1NZU1RFTSA9IERWQlQyCiAgICAgICAgRlJFUVVFTkNZID0gNDgyMDAwMDAwCiAgICAg
+ICAgQkFORFdJRFRIX0haID0gODAwMDAwMAoKW0NIQU5ORUxdCiAgICAgICAgREVMSVZFUllf
+U1lTVEVNID0gRFZCVDIKICAgICAgICBGUkVRVUVOQ1kgPSA0OTAwMDAwMDAKICAgICAgICBC
+QU5EV0lEVEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAgICAgICBERUxJVkVSWV9TWVNU
+RU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDQ5ODAwMDAwMAogICAgICAgIEJBTkRX
+SURUSF9IWiA9IDgwMDAwMDAKCltDSEFOTkVMXQogICAgICAgIERFTElWRVJZX1NZU1RFTSA9
+IERWQlQyCiAgICAgICAgRlJFUVVFTkNZID0gNTA2MDAwMDAwCiAgICAgICAgQkFORFdJRFRI
+X0haID0gODAwMDAwMAoKW0NIQU5ORUxdCiAgICAgICAgREVMSVZFUllfU1lTVEVNID0gRFZC
+VDIKICAgICAgICBGUkVRVUVOQ1kgPSA1MTQwMDAwMDAKICAgICAgICBCQU5EV0lEVEhfSFog
+PSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAgICAgICBERUxJVkVSWV9TWVNURU0gPSBEVkJUMgog
+ICAgICAgIEZSRVFVRU5DWSA9IDUyMjAwMDAwMAogICAgICAgIEJBTkRXSURUSF9IWiA9IDgw
+MDAwMDAKCltDSEFOTkVMXQogICAgICAgIERFTElWRVJZX1NZU1RFTSA9IERWQlQyCiAgICAg
+ICAgRlJFUVVFTkNZID0gNTMwMDAwMDAwCiAgICAgICAgQkFORFdJRFRIX0haID0gODAwMDAw
+MAoKW0NIQU5ORUxdCiAgICAgICAgREVMSVZFUllfU1lTVEVNID0gRFZCVDIKICAgICAgICBG
+UkVRVUVOQ1kgPSA1MzgwMDAwMDAKICAgICAgICBCQU5EV0lEVEhfSFogPSA4MDAwMDAwCgpb
+Q0hBTk5FTF0KICAgICAgICBERUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFV
+RU5DWSA9IDU0NjAwMDAwMAogICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAKCltDSEFO
+TkVMXQogICAgICAgIERFTElWRVJZX1NZU1RFTSA9IERWQlQyCiAgICAgICAgRlJFUVVFTkNZ
+ID0gNTU0MDAwMDAwCiAgICAgICAgQkFORFdJRFRIX0haID0gODAwMDAwMAoKW0NIQU5ORUxd
+CiAgICAgICAgREVMSVZFUllfU1lTVEVNID0gRFZCVDIKICAgICAgICBGUkVRVUVOQ1kgPSA1
+NjIwMDAwMDAKICAgICAgICBCQU5EV0lEVEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAg
+ICAgICBERUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDU3MDAw
+MDAwMAogICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAKCltDSEFOTkVMXQogICAgICAg
+IERFTElWRVJZX1NZU1RFTSA9IERWQlQyCiAgICAgICAgRlJFUVVFTkNZID0gNTc4MDAwMDAw
+CiAgICAgICAgQkFORFdJRFRIX0haID0gODAwMDAwMAoKW0NIQU5ORUxdCiAgICAgICAgREVM
+SVZFUllfU1lTVEVNID0gRFZCVDIKICAgICAgICBGUkVRVUVOQ1kgPSA1ODYwMDAwMDAKICAg
+ICAgICBCQU5EV0lEVEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAgICAgICBERUxJVkVS
+WV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDU5NDAwMDAwMAogICAgICAg
+IEJBTkRXSURUSF9IWiA9IDgwMDAwMDAKCltDSEFOTkVMXQogICAgICAgIERFTElWRVJZX1NZ
+U1RFTSA9IERWQlQyCiAgICAgICAgRlJFUVVFTkNZID0gNjAyMDAwMDAwCiAgICAgICAgQkFO
+RFdJRFRIX0haID0gODAwMDAwMAoKW0NIQU5ORUxdCiAgICAgICAgREVMSVZFUllfU1lTVEVN
+ID0gRFZCVDIKICAgICAgICBGUkVRVUVOQ1kgPSA2MTAwMDAwMDAKICAgICAgICBCQU5EV0lE
+VEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAgICAgICBERUxJVkVSWV9TWVNURU0gPSBE
+VkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDYxODAwMDAwMAogICAgICAgIEJBTkRXSURUSF9I
+WiA9IDgwMDAwMDAKCltDSEFOTkVMXQogICAgICAgIERFTElWRVJZX1NZU1RFTSA9IERWQlQy
+CiAgICAgICAgRlJFUVVFTkNZID0gNjI2MDAwMDAwCiAgICAgICAgQkFORFdJRFRIX0haID0g
+ODAwMDAwMAoKW0NIQU5ORUxdCiAgICAgICAgREVMSVZFUllfU1lTVEVNID0gRFZCVDIKICAg
+ICAgICBGUkVRVUVOQ1kgPSA2MzQwMDAwMDAKICAgICAgICBCQU5EV0lEVEhfSFogPSA4MDAw
+MDAwCgpbQ0hBTk5FTF0KICAgICAgICBERUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAg
+IEZSRVFVRU5DWSA9IDY0MjAwMDAwMAogICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAK
+CltDSEFOTkVMXQogICAgICAgIERFTElWRVJZX1NZU1RFTSA9IERWQlQyCiAgICAgICAgRlJF
+UVVFTkNZID0gNjUwMDAwMDAwCiAgICAgICAgQkFORFdJRFRIX0haID0gODAwMDAwMAoKW0NI
+QU5ORUxdCiAgICAgICAgREVMSVZFUllfU1lTVEVNID0gRFZCVDIKICAgICAgICBGUkVRVUVO
+Q1kgPSA2NTgwMDAwMDAKICAgICAgICBCQU5EV0lEVEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5F
+TF0KICAgICAgICBERUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9
+IDY2NjAwMDAwMAogICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAKCltDSEFOTkVMXQog
+ICAgICAgIERFTElWRVJZX1NZU1RFTSA9IERWQlQyCiAgICAgICAgRlJFUVVFTkNZID0gNjc0
+MDAwMDAwCiAgICAgICAgQkFORFdJRFRIX0haID0gODAwMDAwMAoKW0NIQU5ORUxdCiAgICAg
+ICAgREVMSVZFUllfU1lTVEVNID0gRFZCVDIKICAgICAgICBGUkVRVUVOQ1kgPSA2ODIwMDAw
+MDAKICAgICAgICBCQU5EV0lEVEhfSFogPSA4MDAwMDAwCgpbQ0hBTk5FTF0KICAgICAgICBE
+RUxJVkVSWV9TWVNURU0gPSBEVkJUMgogICAgICAgIEZSRVFVRU5DWSA9IDY5MDAwMDAwMAog
+ICAgICAgIEJBTkRXSURUSF9IWiA9IDgwMDAwMDAK
+--------------E54D23702A4E9BB21535740A--
