@@ -1,112 +1,121 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575F11ACE61;
-	Thu, 20 Jun 2024 14:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC251AD499;
+	Thu, 20 Jun 2024 14:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718892540; cv=none; b=szf6/dgYklX1qT6iwD2D4n4WDevFy8OlLm4gew89SCO9DL/NrnTU9oVSWOt7SStO1DsecEtW28YNjZauh3gQFusIO10Sq2hsx4k4X4juS9EBoH14PO33Xa58j7H+70A+6O8bXBwT9kH/YlXcx+bCV97vAKIO2dgBpwwDZJU7mdk=
+	t=1718893241; cv=none; b=mEOT+nC5Z+YstlIWHDehqUhAIuT31SiCOYU9Ra4WBdqCpoXbWYOSItkMLHlwj9Et5xHSB93SSz3/Xky7KFJZ6Fkfd+z9MNzAibJdh/9VYr5Q+LS54gAWl56pNWXQoSnly2UqSG41OzQfQDoRSCdDVA/+HFO+vGzeDO2BURzSFIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718892540; c=relaxed/simple;
-	bh=bkoariQAFK5nzptqulE5lD4Ceq9ZNl7I/5y71MtF05E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uRWDFYXVJgofUc/UORUt0WtSPE3OaRk42bo5qtFx2gSjltRT2BY7ni5PumDUE2auzaWk8T4zMaljOnBoc0hMtiY6r5lP9uo2hwq1UtTGU+Vsnbv4ELNhqLCLKFPm2HN7GgkoCEWaylCKNg8lec7ilwbfg/1AC+IBpAmD5k5HwEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aEJuulX0; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718893241; c=relaxed/simple;
+	bh=H3l1v9yeYyPj1A0lN+6W/nwjuWXv/WE2qcLC1YwJUvQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EWWict+/PNCmWPcGLOh0w4AqEVXhl5gYfHpKRCbX46PtEgOqvkb60wGmn22fk5Yvc5FxoAH99EG/04+FA4sDgmfMOX4fL0IJ9tsOddGUtWH+SQFhNj17OC3Ahxq5l/vrQOjpV2gnrlc4JDvaLbAimc42CSLkMTbfAvf9VsW9Xjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rtj5r0ig; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aEJuulX0"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70623ec42c2so759508b3a.0;
-        Thu, 20 Jun 2024 07:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718892539; x=1719497339; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkoariQAFK5nzptqulE5lD4Ceq9ZNl7I/5y71MtF05E=;
-        b=aEJuulX0jjYaqSnZkVAkKwhLoW87T9LVCZe4XV/JMH0kAxX2TQe7CvbbXb0pPFh4Qh
-         +Wj3iqMc3vhY0GVy+3DBebyU+P4pbHwBmFzcbPuvJDrHpIZuWfO7zJuMuSr4Dd5eWfla
-         zRIvmNivP3W84FN5sTdIkmY6OdKRPiu4pQ5yh/CobGFteOOZXunB1IEh4Bw4vcJeEaVz
-         rSidujIA+e54/QNVC0swlr7eVppkYnNpvO9IEY3eVnc6STcg363E9SweA68rfaSviwGI
-         gTTZdwo2/ezB8YYQMF3MRXlPdand6UgS8XjJA+6ohfUEnr8bH1QcnwJ5TyHxNGkIgZ/5
-         Ufwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718892539; x=1719497339;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bkoariQAFK5nzptqulE5lD4Ceq9ZNl7I/5y71MtF05E=;
-        b=uNbUYik8ey499IUjzk1secF4EmwmYX1Q3Y0P7QpiM2iDy6j/44rfPMBbbKXShvtYt4
-         wvj0oyJ7DGfW+MUXBaeSdr6EG/NysS4E7UtdjKmlBAEE50dJG0eOMU4vLTiiRBQS4gMK
-         LVa2YE4e38TOOU5pGQQ/wcJQ6G2FsPkgg9jWZ9DUi+R26B5xbiJbH6f5XSOdtIG//IMe
-         QPEOfTAiZjsmbNbDcf1q5QAl2SR9zC6U2JgCtyU8d1aGPR3derLzLmvRL8CltoUpP+8n
-         goyD6Jm1r6agkiAu24KVQITYdRZHHOP9fUy6enELFSgdb1TaspSim8qPh7TndFpx322L
-         ojbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQnPlSh5BOGXeQypkP5KwA5h7T4l5YQtnQcgYh4mqXyJb9ej9AwpbhNwL9/SX7e6n8LgAwKdnoT3KgfChsYOAy+QYkJvBawh2gaGf4dLLsBQPyGH0MWdl1lrFMqxPvRqAlk4HdKc7tiW+o220wdLTZP2iR0a8xBRpx+DZ0uAT/2F2ATpBy1sVRIrGJccoS9zCTtkhsgsZDbQ5pwtDH0JU1Fill0YA51f+TWS+uJ32STFxJ+uFTJlW3mnE=
-X-Gm-Message-State: AOJu0Yy8Sscwz/pBGRDjfLZXc2ZYnnUx0VtgNrit0abBjF07uiqyn0nV
-	L9ck7xooPLgWezdHTs4A5H2fdw0M0cr1W38v+2cmeBDegD/XCMlW
-X-Google-Smtp-Source: AGHT+IEWi/i9vtD/HvCPbZdrn1cy8dwPBWfdCTrVuHryTftlO8XzUts6A/QV130K6XeOnU1kYBckXA==
-X-Received: by 2002:a05:6a00:4f06:b0:705:995c:3e30 with SMTP id d2e1a72fcca58-706290abf4fmr7801065b3a.17.1718892538504;
-        Thu, 20 Jun 2024 07:08:58 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705cc987743sm12800997b3a.90.2024.06.20.07.08.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jun 2024 07:08:58 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id AFD9C1824D9E0; Thu, 20 Jun 2024 21:08:55 +0700 (WIB)
-Date: Thu, 20 Jun 2024 21:08:55 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Vinod Koul <vkoul@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Nuno Sa <nuno.sa@analog.com>,
-	linux-iio@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v12 6/7] Documentation: iio: Document high-speed DMABUF
- based API
-Message-ID: <ZnQ398_ZtYpo-JLS@archie.me>
-References: <20240620122726.41232-1-paul@crapouillou.net>
- <20240620122726.41232-7-paul@crapouillou.net>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rtj5r0ig"
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45KEKJrU104681;
+	Thu, 20 Jun 2024 09:20:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718893219;
+	bh=ymReCO7N2ADiyVC3g1gB0UJoYCRDko7LaKWU+9edZ0E=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=rtj5r0igmn7EeYVH2JH/xAicz3ZwzuSAfwQhQROXR0PvnYD4K4kU6VomIRIHt373N
+	 vuuRmidZ3cC/OmwEwJhbuT1h37ya7YPCIrz34BhhChWOc8UGe7Yp/dnJlVo1Rdvk8Z
+	 RXb1jinQjdCwpgFkiWVbWwmg/BOYSRwz7DX9eZlI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45KEKJmC097716
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 20 Jun 2024 09:20:19 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 20
+ Jun 2024 09:20:19 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 20 Jun 2024 09:20:19 -0500
+Received: from [172.24.227.193] (devarsht.dhcp.ti.com [172.24.227.193] (may be forged))
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45KEKEpK092433;
+	Thu, 20 Jun 2024 09:20:15 -0500
+Message-ID: <e901967f-59df-f4b0-de51-61e542c04161@ti.com>
+Date: Thu, 20 Jun 2024 19:50:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OmuTAUrc7S676QKv"
-Content-Disposition: inline
-In-Reply-To: <20240620122726.41232-7-paul@crapouillou.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v6 2/4] media: chips-media: wave5: Support runtime
+ suspend/resume
+Content-Language: en-US
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        "jackson.lee"
+	<jackson.lee@chipsnmedia.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "sebastian.fricke@collabora.com" <sebastian.fricke@collabora.com>
+CC: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        Nas Chung
+	<nas.chung@chipsnmedia.com>,
+        "lafley.kim" <lafley.kim@chipsnmedia.com>,
+        "b-brnich@ti.com" <b-brnich@ti.com>, "Luthra, Jai" <j-luthra@ti.com>,
+        Vibhore
+	<vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        Aradhya <a-bhatia1@ti.com>, "Raghavendra, Vignesh" <vigneshr@ti.com>
+References: <20240617104818.221-1-jackson.lee@chipsnmedia.com>
+ <20240617104818.221-3-jackson.lee@chipsnmedia.com>
+ <6e6f767c-85e9-87f6-394f-440efcc0fd21@ti.com>
+ <SE1P216MB13037621438C8CE6142A69A8EDCF2@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
+ <SE1P216MB130382374B76CD8BC9FFCFE5EDC82@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
+ <881dcea1-a592-4506-083a-9d5f3c6a8781@ti.com>
+ <b2f7552d37075538e22640f7b42838d29d3f8b3e.camel@collabora.com>
+From: Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <b2f7552d37075538e22640f7b42838d29d3f8b3e.camel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+Hi Nicolas,
 
---OmuTAUrc7S676QKv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 20/06/24 19:35, Nicolas Dufresne wrote:
+> Hi Devarsh,
+> 
+> Le jeudi 20 juin 2024 à 15:05 +0530, Devarsh Thakkar a écrit :
+>> In my view the delayed suspend functionality is generally helpful for devices
+>> where resume latencies are higher for e.g. this light sensor driver [2] uses
+>> it because it takes 250ms to stabilize after resumption and I don't see this
+>> being used in codec drivers generally since there is no such large resume
+>> latency. Please let me know if I am missing something or there is a strong
+>> reason to have delayed suspend for wave5.
+> 
+> It sounds like you did proper scientific testing of the suspend results calls,
+> mind sharing the actual data ?
 
-On Thu, Jun 20, 2024 at 02:27:25PM +0200, Paul Cercueil wrote:
-> Document the new DMABUF based API.
->=20
+Nopes, I did not do that but yes I agree it is good to profile and evaluate
+the trade-off but I am not expecting 250ms kind of latency. I would suggest
+Jackson to do the profiling for the resume latencies.
 
-LGTM, thanks!
+But perhaps a separate issue, I did notice that intention of the patchset was
+to suspend without waiting for the timeout if there is no application having a
+handle to the wave5 device but even if I close the last instance I still see
+the IP stays on for 5seconds as seen in this logs [1] and this perhaps could
+be because extra pm counter references being hold.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+[2024-06-20 12:32:50] Freeing pipeline ...
 
---=20
-An old man doll... just what I always wanted! - Clara
+and after 5 seconds..
 
---OmuTAUrc7S676QKv
-Content-Type: application/pgp-signature; name="signature.asc"
+[2024-06-20 12:32:55] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_ON |
+[2024-06-20 12:32:56] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_OFF
 
------BEGIN PGP SIGNATURE-----
+[1]: https://gist.github.com/devarsht/009075d8706001f447733ed859152d90
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZnQ37gAKCRD2uYlJVVFO
-o/r8AQCIFAAnhfXKSkVIpjhII/qaXwnWsgfL4cVfExJmpumexgD/Ri4NWMVAfeiY
-yXZE6Mz87M0muGonVU4ld7vLcryHOwE=
-=A0ev
------END PGP SIGNATURE-----
-
---OmuTAUrc7S676QKv--
+Regards
+Devarsh
