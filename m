@@ -1,156 +1,174 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774A21BF32C;
-	Thu, 20 Jun 2024 17:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26D41B4C26;
+	Thu, 20 Jun 2024 17:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718904781; cv=none; b=m/NuB4APjPidz2VPI/3GnFhxvfuFGO1E4B47QSUWJm+6i5jPvpfSn+cWyKbATPTheXrtYPOkGDjI4qc+UpWPGKGazRmvXs3tEkyNd640kzmURUW333V6ezMA/xdr07z9l3lbxMIVQnPGBdtvHroDje3AMOoMKyohR29TJhnEHBg=
+	t=1718905122; cv=none; b=LBXJHmNLFnrDbu59i7+6REoMMx6ujbum9wt25Icv8Is2dLR9GkkQnMteceCzjRjn7PN1z1yytF+O25S5+6wm8sBGZfOkKVm0x3d+KAMpFrIoEZwBKHGl/W77+0ZrHHNAX0yXHIL0skDsQXBcO1pY+G0bHko9G8j0Yx16WH9CKGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718904781; c=relaxed/simple;
-	bh=kp1Q4kOh5cBalrsrfuwKZ2xz4Q7tGmSDRh5ia6AColo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ew4eyQrtXCnF6KweAx3aHE7rllFAcMYEFyHRWtnqTdVeI5/+rWiLSPiGwLvYiuENDI6klur1NsEalqcDZfADL4tug7jiv2S2L7oTgGF1IDMIWjeQeQ+YNyP7WkDTZ9D0s+qsrTZpXUstUgw357FuiNp4ypCcuMDPgaXsnO0vi9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=4e3GMXpV; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1718905122; c=relaxed/simple;
+	bh=WNDUfhBM9/HSXNcFmiKwEnh7+iaCd5SdM7ZCgWc+f/g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=h4bV1iqdrLikiaY3/dKVj8LSi7rq1JlN1AMmDpg8GDA/faHxpoRZFNS1Z791vgQtwqb6v0Du2hlbBMHoJd88HNrKg/47qbsnLKXOveQ9gCOF4Itwf/c+4GdmpLtHmJcBqvmSxELxd5FUzSPEJkevLDSrbE6GKH5bkP5UwdxMqfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNNUr1vT; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4e3GMXpV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1718904777;
-	bh=kp1Q4kOh5cBalrsrfuwKZ2xz4Q7tGmSDRh5ia6AColo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=4e3GMXpVwKiIbMVo4FBTo077VSFfO5NQaKIm+GvYE0c9IoGOwMTxnAhivY1LKwwJn
-	 f4B2jyWmH4Zf3NACjEEVJr8gYnVYui4oms0nZU56Lmt1Q4zIreD8y/4lvW/G4JVJQi
-	 2sCeaJn5B11ezbhnsWDv0ra281KOkh5mLup6am1As6xZY7xD60TuXOMarPf5YB4BEw
-	 iNcKY9zGZQHLoWE9aywIFKjLzsJNz6dnEpbd3QeYpmg/Yngvv+D+sm0VFO0C5SjU+x
-	 VyQfhhXyjzfKH9padDtAaxaYRH5vcljyGsa6LUfyFMVXx/tDRqbkd3qjN7jbxX+cQT
-	 DPor6Xqk351pA==
-Received: from nicolas-tpx395.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nicolas)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B112237810CD;
-	Thu, 20 Jun 2024 17:32:55 +0000 (UTC)
-Message-ID: <07d56a690d5fed16082e73c5565b67777e31494a.camel@collabora.com>
-Subject: Re: [RESEND PATCH v6 2/4] media: chips-media: wave5: Support
- runtime suspend/resume
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To: Devarsh Thakkar <devarsht@ti.com>, "jackson.lee"
-	 <jackson.lee@chipsnmedia.com>, "mchehab@kernel.org" <mchehab@kernel.org>, 
- "sebastian.fricke@collabora.com"
-	 <sebastian.fricke@collabora.com>
-Cc: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,  Nas Chung
- <nas.chung@chipsnmedia.com>, "lafley.kim" <lafley.kim@chipsnmedia.com>,
- "b-brnich@ti.com" <b-brnich@ti.com>, "Luthra, Jai" <j-luthra@ti.com>,
- Vibhore <vibhore@ti.com>,  Dhruva Gole <d-gole@ti.com>, Aradhya
- <a-bhatia1@ti.com>, "Raghavendra, Vignesh" <vigneshr@ti.com>
-Date: Thu, 20 Jun 2024 13:32:52 -0400
-In-Reply-To: <e901967f-59df-f4b0-de51-61e542c04161@ti.com>
-References: <20240617104818.221-1-jackson.lee@chipsnmedia.com>
-	 <20240617104818.221-3-jackson.lee@chipsnmedia.com>
-	 <6e6f767c-85e9-87f6-394f-440efcc0fd21@ti.com>
-	 <SE1P216MB13037621438C8CE6142A69A8EDCF2@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <SE1P216MB130382374B76CD8BC9FFCFE5EDC82@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
-	 <881dcea1-a592-4506-083a-9d5f3c6a8781@ti.com>
-	 <b2f7552d37075538e22640f7b42838d29d3f8b3e.camel@collabora.com>
-	 <e901967f-59df-f4b0-de51-61e542c04161@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 (3.52.2-1.fc40) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNNUr1vT"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f9cd92b146so8085025ad.3;
+        Thu, 20 Jun 2024 10:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718905120; x=1719509920; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4sG4Va9OdsdsAbudvNBTbNSzmionWI4fbzxfvxF/ZFU=;
+        b=NNNUr1vTXlNoCMK5h20v7urH9pZewRlosfUeedkaqPeGndfK1b0jZ19qYyxr1iX3gT
+         LTAiOn0WRWMp9/KFBWpZ+VQhr90Yr/YTLGnXlc50L4mSZNiUBZrSW+FI4QBCdTULbpQJ
+         yIkFA7WO3V4Qr51wYOZRHUYzEY9TW/Ax8PmVaLCa5gu8F+XYyyb5lK6hxwO3D2fj5veJ
+         85LHA2RAb/uoT1mWb+zqDYCQS8JOaiyggACWKhJKxYOX8XkTl3t06Kh0IWsG+Jffx1Tc
+         nCUC8UpW+jP5Y4oDUYD01SsDhnffEA8nj3T5d+m6opEfsluTGkFG2Eh6uJT4WZR0JuQn
+         V/aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718905120; x=1719509920;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4sG4Va9OdsdsAbudvNBTbNSzmionWI4fbzxfvxF/ZFU=;
+        b=QTepeAmOWZ4QXjiAPyljFiw4v7I4ff5jySb4u5n4pXMhqzvjkXVl6BMzq545nRgKwT
+         HWEBJa0GLZTnBkFuWhX5y1cwXspVdVL0pmlokt4CIq4oR1b9Ovh1fw+qEo7AZrTUlfcR
+         rDTpYiR0dP80b8vjPEUgNRxZ20jnlMu8FzWs9HrM/f5q9xEOtSZsp0jLYzUjo9B2Wr/q
+         wQTRKGe8BlOyv2/uokWaYVXNnj+nG8BAuc7yyON/BirLC2dQX/rcCpvYq5VgK3klAqId
+         95O1gnoXkksJeILnzp2BkRsY1Z3MBfcrc9+mKos1pQXTeIIIKbVkhRFGJ6nIbT+JNWwp
+         rp0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVRl8MhzuEprOkXcMtuawck8KLP1DZpBaQKAeV/uTBf5TchUTHQRABYsP1tcMTmQE8/RjkLrvNCZfFpRuGWoQrqddbRLhIiUmPfZFcOpki25l+duh+CUaDAi4vxZb8fER7/Aas6tFM4NI7ZmB1oJvXKUbvf6zBcJE/hG+ZiXmF8TdCybtBm
+X-Gm-Message-State: AOJu0YywWB0F0QIDTr0p8P118c6O9AgUfwpVJbwrQirndNe1vzBl3nZD
+	wvfIeQPKtx0LHAlu0/VOxE05O3MkdKpWu0utVeeit/EkF7sWLG0i
+X-Google-Smtp-Source: AGHT+IGuxDdFAgdWqgiP/kZrg0iwxBJMVyTH3b8zZKvOQHHripPZ4bEWsXUOLcu/oJJn63EYCqpTKg==
+X-Received: by 2002:a17:903:2443:b0:1f9:cbe1:ae9 with SMTP id d9443c01a7336-1f9cbe10dc6mr23294315ad.44.1718905119620;
+        Thu, 20 Jun 2024 10:38:39 -0700 (PDT)
+Received: from localhost.localdomain ([221.220.128.96])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855e55ca1sm140132045ad.49.2024.06.20.10.38.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 10:38:39 -0700 (PDT)
+From: Jianfeng Liu <liujianfeng1994@gmail.com>
+To: nicolas.dufresne@collabora.com
+Cc: andy.yan@rock-chips.com,
+	benjamin.gaignard@collabora.com,
+	boris.brezillon@collabora.com,
+	conor+dt@kernel.org,
+	daniel.almeida@collabora.com,
+	detlev.casanova@collabora.com,
+	devicetree@vger.kernel.org,
+	didi.debian@cknow.org,
+	dsimic@manjaro.org,
+	ezequiel@vanguardiasur.com.ar,
+	gregkh@linuxfoundation.org,
+	heiko@sntech.de,
+	hverkuil-cisco@xs4all.nl,
+	jonas@kwiboo.se,
+	knaerzche@gmail.com,
+	krzk+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-staging@lists.linux.dev,
+	liujianfeng1994@gmail.com,
+	mchehab@kernel.org,
+	paul.kocialkowski@bootlin.com,
+	robh@kernel.org,
+	sebastian.reichel@collabora.com
+Subject: Re: [PATCH v2 2/4] media: rockchip: Introduce the rkvdec2 driver
+Date: Fri, 21 Jun 2024 01:38:30 +0800
+Message-Id: <20240620173830.277022-1-liujianfeng1994@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2349746d488f4edf9c7c40df5e15ff70d3ec67b7.camel@collabora.com>
+References: <2349746d488f4edf9c7c40df5e15ff70d3ec67b7.camel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Le jeudi 20 juin 2024 =C3=A0 19:50 +0530, Devarsh Thakkar a =C3=A9crit=C2=
-=A0:
-> Hi Nicolas,
->=20
-> On 20/06/24 19:35, Nicolas Dufresne wrote:
-> > Hi Devarsh,
-> >=20
-> > Le jeudi 20 juin 2024 =C3=A0 15:05 +0530, Devarsh Thakkar a =C3=A9crit=
-=C2=A0:
-> > > In my view the delayed suspend functionality is generally helpful for=
- devices
-> > > where resume latencies are higher for e.g. this light sensor driver [=
-2] uses
-> > > it because it takes 250ms to stabilize after resumption and I don't s=
-ee this
-> > > being used in codec drivers generally since there is no such large re=
-sume
-> > > latency. Please let me know if I am missing something or there is a s=
-trong
-> > > reason to have delayed suspend for wave5.
-> >=20
-> > It sounds like you did proper scientific testing of the suspend results=
- calls,
-> > mind sharing the actual data ?
->=20
-> Nopes, I did not do that but yes I agree it is good to profile and evalua=
-te
-> the trade-off but I am not expecting 250ms kind of latency. I would sugge=
-st
-> Jackson to do the profiling for the resume latencies.
+Hi Detlev,
 
-I'd clearly like to see numbers before we proceed.
+On Thu, 20 Jun 2024 10:07:41 -0400, Detlev Casanova wrote:
 
->=20
-> But perhaps a separate issue, I did notice that intention of the patchset=
- was
-> to suspend without waiting for the timeout if there is no application hav=
-ing a
-> handle to the wave5 device but even if I close the last instance I still =
-see
-> the IP stays on for 5seconds as seen in this logs [1] and this perhaps co=
-uld
-> be because extra pm counter references being hold.
+>This feels like hacking the driver to please a specific userspace application, 
+>so I'd like to understand better what chromium is doing.
 
-Not sure where this comes from, I'm not aware of drivers doing that with M2=
-M
-instances. Only=20
+Yes that hack is ugly. I have added log print in chromium to see if they
+have set frame_mbs_only_flag to zero and found nothing. This sps->flags is
+initialized 0 by kernel's v4l2 code. I printed all sps values in function
+rkvdec2_h264_validate_sps and they are all initial values when chromiumn
+call VIDIOC_STREAMON at the first time.
 
->=20
-> [2024-06-20 12:32:50] Freeing pipeline ...
->=20
-> and after 5 seconds..
->=20
-> [2024-06-20 12:32:55] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_ON |
-> [2024-06-20 12:32:56] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_OFF
->=20
-> [1]: https://gist.github.com/devarsht/009075d8706001f447733ed859152d90
+Hi Nicolas,
 
-Appart from the 5s being too long, that is expected. If it fails after that=
-,
-this is a bug, we we should hold on merging this until the problem has been
-resolved.
+On Thu, 20 Jun 2024 11:03:54 -0400, Nicolas Dufresne wrote:
 
-Imagine that userspace is going gapless playback, if you have a lets say 30=
-ms on
-forced suspend cycle due to close/open of the decoder instance, it won't
-actually endup gapless. The delay will ensure that we only suspend when nee=
-ded.
+>This falls short of a specification to support the uninitialized usage by
+>Chromium. That being said, we do make an effort to try and have a valid default
+>SPS control and OUTPUT format combination. So my suggestion would be to set
+>V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY in the default compound control init. This
+>way, 0x0 get translate to 16x16 instead of 16x32, thus will work with more
+>drivers.
 
-There is other changes I have asked in this series, since we always have th=
-e
-case where userspace just pause on streaming, and we want that prolonged pa=
-used
-lead to suspend. Hopefully this has been strongly tested and is not just ad=
-ded
-for "completeness".
+Yeah that's the root cause. Vaule of sps->flags is initialized to 0 along
+with pic_width_in_mbs_minus1 and pic_height_in_map_units_minus1, so this
+check would fall with minimal decoder size 16x16.
 
-Its important to note that has a reviewer only, my time is limited, and I
-completely rely on the author judgment of delay tuning and actual testing.
+>Chromium these days is not being tested on anything else then MTK, which has a
+>64x64 minimum size, this is why they never get into this issue. This driver
+>validation is entirely correct. Removing in some cases is unsafe, it would need
+>to be replaced with STREAMON only validation of the CAPTURE sizes (which
+>currently is validate by implied propagation of valid SPS/OUTPUT).
+>
+>**not even compiled tested, just to illustrate**
+>
+>diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-
+>core/v4l2-ctrls-core.c
+>index c4d995f32191..a55e165ea9c3 100644
+>--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+>+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+>@@ -111,6 +111,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl,
+>u32 idx,
+>        struct v4l2_ctrl_vp9_frame *p_vp9_frame;
+>        struct v4l2_ctrl_fwht_params *p_fwht_params;
+>        struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
+>+       struct v4l2_ctrl_h264_sps *p_h264_sps;
+>        struct v4l2_ctrl_av1_sequence *p_av1_sequence;
+>        void *p = ptr.p + idx * ctrl->elem_size;
+> 
+>@@ -179,6 +180,18 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl,
+>u32 idx,
+>                 */
+>                memset(p_h264_scaling_matrix, 16,
+>sizeof(*p_h264_scaling_matrix));
+>                break;
+>+       case V4L2_CTRL_TYPE_H264_SPS:
+>+               p_h264_sps = p;
+>+               /*
+>+                * Without V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY,
+>+                * frame_mbs_only_flag set to 0 will translate to a miniumum
+>+                * height of 32 (see H.264 specification 7-8). Some driver may
+>+                * have a minimum size lower then 32, which would fail
+>+                * validation with the SPS value. Set this flag, so that there
+>+                * is now doubling in the height, allowing a valid default.
+>+                */
+>+               p_h264_sps->flags = V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY;
+>+               break;
+>        }
+> }
+>
+>Nicolas
 
-Nicolas
+This patch makes sense and I just confirmed that it works with chromium.
+Thank you very much!
 
->=20
-> Regards
-> Devarsh
-
+Best regards,
+Jianfeng
