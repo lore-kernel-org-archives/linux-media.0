@@ -1,121 +1,139 @@
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC251AD499;
-	Thu, 20 Jun 2024 14:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EAA1AD4B2;
+	Thu, 20 Jun 2024 14:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718893241; cv=none; b=mEOT+nC5Z+YstlIWHDehqUhAIuT31SiCOYU9Ra4WBdqCpoXbWYOSItkMLHlwj9Et5xHSB93SSz3/Xky7KFJZ6Fkfd+z9MNzAibJdh/9VYr5Q+LS54gAWl56pNWXQoSnly2UqSG41OzQfQDoRSCdDVA/+HFO+vGzeDO2BURzSFIE=
+	t=1718893570; cv=none; b=ibddsNpZxYEYrFha3AMqVSZY1+yK5yf6Rjns9duTQEmuUNVWgEAMgbrocKlRV/rgA77Zq6818JgWYQ5Ej/yFMvjnohmdKvv3erlXB0AwZGbL1aR/0rv918Ko2CiD08H6W65soKhJ9LfPl3noGt6I8vEaf4Zj/0DRqCHn3yo2Rvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718893241; c=relaxed/simple;
-	bh=H3l1v9yeYyPj1A0lN+6W/nwjuWXv/WE2qcLC1YwJUvQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EWWict+/PNCmWPcGLOh0w4AqEVXhl5gYfHpKRCbX46PtEgOqvkb60wGmn22fk5Yvc5FxoAH99EG/04+FA4sDgmfMOX4fL0IJ9tsOddGUtWH+SQFhNj17OC3Ahxq5l/vrQOjpV2gnrlc4JDvaLbAimc42CSLkMTbfAvf9VsW9Xjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rtj5r0ig; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1718893570; c=relaxed/simple;
+	bh=0/FfAt3cSYRx0NHA0nqVIaLGkcN+3itJkOw3CRTTXcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FHmL92uY7Mrmd0w4LObZLhge7lclMb8Q7YvrU227zF4CikWgAhvkDAYpxXGmMavE7yHJda5Pmt+sQ4K9IeztSrH+h7yN7fh7QPDvlfhBdR7YGqGialjSQpkjWI5DxkI4OXQdpeT3Rv33fJlHr0Mchi8XhLgG1+7IhB51SPD17VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=3av3fyJ8; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rtj5r0ig"
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45KEKJrU104681;
-	Thu, 20 Jun 2024 09:20:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718893219;
-	bh=ymReCO7N2ADiyVC3g1gB0UJoYCRDko7LaKWU+9edZ0E=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=rtj5r0igmn7EeYVH2JH/xAicz3ZwzuSAfwQhQROXR0PvnYD4K4kU6VomIRIHt373N
-	 vuuRmidZ3cC/OmwEwJhbuT1h37ya7YPCIrz34BhhChWOc8UGe7Yp/dnJlVo1Rdvk8Z
-	 RXb1jinQjdCwpgFkiWVbWwmg/BOYSRwz7DX9eZlI=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45KEKJmC097716
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 20 Jun 2024 09:20:19 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 20
- Jun 2024 09:20:19 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 20 Jun 2024 09:20:19 -0500
-Received: from [172.24.227.193] (devarsht.dhcp.ti.com [172.24.227.193] (may be forged))
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45KEKEpK092433;
-	Thu, 20 Jun 2024 09:20:15 -0500
-Message-ID: <e901967f-59df-f4b0-de51-61e542c04161@ti.com>
-Date: Thu, 20 Jun 2024 19:50:14 +0530
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3av3fyJ8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1718893567;
+	bh=0/FfAt3cSYRx0NHA0nqVIaLGkcN+3itJkOw3CRTTXcw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=3av3fyJ8qpK83vb7XS+AGaXwQBHXIG10nU980ofHt7F9LVF2Hy6yHyhJzZLnGFwEM
+	 8n8PLMhF9+6mD2MItdoiawBvntnqlYBljLsFlu8bznzfo0e2YNr2LRTTQAHby9zSYQ
+	 k5Pn1sWlnPW+VIEGj6CAXgfB73Qy0Lcs6wWiaigCHOqFq+SBz2aulYLVHlY+TVgF/l
+	 Zc6hiPUU6LuGcJh7ABTk4BCEgDGcVBjIYZtF9lDBho9Q9HjnDYxv9iBuXOSD3AMZiI
+	 8Dx4mjz7nT1sXsudtboOi906aNj9X4x8mT20MIhMG+R1DwUSYraFkCb3fOPjeIqPfP
+	 Fj2rfyJthY7JQ==
+Received: from arisu.hitronhub.home (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: detlev)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C90283782159;
+	Thu, 20 Jun 2024 14:26:03 +0000 (UTC)
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Alex Bee <knaerzche@gmail.com>,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-staging@lists.linux.dev,
+	Detlev Casanova <detlev.casanova@collabora.com>
+Subject: [PATCH v3 0/4] media: rockchip: Add rkvdec2 driver
+Date: Thu, 20 Jun 2024 10:19:42 -0400
+Message-ID: <20240620142532.406564-1-detlev.casanova@collabora.com>
+X-Mailer: git-send-email 2.44.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v6 2/4] media: chips-media: wave5: Support runtime
- suspend/resume
-Content-Language: en-US
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "jackson.lee"
-	<jackson.lee@chipsnmedia.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "sebastian.fricke@collabora.com" <sebastian.fricke@collabora.com>
-CC: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        Nas Chung
-	<nas.chung@chipsnmedia.com>,
-        "lafley.kim" <lafley.kim@chipsnmedia.com>,
-        "b-brnich@ti.com" <b-brnich@ti.com>, "Luthra, Jai" <j-luthra@ti.com>,
-        Vibhore
-	<vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
-        Aradhya <a-bhatia1@ti.com>, "Raghavendra, Vignesh" <vigneshr@ti.com>
-References: <20240617104818.221-1-jackson.lee@chipsnmedia.com>
- <20240617104818.221-3-jackson.lee@chipsnmedia.com>
- <6e6f767c-85e9-87f6-394f-440efcc0fd21@ti.com>
- <SE1P216MB13037621438C8CE6142A69A8EDCF2@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
- <SE1P216MB130382374B76CD8BC9FFCFE5EDC82@SE1P216MB1303.KORP216.PROD.OUTLOOK.COM>
- <881dcea1-a592-4506-083a-9d5f3c6a8781@ti.com>
- <b2f7552d37075538e22640f7b42838d29d3f8b3e.camel@collabora.com>
-From: Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <b2f7552d37075538e22640f7b42838d29d3f8b3e.camel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Nicolas,
+Add a rkvdec2 driver for newer video decoder found on rk3588 based SoC.
 
-On 20/06/24 19:35, Nicolas Dufresne wrote:
-> Hi Devarsh,
-> 
-> Le jeudi 20 juin 2024 à 15:05 +0530, Devarsh Thakkar a écrit :
->> In my view the delayed suspend functionality is generally helpful for devices
->> where resume latencies are higher for e.g. this light sensor driver [2] uses
->> it because it takes 250ms to stabilize after resumption and I don't see this
->> being used in codec drivers generally since there is no such large resume
->> latency. Please let me know if I am missing something or there is a strong
->> reason to have delayed suspend for wave5.
-> 
-> It sounds like you did proper scientific testing of the suspend results calls,
-> mind sharing the actual data ?
+It is also found on other hardware like the RK356x, but not tested yet,
+so it will be added later.
 
-Nopes, I did not do that but yes I agree it is good to profile and evaluate
-the trade-off but I am not expecting 250ms kind of latency. I would suggest
-Jackson to do the profiling for the resume latencies.
+Support for yuv 4:2:2 and 10 bits streams will also be added later, when the
+https://lore.kernel.org/linux-media/20240618194647.742037-1-jonas@kwiboo.se
+patch set is merged.
 
-But perhaps a separate issue, I did notice that intention of the patchset was
-to suspend without waiting for the timeout if there is no application having a
-handle to the wave5 device but even if I close the last instance I still see
-the IP stays on for 5seconds as seen in this logs [1] and this perhaps could
-be because extra pm counter references being hold.
+The support for IOMMU will be added later as preliminary tests show that
+the current rockchip iommu driver fails to allocate pages for the video
+decoder iommu.
 
-[2024-06-20 12:32:50] Freeing pipeline ...
+See the second commit message for more details.
 
-and after 5 seconds..
+Changes since v2:
+- doc: Disable resets and sram for other platforms, add maxItems for
+  clocks
+- Fix h264 spec equation number in comment
+- Remove superfluous status field in dtsi
+- Add TODO item for IOMMU
 
-[2024-06-20 12:32:55] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_ON |
-[2024-06-20 12:32:56] |   204     | AM62AX_DEV_CODEC0 | DEVICE_STATE_OFF
+Changes since v1:
+- Add support for RCB in SRAM
+- Move bindings to rockchip,vdec.yaml
+- Add resets bindings
+- Add second core and enable them from dtsi file
+- Only expose one video device to userspace (but don't support multicore yet)
+- Share CABAC table with rkvdec
+- Fix iowrite32 call and add preliminary support for arm
+- Remove unused code
+- Improve registers naming and code style
+- Remove DMA_ATTR_ALLOC_SINGLE_PAGES flag
 
-[1]: https://gist.github.com/devarsht/009075d8706001f447733ed859152d90
+Detlev Casanova (4):
+  media: rockchip: Move H264 CABAC table to header file
+  media: rockchip: Introduce the rkvdec2 driver
+  media: dt-bindings: rockchip: Document RK3588 Video Decoder bindings
+  arm64: dts: rockchip: Add rkvdec2 Video Decoder on rk3588(s)
 
-Regards
-Devarsh
+ .../bindings/media/rockchip,vdec.yaml         |   55 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |   48 +
+ drivers/staging/media/Kconfig                 |    1 +
+ drivers/staging/media/Makefile                |    1 +
+ .../staging/media/rkvdec/rkvdec-h264-cabac.h  |  509 +++++++
+ drivers/staging/media/rkvdec/rkvdec-h264.c    |  500 +------
+ drivers/staging/media/rkvdec2/Kconfig         |   15 +
+ drivers/staging/media/rkvdec2/Makefile        |    3 +
+ drivers/staging/media/rkvdec2/TODO            |    9 +
+ drivers/staging/media/rkvdec2/rkvdec2-h264.c  |  739 ++++++++++
+ drivers/staging/media/rkvdec2/rkvdec2-regs.h  |  345 +++++
+ drivers/staging/media/rkvdec2/rkvdec2.c       | 1253 +++++++++++++++++
+ drivers/staging/media/rkvdec2/rkvdec2.h       |  130 ++
+ 13 files changed, 3109 insertions(+), 499 deletions(-)
+ create mode 100644 drivers/staging/media/rkvdec/rkvdec-h264-cabac.h
+ create mode 100644 drivers/staging/media/rkvdec2/Kconfig
+ create mode 100644 drivers/staging/media/rkvdec2/Makefile
+ create mode 100644 drivers/staging/media/rkvdec2/TODO
+ create mode 100644 drivers/staging/media/rkvdec2/rkvdec2-h264.c
+ create mode 100644 drivers/staging/media/rkvdec2/rkvdec2-regs.h
+ create mode 100644 drivers/staging/media/rkvdec2/rkvdec2.c
+ create mode 100644 drivers/staging/media/rkvdec2/rkvdec2.h
+
+-- 
+2.44.2
+
