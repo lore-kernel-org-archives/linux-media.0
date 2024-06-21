@@ -1,158 +1,163 @@
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2099.outbound.protection.partner.outlook.cn [139.219.146.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4006563A;
-	Fri, 21 Jun 2024 05:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718947627; cv=fail; b=aqZD3M2dRac+UxhDHJXFTRLPAGU4q2olgTTGehuoQVRWgNFhKwuGP8k9GCANLajdw6vrhV5ZQ21AftsKZuLiPIBzBM1uv+DsTg6JxLJk/Rf6+BQmTrTwXo39DdrSiNnGhbK9cIGD9c9E6M/dcG4FEUv8AbvabMYChpeUn86L+/Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718947627; c=relaxed/simple;
-	bh=UK1EjxogC61HDHqypF0xBfHUOj1u2hrFlpRkLhkRxdU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=tbw0u2jbZ0kGnFpDurCjWJZ0rTv0USrRbnpkBcSKCW6LxRaKpqtJLizMgu8PlFD6uZw2Q6RteHXOfN/kXP01TRy5meKHfIaLoTSu0Q/fgoD4XHmaR3uPJixdycaQTR2lkVWIgtQvKbfae6062KYO8H3dHp3tQb9J6PXm1fufbU4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xqh00x4sxyeGRn4zkkn5DkniGbtolFcU69foBYsqfi6r/v8fLjDM/Vah3lfjnxxEB4cdShEk8X/8ObGc7xuXfLtW0g8qw/00sfA0MITYcex5bf0WzhJ9P2rzVp6ohmrhYxo5Mts7BZxsXcbIrimW5Yal5Q+I1VUPy02Y2lSCQGGstRnP6ovQRw/pE+rTvnst9GrQLUsy6+uhxDYEK3G5EnN7EcxH2RXoEYYJiWf5eqX5FV07LEwWe+nS+ccwXfBNSEgyqSh3aSVvgPPUxKU3xzibEQwJuoO5qwk/wF53step+jk2rO0MIPQsupMmsPt0dzvPvLe7FK94tRMal0cASA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UK1EjxogC61HDHqypF0xBfHUOj1u2hrFlpRkLhkRxdU=;
- b=SfmtVIPS7W5yuoXIpYH3ERPcphlKaPsciXeuPCa5QHKo+Hrqvc3iZURrmqZePy3rSk415iuYJ+BDlW1+Uh1U9tGzqZ0ZdcH7UGzjY0LmnanL/JtFrOJNlur5HnPybytks9keLUvGm/gv2KJVVbHQnyGXqxIFGnF6Tn1aFqU6j53YI5WdIi4cHXxzRiNTAeAeeYcY8/mirhTQqmq2MdBWo/d0vNqcVQxNz8vQ3gm6dvQ9HDLVi6Ix0i6q6uUCST7cn9K/d4hfLAra5QvUn2BexBnh7QPl9/4fz0Uie3abip1evCFeDHSIxPKG1XxYSVOVyBi1g4zj1AbKzC09CRc+GQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9) by ZQ0PR01MB1158.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.33; Fri, 21 Jun
- 2024 01:55:14 +0000
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- ([fe80::4d66:ac5e:3903:cdf5]) by
- ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::4d66:ac5e:3903:cdf5%4])
- with mapi id 15.20.7656.033; Fri, 21 Jun 2024 01:55:14 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>, Ming Qian <ming.qian@nxp.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Nicolas Dufresne
-	<nicolas.dufresne@collabora.com>, Benjamin Gaignard
-	<benjamin.gaignard@collabora.com>, Tomi Valkeinen
-	<tomi.valkeinen+renesas@ideasonboard.com>, Mingjia Zhang
-	<mingjia.zhang@mediatek.com>, Marvin Lin <milkfafa@gmail.com>
-CC: Jack Zhu <jack.zhu@starfivetech.com>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-staging@lists.linux.dev"
-	<linux-staging@lists.linux.dev>
-Subject:
- =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggdjQgMTEvMTNdIHN0YWdpbmc6IG1lZGlhOiBzdGFy?=
- =?utf-8?Q?five:_Add_ISP_params_video_device?=
-Thread-Topic: [PATCH v4 11/13] staging: media: starfive: Add ISP params video
- device
-Thread-Index: AQHahOSdWqK6kryYfkire1/jsFmExrHRC1+AgADlDnA=
-Date: Fri, 21 Jun 2024 01:55:13 +0000
-Message-ID:
- <ZQ0PR01MB130298ADCD73E4E0E05230C1F2C92@ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn>
-References: <20240402100011.13480-1-changhuang.liang@starfivetech.com>
- <20240402100011.13480-12-changhuang.liang@starfivetech.com>
- <d9c511e7-cf5b-449a-8116-bead72580b6d@xs4all.nl>
-In-Reply-To: <d9c511e7-cf5b-449a-8116-bead72580b6d@xs4all.nl>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB1158:EE_
-x-ms-office365-filtering-correlation-id: c664d278-e176-40c5-2d85-08dc9195311d
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam:
- BCL:0;ARA:13230037|7416011|1800799021|366013|41320700010|38070700015|921017;
-x-microsoft-antispam-message-info:
- brZiZwbu9XsBN4LfHuytsEewmczBPCBE0U/r7eBMOxRd8rMqsU3eog7Flqfay021bn3itMU3Rf8JAzWN0wgl076L+Wp+ExfBGxUJ/Rent9JUIAbxT0y2DpW7tX96fmDmdGokwnyZ3cUvqVzRFsWv/kxOf/dBX3zgUVoxWWBPOY655I0VvvK/kSkH8pPge7FTIbX3F+gLvKex9sdZS7Xg8XUvI/hwH46nP/veoKqAIMuzU4nwotz9Wc1g2K/xcJsQSz3YoIqCWNX2zcxlrmiOa05l4IYygvIaibrBEXiF8lBhVN1UHftRzyru7K6SL1vlDNvQvxwFaK/3tMGdUkmQxwvZ4f43zxVuRd89MDMWB85973qIKmqczMgTUfyg60Ua2+mWurDh0sRj5MblMt00ZJ6lpb0ffW9W13MKPkHigMfGtkxeTzTSmRP6mM9RpWYNua2kYdTJiaXCFHkbiL2e347OIHtm7yFXJy5wwD9PpekIS2K/4xZVrAzeS0exnzS0+JrStSpIS2698buWbaD3oalpQK/SAW649w7gxJOudsMUu0uiU6ZFUWtMl8Pc7Q0JPhIIALmz6+W+FXHk+7xMg/q0fFw50QqMpaxn7zEBeUKGmPAvlF7r7MtlMTdkgPqCoFbhFP9FI/iGyN0yGH8CKg==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230037)(7416011)(1800799021)(366013)(41320700010)(38070700015)(921017);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QlRvTFZzVzYvVEtuNXlDQ3dVSmZUTEkvcjVqTUFuZS8zbC9DeEpjYVhRRnYv?=
- =?utf-8?B?aDVzaGNrbFBlZHpSTUg2ZlgyYlVQaGppRURDTGwzeXNkMjhaOXNJRlYvcE5C?=
- =?utf-8?B?WTh0UFlYdVhHVnQyWXAzYUh1ZkNBZnYvM0lNblFlMERXVkJYUnRXU3FDQktP?=
- =?utf-8?B?TlVuV0dlNGFsTWVOK2kvSW9oWW9obE5uOEkvOTF0YzVkK2Z5dzNmNXpnZzQ5?=
- =?utf-8?B?VldvczdjWS9JZ1p4bWJmSXI2aE50RmFDTndKMThxN3VkdVZBSWdaZTRsMVdL?=
- =?utf-8?B?Z0lvR2JMNnRQc0xzOGJ3TVEvTGdBcEdQNktNNmlDUXVONmlSL3pwQnBlNEI4?=
- =?utf-8?B?eDRYQXRIeDJ6YlQ1aE0vODlXaytiTVpRSjhvb1F5RndpK2MrelRrVE80bk8z?=
- =?utf-8?B?c2JWNW5KVFV6S21VYWRHc3hpSTIvcFRxNWpqWEgvWFlXMXNKYkcrRjdqSis1?=
- =?utf-8?B?WDNxZ25iMmZXamlVcDFjVzg4bHpRM3RaRkRiWk85cVN2U0t6ZktqTk01MFly?=
- =?utf-8?B?R1I5UG9jK1dzNjY1VlMvWHR3UzQ3bmtnV3BsQW5TQlNVN2dGT2gzbUs4b1BT?=
- =?utf-8?B?cFRjN0UzbGNMUE1qNkpKMmRGRHR2Vk03OU9LT282T2pyOFZYWGdKZWtBc0gr?=
- =?utf-8?B?ZHp4aW5zNG5BS25XZUZpak9DQmY0aTgyZkdLVEdBbTVWd2ZrRk5XOXU4Y3BN?=
- =?utf-8?B?b1F5MTJtNGtaenlHTzM2UGNWb1czR3JYUGllaGVqN1hEbWNucVBtY0srNndC?=
- =?utf-8?B?WWVQaU16dDhQbjZ4Q2xkMTdhVFMwVlpPUEpHNWJhRjVmN3RPdjZPWE90SExJ?=
- =?utf-8?B?UzF5MElxYmoxUm9zZ0tDYlJNaktqMWpuQ3NxR0g2K1ZHeWVhbE1uTjh2ZHVT?=
- =?utf-8?B?K3ZaNlF5MStVaDFRdjM2TjZvcVBrRHlWMkMrT2djTXdwUnFXL09Ud3drMzVp?=
- =?utf-8?B?cENPZXo4NEpqSGlrTFRiZmEvUXFBWmdlSTJ3OVlVdEFaRkZEM2VYRlZPTXRk?=
- =?utf-8?B?Ry9iWjJnSGQ4QjJuZXdhZ05nTEFFb0t0T1EyUWlCOEErbEY3L212UklLZGpW?=
- =?utf-8?B?cWFQMHE1QnZrSlJUcWVwSmxCcjJFRjBhWHU4bWl6bmFia2ZOQjAyajlmZTMv?=
- =?utf-8?B?WHg2MHFUUis4aEdUQnRmOHRmMVFqQ3hQN3RhdnVBWmFEQW0wbC8zUFFKVEpN?=
- =?utf-8?B?WUZVRFZuNG9BK2wrVUx4UWxQaDI0TVBWZmlOcHJETG5lN1JPVU55QXQ2ZHo0?=
- =?utf-8?B?UWVnVTRUYlVxT3dvOE5aNzBsd3ZFdUJkMzNMaVZiemxwaU9oWHVZeXZHQjNS?=
- =?utf-8?B?UGtPVFpDZXNacWJrSysyQ0ljc21FeUFpL2JIeFBLamdJMEtlYjJOcUt3VGpm?=
- =?utf-8?B?ampNVmNqeWFZWWVJRU0wVGFTM2xOZXZBUEg0WlZQMkRibjF3MHU0azBvbXRT?=
- =?utf-8?B?WmNTbFlkMUc2Q2IwNXdBVHQwaGdQbzZHRzk1R2tmK1BxNk9WVzFlNFFuaEdF?=
- =?utf-8?B?Y3NrTThnQXlJVFlGYXhLYmd5d1ovSU1HTk9WTHFEZWVTZTlHaWs3Z290MERX?=
- =?utf-8?B?TDkxaC9KRmN0a2RuZmd4cHkvOS8yRkdNWlY4aTV3Q1MyeWg5QkpTYXZKKzY0?=
- =?utf-8?B?aGhBWXoyc1lraExrNnhrRDRSNzk3TC8wZ2ptUVpVcDFWMkJFOVkvMlA0TEZa?=
- =?utf-8?B?RkNJQ2Y0NkF1QTV3Q2JzeGE2MkdHUTRaaGJiUzUrbTZVSTZzQ3liREJQWElB?=
- =?utf-8?B?M3lnWnpBMVBLK2s0cVlmcGVQM2lOTHBDSzZKcm16Sk0wYWUzTDVIbDJHVjhL?=
- =?utf-8?B?Njg5VU5tdVhSZXkxS0I5Q3E1RmlEYkEzZ2dZZEVXZlJtZnY1WHhQeVBEeHRF?=
- =?utf-8?B?ZHoxckdxVzVSeU94UFptWnJiWjBvWFRqWU1IQUkxVUtkTnk4TTJyV0o2d0sz?=
- =?utf-8?B?K1ZWMUZINUdUdkhrTUhUS3gwN3drYU85bXRKSjNEUC9tZWFBSEtrQWlIWlJ2?=
- =?utf-8?B?Ui90ckhHZ05tUnNUeEF1TFRyVnRvaUdjYjExZGhRSkgwcWJ0Qm9FQzhGRll4?=
- =?utf-8?B?NjNBRVh6ZzZtTnR5U3RSbG5jME1salZhUDVFa3hIa0gwbXpPNVZiZUhXV1FI?=
- =?utf-8?B?OHZqOFBxZ0RrZkYvWmIwUExFOExzNkYrL3BSZElKbVU1RkQzMWRFeUQvdFVN?=
- =?utf-8?B?SHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00583168C17;
+	Fri, 21 Jun 2024 06:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718950238; cv=none; b=lgt5kboeDImTOghqWsbjTkEpOCUOLyq9JcqWf+9zA+5+nOaFQfPAGGPc+3y9eh6pP5oJwLD3J+8CPnJ8fcoFpUGy5JBER4FOgUJ2F7JCU9Qs3axiQDw/e+knAYxShQiQxCFU1Gsb+AaVlKnawigNkiIzkc6ikiRNohyuwe3kXUU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718950238; c=relaxed/simple;
+	bh=vanRCVs7Il0N1bVX0/dHBOpckIxMz3F6/5aZRbOXc3M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gjQPF79QalDQvdInnmd40943iu9RJgui4Ie2SeN6bQHDdYjWAk9pBnoBP5j0cyLtqVDw5ZA/l9duaDjXDFgIVBlfBrqTAHJIaO7+pOr6qeBNDUgo0r8h3zhtvFQDPE3XrDSTFORBtBnTaNsnPNqYCMFQ6bpSJGvdN0A6DgCGqaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SgHVQoco; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SgHVQoco"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C4CC2BBFC;
+	Fri, 21 Jun 2024 06:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718950237;
+	bh=vanRCVs7Il0N1bVX0/dHBOpckIxMz3F6/5aZRbOXc3M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SgHVQocoCiIw1OHhZ5VnmaFBHjno76cQpn3hOUw3agt9k/yNyFP4X20lAMb/XwW+r
+	 PsNJ3RRtPQHqHTvq+AnyiIoL6sByOVlWJjEECnAvn8h/skjp4fmp5rpvxXmasyXR5p
+	 M3y1GUkH4gZl9esHKaTyI6x8RL2rIzUuKPMns1GfxHUcE1JEwDpKQQnBUzQjiFmznV
+	 DgsmS8eM76NSSRZC046k0iLRArOqBJ3u12icEapzxoaE21/nPncY7XAW0EtDLlq9om
+	 3B8yUQ2w48nD/WWOjS7QdOPDHrDixtUfV5qGeSebzGUYwkALUXJL4DyImgOpaCrpoO
+	 4lWJR1dUvEW/A==
+Message-ID: <3acc5a0a-260a-4958-aab2-1d473c835a1b@kernel.org>
+Date: Fri, 21 Jun 2024 08:10:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: c664d278-e176-40c5-2d85-08dc9195311d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2024 01:55:13.9648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gmEchP/YDac5Y5ThI6Gj8Bcz9KZzFK+JBwa4WIn/JePWAHGpRkeiw8LehTr0WNBNe9Q6aSWF+mNwr4nsy1V43jiopYc9VE3wQ79XzXomIzQoUytvir+jTEMsFkURBPzH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1158
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] media: rockchip: Introduce the rkvdec2 driver
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Detlev Casanova <detlev.casanova@collabora.com>,
+ linux-kernel@vger.kernel.org, Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dragan Simic <dsimic@manjaro.org>, Diederik de Haas <didi.debian@cknow.org>,
+ Andy Yan <andy.yan@rock-chips.com>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Alex Bee <knaerzche@gmail.com>,
+ linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-staging@lists.linux.dev
+References: <20240619150029.59730-1-detlev.casanova@collabora.com>
+ <20240619150029.59730-3-detlev.casanova@collabora.com>
+ <dc232a01-1495-42ff-ad2a-5a0aa780b60c@kernel.org>
+ <klzru2ak3yxccywqr57bslyctqtmrl2d3eghgv5letp7jkel6s@rlupljmxfijg>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <klzru2ak3yxccywqr57bslyctqtmrl2d3eghgv5letp7jkel6s@rlupljmxfijg>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGksIEhhbnMNCg0KVGhhbmtzIGZvciB5b3VyIGNvbW1lbnRzLg0KDQpbLi4uXQ0KPiA+ICtzdGF0
-aWMgaW50IHN0Zl9pc3BfcGFyYW1zX3F1ZXVlX3NldHVwKHN0cnVjdCB2YjJfcXVldWUgKnEsDQo+
-ID4gKwkJCQkgICAgICB1bnNpZ25lZCBpbnQgKm51bV9idWZmZXJzLA0KPiA+ICsJCQkJICAgICAg
-dW5zaWduZWQgaW50ICpudW1fcGxhbmVzLA0KPiA+ICsJCQkJICAgICAgdW5zaWduZWQgaW50IHNp
-emVzW10sDQo+ID4gKwkJCQkgICAgICBzdHJ1Y3QgZGV2aWNlICphbGxvY19kZXZzW10pIHsNCj4g
-DQo+IEFkZDoNCj4gDQo+ICAgICAgICAgaWYgKCpucGxhbmVzKQ0KPiAgICAgICAgICAgICAgICAg
-cmV0dXJuIHNpemVzWzBdIDwgc2l6ZW9mKHN0cnVjdCBqaDcxMTBfaXNwX3BhcmFtc19idWZmZXIg
-Pw0KPiAtRUlOVkFMIDogMDsNCj4gDQoNCldpbGwgYWRkIHRoaXMuDQoNCj4gPiArCSpudW1fcGxh
-bmVzID0gMTsNCj4gPiArCXNpemVzWzBdID0gc2l6ZW9mKHN0cnVjdCBqaDcxMTBfaXNwX3BhcmFt
-c19idWZmZXIpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KWy4uLl0N
-Cj4gPiArc3RhdGljIGNvbnN0IHN0cnVjdCB2NGwyX2ZpbGVfb3BlcmF0aW9ucyBzdGZfaXNwX3Bh
-cmFtc19mb3BzID0gew0KPiA+ICsJLm93bmVyICAgICAgICAgID0gVEhJU19NT0RVTEUsDQo+ID4g
-KwkudW5sb2NrZWRfaW9jdGwgPSB2aWRlb19pb2N0bDIsDQo+ID4gKwkub3BlbiAgICAgICAgICAg
-PSB2NGwyX2ZoX29wZW4sDQo+ID4gKwkucmVsZWFzZSAgICAgICAgPSB2YjJfZm9wX3JlbGVhc2Us
-DQo+ID4gKwkucG9sbCAgICAgICAgICAgPSB2YjJfZm9wX3BvbGwsDQo+ID4gKwkubW1hcCAgICAg
-ICAgICAgPSB2YjJfZm9wX21tYXAsDQo+ID4gKwkucmVhZCAgICAgICAgICAgPSB2YjJfZm9wX3Jl
-YWQsDQo+IA0KPiBUaGlzIGlzbid0IG5lZWRlZCBzaW5jZSBubyByZWFkIHN1cHBvcnQgaXMgaW5k
-aWNhdGVkIGluIHEtPmlvX21vZGVzLg0KPiANCg0KV2lsIGRyb3AgcmVhZCBzdXBwb3J0Lg0KDQo+
-IE5vdGU6IEkgc2VlIHRoYXQgdGhpcyBpcyBhbHNvIHNldCBpbiBzdGZfdmlkX2ZvcHMsIGJ1dCBp
-dCBjYW4gYmUgZHJvcHBlZCB0aGVyZSBhcw0KPiB3ZWxsLiBQbGVhc2UgbWFrZSBhIHNlcGFyYXRl
-IHBhdGNoIGZvciB0aGF0IGNoYW5nZS4NCj4gDQoNCldpbGwgYWRkIGEgbmV3IHBhdGNoIGRyb3Ag
-cmVhZCBzdXBwb3J0IGluIHN0Zl92aWRfZm9wcy4NCg0KUmVnYXJkcywNCkNoYW5naHVhbmcNCg==
+On 20/06/2024 15:41, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Thu, Jun 20, 2024 at 12:30:00PM GMT, Krzysztof Kozlowski wrote:
+>> On 19/06/2024 16:57, Detlev Casanova wrote:
+>>> +static const char * const rkvdec2_clk_names[] = {
+>>> +	"axi",
+>>> +	"ahb",
+>>> +	"core",
+>>> +	"cabac",
+>>> +	"hevc_cabac",
+>>> +};
+>>> +
+>>> +/*
+>>> + * Some SoCs, like RK3588 have multiple identical vdpu34x cores, but the
+>>> + * kernel is currently missing support for multi-core handling. Exposing
+>>> + * separate devices for each core to userspace is bad, since that does
+>>> + * not allow scheduling tasks properly (and creates ABI). With this workaround
+>>> + * the driver will only probe for the first core and early exit for the other
+>>> + * cores. Once the driver gains multi-core support, the same technique
+>>> + * for detecting the main core can be used to cluster all cores together.
+>>> + */
+>>> +static int rkvdec2_disable_multicore(struct rkvdec2_dev *rkvdec)
+>>> +{
+>>> +	const char *compatible;
+>>> +	struct device_node *node;
+>>> +	int ret;
+>>> +
+>>> +	/* Intentionally ignores the fallback strings */
+>>> +	ret = of_property_read_string(rkvdec->dev->of_node, "compatible", &compatible);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	/* first compatible node found from the root node is considered the main core */
+>>
+>> So you rely on order of nodes? Before you claim "identical cores", but
+>> now "main core" suggests one is different than others.
+> 
+> Heh, I wrote that comment for Hantro. By main core I was referencing
+> the software side of things. With a number of equal cores and no DT
+> node describing a cluster (from HW point of view it's just equal
+> cores), they somehow need to be combined into a single entity to allow
+> scheduling work between them. This solves the issue by making one of
+> the devices the "main" device. From the HW point it's exactly the same
+> as the others. The function could also use the last core or the second
+> one. It does not matter as long as there is only one "main" core.
+
+Sounds good. Maybe comment could be a bit extended with this
+explanation, so the term "main" is clarified.
+
+Best regards,
+Krzysztof
+
