@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD90416EB6F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B037B16E89E;
 	Fri, 21 Jun 2024 09:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718962857; cv=none; b=mmuxzhHWbXwekgkbbdu6fChjgcJW1bJH5+2sfCAwqXg12u+8TY5mneq2Kd6p+8/mt6SlPEX+KtUU4x8T05Mxf3c1cGAPDdywMQ21c2av4tK0Gfk8JOcKAJcP56BMJG+1eW1cRZkH2IjRCLtIOJNq3wwoPb0mSbeMUWqlmwobd5Q=
+	t=1718962857; cv=none; b=Iiz4ar/Eh59FyIaHvwQNMa36IddVXDkDN5VVseA/UI0Xx4mHHN1anjhqs+1kw7gKr/eh8KpZuSWoHFIezP114t/3gXpvPCuanFkqB+pbY/cENIIY2kg8b7OmV55Py4g6BV0OQrtXGhg5SJUEK/hRC8fAMrMhiKHY1Mm/5YpFKIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718962857; c=relaxed/simple;
-	bh=y0RoOWqrDNtRx3/l9S/QfF0yJ9pb9mKrBdIdyjxlfG4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PFXJe9TBLrBHsQr9Q0DbsOvEq9LbuLw9JO141SBFDCXCjmnQH5LZI1SNN27PJRmD3hdxmNNGaJfW7NoCROGwqnHG/YIc1p+k2I993K4sYRyX601a8mE0VqECEl/QVxIkmFQvwLwdA/snu3J98K7ph4CWPCJQuMc/JZ4oDgG68Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPB9zuMt; arc=none smtp.client-ip=10.30.226.201
+	bh=ZVXJbWByUzIKTOC7VscBLLwylCglSs2J2Rvmr2V8T5A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hQeVng7Fl/n9b3qv72QZre2ixUY9HU0GrdVpXw5nc+f8wo8MAVIw7DlRfsu2Yo5hFIYot74ab3U3Ltxj0oD1YHN9otuM1Fd8pdC4kt0vt7iYS/hvH13SP/rqgEqI87rLXv3Mi925Qlqo9rEkRGLyOE4M3dhpwj6fVjE6217ujV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9a9Ifh+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPB9zuMt"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71878C4AF11;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9a9Ifh+"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C26FC2BBFC;
 	Fri, 21 Jun 2024 09:40:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718962857;
-	bh=y0RoOWqrDNtRx3/l9S/QfF0yJ9pb9mKrBdIdyjxlfG4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LPB9zuMtIL4KWLHx/bBJMGmXBkmbTCL10YVGqmjS5cqmuXHK9Lh444pEijkmn9dhO
-	 zSiB5aEp1GjH1SEifwzO4AtREq+2fJIJR5pMLLp9++AloSnOUpT7oiiakNmkN3byQL
-	 Xamwx6wuaFQFWTUW3mR8uzL9vMBTibF/OnMnKiqqBy+q7BtoaBoWi0eprlN3kDvVUd
-	 /h5P0tOyTVcsFPhMvy3NXnKZhbWfXlLZlsZpMncPejrRJ9GC10b8eQxoTa5PzMwALp
-	 cjzqoo86trOmAoHjWIcXIAaRC4ldYK/RbkJnDSIQf2Yfzxc94E7OJTe+jkJzUusUcW
-	 /27HDj48UAdpA==
+	bh=ZVXJbWByUzIKTOC7VscBLLwylCglSs2J2Rvmr2V8T5A=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=t9a9Ifh+bD9lt8eMom0eEB7hbcAsRYIdOdBb9O058tDO7Kmzvxo9w6yK/fo1bvOJW
+	 LIb+qkkPJn/7cO0b4W979WDXZj8MSBM7H1bwcNK/WVzwuxEvo8NgX2FUIEgWwxF+ow
+	 43cPVWG7LfnCJ9llkHa9chOZE5HElIESUn4H1MBzORC1TKBtQv8u5xHQr3cB0rpKfw
+	 RatY5r0g62zA7Dk4GMtJMCioqLBtsxRthEv8HJ4a+8+f9LDvgp6jQce1V3QyGaZMGC
+	 7RUGohWUHmODpT/Dxv+l5onru5+eaOJfyAL64TcbuUZMBlFNCO+yjUobb66Vs7Dfl9
+	 UWnSKDhToQJmg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61AA8C2BA1A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28CDEC2BA1A;
 	Fri, 21 Jun 2024 09:40:57 +0000 (UTC)
 From: George Chan via B4 Relay <devnull+gchan9527.gmail.com@kernel.org>
-Date: Fri, 21 Jun 2024 17:40:56 +0800
-Subject: [PATCH 4/6] media: qcom: camss: Add sc7180 support
+Subject: [PATCH 0/6] media: qcom: camss: Add sc7180 support
+Date: Fri, 21 Jun 2024 17:40:52 +0800
+Message-Id: <20240621-b4-sc7180-camss-v1-0-14937929f30e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,9 +40,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-b4-sc7180-camss-v1-4-14937929f30e@gmail.com>
-References: <20240621-b4-sc7180-camss-v1-0-14937929f30e@gmail.com>
-In-Reply-To: <20240621-b4-sc7180-camss-v1-0-14937929f30e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKRKdWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDMyND3SQT3eJkc0MLA93kxNziYt3klJRksyQzg0TLJBMloK6CotS0zAq
+ widGxtbUA0tGVeGEAAAA=
 To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -54,11 +54,11 @@ Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  George Chan <gchan9527@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718962855; l=2308;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718962855; l=1917;
  i=gchan9527@gmail.com; s=20240621; h=from:subject:message-id;
- bh=YnPxfplUpyI7adL5KPtpIXi5NQhvsVScDtSlkhPHhXI=;
- b=6N0QHkttcoYSS5SQ1fZKQ/9yXpFF+i4jfnyxFZ/YNyQ7zNoXbFOCVAxMHQm5FCGJtRgJI6iC/
- LYsmZIaJH8pBbe6sVnNlv7yrOh1pHN56UuFSW8GTBg9UZ33wu+ZamU6
+ bh=ZVXJbWByUzIKTOC7VscBLLwylCglSs2J2Rvmr2V8T5A=;
+ b=BnsW7oejRFpwuGmmirMaAx9oEYiaBpv3Qz/M2DX4n3OI8yXFjAvAEpaiy89G07uhalR+jN7Gy
+ AaiYtcEU7BxBFzn//FTtSNerwZ79KNwxLH9n3Zcgy1FR9/ZUjzk6zkA
 X-Developer-Key: i=gchan9527@gmail.com; a=ed25519;
  pk=Ac2fkTqgUBlj2sns9hRIWJTYhWHO1BsmHbdBb5UpUUY=
 X-Endpoint-Received: by B4 Relay for gchan9527@gmail.com/20240621 with
@@ -66,71 +66,54 @@ X-Endpoint-Received: by B4 Relay for gchan9527@gmail.com/20240621 with
 X-Original-From: George Chan <gchan9527@gmail.com>
 Reply-To: gchan9527@gmail.com
 
-From: George Chan <gchan9527@gmail.com>
+SM7125 is the SoC found in the Xiaomi Redmi Note 9 Pro(joyeuse) cellphone.
+This series adds support to bring up the CSIPHY, CSID, VFE/RDI interfaces.
 
-Add in functional logic throughout the code to support the sc7180.
+Since SM7125 is a low-speed variant of SC7180, SC7180 testers please
+take a look and have a test as well.
+
+sc7180 provides
+
+- 2 x VFE
+- 1 x VFE Lite
+- 2 x CSID
+- 1 x CSID Lite
+- 4 x CSI PHY
+
+The sc7180-camss binding should be comaptible with sdm845 yaml.
+I've copied a new yaml from sdm845-camss.yaml, strip all _src clk and leave
+original maintainer. If this is not desirable then i can add binding to
+existing sdm845 yaml instead.
+
+In addition, a bootable tree of sm7125/joyeuse is availble at:
+https://github.com/99degree/linux/tree/camss
+  
 
 Signed-off-by: George Chan <gchan9527@gmail.com>
 ---
- drivers/media/platform/qcom/camss/camss-csiphy.c | 1 +
- drivers/media/platform/qcom/camss/camss-vfe.c    | 3 +++
- drivers/media/platform/qcom/camss/camss-video.c  | 1 +
- 3 files changed, 5 insertions(+)
+George Chan (6):
+      media: dt-bindings: media: camss: Add qcom,sc7180-camss binding
+      media: qcom: camss: Add CAMSS_SC7180 enum
+      media: qcom: camss: csiphy-3ph: Add Gen2 v1.2.2 two-phase MIPI CSI-2 DPHY init
+      media: qcom: camss: Add sc7180 support
+      media: qcom: camss: Add sc7180 resources
+      [RFT]arm64: dts: qcom: sc7180: Add support for camss subsys
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
-index 45b3a8e5dea4..1fb08b5ee01b 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
-@@ -577,6 +577,7 @@ int msm_csiphy_subdev_init(struct camss *camss,
- 		csiphy->nformats = ARRAY_SIZE(csiphy_formats_8x96);
- 		break;
- 	case CAMSS_845:
-+	case CAMSS_7180:
- 	case CAMSS_8250:
- 	case CAMSS_8280XP:
- 		csiphy->formats = csiphy_formats_sdm845;
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index d875237cf244..05fa1adc1661 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -224,6 +224,7 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
- 	case CAMSS_8x96:
- 	case CAMSS_660:
- 	case CAMSS_845:
-+	case CAMSS_7180:
- 	case CAMSS_8250:
- 	case CAMSS_8280XP:
- 		switch (sink_code) {
-@@ -1518,6 +1519,7 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
- 			}
- 			break;
- 		case CAMSS_845:
-+		case CAMSS_7180:
- 		case CAMSS_8250:
- 		case CAMSS_8280XP:
- 			l->formats = formats_rdi_845;
-@@ -1603,6 +1605,7 @@ static int vfe_bpl_align(struct vfe_device *vfe)
- 
- 	switch (vfe->camss->res->version) {
- 	case CAMSS_845:
-+	case CAMSS_7180:
- 	case CAMSS_8250:
- 	case CAMSS_8280XP:
- 		ret = 16;
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 54cd82f74115..5b7f3fba938c 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -1027,6 +1027,7 @@ int msm_video_register(struct camss_video *video, struct v4l2_device *v4l2_dev,
- 		}
- 		break;
- 	case CAMSS_845:
-+	case CAMSS_7180:
- 	case CAMSS_8250:
- 	case CAMSS_8280XP:
- 		video->formats = formats_rdi_845;
+ .../bindings/media/qcom,sc7180-camss.yaml          | 324 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 134 +++++++++
+ .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     | 120 ++++++++
+ drivers/media/platform/qcom/camss/camss-csiphy.c   |   1 +
+ drivers/media/platform/qcom/camss/camss-vfe.c      |   3 +
+ drivers/media/platform/qcom/camss/camss-video.c    |   1 +
+ drivers/media/platform/qcom/camss/camss.c          | 218 +++++++++++++-
+ drivers/media/platform/qcom/camss/camss.h          |   1 +
+ 8 files changed, 801 insertions(+), 1 deletion(-)
+---
+base-commit: 2102cb0d050d34d50b9642a3a50861787527e922
+change-id: 20240621-b4-sc7180-camss-cddc6b60a9b4
 
+Best regards,
 -- 
-2.34.1
+George Chan <gchan9527@gmail.com>
 
 
