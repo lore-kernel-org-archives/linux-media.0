@@ -1,196 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEBE18E29
-	for <linux-media@vger.kernel.org>; Mon, 24 Jun 2024 09:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3802612E1F6
+	for <linux-media@vger.kernel.org>; Mon, 24 Jun 2024 09:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719222831; cv=none; b=mOUHq2GMkFMiw6BnBdw9pPOHe+ZEnqzEw+Cb44N8q0DhKbbi6IM3h3Hg88qW5tNjD34V2dj1uNPHOs2g3YQIIUSZ8REM+XKmoDV/+hRGPnpT7rbpGbmumpPZMot1pxhtYTqviRxu8m4/VmGMklRBKL8tdyAU3/BV7j633XDmZi0=
+	t=1719222877; cv=none; b=VlXMOE/fnd1BFNnVaz5y1M2gS1yNYGaAXmrUQ8k1S56hLCt/Ct+qkef5N1ayZ4ORJ1azgH4L2sLoP3jop9vJx5k96dzt5Z5sI5TYdWFXfp8uiIUos+2QgGO1QtJQZBGxKvG2kZyqLG0kT9EIVihvzQkVc44UpYJUD3oO6JlNNkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719222831; c=relaxed/simple;
-	bh=7fZgtzBeRSr0HRJCazoFR1DwQVt6mEBQMsa8qhgcO/8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=nuECaX8mb6CG27IfoPkoAUsqFkNt4FgZt5IqGHIpxL3jyDaA5DOfF/ZzB2sbzu022psJ8xqm7P9krsPE90Y0Wv+9FSwPgdhUOhJVZqsKQCdodxjmO9uE6XF+yAzqjFo46f+YJzKPRaxNKOxHaGj7PPA8fB9CmSkmTnlLnk03vCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NUKlKXvY; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719222877; c=relaxed/simple;
+	bh=Lr5yF3QaL0y7SMSGlclyfoFjJEBmOuBw8Lz7UKRBFxY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PzRc/ac4gi0lIdqzD9nqIiIlkkDnF9FuA6k9U+1r99WoetFCKsu430uweRO3+aAgemjJL2ja3jhicYGoj3201vYXsAWA/Z5Bvo2SaKW7DQSsS/DhB344bUnRkd95UupuutskOmqgrN3AFm82rJzY63tKlfWRius+yyvTImspuc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E8fN++gc; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NUKlKXvY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719222830; x=1750758830;
-  h=date:from:to:cc:subject:message-id;
-  bh=7fZgtzBeRSr0HRJCazoFR1DwQVt6mEBQMsa8qhgcO/8=;
-  b=NUKlKXvY5zRwzZt55yBhjn9VePl5fL6+FVTNldPwIuUWbgEOGFnee8cF
-   2es6EaeSmLQmG7JTJainEEypUnbxJXy1Pk73ermkXs57Bn5ky3R2yMAkY
-   tmE/ne7UuHBDwQ/e8EZQ6xpxMAn3rqpa977s6RY7PEUANT7k3U7jE7OcO
-   leTIsJb3SwPf6EeMElS+5EfIrKlOTA7np/knTCbipECQHRboXg/klluAy
-   9/wgKjjm5fI3wnYLS/S6V0SnnlNB9n3Gn3CumiE6kPEZokLNXdBYVa5Zy
-   gXZL/XIt9JmE5hmxkE/a6dyXQkfZAFHxjRyw2HFsxc/WSbf59fmvTysHU
-   A==;
-X-CSE-ConnectionGUID: n9oECVM4SWOKYKDqpP/2qQ==
-X-CSE-MsgGUID: AgqggznoT9SE/uz5i8Wudw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11112"; a="15874405"
-X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
-   d="scan'208";a="15874405"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 02:53:49 -0700
-X-CSE-ConnectionGUID: HGyD0nyGS/uHoj8Bgb9uTw==
-X-CSE-MsgGUID: J5yNVx7hRtaryWZ+lAFwUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,261,1712646000"; 
-   d="scan'208";a="43688696"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 24 Jun 2024 02:53:48 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sLgOP-000CYq-1T;
-	Mon, 24 Jun 2024 09:53:45 +0000
-Date: Mon, 24 Jun 2024 17:53:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org
-Subject: [sailus-media-tree:devel] BUILD SUCCESS
- 25698102a2785b65aebf74b227c31e6f9825655d
-Message-ID: <202406241736.wRX0jqRR-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8fN++gc"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-421cd1e5f93so31328895e9.0
+        for <linux-media@vger.kernel.org>; Mon, 24 Jun 2024 02:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719222874; x=1719827674; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pht3IvVhY+Nj6zHJhE+MfolZZKBRDqmhD2Saz3i11CA=;
+        b=E8fN++gcYYB6zcSMjUf68Z9pIoPCaxh6eu/Ncx/Rfn1Tf4GE7aSkbOEFvo8lb45bLo
+         26ZWkvqhlDDy1G+ic9+fOHkZX3Xy/A+TYnT5DLuYSTTshEQ7FVeeduNXvhFX62hzo8UG
+         BmjNtvMWGUBaiZSolaTiiFPUUEI6zBaUt5RcQW+jKnJsGxmQCf4YizL/JoCnwBAlUV85
+         oCKe211x/yuZsO4U1glvkWavZbiNQdaAHK8DAoYrHqk4UsnbZR7RzTDwnzN7h4MD6DbO
+         i9J2Sbea3lPr9tFV/wX0P0RrkwRMLabbXJh9Ub3ckeEPAquCTy92J2EwYORsvFL7uGRA
+         hMQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719222874; x=1719827674;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pht3IvVhY+Nj6zHJhE+MfolZZKBRDqmhD2Saz3i11CA=;
+        b=xA+M/OxKjHxVOum3Z9mZQKGS1WBZc6wINIHfFytxxKvDrPi9VaGXMY4eh7HPhggnHm
+         eT9qzboUBSlImfi6ADGR6gijdtTivgM486xzG36ifRnhMOjpD6LtrXNCRvToWpAce5lr
+         FgAVzh6p0h3eIjvSUL0PtA7qUX+OT5sI02QDupftFzFE38dGXuHdavUea5FqBlE4yGhn
+         L6DMBQES6lKEVqIA+oO8DXRcb2oQHP+RtLRD3CINpLvqqQlo33l8rAdR4uaowTUrnMve
+         7AnSK/iyp3XxibFkT1VLvebys4aDIQiwmzxULCi5LuJxy5m1+1kCfCV/qFyqHJyBTjq6
+         4SHg==
+X-Gm-Message-State: AOJu0Yyr/Ei47ddju7stm30oSHxOV4U4AwatyUbYIbnN38HkF89nQX9A
+	Cdk9VUwZrp51tCzuH1+Dl7z4NJJktqeINT4MDiPwBTbj6SKgCG41a6UBz0k=
+X-Google-Smtp-Source: AGHT+IEz27bnjwX8uKVBVk8I1Mo9jVeGOGJOrW6hITsGuRBpjzdK6R3hdUnBg6Wt/5HtPKQrH1dUDQ==
+X-Received: by 2002:a05:600c:1d24:b0:424:917e:f394 with SMTP id 5b1f17b1804b1-424917ef3dbmr18809475e9.31.1719222873905;
+        Mon, 24 Jun 2024 02:54:33 -0700 (PDT)
+Received: from localhost.localdomain ([105.163.2.38])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-424817b5ca0sm128258475e9.24.2024.06.24.02.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 02:54:33 -0700 (PDT)
+From: Dorcas Anono Litunya <anonolitunya@gmail.com>
+To: linux-media@vger.kernel.org
+Cc: anonolitunya@gmail.com,
+	jaffe1@gmail.com
+Subject: [PATCH 00/10] Add loopback support across multiple vivid instances 
+Date: Mon, 24 Jun 2024 12:52:51 +0300
+Message-Id: <20240624095300.745567-1-anonolitunya@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: git://linuxtv.org/sailus/media_tree.git devel
-branch HEAD: 25698102a2785b65aebf74b227c31e6f9825655d  MAINTAINERS: delete email for Anton Sviridenko
+Hello,
 
-elapsed time: 1469m
+This series sets up loopback support for video, sliced VBI data and
+HDMI CEC across multiple instances in the vivid test driver. It also
+updates documentation to reflect changes made.
 
-configs tested: 119
-configs skipped: 2
+The first 7 patches do not implement the actual work but are necessary for
+setting up the next changes. They address documentation issues,
+fix a g_edid bug, resolve a vivid crash when no outputs are configured,
+and add the instance number to the video input and output enumerations.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The 8th patch adds the controls and infrastructure needed to enable
+loopback across multiple instances.
+The 9th patch enables the video looping code and CEC support.
+The 10th update documentation to reflect all changes made.
 
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                               defconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arc                   randconfig-001-20240623   gcc-13.2.0
-arc                   randconfig-002-20240623   gcc-13.2.0
-arm                               allnoconfig   clang-19
-arm                                 defconfig   clang-14
-arm                   randconfig-001-20240623   gcc-13.2.0
-arm                   randconfig-002-20240623   gcc-13.2.0
-arm                   randconfig-003-20240623   gcc-13.2.0
-arm                   randconfig-004-20240623   gcc-13.2.0
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-arm64                 randconfig-001-20240623   clang-15
-arm64                 randconfig-002-20240623   clang-19
-arm64                 randconfig-003-20240623   clang-19
-arm64                 randconfig-004-20240623   clang-19
-csky                              allnoconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-csky                  randconfig-001-20240623   gcc-13.2.0
-csky                  randconfig-002-20240623   gcc-13.2.0
-hexagon                           allnoconfig   clang-19
-hexagon                             defconfig   clang-19
-hexagon               randconfig-001-20240623   clang-19
-hexagon               randconfig-002-20240623   clang-19
-i386         buildonly-randconfig-001-20240623   clang-18
-i386         buildonly-randconfig-002-20240623   clang-18
-i386         buildonly-randconfig-003-20240623   clang-18
-i386         buildonly-randconfig-004-20240623   gcc-13
-i386         buildonly-randconfig-005-20240623   clang-18
-i386         buildonly-randconfig-006-20240623   clang-18
-i386                  randconfig-001-20240623   gcc-9
-i386                  randconfig-002-20240623   clang-18
-i386                  randconfig-003-20240623   gcc-13
-i386                  randconfig-004-20240623   clang-18
-i386                  randconfig-005-20240623   gcc-7
-i386                  randconfig-006-20240623   clang-18
-i386                  randconfig-011-20240623   clang-18
-i386                  randconfig-012-20240623   gcc-8
-i386                  randconfig-013-20240623   clang-18
-i386                  randconfig-014-20240623   clang-18
-i386                  randconfig-015-20240623   gcc-8
-i386                  randconfig-016-20240623   clang-18
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-loongarch             randconfig-001-20240623   gcc-13.2.0
-loongarch             randconfig-002-20240623   gcc-13.2.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                                defconfig   gcc-13.2.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                          defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-nios2                 randconfig-001-20240623   gcc-13.2.0
-nios2                 randconfig-002-20240623   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc                randconfig-001-20240623   gcc-13.2.0
-parisc                randconfig-002-20240623   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc               randconfig-001-20240623   gcc-13.2.0
-powerpc               randconfig-002-20240623   clang-15
-powerpc               randconfig-003-20240623   clang-19
-powerpc64             randconfig-001-20240623   gcc-13.2.0
-powerpc64             randconfig-002-20240623   clang-19
-powerpc64             randconfig-003-20240623   gcc-13.2.0
-riscv                             allnoconfig   gcc-13.2.0
-riscv                               defconfig   clang-19
-riscv                 randconfig-001-20240623   clang-19
-riscv                 randconfig-002-20240623   clang-19
-s390                              allnoconfig   clang-19
-s390                                defconfig   clang-19
-s390                  randconfig-001-20240623   gcc-13.2.0
-s390                  randconfig-002-20240623   gcc-13.2.0
-sh                                allnoconfig   gcc-13.2.0
-sh                                  defconfig   gcc-13.2.0
-sh                    randconfig-001-20240623   gcc-13.2.0
-sh                    randconfig-002-20240623   gcc-13.2.0
-sparc64                             defconfig   gcc-13.2.0
-sparc64               randconfig-001-20240623   gcc-13.2.0
-sparc64               randconfig-002-20240623   gcc-13.2.0
-um                                allnoconfig   clang-17
-um                                  defconfig   clang-19
-um                             i386_defconfig   gcc-13
-um                    randconfig-001-20240623   gcc-7
-um                    randconfig-002-20240623   clang-19
-um                           x86_64_defconfig   clang-15
-x86_64       buildonly-randconfig-001-20240623   clang-18
-x86_64       buildonly-randconfig-002-20240623   clang-18
-x86_64       buildonly-randconfig-003-20240623   clang-18
-x86_64       buildonly-randconfig-004-20240623   clang-18
-x86_64       buildonly-randconfig-005-20240623   clang-18
-x86_64       buildonly-randconfig-006-20240623   clang-18
-x86_64                randconfig-001-20240623   gcc-13
-x86_64                randconfig-002-20240623   gcc-13
-x86_64                randconfig-003-20240623   clang-18
-x86_64                randconfig-004-20240623   gcc-13
-x86_64                randconfig-005-20240623   gcc-8
-x86_64                randconfig-006-20240623   clang-18
-x86_64                randconfig-011-20240623   clang-18
-x86_64                randconfig-012-20240623   gcc-13
-x86_64                randconfig-013-20240623   clang-18
-x86_64                randconfig-014-20240623   clang-18
-x86_64                randconfig-015-20240623   gcc-13
-x86_64                randconfig-016-20240623   clang-18
-x86_64                randconfig-071-20240623   gcc-13
-x86_64                randconfig-072-20240623   gcc-13
-x86_64                randconfig-073-20240623   clang-18
-x86_64                randconfig-074-20240623   clang-18
-x86_64                randconfig-075-20240623   gcc-13
-x86_64                randconfig-076-20240623   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                randconfig-001-20240623   gcc-13.2.0
-xtensa                randconfig-002-20240623   gcc-13.2.0
+Dorcas Anono Litunya (3):
+  media: Documentation: vivid.rst: Remove documentation for Capture
+    Overlay
+  media: vivid: Add 'Is Connected To' menu controls
+  documentation: media: vivid: Update documentation on vivid loopback
+    support
+
+Hans Verkuil (7):
+  media: Documentation: vivid.rst: fix confusing section refs
+  media: Documentation: vivid.rst: drop "Video, VBI and RDS Looping"
+  media: Documentation: vivid.rst: add supports_requests
+  media: vivid: vidioc_g_edid: do not change the original input EDID
+  media: vivid: don't set HDMI TX controls if there are no HDMI outputs
+  media: vivid: add instance number to input/output names
+  media: vivid: loopback based on 'Connected To' controls
+
+ Documentation/admin-guide/media/vivid.rst     | 185 +++++--------
+ drivers/media/test-drivers/vivid/vivid-cec.c  |  88 ++++--
+ drivers/media/test-drivers/vivid/vivid-core.c | 250 ++++++++++++++---
+ drivers/media/test-drivers/vivid/vivid-core.h | 125 ++++++++-
+ .../media/test-drivers/vivid/vivid-ctrls.c    | 262 ++++++++++--------
+ .../test-drivers/vivid/vivid-kthread-cap.c    |  86 +++---
+ .../media/test-drivers/vivid/vivid-vbi-cap.c  |   5 +-
+ .../media/test-drivers/vivid/vivid-vid-cap.c  | 115 +++++---
+ .../media/test-drivers/vivid/vivid-vid-cap.h  |   2 +
+ .../test-drivers/vivid/vivid-vid-common.c     | 134 ++++++---
+ .../test-drivers/vivid/vivid-vid-common.h     |   5 +-
+ .../media/test-drivers/vivid/vivid-vid-out.c  |  25 +-
+ 12 files changed, 859 insertions(+), 423 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
