@@ -1,273 +1,181 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F7233D5;
-	Mon, 24 Jun 2024 00:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401F412B63;
+	Mon, 24 Jun 2024 04:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719188024; cv=none; b=UqDu1PfL4zXyoOQtIKl2cBoWdhyQHhQdyfghctZvqC0oFvW+yeYp8yAhvSiwVwUxOKUCAHCtos0K6I10EVLk7aYsapOvFxEGldRGLFquV50tO3QLgcbVsdWAFJkVQCCZmSCSyetA8zny20HGjmNbWwj7oaYnnRbQXXvGOX4I4n4=
+	t=1719204569; cv=none; b=nwTpMCbmuue25MVFYtL8dggKJf2c+P7TlEo4rtOG51fwM33ez0aHrdS+gy1lCKXYT6AF3MGQaA9yaeJzPpjA+SzzsAHNhF39FrDjImvF45m1UucariPiYxq8D84n3O41wemwNnJYnbIvxXsOfvKRhxovnJmBir8tutBCMf+IVz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719188024; c=relaxed/simple;
-	bh=gLzfNh2sD0Snt/c/PSgDu7vQo2JbZYPugwHufL1hitI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EO4vew/UpHWKs8tGTGm/CxYFDVoQeH0XH/AP9AwTe4fna410Jb7Xp9N/iQmwoxByGKlyOzxa4aOYpp0sMnbNuQfTgY91i56mRIhEdNsGXtew8kW86XUHTKIGMXTcjErKoPRzdkLSMaSAlm4htuAgcPNbWAedrwrufg02XDGQBDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a06ab9WT; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719204569; c=relaxed/simple;
+	bh=pQXhsuPENZp3hn2RiM9MvxzB7FEhBOt0AXLDfl+srr0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZXhp5VenbCIonrES7cgdXp2CN45DsXM0gjG7bDwOXmgwPN1r2QQsK0gjzYbksC63vkpz677/1m5A+OPnsmXedoPqCOOmRodHdnv5Bm1Q+c79wvh1W435uyQooChq7lgEzT63XpV9WwQk2WuZ580j+YZqVKVt0zxql4Ng1yclqOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hMx3XzmX; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a06ab9WT"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52cd628f21cso2671764e87.3;
-        Sun, 23 Jun 2024 17:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719188020; x=1719792820; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GK3XqR+PJ1d4Fz6hBIhYUON//yKPUubXeIxccDTP36Q=;
-        b=a06ab9WTRhJynHAl+mLZ8WF34RB89lS00xXi4hrLX/5qd/V8YmgRbAnGsX/ncPfmAY
-         NQRamRqOoX3H9w+AxYeGOqt6g7Hfkxp7NCRbm4/qTRf9XzTbjBOvnFcu5Ab5seBQE/wh
-         CqvqiD+1lynMtw9KBureXZ/urzYIZKbAM5EUuebXEtLa8KEND4MblPLyCmM3TgdlmZP7
-         D1zrNIlm+5BXtf3LHCVeMlf0Vdv+7gDXzxg2u+jIOJ31oGU6+grOHOzpS2gDkxGxcPH4
-         TCMyhCWBJCTwJzR0r3TBtqhLnjWvlPVAc3g7ig8VJZoaiQ+qq30jaQjUBi1MGJ48AtOv
-         1bmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719188020; x=1719792820;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GK3XqR+PJ1d4Fz6hBIhYUON//yKPUubXeIxccDTP36Q=;
-        b=hsxIj8qMkI75NvBZrrMtP9vFmJzapokL6PoaSIn5xygboh855xsu1wtWwCJHg+gMRp
-         JNmJIFDPdrXRCIcsaWh9DLtbrMhmkCWx9AnF0SDynRKwAqMHQoH9DcV6yCXrhKGmfWLK
-         D0PNr7LgfL4TEyPHEhStwoaZD9T866VF6LPVPrg21D/BZeCNsKCpHfBF5iC/oVdL+rG2
-         8x+vAo9b7bUepxWS4dJWbtY5lrx0EGeuoYjOsqJirw2UFImn/5djCEOrWBBr+SZnAEqT
-         pxreI2h5jCoXRzZk980WEDcfNqqaXGG0BMuVw2EP7BJnJM+tASmK8eVhLLhPDrW4ZfhN
-         jUNA==
-X-Forwarded-Encrypted: i=1; AJvYcCW/7jgwsP6mqpXZ9d6TBc8J3sHaJBnZuGNerUk40yh0m0xMQ1LIsPY94IRF0nRak58HxRpeFEzrma8XYD/jGbBXcBnnDhNqJGWp9OXYc5s33EBoYdM2WZXwZoXvEL4AHwtObjLZYlp2BIfW+LQtwjaRpFpIh4R3xiB3T08o5RqdIbCKGsTSRASNkZLiF82J+OnNAgBLL/fLxRmENR3e8Hu/BHnQOm+J1IebCYctjO3H6ui3OPRhmlxjMZ8ktbJMafWcZyAz0yGu48F94kn9U02hRJEF0HjM3WodKgQkVzX8tUsibXKZ4vzT06TdRKROaSJitCimM2SPiY3+cQsNdumxxxOTAbPCVzC9r8FE68LMGeuNQaWUxZL16i7KuHSCt0Q910ev6xtX4VcNrWDlw0K+fPm14PXHsfuPglMUeXBkAf45Lvzls3nisPE8aXIcTvMMcKzWdpnyeMm7frAoSuhKKyQwYTAY4Nk+a0t0QYH12KJGhJ+0beQMGnFjP9zuUj/7GPsptYJ90MvWr8y5rnPz
-X-Gm-Message-State: AOJu0YzsteuoHvEdseYFzizqjHjFOU22IaQrm0BUF9rBLmKpmHyXaI0H
-	O6KV46Dk0ZjBrzSjtA0ZWYBE/8HDTsXid7YrkQlDQOSsTeXH+qZ+
-X-Google-Smtp-Source: AGHT+IF2Bfeow77JRmsfl+qYe07q4SCYIXRmBXwU95g0HYBerXLLikzR2pgaDVKgp0/53mQUmpDsKw==
-X-Received: by 2002:ac2:4437:0:b0:52c:c9d1:ad32 with SMTP id 2adb3069b0e04-52ce1835a80mr1726400e87.22.1719188020234;
-        Sun, 23 Jun 2024 17:13:40 -0700 (PDT)
-Received: from [192.168.8.113] ([148.252.133.212])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a725060340csm88197066b.22.2024.06.23.17.13.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Jun 2024 17:13:39 -0700 (PDT)
-Message-ID: <ae0d02f0-b304-4847-a88a-cd5bd4b9bc76@gmail.com>
-Date: Mon, 24 Jun 2024 01:13:41 +0100
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hMx3XzmX"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45NJsPDv010289;
+	Mon, 24 Jun 2024 04:49:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=KydZ88xOOx1QUleFVGviQM
+	OJBHWnnblmUF9HPkZpj20=; b=hMx3XzmXt9YKsC3H9gglyYLPQEROmfb/ASND0K
+	4NutJTFrNJ4QY4HJNlgRXNuzky4H6+GkTBPvr8tJBFXW/n1COLDp45M31FUuVqwp
+	pFaOzNKDyUZFBWITk+6+zLZPhqfWuMeY5THPZ5HuuLNg3Ba2CNzE0tn7A9/069UY
+	rLvgbvTArMsC2GsFtJOVjUi7ZmDku6kBeqvsfSffSKoIj+U8mtAvt5ghJH5PX7Yd
+	zX38nCTgKPSe8J7LbJWJkgkw6CJIC0jAN9WfrHTPnTnplAg4GDjwOjNNm5woPMAM
+	6wQOMzIvC0oYcEj80cL7CblozYpSYipI0pFXno9dhIIEJXdg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywqshjnb5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Jun 2024 04:49:16 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45O4nFWZ027438
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Jun 2024 04:49:15 GMT
+Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 23 Jun 2024 21:49:07 -0700
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov
+	<stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J .
+ Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        "Jagadeesh Kona" <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli
+	<quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        "Ajit
+ Pandey" <quic_ajipan@quicinc.com>
+Subject: [PATCH V7 0/5] Add control for switching back and forth to HW control
+Date: Mon, 24 Jun 2024 10:18:04 +0530
+Message-ID: <20240624044809.17751-1-quic_jkona@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 10/13] tcp: RX path for devmem TCP
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-11-almasrymina@google.com>
- <20a6a727-d9f2-495c-bf75-72c27740dd82@gmail.com>
- <CAHS8izMce36FwLhFB0znHQYmxpe5hmTSXtZA7+b5VsmSJUfhRw@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izMce36FwLhFB0znHQYmxpe5hmTSXtZA7+b5VsmSJUfhRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4wqzvm7BSsU_iEEUqt9m4phBgt-c0ThO
+X-Proofpoint-GUID: 4wqzvm7BSsU_iEEUqt9m4phBgt-c0ThO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-24_04,2024-06-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
+ mlxscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
+ definitions=main-2406240036
 
-On 6/21/24 21:31, Mina Almasry wrote:
-> On Mon, Jun 17, 2024 at 9:36 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 6/13/24 02:35, Mina Almasry wrote:
->>>
->>> The pages awaiting freeing are stored in the newly added
->>> sk->sk_user_frags, and each page passed to userspace is get_page()'d.
->>> This reference is dropped once the userspace indicates that it is
->>> done reading this page.  All pages are released when the socket is
->>> destroyed.
->>
->> One small concern is that if the pool gets destroyed (i.e.
->> page_pool_destroy) before sockets holding netiov, page pool will
->> semi-busily poll until the sockets die or such and will spam with
->> pr_warn(). E.g. when a user drops the nl but leaks data sockets
->> and continues with its userspace business. You can probably do
->> it in a loop and create dozens of such pending
->> page_pool_release_retry().
->>
-> 
-> Yes, true, but this is not really an issue with netiovs per se, it's a
-> quirk with the page_pool in general. If a non-devmem page_pool is
+This series adds support for dev_pm_genpd_set_hwmode() and dev_pm_genpd_get_hwmode() APIs
+and support in gdsc genpd provider drivers to register respective callbacks and a venus
+consumer driver example using above API to switch the power domain(GDSC) to HW/SW modes
+dynamically at runtime.
 
-True, devmem is just a new convenient way of doing that ...
+Changes in V7:
+- [PATCH 3/5]: Updated the comment description in gdsc_set_hwmode as per V6 review comments
+- Added R-By tags received on V6
+- Link to V6: https://lore.kernel.org/all/20240619141413.7983-1-quic_jkona@quicinc.com/
 
-> destroyed while there are pages waiting in the receive queues to be
-> recvmsg'd, the behavior you described happens anyway AFAIU.
-> 
-> Jakub did some work to improve this. IIRC he disabled the regular
-> warning and he reparents the orphan page_pools so they appear in the
-> stats of his netlink API.
-> 
-> Since this is behavior already applying to pages, I did not seek to
-> improve it as I add devmem support, I just retain it. We could improve
-> it in a separate patchset, but I do not see this behavior as a
-> critical issue really, especially since the alarming pr_warn has been
-> removed.
+Changes in V6:
+- [PATCH 3/5]: Added details for 1usec delay in gdsc_set_hwmode()
+- [PATCH 4/5]: Updated commit text
+- Added R-By and T-By tags received on V5 RESEND
+- Link to V5 RESEND: https://lore.kernel.org/all/20240413152013.22307-1-quic_jkona@quicinc.com/
+- Link to V5: https://lore.kernel.org/all/20240315111046.22136-1-quic_jkona@quicinc.com/
 
-... fair enough. I haven't noticed it being removed, but was
-thinking to suggest to conver to ratelimited.
+Changes in V5:
+- Updated 1st patch as per V4 review comments to synchronize the initial HW mode state by
+  invoking ->get_hwmode_dev()callback in genpd_add_device()
+- With above change, SW cached hwmode will contain correct value initially, and it will be
+  updated everytime mode is changed in set_hwmode, hence updated dev_pm_genpd_get_hwmode()
+  to just return SW cached hwmode in 1st patch
+- Updated commit text for 1st, 3rd, 4th and 5th patches
+- Updated 3rd and 5th patches as per review comments received on V4 series
+- Added R-By tags received in older series to 1st and 2nd patches
+- Link to V4: https://lore.kernel.org/all/20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org/
 
->>> +static int tcp_xa_pool_refill(struct sock *sk, struct tcp_xa_pool *p,
->>> +                           unsigned int max_frags)
->>> +{
->>> +     int err, k;
->>> +
->>> +     if (p->idx < p->max)
->>> +             return 0;
->>> +
->>> +     xa_lock_bh(&sk->sk_user_frags);
->>> +
->>> +     tcp_xa_pool_commit_locked(sk, p);
->>> +
->>> +     for (k = 0; k < max_frags; k++) {
->>> +             err = __xa_alloc(&sk->sk_user_frags, &p->tokens[k],
->>> +                              XA_ZERO_ENTRY, xa_limit_31b, GFP_KERNEL);
->>> +             if (err)
->>> +                     break;
->>> +     }
->>> +
->>> +     xa_unlock_bh(&sk->sk_user_frags);
->>> +
->>> +     p->max = k;
->>> +     p->idx = 0;
->>> +     return k ? 0 : err;
->>> +}
->>
->> Personally, I'd prefer this optimisation to be in a separate patch,
->> especially since there is some degree of hackiness to it.
->>
->>
-> 
-> To be honest this optimization is very necessary from my POV. We ran
-> into real production problems due to the excessive locking when we use
-> regular xa_alloc(), and Eric implemented this optimization to resolve
-> that. I simply squashed the optimization for this upstream series.
-> 
-> If absolutely necessary I can refactor it into a separate patch or
-> carry the optimization locally, but this seems like a problem everyone
-> looking to use devmem TCP will re-discover, so probably worth just
-> having here?
+Changes in V4:
+ - Re-worded 1st patch commit message, as per Bjorn's suggestion, and added
+   Dmitry's R-b tag
+ - Added Bjorn's and Dmitry's R-b tags to the 2nd patch
+ - Re-worded 3rd patch commit message, to better explain the HW_CTRL_TRIGGER flag.
+ - Added mode transition delay when setting mode for GDSC
+ - Added status polling if GDSSC is enabled when transitioning from HW to SW
+ - Re-worded 4th patch commit message to better explain why the
+   HW_CTRL_TRIGGER needs to be used instead
+ - Drop changes to SC7180, SDM845 and SM8550 video CC drivers, as only
+   SC7280 and SM8250 have been tested so far. More platforms (with v6 venus)
+   will be added eventually.
+ - Call genpd set_hwmode API only for v6 and dropped the vcodec_pmdomains_hwctrl.
+ - Re-worded 5th patch commit message accordingly. 
+ - Link to V3: https://lore.kernel.org/lkml/20230823114528.3677667-1-abel.vesa@linaro.org/ 
 
-I specifically mean how it's split into patches within the set. It'd
-have been easier to review, understand for people looking it up in
-history and so on. However, not insisting on changing it now, might
-be safer to leave it alone
+Changes in V3:
+ - 5th patch has been squashed in the 4th one
+ - Link to V2: https://lore.kernel.org/lkml/20230816145741.1472721-1-abel.vesa@linaro.org/
 
->>> +             /* if remaining_len is not satisfied yet, we need to go to the
->>> +              * next frag in the frag_list to satisfy remaining_len.
->>> +              */
->>> +             skb = skb_shinfo(skb)->frag_list ?: skb->next;
->>> +
->>> +             offset = offset - start;
->>
->> It's an offset into the current skb, isn't it? Wouldn't
->> offset = 0; be less confusing?
->>
-> 
-> Seems so, AFAICT. Let me try to apply this and see if it trips up any tests.
-> 
->>> +     } while (skb);
->>> +
->>> +     if (remaining_len) {
->>> +             err = -EFAULT;
->>> +             goto out;
->>> +     }
->>
->> Having data left is not a fault,
-> 
-> I think it is. The caller of tcp_recvmsg_dmabuf() expects all of
-> remaining_len to be used up, otherwise it messes up with the math in
-> the caller. __skb_datagram_iter(), which is the equivalent to this one
-> for pages, regards having left over data as a fault and also returns
-> -EFAULT, AFAICT.
+Changes in V2:
+ - patch for printing domain HW-managed mode in the summary
+ - patch that adds one consumer (venus)
+ - patch for gdsc with new (different) flag
+ - patch for videocc GDSC provider to update flags
+ - Link to V1: https://lore.kernel.org/all/20230628105652.1670316-1-abel.vesa@linaro.org/
 
-I mean "Having data left is not a fault, not receiving
-anything is", and you correctly return a partial result
-if that was the case.
+Abel Vesa (1):
+  PM: domains: Add the domain HW-managed mode to the summary
 
->> and to get here you
->> need to get an skb with no data left, which shouldn't
->> happen. Seems like everything you need is covered by
->> the "!sent" check below.
->>
-> 
-> I think we can get here if we run out of skbs with data, no?
+Jagadeesh Kona (3):
+  clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
+  clk: qcom: videocc: Use HW_CTRL_TRIGGER for SM8250, SC7280 vcodec
+    GDSC's
+  venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode on
+    V6
 
-IIRC the caller clamps it so that it's within the skb with
-its frags. Well, safer to have the check, I agree. It's just
-looked a bit odd since the value is complementary to @sent,
-but I guess it's just a way to propagate -EFAULT.
+Ulf Hansson (1):
+  PM: domains: Allow devices attached to genpd to be managed by HW
 
->>> @@ -2503,6 +2504,15 @@ static void tcp_md5sig_info_free_rcu(struct rcu_head *head)
->>>    void tcp_v4_destroy_sock(struct sock *sk)
->>>    {
->>>        struct tcp_sock *tp = tcp_sk(sk);
->>> +     __maybe_unused unsigned long index;
->>> +     __maybe_unused void *netmem;
->>
->> How about adding a function to get rid of __maybe_unused?.
->>
->> static void sock_release_devmem_frags() {
->> #ifdef PP
->>          unsigned index;
->>          ...
->> #endif PP
->> }
->>
-> 
-> Will do.
-> 
->> Also, even though you wire it up for TCP, since ->sk_user_frags
->> is in struct sock I'd expect the release to be somewhere in the
->> generic sock path like __sk_destruct(), and same for init.
->> Perhpas, it's better to leave it for later.
+ drivers/clk/qcom/gdsc.c                       | 41 ++++++++++
+ drivers/clk/qcom/gdsc.h                       |  1 +
+ drivers/clk/qcom/videocc-sc7280.c             |  2 +-
+ drivers/clk/qcom/videocc-sm8250.c             |  4 +-
+ .../media/platform/qcom/venus/pm_helpers.c    | 39 ++++++----
+ drivers/pmdomain/core.c                       | 78 ++++++++++++++++++-
+ include/linux/pm_domain.h                     | 17 ++++
+ 7 files changed, 161 insertions(+), 21 deletions(-)
 
 -- 
-Pavel Begunkov
+2.43.0
+
