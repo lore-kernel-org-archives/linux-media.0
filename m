@@ -1,50 +1,50 @@
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EB7188CB9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F1B18A939;
 	Thu, 27 Jun 2024 13:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719493848; cv=none; b=qoBA5UzFd7ksVapN3j+em+bZ77m+0/759mKPaQlkgdXwd1up4MIRQa0QAud0h5x45qBEk2UFIMMnS+nYbBVAqcjq+0cI56h8ze4SZZkTba37f6xDaw51GvoFz3xiiejNC2GoYj+ohIPm2KEeWFinm05PzFWTktR08aZAHmcBnxY=
+	t=1719493848; cv=none; b=Q722P1LXUADmzn75TQtPR5Gxt7zIVIEVIhNNabefu/vpUBdEvP4ud9tMrp5+VsQTEckzUGDuMmdbc+KObWTIPO2o7enfe66gJLQIkCh7q9o6ZgDge6MBYb0nrxnyDrfUIyi7P3s3+rX+y1aQMlowrmP+LZTaFiswHZF05gmrnGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719493848; c=relaxed/simple;
-	bh=24D3XNVBK9Dmv+4yYpQCrJXrk43bw9jFtHr0iPUMswk=;
+	bh=v3gEkPdG9b7eYy0/FF4jb8UhEm5GRijCHvs7LwoGo2E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=L0fQuQmG3JWyA41kSVfjt5oQT6W9SfqTWZxxbUQCtQDSMor9FFM97jU3GBX4mSxz3FKaw0aZHp5MU9IstKtwXM3h9l0kdyNMijhrgVRSJuBnLYG/AxcCyiD9431zIpqMu2xY4Et0F+IvvaiIfWFnOZAsVUPAu2ytibqPjx8Ihr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=DrHwsbBg; arc=none smtp.client-ip=198.47.19.141
+	 In-Reply-To:To:CC; b=IlhWeFJR2aOoqLzdEoQgIox/2Ds1p3Z3mpqbFP03c3nJCbrzCrdsA54AbwS9ek515l5UrbHW88WfOtvWCRBOfx3wcsqjh/uodd2zmfVnZIfplBcsFMcI7fKRyvxAVZotEZPF5f68NEx1lOW2wmHIpoRIc6AS1670xT55Ru+TKSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jar8vWOi; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DrHwsbBg"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jar8vWOi"
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDASMT117441;
-	Thu, 27 Jun 2024 08:10:28 -0500
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAVN4117473;
+	Thu, 27 Jun 2024 08:10:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1719493828;
-	bh=SKvlDdGZFIbN30XgC3XarKQ1FX7j3zWjtGxbHfAaf9A=;
+	s=ti-com-17Q1; t=1719493831;
+	bh=HB+flKInIVpcWdRlTa6Zzhif0gbdAzt/xBNWPP/eYRM=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=DrHwsbBgSqtXTyATAhVSca5v8CFXfwBcbPhthIw9NZkMnSUkC853wO0MQKR9sNkTS
-	 j0bhSlXz0dX775YJcbCmARglxjmiNHpJaWnwmEE5HwKGYHRvIV3yhRlcwACxjsihPA
-	 i+5iowqgRYwyaifgxsKlXr9Rel5TJwaQ034xyhf4=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDASCw095631
+	b=jar8vWOiLrruK8MMulrKuxWAapYVqAqdQKV5XAFY97S0vHht1PFk55v2hHvNcccpx
+	 0WdmUbIyismcQy6O1Qw4VK+Q0NHnUnBV3WgX89fShkMgULkwd+oufhlzhTTgs29iBa
+	 LUGA+ijSYITLE+/cmUGpulP5CvtgeGaOnLxVOgvE=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDAV9f095648
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 27 Jun 2024 08:10:28 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 27 Jun 2024 08:10:31 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
- Jun 2024 08:10:27 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2024 08:10:30 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 27 Jun 2024 08:10:27 -0500
+ Frontend Transport; Thu, 27 Jun 2024 08:10:30 -0500
 Received: from localhost (jluthra.dhcp.ti.com [172.24.227.116])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAQUq072036;
-	Thu, 27 Jun 2024 08:10:27 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAURw038539;
+	Thu, 27 Jun 2024 08:10:30 -0500
 From: Jai Luthra <j-luthra@ti.com>
-Date: Thu, 27 Jun 2024 18:39:57 +0530
-Subject: [PATCH v2 02/13] dt-bindings: media: ti,j721e-csi2rx-shim: Support
- 32 dma chans
+Date: Thu, 27 Jun 2024 18:39:59 +0530
+Subject: [PATCH v2 04/13] media: ti: j721e-csi2rx: prepare SHIM code for
+ multiple contexts
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240627-multistream-v2-2-6ae96c54c1c3@ti.com>
+Message-ID: <20240627-multistream-v2-4-6ae96c54c1c3@ti.com>
 References: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 In-Reply-To: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -81,101 +81,90 @@ CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<laurent.pinchart@ideasonboard.com>,
         Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2357; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=24D3XNVBK9Dmv+4yYpQCrJXrk43bw9jFtHr0iPUMswk=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWSzv7MySL0FTesXdooSEM5hPyLoCARKft5Ze
- 8R/DF6JzmmJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1kswAKCRBD3pH5JJpx
- RbzKD/4vbD5acj/hG7LS+2Zg+E3I8TtCFax3iAE4aelwhzRiQkl/qJZ6zWLWjI96hnLifePXnNM
- GP/QV0m8AROv1M4DYOfxDZODwKuPmdnpdNwyxXfK8fAoXiPSYH73D3i3s+yq70TsLaJwYSFeP06
- Gyfp//a25HnI0apZSLI4swe3qsg44IVzPAbFWIfzePOVJ/tHMr5NWXkBWjOLGoYfELEjgnBfthQ
- APVro4n99mytxDDyMjYkvd5hL8zsvWiA0qjPz72H07lWCURKqx2HjeRfzJpH3+eH2KJfSvBEE3d
- 52NyOmViipLh5BPczHytQhVLd4gdpLAnCkzqkHqZCmGWj72xRbA5zI22RCk8dTSoIsTS5V/8Fu7
- VLhbPV6HXYjIF1o7kGvvsI0fC3qD/pDsxFUTF6J6JFwUwu4geTnnWx7+OUJM+6IURiwFMwkU9jg
- bww2sWImNFP82u7ligtO1JvXlo0Y8HHtQ4130WMsqQ+IViJgHl9yY+w5tvcTlXf+oXdPWPw1Fzq
- 1Y9iNZdj8qV0V0NQu40vZPiE7UBB0kSIia4uwC6UQj8+iD1chpOZRrwK4lon6mLqBOrTmd5w9CI
- oyraAcE7aZ2dp+45h3SPDkp2PtHjvNxzsyNbMhsSl85jlRJbCD0iP2RF1v0UloozC3CFyZEs8n4
- uXZXtztGH7z+HAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2436; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=LpLlB+YmYVSUi0YgNLhdccCiz/SToDm+eRN4FDifDXY=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWS1ploOz/OFRtwmZ4wW5tZGbQtitE0Iek7JG
+ WFkFRE9kcCJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1ktQAKCRBD3pH5JJpx
+ RQTTD/9/W9Pi0VpvwdtJW2kwsoUWw/RQl4maIOR1WULpe7FZmEepcywqdvv95i/t0ILfXqFHZOF
+ CSSPVSVHUW3m4tx96o2g5C2W+OoTaisnfMoR9tu2we/2Gk5BrlyWApY02TYeYTg1883cLzfVcmo
+ fa8lIokLUDouFd1LJDxn0l6f3gx3fgHNymZzzS3UdpWP2QvAWJaBeEC+0CyDEO1FumsTHHF0xAA
+ yc8FfCNZQd7g6XxPy6eiPXltn6e3WmrSkf02woxJ5JBrT2m6BZB5KcAK4eDuDhKdt7g1wBPodQX
+ 8N0CS0cGbwUR87oXePZVfj7/I9lBupFibxjfTEMYhbo7uyUNfIsZER0qLuTIyhoALGXfIJjGICN
+ 4qwqdL+2GhivLaUTkUAhKbT8ZWVYcNvrmgJgAMLPzWuEfwX1b0e7kQT36M1gLxde2Id8m+3i1Cc
+ Sjusf+iC+KguFSCmCMmrNSMFDkXB956veWJ9L1NFk556/pGm6K9Xbi+V3eTYHgIG+MVcBwFvr7Z
+ MEVqOERM7olWVnK9eOjOpEzDta/B5Tk+kpsZCA9WAs5+Oi7gw7wV6bMccKne1JYhdQdnrdRVKyJ
+ CZdbvLgyWTBPSG4pZXTPH3eIk0MgiTtBIKJEeX5eDkoj4lmt8KNsYfkQ0dW8+7tNSZOjJ5wZxKC
+ cnvuc68MpmAsQDw==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-The CSI2RX SHIM IP can support a maximum of 32x DMA channels.
+From: Pratyush Yadav <p.yadav@ti.com>
 
-These can be used to split incoming "streams" of data on the CSI-RX
-port, distinguished by MIPI Virtual Channel (or Data Type), into
-different locations in memory (/dev/videoX nodes).
+Currently the SHIM code to configure the context only touches the first
+context. Add support for writing to the context's registers based on the
+context index.
 
-Actual number of DMA channels reserved is different for each SoC
-integrating this IP, but a maximum of 32x channels are always available
-in this IP's register space, so set minimum as 1 and maximum as 32.
-
-Link: https://www.ti.com/lit/pdf/spruiv7
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- .../bindings/media/ti,j721e-csi2rx-shim.yaml       | 39 ++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 3 deletions(-)
+ drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
-index f762fdc05e4d..0e00533c7b68 100644
---- a/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
-+++ b/Documentation/devicetree/bindings/media/ti,j721e-csi2rx-shim.yaml
-@@ -20,11 +20,44 @@ properties:
-     const: ti,j721e-csi2rx-shim
+diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+index d8dfe0002b72..bffc8165fd33 100644
+--- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
++++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+@@ -25,7 +25,7 @@
+ #define SHIM_CNTL			0x10
+ #define SHIM_CNTL_PIX_RST		BIT(0)
  
-   dmas:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 32
+-#define SHIM_DMACNTX			0x20
++#define SHIM_DMACNTX(i)			(0x20 + ((i) * 0x20))
+ #define SHIM_DMACNTX_EN			BIT(31)
+ #define SHIM_DMACNTX_YUV422		GENMASK(27, 26)
+ #define SHIM_DMACNTX_SIZE		GENMASK(21, 20)
+@@ -35,7 +35,7 @@
+ #define SHIM_DMACNTX_SIZE_16		1
+ #define SHIM_DMACNTX_SIZE_32		2
  
-   dma-names:
-+    minItems: 1
-     items:
-       - const: rx0
-+      - const: rx1
-+      - const: rx2
-+      - const: rx3
-+      - const: rx4
-+      - const: rx5
-+      - const: rx6
-+      - const: rx7
-+      - const: rx8
-+      - const: rx9
-+      - const: rx10
-+      - const: rx11
-+      - const: rx12
-+      - const: rx13
-+      - const: rx14
-+      - const: rx15
-+      - const: rx16
-+      - const: rx17
-+      - const: rx18
-+      - const: rx19
-+      - const: rx20
-+      - const: rx21
-+      - const: rx22
-+      - const: rx23
-+      - const: rx24
-+      - const: rx25
-+      - const: rx26
-+      - const: rx27
-+      - const: rx28
-+      - const: rx29
-+      - const: rx30
-+      - const: rx31
+-#define SHIM_PSI_CFG0			0x24
++#define SHIM_PSI_CFG0(i)		(0x24 + ((i) * 0x20))
+ #define SHIM_PSI_CFG0_SRC_TAG		GENMASK(15, 0)
+ #define SHIM_PSI_CFG0_DST_TAG		GENMASK(31, 16)
  
-   reg:
-     maxItems: 1
-@@ -62,8 +95,8 @@ examples:
+@@ -549,11 +549,11 @@ static void ti_csi2rx_setup_shim(struct ti_csi2rx_ctx *ctx)
  
-     ti_csi2rx0: ticsi2rx@4500000 {
-         compatible = "ti,j721e-csi2rx-shim";
--        dmas = <&main_udmap 0x4940>;
--        dma-names = "rx0";
-+        dmas = <&main_udmap 0x4940>, <&main_udmap 0x4941>;
-+        dma-names = "rx0", "rx1";
-         reg = <0x4500000 0x1000>;
-         power-domains = <&k3_pds 26 TI_SCI_PD_EXCLUSIVE>;
-         #address-cells = <1>;
+ 	reg |= FIELD_PREP(SHIM_DMACNTX_SIZE, fmt->size);
+ 
+-	writel(reg, csi->shim + SHIM_DMACNTX);
++	writel(reg, csi->shim + SHIM_DMACNTX(ctx->idx));
+ 
+ 	reg = FIELD_PREP(SHIM_PSI_CFG0_SRC_TAG, 0) |
+ 	      FIELD_PREP(SHIM_PSI_CFG0_DST_TAG, 0);
+-	writel(reg, csi->shim + SHIM_PSI_CFG0);
++	writel(reg, csi->shim + SHIM_PSI_CFG0(ctx->idx));
+ }
+ 
+ static void ti_csi2rx_drain_callback(void *param)
+@@ -870,7 +870,7 @@ static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
+ err_pipeline:
+ 	video_device_pipeline_stop(&ctx->vdev);
+ 	writel(0, csi->shim + SHIM_CNTL);
+-	writel(0, csi->shim + SHIM_DMACNTX);
++	writel(0, csi->shim + SHIM_DMACNTX(ctx->idx));
+ err:
+ 	ti_csi2rx_cleanup_buffers(ctx, VB2_BUF_STATE_QUEUED);
+ 	return ret;
+@@ -885,7 +885,7 @@ static void ti_csi2rx_stop_streaming(struct vb2_queue *vq)
+ 	video_device_pipeline_stop(&ctx->vdev);
+ 
+ 	writel(0, csi->shim + SHIM_CNTL);
+-	writel(0, csi->shim + SHIM_DMACNTX);
++	writel(0, csi->shim + SHIM_DMACNTX(ctx->idx));
+ 
+ 	ret = v4l2_subdev_call(csi->source, video, s_stream, 0);
+ 	if (ret)
 
 -- 
 2.43.0
