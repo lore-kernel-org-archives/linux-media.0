@@ -1,50 +1,50 @@
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90E4188CB4;
-	Thu, 27 Jun 2024 13:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E02619148F;
+	Thu, 27 Jun 2024 13:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719493859; cv=none; b=S0C1rmlT3uZ03PnnBlDrqqGJVLU0VC2mkZluIbeOFRXK0J4eUDdm29s+1lOfAlZtYHeGNDWY2N1Tsd21nasuqWNa+59NNveC49NuNzMsHLEcrD/K+ZpAmFmBL+p2I+dvDpFMwKhimCJ7dojnM4lIa8KzS9d/zmWzkzddlKCxREw=
+	t=1719493859; cv=none; b=UAiWIFTujIoMRFJi7bvgyVQ1wkQF8Uc0BS/0GFQVAASKJNAzwgaur8Mw0P0oStaGocRdDjoO4pPL6JiDmOH4GsuzKgO65JxpqkVINhsUpRe0zMCojCoWgd4dEEzjQLL70LWwPU2uaNRqGNMRpK5H+B3cLCAKML0wx3pp5x62wpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719493859; c=relaxed/simple;
-	bh=RDngiRmegaVpmtiwswQNbcJcgzgEEmR3QpUY2irL1ng=;
+	bh=WZ2gAxTS7fZA7Ln7bwpB4aZ+mMTaAMP5yoJH7VSPXII=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=B+EhDWv3tbbM4GtsdnR/KN4bAhTdc6atJ2Bkd1F5Lv8WSPbsGhAOCDNOqd96pdyXjmepmfuwQLFVNVs/dJuvLk8Ypvy3xQxfjklYrDRE8YM9iWBqlnelzMqWKXlBHB/nAPsHAFrwEPJF1M/pI7lP7SifuX54JC5UCWD6YzBgo2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=g5hJ7GNf; arc=none smtp.client-ip=198.47.19.142
+	 In-Reply-To:To:CC; b=ow9UF8Cq6XUjgfa8shb8A5ONeHgN31sl+me+Qkyie4iRw6LbCSgnWNqVswMuRatTtpDtWpdiPKoU4GfJRUPCWAuujgPmWBak13+707C/rDiNwzoM/RlTg+SDViTEysYCqv5Yz7O4UIQSIZOHzM5Xnuk2dHJUuxmqQKS8va6UUCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=HN4Oyu8J; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="g5hJ7GNf"
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDATHO118614;
-	Thu, 27 Jun 2024 08:10:29 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="HN4Oyu8J"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAfoN118794;
+	Thu, 27 Jun 2024 08:10:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1719493829;
-	bh=Z0jJIr/emntF1D7KoGv8oiZaVWFFd2ee75t61eDYY6I=;
+	s=ti-com-17Q1; t=1719493841;
+	bh=TuGcjpY/SSWwMollyfrfG2FCoWRm4VbYrHc8nyRtYiM=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=g5hJ7GNfxDu9yuSSIzg+ieM2FK7owPLUSm+r8qb6UNHPDSzAO9vSMLKw+ZkH6acDn
-	 QG1ZAXaOMocAs6ziMUCu5UdaURiLaklnHvsyD9iAOwPodk+2/2WVlXhLzXemTGwsOu
-	 7HbYFmIKTVokexfQle0yOv9GrcAPZtflaMybs+7Y=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDAT9B117581
+	b=HN4Oyu8Jm5AOD6w28sbaTCoDWKijMldXVZy1bjg0ZhMlv4SXGghJ1doBHux/7HxOq
+	 TXJbc9d1d8cJZMSOO3mejCWHPVOba1HEyH2tXI2vz7yyOJ2SbZDKQbwTyiCVl2I/ME
+	 SqwhXrlXd7d4UQsvD6ysIOdvGcDGcXMPlmewn0IY=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDAfUJ029383
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 27 Jun 2024 08:10:29 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 27 Jun 2024 08:10:41 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
- Jun 2024 08:10:29 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2024 08:10:41 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 27 Jun 2024 08:10:29 -0500
+ Frontend Transport; Thu, 27 Jun 2024 08:10:41 -0500
 Received: from localhost (jluthra.dhcp.ti.com [172.24.227.116])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAS2W038515;
-	Thu, 27 Jun 2024 08:10:29 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAeEW038757;
+	Thu, 27 Jun 2024 08:10:41 -0500
 From: Jai Luthra <j-luthra@ti.com>
-Date: Thu, 27 Jun 2024 18:39:58 +0530
-Subject: [PATCH v2 03/13] media: ti: j721e-csi2rx: separate out device and
- context
+Date: Thu, 27 Jun 2024 18:40:06 +0530
+Subject: [PATCH v2 11/13] media: cadence: csi2rx: Enable multi-stream
+ support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240627-multistream-v2-3-6ae96c54c1c3@ti.com>
+Message-ID: <20240627-multistream-v2-11-6ae96c54c1c3@ti.com>
 References: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 In-Reply-To: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -81,863 +81,603 @@ CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<laurent.pinchart@ideasonboard.com>,
         Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=26507; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=RDngiRmegaVpmtiwswQNbcJcgzgEEmR3QpUY2irL1ng=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWS0wwRSMdrfKBHFDGJ0vz14vddHh1HH7atm0
- F92UH/ojaqJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1ktAAKCRBD3pH5JJpx
- RZoqEACHk9wdXAjn1SZEbifpJYWairOrn47XWn/0WgT9bzETYMMFRzV7nV9owWTySAlnWRZmvG+
- Y7O+bNExYyospblTkSusw43yxc9BTbmCyQKKU6D+Fjtk2paj6NVshK9FuwGUIIhpKRu1WzOvABi
- 6S9XTweFEQlpyZttA7m4S4ojXiXg084IE4IKIJglBkfo1FHGSeC39V4n5mGAGNt68wc5kWi9JP6
- 2Gt8QZ/cWnMdNHDiZFB6ns/xp1IJqgy0PFNEQnYPKuDA92ivCm4MI2+kDANh3TyTykjcDAAB44U
- iFonZCCwTsHpjm+Q0YY8zDX400tXGh1SDp9g70lSTORYWCF7eZiiEHduW/iCRZ3BeF/xdMtjwZh
- KoE71SKCjioHcr+OQVYR4T8zR2ynJkNjbbBOFoNPLo2OOFi4mT+5Prf2b+pWAP70puNph6S9Zda
- ++tnVdhqGB/q7sadNxrzV3VFnKTEwO+vgm9lpV9tDeUHjldCzG4CZh7oLTTbX8JC8p7YH7Q3dRq
- xQ0sNwRHTgE89b+UJy4e+Vl6okSlWskIal8/WVqib++xr9bmYmU/FrHsATBeM6V6UDxAmM8idkR
- GLrTE39+ZlTdiFWg/I6lIz3bb7ehkFcocjRitpCw2bl1RTnVbLi/BsrbER0d6xB2+pt+PZtK1f/
- e95uK31O/f6tW9w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17618; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=WZ2gAxTS7fZA7Ln7bwpB4aZ+mMTaAMP5yoJH7VSPXII=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWS8kXWgUxWEmhheeqfIJ3N/gJAQoee87ZgJj
+ BqsAwEXNteJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1kvAAKCRBD3pH5JJpx
+ RY7nD/43z7oRdY/2s4jXmQYZl/vxw7EmMt1wCYeai0UjJ4BLxkE4eEALCtB4LSPulKO/ClQ5LoS
+ tFaS9dWOx8JiKXmcUhGs8pa0Q6+AthBms6zJL1eXptJMexQN+pdUiySXnz+eMJzd2Ac+DGiMyaZ
+ L4xmegJZ/oRy4/TXtWuoqbDReqnUHylDNgCknhKq07Borte8LuL83fcbR9hWNus2MFZasHz39Gh
+ 1auogaceZBUqjKUMYCszGzvDmSrofi2TTb1fgw+V5p1jDEUZ4hSPiDpcFkC/CdZWm33Fnis6Ymc
+ oiKnUbK5Uuxb6Gh8u8PC3YRgDgs2bMLVIGzSIWmm8AP4WrwKswXjUi02vyCrvJ+NhCFNhiCcfsJ
+ k/mW8r4SSXoT2PSxp9JapXTcr0hT1dHOSCptXv5GCLN2uRUtdR7VPjeSAhBaADsIxMoC1ZwFs8M
+ J3Ijh2FdShAU9/nCzujxiCzphk50KmMIN7R1QqW20TBeACVLJbQvRAOZsAKkqjLv70/2gi5Y27E
+ Iqu6IoWSRRON3Q3JxNp7AOxDUSqGH8iGmN6WKvDBhb4n6UU/Kd8JR7b4/1nBM4s1JO8h3rnaS0b
+ riLWDSmlELrAcBK2q+LLbnOSYuu1Ald6CHQd9AWdNHhnF7ZC9mLiTVl7OjMsZa/hyLLtGu6z/zQ
+ mwVDONTECvt8SYw==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-The TI CSI2RX wrapper has two parts: the main device and the DMA
-contexts. The driver was originally written with single camera capture
-in mind, so only one DMA context was needed. For the sake of simplicity,
-the context specific stuff was not modeled different to the main device.
+Cadence CSI-2 bridge IP supports capturing multiple virtual "streams"
+of data over the same physical interface using MIPI Virtual Channels.
 
-To enable multiplexed stream capture, the contexts need to be separated
-out from the main device. Create a struct ti_csi2rx_ctx that holds the
-DMA context specific things. Separate out functions handling the device
-and context related functionality.
+The V4L2 subdev APIs should reflect this capability and allow per-stream
+routing and controls.
 
-Co-developed-by: Pratyush Yadav <p.yadav@ti.com>
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+While the hardware IP supports usecases where streams coming in the sink
+pad can be broadcasted to multiple source pads, the driver will need
+significant re-architecture to make that possible. The two users of this
+IP in mainline linux are TI Shim and StarFive JH7110 CAMSS, and both
+have only integrated the first source pad i.e stream0 of this IP. So for
+now keep it simple and only allow 1-to-1 mapping of streams from sink to
+source, without any broadcasting.
+
+With stream routing now supported in the driver, implement the
+enable_stream and disable_stream hooks in place of the stream-unaware
+s_stream hook.
+
+This allows consumer devices like a DMA bridge or ISP, to enable
+particular streams on a source pad, which in turn can be used to enable
+only particular streams on the CSI-TX device connected on the sink pad.
+
+Implement a fallback s_stream hook that internally calls enable_stream
+on each source pad, for consumer drivers that don't use multi-stream
+APIs to still work.
+
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- .../media/platform/ti/j721e-csi2rx/j721e-csi2rx.c  | 423 ++++++++++++---------
- 1 file changed, 242 insertions(+), 181 deletions(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 407 ++++++++++++++++++++-------
+ 1 file changed, 313 insertions(+), 94 deletions(-)
 
-diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-index 22442fce7607..d8dfe0002b72 100644
---- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-+++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
-@@ -40,6 +40,8 @@
- #define SHIM_PSI_CFG0_DST_TAG		GENMASK(31, 16)
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 2ec34fc9c524..b0c91a9c65e8 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -90,6 +90,7 @@ struct csi2rx_priv {
+ 	struct reset_control		*pixel_rst[CSI2RX_STREAMS_MAX];
+ 	struct phy			*dphy;
  
- #define PSIL_WORD_SIZE_BYTES		16
-+#define TI_CSI2RX_NUM_CTX		1
-+
- /*
-  * There are no hard limits on the width or height. The DMA engine can handle
-  * all sizes. The max width and height are arbitrary numbers for this driver.
-@@ -64,7 +66,7 @@ struct ti_csi2rx_buffer {
- 	/* Common v4l2 buffer. Must be first. */
- 	struct vb2_v4l2_buffer		vb;
- 	struct list_head		list;
--	struct ti_csi2rx_dev		*csi;
-+	struct ti_csi2rx_ctx		*ctx;
- };
++	u32				vc_select[CSI2RX_STREAMS_MAX];
+ 	u8				lanes[CSI2RX_LANES_MAX];
+ 	u8				num_lanes;
+ 	u8				max_lanes;
+@@ -179,27 +180,43 @@ static void csi2rx_reset(struct csi2rx_priv *csi2rx)
  
- enum ti_csi2rx_dma_state {
-@@ -84,29 +86,37 @@ struct ti_csi2rx_dma {
- 	 * Queue of buffers submitted to DMA engine.
- 	 */
- 	struct list_head		submitted;
--	/* Buffer to drain stale data from PSI-L endpoint */
--	struct {
--		void			*vaddr;
--		dma_addr_t		paddr;
--		size_t			len;
--	} drain;
-+};
-+
-+struct ti_csi2rx_dev;
-+
-+struct ti_csi2rx_ctx {
-+	struct ti_csi2rx_dev		*csi;
-+	struct video_device		vdev;
-+	struct vb2_queue		vidq;
-+	struct mutex			mutex; /* To serialize ioctls. */
-+	struct v4l2_format		v_fmt;
-+	struct ti_csi2rx_dma		dma;
-+	u32				sequence;
-+	u32				idx;
- };
- 
- struct ti_csi2rx_dev {
- 	struct device			*dev;
- 	void __iomem			*shim;
- 	struct v4l2_device		v4l2_dev;
--	struct video_device		vdev;
- 	struct media_device		mdev;
- 	struct media_pipeline		pipe;
- 	struct media_pad		pad;
- 	struct v4l2_async_notifier	notifier;
- 	struct v4l2_subdev		*source;
--	struct vb2_queue		vidq;
--	struct mutex			mutex; /* To serialize ioctls. */
--	struct v4l2_format		v_fmt;
--	struct ti_csi2rx_dma		dma;
--	u32				sequence;
-+	struct ti_csi2rx_ctx		ctx[TI_CSI2RX_NUM_CTX];
-+	/* Buffer to drain stale data from PSI-L endpoint */
-+	struct {
-+		void			*vaddr;
-+		dma_addr_t		paddr;
-+		size_t			len;
-+	} drain;
- };
- 
- static const struct ti_csi2rx_fmt ti_csi2rx_formats[] = {
-@@ -212,7 +222,7 @@ static const struct ti_csi2rx_fmt ti_csi2rx_formats[] = {
- };
- 
- /* Forward declaration needed by ti_csi2rx_dma_callback. */
--static int ti_csi2rx_start_dma(struct ti_csi2rx_dev *csi,
-+static int ti_csi2rx_start_dma(struct ti_csi2rx_ctx *ctx,
- 			       struct ti_csi2rx_buffer *buf);
- 
- static const struct ti_csi2rx_fmt *find_format_by_fourcc(u32 pixelformat)
-@@ -302,7 +312,7 @@ static int ti_csi2rx_enum_fmt_vid_cap(struct file *file, void *priv,
- static int ti_csi2rx_g_fmt_vid_cap(struct file *file, void *prov,
- 				   struct v4l2_format *f)
+ static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
  {
--	struct ti_csi2rx_dev *csi = video_drvdata(file);
-+	struct ti_csi2rx_ctx *csi = video_drvdata(file);
- 
- 	*f = csi->v_fmt;
- 
-@@ -333,7 +343,7 @@ static int ti_csi2rx_try_fmt_vid_cap(struct file *file, void *priv,
- static int ti_csi2rx_s_fmt_vid_cap(struct file *file, void *priv,
- 				   struct v4l2_format *f)
- {
--	struct ti_csi2rx_dev *csi = video_drvdata(file);
-+	struct ti_csi2rx_ctx *csi = video_drvdata(file);
- 	struct vb2_queue *q = &csi->vidq;
++	struct v4l2_ctrl_handler *handler = csi2rx->source_subdev->ctrl_handler;
+ 	union phy_configure_opts opts = { };
+ 	struct phy_configure_opts_mipi_dphy *cfg = &opts.mipi_dphy;
+-	struct v4l2_subdev_format sd_fmt = {
+-		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
+-		.pad	= CSI2RX_PAD_SINK,
+-	};
++	struct v4l2_mbus_framefmt *framefmt;
++	struct v4l2_subdev_state *state;
+ 	const struct csi2rx_fmt *fmt;
+ 	s64 link_freq;
  	int ret;
  
-@@ -419,25 +429,33 @@ static int csi_async_notifier_bound(struct v4l2_async_notifier *notifier,
- static int csi_async_notifier_complete(struct v4l2_async_notifier *notifier)
- {
- 	struct ti_csi2rx_dev *csi = dev_get_drvdata(notifier->v4l2_dev->dev);
--	struct video_device *vdev = &csi->vdev;
--	int ret;
-+	int ret, i;
- 
--	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
--	if (ret)
+-	ret = v4l2_subdev_call_state_active(&csi2rx->subdev, pad, get_fmt,
+-					    &sd_fmt);
+-	if (ret < 0)
 -		return ret;
-+	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
-+		struct ti_csi2rx_ctx *ctx = &csi->ctx[i];
-+		struct video_device *vdev = &ctx->vdev;
- 
--	ret = v4l2_create_fwnode_links_to_pad(csi->source, &csi->pad,
--					      MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
--
--	if (ret) {
--		video_unregister_device(vdev);
--		return ret;
-+		ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
-+		if (ret)
-+			goto unregister_dev;
- 	}
- 
-+	ret = v4l2_create_fwnode_links_to_pad(csi->source, &csi->pad,
-+					      MEDIA_LNK_FL_IMMUTABLE |
-+					      MEDIA_LNK_FL_ENABLED);
-+	if (ret)
-+		goto unregister_dev;
++	if (v4l2_ctrl_find(handler, V4L2_CID_LINK_FREQ)) {
++		link_freq = v4l2_get_link_freq(handler, 0, 0);
++	} else {
++		state = v4l2_subdev_get_locked_active_state(&csi2rx->subdev);
++		framefmt = v4l2_subdev_state_get_format(state, CSI2RX_PAD_SINK,
++							0);
 +
- 	ret = v4l2_device_register_subdev_nodes(&csi->v4l2_dev);
- 	if (ret)
--		video_unregister_device(vdev);
-+		goto unregister_dev;
-+
-+	return 0;
++		if (framefmt) {
++			fmt = csi2rx_get_fmt_by_code(framefmt->code);
++		} else {
++			dev_err(csi2rx->dev,
++				"Did not find active sink format\n");
++			return -EINVAL;
++		}
  
-+unregister_dev:
-+	i--;
-+	for (; i >= 0; i--)
-+		video_unregister_device(&csi->ctx[i].vdev);
- 	return ret;
- }
+-	fmt = csi2rx_get_fmt_by_code(sd_fmt.format.code);
++		link_freq = v4l2_get_link_freq(handler, fmt->bpp,
++					       2 * csi2rx->num_lanes);
  
-@@ -483,12 +501,13 @@ static int ti_csi2rx_notifier_register(struct ti_csi2rx_dev *csi)
- 	return 0;
- }
- 
--static void ti_csi2rx_setup_shim(struct ti_csi2rx_dev *csi)
-+static void ti_csi2rx_setup_shim(struct ti_csi2rx_ctx *ctx)
- {
-+	struct ti_csi2rx_dev *csi = ctx->csi;
- 	const struct ti_csi2rx_fmt *fmt;
- 	unsigned int reg;
- 
--	fmt = find_format_by_fourcc(csi->v_fmt.fmt.pix.pixelformat);
-+	fmt = find_format_by_fourcc(ctx->v_fmt.fmt.pix.pixelformat);
- 
- 	/* De-assert the pixel interface reset. */
- 	reg = SHIM_CNTL_PIX_RST;
-@@ -555,8 +574,9 @@ static void ti_csi2rx_drain_callback(void *param)
-  * To prevent that stale data corrupting the subsequent transactions, it is
-  * required to issue DMA requests to drain it out.
-  */
--static int ti_csi2rx_drain_dma(struct ti_csi2rx_dev *csi)
-+static int ti_csi2rx_drain_dma(struct ti_csi2rx_ctx *ctx)
- {
-+	struct ti_csi2rx_dev *csi = ctx->csi;
- 	struct dma_async_tx_descriptor *desc;
- 	struct completion drain_complete;
- 	dma_cookie_t cookie;
-@@ -564,8 +584,8 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_dev *csi)
- 
- 	init_completion(&drain_complete);
- 
--	desc = dmaengine_prep_slave_single(csi->dma.chan, csi->dma.drain.paddr,
--					   csi->dma.drain.len, DMA_DEV_TO_MEM,
-+	desc = dmaengine_prep_slave_single(ctx->dma.chan, csi->drain.paddr,
-+					   csi->drain.len, DMA_DEV_TO_MEM,
- 					   DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!desc) {
- 		ret = -EIO;
-@@ -580,11 +600,11 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_dev *csi)
- 	if (ret)
- 		goto out;
- 
--	dma_async_issue_pending(csi->dma.chan);
-+	dma_async_issue_pending(ctx->dma.chan);
- 
- 	if (!wait_for_completion_timeout(&drain_complete,
- 					 msecs_to_jiffies(DRAIN_TIMEOUT_MS))) {
--		dmaengine_terminate_sync(csi->dma.chan);
-+		dmaengine_terminate_sync(ctx->dma.chan);
- 		dev_dbg(csi->dev, "DMA transfer timed out for drain buffer\n");
- 		ret = -ETIMEDOUT;
- 		goto out;
-@@ -596,8 +616,8 @@ static int ti_csi2rx_drain_dma(struct ti_csi2rx_dev *csi)
- static void ti_csi2rx_dma_callback(void *param)
- {
- 	struct ti_csi2rx_buffer *buf = param;
--	struct ti_csi2rx_dev *csi = buf->csi;
--	struct ti_csi2rx_dma *dma = &csi->dma;
-+	struct ti_csi2rx_ctx *ctx = buf->ctx;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
- 	unsigned long flags;
- 
- 	/*
-@@ -605,7 +625,7 @@ static void ti_csi2rx_dma_callback(void *param)
- 	 * hardware monitor registers.
- 	 */
- 	buf->vb.vb2_buf.timestamp = ktime_get_ns();
--	buf->vb.sequence = csi->sequence++;
-+	buf->vb.sequence = ctx->sequence++;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
- 
-@@ -617,8 +637,9 @@ static void ti_csi2rx_dma_callback(void *param)
- 	while (!list_empty(&dma->queue)) {
- 		buf = list_entry(dma->queue.next, struct ti_csi2rx_buffer, list);
- 
--		if (ti_csi2rx_start_dma(csi, buf)) {
--			dev_err(csi->dev, "Failed to queue the next buffer for DMA\n");
-+		if (ti_csi2rx_start_dma(ctx, buf)) {
-+			dev_err(ctx->csi->dev,
-+				"Failed to queue the next buffer for DMA\n");
- 			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
- 		} else {
- 			list_move_tail(&buf->list, &dma->submitted);
-@@ -631,17 +652,17 @@ static void ti_csi2rx_dma_callback(void *param)
- 	spin_unlock_irqrestore(&dma->lock, flags);
- }
- 
--static int ti_csi2rx_start_dma(struct ti_csi2rx_dev *csi,
-+static int ti_csi2rx_start_dma(struct ti_csi2rx_ctx *ctx,
- 			       struct ti_csi2rx_buffer *buf)
- {
- 	unsigned long addr;
- 	struct dma_async_tx_descriptor *desc;
--	size_t len = csi->v_fmt.fmt.pix.sizeimage;
-+	size_t len = ctx->v_fmt.fmt.pix.sizeimage;
- 	dma_cookie_t cookie;
- 	int ret = 0;
- 
- 	addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
--	desc = dmaengine_prep_slave_single(csi->dma.chan, addr, len,
-+	desc = dmaengine_prep_slave_single(ctx->dma.chan, addr, len,
- 					   DMA_DEV_TO_MEM,
- 					   DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
- 	if (!desc)
-@@ -655,20 +676,20 @@ static int ti_csi2rx_start_dma(struct ti_csi2rx_dev *csi,
- 	if (ret)
- 		return ret;
- 
--	dma_async_issue_pending(csi->dma.chan);
-+	dma_async_issue_pending(ctx->dma.chan);
- 
- 	return 0;
- }
- 
--static void ti_csi2rx_stop_dma(struct ti_csi2rx_dev *csi)
-+static void ti_csi2rx_stop_dma(struct ti_csi2rx_ctx *ctx)
- {
--	struct ti_csi2rx_dma *dma = &csi->dma;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
- 	enum ti_csi2rx_dma_state state;
- 	unsigned long flags;
- 	int ret;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
--	state = csi->dma.state;
-+	state = ctx->dma.state;
- 	dma->state = TI_CSI2RX_DMA_STOPPED;
- 	spin_unlock_irqrestore(&dma->lock, flags);
- 
-@@ -679,30 +700,30 @@ static void ti_csi2rx_stop_dma(struct ti_csi2rx_dev *csi)
- 		 * is stopped, as the module-level pixel reset cannot be
- 		 * enforced before terminating DMA.
- 		 */
--		ret = ti_csi2rx_drain_dma(csi);
-+		ret = ti_csi2rx_drain_dma(ctx);
- 		if (ret && ret != -ETIMEDOUT)
--			dev_warn(csi->dev,
-+			dev_warn(ctx->csi->dev,
- 				 "Failed to drain DMA. Next frame might be bogus\n");
- 	}
- 
--	ret = dmaengine_terminate_sync(csi->dma.chan);
-+	ret = dmaengine_terminate_sync(ctx->dma.chan);
- 	if (ret)
--		dev_err(csi->dev, "Failed to stop DMA: %d\n", ret);
-+		dev_err(ctx->csi->dev, "Failed to stop DMA: %d\n", ret);
- }
- 
--static void ti_csi2rx_cleanup_buffers(struct ti_csi2rx_dev *csi,
-+static void ti_csi2rx_cleanup_buffers(struct ti_csi2rx_ctx *ctx,
- 				      enum vb2_buffer_state state)
- {
--	struct ti_csi2rx_dma *dma = &csi->dma;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
- 	struct ti_csi2rx_buffer *buf, *tmp;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
--	list_for_each_entry_safe(buf, tmp, &csi->dma.queue, list) {
-+	list_for_each_entry_safe(buf, tmp, &ctx->dma.queue, list) {
- 		list_del(&buf->list);
- 		vb2_buffer_done(&buf->vb.vb2_buf, state);
- 	}
--	list_for_each_entry_safe(buf, tmp, &csi->dma.submitted, list) {
-+	list_for_each_entry_safe(buf, tmp, &ctx->dma.submitted, list) {
- 		list_del(&buf->list);
- 		vb2_buffer_done(&buf->vb.vb2_buf, state);
- 	}
-@@ -713,8 +734,8 @@ static int ti_csi2rx_queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
- 				 unsigned int *nplanes, unsigned int sizes[],
- 				 struct device *alloc_devs[])
- {
--	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(q);
--	unsigned int size = csi->v_fmt.fmt.pix.sizeimage;
-+	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(q);
-+	unsigned int size = ctx->v_fmt.fmt.pix.sizeimage;
- 
- 	if (*nplanes) {
- 		if (sizes[0] < size)
-@@ -730,11 +751,11 @@ static int ti_csi2rx_queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
- 
- static int ti_csi2rx_buffer_prepare(struct vb2_buffer *vb)
- {
--	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vb->vb2_queue);
--	unsigned long size = csi->v_fmt.fmt.pix.sizeimage;
-+	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-+	unsigned long size = ctx->v_fmt.fmt.pix.sizeimage;
- 
- 	if (vb2_plane_size(vb, 0) < size) {
--		dev_err(csi->dev, "Data will not fit into plane\n");
-+		dev_err(ctx->csi->dev, "Data will not fit into plane\n");
- 		return -EINVAL;
- 	}
- 
-@@ -744,15 +765,15 @@ static int ti_csi2rx_buffer_prepare(struct vb2_buffer *vb)
- 
- static void ti_csi2rx_buffer_queue(struct vb2_buffer *vb)
- {
--	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vb->vb2_queue);
-+	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
- 	struct ti_csi2rx_buffer *buf;
--	struct ti_csi2rx_dma *dma = &csi->dma;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
- 	bool restart_dma = false;
- 	unsigned long flags = 0;
- 	int ret;
- 
- 	buf = container_of(vb, struct ti_csi2rx_buffer, vb.vb2_buf);
--	buf->csi = csi;
-+	buf->ctx = ctx;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
- 	/*
-@@ -781,18 +802,18 @@ static void ti_csi2rx_buffer_queue(struct vb2_buffer *vb)
- 		 * the application and will only confuse it. Issue a DMA
- 		 * transaction to drain that up.
- 		 */
--		ret = ti_csi2rx_drain_dma(csi);
-+		ret = ti_csi2rx_drain_dma(ctx);
- 		if (ret && ret != -ETIMEDOUT)
--			dev_warn(csi->dev,
-+			dev_warn(ctx->csi->dev,
- 				 "Failed to drain DMA. Next frame might be bogus\n");
- 
- 		spin_lock_irqsave(&dma->lock, flags);
--		ret = ti_csi2rx_start_dma(csi, buf);
-+		ret = ti_csi2rx_start_dma(ctx, buf);
- 		if (ret) {
- 			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
- 			dma->state = TI_CSI2RX_DMA_IDLE;
- 			spin_unlock_irqrestore(&dma->lock, flags);
--			dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
-+			dev_err(ctx->csi->dev, "Failed to start DMA: %d\n", ret);
- 		} else {
- 			list_add_tail(&buf->list, &dma->submitted);
- 			spin_unlock_irqrestore(&dma->lock, flags);
-@@ -802,8 +823,9 @@ static void ti_csi2rx_buffer_queue(struct vb2_buffer *vb)
- 
- static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
- {
--	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vq);
--	struct ti_csi2rx_dma *dma = &csi->dma;
-+	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct ti_csi2rx_dev *csi = ctx->csi;
-+	struct ti_csi2rx_dma *dma = &ctx->dma;
- 	struct ti_csi2rx_buffer *buf;
- 	unsigned long flags;
- 	int ret = 0;
-@@ -815,18 +837,18 @@ static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	if (ret)
- 		return ret;
- 
--	ret = video_device_pipeline_start(&csi->vdev, &csi->pipe);
-+	ret = video_device_pipeline_start(&ctx->vdev, &csi->pipe);
- 	if (ret)
- 		goto err;
- 
--	ti_csi2rx_setup_shim(csi);
-+	ti_csi2rx_setup_shim(ctx);
- 
--	csi->sequence = 0;
-+	ctx->sequence = 0;
- 
- 	spin_lock_irqsave(&dma->lock, flags);
- 	buf = list_entry(dma->queue.next, struct ti_csi2rx_buffer, list);
- 
--	ret = ti_csi2rx_start_dma(csi, buf);
-+	ret = ti_csi2rx_start_dma(ctx, buf);
- 	if (ret) {
- 		dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
- 		spin_unlock_irqrestore(&dma->lock, flags);
-@@ -844,22 +866,23 @@ static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	return 0;
- 
- err_dma:
--	ti_csi2rx_stop_dma(csi);
-+	ti_csi2rx_stop_dma(ctx);
- err_pipeline:
--	video_device_pipeline_stop(&csi->vdev);
-+	video_device_pipeline_stop(&ctx->vdev);
- 	writel(0, csi->shim + SHIM_CNTL);
- 	writel(0, csi->shim + SHIM_DMACNTX);
- err:
--	ti_csi2rx_cleanup_buffers(csi, VB2_BUF_STATE_QUEUED);
-+	ti_csi2rx_cleanup_buffers(ctx, VB2_BUF_STATE_QUEUED);
- 	return ret;
- }
- 
- static void ti_csi2rx_stop_streaming(struct vb2_queue *vq)
- {
--	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vq);
-+	struct ti_csi2rx_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct ti_csi2rx_dev *csi = ctx->csi;
- 	int ret;
- 
--	video_device_pipeline_stop(&csi->vdev);
-+	video_device_pipeline_stop(&ctx->vdev);
- 
- 	writel(0, csi->shim + SHIM_CNTL);
- 	writel(0, csi->shim + SHIM_DMACNTX);
-@@ -868,8 +891,8 @@ static void ti_csi2rx_stop_streaming(struct vb2_queue *vq)
- 	if (ret)
- 		dev_err(csi->dev, "Failed to stop subdev stream\n");
- 
--	ti_csi2rx_stop_dma(csi);
--	ti_csi2rx_cleanup_buffers(csi, VB2_BUF_STATE_ERROR);
-+	ti_csi2rx_stop_dma(ctx);
-+	ti_csi2rx_cleanup_buffers(ctx, VB2_BUF_STATE_ERROR);
- }
- 
- static const struct vb2_ops csi_vb2_qops = {
-@@ -882,27 +905,60 @@ static const struct vb2_ops csi_vb2_qops = {
- 	.wait_finish = vb2_ops_wait_finish,
- };
- 
--static int ti_csi2rx_init_vb2q(struct ti_csi2rx_dev *csi)
-+static void ti_csi2rx_cleanup_dma(struct ti_csi2rx_ctx *ctx)
- {
--	struct vb2_queue *q = &csi->vidq;
-+	dma_release_channel(ctx->dma.chan);
-+}
-+
-+static void ti_csi2rx_cleanup_v4l2(struct ti_csi2rx_dev *csi)
-+{
-+	media_device_unregister(&csi->mdev);
-+	v4l2_device_unregister(&csi->v4l2_dev);
-+	media_device_cleanup(&csi->mdev);
-+}
-+
-+static void ti_csi2rx_cleanup_notifier(struct ti_csi2rx_dev *csi)
-+{
-+	v4l2_async_nf_unregister(&csi->notifier);
-+	v4l2_async_nf_cleanup(&csi->notifier);
-+}
-+
-+static void ti_csi2rx_cleanup_vb2q(struct ti_csi2rx_ctx *ctx)
-+{
-+	vb2_queue_release(&ctx->vidq);
-+}
-+
-+static void ti_csi2rx_cleanup_ctx(struct ti_csi2rx_ctx *ctx)
-+{
-+	ti_csi2rx_cleanup_dma(ctx);
-+	ti_csi2rx_cleanup_vb2q(ctx);
-+
-+	video_unregister_device(&ctx->vdev);
-+
-+	mutex_destroy(&ctx->mutex);
-+}
-+
-+static int ti_csi2rx_init_vb2q(struct ti_csi2rx_ctx *ctx)
-+{
-+	struct vb2_queue *q = &ctx->vidq;
- 	int ret;
- 
- 	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	q->io_modes = VB2_MMAP | VB2_DMABUF;
--	q->drv_priv = csi;
-+	q->drv_priv = ctx;
- 	q->buf_struct_size = sizeof(struct ti_csi2rx_buffer);
- 	q->ops = &csi_vb2_qops;
- 	q->mem_ops = &vb2_dma_contig_memops;
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
--	q->dev = dmaengine_get_dma_device(csi->dma.chan);
--	q->lock = &csi->mutex;
-+	q->dev = dmaengine_get_dma_device(ctx->dma.chan);
-+	q->lock = &ctx->mutex;
- 	q->min_queued_buffers = 1;
- 
- 	ret = vb2_queue_init(q);
- 	if (ret)
- 		return ret;
- 
--	csi->vdev.queue = q;
-+	ctx->vdev.queue = q;
- 
- 	return 0;
- }
-@@ -911,8 +967,9 @@ static int ti_csi2rx_link_validate(struct media_link *link)
- {
- 	struct media_entity *entity = link->sink->entity;
- 	struct video_device *vdev = media_entity_to_video_device(entity);
--	struct ti_csi2rx_dev *csi = container_of(vdev, struct ti_csi2rx_dev, vdev);
--	struct v4l2_pix_format *csi_fmt = &csi->v_fmt.fmt.pix;
-+	struct ti_csi2rx_ctx *ctx = container_of(vdev, struct ti_csi2rx_ctx, vdev);
-+	struct ti_csi2rx_dev *csi = ctx->csi;
-+	struct v4l2_pix_format *csi_fmt = &ctx->v_fmt.fmt.pix;
- 	struct v4l2_subdev_format source_fmt = {
- 		.which	= V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.pad	= link->source->index,
-@@ -965,47 +1022,69 @@ static const struct media_entity_operations ti_csi2rx_video_entity_ops = {
- 	.link_validate = ti_csi2rx_link_validate,
- };
- 
--static int ti_csi2rx_init_dma(struct ti_csi2rx_dev *csi)
-+static int ti_csi2rx_init_dma(struct ti_csi2rx_ctx *ctx)
- {
- 	struct dma_slave_config cfg = {
- 		.src_addr_width = DMA_SLAVE_BUSWIDTH_16_BYTES,
- 	};
- 	int ret;
- 
--	INIT_LIST_HEAD(&csi->dma.queue);
--	INIT_LIST_HEAD(&csi->dma.submitted);
--	spin_lock_init(&csi->dma.lock);
-+	INIT_LIST_HEAD(&ctx->dma.queue);
-+	INIT_LIST_HEAD(&ctx->dma.submitted);
-+	spin_lock_init(&ctx->dma.lock);
- 
--	csi->dma.state = TI_CSI2RX_DMA_STOPPED;
-+	ctx->dma.state = TI_CSI2RX_DMA_STOPPED;
- 
--	csi->dma.chan = dma_request_chan(csi->dev, "rx0");
--	if (IS_ERR(csi->dma.chan))
--		return PTR_ERR(csi->dma.chan);
-+	ctx->dma.chan = dma_request_chan(ctx->csi->dev, "rx0");
-+	if (IS_ERR(ctx->dma.chan))
-+		return PTR_ERR(ctx->dma.chan);
- 
--	ret = dmaengine_slave_config(csi->dma.chan, &cfg);
-+	ret = dmaengine_slave_config(ctx->dma.chan, &cfg);
- 	if (ret) {
--		dma_release_channel(csi->dma.chan);
-+		dma_release_channel(ctx->dma.chan);
- 		return ret;
- 	}
- 
--	csi->dma.drain.len = DRAIN_BUFFER_SIZE;
--	csi->dma.drain.vaddr = dma_alloc_coherent(csi->dev, csi->dma.drain.len,
--						  &csi->dma.drain.paddr,
--						  GFP_KERNEL);
--	if (!csi->dma.drain.vaddr)
--		return -ENOMEM;
--
- 	return 0;
- }
- 
- static int ti_csi2rx_v4l2_init(struct ti_csi2rx_dev *csi)
- {
- 	struct media_device *mdev = &csi->mdev;
--	struct video_device *vdev = &csi->vdev;
-+	int ret;
-+
-+	mdev->dev = csi->dev;
-+	mdev->hw_revision = 1;
-+	strscpy(mdev->model, "TI-CSI2RX", sizeof(mdev->model));
-+
-+	media_device_init(mdev);
-+
-+	csi->v4l2_dev.mdev = mdev;
-+
-+	ret = v4l2_device_register(csi->dev, &csi->v4l2_dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = media_device_register(mdev);
-+	if (ret) {
-+		v4l2_device_unregister(&csi->v4l2_dev);
-+		media_device_cleanup(mdev);
-+		return ret;
+-	link_freq = v4l2_get_link_freq(csi2rx->source_subdev->ctrl_handler,
+-				       fmt->bpp, 2 * csi2rx->num_lanes);
+-	if (link_freq < 0)
++		dev_warn(csi2rx->dev,
++			 "Guessing link frequency using bitdepth of stream 0.\n");
++		dev_warn(csi2rx->dev,
++			 "V4L2_CID_LINK_FREQ control is required for multi format sources.\n");
 +	}
 +
++	if (link_freq < 0) {
++		dev_err(csi2rx->dev, "Unable to calculate link frequency\n");
+ 		return link_freq;
++	}
+ 
+ 	ret = phy_mipi_dphy_get_default_config_for_hsclk(link_freq,
+ 							 csi2rx->num_lanes, cfg);
+@@ -222,18 +239,10 @@ static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
+ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ {
+ 	unsigned int i;
+-	struct media_pad *remote_pad;
+ 	unsigned long lanes_used = 0;
+ 	u32 reg;
+ 	int ret;
+ 
+-	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
+-	if (!remote_pad) {
+-		dev_err(csi2rx->dev,
+-			"Failed to find connected source\n");
+-		return -ENODEV;
+-	}
+-
+ 	ret = clk_prepare_enable(csi2rx->p_clk);
+ 	if (ret)
+ 		return ret;
+@@ -300,11 +309,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 		writel(CSI2RX_STREAM_CFG_FIFO_MODE_LARGE_BUF,
+ 		       csi2rx->base + CSI2RX_STREAM_CFG_REG(i));
+ 
+-		/*
+-		 * Enable one virtual channel. When multiple virtual channels
+-		 * are supported this will have to be changed.
+-		 */
+-		writel(CSI2RX_STREAM_DATA_CFG_VC_SELECT(0),
++		writel(csi2rx->vc_select[i],
+ 		       csi2rx->base + CSI2RX_STREAM_DATA_CFG_REG(i));
+ 
+ 		writel(CSI2RX_STREAM_CTRL_START,
+@@ -317,17 +322,10 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 
+ 	reset_control_deassert(csi2rx->sys_rst);
+ 
+-	ret = v4l2_subdev_enable_streams(csi2rx->source_subdev,
+-					 remote_pad->index, BIT(0));
+-	if (ret)
+-		goto err_disable_sysclk;
+-
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	return 0;
+ 
+-err_disable_sysclk:
+-	clk_disable_unprepare(csi2rx->sys_clk);
+ err_disable_pixclk:
+ 	for (; i > 0; i--) {
+ 		reset_control_assert(csi2rx->pixel_rst[i - 1]);
+@@ -346,7 +344,6 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ {
+-	struct media_pad *remote_pad;
+ 	unsigned int i;
+ 	u32 val;
+ 	int ret;
+@@ -375,13 +372,6 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	reset_control_assert(csi2rx->p_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
+ 
+-	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
+-	if (!remote_pad ||
+-	    v4l2_subdev_disable_streams(csi2rx->source_subdev,
+-					remote_pad->index, BIT(0))) {
+-		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
+-	}
+-
+ 	if (csi2rx->dphy) {
+ 		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
+ 
+@@ -390,47 +380,167 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	}
+ }
+ 
+-static int csi2rx_s_stream(struct v4l2_subdev *subdev, int enable)
++static void csi2rx_update_vc_select(struct csi2rx_priv *csi2rx,
++				    struct v4l2_subdev_state *state)
+ {
+-	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
+-	int ret = 0;
++	struct v4l2_mbus_frame_desc fd = {0};
++	struct v4l2_subdev_route *route;
++	unsigned int i;
++	int ret;
+ 
+-	if (enable) {
+-		ret = pm_runtime_resume_and_get(csi2rx->dev);
+-		if (ret < 0)
+-			return ret;
++	for (i = 0; i < CSI2RX_STREAMS_MAX; i++)
++		csi2rx->vc_select[i] = 0;
++
++	ret = csi2rx_get_frame_desc_from_source(csi2rx, &fd);
++	if (ret || fd.type != V4L2_MBUS_FRAME_DESC_TYPE_CSI2) {
++		dev_dbg(csi2rx->dev,
++			"Failed to get source frame desc, allowing only VC=0\n");
++		goto err_no_fd;
+ 	}
+ 
+-	mutex_lock(&csi2rx->lock);
++	/* If source provides per-stream VC info, use it to filter by VC */
++	for_each_active_route(&state->routing, route) {
++		int cdns_stream = route->source_pad - CSI2RX_PAD_SOURCE_STREAM0;
++		u8 used_vc = 0;
+ 
+-	if (enable) {
+-		/*
+-		 * If we're not the first users, there's no need to
+-		 * enable the whole controller.
+-		 */
+-		if (!csi2rx->count) {
+-			ret = csi2rx_start(csi2rx);
+-			if (ret) {
+-				pm_runtime_put(csi2rx->dev);
+-				goto out;
++		for (i = 0; i < fd.num_entries; i++) {
++			if (fd.entry[i].stream == route->sink_stream) {
++				used_vc = fd.entry[i].bus.csi2.vc;
++				break;
+ 			}
+ 		}
++		csi2rx->vc_select[cdns_stream] |=
++			CSI2RX_STREAM_DATA_CFG_VC_SELECT(used_vc);
++	}
+ 
+-		csi2rx->count++;
+-	} else {
+-		csi2rx->count--;
++err_no_fd:
++	for (i = 0; i < CSI2RX_STREAMS_MAX; i++) {
++		if (!csi2rx->vc_select[i]) {
++			csi2rx->vc_select[i] =
++				CSI2RX_STREAM_DATA_CFG_VC_SELECT(0);
++		}
++	}
++}
+ 
+-		/*
+-		 * Let the last user turn off the lights.
+-		 */
+-		if (!csi2rx->count)
+-			csi2rx_stop(csi2rx);
++static int csi2rx_enable_streams(struct v4l2_subdev *subdev,
++				 struct v4l2_subdev_state *state, u32 pad,
++				 u64 streams_mask)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct media_pad *remote_pad;
++	u64 sink_streams;
++	int ret;
++
++	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
++	if (!remote_pad) {
++		dev_err(csi2rx->dev,
++			"Failed to find connected source\n");
++		return -ENODEV;
++	}
++
++	ret = pm_runtime_resume_and_get(csi2rx->dev);
++	if (ret < 0)
++		return ret;
++
++	sink_streams = v4l2_subdev_state_xlate_streams(state, pad,
++						       CSI2RX_PAD_SINK,
++						       &streams_mask);
+ 
+-		pm_runtime_put(csi2rx->dev);
++	mutex_lock(&csi2rx->lock);
++	/*
++	 * If we're not the first users, there's no need to
++	 * enable the whole controller.
++	 */
++	if (!csi2rx->count) {
++		ret = csi2rx_start(csi2rx);
++		if (ret)
++			goto err_stream_start;
+ 	}
+ 
+-out:
++	/* Start streaming on the source */
++	ret = v4l2_subdev_enable_streams(csi2rx->source_subdev, remote_pad->index,
++					 sink_streams);
++	if (ret) {
++		dev_err(csi2rx->dev,
++			"Failed to start streams %#llx on subdev\n",
++			sink_streams);
++		goto err_subdev_enable;
++	}
++
++	csi2rx->count++;
++	mutex_unlock(&csi2rx->lock);
++
++	return 0;
++
++err_subdev_enable:
++	if (!csi2rx->count)
++		csi2rx_stop(csi2rx);
++err_stream_start:
+ 	mutex_unlock(&csi2rx->lock);
++	pm_runtime_put(csi2rx->dev);
++	return ret;
++}
++
++static int csi2rx_disable_streams(struct v4l2_subdev *subdev,
++				  struct v4l2_subdev_state *state, u32 pad,
++				  u64 streams_mask)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct media_pad *remote_pad;
++	u64 sink_streams;
++
++	sink_streams = v4l2_subdev_state_xlate_streams(state, pad,
++						       CSI2RX_PAD_SINK,
++						       &streams_mask);
++
++	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
++	if (!remote_pad ||
++	    v4l2_subdev_disable_streams(csi2rx->source_subdev,
++					remote_pad->index, sink_streams)) {
++		dev_err(csi2rx->dev, "Couldn't disable our subdev\n");
++	}
++
++	mutex_lock(&csi2rx->lock);
++	csi2rx->count--;
++	/*
++	 * Let the last user turn off the lights.
++	 */
++	if (!csi2rx->count)
++		csi2rx_stop(csi2rx);
++	mutex_unlock(&csi2rx->lock);
++
++	pm_runtime_put(csi2rx->dev);
++
 +	return 0;
 +}
 +
-+static int ti_csi2rx_init_ctx(struct ti_csi2rx_ctx *ctx)
++static int csi2rx_s_stream_fallback(struct v4l2_subdev *sd, int enable)
 +{
-+	struct ti_csi2rx_dev *csi = ctx->csi;
-+	struct video_device *vdev = &ctx->vdev;
- 	const struct ti_csi2rx_fmt *fmt;
--	struct v4l2_pix_format *pix_fmt = &csi->v_fmt.fmt.pix;
-+	struct v4l2_pix_format *pix_fmt = &ctx->v_fmt.fmt.pix;
- 	int ret;
- 
-+	mutex_init(&ctx->mutex);
++	struct v4l2_subdev_state *state;
++	struct v4l2_subdev_route *route;
++	u64 mask[CSI2RX_PAD_MAX] = {0};
++	int i, ret;
 +
- 	fmt = find_format_by_fourcc(V4L2_PIX_FMT_UYVY);
- 	if (!fmt)
- 		return -EINVAL;
-@@ -1018,15 +1097,16 @@ static int ti_csi2rx_v4l2_init(struct ti_csi2rx_dev *csi)
- 	pix_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE,
- 	pix_fmt->xfer_func = V4L2_XFER_FUNC_SRGB,
++	/* Find the stream mask on all source pads */
++	state = v4l2_subdev_lock_and_get_active_state(sd);
++	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++) {
++		for_each_active_route(&state->routing, route) {
++			if (route->source_pad == i)
++				mask[i] |= BIT_ULL(route->source_stream);
++		}
++	}
++	v4l2_subdev_unlock_state(state);
++
++	/* Start streaming on each pad */
++	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++) {
++		if (enable)
++			ret = v4l2_subdev_enable_streams(sd, i, mask[i]);
++		else
++			ret = v4l2_subdev_disable_streams(sd, i, mask[i]);
++		if (ret)
++			return ret;
++	}
++
+ 	return ret;
+ }
  
--	ti_csi2rx_fill_fmt(fmt, &csi->v_fmt);
--
--	mdev->dev = csi->dev;
--	mdev->hw_revision = 1;
--	strscpy(mdev->model, "TI-CSI2RX", sizeof(mdev->model));
-+	ti_csi2rx_fill_fmt(fmt, &ctx->v_fmt);
+@@ -446,12 +556,63 @@ static int csi2rx_enum_mbus_code(struct v4l2_subdev *subdev,
+ 	return 0;
+ }
  
--	media_device_init(mdev);
-+	csi->pad.flags = MEDIA_PAD_FL_SINK;
-+	vdev->entity.ops = &ti_csi2rx_video_entity_ops;
-+	ret = media_entity_pads_init(&ctx->vdev.entity, 1, &csi->pad);
++static int _csi2rx_set_routing(struct v4l2_subdev *subdev,
++			       struct v4l2_subdev_state *state,
++			       struct v4l2_subdev_krouting *routing)
++{
++	static const struct v4l2_mbus_framefmt format = {
++		.width = 640,
++		.height = 480,
++		.code = MEDIA_BUS_FMT_UYVY8_1X16,
++		.field = V4L2_FIELD_NONE,
++		.colorspace = V4L2_COLORSPACE_SRGB,
++		.ycbcr_enc = V4L2_YCBCR_ENC_601,
++		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
++		.xfer_func = V4L2_XFER_FUNC_SRGB,
++	};
++	int ret;
++
++	if (routing->num_routes > V4L2_FRAME_DESC_ENTRY_MAX)
++		return -EINVAL;
++
++	ret = v4l2_subdev_routing_validate(subdev, routing,
++					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1);
 +	if (ret)
 +		return ret;
++
++	ret = v4l2_subdev_set_routing_with_fmt(subdev, state, routing, &format);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int csi2rx_set_routing(struct v4l2_subdev *subdev,
++			      struct v4l2_subdev_state *state,
++			      enum v4l2_subdev_format_whence which,
++			      struct v4l2_subdev_krouting *routing)
++{
++	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	int ret;
++
++	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && csi2rx->count)
++		return -EBUSY;
++
++	ret = _csi2rx_set_routing(subdev, state, routing);
++
++	if (ret)
++		return ret;
++
++	csi2rx_update_vc_select(csi2rx, state);
++
++	return 0;
++}
++
+ static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
+ 			  struct v4l2_subdev_state *state,
+ 			  struct v4l2_subdev_format *format)
+ {
+ 	struct v4l2_mbus_framefmt *fmt;
+-	unsigned int i;
  
--	strscpy(vdev->name, TI_CSI2RX_MODULE_NAME, sizeof(vdev->name));
-+	snprintf(vdev->name, sizeof(vdev->name), "%s context %u",
-+		 dev_name(csi->dev), ctx->idx);
- 	vdev->v4l2_dev = &csi->v4l2_dev;
- 	vdev->vfl_dir = VFL_DIR_RX;
- 	vdev->fops = &csi_fops;
-@@ -1034,61 +1114,28 @@ static int ti_csi2rx_v4l2_init(struct ti_csi2rx_dev *csi)
- 	vdev->release = video_device_release_empty;
- 	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
- 			    V4L2_CAP_IO_MC;
--	vdev->lock = &csi->mutex;
--	video_set_drvdata(vdev, csi);
-+	vdev->lock = &ctx->mutex;
-+	video_set_drvdata(vdev, ctx);
+ 	/* No transcoding, source and sink formats must match. */
+ 	if (format->pad != CSI2RX_PAD_SINK)
+@@ -463,14 +624,19 @@ static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
+ 	format->format.field = V4L2_FIELD_NONE;
  
--	csi->pad.flags = MEDIA_PAD_FL_SINK;
--	vdev->entity.ops = &ti_csi2rx_video_entity_ops;
--	ret = media_entity_pads_init(&csi->vdev.entity, 1, &csi->pad);
-+	ret = ti_csi2rx_init_dma(ctx);
- 	if (ret)
- 		return ret;
+ 	/* Set sink format */
+-	fmt = v4l2_subdev_state_get_format(state, format->pad);
++	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
++	if (!fmt)
++		return -EINVAL;
++
+ 	*fmt = format->format;
  
--	csi->v4l2_dev.mdev = mdev;
--
--	ret = v4l2_device_register(csi->dev, &csi->v4l2_dev);
-+	ret = ti_csi2rx_init_vb2q(ctx);
- 	if (ret)
--		return ret;
--
--	ret = media_device_register(mdev);
--	if (ret) {
--		v4l2_device_unregister(&csi->v4l2_dev);
--		media_device_cleanup(mdev);
--		return ret;
+-	/* Propagate to source formats */
+-	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++) {
+-		fmt = v4l2_subdev_state_get_format(state, i);
+-		*fmt = format->format;
 -	}
-+		goto cleanup_dma;
++	/* Propagate to source format */
++	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
++							   format->stream);
++	if (!fmt)
++		return -EINVAL;
++
++	*fmt = format->format;
  
  	return 0;
--}
+ }
+@@ -478,40 +644,92 @@ static int csi2rx_set_fmt(struct v4l2_subdev *subdev,
+ static int csi2rx_init_state(struct v4l2_subdev *subdev,
+ 			     struct v4l2_subdev_state *state)
+ {
+-	struct v4l2_subdev_format format = {
+-		.pad = CSI2RX_PAD_SINK,
+-		.format = {
+-			.width = 640,
+-			.height = 480,
+-			.code = MEDIA_BUS_FMT_UYVY8_1X16,
+-			.field = V4L2_FIELD_NONE,
+-			.colorspace = V4L2_COLORSPACE_SRGB,
+-			.ycbcr_enc = V4L2_YCBCR_ENC_601,
+-			.quantization = V4L2_QUANTIZATION_LIM_RANGE,
+-			.xfer_func = V4L2_XFER_FUNC_SRGB,
++	struct v4l2_subdev_route routes[] = {
++		{
++			.sink_pad = CSI2RX_PAD_SINK,
++			.sink_stream = 0,
++			.source_pad = CSI2RX_PAD_SOURCE_STREAM0,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
+ 		},
+ 	};
  
--static void ti_csi2rx_cleanup_dma(struct ti_csi2rx_dev *csi)
--{
--	dma_free_coherent(csi->dev, csi->dma.drain.len,
--			  csi->dma.drain.vaddr, csi->dma.drain.paddr);
--	csi->dma.drain.vaddr = NULL;
--	dma_release_channel(csi->dma.chan);
--}
--
--static void ti_csi2rx_cleanup_v4l2(struct ti_csi2rx_dev *csi)
--{
--	media_device_unregister(&csi->mdev);
--	v4l2_device_unregister(&csi->v4l2_dev);
--	media_device_cleanup(&csi->mdev);
--}
--
--static void ti_csi2rx_cleanup_subdev(struct ti_csi2rx_dev *csi)
--{
--	v4l2_async_nf_unregister(&csi->notifier);
--	v4l2_async_nf_cleanup(&csi->notifier);
--}
--
--static void ti_csi2rx_cleanup_vb2q(struct ti_csi2rx_dev *csi)
--{
--	vb2_queue_release(&csi->vidq);
-+cleanup_dma:
-+	ti_csi2rx_cleanup_dma(ctx);
+-	return csi2rx_set_fmt(subdev, state, &format);
++	struct v4l2_subdev_krouting routing = {
++		.num_routes = ARRAY_SIZE(routes),
++		.routes = routes,
++	};
++
++	return _csi2rx_set_routing(subdev, state, &routing);
+ }
+ 
+ static int csi2rx_get_frame_desc(struct v4l2_subdev *subdev, unsigned int pad,
+ 				 struct v4l2_mbus_frame_desc *fd)
+ {
+ 	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	struct v4l2_mbus_frame_desc source_fd = {0};
++	struct v4l2_subdev_route *route;
++	struct v4l2_subdev_state *state;
++	int ret;
++
++	ret = csi2rx_get_frame_desc_from_source(csi2rx, &source_fd);
++	if (ret)
++		return ret;
++
++	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
+ 
+-	return csi2rx_get_frame_desc_from_source(csi2rx, fd);
++	state = v4l2_subdev_lock_and_get_active_state(subdev);
++
++	for_each_active_route(&state->routing, route) {
++		struct v4l2_mbus_frame_desc_entry *source_entry = NULL;
++		unsigned int i;
++
++		if (route->source_pad != pad)
++			continue;
++
++		for (i = 0; i < source_fd.num_entries; i++) {
++			if (source_fd.entry[i].stream == route->sink_stream) {
++				source_entry = &source_fd.entry[i];
++				break;
++			}
++		}
++
++		if (!source_entry) {
++			dev_err(csi2rx->dev,
++				"Failed to find stream from source frame desc\n");
++			ret = -EPIPE;
++			goto err_missing_stream;
++		}
++
++		fd->entry[fd->num_entries].stream = route->source_stream;
++		fd->entry[fd->num_entries].flags = source_entry->flags;
++		fd->entry[fd->num_entries].length = source_entry->length;
++		fd->entry[fd->num_entries].pixelcode = source_entry->pixelcode;
++		fd->entry[fd->num_entries].bus.csi2.vc =
++			source_entry->bus.csi2.vc;
++		fd->entry[fd->num_entries].bus.csi2.dt =
++			source_entry->bus.csi2.dt;
++
++		fd->num_entries++;
++	}
++
++err_missing_stream:
++	v4l2_subdev_unlock_state(state);
++
 +	return ret;
  }
  
- static int ti_csi2rx_probe(struct platform_device *pdev)
- {
- 	struct ti_csi2rx_dev *csi;
--	int ret;
-+	int ret, i;
+ static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
+-	.enum_mbus_code	= csi2rx_enum_mbus_code,
+-	.get_fmt	= v4l2_subdev_get_fmt,
+-	.set_fmt	= csi2rx_set_fmt,
+-	.get_frame_desc = csi2rx_get_frame_desc,
++	.enum_mbus_code		= csi2rx_enum_mbus_code,
++	.get_fmt		= v4l2_subdev_get_fmt,
++	.set_fmt		= csi2rx_set_fmt,
++	.get_frame_desc		= csi2rx_get_frame_desc,
++	.set_routing		= csi2rx_set_routing,
++	.enable_streams		= csi2rx_enable_streams,
++	.disable_streams	= csi2rx_disable_streams,
+ };
  
- 	csi = devm_kzalloc(&pdev->dev, sizeof(*csi), GFP_KERNEL);
- 	if (!csi)
-@@ -1097,62 +1144,76 @@ static int ti_csi2rx_probe(struct platform_device *pdev)
- 	csi->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, csi);
+ static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
+-	.s_stream	= csi2rx_s_stream,
++	.s_stream	= csi2rx_s_stream_fallback,
+ };
  
--	mutex_init(&csi->mutex);
- 	csi->shim = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(csi->shim)) {
- 		ret = PTR_ERR(csi->shim);
--		goto err_mutex;
-+		return ret;
- 	}
+ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
+@@ -766,7 +984,8 @@ static int csi2rx_probe(struct platform_device *pdev)
+ 	csi2rx->pads[CSI2RX_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+ 	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++)
+ 		csi2rx->pads[i].flags = MEDIA_PAD_FL_SOURCE;
+-	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
++		V4L2_SUBDEV_FL_STREAMS;
+ 	csi2rx->subdev.entity.ops = &csi2rx_media_ops;
  
--	ret = ti_csi2rx_init_dma(csi);
--	if (ret)
--		goto err_mutex;
-+	csi->drain.len = DRAIN_BUFFER_SIZE;
-+	csi->drain.vaddr = dma_alloc_coherent(csi->dev, csi->drain.len,
-+					      &csi->drain.paddr,
-+					      GFP_KERNEL);
-+	if (!csi->drain.vaddr)
-+		return -ENOMEM;
- 
- 	ret = ti_csi2rx_v4l2_init(csi);
--	if (ret)
--		goto err_dma;
--
--	ret = ti_csi2rx_init_vb2q(csi);
- 	if (ret)
- 		goto err_v4l2;
- 
-+	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
-+		csi->ctx[i].idx = i;
-+		csi->ctx[i].csi = csi;
-+		ret = ti_csi2rx_init_ctx(&csi->ctx[i]);
-+		if (ret)
-+			goto err_ctx;
-+	}
-+
- 	ret = ti_csi2rx_notifier_register(csi);
- 	if (ret)
--		goto err_vb2q;
-+		goto err_ctx;
- 
- 	ret = of_platform_populate(csi->dev->of_node, NULL, NULL, csi->dev);
- 	if (ret) {
- 		dev_err(csi->dev, "Failed to create children: %d\n", ret);
--		goto err_subdev;
-+		goto err_notifier;
- 	}
- 
- 	return 0;
- 
--err_subdev:
--	ti_csi2rx_cleanup_subdev(csi);
--err_vb2q:
--	ti_csi2rx_cleanup_vb2q(csi);
--err_v4l2:
-+err_notifier:
-+	ti_csi2rx_cleanup_notifier(csi);
-+err_ctx:
-+	i--;
-+	for (; i >= 0; i--)
-+		ti_csi2rx_cleanup_ctx(&csi->ctx[i]);
- 	ti_csi2rx_cleanup_v4l2(csi);
--err_dma:
--	ti_csi2rx_cleanup_dma(csi);
--err_mutex:
--	mutex_destroy(&csi->mutex);
-+err_v4l2:
-+	dma_free_coherent(csi->dev, csi->drain.len, csi->drain.vaddr,
-+			  csi->drain.paddr);
- 	return ret;
- }
- 
- static void ti_csi2rx_remove(struct platform_device *pdev)
- {
- 	struct ti_csi2rx_dev *csi = platform_get_drvdata(pdev);
-+	int i;
-+
-+	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++) {
-+		if (vb2_is_busy(&csi->ctx[i].vidq))
-+			dev_err(csi->dev,
-+				"Failed to remove as queue busy for ctx %u\n",
-+				i);
-+	}
- 
--	video_unregister_device(&csi->vdev);
-+	for (i = 0; i < TI_CSI2RX_NUM_CTX; i++)
-+		ti_csi2rx_cleanup_ctx(&csi->ctx[i]);
- 
--	ti_csi2rx_cleanup_vb2q(csi);
--	ti_csi2rx_cleanup_subdev(csi);
-+	ti_csi2rx_cleanup_notifier(csi);
- 	ti_csi2rx_cleanup_v4l2(csi);
--	ti_csi2rx_cleanup_dma(csi);
- 
--	mutex_destroy(&csi->mutex);
-+	dma_free_coherent(csi->dev, csi->drain.len, csi->drain.vaddr,
-+			  csi->drain.paddr);
- }
- 
- static const struct of_device_id ti_csi2rx_of_match[] = {
+ 	ret = media_entity_pads_init(&csi2rx->subdev.entity, CSI2RX_PAD_MAX,
 
 -- 
 2.43.0
