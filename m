@@ -1,50 +1,50 @@
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E2318C342;
-	Thu, 27 Jun 2024 13:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C692318EFD3;
+	Thu, 27 Jun 2024 13:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719493850; cv=none; b=jAu9xe5hzE5HTyzRccm2ZXm96xYe9F/g35QsUqXXsc/oX8+dQP5yyYKGVFYwrY7Qx0fRMYdgKhCLYrL3ZMrHfsoi+2IUOT+qxramjzDySZaKArdV43nJtwU9iWbEQAFLj5u/DXJK7099XkQ7Uiu7G/MTkQAU2O9LHap/gqwxq2w=
+	t=1719493852; cv=none; b=B1KBTg+WgvPSinmcFoUcTVxVggKugS6cTozziPE4MZ1LL3tb9tmnUySUMYDZxKpIe97z/VZJISVIl+sLeBYBTU76DuIlrzXkPVNQ9h5QS+BV5zeyyd1AAio+oeWzIsuK4l7Gt/O5brbdMqPvZ5UFZWt0JuiyDoGaIJ4xCuhms5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719493850; c=relaxed/simple;
-	bh=2vFuVo+bGPPecHogl/3Txdtb7wk2+AmyvjLdF8g5D1c=;
+	s=arc-20240116; t=1719493852; c=relaxed/simple;
+	bh=+/EnvUrM4ZPWCtrpdzk+4GojwCIuX8pMK1WphzTTUK0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=ZdIb0QpE3HG+82rVg0rDwi67SqgwBe0w6QpAzw2FSdlVm9KgmETmnNsW6KZwYNMGexWrQILe98BYoRK9ae5zI1fgvI40IbxTw2Hkfet0E5Ftt0UQE5WbIBcHqR+xN4l8Jc4jvhz9JWe986dRwsDTQKC5FeQn1hTy1uaWog8NaVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=QySt7jfI; arc=none smtp.client-ip=198.47.23.248
+	 In-Reply-To:To:CC; b=T2CNEc5uiTfcn9xD0AJE4D+30iqkbAuK6QBWKx9wopdRe3MMmCfaAVGyCamR2PFX5nG/ShDp51OjF6uxkcWKoXuzFfBVQkbXm2J8sawhUmS7STDszyOC9PDfaBB6awR7IoKb3EpSj2dPcB7UFOlkPMMDAPELHNPwoPOXq0jn8rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=AK6P6MZ5; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="QySt7jfI"
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAb2A110243;
-	Thu, 27 Jun 2024 08:10:37 -0500
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="AK6P6MZ5"
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAe84024343;
+	Thu, 27 Jun 2024 08:10:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1719493837;
-	bh=d1NREPANpw432CzvUECzmUTRPruFVZvBjGhgyeTjW2M=;
+	s=ti-com-17Q1; t=1719493840;
+	bh=8pnwDRf5zvvCFyhKGj1stRmE7TXO+7c8UQvSNtofPhk=;
 	h=From:Date:Subject:References:In-Reply-To:To:CC;
-	b=QySt7jfIxo2KqCQDBzoEh5kkg3hZoAYQr5JNjyw3toQr1Q3E2oU+yYFVBGNoVfpe2
-	 kDrEMsrp64as06RHMz4Qe5Zert2xxYEQ8iuCN5cWy2Ig5pRk/CedOL/1VpWt/ppuCw
-	 uZSkvzgMIgxKzQYjx/8d2x3prWidkr+/04Kerhsc=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDAbN4029355
+	b=AK6P6MZ5/S9muQETiJGVJMfBtz23yMC3UT7CJv3WFoYWviekUUCjiUMXdYDOmzXcw
+	 wjo8151R7qvjkhXUGuaVJo0+CMbZv67MxXQAsBO7vbqVjA6LmJcrjQE/SKSaqpMrjH
+	 2OgzFUR8jqfHUw6pFEpugSdKVtBaErk5GuGjrI7s=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45RDAeNu117673
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 27 Jun 2024 08:10:37 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 27 Jun 2024 08:10:40 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
- Jun 2024 08:10:36 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2024 08:10:39 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 27 Jun 2024 08:10:36 -0500
+ Frontend Transport; Thu, 27 Jun 2024 08:10:39 -0500
 Received: from localhost (jluthra.dhcp.ti.com [172.24.227.116])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAaZB038665;
-	Thu, 27 Jun 2024 08:10:36 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45RDAdNC038728;
+	Thu, 27 Jun 2024 08:10:39 -0500
 From: Jai Luthra <j-luthra@ti.com>
-Date: Thu, 27 Jun 2024 18:40:03 +0530
-Subject: [PATCH v2 08/13] media: cadence: csi2rx: add get_frame_desc
- wrapper
+Date: Thu, 27 Jun 2024 18:40:05 +0530
+Subject: [PATCH v2 10/13] media: cadence: csi2rx: Use new enable stream
+ APIs
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240627-multistream-v2-8-6ae96c54c1c3@ti.com>
+Message-ID: <20240627-multistream-v2-10-6ae96c54c1c3@ti.com>
 References: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 In-Reply-To: <20240627-multistream-v2-0-6ae96c54c1c3@ti.com>
 To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
@@ -81,83 +81,92 @@ CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<laurent.pinchart@ideasonboard.com>,
         Jai Luthra <j-luthra@ti.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2073; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=JtptYl9pWQyib/AWqwA187Qcdcnrfn7aG9FAK3/vGqA=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWS527ImTZLiFEOQ5Xg8bvJcnev8SegdmIezz
- 8SgaEGPt16JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1kuQAKCRBD3pH5JJpx
- RSigEACd6lCD+0c0Z5dyQqGiA+nfMwiSLo02Hjiw9r5Tu9glT3XdX19bkkLuTtCz4bmPzDA1TT9
- 7NO0JCk9N6ZIhOloJQQXadcooxoYUOMY5GPAizVWDA9kOvcgNjTuocb3Lr05SHfxqsNSocft2E0
- hb2eTCeC5CcVAfC5LG8RCODjiVzYswxwvR5V4L9lkSDy24hoVPoRl01sQVle9rFSUWn9Nzt0lXi
- chhcR+zCDO/0im0iOnzdoV/P5ntRuPq5+q4N3l+yjUMkaj5qPXA8cAdeXzmyRPFLEPh7zKOwOfv
- e5WHZz9N0IlziAf6OKFx9+bsjpsVUw8qA+95m19fI85g9tlGiJOPPnP1oHGhJM1QiM+1u5Syth/
- kRpr3lBaDv48ecJ6Ly/kvLIILKy7Tou9vCu+jL/u+bJ++jU42bVok/ASI5K9ZhxgHIa5FyUfNwU
- hEBdUvHExU31W1fGJfLLZqH85JsROIb6+KOfLAA33BzpUOjlfJSCUU+LRXsV79QaLNXRa+z6Nyb
- H1LbM4TjTrG/SYNfg3qt6c/T94kl2iwFbpAhk6c6DHNQnv7tuQvstLmz0g5QCtugnk1vOQAO8Bd
- wDQ3YVcn4GOM+RVA16BnMcX8KByUfBHdZMrnXh7L5/zrBgBBWQ4T3j0yGCEJrdANMpa0B1frigL
- 7YeY12kJWOnbi+g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2442; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=+/EnvUrM4ZPWCtrpdzk+4GojwCIuX8pMK1WphzTTUK0=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBmfWS7OfDqioXJZI8fnZEa4wpgqbGgmassDG72w
+ BkOFF9PVH+JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZn1kuwAKCRBD3pH5JJpx
+ ReDmD/9/dyPzxoCU46hjGnzhJDbl7cAwBkarMeyvjGS7RDbRZ2rETX2ad7BbzyjlZ90YAAHq0Pt
+ bFGFI7TCyZ+QSwjSW7e/sLCyvQNBji5kMya00DHU+mjIDCJOKYame5x//s3pVQWu6lob3vU7QPG
+ e/6+GilGLbiWo7yavhg5r05LPpGIxSXJXcmjVVyJtbse/LdTmRU+5oy5eEa8Varlvs/QLSialJe
+ zzGbloHrktXNfg8lNyRbRMn1LQU+jmmF1/vZectyVO0gxbUGliINOAQizZgViI77C4o6TI0cXyc
+ 5Fo1huXY/Bn4QEp1h7TrKHmBRaR43k0bPC8tdW5C9nhrpxaYpzoKX1rVTW0RedZ6LYSyalfGbXj
+ FyXZm3sFyioCLpv5pqoEXHd/Geqmb0NPixVlTNLKdrLQ2D3FVypptuw5z0KkcrjyXHId4fjLNdi
+ /Xe4Yp1iTru9VZXsqXetHrp+la1oSJSCmVxT2A7VcynPsIJzd7B6cxdTzJSZOjeXq5+AaMDfpDX
+ Tyi8A85NLCJYMPk5ay/ufm1LfCJBALDJop8P5Tv3HbfWv+I2ZisgF4qftrcMagAUGVlrULUb9TL
+ WECbgkUUZAwU5i5rKC3mHfmWqmQiRK+X38dvpN1rUBB8cwfntHfoyG6an6ZiCFVEDLebaiYYU2q
+ EMAFjJaoJXoTkhw==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Pratyush Yadav <p.yadav@ti.com>
+The enable_streams() API in v4l2 supports passing a bitmask to enable
+each pad/stream combination individually on any media subdev instead of
+doing s_stream(1) to start all streams on the subdev at once.
 
-J721E wrapper CSI2RX driver needs to get the frame descriptor from the
-source to find out info about virtual channel. This driver itself does
-not touch the routing or virtual channels in any way. So simply pass the
-descriptor through from the source.
+This API is implemented by ds90ub960 driver (FPDLink deser) and thus the
+caller (cdns-csi2x) is required to use it. For now we only enable
+stream0.
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
- drivers/media/platform/cadence/cdns-csi2rx.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 751eadbe61ef..b6054d62c799 100644
+index b6054d62c799..2ec34fc9c524 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -135,6 +135,21 @@ static const struct csi2rx_fmt *csi2rx_get_fmt_by_code(u32 code)
- 	return NULL;
- }
- 
-+static int csi2rx_get_frame_desc_from_source(struct csi2rx_priv *csi2rx,
-+					     struct v4l2_mbus_frame_desc *fd)
-+{
+@@ -222,10 +222,18 @@ static int csi2rx_configure_ext_dphy(struct csi2rx_priv *csi2rx)
+ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ {
+ 	unsigned int i;
 +	struct media_pad *remote_pad;
-+
-+	remote_pad = media_entity_remote_source_pad_unique(&csi2rx->subdev.entity);
+ 	unsigned long lanes_used = 0;
+ 	u32 reg;
+ 	int ret;
+ 
++	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
 +	if (!remote_pad) {
-+		dev_err(csi2rx->dev, "No remote pad found for sink\n");
++		dev_err(csi2rx->dev,
++			"Failed to find connected source\n");
 +		return -ENODEV;
 +	}
 +
-+	return v4l2_subdev_call(csi2rx->source_subdev, pad, get_frame_desc,
-+				remote_pad->index, fd);
-+}
-+
- static inline
- struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
+ 	ret = clk_prepare_enable(csi2rx->p_clk);
+ 	if (ret)
+ 		return ret;
+@@ -309,7 +317,8 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 
+ 	reset_control_deassert(csi2rx->sys_rst);
+ 
+-	ret = v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, true);
++	ret = v4l2_subdev_enable_streams(csi2rx->source_subdev,
++					 remote_pad->index, BIT(0));
+ 	if (ret)
+ 		goto err_disable_sysclk;
+ 
+@@ -337,6 +346,7 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
  {
-@@ -466,10 +481,19 @@ static int csi2rx_init_state(struct v4l2_subdev *subdev,
- 	return csi2rx_set_fmt(subdev, state, &format);
- }
++	struct media_pad *remote_pad;
+ 	unsigned int i;
+ 	u32 val;
+ 	int ret;
+@@ -365,8 +375,12 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	reset_control_assert(csi2rx->p_rst);
+ 	clk_disable_unprepare(csi2rx->p_clk);
  
-+static int csi2rx_get_frame_desc(struct v4l2_subdev *subdev, unsigned int pad,
-+				 struct v4l2_mbus_frame_desc *fd)
-+{
-+	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
-+
-+	return csi2rx_get_frame_desc_from_source(csi2rx, fd);
-+}
-+
- static const struct v4l2_subdev_pad_ops csi2rx_pad_ops = {
- 	.enum_mbus_code	= csi2rx_enum_mbus_code,
- 	.get_fmt	= v4l2_subdev_get_fmt,
- 	.set_fmt	= csi2rx_set_fmt,
-+	.get_frame_desc = csi2rx_get_frame_desc,
- };
+-	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
++	remote_pad = media_pad_remote_pad_first(&csi2rx->pads[CSI2RX_PAD_SINK]);
++	if (!remote_pad ||
++	    v4l2_subdev_disable_streams(csi2rx->source_subdev,
++					remote_pad->index, BIT(0))) {
+ 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
++	}
  
- static const struct v4l2_subdev_video_ops csi2rx_video_ops = {
+ 	if (csi2rx->dphy) {
+ 		writel(0, csi2rx->base + CSI2RX_DPHY_LANE_CTRL_REG);
 
 -- 
 2.43.0
