@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA68512D1E0;
-	Sun, 30 Jun 2024 14:18:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63DB1527AA;
+	Sun, 30 Jun 2024 14:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719757116; cv=none; b=UixEf2vZboQYAWXsGy/BtOKmz4BOipgEKlGxahFJVni7mZaKDDnktnrnMFSa6W8WoZmnTVlatZXNbgyigjA5cpkSdYdRFMdPCTrmT6j5RE61c6jp7ZaBoaNNBhnyxf2Pixt/bD1KsPg6xvKtIClgfIT5+03xU52Ffb2N8hN70O0=
+	t=1719757121; cv=none; b=V+2gVkVPQCUzUxHhhEIH55KaC8owRPOOzuKmANWRhHpcotfprGBgysYM2CZeZbhYhAv7Jvy/5Rjx1rAzLwkCR2r7G25QRE79YkF0cWyCVUfzWYxBJ6i0WzmR57gcfPuGhOIKESt/CCKkYXj34vdDYjdAgKNUWW9la4zN8V8wnUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719757116; c=relaxed/simple;
-	bh=NAoPLXhf+1S23FwRoRgtZGHyNKRb1J5+vr8TaGFXZGA=;
+	s=arc-20240116; t=1719757121; c=relaxed/simple;
+	bh=C5kmeLYb0jLUF+nLwczQud+TEQ399CKGeKxIRRFHAhk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D3z5E1y0/RrvTmlmgNiU6EQstZP0407dpdBNYYx5pheSZ0y29n65uQhADR8QcMdtALNWlg3oTshGms7uA4xvoZDWfc4QkR2O7ikO+RUKDbkpTFEGiKj/HpxyPIgoBxqjBHhlrtSTfcvBsackORPvrILtORYXZdKuwoH7sFuFl6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=saaqOlII; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=LJfYA8LhHt76rWUWDvr6SOkF8FYUGPEvRWYB18SvvFSRevPF+AkMrUMBouz9i2nk36Ngj0XmVCiQUTUYne/+btXmyWsdML4ibX08BhJK8tlX6bPq7uLFa8cvwrOfTCIa47RtgWKmSZwvHgpjs1S3tMDo4dWmqFJcp+D0SZ4UUM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=asgJImnB; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="saaqOlII"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="asgJImnB"
 Received: from pendragon.ideasonboard.com (85-76-36-175-nat.elisa-mobile.fi [85.76.36.175])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30F4266D;
-	Sun, 30 Jun 2024 16:18:01 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E2E666F;
+	Sun, 30 Jun 2024 16:18:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1719757081;
-	bh=NAoPLXhf+1S23FwRoRgtZGHyNKRb1J5+vr8TaGFXZGA=;
+	s=mail; t=1719757087;
+	bh=C5kmeLYb0jLUF+nLwczQud+TEQ399CKGeKxIRRFHAhk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=saaqOlIIN02PMHP8YsS/oXl7fNNavZNiMJqXbirmEfHEi6FMFQUz/pE2JEYivs92W
-	 6yviKuHuXLTpnOqKuCXiJDxK+C0Rfl/UzcuHdwW2c43vJ4xqagfuU12/F+X8hvz2P3
-	 3EIevPxDu7cNMMgxVpme5k3GUyHuPuR3w1ieASnc=
+	b=asgJImnBIDIT0cvfD1Mx/fycNtsPMBTqKukwcRf2PDN9yRDHcXPXil9SNSAZ5deyz
+	 EBa5qTaPwxZMz2KUCrDW9WuMnCWr4awQSQSBsbR9m2WNjcVcysgt2Y+48UO1lus7Nb
+	 f5YXe+tI3X5nEb6LnNZKz7HKlX8So64n4RjPyUE8=
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org
@@ -34,9 +34,9 @@ Cc: Rob Herring <robh@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH/RFC v1 1/9] media: dt-bindings: media: i2c: Add AR0144 camera sensor
-Date: Sun, 30 Jun 2024 17:17:51 +0300
-Message-ID: <20240630141802.15830-2-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH/RFC v1 3/9] media: i2c: ar0144: Add support for the parallel interface
+Date: Sun, 30 Jun 2024 17:17:53 +0300
+Message-ID: <20240630141802.15830-4-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.44.2
 In-Reply-To: <20240630141802.15830-1-laurent.pinchart@ideasonboard.com>
 References: <20240630141802.15830-1-laurent.pinchart@ideasonboard.com>
@@ -46,208 +46,107 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add device tree binding for the onsemi AR0144 CMOS camera sensor. The
-binding supports both the monochrome and color sensor versions.
+Add basic support for the parallel interface. This hasn't been tested
+due to the lack of a test platform, and will thus likely not work out of
+the box.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../bindings/media/i2c/onnn,ar0144.yaml       | 166 ++++++++++++++++++
- MAINTAINERS                                   |   6 +
- 2 files changed, 172 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/onnn,ar0144.yaml
+ drivers/media/i2c/ar0144.c | 31 +++++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/onnn,ar0144.yaml b/Documentation/devicetree/bindings/media/i2c/onnn,ar0144.yaml
-new file mode 100644
-index 000000000000..3de0c46c3518
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/onnn,ar0144.yaml
-@@ -0,0 +1,166 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/onnn,ar0144.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ON Semiconductor AR0144 MIPI CSI-2 sensor
-+
-+maintainers:
-+  - Krzysztof Hałasa <khalasa@piap.pl>
-+
-+description: |
-+  The AR0144 is a 1/4" 1MP raw CMOS image sensor with MIPI CSI-2 and parallel
-+  outputs, and an I2C-compatible control interface.
-+
-+  The sensor comes in a regular CMOS version (AR0144CS) and an automotive
-+  version (AR0144AT). The former is further declined in a colour version
-+  (AR0144CSSC) and a monochrome version (AR0144CSSM), while the later exists
-+  only in monochrome (AR0144ATSM)
-+
-+allOf:
-+  - $ref: /schemas/media/video-interface-devices.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - onnn,ar0144c  # Color version
-+      - onnn,ar0144m  # Monochrome version
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: extclk
-+
-+  vaa-supply:
-+    description:
-+      Supply for the VAA and VAA_PIX analog power rails (2.8V).
-+
-+  vdd-supply:
-+    description:
-+      Supply for the VDD and VDD_PHY digital power rails (1.2V).
-+
-+  vdd_io-supply:
-+    description:
-+      Supply for the VDD_IO digital I/O power rail (1.8V or 2.8V).
-+
-+  reset-gpios:
-+    description: Reset GPIO, active low.
-+    maxItems: 1
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    unevaluatedProperties: false
-+    description: |
-+      Video output port.
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          bus-type:
-+            enum:
-+              - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
-+              - 5 # MEDIA_BUS_TYPE_PARALLEL
-+
-+          data-lanes:
-+            items:
-+              - const: 1
-+              - const: 2
-+
-+          bus-width:
-+            enum: [8, 10, 12]
-+            default: 12
-+
-+          data-shift:
-+            enum: [0, 2, 4]
-+            default: 0
-+
-+          pclk-sample:
-+            enum: [0, 1]
-+            default: 0
-+
-+        allOf:
-+          - if:
-+              properties:
-+                bus-type:
-+                  const: 4 # MEDIA_BUS_TYPE_CSI2_DPHY
-+            then:
-+              properties:
-+                bus-width: false
-+                data-shift: false
-+                pclk-sample: false
-+              required:
-+                - data-lanes
-+            else:
-+              properties:
-+                data-lanes: false
-+          - if:
-+              properties:
-+                bus-width:
-+                  const: 10
-+            then:
-+              properties:
-+                data-shift:
-+                  enum: [0, 2]
-+          - if:
-+              properties:
-+                bus-width:
-+                  const: 12
-+            then:
-+              properties:
-+                data-shift:
-+                  const: 0
-+
-+        required:
-+          - bus-type
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - vaa-supply
-+  - vdd-supply
-+  - vdd_io-supply
-+  - port
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/media/video-interfaces.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        camera@10 {
-+            compatible = "onnn,ar0144c";
-+            reg = <0x10>;
-+
-+            clocks = <&cam_clk>;
-+            clock-names = "extclk";
-+
-+            reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+
-+            vaa-supply = <&reg_2v8>;
-+            vdd-supply = <&reg_1v2>;
-+            vdd_io-supply = <&reg_1v8>;
-+
-+            port {
-+                ar0144_out: endpoint {
-+                    remote-endpoint = <&mipi_csi2_in>;
-+                    bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
-+                    data-lanes = <1 2>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90b3a875cbf4..8e591445bec4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1637,6 +1637,12 @@ S:	Supported
- W:	http://www.aquantia.com
- F:	drivers/net/ethernet/aquantia/atlantic/aq_ptp*
+diff --git a/drivers/media/i2c/ar0144.c b/drivers/media/i2c/ar0144.c
+index b0e738a28de6..d231459d7218 100644
+--- a/drivers/media/i2c/ar0144.c
++++ b/drivers/media/i2c/ar0144.c
+@@ -10,7 +10,8 @@
+  * - Use grouped parameter hold to update controls atomically
+  * - Expose debug information through debugfs (FRAME_COUNT, FRAME_STATUS, ...)
+  * - Make MIPI D-PHY timings configurable
+- * - Support the parallel interface
++ * - Program additional parallel interface parameters (slew rates, polarities,
++ *   ...)
+  * - Expose additional controls (in particular the temperature sensor and the
+  *   on-chip black level correction)
+  */
+@@ -298,6 +299,8 @@
+ #define AR0144_MIN_CSI2_LINK_FREQ		150000000U
+ #define AR0144_MAX_CSI2_LINK_FREQ		384000000U
  
-+AR0144 ONSEMI CAMERA SENSOR DRIVER
-+M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/i2c/onnn,ar0144.yaml
++#define AR0144_MAX_PARALLEL_LINK_FREQ		74250000U
 +
- AR0521 ON SEMICONDUCTOR CAMERA SENSOR DRIVER
- M:	Krzysztof Hałasa <khalasa@piap.pl>
- L:	linux-media@vger.kernel.org
+ /*
+  * The pixel array contains 1300x820 optically transparent pixels, with 6 dummy
+  * pixels on each side that can't be read out. The active size is 1288x808.
+@@ -464,6 +467,12 @@ static int ar0144_configure_pll(struct ar0144 *sensor)
+ 	return ret;
+ }
+ 
++static int ar0144_configure_parallel(struct ar0144 *sensor,
++				     const struct ar0144_format_info *info)
++{
++	return cci_write(sensor->regmap, AR0144_SERIAL_FORMAT, 0x0200, NULL);
++}
++
+ static int ar0144_configure_mipi(struct ar0144 *sensor,
+ 				 const struct ar0144_format_info *info)
+ {
+@@ -550,13 +559,19 @@ static int ar0144_start_streaming(struct ar0144 *sensor,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = ar0144_configure_mipi(sensor, info);
++	if (sensor->bus_cfg.bus_type == V4L2_MBUS_PARALLEL)
++		ret = ar0144_configure_parallel(sensor, info);
++	else
++		ret = ar0144_configure_mipi(sensor, info);
+ 
+ 	/*
+ 	 * We're all set, start streaming. Mask bad frames and keep read-only
+ 	 * registers locked.
+ 	 */
+ 	val = AR0144_MASK_BAD | AR0144_LOCK_REG | AR0144_STREAM | 0x2010;
++	if (sensor->bus_cfg.bus_type == V4L2_MBUS_PARALLEL)
++		val |= AR0144_SMIA_SERIALIZER_DIS | AR0144_PARALLEL_EN
++		    |  AR0144_DRIVE_PINS;
+ 	cci_write(sensor->regmap, AR0144_RESET_REGISTER, val, &ret);
+ 
+ 	return ret;
+@@ -581,6 +596,10 @@ static int ar0144_stop_streaming(struct ar0144 *sensor)
+ 	 * Initiate the transition to standby by clearing the STREAM bit. Don't
+ 	 * clear the bits that affect the output interface yet.
+ 	 */
++	if (sensor->bus_cfg.bus_type == V4L2_MBUS_PARALLEL)
++		val |= AR0144_SMIA_SERIALIZER_DIS | AR0144_PARALLEL_EN
++		    |  AR0144_DRIVE_PINS;
++
+ 	ret = cci_write(sensor->regmap, AR0144_RESET_REGISTER, reset_bits, NULL);
+ 	if (ret)
+ 		return ret;
+@@ -1268,6 +1287,10 @@ static int ar0144_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
+ 	default:
+ 		cfg->bus.mipi_csi2 = sensor->bus_cfg.bus.mipi_csi2;
+ 		break;
++
++	case V4L2_MBUS_PARALLEL:
++		cfg->bus.parallel = sensor->bus_cfg.bus.parallel;
++		break;
+ 	}
+ 
+ 	return 0;
+@@ -1607,6 +1630,10 @@ static int ar0144_parse_dt(struct ar0144 *sensor)
+ 		}
+ 		break;
+ 
++	case V4L2_MBUS_PARALLEL:
++		nlanes = ep->bus.parallel.bus_width ? : 12;
++		break;
++
+ 	default:
+ 		dev_err(sensor->dev, "Unsupported bus type %u\n", ep->bus_type);
+ 		goto error;
 -- 
 Regards,
 
