@@ -1,21 +1,25 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E7A2C859
-	for <linux-media@vger.kernel.org>; Mon,  1 Jul 2024 09:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73EC112D1EA
+	for <linux-media@vger.kernel.org>; Mon,  1 Jul 2024 10:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719827373; cv=none; b=tVxXIae7xoBwEZqYegu0pF1PAyb9VvIYZeHZWNupQcIAcg7iBMKBAsJSYyBdHnD2/6hlzjIlWPN3FPOo1UeyAXX1j3rrBK1zrLpkNCuyLpImjy+PJOjlK6/GSsBqJY0TT3zcWr8jfRXx4fl3LfcarpTkUc6hBWWVYbrvlZa8CRw=
+	t=1719828998; cv=none; b=WdEgn5A5UW8itQRPuqZweu1KBBHrvhJN5FXDYsgEh3tvVClhSR83rLr/Thgxu4EDlKZjs4YcQ18AVqYU80WuOG1LshWpDBY4xydQsxYfzoev9vAqDbxFUp5oxbj0uJpft0sYcO9pTb7zfPzhtocJE1YUOe+QsN58SjxJTeN5prM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719827373; c=relaxed/simple;
-	bh=M5jlQm+nXhJNffkrlTY1OLLdNGw9Dy9TPy6Yn6zyaS4=;
+	s=arc-20240116; t=1719828998; c=relaxed/simple;
+	bh=1oLewmcy0vRKIVUlzNgxiiDAU1wsuWipvuG13FoxmoU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=SkQ45qgrjf23UP9s1Vnd0W+21wp+t9UiXbfMvoRk64Dw45K/nQIwKQWLz81lbTHyTsXk7JcbgSYwq3SJvM5J5PzSIcuBk/WODZyOMsw59Q62kSl4sNALpOgQfDZjnfTrt2JvfTXIx6S26QFOcS0MpsqK3HVaCFqe+iI8ut37DQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4676FC116B1;
-	Mon,  1 Jul 2024 09:49:32 +0000 (UTC)
-Message-ID: <59d86208-16bb-4f42-a302-81f015776894@xs4all.nl>
-Date: Mon, 1 Jul 2024 11:49:30 +0200
+	 In-Reply-To:Content-Type; b=XF08AaK6fucNgHpTJZYvL4/nKY46mSjcAeiSxHs8iZzORTuP4p7mr4yITUA6XHx2g3DdXy9fRzKb//zeoZ0JONw6BpUybqCDT1rsKMYp6UeKD1Qp8uGAupVNaZO53VT4a1UoVqDSR1Vkpe9NaT1uleCrC3tAVJMtPygF7K03PNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6C6B339;
+	Mon,  1 Jul 2024 03:17:00 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB5EA3F762;
+	Mon,  1 Jul 2024 03:16:29 -0700 (PDT)
+Message-ID: <9dd07016-9666-4564-9369-b76a30a6fec9@arm.com>
+Date: Mon, 1 Jul 2024 11:16:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -23,336 +27,77 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [SPAM] [PATCH 4/4] v4l-utils: fix formats under ppc/mips64
-To: Rosen Penev <rosenp@gmail.com>, linux-media@vger.kernel.org
-References: <20240630224440.5912-1-rosenp@gmail.com>
- <20240630224440.5912-4-rosenp@gmail.com>
-Content-Language: en-US, nl
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <20240630224440.5912-4-rosenp@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v5 3/7] hwtracing: use for_each_endpoint_of_node()
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+ "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Alexey Brodkin <abrodkin@synopsys.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@gmail.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Eugen Hristev <eugen.hristev@collabora.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Maxime Ripard <mripard@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ coresight@lists.linaro.org, dri-devel@lists.freedesktop.org,
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-staging@lists.linux.dev
+References: <87cynx971l.wl-kuninori.morimoto.gx@renesas.com>
+ <878qyl970c.wl-kuninori.morimoto.gx@renesas.com>
+Content-Language: en-US
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <878qyl970c.wl-kuninori.morimoto.gx@renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 01/07/2024 00:44, Rosen Penev wrote:
-> Unlike libc, kernel headers use long long for 64-bit types. The
-> exception is ppc64 and mips64, unless __SANE_USERSPACE_TYPES__ is
-> defined.
+On 01/07/2024 03:32, Kuninori Morimoto wrote:
+> We already have for_each_endpoint_of_node(), don't use
+> of_graph_get_next_endpoint() directly. Replace it.
 > 
-> Define in compiler.h and include before kernel headers are included so
-> that wrong __u64 and __s64 definitions to not get used.
-> 
-> Fixes -Wformat warnings about llu being used instead of lu.
-> 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: James Clark <james.clark@arm.com>
 > ---
->  contrib/xc3028-firmware/firmware-tool.c | 2 ++
->  include/linux/compiler.h                | 1 +
->  utils/cec-compliance/cec-compliance.h   | 2 ++
->  utils/cec-ctl/cec-ctl.cpp               | 2 ++
->  utils/cec-ctl/cec-ctl.h                 | 2 ++
->  utils/cec-ctl/cec-pin.cpp               | 2 ++
->  utils/cec-follower/cec-processing.cpp   | 2 ++
->  utils/common/v4l2-info.h                | 2 ++
->  utils/cx18-ctl/cx18-ctl.c               | 2 ++
->  utils/ivtv-ctl/ivtv-ctl.c               | 2 ++
->  utils/keytable/keytable.c               | 2 ++
->  utils/media-ctl/media-ctl.c             | 2 ++
->  utils/v4l2-compliance/v4l2-compliance.h | 2 ++
->  utils/v4l2-ctl/v4l2-ctl-common.cpp      | 2 ++
->  utils/v4l2-ctl/v4l2-ctl-streaming.cpp   | 2 ++
->  utils/v4l2-ctl/v4l2-ctl.cpp             | 2 ++
->  utils/v4l2-ctl/v4l2-ctl.h               | 2 ++
->  utils/v4l2-dbg/v4l2-dbg.cpp             | 2 ++
->  18 files changed, 35 insertions(+)
+>   drivers/hwtracing/coresight/coresight-platform.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/contrib/xc3028-firmware/firmware-tool.c b/contrib/xc3028-firmware/firmware-tool.c
-> index 5dd205e0..6bcb3237 100644
-> --- a/contrib/xc3028-firmware/firmware-tool.c
-> +++ b/contrib/xc3028-firmware/firmware-tool.c
-> @@ -29,6 +29,8 @@
->  #include <string.h>
->  #include <unistd.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <asm/byteorder.h>
->  #include <asm/types.h>
->  
-> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> index 379629be..5a6326f8 100644
-> --- a/include/linux/compiler.h
-> +++ b/include/linux/compiler.h
-> @@ -1,6 +1,7 @@
->  #ifndef __linux_compiler_h
->  #define __linux_compiler_h
->  
-> +#define __SANE_USERSPACE_TYPES__
+> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+> index 57a009552cc5..64e171eaad82 100644
+> --- a/drivers/hwtracing/coresight/coresight-platform.c
+> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+> @@ -275,7 +275,7 @@ static int of_get_coresight_platform_data(struct device *dev,
+>   	 */
+>   	if (!parent) {
+>   		/*
+> -		 * Avoid warnings in of_graph_get_next_endpoint()
+> +		 * Avoid warnings in for_each_endpoint_of_node()
+>   		 * if the device doesn't have any graph connections
+>   		 */
+>   		if (!of_graph_is_present(node))
+> @@ -286,7 +286,7 @@ static int of_get_coresight_platform_data(struct device *dev,
+>   	}
+>   
+>   	/* Iterate through each output port to discover topology */
+> -	while ((ep = of_graph_get_next_endpoint(parent, ep))) {
+> +	for_each_endpoint_of_node(parent, ep) {
+>   		/*
+>   		 * Legacy binding mixes input/output ports under the
+>   		 * same parent. So, skip the input ports if we are dealing
 
-Please add a comment before this define, explaining why it is needed.
 
-Basically the same as what you wrote in the commit log.
+Applied to coresight next
 
-But this is in the wrong header: it should go into include/compiler.h.
-The linux/compiler.h header was used in just a single test application,
-and in fact it is no longer needed and has been effectively obsolete for
-quite a long time. I just removed it from v4l-utils.
+https://git.kernel.org/coresight/c/2e5657aa5966
 
-Regards,
-
-	Hans
-
->  #define __user
->  
->  #endif
-> diff --git a/utils/cec-compliance/cec-compliance.h b/utils/cec-compliance/cec-compliance.h
-> index aae72842..d5bd1d0a 100644
-> --- a/utils/cec-compliance/cec-compliance.h
-> +++ b/utils/cec-compliance/cec-compliance.h
-> @@ -8,6 +8,8 @@
->  #ifndef _CEC_COMPLIANCE_H_
->  #define _CEC_COMPLIANCE_H_
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/cec-funcs.h>
->  #include "cec-htng-funcs.h"
->  
-> diff --git a/utils/cec-ctl/cec-ctl.cpp b/utils/cec-ctl/cec-ctl.cpp
-> index fb38320d..a2ffcb2b 100644
-> --- a/utils/cec-ctl/cec-ctl.cpp
-> +++ b/utils/cec-ctl/cec-ctl.cpp
-> @@ -21,6 +21,8 @@
->  #include <sys/time.h>
->  #include <unistd.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/cec-funcs.h>
->  #include "cec-htng-funcs.h"
->  #include "cec-log.h"
-> diff --git a/utils/cec-ctl/cec-ctl.h b/utils/cec-ctl/cec-ctl.h
-> index 2c82bedc..e0692c31 100644
-> --- a/utils/cec-ctl/cec-ctl.h
-> +++ b/utils/cec-ctl/cec-ctl.h
-> @@ -6,6 +6,8 @@
->  #ifndef _CEC_CTL_H_
->  #define _CEC_CTL_H_
->  
-> +#include "linux/compiler.h"
-> +
->  #include <cec-info.h>
->  
->  // cec-ctl.cpp
-> diff --git a/utils/cec-ctl/cec-pin.cpp b/utils/cec-ctl/cec-pin.cpp
-> index f3500555..0cdc19f7 100644
-> --- a/utils/cec-ctl/cec-pin.cpp
-> +++ b/utils/cec-ctl/cec-pin.cpp
-> @@ -3,6 +3,8 @@
->   * Copyright 2017 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
->   */
->  
-> +#include "linux/compiler.h"
-> +
->  #include <string>
->  
->  #include <linux/cec.h>
-> diff --git a/utils/cec-follower/cec-processing.cpp b/utils/cec-follower/cec-processing.cpp
-> index 20c6165c..cc38f143 100644
-> --- a/utils/cec-follower/cec-processing.cpp
-> +++ b/utils/cec-follower/cec-processing.cpp
-> @@ -3,6 +3,8 @@
->   * Copyright 2016 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
->   */
->  
-> +#include "linux/compiler.h"
-> +
->  #include <cerrno>
->  #include <cinttypes>
->  #include <ctime>
-> diff --git a/utils/common/v4l2-info.h b/utils/common/v4l2-info.h
-> index ac227971..eeb7bc6b 100644
-> --- a/utils/common/v4l2-info.h
-> +++ b/utils/common/v4l2-info.h
-> @@ -8,6 +8,8 @@
->  
->  #include <string>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/videodev2.h>
->  #include <linux/v4l2-subdev.h>
->  
-> diff --git a/utils/cx18-ctl/cx18-ctl.c b/utils/cx18-ctl/cx18-ctl.c
-> index 8586f72d..7c13b1a3 100644
-> --- a/utils/cx18-ctl/cx18-ctl.c
-> +++ b/utils/cx18-ctl/cx18-ctl.c
-> @@ -34,6 +34,8 @@
->  #include <sys/time.h>
->  #include <math.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/videodev2.h>
->  #include <v4l-getsubopt.h>
->  
-> diff --git a/utils/ivtv-ctl/ivtv-ctl.c b/utils/ivtv-ctl/ivtv-ctl.c
-> index b42b3489..bf36f40b 100644
-> --- a/utils/ivtv-ctl/ivtv-ctl.c
-> +++ b/utils/ivtv-ctl/ivtv-ctl.c
-> @@ -34,6 +34,8 @@
->  #include <sys/time.h>
->  #include <math.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/videodev2.h>
->  #include <v4l-getsubopt.h>
->  
-> diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-> index 538f4ef3..ba7c7c4d 100644
-> --- a/utils/keytable/keytable.c
-> +++ b/utils/keytable/keytable.c
-> @@ -12,6 +12,8 @@
->     GNU General Public License for more details.
->   */
->  
-> +#include "linux/compiler.h"
-> +
->  #include <ctype.h>
->  #include <errno.h>
->  #include <fcntl.h>
-> diff --git a/utils/media-ctl/media-ctl.c b/utils/media-ctl/media-ctl.c
-> index 33df0880..f91c1cfa 100644
-> --- a/utils/media-ctl/media-ctl.c
-> +++ b/utils/media-ctl/media-ctl.c
-> @@ -34,6 +34,8 @@
->  #include <string.h>
->  #include <unistd.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/media.h>
->  #include <linux/types.h>
->  #include <linux/v4l2-mediabus.h>
-> diff --git a/utils/v4l2-compliance/v4l2-compliance.h b/utils/v4l2-compliance/v4l2-compliance.h
-> index 3517bd07..2c2b2158 100644
-> --- a/utils/v4l2-compliance/v4l2-compliance.h
-> +++ b/utils/v4l2-compliance/v4l2-compliance.h
-> @@ -26,6 +26,8 @@
->  #include <string>
->  #include <cstdint>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/videodev2.h>
->  #include <linux/v4l2-subdev.h>
->  #include <linux/media.h>
-> diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
-> index 1f9cd0fb..ea120eb8 100644
-> --- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
-> +++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
-> @@ -9,6 +9,8 @@
->  #include <sys/stat.h>
->  #include <sys/sysmacros.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/media.h>
->  
->  #include "v4l2-ctl.h"
-> diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-> index 13bc057d..7af62ec8 100644
-> --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-> +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-> @@ -3,6 +3,8 @@
->  #include <netdb.h>
->  #include <sys/types.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/media.h>
->  
->  #include "compiler.h"
-> diff --git a/utils/v4l2-ctl/v4l2-ctl.cpp b/utils/v4l2-ctl/v4l2-ctl.cpp
-> index a64fa514..d8a6c617 100644
-> --- a/utils/v4l2-ctl/v4l2-ctl.cpp
-> +++ b/utils/v4l2-ctl/v4l2-ctl.cpp
-> @@ -27,6 +27,8 @@
->  #include <getopt.h>
->  #include <sys/epoll.h>
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/media.h>
->  
->  #include "v4l2-ctl.h"
-> diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
-> index a1911e80..fd1bd24a 100644
-> --- a/utils/v4l2-ctl/v4l2-ctl.h
-> +++ b/utils/v4l2-ctl/v4l2-ctl.h
-> @@ -1,6 +1,8 @@
->  #ifndef _V4L2_CTL_H
->  #define _V4L2_CTL_H
->  
-> +#include "linux/compiler.h"
-> +
->  #include <cstdint>
->  #include <linux/videodev2.h>
->  #include <linux/v4l2-subdev.h>
-> diff --git a/utils/v4l2-dbg/v4l2-dbg.cpp b/utils/v4l2-dbg/v4l2-dbg.cpp
-> index bd08b4cf..1b0d278a 100644
-> --- a/utils/v4l2-dbg/v4l2-dbg.cpp
-> +++ b/utils/v4l2-dbg/v4l2-dbg.cpp
-> @@ -31,6 +31,8 @@
->  #include <sys/klog.h>
->  #endif
->  
-> +#include "linux/compiler.h"
-> +
->  #include <linux/videodev2.h>
->  #include <v4l-getsubopt.h>
->  
+Thanks
+Suzuki
 
