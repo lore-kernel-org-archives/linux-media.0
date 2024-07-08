@@ -1,51 +1,40 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996977BAF4
-	for <linux-media@vger.kernel.org>; Mon,  8 Jul 2024 10:28:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B59413C674;
+	Mon,  8 Jul 2024 13:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720434531; cv=none; b=f4cMAENRqgE189/zgUVyhRthuisqO5SN5ybu73i8cTJ8BwQJCRe3rUxib7ddtVdpzWNVqkm7seMfIu7JGW6cpbvj3e/nKQSDjB7Dcnwz+pE7734Cxp7nhi28LJB83xBHBqvDmAFoQhYA6bAwNxi59CSWMAlSgghdt8X1iVyLcyc=
+	t=1720446430; cv=none; b=leJgItZ7GbJi7Nk5zc5SGun3K5ZQxqkVV9Ctuvvt/kmyAWB+iI/107HTJE1EJk6pJOIMoN4fjfOmgquEynFd2/hkZGwahjdqkb0kXRTppDYCg7jlic6MiW7IYIkVctFEvaXqS0qhTXPZQYNKAp7DfJlkLrYovA6VCeu1Wjho4is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720434531; c=relaxed/simple;
-	bh=dQyFul/sCWpMoPl+AWr4wSgi0Qb6+amM4EIwySc8P0c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YUo7JWBW6qGWJ5nXiQzejeTGzxzuBzXqcbcZiCXnKSjYjeVJb2OTBmcUeWulDUS1yjjOWYanWHfq0l+N+0CN+pIRI/+zazh0L8OvraWUIDfvp6AyqpeQ4hw3HXnYbIONAb7ivYv9+XRxBOsRFD2+b9Zp7IjjEADyoo1RrGQSrec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=YotgQN3f; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="YotgQN3f"
-Received: from ideasonboard.com (mob-5-90-59-142.net.vodafone.it [5.90.59.142])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id F364AD01;
-	Mon,  8 Jul 2024 12:28:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1720434496;
-	bh=dQyFul/sCWpMoPl+AWr4wSgi0Qb6+amM4EIwySc8P0c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YotgQN3fo61m26uqEYJu0Kf8G6k0r3KCpYfrh5Qb9EVNJ0KzmVNYhQlxsNuu8S4p0
-	 GbasAHD7vTktano7LcodjXi5aKQuAmWeVQk7rd/rm2vdhBP/cwH5SoAMFm9unFZEZh
-	 xN+Q6CoouXfGy4ajB+Xl3PM5mKTgztDPufvD7hkk=
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@iki.fi>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Umang Jain <umang.jain@ideasonboard.com>,
-	Dafna Hirschfeld <dafna@fastmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v6 7/7] media: rkisp1: Implement s_fmt/try_fmt
-Date: Mon,  8 Jul 2024 12:27:58 +0200
-Message-ID: <20240708102759.53297-8-jacopo.mondi@ideasonboard.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240708102759.53297-1-jacopo.mondi@ideasonboard.com>
-References: <20240708102759.53297-1-jacopo.mondi@ideasonboard.com>
+	s=arc-20240116; t=1720446430; c=relaxed/simple;
+	bh=Z2ybd0Usyw2/wpk/t/F+xiGAID0UDg1H3MGfl9My+tM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ULwpH/46JRE8r5l6HumMHHZPWIMYDW8UUHkSe5+r96e5ZuWzyRTgPmaCLR485JKL5sKB6e+Gi1bxOFlnC8QZP0q8SfQlJIteUvuapvFaxXggKWxP98SVFpMEJGbUas7b/aXHtiR86GXo3TFJbzOFEbRvFfA0mHpfYHf2volwu0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WHlfw48V3zxVbW;
+	Mon,  8 Jul 2024 21:42:32 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
+	by mail.maildlp.com (Postfix) with ESMTPS id AF0F6180AA6;
+	Mon,  8 Jul 2024 21:47:05 +0800 (CST)
+Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 8 Jul 2024 21:47:04 +0800
+From: Zenghui Yu <yuzenghui@huawei.com>
+To: <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <sumit.semwal@linaro.org>, <benjamin.gaignard@collabora.com>,
+	<Brian.Starkey@arm.com>, <jstultz@google.com>, <tjmercier@google.com>,
+	<shuah@kernel.org>, <wanghaibin.wang@huawei.com>, Zenghui Yu
+	<yuzenghui@huawei.com>
+Subject: [PATCH] kselftests: dmabuf-heaps: Ensure the driver name is null-terminated
+Date: Mon, 8 Jul 2024 21:46:54 +0800
+Message-ID: <20240708134654.1725-1-yuzenghui@huawei.com>
+X-Mailer: git-send-email 2.23.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,114 +42,42 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
 
-Implement in the rkisp1 driver support for the s_fmt and try_fmt
-operation to allow userspace to select between the extensible
-and the fixed parameters formats.
+Even if a vgem device is configured in, we will skip the import_vgem_fd()
+test almost every time.
 
-Implement enum_mbus_code to enumerate the fixed and the extensible
-formats and disallow changing the data format while the queue is busy.
+  TAP version 13
+  1..11
+  # Testing heap: system
+  # =======================================
+  # Testing allocation and importing:
+  ok 1 # SKIP Could not open vgem -1
 
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
+version information but leave the name field a non-null-terminated string.
+Terminate it properly to actually test against the vgem device.
+
+Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-params.c  | 58 ++++++++++++++++---
- 1 file changed, 50 insertions(+), 8 deletions(-)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-index ea6198cd2732..f99fff1b5219 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -75,6 +75,17 @@ static const struct v4l2_meta_format rkisp1_params_formats[] = {
- 	},
- };
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index 5f541522364f..2fcc74998fa9 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -32,6 +32,8 @@ static int check_vgem(int fd)
+ 	if (ret)
+ 		return 0;
  
-+static const struct v4l2_meta_format *
-+rkisp1_params_get_format_info(u32 dataformat)
-+{
-+	for (unsigned int i = 0; i < ARRAY_SIZE(rkisp1_params_formats); i++) {
-+		if (rkisp1_params_formats[i].dataformat == dataformat)
-+			return &rkisp1_params_formats[i];
-+	}
++	name[4] = '\0';
 +
-+	return &rkisp1_params_formats[RKISP1_PARAMS_FIXED];
-+}
-+
- static inline void
- rkisp1_param_set_bits(struct rkisp1_params *params, u32 reg, u32 bit_mask)
- {
-@@ -2233,12 +2244,12 @@ static int rkisp1_params_enum_fmt_meta_out(struct file *file, void *priv,
- 					   struct v4l2_fmtdesc *f)
- {
- 	struct video_device *video = video_devdata(file);
--	struct rkisp1_params *params = video_get_drvdata(video);
- 
--	if (f->index > 0 || f->type != video->queue->type)
-+	if (f->index >= ARRAY_SIZE(rkisp1_params_formats) ||
-+	    f->type != video->queue->type)
- 		return -EINVAL;
- 
--	f->pixelformat = params->metafmt->dataformat;
-+	f->pixelformat = rkisp1_params_formats[f->index].dataformat;
- 
- 	return 0;
+ 	return !strcmp(name, "vgem");
  }
-@@ -2253,9 +2264,40 @@ static int rkisp1_params_g_fmt_meta_out(struct file *file, void *fh,
- 	if (f->type != video->queue->type)
- 		return -EINVAL;
  
--	memset(meta, 0, sizeof(*meta));
--	meta->dataformat = params->metafmt->dataformat;
--	meta->buffersize = params->metafmt->buffersize;
-+	*meta = *params->metafmt;
-+
-+	return 0;
-+}
-+
-+static int rkisp1_params_try_fmt_meta_out(struct file *file, void *fh,
-+					  struct v4l2_format *f)
-+{
-+	struct video_device *video = video_devdata(file);
-+	struct v4l2_meta_format *meta = &f->fmt.meta;
-+
-+	if (f->type != video->queue->type)
-+		return -EINVAL;
-+
-+	*meta = *rkisp1_params_get_format_info(meta->dataformat);
-+
-+	return 0;
-+}
-+
-+static int rkisp1_params_s_fmt_meta_out(struct file *file, void *fh,
-+					struct v4l2_format *f)
-+{
-+	struct video_device *video = video_devdata(file);
-+	struct rkisp1_params *params = video_get_drvdata(video);
-+	struct v4l2_meta_format *meta = &f->fmt.meta;
-+
-+	if (f->type != video->queue->type)
-+		return -EINVAL;
-+
-+	if (vb2_is_busy(video->queue))
-+		return -EBUSY;
-+
-+	params->metafmt = rkisp1_params_get_format_info(meta->dataformat);
-+	*meta = *params->metafmt;
- 
- 	return 0;
- }
-@@ -2285,8 +2327,8 @@ static const struct v4l2_ioctl_ops rkisp1_params_ioctl = {
- 	.vidioc_streamoff = vb2_ioctl_streamoff,
- 	.vidioc_enum_fmt_meta_out = rkisp1_params_enum_fmt_meta_out,
- 	.vidioc_g_fmt_meta_out = rkisp1_params_g_fmt_meta_out,
--	.vidioc_s_fmt_meta_out = rkisp1_params_g_fmt_meta_out,
--	.vidioc_try_fmt_meta_out = rkisp1_params_g_fmt_meta_out,
-+	.vidioc_s_fmt_meta_out = rkisp1_params_s_fmt_meta_out,
-+	.vidioc_try_fmt_meta_out = rkisp1_params_try_fmt_meta_out,
- 	.vidioc_querycap = rkisp1_params_querycap,
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
- 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
 -- 
-2.45.2
+2.33.0
 
