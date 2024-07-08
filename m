@@ -1,147 +1,116 @@
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C581014A609;
-	Mon,  8 Jul 2024 16:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9191411E7
+	for <linux-media@vger.kernel.org>; Mon,  8 Jul 2024 16:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720454418; cv=none; b=cpef4LwpvUisNxFcRNT8jQrte1hEDXuNG5FutCzC2/+nwZCjgUMysIMOGNaNNYHNvWp3PpRDPVQzMa8DlaRmBSYaoXCv24sfGeWIIjLJ2nyCp5W+7Vfs3GVK5+qfBzxj7jptMvB1HByuD1WXm4Dob0JOkgCnbqLExX18jphDLTI=
+	t=1720455041; cv=none; b=oMO72K46IcyCoex89ZfP9TbvXKVzb/qeVFPrtpkd1k+iaZg6ti9Y4ias8EMMNhb1JyXjsJUvCom7kxMCgTRC4tbNWSOFbv+72vvzlTqrUvevKXrmuIK3e6tLbJbeVoIA+uuu2LsjU6nb9qQM0wk0NZ0THFvgoFkBAhRqZqhL5p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720454418; c=relaxed/simple;
-	bh=MuEF+GNm/VqqdPc7ws1S3BPo1gOfqoRwznKc1YlSbHY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UrWZ9p0Ue6YMJqTEm9fy9elHeZXAcsaYvJ7vAryQM/i8XLt/nx+ImD7JhYfgrxtVNIny5WPMy0/qORT/QeS9aJXrlBW4h4qW846B7LJvkVjiAj3czrQFxxy/xHsDHQTE0iv7Dha7OsW9Ei12OBzzaiA7t9cz/DkGYcVRZGXzfKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=N5dzKs15; arc=none smtp.client-ip=198.47.23.249
+	s=arc-20240116; t=1720455041; c=relaxed/simple;
+	bh=9w8E6X2IN6tRp9nkv2mrwPkgNr+AZw8hMVLZCz7CelI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=KgAqHYDaHOadu4CN7Fxxq2TDd1g+M2vNssg/IpIWzrvKyh2GLn0jUE+jfReV3H5eegL+9UokZ2yUkFp+cSdlel0/5CCAD+grQx19ipw51wtmRbu2M9DuC7mE6FK4NOsuvoelFrxgDfTA9lCKYn+CcR0DKDiXGXrcKoB+v2Qu6vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=apmbiQyZ; arc=none smtp.client-ip=198.47.23.248
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="N5dzKs15"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="apmbiQyZ"
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 468FxqG7054487;
-	Mon, 8 Jul 2024 10:59:52 -0500
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 468GAZ9k082188;
+	Mon, 8 Jul 2024 11:10:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1720454392;
-	bh=d3mM+hxXZg7+ES3r8+HaF5X0gqA1QPFzoF7HByEy0NI=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=N5dzKs15cF5D5oonv+wjDp+JgXx52UK22pvnqbXXDOBHUq8Nkjds4radMVI27S3BJ
-	 8oJZsCnxx5PDl/phiZkLWowr7iGck4lrlE77UQhjaiakgiLJayZY4oMQFANWOZo/wg
-	 I+VU7LsSx7se3DZSKbkKMPXjPjYFlDmgS+3Ikdm8=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 468Fxq7p023140
+	s=ti-com-17Q1; t=1720455035;
+	bh=EYo6hQunSNZDF1eE4CxQG1JEo0aCsP8+AYRyOc/BHsg=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=apmbiQyZfqaokmVlwFrf7ookkpauxdRmEBJq+E/nQMihIMumQ70pmsXWiDAGyphwm
+	 HBfnn5qvfYL+Wlh03KKhSW64ncjEJ/CrpTLErJy7WW84lehR0WV5J8xhdZ3DqEwI71
+	 1ALVStpblolCJ0J+uc+QBO3otK1oXfOddiwNDV+Y=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 468GAZom029579
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 8 Jul 2024 10:59:52 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 8 Jul 2024 11:10:35 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 8
- Jul 2024 10:59:52 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2024 11:10:35 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 8 Jul 2024 10:59:51 -0500
-Received: from localhost (ti.dhcp.ti.com [172.24.227.95] (may be forged))
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 468FxpAK033408;
-	Mon, 8 Jul 2024 10:59:51 -0500
-From: Devarsh Thakkar <devarsht@ti.com>
-To: <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sebastian.fricke@collabora.com>, <andriy.shevchenko@linux.intel.com>,
-        <jani.nikula@intel.com>, <jirislaby@kernel.org>, <corbet@lwn.net>,
-        <broonie@kernel.org>, <rdunlap@infradead.org>,
-        <linux-doc@vger.kernel.org>
-CC: <laurent.pinchart@ideasonboard.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
-        <b-brnich@ti.com>, <detheridge@ti.com>, <p-mantena@ti.com>,
-        <vijayp@ti.com>, <devarsht@ti.com>, <andi.shyti@linux.intel.com>,
-        <nicolas@ndufresne.ca>, <davidgow@google.com>, <dlatypov@google.com>
-Subject: [PATCH 5/6] lib: math_kunit: Add tests for new macros related to rounding to nearest value
-Date: Mon, 8 Jul 2024 21:29:42 +0530
-Message-ID: <20240708155943.2314427-6-devarsht@ti.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20240708155943.2314427-1-devarsht@ti.com>
-References: <20240708155943.2314427-1-devarsht@ti.com>
+ Frontend Transport; Mon, 8 Jul 2024 11:10:35 -0500
+Received: from [172.24.227.193] (devarsht.dhcp.ti.com [172.24.227.193] (may be forged))
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 468GAXMF054004;
+	Mon, 8 Jul 2024 11:10:34 -0500
+Message-ID: <7df57628-175b-a02b-db45-c514037af325@ti.com>
+Date: Mon, 8 Jul 2024 21:40:33 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [GIT PULL FOR 6.11] Imagination E5010 JPEG encoder
+Content-Language: en-US
+To: Hans Verkuil <hverkuil@xs4all.nl>,
+        Sebastian Fricke
+	<sebastian.fricke@collabora.com>,
+        <linux-media@vger.kernel.org>
+References: <20240611155528.mqmekz42cgs6jpdi@basti-XPS-13-9310>
+ <fe8c3f9a-b6c7-448d-8216-a803530b3954@ti.com>
+ <1db64af7-3688-4bcc-a671-9440d8f02d1a@xs4all.nl>
+From: Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <1db64af7-3688-4bcc-a671-9440d8f02d1a@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Add tests for round_closest_up/down and roundclosest macros which round
-to nearest multiple of specified argument. These are tested with kunit
-tool as shared here [1] :
+Hi Sebastian, Hans,
 
-Link: https://gist.github.com/devarsht/3f9042825be3da4e133b8f4eda067876 [1]
-Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- lib/math/math_kunit.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+On 13/06/24 13:45, Hans Verkuil wrote:
+> On 12/06/2024 07:57, Devarsh Thakkar wrote:
+>> +Andrew,
+>>
+>> Hi Sebastian, Hans, Andrew,
+>>
+>> On 11/06/24 21:25, Sebastian Fricke wrote:
+>>> Hey Hans & Mauro,
+>>>
+>>> Doesn't include the math changes and
+>>> https://patchwork.linuxtv.org/project/linux-media/patch/20240607133253.3559339-1-devarsht@ti.com/
+>>> has to be taken separately, as discussed here:
+>>> https://patchwork.linuxtv.org/project/linux-media/patch/20240604105335.2257629-1-devarsht@ti.com/#158409
+>>>
+>>
+>> I see Andy mentioned here [1] that math.h is orphaned and nobody behind it.
+>> And I see changes in these files getting pulled in along with subsystem
+>> specific changes [2].
+>>
+>> So just wanted to check if it's possible to include math.h related patches too
+>> directly in this PR itself since they were already reviewed/Acked and I guess
+>> this be a simpler path since they need to be applied on top of current set of
+>> patches in this PR.
+>>
+>> So, Could you please let me know if it's possible to include all the 13
+>> patches sent across [3] in this PR itself or some other path need to be taken
+>> for math.h related patches?
+> 
+> I plan to take this PR (with just the first 6 patches) first today.
+> 
+> Once in, post a new patch series for the second half. Mention in the cover
+> letter that math.h is orphaned (I wasn't aware of that) and I expect that
+> Sebastian can make a second PR.
+> 
 
-diff --git a/lib/math/math_kunit.c b/lib/math/math_kunit.c
-index be27f2afb8e4..05022f010be6 100644
---- a/lib/math/math_kunit.c
-+++ b/lib/math/math_kunit.c
-@@ -70,6 +70,26 @@ static void round_down_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, round_down((1 << 30) - 1, 1 << 29), 1 << 29);
- }
- 
-+static void round_closest_up_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, round_closest_up(17, 4), 16);
-+	KUNIT_EXPECT_EQ(test, round_closest_up(15, 4), 16);
-+	KUNIT_EXPECT_EQ(test, round_closest_up(14, 4), 16);
-+	KUNIT_EXPECT_EQ(test, round_closest_up((1 << 30) - 1, 1 << 30), 1 << 30);
-+	KUNIT_EXPECT_EQ(test, round_closest_up((1 << 30) + 1, 1 << 30), 1 << 30);
-+	KUNIT_EXPECT_EQ(test, round_closest_up((1 << 30) - 1, 2), 1 << 30);
-+}
-+
-+static void round_closest_down_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, round_closest_down(17, 4), 16);
-+	KUNIT_EXPECT_EQ(test, round_closest_down(15, 4), 16);
-+	KUNIT_EXPECT_EQ(test, round_closest_down(14, 4), 12);
-+	KUNIT_EXPECT_EQ(test, round_closest_down((1 << 30) - 1, 1 << 30), 1 << 30);
-+	KUNIT_EXPECT_EQ(test, round_closest_down((1 << 30) + 1, 1 << 30), 1 << 30);
-+	KUNIT_EXPECT_EQ(test, round_closest_down((1 << 30) - 1, 2), (1 << 30) - 2);
-+}
-+
- /* These versions can round to numbers that aren't a power of two */
- static void roundup_test(struct kunit *test)
- {
-@@ -95,6 +115,18 @@ static void rounddown_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, rounddown(4, 3), 3);
- }
- 
-+static void roundclosest_test(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, roundclosest(21, 5), 20);
-+	KUNIT_EXPECT_EQ(test, roundclosest(19, 5), 20);
-+	KUNIT_EXPECT_EQ(test, roundclosest(17, 5), 15);
-+	KUNIT_EXPECT_EQ(test, roundclosest((1 << 30), 3), (1 << 30) - 1);
-+	KUNIT_EXPECT_EQ(test, roundclosest((1 << 30) - 1, 1 << 29), 1 << 30);
-+
-+	KUNIT_EXPECT_EQ(test, roundclosest(4, 3), 3);
-+	KUNIT_EXPECT_EQ(test, roundclosest(5, 3), 6);
-+}
-+
- static void div_round_up_test(struct kunit *test)
- {
- 	KUNIT_EXPECT_EQ(test, DIV_ROUND_UP(0, 1), 0);
-@@ -272,8 +304,11 @@ static struct kunit_case math_test_cases[] = {
- 	KUNIT_CASE(int_sqrt_test),
- 	KUNIT_CASE(round_up_test),
- 	KUNIT_CASE(round_down_test),
-+	KUNIT_CASE(round_closest_up_test),
-+	KUNIT_CASE(round_closest_down_test),
- 	KUNIT_CASE(roundup_test),
- 	KUNIT_CASE(rounddown_test),
-+	KUNIT_CASE(roundclosest_test),
- 	KUNIT_CASE(div_round_up_test),
- 	KUNIT_CASE(div_round_closest_test),
- 	KUNIT_CASE_PARAM(gcd_test, gcd_gen_params),
--- 
-2.39.1
+As suggested above, I have posted the math.h related changes as a separate
+series here [1] as I see that imagination jpeg series already got into
+media_stage tree.
 
+Kindly let me know if it's possible to have a PR for this or any other changes
+required.
+
+[1]: https://lore.kernel.org/all/20240708155943.2314427-1-devarsht@ti.com/#r
+
+Regards
+Devarsh
