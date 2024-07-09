@@ -1,58 +1,70 @@
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1121.securemx.jp [210.130.202.129])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13833620;
-	Tue,  9 Jul 2024 02:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B108A47;
+	Tue,  9 Jul 2024 03:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720490455; cv=none; b=Yhu+YNeV+Y7QzuIxr9IO4UKwUIjrfc8ScBQjk4v2FbD5PnsfeRD1G+qBi7o834Z0VrgY2l6TkgHdtbd30O4O3iFN/NBrXYqEvCxYiRmU4adaIwqnFw+ZXhos4Fw/lbVP2WrgDKNtr4aIAFdEoleRBIxXvha5f7C7tPwEyQ46O6Q=
+	t=1720494383; cv=none; b=OS1NRkkJUb9JAEjGA2DMHUafLiRsJO0izD7paMT22sBRdaIGUvsc3tIS0RbL8fFtuyrAuQdpRwR66LfPRyQMbK9zVkJJhehvFiijwhBTcm1EqLXvivMO9fKFDhiypV6M9/c8aTESwO007o8D6wWFSCAl93Kc5FKnnEh8YMeYltM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720490455; c=relaxed/simple;
-	bh=7z7CdwVNvQ3yLS8tHQyMEa+5Hnm+3Wt56PFdhq3vkR4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=I1s29Guj7H0XADq6/Zy0K1Cs2+TdeoXZTfdgMZASZEtsdNMgWDsLN8T6/vjXNjbDPPFRlNK7tzOMcm50wKSZFAaqrwnIyT1DU+kVvlfZGk8jtN5pUOQ6EbTybcX/s1Dc7kvRH1KTHt9r5UKTbNbDR+3w4gRmLurXQ/4WKv8tXxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=Y+nPM+mx; arc=none smtp.client-ip=210.130.202.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
+	s=arc-20240116; t=1720494383; c=relaxed/simple;
+	bh=d3srkMsg2KdxDzO3xlTrmynajVoZFXikx+M2zbMSD4o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CEc1OeGG6DfENhtHDdtbBjRuRHOVFrbDzdneJkS0PLteGcgQQeSCw4CS/x+c/khuRas7zNlZaLJoNky8fVDj15kxsVOS6BsGrwITR1SMtDS07L6fOCXHmApS96swol8gtwnjVBXyxQ02YhUXwaGSybaUeLmeKoMVWuFSRlOlCUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lEBslGGV; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="Y+nPM+mx"
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1121) id 4690FGuK2760175; Tue, 9 Jul 2024 09:15:16 +0900
-DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
-	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key2.smx;t=
-	1720484072;x=1721693672;bh=7z7CdwVNvQ3yLS8tHQyMEa+5Hnm+3Wt56PFdhq3vkR4=;b=Y+n
-	PM+mxgIKNOYnO3Slr7Ck04iLaZcqjuJZo5AxvTrF1Wv7/z3iSGnS3Vho03oked7Tk0Gv/9wU6176K
-	NhdnJcNQBvHPNhYK+8xJQiSccvYC1sVFaSoGhuag1ItMXGxQwOJyHGj9X3iy17bCh5IBuMpYoPAEK
-	82/j0bKdqqxvQtalWxrdCz856US048CsDKFyWlzIUKfky5YTbmqG/zwBBFJS1O5xsRRvOde5R1zt8
-	57P+1Zd2l+x7CH2i9HiijtKVf5JKR3BOcx4DHquZqI2Yq+zEn9oetv1xz0f+244txy3cg4+coZnKA
-	7NVu4ec7+lcZncYmzlnHAjk9LW83Lhg==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1120) id 4690EW2h2854003; Tue, 9 Jul 2024 09:14:32 +0900
-X-Iguazu-Qid: 2rWgK3ox5moeeUQHFF
-X-Iguazu-QSIG: v=2; s=0; t=1720484071; q=2rWgK3ox5moeeUQHFF; m=zK74XrmOVBLS1OQZbqRAPgE1lIZgT0DJsvrsKvYKMg8=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-	by relay.securemx.jp (mx-mr1120) id 4690EUrO950994
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 9 Jul 2024 09:14:30 +0900
-X-SA-MID: 24614076
-From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To: Hans Verkuil <hverkuil@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v11 2/6] media: videodev2.h: add visconti viif meta buffer format
-Date: Tue,  9 Jul 2024 09:08:44 +0900
-X-TSB-HOP2: ON
-Message-Id: <20240709000848.1108788-3-yuji2.ishikawa@toshiba.co.jp>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lEBslGGV"
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5c670e5469aso1035592eaf.1;
+        Mon, 08 Jul 2024 20:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720494381; x=1721099181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Iooajm32+cbim4jJ3gpk2rpzqQgy6Cf493SBECgZQk=;
+        b=lEBslGGVgaFXl7XA1sGVWdzo8zV/ttxTFcNhH9rB5BL0KLVB9VtDDHSIvy1R0W75lQ
+         ueCOZWc1Idld8JzLSIrK2KM/o+oS7iUNW65rthH59j9ZQxwCUhXvy5Ecvngf6JXn0dqc
+         BpQbLFycqXwddjWwrq7fZBs+cm5LVd9lIReLQLiZ0sAwDulwn3Gn7b36EpR4B/YDBfPK
+         De1XvTxrr1jgqEA6SywwhJuDbr1iNB6b+vz6HszuuUFdz74fSmd6HD4uedcdYo+JRoHD
+         TV+8ZmWiu7eV9drKwbKBoUTeS6JQUm7gm9Tt7tiPsGimjMHnvMmIqkzSZAsF3sW0aaZ+
+         ugdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720494381; x=1721099181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Iooajm32+cbim4jJ3gpk2rpzqQgy6Cf493SBECgZQk=;
+        b=ZRRmHrwsO0BTxwLBdt6KxiYhR2fcMAzDejrh9YPVH059qroDQl+DEmGK6wK8R4F0l7
+         agkLHjfxN60qzw3nxRoQ+rph3xqVaveeX9pW/sI8WrkO7WzTd5etrldSMVeBZFcvVz6H
+         LH0RDArCpPXhShyHRVzn6Gn9rQIuLz5Y9b6khuC+laj3UtHtoTYxS1ndgHd3qNf3QjAI
+         WG3nuTW60izbIMz9q5Uevl4lxtdC9ZpoYwCs1feMRf4GfU3YiEKVNWSG5puxW5/6C0ko
+         EbJKlj4cYXRgUoU7A0Cu7zXU5MnPmMfUTY1fueeeHjQN0vqVp+0xmaCe733IuoVlzCPz
+         iTgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUzKD38dVQfbBJZRZGlcfIzQr1jHHs+KLR0Jfyv2A0q0bXtXn+N/BDmPz9mGjXwePIxX8ySgkwaGxHJio/kR8nRMYOl6dEI6rWb5jDBmy9rrEK7iPQbk3m4DKEF8QAkcrgdko7IOU9hpENdHGBtv0hIC2n51fkDDLQ40nKToWuseGwYW7g=
+X-Gm-Message-State: AOJu0YwjlOuLPd8e4xZb/olEpnNUlgkSn2RQCMDBmvHW1kTvzc/Bo/ST
+	2uuwZ1fTLW5rPpJCVDstqb4MtY9hYa62UPRa4n38mzIwrFXI2p77
+X-Google-Smtp-Source: AGHT+IEhHD+qwVHMhVIw9k8OzWe7UeTC/D40buUHZnfJUnXTtABu7BgCLngwzZXKIHWNK6QAsyWgyw==
+X-Received: by 2002:a4a:b0ce:0:b0:5c6:6f69:7e7b with SMTP id 006d021491bc7-5c68e13ddefmr1381600eaf.3.1720494381220;
+        Mon, 08 Jul 2024 20:06:21 -0700 (PDT)
+Received: from shiv-machina.. (c-73-169-52-138.hsd1.co.comcast.net. [73.169.52.138])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5c68cd9a919sm187717eaf.28.2024.07.08.20.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 20:06:20 -0700 (PDT)
+From: Shivani Gupta <shivani07g@gmail.com>
+To: laurent.pinchart@ideasonboard.com,
+	mchehab@kernel.org
+Cc: Shivani Gupta <shivani07g@gmail.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com
+Subject: [PATCH] usb: xhci: Fix compiler warning in xhci.c
+Date: Tue,  9 Jul 2024 03:06:04 +0000
+Message-Id: <20240709030604.1347546-1-shivani07g@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240709000848.1108788-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20240709000848.1108788-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,39 +73,30 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adds the Toshiba Visconti VIIF specific metadata format
+Fixes the following compiler warnings by changing the comment syntax
+from "/**" to "/*" in the specified comments:
 
-- V4L2_META_FMT_VISCONTI_VIIF_PARAMS for ISP parameters
-- V4L2_META_FMT_VISCONTI_VIIF_STATS for ISP statistics
+drivers/usb/host/xhci.c:1369: warning: Function parameter or struct member
+'desc' not described in 'xhci_get_endpoint_index'
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Signed-off-by: Shivani Gupta <shivani07g@gmail.com>
 ---
-Changelog v10:
-- add entry for V4L2_META_FMT_VISCONTI_VIIF_PARAMS
-- add entry for V4L2_META_FMT_VISCONTI_VIIF_STATS
+ drivers/usb/host/xhci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changelog v11:
-- no change
-
- include/uapi/linux/videodev2.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 4e91362da6..562038f144 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -858,6 +858,10 @@ struct v4l2_pix_format {
- /* Vendor specific - used for RaspberryPi PiSP */
- #define V4L2_META_FMT_RPI_BE_CFG	v4l2_fourcc('R', 'P', 'B', 'C') /* PiSP BE configuration */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 37eb37b0affa..67168661aa52 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1355,7 +1355,7 @@ static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
+ 		usb_hcd_unmap_urb_for_dma(hcd, urb);
+ }
  
-+/* Vendor specific - used for Visconti VIIF sub-system */
-+#define V4L2_META_FMT_VISCONTI_VIIF_PARAMS	v4l2_fourcc('V', 'I', 'F', 'P') /* ISP Params */
-+#define V4L2_META_FMT_VISCONTI_VIIF_STATS	v4l2_fourcc('V', 'I', 'F', 'S') /* ISP Stats */
-+
- #ifdef __KERNEL__
- /*
-  * Line-based metadata formats. Remember to update v4l_fill_fmtdesc() when
+-/**
++/*
+  * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
+  * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
+  * value to right shift 1 for the bitmask.
 -- 
-2.25.1
-
+2.34.1
 
