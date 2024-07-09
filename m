@@ -1,93 +1,120 @@
-Received: from mout.web.de (mout.web.de [212.227.15.3])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975E8155A53
-	for <linux-media@vger.kernel.org>; Tue,  9 Jul 2024 12:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB6815ECCD;
+	Tue,  9 Jul 2024 13:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720528572; cv=none; b=R2Sw3vbe4cPCJeVng93dcIb7Ffa2GG307vcVUrt1TbtuH3nE+cB9pL3/lwYOFwumkGbSUxsa3Ucre/v2NQZq48TiX0iMUDL2YyA2EwRB6f8LVg93kNSB+hKprqebq+KI0FJzkzbn48NxdQbb7b6rv3553+M+UK79VmPqh1wFUHw=
+	t=1720531761; cv=none; b=kMgAtkf9fOkN7qcHAOkqiZKIlBhp4N9Xl5QJj+cJseNcgP52NJJIexX1zPHfYE2H5/Q5xxIzbexLdm6t3tnf7xrIPmpXzbiXHU1QNZk8uxTPayQ7Yq0CRnZmHP+3SO86hVYwt4CVt0LMYZvrtSnEitI3XFoGVi01AO4QmPn9meY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720528572; c=relaxed/simple;
-	bh=+KUvTkoBvwVYTCqxYhmKbqzJ26ebhdnhNDmhvdxCv8c=;
-	h=MIME-Version:Message-ID:From:To:Subject:Content-Type:Date; b=M4s+hMlQvxl/x6FVxPfVEkLv1/sZJAG4DaEhtgnDIr4sk+6OX3497KXJ+ZxiAZsh33lvnQjn5t9VIf+mP1sGxxuxYkojDXr7byn154N6J7M5683oSlEpO+3UEkXAVMUBrt9NtNLLurp5ToyWhCAws+M1/gHAtsxeWaJDv8LWwEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kuss.ms; spf=pass smtp.mailfrom=kuss.ms; dkim=pass (2048-bit key) header.d=kuss.ms header.i=friendscout@kuss.ms header.b=GSlqCTi4; arc=none smtp.client-ip=212.227.15.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kuss.ms
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kuss.ms
+	s=arc-20240116; t=1720531761; c=relaxed/simple;
+	bh=mFsO24iG5YUpUaNSD2UNlN/Wjjn30XanUhAge6n4OLk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CncVrORA6VtkwxAzLaK6GdLyuyxpVKJssEuyrE08M7zGFfbGiWI64g+Eye183qHand71DB83idk4WTCWclMCnTspbHCpl+iji6vlp1h8eNb2kt8pdSY8X2ztISONai22JPX9yOZQVMtU6tpFgHk6D47zk++VMsU8Y8pvDwADYLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=MqgSuIOL; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kuss.ms header.i=friendscout@kuss.ms header.b="GSlqCTi4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuss.ms;
-	s=s29768273; t=1720528565; x=1721133365; i=friendscout@kuss.ms;
-	bh=+KUvTkoBvwVYTCqxYhmKbqzJ26ebhdnhNDmhvdxCv8c=;
-	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:
-	 Content-Type:Date:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=GSlqCTi4IqprT7SIl39KeabugU8Q1y6b6bmhtSBwwOTPl3h1JWV+8iVPdJmyEMPq
-	 Gearh9Krq7b593hxn5MA6WB8kzoXTgZAlHj8PN/JA8u+I58TZflg7mrjrRHESvMmj
-	 ++RAo82YCeUr5S03z4zpHxEw9eXB1tN7MIpaj2R7KqzcLQXPsr0A2sK9HitH4ZHwp
-	 hAcD5cTUDpY1uS8pyd2ahPN1mfC5GWWOmJEktpxZb0pLLlOgvxIg3xi+WnyXWtXMc
-	 enCRlMvMuwpaXZay3EiHhkw+T2qEK+iFG/+nvbb83XqEiM9deABesjvaAOhhlL+t6
-	 gTYQfSgoOxiNT5d55g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [178.251.90.190] ([178.251.90.190]) by web-mail.web.de
- (3c-app-webde-bs19.server.lan [172.19.170.19]) (via HTTP); Tue, 9 Jul 2024
- 14:36:04 +0200
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="MqgSuIOL"
+Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 835A816C3;
+	Tue,  9 Jul 2024 15:28:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1720531724;
+	bh=mFsO24iG5YUpUaNSD2UNlN/Wjjn30XanUhAge6n4OLk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MqgSuIOLin6RcfsQCFDAAy8ebHsAbqA3fmvxgXTPzmaGL2J6H7e1cezgtfVuJk0jt
+	 4XR1DfAdNgUDL47cuGlR4sCfcbQWalY6i/dQr0MRp6uKE3yOfJdom6Embg7xWCi53M
+	 h9KRBCOa5H6ihKvSMANmkglTvyjXEObMHssjfusc=
+From: Daniel Scally <dan.scally@ideasonboard.com>
+To: linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: jacopo.mondi@ideasonboard.com,
+	nayden.kanchev@arm.com,
+	robh+dt@kernel.org,
+	mchehab@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	jerome.forissier@linaro.org,
+	kieran.bingham@ideasonboard.com,
+	laurent.pinchart@ideasonboard.com,
+	sakari.ailus@iki.fi,
+	Daniel Scally <dan.scally@ideasonboard.com>
+Subject: [PATCH v6 01/18] media: mc-entity: Record number of video devices in a pipeline
+Date: Tue,  9 Jul 2024 14:28:49 +0100
+Message-Id: <20240709132906.3198927-2-dan.scally@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240709132906.3198927-1-dan.scally@ideasonboard.com>
+References: <20240709132906.3198927-1-dan.scally@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-b60ffddb-ebbc-4aff-a86c-e4b2d74f3d63-1720528564959@3c-app-webde-bs19>
-From: Christoph Lauer <friendscout@kuss.ms>
-To: linux-media@vger.kernel.org
-Subject: [BUG] media: platform: coda: camera Dometic CAM58IP causes CODA
- PIC_RUN timeout
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 9 Jul 2024 14:36:04 +0200
-Importance: normal
-Sensitivity: Normal
-Content-Transfer-Encoding: quoted-printable
-X-Priority: 3
-X-Provags-ID: V03:K1:RW4WpPnImRCce75BNWEy5iNowSZ+szP04PLhmR9WkF9pPonaIiWuhFiQaIsY1rhK+9M5i
- 5kV2y4lrnBPn5joon8OKYJ0N/l/P5ozCPzxdtA69+ufpgBHkPZ1sv02oU1PxSw51Ua/rhKlgM6bN
- xZMpMoYR7pWIl1dBvm5aJIERCZ9+ofe+i2UAYNGFdExfi4RG2go8SnaWLKl3LQtv4U+mDMxlX6BG
- UxsXwjV9oMKbBmVQ8YKk5VhFAUOhXbs4sjqpc1f+6BKBSZflhkpj4sn2o1r8c1DlvXBxO4/mil8l
- to=
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:hhds7HiDt+g=;M5tz0LUc4LcwF7vQUlTXVbu1wwB
- 9/p15XZOaN6xx8LLdWN7OD43HO+6YhQWSV1Rvj0blL4VU3Q7GuSvEHQQTME6wLDxkKl/uD4P4
- 8+TRyiG+bdat/U1pagiOn6kpO3teO+Io1KGiY8eh76ukaCfpYiLplDGkVDQCmDNMmHHoWO0Ma
- 2nv/Ro2CBWxkBE9puPICbvGt0gZlEHu5Jq/7C5gYUUoxl7heVhIhf9VPQtezbXUB0+SOFi+nn
- rKY/uVdQ7fH++uT3aHf5Mm1Ul+UHy6gGp1tLSXE49X1zayFUpFLVlN00IVjU2VVdtfkxPyWhJ
- SiNJ+vM4d8+OMyVk3LvFBjuRxq2fIw0eRpVxRX1wHyMP87Qcij7XPBq/4F28FibJVoRerf0CE
- 8rQf4szOwdG1KWjZJi/p8i09GoC17Al8tiCuey9bHt7gEbuUl8PyOMrURXipuMJTWydjaJAsF
- gO7upwHuSeHKqlHMvAB+Xpm9nTh2NYbxo+DzAddCwNQ5HPj1awGOVoMiJIT56otFQy7swYMPN
- 0ww1hxAcAuF+fyYY5BCkKLiQp9VkumS3fzkwuNZo9x0RJTZinOAcVWZ+9JnNI0AFsmG7fI9Ql
- yv51vJ7A1iJ3OlPUqIBbsDkK1OG0M1cWaANnD9/LVyEM7ysB63uQZI6I7j60AIDX8XvSgANHc
- KfnyuRMY5pS/qYn/NTGELWxtYTncM+uF5Y7nTMe5CxjHnUqDJfBCAL96MwrJi78=
+Content-Transfer-Encoding: 8bit
 
-Hi,
-I am working on a Phytec i=2EMX6 DL and I am trying to get the IP camera D=
-ometic CAM58IP up and running on a coda-configured Phytec kernel (5=2E15=2E=
-102)=2E The connection can be established, but the stream doesn=E2=80=99t p=
-lay, and dmesg shows this timeout message every ~2s:
+Record the number of video devices in a pipeline so that we can track
+in a central location how many need to be started before drivers must
+actually begin streaming.
 
-[ 1029=2E344642] coda 2040000=2Evpu: CODA PIC_RUN
-=C2=A0
-I can successfully play streams from other IP cameras on the mx6 device=2E
-I can successfully play the Dometic stream with VLC media player or with g=
-streamer on a desktop system (not using CODA)=2E
-=C2=A0
-I have already applied patch =E2=80=9E[PATCH] media: coda: avoid starvatio=
-n on well-compressed data=E2=80=9C from Benjamin Bara for testing, the resu=
-lt was the same=2E
-=C2=A0
-Any help would be appreciated=2E
-=C2=A0
-Config summary:
-HW: Phytec i=2Emx6 DualLite with CODA960
-Kernel: 5=2E15=2E102-phytec
-Gstreamer: 1=2E20=2E7
-CODA Firmware version: 3=2E1=2E1
+Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+---
+Changes in v6:
+
+	- New patch. This is intended to support Sakari's requirement for the
+	  driver not to start streaming before all of the video devices have
+	  called streamon(). This was the cleanest way I could think to acheive
+	  the goal, and lets us just check for start_count == required_count
+	  before streaming.
+
+ drivers/media/mc/mc-entity.c | 5 +++++
+ include/media/media-entity.h | 2 ++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 96dd0f6ccd0d..1e8186b13b55 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -596,6 +596,9 @@ static int media_pipeline_add_pad(struct media_pipeline *pipe,
+ 
+ 	list_add_tail(&ppad->list, &pipe->pads);
+ 
++	if (pad->entity->obj_type == MEDIA_ENTITY_TYPE_VIDEO_DEVICE)
++		pipe->required_count++;
++
+ 	dev_dbg(pad->graph_obj.mdev->dev,
+ 		"media pipeline: added pad '%s':%u\n",
+ 		pad->entity->name, pad->index);
+@@ -713,6 +716,8 @@ static void media_pipeline_cleanup(struct media_pipeline *pipe)
+ 		list_del(&ppad->list);
+ 		kfree(ppad);
+ 	}
++
++	pipe->required_count = 0;
+ }
+ 
+ static int media_pipeline_populate(struct media_pipeline *pipe,
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 0393b23129eb..ab84458b40dc 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -104,12 +104,14 @@ struct media_graph {
+  * @mdev:		The media device the pipeline is part of
+  * @pads:		List of media_pipeline_pad
+  * @start_count:	Media pipeline start - stop count
++ * @required_count:	Number of starts required to be "running"
+  */
+ struct media_pipeline {
+ 	bool allocated;
+ 	struct media_device *mdev;
+ 	struct list_head pads;
+ 	int start_count;
++	int required_count;
+ };
+ 
+ /**
+-- 
+2.34.1
 
