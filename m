@@ -1,48 +1,45 @@
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57CD18A920;
-	Tue,  9 Jul 2024 13:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09356184128;
+	Tue,  9 Jul 2024 13:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720533130; cv=none; b=kXZWuW40XQjX98glUQdlvD7ieqqI+EwOuHqGxCKDvU0xDazLkLIwLm/t2YSDupsRgmW5U7M7Nx3oD0G92fd8F5tHw4jOW9JLstAso4dEcLaSwUvoFPyAQU49W1m68Ss7/9aG6QRKDwMH9N9Z427zkE/AEZvgqvIfUFmuaIFhRoQ=
+	t=1720533134; cv=none; b=Pc2F301AOjMEfnRx24L6tjOcBD5luD+6bZ/mJH02u5c5TyYl1jGVCfqhFAQFRrl4IJMbRPYfLorxBgao+SbWIcxxe9/X6XONwrJBPAa3eIcONjgd5UKhXvF/94yGuybvuE4RVpVIas2p7HaAYe6hMsV5uCuWa+uErRW/VLj8Pz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720533130; c=relaxed/simple;
-	bh=8rewHxcmqYhfVpubhNLA7SsGqC/hBasB9s/0SBJtcSM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Km9ahqct8sPhlHmx5I/7R6ir9lzAAFHEv0V/eS/AiVRrToK9bkQXIf06BiK3Xi7959AU+Q3YpfGh3JbH4bx3BIaWImwPBDbXPNX5V6Qzyp06om6aCBtRoH2uYZmCY9A7GlDqfEnSdNkOLt4+GzhNn2AIA8gcNaOHSwefvocMI/U=
+	s=arc-20240116; t=1720533134; c=relaxed/simple;
+	bh=tV8rbhT5Txu7ivXHeEYxuKCkDBgJT+Q1p5Zpx55LQWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nQLOFf9A0V73qwmbyL85zXeSFpfWFHOVJxvfd8FZWuCAOR0xY4JWJRSKAJJvWshAXQHyu+CZ293GoBsS9Tf0/M8phKoioo8MRKhhVYZPJMKNmAlBXz1MxPGClDdyx8sisuVG8sZmhdgq1cGH/vHLqTiZfvsrXIQ+76Hz+WwsYTY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
 X-IronPort-AV: E=Sophos;i="6.09,195,1716217200"; 
-   d="scan'208";a="210808011"
+   d="scan'208";a="210808026"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 09 Jul 2024 22:52:01 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 09 Jul 2024 22:52:11 +0900
 Received: from localhost.localdomain (unknown [10.226.92.130])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 53C2443BC48B;
-	Tue,  9 Jul 2024 22:51:55 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5320F43DEDAE;
+	Tue,  9 Jul 2024 22:52:07 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
 	Conor Dooley <conor+dt@kernel.org>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>,
 	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
 	linux-renesas-soc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 0/9] Add support for RZ/G2UL Display Unit
-Date: Tue,  9 Jul 2024 14:51:38 +0100
-Message-ID: <20240709135152.185042-1-biju.das.jz@bp.renesas.com>
+	Biju Das <biju.das.au@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 2/9] media: dt-bindings: media: renesas,fcp: Document RZ/G2UL FCPVD bindings
+Date: Tue,  9 Jul 2024 14:51:40 +0100
+Message-ID: <20240709135152.185042-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240709135152.185042-1-biju.das.jz@bp.renesas.com>
+References: <20240709135152.185042-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,45 +48,38 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series aims to add support for RZ/G2UL DU.
+Document FCPVD found in RZ/G2UL SoC. FCPVD block is similar to FCP for
+VSP found on RZ/{G2L,G2LC,V2L} SoCs.
 
-The LCD controller is composed of Frame Compression Processor (FCPVD),
-Video Signal Processor (VSPD), and Display Unit (DU).
-
-The output of LCDC is connected display parallel interface (DPI) and
-supports a maximum resolution of WXGA along with 2 RPFs to support the
-blending of two picture layers and raster operations (ROPs)
-
-It is similar to LCDC IP on RZ/G2L SoCs, but does not have DSI interface.
-
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v1->v2:
- * Updated cover letter header "DU IP->Display Unit".
- * Updated commit description related to non ABI breakage for patch#3.
- * Added Ack from Conor for binding patches.
+ * Added Ack from Conor.
+---
+ Documentation/devicetree/bindings/media/renesas,fcp.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Biju Das (9):
-  media: dt-bindings: media: renesas,vsp1: Document RZ/G2UL VSPD
-    bindings
-  media: dt-bindings: media: renesas,fcp: Document RZ/G2UL FCPVD
-    bindings
-  dt-bindings: display: renesas,rzg2l-du: Document RZ/G2UL DU bindings
-  clk: renesas: r9a07g043: Add LCDC clock and reset entries
-  drm: renesas: rz-du: Add RZ/G2UL DU Support
-  arm64: dts: renesas: r9a07g043u: Add vspd node
-  arm64: dts: renesas: r9a07g043u: Add fcpvd node
-  arm64: dts: renesas: r9a07g043u: Add DU node
-  arm64: dts: renesas: r9a07g043u11-smarc: Enable DU
-
- .../bindings/display/renesas,rzg2l-du.yaml    |  32 ++++-
- .../bindings/media/renesas,fcp.yaml           |   2 +
- .../bindings/media/renesas,vsp1.yaml          |   1 +
- arch/arm64/boot/dts/renesas/r9a07g043u.dtsi   |  49 ++++++++
- .../boot/dts/renesas/r9a07g043u11-smarc.dts   | 111 ++++++++++++++++++
- drivers/clk/renesas/r9a07g043-cpg.c           |  12 ++
- drivers/gpu/drm/renesas/rz-du/rzg2l_du_crtc.c |   9 +-
- drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c  |  11 ++
- 8 files changed, 223 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/renesas,fcp.yaml b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+index c6abe719881b..f94dacd96278 100644
+--- a/Documentation/devicetree/bindings/media/renesas,fcp.yaml
++++ b/Documentation/devicetree/bindings/media/renesas,fcp.yaml
+@@ -27,6 +27,7 @@ properties:
+           - renesas,fcpf # FCP for FDP
+       - items:
+           - enum:
++              - renesas,r9a07g043u-fcpvd # RZ/G2UL
+               - renesas,r9a07g044-fcpvd # RZ/G2{L,LC}
+               - renesas,r9a07g054-fcpvd # RZ/V2L
+           - const: renesas,fcpv         # Generic FCP for VSP fallback
+@@ -62,6 +63,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - renesas,r9a07g043u-fcpvd
+               - renesas,r9a07g044-fcpvd
+               - renesas,r9a07g054-fcpvd
+     then:
 -- 
 2.43.0
 
