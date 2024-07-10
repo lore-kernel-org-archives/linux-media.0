@@ -1,892 +1,182 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2094.outbound.protection.partner.outlook.cn [139.219.17.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BD51DDC5;
-	Wed, 10 Jul 2024 13:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720617475; cv=none; b=cwEYqDfP8o3xbIhPofbPZ3h9N1RHvfdGQs/bw3JwOUAC1Gj0rifDFQeuWj4aQQx11EGMC9lAOgcjjJT5lyC3l3mb7/ORHIhGuJ9k4T4w3NVyegR7as0mSGdoMjMZIeghAjX8D3h38Um8GL9KeeTH5esogpiBl91B7LReDFPRxKQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720617475; c=relaxed/simple;
-	bh=UrHyaviSLFA8sWVdfqGOsRFU0vt4/8vUZu3mZb+GZDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RHvm3VL8zc4viCzR+t4JeDbCi8GXL59ewZRxNDuNqSGWuY4gOgtwU3j/Jfxtnnl9qeuDwATy1zQUFPbba5eDICqWB0MdfXEBrqop5UD2GU54SrIKNQP1AHv6QlcX493LO5xCkAfhZtx/AIN9yqG7z4K82pOz0yfWmk4ajPA4IxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=weH4yMa+; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="weH4yMa+"
-Received: from ideasonboard.com (unknown [IPv6:2001:b07:5d2e:52c9:72c3:346:a663:c82d])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E87757F5;
-	Wed, 10 Jul 2024 15:17:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1720617437;
-	bh=UrHyaviSLFA8sWVdfqGOsRFU0vt4/8vUZu3mZb+GZDI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=weH4yMa+VqILm3Ib5C8N6wgo/CkQ0/+KB/FvWEdp54Ve3rbrQUCaNNw5DRFScTERn
-	 JvoqbA5hJDZ5wkHMl5OWP5vJM/X5UJDl2+3LKhjFT/mQE618xNls7cnV+zoL9GvP/q
-	 jym0Gs2su43TWMuLa0OpjJZDodXEJ5PpgQOG1wSI=
-Date: Wed, 10 Jul 2024 15:17:47 +0200
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, Mingjia Zhang <mingjia.zhang@mediatek.com>, 
-	Jack Zhu <jack.zhu@starfivetech.com>, Keith Zhao <keith.zhao@starfivetech.com>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v5 12/14] staging: media: starfive: Add ISP parameters
- hardware configure
-Message-ID: <rs5fegc5qdjwyyprlcbaruoapjdu6n6qrvlmj2s2hvhcfoypvi@3af2mr375fcp>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA64818560A;
+	Wed, 10 Jul 2024 13:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.94
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720617602; cv=fail; b=dt9BGk4Hyz23MqnwtO+RAA5II2Un18oGc1mH3XWi8YQWpq619wyen73YKygTW5icdtWvdYq8axuFrHIWAywd1+3o43Jya7u14/aiDd0tquPJgESSkxnSFd1fesuARAt1p/g3KGc089YO2ZB3HHx38QY9zwIDoxZxtVidJJmW6U4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720617602; c=relaxed/simple;
+	bh=zZOkhTSS4Az48aT1oSlFjbBwtMjKBRY3xbxuoUVRA7E=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Pn0FCB95+aVsOJ+QvmJ8b0eh/QhBGRGk7WiHaqPD/3hJMPFwJIYDcTG9534BDgwYP/goM3JCY7jCT/+U1FQ1t5b70eh/5IADQ6ORynV55yENVv1euLqGfBpgH9t0yVwogR4WZ4bilyzW+j7GelurwYaSPZPb1crvoULYOmuw/4s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SHEACoYwAnnCaUbh304SJpBfxTabgrs0vNcqTIngEWQBPFAOj9zwK4Ntka0ZtqEYxX/Le/riXoTMz6Nx5iDR/R4BMP5MSMHR74FXt5Idq1XaRT2/KPb8PFfnLdVM2bBXwVeNIvyQa6J/Yy4MBeRDoobolh5x1CYBoAgtwrohwNY59TFOSMlh+QM5VYqKbU03nKbT8bnXANu1na32l7To5635x1AbtnnRSq7I54AqNhi52la+jGJjOuiUenuU8CU05QfMzX+rAwyT8iF4xzNXZjfJwthlFhUZ2gEB/p5NDiX23RHLN8tzsYO+tlmbfEszvrB/065bBeoJt8aCF3Bduw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zZOkhTSS4Az48aT1oSlFjbBwtMjKBRY3xbxuoUVRA7E=;
+ b=DoPnDwNXk0B8a1OOB8cOxhK4+Ajx+Gu3QsKjD1zQIfLC9jhTtR8KKE0e1+mDuYw2CXfYuz/2wpwBETRdikGVecp4uFvwqfpV2CiH4lxN9mNCqEdGMxbRxFXnR0q/9mqVj+NCD7Ga8W7GOhT2a9BnblfhW21mV8f3M53pH7d1ykzZSVubVY2ZxJSDEypgXK4QMCqtxwgntBF4ZpqMD6zN+m9ciI2zKqBHGl2Va3dYCXVXe8bclxVHZXFtIg+k6PYhzaDc0BX+QVOvO7NIx9biRzD8RHV4PgLdlOE58ByYKkQjco7SzaAmCbvljj2KS1gs952x6kZ/kzAyviKhhdy0qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1b::9) by ZQ0PR01MB1064.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:d::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.38; Wed, 10 Jul
+ 2024 13:04:27 +0000
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ ([fe80::64c5:50d8:4f2c:59aa]) by
+ ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%6])
+ with mapi id 15.20.7741.033; Wed, 10 Jul 2024 13:04:27 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>, Jean-Michel Hautbois
+	<jeanmichel.hautbois@ideasonboard.com>, Benjamin Gaignard
+	<benjamin.gaignard@collabora.com>, Tomi Valkeinen
+	<tomi.valkeinen+renesas@ideasonboard.com>, Mingjia Zhang
+	<mingjia.zhang@mediatek.com>, Jack Zhu <jack.zhu@starfivetech.com>, Keith
+ Zhao <keith.zhao@starfivetech.com>, "linux-media@vger.kernel.org"
+	<linux-media@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-staging@lists.linux.dev"
+	<linux-staging@lists.linux.dev>
+Subject:
+ =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggdjUgMDQvMTRdIHN0YWdpbmc6IG1lZGlhOiBzdGFy?=
+ =?utf-8?B?Zml2ZTogQWRkIGEgcGFyYW1zIHNpbmsgcGFkIGFuZCBhIHNjZCBzb3VyY2Ug?=
+ =?utf-8?Q?pad_for_ISP?=
+Thread-Topic: [PATCH v5 04/14] staging: media: starfive: Add a params sink pad
+ and a scd source pad for ISP
+Thread-Index: AQHa0dtkcNKKzXoXiUypx3sthnB42bHvuaWAgAA0quA=
+Date: Wed, 10 Jul 2024 13:04:27 +0000
+Message-ID:
+ <ZQ0PR01MB13024823EE94D8A5705FC728F2A42@ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn>
 References: <20240709083824.430473-1-changhuang.liang@starfivetech.com>
- <20240709083824.430473-13-changhuang.liang@starfivetech.com>
+ <20240709083824.430473-5-changhuang.liang@starfivetech.com>
+ <ku5lhlocshwrc6yxbofr7dtqgrpdijaop4c265njyjnu42rpi5@o36mnwborhjo>
+In-Reply-To: <ku5lhlocshwrc6yxbofr7dtqgrpdijaop4c265njyjnu42rpi5@o36mnwborhjo>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB1064:EE_
+x-ms-office365-filtering-correlation-id: b10794e9-c71b-459a-7058-08dca0e0d42b
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|366016|41320700013|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ HAQaRSLLmHaNFdcNjUgE6cDBmgUIL5gp/aH5CKMU9YptBO/dDpMNYMFMXi16wjBJPOCv9ziKvJd6Liaza0PkqsSbaP41rmM/Rm+uGU515C+zTZQJ2aQ9YnT0hYvtmB9NtE6CYnNkFHtirea8As1zRAB82LNbcrv7lGZwnWU6LHn4AWmstOATcKF9MICWZLbhuabTToC/AcPitgYpZ5SMGHGYN1lIWo5X1yH91JE5XnIDjEMBuZ68opc8WgmtejJUTF/TM4Pl4onOOHRJ4THfuMUsfiQ1k2jIeOceGmRiARhC5HYnoQGyHaKjRvyVG8Khb4x8h53Gd8h5zB9fZQ7ax5Flyiwyu/5PM2g67eBBIMIteOZgJm2vs9TINh2AoTxEabsMJaMKiv40qDDIQ/WWHNOasD9FwYuCZa7bT093SK4NP7q+5e+ehy/+/uz9sC0v1g/JDWvSkoc3YxFkz2YzXLblsNTAn4s7OPzWCULf+gTyFwf15YuFHyPBwhFh593IyAIn2bBzWNfiabs9HBIdF4OVTy3R4egCvNbcudDnS7JL0ElrvgqeR6hhCcddpCh573+AZXZ03UJYuLsKHrv7Iz8GDBHDpJ1qTfyPC0wUUmqead8EFOruIXQU81xn64XI
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(41320700013)(1800799024)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?Y0dtWVNBSnB5U2tXSURSYjQ0YW1KUFFTRjBHMnltSGpJckZZbnhDUElic1ha?=
+ =?utf-8?B?VTRjQmkyc0dQMXhxQmhQeThBSjh6aGdVZDdNMVR2OUU3eGtFb0JYYlJCT1ZU?=
+ =?utf-8?B?VnhMaGNORkxpbE45QTh6Mm45dllsTTFuZ2FZOEMxdWJnUXZnbU40UUQrejFF?=
+ =?utf-8?B?TllldGVZQnd4OVJ5b3J6anlCTTlXckVPYVB3eUJmdHZqeFh4VWgwdjZmd1hY?=
+ =?utf-8?B?WlhZZktMR1djNTZYT3BKNXh0WnB1d0Y1S0V3WHRmeHE0R1hhSEVSZFByaGs5?=
+ =?utf-8?B?MVBaMnQvdG1DRURxdzdpWmk3M1VwMXZzcEs0L2llSExRU2lyZzVCSk0xM3ox?=
+ =?utf-8?B?MkhGYVBRYUQyWExNenBoSklYbGZ3S3VEUmlVWHhKbDFnR0pBNjROc1crcnh3?=
+ =?utf-8?B?b1Y4aVlMRXkybUxZQnptbm0vdWRKbEN2djV2d243K2lqNDcyaG5yNUpWTy92?=
+ =?utf-8?B?UkVOeWRCcWtjdXFlZm0zU2pkRjMzNXFiTXpUdnpjL1dPVlJtZHpMdHhBQWpQ?=
+ =?utf-8?B?bjkxNEJIR24vc2d4R2hKVkhZKzd4RWJIVWg0OFBEK0x3aVpwZE9LK0Nsdm41?=
+ =?utf-8?B?Y2NEQXRBWitxVXoyVWFuZW5BR09jakxOZjJvQTJSaCtFV1RHcnJ5N0prM2Ur?=
+ =?utf-8?B?OFNjTWwxUnBoSG8wQVNpR01qTmg5QThlb0xEbFFmK2xKQlZBOUpmMlFjLzNW?=
+ =?utf-8?B?aEEvRzJrdEJrMlMza1FhY0l2RlA5RkZXWm1lbTdXcmtwaDNGTnk1OUZZd0cx?=
+ =?utf-8?B?OVhqY1M3SXN3SlIyakVPVEVNK3I5amoxZW9oc3lvYW1iM1htWFlVUVdDZ2o2?=
+ =?utf-8?B?Q3FxMUY4eUNGR0VlM3pxN2pwWkxQdjl0cjVseDVCQnNzUXowU1IyaUtIVTI1?=
+ =?utf-8?B?aUVGVjVPbUM5VFVMV1BqckV2ZjRqRnpCcUQvTHZiS0pOMTU3dWpDaTVwdGJY?=
+ =?utf-8?B?V3ZVWXRoUjR4NEFmVFV0aURWQzUxUEd4V2lDdjNFdnpBU3gyditnV0JYSXJE?=
+ =?utf-8?B?OTNqV0ZCRG14anlqbVdQbTJJYm1xNU1OVzFaaXh6KzlmNEZvNVVKbDFsNlhP?=
+ =?utf-8?B?L3FIeUhodHdHeWtERjdEeEFLQVdHYzdVV3dWUmpzaXJTMnZVNXdXNTJUOTk1?=
+ =?utf-8?B?OHJkOUlwZmRwT0tYNXlMblRkZmpRNllhSVY3T2E0dndoeFF0QVhPbXByQmZF?=
+ =?utf-8?B?U08xYWJhS0FmR3RGWGRobWxqUlBmWWRyRCtKVDNDZENacTZpYzVsYnFmUm11?=
+ =?utf-8?B?MGt1dFczeUFmcGdIZDdGdXhDenJ0Y3ovSWo1WklicVRucGthOGZ1RHJlYUV6?=
+ =?utf-8?B?MHMxZlN6a2VhTlZhWnRkcEtWRmo2Q01yODlIanZ1RkpRQ0d6cisyUHU1bEps?=
+ =?utf-8?B?dXhBWE0xZXg3UFA0VkZGVHQ2eldrbG9nYWtJNUtIelBxdVJXSmlzSVMrVUFF?=
+ =?utf-8?B?VDV6aGlSZlBIM2djV1c0NkNVRUR2RXROZ0hka09jT2V2Z0lYSFppRjU1em5H?=
+ =?utf-8?B?ZzdBNjYzdjFyMHpaUE1Za1d1QjZ2WlZ6MHBlNGtsK1cwMUhqbllxeEY2bG91?=
+ =?utf-8?B?Vm04MGJvTVdiWXlCYk9jOUZqWGQ4VklXNmdXQmhOVGFoS0ZHTnNNaVEzcFdE?=
+ =?utf-8?B?TitGWjlWRVpQOVBPdy9zTmZoMkJGcEdoRCswaGFyL08zT2JqdFNkQnc1TU1Q?=
+ =?utf-8?B?YUFCYmRHTzZLczdYN3BkTXRhMm96bU00azhsQjZKVUhvSFN5aFpmOVpMQklw?=
+ =?utf-8?B?Vy9tN0FoSHp2c1gzb2FUcHlVcE1QZDd2ZktoYnlPei91dTlCZXRNU2ZjRUNu?=
+ =?utf-8?B?TDU1dzh2UDMwWnowOGg4YXlNZVE4VXhmU0RwSlI3UmJMVDBsSzhnREJha0NG?=
+ =?utf-8?B?ZmdGemwzbkR0OU5aYTZWSU56V1ZFVUdoN2lIM3ZrbzJYSnIwOXZnYjN2UXVO?=
+ =?utf-8?B?ODZaZVd6ZU1nU0hSNkJFM1FpNFUybHN1d1JVbXMrcVVHcFBjZmtlM3QrRmZs?=
+ =?utf-8?B?SnJnWFRFTEFQZWpDcVo4blR0WXgvbks2clU4ZXh3WGZjWGlrNGptdC84K2xR?=
+ =?utf-8?B?NGFIc1N0WmpBcGgrUFdYT0tGOWkwQ2ZxU2IyL1Jyd2RuSmx3STI1NTFheUs0?=
+ =?utf-8?B?TW1EN1BOZGVqeE8vMHg4WWNWUlA2bHJSUmYwYnYwTU9TbExud3pncUxLVWF1?=
+ =?utf-8?B?SEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240709083824.430473-13-changhuang.liang@starfivetech.com>
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: b10794e9-c71b-459a-7058-08dca0e0d42b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2024 13:04:27.2048
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sJT+U1KdQMVZU2f6ReT/t29CxGV9mNGcY/7XEft1kzXRTjouGxfhXJ6yQzrbhZB2TOD6sbWnT0Nvu5OTj+bP4XN9r+gAXy09f/2JYKgJ9AFCVYSBdXyIc5C92Yb8RHNd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1064
 
-Hi Changhuang
-
-On Tue, Jul 09, 2024 at 01:38:22AM GMT, Changhuang Liang wrote:
-> Add ISP parameters hardware configure.
->
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../staging/media/starfive/camss/stf-camss.h  |   8 +
->  .../media/starfive/camss/stf-isp-hw-ops.c     | 573 ++++++++++++++++++
->  .../staging/media/starfive/camss/stf-isp.h    | 135 +++++
->  3 files changed, 716 insertions(+)
->
-> diff --git a/drivers/staging/media/starfive/camss/stf-camss.h b/drivers/staging/media/starfive/camss/stf-camss.h
-> index 3f84f1a1e997..328318d61c6b 100644
-> --- a/drivers/staging/media/starfive/camss/stf-camss.h
-> +++ b/drivers/staging/media/starfive/camss/stf-camss.h
-> @@ -106,6 +106,14 @@ static inline void stf_isp_reg_set(struct stfcamss *stfcamss, u32 reg, u32 mask)
->  		  stfcamss->isp_base + reg);
->  }
->
-> +static inline void stf_isp_reg_fill_zero(struct stfcamss *stfcamss, u32 reg, u32 size)
-> +{
-> +	u32 i;
-> +
-> +	for (i = 0; i < size; i++, reg += 4)
-> +		iowrite32(0, stfcamss->isp_base + reg);
-> +}
-> +
-
-Why in the header file ? Also could memset_io() replace this ?
-
->  static inline u32 stf_syscon_reg_read(struct stfcamss *stfcamss, u32 reg)
->  {
->  	return ioread32(stfcamss->syscon_base + reg);
-> diff --git a/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
-> index 0bc5e36f952e..e54368910906 100644
-> --- a/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
-> +++ b/drivers/staging/media/starfive/camss/stf-isp-hw-ops.c
-> @@ -10,6 +10,25 @@
->
->  #include "stf-camss.h"
->
-> +static const struct stf_isp_module_info mod_info[] = {
-> +	{ ISP_REG_CSI_MODULE_CFG, 2 },
-> +	{ ISP_REG_CSI_MODULE_CFG, 4 },
-> +	{ ISP_REG_CSI_MODULE_CFG, 6 },
-> +	{ ISP_REG_CSI_MODULE_CFG, 7 },
-> +	{ ISP_REG_CSI_MODULE_CFG, 17 },
-> +	{ ISP_REG_ISP_CTRL_1, 1 },
-> +	{ ISP_REG_ISP_CTRL_1, 2 },
-> +	{ ISP_REG_ISP_CTRL_1, 3 },
-> +	{ ISP_REG_ISP_CTRL_1, 4 },
-> +	{ ISP_REG_ISP_CTRL_1, 5 },
-> +	{ ISP_REG_ISP_CTRL_1, 7 },
-> +	{ ISP_REG_ISP_CTRL_1, 8 },
-> +	{ ISP_REG_ISP_CTRL_1, 17 },
-> +	{ ISP_REG_ISP_CTRL_1, 19 },
-> +	{ ISP_REG_ISP_CTRL_1, 21 },
-> +	{ ISP_REG_ISP_CTRL_1, 22 },
-> +};
-> +
->  static void stf_isp_config_obc(struct stfcamss *stfcamss)
->  {
->  	u32 reg_val, reg_add;
-> @@ -517,6 +536,59 @@ static void stf_isp_fill_flag(struct stfcamss *stfcamss, void *vaddr,
->  	}
->  }
->
-> +static void stf_isp_set_params(struct stfcamss *stfcamss, void *vaddr)
-> +{
-
-Shouldn't all these operations be in the -params.c file ?
-
-> +	struct jh7110_isp_params_buffer *params = (struct jh7110_isp_params_buffer *)vaddr;
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_WB_SETTING)
-> +		isp_set_ctrl_wb(stfcamss, &params->wb_setting);
-
-Also this function is exported in stf-isp.h but are only called
-from within this file ? Same for all the other ones I guess ?
-
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_CAR_SETTING)
-> +		isp_set_ctrl_car(stfcamss, &params->car_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_CCM_SETTING)
-> +		isp_set_ctrl_ccm(stfcamss, &params->ccm_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_CFA_SETTING)
-> +		isp_set_ctrl_cfa(stfcamss, &params->cfa_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_CTC_SETTING)
-> +		isp_set_ctrl_ctc(stfcamss, &params->ctc_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_DBC_SETTING)
-> +		isp_set_ctrl_dbc(stfcamss, &params->dbc_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_DNYUV_SETTING)
-> +		isp_set_ctrl_dnyuv(stfcamss, &params->dnyuv_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_GMARGB_SETTING)
-> +		isp_set_ctrl_gmargb(stfcamss, &params->gmargb_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_LCCF_SETTING)
-> +		isp_set_ctrl_lccf(stfcamss, &params->lccf_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_OBC_SETTING)
-> +		isp_set_ctrl_obc(stfcamss, &params->obc_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_OECF_SETTING)
-> +		isp_set_ctrl_oecf(stfcamss, &params->oecf_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_R2Y_SETTING)
-> +		isp_set_ctrl_r2y(stfcamss, &params->r2y_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_SAT_SETTING)
-> +		isp_set_ctrl_sat(stfcamss, &params->sat_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_SHARP_SETTING)
-> +		isp_set_ctrl_sharp(stfcamss, &params->sharp_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_YCRV_SETTING)
-> +		isp_set_ctrl_ycrv(stfcamss, &params->ycrv_setting);
-> +
-> +	if (params->enable_setting & JH7110_ISP_MODULE_SC_SETTING)
-> +		isp_set_ctrl_sc(stfcamss, &params->sc_setting);
-> +}
-> +
->  irqreturn_t stf_line_irq_handler(int irq, void *priv)
->  {
->  	struct stfcamss *stfcamss = priv;
-> @@ -566,11 +638,20 @@ irqreturn_t stf_isp_irq_handler(int irq, void *priv)
->  	struct stfcamss *stfcamss = priv;
->  	struct stf_capture *cap = &stfcamss->captures[STF_CAPTURE_YUV];
->  	struct stf_capture *cap_scd = &stfcamss->captures[STF_CAPTURE_SCD];
-> +	struct stf_output *output = &stfcamss->output;
->  	struct stfcamss_buffer *ready_buf;
->  	u32 status;
->
->  	status = stf_isp_reg_read(stfcamss, ISP_REG_ISP_CTRL_0);
->  	if (status & ISPC_ISP) {
-> +		ready_buf = stf_buf_get_ready(&output->buffers);
-> +		if (ready_buf) {
-> +			stf_isp_set_params(stfcamss, ready_buf->vaddr);
-> +			ready_buf->vb.vb2_buf.timestamp = ktime_get_ns();
-> +			ready_buf->vb.sequence = output->buffers.sequence++;
-> +			vb2_buffer_done(&ready_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
-> +		}
-> +
->  		if (status & ISPC_ENUO) {
->  			ready_buf = stf_buf_done(&cap->buffers);
->  			if (ready_buf)
-> @@ -591,4 +672,496 @@ irqreturn_t stf_isp_irq_handler(int irq, void *priv)
->  	}
->
->  	return IRQ_HANDLED;
-> +};
-> +
-> +int isp_set_ctrl_wb(struct stfcamss *stfcamss, const void *value)
-
-This function is generic, there's no need to pass a const
-void * here and cast it below, you can use const struct jh7110_isp_wb_setting *
-as the second argument type.
-
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_awb];
-> +	const struct jh7110_isp_wb_setting *setting =
-> +		(const struct jh7110_isp_wb_setting *)value;
-> +	const struct jh7110_isp_wb_gain *gains = &setting->gains;
-> +
-> +	stf_isp_reg_fill_zero(stfcamss, ISP_REG_AWB_X0_CFG_0, 16);
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S0_CFG_0,
-> +			  AWB_S_SYMBOL_H(gains->gain_r) | AWB_S_SYMBOL_L(gains->gain_r));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S0_CFG_1,
-> +			  AWB_S_SYMBOL_H(gains->gain_r) | AWB_S_SYMBOL_L(gains->gain_r));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S1_CFG_0,
-> +			  AWB_S_SYMBOL_H(gains->gain_g) | AWB_S_SYMBOL_L(gains->gain_g));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S1_CFG_1,
-> +			  AWB_S_SYMBOL_H(gains->gain_g) | AWB_S_SYMBOL_L(gains->gain_g));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S2_CFG_0,
-> +			  AWB_S_SYMBOL_H(gains->gain_g) | AWB_S_SYMBOL_L(gains->gain_g));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S2_CFG_1,
-> +			  AWB_S_SYMBOL_H(gains->gain_g) | AWB_S_SYMBOL_L(gains->gain_g));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S3_CFG_0,
-> +			  AWB_S_SYMBOL_H(gains->gain_b) | AWB_S_SYMBOL_L(gains->gain_b));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_AWB_S3_CFG_1,
-> +			  AWB_S_SYMBOL_H(gains->gain_b) | AWB_S_SYMBOL_L(gains->gain_b));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_car(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_car];
-> +	const struct jh7110_isp_car_setting *setting =
-> +		(const struct jh7110_isp_car_setting *)value;
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_ccm(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_ccm];
-> +	const struct jh7110_isp_ccm_setting *setting =
-> +		(const struct jh7110_isp_ccm_setting *)value;
-> +	const struct jh7110_isp_ccm_smlow *ccm = &setting->ccm_smlow;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_0, DNRM_F(6));
-> +	stf_isp_reg_fill_zero(stfcamss, ISP_REG_ICAMD_1, 11);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_12, ccm->ccm[0][0]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_13, ccm->ccm[0][1]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_14, ccm->ccm[0][2]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_15, ccm->ccm[1][0]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_16, ccm->ccm[1][1]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_17, ccm->ccm[1][2]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_18, ccm->ccm[2][0]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_19, ccm->ccm[2][1]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_20, ccm->ccm[2][2]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_21, ccm->offsets[0]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_22, ccm->offsets[1]);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICAMD_23, ccm->offsets[2]);
-> +	stf_isp_reg_fill_zero(stfcamss, ISP_REG_ICAMD_24, 2);
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_cfa(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_cfa];
-> +	const struct jh7110_isp_cfa_setting *setting =
-> +		(const struct jh7110_isp_cfa_setting *)value;
-> +	const struct jh7110_isp_cfa_params *cfa = &setting->settings;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICFAM,
-> +			  HV_W(cfa->hv_width) | CROSS_COV(cfa->cross_cov));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_ctc(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_ctc];
-> +	const struct jh7110_isp_ctc_setting *setting =
-> +		(const struct jh7110_isp_ctc_setting *)value;
-> +	const struct jh7110_isp_ctc_params *ctc = &setting->settings;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_ICTC,
-> +			  MINGT(ctc->min_gt) | MAXGT(ctc->max_gt) |
-> +			  GF_MODE(ctc->saf_mode | ctc->daf_mode));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_dbc(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_dbc];
-> +	const struct jh7110_isp_dbc_setting *setting =
-> +		(const struct jh7110_isp_dbc_setting *)value;
-> +	const struct jh7110_isp_dbc_params *dbc = &setting->settings;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_IDBC,
-> +			  BADXT(dbc->bad_xt) | BADGT(dbc->bad_gt));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_dnyuv(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_dnyuv];
-> +	const struct jh7110_isp_dnyuv_setting *setting =
-> +		(const struct jh7110_isp_dnyuv_setting *)value;
-> +	const struct jh7110_isp_dnyuv_params *cfg = &setting->settings;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YSWR0,
-> +			  YUVSW0(cfg->y_sweight[0]) | YUVSW1(cfg->y_sweight[1]) |
-> +			  YUVSW2(cfg->y_sweight[2]) | YUVSW3(cfg->y_sweight[3]) |
-> +			  YUVSW4(cfg->y_sweight[4]) | YUVSW5(cfg->y_sweight[5]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YSWR1,
-> +			  YUVSW0(cfg->y_sweight[6]) | YUVSW1(cfg->y_sweight[7]) |
-> +			  YUVSW2(cfg->y_sweight[8]) | YUVSW3(cfg->y_sweight[9]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CSWR0,
-> +			  YUVSW0(cfg->uv_sweight[0]) | YUVSW1(cfg->uv_sweight[1]) |
-> +			  YUVSW2(cfg->uv_sweight[2]) | YUVSW3(cfg->uv_sweight[3]) |
-> +			  YUVSW4(cfg->uv_sweight[4]) | YUVSW5(cfg->uv_sweight[5]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CSWR1,
-> +			  YUVSW0(cfg->uv_sweight[6]) | YUVSW1(cfg->uv_sweight[7]) |
-> +			  YUVSW2(cfg->uv_sweight[8]) | YUVSW3(cfg->uv_sweight[9]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR0,
-> +			  CURVE_D_L(cfg->y_curve[0]) | CURVE_D_H(cfg->y_curve[1]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR1,
-> +			  CURVE_D_L(cfg->y_curve[2]) | CURVE_D_H(cfg->y_curve[3]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_YDR2,
-> +			  CURVE_D_L(cfg->y_curve[4]) | CURVE_D_H(cfg->y_curve[5]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR0,
-> +			  CURVE_D_L(cfg->uv_curve[0]) | CURVE_D_H(cfg->uv_curve[1]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR1,
-> +			  CURVE_D_L(cfg->uv_curve[2]) | CURVE_D_H(cfg->uv_curve[3]));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_DNYUV_CDR2,
-> +			  CURVE_D_L(cfg->uv_curve[4]) | CURVE_D_H(cfg->uv_curve[5]));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_gmargb(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_gmargb];
-> +	const struct jh7110_isp_gmargb_setting *setting =
-> +		(const struct jh7110_isp_gmargb_setting *)value;
-> +	const struct jh7110_isp_gmargb_point *curve = setting->curve;
-> +	u32 reg_addr = ISP_REG_GAMMA_VAL0;
-> +	u32 i;
-> +
-> +	for (i = 0; i < 15; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr,
-> +				  GAMMA_S_VAL(curve[i].sg_val) | GAMMA_VAL(curve[i].g_val));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_lccf(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_lccf];
-> +	const struct jh7110_isp_lccf_setting *setting =
-> +		(const struct jh7110_isp_lccf_setting *)value;
-> +	const struct jh7110_isp_lccf_circle *circle = &setting->circle;
-> +	const struct jh7110_isp_lccf_curve_param *r_param = &setting->r_param;
-> +	const struct jh7110_isp_lccf_curve_param *gr_param = &setting->gr_param;
-> +	const struct jh7110_isp_lccf_curve_param *gb_param = &setting->gb_param;
-> +	const struct jh7110_isp_lccf_curve_param *b_param = &setting->b_param;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_0,
-> +			  Y_DISTANCE(circle->center_y) | X_DISTANCE(circle->center_x));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_1,
-> +			  LCCF_MAX_DIS(circle->radius));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_2,
-> +			  LCCF_F1_PAR(r_param->f1) | LCCF_F2_PAR(r_param->f2));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_3,
-> +			  LCCF_F1_PAR(gr_param->f1) | LCCF_F2_PAR(gr_param->f2));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_4,
-> +			  LCCF_F1_PAR(gb_param->f1) | LCCF_F2_PAR(gb_param->f2));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_LCCF_CFG_5,
-> +			  LCCF_F1_PAR(b_param->f1) | LCCF_F2_PAR(b_param->f2));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_obc(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_obc];
-> +	const struct jh7110_isp_obc_setting *setting =
-> +		(const struct jh7110_isp_obc_setting *)value;
-> +	const struct jh7110_isp_obc_win_size *win_size = &setting->win_size;
-> +	const struct jh7110_isp_obc_gain *gain = setting->gain;
-> +	const struct jh7110_isp_obc_offset *offset = setting->offset;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBC_CFG,
-> +			  OBC_W_W(win_size->width) | OBC_W_H(win_size->height));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCG_CFG_0,
-> +			  GAIN_A_POINT(gain[0].tl_gain) | GAIN_B_POINT(gain[0].tr_gain) |
-> +			  GAIN_C_POINT(gain[0].bl_gain) | GAIN_D_POINT(gain[0].br_gain));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCG_CFG_1,
-> +			  GAIN_A_POINT(gain[1].tl_gain) | GAIN_B_POINT(gain[1].tr_gain) |
-> +			  GAIN_C_POINT(gain[1].bl_gain) | GAIN_D_POINT(gain[1].br_gain));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCG_CFG_2,
-> +			  GAIN_A_POINT(gain[2].tl_gain) | GAIN_B_POINT(gain[2].tr_gain) |
-> +			  GAIN_C_POINT(gain[2].bl_gain) | GAIN_D_POINT(gain[2].br_gain));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCG_CFG_3,
-> +			  GAIN_A_POINT(gain[3].tl_gain) | GAIN_B_POINT(gain[3].tr_gain) |
-> +			  GAIN_C_POINT(gain[3].bl_gain) | GAIN_D_POINT(gain[3].br_gain));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCO_CFG_0,
-> +			  OFFSET_A_POINT(offset[0].tl_offset) |
-> +			  OFFSET_B_POINT(offset[0].tr_offset) |
-> +			  OFFSET_C_POINT(offset[0].bl_offset) |
-> +			  OFFSET_D_POINT(offset[0].br_offset));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCO_CFG_1,
-> +			  OFFSET_A_POINT(offset[1].tl_offset) |
-> +			  OFFSET_B_POINT(offset[1].tr_offset) |
-> +			  OFFSET_C_POINT(offset[1].bl_offset) |
-> +			  OFFSET_D_POINT(offset[1].br_offset));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCO_CFG_2,
-> +			  OFFSET_A_POINT(offset[2].tl_offset) |
-> +			  OFFSET_B_POINT(offset[2].tr_offset) |
-> +			  OFFSET_C_POINT(offset[2].bl_offset) |
-> +			  OFFSET_D_POINT(offset[2].br_offset));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_OBCO_CFG_3,
-> +			  OFFSET_A_POINT(offset[3].tl_offset) |
-> +			  OFFSET_B_POINT(offset[3].tr_offset) |
-> +			  OFFSET_C_POINT(offset[3].bl_offset) |
-> +			  OFFSET_D_POINT(offset[3].br_offset));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_oecf(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_oecf];
-> +	const struct jh7110_isp_oecf_setting *setting =
-> +		(const struct jh7110_isp_oecf_setting *)value;
-> +	const struct jh7110_isp_oecf_point *oecf = setting->r_curve;
-> +	u32 reg_x_addr = ISP_REG_OECF_X0_CFG0;
-> +	u32 reg_y_addr = ISP_REG_OECF_Y0_CFG0;
-> +	u32 reg_s_addr = ISP_REG_OECF_S0_CFG0;
-> +	u32 i;
-> +
-> +	for (i = 0; i < 64; i += 2, reg_x_addr += 4, reg_y_addr += 4, reg_s_addr += 4) {
-> +		stf_isp_reg_write(stfcamss, reg_x_addr,
-> +				  OCEF_PAR_L(oecf[i].x) | OCEF_PAR_H(oecf[i + 1].x));
-> +		stf_isp_reg_write(stfcamss, reg_y_addr,
-> +				  OCEF_PAR_L(oecf[i].y) | OCEF_PAR_H(oecf[i + 1].y));
-> +		stf_isp_reg_write(stfcamss, reg_s_addr,
-> +				  OCEF_PAR_L(oecf[i].slope) | OCEF_PAR_H(oecf[i + 1].slope));
-> +	}
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_r2y(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_r2y];
-> +	const struct jh7110_isp_r2y_setting *setting =
-> +		(const struct jh7110_isp_r2y_setting *)value;
-> +	const struct jh7110_isp_r2y_matrix *matrix = &setting->matrix;
-> +	u32 reg_addr = ISP_REG_R2Y_0;
-> +	u32 i;
-> +
-> +	for (i = 0; i < 9; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr, matrix->m[i]);
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_sat(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_sat];
-> +	const struct jh7110_isp_sat_setting *setting =
-> +		(const struct jh7110_isp_sat_setting *)value;
-> +	const struct jh7110_isp_sat_info *sat = &setting->sat_info;
-> +	const struct jh7110_isp_sat_hue_info *hue = &setting->hue_info;
-> +	const struct jh7110_isp_sat_curve *curve = &setting->curve;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_CS_GAIN,
-> +			  CMAB(sat->gain_cmab) | CMAD(sat->gain_cmmd));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_CS_THRESHOLD,
-> +			  CMB(sat->threshold_cmb) | CMD(sat->threshold_cmd));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_CS_OFFSET,
-> +			  UOFF(sat->offset_u) | VOFF(sat->offset_v));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_CS_SCALE, sat->cmsf);
-> +	stf_isp_reg_write(stfcamss, ISP_REG_CS_HUE_F,
-> +			  COS(hue->cos) | SIN(hue->sin));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_YADJ0,
-> +			  YIMIN(curve->yi_min) | YOIR(curve->yo_ir));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_YADJ1,
-> +			  YOMIN(curve->yo_min) | YOMAX(curve->yo_max));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_sharp(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_shrp];
-> +	const struct jh7110_isp_sharp_setting *setting =
-> +		(const struct jh7110_isp_sharp_setting *)value;
-> +	const struct jh7110_isp_sharp_weight *weight = &setting->weight;
-> +	const struct jh7110_isp_sharp_strength *strength = &setting->strength;
-> +	u32 reg_addr = ISP_REG_SHARPEN0;
-> +	u32 i;
-> +
-> +	for (i = 0; i < 4; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr,
-> +				  S_WEIGHT(weight->weight[i]) | S_DELTA(strength->diff[i]));
-> +
-> +	for (; i < 15; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr, S_WEIGHT(weight->weight[i]));
-> +
-> +	reg_addr = ISP_REG_SHARPEN_FS0;
-> +
-> +	for (i = 0; i < 3; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr,
-> +				  S_SLOPE(strength->s[i]) | S_FACTOR(strength->f[i]));
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SHARPEN_WN,
-> +			  WSUM(weight->recip_wei_sum) | NDIRF(setting->ndirf) |
-> +			  PDIRF(setting->pdirf));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_ycrv(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_ycrv];
-> +	const struct jh7110_isp_ycrv_setting *setting =
-> +		(const struct jh7110_isp_ycrv_setting *)value;
-> +	const struct jh7110_isp_ycrv_curve *curve = &setting->curve;
-> +	u32 reg_addr = ISP_REG_YCURVE_0;
-> +	u32 i;
-> +
-> +	for (i = 0; i < 64; i++, reg_addr += 4)
-> +		stf_isp_reg_write(stfcamss, reg_addr, curve->y[i]);
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
-> +}
-> +
-> +int isp_set_ctrl_sc(struct stfcamss *stfcamss, const void *value)
-> +{
-> +	const struct stf_isp_module_info *reg_info = &mod_info[imi_sc];
-> +	const struct jh7110_isp_sc_setting *setting =
-> +		(const struct jh7110_isp_sc_setting *)value;
-> +	const struct jh7110_isp_sc_config *crop = &setting->crop_config;
-> +	const struct jh7110_isp_sc_af_config *af = &setting->af_config;
-> +	const struct jh7110_isp_sc_awb_config *awb = &setting->awb_config;
-> +	const struct jh7110_isp_sc_awb_ps *awb_ps = &awb->ps_config;
-> +	const struct jh7110_isp_sc_awb_ws *awb_ws = &awb->ws_config;
-> +	const struct jh7110_isp_sc_awb_point *pts = awb->pts;
-> +	u32 reg_addr0, reg_addr1;
-> +	u32 i;
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SCD_CFG_1, AXI_ID(1));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_CFG_0,
-> +			  HSTART(crop->h_start) | VSTART(crop->v_start));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_CFG_1,
-> +			  SC_WIDTH(crop->sw_width) | SC_HEIGHT(crop->sw_height) |
-> +			  AWB_PS_GRB_BA(awb->awb_ps_grb_ba) | SEL_TYPE(awb->sel));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_DEC,
-> +			  SC_DEC_H_PERIOD(crop->hperiod) | SC_DEC_H_KEEP(crop->hkeep) |
-> +			  SC_DEC_V_PERIOD(crop->vperiod) | SC_DEC_V_KEEP(crop->vkeep));
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_PS_CFG_0,
-> +			  AWB_PS_RL(awb_ps->awb_ps_rl) | AWB_PS_RU(awb_ps->awb_ps_ru) |
-> +			  AWB_PS_GL(awb_ps->awb_ps_gl) | AWB_PS_GU(awb_ps->awb_ps_gu));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_PS_CFG_1,
-> +			  AWB_PS_BL(awb_ps->awb_ps_bl) | AWB_PS_BU(awb_ps->awb_ps_bu) |
-> +			  AWB_PS_YL(awb_ps->awb_ps_yl) | AWB_PS_YU(awb_ps->awb_ps_yu));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_PS_CFG_2,
-> +			  AWB_PS_GRL(awb_ps->awb_ps_grl) | AWB_PS_GRU(awb_ps->awb_ps_gru));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_PS_CFG_3,
-> +			  AWB_PS_GBL(awb_ps->awb_ps_gbl) | AWB_PS_GBU(awb_ps->awb_ps_gbu));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_PS_CFG_4,
-> +			  AWB_PS_GRBL(awb_ps->awb_ps_grbl) | AWB_PS_GRBU(awb_ps->awb_ps_grbu));
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AF,
-> +			  AF_ES_HM(af->es_hor_mode) | AF_ES_SM(af->es_sum_mode) |
-> +			  AF_ES_HE(af->hor_en) | AF_ES_VE(af->ver_en) |
-> +			  AF_ES_VTHR(af->es_ver_thr) | AF_ES_HTHR(af->es_hor_thr));
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_CFG_0,
-> +			  AWB_WS_RL(awb_ws->awb_ws_rl) | AWB_WS_RU(awb_ws->awb_ws_ru) |
-> +			  AWB_WS_GRL(awb_ws->awb_ws_grl) | AWB_WS_GRU(awb_ws->awb_ws_gru));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_CFG_1,
-> +			  AWB_WS_GBL(awb_ws->awb_ws_gbl) | AWB_WS_GBU(awb_ws->awb_ws_gbu) |
-> +			  AWB_WS_BL(awb_ws->awb_ws_bl) | AWB_WS_BU(awb_ws->awb_ws_bu));
-> +
-> +	reg_addr0 = ISP_REG_SC_AWB_WS_CW0_CFG_0;
-> +	reg_addr1 = ISP_REG_SC_AWB_WS_CW0_CFG_1;
-> +
-> +	for (i = 0; i < 13; i++, reg_addr0 += 8, reg_addr1 += 8) {
-> +		stf_isp_reg_write(stfcamss, reg_addr0,
-> +				  AWB_WS_CW_W_0(awb->awb_cw[13 * i]) |
-> +				  AWB_WS_CW_W_1(awb->awb_cw[13 * i + 1]) |
-> +				  AWB_WS_CW_W_2(awb->awb_cw[13 * i + 2]) |
-> +				  AWB_WS_CW_W_3(awb->awb_cw[13 * i + 3]) |
-> +				  AWB_WS_CW_W_4(awb->awb_cw[13 * i + 4]) |
-> +				  AWB_WS_CW_W_5(awb->awb_cw[13 * i + 5]) |
-> +				  AWB_WS_CW_W_6(awb->awb_cw[13 * i + 6]) |
-> +				  AWB_WS_CW_W_7(awb->awb_cw[13 * i + 7]));
-> +		stf_isp_reg_write(stfcamss, reg_addr1,
-> +				  AWB_WS_CW_W_0(awb->awb_cw[13 * i + 8]) |
-> +				  AWB_WS_CW_W_1(awb->awb_cw[13 * i + 9]) |
-> +				  AWB_WS_CW_W_2(awb->awb_cw[13 * i + 10]) |
-> +				  AWB_WS_CW_W_3(awb->awb_cw[13 * i + 11]) |
-> +				  AWB_WS_CW_W_4(awb->awb_cw[13 * i + 12]));
-> +	}
-> +
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWV_CFG_0,
-> +			  AWB_WS_IW_V_0(pts[0].weight) | AWB_WS_IW_V_1(pts[1].weight) |
-> +			  AWB_WS_IW_V_2(pts[2].weight) | AWB_WS_IW_V_3(pts[3].weight) |
-> +			  AWB_WS_IW_V_4(pts[4].weight) | AWB_WS_IW_V_5(pts[5].weight) |
-> +			  AWB_WS_IW_V_6(pts[6].weight) | AWB_WS_IW_V_7(pts[7].weight));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWV_CFG_1,
-> +			  AWB_WS_IW_V_0(pts[8].weight) | AWB_WS_IW_V_1(pts[9].weight) |
-> +			  AWB_WS_IW_V_2(pts[10].weight) | AWB_WS_IW_V_3(pts[11].weight) |
-> +			  AWB_WS_IW_V_4(pts[12].weight) | AWB_WS_IW_V_5(pts[13].weight) |
-> +			  AWB_WS_IW_V_6(pts[14].weight) | AWB_WS_IW_V_7(pts[15].weight));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWS_CFG_0,
-> +			  AWB_WS_IW_S_0(2 * (pts[1].weight - pts[0].weight)) |
-> +			  AWB_WS_IW_S_1(2 * (pts[2].weight - pts[1].weight)) |
-> +			  AWB_WS_IW_S_2(2 * (pts[3].weight - pts[2].weight)) |
-> +			  AWB_WS_IW_S_3(2 * (pts[4].weight - pts[3].weight)));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWS_CFG_1,
-> +			  AWB_WS_IW_S_0(2 * (pts[5].weight - pts[4].weight)) |
-> +			  AWB_WS_IW_S_1(2 * (pts[6].weight - pts[5].weight)) |
-> +			  AWB_WS_IW_S_2(2 * (pts[7].weight - pts[6].weight)) |
-> +			  AWB_WS_IW_S_3(2 * (pts[8].weight - pts[7].weight)));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWS_CFG_2,
-> +			  AWB_WS_IW_S_0(2 * (pts[9].weight - pts[8].weight)) |
-> +			  AWB_WS_IW_S_1(2 * (pts[10].weight - pts[9].weight)) |
-> +			  AWB_WS_IW_S_2(2 * (pts[11].weight - pts[10].weight)) |
-> +			  AWB_WS_IW_S_3(2 * (pts[12].weight - pts[11].weight)));
-> +	stf_isp_reg_write(stfcamss, ISP_REG_SC_AWB_WS_IWS_CFG_3,
-> +			  AWB_WS_IW_S_0(2 * (pts[13].weight - pts[12].weight)) |
-> +			  AWB_WS_IW_S_1(2 * (pts[14].weight - pts[13].weight)) |
-> +			  AWB_WS_IW_S_2(2 * (pts[15].weight - pts[14].weight)) |
-> +			  AWB_WS_IW_S_3(2 * (pts[16].weight - pts[15].weight)));
-> +
-> +	stf_isp_reg_set_bit(stfcamss, reg_info->en_reg, 1 << reg_info->en_nbit,
-> +			    setting->enabled ? 1 << reg_info->en_nbit : 0);
-> +
-> +	return 0;
->  }
-> diff --git a/drivers/staging/media/starfive/camss/stf-isp.h b/drivers/staging/media/starfive/camss/stf-isp.h
-> index 76ea943bfe98..80c4571dc522 100644
-> --- a/drivers/staging/media/starfive/camss/stf-isp.h
-> +++ b/drivers/staging/media/starfive/camss/stf-isp.h
-> @@ -124,6 +124,44 @@
->  #define SC_HEIGHT(n)				((n) << 8)
->  #define SC_WIDTH(n)				((n) << 0)
->
-> +#define ISP_REG_SC_AF				0x0c0
-> +#define AF_ES_HTHR(n)				((n) << 16)
-> +#define AF_ES_VTHR(n)				((n) << 8)
-> +#define AF_ES_VE(n)				((n) << 3)
-> +#define AF_ES_HE(n)				((n) << 2)
-> +#define AF_ES_SM(n)				((n) << 1)
-> +#define AF_ES_HM(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_PS_CFG_0			0x0c4
-> +#define AWB_PS_GU(n)				((n) << 24)
-> +#define AWB_PS_GL(n)				((n) << 16)
-> +#define AWB_PS_RU(n)				((n) << 8)
-> +#define AWB_PS_RL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_PS_CFG_1			0x0c8
-> +#define AWB_PS_YU(n)				((n) << 24)
-> +#define AWB_PS_YL(n)				((n) << 16)
-> +#define AWB_PS_BU(n)				((n) << 8)
-> +#define AWB_PS_BL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_PS_CFG_2			0x0cc
-> +#define AWB_PS_GRU(n)				((n) << 16)
-> +#define AWB_PS_GRL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_PS_CFG_3			0x0d0
-> +#define AWB_PS_GBU(n)				((n) << 16)
-> +#define AWB_PS_GBL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_PS_CFG_4			0x0d4
-> +#define AWB_PS_GRBU(n)				((n) << 16)
-> +#define AWB_PS_GRBL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_DEC				0x0d8
-> +#define SC_DEC_V_KEEP(n)			((n) << 24)
-> +#define SC_DEC_V_PERIOD(n)			((n) << 16)
-> +#define SC_DEC_H_KEEP(n)			((n) << 8)
-> +#define SC_DEC_H_PERIOD(n)			((n) << 0)
-> +
->  #define ISP_REG_LCCF_CFG_2			0x0e0
->  #define ISP_REG_LCCF_CFG_3			0x0e4
->  #define ISP_REG_LCCF_CFG_4			0x0e8
-> @@ -140,6 +178,8 @@
->  #define ISP_REG_OECF_X0_CFG6			0x118
->  #define ISP_REG_OECF_X0_CFG7			0x11c
->
-> +#define ISP_REG_OECF_Y0_CFG0			0x180
-> +
->  #define ISP_REG_OECF_Y3_CFG0			0x1e0
->  #define ISP_REG_OECF_Y3_CFG1			0x1e4
->  #define ISP_REG_OECF_Y3_CFG2			0x1e8
-> @@ -204,6 +244,49 @@
->  #define OFFSET_B_POINT(x)			((x) << 8)
->  #define OFFSET_A_POINT(x)			((x) << 0)
->
-> +#define ISP_REG_SC_AWB_WS_CW0_CFG_0		0x4d0
-> +#define ISP_REG_SC_AWB_WS_CW0_CFG_1		0x4d4
-> +#define AWB_WS_CW_W_7(x)			((x) << 28)
-> +#define AWB_WS_CW_W_6(x)			((x) << 24)
-> +#define AWB_WS_CW_W_5(x)			((x) << 20)
-> +#define AWB_WS_CW_W_4(x)			((x) << 16)
-> +#define AWB_WS_CW_W_3(x)			((x) << 12)
-> +#define AWB_WS_CW_W_2(x)			((x) << 8)
-> +#define AWB_WS_CW_W_1(x)			((x) << 4)
-> +#define AWB_WS_CW_W_0(x)			((x) << 0)
-> +
-> +#define ISP_REG_SC_AWB_WS_IWV_CFG_0		0x538
-> +#define ISP_REG_SC_AWB_WS_IWV_CFG_1		0x53c
-> +#define AWB_WS_IW_V_7(x)			((x) << 28)
-> +#define AWB_WS_IW_V_6(x)			((x) << 24)
-> +#define AWB_WS_IW_V_5(x)			((x) << 20)
-> +#define AWB_WS_IW_V_4(x)			((x) << 16)
-> +#define AWB_WS_IW_V_3(x)			((x) << 12)
-> +#define AWB_WS_IW_V_2(x)			((x) << 8)
-> +#define AWB_WS_IW_V_1(x)			((x) << 4)
-> +#define AWB_WS_IW_V_0(x)			((x) << 0)
-> +
-> +#define ISP_REG_SC_AWB_WS_IWS_CFG_0		0x540
-> +#define ISP_REG_SC_AWB_WS_IWS_CFG_1		0x544
-> +#define ISP_REG_SC_AWB_WS_IWS_CFG_2		0x548
-> +#define ISP_REG_SC_AWB_WS_IWS_CFG_3		0x54c
-> +#define AWB_WS_IW_S_3(x)			((x) << 24)
-> +#define AWB_WS_IW_S_2(x)			((x) << 16)
-> +#define AWB_WS_IW_S_1(x)			((x) << 8)
-> +#define AWB_WS_IW_S_0(x)			((x) << 0)
-> +
-> +#define ISP_REG_SC_AWB_WS_CFG_0			0x5d0
-> +#define AWB_WS_GRU(n)				((n) << 24)
-> +#define AWB_WS_GRL(n)				((n) << 16)
-> +#define AWB_WS_RU(n)				((n) << 8)
-> +#define AWB_WS_RL(n)				((n) << 0)
-> +
-> +#define ISP_REG_SC_AWB_WS_CFG_1			0x5d4
-> +#define AWB_WS_BU(n)				((n) << 24)
-> +#define AWB_WS_BL(n)				((n) << 16)
-> +#define AWB_WS_GBU(n)				((n) << 8)
-> +#define AWB_WS_GBL(n)				((n) << 0)
-> +
->  #define ISP_REG_ISP_CTRL_0			0xa00
->  #define ISPC_LINE				BIT(27)
->  #define ISPC_SC					BIT(26)
-> @@ -315,8 +398,19 @@
->  #define CURVE_D_L(n)				((n) << 0)
->
->  #define ISP_REG_ICAMD_0				0xc40
-> +#define ISP_REG_ICAMD_1				0xc44
->  #define ISP_REG_ICAMD_12			0xc70
-> +#define ISP_REG_ICAMD_13			0xc74
-> +#define ISP_REG_ICAMD_14			0xc78
-> +#define ISP_REG_ICAMD_15			0xc7c
-> +#define ISP_REG_ICAMD_16			0xc80
-> +#define ISP_REG_ICAMD_17			0xc84
-> +#define ISP_REG_ICAMD_18			0xc88
-> +#define ISP_REG_ICAMD_19			0xc8c
->  #define ISP_REG_ICAMD_20			0xc90
-> +#define ISP_REG_ICAMD_21			0xc94
-> +#define ISP_REG_ICAMD_22			0xc98
-> +#define ISP_REG_ICAMD_23			0xc9c
->  #define ISP_REG_ICAMD_24			0xca0
->  #define ISP_REG_ICAMD_25			0xca4
->  #define DNRM_F(n)				((n) << 16)
-> @@ -439,6 +533,30 @@ enum stf_isp_pad_id {
->  	STF_ISP_PAD_MAX
->  };
->
-> +enum stf_isp_modules_index {
-> +	imi_obc = 0,
-> +	imi_oecf,
-> +	imi_lccf,
-> +	imi_awb,
-> +	imi_sc,
-> +	imi_cfa,
-> +	imi_car,
-> +	imi_ccm,
-> +	imi_gmargb,
-> +	imi_r2y,
-> +	imi_shrp,
-> +	imi_sat,
-> +	imi_dnyuv,
-> +	imi_ycrv,
-> +	imi_ctc,
-> +	imi_dbc,
-> +};
-> +
-> +struct stf_isp_module_info {
-> +	u32 en_reg;
-> +	u8 en_nbit;
-> +};
-> +
->  struct stf_isp_format {
->  	u32 code;
->  	u8 bpp;
-> @@ -478,4 +596,21 @@ int stf_isp_params_register(struct stfcamss_video *video,
->  			    struct v4l2_device *v4l2_dev,
->  			    const char *name);
->
-> +int isp_set_ctrl_wb(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_car(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_ccm(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_cfa(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_ctc(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_dbc(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_dnyuv(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_gmargb(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_lccf(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_obc(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_oecf(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_r2y(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_sat(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_sharp(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_ycrv(struct stfcamss *stfcamss, const void *value);
-> +int isp_set_ctrl_sc(struct stfcamss *stfcamss, const void *value);
-> +
->  #endif /* STF_ISP_H */
-> --
-> 2.25.1
->
->
+SGksIEphY29wbw0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudHMuDQoNClsuLi5dDQoNCj4gPiBA
+QCAtMTUxLDYgKzE3MSw5IEBAIHN0YXRpYyBpbnQgaXNwX3NldF9mb3JtYXQoc3RydWN0IHY0bDJf
+c3ViZGV2ICpzZCwNCj4gPiAgCWlzcF90cnlfZm9ybWF0KGlzcF9kZXYsIHN0YXRlLCBmbXQtPnBh
+ZCwgJmZtdC0+Zm9ybWF0KTsNCj4gPiAgCSpmb3JtYXQgPSBmbXQtPmZvcm1hdDsNCj4gPg0KPiA+
+ICsJaWYgKGZtdC0+cGFkID09IFNURl9JU1BfUEFEX1NSQ19TQ0QgfHwgZm10LT5wYWQgPT0NCj4g
+PiArU1RGX0lTUF9QQURfU0lOS19QQVJBTVMpDQo+IA0KPiBuaXQ6IGNhbiBlYXNpbHkgYmUgbWFk
+ZSA8IDgwIGNvbHMgKGFnYWluLCBub3QgbWFuZGF0b3J5IGluIExpbnV4IGJ1dCBlbmZvcmNlZA0K
+PiBpbiB2NGwgYWNjb3JkaW5nIHRvDQo+IERvY3VtZW50YXRpb24vZHJpdmVyLWFwaS9tZWRpYS9t
+YWludGFpbmVyLWVudHJ5LXByb2ZpbGUucnN0KQ0KPiANCg0KSSB3aWxsIGFkZCAtLW1heC1saW5l
+LWxlbmd0aD04MCB0byBjaGVjayBwYXRjaHMgYWdhaW4uDQoNCj4gPiArCQlyZXR1cm4gMDsNCj4g
+PiArDQo+ID4gIAlpc3BfZGV2LT5jdXJyZW50X2ZtdCA9DQo+IHN0Zl9nX2ZtdF9ieV9tY29kZSgm
+aXNwX2Rldi0+Zm9ybWF0c1tmbXQtPnBhZF0sDQo+ID4gIAkJCQkJCSAgZm10LT5mb3JtYXQuY29k
+ZSk7DQo+ID4NCj4gPiBAQCAtMjAyLDYgKzIyNSw5IEBAIHN0YXRpYyBpbnQgaXNwX2dldF9zZWxl
+Y3Rpb24oc3RydWN0IHY0bDJfc3ViZGV2ICpzZCwNCj4gPiAgCXN0cnVjdCB2NGwyX3N1YmRldl9m
+b3JtYXQgZm10ID0geyAwIH07DQo+ID4gIAlzdHJ1Y3QgdjRsMl9yZWN0ICpyZWN0Ow0KPiA+DQo+
+ID4gKwlpZiAoc2VsLT5wYWQgPT0gU1RGX0lTUF9QQURfU1JDX1NDRCB8fCBzZWwtPnBhZCA9PQ0K
+PiBTVEZfSVNQX1BBRF9TSU5LX1BBUkFNUykNCj4gPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gPiAr
+DQo+ID4gIAlzd2l0Y2ggKHNlbC0+dGFyZ2V0KSB7DQo+ID4gIAljYXNlIFY0TDJfU0VMX1RHVF9D
+Uk9QX0JPVU5EUzoNCj4gPiAgCQlpZiAoc2VsLT5wYWQgPT0gU1RGX0lTUF9QQURfU0lOSykgeyBA
+QCAtMjM5LDYgKzI2NSw5IEBAIHN0YXRpYw0KPiBpbnQNCj4gPiBpc3Bfc2V0X3NlbGVjdGlvbihz
+dHJ1Y3QgdjRsMl9zdWJkZXYgKnNkLA0KPiA+ICAJc3RydWN0IHN0Zl9pc3BfZGV2ICppc3BfZGV2
+ID0gdjRsMl9nZXRfc3ViZGV2ZGF0YShzZCk7DQo+ID4gIAlzdHJ1Y3QgdjRsMl9yZWN0ICpyZWN0
+Ow0KPiA+DQo+ID4gKwlpZiAoc2VsLT5wYWQgPT0gU1RGX0lTUF9QQURfU1JDX1NDRCB8fCBzZWwt
+PnBhZCA9PQ0KPiBTVEZfSVNQX1BBRF9TSU5LX1BBUkFNUykNCj4gPiArCQlyZXR1cm4gLUVJTlZB
+TDsNCj4gPiArDQo+ID4gIAlpZiAoc2VsLT50YXJnZXQgIT0gVjRMMl9TRUxfVEdUX0NST1ApDQo+
+ID4gIAkJcmV0dXJuIC1FSU5WQUw7DQo+ID4NCj4gPiBAQCAtMjk2LDggKzMyNSwzOCBAQCBzdGF0
+aWMgaW50IGlzcF9pbml0X2Zvcm1hdHMoc3RydWN0IHY0bDJfc3ViZGV2ICpzZCwNCj4gPiAgCQkJ
+LmhlaWdodCA9IDEwODANCj4gPiAgCQl9DQo+ID4gIAl9Ow0KPiA+ICsJc3RydWN0IHY0bDJfc3Vi
+ZGV2X2Zvcm1hdCBmb3JtYXRfcGFyYW1zID0gew0KPiA+ICsJCS5wYWQgPSBTVEZfSVNQX1BBRF9T
+SU5LX1BBUkFNUywNCj4gPiArCQkud2hpY2ggPSBWNEwyX1NVQkRFVl9GT1JNQVRfQUNUSVZFLA0K
+PiA+ICsJCS5mb3JtYXQgPSB7DQo+ID4gKwkJCS5jb2RlID0gTUVESUFfQlVTX0ZNVF9NRVRBREFU
+QV9GSVhFRCwNCj4gPiArCQkJLndpZHRoID0gMSwNCj4gPiArCQkJLmhlaWdodCA9IDENCj4gPiAr
+CQl9DQo+ID4gKwl9Ow0KPiA+ICsJc3RydWN0IHY0bDJfc3ViZGV2X2Zvcm1hdCBmb3JtYXRfc2Nk
+ID0gew0KPiA+ICsJCS5wYWQgPSBTVEZfSVNQX1BBRF9TUkNfU0NELA0KPiA+ICsJCS53aGljaCA9
+IFY0TDJfU1VCREVWX0ZPUk1BVF9BQ1RJVkUsDQo+ID4gKwkJLmZvcm1hdCA9IHsNCj4gPiArCQkJ
+LmNvZGUgPSBNRURJQV9CVVNfRk1UX01FVEFEQVRBX0ZJWEVELA0KPiA+ICsJCQkud2lkdGggPSAx
+LA0KPiA+ICsJCQkuaGVpZ2h0ID0gMQ0KPiA+ICsJCX0NCj4gPiArCX07DQo+ID4gKwlpbnQgcmV0
+Ow0KPiA+ICsNCj4gPiArCS8qIEluaXQgZm9yIFNURl9JU1BfUEFEX1NJTksgYW5kIFNURl9JU1Bf
+UEFEX1NSQyBwYWQgKi8NCj4gDQo+IERvZXMgdGhpcyBpbml0aWFsaXplIHRoZSBmb3JtYXQgb24g
+U1RGX0lTUF9QQURfU1JDIGZvciByZWFsID8NCj4gDQoNClllcywgaXQgd2lsbCBpbml0aWFsaXpl
+IHRoZSBQQURfU0lOSyBhbmQgUEFORF9TUkMgZm9ybWF0cyBieSBpc3Bfc2V0X3NlbGVjdGlvbi4N
+Cg0KPiBBbnl3YXksIHdhcyB0aGVyZSBhbHJlYWR5IHNvDQo+IFJldmlld2VkLWJ5OiBKYWNvcG8g
+TW9uZGkgPGphY29wby5tb25kaUBpZGVhc29uYm9hcmQuY29tPg0KPiANCj4gVGhhbmtzDQo+ICAg
+ag0KPiANCg0K
