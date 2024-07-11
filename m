@@ -1,59 +1,61 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA61F14F9E5
-	for <linux-media@vger.kernel.org>; Thu, 11 Jul 2024 10:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31A115887C
+	for <linux-media@vger.kernel.org>; Thu, 11 Jul 2024 10:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720693205; cv=none; b=CVurK24mS67E9ugXPw/qT/QvDaB1tM/weAE0nHMhJ5Nr4sadEBfST7fEkX7kP/TXOffrTSaNDf8ThAywWnUj3keppwk3GlN8sP2c5leRKc4F7+fgyEgYRP6+S9NaewqKUHj2mNH2AJhaZNlYFi5IB7HN+cdAirKrgC5RYDitCz0=
+	t=1720693207; cv=none; b=RE+kvVLasN5FAmbu6ilvz0fJXdjKP8qmglhamSjWmZPoUKbgFWdNVuVUtVi0GF+1Gs1Hx2WD8aaE5EhFTJwfYj6GKyF79rJmgdxr2r9+4LjuWnqcfaApqcLgyvJPG6xHMmizl/13xZ5UBrmgH9+nX3hsXl1HIjJub89E3LXPhzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720693205; c=relaxed/simple;
-	bh=Te0Lw1oxuPXepV/5h7IQuALOgj6ZhURsQxOt9/IHXPc=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iX5rz8nf2NAL1qQeGAQXRGv0nkjPu8yfnh5qx3GCSgcy1Jsdr5A52UbP4DLaOvWJg2FTrKbMOQ5cwBwEFGbwFk7P2wVtBhTLBQCl/Vn2Mm8rmGV1Jr+Ko8sT8ZYcxUPN0csIEF7zx91LlgMEQhn6hlmLGYuTF9c92Badc1Q04Rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ut13nFWH; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1720693207; c=relaxed/simple;
+	bh=bKIdUuVmWv5FJkFDtu2H6clQsAHCUTFbn8+qyaw6hHg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=N6NU3XawD3fLsPPC+BiZGsqklsXtYYSyYgTlh/EQA0nWERhK/8i/cIGTwx6D1rVRfkcNNbeR4ITp+KvdnwbV8Mgf6KBKEmaJPB0hSjBHsFftIo17DTX1dM8AKiu0qG1DhcIzwb+/Zb5QdW8UR3JQv217jU9n1SZ01WeHsX+nXe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AeDeOfgq; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ut13nFWH"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42797289c8bso5100275e9.0
-        for <linux-media@vger.kernel.org>; Thu, 11 Jul 2024 03:20:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AeDeOfgq"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4279c924ca7so35395e9.2
+        for <linux-media@vger.kernel.org>; Thu, 11 Jul 2024 03:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720693201; x=1721298001; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpEPOR+4bYifIxXAHWhUoDP3ysZA8Zm0c8+Ht0LO1TA=;
-        b=ut13nFWHV2SFSwyKg8eMtIyLnzLTRCi947pSOL7+KHsC5u2iDwVmceEU/6JlRjuJDe
-         7BY5tGwCaMt8xF4Q3jkblU/PGGIplgIMi6tQ8GoB9f4eb+L3aUc1Ohx+LvgTfaJeo0OQ
-         owuJ4zVqr/RUbYqoCpgnWL4Qf+OOHnVfnh1j4ZpNuUcSfPTqLfohIYsMwCunWl1BmG9P
-         PuNCHOpi8JHYFC6I0gwtLHX06L53lZgIrVZg3jDpQjLaihUuP5vwYy8w4sJ8u8ECqJB3
-         o0G5jOnxryXXYzY5iQvstsKlkUFCJAuQoullZpLhnn61XhJ4cRj9/q/UydjaV9yF7mXq
-         cLuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720693201; x=1721298001;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1720693203; x=1721298003; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NpEPOR+4bYifIxXAHWhUoDP3ysZA8Zm0c8+Ht0LO1TA=;
-        b=fUGnix+mi2kcex3wFIh+4DJO+mSvrhBskGupNNpkDG3iSiUGGdWAQ7Cfvatg/Hr2UA
-         qAaTZKkvbo87eYMVy4/XI6QMTf0m790lXazqJTJpNskV84vYFg5fKn5DYOWvFuUXEXQh
-         S1rWvdTDNBDfiZCnfnNlJDxaUhOiJTfpn2LQqle8LCTws4Up12YAkaU9U4+z4IBwxIM+
-         rF5FwP7b86//dYIX91FGStBnu1I8dahUZw2DPhRn2kh1TxfYxrSwUT+gnt68nx/ziOWd
-         DJcz8owpyfyoGzZrf6HoJcIDvGLbOjsMce4kw40Kjm28txVvy8Ve2WkOc6zpuouHBVsQ
-         GhLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVfzlVkaY9BVO46Bm/CNkgZzbidnxlQJldYhiGG6Pt/+xj0wzaTsI+xRjVgqdllvnM7Nxz0/KogFyC4mkEkQrhQtpO5vbFcT99rfF4=
-X-Gm-Message-State: AOJu0YyZVW+M5tJgQG1Ioawo31GDKJWS2q7GHx9xoBP/H/IkHgVDCQRZ
-	Bns5a6gGWLMJpdGigUq2y2ezH1bkPXr3W3FpKN+kjED1zg7o7DTPAWFqo/lNShc=
-X-Google-Smtp-Source: AGHT+IHhAvNQpxxxtu0l2TiI7e2EheLMZqNQ9j5p+6ozwhs2ZYLmXamkgwEmDJBnpLYODpEJcUMVEQ==
-X-Received: by 2002:a7b:cd1a:0:b0:426:4f47:6037 with SMTP id 5b1f17b1804b1-426707d7914mr50144105e9.19.1720693201030;
-        Thu, 11 Jul 2024 03:20:01 -0700 (PDT)
+        bh=Jw6bLyA4dVnYszcIqA96Q05ikE6tm67ysRPS44gZ2Bo=;
+        b=AeDeOfgqmtP6YqYtgTpYNinb9oqMQl3i7j38vK4+io3o2BdQ00xqcjagYE4jzCULnB
+         E4zK8QAZ7vgI18tg4Wl9bxBcVnzYW/fUdzoUskWQc+r5st4WQBPQ18QdyrnbNCK/CkK9
+         9by3L7M9izvLBeYybfLp7EGrHzIkly9reeppj256TLUcJTas4KaaYGDeL6blF2Xj67po
+         7JmFAm3A3hjbGCAd7Q45WmwhiU9R7cNAbVHuzPXOMnlorAPMeRcyY1KCUJmq8r2iA7vm
+         Jmdj+/wNpcM5s0aaCWbWTgk2OVrKksnQfoAsrNXjLVa1Ng0pN2u+TS64yQ0ie+9HuytJ
+         lUbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720693203; x=1721298003;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jw6bLyA4dVnYszcIqA96Q05ikE6tm67ysRPS44gZ2Bo=;
+        b=Jw6ev/WrFlZjf73GPlzCavoVlW8KlbV3iEvAZVXT3RT7hO1Fp1LtfRjRT/jdGC+ia9
+         gS/STO3VMq0Et2caiGpB9QiTij7zaVI7QZaL7ozO2A57ldqnYfiIEHPO1d02RGnOBT/H
+         eqXe6Zlg/tF4+1A8WWkzqA+BFmR2gu0FrK/sR1cmXDiZZV9/uDNZvNrl4fzwZsEqBR8j
+         kGzj+du3tIVbMv4oOY4pSCpSml1WSqKYWOa8CczvhLYsg2sVysfst/Fe9hwRK8xi5dnV
+         StBsLNES2stGdfJv3XjsS9ytzNuRZ4jjaDkM62eGlVgGoV1P6YhCC4CRd8TtSS7tEhT2
+         orwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF2z9XLRwSMXYyurjvy9j/pAoBX/nm0JF/0A/IHg8etp8i4+kG3q7jzfr+Gy/KEqLlq68b081WEkBQ9x1CcVBtR0w3kDQm+vepoS4=
+X-Gm-Message-State: AOJu0YxRI0mcQc0G4WsOOj3gBcWG6qN73rwt+vDGgBx1URePWSrzEqKH
+	GzgUltx4uGkabjd5Z4wLHT3b0nYRibSbjY6DCsrUDF9GguI/c3Jj2NT5GBOxAj4=
+X-Google-Smtp-Source: AGHT+IEPG6ALVrKC0vxITNNnj0AxUU2b5IhohOK+zwxcy7Y2DoKsbVYQ4rwu1v3iMbA9+oXaQb0Gcw==
+X-Received: by 2002:a05:600c:228f:b0:426:668f:5eca with SMTP id 5b1f17b1804b1-426706c6878mr52146665e9.7.1720693203327;
+        Thu, 11 Jul 2024 03:20:03 -0700 (PDT)
 Received: from [127.0.1.1] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266e861339sm125270025e9.12.2024.07.11.03.20.00
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4266e861339sm125270025e9.12.2024.07.11.03.20.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jul 2024 03:20:00 -0700 (PDT)
+        Thu, 11 Jul 2024 03:20:02 -0700 (PDT)
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH 0/2] media: ov5675: Fixup ov5675 reset failures
-Date: Thu, 11 Jul 2024 11:20:00 +0100
-Message-Id: <20240711-linux-next-ov5675-v1-0-69e9b6c62c16@linaro.org>
+Date: Thu, 11 Jul 2024 11:20:02 +0100
+Subject: [PATCH 2/2] media: ov5675: Elongate reset to first transaction
+ minimum gap
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -62,9 +64,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANCxj2YC/x3MSwqAMAwA0atI1gZStVa8irjwEzUgVVqVgvTuF
- pdvMfOCZyfsoc1ecPyIl8MmqDyDaRvsyihzMhRUVGQU4S72Dmg5XHg8ujYaaxqJm3Iy5aIgdaf
- jRcL/7PoYP2HfoWBjAAAA
+Message-Id: <20240711-linux-next-ov5675-v1-2-69e9b6c62c16@linaro.org>
+References: <20240711-linux-next-ov5675-v1-0-69e9b6c62c16@linaro.org>
+In-Reply-To: <20240711-linux-next-ov5675-v1-0-69e9b6c62c16@linaro.org>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Quentin Schulz <quentin.schulz@theobroma-systems.com>, 
@@ -75,64 +77,53 @@ Cc: Johan Hovold <johan@kernel.org>,
  Bryan O'Donoghue <bryan.odonoghue@linaro.org>, stable@vger.kernel.org
 X-Mailer: b4 0.15-dev-13183
 
-One long running saga for me on the Lenovo X13s is the occasional failure
-to either probe or subsequently bring-up the ov5675 main RGB sensor on the
-laptop.
+The ov5675 specification says that the gap between XSHUTDN deassert and the
+first I2C transaction should be a minimum of 8192 XVCLK cycles.
 
-Initially I suspected the PMIC for this part as the PMIC is using a new
-interface on an I2C bus instead of an SPMI bus. In particular I thought
-perhaps the I2C write to PMIC had completed but the regulator output hadn't
-become stable from the perspective of the SoC. This however doesn't appear
-to be the case - I can introduce a delay of milliseconds on the PMIC path
-without resolving the sensor reset problem.
+Right now we use a usleep_rage() that gives a sleep time of between about
+430 and 860 microseconds.
 
-Secondly I thought about reset pin polarity or drive-strength but, again
-playing about with both didn't yield decent results.
+On the Lenovo X13s we have observed that in about 1/20 cases the current
+timing is too tight and we start transacting before the ov5675's reset
+cycle completes, leading to I2C bus transaction failures.
 
-I also played with the duration of reset to no avail.
+The reset racing is sometimes triggered at initial chip probe but, more
+usually on a subsequent power-off/power-on cycle e.g.
 
-The error manifested as an I2C write timeout to the sensor which indicated
-that the chip likely hadn't come out reset. An intermittent fault appearing
-in perhaps 1/10 or 1/20 reset cycles.
+[   71.451662] ov5675 24-0010: failed to write reg 0x0103. error = -5
+[   71.451686] ov5675 24-0010: failed to set plls
 
-Looking at the expression of the reset we see that there is a minimum time
-expressed in XVCLK cycles between reset completion and first I2C
-transaction to the sensor. The specification calls out the minimum delay @
-8192 XVCLK cycles and the ov5675 driver meets that timing almost exactly.
+The current quiescence period we have is too tight, doubling the minimum
+appears to fix the issue observed on X13s.
 
-A little too exactly - testing finally showed that we were too racy with
-respect to the minimum quiescence between reset completion and first
-command to the chip.
-
-Fixing this error I choose to base the fix again on the number of clocks
-but to also support any clock rate the chip could support by moving away
-from a define to reading and using the XVCLK.
-
-True enough only 19.2 MHz is currently supported but for the hypothetical
-case where some other frequency is supported in the future, I wanted the
-fix introduced in this series to still hold.
-
-Hence this series:
-
-1. Allows for any clock rate to be used in the valid range for the reset.
-2. Elongates the post-reset period based on clock cycles which can now
-vary.
-
-Patch #2 can still be backported to stable irrespective of patch #1.
-
+Fixes: 49d9ad719e89 ("media: ov5675: add device-tree support and support runtime PM")
+Cc: stable@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
-Bryan O'Donoghue (2):
-      media: ov5675: Derive delay cycles from the clock rate reported
-      media: ov5675: Elongate reset to first transaction minimum gap
+ drivers/media/i2c/ov5675.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- drivers/media/i2c/ov5675.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
----
-base-commit: 523b23f0bee3014a7a752c9bb9f5c54f0eddae88
-change-id: 20240710-linux-next-ov5675-60b0e83c73f1
+diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
+index 92bd35133a5d..0498f8f3064d 100644
+--- a/drivers/media/i2c/ov5675.c
++++ b/drivers/media/i2c/ov5675.c
+@@ -1018,8 +1018,13 @@ static int ov5675_power_on(struct device *dev)
+ 
+ 	gpiod_set_value_cansleep(ov5675->reset_gpio, 0);
+ 
+-	/* 8192 xvclk cycles prior to the first SCCB transation */
+-	usleep_range(delay_us, delay_us * 2);
++	/* The spec calls for a minimum delay of 8192 XVCLK cycles prior to
++	 * transacting on the I2C bus, which translates to about 430
++	 * microseconds at 19.2 MHz.
++	 * Testing shows the range 8192 - 16384 cycles to be unreliable.
++	 * Grant a more liberal 2x -3x clock cycle grace time.
++	 */
++	usleep_range(delay_us * 2, delay_us * 3);
+ 
+ 	return 0;
+ }
 
-Best regards,
 -- 
-Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+2.45.2
 
