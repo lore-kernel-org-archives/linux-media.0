@@ -1,108 +1,185 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378BA4C62E
-	for <linux-media@vger.kernel.org>; Thu, 18 Jul 2024 07:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6A613EFF3
+	for <linux-media@vger.kernel.org>; Thu, 18 Jul 2024 13:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721286271; cv=none; b=dx2UPoEJr3GfqLIVKioT65uDYj93OaT2EObM0HEWWzHj03UwWM2oEk9E13w5enU+1TouO9Zfur8ONvuBTWdnDdGtHJrQpNfTY3e8hGDusF0RadKHCgXqeFfQ58+Bkedf6RKduOBpIjxyPQkZkrEAQBic35mIA9QTrdADAVd+pL4=
+	t=1721310977; cv=none; b=jWGYn5+ZI27JHp1Y2YPPPXwBqZJ8USuYfAAcaUxV4P/awHa6CFgnrkECxVbnhXf3cKHTNl13D5rmHfXgMQ2HSBN4Iip/fBVmt4gjiaNMpCE47QgSlYxrtAGGgiqg9St8YE4Ad0nfK6vqyrpZp0xrZ6HYb9Rnt7SdTKIvqblo2rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721286271; c=relaxed/simple;
-	bh=1Xu8Yi47SBbo6wUtzRMDew71eWHN9aqL5DaNW2rC8BQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qm4CN8wC+N8hGRrQYC7Zi+jcqiZW2MwuQ9CoEe7Q0SuhHY0+qjUoJkzF/aiv4i0mtiOnCVeS0v72irYsfRA83+ATGsL8kz1PqtF1RCVOXkq7GG6M1Q3MnhuxmnwKfkKXM3PqwklMP1vIQfO82f/juTo1eo1xEaV0OPIvK3Xtylc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=r0iUkIUF; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
+	s=arc-20240116; t=1721310977; c=relaxed/simple;
+	bh=FN9lQnWaRRboDIggzQ7mgKydoQ5EpPRR91UZWwuXo8s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=exKACilQwg8Y0AjMrMZv3V01qLascqGEOoMrcGWQmvzBGQ2wSBYQWcEOEiV56u12KtWZrKNF3Pb24zXOPYCAzw1S9rosOMmt57Q7ejAscpJ3ZikN1EmQMkln+Czd8ap1eRERyihYWlSChyQaZXj/+trCPqVRiSAuwrgyTClGlwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=aIyDMbHA; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="r0iUkIUF"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-664ccd158b0so4623667b3.1
-        for <linux-media@vger.kernel.org>; Thu, 18 Jul 2024 00:04:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="aIyDMbHA"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-44f6700addcso1736771cf.2
+        for <linux-media@vger.kernel.org>; Thu, 18 Jul 2024 06:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1721286268; x=1721891068; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T079+BhXBkSwoZ9I0E7sRDEQbm5N/2Sok2ZsenaxAAc=;
-        b=r0iUkIUF1jFH8thUMF1UmvU4b5RXdFqZ25I8KVeEYsHtzmO9Bd3Dy7O6gSnpdc1z6o
-         zynkD3X8GphnccI91zNh1JJTW9Vpo7iCJBfEwlISU89RFnHhmPK3a/KLaP6c1X/a9/9B
-         cyJ9BZhSI5SgKwWurAeNLJ1E0hd89KEa7nCYYuzc8B7OHxf8AGrQHZPJbGD2yZoEemki
-         7XY6MFW4wbb5tZDtDraiLdL1j8+xtKybTLIrJOQPI8NECAKl9gkHoNabyIKjHYw0LSdn
-         M9LF7PoQ/qCXeauvcroluF8MEJ3AJ6aypCpw9hHLPfN/J6rGGzZgnFEidkUpx7282GmK
-         DwWQ==
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1721310974; x=1721915774; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/9PgN2CWlwkAlyMyd9I5yTG/RODQPuF8I+fsHHELrjs=;
+        b=aIyDMbHAc8DDvgSgmApo/q09ppsEl2CMHhu6BXJEOPHhYaooCZrAQYEcLH7t4Cgi2p
+         HcoRSxhoLbP+1HXNezk8QENTVjxnq2NUzkhJGt2TwObQiUSvOyLEU2QIN5SbbKNhgV+x
+         bPxhekQIR4qOmZIi5SYD0kx+TjT8IWwMzvkWwWwvLsgqODqYWGpcpiKR6KoWitvK6C+S
+         utGZ+eZb07gMwvLbrNDHyuH+njazwfpjHsdI+EOGV4AqdAJKvdg+8X0Ojuv/eu16i19x
+         eThl7PuFzdAOk7KCnlwOiutydnBnEYE/VNyr1dGS4Sn3IfLS7q1injJB+8X44cjWug3U
+         eUfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721286268; x=1721891068;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T079+BhXBkSwoZ9I0E7sRDEQbm5N/2Sok2ZsenaxAAc=;
-        b=l164gsWWUh3vnkAG5KKcicvvl7poNDkoxqbWsTNWVOjEPE3IeeuKo0d82plglqjapG
-         biuHpDawhhayioXWKrZG8HvT21UlKExf2TTdjIa9jB6Hyr/SFr+HyYc+WqZ+lqN4liGJ
-         mBh0BbMI7Ote2HwVjCmbAX6uunuDh0VhgOPmJe+WCC8VO/EMNG/5aREzF5GGEZU3G2Z6
-         LpouRRQI/+AE8L4RQzBd/HOUXxSVw6VaO0L2wXzZR4z05VzYRN+CMEXmuk/t1L1JuxQt
-         E8L16nDQCTVicv/VGmcY5su/oWOgytOo+xH7Ws2F8cISJk35fNUKNaPuuWp8fC5t+ENY
-         o8eg==
-X-Forwarded-Encrypted: i=1; AJvYcCW/jy0GVpv9onKs7Jp6FZ9AidXAjNPE6T1R6S5s79XlRegICObMpcp3lZzH8xq7iNmRLzk1P+go87XavXg4naRMl5c53x3aK/75eK8=
-X-Gm-Message-State: AOJu0YyVc1qacA5nlu9ad6DDCBCo0jkLRcKhOTffeWEbk9+g2q/JAKeP
-	sn23kEyeOkmBDrzUe1Uf6KaFAJbOy8IHTNXebvoRBxdWgX5t7UuOoPyv3WIL4em01wIJ4iwPKlj
-	ZRv+o7DGQ/0C0ugp8KRQX/CfChPpolGolgiiy6w==
-X-Google-Smtp-Source: AGHT+IFlQI8K52rV4omYU+cIAWyk8RiToWA0rPlVty8biTQda5X0QeC0G+0wl/1ZhV+NfvqjKUmqbEHYihn5KA4LE5A=
-X-Received: by 2002:a0d:e842:0:b0:65c:703:bd5f with SMTP id
- 00721157ae682-664fe933a4emr47489867b3.12.1721286268127; Thu, 18 Jul 2024
- 00:04:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721310974; x=1721915774;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/9PgN2CWlwkAlyMyd9I5yTG/RODQPuF8I+fsHHELrjs=;
+        b=d1lDw82MYFXRtKyztQjVKqndZGVmxuKnJ85pd7o+Or13wdeTOMTWNqbFxLg/omnjiG
+         7uTZvt1BkmYHMoCEqIjeCRNF5SAiuH6mQqE2SQ6+YyzluAHNBUWyxAGeCWJ+BE/PY5h9
+         0Te69SvecYb0VMOTo2qx6spui23lej8jO2L3tUpU5lqCEVc9FA8nWxapdivCl0rpS+/V
+         uLH9kE2Az+slJ3ItPLScpfs2W4I+4zwliU55F3oi5Vkqt2tpCBn2/0evpdw/7QPFp8me
+         tx9LnoOFa8auvgeAuotTnbPUVsJmNU2KUSea0F5QvJSB4ZjhZP1zV73HNnB0ZXpITMY5
+         FlZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPNgC/mNkrd3jgcVth1QKMhkCn/eah93v3ETmsG1VR/LyCl8ZClkaGM01imubt9s0JtRfGaf2YHQz8EYMIp3rUkDT7Ib03zjArjpE=
+X-Gm-Message-State: AOJu0YzQvUMdtrWn/fu6fZMV3UgIciFBwjfVW3PFxVF0YEM7gLpIv7DO
+	nOsJSfsfaZGqqB1UACr6kWgwmXVFuXKbItbrDvSZGMMHC+trS3egcFVg7pNUpvs=
+X-Google-Smtp-Source: AGHT+IH5MTKib9696k0vgo2HoX8hTJTXldqZABkNwBgCpERpaxYd5V6iPU264qEzfgN6WERm7Mn/6g==
+X-Received: by 2002:ac8:7d95:0:b0:447:ede4:c6fe with SMTP id d75a77b69052e-44f9696658emr11297251cf.9.1721310974303;
+        Thu, 18 Jul 2024 06:56:14 -0700 (PDT)
+Received: from nicolas-tpx395.lan ([2606:6d00:15:6720::7a9])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44f96acd157sm2521331cf.95.2024.07.18.06.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jul 2024 06:56:13 -0700 (PDT)
+Message-ID: <7113029e2e192d43523a1ea5dae041fb53ae5948.camel@ndufresne.ca>
+Subject: Re: [PATCH v4 1/2] media: videodev2: Add flags to unconditionnaly
+ enumerate pixels formats
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Benjamin Gaignard <benjamin.gaignard@collabora.com>, Jacopo Mondi
+	 <jacopo.mondi@ideasonboard.com>
+Cc: mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+ hverkuil-cisco@xs4all.nl,  linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-rockchip@lists.infradead.org,
+ kernel@collabora.com
+Date: Thu, 18 Jul 2024 09:56:12 -0400
+In-Reply-To: <1faa7098-b108-480e-ae4b-ed25e0020e51@collabora.com>
+References: <20240717131430.159727-1-benjamin.gaignard@collabora.com>
+	 <20240717131430.159727-2-benjamin.gaignard@collabora.com>
+	 <2kbxr3hkjbcnaqescxmlcerziixg72icqpug6wa25eeggy2pnj@vqmxe4ojcwml>
+	 <dfc292f8-0014-4bf4-9429-31f729a176cd@collabora.com>
+	 <ok2a4ubzka6rhzyj2c5op73ij7pw35g6e75whc2jjget62fatx@zka2ewyt3kfv>
+	 <c8358d79bd51a9bfa5116b33ae5e7766b95d344d.camel@ndufresne.ca>
+	 <1faa7098-b108-480e-ae4b-ed25e0020e51@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 (3.52.2-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240715102425.1244918-1-naush@raspberrypi.com>
- <t4zv56rnrprztgyjyjx3k3lzaitddky3c22bqslykq3qvxi7gi@jaafmm5uw6rs>
- <CAEmqJPrUbK-gpHfJG84iBeA_9WOJYLDoa4JaGjLvZYoq-nUgdg@mail.gmail.com>
- <74hch6w64p7yzn4wustd3btn7dglxxbuge3r6bapb6chbbddeu@vljc2qopn5kj> <f6696dbd-0b1f-45df-823f-bc738d95ff48@suswa.mountain>
-In-Reply-To: <f6696dbd-0b1f-45df-823f-bc738d95ff48@suswa.mountain>
-From: Naushir Patuck <naush@raspberrypi.com>
-Date: Thu, 18 Jul 2024 08:03:51 +0100
-Message-ID: <CAEmqJPqh0uj2hj5x=S-2x7v6xMyYcyOwbB5oaZUdP++Kb98S-Q@mail.gmail.com>
-Subject: Re: [PATCH] media: pispbe: Protect against left-shift wrap in V4L2_COLORSPACE_MASK()
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, linux-media@vger.kernel.org, 
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 16 Jul 2024 at 14:30, Dan Carpenter <dan.carpenter@linaro.org> wrote:
->
-> On Tue, Jul 16, 2024 at 10:48:20AM +0200, Jacopo Mondi wrote:
-> > > I did consider this, but did not like the undesired behavior it would
-> > > introduce.  With your suggested change above, we now switch the color
-> > > space to an unsupported value (V4L2_COLORSPACE_DCI_P3, assuming we
-> > > shift by V4L2_COLORSPACE_LAST - 1) if the user passed an invalid
-> > > value.  Of course, this does subsequently get fixed when used in
-> > > pispbe_try_format(), but not for the usage in pisp_be_formats.h.  In
-> > > my original change, we revert to the default for the requested format
-> > > instead.  Although, perhaps my test should be if
-> > > (!v4l2_is_colorspace_valid(f->fmt.pix_mp.colorspace) ... instead.
-> >
-> > Keep in mind the core 'sanitizes' the colorspace for you (see the
-> > usage of v4l_sanitize_colorspace() in
-> > drivers/media/v4l2-core/v4l2-ioctl.c) so a fix is need only to silence
-> > smatch not to actually address any run-time issue.
-> >
->
-> Ah.  That's true.  Let's just ignore this warning in that case...
->
-> Smatch would have an easier time parsing these if we passed p instead of
-> arg to return ops->vidioc_try_fmt_vid_cap_mplane(file, fh, arg) in
-> v4l_try_fmt().
->
->         struct v4l2_format *p = arg;
->
->         v4l_sanitize_format(p);
->
->         return ops->vidioc_try_fmt_vid_cap_mplane(file, fh, arg);
->
-> I can just filter out that call to say that when v4l_try_fmt() calls
-> ops->vidioc_try_fmt_vid_cap_mplane() "arg" variable is trusted data.
+Hi,
 
-Sounds good, I'll drop this patch then.
+Le jeudi 18 juillet 2024 =C3=A0 09:04 +0200, Benjamin Gaignard a =C3=A9crit=
+=C2=A0:
+> Le 17/07/2024 =C3=A0 19:50, Nicolas Dufresne a =C3=A9crit=C2=A0:
+> >=20
 
-Naush
+[...]
+
+> > > > > > @@ -1569,6 +1569,7 @@ static int v4l_enum_fmt(const struct v4l2=
+_ioctl_ops *ops,
+> > > > > >    	int ret =3D check_fmt(file, p->type);
+> > > > > >    	u32 mbus_code;
+> > > > > >    	u32 cap_mask;
+> > > > > > +	u32 flags;
+> > > > > >=20
+> > > > > >    	if (ret)
+> > > > > >    		return ret;
+> > > > > > @@ -1578,8 +1579,10 @@ static int v4l_enum_fmt(const struct v4l=
+2_ioctl_ops *ops,
+> > > > > >    		p->mbus_code =3D 0;
+> > > > > >=20
+> > > > > >    	mbus_code =3D p->mbus_code;
+> > > > > > +	flags =3D p->flags & V4L2_FMT_FLAG_ENUM_ALL_FORMATS;
+> > > > > >    	memset_after(p, 0, type);
+> > > > > >    	p->mbus_code =3D mbus_code;
+> > > > > > +	p->flags =3D flags;
+> > > > > Won't this set V4L2_FMT_FLAG_ENUM_ALL_FORMATS (if present) in the
+> > > > > flags returned to userspace ? Shouldn't be drivers to set
+> > > > > V4L2_FMT_FLAG_ALL_FORMATS instead ?
+> > > > memset_after zeroed flags field so we need this to send V4L2_FMT_FL=
+AG_ENUM_ALL_FORMATS
+> > > > flag to drivers. Return it to userspace is a side effect but I don'=
+t that is problem
+> > > > since it set it anyway.
+> > > >=20
+> > > Ok, if the expectation is that the flag is preserved through the ioct=
+l
+> > > call, this is fine with me
+> > I might be missing something other similar features are explicitly adve=
+rtised by
+> > drivers. This way, the generic layer can keep or clear the flag based o=
+f if its
+> > supported. The fact the flag persist the ioctl() or not endup having a =
+useful
+> > semantic.
+> >=20
+> > Could we do the same?
+>=20
+> It is the only flag set by userspace when calling the ioctl(), all others
+> are set by the drivers.
+> I can clean it from the ioctl() structure after driver call but that won'=
+t change anything.
+
+This does not answer my question. In other similar feature, we have an
+**internal** flag set by drivers to tell the framework that such feature is
+abled. Using that, the framework can keep or remove that flag based on if i=
+ts
+supported or not. This way, userspace have a clue if the driver do have thi=
+s
+support or if the returned result (in that case) is just a subset matching =
+the
+configuration. We don't seem to have done the same level of effort here.
+
+Nicolas
+
+>=20
+> >=20
+> > > Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> > >=20
+> > > > > >    	switch (p->type) {
+> > > > > >    	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+> > > > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linu=
+x/videodev2.h
+> > > > > > index fe6b67e83751..b6a5da79ba21 100644
+> > > > > > --- a/include/uapi/linux/videodev2.h
+> > > > > > +++ b/include/uapi/linux/videodev2.h
+> > > > > > @@ -886,6 +886,8 @@ struct v4l2_fmtdesc {
+> > > > > >    #define V4L2_FMT_FLAG_CSC_HSV_ENC		V4L2_FMT_FLAG_CSC_YCBCR_E=
+NC
+> > > > > >    #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
+> > > > > >    #define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
+> > > > > > +#define V4L2_FMT_FLAG_ENUM_ALL_FORMATS		0x0400
+> > > > > > +#define V4L2_FMT_FLAG_ALL_FORMATS		0x0800
+> > > > > >=20
+> > > > > >    	/* Frame Size and frame rate enumeration */
+> > > > > >    /*
+> > > > > > --
+> > > > > > 2.43.0
+> > > > > >=20
+> > > > > >=20
+> > > > > _______________________________________________
+> > > > > Kernel mailing list -- kernel@mailman.collabora.com
+> > > > > To unsubscribe send an email to kernel-leave@mailman.collabora.co=
+m
+> > > > > This list is managed by https://mailman.collabora.com
+> >=20
+> _______________________________________________
+> Kernel mailing list -- kernel@mailman.collabora.com
+> To unsubscribe send an email to kernel-leave@mailman.collabora.com
+> This list is managed by https://mailman.collabora.com
+
