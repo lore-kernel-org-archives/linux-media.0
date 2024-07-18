@@ -1,198 +1,222 @@
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2108.outbound.protection.partner.outlook.cn [139.219.146.108])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D871C41C7F;
-	Thu, 18 Jul 2024 05:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721278976; cv=fail; b=cObrTrN+08PyLodqvmK0iNXeXUcDnSBtlypaOGoAykn6kcn94/yhoEsbQ3F6+gysVNSMxxzdhsQ+xv1iaeR83CMWyVOyUMOuGpdBH5VkSZRQYBLkrNym+JtbghI7AGI818rLm/AN7LgkYlTh6JYwM7oFR0q0og6GkdR928oPuHI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721278976; c=relaxed/simple;
-	bh=3ALIIwaquQs4Ms4Lp4N9MuFsYbjraB6dnxG6CEfEyF4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DQe3SrA0bva3DTgjry4qsXZzuhBK0CyL7NaGhzRk3CdV7QZvzBKkNyfUEvby3Nq4hO7J+GiV1U5R+KrWJW0HNoMP/Xb0kB3ofUnyxCQSaF54D1vnkEUdovXYYovc2aaGDsktwTQvILMnb1zMGgeBUbRX9CjOdktPw2a+ckKkFms=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oM5Z+qbRJrCnTrm/QU989AJyEIeZ3b8PvqCWBfoTWbZ37no6m4USshcDCmCmBbuvczxw4DF5pEJ7x1zTbuL4Ps3c6d+mDSFbtQD9ABXZgtgNbFPPdA1KMjUdYLuV+Xx0d/I/xuwE0Z6GxfAMNBBLKe59NT85rPM+O35vN3Kbtu4S3Wp29vxNLWkve7Z7pKJXOQ9yTIxI6FEVh3ns3ZEo3NZneO8FcneaLqhLZwKp6tvaZ8g4IqX4PuwMs76HvrDnGIO0ub+R/PJ6ZFW6cEK7eRd+AsfTnXyKCKQLJphXg/4oIgQ4tJRTtAC5ulTsZiOsK8N3DbM3y7mqbaZrQIzfbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=51NUMLFUOslcX5PgbS299VUsPDMwW+amx2sRqAl03fQ=;
- b=EYa8I9l5oP50RqNgqXFgEH0t7lJtHCvfdBIJdPdwGilQ4R5zesNGStY5W5XTpc96CBHJ7pM+3wWHok+FclQ8lpo7ARza7YAMdME1G9mONXYNOnyPLNhFXZaG32RF3PKgQRsXFjlnyPON2vwyN7F/JDaPdc7DflUNLks1fcn93RBrdItuJ26e2oxsz/KkVdG3cs7v3a2qiK1qBEb4DINN4Zm4pNKoCYCNZMoMbSey4AjsV8mt9cI+LXJIl/Gj3NG/ozi7Dh3BmNzGeksd7O1gUPMMYOxDAHYVgSHerKP3N3J3sAcML7kxf11ZLjgsBwDc0adY5Q1ihaUTYT2zzlUdWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9) by ZQ0PR01MB1046.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:e::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.36; Thu, 18 Jul
- 2024 03:28:47 +0000
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- ([fe80::64c5:50d8:4f2c:59aa]) by
- ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%6])
- with mapi id 15.20.7741.044; Thu, 18 Jul 2024 03:28:47 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-	Jack Zhu <jack.zhu@starfivetech.com>,
-	Keith Zhao <keith.zhao@starfivetech.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	Jayshri Pawar <jpawar@cadence.com>,
-	Jai Luthra <j-luthra@ti.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v2 5/5] staging: media: starfive: Add system PM support
-Date: Wed, 17 Jul 2024 20:28:34 -0700
-Message-Id: <20240718032834.53876-6-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240718032834.53876-1-changhuang.liang@starfivetech.com>
-References: <20240718032834.53876-1-changhuang.liang@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: NT0PR01CA0031.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:c::14) To ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3184C7346D;
+	Thu, 18 Jul 2024 07:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721286269; cv=none; b=cA7ETLg+4cwcK9ccP5ZC7l7BvAPH8oFRXf7N79kUg+QenN/p39+Eqiwd+Vq1yIHPFkVsbjU15pK60HP9qPjT8qKFEztfKmWnar9SO+tfXHN4Ymermpe23GoZ3vv2Z4jYY8q5Ab4+RmS9oOKBQQTUxJ3rzeoP/yoCUvuSnFh6eRM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721286269; c=relaxed/simple;
+	bh=sUGKjIci3teBAOaK1yJmIBrfDhBZxW9N+JYe8udLreU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o/l8YGq2CA7ddDEkJp/GuSmw20kfhFZxrvcObXFesW7DWzEvGBx9tpLkPZJx04zn2rv6R+xFX4R1r0AYj0qGyIJh2/Wdsq4JJn9UYBhquI4U1UiXvnHQRAxo5H3XVmWMAumAiIdCx8hU9awSSe09KQu3bEowWHS6p41bn4tcZ4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Pq/iYYoM; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Pq/iYYoM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1721286265;
+	bh=sUGKjIci3teBAOaK1yJmIBrfDhBZxW9N+JYe8udLreU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Pq/iYYoM7oXKSLFNuIGI5jQ3aF8HiaJzjOBmSaHGlEBnjkIP+PNbyLKyLmCbyJhTy
+	 0n+3uni8fKZ/RBUIbyzq/qKtWGthSeIKz/4KgTYbMrmnKstnFaMGu9+O+qRcTngVty
+	 ppSm2CXuYkf9KopO5NIeEyDj5nOZ1JU2yAKiZfezkOxTCaruYR/GTOI712rLld2go1
+	 Hu8vUqs1IiQnRFTxNJ24Q/KKrJzYdFcuTCFZ7NyxM9gBQTznGwuVtFLumJSZATh5Qk
+	 q92xRsCqlF9Z5hmFk/pe+8BCJaAFRblR8XICZMdJkxKmUsshmWOf08LUr+J3iZdw1y
+	 bQehemjm0vVeA==
+Received: from [100.93.89.217] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: benjamin.gaignard)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B3FAF37813C0;
+	Thu, 18 Jul 2024 07:04:24 +0000 (UTC)
+Message-ID: <1faa7098-b108-480e-ae4b-ed25e0020e51@collabora.com>
+Date: Thu, 18 Jul 2024 09:04:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB1046:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00fe384c-a902-4976-4716-08dca6d9bc1a
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|52116014|41320700013|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	81rzuWjzaYgsvPdhEzC/RfB1iEE11XZKkurrP0Wsm9Wzo4Xj1EuW2H5opsraTBfncfvZjpX5Nyj5+8AmHzrG5SA8YZPo4gaLRR33QFCs1aZupqsGrp3xbvGOKcqx8TUN0qfj52GZmhMXGh6Ep/euaQpq+5RhCQ9yNlD6pAMblSmKpovlp1rp7wHNUpk14Xu/niK59eVph3KC2ru62f1g+W0GwwsW7ERgcYhEJ2l00WIjcz51b0Cdcz2x0eupE+FkyelV2FpnzxQsxrrQWPbj2coSvO/tfuPaB0qFPfngRolHD2FRNEjVW6FLZwAOWkW9Us2ZnQxensewbkmWH/Pu4kLBiovEiA4VOFsRD04aBQ1CN9/uqk8UVmM4hEHyq3oUkiiHqzSFOQWNXujV392Wn3blIriQNRlGTFja0nkdibxvdcAnc7jsiDE15heQVvbIqSpAvr6HcJU/1kuInV4BqPscFtieF9agwGdnDIkSP49l1eBWNgJG547bDAPkq3s97mYC062QZIz1f347UqgyKU9NwhcNgJGn6B+JwB3yptoZouob6qg4NoD71pwMmWAI7Uvm6XaAa3lBFBxk3Fx8Zit5OUmi2Juafg/Q5HME7P0SgAVDHa8gEHvzvoixv3aO
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(41320700013)(366016)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?whqkQN7gAsT3TJ4u02KlUZy68hEDIsY2/+JxsmqX3gbtffwq8/WqC7DmGHPb?=
- =?us-ascii?Q?3BmB3n2jU1ljqOlW1PLFcMW6WkYvvKPIH9wYxuQDVuO8HndJEBy06ZMXpeec?=
- =?us-ascii?Q?mwqEcusfu9vWtMUvueK1OY+xyppVn41fsIL0n8Go7F+tOB5uQh0Uey+bkHhc?=
- =?us-ascii?Q?PGucRXCbLt98QfCPOXcwuup2p8V6kwLgX+JPutNU00PdAQR5j3Mot646ohg8?=
- =?us-ascii?Q?CrDZ+nuL1zyJ5waZQNcfaaokLE/23FGTJ93tRJJfZ1AoN1VsMqyGBQrrh74W?=
- =?us-ascii?Q?ONZ9j5iXKcmB8K0EBcBtZ6n5wFSlGWzLM+TDENUvPGMd0fUsSgtxH4lL4Qot?=
- =?us-ascii?Q?u5jYyvjYb9xGpcWw3Wu1fnqTWUxT3C0+b+jkfkBW/aBtz6uQpPu5LoCv5Clm?=
- =?us-ascii?Q?Wd172Js1amBvKWxphUz+ixufYh6S7JJzFPofeULZvk2+1UL3VfCzBGN0guOf?=
- =?us-ascii?Q?b45NtOITHByhj0w581YRjpE/7euPOfStPdO2TtE2zu51+oX+5pz5qxfYQgf+?=
- =?us-ascii?Q?ET9nO6KBiDeup0klf7RKDyumHWI2cPACLWH6MLGRuBsaJHMHAtvuhqXvhoUw?=
- =?us-ascii?Q?cbLx7GHNx4cmBYaUx4epDFHxI9eXvxJhg6vtgbFYxpWKBdyvVU49vpfozKNM?=
- =?us-ascii?Q?ULuT7PM3w/p+NKabS5i9zJZ4UxDRUr0v+LSYPitwSIY7TStZ43Po08yBzd4a?=
- =?us-ascii?Q?6QXwFM2ALuNbYVZMEoybRd5zRXbaOZAuKgfmdmvJAj0h85qL58m8ED9Fxx6F?=
- =?us-ascii?Q?oA7aBL4ziduKFDcwll0OhqkFymUPxPTub2g+riH4NrlExpcisM5vKU5TvJF4?=
- =?us-ascii?Q?uq00rTFFH46j9O/EpsMCZL2Is8B/7ldNO3roIX37co48FtMiLc6d+aTBOSs3?=
- =?us-ascii?Q?GZi5MwdFIoKhHrln6A0Vqcd4yBi6rSF9UyJq5dY5gNHV9VhCylzxTER/W1iU?=
- =?us-ascii?Q?qM3jvNABpIRydTkmhJQO7bMgznUWtrPVWu0/RHfRb69XSy9Qq25Q8MtzzWJ9?=
- =?us-ascii?Q?M0ex3fBig71yBJTvlpA8DIsjhRz7mVgxcYDfsR2RyyaHhw2Gg7vc/TCVstPo?=
- =?us-ascii?Q?XKE9nw7iRqg9q32iij2aNZ7im0wF/rIOl8sG+mUXAcj+cuvmCKPH5aLygXJp?=
- =?us-ascii?Q?WqYCfrrd6yGbkV8fSgYGufqN3mAo4BM3U1ZPEdoHYdbcQ/fCeZzQ1ggNZTPN?=
- =?us-ascii?Q?ynkF7/Kw23Ryo0DQeAUhUxqqdjC8to5m9NBxOREvWWjEuILRf7rcMhxfDpiR?=
- =?us-ascii?Q?FE1kkjhos+JryDsOySUG5/vILinjehpddbIKFpvB/1ntGA2srBAgiWcGHRmm?=
- =?us-ascii?Q?pN0WqYHhM3AdDHshrTUUMwbo2bgqG6domObPBnAXCu8xXO781OoHnhFJE8/c?=
- =?us-ascii?Q?PH5SwFp1+6FAvW0WE/GzAAKZWc4wF1U8fvIUhhoJqZ+3q5E08/U4hjMby9Yt?=
- =?us-ascii?Q?yrcGnbMlaRZgGFhroytIK5W4+fU7o4GQFkS/zVY77XZsPKhRiGD0Y1bz2WJU?=
- =?us-ascii?Q?vwwuQtRYkUuXl26rjujtitTksnFRcmApDTKaqsAL8Z3QmipU6GnWP6fdseTc?=
- =?us-ascii?Q?Lc9fvAEGYdI1UPN5S6cl+fIyOxuE1HH8LXBpfUlnFV+zaedd6db58r9Z6N/r?=
- =?us-ascii?Q?8tsKHbJ60ZHFEBmc+Pr1FrI=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00fe384c-a902-4976-4716-08dca6d9bc1a
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2024 03:28:47.4993
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eTMJcpFQyHjwPh5ob1ouEaAME9wa6NN544I0QKOECbZArCdjwzxe8z0W6n+WID4caOcEoqmlLvOt/N/zgR2vwfkMtTTv34JCrG8bHhU6gMwmyG1wuMmVRE1A9aJXwthr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1046
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] media: videodev2: Add flags to unconditionnaly
+ enumerate pixels formats
+To: Nicolas Dufresne <nicolas@ndufresne.ca>,
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+ hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+ kernel@collabora.com
+References: <20240717131430.159727-1-benjamin.gaignard@collabora.com>
+ <20240717131430.159727-2-benjamin.gaignard@collabora.com>
+ <2kbxr3hkjbcnaqescxmlcerziixg72icqpug6wa25eeggy2pnj@vqmxe4ojcwml>
+ <dfc292f8-0014-4bf4-9429-31f729a176cd@collabora.com>
+ <ok2a4ubzka6rhzyj2c5op73ij7pw35g6e75whc2jjget62fatx@zka2ewyt3kfv>
+ <c8358d79bd51a9bfa5116b33ae5e7766b95d344d.camel@ndufresne.ca>
+Content-Language: en-US
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <c8358d79bd51a9bfa5116b33ae5e7766b95d344d.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This patch implements system suspend and system resume operation for
-StarFive Camera Subsystem. It supports hibernation during streaming
-and restarts streaming at system resume time.
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- .../staging/media/starfive/camss/stf-camss.c  | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+Le 17/07/2024 à 19:50, Nicolas Dufresne a écrit :
+> Hi
+>
+> Le mercredi 17 juillet 2024 à 16:04 +0200, Jacopo Mondi a écrit :
+>> Hi Benjamin
+>>
+>> On Wed, Jul 17, 2024 at 03:44:24PM GMT, Benjamin Gaignard wrote:
+>>> Le 17/07/2024 à 15:20, Jacopo Mondi a écrit :
+>>>> Hi Benjamin
+>>>>
+>>>> On Wed, Jul 17, 2024 at 03:14:29PM GMT, Benjamin Gaignard wrote:
+>>>>> Add new flags to enumerate all pixels formats when calling VIDIOC_ENUM_FMT ioctl.
+>>>>> When this V4L2_FMT_FLAG_ENUM_ALL_FORMATS flag is set drivers must
+>>>>> ignore the configuration and return the hardware supported pixel
+>>>>> formats for the specified queue.
+>>>>> To distinguish this particular enumeration case V4L2_FMT_FLAG_ALL_FORMATS
+>>>>> flag must be set by the drivers to highlight support of this feature
+>>>>> to user space applications.
+>>>>> This will permit to discover which pixel formats are supported
+>>>>> without setting codec-specific information so userland can more easily
+>>>>> know if the driver suits its needs well.
+>>>>> The main target are stateless decoders so update the documentation
+>>>>> about how to use this flag.
+>>>>>
+>>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>>> ---
+>>>>> changes in version 4:
+>>>>> - Explicitly document that the new flags are targeting mem2mem devices.
+>>>>>
+>>>>>    .../userspace-api/media/v4l/dev-stateless-decoder.rst |  6 ++++++
+>>>>>    .../userspace-api/media/v4l/vidioc-enum-fmt.rst       | 11 +++++++++++
+>>>>>    .../userspace-api/media/videodev2.h.rst.exceptions    |  2 ++
+>>>>>    drivers/media/v4l2-core/v4l2-ioctl.c                  |  3 +++
+>>>>>    include/uapi/linux/videodev2.h                        |  2 ++
+>>>>>    5 files changed, 24 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+>>>>> index 35ed05f2695e..b0b657de910d 100644
+>>>>> --- a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+>>>>> +++ b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+>>>>> @@ -58,6 +58,12 @@ Querying capabilities
+>>>>>         default values for these controls being used, and a returned set of formats
+>>>>>         that may not be usable for the media the client is trying to decode.
+>>>>>
+>>>>> +   * If the ``V4L2_FMT_FLAG_ENUM_ALL_FORMATS`` flag is set the driver must enumerate
+>>>>> +     all the supported formats without taking care of codec-dependent controls
+>>>>> +     set on the ``OUTPUT`` queue. To indicate that the driver has take care of this
+>>>>> +     flag it must set ``V4L2_FMT_FLAG_ALL_FORMATS`` flag for each format while
+>>>>> +     enumerating.
+>>>>> +
+>>>>>    3. The client may use :c:func:`VIDIOC_ENUM_FRAMESIZES` to detect supported
+>>>>>       resolutions for a given format, passing desired pixel format in
+>>>>>       :c:type:`v4l2_frmsizeenum`'s ``pixel_format``.
+>>>>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+>>>>> index 3adb3d205531..15bc2f59c05a 100644
+>>>>> --- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+>>>>> +++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+>>>>> @@ -234,6 +234,17 @@ the ``mbus_code`` field is handled differently:
+>>>>>    	valid. The buffer consists of ``height`` lines, each having ``width``
+>>>>>    	Data Units of data and the offset (in bytes) between the beginning of
+>>>>>    	each two consecutive lines is ``bytesperline``.
+>>>>> +    * - ``V4L2_FMT_FLAG_ENUM_ALL_FORMATS``
+>>>>> +      - 0x0400
+>>>>> +      - Set by userland applications to enumerate all possible pixel formats
+>>>>> +        without taking care of any OUTPUT or CAPTURE queue configuration.
+>>>>> +        This flag is relevant only for mem2mem devices.
+>>>>> +    * - ``V4L2_FMT_FLAG_ALL_FORMATS``
+>>>>> +      - 0x0800
+>>>>> +      - Set by the driver to indicated that format have been enumerated because
+>>>>> +        :ref:`V4L2_FMT_FLAG_ENUM_ALL_FORMATS <v4l2-pix-fmt-flag-set-csc>` has
+>>>>> +        been set by the userland application.
+>>>>> +        This flag is relevant only for mem2mem devices.
+>>>> Thanks, however I think this can be wrapper on the previous line
+>>> ok
+>>>
+>>>>>    Return Value
+>>>>>    ============
+>>>>> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+>>>>> index bdc628e8c1d6..7a3a1e9dc055 100644
+>>>>> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+>>>>> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+>>>>> @@ -216,6 +216,8 @@ replace define V4L2_FMT_FLAG_CSC_YCBCR_ENC fmtdesc-flags
+>>>>>    replace define V4L2_FMT_FLAG_CSC_HSV_ENC fmtdesc-flags
+>>>>>    replace define V4L2_FMT_FLAG_CSC_QUANTIZATION fmtdesc-flags
+>>>>>    replace define V4L2_FMT_FLAG_META_LINE_BASED fmtdesc-flags
+>>>>> +replace define V4L2_FMT_FLAG_ENUM_ALL_FORMATS fmtdesc-flags
+>>>>> +replace define V4L2_FMT_FLAG_ALL_FORMATS fmtdesc-flags
+>>>>>
+>>>>>    # V4L2 timecode types
+>>>>>    replace define V4L2_TC_TYPE_24FPS timecode-type
+>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> index 4c76d17b4629..5785a98b6ba2 100644
+>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> @@ -1569,6 +1569,7 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>>>>>    	int ret = check_fmt(file, p->type);
+>>>>>    	u32 mbus_code;
+>>>>>    	u32 cap_mask;
+>>>>> +	u32 flags;
+>>>>>
+>>>>>    	if (ret)
+>>>>>    		return ret;
+>>>>> @@ -1578,8 +1579,10 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>>>>>    		p->mbus_code = 0;
+>>>>>
+>>>>>    	mbus_code = p->mbus_code;
+>>>>> +	flags = p->flags & V4L2_FMT_FLAG_ENUM_ALL_FORMATS;
+>>>>>    	memset_after(p, 0, type);
+>>>>>    	p->mbus_code = mbus_code;
+>>>>> +	p->flags = flags;
+>>>> Won't this set V4L2_FMT_FLAG_ENUM_ALL_FORMATS (if present) in the
+>>>> flags returned to userspace ? Shouldn't be drivers to set
+>>>> V4L2_FMT_FLAG_ALL_FORMATS instead ?
+>>> memset_after zeroed flags field so we need this to send V4L2_FMT_FLAG_ENUM_ALL_FORMATS
+>>> flag to drivers. Return it to userspace is a side effect but I don't that is problem
+>>> since it set it anyway.
+>>>
+>> Ok, if the expectation is that the flag is preserved through the ioctl
+>> call, this is fine with me
+> I might be missing something other similar features are explicitly advertised by
+> drivers. This way, the generic layer can keep or clear the flag based of if its
+> supported. The fact the flag persist the ioctl() or not endup having a useful
+> semantic.
+>
+> Could we do the same?
 
-diff --git a/drivers/staging/media/starfive/camss/stf-camss.c b/drivers/staging/media/starfive/camss/stf-camss.c
-index fecd3e67c7a1..8dcd35aef69d 100644
---- a/drivers/staging/media/starfive/camss/stf-camss.c
-+++ b/drivers/staging/media/starfive/camss/stf-camss.c
-@@ -416,10 +416,59 @@ static int __maybe_unused stfcamss_runtime_resume(struct device *dev)
- 	return 0;
- }
- 
-+static int __maybe_unused stfcamss_suspend(struct device *dev)
-+{
-+	struct stfcamss *stfcamss = dev_get_drvdata(dev);
-+	struct stfcamss_video *video;
-+	unsigned int i;
-+
-+	for (i = 0; i < STF_CAPTURE_NUM; ++i) {
-+		video = &stfcamss->captures[i].video;
-+		if (video->vb2_q.streaming) {
-+			video->ops->stop_streaming(video);
-+			video->ops->flush_buffers(video, VB2_BUF_STATE_ERROR);
-+		}
-+	}
-+
-+	return pm_runtime_force_suspend(dev);
-+}
-+
-+static int __maybe_unused stfcamss_resume(struct device *dev)
-+{
-+	struct stfcamss *stfcamss = dev_get_drvdata(dev);
-+	struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
-+	struct v4l2_subdev_state *sd_state;
-+	struct stfcamss_video *video;
-+	unsigned int i;
-+	int ret;
-+
-+	ret = pm_runtime_force_resume(dev);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to resume\n");
-+		return ret;
-+	}
-+
-+	sd_state = v4l2_subdev_lock_and_get_active_state(&isp_dev->subdev);
-+
-+	if (isp_dev->streaming)
-+		stf_isp_stream_on(isp_dev, sd_state);
-+
-+	v4l2_subdev_unlock_state(sd_state);
-+
-+	for (i = 0; i < STF_CAPTURE_NUM; ++i) {
-+		video = &stfcamss->captures[i].video;
-+		if (video->vb2_q.streaming)
-+			video->ops->start_streaming(video);
-+	}
-+
-+	return 0;
-+}
-+
- static const struct dev_pm_ops stfcamss_pm_ops = {
- 	SET_RUNTIME_PM_OPS(stfcamss_runtime_suspend,
- 			   stfcamss_runtime_resume,
- 			   NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(stfcamss_suspend, stfcamss_resume)
- };
- 
- static struct platform_driver stfcamss_driver = {
--- 
-2.25.1
+It is the only flag set by userspace when calling the ioctl(), all others
+are set by the drivers.
+I can clean it from the ioctl() structure after driver call but that won't change anything.
 
+>
+>> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+>>
+>>>>>    	switch (p->type) {
+>>>>>    	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+>>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>>>>> index fe6b67e83751..b6a5da79ba21 100644
+>>>>> --- a/include/uapi/linux/videodev2.h
+>>>>> +++ b/include/uapi/linux/videodev2.h
+>>>>> @@ -886,6 +886,8 @@ struct v4l2_fmtdesc {
+>>>>>    #define V4L2_FMT_FLAG_CSC_HSV_ENC		V4L2_FMT_FLAG_CSC_YCBCR_ENC
+>>>>>    #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
+>>>>>    #define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
+>>>>> +#define V4L2_FMT_FLAG_ENUM_ALL_FORMATS		0x0400
+>>>>> +#define V4L2_FMT_FLAG_ALL_FORMATS		0x0800
+>>>>>
+>>>>>    	/* Frame Size and frame rate enumeration */
+>>>>>    /*
+>>>>> --
+>>>>> 2.43.0
+>>>>>
+>>>>>
+>>>> _______________________________________________
+>>>> Kernel mailing list -- kernel@mailman.collabora.com
+>>>> To unsubscribe send an email to kernel-leave@mailman.collabora.com
+>>>> This list is managed by https://mailman.collabora.com
+>
