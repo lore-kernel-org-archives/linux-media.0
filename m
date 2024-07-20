@@ -1,48 +1,49 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F848DDA5;
-	Sat, 20 Jul 2024 07:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4928BE2;
+	Sat, 20 Jul 2024 08:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721462243; cv=none; b=MssFfk05ZmmwZ0J9UTpxcaqhi/VJM2C7YlsWD5byo+rg/J/Nk33BwBvbWgiKmvWHmaqAXPzBJ98G2rSwQvldKdxHNA5sb0uF7D0GQXeFIQlBX9+KykhkxyoIFqdJBJJony06lh6x4xuol7KSZzZ7JmbwU1Dd6ym5xdIk8Tet6cg=
+	t=1721462451; cv=none; b=r0V3n6aWEx5Ofob+ju+R05qDK624z2VM6orM5mb0wQcWBKBwm2I3ZA65iIFAZn5c+5or+KAuAr6eGZF3WD+SmY+4NPX3Mq/dPOpfkqAIb0sd33gxntMBXE3smaZGLhZslEZm9AMcb8VxsVsu05xgayAVUhR4EmNNHm1WITjGGPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721462243; c=relaxed/simple;
-	bh=8G0QG33HLHXEbJIgpCpDOVKRRTeV+ncZ7LCxd5DF9qQ=;
+	s=arc-20240116; t=1721462451; c=relaxed/simple;
+	bh=pq8xBK0+IqiGOJ3YhCMZptSa3Bj0C0JyHPXwo2Qrwys=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k1LPR06dUtrGTtr7qa410HVeQMAbveLBO2qvW1Bh8bQal1ywK++Z3zfHkwlFt+k+SQ62nUODgb8xPX0jx/gzVs+zxMeppeTBN4FiC1iodvI7oy4kn9c4Jau4Sj1EAyfS1FFxCDLOjyzilx020CsEXIHSW1p3Z4yHNmgcTH+kBwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FDkIGEpA; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=t8KhypSd4y74+SlsWWnkIYcjZJ6RAz4gO9BslQklAleJUrK9ozmYOa51pYx5Tp70cWWaIb7EbHnZAp+kd8rB52iSls3yeagZJtRTbzUup8zLq+VLZlgZ7sWuxxagXFNUxx4/yANeqzUYMZHc/1yKS2Ee5EtVKqPBft+LYoHZMHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=q3EmrTkw; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FDkIGEpA"
-X-UUID: f0d30cf4466711ef87684b57767b52b1-20240720
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="q3EmrTkw"
+X-UUID: 051999a8466811ef87684b57767b52b1-20240720
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=LHC3o5V5lRo65fXxEL/oKhYnOszY3UdThDILHWsUQFg=;
-	b=FDkIGEpAdjUgSh6MzhFMeiVfLIwOuf1eTHTjNDikdi2GQ+ddlSRE7S3f5mXm2AR/26H27sgmUpC5E0XL8f/KCMkJbGwVJ69kf+QjFrSfT1SVEwZJzKkRwaMXcSpr98EAKBECH7cwKnyEQqZ53Zd6spBRMxP8phTfzABbWq7OcQI=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=My2qHK1LZTlVJLyDFXRnOL28F6fqvoK2IyVdTbSQJKE=;
+	b=q3EmrTkwxU/JcWEA3TbQTY6DTWVg2Y04FLMXThvabJiZgsedBDG39qpgu5cK/qzifm5N0YTuD8IRfGE8KWjHbGr0CxJzFOwEun2P1J5LPZmILnmjdqu6TavEozgII/Txvc3UcWJMKvPqvRiGJJ7dy8ewbeE7GXBjMiNdxk7THiY=;
+X-CID-CACHE: Type:Local,Time:202407201558+08,HitQuantity:1
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.40,REQID:67117b4c-7df3-4532-bbaa-4fd73d67ceab,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-55
-X-CID-META: VersionHash:ba885a6,CLOUDID:0904ae0d-46b0-425a-97d3-4623fe284021,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+X-CID-O-INFO: VERSION:1.1.40,REQID:d050331a-3c18-4fe7-8adc-919ecc0810a3,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-30
+X-CID-META: VersionHash:ba885a6,CLOUDID:15798545-a117-4f46-a956-71ffeac67bfa,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:1,IP:nil,UR
 	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
 	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: f0d30cf4466711ef87684b57767b52b1-20240720
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-UUID: 051999a8466811ef87684b57767b52b1-20240720
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
 	(envelope-from <yunfei.dong@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1335732629; Sat, 20 Jul 2024 15:16:10 +0800
+	with ESMTP id 1241200868; Sat, 20 Jul 2024 15:16:44 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Sat, 20 Jul 2024 15:16:10 +0800
+ 15.2.1118.26; Sat, 20 Jul 2024 15:16:44 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:08 +0800
+ 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:42 +0800
 From: Yunfei Dong <yunfei.dong@mediatek.com>
 To: Jeffrey Kardatzke <jkardatzke@google.com>,
 	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
@@ -65,9 +66,9 @@ CC: Chen-Yu Tsai <wenst@chromium.org>, Yong Wu <yong.wu@mediatek.com>, Hsin-Yi
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v7 01/28] v4l2: add restricted memory flags
-Date: Sat, 20 Jul 2024 15:15:39 +0800
-Message-ID: <20240720071606.27930-2-yunfei.dong@mediatek.com>
+Subject: [PATCH v7 24/28] media: mediatek: vcodec: support vp9 svp decoder for mt8188
+Date: Sat, 20 Jul 2024 15:16:02 +0800
+Message-ID: <20240720071606.27930-25-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240720071606.27930-1-yunfei.dong@mediatek.com>
 References: <20240720071606.27930-1-yunfei.dong@mediatek.com>
@@ -81,126 +82,236 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Jeffrey Kardatzke <jkardatzke@google.com>
+From: Yilong Zhou <yilong.zhou@mediatek.com>
 
-Adds a V4L2 flag which indicates that a queue is using restricted
-dmabufs and the corresponding capability flag.
+Change vp9 driver to support secure video playback(svp) for
+mt8188. Need to map shared memory with optee interface and
+wait interrupt in optee-os.
 
-Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+Signed-off-by: Yilong Zhou <yilong.zhou@mediatek.com>
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[Yunfei: Change reviewer's comments]
+[Yunfei: Fix the checkpatch warning]
 ---
- Documentation/userspace-api/media/v4l/buffer.rst       | 10 +++++++++-
- .../userspace-api/media/v4l/vidioc-reqbufs.rst         |  6 ++++++
- include/media/videobuf2-core.h                         |  8 +++++++-
- include/uapi/linux/videodev2.h                         |  2 ++
- 4 files changed, 24 insertions(+), 2 deletions(-)
+ .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 101 +++++++++++-------
+ 1 file changed, 65 insertions(+), 36 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-index 52bbee81c080..901eb007aae8 100644
---- a/Documentation/userspace-api/media/v4l/buffer.rst
-+++ b/Documentation/userspace-api/media/v4l/buffer.rst
-@@ -696,7 +696,7 @@ enum v4l2_memory
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+index eea709d93820..a16a6f858e2e 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+@@ -141,6 +141,7 @@ struct vdec_vp9_slice_frame_counts {
+  * @skip:	skip counts.
+  * @y_mode:	Y prediction mode counts.
+  * @filter:	interpolation filter counts.
++ * @mv_joint:	motion vector joint counts.
+  * @sign:	motion vector sign counts.
+  * @classes:	motion vector class counts.
+  * @class0:	motion vector class0 bit counts.
+@@ -804,6 +805,9 @@ static void vdec_vp9_slice_setup_frame_ctx(struct vdec_vp9_slice_instance *insta
+ 	error_resilient_mode = HDR_FLAG(ERROR_RESILIENT);
+ 	reset_frame_context = uh->reset_frame_context;
  
- .. _memory-flags:
- 
--Memory Consistency Flags
-+Memory Flags
- ------------------------
- 
- .. raw:: latex
-@@ -728,6 +728,14 @@ Memory Consistency Flags
- 	only if the buffer is used for :ref:`memory mapping <mmap>` I/O and the
- 	queue reports the :ref:`V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS
- 	<V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS>` capability.
-+    * .. _`V4L2-MEMORY-FLAG-RESTRICTED`:
++	if (instance->ctx->is_secure_playback)
++		return;
 +
-+      - ``V4L2_MEMORY_FLAG_RESTRICTED``
-+      - 0x00000002
-+      - The queued buffers are expected to be in restricted memory. If not, an
-+	error will be returned. This flag can only be used with ``V4L2_MEMORY_DMABUF``.
-+	Typically restricted buffers are allocated using a restricted dma-heap. This flag
-+	can only be specified if the :ref:`V4L2_BUF_CAP_SUPPORTS_RESTRICTED_MEM` is set.
+ 	/*
+ 	 * according to "6.2 Uncompressed header syntax" in
+ 	 * "VP9 Bitstream & Decoding Process Specification",
+@@ -818,8 +822,7 @@ static void vdec_vp9_slice_setup_frame_ctx(struct vdec_vp9_slice_instance *insta
+ 		 * 2 resets just the context specified in the frame header
+ 		 * 3 resets all contexts
+ 		 */
+-		if (key_frame || error_resilient_mode ||
+-		    reset_frame_context == 3) {
++		if (key_frame || error_resilient_mode || reset_frame_context == 3) {
+ 			/* use default table */
+ 			for (i = 0; i < 4; i++)
+ 				instance->dirty[i] = 0;
+@@ -1042,6 +1045,9 @@ static void vdec_vp9_slice_setup_seg_buffer(struct vdec_vp9_slice_instance *inst
+ {
+ 	struct vdec_vp9_slice_uncompressed_header *uh;
  
- .. raw:: latex
++	if (instance->ctx->is_secure_playback)
++		return;
++
+ 	/* reset segment buffer */
+ 	uh = &vsi->frame.uh;
+ 	if (uh->frame_type == 0 ||
+@@ -1172,15 +1178,16 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
  
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-index bbc22dd76032..8a264ae08db1 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-reqbufs.rst
-@@ -122,6 +122,7 @@ aborting or finishing any DMA in progress, an implicit
- .. _V4L2-BUF-CAP-SUPPORTS-MMAP-CACHE-HINTS:
- .. _V4L2-BUF-CAP-SUPPORTS-MAX-NUM-BUFFERS:
- .. _V4L2-BUF-CAP-SUPPORTS-REMOVE-BUFS:
-+.. _V4L2-BUF-CAP-SUPPORTS-RESTRICTED_MEM:
+ 	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[0]);
  
- .. raw:: latex
+-	/* setup prob/tile buffers for LAT */
+-
+-	ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
+-	if (ret)
+-		goto err;
++	if (!instance->ctx->is_secure_playback) {
++		/* setup prob/tile buffers for LAT */
++		ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
++		if (ret)
++			goto err;
  
-@@ -166,6 +167,11 @@ aborting or finishing any DMA in progress, an implicit
-         :ref:`V4L2_BUF_FLAG_NO_CACHE_INVALIDATE <V4L2-BUF-FLAG-NO-CACHE-INVALIDATE>`,
-         :ref:`V4L2_BUF_FLAG_NO_CACHE_CLEAN <V4L2-BUF-FLAG-NO-CACHE-CLEAN>` and
-         :ref:`V4L2_MEMORY_FLAG_NON_COHERENT <V4L2-MEMORY-FLAG-NON-COHERENT>`.
-+    * - ``V4L2_BUF_CAP_SUPPORTS_RESTRICTED_MEM``
-+      - 0x00000100
-+      - This capability is set by the driver to indicate the queue supports
-+        restricted memory. See
-+        :ref:`V4L2_MEMORY_FLAG_RESTRICTED <V4L2-MEMORY-FLAG-RESTRICTED>`.
+-	ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
+-	if (ret)
+-		goto err;
++		ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
++		if (ret)
++			goto err;
++	}
  
- .. raw:: latex
+ 	return 0;
  
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 955237ac503d..afd497e93a37 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -517,6 +517,9 @@ struct vb2_buf_ops {
-  *		->finish().
-  * @non_coherent_mem: when set queue will attempt to allocate buffers using
-  *		non-coherent memory.
-+ * @allow_restricted_mem: when set user-space can pass the %V4L2_MEMORY_FLAG_RESTRICTED
-+ *		flag to indicate the dma bufs are restricted.
-+ * @restricted_mem: when set queue will verify that the dma bufs are restricted.
-  * @lock:	pointer to a mutex that protects the &struct vb2_queue. The
-  *		driver can set this to a mutex to let the v4l2 core serialize
-  *		the queuing ioctls. If the driver wants to handle locking
-@@ -621,6 +624,8 @@ struct vb2_queue {
- 	unsigned int			uses_requests:1;
- 	unsigned int			allow_cache_hints:1;
- 	unsigned int			non_coherent_mem:1;
-+	unsigned int			allow_restricted_mem:1;
-+	unsigned int			restricted_mem:1;
+@@ -1599,7 +1606,8 @@ static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance
+ 		       pfc->seq, vsi->state.crc[4], vsi->state.crc[5],
+ 		       vsi->state.crc[6], vsi->state.crc[7]);
  
- 	struct mutex			*lock;
- 	void				*owner;
-@@ -792,7 +797,8 @@ void vb2_core_querybuf(struct vb2_queue *q, struct vb2_buffer *vb, void *pb);
-  * @q:		pointer to &struct vb2_queue with videobuf2 queue.
-  * @memory:	memory type, as defined by &enum vb2_memory.
-  * @flags:	auxiliary queue/buffer management flags. Currently, the only
-- *		used flag is %V4L2_MEMORY_FLAG_NON_COHERENT.
-+ *		used flags are %V4L2_MEMORY_FLAG_NON_COHERENT and
-+ *		%V4L2_MEMORY_FLAG_RESTRICTED.
-  * @count:	requested buffer count.
-  *
-  * Videobuf2 core helper to implement VIDIOC_REQBUF() operation. It is called
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 4e91362da6da..c4b1bc10af4c 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1060,6 +1060,7 @@ struct v4l2_requestbuffers {
- };
+-	vdec_vp9_slice_update_prob(instance, vsi);
++	if (!instance->ctx->is_secure_playback)
++		vdec_vp9_slice_update_prob(instance, vsi);
  
- #define V4L2_MEMORY_FLAG_NON_COHERENT			(1 << 0)
-+#define V4L2_MEMORY_FLAG_RESTRICTED			(1 << 1)
+ 	instance->width = vsi->frame.uh.frame_width;
+ 	instance->height = vsi->frame.uh.frame_height;
+@@ -1632,7 +1640,8 @@ static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
+ 		return -EAGAIN;
+ 	}
  
- /* capabilities for struct v4l2_requestbuffers and v4l2_create_buffers */
- #define V4L2_BUF_CAP_SUPPORTS_MMAP			(1 << 0)
-@@ -1071,6 +1072,7 @@ struct v4l2_requestbuffers {
- #define V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS		(1 << 6)
- #define V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS		(1 << 7)
- #define V4L2_BUF_CAP_SUPPORTS_REMOVE_BUFS		(1 << 8)
-+#define V4L2_BUF_CAP_SUPPORTS_RESTRICTED_MEM		(1 << 9)
+-	vdec_vp9_slice_update_prob(instance, vsi);
++	if (!instance->ctx->is_secure_playback)
++		vdec_vp9_slice_update_prob(instance, vsi);
  
- /**
-  * struct v4l2_plane - plane info for multi-planar buffers
+ 	instance->width = vsi->frame.uh.frame_width;
+ 	instance->height = vsi->frame.uh.frame_height;
+@@ -1665,7 +1674,6 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+ 	struct vb2_queue *vq;
+ 	struct vdec_vp9_slice_reference *ref;
+ 	int plane;
+-	int size;
+ 	int w;
+ 	int h;
+ 	int i;
+@@ -1673,12 +1681,14 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+ 	plane = instance->ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes;
+ 	w = vsi->frame.uh.frame_width;
+ 	h = vsi->frame.uh.frame_height;
+-	size = ALIGN(w, 64) * ALIGN(h, 64);
++
++	vsi->fb.y.size = instance->ctx->picinfo.fb_sz[0];
++	vsi->fb.c.size = instance->ctx->picinfo.fb_sz[1];
+ 
+ 	/* frame buffer */
+ 	vsi->fb.y.dma_addr = fb->base_y.dma_addr;
+ 	if (plane == 1)
+-		vsi->fb.c.dma_addr = fb->base_y.dma_addr + size;
++		vsi->fb.c.dma_addr = fb->base_y.dma_addr + vsi->fb.y.size;
+ 	else
+ 		vsi->fb.c.dma_addr = fb->base_c.dma_addr;
+ 
+@@ -1694,8 +1704,15 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+ 		return -EINVAL;
+ 
+ 	/* update internal buffer's width/height */
+-	instance->dpb[vb->index].width = w;
+-	instance->dpb[vb->index].height = h;
++	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
++		struct vb2_buffer *buf = vb2_get_buffer(vq, i);
++
++		if (vb == buf) {
++			instance->dpb[i].width = w;
++			instance->dpb[i].height = h;
++			break;
++		}
++	}
+ 
+ 	/*
+ 	 * get buffer's width/height from instance
+@@ -1717,7 +1734,7 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+ 				vb2_dma_contig_plane_dma_addr(vb, 0);
+ 			if (plane == 1)
+ 				vsi->ref[i].c.dma_addr =
+-					vsi->ref[i].y.dma_addr + size;
++					vsi->ref[i].y.dma_addr + vsi->fb.y.size;
+ 			else
+ 				vsi->ref[i].c.dma_addr =
+ 					vb2_dma_contig_plane_dma_addr(vb, 1);
+@@ -1779,7 +1796,8 @@ static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
+ 	if (ret)
+ 		goto err;
+ 
+-	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[1]);
++	if (!instance->ctx->is_secure_playback)
++		vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[1]);
+ 
+ 	return 0;
+ 
+@@ -1874,19 +1892,30 @@ static int vdec_vp9_slice_init(struct mtk_vcodec_dec_ctx *ctx)
+ 		goto error_vsi;
+ 	}
+ 	instance->init_vsi = vsi;
+-	instance->core_vsi = mtk_vcodec_fw_map_dm_addr(ctx->dev->fw_handler,
+-						       (u32)vsi->core_vsi);
+-	if (!instance->core_vsi) {
+-		mtk_vdec_err(ctx, "failed to get VP9 core vsi\n");
+-		ret = -EINVAL;
+-		goto error_vsi;
+-	}
+ 
+-	instance->irq = 1;
++	if (ctx->is_secure_playback) {
++		instance->core_vsi = mtk_vcodec_dec_get_shm_buffer_va(ctx->dev, MTK_VDEC_CORE,
++								      OPTEE_DATA_INDEX);
++		if (!instance->core_vsi) {
++			mtk_vdec_err(ctx, "failed to get VP9 svp core vsi\n");
++			ret = -EINVAL;
++			goto error_vsi;
++		}
++		instance->irq = 0;
++	} else {
++		instance->core_vsi = mtk_vcodec_fw_map_dm_addr(ctx->dev->fw_handler,
++							       (u32)vsi->core_vsi);
++		if (!instance->core_vsi) {
++			mtk_vdec_err(ctx, "failed to get VP9 normal core vsi\n");
++			ret = -EINVAL;
++			goto error_vsi;
++		}
++		instance->irq = 1;
+ 
+-	ret = vdec_vp9_slice_init_default_frame_ctx(instance);
+-	if (ret)
+-		goto error_default_frame_ctx;
++		ret = vdec_vp9_slice_init_default_frame_ctx(instance);
++		if (ret)
++			goto error_default_frame_ctx;
++	}
+ 
+ 	ctx->drv_handle = instance;
+ 
+@@ -2101,9 +2130,12 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 		       (unsigned long)pfc->vsi.trans.dma_addr,
+ 		       (unsigned long)pfc->vsi.trans.dma_addr_end);
+ 
+-	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue,
+-				       vsi->trans.dma_addr_end +
+-				       ctx->msg_queue.wdma_addr.dma_addr);
++	if (!instance->ctx->is_secure_playback) {
++		vsi->trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
++		mtk_vdec_debug(ctx, "core dma_addr_end 0x%lx\n",
++			       (unsigned long)pfc->vsi.trans.dma_addr_end);
++	}
++	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue, vsi->trans.dma_addr_end);
+ 	vdec_msg_queue_qbuf(&ctx->msg_queue.core_ctx, lat_buf);
+ 
+ 	return 0;
+@@ -2183,9 +2215,6 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
+ 		goto err;
+ 	}
+ 
+-	pfc->vsi.trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
+-	mtk_vdec_debug(ctx, "core dma_addr_end 0x%lx\n",
+-		       (unsigned long)pfc->vsi.trans.dma_addr_end);
+ 	vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
+ 	ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
+ 
 -- 
 2.18.0
 
