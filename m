@@ -1,49 +1,48 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4928BE2;
-	Sat, 20 Jul 2024 08:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426E11C27;
+	Sat, 20 Jul 2024 08:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721462451; cv=none; b=r0V3n6aWEx5Ofob+ju+R05qDK624z2VM6orM5mb0wQcWBKBwm2I3ZA65iIFAZn5c+5or+KAuAr6eGZF3WD+SmY+4NPX3Mq/dPOpfkqAIb0sd33gxntMBXE3smaZGLhZslEZm9AMcb8VxsVsu05xgayAVUhR4EmNNHm1WITjGGPk=
+	t=1721462601; cv=none; b=JCN05JOWrPKq03muxIpK32LCOVVEi3bEl2wWIDFND3nHC+8czEdLHHFwQbWdZxP+pcuE5gj84lEyEZzMNayvXOWZ1aiMGf6T8ppabIqKFk5d2oOektdZDPQN9ZwVTE2STip0oRnV4R0Jqd1fMiJF7pFXJPGPB0FP5R+X9Tzgl2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721462451; c=relaxed/simple;
-	bh=pq8xBK0+IqiGOJ3YhCMZptSa3Bj0C0JyHPXwo2Qrwys=;
+	s=arc-20240116; t=1721462601; c=relaxed/simple;
+	bh=ToqaC2fQpqA71Jvnw8czm5+q9TOF3TTZS8re9l0gl3A=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t8KhypSd4y74+SlsWWnkIYcjZJ6RAz4gO9BslQklAleJUrK9ozmYOa51pYx5Tp70cWWaIb7EbHnZAp+kd8rB52iSls3yeagZJtRTbzUup8zLq+VLZlgZ7sWuxxagXFNUxx4/yANeqzUYMZHc/1yKS2Ee5EtVKqPBft+LYoHZMHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=q3EmrTkw; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=YQYxU0oBEOvDK/lc9r7g05I9ysfCInFdiYd7pbN+2a9VG/aTL1t6jI70PD+NeCbroqGTq0KZeI4yQV4kFWlW1OW7QxgLYRhW6cPzyZ1FgNSj7a7dK2z9LANydUnKHOuqL+znNlWQ2ssnx9McsAOl0DLjPJtjCtIzQzs2EEYcqjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=p+jW2YlC; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="q3EmrTkw"
-X-UUID: 051999a8466811ef87684b57767b52b1-20240720
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="p+jW2YlC"
+X-UUID: f1b8048a466711ef87684b57767b52b1-20240720
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=My2qHK1LZTlVJLyDFXRnOL28F6fqvoK2IyVdTbSQJKE=;
-	b=q3EmrTkwxU/JcWEA3TbQTY6DTWVg2Y04FLMXThvabJiZgsedBDG39qpgu5cK/qzifm5N0YTuD8IRfGE8KWjHbGr0CxJzFOwEun2P1J5LPZmILnmjdqu6TavEozgII/Txvc3UcWJMKvPqvRiGJJ7dy8ewbeE7GXBjMiNdxk7THiY=;
-X-CID-CACHE: Type:Local,Time:202407201558+08,HitQuantity:1
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xQJAVcEsNPwhyH05n9NzE0IPLrlyrT5EWY2i00FYOis=;
+	b=p+jW2YlCkuwX1ZTVIq1TsDOTdvn/chhQ574+hj+qN54rfTGS6CtZKonh2T9uW5GjUSdZ9S8t/0yEbbIGU7+tZMvCzvTMGG3J2bW1Zcs23VgjqlgX4mF5H7PJc9Afuh6wpLlUrfenKjvt+MU+6ExvTcGlj8g1nAsENxzPj070p8w=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.40,REQID:d050331a-3c18-4fe7-8adc-919ecc0810a3,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-30
-X-CID-META: VersionHash:ba885a6,CLOUDID:15798545-a117-4f46-a956-71ffeac67bfa,B
+X-CID-O-INFO: VERSION:1.1.40,REQID:15bc6639-9406-406d-932b-3fa1a22e8354,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:ba885a6,CLOUDID:c210ae0d-46b0-425a-97d3-4623fe284021,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:1,IP:nil,UR
 	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
 	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 051999a8466811ef87684b57767b52b1-20240720
+X-UUID: f1b8048a466711ef87684b57767b52b1-20240720
 Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
 	(envelope-from <yunfei.dong@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1241200868; Sat, 20 Jul 2024 15:16:44 +0800
+	with ESMTP id 1237293394; Sat, 20 Jul 2024 15:16:12 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Sat, 20 Jul 2024 15:16:44 +0800
+ 15.2.1118.26; Sat, 20 Jul 2024 15:16:11 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:42 +0800
+ 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:10 +0800
 From: Yunfei Dong <yunfei.dong@mediatek.com>
 To: Jeffrey Kardatzke <jkardatzke@google.com>,
 	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
@@ -66,9 +65,9 @@ CC: Chen-Yu Tsai <wenst@chromium.org>, Yong Wu <yong.wu@mediatek.com>, Hsin-Yi
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v7 24/28] media: mediatek: vcodec: support vp9 svp decoder for mt8188
-Date: Sat, 20 Jul 2024 15:16:02 +0800
-Message-ID: <20240720071606.27930-25-yunfei.dong@mediatek.com>
+Subject: [PATCH v7 02/28] v4l2: handle restricted memory flags in queue setup
+Date: Sat, 20 Jul 2024 15:15:40 +0800
+Message-ID: <20240720071606.27930-3-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240720071606.27930-1-yunfei.dong@mediatek.com>
 References: <20240720071606.27930-1-yunfei.dong@mediatek.com>
@@ -82,236 +81,130 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-From: Yilong Zhou <yilong.zhou@mediatek.com>
+From: Jeffrey Kardatzke <jkardatzke@google.com>
 
-Change vp9 driver to support secure video playback(svp) for
-mt8188. Need to map shared memory with optee interface and
-wait interrupt in optee-os.
+Validates the restricted memory flags when setting up a queue and
+ensures the queue has the proper capability.
 
-Signed-off-by: Yilong Zhou <yilong.zhou@mediatek.com>
+Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[Yunfei: Fix the checkpatch warning]
+[Yunfei: Change reviewer's comments]
 ---
- .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 101 +++++++++++-------
- 1 file changed, 65 insertions(+), 36 deletions(-)
+ .../media/common/videobuf2/videobuf2-core.c   | 29 +++++++++++++++++++
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-index eea709d93820..a16a6f858e2e 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-@@ -141,6 +141,7 @@ struct vdec_vp9_slice_frame_counts {
-  * @skip:	skip counts.
-  * @y_mode:	Y prediction mode counts.
-  * @filter:	interpolation filter counts.
-+ * @mv_joint:	motion vector joint counts.
-  * @sign:	motion vector sign counts.
-  * @classes:	motion vector class counts.
-  * @class0:	motion vector class0 bit counts.
-@@ -804,6 +805,9 @@ static void vdec_vp9_slice_setup_frame_ctx(struct vdec_vp9_slice_instance *insta
- 	error_resilient_mode = HDR_FLAG(ERROR_RESILIENT);
- 	reset_frame_context = uh->reset_frame_context;
+diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+index 0217392fcc0d..44080121f37e 100644
+--- a/drivers/media/common/videobuf2/videobuf2-core.c
++++ b/drivers/media/common/videobuf2/videobuf2-core.c
+@@ -830,6 +830,23 @@ static bool verify_coherency_flags(struct vb2_queue *q, bool non_coherent_mem)
+ 	return true;
+ }
  
-+	if (instance->ctx->is_secure_playback)
-+		return;
++static bool verify_restricted_mem_flags(struct vb2_queue *q, bool restricted_mem)
++{
++	if (restricted_mem != q->restricted_mem) {
++		dprintk(q, 1, "restricted memory model mismatch\n");
++		return false;
++	}
 +
- 	/*
- 	 * according to "6.2 Uncompressed header syntax" in
- 	 * "VP9 Bitstream & Decoding Process Specification",
-@@ -818,8 +822,7 @@ static void vdec_vp9_slice_setup_frame_ctx(struct vdec_vp9_slice_instance *insta
- 		 * 2 resets just the context specified in the frame header
- 		 * 3 resets all contexts
- 		 */
--		if (key_frame || error_resilient_mode ||
--		    reset_frame_context == 3) {
-+		if (key_frame || error_resilient_mode || reset_frame_context == 3) {
- 			/* use default table */
- 			for (i = 0; i < 4; i++)
- 				instance->dirty[i] = 0;
-@@ -1042,6 +1045,9 @@ static void vdec_vp9_slice_setup_seg_buffer(struct vdec_vp9_slice_instance *inst
++	return true;
++}
++
++static inline int restricted_mem_mismatch(bool restricted_mem, struct vb2_queue *q,
++					  enum vb2_memory memory)
++{
++	return restricted_mem && (!q->allow_restricted_mem || memory != VB2_MEMORY_DMABUF) ?
++	       -1 : 0;
++}
++
+ static int vb2_core_allocated_buffers_storage(struct vb2_queue *q)
  {
- 	struct vdec_vp9_slice_uncompressed_header *uh;
+ 	if (!q->bufs)
+@@ -863,6 +880,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	unsigned int q_num_bufs = vb2_get_num_buffers(q);
+ 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+ 	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
++	bool restricted_mem = flags & V4L2_MEMORY_FLAG_RESTRICTED;
+ 	unsigned int i, first_index;
+ 	int ret = 0;
  
-+	if (instance->ctx->is_secure_playback)
-+		return;
-+
- 	/* reset segment buffer */
- 	uh = &vsi->frame.uh;
- 	if (uh->frame_type == 0 ||
-@@ -1172,15 +1178,16 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
- 
- 	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[0]);
- 
--	/* setup prob/tile buffers for LAT */
--
--	ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
--	if (ret)
--		goto err;
-+	if (!instance->ctx->is_secure_playback) {
-+		/* setup prob/tile buffers for LAT */
-+		ret = vdec_vp9_slice_setup_prob_buffer(instance, vsi);
-+		if (ret)
-+			goto err;
- 
--	ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
--	if (ret)
--		goto err;
-+		ret = vdec_vp9_slice_setup_tile_buffer(instance, vsi, bs);
-+		if (ret)
-+			goto err;
-+	}
- 
- 	return 0;
- 
-@@ -1599,7 +1606,8 @@ static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance
- 		       pfc->seq, vsi->state.crc[4], vsi->state.crc[5],
- 		       vsi->state.crc[6], vsi->state.crc[7]);
- 
--	vdec_vp9_slice_update_prob(instance, vsi);
-+	if (!instance->ctx->is_secure_playback)
-+		vdec_vp9_slice_update_prob(instance, vsi);
- 
- 	instance->width = vsi->frame.uh.frame_width;
- 	instance->height = vsi->frame.uh.frame_height;
-@@ -1632,7 +1640,8 @@ static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
- 		return -EAGAIN;
+@@ -906,6 +924,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			return 0;
  	}
  
--	vdec_vp9_slice_update_prob(instance, vsi);
-+	if (!instance->ctx->is_secure_playback)
-+		vdec_vp9_slice_update_prob(instance, vsi);
- 
- 	instance->width = vsi->frame.uh.frame_width;
- 	instance->height = vsi->frame.uh.frame_height;
-@@ -1665,7 +1674,6 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 	struct vb2_queue *vq;
- 	struct vdec_vp9_slice_reference *ref;
- 	int plane;
--	int size;
- 	int w;
- 	int h;
- 	int i;
-@@ -1673,12 +1681,14 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 	plane = instance->ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes;
- 	w = vsi->frame.uh.frame_width;
- 	h = vsi->frame.uh.frame_height;
--	size = ALIGN(w, 64) * ALIGN(h, 64);
++	if (restricted_mem_mismatch(restricted_mem, q, memory))
++		return -EINVAL;
 +
-+	vsi->fb.y.size = instance->ctx->picinfo.fb_sz[0];
-+	vsi->fb.c.size = instance->ctx->picinfo.fb_sz[1];
- 
- 	/* frame buffer */
- 	vsi->fb.y.dma_addr = fb->base_y.dma_addr;
- 	if (plane == 1)
--		vsi->fb.c.dma_addr = fb->base_y.dma_addr + size;
-+		vsi->fb.c.dma_addr = fb->base_y.dma_addr + vsi->fb.y.size;
- 	else
- 		vsi->fb.c.dma_addr = fb->base_c.dma_addr;
- 
-@@ -1694,8 +1704,15 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 		return -EINVAL;
- 
- 	/* update internal buffer's width/height */
--	instance->dpb[vb->index].width = w;
--	instance->dpb[vb->index].height = h;
-+	for (i = 0; i < vb2_get_num_buffers(vq); i++) {
-+		struct vb2_buffer *buf = vb2_get_buffer(vq, i);
-+
-+		if (vb == buf) {
-+			instance->dpb[i].width = w;
-+			instance->dpb[i].height = h;
-+			break;
-+		}
-+	}
+ 	/*
+ 	 * Make sure the requested values and current defaults are sane.
+ 	 */
+@@ -923,6 +944,7 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	if (ret)
+ 		return ret;
+ 	set_queue_coherency(q, non_coherent_mem);
++	q->restricted_mem = restricted_mem;
  
  	/*
- 	 * get buffer's width/height from instance
-@@ -1717,7 +1734,7 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
- 				vb2_dma_contig_plane_dma_addr(vb, 0);
- 			if (plane == 1)
- 				vsi->ref[i].c.dma_addr =
--					vsi->ref[i].y.dma_addr + size;
-+					vsi->ref[i].y.dma_addr + vsi->fb.y.size;
- 			else
- 				vsi->ref[i].c.dma_addr =
- 					vb2_dma_contig_plane_dma_addr(vb, 1);
-@@ -1779,7 +1796,8 @@ static int vdec_vp9_slice_setup_core(struct vdec_vp9_slice_instance *instance,
- 	if (ret)
- 		goto err;
+ 	 * Ask the driver how many buffers and planes per buffer it requires.
+@@ -1031,6 +1053,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+ 	bool non_coherent_mem = flags & V4L2_MEMORY_FLAG_NON_COHERENT;
+ 	unsigned int q_num_bufs = vb2_get_num_buffers(q);
++	bool restricted_mem = flags & V4L2_MEMORY_FLAG_RESTRICTED;
+ 	bool no_previous_buffers = !q_num_bufs;
+ 	int ret = 0;
  
--	vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[1]);
-+	if (!instance->ctx->is_secure_playback)
-+		vdec_vp9_slice_setup_seg_buffer(instance, vsi, &instance->seg[1]);
- 
- 	return 0;
- 
-@@ -1874,19 +1892,30 @@ static int vdec_vp9_slice_init(struct mtk_vcodec_dec_ctx *ctx)
- 		goto error_vsi;
- 	}
- 	instance->init_vsi = vsi;
--	instance->core_vsi = mtk_vcodec_fw_map_dm_addr(ctx->dev->fw_handler,
--						       (u32)vsi->core_vsi);
--	if (!instance->core_vsi) {
--		mtk_vdec_err(ctx, "failed to get VP9 core vsi\n");
--		ret = -EINVAL;
--		goto error_vsi;
--	}
- 
--	instance->irq = 1;
-+	if (ctx->is_secure_playback) {
-+		instance->core_vsi = mtk_vcodec_dec_get_shm_buffer_va(ctx->dev, MTK_VDEC_CORE,
-+								      OPTEE_DATA_INDEX);
-+		if (!instance->core_vsi) {
-+			mtk_vdec_err(ctx, "failed to get VP9 svp core vsi\n");
-+			ret = -EINVAL;
-+			goto error_vsi;
-+		}
-+		instance->irq = 0;
-+	} else {
-+		instance->core_vsi = mtk_vcodec_fw_map_dm_addr(ctx->dev->fw_handler,
-+							       (u32)vsi->core_vsi);
-+		if (!instance->core_vsi) {
-+			mtk_vdec_err(ctx, "failed to get VP9 normal core vsi\n");
-+			ret = -EINVAL;
-+			goto error_vsi;
-+		}
-+		instance->irq = 1;
- 
--	ret = vdec_vp9_slice_init_default_frame_ctx(instance);
--	if (ret)
--		goto error_default_frame_ctx;
-+		ret = vdec_vp9_slice_init_default_frame_ctx(instance);
-+		if (ret)
-+			goto error_default_frame_ctx;
-+	}
- 
- 	ctx->drv_handle = instance;
- 
-@@ -2101,9 +2130,12 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 		       (unsigned long)pfc->vsi.trans.dma_addr,
- 		       (unsigned long)pfc->vsi.trans.dma_addr_end);
- 
--	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue,
--				       vsi->trans.dma_addr_end +
--				       ctx->msg_queue.wdma_addr.dma_addr);
-+	if (!instance->ctx->is_secure_playback) {
-+		vsi->trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
-+		mtk_vdec_debug(ctx, "core dma_addr_end 0x%lx\n",
-+			       (unsigned long)pfc->vsi.trans.dma_addr_end);
-+	}
-+	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue, vsi->trans.dma_addr_end);
- 	vdec_msg_queue_qbuf(&ctx->msg_queue.core_ctx, lat_buf);
- 
- 	return 0;
-@@ -2183,9 +2215,6 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- 		goto err;
+@@ -1039,6 +1062,9 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		return -ENOBUFS;
  	}
  
--	pfc->vsi.trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
--	mtk_vdec_debug(ctx, "core dma_addr_end 0x%lx\n",
--		       (unsigned long)pfc->vsi.trans.dma_addr_end);
- 	vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
- 	ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
++	if (restricted_mem_mismatch(restricted_mem, q, memory))
++		return -EINVAL;
++
+ 	if (no_previous_buffers) {
+ 		if (q->waiting_in_dqbuf && *count) {
+ 			dprintk(q, 1, "another dup()ped fd is waiting for a buffer\n");
+@@ -1057,6 +1083,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 			return ret;
+ 		q->waiting_for_buffers = !q->is_output;
+ 		set_queue_coherency(q, non_coherent_mem);
++		q->restricted_mem = restricted_mem;
+ 	} else {
+ 		if (q->memory != memory) {
+ 			dprintk(q, 1, "memory model mismatch\n");
+@@ -1064,6 +1091,8 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+ 		}
+ 		if (!verify_coherency_flags(q, non_coherent_mem))
+ 			return -EINVAL;
++		if (!verify_restricted_mem_flags(q, restricted_mem))
++			return -EINVAL;
+ 	}
  
+ 	num_buffers = min(*count, q->max_num_buffers - q_num_bufs);
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 293f3d5f1c4e..9ee24e537e0c 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -682,7 +682,7 @@ static void vb2_set_flags_and_caps(struct vb2_queue *q, u32 memory,
+ 		*flags = 0;
+ 	} else {
+ 		/* Clear all unknown flags. */
+-		*flags &= V4L2_MEMORY_FLAG_NON_COHERENT;
++		*flags &= V4L2_MEMORY_FLAG_NON_COHERENT | V4L2_MEMORY_FLAG_RESTRICTED;
+ 	}
+ 
+ 	*caps |= V4L2_BUF_CAP_SUPPORTS_ORPHANED_BUFS;
+@@ -698,6 +698,8 @@ static void vb2_set_flags_and_caps(struct vb2_queue *q, u32 memory,
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_MMAP_CACHE_HINTS;
+ 	if (q->supports_requests)
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_REQUESTS;
++	if (q->allow_restricted_mem && q->io_modes & VB2_DMABUF)
++		*caps |= V4L2_BUF_CAP_SUPPORTS_RESTRICTED_MEM;
+ 	if (max_num_bufs) {
+ 		*max_num_bufs = q->max_num_buffers;
+ 		*caps |= V4L2_BUF_CAP_SUPPORTS_MAX_NUM_BUFFERS;
 -- 
 2.18.0
 
