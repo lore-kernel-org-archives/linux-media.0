@@ -1,47 +1,48 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18271756A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507F2101E4;
 	Sat, 20 Jul 2024 07:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721459785; cv=none; b=UJrQwvnzyg3+Qbgk2Tf2bAN4SsUBbb5wP1L36aAU9M/Oc74Xonh+DB9B0IkUUuNRNxGPj3e0PUmwP1jqQ6E9PpC8+h0bEEmp2kMwN+bg8gRmGZ1lr5xLoGNLQTx52C/QjmsWBH+eLV3R+JFuBHoOvfwia9/RML9wZoJD9fc1jps=
+	t=1721459786; cv=none; b=bIFcJkjf1JpEF3b7nF3zPnNy2Pa797rP9KRicNjNGclhOq+aKZAMxt3eQSU8KtnuJ8/J+Vrr2eDxkrdM/uJDh0/U/PyLFtvLTqLJXGkceuANropOfbQ1O9AfLeHniybnLRn8h871tVJFqZSDcOLKEOKw7tlHxxSURAvvNmcrYe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721459785; c=relaxed/simple;
-	bh=YTKdcCxwtaYiiDUUKTU/gLpPY9GNMJX1bO5WdYDzDd4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QsAgafGqx8IbNKM7VGBb3o+KAv5KA+mVR1NMIOOekDpUeiTXU5koJariei3ts0QOkCf2mblmeCyjSmVWdTHtKDy6hT5xzON1/9zlQflkVqKSJaoS041s84EEbmGUKT2b+DZLF18X8vL/ma8QG5SaoGlAopH7hO6Qm0Zhsi0pXkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=UzUCGDVo; arc=none smtp.client-ip=60.244.123.138
+	s=arc-20240116; t=1721459786; c=relaxed/simple;
+	bh=xt0ASVPD8sSh86Q2GNtiaVRTgDcLBS3/GaSpi8rzePE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=s9uFCOvcbVjXzORtq6z5FwPZm2ZhviqiMN7uCbYseTBeOuI4EU8/Q1gDC/hBsZaRE1hqvbK+0piDKFOs/3cJkLpRZjQ20Fke8hxniPNePcWtSrzDEN4wYlQ9X0gQpzOrdQHyQuzJiLu3q4Lk1EAjPs60R+0qLzcCZSvltSESDm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=rHIE4Ggm; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="UzUCGDVo"
-X-UUID: f1506bb8466711efb5b96b43b535fdb4-20240720
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="rHIE4Ggm"
+X-UUID: f4e4a820466711efb5b96b43b535fdb4-20240720
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EdAs1weRfnXAf3MugcpLFugaC1pT5jW7JMNcKSNeugk=;
-	b=UzUCGDVoDCKd95FC6xcDxTJX2kw3VVTNgH+OjVc9x4AevPahQO1cHWydEM2y7iLdwUELHI3wSUHBK/Uit9QSTNPWk6YjqOeBw/sQF5A0Z8bo1yIZo+oBm24hDvZMhnGN3F2X3yosL0+OvL1OlsjY1DVswGhC99x6GQ1Y1e85a50=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=91RqwGm8L1GvA0gEqTJqa6Z8jkRudalRKuHiVM28dZU=;
+	b=rHIE4GgmqeiybFCxUAa0J4XKJ+1eH8iI2gvFMPGE3h3AaJvA6ihMGvxuCfyCc/5dkxaiREKyJlIyQ4n3YyTnGlHU9lsQku/2744vrvmWPYGWia3Hgj7Nz39PfnkutJt3gVlye/fKhEgH3jrwJ/G5s5OdbfWwKGMA8atNcNXQUmw=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.40,REQID:c7b8d443-cc2c-4ae3-8e4c-035dd99d101c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:ba885a6,CLOUDID:77c9ad0d-46b0-425a-97d3-4623fe284021,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.1.40,REQID:ba5e5af9-68d2-4f5e-a724-30ac5d95ad34,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-50
+X-CID-META: VersionHash:ba885a6,CLOUDID:3914b4d1-436f-4604-ad9d-558fa44a3bbe,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:1,IP:nil,UR
+	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
+	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-UUID: f1506bb8466711efb5b96b43b535fdb4-20240720
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: f4e4a820466711efb5b96b43b535fdb4-20240720
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
 	(envelope-from <yunfei.dong@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 196629985; Sat, 20 Jul 2024 15:16:11 +0800
+	with ESMTP id 296687237; Sat, 20 Jul 2024 15:16:17 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Sat, 20 Jul 2024 15:16:08 +0800
+ 15.2.1118.26; Sat, 20 Jul 2024 15:16:16 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:07 +0800
+ 15.2.1118.26 via Frontend Transport; Sat, 20 Jul 2024 15:16:14 +0800
 From: Yunfei Dong <yunfei.dong@mediatek.com>
 To: Jeffrey Kardatzke <jkardatzke@google.com>,
 	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
@@ -64,10 +65,12 @@ CC: Chen-Yu Tsai <wenst@chromium.org>, Yong Wu <yong.wu@mediatek.com>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v7 00/28] media: mediatek: add driver to support secure video decoder
-Date: Sat, 20 Jul 2024 15:15:38 +0800
-Message-ID: <20240720071606.27930-1-yunfei.dong@mediatek.com>
+Subject: [PATCH v7 05/28] dma-heap: Add proper kref handling on dma-buf heaps
+Date: Sat, 20 Jul 2024 15:15:43 +0800
+Message-ID: <20240720071606.27930-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240720071606.27930-1-yunfei.dong@mediatek.com>
+References: <20240720071606.27930-1-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -77,184 +80,116 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--3.923600-8.000000
-X-TMASE-MatchedRID: UCRb5awSya3tzSKzUmDUVwI0yP/uoH+DHgnyJJNAX/hGL0g1nVmkYTjh
-	cV1z6ih5WiaTAptjMRWkCf2vRV+wnagSz5LfW6gEtgGefYRQNetUNS+xp6iMXWsxtqQk3w552Fx
-	nSUK+m7/6scB2izTfK0mdI2aa3IoLfjm4FmbDbT0zw5Ejs3g1loab/1O/b86BknxabN/DinjEBp
-	jowVhUR9Gzq011f5lgCmjHXhV21s3GHadaRuAOv1z+axQLnAVBnp/1DQXYWrUR34ro7k23nYNaw
-	NhHLl62M4Cy4e3S8WLRulxaGH1cMyZywmJvYiNpwCZxkTHxccl51GakW92m5gnnMzd3ORpB2VC1
-	QWKKKPphZzqJazAr2ev5q3xJofu6uafWgMhNYLkMH4SsGvRsAyKRTjFAWBvu6PPBanTHTInv8kZ
-	Fnw+AJ/VsyTtlUxkI4rz9nnOxxGUBOHW58ozCWgPZZctd3P4BVX7TxgU0dK74JkeQZhmPNV2kxK
-	IqW9ov4vM1YF6AJbbCCfuIMF6xLcK21zBg2KlfrXT/QMyU2NwZhhkXJLJyemxvnWgm/4wDXmxfe
-	npNxnHCR4PmRCAjVsfoSk5yMK1aT8omgjK7aRYzL9YEHFyRwUdR2mhSiz4SRC4FP+bFQP+jJ0yU
-	SNFyJ318FBJtaLg8yw2MRQtf+64wgUA8tQSUnMC+ksT6a9fy
+X-TM-AS-Result: No-10--5.707100-8.000000
+X-TMASE-MatchedRID: uvmf2XsR/xmRKhTVQwgiGPOS+SRxjgFwIaLR+2xKRDJGL0g1nVmkYXB4
+	4IkzjfYyrUhQzMxACbqtTxRj9EhMYqh+3Rlbev+JEgwM8US/pTFYN1akkye0qOVyoVV0m7wN7fS
+	O5z9h3Mjfbqj275Pjcy33B760297/lwV2iaAfSWcURSScn+QSXt0H8LFZNFG71sULACB0qRI987
+	fAqpfLD+SVyx8f84bFK4QcjwmrlwJjdxLGTzb+8v8Akuq1Mq2slExlQIQeRG0=
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--3.923600-8.000000
+X-TMASE-Result: 10--5.707100-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 49B51B8754C4E41DDC0D865904996A3C04FCCE0CAD1A9508D689F44F7DB119382000:8
+X-TM-SNTS-SMTP:
+	B5C727F956790980F61EEFCB8F9B46EAB3F94B842BBB02CD8E829204F26000262000:8
 X-MTK: N
 
-The patch series used to enable secure video playback (SVP) on MediaTek
-hardware in the Linux kernel.
+From: John Stultz <jstultz@google.com>
 
-Memory Definitions:
-secure memory - Memory allocated in the TEE (Trusted Execution
-Environment) which is inaccessible in the REE (Rich Execution
-Environment, i.e. linux kernel/user space).
-secure handle - Integer value which acts as reference to 'secure
-memory'. Used in communication between TEE and REE to reference
-'secure memory'.
-secure buffer - 'secure memory' that is used to store decrypted,
-compressed video or for other general purposes in the TEE.
-secure surface - 'secure memory' that is used to store graphic buffers.
+Add proper reference counting on the dma_heap structure. While
+existing heaps are built-in, we may eventually have heaps loaded
+from modules, and we'll need to be able to properly handle the
+references to the heaps
 
-Memory Usage in SVP:
-The overall flow of SVP starts with encrypted video coming in from an
-outside source into the REE. The REE will then allocate a 'secure
-buffer' and send the corresponding 'secure handle' along with the
-encrypted, compressed video data to the TEE. The TEE will then decrypt
-the video and store the result in the 'secure buffer'. The REE will
-then allocate a 'secure surface'. The REE will pass the 'secure
-handles' for both the 'secure buffer' and 'secure surface' into the
-TEE for video decoding. The video decoder HW will then decode the
-contents of the 'secure buffer' and place the result in the 'secure
-surface'. The REE will then attach the 'secure surface' to the overlay
-plane for rendering of the video.
-
-Everything relating to ensuring security of the actual contents of the
-'secure buffer' and 'secure surface' is out of scope for the REE and
-is the responsibility of the TEE.
-
-This patch series is consists of four parts. The first is from Jeffrey,
-adding secure memory flag in v4l2 framework to support request secure
-buffer.
-
-The second and third parts are from John and T.J, adding some heap
-interfaces, then our kernel users could allocate buffer from special
-heap. The patch v1 is inside below dmabuf link.
-https://lore.kernel.org/linux-mediatek/20230911023038.30649-1-yong.wu@mediatek.com/
-To avoid confusing, move them into vcodec patch set since we use the
-new interfaces directly.
-
-The last part is mediatek video decoder driver, adding tee interface and
-decoder driver to support secure video playback.
-
-This patch set depends on "dma-buf: heaps: Add restricted heap"[1]
-
-[1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=853380
+Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+[Yong: Just add comment for "minor" and "refcount"]
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+[Yunfei: Change reviewer's comments]
 ---
-Changed in v7:
-- fix many reviewer's comments
-- build optee driver to ko
-- support h264 svp and non svp vsi
+ drivers/dma-buf/dma-heap.c | 29 +++++++++++++++++++++++++++++
+ include/linux/dma-heap.h   |  2 ++
+ 2 files changed, 31 insertions(+)
 
-Changed in v6:
-- fix unreasonable logic for patch 2/3/23
-- add to support vp9 for patch 24
-
-Changed in v5:
-- fix merge conflict when rebase to latest media stage for patch 1/2
-- change allocate memory type to cma for patch 12
-- add to support av1 for patch 23
-
-Changed in v4:
-- change the driver according to maintainer advice for patch 1/2/3/4
-- replace secure with restricted for patch 1/2/3/4
-- fix svp decoder error for patch 21
-- add to support hevc for patch 22
-
-Changed in v3:
-- rewrite the cover-letter of this patch series
-- disable irq for svp mode
-- rebase the driver based on the latest media stage
-
-Changed in v2:
-- remove setting decoder mode and getting secure handle from decode
-- add Jeffrey's patch
-- add John and T.J's patch
-- getting secure flag with request buffer
-- fix some comments from patch v1
----
-Jeffrey Kardatzke (2):
-  v4l2: add restricted memory flags
-  v4l2: handle restricted memory flags in queue setup
-
-John Stultz (2):
-  dma-heap: Add proper kref handling on dma-buf heaps
-  dma-heap: Provide accessors so that in-kernel drivers can allocate
-    dmabufs from specific heaps
-
-T.J. Mercier (1):
-  dma-buf: heaps: Deduplicate docs and adopt common format
-
-Xiaoyong Lu (1):
-  media: mediatek: vcodec: support av1 svp decoder for mt8188
-
-Yilong Zhou (1):
-  media: mediatek: vcodec: support vp9 svp decoder for mt8188
-
-Yunfei Dong (21):
-  media: videobuf2: calculate restricted memory size
-  media: mediatek: vcodec: add tee client interface to communiate with
-    optee-os
-  media: mediatek: vcodec: build decoder OPTEE driver as module
-  media: mediatek: vcodec: allocate tee share memory
-  media: mediatek: vcodec: send share memory data to optee
-  media: mediatek: vcodec: initialize msg and vsi information
-  media: mediatek: vcodec: add interface to allocate/free secure memory
-  media: mediatek: vcodec: using shared memory as vsi address
-  media: mediatek: vcodec: add single allocation format
-  media: mediatek: vcodec: support single allocation format
-  media: mediatek: vcodec: support single allocation buffer
-  media: mediatek: vcodec: re-construct h264 driver to support svp mode
-  media: mediatek: vcodec: remove parse nal_info in kernel
-  media: mediatek: vcodec: disable wait interrupt for svp mode
-  media: mediatek: vcodec: support tee decoder
-  media: mediatek: vcodec: move vdec init interface to setup callback
-  media: mediatek: vcodec: support hevc svp for mt8188
-  media: mediatek: vcodec: remove vsi data from common interface
-  media: mediatek: vcodec: rename vsi to extend vsi
-  media: mediatek: vcodec: adding non extend struct
-  media: mediatek: vcodec: support extend h264 driver
-
- .../userspace-api/media/v4l/buffer.rst        |  10 +-
- .../media/v4l/pixfmt-reserved.rst             |   7 +
- .../media/v4l/vidioc-reqbufs.rst              |   6 +
- drivers/dma-buf/dma-heap.c                    | 139 ++++-
- .../media/common/videobuf2/videobuf2-core.c   |  29 +
- .../common/videobuf2/videobuf2-dma-contig.c   |  34 +-
- .../media/common/videobuf2/videobuf2-v4l2.c   |   4 +-
- .../media/platform/mediatek/vcodec/Kconfig    |  13 +
- .../mediatek/vcodec/common/mtk_vcodec_util.c  | 117 +++-
- .../mediatek/vcodec/common/mtk_vcodec_util.h  |   8 +-
- .../platform/mediatek/vcodec/decoder/Makefile |   4 +
- .../mediatek/vcodec/decoder/mtk_vcodec_dec.c  | 152 +++--
- .../vcodec/decoder/mtk_vcodec_dec_drv.c       |   8 +
- .../vcodec/decoder/mtk_vcodec_dec_drv.h       |  11 +
- .../vcodec/decoder/mtk_vcodec_dec_hw.c        |  34 +-
- .../vcodec/decoder/mtk_vcodec_dec_optee.c     | 391 +++++++++++++
- .../vcodec/decoder/mtk_vcodec_dec_optee.h     | 198 +++++++
- .../vcodec/decoder/mtk_vcodec_dec_pm.c        |   6 +-
- .../vcodec/decoder/mtk_vcodec_dec_stateless.c |  35 +-
- .../vcodec/decoder/vdec/vdec_av1_req_lat_if.c | 104 ++--
- .../decoder/vdec/vdec_h264_req_common.c       |  18 +-
- .../decoder/vdec/vdec_h264_req_multi_if.c     | 536 +++++++++++++++++-
- .../decoder/vdec/vdec_hevc_req_multi_if.c     |  88 +--
- .../vcodec/decoder/vdec/vdec_vp9_req_lat_if.c | 101 ++--
- .../mediatek/vcodec/decoder/vdec_drv_if.c     |   4 +-
- .../mediatek/vcodec/decoder/vdec_msg_queue.c  |   9 +-
- .../mediatek/vcodec/decoder/vdec_vpu_if.c     |  51 +-
- .../mediatek/vcodec/decoder/vdec_vpu_if.h     |   4 +
- drivers/media/v4l2-core/v4l2-common.c         |   2 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
- include/linux/dma-heap.h                      |  29 +-
- include/media/videobuf2-core.h                |   8 +-
- include/uapi/linux/videodev2.h                |   3 +
- 33 files changed, 1868 insertions(+), 296 deletions(-)
- create mode 100644 drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.c
- create mode 100644 drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_optee.h
-
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 22f6c193db0d..97025ee8500f 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -11,6 +11,7 @@
+ #include <linux/dma-buf.h>
+ #include <linux/dma-heap.h>
+ #include <linux/err.h>
++#include <linux/kref.h>
+ #include <linux/list.h>
+ #include <linux/nospec.h>
+ #include <linux/syscalls.h>
+@@ -30,6 +31,7 @@
+  * @heap_devt:		heap device node
+  * @list:		list head connecting to list of heaps
+  * @heap_cdev:		heap char device
++ * @refcount:		reference counter for this heap device
+  *
+  * Represents a heap of memory from which buffers can be made.
+  */
+@@ -40,6 +42,7 @@ struct dma_heap {
+ 	dev_t heap_devt;
+ 	struct list_head list;
+ 	struct cdev heap_cdev;
++	struct kref refcount;
+ };
+ 
+ static LIST_HEAD(heap_list);
+@@ -240,6 +243,7 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 	if (!heap)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	kref_init(&heap->refcount);
+ 	heap->name = exp_info->name;
+ 	heap->ops = exp_info->ops;
+ 	heap->priv = exp_info->priv;
+@@ -304,6 +308,31 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 	return err_ret;
+ }
+ 
++static void dma_heap_release(struct kref *ref)
++{
++	struct dma_heap *heap = container_of(ref, struct dma_heap, refcount);
++	unsigned int minor = MINOR(heap->heap_devt);
++
++	mutex_lock(&heap_list_lock);
++	list_del(&heap->list);
++	mutex_unlock(&heap_list_lock);
++
++	device_destroy(dma_heap_class, heap->heap_devt);
++	cdev_del(&heap->heap_cdev);
++	xa_erase(&dma_heap_minors, minor);
++
++	kfree(heap);
++}
++
++/**
++ * dma_heap_put - drops a reference to a dmabuf heap, potentially freeing it
++ * @heap: DMA-Heap whose reference count to decrement
++ */
++void dma_heap_put(struct dma_heap *heap)
++{
++	kref_put(&heap->refcount, dma_heap_release);
++}
++
+ static char *dma_heap_devnode(const struct device *dev, umode_t *mode)
+ {
+ 	return kasprintf(GFP_KERNEL, "dma_heap/%s", dev_name(dev));
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index fbe86ec889a8..d57593f8a1bc 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -46,4 +46,6 @@ const char *dma_heap_get_name(struct dma_heap *heap);
+ 
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info);
+ 
++void dma_heap_put(struct dma_heap *heap);
++
+ #endif /* _DMA_HEAPS_H */
 -- 
 2.18.0
 
