@@ -1,37 +1,38 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4A816CD1D;
-	Mon, 22 Jul 2024 15:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2950116D9D9;
+	Mon, 22 Jul 2024 15:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721660733; cv=none; b=II3RSWnGve0upQeGGtbkWisbj90QYijkMt7giPNqmmUUBuHIbofOcT43Mu76wXeEnXjJLaSfU4suMZn3tZl1mXDhr5y+DfzYGEKxs8MwK1PHK+E8Z5m2EZGh0B+kKmNz/kkm1019/HWOEohA1Vi2WxdP7WLr8EccDdRm0LQqcpE=
+	t=1721660733; cv=none; b=SzgAmxClPFAuIkvruzYi4Z5tvkJVSosIbrfYiBT3hA9DTE/xydATCni19uJEfCgcOKBlOur8XU6hT98KHQbU8qcq/6tzApzCgakBiPiWYOTG9mLdcJCWbF4me55VxEYe+aKVptt9LM8puJbz1bYRYnFLomjoJdpoyMsCUbDkFOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1721660733; c=relaxed/simple;
-	bh=Q1hq1BqmmzXLyGaSkJtWC/+tCaQdpoOpOXqfqPFG/34=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U5yzFiDrSlCCbEO4obJO8eoqH0108LILA2nq0SNLIW2VyqBBeqzPwKh4ONHr7N9xQgjbZxG1vj9LI4iBqiDVDtdRIMSHrovKNCPWdFaDIbUwHFvcEuevKQxmkiKshRBpGuKCyPyQnWbfgDdRsstghkmlN1roeQT82y5A7DB9ppQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GQZpkDOB; arc=none smtp.client-ip=46.235.227.194
+	bh=OBlqu3+85gEfIvQ1Nesc8JuesnXxw3aI//SRrubWmfs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iFqGPEU1D2yhrZnGk/1rpKE14+wlaYe35fRCGpSGTmTeb6jNfxhyjI3BXcXsurivm3+cJJupJBAxBT3Y6HxLUkldJZL6xX8xXVBtGbUJCOAgkhaNjh7NALGHhZT9ICk2Fo6oOfvuwbv7rGh5PEaX+uPqHe+72CTbIoNrD19X5Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=sqb5TElE; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GQZpkDOB"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="sqb5TElE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1721660729;
-	bh=Q1hq1BqmmzXLyGaSkJtWC/+tCaQdpoOpOXqfqPFG/34=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GQZpkDOBmVq0onkKV/Hiqb3KzRAEoXscvkKZnYwIgIx6C4+i1hDz/zw3kh4Rt+IYP
-	 DufYTumrn90HK0m8whtTbWdPrWQTiM1wEoygG8Ljs8iHoNj8JCUFYt/q8oPgOlBm9c
-	 Wg6Y1S1qeTNikAJWzBFFU+d7L9HR2CA+fTjCA6LmHlLOldOtW2ULrxzKWJz/lRmVbC
-	 nN94xrlFQ08ZxxkwVdRKwzjPKCjwxSVRo7wgEwqIFDOWwS4aLCsSTBsSjamBgFPLvf
-	 jl6DckYRwNPA8r2wiRcM+vfm4p9SRJwY1nEnxjj+ks6OCFMjb2F4eNriaMlP7QFsIn
-	 SIxH0ZC7FWMkQ==
+	s=mail; t=1721660730;
+	bh=OBlqu3+85gEfIvQ1Nesc8JuesnXxw3aI//SRrubWmfs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sqb5TElEzxHGPk8CVRMF+yaC+ffdEL0WEn3AOtFCh2+9badendM5HkLjx9aawgyPS
+	 0db/kACiRWJtWFP8YYy10m3GVCf2NrY8XNgL+EjhfdhCcHX+b7LM4E1+1d1X25wuRo
+	 dwSURXqUENc9lNQ1+ekhBHu8SGAiDWWwT2mQPS/aBn9A+2UaQNRxjxpbmMnxNXTfeC
+	 5v67wj2vbApQOuORwXTQ1BiMsCET5bHkVhNVKHneZ16DF0CPVhXK79vSooKvSheHUt
+	 nYZiPMsobvbFrc201QTj3P/yc8ePUg32T89Q7JidlNeDdCVnwKYrVNIIY1QnhMs/z1
+	 AEf5raMIyUG4w==
 Received: from benjamin-XPS-13-9310.. (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: benjamin.gaignard)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CE927378001E;
-	Mon, 22 Jul 2024 15:05:28 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0D22537809D0;
+	Mon, 22 Jul 2024 15:05:30 +0000 (UTC)
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: mchehab@kernel.org,
 	ezequiel@vanguardiasur.com.ar,
@@ -41,10 +42,12 @@ Cc: linux-media@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	kernel@collabora.com,
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v5 0/3]  Enumerate all pixels formats
-Date: Mon, 22 Jul 2024 17:05:20 +0200
-Message-ID: <20240722150523.149667-1-benjamin.gaignard@collabora.com>
+Subject: [PATCH v5 2/3] media: test-drivers: Use V4L2_FMT_FLAG_ENUM_ALL flag
+Date: Mon, 22 Jul 2024 17:05:22 +0200
+Message-ID: <20240722150523.149667-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240722150523.149667-1-benjamin.gaignard@collabora.com>
+References: <20240722150523.149667-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,54 +56,83 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The goal of this series is to help userspace applications, like Gstreamer
-or Chromium, to categorize decoders and so avoid trying to use decoder
-that can't do the require task because it won't support the needed pixel
-format.
-As example, in today implementation we need to simulate 10 bit header
-control to know if the driver support 10 bits pixel formats. With this
-new flag it will simpler for userspace applications know if driver
-support 10 bit pixel formats and if it is supported by userspace.
+Since V4L2_FMT_FLAG_ENUM_ALL flag mostly targeting stateless
+decoder pixel formats enumeration, update vicodec visl test
+drivers to use it.
 
-An example of how it can be used in GStreamer to discover the
-supported pixels formats for stateless decoders is available here:
-https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/v4l2codecs_enum_all_supported_formats?ref_type=heads
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ drivers/media/test-drivers/vicodec/vicodec-core.c |  7 ++++---
+ drivers/media/test-drivers/visl/visl-video.c      | 11 +++++++----
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-v4l2-compliance test of this flag:
-https://gitlab.collabora.com/benjamin.gaignard/v4l-utils/-/tree/enum_all_formats?ref_type=heads
-
-changes in version 5:
-- Reset the proposal to follow Hans's advices
-- Add new flag to be used with index field.
-- Make vicodec and visl test driver use the new flag
-- Doing the same for Verisilicon driver.
-
-changes in version 4:
-- Explicitly document that the new flags are targeting mem2mem devices.
-
-changes in version 3:
-- Add a flag to inform userspace application that driver
-  as take care of the flag.
-
-changes in version 2:
-- Clarify documentation.
-- Only keep V4L2_FMT_FLAG_ALL_FORMATS flag in ioctl.
-
-Benjamin
-
-Benjamin Gaignard (3):
-  media: videodev2: Add flag to unconditionnaly enumerate pixels formats
-  media: test-drivers: Use V4L2_FMT_FLAG_ENUM_ALL flag
-  media: verisilicon: Use V4L2_FMT_FLAG_ENUM_ALL flag
-
- .../userspace-api/media/v4l/vidioc-enum-fmt.rst | 12 +++++++++++-
- .../media/videodev2.h.rst.exceptions            |  1 +
- .../media/platform/verisilicon/hantro_v4l2.c    | 17 ++++++++++++-----
- .../media/test-drivers/vicodec/vicodec-core.c   |  7 ++++---
- drivers/media/test-drivers/visl/visl-video.c    | 11 +++++++----
- include/uapi/linux/videodev2.h                  |  3 +++
- 6 files changed, 38 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+index 3e011fe62ae1..1b4cd8ddd7c2 100644
+--- a/drivers/media/test-drivers/vicodec/vicodec-core.c
++++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
+@@ -706,6 +706,7 @@ static int enum_fmt(struct v4l2_fmtdesc *f, struct vicodec_ctx *ctx,
+ 		    bool is_out)
+ {
+ 	bool is_uncomp = (ctx->is_enc && is_out) || (!ctx->is_enc && !is_out);
++	u32 index = f->index & ~V4L2_FMT_FLAG_ENUM_ALL;
+ 
+ 	if (V4L2_TYPE_IS_MULTIPLANAR(f->type) && !multiplanar)
+ 		return -EINVAL;
+@@ -718,18 +719,18 @@ static int enum_fmt(struct v4l2_fmtdesc *f, struct vicodec_ctx *ctx,
+ 
+ 		if (ctx->is_enc ||
+ 		    !vb2_is_streaming(&ctx->fh.m2m_ctx->cap_q_ctx.q))
+-			info = v4l2_fwht_get_pixfmt(f->index);
++			info = v4l2_fwht_get_pixfmt(index);
+ 		else
+ 			info = v4l2_fwht_find_nth_fmt(info->width_div,
+ 						     info->height_div,
+ 						     info->components_num,
+ 						     info->pixenc,
+-						     f->index);
++						     index);
+ 		if (!info)
+ 			return -EINVAL;
+ 		f->pixelformat = info->id;
+ 	} else {
+-		if (f->index)
++		if (index)
+ 			return -EINVAL;
+ 		f->pixelformat = ctx->is_stateless ?
+ 			V4L2_PIX_FMT_FWHT_STATELESS : V4L2_PIX_FMT_FWHT;
+diff --git a/drivers/media/test-drivers/visl/visl-video.c b/drivers/media/test-drivers/visl/visl-video.c
+index f8d970319764..c5f3e13b4198 100644
+--- a/drivers/media/test-drivers/visl/visl-video.c
++++ b/drivers/media/test-drivers/visl/visl-video.c
+@@ -341,21 +341,24 @@ static int visl_enum_fmt_vid_cap(struct file *file, void *priv,
+ 				 struct v4l2_fmtdesc *f)
+ {
+ 	struct visl_ctx *ctx = visl_file_to_ctx(file);
++	u32 index = f->index & ~V4L2_FMT_FLAG_ENUM_ALL;
+ 
+-	if (f->index >= ctx->coded_format_desc->num_decoded_fmts)
++	if (index >= ctx->coded_format_desc->num_decoded_fmts)
+ 		return -EINVAL;
+ 
+-	f->pixelformat = ctx->coded_format_desc->decoded_fmts[f->index];
++	f->pixelformat = ctx->coded_format_desc->decoded_fmts[index];
+ 	return 0;
+ }
+ 
+ static int visl_enum_fmt_vid_out(struct file *file, void *priv,
+ 				 struct v4l2_fmtdesc *f)
+ {
+-	if (f->index >= ARRAY_SIZE(visl_coded_fmts))
++	u32 index = f->index & ~V4L2_FMT_FLAG_ENUM_ALL;
++
++	if (index >= ARRAY_SIZE(visl_coded_fmts))
+ 		return -EINVAL;
+ 
+-	f->pixelformat = visl_coded_fmts[f->index].pixelformat;
++	f->pixelformat = visl_coded_fmts[index].pixelformat;
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
