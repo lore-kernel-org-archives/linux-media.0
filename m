@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EF514E2CC
-	for <linux-media@vger.kernel.org>; Wed, 24 Jul 2024 08:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD1914E2CC
+	for <linux-media@vger.kernel.org>; Wed, 24 Jul 2024 08:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721811048; cv=none; b=bWlTNJ4zeTHYZ4Am/xz2WkC361zXxPqvevpV4xmG4PoSmx4sK59wXMr9tjgBRNUSj7GDKmkxLlZUdUefdM3fT8SfAdwRt6uQYFYv3744DtoZZGp+7ISsUfMtH2mLJc1Yh7HWUCQCAhrvOM7M6b7QE2fzM1Y1Gw+nYLaHcUpDpJs=
+	t=1721811050; cv=none; b=IqbZEB36W1Dd4VWelHMnYIEoHHGigftMylAhsaEFTFj05Q2dF2kSLGrpfNqRRrZQQT26szOyPeRjT3oTHXtyWhnKGIWjf0OZdShRL7B2fvUjM7Kr6P/knl9AY3xbWRcLSDUhN2morhcDuQSnYUWDnXprn79GhFZSlDo5q8Z0U/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721811048; c=relaxed/simple;
-	bh=XOZl/+nTuJyzZmPRxKl6ffK65xQ5aUNQfLA+3jdDc0w=;
+	s=arc-20240116; t=1721811050; c=relaxed/simple;
+	bh=mAMXx9LBO7eMbBooyVf0b5Dbo/mbyImxuCVlhUq8yl8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oGOqXa1I6EYQ1p1tgNfRbHTKu6+DG0vCvZZsLAku8cv0D36XuazFmz3Cc3CQGLYYQ7FsTJDoiXzClEeyVbUFim5QrKnrGD9/WZdKPTmILu9rsa4CryibqKlQ/Cw9ASZbBnExxEEdp9gYbXniDNRtyMd4CwG3MSqQTLbLFEh3mTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qyCLuDZf; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=DLZRSfxzdJ+a/JQfG134jyvFKqIMJLwtIZNWO5w6minhGGe7/LZXNZJSdsLXkWdC6FHqAmhOcmfrV6CBvTWVCTtABl51SXyzkma7Hc1JawY6CKV6FFFCeJVOL67TAtFPal/wV9Phoc41EGlYG43Q2SBgHXRB9OzCxxV+pRtqSqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qhV+tx0r; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qyCLuDZf"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qhV+tx0r"
 Received: from localhost.localdomain (unknown [IPv6:2001:b07:5d2e:52c9:24bf:30c5:c4f3:c9fe])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D19BF1E91;
-	Wed, 24 Jul 2024 10:49:52 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83E8B20AD;
+	Wed, 24 Jul 2024 10:49:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1721810993;
-	bh=XOZl/+nTuJyzZmPRxKl6ffK65xQ5aUNQfLA+3jdDc0w=;
+	s=mail; t=1721810995;
+	bh=mAMXx9LBO7eMbBooyVf0b5Dbo/mbyImxuCVlhUq8yl8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qyCLuDZfNSlw85fOVDyAinCK3CjsHum9grX5+2UmQ2Yps2qtSpxQHl3LHQDqR/v+t
-	 cfF0XEV15k9maAKA7JTPS3DTpgfLi5t5ucP4bY6kQjVnCndO0xQL0gAOr+AEY+ha+l
-	 jPNxKQlDfslrfIOn3RPd9I+ImINanDj9VNA0DCrI=
+	b=qhV+tx0r5f3uGa71XVx7zc4963DaRCrgr8drlgJtTuPDarKi2WaWBVmbbjC/fPiAU
+	 DGMi7RsIMRR/Zn0x5IA8UjL5+SWyooFdAVZyNi5nasDg4uudfRUg9sJEDOrMOC79Ph
+	 IZBWH/iY2tkJDxuEykhAKJmwFedJYBTvvafGvkHw=
 From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 To: Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
@@ -40,9 +40,9 @@ Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Dafna Hirschfeld <dafna@fastmail.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Heiko Stuebner <heiko@sntech.de>
-Subject: [PATCH v7 08/12] media: rkisp1: Add helper function to swap colour channels
-Date: Wed, 24 Jul 2024 10:49:59 +0200
-Message-ID: <20240724085004.82694-9-jacopo.mondi@ideasonboard.com>
+Subject: [PATCH v7 10/12] media: rkisp1: Add register definitions for the companding block
+Date: Wed, 24 Jul 2024 10:50:01 +0200
+Message-ID: <20240724085004.82694-11-jacopo.mondi@ideasonboard.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240724085004.82694-1-jacopo.mondi@ideasonboard.com>
 References: <20240724085004.82694-1-jacopo.mondi@ideasonboard.com>
@@ -54,205 +54,61 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Paul Elder <paul.elder@ideasonboard.com>
 
-The BLS parameters passed by userspace are specified for named colour
-channels (R, Gr, Gb and B), while the hardware registers reference
-positions in the 2x2 CFA pattern (A, B, C and D).
+To prepare for adding support for the companding block to the rkisp1
+driver for the version of the ISP on the i.MX8MP, add the register
+definitions for it, including relevant register field values.
 
-The BLS values are swapped based on the CFA pattern when writing to or
-reading from registers, using hand-roled switch statements. The logic is
-duplicated already, and new code will require similar processing. Move
-the swap logic to a shared function, using static data to control the
-channels order.
-
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- .../platform/rockchip/rkisp1/rkisp1-common.c  | 14 +++++
- .../platform/rockchip/rkisp1/rkisp1-common.h  |  3 +
- .../platform/rockchip/rkisp1/rkisp1-params.c  | 62 +++++--------------
- .../platform/rockchip/rkisp1/rkisp1-stats.c   | 51 +++++----------
- 4 files changed, 45 insertions(+), 85 deletions(-)
+ .../platform/rockchip/rkisp1/rkisp1-regs.h    | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.c
-index f956b90a407a..60c97bb7b18b 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.c
-@@ -178,3 +178,17 @@ void rkisp1_sd_adjust_crop(struct v4l2_rect *crop,
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
+index fccf4c17ee8d..bf0260600a19 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-regs.h
+@@ -704,6 +704,12 @@
+ #define RKISP1_CIF_ISP_DPF_SPATIAL_COEFF_MAX		0x1f
+ #define RKISP1_CIF_ISP_DPF_NLL_COEFF_N_MAX		0x3ff
  
- 	rkisp1_sd_adjust_crop_rect(crop, &crop_bounds);
- }
++/* COMPAND */
++#define RKISP1_CIF_ISP_COMPAND_CTRL_EXPAND_ENABLE	BIT(0)
++#define RKISP1_CIF_ISP_COMPAND_CTRL_COMPRESS_ENABLE	BIT(1)
++#define RKISP1_CIF_ISP_COMPAND_CTRL_SOFT_RESET_FLAG	BIT(2)
++#define RKISP1_CIF_ISP_COMPAND_CTRL_BLS_ENABLE		BIT(3)
 +
-+void rkisp1_bls_swap_regs(enum rkisp1_fmt_raw_pat_type pattern,
-+			  const u32 input[4], u32 output[4])
-+{
-+	static const unsigned int swap[4][4] = {
-+		[RKISP1_RAW_RGGB] = { 0, 1, 2, 3 },
-+		[RKISP1_RAW_GRBG] = { 1, 0, 3, 2 },
-+		[RKISP1_RAW_GBRG] = { 2, 3, 0, 1 },
-+		[RKISP1_RAW_BGGR] = { 3, 2, 1, 0 },
-+	};
-+
-+	for (unsigned int i = 0; i < 4; ++i)
-+		output[i] = input[swap[pattern][i]];
-+}
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-index 2f4bf7e97927..6fbc69128b55 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-common.h
-@@ -598,6 +598,9 @@ void rkisp1_sd_adjust_crop_rect(struct v4l2_rect *crop,
- void rkisp1_sd_adjust_crop(struct v4l2_rect *crop,
- 			   const struct v4l2_mbus_framefmt *bounds);
+ /* =================================================================== */
+ /*                            CIF Registers                            */
+ /* =================================================================== */
+@@ -1394,6 +1400,23 @@
+ #define RKISP1_CIF_ISP_VSM_DELTA_H		(RKISP1_CIF_ISP_VSM_BASE + 0x0000001c)
+ #define RKISP1_CIF_ISP_VSM_DELTA_V		(RKISP1_CIF_ISP_VSM_BASE + 0x00000020)
  
-+void rkisp1_bls_swap_regs(enum rkisp1_fmt_raw_pat_type pattern,
-+			  const u32 input[4], u32 output[4]);
++#define RKISP1_CIF_ISP_COMPAND_BASE			0x00003200
++#define RKISP1_CIF_ISP_COMPAND_CTRL			(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000000)
++#define RKISP1_CIF_ISP_COMPAND_BLS_A_FIXED		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000004)
++#define RKISP1_CIF_ISP_COMPAND_BLS_B_FIXED		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000008)
++#define RKISP1_CIF_ISP_COMPAND_BLS_C_FIXED		(RKISP1_CIF_ISP_COMPAND_BASE + 0x0000000c)
++#define RKISP1_CIF_ISP_COMPAND_BLS_D_FIXED		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000010)
++#define RKISP1_CIF_ISP_COMPAND_EXPAND_PX_N(n)		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000014 + (n) * 4)
++#define RKISP1_CIF_ISP_COMPAND_COMPRESS_PX_N(n)		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000040 + (n) * 4)
++#define RKISP1_CIF_ISP_COMPAND_EXPAND_Y_ADDR		(RKISP1_CIF_ISP_COMPAND_BASE + 0x0000006c)
++#define RKISP1_CIF_ISP_COMPAND_EXPAND_Y_WRITE_DATA	(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000070)
++#define RKISP1_CIF_ISP_COMPAND_COMPRESS_Y_ADDR		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000074)
++#define RKISP1_CIF_ISP_COMPAND_COMPRESS_Y_WRITE_DATA	(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000078)
++#define RKISP1_CIF_ISP_COMPAND_EXPAND_X_ADDR		(RKISP1_CIF_ISP_COMPAND_BASE + 0x0000007c)
++#define RKISP1_CIF_ISP_COMPAND_EXPAND_X_WRITE_DATA	(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000080)
++#define RKISP1_CIF_ISP_COMPAND_COMPRESS_X_ADDR		(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000084)
++#define RKISP1_CIF_ISP_COMPAND_COMPRESS_X_WRITE_DATA	(RKISP1_CIF_ISP_COMPAND_BASE + 0x00000088)
 +
- /*
-  * rkisp1_mbus_info_get_by_code - get the isp info of the media bus code
-  *
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-index d0e3974a8098..ca24ed858448 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -165,54 +165,20 @@ static void rkisp1_bls_config(struct rkisp1_params *params,
- 	new_control &= RKISP1_CIF_ISP_BLS_ENA;
- 	/* fixed subtraction values */
- 	if (!arg->enable_auto) {
--		const struct rkisp1_cif_isp_bls_fixed_val *pval =
--								&arg->fixed_val;
--
--		switch (params->raw_type) {
--		case RKISP1_RAW_BGGR:
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_D_FIXED,
--				     pval->r);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_C_FIXED,
--				     pval->gr);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_B_FIXED,
--				     pval->gb);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_A_FIXED,
--				     pval->b);
--			break;
--		case RKISP1_RAW_GBRG:
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_C_FIXED,
--				     pval->r);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_D_FIXED,
--				     pval->gr);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_A_FIXED,
--				     pval->gb);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_B_FIXED,
--				     pval->b);
--			break;
--		case RKISP1_RAW_GRBG:
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_B_FIXED,
--				     pval->r);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_A_FIXED,
--				     pval->gr);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_D_FIXED,
--				     pval->gb);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_C_FIXED,
--				     pval->b);
--			break;
--		case RKISP1_RAW_RGGB:
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_A_FIXED,
--				     pval->r);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_B_FIXED,
--				     pval->gr);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_C_FIXED,
--				     pval->gb);
--			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_D_FIXED,
--				     pval->b);
--			break;
--		default:
--			break;
--		}
--
-+		static const u32 regs[] = {
-+			RKISP1_CIF_ISP_BLS_A_FIXED,
-+			RKISP1_CIF_ISP_BLS_B_FIXED,
-+			RKISP1_CIF_ISP_BLS_C_FIXED,
-+			RKISP1_CIF_ISP_BLS_D_FIXED,
-+		};
-+		u32 swapped[4];
-+
-+		rkisp1_bls_swap_regs(params->raw_type, regs, swapped);
-+
-+		rkisp1_write(params->rkisp1, swapped[0], arg->fixed_val.r);
-+		rkisp1_write(params->rkisp1, swapped[1], arg->fixed_val.gr);
-+		rkisp1_write(params->rkisp1, swapped[2], arg->fixed_val.gb);
-+		rkisp1_write(params->rkisp1, swapped[3], arg->fixed_val.b);
- 	} else {
- 		if (arg->en_windows & BIT(1)) {
- 			rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_BLS_H2_START,
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-index 2795eef91bdd..a502719e916a 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-stats.c
-@@ -304,48 +304,25 @@ static void rkisp1_stats_get_hst_meas_v12(struct rkisp1_stats *stats,
- static void rkisp1_stats_get_bls_meas(struct rkisp1_stats *stats,
- 				      struct rkisp1_stat_buffer *pbuf)
- {
-+	static const u32 regs[] = {
-+		RKISP1_CIF_ISP_BLS_A_MEASURED,
-+		RKISP1_CIF_ISP_BLS_B_MEASURED,
-+		RKISP1_CIF_ISP_BLS_C_MEASURED,
-+		RKISP1_CIF_ISP_BLS_D_MEASURED,
-+	};
- 	struct rkisp1_device *rkisp1 = stats->rkisp1;
- 	const struct rkisp1_mbus_info *in_fmt = rkisp1->isp.sink_fmt;
- 	struct rkisp1_cif_isp_bls_meas_val *bls_val;
-+	u32 swapped[4];
-+
-+	rkisp1_bls_swap_regs(in_fmt->bayer_pat, regs, swapped);
+ #define RKISP1_CIF_ISP_CSI0_BASE		0x00007000
+ #define RKISP1_CIF_ISP_CSI0_CTRL0		(RKISP1_CIF_ISP_CSI0_BASE + 0x00000000)
  
- 	bls_val = &pbuf->params.ae.bls_val;
--	if (in_fmt->bayer_pat == RKISP1_RAW_BGGR) {
--		bls_val->meas_b =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_A_MEASURED);
--		bls_val->meas_gb =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_B_MEASURED);
--		bls_val->meas_gr =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_C_MEASURED);
--		bls_val->meas_r =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_D_MEASURED);
--	} else if (in_fmt->bayer_pat == RKISP1_RAW_GBRG) {
--		bls_val->meas_gb =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_A_MEASURED);
--		bls_val->meas_b =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_B_MEASURED);
--		bls_val->meas_r =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_C_MEASURED);
--		bls_val->meas_gr =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_D_MEASURED);
--	} else if (in_fmt->bayer_pat == RKISP1_RAW_GRBG) {
--		bls_val->meas_gr =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_A_MEASURED);
--		bls_val->meas_r =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_B_MEASURED);
--		bls_val->meas_b =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_C_MEASURED);
--		bls_val->meas_gb =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_D_MEASURED);
--	} else if (in_fmt->bayer_pat == RKISP1_RAW_RGGB) {
--		bls_val->meas_r =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_A_MEASURED);
--		bls_val->meas_gr =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_B_MEASURED);
--		bls_val->meas_gb =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_C_MEASURED);
--		bls_val->meas_b =
--			rkisp1_read(rkisp1, RKISP1_CIF_ISP_BLS_D_MEASURED);
--	}
-+
-+	bls_val->meas_r = rkisp1_read(rkisp1, swapped[0]);
-+	bls_val->meas_gr = rkisp1_read(rkisp1, swapped[1]);
-+	bls_val->meas_gb = rkisp1_read(rkisp1, swapped[2]);
-+	bls_val->meas_b = rkisp1_read(rkisp1, swapped[3]);
- }
- 
- static const struct rkisp1_stats_ops rkisp1_v10_stats_ops = {
 -- 
 2.45.2
 
