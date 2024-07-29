@@ -1,215 +1,128 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79F0146585;
-	Mon, 29 Jul 2024 19:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116357FBD1
+	for <linux-media@vger.kernel.org>; Mon, 29 Jul 2024 19:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722279733; cv=none; b=OY4UJUH6B2hJFDm9Aa4h8EdQQ7O+ELBx9VUKq8HKup/DZdpo6bkkUgWGALAeyY1Hq8eQ+d8pWv2UREBLEEAgKb5FY8dRYDfC7ZGhbAGLPeHns6qFN5JqsgbiRLiioe9L8qUiJpB27BqTd8wOtPnA1wNkv8sKVQaXEU9KpTDWWTo=
+	t=1722281505; cv=none; b=Ohh1nYS3ov60RHmUrs+L/cVxLbpwaJZGpIJiRxoVoKLPLV7NIOz4dABzWU5nhtUbMmHeccybcGzlCH0joOWLEwxuKKRR+SnfFG5Iy3l+LkZfUtqvlbOHkOS10zdRktraRZZoKIAkVXENp+74GETpmXTJQHMQjdyFWywxf71i2Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722279733; c=relaxed/simple;
-	bh=0cF8ZvCOQYLFv6diQ9ko8QLsf69iQS40TZQZMgf0+8k=;
+	s=arc-20240116; t=1722281505; c=relaxed/simple;
+	bh=8DvLD3KNC0DqFNTImhzjq0hN3fSBpCJ1567YwRbCNeQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WN+k/BruXCe27GNvHQb35LdW57dMw4+3TEwiHFeNR4/Lv7KnF7J3YryURRnwW8LZKTx7Cg4ALfV2ow4V3nnG25sbexvEvIVu3ncmXynjphsnoM7HLNpzHGRKPdfP814ihw1B1yCv9F5y3WhFJ8TWCWXSnVCz5itKV1ISy705dCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=uiwFVSAb; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=tpDiR7JtUFw1WynQjvR7iWa+Mv8daWKCk2AZJblnLfYeoJvahexUhFKwVkaktBqcjwNppnvQ+ixEosUMHELF5coJVVoCImSI5CZPH+NXquV2mK+6QUp6jpkYJzwi1Eb3qea+iXtSBnIZb+2LHQoQP4HD+tozCoxZX940QwcLd84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=wmWryF3F; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="uiwFVSAb"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4686C18D;
-	Mon, 29 Jul 2024 21:01:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1722279683;
-	bh=0cF8ZvCOQYLFv6diQ9ko8QLsf69iQS40TZQZMgf0+8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uiwFVSAbMCmJpx3U9n/YSKrc/F7T3EijoU2h4MZICOkSu4rlEk3RGSR6Xk51frNxb
-	 /ZAN3Nt8Xzum0le/74Z1+Xru3CY8LQKzoJgBLdFAyj5uu5t6ZWXvaSUoDeyWFU2t6E
-	 95xO7iDAe+Nzrn3hpNvNhMaTLeVk+cnYvBqsj0zA=
-Date: Mon, 29 Jul 2024 22:01:49 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Umang Jain <umang.jain@ideasonboard.com>
-Cc: linux-media@vger.kernel.org,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: imx283: Provide optical black mode
-Message-ID: <20240729190149.GE1552@pendragon.ideasonboard.com>
-References: <20240729183955.456957-1-umang.jain@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="wmWryF3F"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7a1d024f775so242257385a.2
+        for <linux-media@vger.kernel.org>; Mon, 29 Jul 2024 12:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1722281502; x=1722886302; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WKpZ7eoB/ekqBlUQuyzYfj8JL7Mxd5CfjCI/+gU/Xwo=;
+        b=wmWryF3FxXLf1MAQ08DJwT7XZ6yCoLrgxmX70kxKWV/wrLRAloq5LYc/NNZ2ONCSFc
+         zm66mlxSMj3YAmhINK014JFAfcEIaGoo0kKDGnn5r4yNngi055iMI+xShcbWwhOOuwDK
+         YfYeg+2B5ErOE616uZ761NKLCsi4yQBkU6o5i5O5ezrbM7WfldBTQNv220iYidFxK7Cb
+         kk883Mc/R2/JPZrwaSbl2g9GkMQm/wk8zjrod5coCP23kUc5vc0GvR4vcuIklx/Ojio7
+         2D/MkD7MXB9JE2uii4cfaoi1uFgbdc8r0GyyBKFBwRDuJCMIydrFL3iswqMN5DhLyFIR
+         kEYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722281502; x=1722886302;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WKpZ7eoB/ekqBlUQuyzYfj8JL7Mxd5CfjCI/+gU/Xwo=;
+        b=HNepP8WEMHh+KS9WLl9rMh0uG29fFIr/2RVTYcKR7D4z5cFkyUNkOxaG9soapWLJSb
+         Z0BOHxQ+2YrkKBw0huCiyS45WJ+n3Vfgypt3uCNRV6q6xCutKYF2VUwg6TjaNuSf0gUN
+         ASJv4JdrIVDPP0k+PkkOkcggR+7no110xNE69OSJHYkCnB6Yvf/eNyLJxin2oGkX1ugc
+         MO8/L2JKxr7JUQkX7ZlMVXKT4tsWQgPdqE7F85bQHG7psfu3q1l5hYcc5cmgcUD+16SL
+         pliNLPSqWr2s/7zDCaQZvrSyL4HbqhgHJKePASHCNIRUwxjjpvr0pgFd3CZh5welAqwU
+         eJrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkdOe6372bukscI61X0fBJrPKozK4tXUXTbam5+he0qvnYKvwkHjNcTV9AV06dj5CqtGDFo+AnrIAFiSjG5Vz+OgHqdKufMfqX6sE=
+X-Gm-Message-State: AOJu0YwECxdjlvKgKgF4YY/2ZRDWOL381A/y4FWWtEcHIjWQmI4G5VDB
+	1AB8MO7MLTONDxIlZD0uduuyAqofW/ra9RXaBmhpOCMdRSHgYD6+l3Lylr9V3w==
+X-Google-Smtp-Source: AGHT+IHKj69NMiL8iPsxcayl/FDa6E4pMMW32p3BOf6R+t+eMdwk5/XWNxzareH4deutnHZuOldRng==
+X-Received: by 2002:a05:620a:394e:b0:7a1:e93c:ccee with SMTP id af79cd13be357-7a1e93cd124mr973596885a.11.1722281501916;
+        Mon, 29 Jul 2024 12:31:41 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a1d73b5003sm564386985a.43.2024.07.29.12.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jul 2024 12:31:41 -0700 (PDT)
+Date: Mon, 29 Jul 2024 15:31:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-usb@vger.kernel.org, mchehab@kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [media?] [usb?] WARNING in
+ smsusb_init_device/usb_submit_urb
+Message-ID: <4442a354-87f1-4f7c-a2b0-96fbb29191d1@rowland.harvard.edu>
+References: <000000000000e45551061e558c37@google.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240729183955.456957-1-umang.jain@ideasonboard.com>
+In-Reply-To: <000000000000e45551061e558c37@google.com>
 
-Hi Umang,
-
-Thank you for the patch.
-
-On Tue, Jul 30, 2024 at 12:09:53AM +0530, Umang Jain wrote:
-> The IMX283 is capable of delivering optical black regions as part of
-> the image capture. These regions support capture of the black levels
-> for calibration and are added as extra pixels on top of the full
-> resolution capture.
+On Sun, Jul 28, 2024 at 02:37:25PM -0700, syzbot wrote:
+> Hello,
 > 
-> Supply an extra mode which accounts for this increased size that will
-> produce black regions in the output image.
-
-Sorry, but this shouldn't be an extra mode. We need a proper API, you
-need to convert the driver to make it freely configurable. Furthermore,
-the OB stream should probably be reported by .get_frame_desc().
-
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
-> - YUYV capture sample with Pi5 ISP for side-by-side comparison of OB regions:
-> https://gcdnb.pbrd.co/images/XQV29MedwXxg.png
-> ---
->  drivers/media/i2c/imx283.c | 68 ++++++++++++++++++++++++++++++++------
->  1 file changed, 58 insertions(+), 10 deletions(-)
+> syzbot found the following issue on:
 > 
-> diff --git a/drivers/media/i2c/imx283.c b/drivers/media/i2c/imx283.c
-> index 8490618c5071..9a0fe2c34a41 100644
-> --- a/drivers/media/i2c/imx283.c
-> +++ b/drivers/media/i2c/imx283.c
-> @@ -66,6 +66,7 @@
->  #define IMX283_REG_HTRIMMING		CCI_REG8(0x300b)
->  #define   IMX283_MDVREV			BIT(0) /* VFLIP */
->  #define   IMX283_HTRIMMING_EN		BIT(4)
-> +#define   IMX283_HOB_EN			BIT(5)
->  
->  #define IMX283_REG_VWINPOS		CCI_REG16_LE(0x300f)
->  #define IMX283_REG_VWIDCUT		CCI_REG16_LE(0x3011)
-> @@ -306,6 +307,7 @@ static const struct imx283_input_frequency imx283_frequencies[] = {
->  
->  enum imx283_modes {
->  	IMX283_MODE_0,
-> +	IMX283_MODE_0_OB,
->  	IMX283_MODE_1,
->  	IMX283_MODE_1A,
->  	IMX283_MODE_1S,
-> @@ -327,6 +329,7 @@ struct imx283_readout_mode {
->  static const struct imx283_readout_mode imx283_readout_modes[] = {
->  	/* All pixel scan modes */
->  	[IMX283_MODE_0] = { 0x04, 0x03, 0x10, 0x00 }, /* 12 bit */
-> +	[IMX283_MODE_0_OB] = { 0x04, 0x03, 0x10, 0x00 }, /* 12 bit */
->  	[IMX283_MODE_1] = { 0x04, 0x01, 0x00, 0x00 }, /* 10 bit */
->  	[IMX283_MODE_1A] = { 0x04, 0x01, 0x20, 0x50 }, /* 10 bit */
->  	[IMX283_MODE_1S] = { 0x04, 0x41, 0x20, 0x50 }, /* 10 bit */
-> @@ -439,6 +442,36 @@ static const struct imx283_mode supported_modes_12bit[] = {
->  			.height = 3648,
->  		},
->  	},
-> +	{
-> +		/* 20MPix 21.40 fps readout mode 0 with optical blacks enabled */
-> +		.mode = IMX283_MODE_0_OB,
-> +		.bpp = 12,
-> +		.width = 5472 + 96, /* width + Horizontal optical black */
-> +		.height = 3648 + 16, /* height + Vertical optical black */
-> +		.min_hmax = 5914, /* 887 @ 480MHz/72MHz */
-> +		.min_vmax = 3793, /* Lines */
-> +
-> +		.veff = 3694,
-> +		.vst = 0,
-> +		.vct = 0,
-> +
-> +		.hbin_ratio = 1,
-> +		.vbin_ratio = 1,
-> +
-> +		/* 20.00 FPS */
-> +		.default_hmax = 6000, /* 900 @ 480MHz/72MHz */
-> +		.default_vmax = 4000,
-> +
-> +		.min_shr = 11,
-> +		.horizontal_ob = 96,
-> +		.vertical_ob = 16,
-> +		.crop = {
-> +			.top = 40,
-> +			.left = 108,
-> +			.width = 5472 + 96,
-> +			.height = 3648 + 16,
-> +		},
-> +	},
->  	{
->  		/*
->  		 * Readout mode 2 : 2/2 binned mode (2736x1824)
-> @@ -793,17 +826,20 @@ static int imx283_set_ctrl(struct v4l2_ctrl *ctrl)
->  		break;
->  
->  	case V4L2_CID_VFLIP:
-> +		u32 htrim = IMX283_HTRIMMING_EN;
-> +
->  		/*
->  		 * VFLIP is managed by BIT(0) of IMX283_REG_HTRIMMING address, hence
->  		 * both need to be set simultaneously.
->  		 */
-> -		if (ctrl->val) {
-> -			cci_write(imx283->cci, IMX283_REG_HTRIMMING,
-> -				  IMX283_HTRIMMING_EN | IMX283_MDVREV, &ret);
-> -		} else {
-> -			cci_write(imx283->cci, IMX283_REG_HTRIMMING,
-> -				  IMX283_HTRIMMING_EN, &ret);
-> -		}
-> +		if (ctrl->val)
-> +			htrim = IMX283_HTRIMMING_EN | IMX283_MDVREV;
-> +
-> +		if (mode->mode == IMX283_MODE_0_OB)
-> +			htrim |= IMX283_HOB_EN;
-> +
-> +		cci_write(imx283->cci, IMX283_REG_HTRIMMING, htrim, &ret);
-> +
->  		break;
->  
->  	case V4L2_CID_TEST_PATTERN:
-> @@ -1010,6 +1046,8 @@ static int imx283_start_streaming(struct imx283 *imx283,
->  	s32 v_pos;
->  	u32 write_v_size;
->  	u32 y_out_size;
-> +	u32 htrim_end;
-> +	u32 ob_size_v = 0;
->  	int ret = 0;
->  
->  	fmt = v4l2_subdev_state_get_format(state, 0);
-> @@ -1057,6 +1095,12 @@ static int imx283_start_streaming(struct imx283 *imx283,
->  		mode->crop.height);
->  
->  	y_out_size = mode->crop.height / mode->vbin_ratio;
-> +
-> +	if (mode->mode == IMX283_MODE_0_OB) {
-> +		y_out_size -= mode->vertical_ob;
-> +		ob_size_v = mode->vertical_ob;
-> +	}
-> +
->  	write_v_size = y_out_size + mode->vertical_ob;
->  	/*
->  	 * cropping start position = (VWINPOS – Vst) × 2
-> @@ -1072,12 +1116,16 @@ static int imx283_start_streaming(struct imx283 *imx283,
->  	cci_write(imx283->cci, IMX283_REG_VWIDCUT, v_widcut, &ret);
->  	cci_write(imx283->cci, IMX283_REG_VWINPOS, v_pos, &ret);
->  
-> -	cci_write(imx283->cci, IMX283_REG_OB_SIZE_V, mode->vertical_ob, &ret);
-> +	cci_write(imx283->cci, IMX283_REG_OB_SIZE_V, ob_size_v, &ret);
-> +
-> +	htrim_end = mode->crop.left + mode->crop.width;
-> +
-> +	if (mode->mode == IMX283_MODE_0_OB)
-> +		htrim_end -= mode->horizontal_ob * mode->hbin_ratio;
->  
->  	/* TODO: Validate mode->crop is fully contained within imx283_native_area */
->  	cci_write(imx283->cci, IMX283_REG_HTRIMMING_START, mode->crop.left, &ret);
-> -	cci_write(imx283->cci, IMX283_REG_HTRIMMING_END,
-> -		  mode->crop.left + mode->crop.width, &ret);
-> +	cci_write(imx283->cci, IMX283_REG_HTRIMMING_END, htrim_end, &ret);
->  
->  	/* Disable embedded data */
->  	cci_write(imx283->cci, IMX283_REG_EBD_X_OUT_SIZE, 0, &ret);
+> HEAD commit:    933069701c1b Merge tag '6.11-rc-smb3-server-fixes' of git:..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10eb7dad980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdd6022e793d4ad
+> dashboard link: https://syzkaller.appspot.com/bug?extid=85e3ddbf0ddbfbc85f1e
+> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10893645980000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10885779980000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/504e81a2120c/disk-93306970.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/320d2f3e66b3/vmlinux-93306970.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/65b8e1c28010/bzImage-93306970.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com
+> 
+> smsusb:smsusb_probe: board id=15, interface number 6
+> smsusb:siano_media_device_register: media controller created
+> ------------[ cut here ]------------
+> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 0 PID: 42 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
 
--- 
-Regards,
+> Call Trace:
+>  <TASK>
+>  smsusb_submit_urb+0x288/0x410 drivers/media/usb/siano/smsusb.c:173
+>  smsusb_start_streaming drivers/media/usb/siano/smsusb.c:197 [inline]
+>  smsusb_init_device+0x856/0xe10 drivers/media/usb/siano/smsusb.c:477
+>  smsusb_probe+0x5e2/0x10b0 drivers/media/usb/siano/smsusb.c:575
 
-Laurent Pinchart
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 933069701c1b
+
+Index: usb-devel/drivers/media/usb/siano/smsusb.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/siano/smsusb.c
++++ usb-devel/drivers/media/usb/siano/smsusb.c
+@@ -410,10 +410,10 @@ static int smsusb_init_device(struct usb
+ 		struct usb_endpoint_descriptor *desc =
+ 				&intf->cur_altsetting->endpoint[i].desc;
+ 
+-		if (desc->bEndpointAddress & USB_DIR_IN) {
++		if (usb_endpoint_is_bulk_in(desc)) {
+ 			dev->in_ep = desc->bEndpointAddress;
+ 			align = usb_endpoint_maxp(desc) - sizeof(struct sms_msg_hdr);
+-		} else {
++		} else if (usb_endpoint_is_bulk_out(desc)) {
+ 			dev->out_ep = desc->bEndpointAddress;
+ 		}
+ 	}
+
