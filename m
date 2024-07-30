@@ -1,723 +1,315 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52BD190472
-	for <linux-media@vger.kernel.org>; Tue, 30 Jul 2024 02:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722306423; cv=none; b=s6jtEG9QUqg1cV0Rx7bO1cGbzpV6M0oX6JO6mSaeAGWiilScqcgSPNa2NUMUSch5JeGgV30n84WokqIb/XeBTvaXSoYEIfsAHR8cr8aVpFhYe8y/BvvAEazipPTw5qVla1VVO1021BA7+Zl55SoQzPU17mW4ebmKenu9szZg0kw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722306423; c=relaxed/simple;
-	bh=y/HydPfwq47Fnji1i4ezBacDYnzFSJDfjBnxG5qpV64=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TowdJlme4L5c1SBHx9DmEa/3b12A8j8LgcoqRBu0uZcyEoZ6NpwXKfLbA1QLKQ1LtxDrbrgJmuRunKnfp2rfRp4me33Q2SBxRZTYTqlrOvZusUj0n6eZSwLo8Js68oWp2ifX+UoNQG2maXHgc1atKRKGXWm5717+78/CgkPQE0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F8GYmWla; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1661CFBC;
+	Tue, 30 Jul 2024 02:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=60.244.123.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722307178; cv=fail; b=UuLqr5u+JtBgci7MsEMOeAPyrALZd1sNlt1fq3tJxp43bRVEFGzlfzMd/iMebU+qaK3VVYdYzcTxQ1aKUcy/WeVLwkZTzjz7nteamamgyuFx0gv6+eAeJXtirHx4JNjWvTwHcBfKFM+jaQ786BzJ+xtUQnoSk5JbRbd944VdKAo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722307178; c=relaxed/simple;
+	bh=O4y5SZmL8/6CZgmPC0545t6vbwIQqanHRxNuOR3HAf0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Up075vtR2FeWhDgMFeuPMdEKW4e5DJLE4bCO0as6rveBAPpEx5uDydVEwf9gjLgK/JY075vvanfvRAmOtC7RdIqD+ZIQLlZ+1iEppalhRWWINzef1pxAXzMz+pkhUwzs5ZrTp8VBAoTYYBrDITWQysfuzUPfhrwZti9sMk/KgG8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ntRFXwQT; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=ihNBZN52; arc=fail smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F8GYmWla"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-1fc4b03fe76so25239775ad.0
-        for <linux-media@vger.kernel.org>; Mon, 29 Jul 2024 19:26:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ntRFXwQT";
+	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="ihNBZN52"
+X-UUID: f2bcc8184e1c11efb5b96b43b535fdb4-20240730
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=O4y5SZmL8/6CZgmPC0545t6vbwIQqanHRxNuOR3HAf0=;
+	b=ntRFXwQToaFfklPI/qv98XnOx3HxQ/9pUesXWyKulmOvw7v6/7E4ZFIcsgcZ5K0+/1qoR0xNsNWROgIKIG+o9D0atFZlRHEVP4kkcb92f61TvDIealpAhZAVPLvMDALHttJi5XiIQEY4gJg3FkjhEAb+u0UGOFmFkoq/0LkhucE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:b9d71506-55a4-49ae-a866-24716c756848,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:4473060e-46b0-425a-97d3-4623fe284021,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: f2bcc8184e1c11efb5b96b43b535fdb4-20240730
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <ck.hu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 44696144; Tue, 30 Jul 2024 10:39:31 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 30 Jul 2024 10:39:30 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 30 Jul 2024 10:39:30 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b6W/Xey/pmC8jT5BJneWDxh8lb6EZFsTSMDSFJhtE7p9arEbFVjGI5pqlRjVJN98aaGqCwa57HfN2NenFU6M6EkRhPzG8z7wiwy+UwCq7l/2dMa/7lTsFyUmQpxQrVtlX4b3mfQM0DHTs/XpbkkPAM9IPnkOUiCGk/FyuJ/WVQPvis8wlSZRJBfasLh5X3AAdJP15GXRMAcsfs2rsFCwZLwJkNQQ+/lvZKfxa6ZOU4oK3SUyUjClnKYrOiGlxSUuHFMpNvjzDYfUhTu26zHzVVtDLe6ledxNl9Hn3XaJitJ13bRCtJcUBRql8Xvoy5yor5zQoEBl8ngdSLwdqYYTMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O4y5SZmL8/6CZgmPC0545t6vbwIQqanHRxNuOR3HAf0=;
+ b=j2rPhs9+AGL5UZ3y6mgoIqNXKS6BaQbownTwAzur5W2bMYscmmF0in6l0DoViw2PsRIAd1mv8DaiWuoNY92y38PK+XoU9vmQEbNRCUx14uzuHgqiWCWxypSCm7sAyloUINILK5Bst6SuvT0hNVVElBvCw9y0qtWBZ1QNJQQf283sY8g7iuLN08QieDUYImiLR1BZSsGPPcn/6ZWArppxuG/7YUFTybq3Pkvg3Q0cG/LRGSl+aHo/o9hDiEqckl8OHSlsT/u3ZFkmXpybyUOddzpLthoab5BcZbHy2RjBi378tX/0GC0bek7KIvizSYlppuywvtOqtIeW8AnWz1t1YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722306414; x=1722911214; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bm+F+1lJ15DX4+i8goF3lSZheqU0n2m/z7PCJY/2Mek=;
-        b=F8GYmWlanq8lOO5VmvVgGxNeit33gMUAYiE1GYM2OWzDIgJiTXeRhZ5uHplFSTVD9M
-         fbr1OIarKihrXnfFDKZNkguWD7xp4tID9HHHR4zHJyQE/+3sF25gX7XW9iMsHEiUf/3L
-         pNG6bgVapfffCZp8qrehkoFBCWiMImI3pv7/eGr6IezZbQY3fw2xWM9q6uaybC0xomf9
-         SbnpEE4LmlNITuGz3shNdIWJhni+TSTuf0UdfZxGGczC/yTozzSKSSbP2KvDUDmY1Qpg
-         aNQ5e6NF6/ArtXVVw4D9V//asF32tPLVQNh7E1CW6aczOsnd6S4cot0/HZos8L6D8Xsm
-         /G+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722306414; x=1722911214;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bm+F+1lJ15DX4+i8goF3lSZheqU0n2m/z7PCJY/2Mek=;
-        b=gTxlYQis3zqF0/FCorwhtm4ICr0G0XbcHTL7HP5FiDvOrxdj75MsRxAVcBWZBfriWF
-         Z2tdcg/Igty3mRHyIVcf0OrFI+oldjdssAQ8ykvAcprFMKh9SSBhhx4yRS97gZIEIhQC
-         NtWMBzkeGfGyVifixMIIPipeTnSVoIPp8lwj32Qhv1VPxY1T57+Z0N+/XjrQI0QFRls0
-         ccjNXDlbXC+BjNChWrrZBLPWl6rsMJ0qKT1Vz5Rz76F3hXvMk2btzrNMk9BEq42pYPE+
-         fn0WISog2mQYijwAgGf/wD1afDnbxBDa/ddHOydAbaJNHtq8Tf1/n4sTRtOc3j9Xob1D
-         y02A==
-X-Forwarded-Encrypted: i=1; AJvYcCVE/iuSFzcPzyzeL7NCzb/oWTSXDk6g4+4IFLQNGWjhdkN5eq+xHD6RFSVM9YMimbEt+07YU/98rvBnTc1o5pw0XWwu5oEBfGQDwsw=
-X-Gm-Message-State: AOJu0Yz5YfLYeE8sqfYyS512rkNuwLBIeaoaBF8BzBXNlyLBWzuWwTMu
-	sPyl6F2+8FmPVnclvrYM6YE1eshfrwKqyVqscFf44iKxy8gYsGCyARIoKOIbipe3d0FfW3e3Bns
-	3YZ/6SR1wJ6p8uCM64aczMg==
-X-Google-Smtp-Source: AGHT+IFF41G+WNFtAXzP8vs01hwZYJQYmJkW3Fs5nbWWNal7J9hno9r2/Szchqe77nlwMafjxWMKbwra8Dzp+Mi0iA==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a17:903:2341:b0:1fd:63d7:5d34 with
- SMTP id d9443c01a7336-1ff04803eeamr2604175ad.5.1722306413784; Mon, 29 Jul
- 2024 19:26:53 -0700 (PDT)
-Date: Tue, 30 Jul 2024 02:26:17 +0000
-In-Reply-To: <20240730022623.98909-1-almasrymina@google.com>
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O4y5SZmL8/6CZgmPC0545t6vbwIQqanHRxNuOR3HAf0=;
+ b=ihNBZN52guq8SG0pbLmvHxQ2nnvUltTdO8KVqJEd78sigh+FP22nkXDOQcXw0iDZp6XZu6NlkXMBb4PtWUsB8YiGTBp7sHwNU2P3KvBIPs2J5cQgfP2mfj6lGGvpFIcjp3lOvqXZP2bYVbhOK58sK3LfqfwOwcp5gxKvQmUZVko=
+Received: from TYZPR03MB6624.apcprd03.prod.outlook.com (2603:1096:400:1f4::13)
+ by TYSPR03MB7990.apcprd03.prod.outlook.com (2603:1096:400:47c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Tue, 30 Jul
+ 2024 02:39:27 +0000
+Received: from TYZPR03MB6624.apcprd03.prod.outlook.com
+ ([fe80::9ce6:1e85:c4a7:2a54]) by TYZPR03MB6624.apcprd03.prod.outlook.com
+ ([fe80::9ce6:1e85:c4a7:2a54%4]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
+ 02:39:26 +0000
+From: =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>
+To: "jstephan@baylibre.com" <jstephan@baylibre.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	=?utf-8?B?QW5keSBIc2llaCAo6Kyd5pm655qTKQ==?= <Andy.Hsieh@mediatek.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "matthias.bgg@gmail.com"
+	<matthias.bgg@gmail.com>, "laurent.pinchart@ideasonboard.com"
+	<laurent.pinchart@ideasonboard.com>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "fsylvestre@baylibre.com" <fsylvestre@baylibre.com>,
+	"angelogioacchino.delregno@collabora.com"
+	<angelogioacchino.delregno@collabora.com>, "pnguyen@baylibre.com"
+	<pnguyen@baylibre.com>
+Subject: Re: [PATCH v5 4/5] media: platform: mediatek: isp_30: add mediatek
+ ISP3.0 camsv
+Thread-Topic: [PATCH v5 4/5] media: platform: mediatek: isp_30: add mediatek
+ ISP3.0 camsv
+Thread-Index: AQHazhdkyJtqWsdLFUSbwSAjf5xgNbH731aAgBH+I4CAANm5gA==
+Date: Tue, 30 Jul 2024 02:39:26 +0000
+Message-ID: <72bfcfad956efb64ba50a3bd9438e3a09a0fea6f.camel@mediatek.com>
+References: <20240704-add-mtk-isp-3-0-support-v5-0-bfccccc5ec21@baylibre.com>
+	 <20240704-add-mtk-isp-3-0-support-v5-4-bfccccc5ec21@baylibre.com>
+	 <85c54f0b1b8bb5d9026c67109a3526fd95cc013b.camel@mediatek.com>
+	 <CAEHHSvZ2etjPKq0MqHYD=hjs19Yy+DJLwXGGorJK7q2tW2dfRQ@mail.gmail.com>
+In-Reply-To: <CAEHHSvZ2etjPKq0MqHYD=hjs19Yy+DJLwXGGorJK7q2tW2dfRQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB6624:EE_|TYSPR03MB7990:EE_
+x-ms-office365-filtering-correlation-id: f5b9b36c-a08a-478b-9e17-08dcb040d447
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?utf-8?B?Y3JXZ1Vob3lqY0c0cjBwa0Zlcjlpb1dVcmhFdCtOTG5mYjBhOGo2TitXeGcr?=
+ =?utf-8?B?NEp0QVBNTVFHT0NPUmwzY3J2RW5DVDBXeXBWRkdWSitmY1ZvQm5ycjdBL3Iv?=
+ =?utf-8?B?Z21EbzUxVEg2NkY3UDl1cTdDUnpuSFBTK1lFK3cwRmZ2djhrY1NyVnlYS0xJ?=
+ =?utf-8?B?UEUxMy9vQ2VYUDN6dzR2T3Y3R1kySktVRnFMckZSWFErd1ZtbTYxV3J5ZXo2?=
+ =?utf-8?B?UVBzMlRqNlpTRnpCYkxtWFcxRHFMRHF6VXUvaE5XYis4NTNGZlRQVVBJVWxs?=
+ =?utf-8?B?MWh0RGtBa3RkYlcxVWp5WUxYdThXdDFkdUR6b0JDdzFJb09rN05FdmdsamtM?=
+ =?utf-8?B?MUtNK3ZDVlNSZDVGZnBoeEtmS25pKzEvVTJnQjFyY2EzV3VBemQ0eStINW8x?=
+ =?utf-8?B?dE01Tk56Q1RaY3Y3VWVBM3RjbVdFS2JrTXdKb0RZU2R1WDhUT0RlcTl5aXlH?=
+ =?utf-8?B?b0lGUU94bk9KY3l2SHdjakVqQUxtaUQ1L2E3ODdKU2k3eG9nMHVQMlBmRUpx?=
+ =?utf-8?B?UDRjL0F3S1JLSDdjWFlBd3JaUTBMWjlJeUp2RmVLZ1kwTG9pOHd3N1JqNWwy?=
+ =?utf-8?B?OUJhelAvZmNJeDJjNzQvV1BNVklpQ0hvT0hseWNYUHZYdWlsbFgveHp2TDNt?=
+ =?utf-8?B?TXFjMkhhbFVYSkNqL0Q3ekp1TUdVRkxUbnlTc245UTJTMUlHa0pydGdGUmdK?=
+ =?utf-8?B?aGJCOE44TkxybnBYRmhKNWVJQit3U0IxU0drQ1pIYk5pYWFsRSt3K05iTEVF?=
+ =?utf-8?B?Skx5bnZhTWtPbkVTUkk2UXB3b0UrTGhoQzNHUi9IUmV0ZEN1amlydkJYZXpi?=
+ =?utf-8?B?aHBTUWdlazZQRUl4UTlvcUxDeGp2SUNtZHpzR2xHYnR5cFRUaXdST2JOM1R1?=
+ =?utf-8?B?VGRRS25hcUxTeDdyS2RHV2ltUjlWT2ZVOUt2SWhnQ2pxL1JhSkJ1Q1E5SFJt?=
+ =?utf-8?B?KzZwYnAyTlhCeldTRUZvZDFoaFpQM3Bqd3ZTU0tQaUNIajdLNHJBazc0QUFq?=
+ =?utf-8?B?Wm8wZE05QnlJOVA5MlJNK3EwV2FOUjhaMnN4cU9EVUNJQXFORnNwK1RnMnIy?=
+ =?utf-8?B?OVlkSml6OUQ3WG1zQmdENlVTV09qNlVDRUd1QnZ5cnpFK0VhL2x0THd4OHBJ?=
+ =?utf-8?B?dFo2NDNiaG9mRndNQk9qN0NhZFYxTUoyWWN5R1VjTWd6YThWL0txdW8wQm1p?=
+ =?utf-8?B?U0kwYWZrd0ZFYUE1aEQ0TlE1d0lpYm9TaGZWY1lzMy85MUFZdm5yV2o1RDBv?=
+ =?utf-8?B?bDE1TExmRjJkeGVJUTlNbUE0aENpazJhWDZWazgvOTQxLzZaeHVPN3lKY3cr?=
+ =?utf-8?B?MmY5dlQrSUR2UTllYStWbjYrVWZKRldoUEtZWURmVXA5WnpoVlhkeFVQR0pp?=
+ =?utf-8?B?VCs4TUdiK2k2dk4wZHJ0WEF0VFh1NlpQeEdlRThmM1NrMlBnK21HZkgyRURn?=
+ =?utf-8?B?SHBsRHBjc3BTWVNSSEJPK2d3NFdwYlpReE00TDlxbk0vOG9RVWJKN3lXZXFT?=
+ =?utf-8?B?eHhRTzlIdklPdXBnZkV0YURqeHpMR3BGYzVJZGQwSEN6MnV6Z2h2VDRBSHg2?=
+ =?utf-8?B?VGR6cXRaWE5ISnFLcDB1dlIybTE0cURSNWQyWmRaYzNNMENCWHNxRWsxUmh2?=
+ =?utf-8?B?UVExemM0amdQay9BaUF6KzRsYkxWODZmbWVpR1cvMUtZUHE0aWNDczc5MS94?=
+ =?utf-8?B?UUFoM1RVeXlSQ2N3SkEwWWFoZDRKdHRGRXc2TWI0WCtheGJqaURoQVRDU3dW?=
+ =?utf-8?B?eWN1L1NnT3J2YTh4MmpCSUtqbGJzckFwV3diUml0amFtUTE0d0EyS2dkbHRR?=
+ =?utf-8?B?Y20vclpuRXRZYVhRak42UjV2VytaRzdsUUdVMVY5WGNIMjBFNE1aMGVUY1pK?=
+ =?utf-8?B?MnJvNUFYYXJpWTd1U3M2SENkaUFNb3NZZGo3a3JHUlRTcXc9PQ==?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6624.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S0VxK0RDNEZySzc1RDMzaGlxY1BCRTRnZU54RlU5VDdQS0ZZd0dHUXF3S2tI?=
+ =?utf-8?B?dEo1aktYTzBUYnlyMEhoeU9NZTJabitRWXM4bU56MjZMMUc0Rk1OWlBMNjA2?=
+ =?utf-8?B?ODVKcWh3bnhFeVgwbVRNaGYvWDRqd3czV3JYUnN5QUxRanI2WHUwdDJxb2dS?=
+ =?utf-8?B?dVJVQ2pQdi95SE9vSGljTlhQRjBqdDJuNVlMZEFLeUhNV3dSVWJyUC9ib2Qv?=
+ =?utf-8?B?c3Z6OUd0MHUrem5paGtwb0YyUVJmSXo5OS9XaGNVcHJ3eHpHOERZNVp6czQ1?=
+ =?utf-8?B?K2dDUFdmK1AwQ3lWOEFYcGtFQkp4WDlqUkNzKzQwVlp5c0ZYUFNFZDRoeVAv?=
+ =?utf-8?B?Z2hBT1Bka2FLZDRoWFhKbFdDNlFGVjRmQkdSSWlNS2Nob3BVMVJITi94QmI2?=
+ =?utf-8?B?SjhXdG5KNWVBWVlqYlozM2h0QmhNdDlnSHppLzdpa2FlUzJqSjEwUWtxVHZn?=
+ =?utf-8?B?eXVpUXlsbktsZENiNmNnckowUlZwNEZ0bExHdklWWmd0VjB6ZHRQcVZNbEhr?=
+ =?utf-8?B?dmZPeXVXZXFlWUJxN0V6TWlJaDBuMTFQZ050NVFiSEVjcUFCVEsrQ2RoblVX?=
+ =?utf-8?B?eWpvN2VEMHc1ZS8vN09RSk5LNmFNdG8wbGs3dDlwbUxpZzAydkFGQjRFdHpS?=
+ =?utf-8?B?cGdXa2VGelFPTDk3UTJweEVBd1FBRE91ZjFoYUZLa0NBalNCcEZhWGM4YXBa?=
+ =?utf-8?B?S2lzQU9DUStFbkNWdVpuWkZySlMyWlIyMUVlNXRYa2dBM0NEQWV2MUxib0Nr?=
+ =?utf-8?B?aVhLRFZUcm9ieXlaZDVBNklkR2l2Mmt6NUpxMVVKWjFQOFJTcTloRFRUcWNV?=
+ =?utf-8?B?bWMyTm85Q1M2M3VuOWg3UkZBY1NyS25ITmZSZHBEbzVleHA3TmNVN1VjQ0VK?=
+ =?utf-8?B?b3BYeUdMUXZDaG84OTBBMlVid2FvcFErL0pqdkJIeWp0MzZYbHJZbkJrZ2Ix?=
+ =?utf-8?B?OTRXZGpCRWpHcnFiY0lwVndMelpFQlJXWDBxUHJvTVVpMTZLQmhOdTI1ZW1Z?=
+ =?utf-8?B?a0NjOGFvVmlmQkVnZnZvWkdDYzh2TGl2Y3BydzFNcVJiT3l0WG8wdGd3S0dF?=
+ =?utf-8?B?ZzRUU29UVWgydEpsL3JuUXhxbXV2S2xETE5PdXR0NUs3MmJZOVFuM08rMW1k?=
+ =?utf-8?B?VjJTWmMySTRWUC9jMTRaNTVaUHBwV2FzK2tuRHR3RzQ1WDlVcXh3U0ozTklE?=
+ =?utf-8?B?KzBUTmR3aXp2TnFMNXluVHhOWG42alhHZTduRVBSZkV6djJYSnlZYmIrZkZh?=
+ =?utf-8?B?RytEWlBid0JlZlNmZitGdGcyQUhvVjJCK1FPWUxKYklTU29PRll3ZndQY1kw?=
+ =?utf-8?B?dmZnaXl0TmV3eGdDVFhzMXBNYkdxWEFjMDlnOHUwWTcxSHJwc3FLRnE1bEJZ?=
+ =?utf-8?B?cU1VM1NwQ3VseDVVaVJPUndtRkJxM3YzQ0dDc3JBT2lzSEtmdldQTU5sS1Zo?=
+ =?utf-8?B?NVp5L3ZxRGtmS2sxMTZmVGpFZ1JmRytDeWY2ZjdBdTdBSEFnOG5xVFYvNnRt?=
+ =?utf-8?B?bGRzY3JMWENBSzVWSDkyV2piZm4rK1M5cVFHZmNVWHM5ZG5iTTRJV1Exbi9M?=
+ =?utf-8?B?UDRKK1VYLzZOckZoS3R0dzh4UkJVUUtiUkQrdG1VN3g2MHhCWXRMUUJTd0ps?=
+ =?utf-8?B?MDJpaDlwRHYrRjNIZXh6Vjd6clFCa2NGUTM5dVZaeXdNbDcvMVlLUDcrcU54?=
+ =?utf-8?B?V1l3bmlMSlI5R0JxNDZ5UVlSb01ydmw2YytYdXdvdmwvZHpqSU1Wc1cyUm50?=
+ =?utf-8?B?ekczNEpYYXE1Z21oUHVPNmdrcWRUQkxVVkZYbzB5Z3dzQ0lBbGFmWGJXRURX?=
+ =?utf-8?B?MW1qcElZZS9yNlhBbFBjaHZQRm9zeG9xWmxWRDlOQ2NRNzNBdzVVanFOSEdp?=
+ =?utf-8?B?L0VxbzNBWmpnL2tJVERqRUhLK3RDM2ZYRzNoZXBrKzhWN1JlZCtqVk0yMTFt?=
+ =?utf-8?B?Z29aeXBJKzJFRzNkVVRDUzhla2tGWEM5Mi82ZG9aZjlZSDY0UVR0ME9yTDB6?=
+ =?utf-8?B?bGY2Vlc4ZGtQMHRWY2ZWbnlMb0ZqMXhBaStIOFRLODJyYTMvbVVGYnBIYmlo?=
+ =?utf-8?B?d3BLaEprZmF4dHRXc0t1SzlpcEVZaEZWKzdSck5hTWl1VnZJYlZtWjR4TGJ1?=
+ =?utf-8?Q?cvzD/lrP8eMKiFqifh1eRWY1F?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <53E9D2A573F88246AB5652B85E3A79C0@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240730022623.98909-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240730022623.98909-14-almasrymina@google.com>
-Subject: [PATCH net-next v17 13/14] selftests: add ncdevmem, netcat for devmem TCP
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6624.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5b9b36c-a08a-478b-9e17-08dcb040d447
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2024 02:39:26.5524
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aaW7NsbEEMJZ9f3qm2jXYukNjFcoJA1hDdtltJv78JcDsfihNDoSC9hxh39pLLQh/bFhphrGL27H31NI4lqbgw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR03MB7990
 
-ncdevmem is a devmem TCP netcat. It works similarly to netcat, but it
-sends and receives data using the devmem TCP APIs. It uses udmabuf as
-the dmabuf provider. It is compatible with a regular netcat running on
-a peer, or a ncdevmem running on a peer.
-
-In addition to normal netcat support, ncdevmem has a validation mode,
-where it sends a specific pattern and validates this pattern on the
-receiver side to ensure data integrity.
-
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-
----
-
-v16:
-- Remove outdated -n option (Taehee).
-- Use 'ifname' instead of accidentally hardcoded 'eth1'. (Taehee)
-- Remove dead code 'iterations' (Taehee).
-- Use if_nametoindex() instead of passing device index (Taehee).
-
-v15:
-- Fix linking against libynl. (Jakub)
-
-v9: https://lore.kernel.org/netdev/20240403002053.2376017-15-almasrymina@google.com/
-- Remove unused nic_pci_addr entry (Cong).
-
-v6:
-- Updated to bind 8 queues.
-- Added RSS configuration.
-- Added some more tests for the netlink API.
-
-Changes in v1:
-- Many more general cleanups (Willem).
-- Removed driver reset (Jakub).
-- Removed hardcoded if index (Paolo).
-
-RFC v2:
-- General cleanups (Willem).
-
----
- tools/testing/selftests/net/.gitignore |   1 +
- tools/testing/selftests/net/Makefile   |   9 +
- tools/testing/selftests/net/ncdevmem.c | 536 +++++++++++++++++++++++++
- 3 files changed, 546 insertions(+)
- create mode 100644 tools/testing/selftests/net/ncdevmem.c
-
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 666ab7d9390b1..fe770903118c5 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -17,6 +17,7 @@ ipv6_flowlabel
- ipv6_flowlabel_mgr
- log.txt
- msg_zerocopy
-+ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 8eaffd7a641c5..e4708975ef428 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -95,6 +95,11 @@ TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
- 
-+# YNL files, must be before "include ..lib.mk"
-+EXTRA_CLEAN += $(OUTPUT)/libynl.a
-+YNL_GEN_FILES := ncdevmem
-+TEST_GEN_FILES += $(YNL_GEN_FILES)
-+
- TEST_FILES := settings
- TEST_FILES += in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_veth.sh
- 
-@@ -104,6 +109,10 @@ TEST_INCLUDES := forwarding/lib.sh
- 
- include ../lib.mk
- 
-+# YNL build
-+YNL_GENS := netdev
-+include ynl.mk
-+
- $(OUTPUT)/epoll_busy_poll: LDLIBS += -lcap
- $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-new file mode 100644
-index 0000000000000..92c4fda346821
---- /dev/null
-+++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -0,0 +1,536 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#define __EXPORTED_HEADERS__
-+
-+#include <linux/uio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <errno.h>
-+#define __iovec_defined
-+#include <fcntl.h>
-+#include <malloc.h>
-+#include <error.h>
-+
-+#include <arpa/inet.h>
-+#include <sys/socket.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include <linux/memfd.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+#include <libmnl/libmnl.h>
-+#include <linux/types.h>
-+#include <linux/netlink.h>
-+#include <linux/genetlink.h>
-+#include <linux/netdev.h>
-+#include <time.h>
-+#include <net/if.h>
-+
-+#include "netdev-user.h"
-+#include <ynl.h>
-+
-+#define PAGE_SHIFT 12
-+#define TEST_PREFIX "ncdevmem"
-+#define NUM_PAGES 16000
-+
-+#ifndef MSG_SOCK_DEVMEM
-+#define MSG_SOCK_DEVMEM 0x2000000
-+#endif
-+
-+/*
-+ * tcpdevmem netcat. Works similarly to netcat but does device memory TCP
-+ * instead of regular TCP. Uses udmabuf to mock a dmabuf provider.
-+ *
-+ * Usage:
-+ *
-+ *	On server:
-+ *	ncdevmem -s <server IP> -c <client IP> -f eth1 -l -p 5201 -v 7
-+ *
-+ *	On client:
-+ *	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-+ *		tr \\n \\0 | \
-+ *		head -c 5G | \
-+ *		nc <server IP> 5201 -p 5201
-+ *
-+ * Note this is compatible with regular netcat. i.e. the sender or receiver can
-+ * be replaced with regular netcat to test the RX or TX path in isolation.
-+ */
-+
-+static char *server_ip = "192.168.1.4";
-+static char *client_ip = "192.168.1.2";
-+static char *port = "5201";
-+static size_t do_validation;
-+static int start_queue = 8;
-+static int num_queues = 8;
-+static char *ifname = "eth1";
-+static unsigned int ifindex;
-+static unsigned int dmabuf_id;
-+
-+void print_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	int i;
-+
-+	for (i = 0; i < size; i++)
-+		printf("%02hhX ", p[i]);
-+	printf("\n");
-+}
-+
-+void print_nonzero_bytes(void *ptr, size_t size)
-+{
-+	unsigned char *p = ptr;
-+	unsigned int i;
-+
-+	for (i = 0; i < size; i++)
-+		putchar(p[i]);
-+	printf("\n");
-+}
-+
-+void validate_buffer(void *line, size_t size)
-+{
-+	static unsigned char seed = 1;
-+	unsigned char *ptr = line;
-+	int errors = 0;
-+	size_t i;
-+
-+	for (i = 0; i < size; i++) {
-+		if (ptr[i] != seed) {
-+			fprintf(stderr,
-+				"Failed validation: expected=%u, actual=%u, index=%lu\n",
-+				seed, ptr[i], i);
-+			errors++;
-+			if (errors > 20)
-+				error(1, 0, "validation failed.");
-+		}
-+		seed++;
-+		if (seed == do_validation)
-+			seed = 0;
-+	}
-+
-+	fprintf(stdout, "Validated buffer\n");
-+}
-+
-+static void reset_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple off",
-+		 ifname);
-+	system(command);
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -K %s ntuple on",
-+		 ifname);
-+	system(command);
-+}
-+
-+static void configure_rss(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command), "sudo ethtool -X %s equal %d",
-+		 ifname, start_queue);
-+	system(command);
-+}
-+
-+static void configure_flow_steering(void)
-+{
-+	char command[256];
-+
-+	memset(command, 0, sizeof(command));
-+	snprintf(command, sizeof(command),
-+		 "sudo ethtool -N %s flow-type tcp4 src-ip %s dst-ip %s src-port %s dst-port %s queue %d",
-+		 ifname, client_ip, server_ip, port, port, start_queue);
-+	system(command);
-+}
-+
-+static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
-+			 struct netdev_queue_id *queues,
-+			 unsigned int n_queue_index, struct ynl_sock **ys)
-+{
-+	struct netdev_bind_rx_req *req = NULL;
-+	struct netdev_bind_rx_rsp *rsp = NULL;
-+	struct ynl_error yerr;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!*ys) {
-+		fprintf(stderr, "YNL: %s\n", yerr.msg);
-+		return -1;
-+	}
-+
-+	req = netdev_bind_rx_req_alloc();
-+	netdev_bind_rx_req_set_ifindex(req, ifindex);
-+	netdev_bind_rx_req_set_fd(req, dmabuf_fd);
-+	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
-+
-+	rsp = netdev_bind_rx(*ys, req);
-+	if (!rsp) {
-+		perror("netdev_bind_rx");
-+		goto err_close;
-+	}
-+
-+	if (!rsp->_present.id) {
-+		perror("id not present");
-+		goto err_close;
-+	}
-+
-+	printf("got dmabuf id=%d\n", rsp->id);
-+	dmabuf_id = rsp->id;
-+
-+	netdev_bind_rx_req_free(req);
-+	netdev_bind_rx_rsp_free(rsp);
-+
-+	return 0;
-+
-+err_close:
-+	fprintf(stderr, "YNL failed: %s\n", (*ys)->err.msg);
-+	netdev_bind_rx_req_free(req);
-+	ynl_sock_destroy(*ys);
-+	return -1;
-+}
-+
-+static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
-+{
-+	struct udmabuf_create create;
-+	int ret;
-+
-+	*devfd = open("/dev/udmabuf", O_RDWR);
-+	if (*devfd < 0) {
-+		error(70, 0,
-+		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		      TEST_PREFIX);
-+	}
-+
-+	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (*memfd < 0)
-+		error(70, 0, "%s: [skip,no-memfd]\n", TEST_PREFIX);
-+
-+	/* Required for udmabuf */
-+	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0)
-+		error(73, 0, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+
-+	ret = ftruncate(*memfd, dmabuf_size);
-+	if (ret == -1)
-+		error(74, 0, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = *memfd;
-+	create.offset = 0;
-+	create.size = dmabuf_size;
-+	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
-+	if (*buf < 0)
-+		error(75, 0, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+}
-+
-+int do_server(void)
-+{
-+	char ctrl_data[sizeof(int) * 20000];
-+	struct netdev_queue_id *queues;
-+	size_t non_page_aligned_frags = 0;
-+	struct sockaddr_in client_addr;
-+	struct sockaddr_in server_sin;
-+	size_t page_aligned_frags = 0;
-+	int devfd, memfd, buf, ret;
-+	size_t total_received = 0;
-+	socklen_t client_addr_len;
-+	bool is_devmem = false;
-+	char *buf_mem = NULL;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	char iobuf[819200];
-+	char buffer[256];
-+	int socket_fd;
-+	int client_fd;
-+	size_t i = 0;
-+	int opt = 1;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	reset_flow_steering();
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	/* Flow steer our devmem flows to start_queue */
-+	configure_flow_steering();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.id = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].id = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+		       buf, 0);
-+	if (buf_mem == MAP_FAILED)
-+		error(1, 0, "mmap()");
-+
-+	server_sin.sin_family = AF_INET;
-+	server_sin.sin_port = htons(atoi(port));
-+
-+	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-+	if (socket < 0)
-+		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	if (socket < 0)
-+		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
-+			 sizeof(opt));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+
-+	printf("binding to address %s:%d\n", server_ip,
-+	       ntohs(server_sin.sin_port));
-+
-+	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, bind]\n", TEST_PREFIX);
-+
-+	ret = listen(socket_fd, 1);
-+	if (ret)
-+		error(errno, errno, "%s: [FAIL, listen]\n", TEST_PREFIX);
-+
-+	client_addr_len = sizeof(client_addr);
-+
-+	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Waiting or connection on %s:%d\n", buffer,
-+	       ntohs(server_sin.sin_port));
-+	client_fd = accept(socket_fd, &client_addr, &client_addr_len);
-+
-+	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+		  sizeof(buffer));
-+	printf("Got connection from %s:%d\n", buffer,
-+	       ntohs(client_addr.sin_port));
-+
-+	while (1) {
-+		struct iovec iov = { .iov_base = iobuf,
-+				     .iov_len = sizeof(iobuf) };
-+		struct dmabuf_cmsg *dmabuf_cmsg = NULL;
-+		struct dma_buf_sync sync = { 0 };
-+		struct cmsghdr *cm = NULL;
-+		struct msghdr msg = { 0 };
-+		struct dmabuf_token token;
-+		ssize_t ret;
-+
-+		is_devmem = false;
-+		printf("\n\n");
-+
-+		msg.msg_iov = &iov;
-+		msg.msg_iovlen = 1;
-+		msg.msg_control = ctrl_data;
-+		msg.msg_controllen = sizeof(ctrl_data);
-+		ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
-+		printf("recvmsg ret=%ld\n", ret);
-+		if (ret < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))
-+			continue;
-+		if (ret < 0) {
-+			perror("recvmsg");
-+			continue;
-+		}
-+		if (ret == 0) {
-+			printf("client exited\n");
-+			goto cleanup;
-+		}
-+
-+		i++;
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+			    (cm->cmsg_type != SCM_DEVMEM_DMABUF &&
-+			     cm->cmsg_type != SCM_DEVMEM_LINEAR)) {
-+				fprintf(stdout, "skipping non-devmem cmsg\n");
-+				continue;
-+			}
-+
-+			dmabuf_cmsg = (struct dmabuf_cmsg *)CMSG_DATA(cm);
-+			is_devmem = true;
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_LINEAR) {
-+				/* TODO: process data copied from skb's linear
-+				 * buffer.
-+				 */
-+				fprintf(stdout,
-+					"SCM_DEVMEM_LINEAR. dmabuf_cmsg->frag_size=%u\n",
-+					dmabuf_cmsg->frag_size);
-+
-+				continue;
-+			}
-+
-+			token.token_start = dmabuf_cmsg->frag_token;
-+			token.token_count = 1;
-+
-+			total_received += dmabuf_cmsg->frag_size;
-+			printf("received frag_page=%llu, in_page_offset=%llu, frag_offset=%llu, frag_size=%u, token=%u, total_received=%lu, dmabuf_id=%u\n",
-+			       dmabuf_cmsg->frag_offset >> PAGE_SHIFT,
-+			       dmabuf_cmsg->frag_offset % getpagesize(),
-+			       dmabuf_cmsg->frag_offset, dmabuf_cmsg->frag_size,
-+			       dmabuf_cmsg->frag_token, total_received,
-+			       dmabuf_cmsg->dmabuf_id);
-+
-+			if (dmabuf_cmsg->dmabuf_id != dmabuf_id)
-+				error(1, 0,
-+				      "received on wrong dmabuf_id: flow steering error\n");
-+
-+			if (dmabuf_cmsg->frag_size % getpagesize())
-+				non_page_aligned_frags++;
-+			else
-+				page_aligned_frags++;
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			if (do_validation)
-+				validate_buffer(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+			else
-+				print_nonzero_bytes(
-+					((unsigned char *)buf_mem) +
-+						dmabuf_cmsg->frag_offset,
-+					dmabuf_cmsg->frag_size);
-+
-+			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
-+			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+			ret = setsockopt(client_fd, SOL_SOCKET,
-+					 SO_DEVMEM_DONTNEED, &token,
-+					 sizeof(token));
-+			if (ret != 1)
-+				error(1, 0,
-+				      "SO_DEVMEM_DONTNEED not enough tokens");
-+		}
-+		if (!is_devmem)
-+			error(1, 0, "flow steering error\n");
-+
-+		printf("total_received=%lu\n", total_received);
-+	}
-+
-+	fprintf(stdout, "%s: ok\n", TEST_PREFIX);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+	fprintf(stdout, "page_aligned_frags=%lu, non_page_aligned_frags=%lu\n",
-+		page_aligned_frags, non_page_aligned_frags);
-+
-+cleanup:
-+
-+	munmap(buf_mem, dmabuf_size);
-+	close(client_fd);
-+	close(socket_fd);
-+	close(buf);
-+	close(memfd);
-+	close(devfd);
-+	ynl_sock_destroy(ys);
-+
-+	return 0;
-+}
-+
-+void run_devmem_tests(void)
-+{
-+	struct netdev_queue_id *queues;
-+	int devfd, memfd, buf;
-+	struct ynl_sock *ys;
-+	size_t dmabuf_size;
-+	size_t i = 0;
-+
-+	dmabuf_size = getpagesize() * NUM_PAGES;
-+
-+	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+
-+	/* Configure RSS to divert all traffic from our devmem queues */
-+	configure_rss();
-+
-+	sleep(1);
-+
-+	queues = malloc(sizeof(*queues) * num_queues);
-+
-+	for (i = 0; i < num_queues; i++) {
-+		queues[i]._present.type = 1;
-+		queues[i]._present.id = 1;
-+		queues[i].type = NETDEV_QUEUE_TYPE_RX;
-+		queues[i].id = start_queue + i;
-+	}
-+
-+	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+		error(1, 0, "Failed to bind\n");
-+
-+	/* Closing the netlink socket does an implicit unbind */
-+	ynl_sock_destroy(ys);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int is_server = 0, opt;
-+
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:")) != -1) {
-+		switch (opt) {
-+		case 'l':
-+			is_server = 1;
-+			break;
-+		case 's':
-+			server_ip = optarg;
-+			break;
-+		case 'c':
-+			client_ip = optarg;
-+			break;
-+		case 'p':
-+			port = optarg;
-+			break;
-+		case 'v':
-+			do_validation = atoll(optarg);
-+			break;
-+		case 'q':
-+			num_queues = atoi(optarg);
-+			break;
-+		case 't':
-+			start_queue = atoi(optarg);
-+			break;
-+		case 'f':
-+			ifname = optarg;
-+			break;
-+		case '?':
-+			printf("unknown option: %c\n", optopt);
-+			break;
-+		}
-+	}
-+
-+	ifindex = if_nametoindex(ifname);
-+
-+	for (; optind < argc; optind++)
-+		printf("extra arguments: %s\n", argv[optind]);
-+
-+	run_devmem_tests();
-+
-+	if (is_server)
-+		return do_server();
-+
-+	return 0;
-+}
--- 
-2.46.0.rc1.232.g9752f9e123-goog
-
+T24gTW9uLCAyMDI0LTA3LTI5IGF0IDE1OjQwICswMjAwLCBKdWxpZW4gU3RlcGhhbiB3cm90ZToN
+Cj4gIAkgDQo+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5rcyBvciBv
+cGVuIGF0dGFjaG1lbnRzIHVudGlsIHlvdSBoYXZlIHZlcmlmaWVkIHRoZSBzZW5kZXIgb3IgdGhl
+IGNvbnRlbnQuDQo+ICBMZSBqZXUuIDE4IGp1aWwuIDIwMjQgw6AgMDQ6NTQsIENLIEh1ICjog6Hk
+v4rlhYkpIDxjay5odUBtZWRpYXRlay5jb20+IGEgw6ljcml0IDoNCj4gPg0KPiA+IEhpLCBKdWxp
+ZW46DQo+ID4NCj4gPiBPbiBUaHUsIDIwMjQtMDctMDQgYXQgMTU6MzYgKzAyMDAsIEp1bGllbiBT
+dGVwaGFuIHdyb3RlOg0KPiA+ID4NCj4gPiA+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5v
+dCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVudGlsIHlvdSBoYXZlIHZlcmlmaWVk
+IHRoZSBzZW5kZXIgb3IgdGhlIGNvbnRlbnQuDQo+ID4gPiAgRnJvbTogUGhpLWJhbmcgTmd1eWVu
+IDxwbmd1eWVuQGJheWxpYnJlLmNvbT4NCj4gPiA+DQo+ID4gPiBUaGlzIGRyaXZlciBwcm92aWRl
+cyBhIHBhdGggdG8gYnlwYXNzIHRoZSBTb0MgSVNQIHNvIHRoYXQgaW1hZ2UgZGF0YQ0KPiA+ID4g
+Y29taW5nIGZyb20gdGhlIFNFTklORiBjYW4gZ28gZGlyZWN0bHkgaW50byBtZW1vcnkgd2l0aG91
+dCBhbnkgaW1hZ2UNCj4gPiA+IHByb2Nlc3NpbmcuIFRoaXMgYWxsb3dzIHRoZSB1c2Ugb2YgYW4g
+ZXh0ZXJuYWwgSVNQLg0KPiA+ID4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IFBoaS1iYW5nIE5ndXll
+biA8cG5ndXllbkBiYXlsaWJyZS5jb20+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBGbG9yaWFuIFN5
+bHZlc3RyZSA8ZnN5bHZlc3RyZUBiYXlsaWJyZS5jb20+DQo+ID4gPiBbUGF1bCBFbGRlciBmaXgg
+aXJxIGxvY2tpbmddDQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBQYXVsIEVsZGVyIDxwYXVsLmVsZGVy
+QGlkZWFzb25ib2FyZC5jb20+DQo+ID4gPiBDby1kZXZlbG9wZWQtYnk6IExhdXJlbnQgUGluY2hh
+cnQgPGxhdXJlbnQucGluY2hhcnRAaWRlYXNvbmJvYXJkLmNvbT4NCj4gPiA+IFNpZ25lZC1vZmYt
+Ynk6IExhdXJlbnQgUGluY2hhcnQgPGxhdXJlbnQucGluY2hhcnRAaWRlYXNvbmJvYXJkLmNvbT4N
+Cj4gPiA+IENvLWRldmVsb3BlZC1ieTogSnVsaWVuIFN0ZXBoYW4gPGpzdGVwaGFuQGJheWxpYnJl
+LmNvbT4NCj4gPiA+IFNpZ25lZC1vZmYtYnk6IEp1bGllbiBTdGVwaGFuIDxqc3RlcGhhbkBiYXls
+aWJyZS5jb20+DQo+ID4gPiAtLS0NCj4gPg0KPiA+IFtzbmlwXQ0KPiA+DQo+ID4gPiArc3RhdGlj
+IGludCBtdGtfY2FtX3ZiMl9zdGFydF9zdHJlYW1pbmcoc3RydWN0IHZiMl9xdWV1ZSAqdnEsDQo+
+ID4gPiArICAgICAgIHVuc2lnbmVkIGludCBjb3VudCkNCj4gPiA+ICt7DQo+ID4gPiArc3RydWN0
+IG10a19jYW1fZGV2ICpjYW0gPSB2YjJfZ2V0X2Rydl9wcml2KHZxKTsNCj4gPiA+ICtzdHJ1Y3Qg
+bXRrX2NhbV9kZXZfYnVmZmVyICpidWY7DQo+ID4gPiArc3RydWN0IG10a19jYW1fdmlkZW9fZGV2
+aWNlICp2ZGV2ID0NCj4gPiA+ICt2YjJfcXVldWVfdG9fbXRrX2NhbV92aWRlb19kZXZpY2UodnEp
+Ow0KPiA+ID4gK3N0cnVjdCBkZXZpY2UgKmRldiA9IGNhbS0+ZGV2Ow0KPiA+ID4gK2NvbnN0IHN0
+cnVjdCB2NGwyX3BpeF9mb3JtYXRfbXBsYW5lICpmbXQgPSAmdmRldi0+Zm9ybWF0Ow0KPiA+ID4g
+K2ludCByZXQ7DQo+ID4gPiArdW5zaWduZWQgbG9uZyBmbGFnczsNCj4gPiA+ICsNCj4gPiA+ICtp
+ZiAocG1fcnVudGltZV9nZXRfc3luYyhkZXYpIDwgMCkgew0KPiA+ID4gK2Rldl9lcnIoZGV2LCAi
+ZmFpbGVkIHRvIGdldCBwbV9ydW50aW1lXG4iKTsNCj4gPiA+ICtwbV9ydW50aW1lX3B1dF9hdXRv
+c3VzcGVuZChkZXYpOw0KPiA+ID4gK3JldHVybiAtMTsNCj4gPiA+ICt9DQo+ID4gPiArDQo+ID4g
+PiArKCpjYW0tPmh3X2Z1bmN0aW9ucy0+bXRrX2NhbV9zZXR1cCkoY2FtLCBmbXQtPndpZHRoLCBm
+bXQtPmhlaWdodCwNCj4gPiA+ICtmbXQtPnBsYW5lX2ZtdFswXS5ieXRlc3BlcmxpbmUsIHZkZXYt
+PmZtdGluZm8tPmNvZGUpOw0KPiA+ID4gKw0KPiA+ID4gKw0KPiA+ID4gKy8qIEVuYWJsZSBDTU9T
+IGFuZCBWRiAqLw0KPiA+ID4gK210a19jYW1fY21vc192Zl9lbmFibGUoY2FtLCB0cnVlLCB0cnVl
+KTsNCj4gPiA+ICsNCj4gPiA+ICttdXRleF9sb2NrKCZjYW0tPm9wX2xvY2spOw0KPiA+ID4gKw0K
+PiA+ID4gK3JldCA9IG10a19jYW1fdmVyaWZ5X2Zvcm1hdChjYW0pOw0KPiA+ID4gK2lmIChyZXQg
+PCAwKQ0KPiA+ID4gK2dvdG8gZmFpbF91bmxvY2s7DQo+ID4gPiArDQo+ID4gPiArLyogU3RhcnQg
+c3RyZWFtaW5nIG9mIHRoZSB3aG9sZSBwaXBlbGluZSBub3cqLw0KPiA+ID4gK2lmICghY2FtLT5w
+aXBlbGluZS5zdGFydF9jb3VudCkgew0KPiA+ID4gK3JldCA9IG1lZGlhX3BpcGVsaW5lX3N0YXJ0
+KHZkZXYtPnZkZXYuZW50aXR5LnBhZHMsDQo+ID4gPiArICAgJmNhbS0+cGlwZWxpbmUpOw0KPiA+
+ID4gK2lmIChyZXQpIHsNCj4gPiA+ICtkZXZfZXJyKGRldiwgImZhaWxlZCB0byBzdGFydCBwaXBl
+bGluZTolZFxuIiwgcmV0KTsNCj4gPiA+ICtnb3RvIGZhaWxfdW5sb2NrOw0KPiA+ID4gK30NCj4g
+PiA+ICt9DQo+ID4gPiArDQo+ID4gPiArLyogTWVkaWEgbGlua3MgYXJlIGZpeGVkIGFmdGVyIG1l
+ZGlhX3BpcGVsaW5lX3N0YXJ0ICovDQo+ID4gPiArY2FtLT5zdHJlYW1fY291bnQrKzsNCj4gPiA+
+ICsNCj4gPiA+ICtjYW0tPnNlcXVlbmNlID0gKHVuc2lnbmVkIGludCktMTsNCj4gPiA+ICsNCj4g
+PiA+ICsvKiBTdHJlYW0gb24gdGhlIHN1Yi1kZXZpY2UgKi8NCj4gPiA+ICtyZXQgPSB2NGwyX3N1
+YmRldl9jYWxsKCZjYW0tPnN1YmRldiwgdmlkZW8sIHNfc3RyZWFtLCAxKTsNCj4gPiA+ICtpZiAo
+cmV0KQ0KPiA+ID4gK2dvdG8gZmFpbF9ub19zdHJlYW07DQo+ID4gPiArDQo+ID4gPiArbXV0ZXhf
+dW5sb2NrKCZjYW0tPm9wX2xvY2spOw0KPiA+ID4gKw0KPiA+ID4gKy8qIENyZWF0ZSBkdW1teSBi
+dWZmZXIgKi8NCj4gPiA+ICtjYW0tPmR1bW15X3NpemUgPSBmbXQtPnBsYW5lX2ZtdFswXS5zaXpl
+aW1hZ2U7DQo+ID4gPiArDQo+ID4gPiArY2FtLT5kdW1teS52YWRkciA9IGRtYV9hbGxvY19jb2hl
+cmVudChjYW0tPmRldiwgY2FtLT5kdW1teV9zaXplLA0KPiA+ID4gKyAgICAgICZjYW0tPmR1bW15
+LmRhZGRyLCBHRlBfS0VSTkVMKTsNCj4gPg0KPiA+IER1bW15IGJ1ZmZlciBjb3N0IG11Y2ggaW4g
+RFJBTSBmb290cHJpbnQuIEkgdGhpbmsgd2UgY2FuIGdldCByaWQgb2YNCj4gPiB0aGlzIGR1bW15
+IGJ1ZmZlci4gSWYgbm8gYnVmZmVyIGlzIHF1ZXVlZCBmcm9tIHVzZXIgc3BhY2UsIGNhbGwNCj4g
+PiBtdGtfY2Ftc3YzMF9jbW9zX3ZmX2h3X2Rpc2FibGUoKSB0byBzdG9wIHdyaXRlIGRhdGEgaW50
+byBEUkFNLiBBZnRlcg0KPiA+IGJ1ZmZlciBpcyBxdWV1ZWQgZnJvbSB1c2VyIHNwYWNlLCBjYWxs
+IG10a19jYW1zdjMwX2Ntb3NfdmZfaHdfZW5hYmxlKCkNCj4gPiB0byBzdGFydCB3cml0ZSBkYXRh
+IGludG8gRFJBTS4NCj4gPg0KPiANCj4gSGkgQ0ssDQo+IA0KPiBJTUhPIGl0IGRvZXMgbm90IGNv
+c3QgdGhhdCBtdWNoLiBBIGxvbmcgdGltZSBhZ28sIHdlIHRyaWVkIHRvIHJlbW92ZQ0KPiBpdCwg
+YnV0IHdlIGZhY2VkIGFuIGlzc3VlIChjYW4ndCByZW1lbWJlciB3aGF0IDovKS4NCg0KNTM3NiAq
+IDQwMzIgKiAyID0gNDMzNTIwNjQgKGJ5dGVzKSBpcyBhIGxhcmdlIHNpemUgZm9yIG1lLg0KDQpJ
+ZiB0aGlzIGlzIGEgc29mdHdhcmUgaXNzdWUsIGZpeCBpdC4NCklmIHRoaXMgaXMgYSBoYXJkd2Fy
+ZSBsaW1pdGF0aW9uLCBhZGQgY29tbWVudCB0byBkZXNjcmliZSBob3cgaGFyZHdhcmUgd29yayBz
+byBuZWVkIHRoaXMgZHVtbXkgYnVmZmVyLg0KSWYgbmV4dCBTb0MgaGFzIG5vIHRoaXMgaGFyZHdh
+cmUgbGltaXRhdGlvbiwgd2UgY291bGQgZHJvcCBkdW1teSBidWZmZXIgaW4gbmV4dCBTb0MuDQoN
+Cj4gTW9yZW92ZXIsIHNvbWUgb3RoZXIgZHJpdmVyIGFscmVhZHkgdXNlcyB0aGUgZHVtbXkgYnVm
+ZmVyDQo+IGltcGxlbWVudGF0aW9uLCBpZiBJIGFtIG5vdCB3cm9uZy4NCg0KSSB0aGluayBldmVy
+eSBkcml2ZXIgaGFzIGRpZmZlcmVudCByZWFzb24gdG8gdXNlIGR1bW15IGJ1ZmZlci4NClNvIHdl
+IGNvdWxkIG5vdCBkaXJlY3RseSBpbmZlciB0aGF0IHRoaXMgZHJpdmVyIG5lZWQgZHVtbXkgYnVm
+ZmVyLg0KDQpSZWdhcmRzLA0KQ0sNCg0KPiANCj4gQ2hlZXJzDQo+IEp1bGllbg0KPiANCj4gPiBS
+ZWdhcmRzLA0KPiA+IENLDQo+ID4NCj4gPiA+ICtpZiAoIWNhbS0+ZHVtbXkudmFkZHIpIHsNCj4g
+PiA+ICtyZXQgPSAtRU5PTUVNOw0KPiA+ID4gK2dvdG8gZmFpbF9ub19idWZmZXI7DQo+ID4gPiAr
+fQ0KPiA+ID4gKw0KPiA+ID4gKy8qIHVwZGF0ZSBmaXJzdCBidWZmZXIgYWRkcmVzcyAqLw0KPiA+
+ID4gKw0KPiA+ID4gKy8qIGFkZGVkIHRoZSBidWZmZXIgaW50byB0aGUgdHJhY2tpbmcgbGlzdCAq
+Lw0KPiA+ID4gK3NwaW5fbG9ja19pcnFzYXZlKCZjYW0tPmlycWxvY2ssIGZsYWdzKTsNCj4gPiA+
+ICtpZiAobGlzdF9lbXB0eSgmY2FtLT5idWZfbGlzdCkpIHsNCj4gPiA+ICsoKmNhbS0+aHdfZnVu
+Y3Rpb25zLT5tdGtfY2FtX3VwZGF0ZV9idWZmZXJzX2FkZCkoY2FtLCAmY2FtLT5kdW1teSk7DQo+
+ID4gPiArY2FtLT5pc19kdW1teV91c2VkID0gdHJ1ZTsNCj4gPiA+ICt9IGVsc2Ugew0KPiA+ID4g
+K2J1ZiA9IGxpc3RfZmlyc3RfZW50cnlfb3JfbnVsbCgmY2FtLT5idWZfbGlzdCwNCj4gPiA+ICsg
+ICAgICAgc3RydWN0IG10a19jYW1fZGV2X2J1ZmZlciwNCj4gPiA+ICsgICAgICAgbGlzdCk7DQo+
+ID4gPiArKCpjYW0tPmh3X2Z1bmN0aW9ucy0+bXRrX2NhbV91cGRhdGVfYnVmZmVyc19hZGQpKGNh
+bSwgYnVmKTsNCj4gPiA+ICtjYW0tPmlzX2R1bW15X3VzZWQgPSBmYWxzZTsNCj4gPiA+ICt9DQo+
+ID4gPiArc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmY2FtLT5pcnFsb2NrLCBmbGFncyk7DQo+ID4g
+PiArDQo+ID4gPiArcmV0dXJuIDA7DQo+ID4gPiArDQo+ID4gPiArZmFpbF9ub19idWZmZXI6DQo+
+ID4gPiArbXV0ZXhfbG9jaygmY2FtLT5vcF9sb2NrKTsNCj4gPiA+ICt2NGwyX3N1YmRldl9jYWxs
+KCZjYW0tPnN1YmRldiwgdmlkZW8sIHNfc3RyZWFtLCAwKTsNCj4gPiA+ICtmYWlsX25vX3N0cmVh
+bToNCj4gPiA+ICtjYW0tPnN0cmVhbV9jb3VudC0tOw0KPiA+ID4gK2lmIChjYW0tPnN0cmVhbV9j
+b3VudCA9PSAwKQ0KPiA+ID4gK21lZGlhX3BpcGVsaW5lX3N0b3AodmRldi0+dmRldi5lbnRpdHku
+cGFkcyk7DQo+ID4gPiArZmFpbF91bmxvY2s6DQo+ID4gPiArbXV0ZXhfdW5sb2NrKCZjYW0tPm9w
+X2xvY2spOw0KPiA+ID4gK210a19jYW1fdmIyX3JldHVybl9hbGxfYnVmZmVycyhjYW0sIFZCMl9C
+VUZfU1RBVEVfUVVFVUVEKTsNCj4gPiA+ICsNCj4gPiA+ICtyZXR1cm4gcmV0Ow0KPiA+ID4gK30N
+Cj4gPiA+ICsNCj4gPg0KPiA+ICoqKioqKioqKioqKiogTUVESUFURUsgQ29uZmlkZW50aWFsaXR5
+IE5vdGljZSAqKioqKioqKioqKioqKioqKioqKg0KPiA+IFRoZSBpbmZvcm1hdGlvbiBjb250YWlu
+ZWQgaW4gdGhpcyBlLW1haWwgbWVzc2FnZSAoaW5jbHVkaW5nIGFueQ0KPiA+IGF0dGFjaG1lbnRz
+KSBtYXkgYmUgY29uZmlkZW50aWFsLCBwcm9wcmlldGFyeSwgcHJpdmlsZWdlZCwgb3Igb3RoZXJ3
+aXNlDQo+ID4gZXhlbXB0IGZyb20gZGlzY2xvc3VyZSB1bmRlciBhcHBsaWNhYmxlIGxhd3MuIEl0
+IGlzIGludGVuZGVkIHRvIGJlDQo+ID4gY29udmV5ZWQgb25seSB0byB0aGUgZGVzaWduYXRlZCBy
+ZWNpcGllbnQocykuIEFueSB1c2UsIGRpc3NlbWluYXRpb24sDQo+ID4gZGlzdHJpYnV0aW9uLCBw
+cmludGluZywgcmV0YWluaW5nIG9yIGNvcHlpbmcgb2YgdGhpcyBlLW1haWwgKGluY2x1ZGluZyBp
+dHMNCj4gPiBhdHRhY2htZW50cykgYnkgdW5pbnRlbmRlZCByZWNpcGllbnQocykgaXMgc3RyaWN0
+bHkgcHJvaGliaXRlZCBhbmQgbWF5DQo+ID4gYmUgdW5sYXdmdWwuIElmIHlvdSBhcmUgbm90IGFu
+IGludGVuZGVkIHJlY2lwaWVudCBvZiB0aGlzIGUtbWFpbCwgb3IgYmVsaWV2ZQ0KPiA+IHRoYXQg
+eW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhl
+IHNlbmRlcg0KPiA+IGltbWVkaWF0ZWx5IChieSByZXBseWluZyB0byB0aGlzIGUtbWFpbCksIGRl
+bGV0ZSBhbnkgYW5kIGFsbCBjb3BpZXMgb2YNCj4gPiB0aGlzIGUtbWFpbCAoaW5jbHVkaW5nIGFu
+eSBhdHRhY2htZW50cykgZnJvbSB5b3VyIHN5c3RlbSwgYW5kIGRvIG5vdA0KPiA+IGRpc2Nsb3Nl
+IHRoZSBjb250ZW50IG9mIHRoaXMgZS1tYWlsIHRvIGFueSBvdGhlciBwZXJzb24uIFRoYW5rIHlv
+dSENCj4gDQo=
