@@ -1,46 +1,46 @@
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2076.outbound.protection.outlook.com [40.107.117.76])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2080.outbound.protection.outlook.com [40.107.255.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94886192B9E;
-	Tue, 30 Jul 2024 07:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63E819306A;
+	Tue, 30 Jul 2024 07:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.80
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722326314; cv=fail; b=DeW+YM/CU5qflBLZV0NdBfYBdhOpwMJSC6s/aKZ9nZJussanz4MQAKTciASUynQmjBu+svLlbzWPDMM/UVq+At6S2+4CPcqkBaaiUY+IJ6A5+gRIanSk+5sZ3KU7ru11/y4Zuh9rghFkF6p5gk/HmH1mBWSdne4vjEBzS7ePnKw=
+	t=1722326318; cv=fail; b=G9zIdnys4rola/ncKYCDvj7Eol6HsDePqHLVl4eN5BgqlkjymgtLOcoys/Bln22GdFdKspvp39bejkfrKb2Sp42CheL0lRqmjY2dRFBGQwRMEuB4jAO/ybgB6G2dL6/lWCaI/RTJH5XXvjk4Lr0Qj0vyonR1c2H7hCDDw6EOw+s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722326314; c=relaxed/simple;
-	bh=/ulFSipo6OAt7vlHQA53ySXbJgChgaI+l7LsVciRZFQ=;
+	s=arc-20240116; t=1722326318; c=relaxed/simple;
+	bh=UJJMaih7si44eGopyrimd00ZFXBeKcT/oJCoSb2rlJM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lONlpgjsG4m9HCKl48yysTT8IZr7TsVtxu2qTvbRAicDUEwiKsPjVVbPowawgTCIFr4mL5PQSM8/nCWDRDvOr5Tju2TLVkG7E+t5hklShyOX42Bbi5egUC6jo7SIaewLm/DroR5wjGa//TwZkbE4XAI8hZyb9eLnN8OERRNdhGk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Lj9XAYVu; arc=fail smtp.client-ip=40.107.117.76
+	 Content-Type:MIME-Version; b=t+G4Squxvzp5reqjO8VJuclSM+7dhouvOhPdC2myinVMTYPe2rZQ/jsUMNiEaf3t0eePU43FKQZQ0Z3CJ6D7LDKfIqZZnN6usq8UHq7l8O6Fn1gRbE/qIhF7uD/F3b8OPV10oHXdnnaeDAWroN1wx/7ubvJYZExq93YeFNAgpPI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=jKZHXZA3; arc=fail smtp.client-ip=40.107.255.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Lj9XAYVu"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="jKZHXZA3"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Kf7S6uYNuv6kxyx30fnD7OGu0Cs7uZvPiJVPSC+h4A6d/szezgwVLZ9+VpP5tFW2qaipegBWlLS5/Ym11vUqRTOQR7bugk6S13GhPc0JOBTZaxUdkQXwdvdfihjkVjnQM0KJkshLfxLgDbMUDlNO/6ouLxDdVCPK9taGVRRpnA+sC/bTNOfEj4Sq41bzkD52vcidgl5Yb/nY1K3+wtjvk2CKfgamUxilfCvl8jkbbPELape+X+aeakYQ3X+zMo0Ive4UYBve7rz/3OqAQ6b/BqpwihCJJ7Qdv1YsrcIYc1chQVqRHTnoI9YmhdsSwsLCiCCM2ALEBeon5nGIZO1Dpg==
+ b=eCflF0Fz6mGUnTN+P9OsE4thAiRbqw6pxSroIs/ogKohMByBARuVojvdr5oocYOrC0mihymrUzMhBdGfL9bTplcNelOXCuO2YpDeOjy6akuVC9PGE6BcJ9gNen8FbPo1zj7pbppeZDKJsRnNOpz7Eca5okCP9T4xsjhdjyvDNo4xeWCtVJ7iR846TOjSRUpCdFzCsMNz1yzSKXAO6F7IV4KuwfB3V2M+iWCFMKG+NWW94yRdGydK4j2S6ER0dOBIpP9G3BiCg9cRDEEasHbqFbkzenBoEssjI3hTUASa9t9e5UNkZbyuBx46HbngXK0f4qCDDtBWWhjPOgTZzJfQeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bMhwemUUoB/3WcjWcxAIFyG/JasZnHDkItVkTKGRmO0=;
- b=xgjc5uXUQXVGkYzbHX3w+50ObcgBsaEYgpuRyimwVBQWd7lM93WMqw/b6HT/wiZDlHPDm28I0jNK259Jr6OP/1DO2BrFt7htxJBI0LCS9pBGEcVTD8gFWbgUxEjJ7R3Af/poib88A7pNSO7qPJyVMU3d6f7vu96y9r7KSGH6Wp1c2SlWVsb++sq/1yvqDZkUet7duFKCndGUN7V3ShLSAj+uihjNq5VPycdZwjtOG+P+20g+LOE2oCJJ3e9eCg8hswO31P2LOyGfHyA7LKfw/M62kbKGqiZhWbU3rrzZBr/paM896MxywQ2S1Vzrvt3z3/1zFhOOrBbuIUvYR9WxMQ==
+ bh=JHX/UiO7M2V7tZ1K2p2u8yZfB1+JJYYUuYVrD1PHkr0=;
+ b=LB2MUVrYLiKCDrBDbLtgniqJynFncosIEGmZgvmL/MFaX1cUA9XGdwEG/Z/CdWVCF+bVWm6BPIX6MZS7t+wkhpTRsergS5c5Ubvoq1kPmc4A11/fhDm/x+OKMAy8mcMkf8Tyz1ezxkRPcGbSTwD8FaptM42ktL5YmM7S4RjKD7fDt1bF39aW5KgecaqBHIxIXfhVotnO0mp5SWSmEwCoXj66c939IaHC2iBTnZRuXoWo5iPBdN5G4wNgBNXqAto58siWxde4dPkM+atmeRlcfevJRbvN4TuzysUQx35xqTisJDgfiKIOqJyOQbsRrY5mKsqak+RzVUFIEh2l/QEoeg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bMhwemUUoB/3WcjWcxAIFyG/JasZnHDkItVkTKGRmO0=;
- b=Lj9XAYVuZ8R6ZsK6zx5iUmEGPzgVqZztdiTqwePe0+mRi9tMrS3J/gxLYaYbNbcJpZg72WcOuYJIEfIku37IdXbVejsYfkTt8LxBdC//QpmCvG+ZVQSf6oH0OMCsU21vzZsCXP3XDDfGtrXTws2BQh3B2OucLK9oOHgFKkP98lCWqavu7cB5AtoZrBuhE+yB4MQ7ahIhG5cvhOc14EIQi2gmyGZFy/tV7kD0Dn3I9iI1c9fzF388pQQlDjDiZHJWisT6t8ZAA4BW263oU06sEF/rEcqOTbakSFt9MdXY4kU76a1ZvpFq6MeDSBoxRC4/hgbPnMttM8k49To89xVIig==
+ bh=JHX/UiO7M2V7tZ1K2p2u8yZfB1+JJYYUuYVrD1PHkr0=;
+ b=jKZHXZA3TF4Ag+YDCbEIId7iH7QMeL84dr04WFOpCSHGeJsZWAswD5GjBaa+KAlF82ftfx1mp8XfJ2/h5Sq/L657YPR9JEPbYaDFVz/szjNBHq4t0K+C/1iOPD+AVWeG2P0ALgTh5YiWs/xpJUhtSnVLokyvfOeRJCdgWnNHRbP0ax7KORhvoKCsDZDLaelvdO9ibePGN9vDWwS+Jqj9+94ioy24D+CzQ7tqkHOTzbAjXTgE6SFfz/7YkZAfWfBs9OO/RAgYEmtt4kKRa4ythAkYS0qbz2gPkWfOE1oDgliGOnxsf0hMEKbg1JnHUT7FViLY+zaVQMWcImBQA7w7+g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com (2603:1096:301:f8::10)
- by SI2PR06MB5386.apcprd06.prod.outlook.com (2603:1096:4:1ed::8) with
+ by TYZPR06MB5123.apcprd06.prod.outlook.com (2603:1096:400:1c1::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Tue, 30 Jul
- 2024 07:58:29 +0000
+ 2024 07:58:18 +0000
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f]) by PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f%6]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
- 07:58:29 +0000
+ 07:58:17 +0000
 From: Huan Yang <link@vivo.com>
 To: Sumit Semwal <sumit.semwal@linaro.org>,
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
@@ -54,9 +54,9 @@ To: Sumit Semwal <sumit.semwal@linaro.org>,
 	linux-kernel@vger.kernel.org
 Cc: opensource.kernel@vivo.com,
 	Huan Yang <link@vivo.com>
-Subject: [PATCH v2 5/5] dma-buf: heaps: configurable async read gather limit
-Date: Tue, 30 Jul 2024 15:57:49 +0800
-Message-ID: <20240730075755.10941-6-link@vivo.com>
+Subject: [PATCH v2 1/5] dma-buf: heaps: Introduce DMA_HEAP_ALLOC_AND_READ_FILE heap flag
+Date: Tue, 30 Jul 2024 15:57:45 +0800
+Message-ID: <20240730075755.10941-2-link@vivo.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240730075755.10941-1-link@vivo.com>
 References: <20240730075755.10941-1-link@vivo.com>
@@ -72,120 +72,331 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|SI2PR06MB5386:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99971946-0b0a-4192-4e2b-08dcb06d6652
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|TYZPR06MB5123:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85174c0b-a3ec-4847-05df-08dcb06d5f42
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|52116014|366016|38350700014|921020;
+	BCL:0;ARA:13230040|376014|7416014|52116014|366016|1800799024|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?kqaTSyl0nuEklRGXrlP6kU9dvC8CrjW13PytQsT3RiGLtmBXfrTROZAvgF/8?=
- =?us-ascii?Q?L9sMyvARcVpm25NcGgcqMnnTP87gtsuSD86DOL52pQM9V89Lx/YE9LeTdc5v?=
- =?us-ascii?Q?w2joHuOekp9kp0VTOpKYtbclcSToLjZzG49cb35mBfflywL1pec4g1BH95tK?=
- =?us-ascii?Q?Z31/AgwWt4H+RLnBV8ZX6VX8E4gYyTlex/waVjzS1gWZ9TG0tIFI5f7f9rkc?=
- =?us-ascii?Q?QlxsBG/rnw8a1pDpM+ee8GpBglzZUYqu+H0edxV8WN2h0p7L821n0YzPt7bX?=
- =?us-ascii?Q?HGxrx4rlzQ+TOL/apfoJ3Uju2SmhBrPx1wG+0YQQ2L4MEF3q8etDWAD6Pf/z?=
- =?us-ascii?Q?X8wWtyr6LXE0TjWqUeIIeKko0BTxPNh3K6u4HIQi9CLG5QkMq7uuyQ0EIMFk?=
- =?us-ascii?Q?wA2h4rIRo+ykxiAAbRy02jfZglpciln3coPT8UaT4q5PTj5nTDJXJdD3ckUG?=
- =?us-ascii?Q?84Yla0Erei1MLo0Ij531Lj4elmxdQbJdxHto2C4Ii4zxyNMsJ2rVM6hcaBoZ?=
- =?us-ascii?Q?Np2MoAYSLo5T8YpDzzOIa+tX9bglA1moqDHsTpuGxJg5OWqUWxP707CQ/Ff4?=
- =?us-ascii?Q?kWlsVZjOUA2z/vYqmiu+mLEtQjEHjzh3z9BRj6/EYK3qYQH+xIySPFUiDI/i?=
- =?us-ascii?Q?BJd7u2JhuOSuH9xpQQHnm0vB+lVkCJxR18Tymdwqel0wTWj4giwcDWaaqtKs?=
- =?us-ascii?Q?aLyvlVcbKgDcFjCxxXG6TDYlIF3edRK0vmiHtDk+LcYKOSvAFZd//Gyym3Ng?=
- =?us-ascii?Q?hXSjciiTKj6UXN2uQTCZ6xL9H/9XnTjadTFirORAMWiVc+HZ87/yK5X5dTOD?=
- =?us-ascii?Q?H0Qqsn3lZU9P58b/4l4FyA0HYEo8TLfM/f2ytF5AtN8XRZaYldZX5J3wejSD?=
- =?us-ascii?Q?L1PQ2/yb3Coc+qtPCqsg9p2XRY6EX0xD2zGjrxaTSZzImU+K4xt8ksGMC77Y?=
- =?us-ascii?Q?e9f3RBqws4sVmkZWGghfe2S5Cg2H2DdkqUtpdD4LPT9koltHsthxL/lKewrJ?=
- =?us-ascii?Q?G3nXRiB8ruha+RRkT7qEXxlW/yyMr4pif/IXgFzSE7vVqiCwxkL8avxbSOZ7?=
- =?us-ascii?Q?LgpHkk9MVTwu1UIAIlJlLGg6MliOjCXbf21wKMhV2MB+qJsxz9bi6GrtSKTs?=
- =?us-ascii?Q?LHCCVY6OxHnHvK4jx0uZtlCJz7EUktqJEscAPhtxf57ont6sB9y7CU7TNl4Z?=
- =?us-ascii?Q?9px5ABx7jrvsR9D+jM7p11ZMMvDlsyN6YMajIFsFT4nQgKsekfTtE0lUcNu5?=
- =?us-ascii?Q?DYqhBD3Qnn7Crb1AR5jDkXyIG1RJvyWDTmgm/gMiSgqnuB35x8OPR+YrPgrn?=
- =?us-ascii?Q?E201Dk++P5XaML8ytba2gmul4uVd8oStPwuD8xt/pzwzN0U5sivEzMCR+hlJ?=
- =?us-ascii?Q?21/SqqZKm5LJ+VDo1+5JKOkqYLCpI8oc6X+o9KFtfSyGsve842q4V2A1l8R+?=
- =?us-ascii?Q?BnypV7leHr0=3D?=
+	=?us-ascii?Q?IXY1yecc9OTgHuiqN5ux2zJYvqolghZ+pukSO5ZPIHyjfTVh235alhizUICs?=
+ =?us-ascii?Q?4oXytsP6lHMTw+lhBzmEaFcN00GVg5l+sPOqUYx5M1XS7IresJluFKWkhlEk?=
+ =?us-ascii?Q?w0LB/2T9J4akoQKdqyCk79hrvdDjTlP0r7bXKghF+eLIH240SO1AWTIJnKsp?=
+ =?us-ascii?Q?A41PYiIgDTYyfdN0XZyzBQDJJ3qAye58keLYE8RDVR9xWgbSHJz3sSWy046+?=
+ =?us-ascii?Q?ej0lvVoQD8PfPDu/epoKQvTOQShcSQPqh9mjlNoY/YdL1F8FumOeyA0p/7E7?=
+ =?us-ascii?Q?1GLZViRND+GEr7IXa9N/mJfzUeA4RBjIsCDwHC0v5agTMUvpujmBgPWY5l5u?=
+ =?us-ascii?Q?VaSdBEcP8qH4S3oNp3bQiNQNxaXihQT57CxPa8oEqbiz3lRG/q0kU8qgDz2S?=
+ =?us-ascii?Q?TgQ10yJg/8/wBNwLJlIpUo51UkwaazEMOQ6EwVSDGfniCI3hNC/b9z+naRbF?=
+ =?us-ascii?Q?9KdR6DQYozlpteY9ckAUivXKfG0TZszDx6r/8sqWPUL1+0Q1NlszOJ4W7KRL?=
+ =?us-ascii?Q?2NKiT2XWUN1ncaVvddkvHi5qUal4aNzu2Z2rHS81z5CPCIdTeUjPtx6bt15J?=
+ =?us-ascii?Q?s8w511RaFoI2xoOJTXD6Xm2+AutGHb3sAtzL5wnMkdonLO2AyQ/I+5H2FH21?=
+ =?us-ascii?Q?jVD8TzWXdPJWifJ4VkxLuhxKYp1d7SObiIJF7nnUlI5GY0UEyBXIosAmTBTI?=
+ =?us-ascii?Q?/kub97hi9Nt1GSaEBe0nh/Q1UElv5bsI9xER+Sh4UarTLmlHfwTQVn96tYQv?=
+ =?us-ascii?Q?rVs58ibKYa3tzGI1Bq1jBTwTMVSCcyjLraQd1RY96ZwWfM8IUfJL0M8muew2?=
+ =?us-ascii?Q?xadresPmHR9bLL0B6nSaZPYvLT+w61hgKds4EwAPMRsI/YLpKNrsQjNHJhLJ?=
+ =?us-ascii?Q?BbVgnrsrfvUqR0HJ4F/2mFLZWyKfiC81kJ/+0G5cUgjbLotIGwNyn45VvNqB?=
+ =?us-ascii?Q?nBV3ZMY1HWbC7L1Yhfh5DxNIZGd7p/K0hVIDN2/rJ9Z/IPPMmnfHNEJcRpiI?=
+ =?us-ascii?Q?nSiHCKLkW7Gq1Ye/oMBzHabzjouKHojifwnfGV5roRxAuPwgHhTnEHryVFhI?=
+ =?us-ascii?Q?Nh03hIfc7fIiPrRCsnRFK+DZ0aGLcUFv3lNEk+o1PPMzfs3Zj+9yP12OqSsU?=
+ =?us-ascii?Q?d/SGCkLvmNcs3sEkyeLWXTlVaaqsONxtOrfJa1VKhZVaSYJLvF9+gw3qQTa1?=
+ =?us-ascii?Q?u9PLOJkdWJ37uOGnApFFg4oNjYNPha4sroxBc97T3bW36vOStL4VZvdg54SL?=
+ =?us-ascii?Q?QjPz7rUSPuzklT8+3yslzP1+7vgWMG17+7M1rEpLmGInvO7I3C/B0eiGHtu3?=
+ =?us-ascii?Q?usne8XYJ70GfIoAhO9KnO5ZUzakU04lPstt0AU8C1Mgnyvc879Rm2BO94r9j?=
+ =?us-ascii?Q?4dPXBiYbnBmn1c/dj6mo5wZl2UV3lAsSOnq0ClWPOJVWG7r2G2A1X7fyfDXf?=
+ =?us-ascii?Q?WNQSjoRq2/A=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(52116014)(366016)(38350700014)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(366016)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?fZqK6JJojZC9m15E9DrjVKd37EPpsoTZyk8yLyqMyq0/eYI3e+qiFCKNOrJG?=
- =?us-ascii?Q?SAEJ5jpDBp5VP1f+OXIktT/RAy2SLXdnyG+4lnrEyToiuidh/UV/3PnpZpjz?=
- =?us-ascii?Q?8mEx0VsCEGtLOOluo7WzcB+KhpM1zO2DueJiSnXDxVXXtoCWAO6wvVg0UY7R?=
- =?us-ascii?Q?FV2oaxt2ND1FwFoHO/+YlV4yE4LAwmm2lAwRFJ/MA9ajA1ovcaAyVQftuogc?=
- =?us-ascii?Q?7TNsYqbnx/65zkAVno5/SKGBJAZHtv/sbpMHpibxDlHAoa5pi5zgT1mjziS0?=
- =?us-ascii?Q?FR8q1viriYIpvM5uPcr+Ci/J2dsjwbyBx4gHLQcMwr+0xVqBDA3AqEwSgbt9?=
- =?us-ascii?Q?pUpBSY971O6fkhA3HY+PYrD6jVVWkSjdTJ/WIf6Pkq6gygpuR7M2g4L9z4bd?=
- =?us-ascii?Q?7aZ810q6ozNe5ErsoJKG1mSXHC9fcMr0W0saqoBG4JBdr5K+udi/uLrdg0V0?=
- =?us-ascii?Q?U58Olzn45wGfJ0vpaW3jG/SkESspxALZ3gosON7MDUo02FQ7doVV5YU2moOz?=
- =?us-ascii?Q?lK7b8J0wnIXfTWkJnxQSqOr1OrgXS01dct79OpNeqJYcrEpUY/kwztHe8WBJ?=
- =?us-ascii?Q?blpfDTXZgtvbUeHoehfFCbdHFCoSYzDb3ZbQTYpeAYWKuc7+vnznrLb/SVBd?=
- =?us-ascii?Q?iI1m9tZQ0TSpvCd+3rSpkwJJxvl/OoEnnL4VdB9fI+19NXYbuBXEGFWz720g?=
- =?us-ascii?Q?q9xtzjJqMP31OQu7fvuKVLMtdxhTX41S/JmKebygjlwLM3PYG8o+cI1oil0V?=
- =?us-ascii?Q?CAa1Ga6fDZhhMGNO8ueDcXb2ueCWgq106gxtg4S2fch/tc+eQW1h1PwSzFZp?=
- =?us-ascii?Q?jwBB3WZZJQxfK+cNdQ65WSG2UpnL/9owXKNc3qBf/NyLsztQr/YNRW8YBppA?=
- =?us-ascii?Q?a1LK9mqFVE9/PnlrZgoupDTsFBsNCx1lYbQQhHKuXBU5NwWGpkZnta1AVEs7?=
- =?us-ascii?Q?3Y73hgijbW+rN61SHG5sPXWOoNIvDPaeghjwLqtlTW870zViOPD7X5veemo5?=
- =?us-ascii?Q?Joh8Gi5bPZkmiA3j4g/S+HpeUQxOYaCt6+HfcpV98Zh/Jcn8TsBzGR7DsYVi?=
- =?us-ascii?Q?BfAbLl+ksfggmkh1mxmlsSrHce0bU/igT3xTZ7qNweiIdSqRg/j3UQMetW1s?=
- =?us-ascii?Q?4d/KW/O3df9jZSrmc84HRT+kJQXSIk+wGFo7Usj135i2NaViFlSE1QvwlIoK?=
- =?us-ascii?Q?6EETWNTS808VUWqnaq94oMUPSskdlXRMni0lg5MXJ2V60HfCzbozrO0hXLxW?=
- =?us-ascii?Q?+ncxb5vZglqfhuYBGb9Z9g6AfV+yHYJ2jNIyFPActMygdm6D3EvGIQ5Ge3Ak?=
- =?us-ascii?Q?h3TmKCnHjjYIMYXWY0GAORiIjOTQNrQasLziaS0cVyRCslJbyggYoHLkKoeh?=
- =?us-ascii?Q?pyiDV816XBvaPJsvJcwKOv1QDRR8R4vVqOsDfhHti6jLV/DUgHyeLAAxqWfX?=
- =?us-ascii?Q?msXHJ/ayggNdBzrVIumTUqFaDXmWnsFOgdlrIYQprS7G0t7/KzoHUc9ezlKm?=
- =?us-ascii?Q?zR8CShWDmrw1MQMVP2y+5ZSt0MMdfPaW4lljsy2RAMBFvkMxIDhAycJ3dDjV?=
- =?us-ascii?Q?yyVSwBzNIf9GmrlaZC4hFPOMciH2/5ni7yDn0hpI?=
+	=?us-ascii?Q?SVvGDNwXFOu4S7kgXQ8jBObYBdWAdXXqYsoTMTD82A0Qq9OW3/oBqfhJZViO?=
+ =?us-ascii?Q?eaq8hli6MO1SvDfM3J/HRSbXSvXXEpKAjONTP8qx4JyhdcYLFxqsrFL1tVm9?=
+ =?us-ascii?Q?dRVmYxUhZh6KDiMbYJuESOCjJ2giugy7alIRLddebStEbp6GpFH2BrTSDPFy?=
+ =?us-ascii?Q?NUKPf2thAggd/RpEygjGDM76uBFRIkd/5ezVZaNEX+Y0MDzD3E+y1RwzNPwv?=
+ =?us-ascii?Q?HmP7RAKMG1SwRI7z9eMQ9mSXJ+s77nbl+htp974L1KAP15K9AAQHbZyRUTCR?=
+ =?us-ascii?Q?TGVMx0ypW5QCW4TkOZgTghAIBqTG9iUmJzTSdneb0w0VImFVkItesiiuCF1f?=
+ =?us-ascii?Q?BK9RJTfbfHiNPj33uZEexEnJKif7DbJf8ddewaPeU1h0tKNOppGdZIqYXZHg?=
+ =?us-ascii?Q?ERAjtcCZ8Qxv+2Zllm80IkKCHqJyy7UyYZY0CO9ayC7ipnl99fGJtiUikBhE?=
+ =?us-ascii?Q?a/DZmVvaVD+s9XrgSyCS4BHOReqzhLjQdrofZaayfkZvqAiOkybkobOtuywf?=
+ =?us-ascii?Q?4kprdtj8BRAO+aw3kFZHLUGIiG2IpMJRlEYvepClDQ1OKzVoKJevUMxMAv83?=
+ =?us-ascii?Q?GdBteyEboP7uFnNd6AVL5f5ucM5JfRHaUeJopwf7ytUKVTKRFMCy0krzV2B8?=
+ =?us-ascii?Q?O2Y7N9ghIct8x+s+1OXnShurbVlhritpvrfjGC62GRlQulk2UTLpDd/aiyGq?=
+ =?us-ascii?Q?goduaaYbb45rGmDtQofqz2tn2ulxiXA7m1XlNwg+ndSD5RFhFuksP4T3v2KI?=
+ =?us-ascii?Q?IVOq3saV8I0CQVX8bH/8bwLBWfQZPptP57zMVc1WdBMsLkuTclvT4zyzq9cW?=
+ =?us-ascii?Q?KzhMeIuaZqKBbkJpo6059Bk1XGbI/iXgJ9JrJwVzE1DFS/mTzK15aL7A78dj?=
+ =?us-ascii?Q?S1NyB38SgES4KR98Qua30yGkEoFmbOTHhuOIeDe7S2MzUWyUVKD9I0GTHSGP?=
+ =?us-ascii?Q?Ej3bqlW8qGYvVTWD9WMxF7Wl2xUpX9LzCVA4Y/AFq7XvWvIuW4HqMHUhyKPw?=
+ =?us-ascii?Q?PI2g4UbZ5RomLHnOZK5ODuoTJh6MnLd9FcR5AHmCeTT7Yi570NPZBv92H2A6?=
+ =?us-ascii?Q?bpR9/1/jdH72kB4Q64FtUTMnhpPMjlhRsvFb4b4COpgnxbiwIMLyWYzTuoo0?=
+ =?us-ascii?Q?5w6+agdBJ7a7lck55JjSl/bMcqxA7Xwp0ejGenPa4VYGpiucA/CDCo5fJUyE?=
+ =?us-ascii?Q?G87qoWMdgCsSOw4B2zGYu+LnZc00gNYjoK8TZ7mEjFnYv0jR0ZXuqYGtCmx1?=
+ =?us-ascii?Q?7RDakYM1VYxKKp6+AfHp/mHRlPHgc/FCCXm0ARvuUieY7sN9ki/9az6e/ftR?=
+ =?us-ascii?Q?70yZdAotsQU3boqGFFs+ufERqTXvWl0qDIrddP8lpH55NUylOF5Vqf8ulapw?=
+ =?us-ascii?Q?yLIey5q0gDJ8luikNvdVc80sRf0/XkUIE5ouqriI0Ikkwe46BAxt5EZJRR3O?=
+ =?us-ascii?Q?QsWzH79Y/0S5qQrWxHQP2/0o9seJLr6rKsJMBjr9GROx6ox7zlUzw1R3n3Ia?=
+ =?us-ascii?Q?VaM6MhgPq5s8g8b8iqf4SnzQbY0f56Xh3/amEvz0sRUHFYw60fgtlpdKXrw5?=
+ =?us-ascii?Q?eHByihIxeINt3vpae2gMOLA3j+q1kwl5Jdg83Y6N?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99971946-0b0a-4192-4e2b-08dcb06d6652
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85174c0b-a3ec-4847-05df-08dcb06d5f42
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5676.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 07:58:29.5867
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 07:58:17.7801
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4CWGcnBzisIgCBGkZCAx3UWENPTN3tDJ2J4o0x2JGfS16XFkaKq0LMR/hkTiO2VsN117nOGTEzKXdrodMvDOEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5386
+X-MS-Exchange-CrossTenant-UserPrincipalName: /ihmnhvaeE9vVy4Qvj/6kz8SY16Dv476VRMaXTahYSNRwtd8K+zTSXx9kbBY2iEYvnuPW2xWtw45Pu1HpA3Q3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5123
 
-The current limit default is 128MB, which is a good experience value for
-I/O reading. However, system administrators should be given a
-considerable degree of freedom to adjust based on the system's
-situation.
+Some user may need load file into dma-buf, current way is:
+  1. allocate a dma-buf, get dma-buf fd
+  2. mmap dma-buf fd into user vaddr
+  3. read(file_fd, vaddr, fsz)
+Due to dma-buf can't support direct I/O(can't pin, not pure page base),
+the file read must be buffer I/O.
 
-This patch exports the limit to the corresponding area of the dma-heap.
+This means that during the process of reading the file into dma-buf,
+page cache needs to be generated, and the corresponding content needs to
+be first copied to the page cache before being copied to the dma-buf.
+
+This method worked well when reading relatively small files before, as
+the page cache can cache the file content, thus improving performance.
+
+However, there are new challenges currently, especially as AI models are
+becoming larger and need to be shared between DMA devices and the CPU
+via dma-buf.
+
+For example, the current 3B model file size is around 3.4GB. Using the
+previous method would mean generating a total of 3.4GB of page cache
+(even if it will be reclaimed), and also requiring the copying of 3.4GB
+of content between page cache and dma-buf.
+
+Due to the limited nature of system memory, files in the gigabyte range
+cannot persist in memory indefinitely, so this portion of page cache may
+not provide much assistance for subsequent reads. Additionally, the
+existence of page cache will consume additional system resources due to
+the extra copying required by the CPU.
+
+Therefore, it is necessary for dma-buf to support direct I/O.
+
+This patch provides a method to immediately read the file content after
+the dma-buf is allocated, and only returns the dma-buf file descriptor
+after the file is fully read.
+
+Since the dma-buf file descriptor is not returned, no other thread can
+access it except for the current thread, so we don't need to worry about
+race conditions.
+
+Map the dma-buf to the vmalloc area and initiate file reads in kernel
+space, supporting both buffer I/O and direct I/O.
+
+This patch adds the DMA_HEAP_ALLOC_AND_READ heap_flag for upper layers.
+When a user needs to allocate a dma-buf and read a file, they should
+pass this flag. As the size of the file being read is fixed, there is no
+need to pass the 'len' parameter.
+
+Instead, The file_fd needs to be passed to indicate to the kernel the file
+that needs to be read, and the file open flag determines the mode of
+file reading. But, please note that if direct I/O(O_DIRECT) is needed to
+read the file, the file size must be page aligned.
+
+Therefore, for the user, len and file_fd are mutually exclusive,
+and they are combined using a union.
+
+Once the user obtains the dma-buf fd, the dma-buf directly contains the
+file content.
 
 Signed-off-by: Huan Yang <link@vivo.com>
 ---
- drivers/dma-buf/dma-heap.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/dma-buf/dma-heap.c    | 127 +++++++++++++++++++++++++++++++++-
+ include/uapi/linux/dma-heap.h |  11 ++-
+ 2 files changed, 133 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index df1b2518f126..2b69cf3ca570 100644
+index 2298ca5e112e..f19b944d4eaa 100644
 --- a/drivers/dma-buf/dma-heap.c
 +++ b/drivers/dma-buf/dma-heap.c
-@@ -417,6 +417,11 @@ size_t dma_heap_file_size(struct dma_heap_file *heap_file)
- 	return heap_file->fsize;
- }
+@@ -43,12 +43,128 @@ struct dma_heap {
+ 	struct cdev heap_cdev;
+ };
  
-+#define DEFAULT_DMA_BUF_HEAPS_GATHER_LIMIT (128 << 20)
-+static int dma_buf_heaps_gather_limit = DEFAULT_DMA_BUF_HEAPS_GATHER_LIMIT;
-+module_param_named(gather_limit, dma_buf_heaps_gather_limit, int, 0644);
-+MODULE_PARM_DESC(gather_limit, "Asynchronous file reading, with a maximum limit on the amount to be gathered");
++/**
++ * struct dma_heap_file - wrap the file, read task for dma_heap allocate use.
++ * @file:		file to read from.
++ * @fsize:		file size.
++ */
++struct dma_heap_file {
++	struct file *file;
++	size_t fsize;
++};
 +
- static int init_dma_heap_file(struct dma_heap_file *heap_file, int file_fd)
- {
- 	struct file *file;
-@@ -442,9 +447,8 @@ static int init_dma_heap_file(struct dma_heap_file *heap_file, int file_fd)
- 	}
+ static LIST_HEAD(heap_list);
+ static DEFINE_MUTEX(heap_list_lock);
+ static dev_t dma_heap_devt;
+ static struct class *dma_heap_class;
+ static DEFINE_XARRAY_ALLOC(dma_heap_minors);
  
- 	heap_file->file = file;
--#define DEFAULT_DMA_BUF_HEAPS_GATHER_LIMIT (128 << 20)
- 	heap_file->glimit = min_t(size_t, PAGE_ALIGN(fsz),
--				  DEFAULT_DMA_BUF_HEAPS_GATHER_LIMIT);
-+				  PAGE_ALIGN(dma_buf_heaps_gather_limit));
- 	heap_file->fsize = fsz;
++static int init_dma_heap_file(struct dma_heap_file *heap_file, int file_fd)
++{
++	struct file *file;
++	size_t fsz;
++
++	file = fget(file_fd);
++	if (!file)
++		return -EINVAL;
++
++	// Direct I/O only support PAGE_SIZE aligned files.
++	fsz = i_size_read(file_inode(file));
++	if (file->f_flags & O_DIRECT && !PAGE_ALIGNED(fsz))
++		return -EINVAL;
++
++	heap_file->fsize = fsz;
++	heap_file->file = file;
++
++	return 0;
++}
++
++static void deinit_dma_heap_file(struct dma_heap_file *heap_file)
++{
++	fput(heap_file->file);
++}
++
++/**
++ * Trigger sync file read, read into dma-buf.
++ *
++ * @dmabuf:			which we done alloced and export.
++ * @heap_file:			file info wrapper to read from.
++ *
++ * Whether to use buffer I/O or direct I/O depends on the mode when the
++ * file is opened.
++ * Remember, if use direct I/O, file must be page aligned.
++ * Since the buffer used for file reading is provided by dma-buf, when
++ * using direct I/O, the file content will be directly filled into
++ * dma-buf without the need for additional CPU copying.
++ *
++ * 0 on success, negative if anything wrong.
++ */
++static int dma_heap_read_file_sync(struct dma_buf *dmabuf,
++				   struct dma_heap_file *heap_file)
++{
++	struct iosys_map map;
++	ssize_t bytes;
++	int ret;
++
++	ret = dma_buf_vmap(dmabuf, &map);
++	if (ret)
++		return ret;
++
++	/**
++	 * The kernel_read_file function can handle file reading effectively,
++	 * and if the return value does not match the file size,
++	 * then it indicates an error.
++	 */
++	bytes = kernel_read_file(heap_file->file, 0, &map.vaddr, dmabuf->size,
++				 &heap_file->fsize, READING_POLICY);
++	if (bytes != heap_file->fsize)
++		ret = -EIO;
++
++	dma_buf_vunmap(dmabuf, &map);
++
++	return ret;
++}
++
++static int dma_heap_buffer_alloc_and_read(struct dma_heap *heap, int file_fd,
++					  u32 fd_flags, u64 heap_flags)
++{
++	struct dma_heap_file heap_file;
++	struct dma_buf *dmabuf;
++	int ret, fd;
++
++	ret = init_dma_heap_file(&heap_file, file_fd);
++	if (ret)
++		return ret;
++
++	dmabuf = heap->ops->allocate(heap, heap_file.fsize, fd_flags,
++				     heap_flags);
++	if (IS_ERR(dmabuf)) {
++		ret = PTR_ERR(dmabuf);
++		goto error_file;
++	}
++
++	ret = dma_heap_read_file_sync(dmabuf, &heap_file);
++	if (ret)
++		goto error_put;
++
++	ret = dma_buf_fd(dmabuf, fd_flags);
++	if (ret < 0)
++		goto error_put;
++
++	fd = ret;
++
++	deinit_dma_heap_file(&heap_file);
++
++	return fd;
++
++error_put:
++	dma_buf_put(dmabuf);
++error_file:
++	deinit_dma_heap_file(&heap_file);
++
++	return ret;
++}
++
+ static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
+ 				 u32 fd_flags,
+ 				 u64 heap_flags)
+@@ -108,9 +224,14 @@ static long dma_heap_ioctl_allocate(struct file *file, void *data)
+ 	if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
+ 		return -EINVAL;
  
- 	heap_file->direct = file->f_flags & O_DIRECT;
+-	fd = dma_heap_buffer_alloc(heap, heap_allocation->len,
+-				   heap_allocation->fd_flags,
+-				   heap_allocation->heap_flags);
++	if (heap_allocation->heap_flags & DMA_HEAP_ALLOC_AND_READ_FILE)
++		fd = dma_heap_buffer_alloc_and_read(
++			heap, heap_allocation->file_fd,
++			heap_allocation->fd_flags, heap_allocation->heap_flags);
++	else
++		fd = dma_heap_buffer_alloc(heap, heap_allocation->len,
++					   heap_allocation->fd_flags,
++					   heap_allocation->heap_flags);
+ 	if (fd < 0)
+ 		return fd;
+ 
+diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-heap.h
+index a4cf716a49fa..ef2fbd885825 100644
+--- a/include/uapi/linux/dma-heap.h
++++ b/include/uapi/linux/dma-heap.h
+@@ -18,13 +18,17 @@
+ /* Valid FD_FLAGS are O_CLOEXEC, O_RDONLY, O_WRONLY, O_RDWR */
+ #define DMA_HEAP_VALID_FD_FLAGS (O_CLOEXEC | O_ACCMODE)
+ 
++/* Heap will read file after alloc done, len field change to file fd */
++#define DMA_HEAP_ALLOC_AND_READ_FILE		00000001
++
+ /* Currently no heap flags */
+-#define DMA_HEAP_VALID_HEAP_FLAGS (0ULL)
++#define DMA_HEAP_VALID_HEAP_FLAGS (DMA_HEAP_ALLOC_AND_READ_FILE)
+ 
+ /**
+  * struct dma_heap_allocation_data - metadata passed from userspace for
+  *                                      allocations
+  * @len:		size of the allocation
++ * @file_fd:		file descriptor to read the allocation from
+  * @fd:			will be populated with a fd which provides the
+  *			handle to the allocated dma-buf
+  * @fd_flags:		file descriptor flags used when allocating
+@@ -33,7 +37,10 @@
+  * Provided by userspace as an argument to the ioctl
+  */
+ struct dma_heap_allocation_data {
+-	__u64 len;
++	union {
++		__u64 len;
++		__u32 file_fd;
++	};
+ 	__u32 fd;
+ 	__u32 fd_flags;
+ 	__u64 heap_flags;
 -- 
 2.45.2
 
