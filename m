@@ -1,152 +1,145 @@
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B907617543;
-	Wed, 31 Jul 2024 17:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0235116CD10
+	for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 20:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722447994; cv=none; b=I9HTZUgYrIxBrIbjJ0Dr8zSQf0TNn1tf7NHa1UOeOlacAtLvISOZdYn6B2T3A99whln7pkV29MZgfAg+Mhr5aesymIuonzIz+VyOFVWbF9tbVOQPhYzwr4TYizYBGSv/ld+QdCYIObEhKUZhXaPMtIwL8C0R3A8G8Py5YD03AW8=
+	t=1722458788; cv=none; b=DABpCJDaDbSo/Rksc/kgkzsd9DnAJ1sW5u42uREbjKZ7YlPReIGa3mRTWlpXAxGIcCC0gAaPm9HgnK8fossebHCgDI7YfUbNff9rFhXNMQhO8IjURTCRoC+lHePNURj83Eb8wD/Jhw1ZQHSxczAyejBSKv4YV27gpmXRiHuIYlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722447994; c=relaxed/simple;
-	bh=VYynSQlkqfKPdPrpqBX9BNsxQD2Rk2GmDS0e1sRFgFg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=id6TSi7bHjkICxR1ZbYJIJHCeZxqfTHPgj+RUFFfg1ROMO9N0jkCOh9AYS+sWIx6a2n3AYsIBS0aMOMXcRgSbuFLl2sbDtvwvEUwSZu91fCw5YoJXpqowzEEumaJalW+2xxayMS8i8ls4BD9Qp01BC/9drf1OUgnqRRA2W5n9ZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=dvTxmvOJ; arc=none smtp.client-ip=80.12.242.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1722458788; c=relaxed/simple;
+	bh=txmpJQycIV5QPKrTWpGC8PUo9tKcejxgqsvRbMC+V8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ccpoFpPSg+hvdKtGUBD2FFE+JnfLsGDGYDlFqx411aV7OxW9M7WSjFw5a536UQLI2Ju+xxn4yBv3DIgqXyg9bh+RPjBtTMU6wJCK8/8FpO22cDLtCthHxB3smbk3/5A1z/hxhWTk51BDvpICbSmsMR9QSe3wLZK2rTZv5tDtrM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=gUK3KgDr; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="dvTxmvOJ"
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id ZCrRsJemgWPKVZCrRsG3Ul; Wed, 31 Jul 2024 19:11:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1722445898;
-	bh=l/N7BL6uXIDoiEcTV0sQ9X+6QKDbvzDQWB0h4bM+lFE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=dvTxmvOJZbGhRxoANl70qmf7S2ZSEKLOcNeA9hLaqEFBvPQUcsA6f9iuxkqiSgiAu
-	 MJOoqNaHkAis3+RugHTH6u2kXY+UKzaEFLzfPZwMxF3sTZAm+DeHEmp8yjO3uU9F4/
-	 HSwpkttWi+aUh05ALFIE3fLkL1l2S7CFYAmCcXxBYnZ6RRTnafAawtCfja3mIbTWEZ
-	 6A2+ULcm7D39ArVc/5GdclhHK+BrJw5SBb9cp1nSTKfIHbxlA3sxI7pVOwjp+D37d2
-	 mKUR4ccBalvZNLsOncet2VLSiWwX5OYVyTA1j2PZVVbsSrR8/EMAhCmdjzjd2Nq9wr
-	 Xqk1uLNDRGQzA==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Wed, 31 Jul 2024 19:11:38 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <0fbca32a-d0e9-4884-9839-be1714543398@wanadoo.fr>
-Date: Wed, 31 Jul 2024 19:11:37 +0200
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="gUK3KgDr"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-428e09ee91eso161015e9.3
+        for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 13:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1722458785; x=1723063585; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxpiuYMhfG8wroCEpsj+T0XsF8n6WcrGB7EkeYVEIFg=;
+        b=gUK3KgDrIf3SDfrPly7lL/g4COmy1oDeJqy2LlzveAKKZ2lhHpArQwwY//wPF+Z4MH
+         EWWUC2PECSxsdzGJAS/t4mD0HOm3ogStf7cHvddWiaL61YSCf4l+ukri3lcTU/IdZWiS
+         i0CqkDeMpDe2e/yAfjZ86Qw7u3b0XimrmpWYQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722458785; x=1723063585;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZxpiuYMhfG8wroCEpsj+T0XsF8n6WcrGB7EkeYVEIFg=;
+        b=tqgQhopAaZFX24mka5pgkYJSP7BE/3lb7dw7KlVMZEKfxLsyAGa4GfUARlV/pbNBlM
+         zonWCqEAPPnmA+6xwk4cQsEMY5LsWk9DjT4UHzWJtaYALoVFP8k5StX/K9faprzbIVOK
+         f0oTllfCDqpSgIvDsw5g7NaioZDXhzvXlcMJZS5B6yHp9MiJ5kZA000Gc98NCwcd/2v9
+         yXx/cWHi3vSNekDh6dUtBJer0H8C9mpVWLpYN0d/5Dwi93cCjvTX+6uPmaQmYrpUHlqr
+         VVHG+lclc3tvEG+E+sY2TheoNHD8HVa1BtvWcxBbrOilXueZt8sRUeaN+zmpWckd0RhL
+         3XSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1AjeTBBn7nZZgRAN91EN94s5hq4i2Qc7eLeCVBEO4W/Kk0Kr6YabDXmaJCX1kugto70HREbArnt3UTQ7IllL2lWqkJK5a97Ykx/E=
+X-Gm-Message-State: AOJu0YzXucSULPd80VY+Dyr5yn5DEBNyJEiI3JuMQmBXFgWBnSJGZCJp
+	A/VfELSsrDfB0nqZExI15bPXww6c/91iOGErzinYw0sXS5KXmEelDJrLOLt2vr8=
+X-Google-Smtp-Source: AGHT+IEOfnwTGBUJMCvgdzsVYm/9gkwgL+/zq/em2Ac2MZaEU7lsjUilDMlqzOjNzanNWiAy/HCT3A==
+X-Received: by 2002:a05:600c:458e:b0:426:6358:7c5d with SMTP id 5b1f17b1804b1-428b4ae9a29mr2485615e9.4.1722458785050;
+        Wed, 31 Jul 2024 13:46:25 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282b8a246asm33360225e9.3.2024.07.31.13.46.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jul 2024 13:46:24 -0700 (PDT)
+Date: Wed, 31 Jul 2024 22:46:22 +0200
+From: Daniel Vetter <daniel.vetter@ffwll.ch>
+To: Huan Yang <link@vivo.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Brian Starkey <Brian.Starkey@arm.com>,
+	John Stultz <jstultz@google.com>,
+	"T.J. Mercier" <tjmercier@google.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v2 0/5] Introduce DMA_HEAP_ALLOC_AND_READ_FILE heap flag
+Message-ID: <Zqqing7M2notp6Ou@phenom.ffwll.local>
+Mail-Followup-To: Huan Yang <link@vivo.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Brian Starkey <Brian.Starkey@arm.com>,
+	John Stultz <jstultz@google.com>,
+	"T.J. Mercier" <tjmercier@google.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+	opensource.kernel@vivo.com
+References: <20240730075755.10941-1-link@vivo.com>
+ <Zqiqv7fomIp1IPS_@phenom.ffwll.local>
+ <25cf34bd-b11f-4097-87b5-39e6b4a27d85@vivo.com>
+ <37b07e69-df85-45fc-888d-54cb7c4be97a@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] udmabuf: use kmem_cache to alloc udmabuf folio
-To: Huan Yang <link@vivo.com>, Gerd Hoffmann <kraxel@redhat.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Cc: opensource.kernel@vivo.com
-References: <20240731073752.1225177-1-link@vivo.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240731073752.1225177-1-link@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <37b07e69-df85-45fc-888d-54cb7c4be97a@vivo.com>
+X-Operating-System: Linux phenom 6.9.10-amd64 
 
-Le 31/07/2024 à 09:37, Huan Yang a écrit :
-> The current udmabuf_folio contains a list_head and the corresponding
-> folio pointer, with a size of 24 bytes. udmabuf_folio uses kmalloc to
-> allocate memory.
+On Tue, Jul 30, 2024 at 08:04:04PM +0800, Huan Yang wrote:
 > 
-> However, kmalloc is a public pool, starting from 8,16,32 bytes.
-> Additionally, if the size is not aligned with the kmalloc size, it will
-> be rounded up to the corresponding size.
-> This means that each udmabuf_folio allocation will get 32 bytes, and
-> waste 8 bytes.
+> 在 2024/7/30 17:05, Huan Yang 写道:
+> > 
+> > 在 2024/7/30 16:56, Daniel Vetter 写道:
+> > > [????????? daniel.vetter@ffwll.ch ?????????
+> > > https://aka.ms/LearnAboutSenderIdentification?????????????]
+> > > 
+> > > On Tue, Jul 30, 2024 at 03:57:44PM +0800, Huan Yang wrote:
+> > > > UDMA-BUF step:
+> > > >    1. memfd_create
+> > > >    2. open file(buffer/direct)
+> > > >    3. udmabuf create
+> > > >    4. mmap memfd
+> > > >    5. read file into memfd vaddr
+> > > Yeah this is really slow and the worst way to do it. You absolutely want
+> > > to start _all_ the io before you start creating the dma-buf, ideally
+> > > with
+> > > everything running in parallel. But just starting the direct I/O with
+> > > async and then creating the umdabuf should be a lot faster and avoid
+> > That's greate,  Let me rephrase that, and please correct me if I'm wrong.
+> > 
+> > UDMA-BUF step:
+> >   1. memfd_create
+> >   2. mmap memfd
+> >   3. open file(buffer/direct)
+> >   4. start thread to async read
+> >   3. udmabuf create
+> > 
+> > With this, can improve
 > 
-> Considering that each udmabuf creates a folio corresponding to a
-> udmabuf_folio, the wasted memory can be significant in the case of
-> memory fragmentation.
+> I just test with it. Step is:
 > 
-> Furthermore, if udmabuf is frequently used, the allocation and
-> deallocation of udmabuf_folio will also be frequent.
+> UDMA-BUF step:
+>   1. memfd_create
+>   2. mmap memfd
+>   3. open file(buffer/direct)
+>   4. start thread to async read
+>   5. udmabuf create
 > 
-> Therefore, this patch adds a kmem_cache dedicated to the allocation and
-> deallocation of udmabuf_folio.This is expected to improve the
-> performance of allocation and deallocation within the expected range,
-> while also avoiding memory waste.
+>   6 . join wait
 > 
-> Signed-off-by: Huan Yang <link@vivo.com>
-> ---
-> v3 -> v2: fix error description.
-> v2 -> v1: fix double unregister, remove unlikely.
->   drivers/dma-buf/udmabuf.c | 19 +++++++++++++++----
->   1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> index 047c3cd2ceff..c112c58ef09a 100644
-> --- a/drivers/dma-buf/udmabuf.c
-> +++ b/drivers/dma-buf/udmabuf.c
-> @@ -24,6 +24,8 @@ static int size_limit_mb = 64;
->   module_param(size_limit_mb, int, 0644);
->   MODULE_PARM_DESC(size_limit_mb, "Max size of a dmabuf, in megabytes. Default is 64.");
->   
-> +static struct kmem_cache *udmabuf_folio_cachep;
-> +
->   struct udmabuf {
->   	pgoff_t pagecount;
->   	struct folio **folios;
-> @@ -169,7 +171,7 @@ static void unpin_all_folios(struct list_head *unpin_list)
->   		unpin_folio(ubuf_folio->folio);
->   
->   		list_del(&ubuf_folio->list);
-> -		kfree(ubuf_folio);
-> +		kmem_cache_free(udmabuf_folio_cachep, ubuf_folio);
->   	}
->   }
->   
-> @@ -178,7 +180,7 @@ static int add_to_unpin_list(struct list_head *unpin_list,
->   {
->   	struct udmabuf_folio *ubuf_folio;
->   
-> -	ubuf_folio = kzalloc(sizeof(*ubuf_folio), GFP_KERNEL);
-> +	ubuf_folio = kmem_cache_alloc(udmabuf_folio_cachep, GFP_KERNEL);
->   	if (!ubuf_folio)
->   		return -ENOMEM;
->   
-> @@ -491,11 +493,20 @@ static int __init udmabuf_dev_init(void)
->   					   DMA_BIT_MASK(64));
->   	if (ret < 0) {
->   		pr_err("Could not setup DMA mask for udmabuf device\n");
-> -		misc_deregister(&udmabuf_misc);
-> -		return ret;
-> +		goto err;
-> +	}
-> +
-> +	udmabuf_folio_cachep = KMEM_CACHE(udmabuf_folio, 0);
-> +	if (!udmabuf_folio_cachep) {
-> +		ret = -ENOMEM;
-> +		goto err;
->   	}
->   
->   	return 0;
-> +
-> +err:
-> +	misc_deregister(&udmabuf_misc);
-> +	return ret;
->   }
->   
->   static void __exit udmabuf_dev_exit(void)
+> 3G file read all step cost 1,527,103,431ns, it's greate.
 
-Hi,
-
-should a kmem_cache_destroy() be also added in udmabuf_dev_exit()?
-
-CJ
-
-> 
-> base-commit: cd19ac2f903276b820f5d0d89de0c896c27036ed
-
+Ok that's almost the throughput of your patch set, which I think is close
+enough. The remaining difference is probably just the mmap overhead, not
+sure whether/how we can do direct i/o to an fd directly ... in principle
+it's possible for any file that uses the standard pagecache.
+-Sima
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
