@@ -1,94 +1,122 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C5E1BC065
-	for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 16:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668511BD50C
+	for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 17:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722444980; cv=none; b=eHlGyZJPS88Dpw+xexLrjyavqpnJ4P4nigZ3FS6iXZ1WGL7MWUZqOFaRpUKxbWwIUXDIQeAUINv5Vzpu5CUoqyS43lQVzvOnAMkQKOKm1JmNp4rG83zbL/WZYS/jxKea7X8sr3DMyHG3NnMLMk9fe2vsynZ0X/DYwD13Vbc3z3Q=
+	t=1722447001; cv=none; b=jf8asRCxfniMbaXJazVZdu5tdmewiO9r4NdY3xgfmPmUjd4w4Sfda52iQQ1cZfdeScCFkWc89R3WF4SCJWK9zu4JubxYlWkotRqG9w0Mx5c/m4Eys67m4uoLaUniFpjblwm8yJU3WNavctaSBbuab6r8SEQFCyATqrDiqUPrawI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722444980; c=relaxed/simple;
-	bh=IKLHxbuR0R9BOTQTYx5RDen/I6pf12f5piDZx2DS4mU=;
+	s=arc-20240116; t=1722447001; c=relaxed/simple;
+	bh=+WdOgppIBKd/amkMUnID1lOCik4HxEEkZwGvDDT4SBo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eceNQz194bSQs4ny364mgskAw66ujzYlFY77RT7KKiCGfHjuAfDQepAyej4DRnk0oqS+JB8NnSJZK8fR4TcelQBaMC+Nor42R3mzM9iYdOmfEo7JUSGJlfNtNDC/5E7Q3k6lDNc1KDuYv7cvqD/liYPhOtdzz8zYSWtlnGGyjQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CeYuCnD/; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=uz598w2muPTjD0j7OiBGPZKNdijPcdkyQFLA9EfqjSeoCnb9axMZYqHjpXGIh9nqdo9bpz7gsIeRAhp0h+KzPY2EXtl/qOs2faYdx/dVSHAv9P9hwsB39DCk01voL7cTgMU3odyufRTShcuNbvOj/2NgdzAW7EVqVXh7AfLRrUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=SoPRarwM; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=g.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CeYuCnD/"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5d5e1c86b83so2656715eaf.3
-        for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 09:56:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="SoPRarwM"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-44fdde0c8dcso33543501cf.0
+        for <linux-media@vger.kernel.org>; Wed, 31 Jul 2024 10:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722444977; x=1723049777; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kcpERRGU5dtW2iPAXxOu8gXnKquzRYp88DBD078J7tA=;
-        b=CeYuCnD/PqrVffd/TEtCts0wY6bPovDPDK47cVyO7ybb/aYlBmGMyptbk5tPyYa7qv
-         mQIywnD7Nh8e0wUEN+Q4ty6/1fdP+4feYx5miC1TiQgUgEyhQ+uloTS2orlKLPG0LIRr
-         aA64Kf+ITd1pRVpisQDZ8Ff+kX+/4drIuW/2UeC0pP6BoZRP00rTTxyTswYOAN+6xHR3
-         ASUpHDPbpPXKeqyTFjjrH4agVxDdMZjLu38AUZCA8fwXGdLgMVORE/rlJFM/XsM1H+UP
-         LKkLdr5eKcDh2hrnaNvrT2Hp5wui5dTCo8B3QNiA67/PFrku9kq5Db6zPhp8p0hRHGi5
-         hzfg==
+        d=rowland.harvard.edu; s=google; t=1722446997; x=1723051797; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m4KY8JEtInRy5xm4RIX3PTL4BAr3AAklSLy+uBqX6QE=;
+        b=SoPRarwMMxZgi7l3FVWylgo9zRI5oLCS7VRAbcQD3kuThwXVX/M02UUXBsLSGFdJXo
+         /r60f54al+3JcnfRj6XV59v3BfHAt4qkMR/gL8aDx1N6Pg2W/L5C9yRBkWi2Tp5RuVY3
+         uEPVTmKQCNC4sKTIJ0f/7be8dWJoHoen4y5sSyPmM0PXd/dZ9GrsvQSjWolLkb4C5HGV
+         Rbx8N6Me0J6bHm0bsD7TX8hAg69hi9n4bgZzqQKws6IxywfNluj+838Ycbd+M/ZzIUAd
+         NjMKoY9hCP6okkKA8Pim5pROLfja0kWA9sL6Y5LJKhXEykqjoXfVLJy62E5+rkfzWLZw
+         sOag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722444977; x=1723049777;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kcpERRGU5dtW2iPAXxOu8gXnKquzRYp88DBD078J7tA=;
-        b=HUJGFaybks/S7WWSnah0hMkoKornZMpgZxBPogGkT/0pYUO2GjnjPTQERQDXIObZgz
-         +sYgZDYXMuk/epdeIOkJUV2tcHT36UhDgCmxyX2DJu6qZbLmwBvqfNv/gGRjgvx1j7w/
-         Oh95YSzZoDx7CCUy/gYqkCoSobY1w5fvOU3ADqr3skbC7ebzfzqEW/SIPwGOyj/5EOjj
-         b2Dju9c33lKYor1S9M6/wMlj9C1Kw5k+jGUOSSnFb5kZjh+xtKlbka9vhJq8jCzaWOKy
-         ObbhXch/YHaJ2jFqI43sQPrtfdLHUIQ5z/9CSQWHPy8ze3b3IQxN/zaS5tVUTQ620CQE
-         kmuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVby67Y7QGl/Dabp8NtZeEYTTB5KorkL40ZPixOpfgVsSP2P0lweM2KNIyHLaA95nybUKRg3fB5qFV2fpvlNmtaRVoe5nVFSx6vgig=
-X-Gm-Message-State: AOJu0YxJPoRL+f2GKeq3LpFOaam+it0iAQg0b8GhEeerMTOTFeEi5KG1
-	ukNQyjUN7jD1JuZozeDQRneWHtbsUSwpbjOFDztGRQWqsUY1WZZRtg26xtFmVDs=
-X-Google-Smtp-Source: AGHT+IEufPjRxTWjzgVrtdmJzPJng6hNeQ52ulh+woNrCp/z6nYp0qwQuW3J63AoyMFVNDqa1RjA9A==
-X-Received: by 2002:a05:6820:160d:b0:5c9:d9db:6a51 with SMTP id 006d021491bc7-5d61e3e28edmr105432eaf.0.1722444976962;
-        Wed, 31 Jul 2024 09:56:16 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700:c572:4680:6997:45a1])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7095ad72442sm978393a34.28.2024.07.31.09.56.16
+        d=1e100.net; s=20230601; t=1722446997; x=1723051797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m4KY8JEtInRy5xm4RIX3PTL4BAr3AAklSLy+uBqX6QE=;
+        b=LGN5cPeVd2bGmtVV8wPl6xQnB+64UShpFLLk5d5bd3tgOdRrpkBkJS8JqVz2SJmGIM
+         H9t/j8ZstHV6UfQvMpbQEoyG0xfVvwG51nypNPOhXYdWdfOGna6p9YNJRKUw2KwXOm1d
+         ZSvRUT/kYITIEsVjcCDjiDEcwcCDLNTT7dlqc09dhHaP9Bieldi/7WlInd2IzN9dIadl
+         nnvNmp4/u1a0MsgBOVJLLJI7qDdEs5cw6IaTXXSzQWQh6Upb82HX1wiFgUMnDk5xQN80
+         9P+cBjnNUvQ6FUAH67t2h1fJZ0b9ald7Gy/9pbX8q6oyOC17UcHjvhirAiEsWIZneISA
+         fbcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUPKglQiHihJqgBl+HFZ2NvAyv5EPGsAVKwGq79Kz51WXkFx4FPRqqJIxIYCMSNhoTNK72U5HSmWfBhOo0mID9PNrtAT3gi5kVdh0=
+X-Gm-Message-State: AOJu0YzhByrTi3VdL8rPnrbRUoYfDHetsLV7tjksGJ6Zsfz4F8xlVDV2
+	nfgIyjMqmmQ3j1zirg/T7i99UZXgXDcI/OaYM3fNGqDB3qJcN3UZqj/dUjMokg==
+X-Google-Smtp-Source: AGHT+IFaLcLGhecfBpoLsXZxMwB3zjexCVb6+nQ4dHeejbB6qTpegfp5KXyGkHY31WGe4ABCodgceQ==
+X-Received: by 2002:a05:622a:19a0:b0:446:5787:875f with SMTP id d75a77b69052e-45004f1995amr192443891cf.38.1722446997206;
+        Wed, 31 Jul 2024 10:29:57 -0700 (PDT)
+Received: from rowland.harvard.edu (iolanthe.rowland.org. [192.131.102.54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-44fe812350bsm61884421cf.9.2024.07.31.10.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 09:56:16 -0700 (PDT)
-Date: Wed, 31 Jul 2024 11:56:15 -0500
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Cc: linux-sunxi@lists.linux.dev, Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        Wed, 31 Jul 2024 10:29:56 -0700 (PDT)
+Date: Wed, 31 Jul 2024 13:29:54 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	syzbot <syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com>,
 	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 4/4] media: cedrus: Don't require requests for all codecs
-Message-ID: <b3ab99a1-2e72-4b7e-8569-f7fe9beb3018@suswa.mountain>
-References: <20240731164422.206503-1-linkmauve@linkmauve.fr>
- <20240731164422.206503-5-linkmauve@linkmauve.fr>
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH] media/usb/siano: Fix endpoint type checking in smsusb
+Message-ID: <51b854da-f031-4a25-a19f-dac442d7bee2@rowland.harvard.edu>
+References: <4442a354-87f1-4f7c-a2b0-96fbb29191d1@rowland.harvard.edu>
+ <0000000000009f6f85061e684e92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240731164422.206503-5-linkmauve@linkmauve.fr>
+In-Reply-To: <0000000000009f6f85061e684e92@google.com>
 
-On Wed, Jul 31, 2024 at 06:44:14PM +0200, Emmanuel Gil Peyrot wrote:
-> From: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> JPEG decoding doesn’t need it currently.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
+The syzbot fuzzer reports that the smsusb driver doesn't check whether
+the endpoints it uses are actually Bulk:
 
-Does this change have an effect on runtime?
+smsusb:smsusb_probe: board id=15, interface number 6
+smsusb:siano_media_device_register: media controller created
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 42 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+...
+Call Trace:
+ <TASK>
+ smsusb_submit_urb+0x288/0x410 drivers/media/usb/siano/smsusb.c:173
+ smsusb_start_streaming drivers/media/usb/siano/smsusb.c:197 [inline]
+ smsusb_init_device+0x856/0xe10 drivers/media/usb/siano/smsusb.c:477
+ smsusb_probe+0x5e2/0x10b0 drivers/media/usb/siano/smsusb.c:575
 
-regards,
-dan carpenter
+The problem can be fixed by checking the endpoints' types along with
+their directions.
 
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com
+Tested-by: syzbot+85e3ddbf0ddbfbc85f1e@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/linux-usb/000000000000e45551061e558c37@google.com/
+Fixes: 31e0456de5be ("media: usb: siano: Fix general protection fault in smsusb")
+Cc: <stable@vger.kernel.org>
 
+---
+
+ drivers/media/usb/siano/smsusb.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: usb-devel/drivers/media/usb/siano/smsusb.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/siano/smsusb.c
++++ usb-devel/drivers/media/usb/siano/smsusb.c
+@@ -410,10 +410,10 @@ static int smsusb_init_device(struct usb
+ 		struct usb_endpoint_descriptor *desc =
+ 				&intf->cur_altsetting->endpoint[i].desc;
+ 
+-		if (desc->bEndpointAddress & USB_DIR_IN) {
++		if (usb_endpoint_is_bulk_in(desc)) {
+ 			dev->in_ep = desc->bEndpointAddress;
+ 			align = usb_endpoint_maxp(desc) - sizeof(struct sms_msg_hdr);
+-		} else {
++		} else if (usb_endpoint_is_bulk_out(desc)) {
+ 			dev->out_ep = desc->bEndpointAddress;
+ 		}
+ 	}
