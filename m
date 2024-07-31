@@ -1,123 +1,234 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2086.outbound.protection.outlook.com [40.107.215.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95FD1CF93;
-	Wed, 31 Jul 2024 09:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722416552; cv=none; b=q0HYst0TgUFbRpM8q/Tcdum3nyYDyScOIQiYKxvTjHIWYzBG/ArMDB9KIFoyKeZnQqJEnSMnMUZUhUfaMV8mVzAfZvxH6cZcmnHdFC1hRuoSXldJptsdS4w5jyh2vkAZ08+cR5Uo6QdCYgM4YwU+FNOz1Z5X+JEL9mLlucnQtWk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722416552; c=relaxed/simple;
-	bh=AB2p6wGJjXid3HdQ0XFK5dg77scNWUczy0gxuj1MWjU=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=oHOknmiDRQxwMMaDt776FrHG+hm7rkBRxSuDjkJh/TmGAhyk5yt8sFGQudqg5n8rb6igdqBlkW0PBsb2bPsG0KQqOTFRNKC2t3p1gHJ/93RkxR1fuKvEkCgrug3AtsYx2V/LwHw9b8YNvAiqW2pyykrjASPTP5lqgv3LtJknB6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=kK7J7VAe; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD791CF93;
+	Wed, 31 Jul 2024 09:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722416574; cv=fail; b=BJudVpank4mnTUK68TL4SF0vXBcapqyVTbREqLqPuq492QTcAIulwHDplUdK/psiZvltjING7ALUMp7KjAsPHaDIWwaE4oaZH5muYBbrZeS7hedfr5hRbRzrtKvMHcO+rMXHgNy5lib1ZuxGSpdpdslE3EeXywg4f8/2qzN0kQs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722416574; c=relaxed/simple;
+	bh=BjdyK/sz5gEkEg7fImNeX7lKO3p1NfDSawwj+nib05A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VzEFo6FVhVhcTa58N5XBJE/MlZySvxipZsiuGodSFrQQUanlvNBkOJpiIh2fxPspJrrfwIwNcLAULgnk0Lsgx2qhFNlGjqoAs5T6mgkJSr5emPctiqfcAp7B2sqPr/um3HApdQLp22/HRTIPUQYvtUAwqockeToMdozuoOW+dO4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=i4SncwO2; arc=fail smtp.client-ip=40.107.215.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kK7J7VAe"
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BE54C842;
-	Wed, 31 Jul 2024 11:01:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1722416500;
-	bh=AB2p6wGJjXid3HdQ0XFK5dg77scNWUczy0gxuj1MWjU=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=kK7J7VAeYxjrX8yUi76juI/Y+cxD45n9oJxi6ywK8xvW1++5xbyBwxcs3AlROGNvN
-	 kuk37VO6B4LtHK44FZo5fWewQVVuQB1kgI8bNQsHI2WrhaxL/+yOEMfoWs84TqeYRR
-	 WZ3xY+PmnCDG351Rd6FuEIUnyQtQv4CGlXQeyaIc=
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="i4SncwO2"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RD+I1+ebJ93/Ea0CceJgc3Eyc2Y4D8E6ZfnmxQtJqpiotAwYBcvzwweOo8tyr3lE1tIx24/tqnXE7RIY1amW1MSGEy3ThJ94SkYR61UEu8bYN1yA7/h0eWjmu9NM2EfEviXYCEURb9k5thuy9iohCz3sRbnjEpKMn/xRWfafLUsajKWRWahvOq/B2QuXpoMHjXEqN3CVv+Lm6veuA1k+4GzrrkWybiaAmKaXPnu+wHJ59MAKR/uLz0jEUkSS8Yeyf1d1xeOtdQMj1ceQ1KbhMqf7gClgLKxH3wxfyUIEWzCAsGWz7Ija41eBhDNftdn3ywjFw7DY5E8lvtkrZh69hA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rh6mMFBK64P5wZb+ppyB0dcKV5TjJKuBEtiJnIYiZwg=;
+ b=F2e8sbXoam2w4QSAxEqQw+7WPAibiONsYdsjF2RFlibiuQ/5juoI6l5rO1PHBQSb9ijQ2Gs5fxQlVAXhOFtcs39R0P3HeNZy9859ui3UmqRyRLBclXwlqxkO6cdb0rITU4/1szGV8tSe5SjImVCp09zo93cRn3WxXSCE60xO9HErKlDYFee/AQ2VG4hlaFCOiLv8qPB+TEeHb2Bl+0KpxGEL7XS/yjrnz+aAc+vIVj8dT0XWU7XbVUtvbAIr+zgTeCmxH5shqD1+jEr1ZDJTuIwehouDq+WA1YQyU8zPbgaZ9YjM4nwdY4StslTJgYfnk1jJ5gWjlT3Fwx8tdUVfbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rh6mMFBK64P5wZb+ppyB0dcKV5TjJKuBEtiJnIYiZwg=;
+ b=i4SncwO2w6IeBvbOznB5aociyshFbEhiWlnoLrcNJxTF2pgIL9Kj84z++Fjhq30Eyv62Awu2YfNHlMAxnLalS55AmxPAoXd5rNy0NGAlns5rRWMEHmD0YDYzayXet7+MEix0llOtFBdAsCQsbm0tUc1Yt1on6arBJxLmPvoV4WnYZAuLHjbugiBHQ7IDHFxc3gZw4K5LFytN17c81TKRwmumljOSH+0pQqzczpGHs2hgPUTlXSZmM4ZUjotAwcdwDMYYcTEkmTuGVCvPsVVbRoejgLxTm0Oxkagx8v0DviXvwcKX3ib2SGUI8qM63Tx1O+2g0UvvsYiSuhEljxYs/w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB5676.apcprd06.prod.outlook.com (2603:1096:301:f8::10)
+ by SEYPR06MB7027.apcprd06.prod.outlook.com (2603:1096:101:1e3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.33; Wed, 31 Jul
+ 2024 09:02:47 +0000
+Received: from PUZPR06MB5676.apcprd06.prod.outlook.com
+ ([fe80::a00b:f422:ac44:636f]) by PUZPR06MB5676.apcprd06.prod.outlook.com
+ ([fe80::a00b:f422:ac44:636f%6]) with mapi id 15.20.7807.026; Wed, 31 Jul 2024
+ 09:02:47 +0000
+From: Huan Yang <link@vivo.com>
+To: Gerd Hoffmann <kraxel@redhat.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org
+Cc: opensource.kernel@vivo.com,
+	Huan Yang <link@vivo.com>
+Subject: [PATCH 2/2] udmabuf: make udmabuf folios and offsets set more readable
+Date: Wed, 31 Jul 2024 17:02:33 +0800
+Message-ID: <20240731090233.1343559-2-link@vivo.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240731090233.1343559-1-link@vivo.com>
+References: <20240731090233.1343559-1-link@vivo.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0035.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::13) To PUZPR06MB5676.apcprd06.prod.outlook.com
+ (2603:1096:301:f8::10)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <cefc0b19-f065-4023-a536-56b2762ac967@ideasonboard.com>
-References: <20240729110437.199428-1-umang.jain@ideasonboard.com> <20240729110437.199428-3-umang.jain@ideasonboard.com> <ef05c39a-ad5c-4751-a758-f73a2d114823@kernel.org> <ZqijVf68ZQuFGKhU@kekkonen.localdomain> <729280cd-557f-43ba-b1a6-8d319977ca82@kernel.org> <20240730091011.GL300@pendragon.ideasonboard.com> <cefc0b19-f065-4023-a536-56b2762ac967@ideasonboard.com>
-Subject: Re: [PATCH v2 2/2] media: imx335: Fix reset-gpio handling
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org, stable@vger.kernel.org, Tommaso Merciai <tomm.merciai@gmail.com>, Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Umang Jain <umang.jain@ideasonboard.com>
-Date: Wed, 31 Jul 2024 10:02:25 +0100
-Message-ID: <172241654546.392292.16164306008596010671@ping.linuxembedded.co.uk>
-User-Agent: alot/0.10
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|SEYPR06MB7027:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c10943a-cf4a-4452-c13e-08dcb13f8c1a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|1800799024|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lHQCp9t2YyrcqD4kPKk49qgMEHLFvgAlxq120pTPBAaczC+NRMnwum/VBJcp?=
+ =?us-ascii?Q?M3qXVaJZMn/iMkSpegyF3DAAT/xj7a0Qt3tj4zJN18BQ7wBMY/hBPePedvel?=
+ =?us-ascii?Q?LOphFH8xgoDkXHr4iLMK2yz0gRgzTB3qXe2BSdzQXzMBUgcl0ROjp13i+Qz7?=
+ =?us-ascii?Q?mKhrYRZULc4qVJBryT6l9HZiqDIKKxVHzsK87TF8AF+Kxzj7/AgmmaDgkRrl?=
+ =?us-ascii?Q?j6Lht6p3pYVWxnLZgRLixT+/cR/6l3Dx409lTcfavuSnKsxKPSLNyuqImo/3?=
+ =?us-ascii?Q?M5zZPD0tIomXeaN9vshuItiN0o2DH+WRlOoXMuLhRlfbAYTdtqFSX4+etPwu?=
+ =?us-ascii?Q?UXMjdQ9BjpH7idWD32z4TLs92gmjkVL6KfuChKQet+Rsaxskb1+Nnw5BTZhg?=
+ =?us-ascii?Q?cMrVdv1UQKnz7TOl8GFf2gCZYVjmlpWYUdUXm550vzOm3wEuGqTtNLWGPM+S?=
+ =?us-ascii?Q?bfMWXeV2X3lYNKLeRsWsDmfRwstQGiFvPmlpEDcRSL0RcvLWYhSroLFdcPWS?=
+ =?us-ascii?Q?64wJNpyzJg5ev36BfSyWuqRnWE57x1ViY+OT2dF0yqWAf98lofNpDF8AbECM?=
+ =?us-ascii?Q?s+wuR5ohk3BTEpm7vyc8JC1GAdzNwhKJVdSjMB0qF7NqkCt6CiuyLo+izJsO?=
+ =?us-ascii?Q?s5//Qkwsxn2r9voEjpcZiWpqBy/S4fUy1vLqs2jWHBzseaNGNMQptyNT/YzP?=
+ =?us-ascii?Q?n4+cIDNZUfe/loc/auKa6Lu1eZ2MsrX86oO0hQls0+0D3rxLAw5VkqF/lkwX?=
+ =?us-ascii?Q?2prcHMyvh9f4muatOALg7p/pw6WL9hrHWBBJbSRO+Jic6W2I42xikiJecZuJ?=
+ =?us-ascii?Q?E8sBN1vXA2GHH6AijwLqIy7LAeUKtt4mBRjl2XIA1/G4cbhg/hyZ5Eze4f3j?=
+ =?us-ascii?Q?XOsOPpBalCv25xnaSHuqiX7ol84vIstlVfDb6URvziwuN/ZR9uxPS9G1XZCh?=
+ =?us-ascii?Q?uTxYRjDd/qQ4e0cZPeiGA7OSE/RDaQlwi7aOwWqr5Mi0Oce7Hn2eeMIAdXr5?=
+ =?us-ascii?Q?2ptPftjLwuaQ+Eva/Ib/WDGYxMGP6u/Yj+aEna0oxMUs3skuHZx8QLxzakmk?=
+ =?us-ascii?Q?6aA7w7KptXysN3ro77bJbvB1k/oQd4S8CuXBGreCDvKIopnPsUlEpzUifagG?=
+ =?us-ascii?Q?aUrTqQ3n8XZtylmgjLTqBA7H4K17ps1LsncfttbqG+EqhxT5URmfh0rZVQ1f?=
+ =?us-ascii?Q?GsOz7yGe6Cuv8D/gHwLrBj+pL9+UoXZSd5+PMQjRjLfUkJsN4bLX0NNvEoGS?=
+ =?us-ascii?Q?3EG6N9mFIzYQlvvHjEdAw5sD06utjijW7Nj4rN2rS60XA0j8/KuuzuRIeBEv?=
+ =?us-ascii?Q?AxsvLMGHd2Lv6KiSfvTKIwYT1RQvuNkFLGOi/U8k9isftM/zc6SX8cRL13/I?=
+ =?us-ascii?Q?/yZDgMWk3z8Ils4osIFF1tobJtyoTuIkyuatucd0tlBV41z1bQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?lQ02AiDFhOE6uoaxFqHPB795rw8PpaESQzi/1bHUxYFkr5dnUBVEkUE7v4eD?=
+ =?us-ascii?Q?TIZYMQuNNm9VNhBEzDLOY7u8fFnYyyRg9DjPPvTS8+C6Q+6onF1t5Dy999n9?=
+ =?us-ascii?Q?znIri4oKAdo9jTcWzpdEH91updM8BLfcPYeZGXz56UGTunSQj9qit8msAkj6?=
+ =?us-ascii?Q?OJMnI8kg3yZN50lUZxQmPHz314v/rBJ+u/bkjmeP0o0+NgyF8zS+PtTSsH4p?=
+ =?us-ascii?Q?0rDLFjg2C72zBqdfZGr1WKXLR+CAOxmGZRClMD9hqWb87eLI0c+znHi9hakz?=
+ =?us-ascii?Q?lfAGIgxkZ/iCbOXIO5A57iLuqAd/mA1D35T3zgho5jYQ0jNSFm/la2eaVCWw?=
+ =?us-ascii?Q?hcqBshz33j+rqqdyeGkHj14oSn0ErIVPvM5qDfLK4/hl8sXra+wxbyCNFzpM?=
+ =?us-ascii?Q?zq8FwQcRPoR+3nJAeI/iHxqFvObkU0fVdeRwAHhp6BvDNPMbpYmdiT0k0yH3?=
+ =?us-ascii?Q?BUX9aLE9D73Qs7EKm7H/LqoxV9N6fCAoxr6bcoHDmtcwYodX1XwfKZqMmj6s?=
+ =?us-ascii?Q?tpMpcRmgCmi7nonUpG4EDRq7Hdfrt8CcJx2E1ttO97yyccyjqbDt1CWUbiAQ?=
+ =?us-ascii?Q?Pe6p3AaJgd+iyF3ufOw41vK5nssTWWj3/uoZa4ZXUwK9HUcOmFlp4R14vKvG?=
+ =?us-ascii?Q?8by6guogqZQphgGvIOm+Twv0FwwBK2JqjY45RFbbpPPwgZ0n6g4E1Wa4CzF/?=
+ =?us-ascii?Q?VWlPE3Y1C44AXPLc5IQ+3d0Ro0qws5DWUe+qDavxS70crQiN0Tbyub/lz8dx?=
+ =?us-ascii?Q?tMxOd4MK8d55V9TkOU8L4sx69Bq85DLXOzSWQxzsggF8/NdARiO80qqRmwBw?=
+ =?us-ascii?Q?PmhQGgHMzYEC8Dl6yLMxHAnFdDCzCb3hnYfFMQBR3NJesp3J5paN1I1M0TrB?=
+ =?us-ascii?Q?U52863CIKcIUaewfoOQrHAiWZTx8e/77isIi2KYQ7XLg7gIxxeATkasvbPJZ?=
+ =?us-ascii?Q?i7CQDtI0TkFgiUEx2xvm6auZfeh23X8s9KWj1hxwDxJxRgak+GQcU0XXlpZg?=
+ =?us-ascii?Q?FmudWjPSiEhVhPwdGL2LXQZD/LzPInjZxrFarVhJmqcPZAE2njlOCDORN/V/?=
+ =?us-ascii?Q?Uk44GLeJT00MJl7Tb/plSewacL6aZJv8l/3NLHYy4jQiTdsy19ZNW7LSEwe5?=
+ =?us-ascii?Q?dFMUDDZKyIu7TEIJSTcF4DLCYkk7Zdmr+tjmRChhol/EjSQ7Euhj/ZFKukwG?=
+ =?us-ascii?Q?1CyaD+2+wWNAqpYVKqmK4Smk3ntvpmSetzUY19cdCkn+p7NrtXGggk7XoyEH?=
+ =?us-ascii?Q?Zql0bcyIvur5qfRL32Q7FQgmQvn7xM/FDEc0/jxioqf7psVoW1xUH1Tr6r7U?=
+ =?us-ascii?Q?9f9ihS3JD/Q4zWqIywn2k6ruD7UH0AeoNRXJqeT0dDmoxWL+9cm+P0iPrLm1?=
+ =?us-ascii?Q?txS6vNjlkRyqtHGIymXXJY6fz44V2/+mhNncR/xfwH3I1GwqSodpZWz+RE6M?=
+ =?us-ascii?Q?J2IBIl98Z/6+/cMf9VhT3O+twnFbBr4qeK2AodjqCU7/9Ha4vxmy7g2ZunQj?=
+ =?us-ascii?Q?KKp2bLQVn1zi+vJUG0XGSYlrljHOeVzj03HpIDOevHw6NSqPUhplsvqJ5Ma6?=
+ =?us-ascii?Q?zbxFzZwJpjjBc8cJG19eQINbEq/A5eeh90Bt4FcO?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c10943a-cf4a-4452-c13e-08dcb13f8c1a
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5676.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 09:02:47.2708
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zqZ8EUSKMSj5uuje2ME9i8oo+xM+JpttON2kqXir4SDtqmRIllSvVNFLpy95XOj9b7WcWy1eQ+MZJTVHQ6kh3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB7027
 
-Quoting Umang Jain (2024-07-31 06:41:35)
-> Hi all,
->=20
-> On 30/07/24 2:40 pm, Laurent Pinchart wrote:
-> > On Tue, Jul 30, 2024 at 10:42:01AM +0200, Krzysztof Kozlowski wrote:
-> >> On 30/07/2024 10:24, Sakari Ailus wrote:
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Mon, Jul 29, 2024 at 04:09:39PM +0200, Krzysztof Kozlowski wrote:
-> >>>> On 29/07/2024 13:04, Umang Jain wrote:
-> >>>>> Rectify the logical value of reset-gpio so that it is set to
-> >>>>> 0 (disabled) during power-on and to 1 (enabled) during power-off.
-> >>>>>
-> >>>>> Meanwhile at it, set the reset-gpio to GPIO_OUT_HIGH at initializat=
-ion
-> >>>>> time to make sure it starts off in reset.
-> >>>>>
-> >>>>> Fixes: 45d19b5fb9ae ("media: i2c: Add imx335 camera sensor driver")
-> >>>>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> >>>>> ---
-> >>>>>   drivers/media/i2c/imx335.c | 8 ++++----
-> >>>>>   1 file changed, 4 insertions(+), 4 deletions(-)
-> >>>>>
-> >>>> This will break all the users, so no. At least not without mentioning
-> >>>> ABI break and some sort of investigating how customers or users are
-> >>>> affected.
-> >>> I know the original authors aren't using the driver anymore and it to=
-ok
-> >>> quite a bit of time until others started to contribute to it so I sus=
-pect
-> >>> the driver hasn't been in use for that long. There are no instances o=
-f the
-> >>> device in the in-kernel DTS either.
-> >>>
-> >>> Any DTS author should have also noticed the issue but of course there=
-'s a
-> >>> risk someone could have just changed the polarity and not bothered to=
- chech
-> >>> what it was supposed to be.
-> >>>
-> >>> I agree the commit message should be more vocal about the effects on
-> >>> existing DTS.
-> >> I can imagine that all users (out of tree, in this case) inverted
-> >> polarity in DTS based on what's implemented. You could go with some
-> >> trivial hack, like I did for one of codecs - see 738455858a2d ("ASoC:
-> >> codecs: wsa881x: Use proper shutdown GPIO polarity"), but I remember
-> >> Mark Brown rejected similar commit for newer drivers.
-> > I don't think there's any out-of-tree user, because when we started
-> > using the recently driver, it required lots of fixes to even work at
-> > all. I'll let Kieran and Umang comment on that, I haven't follow the
-> > development in details.
->=20
-> indeed, initially we had to put up fixes like :
->=20
-> 14a60786d72e ("media: imx335: Set reserved register to default value")
-> 81495a59baeba ("media: imx335: Fix active area height discrepency")
->=20
-> to make the sensor work properly on our platforms. Only after that we=20
-> had a base to support more capabilities on the sensor (multiple lanes=20
-> support, flips, TPG etc.)
+The current code for setting folios and offsets is not very readable.
 
-I would also add that we had to provide control for the regulators to be
-able to power the device as well in fea91ee73b7c ("media: i2c: imx335:
-Enable regulator supplies").
+In fact, udmabuf->folios represents the head page of each folio, while
+the offset indicates the PAGE_SIZE offset within the folio for the
+corresponding pgcnt. And folios only add head page(the folio) into unpin
+list.
 
-Given the driver was posted from Intel, I would have anticipated perhaps
-the driver was in fact only actually tested by Intel on ACPI platforms -
-yet with no ACPI table registered in the driver - even that could likely
-be considered broken.
+This patch changes the loop condition to use folios as the outer loop
+and sets the subpages of the folio in the inner loop, making it easier
+to understand the relationship between unpin and folios/offset.
 
-Based on that I have a high confidence that there are no current users
-of this driver (except us).
+The loop conditions for j and k are actually only used in the head loop,
+so they can be turned into loop variables.
 
-Umang, I see we need an updated patch with commit message to cover this,
-please consider the above to add in there too.
---
-Kieran
+Signed-off-by: Huan Yang <link@vivo.com>
+---
+ drivers/dma-buf/udmabuf.c | 40 ++++++++++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 6604d91e7072..0285194e6b51 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -301,7 +301,7 @@ static long udmabuf_create(struct miscdevice *device,
+ 	struct file *memfd = NULL;
+ 	struct folio **folios;
+ 	struct udmabuf *ubuf;
+-	u32 i, j, k, flags;
++	u32 i, flags;
+ 	loff_t end;
+ 
+ 	ubuf = kzalloc(sizeof(*ubuf), GFP_KERNEL);
+@@ -338,6 +338,7 @@ static long udmabuf_create(struct miscdevice *device,
+ 
+ 	pgbuf = 0;
+ 	for (i = 0; i < head->count; i++) {
++		u32 j, k;
+ 		memfd = fget(list[i].memfd);
+ 		ret = check_memfd_seals(memfd);
+ 		if (ret < 0)
+@@ -360,26 +361,27 @@ static long udmabuf_create(struct miscdevice *device,
+ 			goto err;
+ 		}
+ 
+-		nr_folios = ret;
+-		pgoff >>= PAGE_SHIFT;
+-		for (j = 0, k = 0; j < pgcnt; j++) {
+-			ubuf->folios[pgbuf] = folios[k];
+-			ubuf->offsets[pgbuf] = pgoff << PAGE_SHIFT;
+-
+-			if (j == 0 || ubuf->folios[pgbuf-1] != folios[k]) {
+-				ret = add_to_unpin_list(&ubuf->unpin_list,
+-							folios[k]);
+-				if (ret < 0) {
+-					kfree(folios);
+-					goto err;
+-				}
++		/**
++		 * Iter each folios we got from pin, add each folio into unpin
++		 * list and setup each folio and page offset into folio into
++		 * corrent page count position.
++		 * So that we can iter any offset in size and get correctly
++		 * page.
++		 */
++		for (j = 0, pgoff >>= PAGE_SHIFT, nr_folios = ret;
++		     j < nr_folios; ++j, pgoff = 0) {
++			long nr_pages;
++
++			ret = add_to_unpin_list(&ubuf->unpin_list, folios[j]);
++			if (ret < 0) {
++				kfree(folios);
++				goto err;
+ 			}
+ 
+-			pgbuf++;
+-			if (++pgoff == folio_nr_pages(folios[k])) {
+-				pgoff = 0;
+-				if (++k == nr_folios)
+-					break;
++			for (k = 0, nr_pages = folio_nr_pages(folios[j]);
++			     k < nr_pages; ++k, ++pgoff, ++pgbuf) {
++				ubuf->folios[pgbuf] = folios[j];
++				ubuf->offsets[pgbuf] = pgoff << PAGE_SHIFT;
+ 			}
+ 		}
+ 
+-- 
+2.45.2
+
