@@ -1,38 +1,40 @@
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B4E1B29A9;
-	Wed, 31 Jul 2024 16:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from luna.linkmauve.fr (luna.linkmauve.fr [82.65.109.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8381BD513;
+	Wed, 31 Jul 2024 16:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.65.109.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722444586; cv=none; b=oXZspyRmTorPsfl+fyCEzJdotKEidnTuPupRnZ2+9HkivyubAYojc/7nfQKut02IReXy1sQ8EUfKjDp3Hwb99qYk+18rgW6OVYaP9ToJcI29S1EXbamHc2C2KK5cWZPcIb4R4AQQ9DFBcvgiJGsJtPaATTtx5ih2OrLc+bYaCws=
+	t=1722444790; cv=none; b=sY2j3Vf872YxhizAP6ifJfk7kT+BcKdHkrntwu6K+6a6lO5mGK/QgPTLoQkDYAWRLVcieeLdqupvpanwuVPEQ+nq7g5ZNePBBJn+uE/UByRnhjvQDblGQmrqckRimzK3JoG0JXEblvbJ+rEvedWG57bN2DJAO3xRjZ8kXpnfmc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722444586; c=relaxed/simple;
-	bh=GpMp6tg/YgVY/vTU7Drds7N/cSGXzNQUQkiNMM51k/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sqVzWWOEMXOer9kiloMISbnl19kb7M1hZdCyzsfFeCuSAhcyrufU0zK2FujWFsqxG78+T6FYzLwc4etBCQLY++dT9GaXVD66c9Gt/sZ24iI18Y91XPD90QpLRhg/6asoGi4aju2udGq9R6nxCEXjMCg+ivjRyMnM1vPffKE5li4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-IronPort-AV: E=Sophos;i="6.09,251,1716217200"; 
-   d="scan'208";a="214252124"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 01 Aug 2024 01:49:39 +0900
-Received: from localhost.localdomain (unknown [10.226.93.39])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1CCA64010088;
-	Thu,  1 Aug 2024 01:49:36 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	s=arc-20240116; t=1722444790; c=relaxed/simple;
+	bh=4q8W9CDGm7kj2yaWbuIWp1ErRtQpGcJXde2YvXOADAA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p6E2XrOeRpjin4QxXZO+AlmG520dI3pDyScVRuvdRIQAP0W5ps2t0a9bF9ZhhD1uTWrOR7CxV2GctqHq5bi89P+NlE3LslewdQq27IVbXUk5efm5EadxxZmv/Qly9RS9apAYR4Bbrlaje/o8Adl1HBPWpoONe+g8GzQuDMV7MdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr; spf=pass smtp.mailfrom=linkmauve.fr; arc=none smtp.client-ip=82.65.109.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linkmauve.fr
+Received: by luna.linkmauve.fr (Postfix, from userid 1000)
+	id 9279114649DD; Wed, 31 Jul 2024 18:44:28 +0200 (CEST)
+From: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+To: linux-sunxi@lists.linux.dev
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Samuel Holland <samuel@sholland.org>,
+	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] media: platform: rzg2l-cru: rzg2l-csi2: Add missing MODULE_DEVICE_TABLE
-Date: Wed, 31 Jul 2024 17:49:32 +0100
-Message-ID: <20240731164935.308994-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
+	linux-staging@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 3/4] media: cedrus: Enable JPEG decoding in various variants
+Date: Wed, 31 Jul 2024 18:44:13 +0200
+Message-ID: <20240731164422.206503-4-linkmauve@linkmauve.fr>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240731164422.206503-1-linkmauve@linkmauve.fr>
+References: <20240731164422.206503-1-linkmauve@linkmauve.fr>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,28 +43,103 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The rzg2l-csi2 driver can be compiled as a module, but lacks
-MODULE_DEVICE_TABLE() and will therefore not be loaded automatically.
-Fix this.
+From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Fixes: 51e8415e39a9 ("media: platform: Add Renesas RZ/G2L MIPI CSI-2 receiver driver")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+As far as manuals go, only A10 and A13 don't have JPEG support
+mentioned, all others do.
+
+To be safe, enable it on all variants except A13, since it was tested to
+be functional on A10.
+
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-index e68fcdaea207..c7fdee347ac8 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-@@ -865,6 +865,7 @@ static const struct of_device_id rzg2l_csi2_of_table[] = {
- 	{ .compatible = "renesas,rzg2l-csi2", },
- 	{ /* sentinel */ }
- };
-+MODULE_DEVICE_TABLE(of, rzg2l_csi2_of_table);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index f52df6836045..f586bd95c163 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -563,6 +563,7 @@ static void cedrus_remove(struct platform_device *pdev)
  
- static struct platform_driver rzg2l_csi2_pdrv = {
- 	.remove_new = rzg2l_csi2_remove,
+ static const struct cedrus_variant sun4i_a10_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	= 320000000,
+@@ -577,6 +578,7 @@ static const struct cedrus_variant sun5i_a13_cedrus_variant = {
+ 
+ static const struct cedrus_variant sun7i_a20_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	= 320000000,
+@@ -585,6 +587,7 @@ static const struct cedrus_variant sun7i_a20_cedrus_variant = {
+ static const struct cedrus_variant sun8i_a33_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	= 320000000,
+@@ -593,6 +596,7 @@ static const struct cedrus_variant sun8i_a33_cedrus_variant = {
+ static const struct cedrus_variant sun8i_h3_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_H265_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+@@ -601,6 +605,7 @@ static const struct cedrus_variant sun8i_h3_cedrus_variant = {
+ 
+ static const struct cedrus_variant sun8i_v3s_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC,
+ 	.mod_rate	= 297000000,
+ };
+@@ -608,6 +613,7 @@ static const struct cedrus_variant sun8i_v3s_cedrus_variant = {
+ static const struct cedrus_variant sun8i_r40_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+ 	.mod_rate	= 297000000,
+@@ -616,6 +622,7 @@ static const struct cedrus_variant sun8i_r40_cedrus_variant = {
+ static const struct cedrus_variant sun20i_d1_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_H265_DEC,
+ 	.mod_rate	= 432000000,
+@@ -624,6 +631,7 @@ static const struct cedrus_variant sun20i_d1_cedrus_variant = {
+ static const struct cedrus_variant sun50i_a64_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_H265_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+@@ -633,6 +641,7 @@ static const struct cedrus_variant sun50i_a64_cedrus_variant = {
+ static const struct cedrus_variant sun50i_h5_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_H265_DEC |
+ 			  CEDRUS_CAPABILITY_VP8_DEC,
+@@ -642,6 +651,7 @@ static const struct cedrus_variant sun50i_h5_cedrus_variant = {
+ static const struct cedrus_variant sun50i_h6_cedrus_variant = {
+ 	.capabilities	= CEDRUS_CAPABILITY_UNTILED |
+ 			  CEDRUS_CAPABILITY_MPEG2_DEC |
++			  CEDRUS_CAPABILITY_JPEG_DEC |
+ 			  CEDRUS_CAPABILITY_H264_DEC |
+ 			  CEDRUS_CAPABILITY_H265_DEC |
+ 			  CEDRUS_CAPABILITY_H265_10_DEC |
 -- 
-2.43.0
+2.45.2
 
