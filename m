@@ -1,167 +1,111 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B3F15AF6;
-	Wed, 31 Jul 2024 07:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347391A4B4A;
+	Wed, 31 Jul 2024 07:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722409248; cv=none; b=jd2+M00TyIZ6i0CAtMIG89uwZmmg1BCLnn8AXbiAGQ8LeLMlFwXz8uFQwJ69Fll07u1gNdmZDTh7BKu/JH8LnmnhLe7BYppmRJqki+lt/6HwrxHVXMivQ5OUTDydDaNb7UfwJ5sxer1jkdPVP43rvT5gFin8eor2w0iUg+ZYFIo=
+	t=1722409382; cv=none; b=KRQKxQ3NQLhMNoDzYhsd6+DE1d4NKt+UdUWvpVajziCo86dTB18i+yvHQ4W7rC+ch/+QXyM4P78GeShjZowb0VBByeEoUD2J7B6TxLzpSjeHX542Hju/oTEVMKT7K7+OGmNq4fNqQ6jR00HC9Q3G6MC8qLeNj/FGLr7ZV/Hm9jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722409248; c=relaxed/simple;
-	bh=2m1FPDyQe8xDyUfFki4gWqbW/FycigIA1fOZMOU7sCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RQZU3l6LqOoRsAVV8b0h5+0ELtmFv1+0espp9/bjxSSpwLPRVfs81icsbtE3GfcNOO9wE+NFbkkhWpq74dwcrETfyySjxVYnWdi/eP9RjF0hw6loYQEtbmByhCmcEe2/vsa7mcAw5JjfDdDUwFvzvFIUlRLg9NaaT0SCEDiTg3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=orb3e89D; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1722409382; c=relaxed/simple;
+	bh=liF0sXKHqjDKpx94oIxqmUf1lDsy3nU2IMMBID62o+E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=i2Msxk+4jriTcGilc4gG6mupLX8fXtYz22JakHnGqbJXmqnGG/ElxNmqtjksqZwOgGxBtMHYInjrsUmcNF+awF0qdJp+3G98RdvLZbrDHqmykz0VQs/VpCHAdpQXKKXwkSffKYgomG5PLcTUgg7TAMaHUg231Cik39orSXCmpZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=VTqvPk1u; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="orb3e89D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722409245;
-	bh=2m1FPDyQe8xDyUfFki4gWqbW/FycigIA1fOZMOU7sCw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=orb3e89D9C564m+JGiavnP8Jg53kCcIwPKPgGZ0Iu+f/xS8iTbw0uyVi6n8cqexmL
-	 WPiGpIM3efYttUML/4mD7eueAqq3urfHxiZZSRgvXH68y8zQkdLw8SS6jJP3ZOoJmC
-	 5GiuiJoaUwVrd/01SPOugAlY4f5fvOFFzeFv3+WsCTNarenvfxdrXaXRgbvMFGX0/6
-	 bSSzJQlINFLt3j5covI7DU4383tbrOJSbVD7jSFAYMtZpXn5IplfyTY9l1w37HpG0T
-	 lej3f6KWE67ToViDbpO3jkrUKKNVxKlr6ab5kqWNSAx+C5/J/PySzE+KIPWM4iBvpO
-	 4F5hTRb2t40zQ==
-Received: from [100.93.89.217] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: benjamin.gaignard)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D8C1E3780B79;
-	Wed, 31 Jul 2024 07:00:44 +0000 (UTC)
-Message-ID: <07a6b2a7-9884-40cb-b29a-3b30731d9686@collabora.com>
-Date: Wed, 31 Jul 2024 09:00:44 +0200
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="VTqvPk1u"
+Received: from [192.168.29.25] (unknown [IPv6:2405:201:2015:f873:55f8:639e:8e9f:12ec])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 43CB6842;
+	Wed, 31 Jul 2024 09:02:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1722409331;
+	bh=liF0sXKHqjDKpx94oIxqmUf1lDsy3nU2IMMBID62o+E=;
+	h=From:Subject:Date:To:Cc:From;
+	b=VTqvPk1usTRwO6vA8uspqkmnqJPEC+ZokX+w4D/B8DAg5/0wvBaz/D9LVL3KWsa2r
+	 3ECkq3C6m8U917kFyRUU35oZlwbMjoqo4+gnqbd1lHU0ZyDzPCeBqzoDWJnYBgPa92
+	 ozOS3KxDwWwABAJyU9LkqjP7Nj74HRvbTR6FdVxw=
+From: Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH v3 0/2] media: imx335: Fix reset-gpio handling
+Date: Wed, 31 Jul 2024 12:32:40 +0530
+Message-Id: <20240731-imx335-gpio-v3-0-443bfa6ce864@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] media: videodev2: Add flag to unconditionnaly
- enumerate pixels formats
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, mchehab@kernel.org,
- ezequiel@vanguardiasur.com.ar
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20240722150523.149667-1-benjamin.gaignard@collabora.com>
- <20240722150523.149667-2-benjamin.gaignard@collabora.com>
- <0b4e2f13-8d79-4931-b868-6100f8b8893f@xs4all.nl>
- <3459c15d-5492-4765-b81c-9360d4291384@xs4all.nl>
-Content-Language: en-US
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <3459c15d-5492-4765-b81c-9360d4291384@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJDhqWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDc2ND3czcCmNjU930gsx8XQtDixRzY7M0SyNLUyWgjoKi1LTMCrBp0bG
+ 1tQDrVJMCXQAAAA==
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ "Paul J. Murphy" <paul.j.murphy@intel.com>, 
+ Daniele Alessandrelli <daniele.alessandrelli@intel.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Martina Krasteva <martinax.krasteva@intel.com>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+ Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Umang Jain <umang.jain@ideasonboard.com>, stable@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722409375; l=1367;
+ i=umang.jain@ideasonboard.com; s=20240731; h=from:subject:message-id;
+ bh=liF0sXKHqjDKpx94oIxqmUf1lDsy3nU2IMMBID62o+E=;
+ b=vuOEomY0cQDyzahht6nf3VDWeVkMWHOG1+/Px1nw7idTbw0BNwniKEzHLG+Hz80zUztxlFMxh
+ VOIRJoDKonYBogAwvaO9JfsrEeJh4sLWI6Z56PHBY5VPD5AJDT4Hfso
+X-Developer-Key: i=umang.jain@ideasonboard.com; a=ed25519;
+ pk=7pvnIBNsDpFUMiph0Vlhrr01+rAn5fSIn/QtDeLeXL0=
 
+These couple of patches intends to fix the reset-gpio handling
+for imx335 driver.
 
-Le 30/07/2024 à 09:19, Hans Verkuil a écrit :
-> On 30/07/2024 09:08, Hans Verkuil wrote:
->> On 22/07/2024 17:05, Benjamin Gaignard wrote:
->>> When the index field is ORed with V4L2_FMT_FLAG_ENUM_ALL the driver
->>> will ignore any configuration and enumerate all the possible formats.
->>> Drivers which do not support this flag yet always return an EINVAL
->>> error code.
->>>
->>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> ---
->>> changes in version 5:
->>> - Reset the proposal to follow Hans's advices
->>> - Add new flag to be used with index field.
->>>
->>>   .../userspace-api/media/v4l/vidioc-enum-fmt.rst      | 12 +++++++++++-
->>>   .../userspace-api/media/videodev2.h.rst.exceptions   |  1 +
->>>   include/uapi/linux/videodev2.h                       |  3 +++
->>>   3 files changed, 15 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
->>> index 3adb3d205531..12e1e65e6a71 100644
->>> --- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
->>> +++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
->>> @@ -85,7 +85,11 @@ the ``mbus_code`` field is handled differently:
->>>       * - __u32
->>>         - ``index``
->>>         - Number of the format in the enumeration, set by the application.
->>> -	This is in no way related to the ``pixelformat`` field.
->>> +        This is in no way related to the ``pixelformat`` field. When the
->> You need to start a new paragraph before 'When'. Otherwise you might read
->> that the 'When' sentence is somehow related to the previous sentence.
->>
->>> +        index is ORed with V4L2_FMT_FLAG_ENUM_ALL the driver will ignore
->>> +        any configuration and enumerate all the possible formats. Drivers
->> I'd rephrase this a little bit:
->>
->> the driver will enumerate all the possible formats, ignoring any limitations
->> from the current configuration.
->>
->> And after that I would like to see an example of a use-case.
-> Should the flag be kept on return of VIDIOC_ENUM_FMT or should it be cleared?
-> For reference: VIDIOC_QUERYCTRL will clear the V4L2_CTRL_FLAG_NEXT_CTRL flag.
->
-> Regardless of what we pick, it should be documented.
+Patch 1/2 mentions reset-gpio polarity in DT binding example.
 
-I believe most of the flags are cleared in v4l2 so I will to do the same and
-document it.
+Patch 2/2 fixes the logical value of reset-gpio during
+power-on/power-off sequence.
 
->
-> Regards,
->
-> 	Hans
->
->>> +        which do not support this flag yet always return an ``EINVAL``
->>> +        error code.
->>>       * - __u32
->>>         - ``type``
->>>         - Type of the data stream, set by the application. Only these types
->>> @@ -234,6 +238,12 @@ the ``mbus_code`` field is handled differently:
->>>   	valid. The buffer consists of ``height`` lines, each having ``width``
->>>   	Data Units of data and the offset (in bytes) between the beginning of
->>>   	each two consecutive lines is ``bytesperline``.
->>> +    * - ``V4L2_FMT_FLAG_ENUM_ALL``
->> I am not really happy with this name since the prefix is identical to that
->> of other V4L2_FMT_FLAG_ defines. How about: V4L2_FMTDESC_FLAG_ENUM_ALL?
->> Or V4L2_FMT_IDX_ENUM_ALL?
->>
->>> +      - 0x80000000
->>> +      - When the applications ORs ``index`` with ``V4L2_FMT_FLAG_ENUM_ALL`` flag
->>> +        the driver enumerates all the possible pixel formats without taking care
->>> +        of any already set configuration. Drivers which do not support this flag
->>> +        yet always return ``EINVAL``.
->>>   
->>>   Return Value
->>>   ============
->>> diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>> index bdc628e8c1d6..8dc10a500fc6 100644
->>> --- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>> +++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
->>> @@ -216,6 +216,7 @@ replace define V4L2_FMT_FLAG_CSC_YCBCR_ENC fmtdesc-flags
->>>   replace define V4L2_FMT_FLAG_CSC_HSV_ENC fmtdesc-flags
->>>   replace define V4L2_FMT_FLAG_CSC_QUANTIZATION fmtdesc-flags
->>>   replace define V4L2_FMT_FLAG_META_LINE_BASED fmtdesc-flags
->>> +replace define V4L2_FMT_FLAG_ENUM_ALL fmtdesc-flags
->>>   
->>>   # V4L2 timecode types
->>>   replace define V4L2_TC_TYPE_24FPS timecode-type
->>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->>> index 4e91362da6da..3d11f91273a1 100644
->>> --- a/include/uapi/linux/videodev2.h
->>> +++ b/include/uapi/linux/videodev2.h
->>> @@ -904,6 +904,9 @@ struct v4l2_fmtdesc {
->>>   #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
->>>   #define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
->>>   
->>> +/*  Format description flag, to be ORed with the index */
->>> +#define V4L2_FMT_FLAG_ENUM_ALL			0x80000000
->>> +
->>>   	/* Frame Size and frame rate enumeration */
->>>   /*
->>>    *	F R A M E   S I Z E   E N U M E R A T I O N
->> Regards,
->>
->> 	Hans
->>
->
+--
+Changes in v3:
+- Rework 1/2 commit message
+- Fix gpio include in DT example in 1/2
+- Remove not-so-informative XCLR comment in 2/2
+
+Changes in v2:
+- Also include reset-gpio polarity, mention in DT binding
+- Add Fixes tag in 2/2
+- Set the reset line to high during init time in 2/2
+
+Link to v2:
+https://lore.kernel.org/linux-media/20240729110437.199428-1-umang.jain@ideasonboard.com/
+
+Link to v1:
+https://lore.kernel.org/linux-media/tyo5etjwsfznuk6vzwqmcphbu4pz4lskrg3fjieojq5qc3mg6s@6jbwavmapwmf/T/#m189ccfa77ddceda6c3b29be3306f1a27ed0934d6
+
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+---
+Umang Jain (2):
+      dt-bindings: media: imx335: Add reset-gpios to the DT example
+      media: imx335: Fix reset-gpio handling
+
+ Documentation/devicetree/bindings/media/i2c/sony,imx335.yaml | 4 ++++
+ drivers/media/i2c/imx335.c                                   | 9 ++++-----
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+---
+base-commit: f3d2b941adafcdfba9ef63d9ca5bb2d9b263e2af
+change-id: 20240731-imx335-gpio-818d736f9295
+
+Best regards,
+-- 
+Umang Jain <umang.jain@ideasonboard.com>
+
