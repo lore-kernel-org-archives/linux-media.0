@@ -1,137 +1,171 @@
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567AB208C4
-	for <linux-media@vger.kernel.org>; Thu,  8 Aug 2024 08:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB25925634;
+	Thu,  8 Aug 2024 08:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723105869; cv=none; b=nVPel2yAIq8zc6if57Pia2KexjhVznrgFveIML+0NueygMyItaK04I/OEtg9ZhvBgNdqsBPI3gyzbYBoAnR9Ft8OOXh0JccawsnJlV007K4dlVvY+KP3vnkN4XPBBg5NRbbRUGh4wT5NyATPwRAqk7rrwvIvJJOV8j0SY5mPPrY=
+	t=1723106894; cv=none; b=oZn0pvToXvaN8wKsT0DNyrFso+wVVuYkQ0Ki4o2ZwGdqvlwLEpQGlg/ZtakmSPfhUFFzZS8jlosFwx34YtXOLJsVDos8hFSFHTX14mV56bN7IBtCTcBV/pzEQ1o6l3pS5U008TD6+s40Atn4PDm7/Yu58XId7HzxyWuXKeg42Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723105869; c=relaxed/simple;
-	bh=Q+a6uAoUzOJfNJlLqKiW9bOJctnF6d0eXCj+TgP69rg=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=IjDM2hRA8J/GJYDTQR3Fqm23SLl4yc0GmaCWI3LRu68dBaSiYZ4i+/K8ZA4c/xHSwIWKQ4l7Cka32RoWa2WGC4twDK3e8Na1jNOlf+nOuMZHu93jRSzzTGUYrtYMt+xOaAkPMCy3OlKLliqdrdGOhTm7sh3HdDvhdx2gC/98bY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LeQ+sdTz; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1723106894; c=relaxed/simple;
+	bh=uRH/ciiHycNXip9jjHyyUFJfgnUsV443g3yhFyDelNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CG4ywN/1cxnO4GWxN+ZX+9XmJ9j6GU3WNTXLZ9lpf9yHEQquoh90SD+DFsd0aZ4Ptn9+T6lGQQuUA1Jl0j+YTVdedSgj3sbyMfXgxJDov8zacvWBX2TblU62VYFRyOgLZ0VdbfK+qL5xp63BKKwS4evR63Ocvw9Gc2pdBVZyWo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=LLdDRSK/; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=sEZqwcAu; arc=none smtp.client-ip=88.97.38.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LeQ+sdTz"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240808083105epoutp03bc852242283b1be1b0bab45e5f115cca~ps6en0pU21087410874epoutp03W
-	for <linux-media@vger.kernel.org>; Thu,  8 Aug 2024 08:31:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240808083105epoutp03bc852242283b1be1b0bab45e5f115cca~ps6en0pU21087410874epoutp03W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723105865;
-	bh=sy99WQrEArLB2GVHVM3NcSs6PqK16OI98ozU/DmWpwg=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=LeQ+sdTzPlWHdpaLqm154qkZK+2No+6M5ex4zvnOJclUG3r9/7Kt17hk4y2mmRKO3
-	 rN3d8Xi8lrhsUQAZMVeBv9g5v0uCRL1WPc+vGDEEX976lFsfLq7F4yb6347FkMaRMI
-	 wJk3dV7z1PTGohQJWj7iGPFocVrLr0VcMtqWXfc0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-	20240808083104epcas5p46c53678e6566ab4be853214002c36ac8~ps6eA4fxx0482004820epcas5p4D;
-	Thu,  8 Aug 2024 08:31:04 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.180]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4WfgHB5pGnz4x9Q1; Thu,  8 Aug
-	2024 08:31:02 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A4.7F.19863.64284B66; Thu,  8 Aug 2024 17:31:02 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240808083027epcas5p153e64139a5e71448b1ea3f04af1df2bd~ps57ZZ5ZQ1632116321epcas5p1j;
-	Thu,  8 Aug 2024 08:30:27 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240808083027epsmtrp1792e9837461341a1756c4fc6532dda71~ps57YUnui2600726007epsmtrp13;
-	Thu,  8 Aug 2024 08:30:27 +0000 (GMT)
-X-AuditID: b6c32a50-ef5fe70000004d97-52-66b482468aee
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	25.B2.19367.32284B66; Thu,  8 Aug 2024 17:30:27 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-	[107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240808083025epsmtip26002044a67fd5e12a21da265afeb47dd~ps55cL1Ew2734327343epsmtip27;
-	Thu,  8 Aug 2024 08:30:25 +0000 (GMT)
-From: Aakarsh Jain <aakarsh.jain@samsung.com>
-To: linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc: m.szyprowski@samsung.com, hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-samsung-soc@vger.kernel.org, gost.dev@samsung.com,
-	aswani.reddy@samsung.com, pankaj.dubey@samsung.com, Aakarsh Jain
-	<aakarsh.jain@samsung.com>
-Subject: [PATCH V3] dt-bindings: media: s5p-mfc: Remove s5p-mfc.txt binding
-Date: Thu,  8 Aug 2024 13:48:15 +0530
-Message-Id: <20240808081815.88711-1-aakarsh.jain@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNKsWRmVeSWpSXmKPExsWy7bCmpq5b05Y0g3XPtC2e7pjJanFo81Z2
-	izV7zzFZzD9yjtXi5oGdTBYXZ95lseh78ZDZYtPja6wWl3fNYbPo2bCV1WLG+X1MFmuP3GW3
-	WLT1C7tF694j7A58HptWdbJ53Lm2h81j85J6j74tqxg9Pm+S8zj19TN7AFtUtk1GamJKapFC
-	al5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0LVKCmWJOaVAoYDE4mIl
-	fTubovzSklSFjPziElul1IKUnAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyM/Xu3MxWsYq+4
-	M3E+UwPjLrYuRk4OCQETiYX3J7J2MXJxCAnsYZRofDyVGcL5xCjRtmkWE5wze8MrRpiW/XtP
-	skMkdjJKdDy4yAbhtDJJLL37FaiKg4NNQFfi7PYckAYRgUZGiccdJSA1zAILmCS2vL/FBJIQ
-	FvCWmDdrKjtIPYuAqsSliRYgYV4BW4k3M98yQyyTl1i94QDYSRICL9kl/j3axAKRcJGYu/gx
-	O4QtLPHq+BYoW0riZX8blJ0s8XjRS6hBORLr90yB6rWXOHBlDgvIXmYBTYn1u/QhwrISU0+t
-	AzuNWYBPovf3EyaIOK/EjnkwtprEnDs/WCFsGYnDq5dCA8VDYsub9WC2kECsxIF3rxknMMrO
-	QtiwgJFxFaNUakFxbnpqsmmBoW5eajk8ppLzczcxglOhVsAOxtUb/uodYmTiYDzEKMHBrCTC
-	2xy+KU2INyWxsiq1KD++qDQntfgQoykwzCYyS4km5wOTcV5JvKGJpYGJmZmZiaWxmaGSOO/r
-	1rkpQgLpiSWp2ampBalFMH1MHJxSDUz+6/dG9CgW/Dj/63G13+ayVMNzJ9e+nxe8cWaC1ZaP
-	fCLCm43vtKgLaOyXD57wNy/WijMkpic3Vehl6uOnq90Yv3ZwfXdeq+vlbPnS/2XuuYWauWKn
-	f36ZJC1i8jRH8JnZ6rUeIVzPxSYbvjgV6FlRstkw5PvUN6Wn7j6wDbRaGLhUqaeD8TKL7NOJ
-	WRoM0TdZcg/M+HHjgs2fpGa/nzrZUZYGXSahX3iaDvDsPZBl4aKzYGK0tmfIWY/nXPw2B7ae
-	bqnmmX95r8QzRgvLVU+cjmoc6Nx9gsF7ycE9rTyTD8TMXW6+Ztnzpze8bhX9cI2qnJw1ye3T
-	C1svsddW81v3dqy44zo9Sj3xllXs9RYlluKMREMt5qLiRAA3UjXbDgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrELMWRmVeSWpSXmKPExsWy7bCSvK5y05Y0g9Z2DounO2ayWhzavJXd
-	Ys3ec0wW84+cY7W4eWAnk8XFmXdZLPpePGS22PT4GqvF5V1z2Cx6NmxltZhxfh+Txdojd9kt
-	Fm39wm7RuvcIuwOfx6ZVnWwed67tYfPYvKTeo2/LKkaPz5vkPE59/cwewBbFZZOSmpNZllqk
-	b5fAlbF/73amglXsFXcmzmdqYNzF1sXIySEhYCKxf+9J9i5GLg4hge2MErefPmWCSMhI/G87
-	xg5hC0us/PccqqiZSWLP/kWMXYwcHGwCuhJnt+eAxEUEWhklrq/sZAJxmAVWMUlMePcJbIWw
-	gLfEvFlT2UEaWARUJS5NtAAJ8wrYSryZ+ZYZYoG8xOoNB5gnMPIsYGRYxSiaWlCcm56bXGCo
-	V5yYW1yal66XnJ+7iREcjFpBOxiXrf+rd4iRiYPxEKMEB7OSCG9z+KY0Id6UxMqq1KL8+KLS
-	nNTiQ4zSHCxK4rzKOZ0pQgLpiSWp2ampBalFMFkmDk6pBiaW0N2dxzmKH6yUmv9ZwenDIu2A
-	KStSg8qeFQafNjizbrfW94PXq7Nbb6i57uxaWFl8cErUXZUtjIH/HA0qVff94J+66tzDRpvy
-	khd/yqUPf3/3Krpxzc+w/VGFkUs66tiLfLrt9jkmcr6veL2Fk+P78adL1lzzudiRu2ZKVH6/
-	c7/4rfu8V44u5X35edrJhS+jBM+zlqiHHq2fs2Hanpd23gpcT4327GheIek3Z8+Nq1duitRa
-	X7nRse2O2PYUKem7S24kXfqzkWn7yaVmio8rY58+m3dXJP/xhg3Vh9VL2fY95PRb/XxNRtHK
-	q2zHTzaYW3zKUnC9v9OxOmq5jJdIgN62nPXpJqXb7kvJJigVK7EUZyQaajEXFScCAA3LIsm1
-	AgAA
-X-CMS-MailID: 20240808083027epcas5p153e64139a5e71448b1ea3f04af1df2bd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240808083027epcas5p153e64139a5e71448b1ea3f04af1df2bd
-References: <CGME20240808083027epcas5p153e64139a5e71448b1ea3f04af1df2bd@epcas5p1.samsung.com>
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="LLdDRSK/";
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="sEZqwcAu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1723106890; bh=uRH/ciiHycNXip9jjHyyUFJfgnUsV443g3yhFyDelNY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LLdDRSK/UKmCKanuLW49XqVQ8szl4DmFV9uyRWJ+hM0lb0SwBpAJynIlsI7bOsb1p
+	 IdSh6rqDF0VI4p400+QTNw8T7DbMzn2axD4LbPmAgc61kyr76BVFLjMj20ZyMRLUtc
+	 XIoBwDJrMUMSuikmEVcj3xDl32aVtSVGtXYssnDn/0jZXBZqYJFfPq7zwTUQmrNQR5
+	 a5o6KAA6irrj/rEABhkAYH2XyF8jAzSdZQdkZir7jT0Ow4xcv3M525xdmmKA1z3ADr
+	 zprEEFH/JnJ05cIEcsr7HNQYhE5ndWwKvktMXVC5Ps0DcM2lBxuSTuW+m5Q4Adwyla
+	 lw224SUzIK3kw==
+Received: by gofer.mess.org (Postfix, from userid 501)
+	id D07A4100105; Thu,  8 Aug 2024 09:48:10 +0100 (BST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1723106888; bh=uRH/ciiHycNXip9jjHyyUFJfgnUsV443g3yhFyDelNY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sEZqwcAuz1JmMJHEundW0lrxice1lJTwMjbN1H6EqyQe48jUf3TBbaNEyZ/sAs2C9
+	 lBQMWmlmNKGvsiUe8GloMhmaZb5Aq085WrE3LGPYVIE8q9CD2TR8lRvlFAqpnDOR8T
+	 ZzSBKqjoqhUtnUhwIBb0+jGDCQzJ8BhJMOMKErY+z4FjQ0d4JL6f1NTt9Y7QuWqngr
+	 AjY5e2hOi0NOPGpoHjG5oihte7HNSSjSK3JjERZy5q2tH+dzEUQXq28Bmda/yandhb
+	 v7AtPFrbLEl8PAvVk33M5GBbFKOOIFACACej6qkoSmxv1edHHxZC3xNN59F8y8A3um
+	 3hgimU52UkumQ==
+Received: from localhost.localdomain (bigcore.local [IPv6:2a02:8011:d000:212:bc3c:1b4a:a6fa:362f])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gofer.mess.org (Postfix) with ESMTPSA id 69724100074;
+	Thu,  8 Aug 2024 09:48:08 +0100 (BST)
+From: Sean Young <sean@mess.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Sean Young <sean@mess.org>,
+	Stefan Lippers-Hollmann <s.l-h@gmx.de>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "media: dvb-usb: Fix unexpected infinite loop in dvb_usb_read_remote_control()"
+Date: Thu,  8 Aug 2024 09:47:57 +0100
+Message-ID: <20240808084757.18084-1-sean@mess.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-s5p-mfc bindings to json-schema is already merged with
-this commit 538af6e5856b ("dt-bindings: media: s5p-mfc:
-convert bindings to json-schema"). Remove s5p-mfc.txt
-file.
+This reverts commit 2052138b7da52ad5ccaf74f736d00f39a1c9198c.
 
-Fixes: 538af6e5856b ("dt-bindings: media: s5p-mfc: convert bindings to json-schema")
-Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-changelog:
-v1->v2
-Add Fixes tag suggested by Krzysztof
-v2->v3
-Aligned Fixes tag in oneline and corrected commit message
-Link: https://patchwork.kernel.org/project/linux-media/patch/20240213045733.63876-1-aakarsh.jain@samsung.com/
+This breaks the TeVii s480 dual DVB-S2 S660. The device has a bulk in
+endpoint but no corresponding out endpoint, so the device does not pass
+the "has both receive and send bulk endpoint" test.
+
+Seemingly this device does not use dvb_usb_generic_rw() so I have tried
+removing the generic_bulk_ctrl_endpoint entry, but this resulted in
+different problems.
+
+As we have no explanation yet, revert.
+
+$ dmesg | grep -i -e dvb -e dw21 -e usb\ 4
+[    0.999122] usb 1-1: new high-speed USB device number 2 using ehci-pci
+[    1.023123] usb 4-1: new high-speed USB device number 2 using ehci-pci
+[    1.130247] usb 1-1: New USB device found, idVendor=9022, idProduct=d482,
++bcdDevice= 0.01
+[    1.130257] usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    1.152323] usb 4-1: New USB device found, idVendor=9022, idProduct=d481,
++bcdDevice= 0.01
+[    1.152329] usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+[    6.701033] dvb-usb: found a 'TeVii S480.2 USB' in cold state, will try to
++load a firmware
+[    6.701178] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
+[    6.701179] dw2102: start downloading DW210X firmware
+[    6.703715] dvb-usb: found a 'Microsoft Xbox One Digital TV Tuner' in cold
++state, will try to load a firmware
+[    6.703974] dvb-usb: downloading firmware from file 'dvb-usb-dib0700-1.20.fw'
+[    6.756432] usb 1-1: USB disconnect, device number 2
+[    6.862119] dvb-usb: found a 'TeVii S480.2 USB' in warm state.
+[    6.862194] dvb-usb: TeVii S480.2 USB error while loading driver (-22)
+[    6.862209] dvb-usb: found a 'TeVii S480.1 USB' in cold state, will try to
++load a firmware
+[    6.862244] dvb-usb: downloading firmware from file 'dvb-usb-s660.fw'
+[    6.862245] dw2102: start downloading DW210X firmware
+[    6.914811] usb 4-1: USB disconnect, device number 2
+[    7.014131] dvb-usb: found a 'TeVii S480.1 USB' in warm state.
+[    7.014487] dvb-usb: TeVii S480.1 USB error while loading driver (-22)
+[    7.014538] usbcore: registered new interface driver dw2102
+
+Closes: https://lore.kernel.org/stable/20240801165146.38991f60@mir/
+Reported-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- Documentation/devicetree/bindings/media/s5p-mfc.txt | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/media/s5p-mfc.txt
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 35 +++---------------------
+ 1 file changed, 4 insertions(+), 31 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
-deleted file mode 100644
-index e69de29bb2d1..000000000000
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index 22d83ac18eb7..fbf58012becd 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -23,40 +23,11 @@ static int dvb_usb_force_pid_filter_usage;
+ module_param_named(force_pid_filter_usage, dvb_usb_force_pid_filter_usage, int, 0444);
+ MODULE_PARM_DESC(force_pid_filter_usage, "force all dvb-usb-devices to use a PID filter, if any (default: 0).");
+ 
+-static int dvb_usb_check_bulk_endpoint(struct dvb_usb_device *d, u8 endpoint)
+-{
+-	if (endpoint) {
+-		int ret;
+-
+-		ret = usb_pipe_type_check(d->udev, usb_sndbulkpipe(d->udev, endpoint));
+-		if (ret)
+-			return ret;
+-		ret = usb_pipe_type_check(d->udev, usb_rcvbulkpipe(d->udev, endpoint));
+-		if (ret)
+-			return ret;
+-	}
+-	return 0;
+-}
+-
+-static void dvb_usb_clear_halt(struct dvb_usb_device *d, u8 endpoint)
+-{
+-	if (endpoint) {
+-		usb_clear_halt(d->udev, usb_sndbulkpipe(d->udev, endpoint));
+-		usb_clear_halt(d->udev, usb_rcvbulkpipe(d->udev, endpoint));
+-	}
+-}
+-
+ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ {
+ 	struct dvb_usb_adapter *adap;
+ 	int ret, n, o;
+ 
+-	ret = dvb_usb_check_bulk_endpoint(d, d->props.generic_bulk_ctrl_endpoint);
+-	if (ret)
+-		return ret;
+-	ret = dvb_usb_check_bulk_endpoint(d, d->props.generic_bulk_ctrl_endpoint_response);
+-	if (ret)
+-		return ret;
+ 	for (n = 0; n < d->props.num_adapters; n++) {
+ 		adap = &d->adapter[n];
+ 		adap->dev = d;
+@@ -132,8 +103,10 @@ static int dvb_usb_adapter_init(struct dvb_usb_device *d, short *adapter_nrs)
+ 	 * when reloading the driver w/o replugging the device
+ 	 * sometimes a timeout occurs, this helps
+ 	 */
+-	dvb_usb_clear_halt(d, d->props.generic_bulk_ctrl_endpoint);
+-	dvb_usb_clear_halt(d, d->props.generic_bulk_ctrl_endpoint_response);
++	if (d->props.generic_bulk_ctrl_endpoint != 0) {
++		usb_clear_halt(d->udev, usb_sndbulkpipe(d->udev, d->props.generic_bulk_ctrl_endpoint));
++		usb_clear_halt(d->udev, usb_rcvbulkpipe(d->udev, d->props.generic_bulk_ctrl_endpoint));
++	}
+ 
+ 	return 0;
+ 
 -- 
-2.17.1
+2.46.0
 
