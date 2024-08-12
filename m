@@ -1,59 +1,33 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921B0175D29
-	for <linux-media@vger.kernel.org>; Mon, 12 Aug 2024 11:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D50817A93D;
+	Mon, 12 Aug 2024 12:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723462336; cv=none; b=LYmJ9K5bEhlQqqti1vdn0U1vqKusrR9wDWbF3TOQ0baH7KQoqHwYszWO4do+ODx2OjlCSsLaxuF/FZj+L83ctz1jrI6E7bYMr1KOtxyiAV7gwKKaGKG4vLesuPxj06NjQ8nEcyWlLTX/Y9QAYQSMjPsKGcc9kIbjmcjryA2mDhU=
+	t=1723465071; cv=none; b=tqsxuXEGfXdg92E4T7B1en9ivAUNsZ8ZPemb26C0EsDPhpyIszVxKKnU7Z7utTukOVd3JtVTTvYYHbmIEv26vf3zukRXXoM31FlfGBS72pA9cLtuNy44EsyVWFckEwn+8yBdYP52qugxm4SsmLM03KLszVa0NpL6RAIPigDpYQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723462336; c=relaxed/simple;
-	bh=Sn9icOhMEkpoF0A6tI3yE7WA9lul1v5onDCX2r2+Qrk=;
+	s=arc-20240116; t=1723465071; c=relaxed/simple;
+	bh=S2P4a8gs63oxTnfbDDSN0RqKQwu01VpNGQhGFsGLgg0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vd3x7fv1owoI222U++tvaU2YZuMgk2nl8FbVviOUtxQhoywoRZEAujN/8rGTjLM+H5SWyWNLMVMXcu9WW/uWIySFQ1F4VRKFLNJufObVXdGHnUVMNh2r5wParehX+pNytgKDvRfu9vpXLDTYelP1U4w5je7hsxeu6JicAm2VzbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dS781GUs; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:Content-Type; b=DFPjuEilWkhyk86OjO2wkEBRv5lRRSoEctyh4MRnQ/goESw6YPDxcyuxTsXiz6p3fILAEGrwkRrps2mP4o64U/nJc79VuJ42rFgnsGse1qpl3UHs1kAoTwCoWF+npEDuvVXiarpFsZrUkwJe2ati3MZV4H7edg53ASaB8MhbvWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0wLuF2T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dS781GUs"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3687f91af40so2555211f8f.0
-        for <linux-media@vger.kernel.org>; Mon, 12 Aug 2024 04:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723462333; x=1724067133; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pcyTK/oFMaR/LKJwL+lhFRbctKc9N7kd/DA0SliDqNw=;
-        b=dS781GUsOJpq/5SPqVVB60Ti90hTdYQZEfWn90Ul/xJzZp0drpkmPJf30f5VEKKphU
-         aSle2ZnKdc9DLiP3XgICnWzzh2u/9ceeRvR4pHs05A9Tk7uigBhn9cVjMza+fgNGHcZb
-         wNy+yY9uIheV/5u0It4vqdzx+zVBCwYIXWdj32wvTs02MMxkpXB0VB/8jNhpmm9wnkOX
-         q9roSdAkYntSq7X9JZhupgJiZmS4ol8fSX1d1PoXY3PkwkdRLIafH2eHFOsvKkkY7sGv
-         DoOZVkSEX9lJHtzMDIinS1ukDLu+jcgmig5z1K43om4tENRPcU7pS+PpAUcfZ634yCvG
-         umVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723462333; x=1724067133;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pcyTK/oFMaR/LKJwL+lhFRbctKc9N7kd/DA0SliDqNw=;
-        b=OvO+sS/AvidObPREcQl/wsFTEBqXI4v7nwK5XI3ibl7N4uneUoEspJ+b+JoDPSSFZT
-         Gl8QGjkVOJgRzdt7KB/n/+9FHj/7k2fVQSpWB8CwQXQPQV12DFCQ08PperxOtO+KW1Y4
-         8OHntHFBw9KIjkFTZeuCfS/py57QFTrz1yKo2IATqpnLdRMgKoyw/jy2yyvah9HPGOcD
-         be5sMl2x/YuODRVdDXmwcaZG0OS2FgQRdS1w5kTimHrkPi8rgZblkEjlhFAiAmjxgx9a
-         b9rsKDrRqbDZut9OGPW4vwuFiv+ZgI3a/Uki70w8UcIHnzEc9Hkk50XdO8FBVl7R9o6W
-         NYyg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9LQGf/w1D30NgtCnT/4NAZ/uibTD/VTAwH3DF4v1RBY35gDBU4J5W3gdCldtNt7ejhJwDNoQjoz3ZWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEeX1iPbuBIXfM6RZZyLDL5cCTkw8gxdcukmri16yQvgQfdnKv
-	4DNhqV+U1Z47gZ2edJPGu4hkFdfxj+39WiV2xJi+U9A9AuM1AQr4lgLdcOGSXcY=
-X-Google-Smtp-Source: AGHT+IFKMt3nGJr3TmBQHVfbwLzP7ID+7QLqJpZ8Bb1C7l06gp6nyMd4PGALNfePozuyllzfm0jwZg==
-X-Received: by 2002:a5d:4ad1:0:b0:362:8ec2:53d6 with SMTP id ffacd0b85a97d-36d61cd3550mr8292553f8f.61.1723462332792;
-        Mon, 12 Aug 2024 04:32:12 -0700 (PDT)
-Received: from [192.168.0.25] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c937b6esm7261016f8f.32.2024.08.12.04.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Aug 2024 04:32:12 -0700 (PDT)
-Message-ID: <e7476a09-4e11-4171-89ed-61b41c9f5cc9@linaro.org>
-Date: Mon, 12 Aug 2024 12:32:10 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0wLuF2T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C91C4AF0D;
+	Mon, 12 Aug 2024 12:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723465071;
+	bh=S2P4a8gs63oxTnfbDDSN0RqKQwu01VpNGQhGFsGLgg0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=K0wLuF2TPqJDcAdCieO7kWBStu/rZPi7YZWyWamFvukjA8CBQqauKMAsf8BoUHLHs
+	 ntN4SNPMCTl4A60aWqpx9CDOhrC5A9WN8xtpMsECfjHd/lUmwCj1+LNdQF7HNiED2w
+	 ttxd1blZdjaEJ3qWQg2ar3pKtzXZfah/94owgFt9Y2cfptVaIIlO13B1UlYe+duliS
+	 xVMNPunwsOQtMUchvCZTg61ihYafnssE9+06SJstZItEzv0pqseLJZyvmNkW7Joi8W
+	 +2AB3QT4UXEepkpimKWnarO4kbkpEOiAq7sKZxD7Ur+h6I7dv+iqcXgGg+WdHfwU+c
+	 uj0zsZGOzjY6g==
+Message-ID: <323f5038-f9d5-459a-a5e2-f1e4dbd4c386@kernel.org>
+Date: Mon, 12 Aug 2024 14:17:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,56 +35,113 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/13] media: qcom: camss: csiphy: Add an init callback to
- CSI PHY devices
-To: Depeng Shao <quic_depengs@quicinc.com>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, rfoss@kernel.org,
- todor.too@gmail.com, mchehab@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: quic_eberman@quicinc.com, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@quicinc.com
-References: <20240709160656.31146-1-quic_depengs@quicinc.com>
- <20240709160656.31146-5-quic_depengs@quicinc.com>
- <6dfc2c79-fc6d-4eed-bf3f-94396130cb4f@linaro.org>
- <fafda7d5-3853-428a-b0eb-9993fc2d4f56@linaro.org>
- <4426c0e0-f877-409c-b2d2-a5aac5e8c645@linaro.org>
- <1226d080-d1fc-4e06-ac81-84e93cb314e0@quicinc.com>
- <8f935a7d-87b5-479c-a98e-c95671dbe259@linaro.org>
- <7c03280f-908d-435d-acef-b6bf4f865029@quicinc.com>
- <ff12ce12-41d6-4aa5-ab97-222b07146e36@linaro.org>
- <3241cc15-c920-4c88-ac53-005903baf9e7@quicinc.com>
+Subject: Re: [PATCH v3] media: aspeed: Allow to capture from SoC display (GFX)
+To: Jammy Huang <jammy_huang@aspeedtech.com>, eajames@linux.ibm.com,
+ mchehab@kernel.org, joel@jms.id.au, andrew@aj.id.au, pmenzel@molgen.mpg.de
+Cc: linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org
+References: <20240812091656.2617664-1-jammy_huang@aspeedtech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <3241cc15-c920-4c88-ac53-005903baf9e7@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240812091656.2617664-1-jammy_huang@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 08/08/2024 15:02, Depeng Shao wrote:
-> I'm updating the code based on above comments, but I meet crash issue if 
-> I move the offset assignment to csiphy_gen2_config_lanes, since the 
-> csiphy->res->hw_ops->reset(csiphy) is called earlier than 
-> csiphy_gen2_config_lanes, so if we don't have the .init interface, we 
-> only can move this offset value to `struct csiphy_subdev_resources`, but 
-> if we add the offset to `struct csiphy_subdev_resources`, then below two 
-> patches are also can be dropped.
+On 12/08/2024 11:16, Jammy Huang wrote:
+> ASPEED BMC IC has 2 different display engines. Please find AST2600's
+> datasheet to get detailed information.
 > 
-> 
-> [PATCH 05/13] media: qcom: camss: csiphy-3ph: Move CSIPHY variables to 
-> data field inside csiphy struct
-> [PATCH 06/13] media: qcom: camss: csiphy-3ph: Use an offset variable to 
-> find common control regs
-> 
-> 
-> Could you please comment on if I need to add the CSI_COMMON_CTR offset 
-> to res directly?
-> Or add back the .init interface?
+> 1. VGA on PCIe
+> 2. SoC Display (GFX)
 
-Ah, I hadn't recalled why the .init was added -> because sequencing.
+...
 
-Lets retain the patch but expand the commit log to explain why the init 
-is being added, instead of jumping through hoops to restructure to get 
-rid of it.
+>  
+> +/*
+> + * Get regmap without checking res, such as clk/reset, that could lead to
+> + * conflict.
+> + */
+> +static struct regmap *aspeed_regmap_lookup(struct device_node *np, const char *property)
+> +{
+> +	struct device_node *syscon_np;
+> +	struct regmap *regmap;
 
----
-bod
+Drop...
+
+> +
+> +	syscon_np = of_parse_phandle(np, property, 0);
+
+This joins first line and then use scoped/cleanup to make everything
+simpler.
+
+> +	if (!syscon_np)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	regmap = device_node_to_regmap(syscon_np);
+> +	of_node_put(syscon_np);
+> +
+> +	return regmap;
+> +}
+> +
+>  static int aspeed_video_init(struct aspeed_video *video)
+>  {
+>  	int irq;
+>  	int rc;
+>  	struct device *dev = video->dev;
+>  
+> +	video->scu = aspeed_regmap_lookup(dev->of_node, "aspeed,scu");
+> +	video->gfx = aspeed_regmap_lookup(dev->of_node, "aspeed,gfx");
+
+This looks undocumented.
+
+You will need to convert the bindings to DT Schema first.
+
+Anyway, you miss here error checking.
+
+Best regards,
+Krzysztof
+
