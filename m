@@ -1,191 +1,152 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2109.outbound.protection.partner.outlook.cn [139.219.17.109])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D81199E93
-	for <linux-media@vger.kernel.org>; Tue, 13 Aug 2024 12:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723553844; cv=none; b=Y1Mr0kFbz7LMCHqz4TS4RRiksgaKTgSp4gMxjxNddJr3YnvhTX48DZdeaP4FKO6kIq/P5nVMp8qZ0zu3w3rKjrlCCrJPf4U8LrAOSXWLxelkX319YRBArUqzXmc75BOBoTES1obyBxqsWwF1+cWu2Mf3W8nMBvwpwJYk6w4cRG8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723553844; c=relaxed/simple;
-	bh=TofroUqhS0CIITaImahcaurLCMZLdQJdHZ6gq1QJThQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eqV7zdA3y/ulJIUWaV1IyJrgDrPQNqQ3qgmpexq4hQo4KPawPmTO2y/3ziTM/wbeGAT7582B7HvbXWJQz6MhOfxoUn+fuPhDh1hwVeCFut6971tYpR6BVCihGzr7KjD/gdiWcWNCrP+KF/bAb2Qusu3DV3Ney5q7PfvUD1LyG+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=swPR/3bl; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="swPR/3bl"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-368712acb8dso3196727f8f.2
-        for <linux-media@vger.kernel.org>; Tue, 13 Aug 2024 05:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723553841; x=1724158641; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXx95rKB/SR9Bmx/7XeMli10udzlREHhp7NHVB0yfaY=;
-        b=swPR/3bl/0FSkpeMfrQEzMLIyLKiwM/fKhCSCLsvy5jBcIXbCvKeCau0FQMn1gv0BE
-         8QqwuzNUlBfZpynqg5+2lydQRUz5YKkLs+XqyAK6cNpY3WDZCt6m5aXbkkIDAgJpKEau
-         cCyM5/vsL7QLzsAR0784SrrUEeESibZke9ZJobcQ+aOECy1sOUhFJWignAi/Q0GlAa9T
-         BoXmcUyCO+dvwxLAjDdoREbVCyAY5uFTjn7Bk7mEFsw6M3ZNa9OpkWdwPYTJYlNR8MEF
-         VDNG+X1DiVmTTjyiQyTiI7+eZhh2Qgb11s1m+nvZGpfTv+FTHSqaCiYd5uYNXnqMOqg6
-         8ydQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723553841; x=1724158641;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXx95rKB/SR9Bmx/7XeMli10udzlREHhp7NHVB0yfaY=;
-        b=DxwAZolGNCG5/I8lMTcSNsR6R/NispihEM+vVNLPuMtFYDJ8h/8m1qGUpSaN8pcSh1
-         sFn9wJdJWkVvAWbQhB5S6lZONeyhzay8lT9sTrCv+TBeO2z2ba1qWs0eMwVSb/7Kupyi
-         B9+TkFYwMcos2aLQ42x3JwcKExgoUBhSLjnNh0jdOHOnJ8yfHgGKuxK2UqL+fjEukG2+
-         79DVBYTGQfdP7E7UEK33s9xWzJSdIgkUT49wuJGHoUAVvNwFSOjJDIw/MLTvmb/OcmJk
-         mDE2Ze/2iG4gw1ar3gpu37iYaVGyTkqB0jP5UvqgKaqtFAcNAg0Y+nODSdunVCExKtfF
-         6wgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV73+f6j8ZD2VZAsh3FMt9dNErSFdM4Z6rpjz1hgKMo6UjKM22Tw+RQu+ItYoAl3O+ZZxed81yMZ1nbjBlgVr6Kiq9Cj8F78apGXXI=
-X-Gm-Message-State: AOJu0Ywq2z3sS9k/bGxsOcGhDrrYcrH4x+QJAVSbUubpwSJrZqeJKdxn
-	Q6/xMjZnVdptBVnNT/wfiufGIA/GUTbq8cd2Ma49iIAIj6T96I1B5IGxY6mEcTY=
-X-Google-Smtp-Source: AGHT+IE/LfQmZSNm6rNNhtleN5aFz1noMcX53DlCIRu8BM4WQvIqpru5JT7ZSX4OlCydEvw9J8tU0Q==
-X-Received: by 2002:adf:f950:0:b0:368:420e:b790 with SMTP id ffacd0b85a97d-3716ccf5185mr2430791f8f.14.1723553841192;
-        Tue, 13 Aug 2024 05:57:21 -0700 (PDT)
-Received: from [192.168.0.25] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c937b23sm10203672f8f.35.2024.08.13.05.57.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 05:57:20 -0700 (PDT)
-Message-ID: <74a07065-f10b-42a9-b142-b561de25a082@linaro.org>
-Date: Tue, 13 Aug 2024 13:57:19 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166921993B7;
+	Tue, 13 Aug 2024 13:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.109
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723554055; cv=fail; b=XA39P6z93Xpk4oOkltZMbLfL0cv2BKeoFHd1XW46XS6UzJe6JIVpv5XNHQXUTzzUzWyS+iu5tW4rmERwXY0Z8sXxLMzbyJagUSt50psT/DJ+p0VwKOdlhav0d9ZPocqxW6PrmqT1w95uWdvVkYLYXFGMXxyhnbaNRVU3vzzMkwM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723554055; c=relaxed/simple;
+	bh=gNrF6zlKQ22CeOr3+dx9MaYkDq7a1YFti/CguJ0sc9E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G1FcZ1yE1TFBKLXO7lHrH+3dhbTGf3G22H8w3RkvSKzlAOcJikJ8T3n+ssYNeTgAGEj5ETLBegexB23H9vZg4Zme3KGCCPHDW7gtScH2Z5StfXVogEYupEZaZ7+OAHDW/pDTQus9X2U/mksUO1BfG5mfnge0uAp/vwns8g6FOMk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CHInLaSlGHIBoZw8UDEP8zuycg3ubqRn8o5DVcO5Y4OCfoQ6AKVubDpGLv2VzPMd6Bq1QgKjhi9l33OdGKmGcIqgJWwH7CGVdpEDCcuaHMCbHzjvBVGyp7IoKaWLlRdAo1O/Imgbpznc/ISY92t2iFTC2e8+FnV5h00NncHf8almkoI3QF6ftRxi23kK21CpGqz18afqpq4mgQHVJ2fCDUNt8cekTz3kgLjYoM6EbSvHxCxL139/4V5xOZ4gJFz0Xnfx3dfCYJnFI28lSNkPj3GSfzifMNLEV5Ol/ZxTVMFoRTPe1G1V4dtEB2EB9ucfztXDALwGq8w5TO75+Kqs9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iYBjPgtoSa2UyIeiJ6ux9B8wMPWjIfLhCqh+PLDTAqI=;
+ b=H2v3df+5hwo0gKpJGOV2iuFZmEWdioA1nk+F+l0TtM65zFQ8l7/ALZ/3/M1F3L3uLPhwsjg0qbI/NOwDOzbnzn3UI+4L0CL0i5Dnyjoyb69i46O7uuoDscfqqHsodQyy3QpioYaXN9ZTtQB+P+4d7GUJG6TnWATKSpKiclcrr21/0lvro0Eyv58KsA17zVMBTPNayUuMaRRe96Cvujzmmtq81v4JUljhbn0WcJE3UWBXrj+1Ssv8n9HUWcQrrzcuXAzmrFEKM5b9V+o4fI98h0r7RysrhdK19AcXRm5URuGpWDCFaZy/zbily9tcT3WKl2ExGtAHrJwx3LWk3iHLFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1b::9) by ZQ0PR01MB1254.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1c::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.33; Tue, 13 Aug
+ 2024 12:44:49 +0000
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ ([fe80::64c5:50d8:4f2c:59aa]) by
+ ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%3])
+ with mapi id 15.20.7828.031; Tue, 13 Aug 2024 12:44:49 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: mike.rudenko@gmail.com
+Cc: christophe.jaillet@wanadoo.fr,
+	dave.stevenson@raspberrypi.com,
+	jacopo@jmondi.org,
+	laurent.pinchart@ideasonboard.com,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	mchehab@kernel.org,
+	sakari.ailus@linux.intel.com,
+	tomm.merciai@gmail.com,
+	changhuang.liang@starfivetech.com
+Subject: [PATCH 4/4] media: i2c: ov4689: Implement 2x2 binning
+Date: Tue, 13 Aug 2024 05:44:43 -0700
+Message-Id: <20240813124443.446703-1-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240616202433.227895-5-mike.rudenko@gmail.com>
+References: <20240616202433.227895-5-mike.rudenko@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0007.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:5::21) To ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1b::9)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/13] media: qcom: camss: Add sm8550 compatible
-To: Depeng Shao <quic_depengs@quicinc.com>, rfoss@kernel.org,
- todor.too@gmail.com, mchehab@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@quicinc.com
-References: <20240812144131.369378-1-quic_depengs@quicinc.com>
- <20240812144131.369378-11-quic_depengs@quicinc.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240812144131.369378-11-quic_depengs@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB1254:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1c60397-61d2-461b-0cb2-08dcbb95b852
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|52116014|41320700013|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	TDbE3PmZM/0enA80zQOUlTlqNh+51n9dHXReVA3zGFMKDByc5x794ndSdsc/lDaNbXvqmenn8jI6maF0w72HXqVQ26WXhUuqd68QpL5EbCBSHgL46jMwQGEY+Dnvn+mU1Be7nuzial5gfQTxT1KKSPqbEcOkceTZgcSDCLemLw9rqhsiKNWywJOf8NnELmVAs9lnXbhWakJ+75qilrpwIMphaRfUlOlePwcMx6NJh+ypvM/pWeLMH6MZjhCGQg9jF+rZBDWqJb6yq8kop30Tt+d8PkdJ7Mv5XznIb3O/Ggx6KPgISg1cl7o1LDU21cSzw1uRHX4V3mZtqatUxN0wqNYlUzJVgwkEAeqlRxO2+OEG+ksL8zGltXifgkIoplehOR1CXwOcz0mfcHy+l2tbVxaf4GDRe0u9OjXdyviM/00HxE/BEoEkyFKr41hQ+JgHChIXsDZkr/+nEuphgsWB8gfM2NbYPUhZfwGBQmqXYjVtgE7VUnnjLxwQDNK73/6PhFKf3AZNywXFj80Vaph0AFnf/NByh8in1j+udUqZhs/Z/ZoVZJ7eawdfNNylZn6q9cZxnWZg5Yx+8B+dn4px8BXSske/abxqdwlDqO/hJWQfMP6naWzqge9hc3H7wJnU
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(41320700013)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?aRU163Pc92+k3I2FemoTdsEgHH8MZrkr2w3wqqUfn3S/g6Lo2uwX5v4zev+n?=
+ =?us-ascii?Q?HkyFZ56gRqxFIDak0GuR5M7jPf264zZhvFYZUHmOWVDhNP2MslGy2axnWu/1?=
+ =?us-ascii?Q?H1iLaHOfvzfzpMLIUrzyrz1z+V9yakyNwV6eXHbrzlRCyfbzYYxzZZtDW6rD?=
+ =?us-ascii?Q?cU2SRYdH2GBReRmZJ1DLgs06EB5eanSYHHn+q2AMFt6n5xk6lihkt6K057jg?=
+ =?us-ascii?Q?BSibNIXg/P3hompXeXFc54Whj0ng8d2SKpWCiCa/pG6WpT07Rk0KdifNFAhh?=
+ =?us-ascii?Q?f0wDhrx8RqBFKhpDz582yR1sIni2x8rh6+CN8i8rVTQvjAEyex6l+/tvoItm?=
+ =?us-ascii?Q?1xhImfu0dlix1jARvxjO/4vJOb0MgO8oNtelp8rnmS8/IMgezJl7p0DZG5mK?=
+ =?us-ascii?Q?MEDeCjAl6sbMGEKsXBk+voyHPl/JAh06ya4r4Ed1i/9u1zs+vnDmNH3kjYjA?=
+ =?us-ascii?Q?dF0fHQhxQYlP6ddDnB6j6HySJe86b84qaikBSf2kxDAVeCw7ysb5NBMQ7kPA?=
+ =?us-ascii?Q?+rsHlVIgmf3RrPB0civwaEpcMpkqdnLAgh1vfV2cSWfQAYaasxQr3iy88gpI?=
+ =?us-ascii?Q?C/hji+rAcfY7HseyPLFZRax4+ArWzK+ApYjPvSazJiQZq7Sc/bUZFD+hfY5P?=
+ =?us-ascii?Q?mKqaBfMzd6lJsBv9FbVqQtUFoEJ9PN9b1CrVMaDEbFGmlwnRwKGhoyE3xOZ2?=
+ =?us-ascii?Q?vML1zhgsDYiJKN/wZPuLGJeEImbYtMU47f/NFe/OfG8z9NRTB6WjxvSehcf2?=
+ =?us-ascii?Q?3bugfg6UsGdC0zdTqIDaMYy89PhCgIFwhTD8ScV3Y95zVlkWN4Vfzrk1CsSj?=
+ =?us-ascii?Q?5KycWpG5tL/LJlBIgrSH1eciQSVgYwRLkmMoIygqkutmC/MhDLvbyX2gqVIK?=
+ =?us-ascii?Q?qJXrHVj94sdPLr1u4yPbh9OFSXGwLEjVOogwT20UoLuSg8am4+H/yYk/5Rtm?=
+ =?us-ascii?Q?pO/rIl/3OaSOobG5p1eRSaXjL6cLsgF1U1rRTyA9vZ0TqPVDreK7zr8iMHWQ?=
+ =?us-ascii?Q?ZGs4u8kcPpBLpjlu/cjjgyOUw94GdujwQdTUHS0S3YO2BYktKe7t0eNMzC62?=
+ =?us-ascii?Q?dJPjGxBy5KCJkItDCtvHPJBFvG1NYGWYPOHjRdnt9ths5FvCEaRIwJZc6VML?=
+ =?us-ascii?Q?UI+jhyRMLtJd17F3Xgk9MNwKKRZE9qEmZ6PIwsXhZ2FDWBZCbyPtaxAyVLNQ?=
+ =?us-ascii?Q?emUxZnfMQNhzxuS+E71d07Yazu1gHqd0vEUn6yHln62tM2Jl/KhRhQ5COOy6?=
+ =?us-ascii?Q?75kd7ltABIsqHGQ7lw3ulruWuoSWbFZPdmBorBekVQPbumIq0fU/nK9ro3mx?=
+ =?us-ascii?Q?EhdUxl43KSDmEnurMhOCCIy3A2ZRFXTSXCxwSntATcvuxlFvuvt3VEHkCgzq?=
+ =?us-ascii?Q?HgOOMF5InC8NWScOsYrcVts2qjxBa3tWaILE0QXXgkQshMzW/xBoXoEKWXni?=
+ =?us-ascii?Q?1TZbU5weygu++8gEm/Ng3rFjBlUlzH5iRCup01znHx7g+AUwW0cN9IK5vc4I?=
+ =?us-ascii?Q?QzWmbJCHHB5eVrvOMYuBxV55fbccMDYVaJCF6uZaz1Vz/n0DVQUFFab0dK9E?=
+ =?us-ascii?Q?P/l0QxK9f9dqD4j2YtY5K8DK6TD/M9lawPwUOOhOlgySK4yQSVgrzlmONUXZ?=
+ =?us-ascii?Q?7jWIO6zHaIup5GJ+oTc81Yo=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1c60397-61d2-461b-0cb2-08dcbb95b852
+X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2024 12:44:49.7753
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SxdGbJvPPux7GK9qap9A+H0jrHdmDdZ1EJ6cVToh/Vr1K66B+k6ofSteAK5sGTejTbGdqPu6+i7MfYW4mUxiqDLjft9/imYU01tnWPNwxOrOrpoIaRHQ92LCDQspBWdp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1254
 
-On 12/08/2024 15:41, Depeng Shao wrote:
-> Add CAMSS_8550 enum, sm8550 compatible and sm8550 camss drvier private
-> data, the private data just include some basic information now, later
-> changes will enumerate with csiphy, csid and vfe resources.
-> 
-> Also add a default case in vfe_src_pad_code to get rid of a compile
-> warning since a new hw enum is added.
-> 
->    drivers/media/platform/qcom/camss/camss-vfe.c:291:10: warning:
->    enumeration value 'CAMSS_8550' not handled in switch [-Wswitch]
->      291 |         switch (vfe->camss->res->version) {
->          |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
+Hi, Mikhail
+
+Thanks for your patch.
+
+>
+> Implement 2x2 binning support. Compute best binning mode (none or 2x2)
+> from pad crop and pad format in ov4689_set_fmt. Use output frame size
+> instead of analogue crop to compute control ranges and BLC anchors.
+>
+> Also move ov4689_hts_min and ov4689_update_ctrl_ranges, since they are
+> now also called from ov4689_set_fmt. Update frame timings to
+> accommodate the requirements of binning mode and avoid visual
+> artefacts. Additionally, report 2x2 binned mode in addition to
+> non-binned one in ov4689_enum_frame_sizes.
+>
+> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+
+Tested-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+
 > ---
->   drivers/media/platform/qcom/camss/camss-vfe.c |  4 +++
->   drivers/media/platform/qcom/camss/camss.c     | 32 +++++++++++++++++++
->   drivers/media/platform/qcom/camss/camss.h     |  1 +
->   3 files changed, 37 insertions(+)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-> index f6650694f47e..71bd55e854bb 100644
-> --- a/drivers/media/platform/qcom/camss/camss-vfe.c
-> +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-> @@ -403,6 +403,10 @@ static u32 vfe_src_pad_code(struct vfe_line *line, u32 sink_code,
->   			return sink_code;
->   		}
->   		break;
-> +	default:
-> +		WARN(1, "Unsupported HW version: %x\n",
-> +		     vfe->camss->res->version);
-> +		break;
->   	}
->   	return 0;
->   }
+>  drivers/media/i2c/ov4689.c | 179 ++++++++++++++++++++++++-------------
+>  1 file changed, 117 insertions(+), 62 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
+> index c4c7c462672a..1499fbe88b76 100644
+> --- a/drivers/media/i2c/ov4689.c
+> +++ b/drivers/media/i2c/ov4689.c
+> @@ -114,7 +114,7 @@
+>   * Minimum working vertical blanking value. Found experimentally at
+>   * minimum HTS values.
+>   */
 
-Please make the addition of the standalone case a standalone patch ;)
-
-Then add.
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
-To this patch.
-
-> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> index 51b1d3550421..519b37794745 100644
-> --- a/drivers/media/platform/qcom/camss/camss.c
-> +++ b/drivers/media/platform/qcom/camss/camss.c
-> @@ -1480,6 +1480,29 @@ static const struct resources_icc icc_res_sc8280xp[] = {
->   	},
->   };
->   
-> +static const struct resources_icc icc_res_sm8550[] = {
-> +	{
-> +		.name = "ahb",
-> +		.icc_bw_tbl.avg = 2097152,
-> +		.icc_bw_tbl.peak = 2097152,
-> +	},
-> +	{
-> +		.name = "hf_0_mnoc",
-> +		.icc_bw_tbl.avg = 2097152,
-> +		.icc_bw_tbl.peak = 2097152,
-> +	},
-> +	{
-> +		.name = "icp_mnoc",
-> +		.icc_bw_tbl.avg = 2097152,
-> +		.icc_bw_tbl.peak = 2097152,
-> +	},
-> +	{
-> +		.name = "sf_0_mnoc",
-> +		.icc_bw_tbl.avg = 2097152,
-> +		.icc_bw_tbl.peak = 2097152,
-> +	},
-> +};
-> +
->   /*
->    * camss_add_clock_margin - Add margin to clock frequency rate
->    * @rate: Clock frequency rate
-> @@ -2443,6 +2466,14 @@ static const struct camss_resources sc8280xp_resources = {
->   	.link_entities = camss_link_entities
->   };
->   
-> +static const struct camss_resources sm8550_resources = {
-> +	.version = CAMSS_8550,
-> +	.pd_name = "top",
-> +	.icc_res = icc_res_sm8550,
-> +	.icc_path_num = ARRAY_SIZE(icc_res_sm8550),
-> +	.link_entities = camss_link_entities
-> +};
-> +
->   static const struct of_device_id camss_dt_match[] = {
->   	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
->   	{ .compatible = "qcom,msm8996-camss", .data = &msm8996_resources },
-> @@ -2450,6 +2481,7 @@ static const struct of_device_id camss_dt_match[] = {
->   	{ .compatible = "qcom,sdm845-camss", .data = &sdm845_resources },
->   	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
->   	{ .compatible = "qcom,sc8280xp-camss", .data = &sc8280xp_resources },
-> +	{ .compatible = "qcom,sm8550-camss", .data = &sm8550_resources },
->   	{ }
->   };
->   
-> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
-> index 73c47c07fc30..5568ab32d5d7 100644
-> --- a/drivers/media/platform/qcom/camss/camss.h
-> +++ b/drivers/media/platform/qcom/camss/camss.h
-> @@ -79,6 +79,7 @@ enum camss_version {
->   	CAMSS_845,
->   	CAMSS_8250,
->   	CAMSS_8280XP,
-> +	CAMSS_8550,
->   };
->   
->   enum icc_count {
-
+Regards,
+Changhuang
