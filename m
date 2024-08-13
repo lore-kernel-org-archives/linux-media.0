@@ -1,152 +1,177 @@
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2109.outbound.protection.partner.outlook.cn [139.219.17.109])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166921993B7;
-	Tue, 13 Aug 2024 13:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.109
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723554055; cv=fail; b=XA39P6z93Xpk4oOkltZMbLfL0cv2BKeoFHd1XW46XS6UzJe6JIVpv5XNHQXUTzzUzWyS+iu5tW4rmERwXY0Z8sXxLMzbyJagUSt50psT/DJ+p0VwKOdlhav0d9ZPocqxW6PrmqT1w95uWdvVkYLYXFGMXxyhnbaNRVU3vzzMkwM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723554055; c=relaxed/simple;
-	bh=gNrF6zlKQ22CeOr3+dx9MaYkDq7a1YFti/CguJ0sc9E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G1FcZ1yE1TFBKLXO7lHrH+3dhbTGf3G22H8w3RkvSKzlAOcJikJ8T3n+ssYNeTgAGEj5ETLBegexB23H9vZg4Zme3KGCCPHDW7gtScH2Z5StfXVogEYupEZaZ7+OAHDW/pDTQus9X2U/mksUO1BfG5mfnge0uAp/vwns8g6FOMk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CHInLaSlGHIBoZw8UDEP8zuycg3ubqRn8o5DVcO5Y4OCfoQ6AKVubDpGLv2VzPMd6Bq1QgKjhi9l33OdGKmGcIqgJWwH7CGVdpEDCcuaHMCbHzjvBVGyp7IoKaWLlRdAo1O/Imgbpznc/ISY92t2iFTC2e8+FnV5h00NncHf8almkoI3QF6ftRxi23kK21CpGqz18afqpq4mgQHVJ2fCDUNt8cekTz3kgLjYoM6EbSvHxCxL139/4V5xOZ4gJFz0Xnfx3dfCYJnFI28lSNkPj3GSfzifMNLEV5Ol/ZxTVMFoRTPe1G1V4dtEB2EB9ucfztXDALwGq8w5TO75+Kqs9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iYBjPgtoSa2UyIeiJ6ux9B8wMPWjIfLhCqh+PLDTAqI=;
- b=H2v3df+5hwo0gKpJGOV2iuFZmEWdioA1nk+F+l0TtM65zFQ8l7/ALZ/3/M1F3L3uLPhwsjg0qbI/NOwDOzbnzn3UI+4L0CL0i5Dnyjoyb69i46O7uuoDscfqqHsodQyy3QpioYaXN9ZTtQB+P+4d7GUJG6TnWATKSpKiclcrr21/0lvro0Eyv58KsA17zVMBTPNayUuMaRRe96Cvujzmmtq81v4JUljhbn0WcJE3UWBXrj+1Ssv8n9HUWcQrrzcuXAzmrFEKM5b9V+o4fI98h0r7RysrhdK19AcXRm5URuGpWDCFaZy/zbily9tcT3WKl2ExGtAHrJwx3LWk3iHLFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9) by ZQ0PR01MB1254.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1c::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.33; Tue, 13 Aug
- 2024 12:44:49 +0000
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- ([fe80::64c5:50d8:4f2c:59aa]) by
- ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%3])
- with mapi id 15.20.7828.031; Tue, 13 Aug 2024 12:44:49 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: mike.rudenko@gmail.com
-Cc: christophe.jaillet@wanadoo.fr,
-	dave.stevenson@raspberrypi.com,
-	jacopo@jmondi.org,
-	laurent.pinchart@ideasonboard.com,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	mchehab@kernel.org,
-	sakari.ailus@linux.intel.com,
-	tomm.merciai@gmail.com,
-	changhuang.liang@starfivetech.com
-Subject: [PATCH 4/4] media: i2c: ov4689: Implement 2x2 binning
-Date: Tue, 13 Aug 2024 05:44:43 -0700
-Message-Id: <20240813124443.446703-1-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240616202433.227895-5-mike.rudenko@gmail.com>
-References: <20240616202433.227895-5-mike.rudenko@gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZQ0PR01CA0007.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:5::21) To ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05B11E4A4
+	for <linux-media@vger.kernel.org>; Tue, 13 Aug 2024 13:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723554117; cv=none; b=M7FnpW4WHw0lEnRK1zGTsTMdXxWcxK4AOelELMQwMK/KsrEoZJg43fOljm86nxWsiJa1Dqn46XT/v/fCNQjc6SVSxop62BeRZikLN1hZV6zzjkL8ui02HXutNYlpJhQmG956SUQJ6H0wBVW9NpGEhX9Kf29vAGlHN5v6LoGGlyk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723554117; c=relaxed/simple;
+	bh=OW9ZXqxEkr9RUH5IYYordISjGdWv1zhb8JCl6eodq94=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iB1TIz6KleT/uCnSP+F+EWMX7ZUqNVnSpCdURXV+PWGh6mt7NRG/GcHx0CT7xwipfnFNrZYlcllA+NjI5SB3JKHdv4at8SFt6bLjFbrBaSq9X00X0Gi9rv9W6vG4ICaEUXF+VEbEOvus7EX8hHI47v0KpZDcaZkm2sKAHNbcTYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AoMEQtvE; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AoMEQtvE"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5bb85e90ad5so4668865a12.3
+        for <linux-media@vger.kernel.org>; Tue, 13 Aug 2024 06:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1723554114; x=1724158914; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZ3qkhG6IpTE9k1+4JdfEiuc6iwsZmU2tud2hbQlnTM=;
+        b=AoMEQtvEvHVwjfsLIBsWOGJ5uFyh1Npe9nLi47CXUpccrcL2rweiiHmUiZ4XIRChwp
+         bB4IBRfWwzoXhpSIW5b/cPkmDpIiN3qQ54cdTHc7ViaIOce1+sTGBWk8CFz01iV0w/9Q
+         BLNjAzDtJ+Efd2WwC5EgjhuWtzgz/3ZMO/sHs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723554114; x=1724158914;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zZ3qkhG6IpTE9k1+4JdfEiuc6iwsZmU2tud2hbQlnTM=;
+        b=JeO0py6q2cYeZcyc02Uir1Tcyhki5NKV/qCDKJhSM/kZNk+LY9NCAhmLMOG1Gi4xI7
+         7ARDec43L6mUhaRYla38uLW6bjtN8Eu/W5UXAR2B1smye6OV4xc8h/pp8EE3kGXb0S5o
+         OkMJ/EZKWDjhwhbFYEHa1bAHvTdetQ64jMp6CRIRUy8c25PhYt/fhCHpWevhuLzCeM9W
+         LfmUxZA0Zg/AZc/OV0ufXZ0LRQ1f/2TN6ijZZHox6Xwy5eOyd9CF6Kguw5NEY/EXdKve
+         5ZBCax9FlhxV4QXeQd54vSAAIgtNWIPmx/sMYNZHuPxiw+7SOpbv7wT7dPqV7ojfgpbR
+         9Y+g==
+X-Forwarded-Encrypted: i=1; AJvYcCX3RP+N/Xl5KMN/WpbakdE1YCX+d3TBP06VNS9vCrCVYA3Xf5danES/5yO8rbYqgbRf6etpSjpVxHv7tp4NDYjnUDdO5Zc67ng2Y0I=
+X-Gm-Message-State: AOJu0Yw1G2b7ydYaq0UL8WLfJ3xYxjqMFZ6WuDUTC9Z950MyiegOlqFo
+	zZKvgqPYYiOMiU13QikNY8mbcKku2skF3MgXmQEj+ZPRQIIY+n3TBAniaeWhcUo9xsHuCqv79N1
+	q7Q==
+X-Google-Smtp-Source: AGHT+IH71IgT20jKJsDeV+2//tTVW13XVJ0OjCfG049JHfkJJH2pIN3J9es12e2VSvTp6eIetrvJXA==
+X-Received: by 2002:a17:907:724f:b0:a80:7c30:a82a with SMTP id a640c23a62f3a-a80ed2d71ebmr272624866b.69.1723554113785;
+        Tue, 13 Aug 2024 06:01:53 -0700 (PDT)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f411aee8sm67716366b.138.2024.08.13.06.01.52
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Aug 2024 06:01:52 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a7a975fb47eso85018266b.3
+        for <linux-media@vger.kernel.org>; Tue, 13 Aug 2024 06:01:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSO4k4PLt50viaShg6zsCrV0uO/XHkoL6aRpC624H/+ybtgnEiO9gsQFra0G0i2HtRh6lL5bHMFVvRHlBwyjYku1t3OdfWLbEwFrE=
+X-Received: by 2002:a17:907:d2d9:b0:a7a:ae85:f245 with SMTP id
+ a640c23a62f3a-a80ed258d19mr244135166b.38.1723554111718; Tue, 13 Aug 2024
+ 06:01:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB1254:EE_
-X-MS-Office365-Filtering-Correlation-Id: f1c60397-61d2-461b-0cb2-08dcbb95b852
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|52116014|41320700013|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	TDbE3PmZM/0enA80zQOUlTlqNh+51n9dHXReVA3zGFMKDByc5x794ndSdsc/lDaNbXvqmenn8jI6maF0w72HXqVQ26WXhUuqd68QpL5EbCBSHgL46jMwQGEY+Dnvn+mU1Be7nuzial5gfQTxT1KKSPqbEcOkceTZgcSDCLemLw9rqhsiKNWywJOf8NnELmVAs9lnXbhWakJ+75qilrpwIMphaRfUlOlePwcMx6NJh+ypvM/pWeLMH6MZjhCGQg9jF+rZBDWqJb6yq8kop30Tt+d8PkdJ7Mv5XznIb3O/Ggx6KPgISg1cl7o1LDU21cSzw1uRHX4V3mZtqatUxN0wqNYlUzJVgwkEAeqlRxO2+OEG+ksL8zGltXifgkIoplehOR1CXwOcz0mfcHy+l2tbVxaf4GDRe0u9OjXdyviM/00HxE/BEoEkyFKr41hQ+JgHChIXsDZkr/+nEuphgsWB8gfM2NbYPUhZfwGBQmqXYjVtgE7VUnnjLxwQDNK73/6PhFKf3AZNywXFj80Vaph0AFnf/NByh8in1j+udUqZhs/Z/ZoVZJ7eawdfNNylZn6q9cZxnWZg5Yx+8B+dn4px8BXSske/abxqdwlDqO/hJWQfMP6naWzqge9hc3H7wJnU
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(41320700013)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aRU163Pc92+k3I2FemoTdsEgHH8MZrkr2w3wqqUfn3S/g6Lo2uwX5v4zev+n?=
- =?us-ascii?Q?HkyFZ56gRqxFIDak0GuR5M7jPf264zZhvFYZUHmOWVDhNP2MslGy2axnWu/1?=
- =?us-ascii?Q?H1iLaHOfvzfzpMLIUrzyrz1z+V9yakyNwV6eXHbrzlRCyfbzYYxzZZtDW6rD?=
- =?us-ascii?Q?cU2SRYdH2GBReRmZJ1DLgs06EB5eanSYHHn+q2AMFt6n5xk6lihkt6K057jg?=
- =?us-ascii?Q?BSibNIXg/P3hompXeXFc54Whj0ng8d2SKpWCiCa/pG6WpT07Rk0KdifNFAhh?=
- =?us-ascii?Q?f0wDhrx8RqBFKhpDz582yR1sIni2x8rh6+CN8i8rVTQvjAEyex6l+/tvoItm?=
- =?us-ascii?Q?1xhImfu0dlix1jARvxjO/4vJOb0MgO8oNtelp8rnmS8/IMgezJl7p0DZG5mK?=
- =?us-ascii?Q?MEDeCjAl6sbMGEKsXBk+voyHPl/JAh06ya4r4Ed1i/9u1zs+vnDmNH3kjYjA?=
- =?us-ascii?Q?dF0fHQhxQYlP6ddDnB6j6HySJe86b84qaikBSf2kxDAVeCw7ysb5NBMQ7kPA?=
- =?us-ascii?Q?+rsHlVIgmf3RrPB0civwaEpcMpkqdnLAgh1vfV2cSWfQAYaasxQr3iy88gpI?=
- =?us-ascii?Q?C/hji+rAcfY7HseyPLFZRax4+ArWzK+ApYjPvSazJiQZq7Sc/bUZFD+hfY5P?=
- =?us-ascii?Q?mKqaBfMzd6lJsBv9FbVqQtUFoEJ9PN9b1CrVMaDEbFGmlwnRwKGhoyE3xOZ2?=
- =?us-ascii?Q?vML1zhgsDYiJKN/wZPuLGJeEImbYtMU47f/NFe/OfG8z9NRTB6WjxvSehcf2?=
- =?us-ascii?Q?3bugfg6UsGdC0zdTqIDaMYy89PhCgIFwhTD8ScV3Y95zVlkWN4Vfzrk1CsSj?=
- =?us-ascii?Q?5KycWpG5tL/LJlBIgrSH1eciQSVgYwRLkmMoIygqkutmC/MhDLvbyX2gqVIK?=
- =?us-ascii?Q?qJXrHVj94sdPLr1u4yPbh9OFSXGwLEjVOogwT20UoLuSg8am4+H/yYk/5Rtm?=
- =?us-ascii?Q?pO/rIl/3OaSOobG5p1eRSaXjL6cLsgF1U1rRTyA9vZ0TqPVDreK7zr8iMHWQ?=
- =?us-ascii?Q?ZGs4u8kcPpBLpjlu/cjjgyOUw94GdujwQdTUHS0S3YO2BYktKe7t0eNMzC62?=
- =?us-ascii?Q?dJPjGxBy5KCJkItDCtvHPJBFvG1NYGWYPOHjRdnt9ths5FvCEaRIwJZc6VML?=
- =?us-ascii?Q?UI+jhyRMLtJd17F3Xgk9MNwKKRZE9qEmZ6PIwsXhZ2FDWBZCbyPtaxAyVLNQ?=
- =?us-ascii?Q?emUxZnfMQNhzxuS+E71d07Yazu1gHqd0vEUn6yHln62tM2Jl/KhRhQ5COOy6?=
- =?us-ascii?Q?75kd7ltABIsqHGQ7lw3ulruWuoSWbFZPdmBorBekVQPbumIq0fU/nK9ro3mx?=
- =?us-ascii?Q?EhdUxl43KSDmEnurMhOCCIy3A2ZRFXTSXCxwSntATcvuxlFvuvt3VEHkCgzq?=
- =?us-ascii?Q?HgOOMF5InC8NWScOsYrcVts2qjxBa3tWaILE0QXXgkQshMzW/xBoXoEKWXni?=
- =?us-ascii?Q?1TZbU5weygu++8gEm/Ng3rFjBlUlzH5iRCup01znHx7g+AUwW0cN9IK5vc4I?=
- =?us-ascii?Q?QzWmbJCHHB5eVrvOMYuBxV55fbccMDYVaJCF6uZaz1Vz/n0DVQUFFab0dK9E?=
- =?us-ascii?Q?P/l0QxK9f9dqD4j2YtY5K8DK6TD/M9lawPwUOOhOlgySK4yQSVgrzlmONUXZ?=
- =?us-ascii?Q?7jWIO6zHaIup5GJ+oTc81Yo=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1c60397-61d2-461b-0cb2-08dcbb95b852
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2024 12:44:49.7753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SxdGbJvPPux7GK9qap9A+H0jrHdmDdZ1EJ6cVToh/Vr1K66B+k6ofSteAK5sGTejTbGdqPu6+i7MfYW4mUxiqDLjft9/imYU01tnWPNwxOrOrpoIaRHQ92LCDQspBWdp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1254
+References: <20240813-smatch-clock-v1-0-664c84295b1c@chromium.org>
+ <20240813-smatch-clock-v1-1-664c84295b1c@chromium.org> <ce0ed949-5e57-4193-8190-9e4aa9cb62be@stanley.mountain>
+In-Reply-To: <ce0ed949-5e57-4193-8190-9e4aa9cb62be@stanley.mountain>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 13 Aug 2024 15:01:37 +0200
+X-Gmail-Original-Message-ID: <CANiDSCu6BUdJt1sjmbOq2s4KU1JUN9D+HfnvSG6OqMhD-dKekw@mail.gmail.com>
+Message-ID: <CANiDSCu6BUdJt1sjmbOq2s4KU1JUN9D+HfnvSG6OqMhD-dKekw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] media: ar0521: Refactor ar0521_power_off()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+	linux-staging@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, Mikhail
+Hi Dan
 
-Thanks for your patch.
+On Tue, 13 Aug 2024 at 14:54, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+>
+> On Tue, Aug 13, 2024 at 12:13:48PM +0000, Ricardo Ribalda wrote:
+> > Factor out all the power off logic, except the clk_disable_unprepare(),
+> > to a new function __ar0521_power_off().
+> >
+> > This allows ar0521_power_on() to explicitly clean-out the clock during
+> > the error-path.
+> >
+> > The following smatch warning is fixed:
+> > drivers/media/i2c/ar0521.c:912 ar0521_power_on() warn: 'sensor->extclk' from clk_prepare_enable() not released on lines: 912.
+> >
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+>
+> It's better to just ignore false positives...  The problem here is that
+> Smatch can't track that to_ar0521_dev(dev_get_drvdata(dev))->sensor is the same
+> as sensor.  What I could do is say that "this frees *something* unknown" so
+> let's silence the warning."
+>
+> The problem is that check_unwind.c is not very granular.  It just marks things
+> as allocated and freed.  I could make it more granular so the free and the
+> alloc have to match.  Or we could match based on the type.  This frees a
+> "struct ar0521_dev" so mark all those as freed in the caller.
+>
+> >  drivers/media/i2c/ar0521.c | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+> > index 09331cf95c62..2c528db31ba6 100644
+> > --- a/drivers/media/i2c/ar0521.c
+> > +++ b/drivers/media/i2c/ar0521.c
+> > @@ -835,7 +835,7 @@ static const struct initial_reg {
+> >            be(0x0707)), /* 3F44: couple k factor 2 */
+> >  };
+> >
+> > -static int ar0521_power_off(struct device *dev)
+> > +static void __ar0521_power_off(struct device *dev)
+> >  {
+> >       struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> >       struct ar0521_dev *sensor = to_ar0521_dev(sd);
+> > @@ -850,6 +850,16 @@ static int ar0521_power_off(struct device *dev)
+> >               if (sensor->supplies[i])
+> >                       regulator_disable(sensor->supplies[i]);
+> >       }
+> > +}
+> > +
+> > +static int ar0521_power_off(struct device *dev)
+> > +{
+> > +     struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> > +     struct ar0521_dev *sensor = to_ar0521_dev(sd);
+> > +
+> > +     clk_disable_unprepare(sensor->extclk);
+> > +     __ar0521_power_off(dev);
+>
+> You had intended to remove the clk_disable_unprepare() from __ar0521_power_off()
+> but forgot so these are double unprepares.
+
+Ups, thanks for catching it :)
+
+Will send as v2, unless you fix it in smatch first ;P
+
+Regards!
 
 >
-> Implement 2x2 binning support. Compute best binning mode (none or 2x2)
-> from pad crop and pad format in ov4689_set_fmt. Use output frame size
-> instead of analogue crop to compute control ranges and BLC anchors.
+> regards,
+> dan carpenter
 >
-> Also move ov4689_hts_min and ov4689_update_ctrl_ranges, since they are
-> now also called from ov4689_set_fmt. Update frame timings to
-> accommodate the requirements of binning mode and avoid visual
-> artefacts. Additionally, report 2x2 binned mode in addition to
-> non-binned one in ov4689_enum_frame_sizes.
->
-> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
+> > +
+> >       return 0;
+> >  }
+> >
+> > @@ -908,7 +918,8 @@ static int ar0521_power_on(struct device *dev)
+> >
+> >       return 0;
+> >  off:
+> > -     ar0521_power_off(dev);
+> > +     clk_disable_unprepare(sensor->extclk);
+> > +     __ar0521_power_off(dev);
+> >       return ret;
+> >  }
+> >
+> >
+> > --
+> > 2.46.0.76.ge559c4bf1a-goog
+> >
 
-Tested-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 
-> ---
->  drivers/media/i2c/ov4689.c | 179 ++++++++++++++++++++++++-------------
->  1 file changed, 117 insertions(+), 62 deletions(-)
->
-> diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
-> index c4c7c462672a..1499fbe88b76 100644
-> --- a/drivers/media/i2c/ov4689.c
-> +++ b/drivers/media/i2c/ov4689.c
-> @@ -114,7 +114,7 @@
->   * Minimum working vertical blanking value. Found experimentally at
->   * minimum HTS values.
->   */
 
-Regards,
-Changhuang
+-- 
+Ricardo Ribalda
