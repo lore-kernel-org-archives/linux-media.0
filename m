@@ -1,59 +1,21 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FBF1420B0
-	for <linux-media@vger.kernel.org>; Wed, 14 Aug 2024 08:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D545A1AD9E4
+	for <linux-media@vger.kernel.org>; Wed, 14 Aug 2024 10:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723624947; cv=none; b=dmJU+Esz1HI4mSlerVSjQjOmffUEmEYgqMVVtakQm7h6lNMenKcWwSV9FjfXZiGDq8cvNPHaFGKuGAApKPYvBr/+h9YbDxDULe3z1+BDa1Lz9JD3bhwXCcqkRSRDWF9sMEpKpQIew9ynB0qeXplmXqUPk5zEzgy9eYAtfSQVcjg=
+	t=1723629761; cv=none; b=ixUD+fWLB8XDtWkqt2sg2zq1HBxP1kS+fINpaJJHHa3YH2tO9P21/lMnbPGiGGJXDQhkgvoEGusyrG4WDpH+6CPn+b+737MeXwfjkwrcXSZeEumoWJ5x2qYh0n4yp1bpZx2s/awiBj5JqhOCBONd6a1Y9EDmYMP63kGKYrOZzFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723624947; c=relaxed/simple;
-	bh=1QfKCLMRnNPzmvyKlrpuDS58cibY7JPKGSrw1Fiy1Nw=;
+	s=arc-20240116; t=1723629761; c=relaxed/simple;
+	bh=tCk+VLwF1xD3H5u/Uo3J7/Jhh237r2up+DlzGKXe5iI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OGUMl2k4Fh9/XLTqQfgiPAKMN82rK4dlt+p4aUuSZICsuZV2vqR3YU34MBdVnd2hsvXee3mKYtgHPWJHiwdsmewCQEPdD1rKUdI8Xddv45Zr5NRJ203mCSo2GM8i9/ZMOCM4phnuNktAML3yH224ZnF3zKfe6WKIIEOLfTzTzKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CEJk4MK3; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CEJk4MK3"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-428f5c0833bso3564755e9.0
-        for <linux-media@vger.kernel.org>; Wed, 14 Aug 2024 01:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723624944; x=1724229744; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3AyfZexU22I2sH9aPnSL5GuTFz1W/ENho/AlFGBB7a0=;
-        b=CEJk4MK3CZS+YK43bn+qrW6bbbUDjcX0xgjwbHGYz26i98fKa85krHbezelrZOgBLH
-         ojcDcZlfTczn4BIdleq77AwHW64cyymaAVGFXZLhQvJs4yn3j1s+9+kespzKAD9oJfFO
-         ADRxIAPJJVTT/+NMbNDLUfnD/72mw9VfhV6tAfEk8F1luMBam7CkdmBGYImcHkxdHzmC
-         01MJ45AI00gcqQINIJEXfiPab71A13Ra9RRffq0vuNOwynlpeGK+/BBI6NiYN3xaEsqo
-         rRTjq++kcgPPKVqOiJBz7+CC64nY18bt2TiMv3nP3pz3VsXUf0tii0t2+pI/39g8IOKP
-         UOlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723624944; x=1724229744;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3AyfZexU22I2sH9aPnSL5GuTFz1W/ENho/AlFGBB7a0=;
-        b=ffUzZYTwRlzjUwKUqTJb3XILep/DZtIhN3NvOn+094XbKjA7kdE++S61XMe5XyNBar
-         Suzfoaj5zUbNAOKCP0+poFx80KtXYxwUAhTPTN4oAdedeKphl32Ji4JSgj3ymRU8TC5M
-         6qa4LCr2PofhWukNz+5traKokP1KpAI8INh61vYukhCJTNNBFiM3Vd/JmKf9YInMWi6I
-         Jqa2pj5yrmfNZJ1S/2jjyQDP3g0y31jMJTxVZJiUXldGgZ6X/IwR88uK3QgtxUbOm4BT
-         2Z22/K1uP5mLpEJs4fr9v/UDpgkiV0mnPLdVupi2oIlFwUNuu3kusfKsDQ+Qlc6NUBiq
-         d9Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkJUSKJp7LRJEmg5otp/1sFmtAnu3G7Fn5/MQLS+D8VRl2bis/OX9WxGGTUB9eKP9IknqLI+un/wfgpstLzocebqtmRXUGpD3+9bA=
-X-Gm-Message-State: AOJu0YxhL18c54LTdBM0PuFm3yQvI/AoiVq3bpEhFLYCvl8ead4OBAyh
-	oC12wPk77o7HiNAYu8Tsk9ZDk5TjhMFueNGJli7b1UBdP8TtL1IR3dUVchXgQwA=
-X-Google-Smtp-Source: AGHT+IGQisfWqgtdPNDL3251nLqNoB/iLdOa4Y+g5fQHv6/ZcTIQfBAbps6K9TvAvJILM4MqhlIIFw==
-X-Received: by 2002:a05:6000:2a3:b0:366:e9f7:4e73 with SMTP id ffacd0b85a97d-3716e3ead69mr5763290f8f.5.1723624943698;
-        Wed, 14 Aug 2024 01:42:23 -0700 (PDT)
-Received: from [192.168.0.25] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37179646104sm962415f8f.113.2024.08.14.01.42.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Aug 2024 01:42:23 -0700 (PDT)
-Message-ID: <ede0cc89-35ad-454c-bcae-5a77dc3bafa9@linaro.org>
-Date: Wed, 14 Aug 2024 09:42:22 +0100
+	 In-Reply-To:Content-Type; b=L7IaI+/Pqw4iuiXQ57vRfkwHH+b+SyXEAT3nZcOmUAoKuqiIkf/a5QAewBCrPO9MFcc971b7vHxdxZki5ZBLAJffcBGAeg3rxmRg5VrkLRV5G0yIQU7pZG+gW2RDieXWmWUgwLJgj1nyInjnJZ6ujf9Go7PqHaJ23dtxoOkNlq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97CDC32786;
+	Wed, 14 Aug 2024 10:02:40 +0000 (UTC)
+Message-ID: <70262640-21eb-452a-a24d-783b4bcd8d54@xs4all.nl>
+Date: Wed, 14 Aug 2024 12:02:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,83 +23,106 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] media: qcom: camss: fix error path on configuration of
- power domains
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Robert Foss <rfoss@kernel.org>
-Cc: Todor Tomov <todor.too@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-media@vger.kernel.org,
- linux-arm-msm@vger.kernel.org,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <20240813210342.1765944-1-vladimir.zapolskiy@linaro.org>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240813210342.1765944-1-vladimir.zapolskiy@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [GIT PULL FOR v6.12] rkisp1 extensible parameters format
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ linux-media@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20240812230545.GA2358@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20240812230545.GA2358@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/08/2024 22:03, Vladimir Zapolskiy wrote:
-> There is a chance to meet runtime issues during configuration of CAMSS
-> power domains, because on the error path dev_pm_domain_detach() is
-> unexpectedly called with NULL or error pointer.
-> 
-> One of the simplest ways to reproduce the problem is to probe CAMSS
-> driver before registration of CAMSS power domains, for instance if
-> a platform CAMCC driver is simply not built.
-> 
-> Warning backtrace example:
-> 
->      Unable to handle kernel NULL pointer dereference at virtual address 00000000000001a2
-> 
->      <snip>
-> 
->      pc : dev_pm_domain_detach+0x8/0x48
->      lr : camss_probe+0x374/0x9c0
-> 
->      <snip>
-> 
->      Call trace:
->       dev_pm_domain_detach+0x8/0x48
->       platform_probe+0x70/0xf0
->       really_probe+0xc4/0x2a8
->       __driver_probe_device+0x80/0x140
->       driver_probe_device+0x48/0x170
->       __device_attach_driver+0xc0/0x148
->       bus_for_each_drv+0x88/0xf0
->       __device_attach+0xb0/0x1c0
->       device_initial_probe+0x1c/0x30
->       bus_probe_device+0xb4/0xc0
->       deferred_probe_work_func+0x90/0xd0
->       process_one_work+0x164/0x3e0
->       worker_thread+0x310/0x420
->       kthread+0x120/0x130
->       ret_from_fork+0x10/0x20
-> 
-> Fixes: 23aa4f0cd327 ("media: qcom: camss: Move VFE power-domain specifics into vfe.c")
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> ---
-> The first version of the patch and discussion is found over here:
-> 
->    https://lore.kernel.org/all/20240806221204.1560258-1-vladimir.zapolskiy@linaro.org/
-> 
-> Changes from v1 to v2:
-> * added an encountered runtime warning to the commit message per ask from Bryan.
-> 
-> I tested this fix in both cases of set and unset "power-domain-names"
-> property in camss device tree node, and I didn't find any negative side
-> effects of the fix.
-> 
->   drivers/media/platform/qcom/camss/camss.c | 19 ++++++++-----------
->   1 file changed, 8 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
-> index 51b1d3550421..aa894be1461d 100644
-> --- a/drivers/media/platform/qcom/camss/camss.c
-> +++ b/drivers/media/platform/qcom/camss/camss.c
+Hi Laurent,
 
-+ stable@vger.kernel.org
+On 13/08/2024 01:05, Laurent Pinchart wrote:
+> Hi Hans, Mauro,
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+commit 5ef3fcc8e42b43523498c7b0ede19a47fbdf8353 (media: rkisp1: Implement extensible params support)
+failed to push because the commit log contains a local changelog:
+
+    ...
+    Implement parameter buffer validation for the extensible format at
+    .buf_prepare() time.
+
+    Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+    Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+    Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+    Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+    Tested-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+    Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+    Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+    ---
+    Changes since v10:
+
+    - Use %zu to print size_t arguments
+
+I can either just take these patches (i.e. I don't merge them), and manually remove
+this before committing, or you need to update your tree yourself.
+
+If you decide to do the latter, then please add my:
+
+	Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
+to patches 2 and 3 (uAPI changes).
+
+Regards,
+
+	Hans
+
+> 
+> The following changes since commit c80bfa4f9e0ebfce6ac909488d412347acbcb4f9:
+> 
+>   media: ti: cal: use 'time_left' variable with wait_event_timeout() (2024-08-09 07:56:39 +0200)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git tags/next-media-rkisp1-20240813
+> 
+> for you to fetch changes up to 32be6029c1c1e8c628077403b2096e9d9085f6c8:
+> 
+>   media: rkisp1: Add support for the companding block (2024-08-12 13:36:50 +0300)
+> 
+> ----------------------------------------------------------------
+> Extensible parameters support for the rkisp1 driver
+> 
+> ----------------------------------------------------------------
+> Jacopo Mondi (7):
+>       media: uapi: rkisp1-config: Add extensible params format
+>       media: uapi: videodev2: Add V4L2_META_FMT_RK_ISP1_EXT_PARAMS
+>       media: rkisp1: Add struct rkisp1_params_buffer
+>       media: rkisp1: Copy the parameters buffer
+>       media: rkisp1: Cache the currently active format
+>       media: rkisp1: Implement extensible params support
+>       media: rkisp1: Implement s_fmt/try_fmt
+> 
+> Laurent Pinchart (2):
+>       media: rkisp1: Add helper function to swap colour channels
+>       media: rkisp1: Add features mask to extensible block handlers
+> 
+> Ondrej Jirman (1):
+>       media: rkisp1: Adapt to different SoCs having different size limits
+> 
+> Paul Elder (3):
+>       media: rkisp1: Add register definitions for the companding block
+>       media: rkisp1: Add feature flags for BLS and compand
+>       media: rkisp1: Add support for the companding block
+> 
+>  Documentation/admin-guide/media/rkisp1.rst         |   11 +-
+>  .../userspace-api/media/v4l/metafmt-rkisp1.rst     |   57 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-common.c |   14 +
+>  .../media/platform/rockchip/rkisp1/rkisp1-common.h |   49 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-csi.c    |    5 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-dev.c    |   15 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-isp.c    |    9 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-params.c | 1037 ++++++++++++++++++--
+>  .../media/platform/rockchip/rkisp1/rkisp1-regs.h   |   23 +
+>  .../platform/rockchip/rkisp1/rkisp1-resizer.c      |    4 +-
+>  .../media/platform/rockchip/rkisp1/rkisp1-stats.c  |   51 +-
+>  drivers/media/v4l2-core/v4l2-ioctl.c               |    1 +
+>  include/uapi/linux/rkisp1-config.h                 |  578 +++++++++++
+>  include/uapi/linux/videodev2.h                     |    1 +
+>  14 files changed, 1689 insertions(+), 166 deletions(-)
+> 
 
