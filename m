@@ -1,126 +1,124 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from azazel.net (taras.nevrast.org [35.176.194.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2A31AC886;
-	Thu, 15 Aug 2024 10:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C239C7DA9F
+	for <linux-media@vger.kernel.org>; Thu, 15 Aug 2024 11:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.176.194.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723719027; cv=none; b=OkGwb+xVHgaUS0Xt5plNeVzmf87vj03ikkz/tuKU5+PtWzHQsR8LHxci+WaFxKf4snVWT9KKfYieo+MNuiaFNaewPVmcLhkrigakjVLv6z7vBdOLy9j1wFTgHCp54Kw9MMoe6GY6egLIRbcP+jScqEaNYm5Uz2wY/23D96WOt1c=
+	t=1723722871; cv=none; b=g5ltLPrX7pBn3pcS7nAgW+VYC+osJrAQpxKd2snrx4cJLri6yRzWqLh/dKiTibxZ05wI9Q03c3wEatutyiTrmIdSKCGNhXjQ03T/N1u4y5cGk6OKzuvWLRw5jcyAz23S1iPYlt/yV0d09zvlgq0fGUgGrEnz6dpEKyl8yEjwjnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723719027; c=relaxed/simple;
-	bh=im0u3eDxsETwiNVKDYspTSbhx4x8HTTNFfvIT6Catbg=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=LLidX+DrKX88vOS9p/a+ifiWuN9Hzg4zTBaS9+mJp/n7Ir/GeAyR3d7J7/hmC9sVzsAdld7xrfJgTdxroJWTA5+YrSs2Q9OOVMvlM7fsRMZqavh1eQ69Yx57sndeDHvV7wgLXynQlkbKqr9qX9QOXahdDcFN7eR2bZUUn+bGSrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=WZVHE9nA; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1723722871; c=relaxed/simple;
+	bh=MOA6KauWo57lSSDDmM60VY7SV4gVdVsAu6JfiRQPuDo=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mWanuzys0Duut4VjTYnaQr/XFsdz1BJ0Aks0ib4vcB2u6NQ8NyhHRDkQNoExTFYmfoiDS6fea1fZyJccNPS9fjeeUU6OXrTYwV6GNDmIDahk/C2d3XtPzqiwgA1g2DeCgif/t2n9uLeSFlUYfETwUqMg5qr2SjXf9unrP0i3Bq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=azazel.net; spf=pass smtp.mailfrom=azazel.net; dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b=kmcbaxRx; arc=none smtp.client-ip=35.176.194.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=azazel.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=azazel.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="WZVHE9nA"
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4EC226CA;
-	Thu, 15 Aug 2024 12:49:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1723718965;
-	bh=im0u3eDxsETwiNVKDYspTSbhx4x8HTTNFfvIT6Catbg=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=WZVHE9nAE+7a65O4hOU2HZcKLgPmwe+X5btJh95wCAbicNv8tCZrrOpcc197HHqmW
-	 i/jJLe8nqGbiKZxXGIwkQGB853C9uX3KkaKJGfF2ShaT72Ae2+9HZuR8q1mC+iwc7V
-	 OZPwCQ1z99EZWpGm4i8sGXTSqfnUZfOJ+PnsDKpk=
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b="kmcbaxRx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
+	s=20220717; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=vN93bRKca0zv/L2pwmGS4rrzVdQ3N7QEPwLt8BVq+qo=; b=kmcbaxRx8ogtkCQhlZGc1THTqL
+	gfgNDT10wzv2iL+ZAkPUmKtPNAChpDPP1yg0Cw/aKzTstjJ+qu1a+cUgr6za5rkHQ56Lo68S9e8T8
+	UXT71EjfQ1+mN+7J2dxsIYva8Cg1CYJ5m79MRIDxeJdYZ7nfAltDZds4Trr7hGBEjZHLjr+/vSu5I
+	Xeinkzo0y+Rh6g3wD1aT2rPxqQmne+tJNUFd0fYgOJQS3lOVh7jdwmz4eXUQTnF3IF1q8QY2OxpM8
+	IES9QduqD6x5WNRxVYiRCucDj48ev5lc8jLsXphPp1hr+5C4LfaMBx9yhcXqOgrzYq/fQhOT1MbIT
+	TwTRIedg==;
+Received: from ulthar.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae])
+	by taras.nevrast.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <jeremy@azazel.net>)
+	id 1seZ3i-00CeCX-05
+	for linux-media@vger.kernel.org;
+	Thu, 15 Aug 2024 12:54:26 +0100
+From: Jeremy Sowden <jeremy@azazel.net>
+To: Linux Media <linux-media@vger.kernel.org>
+Subject: [PATCH xawtv3 1/2] Fix gcc-14 compilation failures caused by incompatible pointer types
+Date: Thu, 15 Aug 2024 12:54:14 +0100
+Message-ID: <20240815115415.3371544-2-jeremy@azazel.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240815115415.3371544-1-jeremy@azazel.net>
+References: <20240815115415.3371544-1-jeremy@azazel.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240813-imx335-binned-mode-v1-1-edbb3718ab0f@ideasonboard.com>
-References: <20240813-imx335-binned-mode-v1-1-edbb3718ab0f@ideasonboard.com>
-Subject: Re: [PATCH] media: imx283: Add 3/3 binning mode
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Umang Jain <umang.jain@ideasonboard.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, Umang Jain <umang.jain@ideasonboard.com>
-Date: Thu, 15 Aug 2024 11:50:21 +0100
-Message-ID: <172371902103.129190.2742499360622510193@ping.linuxembedded.co.uk>
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae
+X-SA-Exim-Mail-From: jeremy@azazel.net
+X-SA-Exim-Scanned: No (on taras.nevrast.org); SAEximRunCond expanded to false
 
-Quoting Umang Jain (2024-08-13 06:52:00)
-> IMX283 supports 12-bit 3/3 binning mode with 1824x1216 resolution.
-> Introduce the mode config for the same.
->=20
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
-> Patch to introduce 3/3 binning mode - 1824x1216 12-bit output.
-> ---
->  drivers/media/i2c/imx283.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->=20
-> diff --git a/drivers/media/i2c/imx283.c b/drivers/media/i2c/imx283.c
-> index 8490618c5071..94276f4f2d83 100644
-> --- a/drivers/media/i2c/imx283.c
-> +++ b/drivers/media/i2c/imx283.c
-> @@ -465,6 +465,39 @@ static const struct imx283_mode supported_modes_12bi=
-t[] =3D {
->                 .horizontal_ob =3D 48,
->                 .vertical_ob =3D 4,
-> =20
-> +               .crop =3D {
+`XawListChange` declares the type of its second parameter as `_Xconst
+char **`.  However, xawtv passes `str_list`, which is declared as
+`String *`, or `&empty` which is declared as `char *`.  With gcc 14, these
+result in incompatible-pointer errors:
 
-I still wonder if these crops for full resolution mode can be set as:
+ x11/propwatch.c: In function 'RebuildList':
+ x11/propwatch.c:319:43: error: passing argument 2 of 'XawListChange' from incompatible pointer type [-Wincompatible-pointer-types]
+   319 |     XawListChange(bl,str_count ? str_list : &empty,
+       |                      ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+       |                                           |
+       |                                           char **
+ In file included from x11/propwatch.c:28:
+ /usr/include/X11/Xaw/List.h:170:27: note: expected 'const char **' but argument is of type 'char **'
+   170 |  _Xconst char           **list,
+       |                           ^
+ x11/propwatch.c: In function 'ProcessPropertyChange':
+ x11/propwatch.c:498:34: error: passing argument 2 of 'XawListChange' from incompatible pointer type [-Wincompatible-pointer-types]
+   498 |                 XawListChange(bl,str_list,str_count,1000,1);
+       |                                  ^~~~~~~~
+       |                                  |
+       |                                  char **
+ /usr/include/X11/Xaw/List.h:170:27: note: expected 'const char **' but argument is of type 'char **'
+   170 |  _Xconst char           **list,
+       |                           ^
 
- 	.crop =3D imx283_active_area,
+Both variables are only used as arguments to `XawListChange`, so change
+their types to match its expectations.
 
-But that's a separate patch/discussion.
+Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075650
+Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+---
+ x11/propwatch.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/x11/propwatch.c b/x11/propwatch.c
+index 465c4ea1546e..f7aac657a4c8 100644
+--- a/x11/propwatch.c
++++ b/x11/propwatch.c
+@@ -58,8 +58,8 @@ static char *watch_default[] = {
+     "WM_COMMAND",
+ };
+ 
+-static String   *str_list;
+-static int      str_count;
++static const char **str_list;
++static int          str_count;
+ 
+ static void AddWatch(Display *dpy, Window win, int i);
+ static void DeleteWatch(Window win);
+@@ -306,13 +306,13 @@ cmp(const void *a, const void *b)
+ static void
+ RebuildList(void)
+ {
+-    static char *empty = "empty";
++    static const char *empty = "empty";
+     int i;
+     struct WATCHLIST *this;
+ 
+     if (str_list)
+ 	free(str_list);
+-    str_list = malloc(str_count*sizeof(String));
++    str_list = malloc(str_count*sizeof(*str_list));
+     for (i=0, this=watchlist; this!=NULL; i++, this=this->next)
+ 	str_list[i] = this->text;
+     qsort(str_list,str_count,sizeof(char*),cmp);
+-- 
+2.43.0
 
-> +                       .top =3D 40,
-> +                       .left =3D 108,
-> +                       .width =3D 5472,
-> +                       .height =3D 3648,
-> +               },
-> +       },
-> +       {
-> +               /*
-> +                * Readout mode 3 : 3/3 binned mode (1824x1216)
-> +                */
-> +               .mode =3D IMX283_MODE_3,
-> +               .bpp =3D 12,
-> +               .width =3D 1824,
-> +               .height =3D 1216,
-> +               .min_hmax =3D 1894, /* Pixels (284 * 480MHz/72MHz + paddi=
-ng) */
-> +               .min_vmax =3D 4200, /* Lines */
-> +
-> +               /* 60.00 fps */
-> +               .default_hmax =3D 1900, /* 285 @ 480MHz/72Mhz */
-> +               .default_vmax =3D 4200,
-> +
-> +               .veff =3D 1234,
-> +               .vst =3D 0,
-> +               .vct =3D 0,
-> +
-> +               .hbin_ratio =3D 3,
-> +               .vbin_ratio =3D 3,
-> +
-> +               .min_shr =3D 16,
-> +               .horizontal_ob =3D 32,
-> +               .vertical_ob =3D 4,
-> +
-
-Everything there matches my expectations and the datasheet:
-
-
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-
->                 .crop =3D {
->                         .top =3D 40,
->                         .left =3D 108,
->=20
-> ---
-> base-commit: 68a72104cbcf38ad16500216e213fa4eb21c4be2
-> change-id: 20240813-imx335-binned-mode-98b2b7ee5ba0
->=20
-> Best regards,
-> --=20
-> Umang Jain <umang.jain@ideasonboard.com>
->
