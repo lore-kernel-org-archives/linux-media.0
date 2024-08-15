@@ -1,48 +1,45 @@
 Received: from azazel.net (taras.nevrast.org [35.176.194.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C242815D5D8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23E414BFA8
 	for <linux-media@vger.kernel.org>; Thu, 15 Aug 2024 11:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.176.194.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723722871; cv=none; b=Qf5Ch7kpEm0cNL57xLTzwmC/RbJQjlA24UplrzwCr8uk7S57IIBNAW4FXLng34U5lDy/V5e024YA/ub0VDuMFXJwC8+Y3Hfq+DG4y61t87GT42rW5QGFpwx5IlgOE2hxhl4RzcH3k0MeMBvuRRSo7Rg8iHmvVbDfg0S56wQdpR8=
+	t=1723722871; cv=none; b=VBbf6fYoEfc6tPpZCTFH6qKeweVMPutl30rbTA68QDHG8lmQsJXeDnGnhw2d2ajbsToNnfF4rb/wnI8JHp/mdMzjzZtqztmetT7XkBO67l0ZfSbF5PBxeKMxn6l6YlgsClnd6AEc6f/XHl9z1q1MAZ3X7FdFB4hWswqzcMIgIQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723722871; c=relaxed/simple;
-	bh=in0SgKVukHQVY7hSNzsyXaEqTq7VkY9phTEYgRHw+us=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HtIB/34fSy8UC3ZFRGbLDUclL1IzI91z5TOL6l78fUwZtgVwtE3ytddsXbtdsMT03GcbmAp8kPiGIPF1nDzyMjfFJ1eT9m3Z0b9a4YCEjd1KAmWsO/7heGhqTBYcdnQVzn7kTKNQIKlYgbDljXeQdwkWZTAcdLEg3YrjjrS37Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=azazel.net; spf=pass smtp.mailfrom=azazel.net; dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b=HKLBHKcE; arc=none smtp.client-ip=35.176.194.208
+	bh=+uhHEgpn44Es/WOyTJ50lnKyN5iX1xSQuK7iKZj04c0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=KEOwRYDHH4JhmbU3bT2myGuakRy8La/ijkwRxAQvvpAf1QfrpMD7mtOxO8qhCVMV1fR7Q/ufQyNojtSVmEhQhHGTH4IY5mr9iYRc8iuWqsDPopUxrdfNX0X33HculD1o+8+TH5SuzQBesJYzWkHoJxDeWo+Xwyiz3o89IAvbpqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=azazel.net; spf=pass smtp.mailfrom=azazel.net; dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b=oonhyqQR; arc=none smtp.client-ip=35.176.194.208
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=azazel.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=azazel.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b="HKLBHKcE"
+	dkim=pass (2048-bit key) header.d=azazel.net header.i=@azazel.net header.b="oonhyqQR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-	s=20220717; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20220717; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=GRkjbYMXHTGu0tW3xWL2oeZwgq5QTLtjAllLA/Z9oyU=; b=HKLBHKcEZhK7bzpGUIFnn9XRtC
-	I4bjEY13ypX24PFbpbl0YlLOyz0pUI/dEqQN0k9VJKdvceLtV3BfzLb7z0uhPKrUgoYOxkvwFaFQL
-	R/5O7lCRHJALcUnwVxKyydSWgPc6gqg0+CLxDCcY9W29J75g7vrN4/iD2zfrEb9dBkcRDTAbNwcaH
-	NMEFH+4m0mxkjiydj9lkGP4z7QD5XOHxh1it1M4Ogk9AANKl7SxcgFLdZc6XEredCYmYK530XVshy
-	8glrYJB995lv6XcFD3EiX4HLnmxjlNBHIMseBrqOI8wsuevqcQGfa4EXgQO3qZqP3MpFe9uGSBdTf
-	NVqozMBA==;
+	bh=gk96W3iLiIgfQxOAZzEJe2RPULYPsPwcnZDMJ6IcFag=; b=oonhyqQRpVHU07i0steJ6QzdAu
+	BKUE/tXhH2kGDwH3APXiRb6Qurz1Tu0sW2dHmPjJQPT4JVE4moO1Uw540n34lDgsEYOO4owQDfGvO
+	PjIm0GGS2+LomdYOVmmWVuh1C7/AnVMlN5Ii+yVH9QNiEMwid2yARjHOTFTrreVpQ3tui5eE4tC6T
+	N9vEWgTb3L7F18CnIdbNBnxh9duS+mQJPhCjIwQNWWzfy6sMHx8VJHGfkwVsadMhf7sy5VACUok1K
+	ZH3VneDrYMFU4r3HEnjoRZAiP78s8rQKwQv/ToqG2ms3bch3hTEdf9QjcziZgGEQgUktY6Kk3Pt3m
+	lYw66toQ==;
 Received: from ulthar.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae])
 	by taras.nevrast.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <jeremy@azazel.net>)
-	id 1seZ3i-00CeCX-0D
+	id 1seZ3h-00CeCX-3A
 	for linux-media@vger.kernel.org;
-	Thu, 15 Aug 2024 12:54:26 +0100
+	Thu, 15 Aug 2024 12:54:25 +0100
 From: Jeremy Sowden <jeremy@azazel.net>
 To: Linux Media <linux-media@vger.kernel.org>
-Subject: [PATCH xawtv3 2/2] Use `pclose` to close file-pointer created with `popen`
-Date: Thu, 15 Aug 2024 12:54:15 +0100
-Message-ID: <20240815115415.3371544-3-jeremy@azazel.net>
+Subject: [PATCH xawtv3 0/2] A couple of fixes
+Date: Thu, 15 Aug 2024 12:54:13 +0100
+Message-ID: <20240815115415.3371544-1-jeremy@azazel.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240815115415.3371544-1-jeremy@azazel.net>
-References: <20240815115415.3371544-1-jeremy@azazel.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -54,39 +51,17 @@ X-SA-Exim-Connect-IP: 2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae
 X-SA-Exim-Mail-From: jeremy@azazel.net
 X-SA-Exim-Scanned: No (on taras.nevrast.org); SAEximRunCond expanded to false
 
-gcc reports:
+The former is a gcc-14 compilation failure that was reported in Debian.  The
+latter is something unrelated I spotted while testing the former.
 
-  x11/man.c: In function 'man':
-  x11/man.c:106:5: warning: 'fclose' called on pointer returned from a mismatched allocation function [-Wmismatched-dealloc]
-    106 |     fclose(fp);
-        |     ^~~~~~~~~~
-  x11/man.c:69:10: note: returned from 'popen'
-     69 |     fp = popen(line,"r");
-        |          ^~~~~~~~~~~~~~~
+Jeremy Sowden (2):
+  Fix gcc-14 compilation failures caused by incompatible pointer types
+  Use `pclose` to close file-pointer created with `popen`
 
-and the popen(3) man-page states:
+ x11/man.c       | 2 +-
+ x11/propwatch.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-  The return value from popen() is a normal standard I/O stream in all respects
-  save that it must be closed with pclose() rather than fclose(3).
-
-Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
----
- x11/man.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/x11/man.c b/x11/man.c
-index 482980565a63..b71785c31ab4 100644
---- a/x11/man.c
-+++ b/x11/man.c
-@@ -103,7 +103,7 @@ man(char *page)
-     }
-     XtVaSetValues(label,XmNlabelString,xmpage,NULL);
-     XmStringFree(xmpage);
--    fclose(fp);
-+    pclose(fp);
- }
- 
- void
 -- 
 2.43.0
 
