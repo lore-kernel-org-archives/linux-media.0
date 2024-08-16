@@ -1,122 +1,195 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A22613DBBC;
-	Fri, 16 Aug 2024 07:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEB81D69E;
+	Fri, 16 Aug 2024 08:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723794372; cv=none; b=tDBzsNng7xTqxjtKVXHWVM53D+ob0lnXq6ht85QH1l5Y1zJdQJLn6b9MQCyAS+zaptd4rGReZJpBAKhEuNn02ZkxpZwe2qMBO9UjvIpPOB0X9ESZlYs9CaIhXeO2wslWKiwV6gYV7PFQRkGsnZX9ffnhzKz7C947pqv5ascA5ZU=
+	t=1723796215; cv=none; b=TIAOwlCumP5hdXuk07IuIVa1aQgun5APGlQP62NM5q4GIrljGsfNPxkYxIQGBEbb5uCfbrsnwvnMRsusBy91gTy1z1x5kxJDJ4vWZEaqBlF7tF9VIGlL8xxWXVBpnpgReJJvSAeKOXOTOvUC+TplywG5rwABra5DT95QihLWoDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723794372; c=relaxed/simple;
-	bh=961HR25fBK6+U+34IivlTuUdOrvdw5kInN6SiWfWruI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hZcVbTqyEckVddnlGB4bNQ5nN3fdxqObGO2ef57JDycB4Wns54/7XTydoW4DJvBwCl1qONt4BNv7YVsBYlJQcKwHwDVeEX2lmF8qYVZhmPkYRo7HexGyhDo92btUA+PyoHP4jMHYJd5s2qHjWI4GhY+EqH8DiTAA95FeSeQgaB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KGjlAhWc; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1723796215; c=relaxed/simple;
+	bh=2KW7ZfCfAPxL/c/Dj8juAjP5x/6affa9XObmS8J9Yhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=D7UPK5zNppQlT5xQL4F0r9low50htGVUNzKdW+nDL95hsbf4TuW6isIieGCcHMPGx8O7KZGUF0rMDvs/gTnWgMEzIrqCbSKhjgKTs+YFQOsrKq77bTdyUvjNVntXH9voYr+RCMGe3EuCgPdJ5pO12++8/2wlNQFnNPtWY/tXZo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HEeDIR7O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KGjlAhWc"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FLTJSM020572;
-	Fri, 16 Aug 2024 07:46:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	i7/Oc25XBlXJTMUNL+LN07bCOIRiR0fvFcEP4h10F+w=; b=KGjlAhWc5CIlvVUh
-	XuTeXr9KgoR1D58k4p8kjaWpJVzqARjPcRo10p0xPnVD25xd9Z5nGUHAXbH05ws8
-	9G0FZir12r/v0m6MWWdnv4WhYBKmHD242wEwMfth2VAqj7bYAFGa96XY+3wXRori
-	83FLHLulp9/JguFQueuy7zeqcRBTA9wfyXJ3HzVujA5zsvO8yKfXoJRe9D39emla
-	PP0u9XytCPypm9/5WvIFhESq0XUnAFmo48NbHlE7tRaT5PZyYIPcOiDNpAj+J7UQ
-	HlTtuqo07b23EWmueoTrWxYPYq3FlaHrdwFKQdIGBMZwKM5WREFulTHXmhQsyI5n
-	r7+HoA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4112r3v2xd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 07:46:03 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47G7k2qf019214
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 07:46:02 GMT
-Received: from [10.239.97.152] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 16 Aug
- 2024 00:45:54 -0700
-Message-ID: <aa12fd2e-4869-4909-a04f-6bf24f76ed51@quicinc.com>
-Date: Fri, 16 Aug 2024 15:45:52 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HEeDIR7O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6222DC4AF09;
+	Fri, 16 Aug 2024 08:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723796215;
+	bh=2KW7ZfCfAPxL/c/Dj8juAjP5x/6affa9XObmS8J9Yhs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=HEeDIR7O1mP0wljV1V72QP8QXruC2zG4FfvIXuI9/HIaXcH+Jpro7g08QP3JCi59P
+	 AySmbsqFOFtlEIkve7stuiBxFrL2BQyoEKCaFSOE8f5PCAepUU/00ppRPsDuS1Wfr8
+	 zzGyAiaGX1asJYnoVnfrNUlJwcPEQ/6DPXrvg4jFUNVzunkZ/J3YPRKsMsO/LIWyZk
+	 8Ln/M25m6YEYyzLqmQrNwkVjJ+UqPwP8tbGnkUDk1b9ZYvTCZK0USBP/FQT9IPVAf3
+	 joVaU1xDlrvzdu470RGwJiCKfkxuraLBEe4IqZwFokV3ZADBbiEmUlL6A3rHDEDrEm
+	 pEguyI1K9ZCIw==
+Date: Fri, 16 Aug 2024 10:16:51 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v2 2/2] media: drivers/media/dvb-core: Refactor
+ dvb_frontend_open locking
+Message-ID: <20240816101642.5ef4e461@foz.lan>
+In-Reply-To: <20240814-coccinelle-followup-v2-2-88b4e4a9af56@chromium.org>
+References: <20240814-coccinelle-followup-v2-0-88b4e4a9af56@chromium.org>
+	<20240814-coccinelle-followup-v2-2-88b4e4a9af56@chromium.org>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/13] dt-bindings: media: camss: Add qcom,sm8550-camss
- binding
-To: Krzysztof Kozlowski <krzk@kernel.org>, <rfoss@kernel.org>,
-        <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
-        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@quicinc.com>, Yongsheng Li <quic_yon@quicinc.com>
-References: <20240812144131.369378-1-quic_depengs@quicinc.com>
- <20240812144131.369378-8-quic_depengs@quicinc.com>
- <cb905d5e-6d70-4395-894c-55b3542e2ebe@kernel.org>
-Content-Language: en-US
-From: Depeng Shao <quic_depengs@quicinc.com>
-In-Reply-To: <cb905d5e-6d70-4395-894c-55b3542e2ebe@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nz1EZt51V966XEKronGAHqNzJZJ9mJDL
-X-Proofpoint-ORIG-GUID: nz1EZt51V966XEKronGAHqNzJZJ9mJDL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-15_18,2024-08-15_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 mlxscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 impostorscore=0
- mlxlogscore=938 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2408160055
 
-Hi Krzysztof,
+Em Wed, 14 Aug 2024 14:10:23 +0000
+Ricardo Ribalda <ribalda@chromium.org> escreveu:
 
-On 8/16/2024 3:01 PM, Krzysztof Kozlowski wrote:
-
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +  - interconnects
->> +  - interconnect-names
->> +  - interrupts
->> +  - interrupt-names
->> +  - iommus
->> +  - power-domains
->> +  - power-domain-names
->> +  - reg
->> +  - reg-names
->> +  - vdda-phy-supply
->> +  - vdda-pll-supply
+> Split out the wait function, and introduce some new toys: guard and
+> lockdep.
 > 
-> Order is still not as expected. I already commented on this - keep the
-> same order as in "properties:" block.
+> This fixes the following cocci warnings:
+> drivers/media/dvb-core/dvb_frontend.c:2897:1-7: preceding lock on line 2776
+> drivers/media/dvb-core/dvb_frontend.c:2897:1-7: preceding lock on line 2786
+> drivers/media/dvb-core/dvb_frontend.c:2897:1-7: preceding lock on line 2809
+
+Hi Ricardo,
+
+Every time someone tries to fix this lock, we end having regression reports,
+because of the diversity of devices, and the way they registers there.
+
+That's specially true for devices with multiple frontends and custom
+zigzag methods.
+
+On what devices have you tested this patch?
+
+Regards,
+Mauro
+
 > 
-> With the order fixed:
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/dvb-core/dvb_frontend.c | 58 ++++++++++++++++++++++-------------
+>  1 file changed, 37 insertions(+), 21 deletions(-)
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
+> index e81b9996530e..7f5d0c297464 100644
+> --- a/drivers/media/dvb-core/dvb_frontend.c
+> +++ b/drivers/media/dvb-core/dvb_frontend.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/kthread.h>
+>  #include <linux/ktime.h>
+>  #include <linux/compat.h>
+> +#include <linux/lockdep.h>
+>  #include <asm/processor.h>
+>  
+>  #include <media/dvb_frontend.h>
+> @@ -2826,6 +2827,34 @@ static int __dvb_frontend_open(struct inode *inode, struct file *file)
+>  	return ret;
+>  }
+>  
+> +static int wait_dvb_frontend(struct dvb_adapter *adapter,
+> +			     struct dvb_device *mfedev)
+> +{
+> +	struct dvb_frontend *mfe = mfedev->priv;
+> +	struct dvb_frontend_private *mfepriv = mfe->frontend_priv;
+> +	int mferetry = (dvb_mfe_wait_time << 1);
+> +	int ret = 0;
+> +
+> +	lockdep_assert_held(&adapter->mfe_lock);
+> +
+> +	if (mfedev->users == -1 && !mfepriv->thread)
+> +		return 0;
+> +
+> +	mutex_unlock(&adapter->mfe_lock);
+> +
+> +	while (mferetry-- && (mfedev->users != -1 || mfepriv->thread)) {
+> +		if (msleep_interruptible(500))
+> +			if (signal_pending(current)) {
+> +				ret = -EINTR;
+> +				break;
+> +			}
+> +	}
+> +
+> +	mutex_lock(&adapter->mfe_lock);
+> +
+> +	return ret;
+> +}
+> +
+>  static int dvb_frontend_open(struct inode *inode, struct file *file)
+>  {
+>  	struct dvb_device *dvbdev = file->private_data;
+> @@ -2840,19 +2869,16 @@ static int dvb_frontend_open(struct inode *inode, struct file *file)
+>  	if (!adapter->mfe_shared)
+>  		return __dvb_frontend_open(inode, file);
+>  
+> +	guard(mutex)(&adapter->mfe_lock);
+> +
+>  	if (adapter->mfe_shared == 2) {
+> -		mutex_lock(&adapter->mfe_lock);
+>  		if ((file->f_flags & O_ACCMODE) != O_RDONLY) {
+>  			if (adapter->mfe_dvbdev &&
+> -			    !adapter->mfe_dvbdev->writers) {
+> -				mutex_unlock(&adapter->mfe_lock);
+> +			    !adapter->mfe_dvbdev->writers)
+>  				return -EBUSY;
+> -			}
+>  			adapter->mfe_dvbdev = dvbdev;
+>  		}
+>  	} else {
+> -		mutex_lock(&adapter->mfe_lock);
+> -
+>  		if (!adapter->mfe_dvbdev) {
+>  			adapter->mfe_dvbdev = dvbdev;
+>  		} else if (adapter->mfe_dvbdev != dvbdev) {
+> @@ -2862,34 +2888,24 @@ static int dvb_frontend_open(struct inode *inode, struct file *file)
+>  				*mfe = mfedev->priv;
+>  			struct dvb_frontend_private
+>  				*mfepriv = mfe->frontend_priv;
+> -			int mferetry = (dvb_mfe_wait_time << 1);
+> -
+> -			mutex_unlock(&adapter->mfe_lock);
+> -			while (mferetry-- && (mfedev->users != -1 ||
+> -					      mfepriv->thread)) {
+> -				if (msleep_interruptible(500)) {
+> -					if (signal_pending(current))
+> -						return -EINTR;
+> -				}
+> -			}
+>  
+> -			mutex_lock(&adapter->mfe_lock);
+> +			ret = wait_dvb_frontend(adapter, mfedev);
+> +			if (ret)
+> +				return ret;
+> +
+>  			if (adapter->mfe_dvbdev != dvbdev) {
+>  				mfedev = adapter->mfe_dvbdev;
+>  				mfe = mfedev->priv;
+>  				mfepriv = mfe->frontend_priv;
+>  				if (mfedev->users != -1 ||
+> -				    mfepriv->thread) {
+> -					mutex_unlock(&adapter->mfe_lock);
+> +				    mfepriv->thread)
+>  					return -EBUSY;
+> -				}
+>  				adapter->mfe_dvbdev = dvbdev;
+>  			}
+>  		}
+>  	}
+>  
+>  	ret = __dvb_frontend_open(inode, file);
+> -	mutex_unlock(&adapter->mfe_lock);
+>  
+>  	return ret;
+>  }
 > 
 
-Thanks for catching this, the order was correct in my local build, then 
-Vladimir posted a new comment, so I updated it again and forgot to 
-update the required item, I will correct the order in next version series.
 
-Vladimir: "I would suggest to put 'compatible', 'reg' and 'reg-names' 
-properties as the first ones. 'clock-names' should follow 'clocks' 
-property in the list."
 
 Thanks,
-Depeng
+Mauro
