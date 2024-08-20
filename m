@@ -1,157 +1,141 @@
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2126.outbound.protection.partner.outlook.cn [139.219.146.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50EB14B075;
-	Tue, 20 Aug 2024 11:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.126
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724154795; cv=fail; b=qIcxnVnoQxu+IE+MUDpPNvvOW/ImC9UOrYxRPL0/3WauSHnIkAVre6dCrjbYxPiNxMSwlM4CSobtgOazhXhFwM/Y0CJMDdvJzViyUaOFe9J3ecOEh6570auFtCpHTFc1gNYWA+n3rll08PxBtc2soDpXnI0hUEZSNgRsNCTYj8c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724154795; c=relaxed/simple;
-	bh=md1ZiH41YjRoCvIDTOpyyAQicQCtgt7pbVGuWk+noVw=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=N/x/WnV1cVa0rjw56fWhWEgSjX8kEegaLlqxKjCmUA/o48KkvsjDE6ni60ZiyPr6ayIsEfOzLf6Hs1GEPoc7IeAwtQLbBGKKobMh2PZ+Wz5K7m03MDYZEXuWlDUJ3YJU/Pejp2HtnzkDiKuNLrQ8qFzuSY88PKPi3+PhYiJv7UY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.126
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O9CEdevEVx92aO3Bn8S5JDF8FqGcA4pwF5RthxQe/uaVL3qbYYi5b9u8feN+YKjgDxy6rJB6kgIFb+yXXDL86SzUt1ED3HdWQjQrdY+9FqIvcwU6HblFs2hpLtm9Snm8qlQ2X5F1RtU3stoZ1Wmzh4DykkjoMRQEUjAYoXu5HYT4RZDgVdVIZZEEeNnzn037doHC1vwzFo/Hc90hkPiNUTxt2BPBlzbFYH0rvEqmtDzxcZ+Vk7ZSr+0KUeO9xIazO61WwhkFNL3ocgLRGi3DzfW/0IeKxA6GOtuEbVNpWrUmMHn2Q26uHMIOXhCDEcKAc/ey2jHT5bf+Q14tmPyWzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ugAnj0BPZz5ykIJbMuSuXvCrYsjSsTf+AClzGKBFTZc=;
- b=HZuTqslHOplaQFk4BIzDdBW2iLJPrmkDQreQhHWBOMNLhZdm0I2Nm2hDSkGxMjFtbALweY/DYpfmNDcKKHxk2Jkf9WZxP3gsBK9w0upXyUDB0kCO/pu7bN2IfKgZwr6puiUDc66lG2+2kkUfIBGkwbhgxl6bJRd5CDh1rBIUalvm355Gis2cymmfF24po2nwad94mSLTF3CuYvRkpfDSZHg4hHfqZN6mMvjAmpLin+lSx5lfTWMRcBGwmde2LVmPFPX/t8q67sX4+pWu1eUlxFl1XfXh4wMW2J2zRMd74OoW34CjwfuHEHr3eWj2ebEh0g4/W6MXgWLp77eNstWkFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9) by ZQ0PR01MB0998.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.19; Tue, 20 Aug
- 2024 11:20:09 +0000
-Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- ([fe80::64c5:50d8:4f2c:59aa]) by
- ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%3])
- with mapi id 15.20.7875.023; Tue, 20 Aug 2024 11:20:09 +0000
-From: Changhuang Liang <changhuang.liang@starfivetech.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Jack Zhu <jack.zhu@starfivetech.com>,
-	Keith Zhao <keith.zhao@starfivetech.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [v3] staging: media: starfive: Add the dynamic resolution support
-Date: Tue, 20 Aug 2024 04:20:02 -0700
-Message-Id: <20240820112002.560432-1-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZQ0PR01CA0006.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:5::16) To ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1b::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CFA18FC89
+	for <linux-media@vger.kernel.org>; Tue, 20 Aug 2024 12:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724155714; cv=none; b=CnwOK+Q3GErKWDt0EBdJw8jiFyBN2RT9U6Hm3khh8Eqe0YzuA6eqQL+nWoqVY2JR+OKFRDe3TSseVA/j3e9UynPLvJQQIrhhqcLWhPEsVALmTq3VRhMQXjtVRt7lR4S7BqH/HjnBQgnOftvO1rT7KioYbpjqijWWG8sJ6vRrugg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724155714; c=relaxed/simple;
+	bh=y1mlKypWtodaCGrzVTsxH74OgoWdbq/gwkkgwWEhz+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MeLCrAl/do7b2gC0Xbac2c88lmG6jId8Eau9mY2GYc4yVw+hsz+tJQdk9wFhHH6OgE2StA+jcoBYUA2JbjNm27JVxRO1fa86iVh4DEgyhfvvOWX6q7IPQoVx0jWIibn4unOk08s7Ch7ZkLLE1p/uMCf11n67Ak54mok5DKBzeso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gacyDN3i; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gacyDN3i"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5332f488c6eso4879272e87.1
+        for <linux-media@vger.kernel.org>; Tue, 20 Aug 2024 05:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724155710; x=1724760510; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=XJKP76CouD8q14UcNI5cVrV8SGgjx8qr+hf0bLJ6IaQ=;
+        b=gacyDN3iVeV6yMyU9fifpPbDqRX4zSvhdUiR9BB3t+WEnaeZcifxu0btC0e45gG8QC
+         CZBVg5TXcW+HOjERYI44KNwXRfW62CHhxvznymEeI4u8eb5tHuf3F5+A9iGQST7BWeY2
+         HXRiJvZbxICV6Ycw/QSCrOrjT/yDtKqF+kmA46aQYnUyQaYfN5Czrbl1cDInYwMNGhT+
+         BhPOH31JCscMpI3Z9HwV2G84x4P7lPOmSsmCJtp8VCDGV5jW05H77+szPNkd52VWpADL
+         jzjfFnOlX1piqz9r4Eu/qd9cCY6D51Kvj8XJ1ZQYZuKg3MGqWXHAN6nnGi0JtCy3eBPX
+         SR+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724155710; x=1724760510;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XJKP76CouD8q14UcNI5cVrV8SGgjx8qr+hf0bLJ6IaQ=;
+        b=cJdB9vUdeVcAzpRd0OBji8JgfXozOLIBMhYb4xSOzG7PzHXOg5MpyhEDteH0z4Tuxv
+         ZqTf4drsAF9PkGOw4DJvQSqlZWftx2dvyWsbTLKxDO1ar9DYKTnYlP24SksusYAej9Wz
+         z0xShDzFYLHi8/ru1CqIfPorVBIyjDN3N07wusv3yV0iJCXzJCGxNRoApgLVLKheErIA
+         xLnGXgiI1pfG4Qmg556e/s20QMEu/8e8qr8yBN66rPgvL44iODS4ET16zsdOFFBasEfa
+         Uy7BuEjVeiY19rBA6HKWU1HirAt9eBfcsg1oSQnb6JfxpYCPZ9rBNNSrg5tm4ic4HuS0
+         v75w==
+X-Forwarded-Encrypted: i=1; AJvYcCVHFZ36qEmnhYlNB+e6PP+ehDl9tiWRAH5zbDPAqKu//P3LYdX2UsNOna2TjObkRdk2fJTxPyJxy4nLQ0ZyzN6ftIiEOCp7YdCNs0Y=
+X-Gm-Message-State: AOJu0Ywexn7wVsrJ3YRtDTL+k7mnhsy82FxTmtkGgY7q4rJXf43KoM0j
+	s/ug7pkmBgbpUd6ZwIpU9BHTEcL1gPAlQO3NEfPBQr51f6WSmi0zsWq05yNZY4A=
+X-Google-Smtp-Source: AGHT+IEF9zT4lF3HQI46a4mMAwlYCEPY4iabeAUetjsE8T+UXNumUW7ckK6C0wnTbgkThfDf4yfC0g==
+X-Received: by 2002:a05:6512:3a85:b0:52e:9921:6dff with SMTP id 2adb3069b0e04-5331c6b984cmr10884191e87.26.1724155710320;
+        Tue, 20 Aug 2024 05:08:30 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cef1esm757376166b.48.2024.08.20.05.08.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Aug 2024 05:08:29 -0700 (PDT)
+Message-ID: <9172f40f-c886-4fe4-bf12-d6d066522921@linaro.org>
+Date: Tue, 20 Aug 2024 14:08:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB0998:EE_
-X-MS-Office365-Filtering-Correlation-Id: 770ef356-eb52-42e8-c82c-08dcc10a0d3b
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|41320700013|1800799024|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	C2HAD8SGM4EsclIt19/tHMH0p9SAuS8bxJHdowS+nrOSdTXSz5EUpIwnUvdZz9azlXvNimq5GOIn0mN61kU//tOoXXRNZoRNV+aQiHVBznF4I/E1o+3WQqQErzRcUxnJGUDfw9raDaT48DpEZQuqdhnLwY7H/UflJnk0lBFcLitbEHCpOb+Yd1QaZxCVHjgHrJsdb55MV8pMKIgJwH04Zm1+kgf9pBSsV96pfdtAP9zoad2LNXJRSlnOwYjy3ardCioDCYM0w9lb8Ke7ZNfGR7zhDN6fRvnWxjEtK4OiUqhGGe0Klr4DgNi86vGEhoO6wLm5VbtS+m2CjKSWR4qYFM5HGH6AJDaMsU2vQJ4+Jf0oOaSu9miGkHSuNE19/DxQh9820Ohxq3j8B/d0aY/3mQZJ74hvE4DFnNlh0T3yFjW3amKXoVB/HShx2jGgHkHFfCre4ghZodRtSmq6jdk5Kva+1vaRasyaZ4RNdqvh3Z8cdJ9Iao0BYNyz2d0mEBBz1fmlDq5LxDIN0YCXzdO556Xd8au3n0kwQoMmCYivcGaWuyJ5j8Kik0BRAAxX6fqfNoV4PdiaU2oI0N4BjgQ9VR/WnhsXpF6QIo3bbFIV2UQloRMRyPRLXclRppx46z0m
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(41320700013)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?x/5836mXriU5xlAZX86a/1QSWZdWV9fy6JDOywh+2izwpJxo5wSrQcJGL995?=
- =?us-ascii?Q?2z3NIPBJ5coOjcAP6sRKibjvzcs92Rxs0GOQIHAauXxqd6UFFocqkFOgqSrg?=
- =?us-ascii?Q?oaeasqw6Izq8ZVoBAozGlzGTw4cK3RRLwBPyKn3NCPME6dMLF3TitFIorD2f?=
- =?us-ascii?Q?ccM8iCD+3gtzZHuUC7Ema0d01Iu3OnKNtB4t6H3W8Jr+zVxNrZ1e+vKFcDQb?=
- =?us-ascii?Q?vXDzH4MrPX9SVy/ine8Z/83DYX3mldz5NWuY+i291c2FHgdJB9S6/lt0Hdvd?=
- =?us-ascii?Q?8RiF11YHMQiYKC6BYqBGdneFLxU4P7951nOGUfOAxm0Jl5W49IBoPOhisWss?=
- =?us-ascii?Q?Y4UcfjHVRymux+Ffp9TZhqG/emvqqymTaTuzZez/3c1fp4hyjFAIb4ZTx3pM?=
- =?us-ascii?Q?Y2Cs6dDbph+aHOcOpM6nIEsl2nd+YAa8ACj+JEjKCoo9Vq2JQ8Fyd0CtshDy?=
- =?us-ascii?Q?VgLO50z6HWUvbYYDBOKoxFQs7Dq5RUOKrU1AAq8HW8yclHH5O63LD6vZLFYt?=
- =?us-ascii?Q?KVUBpI0pvErumWYo+GbSPfxw/irG8QV0reMjdS+pu0vzaRnGQYUnMaxVyrcw?=
- =?us-ascii?Q?Lt3KUed2JszjsbPaTv9IRUxogoXvwz3+d+wTaVoB0/OQr6RNHXtdg8+OmolX?=
- =?us-ascii?Q?rdKAKpDKC8BUr2P6qm+/bVvwtUgWX6SazKdYkArz/qeJo7OUNch+fwvtUpjs?=
- =?us-ascii?Q?4vnZhKBxknWKYTItfpwJDfSEMUmtJKe3w5XEvPz0r2dqlslCQ+X/7hOxfj1B?=
- =?us-ascii?Q?P1TyRcjC1L7r+Hq+1J6l6JjI5HqlzbLV17KJxoNjNbyLH/Fpdz1DOWpGVfCP?=
- =?us-ascii?Q?ZP8O2dBs3awv07vrnlx+0kLm/cMorjWzyg0vPqlaQtwhI3gV37XRNvTp2AqE?=
- =?us-ascii?Q?8yOFZNLzD7V6qzIInk4N7Ml1riRkpbg1/ewh31EPAZdlcRWTdLbPw7mtyuSw?=
- =?us-ascii?Q?MCZm4zRk7poVcMRcQRRc90u4Ph+ftxEsweq9CMjL9rg7NsXXuPby8O2ItgFN?=
- =?us-ascii?Q?Nz7nLpWYKhynMCVOjEqTlsR4k560OffvCTmg53Q7SMnYOTxtWZLgAjZ9kax5?=
- =?us-ascii?Q?UxXQen6O4kFe4KH1rT8R7S8TCwPHZGy4N3Nx6x+WeFHFc2xVjDhE+UBuziUx?=
- =?us-ascii?Q?yyK5CkXSfLBd8etROjfzS59RI2ay2eq9dgNLUyeX7/JdzR0izmhoZQvXbWwC?=
- =?us-ascii?Q?BU9lXviCJcNoKyCDpzNtdym55xdr78Az47PryMyasUp01sApsJYjnODmH6y8?=
- =?us-ascii?Q?pq/onkZV43FtJGv+0Qx2ClxkTJeq724UH74t/aENcbpfyV70HmXrm3gw9Irs?=
- =?us-ascii?Q?dM8goG0WIlFyivlHucNWyRevicK0nsqVGA7HFfO6SBMOA5f6IykzZsf7TOIk?=
- =?us-ascii?Q?CwzzL2XeJaYqqg9K9eiw2nHuVi2lDVi8do91W+8r7qyqVyr1TGxEabdMZIww?=
- =?us-ascii?Q?1MJT3pUdCYocw57UAqHBvLmZyIUFMhAvhEfQ4ctid2dMoBIg0dETmQ7zgdVk?=
- =?us-ascii?Q?DyhjLCr/1rCuUhaTqmDTR1c0gyiTEQlNMX5dx9rXMxNj2tWzO/ki2IFH6rgP?=
- =?us-ascii?Q?Xjsa14/8QesqytOX0eZFInb+6YJ/TrxzN4LgXkBCIjneVD53ctyLFEZOrLUY?=
- =?us-ascii?Q?WtVc6T+TdiTFWmw+zm7luUU=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 770ef356-eb52-42e8-c82c-08dcc10a0d3b
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2024 11:20:09.6917
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JURwem/LgupypA8aAbmU4TukZUQ1LKClojhoDUxNSr/0FifW/BsaK1OeznFzgcfUbv81YmDzDneFeoqcka5XiY391+j4Ni9yag+ykoWqLqaZq972/7D9stc8JrHfRDN4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB0998
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v1] MAINTAINERS: Add "qcom," substring for Qualcomm Camera
+ Subsystem
+To: Changhuang Liang <changhuang.liang@starfivetech.com>,
+ Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Jack Zhu <jack.zhu@starfivetech.com>,
+ Keith Zhao <keith.zhao@starfivetech.com>, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240820112053.560605-1-changhuang.liang@starfivetech.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240820112053.560605-1-changhuang.liang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the dynamic resolution support for video "capture_raw" device.
-Otherwise it will capture the wrong image data if the width is
-not 1920.
+On 20/08/2024 13:20, Changhuang Liang wrote:
+> Commit f5502cd25ac0 ("media: dt-bindings: Add JH7110 Camera Subsystem")
+> adds the StarFive Camera Subsystem parts, also complies with Qualcomm's
+> rules. Add "qcom," substring restrcting this condition.
+> 
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
 
-Fixes: e080f339c80a ("media: staging: media: starfive: camss: Add capture driver")
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
-Hi
+You miss "media:" subject prefix, so folks will notice this patch.
 
-v2 forgot to synchronous description with v1. Now send a new version 3.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best Regards
-Changhuang
----
- drivers/staging/media/starfive/camss/stf-capture.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/starfive/camss/stf-capture.c b/drivers/staging/media/starfive/camss/stf-capture.c
-index ec5169e7b391..e15d2e97eb0b 100644
---- a/drivers/staging/media/starfive/camss/stf-capture.c
-+++ b/drivers/staging/media/starfive/camss/stf-capture.c
-@@ -180,6 +180,8 @@ static void stf_channel_set(struct stfcamss_video *video)
- 	u32 val;
- 
- 	if (cap->type == STF_CAPTURE_RAW) {
-+		const struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
-+
- 		val = stf_syscon_reg_read(stfcamss, VIN_CHANNEL_SEL_EN);
- 		val &= ~U0_VIN_CHANNEL_SEL_MASK;
- 		val |= CHANNEL(0);
-@@ -193,7 +195,7 @@ static void stf_channel_set(struct stfcamss_video *video)
- 		val |= PIXEL_HEIGH_BIT_SEL(0);
- 
- 		val &= ~U0_VIN_PIX_CNT_END_MASK;
--		val |= PIX_CNT_END(IMAGE_MAX_WIDTH / 4 - 1);
-+		val |= PIX_CNT_END(pix->width / 4 - 1);
- 
- 		stf_syscon_reg_write(stfcamss, VIN_INRT_PIX_CFG, val);
- 	} else if (cap->type == STF_CAPTURE_YUV) {
--- 
-2.25.1
+Best regards,
+Krzysztof
 
