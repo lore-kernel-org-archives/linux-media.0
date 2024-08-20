@@ -1,258 +1,157 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2126.outbound.protection.partner.outlook.cn [139.219.146.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C780518E05C
-	for <linux-media@vger.kernel.org>; Tue, 20 Aug 2024 11:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724153856; cv=none; b=qsG3TbXiVlhPcA7teMO12ycREoFk+jrUMd0BC1RJm0BYpPxjgCeByYm9/JDm9DLF8KCp+roEJS5O+Lh+MIl79YFeEzH55T2oZydTYRTgij0ZGFFLLkFjG06wOAJOPM4JtZbael8JtjRqLGQ8n2XxdFJXNIsHNKYgmpsDEuxQPJc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724153856; c=relaxed/simple;
-	bh=IvZBJUxFElI7oSzZMmvS6vB7Efvt3Xy4SUpSkkCUtPc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nC9n2HlHnxfPSZBgfmyJrhGzqhV2P2YOwyaDRtp0xeOJj2woVFL4A76ibNzF+1SOJLRE6SVPoxtydwI0bjxItA8+ko6lQrSKBdSKgcAcXUcQH2RFUi8GhRN9KnEhoheJH8vK+A6PtTHIWOFYow51Tta1mF9NLOuxdGZWyB9yXiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y3exv8Rl; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y3exv8Rl"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53345fe848eso2664e87.2
-        for <linux-media@vger.kernel.org>; Tue, 20 Aug 2024 04:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724153853; x=1724758653; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvQ5KNXMJMLakdVv034VXkUY0ogpNTCoT/KgikaWz60=;
-        b=y3exv8Rlk35ck1be4h47L1GST7T85+FbRXn6gLLsPaAp2C9tiWn8gUGw8y7kPZXBz1
-         zFu52SWFjzeLKrzj+qzE64sc+QFn6bCFCXulmh001pc87MfNdLmYwM5vf2iZB2Zd75xv
-         nVtRrZiRrbPFLh0JPiftMt681mWbkVHh5dK0Ju2/HbO0w0xtch5NcdUDd2aPJCm2/4Pz
-         dADiO9lwyoHCIpLCz9nMpDaEo4mtghvFomSNIHJkgYY9689ilc/HpHgccIzOKnm6icY0
-         8MJVqxdIh/a1/8MDHPndtnzWJNLMjmDHdMn1EDbgUjFZGrCokeHvffhcFOm3ar3VZEh/
-         Zi3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724153853; x=1724758653;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BvQ5KNXMJMLakdVv034VXkUY0ogpNTCoT/KgikaWz60=;
-        b=cadt59cphe/gIJ96QwPtLTaZ8Pxt+Gq/FU33AyREy9xYlZNvanZs3FipgSWLcWkwpT
-         6iQ3qoxypkMLfYoJBlYx3vwnmv+we3bXWhKQcCur7uKqtxvJrJIXOB6432gG1G+soRtT
-         G0+9C+nN0bDk2cj8XbrGD6hrPszM47GJxqFHZXUde1DbyTv3T6CCMZ/UqoqPhgTT1q+l
-         RVpFVuRCqq4R30KavDn9KRJ1eQNn8pgPf3sEdD8FMWd8qeSGkHXlsV8MLKV40kqPc2IH
-         Nm1BAlpPXWOxDxNwnYq8oC880W4UxKblGmCf+JLpu67t4fcIZf7J72/GNLpoIzeh47oZ
-         fT0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU/0l1nsM8WiomgxzWDrmPFA69WqYLj3U+25hqGiqCeRZ8m0YzPyGiQOMCZ/Cj3383+nwW8uNEd6PVhog==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlfBj836LZ1YZcwzg9AeesCaOaolumSRrhtvnMYyysDFiw5wQY
-	VkO4yOOpAH5qwxN7Rmf1aUeh/5EdC5lzHJUDgORDX+d4P42klrZA5OPXYpgdG6s=
-X-Google-Smtp-Source: AGHT+IEnAtcUPnLPniIn1G+PY8BSHGTXyXnIRA/xgiJW0ArDYm/MnZ9Zgqj+xLtJoMXC1pXKYENaLg==
-X-Received: by 2002:a05:6512:4007:b0:533:d28:b9f5 with SMTP id 2adb3069b0e04-5331c6f621amr5321803e87.9.1724153852473;
-        Tue, 20 Aug 2024 04:37:32 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5330d420357sm1758134e87.231.2024.08.20.04.37.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Aug 2024 04:37:32 -0700 (PDT)
-Message-ID: <48127e98-f489-4c62-a7e2-f207c875c77b@linaro.org>
-Date: Tue, 20 Aug 2024 14:37:30 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50EB14B075;
+	Tue, 20 Aug 2024 11:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.126
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724154795; cv=fail; b=qIcxnVnoQxu+IE+MUDpPNvvOW/ImC9UOrYxRPL0/3WauSHnIkAVre6dCrjbYxPiNxMSwlM4CSobtgOazhXhFwM/Y0CJMDdvJzViyUaOFe9J3ecOEh6570auFtCpHTFc1gNYWA+n3rll08PxBtc2soDpXnI0hUEZSNgRsNCTYj8c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724154795; c=relaxed/simple;
+	bh=md1ZiH41YjRoCvIDTOpyyAQicQCtgt7pbVGuWk+noVw=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=N/x/WnV1cVa0rjw56fWhWEgSjX8kEegaLlqxKjCmUA/o48KkvsjDE6ni60ZiyPr6ayIsEfOzLf6Hs1GEPoc7IeAwtQLbBGKKobMh2PZ+Wz5K7m03MDYZEXuWlDUJ3YJU/Pejp2HtnzkDiKuNLrQ8qFzuSY88PKPi3+PhYiJv7UY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.126
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O9CEdevEVx92aO3Bn8S5JDF8FqGcA4pwF5RthxQe/uaVL3qbYYi5b9u8feN+YKjgDxy6rJB6kgIFb+yXXDL86SzUt1ED3HdWQjQrdY+9FqIvcwU6HblFs2hpLtm9Snm8qlQ2X5F1RtU3stoZ1Wmzh4DykkjoMRQEUjAYoXu5HYT4RZDgVdVIZZEEeNnzn037doHC1vwzFo/Hc90hkPiNUTxt2BPBlzbFYH0rvEqmtDzxcZ+Vk7ZSr+0KUeO9xIazO61WwhkFNL3ocgLRGi3DzfW/0IeKxA6GOtuEbVNpWrUmMHn2Q26uHMIOXhCDEcKAc/ey2jHT5bf+Q14tmPyWzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ugAnj0BPZz5ykIJbMuSuXvCrYsjSsTf+AClzGKBFTZc=;
+ b=HZuTqslHOplaQFk4BIzDdBW2iLJPrmkDQreQhHWBOMNLhZdm0I2Nm2hDSkGxMjFtbALweY/DYpfmNDcKKHxk2Jkf9WZxP3gsBK9w0upXyUDB0kCO/pu7bN2IfKgZwr6puiUDc66lG2+2kkUfIBGkwbhgxl6bJRd5CDh1rBIUalvm355Gis2cymmfF24po2nwad94mSLTF3CuYvRkpfDSZHg4hHfqZN6mMvjAmpLin+lSx5lfTWMRcBGwmde2LVmPFPX/t8q67sX4+pWu1eUlxFl1XfXh4wMW2J2zRMd74OoW34CjwfuHEHr3eWj2ebEh0g4/W6MXgWLp77eNstWkFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1b::9) by ZQ0PR01MB0998.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.19; Tue, 20 Aug
+ 2024 11:20:09 +0000
+Received: from ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ ([fe80::64c5:50d8:4f2c:59aa]) by
+ ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn ([fe80::64c5:50d8:4f2c:59aa%3])
+ with mapi id 15.20.7875.023; Tue, 20 Aug 2024 11:20:09 +0000
+From: Changhuang Liang <changhuang.liang@starfivetech.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Jack Zhu <jack.zhu@starfivetech.com>,
+	Keith Zhao <keith.zhao@starfivetech.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Changhuang Liang <changhuang.liang@starfivetech.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: [v3] staging: media: starfive: Add the dynamic resolution support
+Date: Tue, 20 Aug 2024 04:20:02 -0700
+Message-Id: <20240820112002.560432-1-changhuang.liang@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0006.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:5::16) To ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:1b::9)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] dt-bindings: media: camss: Add qcom,sdm670-camss
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Richard Acayan <mailingradian@gmail.com>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <20240819221051.31489-7-mailingradian@gmail.com>
- <20240819221051.31489-9-mailingradian@gmail.com>
- <3b3774de-3aeb-4a58-8c0e-e494a2f2aaf8@linaro.org>
- <e34dd20c-e67e-4b69-88df-b4d34e01f8b8@kernel.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <e34dd20c-e67e-4b69-88df-b4d34e01f8b8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1302:EE_|ZQ0PR01MB0998:EE_
+X-MS-Office365-Filtering-Correlation-Id: 770ef356-eb52-42e8-c82c-08dcc10a0d3b
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|41320700013|1800799024|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	C2HAD8SGM4EsclIt19/tHMH0p9SAuS8bxJHdowS+nrOSdTXSz5EUpIwnUvdZz9azlXvNimq5GOIn0mN61kU//tOoXXRNZoRNV+aQiHVBznF4I/E1o+3WQqQErzRcUxnJGUDfw9raDaT48DpEZQuqdhnLwY7H/UflJnk0lBFcLitbEHCpOb+Yd1QaZxCVHjgHrJsdb55MV8pMKIgJwH04Zm1+kgf9pBSsV96pfdtAP9zoad2LNXJRSlnOwYjy3ardCioDCYM0w9lb8Ke7ZNfGR7zhDN6fRvnWxjEtK4OiUqhGGe0Klr4DgNi86vGEhoO6wLm5VbtS+m2CjKSWR4qYFM5HGH6AJDaMsU2vQJ4+Jf0oOaSu9miGkHSuNE19/DxQh9820Ohxq3j8B/d0aY/3mQZJ74hvE4DFnNlh0T3yFjW3amKXoVB/HShx2jGgHkHFfCre4ghZodRtSmq6jdk5Kva+1vaRasyaZ4RNdqvh3Z8cdJ9Iao0BYNyz2d0mEBBz1fmlDq5LxDIN0YCXzdO556Xd8au3n0kwQoMmCYivcGaWuyJ5j8Kik0BRAAxX6fqfNoV4PdiaU2oI0N4BjgQ9VR/WnhsXpF6QIo3bbFIV2UQloRMRyPRLXclRppx46z0m
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(41320700013)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?x/5836mXriU5xlAZX86a/1QSWZdWV9fy6JDOywh+2izwpJxo5wSrQcJGL995?=
+ =?us-ascii?Q?2z3NIPBJ5coOjcAP6sRKibjvzcs92Rxs0GOQIHAauXxqd6UFFocqkFOgqSrg?=
+ =?us-ascii?Q?oaeasqw6Izq8ZVoBAozGlzGTw4cK3RRLwBPyKn3NCPME6dMLF3TitFIorD2f?=
+ =?us-ascii?Q?ccM8iCD+3gtzZHuUC7Ema0d01Iu3OnKNtB4t6H3W8Jr+zVxNrZ1e+vKFcDQb?=
+ =?us-ascii?Q?vXDzH4MrPX9SVy/ine8Z/83DYX3mldz5NWuY+i291c2FHgdJB9S6/lt0Hdvd?=
+ =?us-ascii?Q?8RiF11YHMQiYKC6BYqBGdneFLxU4P7951nOGUfOAxm0Jl5W49IBoPOhisWss?=
+ =?us-ascii?Q?Y4UcfjHVRymux+Ffp9TZhqG/emvqqymTaTuzZez/3c1fp4hyjFAIb4ZTx3pM?=
+ =?us-ascii?Q?Y2Cs6dDbph+aHOcOpM6nIEsl2nd+YAa8ACj+JEjKCoo9Vq2JQ8Fyd0CtshDy?=
+ =?us-ascii?Q?VgLO50z6HWUvbYYDBOKoxFQs7Dq5RUOKrU1AAq8HW8yclHH5O63LD6vZLFYt?=
+ =?us-ascii?Q?KVUBpI0pvErumWYo+GbSPfxw/irG8QV0reMjdS+pu0vzaRnGQYUnMaxVyrcw?=
+ =?us-ascii?Q?Lt3KUed2JszjsbPaTv9IRUxogoXvwz3+d+wTaVoB0/OQr6RNHXtdg8+OmolX?=
+ =?us-ascii?Q?rdKAKpDKC8BUr2P6qm+/bVvwtUgWX6SazKdYkArz/qeJo7OUNch+fwvtUpjs?=
+ =?us-ascii?Q?4vnZhKBxknWKYTItfpwJDfSEMUmtJKe3w5XEvPz0r2dqlslCQ+X/7hOxfj1B?=
+ =?us-ascii?Q?P1TyRcjC1L7r+Hq+1J6l6JjI5HqlzbLV17KJxoNjNbyLH/Fpdz1DOWpGVfCP?=
+ =?us-ascii?Q?ZP8O2dBs3awv07vrnlx+0kLm/cMorjWzyg0vPqlaQtwhI3gV37XRNvTp2AqE?=
+ =?us-ascii?Q?8yOFZNLzD7V6qzIInk4N7Ml1riRkpbg1/ewh31EPAZdlcRWTdLbPw7mtyuSw?=
+ =?us-ascii?Q?MCZm4zRk7poVcMRcQRRc90u4Ph+ftxEsweq9CMjL9rg7NsXXuPby8O2ItgFN?=
+ =?us-ascii?Q?Nz7nLpWYKhynMCVOjEqTlsR4k560OffvCTmg53Q7SMnYOTxtWZLgAjZ9kax5?=
+ =?us-ascii?Q?UxXQen6O4kFe4KH1rT8R7S8TCwPHZGy4N3Nx6x+WeFHFc2xVjDhE+UBuziUx?=
+ =?us-ascii?Q?yyK5CkXSfLBd8etROjfzS59RI2ay2eq9dgNLUyeX7/JdzR0izmhoZQvXbWwC?=
+ =?us-ascii?Q?BU9lXviCJcNoKyCDpzNtdym55xdr78Az47PryMyasUp01sApsJYjnODmH6y8?=
+ =?us-ascii?Q?pq/onkZV43FtJGv+0Qx2ClxkTJeq724UH74t/aENcbpfyV70HmXrm3gw9Irs?=
+ =?us-ascii?Q?dM8goG0WIlFyivlHucNWyRevicK0nsqVGA7HFfO6SBMOA5f6IykzZsf7TOIk?=
+ =?us-ascii?Q?CwzzL2XeJaYqqg9K9eiw2nHuVi2lDVi8do91W+8r7qyqVyr1TGxEabdMZIww?=
+ =?us-ascii?Q?1MJT3pUdCYocw57UAqHBvLmZyIUFMhAvhEfQ4ctid2dMoBIg0dETmQ7zgdVk?=
+ =?us-ascii?Q?DyhjLCr/1rCuUhaTqmDTR1c0gyiTEQlNMX5dx9rXMxNj2tWzO/ki2IFH6rgP?=
+ =?us-ascii?Q?Xjsa14/8QesqytOX0eZFInb+6YJ/TrxzN4LgXkBCIjneVD53ctyLFEZOrLUY?=
+ =?us-ascii?Q?WtVc6T+TdiTFWmw+zm7luUU=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 770ef356-eb52-42e8-c82c-08dcc10a0d3b
+X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1302.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2024 11:20:09.6917
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JURwem/LgupypA8aAbmU4TukZUQ1LKClojhoDUxNSr/0FifW/BsaK1OeznFzgcfUbv81YmDzDneFeoqcka5XiY391+j4Ni9yag+ykoWqLqaZq972/7D9stc8JrHfRDN4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB0998
 
-Hi Krzysztof,
+Add the dynamic resolution support for video "capture_raw" device.
+Otherwise it will capture the wrong image data if the width is
+not 1920.
 
-On 8/20/24 12:56, Krzysztof Kozlowski wrote:
-> On 20/08/2024 11:15, Vladimir Zapolskiy wrote:
->> Hi Richard,
->>
-> 
-> ...
-> 
->>> +
->>> +  clocks:
->>
->> Please add
->>
->> minItems: 22
->>
->>> +    maxItems: 22> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: camnoc_axi
->>> +      - const: cpas_ahb
->>> +      - const: csi0
->>> +      - const: csi1
->>> +      - const: csi2
->>> +      - const: csiphy0
->>> +      - const: csiphy0_timer
->>> +      - const: csiphy1
->>> +      - const: csiphy1_timer
->>> +      - const: csiphy2
->>> +      - const: csiphy2_timer
->>> +      - const: gcc_camera_ahb
->>> +      - const: gcc_camera_axi
->>> +      - const: soc_ahb
->>> +      - const: vfe0_axi
->>> +      - const: vfe0
->>> +      - const: vfe0_cphy_rx
->>> +      - const: vfe1_axi
->>> +      - const: vfe1
->>> +      - const: vfe1_cphy_rx
->>> +      - const: vfe_lite
->>> +      - const: vfe_lite_cphy_rx
->>> +
->>> +  interrupts:
->>
->> Please add
->>
->> minItems: 9
->>
->>> +    maxItems: 9
->>> +
->>> +  interrupt-names:
->>> +    items:
->>> +      - const: csid0
->>> +      - const: csid1
->>> +      - const: csid2
->>> +      - const: csiphy0
->>> +      - const: csiphy1
->>> +      - const: csiphy2
->>> +      - const: vfe0
->>> +      - const: vfe1
->>> +      - const: vfe_lite
->>> +
->>> +  iommus:
->>
->> Please add
->>
->> minItems: 4>
->>> +    maxItems: 4
->>> +
->>> +  power-domains:
->>> +    items:
->>> +      - description: IFE0 GDSC - Image Front End, Global Distributed Switch Controller.
->>> +      - description: IFE1 GDSC - Image Front End, Global Distributed Switch Controller.
->>> +      - description: Titan Top GDSC - Titan ISP Block, Global Distributed Switch Controller.
->>> +
->>> +  power-domain-names:
->>> +    items:
->>> +      - const: ife0
->>> +      - const: ife1
->>> +      - const: top
->>> +
->>> +  ports:
->>> +    $ref: /schemas/graph.yaml#/properties/ports
->>> +
->>> +    description:
->>> +      CSI input ports.
->>> +
->>> +    properties:
->>> +      port@0:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY0.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@1:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY1.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +      port@2:
->>> +        $ref: /schemas/graph.yaml#/$defs/port-base
->>> +        unevaluatedProperties: false
->>> +        description:
->>> +          Input port for receiving CSI data from CSIPHY2.
->>> +
->>> +        properties:
->>> +          endpoint:
->>> +            $ref: video-interfaces.yaml#
->>> +            unevaluatedProperties: false
->>> +
->>> +            properties:
->>> +              clock-lanes:
->>> +                maxItems: 1
->>> +
->>> +              data-lanes:
->>> +                minItems: 1
->>> +                maxItems: 4
->>> +
->>> +            required:
->>> +              - clock-lanes
->>> +              - data-lanes
->>> +
->>> +  reg:
->>
->> Please add
->>
->> minItems: 9
-> 
-> 
-> None of above are necessary and this contradicts review we give to drop
-> these...
+Fixes: e080f339c80a ("media: staging: media: starfive: camss: Add capture driver")
+Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+---
+Hi
 
-Thank you for the correction, I will memorize it.
+v2 forgot to synchronous description with v1. Now send a new version 3.
 
---
-Best wishes,
-Vladimir
+Best Regards
+Changhuang
+---
+ drivers/staging/media/starfive/camss/stf-capture.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/starfive/camss/stf-capture.c b/drivers/staging/media/starfive/camss/stf-capture.c
+index ec5169e7b391..e15d2e97eb0b 100644
+--- a/drivers/staging/media/starfive/camss/stf-capture.c
++++ b/drivers/staging/media/starfive/camss/stf-capture.c
+@@ -180,6 +180,8 @@ static void stf_channel_set(struct stfcamss_video *video)
+ 	u32 val;
+ 
+ 	if (cap->type == STF_CAPTURE_RAW) {
++		const struct v4l2_pix_format *pix = &video->active_fmt.fmt.pix;
++
+ 		val = stf_syscon_reg_read(stfcamss, VIN_CHANNEL_SEL_EN);
+ 		val &= ~U0_VIN_CHANNEL_SEL_MASK;
+ 		val |= CHANNEL(0);
+@@ -193,7 +195,7 @@ static void stf_channel_set(struct stfcamss_video *video)
+ 		val |= PIXEL_HEIGH_BIT_SEL(0);
+ 
+ 		val &= ~U0_VIN_PIX_CNT_END_MASK;
+-		val |= PIX_CNT_END(IMAGE_MAX_WIDTH / 4 - 1);
++		val |= PIX_CNT_END(pix->width / 4 - 1);
+ 
+ 		stf_syscon_reg_write(stfcamss, VIN_INRT_PIX_CFG, val);
+ 	} else if (cap->type == STF_CAPTURE_YUV) {
+-- 
+2.25.1
+
