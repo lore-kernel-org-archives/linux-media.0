@@ -1,45 +1,46 @@
-Received: from HK2PR02CU002.outbound.protection.outlook.com (mail-eastasiaazon11010011.outbound.protection.outlook.com [52.101.128.11])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2065.outbound.protection.outlook.com [40.107.255.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B06C13C3CD;
-	Thu, 22 Aug 2024 08:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.128.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDD516EB76;
+	Thu, 22 Aug 2024 08:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724316289; cv=fail; b=ApMpZ1WfAMx5lHyNNxxR3EUZu1WAG6LEKRLA5bYclGZzxGCuYj1USdP6u3dp1iLGkJUJb/gkSgPsIEJjYxwWZsaYZ7L5p0QgqMf3Re9rp4ZODn3ZVEg+0eMt+UQaHMqEwvr1cuzCXM4n6e3oUc4oRyc1ZDyNNQ3Z/aguYhSAnaY=
+	t=1724316291; cv=fail; b=siNVwnczS545BMd6SkaDRAM3kNOfMZvW76SwSf3AzB6GBlnbhS/zyR9DPct3Cr2lRKafpo63dgmVReXC0GrURY1Uy8rmWkuT8w7/R75toeTDaSDP2NfyE65ixVz5+T7umXwQnnoUMn4wSrThjCpGJUpZqpOBXU1Ib3oRWuhZPto=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724316289; c=relaxed/simple;
-	bh=1ngaa7T81IuqmgUkef3xxyfviFhn4Af4kOmGNvnQBqs=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lElQ64T6ZUkPMEsiGIOyrFQeeA8L6rWLOJs7Ik+VHI7os4s9yPsaDRDEuY2cQ/nARQ1+xMn03LvkE1pz2Y4gKoCzriPuhzMskucKkwLxBfFubv61/Hnbn577QY51ukmY/cpkMtf5rWNYkee9B6GTEmEyqLqfi6pNhyKO2DibRG4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=UK0CVOd4; arc=fail smtp.client-ip=52.101.128.11
+	s=arc-20240116; t=1724316291; c=relaxed/simple;
+	bh=uU+Jqdf/3/DHtfwUJSCwMfbQ2edyjuxtIqmJxPx23aM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jASMlpdJQ775tsSGRt7HtXB2hr4fVRdxpIDUyN0iTyr4UG/SAo+GfClQ6DPUqiq6fv3kVGDJKAbThQNefxjc52snQS2mWPPQCDGkpQqaSAyOiKYu58UDabraVTOuqb0d/hP9dcB49sGp6q2xUQORowUm53rubDEuhsKnCN8t/R4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=AGJgfKxk; arc=fail smtp.client-ip=40.107.255.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="UK0CVOd4"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="AGJgfKxk"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=W/A1lMIXSdpE1nzP3Z6exExAQ0f+T56TIQOVPnah5oeesiWafXwJh+pkK0wr5PjRAs944UE3sflfagjR4aKyEsnaZkzy79Vrn0ScEW0mj0GvjxrEwhB6ZgPAM7ljXlR4iQFZV3qG1pujm1muJYwhHcxwBcppF0Z1i8TKpO5FPnfPOs0QfaXr07tyHDjc4dAr2zHB/ELNlgyqBnu5/lO0/bQdtJx9uNMPkuo6nDWED3m0wk0AX1mhC/qxP3Q8Aaehjsjob2saVHz3cswOJ7fA32t9zzsE6Q3Zxr0vrrJS/a8jKdJ7eyF0sivacK068lVs5FizO9LGn0sk40s106yTBg==
+ b=lzmkWLz5b5jVZ81HPPvS9B94sXamN4WVaBEoOi5LrsSpmdUSeY8ZDg35+wRDtWUDpTymJWt+CYAX8kjrbbhf5zcfdmnMOsfeP7mHXMtCQsikC3KRUqZomP9u5C27R5baRyZ97Y87xsKzKXdtjWj978gDNzQnyjRTshWNJh0hXUlwk0jzMT37bJydDhFQORA/0eYPA/DSifKIEYQF7qzkYUEaoDzUp4UvFiZ4+v59VLGl2yWAX+Mr2c/PNY3aa3fKVlzZOMPnFJ6gHIPJpgKQL1ZBH1hGYVBhDoVfZWbvP5aPAIEdGJXu2grDLyy9tT7hyH583AQCwO/8qYks1w62Aw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cZ0EDg7J5xF9Ken8evvZ/Cghi/i1KIkpLvh/LrUwe24=;
- b=rK6khwUwBswDh9QlB1G7UwTmUCnRByS1KrRJujAjT2EBgZM3JDx4gkHzBx23JEvHKX4h5wffhFS0Kk/6UDVs9T6ALHCe/TxwDFAMt7sfzm5eWQIuVm7P9M0ib3JDkswnpuudqNZJ/URu5WA9YMz/SoGm1P10ug7sVNpR4puIEAdnfqTDrJCspLAQ+J8zwhp4Lo3DYDOov5NXxQuQbufz5kqDpR4FaRgrBUL39/ykyiyxgxk9f1A2sGvMm3qOs29h5HuLK0jDARbV8WMHdhl32yU8+IRLMddDiScivF8zl7GqSrTkwO+GIFt44QWbFdCRsOdM8HQkIXFCxzoW/0YnjQ==
+ bh=ZBoWxiC0767j5ureUaV1O4bR94sWbe0OopEd4xp5fjk=;
+ b=x3aBYm5/xAZj/sDkuN3olgycFaEHNrRlXKFsXKTIc85tJsbGOk7pSYL4uYPbVO0aaCI6s4wn7xxAPOiH5aIqoVoZYsy/vJuEIrqy5A7rZXGcFeIw2GSqYZ2Z1aTLAcQOsnI+JoHfeU2Q+ZwAy2AaFgSz8CR9/pR6PftWUeS90xtBXEweyaHiyktNowOzRRVBmuqZHbxdNDTROTCvf1/Q9FKkBBwPaHF8GGkO8/vBy6xE2ou2tssvkD5xOYRnNcpX+EZqMfy4y1NOu613/RZjgY8O8IbrkPTTFE6e0hYZ683p0vi+30YbhFWAK+itpq8dWrt5dL2xdaE/6ZwPgdRPCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cZ0EDg7J5xF9Ken8evvZ/Cghi/i1KIkpLvh/LrUwe24=;
- b=UK0CVOd4wkB2q16jEEyQvy6/dnboFj2MOeiQoEWNxzulNz2n5B3eqTjnzkQzUDlTcR2DU3iqeLtA8sfuHGghzTlvmZ6cU9guClkaCwr9k/jFBvGrrbXroZiaXrbuluustLjvs84FMDby0B3G4EuW/KSUmlb7RwgoBc12KAd9k9t52Xq9t6XaIsP588dUU/Mh/BFJGnRpoYRRWG1NqZOYu505Q5QC2j5X1nHsoUSpJP2sccVSSPg+XrvKBD7s5REm+Ow5YEdMsEqWU0MXwrFu1n3eBIVYbWfUKvP8pGwvebQRN/6YoO+yuI2daLxmix77G3izMcY+MxjaJrLv4rbG+A==
+ bh=ZBoWxiC0767j5ureUaV1O4bR94sWbe0OopEd4xp5fjk=;
+ b=AGJgfKxk/vqN8lxyzoRBgZCAV5143FiDdgz7xAKqzRrF8ooRy6PDslRsn57EDn5+VtRycWWRz/t/i1xmyhjMt9glmqzYzTBMeblJu2/R1xOHx6NKHu/SuROs/wkeiuwDKwxYWnYTebGR/0UeXAm+KTbk3p++N1s0HFWhcwlOiIL0DBZ+q8TnttBzKubZgs10CHbUVWA/TFR2dov4ROvKOZD4flwz7CifvzxgZxqzoBWmdl0rYp5IgHJo8cjgZ0dH93u11gGxvwG9p2bnRgBud4FkoK5ibMhsMLaBEJXnSLENETvwgtAJedL7YK+LFk3Ilg/bU6t6p4DaUa4yW0dPZQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com (2603:1096:301:f8::10)
- by SEYPR06MB5400.apcprd06.prod.outlook.com (2603:1096:101:8d::6) with
+ by TYZPR06MB6402.apcprd06.prod.outlook.com (2603:1096:400:425::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.19; Thu, 22 Aug
- 2024 08:44:39 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.27; Thu, 22 Aug
+ 2024 08:44:44 +0000
 Received: from PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f]) by PUZPR06MB5676.apcprd06.prod.outlook.com
  ([fe80::a00b:f422:ac44:636f%5]) with mapi id 15.20.7875.019; Thu, 22 Aug 2024
- 08:44:39 +0000
+ 08:44:44 +0000
 From: Huan Yang <link@vivo.com>
 To: Sumit Semwal <sumit.semwal@linaro.org>,
 	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -49,11 +50,14 @@ To: Sumit Semwal <sumit.semwal@linaro.org>,
 	linaro-mm-sig@lists.linaro.org,
 	linux-kernel@vger.kernel.org
 Cc: opensource.kernel@vivo.com,
-	Huan Yang <link@vivo.com>
-Subject: [PATCH v4 0/5] udmbuf bug fix and some improvements
-Date: Thu, 22 Aug 2024 16:43:32 +0800
-Message-ID: <20240822084342.1574914-1-link@vivo.com>
+	Huan Yang <link@vivo.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>
+Subject: [PATCH v4 2/5] udmabuf: change folios array from kmalloc to kvmalloc
+Date: Thu, 22 Aug 2024 16:43:34 +0800
+Message-ID: <20240822084342.1574914-3-link@vivo.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240822084342.1574914-1-link@vivo.com>
+References: <20240822084342.1574914-1-link@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: SI1PR02CA0059.apcprd02.prod.outlook.com
@@ -66,197 +70,225 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|SEYPR06MB5400:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ec5d0e5-0118-4742-48d9-08dcc286a887
+X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|TYZPR06MB6402:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d36d840-a83e-4f37-332a-08dcc286abb0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
+	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cEhTcFQ1MEtPcWYySUpKNE9obmlDblpSbXdRR2N5UEY3MVZnTWlYV0IrdWhw?=
- =?utf-8?B?V1l5WVBFZjFjeXloZHhnN2VRdzUvZkhaNUs1VDJPZk5PTS82aEROcVNwVXRZ?=
- =?utf-8?B?c0lQNEcxd2Z4eVp1d1JpMmZzUnlVK2h3VlpLUEZHdTYxcFJZVmJLT1FmRDEr?=
- =?utf-8?B?QnYzbG1iSWdxUWpTb2kxODJyYWVOdVc2QndsalppaWtUZ1hGbmhIejBFakly?=
- =?utf-8?B?Si9Dejg4WVdzVDIvbUdZQjZ3bXZiU2pHODdRMUR2dStjSWNTamozOUdrZjVj?=
- =?utf-8?B?aWdzcWRJbEdFTDB1WExxK1hrOXpjN2NRN2JvNFF2SVJnMWNqQ0pJbzYvelZT?=
- =?utf-8?B?WGJROUovK09TV1hSUVdkUGhubWwrTWo1T3ZONzlqYW8xWDJHM1pmZzExSTEy?=
- =?utf-8?B?cmxBbzUxQUEwNUp5S3VKQ0FWNDlNSkdVdFNqRFd5TXZVQkt2M1NZblI0S2gx?=
- =?utf-8?B?RzFUMUxLYkZaZzlnOGI4eks0RFBhMGlFSUp5dWtST1Q1SG1vNCs2NHVGYnhr?=
- =?utf-8?B?ZzRPbjg1dWs5KzkvWmoraHluWFlBTEEyamp3VnNLMHdKbFk3a0QwZ0JsSmhq?=
- =?utf-8?B?OVA2emVxNlhQTzBXeUJ6SlE4VmNscTBwNk16NzdqSnF5RUxQMWNOdmVSOU1v?=
- =?utf-8?B?c0hkejFnem5FOHJmYU5vN3U4M0xBNnk4eUpqQnc1bkpGUHdoMEZtbkFPREh0?=
- =?utf-8?B?SjlRM0lyUG9MdWlQejhrMld6WEZhczVqbm1IUjByZnB0YXQyOW80Rkc1Z3B0?=
- =?utf-8?B?bEJmUlFBOGVDUEh3NmRCRjkxMXVoNEJ6RkZDZmFONlhDalpNc1poUkNIVWdR?=
- =?utf-8?B?eWc3NWR3ZnNjWmNRRmg0WDdIeEs4NWFoUFBBTjRQVmg0bFVTTlpkMW5JRXZN?=
- =?utf-8?B?dmZDL1NGcXVIWSszV1ZXSGRqR0NSVm55NFhON0xRSjVHaWs5eDVRSktOcnVQ?=
- =?utf-8?B?cEhjTU1KOGpUSkRJVzMwYm1YNS9CdHV5ZFd2V21URkV0RHl4ZVdpRHJpN0xD?=
- =?utf-8?B?ZEJpZFBMdjNrZjVaVDBQeHZqb0pTUTh6VXU3MFFDODg4U0M3TTZJSDlyVGF6?=
- =?utf-8?B?NFlnd3g1UTFWWkVIUWhtTGRpSUpHU0xSTFJLT1cydnY3MnRtOFd6NnFzcGFR?=
- =?utf-8?B?L2QrZ3A0SXVVdmpRbTVrVC90SE42R1llUE1GZE84TEZZSEpJc0Eyak1hOG5a?=
- =?utf-8?B?OUtQVkJxSWpMRHkySDU5bHVlYXdNWFZnM2c3dWFHb0pudE9xRUlaR2NSbEQr?=
- =?utf-8?B?VUN4Mm5SMThlQWlIbEpBaUkwMjFWVEVBNWZuVkN4SHBsZmlRdUFXUnlZVkds?=
- =?utf-8?B?ZE1ZRnRSZ0pmMDhXOVNrK1pEa2RaNjA3ZkpHclhFQTBFR2gyNFg0UW43YURo?=
- =?utf-8?B?UU5sSXJIenNYUEp2ZGtPWnM2UTYzcWxicUEzYnBhcEZmdzBna1VvYmJGNnpQ?=
- =?utf-8?B?eGVCaHBZVnlYOVJFdS9tQ1hJYzYzY3hjMUNDMGFrTDUzc1lKeGNBZnAwQ01k?=
- =?utf-8?B?bEJ5RSs3WWkzalBmdEtQRjNQM09vMUVFY0Q2NzY4R1VvY3FMY2Z0dlpDekVj?=
- =?utf-8?B?MklCNDhKbGJMNnRZcE95RnVpZU9SaWxXWGlhWkl2Vi9ZL1BJU3VPRDJVY3JO?=
- =?utf-8?B?czNWbEQwZklUOGxpdlBsV094MHRTSjJaQk5QRU95OUpCOGRjdGhkNHdETzRH?=
- =?utf-8?B?KzFUZktYd1NxcStXNmI0TWZxK2JZSWl5YzczMDdNZjRjUkQyZzZPZUw5cVIr?=
- =?utf-8?B?UHhpZjAveVRzakYzOGd0Y1Yvb1ZucWxneW9ZelljcU5YNDJlSU42ZFpaOStW?=
- =?utf-8?B?eTJXd0lTV0UraHJhZTNYQ3ZkUzYxSUwzSlRQRzRYMFhuSzIwYmxHTXJWdGND?=
- =?utf-8?B?d1FvQXlKYTFNQS9LbzZteUxDL1RKYi9LQnhhNE8xZks2NVE9PQ==?=
+	=?utf-8?B?TFp3amZWQmkyby9oUmg3bVpLNEliRDNPbXV6ajJiY3I0RkUyRG4vUC9COUZJ?=
+ =?utf-8?B?NHJjQW9TZzA0OFRodzFnc2ZkOUlzRGJwOWFxNnF5OFJjaFRhczNlVko3a1p4?=
+ =?utf-8?B?TDFENkNmY3MwWWZYSkxwYWhXdGRvUlhhUSt0eGJya2x4L2lzMTNCNkQ1NS9y?=
+ =?utf-8?B?YjJEeFR2TlRCV0hsaVVwenpKQ0p2OEtwWVBSaHFPaWdzSitRWkdvejJoaDFC?=
+ =?utf-8?B?bVZ2U3pBQ0VZN0NpMVNmZ1Y2eVhUcGk2NjFRbWFpaDBXUllYOE1MMVNpTzhW?=
+ =?utf-8?B?L21qZTRKSU1UYnpBTGRmVDRLbFBCM1JFMUU0bWMwUHdmSWMzTTZrbW9kRm9q?=
+ =?utf-8?B?Z2VEMDZEbjFKc1kxSnN2WDJjTGRmRDNLK215ZEozR3J5cEhIZmFudUtxUU5t?=
+ =?utf-8?B?RXFJeXFLT091ZkN4QnkzTnNROW0yWlZJRUtjT3FRK2ozU2RsUUFKeWVzMHJ5?=
+ =?utf-8?B?dFVzcWNTYUtZbkdNcEpGYUZGc2xMcEs2bGYrais1Y1JpTU9sWEsvZjdFK1NK?=
+ =?utf-8?B?eTFtR0drZTN6ejZWay9SYm1yck1oZHNZZHJkaGU4MWI1VG45RVR6cytxbEpE?=
+ =?utf-8?B?TkJtQU9OdUFNUTdJRGkyOHZUekdRMkRuY2RYZWFGLy8zWlRZYXRiTDVTcEF2?=
+ =?utf-8?B?c3dUS0JKcnhwOHlzQnkzSG5MMlRCTmJWSHBwdHhyWmNudWNQaXFOREpQaGNL?=
+ =?utf-8?B?QUpjT00zSXU5cUs4cXN2VW9HM1VuNGFFd0l3Yi9DbTFBd1BIWm5mY1hwYk5y?=
+ =?utf-8?B?SGxBYkZFLzJ6aTRVOFR1VlpLVUZJbUkrZUdFeExtQTUxSzNCMGx5ZHBRZWxo?=
+ =?utf-8?B?WjMyWWVicTBCd2F4ZjBWaFJwUVplUnh5UFF2Z3BxcThHZUlIYm4zSUpmeDg5?=
+ =?utf-8?B?dFU2VzZtOUdISUZPaVJPaUkwS3N4L1Nvb1c5UXNpL3Z2RzA1bkt4cjA1Qndj?=
+ =?utf-8?B?WnpVK1FNK0lJZE51R2ZQeDJHdmJhRENsc09URTh4U3BxRzhPbFpZV1NGQ3NH?=
+ =?utf-8?B?YUlCaEZBRG1acTR2a3NVVDB4c3hFNUljWFRIU29nci9GSXpBc0psSmx2Q1lp?=
+ =?utf-8?B?alFzUUJnbEowbGtmRGpab2dNOUpxWG0wcGxqS1U3WnlHUXkwbGcrSnZHeDYw?=
+ =?utf-8?B?Z3BRNG9tL0Ewa2x6c3NES2JIdkw0aFZTTlNaQTVaV0E3dGJOdDRleU9YUHFh?=
+ =?utf-8?B?S3dXU0pFb1NvQkNtSzM1V0FneGVsK3lEVjlKWnJ3bCtJVEdUVmErYnZsaUNl?=
+ =?utf-8?B?ZUh3L3c1bW1jRHJkNDhwV1VrTWwxZHUxc0dWbzNXVHZyeGRkS3dlYnA2M3NO?=
+ =?utf-8?B?WlNLS1lzckdMWUk3MXg2NU1sblVrTFdSRnZaTEtBd1NhWFg4d2gvRktZS3FL?=
+ =?utf-8?B?allvZFdDei9RT2hpc1hFMFRHVWtHdUZxTXFrdnplRXFGdnJCSHc3VlVJbjVE?=
+ =?utf-8?B?WkptR0ttT0VsNzhqQWVSWWRIeDl4dElKV1I4d3A3cHVIdEJtNkcyN1YzZkor?=
+ =?utf-8?B?emRrZWdyZnNqOVFyb3kydmpLQS9QSWxBQ2YrS3l1VEova0RKTnhNVDNybXdL?=
+ =?utf-8?B?czFIRDcweFNidXNlUEgydEVmK0FDc0tSdVc3bUVnM0VWUkltK2RFT1o3T0Fw?=
+ =?utf-8?B?ZmdJTCtmME5kUjhFQmtoejROUFdSMFRQVitMTkovV1ZHVlc4Wjk5RGRYM2h5?=
+ =?utf-8?B?anIyeEtZNDJvOWZCdVR6Y0ZIdHl0ZHd1Vk1XY3pwWlNGNHI5cmtTNEFXVGU1?=
+ =?utf-8?B?SEptSG9rS1Mrbkk5aTlGa3NRU0c3enFHd3BCVElldVhLWXVrbHFNQThVN0E4?=
+ =?utf-8?B?U1IwQ1BVaUoyelA3YXFBd3FDd2VyQjdQRzUxYWlDdXpLc203QXZySmhRTFBX?=
+ =?utf-8?B?WEovbXhuZjZRdmpUcUFmL0xIWWhHYWl1amxsaHhjQ1BhTEE9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bHdoRnVQRUY2KzJhQTZ1OXRHMklXajVpSU01QUJlMVR0MVcrUjZRU2JlWEl2?=
- =?utf-8?B?N1hPaFQyWlNQYzg4ZXp3S2Z1aHBwM0dudmlHOTI3OU1JVGkyeWJDakhrMis1?=
- =?utf-8?B?TzFvSkRmNVB1ZUExWDg4dmFhZjh2RmZmVjJIN1djNllLQzYxSGpEL2NiYU8r?=
- =?utf-8?B?bzZ0N01paGl6ODNOcktwUWdnbGJOQ2V0T2lJVFg5SGtEbzRBbXA0Wkcyckxl?=
- =?utf-8?B?Y2c1TjJxOUNNdzdldnJNK2FRMTlUUFZlQTJtaHAyTUVsZGZDUjc4N2dWU0ky?=
- =?utf-8?B?Z0ZHUTE1Z0MxekVmUjVNSlRVOTdtdWJyWmxDa2xlU3VQWTJMUDhhNE54Z1FC?=
- =?utf-8?B?YjRWN0lMWWZpWmwvcnJDdFpOSnR3QWRpVGVrSTNxWXFRd2ZFTGo5Mjd2OURO?=
- =?utf-8?B?K0lRazZCNSt2Q29RTnA0ZlBSRUVOL3dWV3I4YXFPN0tkTzNVTFo2dk05TnNn?=
- =?utf-8?B?endwUEoweXRsSkdzdFBJTFpSL2JDNVBablhGRjc0TWZnZS9DZndnaWdmU1dL?=
- =?utf-8?B?b1RNak9hYXlTaytjNWFEOUtBWHcwZmZtMGhLOVJOcUx5M1RjcTVBZ3I5OHRn?=
- =?utf-8?B?TXBNZkZpbzk3VnNSYnN5czgwZlpqNVE0eXVya24rSTdOZVVWYWk1SG93cXRT?=
- =?utf-8?B?ZFZGYUNkWGdyZ2ZLUkkxd1BhQ0hyaFMxRG4vTEJqZVhhQ1hTTU04bGR1S2wx?=
- =?utf-8?B?NHBsK0F3SFVNYzcya1pHR213SXc5ckVzRFBYYy8yU0t3TzF1OVpUQ21vOGZZ?=
- =?utf-8?B?Y2pJTHgxa1dVdWVzbmM2T2hEZTVzNm9lS0MwUExYQlp1S005aWQrM2JZT0hu?=
- =?utf-8?B?VVcwd2w3bjJ0cDFhVk5MOFhtaEVVNXdMcWtOVVAxSGxPbG1kTkpZL2VjNlFh?=
- =?utf-8?B?ZlV4dmNOdStRU3V5TzIybWI4UUNFU0JrOXBmNWZFWURtdmR1TE8vdm82bXRy?=
- =?utf-8?B?c3B3VUszaWdlQUpTZXFOdUVCbWVEUUk0bjJrVUhMNWt1alpEN2l0a2NNUWtD?=
- =?utf-8?B?b3pFYks4UG9wWUkxYnczN3B0V2tEeSt0N3JuM0hRTmNmMzFVYng5aFNxM2dO?=
- =?utf-8?B?bUpocmZ6WC8yTk1jRzU0WTJ5cDBWZlhJYk9Rclp5eEJ0amlMUVpFQnR0dmJF?=
- =?utf-8?B?YjJvQk8ybXVjK1pGTFo1Z1ZvdXpiUGpGUHlUNk5SR0s2bUk2Qnd6K0hlYzJV?=
- =?utf-8?B?dWU0dEY4TDNnb09aQVh5U2RQQnNMRmsxYzFwaC9NbEN1UGRvY3FRdGdUWjNY?=
- =?utf-8?B?cnRTeWozTUN4Vnk3VVpnUjVTbXBZRVlpQU1hcnpPN0ZLV0ZXZWpLZzV4UEsw?=
- =?utf-8?B?WVl6WVF6NXJPYTEyRXM0YTMzOFkvVkFRaW9NV0xGTktVeGg4WWg1YjJMa015?=
- =?utf-8?B?aHkzaEFmWldVdmZzYzUwYmhhc0dGYXIrMFR2REpiQ2gvZi9hNkgvQlhIQVNK?=
- =?utf-8?B?VVlXRWtad1hvNXFUWFVNZVN2L2Vycm4wNVZQaHRvdU5CSy8wd3pHR2VOV2Mv?=
- =?utf-8?B?cmRXMnh1UXRuamhqRmhsYmpZN3BzL3FFdmVJMldxQk5lejdZZXRpMStwN3BG?=
- =?utf-8?B?bStpdjhza3BXK05pVE5uOHI3Wlg5TW9UQURuMjlzM3ZoRjcvUmU1V3IzNjlU?=
- =?utf-8?B?UTZ0YXZnbGJVR0UwdFVxQTNxcEE5WCtxUFI1V2N2NW9QblQ3c2ZQWElXSnZi?=
- =?utf-8?B?bE9Hc25vakU2Q0ZwajRhZ2Z5SFhrQmRTRDJRclByNGdxdXBJaEh1aEJUaE1K?=
- =?utf-8?B?MW1BTWk5NDNUaTJEWms4S0tEL2loL0VOU0tPK1ltOFRCV20xa0xOUVplaWFC?=
- =?utf-8?B?WWVqVlVFYndLNGFQU0Z2eFo3TjVKTSsrWmlXS0pPMk1WQzdBRDF2bWVtTHU4?=
- =?utf-8?B?QUp1TUNqUDJNVG9mQlo0Qkt0cDEyLzRUYTFZZXdIWi96QVI1aC8wRXVTamls?=
- =?utf-8?B?NFdjeTVacTJYa2FaZkI4dG8vNHArRkJoNEZsQnMxMFNabncwdWNvcFpYSmsv?=
- =?utf-8?B?cndKcWcwdzdNOUhrdGFVbXZoR2VqakVzeGlkN1dyd2NYUDFBTmhJOTAyU1Fs?=
- =?utf-8?B?YjZsZ09BQ0NlcURQeWZuVVZUQVBIcmROcFNrUGZlSWM2KzFYdHBzcVFXaElU?=
- =?utf-8?Q?QG2ozKHTYNS8c56C7yFNBgxmx?=
+	=?utf-8?B?M0R4Y1lCZ0RVbk5OS3YxeVVtLzR0WGxoblY0Sk9HbGEvd1hKMDFvdHpWMDNo?=
+ =?utf-8?B?TEpOendhSkJFV0tUVitwSXlSUURhYXVneTZXa0xMdTRsOTlMczFWTTJWRWVJ?=
+ =?utf-8?B?dEVwcmRJQXJrcS9KNE9zU2EvWjdkZEc2U2k3bENVUHpOcVZyOWhNWXg0Mlhv?=
+ =?utf-8?B?YXd2TG0zSDROTEkrUGc3OWYvaEZUTEphdmxwOGU5RVQrbW42Mk5CN1ZCdURK?=
+ =?utf-8?B?bWtiK09SMGdLUWlLVk1raERpeUdIY092TUVkZ1pqR05HRW9tblc0bFJQRGpD?=
+ =?utf-8?B?YVhLNXh0YWVtVERwdWlWRjBlbkVhWTNHby9xc0hXZjRzTWpGcmNTTFF0V1dp?=
+ =?utf-8?B?SE9RVGk2Y2htYUJKNm00enVYck83djA2eUVUUDcvVndvNXVIeVo0VlZBSnhu?=
+ =?utf-8?B?OVBYOTFWejB4cmJQRGU5ZkJnMnpKRjJzMFpSMlI1WVFaRHcvUzVzK2RhdkdM?=
+ =?utf-8?B?R1N1VWZCT3QxRDAvYXFsUDhNVVQ5VTZpbDdzR0YwNzZSaE5lSXNlNHRQRkhH?=
+ =?utf-8?B?TnRiUTh0Y0VxRkMrMFgvVmcySUc4b2g5S0cxK1hyVk1US0pFcnd6MUpaMkRK?=
+ =?utf-8?B?eHdQemE5ZVVOblhORDlIdThvbmt6aHVRWnR0dkkzdUdDSElrYng2dHk1UlY5?=
+ =?utf-8?B?M1cyMmdSQ0E1UTN4aUt1SnIzczhpUGdoNnY5S29SOTN4c1RQUWhHZDhwaWVn?=
+ =?utf-8?B?cVIwV28yMU1ncVN5Y0l1VEE3UW16ZmRNU2NJRVVFVGtNS1h0VW9QN0NMNERz?=
+ =?utf-8?B?SlBiMFowRW4yNWdDUkFuZjNYMDM0K3pocXN5Vm1HSTNuZGd2WDZWdHJ1dFJs?=
+ =?utf-8?B?eGd4dDAzU0lyOHRod1JMTjZSMVdyS1FUTjdRR3JaMUt3M2lwZkdRdjY0cEFy?=
+ =?utf-8?B?azFRd1dudWpRT2k5ZVBHQTNMM1R6aDN3cm5Od2wybHgzdzF3ZDVoendLYTZX?=
+ =?utf-8?B?VXF0bWZEeDFLdDV1OGM3bGRveUs1U0FUd3pzY0FhTU5kVXNEMnY3ZTVRcFNT?=
+ =?utf-8?B?VjN4SDFianN3Z0tNQm52TFpaekpyZmhyYUdPVExNYUVRUXNERzhmajd0TFlx?=
+ =?utf-8?B?aFhlbEhaMGtVNE0zWHczTTMyVTB5cCtZaTZmbTFQbTFUZlV1R0MwT1dQZStk?=
+ =?utf-8?B?VFh4YUl4ZFZSbGw1SGQ1cmpkRlAxakpvamVkNEVvakNCM295c0VDOUY5MDZk?=
+ =?utf-8?B?RHFVNVZReUN6VWNsYnlXTFE5NVo1anZiREkxNGk4U0l5Q1hFUmRTcDNMQjZt?=
+ =?utf-8?B?OVNXdThDUGtSWWJTU2ZXVlNydDRZdUhFU3FzeHJMeUpybzRCdmVSVy9nUGo1?=
+ =?utf-8?B?RktaOGM2d0JoUU5hUEpQbVNFOGZ5MmlqRVhiNFFvTzVLaFhRQWR1UkFMWFA3?=
+ =?utf-8?B?K1ZsbzRta1lmZEw0aGxJakdkeEtrM0M2Y3NpYUxYWXN5ZnljWEExS3pyaTRT?=
+ =?utf-8?B?b3B5RXh1eHlZbUlxd01GeVg5VFZ4WEZlQ3pzRGRJb01zR0RrUXh2dkFZZTZu?=
+ =?utf-8?B?cERQVW1HU0hBajBhNm5ySUhteStxd2lFaFYybC9rSzdBS3I3RFVzT2IwdCt4?=
+ =?utf-8?B?bGxmSFlpQ2NrcjZTdXJadGZuTTF4dkpzR2xtbkhPaU9iYzkrQVBUQTlYcEFD?=
+ =?utf-8?B?TzdUYkt0MWtvWW9qbUtXdEQ3bk14ME01aytiL3BqWitVTjlyTTlQU1k0NkhH?=
+ =?utf-8?B?eHFZNXpNWHE3cG5ZSXQ4U3dscHpjK3BJUlNMaHVBK3dxVzdvK05raWxhTkRY?=
+ =?utf-8?B?SWJZZHdaejhsWjMxUWxrc3lSRW1lV2JTd0NpS1J5bDcxOVQ1SlVtWlltWU1m?=
+ =?utf-8?B?K0doQmNpVDhJaGVuTkxVZklMdk0vc05SZ01RVXVSV2tZS3hOSHo1eVNZaHI5?=
+ =?utf-8?B?ZWViSk1URVU1V3FucDl3M3BnYzVpbkVQN2w0TGVTVHJWQ2ZVU2RQUnArRk9U?=
+ =?utf-8?B?a0tRbjgyY2M3Y1dGcUJDZjNCZFp4UXA2U0VXOWtNaS8vd2dpTllGWWFjUWZQ?=
+ =?utf-8?B?ajl1clY0U2x6K1RtL0N4MnFQbFdkUWZOSW1YeTVVK1RoN2RyZlR5TUt4alhJ?=
+ =?utf-8?B?cFVSSCtReTh1TFZqN2g2VEE5RVdHME9Eek5GMWZINHJZYUxsOUJFaUZFRmhH?=
+ =?utf-8?Q?a3BigWzEhuyUKgWyn908t4Cfh?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ec5d0e5-0118-4742-48d9-08dcc286a887
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d36d840-a83e-4f37-332a-08dcc286abb0
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5676.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 08:44:39.0299
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2024 08:44:44.3238
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mvXDUSv5y5yCsXum1OMeh5kQ/C00g5ta22F0x60S7J61JINUYsEIiXi57vAK2x3djDsLfE+hf2Nyw8NzHC6DWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5400
+X-MS-Exchange-CrossTenant-UserPrincipalName: lCFDaTiiydVsCrklW2IykbodBFt4GLWfU90igbjW5HfU5GE+IQmeJtg9rQMf5O8af4Q2lfrcdrBVT2/pLNWM2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6402
 
-This patchset attempts to fix some errors in udmabuf and remove the
-upin_list structure.
+When PAGE_SIZE 4096, MAX_PAGE_ORDER 10, 64bit machine,
+page_alloc only support 4MB.
+If above this, trigger this warn and return NULL.
 
-Some of this fix just gather the patches which I upload before.
+udmabuf can change size limit, if change it to 3072(3GB), and then alloc
+3GB udmabuf, will fail create.
 
-Patch 1,2,4,5 has passed the udmabuf self-test suite's tests.
-Suggested by Kasireddy, Vivek <vivek.kasireddy@intel.com>
-Patch5 modified the unpin function, therefore running the udmabuf
-self-test program in a loop did not reveal any memory leaks.
+[ 4080.876581] ------------[ cut here ]------------
+[ 4080.876843] WARNING: CPU: 3 PID: 2015 at mm/page_alloc.c:4556 __alloc_pages+0x2c8/0x350
+[ 4080.878839] RIP: 0010:__alloc_pages+0x2c8/0x350
+[ 4080.879470] Call Trace:
+[ 4080.879473]  <TASK>
+[ 4080.879473]  ? __alloc_pages+0x2c8/0x350
+[ 4080.879475]  ? __warn.cold+0x8e/0xe8
+[ 4080.880647]  ? __alloc_pages+0x2c8/0x350
+[ 4080.880909]  ? report_bug+0xff/0x140
+[ 4080.881175]  ? handle_bug+0x3c/0x80
+[ 4080.881556]  ? exc_invalid_op+0x17/0x70
+[ 4080.881559]  ? asm_exc_invalid_op+0x1a/0x20
+[ 4080.882077]  ? udmabuf_create+0x131/0x400
 
-Notice: Test item 6 maybe requires running the command:
-  echo 1024 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+Because MAX_PAGE_ORDER, kmalloc can max alloc 4096 * (1 << 10), 4MB
+memory, each array entry is pointer(8byte), so can save 524288 pages(2GB).
 
-Patch1
-===
-mmap just pre-fault when the first access
+Further more, costly order(order 3) may not be guaranteed that it can be
+applied for, due to fragmentation.
 
-test this by look run create udmabuf
-size 3GB, then only record the "mmap -> memset"'s time.
-This average show 1.2s cost
+This patch change udmabuf array use kvmalloc_array, this can fallback
+alloc into vmalloc, which can guarantee allocation for any size and does
+not affect the performance of kmalloc allocations.
 
-compare to direct map when mmap, this also show 1.2s cost.
-
-environment: archlinux, linux-next, 16G, 4 core.
-
-Patch2
-===
-This is the same to patch:
-https://lore.kernel.org/all/20240725021349.580574-1-link@vivo.com/
-
-Patch3
-===
-fix current implementation of udmabuf's vmap issues, use pfn.
-
-Patch4
-===
-Change codestyle and fix a potential bug.
-
-
-Patch5
-===
-Attempt to remove unpin_list and other related data structures.
-
-
-Changelog
-===
-  v4 -> v3:
-    Patch1 fill vma area with pfn only when true access.
-    Patch2 no change
-    Patch3 select VMAP_PFN
-    Patch4 use function pin each item.
-    Patch5 use pinned folio array instead udmabuf_folio struct.
-  v2 -> v3:
-    Patch1, avoid use page, instead, use pfn, and use vmf_insert_pfn map
-    suggested-by Kasireddy, Vivek <vivek.kasireddy@intel.com>
-
-    Patch2, update acked-by Kasireddy, Vivek <vivek.kasireddy@intel.com>
-    And keep the kvcalloc on the same line.
-
-    Patch3, avoid use page, instead, use pfn, then use vmap_pfn map
-
-    Patch4, split v2 patch4, single update codestyle to keep review
-    easy.
-
-    Patch5, another way to remove udmabuf_folio
-    
+Signed-off-by: Huan Yang <link@vivo.com>
+Acked-by: Christian König <christian.koenig@amd.com>
+Acked-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
 ---
-  v1 -> v2:
-    Patch1, 3 Rectify the improper use of the sg table.
-    suggested-by Christian König <christian.koenig@amd.com>
-    
-    Patch2 add acked-by Christian K�nig <christian.koenig@amd.com> which
-    marked in v1
+ drivers/dma-buf/udmabuf.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-    Patch4
-    Modify the data structure to restore the use of pages and
-    correct the misunderstanding of loop conditions such as "pgcnt".
-    make sure pass self test.
-
-    remove v1's patch4
-v3
-  https://lore.kernel.org/all/20240813090518.3252469-1-link@vivo.com/
-v2
-  https://lore.kernel.org/all/20240805032550.3912454-1-link@vivo.com/
-v1
-  https://lore.kernel.org/all/20240801104512.4056860-1-link@vivo.com/
-
-Huan Yang (5):
-  udmabuf: direct map pfn when first page fault
-  udmabuf: change folios array from kmalloc to kvmalloc
-  udmabuf: fix vmap_udmabuf error page set
-  udmabuf: udmabuf_create codestyle cleanup
-  udmabuf: remove udmabuf_folio
-
- drivers/dma-buf/Kconfig   |   1 +
- drivers/dma-buf/udmabuf.c | 281 +++++++++++++++++++++++---------------
- 2 files changed, 172 insertions(+), 110 deletions(-)
-
-
-base-commit: 6a7917c89f219f09b1d88d09f376000914a52763
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 0e33d25310ec..1bad4576d492 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -102,7 +102,7 @@ static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+ 
+ 	dma_resv_assert_held(buf->resv);
+ 
+-	pages = kmalloc_array(ubuf->pagecount, sizeof(*pages), GFP_KERNEL);
++	pages = kvmalloc_array(ubuf->pagecount, sizeof(*pages), GFP_KERNEL);
+ 	if (!pages)
+ 		return -ENOMEM;
+ 
+@@ -110,7 +110,7 @@ static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
+ 		pages[pg] = &ubuf->folios[pg]->page;
+ 
+ 	vaddr = vm_map_ram(pages, ubuf->pagecount, -1);
+-	kfree(pages);
++	kvfree(pages);
+ 	if (!vaddr)
+ 		return -EINVAL;
+ 
+@@ -218,8 +218,8 @@ static void release_udmabuf(struct dma_buf *buf)
+ 		put_sg_table(dev, ubuf->sg, DMA_BIDIRECTIONAL);
+ 
+ 	unpin_all_folios(&ubuf->unpin_list);
+-	kfree(ubuf->offsets);
+-	kfree(ubuf->folios);
++	kvfree(ubuf->offsets);
++	kvfree(ubuf->folios);
+ 	kfree(ubuf);
+ }
+ 
+@@ -344,14 +344,14 @@ static long udmabuf_create(struct miscdevice *device,
+ 	if (!ubuf->pagecount)
+ 		goto err;
+ 
+-	ubuf->folios = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->folios),
+-				    GFP_KERNEL);
++	ubuf->folios = kvmalloc_array(ubuf->pagecount, sizeof(*ubuf->folios),
++				      GFP_KERNEL);
+ 	if (!ubuf->folios) {
+ 		ret = -ENOMEM;
+ 		goto err;
+ 	}
+-	ubuf->offsets = kcalloc(ubuf->pagecount, sizeof(*ubuf->offsets),
+-				GFP_KERNEL);
++	ubuf->offsets = kvcalloc(ubuf->pagecount, sizeof(*ubuf->offsets),
++				 GFP_KERNEL);
+ 	if (!ubuf->offsets) {
+ 		ret = -ENOMEM;
+ 		goto err;
+@@ -365,7 +365,7 @@ static long udmabuf_create(struct miscdevice *device,
+ 			goto err;
+ 
+ 		pgcnt = list[i].size >> PAGE_SHIFT;
+-		folios = kmalloc_array(pgcnt, sizeof(*folios), GFP_KERNEL);
++		folios = kvmalloc_array(pgcnt, sizeof(*folios), GFP_KERNEL);
+ 		if (!folios) {
+ 			ret = -ENOMEM;
+ 			goto err;
+@@ -375,7 +375,7 @@ static long udmabuf_create(struct miscdevice *device,
+ 		ret = memfd_pin_folios(memfd, list[i].offset, end,
+ 				       folios, pgcnt, &pgoff);
+ 		if (ret <= 0) {
+-			kfree(folios);
++			kvfree(folios);
+ 			if (!ret)
+ 				ret = -EINVAL;
+ 			goto err;
+@@ -404,7 +404,7 @@ static long udmabuf_create(struct miscdevice *device,
+ 			}
+ 		}
+ 
+-		kfree(folios);
++		kvfree(folios);
+ 		fput(memfd);
+ 		memfd = NULL;
+ 	}
+@@ -420,8 +420,8 @@ static long udmabuf_create(struct miscdevice *device,
+ 	if (memfd)
+ 		fput(memfd);
+ 	unpin_all_folios(&ubuf->unpin_list);
+-	kfree(ubuf->offsets);
+-	kfree(ubuf->folios);
++	kvfree(ubuf->offsets);
++	kvfree(ubuf->folios);
+ 	kfree(ubuf);
+ 	return ret;
+ }
 -- 
 2.45.2
 
