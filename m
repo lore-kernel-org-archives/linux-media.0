@@ -1,48 +1,48 @@
-Received: from a7-48.smtp-out.eu-west-1.amazonses.com (a7-48.smtp-out.eu-west-1.amazonses.com [54.240.7.48])
+Received: from a7-30.smtp-out.eu-west-1.amazonses.com (a7-30.smtp-out.eu-west-1.amazonses.com [54.240.7.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F100198A19;
-	Mon, 26 Aug 2024 17:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E11064A;
+	Mon, 26 Aug 2024 17:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724693053; cv=none; b=ckThNHqiWy+cNBijOtIq3z622AywCConfIIMNpXiAaHlhmJjK/6ZWCqF2O0HFeVbw1Pe6yUp/XIOfWdL5Poy9H7Z7l8JHdw/xe+6ptJed29swgWwDKKK36gECbO35Br9NZINfgDVYcpu/0nvsDEowhdAgsXh8FfYoPAPZhg/kGM=
+	t=1724693054; cv=none; b=og+42a5seL4W++xL/J3Fplz4KT5h+eSlzDfHmCQ27ruLhNt+4TxzN1jzcMHlfVc2Fler2yCNDOBaRIRvbRptym7ME0JUrMeZMf9osT9HDaDbX/9aKmAaerKbB3xSDwCqhd3JHckvCvw7uhsG2Ce9+DQv2l4aXq13tP2g8XHSLbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724693053; c=relaxed/simple;
-	bh=OSLHE8tFNYIiN6g4tIzBnhyy90K7b7D8a3ozf67hRBM=;
+	s=arc-20240116; t=1724693054; c=relaxed/simple;
+	bh=etTr18PVUbyD9sH0upSXvlXDIQwDCIKkQLfctpu+WIM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UtZBvTLJuQbiTkzYXbvz5Jt8JKHfqjFgqF2iVll4k0ai55l/cvXF5GUBsKudmMJGhqWBPhrzhyuLAeBwhyh8VN0Fg7S10jhHFQRCLUUZtzQDKKSdBv1YyHV9Y5gNdb9iX3DEyRp7UxTMXca28hT10o+ZbBt40bzjDzRBcIAWilU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UYHt5unp; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=NYpYp1Iy; arc=none smtp.client-ip=54.240.7.48
+	 MIME-Version; b=ZAewdbyAfzx5Xo9xptcxSXZRUGviz2c9B9BZ33KtwpCo7kNMpTZxAI/KtYDmW2uzwbHheO78BNpBdF6F6pfDbE130NxrwTzBMKM5DO/B42ihKa3JIfFlGgjx2xUbpPwZye/vQx4cnkjBt7HHd/kCn2COvau3SsLh7JWZR2DwlSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CCe11pr6; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=IJNBUtaj; arc=none smtp.client-ip=54.240.7.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UYHt5unp";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="NYpYp1Iy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CCe11pr6";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="IJNBUtaj"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724693049;
+	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724693050;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=OSLHE8tFNYIiN6g4tIzBnhyy90K7b7D8a3ozf67hRBM=;
-	b=UYHt5unpeTd1SjzXB4oPnLLw1ua3OR6NXKvGKdI54KdLiIOq27LW4soXUpcdVE4K
-	FMNobThYB1LrSIz5z0pv+whyGg/Zq4i6xneWnSlZkCGZEuLWkatgb1v31EdXYRZ+avk
-	f8B/kTDQ+bNWdsiFeYB/nbbW/Fea8/aqatOZscghT/VMd62BTJti2iNLGCIhaTEHxvx
-	L8iQLYDAJSzTG21dkxLiMXHkS4N1a9HkqIyCSnvCVSRISBZ1fhMC92Nv1Ms4tJQVMr1
-	k+oU+YmpQPzN4/7EE5/gN3h9HVGW9p0Djqm/GbFK2ZgfOrlNVWWODkUvFimEzHTNl8S
-	2rXtrk0twg==
+	bh=etTr18PVUbyD9sH0upSXvlXDIQwDCIKkQLfctpu+WIM=;
+	b=CCe11pr6qOy961/sWNVUMH6KKouTy/tOjExkTfT2L+8KDU8TzEFeUAXBuf7DPHhh
+	xKSmoKi7ylUV4vwdY/z/lQPB0QnSDieugfPWooL2O7lNTJsRIOWJ9PHsmJrXmZLTAzA
+	8V5ClmdQQVJbqNvlVho6cciT6j8qJiL3Vu8FMXLxLU/7qlgeHa3dWVQMYtDLafn/SFa
+	2c9DGBIn35M7JdGhMtZ4+LbAqV4n63cm4gMiwhEJsnjjYnEbAmYpUeDTpt5jMhO2bKs
+	iIqbM2NPqzfxAMV/3O8mxI29gN91GpixK7/1tXMdyD4xCn4M5LnVwWj6dSRbDMGbyeH
+	QwWac6451w==
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724693049;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724693050;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-	bh=OSLHE8tFNYIiN6g4tIzBnhyy90K7b7D8a3ozf67hRBM=;
-	b=NYpYp1Iy4Y5lBH10T+knIOw2cpLAirYjJNJW+MN1BxBtwMPg8D6l5ektfKP+qG/o
-	HH1D0xE6b13gIpVDHYPUsn1gGRF+MNXDw0ZnN/XPTinN4HUVb/WGvACrwyaufhfF6nH
-	MzT7r5Xbn3u4TrjBttgfYHJr6JkgIWWk+M34SUQg=
+	bh=etTr18PVUbyD9sH0upSXvlXDIQwDCIKkQLfctpu+WIM=;
+	b=IJNBUtajuE12ye6IkYE7m+mee4d0+VJDF+NehKONNLoVgKTBsikexRUoLLiGVJz/
+	0lbZF/0JhtX3sIS7iEcJCxEamB5WTOw6lJqcZm6w57s2ipG0UAt6BobQ+m5LtJTh4m4
+	5wPa1zr8cbvDW+/prx8x/YHw/9kbmXJACHE0JDpM=
 From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To: mchehab@kernel.org, ezequiel@vanguardiasur.com.ar, 
 	hverkuil-cisco@xs4all.nl
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-rockchip@lists.infradead.org, kernel@collabora.com, 
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v7 1/3] media: videodev2: Add flag to unconditionally enumerate pixel formats
-Date: Mon, 26 Aug 2024 17:24:09 +0000
-Message-ID: <010201918fb77141-93148d3e-6899-4b09-bff3-5d4f146f1449-000000@eu-west-1.amazonses.com>
+Subject: [PATCH v7 2/3] media: test-drivers: Use V4L2_FMTDESC_FLAG_ENUM_ALL flag
+Date: Mon, 26 Aug 2024 17:24:10 +0000
+Message-ID: <010201918fb772f4-51d41cc7-a573-4d49-b75c-3e6b37839901-000000@eu-west-1.amazonses.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240826172407.140538-1-benjamin.gaignard@collabora.com>
 References: <20240826172407.140538-1-benjamin.gaignard@collabora.com>
@@ -54,85 +54,59 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
-X-SES-Outgoing: 2024.08.26-54.240.7.48
+X-SES-Outgoing: 2024.08.26-54.240.7.30
 
-When the index is ORed with V4L2_FMTDESC_FLAG_ENUM_ALL the
-driver clears the flag and enumerate all the possible formats,
-ignoring any limitations from the current configuration.
-Drivers which do not support this flag yet always return an EINVAL.
+Since the V4L2_FMTDESC_FLAG_ENUM_ALL flag mostly targets stateless
+decoder pixel-format enumeration, update visl test driver to use it.
+When V4L2_FMTDESC_FLAG_ENUM_ALL flag is set let the driver returns
+one more pixel format.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
-change in version 7:
-- Rework documentation about which drivers should use the flag
+ drivers/media/test-drivers/visl/visl-video.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
- .../media/v4l/vidioc-enum-fmt.rst              | 18 +++++++++++++++++-
- .../media/videodev2.h.rst.exceptions           |  1 +
- include/uapi/linux/videodev2.h                 |  3 +++
- 3 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-index 3adb3d205531..e39c87bcbfc3 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
-@@ -85,7 +85,17 @@ the ``mbus_code`` field is handled differently:
-     * - __u32
-       - ``index``
-       - Number of the format in the enumeration, set by the application.
--	This is in no way related to the ``pixelformat`` field.
-+        This is in no way related to the ``pixelformat`` field.
-+        When the index is ORed with ``V4L2_FMTDESC_FLAG_ENUM_ALL`` the
-+        driver clears the flag and enumerates all the possible formats,
-+        ignoring any limitations from the current configuration. Drivers
-+        which do not support this flag always return an ``EINVAL``
-+        error code.
-+        Formats enumerated when using ``V4L2_FMTDESC_FLAG_ENUM_ALL`` flag
-+        shouldn't be used when calling :c:func:`VIDIOC_ENUM_FRAMESIZES`
-+        or :c:func:`VIDIOC_ENUM_FRAMEINTERVALS`.
-+        ``V4L2_FMTDESC_FLAG_ENUM_ALL`` should only be used by drivers that
-+        can return different format list depending on this flag.
-     * - __u32
-       - ``type``
-       - Type of the data stream, set by the application. Only these types
-@@ -234,6 +244,12 @@ the ``mbus_code`` field is handled differently:
- 	valid. The buffer consists of ``height`` lines, each having ``width``
- 	Data Units of data and the offset (in bytes) between the beginning of
- 	each two consecutive lines is ``bytesperline``.
-+    * - ``V4L2_FMTDESC_FLAG_ENUM_ALL``
-+      - 0x80000000
-+      - When the applications ORs ``index`` with ``V4L2_FMTDESC_FLAG_ENUM_ALL`` flag
-+        the driver enumerates all the possible pixel formats without taking care
-+        of any already set configuration. Drivers which do not support this flag,
-+        always return ``EINVAL``.
+diff --git a/drivers/media/test-drivers/visl/visl-video.c b/drivers/media/test-drivers/visl/visl-video.c
+index f8d970319764..677a8564de03 100644
+--- a/drivers/media/test-drivers/visl/visl-video.c
++++ b/drivers/media/test-drivers/visl/visl-video.c
+@@ -136,6 +136,12 @@ static const u32 visl_decoded_fmts[] = {
+ 	V4L2_PIX_FMT_YUV420,
+ };
  
- Return Value
- ============
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index bdc628e8c1d6..0a9ea9686c24 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -216,6 +216,7 @@ replace define V4L2_FMT_FLAG_CSC_YCBCR_ENC fmtdesc-flags
- replace define V4L2_FMT_FLAG_CSC_HSV_ENC fmtdesc-flags
- replace define V4L2_FMT_FLAG_CSC_QUANTIZATION fmtdesc-flags
- replace define V4L2_FMT_FLAG_META_LINE_BASED fmtdesc-flags
-+replace define V4L2_FMTDESC_FLAG_ENUM_ALL fmtdesc-flags
- 
- # V4L2 timecode types
- replace define V4L2_TC_TYPE_24FPS timecode-type
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 4e91362da6da..421a30cb0c51 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -904,6 +904,9 @@ struct v4l2_fmtdesc {
- #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
- #define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
- 
-+/*  Format description flag, to be ORed with the index */
-+#define V4L2_FMTDESC_FLAG_ENUM_ALL		0x80000000
++static const u32 visl_extended_decoded_fmts[] = {
++	V4L2_PIX_FMT_NV12,
++	V4L2_PIX_FMT_YUV420,
++	V4L2_PIX_FMT_P010,
++};
 +
- 	/* Frame Size and frame rate enumeration */
- /*
-  *	F R A M E   S I Z E   E N U M E R A T I O N
+ const struct visl_coded_format_desc visl_coded_fmts[] = {
+ 	{
+ 		.pixelformat = V4L2_PIX_FMT_FWHT_STATELESS,
+@@ -341,11 +347,21 @@ static int visl_enum_fmt_vid_cap(struct file *file, void *priv,
+ 				 struct v4l2_fmtdesc *f)
+ {
+ 	struct visl_ctx *ctx = visl_file_to_ctx(file);
++	u32 index = f->index & ~V4L2_FMTDESC_FLAG_ENUM_ALL;
++	int max_fmts = ctx->coded_format_desc->num_decoded_fmts;
++	const u32 *decoded_fmts = ctx->coded_format_desc->decoded_fmts;
++
++	if (f->index & V4L2_FMTDESC_FLAG_ENUM_ALL) {
++		max_fmts = ARRAY_SIZE(visl_extended_decoded_fmts);
++		decoded_fmts = visl_extended_decoded_fmts;
++	}
++
++	f->index = index;
+ 
+-	if (f->index >= ctx->coded_format_desc->num_decoded_fmts)
++	if (index >= max_fmts)
+ 		return -EINVAL;
+ 
+-	f->pixelformat = ctx->coded_format_desc->decoded_fmts[f->index];
++	f->pixelformat = decoded_fmts[index];
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
