@@ -1,72 +1,72 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E014690
-	for <linux-media@vger.kernel.org>; Fri, 30 Aug 2024 01:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D1754278
+	for <linux-media@vger.kernel.org>; Fri, 30 Aug 2024 03:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724982952; cv=none; b=ll1LGpqG5HBGfiONxAcyv5YuF5AcqVek0UZ3eMWjy//CaUoXw7Vz+vEeQPimSCtKOih2Fbj0OVxBcGX4p2YCkGYB8ASIYaUSXK+i2qR5jUp6A3hN4Wjnmp69gVUtytTJ5tH1wdrJSLrkKgwKZSY91MX68Z+3lCMnjVaaA+TNlMQ=
+	t=1724987643; cv=none; b=tBn/HFwPzr0bOvzTa+C/Vw0pyHncyp06Za7fEwkdJxVvXuRTA1Xi7xRKj5+FVczKdeqhPynJOmh8iKLkwc9nuUnnbiaRh72tREnPeLrPajx4ZYFtpsU51WCgaBqK2ttPmKjbDBF8NCvfTUI1TNya2Gomjlb3yySrBIrWVy409w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724982952; c=relaxed/simple;
-	bh=btURHJHgcbamrJMkXS6o5YNqsFZw4OfY2G1S2IP6JuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=i6C7lNHiZ030RPVy0EwJQsVwuhT09Qfr0DyXoR192U/LDeq+nDTHoH63vezGMaYt58mc5RcIdIGb73Z0weA5RmHrSbKx9D60L1iZEMA8IfbGw1rbpgMl+q/UZm1q53dAMnB+YwpBqTAS3Agb8FL5VZjdq277DRnFaSd3dAfd67k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	s=arc-20240116; t=1724987643; c=relaxed/simple;
+	bh=6U1v4QA1iEkOcGOrw/NJm1ePCTrLuULDDSfavjW8DkU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zj5sK7awpvqSgp6UvZPXq/ujqUsJ21FiJFAZG+05HL4Z9Pqnwnx0vMarzIE4sfvCoekaO7o2rVLEiQrepfkxRgy1OuEZ9BhOYiFf6vd3t3oe0Kw7DBSAlFjkLGSuSHwQhXn/ABp9TlcuVjj5QOABArF0niSGQzEgT5tqRJJfeD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ww1SM1zjQzyQy8;
-	Fri, 30 Aug 2024 09:55:15 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ww3Bw3PRJz2Dbbh;
+	Fri, 30 Aug 2024 11:13:44 +0800 (CST)
 Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id 66F9C140202;
-	Fri, 30 Aug 2024 09:55:47 +0800 (CST)
-Received: from [10.174.176.82] (10.174.176.82) by
- kwepemf500003.china.huawei.com (7.202.181.241) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 30 Aug 2024 09:55:46 +0800
-Message-ID: <4bc13d33-90a6-4780-9c63-a72dca3d4f15@huawei.com>
-Date: Fri, 30 Aug 2024 09:55:45 +0800
+	by mail.maildlp.com (Postfix) with ESMTPS id EF1081402C6;
+	Fri, 30 Aug 2024 11:13:57 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemf500003.china.huawei.com
+ (7.202.181.241) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 30 Aug
+ 2024 11:13:57 +0800
+From: Zhang Zekun <zhangzekun11@huawei.com>
+To: <hdegoede@redhat.com>, <mchehab@kernel.org>,
+	<sakari.ailus@linux.intel.com>, <linux-media@vger.kernel.org>,
+	<changhuang.liang@starfivetech.com>
+CC: <zhangzekun11@huawei.com>
+Subject: [PATCH v2] media: atomisp: Remove unused declartion
+Date: Fri, 30 Aug 2024 11:00:35 +0800
+Message-ID: <20240830030035.15686-1-zhangzekun11@huawei.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: atomisp: Remove unused declartions
-To: Changhuang Liang <changhuang.liang@starfivetech.com>
-CC: <hdegoede@redhat.com>, <linux-media@vger.kernel.org>,
-	<mchehab@kernel.org>, <sakari.ailus@linux.intel.com>
-References: <20240827071122.26706-1-zhangzekun11@huawei.com>
- <20240829125845.708915-1-changhuang.liang@starfivetech.com>
-From: "zhangzekun (A)" <zhangzekun11@huawei.com>
-In-Reply-To: <20240829125845.708915-1-changhuang.liang@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
  kwepemf500003.china.huawei.com (7.202.181.241)
 
-Hi, Changhuang,
+v4l2_get_acpi_sensor_info() has been removed since commit d80be6a10cd3
+("media: atomisp: Drop v4l2_get_acpi_sensor_info() function"), remain
+the declaration untouched in the header file. So, let's remove this
+unused declartion.
 
-Thanks for your review, I will send v2 to fix this.
+Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
+---
+v2: Improve commit message
 
-Best Regards,
-Zekun
+ drivers/staging/media/atomisp/include/linux/atomisp_platform.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-在 2024/8/29 20:58, Changhuang Liang 写道:
-> Hi, Zekun
-> 
->> v4l2_get_acpi_sensor_info() has been removed since commit d80be6a10cd3
->> ("media: atomisp: Drop v4l2_get_acpi_sensor_info() function"), remain
->> the declarations untouched in the header files. So, let's remove these
->> unused declartions.
->>
-> 
-> You just remove one declartion.
-> Or:
-> declartions => declartion.
-> these => this.
-> 
-> Best Regards,
-> Changhuang
-> 
+diff --git a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
+index fdeb247036b0..ca31eea41f39 100644
+--- a/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
++++ b/drivers/staging/media/atomisp/include/linux/atomisp_platform.h
+@@ -175,8 +175,6 @@ int atomisp_register_sensor_no_gmin(struct v4l2_subdev *subdev, u32 lanes,
+ 				    enum atomisp_bayer_order bayer_order);
+ void atomisp_unregister_subdev(struct v4l2_subdev *subdev);
+ 
+-int v4l2_get_acpi_sensor_info(struct device *dev, char **module_id_str);
+-
+ /* API from old platform_camera.h, new CPUID implementation */
+ #define __IS_SOC(x) (boot_cpu_data.x86_vfm == x)
+ #define __IS_SOCS(x, y) (boot_cpu_data.x86_vfm == x || boot_cpu_data.x86_vfm == y)
+-- 
+2.17.1
+
