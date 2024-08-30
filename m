@@ -1,74 +1,72 @@
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4086A1D12EE
-	for <linux-media@vger.kernel.org>; Fri, 30 Aug 2024 01:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E014690
+	for <linux-media@vger.kernel.org>; Fri, 30 Aug 2024 01:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724980185; cv=none; b=BXxtyAg4Qzcoj7GlOimq7OcNoukXu85Fjm1uu7c3GWzN92k119kn03X0JH7/TO1qYS8+V1WCI/IY324pEyEPA7DRdsPJmH2o8iNPYipH0pAUV2KNl+qR3eLCE+DiZfiNsnowH599T6ozKrZAex3Xz8fuaqoggpwp5lTRW/Q0vpM=
+	t=1724982952; cv=none; b=ll1LGpqG5HBGfiONxAcyv5YuF5AcqVek0UZ3eMWjy//CaUoXw7Vz+vEeQPimSCtKOih2Fbj0OVxBcGX4p2YCkGYB8ASIYaUSXK+i2qR5jUp6A3hN4Wjnmp69gVUtytTJ5tH1wdrJSLrkKgwKZSY91MX68Z+3lCMnjVaaA+TNlMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724980185; c=relaxed/simple;
-	bh=qqfxa+abl1Qnne9mq27G2RZsQkTwE1GaZhwOOiO51Y0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BaGy9AzIfvB/7/fEOoXv95x+RSCD/Rr/G/W9VQhUo7hBAzguX2PmFlfaDE8/xlK0s2oqHgh3GqahyeS80d+46HBrj1BvpfXETxPdpzXCy+lVL8/xRosVKSeEJiuv7cWs88GMLpshv1OMiqfCpxMjrdNtl7SCq60kFinEnsNz6mM=
+	s=arc-20240116; t=1724982952; c=relaxed/simple;
+	bh=btURHJHgcbamrJMkXS6o5YNqsFZw4OfY2G1S2IP6JuA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=i6C7lNHiZ030RPVy0EwJQsVwuhT09Qfr0DyXoR192U/LDeq+nDTHoH63vezGMaYt58mc5RcIdIGb73Z0weA5RmHrSbKx9D60L1iZEMA8IfbGw1rbpgMl+q/UZm1q53dAMnB+YwpBqTAS3Agb8FL5VZjdq277DRnFaSd3dAfd67k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ww0R76Qd5zyR6t;
-	Fri, 30 Aug 2024 09:09:07 +0800 (CST)
-Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 018C8180105;
-	Fri, 30 Aug 2024 09:09:40 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
- (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Fri, 30 Aug
- 2024 09:09:39 +0800
-From: Li Zetao <lizetao1@huawei.com>
-To: <hdegoede@redhat.com>, <mchehab@kernel.org>,
-	<sakari.ailus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-	<topofeverest8848@gmail.com>, <hverkuil-cisco@xs4all.nl>,
-	<andriy.shevchenko@linux.intel.com>
-CC: <lizetao1@huawei.com>, <linux-media@vger.kernel.org>,
-	<linux-staging@lists.linux.dev>
-Subject: [PATCH -next 1/2] media: atomisp: use clamp() in ia_css_eed1_8_encode()
-Date: Fri, 30 Aug 2024 09:17:51 +0800
-Message-ID: <20240830011752.603433-2-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240830011752.603433-1-lizetao1@huawei.com>
-References: <20240830011752.603433-1-lizetao1@huawei.com>
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ww1SM1zjQzyQy8;
+	Fri, 30 Aug 2024 09:55:15 +0800 (CST)
+Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id 66F9C140202;
+	Fri, 30 Aug 2024 09:55:47 +0800 (CST)
+Received: from [10.174.176.82] (10.174.176.82) by
+ kwepemf500003.china.huawei.com (7.202.181.241) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 30 Aug 2024 09:55:46 +0800
+Message-ID: <4bc13d33-90a6-4780-9c63-a72dca3d4f15@huawei.com>
+Date: Fri, 30 Aug 2024 09:55:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: atomisp: Remove unused declartions
+To: Changhuang Liang <changhuang.liang@starfivetech.com>
+CC: <hdegoede@redhat.com>, <linux-media@vger.kernel.org>,
+	<mchehab@kernel.org>, <sakari.ailus@linux.intel.com>
+References: <20240827071122.26706-1-zhangzekun11@huawei.com>
+ <20240829125845.708915-1-changhuang.liang@starfivetech.com>
+From: "zhangzekun (A)" <zhangzekun11@huawei.com>
+In-Reply-To: <20240829125845.708915-1-changhuang.liang@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemd500012.china.huawei.com (7.221.188.25)
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemf500003.china.huawei.com (7.202.181.241)
 
-When it needs to get a value within a certain interval, using clamp()
-makes the code easier to understand than min(max()).
+Hi, Changhuang,
 
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- .../media/atomisp/pci/isp/kernels/eed1_8/ia_css_eed1_8.host.c   | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your review, I will send v2 to fix this.
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/eed1_8/ia_css_eed1_8.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/eed1_8/ia_css_eed1_8.host.c
-index e4fc90f88e24..55d102b479ac 100644
---- a/drivers/staging/media/atomisp/pci/isp/kernels/eed1_8/ia_css_eed1_8.host.c
-+++ b/drivers/staging/media/atomisp/pci/isp/kernels/eed1_8/ia_css_eed1_8.host.c
-@@ -276,7 +276,7 @@ ia_css_eed1_8_encode(
- 	for (i = 0; i < (IA_CSS_NUMBER_OF_DEW_ENHANCE_SEGMENTS - 1); i++) {
- 		min_exp = max(min_exp, from->dew_enhance_seg_exp[i]);
- 	}
--	to->e_dew_enh_asr = 13 - min(max(min_exp, 0), 13);
-+	to->e_dew_enh_asr = 13 - clamp(min_exp, 0, 13);
- 
- 	to->dedgew_max = from->dedgew_max;
- }
--- 
-2.34.1
+Best Regards,
+Zekun
 
+在 2024/8/29 20:58, Changhuang Liang 写道:
+> Hi, Zekun
+> 
+>> v4l2_get_acpi_sensor_info() has been removed since commit d80be6a10cd3
+>> ("media: atomisp: Drop v4l2_get_acpi_sensor_info() function"), remain
+>> the declarations untouched in the header files. So, let's remove these
+>> unused declartions.
+>>
+> 
+> You just remove one declartion.
+> Or:
+> declartions => declartion.
+> these => this.
+> 
+> Best Regards,
+> Changhuang
+> 
