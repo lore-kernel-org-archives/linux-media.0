@@ -1,79 +1,143 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4FD166F0D;
-	Fri, 30 Aug 2024 20:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCD81BF7E8;
+	Fri, 30 Aug 2024 20:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725049947; cv=none; b=pCGKlDtG+oL7xXZSYJR/loIHqPIQ1FGqisYC9Xvaa8NSLcTRD+Qg2ifq6WwaSWMY6vzEGYPQnrZcjwQ0smHY2Syl8puuVDkepDB80JCnsrDGyi3mR5DwZPoIBf1t+QtAbVoJADjCFfCTxAF6ZlmbwANU1/jVIvjlyX9yYa+h4IQ=
+	t=1725050101; cv=none; b=Tf9HXFJwA4BNJkSXJMf0AHp8BD/HqwnV4YUZ4YUT67FyMB73y9DNnOyCeJ66/QjMpIRPGpcncJ7+Ub2huasy8HOswkl/7VqYXbwNw1gm9leJlUiFDiTKlJcOomfw09yPC9FAvNMXv0lb1Gem3AGszpKkWP/dh6xd3g24myS3JgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725049947; c=relaxed/simple;
-	bh=rOtkussEVvEtJaYYLqRR1742JXpbhS+YhqlnswW9ZG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MnLCtmBYr5alktwGObTsJN5aIVSWTt7fcBVRDyP/YJp/Cju1J2jigjMBc5Eqlcp94brxanaOrrA7rIotU8RrDX20Rnhm3+0ISqmtgnkUEeuGIlTydSl5Cqv2AVmc1QWFheHVLOkc1A7UoYgnOs7OAfIYU4Ff4djUHPxR1m4kgac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=l1gTFH/0; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1725050101; c=relaxed/simple;
+	bh=PP52VW+hdDG/ryUUM29mko/Q7QX9Rkb6Kg/s9fNpTRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oUlaDQkNZ0OT9h9dhVrX1DBgGRftG3ftg8QeIXV3mNywYsf2Kt68+zWnLO8DXfcyCjh2B8RUsEaV5FstlWv1kcHB8s+gxwiPKSTQq68hKx/cWNx4Hq8mkoYPCU4NNSml+mkWZzUGfvPUJ41TQ5Hytn0Y0TYB2dewlDk/D6mz1Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=sjh/0qxr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cu7hY2mj; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="l1gTFH/0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1725049943;
-	bh=rOtkussEVvEtJaYYLqRR1742JXpbhS+YhqlnswW9ZG0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l1gTFH/043LrvIs3MAkQBN3SS90BvwS3PZwIsSVvAt841aCoqoEpMc7aFPtO7AW1d
-	 EwxHd+cBGOUuHl25xHzE4Uy2jzmDNPTulvRK8mo/gCrEhiI77vuu4MwDakXCPXzY9y
-	 hCw4Tshns0hj6Xy+Tw+XkZwSlCxGK/PJH4Go/aX1Y9C0tQh6hMmNMDSIJKlvk2fi47
-	 4HnFcMCjhwwH4eQFuqP3b2giom53ZFykytaVA+7vRtkMxs9tdKSYaCEtXzdU1MYXRb
-	 IZ1dhBVg2qePGDmC4EshaD8jMQ/ARgcSmf28iNda3Jfj+Bw7j0cQ0z2rAmbuaCSeWL
-	 JWUNJaSINFxqg==
-Received: from notapiano (pool-100-2-116-133.nycmny.fios.verizon.net [100.2.116.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 34D2D17E121B;
-	Fri, 30 Aug 2024 22:32:22 +0200 (CEST)
-Date: Fri, 30 Aug 2024 16:32:20 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Moudy Ho <moudy.ho@mediatek.com>,
-	"Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] soc: mediatek: cmdq: Remove cmdq_pkt_finalize()
- helper function
-Message-ID: <7a5a4d9f-f22f-433a-87a3-7df7ae4f8cd3@notapiano>
-References: <20240810090918.7457-1-chunkuang.hu@kernel.org>
- <20240810090918.7457-6-chunkuang.hu@kernel.org>
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="sjh/0qxr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cu7hY2mj"
+Received: from phl-compute-05.internal (phl-compute-05.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id B4F7613800DC;
+	Fri, 30 Aug 2024 16:34:56 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 30 Aug 2024 16:34:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1725050096; x=1725136496; bh=6f
+	6NERc6i30T4YoOg04z8yEi1BAkErRXeOlvcKvHBbs=; b=sjh/0qxrYsjmH5Xq1R
+	InDjHgqxX6r8z0Fo1S+sq9tG/XCP4KqYpzUJG89AD5MlGTE1KTck0g8xHltf1Tgj
+	tTkw4DUJennLkzH+ez5A99Dv1ocCzk3RJuUOnojF4g3E2A7fiUxiaIoLUZ/AbmbT
+	VeOA4/zYbCBX6pMri2GgVPT986rsq0dtVYD6r0bA7WpK9d5j3Bhhl6lF8/BB75yK
+	uC19vfxPyaXGRrMyTFovEb2aSLlOaGU4nyIOptC5Xfv/WhXUhLLp6njoHt80MleA
+	mHW8WM3anzNWuiiB6n/GqZ3LJkTuG6G2DN6HGGJ2JFcnziRdP7hSnYi8K6dNJyT1
+	3QLQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1725050096; x=1725136496; bh=6f6NERc6i30T4
+	YoOg04z8yEi1BAkErRXeOlvcKvHBbs=; b=cu7hY2mjq6klilpj1kZpsaO7VxueQ
+	N5gMOeaNZ/bTHkrNKpS04+QEudkXqA37YE5z0pszqj8Yj4zST9NTV3uW6Yn5CyNX
+	C2EjZSKVL/vXlTVclj3IVWyhUlBIPwkltZm/FpTxnbFNsHO4stNt2id15T0Os4pa
+	wCosprZGTbkfS4ZrOf4qSqx3BTLaENqti2CHH/P+kv6liOlWfsVjFequSw8ma+3O
+	12HYyBBlytZZpb94gBEQIK277AFngudEofafbHQgUvH/NK+Q7wpMMXjM5Lm//ur7
+	bAxKvbpE/ok4ineOP1LvRYCvWAx8etjLChNXElEdVNMOGJ7002amqeZMg==
+X-ME-Sender: <xms:8CzSZh6nzBSNbWn0tTze0B8I3VhsLiBL30olguNjC-oyTbD3ZjbQmg>
+    <xme:8CzSZu435hR08g9RFymHOPUVOsAp5wMDTDpD7NX5p3NxVf2UbK2PJKEFoH5suQmge
+    9w7xqvL3j6UImGQPCA>
+X-ME-Received: <xmr:8CzSZof8Dac8qbn2K1L40k4hh7oD8mifu3zP2IBf-ulX18MhnHT1GLC7WrdsrCm5WlpRQKDk5Ugc82klKu2UEcN6Ug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudefiedgudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeen
+    ucfhrhhomheppfhikhhlrghsucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsohguvg
+    hrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvgeqnecuggftrfgrthht
+    vghrnhepheduleetteekgffffedufeeuvdejiedvkefhveeifeegffehledtvdevhfefte
+    egnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepnhhi
+    khhlrghsrdhsohguvghrlhhunhgusehrrghgnhgrthgvtghhrdhsvgdpnhgspghrtghpth
+    htohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmtghhvghhrggssehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehlrghurhgvnhhtrdhpihhntghhrghrthesih
+    guvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhs
+    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhosghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehkrhiihihsiihtohhfrdhkohiilhhofihskhhiodguthes
+    lhhinhgrrhhordhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehgvggvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpdhr
+    tghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:8CzSZqI7LdV0voGWs5bkznq7o9UBZIeTagcTERkHlgUuzEijNVKinQ>
+    <xmx:8CzSZlK0cRlsDt7eX0Ax6IFw7AOGxdMYFNWBEj7joFdkI96ZLybRiA>
+    <xmx:8CzSZjwP6tViALnLRVaxZjA0kOOe0o8ENydjQgs5GgAvNFp4nKogig>
+    <xmx:8CzSZhL2ReR5rJ1TMaGUQqXV1BitaRab3c1LQqmaH2Epx5pwLvkBcg>
+    <xmx:8CzSZvxoUspq2f6YLvCpTx1n9K8n-5dKdOV-pHBSnVUz3SPBXeYmBjNK>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 30 Aug 2024 16:34:55 -0400 (EDT)
+From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 0/8] media: rcar-csi2: Add support for V4M
+Date: Fri, 30 Aug 2024 22:30:56 +0200
+Message-ID: <20240830203104.3479124-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240810090918.7457-6-chunkuang.hu@kernel.org>
 
-On Sat, Aug 10, 2024 at 09:09:18AM +0000, Chun-Kuang Hu wrote:
-> In order to have fine-grained control, use cmdq_pkt_eoc() and
-> cmdq_pkt_jump_rel() to replace cmdq_pkt_finalize().
+Hello,
 
-This commit description doesn't match what you're doing. What about
+This series enables support for R-Car V4M to the CSI-2 receiver.
 
-Now that all occurrences of cmdq_pkt_finalize() have been switched to
-cmdq_pkt_eoc() and cmdq_pkt_jump_rel() for more fine-grained control, remove
-cmdq_pkt_finalize().
+Patch 1 adds the binding for the new device. This patch was posted 
+separately in v1 but have now been folded in to this series.
 
-> 
-> Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Patch 2-3 clean up some simplifications in the driver which where
+possible before V4M support but that now needs to be addressed.
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Patch 4-6 prepares for V4M support by extending some of the abstractions
+used in the driver to cover how they are implemented in the V4M version
+of the CSI-2 IP.
 
-Thanks,
-Nícolas
+Patch 7 improves the documentation around two registers used on Gen4 as
+later datasheets now document them and they will be used when enabling
+V4M support.
+
+And finally patch 8 adds V4M support. The V4M is similar in design to
+V4H with the big difference it only supports CSI-2 D-PHY. All of the
+media graph setup and V4L2 callbacks can be reused, only the start
+procedure is different.
+
+See individual patches for changelog.
+
+Niklas SÃ¶derlund (8):
+  dt-bindings: media: renesas,csi2: Add binding for V4M
+  media: rcar-csi2: Correct field size for PHTW writes
+  media: rcar-csi2: Allow writing any code and data value to PHTW
+  media: rcar-csi2: Abstract PHTW and PHYPLL register offsets
+  media: rcar-csi2: Add helper to lookup mbps settings
+  media: rcar-csi2: Move PHTW write helpers
+  media: rcar-csi2: Add documentation for PHY_EN and PHY_MODE registers
+  media: rcar-csi2: Add support for R-Car V4M
+
+ .../bindings/media/renesas,csi2.yaml          |   1 +
+ drivers/media/platform/renesas/rcar-csi2.c    | 518 ++++++++++++++----
+ 2 files changed, 419 insertions(+), 100 deletions(-)
+
+-- 
+2.46.0
+
