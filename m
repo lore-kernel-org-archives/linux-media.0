@@ -1,61 +1,61 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B361A3050;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AEB1AB6F2;
 	Mon,  2 Sep 2024 15:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725292662; cv=none; b=PmzDxrYp88jIKj8q9ZB8KjqSF2tSnH2enu9EmzIJI8T7fL9EtgbRtqpzmlVyGXqTv0pY+UtdGv0HBKPIA/1RVcTfIe8FIC5ynE3+Rb8Wbwfbtzz0G2OSew0HkdkYF4TY77e/HiC9CG6k6u+lbho8lOvR1ReTH4OCnrDPEgzaLng=
+	t=1725292663; cv=none; b=BPOyTmxiqLBVQcpGTBP6pBiLISb5AZcZ+Oocrlw0Qkk3kNkGloVwdMY6ywRpFEUKS+eHw40/FqBohOnsMOn87I3Jm+MCc3EYfFEOiS7vWDSGguqRYNxE7vGtdL0G5waCQ7KRXbdQfioBqatwRDbefh+INGPPeb4iH3AbUK+W9z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725292662; c=relaxed/simple;
-	bh=/qpG/2Z5WXZGm8WmkwLs3toa6eHEzRVbA+bjWc2mt+k=;
+	s=arc-20240116; t=1725292663; c=relaxed/simple;
+	bh=ElOxBofJFS3FqIivMvaZANT2xPW9ATldUSTSCIy5YXU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MNYjamUzflWTh7drak3/3kd4xYGQV8VBuHJzYeaJ45FwLrewj7OyX347q6UFo1D+2ui+NzHIGj7VR6tLvTsxRg4bnHMFhDzzgrYIxeHe1qq+KLk6U0ghYY5UHDruAGFuDjayFzK7Vil6rAfpwpVdwGXtrJ9HUbA30c4JO72WM/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gWcpg/8n; arc=none smtp.client-ip=209.85.167.51
+	 In-Reply-To:To:Cc; b=lVicrHd8uc1+QQRsDubQ7PujUSlWB/RzR60ClKB+JXgkoSxIcX+P53tk4c+caPC68n8U103WZkHMQ5UNUHtlAe9xE5wuh8dSVlZo5wD8Gl7lAnFltAUs6ZX81ZcY9MB5JjvJdlsXAIg8j53EIvaHXRZL6T3nSkNCIpCGGi5WEAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ikyftJkn; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gWcpg/8n"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5353cd18c20so5210808e87.0;
-        Mon, 02 Sep 2024 08:57:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ikyftJkn"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a86c476f679so515039566b.1;
+        Mon, 02 Sep 2024 08:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725292658; x=1725897458; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725292659; x=1725897459; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gySomjgMUV/LhUrr958ADeJEzee1tSZcTuNwCSieT4k=;
-        b=gWcpg/8nKNxerrb3oQsxDxAf7n0G/JTLkaENht8HtPx4WCLX3Ugb2rmvP+er/zAy30
-         DyFq7FIualLqf/DtcLjICOj5xcj8RMWJ/oIW6Fi0H8s1Sly1N76JTk7udWp4+0xiP5Er
-         fOSdO/TgLLvcsImDyLZI7lO59bxmFxyo9LjUc1pLqSXsFCR67ysm4eE020bf6wofWSVq
-         0PDD12dr5D3HR5YeTNdK3+rWKRot35K8SmwEY1qloFEE3SSUVd65/B4YyjpST0W8mDus
-         ezLJv9FYqS6gqkkAA23vxtGFmFRf93ADaHus4uOoJIUnQmW1SYzOZExLn5Lp5UD2sMPl
-         HJHg==
+        bh=UH91BWlbNf9k3CqoGaHxhWlCV3pTOvd9OXWFBubCGPg=;
+        b=ikyftJknGRxyhzWZEc65cAFncQDEJuRPJ3BMKO4AunJE20C9L/EXbkTVpn3JaI3GNN
+         iUc22x1Peeq+O4nAyOOA1LB6erz0DwtN4PiVRKiIgBX4ixnptNTmBdrhWl2m3fiOCtLJ
+         8HdUhJRg4dYUzq86dl57/e4UYzWR6Ocw/8GBzEwljK2eCkWR5ewd7ZrRtHDfyw8U+ha/
+         jMRNmXxoCmmEfBwbb4hH6L2kOxzi0WWqvkbPOnFTfUnmFs3E+nWUOv+ASotoDrrFKU4H
+         sE65/4REP5DTI5LbWC3/N/E/O0Euj2PpuGyYykLfxL6OP6cO2n1wRC1VTJdV6kooj/Zq
+         nPpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725292658; x=1725897458;
+        d=1e100.net; s=20230601; t=1725292659; x=1725897459;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gySomjgMUV/LhUrr958ADeJEzee1tSZcTuNwCSieT4k=;
-        b=LK4qpUQx7Wi3RGTzTzVgvLh2FAtVvn9VlOQSf/5ZC0kKNf3HLJOyxfjF1Vu51s2vvi
-         VtdmonHn9HCrzvdBS1PXTmctSK2nk/D6xlPTHjh3tgcsLD5XKd6sCe66CodSmkwfaoO+
-         mutcSWFub7Ib1+CfxJFvRwRSgW8bSa65lpUV6C8+hRkZA0WW5o7Ap7WI81D6SFlH6Yej
-         l9JX3Hi6q+X2+HrBCf+S+EagywFzvsYpCr+86UgSHpILdjCYy9MzPI9Igq3jlr700sm7
-         Yg5qcuDnwOrZv6+qwLkBjXykhCkcI+Cd8Sx2Rc/gRR69e3837JbeTtqnIS48P7olPaq1
-         GTig==
-X-Forwarded-Encrypted: i=1; AJvYcCUS7J32h4AMPvQACDbzzXKcUngvWI/G3FSeIzLDyJY/Tp5vOn/zASNIqJCDo1nTwmZo2EokZtQy4wJhU8M=@vger.kernel.org, AJvYcCUdHnRmi1kqqD19KvRCanRdfEwsHabOX4qDMXWewjQ0nlw/xCuSzdrYGNZXaq5am1raEP2fpIdIWSNB9N8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywst6ilVzyOCpuQWFQa2w+Ufn9R//keEfxoyDv80PyGF4PYLW2q
-	43r0AnhVgd8emUYEGxMiSLyyCR6IxgJLUIWWmWquQKQR0x4Y5sREqQEbC7QJ
-X-Google-Smtp-Source: AGHT+IECCIS7n0qtjSCOMA/WBAr1wEWl2cuJHHAZgShmBdFOgCsT+SftyNWty8H8C5g81ZcvfXGGVw==
-X-Received: by 2002:a05:6512:124b:b0:530:ba92:f9a5 with SMTP id 2adb3069b0e04-53546b905d6mr7540905e87.45.1725292657808;
-        Mon, 02 Sep 2024 08:57:37 -0700 (PDT)
+        bh=UH91BWlbNf9k3CqoGaHxhWlCV3pTOvd9OXWFBubCGPg=;
+        b=lVlTlz5SxMf8Zo4rgV5hTJs/wxhOGcfB4U5sKvdEpO3Kx5lDZCjzTM5zYfqLwxmipB
+         IXhAtEnGBKnXkRPEtKvNT2LMnenCQV4gBG41Uf1TWKUok2Q0gsjl5pnIwli5JNdhgU8F
+         t1i2edb5+yJujW1P+EazEe20GlPg6HMDJW9l253OLrVHP5EZxDgyi9TglDriTYQUsQ1g
+         zjFcAIAMddtIVYUA6SZdnekJp0tgPTlHor3duj68lmHYX/nAD4VpwF1njtA8u2jzxD2Z
+         CTRA4cbR5IBDBys4i1puAeXyJr/HToiKuoCkLfIcOf2c4a1eQwMF7MArrMt3qdJ0U3wq
+         osVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVutaQScsKZTR4+LvqP+8BMxjDLYMpz+6Lnq0kIl6GmcNzMT/1IT07eELArFIq2c0Bx763eGIynEr8h3is=@vger.kernel.org, AJvYcCWUQyx79OnghB/mn5MZgsZwQtJJccNB0ITsCrmem5eOWncvD5smD2DT7enxteFlStW4ViSU+ML1dF5QYeI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziTbNovj+YLzneuEnChQesdS0ZUyTNezmpHBKu+9qYibH698Id
+	xgJs0VqGPi7V0EL3OXsNBarJU+hRFpsqygA3k1cGnW3tdfdSnCPS
+X-Google-Smtp-Source: AGHT+IF/avJyViP33NxlB7JIvafCpQ62Qk7c3tV78whp3DOCwDoGgx03vbyld+NkellYNus7gNflYw==
+X-Received: by 2002:a17:907:7d8e:b0:a72:6849:cb0f with SMTP id a640c23a62f3a-a89b9729537mr544000366b.62.1725292659125;
+        Mon, 02 Sep 2024 08:57:39 -0700 (PDT)
 Received: from [127.0.1.1] ([2001:67c:2330:2002:af84:a410:1c4f:f793])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89891d6f87sm570951366b.158.2024.09.02.08.57.37
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89891d6f87sm570951366b.158.2024.09.02.08.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 08:57:37 -0700 (PDT)
+        Mon, 02 Sep 2024 08:57:38 -0700 (PDT)
 From: bbara93@gmail.com
-Date: Mon, 02 Sep 2024 17:57:29 +0200
-Subject: [PATCH v3 4/7] media: i2c: imx290: Introduce initial "off" mode &
- link freq
+Date: Mon, 02 Sep 2024 17:57:31 +0200
+Subject: [PATCH v3 6/7] media: i2c: imx290: Check for availability in
+ probe()
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240902-imx290-avail-v3-4-b32a12799fed@skidata.com>
+Message-Id: <20240902-imx290-avail-v3-6-b32a12799fed@skidata.com>
 References: <20240902-imx290-avail-v3-0-b32a12799fed@skidata.com>
 In-Reply-To: <20240902-imx290-avail-v3-0-b32a12799fed@skidata.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -79,97 +79,53 @@ X-Mailer: b4 0.14.1
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-To be compliant to the V4L2 API, the driver currently "randomly" decides
-on one of the two supported modes which also implies a link frequency.
+Currently, the V4L2 subdevice is also created when the device is not
+available/connected. From userspace perspective, there is no visible
+difference between a working and not-working subdevice (except when
+trying it out).
 
-Add a new mode and frequency which symbolize that the sensor is not in
-use. This can be used as a default value during probe() and enables us
-to avoid communication with the sensor.
+This commit adds a simple availability check before starting with the
+subdev initialization to error out instead.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
 Changes since v2:
-- new
+- the new 1/8 is split out
+- use dev_err_probe() (thx Laurent)
 ---
- drivers/media/i2c/imx290.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ drivers/media/i2c/imx290.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 6812e7cb9e23..ece4d66001f5 100644
+index 9610e9fd2059..6b292bbb0856 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -425,14 +425,17 @@ static const struct imx290_csi_cfg imx290_csi_297mhz = {
- /* supported link frequencies */
- #define FREQ_INDEX_1080P	0
- #define FREQ_INDEX_720P		1
-+#define FREQ_INDEX_OFF		2
- static const s64 imx290_link_freq_2lanes[] = {
- 	[FREQ_INDEX_1080P] = 445500000,
- 	[FREQ_INDEX_720P] = 297000000,
-+	[FREQ_INDEX_OFF] = 0,
- };
- 
- static const s64 imx290_link_freq_4lanes[] = {
- 	[FREQ_INDEX_1080P] = 222750000,
- 	[FREQ_INDEX_720P] = 148500000,
-+	[FREQ_INDEX_OFF] = 0,
- };
- 
- /*
-@@ -552,6 +555,10 @@ static const struct imx290_mode imx290_modes_4lanes[] = {
- 	},
- };
- 
-+static const struct imx290_mode imx290_mode_off = {
-+	.link_freq_index = FREQ_INDEX_OFF,
-+};
-+
- static inline const struct imx290_mode *imx290_modes_ptr(const struct imx290 *imx290)
+@@ -1571,6 +1571,7 @@ static int imx290_probe(struct i2c_client *client)
  {
- 	if (imx290->nlanes == 2)
-@@ -876,10 +883,19 @@ static unsigned int imx290_get_blank_min(const struct imx290 *imx290, bool v)
- static void imx290_ctrl_update(struct imx290 *imx290,
- 			       const struct imx290_mode *mode)
- {
--	unsigned int hblank_min = mode->hmax_min - mode->width;
--	unsigned int hblank_max = IMX290_HMAX_MAX - mode->width;
--	unsigned int vblank_min = mode->vmax_min - mode->height;
--	unsigned int vblank_max = IMX290_VMAX_MAX - mode->height;
-+	unsigned int hblank_min, hblank_max, vblank_min, vblank_max;
-+
-+	if (mode == &imx290_mode_off) {
-+		hblank_min = imx290_get_blank_min(imx290, false);
-+		hblank_max = HBLANK_MAX;
-+		vblank_min = imx290_get_blank_min(imx290, true);
-+		vblank_max = VBLANK_MAX;
-+	} else {
-+		hblank_min = mode->hmax_min - mode->width;
-+		hblank_max = IMX290_HMAX_MAX - mode->width;
-+		vblank_min = mode->vmax_min - mode->height;
-+		vblank_max = IMX290_VMAX_MAX - mode->height;
-+	}
- 
- 	__v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
- 
-@@ -932,7 +948,8 @@ static int imx290_ctrl_init(struct imx290 *imx290)
- 	imx290->link_freq =
- 		v4l2_ctrl_new_int_menu(&imx290->ctrls, &imx290_ctrl_ops,
- 				       V4L2_CID_LINK_FREQ,
--				       imx290_link_freqs_num(imx290) - 1, 0,
-+				       imx290_link_freqs_num(imx290) - 1,
-+				       FREQ_INDEX_OFF,
- 				       imx290_link_freqs_ptr(imx290));
- 	if (imx290->link_freq)
- 		imx290->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-@@ -1278,7 +1295,7 @@ static int imx290_subdev_init(struct imx290 *imx290)
- 	struct v4l2_subdev_state *state;
+ 	struct device *dev = &client->dev;
+ 	struct imx290 *imx290;
++	u64 val;
  	int ret;
  
--	imx290->current_mode = &imx290_modes_ptr(imx290)[0];
-+	imx290->current_mode = &imx290_mode_off;
+ 	imx290 = devm_kzalloc(dev, sizeof(*imx290), GFP_KERNEL);
+@@ -1631,6 +1632,17 @@ static int imx290_probe(struct i2c_client *client)
+ 	pm_runtime_set_autosuspend_delay(dev, 1000);
+ 	pm_runtime_use_autosuspend(dev);
  
- 	v4l2_i2c_subdev_init(&imx290->sd, client, &imx290_subdev_ops);
- 	imx290->sd.internal_ops = &imx290_internal_ops;
++	/* Make sure the sensor is available before V4L2 subdev init. */
++	ret = cci_read(imx290->regmap, IMX290_STANDBY, &val, NULL);
++	if (ret) {
++		ret = dev_err_probe(dev, -ENODEV, "Failed to detect sensor\n");
++		goto err_pm;
++	}
++	if (val != IMX290_STANDBY_STANDBY) {
++		ret = dev_err_probe(dev, -ENODEV, "Sensor is not in standby\n");
++		goto err_pm;
++	}
++
+ 	/* Initialize the V4L2 subdev. */
+ 	ret = imx290_subdev_init(imx290);
+ 	if (ret)
 
 -- 
 2.46.0
