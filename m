@@ -1,49 +1,36 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF0920FA94;
-	Mon,  2 Sep 2024 13:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3AF1DAC47
+	for <linux-media@vger.kernel.org>; Mon,  2 Sep 2024 13:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725282006; cv=none; b=i8EM0yvxpVpw5VW5vSi+xx1ekRWanDk+RdTMtkwWbSgPDKzCf6ZxXKQ26RFaERAO+hM28PCX42oPca0LW9pgBxHlVphLz4VLOuc5jxv+2Sovy6el1C7ri1UQJW+/JcLthb1DogKOCYzR+c1RP++iMFbTEXovHFsSWeyJT40846o=
+	t=1725282451; cv=none; b=XMtY3WcaIqtDhndHPNXARN2GQFsfAHN1Pv0PnixL2rlwS022QlqoCB+MmrPayVS8KnsDD7d0FQvR87iZH7B599giyrNnZeQjLsdZGTxxOaBR99oiIwS9cTGfU1kADjXVIUALHNtLvHt8u8z6a40FV42mDJrFOgjKI2f4W5p5Hd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725282006; c=relaxed/simple;
-	bh=ef8LxGrRpjdmL/uT5tW7ISEWjInkoyUm4FYUw3dm4Yg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u8Gk0VRm5LtRiAKSaAdfRoJvXAZvyDoRkuvLiQYnygUqr84y19voUFcJ2KZ6VAyN+EcoKc7v8cF5nmDywm+XbrwLN7zZPbPSl2gv6d2WVpZ1L/ky34tA0ojgqzdfKh6HFLn/IczAx08QRsF5V+B5o6ILruo6WiccGHpcnImSv/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wy83g48zwz4f3m6g;
-	Mon,  2 Sep 2024 20:59:43 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 536A31A154C;
-	Mon,  2 Sep 2024 20:59:59 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.85.165.202])
-	by APP4 (Coremail) with SMTP id gCh0CgD3KsfEttVmOJPAAA--.25304S11;
-	Mon, 02 Sep 2024 20:59:59 +0800 (CST)
-From: Yang Yingliang <yangyingliang@huaweicloud.com>
-To: broonie@kernel.org,
-	mchehab@kernel.org,
-	Jonathan.Cameron@huawei.com,
-	rmfrfs@gmail.com,
-	vireshk@kernel.org,
-	gregkh@linuxfoundation.org,
-	deller@gmx.de,
-	corbet@lwn.net,
-	yangyingliang@huawei.com,
-	liwei391@huawei.com
-Cc: linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH -next 7/7] spi: remove {devm_}spi_alloc_master/slave()
-Date: Mon,  2 Sep 2024 20:59:47 +0800
-Message-ID: <20240902125947.1368-8-yangyingliang@huaweicloud.com>
-X-Mailer: git-send-email 2.46.0.windows.1
-In-Reply-To: <20240902125947.1368-1-yangyingliang@huaweicloud.com>
-References: <20240902125947.1368-1-yangyingliang@huaweicloud.com>
+	s=arc-20240116; t=1725282451; c=relaxed/simple;
+	bh=E9h47cMNOxWfFO6UXtJRyi4VqPhkdcZD7OFRa/PFIk0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BmLhTCpdCBCKlXhj5MfUDDXwDpkKEPXrAEM3Hiy68ErGkg1aYXUxojiRtZwkHKDnjWlVJjvXbPnaL+BFZmCZG1wPIPdzdOpuz/uGI88GjMdax3zKbVgzHJLV3ysDNojHZCC0EgCNgFAK8EUoCq7El41pP1teB97ys3Z5vNscbKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Wy8DD6KwYz2DbhF;
+	Mon,  2 Sep 2024 21:07:08 +0800 (CST)
+Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id C46561400D4;
+	Mon,  2 Sep 2024 21:07:26 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
+ (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 2 Sep
+ 2024 21:07:26 +0800
+From: Hongbo Li <lihongbo22@huawei.com>
+To: <sakari.ailus@linux.intel.com>, <bingbu.cao@intel.com>,
+	<tian.shu.qiu@intel.com>, <mchehab@kernel.org>
+CC: <linux-media@vger.kernel.org>, <lihongbo22@huawe.com>
+Subject: [PATCH -next] media: intel/ipu6: make use of dev_err_cast_probe()
+Date: Mon, 2 Sep 2024 21:15:53 +0800
+Message-ID: <20240902131553.3088122-1-lihongbo22@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,144 +38,72 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3KsfEttVmOJPAAA--.25304S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4ktFW5Jr43tr43Kr1Dtrb_yoWrAw17pF
-	4rWFsxAFWktF45uF4Utw4kuFy3Jas7WFW0kwsrG34Fvr1Sgr95XryDCryrXFy5tFWjyFyj
-	yrs093y8ua12yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r
-	43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUF9NVUUUUU
-X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+Using dev_err_cast_probe() to simplify the code.
+No functional changes.
 
-All the {devm_}spi_alloc_master/slave() have been replaced,
-so they can be removed and replaced in doc and comment.
-
-No functional changed.
-
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
 ---
- .../driver-api/driver-model/devres.rst        |  4 +--
- drivers/spi/spi.c                             | 14 ++++-----
- include/linux/spi/spi.h                       | 30 -------------------
- 3 files changed, 9 insertions(+), 39 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index 5f2ee8d717b1..ebbf8e4cc85f 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -462,8 +462,8 @@ SLAVE DMA ENGINE
-   devm_acpi_dma_controller_free()
+diff --git a/drivers/media/pci/intel/ipu6/ipu6.c b/drivers/media/pci/intel/ipu6/ipu6.c
+index bbd646378ab3..d10cbdd088ab 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6.c
++++ b/drivers/media/pci/intel/ipu6/ipu6.c
+@@ -390,20 +390,18 @@ ipu6_isys_init(struct pci_dev *pdev, struct device *parent,
+ 	isys_adev = ipu6_bus_initialize_device(pdev, parent, pdata, ctrl,
+ 					       IPU6_ISYS_NAME);
+ 	if (IS_ERR(isys_adev)) {
+-		dev_err_probe(dev, PTR_ERR(isys_adev),
+-			      "ipu6_bus_initialize_device isys failed\n");
+ 		kfree(pdata);
+-		return ERR_CAST(isys_adev);
++		return dev_err_cast_probe(dev, isys_adev,
++				"ipu6_bus_initialize_device isys failed\n");
+ 	}
  
- SPI
--  devm_spi_alloc_master()
--  devm_spi_alloc_slave()
-+  devm_spi_alloc_host()
-+  devm_spi_alloc_target()
-   devm_spi_optimize_message()
-   devm_spi_register_controller()
-   devm_spi_register_host()
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 60a2b5a0c85d..2000bce240a6 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3249,9 +3249,9 @@ static int spi_controller_id_alloc(struct spi_controller *ctlr, int start, int e
- }
+ 	isys_adev->mmu = ipu6_mmu_init(dev, base, ISYS_MMID,
+ 				       &ipdata->hw_variant);
+ 	if (IS_ERR(isys_adev->mmu)) {
+-		dev_err_probe(dev, PTR_ERR(isys_adev->mmu),
+-			      "ipu6_mmu_init(isys_adev->mmu) failed\n");
+ 		put_device(&isys_adev->auxdev.dev);
+ 		kfree(pdata);
+-		return ERR_CAST(isys_adev->mmu);
++		return dev_err_cast_probe(dev, isys_adev->mmu,
++				"ipu6_mmu_init(isys_adev->mmu) failed\n");
+ 	}
  
- /**
-- * spi_register_controller - register SPI master or slave controller
-- * @ctlr: initialized master, originally from spi_alloc_master() or
-- *	spi_alloc_slave()
-+ * spi_register_controller - register SPI host or target controller
-+ * @ctlr: initialized controller, originally from spi_alloc_host() or
-+ *	spi_alloc_target()
-  * Context: can sleep
-  *
-  * SPI controllers connect to their drivers using some non-SPI bus,
-@@ -3401,11 +3401,11 @@ static void devm_spi_unregister(struct device *dev, void *res)
- }
+ 	isys_adev->mmu->dev = &isys_adev->auxdev.dev;
+@@ -436,20 +434,18 @@ ipu6_psys_init(struct pci_dev *pdev, struct device *parent,
+ 	psys_adev = ipu6_bus_initialize_device(pdev, parent, pdata, ctrl,
+ 					       IPU6_PSYS_NAME);
+ 	if (IS_ERR(psys_adev)) {
+-		dev_err_probe(&pdev->dev, PTR_ERR(psys_adev),
+-			      "ipu6_bus_initialize_device psys failed\n");
+ 		kfree(pdata);
+-		return ERR_CAST(psys_adev);
++		return dev_err_cast_probe(&pdev->dev, psys_adev,
++				"ipu6_bus_initialize_device psys failed\n");
+ 	}
  
- /**
-- * devm_spi_register_controller - register managed SPI master or slave
-+ * devm_spi_register_controller - register managed SPI host or target
-  *	controller
-  * @dev:    device managing SPI controller
-- * @ctlr: initialized controller, originally from spi_alloc_master() or
-- *	spi_alloc_slave()
-+ * @ctlr: initialized controller, originally from spi_alloc_host() or
-+ *	spi_alloc_target()
-  * Context: can sleep
-  *
-  * Register a SPI device as with spi_register_controller() which will
-@@ -3489,7 +3489,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 	psys_adev->mmu = ipu6_mmu_init(&pdev->dev, base, PSYS_MMID,
+ 				       &ipdata->hw_variant);
+ 	if (IS_ERR(psys_adev->mmu)) {
+-		dev_err_probe(&pdev->dev, PTR_ERR(psys_adev->mmu),
+-			      "ipu6_mmu_init(psys_adev->mmu) failed\n");
+ 		put_device(&psys_adev->auxdev.dev);
+ 		kfree(pdata);
+-		return ERR_CAST(psys_adev->mmu);
++		return dev_err_cast_probe(&pdev->dev, psys_adev->mmu,
++				"ipu6_mmu_init(psys_adev->mmu) failed\n");
+ 	}
  
- 	/*
- 	 * Release the last reference on the controller if its driver
--	 * has not yet been converted to devm_spi_alloc_master/slave().
-+	 * has not yet been converted to devm_spi_alloc_host/target().
- 	 */
- 	if (!ctlr->devm_allocated)
- 		put_device(&ctlr->dev);
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index d47d5f14ff99..a9a6af11c974 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -833,21 +833,6 @@ void spi_take_timestamp_post(struct spi_controller *ctlr,
- extern struct spi_controller *__spi_alloc_controller(struct device *host,
- 						unsigned int size, bool slave);
- 
--static inline struct spi_controller *spi_alloc_master(struct device *host,
--						      unsigned int size)
--{
--	return __spi_alloc_controller(host, size, false);
--}
--
--static inline struct spi_controller *spi_alloc_slave(struct device *host,
--						     unsigned int size)
--{
--	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
--		return NULL;
--
--	return __spi_alloc_controller(host, size, true);
--}
--
- static inline struct spi_controller *spi_alloc_host(struct device *dev,
- 						    unsigned int size)
- {
-@@ -867,21 +852,6 @@ struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
- 						   unsigned int size,
- 						   bool slave);
- 
--static inline struct spi_controller *devm_spi_alloc_master(struct device *dev,
--							   unsigned int size)
--{
--	return __devm_spi_alloc_controller(dev, size, false);
--}
--
--static inline struct spi_controller *devm_spi_alloc_slave(struct device *dev,
--							  unsigned int size)
--{
--	if (!IS_ENABLED(CONFIG_SPI_SLAVE))
--		return NULL;
--
--	return __devm_spi_alloc_controller(dev, size, true);
--}
--
- static inline struct spi_controller *devm_spi_alloc_host(struct device *dev,
- 							 unsigned int size)
- {
+ 	psys_adev->mmu->dev = &psys_adev->auxdev.dev;
 -- 
-2.33.0
+2.34.1
 
