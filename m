@@ -1,139 +1,125 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36DA20012E;
-	Mon,  2 Sep 2024 13:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6DF19E98B
+	for <linux-media@vger.kernel.org>; Mon,  2 Sep 2024 14:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725282693; cv=none; b=eGuHXD8qUNk3Gkye2y6sunDXwMiqgQ+bZsGi6Q4Y4j8DCxbBaEudgiYgzaZmAxfGLr0OLNhzbTr4EQmNrVudMyZeS0i/JQ0UCQ+x3nDGuhjZ9euHKA0C3jrFdWnYc4EZUH3rqn3WACQRFnSrlFs1gPGQnc7W9rY8nSB133/p22Q=
+	t=1725285627; cv=none; b=QTdWwSuj/VRyaZcHuunpi2JHXsbSXgHHB7zYoF/LYAFSFEc1ftVWHMd/OdLB6ARAbrYC9R3rouSEusZ2+qjgQijICQp5UG0GkOLFZy64gOKygaaJXV/pxcnUQ6ZxvCK+GWm+SH1rK/2P21PrIrc0YiSbq4XP9oARFIOR+Un5HDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725282693; c=relaxed/simple;
-	bh=zqOWTXiJ+gcUGV9KX3FtFoCyGk5Gbwro6DOZyH48KXs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=porN7ItMbVhV/c6g4foZRjIo3V9LtkZQXpI8TNR9HJ/4SIeCZ9RJXlIAuJjsjHpEpWAtcpVdQ4ZiDeddtmUaqmjVoe/iQbzhXklVDvUU9S1I5PrW80tj5J1dzZ+re8hPiL4It2W1HJdC+V08UCQkE8u+ozhip9MS4iIgMSI7oQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c/HqMLZW; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1725285627; c=relaxed/simple;
+	bh=UetKe0nW+Txu4MN/1f6+u0xL82nlJDtRxYbQh6Cxml8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AxQdriSVwzlofQXWSJyvU9YQgTYcNqq0HWiMntdehBy9Oeo2vOEk8cLedjJhE7eukcCU0wBzfjBE35gNFXonQ0r1jwyANvcrzWW+t0fZC8ll1oKZn9g4v6+e7zsy26dZo33j4ZVCcgiBR4rbCbXJ6AAaRsk1CWwf3HjbUjMc66o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=VWiHNOFm; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c/HqMLZW"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 482B3r5H017590;
-	Mon, 2 Sep 2024 13:11:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	j9WHxuQnRTLsE497EiOLxYEbwyyvR08h94gaijqV738=; b=c/HqMLZWbu/cMntB
-	JjvOf+7lwvK77GDxiIqFonwSV+13T0McFT/GBz6fT2dDULxKGbbUwVHeUOKrQ/te
-	70lysSK7bVYR779VNl4Ui7TfisK2Y9IumVqxh2FbWB4KkEkGww9Uf1Isl03bBqye
-	4tsyPfIFLP9RWY6ztzq0IN0qEj0kUyaoznHo5CtPVDFCMhhU03pJADUtFpVQd9zV
-	udxkgSRzu83w6VaMChTp6y7jG1B7BOy6/0QgyfWjZYzktC5k1CzaaiERHMjSATZ8
-	DgTDihcd9tFPfMiZzlakDmwWnxTo8ntzwcnn24NevitssfQxJ5m1HgkX4mlN/fY4
-	9j+F2g==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41btggvued-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Sep 2024 13:11:26 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 482DBO7I013825
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 2 Sep 2024 13:11:24 GMT
-Received: from [10.239.97.152] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 2 Sep 2024
- 06:11:18 -0700
-Message-ID: <14e297e3-6d70-4270-9477-6bb094ccc621@quicinc.com>
-Date: Mon, 2 Sep 2024 21:11:16 +0800
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="VWiHNOFm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1725285623; x=1725890423; i=ps.report@gmx.net;
+	bh=UetKe0nW+Txu4MN/1f6+u0xL82nlJDtRxYbQh6Cxml8=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=VWiHNOFm5agQht+4q2CoqA0X33GJfnz7YMJadXpYV2FbfYc25rcLHOMqbNsKlyrL
+	 rIjkUjIKi8eSuOMnGzp/Z2pmlgmdmzgqtzxiOkj0FgJnDvQJfLG9h3xD/w682AHSL
+	 ABFNv/NMfDwCCd9vjeEakEjlPd7jSJjEPmzzZMxwSudrLYSRbxtEXlWImpJqp8ybr
+	 WvKjToPSqRCF3+E0gwTs9mm9s6yrqIbYB+mWfCizNRxZ5dr/ZB0X5b0f2hotEiDtk
+	 RruSfsd87yVJPzU3PrUCudkg4pgCdffKqf7torJ8vXywSMbQKMpmy6zUO60tGfs3h
+	 6nbvod6sptcbbRgUQw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.185]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MxDp4-1rrwa63UEK-014Q2Z; Mon, 02
+ Sep 2024 16:00:22 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+To: linux-media@vger.kernel.org
+Cc: Peter Seiderer <ps.report@gmx.net>
+Subject: [PATCH v4l-utils v1] libv4lconvert: fix jpeg-v9x/gcc-14.x compile (jpeg_mem_dest argument mismatch)
+Date: Mon,  2 Sep 2024 15:59:53 +0200
+Message-ID: <20240902135953.1856308-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/13] media: qcom: camss: vfe: Move common code into vfe
- core
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>, <rfoss@kernel.org>,
-        <todor.too@gmail.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@quicinc.com>
-References: <20240812144131.369378-1-quic_depengs@quicinc.com>
- <20240812144131.369378-10-quic_depengs@quicinc.com>
- <0611458d-b508-4e52-bafe-7f5612c63b72@linaro.org>
- <b1e1ff88-5bba-4424-bc85-38caa85b831f@linaro.org>
-Content-Language: en-US
-From: Depeng Shao <quic_depengs@quicinc.com>
-In-Reply-To: <b1e1ff88-5bba-4424-bc85-38caa85b831f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zr1bfym8Z3fimDUFDuH1oWKTGuzrw-CC
-X-Proofpoint-ORIG-GUID: zr1bfym8Z3fimDUFDuH1oWKTGuzrw-CC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-02_03,2024-09-02_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 adultscore=0 mlxscore=0 priorityscore=1501
- clxscore=1011 impostorscore=0 suspectscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2409020104
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:YnMWju/A92+4mQDNfXziPJbmDM3GGcBK6ds0PiZgKTyYGHenIMd
+ G9eSbesRQulmCCin00JltILSbVIeSh2n+Y/L/eBl0fUHLVbdRxdpJL3b0aOrKDP4rkQStvf
+ h4+UMzXmQDbeBElKl4vfNAfyEqb5odRndcS5iUk+dSXo/ThOCCYKAX7t7DM7scgZ5iNttFD
+ ZILpSImVm+TkhqWIABhyQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:T/dDKSUB54A=;jMsCuZ1oBRwZbcjZkPkLcigmRZc
+ lIHdyjTnwJdj0d81U562fhs1PkNxcHgin4pYjHB3yGnegaOjhIJnuQeWQ7nxgpFzJB9W1uBht
+ XhL0ptT/dtn/oItYUwgpSrp8tc2JgfSsLPXLuOzCM6kwXy3QMOwmCnX3truWtxe3OBLDLXeQT
+ 7ydLQICpCkTRZL9G5w9kzf6D8rHXhPFeO03eiDQ5c0v7Hl8ZV4GgZ9uc/Q92VcrZrspymGOXb
+ Ty66BOBhYs3GcZ3WyGYKkoMz8tKN9cA/+K9LFzo0TaAlKaaID6xKq6D9+86BPcqWFsUQkHwHI
+ 1GXcnVFOlIYoJz6F2QbZUHfTtuQB2CasKSOjm9f0eWzedgaPtBUHpD2l7/D252qm5yd76gWNZ
+ lPyvTrseDF/wIqxMtCwV8lbggFX4bpll+sx0WJ9cbdZ7OW2CIawtHkKQtEnc9UU5ASc9dEwtg
+ 5tAhAXMxA/h3gcGAFH8MMG4cR8JPAa9PL32I+K0GJA145jTg+WU+dWcpzdzX3WaUQmKJvlUEB
+ +rBRt8Df0Twl0i3T+VuU893JfW8hJJewIJJSefBgWXy2mRPtlHWU5anFbcEHkEdGsCpvmyqr7
+ Cu/W1xkJuwYIqm0ydp3IQlUvMwoZ4ycvMSAxqlC5STCt7H4ff8Mh56WLZiUCQHT5Jqr9w+RHL
+ FcDb88ZBBdJY+JmGLJ8lZ/EAxBUFru20JhCf3r0xKDzblfwVEh3ivnUcOvj9zXM7ixt+w7K7Y
+ jH5uKqSEiDcDiDfc6MEL7CPGViBC93Ubtoe2loslONdaAnpEzzqklnM0rAzTI3TKH3DoU9ZmO
+ rgqw9pRZ0u4HRG2XRHQmzJgQ==
 
-Hi Vladimir,
-
-
-On 8/24/2024 9:06 PM, Vladimir Zapolskiy wrote:
-
->>> +
->>> +/*
->>> + * vfe_enable_v2 - Enable streaming on VFE line
->>> + * @line: VFE line
->>> + *
->>> + * Return 0 on success or a negative error code otherwise
->>> + */
->>> +int vfe_enable_v2(struct vfe_line *line)
->>> +{
->>> +    struct vfe_device *vfe = to_vfe(line);
->>> +    int ret;
->>> +
->>> +    mutex_lock(&vfe->stream_lock);
->>> +
->>> +    if (vfe->res->hw_ops->enable_irq)
->>> +        vfe->res->hw_ops->enable_irq(vfe);
->>
->> Right so generally speaking I don't believe we should have any null
->> function pointers.
->>
->> We just mandate that to be comitted, an impelmentation must provide a
->> dummy but, in this case when do we ever want a dummy function anyway
->> surely enable_irq() is a fundamental operation that is core to the logic.
-> 
-> Why? What could be a justification here?
-> 
-> The image capturing media pipeline for all recent Qualcomm SoCs, including
-> this one in the series for SM8550, can be set up and enabled without
-> touching VFE interrupts at all.
-> 
-> It might be extremely confusing to see in the code that some not ever
-> requested interrupts are enabled/disabled, and then to discover that just
-> some stubs around VFE interrupts are added. And it's the case especially
-> in this new vfe_enable_v2() function, which I believe is intended for
-> CAMSS support on new platforms.
-> 
-> What's worse, since these VFE interrupts are not needed on the modern
-> platforms, it will require to add a proposed dummy "return 0" function
-> into any CAMSS support for new platforms forever. I believe it'd be better
-> to clearly say that it's a legacy to have an obligatory support of VFE
-> interrupts.
-> 
-
-Sure, I will add a proposed dummy "return 0" function for these interfaces.
-
-Thanks,
-Depeng
-
+LSBmaXgganBlZ19tZW1fZGVzdCBwb2ludGVyIGFydW1lbnQgbWlzbWF0Y2ggKGxvbmcgdW5zaWdu
+ZWQgaW50IHZzLiBzaXplX3QpCiAgd2l0aCBqcGVnLXY5eC9nY2MtMTQueCAzMi1iaXQgYXJtIGNv
+bXBpbGUKCkZpeGVzOgoKICAuLi9saWIvbGlidjRsY29udmVydC9qbDIwMDViY2QuYzogSW4gZnVu
+Y3Rpb24g4oCYdjRsY29udmVydF9kZWNvZGVfamwyMDA1YmNk4oCZOgogIC4uL2xpYi9saWJ2NGxj
+b252ZXJ0L2psMjAwNWJjZC5jOjk0OjQ2OiBlcnJvcjogcGFzc2luZyBhcmd1bWVudCAzIG9mIOKA
+mGpwZWdfbWVtX2Rlc3TigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlIFstV2luY29t
+cGF0aWJsZS1wb2ludGVyLXR5cGVzXQogICAgIDk0IHwgICAgICAgICBqcGVnX21lbV9kZXN0ICgm
+Y2luZm8sICZqcGVnX2hlYWRlciwgJmpwZWdfaGVhZGVyX3NpemUpOwogICAgICAgIHwgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn4K
+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwK
+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxv
+bmcgdW5zaWduZWQgaW50ICoKICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vbGliL2xpYnY0bGNv
+bnZlcnQvbGlidjRsY29udmVydC1wcml2Lmg6MjYsCiAgICAgICAgICAgICAgICAgICBmcm9tIC4u
+L2xpYi9saWJ2NGxjb252ZXJ0L2psMjAwNWJjZC5jOjMwOgogIC4uLi9ob3N0L2FybS1idWlsZHJv
+b3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2luY2x1ZGUvanBlZ2xpYi5oOjk3OToyODog
+bm90ZTogZXhwZWN0ZWQg4oCYc2l6ZV90ICrigJkge2FrYSDigJh1bnNpZ25lZCBpbnQgKuKAmX0g
+YnV0IGFyZ3VtZW50IGlzIG9mIHR5cGUg4oCYbG9uZyB1bnNpZ25lZCBpbnQgKuKAmQogICAgOTc5
+IHwgRVhURVJOKHZvaWQpIGpwZWdfbWVtX2Rlc3QgSlBQKChqX2NvbXByZXNzX3B0ciBjaW5mbywK
+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fgoKICAuLi9saWIvbGlidjRs
+Y29udmVydC9qcGVnLmM6IEluIGZ1bmN0aW9uIOKAmGluaXRfbGlianBlZ19jaW5mb+KAmToKICAu
+Li9saWIvbGlidjRsY29udmVydC9qcGVnLmM6MTU3OjQ1OiBlcnJvcjogcGFzc2luZyBhcmd1bWVu
+dCAzIG9mIOKAmGpwZWdfbWVtX2Rlc3TigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBl
+IFstV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQogICAgMTU3IHwgICAgICAgICBqcGVnX21l
+bV9kZXN0KCZjaW5mbywgJmpwZWdfaGVhZGVyLCAmanBlZ19oZWFkZXJfc2l6ZSk7CiAgICAgICAg
+fCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
+fn5+fn5+CiAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwKICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgbG9uZyB1bnNpZ25lZCBpbnQgKgogIEluIGZpbGUgaW5jbHVkZWQgZnJvbSAuLi9saWIvbGli
+djRsY29udmVydC9saWJ2NGxjb252ZXJ0LXByaXYuaDoyNiwKICAgICAgICAgICAgICAgICAgIGZy
+b20gLi4vbGliL2xpYnY0bGNvbnZlcnQvanBlZy5jOjIxOgogIC4uLi9ob3N0L2FybS1idWlsZHJv
+b3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2luY2x1ZGUvanBlZ2xpYi5oOjk3OToyODog
+bm90ZTogZXhwZWN0ZWQg4oCYc2l6ZV90ICrigJkge2FrYSDigJh1bnNpZ25lZCBpbnQgKuKAmX0g
+YnV0IGFyZ3VtZW50IGlzIG9mIHR5cGUg4oCYbG9uZyB1bnNpZ25lZCBpbnQgKuKAmQogICAgOTc5
+IHwgRVhURVJOKHZvaWQpIGpwZWdfbWVtX2Rlc3QgSlBQKChqX2NvbXByZXNzX3B0ciBjaW5mbywK
+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fgoKU2lnbmVkLW9mZi1ieTog
+UGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PgotLS0KIGxpYi9saWJ2NGxjb252ZXJ0
+L2psMjAwNWJjZC5jIHwgNCArKysrCiBsaWIvbGlidjRsY29udmVydC9qcGVnLmMgICAgICB8IDQg
+KysrKwogMiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9saWIv
+bGlidjRsY29udmVydC9qbDIwMDViY2QuYyBiL2xpYi9saWJ2NGxjb252ZXJ0L2psMjAwNWJjZC5j
+CmluZGV4IDcwN2MzMjA1Li4xNGIwNDBmMyAxMDA2NDQKLS0tIGEvbGliL2xpYnY0bGNvbnZlcnQv
+amwyMDA1YmNkLmMKKysrIGIvbGliL2xpYnY0bGNvbnZlcnQvamwyMDA1YmNkLmMKQEAgLTYzLDcg
+KzYzLDExIEBAIGludCB2NGxjb252ZXJ0X2RlY29kZV9qbDIwMDViY2Qoc3RydWN0IHY0bGNvbnZl
+cnRfZGF0YSAqZGF0YSwKIAlzdHJ1Y3QganBlZ19kZWNvbXByZXNzX3N0cnVjdCBkaW5mbzsKIAlz
+dHJ1Y3QganBlZ19lcnJvcl9tZ3IgamNlcnIsIGpkZXJyOwogCUpPQ1RFVCAqanBlZ19oZWFkZXIg
+PSBOVUxMOworI2lmIEpQRUdfTElCX1ZFUlNJT04gPj0gOTAKKwlzaXplX3QganBlZ19oZWFkZXJf
+c2l6ZSA9IDA7CisjZWxzZQogCXVuc2lnbmVkIGxvbmcganBlZ19oZWFkZXJfc2l6ZSA9IDA7Cisj
+ZW5kaWYKIAlpbnQgaSwgeCwgeSwgeDEsIHkxLCBqcGVnX2RhdGFfc2l6ZSwganBlZ19kYXRhX2lk
+eCwgZW9pLCBzaXplOwogCiAJLyogc3JjX3NpemUgaGFkIGJldHRlciBiZSBiaWdnZXIgdGhhbiAx
+NiAqLwpkaWZmIC0tZ2l0IGEvbGliL2xpYnY0bGNvbnZlcnQvanBlZy5jIGIvbGliL2xpYnY0bGNv
+bnZlcnQvanBlZy5jCmluZGV4IGViZmM4MTQ5Li40NTBkMDk2NyAxMDA2NDQKLS0tIGEvbGliL2xp
+YnY0bGNvbnZlcnQvanBlZy5jCisrKyBiL2xpYi9saWJ2NGxjb252ZXJ0L2pwZWcuYwpAQCAtMTM2
+LDcgKzEzNiwxMSBAQCBzdGF0aWMgdm9pZCBpbml0X2xpYmpwZWdfY2luZm8oc3RydWN0IHY0bGNv
+bnZlcnRfZGF0YSAqZGF0YSkKIHsKIAlzdHJ1Y3QganBlZ19jb21wcmVzc19zdHJ1Y3QgY2luZm87
+CiAJdW5zaWduZWQgY2hhciAqanBlZ19oZWFkZXIgPSBOVUxMOworI2lmIEpQRUdfTElCX1ZFUlNJ
+T04gPj0gOTAKKwlzaXplX3QganBlZ19oZWFkZXJfc2l6ZSA9IDA7CisjZWxzZQogCXVuc2lnbmVk
+IGxvbmcganBlZ19oZWFkZXJfc2l6ZSA9IDA7CisjZW5kaWYKIAogCWlmIChkYXRhLT5jaW5mb19p
+bml0aWFsaXplZCkKIAkJcmV0dXJuOwotLSAKMi40Ni4wCgo=
