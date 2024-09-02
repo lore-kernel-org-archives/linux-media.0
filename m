@@ -1,25 +1,27 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988EF20FAA7
-	for <linux-media@vger.kernel.org>; Mon,  2 Sep 2024 14:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4732101AB
+	for <linux-media@vger.kernel.org>; Mon,  2 Sep 2024 14:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725285904; cv=none; b=byZ6D/RzFVSfzO3VB1vqBMB487sPZlfOEpQSxElAf9j/g1OI+gikGT/g9t9YhntYiN23jkvtZtEYb5G/AyAqpS21llzGRaxpzboPkwW6CjXlTmnjDaCEz0SxkyaJtG4pEsfT+VY4b1JFa9ux4HzeTdqVLC1wwMNYoBUIvquy1yw=
+	t=1725285906; cv=none; b=hw70hCbWhRqH0Ecy13d5raFvXw+1SEo9oHpsqcQrPPzMiG+7RszG9AoN/XZloKrTOIxWxwSagDNrSSZbPLgCuTZJSkZ+rtvuw+wSzI8m1FfAPqj9sxF4itef7+kxuDdTdx7OEXLRQfXCPCmwnXPFkJiwPiYS8YDuWsWVKEDN8Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725285904; c=relaxed/simple;
-	bh=a5mhb6v74NOvJXgvSCwpp0T/xk+4D68DXSQa4Hg6REY=;
+	s=arc-20240116; t=1725285906; c=relaxed/simple;
+	bh=4+sYOVEWudfQ7A3gAJKo1TYrsTzNLGy1rNQrOlopv/A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sUGpqAka/9PYdLoS/HtkrASemfTwSuI88gq+xTn8A8I+xRxQeYICDKW3SXJAVBrm+4+j44WVghFIW0GmN7zXMu2PxXwJZHDL7lIV0xDblBZBsUSJcY6abMTMyJOTOcH85dc8/IJXk3aHq6Uex7oS3HpdlkIgXoYI6h5tXhSqmH8=
+	 MIME-Version; b=AlgkfQxS8wRP2dvT1jRBAuIcj8WM4qAkuVZ7ONe4RdALCUYlQ9TybOV0pR9OCk5I2E+tooHZ6Wy6bUx4b9hm4QBufzSHfRYz9QVGtX43wnlsX8Zwq/Y8HyrgQgn4yPZ+jChHaF2Aqk+Wg/iZMdJ28ZhXXpDKoyIlJeYvJSUczGU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FC8C4CEC7;
-	Mon,  2 Sep 2024 14:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 940C7C4CEC4;
+	Mon,  2 Sep 2024 14:05:04 +0000 (UTC)
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To: linux-media@vger.kernel.org
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 5/9] media: airspy: set lock before calling vb2_queue_init()
-Date: Mon,  2 Sep 2024 16:04:51 +0200
-Message-Id: <50a4adc0487018bb51328142c05d636e7663ef55.1725285495.git.hverkuil-cisco@xs4all.nl>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: [PATCH 6/9] media: rcar_drif.c: set lock before calling vb2_queue_init()
+Date: Mon,  2 Sep 2024 16:04:52 +0200
+Message-Id: <31085af170e3cc9b4fe115d53a556ccf477751d3.1725285495.git.hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1725285495.git.hverkuil-cisco@xs4all.nl>
 References: <cover.1725285495.git.hverkuil-cisco@xs4all.nl>
@@ -36,30 +38,32 @@ the future. So for those drivers that set the lock later, move it up to
 before the vb2_queue_init() call.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- drivers/media/usb/airspy/airspy.c | 2 +-
+ drivers/media/platform/renesas/rcar_drif.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
-index e24e655fb1db..3e2a3099a8fe 100644
---- a/drivers/media/usb/airspy/airspy.c
-+++ b/drivers/media/usb/airspy/airspy.c
-@@ -1017,6 +1017,7 @@ static int airspy_probe(struct usb_interface *intf,
- 	s->vb_queue.ops = &airspy_vb2_ops;
- 	s->vb_queue.mem_ops = &vb2_vmalloc_memops;
- 	s->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	s->vb_queue.lock = &s->vb_queue_lock;
- 	ret = vb2_queue_init(&s->vb_queue);
- 	if (ret) {
- 		dev_err(s->dev, "Could not initialize vb2 queue\n");
-@@ -1026,7 +1027,6 @@ static int airspy_probe(struct usb_interface *intf,
- 	/* Init video_device structure */
- 	s->vdev = airspy_template;
- 	s->vdev.queue = &s->vb_queue;
--	s->vdev.queue->lock = &s->vb_queue_lock;
- 	video_set_drvdata(&s->vdev, s);
+diff --git a/drivers/media/platform/renesas/rcar_drif.c b/drivers/media/platform/renesas/rcar_drif.c
+index f21d05054341..5d3109940ded 100644
+--- a/drivers/media/platform/renesas/rcar_drif.c
++++ b/drivers/media/platform/renesas/rcar_drif.c
+@@ -1071,7 +1071,6 @@ static int rcar_drif_sdr_register(struct rcar_drif_sdr *sdr)
+ 	sdr->vdev->release = video_device_release;
+ 	sdr->vdev->lock = &sdr->v4l2_mutex;
+ 	sdr->vdev->queue = &sdr->vb_queue;
+-	sdr->vdev->queue->lock = &sdr->vb_queue_mutex;
+ 	sdr->vdev->ctrl_handler = &sdr->ctrl_hdl;
+ 	sdr->vdev->v4l2_dev = &sdr->v4l2_dev;
+ 	sdr->vdev->device_caps = V4L2_CAP_SDR_CAPTURE | V4L2_CAP_TUNER |
+@@ -1316,6 +1315,7 @@ static int rcar_drif_sdr_probe(struct rcar_drif_sdr *sdr)
+ 	sdr->vb_queue.ops = &rcar_drif_vb2_ops;
+ 	sdr->vb_queue.mem_ops = &vb2_vmalloc_memops;
+ 	sdr->vb_queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	sdr->vb_queue.lock = &sdr->vb_queue_mutex;
  
- 	/* Register the v4l2_device structure */
+ 	/* Init videobuf2 queue */
+ 	ret = vb2_queue_init(&sdr->vb_queue);
 -- 
 2.34.1
 
