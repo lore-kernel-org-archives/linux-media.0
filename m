@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD481154C1D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4D116F0D0;
 	Mon,  2 Sep 2024 21:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725314031; cv=none; b=JwZJem4J2iHVymLsnLUWOc0muIVrrGxAwxABt7TDTujOSx6R1Nqh4/v3zLdo27lB4dyQbMqtF6q9elxyvmTMDmtbQmn5o5Li5NzZaJ8mYSHpdm2fM0Y9mwqleDOCLnXFA0BbD47Kq29T4Qaw8aEG4qz7c0m2KgZuj0rka3amKvw=
+	t=1725314031; cv=none; b=tNynJStqUp4vpJDt0RqC9lqb8WXVutUroI+TXxAHJTZV7cSirTB+MP8kLf5y+T5jjd6bCAXbE8Fr7BFCh84dfHsNP4bIRWtC0kG9D30gt2QfjvT8n1EVuKxM2cZqDZyFdDatZFCmb8jSR0LwxhsDiEOx5iwLonYTfG2WyZklHuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725314031; c=relaxed/simple;
-	bh=5Ytv8wsrnEMdAIi6hl/ZWeImEmKYwIq7k56/QsdmC48=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L5zTYU+d0b1aubnSo8tb0ATvZJJRd8CxkSiNav6EKVqwm48P1xqxMMuwM14iUu5Lpo4d+VsvlZ1pfKmPD+pEVLuBOaClDdgBdS9zynKYiI3h0BSYOx3KA4lRvgAYQRsCxG1frXDebKovOW8FT7QqGtUNW35/K7CbQd2a10O4NF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHaOh6bB; arc=none smtp.client-ip=10.30.226.201
+	bh=fkLGY4U5lk/Rad59LcWYJhIpX0ElWK9FM/qu8thACn4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B2898ji/8C6iQ58LraS2xFVK83MMeIw44BYvd0CuabhxQlTTGAVWEfToRgSsG594t6hQuFXVOyUvIdk1N3yzQcbjC/kPY6Qpny9MG8Jr4/Vci/xaDy072RdiGaSCy1OrUueqkou61BFFxKxpdVEARw1adH/u1ErxKFD+KMe4ahs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmEZeAMg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHaOh6bB"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63DE0C4CECA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmEZeAMg"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 46567C4CEC2;
 	Mon,  2 Sep 2024 21:53:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1725314031;
-	bh=5Ytv8wsrnEMdAIi6hl/ZWeImEmKYwIq7k56/QsdmC48=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=PHaOh6bBSbt31nOcftLOxqAEUErB5LlTTfZgnFQxXGSR9gxmsoB1HZvMZMz3cUvTV
-	 nvQEekCtNqpPp+kyIw/a0PgYvpVhCxtofZoxgzIpN5xnlrO7t8dG+ZCQaUKMohxG1s
-	 5nYQM72DHi+ueynnRlWCw63RlwlT9woLU1lyVu8+BZ3GcU0NL7k9eqHJVVXURGMmP7
-	 Tb+oJ6KDuarCzeTPzgMARLcM3r2jHkkrZ7uN/osXAoozqwkN2v9kDpmVLFqKwyrLQQ
-	 lRvHAF2FZ0ZmEDjAM2Ki5DIuxPJ/FRPydElwH36fniPnN9u1cykzH38imvUl3Fo5oP
-	 ZrpWNRKipyQ6g==
+	bh=fkLGY4U5lk/Rad59LcWYJhIpX0ElWK9FM/qu8thACn4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=FmEZeAMgRN/ZWs0iiFpt6VzgY8Xc4FuXj/q/lquz5D6hS2uBefTIurOS8TdBRycqC
+	 swDy5WsZXDO0Bsg2uphXYOtqGnRQvxqF9bqE5H1bpZyQpPY3PPEUe7c0lS5A9FzIlz
+	 woIQ7gjR8cMu7TBGXtLTutrxIctrw+6Uqs/1+ed5VuIb+WvFvpt5S3wtYgYWtCJZCT
+	 81A9jCKPhpEVLTGUuuGIPKyk7qjB8X5VXzEY74ZN4c3mIPVSBdDwhdmEBGkAl2Kfb5
+	 IBZMFETPKWHHWeuM1XOjNRLpvdyYeJwytpxXWseGzlxLXYOTAvPY5zBY5YgfWUQ8G9
+	 WsV1RJfoW/PgA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53B43CD3420;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36183C54FC6;
 	Mon,  2 Sep 2024 21:53:51 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Mon, 02 Sep 2024 23:54:29 +0200
-Subject: [PATCH 02/13] media: i2c: imx214: Remove unneeded goto
+Subject: [PATCH 00/13] media: i2c: imx214: Miscellaneous cleanups and
+ improvements
+Date: Mon, 02 Sep 2024 23:54:27 +0200
+Message-Id: <20240902-imx214-v1-0-c96cba989315@apitzsch.eu>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,9 +41,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240902-imx214-v1-2-c96cba989315@apitzsch.eu>
-References: <20240902-imx214-v1-0-c96cba989315@apitzsch.eu>
-In-Reply-To: <20240902-imx214-v1-0-c96cba989315@apitzsch.eu>
+X-B4-Tracking: v=1; b=H4sIABM01mYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDC0ML3czcCiNDE10LYyMTcwuTZPOk1FQloOKCotS0zAqwQdGxtbUAjcG
+ iblgAAAA=
 To: Ricardo Ribalda <ribalda@kernel.org>, 
  Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -50,11 +51,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725314079; l=1448;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725314079; l=1440;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=+EHNoEmtv/1kZSlndhZbuM8zP4Ms4i21sRmxvjbE1m0=;
- b=ZBWn6rlG+hqBQ6iO8z8r6ViyjrgcD7I32Nv/fAYf650Jgm97RWiXVDiD8BP9SDO+CgNed82vK
- +tcfXo5dcMMBAhegkYuRBXndDvDt+1KTcMK3G3aLPLa3+PGzD9jp4w1
+ bh=fkLGY4U5lk/Rad59LcWYJhIpX0ElWK9FM/qu8thACn4=;
+ b=E/Uhb4OXlg2lmNafSJOLnsbDj7RCoODhTb3s5BxODnAqUXPumwIW+Y+dbgrwiwHRTIBnozf5C
+ UnTyBygQ/96C+y/xVYJlBGSDhYUg+BK+fyPZhsLZaxVOnPWhKWWDzXr
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -62,57 +63,40 @@ X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
 X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 Reply-To: git@apitzsch.eu
 
-From: André Apitzsch <git@apitzsch.eu>
+This patch series is a collection of miscellaneous cleanups and
+improvements to the imx214 driver.
 
-Simplify the imx214_start_streaming() by removing unneeded goto
-statements, and the corresponding error label.
+The series converts the driver to the CCI helpers and adds controls
+needed to make the driver work with libcamera.
+
+The changes are inspired by the imx219 driver.
 
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+André Apitzsch (13):
+      media: i2c: imx214: Use subdev active state
+      media: i2c: imx214: Remove unneeded goto
+      media: i2c: imx214: Simplify with dev_err_probe()
+      media: i2c: imx214: Convert to CCI register access helpers
+      media: i2c: imx214: Replace register addresses with macros
+      media: i2c: imx214: Drop IMX214_REG_EXPOSURE from mode reg arrays
+      media: i2c: imx214: Use number of lanes from device tree
+      media: i2c: imx214: Add vblank and hblank controls
+      media: i2c: imx214: Extract format and crop settings
+      media: i2c: imx214: Implement vflip/hflip controls
+      media: i2c: imx214: Add analogue/digital gain control
+      media: i2c: imx214: Verify chip ID
+      media: i2c: imx214: Add test pattern control
 
-diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 58f3c3f67e0d..283d4783c22e 100644
---- a/drivers/media/i2c/imx214.c
-+++ b/drivers/media/i2c/imx214.c
-@@ -776,7 +776,7 @@ static int imx214_start_streaming(struct imx214 *imx214)
- 	ret = imx214_write_table(imx214, mode_table_common);
- 	if (ret < 0) {
- 		dev_err(imx214->dev, "could not sent common table %d\n", ret);
--		goto error;
-+		return ret;
- 	}
- 
- 	mode = v4l2_find_nearest_size(imx214_modes,
-@@ -785,22 +785,17 @@ static int imx214_start_streaming(struct imx214 *imx214)
- 	ret = imx214_write_table(imx214, mode->reg_table);
- 	if (ret < 0) {
- 		dev_err(imx214->dev, "could not sent mode table %d\n", ret);
--		goto error;
-+		return ret;
- 	}
- 	ret = __v4l2_ctrl_handler_setup(&imx214->ctrls);
- 	if (ret < 0) {
- 		dev_err(imx214->dev, "could not sync v4l2 controls\n");
--		goto error;
-+		return ret;
- 	}
- 	ret = regmap_write(imx214->regmap, IMX214_REG_MODE_SELECT, IMX214_MODE_STREAMING);
--	if (ret < 0) {
-+	if (ret < 0)
- 		dev_err(imx214->dev, "could not sent start table %d\n", ret);
--		goto error;
--	}
--
--	return 0;
- 
--error:
- 	return ret;
- }
- 
+ drivers/media/i2c/Kconfig  |    1 +
+ drivers/media/i2c/imx214.c | 1313 +++++++++++++++++++++++++++-----------------
+ 2 files changed, 803 insertions(+), 511 deletions(-)
+---
+base-commit: b891f84dd1f93ef4a716f10a70da80db443db431
+change-id: 20240818-imx214-8324784c7bee
 
+Best regards,
 -- 
-2.46.0
+André Apitzsch <git@apitzsch.eu>
 
 
