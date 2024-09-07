@@ -1,29 +1,29 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5622381BA;
-	Sat,  7 Sep 2024 03:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709F643ACB;
+	Sat,  7 Sep 2024 03:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725678093; cv=none; b=sgtkhLMid1DEaKUJ2hHrILo8QM0hNzBORf29rTnslAerF6DLD6H9B01HUh98bkSG2I3XJlv/2JVOpb8P03A/WuXpiACYny1bcWbcarVm+7tYricdPcW+9NlNyseRt7TVMzJvlWA8QOoMZWiXHbshzh2ci1554tNGt0YzXj8KmwI=
+	t=1725678096; cv=none; b=Mi8LVcKFi722pQZpYn6ljrXlIXh/px5siauO29etOpFyCMrz43ZGt8qUecf8BA9uVyF5BC6RC4XBoWPxhfRuKIDA+a4rVc9SjgHW2lxwEBytgWePA7cOITvWmu7Xvz3U/P0Pr+T+lIZdQ8w6cg1SMwFl5D+jzz/CFMJgVKyQbp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725678093; c=relaxed/simple;
-	bh=3DrBXBN4zHFdmZQPm97ddSdyM4eMMKuEHq8ZpIhhgb8=;
+	s=arc-20240116; t=1725678096; c=relaxed/simple;
+	bh=QTU7fufNN1BaBlcJYY1qHswGUbgAx/DUxgQa8eGoits=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JPChYk7Wy935Ll3DJkPPl9HkujJPkpVkgs8QyZq3qQvfk/KtIzspH0I/QzSdoYn5C/R04Oh4gGZWwGYED3FwPH4+SAjE8otPCISlWiQ69ox2/Ho2V08naNBA9e0GnlZawg2NDOtOnPDdzM8dcI6PVMXLunBDv71W3v8FwFLp8gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=aliEXJB4cB8L0EVUC8i1w8NPT4T1c+kt/MJCv4GFt5gvZxFpkTppNln/wNflwNZog/1t5sIh6d19O4QdQlE1V8hCkF7B+/WcmujxJnDjnlO8uQGof6jltuVIxdX33HPIuqwsayi8DlPrOEf9Zq05vpthSU9oS4mil9EPOsbTyUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4X0yXB5KYYzyRRW;
-	Sat,  7 Sep 2024 11:00:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X0yRL2ZlSz20nY1;
+	Sat,  7 Sep 2024 10:56:30 +0800 (CST)
 Received: from kwepemd500012.china.huawei.com (unknown [7.221.188.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id B4300180064;
-	Sat,  7 Sep 2024 11:01:23 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 5BFA91A0188;
+	Sat,  7 Sep 2024 11:01:30 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemd500012.china.huawei.com
  (7.221.188.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Sat, 7 Sep
- 2024 11:01:22 +0800
+ 2024 11:01:29 +0800
 From: Li Zetao <lizetao1@huawei.com>
 To: <mchehab@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
 	<kuba@kernel.org>, <pabeni@redhat.com>, <wens@csie.org>,
@@ -41,9 +41,9 @@ CC: <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
 	<linux-rockchip@lists.infradead.org>,
 	<linux-stm32@st-md-mailman.stormreply.com>,
 	<platform-driver-x86@vger.kernel.org>
-Subject: [PATCH net-next v2 03/10] net: ethernet: arc: Convert using devm_clk_get_enabled() in emac_probe()
-Date: Sat, 7 Sep 2024 11:10:02 +0800
-Message-ID: <20240907031009.3591057-5-lizetao1@huawei.com>
+Subject: [PATCH net-next v2 10/10] net: xilinx: axienet: Convert using devm_clk_get_optional_enabled() in axienet_probe()
+Date: Sat, 7 Sep 2024 11:10:09 +0800
+Message-ID: <20240907031009.3591057-12-lizetao1@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240907031009.3591057-1-lizetao1@huawei.com>
 References: <20240907031009.3591057-1-lizetao1@huawei.com>
@@ -58,125 +58,65 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  kwepemd500012.china.huawei.com (7.221.188.25)
 
-Use devm_clk_get_enabled() instead of devm_clk_get() +
+Use devm_clk_get_optional_enabled() instead of devm_clk_get_optional() +
 clk_prepare_enable(), which can make the clk consistent with the device
 life cycle and reduce the risk of unreleased clk resources. Since the
 device framework has automatically released the clk resource, there is
-no need to execute clk_disable_unprepare(clk) on the error path, drop
-the out_clk_disable_unprepare label, and the original error process can
-changed to the out_dispose_mapping error path.
+no need to execute clk_disable_unprepare(clk) on the error path.
 
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 Signed-off-by: Li Zetao <lizetao1@huawei.com>
 ---
- drivers/net/ethernet/arc/emac_rockchip.c | 34 +++++-------------------
- 1 file changed, 6 insertions(+), 28 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/arc/emac_rockchip.c b/drivers/net/ethernet/arc/emac_rockchip.c
-index 493d6356c8ca..22b3ebe059d9 100644
---- a/drivers/net/ethernet/arc/emac_rockchip.c
-+++ b/drivers/net/ethernet/arc/emac_rockchip.c
-@@ -144,7 +144,7 @@ static int emac_rockchip_probe(struct platform_device *pdev)
- 		goto out_netdev;
- 	}
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 374dff70ef0d..87c5dcec2325 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2592,22 +2592,17 @@ static int axienet_probe(struct platform_device *pdev)
+ 	seqcount_mutex_init(&lp->hw_stats_seqcount, &lp->stats_lock);
+ 	INIT_DEFERRABLE_WORK(&lp->stats_work, axienet_refresh_stats);
  
--	priv->refclk = devm_clk_get(dev, "macref");
-+	priv->refclk = devm_clk_get_enabled(dev, "macref");
- 	if (IS_ERR(priv->refclk)) {
- 		dev_err(dev, "failed to retrieve reference clock (%ld)\n",
- 			PTR_ERR(priv->refclk));
-@@ -152,18 +152,12 @@ static int emac_rockchip_probe(struct platform_device *pdev)
- 		goto out_netdev;
- 	}
- 
--	err = clk_prepare_enable(priv->refclk);
--	if (err) {
--		dev_err(dev, "failed to enable reference clock (%d)\n", err);
--		goto out_netdev;
+-	lp->axi_clk = devm_clk_get_optional(&pdev->dev, "s_axi_lite_clk");
+-	if (!lp->axi_clk) {
++	lp->axi_clk = devm_clk_get_optional_enabled(&pdev->dev, "s_axi_lite_clk");
++	if (!lp->axi_clk)
+ 		/* For backward compatibility, if named AXI clock is not present,
+ 		 * treat the first clock specified as the AXI clock.
+ 		 */
+-		lp->axi_clk = devm_clk_get_optional(&pdev->dev, NULL);
 -	}
--
- 	/* Optional regulator for PHY */
- 	priv->regulator = devm_regulator_get_optional(dev, "phy");
- 	if (IS_ERR(priv->regulator)) {
- 		if (PTR_ERR(priv->regulator) == -EPROBE_DEFER) {
- 			err = -EPROBE_DEFER;
--			goto out_clk_disable;
-+			goto out_netdev;
- 		}
- 		dev_err(dev, "no regulator found\n");
- 		priv->regulator = NULL;
-@@ -173,7 +167,7 @@ static int emac_rockchip_probe(struct platform_device *pdev)
- 		err = regulator_enable(priv->regulator);
- 		if (err) {
- 			dev_err(dev, "failed to enable phy-supply (%d)\n", err);
--			goto out_clk_disable;
-+			goto out_netdev;
- 		}
++		lp->axi_clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++
+ 	if (IS_ERR(lp->axi_clk)) {
+ 		ret = PTR_ERR(lp->axi_clk);
+ 		goto free_netdev;
  	}
+-	ret = clk_prepare_enable(lp->axi_clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Unable to enable AXI clock: %d\n", ret);
+-		goto free_netdev;
+-	}
  
-@@ -200,7 +194,7 @@ static int emac_rockchip_probe(struct platform_device *pdev)
- 	}
+ 	lp->misc_clks[0].id = "axis_clk";
+ 	lp->misc_clks[1].id = "ref_clk";
+@@ -2923,7 +2918,6 @@ static int axienet_probe(struct platform_device *pdev)
+ 		axienet_mdio_teardown(lp);
+ cleanup_clk:
+ 	clk_bulk_disable_unprepare(XAE_NUM_MISC_CLOCKS, lp->misc_clks);
+-	clk_disable_unprepare(lp->axi_clk);
  
- 	if (priv->soc_data->need_div_macclk) {
--		priv->macclk = devm_clk_get(dev, "macclk");
-+		priv->macclk = devm_clk_get_enabled(dev, "macclk");
- 		if (IS_ERR(priv->macclk)) {
- 			dev_err(dev, "failed to retrieve mac clock (%ld)\n",
- 				PTR_ERR(priv->macclk));
-@@ -208,37 +202,26 @@ static int emac_rockchip_probe(struct platform_device *pdev)
- 			goto out_regulator_disable;
- 		}
- 
--		err = clk_prepare_enable(priv->macclk);
--		if (err) {
--			dev_err(dev, "failed to enable mac clock (%d)\n", err);
--			goto out_regulator_disable;
--		}
--
- 		/* RMII TX/RX needs always a rate of 25MHz */
- 		err = clk_set_rate(priv->macclk, 25000000);
- 		if (err) {
- 			dev_err(dev,
- 				"failed to change mac clock rate (%d)\n", err);
--			goto out_clk_disable_macclk;
-+			goto out_regulator_disable;
- 		}
- 	}
- 
- 	err = arc_emac_probe(ndev, interface);
- 	if (err) {
- 		dev_err(dev, "failed to probe arc emac (%d)\n", err);
--		goto out_clk_disable_macclk;
-+		goto out_regulator_disable;
- 	}
- 
- 	return 0;
- 
--out_clk_disable_macclk:
--	if (priv->soc_data->need_div_macclk)
--		clk_disable_unprepare(priv->macclk);
- out_regulator_disable:
- 	if (priv->regulator)
- 		regulator_disable(priv->regulator);
--out_clk_disable:
--	clk_disable_unprepare(priv->refclk);
- out_netdev:
+ free_netdev:
  	free_netdev(ndev);
- 	return err;
-@@ -251,14 +234,9 @@ static void emac_rockchip_remove(struct platform_device *pdev)
+@@ -2947,7 +2941,6 @@ static void axienet_remove(struct platform_device *pdev)
+ 	axienet_mdio_teardown(lp);
  
- 	arc_emac_remove(ndev);
+ 	clk_bulk_disable_unprepare(XAE_NUM_MISC_CLOCKS, lp->misc_clks);
+-	clk_disable_unprepare(lp->axi_clk);
  
--	clk_disable_unprepare(priv->refclk);
--
- 	if (priv->regulator)
- 		regulator_disable(priv->regulator);
- 
--	if (priv->soc_data->need_div_macclk)
--		clk_disable_unprepare(priv->macclk);
--
  	free_netdev(ndev);
  }
- 
 -- 
 2.34.1
 
