@@ -1,128 +1,187 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839011B9B26;
-	Mon,  9 Sep 2024 07:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC15B1B1D7A;
+	Mon,  9 Sep 2024 08:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725868639; cv=none; b=DnGFwXzlEx07xYz1rGT2uuYkIdSw7ZtTFlRJAntp4W8ZEE0NWiMV406ql90hmpWjz/6DTD5VPWJcdJDISK2WVp/OgBRUBsQl1XyurJ3psFOWufyMWlJvzKwKcMr3CJiESqcjiRaDE9JCLT0otznhx5qZiLZF6SQA0XFVzftNs/I=
+	t=1725871503; cv=none; b=GY7fuCnIYY3tULP+I0yVKuhRhsirEtuAwAlty0cqg1G8GPFqi1Omf02iJe0DogSB4dHfDHfHvmGeDy/KWB6FFvnA7knZ21A/2l643Imb2iaT4Ub5L1345YMTODQ/crgUoZg1FsaDjSNIsh+2OWXd2Xl2WK84vsM/02k1CetBB1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725868639; c=relaxed/simple;
-	bh=3uUcilVnojt4+ddh4TttNjspH/Ah42tEMA3oIXy4hyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GZnCTGPigUydlVbEnx3rDq48h7yEVGVGRVU1szDeN1H1dEEwyBR118BTfxba0Bz9D7rReISK/7+sp8s+9NZng4hsRh9NWimjmwYmrumzh55+NT4O6QwWMARIqVAobfUdjR9FlHrgS3XPyEstC+bL4LLYldXHsOhSlFWGt0wxCGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K5TSn1Zu; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1725871503; c=relaxed/simple;
+	bh=s+xlewCctMaDsFweMYj/4diRQjW82za84FW+swoCSDI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=h2GFQcDbrVcqZh4CGALTrTWVen5aZtJwjZaQuTXfWmIsHoCCtDpXKDPSINbtI1RvrSFD/YT7BTdb3h5Dod2zvF5BdItcSucFglv1DYsRFe06IOetD2RtTdyYfYHvoCc+oioqE/byb3dO1NlwKcL1xYxrHixoBjOPWaM4qEjhS54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=qNNuh/NS; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K5TSn1Zu"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-374c1e5fe79so2605856f8f.1;
-        Mon, 09 Sep 2024 00:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725868636; x=1726473436; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=diK2vfMDlJNUyXW9lcHoHKMejPsgQZ2jk7i/6JqtmLQ=;
-        b=K5TSn1Zu9wSHyg22vRIUBJRFZE0+nW0Fx61sQgywJSYKXXLa24rlxyssEtJDaq1Mkz
-         N26Q+luc+IVHFIj1bRTkUUTHI/zFHRIqKaNalJUWYm5xcWqiKgDxb7xpeCefYsPul2n8
-         Bba6XMUX3g6obJ4S6/rElfdPZ+IsIG/w4z546vGJYNC1UuTFPjFeOniceUmzwIlWHyn0
-         0UynNYF3onJH3dpO2ZQdHi9JXqT77KzrZZqDC1ZZpeOheJV1Ztx5whzaeu+muKUMi6+K
-         x2IESbG4MFYSNwCWX4H4eAiYUiEkL8Pgl2toMjS//8s6VoRpFy4gWv0u5afnOO57z5qZ
-         mS3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725868636; x=1726473436;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=diK2vfMDlJNUyXW9lcHoHKMejPsgQZ2jk7i/6JqtmLQ=;
-        b=KvN7UiVsuoDXFVMMFR0eAgWOL8sUMfAwB9i7rNsSVMH8At2ycZfkGfgm2wOrb524Qk
-         JAPL8SYV7t64eRoWTBdwkehIzwuT8UFB853rmtQV2Fle56ou39YB7YGyOkXNCZiHpE6U
-         XCUzMAd9L/PQFH29eKSjuQvtIsoxPYKkrU/Qs/9eVRkfquPBAd8G4tNid2RGb+0vrOwe
-         zOt4n6uUOBVICspaQ+xHJq6hf7+EGBt5r7bvNsIIuXwx7sM9U2r4qJYqRUV1gRlahAjq
-         Exn0V/IcPO2L37GvQzjIbtEOIQ3zqrP+EHh5Imzb7cm9M/G+Cqcaw2/4/uGq/dcpPwvu
-         Hqhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPihdABBPFC/HaFqR4d01GlhVltIRcBfm6i2dtniSdD78m8iRYFWneq3g9MY8QZ+xCK1g=@vger.kernel.org, AJvYcCUvTkDJruDZ3Se60ORLIIgoBHHujuO6Q73h3CtRwrrgmwp16rnWn8TvbZmBexBvZp/84miLoZU+8rJP1A==@vger.kernel.org, AJvYcCV9F9AhS26NOhp0NpVtem4LWt9QFBH0+OYw4uENk9wC+WhSRR0IRphSjcJ2PjH5A5IicHZTFdHr0+4KbvaP4A==@vger.kernel.org, AJvYcCVHEyMdwXE7mDQdt7rS2YHME1Po+fspeZxn0zAU55krw17T+A/pSchs8lf/IcPN2XEkJ1QnJp1JH5XsSeg=@vger.kernel.org, AJvYcCWTencOdfl0NdzDRpMzknC25N7dB+ykjoSrVrXzAUE99VCYIooRlRAd6dgT0zdPSTWQLnDlZekypol0+mMN@vger.kernel.org, AJvYcCWZk3H3YFLZRSEwu9zZvdfXlKmo5aKycb9ngyuxZHSJa7CcDKb3YIoADOo5gHp8hPPQBAXbHgi7fK3sL8Jp@vger.kernel.org, AJvYcCWd9V4BtsAVh9z+dTYYRmfQFfZL6MFZx+YyuO92lknnWoGZBToXDg+bHLBmapEdoxtENkjVRfUnorr1/y5ubb6G@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuppX+HNfvgcQNBrPy83ADsTztYvuR66OzzhMDNd6tW6WtbcnA
-	ZNRCHmuu8Bp+kJ00GF1wkEwSkCfclKeBdqXddY9Pl6hK6zE7EEId
-X-Google-Smtp-Source: AGHT+IFme0X5nXLgn/ucuf8q8ansjRE1zBSf1qUsO6JYCVp2iHcyiqIaQ+1W/AW6ZFOhV/STuqOK5w==
-X-Received: by 2002:adf:fe84:0:b0:371:8e3c:59 with SMTP id ffacd0b85a97d-378895c2578mr7417099f8f.5.1725868635798;
-        Mon, 09 Sep 2024 00:57:15 -0700 (PDT)
-Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37895675b7esm5303001f8f.50.2024.09.09.00.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 00:57:15 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	linux-crypto@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	linux-fscrypt@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	"Theodore Ts'o" <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [PATCH RESEND v2 19/19] prandom: Include <linux/percpu.h> in <linux/prandom.h>
-Date: Mon,  9 Sep 2024 09:54:02 +0200
-Message-ID: <20240909075641.258968-20-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240909075641.258968-1-ubizjak@gmail.com>
-References: <20240909075641.258968-1-ubizjak@gmail.com>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="qNNuh/NS"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48986X8W022718;
+	Mon, 9 Sep 2024 10:44:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	IOm4ThO68sZ/MvSmIYIo32o7N2x0/3KIu3jjeSGhrfw=; b=qNNuh/NSwbUHYh/2
+	sAmk4jT3EuhQ+Qprw8LdvXJHKc4Zm1iShImlwC7kHV8TDPsrzIWcsRdwAWV+tiVA
+	J7WPCfFx2LjeuFKOKRl0u1822YLjnNtpmTHWeBc8ifXnHKN+ory/ZnuDFUChfsHi
+	/AOlfM+I3M+QPrGCN/9UhEIICYner1UKOvTRE7eoMetsE23MZsphw91WBaWNWmeE
+	hu693aUCUHX+TGavdnVBKuNRvrBs8WBGHwOqLEt6wOd9HipL1R6vSCq5H1OGnHSy
+	o6JzTzg/P4bxMRYQhAo0b9C+zRfFpTmAzamptvKrMiwFZxcT0/PLL+zeizsMG9ll
+	mr5kmg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 41gyaum1s0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Sep 2024 10:44:51 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 3544340048;
+	Mon,  9 Sep 2024 10:43:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0916A24F388;
+	Mon,  9 Sep 2024 10:42:18 +0200 (CEST)
+Received: from [10.131.140.24] (10.131.140.24) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 9 Sep
+ 2024 10:42:17 +0200
+Message-ID: <4b37dccd-bfc6-4355-847f-f613a4a87263@foss.st.com>
+Date: Mon, 9 Sep 2024 10:42:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] media: i2c: Add driver for ST VD56G3 camera sensor
+To: Sakari Ailus <sakari.ailus@iki.fi>
+CC: <benjamin.mugnier@foss.st.com>, <mchehab@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20240521162950.6987-1-sylvain.petinot@foss.st.com>
+ <20240521162950.6987-3-sylvain.petinot@foss.st.com>
+ <ZlXEvR3yKe0W8X_q@valkosipuli.retiisi.eu>
+ <ecccf332-66e5-43c0-8a48-d49b0aa1e5a9@foss.st.com>
+ <Zt6ei2-orFC4Jq1g@valkosipuli.retiisi.eu>
+From: Sylvain Petinot <sylvain.petinot@foss.st.com>
+Content-Language: en-US
+In-Reply-To: <Zt6ei2-orFC4Jq1g@valkosipuli.retiisi.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-<linux/percpu.h> include was removed from <linux/prandom.h>
-in d9f29deb7fe8 ("prandom: Remove unused include") because
-this inclusion broke arm64 due to a circular dependency
-on include files.
+Hello Sakari,
 
-__percpu tag is defined in include/linux/compiler_types.h, so there
-is currently no direct need for the inclusion of <linux/percpu.h>.
-However, in [1] we would like to repurpose __percpu tag as a named
-address space qualifier, where __percpu macro uses defines from
-<linux/percpu.h>.
+Thanks for your feedback, no worries about the delay ...
 
-The circular dependency was removed in xxxxxxxxxxxx ("random: Do not
-include <linux/prandom.h> in <linux/random.h>") and it cleared
-the path for the inclusion of <linux/percpu.h> in <linux/prandom.h>.
+On 9/9/2024 9:06 AM, Sakari Ailus wrote:
+> Hi Sylwain,
+> 
+> Apologies for the delay...
+> 
+> On Mon, Jun 03, 2024 at 11:59:29AM +0200, Sylvain Petinot wrote:
+>>>> +/*
+>>>> + * The VD56G3 pixel array is organized as follows:
+>>>> + *
+>>>> + * +--------------------------------+
+>>>> + * |                                | \
+>>>> + * |   +------------------------+   |  |
+>>>> + * |   |                        |   |  |
+>>>> + * |   |                        |   |  |
+>>>> + * |   |                        |   |  |
+>>>> + * |   |                        |   |  |
+>>>> + * |   |                        |   |  |
+>>>> + * |   |   Default resolution   |   |  | Native height (1364)
+>>>
+>>> What's outside the default resolution? It doesn't appear the driver would
+>>> allow capturing pixels out side this area.
+>>
+>> Well both native and default resolutions are supported in the
+>> 'vd56g3_supported_modes' below.
+>> However this quite exotic resolution (1364 x 1124) isn't well supported
+>> by csi receivers, ISPs. That's why the default resolution of the driver
+>> is 1120 x 1360 (multiple of 16).
+> 
+> Ack.
+> 
+> I'd still keep the native resolution as the default and allow configuring
+> something else if the user space wants to.
+> 
+> The desired resolution really depends on the use case (as well as the ISP).
 
-This patch is basically a revert of d9f29deb7fe8
-("prandom: Remove unused include").
+Sure, I can change the default to the native... The choice I made was
+more a way to simplify (my) life (several times we went into debugging
+before realizing that it was the exotic resolution causing the unwanted
+behavior).
+But, that's probably better, I'll change it for V4.
 
-[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
+> 
+>>>> +		break;
+>>>> +	case V4L2_CID_EXPOSURE_AUTO:
+>>>> +		is_auto = (ctrl->val == V4L2_EXPOSURE_AUTO);
+>>>> +		__v4l2_ctrl_grab(sensor->ae_lock_ctrl, !is_auto);
+>>>> +		__v4l2_ctrl_grab(sensor->ae_bias_ctrl, !is_auto);
+>>>> +		break;
+>>>> +	default:
+>>>> +		break;
+>>>
+>>> You could omit default here.
+>>
+>> I don't really like switch case without default. For sure I can omit,
+>> but I prefer making it explicit.
+> 
+> I'm ok with that.
+> 
+> ...
+> 
+>>>> +static int vd56g3_power_off(struct vd56g3 *sensor)
+>>>> +{
+>>>> +	clk_disable_unprepare(sensor->xclk);
+>>>> +	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
+>>>> +	regulator_bulk_disable(ARRAY_SIZE(sensor->supplies), sensor->supplies);
+>>>> +	return 0;
+>>>
+>>> You can make the return type void.
+>>>
+>>> Do you need two pairs of functions doing the same, or could you call
+>>> vd56g3_runtime_resume and vd56g3_runtime_suspend from driver's probe and
+>>> remove functions, too?
+>>
+>> "Well, in fact, I tested both options before submitting V2 (I mean the
+>> unification of vd56g3_runtime_resume/suspend functions with
+>> vd56g3_power_on/off).
+>>
+>> The unification option has the advantage of simplifying the code and
+>> removing two "useless" functions. The only drawback is that I had to
+>> call v4l2_i2c_subdev_init() earlier in the probe() function, whereas
+>> it's currently called in vd56g3_subdev_init() (currently at the end of
+>> the probe()). OK, it's not a big deal, but I find that the resulting
+>> code is not as well structured/divided (thus readable).
+>>
+>> I'm interested to get your feedback to decide wich option to push for V3.
+> 
+> I'd prefer calling v4l2_i2c_subdev_init() earlier, in order to set the
+> device context. These are usually among those things that should be done as
+> early as possible, in order to avoid invalid pointers where much of the
+> driver code expects something else.
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>
----
- include/linux/prandom.h | 1 +
- 1 file changed, 1 insertion(+)
+Yes, the V3 I pushed include this modification.
 
-diff --git a/include/linux/prandom.h b/include/linux/prandom.h
-index f7f1e5251c67..f2ed5b72b3d6 100644
---- a/include/linux/prandom.h
-+++ b/include/linux/prandom.h
-@@ -10,6 +10,7 @@
- 
- #include <linux/types.h>
- #include <linux/once.h>
-+#include <linux/percpu.h>
- #include <linux/random.h>
- 
- struct rnd_state {
--- 
-2.46.0
+> 
+> Btw. if you're not in too much hurry (I guess so?), we're just about to
+> rework the sensor API, to include internal pads and embedded data, for
+> better sensor configurability. It'll take a while before we're there
+> though, but when this driver is merged, the existing API must continue to
+> work.
+> 
 
+I have a few branches with stream API (notably for the support of status
+lines), but I need a to test a bit more before pushing.
+
+
+--
+Sylvain
