@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DE61AED5D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8891AF4DA;
 	Mon,  9 Sep 2024 07:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725866679; cv=none; b=PwvE49wxQoP9HOk1sL58D7Bw1VOVMyRT0fPMI/zSkZGKqrrGpi4XqfNkAEY+CKpjBU1JoFfvBjmuLCd8JVdoXw10267ql0ziInKjhCjG/AjToqOGV2rizUJg8Rh3hmrB7jPU6DO9ccD3fItmgZhuVATBDt+upraqkSfdpgs4mYs=
+	t=1725866680; cv=none; b=eE950lNWLv1cIHwe2Bb4976YwVuLCZIMBlxxUqROhJdhnYKdhWAcUBgTi+zMtXteUj4OYfk0znbniMb/HE56jJe7lVMGF3OEzp3HtDbC1uj6LICKUMfPUGYBwmHc6OsKqpMbA9o9Ok5hFfOF77c7L0vIbc/PDK+w0xx8oo4UCpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725866679; c=relaxed/simple;
-	bh=VwdSx+5TN7jkNts+t5hw0+q+rGumOpnMd4C0DTssp9E=;
+	s=arc-20240116; t=1725866680; c=relaxed/simple;
+	bh=R1WJoC9+rRNjgepHVvPUGpQmQVTDwu5OL92TbHy0nW0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=am+3PbgM6MhEd3+GUeKp9otLS2xRWJWE7JMZ6EaoupcjauWW+5d1H+c9e7DKcI1XzOiZUDd9BXPEkd9Zw52YK6Qcb5LXl4/Xhfr+QJUcD1pK13WXAeTPnspXOdu/1jfcW2rs/Sdifa7vvE3nfbBWww4ISJSmYt/vHOJyXxNPvK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oq/JIbP1; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=UTWFvb/5awzYSzZZbhhfieTX1iBBQdEEaPKEgvMGkFlMX9js3lA10Wz2eQRcLfS8cVpEZYGti9CA3PaUeylNQvEzqzuuLdeKhPDs/tatJ0fdGl9hFT5r0s7cqjCgGXyLUgCTwSv6TBVz6ELwIS7b7PLL5RN2g9aPlguNBuSjb50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IbJ6kEAl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oq/JIbP1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 78D34C4CECA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IbJ6kEAl"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9ACA8C4CEC8;
 	Mon,  9 Sep 2024 07:24:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1725866679;
-	bh=VwdSx+5TN7jkNts+t5hw0+q+rGumOpnMd4C0DTssp9E=;
+	bh=R1WJoC9+rRNjgepHVvPUGpQmQVTDwu5OL92TbHy0nW0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Oq/JIbP1WgHonAkdHtBnPBIEx0mmBv5wS2Qa7PtGSHF2y8SUPZeGYUA3tzuBLnYsW
-	 s2yS8g10ceT41shFHSpLg/9z5stu3HcmR84dlhQbbRvrXhiZvx1COWrnCSWjB2qdM+
-	 QI16fbsY1Lbstfs0kcSJdBFsPCUUD0DTf7jVBNWOjdsNHlz7VgL19J5elSSiZJOdCk
-	 tRRoVqgYcF89fM++Uu7DEL6hKC8XPoQrJN1c2UC8AglNWd72EhNss+dBoiWGu+OyMm
-	 aJpnCfaQ8tYkLEq9cppUcgmUY+cOQYY0Cv0/th2Gg2zyXAD1at56RyxpZJ+UENuh3R
-	 y7WNsETJ7mMSQ==
+	b=IbJ6kEAlkmp2JT9RkQoog2LKoH2CAUTiZBclSWVJvBXq3Fb2kS4ujxnTpjLfttAmA
+	 FDHBMgLVO52CzKez0sWV9/GyiuhyY5m8P8FwbNX6T36y7uqdRefc7O4zJiHZtmPD3z
+	 LzvWpFYz4Kmog2UvvTW2zXgt3qL9GVWLxpVHHqguqggpTEOFatyErqEDlxp5abvwdn
+	 ybXVTvQGZX4dlcUnhBsAezeogmD9q+yHtUfctmugupwyqp78Vlwl/smVmNjLjD1VjY
+	 +h07T2h6HnzSXNyK7yo1osCnF4nxxrZXRuZZ8FA36/2ditFJ++7PrLwSu1A1q9/c6w
+	 WSGc0OovKnzvQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 670A2CE7AB0;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90E73CD4F4C;
 	Mon,  9 Sep 2024 07:24:39 +0000 (UTC)
 From: Keke Li via B4 Relay <devnull+keke.li.amlogic.com@kernel.org>
-Date: Mon, 09 Sep 2024 15:24:11 +0800
-Subject: [PATCH v2 1/9] dt-bindings: media: Add amlogic,c3-mipi-csi2.yaml
+Date: Mon, 09 Sep 2024 15:24:13 +0800
+Subject: [PATCH v2 3/9] dt-bindings: media: Add
+ amlogic,c3-mipi-adapter.yaml
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240909-c3isp-v2-1-3c866a1cea56@amlogic.com>
+Message-Id: <20240909-c3isp-v2-3-3c866a1cea56@amlogic.com>
 References: <20240909-c3isp-v2-0-3c866a1cea56@amlogic.com>
 In-Reply-To: <20240909-c3isp-v2-0-3c866a1cea56@amlogic.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -51,11 +52,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
  Keke Li <keke.li@amlogic.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725866660; l=3615;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725866660; l=3150;
  i=keke.li@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=uonDpUuENKMvvPR8TlFC/qzJCjmFRIkjBuDItRjYTbg=;
- b=DDciZROUQqVDGKcb+1UFDQ5U8mVQNLxuisJ4y7c3KA0hL7XYCKmRqPI1eBaVDe4eiX6Rqko/t
- je6dw5sM8tOCjlNtjTmnp4+2LMQXtdTDea9qaUIx/BFVt6Ah3PSaXVf
+ bh=ijC2cwZ5UkAT/WB+A9DxxF8sasBO/hzhGYgM1ZgmtNg=;
+ b=bFZl0VuZSsT0BLHsNd29tSLe0RIFbGXG8t+LO2We2ghCWwqUsabEduBtC2J8i+6/8NaKUXMcB
+ 6ry1FmM+O99BNPCH8ZkwFd2/XwD7uWb3um9F55P/ZmKFGmsJdG8nNDA
 X-Developer-Key: i=keke.li@amlogic.com; a=ed25519;
  pk=XxNPTsQ0YqMJLLekV456eoKV5gbSlxnViB1k1DhfRmU=
 X-Endpoint-Received: by B4 Relay for keke.li@amlogic.com/20240902 with
@@ -65,48 +66,48 @@ Reply-To: keke.li@amlogic.com
 
 From: Keke Li <keke.li@amlogic.com>
 
-c3-mipi-csi2 is used to receive mipi data from image sensor.
+c3-mipi-adapter is used to organize mipi data and
+send raw data to ISP module.
 
 Signed-off-by: Keke Li <keke.li@amlogic.com>
 ---
- .../bindings/media/amlogic,c3-mipi-csi2.yaml       | 124 +++++++++++++++++++++
- 1 file changed, 124 insertions(+)
+ .../bindings/media/amlogic,c3-mipi-adapter.yaml    | 108 +++++++++++++++++++++
+ 1 file changed, 108 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml
+diff --git a/Documentation/devicetree/bindings/media/amlogic,c3-mipi-adapter.yaml b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-adapter.yaml
 new file mode 100644
-index 000000000000..5cea06595205
+index 000000000000..d900ff9df61b
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml
-@@ -0,0 +1,124 @@
++++ b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-adapter.yaml
+@@ -0,0 +1,108 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/amlogic,c3-mipi-csi2.yaml#
++$id: http://devicetree.org/schemas/media/amlogic,c3-mipi-adapter.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic C3 MIPI CSI-2 receiver
++title: Amlogic C3 MIPI adapter receiver
 +
 +maintainers:
 +  - Keke Li <keke.li@amlogic.com>
 +
 +description:
-+  MIPI CSI-2 receiver contains CSI-2 RX PHY and host controller.
-+  It receives the MIPI data from the image sensor and sends MIPI data
-+  to MIPI adapter.
++  MIPI adapter is used to convert the MIPI CSI-2 data
++  into an ISP supported data format.
 +
 +properties:
 +  compatible:
 +    enum:
-+      - amlogic,c3-mipi-csi2
++      - amlogic,c3-mipi-adapter
 +
 +  reg:
 +    maxItems: 3
 +
 +  reg-names:
 +    items:
-+      - const: aphy
-+      - const: dphy
-+      - const: host
++      - const: top
++      - const: fd
++      - const: rd
 +
 +  power-domains:
 +    maxItems: 1
@@ -117,33 +118,19 @@ index 000000000000..5cea06595205
 +  clock-names:
 +    items:
 +      - const: vapb
-+      - const: phy0
++      - const: isp0
 +
 +  ports:
 +    $ref: /schemas/graph.yaml#/properties/ports
 +
 +    properties:
 +      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description: input port node, connected to sensor.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                minItems: 1
-+                maxItems: 4
-+
-+            required:
-+              - data-lanes
++        $ref: /schemas/graph.yaml#/properties/port
++        description: input port node.
 +
 +      port@1:
 +        $ref: /schemas/graph.yaml#/properties/port
-+        description: output port node
++        description: output port node.
 +
 +    required:
 +      - port@0
@@ -169,16 +156,16 @@ index 000000000000..5cea06595205
 +        #address-cells = <2>;
 +        #size-cells = <2>;
 +
-+        csi: csi@ff018000 {
-+            compatible = "amlogic,c3-mipi-csi2";
-+            reg = <0x0 0xff018000 0x0 0x400>,
-+                  <0x0 0xff019000 0x0 0x300>,
-+                  <0x0 0xff01a000 0x0 0x100>;
-+            reg-names = "aphy", "dphy", "host";
-+            power-domains = <&pwrc PWRC_C3_MIPI_ISP_WRAP_ID>;
-+            clocks =  <&clkc_periphs CLKID_VAPB>,
-+                      <&clkc_periphs CLKID_CSI_PHY0>;
-+            clock-names = "vapb", "phy0";
++        adap: adap@ff010000 {
++            compatible = "amlogic,c3-mipi-adapter";
++            reg = <0x0 0xff010000 0x0 0x100>,
++                  <0x0 0xff01b000 0x0 0x100>,
++                  <0x0 0xff01d000 0x0 0x200>;
++            reg-names = "top", "fd", "rd";
++            power-domains = <&pwrc PWRC_C3_ISP_TOP_ID>;
++            clocks = <&clkc_periphs CLKID_VAPB>,
++                     <&clkc_periphs CLKID_ISP0>;
++            clock-names = "vapb", "isp0";
 +
 +            ports {
 +                #address-cells = <1>;
@@ -186,16 +173,15 @@ index 000000000000..5cea06595205
 +
 +                port@0 {
 +                    reg = <0>;
-+                    c3_mipi_csi_in: endpoint {
-+                        remote-endpoint = <&imx290_out>;
-+                        data-lanes = <1 2 3 4>;
++                    c3_adap_in: endpoint {
++                        remote-endpoint = <&c3_mipi_csi_out>;
 +                    };
 +                };
 +
 +                port@1 {
 +                    reg = <1>;
-+                    c3_mipi_csi_out: endpoint {
-+                        remote-endpoint = <&c3_adap_in>;
++                    c3_adap_out: endpoint {
++                        remote-endpoint = <&c3_isp_in>;
 +                    };
 +                };
 +            };
