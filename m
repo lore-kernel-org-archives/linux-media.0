@@ -1,425 +1,120 @@
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2065.outbound.protection.outlook.com [40.107.117.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFBB14C5BA;
-	Mon,  9 Sep 2024 06:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725863490; cv=fail; b=tWF4DjHHSGGA0A8kSgE28swI1Wp95mFShxPDTB7FsiHlW4g4/q/82t7GNI90TVBNLd0kvSaVCc3H6t+Xt7qclAF0aZO6pGH+7z/KIrrO+pLn80w80jFTR0iXR6tzX5z2iAhehLHVdnUGbPgeOYGag1CNa0U+Xxh3Qto/Dn09bVw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725863490; c=relaxed/simple;
-	bh=FZeoXwVspxCVN5dBaGxNs4To4vTFTEx5+nK23XZntG8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=p4wrl02fIYpRSG5JUNQvqExgCP3PGs8Q0/1dhIIlHNO0nWW9N2ZaezUHkXId+dNBCfB6HQs0+0MNwRYj8cUc4b4xjPVtAynCY5bEu3A43BX9Zcpnft5ikQ3uF0UoPHak7+nX9nq6qA8JZUeFyzJ1hhWHQKtF3YoB7DfIJrQr3mQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=mEI4n5ap; arc=fail smtp.client-ip=40.107.117.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F5D1AD9F1;
+	Mon,  9 Sep 2024 07:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725865700; cv=none; b=HAXBYKOQ56G4AoU0UuG63ZvG1hO5nFQxtR0XI0cbqDlQEpkUgIi87sLDfxa/mzQQ7p6OqpSjge7xf/XEWP2qZmiTww+KnRmfgbe3AEukJnJpv00QkNXUcdiQkdMapKwg7hVN13FPBYL76hRoto3WBxVmxKgGaA3FVsI/ykVCHJs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725865700; c=relaxed/simple;
+	bh=vg8RVh1QVSzklqVo21bOPOyAtUZ4RZO6cEL+S2fGkkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GHbLOOtJKYyaUnd16ZcJjrwPWgm1+YxMlVNq5Nzm9Vd0V59VY5P4OO5S5ZcXPNbx5UQEGZ9THjE5FPq2QLXElILX/81uqwO2wGl9b+jozglW/zd3uPeDMpnnLhxDuh76Nut+rzfrXO9vQlT5Vg9diZHCUQCR/MpUsrXjgsyyQvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hOb2shye; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="mEI4n5ap"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fJbJ3UYCwQQH6ul5uouSFG2r84/TbuQuxZJIVFFSxm33saQKcl4/BPRQKW9cj3rwYy5YSip7O3/99Zr8ipuCtCrj9nLm6OpxUiiTkr9KfzxP86nnS8J3dijHF9lbe1e6bfKQtwlyIiQiaCE172Bio7koodqFRj4qqcbdNg9yLcOD8G+HeGqSnf3GrJukG9PMXibZ/SESdxF89Wt+R81yHb/jpS/gxVIyy5miWERFeP0VHwTP/mwuG22hSA+cY2ggFErX0bdGGSS/ThfPmnsZ5ncqvFTXIXP+2IP4TNlKsHrqgBvAGHLg9VY678R+O9IV26ndS2GDDCOTE7Vw7Wd/Iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=igDsuP4N2fz4ic4AcBGpSic3BENLoAczWJb/VRDtrIw=;
- b=xcnaA/Y9YEDcxLDLCt/pcYYfTIFO91u1+bffInAolABYurP0DZTcXA21CeAAENOLC+ai0bsN2H9fZNNZ0eWHZ3jtWt7X62WEXbRVrpMhhLP+4Rg15OkD2QMgH8R4TRVX14jc1cPOSUlYbkKg48v7n9UHcNnp/LpbKZOs+xLiL5BjDUUOLPck5nC8dQM2K51eOChWl6AdcdX+Y7cCa+CwwJCsDWFp7ePDx/2CHJmWWnmkfXqiYFjAOK126BWIJlGMbHGZWexZSaeQycFuPTysdbJQEDHfTST52NLKPNAxv1UZilCgW1uiBkij7MxTRmll8m1h4lkA66tN/33l+G+yrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=igDsuP4N2fz4ic4AcBGpSic3BENLoAczWJb/VRDtrIw=;
- b=mEI4n5apTaHUCktUbaOBkuD8cm2Chk0Emi8/Fx5SzDnhbfaXV+60SBYBm3NyKbQ1v+dJW2yp7ybiXstWXjSQLklbbZJfF7g7DoQNz6G3h7lzTeMvytMLo8Bhdr9dzdPcc2OAdq0wci0Lfwp3BPcNHCCliiZGPLkd4FP17tGp62ExeA9XdazLfuqpvwqPAfkX041EiFBSI6dHrzsVl5RpY/C9xDM/92iUiCYlkzARQ+kACO30jqdWLh4iyZSOzjKLpWX3kRLjqLlElJ3JbM2200y/6AZ0KA5c+d18rULCi7xhnKiPCuk3YJaiXqTG9NVpKgi/c2bH4q8u/ZG7H3TOng==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB5676.apcprd06.prod.outlook.com (2603:1096:301:f8::10)
- by PUZPR06MB5954.apcprd06.prod.outlook.com (2603:1096:301:119::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Mon, 9 Sep
- 2024 06:31:21 +0000
-Received: from PUZPR06MB5676.apcprd06.prod.outlook.com
- ([fe80::a00b:f422:ac44:636f]) by PUZPR06MB5676.apcprd06.prod.outlook.com
- ([fe80::a00b:f422:ac44:636f%6]) with mapi id 15.20.7939.017; Mon, 9 Sep 2024
- 06:31:21 +0000
-Message-ID: <005ca835-2768-4a7a-a76f-5ea0e318b9e4@vivo.com>
-Date: Mon, 9 Sep 2024 14:31:15 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] udmabuf: udmabuf_create pin folio codestyle
- cleanup
-To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Gerd Hoffmann <kraxel@redhat.com>,
- "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
-References: <20240903083818.3071759-1-link@vivo.com>
- <20240903083818.3071759-5-link@vivo.com>
- <IA0PR11MB7185AA974CF7207048178187F89E2@IA0PR11MB7185.namprd11.prod.outlook.com>
- <d213c597-ec2a-4685-9048-5b477f64853f@vivo.com>
- <CH3PR11MB7177760ADAF50756F886989CF8992@CH3PR11MB7177.namprd11.prod.outlook.com>
-From: Huan Yang <link@vivo.com>
-In-Reply-To: <CH3PR11MB7177760ADAF50756F886989CF8992@CH3PR11MB7177.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0055.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::16) To PUZPR06MB5676.apcprd06.prod.outlook.com
- (2603:1096:301:f8::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hOb2shye"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374c1e5fe79so2573496f8f.1;
+        Mon, 09 Sep 2024 00:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725865697; x=1726470497; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8B7BVoErPcOoKPxSdUBz41r3SRVlI1m5+I4zzu3vMfI=;
+        b=hOb2shyew6VcFuElGULlrfNIjky0KF0Pr8T+bMV1osEqJEDlb4yKdZjqIR5auEz/QI
+         Ao+qeWQhCNiM6qLB3/yvXiTiKTHgInbDjkJq2fcDoJCxGj4w4lMMDaCdjBM9xD78Tw1H
+         gyr7BmoR4Z7u6rttdffn/l+5T6OUwfuRb6GWiKCdBW+17g6mrDUdWEWjHWtgAuzcDgXP
+         8OxxvAP4w4+/+18QO6Ub1cckD/UfePT5ICMBDszAIhXtUJ1fTejrjKMY5K1nY2U3J3pH
+         QKJZPdn1NYi7PJaTKV7bnRCIwNxVNYFPrz7ikzMdUgXCycdgb0OHNeyxhcVzQRGSsl7H
+         xzPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725865697; x=1726470497;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8B7BVoErPcOoKPxSdUBz41r3SRVlI1m5+I4zzu3vMfI=;
+        b=KuTVlD+OrDDyGjdlsz7wdLJJ7NE3bo5z701VI4bIxL9S+Gds7cjWfVeD5C+uSTqWdr
+         GQElE0Q3P6X3usMjHkksNRjZNpDceo9Gb3lzwEeOhfeWS+gIY1+AwuodB8g0s9v1qdyW
+         FAUFgbc6ap2IRfEit5KfvTU1cORFkPM+f0noqqyBGhYbMTYQsHZn4S7cMOmENyVhSwCI
+         FqFVzoNqAa9a5HBQrFOZ8cLMAXHtFcSghhKBDSstAEh06PN/3oyVE+9bjcL5LampSJnQ
+         +zRSuoXUZmKg3joyDpzHgLasv5+E2lWeB4RAGzPcdWprJR3dKOFbHV1aOJWpQ0N+RHYF
+         59tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQb25kQyBmaNG8nJUwedggVSTMhgOMmF4lOQeJagL9jJgn0TnVLSAxV9H735nsVp3B2PtEJmN2YG3kog==@vger.kernel.org, AJvYcCVOCYj5tV1FDDox2p1WXj9JkZS8yq1w3J4vhJe6q/JQDBnfSDUKi4QWI6N6vY9nSs7UT3E=@vger.kernel.org, AJvYcCVbNxPujFfFnPkeeea7zLgaA+3+5kP7IrbmRgMQqH0/qaZs85USjJS3cuAG8XZ0ECM2tMNfSqUkzoT+iAU=@vger.kernel.org, AJvYcCWmbfcje/Y9okhRxV7YH++yIFDmU3seqdu07VdhnwrJVZ8bTIqQwm4yHO8L7dFVpk7IjRx/i0tcCxc3+OnV@vger.kernel.org, AJvYcCXGfiSt1lDTVmlSjMH6he3HOJlBo9fw43YP/S2arzjHvoBh8rE4wFkDVZp6EqrRXTRTk7k2TB+8IBrq1N7LswsN@vger.kernel.org, AJvYcCXVDWg9NES1B9EcvtKqq4BCOq/PImnMpEKo6oN1J1C259+zHCFw/VAbkhdSI2EYgoD/Rfo72fxuU9WuKbp6/A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4C7kuOXhPPEWOtcnDSKVD90Zu291hOy3qxy8Sauq7BuY6CqQB
+	LciMcPXayyKQiLzZQxsJnGYpFr46FSjUQZg2rTXHSgJckJIFbemr
+X-Google-Smtp-Source: AGHT+IGYyMu3Vg6t0QKAaHpT+Zfos7iWqitbr5XWvfDWFMrJwqorNUfbV12tuLSocQgEo0BB8LI95Q==
+X-Received: by 2002:adf:fe84:0:b0:371:8e3c:59 with SMTP id ffacd0b85a97d-378895c2578mr7304772f8f.5.1725865697132;
+        Mon, 09 Sep 2024 00:08:17 -0700 (PDT)
+Received: from fedora.iskraemeco.si ([193.77.86.250])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378956d375asm5178754f8f.66.2024.09.09.00.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 00:08:16 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: x86@kernel.org,
+	linux-crypto@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-fscrypt@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v2 01/19] x86/kaslr: Include <linux/prandom.h> instead of <linux/random.h>
+Date: Mon,  9 Sep 2024 09:05:15 +0200
+Message-ID: <20240909070742.75425-2-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240909070742.75425-1-ubizjak@gmail.com>
+References: <20240909070742.75425-1-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB5676:EE_|PUZPR06MB5954:EE_
-X-MS-Office365-Filtering-Correlation-Id: de6d4fa4-97ea-45ef-fd0d-08dcd09904f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?L0g1cGFUcEpNMGNrdEVNRnRsM1BEcDFLRitTaGRZS0crSlJZNFlnYldaQ0xL?=
- =?utf-8?B?emZGaSs2QVNvc1gzSU5ZcWFtNC9VemJzRnNkZjM5VFc0RFhhUzZaSUtFcnVm?=
- =?utf-8?B?TnRYTWhpNnlmZVIyNVBrTFBBd04rQlZKMXYyZ1dxdklldUNoTGxPQkxkRERJ?=
- =?utf-8?B?UmovYUh1RFVzWVVYV0F1VXowc0NyK2NFSVZKbWRpSDJOME5yc3R2ZTBuY2dI?=
- =?utf-8?B?R1A0ai9xbEdzazhUa3VBOHdaU0Mzak85Mm95TWhHeDhZUlNrOEtZcThjdm94?=
- =?utf-8?B?dmlKSkdqZGhoallTK3dnNGRsZE9KU0FYRCs5b1Z0Z0tFMGdyZ2xhT3RFT3BO?=
- =?utf-8?B?R0c1L1A2YlZ3NzVGbkgrVDBHbzFsN0JSaDhxNitVOXZENkNaQmxoN0V6NVRh?=
- =?utf-8?B?WXFPOGd0SndaYjNXODluemFOQzJtNU1remxtTGswUXVOaS9YdTA2K0RLUzNk?=
- =?utf-8?B?VTA2TExOV0swTDMxUmVCVUNYOFczemZRK0RFcWxaUHRyMDR5bWs0QUlCMkFZ?=
- =?utf-8?B?a2JTRXNFTW85d0tqZDZMOUpQTUJFaTFhMUhPZU1PYjdReUVGbjlsOTRmNEZi?=
- =?utf-8?B?UkZRWTN5eisvYUdiVjQvM3VVQkYrdUlpbFZrWXV4MGdpeFZxUFlDaENTa2hp?=
- =?utf-8?B?ZjBua0RpbGw4aWdiSU1OVHpRd24zVGNySThsZWRUMWRVQkZ5Qy91dnEyemF6?=
- =?utf-8?B?WTZPaTdML1IwdlpVUWtPanRkbEdzRjg1MXFyZ2FwdHUxWVRyczdTT0ExWlpm?=
- =?utf-8?B?bkc5R01YNFEwYXlLTERWNFZNMXd0TFZIdFQvWCtzdlUrcldPRDJiRHBLdVJv?=
- =?utf-8?B?MUpMM2orVDgvV0lCbStFQzR6UWFUK3NNNHhWZkVRYzE2T1JUYlp1OTFqa2s1?=
- =?utf-8?B?MFBOdXJkenRFbExjeFhHdFEvL2U1cDFma2ZFL0ozRk91YSt3UGlyTGlJOTFY?=
- =?utf-8?B?RCtuMnIrM0NaVkpMRWl2K21nQ2ExbVlObHBKRTYxNHFoZ3pZVHE4R1I3UHJB?=
- =?utf-8?B?aWxSckdUdU1qWkczOTBwaWxBYXRpMjI3ems5SU54NVdvQzVRWVRCWk41bGcy?=
- =?utf-8?B?UGsxVGtBVExpSVpWMlNCaWRIL3hyTkxpRDFQd2RKakdGQWlISVB0aWN1Q1Fu?=
- =?utf-8?B?UGQxS2NpV0NZdXdFRWZ3K1pncEpvSTZTVW01dGNhV2M4SmpQZHM4RkxOazZD?=
- =?utf-8?B?djRqRE9WSjcya3pPTjVhOVZuMkliOHc2czdZNzIyMkdrSDlWaVEwNmJCZVBh?=
- =?utf-8?B?WCtBMkpqdm5qV2xGVkhORkNaaUV1MGJIbHEvM01nOUFnOW1OdTcrckJ2bnpW?=
- =?utf-8?B?d25XR1hNcUpkUnMrVDlrT3AyMUl5ZThmaU5WbEVWRnZoS1FORERKbG1zbkZ2?=
- =?utf-8?B?b1ZIL1MvYk10dGtibXdwQzNvaWJSQkl4Z2lNUkpOSWlKSlZPVEovOG93QWFk?=
- =?utf-8?B?cUE5Rk5rN2VlOCtQcE5MdG02REVUTFZRZzBCOWdiY1NrQlBMWlE5T2NtOVRz?=
- =?utf-8?B?QW1KRnFjY21UU0tUNnhCQjZkMExJSFJIdWx6TXV0aFNDUUpoT01Vd050bDln?=
- =?utf-8?B?bDQxcmZyM2NxcWYyU2QrcFFFczFqNStwWGIzVWZ4ZUZwTk1RUWJOT0dGVkFo?=
- =?utf-8?B?d1ZnM2p5S1U2UmJrWlJMMXk2enNsYVhHVzdqR0QzMEJUa3hyelFpeWJkMmNt?=
- =?utf-8?B?WWpUV1M5VzRhV0g1WFNlOUx0dVJzTmN6bzQ5eFM1T1I5REI5Ui9mbTdDcWd4?=
- =?utf-8?B?QXJONHJrbFlJckIyVVdQK0swSTN6K3Z0d0twblpiWnA1dFdLVXlubTR6dWdQ?=
- =?utf-8?B?NDRiV2Y2Z1UyVjRCRGpkQnhwVmJpZzNRaGZuV1FJelhMSEtyZlcxZno1OFJl?=
- =?utf-8?B?aGVCOWdjaFJzK2dEazBJV2lpNERvNVFuUEplRE1OZUUvbHc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB5676.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RzJUelhlYktSdHp1cU5Nc3VjYVFkM0ZiSjRPaDRUVU1vRFpzWkdGbVJTVHdO?=
- =?utf-8?B?SnpzUUErMllDOUMyYzlXSnFVUWtxWkxhYWViVytqclJmZmVoNFNHdWYxVE0y?=
- =?utf-8?B?M3VxMUZ0Nk83a3NlaU1RVGZQdmwrTVNaNzFiQnMrREsrNXZibmNPeWdxL3dC?=
- =?utf-8?B?d1BRSTQ4NnhQekxRZGdwb3NlMkwzU2hvR050SFJRc2ZzcEF1NlNsL3d5bzQz?=
- =?utf-8?B?TDgrRnUray9HWU9peFhBaUZUVHZNc290VnRwRkYxRExTNnhRNzNDOGRLRnlv?=
- =?utf-8?B?eTZIZlllNmVUK2RrL1ZhbktEUktqb09YTXVqWTRlZUtRc0F5SWtuOUhrYW14?=
- =?utf-8?B?TCtYV0lPRlJoWVcyZnp3Z3ZSWERvRzBuU3ZYdkxmRmowQ2gvMlRuVW5qbFRR?=
- =?utf-8?B?Sk9UYi9RRGloQk8yMEdpMTN0RmFXejZDbjJNak40T2tTUDd1TkFmOTdxVkZ5?=
- =?utf-8?B?cHA4S0dGMmVjZjBsNEZiQzgzOW9jdHJjMFJGS3hSWk01TzgzR1ZwTXg0US9l?=
- =?utf-8?B?czE3U09yTE04N0Q5NDg5Z01nSy9FZG90Q2tkeWkvRFZKMEFxY3BBNDFGaFh5?=
- =?utf-8?B?V09sTER0N3d4MlhqVHYxbDloaDQ5QTR0L2Q0NEllMnhNYWRDb052TDBIUW9p?=
- =?utf-8?B?cHBzVThIbUZwRjcrSHBuTjAzWVF3bkxQT2VVanVCdnB3aitvSUxPcnA2NlJW?=
- =?utf-8?B?bW4xRWxRcTN1emtyWW9CMEtvdlBkbzNycnJrRzdaZnh2NlAyVjVkME9Td2Z2?=
- =?utf-8?B?S0lkZTdTVVNOUTBvdzc1ZGVnYWpyYXM1a0ZDT2tlTVRNMXZOaVl3QTRZcGRK?=
- =?utf-8?B?eUhKRzNnT2t1NnE1UERNczVzOEN1MzU0ZEk1ZXNlMlVhczBnenVpR2lhV0tu?=
- =?utf-8?B?bmtwVzFXSFZEMzBEdUhCUzRESDVjSThXMUNPUWFZeXZ2THVzblVhV2s4bFRJ?=
- =?utf-8?B?WnF5KzhyZHdsbTF3RnlNZEdCR1o1cnpLSitRRmJzVWhHQkMzMzU4WUVoZWk5?=
- =?utf-8?B?bFdWSVhLaWhLOEdxeW9qeDBGcXRwNjFCQXVIT0U0VUl5LzNldDhyZzVIak1m?=
- =?utf-8?B?M2tTajg2US9KNkJTbzZqNjhIL3JvUUpkRzRPZnkzTVJnWGl3QWtid1BLcDZO?=
- =?utf-8?B?WnhUVllsOUQ5SHlQUFNkWnNJbWdkSzFjR2l6MTdKV2xwUVk5YUNBRlVrUDhQ?=
- =?utf-8?B?WUszQSs0WGRJckxtb216KzN2RDBmSStaS052NkhBZE9vRVppbnk5ZW0vR0JM?=
- =?utf-8?B?d0crMzZLRVI0N3AvRDQ5eUh2UUtOaEZWZld0SkZnV2Jxd0R3NHNYYkszMUlJ?=
- =?utf-8?B?WWtjVU1mWVhSQ2x0bE0rc3NvSFlqMlo3ZUlQUXpGVmdRNlhWejhHL0Y2aFNp?=
- =?utf-8?B?V0M4RlZ2elpoak1lOFBJRWpQNjRNSm5GaG5oUWNuS3hxZ1VxU0dkSkJ6R0hj?=
- =?utf-8?B?RkVoRGxqaGFKZDBvditITnlNdlYzVFNlYzlGbmpvUnpVeUJYeisxaEkwUTNz?=
- =?utf-8?B?Y0R2VTl4bjIwaHgwcGVWOHBuMExYdTVDNG5aa1VYdWl1K1YzUkVmK0g2cXdr?=
- =?utf-8?B?dThpbHZiVDRFTXhXMFYrUUNNcjBlVjFVeVcwMEZMS1ArYUpyTzhxWCt2eUtm?=
- =?utf-8?B?WlQ3SUJFcHFxR1FNRUFpVXpocXV3SUtYVTY1R1QzOHliNFRNbzQxemtjQUw3?=
- =?utf-8?B?eDlRRUhLd2RqalliNmNrbjBqTVRGQnFsU015SzlaV2NpL3lpcHplTUZUZW1W?=
- =?utf-8?B?TTd0L2JRWHhHbTd0MDZXNndKb2JIV0FSc080Y2J4WHFSdHFIMDZVNXZ1dFN5?=
- =?utf-8?B?L0VtODVCNTducVEwckhYRVk5ZXJYemx4TW1QNmRpc0lZR29VQ21PM3ZBd0lR?=
- =?utf-8?B?cGlDTEpmeGJlYU9xWE53dTUyZmw4a0V0SmFyNjNhcWI5QTlkbUl3blp3amgz?=
- =?utf-8?B?WGFHWkwrZ05ZcWl2NU5PcW9SRWlwZ1poMGt0aDI1QTdob0VxM09Hc2g4L1FN?=
- =?utf-8?B?MmUvSUUzNWd6T2NrSjJLeTJyRkl0ck9TZUl1K1NJZFFVekU2S0VqNnRmdkhM?=
- =?utf-8?B?TWZqT3VnN2pYOHIwRnR6MVdMS1Q1Z0E2amJJLzlJaHpJVCs0SEJCWENvbEhp?=
- =?utf-8?Q?YNftmTtSUlMbBPxHRYq57XLY8?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de6d4fa4-97ea-45ef-fd0d-08dcd09904f2
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB5676.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2024 06:31:21.3533
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hLS8F2PTgfWu+2UH6u3xaUBqAEN/FaZJ9XLeM19fFRcQWQB4fukhdtEkCBVvu06vtxB+xpBYQuMfwacyG4irvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB5954
+Content-Transfer-Encoding: 8bit
 
+Substitute the inclusion of <linux/random.h> header with
+<linux/prandom.h> to allow the removal of legacy inclusion
+of <linux/prandom.h> from <linux/random.h>.
 
-在 2024/9/9 13:03, Kasireddy, Vivek 写道:
-> Hi Huan,
->
->> Subject: Re: [PATCH v5 4/7] udmabuf: udmabuf_create pin folio codestyle
->> cleanup
->>
->>
->> 在 2024/9/6 16:17, Kasireddy, Vivek 写道:
->>> Hi Huan,
->>>
->>>> Subject: [PATCH v5 4/7] udmabuf: udmabuf_create pin folio codestyle
->>>> cleanup
->>>>
->>>> This patch split pin folios into single function: udmabuf_pin_folios.
->>>>
->>>> When record folio and offset into udmabuf_folio and offsets, the outer
->>>> loop of this patch iterates through folios, while the inner loop correctly
->>>> sets the folio and corresponding offset into the udmabuf starting from
->>>> the offset. if reach to pgcnt or nr_folios, end of loop.
->>>>
->>>> By this, more readable.
->>>>
->>>> Signed-off-by: Huan Yang <link@vivo.com>
->>>> ---
->>>>    drivers/dma-buf/udmabuf.c | 132 ++++++++++++++++++++------------------
->>>>    1 file changed, 71 insertions(+), 61 deletions(-)
->>>>
->>>> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
->>>> index 456db58446e1..ca2b21c5c57f 100644
->>>> --- a/drivers/dma-buf/udmabuf.c
->>>> +++ b/drivers/dma-buf/udmabuf.c
->>>> @@ -330,17 +330,67 @@ static int export_udmabuf(struct udmabuf
->> *ubuf,
->>>>    	return dma_buf_fd(buf, flags);
->>>>    }
->>>>
->>>> +static int udmabuf_pin_folios(struct udmabuf *ubuf, struct file *memfd,
->>>> +			      loff_t start, loff_t size)
->>>> +{
->>>> +	pgoff_t pgoff, pgcnt, upgcnt = ubuf->pagecount;
->>>> +	u32 cur_folio, cur_pgcnt;
->>>> +	struct folio **folios = NULL;
->>>> +	long nr_folios;
->>>> +	loff_t end;
->>>> +	int ret = 0;
->>> Change ret's type and this function's return type to long for consistency.
->>>
->>>> +
->>>> +	pgcnt = size >> PAGE_SHIFT;
->>>> +	folios = kvmalloc_array(pgcnt, sizeof(*folios), GFP_KERNEL);
->>>> +	if (!folios)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	end = start + (pgcnt << PAGE_SHIFT) - 1;
->>>> +	nr_folios = memfd_pin_folios(memfd, start, end, folios, pgcnt,
->>>> &pgoff);
->>>> +	if (nr_folios <= 0) {
->>>> +		ret = nr_folios ? nr_folios : -EINVAL;
->>>> +		goto err;
->>>> +	}
->>>> +
->>>> +	cur_pgcnt = 0;
->>>> +	for (cur_folio = 0; cur_folio < nr_folios; ++cur_folio) {
->>>> +		pgoff_t subpgoff = pgoff;
->>>> +		size_t fsize = folio_size(folios[cur_folio]);
->>>> +
->>>> +		ret = add_to_unpin_list(&ubuf->unpin_list, folios[cur_folio]);
->>>> +		if (ret < 0)
->>>> +			goto err;
->>>> +
->>>> +		for (; subpgoff < fsize; subpgoff += PAGE_SIZE) {
->>>> +			ubuf->folios[upgcnt] = folios[cur_folio];
->>>> +			ubuf->offsets[upgcnt] = subpgoff;
->>>> +			++upgcnt;
->>>> +
->>>> +			if (++cur_pgcnt >= pgcnt)
->>>> +				goto end;
->>>> +		}
->>>> +
->>>> +		/**
->>>> +		 * The term range may start with offset, so the first folio
->>>> +		 * need take care of it. And the remain folio start from 0.
->>> The comments above are not very meaningful. Please rewrite them as:
->>> * In a given range, only the first subpage of the first folio has an offset, that
->>> * is returned by memfd_pin_folios(). The first subpages of other folios (in
->> the
->>> * range) have an offset of 0.
->>>
->>>> +		 */
->>>> +		pgoff = 0;
->>>> +	}
->>>> +end:
->>>> +err:
->>> No need to have two labels here. Keep end and get rid of err?
->>>
->>>> +	ubuf->pagecount = upgcnt;
->>>> +	kvfree(folios);
->>>> +	return ret;
->>>> +}
->>>> +
->>>>    static long udmabuf_create(struct miscdevice *device,
->>>>    			   struct udmabuf_create_list *head,
->>>>    			   struct udmabuf_create_item *list)
->>>>    {
->>>> -	pgoff_t pgoff, pgcnt, pglimit, pgbuf = 0;
->>>> -	long nr_folios, ret = -EINVAL;
->>>> -	struct file *memfd = NULL;
->>>> -	struct folio **folios;
->>>> +	pgoff_t pgcnt = 0, pglimit;
->>>> +	long ret = -EINVAL;
->>>>    	struct udmabuf *ubuf;
->>>> -	u32 i, j, k, flags;
->>>> -	loff_t end;
->>>> +	u32 i, flags;
->>>>
->>>>    	ubuf = kzalloc(sizeof(*ubuf), GFP_KERNEL);
->>>>    	if (!ubuf)
->>>> @@ -349,81 +399,43 @@ static long udmabuf_create(struct miscdevice
->>>> *device,
->>>>    	INIT_LIST_HEAD(&ubuf->unpin_list);
->>>>    	pglimit = (size_limit_mb * 1024 * 1024) >> PAGE_SHIFT;
->>>>    	for (i = 0; i < head->count; i++) {
->>>> -		if (!IS_ALIGNED(list[i].offset, PAGE_SIZE))
->>>> +		if (!PAGE_ALIGNED(list[i].offset))
->>>>    			goto err;
->>>> -		if (!IS_ALIGNED(list[i].size, PAGE_SIZE))
->>>> +		if (!PAGE_ALIGNED(list[i].size))
->>>>    			goto err;
->>>> -		ubuf->pagecount += list[i].size >> PAGE_SHIFT;
->>>> -		if (ubuf->pagecount > pglimit)
->>>> +
->>>> +		pgcnt += list[i].size >> PAGE_SHIFT;
->>>> +		if (pgcnt > pglimit)
->>>>    			goto err;
->>>>    	}
->>>>
->>>> -	if (!ubuf->pagecount)
->>>> +	if (!pgcnt)
->>>>    		goto err;
->>>>
->>>> -	ubuf->folios = kvmalloc_array(ubuf->pagecount, sizeof(*ubuf-
->>>>> folios),
->>>> -				      GFP_KERNEL);
->>>> +	ubuf->folios = kvmalloc_array(pgcnt, sizeof(*ubuf->folios),
->>>> GFP_KERNEL);
->>>>    	if (!ubuf->folios) {
->>>>    		ret = -ENOMEM;
->>>>    		goto err;
->>>>    	}
->>>> -	ubuf->offsets = kvcalloc(ubuf->pagecount, sizeof(*ubuf->offsets),
->>>> -				 GFP_KERNEL);
->>>> +
->>>> +	ubuf->offsets = kvcalloc(pgcnt, sizeof(*ubuf->offsets), GFP_KERNEL);
->>>>    	if (!ubuf->offsets) {
->>>>    		ret = -ENOMEM;
->>>>    		goto err;
->>>>    	}
->>>>
->>>> -	pgbuf = 0;
->>>>    	for (i = 0; i < head->count; i++) {
->>>> -		memfd = fget(list[i].memfd);
->>>> +		struct file *memfd = fget(list[i].memfd);
->>>> +
->>>>    		ret = check_memfd_seals(memfd);
->>>>    		if (ret < 0)
->>>>    			goto err;
->>>>
->>>> -		pgcnt = list[i].size >> PAGE_SHIFT;
->>>> -		folios = kvmalloc_array(pgcnt, sizeof(*folios), GFP_KERNEL);
->>>> -		if (!folios) {
->>>> -			ret = -ENOMEM;
->>>> -			goto err;
->>>> -		}
->>>> -
->>>> -		end = list[i].offset + (pgcnt << PAGE_SHIFT) - 1;
->>>> -		ret = memfd_pin_folios(memfd, list[i].offset, end,
->>>> -				       folios, pgcnt, &pgoff);
->>>> -		if (ret <= 0) {
->>>> -			kvfree(folios);
->>>> -			if (!ret)
->>>> -				ret = -EINVAL;
->>>> -			goto err;
->>>> -		}
->>>> -
->>>> -		nr_folios = ret;
->>>> -		pgoff >>= PAGE_SHIFT;
->>>> -		for (j = 0, k = 0; j < pgcnt; j++) {
->>>> -			ubuf->folios[pgbuf] = folios[k];
->>>> -			ubuf->offsets[pgbuf] = pgoff << PAGE_SHIFT;
->>>> -
->>>> -			if (j == 0 || ubuf->folios[pgbuf-1] != folios[k]) {
->>>> -				ret = add_to_unpin_list(&ubuf->unpin_list,
->>>> -							folios[k]);
->>>> -				if (ret < 0) {
->>>> -					kfree(folios);
->>>> -					goto err;
->>>> -				}
->>>> -			}
->>>> -
->>>> -			pgbuf++;
->>>> -			if (++pgoff == folio_nr_pages(folios[k])) {
->>>> -				pgoff = 0;
->>>> -				if (++k == nr_folios)
->>>> -					break;
->>>> -			}
->>>> -		}
->>>> -
->>>> -		kvfree(folios);
->>>> +		ret = udmabuf_pin_folios(ubuf, memfd, list[i].offset,
->>>> +					 list[i].size);
->>>>    		fput(memfd);
->>>> -		memfd = NULL;
->>>> +		if (ret)
->>>> +			goto err;
->>>>    	}
->>>>
->>>>    	flags = head->flags & UDMABUF_FLAGS_CLOEXEC ? O_CLOEXEC : 0;
->>>> @@ -434,8 +446,6 @@ static long udmabuf_create(struct miscdevice
->>>> *device,
->>>>    	return ret;
->>>>
->>>>    err:
->>>> -	if (memfd)
->>>> -		fput(memfd);
->>> I think this needs to stay because if the seals check fails, then we would not
->> be
->>> doing fput(memfd).
->> Yes, there a mistake, but I'd like set it into here:
->>
->>    		ret = check_memfd_seals(memfd);
->>    		if (ret < 0) {
-> You still need an if (memfd) check here because check_memfd_seals() might do:
->          if (!memfd)
->                  return -EBADFD;
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+---
+ arch/x86/mm/kaslr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, fput do not check if pointer is NULL.
+diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
+index 230f1dee4f09..e17e6e27b7ec 100644
+--- a/arch/x86/mm/kaslr.c
++++ b/arch/x86/mm/kaslr.c
+@@ -22,7 +22,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+-#include <linux/random.h>
++#include <linux/prandom.h>
+ #include <linux/memblock.h>
+ #include <linux/pgtable.h>
+ 
+-- 
+2.46.0
 
-Thanks.
-
->
-> Thanks,
-> Vivek
->
->> 			fput(memfd);
->>    			goto err;
->> 		}
->> due to only in inner look, memfd can get. and memfd change into loop var.
->> Thanks
->>
->>> Thanks,
->>> Vivek
->>>
->>>>    	unpin_all_folios(&ubuf->unpin_list);
->>>>    	kvfree(ubuf->offsets);
->>>>    	kvfree(ubuf->folios);
->>>> --
->>>> 2.45.2
