@@ -1,106 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8FE18FDBD;
-	Wed, 11 Sep 2024 12:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A21714AC;
+	Wed, 11 Sep 2024 13:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726058246; cv=none; b=FiqGy4b722K5v7pAzojFzKNPTIyPnGaI8M9vuUQIqkVLJDHyM59Il8tIupBqziSVemK0iSCsDHzPVOmHcrAJt9i4evCgbJ15p7MVtPs3O8HzZEwAiaYuGxyodtvvcXw1g+y301GJUHkpeh1QxiVeQ728ptZqp7kyFcvm4blep2o=
+	t=1726062738; cv=none; b=WEbtAp8wae5t4E7MLD1It3aBfDjbsZXUdcp5gilsPiZxgVFFhz8sYRWZVBsxoNII7v+oWF/ZE6gBGLmkCz7YRHE1PsNVm0TgjO+YvcxoJlsGs+GADKhd34BEhbHoIWasQv6n671ef1U8O4xc89vZK/cywe1B1TsAaXVlC2c9lRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726058246; c=relaxed/simple;
-	bh=rOhh9TtkfWnKgA0fJDkoKegIl8tjt+2vZETiZOM0N3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tr7RiXLVwg6Jd0pEJlK9Ds0AdF5UEOOJO3/dPfE79SXA9rStrAcb7lsX4tHlBuocYD4eAvcuem4foMNiwvkI2gp3jc1BFpgMtvtDu0iAWri/azySOPZN0xoX+NMzUGvupbt6rCMgkOG97cQ9A4akAZFPe6BVbymQfUi3b4386rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JYsiu2g5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726062738; c=relaxed/simple;
+	bh=UPnb5CwXN2BdNLF7oqXNvJIjcEvtnsHHPPV/LttT9vg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tvq4oH4a3tFNo3cqxPTGh/d5DyrGeC88M+DFrx6VL07Pa88yXlbtFHGK5u+JA1hh/ztrY5Pf5ArufYY1jU13faQTRHg0oNem++sjg14z/l10F6xaCaZt07WfroisbtyfOFx6H1W5Bt3pSJXj1WKv88raEeyJBto7vTbH/NtVREc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=5DEXhlLe; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JYsiu2g5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09466C4CEC5;
-	Wed, 11 Sep 2024 12:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1726058245;
-	bh=rOhh9TtkfWnKgA0fJDkoKegIl8tjt+2vZETiZOM0N3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JYsiu2g5kYk932I072qKlhbG0DbYRUWPKriXbv36QEFZNDaFRLO8ftpOENClFKN+o
-	 goiS0ELDGq2dCP9AZLZmpJBT/ofjtBqBOTevsBDMTdIFbVtpW6ANzAXtkEcbJbyF+c
-	 6CBD3dQi92NjP9WpJfwpsMsNZ7i52P1C6uX1paZ4=
-Date: Wed, 11 Sep 2024 07:30:31 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Li Zetao <lizetao1@huawei.com>
-Cc: hverkuil-cisco@xs4all.nl, mchehab@kernel.org, ricardo@marliere.net,
-	ruanjinjie@huawei.com, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v3 1/2] media: cec: remove redundant null pointer
- checks in cec_devnode_init()
-Message-ID: <2024091142-flattery-graveyard-cfea@gregkh>
-References: <20240910154803.736951-1-lizetao1@huawei.com>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="5DEXhlLe"
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48BAnBB0027599;
+	Wed, 11 Sep 2024 15:51:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=8x5WYgjMDMpnQ929UybthC
+	m8FyP9r1CPBj4apvbGduM=; b=5DEXhlLe3MNxVRexH5TEM92XsJG+4hQaC7cFr2
+	11eMEu2XF4qXgFkaPc6gx3VqbLgqRaPF1FNc5w8I0ihgbazWyu4DQ3ur3GQya/36
+	XF+xNhLDYi+ywRCTmwCPo8O97JwyAOjeu5xlWgj28kPyUIHvocm2u1z7/R60AUqO
+	Vy/jyvKrYS4KRCg9Yk1FjH6y7TeDuqoRkk+0GAnBNkP9r5nkFNJITXei7Gi+NnEh
+	GMEMiRmno+7uMjT23NpyFASdqz6MaBLarBgy34DetcJdnfBTDsd7Y81T1cWi9tdq
+	3Wh0SCGVJ0LwAowY1zLIqbesPIdRXjaV1wcZfe67sAm6h1eg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 41gy7sfggb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Sep 2024 15:51:35 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id C5EE740045;
+	Wed, 11 Sep 2024 15:50:22 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9C631233FE4;
+	Wed, 11 Sep 2024 15:48:32 +0200 (CEST)
+Received: from localhost (10.48.86.208) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Wed, 11 Sep
+ 2024 15:48:32 +0200
+From: Hugues Fruchet <hugues.fruchet@foss.st.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia
+	<ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans
+ Verkuil <hverkuil-cisco@xs4all.nl>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        Daniel Almeida
+	<daniel.almeida@collabora.com>,
+        Andrzej Pietrasiewicz
+	<andrzej.p@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+CC: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Subject: [PATCH 0/2] Add WebP support to hantro decoder
+Date: Wed, 11 Sep 2024 15:48:30 +0200
+Message-ID: <20240911134830.161091-1-hugues.fruchet@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240910154803.736951-1-lizetao1@huawei.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-On Tue, Sep 10, 2024 at 11:48:02PM +0800, Li Zetao wrote:
-> Since the debugfs_create_dir() never returns a null pointer, checking
-> the return value for a null pointer is redundant. Remove this check
-> since debugfs_create_file can handle IS_ERR pointers. At the same time,
-> debugfs_create_dir returns ERR_PTR (-ENODEV) by default when
-> CONFIG_DEBUG_FS=N, so there is no need for CONFIG_DEBUG_FS macro
-> isolation.
-> 
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
-> ---
-> v2 -> v3: Drop the null pointer check for top_cec_dir
-> v2: https://lore.kernel.org/all/20240907034400.3693797-1-lizetao1@huawei.com/
-> v1 -> v2: Remove this check since debugfs_create_file can handle IS_ERR
-> pointers. And drop the ifdef CONFIG_DEBUG_FS statement.
-> v1: https://lore.kernel.org/all/20240903143607.2004802-1-lizetao1@huawei.com/
-> 
->  drivers/media/cec/core/cec-core.c | 11 -----------
->  1 file changed, 11 deletions(-)
-> 
-> diff --git a/drivers/media/cec/core/cec-core.c b/drivers/media/cec/core/cec-core.c
-> index e0756826d629..2897283ebe72 100644
-> --- a/drivers/media/cec/core/cec-core.c
-> +++ b/drivers/media/cec/core/cec-core.c
-> @@ -374,10 +374,6 @@ int cec_register_adapter(struct cec_adapter *adap,
->  	}
->  
->  	dev_set_drvdata(&adap->devnode.dev, adap);
-> -#ifdef CONFIG_DEBUG_FS
-> -	if (!top_cec_dir)
-> -		return 0;
-> -
->  	adap->cec_dir = debugfs_create_dir(dev_name(&adap->devnode.dev),
->  					   top_cec_dir);
->  
-> @@ -388,7 +384,6 @@ int cec_register_adapter(struct cec_adapter *adap,
->  		return 0;
->  	debugfs_create_file("error-inj", 0644, adap->cec_dir, adap,
->  			    &cec_error_inj_fops);
-> -#endif
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(cec_register_adapter);
-> @@ -439,13 +434,7 @@ static int __init cec_devnode_init(void)
->  		return ret;
->  	}
->  
-> -#ifdef CONFIG_DEBUG_FS
->  	top_cec_dir = debugfs_create_dir("cec", NULL);
+Add WebP image decoding support to stateless V4L2 VP8 decoder.
 
-I'm going to be a pain here, and say "why do you need top_cec_dir at
-all?"
+Tested on STM32MP257F-EV1 evaluation board with GStreamer
+using an updated version of V4L2 VP8 stateless decoder element:
 
-Why not just look it up every time you want it after creating it with a
-call to debugfs_lookup() or debugfs_lookup_and_remove()?
+wget https://www.gstatic.com/webp/gallery/1.webp
+gst-launch-1.0 filesrc location= 1.webp ! typefind ! v4l2slvp8dec ! imagefreeze num-buffers=20 ! waylandsink fullscreen=true
 
-anyway, not a big deal, it's up to the maintainers here to want this as
-well, just a thought for further calls cleanup work.
+Hugues Fruchet (2):
+  media: uapi: add WebP VP8 frame flag
+  media: verisilicon: add WebP decoding support
 
-thanks,
+ .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 3 +++
+ drivers/media/platform/verisilicon/hantro_g1_regs.h        | 1 +
+ drivers/media/platform/verisilicon/hantro_g1_vp8_dec.c     | 7 +++++++
+ include/uapi/linux/v4l2-controls.h                         | 1 +
+ 4 files changed, 12 insertions(+)
 
-greg k-h
+-- 
+2.25.1
+
