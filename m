@@ -1,215 +1,173 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101431DA619;
-	Fri, 13 Sep 2024 12:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726231786; cv=pass; b=n+BUv74WBpIAxmm0Oh2flCKUKUMb5KfkBb6/oaFoSEGuUZNLg607l9D5gmTI7/XpZpobLZqpYQ7pjN5Ehk7Jp/3EHF/yXP/laQ3966CJw4PVB8OFaslF8sUwj0lRjnVUZIk6RY6ysAhXRELw78fBlUMn7p0Uv+j+TtSoKM3iKuk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726231786; c=relaxed/simple;
-	bh=asAKIMloSf1nvWG/eY0Vpe2S7Uh/A8aA1LS8hR1uMGU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g/ky5sjMvJaHJMgwyjlt244gYDs9jvI0/UJ1p0UW189Z20EUsm1VuFFzLbBaBo0GXVO51EommOfjeUmd4g1CszGmOihuUYoZdCwcPz6DH2lc0z9GDWqP3COXzRnXPGUKA8M0a+aF/P5TW8UhDhoEYLHgVPWXuPA0SGc16N3aO1s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=EduZNAa1; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="EduZNAa1"
-ARC-Seal: i=1; a=rsa-sha256; t=1726231767; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=kX8xnFyIF0YwUcO1em0NFK76ybiqVlSfq6wBncXwLViEVzddfvh+scoFQYfnlOmS9KPhojaML/GfM/v3Mmg7T+bs6oDb13L75iQ9K/OLgxgijIU4ZW89LgRdT4KlKmWq7kvo+p3D4Tyf7C58AzjFtBXlCeuWEbklBCNwHT40yIQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1726231767; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8Zx1uYvQJHEfMq1P3R7kwkjfLptnJ4BSs6hKaoa5xIA=; 
-	b=b4NrpurorTXkOnAebVNnocdMh8ecd/7wtksFt0UEv8D53gh84fePXrVv95/WF35r5kNSj49fGjNodD7bqoNJBMAV2tfNMlxpUvI0VUuWkeimY1z/uMOcYvlvUSKQ2eEc7R1EM3StkXh0tJ46KgUZEuHL2Vf1TC9rpkWdtVt+YGw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
-	dmarc=pass header.from=<adrian.larumbe@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726231767;
-	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=8Zx1uYvQJHEfMq1P3R7kwkjfLptnJ4BSs6hKaoa5xIA=;
-	b=EduZNAa19+GxhbeGdsnhnoOhDdhTGxyuu/Su24xLLIFcOWCvo5MaoW27jBhIrMdp
-	S/UueQmrPz6EILOoYrv+fX6RGJdOoPaT+mZIpe+qWCRjrcZGUMn5t6SU7I+HabUbEHq
-	qSVVxpIkeALwu4WmzS26mUgURzvVZXD8erfpp2es=
-Received: by mx.zohomail.com with SMTPS id 1726231765207404.5400860623354;
-	Fri, 13 Sep 2024 05:49:25 -0700 (PDT)
-From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
-To: Boris Brezillon <boris.brezillon@collabora.com>,
-	Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: kernel@collabora.com,
-	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v6 5/5] drm/panthor: add sysfs knob for enabling job profiling
-Date: Fri, 13 Sep 2024 13:42:13 +0100
-Message-ID: <20240913124857.389630-6-adrian.larumbe@collabora.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240913124857.389630-1-adrian.larumbe@collabora.com>
-References: <20240913124857.389630-1-adrian.larumbe@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78891DB926
+	for <linux-media@vger.kernel.org>; Fri, 13 Sep 2024 13:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726234526; cv=none; b=Iy/s2aEmGtvuh6YVvG7fLwaa0QeR1zmQ/6+aFf2xD5aJd53ePCZmpojhTIKLuNkgTRQ1K+alZcLOwllAXHBgP5gqRHtCK7z3fXEbT3vrdNpcQkfiXwcUzII7BxRTANAwPLavxdVEG7CBbQknnlMrwt5pNXeje0xRcX/2QOt98Q8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726234526; c=relaxed/simple;
+	bh=L617Mvljy9HXxjmnwsSVVglV+7CPs0s/u19e4e37Gww=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=BOgGd2Ol4WcIlFz69xBR9wbgaSUAM2kAE/bBl5a0z8By58S8tzTxqvHQ0u4qLZSi9UsTOFJEsvLRdzYeIHgd05gLiDiVAhf7h3nZZ01IEdr1maBtxZ8ChIPRFdmjNLAAIMirG1NfRyz0WSM/+JfxjY2jsD1AMPqZ4GveIeHJ0Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a0862f232fso23118475ab.0
+        for <linux-media@vger.kernel.org>; Fri, 13 Sep 2024 06:35:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726234524; x=1726839324;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PKoCISMK/cJuQ+TbC+0Y5hS3vYJ16tnnHaLKn4tGUJA=;
+        b=lGDTdUTcK1fdmxGnONHJ/dTbIna7eOQBgqZL6CGO7UV5n1hURPYZPs91hEjJ7b1GqO
+         laWcTeH25nBU6vw/CsFlER+JxTlboJmjSh47kJOaaMvEp0UN7KVlzmA2EFFsSedahTRY
+         VWmLmMMLstKKyxnpZ9kKL9CyidYg/ilk7GMTFQXgdPnczCIDzfbDip7IGZbz6pdRt4R7
+         s2X2WfR7v7fS6K/6WzB/5kq9qUMCYyMk0BM9Z0GsaTU2Ngpfqx/7XqRKE3rc90dsNI0X
+         1ftvbkHajnJDu3sbfAhj8jUqkMDcVIxKKFehAmoEZTuLcWIuAU2TErH+sqVxtu4hBZg6
+         H3sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYJ7aJ1CGVLrX1ER1Gf+N+khujxwnou6WSHPUNIKbqNTBkLHwiJWomksxIfDGs70c7FPUBikYS0GbbbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPuHAb2ls6Oci39ACBucL0uoQSvE8XBZI9T1wQ2TJcnZhFUWX5
+	laPhzzCXN73ja68Gb7ufNGjeWSHQwziz26JJQ0L3Swz2gsWEThvyPif/VRqdFaRR53YI/uSIh33
+	YCWGzktajLuWMg2SEAInNg5/e5U3S+UT1ZVMjAxrV83TNSDsnDbzeYu0=
+X-Google-Smtp-Source: AGHT+IFaewThfqOu3Dxs6Z2K3D6Ex89U7YXfa6Dv7psqA58MWU+8j6fd59h3RMPd5T3lE2HTfYsPfyy7zSaCh4mlwQGOO2xQryfy
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1d85:b0:3a0:8dc8:4cd with SMTP id
+ e9e14a558f8ab-3a08dc80569mr16597575ab.23.1726234523807; Fri, 13 Sep 2024
+ 06:35:23 -0700 (PDT)
+Date: Fri, 13 Sep 2024 06:35:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000974b090622004b40@google.com>
+Subject: [syzbot] [media?] general protection fault in dvb_usbv2_generic_write
+From: syzbot <syzbot+f9f5333782a854509322@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-This commit introduces a DRM device sysfs attribute that lets UM control
-the job accounting status in the device. The knob variable had been brought
-in as part of a previous commit, but now we're able to fix it manually.
+Hello,
 
-As sysfs files are part of a driver's uAPI, describe its legitimate input
-values and output format in a documentation file.
+syzbot found the following issue on:
 
-Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
+HEAD commit:    5dadc1be8fc5 Merge tag 'char-misc-6.11-rc7' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16784e00580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=58a85aa6925a8b78
+dashboard link: https://syzkaller.appspot.com/bug?extid=f9f5333782a854509322
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/21e48b60b45c/disk-5dadc1be.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/92982a88343c/vmlinux-5dadc1be.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2149656ca3d1/bzImage-5dadc1be.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f9f5333782a854509322@syzkaller.appspotmail.com
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
+CPU: 0 UID: 0 PID: 10852 Comm: syz.3.1595 Not tainted 6.11.0-rc6-syzkaller-00355-g5dadc1be8fc5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:587 [inline]
+RIP: 0010:__mutex_lock+0xf2/0xd70 kernel/locking/mutex.c:752
+Code: c0 c0 b9 33 9a 48 c1 e8 03 42 0f b6 04 20 84 c0 0f 85 79 0b 00 00 83 3d bb 28 71 0e 00 75 21 49 8d 7d 60 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 74 05 e8 b2 42 38 f6 4d 39 6d 60 0f 85 f3 0a 00 00
+RSP: 0018:ffffc9000313ef60 EFLAGS: 00010202
+RAX: 0000000000000019 RBX: 0000000000000000 RCX: ffffffff9a33b903
+RDX: dffffc0000000000 RSI: ffff888030280000 RDI: 00000000000000c8
+RBP: ffffc9000313f0b8 R08: ffffc9000313f027 R09: 0000000000000000
+R10: ffffc9000313f000 R11: fffff52000627e05 R12: dffffc0000000000
+R13: 0000000000000068 R14: 0000000000000000 R15: ffff888060c51958
+FS:  0000000000000000(0000) GS:ffff8880b8800000(0063) knlGS:00000000f5776b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00007f35653215e8 CR3: 0000000028422000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dvb_usbv2_generic_write+0x26/0x50 drivers/media/usb/dvb-usb-v2/dvb_usb_urb.c:77
+ mxl111sf_ctrl_msg+0x143/0x270 drivers/media/usb/dvb-usb-v2/mxl111sf.c:73
+ mxl111sf_write_reg+0xd8/0x1f0 drivers/media/usb/dvb-usb-v2/mxl111sf.c:123
+ mxl111sf_i2c_start drivers/media/usb/dvb-usb-v2/mxl111sf-i2c.c:130 [inline]
+ mxl111sf_i2c_xfer+0x91e/0x8a30 drivers/media/usb/dvb-usb-v2/mxl111sf-i2c.c:813
+ __i2c_transfer+0x866/0x21f0
+ i2c_transfer+0x271/0x3b0 drivers/i2c/i2c-core-base.c:2304
+ i2cdev_ioctl_rdwr+0x452/0x700 drivers/i2c/i2c-dev.c:309
+ compat_i2cdev_ioctl+0x7ca/0x8e0 drivers/i2c/i2c-dev.c:576
+ __do_compat_sys_ioctl fs/ioctl.c:1007 [inline]
+ __se_compat_sys_ioctl+0x51c/0xca0 fs/ioctl.c:950
+ do_syscall_32_irqs_on arch/x86/entry/common.c:165 [inline]
+ __do_fast_syscall_32+0xb4/0x110 arch/x86/entry/common.c:386
+ do_fast_syscall_32+0x34/0x80 arch/x86/entry/common.c:411
+ entry_SYSENTER_compat_after_hwframe+0x84/0x8e
+RIP: 0023:0xf747d579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 002b:00000000f577656c EFLAGS: 00000206 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000000707
+RDX: 0000000020001100 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:587 [inline]
+RIP: 0010:__mutex_lock+0xf2/0xd70 kernel/locking/mutex.c:752
+Code: c0 c0 b9 33 9a 48 c1 e8 03 42 0f b6 04 20 84 c0 0f 85 79 0b 00 00 83 3d bb 28 71 0e 00 75 21 49 8d 7d 60 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 74 05 e8 b2 42 38 f6 4d 39 6d 60 0f 85 f3 0a 00 00
+RSP: 0018:ffffc9000313ef60 EFLAGS: 00010202
+RAX: 0000000000000019 RBX: 0000000000000000 RCX: ffffffff9a33b903
+RDX: dffffc0000000000 RSI: ffff888030280000 RDI: 00000000000000c8
+RBP: ffffc9000313f0b8 R08: ffffc9000313f027 R09: 0000000000000000
+R10: ffffc9000313f000 R11: fffff52000627e05 R12: dffffc0000000000
+R13: 0000000000000068 R14: 0000000000000000 R15: ffff888060c51958
+FS:  0000000000000000(0000) GS:ffff8880b8800000(0063) knlGS:00000000f5776b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 000055f273f047f0 CR3: 0000000028422000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	c0 c0 b9             	rol    $0xb9,%al
+   3:	33 9a 48 c1 e8 03    	xor    0x3e8c148(%rdx),%ebx
+   9:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax
+   e:	84 c0                	test   %al,%al
+  10:	0f 85 79 0b 00 00    	jne    0xb8f
+  16:	83 3d bb 28 71 0e 00 	cmpl   $0x0,0xe7128bb(%rip)        # 0xe7128d8
+  1d:	75 21                	jne    0x40
+  1f:	49 8d 7d 60          	lea    0x60(%r13),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	74 05                	je     0x36
+  31:	e8 b2 42 38 f6       	call   0xf63842e8
+  36:	4d 39 6d 60          	cmp    %r13,0x60(%r13)
+  3a:	0f 85 f3 0a 00 00    	jne    0xb33
+
+
 ---
- .../testing/sysfs-driver-panthor-profiling    | 10 ++++
- Documentation/gpu/panthor.rst                 | 46 +++++++++++++++++++
- drivers/gpu/drm/panthor/panthor_drv.c         | 39 ++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-panthor-profiling
- create mode 100644 Documentation/gpu/panthor.rst
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-panthor-profiling b/Documentation/ABI/testing/sysfs-driver-panthor-profiling
-new file mode 100644
-index 000000000000..af05fccedc15
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-panthor-profiling
-@@ -0,0 +1,10 @@
-+What:		/sys/bus/platform/drivers/panthor/.../profiling
-+Date:		September 2024
-+KernelVersion:	6.11.0
-+Contact:	Adrian Larumbe <adrian.larumbe@collabora.com>
-+Description:
-+		Bitmask to enable drm fdinfo's job profiling measurements.
-+		Valid values are:
-+		0: Don't enable fdinfo job profiling sources.
-+		1: Enable GPU cycle measurements for running jobs.
-+		2: Enable GPU timestamp sampling for running jobs.
-diff --git a/Documentation/gpu/panthor.rst b/Documentation/gpu/panthor.rst
-new file mode 100644
-index 000000000000..cbf5c4429a2d
---- /dev/null
-+++ b/Documentation/gpu/panthor.rst
-@@ -0,0 +1,46 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+
-+=========================
-+ drm/Panthor CSF driver
-+=========================
-+
-+.. _panfrost-usage-stats:
-+
-+Panthor DRM client usage stats implementation
-+==============================================
-+
-+The drm/Panthor driver implements the DRM client usage stats specification as
-+documented in :ref:`drm-client-usage-stats`.
-+
-+Example of the output showing the implemented key value pairs and entirety of
-+the currently possible format options:
-+
-+::
-+     pos:    0
-+     flags:  02400002
-+     mnt_id: 29
-+     ino:    491
-+     drm-driver:     panthor
-+     drm-client-id:  10
-+     drm-engine-panthor:     111110952750 ns
-+     drm-cycles-panthor:     94439687187
-+     drm-maxfreq-panthor:    1000000000 Hz
-+     drm-curfreq-panthor:    1000000000 Hz
-+     drm-total-memory:       16480 KiB
-+     drm-shared-memory:      0
-+     drm-active-memory:      16200 KiB
-+     drm-resident-memory:    16480 KiB
-+     drm-purgeable-memory:   0
-+
-+Possible `drm-engine-` key names are: `panthor`.
-+`drm-curfreq-` values convey the current operating frequency for that engine.
-+
-+Users must bear in mind that engine and cycle sampling are disabled by default,
-+because of power saving concerns. `fdinfo` users and benchmark applications which
-+query the fdinfo file must make sure to toggle the job profiling status of the
-+driver by writing into the appropriate sysfs node::
-+
-+    echo <N> > /sys/bus/platform/drivers/panthor/[a-f0-9]*.gpu/profiling
-+
-+Where `N` is a bit mask where cycle and timestamp sampling are respectively
-+enabled by the first and second bits.
-diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/panthor/panthor_drv.c
-index 233b265c0819..6f47d9d1d86a 100644
---- a/drivers/gpu/drm/panthor/panthor_drv.c
-+++ b/drivers/gpu/drm/panthor/panthor_drv.c
-@@ -1513,6 +1513,44 @@ static void panthor_remove(struct platform_device *pdev)
- 	panthor_device_unplug(ptdev);
- }
- 
-+static ssize_t profiling_show(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct panthor_device *ptdev = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", ptdev->profile_mask);
-+}
-+
-+static ssize_t profiling_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t len)
-+{
-+	struct panthor_device *ptdev = dev_get_drvdata(dev);
-+	u32 value;
-+	int err;
-+
-+	err = kstrtou32(buf, 0, &value);
-+	if (err)
-+		return err;
-+
-+	if ((value & ~PANTHOR_DEVICE_PROFILING_ALL) != 0)
-+		return -EINVAL;
-+
-+	ptdev->profile_mask = value;
-+
-+	return len;
-+}
-+
-+static DEVICE_ATTR_RW(profiling);
-+
-+static struct attribute *panthor_attrs[] = {
-+	&dev_attr_profiling.attr,
-+	NULL,
-+};
-+
-+ATTRIBUTE_GROUPS(panthor);
-+
- static const struct of_device_id dt_match[] = {
- 	{ .compatible = "rockchip,rk3588-mali" },
- 	{ .compatible = "arm,mali-valhall-csf" },
-@@ -1532,6 +1570,7 @@ static struct platform_driver panthor_driver = {
- 		.name = "panthor",
- 		.pm = pm_ptr(&panthor_pm_ops),
- 		.of_match_table = dt_match,
-+		.dev_groups = panthor_groups,
- 	},
- };
- 
--- 
-2.46.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
