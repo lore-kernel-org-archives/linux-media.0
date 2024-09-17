@@ -1,99 +1,123 @@
-Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71C23C08A;
-	Tue, 17 Sep 2024 14:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.19.76.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EB519BBA;
+	Tue, 17 Sep 2024 14:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726581990; cv=none; b=bSWJysWyosY2WMdb2xKoT1xzJknaYZjSlb7Sf11rcb3qa43tExVH8xDpotzFXBBn7STkyPztG8vf1kSi0s8nmcAPm8ZaK2HzMJWCMszaD9cbGsyrPgYqiupQOeH2LU7o8pUh59iEbJeLMe5cvU+mvSxDARmw88gPC/1T9OW1Cjo=
+	t=1726582210; cv=none; b=ddxar7NizKEO7lDe029ka4j9OzTLOx/PeGtFWoJJzx1XNYoprNgo8jkKcrRoccyzib3E0qx88s8V0IfuCIldL/LpB7xuuMzRSjFCWsuPdgwT2EWXsB0wzizpziZ2XQp5TLBq4Xd6tbsNOmc8sGNZUL6x77PycBSgJoWoh9tFO04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726581990; c=relaxed/simple;
-	bh=O8TFnEzzQuQka4uM9JJmV5K6N/xJ6xskvb4dgy98N24=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dZjvhwMjYXftEv01DoJVZ2DfItw+KARV5xjv5VGz5GMHMUVi8fmEGYKrgHGT66HDvBtSShEkn1ux0McBl5R5TpWkJG9Ug5wzRFXF6jHA177OeIyT4r7RbzNPI6AIPmLjpfv6MNMYk3QsRuJGS43FeYXHn+tm7iZSkpDQUF5+OCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru; spf=pass smtp.mailfrom=rosalinux.ru; dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b=ngkM901K; arc=none smtp.client-ip=195.19.76.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosalinux.ru
+	s=arc-20240116; t=1726582210; c=relaxed/simple;
+	bh=dJi12s2uuOavLgRJd+8G/40diMcWbmgczahPyVn/RCI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jakKC+mtUxj/X0QW51Omiw3JbuK6t+pfa+/KkVaGtwZBeBlQBMPlIx5xIS7bztbyw1sAiprGA8wiVYmK4j5ySK3nKrMiRMikmVuDPPvTF02igI1Qdavlb1aJThpjFYnPdHQQqX8eM9rGYsut2yIIRMZg8bcCRzGX99kfkvXoFHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=aQzhEj40; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b="ngkM901K"
-Received: from localhost (localhost [127.0.0.1])
-	by mail.rosalinux.ru (Postfix) with ESMTP id 1CA15DFC0E87E;
-	Tue, 17 Sep 2024 17:06:18 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id N1XX7aZF9tt3; Tue, 17 Sep 2024 17:06:18 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.rosalinux.ru (Postfix) with ESMTP id E2606DFC0E884;
-	Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru E2606DFC0E884
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-	s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1726581977;
-	bh=ZnDp0kuwty6ZYaaIo7tuaeh++IuabuL6NxK44pY/klQ=;
-	h=From:To:Date:Message-Id:MIME-Version;
-	b=ngkM901K2TKUDaPb/wJmr8+7GOnECevGJqc6o8jWHtTiJiYZBU71zMIRpmy0v+FkG
-	 VDt9pWrlAyIHp2eZbyH0kHok0iTll3qhiwxZh1pHqlIJcrvncFnIEIm/X38i2ppX3f
-	 ETYr1+1jg0xOdbizNuOjjpg8E6cGWgsYViAKFHvGSpcXuJm4YgU3PfCGiate3GXeeY
-	 UYVFlOpxQBd1Z5OSCRpkEU7Orm3jmp4rWtNbiNXe0wUag/a8ap16WoDvGQvNJaZGSd
-	 /mip9VWnyq8iMj+dF6o5ppN0Jmex4l7/4gysKH6eKQg8tFqiXBYRsAJJB692IEQpSe
-	 T6zVa0wvBXYMQ==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ggBFHbrd65yx; Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
-Received: from ubuntu.localdomain (unknown [144.206.93.23])
-	by mail.rosalinux.ru (Postfix) with ESMTPSA id A44EBDFC0E87E;
-	Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
-From: Aleksandr Burakov <a.burakov@rosalinux.ru>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Guennadi Liakhovetski <g.liakhovetski@gmx.de>
-Cc: Aleksandr Burakov <a.burakov@rosalinux.ru>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	lvc-patches@linuxtesting.org
-Subject: [PATCH] V4L/DVB (13661): rj54n1cb0c: possible integer overflow fix
-Date: Tue, 17 Sep 2024 17:04:54 +0300
-Message-Id: <20240917140454.7880-1-a.burakov@rosalinux.ru>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="aQzhEj40"
+Received: from [127.0.1.1] (91-156-87-48.elisa-laajakaista.fi [91.156.87.48])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CE7466B5;
+	Tue, 17 Sep 2024 16:08:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1726582124;
+	bh=dJi12s2uuOavLgRJd+8G/40diMcWbmgczahPyVn/RCI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=aQzhEj40fqqXhL4kwCu2fy8doPaf0e39W8BFTMw0uAQZUEfRrNM/HcZTYenEcNcuX
+	 GwoNZ1kFcjfcvhCS41GdMDevsu419mU1Eh7AT4mFiEt+IsRs7MubNsGjXYYO0qceQ/
+	 W3IrHcqgTc77VzFbOU6RBSRcxBb1K5xO0IgsPJlY=
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Tue, 17 Sep 2024 17:09:29 +0300
+Subject: [PATCH 1/4] media: v4l2-subdev: Add cleanup macros for active
+ state
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240917-scoped-state-v1-1-b8ba3fbe5952@ideasonboard.com>
+References: <20240917-scoped-state-v1-0-b8ba3fbe5952@ideasonboard.com>
+In-Reply-To: <20240917-scoped-state-v1-0-b8ba3fbe5952@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-renesas-soc@vger.kernel.org, 
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1639;
+ i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
+ bh=h+utgyyppaqOqSvoQJ+8vFfC8hzW6qWNmGY5TYaanVw=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBm6Y27dHyTQ+/AekiRMk2DsfelvLw8zpOyIuR05
+ FcVQj9J5qqJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZumNuwAKCRD6PaqMvJYe
+ 9d/hD/9HgsqpkJr4FALWv264jckzXVna2IvdhY9BWKXoLMRo60ts1PA9TZfoQyPZS7LM23Mxfbu
+ tDC1PaiZTS1ThXWgtpR5c7j/Bm5lRowe9p8CBHLwTuHxfDWueMdfUPaxM9HK44mVi6wmRSC8TfX
+ AafPEwkXUzHd5CG8nugCUvWEG83UYCsP+p0WZYy92gydPvzdo+COqDjTL+PZ/7VOKaJtNOntJM4
+ BGNElZKdKpyvx+avumgcGq4eIg5ejIDpciQPTatI3wjek2E27n910JsbaJcquq1aoeoWzhUDzyJ
+ A6VEe/j4TcVQ/ZNKoVCArQQVePNDT4UKKzf/o1wQ0bUxUEW4mEK2rSrBo3nf0VFdQVukU+X6Dbr
+ E01A/qRLUYFKK/5GBMa49FKojhyaJxpnX6IXA64EQI8+0nfoat4G/15FipW9OXKwhI3vpi4lXgy
+ Yj4SB2h2G97OqVgktWCpkzV3FLTYwD55RNaIwzUjDRa7CQP71SpWPorl+bFLpezlefvfnwLdQuy
+ V4r74oy54cj447iQcNWpte/qPIlYTtLo4gzYHcQvhXTT/x4XEu+ZfdsaHb4v4pD2eYq4JoBRkew
+ sZ8Ag8Lug1PKLWlpLWnpYEuYASdFStieBzMxcmE0Kw/76e2O1/omeK7akCAyJPPWEey0Bazgz1J
+ zg4xSbFqfW6olyA==
+X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
+ fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-An integer overflow may occur due to arithmetic operation
-(multiplication) between value '314572800' and variable 'resize',
-where the value comes from '12 * RJ54N1_MAX_WIDTH * (1 << 14)'=20
-and when 'resize' is equal to 16319.
+From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Add cleanup macros for active state. These can be used to call
+v4l2_subdev_lock_and_get_active_state() and manage the unlocking either
+in unscoped or scoped fashion:
 
-Fixes: a6b5f2008a3d ("V4L/DVB (13661): rj54n1cb0c: Add cropping, auto whi=
-te balance, restrict sizes, add platform data")
-Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+This locks the state, gets it to the 'state' variable, and unlocks when
+exiting the surrounding scope:
+
+CLASS(v4l2_subdev_lock_and_get_active_state, state)(subdev);
+
+This does the same, but inside the given scope:
+
+scoped_v4l2_subdev_lock_and_get_active_state(subdev) {
+}
+
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 ---
- drivers/media/i2c/rj54n1cb0c.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/media/v4l2-subdev.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/media/i2c/rj54n1cb0c.c b/drivers/media/i2c/rj54n1cb0=
-c.c
-index a59db10153cd..a612ec1e7157 100644
---- a/drivers/media/i2c/rj54n1cb0c.c
-+++ b/drivers/media/i2c/rj54n1cb0c.c
-@@ -776,8 +776,8 @@ static int rj54n1_sensor_scale(struct v4l2_subdev *sd=
-, s32 *in_w, s32 *in_h,
- 	}
-=20
- 	/* Antiflicker */
--	peak =3D 12 * RJ54N1_MAX_WIDTH * (1 << 14) * resize / rj54n1->tgclk_mhz=
- /
--		10000;
-+	peak =3D 12 * RJ54N1_MAX_WIDTH * resize / rj54n1->tgclk_mhz / 10000;
-+	peak =3D peak * (1 << 14);
- 	peak_50 =3D peak / 6;
- 	peak_60 =3D peak / 5;
-=20
---=20
-2.25.1
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index bd235d325ff9..699007cfffd7 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -8,6 +8,7 @@
+ #ifndef _V4L2_SUBDEV_H
+ #define _V4L2_SUBDEV_H
+ 
++#include <linux/cleanup.h>
+ #include <linux/types.h>
+ #include <linux/v4l2-subdev.h>
+ #include <media/media-entity.h>
+@@ -1854,6 +1855,15 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
+ 	return sd->active_state;
+ }
+ 
++DEFINE_CLASS(v4l2_subdev_lock_and_get_active_state, struct v4l2_subdev_state *,
++	     v4l2_subdev_unlock_state(_T),
++	     v4l2_subdev_lock_and_get_active_state(sd), struct v4l2_subdev *sd);
++
++#define scoped_v4l2_subdev_lock_and_get_active_state(sd)              \
++	for (CLASS(v4l2_subdev_lock_and_get_active_state, state)(sd), \
++	     *done = NULL;                                            \
++	     !done; done = (void *)1)
++
+ /**
+  * v4l2_subdev_init - initializes the sub-device struct
+  *
+
+-- 
+2.43.0
 
