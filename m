@@ -1,92 +1,99 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD8417ADFF
-	for <linux-media@vger.kernel.org>; Tue, 17 Sep 2024 13:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71C23C08A;
+	Tue, 17 Sep 2024 14:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.19.76.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726578091; cv=none; b=A1OajXA6U+WrLv72NoiiJmUJPVDHxmN6BzmgrcZzcDbs2ueyoNYlrdJMl1AB2cvvA4xIyX3RwiaIQbCJAr9SD6WGtr1ituffB5YXP7tTMjXWHviP3V1k0HPm17n1DEnIwAW5n5OIdt74fgoD9zfsNhQ6S+zrgS8m8AIYZ79XNvM=
+	t=1726581990; cv=none; b=bSWJysWyosY2WMdb2xKoT1xzJknaYZjSlb7Sf11rcb3qa43tExVH8xDpotzFXBBn7STkyPztG8vf1kSi0s8nmcAPm8ZaK2HzMJWCMszaD9cbGsyrPgYqiupQOeH2LU7o8pUh59iEbJeLMe5cvU+mvSxDARmw88gPC/1T9OW1Cjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726578091; c=relaxed/simple;
-	bh=qn26PPUmLnFy2sPy0MURRhfS1BPx19fr9dkFSlU1qKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KJK0T77uApzQ4UZNVRPm4kKtRHZGhvJUkmDh2WqIThE/cd2UJ5EsPW4jSCJMFWmqfWdfdgagxmxm1Z2CeO157hk6QlH0+vsJGK2WN//PkISnGEaT0hRDv2bqlX096IYiO7tj7Fn0vdFEdehN8kq7evMO7oVCy4F4SdpFVZyGY+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=KceMzZkj; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1726581990; c=relaxed/simple;
+	bh=O8TFnEzzQuQka4uM9JJmV5K6N/xJ6xskvb4dgy98N24=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dZjvhwMjYXftEv01DoJVZ2DfItw+KARV5xjv5VGz5GMHMUVi8fmEGYKrgHGT66HDvBtSShEkn1ux0McBl5R5TpWkJG9Ug5wzRFXF6jHA177OeIyT4r7RbzNPI6AIPmLjpfv6MNMYk3QsRuJGS43FeYXHn+tm7iZSkpDQUF5+OCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru; spf=pass smtp.mailfrom=rosalinux.ru; dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b=ngkM901K; arc=none smtp.client-ip=195.19.76.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosalinux.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KceMzZkj"
-Received: from pendragon.ideasonboard.com (62-46-121-59.adsl.highway.telekom.at [62.46.121.59])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C636514;
-	Tue, 17 Sep 2024 15:00:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1726578000;
-	bh=qn26PPUmLnFy2sPy0MURRhfS1BPx19fr9dkFSlU1qKU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KceMzZkjqVH0tTyLMV1EFQqk8MI+6D5Kdx01Z999u3aBcWldWbpKOWmtGubu15zD/
-	 rIi2S1YXZlNAc6g0VyQPnVKWBD8uywasZvWMi/YPcyytgJjCTtRm/GSdMS7hxUPm2l
-	 GI+/Sa92Ed5Jufr9CRrAJhAmPpmBKhX474Bc22ek=
-Date: Tue, 17 Sep 2024 16:00:47 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, tomi.valkeinen@ideasonboard.com,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, hverkuil@xs4all.nl
-Subject: Re: [PATCH 2/2] media: Documentation: Update
- {enable,disable}_streams documentation
-Message-ID: <20240917130047.GC17350@pendragon.ideasonboard.com>
-References: <20240917124345.16681-1-sakari.ailus@linux.intel.com>
- <20240917124345.16681-2-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b="ngkM901K"
+Received: from localhost (localhost [127.0.0.1])
+	by mail.rosalinux.ru (Postfix) with ESMTP id 1CA15DFC0E87E;
+	Tue, 17 Sep 2024 17:06:18 +0300 (MSK)
+Received: from mail.rosalinux.ru ([127.0.0.1])
+	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id N1XX7aZF9tt3; Tue, 17 Sep 2024 17:06:18 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.rosalinux.ru (Postfix) with ESMTP id E2606DFC0E884;
+	Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru E2606DFC0E884
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
+	s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1726581977;
+	bh=ZnDp0kuwty6ZYaaIo7tuaeh++IuabuL6NxK44pY/klQ=;
+	h=From:To:Date:Message-Id:MIME-Version;
+	b=ngkM901K2TKUDaPb/wJmr8+7GOnECevGJqc6o8jWHtTiJiYZBU71zMIRpmy0v+FkG
+	 VDt9pWrlAyIHp2eZbyH0kHok0iTll3qhiwxZh1pHqlIJcrvncFnIEIm/X38i2ppX3f
+	 ETYr1+1jg0xOdbizNuOjjpg8E6cGWgsYViAKFHvGSpcXuJm4YgU3PfCGiate3GXeeY
+	 UYVFlOpxQBd1Z5OSCRpkEU7Orm3jmp4rWtNbiNXe0wUag/a8ap16WoDvGQvNJaZGSd
+	 /mip9VWnyq8iMj+dF6o5ppN0Jmex4l7/4gysKH6eKQg8tFqiXBYRsAJJB692IEQpSe
+	 T6zVa0wvBXYMQ==
+X-Virus-Scanned: amavisd-new at rosalinux.ru
+Received: from mail.rosalinux.ru ([127.0.0.1])
+	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ggBFHbrd65yx; Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
+Received: from ubuntu.localdomain (unknown [144.206.93.23])
+	by mail.rosalinux.ru (Postfix) with ESMTPSA id A44EBDFC0E87E;
+	Tue, 17 Sep 2024 17:06:17 +0300 (MSK)
+From: Aleksandr Burakov <a.burakov@rosalinux.ru>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+Cc: Aleksandr Burakov <a.burakov@rosalinux.ru>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org,
+	lvc-patches@linuxtesting.org
+Subject: [PATCH] V4L/DVB (13661): rj54n1cb0c: possible integer overflow fix
+Date: Tue, 17 Sep 2024 17:04:54 +0300
+Message-Id: <20240917140454.7880-1-a.burakov@rosalinux.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240917124345.16681-2-sakari.ailus@linux.intel.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 17, 2024 at 03:43:45PM +0300, Sakari Ailus wrote:
-> Document the expected {enable,disable}_streams callback behaviour for
-> drivers that are stream-unaware i.e. don't specify the
-> V4L2_SUBDEV_CAP_STREAMS sub-device capability flat. In this specific case,
-> the mask argument can be ignored.
+An integer overflow may occur due to arithmetic operation
+(multiplication) between value '314572800' and variable 'resize',
+where the value comes from '12 * RJ54N1_MAX_WIDTH * (1 << 14)'=20
+and when 'resize' is equal to 16319.
 
-Wouldn't it be better to use BIT(0) in that case to simplifiy
-interoperability with stream-aware devices ?
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  include/media/v4l2-subdev.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index 3cc6b4a5935f..67a6e6ec58b8 100644
-> --- a/include/media/v4l2-subdev.h
-> +++ b/include/media/v4l2-subdev.h
-> @@ -834,11 +834,19 @@ struct v4l2_subdev_state {
->   *	v4l2_subdev_init_finalize() at initialization time). Do not call
->   *	directly, use v4l2_subdev_enable_streams() instead.
->   *
-> + *	Drivers that support only a single stream without setting the
-> + *	V4L2_SUBDEV_CAP_STREAMS sub-device capatility flag do not need to
-> + *	be concerned with the mask argument.
-> + *
->   * @disable_streams: Disable the streams defined in streams_mask on the given
->   *	source pad. Subdevs that implement this operation must use the active
->   *	state management provided by the subdev core (enabled through a call to
->   *	v4l2_subdev_init_finalize() at initialization time). Do not call
->   *	directly, use v4l2_subdev_disable_streams() instead.
-> + *
-> + *	Drivers that support only a single stream without setting the
-> + *	V4L2_SUBDEV_CAP_STREAMS sub-device capatility flag do not need to
-> + *	be concerned with the mask argument.
->   */
->  struct v4l2_subdev_pad_ops {
->  	int (*enum_mbus_code)(struct v4l2_subdev *sd,
+Fixes: a6b5f2008a3d ("V4L/DVB (13661): rj54n1cb0c: Add cropping, auto whi=
+te balance, restrict sizes, add platform data")
+Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+---
+ drivers/media/i2c/rj54n1cb0c.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Regards,
+diff --git a/drivers/media/i2c/rj54n1cb0c.c b/drivers/media/i2c/rj54n1cb0=
+c.c
+index a59db10153cd..a612ec1e7157 100644
+--- a/drivers/media/i2c/rj54n1cb0c.c
++++ b/drivers/media/i2c/rj54n1cb0c.c
+@@ -776,8 +776,8 @@ static int rj54n1_sensor_scale(struct v4l2_subdev *sd=
+, s32 *in_w, s32 *in_h,
+ 	}
+=20
+ 	/* Antiflicker */
+-	peak =3D 12 * RJ54N1_MAX_WIDTH * (1 << 14) * resize / rj54n1->tgclk_mhz=
+ /
+-		10000;
++	peak =3D 12 * RJ54N1_MAX_WIDTH * resize / rj54n1->tgclk_mhz / 10000;
++	peak =3D peak * (1 << 14);
+ 	peak_50 =3D peak / 6;
+ 	peak_60 =3D peak / 5;
+=20
+--=20
+2.25.1
 
-Laurent Pinchart
