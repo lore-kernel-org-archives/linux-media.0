@@ -1,123 +1,157 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E5C101EE
-	for <linux-media@vger.kernel.org>; Tue, 17 Sep 2024 14:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1DB535DC
+	for <linux-media@vger.kernel.org>; Tue, 17 Sep 2024 14:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726583457; cv=none; b=mmrYsDOs+cdtxW4t2mU4lh6EiuAf7K9p9upKCQOcyp0QVRuT72nvl50XYfuFVJ2E5cn93hnibS/naK7H+MiptkH5dWOx8lreZWdTWmT0wmZmgQH5iG5WxsYA5YY2ckFPJBAGQkIsYw6MkNQHf/nDOnBzGIgBreizrtH62YD6SsA=
+	t=1726584887; cv=none; b=IWGXdEPhIMXcgBOIEMlo1D7L+uaaTbo8G1ML7owvHx8EMxn7kQvLr/lTUU3596UulSe4mFKHClbwpG/3q3k+K6Y2aFc4SoMRFwzrrenvSiv+QjbDww8l9Dxqej6AJyoGvXvLMHVCBc4vtlQx+feAfiGIIe3IQcbiRIDtTnd9xlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726583457; c=relaxed/simple;
-	bh=kIfGlOdakpQPz1iOfxWBoFSTSxvleeXHaLmfhx/JTd8=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YJLGVOaPVA8Cz5cn4vY4Y75FxftYF6Mibtv5roT3JqjlPGsTZLNc3HXzmW2GiLqkBQVQzllPJpK6jJtS5/pf6VQUT2tkOTVCKmsE3WW/wU4GSgUFygLMtEcCaP//gH8xRc2Xwp7T1PHhq3YgrEZt2kPlBDZw2+FPgox0mljqzwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=r8BZqzEt; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
+	s=arc-20240116; t=1726584887; c=relaxed/simple;
+	bh=kBC1DQmmJLEUb7Lnac1xNRSNkCpdbQAaFQ+P5IgAntM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jlIPQZr9rWkqgfdkXrsYvr6tIvp1f1G7z0xs9DqrZaLQo5jEwYV+Iw9UDVqnAS4RBl9pgyKu9ckK0ACa8idhoyTnrKYntrOhE6IsQGGqIEehvhZM3D+Q7ktmBtida8RcHmOIwIkA4kGUDM0m++4m1QmPXg4S5UiqWjyQPhtfZns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=oSh9vu6y; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="r8BZqzEt"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7a9a7bea3d8so459147385a.3
-        for <linux-media@vger.kernel.org>; Tue, 17 Sep 2024 07:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1726583454; x=1727188254; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMM89ZB/1bnrJFSfjunecThQPb2k/NYHbLvDy7SZXiQ=;
-        b=r8BZqzEtGXqRArtqGvo+4IdonT2WrqxHMWHBWoLdB6BBzsnKNlIYNGp38y7t+lt9zM
-         IKhICgPKmQvV+JZ1RM8tXYgp+/fWqLaBYqPsuSdtu9aBNXho+/5VM7xeX99NVXPEgP5v
-         5Ie7ugnnFlJpAMri9MgvvUr6kaTQ6YdvVW+IP+sQxQ1mo495+OYcd1TgwOK2pYUKjy01
-         sgpiOFSfOPTsoVl4ThQwmitRkH9EbqzEWHqbwAnwtJk6fX7L4zKl1783y8hqHpDJ2Y7w
-         0NXef/10Bu9a/f7BCL2gJ9BPFsf5R8CAIyjCQC0YC2QrM0SCM6fGanC5oHSpQKeOO0kf
-         IJ6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726583454; x=1727188254;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yMM89ZB/1bnrJFSfjunecThQPb2k/NYHbLvDy7SZXiQ=;
-        b=oLQV69ID3zGvbNgRE86u3dgPzKkp5tkbwYG1kpLd0iRbt1bkJElpz+z/E62RcvAHet
-         vbG4fwQ/5h0eXPCNJbCr9h3F/5FU7yT7gjgosfbQ/XStb4shyilQsiRGVcA1f4qBNTNz
-         9mY2P2vkym/AybUYpTaLEuJ15krDtPEBH7wZ+Hn+ph6lWldqT2/8DL4lYJikwJIj6o63
-         VlbXUomXFair0YRkwuVRDw1Y3uyn2mnuhkpGhdu6m2dho3l10zo+IpNHwfYgYuCaIBdg
-         aTeCSJ9EVXsfPNLqwLb2tvyUPJJvMCFx7M8m7vTnKdnYkji+JnpE3fOGO2qYoxi9Y7PG
-         yG/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUGuPMAAa3Y771xbafFjP2OzSS5NmXkaNDz2p+cktxyWV0iI1qbXPzTw8m6LCo2JcYxNUwN+36EVNwiMw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyDNY5GBxSWRe26QMogvObidFFXoN1QOwZ+0VbfLHBFME7QGUT
-	7rqyO1lprfkcN7Lj2EH7MjwlKP05VWnKbSrBpCD4KCWauWFS9/zJkDspTJv4yEk0iSvnkDaQp8R
-	T
-X-Google-Smtp-Source: AGHT+IFuWpiPqswEiMK4f91GlBUHLcxy6MBTuW0yOxRV4vS+sFwcpn9cidx38Ymk5ez2HHX6RtiWJQ==
-X-Received: by 2002:a05:620a:2907:b0:7a6:674d:a32c with SMTP id af79cd13be357-7a9e5ee7cd0mr2990491285a.10.1726583454536;
-        Tue, 17 Sep 2024 07:30:54 -0700 (PDT)
-Received: from nicolas-tpx395.lan ([2606:6d00:17:9cac::580])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ab3eb57890sm360529585a.88.2024.09.17.07.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2024 07:30:54 -0700 (PDT)
-Message-ID: <7a8e87d0acea6694e3a230472c942c6f5737bd3e.camel@ndufresne.ca>
-Subject: Re: Media Requests on Video Capture Device
-From: Nicolas Dufresne <nicolas@ndufresne.ca>
-To: Karthik Poduval <karthik.poduval@gmail.com>, Linux Media Mailing List
-	 <linux-media@vger.kernel.org>
-Date: Tue, 17 Sep 2024 10:30:53 -0400
-In-Reply-To: <CAFP0Ok-pjOYpRxj8TbSgFgdQ6xT-pegd0b9uiM8LDhmu_WvZMw@mail.gmail.com>
-References: 
-	<CAFP0Ok-pjOYpRxj8TbSgFgdQ6xT-pegd0b9uiM8LDhmu_WvZMw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="oSh9vu6y"
+Received: from pendragon.ideasonboard.com (62-46-121-59.adsl.highway.telekom.at [62.46.121.59])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A4788514;
+	Tue, 17 Sep 2024 16:53:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1726584801;
+	bh=kBC1DQmmJLEUb7Lnac1xNRSNkCpdbQAaFQ+P5IgAntM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oSh9vu6ybaYXDvYVYp1bvJVzQPkHPocSV1U7vVjOdIAEDVxi8yTMCEuOqzRIlF+ue
+	 oC2CBiAhPDAQJBbOfpK8t7yXekHYtfV66tTdR2YeRtwqbpl6J99mFEp+hll29MXy9b
+	 wc+r4ut+sZtu/gC7fNXdlQPnIu/Ud8d+u+A87tMA=
+Date: Tue, 17 Sep 2024 17:54:09 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, hverkuil@xs4all.nl
+Subject: Re: [PATCH 1/2] media: Documentation: Deprecate s_stream video op,
+ update docs
+Message-ID: <20240917145409.GD17350@pendragon.ideasonboard.com>
+References: <20240917124345.16681-1-sakari.ailus@linux.intel.com>
+ <6a869a88-9fb0-43fd-99f9-9c465419e4cf@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6a869a88-9fb0-43fd-99f9-9c465419e4cf@ideasonboard.com>
 
-Le lundi 16 septembre 2024 =C3=A0 20:42 -0700, Karthik Poduval a =C3=A9crit=
-=C2=A0:
-> Hi All,
->=20
-> I was trying to implement media requests on a video capture device on
-> kernel version 6.1. On my video capture device driver I configured the
-> q settings as
-> q->min_buffers_needed =3D 4;
-> q->supports_requests =3D true;
->=20
-> To make the application work however I had to comment out the
-> following lines from videobuf2-core.c
->  /*
-> * This combination is not allowed since a non-zero value of
-> * q->min_queued_buffers can cause vb2_core_qbuf() to fail if
-> * it has to call start_streaming(), and the Request API expects
-> * that queueing a request (and thus queueing a buffer contained
-> * in that request) will always succeed. There is no method of
-> * propagating an error back to userspace.
-> */
-> //if (WARN_ON(q->supports_requests && q->min_queued_buffers))
-> // return -EINVAL;
->=20
-> Regular capture would not work without min_buffers_needed being set
-> and requests wouldn't work without supports_requests being set.
->=20
-> Does this mean that media requests are not supported on video capture dev=
-ices ?
-> Kindly advise on how to proceed.
+On Tue, Sep 17, 2024 at 05:22:29PM +0300, Tomi Valkeinen wrote:
+> On 17/09/2024 15:43, Sakari Ailus wrote:
+> > The scope of the s_stream video operation is now fully supported by
+> > {enable,disable}_straems. Explicitly document the s_stream() op as
+> > deprecated and update the related documentation.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >   Documentation/driver-api/media/camera-sensor.rst |  8 ++++----
+> >   Documentation/driver-api/media/tx-rx.rst         | 11 ++++++-----
+> >   include/media/v4l2-subdev.h                      |  5 +++--
+> >   3 files changed, 13 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+> > index b4920b34cebc..c290833165e6 100644
+> > --- a/Documentation/driver-api/media/camera-sensor.rst
+> > +++ b/Documentation/driver-api/media/camera-sensor.rst
+> > @@ -81,10 +81,10 @@ restart when the system is resumed. This requires coordination between the
+> >   camera sensor and the rest of the camera pipeline. Bridge drivers are
+> >   responsible for this coordination, and instruct camera sensors to stop and
+> >   restart streaming by calling the appropriate subdev operations
+> > -(``.s_stream()``, ``.enable_streams()`` or ``.disable_streams()``). Camera
+> > -sensor drivers shall therefore **not** keep track of the streaming state to
+> > -stop streaming in the PM suspend handler and restart it in the resume handler.
+> > -Drivers should in general not implement the system PM handlers.
+> > +(``.enable_streams()`` or ``.disable_streams()``). Camera sensor drivers shall
+> 
+> I didn't go through the docs, but I think we need to make it clear 
+> somewhere that v4l2_subdev_enable_streams() and 
+> v4l2_subdev_disable_streams() _must_ be used to enable/disable the 
+> streaming in the source subdevice, and the related subdev callbacks must 
+> not be called directly.
 
-Correct, some RFC for read-only request was adding some of the implementati=
-on.
+include/media/v4l2-subdev.h states
 
-https://lore.kernel.org/linux-media/20210610113615.785359-1-hverkuil-cisco@=
-xs4all.nl/
+ * @enable_streams: Enable the streams defined in streams_mask on the given
+ *      source pad. Subdevs that implement this operation must use the active
+ *      state management provided by the subdev core (enabled through a call to
+ *      v4l2_subdev_init_finalize() at initialization time). Do not call
+ *      directly, use v4l2_subdev_enable_streams() instead.
 
-Now, this is about attaching control values that are apply when a buffer is
-produced (more like what parameter was applied to that buffer). There is no=
- RFC
-for actually applying a control for a specific capture. This is a bit
-challenging, since we don't have spec that requires drivers to fill capture
-buffers in the order they have been queued, even though this is what we do =
-in
-practice.
+This patch looks good to me.
 
-Nicolas
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-p.s. the dynamic arrays part has been split out and merged already
+> Also, v4l2_subdev_enable_streams() and v4l2_subdev_disable_streams() 
+> kernel doc doesn't seem to clarify that if the driver using those 
+> functions does not support streams, it should use BIT_ULL(1) as the 
+> streams_mask parameter.
+> 
+> > +therefore **not** keep track of the streaming state to stop streaming in the PM
+> > +suspend handler and restart it in the resume handler. Drivers should in general
+> > +not implement the system PM handlers.
+> >   
+> >   Camera sensor drivers shall **not** implement the subdev ``.s_power()``
+> >   operation, as it is deprecated. While this operation is implemented in some
+> > diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
+> > index 29d66a47b56e..a339df61fca8 100644
+> > --- a/Documentation/driver-api/media/tx-rx.rst
+> > +++ b/Documentation/driver-api/media/tx-rx.rst
+> > @@ -49,11 +49,12 @@ Link frequency
+> >   The :ref:`V4L2_CID_LINK_FREQ <v4l2-cid-link-freq>` control is used to tell the
+> >   receiver the frequency of the bus (i.e. it is not the same as the symbol rate).
+> >   
+> > -``.s_stream()`` callback
+> > -^^^^^^^^^^^^^^^^^^^^^^^^
+> > +``.enable_streams()`` and ``.disable_streams()`` callbacks
+> > +^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   
+> > -The struct struct v4l2_subdev_video_ops->s_stream() callback is used by the
+> > -receiver driver to control the transmitter driver's streaming state.
+> > +The struct v4l2_subdev_pad_ops->enable_streams() and struct
+> > +v4l2_subdev_pad_ops->disable_streams() callbacks are used by the receiver driver
+> > +to control the transmitter driver's streaming state.
+> >   
+> >   
+> >   CSI-2 transmitter drivers
+> > @@ -127,7 +128,7 @@ Stopping the transmitter
+> >   ^^^^^^^^^^^^^^^^^^^^^^^^
+> >   
+> >   A transmitter stops sending the stream of images as a result of
+> > -calling the ``.s_stream()`` callback. Some transmitters may stop the
+> > +calling the ``.disable_streams()`` callback. Some transmitters may stop the
+> >   stream at a frame boundary whereas others stop immediately,
+> >   effectively leaving the current frame unfinished. The receiver driver
+> >   should not make assumptions either way, but function properly in both
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index 8daa0929865c..3cc6b4a5935f 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -450,8 +450,9 @@ enum v4l2_subdev_pre_streamon_flags {
+> >    *	already started or stopped subdev. Also see call_s_stream wrapper in
+> >    *	v4l2-subdev.c.
+> >    *
+> > - *	New drivers should instead implement &v4l2_subdev_pad_ops.enable_streams
+> > - *	and &v4l2_subdev_pad_ops.disable_streams operations, and use
+> > + *	This callback is DEPRECATED. New drivers should instead implement
+> > + *	&v4l2_subdev_pad_ops.enable_streams and
+> > + *	&v4l2_subdev_pad_ops.disable_streams operations, and use
+> >    *	v4l2_subdev_s_stream_helper for the &v4l2_subdev_video_ops.s_stream
+> >    *	operation to support legacy users.
+> >    *
 
+-- 
+Regards,
+
+Laurent Pinchart
