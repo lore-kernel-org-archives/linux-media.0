@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CD215C14E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FED1662E4;
 	Wed, 18 Sep 2024 06:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726639656; cv=none; b=qV2+quf7/AB9hxN+Rt+xf357nyL9GYN/LGfNv5IPArtDaBoZRs6w4f7KfxcU9SDLNf8z0jVPDV490IuuJBgTOOLtFCpMwMhWDFNJXWTRyLss11SBWtNkyaE4Sc83uPjVPvZKL0SwMu6d0LR5E9M2jPaNGeRgnNsQWYvwE8R7GI8=
+	t=1726639657; cv=none; b=O3ms/5o2+SgoyHq/JFub5NJBI6dR9xAHeljRTnv5mycIyQS1rYYjjaG28qy8qNVyOxsJeNxP3KyLQR52bNSUwYXTo+ze0HCATXekeOCd51fyxk9fs7Ef8/+C6NWeobqIHKdsb1BpA87GTE8kT8nqhFObfkbVkoLezZwuu9u59tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726639656; c=relaxed/simple;
-	bh=eU1HQMFCxErjcvWaDadkLK5YgaXUhPL5khZzjM98BSs=;
+	s=arc-20240116; t=1726639657; c=relaxed/simple;
+	bh=4+Kjm45EumF1BZkBC+vch/qxAQMK2SWvZ+EcU8j+cTA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GfI+kjicQEi/OeD5AnmHm3MdYb4jM6Am/bIwZPmjhkGvh3TG7l/bozcvjTv2QKNv8SobK14T5xnpE3wou3P4jMBAURKxBt3+EGNRQwuTaJXQQf3HeuavpyKfJsbeCuLIRkAwpTM/Tkf1KgBogwptmLo88cOb8WiK0mCsFUrOL9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dGnD5sm8; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=aWalo9dl1+XcKbFs0CXBKwQ0Ybp8AVLQA4Io0O0+2zS+rB/zlIBcgjRS6NwK1VP625XCbJjiQvWStULq27HTJV4Z9qIjEqXuJqzfNqWYsbvfggw1kHzvYcWSzQDsAT2SXO+5rBIkfgt9jkiWcZvTqGVHSnUZUY95dXzSP5Pgmn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ccu5jhtP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGnD5sm8"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5EAFDC4CEDD;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ccu5jhtP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A3C5EC4CEE2;
 	Wed, 18 Sep 2024 06:07:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1726639656;
-	bh=eU1HQMFCxErjcvWaDadkLK5YgaXUhPL5khZzjM98BSs=;
+	bh=4+Kjm45EumF1BZkBC+vch/qxAQMK2SWvZ+EcU8j+cTA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=dGnD5sm8zQJ6YbhSZqxx3uRcqiP24nmZpSmfzUpt9jdT7BzahJtlATGsrB3P3hcrO
-	 cGTrMM8K4fIlARAO/qvou8q1sWs0fgFuOOVQD/3KRUTRnB5f9MyXM8IQrzucYUezvg
-	 JBBHQ5A0Dh8eiw9Wb4fThCzjHxG8c2vM4+WJW3ASMSeqpvqw6wLO9/7AxjvPd9sz7q
-	 RFBSxa4M6wemGetQ6tA1jDNIxM7eAjLsW+Oz3yAq/bUEePm2RqglfyW2Ae7iogLT3S
-	 d51drtoZpPir1eN6RoOuT4nU6K1xBOiOMnd5Im5Al2v61OTF1LHd1DwqHU1C4aIauq
-	 CK+nB674yUUrQ==
+	b=ccu5jhtP1wFFhLTJ2Jxp1o+q714FG0m0mRoJ68ybmQHTRIKDrRhFD/oXVBk+/sn3x
+	 uCKyk+LUDsUbWVwaOTbn35235JeH0pD4Mvl1qh4IbthZALkp5OCtt/Qb6250sj0A4v
+	 oxcnk0A4q5gsMlHAAZwZEsLiNFHKM7sILNcIJAxZ9gMDwgLbKGT9HylRKCns+ZJMOq
+	 MipM6h4acrvLce7X74OjBgF4xwdFkHVWsK0q/0Yc1hq5Wsd7d+dI1cZCyh4xHboyDO
+	 sNfMQ7b02ArPX7cMszuECn5zrXX26W4VngPT48r/LE6P51e8T+d1pfutwFvuPA2+6H
+	 6pN6Iy1krN6EA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C6CC3ABCD;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 986ABCAC589;
 	Wed, 18 Sep 2024 06:07:36 +0000 (UTC)
 From: Keke Li via B4 Relay <devnull+keke.li.amlogic.com@kernel.org>
-Date: Wed, 18 Sep 2024 14:07:17 +0800
-Subject: [PATCH v3 6/9] media: Add C3ISP_PARAMS and C3ISP_STATS meta
- formats
+Date: Wed, 18 Sep 2024 14:07:19 +0800
+Subject: [PATCH v3 8/9] Documentation: media: add documentation file
+ metafmt-c3-isp.rst
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240918-c3isp-v3-6-f774a39e6774@amlogic.com>
+Message-Id: <20240918-c3isp-v3-8-f774a39e6774@amlogic.com>
 References: <20240918-c3isp-v3-0-f774a39e6774@amlogic.com>
 In-Reply-To: <20240918-c3isp-v3-0-f774a39e6774@amlogic.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -52,11 +52,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
  Keke Li <keke.li@amlogic.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726639635; l=2162;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726639635; l=2506;
  i=keke.li@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=1oRu2lG8MHrXLJnw+JUMY2ovLWxxdjfkC+35WOnDZsM=;
- b=Xp08y3/+60VjbWI0SB2B61yV6fl2Btz4PdvaL31h966ruee+1lOBKzsixe9ys/hdLbbrT3fsA
- fgOV8G+pgEDAVrLTE/+xHOtWwOvGtm/VJ9F5fZ0TbJnVqR4A0snDtcN
+ bh=rUBd8+yUBOxLjKjvST1rZmnj73w+JEufrqFVM56kfIk=;
+ b=umhZtXyWm5l3d16imxC3hRyCvlhDSs+brlI2w+6I5pg2d79B0fSj2Kor1GABxoWgSCO6axCwJ
+ TNdX7IB2i1hCjo8HjSm3D9L0mZngrJQUAI95+jptQ3Dua/Jpu8xNMn1
 X-Developer-Key: i=keke.li@amlogic.com; a=ed25519;
  pk=XxNPTsQ0YqMJLLekV456eoKV5gbSlxnViB1k1DhfRmU=
 X-Endpoint-Received: by B4 Relay for keke.li@amlogic.com/20240902 with
@@ -66,44 +66,72 @@ Reply-To: keke.li@amlogic.com
 
 From: Keke Li <keke.li@amlogic.com>
 
-C3ISP_PARAMS is the C3 ISP Parameters format.
-C3ISP_STATS is the C3 ISP Statistics format.
+Add the file 'metafmt-c3-isp.rst' that documents
+the meta format of c3-isp.
 
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Keke Li <keke.li@amlogic.com>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
- include/uapi/linux/videodev2.h       | 4 ++++
- 2 files changed, 6 insertions(+)
+ .../userspace-api/media/v4l/meta-formats.rst       |  1 +
+ .../userspace-api/media/v4l/metafmt-c3-isp.rst     | 39 ++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index e14db67be97c..d0e346f301c1 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1459,6 +1459,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr = "Rockchip ISP1 3A Parameters"; break;
- 	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr = "Rockchip ISP1 3A Statistics"; break;
- 	case V4L2_META_FMT_RK_ISP1_EXT_PARAMS:	descr = "Rockchip ISP1 Ext 3A Params"; break;
-+	case V4L2_META_FMT_C3ISP_PARAMS:	descr = "Amlogic C3 ISP Parameters"; break;
-+	case V4L2_META_FMT_C3ISP_STATS:		descr = "Amlogic C3 ISP Statistics"; break;
- 	case V4L2_PIX_FMT_NV12_8L128:	descr = "NV12 (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12M_8L128:	descr = "NV12M (8x128 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_10BE_8L128:	descr = "10-bit NV12 (8x128 Linear, BE)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 27239cb64065..7d0a3e502a47 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -857,6 +857,10 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
- #define V4L2_META_FMT_RK_ISP1_EXT_PARAMS	v4l2_fourcc('R', 'K', '1', 'E') /* Rockchip ISP1 3a Extensible Parameters */
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index c6e56b5888bc..3a420747f6e7 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -12,6 +12,7 @@ These formats are used for the :ref:`metadata` interface only.
+ .. toctree::
+     :maxdepth: 1
  
-+/* Vendor specific - used for C3_ISP */
-+#define V4L2_META_FMT_C3ISP_PARAMS	v4l2_fourcc('C', 'P', 'R', 'M') /* Amlogic C3 ISP Parameters */
-+#define V4L2_META_FMT_C3ISP_STATS	v4l2_fourcc('C', 'S', 'T', 'S') /* Amlogic C3 ISP Statistics */
++    metafmt-c3-isp
+     metafmt-d4xx
+     metafmt-generic
+     metafmt-intel-ipu3
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst b/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst
+new file mode 100644
+index 000000000000..bbaf3542c1ca
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst
+@@ -0,0 +1,39 @@
++.. SPDX-License-Identifier: (GPL-2.0-only OR MIT)
 +
- /* Vendor specific - used for RaspberryPi PiSP */
- #define V4L2_META_FMT_RPI_BE_CFG	v4l2_fourcc('R', 'P', 'B', 'C') /* PiSP BE configuration */
- 
++.. _v4l2-meta-fmt-c3isp-stats:
++.. _v4l2-meta-fmt-c3isp-params:
++
++***********************************************************************
++V4L2_META_FMT_C3ISP_STATS ('CSTS'), V4L2_META_FMT_C3ISP_PARAMS ('CPRM')
++***********************************************************************
++
++.. c3_isp_stats_info
++
++3A statistics
++=============
++
++The C3 ISP can collect different statistics over an input Bayer frame.
++Those statistics are obtained from the "isp-stats" metadata capture video nodes,
++using the :c:type:`v4l2_meta_format` interface.
++They are formatted as described by the :c:type:`c3_isp_stats_info` structure.
++
++The statistics collected are  Auto-white balance,
++Auto-exposure and Auto-focus information.
++
++.. c3_isp_params_buffer
++
++Pipeline parameters
++===================
++
++The pipeline parameters are passed to the "isp-params" metadata
++output video nodes, using the :c:type:`v4l2_meta_format` interface. They are
++formatted as described by the :c:type:`c3_isp_params_buffer` structure.
++
++The structure c3_isp_params_buffer includes the necessary parameters
++required by the ISP.
++These parameters are written to the ISP hardware.
++
++Amlogic C3 ISP uAPI data types
++===============================
++
++.. kernel-doc:: drivers/media/platform/amlogic/c3-isp/include/uapi/c3-isp-config.h
 
 -- 
 2.46.1
