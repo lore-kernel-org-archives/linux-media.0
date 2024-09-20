@@ -1,133 +1,120 @@
 Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AE1433CF
-	for <linux-media@vger.kernel.org>; Fri, 20 Sep 2024 07:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.185.170.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726817716; cv=none; b=XjsxN6vuxEhfX+yP+Eul2f/igOf9qV2gZWG0mC5CHV6oWsSNBf7tqSEImJCnFzgbwnzBsSxazI19Kc4Dzbyq/bucilXL+vToCDZBIqP8wy/KXNZeIhG3q6v8dWuG8p9E8KdOQSTOuRizT1h/awap9oXZ0VAIXChQ25F0ie9vblY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726817716; c=relaxed/simple;
-	bh=7Aa+VJ+t4CkCprfOvJ6iqSsoMb+v7iTedb3/isDi3ok=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Chr9zBAtD6q3DhmUOGytOUy2Tnn/4x9/m3EiWWgE7lb442XEGmiwzx0t4BX6fMApDbiy2eaxGwDJ/raSYHp5GduoKhFi115hZ1A2LTucXTqlXuDT52gwjyia0V0kF37/2/cCQmCHxg9GE/Cscw146Yp27q8YUVfxyOYsXGkHgmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=iki.fi; arc=none smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C634D9FB
+	for <linux-media@vger.kernel.org>; Fri, 20 Sep 2024 07:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726817804; cv=pass; b=FUUfQLQhS4IHXrOGLgH4K8YgBl0Bcn0BpfbPOCj+Fhn98FVhuasYPMVoQWbJzPsRAiBc2NgAseNfPp5+O36TIuD+AU1rZva5xKsraCzyk7ADV8YNwT/s81GvkvXYRUuvO3gHs9OWNjHuQbhAa91u+FAB7aA5jB/U/UO7gm0XUWQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726817804; c=relaxed/simple;
+	bh=mvbxh5AvWKpyL6qOprKhSRalLQkB/FYJVh32enZBfZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u5lcBz0eN7AnjFQCIqYSRjfWQeP40/A47A2Eu0oxGIzDtJSnNgebucXJhPp/S67EFyotGJmhPHi9HjP3bbQcXwKjGr2QqQW6yItkeJKjI/oVaQaHMer/9UfwcM8Xmdt6Au0D41y+XFtiubkYZSmBH1NpCNAOUWX491jBRUOqux0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=HnEA3LwA; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="HnEA3LwA"
 Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-c641-1eff-feae-163c.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:c641:1eff:feae:163c])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sailus)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4X940l6pSRz49Q3Y;
-	Fri, 20 Sep 2024 10:35:03 +0300 (EEST)
-Received: from vihersipuli.localdomain (vihersipuli.localdomain [IPv6:fd35:1bc8:1a6:d3d5::84:2])
-	by hillosipuli.retiisi.eu (Postfix) with ESMTP id 58F6E634C97;
-	Fri, 20 Sep 2024 10:35:03 +0300 (EEST)
-Received: from sailus by vihersipuli.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@iki.fi>)
-	id 1srYAR-0005rp-0R;
-	Fri, 20 Sep 2024 10:35:03 +0300
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: laurent.pinchart@ideasonboard.com,
-	tomi.valkeinen@ideasonboard.com,
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4X942Z0wpxz49Q3Y;
+	Fri, 20 Sep 2024 10:36:38 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1726817798;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ml7Mt8t/89WM6o0ma1Je54LdyMIVwCVpisDtUMJhLtg=;
+	b=HnEA3LwA+GAAWCP+9DUp3I1J62NGXBkeSH/Cxn9mW7wg7srgCQxZA0PwBS9R48BR/p6s6t
+	PBPGS+Bnn2F5wIhXgssVMUuIiarPbNU+bv/vYS2F2csTaMmbRnKh6AOKeUCecW/wY5MTns
+	4sJU1RyEGGOtZWet5CExhhj0zKF9ZM13yIa1miGVxd4z49Oe7bhAD5nRObzLh1vKrJdcrI
+	1wU8xLhULHlHLQ6N+alzh/mfomDE+H0zCFRuWoYuiRmVyoMmK6MPy7c64u+wtaT3pYF1Hg
+	BnR4bdekGtdjzeurdS6ybIHbrAfhc2SWplfGlwzQ+s4UEIHdp+axKUdlG9W6eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1726817798;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ml7Mt8t/89WM6o0ma1Je54LdyMIVwCVpisDtUMJhLtg=;
+	b=rIvUGzAeJW1cXpfak9fBK5PmYDbdUb9ao4xDuuYmK3xpXbSvMbyfsqF+CGVlB6/AVrtSmr
+	3i4UamVepqv+3bzgNzRTaWiZR9J02o0StxvIhyBzBDuiKP/O6Lok7sHXLt9TWSxRYBS5pZ
+	mkR6TZBioKA0Tkgt6WpxOIXe8ut2HZWdOK5QluCyFlN/fb39fdzgFdi731+IwHmoTdJQrd
+	aECcL2vH8gE9xvOBDRCQ4YogEng7l0AK+OV5NJl0tMd9mtxRws4d5nMTT4H74sE4ZrAZKJ
+	7/RCK1nO9h+5mYBBt6yVpI6y5iO6QrTG+nwPOIyeNZhR1s3hNcnrHeTRkgFKgw==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1726817798; a=rsa-sha256;
+	cv=none;
+	b=YKxWmKuUxnuEq4WFySgly59Di2RiNAEsULW/DURjlvI4MrjSXlSHPE2YRg572HCdNqT/6v
+	ZhhTj9y+85QbqO11K0GaWICXx1rxHHDYdPmAm844Dv9lmq/ezSNmXObgkGFfvx4gP3Z8J+
+	WSB5SHuriZtoq3WNQ0eTP49SnuJwtfdJEtXOx2yniRlTROjqKEl37jUfk7cyaFfCGOVDK3
+	0jmmdvhpOb5x+sOV9LnVpuKEH584IcLc5pegEC4/RwP2JZZpRAbg7YqPh5aHJSsrTYvWAQ
+	Q2xn1stML9pVuZ0vCLc3i25465cUG22VG3PuwncPzzjihA/LeI5HbZ7v+DMoqA==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E7050634C96;
+	Fri, 20 Sep 2024 10:36:37 +0300 (EEST)
+Date: Fri, 20 Sep 2024 07:36:37 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
 	Alain Volmat <alain.volmat@foss.st.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	hverkuil@xs4all.nl
-Subject: [PATCH v3 1/3] media: Documentation: Deprecate s_stream video op, update docs
-Date: Fri, 20 Sep 2024 10:35:01 +0300
-Message-Id: <20240920073503.22536-2-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20240920073503.22536-1-sakari.ailus@linux.intel.com>
-References: <20240920073503.22536-1-sakari.ailus@linux.intel.com>
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>, hverkuil@xs4all.nl
+Subject: Re: [PATCH v2 0/3] Update streaming related documentation
+Message-ID: <Zu0mBZLfSCNcTJFv@valkosipuli.retiisi.eu>
+References: <20240917150254.17639-1-sakari.ailus@linux.intel.com>
+ <d5068889-ba2b-4397-9b7a-3e1bf05d55d3@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5068889-ba2b-4397-9b7a-3e1bf05d55d3@ideasonboard.com>
 
-The scope of the s_stream video operation is now fully supported by
-{enable,disable}_streams. Explicitly document the s_stream() op as
-deprecated and update the related documentation.
+Huomenta,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- Documentation/driver-api/media/camera-sensor.rst |  8 ++++----
- Documentation/driver-api/media/tx-rx.rst         | 13 ++++++++-----
- include/media/v4l2-subdev.h                      |  5 +++--
- 3 files changed, 15 insertions(+), 11 deletions(-)
+On Tue, Sep 17, 2024 at 08:40:28PM +0300, Tomi Valkeinen wrote:
+> On 17/09/2024 18:02, Sakari Ailus wrote:
+> > Hi folks,
+> > 
+> > This set updates streaming starting and stopping related documentation.
+> > 
+> > since v1:
+> > 
+> > - Document the use of v4l2_subdev_{en,dis}able_streams() and setting the
+> >    streams_mask for drivers that do not support streams.
+> > 
+> > Sakari Ailus (3):
+> >    media: Documentation: Deprecate s_stream video op, update docs
+> >    media: Documentation: Update {enable,disable}_streams documentation
+> >    media: Documentation: Improve v4l2_subdev_{en,dis}able_streams
+> >      documentation
+> > 
+> >   .../driver-api/media/camera-sensor.rst          |  8 ++++----
+> >   Documentation/driver-api/media/tx-rx.rst        | 13 ++++++++-----
+> >   include/media/v4l2-subdev.h                     | 17 +++++++++++++++--
+> >   3 files changed, 27 insertions(+), 11 deletions(-)
+> > 
+> 
+> Still missing addressing 20240917145735.GE17350@pendragon.ideasonboard.com
+> comments, but with those fixed:
+> 
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-index b4920b34cebc..c290833165e6 100644
---- a/Documentation/driver-api/media/camera-sensor.rst
-+++ b/Documentation/driver-api/media/camera-sensor.rst
-@@ -81,10 +81,10 @@ restart when the system is resumed. This requires coordination between the
- camera sensor and the rest of the camera pipeline. Bridge drivers are
- responsible for this coordination, and instruct camera sensors to stop and
- restart streaming by calling the appropriate subdev operations
--(``.s_stream()``, ``.enable_streams()`` or ``.disable_streams()``). Camera
--sensor drivers shall therefore **not** keep track of the streaming state to
--stop streaming in the PM suspend handler and restart it in the resume handler.
--Drivers should in general not implement the system PM handlers.
-+(``.enable_streams()`` or ``.disable_streams()``). Camera sensor drivers shall
-+therefore **not** keep track of the streaming state to stop streaming in the PM
-+suspend handler and restart it in the resume handler. Drivers should in general
-+not implement the system PM handlers.
- 
- Camera sensor drivers shall **not** implement the subdev ``.s_power()``
- operation, as it is deprecated. While this operation is implemented in some
-diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
-index 29d66a47b56e..dd09484df1d3 100644
---- a/Documentation/driver-api/media/tx-rx.rst
-+++ b/Documentation/driver-api/media/tx-rx.rst
-@@ -49,11 +49,14 @@ Link frequency
- The :ref:`V4L2_CID_LINK_FREQ <v4l2-cid-link-freq>` control is used to tell the
- receiver the frequency of the bus (i.e. it is not the same as the symbol rate).
- 
--``.s_stream()`` callback
--^^^^^^^^^^^^^^^^^^^^^^^^
-+``.enable_streams()`` and ``.disable_streams()`` callbacks
-+^^^^^^^^^^^^^^^^^^^^^^^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--The struct struct v4l2_subdev_video_ops->s_stream() callback is used by the
--receiver driver to control the transmitter driver's streaming state.
-+The struct v4l2_subdev_pad_ops->enable_streams() and struct
-+v4l2_subdev_pad_ops->disable_streams() callbacks are used by the receiver driver
-+to control the transmitter driver's streaming state. These callbacks may not be
-+called directly, but by using ``v4l2_subdev_enable_streams()`` and
-+``v4l2_subdev_disable_streams()``.
- 
- 
- CSI-2 transmitter drivers
-@@ -127,7 +130,7 @@ Stopping the transmitter
- ^^^^^^^^^^^^^^^^^^^^^^^^
- 
- A transmitter stops sending the stream of images as a result of
--calling the ``.s_stream()`` callback. Some transmitters may stop the
-+calling the ``.disable_streams()`` callback. Some transmitters may stop the
- stream at a frame boundary whereas others stop immediately,
- effectively leaving the current frame unfinished. The receiver driver
- should not make assumptions either way, but function properly in both
-diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-index 8daa0929865c..3cc6b4a5935f 100644
---- a/include/media/v4l2-subdev.h
-+++ b/include/media/v4l2-subdev.h
-@@ -450,8 +450,9 @@ enum v4l2_subdev_pre_streamon_flags {
-  *	already started or stopped subdev. Also see call_s_stream wrapper in
-  *	v4l2-subdev.c.
-  *
-- *	New drivers should instead implement &v4l2_subdev_pad_ops.enable_streams
-- *	and &v4l2_subdev_pad_ops.disable_streams operations, and use
-+ *	This callback is DEPRECATED. New drivers should instead implement
-+ *	&v4l2_subdev_pad_ops.enable_streams and
-+ *	&v4l2_subdev_pad_ops.disable_streams operations, and use
-  *	v4l2_subdev_s_stream_helper for the &v4l2_subdev_video_ops.s_stream
-  *	operation to support legacy users.
-  *
+Thanks! I'll add these while applying / v4 if needed.
+
 -- 
-2.39.5
+Terveisin,
 
+Sakari Ailus
