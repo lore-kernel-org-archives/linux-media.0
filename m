@@ -1,84 +1,142 @@
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B31884E14;
-	Mon, 23 Sep 2024 22:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B5712D1FA;
+	Mon, 23 Sep 2024 23:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727131027; cv=pass; b=Qk+OtDvU4m2TDSQtZZIjcFC/g0YPLNPhNvkfCJQPV7v4/nDsvF7NNXsyE9K0h0yWi5CVaq7iKtvJd8II3vbQZiOk2RnAa/E3EIIIrjkZTPIi5UB5e6+YZC368ndkxOoz/jMX7MQqouX4e+oaKLlFpjmeLwqJ5x9M4W3/UMBkrrE=
+	t=1727132982; cv=pass; b=CyR1w5Clms2WAM6DBkRtmu/xnMHbOgC+4jd6xNfWOm3KpT+UDTCprVH0KSk2ViojwqGartFZpBRIO/YRkG5mBU534x+WjpN7Hu3i/Byrl/eNRewc1/lh8DzNGTmTCXyzzFpGTQVX7N5+fkVRFrv3BwYaeMoYOP/2Tdt2Kuk3Y6g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727131027; c=relaxed/simple;
-	bh=u0mvGAUsuusyPrkhDzUdEAF0FETvghc3W7PmEUB5JWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CU94lMrpv957eFGW38zshligKjVKibDyQSoRNKi9NN6t5D87WtyFB7zdNajcyQuruHHJXA2hnHNGkH2vscKGy9Eb/un6INNpLnD8XNJjckUSYSzaoQs2M6wgUS/Ou7Q7ANedIRH5c3Yu59tjGCaiUnYmX4IsDqWLI7kRKqS4BAw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=dz4+1e7/; arc=pass smtp.client-ip=136.143.188.112
+	s=arc-20240116; t=1727132982; c=relaxed/simple;
+	bh=c06FO/kcN5ebzIo8Lxctzj0SeQk61xZa4CP6vGcIkP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bLw8MC4x5RWMEKSn7OwBXnYZwRiVbzitvGoGbJ7P+GE4XReydFO0hcn5mts7oLf7xOxR1v/a7364S9CIQ0D+OTgev5sQc0vYfub3pAmednGFGQVVoeVikPQZ+MXsiPnaV7evNERNlKHY5vGPHaF4qSxS703HiNRamexfiP5wyUw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=UF/00oAN; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="dz4+1e7/"
-ARC-Seal: i=1; a=rsa-sha256; t=1727130994; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="UF/00oAN"
+ARC-Seal: i=1; a=rsa-sha256; t=1727132966; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=etfvqn6nE9bSw12FIbfJjgCORXBDGGvV9maXWJaQnkhh0rxOqHDnHlz7YIqv4BYx7SoLUvprqJVEcqHmzlYTkjJDJ+yUP208bEq/Kuvqt5+V7HxY+7KXSEGcNGRtfX2l3fsAlfyJ0PqnO0UpzLDWbSsRY6mUoAsfS6I1hiABPrQ=
+	b=FJ1NhH7uhig/MkZYlgjPcBD2ITFFRjkTTkCvTNt8aqGo0TP1LtNSzpsitJqDIPdmYBvaohSCE4LU31HrE7CAMbgKIeCd18hfo+jKtJXFaO2wNZxuBJCCxnrrY2kYj85v84WCn/QJpBXeqhQAhvInSndj6OrUpoq806f8C6plH4Y=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1727130994; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=+t7REgL0vRbD5ozbKxnGHX+D3ka+R93Qijxfle7UDkw=; 
-	b=caAMCQASvh6dv59R7g9ZGrEmIYXI4sXujsjyPHqcmiT1F8cQr3uPVKefSzqrcbFD5kjc8FmeRvMhlqCVfD5L3imxGm9MZoOfgjWPVXI1otXetnaa+V9Kto7NFzzI7VcuRUj/SfewxIapq7Yb+LUiEfiQWdSJIRqthqp4mdfXRfM=
+	t=1727132966; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=EXwo6vgrQS8r/knP9TPY91FMXiIzo7plKOoU5Yr1Wgg=; 
+	b=duJFrNW3xskG5n3NJAzBzlBQE8e4H5vTnE3v7u6T8l3640ZWcz7fQ0x4ZBkxZL//wjBtWjszpn63mSorw5WElg03yKCaDvyGA3AvTsxDo64Bo2gdwpbejwXti294yEqoGD9Ti2FkIlI0rd9AmOhJ+IGFxyqXwIkpQvYOn54QdW4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
-	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727130994;
-	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=+t7REgL0vRbD5ozbKxnGHX+D3ka+R93Qijxfle7UDkw=;
-	b=dz4+1e7/rELveWVtwg4DVhx47h7EuwGhj6wtaSdKerqaaZFFwgcgicUrFHJtGFrN
-	iUeAOyKrKgGoYWl+8U5FsfXsVwWlWAST8tkJPRcAIMaiSUFqKe7SBOT+SX6yB6LNNMw
-	qamG/u3aI9vslBmysAeaBAe2+ochwSJFpcC5UBX4=
-Received: by mx.zohomail.com with SMTPS id 1727130994054161.20850860095402;
-	Mon, 23 Sep 2024 15:36:34 -0700 (PDT)
-Message-ID: <40099a01-cac2-4b65-bb96-3dfdb106a4eb@collabora.com>
-Date: Tue, 24 Sep 2024 01:36:27 +0300
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727132966;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=EXwo6vgrQS8r/knP9TPY91FMXiIzo7plKOoU5Yr1Wgg=;
+	b=UF/00oANFDVYlSsiKjV8pabqKMAMn1id+JyX9LW7lq9ahT+MoSYR40DrDhyGJuaa
+	Ru6/QwyskRXp2mVf/Rpoou75+Ct1Ed2gYhzo2VFmJRygALmVTLSy6UIsYUre9hxxFmF
+	nGbD9O8xMxk62UU5V+35tZjKiaf7RQgP4DuC4wJs=
+Received: by mx.zohomail.com with SMTPS id 1727132963748614.7582038696082;
+	Mon, 23 Sep 2024 16:09:23 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: Boris Brezillon <boris.brezillon@collabora.com>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v8 0/5] Support fdinfo runtime and memory stats on Panthor
+Date: Tue, 24 Sep 2024 00:06:20 +0100
+Message-ID: <20240923230912.2207320-1-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] media: platform: synopsys: Add support for hdmi
- input driver
-To: Hans Verkuil <hverkuil@xs4all.nl>,
- Shreeya Patel <shreeya.patel@collabora.com>, heiko@sntech.de,
- mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- p.zabel@pengutronix.de, jose.abreu@synopsys.com, nelson.costa@synopsys.com,
- shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com,
- hverkuil-cisco@xs4all.nl
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20240719124032.26852-1-shreeya.patel@collabora.com>
- <20240719124032.26852-5-shreeya.patel@collabora.com>
- <c5b9be4d-16ee-45f7-b980-d2e0e4b3ef23@xs4all.nl>
-Content-Language: en-US
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <c5b9be4d-16ee-45f7-b980-d2e0e4b3ef23@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 
-On 7/23/24 11:48, Hans Verkuil wrote:
->> +	val = hdmirx_readl(hdmirx_dev, DMA_STATUS11);
->> +	field_type = (val & HDMIRX_TYPE_MASK) >> 7;
->> +	hdmirx_get_pix_fmt(hdmirx_dev);
-> Hold on, this changes the pixel format based on the detected video format.
-> Does that mean this hardware does not have a colorspace conversion block?
-> All the HDMI receiver hardware I have seen always had a CSC matrix and
-> could convert between 4:4:4, 4:2:2 and 4:2:0.
+This patch series enables userspace utilities like gputop and nvtop to query a
+render context's fdinfo file and figure out rates of engine and memory utilisation.
 
-TRM doesn't mention that CSC is supported.
+Previous discussion can be found at
+https://lore.kernel.org/dri-devel/20240920234436.207563-1-adrian.larumbe@collabora.com/
+
+Changelog:
+v8:
+ - Fixed uninitialised stack variable bug that was triggering an invalid memory reference.
+ - Added a few R-b tags to commits
+v7:
+ - Fixed some kernel test bot-reported documentation and sign mismatch errors.
+ - Defined convenience macros for specifying CS instructions according to their profiled status.
+ - Explicitly initialised instruction count for structure containing a job's
+ instructions when calculating its amount of credits for the scheduler.
+ - Some minor cosmetic nits. 
+v6:
+ - Addressed some nits and style issues.
+ - Enforced static assert equality of instruction buffer when calculating job
+ credits or copying them into the ringbuffer.
+ - Added explanation to the way in which job credits and profiled job size is done.
+ - Broke down fdinfo enablement patch into two, one of them dealing with adding
+ support for calculating the current and top operating device frequencies
+ - Fixed race at the time drm file-wide profiling stats are gathered from groups.
+v5:
+ - Moved profiling information slots into a per-queue BO and away from syncobjs.
+ - Decide on size of profiling slots BO from size of CS for minimal profiled job
+ - Turn job and device profiling flag into a bit mask so that individual metrics
+ can be enabled separately.
+ - Shrunk ringbuffer slot size to that of a cache line.
+ - Track profiling slot indeces separately from the job's queue ringbuffer's
+ - Emit CS instructions one by one and tag them depending on profiling mask
+ - New helper for calculating job credits depending on profiling flags
+ - Add Documentation file for sysfs profiling knob
+ - fdinfo will only show engines or cycles tags if these are respectively enabled.
+v4:
+ - Fixed wrong assignment location for frequency values in Panthor's devfreq
+ - Removed the last two commits about registering size of internal BO's
+ - Rearranged patch series so that sysfs knob is done last and all the previous
+ time sampling and fdinfo show dependencies are already in place
+v3:
+ - Fixed some nits and removed useless bounds check in panthor_sched.c
+ - Added support for sysfs profiling knob and optional job accounting
+ - Added new patches for calculating size of internal BO's
+v2:
+ - Split original first patch in two, one for FW CS cycle and timestamp
+ calculations and job accounting memory management, and a second one
+ that enables fdinfo.
+ - Moved NUM_INSTRS_PER_SLOT to the file prelude
+ - Removed nelem variable from the group's struct definition.
+ - Precompute size of group's syncobj BO to avoid code duplication.
+ - Some minor nits.
+
+Adrián Larumbe (5):
+  drm/panthor: introduce job cycle and timestamp accounting
+  drm/panthor: record current and maximum device clock frequencies
+  drm/panthor: add DRM fdinfo support
+  drm/panthor: enable fdinfo for memory stats
+  drm/panthor: add sysfs knob for enabling job profiling
+
+ .../testing/sysfs-driver-panthor-profiling    |  10 +
+ Documentation/gpu/panthor.rst                 |  46 +++
+ drivers/gpu/drm/panthor/panthor_devfreq.c     |  18 +-
+ drivers/gpu/drm/panthor/panthor_device.h      |  36 ++
+ drivers/gpu/drm/panthor/panthor_drv.c         |  73 ++++
+ drivers/gpu/drm/panthor/panthor_gem.c         |  12 +
+ drivers/gpu/drm/panthor/panthor_sched.c       | 384 +++++++++++++++---
+ drivers/gpu/drm/panthor/panthor_sched.h       |   2 +
+ 8 files changed, 531 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-panthor-profiling
+ create mode 100644 Documentation/gpu/panthor.rst
 
 -- 
-Best regards,
-Dmitry
+2.46.0
 
