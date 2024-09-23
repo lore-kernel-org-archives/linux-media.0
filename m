@@ -1,84 +1,63 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576A22942A;
-	Mon, 23 Sep 2024 22:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727130328; cv=pass; b=A/c1W0uRXy1kdV1Z1J74GAnou0yPBvD+DOTp15534vCF2McoWlJvAqMButKOEXypwduSvujrPD1c29nEgYPlaobTqnsYbsMuoR2gWg0raJk93QThBzaDH5BEYp8PbfeygzkQ+PJ47DMk5TpM921U/yBF4dmqSc9t4TPGKhXlsEM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727130328; c=relaxed/simple;
-	bh=Er1R3DujufWyloaeYQ8YJUJhozPPJ77kf3f9khDSoWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hn4irSHxpIpnIJXQu3wdCVhDpQRG7CBLHM9lEzsP6DGt4SE/XuNAWBrQnnaC151ONxB/SKJqgEIUxkwsb6hDw6UgpLWYjD3Mt5Xy0V4kw9SCktnsiH6uOaI2c5M7VL9QH+AfgXSx4udhPGA7xmC5vbk2+jgZC+LDxhSZBZoqgYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=H9W4lYj9; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769D91514CE;
+	Mon, 23 Sep 2024 22:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727130887; cv=none; b=bdiqc+TJQLS49CqUqYaKuQrbYwCjJqFpz5cTAzR8BQz0Uh81h8U/8c6gkkmbHz2Kpv221Pzv6YjYx48b+CfWuugcAOKhwfESLPxWdmdXRfoiuVsYwisZ3k20zKL7n484zfFNqy67Afx3m5AWgYyDSHHIzPGmglUJbG3eHTNOpP4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727130887; c=relaxed/simple;
+	bh=aibMLGCC2zV6KGulz4V39o41y33zGJUcc8E8Fb1djcE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=okwb5evqrWIqyML1YggMCQIurLhj4P80OA3B+pjQAyNEGAK4jQNgzTawGI2cn8HlVJVvIhtfhz5XP/OSScmsVrk45VECZWmnDZtHTb2HsldWjl0Z4cLUArPvhYw6EesRvF+zWwHmsab1J91gF14zD+Mi07EaYtGs2k4BVqr7NbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOx2AiE0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="H9W4lYj9"
-ARC-Seal: i=1; a=rsa-sha256; t=1727130273; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=YfYNJdMgp/y1uP6d8OafGpncvOgQDBktKmhw/iFx6zKap/RvxnMc38P54Qum1I6bBqHHU38aERxlvKhWiiCz0nQkP8aNQeoAHMSczYlVplQVY3nlWFF3TWVtcsQ/ncNbtmESt46WJNEzNICkwsR0k6YX5/5axbj35HW8q4FTols=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1727130273; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=1r2+YqfMcD9QvzdF/0v6a42z5qBEA9M5RklZEc7Zddk=; 
-	b=NwJ16BUcMQ8fcywQ6N0XX9ONOjdjym4UIzG9ftA1QF/wvRuF2msBg0lfyWcKZQ4w9FMvjA8YnMiostY/mDOO/q90qNebvQ4lb9ibsRE4aoUKMirGghqH4m3Gqp4G6pO9GxpyXzBDxlxfLxhtslsclGixh8mnruP3D2gjWU080GE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
-	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727130273;
-	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=1r2+YqfMcD9QvzdF/0v6a42z5qBEA9M5RklZEc7Zddk=;
-	b=H9W4lYj923wdFyT39nL9dzqsqpqPxWLufsdajfpDh5o/hv1Y/M3ScXCk/pfSE3vf
-	nrmGXPIyz3e80r4VwzM3SmykO1RW3K59gs6JCnx4czERQPPAER+H0O2CopPn+BFGK6t
-	P9eT+VuS96oN+OW/6+pttPe8tNXhlXq8fUGJJf5c=
-Received: by mx.zohomail.com with SMTPS id 1727130270973625.9553539455802;
-	Mon, 23 Sep 2024 15:24:30 -0700 (PDT)
-Message-ID: <8239ae11-12a7-49fd-b78e-c906f3a468de@collabora.com>
-Date: Tue, 24 Sep 2024 01:24:24 +0300
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOx2AiE0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571EEC4CEC4;
+	Mon, 23 Sep 2024 22:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727130887;
+	bh=aibMLGCC2zV6KGulz4V39o41y33zGJUcc8E8Fb1djcE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=NOx2AiE0Y/ccmUc8l/2kwgPev8jwrPySnBSoha9gYKLf1jWrm5Qc2XvdC+Djs58o7
+	 vuQIIW0tGzvmUuIfIkxkUKCrR27/RzR7N7HlJQaNh7XWujFCr1Jwvb78iXwjwBiFKY
+	 mjTZpXj+pirE2gS1su2x6r43IBdqdld0eRqWYlzeS1ysNIT+E6+0dU/aRFMdnGfb6b
+	 WH6iF+GWN+bOA0tAMOegxrYCVpd0OTzKrH6nk/cTk9wXHilb4My5HhLL53Q2tN+fdQ
+	 MCM4rJSwuV9setEFy6QJ1OgV50kGIzeDoKJYPu3JasEUpYLSiTOWot7kN1NAWoUlsN
+	 uzMJMxSjGj4vQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB2DA3809A8F;
+	Mon, 23 Sep 2024 22:34:50 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.12-rc1] media updates
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240923125642.7aed968b@foz.lan>
+References: <20240923125642.7aed968b@foz.lan>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240923125642.7aed968b@foz.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.12-1
+X-PR-Tracked-Commit-Id: 81ee62e8d09ee3c7107d11c8bbfd64073ab601ad
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: abf2050f51fdca0fd146388f83cddd95a57a008d
+Message-Id: <172713088962.3509221.1481536228444812034.pr-tracker-bot@kernel.org>
+Date: Mon, 23 Sep 2024 22:34:49 +0000
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, Linux Media Mailing List <linux-media@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/4] media: platform: synopsys: Add support for hdmi
- input driver
-To: Hans Verkuil <hverkuil@xs4all.nl>,
- Shreeya Patel <shreeya.patel@collabora.com>, heiko@sntech.de,
- mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- p.zabel@pengutronix.de, jose.abreu@synopsys.com, nelson.costa@synopsys.com,
- shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com,
- hverkuil-cisco@xs4all.nl
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org
-References: <20240719124032.26852-1-shreeya.patel@collabora.com>
- <20240719124032.26852-5-shreeya.patel@collabora.com>
- <c5b9be4d-16ee-45f7-b980-d2e0e4b3ef23@xs4all.nl>
-Content-Language: en-US
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <c5b9be4d-16ee-45f7-b980-d2e0e4b3ef23@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 
-On 7/23/24 11:48, Hans Verkuil wrote:
->> +static u8 edid_init_data_340M[] = {
-> This should be under #ifdef CONFIG_HDMIRX_LOAD_DEFAULT_EDID, since there is
-> no point to have this if you are not using it.
+The pull request you sent on Mon, 23 Sep 2024 12:56:42 +0200:
 
-No need to use #ifdef since EDID array will be compiled out at a build
-time. Kernel doesn't support old compilers that can't eliminate dead code.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.12-1
 
-#ifdef makes code less readable and adds requirement to build-test all
-variants with/without the #ifdef, we don't want either of these.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/abf2050f51fdca0fd146388f83cddd95a57a008d
+
+Thank you!
 
 -- 
-Best regards,
-Dmitry
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
