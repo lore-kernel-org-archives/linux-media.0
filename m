@@ -1,78 +1,112 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E43149C54;
-	Tue, 24 Sep 2024 13:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC411A3A9C
+	for <linux-media@vger.kernel.org>; Tue, 24 Sep 2024 13:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727183543; cv=none; b=bcMvrn34BnWLewOyUI8jyrhfkBNKeW/xN0Fu2rgljo3JnMp8G3ndJeYaB167fqVt8C4+M0PQtJkTnVrzHyM+fXsd0ZRHL43lviyzSud6rCbA12WrnEUvbQf1JcLZvUaJgwZnqCdLjY8TRuLdheKE358MviIJgAmxvBJ5Nz/bxEg=
+	t=1727184814; cv=none; b=JBN6G78n/K7YKwPfoOnhrbIW9HltizxrhSRPPly7tO6oUysrgq4bkP+bziBKOUO73iRzHAq3gbZp6tKhLDF6OqBIWjnZRybpXNtQFEvVPaDQjrrRME4KU5rcfQs1tvKe1AtCRHC0O95j5LIueg1YWNRVdyCSGjnYlySBKJHmzr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727183543; c=relaxed/simple;
-	bh=z1m4TZL5Mm0VylMjkh1Vw2oNwHroAVN/PG8TLGzmKww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qryLOUuy759yvFwy2iIdjU5uEbJ+T2u93vhWgs5QZjaFhsnhszw2Z+KLlD8RwxtK/NVSe/IKbOjSw/TMRU3/Hw0kFZi3yGGuAea+2HpM9gnbLorwr3PHQcEnqoiXg3rls8gtmfRtasyFdXlj/NQ7n+v/ftfJakEjFeuvwsyW3VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=vmjSPgmG; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+	s=arc-20240116; t=1727184814; c=relaxed/simple;
+	bh=cEq7D7GYogekk6JdLCtsg3CQebwP5ANi5/On67Tn6vU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZYyj8OSDoXQMwkLFubFPHsScemjW04Mx2NhlzgJl0BtTC7tXfdVVSppKzRF7sad99izHAPLRDiNCkIdyrHI4WUz5iQRxUZ0DuN6r6xdOdl5Hd4xDVmWeAhv48Epk+1i5BhhRurjnH35ZHJYaGOHpa6a7mZM5dMdtj0QrY0WQqNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=F2KWoiTG; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="vmjSPgmG"
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 2A5D488363;
-	Tue, 24 Sep 2024 15:12:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1727183534;
-	bh=DRU/cZ7ys2vNvnn5GxJewD+OdUTeyoFQ0VsBt7f/Egk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vmjSPgmGRaFAnOrry+S9EpbnEpf7b+ZOCIPwTv/RFwc8cIt1rTFbuPlgtu7KAdx05
-	 eQXRI+Ln85yYO2bJULn2PIxKSpNDJr1QFK1yqFVVtpVCuBNrJHCu+7TOUtaSQuTokm
-	 zu1XdW9oy+iI5bYVKZZu4rpuChn9MIU/gQvaympYvjoz2JCcOESEEx34O1B8kzGhHk
-	 IH4Otwz12Jk6dhGtMLAWLSNHTWrkB0VbXEcYlLCewTur9TlRkfyZET2N+SP7ikIMy1
-	 ROoliO29kbKLl4naoBX7YHf+NtA2fdqB28lVNQ2t6isLe4cQRH5Wdpklg8FJytwf1y
-	 yhizP3oGT17zQ==
-Message-ID: <546c9dac-39ab-4abe-a495-ab54d6ee925d@denx.de>
-Date: Tue, 24 Sep 2024 12:47:12 +0200
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F2KWoiTG"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4582a0b438aso42347911cf.0
+        for <linux-media@vger.kernel.org>; Tue, 24 Sep 2024 06:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1727184812; x=1727789612; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4z0qxOdupfIRXdbnkFD/B9bzDAeZi9Dt7I+vMO5OZG4=;
+        b=F2KWoiTG3RXazKszp465W3qDa5l5UEuCK6a6CVVvqoRXykIymyr9F7k/BA3A5btQ5h
+         uyS3n+INiZxUREDrC3QIyKx1W0rHeq8RpiREMDrlxsn/21r4Nz4JI29qayTC8rtRqzhS
+         rRpPNFDSADt53R4o4OBeNt7RbYtlE1T9rKRVE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727184812; x=1727789612;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4z0qxOdupfIRXdbnkFD/B9bzDAeZi9Dt7I+vMO5OZG4=;
+        b=de7qNOC8JxDtQ2AFf/ChgpOP7uj87NugGZ4bTaMeYvQSY14Pmh/84EeFyUmLmN+to9
+         3OyHgqg8Q3U+9GKWa+tejW8xEYBjuWqPDOdSwxFOL/AoQ92CIY4Ktpkdbg0yenoDtRZ0
+         2RDNfyrcFkL65GjJP45jN4QE4O39AuQ/01RykPKxWNMY4SmrgajTA4457wHz4108ImZT
+         u9vnaoSheJyjsa4C2bzvIABSaL3SXRuDIl28MEsF79cdnkNhTzd1AmA7G0BDy+WCctjg
+         ZKyG+XGeiB8gmVHDbilyYG5ojIRQpsAPTUneYyOv0Pfmw/S/rSeyGyK+ysOUpKfDU7QF
+         kG1g==
+X-Gm-Message-State: AOJu0Yz8TU4SUrb9nPdVwU2KbBqnMrKGG+5d986bYraWQc5vZhIW1vZB
+	rzmD1xncQy0X4j8Dp1ygDYlcH1HGJVR48i7ewg2+dy4glkDnA3jH5n6Ud5qIjQ==
+X-Google-Smtp-Source: AGHT+IEAbFJ2gs9LVV/+qhJ79xlUVTJtnBUQy0Wwae8OfDu95Oooo07L6KtmIVjtfF14G2a9ZF9lPQ==
+X-Received: by 2002:ac8:5792:0:b0:458:2607:d5a7 with SMTP id d75a77b69052e-45b228a9d4fmr277173571cf.43.1727184811673;
+        Tue, 24 Sep 2024 06:33:31 -0700 (PDT)
+Received: from denia.c.googlers.com (76.224.245.35.bc.googleusercontent.com. [35.245.224.76])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45b52572710sm6335101cf.22.2024.09.24.06.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Sep 2024 06:33:31 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 24 Sep 2024 13:33:29 +0000
+Subject: [PATCH] media: uvcvideo: Force UVC version to 1.0a for 0408:4033
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] gpu: ipu-v3: vdic: Simplify ipu_vdi_setup()
-To: Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Fabio Estevam <festevam@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
- <deller@gmx.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Steve Longerbeam <slongerbeam@gmail.com>, dri-devel@lists.freedesktop.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20240724002044.112544-1-marex@denx.de>
- <95efd6b6491069d04b4bfae6616d9a43ba8467a6.camel@pengutronix.de>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <95efd6b6491069d04b4bfae6616d9a43ba8467a6.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Message-Id: <20240924-uvc-quanta-v1-1-2de023863767@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAKm/8mYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyMT3dKyZN3C0sS8kkRdU6NEQyODRCNz87RUJaCGgqLUtMwKsGHRsbW
+ 1AAZ0cltcAAAA
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Giuliano Lotta <giuliano.lotta@gmail.com>, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.13.0
 
-On 9/4/24 11:05 AM, Philipp Zabel wrote:
-> On Mi, 2024-07-24 at 02:19 +0200, Marek Vasut wrote:
->> The 'code' parameter only ever selects between YUV 4:2:0 and 4:2:2
->> subsampling, turn it into boolean to select exactly that and update
->> related code accordingly.
->>
->> Signed-off-by: Marek Vasut <marex@denx.de>
-> 
-> I'd prefer this to be an enum ipu_chroma_subsampling or similar,
-> instead of a boolean. Otherwise,
+The Quanta ACER HD User Facing camera reports a UVC 1.50 version, but
+implements UVC 1.0a as shown by the UVC probe control being 26 bytes
+long. Force the UVC version for that device.
 
-I'm afraid this introduces unnecessary back and forth conversions 
-between the boolean and either of the two enum ipu_chroma_subsampling 
-values in the code.
+Reported-by: Giuliano Lotta <giuliano.lotta@gmail.com>
+Closes: https://lore.kernel.org/linux-media/fce4f906-d69b-417d-9f13-bf69fe5c81e3@koyu.space/
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index f0febdc08c2d..cc62bdf77c08 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2431,6 +2431,17 @@ static const struct uvc_device_info uvc_quirk_force_y8 = {
+  */
+ static const struct usb_device_id uvc_ids[] = {
+ 	/* Quanta ACER HD User Facing */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x0408,
++	  .idProduct		= 0x4033,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= UVC_PC_PROTOCOL_15,
++	  .driver_info		= (kernel_ulong_t)&(const struct uvc_device_info){
++		.uvc_version = 0x010a,
++	  } },
++	/* Quanta ACER HD User Facing */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
+ 	  .idVendor		= 0x0408,
+
+---
+base-commit: abf2050f51fdca0fd146388f83cddd95a57a008d
+change-id: 20240924-uvc-quanta-52a120a277fe
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
+
