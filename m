@@ -1,59 +1,39 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000F717579
-	for <linux-media@vger.kernel.org>; Tue, 24 Sep 2024 15:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FFE1AC442;
+	Tue, 24 Sep 2024 16:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727190971; cv=none; b=BMp/oodzDFht1MpUUzSbMHU9S4ZQZ7anO2f7U8YoMHn714m/G8snI6hVjTE7uauAqvJfZvXFV2sLq4nG22IDsjgwhBLbTQDDQcPvfG44ujgTIdDjyYRebInsKxmPLyXQarnMSswUdNNt8HdrHz6YZDWRIrgJeP4uV0l4fmn8cxU=
+	t=1727196326; cv=none; b=gfKUrbjOezhaZZgTJ9n2LQoLUUgdevXE4+wxwRRd6gzlnwoQkVH9HJmID1wBsrpmHGz+H4qNZ2UJYRlYbmht+rCKndSxw1YtEIWb+T4Pm4Shtz3C63Tr3eddIjwbFoOUUTtR/QV3GZURXtJt+tcrRW5dGi9unUyLnpiJ+TE80fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727190971; c=relaxed/simple;
-	bh=PwTDlLox2AQAmONIpbECM8jVk9QU0Vp6e7ZQgQ06bE0=;
+	s=arc-20240116; t=1727196326; c=relaxed/simple;
+	bh=InCCWoG3adxGtYBl1KJ1A0wtIntYs6J8nTlU5jG90Yo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qhW8KZIX9OaYe9YD5IN40x0X/K2O1vx2ow+ITHoCNRBe6r4NV4ytRWH37GO1GlIKd/vK3tUjvIEOdDGEXX93dIToWXbPmByYMG+THML8i3aVWisFPPUBBvAlULUIM7pmL1MQzB4tWGUe3g68FEmXOFqRZGiy/L69JjhBneMDOmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C3nPpx7L; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:Content-Type; b=KP5vgGWw6BrPwCMXpZ6fp3yHcZJTClijpmIyL1pQUMgtMzL0OLZkKTuxp59bEapfy5ZX4Ahb/JLrRYJUHW0ikvkxkbX9jgBzmG6aPMlC4CZz/00GwWijTLx8wtVWa7XiWQzqcHoVPianYJ+YGqaugFGiyCbaIyP1dGF8cacZZtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=OsInmcF9; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C3nPpx7L"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f74b6e1810so46883771fa.2
-        for <linux-media@vger.kernel.org>; Tue, 24 Sep 2024 08:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727190968; x=1727795768; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2+kErz59ViWHYR3BIUhJh9tCnLP5LQVNzAaQ1sSNYU=;
-        b=C3nPpx7LcETD3OwJ5UC7uqNcT61XcL6WP2dt+Ga+OaNRsKz/2kEpJV8M5EUEopFb8F
-         rjtLXyiPPT8YkjnDgT35bLGfGZrYo97dcpHz1L0A8txhyerUQ1PN2a0RAEJJBSKUtA7v
-         aMlkD+tw6V+JPinEBIwIQyxgENhKuZfQpfOPkQyepr/VOYKFiHMfx8aflVQTICYbouXp
-         FUBMeQmcL7il1jnKTlgj77i6WHzuokxJXIZfMcs7pS5a6xhNH1IQFjyEgK2Cy0U3CoPZ
-         eTKGgS8hx78mikL6vHPjADgFj5dCXO2HNr+e9YNThrzMFfF3MtHlamObA1qtFpw8qYeZ
-         sGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727190968; x=1727795768;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M2+kErz59ViWHYR3BIUhJh9tCnLP5LQVNzAaQ1sSNYU=;
-        b=RRk5oxd9tw7qnag6/xnlYCJTt6W2daqQmATQD9RIdgFX2Fv3fb6gzaTR10nl0fH+dJ
-         XHm8Z33Y6vsCqTQTmGvsv59xgMpgPuwOxnkHUIDfX1hmIJ9CPe/dexpzHxhn7GUb4gKG
-         TNNPw3IN+DltnyBiHjIuBSJIbejII5bpKv5DT9HVg0FSa1Mg/EJ9Is3s/Hnw/L7LvLUk
-         klgmTiRJhHGHjrTB2mYyeAbSoYRJoPy8f/4VjIV+i8Ds54FJRlC5pHU65CvpfX+q5ruF
-         krdPh8pREXbu+3rcvG91guuG0JuK7EsJ1SqQz/IpV2FYyp88fihEVHuX3532JN+rOdPN
-         mfQw==
-X-Gm-Message-State: AOJu0YzPpNmwqrhNlP65K8GBHepcq8XJqCg1vYx7xfBfyCWa3Z6Sehh+
-	XdqwqzO8bXRstEripfn3ITuyIUoaOrcWhkD+SYRWKS6JZQEIzVXMiezrX6YPZyTe81CaaIUndYn
-	H7d8=
-X-Google-Smtp-Source: AGHT+IGga//IkWzGe9va/Pn0IB7tDK/PAFPD+bS+JVMybUqi1i8ZQsWDZz9NCHDjyOTeeTzh5RfKGw==
-X-Received: by 2002:a2e:a593:0:b0:2f7:5980:78ca with SMTP id 38308e7fff4ca-2f7cb360495mr81537551fa.32.1727190968045;
-        Tue, 24 Sep 2024 08:16:08 -0700 (PDT)
-Received: from [192.168.0.25] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c5cf49d41esm841259a12.42.2024.09.24.08.16.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Sep 2024 08:16:07 -0700 (PDT)
-Message-ID: <b259f304-77a2-4b0e-a8b3-c8d0fb8f9750@linaro.org>
-Date: Tue, 24 Sep 2024 16:16:06 +0100
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="OsInmcF9"
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id B6FFB88599;
+	Tue, 24 Sep 2024 18:45:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1727196320;
+	bh=bWwrE328F7Z+63CI6eWDJIHlvUQra1+8FULnnYG6ROQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OsInmcF9MnpWRstLF1yZsIScU3ErKXqFbp7byMIsYMHRpRDmP5qw9rVnNVStMkIf2
+	 fKwGGuykws/4A6HnsPiZZQg4oUUm33udBmtt/BuG6bOMI7ajhVr4Bi+4w5NHkSZTsN
+	 oi8VlUC+K12JOtnmdiRmAKHtq91v7TYcmEz+0FZt+BlR4KNK/QnKHGfe2SAn1Om427
+	 AonOHwCV/HACE3csIk3ZRYqgvadLA5sVu+hDQ7Ntq1Mhf7c7mwdD06YyF7cWVFwEu4
+	 6uTTrLXMHR3A8NrD5PB9VgGbf3dLk+q+xtrYzh6I0aGuTQfKMl82Mn0dWH3XIUWL8N
+	 zk5rP6G14Z/eA==
+Message-ID: <0db95012-3ff6-41bf-85c8-ab0cdffdfc74@denx.de>
+Date: Tue, 24 Sep 2024 17:42:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,136 +41,84 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 20/29] media: iris: subscribe parameters and properties
- to firmware for hfi_gen2
-To: quic_dikshita@quicinc.com, Vikash Garodia <quic_vgarodia@quicinc.com>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Vedang Nagar <quic_vnagar@quicinc.com>
-References: <20240827-iris_v3-v3-0-c5fdbbe65e70@quicinc.com>
- <20240827-iris_v3-v3-20-c5fdbbe65e70@quicinc.com>
+Subject: Re: [PATCH v2 2/2] media: imx: vdic: Introduce mem2mem VDI
+ deinterlacer driver
+To: Nicolas Dufresne <nicolas@ndufresne.ca>, linux-media@vger.kernel.org
+Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+ Fabio Estevam <festevam@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
+ <deller@gmx.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Steve Longerbeam <slongerbeam@gmail.com>, dri-devel@lists.freedesktop.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev
+References: <20240724002044.112544-1-marex@denx.de>
+ <20240724002044.112544-2-marex@denx.de>
+ <5e5fba4fd6c3c0c9df23697bd328367e5fdfa923.camel@ndufresne.ca>
+ <8aea6cc0-10bf-48b8-add9-eb3f1caa2d66@denx.de>
+ <2229769f3a9baf58fbeeed93fa4b0373a02055e3.camel@ndufresne.ca>
 Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20240827-iris_v3-v3-20-c5fdbbe65e70@quicinc.com>
+From: Marek Vasut <marex@denx.de>
+In-Reply-To: <2229769f3a9baf58fbeeed93fa4b0373a02055e3.camel@ndufresne.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-On 27/08/2024 11:05, Dikshita Agarwal via B4 Relay wrote:
-> From: Vedang Nagar <quic_vnagar@quicinc.com>
+On 7/30/24 6:05 PM, Nicolas Dufresne wrote:
+
+Hi,
+
+sorry for the abysmal delay.
+
+>>> Le mercredi 24 juillet 2024 à 02:19 +0200, Marek Vasut a écrit :
+>>>> Introduce dedicated memory-to-memory IPUv3 VDI deinterlacer driver.
+>>>> Currently the IPUv3 can operate VDI in DIRECT mode, from sensor to
+>>>> memory. This only works for single stream, that is, one input from
+>>>> one camera is deinterlaced on the fly with a helper buffer in DRAM
+>>>> and the result is written into memory.
+>>>>
+>>>> The i.MX6Q/QP does support up to four analog cameras via two IPUv3
+>>>> instances, each containing one VDI deinterlacer block. In order to
+>>>> deinterlace all four streams from all four analog cameras live, it
+>>>> is necessary to operate VDI in INDIRECT mode, where the interlaced
+>>>> streams are written to buffers in memory, and then deinterlaced in
+>>>> memory using VDI in INDIRECT memory-to-memory mode.
+>>>
+>>> Just a quick design question. Is it possible to chain the deinterlacer and the
+>>> csc-scaler ?
+>>
+>> I think you could do that.
+>>
+>>> If so, it would be much more efficient if all this could be
+>>> combined into the existing m2m driver, since you could save a memory rountrip
+>>> when needing to deinterlace, change the colorspace and possibly scale too.
+>>
+>> The existing PRP/IC driver is similar to what this driver does, yes, but
+>> it uses a different DMA path , I believe it is IDMAC->PRP->IC->IDMAC .
+>> This driver uses IDMAC->VDI->IC->IDMAC . I am not convinced mixing the
+>> two paths into a single driver would be beneficial, but I am reasonably
+>> sure it would be very convoluted. Instead, this driver could be extended
+>> to do deinterlacing and scaling using the IC if that was needed. I think
+>> that would be the cleaner approach.
 > 
-> For hfi_gen2, subscribe for different bitstream parameters to
-> firmware to get notified for change in any of the subscribed
-> parameters.
-> 
-> Signed-off-by: Vedang Nagar <quic_vnagar@quicinc.com>
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> ---
->   drivers/media/platform/qcom/iris/iris_hfi_gen2.h   |   6 +
->   .../platform/qcom/iris/iris_hfi_gen2_command.c     | 179 +++++++++++++++++++++
->   .../platform/qcom/iris/iris_hfi_gen2_defines.h     |   9 ++
->   .../platform/qcom/iris/iris_platform_common.h      |   4 +
->   .../platform/qcom/iris/iris_platform_sm8550.c      |  13 ++
->   5 files changed, 211 insertions(+)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2.h b/drivers/media/platform/qcom/iris/iris_hfi_gen2.h
-> index 8170c1fef569..5fbbab844025 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2.h
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2.h
-> @@ -18,12 +18,18 @@ struct iris_core;
->    *
->    * @inst: pointer to iris_instance structure
->    * @packet: HFI packet
-> + * @ipsc_properties_set: boolean to set ipsc properties to fw
-> + * @opsc_properties_set: boolean to set opsc properties to fw
->    * @src_subcr_params: subscription params to fw on input port
-> + * @dst_subcr_params: subscription params to fw on output port
->    */
->   struct iris_inst_hfi_gen2 {
->   	struct iris_inst		inst;
->   	struct iris_hfi_header		*packet;
-> +	bool				ipsc_properties_set;
-> +	bool				opsc_properties_set;
->   	struct hfi_subscription_params	src_subcr_params;
-> +	struct hfi_subscription_params	dst_subcr_params;
->   };
->   
->   void iris_hfi_gen2_command_ops_init(struct iris_core *core);
-> diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> index e50f00021f6d..791b535a3584 100644
-> --- a/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> +++ b/drivers/media/platform/qcom/iris/iris_hfi_gen2_command.c
-> @@ -472,6 +472,9 @@ static int iris_hfi_gen2_session_open(struct iris_inst *inst)
->   	if (inst->state != IRIS_INST_DEINIT)
->   		return -EALREADY;
->   
-> +	inst_hfi_gen2->ipsc_properties_set = false;
-> +	inst_hfi_gen2->opsc_properties_set = false;
-> +
->   	inst_hfi_gen2->packet = kzalloc(4096, GFP_KERNEL);
->   	if (!inst_hfi_gen2->packet)
->   		return -ENOMEM;
-> @@ -536,9 +539,185 @@ static int iris_hfi_gen2_session_close(struct iris_inst *inst)
->   	return ret;
->   }
->   
-> +static int iris_hfi_gen2_session_subscribe_mode(struct iris_inst *inst,
-> +						u32 cmd, u32 plane, u32 payload_type,
-> +						void *payload, u32 payload_size)
-> +{
-> +	struct iris_inst_hfi_gen2 *inst_hfi_gen2 = to_iris_inst_hfi_gen2(inst);
-> +
-> +	iris_hfi_gen2_packet_session_command(inst,
-> +					     cmd,
-> +					     (HFI_HOST_FLAGS_RESPONSE_REQUIRED |
-> +					     HFI_HOST_FLAGS_INTR_REQUIRED),
-> +					     iris_hfi_gen2_get_port(plane),
-> +					     inst->session_id,
-> +					     payload_type,
-> +					     payload,
-> +					     payload_size);
-> +
-> +	return iris_hfi_queue_cmd_write(inst->core, inst_hfi_gen2->packet,
-> +					inst_hfi_gen2->packet->size);
-> +}
-> +
-> +static int iris_hfi_gen2_subscribe_change_param(struct iris_inst *inst, u32 plane)
-> +{
-> +	struct iris_inst_hfi_gen2 *inst_hfi_gen2 = to_iris_inst_hfi_gen2(inst);
-> +	struct hfi_subscription_params subsc_params;
-> +	u32 prop_type, payload_size, payload_type;
-> +	struct iris_core *core = inst->core;
-> +	const u32 *change_param = NULL;
-> +	u32 change_param_size = 0;
-> +	u32 payload[32] = {0};
-> +	u32 hfi_port = 0;
-> +	int ret;
-> +	u32 i;
-> +
-> +	if ((V4L2_TYPE_IS_OUTPUT(plane) && inst_hfi_gen2->ipsc_properties_set) ||
-> +	    (V4L2_TYPE_IS_CAPTURE(plane) && inst_hfi_gen2->opsc_properties_set)) {
-> +		dev_err(core->dev, "invalid plane\n");
-> +		return 0;
-> +	}
-> +
-> +	change_param = core->iris_platform_data->input_config_params;
-> +	change_param_size = core->iris_platform_data->input_config_params_size;
-> +
-> +	if (!change_param || !change_param_size)
-> +		return -EINVAL;
+> Not that I only meant to ask if there was a path to combine
+> CSC/Scaling/Deinterlacing without a memory rountrip. If a rountrip is needed
+> anyway, I would rather make separate video nodes, and leave it to userspace to
+> deal with. Though, if we can avoid it, a combined driver should be highly
+> beneficial.
+The VDI mem2mem driver already uses the IC as an output path from the 
+deinterlacer, IC is capable of scaling and it could be configured to do 
+scaling. The IC configuration in the VDI mem2mem driver is some 10 lines 
+of code (select input and output colorspace, and input and output image 
+resolution), the rest of the VDI mem2mem driver is interaction with the 
+VDI itself.
 
-That's an odd one, checking for zero but _not_ bounds checking 
-chanage_param_size < (sizeof(payload)/sizeof(u32)) - 1
+Since the IC configuration (i.e. color space conversion and scaling) is 
+already well factored out, I think mixing the VDI and CSC drivers 
+wouldn't bring any real benefit, it would only make the code more 
+complicated.
 
-I'm not sure where inpug_config_param_size gets populated but I'd rather 
-check that type of parameter - for exactly that reason - than the 
-defensive coding done on your inputs elsewhere.
-
-TL;DR why do you trust change_param_size < your array size but not 
-change_param_size >= 1 ?
-
----
-bod
+[...]
