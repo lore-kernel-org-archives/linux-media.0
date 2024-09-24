@@ -1,307 +1,140 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA7D1AC428;
-	Tue, 24 Sep 2024 16:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A892E419;
+	Tue, 24 Sep 2024 17:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727196326; cv=none; b=FnkRWhR3uAAR3wFi8g1JGtO+Pbdgqaajb3T5nodb29PezNKquREh5xQ+rrKc6LW7b8GybyXQgZkfWCAH8SOCqxhrLX/kOlWpfTWywqUcRKO94MxiEMG7sSyBaIMQtKOdR0XhrwaZuCgt10j/kF9oTKFPQAaowqY4Lv3so7FZ0EU=
+	t=1727198295; cv=none; b=mA7sS1n8c/BS7rsUuvogYYgyKjvAM0aZh3O2bvCbLgmFFYnK2+n7fStplkM2sa0kfsliSN3uT4A6+b7p4h2hyfMhgMbMDnH/IHZlSFxfmo7GcIq3i2nqedQ/OiIubdj9wPn71cOAmtTS88a7Xpl33ROYfulAK1OYBL8GtbpfZ1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727196326; c=relaxed/simple;
-	bh=rCfIVPGFT37TLiSakYjQVCPJampvNGxibhpB8QAbAMw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Fns80NPQpFvUx8kK3M7quVm/4FheGJDuJ6/Aew97KFc00yg+Zp+sm+WCePPsgLFx7u5kkXKdBZvncI4jH5TBdLIKJS/hScXSJ0CSFCBjDfTGxpTgueTdSp3z7O5RBFXQxi+kmHQMu2ly9mm9cKV5dyMus4hO5DSlbireXzgarQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=OmEObOsu; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+	s=arc-20240116; t=1727198295; c=relaxed/simple;
+	bh=SDh/w9bYOwefz7vHc6h1SwrveHXcT778HDAlVUqm8NY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJrGUhVBf0Cb+TOy03yrqByspOkPAgTaJhCWy0SuThL7Mhy8WkBjC/R0Url79T1ZYCqq5NJsNGT+JtH/L72ScWJ2JfcSWXwDqdzeIbW+SdtC60sUlIodvV3TzyE6yc9Qx7JqkYQ8lU3BXAXpzRbdctbcVIur1dzcX8psBoTA+og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=kbrpGWm2; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="OmEObOsu"
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 5520388580;
-	Tue, 24 Sep 2024 18:45:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1727196319;
-	bh=/Jgh2J56THl4Ke+D7QEi5nBhb50MSZCH9cCXRjOyfYI=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=OmEObOsuIyMuuEy8T1cDPkzmwhe3PnLL+TB5IGYFqRdVpIQmqnaquhSYrLvmn9957
-	 2ZZJwClGW3YIJnYty1BS3bip4v1/5PsQ/kB9MQyT0jmAsJWiXJcJteNT/Cvb55Rzir
-	 LBkHEngLq8f+RJPX07nOtZbgV3JnEuR+t2L/4rzkgIQ4CFAdtZHVj0vFxx5RQjcBkH
-	 MOEiWssJSHcg8rpjSUvjdm589BHHe/9pXtY2c0IUrMlhdnCPSPj6d3/KJjM0SBIl2E
-	 2qGcMPcm4CeCdQy8fr9sILsjcAJMWeNP7eslmUH0Lgf2OVI8h6SrXkqXhUbLAronA/
-	 rqdythIZtZqrg==
-Message-ID: <3e850259-9349-4215-947a-ce192fa95f14@denx.de>
-Date: Tue, 24 Sep 2024 17:28:32 +0200
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kbrpGWm2"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 090B719BA;
+	Tue, 24 Sep 2024 19:16:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1727198202;
+	bh=SDh/w9bYOwefz7vHc6h1SwrveHXcT778HDAlVUqm8NY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kbrpGWm2C3eLPF/4upHVSAiEaLjx9FeY7fwYC/vIXZJvsY9NSOFOASb5EgvjOBkO2
+	 uR+ekoGYYdJAP+5ML8I9sb65FZuss09drV6f+wqenx5H4sUexHkMs4X354Au7j+Mvl
+	 mFcyubbPes5HkZTBXY9pBNO+ix8Al7Sz00Leq9qo=
+Date: Tue, 24 Sep 2024 20:17:36 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH 1/4] media: v4l2-subdev: Add cleanup macros for active
+ state
+Message-ID: <20240924171736.GE30551@pendragon.ideasonboard.com>
+References: <20240917-scoped-state-v1-0-b8ba3fbe5952@ideasonboard.com>
+ <20240917-scoped-state-v1-1-b8ba3fbe5952@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v2 2/2] media: imx: vdic: Introduce mem2mem VDI
- deinterlacer driver
-To: Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Fabio Estevam <festevam@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Helge Deller
- <deller@gmx.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Steve Longerbeam <slongerbeam@gmail.com>, dri-devel@lists.freedesktop.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20240724002044.112544-1-marex@denx.de>
- <20240724002044.112544-2-marex@denx.de>
- <a66a2eaf30e21ff7c87f140e97ed4639640121ba.camel@pengutronix.de>
-Content-Language: en-US
-In-Reply-To: <a66a2eaf30e21ff7c87f140e97ed4639640121ba.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240917-scoped-state-v1-1-b8ba3fbe5952@ideasonboard.com>
 
-On 9/6/24 11:01 AM, Philipp Zabel wrote:
+Hi Tomi,
 
-Hi,
+Thank you for the patch.
 
->> diff --git a/drivers/staging/media/imx/imx-media-dev.c b/drivers/staging/media/imx/imx-media-dev.c
->> index be54dca11465d..a841fdb4c2394 100644
->> --- a/drivers/staging/media/imx/imx-media-dev.c
->> +++ b/drivers/staging/media/imx/imx-media-dev.c
->> @@ -57,7 +57,52 @@ static int imx6_media_probe_complete(struct v4l2_async_notifier *notifier)
->>   		goto unlock;
->>   	}
->>   
->> +	imxmd->m2m_vdic[0] = imx_media_mem2mem_vdic_init(imxmd, 0);
->> +	if (IS_ERR(imxmd->m2m_vdic[0])) {
->> +		ret = PTR_ERR(imxmd->m2m_vdic[0]);
->> +		imxmd->m2m_vdic[0] = NULL;
->> +		goto unlock;
->> +	}
->> +
->> +	/* MX6S/DL has one IPUv3, init second VDI only on MX6Q/QP */
->> +	if (imxmd->ipu[1]) {
->> +		imxmd->m2m_vdic[1] = imx_media_mem2mem_vdic_init(imxmd, 1);
->> +		if (IS_ERR(imxmd->m2m_vdic[1])) {
->> +			ret = PTR_ERR(imxmd->m2m_vdic[1]);
->> +			imxmd->m2m_vdic[1] = NULL;
->> +			goto uninit_vdi0;
->> +		}
->> +	}
+On Tue, Sep 17, 2024 at 05:09:29PM +0300, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 > 
-> Instead of presenting two devices to userspace, it would be better to
-> have a single video device that can distribute work to both IPUs.
-
-Why do you think so ?
-
-I think it is better to keep the kernel code as simple as possible, i.e. 
-provide the device node for each m2m device to userspace and handle the 
-m2m device hardware interaction in the kernel driver, but let userspace 
-take care of policy like job scheduling, access permissions assignment 
-to each device (e.g. if different user accounts should have access to 
-different VDICs), or other such topics.
-
-> To be fair, we never implemented that for the CSC/scaler mem2mem device
-> either.
-
-I don't think that is actually a good idea. Instead, it would be better 
-to have two scaler nodes in userspace.
-
-[...]
-
->> +++ b/drivers/staging/media/imx/imx-media-mem2mem-vdic.c
->> @@ -0,0 +1,997 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * i.MX VDIC mem2mem de-interlace driver
->> + *
->> + * Copyright (c) 2024 Marek Vasut <marex@denx.de>
->> + *
->> + * Based on previous VDIC mem2mem work by Steve Longerbeam that is:
->> + * Copyright (c) 2018 Mentor Graphics Inc.
->> + */
->> +
->> +#include <linux/delay.h>
->> +#include <linux/fs.h>
->> +#include <linux/module.h>
->> +#include <linux/sched.h>
->> +#include <linux/slab.h>
->> +#include <linux/version.h>
->> +
->> +#include <media/media-device.h>
->> +#include <media/v4l2-ctrls.h>
->> +#include <media/v4l2-device.h>
->> +#include <media/v4l2-event.h>
->> +#include <media/v4l2-ioctl.h>
->> +#include <media/v4l2-mem2mem.h>
->> +#include <media/videobuf2-dma-contig.h>
->> +
->> +#include "imx-media.h"
->> +
->> +#define fh_to_ctx(__fh)	container_of(__fh, struct ipu_mem2mem_vdic_ctx, fh)
->> +
->> +#define to_mem2mem_priv(v) container_of(v, struct ipu_mem2mem_vdic_priv, vdev)
+> Add cleanup macros for active state. These can be used to call
+> v4l2_subdev_lock_and_get_active_state() and manage the unlocking either
+> in unscoped or scoped fashion:
 > 
-> These could be inline functions for added type safety.
-
-Fixed in v3
-
-[...]
-
->> +static void ipu_mem2mem_vdic_device_run(void *_ctx)
->> +{
->> +	struct ipu_mem2mem_vdic_ctx *ctx = _ctx;
->> +	struct ipu_mem2mem_vdic_priv *priv = ctx->priv;
->> +	struct vb2_v4l2_buffer *curr_buf, *dst_buf;
->> +	dma_addr_t prev_phys, curr_phys, out_phys;
->> +	struct v4l2_pix_format *infmt;
->> +	u32 phys_offset = 0;
->> +	unsigned long flags;
->> +
->> +	infmt = ipu_mem2mem_vdic_get_format(priv, V4L2_BUF_TYPE_VIDEO_OUTPUT);
->> +	if (V4L2_FIELD_IS_SEQUENTIAL(infmt->field))
->> +		phys_offset = infmt->sizeimage / 2;
->> +	else if (V4L2_FIELD_IS_INTERLACED(infmt->field))
->> +		phys_offset = infmt->bytesperline;
->> +	else
->> +		dev_err(priv->dev, "Invalid field %d\n", infmt->field);
->> +
->> +	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
->> +	out_phys = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
->> +
->> +	curr_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
->> +	if (!curr_buf) {
->> +		dev_err(priv->dev, "Not enough buffers\n");
->> +		return;
->> +	}
->> +
->> +	spin_lock_irqsave(&priv->irqlock, flags);
->> +
->> +	if (ctx->curr_buf) {
->> +		ctx->prev_buf = ctx->curr_buf;
->> +		ctx->curr_buf = curr_buf;
->> +	} else {
->> +		ctx->prev_buf = curr_buf;
->> +		ctx->curr_buf = curr_buf;
->> +		dev_warn(priv->dev, "Single-buffer mode, fix your userspace\n");
->> +	}
->> +
->> +	prev_phys = vb2_dma_contig_plane_dma_addr(&ctx->prev_buf->vb2_buf, 0);
->> +	curr_phys = vb2_dma_contig_plane_dma_addr(&ctx->curr_buf->vb2_buf, 0);
->> +
->> +	priv->curr_ctx = ctx;
->> +	spin_unlock_irqrestore(&priv->irqlock, flags);
->> +
->> +	ipu_cpmem_set_buffer(priv->vdi_out_ch,  0, out_phys);
->> +	ipu_cpmem_set_buffer(priv->vdi_in_ch_p, 0, prev_phys + phys_offset);
->> +	ipu_cpmem_set_buffer(priv->vdi_in_ch,   0, curr_phys);
->> +	ipu_cpmem_set_buffer(priv->vdi_in_ch_n, 0, curr_phys + phys_offset);
+> This locks the state, gets it to the 'state' variable, and unlocks when
+> exiting the surrounding scope:
 > 
-> This always outputs at a frame rate of half the field rate, and only
-> top fields are ever used as current field, and bottom fields as
-> previous/next fields, right?
-
-Yes, currently the driver extracts 1 frame from two consecutive incoming 
-fields (previous Bottom, and current Top and Bottom):
-
-(frame 1 and 3 below is omitted)
-
-     1  2  3  4
-...|T |T |T |T |...
-...| B| B| B| B|...
-      | ||  | ||
-      '-''  '-''
-       ||    ||
-       ||    \/
-       \/  Frame#4
-     Frame#2
-
-As far as I understand it, this is how the current VDI implementation 
-behaves too, right ?
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/media/imx/imx-media-vdic.c#n207
-
-> I think it would be good to add a mode that doesn't drop the
+> CLASS(v4l2_subdev_lock_and_get_active_state, state)(subdev);
 > 
-> 	ipu_cpmem_set_buffer(priv->vdi_in_ch_p, 0, prev_phys);
-> 	ipu_cpmem_set_buffer(priv->vdi_in_ch,   0, prev_phys + phys_offset);
-> 	ipu_cpmem_set_buffer(priv->vdi_in_ch_n, 0, curr_phys);
+> This does the same, but inside the given scope:
 > 
-> output frames, right from the start.
-
-This would make the VDI act as a frame-rate doubler, which would spend a 
-lot more memory bandwidth, which is limited on MX6, so I would also like 
-to have a frame-drop mode (i.e. current behavior).
-
-Can we make that behavior configurable ? Since this is a mem2mem device, 
-we do not really have any notion of input and output frame-rate, so I 
-suspect this would need some VIDIOC_* ioctl ?
-
-> If we don't start with that supported, I fear userspace will make
-> assumptions and be surprised when a full rate mode is added later.
-
-I'm afraid that since the current VDI already does retain input frame 
-rate instead of doubling it, the userspace already makes an assumption, 
-so that ship has sailed.
-
-But I think we can make the frame doubling configurable ?
-
->> +	/* No double buffering, always pick buffer 0 */
->> +	ipu_idmac_select_buffer(priv->vdi_out_ch, 0);
->> +	ipu_idmac_select_buffer(priv->vdi_in_ch_p, 0);
->> +	ipu_idmac_select_buffer(priv->vdi_in_ch, 0);
->> +	ipu_idmac_select_buffer(priv->vdi_in_ch_n, 0);
->> +
->> +	/* Enable the channels */
->> +	ipu_idmac_enable_channel(priv->vdi_out_ch);
->> +	ipu_idmac_enable_channel(priv->vdi_in_ch_p);
->> +	ipu_idmac_enable_channel(priv->vdi_in_ch);
->> +	ipu_idmac_enable_channel(priv->vdi_in_ch_n);
->> +}
-
-[...]
-
->> +static int ipu_mem2mem_vdic_setup_hardware(struct ipu_mem2mem_vdic_priv *priv)
->> +{
->> +	struct v4l2_pix_format *infmt, *outfmt;
->> +	struct ipu_ic_csc csc;
->> +	bool in422, outyuv;
->> +	int ret;
->> +
->> +	infmt = ipu_mem2mem_vdic_get_format(priv, V4L2_BUF_TYPE_VIDEO_OUTPUT);
->> +	outfmt = ipu_mem2mem_vdic_get_format(priv, V4L2_BUF_TYPE_VIDEO_CAPTURE);
->> +	in422 = ipu_mem2mem_vdic_format_is_yuv422(infmt->pixelformat);
->> +	outyuv = ipu_mem2mem_vdic_format_is_yuv(outfmt->pixelformat);
->> +
->> +	ipu_vdi_setup(priv->vdi, in422, infmt->width, infmt->height);
->> +	ipu_vdi_set_field_order(priv->vdi, V4L2_STD_UNKNOWN, infmt->field);
->> +	ipu_vdi_set_motion(priv->vdi, HIGH_MOTION);
+> scoped_v4l2_subdev_lock_and_get_active_state(subdev) {
+> }
 > 
-> This maps to VDI_C_MOT_SEL_FULL aka VDI_MOT_SEL=2, which is documented
-> as "full motion, only vertical filter is used". Doesn't this completely
-> ignore the previous/next fields and only use the output of the di_vfilt
-> four tap vertical filter block to fill in missing lines from the
-> surrounding pixels (above and below) of the current field?
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> ---
+>  include/media/v4l2-subdev.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index bd235d325ff9..699007cfffd7 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _V4L2_SUBDEV_H
+>  #define _V4L2_SUBDEV_H
+>  
+> +#include <linux/cleanup.h>
+>  #include <linux/types.h>
+>  #include <linux/v4l2-subdev.h>
+>  #include <media/media-entity.h>
+> @@ -1854,6 +1855,15 @@ v4l2_subdev_lock_and_get_active_state(struct v4l2_subdev *sd)
+>  	return sd->active_state;
+>  }
+>  
+> +DEFINE_CLASS(v4l2_subdev_lock_and_get_active_state, struct v4l2_subdev_state *,
+> +	     v4l2_subdev_unlock_state(_T),
+> +	     v4l2_subdev_lock_and_get_active_state(sd), struct v4l2_subdev *sd);
+> +
+> +#define scoped_v4l2_subdev_lock_and_get_active_state(sd)              \
+> +	for (CLASS(v4l2_subdev_lock_and_get_active_state, state)(sd), \
+> +	     *done = NULL;                                            \
+> +	     !done; done = (void *)1)
 
-Is there a suitable knob for this or shall I introduce a device specific 
-one, like the vdic_ctrl_motion_menu for the current VDIC direct driver ?
+That a very long name :-S Could this be done using the scoped_guard()
+macro instead ? For instance, with spinlocks you can do
 
-If we introduce such a knob, then it is all the more reason to provide 
-one device node per one VDIC hardware instance, since each can be 
-configured for different motion settings.
+	scoped_guard(spinlock_irqsave, &dev->lock) {
+		...
+	}
 
-> I think this should at least be configurable, and probably default to
-> MED_MOTION.
+It would be nice to be able to write
 
-I think to be compatible with the current VDI behavior and to reduce 
-memory bandwidth usage, let's default to the HIGH/full mode. That one 
-produces reasonably good results without spending too much memory 
-bandwidth which is constrained already on the MX6, and if the user needs 
-better image quality, they can configure another mode using the V4L2 
-control.
+	scoped_guard(v4l2_subdev_state, sd) {
+		...
+	}
 
-[...]
+This being said, we would then end up with the state variable being
+named scope, which wouldn't be great.
+
+This is actually one of my issues with the above macros, and especially
+scoped_v4l2_subdev_lock_and_get_active_state(). It creates a local state
+variable in the scope, which makes the code less readable in my opinion.
+
+We could keep the class and drop
+scoped_v4l2_subdev_lock_and_get_active_state(). I think I would like to
+shorten the class name then.
+
+Another option is to use DEFINE_FREE() and __free() instead.
+
+> +
+>  /**
+>   * v4l2_subdev_init - initializes the sub-device struct
+>   *
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
