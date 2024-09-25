@@ -1,255 +1,228 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E591865F7
-	for <linux-media@vger.kernel.org>; Wed, 25 Sep 2024 15:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0BE3B796;
+	Wed, 25 Sep 2024 15:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276862; cv=none; b=QIuxhb9mqP7NmB5V9LcESkYkLgFu1sUzZ3DeesXSiGVBpcvqMuNGPXvPIbxhKJfoBhSqNeeWrmTtlb5kuoipk4K3tmOvyKsguYJgWo+HGK5XVzkzC/Vb/T/LcFCfTgD3HLgFfBKnJdhKuiGUgb6jjH3l1Gr0aYDdxlLdFAw8pHE=
+	t=1727277225; cv=none; b=XcwPmv9k2rfFBzsGtmafqMtZESF+qr0EE970OWOPa0wGItfSvI5r3MifsGCQi8lPyn1Yjop/G1urlz4guSnHMfBwzklD1FUfkEcrBmhU92Hb9hN2UKtS9fncpt/lbAdy+O5QlKHlQ5HND4302ERKrI0oQPMBOiQbSbTqoDlW0Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276862; c=relaxed/simple;
-	bh=8GfBUdOg/QSvr9uhZROpCY6GPCwtP46GQFOUZHOoOrc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dYxNLUggr14y2lV9Ab5F/tHoyxYEd218VlVIRCnt2AmtaJgDWZo+xmf4zk9BbTSyesVqngdFNMRNpVXy29pVCzGOnwH9C1ZBirWYrD1RwNynuutYSnvbDNtDfXOXO629cJc/I+50EDoxzNL+YNOdcorbBggosl4KmlAxMT4TXm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1stTbx-0005WS-Gp; Wed, 25 Sep 2024 17:07:25 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1stTbw-001Tgc-Qq; Wed, 25 Sep 2024 17:07:24 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1stTbw-000MKv-2P;
-	Wed, 25 Sep 2024 17:07:24 +0200
-Message-ID: <f894eb3fd132a214ddbf2fa3ed405d065e629398.camel@pengutronix.de>
-Subject: Re: [PATCH v2 2/2] media: imx: vdic: Introduce mem2mem VDI
- deinterlacer driver
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Marek Vasut <marex@denx.de>, linux-media@vger.kernel.org
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, Fabio
- Estevam <festevam@gmail.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Helge Deller <deller@gmx.de>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo
- <shawnguo@kernel.org>,  Steve Longerbeam <slongerbeam@gmail.com>,
- dri-devel@lists.freedesktop.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org, 
- linux-staging@lists.linux.dev
-Date: Wed, 25 Sep 2024 17:07:24 +0200
-In-Reply-To: <3e850259-9349-4215-947a-ce192fa95f14@denx.de>
-References: <20240724002044.112544-1-marex@denx.de>
-	 <20240724002044.112544-2-marex@denx.de>
-	 <a66a2eaf30e21ff7c87f140e97ed4639640121ba.camel@pengutronix.de>
-	 <3e850259-9349-4215-947a-ce192fa95f14@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1727277225; c=relaxed/simple;
+	bh=uxbcjAmptvie1W4Mx7yaaLpA7Q3f3F8RvWBLg04aUdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HNNhBPnpW4hWs2hWSfrCOAOmiYLLQpdOffWBOlP6yGK6LChQKYKsX+9Bo9ktKNwChinTsV/yenmhackhIyiQxubnByeucVtc73f87z7ge1iHONE1KKl7ebEt2CvRuCOJnmt8T6NtQKcB0Dw71V9kP9zBIZ8khEOJicXPKWNcOcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TwhdQubu; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TwhdQubu"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48P86pN2018535;
+	Wed, 25 Sep 2024 15:13:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	y8B3AA1Oy4YgLejJwIJ71AljxWMCbFNvodY0+wutPHM=; b=TwhdQubuZXSGyHXl
+	nIlMJtzZjMsmG83okX99sQrqkFl4jbWjpcnfRDxmudZgwWhTi/ZHpJ5BS/SRMMMk
+	9VrKYduskpPaVW36NnAAvPk8hoPaOoLl3UTqDY49EZoQwGxpoL+lkX3pnG/GYDJQ
+	Yo0Mn7mwyX5uzUIBbdgvlWALdeUGrtK2kUy9stOrnN6AlqmQasgd5mLF3bCBpmOk
+	ehFT9Tfn7Xk+4FQKibnihsBpKWSNcpXm2FoMPqQiH3yXOrjmlV0F7+a5mArQO+/J
+	no2Utl39PFOcAB/SL6VklxeznZfnLoqXJ6fwfRNiTveo5Pjw1+VFzAOp8ErYXzg8
+	JtyYWg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41sqakm8eq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 15:13:26 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48PFDPMh025682
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Sep 2024 15:13:25 GMT
+Received: from [10.239.97.152] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 25 Sep
+ 2024 08:13:19 -0700
+Message-ID: <ed012367-1bfd-4eef-931b-37e1ac839176@quicinc.com>
+Date: Wed, 25 Sep 2024 23:13:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/13] dt-bindings: media: camss: Add qcom,sm8550-camss
+ binding
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, <rfoss@kernel.org>,
+        <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
+        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>, Yongsheng Li <quic_yon@quicinc.com>
+References: <20240812144131.369378-1-quic_depengs@quicinc.com>
+ <20240812144131.369378-8-quic_depengs@quicinc.com>
+ <9ed92660-5f42-4a1a-9261-b8800133972a@linaro.org>
+Content-Language: en-US
+From: Depeng Shao <quic_depengs@quicinc.com>
+In-Reply-To: <9ed92660-5f42-4a1a-9261-b8800133972a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ixBl7qkO5m5ncWrhF8ZbMhffXrEYOHnL
+X-Proofpoint-GUID: ixBl7qkO5m5ncWrhF8ZbMhffXrEYOHnL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 suspectscore=0 phishscore=0 adultscore=0
+ clxscore=1011 malwarescore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409250108
 
-Hi,
+Hi Vladimir,
 
-On Di, 2024-09-24 at 17:28 +0200, Marek Vasut wrote:
-> On 9/6/24 11:01 AM, Philipp Zabel wrote:
-[...]
-> > Instead of presenting two devices to userspace, it would be better to
-> > have a single video device that can distribute work to both IPUs.
->=20
-> Why do you think so ?
+On 9/6/2024 11:56 PM, Vladimir Zapolskiy wrote:
 
-The scaler/colorspace converter supports frames larger than the
-1024x1024 hardware by splitting each frame into multiple tiles. It
-currently does so sequentially on a single IC. Speed could be improved
-by distributing the tiles to both ICs. This is not an option anymore if
-there are two video devices that are fixed to one IC each.
+>> +            compatible = "qcom,sm8550-camss";
+>> +
+>> +            reg = <0 0x0acb7000 0 0xd00>,
+>> +                  <0 0x0acb9000 0 0xd00>,
+>> +                  <0 0x0acbb000 0 0xd00>,
+>> +                  <0 0x0acca000 0 0xa00>,
+>> +                  <0 0x0acce000 0 0xa00>,
+>> +                  <0 0x0acb6000 0 0x1000>,
+>> +                  <0 0x0ace4000 0 0x2000>,
+>> +                  <0 0x0ace6000 0 0x2000>,
+>> +                  <0 0x0ace8000 0 0x2000>,
+>> +                  <0 0x0acea000 0 0x2000>,
+>> +                  <0 0x0acec000 0 0x2000>,
+>> +                  <0 0x0acee000 0 0x2000>,
+>> +                  <0 0x0acf0000 0 0x2000>,
+>> +                  <0 0x0acf2000 0 0x2000>,
+>> +                  <0 0x0ac62000 0 0xf000>,
+>> +                  <0 0x0ac71000 0 0xf000>,
+>> +                  <0 0x0ac80000 0 0xf000>,
+>> +                  <0 0x0accb000 0 0x2800>,
+>> +                  <0 0x0accf000 0 0x2800>;
+> 
+> Please sort the list above in numerical order, this will change positions
+> of "vfe_lite0", "vfe_lite1" etc.
+> 
+> Another note, since it's not possible to map less than a page, so I believe
+> it might make sense to align all sizes to 0x1000.
+> 
 
-The same would be possible for the deinterlacer, e.g. to support 720i
-frames split into two tiles each sent to one of the two VDICs.
+Sure, I previously sorted by the alphabetical order of reg_name.
+I will update it based on your suggestion. And will also make sure the 
+align all sizes to 0x1000.
 
-> I think it is better to keep the kernel code as simple as possible, i.e.=
-=20
-> provide the device node for each m2m device to userspace and handle the=
-=20
-> m2m device hardware interaction in the kernel driver, but let userspace=
-=20
-> take care of policy like job scheduling, access permissions assignment=
-=20
-> to each device (e.g. if different user accounts should have access to=20
-> different VDICs), or other such topics.
 
-I both agree and disagree with you at the same time.
+>> +                     <&camcc CAM_CC_IFE_LITE_CLK>,
+>> +                     <&camcc CAM_CC_IFE_LITE_AHB_CLK>,
+>> +                     <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>,
+>> +                     <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
+>> +                     <&gcc GCC_CAMERA_HF_AXI_CLK>;
+> 
+> Could you please put the &gcc provided clock as the first one in the list?
+> 
 
-If the programming model were more similar to DRM, I'd agree in a
-heartbeat. If the kernel driver just had to do memory/fence handling
-and command submission (and parameter sanitization, because there is no
-MMU), and there was some userspace API on top, it would make sense to
-me to handle parameter calculation and job scheduling in a hardware
-specific userspace driver that can just open one device for each IPU.
+Sure, will do.
 
-With the rigid V4L2 model though, where memory handling, parameter
-calculation, and job scheduling of tiles in a single frame all have to
-be hidden behind the V4L2 API, I don't think requiring userspace to
-combine multiple mem2mem video devices to work together on a single
-frame is feasible.
+>> +
+>> +            interconnects = <&gem_noc MASTER_APPSS_PROC 0 &config_noc 
+>> SLAVE_CAMERA_CFG 0>,
+>> +                            <&mmss_noc MASTER_CAMNOC_HF 0 &mc_virt 
+>> SLAVE_EBI1 0>,
+>> +                            <&mmss_noc MASTER_CAMNOC_ICP 0 &mc_virt 
+>> SLAVE_EBI1 0>,
+>> +                            <&mmss_noc MASTER_CAMNOC_SF 0 &mc_virt 
+>> SLAVE_EBI1 0>;
+>> +            interconnect-names = "ahb",
+>> +                                 "hf_0_mnoc",
+>> +                                 "icp_mnoc",
+>> +                                 "sf_0_mnoc";
+> 
+> Just a note for myself, interconnect names lost "cam_" prefix, and it 
+> should
+> be fine.
 
-Is limiting different users to the different deinterlacer hardware
-units a real usecase? I saw the two ICs, when used as mem2mem devices,
-as interchangeable resources.
+Krzysztof posted a comment in a SC7280 camss change and asked to remove 
+the "cam_" prefix.
 
-> > To be fair, we never implemented that for the CSC/scaler mem2mem device
-> > either.
->=20
-> I don't think that is actually a good idea. Instead, it would be better=
-=20
-> to have two scaler nodes in userspace.
 
-See above, that would make it impossible (or rather unreasonably
-complicated) to distribute work on a single frame to both IPUs.
+https://lore.kernel.org/all/087e7f29-1fa8-4bc2-bb3d-acb941432381@kernel.org/
 
-[...]
-> > > +	ipu_cpmem_set_buffer(priv->vdi_out_ch,  0, out_phys);
-> > > +	ipu_cpmem_set_buffer(priv->vdi_in_ch_p, 0, prev_phys + phys_offset)=
-;
-> > > +	ipu_cpmem_set_buffer(priv->vdi_in_ch,   0, curr_phys);
-> > > +	ipu_cpmem_set_buffer(priv->vdi_in_ch_n, 0, curr_phys + phys_offset)=
-;
-> >=20
-> > This always outputs at a frame rate of half the field rate, and only
-> > top fields are ever used as current field, and bottom fields as
-> > previous/next fields, right?
->=20
-> Yes, currently the driver extracts 1 frame from two consecutive incoming=
-=20
-> fields (previous Bottom, and current Top and Bottom):
->=20
-> (frame 1 and 3 below is omitted)
->=20
->      1  2  3  4
-> ...|T |T |T |T |...
-> ...| B| B| B| B|...
->       | ||  | ||
->       '-''  '-''
->        ||    ||
->        ||    \/
->        \/  Frame#4
->      Frame#2
->=20
-> As far as I understand it, this is how the current VDI implementation=20
-> behaves too, right ?
 
-Yes, that is a hardware limitation when using the direct CSI->VDIC
-direct path. As far as I understand, for each frame (two fields) the
-CSI only sends the first ("PREV") field directly to the VDIC, which
-therefor can only be run in full motion mode (use the filter to add in
-the missing lines).
-The second ("CUR") field is just ignored. It could be written to RAM
-via IDMAC output channel 13 (IPUV3_CHANNEL_VDI_MEM_RECENT), which can
-not be used by the VDIC in direct mode. So this is not implemented.
+>> +            ports {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+> 
+> In case of a single child node #address-cells/#size-cells could be omitted,
+> if I'm not mistaken about it...
+> 
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
-rivers/staging/media/imx/imx-media-vdic.c#n207
+I tried it, but dt_binding_check report below warning.
 
-That code is unused. The direct hardware path doesn't use
-IPUV3_CHANNEL_MEM_VDI_PREV/CUR/NEXT, but is has a similar effect, half
-of the incoming fields are dropped. The setup is vdic_setup_direct().
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dts:221.29-39: 
+Warning (reg_format): 
+/example-0/soc/camss@ace4000/ports/port@0/endpoint@0:reg: property has 
+invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dts:220.48-225.27: 
+Warning (avoid_default_addr_size): 
+/example-0/soc/camss@ace4000/ports/port@0/endpoint@0: Relying on default 
+#address-cells value
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dts:220.48-225.27: 
+Warning (avoid_default_addr_size): 
+/example-0/soc/camss@ace4000/ports/port@0/endpoint@0: Relying on default 
+#size-cells value
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dtb: 
+Warning (unique_unit_address_if_enabled): Failed prerequisite 
+'avoid_default_addr_size'
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dts:220.48-225.27: 
+Warning (graph_endpoint): 
+/example-0/soc/camss@ace4000/ports/port@0/endpoint@0: graph node 
+'#address-cells' is -1, must be 1
+Documentation/devicetree/bindings/media/qcom,sm8550-camss.example.dts:220.48-225.27: 
+Warning (graph_endpoint): 
+/example-0/soc/camss@ace4000/ports/port@0/endpoint@0: graph node 
+'#size-cells' is -1, must be 0
 
-> > I think it would be good to add a mode that doesn't drop the
-> >=20
-> > 	ipu_cpmem_set_buffer(priv->vdi_in_ch_p, 0, prev_phys);
-> > 	ipu_cpmem_set_buffer(priv->vdi_in_ch,   0, prev_phys + phys_offset);
-> > 	ipu_cpmem_set_buffer(priv->vdi_in_ch_n, 0, curr_phys);
-> >=20
-> > output frames, right from the start.
->=20
-> This would make the VDI act as a frame-rate doubler, which would spend a=
-=20
-> lot more memory bandwidth, which is limited on MX6, so I would also like=
-=20
-> to have a frame-drop mode (i.e. current behavior).
->
-> Can we make that behavior configurable ? Since this is a mem2mem device,=
-=20
-> we do not really have any notion of input and output frame-rate, so I=20
-> suspect this would need some VIDIOC_* ioctl ?
+>> +                port@0 {
+>> +                    reg = <0>;
+>> +                    #address-cells = <1>;
+>> +                    #size-cells = <0>;
+> 
+> Same as above.
+> 
 
-That would be good. The situation I'd like to avoid is that this device
-becomes available without the full frame-rate mode, userspace then
-assumes this is a 1:1 frame converter device, and then we can't add the
-full frame-rate later without breaking userspace.
+Same warning..
 
-> > If we don't start with that supported, I fear userspace will make
-> > assumptions and be surprised when a full rate mode is added later.
->=20
-> I'm afraid that since the current VDI already does retain input frame=20
-> rate instead of doubling it, the userspace already makes an assumption,=
-=20
-> so that ship has sailed.
+>> +
+>> +                    csiphy_ep0: endpoint@0 {
+>> +                        reg = <0>;
+>> +                        clock-lanes = <7>;
+>> +                        data-lanes = <0 1>;
+>> +                        remote-endpoint = <&sensor_ep>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+> 
 
-No, this is about the deinterlacer mem2mem device, which doesn't exist
-before this series.
-
-The CSI capture path already has configurable framedrops (in the CSI).
-
-> But I think we can make the frame doubling configurable ?
-
-That would be good. Specifically, there must be no guarantee that one
-input frame with two fields only produces one deinterlaced output
-frame, and userspace should somehow be able to understand this.
-
-This would be an argument against Nicolas' suggestion of including this
-in the csc/scaler device, which always must produce one output frame
-per input frame.
-
-[...]
-> > This maps to VDI_C_MOT_SEL_FULL aka VDI_MOT_SEL=3D2, which is documente=
-d
-> > as "full motion, only vertical filter is used". Doesn't this completely
-> > ignore the previous/next fields and only use the output of the di_vfilt
-> > four tap vertical filter block to fill in missing lines from the
-> > surrounding pixels (above and below) of the current field?
->=20
-> Is there a suitable knob for this or shall I introduce a device specific=
-=20
-> one, like the vdic_ctrl_motion_menu for the current VDIC direct driver ?
->=20
-> If we introduce such a knob, then it is all the more reason to provide=
-=20
-> one device node per one VDIC hardware instance, since each can be=20
-> configured for different motion settings.
-
-As far as I know, there is no such control yet. I don't think this
-should be per-device, but per-stream (or even per-frame).
-
-> > I think this should at least be configurable, and probably default to
-> > MED_MOTION.
->=20
-> I think to be compatible with the current VDI behavior and to reduce=20
-> memory bandwidth usage, let's default to the HIGH/full mode. That one=20
-> produces reasonably good results without spending too much memory=20
-> bandwidth which is constrained already on the MX6, and if the user needs=
-=20
-> better image quality, they can configure another mode using the V4L2=20
-> control.
-
-I'd rather not default to the setting that throws away half of the
-input data. Not using frame doubling by default is sensible, but now
-that using all three input fields to calculate the output frame is
-possible, why not make that the default.
-
-regards
-Philipp
+---
+Thanks,
+Depeng
