@@ -1,151 +1,143 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77437155398;
-	Mon, 30 Sep 2024 07:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D8815445B;
+	Mon, 30 Sep 2024 07:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727681051; cv=none; b=go3l19jhxhyMBbkzC0xygdLja3udPCK+BI1bDzIC3tvKhMBX+JABzfAxlCQwOXJ/khQe3VXUpIxKnr8SCZW/eaFwMFR1/l0VHPYmbXIVkz8AlfjzMHkSftFwABDiY7/GZ4VHEBe+laHYjVU4M00yELPSpoDYIc86hVsOO8lafMk=
+	t=1727681210; cv=none; b=WknLKA5YzLEn1G9GpSz5fYLMXxyvsDPQbSQ3SYbqXigpueiIbR+LPD/JxXDAYdJbEs9UDbbqPXbgsBH0kKPgABq1s7o7pdVdzCOSoEweJsFdsD3mEgiLvKTr0ZbysfGh+c2FE0ZAUQ0Pa1MvDU6poNv/NEL23ndcf0zfk2pxUZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727681051; c=relaxed/simple;
-	bh=KPkdZJR4jn1ve9SjvvpCS5e1jcq1I2+AXyH4rJBjMZg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CWQxe3FOlvr+eMPM2gnJS/b1jK6HEWsFqMRP27VB2isbnP5i5Z2jotGyoZtpXpe+yUMTc9+6GZxx+BxMLa+IEOPUYAnI8XcqPRScY6rV57UWmbSteO8HB8biXipbc7C8zQ1OyYV2DQ85JE/WjQt7CbOaFPuUnDaS5EOX+MnpgbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=tnJNQ0YZ; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1727681210; c=relaxed/simple;
+	bh=7URofMgMi5TFK6ZH3IosD7VZaKF1XyhAswqZm9mqRkc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mpdlm7paDuqV6LRymqkYNH6opd0NRvbD4bM4Nlc33Er3N5EPxD76fFSl12TRjUDlE+aTrlYW+/4l4YC1SJelpKjc0dnCU54M2XsfZmKJl18JKzEc7Pz4v4jY2jj6hO3MC1cFvR1zndXSSQQ9xxrgDUY9gMXMLp9LjZU0Dt/W2zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Khlt3dO8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="tnJNQ0YZ"
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48U65xMf003251;
-	Mon, 30 Sep 2024 08:54:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=selector1; bh=TupV0Brvfq7wiAHvg+5/zM
-	piO80TJ5UsN6TLmJdrXA4=; b=tnJNQ0YZlzt0H+nEMtYXomrJyE4l2AeAnTyE3f
-	Txqdeg+XtakWIQR9blEQ4Y6cswEXvlErW5vHanVlJDPFmen3FZS/d0mTh9aRYVJR
-	nGYcW/96A6XughTYkzk2RS28MuJgDxepvZpay5oaDQ4ZP4HrVeDS2slYiAx39m1b
-	SSeRNqHX68N8e5QW6Skjbtmog3YXs1V/v4cL7KK770vRuYlhUf9JY6CdGpYXoaJg
-	ziagQ9CEc9EPHbRP8emJ91hMT2e3k5I9p2dPDhxRQyGdLoZTvm1wJHacoq6wrtMP
-	E5qAFp2mqOD/eSCkhuPaTtv4jxLDxK5WpTbgPgbA4GK7Qrdg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 41x8pc6g8d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Sep 2024 08:54:11 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B1B4840057;
-	Mon, 30 Sep 2024 08:53:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0431424BCB1;
-	Mon, 30 Sep 2024 08:51:43 +0200 (CEST)
-Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 30 Sep
- 2024 08:51:42 +0200
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Alain Volmat <alain.volmat@foss.st.com>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] media: i2c: gc2145: introduce enable/disable_streams ops
-Date: Mon, 30 Sep 2024 08:51:38 +0200
-Message-ID: <20240930065139.1490217-1-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Khlt3dO8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A8DC4CEC7;
+	Mon, 30 Sep 2024 07:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727681210;
+	bh=7URofMgMi5TFK6ZH3IosD7VZaKF1XyhAswqZm9mqRkc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Khlt3dO8JrjcevfHnqUMjQq5l6PAwsNJpH3Hxahuw6mnAlDgLVSyDV1z7cnSV15eD
+	 feVRq6NqlG5xJ5RmDbxYP8pTXqLC8UST5L1B1ueYCnKwYj2MoarCtKyNaewxuO+jhW
+	 zRJ38QxFVxEIH9fADM+XvBVvq5P5rW8Wl0vMzdq9OdVx5ACYauM9d7ulx2VJ+cuvnr
+	 OSjX4zm+jXNH4xEb7Ct4zSLvo6AaTc/LRnVreyh5U/OVvUnGYYkSy5Q0QvlIVTeexk
+	 avnFhJ6XlEXYAK4fIwHBYzjkKcc+txBaeqfNvFT/NaZWExU2kZjcWb7pkrFk65xRN0
+	 e18wev390gNDQ==
+Message-ID: <212c880a-9a09-4433-a049-eb15a0c32322@kernel.org>
+Date: Mon, 30 Sep 2024 09:26:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/13] dt-bindings: media: camss: Add qcom,sm8550-camss
+ binding
+To: Depeng Shao <quic_depengs@quicinc.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, rfoss@kernel.org,
+ todor.too@gmail.com, bryan.odonoghue@linaro.org, mchehab@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@quicinc.com, Yongsheng Li <quic_yon@quicinc.com>
+References: <20240812144131.369378-1-quic_depengs@quicinc.com>
+ <20240812144131.369378-8-quic_depengs@quicinc.com>
+ <9ed92660-5f42-4a1a-9261-b8800133972a@linaro.org>
+ <ed012367-1bfd-4eef-931b-37e1ac839176@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <ed012367-1bfd-4eef-931b-37e1ac839176@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Introduce enable_streams and disable_streams pad ops and
-replace s_stream with the v4l2_subdev_s_stream_helper
-function.
+On 25/09/2024 17:13, Depeng Shao wrote:
+> Hi Vladimir,
+> 
+> On 9/6/2024 11:56 PM, Vladimir Zapolskiy wrote:
+> 
+>>> +            compatible = "qcom,sm8550-camss";
+>>> +
+>>> +            reg = <0 0x0acb7000 0 0xd00>,
+>>> +                  <0 0x0acb9000 0 0xd00>,
+>>> +                  <0 0x0acbb000 0 0xd00>,
+>>> +                  <0 0x0acca000 0 0xa00>,
+>>> +                  <0 0x0acce000 0 0xa00>,
+>>> +                  <0 0x0acb6000 0 0x1000>,
+>>> +                  <0 0x0ace4000 0 0x2000>,
+>>> +                  <0 0x0ace6000 0 0x2000>,
+>>> +                  <0 0x0ace8000 0 0x2000>,
+>>> +                  <0 0x0acea000 0 0x2000>,
+>>> +                  <0 0x0acec000 0 0x2000>,
+>>> +                  <0 0x0acee000 0 0x2000>,
+>>> +                  <0 0x0acf0000 0 0x2000>,
+>>> +                  <0 0x0acf2000 0 0x2000>,
+>>> +                  <0 0x0ac62000 0 0xf000>,
+>>> +                  <0 0x0ac71000 0 0xf000>,
+>>> +                  <0 0x0ac80000 0 0xf000>,
+>>> +                  <0 0x0accb000 0 0x2800>,
+>>> +                  <0 0x0accf000 0 0x2800>;
+>>
+>> Please sort the list above in numerical order, this will change positions
+>> of "vfe_lite0", "vfe_lite1" etc.
+>>
+>> Another note, since it's not possible to map less than a page, so I believe
+>> it might make sense to align all sizes to 0x1000.
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/media/i2c/gc2145.c | 31 +++++++++++--------------------
- 1 file changed, 11 insertions(+), 20 deletions(-)
+And if Linux behavior changes then are you going to rewrite all the DTS
+for new size?
 
-diff --git a/drivers/media/i2c/gc2145.c b/drivers/media/i2c/gc2145.c
-index 667bb756d056..ab3c086c3ad6 100644
---- a/drivers/media/i2c/gc2145.c
-+++ b/drivers/media/i2c/gc2145.c
-@@ -899,9 +899,11 @@ static int gc2145_config_mipi_mode(struct gc2145 *gc2145,
- 	return ret;
- }
- 
--static int gc2145_start_streaming(struct gc2145 *gc2145,
--				  struct v4l2_subdev_state *state)
-+static int gc2145_enable_streams(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *state, u32 pad,
-+				 u64 streams_mask)
- {
-+	struct gc2145 *gc2145 = to_gc2145(sd);
- 	struct i2c_client *client = v4l2_get_subdevdata(&gc2145->sd);
- 	const struct gc2145_format *gc2145_format;
- 	struct v4l2_mbus_framefmt *fmt;
-@@ -967,8 +969,11 @@ static int gc2145_start_streaming(struct gc2145 *gc2145,
- 	return ret;
- }
- 
--static void gc2145_stop_streaming(struct gc2145 *gc2145)
-+static int gc2145_disable_streams(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *state, u32 pad,
-+				  u64 streams_mask)
- {
-+	struct gc2145 *gc2145 = to_gc2145(sd);
- 	struct i2c_client *client = v4l2_get_subdevdata(&gc2145->sd);
- 	int ret = 0;
- 
-@@ -983,22 +988,6 @@ static void gc2145_stop_streaming(struct gc2145 *gc2145)
- 
- 	pm_runtime_mark_last_busy(&client->dev);
- 	pm_runtime_put_autosuspend(&client->dev);
--}
--
--static int gc2145_set_stream(struct v4l2_subdev *sd, int enable)
--{
--	struct gc2145 *gc2145 = to_gc2145(sd);
--	struct v4l2_subdev_state *state;
--	int ret = 0;
--
--	state = v4l2_subdev_lock_and_get_active_state(sd);
--
--	if (enable)
--		ret = gc2145_start_streaming(gc2145, state);
--	else
--		gc2145_stop_streaming(gc2145);
--
--	v4l2_subdev_unlock_state(state);
- 
- 	return ret;
- }
-@@ -1129,7 +1118,7 @@ static const struct v4l2_subdev_core_ops gc2145_core_ops = {
- };
- 
- static const struct v4l2_subdev_video_ops gc2145_video_ops = {
--	.s_stream = gc2145_set_stream,
-+	.s_stream = v4l2_subdev_s_stream_helper,
- };
- 
- static const struct v4l2_subdev_pad_ops gc2145_pad_ops = {
-@@ -1138,6 +1127,8 @@ static const struct v4l2_subdev_pad_ops gc2145_pad_ops = {
- 	.set_fmt = gc2145_set_pad_format,
- 	.get_selection = gc2145_get_selection,
- 	.enum_frame_size = gc2145_enum_frame_size,
-+	.enable_streams = gc2145_enable_streams,
-+	.disable_streams = gc2145_disable_streams,
- };
- 
- static const struct v4l2_subdev_ops gc2145_subdev_ops = {
--- 
-2.25.1
+No, the sizes reflect hardware register layout, not concept of pages.
+
+I don't think that we should be coming with more nitpicky ideas, one
+month after the patch was sent and reviewed.
+
+Best regards,
+Krzysztof
 
