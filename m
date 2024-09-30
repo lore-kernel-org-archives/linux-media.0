@@ -1,131 +1,151 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA45714A0AB;
-	Mon, 30 Sep 2024 07:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77437155398;
+	Mon, 30 Sep 2024 07:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727680918; cv=none; b=kX4EAd1AS1nq7bvbJvxktVddTs8GABqSlXzmyAbaRCwQdLgSgZSzOQ3ELLCbCr2KA3M+84OQzKwWkW54sguSKPZE+XDbG/fPW02ArLKjq4wl1QC56sEaADCYDuz7KHI0e763weS4sSrTf6zq+CQnEGRAaVvmkhwGdbj3NZJAw0k=
+	t=1727681051; cv=none; b=go3l19jhxhyMBbkzC0xygdLja3udPCK+BI1bDzIC3tvKhMBX+JABzfAxlCQwOXJ/khQe3VXUpIxKnr8SCZW/eaFwMFR1/l0VHPYmbXIVkz8AlfjzMHkSftFwABDiY7/GZ4VHEBe+laHYjVU4M00yELPSpoDYIc86hVsOO8lafMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727680918; c=relaxed/simple;
-	bh=cdcHOH4arkLm0zru6oCJ02VyxLBvcCTvbxkPC2+57Qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hFmpZfl2nfByYeJoHs7mGQWMH1i3BgLF5rxANDspy6Q+WYZ4Tfx60Bs7RYKUsz6C2lr0JdRXPvgGztpr0OnpE6af1fwNQ5S7uu8O4Fsaj8X2DXsjRycYVb1hRF1NQ6eUYBzgIS4dNrcjr+BJhGzHTaR2WgK7tfDGb/8N34JrSc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qwR2GjGD; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1727681051; c=relaxed/simple;
+	bh=KPkdZJR4jn1ve9SjvvpCS5e1jcq1I2+AXyH4rJBjMZg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CWQxe3FOlvr+eMPM2gnJS/b1jK6HEWsFqMRP27VB2isbnP5i5Z2jotGyoZtpXpe+yUMTc9+6GZxx+BxMLa+IEOPUYAnI8XcqPRScY6rV57UWmbSteO8HB8biXipbc7C8zQ1OyYV2DQ85JE/WjQt7CbOaFPuUnDaS5EOX+MnpgbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=tnJNQ0YZ; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qwR2GjGD"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D8711A1A;
-	Mon, 30 Sep 2024 09:20:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1727680824;
-	bh=cdcHOH4arkLm0zru6oCJ02VyxLBvcCTvbxkPC2+57Qk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qwR2GjGDisyXvS3FC5gFhsn8Ueel5CcCWd9dMIdd4Z5OwGc+5tqCLhshuX/tWtFAk
-	 Tf8imkuL+nW0Y1cESO+6Cco6Qb31JRD9mfCs510HYV7pFtEf3Ram9eMo+rvAPNiwMy
-	 NoR5qnivQxJsM/DvOQYUYCmGvXpGvdPt91A+9YSk=
-Date: Mon, 30 Sep 2024 10:21:51 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: "G.N. Zhou (OSS)" <guoniu.zhou@oss.nxp.com>
-Cc: "rmfrfs@gmail.com" <rmfrfs@gmail.com>,
-	"martink@posteo.de" <martink@posteo.de>,
-	"kernel@puri.sm" <kernel@puri.sm>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] media: imx8mq-mipi-csi2: Simplify power management
- handling
-Message-ID: <20240930072151.GC31662@pendragon.ideasonboard.com>
-References: <20240929134354.20735-1-laurent.pinchart@ideasonboard.com>
- <AS8PR04MB9080211FC5A0FFCB255C3247FA762@AS8PR04MB9080.eurprd04.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="tnJNQ0YZ"
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48U65xMf003251;
+	Mon, 30 Sep 2024 08:54:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=TupV0Brvfq7wiAHvg+5/zM
+	piO80TJ5UsN6TLmJdrXA4=; b=tnJNQ0YZlzt0H+nEMtYXomrJyE4l2AeAnTyE3f
+	Txqdeg+XtakWIQR9blEQ4Y6cswEXvlErW5vHanVlJDPFmen3FZS/d0mTh9aRYVJR
+	nGYcW/96A6XughTYkzk2RS28MuJgDxepvZpay5oaDQ4ZP4HrVeDS2slYiAx39m1b
+	SSeRNqHX68N8e5QW6Skjbtmog3YXs1V/v4cL7KK770vRuYlhUf9JY6CdGpYXoaJg
+	ziagQ9CEc9EPHbRP8emJ91hMT2e3k5I9p2dPDhxRQyGdLoZTvm1wJHacoq6wrtMP
+	E5qAFp2mqOD/eSCkhuPaTtv4jxLDxK5WpTbgPgbA4GK7Qrdg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 41x8pc6g8d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Sep 2024 08:54:11 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B1B4840057;
+	Mon, 30 Sep 2024 08:53:14 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0431424BCB1;
+	Mon, 30 Sep 2024 08:51:43 +0200 (CEST)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 30 Sep
+ 2024 08:51:42 +0200
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Alain Volmat <alain.volmat@foss.st.com>,
+        Sakari Ailus
+	<sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: i2c: gc2145: introduce enable/disable_streams ops
+Date: Mon, 30 Sep 2024 08:51:38 +0200
+Message-ID: <20240930065139.1490217-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <AS8PR04MB9080211FC5A0FFCB255C3247FA762@AS8PR04MB9080.eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-On Mon, Sep 30, 2024 at 07:08:09AM +0000, G.N. Zhou (OSS) wrote:
-> On Sunday, September 29, 2024 9:44 PM, Laurent Pinchart wrote:
-> > 
-> > Hello,
-> > 
-> > This small patch series is a reaction to "[PATCH] media: nxp:
-> > imx8mq-mipi-csi2: Fix CSI clocks always enabled issue" ([1]). Instead of making
-> > the PM handling more complex, I think it can be greatly simplified.
-> > 
-> > I have only compile-tested the patches. Guoniu, could you give this a try ?
-> 
-> After applying the patches and test both on iMX8ULP.
-> 
-> For iMX8ULP, it will cause kernel dump when access CSI registers and
-> system hang during do suspend/resume while streaming
-> Need to add system suspend/resume handlers and call
-> pm_runtime_force_suspend/resume in the handlers.
-> 
-> I tried to debug this issue and found pm runtime callback won't be
-> called when system resume. The state of power domain won't enabled.
+Introduce enable_streams and disable_streams pad ops and
+replace s_stream with the v4l2_subdev_s_stream_helper
+function.
 
-Thank you for testing.
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ drivers/media/i2c/gc2145.c | 31 +++++++++++--------------------
+ 1 file changed, 11 insertions(+), 20 deletions(-)
 
-I wonder if this could be caused by the CSI bridge being resumed from
-system sleep before the CSI-2 receiver. Could you check if that's the
-case ? If so, does the following change fix the issue ?
-
-diff --git a/drivers/media/platform/nxp/imx7-media-csi.c b/drivers/media/platform/nxp/imx7-media-csi.c
-index 9566ff738818..c66b0621e395 100644
---- a/drivers/media/platform/nxp/imx7-media-csi.c
-+++ b/drivers/media/platform/nxp/imx7-media-csi.c
-@@ -2057,9 +2057,22 @@ static int imx7_csi_notify_bound(struct v4l2_async_notifier *notifier,
- {
- 	struct imx7_csi *csi = imx7_csi_notifier_to_dev(notifier);
- 	struct media_pad *sink = &csi->sd.entity.pads[IMX7_CSI_PAD_SINK];
-+	struct device_link *link;
- 
- 	csi->src_sd = sd;
- 
-+	/*
-+	 * Enforce suspend/resume ordering between the source (supplier) and
-+	 * the CSI (consumer). The source will be suspended before and resume
-+	 * after the CSI.
-+	 */
-+	link = device_link_add(csi->dev, sd->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(csi->dev,
-+			"Failed to create device link to source %s\n", sd->name);
-+		return -EINVAL;
-+	}
-+
- 	return v4l2_create_fwnode_links_to_pad(sd, sink, MEDIA_LNK_FL_ENABLED |
- 					       MEDIA_LNK_FL_IMMUTABLE);
+diff --git a/drivers/media/i2c/gc2145.c b/drivers/media/i2c/gc2145.c
+index 667bb756d056..ab3c086c3ad6 100644
+--- a/drivers/media/i2c/gc2145.c
++++ b/drivers/media/i2c/gc2145.c
+@@ -899,9 +899,11 @@ static int gc2145_config_mipi_mode(struct gc2145 *gc2145,
+ 	return ret;
  }
-
-> > [1] https://lore.kernel.org/r/20240929101635.1648234-1-guoniu.zhou@oss.nxp.com
-> > 
-> > Laurent Pinchart (3):
-> >   media: imx8mq-mipi-csi2: Drop stream stop/restart at suspend/resume
-> >     time
-> >   media: imx8mq-mipi-csi2: Drop ST_SUSPENDED guard
-> >   media: imx8mq-mipi-csi2: Drop system suspend/resume handlers
-> > 
-> >  drivers/media/platform/nxp/imx8mq-mipi-csi2.c | 113 ++----------------
-> >  1 file changed, 10 insertions(+), 103 deletions(-)
-> > 
-> > 
-> > base-commit: 81ee62e8d09ee3c7107d11c8bbfd64073ab601ad
-
+ 
+-static int gc2145_start_streaming(struct gc2145 *gc2145,
+-				  struct v4l2_subdev_state *state)
++static int gc2145_enable_streams(struct v4l2_subdev *sd,
++				 struct v4l2_subdev_state *state, u32 pad,
++				 u64 streams_mask)
+ {
++	struct gc2145 *gc2145 = to_gc2145(sd);
+ 	struct i2c_client *client = v4l2_get_subdevdata(&gc2145->sd);
+ 	const struct gc2145_format *gc2145_format;
+ 	struct v4l2_mbus_framefmt *fmt;
+@@ -967,8 +969,11 @@ static int gc2145_start_streaming(struct gc2145 *gc2145,
+ 	return ret;
+ }
+ 
+-static void gc2145_stop_streaming(struct gc2145 *gc2145)
++static int gc2145_disable_streams(struct v4l2_subdev *sd,
++				  struct v4l2_subdev_state *state, u32 pad,
++				  u64 streams_mask)
+ {
++	struct gc2145 *gc2145 = to_gc2145(sd);
+ 	struct i2c_client *client = v4l2_get_subdevdata(&gc2145->sd);
+ 	int ret = 0;
+ 
+@@ -983,22 +988,6 @@ static void gc2145_stop_streaming(struct gc2145 *gc2145)
+ 
+ 	pm_runtime_mark_last_busy(&client->dev);
+ 	pm_runtime_put_autosuspend(&client->dev);
+-}
+-
+-static int gc2145_set_stream(struct v4l2_subdev *sd, int enable)
+-{
+-	struct gc2145 *gc2145 = to_gc2145(sd);
+-	struct v4l2_subdev_state *state;
+-	int ret = 0;
+-
+-	state = v4l2_subdev_lock_and_get_active_state(sd);
+-
+-	if (enable)
+-		ret = gc2145_start_streaming(gc2145, state);
+-	else
+-		gc2145_stop_streaming(gc2145);
+-
+-	v4l2_subdev_unlock_state(state);
+ 
+ 	return ret;
+ }
+@@ -1129,7 +1118,7 @@ static const struct v4l2_subdev_core_ops gc2145_core_ops = {
+ };
+ 
+ static const struct v4l2_subdev_video_ops gc2145_video_ops = {
+-	.s_stream = gc2145_set_stream,
++	.s_stream = v4l2_subdev_s_stream_helper,
+ };
+ 
+ static const struct v4l2_subdev_pad_ops gc2145_pad_ops = {
+@@ -1138,6 +1127,8 @@ static const struct v4l2_subdev_pad_ops gc2145_pad_ops = {
+ 	.set_fmt = gc2145_set_pad_format,
+ 	.get_selection = gc2145_get_selection,
+ 	.enum_frame_size = gc2145_enum_frame_size,
++	.enable_streams = gc2145_enable_streams,
++	.disable_streams = gc2145_disable_streams,
+ };
+ 
+ static const struct v4l2_subdev_ops gc2145_subdev_ops = {
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
