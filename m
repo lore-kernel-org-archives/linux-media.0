@@ -1,113 +1,110 @@
-Received: from mail.rosalinux.ru (mail.rosalinux.ru [195.19.76.54])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D0314F9D5;
-	Sat,  5 Oct 2024 12:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.19.76.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33CF22318
+	for <linux-media@vger.kernel.org>; Sat,  5 Oct 2024 12:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728129612; cv=none; b=VdqKhW624RENGWASf+IV8377EA4hmArFzWiRPdD9HcuvbqlXZ7udfKX+2kdnoIk2lcgpHKAXHuZAXIfrbFIVS5IDrEfTfv5ZPPBqNSxcZmU/u47ggUXtefk2cQq1h0emg5eqg6ncDWb62LTqenx/PuU0Tjhqup6O35ULtobJWak=
+	t=1728130541; cv=none; b=uytS0NKzEFO7XS8nymNA/5lZSL7pU7ZUrNRKktGpc6g1hnrdOXgkwM5pntvbmDta0/dfmQ5hBw4D7BDD/U35K1e9HiGjCbHco7H34hva5pEixrsnjED6bZby0JfdP5V7FOJronqLEWu+XBUDokhibJRFKVXJ7t+vjO3vxc3s9m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728129612; c=relaxed/simple;
-	bh=lgjjzW8JhomFfhqNJl60GVevaG2TRoCJ1RUSqhu+/PI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VGUTu1Cr14Zp747Z3fCAVGiQf/rxkFNxdRzF8SbiQWO5rhvg2khUJGmV3E5GTbqZA6LH2GKVBxnCRCfNk0wFgQYgzTKf3t0xlCsTlSM0HcxGMTZjvSqnFbwl/fHMIupTNQwtIxekneJw2VhRGt0lOABAHSRNwnY59GONGIabZpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru; spf=pass smtp.mailfrom=rosalinux.ru; dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b=EgnoNtMA; arc=none smtp.client-ip=195.19.76.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosalinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosalinux.ru
+	s=arc-20240116; t=1728130541; c=relaxed/simple;
+	bh=Wjz3P/Z8uXiamuWAV3rU8kHL11hfIRgMzalR8gKIKKE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iuaVKcXrkPhG74u0rH2Mq7uNSw4WpIPQMwUIgCcYShzZmj9KPDUE+Yh6lYtF/RkkP7tWxIsBBaJl0bWil7akj4S8z48Ql1uhOg6tTBq4tH5W9GKkfrNwKwQ/ZqmaTSd2Offv1Obqjt/oZ9ymnYjLLohpoqroonugpBBfERbaNKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XZEbJ5KV; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rosalinux.ru header.i=@rosalinux.ru header.b="EgnoNtMA"
-Received: from localhost (localhost [127.0.0.1])
-	by mail.rosalinux.ru (Postfix) with ESMTP id 20E6BDB761279;
-	Sat,  5 Oct 2024 15:00:05 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id eoG0vcNe2Ldw; Sat,  5 Oct 2024 15:00:05 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.rosalinux.ru (Postfix) with ESMTP id DA1A3E2D87380;
-	Sat,  5 Oct 2024 15:00:04 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru DA1A3E2D87380
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-	s=1D4BB666-A0F1-11EB-A1A2-F53579C7F503; t=1728129604;
-	bh=r1ZRAdOPsZ6V3qrG7zP/y2ZKnPDaC4zWXBpyCVEL9mo=;
-	h=From:To:Date:Message-ID:MIME-Version;
-	b=EgnoNtMANl7XTY6tSlxGbZN1cnfhlgvS1f2uqP5enUOSoAybdLk9BGw59EN/UAXRu
-	 ClV9zWaSjT7zlC3ohOYPBg81EJG/1afnY8ZNyOZOQoV7fHfA0cPDx5Z3uP/BOLookF
-	 1GKRa6V8CIPl61pHhuLdvhd1DyAIv9HtGBzpbj1aE2Op4jB0vRHxOl/SUkgWrV5flO
-	 E+hsaXFDT67M/10U5TqjoQj5gqm1WfMqVk8MXaisWKu8eCHeuFSHt8TLtFMij1d+Rl
-	 jCsuasG1R7ZlaUThKuNS5DNiLRaQLHku3FdG0tWY5pzdXzBZxmkBnCVGjiLaaqi66s
-	 cqlHH88kQkajg==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-	by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id jvuZZ7dH1Y9h; Sat,  5 Oct 2024 15:00:04 +0300 (MSK)
-Received: from localhost.localdomain (unknown [213.87.162.215])
-	by mail.rosalinux.ru (Postfix) with ESMTPSA id CE044DB761279;
-	Sat,  5 Oct 2024 15:00:03 +0300 (MSK)
-From: Mikhail Lobanov <m.lobanov@rosalinux.ru>
-To: Jacopo Mondi <jacopo@jmondi.org>
-Cc: Mikhail Lobanov <m.lobanov@rosalinux.ru>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XZEbJ5KV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1728130538;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qBb7pxcFZznXYVyh1jtZaUCQQPBm9CrNZYxR0moz+/Q=;
+	b=XZEbJ5KV7pOnee2mOT1PjofOfbDulrKqP8G1ZpcaZ6tPc86gQcZZVNMz5Yl6q2LvLwjsrU
+	6tQHiPamxQ4BEwJ6xnoG9cWuBNd1BgaLTUfvzfqVXxkZUNnI9osNTAt5lqGT7Eeni4HCrP
+	77GCk1r8IBsaqZLmh573ox+POI0NHko=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-497-h4rNNykDM1uGhxN6m0LB8A-1; Sat,
+ 05 Oct 2024 08:15:37 -0400
+X-MC-Unique: h4rNNykDM1uGhxN6m0LB8A-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 014451954B16;
+	Sat,  5 Oct 2024 12:15:36 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.19])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6AFC219560A3;
+	Sat,  5 Oct 2024 12:15:34 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Daniel Scally <djrscally@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-	Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	Aleksandr Burakov <a.burakov@rosalinux.ru>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v3] media: rj54n1cb0c: possible integer overflow fix
-Date: Sat,  5 Oct 2024 07:58:57 -0400
-Message-ID: <20241005115859.13273-1-m.lobanov@rosalinux.ru>
-X-Mailer: git-send-email 2.43.0
+	linux-media@vger.kernel.org
+Subject: [PATCH 2/4] media: ov7251: Improve error logging when fwnode is not found
+Date: Sat,  5 Oct 2024 14:15:23 +0200
+Message-ID: <20241005121525.32172-2-hdegoede@redhat.com>
+In-Reply-To: <20241005121525.32172-1-hdegoede@redhat.com>
+References: <20241005121525.32172-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-An integer overflow may occur due to arithmetic operation
-(multiplication) between value '314572800' and variable 'resize',
-where the value comes from '12 * RJ54N1_MAX_WIDTH * (1 << 14)'
-and when 'resize' is equal to 16319.
+The ov7251 driver waits for the endpoint fwnode to show up in case this
+fwnode is created by a bridge-driver.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+It does this by returning -EPROBE_DEFER, but it does not use
+dev_err_probe() so no reason for deferring gets registered.
 
-Fixes: a6b5f2008a3d ("V4L/DVB (13661): rj54n1cb0c: Add cropping, auto whi=
-te balance, restrict sizes, add platform data")
-Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
-Signed-off-by: Mikhail Lobanov <m.lobanov@rosalinux.ru>
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+After 30 seconds the kernel logs a warning that the probe is still
+deferred, which looks like this:
+
+[   33.952052] i2c i2c-INT347E:00: deferred probe pending: (reason unknown)
+
+Use dev_err_probe() when returning -EPROBE_DEFER to register the probe
+deferral reason changing the error to:
+
+deferred probe pending: waiting for fwnode graph endpoint
+
+Also update the comment to not refer to the no longer existing cio2-bridge
+code.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-v1->v2: updated multiplication operation to use shorthand assignment for =
-improved code readability
-link to v1: https://lore.kernel.org/lkml/20240917140454.7880-1-a.burakov@=
-rosalinux.ru/
-v2->v3: the subsystem prefix has been updated to 'media: rj54n1cb0c:'.
-link to v2: https://lore.kernel.org/lkml/20241004121924.27174-1-m.lobanov=
-@rosalinux.ru/
- drivers/media/i2c/rj54n1cb0c.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov7251.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/rj54n1cb0c.c b/drivers/media/i2c/rj54n1cb0=
-c.c
-index a59db10153cd..a612ec1e7157 100644
---- a/drivers/media/i2c/rj54n1cb0c.c
-+++ b/drivers/media/i2c/rj54n1cb0c.c
-@@ -776,8 +776,8 @@ static int rj54n1_sensor_scale(struct v4l2_subdev *sd=
-, s32 *in_w, s32 *in_h,
- 	}
-=20
- 	/* Antiflicker */
--	peak =3D 12 * RJ54N1_MAX_WIDTH * (1 << 14) * resize / rj54n1->tgclk_mhz=
- /
--		10000;
-+	peak =3D 12 * RJ54N1_MAX_WIDTH * resize / rj54n1->tgclk_mhz / 10000;
-+	peak *=3D 1 << 14;
- 	peak_50 =3D peak / 6;
- 	peak_60 =3D peak / 5;
-=20
---=20
-2.25.1
+diff --git a/drivers/media/i2c/ov7251.c b/drivers/media/i2c/ov7251.c
+index 30f61e04ecaf..c417af01f194 100644
+--- a/drivers/media/i2c/ov7251.c
++++ b/drivers/media/i2c/ov7251.c
+@@ -1484,9 +1484,14 @@ static int ov7251_check_hwcfg(struct ov7251 *ov7251)
+ 	unsigned int i, j;
+ 	int ret;
+ 
++	/*
++	 * Sometimes the fwnode graph is initialized by the bridge driver
++	 * Bridge drivers doing this may also add GPIO mappings, wait for this.
++	 */
+ 	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
+ 	if (!endpoint)
+-		return -EPROBE_DEFER; /* could be provided by cio2-bridge */
++		return dev_err_probe(ov7251->dev, -EPROBE_DEFER,
++				     "waiting for fwnode graph endpoint\n");
+ 
+ 	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
+ 	fwnode_handle_put(endpoint);
+-- 
+2.46.2
 
