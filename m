@@ -1,153 +1,116 @@
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6031D14FA;
-	Mon,  7 Oct 2024 12:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.165
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728304241; cv=pass; b=Jb4Rj4KBFB6qU5yvaFldwiRP601a9nRht8unvKgeDMEMWktRrIgfuSYb2pze5ddmLVhQIx3snJHX6KMwHfRHkTQTojlbsrtchByVAwK5HkkZMK72y7cfDfDQxF6Vz7HBrZg5EVyTnFeB6r9DYDmxnpYVZ19GPJpoCCcbzYgCKa8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728304241; c=relaxed/simple;
-	bh=1PWo9tctrQWE2WTrs2JbpKaiILAYSvQ0hceshNyq6uo=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=N7C3skGVOlTgIh2s4qTur9tnPeO3niB0+aXQcqHi3ZrvX0fVwbo8crGg9c/bKKmAeAp5pnfB1lTRPkG2rmRHwxK4rdYS/EyHSTH+YzvA3Jzj4/Zqtbyd3D9WhxXDeSFdg6gG5lRnLrj9lpQ66//j7XMLlUpKBbgm+o4Gp/3lMLs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=WjaDVqs7; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=/ppHk7zE; arc=pass smtp.client-ip=81.169.146.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12D41E519;
+	Mon,  7 Oct 2024 12:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728304707; cv=none; b=OAGsqms9z2/n/syuy4TEkrFnXp5YzGpTE0nio69ZioZLpFYho49lrzrFFz/IhSECLWrX2siqie5yAgeYOvEwfkSstwHnjWzeUwdpDVLSzlTScZbJqo6fBvXk/AI+0XavP6A9JzU6IdyPc3Mkuhp94rFZtq+XgDA415vQI4OafqQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728304707; c=relaxed/simple;
+	bh=odAPpBT/zYedTl3X7UH5eVT95wTIKt/IubVvFrMiNPs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hB8hexEGpVuaKu/FWtCd/CNAI1xsVWansEbqzqd79C8VIB67vngAI0UrUYVsqk2sVU2vmb2p40MTSjzUTyIfuJT5iRwZQdbi1O+Jpi90muG/ES4e9Oe7ITk49NstO+oNbk7aTYgkDlJ5YF738MXmiDt5pGXTpF24V8pb/KYm1RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8gZ398J; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="WjaDVqs7";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="/ppHk7zE"
-ARC-Seal: i=1; a=rsa-sha256; t=1728304217; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=SsluR/XVS90n1+sgIHlpTwq1c4ITLtEEyw0KaZXVXHAfT4Avtgnoqexj7FPsqKdOz1
-    YR+GES4tsvOkdYn0Ev0DWqVGYfKumvvUaM83q6GJ36VIXtpLG6hyLoT+eYH7PHTc2gOc
-    r/73p6FvtfJQatHpQ4tS4RCHOcm0foccscEUarTsUmu7klr8lUrfDP0Ik2WBRNpriiS7
-    jocV7VCnqxLqM86FiCOcLrUi2hGRpphtPGWB9TdzqKSEEr35haD1Plwi1JhKiuosZzqs
-    DPI5pWD8EMRyDFKnzTmd1Gl2V/i2VgIcYlyEtoWWoztTs5ivKV7xlImhUi2pjAqFxTOy
-    srgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1728304217;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=375XtLOU9mHCVgSPS3tKHJvslztan0SSxd6+J7FYLms=;
-    b=q3Zn5aRTDhKPAtUZcdN/y9sgDazo3YK5iAfqYu/NEeOlWSv3ILYmr5ct0/s0utOzsP
-    y7FymXBQHRJkCdihcSh1JK88MtpzhFvqxb1p5jbtFGKyqsbUr1gCR0j+uNl6fztaQY7S
-    BX7eSDzs+nbVTHAkE0AT4j1DLx86KBCdZx5YAFjSHCAJ9Z86+OOa9AgiZ6dVWb5Qab6s
-    kbjppR7t16kLKG/sDvZ/b67oWs4SoHlQcd+DFWexfz+iEmbsS/9s0Ez/1QE2ySXlMr3P
-    NyuSjER7kajmENGZb4XViRIeQ4i/Dw3CkpL6LbU+Idjb+uTy4cOG8I3HKtDlWLitnMqH
-    v3Og==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1728304217;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=375XtLOU9mHCVgSPS3tKHJvslztan0SSxd6+J7FYLms=;
-    b=WjaDVqs7d/GM6ldq11sgTU4xUjT1SUoM9zhDZ+2JS5SEs+IFYBMEhcLrJ6xeVAhLbb
-    28GBjOiRQvtVXSgtWRnXaoRUNB2OaDXWmm65jtyyY+7lOgsfTwliyOCvyelSa91Yxenh
-    JMUbNv0usLtqYjeFfm+34s13i64YDtRRWcDbh4fvz1yPz+BY3Os/kljvqIXLZPhUkLiN
-    SSNXC3lmM+0Bt8VfaY4ftze0qU81QF34JQiEMDqoW02PYZFekr4Xc0XgZvZ6gYf8gC4Z
-    QKGlj/FZ0+l38dvStkOdQOVIy1w2Z4O2I1pQERwiDPRfqbzMw0FqwXXmsOcndqx9Q0ww
-    h6zg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1728304217;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=375XtLOU9mHCVgSPS3tKHJvslztan0SSxd6+J7FYLms=;
-    b=/ppHk7zEgJnCv2CZU6B81xPTNUqL86pXmWBUB06308ksbtt+K2xbf3ZTmLy0YRrTpl
-    Hd4C3CAUOhmYRd7YBsCA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeTgZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 51.2.7 DYNA|AUTH)
-    with ESMTPSA id Qd0dc2097CUGSMB
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Mon, 7 Oct 2024 14:30:16 +0200 (CEST)
-Content-Type: text/plain;
-	charset=us-ascii
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8gZ398J"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fabe5c8c26so38673151fa.2;
+        Mon, 07 Oct 2024 05:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728304704; x=1728909504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L4N4WRwWKnBCjI4J9wKZ7MwHF7s+GuSiaI5NgEKRFt8=;
+        b=e8gZ398J0naskfY1XtWkHxuIonUIaxxQiR8xqDdIecVEhFsas6rnpmrMxU4U2DB5k4
+         WNmKrKmBLPCE0bT8obZkL28xcgfidtIrXlC0V/qatQcb6s2ls3wBFb/dlcR2uh6+scnj
+         vqZ48Z94RDzA3MUkpiHBxQLEGCdgZGkgN6LXCfwy6IjvPpePSEMYxJeAerScc40YS408
+         VE81PteS/3kAguuwoPui60YiP0i3PYc9/EQYOUVPpSvUtFwLX1EoGgAj7kZ+5QGoHksa
+         zno7R1weco0KQ2hu68+LUI5+I/9a23711A2afjw2TQOK+EAYIzmAmDlMAxEIj6yc77KX
+         uHuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728304704; x=1728909504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L4N4WRwWKnBCjI4J9wKZ7MwHF7s+GuSiaI5NgEKRFt8=;
+        b=VDBhT6zz0nxBSvWInVH+xT1PgYrFR4kpHWnUo/bhBaThlFre24MWmA3ftUFayiCHNH
+         kJ0LLiN799N7wWdOQjn6Y4z+PtTJ1EXvi589TzBd6TaVA0uBO722GqMcY+P6QQsIyrcX
+         G2zIOfHR4UsVkgryT5fX+bwnGdVnEIVX75stx2XxFdP0QHl1tD00wwBh9m6hPF+9YFMF
+         D8mt4SWQF2E1vqwOR3k92Q2zxSQ+akPygZ4ccACM+4qo6SdXzkXUC/uZ5w3tnlnZvucH
+         wMSTREI5RyzUxNvhjADdJHTTMbgKEO0frcaIkGOV3xBOUUi6HnVjnyW9FU179Z4sS1mn
+         FAyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaGGcOovkGuNs+0Dirrg0ALCR6sKnR18bfZ6DUJSxHfQy+BTHaA6UtVXNA44TXFmKxXH/NX1aOj9ezQM0=@vger.kernel.org, AJvYcCWBxAJ8X+7tOs8iELG24eetI5V6vJkaracXPErPYuipc7Ectynxg77gPNbolUngFcJoJAibtyi3lTSx7kvlUpXvcSI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4DNj2EYeptDyCCCy3R0H/v0Fn6tORhhQaC5A1RXbkCchoM7Jt
+	DrBEwrFH92G7lt8hhxVsnGbfqJ4d19rDGkLjojOqknYvG0+0/HU+MOiiBQ==
+X-Google-Smtp-Source: AGHT+IEJw8zFkm6MmMyZHv/FNQY64b9MViKfx6FjnuRizVpR3z3M6sT9SzV6/x+wDGcXGET87hh57w==
+X-Received: by 2002:a05:651c:2210:b0:2f4:5d9:e8e3 with SMTP id 38308e7fff4ca-2faf3c14096mr61429301fa.7.1728304703395;
+        Mon, 07 Oct 2024 05:38:23 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2500:a01:f429:642d:d66a:1085])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05ac2casm3153143a12.34.2024.10.07.05.38.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 05:38:22 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2] v4l2-subdev: Return -EOPNOTSUPP for unsupported pad type in call_get_frame_desc()
+Date: Mon,  7 Oct 2024 13:38:09 +0100
+Message-ID: <20241007123809.89281-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: BUG: "iommu: Retire bus ops" breaks omap-iommu and omap3isp
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20241007121543.GM1365916@nvidia.com>
-Date: Mon, 7 Oct 2024 14:30:06 +0200
-Cc: Robin Murphy <robin.murphy@arm.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Christoph Hellwig <hch@lst.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Lu Baolu <baolu.lu@linux.intel.com>,
- Jerry Snitselaar <jsnitsel@redhat.com>,
- Joerg Roedel <jroedel@suse.de>,
- tony Lindgren <tony@atomide.com>,
- Andreas Kemnade <andreas@kemnade.info>,
- Linux-OMAP <linux-omap@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-media@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <ED01709A-1A43-480F-A951-7367DA9748AE@goldelico.com>
-References: <A7C284A9-33A5-4E21-9B57-9C4C213CC13F@goldelico.com>
- <20241007121543.GM1365916@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-X-Mailer: Apple Mail (2.3776.700.51.11.1)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Jason,
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> Am 07.10.2024 um 14:15 schrieb Jason Gunthorpe <jgg@nvidia.com>:
->=20
-> On Sun, Oct 06, 2024 at 09:40:00AM +0200, H. Nikolaus Schaller wrote:
->> Hi,
->>=20
->> I found that the camera on our OMAP3 based system (GTA04) stopped =
-working with v6.8-rc1.
->> There was no bug in the camera driver but the OMAP3 ISP (image signal =
-processor) emits
->>=20
->> [   14.963684] omap3isp 480bc000.isp: failed to create ARM IOMMU =
-mapping
->> [   15.010192] omap3isp 480bc000.isp: unable to attach to IOMMU
->> [   15.023376] omap3isp 480bc000.isp: isp_xclk_set_rate: cam_xclka =
-set to 24685714 Hz (div 7)
->> [   15.065399] omap3isp: probe of 480bc000.isp failed with error -12
->>=20
->> Deeper analyses lead to this patch breaking operation. It is not =
-fixed up to v6.12-rc1.
->>=20
->> What seems to happen (in 6.8-rc1 code):
->>=20
->> - omap_iommu_probe() passes &omap_iommu_ops to =
-iommu_device_register()
->> - iommu_device_register() stores the ops in iommu->ops (only)
->> - __iommu_probe_device tries to read the ops from some fw_spec but =
-not iommu->ops
->=20
-> Maybe like this?
->=20
-> @@ -1233,6 +1233,12 @@ static int omap_iommu_probe(struct =
-platform_device *pdev)
->                err =3D iommu_device_register(&obj->iommu, =
-&omap_iommu_ops, &pdev->dev);
->                if (err)
->                        goto out_sysfs;
-> +               /*
-> +                * omap has a DT reprensetation but can't use the =
-common DT
-> +                * code. Setting fwnode to NULL causes probe to be =
-called for
-> +                * every device.
-> +                */
-> +               obj->iommu.fwnode =3D NULL;
->                obj->has_iommu_driver =3D true;
->        }
+The `get_frame_desc()` operation should always be called on a source pad,
+which is indicated by the `MEDIA_PAD_FL_SOURCE` flag. This patch adds a
+check in `call_get_frame_desc()` to ensure that the `MEDIA_PAD_FL_SOURCE`
+flag is set for the pad before invoking `get_frame_desc()`. If the pad is
+not a source pad, the function will return an `-EOPNOTSUPP` error,
+signaling that the operation is not supported on non-source pads.
 
-I'll give it a try asap and report back.
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v1->v2
+- Added a check for CONFIG_MEDIA_CONTROLLER, as the `entity` member in 
+  `struct v4l2_subdev` is only available when CONFIG_MEDIA_CONTROLLER
+  is enabled.
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-BR and thanks,
-Nikolaus
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index de9ac67574bb..446fbc3805c7 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -325,6 +325,11 @@ static int call_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	unsigned int i;
+ 	int ret;
+ 
++#if defined(CONFIG_MEDIA_CONTROLLER)
++	if (!(sd->entity.pads[pad].flags & MEDIA_PAD_FL_SOURCE))
++		return -EOPNOTSUPP;
++#endif
++
+ 	memset(fd, 0, sizeof(*fd));
+ 
+ 	ret = sd->ops->pad->get_frame_desc(sd, pad, fd);
+-- 
+2.43.0
 
