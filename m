@@ -1,127 +1,147 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB0E1D6DA3
-	for <linux-media@vger.kernel.org>; Tue,  8 Oct 2024 12:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728388839; cv=none; b=dF6qngypxqG6YvuwvAw3VUju80tSMTu6EWvYZE31i03p9uO43qbRznVUFi0HYQqK4uW2v4c8BrlqFZ6ezSoPBIO8ApLhvGyI/cCmvS9VOr0P/8kctO12XIpTOAGOxFOt+TmvQtlLsddKFLulOlgSZOgBfY6tnaaApsqxwYi0fjs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728388839; c=relaxed/simple;
-	bh=HGcC7+VY91jM9PbU/jtXNCSHPq24Ef2KCeukkznljEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FkklP/JPgZFspAGXnrbuil4L9kGl3p+MuN9Y0bC0gE9NiWcY4bzC68LtOIdbZmbtsDoM+56OgNl1Bze2e4E5y3Ji+gm/RjEzuFg5q+EWP3Ezb5FNYON4mogywm8qSr3/Nv/zeoDDqhXWXT0WHyDKpTNmfmsd2Ih5UjHfmHK9CtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QZp6ciEE; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C041DDA36;
+	Tue,  8 Oct 2024 12:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728388863; cv=fail; b=aR2S5eR3tY4UjEG0bD1GHoF4ALRV00Y5VFRF+PZjbriwZa8MZm7FvgUozu/2+IYvDyq3j1dH8bu7gD0oEAAOs8hQGoWOY/epgqjrFhaTAQR1rvpt+R5/0J+34zpHs7INxGNxLsRhQZLvbcEpDnn7SKzvqq1Fxd4Rv6ndsoqdm0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728388863; c=relaxed/simple;
+	bh=b1P3DJk/6hfkSCnVQuxHt+Ux8LUCWKKpIGVzlcmNA0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vd+551GbIcuuamXnuu0sI93a2LaCYUqxUbYu5N1sJI4sFhBR+VLCigLI0tsb9nFjTKVQ9jUvyxYB94xu0xn19f0qgDdEhKvZcP951Qwy7ccfRlL0+QewnlSRKFSB0xzgmzDsIusSgH1tWbAMxt/wRY3c2mfkCi+YtEscbQ3+KK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=RYURahtC; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=Ib9new5v; arc=fail smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QZp6ciEE"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f75d529b49so2891541fa.1
-        for <linux-media@vger.kernel.org>; Tue, 08 Oct 2024 05:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728388836; x=1728993636; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wy3ZB9kP2gzcnlBFACJDVgdVUyuV83Cv1jwMAxXcqpA=;
-        b=QZp6ciEE7DQght2FUAydelFM2EF2c6kG51XcrHjpCvNI62tNVv8k9qTz+GJDrSQGF1
-         IvoyGoYnTEguArmA8vGw7w75vy/GureuPrq+ADKNyJqy1e56BvNYnrHkxBmXS7iVsq8E
-         cjeF2nesoYtWB1aYdtNah21LxCxJ6URIhYOLs8sYCo80ufEvPAs+pSZhmuRW7YJCs2EK
-         Wit8fEsjU4TMV95DnSs4EXKS+NEf/rzsrmvdAlx83sa09aTIT02Fdw0ELVWh8v9KQ/F/
-         uPgvBYnZQwny+YKgXqboBN6FXX7aDXlQKyhYBqsvCWF7N1FC8kIAlF0joCg/4N3moycl
-         qPqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728388836; x=1728993636;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wy3ZB9kP2gzcnlBFACJDVgdVUyuV83Cv1jwMAxXcqpA=;
-        b=JzW4pw4VmSBtfiXaoTn/Qt0/EwZaAUf7apPzqJKa2CIFPj9NCuIvYmAuS8UgeyFAhj
-         qx1Nt06e34JmpmZ7A+CJ3dHWc58itEJtoOnA7gLIzGib/bwGwg+QnuaAbBq/TAzOLTHt
-         ZqyqUtf8kysK55A7Yf/cpkkn4jQ2PNZZtVJ82Lou3K2mQFH/rTWR3iR3f8TgyAYoB5WJ
-         HHo5flyEUmA0RBsMJnAsW5RQ96yRZKP2G6WHX4Hv0XFrOK4MiskZaMpi0/SZubNNhb+9
-         zQQinjoV/oQMql7C4tMspEh1PG0eFLqoUW+oRR+pWys9DZuUWDk/w2h8V4QGAIsc4H7K
-         l1Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVkH5NUsFVL47QmXMpxAvyYmm7TvCKe2z/cJw8tE8cUL3iVt1t0LcKhG8Z7f2eW16kosfpXXZ0qDzqysA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy72LZuL2d+hnDL2pnsFrx1KZN1RHShDCeBpp1avjgW/GuIIbvp
-	jpRB7A8yJ7QdoRF9gSk8m4/4mhOTlwr8rBf5pyHiHBriiBsAF2nhhXYc6vHL2wQ=
-X-Google-Smtp-Source: AGHT+IFu5Dr2I7al/DxAhjX9t4A2v1hWE9wdfRqfKCp15yXf/s2VQgi5jVFxvuIB4EgUK++HDAqY5A==
-X-Received: by 2002:a05:6512:b29:b0:535:6986:9806 with SMTP id 2adb3069b0e04-539ab856991mr2131126e87.3.1728388835774;
-        Tue, 08 Oct 2024 05:00:35 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539aff283a6sm1180276e87.287.2024.10.08.05.00.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Oct 2024 05:00:33 -0700 (PDT)
-Message-ID: <c18a92f0-5824-417c-94b2-ed10f4580cfd@linaro.org>
-Date: Tue, 8 Oct 2024 15:00:32 +0300
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="RYURahtC";
+	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="Ib9new5v"
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPS id 4XNDsL1G9Mz49Pwl;
+	Tue,  8 Oct 2024 14:52:22 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1728388342;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U/1XjZ8pkIPE3lI97nZZnbcpCWTZVXjxc7zkc/9HM1M=;
+	b=RYURahtCmVnySZmKapolw8ViCcq5lJ2BkQEMp1UpemEG/ODBqu8kgoHn9QFLVBC9UTKl6L
+	W0d0KeqPHxGOWnTv0W0g/6QdT/7sgc4gNT+u5HH9ZmaH/y+eb7CF59Ign9nP4sca3u2a5Z
+	HVwY+vIDWDCpKsnaK/UqbmTGtLXMk+UYpYwJywUQZ9q6OHUdizAQ3oQTN5BqOiIOMPChf5
+	l799kqxzipMalW4w3cvCzxfGtdBeHTMHFnRASfuBMcSv+8dTon54JEiNCHddCruTWWH8ad
+	ron9fiylHeNGvBg+l99iWGSVC+kJsCBAHMvEDuWsaxS0mPPWRs3SWMGarJa2AA==
+Received: from hillosipuli.retiisi.eu (80-248-247-191.cust.suomicom.net [80.248.247.191])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by meesny.iki.fi (Postfix) with ESMTPSA id 4XNDs97169zyRx;
+	Tue,  8 Oct 2024 14:52:13 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+	t=1728388334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U/1XjZ8pkIPE3lI97nZZnbcpCWTZVXjxc7zkc/9HM1M=;
+	b=Ib9new5vglA0JYX/xJisWGgvH6vzKC0ctR1J7NBeUt2OrolKwqRTtzd4iHb2NuN7AOBqjJ
+	/9upfe9aJwRJE17j8av5ehstbNt+0DF0t5IcZuiasmhWuL1kUhSV0hP4yHdk2mKMuGPlQ3
+	0APdLgpVdHKI5YTMaJ4RnI7Jp2OsPso=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=meesny; t=1728388334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=U/1XjZ8pkIPE3lI97nZZnbcpCWTZVXjxc7zkc/9HM1M=;
+	b=xdSSDQROEFpeWY85dTW3FKy8Uks27Ql3uWRoSRDKrB1G/UY3BHZR665BCc1j9QoQyqTei8
+	m5J2CFLStaw26wK7R2B6vyV4JB//q1NNhm60NEi+8WeWc4YvJRJrgLAXUZddXYQryfIq11
+	T9XP87nVEsq1xNEiNWEtnnUPoBTJF6g=
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1728388334; a=rsa-sha256; cv=none;
+	b=xu6Ltj/i7Bvwjg+t1+v6vrZODN6IHByVP50vkI+HUGAjff99SMjtp6rlQrQVj1PtIEJJm2
+	CahD/42SYXNKKRJRh+CrfTeANoW4sgkerkxLub/cKIwvsf1N4iQK+WFeVsAzsbLcBLtd06
+	FqnN2Mk0Jpl4ABKPRCDwqsy9dlMqf7A=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 7D29E634CBD;
+	Tue,  8 Oct 2024 14:52:11 +0300 (EEST)
+Date: Tue, 8 Oct 2024 11:52:11 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] media: uvcvideo: Support partial control reads
+Message-ID: <ZwUc6-hbqDgBiqRl@valkosipuli.retiisi.eu>
+References: <20241008-uvc-readless-v1-0-042ac4581f44@chromium.org>
+ <20241008-uvc-readless-v1-1-042ac4581f44@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] dt-bindings: media: qcom,sc8280xp-camss: Fix
- interrupt types
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240923072827.3772504-1-vladimir.zapolskiy@linaro.org>
- <20240923072827.3772504-2-vladimir.zapolskiy@linaro.org>
- <datahu33nmsser2p4fb2hyncsujtkwaca377ivwmpc6yj2naut@2sjsbebfm3gf>
- <3f87e855-8779-4df3-8f26-e3d2b611d3e9@linaro.org>
- <313667a6-afcd-44cb-a6f6-0d550e8f68a0@linaro.org>
- <4bf490cb-228d-4f01-a956-cacbafa94e2a@linaro.org>
- <27f39cda-932c-4b79-84d4-be78d266ebdf@linaro.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <27f39cda-932c-4b79-84d4-be78d266ebdf@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008-uvc-readless-v1-1-042ac4581f44@chromium.org>
 
-Hi Bryan,
+Hi Ricardo,
 
-On 10/8/24 14:50, Bryan O'Donoghue wrote:
-> On 08/10/2024 12:37, Vladimir Zapolskiy wrote:
->>
->> I don't have access to datasheets or hardware of sc8280xp powered board,
->> someone may either verify, if CAMSS level high type interrupts are
->> supported/working at all or not (obviously its current presence in dts is
->> insufficient), or check the SoC datasheet.
+On Tue, Oct 08, 2024 at 07:06:14AM +0000, Ricardo Ribalda wrote:
+> Some cameras, like the ELMO MX-P3, do not return all the bytes
+> requested from a control if it can fit in less bytes.
+> Eg: Returning 0xab instead of 0x00ab.
+> usb 3-9: Failed to query (GET_DEF) UVC control 3 on unit 2: 1 (exp. 2).
 > 
-> I've tested both as was submitted and your change.
-
-let me give you a correction, whatever is found in the CAMSS device tree
-node is ignored - unless you meet the problem fixed by this changeset.
-
-All what you see and on any variant of CAMSS device tree node is
-rising edge interrupt, this is the type requested by the driver, and
-I believe you've tested the driver.
-
-> I _always_ test my patches. I'm not sure there's a datasheet which
-> spells this out to be honest.
+> Extend the returned value from the camera and return it.
 > 
-> Rising or High can both be justified, its really down to how your
-> interrupt controller latches the state change. However I personally am
-> fine with the change you've provided because I trust it fixes an error
-> for you.
+> Cc: stable@vger.kernel.org
+> Fixes: a763b9fb58be ("media: uvcvideo: Do not return positive errors in uvc_query_ctrl()")
 
-Please share the change to the driver, which you've used to test
-high level type of interrupts, shall it be send for upstream inclusion?
+Is this really the patch that introduced the problem?
 
-Such a change has never been a subject of discussion.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index cd9c29532fb0..853dfb7b5f7b 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -79,11 +79,16 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>  	if (likely(ret == size))
+>  		return 0;
+>  
+> +	if (ret > 0 && ret < size) {
+> +		memset(data + ret, 0, size - ret);
 
-> I didn't try loading and unloading that module but, since you did I'm
-> happy to Ack the change and trust your work.
+It'd be nice to have a comment in the code why this is being done
+(including it's little endian).
+
+> +		return 0;
+> +	}
+> +
+>  	if (ret != -EPIPE) {
+>  		dev_err(&dev->udev->dev,
+>  			"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
+>  			uvc_query_name(query), cs, unit, ret, size);
+> -		return ret < 0 ? ret : -EPIPE;
+> +		return ret ? ret : -EPIPE;
+>  	}
+>  
+>  	/* Reuse data[0] to request the error code. */
 > 
 
---
-Best wishes,
-Vladimir
+-- 
+Kind regards,
+
+Sakari Ailus
