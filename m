@@ -1,52 +1,51 @@
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5AD1CFEB9;
-	Tue,  8 Oct 2024 11:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D263D1D2200;
+	Tue,  8 Oct 2024 11:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728386497; cv=none; b=aieiNmIm04/g6pAwknbdlTA6LwLtt5GS6ySXFaoLP58QGDJPq+HrAPaAHrXjfbgyWWWOZlacADDr1ggA1UVcXkl1z/U6xC5LwjCu7wSC8bY513/fxFY2vJOys0wy3my2eRnFAoguEFfG4Yv/hIGh8t7mQ1F2HG/r7rGkgqkyQRE=
+	t=1728386498; cv=none; b=E6cTM1PrYp9uLZarQy3OWV/gdlB33usB/UNSgjwsw0x/Qojwyacw8B1tSxi1YYv0aY2oFJwhihAeNcafssIXeXA3kJy+PFtqKghkYZ5q+UkPCDdiSK/WDgt1CwU0MXcDl6n1sZFo9wV2kvKt3yJKKnK9EPiTYTR5zj9MXB3GAr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728386497; c=relaxed/simple;
-	bh=pO0baIQClf0ZdjAYNoEuMxIqy6s3Z1E7Gir62gq3KUU=;
+	s=arc-20240116; t=1728386498; c=relaxed/simple;
+	bh=XD9uM8l4G2YFDOj2yp3FrGOiS3X4EzCJZb5f6o3aGnc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=VbDQjn1pniXfNbXqTDQIgioPRQQiXv1l7lZZpiexH3/UJA9TjUQInYbeKKS4aqpT6LMWTtdHRtKhT0nCVsZkt+Rs5bF5GPVotGEdY0rLH619PwdHbPty46w3yHN3oHgl/AIEts2XAdsB/kbv8CpHdhgOQKtzFke2dpKNnYAbMdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=WRxnhRVV; arc=none smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=THK3nOUm+scOb9NfR5Y7sbGJPgVzTwbvfbh9cWpK7Kcb/71v41eHGOU9NrOySuCrnuMdPqbBiu+lB4v1h4dp86kFQBiEsSUthHJMZmPtQaTO7DGea4ainXpp2D9vYzcYSrViQ0eCCRD56PZxh42IagUZ7wKYPUWTHYqPQyV/BEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=rCaAjxNX; arc=none smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="WRxnhRVV"
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4989eiZf006897;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="rCaAjxNX"
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498AAvSq018601;
 	Tue, 8 Oct 2024 13:21:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	iIY+1AsYhidNu2mjIxZYKmfOZ/gtOZIy7jg5tbnDPgM=; b=WRxnhRVVc/QyFSFJ
-	IMorsWiwRWXXbiQlUT/O0JDDW7wNB1OEsaiwRWRl8/mzgWu10dKH6CKMFYgV9PWV
-	8CakFY6H1NE9/l9asw7mJ6dwk9oakKGWTNDo0OAAV5UT1QaVyfPNGoFFpAPg1Ebg
-	LFy/JkLyHoFz9T68BeicVPwh/aoCZNe8W6MF0bOAT9qXjb/+OuiIpHzc7wbT5XJL
-	3L7on4+/DSjOYpKyEj2JiMfafp08dUEudn8in4vkEIvZP83au9PZgkqMIe/UfIZF
-	zzzfzbzsfCvp3lnrrlIR5kDfzUuMm5SCLLt4xCw5dASyQQPWt1Bl69CgoXnz8p69
-	avLIGQ==
+	eS1Ydz5dJzG64YExvLeeU/gUoCifHif4ti+YMahrQnU=; b=rCaAjxNXcB3ZLUZc
+	lE5Vrxs0C+fTZO+AtD8lSKCuYCLp8vowGUXAsGgrCiRjXiOcR4trxGqADUey4OWu
+	cXTxncQH9I5praz1tl89kX8FQcYODSkVHsgTYvAG2rltTL3yWTSyXDNg0xl2qCrR
+	Epbb5BtmpmcWPMxj75h7k6zRSalfVtoMH7PzwugxxDRrViQaYSUYlP1iWM+Z+Gbh
+	fzVpyhE3Fu/LhhQn8wbGM0J94iSxdAZr/mu0kc3CxcBXCm0h87EwsQLOiqC9PyZc
+	4mRlCEV5/rVysCaaGBGh5e5KCtoIpm2pQGMLgbL6UtZL+J6P2uQFhDPGwSvzRuCi
+	qQbG4w==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 422xv760qh-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 422xs1dykd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 08 Oct 2024 13:21:20 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 56F884005C;
-	Tue,  8 Oct 2024 13:20:18 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 2A6BF40049;
+	Tue,  8 Oct 2024 13:20:15 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 011D0285A0A;
-	Tue,  8 Oct 2024 13:18:21 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 38C4928518F;
+	Tue,  8 Oct 2024 13:18:16 +0200 (CEST)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 8 Oct
- 2024 13:18:20 +0200
+ 2024 13:18:15 +0200
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Tue, 8 Oct 2024 13:18:14 +0200
-Subject: [PATCH 12/15] dt-bindings: media: addition of stm32mp25 compatible
- of DCMIPP
+Date: Tue, 8 Oct 2024 13:18:06 +0200
+Subject: [PATCH 04/15] media: stm32: dcmipp: use v4l2_subdev_is_streaming
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +54,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241008-csi_dcmipp_mp25-v1-12-e3fd0ed54b31@foss.st.com>
+Message-ID: <20241008-csi_dcmipp_mp25-v1-4-e3fd0ed54b31@foss.st.com>
 References: <20241008-csi_dcmipp_mp25-v1-0-e3fd0ed54b31@foss.st.com>
 In-Reply-To: <20241008-csi_dcmipp_mp25-v1-0-e3fd0ed54b31@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -83,110 +82,79 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Addition of the stm32mp25 compatible for the DCMIPP.
-The stm32mp25 distinguish with the stm32mp13 by the fact that:
- - supports also csi inputs in addition to parallel inputs
- - requires an addition csi clock to be present
-
-The commit also adds access-controllers, an optional property that
-allows a peripheral to refer to one or more domain access controller(s).
+Rely on v4l2_subdev_is_streaming in order to know if the subdev
+is streaming or not instead of relying on a local variable.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- .../devicetree/bindings/media/st,stm32-dcmipp.yaml | 53 +++++++++++++++++++---
- 1 file changed, 47 insertions(+), 6 deletions(-)
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 6 +-----
+ drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c | 5 +----
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-index 87731f3ce7bd..bda28fef0b78 100644
---- a/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-+++ b/Documentation/devicetree/bindings/media/st,stm32-dcmipp.yaml
-@@ -10,9 +10,40 @@ maintainers:
-   - Hugues Fruchet <hugues.fruchet@foss.st.com>
-   - Alain Volmat <alain.volmat@foss.st.com>
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index 5a361ad6b023..50500112eab9 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -78,7 +78,6 @@ struct dcmipp_byteproc_device {
+ 	struct v4l2_subdev sd;
+ 	struct device *dev;
+ 	void __iomem *regs;
+-	bool streaming;
+ };
  
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - st,stm32mp13-dcmipp
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 1
-+
-+        clock-names:
-+          maxItems: 1
-+
-+        port:
-+          properties:
-+            endpoint:
-+              properties:
-+                bus-type:
-+                  enum: [5, 6]
-+    else:
-+      properties:
-+        clocks:
-+          minItems: 2
-+
-+        clock-names:
-+          minItems: 2
-+
- properties:
-   compatible:
--    const: st,stm32mp13-dcmipp
-+    enum:
-+      - st,stm32mp13-dcmipp
-+      - st,stm32mp25-dcmipp
+ static const struct v4l2_mbus_framefmt fmt_default = {
+@@ -239,11 +238,10 @@ static int dcmipp_byteproc_set_fmt(struct v4l2_subdev *sd,
+ 				   struct v4l2_subdev_state *sd_state,
+ 				   struct v4l2_subdev_format *fmt)
+ {
+-	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *mf;
+ 	struct v4l2_rect *crop, *compose;
  
-   reg:
-     maxItems: 1
-@@ -21,11 +52,24 @@ properties:
-     maxItems: 1
+-	if (byteproc->streaming)
++	if (v4l2_subdev_is_streaming(sd))
+ 		return -EBUSY;
  
-   clocks:
--    maxItems: 1
-+    items:
-+      - description: bus clock
-+      - description: csi clock
-+    minItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: kclk
-+      - const: mclk
-+    minItems: 1
+ 	mf = v4l2_subdev_state_get_format(sd_state, fmt->pad);
+@@ -495,8 +493,6 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
+ 		}
+ 	}
  
-   resets:
-     maxItems: 1
- 
-+  access-controllers:
-+    minItems: 1
-+    maxItems: 2
-+
-   port:
-     $ref: /schemas/graph.yaml#/$defs/port-base
-     unevaluatedProperties: false
-@@ -39,7 +83,7 @@ properties:
- 
-         properties:
-           bus-type:
--            enum: [5, 6]
-+            enum: [4, 5, 6]
-             default: 5
- 
-           bus-width:
-@@ -50,9 +94,6 @@ properties:
-           hsync-active: true
-           vsync-active: true
- 
--        required:
--          - pclk-sample
+-	byteproc->streaming = enable;
 -
- required:
-   - compatible
-   - reg
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
+index 62c5c3331cfe..05e8897ae37a 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
+@@ -129,7 +129,6 @@ struct dcmipp_par_device {
+ 	struct v4l2_subdev sd;
+ 	struct device *dev;
+ 	void __iomem *regs;
+-	bool streaming;
+ };
+ 
+ static const struct v4l2_mbus_framefmt fmt_default = {
+@@ -230,7 +229,7 @@ static int dcmipp_par_set_fmt(struct v4l2_subdev *sd,
+ 	struct dcmipp_par_device *par = v4l2_get_subdevdata(sd);
+ 	struct v4l2_mbus_framefmt *mf;
+ 
+-	if (par->streaming)
++	if (v4l2_subdev_is_streaming(sd))
+ 		return -EBUSY;
+ 
+ 	mf = v4l2_subdev_state_get_format(sd_state, fmt->pad);
+@@ -370,8 +369,6 @@ static int dcmipp_par_s_stream(struct v4l2_subdev *sd, int enable)
+ 		reg_clear(par, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
+ 	}
+ 
+-	par->streaming = enable;
+-
+ 	return ret;
+ }
+ 
 
 -- 
 2.25.1
