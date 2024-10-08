@@ -1,52 +1,51 @@
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B521DED6F;
-	Tue,  8 Oct 2024 11:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8991D2B3C;
+	Tue,  8 Oct 2024 11:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728386501; cv=none; b=q7Xg3yoh4hVKRDA6xy/XaP561DGfK2BMbEGfvHDt9v6bEF+Wu1VhstDpvnV8aVeof6F/8RZFn+7Q1jZzuQaBw5/UccJitH6hUIdtD71OUEjpwA7pf496BdBw49nQ608z0trro5l16xEaSbsxaAX60/TJ/7CH/uMTpInQdp2iXyI=
+	t=1728386509; cv=none; b=Mg++pu3t7QwyJZ2xWFXQcvKvALxNouvLDofmFrDnM6j5q+snrtRCZ+eDIA7JPe3x5/jxGNniyPY6MUW/5OlLQdxpoMS+lAaDZaABJCJrsSq7w5BDxpmaEUkRrRWV34ut5olmQpfc3XWLgNUPDPKnnTNPr5kYpReW7ICIvqTUJJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728386501; c=relaxed/simple;
-	bh=bDZ1nmPh76at+OcvI4UXTjHlWHiTN34mOgxwnYsozA4=;
+	s=arc-20240116; t=1728386509; c=relaxed/simple;
+	bh=BZNPaEW8yThUhVAR4fIYowHy3Kpq6TY8VoTtClQchtE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=b7xedxs7hCi1oWsE6GQiCHygo7CpKfWnn1ZWwqAkg8JcKUYj1NUob6xa/hde2xhAkibAAkLluQjxB3EBzuOqnZfl4hupLsHXGqhXmoaRVmRoKJaKdle1DPrmsl3sD0EuhBfTZNCXpGC36cHU7zM3YGMU7NsVZfF3qc7JZoQuu+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=nqAOptdJ; arc=none smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=ubETfgszOQuhNSKThpaAYRk/3Ndh9QpCrggUcOXsYMQI4o/ZKTANZUWie0TIBf7SBNWgSpiLIvxBhgWJDvv0X5XXoLmCTVyj2SzTbnCxfVDpSybsYkROaLHjAeuSBYRQB+lY39VKuWv3wdWJKpLJNCHgS4gjkHs5qUELW8jGSpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=P8V2Ncs2; arc=none smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="nqAOptdJ"
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4989xKYQ010445;
-	Tue, 8 Oct 2024 13:21:26 +0200
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="P8V2Ncs2"
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4989HT5W006696;
+	Tue, 8 Oct 2024 13:21:35 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	kiqzWHEBgnNYNgdh+Exj40v+YEhGxybZPtFdvBV6hu4=; b=nqAOptdJRBi4dFTT
-	0QfU9K772LTxMs3WZPyfle7J20aD/O5BIm4+ERlSP9yS6xPPV4Rq/nYz03uyyuw3
-	dmkdxo/CMLS1dkYse7bnrQRgHNwM85Ud85lGI2DceBexlAUbIU6Vf2rN8yFFEmBH
-	6/OA/vrwTVllKIK4qh4wVrZVgcLyq1pl6UIWRcnCUzkgFQGGxrZ5W8N6J7qtkwhl
-	ga7SmdDIoH2DU4X9MnGewe7o9IaqywA0awal9LCb/GQ+2TsGW/zxl78Z/cQ6QJIJ
-	xy41f1HHVcJO0Yy+5tYv3kzgexzjljQJ6oniDbrDr6oQdEABLQ/Ehvz9LUjQG00t
-	aPYWog==
+	tVw5V3N7oxijnAT3uS7ZS+U54mpSzsyRVWli7nkwvYk=; b=P8V2Ncs2nNUbIsSn
+	oM5XkytT9R5cvjaU0HaGzqQ/Be6jgHPXBFxUT7Rufj2T7I6A+w/vF7eyj7MPfzc8
+	2caj4hMpG7MQs1rVlgpEz9aNHVjApGD1yaJf7rpa9NEOHXWBjwGnFJ8GzKekrlNt
+	VNKwQGj26TRN5jP9HySHfvy0DBRj9wESPlq0sdL6Zokudwa2Vz+3MWDmW39vx2+4
+	NAeX7PaMckV7HJvf49FlOnnXLlSZ/bT6WWX85NQDeLlZORxsjJ1UZsNgSpL3inHr
+	gDvOBxM8pjRKjJbyZGaMmK1AdwHVvokemiPCBR18k+sbGD/djN2PAVZ2xLAafJTy
+	cefJDg==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 422xv760qt-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 422xs1dyme-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 13:21:26 +0200 (MEST)
+	Tue, 08 Oct 2024 13:21:34 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 549FE40055;
-	Tue,  8 Oct 2024 13:20:12 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 223724005A;
+	Tue,  8 Oct 2024 13:20:16 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0A25128518A;
-	Tue,  8 Oct 2024 13:18:15 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A73EA28519B;
+	Tue,  8 Oct 2024 13:18:18 +0200 (CEST)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 8 Oct
- 2024 13:18:14 +0200
+ 2024 13:18:18 +0200
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Tue, 8 Oct 2024 13:18:04 +0200
-Subject: [PATCH 02/15] dt-bindings: media: addition of stm32 csi driver
- description
+Date: Tue, 8 Oct 2024 13:18:10 +0200
+Subject: [PATCH 08/15] media: stm32: dcmipp: add bayer 10~14 bits formats
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +54,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241008-csi_dcmipp_mp25-v1-2-e3fd0ed54b31@foss.st.com>
+Message-ID: <20241008-csi_dcmipp_mp25-v1-8-e3fd0ed54b31@foss.st.com>
 References: <20241008-csi_dcmipp_mp25-v1-0-e3fd0ed54b31@foss.st.com>
 In-Reply-To: <20241008-csi_dcmipp_mp25-v1-0-e3fd0ed54b31@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -83,148 +82,60 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Addition of the stm32 csi controller driver
+Add support for bayer formats from 10 to 14 bits.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- .../devicetree/bindings/media/st,stm32-csi.yaml    | 129 +++++++++++++++++++++
- 1 file changed, 129 insertions(+)
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c    | 12 ++++++++++++
+ .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c   | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
-new file mode 100644
-index 000000000000..71e7c51be58c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/st,stm32-csi.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/st,stm32-csi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STM32 CSI controller
-+
-+description:
-+  The STM32 CSI controller allows connecting a CSI based
-+  camera to the DCMIPP camera pipeline.
-+
-+maintainers:
-+  - Alain Volmat <alain.volmat@foss.st.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32mp25-csi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 3
-+
-+  clock-names:
-+    items:
-+      - const: pclk
-+      - const: txesc
-+      - const: csi2phy
-+
-+  resets:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: Digital core power supply (0.91V)
-+
-+  vdda18-supply:
-+    description: System analog power supply (1.8V)
-+
-+  access-controllers:
-+    minItems: 1
-+    maxItems: 2
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port node
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                description:
-+                  Indicate the number of data-lanes and their mapping.
-+
-+                items:
-+                  minItems: 1
-+                  items:
-+                    - const: 1
-+                    - const: 2
-+
-+            required:
-+              - data-lanes
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Output port node
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/st,stm32mp25-rcc.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/media/video-interfaces.h>
-+    #include <dt-bindings/reset/st,stm32mp25-rcc.h>
-+    csi@48020000 {
-+        compatible = "st,stm32mp25-csi";
-+        reg = <0x48020000 0x2000>;
-+        interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-+        resets = <&rcc CSI_R>;
-+        clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>, <&rcc CK_KER_CSIPHY>;
-+        clock-names = "pclk", "txesc", "csi2phy";
-+
-+        ports {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            port@0 {
-+                reg = <0>;
-+                endpoint {
-+                    remote-endpoint = <&imx335_ep>;
-+                    data-lanes = <0 1>;
-+                    bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
-+                };
-+            };
-+
-+            port@1 {
-+                reg = <1>;
-+                endpoint {
-+                    remote-endpoint = <&dcmipp_0>;
-+                };
-+            };
-+        };
-+    };
-+
-+...
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+index 48596592bfd5..d6fad99e44bb 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
+@@ -65,6 +65,18 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
+ 	PIXMAP_MBUS_PFMT(SGBRG8_1X8, SGBRG8),
+ 	PIXMAP_MBUS_PFMT(SGRBG8_1X8, SGRBG8),
+ 	PIXMAP_MBUS_PFMT(SRGGB8_1X8, SRGGB8),
++	PIXMAP_MBUS_PFMT(SBGGR10_1X10, SBGGR10),
++	PIXMAP_MBUS_PFMT(SGBRG10_1X10, SGBRG10),
++	PIXMAP_MBUS_PFMT(SGRBG10_1X10, SGRBG10),
++	PIXMAP_MBUS_PFMT(SRGGB10_1X10, SRGGB10),
++	PIXMAP_MBUS_PFMT(SBGGR12_1X12, SBGGR12),
++	PIXMAP_MBUS_PFMT(SGBRG12_1X12, SGBRG12),
++	PIXMAP_MBUS_PFMT(SGRBG12_1X12, SGRBG12),
++	PIXMAP_MBUS_PFMT(SRGGB12_1X12, SRGGB12),
++	PIXMAP_MBUS_PFMT(SBGGR14_1X14, SBGGR14),
++	PIXMAP_MBUS_PFMT(SGBRG14_1X14, SGBRG14),
++	PIXMAP_MBUS_PFMT(SGRBG14_1X14, SGRBG14),
++	PIXMAP_MBUS_PFMT(SRGGB14_1X14, SRGGB14),
+ 	PIXMAP_MBUS_PFMT(JPEG_1X8, JPEG),
+ };
+ 
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+index a19c8235af56..72f1bb4c64ad 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
+@@ -57,6 +57,18 @@ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
+ 	PIXMAP_MBUS_BPP(SGBRG8_1X8, 1),
+ 	PIXMAP_MBUS_BPP(SGRBG8_1X8, 1),
+ 	PIXMAP_MBUS_BPP(SRGGB8_1X8, 1),
++	PIXMAP_MBUS_BPP(SBGGR10_1X10, 2),
++	PIXMAP_MBUS_BPP(SGBRG10_1X10, 2),
++	PIXMAP_MBUS_BPP(SGRBG10_1X10, 2),
++	PIXMAP_MBUS_BPP(SRGGB10_1X10, 2),
++	PIXMAP_MBUS_BPP(SBGGR12_1X12, 2),
++	PIXMAP_MBUS_BPP(SGBRG12_1X12, 2),
++	PIXMAP_MBUS_BPP(SGRBG12_1X12, 2),
++	PIXMAP_MBUS_BPP(SRGGB12_1X12, 2),
++	PIXMAP_MBUS_BPP(SBGGR14_1X14, 2),
++	PIXMAP_MBUS_BPP(SGBRG14_1X14, 2),
++	PIXMAP_MBUS_BPP(SGRBG14_1X14, 2),
++	PIXMAP_MBUS_BPP(SRGGB14_1X14, 2),
+ 	PIXMAP_MBUS_BPP(JPEG_1X8, 1),
+ };
+ 
 
 -- 
 2.25.1
