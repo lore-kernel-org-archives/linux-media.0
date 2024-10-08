@@ -1,59 +1,50 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DDB1DD54F
-	for <linux-media@vger.kernel.org>; Tue,  8 Oct 2024 11:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC7B7603F;
+	Tue,  8 Oct 2024 11:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728388232; cv=none; b=JoCQC+UewS5xRddwz1vfopMhShdqAsRc/bdrZbPM4EcYu5DFw8oLLVoTVWVax+HWn3/yTCtihGX2KlICpt5QmreMipRg+Td4/93Q1KRPI3u+PtiX3ruo/rrklh4g5+pnAKyIevuN8BJCx4XO5+aBeu+U10WvA7OZ7V0OyKUcbh8=
+	t=1728388534; cv=none; b=tYQO7i/VQffluKzrTGuq1CuBLk7wMtd5DUsmXvAEWZP85STzgWMJt7sPR8Wnd0/jyxVDZ43hDqk2DYeFDFTJ7qZ693lA818G7Pg8dbXFxY2nz4BJM/SEePUQgbjFDvj5owZC1n+UEDKuBdCE7lqfz3bcW1qdSCra7A997Y40ql0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728388232; c=relaxed/simple;
-	bh=AvIf/cAXb7gv7K7QltyPmNlWcZlQEGDKitfw4yfs74I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QJ9McPiYHzaVDZYvCNFWYVMxp3fjuL5kCAUx7tEgDc3uemLri4EffmK3PaB6pPARDWyi5LYm/H/FkY1mTyQNL/07lHNYlQTPKS8RLvQvA74eUH4m0jfkbBtlb7ph2rvpRfpMt5QzzPea77dnms8oo7nPuPbDaViMErWs8jM6RGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JtjM9NNi; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1728388534; c=relaxed/simple;
+	bh=3OCQxvup2AMr6WZ7I+5yA6H1i+P+6X9ndx6UAPQlhd0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=JFo2q0dO65JWC+LMNJ6GsBgGVmk87t4mwfkIGlt9tyMY5iQQkFnqHs45ISiY35DpJA5fUkKUtYKc0OtHiUBBRRINKxVWivxgDT72WXFwV5eXqC0PbPnPzQ9fe3oC9j5CWoDUa9qRDp6FtRR4bGtabfm2EBAIYx7peTgZPwvjfkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=wZLHUznO; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JtjM9NNi"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539908f238fso6193003e87.2
-        for <linux-media@vger.kernel.org>; Tue, 08 Oct 2024 04:50:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728388229; x=1728993029; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=orTo5qvkhHaghQfSFG2C3pKNVKQQ230FuuT1v/qSo3k=;
-        b=JtjM9NNiYxQkGzA/S/xxuo9t6Q+yGrwzd6y85xpZ94kL5jqFzp240qcIFjiAU0J+u8
-         SGd5OFo2LaxJQVdTauGk1PPRNMvxy7623p7snz2/hMKB2T45DRZ8QasQmd4xveQpx6u1
-         7JaN5I3yDlJBr1+aY6xT+4wcrgDQAYpOYAGjOzaGj6HzRnCkLn+cso2eOpGhmOrkH1wW
-         Ag4h1j2fuJNlF7fgmWnNZfrnFuN/GyRYj0OCNeSqHHaXLbpidXH4vgxatBbKrfvCEaKd
-         Xg0G7shLWDyCzTRaKMwXq1QiTaljPHnLVCQsWfC0RYiI9TXRJG5Yny2cqd9QhZ1K9B4A
-         6JEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728388229; x=1728993029;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=orTo5qvkhHaghQfSFG2C3pKNVKQQ230FuuT1v/qSo3k=;
-        b=MxTLPevU3HOLbOUETtqULoTIKT3JVsZCNwDtmZ+pVVM6uwOA+U2OAZ3JWI+mnmzzmf
-         8RTF4GS4ohnRKY3JwQtilQ2KwjmOX+ljP1IhNOb03y55p/VcmsIWj8BzKlp5HuUzZcR5
-         3qtkd9GGkHi+odUGbXNuL3r1uy8jLafOjGxixkglbceAP2DsgXyr8rDcUeN305Sx3LYM
-         3sCzfG+esV90hAVQ6EPodGv/qyroOoqDbZ5VPZiqf7+j7jhnImLi8wrjbLRmJygKb4RN
-         cSnJF3Q745ZV4iSonNXDWFQX9FNX6YghSlzWjKdJl9FE0FxtRKgUo2CckaCrer3VSGZq
-         6j5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUWcl6uiB9KUF6nkKqSAfrL6MrJGT6bSM1RE+6bX1mM6A6JsSCyk9ZpcI+9cpZIoDdWftVp298LiKdGCA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXkQEEcTnEQ7anNWZ5a3qKKX4qnk/JodyBBZcmlf06UUl1mIsb
-	aYfs7gYGAhqpXa7JP8TE0dyuXv4G9D8HYRPsEm2FvZ64Aaohf2oLO0Yt3izGsOI=
-X-Google-Smtp-Source: AGHT+IFmYoMJxA79DffYEVCVfEsjDHlDmeVIQITg9i1+ZFlfwyf0+DWMFtDh0XjYziiaQGCHLlLUvw==
-X-Received: by 2002:a05:6512:2810:b0:533:43e2:6ac4 with SMTP id 2adb3069b0e04-539ab9f0ccdmr6848774e87.49.1728388229117;
-        Tue, 08 Oct 2024 04:50:29 -0700 (PDT)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9937615e85sm476763566b.175.2024.10.08.04.50.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Oct 2024 04:50:28 -0700 (PDT)
-Message-ID: <27f39cda-932c-4b79-84d4-be78d266ebdf@linaro.org>
-Date: Tue, 8 Oct 2024 12:50:27 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="wZLHUznO"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498A7JAW022075;
+	Tue, 8 Oct 2024 13:55:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	r1DaIo5foOHFEMChIot5/wHw4xGLgo2eu0sEviXqgsw=; b=wZLHUznOjmm5Xo8g
+	zv/VuOfk+OFSwu+MSnSke2fKse6q1sX5rLDboLAuhF0Ko0es8ZRF46kXWj1/F1/w
+	4UKLeEaYhyhs0caFsV1Eibb4XZvhYi/MNMYbyk94eBGWM8kNolWixkEEZixk4qet
+	szmDZYuSSIdUcOx5qgbS6y2DLIOU8VosAYC84CJvOMfjx1hYK7kXS9soio/Aqp3T
+	mMY/1jgEPoec7v7z4+2PA4gxt+i3AqWXECANRXh6WX6uwvH8H2Pr2fya6OaHcPAO
+	ncmM8yFpWL1CxwSgXOJdqnnfIRSW4TYWqrKLnBjfqnpEYvegmtD2oMI1rxNepXaj
+	9K/UJQ==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 423f10uds3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Oct 2024 13:55:27 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 559B840053;
+	Tue,  8 Oct 2024 13:54:35 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 47DB5279E69;
+	Tue,  8 Oct 2024 13:52:41 +0200 (CEST)
+Received: from [10.130.72.241] (10.130.72.241) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 8 Oct
+ 2024 13:52:40 +0200
+Message-ID: <b8def568-e575-4ea3-8c3c-4ca9715802ce@foss.st.com>
+Date: Tue, 8 Oct 2024 13:52:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -61,49 +52,56 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] dt-bindings: media: qcom,sc8280xp-camss: Fix
- interrupt types
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240923072827.3772504-1-vladimir.zapolskiy@linaro.org>
- <20240923072827.3772504-2-vladimir.zapolskiy@linaro.org>
- <datahu33nmsser2p4fb2hyncsujtkwaca377ivwmpc6yj2naut@2sjsbebfm3gf>
- <3f87e855-8779-4df3-8f26-e3d2b611d3e9@linaro.org>
- <313667a6-afcd-44cb-a6f6-0d550e8f68a0@linaro.org>
- <4bf490cb-228d-4f01-a956-cacbafa94e2a@linaro.org>
+Subject: Re: [PATCH 0/4] media: i2c: st-mipid02: fixes & enhancements
+To: Alain Volmat <alain.volmat@foss.st.com>,
+        Sylvain Petinot
+	<sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241008-st-mipid02-streams-v1-0-775c2d25cef9@foss.st.com>
 Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <4bf490cb-228d-4f01-a956-cacbafa94e2a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+In-Reply-To: <20241008-st-mipid02-streams-v1-0-775c2d25cef9@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-On 08/10/2024 12:37, Vladimir Zapolskiy wrote:
+Hi Alain,
+
+Thank you for your patches.
+
+On 10/8/24 13:46, Alain Volmat wrote:
+> This serie includes a fix within the error handling when enable
+> streaming and another one regarding supported formats.
+> It also update the driver to use the streams pad ops
+> instead of the s_stream.
+> pm_runtime is added to be able to control the supplies & clock.
 > 
-> I don't have access to datasheets or hardware of sc8280xp powered board,
-> someone may either verify, if CAMSS level high type interrupts are
-> supported/working at all or not (obviously its current presence in dts is
-> insufficient), or check the SoC datasheet.
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> ---
 
-I've tested both as was submitted and your change.
+For the whole serie:
+Reviewed-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 
-I _always_ test my patches. I'm not sure there's a datasheet which 
-spells this out to be honest.
+> Alain Volmat (4):
+>       media: i2c: st-mipid02: fix mipid02_stream_enable error handling
+>       media: i2c: st-mipid02: use enable/disable_streams pad ops
+>       media: i2c: st-mipid02: add pm_runtime handling
+>       media: i2c: st-mipid02: remove parallel mbus format on sink pad
+> 
+>  drivers/media/i2c/st-mipid02.c | 117 +++++++++++++++++++++++------------------
+>  1 file changed, 66 insertions(+), 51 deletions(-)
+> ---
+> base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+> change-id: 20241007-st-mipid02-streams-2188cc8b6fda
+> 
+> Best regards,
 
-Rising or High can both be justified, its really down to how your 
-interrupt controller latches the state change. However I personally am 
-fine with the change you've provided because I trust it fixes an error 
-for you.
+-- 
+Regards,
 
-I didn't try loading and unloading that module but, since you did I'm 
-happy to Ack the change and trust your work.
-
----
-bod
+Benjamin
