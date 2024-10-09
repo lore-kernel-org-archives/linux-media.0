@@ -1,48 +1,48 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E40A1917E3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C446192590;
 	Wed,  9 Oct 2024 11:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728472589; cv=none; b=nUcGsAy3FhSeUteLs/GkIgrJI8KohYNTbI3XPFS7elY0qT6V7c9luJF+oOocBGzbokEqtnDJepthHmDPSTNgLK6ocLq/1DBLkNPvTS5zE4n3PbpM8i2MibC1io70EA1idhRNShz7YUP4USxu8605zaUbfVf331f052z9hQAG04Q=
+	t=1728472590; cv=none; b=XfbRa0uCvQvEWf3bNSnE2HztsIJqlYqKnCJqZXFSNRkONKFOb1q+HCBP7/1keFuHGvf+wJHA3lKO7k2XPFkguRdDwqOpt1wKI/Y8brlpo1JvQw6R4X3FfEfza68OAj688STYh6T+apM5/r4yAwWPfcSk16V4AK6hIzk4o7MLle0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728472589; c=relaxed/simple;
-	bh=l7kxzYmLzNEGxMH//98GEqmqz7adRHeEjStw695dbzA=;
+	s=arc-20240116; t=1728472590; c=relaxed/simple;
+	bh=P7Oti3BHzGsuAFkQYPgU57/GZ6nET9T/MNmB7OpHrVc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P0QKmB/Cl8miGqZn5WsMxCMwB+UEwiEuY6yhR45B7CgvA57YU3ls6n5SIwntxxNe3tP5ZyI0QQEA0SVlTyskRmrRxIy7eFSNzSqTVfzjb9LiQR9IpOaiwd5zSIKm+ov0pFsyRTdntS7DEiAF0vkURpQHPxuW3O2wpJgh7movAf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WTLLc3/v; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=KIDU2VwpAo1inahbVO6Y4tbT0DC33Z89Cmo9XiVIXui3tH1vi6voIC1M8+M4AviyLfz7/Pel+TfmD1zQbEl2CWPSRhxErsu4YLg4hwjy8vXP/cpDw8Fm8JBEMDzg/0GWs3Q8rsy3qlTifX1hhhKfkBl4SIlBx50BaR0Hv/Zb8y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=PbyDjTqM; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WTLLc3/v"
-X-UUID: e3243378862f11ef88ecadb115cee93b-20241009
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="PbyDjTqM"
+X-UUID: e2940168862f11ef8b96093e013ec31c-20241009
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=0VuqLarItLYDrY4ulRpQt6clWO5FgklO7PyHifwu5X0=;
-	b=WTLLc3/vwpcE2aZvNfkQBDkuVik1RQ7oAef22xTEFLorYZaTjIS7Neaa5PNHY+aFHPfgBndBFT+4zE86auoqs4p93RZB9wbzuj76ojsnUtxa+eXQA6REqnX8CbYMKKwPkBI/FFvA3PPLsLuENNfIRERC1E0HLAn5OxIoiFiVKpM=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ue8XDJwDfmMjuG2089nzMq4aQHQbiXCtmqGQ1mS+Lv8=;
+	b=PbyDjTqMuAeiLywROXsh6T3k0Ds+3H7Cm63mOgiNwNAIVRh+WanEQ0FIWL7Sa6Wzv7VIKFnR7jz+mkyaeYy8A8stLU0MQA47F83jsC38729EdtukKZmmMldbP7oBYBdev69Mpip1rnaALFqUsKTGC2m6IF7/R8MzK2jaQJ/E900=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:92f72cc9-0dd3-4e20-bbc6-8191ca0f9692,IP:0,U
+X-CID-O-INFO: VERSION:1.1.41,REQID:b8f483b7-b989-4885-8e1d-779f12447c13,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:3a8a0041-8751-41b2-98dd-475503d45150,B
+X-CID-META: VersionHash:6dc6a47,CLOUDID:1da58926-5902-4533-af4f-d0904aa89b3c,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:1,OSI:0,OSA:0,AV:0,LES:1,
 	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,OSH|NGT
 X-CID-BAS: 2,OSH|NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e3243378862f11ef88ecadb115cee93b-20241009
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+X-UUID: e2940168862f11ef8b96093e013ec31c-20241009
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
 	(envelope-from <shu-hsiang.yang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1900561142; Wed, 09 Oct 2024 19:16:10 +0800
+	with ESMTP id 1703436404; Wed, 09 Oct 2024 19:16:09 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 9 Oct 2024 19:16:08 +0800
+ 15.2.1118.26; Wed, 9 Oct 2024 19:16:07 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 9 Oct 2024 19:16:08 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 9 Oct 2024 19:16:07 +0800
 From: Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
@@ -57,9 +57,9 @@ CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<yaya.chang@mediatek.com>, <teddy.chen@mediatek.com>,
 	<hidenorik@chromium.org>, <yunkec@chromium.org>, <shun-yi.wang@mediatek.com>,
 	Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
-Subject: [PATCH v1 06/10] media: platform: mediatek: add isp_7x utility
-Date: Wed, 9 Oct 2024 19:15:47 +0800
-Message-ID: <20241009111551.27052-7-Shu-hsiang.Yang@mediatek.com>
+Subject: [PATCH v1 04/10] media: platform: mediatek: add isp_7x cam-raw unit
+Date: Wed, 9 Oct 2024 19:15:45 +0800
+Message-ID: <20241009111551.27052-5-Shu-hsiang.Yang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20241009111551.27052-1-Shu-hsiang.Yang@mediatek.com>
 References: <20241009111551.27052-1-Shu-hsiang.Yang@mediatek.com>
@@ -71,4794 +71,6267 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--22.759400-8.000000
-X-TMASE-MatchedRID: z3tGnJ59QgwjC5wW0aMJWG3NvezwBrVmNNuh+5zmS69fGNbhMhMRcpqb
-	MiXJH8nx00qMv6F9X+6haDFxW9qw7zP6pt+J6m1m0C5BWPk1/EF1ZrYdf6+oJN9RlPzeVuQQkVx
-	Pq+4YGBEtIcNCL+1lT7L0CwDGT5MlADAYgCjdKFvU3m2KoscyC7LiLKO9VZOi8rXw7/nLp58HiC
-	Fmyfp2MIMsP+XBS+etzsaP39ElYThq+Lkur34drWxxOjnyr8CbFk73i4rVVIFBQfUgydCNn174o
-	4FL+8GyQOM0NwAMF4k4FWFUYgGHGBF4l1oN/bmOB7TqRAYVohbbKTxp3+WtIDb9TB28UbkiEWEB
-	IibfYRLZoTly3PGW4HNLZaN7B77MoT61G3YSs7mVOwZbcOalSwreImldQ5BDfc8MDDp7ngeEY2+
-	qvfbJSbPFJkbfigk4TdO3nD4mIn8DcLqIJgk0tyYRREGYqtmUjiWciALpTNMY0A95tjAn+1UUam
-	jc+3TC1KN/0FTZ6dFvKnkxoTqLSpLwwU+EaJP04RtSDjG+z7Auhg66Itb65ci9AjK6C8p1t9zUw
-	xhckRFv/6+1g7VW3j0v5c2s0m9MAzA5lRc6UniHZXNSWjgdUzcah+QZUHeOOu8B7pM3AuUQtsfG
-	305+H9gjcRUxmHvDjxdoJIBed+Um4SY1UdFN+Y+YSzwl92XTz+tKvxV+YbATb/3sT17MXM1Xk2r
-	63LS+xkNDM5+z4N0t7QCTmkVcWc0C5Uci3F0GwVaayvK71l/QpOLaYmAnSNiQJkdS260msqi63S
-	rtewlNZmYh6DtgzcfGGslQqEob932fm8yB1Z6eAiCmPx4NwGmRqNBHmBveg6X7YSXnSlqZv9WvR
+X-TM-AS-Result: No-10--15.012200-8.000000
+X-TMASE-MatchedRID: 1aMQdI+MeNA83pgwlPkMJspQKjU7fBXVkbYh2bSF9Gc2/UwdvFG5Ih8+
+	XHETeZCzpPfp/tMmq7gXy25Jwx1ee6lRmTVyFuWlA9lly13c/gEraL2mh8ZVK7uqk4cq52pzBpN
+	qUzwLvvfC9TF0oEZxDPwSlgkyMvou28kC8Kr7Ask0JY9d6s3vaV67veYUroY0CqIJhrrDy2/5r/
+	N0c4ndaRTXlwIdja91D/M6mxTF6eBDeuA2fujoFUhwlOfYeSqxpfVcx39Kq+7JYIv7y0tu9qIDs
+	C/90PKdFq2u6QNXsALnTzjd3LX3p00EdmgNIMCz4bl1FkKDELc7r2Gtb9iBYS8zQZ2rR/Op8bf3
+	35SL+13V0LJ64h8KJ0gY1PPRRF1Dbai8Vf7R1/2GuzokAQvW7jfwU1OWX2USYe1mzp7dkwd3AzN
+	R49E9zHs1twvT4bomFCOLNe0Jd9Mz2nUKzTJ7O0dAWPMBu8kQIaLR+2xKRDIifM7JMNHW64Jj0L
+	b9Fi4gLLFAZa5Y3vBWTSOlTfbnwNllERdS6V4uLIRqQbCuh+6E6lq+K7jth/zaSz3Z/4aayU7Xg
+	Ts6W4L08oBdFnGk1pUmPFGykXeX4TagRwcBQLNtqNUBzYMqpu8lj2kHOCDUv8D7QPW2jo/j0EH9
+	v7XWEHGdZVe1+//wXFj1pvfElLE+Os0u1LkxvULEoH0ynuZVfV3o8v8dH+qxVl52+frW/74Sh0C
+	0yopsbkYOoCs8hbi8RK4gKVk64Q+ypzJ6Fr8f7/U7JmMpiiH54F/2i/DwjU8vg1FXaj1oLOxC6s
+	uyQ8bYnodwiC5M0gB5duhc76YnrGqzbR7VPHmeAiCmPx4NwGmRqNBHmBveg6X7YSXnSlqZv9WvR
 	V/RbgtuKBGekqUpOlxBO2IcOBaUTGVAhB5EbQ==
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--22.759400-8.000000
+X-TMASE-Result: 10--15.012200-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	6D027AF76D068496F2B10E0E0B54BEED2A883E61A9E9DDB663CE0E552F10514F2000:8
+X-TM-SNTS-SMTP: 575EF3F5F0FB6DD011CE9D49D932254230CE95611793BD4C531DC54249DD67322000:8
 
-Introduces utility files for the MediaTek ISP7.x camsys driver. These
-utilities provide essential platform definitions, debugging tools, and
-management functions to support ISP operations and SCP communication.
-Key functionalities include:
-1.Hardware pipeline and register definitions for managing image
-processing modules.
-2.DMA debugging utilities and buffer management functions.
-3.Definitions of supported image formats for proper data handling.
-4.IPI and SCP communication structures for module state management and
-configuring ISP.
-5.Metadata parameters for configuring image processing.
+Introduces the ISP pipeline driver for the MediaTek ISP raw and yuv
+modules. Key functionalities include data processing, V4L2 integration,
+resource management, debug support, and various control operations.
+Additionally, IRQ handling, platform device management, and MediaTek
+ISP DMA format support are also included.
 
 Signed-off-by: Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
 ---
- .../mediatek/isp/isp_7x/camsys/mtk_cam-defs.h |  168 ++
- .../isp/isp_7x/camsys/mtk_cam-dmadbg.h        |  721 +++++
- .../mediatek/isp/isp_7x/camsys/mtk_cam-fmt.h  |   87 +
- .../mediatek/isp/isp_7x/camsys/mtk_cam-ipi.h  |  233 ++
- .../isp/isp_7x/camsys/mtk_cam-meta-mt8188.h   | 2436 +++++++++++++++++
- .../isp/isp_7x/camsys/mtk_cam-plat-util.c     |  207 ++
- .../isp/isp_7x/camsys/mtk_cam-plat-util.h     |   16 +
- .../mediatek/isp/isp_7x/camsys/mtk_cam-pool.c |  393 +++
- .../mediatek/isp/isp_7x/camsys/mtk_cam-pool.h |   28 +
- .../isp/isp_7x/camsys/mtk_cam-regs-mt8188.h   |  382 +++
- 10 files changed, 4671 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-defs.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-dmadbg.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-fmt.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-ipi.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-meta-mt8188.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-regs-mt8188.h
+ .../mediatek/isp/isp_7x/camsys/mtk_cam-raw.c  | 5359 +++++++++++++++++
+ .../mediatek/isp/isp_7x/camsys/mtk_cam-raw.h  |  325 +
+ .../isp/isp_7x/camsys/mtk_cam-raw_debug.c     |  403 ++
+ .../isp/isp_7x/camsys/mtk_cam-raw_debug.h     |   39 +
+ .../isp_7x/camsys/mtk_camera-v4l2-controls.h  |   65 +
+ 5 files changed, 6191 insertions(+)
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
 
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-defs.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-defs.h
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
 new file mode 100644
-index 000000000000..7d4ad189b9fc
+index 000000000000..c025f53c952d
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-defs.h
-@@ -0,0 +1,168 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTKCAM_DEFS_H
-+#define __MTKCAM_DEFS_H
-+/**
-+ *  This definition is for the following version:
-+ *
-+ *  MTK_CAM_IPI_VERSION_MAJOR: 0
-+ *  MTK_CAM_IPI_VERSION_MINOR: 1
-+ */
-+
-+#include <linux/types.h>
-+#include "mtk_cam-fmt.h"
-+
-+/*
-+ * Note:
-+ *	Following definitions are used in IPI-messaging.
-+ *	Values are used in software control flow only and cannot be applied to
-+ *	hw registers directly.
-+ */
-+
-+/* camsys hw pipelines */
-+enum mtkcam_pipe_subdev {
-+	MTKCAM_SUBDEV_RAW_START = 0,
-+	MTKCAM_SUBDEV_RAW_0	= MTKCAM_SUBDEV_RAW_START,
-+	MTKCAM_SUBDEV_RAW_1,
-+	MTKCAM_SUBDEV_RAW_2,
-+	MTKCAM_SUBDEV_RAW_END,
-+	MTKCAM_SUBDEV_MAX = MTKCAM_SUBDEV_RAW_END,
-+};
-+
-+#define MTKCAM_SUBDEV_RAW_MASK (BIT(MTKCAM_SUBDEV_RAW_0) | \
-+				BIT(MTKCAM_SUBDEV_RAW_1) | \
-+				BIT(MTKCAM_SUBDEV_RAW_2))
-+
-+static inline int is_raw_subdev(unsigned char subdev_id)
-+{
-+	return (subdev_id == MTKCAM_SUBDEV_RAW_0 ||
-+		subdev_id == MTKCAM_SUBDEV_RAW_1 ||
-+		subdev_id == MTKCAM_SUBDEV_RAW_2);
-+}
-+
-+enum mtkcam_pipe_dev {
-+	MTKCAM_PIPE_RAW_A	= 0,
-+	MTKCAM_PIPE_RAW_B,
-+	MTKCAM_PIPE_RAW_C,
-+	MTKCAM_PIPE_MAX
-+};
-+
-+enum mtkcam_ipi_raw_video_id {
-+	MTKCAM_IPI_RAW_ID_UNKNOWN	= 0,
-+	MTKCAM_IPI_RAW_RAWI_2,		/* RAWI_R2 */
-+	MTKCAM_IPI_RAW_RAWI_3,		/* RAWI_R3 */
-+	MTKCAM_IPI_RAW_RAWI_5,		/* RAWI_R5 */
-+	MTKCAM_IPI_RAW_RAWI_6,		/* RAWI_R6 */
-+	MTKCAM_IPI_RAW_IMGO,		/* IMGO_R1 */
-+	MTKCAM_IPI_RAW_UFEO,		/* UFEO_R1 */
-+	MTKCAM_IPI_RAW_RRZO,		/* RRZO_R1 */
-+	MTKCAM_IPI_RAW_UFGO,		/* UFGO_R1 */
-+	MTKCAM_IPI_RAW_YUVO_1,		/* YUVO_R1 */
-+	MTKCAM_IPI_RAW_YUVO_2,		/* YUVO_R2 */
-+	MTKCAM_IPI_RAW_YUVO_3,		/* YUVO_R3 */
-+	MTKCAM_IPI_RAW_YUVO_4,		/* YUVO_R4 */
-+	MTKCAM_IPI_RAW_YUVO_5,		/* YUVO_R5 */
-+	MTKCAM_IPI_RAW_RZH1N2TO_2,	/* RZH1N2TO_R2 */
-+	MTKCAM_IPI_RAW_DRZS4NO_1,	/* DRZS4NO_R1 */
-+	MTKCAM_IPI_RAW_DRZS4NO_2,	/* DRZS4NO_R2 */
-+	MTKCAM_IPI_RAW_DRZS4NO_3,	/* DRZS4NO_R3 */
-+	MTKCAM_IPI_RAW_RZH1N2TO_3,	/* RZH1N2TO_R3 */
-+	MTKCAM_IPI_RAW_RZH1N2TO_1,	/* RZH1N2TO_R1 */
-+	MTKCAM_IPI_RAW_META_STATS_CFG,	/* All settings */
-+	MTKCAM_IPI_RAW_META_STATS_0,	/* statistics */
-+
-+	/*
-+	 * MTKCAM_IPI_RAW_META_STATS_1 is for AFO only, the buffer can be
-+	 * dequeued once we got the  dma done.
-+	 */
-+	MTKCAM_IPI_RAW_META_STATS_1,
-+
-+	/* statistics may be pass to DIP */
-+	MTKCAM_IPI_RAW_META_STATS_2,
-+	MTKCAM_IPI_RAW_ID_MAX,
-+};
-+
-+/* Supported bayer pixel order */
-+enum mtkcam_ipi_bayer_pxl_id {
-+	MTKCAM_IPI_BAYER_PXL_ID_B		= 0,
-+	MTKCAM_IPI_BAYER_PXL_ID_GB		= 1,
-+	MTKCAM_IPI_BAYER_PXL_ID_GR		= 2,
-+	MTKCAM_IPI_BAYER_PXL_ID_R		= 3,
-+	MTKCAM_IPI_BAYER_PXL_ID_UNKNOWN		= 4,
-+};
-+
-+/* special input patterns */
-+enum mtkcam_ipi_sensor_pattern {
-+	MTKCAM_IPI_SENSOR_PATTERN_NORMAL		= 0,
-+	MTKCAM_IPI_SENSOR_PATTERN_DUAL_PIX		= 1,
-+	MTKCAM_IPI_SENSOR_PATTERN_QUADCODE		= 2,
-+	MTKCAM_IPI_SENSOR_PATTERN_4CELL			= 3,
-+	MTKCAM_IPI_SENSOR_PATTERN_MONO			= 4,
-+	MTKCAM_IPI_SENSOR_PATTERN_IVHDR			= 5,
-+	MTKCAM_IPI_SENSOR_PATTERN_ZVHDR			= 6,
-+	MTKCAM_IPI_SENSOR_PATTERN_4CELL_IVHDR		= 7,
-+	MTKCAM_IPI_SENSOR_PATTERN_4CELL_ZVHDR		= 8,
-+	MTKCAM_IPI_SENSOR_PATTERN_DUAL_PIX_IVHDR	= 9,
-+	MTKCAM_IPI_SENSOR_PATTERN_DUAL_PIX_ZVHDR	= 10,
-+	MTKCAM_IPI_SENSOR_PATTERN_YUV			= 11,
-+	MTKCAM_IPI_SENSOR_PATTERN_NORMAL_PD		= 12,
-+};
-+
-+enum mtkcam_ipi_raw_path_control {
-+	MTKCAM_IPI_IMGO_UNPROCESSED		= 0,
-+	MTKCAM_IPI_IMGO_AFTER_BPC,
-+	MTKCAM_IPI_IMGO_AFTER_FRZ,
-+	MTKCAM_IPI_IMGO_AFTER_FUS,
-+	MTKCAM_IPI_IMGO_AFTER_DGN,
-+	MTKCAM_IPI_IMGO_AFTER_LSC,
-+	MTKCAM_IPI_IMGO_AFTER_HLR,
-+	MTKCAM_IPI_IMGO_AFTER_LTM,
-+	MTKCAM_IPI_IMGO_FULLY_PROCESSED = MTKCAM_IPI_IMGO_AFTER_LTM,
-+};
-+
-+/* For LBIT_MODE G2 */
-+enum mtkcam_ipi_sw_feature_control {
-+	MTKCAM_IPI_SW_FEATURE_NORMAL		= 0,
-+	/* Normal */
-+};
-+
-+enum mtkcam_ipi_hw_path_control {
-+	MTKCAM_IPI_HW_PATH_ON_THE_FLY			= 0,
-+	/* TG direct link */
-+	MTKCAM_IPI_HW_PATH_ON_THE_FLY_M2M		= 1,
-+	/* On device tuning */
-+	MTKCAM_IPI_HW_PATH_OFFLINE_M2M			= 7,
-+	/* SW trigger rawi */
-+};
-+
-+enum mtkcam_ipi_meta_valid_num_control {
-+	MTKCAM_IPI_FBCX_AAO = 0,
-+	MTKCAM_IPI_FBCX_AAHO,
-+	MTKCAM_IPI_FBCX_AFO,
-+	MTKCAM_IPI_FBCX_TSFSO_1,
-+	MTKCAM_IPI_FBCX_TSFSO_2,
-+	MTKCAM_IPI_FBCX_LTMSO,
-+	MTKCAM_IPI_FBCX_FLKO,
-+	MTKCAM_IPI_FBCX_ACTSO,
-+	MTKCAM_IPI_FBCX_PDO,
-+	MTKCAM_IPI_FBCX_TNCSYO,
-+	MTKCAM_IPI_FBCX_RZH1N2TO_R1,
-+	MTKCAM_IPI_FBCX_RZH1N2TO_R2,
-+	MTKCAM_IPI_FBCX_RZH1N2TO_R3,
-+	MTKCAM_IPI_FBCX_LAST,
-+};
-+
-+enum {
-+	BIN_AUTO	= 0,
-+	BIN_OFF		= BIN_AUTO,
-+	BIN_ON		= (1 << 0),
-+	CBN_2X2_ON	= (1 << 4),
-+	CBN_3X3_ON	= (1 << 5),
-+	CBN_4X4_ON	= (1 << 6),
-+	QBND_ON		= (1 << 8)
-+};
-+
-+#endif /* __MTKCAM_DEFS_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-dmadbg.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-dmadbg.h
-new file mode 100644
-index 000000000000..83e92316add6
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-dmadbg.h
-@@ -0,0 +1,721 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAM_RAW_DMADBG_H
-+#define __MTK_CAM_RAW_DMADBG_H
-+
-+#include "mtk_cam-raw_debug.h"
-+
-+static __maybe_unused struct dma_debug_item dbg_RAWI_R2[] = {
-+	{0x00000000, "rawi_r2 32(hex) 0000"},
-+	{0x00000100, "rawi_r2 state_checksum"},
-+	{0x00000200, "rawi_r2 line_pix_cnt_tmp"},
-+	{0x00000300, "rawi_r2 line_pix_cnt"},
-+	{0x00000500, "rawi_r2 smi_debug_data (case 0)"},
-+	{0x00010600, "rawi_r2 aff(fifo)_debug_data (case 1)"},
-+	{0x00030600, "rawi_r2 aff(fifo)_debug_data (case 3)"},
-+	{0x01000040, "rawi_r2_smi / plane-0 / data-crc"},
-+	{0x01000041, "rawi_r2_smi / plane-0 / addr-crc"},
-+	{0x00000080, "rawi_r2_smi / smi_latency_mon output"},
-+	{0x000000A0, "rawi_r2_smi / plane-0 / { len-cnt, dle-cnt }"},
-+	{0x000000C0, "rawi_r2_smi / plane-0 / maddr_max record"},
-+	{0x000000C1, "rawi_r2_smi / plane-0 / maddr_min record"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_RAWI_R2_UFD[] = {
-+	{0x00000001, "rawi_r2 ufd 32(hex) 0000"},
-+	{0x00000101, "rawi_r2 ufd state_checksum"},
-+	{0x00000201, "rawi_r2 ufd line_pix_cnt_tmp"},
-+	{0x00000301, "rawi_r2 ufd line_pix_cnt"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_RAWI_R3[] = {
-+	{0x00000003, "rawi_r3 32(hex) 0000"},
-+	{0x00000103, "rawi_r3 state_checksum"},
-+	{0x00000203, "rawi_r3 line_pix_cnt_tmp"},
-+	{0x00000303, "rawi_r3 line_pix_cnt"},
-+	{0x00000503, "rawi_r3 smi_debug_data (case 0)"},
-+	{0x00010603, "rawi_r3 aff(fifo)_debug_data (case 1)"},
-+	{0x00030603, "rawi_r3 aff(fifo)_debug_data (case 3)"},
-+	{0x01000043, "rawi_r3_smi / plane-0 / data-crc"},
-+	{0x01000044, "rawi_r3_smi / plane-0 / addr-crc"},
-+	{0x00000082, "rawi_r3_smi / smi_latency_mon output"},
-+	{0x000000A2, "rawi_r3_smi / plane-0 / { len-cnt, dle-cnt }"},
-+	{0x000002C0, "rawi_r3_smi / plane-0 / maddr_max record"},
-+	{0x000002C1, "rawi_r3_smi / plane-0 / maddr_min record"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_IMGO_R1[] = {
-+	{0x00000019, "imgo_r1 32(hex) 0000"},
-+	{0x00000119, "imgo_r1 state_checksum"},
-+	{0x00000219, "imgo_r1 line_pix_cnt_tmp"},
-+	{0x00000319, "imgo_r1 line_pix_cnt"},
-+	{0x00000819, "imgo_r1 smi_debug_data (case 0)"},
-+	{0x00010719, "imgo_r1 aff(fifo)_debug_data (case 1)"},
-+	{0x00030719, "imgo_r1 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x01000059, "imgo_r1_smi / plane-0 - imgo_r1 / data-crc"},
-+
-+	{0x0000008B, "imgo_r1_smi / smi_latency_mon output"},
-+
-+	{0x000000AB, "imgo_r1_smi / plane-0 / {len-cnt, dle-cnt}"},
-+	{0x000000AC, "imgo_r1_smi / plane-0 / {load_com-cnt, bvalid-cnt}"},
-+
-+	{0x000013C0, "imgo_r1_smi / plane-0 / maddr_max record"},
-+	{0x000013C1, "imgo_r1_smi / plane-0 / maddr_min record"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_AAHO_R1[] = {
-+	{0x0000001B, "32(hex) 0000"},
-+	{0x0000011B, "state_checksum"},
-+	{0x0000021B, "line_pix_cnt_tmp"},
-+	{0x0000031B, "line_pix_cnt"},
-+	{0x0000081B, "smi_debug_data (case 0)"},
-+	{0x0001071B, "aff(fifo)_debug_data (case 1)"},
-+	{0x0003071B, "aff(fifo)_debug_data (case 3)"},
-+
-+	{0x0100005B, "fho_r1_smi / plane-1 - aaho_r1 / data-crc"},
-+
-+	{0x000000AD, "fho_r1_smi / plane-0 - fho_r1 / len-cnt, dle-cnt"},
-+	{0x000000AE, "fho_r1_smi / plane-0 - fho_r1 / load_com-cnt, bvalid-cnt"},
-+	{0x000000AF, "fho_r1_smi / plane-1 - aaho_r1 / len-cnt, dle-cnt"},
-+	{0x000000B0, "fho_r1_smi / plane-1 - aaho_r1 / load_com-cnt, bvalid-cnt"},
-+	{0x000000B1, "fho_r1_smi / plane-2 - pdo_r1 / len-cnt, dle-cnt"},
-+	{0x000000B2, "fho_r1_smi / plane-2 - pdo_r1 / load_com-cnt, bvalid-cnt"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_PDO_R1[] = {
-+	{0x0000001C, "32(hex) 0000"},
-+	{0x0000011C, "state_checksum"},
-+	{0x0000021C, "line_pix_cnt_tmp"},
-+	{0x0000031C, "line_pix_cnt"},
-+	{0x0000081C, "smi_debug_data (case 0)"},
-+	{0x0001071C, "aff(fifo)_debug_data (case 1)"},
-+	{0x0003071C, "aff(fifo)_debug_data (case 3)"},
-+
-+	{0x000000AD, "fho_r1_smi / plane-0 - fho_r1 / len-cnt, dle-cnt"},
-+	{0x000000AE, "fho_r1_smi / plane-0 - fho_r1 / load_com-cnt, bvalid-cnt"},
-+	{0x000000AF, "fho_r1_smi / plane-1 - aaho_r1 / len-cnt, dle-cnt"},
-+	{0x000000B0, "fho_r1_smi / plane-1 - aaho_r1 / load_com-cnt, bvalid-cnt"},
-+	{0x000000B1, "fho_r1_smi / plane-2 - pdo_r1 / len-cnt, dle-cnt"},
-+	{0x000000B2, "fho_r1_smi / plane-2 - pdo_r1 / load_com-cnt, bvalid-cnt"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_PDI_R1[] = {
-+	{0x00000014, "pdi_r1 32(hex) 0000"},
-+	{0x00000114, "pdi_r1 state_checksum"},
-+	{0x00000214, "pdi_r1 line_pix_cnt_tmp"},
-+	{0x00000314, "pdi_r1 line_pix_cnt"},
-+	{0x00000414, "pdi_r1 important_status"},
-+	{0x00000514, "pdi_r1 cmd_data_cnt"},
-+	{0x00000614, "pdi_r1 tilex_byte_cnt"},
-+	{0x00000714, "pdi_r1 tiley_cnt"},
-+	{0x00000814, "pdi_r1 burst_line_cnt"},
-+};
-+
-+// M4U_PORT CAM3_YUVO_R1: yuvo_r1 + yuvbo_r1
-+static __maybe_unused struct dma_debug_item dbg_YUVO_R1[] = {
-+	{0x00000000, "yuvo_r1 32(hex) 0000"},
-+	{0x00000100, "yuvo_r1 state_checksum"},
-+	{0x00000200, "yuvo_r1 line_pix_cnt_tmp"},
-+	{0x00000300, "yuvo_r1 line_pix_cnt"},
-+	{0x00000800, "yuvo_r1 smi_debug_data (case 0)"},
-+	{0x00010700, "yuvo_r1 aff(fifo)_debug_data (case 1)"},
-+	{0x00030700, "yuvo_r1 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x00000001, "yuvbo_r1 32(hex) 0000"},
-+	{0x00000101, "yuvbo_r1 state_checksum"},
-+	{0x00000201, "yuvbo_r1 line_pix_cnt_tmp"},
-+	{0x00000301, "yuvbo_r1 line_pix_cnt"},
-+	{0x00000801, "yuvbo_r1 smi_debug_data (case 0)"},
-+	{0x00010701, "yuvbo_r1 aff(fifo)_debug_data (case 1)"},
-+	{0x00030701, "yuvbo_r1 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x01000040, "yuvo_r1_smi / plane-0 - yuvo_r1 / data-crc"},
-+	{0x01000041, "yuvo_r1_smi / plane-1 - yuvbo_r1 / data-crc"},
-+
-+	{0x00000080, "yuvo_r1_smi / smi_latency_mon output"},
-+
-+	{0x000000AD, "yuvo_r1_smi / plane-0 - yuvo_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000AE, "yuvo_r1_smi / plane-0 - yuvo_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000AF, "yuvo_r1_smi / plane-1 - yuvbo_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000B0, "yuvo_r1_smi / plane-1 - yuvbo_r1 / { load_com-cnt, bvalid-cnt }"},
-+
-+	{0x000000C0,
-+	 "yuvo_r1_smi / plane-0 - yuvo_r1_smi / plane-0 - yuvo_r1 / maddr_max"},
-+	{0x000000C1,
-+	 "yuvo_r1_smi / plane-0 - yuvo_r1_smi / plane-0 - yuvo_r1 / maddr_min"},
-+	{0x000001C0,
-+	 "yuvo_r1_smi / plane-1 - yuvo_r1_smi / plane-0 - yuvbo_r1 / maddr_max"},
-+	{0x000001C1,
-+	 "yuvo_r1_smi / plane-1 - yuvo_r1_smi / plane-0 - yuvbo_r1 / maddr_min"},
-+};
-+
-+// M4U_PORT CAM3_YUVO_R3: yuvo_r3 + yuvbo_r3
-+static __maybe_unused struct dma_debug_item dbg_YUVO_R3[] = {
-+	{0x00000004, "yuvo_r3 32(hex) 0000"},
-+	{0x00000104, "yuvo_r3 state_checksum"},
-+	{0x00000204, "yuvo_r3 line_pix_cnt_tmp"},
-+	{0x00000304, "yuvo_r3 line_pix_cnt"},
-+	{0x00000804, "smi_debug_data (case 0)"},
-+	{0x00010704, "aff(fifo)_debug_data (case 1)"},
-+	{0x00030704, "aff(fifo)_debug_data (case 3)"},
-+
-+	{0x00000005, "yuvbo_r3 32(hex) 0000"},
-+	{0x00000105, "yuvbo_r3 state_checksum"},
-+	{0x00000205, "yuvbo_r3 line_pix_cnt_tmp"},
-+	{0x00000305, "yuvbo_r3 line_pix_cnt"},
-+	{0x00000805, "yuvbo_r3 smi_debug_data (case 0)"},
-+	{0x00010705, "yuvbo_r3 aff(fifo)_debug_data (case 1)"},
-+	{0x00030705, "yuvbo_r3 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x01000042, "yuvo_r3_smi / plane-0 - yuvo_r3 / data-crc"},
-+	{0x01000043, "yuvo_r3_smi / plane-1 - yuvbo_r1 / data-crc"},
-+
-+	{0x00000081, "yuvo_r3_smi / smi_latency_mon output"},
-+
-+	{0x000000B1, "yuvo_r3_smi / plane-0 - yuvo_r3 / { len-cnt, dle-cnt }"},
-+	{0x000000B2, "yuvo_r3_smi / plane-0 - yuvo_r3 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000B3, "yuvo_r3_smi / plane-1 - yuvbo_r3 / { len-cnt, dle-cnt }"},
-+	{0x000000B4, "yuvo_r3_smi / plane-1 - yuvbo_r3 / { load_com-cnt, bvalid-cnt }"},
-+
-+	{0x000002C0,
-+	 "yuvo_r3_smi / plane-0 - yuvo_r3_smi / plane-0 - yuvo_r3 / maddr_max"},
-+	{0x000002C1,
-+	 "yuvo_r3_smi / plane-0 - yuvo_r3_smi / plane-0 - yuvo_r3 / maddr_min"},
-+	{0x000003C0,
-+	 "yuvo_r3_smi / plane-1 - yuvo_r3_smi / plane-0 - yuvbo_r3 / maddr_max"},
-+	{0x000003C1,
-+	 "yuvo_r3_smi / plane-1 - yuvo_r3_smi / plane-0 - yuvbo_r3 / maddr_min"},
-+};
-+
-+// M4U_PORT CAM3_YUVCO_R1: yuvco_r1 + yuvdo_r1 + yuvco_r3 + yuvdo_r3
-+static __maybe_unused struct dma_debug_item dbg_YUVCO_R1[] = {
-+	{0x00000002, "yuvco_r1 32(hex) 0000"},
-+	{0x00000102, "yuvco_r1 state_checksum"},
-+	{0x00000202, "yuvco_r1 line_pix_cnt_tmp"},
-+	{0x00000302, "yuvco_r1 line_pix_cnt"},
-+	{0x00000802, "yuvco_r1 smi_debug_data (case 0)"},
-+	{0x00010702, "yuvco_r1 aff(fifo)_debug_data (case 1)"},
-+	{0x00030702, "yuvco_r1 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x00000003, "yuvdo_r1 32(hex) 0000"},
-+	{0x00000103, "yuvdo_r1 state_checksum"},
-+	{0x00000203, "yuvdo_r1 line_pix_cnt_tmp"},
-+	{0x00000303, "yuvdo_r1 line_pix_cnt"},
-+	{0x00000803, "yuvdo_r1 smi_debug_data (case 0)"},
-+	{0x00010703, "yuvdo_r1 aff(fifo)_debug_data (case 1)"},
-+	{0x00030703, "yuvdo_r1 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x01000044, "yuvco_r1_smi / plane-0 - yuvco_r1 / data-crc"},
-+	{0x01000045, "yuvco_r1_smi / plane-1 - yuvco_r1 / data-crc"},
-+	{0x01000046, "yuvco_r1_smi / plane-2 - yuvco_r1 / data-crc"},
-+	{0x01000047, "yuvco_r1_smi / plane-3 - yuvco_r1 / data-crc"},
-+
-+	{0x00000082, "yuvco_r1_smi / smi_latency_mon output"},
-+
-+	{0x000004C0,
-+	 "yuvco_r1_smi / plane-0 - yuvco_r1_smi / plane-0 - yuvco_r1 / maddr_max"},
-+	{0x000004C1,
-+	 "yuvco_r1_smi / plane-0 - yuvco_r1_smi / plane-0 - yuvco_r1 / maddr_min"},
-+	{0x000005C0,
-+	 "yuvco_r1_smi / plane-1 - yuvco_r1_smi / plane-0 - yuvdo_r1 / maddr_max"},
-+	{0x000005C1,
-+	 "yuvco_r1_smi / plane-1 - yuvco_r1_smi / plane-0 - yuvdo_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_YUVCO_R3[] = {
-+	{0x00000006, "yuvco_r3 32(hex) 0000"},
-+	{0x00000106, "yuvco_r3 state_checksum"},
-+	{0x00000206, "yuvco_r3 line_pix_cnt_tmp"},
-+	{0x00000306, "yuvco_r3 line_pix_cnt"},
-+	{0x00000806, "yuvco_r3 smi_debug_data (case 0)"},
-+	{0x00010706, "yuvco_r3 aff(fifo)_debug_data (case 1)"},
-+	{0x00030706, "yuvco_r3 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x00000007, "yuvdo_r3 32(hex) 0000"},
-+	{0x00000107, "yuvdo_r3 state_checksum"},
-+	{0x00000207, "yuvdo_r3 line_pix_cnt_tmp"},
-+	{0x00000307, "yuvdo_r3 line_pix_cnt"},
-+	{0x00000807, "yuvdo_r3 smi_debug_data (case 0)"},
-+	{0x00010707, "yuvdo_r3 aff(fifo)_debug_data (case 1)"},
-+	{0x00030707, "yuvdo_r3 aff(fifo)_debug_data (case 3)"},
-+
-+	{0x01000044, "yuvco_r1_smi / plane-0 - yuvco_r1 / data-crc"},
-+	{0x01000045, "yuvco_r1_smi / plane-1 - yuvco_r1 / data-crc"},
-+	{0x01000046, "yuvco_r1_smi / plane-2 - yuvco_r1 / data-crc"},
-+	{0x01000047, "yuvco_r1_smi / plane-3 - yuvco_r1 / data-crc"},
-+
-+	{0x00000082, "yuvco_r1_smi / smi_latency_mon output"},
-+
-+	{0x000006C0,
-+	 "yuvco_r1_smi / plane-2 - yuvco_r1_smi / plane-0 - yuvco_r3 / maddr_max"},
-+	{0x000006C1,
-+	 "yuvco_r1_smi / plane-2 - yuvco_r1_smi / plane-0 - yuvco_r3 / maddr_max"},
-+	{0x000007C0,
-+	 "yuvco_r1_smi / plane-3 - yuvco_r1_smi / plane-0 - yuvdo_r3 / maddr_max"},
-+	{0x000007C1,
-+	 "yuvco_r1_smi / plane-3 - yuvco_r1_smi / plane-0 - yuvdo_r3 / maddr_min"},
-+};
-+
-+// M4U_PORT CAM3_YUVO_R2: yuvo_r2 + yuvbo_r2 + yuvo_r4 + yuvbo_r4 + yuvo_r5 + yuvbo_r5
-+static __maybe_unused struct dma_debug_item dbg_YUVO_R2[] = {
-+	{0x00000008, "yuvo_r2 32(hex) 0000"},
-+	{0x00000108, "yuvo_r2 state_checksum"},
-+	{0x00000208, "yuvo_r2 line_pix_cnt_tmp"},
-+	{0x00000308, "yuvo_r2 line_pix_cnt"},
-+	{0x00000408, "yuvo_r2 important_status"},
-+	{0x00000508, "yuvo_r2 cmd_data_cnt"},
-+	{0x00000608, "yuvo_r2 cmd_cnt_for_bvalid_phase"},
-+	{0x00000708, "yuvo_r2 input_h_cnt"},
-+	{0x00000808, "yuvo_r2 input_v_cnt"},
-+	{0x00000908, "yuvo_r2 xfer_y_cnt"},
-+
-+	{0x00000009, "yuvbo_r2 32(hex) 0000"},
-+	{0x00000109, "yuvbo_r2 state_checksum"},
-+	{0x00000209, "yuvbo_r2 line_pix_cnt_tmp"},
-+	{0x00000309, "yuvbo_r2 line_pix_cnt"},
-+	{0x00000409, "yuvbo_r2 important_status"},
-+	{0x00000509, "yuvbo_r2 cmd_data_cnt"},
-+	{0x00000609, "yuvbo_r2 cmd_cnt_for_bvalid_phase"},
-+	{0x00000709, "yuvbo_r2 input_h_cnt"},
-+	{0x00000809, "yuvbo_r2 input_v_cnt"},
-+	{0x00000909, "yuvbo_r2 xfer_y_cnt"},
-+
-+	{0x01000048, "yuvo_r2_smi / plane-0 - yuvo_r2 / data-crc"},
-+	{0x01000049, "yuvo_r2_smi / plane-1 - yuvbo_r2 / data-crc"},
-+
-+	{0x00000083, "yuvo_r2_smi / smi_latency_mon output"},
-+
-+	{0x000008C0,
-+	 "yuvo_r2_smi / plane-0 - yuvo_r2_smi / plane-1 - cqi_r3 / maddr_max"},
-+	{0x000008C1,
-+	 "yuvo_r2_smi / plane-0 - yuvo_r2_smi / plane-1 - cqi_r3 / maddr_min"},
-+	{0x000009C0,
-+	 "yuvo_r2_smi / plane-1 - yuvo_r2_smi / plane-1 - cqi_r4 / maddr_max"},
-+	{0x000009C1,
-+	 "yuvo_r2_smi / plane-1 - yuvo_r2_smi / plane-1 - cqi_r4 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_YUVO_R4[] = {
-+	{0x0000000A, "yuvo_r4 32(hex) 0000"},
-+	{0x0000010A, "yuvo_r4 state_checksum"},
-+	{0x0000020A, "yuvo_r4 line_pix_cnt_tmp"},
-+	{0x0000030A, "yuvo_r4 line_pix_cnt"},
-+	{0x0000040A, "yuvo_r4 important_status"},
-+	{0x0000050A, "yuvo_r4 cmd_data_cnt"},
-+	{0x0000060A, "yuvo_r4 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070A, "yuvo_r4 input_h_cnt"},
-+	{0x0000080A, "yuvo_r4 input_v_cnt"},
-+	{0x0000090A, "yuvo_r4 xfer_y_cnt"},
-+
-+	{0x0000000B, "yuvbo_r4 32(hex) 0000"},
-+	{0x0000010B, "yuvbo_r4 state_checksum"},
-+	{0x0000020B, "yuvbo_r4 line_pix_cnt_tmp"},
-+	{0x0000030B, "yuvbo_r4 line_pix_cnt"},
-+	{0x0000040B, "yuvbo_r4 important_status"},
-+	{0x0000050B, "yuvbo_r4 cmd_data_cnt"},
-+	{0x0000060B, "yuvbo_r4 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070B, "yuvbo_r4 input_h_cnt"},
-+	{0x0000080B, "yuvbo_r4 input_v_cnt"},
-+	{0x0000090B, "yuvbo_r4 xfer_y_cnt"},
-+
-+	{0x0100004A, "yuvo_r2_smi / plane-2 - yuvo_r4 / data-crc"},
-+	{0x0100004B, "yuvo_r2_smi / plane-3 - yuvbo_r4 / data-crc"},
-+
-+	{0x00000083, "yuvo_r2_smi / smi_latency_mon output"},
-+
-+	{0x00000AC0,
-+	 "yuvo_r2_smi / plane-2 - yuvo_r2_smi / plane-0 - lsci_r1 / maddr_max"},
-+	{0x00000AC1,
-+	 "yuvo_r2_smi / plane-2 - yuvo_r2_smi / plane-0 - lsci_r1 / maddr_min"},
-+	{0x00000BC0,
-+	 "yuvo_r2_smi / plane-3 - yuvo_r2_smi / plane-0 - bpci_r1 / maddr_max"},
-+	{0x00000BC1,
-+	 "yuvo_r2_smi / plane-3 - yuvo_r2_smi / plane-0 - bpci_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_YUVO_R5[] = {
-+	{0x0000000C, "yuvo_r5 32(hex) 0000"},
-+	{0x0000010C, "yuvo_r5 state_checksum"},
-+	{0x0000020C, "yuvo_r5 line_pix_cnt_tmp"},
-+	{0x0000030C, "yuvo_r5 line_pix_cnt"},
-+	{0x0000040C, "yuvo_r5 important_status"},
-+	{0x0000050C, "yuvo_r5 cmd_data_cnt"},
-+	{0x0000060C, "yuvo_r5 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070C, "yuvo_r5 input_h_cnt"},
-+	{0x0000080C, "yuvo_r5 input_v_cnt"},
-+	{0x0000090C, "yuvo_r5 xfer_y_cnt"},
-+
-+	{0x0000000D, "yuvbo_r5 32(hex) 0000"},
-+	{0x0000010D, "yuvbo_r5 state_checksum"},
-+	{0x0000020D, "yuvbo_r5 line_pix_cnt_tmp"},
-+	{0x0000030D, "yuvbo_r5 line_pix_cnt"},
-+	{0x0000040D, "yuvbo_r5 important_status"},
-+	{0x0000050D, "yuvbo_r5 cmd_data_cnt"},
-+	{0x0000060D, "yuvbo_r5 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070D, "yuvbo_r5 input_h_cnt"},
-+	{0x0000080D, "yuvbo_r5 input_v_cnt"},
-+	{0x0000090D, "yuvbo_r5 xfer_y_cnt"},
-+
-+	{0x0100004C, "yuvo_r2_smi / plane-4 - yuvo_r5 / data-crc"},
-+	{0x0100004D, "yuvo_r2_smi / plane-5 - yuvbo_r5 / data-crc"},
-+
-+	{0x00000083, "yuvo_r2_smi / smi_latency_mon output"},
-+
-+	{0x00000CC0,
-+	 "yuvo_r2_smi / plane-4 - yuvo_r2_smi / plane-1 - bpci_r2 / maddr_max"},
-+	{0x00000CC1,
-+	 "yuvo_r2_smi / plane-4 - yuvo_r2_smi / plane-1 - bpci_r2 / maddr_min"},
-+	{0x00000DC0,
-+	 "yuvo_r2_smi / plane-5 - yuvo_r2_smi / plane-2 - bpci_r3 / maddr_max"},
-+	{0x00000DC1,
-+	 "yuvo_r2_smi / plane-5 - yuvo_r2_smi / plane-2 - bpci_r3 / maddr_min"},
-+};
-+
-+// M4U_PORT CAM3_RZH1N2TO_R1: rzh1n2to_r1 + rzh1n2tbo_r1 + rzh1n2to_r2 + rzh1n2to_r3 + rzh1n2tbo_r3
-+static __maybe_unused struct dma_debug_item dbg_RZH1N2TO_R1[] = {
-+	{0x0000000E, "rzh1n2to_r1 32(hex) 0000"},
-+	{0x0000010E, "rzh1n2to_r1 state_checksum"},
-+	{0x0000020E, "rzh1n2to_r1 line_pix_cnt_tmp"},
-+	{0x0000030E, "rzh1n2to_r1 line_pix_cnt"},
-+	{0x0000040E, "rzh1n2to_r1 important_status"},
-+	{0x0000050E, "rzh1n2to_r1 cmd_data_cnt"},
-+	{0x0000060E, "rzh1n2to_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070E, "rzh1n2to_r1 input_h_cnt"},
-+	{0x0000080E, "rzh1n2to_r1 input_v_cnt"},
-+	{0x0000090E, "rzh1n2to_r1 xfer_y_cnt"},
-+
-+	{0x0000000F, "rzh1n2tbo_r1 32(hex) 0000"},
-+	{0x0000010F, "rzh1n2tbo_r1 state_checksum"},
-+	{0x0000020F, "rzh1n2tbo_r1 line_pix_cnt_tmp"},
-+	{0x0000030F, "rzh1n2tbo_r1 line_pix_cnt"},
-+	{0x0000040F, "rzh1n2tbo_r1 important_status"},
-+	{0x0000050F, "rzh1n2tbo_r1 cmd_data_cnt"},
-+	{0x0000060F, "rzh1n2tbo_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x0000070F, "rzh1n2tbo_r1 input_h_cnt"},
-+	{0x0000080F, "rzh1n2tbo_r1 input_v_cnt"},
-+	{0x0000090F, "rzh1n2tbo_r1 xfer_y_cnt"},
-+
-+	{0x00000084, "rzh1n2to_r1_smi / smi_latency_mon output"},
-+
-+	{0x00000EC0,
-+	 "rzh1n2to_r1_smi / plane-0 - rzh1n2to_r1_smi / plane-3 - rzh1n2to_r1 / maddr_max"},
-+	{0x00000EC1,
-+	 "rzh1n2to_r1_smi / plane-0 - rzh1n2to_r1_smi / plane-3 - rzh1n2to_r1 / maddr_min"},
-+	{0x00000FC0,
-+	 "rzh1n2to_r1_smi / plane-1 - rzh1n2to_r1_smi / plane-4 - rzh1n2tbo_r1 / maddr_max"},
-+	{0x00000FC1,
-+	 "rzh1n2to_r1_smi / plane-1 - rzh1n2to_r1_smi / plane-4 - rzh1n2tbo_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_RZH1N2TO_R2[] = {
-+	{0x00000010, "rzh1n2to_r2 32(hex) 0000"},
-+	{0x00000110, "rzh1n2to_r2 state_checksum"},
-+	{0x00000210, "rzh1n2to_r2 line_pix_cnt_tmp"},
-+	{0x00000310, "rzh1n2to_r2 line_pix_cnt"},
-+	{0x00000410, "rzh1n2to_r2 important_status"},
-+	{0x00000510, "rzh1n2to_r2 cmd_data_cnt"},
-+	{0x00000610, "rzh1n2to_r2 cmd_cnt_for_bvalid_phase"},
-+	{0x00000710, "rzh1n2to_r2 input_h_cnt"},
-+	{0x00000810, "rzh1n2to_r2 input_v_cnt"},
-+	{0x00000910, "rzh1n2to_r2 xfer_y_cnt"},
-+
-+	{0x01000050, "rzh1n2to_r1_smi / plane-2 - rzh1n2to_r2 / data-crc"},
-+
-+	{0x00000084, "rzh1n2to_r1_smi / smi_latency_mon output"},
-+
-+	{0x000010C0,
-+	 "rzh1n2to_r1_smi / plane-2 - rzh1n2to_r1_smi / plane-0 - rzh1n2to_r2 / maddr_max"},
-+	{0x000010C1,
-+	 "rzh1n2to_r1_smi / plane-2 - rzh1n2to_r1_smi / plane-0 - rzh1n2to_r2 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_RZH1N2TO_R3[] = {
-+	{0x00000011, "rzh1n2to_r3 32(hex) 0000"},
-+	{0x00000111, "rzh1n2to_r3 state_checksum"},
-+	{0x00000211, "rzh1n2to_r3 line_pix_cnt_tmp"},
-+	{0x00000311, "rzh1n2to_r3 line_pix_cnt"},
-+	{0x00000411, "rzh1n2to_r3 important_status"},
-+	{0x00000511, "rzh1n2to_r3 cmd_data_cnt"},
-+	{0x00000611, "rzh1n2to_r3 cmd_cnt_for_bvalid_phase"},
-+	{0x00000711, "rzh1n2to_r3 input_h_cnt"},
-+	{0x00000811, "rzh1n2to_r3 input_v_cnt"},
-+	{0x00000911, "rzh1n2to_r3 xfer_y_cnt"},
-+
-+	{0x00000012, "rzh1n2tbo_r3 32(hex) 0000"},
-+	{0x00000112, "rzh1n2tbo_r3 state_checksum"},
-+	{0x00000212, "rzh1n2tbo_r3 line_pix_cnt_tmp"},
-+	{0x00000312, "rzh1n2tbo_r3 line_pix_cnt"},
-+	{0x00000412, "rzh1n2tbo_r3 important_status"},
-+	{0x00000512, "rzh1n2tbo_r3 cmd_data_cnt"},
-+	{0x00000612, "rzh1n2tbo_r3 cmd_cnt_for_bvalid_phase"},
-+	{0x00000712, "rzh1n2tbo_r3 input_h_cnt"},
-+	{0x00000812, "rzh1n2tbo_r3 input_v_cnt"},
-+	{0x00000912, "rzh1n2tbo_r3 xfer_y_cnt"},
-+
-+	{0x01000051, "rzh1n2to_r1_smi / plane-3 - rzh1n2to_r3 / data-crc"},
-+	{0x01000052, "rzh1n2to_r1_smi / plane-4 - rzh1n2tbo_r3 / data-crc"},
-+
-+	{0x00000084, "rzh1n2to_r1_smi / smi_latency_mon output"},
-+
-+	{0x000011C0,
-+	 "rzh1n2to_r1_smi / plane-3 - rzh1n2to_r1_smi / plane-1 - rzh1n2to_r3 / maddr_max"},
-+	{0x000011C1,
-+	 "rzh1n2to_r1_smi / plane-3 - rzh1n2to_r1_smi / plane-1 - rzh1n2to_r3 / maddr_min"},
-+	{0x000012C0,
-+	 "rzh1n2to_r1_smi / plane-4 - rzh1n2to_r1_smi / plane-2 - rzh1n2tbo_r3 / maddr_max"},
-+	{0x000012C1,
-+	 "rzh1n2to_r1_smi / plane-4 - rzh1n2to_r1_smi / plane-2 - rzh1n2tbo_r3 / maddr_min"},
-+};
-+
-+// M4U_PORT CAM3_DRZS4NO_R1: drzs4no_r1 + drzs4no_r2 + drzs4no_r3 + lmvo_r1 + actso_r1
-+static __maybe_unused struct dma_debug_item dbg_DRZS4NO_R1[] = {
-+	{0x00000013, "drzs4no_r1 32(hex) 0000"},
-+	{0x00000113, "drzs4no_r1 state_checksum"},
-+	{0x00000213, "drzs4no_r1 line_pix_cnt_tmp"},
-+	{0x00000313, "drzs4no_r1 line_pix_cnt"},
-+	{0x00000413, "drzs4no_r1 important_status"},
-+	{0x00000513, "drzs4no_r1 cmd_data_cnt"},
-+	{0x00000613, "drzs4no_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000713, "drzs4no_r1 input_h_cnt"},
-+	{0x00000813, "drzs4no_r1 input_v_cnt"},
-+	{0x00000913, "drzs4no_r1 xfer_y_cnt"},
-+
-+	{0x01000053, "drzs4no_r1_smi / plane-0 - drzs4no_r1 / data-crc"},
-+
-+	{0x00000085, "drzs4no_r1_smi / smi_latency_mon output"},
-+
-+	{0x000013C0,
-+	 "drzs4no_r1_smi / plane-0 - drzs4no_r1_smi / plane-0 - drzs4no_r1 / maddr_max"},
-+	{0x000013C1,
-+	 "drzs4no_r1_smi / plane-0 - drzs4no_r1_smi / plane-0 - drzs4no_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_DRZS4NO_R2[] = {
-+	{0x00000014, "drzs4no_r2 32(hex) 0000"},
-+	{0x00000114, "drzs4no_r2 state_checksum"},
-+	{0x00000214, "drzs4no_r2 line_pix_cnt_tmp"},
-+	{0x00000314, "drzs4no_r2 line_pix_cnt"},
-+	{0x00000414, "drzs4no_r2 important_status"},
-+	{0x00000514, "drzs4no_r2 cmd_data_cnt"},
-+	{0x00000614, "drzs4no_r2 cmd_cnt_for_bvalid_phase"},
-+	{0x00000714, "drzs4no_r2 input_h_cnt"},
-+	{0x00000814, "drzs4no_r2 input_v_cnt"},
-+	{0x00000914, "drzs4no_r2 xfer_y_cnt"},
-+
-+	{0x01000054, "drzs4no_r1_smi / plane-1 - drzs4no_r2 / data-crc"},
-+
-+	{0x00000085, "drzs4no_r1_smi / smi_latency_mon output"},
-+
-+	{0x000014C0,
-+	 "drzs4no_r1_smi / plane-1 - drzs4no_r1_smi / plane-0 - drzs4no_r2 / maddr_max"},
-+	{0x000014C1,
-+	 "drzs4no_r1_smi / plane-1 - drzs4no_r1_smi / plane-0 - drzs4no_r2 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_DRZS4NO_R3[] = {
-+	{0x00000015, "drzs4no_r3 32(hex) 0000"},
-+	{0x00000115, "drzs4no_r3 state_checksum"},
-+	{0x00000215, "drzs4no_r3 line_pix_cnt_tmp"},
-+	{0x00000315, "drzs4no_r3 line_pix_cnt"},
-+	{0x00000415, "drzs4no_r3 important_status"},
-+	{0x00000515, "drzs4no_r3 cmd_data_cnt"},
-+	{0x00000615, "drzs4no_r3 cmd_cnt_for_bvalid_phase"},
-+	{0x00000715, "drzs4no_r3 input_h_cnt"},
-+	{0x00000815, "drzs4no_r3 input_v_cnt"},
-+	{0x00000915, "drzs4no_r3 xfer_y_cnt"},
-+
-+	{0x01000055, "drzs4no_r1_smi / plane-2 - drzs4no_r3 / data-crc"},
-+
-+	{0x00000085, "drzs4no_r1_smi / smi_latency_mon output"},
-+
-+	{0x000015C0,
-+	 "drzs4no_r1_smi / plane-2 - drzs4no_r1_smi / plane-1 - drzs4no_r3 / maddr_max record"},
-+	{0x000015C1,
-+	 "drzs4no_r1_smi / plane-2 - drzs4no_r1_smi / plane-1 - drzs4no_r3 / maddr_min record"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_LMVO_R1[] = {
-+	{0x00000016, "lmvo_r1 32(hex) 0000"},
-+	{0x00000116, "lmvo_r1 state_checksum"},
-+	{0x00000216, "lmvo_r1 line_pix_cnt_tmp"},
-+	{0x00000316, "lmvo_r1 line_pix_cnt"},
-+	{0x00000416, "lmvo_r1 important_status"},
-+	{0x00000516, "lmvo_r1 cmd_data_cnt"},
-+	{0x00000616, "lmvo_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000716, "lmvo_r1 input_h_cnt"},
-+	{0x00000816, "lmvo_r1 input_v_cnt"},
-+	{0x00000916, "lmvo_r1 xfer_y_cnt"},
-+
-+	{0x01000056, "drzs4no_r1_smi / plane-3 - lmvo_r1 / data-crc"},
-+
-+	{0x00000085, "drzs4no_r1_smi / smi_latency_mon output"},
-+
-+	{0x000016C0,
-+	 "drzs4no_r1_smi / plane-3 - drzs4no_r1_smi / plane-2 - lmvo_r1 / maddr_max"},
-+	{0x000016C1,
-+	 "drzs4no_r1_smi / plane-3 - drzs4no_r1_smi / plane-2 - lmvo_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_ACTSO_R1[] = {
-+	{0x00000017, "actso_r1 32(hex) 0000"},
-+	{0x00000117, "actso_r1 state_checksum"},
-+	{0x00000217, "actso_r1 line_pix_cnt_tmp"},
-+	{0x00000317, "actso_r1 line_pix_cnt"},
-+	{0x00000417, "actso_r1 important_status"},
-+	{0x00000517, "actso_r1 cmd_data_cnt"},
-+	{0x00000617, "actso_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000717, "actso_r1 input_h_cnt"},
-+	{0x00000817, "actso_r1 input_v_cnt"},
-+	{0x00000917, "actso_r1 xfer_y_cnt"},
-+
-+	{0x01000057, "drzs4no_r1_smi / plane-4 - actso_r1) / data-crc"},
-+
-+	{0x00000085, "drzs4no_r1_smi / smi_latency_mon output"},
-+
-+	{0x000017C0,
-+	 "drzs4no_r1_smi / plane-4 - drzs4no_r1_smi / plane-0 - actsoo_r1 / maddr_max record"},
-+	{0x000017C1,
-+	 "drzs4no_r1_smi / plane-4 - drzs4no_r1_smi / plane-0 - actsoo_r1 / maddr_min record"},
-+};
-+
-+// M4U_PORT CAM3_TNCSO_R1: tncso_r1 + tncsbo_r1 + tncsho_r1 + tncsyo_r1
-+static __maybe_unused struct dma_debug_item dbg_TNCSO_R1[] = {
-+	{0x00000018, "tncso_r1 32(hex) 0000"},
-+	{0x00000118, "tncso_r1 state_checksum"},
-+	{0x00000218, "tncso_r1 line_pix_cnt_tmp"},
-+	{0x00000318, "tncso_r1 line_pix_cnt"},
-+	{0x00000418, "tncso_r1 important_status"},
-+	{0x00000518, "tncso_r1 cmd_data_cnt"},
-+	{0x00000618, "tncso_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000718, "tncso_r1 input_h_cnt"},
-+	{0x00000818, "tncso_r1 input_v_cnt"},
-+	{0x00000918, "tncso_r1 xfer_y_cnt"},
-+
-+	{0x01000058, "tncso_r1_smi / plane-0 - tncso_r1) / data-crc"},
-+
-+	{0x00000086, "tncso_r1_smi / smi_latency_mon output"},
-+
-+	{0x000018C0,
-+	 "tncso_r1_smi / plane-0 - tncso_r1_smi / plane-1 - tncso_r1 / maddr_max record"},
-+	{0x000018C1,
-+	 "tncso_r1_smi / plane-0 - tncso_r1_smi / plane-1 - tncso_r1 / maddr_min record"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_TNCSBO_R1[] = {
-+	{0x00000019, "tncsbo_r1 32(hex) 0000"},
-+	{0x00000119, "tncsbo_r1 state_checksum"},
-+	{0x00000219, "tncsbo_r1 line_pix_cnt_tmp"},
-+	{0x00000319, "tncsbo_r1 line_pix_cnt"},
-+	{0x00000419, "tncsbo_r1 important_status"},
-+	{0x00000519, "tncsbo_r1 cmd_data_cnt"},
-+	{0x00000619, "tncsbo_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000719, "tncsbo_r1 input_h_cnt"},
-+	{0x00000819, "tncsbo_r1 input_v_cnt"},
-+	{0x00000919, "tncsbo_r1 xfer_y_cnt"},
-+
-+	{0x01000059, "tncso_r1_smi / plane-1 - tncsbo_r1 / data-crc"},
-+
-+	{0x00000086, "tncso_r1_smi / smi_latency_mon output"},
-+
-+	{0x000019C0,
-+	 "tncso_r1_smi / plane-1 - tncso_r1_smi / plane-0 - tncsbo_r1 / maddr_max"},
-+	{0x000019C1,
-+	 "tncso_r1_smi / plane-1 - tncso_r1_smi / plane-0 - tncsbo_r1 / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_TNCSHO_R1[] = {
-+	{0x0000001A, "tncsho_r1 32(hex) 0000"},
-+	{0x0000011A, "tncsho_r1 state_checksum"},
-+	{0x0000021A, "tncsho_r1 line_pix_cnt_tmp"},
-+	{0x0000031A, "tncsho_r1 line_pix_cnt"},
-+	{0x0000041A, "tncsho_r1 important_status"},
-+	{0x0000051A, "tncsho_r1 cmd_data_cnt"},
-+	{0x0000061A, "tncsho_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x0000071A, "tncsho_r1 input_h_cnt"},
-+	{0x0000081A, "tncsho_r1 input_v_cnt"},
-+	{0x0000091A, "tncsho_r1 xfer_y_cnt"},
-+
-+	{0x0100005A, "tncso_r1_smi / plane-2 - tncsho_r1 / data-crc"},
-+
-+	{0x00000086, "tncso_r1_smi / smi_latency_mon output"},
-+
-+	{0x00001AC0,
-+	 "tncso_r1_smi / plane-2 - tncso_r1_smi / plane-1 - tncsho_r1 / maddr_max"},
-+	{0x00001AC1,
-+	 "tncso_r1_smi / plane-2 - tncso_r1_smi / plane-1 - tncsho_r1 / maddr_max"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_TNCSYO_R1[] = {
-+	{0x0000001B, "tncsyo_r1 32(hex) 0000"},
-+	{0x0000011B, "tncsyo_r1 state_checksum"},
-+	{0x0000021B, "tncsyo_r1 line_pix_cnt_tmp"},
-+	{0x0000031B, "tncsyo_r1 line_pix_cnt"},
-+	{0x0000041B, "tncsyo_r1 important_status"},
-+	{0x0000051B, "tncsyo_r1 cmd_data_cnt"},
-+	{0x0000061B, "tncsyo_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x0000071B, "tncsyo_r1 input_h_cnt"},
-+	{0x0000081B, "tncsyo_r1 input_v_cnt"},
-+	{0x0000091B, "tncsyo_r1 xfer_y_cnt"},
-+
-+	{0x0100005B, "tncso_r1_smi / plane-3 - tncsyo_r1 / data-crc"},
-+
-+	{0x00000086, "tncso_r1_smi / smi_latency_mon output"},
-+
-+	{0x00001BC0,
-+	 "tncso_r1_smi / plane-3 - tncso_r1_smi / plane-2 - tncsyo_r1) / maddr_max"},
-+	{0x00001BC0,
-+	 "tncso_r1_smi / plane-3 - tncso_r1_smi / plane-2 - tncsyo_r1) / maddr_min"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_ulc_cmd_cnt[] = {
-+	{0x00000511, "bpci_r1 cmd_data_cnt"},
-+	{0x00000512, "bpci_r2 cmd_data_cnt"},
-+	{0x00000513, "bpci_r3 cmd_data_cnt"},
-+	{0x00000516, "aai_r1 cmd_data_cnt"},
-+	{0x00000518, "rawi_r6 cmd_data_cnt"},
-+	{0x0000051F, "tsfso_r1 cmd_data_cnt"},
-+	{0x0000061F, "tsfso_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000520, "ltmso_r1 cmd_data_cnt"},
-+	{0x00000620, "ltmso_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000521, "tsfso_r2 cmd_data_cnt"},
-+	{0x00000621, "tsfso_r2 cmd_cnt_for_bvalid_phase"},
-+	{0x00000522, "flko_r1 cmd_data_cnt"},
-+	{0x00000622, "flko_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000523, "ufeo_r1 cmd_data_cnt"},
-+	{0x00000623, "ufeo_r1 cmd_cnt_for_bvalid_phase"},
-+	{0x00000528, "bino_r1 cmd_data_cnt"},
-+	{0x00000628, "bino_r1 cmd_cnt_for_bvalid_phase"},
-+};
-+
-+static __maybe_unused struct dma_debug_item dbg_ori_cmd_cnt[] = {
-+	{0x000000A0, "rawi_r2_smi / plane-0 - rawi_r2 / { len-cnt, dle-cnt }"},
-+	{0x000000A1, "ufdi_r2_smi / plane-0 - ufdi_r2 / { len-cnt, dle-cnt }"},
-+	{0x000000A2, "rawi_r3_smi / plane-0 - rawi_r3 / { len-cnt, dle-cnt }"},
-+	{0x000000A3, "ufdi_r3_smi / plane-0 - ufdi_r3 / { len-cnt, dle-cnt }"},
-+	{0x000000A4, "rawi_r4_smi / plane-0 - rawi_r4 / { len-cnt, dle-cnt }"},
-+	{0x000000A5, "rawi_r5_smi / plane-0 - rawi_r5 / { len-cnt, dle-cnt }"},
-+	{0x000000A6, "cqi_r1_smi / plane-0 - cqi_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000A7, "cqi_r1_smi / plane-1 - cqi_r3 / { len-cnt, dle-cnt }"},
-+	{0x000000A8, "cqi_r2_smi / plane-0 - cqi_r2 / { len-cnt, dle-cnt }"},
-+	{0x000000A9, "cqi_r2_smi / plane-1 - cqi_r4 / { len-cnt, dle-cnt }"},
-+	{0x000000AA, "lsci_r1_smi / plane-0 - lsci_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000AB, "imgo_r1_smi / plane-0 - imgo_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000AC, "imgo_r1_smi / plane-0 - imgo_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000AD, "fho_r1_smi / plane-0 - fho_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000AE, "fho_r1_smi / plane-0 - fho_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000AF, "fho_r1_smi / plane-1 - aaho_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000B0, "fho_r1_smi / plane-1 - aaho_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000B1, "fho_r1_smi / plane-2 - pdo_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000B2, "fho_r1_smi / plane-2 - pdo_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000B3, "aao_r1_smi / plane-0 - aao_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000B4, "aao_r1_smi / plane-0 - aao_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000B5, "aao_r1_smi / plane-1 - afo_r1 / { len-cnt, dle-cnt }"},
-+	{0x000000B6, "aao_r1_smi / plane-1 - afo_r1 / { load_com-cnt, bvalid-cnt }"},
-+	{0x000000B7, "ufdi_r5_smi / plane-0 - ufdi_r5 / { len-cnt, dle-cnt }"},
-+};
-+
-+#endif /*__MTK_CAM_RAW_DMADBG_H*/
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-fmt.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-fmt.h
-new file mode 100644
-index 000000000000..2eb54a2332ef
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-fmt.h
-@@ -0,0 +1,87 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTKCAM_FMT_H
-+#define __MTKCAM_FMT_H
-+
-+/* camsys supported format */
-+enum mtkcam_ipi_fmt {
-+	MTKCAM_IPI_IMG_FMT_UNKNOWN		= -1,
-+	MTKCAM_IPI_IMG_FMT_BAYER8		= 0,
-+	MTKCAM_IPI_IMG_FMT_BAYER10		= 1,
-+	MTKCAM_IPI_IMG_FMT_BAYER12		= 2,
-+	MTKCAM_IPI_IMG_FMT_BAYER14		= 3,
-+	MTKCAM_IPI_IMG_FMT_BAYER16		= 4,
-+	MTKCAM_IPI_IMG_FMT_BAYER10_UNPACKED	= 5,
-+	MTKCAM_IPI_IMG_FMT_BAYER12_UNPACKED	= 6,
-+	MTKCAM_IPI_IMG_FMT_BAYER14_UNPACKED	= 7,
-+	MTKCAM_IPI_IMG_FMT_RGB565		= 8,
-+	MTKCAM_IPI_IMG_FMT_RGB888		= 9,
-+	MTKCAM_IPI_IMG_FMT_JPEG			= 10,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER8		= 11,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER10		= 12,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER12		= 13,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER14		= 14,
-+	MTKCAM_IPI_IMG_FMT_YUYV			= 15,
-+	MTKCAM_IPI_IMG_FMT_YVYU			= 16,
-+	MTKCAM_IPI_IMG_FMT_UYVY			= 17,
-+	MTKCAM_IPI_IMG_FMT_VYUY			= 18,
-+	MTKCAM_IPI_IMG_FMT_YUV_422_2P		= 19,
-+	MTKCAM_IPI_IMG_FMT_YVU_422_2P		= 20,
-+	MTKCAM_IPI_IMG_FMT_YUV_422_3P		= 21,
-+	MTKCAM_IPI_IMG_FMT_YVU_422_3P		= 22,
-+	MTKCAM_IPI_IMG_FMT_YUV_420_2P		= 23,
-+	MTKCAM_IPI_IMG_FMT_YVU_420_2P		= 24,
-+	MTKCAM_IPI_IMG_FMT_YUV_420_3P		= 25,
-+	MTKCAM_IPI_IMG_FMT_YVU_420_3P		= 26,
-+	MTKCAM_IPI_IMG_FMT_Y8			= 27,
-+	MTKCAM_IPI_IMG_FMT_YUYV_Y210		= 28,
-+	MTKCAM_IPI_IMG_FMT_YVYU_Y210		= 29,
-+	MTKCAM_IPI_IMG_FMT_UYVY_Y210		= 30,
-+	MTKCAM_IPI_IMG_FMT_VYUY_Y210		= 31,
-+	MTKCAM_IPI_IMG_FMT_YUYV_Y210_PACKED	= 32,
-+	MTKCAM_IPI_IMG_FMT_YVYU_Y210_PACKED	= 33,
-+	MTKCAM_IPI_IMG_FMT_UYVY_Y210_PACKED	= 34,
-+	MTKCAM_IPI_IMG_FMT_VYUY_Y210_PACKED	= 35,
-+	MTKCAM_IPI_IMG_FMT_YUV_P210		= 36,
-+	MTKCAM_IPI_IMG_FMT_YVU_P210		= 37,
-+	MTKCAM_IPI_IMG_FMT_YUV_P010		= 38,
-+	MTKCAM_IPI_IMG_FMT_YVU_P010		= 39,
-+	MTKCAM_IPI_IMG_FMT_YUV_P210_PACKED	= 40,
-+	MTKCAM_IPI_IMG_FMT_YVU_P210_PACKED	= 41,
-+	MTKCAM_IPI_IMG_FMT_YUV_P010_PACKED	= 42,
-+	MTKCAM_IPI_IMG_FMT_YVU_P010_PACKED	= 43,
-+	MTKCAM_IPI_IMG_FMT_YUV_P212		= 44,
-+	MTKCAM_IPI_IMG_FMT_YVU_P212		= 45,
-+	MTKCAM_IPI_IMG_FMT_YUV_P012		= 46,
-+	MTKCAM_IPI_IMG_FMT_YVU_P012		= 47,
-+	MTKCAM_IPI_IMG_FMT_YUV_P212_PACKED	= 48,
-+	MTKCAM_IPI_IMG_FMT_YVU_P212_PACKED	= 49,
-+	MTKCAM_IPI_IMG_FMT_YUV_P012_PACKED	= 50,
-+	MTKCAM_IPI_IMG_FMT_YVU_P012_PACKED	= 51,
-+	MTKCAM_IPI_IMG_FMT_RGB_8B_3P		= 52,
-+	MTKCAM_IPI_IMG_FMT_RGB_10B_3P		= 53,
-+	MTKCAM_IPI_IMG_FMT_RGB_12B_3P		= 54,
-+	MTKCAM_IPI_IMG_FMT_RGB_10B_3P_PACKED	= 55,
-+	MTKCAM_IPI_IMG_FMT_RGB_12B_3P_PACKED	= 56,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER8_3P		= 57,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER10_3P	= 58,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER12_3P	= 59,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER10_3P_PACKED	= 60,
-+	MTKCAM_IPI_IMG_FMT_FG_BAYER12_3P_PACKED	= 61,
-+	MTKCAM_IPI_IMG_FMT_UFBC_NV12		= 62,
-+	MTKCAM_IPI_IMG_FMT_UFBC_NV21		= 63,
-+	MTKCAM_IPI_IMG_FMT_UFBC_YUV_P010	= 64,
-+	MTKCAM_IPI_IMG_FMT_UFBC_YVU_P010	= 65,
-+	MTKCAM_IPI_IMG_FMT_UFBC_YUV_P012	= 66,
-+	MTKCAM_IPI_IMG_FMT_UFBC_YVU_P012	= 67,
-+	MTKCAM_IPI_IMG_FMT_UFBC_BAYER8		= 68,
-+	MTKCAM_IPI_IMG_FMT_UFBC_BAYER10		= 69,
-+	MTKCAM_IPI_IMG_FMT_UFBC_BAYER12		= 70,
-+	MTKCAM_IPI_IMG_FMT_UFBC_BAYER14		= 71,
-+	MTKCAM_IPI_IMG_FMT_BAYER10_MIPI		= 72
-+};
-+
-+#endif /* __MTKCAM_FMT_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-ipi.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-ipi.h
-new file mode 100644
-index 000000000000..f3401287ca6e
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-ipi.h
-@@ -0,0 +1,233 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAM_IPI_H__
-+#define __MTK_CAM_IPI_H__
-+
-+#define MTK_CAM_IPI_VERSION_MAJOR (0)
-+#define MTK_CAM_IPI_VERSION_MINOR (1)
-+
-+#include <linux/types.h>
-+#include "mtk_cam-defs.h"
-+
-+#define MTK_CAM_MAX_RUNNING_JOBS	(3)
-+#define CAM_MAX_PLANENUM		(3)
-+#define CAM_MAX_SUBSAMPLE		(32)
-+#define MTK_CAM_MAX_PROCESSING_BUFS	(2)
-+
-+/*
-+ * struct mtkcam_ipi_point - Point
-+ *
-+ * @x: x-coordinate of the point (zero-based).
-+ * @y: y-coordinate of the point (zero-based).
-+ */
-+struct mtkcam_ipi_point {
-+	u16 x;
-+	u16 y;
-+} __packed;
-+
-+/*
-+ * struct mtkcam_ipi_size - Size
-+ *
-+ * @w: width (in pixels).
-+ * @h: height (in pixels).
-+ */
-+struct mtkcam_ipi_size {
-+	u16 w;
-+	u16 h;
-+} __packed;
-+
-+/*
-+ * struct mtkcam_ipi_fract - fraction
-+ *
-+ * @numerator: numerator part of the fraction.
-+ * @denominator: denominator part of the fraction.
-+ */
-+struct mtkcam_ipi_fract {
-+	u8 numerator;
-+	u8 denominator;
-+};
-+
-+/*
-+ * struct mtkcam_ipi_sw_buffer
-+ *	- Shared buffer between cam-device and co-processor.
-+ *
-+ * @iova: DMA address for CAM DMA device. isp7_1: u64.
-+ * @scp_addr: SCP address for external co-processor unit.
-+ * @size: buffer size.
-+ */
-+struct mtkcam_ipi_sw_buffer {
-+	u64 iova;
-+	u32 scp_addr;
-+	u32 size;
-+} __packed;
-+
-+/*
-+ * struct mtkcam_ipi_hw_buffer - DMA buffer for CAM DMA device.
-+ *
-+ * @iova: DMA address for CAM DMA device. isp7_1: u64.
-+ * @size: buffer size.
-+ */
-+struct mtkcam_ipi_hw_buffer {
-+	u64 iova;
-+	u32 size;
-+} __packed;
-+
-+struct mtkcam_ipi_pix_fmt {
-+	u32	format;
-+	struct mtkcam_ipi_size	s;
-+	u16	stride[CAM_MAX_PLANENUM];
-+} __packed;
-+
-+struct mtkcam_ipi_crop {
-+	struct mtkcam_ipi_point p;
-+	struct mtkcam_ipi_size s;
-+} __packed;
-+
-+struct mtkcam_ipi_uid {
-+	u8 pipe_id;
-+	u8 id;
-+} __packed;
-+
-+struct mtkcam_ipi_img_input {
-+	struct mtkcam_ipi_uid		uid;
-+	struct mtkcam_ipi_pix_fmt	fmt;
-+	struct mtkcam_ipi_sw_buffer	buf[CAM_MAX_PLANENUM];
-+} __packed;
-+
-+struct mtkcam_ipi_img_output {
-+	struct mtkcam_ipi_uid		uid;
-+	struct mtkcam_ipi_pix_fmt	fmt;
-+	struct mtkcam_ipi_sw_buffer	buf[CAM_MAX_SUBSAMPLE][CAM_MAX_PLANENUM];
-+	struct mtkcam_ipi_crop		crop;
-+} __packed;
-+
-+struct mtkcam_ipi_meta_input {
-+	struct mtkcam_ipi_uid		uid;
-+	struct mtkcam_ipi_sw_buffer	buf;
-+} __packed;
-+
-+struct mtkcam_ipi_meta_output {
-+	struct mtkcam_ipi_uid		uid;
-+	struct mtkcam_ipi_sw_buffer	buf;
-+} __packed;
-+
-+struct mtkcam_ipi_input_param {
-+	u32	fmt;
-+	u8	raw_pixel_id;
-+	u8	data_pattern;
-+	u8	pixel_mode;
-+	u8	subsample;
-+	struct mtkcam_ipi_crop in_crop;
-+} __packed;
-+
-+struct mtkcam_ipi_raw_frame_param {
-+	u8	imgo_path_sel; /* mtkcam_ipi_raw_path_control */
-+	u8	hardware_scenario;
-+	u32	bin_flag;
-+	u8	exposure_num;
-+	u8	previous_exposure_num;
-+	struct mtkcam_ipi_fract	frz_ratio;
-+} __packed;
-+
-+struct mtkcam_ipi_session_cookie {
-+	u8	session_id;
-+	u32	frame_no;
-+} __packed;
-+
-+struct mtkcam_ipi_session_param {
-+	struct mtkcam_ipi_sw_buffer workbuf;
-+	struct mtkcam_ipi_sw_buffer msg_buf;
-+	struct mtkcam_ipi_sw_buffer raw_workbuf;
-+	struct mtkcam_ipi_sw_buffer priv_workbuf;
-+	struct mtkcam_ipi_sw_buffer session_buf;
-+} __packed;
-+
-+struct mtkcam_ipi_hw_mapping {
-+	u8	pipe_id; /* ref. to mtkcam_pipe_subdev */
-+	u16	dev_mask; /* ref. to mtkcam_pipe_dev */
-+	u8	exp_order;
-+} __packed;
-+
-+/*  Control flags of CAM_CMD_CONFIG */
-+#define MTK_CAM_IPI_CONFIG_TYPE_INIT			0x0001
-+#define MTK_CAM_IPI_CONFIG_TYPE_INPUT_CHANGE		0x0002
-+#define MTK_CAM_IPI_CONFIG_TYPE_EXEC_TWICE		0x0004
-+#define MTK_CAM_IPI_CONFIG_TYPE_SMVR_PREVIEW		0x0008
-+
-+struct mtkcam_ipi_config_param {
-+	u8	flags;
-+	struct mtkcam_ipi_input_param	input;
-+	u8	n_maps;
-+	/* maximum # of pipes per stream */
-+	struct mtkcam_ipi_hw_mapping maps[6];
-+	/* sub_ratio:8, valid number: 8 */
-+	u16	valid_numbers[MTKCAM_IPI_FBCX_LAST];
-+	u8	sw_feature;
-+} __packed;
-+
-+#define CAM_MAX_IMAGE_INPUT	(5)
-+#define CAM_MAX_IMAGE_OUTPUT	(15)
-+#define CAM_MAX_META_OUTPUT	(4)
-+#define CAM_MAX_PIPE_USED	(4)
-+
-+struct mtkcam_ipi_frame_param {
-+	u32 cur_workbuf_offset;
-+	u32 cur_workbuf_size;
-+
-+	struct mtkcam_ipi_raw_frame_param raw_param;
-+	struct mtkcam_ipi_img_input img_ins[CAM_MAX_IMAGE_INPUT];
-+	struct mtkcam_ipi_img_output img_outs[CAM_MAX_IMAGE_OUTPUT];
-+	struct mtkcam_ipi_meta_output meta_outputs[CAM_MAX_META_OUTPUT];
-+	struct mtkcam_ipi_meta_input meta_inputs[CAM_MAX_PIPE_USED];
-+} __packed;
-+
-+struct mtkcam_ipi_frame_info {
-+	u32	cur_msgbuf_offset;
-+	u32	cur_msgbuf_size;
-+} __packed;
-+
-+struct mtkcam_ipi_frame_ack_result {
-+	u32	cq_desc_offset;
-+	u32	sub_cq_desc_offset;
-+	u32	cq_desc_size;
-+	u32	sub_cq_desc_size;
-+} __packed;
-+
-+struct mtkcam_ipi_ack_info {
-+	u8	ack_cmd_id;
-+	s32	ret;
-+	struct mtkcam_ipi_frame_ack_result frame_result;
-+} __packed;
-+
-+/*
-+ * The IPI command enumeration.
-+ */
-+enum mtkcam_ipi_cmds {
-+	/* request for a new streaming: mtkcam_ipi_session_param */
-+	CAM_CMD_CREATE_SESSION,
-+	/* config the stream: mtkcam_ipi_config_param */
-+	CAM_CMD_CONFIG,
-+	/* per-frame: mtkcam_ipi_frame_param */
-+	CAM_CMD_FRAME,
-+	/* release certain streaming: mtkcam_ipi_session_param */
-+	CAM_CMD_DESTROY_SESSION,
-+	/* ack: mtkcam_ipi_ack_info */
-+	CAM_CMD_ACK,
-+	CAM_CMD_RESERVED,
-+};
-+
-+struct mtkcam_ipi_event  {
-+	struct mtkcam_ipi_session_cookie cookie;
-+	u8 cmd_id;
-+	union {
-+		struct mtkcam_ipi_session_param	session_data;
-+		struct mtkcam_ipi_config_param	config_data;
-+		struct mtkcam_ipi_frame_info	frame_data;
-+		struct mtkcam_ipi_ack_info	ack_data;
-+	};
-+} __packed;
-+
-+#endif /* __MTK_CAM_IPI_H__ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-meta-mt8188.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-meta-mt8188.h
-new file mode 100644
-index 000000000000..656841f6ef57
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-meta-mt8188.h
-@@ -0,0 +1,2436 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAM_META_H__
-+#define __MTK_CAM_META_H__
-+
-+/*
-+ * struct mtk_cam_uapi_meta_rect - rect info
-+ *
-+ * @left: The X coordinate of the left side of the rectangle
-+ * @top:  The Y coordinate of the left side of the rectangle
-+ * @width:  The width of the rectangle
-+ * @height: The height of the rectangle
-+ *
-+ * rect containing the width and height fields.
-+ *
-+ */
-+struct mtk_cam_uapi_meta_rect {
-+	s32 left;
-+	s32 top;
-+	u32 width;
-+	u32 height;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_size - size info
-+ *
-+ * @width:  The width of the size
-+ * @height: The height of the size
-+ *
-+ * size containing the width and height fields.
-+ *
-+ */
-+struct mtk_cam_uapi_meta_size {
-+	u32 width;
-+	u32 height;
-+} __packed;
-+
-+/*
-+ *  A U T O  E X P O S U R E
-+ */
-+
-+/*
-+ *  struct mtk_cam_uapi_ae_hist_cfg - histogram info for AE
-+ *
-+ *  @hist_en:    enable bit for current histogram, each histogram can
-+ *      be 0/1 (disabled/enabled) separately
-+ *  @hist_opt:   color mode config for current histogram (0/1/2/3/4:
-+ *      R/G/B/RGB mix/Y)
-+ *  @hist_bin:   bin mode config for current histogram (1/4: 256/1024 bin)
-+ *  @hist_y_hi:  ROI Y range high bound for current histogram
-+ *  @hist_y_low: ROI Y range low bound for current histogram
-+ *  @hist_x_hi:  ROI X range high bound for current histogram
-+ *  @hist_x_low: ROI X range low bound for current histogram
-+ */
-+struct mtk_cam_uapi_ae_hist_cfg {
-+	s32 hist_en;
-+	u8 hist_opt;
-+	u8 hist_bin;
-+	u16 hist_y_hi;
-+	u16 hist_y_low;
-+	u16 hist_x_hi;
-+	u16 hist_x_low;
-+	u16 rsv;
-+} __packed;
-+
-+#define MTK_CAM_UAPI_ROI_MAP_BLK_NUM (128 * 128)
-+/*
-+ *  struct mtk_cam_uapi_ae_param - parameters for AE configurtion
-+ *
-+ *  @pixel_hist_win_cfg_le: window config for le histogram 0~5
-+ *           separately, uAEHistBin shold be the same
-+ *           for these 6 histograms
-+ *  @pixel_hist_win_cfg_se: window config for se histogram 0~5
-+ *           separately, uAEHistBin shold be the same
-+ *           for these 6 histograms
-+ *  @roi_hist_cfg_le : config for roi le histogram 0~3
-+ *           color mode/enable
-+ *  @roi_hist_cfg_se : config for roi se histogram 0~3
-+ *           color mode/enable
-+ *  @hdr_ratio: in HDR scenario, AE calculated hdr ratio
-+ *           (LE exp*iso/SE exp*iso*100) for current frame,
-+ *           default non-HDR scenario ratio=1000
-+ */
-+struct mtk_cam_uapi_ae_param {
-+	struct mtk_cam_uapi_ae_hist_cfg pixel_hist_win_cfg_le[6];
-+	struct mtk_cam_uapi_ae_hist_cfg pixel_hist_win_cfg_se[6];
-+	struct mtk_cam_uapi_ae_hist_cfg roi_hist_cfg_le[4];
-+	struct mtk_cam_uapi_ae_hist_cfg roi_hist_cfg_se[4];
-+	u8  aai_r1_enable;
-+	u8  aai_roi_map[MTK_CAM_UAPI_ROI_MAP_BLK_NUM];
-+	u8  rsv;
-+	u16 hdr_ratio; /* base 1 x= 1000 */
-+	u32 act_win_x_start;
-+	u32 act_win_x_end;
-+	u32 act_win_y_start;
-+	u32 act_win_y_end;
-+} __packed;
-+
-+/*
-+ *  A U T O  W H I T E  B A L A N C E
-+ */
-+
-+/* Maximum blocks that MediaTek AWB supports */
-+#define MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM (10)
-+
-+/*
-+ *  struct mtk_cam_uapi_awb_param - parameters for AWB configurtion
-+ *
-+ *  @stat_en:                  AWB stat enable
-+ *  @windownum_x:              Number of horizontal AWB windows
-+ *  @windownum_y:              Number of vertical AWB windows
-+ *  @lowthreshold_r:           Low threshold of R
-+ *  @lowthreshold_g:           Low threshold of G
-+ *  @lowthreshold_b:           Low threshold of B
-+ *  @highthreshold_r:          High threshold of R
-+ *  @highthreshold_g:          High threshold of G
-+ *  @highthreshold_b:          High threshold of B
-+ *  @lightsrc_lowthreshold_r:  Low threshold of R for light source estimation
-+ *  @lightsrc_lowthreshold_g:  Low threshold of G for light source estimation
-+ *  @lightsrc_lowthreshold_b:  Low threshold of B for light source estimation
-+ *  @lightsrc_highthreshold_r: High threshold of R for light source estimation
-+ *  @lightsrc_highthreshold_g: High threshold of G for light source estimation
-+ *  @lightsrc_highthreshold_b: High threshold of B for light source estimation
-+ *  @pregainlimit_r:           Maximum limit clipping for R color
-+ *  @pregainlimit_g:           Maximum limit clipping for G color
-+ *  @pregainlimit_b:           Maximum limit clipping for B color
-+ *  @pregain_r:                unit module compensation gain for R color
-+ *  @pregain_g:                unit module compensation gain for G color
-+ *  @pregain_b:                unit module compensation gain for B color
-+ *  @valid_datawidth:          valid bits of statistic data
-+ *  @hdr_support_en:           support HDR mode
-+ *  @stat_mode:                Output format select <1>sum mode <0>average mode
-+ *  @error_ratio:              Programmable error pixel count by AWB window size
-+ *              (base : 256)
-+ *  @awbxv_win_r:              light area of right bound, the size is defined in
-+ *              MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM
-+ *  @awbxv_win_l:              light area of left bound the size is defined in
-+ *              MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM
-+ *  @awbxv_win_d:              light area of lower bound the size is defined in
-+ *              MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM
-+ *  @awbxv_win_u:              light area of upper bound the size is defined in
-+ *              MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM
-+ *  @pregain2_r:               white balance gain of R color
-+ *  @pregain2_g:               white balance gain of G color
-+ *  @pregain2_b:               white balance gain of B color
-+ */
-+struct mtk_cam_uapi_awb_param {
-+	u32 stat_en;
-+	u32 windownum_x;
-+	u32 windownum_y;
-+	u32 lowthreshold_r;
-+	u32 lowthreshold_g;
-+	u32 lowthreshold_b;
-+	u32 highthreshold_r;
-+	u32 highthreshold_g;
-+	u32 highthreshold_b;
-+	u32 lightsrc_lowthreshold_r;
-+	u32 lightsrc_lowthreshold_g;
-+	u32 lightsrc_lowthreshold_b;
-+	u32 lightsrc_highthreshold_r;
-+	u32 lightsrc_highthreshold_g;
-+	u32 lightsrc_highthreshold_b;
-+	u32 pregainlimit_r;
-+	u32 pregainlimit_g;
-+	u32 pregainlimit_b;
-+	u32 pregain_r;
-+	u32 pregain_g;
-+	u32 pregain_b;
-+	u32 valid_datawidth;
-+	u32 hdr_support_en;
-+	u32 stat_mode;
-+	u32 format_shift;
-+	u32 error_ratio;
-+	u32 postgain_r;
-+	u32 postgain_g;
-+	u32 postgain_b;
-+	u32 postgain2_hi_r;
-+	u32 postgain2_hi_g;
-+	u32 postgain2_hi_b;
-+	u32 postgain2_med_r;
-+	u32 postgain2_med_g;
-+	u32 postgain2_med_b;
-+	u32 postgain2_low_r;
-+	u32 postgain2_low_g;
-+	u32 postgain2_low_b;
-+	s32 awbxv_win_r[MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM];
-+	s32 awbxv_win_l[MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM];
-+	s32 awbxv_win_d[MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM];
-+	s32 awbxv_win_u[MTK_CAM_UAPI_AWB_MAX_LIGHT_AREA_NUM];
-+	u32 csc_ccm[9];
-+	u32 acc;
-+	u32 med_region[4];
-+	u32 low_region[4];
-+	u32 pregain2_r;
-+	u32 pregain2_g;
-+	u32 pregain2_b;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_dgn_param
-+ *
-+ *  @gain: digital gain to increase image brightness, 1 x= 1024
-+ */
-+struct mtk_cam_uapi_dgn_param {
-+	u32 gain;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_wb_param
-+ *
-+ *  @gain_r: white balance gain of R channel
-+ *  @gain_g: white balance gain of G channel
-+ *  @gain_b: white balance gain of B channel
-+ */
-+struct mtk_cam_uapi_wb_param {
-+	u32 gain_r;
-+	u32 gain_g;
-+	u32 gain_b;
-+	u32 clip;
-+} __packed;
-+
-+/*
-+ *  A U T O  F O C U S
-+ */
-+
-+/*
-+ * struct mtk_cam_uapi_af_param - af statistic parameters
-+ *  @roi: AF roi rectangle (in pixel) for AF statistic covered, including
-+ *    x, y, width, height
-+ *  @th_sat_g:  green channel pixel value saturation threshold (0~255)
-+ *  @th_h[3]: horizontal AF filters response threshold (0~50) for H0, H1,
-+ *    and H2
-+ *  @th_v:  vertical AF filter response threshold (0~50)
-+ *  @blk_pixel_xnum: horizontal number of pixel per block
-+ *  @blk_pixel_ynum: vertical number of pixel per block
-+ *  @fir_type: to select FIR filter by AF target type (0,1,2,3)
-+ *  @iir_type: to select IIR filter by AF target type (0,1,2,3)
-+ *  @data_gain[7]: gamma curve gain for AF source data
-+ */
-+struct mtk_cam_uapi_af_param {
-+	struct mtk_cam_uapi_meta_rect roi;
-+	u32 th_sat_g;
-+	u32 th_h[3];
-+	u32 th_v;
-+	u32 blk_pixel_xnum;
-+	u32 blk_pixel_ynum;
-+	u32 fir_type;
-+	u32 iir_type;
-+	u32 data_gain[7];
-+} __packed;
-+
-+enum mtk_cam_uapi_flk_hdr_path_control {
-+	MTKCAM_UAPI_FKLO_HDR_1ST_FRAME = 0,
-+	MTKCAM_UAPI_FKLO_HDR_2ND_FRAME,
-+	MTKCAM_UAPI_FKLO_HDR_3RD_FRAME,
-+} __packed;
-+
-+/*
-+ *  struct mtk_cam_uapi_flk_param
-+ *
-+ *  @input_bit_sel: maximum pixel value of flicker statistic input
-+ *  @offset_y: initial position for flicker statistic calculation in y direction
-+ *  @crop_y: number of rows which will be cropped from bottom
-+ *  @sgg_val[8]: Simple Gain and Gamma for noise reduction, sgg_val[0] is
-+ *               gain and sgg_val[1] - sgg_val[7] are gamma table
-+ *  @noise_thr: the noise threshold of pixel value, pixel value lower than
-+ *              this value is considered as noise
-+ *  @saturate_thr: the saturation threshold of pixel value, pixel value
-+ *                 higher than this value is considered as saturated
-+ *  @hdr_flk_src: flk source tap point selection
-+ */
-+struct mtk_cam_uapi_flk_param {
-+	u32 input_bit_sel;
-+	u32 offset_y;
-+	u32 crop_y;
-+	u32 sgg_val[8];
-+	u32 noise_thr;
-+	u32 saturate_thr;
-+	u32 hdr_flk_src;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tsf_param
-+ *
-+ *  @horizontal_num: block number of horizontal direction
-+ *  @vertical_num:   block number of vertical direction
-+ */
-+struct mtk_cam_uapi_tsf_param {
-+	u32 horizontal_num;
-+	u32 vertical_num;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_pde_param
-+ *
-+ * @pdi_max_size: the max required memory size for pd table
-+ * @pdo_max_size: the max required memory size for pd point output
-+ * @pdo_x_size: the pd points out x size
-+ * @pdo_y_size: the pd points out y size
-+ * @pd_table_offset: the offset of pd table in the meta_cfg
-+ */
-+struct mtk_cam_uapi_pde_param {
-+	u32 pdi_max_size;
-+	u32 pdo_max_size;
-+	u32 pdo_x_size;
-+	u32 pdo_y_size;
-+	u32 pd_table_offset;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_hw_buf - hardware buffer info
-+ *
-+ * @offset: offset from the start of the device memory associated to the
-+ *    v4l2 meta buffer
-+ * @size: size of the buffer
-+ *
-+ * Some part of the meta buffers are read or written by statistic related
-+ * hardware DMAs. The hardware buffers may have different size among
-+ * difference pipeline.
-+ */
-+struct mtk_cam_uapi_meta_hw_buf {
-+	u32 offset;
-+	u32 size;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_pdp_stats - statistics of pd
-+ *
-+ * @stats_src:     source width and heitgh of the statistics.
-+ * @stride:     stride value used by
-+ * @pdo_buf:     The buffer for PD statistic hardware output.
-+ *
-+ * This is the PD statistic returned to user.
-+ */
-+struct mtk_cam_uapi_pdp_stats {
-+	struct mtk_cam_uapi_meta_size stats_src;
-+	u32 stride;
-+	struct mtk_cam_uapi_meta_hw_buf pdo_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_cpi_stats - statistics of pd
-+ *
-+ * @stats_src:     source width and heitgh of the statistics.
-+ * @stride:     stride value used by
-+ * @pdo_buf:     The buffer for PD statistic hardware output.
-+ *
-+ * This is the PD statistic returned to user.
-+ */
-+struct mtk_cam_uapi_cpi_stats {
-+	struct mtk_cam_uapi_meta_size stats_src;
-+	u32 stride;
-+	struct mtk_cam_uapi_meta_hw_buf cpio_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_mqe_param
-+ *
-+ * @mqe_mode:
-+ */
-+struct mtk_cam_uapi_mqe_param {
-+	u32 mqe_mode;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_mobc_param
-+ */
-+struct mtk_cam_uapi_mobc_param {
-+	u32 mobc_offst0;
-+	u32 mobc_offst1;
-+	u32 mobc_offst2;
-+	u32 mobc_offst3;
-+	u32 mobc_gain0;
-+	u32 mobc_gain1;
-+	u32 mobc_gain2;
-+	u32 mobc_gain3;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_lsc_param
-+ */
-+struct mtk_cam_uapi_lsc_param {
-+	u32 lsc_ctl1;
-+	u32 lsc_ctl2;
-+	u32 lsc_ctl3;
-+	u32 lsc_lblock;
-+	u32 lsc_fblock;
-+	u32 lsc_ratio;
-+	u32 lsc_tpipe_ofst;
-+	u32 lsc_tpipe_size;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_sgg_param
-+ */
-+struct mtk_cam_uapi_sgg_param {
-+	u32 sgg_pgn;
-+	u32 sgg_gmrc_1;
-+	u32 sgg_gmrc_2;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_mbn_param
-+ */
-+struct mtk_cam_uapi_mbn_param {
-+	u32 mbn_pow;
-+	u32 mbn_dir;
-+	u32 mbn_spar_hei;
-+	u32 mbn_spar_pow;
-+	u32 mbn_spar_fac;
-+	u32 mbn_spar_con1;
-+	u32 mbn_spar_con0;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_cpi_param
-+ */
-+struct mtk_cam_uapi_cpi_param {
-+	u32 cpi_th;
-+	u32 cpi_pow;
-+	u32 cpi_dir;
-+	u32 cpi_spar_hei;
-+	u32 cpi_spar_pow;
-+	u32 cpi_spar_fac;
-+	u32 cpi_spar_con1;
-+	u32 cpi_spar_con0;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_lsci_param
-+ */
-+struct mtk_cam_uapi_lsci_param {
-+	u32 lsci_xsize;
-+	u32 lsci_ysize;
-+} __packed;
-+
-+/*
-+ * Common stuff for all statistics
-+ */
-+
-+#define MTK_CAM_UAPI_MAX_CORE_NUM (2)
-+
-+/*
-+ * struct mtk_cam_uapi_pipeline_config - pipeline configuration
-+ *
-+ * @num_of_core: The number of isp cores
-+ */
-+struct mtk_cam_uapi_pipeline_config {
-+	u32	num_of_core;
-+	struct	mtk_cam_uapi_meta_size core_data_size;
-+	u32	core_pxl_mode_lg2;
-+} __packed;
-+
-+/*
-+ *  A U T O  E X P O S U R E
-+ */
-+
-+/* please check the size of MTK_CAM_AE_HIST_MAX_BIN*/
-+#define MTK_CAM_UAPI_AE_STATS_HIST_MAX_BIN (1024)
-+
-+/*
-+ *  A E  A N D   A W B
-+ */
-+
-+#define MTK_CAM_UAPI_AAO_BLK_SIZE (32)
-+#define MTK_CAM_UAPI_AAO_MAX_BLK_X (128)
-+#define MTK_CAM_UAPI_AAO_MAX_BLK_Y (128)
-+#define MTK_CAM_UAPI_AAO_MAX_BUF_SIZE (MTK_CAM_UAPI_AAO_BLK_SIZE \
-+					* MTK_CAM_UAPI_AAO_MAX_BLK_X \
-+					* MTK_CAM_UAPI_AAO_MAX_BLK_Y)
-+
-+#define MTK_CAM_UAPI_AHO_BLK_SIZE (3)
-+#define MTK_CAM_UAPI_AAHO_HIST_SIZE  (6 * 1024 * MTK_CAM_UAPI_AHO_BLK_SIZE \
-+					+ 14 * 256 * MTK_CAM_UAPI_AHO_BLK_SIZE)
-+#define MTK_CAM_UAPI_AAHO_MAX_BUF_SIZE  (MTK_CAM_UAPI_MAX_CORE_NUM * \
-+					MTK_CAM_UAPI_AAHO_HIST_SIZE)
-+
-+/*
-+ * struct mtk_cam_uapi_ae_awb_stats - statistics of ae and awb
-+ *
-+ * @aao_buf:       The buffer for AAHO statistic hardware output.
-+ *        The maximum size of the buffer is defined with
-+ *        MTK_CAM_UAPI_AAO_MAX_BUF_SIZE
-+ * @aaho_buf:      The buffer for AAHO statistic hardware output.
-+ *        The maximum size of the buffer is defined with
-+ *        MTK_CAM_UAPI_AAHO_MAX_BUF_SIZE.
-+ *
-+ * This is the AE and AWB statistic returned to user. From  our hardware's
-+ * point of view, we can't separate the AE and AWB output result, so I use
-+ * a struct to retutn them.
-+ */
-+struct mtk_cam_uapi_ae_awb_stats {
-+	u32 awb_stat_en_status;
-+	u32 awb_qbn_acc;
-+	u32 ae_stat_en_status;
-+	struct mtk_cam_uapi_meta_hw_buf aao_buf;
-+	struct mtk_cam_uapi_meta_hw_buf aaho_buf;
-+} __packed;
-+
-+/*
-+ *  A U T O  F O C U S
-+ */
-+
-+#define MTK_CAM_UAPI_AFO_BLK_SIZ    (32)
-+#define MTK_CAM_UAPI_AFO_MAX_BLK_NUM (128 * 128)
-+#define MTK_CAM_UAPI_AFO_MAX_BUF_SIZE   (MTK_CAM_UAPI_AFO_BLK_SIZ \
-+						* MTK_CAM_UAPI_AFO_MAX_BLK_NUM)
-+
-+/*
-+ * struct mtk_cam_uapi_af_stats - af statistics
-+ *
-+ * @blk_num_x: block number of horizontal direction
-+ * @blk_num_y: block number of vertical direction
-+ * @afo_buf:    the buffer for AAHO statistic hardware output. The maximum
-+ *      size of the buffer is defined with
-+ *      MTK_CAM_UAPI_AFO_MAX_BUF_SIZE.
-+ */
-+struct mtk_cam_uapi_af_stats {
-+	u32 blk_num_x;
-+	u32 blk_num_y;
-+	struct mtk_cam_uapi_meta_hw_buf afo_buf;
-+} __packed;
-+
-+/*
-+ *  F L I C K E R
-+ */
-+
-+/* FLK's hardware output block size: 64 bits */
-+#define MTK_CAM_UAPI_FLK_BLK_SIZE (8)
-+
-+/* Maximum block size (each line) of MediaTek flicker statistic */
-+#define MTK_CAM_UAPI_FLK_MAX_STAT_BLK_NUM (6)
-+
-+/* Maximum height (in pixel) that driver can support */
-+#define MTK_CAM_UAPI_FLK_MAX_FRAME_HEIGHT (9000)
-+#define MTK_CAM_UAPI_FLK_MAX_BUF_SIZE                              \
-+	(MTK_CAM_UAPI_FLK_BLK_SIZE * MTK_CAM_UAPI_FLK_MAX_STAT_BLK_NUM * \
-+	MTK_CAM_UAPI_FLK_MAX_FRAME_HEIGHT)
-+
-+/*
-+ * struct mtk_cam_uapi_flk_stats
-+ *
-+ * @flko_buf: the buffer for FLKO statistic hardware output. The maximum
-+ *         size of the buffer is defined with MTK_CAM_UAPI_FLK_MAX_BUF_SIZE.
-+ */
-+struct mtk_cam_uapi_flk_stats {
-+	struct mtk_cam_uapi_meta_hw_buf flko_buf;
-+} __packed;
-+
-+/*
-+ *  T S F
-+ */
-+
-+#define MTK_CAM_UAPI_TSFSO_SIZE (40 * 30 * 3 * 4)
-+
-+/*
-+ * struct mtk_cam_uapi_tsf_stats - TSF statistic data
-+ *
-+ * @tsfo_buf: The buffer for tsf statistic hardware output. The buffer size
-+ *        is defined in MTK_CAM_UAPI_TSFSO_SIZE.
-+ *
-+ * This output is for MediaTek proprietary algorithm
-+ */
-+struct mtk_cam_uapi_tsf_stats {
-+	struct mtk_cam_uapi_meta_hw_buf tsfo_r1_buf;
-+	struct mtk_cam_uapi_meta_hw_buf tsfo_r2_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_pd_stats - statistics of pd
-+ *
-+ * @stats_src:     source width and heitgh of the statistics.
-+ * @stride:	   stride value used by
-+ * @pdo_buf:	   The buffer for PD statistic hardware output.
-+ *
-+ * This is the PD statistic returned to user.
-+ */
-+struct mtk_cam_uapi_pd_stats {
-+	struct	mtk_cam_uapi_meta_size stats_src;
-+	u32	stride;
-+	struct	mtk_cam_uapi_meta_hw_buf pdo_buf;
-+} __packed;
-+
-+struct mtk_cam_uapi_timestamp {
-+	u64 timestamp_buf[128];
-+} __packed;
-+
-+/*
-+ *  T O N E
-+ */
-+#define MTK_CAM_UAPI_LTMSO_SIZE ((37 * 12 * 9 + 258) * 8)
-+#define MTK_CAM_UAPI_TNCSO_SIZE (680 * 510 * 2)
-+#define MTK_CAM_UAPI_TNCSHO_SIZE (1544)
-+#define MTK_CAM_UAPI_TNCSBO_SIZE (3888)
-+#define MTK_CAM_UAPI_TNCSYO_SIZE (68)
-+
-+/*
-+ * struct mtk_cam_uapi_ltm_stats - Tone1 statistic data for
-+ *            MediaTek proprietary algorithm
-+ *
-+ * @ltmso_buf:  The buffer for ltm statistic hardware output. The buffer size
-+ *    is defined in MTK_CAM_UAPI_LTMSO_SIZE.
-+ * @blk_num_x: block number of horizontal direction
-+ * @blk_num_y:  block number of vertical direction
-+ */
-+struct mtk_cam_uapi_ltm_stats {
-+	struct mtk_cam_uapi_meta_hw_buf ltmso_buf;
-+	u8 blk_num_x;
-+	u8 blk_num_y;
-+	u8 rsv[2];
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tnc_stats - Tone2 statistic data for
-+ *                 MediaTek proprietary algorithm
-+ *
-+ * @tncso_buf: The buffer for tnc statistic hardware output. The buffer size
-+ *           is defined in MTK_CAM_UAPI_TNCSO_SIZE (680*510*2)
-+ */
-+struct mtk_cam_uapi_tnc_stats {
-+	struct mtk_cam_uapi_meta_hw_buf tncso_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tnch_stats - Tone3 statistic data for MediaTek
-+ *                                  proprietary algorithm
-+ *
-+ * @tncsho_buf: The buffer for tnch statistic hardware output. The buffer size
-+ *           is defined in MTK_CAM_UAPI_TNCSHO_SIZE (1544)
-+ */
-+struct mtk_cam_uapi_tnch_stats {
-+	struct mtk_cam_uapi_meta_hw_buf tncsho_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tncb_stats - Tone4 statistic data for MediaTek
-+ *                                  proprietary algorithm
-+ *
-+ * @tncsbo_buf: The buffer for tncb statistic hardware output. The buffer size
-+ *           is defined in MTK_CAM_UAPI_TNCSBO_SIZE (3888)
-+ */
-+struct mtk_cam_uapi_tncb_stats {
-+	struct mtk_cam_uapi_meta_hw_buf tncsbo_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tncy_stats - Tone3 statistic data for MediaTek
-+ *                                  proprietary algorithm
-+ *
-+ * @tncsyo_buf: The buffer for tncy statistic hardware output. The buffer size
-+ *           is defined in MTK_CAM_UAPI_TNCSYO_SIZE (68)
-+ */
-+struct mtk_cam_uapi_tncy_stats {
-+	struct mtk_cam_uapi_meta_hw_buf tncsyo_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_act_stats - act statistic data for MediaTek
-+ *                                  proprietary algorithm
-+ *
-+ * @actso_buf: The buffer for tncy statistic hardware output. The buffer size
-+ *           is defined in MTK_CAM_UAPI_ACTSO_SIZE (768)
-+ */
-+#define MTK_CAM_UAPI_ACTSO_SIZE (768)
-+struct mtk_cam_uapi_act_stats {
-+	struct mtk_cam_uapi_meta_hw_buf actso_buf;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_awb_param_prot - AWB parameters
-+ *
-+ * @rot_cos: rotation matrix (cos part)
-+ * @rot_sin: rotation matrix (sin part)
-+ *
-+ */
-+struct mtk_cam_uapi_awb_param_prot {
-+	s32 rot_cos;
-+	s32 rot_sin;
-+} __packed;
-+
-+/*
-+ *  T U N I N G S
-+ */
-+
-+/*
-+ * struct mtk_cam_uapi_bpc_param_prot - BPC parameters
-+ *
-+ */
-+#define MTK_CAM_BPCI_TABLE_SIZE (32)
-+struct mtk_cam_uapi_bpc_param_prot {
-+	u32 x_size;
-+	u32 y_size;
-+	u32 stride;
-+
-+	u8  table[MTK_CAM_BPCI_TABLE_SIZE];
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_drzs8t_param_prot
-+ *
-+ *  @tbl_shift: adjust the computed table
-+ *  @tbl_min: use to limit the min table
-+ */
-+struct mtk_cam_uapi_drzs8t_param_prot {
-+	u32 tbl_shift;
-+	u32 tbl_min;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_lsc_param_prot - LSC parameters
-+ *
-+ */
-+#define MTK_CAM_LSCI_TABLE_SIZE (32768)
-+struct mtk_cam_uapi_lsc_param_prot {
-+	u32 x_blk_num;
-+	u32 y_blk_num;
-+	u32 x_size;
-+	u32 y_size;
-+	u32 stride;
-+	u8 table[MTK_CAM_LSCI_TABLE_SIZE];
-+} __packed;
-+
-+/* *
-+ * struct mtk_cam_uapi_slk_param_prot - slk tuning setting from userspace
-+ *
-+ */
-+struct mtk_cam_uapi_slk_param_prot {
-+	u32 center_x;
-+	u32 center_y;
-+	u32 radius_0;
-+	u32 radius_1;
-+	u32 radius_2;
-+	u32 gain0;
-+	u32 gain1;
-+	u32 gain2;
-+	u32 gain3;
-+	u32 gain4;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_wb_param_prot - WB parameters
-+ *
-+ */
-+struct mtk_cam_uapi_wb_param_prot {
-+	u32 debug_info[39];
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_ltms_param_prot - LTMS parameters
-+ *
-+ *  @ratio_x_start: adjusted start point of width related to original width
-+ *  @ratio_y_start: adjusted start point of height related to original height
-+ *  @ratio_x_end: adjusted end point of width related to original width
-+ *  @ratio_y_end: adjusted end point of height related to original height
-+ */
-+struct mtk_cam_uapi_ltms_param_prot {
-+	u32 ltms_gamma_en;
-+	u32 ratio_x_start;
-+	u32 ratio_y_start;
-+	u32 ratio_x_end;
-+	u32 ratio_y_end;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_yuvo_param_prot - YUVO parameters
-+ *
-+ *  @drzh2n_fixed_down_ratio: down scale ratio
-+ */
-+struct mtk_cam_uapi_yuvo_param_prot {
-+	u32 drzh2n_fixed_down_ratio;
-+} __packed;
-+
-+/* The following sw setting are generated by script */
-+/*
-+ * struct mtk_cam_uapi_ccm_param_prot - CCM parameters *
-+ */
-+struct mtk_cam_uapi_ccm_param_prot {
-+	u32 ccm_acc;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_drzh2n_param_prot - DRZH2N parameters *
-+ */
-+struct mtk_cam_uapi_drzh2n_param_prot {
-+	u32 drzh2n_vert_tbl_sel;
-+	u32 drzh2n_hori_tbl_sel;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_drzs4n_param_prot - DRZS4N parameters *
-+ */
-+struct mtk_cam_uapi_drzs4n_param_prot {
-+	u32 drzs4n_vert_tbl_sel;
-+	u32 drzs4n_hori_tbl_sel;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_tncs_param_prot - TNCS parameters *
-+ */
-+struct mtk_cam_uapi_tncs_param_prot {
-+	u32 tncs_ggm_lnr;
-+	u32 tncs_ggm_end_var;
-+} __packed;
-+
-+/*
-+ * MediaTek camera bpc tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_bpc {
-+	u32 bpc_func_con;
-+	u32 rsv0[49];
-+} __packed;
-+
-+/*
-+ * MediaTek camera ccm tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_ccm {
-+	u32 ccm_cnv_1;
-+	u32 ccm_cnv_2;
-+	u32 ccm_cnv_3;
-+	u32 ccm_cnv_4;
-+	u32 ccm_cnv_5;
-+	u32 ccm_cnv_6;
-+} __packed;
-+
-+/*
-+ * MediaTek camera dm tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_dm {
-+	u32 rsv0;
-+	u32 dm_intp_nat;
-+	u32 rsv1[3];
-+	u32 dm_sl_ctl;
-+	u32 rsv2;
-+	u32 dm_nr_str;
-+	u32 dm_nr_act;
-+	u32 dm_hf_str;
-+	u32 dm_hf_act1;
-+	u32 dm_hf_act2;
-+	u32 dm_clip;
-+	u32 rsv3[8];
-+	u32 dm_ee;
-+	u32 rsv4[4];
-+} __packed;
-+
-+/*
-+ * MediaTek camera g2c tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_g2c {
-+	u32 g2c_conv_0a;
-+	u32 g2c_conv_0b;
-+	u32 g2c_conv_1a;
-+	u32 g2c_conv_1b;
-+	u32 g2c_conv_2a;
-+	u32 g2c_conv_2b;
-+} __packed;
-+
-+#define MTK_CAM_UAPI_GGM_LUT (256)
-+/*
-+ * MediaTek camera ggm tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_ggm {
-+	u32 ggm_lut[MTK_CAM_UAPI_GGM_LUT];
-+	u32 ggm_ctrl;
-+} __packed;
-+
-+/*
-+ * MediaTek camera lsc tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_lsc {
-+	u32 lsc_ratio;
-+} __packed;
-+
-+#define MTK_CAM_UAPI_LTM_CURVE_SIZE_2 (1728)
-+#define MTK_CAM_UAPI_LTM_CLP_SIZE_2 (108)
-+
-+/*
-+ * MediaTek camera ltm tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_ltm {
-+	u32 ltm_ctrl;
-+	u32 ltm_blk_num;
-+	u32 ltm_max_div;
-+	u32 ltm_clip;
-+	u32 ltm_cfg;
-+	u32 ltm_clip_th;
-+	u32 ltm_gain_map;
-+	u32 ltm_cvnode_grp0;
-+	u32 ltm_cvnode_grp1;
-+	u32 ltm_cvnode_grp2;
-+	u32 ltm_cvnode_grp3;
-+	u32 ltm_cvnode_grp4;
-+	u32 ltm_cvnode_grp5;
-+	u32 ltm_cvnode_grp6;
-+	u32 ltm_cvnode_grp7;
-+	u32 ltm_cvnode_grp8;
-+	u32 ltm_cvnode_grp9;
-+	u32 ltm_cvnode_grp10;
-+	u32 ltm_cvnode_grp11;
-+	u32 ltm_cvnode_grp12;
-+	u32 ltm_cvnode_grp13;
-+	u32 ltm_cvnode_grp14;
-+	u32 ltm_cvnode_grp15;
-+	u32 ltm_cvnode_grp16;
-+	u32 ltm_out_str;
-+	u32 ltm_act_win_x;
-+	u32 ltm_act_win_y;
-+	u32 ltmtc_curve[MTK_CAM_UAPI_LTM_CURVE_SIZE_2];
-+	u32 ltmtc_clp[MTK_CAM_UAPI_LTM_CLP_SIZE_2];
-+} __packed;
-+
-+/*
-+ * MediaTek camera ltms tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_ltms {
-+	u32 ltms_max_div;
-+	u32 ltms_blkhist_lb;
-+	u32 ltms_blkhist_mb;
-+	u32 ltms_blkhist_ub;
-+	u32 ltms_blkhist_int;
-+	u32 ltms_clip_th_cal;
-+	u32 ltms_clip_th_lb;
-+	u32 ltms_clip_th_hb;
-+	u32 ltms_glbhist_int;
-+} __packed;
-+
-+/*
-+ * MediaTek camera obc tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_obc {
-+	u32 obc_dbs;
-+	u32 obc_gray_bld_0;
-+	u32 obc_gray_bld_1;
-+	u32 obc_wbg_rb;
-+	u32 obc_wbg_g;
-+	u32 obc_wbig_rb;
-+	u32 obc_wbig_g;
-+	u32 obc_obg_rb;
-+	u32 obc_obg_g;
-+	u32 obc_offset_r;
-+	u32 obc_offset_gr;
-+	u32 obc_offset_gb;
-+	u32 obc_offset_b;
-+	u32 rsv1[2];
-+} __packed;
-+
-+/*
-+ * MediaTek camera tsfs tuning setting
-+ */
-+struct mtk_cam_uapi_regmap_raw_tsfs {
-+	u32 tsfs_dgain;
-+} __packed;
-+
-+/*
-+ * Usage example: To print value of "MTK_CAM_BPC_BPC_FUNC_CON_BPC_BPC_LUT_BIT_EXTEND_EN" in "val"
-+ * > printf("%x", GET_MTK_CAM(val, MTK_CAM_BPC_BPC_FUNC_CON_BPC_BPC_LUT_BIT_EXTEND_EN));
-+ */
-+#define GET_MTK_CAM(val, field) \
-+	(((val) & field##_MASK) >> field##_SHIFT)
-+/*
-+ * Usage example: To set "val_of_bpc_lut_bit_extend_en" to bits
-+ * of "MTK_CAM_BPC_BPC_FUNC_CON_BPC_BPC_LUT_BIT_EXTEND_EN" in "val"
-+ * > val = SET_MTK_CAM(val, MTK_CAM_BPC_BPC_FUNC_CON_BPC_BPC_LUT_BIT_EXTEND_EN,
-+ * val_of_bpc_lut_bit_extend_en);
-+ */
-+#define SET_MTK_CAM(val, field, set_val) \
-+	(((val) & ~field##_MASK) | (((set_val) << field##_SHIFT) & field##_MASK))
-+
-+/*
-+ * Bit Feild of BPC_FUNC_CON: BPC_EN
-+ * MTK_CAM_BPC_FUNC_CON_BPC_EN: [31, 31]
-+ * Enable/disable for BPC Correction
-+ * 1'd1: enable the function
-+ * 1'd0: disable the function
-+ */
-+#define MTK_CAM_BPC_FUNC_CON_BPC_EN_MASK   0x80000000
-+#define MTK_CAM_BPC_FUNC_CON_BPC_EN_SHIFT  31
-+
-+/*
-+ * Bit Feild of BPC_FUNC_CON: BPC_CT_EN
-+ * MTK_CAM_BPC_FUNC_CON_BPC_CT_EN: [30, 30]
-+ * Enable/disable for Cross-Talk compensation
-+ * 1'd1: enable
-+ * 1'd0: disable
-+ */
-+#define MTK_CAM_BPC_FUNC_CON_BPC_CT_EN_MASK   0x40000000
-+#define MTK_CAM_BPC_FUNC_CON_BPC_CT_EN_SHIFT  30
-+
-+/*
-+ * Bit Feild of BPC_FUNC_CON: BPC_PDC_EN
-+ * MTK_CAM_BPC_FUNC_CON_BPC_PDC_EN: [29, 29]
-+ * Enable/disable for PDC correction
-+ * 1'd1: enable
-+ * 1'd0: disable
-+ */
-+#define MTK_CAM_BPC_FUNC_CON_BPC_PDC_EN_MASK   0x20000000
-+#define MTK_CAM_BPC_FUNC_CON_BPC_PDC_EN_SHIFT  29
-+
-+/*
-+ * Bit Feild of BPC_FUNC_CON: BPC_LUT_EN
-+ * MTK_CAM_BPC_FUNC_CON_BPC_LUT_EN: [28, 28]
-+ * Enable table lookup
-+ * 1'd1:  enable BPC with default table mode
-+ * 1'd0:  disable BPC with default table mode
-+ */
-+#define MTK_CAM_BPC_FUNC_CON_BPC_LUT_EN_MASK   0x10000000
-+#define MTK_CAM_BPC_FUNC_CON_BPC_LUT_EN_SHIFT  28
-+
-+/*
-+ * Bit Feild of BPC_FUNC_CON: BPC_LUT_BIT_EXTEND_EN
-+ * MTK_CAM_BPC_FUNC_CON_BPC_LUT_BIT_EXTEND_EN: [0, 0]
-+ * Enable table 24 bits mode
-+ * 1'd1: Table format to be 24 bits
-+ * 1'd0: @ the original format, tbale to be 16 bits mode
-+ */
-+#define MTK_CAM_BPC_FUNC_CON_BPC_LUT_BIT_EXTEND_EN_MASK   0x00000001
-+#define MTK_CAM_BPC_FUNC_CON_BPC_LUT_BIT_EXTEND_EN_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_1: CCM_CNV_01
-+ * MTK_CAM_CCM_CNV_1_CCM_CNV_01: [16, 28]
-+ * matrix 0,1 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_1_CCM_CNV_01_MASK   0x1fff0000
-+#define MTK_CAM_CCM_CNV_1_CCM_CNV_01_SHIFT  16
-+
-+/*
-+ * Bit Feild of CCM_CNV_1: CCM_CNV_00
-+ * MTK_CAM_CCM_CNV_1_CCM_CNV_00: [0, 12]
-+ * matrix 0,0 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_1_CCM_CNV_00_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_1_CCM_CNV_00_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_2: CCM_CNV_02
-+ * MTK_CAM_CCM_CNV_2_CCM_CNV_02: [0, 12]
-+ * matrix 0,2 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_2_CCM_CNV_02_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_2_CCM_CNV_02_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_3: CCM_CNV_11
-+ * MTK_CAM_CCM_CNV_3_CCM_CNV_11: [16, 28]
-+ * matrix 1,1 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_3_CCM_CNV_11_MASK   0x1fff0000
-+#define MTK_CAM_CCM_CNV_3_CCM_CNV_11_SHIFT  16
-+
-+/*
-+ * Bit Feild of CCM_CNV_3: CCM_CNV_10
-+ * MTK_CAM_CCM_CNV_3_CCM_CNV_10: [0, 12]
-+ * matrix 1,0 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_3_CCM_CNV_10_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_3_CCM_CNV_10_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_4: CCM_CNV_12
-+ * MTK_CAM_CCM_CNV_4_CCM_CNV_12: [0, 12]
-+ * matrix 1,2 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_4_CCM_CNV_12_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_4_CCM_CNV_12_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_5: CCM_CNV_21
-+ * MTK_CAM_CCM_CNV_5_CCM_CNV_21: [16, 28]
-+ * matrix 2,1 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_5_CCM_CNV_21_MASK   0x1fff0000
-+#define MTK_CAM_CCM_CNV_5_CCM_CNV_21_SHIFT  16
-+
-+/*
-+ * Bit Feild of CCM_CNV_5: CCM_CNV_20
-+ * MTK_CAM_CCM_CNV_5_CCM_CNV_20: [0, 12]
-+ * matrix 2,0 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_5_CCM_CNV_20_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_5_CCM_CNV_20_SHIFT  0
-+
-+/*
-+ * Bit Feild of CCM_CNV_6: CCM_CNV_22
-+ * MTK_CAM_CCM_CNV_6_CCM_CNV_22: [0, 12]
-+ * matrix 2,2 coefficient
-+ */
-+#define MTK_CAM_CCM_CNV_6_CCM_CNV_22_MASK   0x00001fff
-+#define MTK_CAM_CCM_CNV_6_CCM_CNV_22_SHIFT  0
-+
-+/*
-+ * Bit Feild of DM_INTP_NAT: DM_L0_OFST
-+ * MTK_CAM_DM_INTP_NAT_DM_L0_OFST: [12, 19]
-+ * luma blending LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_INTP_NAT_DM_L0_OFST_MASK   0x000ff000
-+#define MTK_CAM_DM_INTP_NAT_DM_L0_OFST_SHIFT  12
-+
-+/*
-+ * Bit Feild of DM_SL_CTL: DM_SL_Y1
-+ * MTK_CAM_DM_SL_CTL_DM_SL_Y1: [14, 21]
-+ * shading link modulation LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_SL_CTL_DM_SL_Y1_MASK   0x003fc000
-+#define MTK_CAM_DM_SL_CTL_DM_SL_Y1_SHIFT  14
-+
-+/*
-+ * Bit Feild of DM_SL_CTL: DM_SL_Y2
-+ * MTK_CAM_DM_SL_CTL_DM_SL_Y2: [6, 13]
-+ * shading link modulation LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_SL_CTL_DM_SL_Y2_MASK   0x00003fc0
-+#define MTK_CAM_DM_SL_CTL_DM_SL_Y2_SHIFT  6
-+
-+/*
-+ * Bit Feild of DM_SL_CTL: DM_SL_EN
-+ * MTK_CAM_DM_SL_CTL_DM_SL_EN: [0, 0]
-+ * shading link enable
-+ * 0: disable SL
-+ * 1: enable SL
-+ */
-+#define MTK_CAM_DM_SL_CTL_DM_SL_EN_MASK   0x00000001
-+#define MTK_CAM_DM_SL_CTL_DM_SL_EN_SHIFT  0
-+
-+/*
-+ * Bit Feild of DM_NR_STR: DM_N0_STR
-+ * MTK_CAM_DM_NR_STR_DM_N0_STR: [10, 14]
-+ * noise reduction strength
-+ * 0 ~ 16
-+ */
-+#define MTK_CAM_DM_NR_STR_DM_N0_STR_MASK   0x00007c00
-+#define MTK_CAM_DM_NR_STR_DM_N0_STR_SHIFT  10
-+
-+/*
-+ * Bit Feild of DM_NR_ACT: DM_N0_OFST
-+ * MTK_CAM_DM_NR_ACT_DM_N0_OFST: [24, 31]
-+ * noise reduction activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_NR_ACT_DM_N0_OFST_MASK   0xff000000
-+#define MTK_CAM_DM_NR_ACT_DM_N0_OFST_SHIFT  24
-+
-+/*
-+ * Bit Feild of DM_HF_STR: DM_HA_STR
-+ * MTK_CAM_DM_HF_STR_DM_HA_STR: [27, 31]
-+ * overall high frequency strength
-+ * 0 ~ 31
-+ */
-+#define MTK_CAM_DM_HF_STR_DM_HA_STR_MASK   0xf8000000
-+#define MTK_CAM_DM_HF_STR_DM_HA_STR_SHIFT  27
-+
-+/*
-+ * Bit Feild of DM_HF_STR: DM_H1_GN
-+ * MTK_CAM_DM_HF_STR_DM_H1_GN: [22, 26]
-+ * individual high frequency strength
-+ * 0 ~ 31
-+ */
-+#define MTK_CAM_DM_HF_STR_DM_H1_GN_MASK   0x07c00000
-+#define MTK_CAM_DM_HF_STR_DM_H1_GN_SHIFT  22
-+
-+/*
-+ * Bit Feild of DM_HF_STR: DM_H2_GN
-+ * MTK_CAM_DM_HF_STR_DM_H2_GN: [17, 21]
-+ * individual high frequency strength
-+ * 0 ~ 31
-+ */
-+#define MTK_CAM_DM_HF_STR_DM_H2_GN_MASK   0x003e0000
-+#define MTK_CAM_DM_HF_STR_DM_H2_GN_SHIFT  17
-+
-+/*
-+ * Bit Feild of DM_HF_STR: DM_H3_GN
-+ * MTK_CAM_DM_HF_STR_DM_H3_GN: [12, 16]
-+ * individual high frequency strength
-+ * 0 ~ 31
-+ */
-+#define MTK_CAM_DM_HF_STR_DM_H3_GN_MASK   0x0001f000
-+#define MTK_CAM_DM_HF_STR_DM_H3_GN_SHIFT  12
-+
-+/*
-+ * Bit Feild of DM_HF_ACT1: DM_H1_LWB
-+ * MTK_CAM_DM_HF_ACT1_DM_H1_LWB: [24, 31]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT1_DM_H1_LWB_MASK   0xff000000
-+#define MTK_CAM_DM_HF_ACT1_DM_H1_LWB_SHIFT  24
-+
-+/*
-+ * Bit Feild of DM_HF_ACT1: DM_H1_UPB
-+ * MTK_CAM_DM_HF_ACT1_DM_H1_UPB: [16, 23]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT1_DM_H1_UPB_MASK   0x00ff0000
-+#define MTK_CAM_DM_HF_ACT1_DM_H1_UPB_SHIFT  16
-+
-+/*
-+ * Bit Feild of DM_HF_ACT1: DM_H2_LWB
-+ * MTK_CAM_DM_HF_ACT1_DM_H2_LWB: [8, 15]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT1_DM_H2_LWB_MASK   0x0000ff00
-+#define MTK_CAM_DM_HF_ACT1_DM_H2_LWB_SHIFT  8
-+
-+/*
-+ * Bit Feild of DM_HF_ACT1: DM_H2_UPB
-+ * MTK_CAM_DM_HF_ACT1_DM_H2_UPB: [0, 7]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT1_DM_H2_UPB_MASK   0x000000ff
-+#define MTK_CAM_DM_HF_ACT1_DM_H2_UPB_SHIFT  0
-+
-+/*
-+ * Bit Feild of DM_HF_ACT2: DM_H3_LWB
-+ * MTK_CAM_DM_HF_ACT2_DM_H3_LWB: [16, 23]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT2_DM_H3_LWB_MASK   0x00ff0000
-+#define MTK_CAM_DM_HF_ACT2_DM_H3_LWB_SHIFT  16
-+
-+/*
-+ * Bit Feild of DM_HF_ACT2: DM_H3_UPB
-+ * MTK_CAM_DM_HF_ACT2_DM_H3_UPB: [8, 15]
-+ * high frequency activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_HF_ACT2_DM_H3_UPB_MASK   0x0000ff00
-+#define MTK_CAM_DM_HF_ACT2_DM_H3_UPB_SHIFT  8
-+
-+/*
-+ * Bit Feild of DM_CLIP: DM_OV_TH
-+ * MTK_CAM_DM_CLIP_DM_OV_TH: [16, 23]
-+ * over/undershoot brightness LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_CLIP_DM_OV_TH_MASK   0x00ff0000
-+#define MTK_CAM_DM_CLIP_DM_OV_TH_SHIFT  16
-+
-+/*
-+ * Bit Feild of DM_CLIP: DM_UN_TH
-+ * MTK_CAM_DM_CLIP_DM_UN_TH: [8, 15]
-+ * over/undershoot brightness LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_CLIP_DM_UN_TH_MASK   0x0000ff00
-+#define MTK_CAM_DM_CLIP_DM_UN_TH_SHIFT  8
-+
-+/*
-+ * Bit Feild of DM_CLIP: DM_CLIP_TH
-+ * MTK_CAM_DM_CLIP_DM_CLIP_TH: [0, 7]
-+ * over/undershoot activity LUT
-+ * 0 ~ 255
-+ */
-+#define MTK_CAM_DM_CLIP_DM_CLIP_TH_MASK   0x000000ff
-+#define MTK_CAM_DM_CLIP_DM_CLIP_TH_SHIFT  0
-+
-+/*
-+ * Bit Feild of DM_EE: DM_HNEG_GN
-+ * MTK_CAM_DM_EE_DM_HNEG_GN: [5, 9]
-+ * edge enhancement negative gain
-+ * 0~16
-+ */
-+#define MTK_CAM_DM_EE_DM_HNEG_GN_MASK   0x000003e0
-+#define MTK_CAM_DM_EE_DM_HNEG_GN_SHIFT  5
-+
-+/*
-+ * Bit Feild of DM_EE: DM_HPOS_GN
-+ * MTK_CAM_DM_EE_DM_HPOS_GN: [0, 4]
-+ * edge enhancement positive gain
-+ * 0~16
-+ */
-+#define MTK_CAM_DM_EE_DM_HPOS_GN_MASK   0x0000001f
-+#define MTK_CAM_DM_EE_DM_HPOS_GN_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_0A: G2C_CNV_01
-+ * MTK_CAM_G2C_CONV_0A_G2C_CNV_01: [16, 26]
-+ * DIP RGB 2 YUV Matrix 0,1 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_0A_G2C_CNV_01_MASK   0x07ff0000
-+#define MTK_CAM_G2C_CONV_0A_G2C_CNV_01_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_0A: G2C_CNV_00
-+ * MTK_CAM_G2C_CONV_0A_G2C_CNV_00: [0, 10]
-+ * DIP RGB 2 YUV Matrix 0,0 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_0A_G2C_CNV_00_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_0A_G2C_CNV_00_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_0B: G2C_Y_OFST
-+ * MTK_CAM_G2C_CONV_0B_G2C_Y_OFST: [16, 30]
-+ * Y offset. Q1.10.0 (mobile) or Q1.14.0 (non-mobile)
-+ */
-+#define MTK_CAM_G2C_CONV_0B_G2C_Y_OFST_MASK   0x7fff0000
-+#define MTK_CAM_G2C_CONV_0B_G2C_Y_OFST_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_0B: G2C_CNV_02
-+ * MTK_CAM_G2C_CONV_0B_G2C_CNV_02: [0, 10]
-+ * DIP RGB 2 YUV Matrix 0,2 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_0B_G2C_CNV_02_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_0B_G2C_CNV_02_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_1A: G2C_CNV_11
-+ * MTK_CAM_G2C_CONV_1A_G2C_CNV_11: [16, 26]
-+ * DIP RGB 2 YUV Matrix 1,1 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_1A_G2C_CNV_11_MASK   0x07ff0000
-+#define MTK_CAM_G2C_CONV_1A_G2C_CNV_11_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_1A: G2C_CNV_10
-+ * MTK_CAM_G2C_CONV_1A_G2C_CNV_10: [0, 10]
-+ * DIP RGB 2 YUV Matrix 1,0 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_1A_G2C_CNV_10_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_1A_G2C_CNV_10_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_1B: G2C_U_OFST
-+ * MTK_CAM_G2C_CONV_1B_G2C_U_OFST: [16, 29]
-+ * U offset. Q1.9.0 (mobile) or Q1.13.0 (non-mobile)
-+ */
-+#define MTK_CAM_G2C_CONV_1B_G2C_U_OFST_MASK   0x3fff0000
-+#define MTK_CAM_G2C_CONV_1B_G2C_U_OFST_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_1B: G2C_CNV_12
-+ * MTK_CAM_G2C_CONV_1B_G2C_CNV_12: [0, 10]
-+ * DIP RGB 2 YUV Matrix 1,2 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_1B_G2C_CNV_12_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_1B_G2C_CNV_12_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_2A: G2C_CNV_21
-+ * MTK_CAM_G2C_CONV_2A_G2C_CNV_21: [16, 26]
-+ * DIP RGB 2 YUV Matrix 2,1 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_2A_G2C_CNV_21_MASK   0x07ff0000
-+#define MTK_CAM_G2C_CONV_2A_G2C_CNV_21_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_2A: G2C_CNV_20
-+ * MTK_CAM_G2C_CONV_2A_G2C_CNV_20: [0, 10]
-+ * DIP RGB 2 YUV Matrix 2,0 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_2A_G2C_CNV_20_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_2A_G2C_CNV_20_SHIFT  0
-+
-+/*
-+ * Bit Feild of G2C_CONV_2B: G2C_V_OFST
-+ * MTK_CAM_G2C_CONV_2B_G2C_V_OFST: [16, 29]
-+ * V offset. Q1.9.0 (mobile) or Q1.13.0 (non-mobile)
-+ */
-+#define MTK_CAM_G2C_CONV_2B_G2C_V_OFST_MASK   0x3fff0000
-+#define MTK_CAM_G2C_CONV_2B_G2C_V_OFST_SHIFT  16
-+
-+/*
-+ * Bit Feild of G2C_CONV_2B: G2C_CNV_22
-+ * MTK_CAM_G2C_CONV_2B_G2C_CNV_22: [0, 10]
-+ * DIP RGB 2 YUV Matrix 2,2 coefficient in Q1.1.9
-+ */
-+#define MTK_CAM_G2C_CONV_2B_G2C_CNV_22_MASK   0x000007ff
-+#define MTK_CAM_G2C_CONV_2B_G2C_CNV_22_SHIFT  0
-+
-+/*
-+ * Bit Feild of GGM_LUT: GGM_LUT
-+ * MTK_CAM_GGM_LUT_GGM_LUT: [0, 9]
-+ * Gamma table entry
-+ * Do NOT read/write this control register when GGM is
-+ * enabled (ISP pipeline processing is on-going) or output
-+ * data of GGM will be gated
-+ */
-+#define MTK_CAM_GGM_LUT_GGM_LUT_MASK   0x000003ff
-+#define MTK_CAM_GGM_LUT_GGM_LUT_SHIFT  0
-+
-+/*
-+ * Bit Feild of GGM_CTRL: GGM_LNR
-+ * MTK_CAM_GGM_CTRL_GGM_LNR: [0, 0]
-+ * Enable linear output
-+ */
-+#define MTK_CAM_GGM_CTRL_GGM_LNR_MASK   0x00000001
-+#define MTK_CAM_GGM_CTRL_GGM_LNR_SHIFT  0
-+
-+/*
-+ * Bit Feild of GGM_CTRL: GGM_END_VAR
-+ * MTK_CAM_GGM_CTRL_GGM_END_VAR: [1, 10]
-+ * end point value
-+ */
-+#define MTK_CAM_GGM_CTRL_GGM_END_VAR_MASK   0x000007fe
-+#define MTK_CAM_GGM_CTRL_GGM_END_VAR_SHIFT  1
-+
-+/*
-+ * Bit Feild of GGM_CTRL: GGM_RMP_VAR
-+ * MTK_CAM_GGM_CTRL_GGM_RMP_VAR: [16, 20]
-+ * 5-bit: can support mapping to 14-bit output, (RMP_VAR+out limiter)/1024
-+ */
-+#define MTK_CAM_GGM_CTRL_GGM_RMP_VAR_MASK   0x001f0000
-+#define MTK_CAM_GGM_CTRL_GGM_RMP_VAR_SHIFT  16
-+
-+/*
-+ * Bit Feild of LSC_RATIO: LSC_RA00
-+ * MTK_CAM_LSC_RATIO_LSC_RA00: [0, 5]
-+ * Shading ratio
-+ */
-+#define MTK_CAM_LSC_RATIO_LSC_RA00_MASK   0x0000003f
-+#define MTK_CAM_LSC_RATIO_LSC_RA00_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_MAX_DIV: LTMS_CLIP_TH_ALPHA_BASE
-+ * MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE: [0, 9]
-+ * Divider for Maxvalue
-+ */
-+#define MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE_MASK   0x000003ff
-+#define MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_MAX_DIV: LTMS_CLIP_TH_ALPHA_BASE_SHIFT_BIT
-+ * MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE_SHIFT_BIT: [16, 20]
-+ * Divider for Maxvalue
-+ */
-+#define MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE_SHIFT_BIT_MASK   0x001f0000
-+#define MTK_CAM_LTMS_MAX_DIV_LTMS_CLIP_TH_ALPHA_BASE_SHIFT_BIT_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTMS_BLKHIST_LB: LTMS_BLKHIST_LB
-+ * MTK_CAM_LTMS_BLKHIST_LB_LTMS_BLKHIST_LB: [0, 17]
-+ * block histogram low bound,
-+ * BLKHIST_UB>=BLKHIST_MB>=BLKHIST_LB
-+ */
-+#define MTK_CAM_LTMS_BLKHIST_LB_LTMS_BLKHIST_LB_MASK   0x0003ffff
-+#define MTK_CAM_LTMS_BLKHIST_LB_LTMS_BLKHIST_LB_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_BLKHIST_MB: LTMS_BLKHIST_MB
-+ * MTK_CAM_LTMS_BLKHIST_MB_LTMS_BLKHIST_MB: [0, 17]
-+ * block histogram middle bound,
-+ * BLKHIST_UB>=BLKHIST_MB>=BLKHIST_LB
-+ */
-+#define MTK_CAM_LTMS_BLKHIST_MB_LTMS_BLKHIST_MB_MASK   0x0003ffff
-+#define MTK_CAM_LTMS_BLKHIST_MB_LTMS_BLKHIST_MB_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_BLKHIST_UB: LTMS_BLKHIST_UB
-+ * MTK_CAM_LTMS_BLKHIST_UB_LTMS_BLKHIST_UB: [0, 17]
-+ * block histogram up bound,
-+ * BLKHIST_UB>=BLKHIST_MB>=BLKHIST_LB
-+ */
-+#define MTK_CAM_LTMS_BLKHIST_UB_LTMS_BLKHIST_UB_MASK   0x0003ffff
-+#define MTK_CAM_LTMS_BLKHIST_UB_LTMS_BLKHIST_UB_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_BLKHIST_INT: LTMS_BLKHIST_INT1
-+ * MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT1: [0, 13]
-+ * block histogram interval 1
-+ */
-+#define MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT1_MASK   0x00003fff
-+#define MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT1_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_BLKHIST_INT: LTMS_BLKHIST_INT2
-+ * MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT2: [16, 29]
-+ * block histogram interval 2
-+ */
-+#define MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT2_MASK   0x3fff0000
-+#define MTK_CAM_LTMS_BLKHIST_INT_LTMS_BLKHIST_INT2_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTMS_CLIP_TH_CAL: LTMS_CLP_HLTHD
-+ * MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_HLTHD: [0, 10]
-+ * control percentage of histogram to calculate clip_th, 10-bits precision.
-+ */
-+#define MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_HLTHD_MASK   0x000007ff
-+#define MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_HLTHD_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_CLIP_TH_CAL: LTMS_CLP_STARTBIN
-+ * MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_STARTBIN: [16, 23]
-+ * start bin of histogram.
-+ */
-+#define MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_STARTBIN_MASK   0x00ff0000
-+#define MTK_CAM_LTMS_CLIP_TH_CAL_LTMS_CLP_STARTBIN_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTMS_CLIP_TH_LB: LTMS_CLP_LB
-+ * MTK_CAM_LTMS_CLIP_TH_LB_LTMS_CLP_LB: [0, 21]
-+ * Low bound of clip threshold output.
-+ */
-+#define MTK_CAM_LTMS_CLIP_TH_LB_LTMS_CLP_LB_MASK   0x003fffff
-+#define MTK_CAM_LTMS_CLIP_TH_LB_LTMS_CLP_LB_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_CLIP_TH_HB: LTMS_CLP_HB
-+ * MTK_CAM_LTMS_CLIP_TH_HB_LTMS_CLP_HB: [0, 21]
-+ * High bound of clip threshold output.
-+ */
-+#define MTK_CAM_LTMS_CLIP_TH_HB_LTMS_CLP_HB_MASK   0x003fffff
-+#define MTK_CAM_LTMS_CLIP_TH_HB_LTMS_CLP_HB_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMS_GLBHIST_INT: LTMS_GLBHIST_INT
-+ * MTK_CAM_LTMS_GLBHIST_INT_LTMS_GLBHIST_INT: [0, 14]
-+ * Interval of global histogram
-+ */
-+#define MTK_CAM_LTMS_GLBHIST_INT_LTMS_GLBHIST_INT_MASK   0x00007fff
-+#define MTK_CAM_LTMS_GLBHIST_INT_LTMS_GLBHIST_INT_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMTC_CURVE: LTMTC_TONECURVE_LUT_L
-+ * MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_L: [0, 13]
-+ * SRAM_PING_PONG
-+ * [u8.6-bits]x12x9
-+ */
-+#define MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_L_MASK   0x00003fff
-+#define MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_L_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTMTC_CURVE: LTMTC_TONECURVE_LUT_H
-+ * MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_H: [16, 29]
-+ * SRAM_PING_PONG
-+ * [u8.6-bits]x12x9
-+ */
-+#define MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_H_MASK   0x3fff0000
-+#define MTK_CAM_LTMTC_CURVE_LTMTC_TONECURVE_LUT_H_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTMTC_CLP: LTMTC_TONECURVE_CLP
-+ * MTK_CAM_LTMTC_CLP_LTMTC_TONECURVE_CLP: [0, 23]
-+ * LTM block CT
-+ */
-+#define MTK_CAM_LTMTC_CLP_LTMTC_TONECURVE_CLP_MASK   0x00ffffff
-+#define MTK_CAM_LTMTC_CLP_LTMTC_TONECURVE_CLP_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CTRL: LTM_GAMMA_EN
-+ * MTK_CAM_LTM_CTRL_LTM_GAMMA_EN: [4, 4]
-+ * Enable gamma domain
-+ */
-+#define MTK_CAM_LTM_CTRL_LTM_GAMMA_EN_MASK   0x00000010
-+#define MTK_CAM_LTM_CTRL_LTM_GAMMA_EN_SHIFT  4
-+
-+/*
-+ * Bit Feild of LTM_CTRL: LTM_CURVE_CP_MODE
-+ * MTK_CAM_LTM_CTRL_LTM_CURVE_CP_MODE: [5, 5]
-+ * Mode of curve control point, [0]: 33 fixed cp, [1]: 16 XY cp
-+ */
-+#define MTK_CAM_LTM_CTRL_LTM_CURVE_CP_MODE_MASK   0x00000020
-+#define MTK_CAM_LTM_CTRL_LTM_CURVE_CP_MODE_SHIFT  5
-+
-+/*
-+ * Bit Feild of LTM_BLK_NUM: LTM_BLK_X_NUM
-+ * MTK_CAM_LTM_BLK_NUM_LTM_BLK_X_NUM: [0, 4]
-+ * block X number supports 2~12
-+ */
-+#define MTK_CAM_LTM_BLK_NUM_LTM_BLK_X_NUM_MASK   0x0000001f
-+#define MTK_CAM_LTM_BLK_NUM_LTM_BLK_X_NUM_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_BLK_NUM: LTM_BLK_Y_NUM
-+ * MTK_CAM_LTM_BLK_NUM_LTM_BLK_Y_NUM: [8, 12]
-+ * block Y number supports 2~9
-+ */
-+#define MTK_CAM_LTM_BLK_NUM_LTM_BLK_Y_NUM_MASK   0x00001f00
-+#define MTK_CAM_LTM_BLK_NUM_LTM_BLK_Y_NUM_SHIFT  8
-+
-+/*
-+ * Bit Feild of LTM_MAX_DIV: LTM_CLIP_TH_ALPHA_BASE
-+ * MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE: [0, 9]
-+ * Divider for Maxvalue
-+ */
-+#define MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE_MASK   0x000003ff
-+#define MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_MAX_DIV: LTM_CLIP_TH_ALPHA_BASE_SHIFT_BIT
-+ * MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE_SHIFT_BIT: [16, 20]
-+ * Divider for Maxvalue
-+ */
-+#define MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE_SHIFT_BIT_MASK   0x001f0000
-+#define MTK_CAM_LTM_MAX_DIV_LTM_CLIP_TH_ALPHA_BASE_SHIFT_BIT_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CLIP: LTM_GAIN_TH
-+ * MTK_CAM_LTM_CLIP_LTM_GAIN_TH: [0, 5]
-+ * Threshold to clip output gain
-+ */
-+#define MTK_CAM_LTM_CLIP_LTM_GAIN_TH_MASK   0x0000003f
-+#define MTK_CAM_LTM_CLIP_LTM_GAIN_TH_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CFG: LTM_ENGINE_EN
-+ * MTK_CAM_LTM_CFG_LTM_ENGINE_EN: [0, 0]
-+ * None
-+ */
-+#define MTK_CAM_LTM_CFG_LTM_ENGINE_EN_MASK   0x00000001
-+#define MTK_CAM_LTM_CFG_LTM_ENGINE_EN_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CFG: LTM_CG_DISABLE
-+ * MTK_CAM_LTM_CFG_LTM_CG_DISABLE: [4, 4]
-+ * None
-+ */
-+#define MTK_CAM_LTM_CFG_LTM_CG_DISABLE_MASK   0x00000010
-+#define MTK_CAM_LTM_CFG_LTM_CG_DISABLE_SHIFT  4
-+
-+/*
-+ * Bit Feild of LTM_CFG: LTM_CHKSUM_EN
-+ * MTK_CAM_LTM_CFG_LTM_CHKSUM_EN: [28, 28]
-+ * None
-+ */
-+#define MTK_CAM_LTM_CFG_LTM_CHKSUM_EN_MASK   0x10000000
-+#define MTK_CAM_LTM_CFG_LTM_CHKSUM_EN_SHIFT  28
-+
-+/*
-+ * Bit Feild of LTM_CFG: LTM_CHKSUM_SEL
-+ * MTK_CAM_LTM_CFG_LTM_CHKSUM_SEL: [29, 30]
-+ * None
-+ */
-+#define MTK_CAM_LTM_CFG_LTM_CHKSUM_SEL_MASK   0x60000000
-+#define MTK_CAM_LTM_CFG_LTM_CHKSUM_SEL_SHIFT  29
-+
-+/*
-+ * Bit Feild of LTM_CLIP_TH: LTM_CLIP_TH
-+ * MTK_CAM_LTM_CLIP_TH_LTM_CLIP_TH: [0, 23]
-+ * clipping threshold, enabled if #define LTM_USE_PREVIOUS_MAXVALUE=1
-+ */
-+#define MTK_CAM_LTM_CLIP_TH_LTM_CLIP_TH_MASK   0x00ffffff
-+#define MTK_CAM_LTM_CLIP_TH_LTM_CLIP_TH_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CLIP_TH: LTM_WGT_BSH
-+ * MTK_CAM_LTM_CLIP_TH_LTM_WGT_BSH: [24, 27]
-+ * rightward bit shift for weighting data
-+ */
-+#define MTK_CAM_LTM_CLIP_TH_LTM_WGT_BSH_MASK   0x0f000000
-+#define MTK_CAM_LTM_CLIP_TH_LTM_WGT_BSH_SHIFT  24
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_MAP_LOG_EN
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_MAP_LOG_EN: [0, 0]
-+ * switch for map log
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_MAP_LOG_EN_MASK   0x00000001
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_MAP_LOG_EN_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_WGT_LOG_EN
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_WGT_LOG_EN: [1, 1]
-+ * switch for weight log
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_WGT_LOG_EN_MASK   0x00000002
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_WGT_LOG_EN_SHIFT  1
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_NONTRAN_MAP_TYPE
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_NONTRAN_MAP_TYPE: [4, 7]
-+ * type of nontran map
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_NONTRAN_MAP_TYPE_MASK   0x000000f0
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_NONTRAN_MAP_TYPE_SHIFT  4
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_TRAN_MAP_TYPE
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_MAP_TYPE: [8, 11]
-+ * type of tran map
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_MAP_TYPE_MASK   0x00000f00
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_MAP_TYPE_SHIFT  8
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_TRAN_WGT_TYPE
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT_TYPE: [12, 13]
-+ * type of tran weight
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT_TYPE_MASK   0x00003000
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT_TYPE_SHIFT  12
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_TRAN_WGT
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT: [16, 20]
-+ * static tran weight
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT_MASK   0x001f0000
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_TRAN_WGT_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_GAIN_MAP: LTM_RANGE_SCL
-+ * MTK_CAM_LTM_GAIN_MAP_LTM_RANGE_SCL: [24, 29]
-+ * scale of maxTran
-+ */
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_RANGE_SCL_MASK   0x3f000000
-+#define MTK_CAM_LTM_GAIN_MAP_LTM_RANGE_SCL_SHIFT  24
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP0: LTM_CVNODE_0
-+ * MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_0: [0, 11]
-+ * cvnode-0 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_0_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_0_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP0: LTM_CVNODE_1
-+ * MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_1: [16, 27]
-+ * cvnode-1 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_1_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP0_LTM_CVNODE_1_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP1: LTM_CVNODE_2
-+ * MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_2: [0, 11]
-+ * cvnode-2 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_2_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_2_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP1: LTM_CVNODE_3
-+ * MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_3: [16, 27]
-+ * cvnode-3 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_3_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP1_LTM_CVNODE_3_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP2: LTM_CVNODE_4
-+ * MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_4: [0, 11]
-+ * cvnode-4 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_4_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_4_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP2: LTM_CVNODE_5
-+ * MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_5: [16, 27]
-+ * cvnode-5 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_5_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP2_LTM_CVNODE_5_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP3: LTM_CVNODE_6
-+ * MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_6: [0, 11]
-+ * cvnode-6 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_6_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_6_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP3: LTM_CVNODE_7
-+ * MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_7: [16, 27]
-+ * cvnode-7 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_7_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP3_LTM_CVNODE_7_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP4: LTM_CVNODE_8
-+ * MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_8: [0, 11]
-+ * cvnode-8 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_8_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_8_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP4: LTM_CVNODE_9
-+ * MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_9: [16, 27]
-+ * cvnode-9 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_9_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP4_LTM_CVNODE_9_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP5: LTM_CVNODE_10
-+ * MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_10: [0, 11]
-+ * cvnode-10 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_10_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_10_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP5: LTM_CVNODE_11
-+ * MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_11: [16, 27]
-+ * cvnode-11 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_11_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP5_LTM_CVNODE_11_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP6: LTM_CVNODE_12
-+ * MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_12: [0, 11]
-+ * cvnode-12 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_12_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_12_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP6: LTM_CVNODE_13
-+ * MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_13: [16, 27]
-+ * cvnode-13 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_13_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP6_LTM_CVNODE_13_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP7: LTM_CVNODE_14
-+ * MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_14: [0, 11]
-+ * cvnode-14 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_14_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_14_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP7: LTM_CVNODE_15
-+ * MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_15: [16, 27]
-+ * cvnode-15 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_15_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP7_LTM_CVNODE_15_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP8: LTM_CVNODE_16
-+ * MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_16: [0, 11]
-+ * cvnode-16 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_16_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_16_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP8: LTM_CVNODE_17
-+ * MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_17: [16, 27]
-+ * cvnode-17 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_17_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP8_LTM_CVNODE_17_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP9: LTM_CVNODE_18
-+ * MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_18: [0, 11]
-+ * cvnode-18 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_18_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_18_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP9: LTM_CVNODE_19
-+ * MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_19: [16, 27]
-+ * cvnode-19 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_19_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP9_LTM_CVNODE_19_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP10: LTM_CVNODE_20
-+ * MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_20: [0, 11]
-+ * cvnode-20 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_20_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_20_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP10: LTM_CVNODE_21
-+ * MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_21: [16, 27]
-+ * cvnode-21 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_21_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP10_LTM_CVNODE_21_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP11: LTM_CVNODE_22
-+ * MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_22: [0, 11]
-+ * cvnode-22 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_22_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_22_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP11: LTM_CVNODE_23
-+ * MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_23: [16, 27]
-+ * cvnode-23 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_23_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP11_LTM_CVNODE_23_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP12: LTM_CVNODE_24
-+ * MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_24: [0, 11]
-+ * cvnode-24 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_24_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_24_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP12: LTM_CVNODE_25
-+ * MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_25: [16, 27]
-+ * cvnode-25 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_25_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP12_LTM_CVNODE_25_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP13: LTM_CVNODE_26
-+ * MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_26: [0, 11]
-+ * cvnode-26 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_26_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_26_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP13: LTM_CVNODE_27
-+ * MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_27: [16, 27]
-+ * cvnode-27 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_27_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP13_LTM_CVNODE_27_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP14: LTM_CVNODE_28
-+ * MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_28: [0, 11]
-+ * cvnode-28 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_28_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_28_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP14: LTM_CVNODE_29
-+ * MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_29: [16, 27]
-+ * cvnode-29 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_29_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP14_LTM_CVNODE_29_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP15: LTM_CVNODE_30
-+ * MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_30: [0, 11]
-+ * cvnode-30 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_30_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_30_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP15: LTM_CVNODE_31
-+ * MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_31: [16, 27]
-+ * cvnode-31 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_31_MASK   0x0fff0000
-+#define MTK_CAM_LTM_CVNODE_GRP15_LTM_CVNODE_31_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_CVNODE_GRP16: LTM_CVNODE_32
-+ * MTK_CAM_LTM_CVNODE_GRP16_LTM_CVNODE_32: [0, 11]
-+ * cvnode-32 for gain map
-+ */
-+#define MTK_CAM_LTM_CVNODE_GRP16_LTM_CVNODE_32_MASK   0x00000fff
-+#define MTK_CAM_LTM_CVNODE_GRP16_LTM_CVNODE_32_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_OUT_STR: LTM_OUT_STR
-+ * MTK_CAM_LTM_OUT_STR_LTM_OUT_STR: [0, 4]
-+ * output strength
-+ */
-+#define MTK_CAM_LTM_OUT_STR_LTM_OUT_STR_MASK   0x0000001f
-+#define MTK_CAM_LTM_OUT_STR_LTM_OUT_STR_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_ACT_WIN_X: LTM_ACT_WIN_X_START
-+ * MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_START: [0, 15]
-+ * Horizontal setting for active window of AE debug
-+ */
-+#define MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_START_MASK   0x0000ffff
-+#define MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_START_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_ACT_WIN_X: LTM_ACT_WIN_X_END
-+ * MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_END: [16, 31]
-+ * Horizontal setting for active window of AE debug
-+ */
-+#define MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_END_MASK   0xffff0000
-+#define MTK_CAM_LTM_ACT_WIN_X_LTM_ACT_WIN_X_END_SHIFT  16
-+
-+/*
-+ * Bit Feild of LTM_ACT_WIN_Y: LTM_ACT_WIN_Y_START
-+ * MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_START: [0, 15]
-+ * Vertical setting for active window of AE debug
-+ */
-+#define MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_START_MASK   0x0000ffff
-+#define MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_START_SHIFT  0
-+
-+/*
-+ * Bit Feild of LTM_ACT_WIN_Y: LTM_ACT_WIN_Y_END
-+ * MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_END: [16, 31]
-+ * Vertical setting for active window of AE debug
-+ */
-+#define MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_END_MASK   0xffff0000
-+#define MTK_CAM_LTM_ACT_WIN_Y_LTM_ACT_WIN_Y_END_SHIFT  16
-+
-+/*
-+ * Bit Feild of OBC_DBS: OBC_DBS_RATIO
-+ * MTK_CAM_OBC_DBS_OBC_DBS_RATIO: [0, 4]
-+ * Ratio of "bias" being eliminated
-+ */
-+#define MTK_CAM_OBC_DBS_OBC_DBS_RATIO_MASK   0x0000001f
-+#define MTK_CAM_OBC_DBS_OBC_DBS_RATIO_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_DBS: OBC_POSTTUNE_EN
-+ * MTK_CAM_OBC_DBS_OBC_POSTTUNE_EN: [8, 8]
-+ * Enable gray-blending and LUT-subtraction processing
-+ */
-+#define MTK_CAM_OBC_DBS_OBC_POSTTUNE_EN_MASK   0x00000100
-+#define MTK_CAM_OBC_DBS_OBC_POSTTUNE_EN_SHIFT  8
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_0: OBC_LUMA_MODE
-+ * MTK_CAM_OBC_GRAY_BLD_0_OBC_LUMA_MODE: [0, 0]
-+ * Selection between max mode or mean mode for luma computation
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_LUMA_MODE_MASK   0x00000001
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_LUMA_MODE_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_0: OBC_GRAY_MODE
-+ * MTK_CAM_OBC_GRAY_BLD_0_OBC_GRAY_MODE: [1, 2]
-+ * Method of gray value computation
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_GRAY_MODE_MASK   0x00000006
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_GRAY_MODE_SHIFT  1
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_0: OBC_NORM_BIT
-+ * MTK_CAM_OBC_GRAY_BLD_0_OBC_NORM_BIT: [3, 7]
-+ * Data scale to be normalized to 12-bit
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_NORM_BIT_MASK   0x000000f8
-+#define MTK_CAM_OBC_GRAY_BLD_0_OBC_NORM_BIT_SHIFT  3
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_1: OBC_BLD_MXRT
-+ * MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_MXRT: [0, 7]
-+ * (normal and LE)Maximum weight for gray blending
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_MXRT_MASK   0x000000ff
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_MXRT_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_1: OBC_BLD_LOW
-+ * MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_LOW: [8, 19]
-+ * (normal and LE)Luma level below which the gray value is
-+ * bleneded with the specified maximum weight.
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_LOW_MASK   0x000fff00
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_LOW_SHIFT  8
-+
-+/*
-+ * Bit Feild of OBC_GRAY_BLD_1: OBC_BLD_SLP
-+ * MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_SLP: [20, 31]
-+ * (normal and LE)Slope of the blending ratio curve between zero and maximum weight.
-+ */
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_SLP_MASK   0xfff00000
-+#define MTK_CAM_OBC_GRAY_BLD_1_OBC_BLD_SLP_SHIFT  20
-+
-+/*
-+ * Bit Feild of OBC_WBG_RB: OBC_PGN_R
-+ * MTK_CAM_OBC_WBG_RB_OBC_PGN_R: [0, 12]
-+ * WB gain for R channel
-+ */
-+#define MTK_CAM_OBC_WBG_RB_OBC_PGN_R_MASK   0x00001fff
-+#define MTK_CAM_OBC_WBG_RB_OBC_PGN_R_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_WBG_RB: OBC_PGN_B
-+ * MTK_CAM_OBC_WBG_RB_OBC_PGN_B: [16, 28]
-+ * WB gain for R channel
-+ */
-+#define MTK_CAM_OBC_WBG_RB_OBC_PGN_B_MASK   0x1fff0000
-+#define MTK_CAM_OBC_WBG_RB_OBC_PGN_B_SHIFT  16
-+
-+/*
-+ * Bit Feild of OBC_WBG_G: OBC_PGN_G
-+ * MTK_CAM_OBC_WBG_G_OBC_PGN_G: [0, 12]
-+ * WB gain for G channel
-+ */
-+#define MTK_CAM_OBC_WBG_G_OBC_PGN_G_MASK   0x00001fff
-+#define MTK_CAM_OBC_WBG_G_OBC_PGN_G_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_WBIG_RB: OBC_IVGN_R
-+ * MTK_CAM_OBC_WBIG_RB_OBC_IVGN_R: [0, 9]
-+ * Inverse WB gain for R channel
-+ */
-+#define MTK_CAM_OBC_WBIG_RB_OBC_IVGN_R_MASK   0x000003ff
-+#define MTK_CAM_OBC_WBIG_RB_OBC_IVGN_R_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_WBIG_RB: OBC_IVGN_B
-+ * MTK_CAM_OBC_WBIG_RB_OBC_IVGN_B: [16, 25]
-+ * Inverse WB gain for B channel
-+ */
-+#define MTK_CAM_OBC_WBIG_RB_OBC_IVGN_B_MASK   0x03ff0000
-+#define MTK_CAM_OBC_WBIG_RB_OBC_IVGN_B_SHIFT  16
-+
-+/*
-+ * Bit Feild of OBC_WBIG_G: OBC_IVGN_G
-+ * MTK_CAM_OBC_WBIG_G_OBC_IVGN_G: [0, 9]
-+ * Inverse WB gain for G channel
-+ */
-+#define MTK_CAM_OBC_WBIG_G_OBC_IVGN_G_MASK   0x000003ff
-+#define MTK_CAM_OBC_WBIG_G_OBC_IVGN_G_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OBG_RB: OBC_GAIN_R
-+ * MTK_CAM_OBC_OBG_RB_OBC_GAIN_R: [0, 11]
-+ * OB gain for R channel
-+ */
-+#define MTK_CAM_OBC_OBG_RB_OBC_GAIN_R_MASK   0x00000fff
-+#define MTK_CAM_OBC_OBG_RB_OBC_GAIN_R_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OBG_RB: OBC_GAIN_B
-+ * MTK_CAM_OBC_OBG_RB_OBC_GAIN_B: [16, 27]
-+ * OB gain for B channel
-+ */
-+#define MTK_CAM_OBC_OBG_RB_OBC_GAIN_B_MASK   0x0fff0000
-+#define MTK_CAM_OBC_OBG_RB_OBC_GAIN_B_SHIFT  16
-+
-+/*
-+ * Bit Feild of OBC_OBG_G: OBC_GAIN_GR
-+ * MTK_CAM_OBC_OBG_G_OBC_GAIN_GR: [0, 11]
-+ * OB gain for Gr channel
-+ */
-+#define MTK_CAM_OBC_OBG_G_OBC_GAIN_GR_MASK   0x00000fff
-+#define MTK_CAM_OBC_OBG_G_OBC_GAIN_GR_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OBG_G: OBC_GAIN_GB
-+ * MTK_CAM_OBC_OBG_G_OBC_GAIN_GB: [16, 27]
-+ * OB gain for Gb channel
-+ */
-+#define MTK_CAM_OBC_OBG_G_OBC_GAIN_GB_MASK   0x0fff0000
-+#define MTK_CAM_OBC_OBG_G_OBC_GAIN_GB_SHIFT  16
-+
-+/*
-+ * Bit Feild of OBC_OFFSET_R: OBC_OFST_R
-+ * MTK_CAM_OBC_OFFSET_R_OBC_OFST_R: [0, 21]
-+ * OB offset for R channel
-+ */
-+#define MTK_CAM_OBC_OFFSET_R_OBC_OFST_R_MASK   0x003fffff
-+#define MTK_CAM_OBC_OFFSET_R_OBC_OFST_R_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OFFSET_GR: OBC_OFST_GR
-+ * MTK_CAM_OBC_OFFSET_GR_OBC_OFST_GR: [0, 21]
-+ * OB offset for Gr channel
-+ */
-+#define MTK_CAM_OBC_OFFSET_GR_OBC_OFST_GR_MASK   0x003fffff
-+#define MTK_CAM_OBC_OFFSET_GR_OBC_OFST_GR_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OFFSET_GB: OBC_OFST_GB
-+ * MTK_CAM_OBC_OFFSET_GB_OBC_OFST_GB: [0, 21]
-+ * OB offset for Gb channel
-+ */
-+#define MTK_CAM_OBC_OFFSET_GB_OBC_OFST_GB_MASK   0x003fffff
-+#define MTK_CAM_OBC_OFFSET_GB_OBC_OFST_GB_SHIFT  0
-+
-+/*
-+ * Bit Feild of OBC_OFFSET_B: OBC_OFST_B
-+ * MTK_CAM_OBC_OFFSET_B_OBC_OFST_B: [0, 21]
-+ * OB offset for B channel
-+ */
-+#define MTK_CAM_OBC_OFFSET_B_OBC_OFST_B_MASK   0x003fffff
-+#define MTK_CAM_OBC_OFFSET_B_OBC_OFST_B_SHIFT  0
-+
-+/*
-+ * Bit Feild of TSFS_DGAIN: TSFS_REGEN_Y_EN
-+ * MTK_CAM_TSFS_DGAIN_TSFS_REGEN_Y_EN: [0, 0]
-+ * Digital gain control
-+ */
-+#define MTK_CAM_TSFS_DGAIN_TSFS_REGEN_Y_EN_MASK   0x00000001
-+#define MTK_CAM_TSFS_DGAIN_TSFS_REGEN_Y_EN_SHIFT  0
-+
-+/*
-+ * Bit Feild of TSFS_DGAIN: TSFS_GAIN
-+ * MTK_CAM_TSFS_DGAIN_TSFS_GAIN: [1, 16]
-+ * Digital gain
-+ */
-+#define MTK_CAM_TSFS_DGAIN_TSFS_GAIN_MASK   0x0001fffe
-+#define MTK_CAM_TSFS_DGAIN_TSFS_GAIN_SHIFT  1
-+
-+/*
-+ *  V 4 L 2  M E T A  B U F F E R  L A Y O U T
-+ */
-+
-+/*
-+ *  struct mtk_cam_uapi_meta_raw_stats_cfg
-+ *
-+ *  @ae_awb_enable: To indicate if AE and AWB should be enblaed or not. If
-+ *        it is 1, it means that we enable the following parts of
-+ *        hardware:
-+ *        (1) AE/AWB
-+ *        (2) aao
-+ *        (3) aaho
-+ *  @af_enable:     To indicate if AF should be enabled or not. If it is 1,
-+ *        it means that the AF and afo is enabled.
-+ *  @dgn_enable:    To indicate if dgn module should be enabled or not.
-+ *  @flk_enable:    If it is 1, it means flk and flko is enable. If ie is 0,
-+ *        both flk and flko is disabled.
-+ *  @tsf_enable:    If it is 1, it means tsfs and tsfso is enable. If ie is 0,
-+ *        both tsfs and tsfso is disabled.
-+ *  @wb_enable:     To indicate if wb module should be enabled or not.
-+ *  @pde_enable:    To indicate if pde module should be enabled or not.
-+ *  @ae_param:  AE Statistic window config
-+ *  @awb_param: AWB statistic configuration control
-+ *  @dgn_param: DGN settings
-+ *  @flk_param: Flicker statistic configuration
-+ *  @tsf_param: tsf statistic configuration
-+ *  @wb_param:  WB settings
-+ *  @pde_param: pde settings
-+ */
-+struct mtk_cam_uapi_meta_raw_stats_cfg {
-+	s8 ae_awb_enable;
-+	s8 af_enable;
-+	s8 dgn_enable;
-+	s8 flk_enable;
-+	s8 tsf_enable;
-+	s8 wb_enable;
-+	s8 pde_enable;
-+	u8 rsv;
-+
-+	struct mtk_cam_uapi_ae_param ae_param;
-+	struct mtk_cam_uapi_awb_param awb_param;
-+	struct mtk_cam_uapi_af_param af_param;
-+	struct mtk_cam_uapi_dgn_param dgn_param;
-+	struct mtk_cam_uapi_flk_param flk_param;
-+	struct mtk_cam_uapi_tsf_param tsf_param;
-+	struct mtk_cam_uapi_wb_param wb_param;
-+	struct mtk_cam_uapi_pde_param pde_param;
-+
-+	struct mtk_cam_uapi_prot {
-+		/* The following top control are generated by script */
-+		u8 drzh2n_r1_tuning_enable;
-+		u8 drzh2n_r2_tuning_enable;
-+		u8 drzh2n_r3_tuning_enable;
-+		u8 drzh2n_r4_tuning_enable;
-+		u8 drzh2n_r5_tuning_enable;
-+		u8 drzh2n_r6_tuning_enable;
-+		u8 drzh2n_r7_tuning_enable;
-+		u8 drzh2n_r8_tuning_enable;
-+		u8 drzs4n_r1_tuning_enable;
-+		u8 drzs4n_r2_tuning_enable;
-+		u8 drzs4n_r3_tuning_enable;
-+		u8 dm_tuning_enable;
-+		u8 drzs8t_r1_tuning_enable;
-+		u8 drzs8t_r2_tuning_enable;
-+		u8 ggm_r1_tuning_enable;
-+		u8 ggm_r2_tuning_enable;
-+		u8 ggm_r3_tuning_enable;
-+		u8 bpc_r1_enable;
-+		u8 bpc_r2_enable;
-+		u8 ccm_r1_enable;
-+		u8 ccm_r2_enable;
-+		u8 ccm_r3_enable;
-+		u8 fus_enable;
-+		u8 g2c_r1_enable;
-+		u8 g2c_r2_enable;
-+		u8 g2c_r3_enable;
-+		u8 hlr_enable;
-+		u8 lsc_enable;
-+		u8 ltm_enable;
-+		u8 ltms_enable;
-+		u8 obc_r1_enable;
-+		u8 obc_r2_enable;
-+		u8 tcy_r1_enable;
-+		u8 tcy_r2_enable;
-+		u8 tcy_r3_enable;
-+		u8 tncs_r1_enable;
-+
-+		struct mtk_cam_uapi_ccm_param_prot ccm_r1_param;
-+		struct mtk_cam_uapi_ccm_param_prot ccm_r2_param;
-+		struct mtk_cam_uapi_ccm_param_prot ccm_r3_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r1_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r2_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r3_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r4_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r5_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r6_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r7_param;
-+		struct mtk_cam_uapi_drzh2n_param_prot drzh2n_r8_param;
-+		struct mtk_cam_uapi_drzs4n_param_prot drzs4n_r1_param;
-+		struct mtk_cam_uapi_drzs4n_param_prot drzs4n_r2_param;
-+		struct mtk_cam_uapi_drzs4n_param_prot drzs4n_r3_param;
-+		struct mtk_cam_uapi_tncs_param_prot tncs_param;
-+		/* script generation done */
-+		struct mtk_cam_uapi_drzs8t_param_prot drzs8t_r1_param;
-+		struct mtk_cam_uapi_drzs8t_param_prot drzs8t_r2_param;
-+		struct mtk_cam_uapi_awb_param_prot awb_param;
-+		struct mtk_cam_uapi_bpc_param_prot bpc_param;
-+		struct mtk_cam_uapi_lsc_param_prot lsc_param;
-+		struct mtk_cam_uapi_slk_param_prot slk_param;
-+		struct mtk_cam_uapi_wb_param_prot wb_param;
-+		struct mtk_cam_uapi_ltms_param_prot ltms_param;
-+		struct mtk_cam_uapi_yuvo_param_prot yuvo_r2_param;
-+		struct mtk_cam_uapi_yuvo_param_prot yuvo_r4_param;
-+		/* The following module stuctures are generated by script */
-+		struct mtk_cam_uapi_regmap_raw_bpc bpc_r1;
-+		struct mtk_cam_uapi_regmap_raw_bpc bpc_r2;
-+		struct mtk_cam_uapi_regmap_raw_ccm ccm_r1;
-+		struct mtk_cam_uapi_regmap_raw_ccm ccm_r2;
-+		struct mtk_cam_uapi_regmap_raw_ccm ccm_r3;
-+		struct mtk_cam_uapi_regmap_raw_dm dm_r1;
-+		u8 rsv1[116];
-+		struct mtk_cam_uapi_regmap_raw_g2c g2c_r1;
-+		struct mtk_cam_uapi_regmap_raw_g2c g2c_r2;
-+		struct mtk_cam_uapi_regmap_raw_g2c g2c_r3;
-+		struct mtk_cam_uapi_regmap_raw_ggm ggm_r1;
-+		struct mtk_cam_uapi_regmap_raw_ggm ggm_r2;
-+		struct mtk_cam_uapi_regmap_raw_ggm ggm_r3;
-+		u8 rsv2[68];
-+		struct mtk_cam_uapi_regmap_raw_lsc lsc_r1;
-+		struct mtk_cam_uapi_regmap_raw_ltm ltm_r1;
-+		struct mtk_cam_uapi_regmap_raw_ltms ltms_r1;
-+		struct mtk_cam_uapi_regmap_raw_obc obc_r1;
-+		struct mtk_cam_uapi_regmap_raw_obc obc_r2;
-+		u8 rsv3[1420];
-+		struct mtk_cam_uapi_regmap_raw_tsfs tsfs_r1;
-+		u8 rsv4[50080];
-+		/* script generation done */
-+	} __packed prot;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_raw_stats_0 - capture buffer returns from camsys
-+ *    after the frame is done. The buffer are not be pushed the other
-+ *    driver such as dip.
-+ *
-+ * @ae_awb_stats_enabled: indicate that ae_awb_stats is ready or not in
-+ *       this buffer
-+ * @ltm_stats_enabled:    indicate that ltm_stats is ready or not in
-+ *       this buffer
-+ * @flk_stats_enabled:    indicate that flk_stats is ready or not in
-+ *       this buffer
-+ * @tsf_stats_enabled:    indicate that tsf_stats is ready or not in
-+ *       this buffer
-+ * @pde_stats_enabled:    indicate that pde_stats is ready or not in
-+ *       this buffer
-+ * @pipeline_config:      the pipeline configuration during processing
-+ * @pde_stats: the pde module stats
-+ */
-+struct mtk_cam_uapi_meta_raw_stats_0 {
-+	u8 ae_awb_stats_enabled;
-+	u8 ltm_stats_enabled;
-+	u8 flk_stats_enabled;
-+	u8 tsf_stats_enabled;
-+	u8 tncy_stats_enabled;
-+	u8 pde_stats_enabled;
-+	u8 rsv[2];
-+
-+	struct mtk_cam_uapi_pipeline_config pipeline_config;
-+
-+	struct mtk_cam_uapi_ae_awb_stats ae_awb_stats;
-+	struct mtk_cam_uapi_ltm_stats ltm_stats;
-+	struct mtk_cam_uapi_flk_stats flk_stats;
-+	struct mtk_cam_uapi_tsf_stats tsf_stats;
-+	struct mtk_cam_uapi_tncy_stats tncy_stats;
-+	struct mtk_cam_uapi_pd_stats pde_stats;
-+	struct mtk_cam_uapi_timestamp timestamp;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_raw_stats_1 - statistics before frame done
-+ *
-+ * @af_stats_enabled: indicate that lce_stats is ready or not in this buffer
-+ * @af_stats: AF statistics
-+ *
-+ * Any statistic output put in this structure should be careful.
-+ * The meta buffer needs copying overhead to return the buffer before the
-+ * all the ISP hardware's processing is finished.
-+ */
-+struct mtk_cam_uapi_meta_raw_stats_1 {
-+	u8 af_stats_enabled;
-+	u8 af_qbn_r6_enabled;
-+	u8 rsv[2];
-+	struct mtk_cam_uapi_af_stats af_stats;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_raw_stats_2 - shared statistics buffer
-+ *
-+ * @act_stats_enabled:  indicate that act_stats is ready or not in this
-+ * buffer
-+ * @act_stats:  act statistics
-+ *
-+ * The statistic output in this structure may be pushed to the other
-+ * driver such as dip.
-+ *
-+ */
-+struct mtk_cam_uapi_meta_raw_stats_2 {
-+	u8 act_stats_enabled;
-+	u8 rsv[3];
-+	struct mtk_cam_uapi_act_stats act_stats;
-+} __packed;
-+
-+/*
-+ * struct mtk_cam_uapi_meta_camsv_stats_0 - capture buffer returns from
-+ *	 camsys's camsv module after the frame is done. The buffer are
-+ *	 not be pushed the other driver such as dip.
-+ *
-+ * @pd_stats_enabled:	 indicate that pd_stats is ready or not in
-+ *			 this buffer
-+ */
-+struct mtk_cam_uapi_meta_camsv_stats_0 {
-+	u8 pd_stats_enabled;
-+	u8 rsv[3];
-+	struct mtk_cam_uapi_pd_stats pd_stats;
-+} __packed;
-+
-+#define MTK_CAM_META_VERSION_MAJOR 2
-+#define MTK_CAM_META_VERSION_MINOR 3
-+#define MTK_CAM_META_PLATFORM_NAME "isp71"
-+#define MTK_CAM_META_CHIP_NAME "mt8188"
-+
-+#endif /* __MTK_CAM_META_H__ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.c
-new file mode 100644
-index 000000000000..3294ffaf56e6
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.c
-@@ -0,0 +1,207 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
+@@ -0,0 +1,5359 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
 +// Copyright (c) 2022 MediaTek Inc.
 +
++#include <linux/clk.h>
++#include <linux/interrupt.h>
++#include <linux/iopoll.h>
 +#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/scatterlist.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-mapping.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/vmalloc.h>
++#include <linux/videodev2.h>
++#include <linux/suspend.h>
++#include <linux/rtc.h>
 +
-+#include <media/videobuf2-v4l2.h>
-+#include <media/videobuf2-memops.h>
++#include <media/v4l2-device.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-ioctl.h>
++#include <media/v4l2-subdev.h>
++
++#include <soc/mediatek/smi.h>
 +
 +#include "mtk_cam.h"
++#include "mtk_cam-feature.h"
 +#include "mtk_cam-raw.h"
++
++#include "mtk_cam-regs-mt8188.h"
++
 +#include "mtk_cam-video.h"
-+#include "mtk_cam-plat-util.h"
-+#include "mtk_cam-meta-mt8188.h"
++#include "mtk_cam-seninf-if.h"
++#include "mtk_camera-v4l2-controls.h"
 +
-+#define RAW_STATS_CFG_SIZE \
-+	ALIGN(sizeof(struct mtk_cam_uapi_meta_raw_stats_cfg), SZ_1K)
++#include "mtk_cam-dmadbg.h"
++#include "mtk_cam-raw_debug.h"
 +
-+/* meta out max size include 1k meta info and dma buffer size */
-+#define RAW_STATS_0_SIZE \
-+	ALIGN(ALIGN(sizeof(struct mtk_cam_uapi_meta_raw_stats_0), SZ_1K) + \
-+	      MTK_CAM_UAPI_AAO_MAX_BUF_SIZE + MTK_CAM_UAPI_AAHO_MAX_BUF_SIZE + \
-+	      MTK_CAM_UAPI_LTMSO_SIZE + \
-+	      MTK_CAM_UAPI_FLK_MAX_BUF_SIZE + \
-+	      MTK_CAM_UAPI_TSFSO_SIZE * 2 + /* r1 & r2 */ \
-+	      MTK_CAM_UAPI_TNCSYO_SIZE, (4 * SZ_1K))
++static unsigned int debug_raw;
++module_param(debug_raw, uint, 0644);
++MODULE_PARM_DESC(debug_raw, "activates debug info");
 +
-+#define RAW_STATS_1_SIZE \
-+	ALIGN(ALIGN(sizeof(struct mtk_cam_uapi_meta_raw_stats_1), SZ_1K) + \
-+	      MTK_CAM_UAPI_AFO_MAX_BUF_SIZE, (4 * SZ_1K))
++static int debug_raw_num = -1;
++module_param(debug_raw_num, int, 0644);
++MODULE_PARM_DESC(debug_raw_num, "debug: num of used raw devices");
 +
-+#define RAW_STATS_2_SIZE \
-+	ALIGN(ALIGN(sizeof(struct mtk_cam_uapi_meta_raw_stats_2), SZ_1K) + \
-+	      MTK_CAM_UAPI_ACTSO_SIZE, (4 * SZ_1K))
++static int debug_pixel_mode = -1;
++module_param(debug_pixel_mode, int, 0644);
++MODULE_PARM_DESC(debug_pixel_mode, "debug: pixel mode");
 +
-+/* ISP platform meta format */
-+static const struct mtk_cam_format_desc meta_fmts[] = {
-+	{
-+		.vfmt.fmt.meta = {
-+			.dataformat = V4L2_META_FMT_MTISP_PARAMS,
-+			.buffersize = RAW_STATS_CFG_SIZE,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.meta = {
-+			.dataformat = V4L2_META_FMT_MTISP_3A,
-+			.buffersize = RAW_STATS_0_SIZE,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.meta = {
-+			.dataformat = V4L2_META_FMT_MTISP_AF,
-+			.buffersize = RAW_STATS_1_SIZE,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.meta = {
-+			.dataformat = V4L2_META_FMT_MTISP_LCS,
-+			.buffersize = RAW_STATS_2_SIZE,
-+		},
-+	},
++static int debug_clk_idx = -1;
++module_param(debug_clk_idx, int, 0644);
++MODULE_PARM_DESC(debug_clk_idx, "debug: clk idx");
++
++static int debug_dump_fbc;
++module_param(debug_dump_fbc, int, 0644);
++MODULE_PARM_DESC(debug_dump_fbc, "debug: dump fbc");
++
++#define MTK_RAW_STOP_HW_TIMEOUT		(33)
++
++#define MTK_CAMSYS_RES_IDXMASK		0xF0
++#define MTK_CAMSYS_RES_BIN_TAG		0x10
++#define MTK_CAMSYS_RES_FRZ_TAG		0x20
++#define MTK_CAMSYS_RES_HWN_TAG		0x30
++#define MTK_CAMSYS_RES_CLK_TAG		0x40
++
++#define MTK_CAMSYS_RES_PLAN_NUM		10
++#define FRZ_PXLMODE_THRES		71
++#define MHz				1000000
++
++/* ISP7_1 */
++#define TGO_MAX_PXLMODE				1
++#define MTK_CAMSYS_PROC_DEFAULT_PIXELMODE	1
++#define sizeof_u32(__struct__) ((sizeof(__struct__) + sizeof(u32) - 1) / \
++				sizeof(u32))
++
++enum MTK_CAMSYS_RES_STEP {
++	E_RES_BASIC,
++	E_RES_BIN_S = MTK_CAMSYS_RES_BIN_TAG,
++	E_RES_BIN0 = E_RES_BIN_S,
++	E_RES_BIN1,
++	E_RES_BIN_E,
++	E_RES_FRZ_S = MTK_CAMSYS_RES_FRZ_TAG,
++	E_RES_FRZ0 = E_RES_FRZ_S,
++	E_RES_FRZ1,
++	E_RES_FRZ_E,
++	E_RES_HWN_S = MTK_CAMSYS_RES_HWN_TAG,
++	E_RES_HWN0 = E_RES_HWN_S,
++	E_RES_HWN1,
++	E_RES_HWN2,
++	E_RES_HWN_E,
++	E_RES_CLK_S = MTK_CAMSYS_RES_CLK_TAG,
++	E_RES_CLK0 = E_RES_CLK_S,
++	E_RES_CLK1,
++	E_RES_CLK2,
++	E_RES_CLK3,
++	E_RES_CLK_E,
 +};
 +
-+struct mtk_cam_vb2_buf {
-+	struct device			*dev;
-+	void				*vaddr;
-+	unsigned long			size;
-+	void				*cookie;
-+	dma_addr_t			dma_addr;
-+	unsigned long			attrs;
-+	enum dma_data_direction		dma_dir;
-+	struct sg_table			*dma_sgt;
-+	struct frame_vector		*vec;
-+
-+	/* MMAP related */
-+	struct vb2_vmarea_handler	handler;
-+	refcount_t			refcount;
-+	struct sg_table			*sgt_base;
-+
-+	/* DMABUF related */
-+	struct dma_buf_attachment	*db_attach;
-+	struct iosys_map		map;
++enum MTK_CAMSYS_MAXLB_CHECK_RESULT {
++	LB_CHECK_OK = 0,
++	LB_CHECK_CBN,
++	LB_CHECK_QBN,
++	LB_CHECK_BIN,
++	LB_CHECK_FRZ,
++	LB_CHECK_TWIN,
++	LB_CHECK_RAW,
 +};
 +
-+static void set_payload(struct mtk_cam_uapi_meta_hw_buf *buf,
-+			unsigned int size, unsigned long *offset)
++#define CAM_RAW_PROCESS_MAX_LINE_BUFFER		(6632)
++#define CAM_RAW_FRZ_MAX_LINE_BUFFER		(6632)
++#define CAM_RAW_BIN_MAX_LINE_BUFFER		(12000)
++#define CAM_RAW_QBND_MAX_LINE_BUFFER		(16000)
++#define CAM_RAW_CBN_MAX_LINE_BUFFER		(18472)
++#define CAM_TWIN_PROCESS_MAX_LINE_BUFFER	(12400)
++
++struct cam_resource_plan {
++	int cam_resource[MTK_CAMSYS_RES_STEP_NUM];
++};
++
++enum resource_strategy_id {
++	RESOURCE_STRATEGY_QPR = 0,
++	RESOURCE_STRATEGY_PQR,
++	RESOURCE_STRATEGY_RPQ,
++	RESOURCE_STRATEGY_QRP,
++	RESOURCE_STRATEGY_NUMBER
++};
++
++static const struct cam_resource_plan raw_resource_strategy_plan[] = {
++	[RESOURCE_STRATEGY_QPR] = {
++		.cam_resource = {
++			E_RES_BASIC, E_RES_HWN1, E_RES_CLK1, E_RES_CLK2,
++			E_RES_CLK3, E_RES_FRZ1, E_RES_BIN1, E_RES_HWN2} },
++	[RESOURCE_STRATEGY_PQR] = {
++		.cam_resource = {
++			E_RES_BASIC, E_RES_HWN1, E_RES_HWN2, E_RES_FRZ1,
++			E_RES_BIN1, E_RES_CLK1, E_RES_CLK2, E_RES_CLK3} },
++	[RESOURCE_STRATEGY_RPQ] = {
++		.cam_resource = {
++			E_RES_BASIC, E_RES_FRZ1, E_RES_BIN1, E_RES_CLK1,
++			E_RES_CLK2, E_RES_CLK3, E_RES_HWN1, E_RES_HWN2} },
++	[RESOURCE_STRATEGY_QRP] = {
++		.cam_resource = {
++			E_RES_BASIC, E_RES_CLK1, E_RES_CLK2, E_RES_CLK3,
++			E_RES_HWN1, E_RES_HWN2, E_RES_FRZ1, E_RES_BIN1} },
++};
++
++static const struct v4l2_mbus_framefmt mfmt_default = {
++	.code = MEDIA_BUS_FMT_SBGGR10_1X10,
++	.width = DEFAULT_WIDTH,
++	.height = DEFAULT_HEIGHT,
++	.field = V4L2_FIELD_NONE,
++	.colorspace = V4L2_COLORSPACE_SRGB,
++	.xfer_func = V4L2_XFER_FUNC_DEFAULT,
++	.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT,
++	.quantization = V4L2_QUANTIZATION_DEFAULT,
++};
++
++static bool mtk_cam_raw_resource_calc(struct mtk_cam_device *cam,
++				      struct mtk_cam_resource_config *res,
++				      s64 pixel_rate, int res_plan, int in_w,
++				      int in_h, int *out_w, int *out_h);
++
++static int mtk_cam_raw_res_copy_fmt_from_user(struct mtk_raw_pipeline *pipeline,
++					      struct mtk_cam_resource *res_user,
++					      struct v4l2_mbus_framefmt *dest)
 +{
-+	buf->offset = *offset;
-+	buf->size = size;
-+	*offset += size;
++	long bytes;
++	struct device *dev = pipeline->raw->devs[pipeline->id];
++
++	if (!res_user->sink_fmt) {
++		dev_err(dev,
++			"%s:pipe(%d): sink_fmt can't be NULL for res ctrl\n",
++			__func__, pipeline->id);
++
++		return -EINVAL;
++	}
++
++	bytes = copy_from_user(dest, (void __user *)res_user->sink_fmt,
++			       sizeof(*dest));
++	if (bytes) {
++		dev_err(dev,
++			"%s:pipe(%d): copy_from_user on sink_fmt failed (%ld)\n",
++			__func__, pipeline->id, bytes);
++		return -EINVAL;
++	}
++
++	return 0;
 +}
 +
-+static void vb2_sync_for_device(void *buf_priv)
++static int mtk_cam_raw_res_copy_fmt_to_user(struct mtk_raw_pipeline *pipeline,
++					    struct mtk_cam_resource *res_user,
++					    struct v4l2_mbus_framefmt *src)
 +{
-+	struct mtk_cam_vb2_buf *buf = buf_priv;
-+	struct sg_table *sgt = buf->dma_sgt;
++	long bytes;
++	struct device *dev = pipeline->raw->devs[pipeline->id];
 +
-+	if (!sgt)
++	/* return the fmt to the users */
++	bytes = copy_to_user((void __user *)res_user->sink_fmt, src, sizeof(*src));
++	if (bytes) {
++		dev_err(dev,
++			"%s:pipe(%d): copy_to_user on sink_fmt failed (%ld)\n",
++			__func__, pipeline->id, bytes);
++
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int mtk_cam_raw_get_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct mtk_cam_resource *user_res;
++	struct mtk_raw_pipeline *pipeline;
++	struct device *dev;
++	int ret = 0;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	dev = pipeline->raw->devs[pipeline->id];
++
++	if (ctrl->id == V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC) {
++		user_res = (struct mtk_cam_resource *)ctrl->p_new.p;
++		user_res->sensor_res = pipeline->user_res.sensor_res;
++		user_res->raw_res = pipeline->user_res.raw_res;
++		if (user_res->sink_fmt)
++			ret = mtk_cam_raw_res_copy_fmt_to_user(pipeline,
++							       user_res,
++							       (struct v4l2_mbus_framefmt *)
++							       pipeline->user_res.sink_fmt);
++	} else if (ctrl->id == V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE) {
++		ctrl->val = pipeline->sensor_mode_update;
++		dev_info(dev,
++			 "%s:pipe(%d): V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE: %d\n",
++			 __func__, pipeline->id, pipeline->sensor_mode_update);
++	} else if (ctrl->id >= V4L2_CID_MTK_CAM_USED_ENGINE_TRY &&
++		   ctrl->id <= V4L2_CID_MTK_CAM_FRZ_TRY) {
++		/**
++		 * Read the determined resource for the "try" format
++		 * negotiation result
++		 */
++		mutex_lock(&pipeline->try_res_config.resource_lock);
++		switch (ctrl->id) {
++		case V4L2_CID_MTK_CAM_USED_ENGINE_TRY:
++			ctrl->val = pipeline->try_res_config.raw_num_used;
++			break;
++		case V4L2_CID_MTK_CAM_BIN_TRY:
++			ctrl->val = pipeline->try_res_config.bin_enable;
++			break;
++		case V4L2_CID_MTK_CAM_FRZ_TRY:
++			ctrl->val = pipeline->try_res_config.frz_enable ?
++				    pipeline->try_res_config.frz_ratio : 100;
++			break;
++		default:
++			dev_info(dev,
++				 "%s:pipe(%d): unknown resource CID: %d\n",
++				 __func__, pipeline->id, ctrl->id);
++			break;
++		}
++		mutex_unlock(&pipeline->try_res_config.resource_lock);
++	} else if (ctrl->id == V4L2_CID_MTK_CAM_SYNC_ID) {
++		mutex_lock(&pipeline->res_config.resource_lock);
++		*ctrl->p_new.p_s64 = pipeline->sync_id;
++		mutex_unlock(&pipeline->res_config.resource_lock);
++	} else {
++		/**
++		 * Read the determined resource for the "set" format
++		 * negotiations result
++		 */
++		mutex_lock(&pipeline->res_config.resource_lock);
++		switch (ctrl->id) {
++		case V4L2_CID_MTK_CAM_USED_ENGINE:
++			ctrl->val = pipeline->res_config.raw_num_used;
++			break;
++		case V4L2_CID_MTK_CAM_BIN_LIMIT:
++			ctrl->val = pipeline->res_config.bin_limit;
++			break;
++		case V4L2_CID_MTK_CAM_BIN:
++			ctrl->val = pipeline->res_config.bin_enable;
++			break;
++		case V4L2_CID_MTK_CAM_FRZ:
++			ctrl->val = pipeline->res_config.frz_enable ?
++				    pipeline->res_config.frz_ratio : 100;
++			break;
++		default:
++			dev_info(dev,
++				 "%s:pipe(%d): unknown try resource CID: %d\n",
++				 __func__, pipeline->id, ctrl->id);
++			break;
++		}
++		mutex_unlock(&pipeline->res_config.resource_lock);
++	}
++
++	dev_dbg(dev, "%s:pipe(%d):id(%s) val(%d)\n",
++		__func__, pipeline->id, ctrl->name, ctrl->val);
++	return ret;
++}
++
++static int mtk_cam_raw_res_store(struct mtk_raw_pipeline *pipeline,
++				 struct mtk_cam_resource *res_user)
++{
++	struct device *dev = pipeline->raw->devs[pipeline->id];
++
++	dev_info(dev,
++		 "%s:pipe(%d): from user: sensor:%d/%d/%lld/%lld/%d/%d, raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
++		 __func__, pipeline->id,
++		 res_user->sensor_res.hblank, res_user->sensor_res.vblank,
++		 res_user->sensor_res.pixel_rate,
++		 res_user->sensor_res.cust_pixel_rate,
++		 res_user->sensor_res.interval.denominator,
++		 res_user->sensor_res.interval.numerator,
++		 res_user->raw_res.feature, res_user->raw_res.bin,
++		 res_user->raw_res.path_sel, res_user->raw_res.raw_max,
++		 res_user->raw_res.raw_min, res_user->raw_res.raw_used,
++		 res_user->raw_res.strategy, res_user->raw_res.pixel_mode,
++		 res_user->raw_res.throughput);
++
++	/* check user value of sensor input parameters */
++	if (!mtk_cam_feature_is_pure_m2m(res_user->raw_res.feature) &&
++	    (!res_user->sensor_res.pixel_rate || !res_user->sensor_res.hblank ||
++	     !res_user->sensor_res.vblank ||
++	     !res_user->sensor_res.interval.denominator ||
++	     !res_user->sensor_res.interval.numerator)) {
++		dev_info(dev,
++			 "%s:pipe(%d): sensor info MUST be provided (TEST_PATTERN case)\n",
++			 __func__, pipeline->id);
++		/*test pattern case resource default copy*/
++		pipeline->res_config.raw_num_used = 1;
++		pipeline->res_config.bin_enable = 0;
++		pipeline->res_config.tgo_pxl_mode = 1;
++		pipeline->res_config.raw_path = 0;
++		pipeline->res_config.hwn_limit_min = 1;
++		pipeline->res_config.raw_feature = res_user->raw_res.feature;
++		pipeline->feature_pending = res_user->raw_res.feature;
++		pipeline->feature_active = res_user->raw_res.feature;
++	}
++
++	/* check user value of raw input parameters */
++	if (res_user->raw_res.feature == 0xFFFFFFFF)
++		res_user->raw_res.feature = 0;
++
++	if (res_user->raw_res.bin == 0xFF)
++		res_user->raw_res.bin = 0;
++
++	if (res_user->raw_res.strategy == 0xFFFF)
++		res_user->raw_res.strategy = RESOURCE_STRATEGY_QRP;
++
++	if (res_user->raw_res.raw_max == 0xFF)
++		res_user->raw_res.raw_max = 2;
++
++	if (res_user->raw_res.raw_min == 0xFF)
++		res_user->raw_res.raw_min = 1;
++
++	if (res_user->raw_res.raw_min > 1)
++		res_user->raw_res.strategy = RESOURCE_STRATEGY_QPR;
++
++	if (res_user->raw_res.path_sel == 0xFF)
++		res_user->raw_res.path_sel = 0;
++
++	dev_info(dev,
++		 "%s:pipe(%d): driver adjusted: raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
++		 __func__, pipeline->id,
++		 res_user->raw_res.feature, res_user->raw_res.bin,
++		 res_user->raw_res.path_sel, res_user->raw_res.raw_max,
++		 res_user->raw_res.raw_min, res_user->raw_res.raw_used,
++		 res_user->raw_res.strategy, res_user->raw_res.pixel_mode,
++		 res_user->raw_res.throughput);
++
++	return 0;
++}
++
++static s64 mtk_cam_calc_pure_m2m_pixelrate(s64 width, s64 height,
++					   struct v4l2_fract *interval)
++{
++	/* process + r/wdma margin = (1 + 5%) x (1 + 10%) */
++	#define PURE_M2M_PROCESS_MARGIN_N 11550
++	#define PURE_M2M_PROCESS_MARGIN_D 10000
++	u64 prate = 0;
++	int fps_n = interval->numerator;
++	int fps_d = interval->denominator;
++
++	prate = width * height * fps_d * PURE_M2M_PROCESS_MARGIN_N;
++	do_div(prate, fps_n * PURE_M2M_PROCESS_MARGIN_D);
++
++	pr_info("%s:width:%lld height:%lld interval:%d/%d prate:%llu\n",
++		__func__, width, height, fps_n, fps_d, prate);
++	return prate;
++}
++
++static int mtk_cam_raw_try_res_ctrl(struct mtk_raw_pipeline *pipeline,
++				    struct mtk_cam_resource *res_user,
++				    struct mtk_cam_resource_config *res_cfg,
++				    struct v4l2_mbus_framefmt *sink_fmt)
++{
++	s64 prate = 0;
++	int width, height;
++	struct device *dev = pipeline->raw->devs[pipeline->id];
++
++	res_cfg->bin_limit = res_user->raw_res.bin; /* 1: force bin on */
++	res_cfg->frz_limit = 0;
++	res_cfg->hwn_limit_max = res_user->raw_res.raw_max;
++	res_cfg->hwn_limit_min = res_user->raw_res.raw_min;
++	res_cfg->hblank = res_user->sensor_res.hblank;
++	res_cfg->vblank = res_user->sensor_res.vblank;
++	res_cfg->sensor_pixel_rate = res_user->sensor_res.pixel_rate;
++	res_cfg->res_plan = res_user->raw_res.strategy;
++	res_cfg->raw_feature = res_user->raw_res.feature;
++	res_cfg->raw_path = res_user->raw_res.path_sel;
++
++	if (res_user->sensor_res.cust_pixel_rate)
++		prate = res_user->sensor_res.cust_pixel_rate;
++	else if (mtk_cam_feature_is_pure_m2m(res_cfg->raw_feature))
++		prate = mtk_cam_calc_pure_m2m_pixelrate(sink_fmt->width,
++							sink_fmt->height,
++							&res_cfg->interval);
++	else
++		prate = mtk_cam_seninf_calc_pixelrate(pipeline->raw->cam_dev,
++						      sink_fmt->width,
++						      sink_fmt->height,
++						      res_user->sensor_res.hblank,
++						      res_user->sensor_res.vblank,
++						      res_user->sensor_res.interval.denominator,
++						      res_user->sensor_res.interval.numerator,
++						      res_user->sensor_res.pixel_rate);
++
++	mtk_cam_raw_resource_calc(dev_get_drvdata(pipeline->raw->cam_dev),
++				  res_cfg, prate, res_cfg->res_plan,
++				  sink_fmt->width, sink_fmt->height,
++				  &width, &height);
++
++	if (res_user->raw_res.bin && !res_cfg->bin_enable) {
++		dev_err(dev,
++			"%s:pipe(%d): res calc failed on fource bin: user(%d)/bin_enable(%d)\n",
++			__func__, pipeline->id,	res_user->raw_res.bin,
++			res_cfg->bin_enable);
++		return -EINVAL;
++	}
++
++	if (res_cfg->raw_num_used > res_user->raw_res.raw_max ||
++	    res_cfg->raw_num_used < res_user->raw_res.raw_min) {
++		dev_err(dev,
++			"%s:pipe(%d): res calc failed on raw used: user(%d/%d)/raw_num_used(%d)\n",
++			__func__, pipeline->id, res_user->raw_res.raw_max,
++			res_user->raw_res.raw_min, res_cfg->raw_num_used);
++	}
++
++	res_user->raw_res.pixel_mode = res_cfg->tgo_pxl_mode;
++	res_user->raw_res.raw_used = res_cfg->raw_num_used;
++	if (res_cfg->bin_limit == BIN_AUTO)
++		res_user->raw_res.bin = res_cfg->bin_enable;
++	else
++		res_user->raw_res.bin = res_cfg->bin_limit;
++
++	dev_info(dev,
++		 "%s:pipe(%d): res calc result: raw_used(%d)/bin(%d)/pixelmode(%d)/strategy(%d)\n",
++		 __func__, pipeline->id, res_user->raw_res.raw_used,
++		 res_user->raw_res.bin, res_user->raw_res.pixel_mode,
++		 res_user->raw_res.strategy);
++
++	/**
++	 * Other output not reveal to user:
++	 * res_cfg->res_strategy[MTK_CAMSYS_RES_STEP_NUM];
++	 * res_cfg->clk_target;
++	 * res_cfg->frz_enable;
++	 * res_cfg->frz_ratio;
++	 * res_cfg->tgo_pxl_mode;
++	 */
++	if (width != sink_fmt->width || height != sink_fmt->height) {
++		dev_info(dev,
++			 "%s:pipe(%d): size adjust info: raw: sink(%d,%d) res:(%d,%d)\n",
++			__func__, pipeline->id, sink_fmt->width,
++			sink_fmt->height, width, height);
++	}
++
++	return 0;
++}
++
++static int mtk_cam_raw_set_res_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct mtk_raw_pipeline *pipeline;
++	struct mtk_cam_resource *res_user;
++	struct v4l2_mbus_framefmt sink_fmt;
++	struct device *dev;
++	int ret = 0;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	dev = pipeline->raw->devs[pipeline->id];
++	res_user = (struct mtk_cam_resource *)ctrl->p_new.p;
++
++	ret = mtk_cam_raw_res_store(pipeline, res_user);
++	pipeline->user_res = *res_user;
++	if (media_entity_is_streaming(&pipeline->subdev.entity)) {
++		/* If the pipeline is streaming, pending the change */
++		dev_dbg(dev,
++			"%s:pipe(%d): pending res calc has not been supported except bin\n",
++			__func__, pipeline->id);
++		return ret;
++	}
++
++	dev_dbg(dev,
++		"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), raw_res.feature(0x%llx), feature_active(0x%llx)\n",
++		__func__, pipeline->id,
++		media_entity_is_streaming(&pipeline->subdev.entity),
++		pipeline->feature_pending, pipeline->user_res.raw_res.feature,
++		pipeline->feature_active);
++
++	ret = mtk_cam_raw_res_copy_fmt_from_user(pipeline, res_user, &sink_fmt);
++	if (ret)
++		return ret;
++
++	pipeline->res_config.sink_fmt = sink_fmt;
++	ret = mtk_cam_raw_try_res_ctrl(pipeline, res_user,
++				       &pipeline->res_config, &sink_fmt);
++
++	if (ret)
++		return -EINVAL;
++
++	return ret;
++}
++
++static int mtk_raw_set_res_ctrl(struct device *dev, struct v4l2_ctrl *ctrl,
++				struct mtk_cam_resource_config *res_cfg,
++				int pipe_id)
++{
++	int ret = 0;
++	struct mtk_raw_pipeline *pipeline;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++
++	if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
++		dev_dbg(dev, "%s:pipe(%d):(name:%s, val:%lld)\n", __func__,
++			pipe_id, ctrl->name, *ctrl->p_new.p_s64);
++	else
++		dev_dbg(dev, "%s:pipe(%d):(name:%s, val:%d)\n", __func__,
++			pipe_id, ctrl->name, ctrl->val);
++
++	mutex_lock(&res_cfg->resource_lock);
++	switch (ctrl->id) {
++	case V4L2_CID_MTK_CAM_USED_ENGINE_LIMIT:
++		res_cfg->hwn_limit_max = ctrl->val;
++		break;
++	case V4L2_CID_MTK_CAM_BIN_LIMIT:
++		res_cfg->bin_limit = ctrl->val;
++		break;
++	case V4L2_CID_MTK_CAM_FRZ_LIMIT:
++		res_cfg->frz_limit = ctrl->val;
++		break;
++	case V4L2_CID_MTK_CAM_RESOURCE_PLAN_POLICY:
++		res_cfg->res_plan = ctrl->val;
++		break;
++	case V4L2_CID_MTK_CAM_RAW_PATH_SELECT:
++		res_cfg->raw_path = ctrl->val;
++		break;
++	case V4L2_CID_HBLANK:
++		res_cfg->hblank = ctrl->val;
++		break;
++	case V4L2_CID_VBLANK:
++		res_cfg->vblank = ctrl->val;
++		break;
++	case V4L2_CID_MTK_CAM_PIXEL_RATE:
++		res_cfg->sensor_pixel_rate = *ctrl->p_new.p_s64;
++		break;
++	case V4L2_CID_MTK_CAM_SYNC_ID:
++		pipeline->sync_id = *ctrl->p_new.p_s64;
++		break;
++	default:
++		dev_info(dev,
++			 "%s:pipe(%d):ctrl(id:0x%x,val:%d) not handled\n",
++			 __func__, pipe_id, ctrl->id, ctrl->val);
++		ret = -EINVAL;
++		break;
++	}
++	mutex_unlock(&res_cfg->resource_lock);
++
++	return ret;
++}
++
++static int mtk_cam_raw_try_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct device *dev;
++	struct mtk_raw_pipeline *pipeline;
++	struct mtk_cam_resource *res_user;
++	struct mtk_cam_resource_config res_cfg = {
++		.interval = {
++			.numerator = 1,
++			.denominator = 30
++		},
++	};
++	int ret = 0;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	dev = pipeline->raw->devs[pipeline->id];
++
++	switch (ctrl->id) {
++	case V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC:
++		res_user = (struct mtk_cam_resource *)ctrl->p_new.p;
++		ret = mtk_cam_raw_res_store(pipeline, res_user);
++		if (ret)
++			break;
++
++		ret = mtk_cam_raw_res_copy_fmt_from_user(pipeline, res_user,
++							 &res_cfg.sink_fmt);
++		if (ret) {
++			ret = 0;
++			/* only corret the user's input, it may be request-based try and set fmt */
++			dev_dbg(dev,
++				"%s:pipe(%d): no sink_fmt from user, not calc res\n",
++				__func__, pipeline->id);
++			break;
++		}
++
++		dev_dbg(dev, "%s:pipe(%d): res ctrl start\n",
++			__func__, pipeline->id);
++		ret = mtk_cam_raw_try_res_ctrl(pipeline, res_user, &res_cfg,
++					       &res_cfg.sink_fmt);
++		if (ret)
++			break;
++
++		dev_dbg(dev,
++			"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), feature_active(0x%llx)\n",
++			__func__, pipeline->id,
++			media_entity_is_streaming(&pipeline->subdev.entity),
++			pipeline->feature_pending, pipeline->feature_active);
++
++		dev_dbg(dev, "%s:pipe(%d): res ctrl end\n",
++			__func__, pipeline->id);
++			break;
++	case V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE:
++		dev_info(dev,
++			 "%s:pipe(%d): skip V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE: %d\n",
++			 __func__, pipeline->id, ctrl->val);
++		ret = 0; /* no support */
++		break;
++	/* skip control value checks */
++	case V4L2_CID_MTK_CAM_FEATURE:
++	case V4L2_CID_MTK_CAM_CAMSYS_HW_MODE:
++		ret = 0;
++		break;
++	default:
++		ret = mtk_raw_set_res_ctrl(pipeline->raw->devs[pipeline->id],
++					   ctrl, &pipeline->try_res_config,
++					   pipeline->id);
++		break;
++	}
++
++	return ret;
++}
++
++static int mtk_cam_raw_set_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct device *dev;
++	struct mtk_raw_pipeline *pipeline;
++	int ret = 0;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	dev = pipeline->raw->devs[pipeline->id];
++
++	switch (ctrl->id) {
++	case V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC:
++		/**
++		 * It also updates V4L2_CID_MTK_CAM_FEATURE and
++		 * V4L2_CID_MTK_CAM_RAW_PATH_SELECT to device
++		 */
++		ret = mtk_cam_raw_set_res_ctrl(ctrl);
++		break;
++	case V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE:
++		/**
++		 * sensor_mode_update should be reset by driver after the completion
++		 * of resource updating (seamless switch)
++		 */
++		pipeline->sensor_mode_update = ctrl->val;
++		dev_info(dev,
++			 "%s:pipe(%d):streaming(%d), sensor_mode_update(%d)\n",
++			 __func__, pipeline->id,
++			 media_entity_is_streaming(&pipeline->subdev.entity),
++			 pipeline->sensor_mode_update);
++		break;
++	case V4L2_CID_MTK_CAM_FEATURE:
++		pipeline->feature_pending = *ctrl->p_new.p_s64;
++		dev_dbg(dev,
++			"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), feature_active(0x%llx)\n",
++			__func__, pipeline->id,
++			media_entity_is_streaming(&pipeline->subdev.entity),
++			pipeline->feature_pending, pipeline->feature_active);
++		ret = 0;
++		break;
++	case V4L2_CID_MTK_CAM_CAMSYS_HW_MODE:
++		pipeline->hw_mode = *ctrl->p_new.p_s64;
++		dev_dbg(dev,
++			"%s:pipe(%d):streaming(%d), hw_mode(0x%llx)\n",
++			__func__, pipeline->id,
++			media_entity_is_streaming(&pipeline->subdev.entity),
++			pipeline->hw_mode);
++
++		ret = 0;
++		break;
++	default:
++		ret = mtk_raw_set_res_ctrl(pipeline->raw->devs[pipeline->id],
++					   ctrl, &pipeline->res_config,
++					   pipeline->id);
++		break;
++	}
++
++	return ret;
++}
++
++static const struct v4l2_ctrl_ops cam_ctrl_ops = {
++	.g_volatile_ctrl = mtk_cam_raw_get_ctrl,
++	.s_ctrl = mtk_cam_raw_set_ctrl,
++	.try_ctrl = mtk_cam_raw_try_ctrl,
++};
++
++static int mtk_raw_pde_get_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct mtk_raw_pipeline *pipeline;
++	struct mtk_raw_pde_config *pde_cfg;
++	struct mtk_cam_pde_info *pde_info_p;
++	struct device *dev;
++	int ret = 0;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	pde_cfg = &pipeline->pde_config;
++	pde_info_p = ctrl->p_new.p;
++	dev = pipeline->raw->devs[pipeline->id];
++
++	switch (ctrl->id) {
++	case V4L2_CID_MTK_CAM_PDE_INFO:
++		pde_info_p->pdo_max_size = pde_cfg->pde_info.pdo_max_size;
++		pde_info_p->pdi_max_size = pde_cfg->pde_info.pdi_max_size;
++		pde_info_p->pd_table_offset = pde_cfg->pde_info.pd_table_offset;
++		break;
++	default:
++		dev_info(dev, "%s(id:0x%x,val:%d) is not handled\n",
++			 __func__, ctrl->id, ctrl->val);
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++static int mtk_raw_pde_set_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct mtk_raw_pipeline *pipeline;
++	struct mtk_raw_pde_config *pde_cfg;
++	struct mtk_cam_pde_info *pde_info_p;
++	struct device *dev;
++	int ret = 0;
++	struct mtk_cam_video_device *node;
++	struct mtk_cam_dev_node_desc *desc;
++	const struct v4l2_format *default_fmt;
++
++	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
++	pde_cfg = &pipeline->pde_config;
++	pde_info_p = ctrl->p_new.p;
++	dev = pipeline->raw->devs[pipeline->id];
++
++	node = &pipeline->vdev_nodes[MTK_RAW_META_IN - MTK_RAW_SINK_NUM];
++	desc = &node->desc;
++	default_fmt = &desc->fmts[desc->default_fmt_idx].vfmt;
++
++	switch (ctrl->id) {
++	case V4L2_CID_MTK_CAM_PDE_INFO:
++		if (!pde_info_p->pdo_max_size || !pde_info_p->pdi_max_size) {
++			dev_info(dev,
++				 "%s:pdo_max_sz(%d)/pdi_max_sz(%d) cannot be 0\n",
++				 __func__, pde_info_p->pdo_max_size,
++				 pde_info_p->pdi_max_size);
++			ret = -EINVAL;
++			break;
++		}
++
++		pde_cfg->pde_info.pdo_max_size = pde_info_p->pdo_max_size;
++		pde_cfg->pde_info.pdi_max_size = pde_info_p->pdi_max_size;
++		pde_cfg->pde_info.pd_table_offset =
++			default_fmt->fmt.meta.buffersize;
++		break;
++	default:
++		dev_info(dev, "%s(id:0x%x,val:%d) is not handled\n",
++			 __func__, ctrl->id, ctrl->val);
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++static const struct v4l2_ctrl_ops cam_pde_ctrl_ops = {
++	.g_volatile_ctrl = mtk_raw_pde_get_ctrl,
++	.s_ctrl = mtk_raw_pde_set_ctrl,
++	.try_ctrl = mtk_raw_pde_set_ctrl,
++};
++
++static const struct v4l2_ctrl_config hwn_limit = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_USED_ENGINE_LIMIT,
++	.name = "Engine resource limitation",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 1,
++	.max = 2,
++	.step = 1,
++	.def = 2,
++};
++
++static const struct v4l2_ctrl_config bin_limit = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_BIN_LIMIT,
++	.name = "Binning limitation",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 0,
++	.max = 0xfff,
++	.step = 1,
++	.def = 0,
++};
++
++static const struct v4l2_ctrl_config frz_limit = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_FRZ_LIMIT,
++	.name = "Resizer limitation",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 70,
++	.max = 100,
++	.step = 1,
++	.def = 100,
++};
++
++static const struct v4l2_ctrl_config hwn = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_USED_ENGINE,
++	.name = "Engine resource",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 1,
++	.max = 2,
++	.step = 1,
++	.def = 2,
++};
++
++static const struct v4l2_ctrl_config bin = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_BIN,
++	.name = "Binning",
++	.type = V4L2_CTRL_TYPE_BOOLEAN,
++	.min = 0,
++	.max = 1,
++	.step = 1,
++	.def = 1,
++};
++
++static const struct v4l2_ctrl_config frz = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_FRZ,
++	.name = "Resizer",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 70,
++	.max = 100,
++	.step = 1,
++	.def = 100,
++};
++
++static const struct v4l2_ctrl_config raw_path = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_RAW_PATH_SELECT,
++	.name = "Raw Path",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 0,
++	.max = 1,
++	.step = 1,
++	.def = 1,
++};
++
++static const struct v4l2_ctrl_config hwn_try = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_USED_ENGINE_TRY,
++	.name = "Engine resource",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 1,
++	.max = 2,
++	.step = 1,
++	.def = 2,
++};
++
++static const struct v4l2_ctrl_config bin_try = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_BIN_TRY,
++	.name = "Binning",
++	.type = V4L2_CTRL_TYPE_BOOLEAN,
++	.min = 0,
++	.max = 1,
++	.step = 1,
++	.def = 1,
++};
++
++static const struct v4l2_ctrl_config frz_try = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_FRZ_TRY,
++	.name = "Resizer",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 70,
++	.max = 100,
++	.step = 1,
++	.def = 100,
++};
++
++static const struct v4l2_ctrl_config res_plan_policy = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_RESOURCE_PLAN_POLICY,
++	.name = "Resource planning policy",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 0,
++	.max = 10,
++	.step = 1,
++	.def = 1,
++};
++
++static const struct v4l2_ctrl_config res_pixel_rate = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_PIXEL_RATE,
++	.name = "Resource pixel rate",
++	.type = V4L2_CTRL_TYPE_INTEGER64,
++	.min = 0,
++	.max = 0xFFFFFFFF,
++	.step = 1,
++	.def = 0,
++};
++
++static const struct v4l2_ctrl_config frame_sync_id = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_SYNC_ID,
++	.name = "Frame sync id",
++	.type = V4L2_CTRL_TYPE_INTEGER64,
++	.min = -1,
++	.max = 0x7FFFFFFF,
++	.step = 1,
++	.def = -1,
++};
++
++static const struct v4l2_ctrl_config mtk_feature = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_FEATURE,
++	.name = "mediatek camsys feature",
++	.type = V4L2_CTRL_TYPE_INTEGER64,
++	.min = 0,
++	.max = RAW_FUNCTION_END,
++	.step = 1,
++	.def = 0,
++};
++
++static struct v4l2_ctrl_config cfg_res_ctrl = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC,
++	.name = "resource ctrl",
++	.type = V4L2_CTRL_COMPOUND_TYPES, /* V4L2_CTRL_TYPE_U32,*/
++	.flags = V4L2_CTRL_FLAG_EXECUTE_ON_WRITE,
++	.max = 0xffffffff,
++	.step = 1,
++	.dims = {sizeof(struct mtk_cam_resource)},
++};
++
++static struct v4l2_ctrl_config cfg_res_update = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE,
++	.name = "resource update",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.min = 0,
++	.max = 0xf,
++	.step = 1,
++	.def = 0,
++};
++
++static const struct v4l2_ctrl_config cfg_pde_info = {
++	.ops = &cam_pde_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_PDE_INFO,
++	.name = "pde information",
++	.type = V4L2_CTRL_TYPE_INTEGER,
++	.flags = V4L2_CTRL_FLAG_VOLATILE,
++	.min = 0,
++	.max = 0x1fffffff,
++	.step = 1,
++	.def = 0,
++	.dims = {sizeof_u32(struct mtk_cam_pde_info)},
++};
++
++static const struct v4l2_ctrl_config mtk_camsys_hw_mode = {
++	.ops = &cam_ctrl_ops,
++	.id = V4L2_CID_MTK_CAM_CAMSYS_HW_MODE,
++	.name = "mediatek camsys hardware mode",
++	.type = V4L2_CTRL_TYPE_INTEGER64,
++	.min = 0,
++	.max = 0x7FFFFFFF,
++	.step = 1,
++	.def = DEFAULT,
++};
++
++static void mtk_cam_raw_toggle_db(struct mtk_raw_device *dev)
++{
++	int value;
++	u32 val_cfg, val_dcif_ctl, val_sen;
++
++	value = readl_relaxed(dev->base + REG_CTL_MISC);
++	val_cfg = readl_relaxed(dev->base_inner + REG_TG_PATH_CFG);
++	val_dcif_ctl = readl_relaxed(dev->base_inner + REG_TG_DCIF_CTL);
++	val_sen = readl_relaxed(dev->base_inner + REG_TG_SEN_MODE);
++	writel_relaxed(value & ~CTL_DB_EN, dev->base + REG_CTL_MISC);
++	wmb(); /* make sure committed */
++	writel_relaxed(value | CTL_DB_EN, dev->base + REG_CTL_MISC);
++	wmb(); /* make sure committed */
++	dev_info(dev->dev,
++		 "%s,  read inner AsIs->ToBe TG_PATH_CFG:0x%x->0x%x, TG_DCIF:0x%x->0x%x, TG_SEN:0x%x->0x%x\n",
++		 __func__, val_cfg,
++		 readl_relaxed(dev->base_inner + REG_TG_PATH_CFG), val_dcif_ctl,
++		 readl_relaxed(dev->base_inner + REG_TG_DCIF_CTL), val_sen,
++		 readl_relaxed(dev->base_inner + REG_TG_SEN_MODE));
++}
++
++void mtk_cam_raw_trigger_rawi(struct mtk_raw_device *dev,
++			      struct mtk_cam_ctx *ctx, signed int hw_scene)
++{
++	#define TRIGGER_RAWI_R6 0x10
++	#define TRIGGER_RAWI_R2 0x01
++	u32 cmd = TRIGGER_RAWI_R2;
++
++	writel_relaxed(cmd, dev->base + REG_CTL_RAWI_TRIG);
++	wmb(); /* make sure committed */
++}
++
++void mtk_cam_raw_apply_cq(struct mtk_raw_device *dev, dma_addr_t cq_addr,
++			  unsigned int cq_size, unsigned int cq_offset,
++			  unsigned int sub_cq_size, unsigned int sub_cq_offset)
++{
++	dma_addr_t main, sub;
++
++	dev_dbg(dev->dev,
++		"apply raw%d cq - addr:0x%pad,size:%d/%d,offset:%d\n",
++		dev->id, &cq_addr, cq_size, sub_cq_size, sub_cq_offset);
++
++	main = cq_addr + cq_offset;
++	sub = cq_addr + sub_cq_offset;
++
++	writel_relaxed(dmaaddr_lsb(main),
++		       dev->base + REG_CQ_THR0_BASEADDR);
++	writel_relaxed(dmaaddr_msb(main),
++		       dev->base + REG_CQ_THR0_BASEADDR_MSB);
++	writel_relaxed(cq_size,
++		       dev->base + REG_CQ_THR0_DESC_SIZE);
++	writel_relaxed(dmaaddr_lsb(sub),
++		       dev->base + REG_CQ_SUB_THR0_BASEADDR_2);
++	writel_relaxed(dmaaddr_msb(sub),
++		       dev->base + REG_CQ_SUB_THR0_BASEADDR_MSB_2);
++	writel_relaxed(sub_cq_size,
++		       dev->base + REG_CQ_SUB_THR0_DESC_SIZE_2);
++
++	/* USINGSCQ and always trigger now */
++	writel_relaxed(CAMCTL_CQ_THR0_DONE_ST,
++		       dev->base + REG_CTL_RAW_INT6_EN);
++	writel_relaxed(CAMCTL_CQ_THRSUB_DONE_EN,
++		       dev->base + REG_CTL_RAW_INT7_EN);
++	writel(CTL_CQ_THR0_START, dev->base + REG_CTL_START);
++
++	wmb(); /* make sure committed */
++}
++
++/* sw check again for rawi dcif case */
++static bool mtk_cam_raw_is_dma_idle(struct mtk_raw_device *dev)
++{
++	bool ret = false;
++	int chasing_stat;
++	int raw_rst_stat = readl(dev->base + REG_DMA_SOFT_RST_STAT);
++	int raw_rst_stat2 = readl(dev->base + REG_DMA_SOFT_RST_STAT2);
++	int yuv_rst_stat = readl(dev->yuv_base + REG_DMA_SOFT_RST_STAT);
++
++	if (raw_rst_stat2 != 0x7 || yuv_rst_stat != 0xfffffff)
++		return false;
++
++	/* check beside rawi_r2/r3/r5 */
++	if (~raw_rst_stat & 0x7fffffda)
++		return false;
++
++	if (~raw_rst_stat & RST_STAT_RAWI_R2) { /* RAWI_R2 */
++		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS);
++		ret = ((chasing_stat & RAWI_R2_SMI_REQ_ST) == 0 &&
++		       (readl(dev->base + REG_RAWI_R2_BASE + DMA_OFFSET_SPECIAL_DCIF)
++		       & DC_CAMSV_STAGER_EN) &&
++		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x1))
++		      ? true : false;
++		dev_info(dev->dev, "%s: chasing_stat: 0x%x ret=%d\n",
++			 __func__, chasing_stat, ret);
++	}
++
++	if (~raw_rst_stat & RST_STAT_RAWI_R3) {
++		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS);
++		ret = ((chasing_stat & RAWI_R3_SMI_REQ_ST) == 0 &&
++		       (readl(dev->base + REG_RAWI_R3_BASE + DMA_OFFSET_SPECIAL_DCIF)
++		       & DC_CAMSV_STAGER_EN) &&
++		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x80))
++		      ? true : false;
++		dev_info(dev->dev, "%s: chasing_stat: 0x%x, ret=%d\n",
++			 __func__, chasing_stat, ret);
++	}
++
++	if (~raw_rst_stat & RST_STAT_RAWI_R5) {
++		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS2);
++		ret = ((chasing_stat & RAWI_R5_SMI_REQ_ST) == 0 &&
++		       (readl(dev->base + REG_RAWI_R5_BASE + DMA_OFFSET_SPECIAL_DCIF)
++		       & DC_CAMSV_STAGER_EN) &&
++		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x1000))
++		      ? true : false;
++		dev_info(dev->dev, "%s: chasing_stat: 0x%x, ret=%d\n",
++			 __func__, chasing_stat, ret);
++	}
++
++	return ret;
++}
++
++void mtk_cam_raw_reset(struct mtk_raw_device *dev)
++{
++	int sw_ctl;
++	int ret;
++
++	dev_dbg(dev->dev, "camsys | trigger %s\n", __func__);
++
++	/* Disable all DMA DCM before reset */
++	writel(0x00000fff, dev->base + REG_CTL_RAW_MOD5_DCM_DIS);
++	writel(0x0007ffff, dev->base + REG_CTL_RAW_MOD6_DCM_DIS);
++	writel(0xffffffff, dev->yuv_base + REG_CTL_RAW_MOD5_DCM_DIS);
++
++	/* Enable CQI_R1 ~ R4 before reset and make sure loaded */
++	writel(readl(dev->base + REG_CTL_MOD6_EN) | 0x78000,
++	       dev->base + REG_CTL_MOD6_EN);
++	mtk_cam_raw_toggle_db(dev);
++
++	writel(0, dev->base + REG_CTL_SW_CTL);
++	writel(1, dev->base + REG_CTL_SW_CTL);
++	wmb(); /* make sure committed */
++
++	ret = readx_poll_timeout(readl, dev->base + REG_CTL_SW_CTL, sw_ctl,
++				 sw_ctl & 0x2,
++				 1 /* delay, us */, 5000 /* timeout, us */);
++
++	if (ret < 0 && !mtk_cam_raw_is_dma_idle(dev)) {
++		dev_info(dev->dev,
++			 "%s: timeout: tg_sen_mode: 0x%x, ctl_en: 0x%x, mod6_en: 0x%x, ctl_sw_ctl:0x%x, frame_no:0x%x,rst_stat:0x%x,rst_stat2:0x%x,yuv_rst_stat:0x%x\n",
++			 __func__,
++			 readl(dev->base + REG_TG_SEN_MODE),
++			 readl(dev->base + REG_CTL_EN),
++			 readl(dev->base + REG_CTL_MOD6_EN),
++			 readl(dev->base + REG_CTL_SW_CTL),
++			 readl(dev->base + REG_FRAME_SEQ_NUM),
++			 readl(dev->base + REG_DMA_SOFT_RST_STAT),
++			 readl(dev->base + REG_DMA_SOFT_RST_STAT2),
++			 readl(dev->yuv_base + REG_DMA_SOFT_RST_STAT));
++
++		goto RESET_FAILURE;
++	}
++
++	/* do hw rst */
++	writel(4, dev->base + REG_CTL_SW_CTL);
++	writel(0, dev->base + REG_CTL_SW_CTL);
++
++RESET_FAILURE:
++	/* Enable all DMA DCM back */
++	writel(0x0, dev->base + REG_CTL_RAW_MOD5_DCM_DIS);
++	writel(0x0, dev->base + REG_CTL_RAW_MOD6_DCM_DIS);
++	writel(0x0, dev->yuv_base + REG_CTL_RAW_MOD5_DCM_DIS);
++
++	wmb(); /* make sure committed */
++}
++
++static void mtk_cam_raw_reset_reg(struct mtk_raw_device *dev)
++{
++	int cq_en, sw_done;
++
++	dev_dbg(dev->dev,
++		"[%s++] CQ_EN/SW_SUB_CTL/SW_DONE [in] 0x%x/0x%x/0x%x [out] 0x%x/0x%x/0x%x\n",
++		__func__,
++		readl_relaxed(dev->base_inner + REG_CQ_EN),
++		readl_relaxed(dev->base_inner + REG_CTL_SW_SUB_CTL),
++		readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE),
++		readl_relaxed(dev->base + REG_CQ_EN),
++		readl_relaxed(dev->base + REG_CTL_SW_SUB_CTL),
++		readl_relaxed(dev->base + REG_CTL_SW_PASS1_DONE));
++
++	cq_en = readl_relaxed(dev->base_inner + REG_CQ_EN);
++	sw_done = readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE);
++
++	cq_en = cq_en & (~SCQ_SUBSAMPLE_EN) & (~SCQ_STAGGER_MODE);
++	writel(cq_en, dev->base_inner + REG_CQ_EN);
++	writel(cq_en, dev->base + REG_CQ_EN);
++
++	dev_dbg(dev->dev, "[--] try to disable SCQ_STAGGER_MODE: CQ_EN(0x%x)\n",
++		cq_en);
++
++	writel(sw_done & (~SW_DONE_SAMPLE_EN), dev->base_inner + REG_CTL_SW_PASS1_DONE);
++	writel(sw_done & (~SW_DONE_SAMPLE_EN), dev->base + REG_CTL_SW_PASS1_DONE);
++
++	writel(0, dev->base_inner + REG_CTL_SW_SUB_CTL);
++	writel(0, dev->base + REG_CTL_SW_SUB_CTL);
++
++	wmb(); /* make sure committed */
++
++	dev_dbg(dev->dev,
++		"[%s--] CQ_EN/SW_SUB_CTL/SW_DONE [in] 0x%x/0x%x/0x%x [out] 0x%x/0x%x/0x%x\n",
++		__func__, readl_relaxed(dev->base_inner + REG_CQ_EN),
++		readl_relaxed(dev->base_inner + REG_CTL_SW_SUB_CTL),
++		readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE),
++		readl_relaxed(dev->base + REG_CQ_EN),
++		readl_relaxed(dev->base + REG_CTL_SW_SUB_CTL),
++		readl_relaxed(dev->base + REG_CTL_SW_PASS1_DONE));
++}
++
++void mtk_cam_raw_dump_aa_info(struct mtk_cam_ctx *ctx,
++			      struct mtk_ae_debug_data *ae_info)
++{
++	struct mtk_raw_device *raw_dev = NULL;
++	struct mtk_raw_pipeline *pipe = ctx->pipe;
++	int i;
++
++	for (i = 0; i < ctx->cam->num_raw_devices; i++) {
++		if (pipe->enabled_raw & (1 << i)) {
++			struct device *dev = ctx->cam->raw.devs[i];
++
++			raw_dev = dev_get_drvdata(dev);
++			ae_info->obc_r1_sum[0] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R1_R_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R1_R_SUM_L);
++			ae_info->obc_r2_sum[0] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R2_R_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R2_R_SUM_L);
++			ae_info->obc_r3_sum[0] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R3_R_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R3_R_SUM_L);
++			ae_info->ltm_sum[0] +=
++				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_R_MSB) << 32) |
++				readl(raw_dev->base + REG_LTM_AE_DEBUG_R_LSB);
++			ae_info->aa_sum[0] +=
++				((u64)readl(raw_dev->base + REG_AA_R_SUM_H) << 32) |
++				readl(raw_dev->base + REG_AA_R_SUM_L);
++
++			ae_info->obc_r1_sum[1] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R1_B_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R1_B_SUM_L);
++			ae_info->obc_r2_sum[1] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R2_B_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R2_B_SUM_L);
++			ae_info->obc_r3_sum[1] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R3_B_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R3_B_SUM_L);
++			ae_info->ltm_sum[1] +=
++				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_B_MSB) << 32) |
++				readl(raw_dev->base + REG_LTM_AE_DEBUG_B_LSB);
++			ae_info->aa_sum[1] +=
++				((u64)readl(raw_dev->base + REG_AA_B_SUM_H) << 32) |
++				readl(raw_dev->base + REG_AA_B_SUM_L);
++
++			ae_info->obc_r1_sum[2] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R1_GR_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R1_GR_SUM_L);
++			ae_info->obc_r2_sum[2] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R2_GR_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R2_GR_SUM_L);
++			ae_info->obc_r3_sum[2] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R3_GR_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R3_GR_SUM_L);
++			ae_info->ltm_sum[2] +=
++				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_GR_MSB) << 32) |
++				readl(raw_dev->base + REG_LTM_AE_DEBUG_GR_LSB);
++			ae_info->aa_sum[2] +=
++				((u64)readl(raw_dev->base + REG_AA_GR_SUM_H) << 32) |
++				readl(raw_dev->base + REG_AA_GR_SUM_L);
++
++			ae_info->obc_r1_sum[3] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R1_GB_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R1_GB_SUM_L);
++			ae_info->obc_r2_sum[3] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R2_GB_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R2_GB_SUM_L);
++			ae_info->obc_r3_sum[3] +=
++				((u64)readl(raw_dev->base + OFFSET_OBC_R3_GB_SUM_H) << 32) |
++				readl(raw_dev->base + OFFSET_OBC_R3_GB_SUM_L);
++			ae_info->ltm_sum[3] +=
++				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_GB_MSB) << 32) |
++				readl(raw_dev->base + REG_LTM_AE_DEBUG_GB_LSB);
++			ae_info->aa_sum[3] +=
++				((u64)readl(raw_dev->base + REG_AA_GB_SUM_H) << 32) |
++				readl(raw_dev->base + REG_AA_GB_SUM_L);
++		}
++	}
++}
++
++static int reset_msgfifo(struct mtk_raw_device *dev)
++{
++	atomic_set(&dev->is_fifo_overflow, 0);
++	return kfifo_init(&dev->msg_fifo, dev->msg_buffer, dev->fifo_size);
++}
++
++static int push_msgfifo(struct mtk_raw_device *dev,
++			struct mtk_camsys_irq_info *info)
++{
++	int len;
++
++	if (unlikely(kfifo_avail(&dev->msg_fifo) < sizeof(*info))) {
++		atomic_set(&dev->is_fifo_overflow, 1);
++		return -1;
++	}
++
++	len = kfifo_in(&dev->msg_fifo, info, sizeof(*info));
++	WARN_ON(len != sizeof(*info));
++
++	return 0;
++}
++
++static void set_fifo_size(void __iomem *dma_base, int fifo_size)
++{
++	writel_relaxed((0x1 << 28) | (fifo_size & 0xFFF),
++		       dma_base + DMA_OFFSET_CON0);
++}
++
++static void set_fifo_threshold(void __iomem *dma_base)
++{
++	u32 fifo_size = 0;
++
++	fifo_size = readl_relaxed(dma_base + DMA_OFFSET_CON0) & 0xFFF;
++	writel_relaxed((0x1 << 28) |
++		       ((fifo_size * 1 / 4) & 0xFFF) << 16 |
++		       ((fifo_size * 1 / 8) & 0xFFF),
++		       dma_base + DMA_OFFSET_CON1);
++	writel_relaxed((0x1 << 28) |
++		       ((fifo_size * 1 / 2) & 0xFFF) << 16 |
++		       ((fifo_size * 3 / 8) & 0xFFF),
++		       dma_base + DMA_OFFSET_CON2);
++	writel_relaxed((0x1 << 31) |
++		       ((fifo_size * 2 / 3) & 0xFFF) << 16 |
++		       ((fifo_size * 13 / 24) & 0xFFF),
++		       dma_base + DMA_OFFSET_CON3);
++	writel_relaxed((0x1 << 31) |
++		       ((fifo_size * 3 / 8) & 0xFFF) << 16 |
++		       ((fifo_size * 1 / 4) & 0xFFF),
++		       dma_base + DMA_OFFSET_CON4);
++}
++
++static void init_dma_threshold(struct mtk_raw_device *dev)
++{
++	struct mtk_cam_device *cam_dev;
++
++	cam_dev = dev->cam;
++
++	/* Set mt8188 default fifo size */
++	set_fifo_size(dev->base + REG_IMGO_R1_BASE, 0x3C0);
++	set_fifo_size(dev->yuv_base + REG_YUVCO_R1_BASE, 0x200);
++	set_fifo_size(dev->yuv_base + REG_YUVDO_R1_BASE, 0x80);
++	set_fifo_size(dev->yuv_base + REG_YUVO_R3_BASE, 0xc0);
++	set_fifo_size(dev->yuv_base + REG_YUVBO_R3_BASE, 0x60);
++	set_fifo_size(dev->yuv_base + REG_YUVCO_R3_BASE, 0x40);
++	set_fifo_size(dev->yuv_base + REG_YUVO_R2_BASE, 0x80);
++	set_fifo_size(dev->yuv_base + REG_YUVBO_R2_BASE, 0x40);
++	set_fifo_size(dev->yuv_base + REG_YUVO_R4_BASE, 0x40);
++	set_fifo_size(dev->yuv_base + REG_YUVBO_R4_BASE, 0x40);
++	set_fifo_size(dev->yuv_base + REG_YUVO_R5_BASE, 0x40);
++	set_fifo_threshold(dev->base + REG_IMGO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_FHO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_AAHO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_PDO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_AAO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_AFO_R1_BASE);
++	set_fifo_threshold(dev->base + REG_PDO_R1_BASE);
++
++	set_fifo_threshold(dev->yuv_base + REG_YUVO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVCO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVDO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVCO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_LTMSO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TSFSO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TSFSO_R2_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_FLKO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_UFEO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVO_R2_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R2_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVO_R4_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R4_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVO_R5_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R5_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TBO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R2_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TBO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R2_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R3_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_ACTSO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TNCSO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TNCSBO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TNCSHO_R1_BASE);
++	set_fifo_threshold(dev->yuv_base + REG_TNCSYO_R1_BASE);
++
++	set_fifo_threshold(dev->base + REG_RAWI_R2_BASE);
++	set_fifo_threshold(dev->base + REG_UFDI_R2_BASE);
++	set_fifo_threshold(dev->base + REG_RAWI_R3_BASE);
++	set_fifo_threshold(dev->base + REG_UFDI_R3_BASE);
++	set_fifo_threshold(dev->base + REG_CQI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_CQI_R2_BASE);
++	set_fifo_threshold(dev->base + REG_CQI_R3_BASE);
++	set_fifo_threshold(dev->base + REG_CQI_R4_BASE);
++	set_fifo_threshold(dev->base + REG_LSCI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_BPCI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_BPCI_R2_BASE);
++	set_fifo_threshold(dev->base + REG_BPCI_R3_BASE);
++	set_fifo_threshold(dev->base + REG_PDI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_AAI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_CACI_R1_BASE);
++	set_fifo_threshold(dev->base + REG_RAWI_R6_BASE);
++
++	writel_relaxed(0x1, cam_dev->base + REG_HALT1_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_HALT2_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_HALT3_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_HALT4_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_HALT5_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_HALT6_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT1_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT2_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT3_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT4_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT5_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT6_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT1_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT2_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT3_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT4_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT5_EN);
++	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT6_EN);
++}
++
++static int get_fps_ratio(struct mtk_raw_device *dev)
++{
++	int fps = (dev->pipeline->res_config.interval.numerator > 0) ?
++			(dev->pipeline->res_config.interval.denominator /
++			dev->pipeline->res_config.interval.numerator) : 0;
++
++	if (fps <= 30)
++		return 1;
++	else if (fps <= 60)
++		return 2;
++	else
++		return 1;
++}
++
++void mtk_cam_raw_initialize(struct mtk_raw_device *dev, int is_sub)
++{
++	u32 val;
++
++	/* USINGSCQ */
++	val = readl_relaxed(dev->base + REG_CQ_EN);
++	writel_relaxed(val | SCQ_EN, dev->base + REG_CQ_EN);
++	writel_relaxed(0xffffffff, dev->base + REG_SCQ_START_PERIOD);
++
++	writel_relaxed(CQ_THR0_MODE_IMMEDIATE | CQ_THR0_EN,
++		       dev->base + REG_CQ_THR0_CTL);
++	writel_relaxed(CQ_THR0_MODE_IMMEDIATE | CQ_THR0_EN,
++		       dev->base + REG_CQ_SUB_THR0_CTL);
++	writel_relaxed(CAMCTL_CQ_THR0_DONE_ST,
++		       dev->base + REG_CTL_RAW_INT6_EN);
++	writel_relaxed(CAMCTL_CQ_THRSUB_DONE_EN,
++		       dev->base + REG_CTL_RAW_INT7_EN);
++
++	dev->is_sub = is_sub;
++	dev->sof_count = 0;
++	dev->vsync_count = 0;
++	atomic_set(&dev->vf_en, 0);
++	reset_msgfifo(dev);
++
++	init_dma_threshold(dev);
++
++	writel_relaxed(0xFFFE0000,
++		       dev->base + REG_FLKO_R1_BASE + DMA_OFFSET_ERR_STAT);
++
++	dev_dbg(dev->dev, "%s - REG_CQ_EN:0x%x ,REG_CQ_THR0_CTL:0x%8x\n",
++		__func__,
++		readl_relaxed(dev->base + REG_CQ_EN),
++		readl_relaxed(dev->base + REG_CQ_THR0_CTL));
++}
++
++void mtk_cam_raw_stream_on(struct mtk_raw_device *dev, int on)
++{
++	u32 val;
++	u32 chk_val;
++	u32 cfg_val;
++	u32 fps_ratio = 1;
++	struct mtk_cam_ctx *ctx;
++
++	dev_info(dev->dev, "raw %d %s %d\n", dev->id, __func__, on);
++	ctx = mtk_cam_find_ctx(dev->cam, &dev->pipeline->subdev.entity);
++	if (!ctx) {
++		dev_info(dev->dev, "%s: cannot find ctx\n", __func__);
++		return;
++	}
++
++	if (on) {
++		/* USINGSCQ */
++		val = readl_relaxed(dev->base + REG_TG_TIME_STAMP_CNT);
++		val = (val == 0) ? 1 : val;
++		fps_ratio = get_fps_ratio(dev);
++		dev_info(dev->dev,
++			 "VF on - REG_TG_TIME_STAMP_CNT val:%d fps(30x):%d\n",
++			 val, fps_ratio);
++		writel_relaxed(SCQ_DEADLINE_MS * 1000 * SCQ_DEFAULT_CLK_RATE /
++			       (val * 2) / fps_ratio,
++			       dev->base + REG_SCQ_START_PERIOD);
++
++		mtk_cam_set_topdebug_rdyreq(dev->dev, dev->base, dev->yuv_base,
++					    TG_OVERRUN);
++		dev->overrun_debug_dump_cnt = 0;
++		if (mtk_cam_is_m2m(ctx)) {
++			dev_info(dev->dev, "[%s] M2M view finder disable\n", __func__);
++		} else {
++			val = readl_relaxed(dev->base + REG_TG_VF_CON);
++			val |= TG_VFDATA_EN;
++			writel_relaxed(val, dev->base + REG_TG_VF_CON);
++			wmb(); /* make sure committed */
++		}
++		atomic_set(&dev->vf_en, 1);
++		dev_info(dev->dev,
++			 "%s - CQ_EN:0x%x, CQ_THR0_CTL:0x%8x, TG_VF_CON:0x%8x, SCQ_START_PERIOD:%d\n",
++			 __func__,
++			 readl_relaxed(dev->base + REG_CQ_EN),
++			 readl_relaxed(dev->base + REG_CQ_THR0_CTL),
++			 readl_relaxed(dev->base + REG_TG_VF_CON),
++			 readl_relaxed(dev->base + REG_SCQ_START_PERIOD));
++	} else {
++		dev_info(dev->dev, "VF off\n");
++		atomic_set(&dev->vf_en, 0);
++
++		writel_relaxed((u32)~CQ_THR0_EN, dev->base + REG_CQ_THR0_CTL);
++		wmb(); /* make sure committed */
++
++		cfg_val = readl_relaxed(dev->base + REG_TG_PATH_CFG);
++		cfg_val |= 0x100;
++		writel(cfg_val, dev->base + REG_TG_PATH_CFG);
++
++		val = readl_relaxed(dev->base + REG_TG_VF_CON);
++		val &= ~TG_VFDATA_EN;
++		writel(val, dev->base + REG_TG_VF_CON);
++
++		cfg_val = readl_relaxed(dev->base + REG_TG_PATH_CFG);
++		cfg_val &= ~0x100;
++		writel(cfg_val, dev->base + REG_TG_PATH_CFG);
++
++		wmb(); /* make sure committed */
++		/* reset hw after vf off */
++		if (readx_poll_timeout(readl, dev->base_inner + REG_TG_VF_CON,
++				       chk_val, chk_val == val, 1 /* sleep us */,
++				       33000 /* timeout us */) < 0) {
++			dev_info(dev->dev,
++				 "%s: wait vf off timeout: TG_VF_CON 0x%x\n",
++				 __func__, chk_val);
++		}
++
++		mtk_cam_raw_reset_reg(dev);
++	}
++}
++
++static int mtk_raw_linebuf_chk(bool b_twin, bool b_bin, bool b_frz, bool b_qbn,
++			       bool b_cbn, int tg_x, int *frz_ratio)
++{
++	int input_x = tg_x;
++	/* max line buffer check for frontal binning and resizer */
++	if (b_twin) {
++		if (input_x > CAM_TWIN_PROCESS_MAX_LINE_BUFFER)
++			return LB_CHECK_TWIN;
++		input_x = input_x >> 1;
++	}
++	if (b_cbn) {
++		if (input_x > CAM_RAW_CBN_MAX_LINE_BUFFER)
++			return LB_CHECK_CBN;
++		input_x = input_x >> 1;
++	}
++	if (b_qbn) {
++		if (input_x > CAM_RAW_QBND_MAX_LINE_BUFFER)
++			return LB_CHECK_QBN;
++		input_x = input_x >> 1;
++	}
++	if (b_bin) {
++		if (input_x > CAM_RAW_BIN_MAX_LINE_BUFFER)
++			return LB_CHECK_BIN;
++		input_x = input_x >> 1;
++	}
++	if (input_x <= CAM_RAW_PROCESS_MAX_LINE_BUFFER) {
++		return LB_CHECK_OK;
++	} else if (b_frz) {
++		if (input_x > CAM_RAW_FRZ_MAX_LINE_BUFFER)
++			return LB_CHECK_FRZ;
++
++		*frz_ratio = input_x * 100 / CAM_RAW_PROCESS_MAX_LINE_BUFFER;
++		return LB_CHECK_OK;
++	} else {
++		return LB_CHECK_RAW;
++	}
++}
++
++static int mtk_raw_pixelmode_calc(int rawpxl, int b_twin, bool b_bin,
++				  bool b_frz, int min_ratio)
++{
++	int pixelmode = rawpxl;
++
++	pixelmode = (b_twin == 2) ? pixelmode << 2 : pixelmode;
++	pixelmode = (b_twin == 1) ? pixelmode << 1 : pixelmode;
++	pixelmode = b_bin ? pixelmode << 1 : pixelmode;
++	pixelmode = (b_frz && (min_ratio < FRZ_PXLMODE_THRES)) ?
++		pixelmode << 1 : pixelmode;
++	pixelmode = (pixelmode > TGO_MAX_PXLMODE) ?
++		TGO_MAX_PXLMODE : pixelmode;
++
++	return pixelmode;
++}
++
++static void mtk_raw_update_debug_param(struct mtk_cam_device *cam,
++				       struct mtk_cam_resource_config *res,
++				       int *clk_idx)
++{
++	/* skip if debug is not enabled */
++	if (!debug_raw)
 +		return;
 +
-+	dma_sync_sgtable_for_device(buf->dev, sgt, buf->dma_dir);
++	dev_dbg(cam->dev,
++		"%s:before:BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
++		__func__, res->bin_enable, res->frz_enable, res->frz_ratio,
++		res->raw_num_used, *clk_idx, res->tgo_pxl_mode,
++		res->clk_target);
++
++	if (debug_raw_num > 0) {
++		dev_info(cam->dev, "DEBUG: force raw_num_used: %d\n",
++			 debug_raw_num);
++		res->raw_num_used = debug_raw_num;
++	}
++
++	if (debug_pixel_mode >= 0) {
++		dev_info(cam->dev, "DEBUG: force debug_pixel_mode (log2): %d\n",
++			 debug_pixel_mode);
++		res->tgo_pxl_mode = debug_pixel_mode;
++	}
++
++	if (debug_clk_idx >= 0) {
++		dev_info(cam->dev, "DEBUG: force debug_clk_idx: %d\n",
++			 debug_clk_idx);
++		*clk_idx = debug_clk_idx;
++	}
++
++	dev_dbg(cam->dev,
++		"%s:after:BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
++		__func__, res->bin_enable, res->frz_enable, res->frz_ratio,
++		res->raw_num_used, *clk_idx, res->tgo_pxl_mode,
++		res->clk_target);
 +}
 +
-+uint64_t *camsys_get_timestamp_addr(void *vaddr)
++static bool is_cbn_en(int bin_flag)
 +{
-+	struct mtk_cam_uapi_meta_raw_stats_0 *stats0;
-+
-+	stats0 = (struct mtk_cam_uapi_meta_raw_stats_0 *)vaddr;
-+	return (uint64_t *)(stats0->timestamp.timestamp_buf);
++	switch (bin_flag) {
++	case CBN_2X2_ON:
++	case CBN_3X3_ON:
++	case CBN_4X4_ON:
++		return true;
++	default:
++		return false;
++	}
 +}
-+EXPORT_SYMBOL_GPL(camsys_get_timestamp_addr);
 +
-+void camsys_set_meta_stats_info(u32 dma_port, struct vb2_buffer *vb,
-+				struct mtk_raw_pde_config *pde_cfg)
++static bool mtk_cam_raw_resource_calc(struct mtk_cam_device *cam,
++				      struct mtk_cam_resource_config *res,
++				      s64 pixel_rate, int res_plan,
++				      int in_w, int in_h, int *out_w, int *out_h)
 +{
-+	struct mtk_cam_uapi_meta_raw_stats_0 *stats0;
-+	struct mtk_cam_uapi_meta_raw_stats_1 *stats1;
-+	unsigned long offset;
-+	unsigned int plane;
-+	void *vaddr = vb2_plane_vaddr(vb, 0);
++	int res_step_type = 0;
++	int tgo_pxl_mode = 1;
++	int pixel_mode[MTK_CAMSYS_RES_STEP_NUM] = {0};
++	int bin_temp = 0, frz_temp = 0, hwn_temp = 0;
++	int bin_en = 0, frz_en = 0, twin_en = 0, clk_cur = 0;
++	int idx = 0, clk_res = 0, idx_res = 0;
++	bool res_found = false;
++	int lb_chk_res = -1;
++	int frz_ratio = 100;
++	int p;
 +
-+	switch (dma_port) {
-+	case MTKCAM_IPI_RAW_META_STATS_0:
-+		stats0 = (struct mtk_cam_uapi_meta_raw_stats_0 *)vaddr;
-+		offset = sizeof(*stats0);
-+		set_payload(&stats0->ae_awb_stats.aao_buf,
-+			    MTK_CAM_UAPI_AAO_MAX_BUF_SIZE, &offset);
-+		set_payload(&stats0->ae_awb_stats.aaho_buf,
-+			    MTK_CAM_UAPI_AAHO_MAX_BUF_SIZE, &offset);
-+		set_payload(&stats0->ltm_stats.ltmso_buf,
-+			    MTK_CAM_UAPI_LTMSO_SIZE, &offset);
-+		set_payload(&stats0->flk_stats.flko_buf,
-+			    MTK_CAM_UAPI_FLK_MAX_BUF_SIZE, &offset);
-+		set_payload(&stats0->tsf_stats.tsfo_r1_buf,
-+			    MTK_CAM_UAPI_TSFSO_SIZE, &offset);
-+		set_payload(&stats0->tsf_stats.tsfo_r2_buf,
-+			    MTK_CAM_UAPI_TSFSO_SIZE, &offset);
-+		set_payload(&stats0->tncy_stats.tncsyo_buf,
-+			    MTK_CAM_UAPI_TNCSYO_SIZE, &offset);
-+		if (pde_cfg) {
-+			if (pde_cfg->pde_info.pd_table_offset) {
-+				set_payload(&stats0->pde_stats.pdo_buf,
-+					    pde_cfg->pde_info.pdo_max_size, &offset);
++	res->res_plan = res_plan;
++	res->pixel_rate = pixel_rate;
++	/* test pattern */
++	if (res->pixel_rate == 0)
++		res->pixel_rate = 450 * MHz;
++	dev_dbg(cam->dev,
++		"[Res] PR = %lld, w/h=%d/%d HWN(%d)/BIN(%d)/FRZ(%d),Plan:%d\n",
++		res->pixel_rate, in_w, in_h,
++		res->hwn_limit_max, res->bin_limit, res->frz_limit, res->res_plan);
++
++	memcpy(res->res_strategy, raw_resource_strategy_plan + res->res_plan,
++	       MTK_CAMSYS_RES_STEP_NUM * sizeof(int));
++	res->bin_enable = 0;
++	res->raw_num_used = 1;
++	res->frz_enable = 0;
++	res->frz_ratio = frz_ratio;
++	for (idx = 0; idx < MTK_CAMSYS_RES_STEP_NUM ; idx++) {
++		res_step_type = res->res_strategy[idx] & MTK_CAMSYS_RES_IDXMASK;
++		switch (res_step_type) {
++		case MTK_CAMSYS_RES_BIN_TAG:
++			bin_temp = res->res_strategy[idx] - E_RES_BIN_S;
++			if (bin_temp <= res->bin_limit)
++				bin_en = bin_temp;
++			if (bin_en && frz_en)
++				frz_en = 0;
++			break;
++		case MTK_CAMSYS_RES_FRZ_TAG:
++			frz_temp = res->res_strategy[idx] - E_RES_FRZ_S;
++			if (res->frz_limit < 100)
++				frz_en = frz_temp;
++			break;
++		case MTK_CAMSYS_RES_HWN_TAG:
++			hwn_temp = res->res_strategy[idx] - E_RES_HWN_S;
++			if (hwn_temp + 1 <= res->hwn_limit_max)
++				twin_en = hwn_temp;
++			break;
++		case MTK_CAMSYS_RES_CLK_TAG:
++			clk_cur = res->res_strategy[idx] - E_RES_CLK_S;
++			break;
++		default:
++			break;
++		}
++
++		/* 1 for force bin on */
++		if (res->bin_limit >= 1)
++			bin_en = 1;
++
++		if (res->hwn_limit_min > 1)
++			twin_en = 1;
++
++		/* max line buffer check*/
++		lb_chk_res = mtk_raw_linebuf_chk(twin_en, res->bin_limit & BIN_ON,
++						 frz_en, res->bin_limit & QBND_ON,
++						 is_cbn_en(res->bin_limit),
++						 in_w, &frz_ratio);
++		/* frz ratio*/
++		if (res_step_type == MTK_CAMSYS_RES_FRZ_TAG) {
++			res->frz_ratio = res->frz_limit < FRZ_PXLMODE_THRES ?
++				res->frz_limit : FRZ_PXLMODE_THRES;
++		}
++		/*try 1-pixel mode first*/
++		for (p = 1; p <= MTK_CAMSYS_PROC_DEFAULT_PIXELMODE; p++) {
++			tgo_pxl_mode = mtk_raw_pixelmode_calc(p, twin_en,
++							      bin_en, frz_en,
++							      res->frz_ratio);
++			/**
++			 * isp throughput along resource strategy
++			 * (compared with pixel rate)
++			 */
++			pixel_mode[idx] = tgo_pxl_mode;
++
++			/* only support 1-pixel mode */
++			if (p == 1 && lb_chk_res == LB_CHECK_OK) {
++				if (!res_found) {
++					res->bin_enable = bin_en;
++					res->frz_enable = frz_en;
++					res->raw_num_used = twin_en + 1;
++					clk_res = clk_cur;
++					idx_res = idx;
++					res_found = true;
++					break;
++				}
 +			}
 +		}
-+	/* Use scp reserved cache buffer, do buffer cache sync after fill in meta payload */
-+		for (plane = 0; plane < vb->num_planes; ++plane)
-+			vb2_sync_for_device(vb->planes[plane].mem_priv);
++		dev_dbg(cam->dev,
++			"Res-%d B/F/H/C=%d/%d/%d/%d -> %d/%d/%d/%d (%d)(%d)\n",
++			idx, bin_temp, frz_temp, hwn_temp, clk_cur, bin_en,
++			frz_en, twin_en, clk_cur, lb_chk_res, pixel_mode[idx]);
++	}
++
++	tgo_pxl_mode = pixel_mode[idx_res];
++	switch (tgo_pxl_mode) {
++	case 1:
++		res->tgo_pxl_mode = 0;
 +		break;
-+	case MTKCAM_IPI_RAW_META_STATS_1:
-+		stats1 = (struct mtk_cam_uapi_meta_raw_stats_1 *)vaddr;
-+		offset = sizeof(*stats1);
-+		set_payload(&stats1->af_stats.afo_buf,
-+			    MTK_CAM_UAPI_AFO_MAX_BUF_SIZE, &offset);
-+	/* Use scp reserved cache buffer, do buffer cache sync after fill in meta payload */
-+		for (plane = 0; plane < vb->num_planes; ++plane)
-+			vb2_sync_for_device(vb->planes[plane].mem_priv);
++	case 2:
++		res->tgo_pxl_mode = 1;
 +		break;
-+	case MTKCAM_IPI_RAW_META_STATS_2:
-+		pr_info("stats 2 not support");
++	case 4:
++		res->tgo_pxl_mode = 2;
++		break;
++	case 8:
++		res->tgo_pxl_mode = 3;
 +		break;
 +	default:
-+		pr_debug("%s: dma_port err\n", __func__);
 +		break;
 +	}
-+}
-+EXPORT_SYMBOL_GPL(camsys_set_meta_stats_info);
 +
-+int camsys_get_meta_version(bool major)
-+{
-+	if (major)
-+		return MTK_CAM_META_VERSION_MAJOR;
-+	else
-+		return MTK_CAM_META_VERSION_MINOR;
-+}
-+EXPORT_SYMBOL_GPL(camsys_get_meta_version);
++	mtk_raw_update_debug_param(cam, res, &clk_res);
 +
-+int camsys_get_meta_size(u32 video_id)
++	if (res_found) {
++		dev_info(cam->dev,
++			 "Res-end:%d BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
++			 idx_res, res->bin_enable, res->frz_enable, res->frz_ratio,
++			 res->raw_num_used, clk_res, res->tgo_pxl_mode,
++			 res->clk_target);
++	} else {
++		dev_dbg(cam->dev, "[%s] Error resource result\n", __func__);
++	}
++	if (res->bin_enable) {
++		*out_w = in_w >> 1;
++		*out_h = in_h >> 1;
++	} else if (res->frz_enable) {
++		*out_w = in_w * res->frz_ratio / 100;
++		*out_h = in_h * res->frz_ratio / 100;
++	} else {
++		*out_w = in_w;
++		*out_h = in_h;
++	}
++
++	return res_found;
++}
++
++static void raw_irq_handle_tg_grab_err(struct mtk_raw_device *raw_dev,
++				       int dequeued_frame_seq_no);
++static void raw_irq_handle_dma_err(struct mtk_raw_device *raw_dev);
++static void raw_irq_handle_tg_overrun_err(struct mtk_raw_device *raw_dev,
++					  int dequeued_frame_seq_no);
++
++static void raw_handle_error(struct mtk_raw_device *raw_dev,
++			     struct mtk_camsys_irq_info *data)
 +{
-+	switch (video_id) {
-+	case MTKCAM_IPI_RAW_META_STATS_CFG:
-+		return RAW_STATS_CFG_SIZE;
-+	case MTKCAM_IPI_RAW_META_STATS_0:
-+		return RAW_STATS_0_SIZE;
-+	case MTKCAM_IPI_RAW_META_STATS_1:
-+		return RAW_STATS_1_SIZE;
-+	case MTKCAM_IPI_RAW_META_STATS_2:
-+		return RAW_STATS_2_SIZE;
++	int err_status = data->e.err_status;
++	int frame_idx_inner = data->frame_idx_inner;
++
++	/* Show DMA errors in detail */
++	if (err_status & DMA_ERR_ST)
++		raw_irq_handle_dma_err(raw_dev);
++
++	/* Show TG register for more error detail*/
++	if (err_status & TG_GBERR_ST)
++		raw_irq_handle_tg_grab_err(raw_dev, frame_idx_inner);
++
++	if (err_status & TG_OVRUN_ST) {
++		if (raw_dev->overrun_debug_dump_cnt < 4) {
++			mtk_cam_dump_topdebug_rdyreq(raw_dev->dev,
++						     raw_dev->base,
++						     raw_dev->yuv_base);
++			raw_dev->overrun_debug_dump_cnt++;
++		} else {
++			dev_dbg(raw_dev->dev,
++				"%s: TG_OVRUN_ST repeated skip dump raw_id:%d\n",
++				__func__, raw_dev->id);
++		}
++		raw_irq_handle_tg_overrun_err(raw_dev, frame_idx_inner);
++	}
++}
++
++static inline unsigned int mtk_raw_get_err_status(unsigned int irq_status)
++{
++	return irq_status & INT_ST_MASK_CAM_ERR;
++}
++
++static irqreturn_t mtk_irq_raw(int irq, void *data)
++{
++	struct mtk_raw_device *raw_dev = (struct mtk_raw_device *)data;
++	struct device *dev = raw_dev->dev;
++	struct mtk_camsys_irq_info irq_info;
++	unsigned int frame_idx, frame_idx_inner, fbc_fho_ctl2;
++	unsigned int irq_status, err_status, dmao_done_status, dmai_done_status;
++	unsigned int drop_status, dma_ofl_status, cq_done_status, cq2_done_status;
++	bool wake_thread = 0;
++
++	irq_status       = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT_STAT);
++	dmao_done_status = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT2_STAT);
++	dmai_done_status = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT3_STAT);
++	drop_status      = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT4_STAT);
++	dma_ofl_status   = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT5_STAT);
++	cq_done_status   = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT6_STAT);
++	cq2_done_status  = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT7_STAT);
++
++	frame_idx       = readl_relaxed(raw_dev->base + REG_FRAME_SEQ_NUM);
++	frame_idx_inner = readl_relaxed(raw_dev->base_inner + REG_FRAME_SEQ_NUM);
++
++	fbc_fho_ctl2 =
++		readl_relaxed(REG_FBC_CTL2(raw_dev->base + FBC_R1A_BASE, 1));
++
++	err_status = mtk_raw_get_err_status(irq_status);
++	if (unlikely(debug_raw))
++		dev_dbg(dev,
++			"INT:0x%x(err:0x%x) 2~7 0x%x/0x%x/0x%x/0x%x/0x%x/0x%x (in:%d)\n",
++			irq_status, err_status,
++			dmao_done_status, dmai_done_status, drop_status,
++			dma_ofl_status, cq_done_status, cq2_done_status,
++			frame_idx_inner);
++
++	if (unlikely(!raw_dev->pipeline || !raw_dev->pipeline->enabled_raw)) {
++		dev_dbg(dev, "%s: %i: raw pipeline is disabled\n",
++			__func__, raw_dev->id);
++		goto ctx_not_found;
++	}
++
++	irq_info.irq_type = 0;
++	irq_info.ts_ns = ktime_get_boottime_ns();
++	irq_info.frame_idx = frame_idx;
++	irq_info.frame_idx_inner = frame_idx_inner;
++
++	/* CQ done */
++	if (cq_done_status & CAMCTL_CQ_THR0_DONE_ST)
++		irq_info.irq_type |= 1 << CAMSYS_IRQ_SETTING_DONE;
++	/* DMAO done, only for AFO */
++	if (dmao_done_status & AFO_DONE_ST)
++		irq_info.irq_type |= 1 << CAMSYS_IRQ_AFO_DONE;
++		/* enable AFO_DONE_EN at backend manually */
++
++	/* Frame done */
++	if (irq_status & SW_PASS1_DON_ST) {
++		irq_info.irq_type |= 1 << CAMSYS_IRQ_FRAME_DONE;
++		raw_dev->overrun_debug_dump_cnt = 0;
++	}
++	/* Frame start */
++	if (irq_status & SOF_INT_ST) {
++		irq_info.irq_type |= 1 << CAMSYS_IRQ_FRAME_START;
++
++		raw_dev->sof_count++;
++		irq_info.write_cnt = ((fbc_fho_ctl2 & WCNT_BIT_MASK) >> 8) - 1;
++		irq_info.fbc_cnt = (fbc_fho_ctl2 & CNT_BIT_MASK) >> 16;
++	}
++	/* Vsync interrupt */
++	if (irq_status & VS_INT_ST)
++		raw_dev->vsync_count++;
++
++	if (irq_info.irq_type && !raw_dev->is_sub) {
++		if (push_msgfifo(raw_dev, &irq_info) == 0)
++			wake_thread = 1;
++	}
++
++	/* Check ISP error status */
++	if (unlikely(err_status)) {
++		struct mtk_camsys_irq_info err_info;
++
++		err_info.irq_type = 1 << CAMSYS_IRQ_ERROR;
++		err_info.ts_ns = irq_info.ts_ns;
++		err_info.frame_idx = irq_info.frame_idx;
++		err_info.frame_idx_inner = irq_info.frame_idx_inner;
++		err_info.e.err_status = err_status;
++
++		if (push_msgfifo(raw_dev, &err_info) == 0)
++			wake_thread = 1;
++	}
++
++	/* enable to debug fbc related */
++	if (debug_raw && debug_dump_fbc && (irq_status & SOF_INT_ST))
++		mtk_cam_raw_dump_fbc(raw_dev->dev, raw_dev->base, raw_dev->yuv_base);
++
++ctx_not_found:
++	return wake_thread ? IRQ_WAKE_THREAD : IRQ_HANDLED;
++}
++
++static irqreturn_t mtk_thread_irq_raw(int irq, void *data)
++{
++	struct mtk_raw_device *raw_dev = (struct mtk_raw_device *)data;
++	struct mtk_camsys_irq_info irq_info;
++
++	if (unlikely(atomic_cmpxchg(&raw_dev->is_fifo_overflow, 1, 0)))
++		dev_info(raw_dev->dev, "msg fifo overflow\n");
++
++	while (kfifo_len(&raw_dev->msg_fifo) >= sizeof(irq_info)) {
++		int len = kfifo_out(&raw_dev->msg_fifo, &irq_info, sizeof(irq_info));
++
++		WARN_ON(len != sizeof(irq_info));
++
++		dev_dbg(raw_dev->dev, "ts=%llu irq_type %d, req:%d/%d\n",
++			irq_info.ts_ns, irq_info.irq_type,
++			irq_info.frame_idx_inner, irq_info.frame_idx);
++
++		/* error case */
++		if (unlikely(irq_info.irq_type == (1 << CAMSYS_IRQ_ERROR))) {
++			raw_handle_error(raw_dev, &irq_info);
++			continue;
++		}
++
++		/* normal case */
++		/* inform interrupt information to camsys controller */
++		mtk_camsys_isr_event(raw_dev->cam, CAMSYS_ENGINE_RAW,
++				     raw_dev->id, &irq_info);
++	}
++
++	return IRQ_HANDLED;
++}
++
++void raw_irq_handle_tg_grab_err(struct mtk_raw_device *raw_dev,
++				int dequeued_frame_seq_no)
++{
++	struct mtk_cam_ctx *ctx;
++	struct mtk_cam_request_stream_data *s_data;
++	int val, val2;
++	unsigned int inner_val, tg_full_sel;
++
++	val = readl_relaxed(raw_dev->base + REG_TG_PATH_CFG);
++	inner_val = readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG);
++	val = val | TG_TG_FULL_SEL;
++	writel_relaxed(val, raw_dev->base + REG_TG_PATH_CFG);
++	writel_relaxed(val, raw_dev->base_inner + REG_TG_PATH_CFG);
++	wmb(); /* make sure committed */
++	val2 = readl_relaxed(raw_dev->base + REG_TG_SEN_MODE);
++	val2 = val2 | TG_CMOS_RDY_SEL;
++	writel_relaxed(val2, raw_dev->base + REG_TG_SEN_MODE);
++	wmb(); /* make sure committed */
++
++	dev_info_ratelimited(raw_dev->dev,
++			     "%d Grab_Err [Outter] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
++			     dequeued_frame_seq_no,
++			     readl_relaxed(raw_dev->base + REG_TG_PATH_CFG),
++			     readl_relaxed(raw_dev->base + REG_TG_SEN_MODE),
++			     readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST),
++			     readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST_R),
++			     readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_PXL),
++			     readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_LIN));
++	dev_info_ratelimited(raw_dev->dev,
++			     "%d Grab_Err [Inner] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
++			     dequeued_frame_seq_no,
++			     readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG),
++			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_MODE),
++			     readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST),
++			     readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST_R),
++			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_PXL),
++			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_LIN));
++
++	ctx = mtk_cam_find_ctx(raw_dev->cam, &raw_dev->pipeline->subdev.entity);
++	if (!ctx) {
++		dev_info(raw_dev->dev, "%s: cannot find ctx\n", __func__);
++		return;
++	}
++
++	s_data = mtk_cam_get_req_s_data(ctx, ctx->stream_id, dequeued_frame_seq_no);
++	if (s_data) {
++		mtk_cam_debug_seninf_dump(s_data);
++		tg_full_sel = ((inner_val & TG_FULLSEL_BIT_MASK) >> 15);
++
++		if (tg_full_sel == 1)
++			mtk_cam_req_dump(s_data, MTK_CAM_REQ_DUMP_CHK_DEQUEUE_FAILED,
++					 "TG Grab Err", false);
++		else
++			dev_info(raw_dev->dev, "%s: tg_full_sel 0x%x\n",
++				 __func__, tg_full_sel);
++	} else {
++		dev_info(raw_dev->dev,
++			 "%s: req(%d) can't be found for seninf dump\n",
++			 __func__, dequeued_frame_seq_no);
++	}
++}
++
++void raw_irq_handle_dma_err(struct mtk_raw_device *raw_dev)
++{
++	mtk_cam_raw_dump_dma_err_st(raw_dev->dev, raw_dev->base);
++	mtk_cam_yuv_dump_dma_err_st(raw_dev->dev, raw_dev->yuv_base);
++
++	if (raw_dev->pipeline->feature_active)
++		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
++				       "RAWI_R2", dbg_RAWI_R2, ARRAY_SIZE(dbg_RAWI_R2));
++
++	if (raw_dev->pipeline->pde_config.pde_info.pd_table_offset) {
++		dev_dbg_ratelimited(raw_dev->dev,
++				    "DMA_ERR:%x,PDI_R1:%x,PDO_R1:%x\n",
++				     readl_relaxed(raw_dev->base + 0x4060),
++				     readl_relaxed(raw_dev->base +
++						   REG_PDI_R1_BASE +
++						   DMA_OFFSET_ERR_STAT),
++				     readl_relaxed(raw_dev->base +
++						   REG_PDO_R1_BASE +
++						   DMA_OFFSET_ERR_STAT));
++		dev_dbg_ratelimited(raw_dev->dev,
++				    "TG_FRMSIZE_ST:%x,TG_FRMSIZE_ST_R:%x\n",
++				    readl_relaxed(raw_dev->base + 0x0738),
++				    readl_relaxed(raw_dev->base + 0x076c));
++		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
++				       "PDO_R1", dbg_PDO_R1, ARRAY_SIZE(dbg_PDO_R1));
++		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
++				       "PDI_R1", dbg_PDI_R1, ARRAY_SIZE(dbg_PDI_R1));
++	}
++}
++
++static void raw_irq_handle_tg_overrun_err(struct mtk_raw_device *raw_dev,
++					  int dequeued_frame_seq_no)
++{
++	struct mtk_cam_ctx *ctx;
++	struct mtk_cam_request_stream_data *s_data;
++	int val, val2;
++	unsigned int inner_val, tg_full_sel;
++
++	val = readl_relaxed(raw_dev->base + REG_TG_PATH_CFG);
++	inner_val = readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG);
++	val = val | TG_TG_FULL_SEL;
++	writel_relaxed(val, raw_dev->base + REG_TG_PATH_CFG);
++	writel_relaxed(val, raw_dev->base_inner + REG_TG_PATH_CFG);
++	wmb(); /* for dbg dump register */
++
++	val2 = readl_relaxed(raw_dev->base + REG_TG_SEN_MODE);
++	val2 = val2 | TG_CMOS_RDY_SEL;
++	writel_relaxed(val2, raw_dev->base + REG_TG_SEN_MODE);
++	wmb(); /* for dbg dump register */
++
++	dev_info(raw_dev->dev,
++		 "%d Overrun_Err [Outter] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
++		 dequeued_frame_seq_no,
++		 readl_relaxed(raw_dev->base + REG_TG_PATH_CFG),
++		 readl_relaxed(raw_dev->base + REG_TG_SEN_MODE),
++		 readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST),
++		 readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST_R),
++		 readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_PXL),
++		 readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_LIN));
++	dev_info(raw_dev->dev,
++		 "%d Overrun_Err [Inner] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
++		 dequeued_frame_seq_no,
++		 readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG),
++		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_MODE),
++		 readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST),
++		 readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST_R),
++		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_PXL),
++		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_LIN));
++	dev_info(raw_dev->dev,
++		 "REQ RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD_REQ_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD2_REQ_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD3_REQ_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD5_REQ_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD6_REQ_STAT));
++	dev_info(raw_dev->dev,
++		 "RDY RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD_RDY_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD2_RDY_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD3_RDY_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD5_RDY_STAT),
++		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD6_RDY_STAT));
++	dev_info(raw_dev->dev,
++		 "REQ YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD_REQ_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD2_REQ_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD3_REQ_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD4_REQ_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD5_REQ_STAT));
++	dev_info(raw_dev->dev,
++		 "RDY YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD_RDY_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD2_RDY_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD3_RDY_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD4_RDY_STAT),
++		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD5_RDY_STAT));
++
++	ctx = mtk_cam_find_ctx(raw_dev->cam, &raw_dev->pipeline->subdev.entity);
++	if (!ctx) {
++		dev_info(raw_dev->dev, "%s: cannot find ctx\n", __func__);
++		return;
++	}
++
++	s_data = mtk_cam_get_req_s_data(ctx, ctx->stream_id, dequeued_frame_seq_no);
++	if (s_data) {
++		/**
++		 * Enable the dump manually if needed.
++		 * mtk_cam_req_dump() already call mtk_cam_seninf_dump()
++		 * in a delayed work if no P1 done comes.
++		 */
++		if (0 && raw_dev->sof_count > 3)
++			mtk_cam_debug_seninf_dump(s_data);
++
++		tg_full_sel = ((inner_val & TG_FULLSEL_BIT_MASK) >> 15);
++		if (tg_full_sel == 1)
++			mtk_cam_req_dump(s_data, MTK_CAM_REQ_DUMP_CHK_DEQUEUE_FAILED,
++					 "TG Overrun Err", true);
++		else
++			dev_info(raw_dev->dev, "%s: tg_full_sel 0x%x:\n",
++				 __func__, tg_full_sel);
++	} else {
++		dev_info(raw_dev->dev, "%s: req(%d) can't be found for dump\n",
++			 __func__, dequeued_frame_seq_no);
++
++		if (0 && raw_dev->sof_count > 3 && ctx->seninf)
++			mtk_cam_seninf_dump(ctx->seninf);
++	}
++}
++
++static int mtk_raw_pm_suspend_prepare(struct mtk_raw_device *dev)
++{
++	u32 val;
++	int ret;
++
++	dev_dbg(dev->dev, "- %s\n", __func__);
++
++	if (pm_runtime_suspended(dev->dev))
++		return 0;
++
++	/* Disable ISP's view finder and wait for TG idle */
++	dev_dbg(dev->dev, "cam suspend, disable VF\n");
++	val = readl(dev->base + REG_TG_VF_CON);
++	writel(val & (~TG_VFDATA_EN), dev->base + REG_TG_VF_CON);
++	ret = readl_poll_timeout_atomic(dev->base + REG_TG_INTER_ST, val,
++					(val & TG_CAM_CS_MASK) == TG_IDLE_ST,
++					USEC_PER_MSEC, MTK_RAW_STOP_HW_TIMEOUT);
++	if (ret)
++		dev_dbg(dev->dev, "can't stop HW:%d:0x%x\n", ret, val);
++
++	/* Disable CMOS */
++	val = readl(dev->base + REG_TG_SEN_MODE);
++	writel(val & (~TG_SEN_MODE_CMOS_EN), dev->base + REG_TG_SEN_MODE);
++
++	/* Force ISP HW to idle */
++	ret = pm_runtime_force_suspend(dev->dev);
++	return ret;
++}
++
++static int mtk_raw_pm_post_suspend(struct mtk_raw_device *dev)
++{
++	u32 val;
++	int ret;
++
++	dev_dbg(dev->dev, "- %s\n", __func__);
++
++	if (pm_runtime_suspended(dev->dev))
++		return 0;
++
++	/* Force ISP HW to resume */
++	ret = pm_runtime_force_resume(dev->dev);
++	if (ret)
++		return ret;
++
++	/* Enable CMOS */
++	dev_dbg(dev->dev, "cam resume, enable CMOS/VF\n");
++	val = readl(dev->base + REG_TG_SEN_MODE);
++	writel(val | TG_SEN_MODE_CMOS_EN, dev->base + REG_TG_SEN_MODE);
++
++	/* Enable VF */
++	val = readl(dev->base + REG_TG_VF_CON);
++	writel(val | TG_VFDATA_EN, dev->base + REG_TG_VF_CON);
++
++	return 0;
++}
++
++static int raw_pm_notifier(struct notifier_block *nb,
++			   unsigned long action, void *data)
++{
++	struct mtk_raw_device *raw_dev =
++			container_of(nb, struct mtk_raw_device, pm_notifier);
++
++	switch (action) {
++	case PM_SUSPEND_PREPARE:
++		mtk_raw_pm_suspend_prepare(raw_dev);
++		break;
++	case PM_POST_SUSPEND:
++		mtk_raw_pm_post_suspend(raw_dev);
++		break;
 +	default:
-+		pr_debug("%s: no support stats(%d)\n", __func__, video_id);
++		break;
++	}
++
++	return NOTIFY_OK;
++}
++
++static int mtk_raw_of_probe(struct platform_device *pdev,
++			    struct mtk_raw_device *raw)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	int ret;
++	int n_clks;
++
++	ret = of_property_read_u32(dev->of_node, "mediatek,cam-id", &raw->id);
++	if (ret) {
++		dev_dbg(dev, "missing camid property\n");
++		return ret;
++	}
++
++	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34))) {
++		dev_err(dev, "%s: No suitable DMA available\n", __func__);
++		return -EIO;
++	}
++
++	if (!dev->dma_parms) {
++		dev->dma_parms =
++			devm_kzalloc(dev, sizeof(*dev->dma_parms), GFP_KERNEL);
++		if (!dev->dma_parms)
++			return -ENOMEM;
++	}
++
++	dma_set_max_seg_size(dev, UINT_MAX);
++
++	/* base outer register */
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "base");
++	if (!res) {
++		dev_err(dev, "failed to get mem\n");
++		return -ENODEV;
++	}
++
++	raw->base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(raw->base)) {
++		dev_err(dev, "failed to map register base\n");
++		return PTR_ERR(raw->base);
++	}
++
++	/* base inner register */
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "inner_base");
++	if (!res) {
++		dev_err(dev, "failed to get mem\n");
++		return -ENODEV;
++	}
++
++	raw->base_inner = devm_ioremap_resource(dev, res);
++	if (IS_ERR(raw->base_inner)) {
++		dev_err(dev, "failed to map register inner base\n");
++		return PTR_ERR(raw->base_inner);
++	}
++
++	/* will be assigned later */
++	raw->yuv_base = NULL;
++
++	raw->irq = platform_get_irq(pdev, 0);
++	if (raw->irq < 0) {
++		dev_err(dev, "failed to get irq\n");
++		return -ENODEV;
++	}
++
++	ret = devm_request_threaded_irq(dev, raw->irq,
++					mtk_irq_raw, mtk_thread_irq_raw,
++					0, dev_name(dev), raw);
++	if (ret) {
++		dev_err(dev, "failed to request irq=%d\n", raw->irq);
++		return ret;
++	}
++	dev_dbg(dev, "registered irq=%d\n", raw->irq);
++
++	disable_irq(raw->irq);
++
++	n_clks = devm_clk_bulk_get_all(dev, &raw->clk_b);
++	if (n_clks < 0) {
++		dev_err(dev, "failed to devm_clk_bulk_get_all=%d\n", n_clks);
++		return n_clks;
++	}
++
++	raw->num_clks = n_clks;
++	dev_info(dev, "clk_num:%d\n", raw->num_clks);
++
++#ifdef CONFIG_PM_SLEEP
++	raw->pm_notifier.notifier_call = raw_pm_notifier;
++	ret = register_pm_notifier(&raw->pm_notifier);
++	if (ret) {
++		dev_info(dev, "failed to register notifier block.\n");
++		return ret;
++	}
++#endif
++	return 0;
++}
++
++static int mtk_raw_sd_subscribe_event(struct v4l2_subdev *subdev,
++				      struct v4l2_fh *fh,
++				      struct v4l2_event_subscription *sub)
++{
++	switch (sub->type) {
++	case V4L2_EVENT_FRAME_SYNC:
++		return v4l2_event_subscribe(fh, sub, 0, NULL);
++	case V4L2_EVENT_REQUEST_DRAINED:
++		return v4l2_event_subscribe(fh, sub, 0, NULL);
++	case V4L2_EVENT_EOS:
++		return v4l2_event_subscribe(fh, sub, 0, NULL);
++	case V4L2_EVENT_REQUEST_DUMPED:
++		return v4l2_event_subscribe(fh, sub, 0, NULL);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int mtk_raw_available_resource(struct mtk_raw *raw)
++{
++	struct device *dev = raw->cam_dev;
++	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
++	int res_status = 0;
++	int i, j;
++
++	for (i = 0; i < cam_dev->num_raw_devices; i++) {
++		struct mtk_raw_pipeline *pipe = raw->pipelines + i;
++
++		for (j = 0; j < ARRAY_SIZE(raw->devs); j++) {
++			if (pipe->enabled_raw & 1 << j)
++				res_status |= 1 << j;
++		}
++	}
++	dev_dbg(raw->cam_dev,
++		"%s raw_status:0x%x Available Engine:A/B/C:%d/%d/%d\n",
++		__func__, res_status,
++		!(res_status & (1 << MTKCAM_SUBDEV_RAW_0)),
++		!(res_status & (1 << MTKCAM_SUBDEV_RAW_1)),
++		!(res_status & (1 << MTKCAM_SUBDEV_RAW_2)));
++
++	return res_status;
++}
++
++int mtk_cam_s_data_raw_select(struct mtk_cam_request_stream_data *s_data,
++			      struct mtkcam_ipi_input_param *cfg_in_param)
++{
++	struct mtk_cam_ctx *ctx;
++	struct mtk_raw_pipeline *pipe;
++	int raw_status = 0;
++	bool selected = false;
++
++	ctx = mtk_cam_s_data_get_ctx(s_data);
++	pipe = ctx->pipe;
++	raw_status = mtk_raw_available_resource(pipe->raw);
++	raw_status &= ~pipe->enabled_raw;
++
++	mtk_raw_available_resource(pipe->raw);
++
++	if (!selected)
++		return -EINVAL;
++
++	return 0;
++}
++
++int mtk_cam_raw_select(struct mtk_cam_ctx *ctx,
++		       struct mtkcam_ipi_input_param *cfg_in_param)
++{
++	struct mtk_raw_pipeline *pipe = ctx->pipe;
++	int raw_status = 0;
++	int mask = 0x0;
++	bool selected = false;
++	int m;
++
++	pipe->enabled_raw = 0;
++	raw_status = mtk_raw_available_resource(pipe->raw);
++	if (pipe->res_config.raw_num_used == 3) {
++		mask = 1 << MTKCAM_SUBDEV_RAW_0
++			| 1 << MTKCAM_SUBDEV_RAW_1 | 1 << MTKCAM_SUBDEV_RAW_2;
++		if (!(raw_status & mask)) {
++			pipe->enabled_raw |= mask;
++			selected = true;
++		}
++	} else if (pipe->res_config.raw_num_used == 2) {
++		for (m = MTKCAM_SUBDEV_RAW_0; m >= MTKCAM_SUBDEV_RAW_0; m--) {
++			mask = (1 << m) | (1 << (m + 1));
++			if (!(raw_status & mask)) {
++				pipe->enabled_raw |= mask;
++				selected = true;
++				break;
++			}
++		}
++	} else {
++		for (m = MTKCAM_SUBDEV_RAW_0; m < ARRAY_SIZE(pipe->raw->devs); m++) {
++			mask = 1 << m;
++			if (!(raw_status & mask)) {
++				pipe->enabled_raw |= mask;
++				selected = true;
++				break;
++			}
++		}
++	}
++	mtk_raw_available_resource(pipe->raw);
++	if (!selected)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int mtk_raw_sd_s_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct mtk_raw_pipeline *pipe;
++	struct mtk_raw *raw;
++	struct mtk_cam_device *cam;
++	struct mtk_cam_ctx *ctx;
++	unsigned int i;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	raw = pipe->raw;
++	if (!raw)
++		return -1;
++	cam = dev_get_drvdata(raw->cam_dev);
++	ctx = mtk_cam_find_ctx(cam, &sd->entity);
++
++	if (WARN_ON(!ctx))
++		return -EINVAL;
++
++	if (enable) {
++		pipe->feature_active = pipe->user_res.raw_res.feature;
++		pipe->enabled_dmas = 0;
++		ctx->pipe = pipe;
++		ctx->used_raw_num++;
++		pipe->feature_active = pipe->user_res.raw_res.feature;
++		for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++) {
++			if (!pipe->vdev_nodes[i].enabled)
++				continue;
++			pipe->enabled_dmas |=
++				(1ULL << pipe->vdev_nodes[i].desc.dma_port);
++		}
++	} else {
++		for (i = 0; i < ARRAY_SIZE(raw->devs); i++) {
++			if (pipe->enabled_raw & 1 << i) {
++				dev_info(raw->cam_dev, "%s: power off raw (%d)\n",
++					 __func__, i);
++				pm_runtime_put_sync(raw->devs[i]);
++			}
++		}
++	}
++
++	dev_info(raw->cam_dev, "%s:raw-%d: en %d, dev 0x%x dmas 0x%lx\n",
++		 __func__, pipe->id, enable, pipe->enabled_raw,
++		 pipe->enabled_dmas);
++
++	return 0;
++}
++
++static int mtk_raw_init_state(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state)
++{
++	struct v4l2_mbus_framefmt *mf;
++	unsigned int i;
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++
++	for (i = 0; i < sd->entity.num_pads; i++) {
++		mf = v4l2_subdev_state_get_format(sd_state, i);
++		*mf = mfmt_default;
++
++		dev_dbg(raw->cam_dev, "%s init pad:%d format:0x%x\n",
++			sd->name, i, mf->code);
++	}
++
++	return 0;
++}
++
++static bool mtk_raw_try_fmt(struct v4l2_subdev *sd,
++			    struct v4l2_subdev_format *fmt)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++	unsigned int user_fmt = mtk_cam_get_sensor_fmt(fmt->format.code);
++
++	dev_dbg(raw->cam_dev, "%s:s_fmt: check format 0x%x, w:%d, h:%d field:%d\n",
++		sd->name, fmt->format.code, fmt->format.width,
++		fmt->format.height, fmt->format.field);
++
++	/* check sensor format */
++	if (fmt->pad == MTK_RAW_SINK) {
++		user_fmt = mtk_cam_get_sensor_fmt(fmt->format.code);
++		if (user_fmt == MTKCAM_IPI_IMG_FMT_UNKNOWN)
++			return false;
++	}
++
++	return true;
++}
++
++static struct v4l2_mbus_framefmt *
++mtk_raw_pipeline_get_fmt(struct mtk_raw_pipeline *pipe,
++			 struct v4l2_subdev_state *sd_state, u32 padid,
++			 int which)
++{
++	struct mtk_raw *raw = pipe->raw;
++
++	if (padid >= MTK_RAW_PIPELINE_PADS_NUM) {
++		dev_err(raw->cam_dev, "Wrong pad id:%d\n", padid);
++		return NULL;
++	}
++	/* format invalid and return default format */
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		return v4l2_subdev_state_get_format(sd_state, padid);
++
++	if (WARN_ON(padid >= pipe->subdev.entity.num_pads))
++		return &pipe->cfg[0].mbus_fmt;
++
++	return &pipe->cfg[padid].mbus_fmt;
++}
++
++static struct v4l2_rect *
++mtk_raw_pipeline_get_selection(struct mtk_raw_pipeline *pipe,
++			       struct v4l2_subdev_state *sd_state, u32 pad,
++			       int which)
++{
++	struct mtk_raw *raw = pipe->raw;
++
++	if (pad >= MTK_RAW_PIPELINE_PADS_NUM) {
++		dev_err(raw->cam_dev, "Wrong pad id:%d\n", pad);
++		return NULL;
++	}
++	/* format invalid and return default format */
++	if (which == V4L2_SUBDEV_FORMAT_TRY)
++		return v4l2_subdev_state_get_crop(sd_state, pad);
++
++	if (WARN_ON(pad >= pipe->subdev.entity.num_pads))
++		return &pipe->cfg[0].crop;
++
++	return &pipe->cfg[pad].crop;
++}
++
++static void propagate_fmt(struct v4l2_mbus_framefmt *sink_mf,
++			  struct v4l2_mbus_framefmt *source_mf, int w, int h)
++{
++	source_mf->code = sink_mf->code;
++	source_mf->colorspace = sink_mf->colorspace;
++	source_mf->field = sink_mf->field;
++	source_mf->width = w;
++	source_mf->height = h;
++}
++
++static bool mtk_raw_fmt_get_res(struct v4l2_subdev *sd,
++				struct v4l2_subdev_format *fmt,
++				struct mtk_cam_resource *res)
++{
++	void *user_ptr;
++	u64 addr;
++
++	addr = ((u64)fmt->reserved[1] << 32) | fmt->reserved[2];
++	user_ptr = (void *)addr;
++	if (!user_ptr) {
++		dev_info(sd->v4l2_dev->dev, "%s: mtk_cam_resource is null\n",
++			 __func__);
++		return false;
++	}
++
++	if (copy_from_user(res, (void __user *)user_ptr, sizeof(*res))) {
++		dev_info(sd->v4l2_dev->dev,
++			 "%s: copy_from_user failedm user_ptr:%p\n",
++			 __func__, user_ptr);
++		return false;
++	}
++
++	dev_dbg(sd->v4l2_dev->dev,
++		"%s:sensor:%d/%d/%lld/%d/%d, raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
++		__func__,
++		res->sensor_res.hblank, res->sensor_res.vblank,
++		res->sensor_res.pixel_rate, res->sensor_res.interval.denominator,
++		res->sensor_res.interval.numerator,
++		res->raw_res.feature, res->raw_res.bin, res->raw_res.path_sel,
++		res->raw_res.raw_max, res->raw_res.raw_min, res->raw_res.raw_used,
++		res->raw_res.strategy, res->raw_res.pixel_mode,
++		res->raw_res.throughput);
++
++	return res;
++}
++
++static int mtk_raw_set_src_pad_selection_default(struct v4l2_subdev *sd,
++						 struct v4l2_subdev_state *sd_state,
++						 struct v4l2_mbus_framefmt *sink_fmt,
++						 struct mtk_cam_resource *res,
++						 int pad, int which)
++{
++	struct v4l2_rect *source_sel;
++	struct mtk_raw_pipeline *pipe;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	source_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
++	if (source_sel->width > sink_fmt->width)
++		source_sel->width = sink_fmt->width;
++
++	if (source_sel->height > sink_fmt->height)
++		source_sel->height = sink_fmt->height;
++
++	return 0;
++}
++
++static int mtk_raw_set_src_pad_selection_yuv(struct v4l2_subdev *sd,
++					     struct v4l2_subdev_state *sd_state,
++					     struct v4l2_mbus_framefmt *sink_fmt,
++					     struct mtk_cam_resource *res,
++					     int pad, int which)
++{
++	int i;
++	struct v4l2_rect *prev_yuv = NULL, *source_sel, *tmp_sel;
++	struct v4l2_mbus_framefmt *framefmt;
++	struct mtk_raw_pipeline *pipe;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	mtk_raw_set_src_pad_selection_default(sd, sd_state, sink_fmt, res, pad, which);
++	source_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
++
++	for (i = MTK_RAW_YUVO_1_OUT; i < pad; i++) {
++		framefmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
++		tmp_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
++
++		/* Skip disabled YUV pad */
++		if (!mtk_cam_is_pad_fmt_enable(framefmt))
++			continue;
++
++		prev_yuv = tmp_sel;
++	}
++
++	if (prev_yuv) {
++		if (source_sel->width != prev_yuv->width) {
++			source_sel->width = prev_yuv->width;
++			dev_dbg(sd->v4l2_dev->dev, "%s: prev width:%d",
++				__func__, source_sel->width);
++		}
++
++		if (source_sel->height != prev_yuv->height) {
++			source_sel->height = prev_yuv->height;
++			dev_dbg(sd->v4l2_dev->dev, "%s: prev height:%d",
++				__func__, source_sel->height);
++		}
++	}
++
++	return 0;
++}
++
++static struct v4l2_mbus_framefmt *
++mtk_raw_get_sink_pad_framefmt(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state, int which)
++{
++	struct v4l2_mbus_framefmt *sink_fmt = NULL, *tmp_fmt;
++	struct mtk_raw_pipeline *pipe;
++	int i;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	for (i = MTK_RAW_SINK; i < MTK_RAW_SOURCE_BEGIN; i++) {
++		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, i, which);
++		if (i != MTK_RAW_META_IN && mtk_cam_is_pad_fmt_enable(tmp_fmt)) {
++			sink_fmt = tmp_fmt;
++			break;
++		}
++	}
++
++	return sink_fmt;
++}
++
++static int mtk_raw_set_pad_selection(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *sd_state,
++				     struct v4l2_subdev_selection *sel)
++{
++	struct v4l2_mbus_framefmt *sink_fmt;
++	struct mtk_raw_pipeline *pipe;
++	struct mtk_cam_video_device *node;
++	struct mtk_cam_resource *res = NULL;
++	struct v4l2_rect *crop;
++	int ret;
++
++	if (sel->pad < MTK_RAW_MAIN_STREAM_OUT ||
++	    sel->pad >= MTK_RAW_META_OUT_BEGIN)
++		return -EINVAL;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++
++	/* The crop rectangle can't be changed while streaming. */
++	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
++	    !media_entity_is_streaming(&sd->entity))
++		return -EBUSY;
++
++	/*
++	 * Find the sink pad fmt, there must be one eanbled sink pad at least
++	 */
++	sink_fmt = mtk_raw_get_sink_pad_framefmt(sd, sd_state, sel->which);
++	if (!sink_fmt)
++		return -EINVAL;
++
++	node = &pipe->vdev_nodes[sel->pad - MTK_RAW_SINK_NUM];
++	crop = mtk_raw_pipeline_get_selection(pipe, sd_state, sel->pad, sel->which);
++	if (!crop)
++		return -EINVAL;
++
++	*crop = sel->r;
++	ret = node->desc.pad_ops->set_pad_selection(sd, sd_state, sink_fmt,
++						    res, sel->pad, sel->which);
++	if (ret)
++		return -EINVAL;
++
++	sel->r = *crop;
++
++	return 0;
++}
++
++static int mtk_raw_get_pad_selection(struct v4l2_subdev *sd,
++				     struct v4l2_subdev_state *sd_state,
++				     struct v4l2_subdev_selection *sel)
++{
++	struct mtk_raw_pipeline *pipe;
++	struct v4l2_rect *crop;
++
++	if (sel->pad < MTK_RAW_MAIN_STREAM_OUT ||
++	    sel->pad >= MTK_RAW_META_OUT_BEGIN)
++		return -EINVAL;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	crop = mtk_raw_pipeline_get_selection(pipe, sd_state, sel->pad, sel->which);
++	if (!crop)
++		return -EINVAL;
++
++	sel->r = *crop;
++
++	return 0;
++}
++
++static int mtk_raw_set_sink_pad_fmt(struct v4l2_subdev *sd,
++				    struct v4l2_subdev_state *sd_state,
++				    struct v4l2_subdev_format *fmt)
++{
++	struct device *dev;
++	struct mtk_cam_video_device *node;
++	const char *node_str;
++	const struct mtk_cam_format_desc *fmt_desc;
++	struct mtk_raw_pipeline *pipe;
++	int i;
++	int ipi_fmt;
++	struct v4l2_mbus_framefmt *framefmt, *source_fmt = NULL, *tmp_fmt;
++
++	/* Do nothing for pad to meta video device */
++	if (fmt->pad == MTK_RAW_META_IN)
++		return 0;
++
++	dev = sd->v4l2_dev->dev;
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	framefmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
++
++	/* If data from sensor, we check the size with max imgo size*/
++	if (fmt->pad < MTK_RAW_SINK_NUM) {
++		/* from sensor */
++		node = &pipe->vdev_nodes[MTK_RAW_MAIN_STREAM_OUT - MTK_RAW_SINK_NUM];
++		node_str = "sink";
++	} else {
++		/* from memory */
++		node = &pipe->vdev_nodes[fmt->pad - MTK_RAW_SINK_NUM];
++		node_str = node->desc.name;
++	}
++
++	ipi_fmt = mtk_cam_get_sensor_fmt(framefmt->code);
++	if (ipi_fmt == MTKCAM_IPI_IMG_FMT_UNKNOWN) {
++		/**
++		 * Set imgo's default fmt, the user must check
++		 * if the pad sink format is the same as the
++		 * source format of the link before stream on.
++		 */
++		fmt_desc = &node->desc.fmts[node->desc.default_fmt_idx];
++		framefmt->code = fmt_desc->pfmt.code;
++		dev_info(dev,
++			 "%s(%d): Adjust unaccept fmt code on sink pad:%d, 0x%x->0x%x\n",
++			 __func__, fmt->which, fmt->pad, fmt->format.code, framefmt->code);
++	}
++
++	/* Reset pads' enable state*/
++	for (i = MTK_RAW_SINK; i < MTK_RAW_META_OUT_BEGIN; i++) {
++		if (i == MTK_RAW_META_IN)
++			continue;
++		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, i, fmt->which);
++		mtk_cam_pad_fmt_disable(tmp_fmt);
++	}
++
++	*framefmt = fmt->format;
++	if (framefmt->width > node->desc.frmsizes->stepwise.max_width)
++		framefmt->width = node->desc.frmsizes->stepwise.max_width;
++
++	if (framefmt->height > node->desc.frmsizes->stepwise.max_height)
++		framefmt->height = node->desc.frmsizes->stepwise.max_height;
++
++	mtk_cam_pad_fmt_enable(framefmt);
++
++	dev_info(dev,
++		 "%s(%d): Set fmt pad:%d(%s), code/w/h = 0x%x/%d/%d\n",
++		 __func__, fmt->which, fmt->pad, node_str,
++		 framefmt->code, framefmt->width, framefmt->height);
++
++	/* Propagation inside subdev */
++	for (i = MTK_RAW_SOURCE_BEGIN; i < MTK_RAW_META_OUT_BEGIN; i++) {
++		source_fmt =
++			mtk_raw_pipeline_get_fmt(pipe, sd_state, i, fmt->which);
++
++		/* Get default format's desc for the pad */
++		node = &pipe->vdev_nodes[i - MTK_RAW_SINK_NUM];
++
++		/**
++		 * Propagate the size from sink pad to source pades, adjusted
++		 * based on each pad's default format.
++		 */
++		if (source_fmt->width > node->desc.frmsizes->stepwise.max_width)
++			source_fmt->width = node->desc.frmsizes->stepwise.max_width;
++		else
++			source_fmt->width = framefmt->width;
++
++		if (source_fmt->height > node->desc.frmsizes->stepwise.max_height)
++			source_fmt->height = node->desc.frmsizes->stepwise.max_height;
++		else
++			source_fmt->height = framefmt->height;
++
++		dev_dbg(dev,
++			"%s(%d): Propagate to pad:%d(%s), (0x%x/%d/%d)\n",
++			__func__, fmt->which, fmt->pad, node->desc.name,
++			source_fmt->code, source_fmt->width, source_fmt->height);
++	}
++
++	return 0;
++}
++
++static int mtk_raw_set_src_pad_fmt_default(struct v4l2_subdev *sd,
++					   struct v4l2_subdev_state *sd_state,
++					   struct v4l2_mbus_framefmt *sink_fmt,
++					   struct mtk_cam_resource *res,
++					   int pad, int which)
++{
++	struct device *dev;
++	struct v4l2_mbus_framefmt *source_fmt;
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_cam_video_device *node;
++
++	dev = sd->v4l2_dev->dev;
++	node = &pipe->vdev_nodes[pad - MTK_RAW_SINK_NUM];
++	source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
++	if (source_fmt->width > sink_fmt->width) {
++		dev_info(dev,
++			 "%s(%d): adjusted: width(%d) over sink (%d)\n",
++			 __func__, which, source_fmt->width, sink_fmt->width);
++		source_fmt->width = sink_fmt->width;
++	}
++
++	if (source_fmt->height > sink_fmt->height) {
++		dev_info(dev,
++			 "%s(%d): adjusted: width(%d) over sink (%d)\n",
++			 __func__, which, source_fmt->height, sink_fmt->height);
++		source_fmt->height = sink_fmt->height;
++	}
++
++	if (source_fmt->width > node->desc.frmsizes->stepwise.max_width) {
++		dev_info(dev,
++			 "%s(%d): adjusted: width(%d) over max (%d)\n",
++			 __func__, which, source_fmt->width,
++			 node->desc.frmsizes->stepwise.max_width);
++		source_fmt->width = node->desc.frmsizes->stepwise.max_width;
++	}
++
++	if (source_fmt->height > node->desc.frmsizes->stepwise.max_height) {
++		dev_info(dev,
++			 "%s(%d): adjusted: height(%d) over max (%d)\n",
++			 __func__, which, source_fmt->height,
++			 node->desc.frmsizes->stepwise.max_height);
++	}
++
++	return 0;
++}
++
++static int mtk_raw_set_src_pad_fmt_rzh1n2(struct v4l2_subdev *sd,
++					  struct v4l2_subdev_state *sd_state,
++					  struct v4l2_mbus_framefmt *sink_fmt,
++					  struct mtk_cam_resource *res, int pad,
++					  int which)
++{
++	struct device *dev;
++	struct v4l2_mbus_framefmt *source_fmt;
++	struct v4l2_mbus_framefmt *tmp_fmt;
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++
++	dev = sd->v4l2_dev->dev;
++	mtk_raw_set_src_pad_fmt_default(sd, sd_state, sink_fmt, res, pad, which);
++	source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
++
++	/* rzh1n2to_r1 and rzh1n2to_r3 size must be the same */
++	if (pad == MTK_RAW_RZH1N2TO_3_OUT) {
++		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state,
++						   MTK_RAW_RZH1N2TO_1_OUT, which);
++		if (mtk_cam_is_pad_fmt_enable(tmp_fmt) &&
++		    source_fmt->height != tmp_fmt->height &&
++		    source_fmt->width != tmp_fmt->width) {
++			dev_info(dev,
++				 "%s(%d): adjusted: rzh1n2to_r3(%d,%d) and rzh1n2to_r1(%d,%d) must have the same sz\n",
++				 __func__, which,
++				 source_fmt->width, source_fmt->height,
++				 tmp_fmt->width, tmp_fmt->height);
++
++			source_fmt->width = tmp_fmt->width;
++			source_fmt->height = tmp_fmt->height;
++		}
++	}
++
++	return 0;
++}
++
++static int mtk_raw_set_src_pad_fmt(struct v4l2_subdev *sd,
++				   struct v4l2_subdev_state *sd_state,
++				   struct v4l2_subdev_format *fmt)
++{
++	struct device *dev;
++	struct mtk_cam_resource res;
++	struct mtk_cam_video_device *node;
++	struct mtk_raw_pipeline *pipe;
++	int ret = 0;
++	struct v4l2_mbus_framefmt *source_fmt, *sink_fmt;
++
++	/* Do nothing for pad to meta video device */
++	if (fmt->pad >= MTK_RAW_META_OUT_BEGIN)
++		return 0;
++
++	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
++	dev = sd->v4l2_dev->dev;
++	node = &pipe->vdev_nodes[fmt->pad - MTK_RAW_SINK_NUM];
++
++	/*
++	 * Find the sink pad fmt, there must be one eanbled sink pad at least
++	 */
++	sink_fmt = mtk_raw_get_sink_pad_framefmt(sd, sd_state, fmt->which);
++	if (!sink_fmt) {
++		dev_info(dev,
++			 "%s(%d): Set fmt pad:%d(%s), no s_fmt on sink pad\n",
++			 __func__, fmt->which, fmt->pad, node->desc.name);
++		return -EINVAL;
++	}
++
++	if (!mtk_raw_fmt_get_res(sd, fmt, &res)) {
++		dev_info(dev,
++			 "%s(%d): Set fmt pad:%d(%s), no mtk_cam_resource found\n",
++			 __func__, fmt->which, fmt->pad, node->desc.name);
++		return -EINVAL;
++	}
++
++	if (node->desc.pad_ops->set_pad_fmt) {
++		/* call source pad's set_pad_fmt op to adjust fmt by pad */
++		source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad,
++						      fmt->which);
++
++		*source_fmt = fmt->format;
++		ret = node->desc.pad_ops->set_pad_fmt(sd, sd_state, sink_fmt,
++						      &res, fmt->pad, fmt->which);
++	}
++
++	if (ret)
++		return ret;
++
++	if (!source_fmt) {
++		dev_info(dev,
++			 "%s(%d): Set fmt pad:%d(%s), no s_fmt on source pad\n",
++			 __func__, fmt->which, fmt->pad, node->desc.name);
++		return -EINVAL;
++	}
++
++	dev_dbg(dev,
++		"%s(%d): s_fmt to pad:%d(%s), user(0x%x/%d/%d) driver(0x%x/%d/%d)\n",
++		__func__, fmt->which, fmt->pad, node->desc.name,
++		fmt->format.code, fmt->format.width, fmt->format.height,
++		source_fmt->code, source_fmt->width, source_fmt->height);
++	mtk_cam_pad_fmt_disable(source_fmt);
++	fmt->format = *source_fmt;
++
++	return 0;
++}
++
++static int mtk_raw_try_pad_fmt(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_state *sd_state,
++			       struct v4l2_subdev_format *fmt)
++{
++	if (fmt->pad >= MTK_RAW_SINK && fmt->pad < MTK_RAW_SOURCE_BEGIN)
++		mtk_raw_set_sink_pad_fmt(sd, sd_state, fmt);
++	else if (fmt->pad < MTK_RAW_PIPELINE_PADS_NUM)
++		mtk_raw_set_src_pad_fmt(sd, sd_state, fmt);
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++static int mtk_raw_call_set_fmt(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *sd_state,
++				struct v4l2_subdev_format *fmt,
++				bool streaming)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++	struct v4l2_mbus_framefmt *mf;
++
++	if (!sd || !fmt) {
++		dev_dbg(raw->cam_dev, "%s: Required sd(%p), fmt(%p)\n",
++			__func__, sd, fmt);
++		return -EINVAL;
++	}
++
++	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY && !sd_state) {
++		dev_dbg(raw->cam_dev,
++			"%s: Required sd(%p), cfg(%p) for FORMAT_TRY\n",
++			__func__, sd, sd_state);
++		return -EINVAL;
++	}
++
++	if (!mtk_raw_try_fmt(sd, fmt) &&
++	    !mtk_cam_feature_is_pure_m2m(pipe->feature_pending)) {
++		mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
++		fmt->format = *mf;
++		dev_info(raw->cam_dev,
++			 "sd:%s pad:%d didn't apply and keep format w/h/code %d/%d/0x%x\n",
++			 sd->name, fmt->pad, mf->width, mf->height, mf->code);
++	} else {
++		mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
++		*mf = fmt->format;
++		dev_dbg(raw->cam_dev,
++			"sd:%s pad:%d set format w/h/code %d/%d/0x%x\n",
++			sd->name, fmt->pad, mf->width, mf->height, mf->code);
++	}
++
++	/*sink pad format propagate to source pad*/
++	if (fmt->pad == MTK_RAW_SINK) {
++		struct v4l2_mbus_framefmt *source_mf;
++
++		source_mf = mtk_raw_pipeline_get_fmt(pipe, sd_state,
++						     MTK_RAW_MAIN_STREAM_OUT,
++						     fmt->which);
++
++		if (streaming) {
++			propagate_fmt(mf, source_mf, mf->width, mf->height);
++			return 0;
++		}
++
++		/**
++		 * User will trigger resource calc
++		 * with V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC
++		 * so we don't need to trigger it here anymore.
++		 */
++		propagate_fmt(mf, source_mf, mf->width, mf->height);
++	}
++
++	return 0;
++}
++
++static int mtk_raw_set_fmt(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
++			   struct v4l2_subdev_format *fmt)
++{
++	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
++		return mtk_raw_try_pad_fmt(sd, sd_state, fmt);
++
++	/* The format can't be changed while streaming. */
++	if (!media_entity_is_streaming(&sd->entity))
++		return mtk_raw_call_set_fmt(sd, sd_state, fmt, false);
++
++	dev_info(sd->v4l2_dev->dev,
++		 "Pipeline is streaming, cannot change format\n");
++	return -EBUSY;
++}
++
++static int mtk_raw_get_fmt(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *sd_state,
++			  struct v4l2_subdev_format *fmt)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++	struct v4l2_mbus_framefmt *mf;
++
++	mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
++	fmt->format = *mf;
++	dev_dbg(raw->cam_dev, "sd:%s pad:%d get format w/h/code %d/%d/0x%x\n",
++		sd->name, fmt->pad, fmt->format.width, fmt->format.height,
++		fmt->format.code);
++
++	return 0;
++}
++
++static int mtk_cam_media_link_setup(struct media_entity *entity,
++				    const struct media_pad *local,
++				    const struct media_pad *remote, u32 flags)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(entity, struct mtk_raw_pipeline, subdev.entity);
++	struct mtk_raw *raw = pipe->raw;
++	u32 pad = local->index;
++
++	dev_dbg(raw->cam_dev,
++		"%s: raw %d: remote:%s:%d->local:%s:%d flags:0x%x\n",
++		__func__, pipe->id, remote->entity->name, remote->index,
++		local->entity->name, local->index, flags);
++
++	if (pad < MTK_RAW_PIPELINE_PADS_NUM && pad != MTK_RAW_SINK)
++		pipe->vdev_nodes[pad - MTK_RAW_SINK_NUM].enabled =
++			!!(flags & MEDIA_LNK_FL_ENABLED);
++
++	if (!media_entity_is_streaming(entity) && !(flags & MEDIA_LNK_FL_ENABLED))
++		memset(pipe->cfg, 0, sizeof(pipe->cfg));
++
++	if (pad == MTK_RAW_SINK && flags & MEDIA_LNK_FL_ENABLED)
++		pipe->res_config.seninf =
++			media_entity_to_v4l2_subdev(remote->entity);
++
++	return 0;
++}
++
++static int mtk_raw_set_frame_interval(struct v4l2_subdev *sd,
++				      struct v4l2_subdev_state *state,
++				      struct v4l2_subdev_frame_interval *fi)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++
++	dev_dbg(raw->cam_dev, "%s:pipe(%d):current res: fps = %d/%d",
++		__func__, pipe->id,
++		fi->interval.numerator, fi->interval.denominator);
++	pipe->res_config.interval = fi->interval;
++
++	return 0;
++}
++
++static int mtk_raw_get_frame_interval(struct v4l2_subdev *sd,
++				      struct v4l2_subdev_state *state,
++				      struct v4l2_subdev_frame_interval *fi)
++{
++	struct mtk_raw_pipeline *pipe =
++		container_of(sd, struct mtk_raw_pipeline, subdev);
++	struct mtk_raw *raw = pipe->raw;
++
++	dev_dbg(raw->cam_dev, "%s:pipe(%d):current res: fps = %d/%d",
++		__func__, pipe->id,
++		fi->interval.numerator, fi->interval.denominator);
++	fi->interval = pipe->res_config.interval;
++
++	return 0;
++}
++
++static const struct v4l2_subdev_core_ops mtk_raw_subdev_core_ops = {
++	.subscribe_event = mtk_raw_sd_subscribe_event,
++	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
++};
++
++static const struct v4l2_subdev_video_ops mtk_raw_subdev_video_ops = {
++	.s_stream =  mtk_raw_sd_s_stream,
++};
++
++static const struct v4l2_subdev_pad_ops mtk_raw_subdev_pad_ops = {
++	.link_validate = mtk_cam_link_validate,
++	.set_fmt = mtk_raw_set_fmt,
++	.get_fmt = mtk_raw_get_fmt,
++	.set_selection = mtk_raw_set_pad_selection,
++	.get_selection = mtk_raw_get_pad_selection,
++	.set_frame_interval = mtk_raw_set_frame_interval,
++	.get_frame_interval = mtk_raw_get_frame_interval,
++};
++
++static const struct v4l2_subdev_internal_ops mtk_raw_subdev_internal_ops = {
++	.init_state = mtk_raw_init_state,
++};
++
++static const struct v4l2_subdev_ops mtk_raw_subdev_ops = {
++	.core = &mtk_raw_subdev_core_ops,
++	.video = &mtk_raw_subdev_video_ops,
++	.pad = &mtk_raw_subdev_pad_ops,
++};
++
++static const struct media_entity_operations mtk_cam_media_entity_ops = {
++	.link_setup = mtk_cam_media_link_setup,
++	.link_validate = v4l2_subdev_link_validate,
++};
++
++static const struct v4l2_ioctl_ops mtk_cam_v4l2_vout_ioctl_ops = {
++	.vidioc_querycap = mtk_cam_vidioc_querycap,
++	.vidioc_enum_framesizes = mtk_cam_vidioc_enum_framesizes,
++	.vidioc_enum_fmt_vid_out = mtk_cam_vidioc_enum_fmt,
++	.vidioc_g_fmt_vid_out_mplane = mtk_cam_vidioc_g_fmt,
++	.vidioc_s_fmt_vid_out_mplane = mtk_cam_vidioc_s_fmt,
++	.vidioc_try_fmt_vid_out_mplane = mtk_cam_vidioc_try_fmt,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
++	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
++};
++
++static const struct v4l2_ioctl_ops mtk_cam_v4l2_vcap_ioctl_ops = {
++	.vidioc_querycap = mtk_cam_vidioc_querycap,
++	.vidioc_enum_framesizes = mtk_cam_vidioc_enum_framesizes,
++	.vidioc_enum_fmt_vid_cap = mtk_cam_vidioc_enum_fmt,
++	.vidioc_g_fmt_vid_cap_mplane = mtk_cam_vidioc_g_fmt,
++	.vidioc_s_fmt_vid_cap_mplane = mtk_cam_vidioc_s_fmt,
++	.vidioc_try_fmt_vid_cap_mplane = mtk_cam_vidioc_try_fmt,
++	.vidioc_s_selection = mtk_cam_vidioc_s_selection,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
++	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
++};
++
++static const struct v4l2_ioctl_ops mtk_cam_v4l2_meta_cap_ioctl_ops = {
++	.vidioc_querycap = mtk_cam_vidioc_querycap,
++	.vidioc_enum_fmt_meta_cap = mtk_cam_vidioc_meta_enum_fmt,
++	.vidioc_g_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_s_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_try_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++};
++
++static const struct v4l2_ioctl_ops mtk_cam_v4l2_meta_out_ioctl_ops = {
++	.vidioc_querycap = mtk_cam_vidioc_querycap,
++	.vidioc_enum_fmt_meta_out = mtk_cam_vidioc_meta_enum_fmt,
++	.vidioc_g_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_s_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_try_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++};
++
++static const struct mtk_cam_format_desc  stream_out_fmts[] = {
++	/* This is a default image format */
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR8,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SBGGR8_1X8,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SBGGR10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SBGGR10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SBGGR12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SBGGR12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SBGGR14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SBGGR14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG8,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGBRG8_1X8,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGBRG10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGBRG10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGBRG12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGBRG12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGBRG14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGBRG14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG8,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGRBG8_1X8,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGRBG10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGRBG10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGRBG12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGRBG12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGRBG14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SGRBG14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB8,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SRGGB8_1X8,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SRGGB10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB10,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SRGGB10_1X10,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB10P,
++		},
++	},
++
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SRGGB12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB12,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SRGGB12_1X12,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SRGGB14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB14,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_MTISP_SRGGB14_1X14,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SBGGR16,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SBGGR16_1X16,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGBRG16,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGBRG16_1X16,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SGRBG16,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SGRBG16_1X16,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_SRGGB16,
++			.num_planes = 1,
++		},
++		.pfmt = {
++			.code = MEDIA_BUS_FMT_SRGGB16_1X16,
++		}
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER8_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER10_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER12_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = IMG_MAX_WIDTH,
++			.height = IMG_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER14_UFBC,
++		},
++	},
++};
++
++static const struct mtk_cam_format_desc yuv_out_group1_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12_12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21_12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_YUV420,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12_UFBC,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB8F,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB10F,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP1_MAX_WIDTH,
++			.height = YUV_GROUP1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB12F,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc yuv_out_group2_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12_12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21_12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = YUV_GROUP2_MAX_WIDTH,
++			.height = YUV_GROUP2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12P,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc rzh1n2to1_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO1_MAX_WIDTH,
++			.height = RZH1N2TO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO1_MAX_WIDTH,
++			.height = RZH1N2TO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO1_MAX_WIDTH,
++			.height = RZH1N2TO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV16,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO1_MAX_WIDTH,
++			.height = RZH1N2TO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV61,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc rzh1n2to2_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO2_MAX_WIDTH,
++			.height = RZH1N2TO2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_YUYV,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO2_MAX_WIDTH,
++			.height = RZH1N2TO2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_YVYU,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc rzh1n2to3_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO3_MAX_WIDTH,
++			.height = RZH1N2TO3_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO3_MAX_WIDTH,
++			.height = RZH1N2TO3_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO3_MAX_WIDTH,
++			.height = RZH1N2TO3_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV16,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = RZH1N2TO3_MAX_WIDTH,
++			.height = RZH1N2TO3_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV61,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc drzs4no1_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_GREY,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV16,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV61,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV16_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV61_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV16_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV61_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV12_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_NV21_10,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
++		},
++	},
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO1_MAX_WIDTH,
++			.height = DRZS4NO1_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
++		},
++	},
++};
++
++static const struct mtk_cam_format_desc drzs4no2_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO2_MAX_WIDTH,
++			.height = DRZS4NO2_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_GREY,
++		},
++	}
++};
++
++static const struct mtk_cam_format_desc drzs4no3_out_fmts[] = {
++	{
++		.vfmt.fmt.pix_mp = {
++			.width = DRZS4NO3_MAX_WIDTH,
++			.height = DRZS4NO3_MAX_HEIGHT,
++			.pixelformat = V4L2_PIX_FMT_GREY,
++		},
++	}
++};
++
++#define MTK_RAW_TOTAL_OUTPUT_QUEUES 4
++
++static const struct
++mtk_cam_dev_node_desc output_queues[] = {
++	{
++		.id = MTK_RAW_META_IN,
++		.name = "meta input",
++		.cap = V4L2_CAP_META_OUTPUT,
++		.buf_type = V4L2_BUF_TYPE_META_OUTPUT,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = false,
++		.smem_alloc = true,
++		/* .need_cache_sync_on_prepare = true, */
++		.dma_port = MTKCAM_IPI_RAW_META_STATS_CFG,
++		.default_fmt_idx = 0,
++		.max_buf_count = 16,
++		.ioctl_ops = &mtk_cam_v4l2_meta_out_ioctl_ops,
++	},
++	{
++		.id = MTK_RAW_RAWI_2_IN,
++		.name = "rawi 2",
++		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RAWI_2,
++		.fmts = stream_out_fmts,
++		.num_fmts = ARRAY_SIZE(stream_out_fmts),
++		.default_fmt_idx = 0,
++		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = IMG_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = IMG_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_RAWI_3_IN,
++		.name = "rawi 3",
++		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.link_flags = 0,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RAWI_3,
++		.fmts = stream_out_fmts,
++		.num_fmts = ARRAY_SIZE(stream_out_fmts),
++		.default_fmt_idx = 0,
++		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = IMG_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = IMG_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_RAWI_4_IN,
++		.name = "rawi 4",
++		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.link_flags = 0,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RAWI_3, /* align backend RAWI_3 */
++		.fmts = stream_out_fmts,
++		.num_fmts = ARRAY_SIZE(stream_out_fmts),
++		.default_fmt_idx = 0,
++		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = IMG_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = IMG_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	}
++};
++
++static const
++char *output_queue_names[RAW_PIPELINE_NUM][MTK_RAW_TOTAL_OUTPUT_QUEUES] = {
++	{"mtk-cam raw-0 meta-input", "mtk-cam raw-0 rawi-2",
++	 "mtk-cam raw-0 rawi-3", "mtk-cam raw-0 rawi-4"},
++
++	{"mtk-cam raw-1 meta-input", "mtk-cam raw-1 rawi-2",
++	 "mtk-cam raw-1 rawi-3", "mtk-cam raw-1 rawi-4"},
++
++	{"mtk-cam raw-2 meta-input", "mtk-cam raw-2 rawi-2",
++	 "mtk-cam raw-2 rawi-3", "mtk-cam raw-2 rawi-4"},
++};
++
++static struct mtk_cam_pad_ops source_pad_ops_default = {
++	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
++	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
++};
++
++static struct mtk_cam_pad_ops source_pad_ops_yuv = {
++	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
++	.set_pad_selection = mtk_raw_set_src_pad_selection_yuv,
++};
++
++static struct mtk_cam_pad_ops source_pad_ops_drzs4no = {
++	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
++	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
++};
++
++static struct mtk_cam_pad_ops source_pad_ops_rzh1n2 = {
++	.set_pad_fmt = mtk_raw_set_src_pad_fmt_rzh1n2,
++	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
++};
++
++#define MTK_RAW_TOTAL_CAPTURE_QUEUES 15
++static const struct
++mtk_cam_dev_node_desc capture_queues[] = {
++	{
++		.id = MTK_RAW_MAIN_STREAM_OUT,
++		.name = "imgo",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_IMGO,
++		.fmts = stream_out_fmts,
++		.num_fmts = ARRAY_SIZE(stream_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_default,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = IMG_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = IMG_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_YUVO_1_OUT,
++		.name = "yuvo 1",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_YUVO_1,
++		.fmts = yuv_out_group1_fmts,
++		.num_fmts = ARRAY_SIZE(yuv_out_group1_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_yuv,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = YUV_GROUP1_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = YUV_GROUP1_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_YUVO_2_OUT,
++		.name = "yuvo 2",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_YUVO_2,
++		.fmts = yuv_out_group2_fmts,
++		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_yuv,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = YUV_GROUP2_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = YUV_GROUP2_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_YUVO_3_OUT,
++		.name = "yuvo 3",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_YUVO_3,
++		.fmts = yuv_out_group1_fmts,
++		.num_fmts = ARRAY_SIZE(yuv_out_group1_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_yuv,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = YUV_GROUP1_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = YUV_GROUP1_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_YUVO_4_OUT,
++		.name = "yuvo 4",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_YUVO_4,
++		.fmts = yuv_out_group2_fmts,
++		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_yuv,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = YUV_GROUP2_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = YUV_GROUP2_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_YUVO_5_OUT,
++		.name = "yuvo 5",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_YUVO_5,
++		.fmts = yuv_out_group2_fmts,
++		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_yuv,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = YUV_GROUP2_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = YUV_GROUP2_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_DRZS4NO_1_OUT,
++		.name = "drzs4no 1",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_1,
++		.fmts = drzs4no1_out_fmts,
++		.num_fmts = ARRAY_SIZE(drzs4no1_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_drzs4no,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = DRZS4NO1_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = DRZS4NO1_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_DRZS4NO_2_OUT,
++		.name = "drzs4no 2",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_2,
++		.fmts = drzs4no2_out_fmts,
++		.num_fmts = ARRAY_SIZE(drzs4no2_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_drzs4no,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = DRZS4NO2_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = DRZS4NO2_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_DRZS4NO_3_OUT,
++		.name = "drzs4no 3",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_3,
++		.fmts = drzs4no3_out_fmts,
++		.num_fmts = ARRAY_SIZE(drzs4no3_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_drzs4no,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = DRZS4NO3_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = DRZS4NO3_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_RZH1N2TO_1_OUT,
++		.name = "rzh1n2to 1",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_1,
++		.fmts = rzh1n2to1_out_fmts,
++		.num_fmts = ARRAY_SIZE(rzh1n2to1_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_rzh1n2,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = RZH1N2TO1_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = RZH1N2TO1_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_RZH1N2TO_2_OUT,
++		.name = "rzh1n2to 2",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_2,
++		.fmts = rzh1n2to2_out_fmts,
++		.num_fmts = ARRAY_SIZE(rzh1n2to2_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_rzh1n2,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = RZH1N2TO2_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = RZH1N2TO2_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_RZH1N2TO_3_OUT,
++		.name = "rzh1n2to 3",
++		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
++		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = true,
++		.smem_alloc = false,
++		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_3,
++		.fmts = rzh1n2to3_out_fmts,
++		.num_fmts = ARRAY_SIZE(rzh1n2to3_out_fmts),
++		.default_fmt_idx = 0,
++		.pad_ops = &source_pad_ops_rzh1n2,
++		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
++		.frmsizes = &(struct v4l2_frmsizeenum) {
++			.index = 0,
++			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
++			.stepwise = {
++				.max_width = RZH1N2TO3_MAX_WIDTH,
++				.min_width = IMG_MIN_WIDTH,
++				.max_height = RZH1N2TO3_MAX_HEIGHT,
++				.min_height = IMG_MIN_HEIGHT,
++				.step_height = 1,
++				.step_width = 1,
++			},
++		},
++	},
++	{
++		.id = MTK_RAW_META_OUT_0,
++		.name = "partial meta 0",
++		.cap = V4L2_CAP_META_CAPTURE,
++		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = false,
++		.smem_alloc = true,
++		.dma_port = MTKCAM_IPI_RAW_META_STATS_0,
++		.default_fmt_idx = 1,
++		.max_buf_count = 16,
++		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
++	},
++	{
++		.id = MTK_RAW_META_OUT_1,
++		.name = "partial meta 1",
++		.cap = V4L2_CAP_META_CAPTURE,
++		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = false,
++		.smem_alloc = true,
++		/* .need_cache_sync_on_finish = true, */
++		.dma_port = MTKCAM_IPI_RAW_META_STATS_1,
++		.default_fmt_idx = 2,
++		.max_buf_count = 16,
++		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
++	},
++	{
++		.id = MTK_RAW_META_OUT_2,
++		.name = "partial meta 2",
++		.cap = V4L2_CAP_META_CAPTURE,
++		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
++		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
++		.image = false,
++		.smem_alloc = false,
++		/* .need_cache_sync_on_finish = true, */
++		.dma_port = MTKCAM_IPI_RAW_META_STATS_2,
++		.default_fmt_idx = 3,
++		.max_buf_count = 16,
++		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
++	},
++};
++
++static const
++char *capture_queue_names[RAW_PIPELINE_NUM][MTK_RAW_TOTAL_CAPTURE_QUEUES] = {
++	{"mtk-cam raw-0 main-stream",
++	 "mtk-cam raw-0 yuvo-1", "mtk-cam raw-0 yuvo-2",
++	 "mtk-cam raw-0 yuvo-3", "mtk-cam raw-0 yuvo-4",
++	 "mtk-cam raw-0 yuvo-5",
++	 "mtk-cam raw-0 drzs4no-1", "mtk-cam raw-0 drzs4no-2", "mtk-cam raw-0 drzs4no-3",
++	 "mtk-cam raw-0 rzh1n2to-1", "mtk-cam raw-0 rzh1n2to-2", "mtk-cam raw-0 rzh1n2to-3",
++	 "mtk-cam raw-0 partial-meta-0", "mtk-cam raw-0 partial-meta-1",
++	 "mtk-cam raw-0 partial-meta-2",
++	 },
++	{"mtk-cam raw-1 main-stream",
++	 "mtk-cam raw-1 yuvo-1", "mtk-cam raw-1 yuvo-2",
++	 "mtk-cam raw-1 yuvo-3", "mtk-cam raw-1 yuvo-4",
++	 "mtk-cam raw-1 yuvo-5",
++	 "mtk-cam raw-1 drzs4no-1", "mtk-cam raw-1 drzs4no-2", "mtk-cam raw-1 drzs4no-3",
++	 "mtk-cam raw-1 rzh1n2to-1", "mtk-cam raw-1 rzh1n2to-2", "mtk-cam raw-1 rzh1n2to-3",
++	 "mtk-cam raw-1 partial-meta-0", "mtk-cam raw-1 partial-meta-1",
++	 "mtk-cam raw-1 partial-meta-2",
++	 },
++
++	{"mtk-cam raw-2 main-stream",
++	 "mtk-cam raw-2 yuvo-1", "mtk-cam raw-2 yuvo-2",
++	 "mtk-cam raw-2 yuvo-3", "mtk-cam raw-2 yuvo-4",
++	 "mtk-cam raw-2 yuvo-5",
++	 "mtk-cam raw-2 drzs4no-1", "mtk-cam raw-2 drzs4no-2", "mtk-cam raw-2 drzs4no-3",
++	 "mtk-cam raw-2 rzh1n2to-1", "mtk-cam raw-2 rzh1n2to-2", "mtk-cam raw-2 rzh1n2to-3",
++	 "mtk-cam raw-2 partial-meta-0", "mtk-cam raw-2 partial-meta-1",
++	 "mtk-cam raw-2 partial-meta-2",
++	 },
++};
++
++/* The helper to configure the device context */
++static void mtk_raw_pipeline_queue_setup(struct mtk_raw_pipeline *pipe)
++{
++	unsigned int node_idx, i;
++
++	if (WARN_ON(MTK_RAW_TOTAL_OUTPUT_QUEUES + MTK_RAW_TOTAL_CAPTURE_QUEUES
++	    != MTK_RAW_TOTAL_NODES))
++		return;
++
++	node_idx = 0;
++	/* Setup the output queue */
++	for (i = 0; i < MTK_RAW_TOTAL_OUTPUT_QUEUES; i++) {
++		pipe->vdev_nodes[node_idx].desc = output_queues[i];
++
++		/* set input meta format */
++		if (pipe->vdev_nodes[node_idx].desc.id == MTK_RAW_META_IN)
++			pipe->vdev_nodes[node_idx].desc.fmts =
++				camsys_get_meta_fmts();
++
++		pipe->vdev_nodes[node_idx++].desc.name =
++			output_queue_names[pipe->id][i];
++	}
++
++	/* Setup the capture queue */
++	for (i = 0; i < MTK_RAW_TOTAL_CAPTURE_QUEUES; i++) {
++		pipe->vdev_nodes[node_idx].desc = capture_queues[i];
++
++		/* set partial meta and external meta format */
++		if (pipe->vdev_nodes[node_idx].desc.id >= MTK_RAW_META_OUT_BEGIN &&
++		    pipe->vdev_nodes[node_idx].desc.id <= MTK_RAW_META_OUT_2)
++			pipe->vdev_nodes[node_idx].desc.fmts =
++				camsys_get_meta_fmts();
++
++		pipe->vdev_nodes[node_idx++].desc.name =
++			capture_queue_names[pipe->id][i];
++	}
++}
++
++static void mtk_raw_pipeline_ctrl_setup(struct mtk_raw_pipeline *pipe)
++{
++	struct v4l2_ctrl_handler *ctrl_hdlr;
++	struct v4l2_ctrl *ctrl;
++	struct device *dev = pipe->raw->devs[pipe->id];
++	int ret = 0;
++
++	ctrl_hdlr = &pipe->ctrl_handler;
++	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 5);
++	if (ret) {
++		dev_info(dev, "v4l2_ctrl_handler init failed\n");
++		return;
++	}
++	mutex_init(&pipe->res_config.resource_lock);
++	mutex_init(&pipe->try_res_config.resource_lock);
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn_limit, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz_limit, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin_limit, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn_try, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz_try, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin_try, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	v4l2_ctrl_new_custom(ctrl_hdlr, &res_plan_policy, NULL);
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &res_pixel_rate, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frame_sync_id, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &raw_path, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++
++	v4l2_ctrl_new_std(ctrl_hdlr, &cam_ctrl_ops,
++			  V4L2_CID_HBLANK, 0, 65535, 1, 0);
++	v4l2_ctrl_new_std(ctrl_hdlr, &cam_ctrl_ops,
++			  V4L2_CID_VBLANK, 0, 65535, 1, 0);
++
++	/* PDE */
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_pde_info, NULL);
++
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &mtk_feature, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_res_update, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_res_ctrl, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
++			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++
++	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr,
++				    &mtk_camsys_hw_mode, NULL);
++	if (ctrl)
++		ctrl->flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
++
++	pipe->res_config.hwn_limit_max = hwn_limit.def;
++	pipe->res_config.frz_limit = frz_limit.def;
++	pipe->res_config.bin_limit = bin_limit.def;
++	pipe->res_config.res_plan = res_plan_policy.def;
++	pipe->feature_pending = mtk_feature.def;
++	pipe->sync_id = frame_sync_id.def;
++	pipe->sensor_mode_update = cfg_res_update.def;
++	pipe->pde_config.pde_info.pdo_max_size = cfg_pde_info.def;
++	pipe->pde_config.pde_info.pdi_max_size = cfg_pde_info.def;
++	pipe->pde_config.pde_info.pd_table_offset = cfg_pde_info.def;
++	pipe->subdev.ctrl_handler = ctrl_hdlr;
++	pipe->hw_mode = mtk_camsys_hw_mode.def;
++}
++
++static int mtk_raw_pipeline_register(unsigned int id, struct device *dev,
++				     struct mtk_raw_pipeline *pipe,
++				     struct v4l2_device *v4l2_dev)
++{
++	struct mtk_cam_device *cam = dev_get_drvdata(pipe->raw->cam_dev);
++	struct v4l2_subdev *sd = &pipe->subdev;
++	struct mtk_cam_video_device *video;
++	unsigned int i;
++	int ret;
++
++	pipe->id = id;
++
++	/* Initialize raw_pipe subdev */
++	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
++	sd->internal_ops = &mtk_raw_subdev_internal_ops;
++	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
++	sd->entity.ops = &mtk_cam_media_entity_ops;
++	sd->flags = V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
++	snprintf(sd->name, sizeof(sd->name),
++		 "%s-%d", dev_driver_string(dev), pipe->id);
++	v4l2_set_subdevdata(sd, pipe);
++	mtk_raw_pipeline_ctrl_setup(pipe);
++	dev_info(dev, "%s: %s\n", __func__, sd->name);
++
++	ret = v4l2_device_register_subdev(v4l2_dev, sd);
++	if (ret < 0) {
++		dev_info(dev, "Failed to register subdev: %d\n", ret);
++		return ret;
++	}
++
++	mtk_raw_pipeline_queue_setup(pipe);
++	/* setup pads of raw pipeline */
++	for (i = 0; i < ARRAY_SIZE(pipe->pads); i++) {
++		pipe->pads[i].flags = i < MTK_RAW_SOURCE_BEGIN ?
++			MEDIA_PAD_FL_SINK : MEDIA_PAD_FL_SOURCE;
++	}
++
++	media_entity_pads_init(&sd->entity, ARRAY_SIZE(pipe->pads), pipe->pads);
++
++	/* setup video node */
++	for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++) {
++		video = pipe->vdev_nodes + i;
++
++		switch (pipe->id) {
++		case MTKCAM_SUBDEV_RAW_0:
++		case MTKCAM_SUBDEV_RAW_1:
++		case MTKCAM_SUBDEV_RAW_2:
++			video->uid.pipe_id = pipe->id;
++			break;
++		default:
++			dev_err(dev, "invalid pipe id\n");
++			return -EINVAL;
++		}
++
++		video->uid.id = video->desc.dma_port;
++		video->ctx = &cam->ctxs[id];
++		ret = mtk_cam_video_register(video, v4l2_dev);
++		if (ret)
++			goto fail_unregister_video;
++
++		if (V4L2_TYPE_IS_OUTPUT(video->desc.buf_type))
++			ret = media_create_pad_link(&video->vdev.entity, 0,
++						    &sd->entity,
++						    video->desc.id,
++						    video->desc.link_flags);
++		else
++			ret = media_create_pad_link(&sd->entity,
++						    video->desc.id,
++						    &video->vdev.entity, 0,
++						    video->desc.link_flags);
++
++		if (ret)
++			goto fail_unregister_video;
++	}
++
++	for (i = 0; i < sd->entity.num_pads; i++)
++		pipe->cfg[i].mbus_fmt = mfmt_default;
++
++	return 0;
++
++fail_unregister_video:
++	if (!i)
++		return ret;
++
++	for (i = i - 1; i >= 0; i--)
++		mtk_cam_video_unregister(pipe->vdev_nodes + i);
++
++	return ret;
++}
++
++static void mtk_raw_pipeline_unregister(struct mtk_raw_pipeline *pipe)
++{
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++)
++		mtk_cam_video_unregister(pipe->vdev_nodes + i);
++	v4l2_ctrl_handler_free(&pipe->ctrl_handler);
++	mutex_destroy(&pipe->res_config.resource_lock);
++	v4l2_device_unregister_subdev(&pipe->subdev);
++	media_entity_cleanup(&pipe->subdev.entity);
++}
++
++int mtk_cam_raw_setup_dependencies(struct mtk_raw *raw)
++{
++	struct device *dev = raw->cam_dev;
++	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
++	struct device *consumer, *supplier;
++	struct device_link *link;
++	struct mtk_raw_device *raw_dev;
++	struct mtk_yuv_device *yuv_dev;
++	int i;
++
++	for (i = 0; i < cam_dev->num_raw_devices; i++) {
++		consumer = raw->devs[i];
++		supplier = raw->yuvs[i];
++		if (!consumer || !supplier) {
++			dev_info(dev, "failed to get raw/yuv dev for id %d\n", i);
++			continue;
++		}
++
++		raw_dev = dev_get_drvdata(consumer);
++		yuv_dev = dev_get_drvdata(supplier);
++		raw_dev->yuv_base = yuv_dev->base;
++
++		link = device_link_add(consumer, supplier,
++				       DL_FLAG_AUTOREMOVE_CONSUMER |
++				       DL_FLAG_PM_RUNTIME);
++		if (!link) {
++			dev_err(dev, "Unable to create link between %s and %s\n",
++				dev_name(consumer), dev_name(supplier));
++			return -ENODEV;
++		}
++	}
++
++	return 0;
++}
++
++int mtk_cam_raw_register_entities(struct mtk_raw *raw, struct v4l2_device *v4l2_dev)
++{
++	struct device *dev = raw->cam_dev;
++	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
++	unsigned int i;
++	int ret;
++
++	for (i = 0; i < cam_dev->num_raw_devices; i++) {
++		struct mtk_raw_pipeline *pipe = raw->pipelines + i;
++
++		pipe->raw = raw;
++		memset(pipe->cfg, 0, sizeof(*pipe->cfg));
++		ret = mtk_raw_pipeline_register(MTKCAM_SUBDEV_RAW_0 + i,
++						raw->devs[i],
++						raw->pipelines + i, v4l2_dev);
++		if (ret)
++			return ret;
 +	}
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(camsys_get_meta_size);
 +
-+const struct mtk_cam_format_desc *camsys_get_meta_fmts(void)
++void mtk_cam_raw_unregister_entities(struct mtk_raw *raw)
 +{
-+	return meta_fmts;
-+}
-+EXPORT_SYMBOL_GPL(camsys_get_meta_fmts);
++	struct device *dev = raw->cam_dev;
++	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
++	unsigned int i;
 +
-+MODULE_DESCRIPTION("MediaTek camera platform utility");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.h
++	for (i = 0; i < cam_dev->num_raw_devices; i++)
++		mtk_raw_pipeline_unregister(raw->pipelines + i);
++}
++
++static int mtk_raw_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_raw_device *raw_dev;
++	struct v4l2_subdev *sd;
++	int ret;
++
++	dev_dbg(dev, "camsys | start %s\n", __func__);
++
++	raw_dev = devm_kzalloc(dev, sizeof(*raw_dev), GFP_KERNEL);
++	if (!raw_dev)
++		return -ENOMEM;
++
++	raw_dev->dev = dev;
++	dev_set_drvdata(dev, raw_dev);
++
++	ret = mtk_raw_of_probe(pdev, raw_dev);
++	if (ret)
++		return ret;
++
++	raw_dev->fifo_size =
++		roundup_pow_of_two(8 * sizeof(struct mtk_camsys_irq_info));
++	raw_dev->msg_buffer = devm_kzalloc(dev, raw_dev->fifo_size, GFP_KERNEL);
++	if (!raw_dev->msg_buffer)
++		return -ENOMEM;
++
++	/* register raw as mtk_cam async child */
++	sd = &raw_dev->subdev;
++	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
++	sd->internal_ops = &mtk_raw_subdev_internal_ops;
++	snprintf(sd->name, sizeof(sd->name), "%s",
++		 of_node_full_name(dev->of_node));
++	sd->dev = dev;
++	sd->owner = THIS_MODULE;
++
++	ret = v4l2_async_register_subdev(sd);
++	if (ret) {
++		dev_err(dev, "%s failed on async_register_subdev\n", __func__);
++		return ret;
++	}
++	dev_dbg(dev, "%s id:%d register subdev\n", __func__, raw_dev->id);
++
++	pm_runtime_enable(dev);
++
++	dev_info(dev, "camsys | [%s] success\n", __func__);
++
++	return 0;
++}
++
++static void mtk_raw_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_raw_device *raw_dev = dev_get_drvdata(dev);
++	struct v4l2_subdev *sd = &raw_dev->subdev;
++
++	dev_dbg(dev, "camsys | start %s\n", __func__);
++
++	unregister_pm_notifier(&raw_dev->pm_notifier);
++
++	pm_runtime_disable(dev);
++
++	v4l2_async_unregister_subdev(sd);
++}
++
++static int mtk_raw_runtime_suspend(struct device *dev)
++{
++	struct mtk_raw_device *drvdata = dev_get_drvdata(dev);
++
++	dev_dbg(dev, "%s:disable clock\n", __func__);
++
++	disable_irq(drvdata->irq);
++
++	mtk_cam_raw_reset(drvdata);
++
++	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
++
++	return 0;
++}
++
++static int mtk_raw_runtime_resume(struct device *dev)
++{
++	struct mtk_raw_device *drvdata = dev_get_drvdata(dev);
++	int ret;
++
++	/* reset_msgfifo before enable_irq */
++	ret = reset_msgfifo(drvdata);
++	if (ret)
++		return ret;
++
++	enable_irq(drvdata->irq);
++
++	dev_dbg(dev, "%s:enable clock\n", __func__);
++
++	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clk_b);
++	if (ret) {
++		dev_info(dev, "failed at clk_bulk_prepare_enable, ret = %d\n", ret);
++		clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
++		return ret;
++	}
++
++	mtk_cam_raw_reset(drvdata);
++
++	return 0;
++}
++
++static const struct dev_pm_ops mtk_raw_pm_ops = {
++	SET_RUNTIME_PM_OPS(mtk_raw_runtime_suspend, mtk_raw_runtime_resume,
++			   NULL)
++};
++
++static const struct of_device_id mtk_raw_of_ids[] = {
++	{.compatible = "mediatek,cam-raw",},
++	{}
++};
++MODULE_DEVICE_TABLE(of, mtk_raw_of_ids);
++
++struct platform_driver mtk_cam_raw_driver = {
++	.probe   = mtk_raw_probe,
++	.remove  = mtk_raw_remove,
++	.driver  = {
++		.name  = "mtk-cam raw",
++		.of_match_table = of_match_ptr(mtk_raw_of_ids),
++		.pm     = &mtk_raw_pm_ops,
++	}
++};
++
++static inline unsigned int mtk_yuv_get_err_status(unsigned int irq_status)
++{
++	return irq_status & YUV_DMA_ERR_ST;
++}
++
++static irqreturn_t mtk_irq_yuv(int irq, void *data)
++{
++	struct mtk_yuv_device *drvdata = (struct mtk_yuv_device *)data;
++	struct device *dev = drvdata->dev;
++
++	unsigned int irq_status, err_status, dma_done_status;
++	unsigned int drop_status, dma_ofl_status;
++
++	irq_status =
++		readl_relaxed(drvdata->base + REG_CTL_RAW_INT_STAT);
++	dma_done_status =
++		readl_relaxed(drvdata->base + REG_CTL_RAW_INT2_STAT);
++	drop_status =
++		readl_relaxed(drvdata->base + REG_CTL_RAW_INT4_STAT);
++	dma_ofl_status =
++		readl_relaxed(drvdata->base + REG_CTL_RAW_INT5_STAT);
++
++	err_status = mtk_yuv_get_err_status(irq_status);
++
++	if (unlikely(debug_raw))
++		dev_dbg(dev, "YUV-INT:0x%x(err:0x%x) INT2/4/5 0x%x/0x%x/0x%x\n",
++			irq_status, err_status,
++			dma_done_status, drop_status, dma_ofl_status);
++
++	return IRQ_HANDLED;
++}
++
++static int mtk_yuv_pm_suspend_prepare(struct mtk_yuv_device *dev)
++{
++	int ret;
++
++	dev_dbg(dev->dev, "- %s\n", __func__);
++
++	if (pm_runtime_suspended(dev->dev))
++		return 0;
++
++	/* Force ISP HW to idle */
++	ret = pm_runtime_force_suspend(dev->dev);
++	return ret;
++}
++
++static int mtk_yuv_pm_post_suspend(struct mtk_yuv_device *dev)
++{
++	int ret;
++
++	dev_dbg(dev->dev, "- %s\n", __func__);
++
++	if (pm_runtime_suspended(dev->dev))
++		return 0;
++
++	/* Force ISP HW to resume */
++	ret = pm_runtime_force_resume(dev->dev);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int yuv_pm_notifier(struct notifier_block *nb,
++			   unsigned long action, void *data)
++{
++	struct mtk_yuv_device *yuv_dev =
++			container_of(nb, struct mtk_yuv_device, pm_notifier);
++
++	switch (action) {
++	case PM_SUSPEND_PREPARE:
++		mtk_yuv_pm_suspend_prepare(yuv_dev);
++		break;
++	case PM_POST_SUSPEND:
++		mtk_yuv_pm_post_suspend(yuv_dev);
++		break;
++	default:
++		break;
++	}
++
++	return NOTIFY_OK;
++}
++
++static int mtk_yuv_of_probe(struct platform_device *pdev,
++			    struct mtk_yuv_device *drvdata)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	int irq, ret;
++	int n_clks;
++
++	ret = of_property_read_u32(dev->of_node, "mediatek,cam-id",
++				   &drvdata->id);
++	if (ret) {
++		dev_dbg(dev, "missing camid property\n");
++		return ret;
++	}
++
++	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34))) {
++		dev_err(dev, "%s: No suitable DMA available\n", __func__);
++		return -EIO;
++	}
++
++	if (!dev->dma_parms) {
++		dev->dma_parms =
++			devm_kzalloc(dev, sizeof(*dev->dma_parms), GFP_KERNEL);
++		if (!dev->dma_parms)
++			return -ENOMEM;
++	}
++
++	dma_set_max_seg_size(dev, UINT_MAX);
++
++	/* base outer register */
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "base");
++	if (!res) {
++		dev_err(dev, "failed to get mem\n");
++		return -ENODEV;
++	}
++
++	drvdata->base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(drvdata->base)) {
++		dev_dbg(dev, "failed to map register base\n");
++		return PTR_ERR(drvdata->base);
++	}
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		dev_err(dev, "failed to get irq\n");
++		return -ENODEV;
++	}
++
++	ret = devm_request_irq(dev, irq, mtk_irq_yuv, 0,
++			       dev_name(dev), drvdata);
++	if (ret) {
++		dev_err(dev, "failed to request irq=%d\n", irq);
++		return ret;
++	}
++	dev_dbg(dev, "registered irq=%d\n", irq);
++
++	n_clks = devm_clk_bulk_get_all(dev, &drvdata->clk_b);
++	if (n_clks < 0) {
++		dev_err(dev, "failed to devm_clk_bulk_get_all=%d\n", n_clks);
++		return n_clks;
++	}
++
++	drvdata->num_clks = n_clks;
++	dev_info(dev, "clk_num:%d\n", drvdata->num_clks);
++
++#ifdef CONFIG_PM_SLEEP
++	drvdata->pm_notifier.notifier_call = yuv_pm_notifier;
++	ret = register_pm_notifier(&drvdata->pm_notifier);
++	if (ret) {
++		dev_err(dev, "failed to register notifier block.\n");
++		return ret;
++	}
++#endif
++
++	return 0;
++}
++
++static int mtk_yuv_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_yuv_device *drvdata;
++	struct v4l2_subdev *sd;
++	int ret;
++
++	dev_dbg(dev, "camsys | start %s\n", __func__);
++
++	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
++	if (!drvdata)
++		return -ENOMEM;
++
++	drvdata->dev = dev;
++	dev_set_drvdata(dev, drvdata);
++
++	ret = mtk_yuv_of_probe(pdev, drvdata);
++	if (ret) {
++		dev_info(dev, "mtk_yuv_of_probe failed\n");
++		return ret;
++	}
++
++	/* register yuv as mtk_cam async child */
++	sd = &drvdata->subdev;
++	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
++	sd->internal_ops = &mtk_raw_subdev_internal_ops;
++	snprintf(sd->name, sizeof(sd->name), "%s",
++		 of_node_full_name(dev->of_node));
++	sd->dev = dev;
++	sd->owner = THIS_MODULE;
++
++	ret = v4l2_async_register_subdev(sd);
++	if (ret) {
++		dev_err(dev, "%s failed on async_register_subdev\n", __func__);
++		return ret;
++	}
++
++	pm_runtime_enable(dev);
++
++	dev_info(dev, "camsys | [%s] success\n", __func__);
++
++	return 0;
++}
++
++static void mtk_yuv_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mtk_yuv_device *yuv_dev = dev_get_drvdata(dev);
++	struct v4l2_subdev *sd = &yuv_dev->subdev;
++
++	dev_dbg(dev, "camsys | start %s\n", __func__);
++
++	unregister_pm_notifier(&yuv_dev->pm_notifier);
++
++	pm_runtime_disable(dev);
++
++	v4l2_async_unregister_subdev(sd);
++}
++
++/* driver for yuv part */
++static int mtk_yuv_runtime_suspend(struct device *dev)
++{
++	struct mtk_yuv_device *drvdata = dev_get_drvdata(dev);
++
++	dev_info(dev, "%s:disable clock\n", __func__);
++
++	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
++
++	return 0;
++}
++
++static int mtk_yuv_runtime_resume(struct device *dev)
++{
++	struct mtk_yuv_device *drvdata = dev_get_drvdata(dev);
++	int ret;
++
++	dev_info(dev, "%s:enable clock\n", __func__);
++
++	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clk_b);
++	if (ret) {
++		dev_info(dev, "failed at clk_bulk_prepare_enable, ret = %d\n", ret);
++		clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops mtk_yuv_pm_ops = {
++	SET_RUNTIME_PM_OPS(mtk_yuv_runtime_suspend, mtk_yuv_runtime_resume,
++			   NULL)
++};
++
++static const struct of_device_id mtk_yuv_of_ids[] = {
++	{.compatible = "mediatek,cam-yuv",},
++	{}
++};
++MODULE_DEVICE_TABLE(of, mtk_yuv_of_ids);
++
++struct platform_driver mtk_cam_yuv_driver = {
++	.probe   = mtk_yuv_probe,
++	.remove  = mtk_yuv_remove,
++	.driver  = {
++		.name  = "mtk-cam yuv",
++		.of_match_table = of_match_ptr(mtk_yuv_of_ids),
++		.pm     = &mtk_yuv_pm_ops,
++	}
++};
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
 new file mode 100644
-index 000000000000..18c387ffd9fc
+index 000000000000..09a92df5d20a
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-plat-util.h
-@@ -0,0 +1,16 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
+@@ -0,0 +1,325 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2022 MediaTek Inc.
 + */
 +
-+#ifndef __MTK_CAM_PLAT_UTIL_H
-+#define __MTK_CAM_PLAT_UTIL_H
++#ifndef __MTK_CAM_RAW_H
++#define __MTK_CAM_RAW_H
 +
-+int camsys_get_meta_version(bool major);
-+int camsys_get_meta_size(u32 video_id);
-+const struct mtk_cam_format_desc *camsys_get_meta_fmts(void);
-+void camsys_set_meta_stats_info(u32 dma_port, struct vb2_buffer *vb,
-+				struct mtk_raw_pde_config *pde_cfg);
-+uint64_t *camsys_get_timestamp_addr(void *vaddr);
++#include <linux/kfifo.h>
++#include <media/v4l2-subdev.h>
++#include "mtk_cam-video.h"
++#include "mtk_camera-v4l2-controls.h"
 +
-+#endif /*__MTK_CAM_PLAT_UTIL_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.c
-new file mode 100644
-index 000000000000..d5ae321e1040
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.c
-@@ -0,0 +1,393 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ * Author: Louis Kuo <louis.kuo@mediatek.com>
-+ */
++struct mtk_cam_request_stream_data;
 +
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/dma-buf.h>
-+#include <linux/mm.h>
-+#include <linux/remoteproc.h>
-+#include <linux/spinlock.h>
++/* ISP7_1 control */
++#define RAW_PIPELINE_NUM 3
 +
-+#include "mtk_cam.h"
-+#include "mtk_cam-pool.h"
++#define SCQ_DEADLINE_MS  15 /* ~1/2 frame length */
++#define SCQ_DEFAULT_CLK_RATE 208 /* default 208MHz */
 +
-+int mtk_cam_working_buf_pool_init(struct mtk_cam_ctx *ctx, struct device *dev)
++#define MTK_CAMSYS_RES_STEP_NUM	8
++
++/* ISP7_1 image */
++#define IMG_MAX_WIDTH		12000
++#define IMG_MAX_HEIGHT		9000
++
++#define IMG_MIN_WIDTH		80
++#define IMG_MIN_HEIGHT		60
++#define YUV_GROUP1_MAX_WIDTH	8160
++#define YUV_GROUP1_MAX_HEIGHT	3896
++#define YUV_GROUP2_MAX_WIDTH	3060
++#define YUV_GROUP2_MAX_HEIGHT	1145
++#define YUV1_MAX_WIDTH		8160
++#define YUV1_MAX_HEIGHT		2290
++#define YUV2_MAX_WIDTH		3060
++#define YUV2_MAX_HEIGHT		1145
++#define YUV3_MAX_WIDTH		7794
++#define YUV3_MAX_HEIGHT		3896
++#define YUV4_MAX_WIDTH		1530
++#define YUV4_MAX_HEIGHT		572
++#define YUV5_MAX_WIDTH		1530
++#define YUV5_MAX_HEIGHT		572
++#define DRZS4NO1_MAX_WIDTH	2400
++#define DRZS4NO1_MAX_HEIGHT	1080
++#define DRZS4NO2_MAX_WIDTH	2400
++#define DRZS4NO2_MAX_HEIGHT	1080
++#define DRZS4NO3_MAX_WIDTH	576
++#define DRZS4NO3_MAX_HEIGHT	432
++#define RZH1N2TO1_MAX_WIDTH	1280
++#define RZH1N2TO1_MAX_HEIGHT	600
++#define RZH1N2TO2_MAX_WIDTH	512
++#define RZH1N2TO2_MAX_HEIGHT	512
++#define RZH1N2TO3_MAX_WIDTH	1280
++#define RZH1N2TO3_MAX_HEIGHT	600
++
++#define IMG_PIX_ALIGN		2
++
++enum raw_module_id {
++	RAW_A = 0,
++	RAW_B = 1,
++	RAW_C = 2,
++	RAW_NUM,
++};
++
++/* feature mask to categorize all raw functions */
++#define MTK_CAM_FEATURE_HDR_MASK		0x0000000F
++#define MTK_CAM_FEATURE_SUBSAMPLE_MASK		0x000000F0
++#define MTK_CAM_FEATURE_OFFLINE_M2M_MASK	0x00000100
++#define MTK_CAM_FEATURE_PURE_OFFLINE_M2M_MASK	0x00000200
++
++enum raw_function_id {
++	/* bit [0~3] hdr */
++	/* bit [4~7] fps */
++	/* bit [8~9] m2m */
++	OFFLINE_M2M			= (1 << 8),
++	PURE_OFFLINE_M2M		= (1 << 9),
++	RAW_FUNCTION_END		= 0xF0000000,
++};
++
++enum hardware_mode_id {
++	DEFAULT			= 0,
++	ON_THE_FLY		= 1,
++	DCIF			= 2,
++};
++
++/* enum for pads of raw pipeline */
++enum {
++	MTK_RAW_SINK_BEGIN = 0,
++	MTK_RAW_SINK = MTK_RAW_SINK_BEGIN,
++	MTK_RAW_SINK_NUM,
++	MTK_RAW_META_IN = MTK_RAW_SINK_NUM,
++	MTK_RAW_RAWI_2_IN,
++	MTK_RAW_RAWI_3_IN,
++	MTK_RAW_RAWI_4_IN,
++	MTK_RAW_SOURCE_BEGIN,
++	MTK_RAW_MAIN_STREAM_OUT = MTK_RAW_SOURCE_BEGIN,
++	MTK_RAW_YUVO_1_OUT,
++	MTK_RAW_YUVO_2_OUT,
++	MTK_RAW_YUVO_3_OUT,
++	MTK_RAW_YUVO_4_OUT,
++	MTK_RAW_YUVO_5_OUT,
++	MTK_RAW_DRZS4NO_1_OUT,
++	MTK_RAW_DRZS4NO_2_OUT,
++	MTK_RAW_DRZS4NO_3_OUT,
++	MTK_RAW_RZH1N2TO_1_OUT,
++	MTK_RAW_RZH1N2TO_2_OUT,
++	MTK_RAW_RZH1N2TO_3_OUT,
++	MTK_RAW_META_OUT_BEGIN,
++	MTK_RAW_META_OUT_0 = MTK_RAW_META_OUT_BEGIN,
++	MTK_RAW_META_OUT_1,
++	MTK_RAW_META_OUT_2,
++	MTK_RAW_PIPELINE_PADS_NUM,
++};
++
++static inline bool is_yuv_node(u32 desc_id)
 +{
-+	int i, ret;
-+	void *ptr;
-+	dma_addr_t addr;
-+	struct mtk_cam_device *cam = ctx->cam;
-+	const unsigned int working_buf_size = round_up(CQ_BUF_SIZE, PAGE_SIZE);
-+	const unsigned int msg_buf_size = round_up(IPI_FRAME_BUF_SIZE, PAGE_SIZE);
-+
-+	INIT_LIST_HEAD(&ctx->buf_pool.cam_freelist.list);
-+	spin_lock_init(&ctx->buf_pool.cam_freelist.lock);
-+	ctx->buf_pool.cam_freelist.cnt = 0;
-+	ctx->buf_pool.working_buf_size = CAM_CQ_BUF_NUM * working_buf_size;
-+	ctx->buf_pool.msg_buf_size = CAM_CQ_BUF_NUM * msg_buf_size;
-+	ctx->buf_pool.raw_workbuf_size = round_up(SIZE_OF_RAW_WORKBUF, PAGE_SIZE);
-+	ctx->buf_pool.priv_workbuf_size = round_up(SIZE_OF_RAW_PRIV, PAGE_SIZE);
-+	ctx->buf_pool.session_buf_size = round_up(SIZE_OF_SESSION, PAGE_SIZE);
-+
-+	/* raw working buffer */
-+	ptr = dma_alloc_coherent(cam->smem_dev, ctx->buf_pool.raw_workbuf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+	ctx->buf_pool.raw_workbuf_scp_addr = addr;
-+	ctx->buf_pool.raw_workbuf_va = ptr;
-+	dev_dbg(dev, "[%s] raw working buf scp addr:%pad va:%pK size %u\n",
-+		__func__,
-+		&ctx->buf_pool.raw_workbuf_scp_addr,
-+		ctx->buf_pool.raw_workbuf_va,
-+		ctx->buf_pool.raw_workbuf_size);
-+
-+	/* raw priv working buffer */
-+	ptr = dma_alloc_coherent(cam->smem_dev, ctx->buf_pool.priv_workbuf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+	ctx->buf_pool.priv_workbuf_scp_addr = addr;
-+	ctx->buf_pool.priv_workbuf_va = ptr;
-+	dev_dbg(dev, "[%s] raw pri working buf scp addr:%pad va:%pK size %u\n",
-+		__func__,
-+		&ctx->buf_pool.priv_workbuf_scp_addr,
-+		ctx->buf_pool.priv_workbuf_va,
-+		ctx->buf_pool.priv_workbuf_size);
-+
-+	/* session buffer */
-+	ptr = dma_alloc_coherent(cam->smem_dev, ctx->buf_pool.session_buf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+	ctx->buf_pool.session_buf_scp_addr = addr;
-+	ctx->buf_pool.session_buf_va = ptr;
-+	dev_dbg(dev, "[%s] session buf scp addr:%pad va:%pK size %u\n",
-+		__func__,
-+		&ctx->buf_pool.session_buf_scp_addr,
-+		ctx->buf_pool.session_buf_va,
-+		ctx->buf_pool.session_buf_size);
-+
-+	/* working buffer */
-+	ptr = dma_alloc_coherent(cam->smem_dev, ctx->buf_pool.working_buf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+	ctx->buf_pool.working_buf_scp_addr = addr;
-+	ctx->buf_pool.working_buf_va = ptr;
-+	addr = dma_map_resource(dev, addr, ctx->buf_pool.working_buf_size,
-+				DMA_BIDIRECTIONAL, DMA_ATTR_SKIP_CPU_SYNC);
-+	if (dma_mapping_error(dev, addr)) {
-+		dev_err(dev, "failed to map scp iova\n");
-+		ret = -ENOMEM;
-+		goto fail_free_mem;
++	switch (desc_id) {
++	case MTK_RAW_YUVO_1_OUT:
++	case MTK_RAW_YUVO_2_OUT:
++	case MTK_RAW_YUVO_3_OUT:
++	case MTK_RAW_YUVO_4_OUT:
++	case MTK_RAW_YUVO_5_OUT:
++	case MTK_RAW_DRZS4NO_1_OUT:
++	case MTK_RAW_DRZS4NO_2_OUT:
++	case MTK_RAW_DRZS4NO_3_OUT:
++	case MTK_RAW_RZH1N2TO_1_OUT:
++	case MTK_RAW_RZH1N2TO_2_OUT:
++	case MTK_RAW_RZH1N2TO_3_OUT:
++		return true;
++	default:
++		return false;
 +	}
-+	ctx->buf_pool.working_buf_iova = addr;
-+	dev_dbg(dev, "[%s] CQ buf scp addr:%pad va:%pK iova:%pad size %u\n",
-+		__func__,
-+		&ctx->buf_pool.working_buf_scp_addr,
-+		ctx->buf_pool.working_buf_va,
-+		&ctx->buf_pool.working_buf_iova,
-+		ctx->buf_pool.working_buf_size);
-+
-+	/* msg buffer */
-+	ptr = dma_alloc_coherent(cam->smem_dev, ctx->buf_pool.msg_buf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr) {
-+		ret = -ENOMEM;
-+		goto fail_free_mem;
-+	}
-+	ctx->buf_pool.msg_buf_scp_addr = addr;
-+	ctx->buf_pool.msg_buf_va = ptr;
-+	dev_dbg(dev, "[%s] msg buf scp addr:%pad va:%pK size %u\n",
-+		__func__, &ctx->buf_pool.msg_buf_scp_addr,
-+		ctx->buf_pool.msg_buf_va, ctx->buf_pool.msg_buf_size);
-+
-+	for (i = 0; i < CAM_CQ_BUF_NUM; i++) {
-+		struct mtk_cam_working_buf_entry *buf = &ctx->buf_pool.working_buf[i];
-+		unsigned int offset = i * working_buf_size;
-+		unsigned int offset_msg = i * msg_buf_size;
-+
-+		buf->ctx = ctx;
-+		buf->buffer.va = ctx->buf_pool.working_buf_va + offset;
-+		buf->buffer.iova = ctx->buf_pool.working_buf_iova + offset;
-+		buf->buffer.scp_addr = ctx->buf_pool.working_buf_scp_addr + offset;
-+		buf->buffer.size = working_buf_size;
-+		buf->msg_buffer.va = ctx->buf_pool.msg_buf_va + offset_msg;
-+		buf->msg_buffer.scp_addr = ctx->buf_pool.msg_buf_scp_addr + offset_msg;
-+		buf->msg_buffer.size = msg_buf_size;
-+		buf->s_data = NULL;
-+
-+		list_add_tail(&buf->list_entry, &ctx->buf_pool.cam_freelist.list);
-+		ctx->buf_pool.cam_freelist.cnt++;
-+	}
-+
-+	dev_dbg(ctx->cam->dev,
-+		"%s: ctx(%d): cq buffers init, freebuf cnt(%d)\n",
-+		__func__, ctx->stream_id, ctx->buf_pool.cam_freelist.cnt);
-+
-+	return 0;
-+fail_free_mem:
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.working_buf_size,
-+			  ctx->buf_pool.working_buf_va,
-+			  ctx->buf_pool.working_buf_scp_addr);
-+	ctx->buf_pool.working_buf_scp_addr = 0;
-+
-+	return ret;
 +}
 +
-+void mtk_cam_working_buf_pool_release(struct mtk_cam_ctx *ctx, struct device *dev)
-+{
-+	struct mtk_cam_device *cam = ctx->cam;
++/* max(pdi_table1, pdi_table2, ...) */
++#define RAW_STATS_CFG_VARIOUS_SIZE ALIGN(0x7500, SZ_1K)
 +
-+	/* msg buffer */
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.msg_buf_size,
-+			  ctx->buf_pool.msg_buf_va,
-+			  ctx->buf_pool.msg_buf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):msg buffers release, va:%pK scp_addr %pad sz %u\n",
-+		__func__, ctx->stream_id,
-+		ctx->buf_pool.msg_buf_va,
-+		&ctx->buf_pool.msg_buf_scp_addr,
-+		ctx->buf_pool.msg_buf_size);
++#define MTK_RAW_TOTAL_NODES (MTK_RAW_PIPELINE_PADS_NUM - MTK_RAW_SINK_NUM)
 +
-+	/* working buffer */
-+	dma_unmap_page_attrs(dev, ctx->buf_pool.working_buf_iova,
-+			     ctx->buf_pool.working_buf_size,
-+			     DMA_BIDIRECTIONAL,
-+			     DMA_ATTR_SKIP_CPU_SYNC);
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.working_buf_size,
-+			  ctx->buf_pool.working_buf_va,
-+			  ctx->buf_pool.working_buf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):cq buffers release, iova %pad scp_addr %pad sz %u\n",
-+		__func__, ctx->stream_id,
-+		&ctx->buf_pool.working_buf_iova,
-+		&ctx->buf_pool.working_buf_scp_addr,
-+		ctx->buf_pool.working_buf_size);
-+
-+	/* session buffer */
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.session_buf_size,
-+			  ctx->buf_pool.session_buf_va,
-+			  ctx->buf_pool.session_buf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):session buffers release, scp_addr %pad sz %u\n",
-+		__func__, ctx->stream_id,
-+		&ctx->buf_pool.session_buf_scp_addr,
-+		ctx->buf_pool.session_buf_size);
-+
-+	/* raw priv working buffer */
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.priv_workbuf_size,
-+			  ctx->buf_pool.priv_workbuf_va,
-+			  ctx->buf_pool.priv_workbuf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):raw pri working buffers release, scp_addr %pad sz %u\n",
-+		__func__, ctx->stream_id,
-+		&ctx->buf_pool.priv_workbuf_scp_addr,
-+		ctx->buf_pool.priv_workbuf_size);
-+
-+	/* raw working buffer */
-+	dma_free_coherent(cam->smem_dev, ctx->buf_pool.raw_workbuf_size,
-+			  ctx->buf_pool.raw_workbuf_va,
-+			  ctx->buf_pool.raw_workbuf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):raw working buffers release, scp_addr %pad sz %u\n",
-+		__func__, ctx->stream_id,
-+		&ctx->buf_pool.raw_workbuf_scp_addr,
-+		ctx->buf_pool.raw_workbuf_size);
-+}
-+
-+void mtk_cam_working_buf_put(struct mtk_cam_working_buf_entry *buf_entry)
-+{
-+	struct mtk_cam_ctx *ctx = buf_entry->ctx;
-+	int cnt;
-+
-+	spin_lock(&ctx->buf_pool.cam_freelist.lock);
-+
-+	list_add_tail(&buf_entry->list_entry,
-+		      &ctx->buf_pool.cam_freelist.list);
-+	cnt = ++ctx->buf_pool.cam_freelist.cnt;
-+
-+	spin_unlock(&ctx->buf_pool.cam_freelist.lock);
-+
-+	dev_dbg(ctx->cam->dev, "%s:ctx(%d):iova(%pad), free cnt(%d)\n",
-+		__func__, ctx->stream_id, &buf_entry->buffer.iova, cnt);
-+}
-+
-+struct mtk_cam_working_buf_entry *mtk_cam_working_buf_get(struct mtk_cam_ctx *ctx)
-+{
-+	struct mtk_cam_working_buf_entry *buf_entry;
-+	int cnt;
-+
-+	/* get from free list */
-+	spin_lock(&ctx->buf_pool.cam_freelist.lock);
-+	if (list_empty(&ctx->buf_pool.cam_freelist.list)) {
-+		spin_unlock(&ctx->buf_pool.cam_freelist.lock);
-+
-+		dev_info(ctx->cam->dev, "%s:ctx(%d):no free buf\n",
-+			 __func__, ctx->stream_id);
-+		return NULL;
-+	}
-+
-+	buf_entry = list_first_entry(&ctx->buf_pool.cam_freelist.list,
-+				     struct mtk_cam_working_buf_entry,
-+				     list_entry);
-+	list_del(&buf_entry->list_entry);
-+	cnt = --ctx->buf_pool.cam_freelist.cnt;
-+	buf_entry->ctx = ctx;
-+
-+	spin_unlock(&ctx->buf_pool.cam_freelist.lock);
-+
-+	dev_dbg(ctx->cam->dev, "%s:ctx(%d):iova(%pad), free cnt(%d)\n",
-+		__func__, ctx->stream_id, &buf_entry->buffer.iova, cnt);
-+
-+	return buf_entry;
-+}
-+
-+int mtk_cam_img_working_buf_pool_init(struct mtk_cam_ctx *ctx, int buf_num,
-+				      struct device *dev)
-+{
-+	int i, ret;
-+	u32 working_buf_size;
-+	void *ptr;
-+	dma_addr_t addr;
-+	struct mtk_cam_device *cam = ctx->cam;
-+	struct mtk_cam_video_device *vdev;
-+
-+	if (buf_num > CAM_IMG_BUF_NUM) {
-+		dev_err(ctx->cam->dev,
-+			"%s: ctx(%d): image buffers number too large(%d)\n",
-+			__func__, ctx->stream_id, buf_num);
-+		WARN_ON(1);
-+		return 0;
-+	}
-+
-+	vdev = &ctx->pipe->vdev_nodes[MTK_RAW_MAIN_STREAM_OUT - MTK_RAW_SINK_NUM];
-+	working_buf_size = vdev->active_fmt.fmt.pix_mp.plane_fmt[0].sizeimage;
-+	INIT_LIST_HEAD(&ctx->img_buf_pool.cam_freeimglist.list);
-+	spin_lock_init(&ctx->img_buf_pool.cam_freeimglist.lock);
-+	ctx->img_buf_pool.cam_freeimglist.cnt = 0;
-+	ctx->img_buf_pool.working_img_buf_size = buf_num * working_buf_size;
-+	ptr = dma_alloc_coherent(cam->smem_dev,
-+				 ctx->img_buf_pool.working_img_buf_size,
-+				 &addr, GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+	ctx->img_buf_pool.working_img_buf_scp_addr = addr;
-+	ctx->img_buf_pool.working_img_buf_va = ptr;
-+	addr = dma_map_resource(dev, addr, ctx->img_buf_pool.working_img_buf_size,
-+				DMA_BIDIRECTIONAL, DMA_ATTR_SKIP_CPU_SYNC);
-+	if (dma_mapping_error(dev, addr)) {
-+		dev_err(dev, "failed to map scp iova\n");
-+		ret = -ENOMEM;
-+		goto fail_free_mem;
-+	}
-+	ctx->img_buf_pool.working_img_buf_iova = addr;
-+	dev_dbg(dev,
-+		"[%s] img working buf scp addr:%pad va:%pK iova: %pad size %d\n",
-+		__func__,
-+		&ctx->img_buf_pool.working_img_buf_scp_addr,
-+		ctx->img_buf_pool.working_img_buf_va,
-+		&ctx->img_buf_pool.working_img_buf_iova,
-+		ctx->img_buf_pool.working_img_buf_size);
-+
-+	for (i = 0; i < buf_num; i++) {
-+		struct mtk_cam_img_working_buf_entry *buf =
-+			&ctx->img_buf_pool.img_working_buf[i];
-+		int offset = i * working_buf_size;
-+
-+		buf->ctx = ctx;
-+		buf->img_buffer.va =
-+			ctx->img_buf_pool.working_img_buf_va + offset;
-+		buf->img_buffer.scp_addr =
-+			ctx->img_buf_pool.working_img_buf_scp_addr + offset;
-+		buf->img_buffer.iova =
-+			ctx->img_buf_pool.working_img_buf_iova + offset;
-+		buf->img_buffer.size = working_buf_size;
-+
-+		list_add_tail(&buf->list_entry,
-+			      &ctx->img_buf_pool.cam_freeimglist.list);
-+		ctx->img_buf_pool.cam_freeimglist.cnt++;
-+	}
-+
-+	dev_dbg(dev, "%s: ctx(%d): image buffers init, freebuf cnt(%d)\n",
-+		__func__, ctx->stream_id, ctx->img_buf_pool.cam_freeimglist.cnt);
-+	return 0;
-+
-+fail_free_mem:
-+	dma_free_coherent(cam->smem_dev, ctx->img_buf_pool.working_img_buf_size,
-+			  ctx->img_buf_pool.working_img_buf_va,
-+			  ctx->img_buf_pool.working_img_buf_scp_addr);
-+	return ret;
-+}
-+
-+void mtk_cam_img_working_buf_pool_release(struct mtk_cam_ctx *ctx,
-+					  struct device *dev)
-+{
-+	struct mtk_cam_device *cam = ctx->cam;
-+
-+	dma_unmap_page_attrs(dev, ctx->img_buf_pool.working_img_buf_iova,
-+			     ctx->img_buf_pool.working_img_buf_size,
-+			     DMA_BIDIRECTIONAL,
-+			     DMA_ATTR_SKIP_CPU_SYNC);
-+	dma_free_coherent(cam->smem_dev, ctx->img_buf_pool.working_img_buf_size,
-+			  ctx->img_buf_pool.working_img_buf_va,
-+			  ctx->img_buf_pool.working_img_buf_scp_addr);
-+	dev_dbg(dev,
-+		"%s:ctx(%d):img working buf release, scp addr %pad va %pK iova %pad, sz %u\n",
-+		__func__, ctx->stream_id,
-+		&ctx->img_buf_pool.working_img_buf_scp_addr,
-+		ctx->img_buf_pool.working_img_buf_va,
-+		&ctx->img_buf_pool.working_img_buf_iova,
-+		ctx->img_buf_pool.working_img_buf_size);
-+}
-+
-+void mtk_cam_img_working_buf_put(struct mtk_cam_img_working_buf_entry *buf_entry)
-+{
-+	struct mtk_cam_ctx *ctx = buf_entry->ctx;
-+	int cnt;
-+
-+	spin_lock(&ctx->img_buf_pool.cam_freeimglist.lock);
-+
-+	list_add_tail(&buf_entry->list_entry,
-+		      &ctx->img_buf_pool.cam_freeimglist.list);
-+	cnt = ++ctx->img_buf_pool.cam_freeimglist.cnt;
-+
-+	spin_unlock(&ctx->img_buf_pool.cam_freeimglist.lock);
-+
-+	dev_dbg(ctx->cam->dev, "%s:ctx(%d):iova(0x%pad), free cnt(%d)\n",
-+		__func__, ctx->stream_id, &buf_entry->img_buffer.iova, cnt);
-+}
-+
-+struct mtk_cam_img_working_buf_entry *
-+mtk_cam_img_working_buf_get(struct mtk_cam_ctx *ctx)
-+{
-+	struct mtk_cam_img_working_buf_entry *buf_entry;
-+	int cnt;
-+
-+	/* get from free list */
-+	spin_lock(&ctx->img_buf_pool.cam_freeimglist.lock);
-+	if (list_empty(&ctx->img_buf_pool.cam_freeimglist.list)) {
-+		spin_unlock(&ctx->img_buf_pool.cam_freeimglist.lock);
-+
-+		dev_info(ctx->cam->dev, "%s:ctx(%d):no free buf\n",
-+			 __func__, ctx->stream_id);
-+		return NULL;
-+	}
-+
-+	buf_entry = list_first_entry(&ctx->img_buf_pool.cam_freeimglist.list,
-+				     struct mtk_cam_img_working_buf_entry,
-+				     list_entry);
-+	list_del(&buf_entry->list_entry);
-+	cnt = --ctx->img_buf_pool.cam_freeimglist.cnt;
-+
-+	spin_unlock(&ctx->img_buf_pool.cam_freeimglist.lock);
-+
-+	dev_dbg(ctx->cam->dev, "%s:ctx(%d):iova(0x%pad), free cnt(%d)\n",
-+		__func__, ctx->stream_id, &buf_entry->img_buffer.iova, cnt);
-+
-+	return buf_entry;
-+}
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.h
-new file mode 100644
-index 000000000000..24cc8382f93d
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-pool.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2018 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAM_POOL_H
-+#define __MTK_CAM_POOL_H
-+
++struct mtk_cam_dev;
 +struct mtk_cam_ctx;
 +
-+int mtk_cam_working_buf_pool_init(struct mtk_cam_ctx *ctx, struct device *dev);
-+void mtk_cam_working_buf_pool_release(struct mtk_cam_ctx *ctx,
-+				      struct device *dev);
++struct mtk_raw_pde_config {
++	struct mtk_cam_pde_info pde_info;
++};
 +
-+void mtk_cam_working_buf_put(struct mtk_cam_working_buf_entry *buf_entry);
-+struct mtk_cam_working_buf_entry *
-+	mtk_cam_working_buf_get(struct mtk_cam_ctx *ctx);
++struct mtk_cam_resource_config {
++	struct v4l2_subdev *seninf;
++	struct mutex resource_lock; /* protect resource calculation */
++	struct v4l2_fract interval;
++	s64 pixel_rate;
++	u32 bin_limit;
++	u32 frz_limit;
++	u32 hwn_limit_max;
++	u32 hwn_limit_min;
++	s64 hblank;
++	s64 vblank;
++	s64 sensor_pixel_rate;
++	u32 res_plan;
++	u32 raw_feature;
++	u32 res_strategy[MTK_CAMSYS_RES_STEP_NUM];
++	u32 clk_target;
++	u32 raw_num_used;
++	u32 bin_enable;
++	u32 frz_enable;
++	u32 frz_ratio;
++	u32 tgo_pxl_mode;
++	u32 raw_path;
++	/* sink fmt adjusted according resource used*/
++	struct v4l2_mbus_framefmt sink_fmt;
++};
 +
-+int mtk_cam_img_working_buf_pool_init(struct mtk_cam_ctx *ctx, int buf_num,
-+				      struct device *dev);
-+void mtk_cam_img_working_buf_pool_release(struct mtk_cam_ctx *ctx,
-+					  struct device *dev);
++struct mtk_raw_pad_config {
++	struct v4l2_mbus_framefmt mbus_fmt;
++	struct v4l2_rect crop;
++};
 +
-+void mtk_cam_img_working_buf_put(struct mtk_cam_img_working_buf_entry *buf_entry);
-+struct mtk_cam_img_working_buf_entry *
-+	mtk_cam_img_working_buf_get(struct mtk_cam_ctx *ctx);
++/*
++ * struct mtk_raw_pipeline - sub dev to use raws.
++ *
++ * @feature_pending: keep the user value of S_CTRL V4L2_CID_MTK_CAM_FEATURE.
++ *		     It it safe save to be used in mtk_cam_vidioc_s_fmt,
++ *		     mtk_cam_vb2_queue_setup and mtk_cam_vb2_buf_queue
++ *		     But considering that we can't when the user calls S_CTRL,
++ *		     please use mtk_cam_request_stream_data's
++ *		     feature.raw_feature field
++ *		     to avoid the CTRL value change tming issue.
++ * @feature_active: The active feature during streaming. It can't be changed
++ *		    during streaming and can only be used after streaming on.
++ *
++ */
++struct mtk_raw_pipeline {
++	unsigned int id;
++	struct v4l2_subdev subdev;
++	struct media_pad pads[MTK_RAW_PIPELINE_PADS_NUM];
++	struct mtk_cam_video_device vdev_nodes[MTK_RAW_TOTAL_NODES];
++	struct mtk_raw *raw;
++	struct mtk_raw_pad_config cfg[MTK_RAW_PIPELINE_PADS_NUM];
 +
-+#endif /* __MTK_CAM_POOL_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-regs-mt8188.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-regs-mt8188.h
++	/* cached settings */
++	unsigned int enabled_raw;
++	unsigned long enabled_dmas;
++	/* resource controls */
++	struct v4l2_ctrl_handler ctrl_handler;
++	s64 feature_pending;
++	s64 feature_active;
++
++	struct mtk_cam_resource user_res;
++	struct mtk_cam_resource_config res_config;
++	struct mtk_cam_resource_config try_res_config;
++	int sensor_mode_update;
++	s64 sync_id;
++	/* pde module */
++	struct mtk_raw_pde_config pde_config;
++	s64 hw_mode;
++};
++
++struct mtk_raw_device {
++	struct v4l2_subdev subdev;
++	struct device *dev;
++	struct mtk_cam_device *cam;
++	unsigned int id;
++	int irq;
++	void __iomem *base;
++	void __iomem *base_inner;
++	void __iomem *yuv_base;
++	unsigned int num_clks;
++	struct clk_bulk_data *clk_b;
++#ifdef CONFIG_PM_SLEEP
++	struct notifier_block pm_notifier;
++#endif
++
++	unsigned int	fifo_size;
++	void		*msg_buffer;
++	struct kfifo	msg_fifo;
++	atomic_t	is_fifo_overflow;
++
++	struct mtk_raw_pipeline *pipeline;
++	bool is_sub;
++
++	u64 sof_count;
++	u64 vsync_count;
++
++	atomic_t vf_en;
++	int overrun_debug_dump_cnt;
++};
++
++struct mtk_yuv_device {
++	struct v4l2_subdev subdev;
++	struct device *dev;
++	unsigned int id;
++	void __iomem *base;
++	unsigned int num_clks;
++	struct clk_bulk_data *clk_b;
++#ifdef CONFIG_PM_SLEEP
++	struct notifier_block pm_notifier;
++#endif
++};
++
++/* AE information */
++struct mtk_ae_debug_data {
++	u64 obc_r1_sum[4];
++	u64 obc_r2_sum[4];
++	u64 obc_r3_sum[4];
++	u64 aa_sum[4];
++	u64 ltm_sum[4];
++};
++
++/*
++ * struct mtk_raw - the raw device information
++ */
++struct mtk_raw {
++	struct device *cam_dev;
++	struct device *devs[RAW_PIPELINE_NUM];
++	struct device *yuvs[RAW_PIPELINE_NUM];
++	struct mtk_raw_pipeline pipelines[RAW_PIPELINE_NUM];
++};
++
++static inline struct mtk_raw_pipeline *
++mtk_cam_ctrl_handler_to_raw_pipeline(struct v4l2_ctrl_handler *handler)
++{
++	return container_of(handler, struct mtk_raw_pipeline, ctrl_handler);
++};
++
++int mtk_cam_raw_setup_dependencies(struct mtk_raw *raw);
++
++int mtk_cam_raw_register_entities(struct mtk_raw *raw,
++				  struct v4l2_device *v4l2_dev);
++void mtk_cam_raw_unregister_entities(struct mtk_raw *raw);
++
++int mtk_cam_raw_select(struct mtk_cam_ctx *ctx,
++		       struct mtkcam_ipi_input_param *cfg_in_param);
++
++void mtk_cam_raw_initialize(struct mtk_raw_device *dev, int is_sub);
++
++void mtk_cam_raw_stream_on(struct mtk_raw_device *dev, int on);
++
++void mtk_cam_raw_apply_cq(struct mtk_raw_device *dev, dma_addr_t cq_addr,
++			  unsigned int cq_size, unsigned int cq_offset,
++			  unsigned int sub_cq_size, unsigned int sub_cq_offset);
++
++void mtk_cam_raw_trigger_rawi(struct mtk_raw_device *dev,
++			      struct mtk_cam_ctx *ctx,
++			      signed int hw_scene);
++
++void mtk_cam_raw_reset(struct mtk_raw_device *dev);
++
++void mtk_cam_raw_dump_aa_info(struct mtk_cam_ctx *ctx,
++			      struct mtk_ae_debug_data *ae_info);
++
++extern struct platform_driver mtk_cam_raw_driver;
++extern struct platform_driver mtk_cam_yuv_driver;
++
++static inline u32 dmaaddr_lsb(dma_addr_t addr)
++{
++	return addr & (u32)U32_MAX;
++}
++
++static inline u32 dmaaddr_msb(dma_addr_t addr)
++{
++	return (u64)addr >> 32;
++}
++
++#endif /*__MTK_CAM_RAW_H */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
 new file mode 100644
-index 000000000000..cb00d243559c
+index 000000000000..bd81ce53b251
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-regs-mt8188.h
-@@ -0,0 +1,382 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
+@@ -0,0 +1,403 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// Copyright (c) 2022 MediaTek Inc.
++
++#include <linux/device.h>
++#include <linux/io.h>
++
++#include "mtk_cam-regs-mt8188.h"
++
++#include "mtk_cam-raw_debug.h"
++
++#define ADD_FBC_DMA(name)	 #name
++static const char * const fbc_r1_list[] = {
++	ADD_FBC_DMA(IMGO_R1),
++	ADD_FBC_DMA(FHO_R1),
++	ADD_FBC_DMA(AAHO_R1),
++	ADD_FBC_DMA(PDO_R1),
++	ADD_FBC_DMA(AAO_R1),
++	ADD_FBC_DMA(TSFSO_R1),
++	ADD_FBC_DMA(LTMSO_R1),
++	ADD_FBC_DMA(AFO_R1),
++	ADD_FBC_DMA(FLKO_R1),
++	ADD_FBC_DMA(UFEO_R1),
++	ADD_FBC_DMA(TSFSO_R2),
++};
++
++static const char * const fbc_r2_list[] = {
++	ADD_FBC_DMA(YUVO_R1),
++	ADD_FBC_DMA(YUVBO_R1),
++	ADD_FBC_DMA(YUVCO_R1),
++	ADD_FBC_DMA(YUVDO_R1),
++	ADD_FBC_DMA(YUVO_R3),
++	ADD_FBC_DMA(YUVBO_R3),
++	ADD_FBC_DMA(YUVCO_R3),
++	ADD_FBC_DMA(YUVDO_R3),
++	ADD_FBC_DMA(YUVO_R2),
++	ADD_FBC_DMA(YUVBO_R2),
++	ADD_FBC_DMA(YUVO_R4),
++	ADD_FBC_DMA(YUVBO_R4),
++	ADD_FBC_DMA(RZH1N2TO_R1),
++	ADD_FBC_DMA(RZH1N2TBO_R1),
++	ADD_FBC_DMA(RZH1N2TO_R2),
++	ADD_FBC_DMA(RZH1N2TO_R3),
++	ADD_FBC_DMA(RZH1N2TBO_R3),
++	ADD_FBC_DMA(DRZS4NO_R1),
++	ADD_FBC_DMA(DRZS4NO_R2),
++	ADD_FBC_DMA(DRZS4NO_R3),
++	ADD_FBC_DMA(TNCSO_R1),
++	ADD_FBC_DMA(TNCSYO_R1),
++	ADD_FBC_DMA(TNCSBO_R1),
++	ADD_FBC_DMA(TNCSHO_R1),
++	ADD_FBC_DMA(ACTSO_R1),
++	ADD_FBC_DMA(YUVO_R5),
++	ADD_FBC_DMA(YUVBO_R5),
++};
++
++#define LOGGER_PREFIX_SIZE 16
++#define LOGGER_BUFSIZE 128
++struct buffered_logger {
++	struct device *dev;
++	void (*log_handler)(struct buffered_logger *log);
++
++	char prefix[LOGGER_PREFIX_SIZE];
++	char buf[LOGGER_BUFSIZE + 1];
++	unsigned int size;
++};
++
++static void mtk_cam_init_logger(struct buffered_logger *logger,
++				struct device *dev,
++				void (*_hdl)(struct buffered_logger *))
++{
++	logger->dev = dev;
++	logger->log_handler = _hdl;
++	logger->prefix[0] = '\0';
++	logger->buf[LOGGER_BUFSIZE] = '\0';
++	logger->size = 0;
++}
++
++static __printf(2, 3)
++void mtk_cam_log_set_prefix(struct buffered_logger *log, const char *fmt, ...)
++{
++	va_list args;
++
++	va_start(args, fmt);
++	vscnprintf(log->prefix, LOGGER_PREFIX_SIZE, fmt, args);
++	va_end(args);
++}
++
++static void mtk_cam_log_handle_limited(struct buffered_logger *log)
++{
++	dev_info_ratelimited(log->dev, "%s: %.*s\n",
++			     log->prefix, log->size, log->buf);
++	log->size = 0;
++}
++
++static void mtk_cam_log_handle_info(struct buffered_logger *log)
++{
++	dev_info(log->dev, "%s: %.*s\n", log->prefix, log->size, log->buf);
++	log->size = 0;
++}
++
++static void mtk_cam_log_flush(struct buffered_logger *log)
++{
++	log->log_handler(log);
++}
++
++static __printf(2, 3)
++void mtk_cam_log_push(struct buffered_logger *log, const char *fmt, ...)
++{
++	va_list args;
++	int len;
++
++	va_start(args, fmt);
++	len = vscnprintf(log->buf + log->size, LOGGER_BUFSIZE - log->size + 1,
++			 fmt, args);
++	va_end(args);
++
++	if (len + log->size < LOGGER_BUFSIZE) {
++		log->size += len;
++		return;
++	}
++
++	mtk_cam_log_flush(log);
++
++	va_start(args, fmt);
++	len = vscnprintf(log->buf + log->size, LOGGER_BUFSIZE - log->size + 1,
++			 fmt, args);
++	va_end(args);
++
++	log->size += len;
++
++	if (len == LOGGER_BUFSIZE)
++		dev_info(log->dev, "log buffer size not enough: %d\n",
++			 LOGGER_BUFSIZE);
++}
++
++void mtk_cam_raw_dump_fbc(struct device *dev,
++			  void __iomem *base, void __iomem *yuvbase)
++{
++	struct buffered_logger log;
++	int fbc_r1_ctl2[ARRAY_SIZE(fbc_r1_list)];
++	int fbc_r2_ctl2[ARRAY_SIZE(fbc_r2_list)];
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(fbc_r1_list); i++)
++		fbc_r1_ctl2[i] = readl(base + REG_FBC_CTL2(FBC_R1A_BASE, i));
++
++	for (i = 0; i < ARRAY_SIZE(fbc_r2_list); i++)
++		fbc_r2_ctl2[i] = readl(yuvbase + REG_FBC_CTL2(FBC_R2A_BASE, i));
++
++	mtk_cam_init_logger(&log, dev, mtk_cam_log_handle_info);
++
++	mtk_cam_log_set_prefix(&log, "%s", "RAW FBC");
++	for (i = 0; i < ARRAY_SIZE(fbc_r1_list); i++)
++		if (fbc_r1_ctl2[i] & 0xffffff) /* if has been used */
++			mtk_cam_log_push(&log, " %s: 0x%08x",
++					 fbc_r1_list[i], fbc_r1_ctl2[i]);
++	mtk_cam_log_flush(&log);
++
++	mtk_cam_log_set_prefix(&log, "%s", "YUV FBC");
++	for (i = 0; i < ARRAY_SIZE(fbc_r2_list); i++)
++		if (fbc_r2_ctl2[i] & 0xffffff) /* if has been used */
++			mtk_cam_log_push(&log, " %s: 0x%08x",
++					 fbc_r2_list[i], fbc_r2_ctl2[i]);
++	mtk_cam_log_flush(&log);
++}
++
++struct reg_to_dump {
++	const char *name;
++	unsigned int reg;
++};
++
++#define ADD_DMA(name)	{ #name, REG_ ## name ## _BASE + DMA_OFFSET_ERR_STAT }
++static const struct reg_to_dump raw_dma_list[] = {
++	ADD_DMA(IMGO_R1),
++	ADD_DMA(IMGO_R1),
++	ADD_DMA(UFEO_R1),
++	ADD_DMA(PDO_R1),
++	ADD_DMA(FLKO_R1),
++	ADD_DMA(TSFSO_R1),
++	ADD_DMA(TSFSO_R2),
++	ADD_DMA(AAO_R1),
++	ADD_DMA(AAHO_R1),
++	ADD_DMA(AFO_R1),
++	ADD_DMA(LTMSO_R1),
++	ADD_DMA(FHO_R1),
++	/* ADD_DMA(BPCO_R1), */
++
++	ADD_DMA(RAWI_R2),
++	ADD_DMA(UFDI_R2),
++	ADD_DMA(BPCI_R1),
++	ADD_DMA(LSCI_R1),
++	ADD_DMA(AAI_R1),
++	ADD_DMA(PDI_R1),
++	ADD_DMA(BPCI_R2),
++	ADD_DMA(RAWI_R3),
++	ADD_DMA(UFDI_R3),
++	ADD_DMA(BPCI_R3),
++	/* ADD_DMA(RAWI_R4), */
++	/* ADD_DMA(BPCI_R4), */
++	/* ADD_DMA(RAWI_R5), */
++	ADD_DMA(RAWI_R6),
++	ADD_DMA(CACI_R1),
++};
++
++static const struct reg_to_dump yuv_dma_list[] = {
++	ADD_DMA(ACTSO_R1),
++	ADD_DMA(TNCSO_R1),
++	ADD_DMA(TNCSBO_R1),
++	ADD_DMA(TNCSHO_R1),
++	ADD_DMA(TNCSYO_R1),
++	ADD_DMA(DRZS4NO_R1),
++	ADD_DMA(DRZS4NO_R2),
++	ADD_DMA(DRZS4NO_R3),
++	ADD_DMA(RZH1N2TO_R1),
++	ADD_DMA(RZH1N2TBO_R1),
++	ADD_DMA(RZH1N2TO_R2),
++	ADD_DMA(RZH1N2TO_R3),
++	ADD_DMA(RZH1N2TBO_R3),
++	ADD_DMA(YUVO_R1),
++	ADD_DMA(YUVBO_R1),
++	ADD_DMA(YUVCO_R1),
++	ADD_DMA(YUVDO_R1),
++	ADD_DMA(YUVO_R2),
++	ADD_DMA(YUVBO_R2),
++	ADD_DMA(YUVO_R3),
++	ADD_DMA(YUVBO_R3),
++	ADD_DMA(YUVCO_R3),
++	ADD_DMA(YUVDO_R3),
++	ADD_DMA(YUVO_R4),
++	ADD_DMA(YUVBO_R4),
++	ADD_DMA(YUVO_R5),
++	ADD_DMA(YUVBO_R5),
++};
++
++static void mtk_cam_dump_dma_err_st(struct device *dev, void __iomem *base,
++				    const char *prefix,
++				    const struct reg_to_dump *from,
++				    const struct reg_to_dump *to)
++{
++	struct buffered_logger log;
++	int err_found = 0;
++	int err_st;
++
++	mtk_cam_init_logger(&log, dev, mtk_cam_log_handle_limited);
++	mtk_cam_log_set_prefix(&log, "%s", prefix);
++
++	while (from < to) {
++		err_st = readl_relaxed(base + from->reg);
++
++		/* [15:0] ERR_STAT */
++		if (err_st & 0xffff) {
++			mtk_cam_log_push(&log, " %s: 0x%08x",
++					 from->name, err_st);
++			err_found = 1;
++		}
++		from++;
++	}
++
++	if (err_found)
++		mtk_cam_log_flush(&log);
++}
++
++void mtk_cam_raw_dump_dma_err_st(struct device *dev, void __iomem *base)
++{
++	mtk_cam_dump_dma_err_st(dev, base, "RAW DMA_ERR",
++				raw_dma_list,
++				raw_dma_list + ARRAY_SIZE(raw_dma_list));
++}
++
++void mtk_cam_yuv_dump_dma_err_st(struct device *dev, void __iomem *base)
++{
++	mtk_cam_dump_dma_err_st(dev, base, "YUV DMA_ERR",
++				yuv_dma_list,
++				yuv_dma_list + ARRAY_SIZE(yuv_dma_list));
++}
++
++void mtk_cam_dump_req_rdy_status(struct device *dev,
++				 void __iomem *base, void __iomem *yuvbase)
++{
++	dev_dbg_ratelimited(dev,
++			    "REQ RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
++			    readl_relaxed(base + REG_CTL_RAW_MOD_REQ_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD2_REQ_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD3_REQ_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD5_REQ_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD6_REQ_STAT));
++	dev_dbg_ratelimited(dev,
++			    "RDY RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
++			    readl_relaxed(base + REG_CTL_RAW_MOD_RDY_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD2_RDY_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD3_RDY_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD5_RDY_STAT),
++			    readl_relaxed(base + REG_CTL_RAW_MOD6_RDY_STAT));
++	dev_dbg_ratelimited(dev,
++			    "REQ YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD_REQ_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD2_REQ_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD3_REQ_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD4_REQ_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD5_REQ_STAT));
++	dev_dbg_ratelimited(dev,
++			    "RDY YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD_RDY_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD2_RDY_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD3_RDY_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD4_RDY_STAT),
++			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD5_RDY_STAT));
++}
++
++void mtk_cam_dump_dma_debug(struct device *dev,
++			    void __iomem *dmatop_base,
++			    const char *dma_name,
++			    struct dma_debug_item *items, int n)
++{
++	void __iomem *dbg_sel = dmatop_base + 0x70;
++	void __iomem *dbg_port = dmatop_base + 0x74;
++	int i = 0;
++	unsigned int vals[16];
++
++	if (n >= 16) {
++		dev_dbg(dev, "%s: should enlarge array size for n(%d)\n",
++			__func__, n);
++		return;
++	}
++
++	for (i = 0; i < n; i++) {
++		writel(items[i].debug_sel, dbg_sel);
++		if (readl(dbg_sel) != items[i].debug_sel)
++			dev_dbg(dev, "failed to write dbg_sel %08x\n",
++				items[i].debug_sel);
++
++		vals[i] = readl(dbg_port);
++	};
++
++	dev_dbg(dev, "%s: %s, n = %d", __func__, dma_name, n);
++	for (i = 0; i < n; i++)
++		dev_dbg(dev, "%08x: %08x [%s]\n",
++			items[i].debug_sel, vals[i], items[i].msg);
++}
++
++void mtk_cam_set_topdebug_rdyreq(struct device *dev,
++				 void __iomem *base, void __iomem *yuvbase,
++				 u32 event)
++{
++	u32 val = event << 16 | 0xa << 12;
++
++	writel(val, base + REG_CTL_DBG_SET);
++	writel(event, base + REG_CTL_DBG_SET2);
++	writel(val, yuvbase + REG_CTL_DBG_SET);
++	dev_info(dev,
++		 "set CAMCTL_DBG_SET2/CAMCTL_DBG_SET (RAW/YUV) 0x%08x/0x%08x\n",
++		 event, val);
++}
++
++void mtk_cam_dump_topdebug_rdyreq(struct device *dev,
++				  void __iomem *base, void __iomem *yuvbase)
++{
++	static const u32 debug_sel[] = {
++		/* req group 1~7 */
++		0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6,
++		/* rdy group 1~7 */
++		0x8, 0x9, 0xA, 0xB, 0xC, 0xD, 0xE,
++		/* latched_events */
++		0xF,
++	};
++	void __iomem *dbg_set;
++	void __iomem *dbg_port;
++	u32 set;
++	int i;
++
++	/* CAMCTL_DBG_SET
++	 *   CAMCTL_SNAPSHOT_SEL  [23:16]
++	 *   CAMCTL_DEBUG_TOP_SEL [15:12]
++	 *   CAMCTL_DEBUG_SEL     [11: 8]
++	 *   CAMCTL_DEBUG_MOD_SEL [ 7: 0]
++	 */
++
++	/* CAMCTL_DEBUG_MOD_SEL
++	 *   0: tg_scq_cnt_sub_pass1_done
++	 *   1: rdyreq_dbg_data
++	 */
++
++	dbg_set = base + REG_CTL_DBG_SET;
++	dbg_port = base + REG_CTL_DBG_PORT;
++
++	set = (readl(dbg_set) & 0xfff000) | 0x1;
++	for (i = 0; i < ARRAY_SIZE(debug_sel); i++) {
++		writel(set | debug_sel[i] << 8, dbg_set);
++		dev_info(dev, "RAW debug_set 0x%08x port 0x%08x\n",
++			 readl(dbg_set), readl(dbg_port));
++	}
++
++	dbg_set = yuvbase + REG_CTL_DBG_SET;
++	dbg_port = yuvbase + REG_CTL_DBG_PORT;
++
++	set = (readl(dbg_set) & 0xfff000) | 0x1;
++	for (i = 0; i < ARRAY_SIZE(debug_sel); i++) {
++		writel(set | debug_sel[i] << 8, dbg_set);
++		dev_info(dev, "YUV debug_set 0x%08x port 0x%08x\n",
++			 readl(dbg_set), readl(dbg_port));
++	}
++}
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
+new file mode 100644
+index 000000000000..8d457403a5b0
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
+@@ -0,0 +1,39 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2022 MediaTek Inc.
 + */
 +
-+#ifndef _CAM_REGS_H
-+#define _CAM_REGS_H
++#ifndef _MTK_CAM_RAW_DEBUG_H
++#define _MTK_CAM_RAW_DEBUG_H
 +
-+/* Raw Part */
++enum topdebug_event {
++	ALL_THE_TIME	= BIT(0),
++	TG_OVERRUN	= BIT(1),
++	CQ_MAIN_VS_ERR	= BIT(2),
++	CQ_SUB_VS_ERR	= BIT(3),
++	RAW_DMA_ERR	= BIT(4),
++	YUV_DMA_ERR	= BIT(5),
++};
 +
-+/* normal siganl */
-+#define VS_INT_ST						BIT(0)
-+#define TG_INT1_ST						BIT(1)
-+#define TG_INT2_ST						BIT(2)
-+#define EXPDON_ST						BIT(5)
-+#define SOF_INT_ST						BIT(8)
-+#define HW_PASS1_DON_ST						BIT(20)
-+#define SW_PASS1_DON_ST						BIT(22)
-+#define TG_VS_INT_ORG_ST					BIT(11)
++struct dma_debug_item {
++	unsigned int	debug_sel;
++	const char	*msg;
++};
 +
-+/* YUV siganl */
-+#define YUV_SW_PASS1_DON_ST					BIT(0)
-+#define YUV_PASS1_DON_ST					BIT(1)
-+#define YUV_DMA_ERR_ST						BIT(2)
++void mtk_cam_raw_dump_fbc(struct device *dev,
++			  void __iomem *base, void __iomem *yuvbase);
++void mtk_cam_raw_dump_dma_err_st(struct device *dev, void __iomem *base);
++void mtk_cam_yuv_dump_dma_err_st(struct device *dev, void __iomem *yuvbase);
++void mtk_cam_dump_req_rdy_status(struct device *dev,
++				 void __iomem *base, void __iomem *yuvbase);
++void mtk_cam_dump_dma_debug(struct device *dev,
++			    void __iomem *dmatop_base,
++			    const char *dma_name,
++			    struct dma_debug_item *items, int n);
++void mtk_cam_set_topdebug_rdyreq(struct device *dev,
++				 void __iomem *base, void __iomem *yuvbase,
++				 u32 event);
++void mtk_cam_dump_topdebug_rdyreq(struct device *dev,
++				  void __iomem *base, void __iomem *yuvbase);
 +
-+/* err status */
-+#define TG_OVRUN_ST						BIT(6)
-+#define TG_GBERR_ST						BIT(7)
-+#define CQ_DB_LOAD_ERR_ST					BIT(12)
-+#define CQ_MAIN_CODE_ERR_ST					BIT(14)
-+#define CQ_MAIN_VS_ERR_ST					BIT(15)
-+#define CQ_MAIN_TRIG_DLY_ST					BIT(16)
-+#define LSCI_ERR_ST						BIT(24)
-+#define DMA_ERR_ST						BIT(26)
++#endif	/* _MTK_CAM_RAW_DEBUG_H */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
+new file mode 100644
+index 000000000000..b775e6c30aa1
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
+@@ -0,0 +1,65 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
 +
-+/* CAM DMA done status */
-+#define IMGO_DONE_ST						BIT(0)
-+#define AFO_DONE_ST						BIT(8)
-+#define CQI_R1_DONE_ST						BIT(15)
++#ifndef __MTK_CAMERA_V4l2_CONTROLS_H
++#define __MTK_CAMERA_V4l2_CONTROLS_H
 +
-+/* RAW input trigger ctrl*/
-+#define RAWI_R2_TRIG						BIT(0)
-+#define RAWI_R3_TRIG						BIT(1)
-+#define RAWI_R4_TRIG						BIT(2)
-+#define RAWI_R5_TRIG						BIT(3)
-+#define RAWI_R6_TRIG						BIT(4)
++#include <linux/videodev2.h>
++#include <linux/v4l2-controls.h>
++#include <linux/mtkisp_camsys.h>
 +
-+/* IRQ signal mask */
-+#define INT_ST_MASK_CAM (VS_INT_ST	 |\
-+			 TG_INT1_ST	 |\
-+			 TG_INT2_ST	 |\
-+			 EXPDON_ST       |\
-+			 HW_PASS1_DON_ST |\
-+			 SOF_INT_ST      |\
-+			 SW_PASS1_DON_ST)
++/* Allowed value of V4L2_CID_MTK_CAM_RAW_PATH_SELECT */
++#define V4L2_MTK_CAM_RAW_PATH_SELECT_BPC	1
++#define V4L2_MTK_CAM_RAW_PATH_SELECT_FUS	3
++#define V4L2_MTK_CAM_RAW_PATH_SELECT_DGN	4
++#define V4L2_MTK_CAM_RAW_PATH_SELECT_LSC	5
++#define V4L2_MTK_CAM_RAW_PATH_SELECT_LTM	7
 +
-+/* IRQ Error Mask */
-+#define INT_ST_MASK_CAM_ERR	(TG_OVRUN_ST		|\
-+				 TG_GBERR_ST		|\
-+				 CQ_DB_LOAD_ERR_ST	|\
-+				 CQ_MAIN_CODE_ERR_ST	|\
-+				 CQ_MAIN_VS_ERR_ST	|\
-+				 DMA_ERR_ST)
++#define V4L2_MBUS_FRAMEFMT_PAD_ENABLE  BIT(1)
 +
-+/* camsys */
-+#define REG_CAMSYS_CG_SET				0x0004
-+#define REG_CAMSYS_CG_CLR				0x0008
++#define MEDIA_BUS_FMT_MTISP_SBGGR10_1X10		0x8001
++#define MEDIA_BUS_FMT_MTISP_SBGGR12_1X12		0x8002
++#define MEDIA_BUS_FMT_MTISP_SBGGR14_1X14		0x8003
++#define MEDIA_BUS_FMT_MTISP_SGBRG10_1X10		0x8004
++#define MEDIA_BUS_FMT_MTISP_SGBRG12_1X12		0x8005
++#define MEDIA_BUS_FMT_MTISP_SGBRG14_1X14		0x8006
++#define MEDIA_BUS_FMT_MTISP_SGRBG10_1X10		0x8007
++#define MEDIA_BUS_FMT_MTISP_SGRBG12_1X12		0x8008
++#define MEDIA_BUS_FMT_MTISP_SGRBG14_1X14		0x8009
++#define MEDIA_BUS_FMT_MTISP_SRGGB10_1X10		0x800a
++#define MEDIA_BUS_FMT_MTISP_SRGGB12_1X12		0x800b
++#define MEDIA_BUS_FMT_MTISP_SRGGB14_1X14		0x800c
++#define MEDIA_BUS_FMT_MTISP_BAYER8_UFBC			0x800d
++#define MEDIA_BUS_FMT_MTISP_BAYER10_UFBC		0x800e
++#define MEDIA_BUS_FMT_MTISP_BAYER12_UFBC		0x8010
++#define MEDIA_BUS_FMT_MTISP_BAYER14_UFBC		0x8011
++#define MEDIA_BUS_FMT_MTISP_BAYER16_UFBC		0x8012
++#define MEDIA_BUS_FMT_MTISP_NV12			0x8013
++#define MEDIA_BUS_FMT_MTISP_NV21			0x8014
++#define MEDIA_BUS_FMT_MTISP_NV12_10			0x8015
++#define MEDIA_BUS_FMT_MTISP_NV21_10			0x8016
++#define MEDIA_BUS_FMT_MTISP_NV12_10P			0x8017
++#define MEDIA_BUS_FMT_MTISP_NV21_10P			0x8018
++#define MEDIA_BUS_FMT_MTISP_NV12_12			0x8019
++#define MEDIA_BUS_FMT_MTISP_NV21_12			0x801a
++#define MEDIA_BUS_FMT_MTISP_NV12_12P			0x801b
++#define MEDIA_BUS_FMT_MTISP_NV21_12P			0x801c
++#define MEDIA_BUS_FMT_MTISP_YUV420			0x801d
++#define MEDIA_BUS_FMT_MTISP_NV12_UFBC			0x801e
++#define MEDIA_BUS_FMT_MTISP_NV21_UFBC			0x8020
++#define MEDIA_BUS_FMT_MTISP_NV12_10_UFBC		0x8021
++#define MEDIA_BUS_FMT_MTISP_NV21_10_UFBC		0x8022
++#define MEDIA_BUS_FMT_MTISP_NV12_12_UFBC		0x8023
++#define MEDIA_BUS_FMT_MTISP_NV21_12_UFBC		0x8024
++#define MEDIA_BUS_FMT_MTISP_NV16			0x8025
++#define MEDIA_BUS_FMT_MTISP_NV61			0x8026
++#define MEDIA_BUS_FMT_MTISP_NV16_10			0x8027
++#define MEDIA_BUS_FMT_MTISP_NV61_10			0x8028
++#define MEDIA_BUS_FMT_MTISP_NV16_10P			0x8029
++#define MEDIA_BUS_FMT_MTISP_NV61_10P			0x802a
 +
-+#define REG_HALT1_EN					0x0350
-+#define REG_HALT2_EN					0x0354
-+#define REG_HALT3_EN					0x0358
-+#define REG_HALT4_EN					0x035c
-+#define REG_HALT5_EN					0x0360
-+#define REG_HALT6_EN					0x0364
-+#define REG_FLASH					0x03A0
-+#define REG_ULTRA_HALT1_EN				0x03c0
-+#define REG_ULTRA_HALT2_EN				0x03c4
-+#define REG_ULTRA_HALT3_EN				0x03c8
-+#define REG_ULTRA_HALT4_EN				0x03cc
-+#define REG_ULTRA_HALT5_EN				0x03d0
-+#define REG_ULTRA_HALT6_EN				0x03d4
-+#define REG_PREULTRA_HALT1_EN				0x03f0
-+#define REG_PREULTRA_HALT2_EN				0x03f4
-+#define REG_PREULTRA_HALT3_EN				0x03f8
-+#define REG_PREULTRA_HALT4_EN				0x03fc
-+#define REG_PREULTRA_HALT5_EN				0x0400
-+#define REG_PREULTRA_HALT6_EN				0x0404
++#define MTK_CAM_RESOURCE_DEFAULT	0xFFFF
 +
-+/* Status check */
-+#define REG_CTL_EN					0x0000
-+#define REG_CTL_EN2					0x0004
-+
-+/* DMA Enable Register, DMA_EN */
-+#define REG_CTL_MOD5_EN					0x0010
-+#define REG_CTL_MOD6_EN					0x0014
-+/* RAW input trigger*/
-+#define REG_CTL_RAWI_TRIG				0x00C0
-+
-+#define REG_CTL_MISC					0x0060
-+#define CTL_DB_EN					BIT(4)
-+
-+#define REG_CTL_SW_CTL					0x00C4
-+#define REG_CTL_START					0x00B0
-+
-+#define REG_CTL_RAW_INT_EN				0x0100
-+#define REG_CTL_RAW_INT_STAT				0x0104
-+#define REG_CTL_RAW_INT2_EN				0x0110
-+#define REG_CTL_RAW_INT2_STAT				0x0114
-+#define REG_CTL_RAW_INT3_STAT				0x0124
-+#define REG_CTL_RAW_INT4_STAT				0x0134
-+#define REG_CTL_RAW_INT5_STAT				0x0144
-+#define REG_CTL_RAW_INT6_EN				0x0150
-+#define REG_CTL_RAW_INT6_STAT				0x0154
-+#define REG_CTL_RAW_INT7_EN				0x0160
-+#define REG_CTL_RAW_INT7_STAT				0x0164
-+
-+#define REG_CTL_RAW_MOD_DCM_DIS				0x0300
-+#define REG_CTL_RAW_MOD2_DCM_DIS			0x0304
-+#define REG_CTL_RAW_MOD3_DCM_DIS			0x0308
-+#define REG_CTL_RAW_MOD5_DCM_DIS			0x0310
-+#define REG_CTL_RAW_MOD6_DCM_DIS			0x0314
-+
-+#define REG_CTL_DBG_SET					0x00F0
-+#define REG_CTL_DBG_PORT				0x00F4
-+#define REG_DMA_DBG_SEL					0x4070
-+#define REG_DMA_DBG_PORT				0x4074
-+#define REG_CTL_DBG_SET2				0x00F8
-+
-+#define REG_CTL_RAW_MOD_REQ_STAT			0x0340
-+#define REG_CTL_RAW_MOD2_REQ_STAT			0x0344
-+#define REG_CTL_RAW_MOD3_REQ_STAT			0x0348
-+#define REG_CTL_RAW_MOD4_REQ_STAT			0x034c
-+#define REG_CTL_RAW_MOD5_REQ_STAT			0x0350
-+#define REG_CTL_RAW_MOD6_REQ_STAT			0x0354
-+
-+#define REG_CTL_RAW_MOD_RDY_STAT			0x0360
-+#define REG_CTL_RAW_MOD2_RDY_STAT			0x0364
-+#define REG_CTL_RAW_MOD3_RDY_STAT			0x0368
-+#define REG_CTL_RAW_MOD4_RDY_STAT			0x036c
-+#define REG_CTL_RAW_MOD5_RDY_STAT			0x0370
-+#define REG_CTL_RAW_MOD6_RDY_STAT			0x0374
-+
-+#define REG_CQ_EN					0x0400
-+#define REG_SCQ_START_PERIOD				0x0408
-+#define REG_CQ_THR0_CTL					0x0410
-+#define REG_CQ_SUB_CQ_EN				0x06B0
-+#define REG_CQ_SUB_THR0_CTL				0x06C0
-+
-+#define REG_CTL_SW_PASS1_DONE				0x00c8
-+#define SW_DONE_SAMPLE_EN				BIT(8)
-+#define REG_CTL_SW_SUB_CTL				0x00cc
-+
-+#define REG_CQ_THR0_BASEADDR				0x0414
-+#define REG_CQ_THR0_BASEADDR_MSB			0x0418
-+#define REG_CQ_THR0_DESC_SIZE				0x041C
-+#define REG_SCQ_CQ_TRIG_TIME				0x0410
-+#define REG_CQ_SUB_THR0_BASEADDR_2			0x06CC
-+#define REG_CQ_SUB_THR0_BASEADDR_MSB_2			0x06D0
-+#define REG_CQ_SUB_THR0_DESC_SIZE_2			0x06D8
-+#define REG_CQ_SUB_THR0_BASEADDR_1			0x06C4
-+#define REG_CQ_SUB_THR0_BASEADDR_MSB_1			0x06C8
-+#define REG_CQ_SUB_THR0_DESC_SIZE_1			0x06D4
-+#define SCQ_EN						BIT(20)
-+#define SCQ_STAGGER_MODE				BIT(12)
-+#define SCQ_SUBSAMPLE_EN				BIT(21)
-+#define CQ_DB_EN					BIT(4)
-+#define CQ_THR0_MODE_IMMEDIATE				BIT(4)
-+#define CQ_THR0_MODE_CONTINUOUS				BIT(5)
-+#define CQ_THR0_EN					BIT(0)
-+#define SCQ_SUB_RESET					BIT(16)
-+
-+#define REG_TG_SEN_MODE					0x0700
-+#define TG_CMOS_RDY_SEL					BIT(14)
-+#define TG_SEN_MODE_CMOS_EN				BIT(0)
-+#define TG_VFDATA_EN					BIT(0)
-+#define TG_TG_FULL_SEL					BIT(15)
-+#define TG_STAGGER_EN					BIT(22)
-+
-+#define REG_TG_VF_CON					0x0704
-+#define REG_TG_SEN_GRAB_PXL				0x0708
-+#define REG_TG_SEN_GRAB_LIN				0x070C
-+#define REG_TG_PATH_CFG					0x0710
-+#define TG_DB_LOAD_DIS					BIT(8)
-+#define TG_SUB_SOF_SRC_SEL_0				BIT(20)
-+#define TG_SUB_SOF_SRC_SEL_1				BIT(21)
-+
-+#define REG_TG_INTER_ST					0x073C
-+/* use this MASK to extract TG_CAM_CS from TG_INTER_ST */
-+#define TG_CAM_CS_MASK					0x3f00
-+#define TG_IDLE_ST					BIT(8)
-+
-+#define REG_TG_FRMSIZE_ST				0x0738
-+#define REG_TG_DCIF_CTL					0x075C
-+#define TG_DCIF_EN					BIT(16)
-+
-+#define REG_TG_FRMSIZE_ST_R				0x076C
-+#define REG_TG_TIME_STAMP				0x0778
-+#define REG_TG_TIME_STAMP_CNT				0x077C
-+
-+/* tg flash */
-+#define	REG_TG_XENON_FLASH_CTL				0x0780
-+#define REG_TG_XENON_FLASH_OFFSET			0x0784
-+#define REG_TG_XENON_FLASH_HIGH_WIDTH			0x0788
-+#define REG_TG_XENON_FLASH_LOW_WIDTH			0x078C
-+#define	REG_TG_IR_FLASH_CTL				0x0798
-+#define REG_TG_IR_FLASH_OFFSET				0x079C
-+#define REG_TG_IR_FLASH_HIGH_WIDTH			0x07A0
-+#define REG_TG_IR_FLASH_LOW_WIDTH			0x07A4
-+
-+/* for raw & yuv's dma top base */
-+#define CAMDMATOP_BASE					0x4000
-+
-+#define REG_DMA_SOFT_RST_STAT				0x4068
-+#define REG_DMA_SOFT_RST_STAT2				0x406C
-+#define REG_DMA_DBG_CHASING_STATUS			0x4098
-+#define REG_DMA_DBG_CHASING_STATUS2			0x409c
-+
-+#define RAWI_R2_SMI_REQ_ST				BIT(0)
-+#define RAWI_R3_SMI_REQ_ST				BIT(16)
-+#define RAWI_R5_SMI_REQ_ST				BIT(16)
-+
-+#define RST_STAT_RAWI_R2				BIT(0)
-+#define RST_STAT_RAWI_R3				BIT(2)
-+#define RST_STAT_RAWI_R5				BIT(5)
-+/* use spare register FH_SPARE_5 */
-+#define REG_FRAME_SEQ_NUM				0x4994
-+
-+#define REG_CAMCTL_FBC_SEL				0x00A0
-+#define REG_CAMCTL_FBC_RCNT_INC				0x00A4
-+
-+#define CAMCTL_IMGO_R1_RCNT_INC				BIT(0)
-+#define CAMCTL_CQ_THR0_DONE_ST				BIT(0)
-+#define CAMCTL_CQ_THRSUB_DONE_EN			BIT(10)
-+#define CTL_CQ_THR0_START				BIT(0)
-+
-+/* CAMSYS_RAW 0x1a03 */
-+#define OFFSET_OBC_R1_R_SUM_L				0x1178
-+#define OFFSET_OBC_R1_R_SUM_H				0x117c
-+#define OFFSET_OBC_R1_B_SUM_L				0x1180
-+#define OFFSET_OBC_R1_B_SUM_H				0x1184
-+#define OFFSET_OBC_R1_GR_SUM_L				0x1188
-+#define OFFSET_OBC_R1_GR_SUM_H				0x118c
-+#define OFFSET_OBC_R1_GB_SUM_L				0x1190
-+#define OFFSET_OBC_R1_GB_SUM_H				0x1194
-+#define OFFSET_OBC_R1_ACT_WIN_X				0x1198
-+#define OFFSET_OBC_R1_ACT_WIN_Y				0x119c
-+
-+#define OFFSET_OBC_R2_R_SUM_L				0x1438
-+#define OFFSET_OBC_R2_R_SUM_H				0x143c
-+#define OFFSET_OBC_R2_B_SUM_L				0x1440
-+#define OFFSET_OBC_R2_B_SUM_H				0x1444
-+#define OFFSET_OBC_R2_GR_SUM_L				0x1448
-+#define OFFSET_OBC_R2_GR_SUM_H				0x144c
-+#define OFFSET_OBC_R2_GB_SUM_L				0x1450
-+#define OFFSET_OBC_R2_GB_SUM_H				0x1454
-+#define OFFSET_OBC_R2_ACT_WIN_X				0x1458
-+#define OFFSET_OBC_R2_ACT_WIN_Y				0x145c
-+
-+#define OFFSET_OBC_R3_R_SUM_L				0x16f8
-+#define OFFSET_OBC_R3_R_SUM_H				0x16fc
-+#define OFFSET_OBC_R3_B_SUM_L				0x1700
-+#define OFFSET_OBC_R3_B_SUM_H				0x1704
-+#define OFFSET_OBC_R3_GR_SUM_L				0x1708
-+#define OFFSET_OBC_R3_GR_SUM_H				0x170c
-+#define OFFSET_OBC_R3_GB_SUM_L				0x1710
-+#define OFFSET_OBC_R3_GB_SUM_H				0x1714
-+#define OFFSET_OBC_R3_ACT_WIN_X				0x1718
-+#define OFFSET_OBC_R3_ACT_WIN_Y				0x171c
-+
-+#define REG_LTM_AE_DEBUG_B_MSB				0x23f0
-+#define REG_LTM_AE_DEBUG_B_LSB				0x23f4
-+#define REG_LTM_AE_DEBUG_GB_MSB				0x23f8
-+#define REG_LTM_AE_DEBUG_GB_LSB				0x23fc
-+#define REG_LTM_AE_DEBUG_GR_MSB				0x2400
-+#define REG_LTM_AE_DEBUG_GR_LSB				0x2404
-+#define REG_LTM_AE_DEBUG_R_MSB				0x2408
-+#define REG_LTM_AE_DEBUG_R_LSB				0x240c
-+#define REG_LTMS_ACT_WIN_X				0x2578
-+#define REG_LTMS_ACT_WIN_Y				0x257c
-+
-+#define REG_AA_R_SUM_L					0x2a1c
-+#define REG_AA_R_SUM_H					0x2a20
-+#define REG_AA_B_SUM_L					0x2a24
-+#define REG_AA_B_SUM_H					0x2a28
-+#define REG_AA_GR_SUM_L					0x2a2c
-+#define REG_AA_GR_SUM_H					0x2a30
-+#define REG_AA_GB_SUM_L					0x2a34
-+#define REG_AA_GB_SUM_H					0x2a30
-+#define REG_AA_ACT_WIN_X				0x2a3c
-+#define REG_AA_ACT_WIN_Y				0x2a40
-+
-+#define DMA_OFFSET_CON0					0x020
-+#define DMA_OFFSET_CON1					0x024
-+#define DMA_OFFSET_CON2					0x028
-+#define DMA_OFFSET_CON3					0x02c
-+#define DMA_OFFSET_CON4					0x030
-+#define DMA_OFFSET_ERR_STAT				0x034
-+
-+#define DMA_OFFSET_SPECIAL_DCIF				0x03c
-+#define DC_CAMSV_STAGER_EN				BIT(16)
-+
-+#define FBC_R1A_BASE					0x2c00
-+#define FBC_R2A_BASE					0x3780
-+#define REG_FBC_CTL1(base, idx)				((base) + (idx) * 8)
-+#define REG_FBC_CTL2(base, idx)				((base) + (idx) * 8 + 4)
-+#define WCNT_BIT_MASK					0xFF00
-+#define CNT_BIT_MASK					0xFF0000
-+#define TG_FULLSEL_BIT_MASK				0x8000
-+/* ORIDMA */
-+/* CAMSYS_RAW 0x1a03 */
-+#define REG_IMGO_R1_BASE				0x4880
-+#define REG_FHO_R1_BASE					0x4930
-+#define REG_AAHO_R1_BASE				0x49e0
-+#define REG_PDO_R1_BASE					0x4a90
-+#define REG_AAO_R1_BASE					0x4a40
-+#define REG_AFO_R1_BASE					0x4bf0
-+
-+/* CAMSYS_YUV 0x1a05 */
-+#define REG_YUVO_R1_BASE				0x4200
-+#define REG_YUVBO_R1_BASE				0x42b0
-+#define REG_YUVCO_R1_BASE				0x4360
-+#define REG_YUVDO_R1_BASE				0x4410
-+#define REG_YUVO_R3_BASE				0x44c0
-+#define REG_YUVBO_R3_BASE				0x4570
-+#define REG_YUVCO_R3_BASE				0x4620
-+#define REG_YUVDO_R3_BASE				0x46D0
-+
-+/* ULCDMA */
-+/* CAMSYS_RAW 0x1603 */
-+#define REG_LTMSO_R1_BASE				0x4ce0
-+#define REG_TSFSO_R1_BASE				0x4ca0
-+#define REG_TSFSO_R2_BASE				0x4de0
-+#define REG_FLKO_R1_BASE				0x4d20
-+#define REG_UFEO_R1_BASE				0x4d60
-+
-+/* CAMSYS_YUV 0x1605 */
-+#define REG_YUVO_R2_BASE				0x4780
-+#define REG_YUVBO_R2_BASE				0x47c0
-+#define REG_YUVO_R4_BASE				0x4800
-+#define REG_YUVBO_R4_BASE				0x4840
-+#define REG_YUVO_R5_BASE				0x4c00
-+#define REG_YUVBO_R5_BASE				0x4c40
-+#define REG_RZH1N2TO_R1_BASE				0x4880
-+#define REG_RZH1N2TBO_R1_BASE				0x48c0
-+#define REG_RZH1N2TO_R2_BASE				0x4900
-+#define REG_RZH1N2TO_R3_BASE				0x4940
-+#define REG_RZH1N2TBO_R3_BASE				0x4980
-+#define REG_DRZS4NO_R1_BASE				0x49c0
-+#define REG_DRZS4NO_R2_BASE				0x4a00
-+#define REG_DRZS4NO_R3_BASE				0x4a40
-+#define REG_ACTSO_R1_BASE				0x4ac0
-+#define REG_TNCSO_R1_BASE				0x4b00
-+#define REG_TNCSBO_R1_BASE				0x4b40
-+#define REG_TNCSHO_R1_BASE				0x4b80
-+#define REG_TNCSYO_R1_BASE				0x4bc0
-+
-+/* CAMSYS_RAW 0x1a03 */
-+#define REG_RAWI_R2_BASE				0x4100
-+#define REG_RAWI_R2_BASE_MSB				0x4104
-+#define REG_UFDI_R2_BASE				0x4170
-+#define REG_RAWI_R3_BASE				0x41e0
-+#define REG_RAWI_R3_BASE_MSB				0x41e4
-+#define REG_UFDI_R3_BASE				0x4250
-+#define REG_CQI_R1_BASE					0x4410
-+#define REG_CQI_R1_BASE_MSB				0x4414
-+#define REG_CQI_R2_BASE					0x4480
-+#define REG_CQI_R2_BASE_MSB				0x4484
-+#define REG_CQI_R3_BASE					0x44f0
-+#define REG_CQI_R3_BASE_MSB				0x44f4
-+#define REG_CQI_R4_BASE					0x4560
-+#define REG_CQI_R4_BASE_MSB				0x4564
-+#define REG_LSCI_R1_BASE				0x45d0
-+#define REG_BPCI_R1_BASE				0x4640
-+#define REG_BPCI_R2_BASE				0x4680
-+#define REG_BPCI_R3_BASE				0x46c0
-+#define REG_PDI_R1_BASE					0x4700
-+#define REG_AAI_R1_BASE					0x4780
-+#define REG_CACI_R1_BASE				0x47c0
-+#define REG_RAWI_R5_BASE				0x4330
-+#define REG_RAWI_R6_BASE				0x4800
-+
-+#endif	/* _CAM_REGS_H */
++#endif /* __MTK_CAMERA_V4l2_CONTROLS_H */
 -- 
 2.18.0
 
