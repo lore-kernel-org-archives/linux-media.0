@@ -1,48 +1,48 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C446192590;
-	Wed,  9 Oct 2024 11:16:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C19D1925AD;
+	Wed,  9 Oct 2024 11:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728472590; cv=none; b=XfbRa0uCvQvEWf3bNSnE2HztsIJqlYqKnCJqZXFSNRkONKFOb1q+HCBP7/1keFuHGvf+wJHA3lKO7k2XPFkguRdDwqOpt1wKI/Y8brlpo1JvQw6R4X3FfEfza68OAj688STYh6T+apM5/r4yAwWPfcSk16V4AK6hIzk4o7MLle0=
+	t=1728472591; cv=none; b=HLKY89tKWWyop+C5ZBmSC/VowyHYQhR6gdsm6x/WYzOd6sp4WIVSlAM/+zJPZEFtp/UmWVN3df2CSeLZPfPoRj6xKTSJlWZlpLfYvlWRDIum9uHDcP/PKCig9qt0UVj/ADCgJQ3vhuWiQILX8HIuHW3Kj3F1ixIsx3i4kdI+c0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728472590; c=relaxed/simple;
-	bh=P7Oti3BHzGsuAFkQYPgU57/GZ6nET9T/MNmB7OpHrVc=;
+	s=arc-20240116; t=1728472591; c=relaxed/simple;
+	bh=dWEBp4kb97UgFo6Hy29seQpzcjeBJh2c5NmyrRP60WM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KIDU2VwpAo1inahbVO6Y4tbT0DC33Z89Cmo9XiVIXui3tH1vi6voIC1M8+M4AviyLfz7/Pel+TfmD1zQbEl2CWPSRhxErsu4YLg4hwjy8vXP/cpDw8Fm8JBEMDzg/0GWs3Q8rsy3qlTifX1hhhKfkBl4SIlBx50BaR0Hv/Zb8y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=PbyDjTqM; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=J15SDiTHxpSDBdfrjE1Bml1+xNz6w2Okn2uTP+Sq8p/2j1UuNVOySW2AWyHyDmxclAe5c0q6s48FjE6oTkFaBLEQgm/0RmSaU2aTjrlg6mWRokFGpJ6lbAYQ8UFoRkRarErjRg3J9RHzwqaxyLA4O32rPnT1XEF2ra4UBewZ7ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=AelIzUc/; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="PbyDjTqM"
-X-UUID: e2940168862f11ef8b96093e013ec31c-20241009
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="AelIzUc/"
+X-UUID: e243155a862f11ef8b96093e013ec31c-20241009
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ue8XDJwDfmMjuG2089nzMq4aQHQbiXCtmqGQ1mS+Lv8=;
-	b=PbyDjTqMuAeiLywROXsh6T3k0Ds+3H7Cm63mOgiNwNAIVRh+WanEQ0FIWL7Sa6Wzv7VIKFnR7jz+mkyaeYy8A8stLU0MQA47F83jsC38729EdtukKZmmMldbP7oBYBdev69Mpip1rnaALFqUsKTGC2m6IF7/R8MzK2jaQJ/E900=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=K8BNr280JSlR7cP0FVamfOuSAUagH9mHOhVDVP8fLWw=;
+	b=AelIzUc/2btIoMGWlFG2nflOil+dt4Hf6OXuIQTaXLScRkueAYesvWIhgTSXi/bvN6L2A5i6i//Vpj4bq8JpEErRbW8gXaXjyLevR+EVzqKxhg2m1KWOW3Oin1Japlr1DTyNBzv9vGgqz81grkp3AHOfDPJ53M06Oykju6srNqc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:b8f483b7-b989-4885-8e1d-779f12447c13,IP:0,U
+X-CID-O-INFO: VERSION:1.1.41,REQID:0312fa28-ec99-4451-b344-9025bfc3da7e,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:1da58926-5902-4533-af4f-d0904aa89b3c,B
+X-CID-META: VersionHash:6dc6a47,CLOUDID:248a0041-8751-41b2-98dd-475503d45150,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:1,OSI:0,OSA:0,AV:0,LES:1,
 	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,OSH|NGT
 X-CID-BAS: 2,OSH|NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e2940168862f11ef8b96093e013ec31c-20241009
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+X-UUID: e243155a862f11ef8b96093e013ec31c-20241009
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
 	(envelope-from <shu-hsiang.yang@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1703436404; Wed, 09 Oct 2024 19:16:09 +0800
+	with ESMTP id 288086585; Wed, 09 Oct 2024 19:16:08 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 9 Oct 2024 19:16:07 +0800
+ 15.2.1118.26; Wed, 9 Oct 2024 19:16:06 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 9 Oct 2024 19:16:07 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 9 Oct 2024 19:16:06 +0800
 From: Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
@@ -57,9 +57,9 @@ CC: <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<yaya.chang@mediatek.com>, <teddy.chen@mediatek.com>,
 	<hidenorik@chromium.org>, <yunkec@chromium.org>, <shun-yi.wang@mediatek.com>,
 	Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
-Subject: [PATCH v1 04/10] media: platform: mediatek: add isp_7x cam-raw unit
-Date: Wed, 9 Oct 2024 19:15:45 +0800
-Message-ID: <20241009111551.27052-5-Shu-hsiang.Yang@mediatek.com>
+Subject: [PATCH v1 02/10] media: platform: mediatek: add seninf controller
+Date: Wed, 9 Oct 2024 19:15:43 +0800
+Message-ID: <20241009111551.27052-3-Shu-hsiang.Yang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20241009111551.27052-1-Shu-hsiang.Yang@mediatek.com>
 References: <20241009111551.27052-1-Shu-hsiang.Yang@mediatek.com>
@@ -71,6267 +71,5140 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--15.012200-8.000000
-X-TMASE-MatchedRID: 1aMQdI+MeNA83pgwlPkMJspQKjU7fBXVkbYh2bSF9Gc2/UwdvFG5Ih8+
-	XHETeZCzpPfp/tMmq7gXy25Jwx1ee6lRmTVyFuWlA9lly13c/gEraL2mh8ZVK7uqk4cq52pzBpN
-	qUzwLvvfC9TF0oEZxDPwSlgkyMvou28kC8Kr7Ask0JY9d6s3vaV67veYUroY0CqIJhrrDy2/5r/
-	N0c4ndaRTXlwIdja91D/M6mxTF6eBDeuA2fujoFUhwlOfYeSqxpfVcx39Kq+7JYIv7y0tu9qIDs
-	C/90PKdFq2u6QNXsALnTzjd3LX3p00EdmgNIMCz4bl1FkKDELc7r2Gtb9iBYS8zQZ2rR/Op8bf3
-	35SL+13V0LJ64h8KJ0gY1PPRRF1Dbai8Vf7R1/2GuzokAQvW7jfwU1OWX2USYe1mzp7dkwd3AzN
-	R49E9zHs1twvT4bomFCOLNe0Jd9Mz2nUKzTJ7O0dAWPMBu8kQIaLR+2xKRDIifM7JMNHW64Jj0L
-	b9Fi4gLLFAZa5Y3vBWTSOlTfbnwNllERdS6V4uLIRqQbCuh+6E6lq+K7jth/zaSz3Z/4aayU7Xg
-	Ts6W4L08oBdFnGk1pUmPFGykXeX4TagRwcBQLNtqNUBzYMqpu8lj2kHOCDUv8D7QPW2jo/j0EH9
-	v7XWEHGdZVe1+//wXFj1pvfElLE+Os0u1LkxvULEoH0ynuZVfV3o8v8dH+qxVl52+frW/74Sh0C
-	0yopsbkYOoCs8hbi8RK4gKVk64Q+ypzJ6Fr8f7/U7JmMpiiH54F/2i/DwjU8vg1FXaj1oLOxC6s
-	uyQ8bYnodwiC5M0gB5duhc76YnrGqzbR7VPHmeAiCmPx4NwGmRqNBHmBveg6X7YSXnSlqZv9WvR
-	V/RbgtuKBGekqUpOlxBO2IcOBaUTGVAhB5EbQ==
+X-TM-AS-Result: No-10--17.556000-8.000000
+X-TMASE-MatchedRID: EOzCvkUI2XJCC3JecVI9Vq+dYEguu4aVJq5DgTAZDtsnynQtBMZAAtnf
+	JrUSEbFD0pQCgxG38xUIkFSbCXH0xc3AmdtMjGJV7spMO3HwKCDDHSNFHFxB8/EJBoK3pfxuUQ3
+	NFKzJAeyMPepmK8xHyNVf+xUxOpYQN8PEWMb3wtiimtMQe97AAOJ6l5ocmTNK1JVSTP0E9d58rw
+	AwWerBmIKuFcvdRxJ2OvJz+HZ1ghGQqMvYg6LYsJA6S0SjvcYUHQwQ9gfpMR5tw+n+iKWyyBXjz
+	2Yr0Ugb9mO4udLA1/iVkysc+ADcMw+/n/431GMSJmbrB1j4XwphBfGxmdHCgh68dIEhVd3VjGyk
+	vTEeLpFoBVJLx4KfEAlzTqJYFPTwVo9xxUteKSuyBjDX4sGuTSG4xLksx3hx3HqWhvh1onWPdZV
+	YbQwPh6okLK+BXKXp0uU94EBIvxQUhfC/ipzRk6IBnfMCFBiCzV4D+5YmeSJX14Hy+eYp7yG6/1
+	cZ3ZJy8DYhDIi7GCYVaq9ckOs5Fn86HKSa2b5kEPf7TDUOGop+iqFlMGARD9BkxehC6ozfXWjvA
+	8TpWFjy2UZqCS3UtUjBgsju+zn2FO8S2NY+rmVQiFNNqFvt1eTWKSbLQnNIRrVBy6YVY3ieti5l
+	U6HVXLbmsw77/ZAPc+bjHkTJKQR4tYfpnu6UT93FiZsHvaPcfS0Ip2eEHnwj/1Rbkzl1EzZJ+97
+	rXjiZZvJ+4w4nZnXdB/CxWTRRu4BQLWahPl6cftwZ3X11IV0=
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--15.012200-8.000000
+X-TMASE-Result: 10--17.556000-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: 575EF3F5F0FB6DD011CE9D49D932254230CE95611793BD4C531DC54249DD67322000:8
+X-TM-SNTS-SMTP:
+	D8B3024DF2B3BE7226B45E2FAF7B41A06BA7CE91B492EA68B86B8AC2FF89AC352000:8
 
-Introduces the ISP pipeline driver for the MediaTek ISP raw and yuv
-modules. Key functionalities include data processing, V4L2 integration,
-resource management, debug support, and various control operations.
-Additionally, IRQ handling, platform device management, and MediaTek
-ISP DMA format support are also included.
+Introduces support for the sensor interface in the MediaTek SoC,
+with the focus on CSI and stream control. The key functionalities
+include parameter control, metering and maintaining status information,
+interrupt handling, and debugging. These features ensure effective
+management and debugging of the camera sensor interface hardware.
 
 Signed-off-by: Shu-hsiang Yang <Shu-hsiang.Yang@mediatek.com>
 ---
- .../mediatek/isp/isp_7x/camsys/mtk_cam-raw.c  | 5359 +++++++++++++++++
- .../mediatek/isp/isp_7x/camsys/mtk_cam-raw.h  |  325 +
- .../isp/isp_7x/camsys/mtk_cam-raw_debug.c     |  403 ++
- .../isp/isp_7x/camsys/mtk_cam-raw_debug.h     |   39 +
- .../isp_7x/camsys/mtk_camera-v4l2-controls.h  |   65 +
- 5 files changed, 6191 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
+ .../isp_7x/camsys/mtk_csi_phy_2_0/Makefile    |    5 +
+ .../mtk_csi_phy_2_0/mtk_cam-seninf-cammux.h   |  911 ++++++
+ .../mtk_cam-seninf-csi0-cphy.h                |   69 +
+ .../mtk_cam-seninf-csi0-dphy.h                |  139 +
+ .../mtk_cam-seninf-hw_phy_2_0.c               | 2879 +++++++++++++++++
+ .../mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h  |  257 ++
+ .../mtk_cam-seninf-seninf1-csi2.h             |  415 +++
+ .../mtk_cam-seninf-seninf1-mux.h              |  147 +
+ .../mtk_csi_phy_2_0/mtk_cam-seninf-seninf1.h  |   47 +
+ .../mtk_csi_phy_2_0/mtk_cam-seninf-tg1.h      |   49 +
+ .../mtk_csi_phy_2_0/mtk_cam-seninf-top-ctrl.h |   99 +
+ 11 files changed, 5017 insertions(+)
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/Makefile
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-cammux.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-cphy.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-dphy.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-hw_phy_2_0.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-csi2.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-mux.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-tg1.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-top-ctrl.h
 
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/Makefile b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/Makefile
 new file mode 100644
-index 000000000000..c025f53c952d
+index 000000000000..e00b8d3904a9
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.c
-@@ -0,0 +1,5359 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2022 MediaTek Inc.
++
++mtk-cam-isp-objs += \
++	mtk_csi_phy_2_0/mtk_cam-seninf-hw_phy_2_0.o
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-cammux.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-cammux.h
+new file mode 100644
+index 000000000000..ec3c621d742a
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-cammux.h
+@@ -0,0 +1,911 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __SENINF_CAM_MUX_H__
++#define __SENINF_CAM_MUX_H__
++
++#define SENINF_CAM_MUX_CTRL_0 0x0000
++#define RG_SENINF_CAM_MUX0_SRC_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX0_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_CAM_MUX1_SRC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX1_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_CAM_MUX2_SRC_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX2_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_CAM_MUX3_SRC_SEL_SHIFT 24
++#define RG_SENINF_CAM_MUX3_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_CTRL_1 0x0004
++#define RG_SENINF_CAM_MUX4_SRC_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX4_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_CAM_MUX5_SRC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX5_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_CAM_MUX6_SRC_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX6_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_CAM_MUX7_SRC_SEL_SHIFT 24
++#define RG_SENINF_CAM_MUX7_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_CTRL_2 0x0008
++#define RG_SENINF_CAM_MUX8_SRC_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX8_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_CAM_MUX9_SRC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX9_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_CAM_MUX10_SRC_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX10_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_CAM_MUX11_SRC_SEL_SHIFT 24
++#define RG_SENINF_CAM_MUX11_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_CTRL_3 0x000c
++#define RG_SENINF_CAM_MUX12_SRC_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX12_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_CAM_MUX13_SRC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX13_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_CAM_MUX14_SRC_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX14_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_CAM_MUX15_SRC_SEL_SHIFT 24
++#define RG_SENINF_CAM_MUX15_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_EN 0x0010
++#define SENINF_CAM_MUX0_EN_SHIFT 0
++#define SENINF_CAM_MUX0_EN_MASK (0x1 << 0)
++#define SENINF_CAM_MUX1_EN_SHIFT 1
++#define SENINF_CAM_MUX1_EN_MASK (0x1 << 1)
++#define SENINF_CAM_MUX2_EN_SHIFT 2
++#define SENINF_CAM_MUX2_EN_MASK (0x1 << 2)
++#define SENINF_CAM_MUX3_EN_SHIFT 3
++#define SENINF_CAM_MUX3_EN_MASK (0x1 << 3)
++#define SENINF_CAM_MUX4_EN_SHIFT 4
++#define SENINF_CAM_MUX4_EN_MASK (0x1 << 4)
++#define SENINF_CAM_MUX5_EN_SHIFT 5
++#define SENINF_CAM_MUX5_EN_MASK (0x1 << 5)
++#define SENINF_CAM_MUX6_EN_SHIFT 6
++#define SENINF_CAM_MUX6_EN_MASK (0x1 << 6)
++#define SENINF_CAM_MUX7_EN_SHIFT 7
++#define SENINF_CAM_MUX7_EN_MASK (0x1 << 7)
++#define SENINF_CAM_MUX8_EN_SHIFT 8
++#define SENINF_CAM_MUX8_EN_MASK (0x1 << 8)
++#define SENINF_CAM_MUX9_EN_SHIFT 9
++#define SENINF_CAM_MUX9_EN_MASK (0x1 << 9)
++#define SENINF_CAM_MUX10_EN_SHIFT 10
++#define SENINF_CAM_MUX10_EN_MASK (0x1 << 10)
++#define SENINF_CAM_MUX11_EN_SHIFT 11
++#define SENINF_CAM_MUX11_EN_MASK (0x1 << 11)
++#define SENINF_CAM_MUX12_EN_SHIFT 12
++#define SENINF_CAM_MUX12_EN_MASK (0x1 << 12)
++#define SENINF_CAM_MUX13_EN_SHIFT 13
++#define SENINF_CAM_MUX13_EN_MASK (0x1 << 13)
++#define SENINF_CAM_MUX14_EN_SHIFT 14
++#define SENINF_CAM_MUX14_EN_MASK (0x1 << 14)
++#define SENINF_CAM_MUX15_EN_SHIFT 15
++#define SENINF_CAM_MUX15_EN_MASK (0x1 << 15)
++
++#define SENINF_CAM_MUX_CHK_EN 0x0018
++#define SENINF_CAM_MUX0_CHK_EN_SHIFT 0
++#define SENINF_CAM_MUX0_CHK_EN_MASK (0x1 << 0)
++#define SENINF_CAM_MUX1_CHK_EN_SHIFT 1
++#define SENINF_CAM_MUX1_CHK_EN_MASK (0x1 << 1)
++#define SENINF_CAM_MUX2_CHK_EN_SHIFT 2
++#define SENINF_CAM_MUX2_CHK_EN_MASK (0x1 << 2)
++#define SENINF_CAM_MUX3_CHK_EN_SHIFT 3
++#define SENINF_CAM_MUX3_CHK_EN_MASK (0x1 << 3)
++#define SENINF_CAM_MUX4_CHK_EN_SHIFT 4
++#define SENINF_CAM_MUX4_CHK_EN_MASK (0x1 << 4)
++#define SENINF_CAM_MUX5_CHK_EN_SHIFT 5
++#define SENINF_CAM_MUX5_CHK_EN_MASK (0x1 << 5)
++#define SENINF_CAM_MUX6_CHK_EN_SHIFT 6
++#define SENINF_CAM_MUX6_CHK_EN_MASK (0x1 << 6)
++#define SENINF_CAM_MUX7_CHK_EN_SHIFT 7
++#define SENINF_CAM_MUX7_CHK_EN_MASK (0x1 << 7)
++#define SENINF_CAM_MUX8_CHK_EN_SHIFT 8
++#define SENINF_CAM_MUX8_CHK_EN_MASK (0x1 << 8)
++#define SENINF_CAM_MUX9_CHK_EN_SHIFT 9
++#define SENINF_CAM_MUX9_CHK_EN_MASK (0x1 << 9)
++#define SENINF_CAM_MUX10_CHK_EN_SHIFT 10
++#define SENINF_CAM_MUX10_CHK_EN_MASK (0x1 << 10)
++#define SENINF_CAM_MUX11_CHK_EN_SHIFT 11
++#define SENINF_CAM_MUX11_CHK_EN_MASK (0x1 << 11)
++#define SENINF_CAM_MUX12_CHK_EN_SHIFT 12
++#define SENINF_CAM_MUX12_CHK_EN_MASK (0x1 << 12)
++#define SENINF_CAM_MUX13_CHK_EN_SHIFT 13
++#define SENINF_CAM_MUX13_CHK_EN_MASK (0x1 << 13)
++#define SENINF_CAM_MUX14_CHK_EN_SHIFT 14
++#define SENINF_CAM_MUX14_CHK_EN_MASK (0x1 << 14)
++#define SENINF_CAM_MUX15_CHK_EN_SHIFT 15
++#define SENINF_CAM_MUX15_CHK_EN_MASK (0x1 << 15)
++
++#define SENINF_CAM_MUX0_OPT 0x0020
++#define RG_SENINF_CAM_MUX0_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX0_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX0_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX0_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX0_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX0_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX0_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX0_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX0_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX0_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX1_OPT 0x0024
++#define RG_SENINF_CAM_MUX1_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX1_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX1_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX1_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX1_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX1_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX1_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX1_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX1_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX1_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX2_OPT 0x0028
++#define RG_SENINF_CAM_MUX2_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX2_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX2_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX2_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX2_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX2_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX2_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX2_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX2_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX2_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX3_OPT 0x002c
++#define RG_SENINF_CAM_MUX3_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX3_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX3_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX3_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX3_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX3_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX3_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX3_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX3_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX3_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX4_OPT 0x0030
++#define RG_SENINF_CAM_MUX4_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX4_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX4_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX4_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX4_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX4_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX4_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX4_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX4_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX4_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX5_OPT 0x0034
++#define RG_SENINF_CAM_MUX5_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX5_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX5_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX5_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX5_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX5_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX5_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX5_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX5_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX5_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX6_OPT 0x0038
++#define RG_SENINF_CAM_MUX6_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX6_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX6_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX6_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX6_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX6_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX6_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX6_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX6_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX6_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX7_OPT 0x003c
++#define RG_SENINF_CAM_MUX7_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX7_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX7_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX7_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX7_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX7_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX7_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX7_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX7_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX7_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX8_OPT 0x0040
++#define RG_SENINF_CAM_MUX8_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX8_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX8_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX8_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX8_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX8_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX8_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX8_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX8_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX8_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX9_OPT 0x0044
++#define RG_SENINF_CAM_MUX9_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX9_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX9_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX9_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX9_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX9_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX9_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX9_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX9_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX9_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX10_OPT 0x0048
++#define RG_SENINF_CAM_MUX10_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX10_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX10_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX10_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX10_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX10_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX10_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX10_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX10_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX10_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX11_OPT 0x004c
++#define RG_SENINF_CAM_MUX11_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX11_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX11_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX11_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX11_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX11_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX11_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX11_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX11_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX11_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX12_OPT 0x0050
++#define RG_SENINF_CAM_MUX12_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX12_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX12_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX12_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX12_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX12_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX12_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX12_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX12_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX12_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX13_OPT 0x0054
++#define RG_SENINF_CAM_MUX13_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX13_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX13_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX13_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX13_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX13_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX13_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX13_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX13_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX13_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX14_OPT 0x0058
++#define RG_SENINF_CAM_MUX14_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX14_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX14_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX14_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX14_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX14_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX14_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX14_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX14_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX14_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX15_OPT 0x005c
++#define RG_SENINF_CAM_MUX15_VC_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX15_VC_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX15_DT_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX15_DT_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX15_VC_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX15_VC_SEL_MASK (0x1f << 8)
++#define RG_SENINF_CAM_MUX15_DT_SEL_SHIFT 16
++#define RG_SENINF_CAM_MUX15_DT_SEL_MASK (0x3f << 16)
++#define RG_SENINF_CAM_MUX15_VSYNC_BYPASS_SHIFT 24
++#define RG_SENINF_CAM_MUX15_VSYNC_BYPASS_MASK (0x1 << 24)
++
++#define SENINF_CAM_MUX_CTRL 0x0080
++#define SENINF_CAM_MUX_SW_RST_SHIFT 0
++#define SENINF_CAM_MUX_SW_RST_MASK (0x1 << 0)
++#define SENINF_CAM_MUX_IRQ_SW_RST_SHIFT 1
++#define SENINF_CAM_MUX_IRQ_SW_RST_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX_SLICE_FULL_OPT_SHIFT 7
++#define RG_SENINF_CAM_MUX_SLICE_FULL_OPT_MASK (0x1 << 7)
++#define RG_SENINF_CAM_MUX_IRQ_CLR_MODE_SHIFT 8
++#define RG_SENINF_CAM_MUX_IRQ_CLR_MODE_MASK (0x1 << 8)
++#define RG_SENINF_CAM_MUX_IRQ_VERIF_EN_SHIFT 9
++#define RG_SENINF_CAM_MUX_IRQ_VERIF_EN_MASK (0x1 << 9)
++
++#define SENINF_CAM_MUX_DYN_CTRL 0x0088
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_BSY0_SHIFT 0
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_BSY0_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_BSY1_SHIFT 4
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_BSY1_MASK (0x1 << 4)
++#define CAM_MUX_DYN_PAGE_SEL_SHIFT 28
++#define CAM_MUX_DYN_PAGE_SEL_MASK (0x1 << 28)
++
++#define SENINF_CAM_MUX_DYN_EN 0x008c
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_EN0_SHIFT 0
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_EN0_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_EN1_SHIFT 16
++#define RG_SENINF_CAM_MUX_DYN_SWITCH_EN1_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX_NEXT_CTRL_0 0x0090
++#define CAM_MUX0_NEXT_SRC_SEL_SHIFT 0
++#define CAM_MUX0_NEXT_SRC_SEL_MASK (0xf << 0)
++#define CAM_MUX1_NEXT_SRC_SEL_SHIFT 8
++#define CAM_MUX1_NEXT_SRC_SEL_MASK (0xf << 8)
++#define CAM_MUX2_NEXT_SRC_SEL_SHIFT 16
++#define CAM_MUX2_NEXT_SRC_SEL_MASK (0xf << 16)
++#define CAM_MUX3_NEXT_SRC_SEL_SHIFT 24
++#define CAM_MUX3_NEXT_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_NEXT_CTRL_1 0x0094
++#define CAM_MUX4_NEXT_SRC_SEL_SHIFT 0
++#define CAM_MUX4_NEXT_SRC_SEL_MASK (0xf << 0)
++#define CAM_MUX5_NEXT_SRC_SEL_SHIFT 8
++#define CAM_MUX5_NEXT_SRC_SEL_MASK (0xf << 8)
++#define CAM_MUX6_NEXT_SRC_SEL_SHIFT 16
++#define CAM_MUX6_NEXT_SRC_SEL_MASK (0xf << 16)
++#define CAM_MUX7_NEXT_SRC_SEL_SHIFT 24
++#define CAM_MUX7_NEXT_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_NEXT_CTRL_2 0x0098
++#define CAM_MUX8_NEXT_SRC_SEL_SHIFT 0
++#define CAM_MUX8_NEXT_SRC_SEL_MASK (0xf << 0)
++#define CAM_MUX9_NEXT_SRC_SEL_SHIFT 8
++#define CAM_MUX9_NEXT_SRC_SEL_MASK (0xf << 8)
++#define CAM_MUX10_NEXT_SRC_SEL_SHIFT 16
++#define CAM_MUX10_NEXT_SRC_SEL_MASK (0xf << 16)
++#define CAM_MUX11_NEXT_SRC_SEL_SHIFT 24
++#define CAM_MUX11_NEXT_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_NEXT_CTRL_3 0x009c
++#define CAM_MUX12_NEXT_SRC_SEL_SHIFT 0
++#define CAM_MUX12_NEXT_SRC_SEL_MASK (0xf << 0)
++#define CAM_MUX13_NEXT_SRC_SEL_SHIFT 8
++#define CAM_MUX13_NEXT_SRC_SEL_MASK (0xf << 8)
++#define CAM_MUX14_NEXT_SRC_SEL_SHIFT 16
++#define CAM_MUX14_NEXT_SRC_SEL_MASK (0xf << 16)
++#define CAM_MUX15_NEXT_SRC_SEL_SHIFT 24
++#define CAM_MUX15_NEXT_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_CAM_MUX_IRQ_EN 0x00a0
++#define RG_SENINF_CAM_MUX0_HSIZE_ERR_IRQ_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX0_HSIZE_ERR_IRQ_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX0_VSIZE_ERR_IRQ_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX0_VSIZE_ERR_IRQ_EN_MASK (0x1 << 1)
++#define RG_SENINF_CAM_MUX1_HSIZE_ERR_IRQ_EN_SHIFT 2
++#define RG_SENINF_CAM_MUX1_HSIZE_ERR_IRQ_EN_MASK (0x1 << 2)
++#define RG_SENINF_CAM_MUX1_VSIZE_ERR_IRQ_EN_SHIFT 3
++#define RG_SENINF_CAM_MUX1_VSIZE_ERR_IRQ_EN_MASK (0x1 << 3)
++#define RG_SENINF_CAM_MUX2_HSIZE_ERR_IRQ_EN_SHIFT 4
++#define RG_SENINF_CAM_MUX2_HSIZE_ERR_IRQ_EN_MASK (0x1 << 4)
++#define RG_SENINF_CAM_MUX2_VSIZE_ERR_IRQ_EN_SHIFT 5
++#define RG_SENINF_CAM_MUX2_VSIZE_ERR_IRQ_EN_MASK (0x1 << 5)
++#define RG_SENINF_CAM_MUX3_HSIZE_ERR_IRQ_EN_SHIFT 6
++#define RG_SENINF_CAM_MUX3_HSIZE_ERR_IRQ_EN_MASK (0x1 << 6)
++#define RG_SENINF_CAM_MUX3_VSIZE_ERR_IRQ_EN_SHIFT 7
++#define RG_SENINF_CAM_MUX3_VSIZE_ERR_IRQ_EN_MASK (0x1 << 7)
++#define RG_SENINF_CAM_MUX4_HSIZE_ERR_IRQ_EN_SHIFT 8
++#define RG_SENINF_CAM_MUX4_HSIZE_ERR_IRQ_EN_MASK (0x1 << 8)
++#define RG_SENINF_CAM_MUX4_VSIZE_ERR_IRQ_EN_SHIFT 9
++#define RG_SENINF_CAM_MUX4_VSIZE_ERR_IRQ_EN_MASK (0x1 << 9)
++#define RG_SENINF_CAM_MUX5_HSIZE_ERR_IRQ_EN_SHIFT 10
++#define RG_SENINF_CAM_MUX5_HSIZE_ERR_IRQ_EN_MASK (0x1 << 10)
++#define RG_SENINF_CAM_MUX5_VSIZE_ERR_IRQ_EN_SHIFT 11
++#define RG_SENINF_CAM_MUX5_VSIZE_ERR_IRQ_EN_MASK (0x1 << 11)
++#define RG_SENINF_CAM_MUX6_HSIZE_ERR_IRQ_EN_SHIFT 12
++#define RG_SENINF_CAM_MUX6_HSIZE_ERR_IRQ_EN_MASK (0x1 << 12)
++#define RG_SENINF_CAM_MUX6_VSIZE_ERR_IRQ_EN_SHIFT 13
++#define RG_SENINF_CAM_MUX6_VSIZE_ERR_IRQ_EN_MASK (0x1 << 13)
++#define RG_SENINF_CAM_MUX7_HSIZE_ERR_IRQ_EN_SHIFT 14
++#define RG_SENINF_CAM_MUX7_HSIZE_ERR_IRQ_EN_MASK (0x1 << 14)
++#define RG_SENINF_CAM_MUX7_VSIZE_ERR_IRQ_EN_SHIFT 15
++#define RG_SENINF_CAM_MUX7_VSIZE_ERR_IRQ_EN_MASK (0x1 << 15)
++#define RG_SENINF_CAM_MUX8_HSIZE_ERR_IRQ_EN_SHIFT 16
++#define RG_SENINF_CAM_MUX8_HSIZE_ERR_IRQ_EN_MASK (0x1 << 16)
++#define RG_SENINF_CAM_MUX8_VSIZE_ERR_IRQ_EN_SHIFT 17
++#define RG_SENINF_CAM_MUX8_VSIZE_ERR_IRQ_EN_MASK (0x1 << 17)
++#define RG_SENINF_CAM_MUX9_HSIZE_ERR_IRQ_EN_SHIFT 18
++#define RG_SENINF_CAM_MUX9_HSIZE_ERR_IRQ_EN_MASK (0x1 << 18)
++#define RG_SENINF_CAM_MUX9_VSIZE_ERR_IRQ_EN_SHIFT 19
++#define RG_SENINF_CAM_MUX9_VSIZE_ERR_IRQ_EN_MASK (0x1 << 19)
++#define RG_SENINF_CAM_MUX10_HSIZE_ERR_IRQ_EN_SHIFT 20
++#define RG_SENINF_CAM_MUX10_HSIZE_ERR_IRQ_EN_MASK (0x1 << 20)
++#define RG_SENINF_CAM_MUX10_VSIZE_ERR_IRQ_EN_SHIFT 21
++#define RG_SENINF_CAM_MUX10_VSIZE_ERR_IRQ_EN_MASK (0x1 << 21)
++#define RG_SENINF_CAM_MUX11_HSIZE_ERR_IRQ_EN_SHIFT 22
++#define RG_SENINF_CAM_MUX11_HSIZE_ERR_IRQ_EN_MASK (0x1 << 22)
++#define RG_SENINF_CAM_MUX11_VSIZE_ERR_IRQ_EN_SHIFT 23
++#define RG_SENINF_CAM_MUX11_VSIZE_ERR_IRQ_EN_MASK (0x1 << 23)
++#define RG_SENINF_CAM_MUX12_HSIZE_ERR_IRQ_EN_SHIFT 24
++#define RG_SENINF_CAM_MUX12_HSIZE_ERR_IRQ_EN_MASK (0x1 << 24)
++#define RG_SENINF_CAM_MUX12_VSIZE_ERR_IRQ_EN_SHIFT 25
++#define RG_SENINF_CAM_MUX12_VSIZE_ERR_IRQ_EN_MASK (0x1 << 25)
++#define RG_SENINF_CAM_MUX13_HSIZE_ERR_IRQ_EN_SHIFT 26
++#define RG_SENINF_CAM_MUX13_HSIZE_ERR_IRQ_EN_MASK (0x1 << 26)
++#define RG_SENINF_CAM_MUX13_VSIZE_ERR_IRQ_EN_SHIFT 27
++#define RG_SENINF_CAM_MUX13_VSIZE_ERR_IRQ_EN_MASK (0x1 << 27)
++#define RG_SENINF_CAM_MUX14_HSIZE_ERR_IRQ_EN_SHIFT 28
++#define RG_SENINF_CAM_MUX14_HSIZE_ERR_IRQ_EN_MASK (0x1 << 28)
++#define RG_SENINF_CAM_MUX14_VSIZE_ERR_IRQ_EN_SHIFT 29
++#define RG_SENINF_CAM_MUX14_VSIZE_ERR_IRQ_EN_MASK (0x1 << 29)
++#define RG_SENINF_CAM_MUX15_HSIZE_ERR_IRQ_EN_SHIFT 30
++#define RG_SENINF_CAM_MUX15_HSIZE_ERR_IRQ_EN_MASK (0x1 << 30)
++#define RG_SENINF_CAM_MUX15_VSIZE_ERR_IRQ_EN_SHIFT 31
++#define RG_SENINF_CAM_MUX15_VSIZE_ERR_IRQ_EN_MASK (0x1 << 31)
++
++#define SENINF_CAM_MUX_IRQ_STATUS 0x00a8
++#define RO_SENINF_CAM_MUX0_HSIZE_ERR_IRQ_SHIFT 0
++#define RO_SENINF_CAM_MUX0_HSIZE_ERR_IRQ_MASK (0x1 << 0)
++#define RO_SENINF_CAM_MUX0_VSIZE_ERR_IRQ_SHIFT 1
++#define RO_SENINF_CAM_MUX0_VSIZE_ERR_IRQ_MASK (0x1 << 1)
++#define RO_SENINF_CAM_MUX1_HSIZE_ERR_IRQ_SHIFT 2
++#define RO_SENINF_CAM_MUX1_HSIZE_ERR_IRQ_MASK (0x1 << 2)
++#define RO_SENINF_CAM_MUX1_VSIZE_ERR_IRQ_SHIFT 3
++#define RO_SENINF_CAM_MUX1_VSIZE_ERR_IRQ_MASK (0x1 << 3)
++#define RO_SENINF_CAM_MUX2_HSIZE_ERR_IRQ_SHIFT 4
++#define RO_SENINF_CAM_MUX2_HSIZE_ERR_IRQ_MASK (0x1 << 4)
++#define RO_SENINF_CAM_MUX2_VSIZE_ERR_IRQ_SHIFT 5
++#define RO_SENINF_CAM_MUX2_VSIZE_ERR_IRQ_MASK (0x1 << 5)
++#define RO_SENINF_CAM_MUX3_HSIZE_ERR_IRQ_SHIFT 6
++#define RO_SENINF_CAM_MUX3_HSIZE_ERR_IRQ_MASK (0x1 << 6)
++#define RO_SENINF_CAM_MUX3_VSIZE_ERR_IRQ_SHIFT 7
++#define RO_SENINF_CAM_MUX3_VSIZE_ERR_IRQ_MASK (0x1 << 7)
++#define RO_SENINF_CAM_MUX4_HSIZE_ERR_IRQ_SHIFT 8
++#define RO_SENINF_CAM_MUX4_HSIZE_ERR_IRQ_MASK (0x1 << 8)
++#define RO_SENINF_CAM_MUX4_VSIZE_ERR_IRQ_SHIFT 9
++#define RO_SENINF_CAM_MUX4_VSIZE_ERR_IRQ_MASK (0x1 << 9)
++#define RO_SENINF_CAM_MUX5_HSIZE_ERR_IRQ_SHIFT 10
++#define RO_SENINF_CAM_MUX5_HSIZE_ERR_IRQ_MASK (0x1 << 10)
++#define RO_SENINF_CAM_MUX5_VSIZE_ERR_IRQ_SHIFT 11
++#define RO_SENINF_CAM_MUX5_VSIZE_ERR_IRQ_MASK (0x1 << 11)
++#define RO_SENINF_CAM_MUX6_HSIZE_ERR_IRQ_SHIFT 12
++#define RO_SENINF_CAM_MUX6_HSIZE_ERR_IRQ_MASK (0x1 << 12)
++#define RO_SENINF_CAM_MUX6_VSIZE_ERR_IRQ_SHIFT 13
++#define RO_SENINF_CAM_MUX6_VSIZE_ERR_IRQ_MASK (0x1 << 13)
++#define RO_SENINF_CAM_MUX7_HSIZE_ERR_IRQ_SHIFT 14
++#define RO_SENINF_CAM_MUX7_HSIZE_ERR_IRQ_MASK (0x1 << 14)
++#define RO_SENINF_CAM_MUX7_VSIZE_ERR_IRQ_SHIFT 15
++#define RO_SENINF_CAM_MUX7_VSIZE_ERR_IRQ_MASK (0x1 << 15)
++#define RO_SENINF_CAM_MUX8_HSIZE_ERR_IRQ_SHIFT 16
++#define RO_SENINF_CAM_MUX8_HSIZE_ERR_IRQ_MASK (0x1 << 16)
++#define RO_SENINF_CAM_MUX8_VSIZE_ERR_IRQ_SHIFT 17
++#define RO_SENINF_CAM_MUX8_VSIZE_ERR_IRQ_MASK (0x1 << 17)
++#define RO_SENINF_CAM_MUX9_HSIZE_ERR_IRQ_SHIFT 18
++#define RO_SENINF_CAM_MUX9_HSIZE_ERR_IRQ_MASK (0x1 << 18)
++#define RO_SENINF_CAM_MUX9_VSIZE_ERR_IRQ_SHIFT 19
++#define RO_SENINF_CAM_MUX9_VSIZE_ERR_IRQ_MASK (0x1 << 19)
++#define RO_SENINF_CAM_MUX10_HSIZE_ERR_IRQ_SHIFT 20
++#define RO_SENINF_CAM_MUX10_HSIZE_ERR_IRQ_MASK (0x1 << 20)
++#define RO_SENINF_CAM_MUX10_VSIZE_ERR_IRQ_SHIFT 21
++#define RO_SENINF_CAM_MUX10_VSIZE_ERR_IRQ_MASK (0x1 << 21)
++#define RO_SENINF_CAM_MUX11_HSIZE_ERR_IRQ_SHIFT 22
++#define RO_SENINF_CAM_MUX11_HSIZE_ERR_IRQ_MASK (0x1 << 22)
++#define RO_SENINF_CAM_MUX11_VSIZE_ERR_IRQ_SHIFT 23
++#define RO_SENINF_CAM_MUX11_VSIZE_ERR_IRQ_MASK (0x1 << 23)
++#define RO_SENINF_CAM_MUX12_HSIZE_ERR_IRQ_SHIFT 24
++#define RO_SENINF_CAM_MUX12_HSIZE_ERR_IRQ_MASK (0x1 << 24)
++#define RO_SENINF_CAM_MUX12_VSIZE_ERR_IRQ_SHIFT 25
++#define RO_SENINF_CAM_MUX12_VSIZE_ERR_IRQ_MASK (0x1 << 25)
++#define RO_SENINF_CAM_MUX13_HSIZE_ERR_IRQ_SHIFT 26
++#define RO_SENINF_CAM_MUX13_HSIZE_ERR_IRQ_MASK (0x1 << 26)
++#define RO_SENINF_CAM_MUX13_VSIZE_ERR_IRQ_SHIFT 27
++#define RO_SENINF_CAM_MUX13_VSIZE_ERR_IRQ_MASK (0x1 << 27)
++#define RO_SENINF_CAM_MUX14_HSIZE_ERR_IRQ_SHIFT 28
++#define RO_SENINF_CAM_MUX14_HSIZE_ERR_IRQ_MASK (0x1 << 28)
++#define RO_SENINF_CAM_MUX14_VSIZE_ERR_IRQ_SHIFT 29
++#define RO_SENINF_CAM_MUX14_VSIZE_ERR_IRQ_MASK (0x1 << 29)
++#define RO_SENINF_CAM_MUX15_HSIZE_ERR_IRQ_SHIFT 30
++#define RO_SENINF_CAM_MUX15_HSIZE_ERR_IRQ_MASK (0x1 << 30)
++#define RO_SENINF_CAM_MUX15_VSIZE_ERR_IRQ_SHIFT 31
++#define RO_SENINF_CAM_MUX15_VSIZE_ERR_IRQ_MASK (0x1 << 31)
++
++#define SENINF_CAM_MUX_VSYNC_IRQ_EN 0x00b0
++#define RG_SENINF_CAM_MUX_VSYNC_IRQ_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX_VSYNC_IRQ_EN_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_IRQ_EN_SHIFT 24
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_IRQ_EN_MASK (0x3 << 24)
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_NONE_IRQ_EN_SHIFT 28
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_NONE_IRQ_EN_MASK (0x3 << 28)
++
++#define SENINF_CAM_MUX_VSYNC_IRQ_STS 0x00b4
++#define RO_SENINF_CAM_MUX_VSYNC_IRQ_SHIFT 0
++#define RO_SENINF_CAM_MUX_VSYNC_IRQ_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX_VSYNC_ALL_IRQ_SHIFT 24
++#define RO_SENINF_CAM_MUX_VSYNC_ALL_IRQ_MASK (0x3 << 24)
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_NONE_IRQ_SHIFT 28
++#define RG_SENINF_CAM_MUX_VSYNC_ALL_NONE_IRQ_MASK (0x3 << 28)
++
++#define SENINF_CAM_MUX_DBG_CTRL 0x00c0
++#define RG_SENINF_CAM_MUX_DBG_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX_DBG_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX_DBG_SEL_SHIFT 8
++#define RG_SENINF_CAM_MUX_DBG_SEL_MASK (0xff << 8)
++
++#define SENINF_CAM_MUX_DBG_OUT 0x00c4
++#define RO_SENINF_CAM_MUX_DBG_OUT_SHIFT 0
++#define RO_SENINF_CAM_MUX_DBG_OUT_MASK (0xffffffff << 0)
++
++#define SENINF_CAM_MUX_VSYNC_T0_WINDOW_L 0x00d0
++#define RG_SENINF_CAM_MUX_VSYNC_TIMER0_WINDOW_L_SHIFT 0
++#define RG_SENINF_CAM_MUX_VSYNC_TIMER0_WINDOW_L_MASK (0xffffffff << 0)
++
++#define SENINF_CAM_MUX_VSYNC_T1_WINDOW_L 0x00d8
++#define RG_SENINF_CAM_MUX_VSYNC_TIMER1_WINDOW_L_SHIFT 0
++#define RG_SENINF_CAM_MUX_VSYNC_TIMER1_WINDOW_L_MASK (0xffffffff << 0)
++
++#define SENINF_CAM_MUX_SAT_IRQ_EN 0x00e0
++#define RG_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE0_IRQ_EN_SHIFT 0
++#define RG_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE0_IRQ_EN_MASK (0x1 << 0)
++#define RG_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE1_IRQ_EN_SHIFT 1
++#define RG_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE1_IRQ_EN_MASK (0x1 << 1)
++
++#define SENINF_CAM_MUX_SAT_IRQ_STATUS 0x00e8
++#define RO_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE0_IRQ_SHIFT 0
++#define RO_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE0_IRQ_MASK (0x1 << 0)
++#define RO_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE1_IRQ_SHIFT 1
++#define RO_SENINF_CAM_MUX_SKIP_NEXT_FRAME_EN_RISE1_IRQ_MASK (0x1 << 1)
++
++#define SENINF_CAM_SPARE 0x00f8
++#define RG_SENINF_TOP_SPARE_0_SHIFT 0
++#define RG_SENINF_TOP_SPARE_0_MASK (0xff << 0)
++#define RG_SENINF_TOP_SPARE_1_SHIFT 16
++#define RG_SENINF_TOP_SPARE_1_MASK (0xff << 16)
++
++#define SENINF_CAM_MUX0_CHK_CTL_0 0x0100
++#define RG_SENINF_CAM_MUX0_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX0_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX0_CHK_CTL_1 0x0104
++#define RG_SENINF_CAM_MUX0_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX0_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX0_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX0_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX0_CHK_RES 0x0108
++#define RO_SENINF_CAM_MUX0_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX0_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX0_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX0_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX0_CHK_ERR_RES 0x010c
++#define RO_SENINF_CAM_MUX0_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX0_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX0_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX0_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX1_CHK_CTL_0 0x0110
++#define RG_SENINF_CAM_MUX1_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX1_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX1_CHK_CTL_1 0x0114
++#define RG_SENINF_CAM_MUX1_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX1_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX1_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX1_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX1_CHK_RES 0x0118
++#define RO_SENINF_CAM_MUX1_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX1_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX1_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX1_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX1_CHK_ERR_RES 0x011c
++#define RO_SENINF_CAM_MUX1_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX1_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX1_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX1_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX2_CHK_CTL_0 0x0120
++#define RG_SENINF_CAM_MUX2_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX2_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX2_CHK_CTL_1 0x0124
++#define RG_SENINF_CAM_MUX2_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX2_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX2_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX2_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX2_CHK_RES 0x0128
++#define RO_SENINF_CAM_MUX2_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX2_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX2_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX2_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX2_CHK_ERR_RES 0x012c
++#define RO_SENINF_CAM_MUX2_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX2_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX2_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX2_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX3_CHK_CTL_0 0x0130
++#define RG_SENINF_CAM_MUX3_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX3_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX3_CHK_CTL_1 0x0134
++#define RG_SENINF_CAM_MUX3_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX3_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX3_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX3_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX3_CHK_RES 0x0138
++#define RO_SENINF_CAM_MUX3_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX3_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX3_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX3_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX3_CHK_ERR_RES 0x013c
++#define RO_SENINF_CAM_MUX3_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX3_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX3_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX3_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX4_CHK_CTL_0 0x0140
++#define RG_SENINF_CAM_MUX4_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX4_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX4_CHK_CTL_1 0x0144
++#define RG_SENINF_CAM_MUX4_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX4_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX4_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX4_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX4_CHK_RES 0x0148
++#define RO_SENINF_CAM_MUX4_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX4_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX4_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX4_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX4_CHK_ERR_RES 0x014c
++#define RO_SENINF_CAM_MUX4_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX4_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX4_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX4_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX5_CHK_CTL_0 0x0150
++#define RG_SENINF_CAM_MUX5_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX5_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX5_CHK_CTL_1 0x0154
++#define RG_SENINF_CAM_MUX5_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX5_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX5_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX5_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX5_CHK_RES 0x0158
++#define RO_SENINF_CAM_MUX5_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX5_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX5_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX5_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX5_CHK_ERR_RES 0x015c
++#define RO_SENINF_CAM_MUX5_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX5_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX5_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX5_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX6_CHK_CTL_0 0x0160
++#define RG_SENINF_CAM_MUX6_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX6_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX6_CHK_CTL_1 0x0164
++#define RG_SENINF_CAM_MUX6_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX6_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX6_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX6_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX6_CHK_RES 0x0168
++#define RO_SENINF_CAM_MUX6_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX6_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX6_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX6_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX6_CHK_ERR_RES 0x016c
++#define RO_SENINF_CAM_MUX6_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX6_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX6_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX6_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX7_CHK_CTL_0 0x0170
++#define RG_SENINF_CAM_MUX7_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX7_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX7_CHK_CTL_1 0x0174
++#define RG_SENINF_CAM_MUX7_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX7_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX7_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX7_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX7_CHK_RES 0x0178
++#define RO_SENINF_CAM_MUX7_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX7_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX7_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX7_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX7_CHK_ERR_RES 0x017c
++#define RO_SENINF_CAM_MUX7_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX7_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX7_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX7_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX8_CHK_CTL_0 0x0180
++#define RG_SENINF_CAM_MUX8_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX8_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX8_CHK_CTL_1 0x0184
++#define RG_SENINF_CAM_MUX8_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX8_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX8_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX8_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX8_CHK_RES 0x0188
++#define RO_SENINF_CAM_MUX8_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX8_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX8_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX8_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX8_CHK_ERR_RES 0x018c
++#define RO_SENINF_CAM_MUX8_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX8_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX8_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX8_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX9_CHK_CTL_0 0x0190
++#define RG_SENINF_CAM_MUX9_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX9_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX9_CHK_CTL_1 0x0194
++#define RG_SENINF_CAM_MUX9_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX9_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX9_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX9_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX9_CHK_RES 0x0198
++#define RO_SENINF_CAM_MUX9_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX9_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX9_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX9_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX9_CHK_ERR_RES 0x019c
++#define RO_SENINF_CAM_MUX9_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX9_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX9_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX9_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX10_CHK_CTL_0 0x01a0
++#define RG_SENINF_CAM_MUX10_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX10_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX10_CHK_CTL_1 0x01a4
++#define RG_SENINF_CAM_MUX10_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX10_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX10_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX10_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX10_CHK_RES 0x01a8
++#define RO_SENINF_CAM_MUX10_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX10_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX10_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX10_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX10_CHK_ERR_RES 0x01ac
++#define RO_SENINF_CAM_MUX10_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX10_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX10_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX10_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX11_CHK_CTL_0 0x01b0
++#define RG_SENINF_CAM_MUX11_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX11_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX11_CHK_CTL_1 0x01b4
++#define RG_SENINF_CAM_MUX11_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX11_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX11_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX11_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX11_CHK_RES 0x01b8
++#define RO_SENINF_CAM_MUX11_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX11_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX11_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX11_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX11_CHK_ERR_RES 0x01bc
++#define RO_SENINF_CAM_MUX11_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX11_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX11_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX11_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX12_CHK_CTL_0 0x01c0
++#define RG_SENINF_CAM_MUX12_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX12_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX12_CHK_CTL_1 0x01c4
++#define RG_SENINF_CAM_MUX12_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX12_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX12_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX12_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX12_CHK_RES 0x01c8
++#define RO_SENINF_CAM_MUX12_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX12_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX12_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX12_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX12_CHK_ERR_RES 0x01cc
++#define RO_SENINF_CAM_MUX12_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX12_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX12_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX12_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX13_CHK_CTL_0 0x01d0
++#define RG_SENINF_CAM_MUX13_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX13_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX13_CHK_CTL_1 0x01d4
++#define RG_SENINF_CAM_MUX13_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX13_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX13_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX13_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX13_CHK_RES 0x01d8
++#define RO_SENINF_CAM_MUX13_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX13_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX13_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX13_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX13_CHK_ERR_RES 0x01dc
++#define RO_SENINF_CAM_MUX13_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX13_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX13_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX13_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX14_CHK_CTL_0 0x01e0
++#define RG_SENINF_CAM_MUX14_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX14_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX14_CHK_CTL_1 0x01e4
++#define RG_SENINF_CAM_MUX14_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX14_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX14_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX14_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX14_CHK_RES 0x01e8
++#define RO_SENINF_CAM_MUX14_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX14_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX14_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX14_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX14_CHK_ERR_RES 0x01ec
++#define RO_SENINF_CAM_MUX14_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX14_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX14_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX14_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX15_CHK_CTL_0 0x01f0
++#define RG_SENINF_CAM_MUX15_PIX_MODE_SEL_SHIFT 0
++#define RG_SENINF_CAM_MUX15_PIX_MODE_SEL_MASK (0x3 << 0)
++
++#define SENINF_CAM_MUX15_CHK_CTL_1 0x01f4
++#define RG_SENINF_CAM_MUX15_EXP_HSIZE_SHIFT 0
++#define RG_SENINF_CAM_MUX15_EXP_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_CAM_MUX15_EXP_VSIZE_SHIFT 16
++#define RG_SENINF_CAM_MUX15_EXP_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX15_CHK_RES 0x01f8
++#define RO_SENINF_CAM_MUX15_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX15_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX15_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX15_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_CAM_MUX15_CHK_ERR_RES 0x01fc
++#define RO_SENINF_CAM_MUX15_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_CAM_MUX15_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_CAM_MUX15_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_CAM_MUX15_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-cphy.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-cphy.h
+new file mode 100644
+index 000000000000..84447bc76b40
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-cphy.h
+@@ -0,0 +1,69 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __CSI0_CPHY_TOP_H__
++#define __CSI0_CPHY_TOP_H__
++
++#define CPHY_RX_CTRL 0x0000
++#define CPHY_RX_TR0_LPRX_EN_SHIFT 0
++#define CPHY_RX_TR0_LPRX_EN_MASK (0x1 << 0)
++#define CPHY_RX_TR1_LPRX_EN_SHIFT 1
++#define CPHY_RX_TR1_LPRX_EN_MASK (0x1 << 1)
++#define CPHY_RX_TR2_LPRX_EN_SHIFT 2
++#define CPHY_RX_TR2_LPRX_EN_MASK (0x1 << 2)
++#define CPHY_RX_TR3_LPRX_EN_SHIFT 3
++#define CPHY_RX_TR3_LPRX_EN_MASK (0x1 << 3)
++#define CPHY_RX_TR0_HSRX_EN_SHIFT 4
++#define CPHY_RX_TR0_HSRX_EN_MASK (0x1 << 4)
++#define CPHY_RX_TR1_HSRX_EN_SHIFT 5
++#define CPHY_RX_TR1_HSRX_EN_MASK (0x1 << 5)
++#define CPHY_RX_TR2_HSRX_EN_SHIFT 6
++#define CPHY_RX_TR2_HSRX_EN_MASK (0x1 << 6)
++#define CPHY_RX_TR3_HSRX_EN_SHIFT 7
++#define CPHY_RX_TR3_HSRX_EN_MASK (0x1 << 7)
++#define CPHY_RX_TR0_BIST_EN_SHIFT 16
++#define CPHY_RX_TR0_BIST_EN_MASK (0x1 << 16)
++#define CPHY_RX_TR1_BIST_EN_SHIFT 17
++#define CPHY_RX_TR1_BIST_EN_MASK (0x1 << 17)
++#define CPHY_RX_TR2_BIST_EN_SHIFT 18
++#define CPHY_RX_TR2_BIST_EN_MASK (0x1 << 18)
++#define CPHY_RX_TR3_BIST_EN_SHIFT 19
++#define CPHY_RX_TR3_BIST_EN_MASK (0x1 << 19)
++
++#define CPHY_RX_DETECT_CTRL_SYNC 0x0010
++#define RG_CPHY_RX_DETECT_7S_DIS_SYNC_SHIFT 0
++#define RG_CPHY_RX_DETECT_7S_DIS_SYNC_MASK (0x1 << 0)
++#define RG_CPHY_RX_DETECT_7S_MASK_SYNC_SHIFT 1
++#define RG_CPHY_RX_DETECT_7S_MASK_SYNC_MASK (0x7f << 1)
++#define RG_CPHY_RX_DETECT_7S_WORD_SYNC_SHIFT 8
++#define RG_CPHY_RX_DETECT_7S_WORD_SYNC_MASK (0x1fffff << 8)
++
++#define CPHY_RX_DETECT_CTRL_ESCAPE 0x0014
++#define RG_CPHY_RX_DETECT_7S_DIS_ESCAPE_SHIFT 0
++#define RG_CPHY_RX_DETECT_7S_DIS_ESCAPE_MASK (0x1 << 0)
++#define RG_CPHY_RX_DETECT_7S_MASK_ESCAPE_SHIFT 1
++#define RG_CPHY_RX_DETECT_7S_MASK_ESCAPE_MASK (0x7f << 1)
++#define RG_CPHY_RX_DETECT_7S_WORD_ESCAPE_SHIFT 8
++#define RG_CPHY_RX_DETECT_7S_WORD_ESCAPE_MASK (0x1fffff << 8)
++
++#define CPHY_RX_DETECT_CTRL_POST 0x0018
++#define RG_CPHY_RX_DETECT_7S_DIS_POST_SHIFT 0
++#define RG_CPHY_RX_DETECT_7S_DIS_POST_MASK (0x1 << 0)
++#define RG_CPHY_RX_DATA_VALID_POST_EN_SHIFT 4
++#define RG_CPHY_RX_DATA_VALID_POST_EN_MASK (0x1 << 4)
++#define RG_CPHY_RX_DETECT_7S_WORD_POST_SHIFT 8
++#define RG_CPHY_RX_DETECT_7S_WORD_POST_MASK (0x1fffff << 8)
++
++#define CPHY_RX_FSM_STATUS 0x00e4
++#define RO_CPHY_RX_TR0_FSM_SHIFT 0
++#define RO_CPHY_RX_TR0_FSM_MASK (0xff << 0)
++#define RO_CPHY_RX_TR1_FSM_SHIFT 8
++#define RO_CPHY_RX_TR1_FSM_MASK (0xff << 8)
++#define RO_CPHY_RX_TR2_FSM_SHIFT 16
++#define RO_CPHY_RX_TR2_FSM_MASK (0xff << 16)
++#define RO_CPHY_RX_TR3_FSM_SHIFT 24
++#define RO_CPHY_RX_TR3_FSM_MASK (0xff << 24)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-dphy.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-dphy.h
+new file mode 100644
+index 000000000000..7fc7dced8e7f
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-csi0-dphy.h
+@@ -0,0 +1,139 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __CSI0_DPHY_TOP_H__
++#define __CSI0_DPHY_TOP_H__
++
++#define DPHY_RX_LANE_EN 0x0000
++#define DPHY_RX_LC0_EN_SHIFT 0
++#define DPHY_RX_LC0_EN_MASK (0x1 << 0)
++#define DPHY_RX_LC1_EN_SHIFT 1
++#define DPHY_RX_LC1_EN_MASK (0x1 << 1)
++#define DPHY_RX_LD0_EN_SHIFT 8
++#define DPHY_RX_LD0_EN_MASK (0x1 << 8)
++#define DPHY_RX_LD1_EN_SHIFT 9
++#define DPHY_RX_LD1_EN_MASK (0x1 << 9)
++#define DPHY_RX_LD2_EN_SHIFT 10
++#define DPHY_RX_LD2_EN_MASK (0x1 << 10)
++#define DPHY_RX_LD3_EN_SHIFT 11
++#define DPHY_RX_LD3_EN_MASK (0x1 << 11)
++#define DPHY_RX_SW_RST_SHIFT 31
++#define DPHY_RX_SW_RST_MASK (0x1 << 31)
++
++#define DPHY_RX_LANE_SELECT 0x0004
++#define RG_DPHY_RX_LC0_SEL_SHIFT 0
++#define RG_DPHY_RX_LC0_SEL_MASK (0x7 << 0)
++#define RG_DPHY_RX_LC1_SEL_SHIFT 4
++#define RG_DPHY_RX_LC1_SEL_MASK (0x7 << 4)
++#define RG_DPHY_RX_LD0_SEL_SHIFT 8
++#define RG_DPHY_RX_LD0_SEL_MASK (0x7 << 8)
++#define RG_DPHY_RX_LD1_SEL_SHIFT 12
++#define RG_DPHY_RX_LD1_SEL_MASK (0x7 << 12)
++#define RG_DPHY_RX_LD2_SEL_SHIFT 16
++#define RG_DPHY_RX_LD2_SEL_MASK (0x7 << 16)
++#define RG_DPHY_RX_LD3_SEL_SHIFT 20
++#define RG_DPHY_RX_LD3_SEL_MASK (0x7 << 20)
++#define DPHY_RX_CK_DATA_MUX_EN_SHIFT 31
++#define DPHY_RX_CK_DATA_MUX_EN_MASK (0x1 << 31)
++
++#define DPHY_RX_HS_RX_EN_SW 0x0008
++#define RG_DPHY_RX_LC0_HSRX_EN_SW_SHIFT 0
++#define RG_DPHY_RX_LC0_HSRX_EN_SW_MASK (0x1 << 0)
++#define RG_DPHY_RX_LC1_HSRX_EN_SW_SHIFT 1
++#define RG_DPHY_RX_LC1_HSRX_EN_SW_MASK (0x1 << 1)
++#define RG_CDPHY_RX_LD0_TRIO0_HSRX_EN_SW_SHIFT 8
++#define RG_CDPHY_RX_LD0_TRIO0_HSRX_EN_SW_MASK (0x1 << 8)
++#define RG_CDPHY_RX_LD1_TRIO1_HSRX_EN_SW_SHIFT 9
++#define RG_CDPHY_RX_LD1_TRIO1_HSRX_EN_SW_MASK (0x1 << 9)
++#define RG_CDPHY_RX_LD2_TRIO2_HSRX_EN_SW_SHIFT 10
++#define RG_CDPHY_RX_LD2_TRIO2_HSRX_EN_SW_MASK (0x1 << 10)
++#define RG_CDPHY_RX_LD2_TRIO3_HSRX_EN_SW_SHIFT 11
++#define RG_CDPHY_RX_LD2_TRIO3_HSRX_EN_SW_MASK (0x1 << 11)
++
++#define DPHY_RX_CLOCK_LANE0_HS_PARAMETER 0x0010
++#define RG_DPHY_RX_LC0_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_DPHY_RX_LC0_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LC0_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_DPHY_RX_LC0_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_DPHY_RX_LC0_HS_PREPARE_EN_SHIFT 28
++#define RG_DPHY_RX_LC0_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LC0_HS_OPTION_SHIFT 30
++#define RG_DPHY_RX_LC0_HS_OPTION_MASK (0x1 << 30)
++
++#define DPHY_RX_CLOCK_LANE1_HS_PARAMETER 0x0014
++#define RG_DPHY_RX_LC1_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_DPHY_RX_LC1_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LC1_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_DPHY_RX_LC1_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_DPHY_RX_LC1_HS_PREPARE_EN_SHIFT 28
++#define RG_DPHY_RX_LC1_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LC1_HS_OPTION_SHIFT 30
++#define RG_DPHY_RX_LC1_HS_OPTION_MASK (0x1 << 30)
++
++#define DPHY_RX_DATA_LANE0_HS_PARAMETER 0x0020
++#define RG_CDPHY_RX_LD0_TRIO0_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_CDPHY_RX_LD0_TRIO0_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LD0_HS_TRAIL_PARAMETER_SHIFT 8
++#define RG_DPHY_RX_LD0_HS_TRAIL_PARAMETER_MASK (0xff << 8)
++#define RG_CDPHY_RX_LD0_TRIO0_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_CDPHY_RX_LD0_TRIO0_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_CDPHY_RX_LD0_TRIO0_HS_PREPARE_EN_SHIFT 28
++#define RG_CDPHY_RX_LD0_TRIO0_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LD0_HS_TRAIL_EN_SHIFT 29
++#define RG_DPHY_RX_LD0_HS_TRAIL_EN_MASK (0x1 << 29)
++
++#define DPHY_RX_DATA_LANE1_HS_PARAMETER 0x0024
++#define RG_CDPHY_RX_LD1_TRIO1_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_CDPHY_RX_LD1_TRIO1_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LD1_HS_TRAIL_PARAMETER_SHIFT 8
++#define RG_DPHY_RX_LD1_HS_TRAIL_PARAMETER_MASK (0xff << 8)
++#define RG_CDPHY_RX_LD1_TRIO1_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_CDPHY_RX_LD1_TRIO1_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_CDPHY_RX_LD1_TRIO1_HS_PREPARE_EN_SHIFT 28
++#define RG_CDPHY_RX_LD1_TRIO1_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LD1_HS_TRAIL_EN_SHIFT 29
++#define RG_DPHY_RX_LD1_HS_TRAIL_EN_MASK (0x1 << 29)
++
++#define DPHY_RX_DATA_LANE2_HS_PARAMETER 0x0028
++#define RG_CDPHY_RX_LD2_TRIO2_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_CDPHY_RX_LD2_TRIO2_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LD2_HS_TRAIL_PARAMETER_SHIFT 8
++#define RG_DPHY_RX_LD2_HS_TRAIL_PARAMETER_MASK (0xff << 8)
++#define RG_CDPHY_RX_LD2_TRIO2_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_CDPHY_RX_LD2_TRIO2_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_CDPHY_RX_LD2_TRIO2_HS_PREPARE_EN_SHIFT 28
++#define RG_CDPHY_RX_LD2_TRIO2_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LD2_HS_TRAIL_EN_SHIFT 29
++#define RG_DPHY_RX_LD2_HS_TRAIL_EN_MASK (0x1 << 29)
++
++#define DPHY_RX_DATA_LANE3_HS_PARAMETER 0x002c
++#define RG_CDPHY_RX_LD3_TRIO3_HS_PREPARE_PARAMETER_SHIFT 0
++#define RG_CDPHY_RX_LD3_TRIO3_HS_PREPARE_PARAMETER_MASK (0xff << 0)
++#define RG_DPHY_RX_LD3_HS_TRAIL_PARAMETER_SHIFT 8
++#define RG_DPHY_RX_LD3_HS_TRAIL_PARAMETER_MASK (0xff << 8)
++#define RG_CDPHY_RX_LD3_TRIO3_HS_SETTLE_PARAMETER_SHIFT 16
++#define RG_CDPHY_RX_LD3_TRIO3_HS_SETTLE_PARAMETER_MASK (0xff << 16)
++#define RG_CDPHY_RX_LD3_TRIO3_HS_PREPARE_EN_SHIFT 28
++#define RG_CDPHY_RX_LD3_TRIO3_HS_PREPARE_EN_MASK (0x1 << 28)
++#define RG_DPHY_RX_LD3_HS_TRAIL_EN_SHIFT 29
++#define RG_DPHY_RX_LD3_HS_TRAIL_EN_MASK (0x1 << 29)
++
++#define DPHY_RX_CLOCK_LANE_FSM 0x0030
++#define RO_DPHY_RX_CL0_FSM_SHIFT 0
++#define RO_DPHY_RX_CL0_FSM_MASK (0x3f << 0)
++#define RO_DPHY_RX_CL1_FSM_SHIFT 8
++#define RO_DPHY_RX_CL1_FSM_MASK (0x3f << 8)
++
++#define DPHY_RX_DATA_LANE_FSM 0x0034
++#define RO_DPHY_RX_DL0_FSM_SHIFT 0
++#define RO_DPHY_RX_DL0_FSM_MASK (0xff << 0)
++#define RO_DPHY_RX_DL1_FSM_SHIFT 8
++#define RO_DPHY_RX_DL1_FSM_MASK (0xff << 8)
++#define RO_DPHY_RX_DL2_FSM_SHIFT 16
++#define RO_DPHY_RX_DL2_FSM_MASK (0xff << 16)
++#define RO_DPHY_RX_DL3_FSM_SHIFT 24
++#define RO_DPHY_RX_DL3_FSM_MASK (0xff << 24)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-hw_phy_2_0.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-hw_phy_2_0.c
+new file mode 100644
+index 000000000000..f24d8a056d0e
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-hw_phy_2_0.c
+@@ -0,0 +1,2879 @@
 +// SPDX-License-Identifier: GPL-2.0
-+//
 +// Copyright (c) 2022 MediaTek Inc.
 +
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/iopoll.h>
 +#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/vmalloc.h>
-+#include <linux/videodev2.h>
-+#include <linux/suspend.h>
-+#include <linux/rtc.h>
++#include <linux/delay.h>
 +
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-subdev.h>
++#include "../mtk_cam-seninf.h"
++#include "../mtk_cam-seninf-hw.h"
++#include "../mtk_cam-seninf-regs.h"
++#include "mtk_cam-seninf-top-ctrl.h"
++#include "mtk_cam-seninf-seninf1-mux.h"
++#include "mtk_cam-seninf-seninf1.h"
++#include "mtk_cam-seninf-seninf1-csi2.h"
++#include "mtk_cam-seninf-tg1.h"
++#include "mtk_cam-seninf-cammux.h"
++#include "mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h"
++#include "mtk_cam-seninf-csi0-cphy.h"
++#include "mtk_cam-seninf-csi0-dphy.h"
++#include "../kd_imgsensor_define_v4l2.h"
 +
-+#include <soc/mediatek/smi.h>
-+
-+#include "mtk_cam.h"
-+#include "mtk_cam-feature.h"
-+#include "mtk_cam-raw.h"
-+
-+#include "mtk_cam-regs-mt8188.h"
-+
-+#include "mtk_cam-video.h"
-+#include "mtk_cam-seninf-if.h"
-+#include "mtk_camera-v4l2-controls.h"
-+
-+#include "mtk_cam-dmadbg.h"
-+#include "mtk_cam-raw_debug.h"
-+
-+static unsigned int debug_raw;
-+module_param(debug_raw, uint, 0644);
-+MODULE_PARM_DESC(debug_raw, "activates debug info");
-+
-+static int debug_raw_num = -1;
-+module_param(debug_raw_num, int, 0644);
-+MODULE_PARM_DESC(debug_raw_num, "debug: num of used raw devices");
-+
-+static int debug_pixel_mode = -1;
-+module_param(debug_pixel_mode, int, 0644);
-+MODULE_PARM_DESC(debug_pixel_mode, "debug: pixel mode");
-+
-+static int debug_clk_idx = -1;
-+module_param(debug_clk_idx, int, 0644);
-+MODULE_PARM_DESC(debug_clk_idx, "debug: clk idx");
-+
-+static int debug_dump_fbc;
-+module_param(debug_dump_fbc, int, 0644);
-+MODULE_PARM_DESC(debug_dump_fbc, "debug: dump fbc");
-+
-+#define MTK_RAW_STOP_HW_TIMEOUT		(33)
-+
-+#define MTK_CAMSYS_RES_IDXMASK		0xF0
-+#define MTK_CAMSYS_RES_BIN_TAG		0x10
-+#define MTK_CAMSYS_RES_FRZ_TAG		0x20
-+#define MTK_CAMSYS_RES_HWN_TAG		0x30
-+#define MTK_CAMSYS_RES_CLK_TAG		0x40
-+
-+#define MTK_CAMSYS_RES_PLAN_NUM		10
-+#define FRZ_PXLMODE_THRES		71
-+#define MHz				1000000
-+
-+/* ISP7_1 */
-+#define TGO_MAX_PXLMODE				1
-+#define MTK_CAMSYS_PROC_DEFAULT_PIXELMODE	1
-+#define sizeof_u32(__struct__) ((sizeof(__struct__) + sizeof(u32) - 1) / \
-+				sizeof(u32))
-+
-+enum MTK_CAMSYS_RES_STEP {
-+	E_RES_BASIC,
-+	E_RES_BIN_S = MTK_CAMSYS_RES_BIN_TAG,
-+	E_RES_BIN0 = E_RES_BIN_S,
-+	E_RES_BIN1,
-+	E_RES_BIN_E,
-+	E_RES_FRZ_S = MTK_CAMSYS_RES_FRZ_TAG,
-+	E_RES_FRZ0 = E_RES_FRZ_S,
-+	E_RES_FRZ1,
-+	E_RES_FRZ_E,
-+	E_RES_HWN_S = MTK_CAMSYS_RES_HWN_TAG,
-+	E_RES_HWN0 = E_RES_HWN_S,
-+	E_RES_HWN1,
-+	E_RES_HWN2,
-+	E_RES_HWN_E,
-+	E_RES_CLK_S = MTK_CAMSYS_RES_CLK_TAG,
-+	E_RES_CLK0 = E_RES_CLK_S,
-+	E_RES_CLK1,
-+	E_RES_CLK2,
-+	E_RES_CLK3,
-+	E_RES_CLK_E,
++/* seninf cfg default, dts may override */
++static struct mtk_cam_seninf_cfg _seninf_cfg = {
++	.mux_num = 8,
++	.seninf_num = 4,
++	.cam_mux_num = 11,
++	.pref_mux_num = 11,
 +};
 +
-+enum MTK_CAMSYS_MAXLB_CHECK_RESULT {
-+	LB_CHECK_OK = 0,
-+	LB_CHECK_CBN,
-+	LB_CHECK_QBN,
-+	LB_CHECK_BIN,
-+	LB_CHECK_FRZ,
-+	LB_CHECK_TWIN,
-+	LB_CHECK_RAW,
-+};
++struct mtk_cam_seninf_cfg *g_seninf_cfg = &_seninf_cfg;
 +
-+#define CAM_RAW_PROCESS_MAX_LINE_BUFFER		(6632)
-+#define CAM_RAW_FRZ_MAX_LINE_BUFFER		(6632)
-+#define CAM_RAW_BIN_MAX_LINE_BUFFER		(12000)
-+#define CAM_RAW_QBND_MAX_LINE_BUFFER		(16000)
-+#define CAM_RAW_CBN_MAX_LINE_BUFFER		(18472)
-+#define CAM_TWIN_PROCESS_MAX_LINE_BUFFER	(12400)
-+
-+struct cam_resource_plan {
-+	int cam_resource[MTK_CAMSYS_RES_STEP_NUM];
-+};
-+
-+enum resource_strategy_id {
-+	RESOURCE_STRATEGY_QPR = 0,
-+	RESOURCE_STRATEGY_PQR,
-+	RESOURCE_STRATEGY_RPQ,
-+	RESOURCE_STRATEGY_QRP,
-+	RESOURCE_STRATEGY_NUMBER
-+};
-+
-+static const struct cam_resource_plan raw_resource_strategy_plan[] = {
-+	[RESOURCE_STRATEGY_QPR] = {
-+		.cam_resource = {
-+			E_RES_BASIC, E_RES_HWN1, E_RES_CLK1, E_RES_CLK2,
-+			E_RES_CLK3, E_RES_FRZ1, E_RES_BIN1, E_RES_HWN2} },
-+	[RESOURCE_STRATEGY_PQR] = {
-+		.cam_resource = {
-+			E_RES_BASIC, E_RES_HWN1, E_RES_HWN2, E_RES_FRZ1,
-+			E_RES_BIN1, E_RES_CLK1, E_RES_CLK2, E_RES_CLK3} },
-+	[RESOURCE_STRATEGY_RPQ] = {
-+		.cam_resource = {
-+			E_RES_BASIC, E_RES_FRZ1, E_RES_BIN1, E_RES_CLK1,
-+			E_RES_CLK2, E_RES_CLK3, E_RES_HWN1, E_RES_HWN2} },
-+	[RESOURCE_STRATEGY_QRP] = {
-+		.cam_resource = {
-+			E_RES_BASIC, E_RES_CLK1, E_RES_CLK2, E_RES_CLK3,
-+			E_RES_HWN1, E_RES_HWN2, E_RES_FRZ1, E_RES_BIN1} },
-+};
-+
-+static const struct v4l2_mbus_framefmt mfmt_default = {
-+	.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+	.width = DEFAULT_WIDTH,
-+	.height = DEFAULT_HEIGHT,
-+	.field = V4L2_FIELD_NONE,
-+	.colorspace = V4L2_COLORSPACE_SRGB,
-+	.xfer_func = V4L2_XFER_FUNC_DEFAULT,
-+	.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT,
-+	.quantization = V4L2_QUANTIZATION_DEFAULT,
-+};
-+
-+static bool mtk_cam_raw_resource_calc(struct mtk_cam_device *cam,
-+				      struct mtk_cam_resource_config *res,
-+				      s64 pixel_rate, int res_plan, int in_w,
-+				      int in_h, int *out_w, int *out_h);
-+
-+static int mtk_cam_raw_res_copy_fmt_from_user(struct mtk_raw_pipeline *pipeline,
-+					      struct mtk_cam_resource *res_user,
-+					      struct v4l2_mbus_framefmt *dest)
++static inline void mtk_cam_seninf_set_di_ch_ctrl(void __iomem *pseninf,
++						 unsigned int stream_id,
++						 struct seninf_vc *vc)
 +{
-+	long bytes;
-+	struct device *dev = pipeline->raw->devs[pipeline->id];
-+
-+	if (!res_user->sink_fmt) {
-+		dev_err(dev,
-+			"%s:pipe(%d): sink_fmt can't be NULL for res ctrl\n",
-+			__func__, pipeline->id);
-+
-+		return -EINVAL;
-+	}
-+
-+	bytes = copy_from_user(dest, (void __user *)res_user->sink_fmt,
-+			       sizeof(*dest));
-+	if (bytes) {
-+		dev_err(dev,
-+			"%s:pipe(%d): copy_from_user on sink_fmt failed (%ld)\n",
-+			__func__, pipeline->id, bytes);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_raw_res_copy_fmt_to_user(struct mtk_raw_pipeline *pipeline,
-+					    struct mtk_cam_resource *res_user,
-+					    struct v4l2_mbus_framefmt *src)
-+{
-+	long bytes;
-+	struct device *dev = pipeline->raw->devs[pipeline->id];
-+
-+	/* return the fmt to the users */
-+	bytes = copy_to_user((void __user *)res_user->sink_fmt, src, sizeof(*src));
-+	if (bytes) {
-+		dev_err(dev,
-+			"%s:pipe(%d): copy_to_user on sink_fmt failed (%ld)\n",
-+			__func__, pipeline->id, bytes);
-+
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_raw_get_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct mtk_cam_resource *user_res;
-+	struct mtk_raw_pipeline *pipeline;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	dev = pipeline->raw->devs[pipeline->id];
-+
-+	if (ctrl->id == V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC) {
-+		user_res = (struct mtk_cam_resource *)ctrl->p_new.p;
-+		user_res->sensor_res = pipeline->user_res.sensor_res;
-+		user_res->raw_res = pipeline->user_res.raw_res;
-+		if (user_res->sink_fmt)
-+			ret = mtk_cam_raw_res_copy_fmt_to_user(pipeline,
-+							       user_res,
-+							       (struct v4l2_mbus_framefmt *)
-+							       pipeline->user_res.sink_fmt);
-+	} else if (ctrl->id == V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE) {
-+		ctrl->val = pipeline->sensor_mode_update;
-+		dev_info(dev,
-+			 "%s:pipe(%d): V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE: %d\n",
-+			 __func__, pipeline->id, pipeline->sensor_mode_update);
-+	} else if (ctrl->id >= V4L2_CID_MTK_CAM_USED_ENGINE_TRY &&
-+		   ctrl->id <= V4L2_CID_MTK_CAM_FRZ_TRY) {
-+		/**
-+		 * Read the determined resource for the "try" format
-+		 * negotiation result
-+		 */
-+		mutex_lock(&pipeline->try_res_config.resource_lock);
-+		switch (ctrl->id) {
-+		case V4L2_CID_MTK_CAM_USED_ENGINE_TRY:
-+			ctrl->val = pipeline->try_res_config.raw_num_used;
-+			break;
-+		case V4L2_CID_MTK_CAM_BIN_TRY:
-+			ctrl->val = pipeline->try_res_config.bin_enable;
-+			break;
-+		case V4L2_CID_MTK_CAM_FRZ_TRY:
-+			ctrl->val = pipeline->try_res_config.frz_enable ?
-+				    pipeline->try_res_config.frz_ratio : 100;
-+			break;
-+		default:
-+			dev_info(dev,
-+				 "%s:pipe(%d): unknown resource CID: %d\n",
-+				 __func__, pipeline->id, ctrl->id);
-+			break;
-+		}
-+		mutex_unlock(&pipeline->try_res_config.resource_lock);
-+	} else if (ctrl->id == V4L2_CID_MTK_CAM_SYNC_ID) {
-+		mutex_lock(&pipeline->res_config.resource_lock);
-+		*ctrl->p_new.p_s64 = pipeline->sync_id;
-+		mutex_unlock(&pipeline->res_config.resource_lock);
-+	} else {
-+		/**
-+		 * Read the determined resource for the "set" format
-+		 * negotiations result
-+		 */
-+		mutex_lock(&pipeline->res_config.resource_lock);
-+		switch (ctrl->id) {
-+		case V4L2_CID_MTK_CAM_USED_ENGINE:
-+			ctrl->val = pipeline->res_config.raw_num_used;
-+			break;
-+		case V4L2_CID_MTK_CAM_BIN_LIMIT:
-+			ctrl->val = pipeline->res_config.bin_limit;
-+			break;
-+		case V4L2_CID_MTK_CAM_BIN:
-+			ctrl->val = pipeline->res_config.bin_enable;
-+			break;
-+		case V4L2_CID_MTK_CAM_FRZ:
-+			ctrl->val = pipeline->res_config.frz_enable ?
-+				    pipeline->res_config.frz_ratio : 100;
-+			break;
-+		default:
-+			dev_info(dev,
-+				 "%s:pipe(%d): unknown try resource CID: %d\n",
-+				 __func__, pipeline->id, ctrl->id);
-+			break;
-+		}
-+		mutex_unlock(&pipeline->res_config.resource_lock);
-+	}
-+
-+	dev_dbg(dev, "%s:pipe(%d):id(%s) val(%d)\n",
-+		__func__, pipeline->id, ctrl->name, ctrl->val);
-+	return ret;
-+}
-+
-+static int mtk_cam_raw_res_store(struct mtk_raw_pipeline *pipeline,
-+				 struct mtk_cam_resource *res_user)
-+{
-+	struct device *dev = pipeline->raw->devs[pipeline->id];
-+
-+	dev_info(dev,
-+		 "%s:pipe(%d): from user: sensor:%d/%d/%lld/%lld/%d/%d, raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
-+		 __func__, pipeline->id,
-+		 res_user->sensor_res.hblank, res_user->sensor_res.vblank,
-+		 res_user->sensor_res.pixel_rate,
-+		 res_user->sensor_res.cust_pixel_rate,
-+		 res_user->sensor_res.interval.denominator,
-+		 res_user->sensor_res.interval.numerator,
-+		 res_user->raw_res.feature, res_user->raw_res.bin,
-+		 res_user->raw_res.path_sel, res_user->raw_res.raw_max,
-+		 res_user->raw_res.raw_min, res_user->raw_res.raw_used,
-+		 res_user->raw_res.strategy, res_user->raw_res.pixel_mode,
-+		 res_user->raw_res.throughput);
-+
-+	/* check user value of sensor input parameters */
-+	if (!mtk_cam_feature_is_pure_m2m(res_user->raw_res.feature) &&
-+	    (!res_user->sensor_res.pixel_rate || !res_user->sensor_res.hblank ||
-+	     !res_user->sensor_res.vblank ||
-+	     !res_user->sensor_res.interval.denominator ||
-+	     !res_user->sensor_res.interval.numerator)) {
-+		dev_info(dev,
-+			 "%s:pipe(%d): sensor info MUST be provided (TEST_PATTERN case)\n",
-+			 __func__, pipeline->id);
-+		/*test pattern case resource default copy*/
-+		pipeline->res_config.raw_num_used = 1;
-+		pipeline->res_config.bin_enable = 0;
-+		pipeline->res_config.tgo_pxl_mode = 1;
-+		pipeline->res_config.raw_path = 0;
-+		pipeline->res_config.hwn_limit_min = 1;
-+		pipeline->res_config.raw_feature = res_user->raw_res.feature;
-+		pipeline->feature_pending = res_user->raw_res.feature;
-+		pipeline->feature_active = res_user->raw_res.feature;
-+	}
-+
-+	/* check user value of raw input parameters */
-+	if (res_user->raw_res.feature == 0xFFFFFFFF)
-+		res_user->raw_res.feature = 0;
-+
-+	if (res_user->raw_res.bin == 0xFF)
-+		res_user->raw_res.bin = 0;
-+
-+	if (res_user->raw_res.strategy == 0xFFFF)
-+		res_user->raw_res.strategy = RESOURCE_STRATEGY_QRP;
-+
-+	if (res_user->raw_res.raw_max == 0xFF)
-+		res_user->raw_res.raw_max = 2;
-+
-+	if (res_user->raw_res.raw_min == 0xFF)
-+		res_user->raw_res.raw_min = 1;
-+
-+	if (res_user->raw_res.raw_min > 1)
-+		res_user->raw_res.strategy = RESOURCE_STRATEGY_QPR;
-+
-+	if (res_user->raw_res.path_sel == 0xFF)
-+		res_user->raw_res.path_sel = 0;
-+
-+	dev_info(dev,
-+		 "%s:pipe(%d): driver adjusted: raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
-+		 __func__, pipeline->id,
-+		 res_user->raw_res.feature, res_user->raw_res.bin,
-+		 res_user->raw_res.path_sel, res_user->raw_res.raw_max,
-+		 res_user->raw_res.raw_min, res_user->raw_res.raw_used,
-+		 res_user->raw_res.strategy, res_user->raw_res.pixel_mode,
-+		 res_user->raw_res.throughput);
-+
-+	return 0;
-+}
-+
-+static s64 mtk_cam_calc_pure_m2m_pixelrate(s64 width, s64 height,
-+					   struct v4l2_fract *interval)
-+{
-+	/* process + r/wdma margin = (1 + 5%) x (1 + 10%) */
-+	#define PURE_M2M_PROCESS_MARGIN_N 11550
-+	#define PURE_M2M_PROCESS_MARGIN_D 10000
-+	u64 prate = 0;
-+	int fps_n = interval->numerator;
-+	int fps_d = interval->denominator;
-+
-+	prate = width * height * fps_d * PURE_M2M_PROCESS_MARGIN_N;
-+	do_div(prate, fps_n * PURE_M2M_PROCESS_MARGIN_D);
-+
-+	pr_info("%s:width:%lld height:%lld interval:%d/%d prate:%llu\n",
-+		__func__, width, height, fps_n, fps_d, prate);
-+	return prate;
-+}
-+
-+static int mtk_cam_raw_try_res_ctrl(struct mtk_raw_pipeline *pipeline,
-+				    struct mtk_cam_resource *res_user,
-+				    struct mtk_cam_resource_config *res_cfg,
-+				    struct v4l2_mbus_framefmt *sink_fmt)
-+{
-+	s64 prate = 0;
-+	int width, height;
-+	struct device *dev = pipeline->raw->devs[pipeline->id];
-+
-+	res_cfg->bin_limit = res_user->raw_res.bin; /* 1: force bin on */
-+	res_cfg->frz_limit = 0;
-+	res_cfg->hwn_limit_max = res_user->raw_res.raw_max;
-+	res_cfg->hwn_limit_min = res_user->raw_res.raw_min;
-+	res_cfg->hblank = res_user->sensor_res.hblank;
-+	res_cfg->vblank = res_user->sensor_res.vblank;
-+	res_cfg->sensor_pixel_rate = res_user->sensor_res.pixel_rate;
-+	res_cfg->res_plan = res_user->raw_res.strategy;
-+	res_cfg->raw_feature = res_user->raw_res.feature;
-+	res_cfg->raw_path = res_user->raw_res.path_sel;
-+
-+	if (res_user->sensor_res.cust_pixel_rate)
-+		prate = res_user->sensor_res.cust_pixel_rate;
-+	else if (mtk_cam_feature_is_pure_m2m(res_cfg->raw_feature))
-+		prate = mtk_cam_calc_pure_m2m_pixelrate(sink_fmt->width,
-+							sink_fmt->height,
-+							&res_cfg->interval);
-+	else
-+		prate = mtk_cam_seninf_calc_pixelrate(pipeline->raw->cam_dev,
-+						      sink_fmt->width,
-+						      sink_fmt->height,
-+						      res_user->sensor_res.hblank,
-+						      res_user->sensor_res.vblank,
-+						      res_user->sensor_res.interval.denominator,
-+						      res_user->sensor_res.interval.numerator,
-+						      res_user->sensor_res.pixel_rate);
-+
-+	mtk_cam_raw_resource_calc(dev_get_drvdata(pipeline->raw->cam_dev),
-+				  res_cfg, prate, res_cfg->res_plan,
-+				  sink_fmt->width, sink_fmt->height,
-+				  &width, &height);
-+
-+	if (res_user->raw_res.bin && !res_cfg->bin_enable) {
-+		dev_err(dev,
-+			"%s:pipe(%d): res calc failed on fource bin: user(%d)/bin_enable(%d)\n",
-+			__func__, pipeline->id,	res_user->raw_res.bin,
-+			res_cfg->bin_enable);
-+		return -EINVAL;
-+	}
-+
-+	if (res_cfg->raw_num_used > res_user->raw_res.raw_max ||
-+	    res_cfg->raw_num_used < res_user->raw_res.raw_min) {
-+		dev_err(dev,
-+			"%s:pipe(%d): res calc failed on raw used: user(%d/%d)/raw_num_used(%d)\n",
-+			__func__, pipeline->id, res_user->raw_res.raw_max,
-+			res_user->raw_res.raw_min, res_cfg->raw_num_used);
-+	}
-+
-+	res_user->raw_res.pixel_mode = res_cfg->tgo_pxl_mode;
-+	res_user->raw_res.raw_used = res_cfg->raw_num_used;
-+	if (res_cfg->bin_limit == BIN_AUTO)
-+		res_user->raw_res.bin = res_cfg->bin_enable;
-+	else
-+		res_user->raw_res.bin = res_cfg->bin_limit;
-+
-+	dev_info(dev,
-+		 "%s:pipe(%d): res calc result: raw_used(%d)/bin(%d)/pixelmode(%d)/strategy(%d)\n",
-+		 __func__, pipeline->id, res_user->raw_res.raw_used,
-+		 res_user->raw_res.bin, res_user->raw_res.pixel_mode,
-+		 res_user->raw_res.strategy);
-+
-+	/**
-+	 * Other output not reveal to user:
-+	 * res_cfg->res_strategy[MTK_CAMSYS_RES_STEP_NUM];
-+	 * res_cfg->clk_target;
-+	 * res_cfg->frz_enable;
-+	 * res_cfg->frz_ratio;
-+	 * res_cfg->tgo_pxl_mode;
-+	 */
-+	if (width != sink_fmt->width || height != sink_fmt->height) {
-+		dev_info(dev,
-+			 "%s:pipe(%d): size adjust info: raw: sink(%d,%d) res:(%d,%d)\n",
-+			__func__, pipeline->id, sink_fmt->width,
-+			sink_fmt->height, width, height);
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_raw_set_res_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct mtk_raw_pipeline *pipeline;
-+	struct mtk_cam_resource *res_user;
-+	struct v4l2_mbus_framefmt sink_fmt;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	dev = pipeline->raw->devs[pipeline->id];
-+	res_user = (struct mtk_cam_resource *)ctrl->p_new.p;
-+
-+	ret = mtk_cam_raw_res_store(pipeline, res_user);
-+	pipeline->user_res = *res_user;
-+	if (media_entity_is_streaming(&pipeline->subdev.entity)) {
-+		/* If the pipeline is streaming, pending the change */
-+		dev_dbg(dev,
-+			"%s:pipe(%d): pending res calc has not been supported except bin\n",
-+			__func__, pipeline->id);
-+		return ret;
-+	}
-+
-+	dev_dbg(dev,
-+		"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), raw_res.feature(0x%llx), feature_active(0x%llx)\n",
-+		__func__, pipeline->id,
-+		media_entity_is_streaming(&pipeline->subdev.entity),
-+		pipeline->feature_pending, pipeline->user_res.raw_res.feature,
-+		pipeline->feature_active);
-+
-+	ret = mtk_cam_raw_res_copy_fmt_from_user(pipeline, res_user, &sink_fmt);
-+	if (ret)
-+		return ret;
-+
-+	pipeline->res_config.sink_fmt = sink_fmt;
-+	ret = mtk_cam_raw_try_res_ctrl(pipeline, res_user,
-+				       &pipeline->res_config, &sink_fmt);
-+
-+	if (ret)
-+		return -EINVAL;
-+
-+	return ret;
-+}
-+
-+static int mtk_raw_set_res_ctrl(struct device *dev, struct v4l2_ctrl *ctrl,
-+				struct mtk_cam_resource_config *res_cfg,
-+				int pipe_id)
-+{
-+	int ret = 0;
-+	struct mtk_raw_pipeline *pipeline;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+
-+	if (ctrl->type == V4L2_CTRL_TYPE_INTEGER64)
-+		dev_dbg(dev, "%s:pipe(%d):(name:%s, val:%lld)\n", __func__,
-+			pipe_id, ctrl->name, *ctrl->p_new.p_s64);
-+	else
-+		dev_dbg(dev, "%s:pipe(%d):(name:%s, val:%d)\n", __func__,
-+			pipe_id, ctrl->name, ctrl->val);
-+
-+	mutex_lock(&res_cfg->resource_lock);
-+	switch (ctrl->id) {
-+	case V4L2_CID_MTK_CAM_USED_ENGINE_LIMIT:
-+		res_cfg->hwn_limit_max = ctrl->val;
-+		break;
-+	case V4L2_CID_MTK_CAM_BIN_LIMIT:
-+		res_cfg->bin_limit = ctrl->val;
-+		break;
-+	case V4L2_CID_MTK_CAM_FRZ_LIMIT:
-+		res_cfg->frz_limit = ctrl->val;
-+		break;
-+	case V4L2_CID_MTK_CAM_RESOURCE_PLAN_POLICY:
-+		res_cfg->res_plan = ctrl->val;
-+		break;
-+	case V4L2_CID_MTK_CAM_RAW_PATH_SELECT:
-+		res_cfg->raw_path = ctrl->val;
-+		break;
-+	case V4L2_CID_HBLANK:
-+		res_cfg->hblank = ctrl->val;
-+		break;
-+	case V4L2_CID_VBLANK:
-+		res_cfg->vblank = ctrl->val;
-+		break;
-+	case V4L2_CID_MTK_CAM_PIXEL_RATE:
-+		res_cfg->sensor_pixel_rate = *ctrl->p_new.p_s64;
-+		break;
-+	case V4L2_CID_MTK_CAM_SYNC_ID:
-+		pipeline->sync_id = *ctrl->p_new.p_s64;
-+		break;
-+	default:
-+		dev_info(dev,
-+			 "%s:pipe(%d):ctrl(id:0x%x,val:%d) not handled\n",
-+			 __func__, pipe_id, ctrl->id, ctrl->val);
-+		ret = -EINVAL;
-+		break;
-+	}
-+	mutex_unlock(&res_cfg->resource_lock);
-+
-+	return ret;
-+}
-+
-+static int mtk_cam_raw_try_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct device *dev;
-+	struct mtk_raw_pipeline *pipeline;
-+	struct mtk_cam_resource *res_user;
-+	struct mtk_cam_resource_config res_cfg = {
-+		.interval = {
-+			.numerator = 1,
-+			.denominator = 30
-+		},
-+	};
-+	int ret = 0;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	dev = pipeline->raw->devs[pipeline->id];
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC:
-+		res_user = (struct mtk_cam_resource *)ctrl->p_new.p;
-+		ret = mtk_cam_raw_res_store(pipeline, res_user);
-+		if (ret)
-+			break;
-+
-+		ret = mtk_cam_raw_res_copy_fmt_from_user(pipeline, res_user,
-+							 &res_cfg.sink_fmt);
-+		if (ret) {
-+			ret = 0;
-+			/* only corret the user's input, it may be request-based try and set fmt */
-+			dev_dbg(dev,
-+				"%s:pipe(%d): no sink_fmt from user, not calc res\n",
-+				__func__, pipeline->id);
-+			break;
-+		}
-+
-+		dev_dbg(dev, "%s:pipe(%d): res ctrl start\n",
-+			__func__, pipeline->id);
-+		ret = mtk_cam_raw_try_res_ctrl(pipeline, res_user, &res_cfg,
-+					       &res_cfg.sink_fmt);
-+		if (ret)
-+			break;
-+
-+		dev_dbg(dev,
-+			"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), feature_active(0x%llx)\n",
-+			__func__, pipeline->id,
-+			media_entity_is_streaming(&pipeline->subdev.entity),
-+			pipeline->feature_pending, pipeline->feature_active);
-+
-+		dev_dbg(dev, "%s:pipe(%d): res ctrl end\n",
-+			__func__, pipeline->id);
-+			break;
-+	case V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE:
-+		dev_info(dev,
-+			 "%s:pipe(%d): skip V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE: %d\n",
-+			 __func__, pipeline->id, ctrl->val);
-+		ret = 0; /* no support */
-+		break;
-+	/* skip control value checks */
-+	case V4L2_CID_MTK_CAM_FEATURE:
-+	case V4L2_CID_MTK_CAM_CAMSYS_HW_MODE:
-+		ret = 0;
-+		break;
-+	default:
-+		ret = mtk_raw_set_res_ctrl(pipeline->raw->devs[pipeline->id],
-+					   ctrl, &pipeline->try_res_config,
-+					   pipeline->id);
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mtk_cam_raw_set_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct device *dev;
-+	struct mtk_raw_pipeline *pipeline;
-+	int ret = 0;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	dev = pipeline->raw->devs[pipeline->id];
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC:
-+		/**
-+		 * It also updates V4L2_CID_MTK_CAM_FEATURE and
-+		 * V4L2_CID_MTK_CAM_RAW_PATH_SELECT to device
-+		 */
-+		ret = mtk_cam_raw_set_res_ctrl(ctrl);
-+		break;
-+	case V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE:
-+		/**
-+		 * sensor_mode_update should be reset by driver after the completion
-+		 * of resource updating (seamless switch)
-+		 */
-+		pipeline->sensor_mode_update = ctrl->val;
-+		dev_info(dev,
-+			 "%s:pipe(%d):streaming(%d), sensor_mode_update(%d)\n",
-+			 __func__, pipeline->id,
-+			 media_entity_is_streaming(&pipeline->subdev.entity),
-+			 pipeline->sensor_mode_update);
-+		break;
-+	case V4L2_CID_MTK_CAM_FEATURE:
-+		pipeline->feature_pending = *ctrl->p_new.p_s64;
-+		dev_dbg(dev,
-+			"%s:pipe(%d):streaming(%d), feature_pending(0x%llx), feature_active(0x%llx)\n",
-+			__func__, pipeline->id,
-+			media_entity_is_streaming(&pipeline->subdev.entity),
-+			pipeline->feature_pending, pipeline->feature_active);
-+		ret = 0;
-+		break;
-+	case V4L2_CID_MTK_CAM_CAMSYS_HW_MODE:
-+		pipeline->hw_mode = *ctrl->p_new.p_s64;
-+		dev_dbg(dev,
-+			"%s:pipe(%d):streaming(%d), hw_mode(0x%llx)\n",
-+			__func__, pipeline->id,
-+			media_entity_is_streaming(&pipeline->subdev.entity),
-+			pipeline->hw_mode);
-+
-+		ret = 0;
-+		break;
-+	default:
-+		ret = mtk_raw_set_res_ctrl(pipeline->raw->devs[pipeline->id],
-+					   ctrl, &pipeline->res_config,
-+					   pipeline->id);
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops cam_ctrl_ops = {
-+	.g_volatile_ctrl = mtk_cam_raw_get_ctrl,
-+	.s_ctrl = mtk_cam_raw_set_ctrl,
-+	.try_ctrl = mtk_cam_raw_try_ctrl,
-+};
-+
-+static int mtk_raw_pde_get_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct mtk_raw_pipeline *pipeline;
-+	struct mtk_raw_pde_config *pde_cfg;
-+	struct mtk_cam_pde_info *pde_info_p;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	pde_cfg = &pipeline->pde_config;
-+	pde_info_p = ctrl->p_new.p;
-+	dev = pipeline->raw->devs[pipeline->id];
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_MTK_CAM_PDE_INFO:
-+		pde_info_p->pdo_max_size = pde_cfg->pde_info.pdo_max_size;
-+		pde_info_p->pdi_max_size = pde_cfg->pde_info.pdi_max_size;
-+		pde_info_p->pd_table_offset = pde_cfg->pde_info.pd_table_offset;
-+		break;
-+	default:
-+		dev_info(dev, "%s(id:0x%x,val:%d) is not handled\n",
-+			 __func__, ctrl->id, ctrl->val);
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mtk_raw_pde_set_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct mtk_raw_pipeline *pipeline;
-+	struct mtk_raw_pde_config *pde_cfg;
-+	struct mtk_cam_pde_info *pde_info_p;
-+	struct device *dev;
-+	int ret = 0;
-+	struct mtk_cam_video_device *node;
-+	struct mtk_cam_dev_node_desc *desc;
-+	const struct v4l2_format *default_fmt;
-+
-+	pipeline = mtk_cam_ctrl_handler_to_raw_pipeline(ctrl->handler);
-+	pde_cfg = &pipeline->pde_config;
-+	pde_info_p = ctrl->p_new.p;
-+	dev = pipeline->raw->devs[pipeline->id];
-+
-+	node = &pipeline->vdev_nodes[MTK_RAW_META_IN - MTK_RAW_SINK_NUM];
-+	desc = &node->desc;
-+	default_fmt = &desc->fmts[desc->default_fmt_idx].vfmt;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_MTK_CAM_PDE_INFO:
-+		if (!pde_info_p->pdo_max_size || !pde_info_p->pdi_max_size) {
-+			dev_info(dev,
-+				 "%s:pdo_max_sz(%d)/pdi_max_sz(%d) cannot be 0\n",
-+				 __func__, pde_info_p->pdo_max_size,
-+				 pde_info_p->pdi_max_size);
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		pde_cfg->pde_info.pdo_max_size = pde_info_p->pdo_max_size;
-+		pde_cfg->pde_info.pdi_max_size = pde_info_p->pdi_max_size;
-+		pde_cfg->pde_info.pd_table_offset =
-+			default_fmt->fmt.meta.buffersize;
-+		break;
-+	default:
-+		dev_info(dev, "%s(id:0x%x,val:%d) is not handled\n",
-+			 __func__, ctrl->id, ctrl->val);
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops cam_pde_ctrl_ops = {
-+	.g_volatile_ctrl = mtk_raw_pde_get_ctrl,
-+	.s_ctrl = mtk_raw_pde_set_ctrl,
-+	.try_ctrl = mtk_raw_pde_set_ctrl,
-+};
-+
-+static const struct v4l2_ctrl_config hwn_limit = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_USED_ENGINE_LIMIT,
-+	.name = "Engine resource limitation",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 1,
-+	.max = 2,
-+	.step = 1,
-+	.def = 2,
-+};
-+
-+static const struct v4l2_ctrl_config bin_limit = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_BIN_LIMIT,
-+	.name = "Binning limitation",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 0,
-+	.max = 0xfff,
-+	.step = 1,
-+	.def = 0,
-+};
-+
-+static const struct v4l2_ctrl_config frz_limit = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_FRZ_LIMIT,
-+	.name = "Resizer limitation",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 70,
-+	.max = 100,
-+	.step = 1,
-+	.def = 100,
-+};
-+
-+static const struct v4l2_ctrl_config hwn = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_USED_ENGINE,
-+	.name = "Engine resource",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 1,
-+	.max = 2,
-+	.step = 1,
-+	.def = 2,
-+};
-+
-+static const struct v4l2_ctrl_config bin = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_BIN,
-+	.name = "Binning",
-+	.type = V4L2_CTRL_TYPE_BOOLEAN,
-+	.min = 0,
-+	.max = 1,
-+	.step = 1,
-+	.def = 1,
-+};
-+
-+static const struct v4l2_ctrl_config frz = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_FRZ,
-+	.name = "Resizer",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 70,
-+	.max = 100,
-+	.step = 1,
-+	.def = 100,
-+};
-+
-+static const struct v4l2_ctrl_config raw_path = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_RAW_PATH_SELECT,
-+	.name = "Raw Path",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 0,
-+	.max = 1,
-+	.step = 1,
-+	.def = 1,
-+};
-+
-+static const struct v4l2_ctrl_config hwn_try = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_USED_ENGINE_TRY,
-+	.name = "Engine resource",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 1,
-+	.max = 2,
-+	.step = 1,
-+	.def = 2,
-+};
-+
-+static const struct v4l2_ctrl_config bin_try = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_BIN_TRY,
-+	.name = "Binning",
-+	.type = V4L2_CTRL_TYPE_BOOLEAN,
-+	.min = 0,
-+	.max = 1,
-+	.step = 1,
-+	.def = 1,
-+};
-+
-+static const struct v4l2_ctrl_config frz_try = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_FRZ_TRY,
-+	.name = "Resizer",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 70,
-+	.max = 100,
-+	.step = 1,
-+	.def = 100,
-+};
-+
-+static const struct v4l2_ctrl_config res_plan_policy = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_RESOURCE_PLAN_POLICY,
-+	.name = "Resource planning policy",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 0,
-+	.max = 10,
-+	.step = 1,
-+	.def = 1,
-+};
-+
-+static const struct v4l2_ctrl_config res_pixel_rate = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_PIXEL_RATE,
-+	.name = "Resource pixel rate",
-+	.type = V4L2_CTRL_TYPE_INTEGER64,
-+	.min = 0,
-+	.max = 0xFFFFFFFF,
-+	.step = 1,
-+	.def = 0,
-+};
-+
-+static const struct v4l2_ctrl_config frame_sync_id = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_SYNC_ID,
-+	.name = "Frame sync id",
-+	.type = V4L2_CTRL_TYPE_INTEGER64,
-+	.min = -1,
-+	.max = 0x7FFFFFFF,
-+	.step = 1,
-+	.def = -1,
-+};
-+
-+static const struct v4l2_ctrl_config mtk_feature = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_FEATURE,
-+	.name = "mediatek camsys feature",
-+	.type = V4L2_CTRL_TYPE_INTEGER64,
-+	.min = 0,
-+	.max = RAW_FUNCTION_END,
-+	.step = 1,
-+	.def = 0,
-+};
-+
-+static struct v4l2_ctrl_config cfg_res_ctrl = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC,
-+	.name = "resource ctrl",
-+	.type = V4L2_CTRL_COMPOUND_TYPES, /* V4L2_CTRL_TYPE_U32,*/
-+	.flags = V4L2_CTRL_FLAG_EXECUTE_ON_WRITE,
-+	.max = 0xffffffff,
-+	.step = 1,
-+	.dims = {sizeof(struct mtk_cam_resource)},
-+};
-+
-+static struct v4l2_ctrl_config cfg_res_update = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_RAW_RESOURCE_UPDATE,
-+	.name = "resource update",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.min = 0,
-+	.max = 0xf,
-+	.step = 1,
-+	.def = 0,
-+};
-+
-+static const struct v4l2_ctrl_config cfg_pde_info = {
-+	.ops = &cam_pde_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_PDE_INFO,
-+	.name = "pde information",
-+	.type = V4L2_CTRL_TYPE_INTEGER,
-+	.flags = V4L2_CTRL_FLAG_VOLATILE,
-+	.min = 0,
-+	.max = 0x1fffffff,
-+	.step = 1,
-+	.def = 0,
-+	.dims = {sizeof_u32(struct mtk_cam_pde_info)},
-+};
-+
-+static const struct v4l2_ctrl_config mtk_camsys_hw_mode = {
-+	.ops = &cam_ctrl_ops,
-+	.id = V4L2_CID_MTK_CAM_CAMSYS_HW_MODE,
-+	.name = "mediatek camsys hardware mode",
-+	.type = V4L2_CTRL_TYPE_INTEGER64,
-+	.min = 0,
-+	.max = 0x7FFFFFFF,
-+	.step = 1,
-+	.def = DEFAULT,
-+};
-+
-+static void mtk_cam_raw_toggle_db(struct mtk_raw_device *dev)
-+{
-+	int value;
-+	u32 val_cfg, val_dcif_ctl, val_sen;
-+
-+	value = readl_relaxed(dev->base + REG_CTL_MISC);
-+	val_cfg = readl_relaxed(dev->base_inner + REG_TG_PATH_CFG);
-+	val_dcif_ctl = readl_relaxed(dev->base_inner + REG_TG_DCIF_CTL);
-+	val_sen = readl_relaxed(dev->base_inner + REG_TG_SEN_MODE);
-+	writel_relaxed(value & ~CTL_DB_EN, dev->base + REG_CTL_MISC);
-+	wmb(); /* make sure committed */
-+	writel_relaxed(value | CTL_DB_EN, dev->base + REG_CTL_MISC);
-+	wmb(); /* make sure committed */
-+	dev_info(dev->dev,
-+		 "%s,  read inner AsIs->ToBe TG_PATH_CFG:0x%x->0x%x, TG_DCIF:0x%x->0x%x, TG_SEN:0x%x->0x%x\n",
-+		 __func__, val_cfg,
-+		 readl_relaxed(dev->base_inner + REG_TG_PATH_CFG), val_dcif_ctl,
-+		 readl_relaxed(dev->base_inner + REG_TG_DCIF_CTL), val_sen,
-+		 readl_relaxed(dev->base_inner + REG_TG_SEN_MODE));
-+}
-+
-+void mtk_cam_raw_trigger_rawi(struct mtk_raw_device *dev,
-+			      struct mtk_cam_ctx *ctx, signed int hw_scene)
-+{
-+	#define TRIGGER_RAWI_R6 0x10
-+	#define TRIGGER_RAWI_R2 0x01
-+	u32 cmd = TRIGGER_RAWI_R2;
-+
-+	writel_relaxed(cmd, dev->base + REG_CTL_RAWI_TRIG);
-+	wmb(); /* make sure committed */
-+}
-+
-+void mtk_cam_raw_apply_cq(struct mtk_raw_device *dev, dma_addr_t cq_addr,
-+			  unsigned int cq_size, unsigned int cq_offset,
-+			  unsigned int sub_cq_size, unsigned int sub_cq_offset)
-+{
-+	dma_addr_t main, sub;
-+
-+	dev_dbg(dev->dev,
-+		"apply raw%d cq - addr:0x%pad,size:%d/%d,offset:%d\n",
-+		dev->id, &cq_addr, cq_size, sub_cq_size, sub_cq_offset);
-+
-+	main = cq_addr + cq_offset;
-+	sub = cq_addr + sub_cq_offset;
-+
-+	writel_relaxed(dmaaddr_lsb(main),
-+		       dev->base + REG_CQ_THR0_BASEADDR);
-+	writel_relaxed(dmaaddr_msb(main),
-+		       dev->base + REG_CQ_THR0_BASEADDR_MSB);
-+	writel_relaxed(cq_size,
-+		       dev->base + REG_CQ_THR0_DESC_SIZE);
-+	writel_relaxed(dmaaddr_lsb(sub),
-+		       dev->base + REG_CQ_SUB_THR0_BASEADDR_2);
-+	writel_relaxed(dmaaddr_msb(sub),
-+		       dev->base + REG_CQ_SUB_THR0_BASEADDR_MSB_2);
-+	writel_relaxed(sub_cq_size,
-+		       dev->base + REG_CQ_SUB_THR0_DESC_SIZE_2);
-+
-+	/* USINGSCQ and always trigger now */
-+	writel_relaxed(CAMCTL_CQ_THR0_DONE_ST,
-+		       dev->base + REG_CTL_RAW_INT6_EN);
-+	writel_relaxed(CAMCTL_CQ_THRSUB_DONE_EN,
-+		       dev->base + REG_CTL_RAW_INT7_EN);
-+	writel(CTL_CQ_THR0_START, dev->base + REG_CTL_START);
-+
-+	wmb(); /* make sure committed */
-+}
-+
-+/* sw check again for rawi dcif case */
-+static bool mtk_cam_raw_is_dma_idle(struct mtk_raw_device *dev)
-+{
-+	bool ret = false;
-+	int chasing_stat;
-+	int raw_rst_stat = readl(dev->base + REG_DMA_SOFT_RST_STAT);
-+	int raw_rst_stat2 = readl(dev->base + REG_DMA_SOFT_RST_STAT2);
-+	int yuv_rst_stat = readl(dev->yuv_base + REG_DMA_SOFT_RST_STAT);
-+
-+	if (raw_rst_stat2 != 0x7 || yuv_rst_stat != 0xfffffff)
-+		return false;
-+
-+	/* check beside rawi_r2/r3/r5 */
-+	if (~raw_rst_stat & 0x7fffffda)
-+		return false;
-+
-+	if (~raw_rst_stat & RST_STAT_RAWI_R2) { /* RAWI_R2 */
-+		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS);
-+		ret = ((chasing_stat & RAWI_R2_SMI_REQ_ST) == 0 &&
-+		       (readl(dev->base + REG_RAWI_R2_BASE + DMA_OFFSET_SPECIAL_DCIF)
-+		       & DC_CAMSV_STAGER_EN) &&
-+		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x1))
-+		      ? true : false;
-+		dev_info(dev->dev, "%s: chasing_stat: 0x%x ret=%d\n",
-+			 __func__, chasing_stat, ret);
-+	}
-+
-+	if (~raw_rst_stat & RST_STAT_RAWI_R3) {
-+		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS);
-+		ret = ((chasing_stat & RAWI_R3_SMI_REQ_ST) == 0 &&
-+		       (readl(dev->base + REG_RAWI_R3_BASE + DMA_OFFSET_SPECIAL_DCIF)
-+		       & DC_CAMSV_STAGER_EN) &&
-+		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x80))
-+		      ? true : false;
-+		dev_info(dev->dev, "%s: chasing_stat: 0x%x, ret=%d\n",
-+			 __func__, chasing_stat, ret);
-+	}
-+
-+	if (~raw_rst_stat & RST_STAT_RAWI_R5) {
-+		chasing_stat = readl(dev->base + REG_DMA_DBG_CHASING_STATUS2);
-+		ret = ((chasing_stat & RAWI_R5_SMI_REQ_ST) == 0 &&
-+		       (readl(dev->base + REG_RAWI_R5_BASE + DMA_OFFSET_SPECIAL_DCIF)
-+		       & DC_CAMSV_STAGER_EN) &&
-+		       (readl(dev->base + REG_CTL_MOD6_EN) & 0x1000))
-+		      ? true : false;
-+		dev_info(dev->dev, "%s: chasing_stat: 0x%x, ret=%d\n",
-+			 __func__, chasing_stat, ret);
-+	}
-+
-+	return ret;
-+}
-+
-+void mtk_cam_raw_reset(struct mtk_raw_device *dev)
-+{
-+	int sw_ctl;
-+	int ret;
-+
-+	dev_dbg(dev->dev, "camsys | trigger %s\n", __func__);
-+
-+	/* Disable all DMA DCM before reset */
-+	writel(0x00000fff, dev->base + REG_CTL_RAW_MOD5_DCM_DIS);
-+	writel(0x0007ffff, dev->base + REG_CTL_RAW_MOD6_DCM_DIS);
-+	writel(0xffffffff, dev->yuv_base + REG_CTL_RAW_MOD5_DCM_DIS);
-+
-+	/* Enable CQI_R1 ~ R4 before reset and make sure loaded */
-+	writel(readl(dev->base + REG_CTL_MOD6_EN) | 0x78000,
-+	       dev->base + REG_CTL_MOD6_EN);
-+	mtk_cam_raw_toggle_db(dev);
-+
-+	writel(0, dev->base + REG_CTL_SW_CTL);
-+	writel(1, dev->base + REG_CTL_SW_CTL);
-+	wmb(); /* make sure committed */
-+
-+	ret = readx_poll_timeout(readl, dev->base + REG_CTL_SW_CTL, sw_ctl,
-+				 sw_ctl & 0x2,
-+				 1 /* delay, us */, 5000 /* timeout, us */);
-+
-+	if (ret < 0 && !mtk_cam_raw_is_dma_idle(dev)) {
-+		dev_info(dev->dev,
-+			 "%s: timeout: tg_sen_mode: 0x%x, ctl_en: 0x%x, mod6_en: 0x%x, ctl_sw_ctl:0x%x, frame_no:0x%x,rst_stat:0x%x,rst_stat2:0x%x,yuv_rst_stat:0x%x\n",
-+			 __func__,
-+			 readl(dev->base + REG_TG_SEN_MODE),
-+			 readl(dev->base + REG_CTL_EN),
-+			 readl(dev->base + REG_CTL_MOD6_EN),
-+			 readl(dev->base + REG_CTL_SW_CTL),
-+			 readl(dev->base + REG_FRAME_SEQ_NUM),
-+			 readl(dev->base + REG_DMA_SOFT_RST_STAT),
-+			 readl(dev->base + REG_DMA_SOFT_RST_STAT2),
-+			 readl(dev->yuv_base + REG_DMA_SOFT_RST_STAT));
-+
-+		goto RESET_FAILURE;
-+	}
-+
-+	/* do hw rst */
-+	writel(4, dev->base + REG_CTL_SW_CTL);
-+	writel(0, dev->base + REG_CTL_SW_CTL);
-+
-+RESET_FAILURE:
-+	/* Enable all DMA DCM back */
-+	writel(0x0, dev->base + REG_CTL_RAW_MOD5_DCM_DIS);
-+	writel(0x0, dev->base + REG_CTL_RAW_MOD6_DCM_DIS);
-+	writel(0x0, dev->yuv_base + REG_CTL_RAW_MOD5_DCM_DIS);
-+
-+	wmb(); /* make sure committed */
-+}
-+
-+static void mtk_cam_raw_reset_reg(struct mtk_raw_device *dev)
-+{
-+	int cq_en, sw_done;
-+
-+	dev_dbg(dev->dev,
-+		"[%s++] CQ_EN/SW_SUB_CTL/SW_DONE [in] 0x%x/0x%x/0x%x [out] 0x%x/0x%x/0x%x\n",
-+		__func__,
-+		readl_relaxed(dev->base_inner + REG_CQ_EN),
-+		readl_relaxed(dev->base_inner + REG_CTL_SW_SUB_CTL),
-+		readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE),
-+		readl_relaxed(dev->base + REG_CQ_EN),
-+		readl_relaxed(dev->base + REG_CTL_SW_SUB_CTL),
-+		readl_relaxed(dev->base + REG_CTL_SW_PASS1_DONE));
-+
-+	cq_en = readl_relaxed(dev->base_inner + REG_CQ_EN);
-+	sw_done = readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE);
-+
-+	cq_en = cq_en & (~SCQ_SUBSAMPLE_EN) & (~SCQ_STAGGER_MODE);
-+	writel(cq_en, dev->base_inner + REG_CQ_EN);
-+	writel(cq_en, dev->base + REG_CQ_EN);
-+
-+	dev_dbg(dev->dev, "[--] try to disable SCQ_STAGGER_MODE: CQ_EN(0x%x)\n",
-+		cq_en);
-+
-+	writel(sw_done & (~SW_DONE_SAMPLE_EN), dev->base_inner + REG_CTL_SW_PASS1_DONE);
-+	writel(sw_done & (~SW_DONE_SAMPLE_EN), dev->base + REG_CTL_SW_PASS1_DONE);
-+
-+	writel(0, dev->base_inner + REG_CTL_SW_SUB_CTL);
-+	writel(0, dev->base + REG_CTL_SW_SUB_CTL);
-+
-+	wmb(); /* make sure committed */
-+
-+	dev_dbg(dev->dev,
-+		"[%s--] CQ_EN/SW_SUB_CTL/SW_DONE [in] 0x%x/0x%x/0x%x [out] 0x%x/0x%x/0x%x\n",
-+		__func__, readl_relaxed(dev->base_inner + REG_CQ_EN),
-+		readl_relaxed(dev->base_inner + REG_CTL_SW_SUB_CTL),
-+		readl_relaxed(dev->base_inner + REG_CTL_SW_PASS1_DONE),
-+		readl_relaxed(dev->base + REG_CQ_EN),
-+		readl_relaxed(dev->base + REG_CTL_SW_SUB_CTL),
-+		readl_relaxed(dev->base + REG_CTL_SW_PASS1_DONE));
-+}
-+
-+void mtk_cam_raw_dump_aa_info(struct mtk_cam_ctx *ctx,
-+			      struct mtk_ae_debug_data *ae_info)
-+{
-+	struct mtk_raw_device *raw_dev = NULL;
-+	struct mtk_raw_pipeline *pipe = ctx->pipe;
-+	int i;
-+
-+	for (i = 0; i < ctx->cam->num_raw_devices; i++) {
-+		if (pipe->enabled_raw & (1 << i)) {
-+			struct device *dev = ctx->cam->raw.devs[i];
-+
-+			raw_dev = dev_get_drvdata(dev);
-+			ae_info->obc_r1_sum[0] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R1_R_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R1_R_SUM_L);
-+			ae_info->obc_r2_sum[0] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R2_R_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R2_R_SUM_L);
-+			ae_info->obc_r3_sum[0] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R3_R_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R3_R_SUM_L);
-+			ae_info->ltm_sum[0] +=
-+				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_R_MSB) << 32) |
-+				readl(raw_dev->base + REG_LTM_AE_DEBUG_R_LSB);
-+			ae_info->aa_sum[0] +=
-+				((u64)readl(raw_dev->base + REG_AA_R_SUM_H) << 32) |
-+				readl(raw_dev->base + REG_AA_R_SUM_L);
-+
-+			ae_info->obc_r1_sum[1] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R1_B_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R1_B_SUM_L);
-+			ae_info->obc_r2_sum[1] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R2_B_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R2_B_SUM_L);
-+			ae_info->obc_r3_sum[1] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R3_B_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R3_B_SUM_L);
-+			ae_info->ltm_sum[1] +=
-+				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_B_MSB) << 32) |
-+				readl(raw_dev->base + REG_LTM_AE_DEBUG_B_LSB);
-+			ae_info->aa_sum[1] +=
-+				((u64)readl(raw_dev->base + REG_AA_B_SUM_H) << 32) |
-+				readl(raw_dev->base + REG_AA_B_SUM_L);
-+
-+			ae_info->obc_r1_sum[2] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R1_GR_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R1_GR_SUM_L);
-+			ae_info->obc_r2_sum[2] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R2_GR_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R2_GR_SUM_L);
-+			ae_info->obc_r3_sum[2] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R3_GR_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R3_GR_SUM_L);
-+			ae_info->ltm_sum[2] +=
-+				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_GR_MSB) << 32) |
-+				readl(raw_dev->base + REG_LTM_AE_DEBUG_GR_LSB);
-+			ae_info->aa_sum[2] +=
-+				((u64)readl(raw_dev->base + REG_AA_GR_SUM_H) << 32) |
-+				readl(raw_dev->base + REG_AA_GR_SUM_L);
-+
-+			ae_info->obc_r1_sum[3] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R1_GB_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R1_GB_SUM_L);
-+			ae_info->obc_r2_sum[3] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R2_GB_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R2_GB_SUM_L);
-+			ae_info->obc_r3_sum[3] +=
-+				((u64)readl(raw_dev->base + OFFSET_OBC_R3_GB_SUM_H) << 32) |
-+				readl(raw_dev->base + OFFSET_OBC_R3_GB_SUM_L);
-+			ae_info->ltm_sum[3] +=
-+				((u64)readl(raw_dev->base + REG_LTM_AE_DEBUG_GB_MSB) << 32) |
-+				readl(raw_dev->base + REG_LTM_AE_DEBUG_GB_LSB);
-+			ae_info->aa_sum[3] +=
-+				((u64)readl(raw_dev->base + REG_AA_GB_SUM_H) << 32) |
-+				readl(raw_dev->base + REG_AA_GB_SUM_L);
-+		}
-+	}
-+}
-+
-+static int reset_msgfifo(struct mtk_raw_device *dev)
-+{
-+	atomic_set(&dev->is_fifo_overflow, 0);
-+	return kfifo_init(&dev->msg_fifo, dev->msg_buffer, dev->fifo_size);
-+}
-+
-+static int push_msgfifo(struct mtk_raw_device *dev,
-+			struct mtk_camsys_irq_info *info)
-+{
-+	int len;
-+
-+	if (unlikely(kfifo_avail(&dev->msg_fifo) < sizeof(*info))) {
-+		atomic_set(&dev->is_fifo_overflow, 1);
-+		return -1;
-+	}
-+
-+	len = kfifo_in(&dev->msg_fifo, info, sizeof(*info));
-+	WARN_ON(len != sizeof(*info));
-+
-+	return 0;
-+}
-+
-+static void set_fifo_size(void __iomem *dma_base, int fifo_size)
-+{
-+	writel_relaxed((0x1 << 28) | (fifo_size & 0xFFF),
-+		       dma_base + DMA_OFFSET_CON0);
-+}
-+
-+static void set_fifo_threshold(void __iomem *dma_base)
-+{
-+	u32 fifo_size = 0;
-+
-+	fifo_size = readl_relaxed(dma_base + DMA_OFFSET_CON0) & 0xFFF;
-+	writel_relaxed((0x1 << 28) |
-+		       ((fifo_size * 1 / 4) & 0xFFF) << 16 |
-+		       ((fifo_size * 1 / 8) & 0xFFF),
-+		       dma_base + DMA_OFFSET_CON1);
-+	writel_relaxed((0x1 << 28) |
-+		       ((fifo_size * 1 / 2) & 0xFFF) << 16 |
-+		       ((fifo_size * 3 / 8) & 0xFFF),
-+		       dma_base + DMA_OFFSET_CON2);
-+	writel_relaxed((0x1 << 31) |
-+		       ((fifo_size * 2 / 3) & 0xFFF) << 16 |
-+		       ((fifo_size * 13 / 24) & 0xFFF),
-+		       dma_base + DMA_OFFSET_CON3);
-+	writel_relaxed((0x1 << 31) |
-+		       ((fifo_size * 3 / 8) & 0xFFF) << 16 |
-+		       ((fifo_size * 1 / 4) & 0xFFF),
-+		       dma_base + DMA_OFFSET_CON4);
-+}
-+
-+static void init_dma_threshold(struct mtk_raw_device *dev)
-+{
-+	struct mtk_cam_device *cam_dev;
-+
-+	cam_dev = dev->cam;
-+
-+	/* Set mt8188 default fifo size */
-+	set_fifo_size(dev->base + REG_IMGO_R1_BASE, 0x3C0);
-+	set_fifo_size(dev->yuv_base + REG_YUVCO_R1_BASE, 0x200);
-+	set_fifo_size(dev->yuv_base + REG_YUVDO_R1_BASE, 0x80);
-+	set_fifo_size(dev->yuv_base + REG_YUVO_R3_BASE, 0xc0);
-+	set_fifo_size(dev->yuv_base + REG_YUVBO_R3_BASE, 0x60);
-+	set_fifo_size(dev->yuv_base + REG_YUVCO_R3_BASE, 0x40);
-+	set_fifo_size(dev->yuv_base + REG_YUVO_R2_BASE, 0x80);
-+	set_fifo_size(dev->yuv_base + REG_YUVBO_R2_BASE, 0x40);
-+	set_fifo_size(dev->yuv_base + REG_YUVO_R4_BASE, 0x40);
-+	set_fifo_size(dev->yuv_base + REG_YUVBO_R4_BASE, 0x40);
-+	set_fifo_size(dev->yuv_base + REG_YUVO_R5_BASE, 0x40);
-+	set_fifo_threshold(dev->base + REG_IMGO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_FHO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_AAHO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_PDO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_AAO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_AFO_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_PDO_R1_BASE);
-+
-+	set_fifo_threshold(dev->yuv_base + REG_YUVO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVCO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVDO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVCO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_LTMSO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TSFSO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TSFSO_R2_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_FLKO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_UFEO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVO_R2_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R2_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVO_R4_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R4_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVO_R5_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_YUVBO_R5_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TBO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R2_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_RZH1N2TBO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R2_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_DRZS4NO_R3_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_ACTSO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TNCSO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TNCSBO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TNCSHO_R1_BASE);
-+	set_fifo_threshold(dev->yuv_base + REG_TNCSYO_R1_BASE);
-+
-+	set_fifo_threshold(dev->base + REG_RAWI_R2_BASE);
-+	set_fifo_threshold(dev->base + REG_UFDI_R2_BASE);
-+	set_fifo_threshold(dev->base + REG_RAWI_R3_BASE);
-+	set_fifo_threshold(dev->base + REG_UFDI_R3_BASE);
-+	set_fifo_threshold(dev->base + REG_CQI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_CQI_R2_BASE);
-+	set_fifo_threshold(dev->base + REG_CQI_R3_BASE);
-+	set_fifo_threshold(dev->base + REG_CQI_R4_BASE);
-+	set_fifo_threshold(dev->base + REG_LSCI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_BPCI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_BPCI_R2_BASE);
-+	set_fifo_threshold(dev->base + REG_BPCI_R3_BASE);
-+	set_fifo_threshold(dev->base + REG_PDI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_AAI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_CACI_R1_BASE);
-+	set_fifo_threshold(dev->base + REG_RAWI_R6_BASE);
-+
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT1_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT2_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT3_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT4_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT5_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_HALT6_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT1_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT2_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT3_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT4_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT5_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_ULTRA_HALT6_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT1_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT2_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT3_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT4_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT5_EN);
-+	writel_relaxed(0x1, cam_dev->base + REG_PREULTRA_HALT6_EN);
-+}
-+
-+static int get_fps_ratio(struct mtk_raw_device *dev)
-+{
-+	int fps = (dev->pipeline->res_config.interval.numerator > 0) ?
-+			(dev->pipeline->res_config.interval.denominator /
-+			dev->pipeline->res_config.interval.numerator) : 0;
-+
-+	if (fps <= 30)
-+		return 1;
-+	else if (fps <= 60)
-+		return 2;
-+	else
-+		return 1;
-+}
-+
-+void mtk_cam_raw_initialize(struct mtk_raw_device *dev, int is_sub)
-+{
-+	u32 val;
-+
-+	/* USINGSCQ */
-+	val = readl_relaxed(dev->base + REG_CQ_EN);
-+	writel_relaxed(val | SCQ_EN, dev->base + REG_CQ_EN);
-+	writel_relaxed(0xffffffff, dev->base + REG_SCQ_START_PERIOD);
-+
-+	writel_relaxed(CQ_THR0_MODE_IMMEDIATE | CQ_THR0_EN,
-+		       dev->base + REG_CQ_THR0_CTL);
-+	writel_relaxed(CQ_THR0_MODE_IMMEDIATE | CQ_THR0_EN,
-+		       dev->base + REG_CQ_SUB_THR0_CTL);
-+	writel_relaxed(CAMCTL_CQ_THR0_DONE_ST,
-+		       dev->base + REG_CTL_RAW_INT6_EN);
-+	writel_relaxed(CAMCTL_CQ_THRSUB_DONE_EN,
-+		       dev->base + REG_CTL_RAW_INT7_EN);
-+
-+	dev->is_sub = is_sub;
-+	dev->sof_count = 0;
-+	dev->vsync_count = 0;
-+	atomic_set(&dev->vf_en, 0);
-+	reset_msgfifo(dev);
-+
-+	init_dma_threshold(dev);
-+
-+	writel_relaxed(0xFFFE0000,
-+		       dev->base + REG_FLKO_R1_BASE + DMA_OFFSET_ERR_STAT);
-+
-+	dev_dbg(dev->dev, "%s - REG_CQ_EN:0x%x ,REG_CQ_THR0_CTL:0x%8x\n",
-+		__func__,
-+		readl_relaxed(dev->base + REG_CQ_EN),
-+		readl_relaxed(dev->base + REG_CQ_THR0_CTL));
-+}
-+
-+void mtk_cam_raw_stream_on(struct mtk_raw_device *dev, int on)
-+{
-+	u32 val;
-+	u32 chk_val;
-+	u32 cfg_val;
-+	u32 fps_ratio = 1;
-+	struct mtk_cam_ctx *ctx;
-+
-+	dev_info(dev->dev, "raw %d %s %d\n", dev->id, __func__, on);
-+	ctx = mtk_cam_find_ctx(dev->cam, &dev->pipeline->subdev.entity);
-+	if (!ctx) {
-+		dev_info(dev->dev, "%s: cannot find ctx\n", __func__);
-+		return;
-+	}
-+
-+	if (on) {
-+		/* USINGSCQ */
-+		val = readl_relaxed(dev->base + REG_TG_TIME_STAMP_CNT);
-+		val = (val == 0) ? 1 : val;
-+		fps_ratio = get_fps_ratio(dev);
-+		dev_info(dev->dev,
-+			 "VF on - REG_TG_TIME_STAMP_CNT val:%d fps(30x):%d\n",
-+			 val, fps_ratio);
-+		writel_relaxed(SCQ_DEADLINE_MS * 1000 * SCQ_DEFAULT_CLK_RATE /
-+			       (val * 2) / fps_ratio,
-+			       dev->base + REG_SCQ_START_PERIOD);
-+
-+		mtk_cam_set_topdebug_rdyreq(dev->dev, dev->base, dev->yuv_base,
-+					    TG_OVERRUN);
-+		dev->overrun_debug_dump_cnt = 0;
-+		if (mtk_cam_is_m2m(ctx)) {
-+			dev_info(dev->dev, "[%s] M2M view finder disable\n", __func__);
-+		} else {
-+			val = readl_relaxed(dev->base + REG_TG_VF_CON);
-+			val |= TG_VFDATA_EN;
-+			writel_relaxed(val, dev->base + REG_TG_VF_CON);
-+			wmb(); /* make sure committed */
-+		}
-+		atomic_set(&dev->vf_en, 1);
-+		dev_info(dev->dev,
-+			 "%s - CQ_EN:0x%x, CQ_THR0_CTL:0x%8x, TG_VF_CON:0x%8x, SCQ_START_PERIOD:%d\n",
-+			 __func__,
-+			 readl_relaxed(dev->base + REG_CQ_EN),
-+			 readl_relaxed(dev->base + REG_CQ_THR0_CTL),
-+			 readl_relaxed(dev->base + REG_TG_VF_CON),
-+			 readl_relaxed(dev->base + REG_SCQ_START_PERIOD));
-+	} else {
-+		dev_info(dev->dev, "VF off\n");
-+		atomic_set(&dev->vf_en, 0);
-+
-+		writel_relaxed((u32)~CQ_THR0_EN, dev->base + REG_CQ_THR0_CTL);
-+		wmb(); /* make sure committed */
-+
-+		cfg_val = readl_relaxed(dev->base + REG_TG_PATH_CFG);
-+		cfg_val |= 0x100;
-+		writel(cfg_val, dev->base + REG_TG_PATH_CFG);
-+
-+		val = readl_relaxed(dev->base + REG_TG_VF_CON);
-+		val &= ~TG_VFDATA_EN;
-+		writel(val, dev->base + REG_TG_VF_CON);
-+
-+		cfg_val = readl_relaxed(dev->base + REG_TG_PATH_CFG);
-+		cfg_val &= ~0x100;
-+		writel(cfg_val, dev->base + REG_TG_PATH_CFG);
-+
-+		wmb(); /* make sure committed */
-+		/* reset hw after vf off */
-+		if (readx_poll_timeout(readl, dev->base_inner + REG_TG_VF_CON,
-+				       chk_val, chk_val == val, 1 /* sleep us */,
-+				       33000 /* timeout us */) < 0) {
-+			dev_info(dev->dev,
-+				 "%s: wait vf off timeout: TG_VF_CON 0x%x\n",
-+				 __func__, chk_val);
-+		}
-+
-+		mtk_cam_raw_reset_reg(dev);
-+	}
-+}
-+
-+static int mtk_raw_linebuf_chk(bool b_twin, bool b_bin, bool b_frz, bool b_qbn,
-+			       bool b_cbn, int tg_x, int *frz_ratio)
-+{
-+	int input_x = tg_x;
-+	/* max line buffer check for frontal binning and resizer */
-+	if (b_twin) {
-+		if (input_x > CAM_TWIN_PROCESS_MAX_LINE_BUFFER)
-+			return LB_CHECK_TWIN;
-+		input_x = input_x >> 1;
-+	}
-+	if (b_cbn) {
-+		if (input_x > CAM_RAW_CBN_MAX_LINE_BUFFER)
-+			return LB_CHECK_CBN;
-+		input_x = input_x >> 1;
-+	}
-+	if (b_qbn) {
-+		if (input_x > CAM_RAW_QBND_MAX_LINE_BUFFER)
-+			return LB_CHECK_QBN;
-+		input_x = input_x >> 1;
-+	}
-+	if (b_bin) {
-+		if (input_x > CAM_RAW_BIN_MAX_LINE_BUFFER)
-+			return LB_CHECK_BIN;
-+		input_x = input_x >> 1;
-+	}
-+	if (input_x <= CAM_RAW_PROCESS_MAX_LINE_BUFFER) {
-+		return LB_CHECK_OK;
-+	} else if (b_frz) {
-+		if (input_x > CAM_RAW_FRZ_MAX_LINE_BUFFER)
-+			return LB_CHECK_FRZ;
-+
-+		*frz_ratio = input_x * 100 / CAM_RAW_PROCESS_MAX_LINE_BUFFER;
-+		return LB_CHECK_OK;
-+	} else {
-+		return LB_CHECK_RAW;
-+	}
-+}
-+
-+static int mtk_raw_pixelmode_calc(int rawpxl, int b_twin, bool b_bin,
-+				  bool b_frz, int min_ratio)
-+{
-+	int pixelmode = rawpxl;
-+
-+	pixelmode = (b_twin == 2) ? pixelmode << 2 : pixelmode;
-+	pixelmode = (b_twin == 1) ? pixelmode << 1 : pixelmode;
-+	pixelmode = b_bin ? pixelmode << 1 : pixelmode;
-+	pixelmode = (b_frz && (min_ratio < FRZ_PXLMODE_THRES)) ?
-+		pixelmode << 1 : pixelmode;
-+	pixelmode = (pixelmode > TGO_MAX_PXLMODE) ?
-+		TGO_MAX_PXLMODE : pixelmode;
-+
-+	return pixelmode;
-+}
-+
-+static void mtk_raw_update_debug_param(struct mtk_cam_device *cam,
-+				       struct mtk_cam_resource_config *res,
-+				       int *clk_idx)
-+{
-+	/* skip if debug is not enabled */
-+	if (!debug_raw)
++	if (stream_id > 7)
 +		return;
 +
-+	dev_dbg(cam->dev,
-+		"%s:before:BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
-+		__func__, res->bin_enable, res->frz_enable, res->frz_ratio,
-+		res->raw_num_used, *clk_idx, res->tgo_pxl_mode,
-+		res->clk_target);
++	SENINF_BITS(pseninf, SENINF_CSI2_S0_DI_CTRL + (stream_id << 0x2),
++		    RG_CSI2_DT_SEL, vc->dt);
++	SENINF_BITS(pseninf, SENINF_CSI2_S0_DI_CTRL + (stream_id << 0x2),
++		    RG_CSI2_VC_SEL, vc->vc);
++	SENINF_BITS(pseninf, SENINF_CSI2_S0_DI_CTRL + (stream_id << 0x2),
++		    RG_CSI2_DT_INTERLEAVE_MODE, 1);
++	SENINF_BITS(pseninf, SENINF_CSI2_S0_DI_CTRL + (stream_id << 0x2),
++		    RG_CSI2_VC_INTERLEAVE_EN, 1);
 +
-+	if (debug_raw_num > 0) {
-+		dev_info(cam->dev, "DEBUG: force raw_num_used: %d\n",
-+			 debug_raw_num);
-+		res->raw_num_used = debug_raw_num;
-+	}
-+
-+	if (debug_pixel_mode >= 0) {
-+		dev_info(cam->dev, "DEBUG: force debug_pixel_mode (log2): %d\n",
-+			 debug_pixel_mode);
-+		res->tgo_pxl_mode = debug_pixel_mode;
-+	}
-+
-+	if (debug_clk_idx >= 0) {
-+		dev_info(cam->dev, "DEBUG: force debug_clk_idx: %d\n",
-+			 debug_clk_idx);
-+		*clk_idx = debug_clk_idx;
-+	}
-+
-+	dev_dbg(cam->dev,
-+		"%s:after:BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
-+		__func__, res->bin_enable, res->frz_enable, res->frz_ratio,
-+		res->raw_num_used, *clk_idx, res->tgo_pxl_mode,
-+		res->clk_target);
-+}
-+
-+static bool is_cbn_en(int bin_flag)
-+{
-+	switch (bin_flag) {
-+	case CBN_2X2_ON:
-+	case CBN_3X3_ON:
-+	case CBN_4X4_ON:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool mtk_cam_raw_resource_calc(struct mtk_cam_device *cam,
-+				      struct mtk_cam_resource_config *res,
-+				      s64 pixel_rate, int res_plan,
-+				      int in_w, int in_h, int *out_w, int *out_h)
-+{
-+	int res_step_type = 0;
-+	int tgo_pxl_mode = 1;
-+	int pixel_mode[MTK_CAMSYS_RES_STEP_NUM] = {0};
-+	int bin_temp = 0, frz_temp = 0, hwn_temp = 0;
-+	int bin_en = 0, frz_en = 0, twin_en = 0, clk_cur = 0;
-+	int idx = 0, clk_res = 0, idx_res = 0;
-+	bool res_found = false;
-+	int lb_chk_res = -1;
-+	int frz_ratio = 100;
-+	int p;
-+
-+	res->res_plan = res_plan;
-+	res->pixel_rate = pixel_rate;
-+	/* test pattern */
-+	if (res->pixel_rate == 0)
-+		res->pixel_rate = 450 * MHz;
-+	dev_dbg(cam->dev,
-+		"[Res] PR = %lld, w/h=%d/%d HWN(%d)/BIN(%d)/FRZ(%d),Plan:%d\n",
-+		res->pixel_rate, in_w, in_h,
-+		res->hwn_limit_max, res->bin_limit, res->frz_limit, res->res_plan);
-+
-+	memcpy(res->res_strategy, raw_resource_strategy_plan + res->res_plan,
-+	       MTK_CAMSYS_RES_STEP_NUM * sizeof(int));
-+	res->bin_enable = 0;
-+	res->raw_num_used = 1;
-+	res->frz_enable = 0;
-+	res->frz_ratio = frz_ratio;
-+	for (idx = 0; idx < MTK_CAMSYS_RES_STEP_NUM ; idx++) {
-+		res_step_type = res->res_strategy[idx] & MTK_CAMSYS_RES_IDXMASK;
-+		switch (res_step_type) {
-+		case MTK_CAMSYS_RES_BIN_TAG:
-+			bin_temp = res->res_strategy[idx] - E_RES_BIN_S;
-+			if (bin_temp <= res->bin_limit)
-+				bin_en = bin_temp;
-+			if (bin_en && frz_en)
-+				frz_en = 0;
-+			break;
-+		case MTK_CAMSYS_RES_FRZ_TAG:
-+			frz_temp = res->res_strategy[idx] - E_RES_FRZ_S;
-+			if (res->frz_limit < 100)
-+				frz_en = frz_temp;
-+			break;
-+		case MTK_CAMSYS_RES_HWN_TAG:
-+			hwn_temp = res->res_strategy[idx] - E_RES_HWN_S;
-+			if (hwn_temp + 1 <= res->hwn_limit_max)
-+				twin_en = hwn_temp;
-+			break;
-+		case MTK_CAMSYS_RES_CLK_TAG:
-+			clk_cur = res->res_strategy[idx] - E_RES_CLK_S;
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		/* 1 for force bin on */
-+		if (res->bin_limit >= 1)
-+			bin_en = 1;
-+
-+		if (res->hwn_limit_min > 1)
-+			twin_en = 1;
-+
-+		/* max line buffer check*/
-+		lb_chk_res = mtk_raw_linebuf_chk(twin_en, res->bin_limit & BIN_ON,
-+						 frz_en, res->bin_limit & QBND_ON,
-+						 is_cbn_en(res->bin_limit),
-+						 in_w, &frz_ratio);
-+		/* frz ratio*/
-+		if (res_step_type == MTK_CAMSYS_RES_FRZ_TAG) {
-+			res->frz_ratio = res->frz_limit < FRZ_PXLMODE_THRES ?
-+				res->frz_limit : FRZ_PXLMODE_THRES;
-+		}
-+		/*try 1-pixel mode first*/
-+		for (p = 1; p <= MTK_CAMSYS_PROC_DEFAULT_PIXELMODE; p++) {
-+			tgo_pxl_mode = mtk_raw_pixelmode_calc(p, twin_en,
-+							      bin_en, frz_en,
-+							      res->frz_ratio);
-+			/**
-+			 * isp throughput along resource strategy
-+			 * (compared with pixel rate)
-+			 */
-+			pixel_mode[idx] = tgo_pxl_mode;
-+
-+			/* only support 1-pixel mode */
-+			if (p == 1 && lb_chk_res == LB_CHECK_OK) {
-+				if (!res_found) {
-+					res->bin_enable = bin_en;
-+					res->frz_enable = frz_en;
-+					res->raw_num_used = twin_en + 1;
-+					clk_res = clk_cur;
-+					idx_res = idx;
-+					res_found = true;
-+					break;
-+				}
-+			}
-+		}
-+		dev_dbg(cam->dev,
-+			"Res-%d B/F/H/C=%d/%d/%d/%d -> %d/%d/%d/%d (%d)(%d)\n",
-+			idx, bin_temp, frz_temp, hwn_temp, clk_cur, bin_en,
-+			frz_en, twin_en, clk_cur, lb_chk_res, pixel_mode[idx]);
-+	}
-+
-+	tgo_pxl_mode = pixel_mode[idx_res];
-+	switch (tgo_pxl_mode) {
++	switch (stream_id) {
++	case 0:
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S0_GRP_EN, 1);
++		break;
 +	case 1:
-+		res->tgo_pxl_mode = 0;
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S1_GRP_EN, 1);
 +		break;
 +	case 2:
-+		res->tgo_pxl_mode = 1;
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S2_GRP_EN, 1);
++		break;
++	case 3:
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S3_GRP_EN, 1);
 +		break;
 +	case 4:
-+		res->tgo_pxl_mode = 2;
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S4_GRP_EN, 1);
 +		break;
-+	case 8:
-+		res->tgo_pxl_mode = 3;
++	case 5:
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S5_GRP_EN, 1);
++		break;
++	case 6:
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S6_GRP_EN, 1);
++		break;
++	case 7:
++		SENINF_BITS(pseninf, SENINF_CSI2_CH0_CTRL + (vc->group << 0x2),
++			    RG_CSI2_S7_GRP_EN, 1);
 +		break;
 +	default:
-+		break;
-+	}
-+
-+	mtk_raw_update_debug_param(cam, res, &clk_res);
-+
-+	if (res_found) {
-+		dev_info(cam->dev,
-+			 "Res-end:%d BIN/FRZ/HWN/CLK/pxl=%d/%d(%d)/%d/%d/%d, clk:%d\n",
-+			 idx_res, res->bin_enable, res->frz_enable, res->frz_ratio,
-+			 res->raw_num_used, clk_res, res->tgo_pxl_mode,
-+			 res->clk_target);
-+	} else {
-+		dev_dbg(cam->dev, "[%s] Error resource result\n", __func__);
-+	}
-+	if (res->bin_enable) {
-+		*out_w = in_w >> 1;
-+		*out_h = in_h >> 1;
-+	} else if (res->frz_enable) {
-+		*out_w = in_w * res->frz_ratio / 100;
-+		*out_h = in_h * res->frz_ratio / 100;
-+	} else {
-+		*out_w = in_w;
-+		*out_h = in_h;
-+	}
-+
-+	return res_found;
-+}
-+
-+static void raw_irq_handle_tg_grab_err(struct mtk_raw_device *raw_dev,
-+				       int dequeued_frame_seq_no);
-+static void raw_irq_handle_dma_err(struct mtk_raw_device *raw_dev);
-+static void raw_irq_handle_tg_overrun_err(struct mtk_raw_device *raw_dev,
-+					  int dequeued_frame_seq_no);
-+
-+static void raw_handle_error(struct mtk_raw_device *raw_dev,
-+			     struct mtk_camsys_irq_info *data)
-+{
-+	int err_status = data->e.err_status;
-+	int frame_idx_inner = data->frame_idx_inner;
-+
-+	/* Show DMA errors in detail */
-+	if (err_status & DMA_ERR_ST)
-+		raw_irq_handle_dma_err(raw_dev);
-+
-+	/* Show TG register for more error detail*/
-+	if (err_status & TG_GBERR_ST)
-+		raw_irq_handle_tg_grab_err(raw_dev, frame_idx_inner);
-+
-+	if (err_status & TG_OVRUN_ST) {
-+		if (raw_dev->overrun_debug_dump_cnt < 4) {
-+			mtk_cam_dump_topdebug_rdyreq(raw_dev->dev,
-+						     raw_dev->base,
-+						     raw_dev->yuv_base);
-+			raw_dev->overrun_debug_dump_cnt++;
-+		} else {
-+			dev_dbg(raw_dev->dev,
-+				"%s: TG_OVRUN_ST repeated skip dump raw_id:%d\n",
-+				__func__, raw_dev->id);
-+		}
-+		raw_irq_handle_tg_overrun_err(raw_dev, frame_idx_inner);
-+	}
-+}
-+
-+static inline unsigned int mtk_raw_get_err_status(unsigned int irq_status)
-+{
-+	return irq_status & INT_ST_MASK_CAM_ERR;
-+}
-+
-+static irqreturn_t mtk_irq_raw(int irq, void *data)
-+{
-+	struct mtk_raw_device *raw_dev = (struct mtk_raw_device *)data;
-+	struct device *dev = raw_dev->dev;
-+	struct mtk_camsys_irq_info irq_info;
-+	unsigned int frame_idx, frame_idx_inner, fbc_fho_ctl2;
-+	unsigned int irq_status, err_status, dmao_done_status, dmai_done_status;
-+	unsigned int drop_status, dma_ofl_status, cq_done_status, cq2_done_status;
-+	bool wake_thread = 0;
-+
-+	irq_status       = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT_STAT);
-+	dmao_done_status = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT2_STAT);
-+	dmai_done_status = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT3_STAT);
-+	drop_status      = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT4_STAT);
-+	dma_ofl_status   = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT5_STAT);
-+	cq_done_status   = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT6_STAT);
-+	cq2_done_status  = readl_relaxed(raw_dev->base + REG_CTL_RAW_INT7_STAT);
-+
-+	frame_idx       = readl_relaxed(raw_dev->base + REG_FRAME_SEQ_NUM);
-+	frame_idx_inner = readl_relaxed(raw_dev->base_inner + REG_FRAME_SEQ_NUM);
-+
-+	fbc_fho_ctl2 =
-+		readl_relaxed(REG_FBC_CTL2(raw_dev->base + FBC_R1A_BASE, 1));
-+
-+	err_status = mtk_raw_get_err_status(irq_status);
-+	if (unlikely(debug_raw))
-+		dev_dbg(dev,
-+			"INT:0x%x(err:0x%x) 2~7 0x%x/0x%x/0x%x/0x%x/0x%x/0x%x (in:%d)\n",
-+			irq_status, err_status,
-+			dmao_done_status, dmai_done_status, drop_status,
-+			dma_ofl_status, cq_done_status, cq2_done_status,
-+			frame_idx_inner);
-+
-+	if (unlikely(!raw_dev->pipeline || !raw_dev->pipeline->enabled_raw)) {
-+		dev_dbg(dev, "%s: %i: raw pipeline is disabled\n",
-+			__func__, raw_dev->id);
-+		goto ctx_not_found;
-+	}
-+
-+	irq_info.irq_type = 0;
-+	irq_info.ts_ns = ktime_get_boottime_ns();
-+	irq_info.frame_idx = frame_idx;
-+	irq_info.frame_idx_inner = frame_idx_inner;
-+
-+	/* CQ done */
-+	if (cq_done_status & CAMCTL_CQ_THR0_DONE_ST)
-+		irq_info.irq_type |= 1 << CAMSYS_IRQ_SETTING_DONE;
-+	/* DMAO done, only for AFO */
-+	if (dmao_done_status & AFO_DONE_ST)
-+		irq_info.irq_type |= 1 << CAMSYS_IRQ_AFO_DONE;
-+		/* enable AFO_DONE_EN at backend manually */
-+
-+	/* Frame done */
-+	if (irq_status & SW_PASS1_DON_ST) {
-+		irq_info.irq_type |= 1 << CAMSYS_IRQ_FRAME_DONE;
-+		raw_dev->overrun_debug_dump_cnt = 0;
-+	}
-+	/* Frame start */
-+	if (irq_status & SOF_INT_ST) {
-+		irq_info.irq_type |= 1 << CAMSYS_IRQ_FRAME_START;
-+
-+		raw_dev->sof_count++;
-+		irq_info.write_cnt = ((fbc_fho_ctl2 & WCNT_BIT_MASK) >> 8) - 1;
-+		irq_info.fbc_cnt = (fbc_fho_ctl2 & CNT_BIT_MASK) >> 16;
-+	}
-+	/* Vsync interrupt */
-+	if (irq_status & VS_INT_ST)
-+		raw_dev->vsync_count++;
-+
-+	if (irq_info.irq_type && !raw_dev->is_sub) {
-+		if (push_msgfifo(raw_dev, &irq_info) == 0)
-+			wake_thread = 1;
-+	}
-+
-+	/* Check ISP error status */
-+	if (unlikely(err_status)) {
-+		struct mtk_camsys_irq_info err_info;
-+
-+		err_info.irq_type = 1 << CAMSYS_IRQ_ERROR;
-+		err_info.ts_ns = irq_info.ts_ns;
-+		err_info.frame_idx = irq_info.frame_idx;
-+		err_info.frame_idx_inner = irq_info.frame_idx_inner;
-+		err_info.e.err_status = err_status;
-+
-+		if (push_msgfifo(raw_dev, &err_info) == 0)
-+			wake_thread = 1;
-+	}
-+
-+	/* enable to debug fbc related */
-+	if (debug_raw && debug_dump_fbc && (irq_status & SOF_INT_ST))
-+		mtk_cam_raw_dump_fbc(raw_dev->dev, raw_dev->base, raw_dev->yuv_base);
-+
-+ctx_not_found:
-+	return wake_thread ? IRQ_WAKE_THREAD : IRQ_HANDLED;
-+}
-+
-+static irqreturn_t mtk_thread_irq_raw(int irq, void *data)
-+{
-+	struct mtk_raw_device *raw_dev = (struct mtk_raw_device *)data;
-+	struct mtk_camsys_irq_info irq_info;
-+
-+	if (unlikely(atomic_cmpxchg(&raw_dev->is_fifo_overflow, 1, 0)))
-+		dev_info(raw_dev->dev, "msg fifo overflow\n");
-+
-+	while (kfifo_len(&raw_dev->msg_fifo) >= sizeof(irq_info)) {
-+		int len = kfifo_out(&raw_dev->msg_fifo, &irq_info, sizeof(irq_info));
-+
-+		WARN_ON(len != sizeof(irq_info));
-+
-+		dev_dbg(raw_dev->dev, "ts=%llu irq_type %d, req:%d/%d\n",
-+			irq_info.ts_ns, irq_info.irq_type,
-+			irq_info.frame_idx_inner, irq_info.frame_idx);
-+
-+		/* error case */
-+		if (unlikely(irq_info.irq_type == (1 << CAMSYS_IRQ_ERROR))) {
-+			raw_handle_error(raw_dev, &irq_info);
-+			continue;
-+		}
-+
-+		/* normal case */
-+		/* inform interrupt information to camsys controller */
-+		mtk_camsys_isr_event(raw_dev->cam, CAMSYS_ENGINE_RAW,
-+				     raw_dev->id, &irq_info);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+void raw_irq_handle_tg_grab_err(struct mtk_raw_device *raw_dev,
-+				int dequeued_frame_seq_no)
-+{
-+	struct mtk_cam_ctx *ctx;
-+	struct mtk_cam_request_stream_data *s_data;
-+	int val, val2;
-+	unsigned int inner_val, tg_full_sel;
-+
-+	val = readl_relaxed(raw_dev->base + REG_TG_PATH_CFG);
-+	inner_val = readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG);
-+	val = val | TG_TG_FULL_SEL;
-+	writel_relaxed(val, raw_dev->base + REG_TG_PATH_CFG);
-+	writel_relaxed(val, raw_dev->base_inner + REG_TG_PATH_CFG);
-+	wmb(); /* make sure committed */
-+	val2 = readl_relaxed(raw_dev->base + REG_TG_SEN_MODE);
-+	val2 = val2 | TG_CMOS_RDY_SEL;
-+	writel_relaxed(val2, raw_dev->base + REG_TG_SEN_MODE);
-+	wmb(); /* make sure committed */
-+
-+	dev_info_ratelimited(raw_dev->dev,
-+			     "%d Grab_Err [Outter] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
-+			     dequeued_frame_seq_no,
-+			     readl_relaxed(raw_dev->base + REG_TG_PATH_CFG),
-+			     readl_relaxed(raw_dev->base + REG_TG_SEN_MODE),
-+			     readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST),
-+			     readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST_R),
-+			     readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_PXL),
-+			     readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_LIN));
-+	dev_info_ratelimited(raw_dev->dev,
-+			     "%d Grab_Err [Inner] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
-+			     dequeued_frame_seq_no,
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG),
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_MODE),
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST),
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST_R),
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_PXL),
-+			     readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_LIN));
-+
-+	ctx = mtk_cam_find_ctx(raw_dev->cam, &raw_dev->pipeline->subdev.entity);
-+	if (!ctx) {
-+		dev_info(raw_dev->dev, "%s: cannot find ctx\n", __func__);
 +		return;
 +	}
-+
-+	s_data = mtk_cam_get_req_s_data(ctx, ctx->stream_id, dequeued_frame_seq_no);
-+	if (s_data) {
-+		mtk_cam_debug_seninf_dump(s_data);
-+		tg_full_sel = ((inner_val & TG_FULLSEL_BIT_MASK) >> 15);
-+
-+		if (tg_full_sel == 1)
-+			mtk_cam_req_dump(s_data, MTK_CAM_REQ_DUMP_CHK_DEQUEUE_FAILED,
-+					 "TG Grab Err", false);
-+		else
-+			dev_info(raw_dev->dev, "%s: tg_full_sel 0x%x\n",
-+				 __func__, tg_full_sel);
-+	} else {
-+		dev_info(raw_dev->dev,
-+			 "%s: req(%d) can't be found for seninf dump\n",
-+			 __func__, dequeued_frame_seq_no);
-+	}
 +}
 +
-+void raw_irq_handle_dma_err(struct mtk_raw_device *raw_dev)
++int mtk_cam_seninf_init_iomem(struct seninf_ctx *ctx, void __iomem *if_base,
++			      void __iomem *ana_base)
 +{
-+	mtk_cam_raw_dump_dma_err_st(raw_dev->dev, raw_dev->base);
-+	mtk_cam_yuv_dump_dma_err_st(raw_dev->dev, raw_dev->yuv_base);
++	u32 i;
 +
-+	if (raw_dev->pipeline->feature_active)
-+		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
-+				       "RAWI_R2", dbg_RAWI_R2, ARRAY_SIZE(dbg_RAWI_R2));
++	ctx->reg_ana_csi_rx[CSI_PORT_0] =
++	ctx->reg_ana_csi_rx[CSI_PORT_0A] = ana_base + 0;
++	ctx->reg_ana_csi_rx[CSI_PORT_0B] = ana_base + 0x1000;
 +
-+	if (raw_dev->pipeline->pde_config.pde_info.pd_table_offset) {
-+		dev_dbg_ratelimited(raw_dev->dev,
-+				    "DMA_ERR:%x,PDI_R1:%x,PDO_R1:%x\n",
-+				     readl_relaxed(raw_dev->base + 0x4060),
-+				     readl_relaxed(raw_dev->base +
-+						   REG_PDI_R1_BASE +
-+						   DMA_OFFSET_ERR_STAT),
-+				     readl_relaxed(raw_dev->base +
-+						   REG_PDO_R1_BASE +
-+						   DMA_OFFSET_ERR_STAT));
-+		dev_dbg_ratelimited(raw_dev->dev,
-+				    "TG_FRMSIZE_ST:%x,TG_FRMSIZE_ST_R:%x\n",
-+				    readl_relaxed(raw_dev->base + 0x0738),
-+				    readl_relaxed(raw_dev->base + 0x076c));
-+		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
-+				       "PDO_R1", dbg_PDO_R1, ARRAY_SIZE(dbg_PDO_R1));
-+		mtk_cam_dump_dma_debug(raw_dev->dev, raw_dev->base + CAMDMATOP_BASE,
-+				       "PDI_R1", dbg_PDI_R1, ARRAY_SIZE(dbg_PDI_R1));
-+	}
-+}
++	ctx->reg_ana_csi_rx[CSI_PORT_1] =
++	ctx->reg_ana_csi_rx[CSI_PORT_1A] = ana_base + 0x4000;
++	ctx->reg_ana_csi_rx[CSI_PORT_1B] = ana_base + 0x5000;
 +
-+static void raw_irq_handle_tg_overrun_err(struct mtk_raw_device *raw_dev,
-+					  int dequeued_frame_seq_no)
-+{
-+	struct mtk_cam_ctx *ctx;
-+	struct mtk_cam_request_stream_data *s_data;
-+	int val, val2;
-+	unsigned int inner_val, tg_full_sel;
++	ctx->reg_ana_csi_rx[CSI_PORT_2] =
++	ctx->reg_ana_csi_rx[CSI_PORT_2A] = ana_base + 0x8000;
++	ctx->reg_ana_csi_rx[CSI_PORT_2B] = ana_base + 0x9000;
 +
-+	val = readl_relaxed(raw_dev->base + REG_TG_PATH_CFG);
-+	inner_val = readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG);
-+	val = val | TG_TG_FULL_SEL;
-+	writel_relaxed(val, raw_dev->base + REG_TG_PATH_CFG);
-+	writel_relaxed(val, raw_dev->base_inner + REG_TG_PATH_CFG);
-+	wmb(); /* for dbg dump register */
++	ctx->reg_ana_csi_rx[CSI_PORT_3] =
++	ctx->reg_ana_csi_rx[CSI_PORT_3A] = ana_base + 0xc000;
++	ctx->reg_ana_csi_rx[CSI_PORT_3B] = ana_base + 0xd000;
 +
-+	val2 = readl_relaxed(raw_dev->base + REG_TG_SEN_MODE);
-+	val2 = val2 | TG_CMOS_RDY_SEL;
-+	writel_relaxed(val2, raw_dev->base + REG_TG_SEN_MODE);
-+	wmb(); /* for dbg dump register */
++	ctx->reg_ana_dphy_top[CSI_PORT_0A] =
++	ctx->reg_ana_dphy_top[CSI_PORT_0B] =
++	ctx->reg_ana_dphy_top[CSI_PORT_0] = ana_base + 0x2000;
 +
-+	dev_info(raw_dev->dev,
-+		 "%d Overrun_Err [Outter] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
-+		 dequeued_frame_seq_no,
-+		 readl_relaxed(raw_dev->base + REG_TG_PATH_CFG),
-+		 readl_relaxed(raw_dev->base + REG_TG_SEN_MODE),
-+		 readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST),
-+		 readl_relaxed(raw_dev->base + REG_TG_FRMSIZE_ST_R),
-+		 readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_PXL),
-+		 readl_relaxed(raw_dev->base + REG_TG_SEN_GRAB_LIN));
-+	dev_info(raw_dev->dev,
-+		 "%d Overrun_Err [Inner] TG PATHCFG/SENMODE FRMSIZE/R GRABPXL/LIN:%x/%x %x/%x %x/%x\n",
-+		 dequeued_frame_seq_no,
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_PATH_CFG),
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_MODE),
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST),
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_FRMSIZE_ST_R),
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_PXL),
-+		 readl_relaxed(raw_dev->base_inner + REG_TG_SEN_GRAB_LIN));
-+	dev_info(raw_dev->dev,
-+		 "REQ RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD_REQ_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD2_REQ_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD3_REQ_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD5_REQ_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD6_REQ_STAT));
-+	dev_info(raw_dev->dev,
-+		 "RDY RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD_RDY_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD2_RDY_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD3_RDY_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD5_RDY_STAT),
-+		 readl_relaxed(raw_dev->base + REG_CTL_RAW_MOD6_RDY_STAT));
-+	dev_info(raw_dev->dev,
-+		 "REQ YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD_REQ_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD2_REQ_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD3_REQ_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD4_REQ_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD5_REQ_STAT));
-+	dev_info(raw_dev->dev,
-+		 "RDY YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD_RDY_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD2_RDY_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD3_RDY_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD4_RDY_STAT),
-+		 readl_relaxed(raw_dev->yuv_base + REG_CTL_RAW_MOD5_RDY_STAT));
++	ctx->reg_ana_dphy_top[CSI_PORT_1A] =
++	ctx->reg_ana_dphy_top[CSI_PORT_1B] =
++	ctx->reg_ana_dphy_top[CSI_PORT_1] = ana_base + 0x6000;
 +
-+	ctx = mtk_cam_find_ctx(raw_dev->cam, &raw_dev->pipeline->subdev.entity);
-+	if (!ctx) {
-+		dev_info(raw_dev->dev, "%s: cannot find ctx\n", __func__);
-+		return;
++	ctx->reg_ana_dphy_top[CSI_PORT_2A] =
++	ctx->reg_ana_dphy_top[CSI_PORT_2B] =
++	ctx->reg_ana_dphy_top[CSI_PORT_2] = ana_base + 0xa000;
++
++	ctx->reg_ana_dphy_top[CSI_PORT_3A] =
++	ctx->reg_ana_dphy_top[CSI_PORT_3B] =
++	ctx->reg_ana_dphy_top[CSI_PORT_3] = ana_base + 0xe000;
++
++	ctx->reg_ana_cphy_top[CSI_PORT_0A] =
++	ctx->reg_ana_cphy_top[CSI_PORT_0B] =
++	ctx->reg_ana_cphy_top[CSI_PORT_0] = ana_base + 0x3000;
++
++	ctx->reg_ana_cphy_top[CSI_PORT_1A] =
++	ctx->reg_ana_cphy_top[CSI_PORT_1B] =
++	ctx->reg_ana_cphy_top[CSI_PORT_1] = ana_base + 0x7000;
++
++	ctx->reg_ana_cphy_top[CSI_PORT_2A] =
++	ctx->reg_ana_cphy_top[CSI_PORT_2B] =
++	ctx->reg_ana_cphy_top[CSI_PORT_2] = ana_base + 0xb000;
++
++	ctx->reg_ana_cphy_top[CSI_PORT_3A] =
++	ctx->reg_ana_cphy_top[CSI_PORT_3B] =
++	ctx->reg_ana_cphy_top[CSI_PORT_3] = ana_base + 0xf000;
++
++	ctx->reg_if_top = if_base;
++
++	for (i = SENINF_1; i < _seninf_cfg.seninf_num; i++) {
++		ctx->reg_if_ctrl[i] = if_base + 0x0200 + (0x1000 * i);
++		ctx->reg_if_tg[i] = if_base + 0x0F00 + (0x1000 * i);
++		ctx->reg_if_csi2[i] = if_base + 0x0a00 + (0x1000 * i);
 +	}
 +
-+	s_data = mtk_cam_get_req_s_data(ctx, ctx->stream_id, dequeued_frame_seq_no);
-+	if (s_data) {
-+		/**
-+		 * Enable the dump manually if needed.
-+		 * mtk_cam_req_dump() already call mtk_cam_seninf_dump()
-+		 * in a delayed work if no P1 done comes.
-+		 */
-+		if (0 && raw_dev->sof_count > 3)
-+			mtk_cam_debug_seninf_dump(s_data);
++	for (i = SENINF_MUX1; i < _seninf_cfg.mux_num; i++)
++		ctx->reg_if_mux[i] = if_base + 0x0d00 + (0x1000 * i);
 +
-+		tg_full_sel = ((inner_val & TG_FULLSEL_BIT_MASK) >> 15);
-+		if (tg_full_sel == 1)
-+			mtk_cam_req_dump(s_data, MTK_CAM_REQ_DUMP_CHK_DEQUEUE_FAILED,
-+					 "TG Overrun Err", true);
-+		else
-+			dev_info(raw_dev->dev, "%s: tg_full_sel 0x%x:\n",
-+				 __func__, tg_full_sel);
-+	} else {
-+		dev_info(raw_dev->dev, "%s: req(%d) can't be found for dump\n",
-+			 __func__, dequeued_frame_seq_no);
-+
-+		if (0 && raw_dev->sof_count > 3 && ctx->seninf)
-+			mtk_cam_seninf_dump(ctx->seninf);
-+	}
-+}
-+
-+static int mtk_raw_pm_suspend_prepare(struct mtk_raw_device *dev)
-+{
-+	u32 val;
-+	int ret;
-+
-+	dev_dbg(dev->dev, "- %s\n", __func__);
-+
-+	if (pm_runtime_suspended(dev->dev))
-+		return 0;
-+
-+	/* Disable ISP's view finder and wait for TG idle */
-+	dev_dbg(dev->dev, "cam suspend, disable VF\n");
-+	val = readl(dev->base + REG_TG_VF_CON);
-+	writel(val & (~TG_VFDATA_EN), dev->base + REG_TG_VF_CON);
-+	ret = readl_poll_timeout_atomic(dev->base + REG_TG_INTER_ST, val,
-+					(val & TG_CAM_CS_MASK) == TG_IDLE_ST,
-+					USEC_PER_MSEC, MTK_RAW_STOP_HW_TIMEOUT);
-+	if (ret)
-+		dev_dbg(dev->dev, "can't stop HW:%d:0x%x\n", ret, val);
-+
-+	/* Disable CMOS */
-+	val = readl(dev->base + REG_TG_SEN_MODE);
-+	writel(val & (~TG_SEN_MODE_CMOS_EN), dev->base + REG_TG_SEN_MODE);
-+
-+	/* Force ISP HW to idle */
-+	ret = pm_runtime_force_suspend(dev->dev);
-+	return ret;
-+}
-+
-+static int mtk_raw_pm_post_suspend(struct mtk_raw_device *dev)
-+{
-+	u32 val;
-+	int ret;
-+
-+	dev_dbg(dev->dev, "- %s\n", __func__);
-+
-+	if (pm_runtime_suspended(dev->dev))
-+		return 0;
-+
-+	/* Force ISP HW to resume */
-+	ret = pm_runtime_force_resume(dev->dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Enable CMOS */
-+	dev_dbg(dev->dev, "cam resume, enable CMOS/VF\n");
-+	val = readl(dev->base + REG_TG_SEN_MODE);
-+	writel(val | TG_SEN_MODE_CMOS_EN, dev->base + REG_TG_SEN_MODE);
-+
-+	/* Enable VF */
-+	val = readl(dev->base + REG_TG_VF_CON);
-+	writel(val | TG_VFDATA_EN, dev->base + REG_TG_VF_CON);
++	ctx->reg_if_cam_mux = if_base + 0x0400;
 +
 +	return 0;
 +}
 +
-+static int raw_pm_notifier(struct notifier_block *nb,
-+			   unsigned long action, void *data)
++int mtk_cam_seninf_init_port(struct seninf_ctx *ctx, int port)
 +{
-+	struct mtk_raw_device *raw_dev =
-+			container_of(nb, struct mtk_raw_device, pm_notifier);
++	u32 port_num;
 +
-+	switch (action) {
-+	case PM_SUSPEND_PREPARE:
-+		mtk_raw_pm_suspend_prepare(raw_dev);
-+		break;
-+	case PM_POST_SUSPEND:
-+		mtk_raw_pm_post_suspend(raw_dev);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int mtk_raw_of_probe(struct platform_device *pdev,
-+			    struct mtk_raw_device *raw)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	int ret;
-+	int n_clks;
-+
-+	ret = of_property_read_u32(dev->of_node, "mediatek,cam-id", &raw->id);
-+	if (ret) {
-+		dev_dbg(dev, "missing camid property\n");
-+		return ret;
-+	}
-+
-+	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34))) {
-+		dev_err(dev, "%s: No suitable DMA available\n", __func__);
-+		return -EIO;
-+	}
-+
-+	if (!dev->dma_parms) {
-+		dev->dma_parms =
-+			devm_kzalloc(dev, sizeof(*dev->dma_parms), GFP_KERNEL);
-+		if (!dev->dma_parms)
-+			return -ENOMEM;
-+	}
-+
-+	dma_set_max_seg_size(dev, UINT_MAX);
-+
-+	/* base outer register */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "base");
-+	if (!res) {
-+		dev_err(dev, "failed to get mem\n");
-+		return -ENODEV;
-+	}
-+
-+	raw->base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(raw->base)) {
-+		dev_err(dev, "failed to map register base\n");
-+		return PTR_ERR(raw->base);
-+	}
-+
-+	/* base inner register */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "inner_base");
-+	if (!res) {
-+		dev_err(dev, "failed to get mem\n");
-+		return -ENODEV;
-+	}
-+
-+	raw->base_inner = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(raw->base_inner)) {
-+		dev_err(dev, "failed to map register inner base\n");
-+		return PTR_ERR(raw->base_inner);
-+	}
-+
-+	/* will be assigned later */
-+	raw->yuv_base = NULL;
-+
-+	raw->irq = platform_get_irq(pdev, 0);
-+	if (raw->irq < 0) {
-+		dev_err(dev, "failed to get irq\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, raw->irq,
-+					mtk_irq_raw, mtk_thread_irq_raw,
-+					0, dev_name(dev), raw);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq=%d\n", raw->irq);
-+		return ret;
-+	}
-+	dev_dbg(dev, "registered irq=%d\n", raw->irq);
-+
-+	disable_irq(raw->irq);
-+
-+	n_clks = devm_clk_bulk_get_all(dev, &raw->clk_b);
-+	if (n_clks < 0) {
-+		dev_err(dev, "failed to devm_clk_bulk_get_all=%d\n", n_clks);
-+		return n_clks;
-+	}
-+
-+	raw->num_clks = n_clks;
-+	dev_info(dev, "clk_num:%d\n", raw->num_clks);
-+
-+#ifdef CONFIG_PM_SLEEP
-+	raw->pm_notifier.notifier_call = raw_pm_notifier;
-+	ret = register_pm_notifier(&raw->pm_notifier);
-+	if (ret) {
-+		dev_info(dev, "failed to register notifier block.\n");
-+		return ret;
-+	}
-+#endif
-+	return 0;
-+}
-+
-+static int mtk_raw_sd_subscribe_event(struct v4l2_subdev *subdev,
-+				      struct v4l2_fh *fh,
-+				      struct v4l2_event_subscription *sub)
-+{
-+	switch (sub->type) {
-+	case V4L2_EVENT_FRAME_SYNC:
-+		return v4l2_event_subscribe(fh, sub, 0, NULL);
-+	case V4L2_EVENT_REQUEST_DRAINED:
-+		return v4l2_event_subscribe(fh, sub, 0, NULL);
-+	case V4L2_EVENT_EOS:
-+		return v4l2_event_subscribe(fh, sub, 0, NULL);
-+	case V4L2_EVENT_REQUEST_DUMPED:
-+		return v4l2_event_subscribe(fh, sub, 0, NULL);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int mtk_raw_available_resource(struct mtk_raw *raw)
-+{
-+	struct device *dev = raw->cam_dev;
-+	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
-+	int res_status = 0;
-+	int i, j;
-+
-+	for (i = 0; i < cam_dev->num_raw_devices; i++) {
-+		struct mtk_raw_pipeline *pipe = raw->pipelines + i;
-+
-+		for (j = 0; j < ARRAY_SIZE(raw->devs); j++) {
-+			if (pipe->enabled_raw & 1 << j)
-+				res_status |= 1 << j;
-+		}
-+	}
-+	dev_dbg(raw->cam_dev,
-+		"%s raw_status:0x%x Available Engine:A/B/C:%d/%d/%d\n",
-+		__func__, res_status,
-+		!(res_status & (1 << MTKCAM_SUBDEV_RAW_0)),
-+		!(res_status & (1 << MTKCAM_SUBDEV_RAW_1)),
-+		!(res_status & (1 << MTKCAM_SUBDEV_RAW_2)));
-+
-+	return res_status;
-+}
-+
-+int mtk_cam_s_data_raw_select(struct mtk_cam_request_stream_data *s_data,
-+			      struct mtkcam_ipi_input_param *cfg_in_param)
-+{
-+	struct mtk_cam_ctx *ctx;
-+	struct mtk_raw_pipeline *pipe;
-+	int raw_status = 0;
-+	bool selected = false;
-+
-+	ctx = mtk_cam_s_data_get_ctx(s_data);
-+	pipe = ctx->pipe;
-+	raw_status = mtk_raw_available_resource(pipe->raw);
-+	raw_status &= ~pipe->enabled_raw;
-+
-+	mtk_raw_available_resource(pipe->raw);
-+
-+	if (!selected)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+int mtk_cam_raw_select(struct mtk_cam_ctx *ctx,
-+		       struct mtkcam_ipi_input_param *cfg_in_param)
-+{
-+	struct mtk_raw_pipeline *pipe = ctx->pipe;
-+	int raw_status = 0;
-+	int mask = 0x0;
-+	bool selected = false;
-+	int m;
-+
-+	pipe->enabled_raw = 0;
-+	raw_status = mtk_raw_available_resource(pipe->raw);
-+	if (pipe->res_config.raw_num_used == 3) {
-+		mask = 1 << MTKCAM_SUBDEV_RAW_0
-+			| 1 << MTKCAM_SUBDEV_RAW_1 | 1 << MTKCAM_SUBDEV_RAW_2;
-+		if (!(raw_status & mask)) {
-+			pipe->enabled_raw |= mask;
-+			selected = true;
-+		}
-+	} else if (pipe->res_config.raw_num_used == 2) {
-+		for (m = MTKCAM_SUBDEV_RAW_0; m >= MTKCAM_SUBDEV_RAW_0; m--) {
-+			mask = (1 << m) | (1 << (m + 1));
-+			if (!(raw_status & mask)) {
-+				pipe->enabled_raw |= mask;
-+				selected = true;
-+				break;
-+			}
-+		}
-+	} else {
-+		for (m = MTKCAM_SUBDEV_RAW_0; m < ARRAY_SIZE(pipe->raw->devs); m++) {
-+			mask = 1 << m;
-+			if (!(raw_status & mask)) {
-+				pipe->enabled_raw |= mask;
-+				selected = true;
-+				break;
-+			}
-+		}
-+	}
-+	mtk_raw_available_resource(pipe->raw);
-+	if (!selected)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_sd_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct mtk_raw_pipeline *pipe;
-+	struct mtk_raw *raw;
-+	struct mtk_cam_device *cam;
-+	struct mtk_cam_ctx *ctx;
-+	unsigned int i;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	raw = pipe->raw;
-+	if (!raw)
-+		return -1;
-+	cam = dev_get_drvdata(raw->cam_dev);
-+	ctx = mtk_cam_find_ctx(cam, &sd->entity);
-+
-+	if (WARN_ON(!ctx))
-+		return -EINVAL;
-+
-+	if (enable) {
-+		pipe->feature_active = pipe->user_res.raw_res.feature;
-+		pipe->enabled_dmas = 0;
-+		ctx->pipe = pipe;
-+		ctx->used_raw_num++;
-+		pipe->feature_active = pipe->user_res.raw_res.feature;
-+		for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++) {
-+			if (!pipe->vdev_nodes[i].enabled)
-+				continue;
-+			pipe->enabled_dmas |=
-+				(1ULL << pipe->vdev_nodes[i].desc.dma_port);
-+		}
-+	} else {
-+		for (i = 0; i < ARRAY_SIZE(raw->devs); i++) {
-+			if (pipe->enabled_raw & 1 << i) {
-+				dev_info(raw->cam_dev, "%s: power off raw (%d)\n",
-+					 __func__, i);
-+				pm_runtime_put_sync(raw->devs[i]);
-+			}
-+		}
-+	}
-+
-+	dev_info(raw->cam_dev, "%s:raw-%d: en %d, dev 0x%x dmas 0x%lx\n",
-+		 __func__, pipe->id, enable, pipe->enabled_raw,
-+		 pipe->enabled_dmas);
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_init_state(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *sd_state)
-+{
-+	struct v4l2_mbus_framefmt *mf;
-+	unsigned int i;
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
-+
-+	for (i = 0; i < sd->entity.num_pads; i++) {
-+		mf = v4l2_subdev_state_get_format(sd_state, i);
-+		*mf = mfmt_default;
-+
-+		dev_dbg(raw->cam_dev, "%s init pad:%d format:0x%x\n",
-+			sd->name, i, mf->code);
-+	}
-+
-+	return 0;
-+}
-+
-+static bool mtk_raw_try_fmt(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_format *fmt)
-+{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
-+	unsigned int user_fmt = mtk_cam_get_sensor_fmt(fmt->format.code);
-+
-+	dev_dbg(raw->cam_dev, "%s:s_fmt: check format 0x%x, w:%d, h:%d field:%d\n",
-+		sd->name, fmt->format.code, fmt->format.width,
-+		fmt->format.height, fmt->format.field);
-+
-+	/* check sensor format */
-+	if (fmt->pad == MTK_RAW_SINK) {
-+		user_fmt = mtk_cam_get_sensor_fmt(fmt->format.code);
-+		if (user_fmt == MTKCAM_IPI_IMG_FMT_UNKNOWN)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+static struct v4l2_mbus_framefmt *
-+mtk_raw_pipeline_get_fmt(struct mtk_raw_pipeline *pipe,
-+			 struct v4l2_subdev_state *sd_state, u32 padid,
-+			 int which)
-+{
-+	struct mtk_raw *raw = pipe->raw;
-+
-+	if (padid >= MTK_RAW_PIPELINE_PADS_NUM) {
-+		dev_err(raw->cam_dev, "Wrong pad id:%d\n", padid);
-+		return NULL;
-+	}
-+	/* format invalid and return default format */
-+	if (which == V4L2_SUBDEV_FORMAT_TRY)
-+		return v4l2_subdev_state_get_format(sd_state, padid);
-+
-+	if (WARN_ON(padid >= pipe->subdev.entity.num_pads))
-+		return &pipe->cfg[0].mbus_fmt;
-+
-+	return &pipe->cfg[padid].mbus_fmt;
-+}
-+
-+static struct v4l2_rect *
-+mtk_raw_pipeline_get_selection(struct mtk_raw_pipeline *pipe,
-+			       struct v4l2_subdev_state *sd_state, u32 pad,
-+			       int which)
-+{
-+	struct mtk_raw *raw = pipe->raw;
-+
-+	if (pad >= MTK_RAW_PIPELINE_PADS_NUM) {
-+		dev_err(raw->cam_dev, "Wrong pad id:%d\n", pad);
-+		return NULL;
-+	}
-+	/* format invalid and return default format */
-+	if (which == V4L2_SUBDEV_FORMAT_TRY)
-+		return v4l2_subdev_state_get_crop(sd_state, pad);
-+
-+	if (WARN_ON(pad >= pipe->subdev.entity.num_pads))
-+		return &pipe->cfg[0].crop;
-+
-+	return &pipe->cfg[pad].crop;
-+}
-+
-+static void propagate_fmt(struct v4l2_mbus_framefmt *sink_mf,
-+			  struct v4l2_mbus_framefmt *source_mf, int w, int h)
-+{
-+	source_mf->code = sink_mf->code;
-+	source_mf->colorspace = sink_mf->colorspace;
-+	source_mf->field = sink_mf->field;
-+	source_mf->width = w;
-+	source_mf->height = h;
-+}
-+
-+static bool mtk_raw_fmt_get_res(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_format *fmt,
-+				struct mtk_cam_resource *res)
-+{
-+	void *user_ptr;
-+	u64 addr;
-+
-+	addr = ((u64)fmt->reserved[1] << 32) | fmt->reserved[2];
-+	user_ptr = (void *)addr;
-+	if (!user_ptr) {
-+		dev_info(sd->v4l2_dev->dev, "%s: mtk_cam_resource is null\n",
-+			 __func__);
-+		return false;
-+	}
-+
-+	if (copy_from_user(res, (void __user *)user_ptr, sizeof(*res))) {
-+		dev_info(sd->v4l2_dev->dev,
-+			 "%s: copy_from_user failedm user_ptr:%p\n",
-+			 __func__, user_ptr);
-+		return false;
-+	}
-+
-+	dev_dbg(sd->v4l2_dev->dev,
-+		"%s:sensor:%d/%d/%lld/%d/%d, raw:%lld/%d/%d/%d/%d/%d/%d/%d/%lld\n",
-+		__func__,
-+		res->sensor_res.hblank, res->sensor_res.vblank,
-+		res->sensor_res.pixel_rate, res->sensor_res.interval.denominator,
-+		res->sensor_res.interval.numerator,
-+		res->raw_res.feature, res->raw_res.bin, res->raw_res.path_sel,
-+		res->raw_res.raw_max, res->raw_res.raw_min, res->raw_res.raw_used,
-+		res->raw_res.strategy, res->raw_res.pixel_mode,
-+		res->raw_res.throughput);
-+
-+	return res;
-+}
-+
-+static int mtk_raw_set_src_pad_selection_default(struct v4l2_subdev *sd,
-+						 struct v4l2_subdev_state *sd_state,
-+						 struct v4l2_mbus_framefmt *sink_fmt,
-+						 struct mtk_cam_resource *res,
-+						 int pad, int which)
-+{
-+	struct v4l2_rect *source_sel;
-+	struct mtk_raw_pipeline *pipe;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	source_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
-+	if (source_sel->width > sink_fmt->width)
-+		source_sel->width = sink_fmt->width;
-+
-+	if (source_sel->height > sink_fmt->height)
-+		source_sel->height = sink_fmt->height;
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_set_src_pad_selection_yuv(struct v4l2_subdev *sd,
-+					     struct v4l2_subdev_state *sd_state,
-+					     struct v4l2_mbus_framefmt *sink_fmt,
-+					     struct mtk_cam_resource *res,
-+					     int pad, int which)
-+{
-+	int i;
-+	struct v4l2_rect *prev_yuv = NULL, *source_sel, *tmp_sel;
-+	struct v4l2_mbus_framefmt *framefmt;
-+	struct mtk_raw_pipeline *pipe;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	mtk_raw_set_src_pad_selection_default(sd, sd_state, sink_fmt, res, pad, which);
-+	source_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
-+
-+	for (i = MTK_RAW_YUVO_1_OUT; i < pad; i++) {
-+		framefmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
-+		tmp_sel = mtk_raw_pipeline_get_selection(pipe, sd_state, pad, which);
-+
-+		/* Skip disabled YUV pad */
-+		if (!mtk_cam_is_pad_fmt_enable(framefmt))
-+			continue;
-+
-+		prev_yuv = tmp_sel;
-+	}
-+
-+	if (prev_yuv) {
-+		if (source_sel->width != prev_yuv->width) {
-+			source_sel->width = prev_yuv->width;
-+			dev_dbg(sd->v4l2_dev->dev, "%s: prev width:%d",
-+				__func__, source_sel->width);
-+		}
-+
-+		if (source_sel->height != prev_yuv->height) {
-+			source_sel->height = prev_yuv->height;
-+			dev_dbg(sd->v4l2_dev->dev, "%s: prev height:%d",
-+				__func__, source_sel->height);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct v4l2_mbus_framefmt *
-+mtk_raw_get_sink_pad_framefmt(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *sd_state, int which)
-+{
-+	struct v4l2_mbus_framefmt *sink_fmt = NULL, *tmp_fmt;
-+	struct mtk_raw_pipeline *pipe;
-+	int i;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	for (i = MTK_RAW_SINK; i < MTK_RAW_SOURCE_BEGIN; i++) {
-+		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, i, which);
-+		if (i != MTK_RAW_META_IN && mtk_cam_is_pad_fmt_enable(tmp_fmt)) {
-+			sink_fmt = tmp_fmt;
-+			break;
-+		}
-+	}
-+
-+	return sink_fmt;
-+}
-+
-+static int mtk_raw_set_pad_selection(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *sd_state,
-+				     struct v4l2_subdev_selection *sel)
-+{
-+	struct v4l2_mbus_framefmt *sink_fmt;
-+	struct mtk_raw_pipeline *pipe;
-+	struct mtk_cam_video_device *node;
-+	struct mtk_cam_resource *res = NULL;
-+	struct v4l2_rect *crop;
-+	int ret;
-+
-+	if (sel->pad < MTK_RAW_MAIN_STREAM_OUT ||
-+	    sel->pad >= MTK_RAW_META_OUT_BEGIN)
-+		return -EINVAL;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+
-+	/* The crop rectangle can't be changed while streaming. */
-+	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
-+	    !media_entity_is_streaming(&sd->entity))
-+		return -EBUSY;
-+
-+	/*
-+	 * Find the sink pad fmt, there must be one eanbled sink pad at least
-+	 */
-+	sink_fmt = mtk_raw_get_sink_pad_framefmt(sd, sd_state, sel->which);
-+	if (!sink_fmt)
-+		return -EINVAL;
-+
-+	node = &pipe->vdev_nodes[sel->pad - MTK_RAW_SINK_NUM];
-+	crop = mtk_raw_pipeline_get_selection(pipe, sd_state, sel->pad, sel->which);
-+	if (!crop)
-+		return -EINVAL;
-+
-+	*crop = sel->r;
-+	ret = node->desc.pad_ops->set_pad_selection(sd, sd_state, sink_fmt,
-+						    res, sel->pad, sel->which);
-+	if (ret)
-+		return -EINVAL;
-+
-+	sel->r = *crop;
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_get_pad_selection(struct v4l2_subdev *sd,
-+				     struct v4l2_subdev_state *sd_state,
-+				     struct v4l2_subdev_selection *sel)
-+{
-+	struct mtk_raw_pipeline *pipe;
-+	struct v4l2_rect *crop;
-+
-+	if (sel->pad < MTK_RAW_MAIN_STREAM_OUT ||
-+	    sel->pad >= MTK_RAW_META_OUT_BEGIN)
-+		return -EINVAL;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	crop = mtk_raw_pipeline_get_selection(pipe, sd_state, sel->pad, sel->which);
-+	if (!crop)
-+		return -EINVAL;
-+
-+	sel->r = *crop;
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_set_sink_pad_fmt(struct v4l2_subdev *sd,
-+				    struct v4l2_subdev_state *sd_state,
-+				    struct v4l2_subdev_format *fmt)
-+{
-+	struct device *dev;
-+	struct mtk_cam_video_device *node;
-+	const char *node_str;
-+	const struct mtk_cam_format_desc *fmt_desc;
-+	struct mtk_raw_pipeline *pipe;
-+	int i;
-+	int ipi_fmt;
-+	struct v4l2_mbus_framefmt *framefmt, *source_fmt = NULL, *tmp_fmt;
-+
-+	/* Do nothing for pad to meta video device */
-+	if (fmt->pad == MTK_RAW_META_IN)
-+		return 0;
-+
-+	dev = sd->v4l2_dev->dev;
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	framefmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
-+
-+	/* If data from sensor, we check the size with max imgo size*/
-+	if (fmt->pad < MTK_RAW_SINK_NUM) {
-+		/* from sensor */
-+		node = &pipe->vdev_nodes[MTK_RAW_MAIN_STREAM_OUT - MTK_RAW_SINK_NUM];
-+		node_str = "sink";
-+	} else {
-+		/* from memory */
-+		node = &pipe->vdev_nodes[fmt->pad - MTK_RAW_SINK_NUM];
-+		node_str = node->desc.name;
-+	}
-+
-+	ipi_fmt = mtk_cam_get_sensor_fmt(framefmt->code);
-+	if (ipi_fmt == MTKCAM_IPI_IMG_FMT_UNKNOWN) {
-+		/**
-+		 * Set imgo's default fmt, the user must check
-+		 * if the pad sink format is the same as the
-+		 * source format of the link before stream on.
-+		 */
-+		fmt_desc = &node->desc.fmts[node->desc.default_fmt_idx];
-+		framefmt->code = fmt_desc->pfmt.code;
-+		dev_info(dev,
-+			 "%s(%d): Adjust unaccept fmt code on sink pad:%d, 0x%x->0x%x\n",
-+			 __func__, fmt->which, fmt->pad, fmt->format.code, framefmt->code);
-+	}
-+
-+	/* Reset pads' enable state*/
-+	for (i = MTK_RAW_SINK; i < MTK_RAW_META_OUT_BEGIN; i++) {
-+		if (i == MTK_RAW_META_IN)
-+			continue;
-+		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, i, fmt->which);
-+		mtk_cam_pad_fmt_disable(tmp_fmt);
-+	}
-+
-+	*framefmt = fmt->format;
-+	if (framefmt->width > node->desc.frmsizes->stepwise.max_width)
-+		framefmt->width = node->desc.frmsizes->stepwise.max_width;
-+
-+	if (framefmt->height > node->desc.frmsizes->stepwise.max_height)
-+		framefmt->height = node->desc.frmsizes->stepwise.max_height;
-+
-+	mtk_cam_pad_fmt_enable(framefmt);
-+
-+	dev_info(dev,
-+		 "%s(%d): Set fmt pad:%d(%s), code/w/h = 0x%x/%d/%d\n",
-+		 __func__, fmt->which, fmt->pad, node_str,
-+		 framefmt->code, framefmt->width, framefmt->height);
-+
-+	/* Propagation inside subdev */
-+	for (i = MTK_RAW_SOURCE_BEGIN; i < MTK_RAW_META_OUT_BEGIN; i++) {
-+		source_fmt =
-+			mtk_raw_pipeline_get_fmt(pipe, sd_state, i, fmt->which);
-+
-+		/* Get default format's desc for the pad */
-+		node = &pipe->vdev_nodes[i - MTK_RAW_SINK_NUM];
-+
-+		/**
-+		 * Propagate the size from sink pad to source pades, adjusted
-+		 * based on each pad's default format.
-+		 */
-+		if (source_fmt->width > node->desc.frmsizes->stepwise.max_width)
-+			source_fmt->width = node->desc.frmsizes->stepwise.max_width;
-+		else
-+			source_fmt->width = framefmt->width;
-+
-+		if (source_fmt->height > node->desc.frmsizes->stepwise.max_height)
-+			source_fmt->height = node->desc.frmsizes->stepwise.max_height;
-+		else
-+			source_fmt->height = framefmt->height;
-+
-+		dev_dbg(dev,
-+			"%s(%d): Propagate to pad:%d(%s), (0x%x/%d/%d)\n",
-+			__func__, fmt->which, fmt->pad, node->desc.name,
-+			source_fmt->code, source_fmt->width, source_fmt->height);
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_set_src_pad_fmt_default(struct v4l2_subdev *sd,
-+					   struct v4l2_subdev_state *sd_state,
-+					   struct v4l2_mbus_framefmt *sink_fmt,
-+					   struct mtk_cam_resource *res,
-+					   int pad, int which)
-+{
-+	struct device *dev;
-+	struct v4l2_mbus_framefmt *source_fmt;
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_cam_video_device *node;
-+
-+	dev = sd->v4l2_dev->dev;
-+	node = &pipe->vdev_nodes[pad - MTK_RAW_SINK_NUM];
-+	source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
-+	if (source_fmt->width > sink_fmt->width) {
-+		dev_info(dev,
-+			 "%s(%d): adjusted: width(%d) over sink (%d)\n",
-+			 __func__, which, source_fmt->width, sink_fmt->width);
-+		source_fmt->width = sink_fmt->width;
-+	}
-+
-+	if (source_fmt->height > sink_fmt->height) {
-+		dev_info(dev,
-+			 "%s(%d): adjusted: width(%d) over sink (%d)\n",
-+			 __func__, which, source_fmt->height, sink_fmt->height);
-+		source_fmt->height = sink_fmt->height;
-+	}
-+
-+	if (source_fmt->width > node->desc.frmsizes->stepwise.max_width) {
-+		dev_info(dev,
-+			 "%s(%d): adjusted: width(%d) over max (%d)\n",
-+			 __func__, which, source_fmt->width,
-+			 node->desc.frmsizes->stepwise.max_width);
-+		source_fmt->width = node->desc.frmsizes->stepwise.max_width;
-+	}
-+
-+	if (source_fmt->height > node->desc.frmsizes->stepwise.max_height) {
-+		dev_info(dev,
-+			 "%s(%d): adjusted: height(%d) over max (%d)\n",
-+			 __func__, which, source_fmt->height,
-+			 node->desc.frmsizes->stepwise.max_height);
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_set_src_pad_fmt_rzh1n2(struct v4l2_subdev *sd,
-+					  struct v4l2_subdev_state *sd_state,
-+					  struct v4l2_mbus_framefmt *sink_fmt,
-+					  struct mtk_cam_resource *res, int pad,
-+					  int which)
-+{
-+	struct device *dev;
-+	struct v4l2_mbus_framefmt *source_fmt;
-+	struct v4l2_mbus_framefmt *tmp_fmt;
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+
-+	dev = sd->v4l2_dev->dev;
-+	mtk_raw_set_src_pad_fmt_default(sd, sd_state, sink_fmt, res, pad, which);
-+	source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, pad, which);
-+
-+	/* rzh1n2to_r1 and rzh1n2to_r3 size must be the same */
-+	if (pad == MTK_RAW_RZH1N2TO_3_OUT) {
-+		tmp_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state,
-+						   MTK_RAW_RZH1N2TO_1_OUT, which);
-+		if (mtk_cam_is_pad_fmt_enable(tmp_fmt) &&
-+		    source_fmt->height != tmp_fmt->height &&
-+		    source_fmt->width != tmp_fmt->width) {
-+			dev_info(dev,
-+				 "%s(%d): adjusted: rzh1n2to_r3(%d,%d) and rzh1n2to_r1(%d,%d) must have the same sz\n",
-+				 __func__, which,
-+				 source_fmt->width, source_fmt->height,
-+				 tmp_fmt->width, tmp_fmt->height);
-+
-+			source_fmt->width = tmp_fmt->width;
-+			source_fmt->height = tmp_fmt->height;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_set_src_pad_fmt(struct v4l2_subdev *sd,
-+				   struct v4l2_subdev_state *sd_state,
-+				   struct v4l2_subdev_format *fmt)
-+{
-+	struct device *dev;
-+	struct mtk_cam_resource res;
-+	struct mtk_cam_video_device *node;
-+	struct mtk_raw_pipeline *pipe;
-+	int ret = 0;
-+	struct v4l2_mbus_framefmt *source_fmt, *sink_fmt;
-+
-+	/* Do nothing for pad to meta video device */
-+	if (fmt->pad >= MTK_RAW_META_OUT_BEGIN)
-+		return 0;
-+
-+	pipe = container_of(sd, struct mtk_raw_pipeline, subdev);
-+	dev = sd->v4l2_dev->dev;
-+	node = &pipe->vdev_nodes[fmt->pad - MTK_RAW_SINK_NUM];
-+
-+	/*
-+	 * Find the sink pad fmt, there must be one eanbled sink pad at least
-+	 */
-+	sink_fmt = mtk_raw_get_sink_pad_framefmt(sd, sd_state, fmt->which);
-+	if (!sink_fmt) {
-+		dev_info(dev,
-+			 "%s(%d): Set fmt pad:%d(%s), no s_fmt on sink pad\n",
-+			 __func__, fmt->which, fmt->pad, node->desc.name);
-+		return -EINVAL;
-+	}
-+
-+	if (!mtk_raw_fmt_get_res(sd, fmt, &res)) {
-+		dev_info(dev,
-+			 "%s(%d): Set fmt pad:%d(%s), no mtk_cam_resource found\n",
-+			 __func__, fmt->which, fmt->pad, node->desc.name);
-+		return -EINVAL;
-+	}
-+
-+	if (node->desc.pad_ops->set_pad_fmt) {
-+		/* call source pad's set_pad_fmt op to adjust fmt by pad */
-+		source_fmt = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad,
-+						      fmt->which);
-+
-+		*source_fmt = fmt->format;
-+		ret = node->desc.pad_ops->set_pad_fmt(sd, sd_state, sink_fmt,
-+						      &res, fmt->pad, fmt->which);
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	if (!source_fmt) {
-+		dev_info(dev,
-+			 "%s(%d): Set fmt pad:%d(%s), no s_fmt on source pad\n",
-+			 __func__, fmt->which, fmt->pad, node->desc.name);
-+		return -EINVAL;
-+	}
-+
-+	dev_dbg(dev,
-+		"%s(%d): s_fmt to pad:%d(%s), user(0x%x/%d/%d) driver(0x%x/%d/%d)\n",
-+		__func__, fmt->which, fmt->pad, node->desc.name,
-+		fmt->format.code, fmt->format.width, fmt->format.height,
-+		source_fmt->code, source_fmt->width, source_fmt->height);
-+	mtk_cam_pad_fmt_disable(source_fmt);
-+	fmt->format = *source_fmt;
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_try_pad_fmt(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *sd_state,
-+			       struct v4l2_subdev_format *fmt)
-+{
-+	if (fmt->pad >= MTK_RAW_SINK && fmt->pad < MTK_RAW_SOURCE_BEGIN)
-+		mtk_raw_set_sink_pad_fmt(sd, sd_state, fmt);
-+	else if (fmt->pad < MTK_RAW_PIPELINE_PADS_NUM)
-+		mtk_raw_set_src_pad_fmt(sd, sd_state, fmt);
++	if (port >= CSI_PORT_0A)
++		port_num = (port - CSI_PORT_0) >> 1;
 +	else
++		port_num = port;
++
++	ctx->port = port;
++	ctx->port_num = port_num;
++	ctx->port_a = CSI_PORT_0A + (port_num << 1);
++	ctx->port_b = ctx->port_a + 1;
++	ctx->is_4d1c = (port == port_num);
++
++	switch (port) {
++	case CSI_PORT_0:
++		ctx->seninf_idx = SENINF_1;
++		break;
++	case CSI_PORT_0A:
++		ctx->seninf_idx = SENINF_1;
++		break;
++	case CSI_PORT_0B:
++		ctx->seninf_idx = SENINF_2;
++		break;
++	case CSI_PORT_1:
++		ctx->seninf_idx = SENINF_3;
++		break;
++	case CSI_PORT_1A:
++		ctx->seninf_idx = SENINF_3;
++		break;
++	case CSI_PORT_1B:
++		ctx->seninf_idx = SENINF_4;
++		break;
++	case CSI_PORT_2:
++		ctx->seninf_idx = SENINF_5;
++		break;
++	case CSI_PORT_2A:
++		ctx->seninf_idx = SENINF_5;
++		break;
++	case CSI_PORT_2B:
++		ctx->seninf_idx = SENINF_6;
++		break;
++	case CSI_PORT_3:
++		ctx->seninf_idx = SENINF_7;
++		break;
++	case CSI_PORT_3A:
++		ctx->seninf_idx = SENINF_7;
++		break;
++	case CSI_PORT_3B:
++		ctx->seninf_idx = SENINF_8;
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid port %d\n", port);
 +		return -EINVAL;
++	}
 +
 +	return 0;
 +}
 +
-+static int mtk_raw_call_set_fmt(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *sd_state,
-+				struct v4l2_subdev_format *fmt,
-+				bool streaming)
++int mtk_cam_seninf_is_cammux_used(struct seninf_ctx *ctx, int cam_mux)
 +{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
-+	struct v4l2_mbus_framefmt *mf;
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++	u32 temp = SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_EN);
 +
-+	if (!sd || !fmt) {
-+		dev_dbg(raw->cam_dev, "%s: Required sd(%p), fmt(%p)\n",
-+			__func__, sd, fmt);
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	return !!(temp & (1 << cam_mux));
++}
++
++int mtk_cam_seninf_cammux(struct seninf_ctx *ctx, int cam_mux)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++	u32 temp;
++
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	temp = SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_EN);
++	SENINF_WRITE_REG(seninf_cam_mux, SENINF_CAM_MUX_EN,
++			 temp | (1 << cam_mux));
++
++	SENINF_WRITE_REG(seninf_cam_mux, SENINF_CAM_MUX_IRQ_STATUS,
++			 3 << (cam_mux * 2)); /* clr irq */
++
++	dev_dbg(ctx->dev, "cam_mux %d EN 0x%x IRQ_EN 0x%x IRQ_STATUS 0x%x\n",
++		cam_mux, SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_EN),
++		SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_IRQ_EN),
++		SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_IRQ_STATUS));
++
++	return 0;
++}
++
++int mtk_cam_seninf_disable_cammux(struct seninf_ctx *ctx, int cam_mux)
++{
++	void __iomem *base = ctx->reg_if_cam_mux;
++	u32 temp;
++
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	temp = SENINF_READ_REG(base, SENINF_CAM_MUX_EN);
++
++	if ((1 << cam_mux) & temp) {
++		SENINF_WRITE_REG(base, SENINF_CAM_MUX_EN,
++				 temp & (~(1 << cam_mux)));
++
++		dev_dbg(ctx->dev, "cammux %d EN %x IRQ_EN %x IRQ_STATUS %x",
++			cam_mux, SENINF_READ_REG(base, SENINF_CAM_MUX_EN),
++			SENINF_READ_REG(base, SENINF_CAM_MUX_IRQ_EN),
++			SENINF_READ_REG(base, SENINF_CAM_MUX_IRQ_STATUS));
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_disable_all_cammux(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++
++	SENINF_WRITE_REG(seninf_cam_mux, SENINF_CAM_MUX_EN, 0);
++
++	dev_dbg(ctx->dev, "%s all cam_mux EN 0x%x\n", __func__,
++		SENINF_READ_REG(seninf_cam_mux, SENINF_CAM_MUX_EN));
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_top_mux_ctrl(struct seninf_ctx *ctx, int mux_idx,
++				    int seninf_src)
++{
++	void __iomem *seninf = ctx->reg_if_top;
++
++	switch (mux_idx) {
++	case SENINF_MUX1:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++			    RG_SENINF_MUX1_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX2:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++			    RG_SENINF_MUX2_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX3:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++			    RG_SENINF_MUX3_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX4:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++			    RG_SENINF_MUX4_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX5:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++			    RG_SENINF_MUX5_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX6:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++			    RG_SENINF_MUX6_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX7:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++			    RG_SENINF_MUX7_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX8:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++			    RG_SENINF_MUX8_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX9:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++			    RG_SENINF_MUX9_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX10:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++			    RG_SENINF_MUX10_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX11:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++			    RG_SENINF_MUX11_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX12:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++			    RG_SENINF_MUX12_SRC_SEL, seninf_src);
++		break;
++	case SENINF_MUX13:
++		SENINF_BITS(seninf, SENINF_TOP_MUX_CTRL_3,
++			    RG_SENINF_MUX13_SRC_SEL, seninf_src);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid mux_idx %d\n", mux_idx);
 +		return -EINVAL;
 +	}
 +
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY && !sd_state) {
-+		dev_dbg(raw->cam_dev,
-+			"%s: Required sd(%p), cfg(%p) for FORMAT_TRY\n",
-+			__func__, sd, sd_state);
++	return 0;
++}
++
++int mtk_cam_seninf_get_top_mux_ctrl(struct seninf_ctx *ctx, int mux_idx)
++{
++	void __iomem *seninf = ctx->reg_if_top;
++	u32 seninf_src = 0;
++
++	switch (mux_idx) {
++	case SENINF_MUX1:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++					      RG_SENINF_MUX1_SRC_SEL);
++		break;
++	case SENINF_MUX2:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++					      RG_SENINF_MUX2_SRC_SEL);
++		break;
++	case SENINF_MUX3:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++					      RG_SENINF_MUX3_SRC_SEL);
++		break;
++	case SENINF_MUX4:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_0,
++					      RG_SENINF_MUX4_SRC_SEL);
++		break;
++	case SENINF_MUX5:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++					      RG_SENINF_MUX5_SRC_SEL);
++		break;
++	case SENINF_MUX6:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++					      RG_SENINF_MUX6_SRC_SEL);
++		break;
++	case SENINF_MUX7:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++					      RG_SENINF_MUX7_SRC_SEL);
++		break;
++	case SENINF_MUX8:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_1,
++					      RG_SENINF_MUX8_SRC_SEL);
++		break;
++	case SENINF_MUX9:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++					      RG_SENINF_MUX9_SRC_SEL);
++		break;
++	case SENINF_MUX10:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++					      RG_SENINF_MUX10_SRC_SEL);
++		break;
++	case SENINF_MUX11:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++					      RG_SENINF_MUX11_SRC_SEL);
++		break;
++	case SENINF_MUX12:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_2,
++					      RG_SENINF_MUX12_SRC_SEL);
++		break;
++	case SENINF_MUX13:
++		seninf_src = SENINF_READ_BITS(seninf, SENINF_TOP_MUX_CTRL_3,
++					      RG_SENINF_MUX13_SRC_SEL);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid mux_idx %d", mux_idx);
 +		return -EINVAL;
 +	}
 +
-+	if (!mtk_raw_try_fmt(sd, fmt) &&
-+	    !mtk_cam_feature_is_pure_m2m(pipe->feature_pending)) {
-+		mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
-+		fmt->format = *mf;
-+		dev_info(raw->cam_dev,
-+			 "sd:%s pad:%d didn't apply and keep format w/h/code %d/%d/0x%x\n",
-+			 sd->name, fmt->pad, mf->width, mf->height, mf->code);
-+	} else {
-+		mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
-+		*mf = fmt->format;
-+		dev_dbg(raw->cam_dev,
-+			"sd:%s pad:%d set format w/h/code %d/%d/0x%x\n",
-+			sd->name, fmt->pad, mf->width, mf->height, mf->code);
++	return seninf_src;
++}
++
++int mtk_cam_seninf_get_cammux_ctrl(struct seninf_ctx *ctx, int cam_mux)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++	u32 seninf_mux_src = 0;
++
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
 +	}
 +
-+	/*sink pad format propagate to source pad*/
-+	if (fmt->pad == MTK_RAW_SINK) {
-+		struct v4l2_mbus_framefmt *source_mf;
++	switch (cam_mux) {
++	case SENINF_CAM_MUX0:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_0,
++						  RG_SENINF_CAM_MUX0_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX1:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_0,
++						  RG_SENINF_CAM_MUX1_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX2:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_0,
++						  RG_SENINF_CAM_MUX2_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX3:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_0,
++						  RG_SENINF_CAM_MUX3_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX4:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_1,
++						  RG_SENINF_CAM_MUX4_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX5:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_1,
++						  RG_SENINF_CAM_MUX5_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX6:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_1,
++						  RG_SENINF_CAM_MUX6_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX7:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_1,
++						  RG_SENINF_CAM_MUX7_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX8:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_2,
++						  RG_SENINF_CAM_MUX8_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX9:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_2,
++						  RG_SENINF_CAM_MUX9_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX10:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_2,
++						  RG_SENINF_CAM_MUX10_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX11:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_2,
++						  RG_SENINF_CAM_MUX11_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX12:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_3,
++						  RG_SENINF_CAM_MUX12_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX13:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_3,
++						  RG_SENINF_CAM_MUX13_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX14:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_3,
++						  RG_SENINF_CAM_MUX14_SRC_SEL);
++		break;
++	case SENINF_CAM_MUX15:
++		seninf_mux_src = SENINF_READ_BITS(seninf_cam_mux,
++						  SENINF_CAM_MUX_CTRL_3,
++						  RG_SENINF_CAM_MUX15_SRC_SEL);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid cam_mux %d", cam_mux);
++		return -EINVAL;
++	}
 +
-+		source_mf = mtk_raw_pipeline_get_fmt(pipe, sd_state,
-+						     MTK_RAW_MAIN_STREAM_OUT,
-+						     fmt->which);
++	return seninf_mux_src;
++}
 +
-+		if (streaming) {
-+			propagate_fmt(mf, source_mf, mf->width, mf->height);
-+			return 0;
-+		}
++u32 mtk_cam_seninf_get_cammux_res(struct seninf_ctx *ctx, int cam_mux)
++{
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
 +
-+		/**
-+		 * User will trigger resource calc
-+		 * with V4L2_CID_MTK_CAM_RAW_RESOURCE_CALC
-+		 * so we don't need to trigger it here anymore.
-+		 */
-+		propagate_fmt(mf, source_mf, mf->width, mf->height);
++		return 0;
++	}
++
++	return SENINF_READ_REG(ctx->reg_if_cam_mux,
++			       SENINF_CAM_MUX0_CHK_RES + (0x10 * cam_mux));
++}
++
++static u32 mtk_cam_seninf_get_cammux_exp(struct seninf_ctx *ctx, int cam_mux)
++{
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	return SENINF_READ_REG(ctx->reg_if_cam_mux,
++			       SENINF_CAM_MUX0_CHK_CTL_1 + (0x10 * cam_mux));
++}
++
++int mtk_cam_seninf_set_cammux_vc(struct seninf_ctx *ctx, int cam_mux,
++				 int vc_sel, int dt_sel, int vc_en,
++				 int dt_en)
++{
++	void __iomem *seninf_cam_mux_vc_addr =
++		ctx->reg_if_cam_mux + (cam_mux << 0x2);
++
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	SENINF_BITS(seninf_cam_mux_vc_addr, SENINF_CAM_MUX0_OPT,
++		    RG_SENINF_CAM_MUX0_VC_SEL, vc_sel);
++	SENINF_BITS(seninf_cam_mux_vc_addr, SENINF_CAM_MUX0_OPT,
++		    RG_SENINF_CAM_MUX0_DT_SEL, dt_sel);
++	SENINF_BITS(seninf_cam_mux_vc_addr, SENINF_CAM_MUX0_OPT,
++		    RG_SENINF_CAM_MUX0_VC_EN, vc_en);
++	SENINF_BITS(seninf_cam_mux_vc_addr, SENINF_CAM_MUX0_OPT,
++		    RG_SENINF_CAM_MUX0_DT_EN, dt_en);
++
++	return 0;
++}
++
++int mtk_cam_seninf_switch_to_cammux_inner_page(struct seninf_ctx *ctx,
++					       bool inner)
++{
++	void __iomem *seninf_cam_mux_addr = ctx->reg_if_cam_mux;
++
++	SENINF_BITS(seninf_cam_mux_addr, SENINF_CAM_MUX_DYN_CTRL,
++		    CAM_MUX_DYN_PAGE_SEL, inner ? 0 : 1);
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_cammux_next_ctrl(struct seninf_ctx *ctx, int src,
++					int target)
++{
++	void __iomem *seninf_cam_mux_base = ctx->reg_if_cam_mux;
++
++	if (target >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, target, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	switch (target) {
++	case SENINF_CAM_MUX0:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_0,
++			    CAM_MUX0_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX1:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_0,
++			    CAM_MUX1_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX2:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_0,
++			    CAM_MUX2_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX3:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_0,
++			    CAM_MUX3_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX4:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_1,
++			    CAM_MUX4_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX5:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_1,
++			    CAM_MUX5_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX6:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_1,
++			    CAM_MUX6_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX7:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_1,
++			    CAM_MUX7_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX8:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_2,
++			    CAM_MUX8_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX9:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_2,
++			    CAM_MUX9_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX10:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_2,
++			    CAM_MUX10_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX11:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_2,
++			    CAM_MUX11_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX12:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_3,
++			    CAM_MUX12_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX13:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_3,
++			    CAM_MUX13_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX14:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_3,
++			    CAM_MUX14_NEXT_SRC_SEL, src);
++		break;
++	case SENINF_CAM_MUX15:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_NEXT_CTRL_3,
++			    CAM_MUX15_NEXT_SRC_SEL, src);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid src %d target %d", src, target);
++		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
-+static int mtk_raw_set_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *sd_state,
-+			   struct v4l2_subdev_format *fmt)
++int mtk_cam_seninf_set_cammux_src(struct seninf_ctx *ctx, int src,
++				  int target, int exp_hsize, int exp_vsize)
 +{
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-+		return mtk_raw_try_pad_fmt(sd, sd_state, fmt);
++	void __iomem *seninf_cam_mux_base = ctx->reg_if_cam_mux;
 +
-+	/* The format can't be changed while streaming. */
-+	if (!media_entity_is_streaming(&sd->entity))
-+		return mtk_raw_call_set_fmt(sd, sd_state, fmt, false);
++	if (target >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, target, _seninf_cfg.cam_mux_num);
 +
-+	dev_info(sd->v4l2_dev->dev,
-+		 "Pipeline is streaming, cannot change format\n");
-+	return -EBUSY;
-+}
++		return 0;
++	}
 +
-+static int mtk_raw_get_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *sd_state,
-+			  struct v4l2_subdev_format *fmt)
-+{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
-+	struct v4l2_mbus_framefmt *mf;
-+
-+	mf = mtk_raw_pipeline_get_fmt(pipe, sd_state, fmt->pad, fmt->which);
-+	fmt->format = *mf;
-+	dev_dbg(raw->cam_dev, "sd:%s pad:%d get format w/h/code %d/%d/0x%x\n",
-+		sd->name, fmt->pad, fmt->format.width, fmt->format.height,
-+		fmt->format.code);
++	switch (target) {
++	case SENINF_CAM_MUX0:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_0,
++			    RG_SENINF_CAM_MUX0_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX0_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX0_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX0_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX0_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX1:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_0,
++			    RG_SENINF_CAM_MUX1_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX1_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX1_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX1_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX1_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX2:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_0,
++			    RG_SENINF_CAM_MUX2_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX2_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX2_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX2_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX2_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX3:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_0,
++			    RG_SENINF_CAM_MUX3_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX3_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX3_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX3_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX3_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX4:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_1,
++			    RG_SENINF_CAM_MUX4_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX4_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX4_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX4_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX4_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX5:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_1,
++			    RG_SENINF_CAM_MUX5_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX5_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX5_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX5_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX5_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX6:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_1,
++			    RG_SENINF_CAM_MUX6_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX6_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX6_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX6_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX6_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX7:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_1,
++			    RG_SENINF_CAM_MUX7_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX7_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX7_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX7_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX7_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX8:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_2,
++			    RG_SENINF_CAM_MUX8_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX8_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX8_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX8_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX8_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX9:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_2,
++			    RG_SENINF_CAM_MUX9_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX9_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX9_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX9_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX9_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX10:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_2,
++			    RG_SENINF_CAM_MUX10_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX10_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX10_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX10_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX10_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX11:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_2,
++			    RG_SENINF_CAM_MUX11_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX11_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX11_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX11_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX11_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX12:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_3,
++			    RG_SENINF_CAM_MUX12_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX12_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX12_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX12_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX12_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX13:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_3,
++			    RG_SENINF_CAM_MUX13_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX13_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX13_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX13_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX13_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX14:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_3,
++			    RG_SENINF_CAM_MUX14_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX14_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX14_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX14_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX14_EXP_VSIZE, exp_vsize);
++		break;
++	case SENINF_CAM_MUX15:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX_CTRL_3,
++			    RG_SENINF_CAM_MUX15_SRC_SEL, src);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX15_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX15_EXP_HSIZE, exp_hsize);
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX15_CHK_CTL_1,
++			    RG_SENINF_CAM_MUX15_EXP_VSIZE, exp_vsize);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid src %d target %d", src, target);
++		return -EINVAL;
++	}
 +
 +	return 0;
 +}
 +
-+static int mtk_cam_media_link_setup(struct media_entity *entity,
-+				    const struct media_pad *local,
-+				    const struct media_pad *remote, u32 flags)
++int mtk_cam_seninf_set_vc(struct seninf_ctx *ctx, u32 seninf_idx,
++			  struct seninf_vcinfo *vcinfo)
 +{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(entity, struct mtk_raw_pipeline, subdev.entity);
-+	struct mtk_raw *raw = pipe->raw;
-+	u32 pad = local->index;
++	void __iomem *seninf_csi2 = ctx->reg_if_csi2[seninf_idx];
++	int i;
++	struct seninf_vc *vc;
 +
-+	dev_dbg(raw->cam_dev,
-+		"%s: raw %d: remote:%s:%d->local:%s:%d flags:0x%x\n",
-+		__func__, pipe->id, remote->entity->name, remote->index,
-+		local->entity->name, local->index, flags);
++	if (!vcinfo || !vcinfo->cnt)
++		return 0;
 +
-+	if (pad < MTK_RAW_PIPELINE_PADS_NUM && pad != MTK_RAW_SINK)
-+		pipe->vdev_nodes[pad - MTK_RAW_SINK_NUM].enabled =
-+			!!(flags & MEDIA_LNK_FL_ENABLED);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S0_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S1_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S2_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S3_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S4_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S5_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S6_DI_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_S7_DI_CTRL, 0);
 +
-+	if (!media_entity_is_streaming(entity) && !(flags & MEDIA_LNK_FL_ENABLED))
-+		memset(pipe->cfg, 0, sizeof(pipe->cfg));
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_CH0_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_CH1_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_CH2_CTRL, 0);
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_CH3_CTRL, 0);
 +
-+	if (pad == MTK_RAW_SINK && flags & MEDIA_LNK_FL_ENABLED)
-+		pipe->res_config.seninf =
-+			media_entity_to_v4l2_subdev(remote->entity);
++	for (i = 0; i < vcinfo->cnt; i++) {
++		vc = &vcinfo->vc[i];
++
++		/* General Long Packet Data Types: 0x10-0x17 */
++		if (vc->dt >= 0x10 && vc->dt <= 0x17) {
++			SENINF_BITS(seninf_csi2, SENINF_CSI2_OPT,
++				    RG_CSI2_GENERIC_LONG_PACKET_EN, 1);
++		}
++
++		mtk_cam_seninf_set_di_ch_ctrl(seninf_csi2, i, vc);
++	}
++
++	dev_dbg(ctx->dev, "DI_CTRL 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x\n",
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S0_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S1_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S2_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S3_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S4_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S5_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S6_DI_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_S7_DI_CTRL));
++
++	dev_dbg(ctx->dev, "CH_CTRL 0x%x 0x%x 0x%x 0x%x\n",
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_CH0_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_CH1_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_CH2_CTRL),
++		SENINF_READ_REG(seninf_csi2, SENINF_CSI2_CH3_CTRL));
 +
 +	return 0;
 +}
 +
-+static int mtk_raw_set_frame_interval(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *state,
-+				      struct v4l2_subdev_frame_interval *fi)
++int mtk_cam_seninf_set_mux_ctrl(struct seninf_ctx *ctx, u32 mux, int hs_pol,
++				int vs_pol, int src_sel, int pixel_mode)
 +{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
++	u32 temp = 0;
++	void __iomem *seninf_mux;
 +
-+	dev_dbg(raw->cam_dev, "%s:pipe(%d):current res: fps = %d/%d",
-+		__func__, pipe->id,
-+		fi->interval.numerator, fi->interval.denominator);
-+	pipe->res_config.interval = fi->interval;
++	seninf_mux = ctx->reg_if_mux[mux];
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_1,
++		    RG_SENINF_MUX_SRC_SEL, src_sel);
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_1,
++		    RG_SENINF_MUX_PIX_MODE_SEL, pixel_mode);
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_OPT,
++		    RG_SENINF_MUX_HSYNC_POL, hs_pol);
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_OPT,
++		    RG_SENINF_MUX_VSYNC_POL, vs_pol);
++
++	temp = SENINF_READ_REG(seninf_mux, SENINF_MUX_CTRL_0);
++	SENINF_WRITE_REG(seninf_mux, SENINF_MUX_CTRL_0, temp |
++			 SENINF_MUX_IRQ_SW_RST_MASK | SENINF_MUX_SW_RST_MASK);
++	SENINF_WRITE_REG(seninf_mux, SENINF_MUX_CTRL_0, temp & 0xFFFFFFF9);
 +
 +	return 0;
 +}
 +
-+static int mtk_raw_get_frame_interval(struct v4l2_subdev *sd,
-+				      struct v4l2_subdev_state *state,
-+				      struct v4l2_subdev_frame_interval *fi)
++int mtk_cam_seninf_update_mux_pixel_mode(struct seninf_ctx *ctx, u32 mux,
++					 int pixel_mode)
 +{
-+	struct mtk_raw_pipeline *pipe =
-+		container_of(sd, struct mtk_raw_pipeline, subdev);
-+	struct mtk_raw *raw = pipe->raw;
++	u32 temp = 0;
++	void __iomem *seninf_mux;
 +
-+	dev_dbg(raw->cam_dev, "%s:pipe(%d):current res: fps = %d/%d",
-+		__func__, pipe->id,
-+		fi->interval.numerator, fi->interval.denominator);
-+	fi->interval = pipe->res_config.interval;
++	seninf_mux = ctx->reg_if_mux[mux];
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_1,
++		    RG_SENINF_MUX_PIX_MODE_SEL, pixel_mode);
++
++	temp = SENINF_READ_REG(seninf_mux, SENINF_MUX_CTRL_0);
++	SENINF_WRITE_REG(seninf_mux, SENINF_MUX_CTRL_0, temp |
++			 SENINF_MUX_IRQ_SW_RST_MASK | SENINF_MUX_SW_RST_MASK);
++	SENINF_WRITE_REG(seninf_mux, SENINF_MUX_CTRL_0, temp & 0xFFFFFFF9);
++
++	dev_dbg(ctx->dev,
++		"%s mux %d SENINF_MUX_CTRL_1(0x%x), SENINF_MUX_OPT(0x%x)",
++		__func__, mux, SENINF_READ_REG(seninf_mux, SENINF_MUX_CTRL_1),
++		SENINF_READ_REG(seninf_mux, SENINF_MUX_OPT));
 +
 +	return 0;
 +}
 +
-+static const struct v4l2_subdev_core_ops mtk_raw_subdev_core_ops = {
-+	.subscribe_event = mtk_raw_sd_subscribe_event,
-+	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-+};
-+
-+static const struct v4l2_subdev_video_ops mtk_raw_subdev_video_ops = {
-+	.s_stream =  mtk_raw_sd_s_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops mtk_raw_subdev_pad_ops = {
-+	.link_validate = mtk_cam_link_validate,
-+	.set_fmt = mtk_raw_set_fmt,
-+	.get_fmt = mtk_raw_get_fmt,
-+	.set_selection = mtk_raw_set_pad_selection,
-+	.get_selection = mtk_raw_get_pad_selection,
-+	.set_frame_interval = mtk_raw_set_frame_interval,
-+	.get_frame_interval = mtk_raw_get_frame_interval,
-+};
-+
-+static const struct v4l2_subdev_internal_ops mtk_raw_subdev_internal_ops = {
-+	.init_state = mtk_raw_init_state,
-+};
-+
-+static const struct v4l2_subdev_ops mtk_raw_subdev_ops = {
-+	.core = &mtk_raw_subdev_core_ops,
-+	.video = &mtk_raw_subdev_video_ops,
-+	.pad = &mtk_raw_subdev_pad_ops,
-+};
-+
-+static const struct media_entity_operations mtk_cam_media_entity_ops = {
-+	.link_setup = mtk_cam_media_link_setup,
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+static const struct v4l2_ioctl_ops mtk_cam_v4l2_vout_ioctl_ops = {
-+	.vidioc_querycap = mtk_cam_vidioc_querycap,
-+	.vidioc_enum_framesizes = mtk_cam_vidioc_enum_framesizes,
-+	.vidioc_enum_fmt_vid_out = mtk_cam_vidioc_enum_fmt,
-+	.vidioc_g_fmt_vid_out_mplane = mtk_cam_vidioc_g_fmt,
-+	.vidioc_s_fmt_vid_out_mplane = mtk_cam_vidioc_s_fmt,
-+	.vidioc_try_fmt_vid_out_mplane = mtk_cam_vidioc_try_fmt,
-+	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf = vb2_ioctl_querybuf,
-+	.vidioc_qbuf = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf = vb2_ioctl_dqbuf,
-+	.vidioc_streamon = vb2_ioctl_streamon,
-+	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_expbuf = vb2_ioctl_expbuf,
-+	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+};
-+
-+static const struct v4l2_ioctl_ops mtk_cam_v4l2_vcap_ioctl_ops = {
-+	.vidioc_querycap = mtk_cam_vidioc_querycap,
-+	.vidioc_enum_framesizes = mtk_cam_vidioc_enum_framesizes,
-+	.vidioc_enum_fmt_vid_cap = mtk_cam_vidioc_enum_fmt,
-+	.vidioc_g_fmt_vid_cap_mplane = mtk_cam_vidioc_g_fmt,
-+	.vidioc_s_fmt_vid_cap_mplane = mtk_cam_vidioc_s_fmt,
-+	.vidioc_try_fmt_vid_cap_mplane = mtk_cam_vidioc_try_fmt,
-+	.vidioc_s_selection = mtk_cam_vidioc_s_selection,
-+	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf = vb2_ioctl_querybuf,
-+	.vidioc_qbuf = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf = vb2_ioctl_dqbuf,
-+	.vidioc_streamon = vb2_ioctl_streamon,
-+	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_expbuf = vb2_ioctl_expbuf,
-+	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+};
-+
-+static const struct v4l2_ioctl_ops mtk_cam_v4l2_meta_cap_ioctl_ops = {
-+	.vidioc_querycap = mtk_cam_vidioc_querycap,
-+	.vidioc_enum_fmt_meta_cap = mtk_cam_vidioc_meta_enum_fmt,
-+	.vidioc_g_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_s_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_try_fmt_meta_cap = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf = vb2_ioctl_querybuf,
-+	.vidioc_qbuf = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf = vb2_ioctl_dqbuf,
-+	.vidioc_streamon = vb2_ioctl_streamon,
-+	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_expbuf = vb2_ioctl_expbuf,
-+};
-+
-+static const struct v4l2_ioctl_ops mtk_cam_v4l2_meta_out_ioctl_ops = {
-+	.vidioc_querycap = mtk_cam_vidioc_querycap,
-+	.vidioc_enum_fmt_meta_out = mtk_cam_vidioc_meta_enum_fmt,
-+	.vidioc_g_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_s_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_try_fmt_meta_out = mtk_cam_vidioc_g_meta_fmt,
-+	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf = vb2_ioctl_querybuf,
-+	.vidioc_qbuf = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf = vb2_ioctl_dqbuf,
-+	.vidioc_streamon = vb2_ioctl_streamon,
-+	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_expbuf = vb2_ioctl_expbuf,
-+};
-+
-+static const struct mtk_cam_format_desc  stream_out_fmts[] = {
-+	/* This is a default image format */
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR8,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SBGGR10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SBGGR12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SBGGR14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SBGGR14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SBGGR14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG8,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGBRG10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGBRG12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGBRG12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGBRG14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGBRG14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGBRG14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG8,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGRBG10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGRBG12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGRBG14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRBG14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SGRBG14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB8,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB10,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SRGGB10_1X10,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB10P,
-+		},
-+	},
-+
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB12,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SRGGB12_1X12,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SRGGB14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SRGGB14,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_MTISP_SRGGB14_1X14,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SBGGR16,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SBGGR16_1X16,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGBRG16,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGBRG16_1X16,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SGRBG16,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SGRBG16_1X16,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_SRGGB16,
-+			.num_planes = 1,
-+		},
-+		.pfmt = {
-+			.code = MEDIA_BUS_FMT_SRGGB16_1X16,
-+		}
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER8_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER10_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER12_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = IMG_MAX_WIDTH,
-+			.height = IMG_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_BAYER14_UFBC,
-+		},
-+	},
-+};
-+
-+static const struct mtk_cam_format_desc yuv_out_group1_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12_12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21_12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_YUV420,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12_UFBC,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB8F,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB10F,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP1_MAX_WIDTH,
-+			.height = YUV_GROUP1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_SGRB12F,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc yuv_out_group2_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12_12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21_12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_12P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = YUV_GROUP2_MAX_WIDTH,
-+			.height = YUV_GROUP2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_12P,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc rzh1n2to1_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO1_MAX_WIDTH,
-+			.height = RZH1N2TO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO1_MAX_WIDTH,
-+			.height = RZH1N2TO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO1_MAX_WIDTH,
-+			.height = RZH1N2TO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV16,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO1_MAX_WIDTH,
-+			.height = RZH1N2TO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV61,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc rzh1n2to2_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO2_MAX_WIDTH,
-+			.height = RZH1N2TO2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_YUYV,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO2_MAX_WIDTH,
-+			.height = RZH1N2TO2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_YVYU,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc rzh1n2to3_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO3_MAX_WIDTH,
-+			.height = RZH1N2TO3_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO3_MAX_WIDTH,
-+			.height = RZH1N2TO3_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO3_MAX_WIDTH,
-+			.height = RZH1N2TO3_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV16,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = RZH1N2TO3_MAX_WIDTH,
-+			.height = RZH1N2TO3_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV61,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc drzs4no1_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_GREY,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV16,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV61,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV16_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV61_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV16_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV61_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV12_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_NV21_10,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV12_10P,
-+		},
-+	},
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO1_MAX_WIDTH,
-+			.height = DRZS4NO1_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_MTISP_NV21_10P,
-+		},
-+	},
-+};
-+
-+static const struct mtk_cam_format_desc drzs4no2_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO2_MAX_WIDTH,
-+			.height = DRZS4NO2_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_GREY,
-+		},
-+	}
-+};
-+
-+static const struct mtk_cam_format_desc drzs4no3_out_fmts[] = {
-+	{
-+		.vfmt.fmt.pix_mp = {
-+			.width = DRZS4NO3_MAX_WIDTH,
-+			.height = DRZS4NO3_MAX_HEIGHT,
-+			.pixelformat = V4L2_PIX_FMT_GREY,
-+		},
-+	}
-+};
-+
-+#define MTK_RAW_TOTAL_OUTPUT_QUEUES 4
-+
-+static const struct
-+mtk_cam_dev_node_desc output_queues[] = {
-+	{
-+		.id = MTK_RAW_META_IN,
-+		.name = "meta input",
-+		.cap = V4L2_CAP_META_OUTPUT,
-+		.buf_type = V4L2_BUF_TYPE_META_OUTPUT,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = false,
-+		.smem_alloc = true,
-+		/* .need_cache_sync_on_prepare = true, */
-+		.dma_port = MTKCAM_IPI_RAW_META_STATS_CFG,
-+		.default_fmt_idx = 0,
-+		.max_buf_count = 16,
-+		.ioctl_ops = &mtk_cam_v4l2_meta_out_ioctl_ops,
-+	},
-+	{
-+		.id = MTK_RAW_RAWI_2_IN,
-+		.name = "rawi 2",
-+		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RAWI_2,
-+		.fmts = stream_out_fmts,
-+		.num_fmts = ARRAY_SIZE(stream_out_fmts),
-+		.default_fmt_idx = 0,
-+		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = IMG_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = IMG_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_RAWI_3_IN,
-+		.name = "rawi 3",
-+		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.link_flags = 0,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RAWI_3,
-+		.fmts = stream_out_fmts,
-+		.num_fmts = ARRAY_SIZE(stream_out_fmts),
-+		.default_fmt_idx = 0,
-+		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = IMG_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = IMG_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_RAWI_4_IN,
-+		.name = "rawi 4",
-+		.cap = V4L2_CAP_VIDEO_OUTPUT_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.link_flags = 0,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RAWI_3, /* align backend RAWI_3 */
-+		.fmts = stream_out_fmts,
-+		.num_fmts = ARRAY_SIZE(stream_out_fmts),
-+		.default_fmt_idx = 0,
-+		.ioctl_ops = &mtk_cam_v4l2_vout_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = IMG_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = IMG_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	}
-+};
-+
-+static const
-+char *output_queue_names[RAW_PIPELINE_NUM][MTK_RAW_TOTAL_OUTPUT_QUEUES] = {
-+	{"mtk-cam raw-0 meta-input", "mtk-cam raw-0 rawi-2",
-+	 "mtk-cam raw-0 rawi-3", "mtk-cam raw-0 rawi-4"},
-+
-+	{"mtk-cam raw-1 meta-input", "mtk-cam raw-1 rawi-2",
-+	 "mtk-cam raw-1 rawi-3", "mtk-cam raw-1 rawi-4"},
-+
-+	{"mtk-cam raw-2 meta-input", "mtk-cam raw-2 rawi-2",
-+	 "mtk-cam raw-2 rawi-3", "mtk-cam raw-2 rawi-4"},
-+};
-+
-+static struct mtk_cam_pad_ops source_pad_ops_default = {
-+	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
-+	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
-+};
-+
-+static struct mtk_cam_pad_ops source_pad_ops_yuv = {
-+	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
-+	.set_pad_selection = mtk_raw_set_src_pad_selection_yuv,
-+};
-+
-+static struct mtk_cam_pad_ops source_pad_ops_drzs4no = {
-+	.set_pad_fmt = mtk_raw_set_src_pad_fmt_default,
-+	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
-+};
-+
-+static struct mtk_cam_pad_ops source_pad_ops_rzh1n2 = {
-+	.set_pad_fmt = mtk_raw_set_src_pad_fmt_rzh1n2,
-+	.set_pad_selection = mtk_raw_set_src_pad_selection_default,
-+};
-+
-+#define MTK_RAW_TOTAL_CAPTURE_QUEUES 15
-+static const struct
-+mtk_cam_dev_node_desc capture_queues[] = {
-+	{
-+		.id = MTK_RAW_MAIN_STREAM_OUT,
-+		.name = "imgo",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_IMGO,
-+		.fmts = stream_out_fmts,
-+		.num_fmts = ARRAY_SIZE(stream_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_default,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = IMG_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = IMG_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_YUVO_1_OUT,
-+		.name = "yuvo 1",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_YUVO_1,
-+		.fmts = yuv_out_group1_fmts,
-+		.num_fmts = ARRAY_SIZE(yuv_out_group1_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_yuv,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = YUV_GROUP1_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = YUV_GROUP1_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_YUVO_2_OUT,
-+		.name = "yuvo 2",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_YUVO_2,
-+		.fmts = yuv_out_group2_fmts,
-+		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_yuv,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = YUV_GROUP2_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = YUV_GROUP2_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_YUVO_3_OUT,
-+		.name = "yuvo 3",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_YUVO_3,
-+		.fmts = yuv_out_group1_fmts,
-+		.num_fmts = ARRAY_SIZE(yuv_out_group1_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_yuv,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = YUV_GROUP1_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = YUV_GROUP1_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_YUVO_4_OUT,
-+		.name = "yuvo 4",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_YUVO_4,
-+		.fmts = yuv_out_group2_fmts,
-+		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_yuv,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = YUV_GROUP2_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = YUV_GROUP2_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_YUVO_5_OUT,
-+		.name = "yuvo 5",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_YUVO_5,
-+		.fmts = yuv_out_group2_fmts,
-+		.num_fmts = ARRAY_SIZE(yuv_out_group2_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_yuv,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = YUV_GROUP2_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = YUV_GROUP2_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_DRZS4NO_1_OUT,
-+		.name = "drzs4no 1",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_1,
-+		.fmts = drzs4no1_out_fmts,
-+		.num_fmts = ARRAY_SIZE(drzs4no1_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_drzs4no,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = DRZS4NO1_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = DRZS4NO1_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_DRZS4NO_2_OUT,
-+		.name = "drzs4no 2",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_2,
-+		.fmts = drzs4no2_out_fmts,
-+		.num_fmts = ARRAY_SIZE(drzs4no2_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_drzs4no,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = DRZS4NO2_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = DRZS4NO2_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_DRZS4NO_3_OUT,
-+		.name = "drzs4no 3",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_DRZS4NO_3,
-+		.fmts = drzs4no3_out_fmts,
-+		.num_fmts = ARRAY_SIZE(drzs4no3_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_drzs4no,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = DRZS4NO3_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = DRZS4NO3_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_RZH1N2TO_1_OUT,
-+		.name = "rzh1n2to 1",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_1,
-+		.fmts = rzh1n2to1_out_fmts,
-+		.num_fmts = ARRAY_SIZE(rzh1n2to1_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_rzh1n2,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = RZH1N2TO1_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = RZH1N2TO1_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_RZH1N2TO_2_OUT,
-+		.name = "rzh1n2to 2",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_2,
-+		.fmts = rzh1n2to2_out_fmts,
-+		.num_fmts = ARRAY_SIZE(rzh1n2to2_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_rzh1n2,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = RZH1N2TO2_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = RZH1N2TO2_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_RZH1N2TO_3_OUT,
-+		.name = "rzh1n2to 3",
-+		.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+		.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = true,
-+		.smem_alloc = false,
-+		.dma_port = MTKCAM_IPI_RAW_RZH1N2TO_3,
-+		.fmts = rzh1n2to3_out_fmts,
-+		.num_fmts = ARRAY_SIZE(rzh1n2to3_out_fmts),
-+		.default_fmt_idx = 0,
-+		.pad_ops = &source_pad_ops_rzh1n2,
-+		.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+		.frmsizes = &(struct v4l2_frmsizeenum) {
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = RZH1N2TO3_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = RZH1N2TO3_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+	},
-+	{
-+		.id = MTK_RAW_META_OUT_0,
-+		.name = "partial meta 0",
-+		.cap = V4L2_CAP_META_CAPTURE,
-+		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = false,
-+		.smem_alloc = true,
-+		.dma_port = MTKCAM_IPI_RAW_META_STATS_0,
-+		.default_fmt_idx = 1,
-+		.max_buf_count = 16,
-+		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
-+	},
-+	{
-+		.id = MTK_RAW_META_OUT_1,
-+		.name = "partial meta 1",
-+		.cap = V4L2_CAP_META_CAPTURE,
-+		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = false,
-+		.smem_alloc = true,
-+		/* .need_cache_sync_on_finish = true, */
-+		.dma_port = MTKCAM_IPI_RAW_META_STATS_1,
-+		.default_fmt_idx = 2,
-+		.max_buf_count = 16,
-+		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
-+	},
-+	{
-+		.id = MTK_RAW_META_OUT_2,
-+		.name = "partial meta 2",
-+		.cap = V4L2_CAP_META_CAPTURE,
-+		.buf_type = V4L2_BUF_TYPE_META_CAPTURE,
-+		.link_flags = MEDIA_LNK_FL_ENABLED |  MEDIA_LNK_FL_IMMUTABLE,
-+		.image = false,
-+		.smem_alloc = false,
-+		/* .need_cache_sync_on_finish = true, */
-+		.dma_port = MTKCAM_IPI_RAW_META_STATS_2,
-+		.default_fmt_idx = 3,
-+		.max_buf_count = 16,
-+		.ioctl_ops = &mtk_cam_v4l2_meta_cap_ioctl_ops,
-+	},
-+};
-+
-+static const
-+char *capture_queue_names[RAW_PIPELINE_NUM][MTK_RAW_TOTAL_CAPTURE_QUEUES] = {
-+	{"mtk-cam raw-0 main-stream",
-+	 "mtk-cam raw-0 yuvo-1", "mtk-cam raw-0 yuvo-2",
-+	 "mtk-cam raw-0 yuvo-3", "mtk-cam raw-0 yuvo-4",
-+	 "mtk-cam raw-0 yuvo-5",
-+	 "mtk-cam raw-0 drzs4no-1", "mtk-cam raw-0 drzs4no-2", "mtk-cam raw-0 drzs4no-3",
-+	 "mtk-cam raw-0 rzh1n2to-1", "mtk-cam raw-0 rzh1n2to-2", "mtk-cam raw-0 rzh1n2to-3",
-+	 "mtk-cam raw-0 partial-meta-0", "mtk-cam raw-0 partial-meta-1",
-+	 "mtk-cam raw-0 partial-meta-2",
-+	 },
-+	{"mtk-cam raw-1 main-stream",
-+	 "mtk-cam raw-1 yuvo-1", "mtk-cam raw-1 yuvo-2",
-+	 "mtk-cam raw-1 yuvo-3", "mtk-cam raw-1 yuvo-4",
-+	 "mtk-cam raw-1 yuvo-5",
-+	 "mtk-cam raw-1 drzs4no-1", "mtk-cam raw-1 drzs4no-2", "mtk-cam raw-1 drzs4no-3",
-+	 "mtk-cam raw-1 rzh1n2to-1", "mtk-cam raw-1 rzh1n2to-2", "mtk-cam raw-1 rzh1n2to-3",
-+	 "mtk-cam raw-1 partial-meta-0", "mtk-cam raw-1 partial-meta-1",
-+	 "mtk-cam raw-1 partial-meta-2",
-+	 },
-+
-+	{"mtk-cam raw-2 main-stream",
-+	 "mtk-cam raw-2 yuvo-1", "mtk-cam raw-2 yuvo-2",
-+	 "mtk-cam raw-2 yuvo-3", "mtk-cam raw-2 yuvo-4",
-+	 "mtk-cam raw-2 yuvo-5",
-+	 "mtk-cam raw-2 drzs4no-1", "mtk-cam raw-2 drzs4no-2", "mtk-cam raw-2 drzs4no-3",
-+	 "mtk-cam raw-2 rzh1n2to-1", "mtk-cam raw-2 rzh1n2to-2", "mtk-cam raw-2 rzh1n2to-3",
-+	 "mtk-cam raw-2 partial-meta-0", "mtk-cam raw-2 partial-meta-1",
-+	 "mtk-cam raw-2 partial-meta-2",
-+	 },
-+};
-+
-+/* The helper to configure the device context */
-+static void mtk_raw_pipeline_queue_setup(struct mtk_raw_pipeline *pipe)
++int mtk_cam_seninf_set_mux_crop(struct seninf_ctx *ctx, u32 mux, int start_x,
++				int end_x, int enable)
 +{
-+	unsigned int node_idx, i;
++	void __iomem *seninf_mux = ctx->reg_if_mux[mux];
 +
-+	if (WARN_ON(MTK_RAW_TOTAL_OUTPUT_QUEUES + MTK_RAW_TOTAL_CAPTURE_QUEUES
-+	    != MTK_RAW_TOTAL_NODES))
-+		return;
++	SENINF_BITS(seninf_mux, SENINF_MUX_CROP_PIX_CTRL,
++		    RG_SENINF_MUX_CROP_START_8PIX_CNT, start_x / 8);
++	SENINF_BITS(seninf_mux, SENINF_MUX_CROP_PIX_CTRL,
++		    RG_SENINF_MUX_CROP_END_8PIX_CNT,
++		    start_x / 8 + (end_x - start_x + 1) / 8 - 1 +
++			    (((end_x - start_x + 1) % 8) > 0 ? 1 : 0));
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_1,
++		    RG_SENINF_MUX_CROP_EN, enable);
 +
-+	node_idx = 0;
-+	/* Setup the output queue */
-+	for (i = 0; i < MTK_RAW_TOTAL_OUTPUT_QUEUES; i++) {
-+		pipe->vdev_nodes[node_idx].desc = output_queues[i];
++	dev_dbg(ctx->dev, "MUX_CROP_PIX_CTRL 0x%x MUX_CTRL_1 0x%x\n",
++		SENINF_READ_REG(seninf_mux, SENINF_MUX_CROP_PIX_CTRL),
++		SENINF_READ_REG(seninf_mux, SENINF_MUX_CTRL_1));
 +
-+		/* set input meta format */
-+		if (pipe->vdev_nodes[node_idx].desc.id == MTK_RAW_META_IN)
-+			pipe->vdev_nodes[node_idx].desc.fmts =
-+				camsys_get_meta_fmts();
++	dev_dbg(ctx->dev, "mux %d, start %d, end %d, enable %d\n",
++		mux, start_x, end_x, enable);
 +
-+		pipe->vdev_nodes[node_idx++].desc.name =
-+			output_queue_names[pipe->id][i];
-+	}
-+
-+	/* Setup the capture queue */
-+	for (i = 0; i < MTK_RAW_TOTAL_CAPTURE_QUEUES; i++) {
-+		pipe->vdev_nodes[node_idx].desc = capture_queues[i];
-+
-+		/* set partial meta and external meta format */
-+		if (pipe->vdev_nodes[node_idx].desc.id >= MTK_RAW_META_OUT_BEGIN &&
-+		    pipe->vdev_nodes[node_idx].desc.id <= MTK_RAW_META_OUT_2)
-+			pipe->vdev_nodes[node_idx].desc.fmts =
-+				camsys_get_meta_fmts();
-+
-+		pipe->vdev_nodes[node_idx++].desc.name =
-+			capture_queue_names[pipe->id][i];
-+	}
++	return 0;
 +}
 +
-+static void mtk_raw_pipeline_ctrl_setup(struct mtk_raw_pipeline *pipe)
++int mtk_cam_seninf_is_mux_used(struct seninf_ctx *ctx, u32 mux)
 +{
-+	struct v4l2_ctrl_handler *ctrl_hdlr;
-+	struct v4l2_ctrl *ctrl;
-+	struct device *dev = pipe->raw->devs[pipe->id];
++	void __iomem *seninf_mux = ctx->reg_if_mux[mux];
++
++	return SENINF_READ_BITS(seninf_mux, SENINF_MUX_CTRL_0, SENINF_MUX_EN);
++}
++
++int mtk_cam_seninf_mux(struct seninf_ctx *ctx, u32 mux)
++{
++	void __iomem *seninf_mux = ctx->reg_if_mux[mux];
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_0, SENINF_MUX_EN, 1);
++	return 0;
++}
++
++int mtk_cam_seninf_disable_mux(struct seninf_ctx *ctx, u32 mux)
++{
++	int i;
++	void __iomem *seninf_mux = ctx->reg_if_mux[mux];
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_0, SENINF_MUX_EN, 0);
++
++	/* also disable CAM_MUX with input from mux */
++	for (i = SENINF_CAM_MUX0; i < _seninf_cfg.cam_mux_num; i++) {
++		if (mux == mtk_cam_seninf_get_cammux_ctrl(ctx, i))
++			mtk_cam_seninf_disable_cammux(ctx, i);
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_disable_all_mux(struct seninf_ctx *ctx)
++{
++	int i;
++	void __iomem *seninf_mux;
++
++	for (i = 0; i < _seninf_cfg.mux_num; i++) {
++		seninf_mux = ctx->reg_if_mux[i];
++		SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_0, SENINF_MUX_EN, 0);
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_cammux_chk_pixel_mode(struct seninf_ctx *ctx,
++					     int cam_mux, int pixel_mode)
++{
++	void __iomem *seninf_cam_mux_base = ctx->reg_if_cam_mux;
++
++	if (cam_mux >= _seninf_cfg.cam_mux_num) {
++		dev_dbg(ctx->dev,
++			"%s err cam_mux %d >= SENINF_CAM_MUX_NUM %d\n",
++			__func__, cam_mux, _seninf_cfg.cam_mux_num);
++
++		return 0;
++	}
++
++	switch (cam_mux) {
++	case SENINF_CAM_MUX0:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX0_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX0_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX1:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX1_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX1_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX2:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX2_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX2_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX3:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX3_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX3_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX4:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX4_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX4_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX5:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX5_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX5_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX6:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX6_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX6_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX7:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX7_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX7_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX8:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX8_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX8_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX9:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX9_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX9_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX10:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX10_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX10_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX11:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX11_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX11_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX12:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX12_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX12_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX13:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX13_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX13_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX14:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX14_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX14_PIX_MODE_SEL, pixel_mode);
++		break;
++	case SENINF_CAM_MUX15:
++		SENINF_BITS(seninf_cam_mux_base, SENINF_CAM_MUX15_CHK_CTL_0,
++			    RG_SENINF_CAM_MUX15_PIX_MODE_SEL, pixel_mode);
++		break;
++	default:
++		dev_dbg(ctx->dev, "invalid cam_mux %d pixel_mode %d\n",
++			cam_mux, pixel_mode);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_test_model(struct seninf_ctx *ctx, int mux, int cam_mux,
++				  int pixel_mode)
++{
++	int intf;
++	void __iomem *seninf;
++	void __iomem *seninf_tg;
++
++	intf = mux % 5; /* testmdl by platform seninf */
++
++	seninf = ctx->reg_if_ctrl[intf];
++	seninf_tg = ctx->reg_if_tg[intf];
++
++	mtk_cam_seninf_reset(ctx, intf);
++	mtk_cam_seninf_mux(ctx, mux);
++	mtk_cam_seninf_set_mux_ctrl(ctx, mux, 0, 0, TEST_MODEL, pixel_mode);
++	mtk_cam_seninf_set_top_mux_ctrl(ctx, mux, intf);
++
++	mtk_cam_seninf_set_cammux_vc(ctx, cam_mux, 0, 0, 0, 0);
++	mtk_cam_seninf_set_cammux_src(ctx, mux, cam_mux, 0, 0);
++	mtk_cam_seninf_set_cammux_chk_pixel_mode(ctx, cam_mux, pixel_mode);
++	mtk_cam_seninf_cammux(ctx, cam_mux);
++
++	SENINF_BITS(seninf, SENINF_TESTMDL_CTRL, RG_SENINF_TESTMDL_EN, 1);
++	SENINF_BITS(seninf, SENINF_CTRL, SENINF_EN, 1);
++
++	SENINF_BITS(seninf_tg, TM_SIZE, TM_LINE, 4224);
++	SENINF_BITS(seninf_tg, TM_SIZE, TM_PXL, 5632);
++	SENINF_BITS(seninf_tg, TM_CLK, TM_CLK_CNT, 7);
++
++	SENINF_BITS(seninf_tg, TM_DUM, TM_VSYNC, 100);
++	SENINF_BITS(seninf_tg, TM_DUM, TM_DUMMYPXL, 100);
++
++	SENINF_BITS(seninf_tg, TM_CTL, TM_PAT, 0xC);
++	SENINF_BITS(seninf_tg, TM_CTL, TM_EN, 1);
++
++	return 0;
++}
++
++static int csirx_phyA_power_on(struct seninf_ctx *ctx, u32 port_idx, int en)
++{
++	void __iomem *base = ctx->reg_ana_csi_rx[port_idx];
++
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_L0_T0AB_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_L1_T1AB_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_L2_T1BC_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_XX_T0BC_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_XX_T0CA_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_8, RG_CSI0_XX_T1CA_EQ_OS_CAL_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_0, RG_CSI0_BG_LPF_EN, 0);
++	SENINF_BITS(base, CDPHY_RX_ANA_0, RG_CSI0_BG_CORE_EN, 0);
++	usleep_range(200, 300);
++
++	if (en) {
++		SENINF_BITS(base, CDPHY_RX_ANA_0,
++			    RG_CSI0_BG_CORE_EN, 1);
++		usleep_range(30, 40);
++		SENINF_BITS(base, CDPHY_RX_ANA_0,
++			    RG_CSI0_BG_LPF_EN, 1);
++		udelay(1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_L0_T0AB_EQ_OS_CAL_EN, 1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_L1_T1AB_EQ_OS_CAL_EN, 1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_L2_T1BC_EQ_OS_CAL_EN, 1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_XX_T0BC_EQ_OS_CAL_EN, 1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_XX_T0CA_EQ_OS_CAL_EN, 1);
++		SENINF_BITS(base, CDPHY_RX_ANA_8,
++			    RG_CSI0_XX_T1CA_EQ_OS_CAL_EN, 1);
++		udelay(1);
++	}
++
++	return 0;
++}
++
++static int apply_efuse_data(struct seninf_ctx *ctx)
++{
 +	int ret = 0;
++	void __iomem *base;
++	u32 port;
++	u32 m_csi_efuse = ctx->m_csi_efuse;
 +
-+	ctrl_hdlr = &pipe->ctrl_handler;
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 5);
-+	if (ret) {
-+		dev_info(dev, "v4l2_ctrl_handler init failed\n");
-+		return;
-+	}
-+	mutex_init(&pipe->res_config.resource_lock);
-+	mutex_init(&pipe->try_res_config.resource_lock);
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn_limit, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz_limit, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin_limit, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &hwn_try, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frz_try, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &bin_try, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	v4l2_ctrl_new_custom(ctrl_hdlr, &res_plan_policy, NULL);
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &res_pixel_rate, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &frame_sync_id, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &raw_path, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			       V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+
-+	v4l2_ctrl_new_std(ctrl_hdlr, &cam_ctrl_ops,
-+			  V4L2_CID_HBLANK, 0, 65535, 1, 0);
-+	v4l2_ctrl_new_std(ctrl_hdlr, &cam_ctrl_ops,
-+			  V4L2_CID_VBLANK, 0, 65535, 1, 0);
-+
-+	/* PDE */
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_pde_info, NULL);
-+
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &mtk_feature, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_res_update, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr, &cfg_res_ctrl, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_VOLATILE |
-+			V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+
-+	ctrl = v4l2_ctrl_new_custom(ctrl_hdlr,
-+				    &mtk_camsys_hw_mode, NULL);
-+	if (ctrl)
-+		ctrl->flags |= V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
-+
-+	pipe->res_config.hwn_limit_max = hwn_limit.def;
-+	pipe->res_config.frz_limit = frz_limit.def;
-+	pipe->res_config.bin_limit = bin_limit.def;
-+	pipe->res_config.res_plan = res_plan_policy.def;
-+	pipe->feature_pending = mtk_feature.def;
-+	pipe->sync_id = frame_sync_id.def;
-+	pipe->sensor_mode_update = cfg_res_update.def;
-+	pipe->pde_config.pde_info.pdo_max_size = cfg_pde_info.def;
-+	pipe->pde_config.pde_info.pdi_max_size = cfg_pde_info.def;
-+	pipe->pde_config.pde_info.pd_table_offset = cfg_pde_info.def;
-+	pipe->subdev.ctrl_handler = ctrl_hdlr;
-+	pipe->hw_mode = mtk_camsys_hw_mode.def;
-+}
-+
-+static int mtk_raw_pipeline_register(unsigned int id, struct device *dev,
-+				     struct mtk_raw_pipeline *pipe,
-+				     struct v4l2_device *v4l2_dev)
-+{
-+	struct mtk_cam_device *cam = dev_get_drvdata(pipe->raw->cam_dev);
-+	struct v4l2_subdev *sd = &pipe->subdev;
-+	struct mtk_cam_video_device *video;
-+	unsigned int i;
-+	int ret;
-+
-+	pipe->id = id;
-+
-+	/* Initialize raw_pipe subdev */
-+	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
-+	sd->internal_ops = &mtk_raw_subdev_internal_ops;
-+	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
-+	sd->entity.ops = &mtk_cam_media_entity_ops;
-+	sd->flags = V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
-+	snprintf(sd->name, sizeof(sd->name),
-+		 "%s-%d", dev_driver_string(dev), pipe->id);
-+	v4l2_set_subdevdata(sd, pipe);
-+	mtk_raw_pipeline_ctrl_setup(pipe);
-+	dev_info(dev, "%s: %s\n", __func__, sd->name);
-+
-+	ret = v4l2_device_register_subdev(v4l2_dev, sd);
-+	if (ret < 0) {
-+		dev_info(dev, "Failed to register subdev: %d\n", ret);
-+		return ret;
++	if (m_csi_efuse == 0) {
++		dev_dbg(ctx->dev, "No efuse data. Returned.\n");
++		return -1;
 +	}
 +
-+	mtk_raw_pipeline_queue_setup(pipe);
-+	/* setup pads of raw pipeline */
-+	for (i = 0; i < ARRAY_SIZE(pipe->pads); i++) {
-+		pipe->pads[i].flags = i < MTK_RAW_SOURCE_BEGIN ?
-+			MEDIA_PAD_FL_SINK : MEDIA_PAD_FL_SOURCE;
-+	}
++	port = ctx->port;
++	base = ctx->reg_ana_csi_rx[port];
 +
-+	media_entity_pads_init(&sd->entity, ARRAY_SIZE(pipe->pads), pipe->pads);
++	SENINF_BITS(base, CDPHY_RX_ANA_2, RG_CSI0_L0P_T0A_HSRT_CODE,
++		    (m_csi_efuse >> 27) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_2, RG_CSI0_L0N_T0B_HSRT_CODE,
++		    (m_csi_efuse >> 27) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_3, RG_CSI0_L1P_T0C_HSRT_CODE,
++		    (m_csi_efuse >> 22) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_3, RG_CSI0_L1N_T1A_HSRT_CODE,
++		    (m_csi_efuse >> 22) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_4, RG_CSI0_L2P_T1B_HSRT_CODE,
++		    (m_csi_efuse >> 17) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_4, RG_CSI0_L2N_T1C_HSRT_CODE,
++		    (m_csi_efuse >> 17) & 0x1f);
 +
-+	/* setup video node */
-+	for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++) {
-+		video = pipe->vdev_nodes + i;
++	dev_dbg(ctx->dev,
++		"CSI%dA CDPHY_RX_ANA_2(0x%x) CDPHY_RX_ANA_3(0x%x) CDPHY_RX_ANA_4(0x%x)",
++		ctx->port,
++		SENINF_READ_REG(base, CDPHY_RX_ANA_2),
++		SENINF_READ_REG(base, CDPHY_RX_ANA_3),
++		SENINF_READ_REG(base, CDPHY_RX_ANA_4));
 +
-+		switch (pipe->id) {
-+		case MTKCAM_SUBDEV_RAW_0:
-+		case MTKCAM_SUBDEV_RAW_1:
-+		case MTKCAM_SUBDEV_RAW_2:
-+			video->uid.pipe_id = pipe->id;
-+			break;
-+		default:
-+			dev_err(dev, "invalid pipe id\n");
-+			return -EINVAL;
-+		}
-+
-+		video->uid.id = video->desc.dma_port;
-+		video->ctx = &cam->ctxs[id];
-+		ret = mtk_cam_video_register(video, v4l2_dev);
-+		if (ret)
-+			goto fail_unregister_video;
-+
-+		if (V4L2_TYPE_IS_OUTPUT(video->desc.buf_type))
-+			ret = media_create_pad_link(&video->vdev.entity, 0,
-+						    &sd->entity,
-+						    video->desc.id,
-+						    video->desc.link_flags);
-+		else
-+			ret = media_create_pad_link(&sd->entity,
-+						    video->desc.id,
-+						    &video->vdev.entity, 0,
-+						    video->desc.link_flags);
-+
-+		if (ret)
-+			goto fail_unregister_video;
-+	}
-+
-+	for (i = 0; i < sd->entity.num_pads; i++)
-+		pipe->cfg[i].mbus_fmt = mfmt_default;
-+
-+	return 0;
-+
-+fail_unregister_video:
-+	if (!i)
++	if (ctx->is_4d1c == 0)
 +		return ret;
 +
-+	for (i = i - 1; i >= 0; i--)
-+		mtk_cam_video_unregister(pipe->vdev_nodes + i);
++	port = ctx->port_b;
++	base = ctx->reg_ana_csi_rx[port];
++
++	SENINF_BITS(base, CDPHY_RX_ANA_2, RG_CSI0_L0P_T0A_HSRT_CODE,
++		    (m_csi_efuse >> 12) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_2, RG_CSI0_L0N_T0B_HSRT_CODE,
++		    (m_csi_efuse >> 12) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_3, RG_CSI0_L1P_T0C_HSRT_CODE,
++		    (m_csi_efuse >> 7) & 0x1f);
++	SENINF_BITS(base, CDPHY_RX_ANA_3, RG_CSI0_L1N_T1A_HSRT_CODE,
++		    (m_csi_efuse >> 7) & 0x1f);
++
++	if (port < CSI_PORT_2A) {
++		SENINF_BITS(base, CDPHY_RX_ANA_4, RG_CSI0_L2P_T1B_HSRT_CODE,
++			    (m_csi_efuse >> 2) & 0x1f);
++		SENINF_BITS(base, CDPHY_RX_ANA_4, RG_CSI0_L2N_T1C_HSRT_CODE,
++			    (m_csi_efuse >> 2) & 0x1f);
++		dev_dbg(ctx->dev,
++			"CSI%dB CDPHY_RX_ANA_2(0x%x) CDPHY_RX_ANA_3(0x%x) CDPHY_RX_ANA_4(0x%x)",
++			ctx->port,
++			SENINF_READ_REG(base, CDPHY_RX_ANA_2),
++			SENINF_READ_REG(base, CDPHY_RX_ANA_3),
++			SENINF_READ_REG(base, CDPHY_RX_ANA_4));
++	} else {
++		dev_dbg(ctx->dev,
++			"CSI%dB CDPHY_RX_ANA_2(0x%x) CDPHY_RX_ANA_3(0x%x)",
++			ctx->port,
++			SENINF_READ_REG(base, CDPHY_RX_ANA_2),
++			SENINF_READ_REG(base, CDPHY_RX_ANA_3));
++	}
 +
 +	return ret;
 +}
 +
-+static void mtk_raw_pipeline_unregister(struct mtk_raw_pipeline *pipe)
++static int csirx_phyA_init(struct seninf_ctx *ctx)
 +{
-+	unsigned int i;
++	u32 i, port;
++	void __iomem *base;
 +
-+	for (i = 0; i < ARRAY_SIZE(pipe->vdev_nodes); i++)
-+		mtk_cam_video_unregister(pipe->vdev_nodes + i);
-+	v4l2_ctrl_handler_free(&pipe->ctrl_handler);
-+	mutex_destroy(&pipe->res_config.resource_lock);
-+	v4l2_device_unregister_subdev(&pipe->subdev);
-+	media_entity_cleanup(&pipe->subdev.entity);
++	port = ctx->port;
++	for (i = 0; i <= ctx->is_4d1c; i++) {
++		port = i ? ctx->port_b : ctx->port;
++		base = ctx->reg_ana_csi_rx[port];
++		SENINF_BITS(base, CDPHY_RX_ANA_1,
++			    RG_CSI0_BG_LPRX_VTL_SEL, 0x4);
++		SENINF_BITS(base, CDPHY_RX_ANA_1,
++			    RG_CSI0_BG_LPRX_VTH_SEL, 0x4);
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_BG_ALP_RX_VTL_SEL, 0x4);
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_BG_ALP_RX_VTH_SEL, 0x4);
++		SENINF_BITS(base, CDPHY_RX_ANA_1,
++			    RG_CSI0_BG_VREF_SEL, 0x8);
++		SENINF_BITS(base, CDPHY_RX_ANA_1,
++			    RG_CSI0_CDPHY_EQ_DES_VREF_SEL, 0x2);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_BW, 0x3);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_IS, 0x1);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_DG1_EN, 0x1);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_SR0, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_5,
++			    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_9,
++			    RG_CSI0_RESERVE, 0x3003);
++		SENINF_BITS(base, CDPHY_RX_ANA_SETTING_0,
++			    CSR_CSI_RST_MODE, 0x2);
++
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_L0P_T0A_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_L0N_T0B_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_3,
++			    RG_CSI0_L1P_T0C_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_3,
++			    RG_CSI0_L1N_T1A_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_4,
++			    RG_CSI0_L2P_T1B_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_4,
++			    RG_CSI0_L2N_T1C_HSRT_CODE, 0x10);
++		SENINF_BITS(base, CDPHY_RX_ANA_0,
++			    RG_CSI0_CPHY_T0_CDR_FIRST_EDGE_EN, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_0,
++			    RG_CSI0_CPHY_T1_CDR_FIRST_EDGE_EN, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_CPHY_T0_CDR_SELF_CAL_EN, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_2,
++			    RG_CSI0_CPHY_T1_CDR_SELF_CAL_EN, 0x0);
++
++		SENINF_BITS(base, CDPHY_RX_ANA_6,
++			    RG_CSI0_CPHY_T0_CDR_CK_DELAY, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_7,
++			    RG_CSI0_CPHY_T1_CDR_CK_DELAY, 0x0);
++		SENINF_BITS(base, CDPHY_RX_ANA_6,
++			    RG_CSI0_CPHY_T0_CDR_AB_WIDTH, 0x9);
++		SENINF_BITS(base, CDPHY_RX_ANA_6,
++			    RG_CSI0_CPHY_T0_CDR_BC_WIDTH, 0x9);
++		SENINF_BITS(base, CDPHY_RX_ANA_6,
++			    RG_CSI0_CPHY_T0_CDR_CA_WIDTH, 0x9);
++		SENINF_BITS(base, CDPHY_RX_ANA_7,
++			    RG_CSI0_CPHY_T1_CDR_AB_WIDTH, 0x9);
++		SENINF_BITS(base, CDPHY_RX_ANA_7,
++			    RG_CSI0_CPHY_T1_CDR_BC_WIDTH, 0x9);
++		SENINF_BITS(base, CDPHY_RX_ANA_7,
++			    RG_CSI0_CPHY_T1_CDR_CA_WIDTH, 0x9);
++
++		dev_dbg(ctx->dev, "port:%d CDPHY_RX_ANA_0(0x%x)\n",
++			port, SENINF_READ_REG(base, CDPHY_RX_ANA_0));
++	}
++
++	apply_efuse_data(ctx);
++
++	return 0;
 +}
 +
-+int mtk_cam_raw_setup_dependencies(struct mtk_raw *raw)
++static int csirx_dphy_init(struct seninf_ctx *ctx)
 +{
-+	struct device *dev = raw->cam_dev;
-+	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
-+	struct device *consumer, *supplier;
-+	struct device_link *link;
-+	struct mtk_raw_device *raw_dev;
-+	struct mtk_yuv_device *yuv_dev;
++	void __iomem *base = ctx->reg_ana_dphy_top[ctx->port];
++	int settle_delay_dt, settle_delay_ck, hs_trail, hs_trail_en;
++	int bit_per_pixel;
++	u64 data_rate;
++
++	settle_delay_dt = ctx->is_cphy ? ctx->core->cphy_settle_delay_dt :
++					 ctx->core->dphy_settle_delay_dt;
++
++	SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++		    RG_CDPHY_RX_LD0_TRIO0_HS_SETTLE_PARAMETER,
++		    settle_delay_dt);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++		    RG_CDPHY_RX_LD1_TRIO1_HS_SETTLE_PARAMETER,
++		    settle_delay_dt);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++		    RG_CDPHY_RX_LD2_TRIO2_HS_SETTLE_PARAMETER,
++		    settle_delay_dt);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++		    RG_CDPHY_RX_LD3_TRIO3_HS_SETTLE_PARAMETER,
++		    settle_delay_dt);
++
++	settle_delay_ck = ctx->core->settle_delay_ck;
++
++	SENINF_BITS(base, DPHY_RX_CLOCK_LANE0_HS_PARAMETER,
++		    RG_DPHY_RX_LC0_HS_SETTLE_PARAMETER,
++		    settle_delay_ck);
++	SENINF_BITS(base, DPHY_RX_CLOCK_LANE1_HS_PARAMETER,
++		    RG_DPHY_RX_LC1_HS_SETTLE_PARAMETER,
++		    settle_delay_ck);
++
++	SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++		    RG_CDPHY_RX_LD0_TRIO0_HS_PREPARE_PARAMETER, 2);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++		    RG_CDPHY_RX_LD1_TRIO1_HS_PREPARE_PARAMETER, 2);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++		    RG_CDPHY_RX_LD2_TRIO2_HS_PREPARE_PARAMETER, 2);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++		    RG_CDPHY_RX_LD3_TRIO3_HS_PREPARE_PARAMETER, 2);
++
++	hs_trail = ctx->hs_trail_parameter;
++
++	SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++		    RG_DPHY_RX_LD0_HS_TRAIL_PARAMETER, hs_trail);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++		    RG_DPHY_RX_LD1_HS_TRAIL_PARAMETER, hs_trail);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++		    RG_DPHY_RX_LD2_HS_TRAIL_PARAMETER, hs_trail);
++	SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++		    RG_DPHY_RX_LD3_HS_TRAIL_PARAMETER, hs_trail);
++
++	if (!ctx->is_cphy) {
++		bit_per_pixel = 10;
++		if (ctx->customized_pixel_rate != 0)
++			data_rate = ctx->customized_pixel_rate * bit_per_pixel;
++		else
++			data_rate = ctx->mipi_pixel_rate * bit_per_pixel;
++
++		do_div(data_rate, ctx->num_data_lanes);
++		hs_trail_en = data_rate < 1400000000;
++		SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++			    RG_DPHY_RX_LD0_HS_TRAIL_EN, hs_trail_en);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++			    RG_DPHY_RX_LD1_HS_TRAIL_EN, hs_trail_en);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++			    RG_DPHY_RX_LD2_HS_TRAIL_EN, hs_trail_en);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++			    RG_DPHY_RX_LD3_HS_TRAIL_EN, hs_trail_en);
++	}
++
++	return 0;
++}
++
++static int csirx_cphy_init(struct seninf_ctx *ctx)
++{
++	void __iomem *base = ctx->reg_ana_cphy_top[ctx->port];
++
++	SENINF_BITS(base, CPHY_RX_DETECT_CTRL_POST,
++		    RG_CPHY_RX_DATA_VALID_POST_EN, 1);
++
++	return 0;
++}
++
++static int csirx_phy_init(struct seninf_ctx *ctx)
++{
++	csirx_phyA_init(ctx);
++
++	csirx_dphy_init(ctx);
++	csirx_cphy_init(ctx);
++
++	return 0;
++}
++
++static int csirx_seninf_csi2_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf_csi2 = ctx->reg_if_csi2[ctx->seninf_idx];
++	int csi_en;
++
++	SENINF_BITS(seninf_csi2, SENINF_CSI2_DBG_CTRL,
++		    RG_CSI2_DBG_PACKET_CNT_EN, 1);
++
++	/* lane/trio count */
++	SENINF_BITS(seninf_csi2, SENINF_CSI2_RESYNC_MERGE_CTRL,
++		    RG_CSI2_RESYNC_CYCLE_CNT_OPT, 1);
++
++	csi_en = (1 << ctx->num_data_lanes) - 1;
++
++	if (!ctx->is_cphy) {
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_OPT, RG_CSI2_CPHY_SEL, 0);
++		SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_EN, csi_en);
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_HDR_MODE_0,
++			    RG_CSI2_HEADER_MODE, 0);
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_HDR_MODE_0,
++			    RG_CSI2_HEADER_LEN, 0);
++	} else {
++		u8 map_hdr_len[] = {0, 1, 2, 4, 5};
++
++		SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_EN, csi_en);
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_OPT,
++			    RG_CSI2_CPHY_SEL, 1);
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_HDR_MODE_0,
++			    RG_CSI2_HEADER_MODE, 2);
++		SENINF_BITS(seninf_csi2, SENINF_CSI2_HDR_MODE_0,
++			    RG_CSI2_HEADER_LEN,
++			    map_hdr_len[ctx->num_data_lanes]);
++	}
++
++	return 0;
++}
++
++static int csirx_seninf_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf = ctx->reg_if_ctrl[ctx->seninf_idx];
++
++	/* enable/disable seninf csi2 */
++	SENINF_BITS(seninf, SENINF_CSI2_CTRL, RG_SENINF_CSI2_EN, 1);
++
++	/* enable/disable seninf, enable after csi2, testmdl is done */
++	SENINF_BITS(seninf, SENINF_CTRL, SENINF_EN, 1);
++
++	return 0;
++}
++
++static int csirx_seninf_top_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf_top = ctx->reg_if_top;
++
++	switch (ctx->port) {
++	case CSI_PORT_0:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++			    RG_PHY_SENINF_MUX0_CPHY_MODE, 0);
++		break;
++	case CSI_PORT_0A:
++	case CSI_PORT_0B:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++			    RG_PHY_SENINF_MUX0_CPHY_MODE, 2);
++		break;
++	case CSI_PORT_1:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++			    RG_PHY_SENINF_MUX1_CPHY_MODE, 0);
++		break;
++	case CSI_PORT_1A:
++	case CSI_PORT_1B:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++			    RG_PHY_SENINF_MUX1_CPHY_MODE, 2);
++		break;
++	case CSI_PORT_2:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++			    RG_PHY_SENINF_MUX2_CPHY_MODE, 0);
++		break;
++	case CSI_PORT_2A:
++	case CSI_PORT_2B:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++			    RG_PHY_SENINF_MUX2_CPHY_MODE, 2);
++		break;
++	case CSI_PORT_3:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++			    RG_PHY_SENINF_MUX3_CPHY_MODE, 0);
++		break;
++	case CSI_PORT_3A:
++	case CSI_PORT_3B:
++		SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++			    RG_PHY_SENINF_MUX3_CPHY_MODE, 2);
++		break;
++	default:
++		break;
++	}
++
++	/* port operation mode */
++	switch (ctx->port) {
++	case CSI_PORT_0:
++	case CSI_PORT_0A:
++	case CSI_PORT_0B:
++		if (!ctx->is_cphy) {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++				    PHY_SENINF_MUX0_CPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++				    PHY_SENINF_MUX0_DPHY_EN, 1);
++		} else {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++				    PHY_SENINF_MUX0_DPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI0,
++				    PHY_SENINF_MUX0_CPHY_EN, 1);
++		}
++		break;
++	case CSI_PORT_1:
++	case CSI_PORT_1A:
++	case CSI_PORT_1B:
++		if (!ctx->is_cphy) {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++				    PHY_SENINF_MUX1_CPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++				    PHY_SENINF_MUX1_DPHY_EN, 1);
++		} else {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++				    PHY_SENINF_MUX1_DPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI1,
++				    PHY_SENINF_MUX1_CPHY_EN, 1);
++		}
++		break;
++	case CSI_PORT_2:
++	case CSI_PORT_2A:
++	case CSI_PORT_2B:
++		if (!ctx->is_cphy) {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++				    PHY_SENINF_MUX2_CPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++				    PHY_SENINF_MUX2_DPHY_EN, 1);
++		} else {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++				    PHY_SENINF_MUX2_DPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI2,
++				    PHY_SENINF_MUX2_CPHY_EN, 1);
++		}
++		break;
++	case CSI_PORT_3:
++	case CSI_PORT_3A:
++	case CSI_PORT_3B:
++		if (!ctx->is_cphy) {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++				    PHY_SENINF_MUX3_CPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++				    PHY_SENINF_MUX3_DPHY_EN, 1);
++		} else {
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++				    PHY_SENINF_MUX3_DPHY_EN, 0);
++			SENINF_BITS(seninf_top, SENINF_TOP_PHY_CTRL_CSI3,
++				    PHY_SENINF_MUX3_CPHY_EN, 1);
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int csirx_phyA_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *base, *baseA, *baseB;
++
++	base = ctx->reg_ana_csi_rx[ctx->port];
++	baseA = ctx->reg_ana_csi_rx[ctx->port_a];
++	baseB = ctx->reg_ana_csi_rx[ctx->port_b];
++
++	if (!ctx->is_cphy) { /* dphy */
++		if (ctx->is_4d1c) {
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 0);
++			/* clear clk sel first */
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 0);
++
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKSEL, 1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKSEL, 1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKSEL, 1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKSEL, 1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKSEL, 1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKSEL, 1);
++
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 0);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 0);
++
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++		} else {
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 0);
++			/* clear clk sel first */
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 0);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 0);
++
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKSEL, 0);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKSEL, 0);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKSEL, 0);
++
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L0_CKMODE_EN, 0);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L1_CKMODE_EN, 1);
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_DPHY_L2_CKMODE_EN, 0);
++
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++		}
++	} else { /* cphy */
++		if (ctx->is_4d1c) {
++			SENINF_BITS(baseA, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 1);
++			SENINF_BITS(baseB, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 1);
++
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x3);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x0);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x3);
++			SENINF_BITS(baseA, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++		} else {
++			SENINF_BITS(base, CDPHY_RX_ANA_0,
++				    RG_CSI0_CPHY_EN, 1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_BW, 0x3);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_IS, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_LATCH_EN, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG0_EN, 0x1);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_DG1_EN, 0x0);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR0, 0x3);
++			SENINF_BITS(base, CDPHY_RX_ANA_5,
++				    RG_CSI0_CDPHY_EQ_SR1, 0x0);
++		}
++	}
++
++	/* phyA power on */
++	if (ctx->is_4d1c) {
++		csirx_phyA_power_on(ctx, ctx->port_a, 1);
++		csirx_phyA_power_on(ctx, ctx->port_b, 1);
++	} else {
++		csirx_phyA_power_on(ctx, ctx->port, 1);
++	}
++
++	return 0;
++}
++
++static int csirx_dphy_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *base = ctx->reg_ana_dphy_top[ctx->port];
++
++	if (ctx->is_4d1c) {
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD3_SEL, 4);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD2_SEL, 0);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD1_SEL, 3);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD0_SEL, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LC0_SEL, 2);
++
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD0_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD1_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD2_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD3_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LC0_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LC1_EN, 0);
++	} else {
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD3_SEL, 5);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD2_SEL, 3);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD1_SEL, 2);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LD0_SEL, 0);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LC1_SEL, 4);
++		SENINF_BITS(base, DPHY_RX_LANE_SELECT, RG_DPHY_RX_LC0_SEL, 1);
++
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD0_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD1_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD2_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LD3_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LC0_EN, 1);
++		SENINF_BITS(base, DPHY_RX_LANE_EN, DPHY_RX_LC1_EN, 1);
++	}
++
++	SENINF_BITS(base, DPHY_RX_LANE_SELECT, DPHY_RX_CK_DATA_MUX_EN, 1);
++
++	return 0;
++}
++
++static int csirx_cphy_setting(struct seninf_ctx *ctx)
++{
++	void __iomem *base = ctx->reg_ana_cphy_top[ctx->port];
++
++	switch (ctx->port) {
++	case CSI_PORT_0:
++	case CSI_PORT_1:
++	case CSI_PORT_2:
++	case CSI_PORT_3:
++	case CSI_PORT_0A:
++	case CSI_PORT_1A:
++	case CSI_PORT_2A:
++	case CSI_PORT_3A:
++		if (ctx->num_data_lanes == 3) {
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR0_LPRX_EN, 1);
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR1_LPRX_EN, 1);
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR2_LPRX_EN, 1);
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR3_LPRX_EN, 0);
++		} else if (ctx->num_data_lanes == 2) {
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR0_LPRX_EN, 1);
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR1_LPRX_EN, 1);
++		} else {
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR0_LPRX_EN, 1);
++		}
++		break;
++	case CSI_PORT_0B:
++	case CSI_PORT_1B:
++	case CSI_PORT_2B:
++	case CSI_PORT_3B:
++		if (ctx->num_data_lanes == 2) {
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR2_LPRX_EN, 1);
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR3_LPRX_EN, 1);
++		} else {
++			SENINF_BITS(base, CPHY_RX_CTRL, CPHY_RX_TR2_LPRX_EN, 1);
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int csirx_phy_setting(struct seninf_ctx *ctx)
++{
++	csirx_phyA_setting(ctx);
++
++	if (!ctx->is_cphy)
++		csirx_dphy_setting(ctx);
++	else
++		csirx_cphy_setting(ctx);
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_csi_mipi(struct seninf_ctx *ctx)
++{
++	csirx_phy_init(ctx);
++
++	/* seninf csi2 */
++	csirx_seninf_csi2_setting(ctx);
++
++	/* seninf */
++	csirx_seninf_setting(ctx);
++
++	/* seninf top */
++	csirx_seninf_top_setting(ctx);
++
++	/* phy */
++	csirx_phy_setting(ctx);
++
++	return 0;
++}
++
++int mtk_cam_seninf_poweroff(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf_csi2;
++
++	seninf_csi2 = ctx->reg_if_csi2[ctx->seninf_idx];
++
++	SENINF_WRITE_REG(seninf_csi2, SENINF_CSI2_EN, 0x0);
++
++	if (ctx->is_4d1c) {
++		csirx_phyA_power_on(ctx, ctx->port_a, 0);
++		csirx_phyA_power_on(ctx, ctx->port_b, 0);
++	} else {
++		csirx_phyA_power_on(ctx, ctx->port, 0);
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_reset(struct seninf_ctx *ctx, u32 seninf_idx)
++{
 +	int i;
++	void __iomem *seninf_mux;
++	void __iomem *seninf = ctx->reg_if_ctrl[seninf_idx];
 +
-+	for (i = 0; i < cam_dev->num_raw_devices; i++) {
-+		consumer = raw->devs[i];
-+		supplier = raw->yuvs[i];
-+		if (!consumer || !supplier) {
-+			dev_info(dev, "failed to get raw/yuv dev for id %d\n", i);
++	SENINF_BITS(seninf, SENINF_CSI2_CTRL, SENINF_CSI2_SW_RST, 1);
++	udelay(1);
++	SENINF_BITS(seninf, SENINF_CSI2_CTRL, SENINF_CSI2_SW_RST, 0);
++
++	dev_dbg(ctx->dev, "reset seninf %d\n", seninf_idx);
++
++	for (i = SENINF_MUX1; i < _seninf_cfg.mux_num; i++)
++		if (mtk_cam_seninf_get_top_mux_ctrl(ctx, i) == seninf_idx &&
++		    mtk_cam_seninf_is_mux_used(ctx, i)) {
++			seninf_mux = ctx->reg_if_mux[i];
++			SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_0,
++				    SENINF_MUX_SW_RST, 1);
++			udelay(1);
++			SENINF_BITS(seninf_mux, SENINF_MUX_CTRL_0,
++				    SENINF_MUX_SW_RST, 0);
++			dev_dbg(ctx->dev, "reset mux %d\n", i);
++		}
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_idle(struct seninf_ctx *ctx)
++{
++	int i;
++	struct seninf_vcinfo *vcinfo = &ctx->vcinfo;
++	struct seninf_vc *vc;
++
++	for (i = 0; i < vcinfo->cnt; i++) {
++		vc = &vcinfo->vc[i];
++		if (vc->enable) {
++			mtk_cam_seninf_disable_mux(ctx, vc->mux);
++			mtk_cam_seninf_disable_cammux(ctx, vc->cam);
++			ctx->pad2cam[vc->out_pad] = 0xff;
++		}
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_get_mux_meter(struct seninf_ctx *ctx, u32 mux,
++				 struct mtk_cam_seninf_mux_meter *meter)
++{
++	void __iomem *seninf_mux;
++	s64 hv, hb, vv, vb, w, h;
++	u64 mipi_pixel_rate, vb_in_us, hb_in_us, line_time_in_us;
++	u32 res;
++
++	seninf_mux = ctx->reg_if_mux[mux];
++
++	SENINF_BITS(seninf_mux, SENINF_MUX_FRAME_SIZE_MON_CTRL,
++		    RG_SENINF_MUX_FRAME_SIZE_MON_EN, 1);
++
++	hv = SENINF_READ_REG(seninf_mux, SENINF_MUX_FRAME_SIZE_MON_H_VALID);
++	hb = SENINF_READ_REG(seninf_mux, SENINF_MUX_FRAME_SIZE_MON_H_BLANK);
++	vv = SENINF_READ_REG(seninf_mux, SENINF_MUX_FRAME_SIZE_MON_V_VALID);
++	vb = SENINF_READ_REG(seninf_mux, SENINF_MUX_FRAME_SIZE_MON_V_BLANK);
++	res = SENINF_READ_REG(seninf_mux, SENINF_MUX_SIZE);
++
++	w = res & 0xffff;
++	h = res >> 16;
++
++	if (ctx->fps_n && ctx->fps_d) {
++		mipi_pixel_rate = w * ctx->fps_n * (vv + vb);
++		do_div(mipi_pixel_rate, ctx->fps_d);
++		do_div(mipi_pixel_rate, hv);
++
++		vb_in_us = vb * ctx->fps_d * 1000000;
++		do_div(vb_in_us, vv + vb);
++		do_div(vb_in_us, ctx->fps_n);
++
++		hb_in_us = hb * ctx->fps_d * 1000000;
++		do_div(hb_in_us, vv + vb);
++		do_div(hb_in_us, ctx->fps_n);
++
++		line_time_in_us = (hv + hb) * ctx->fps_d * 1000000;
++		do_div(line_time_in_us, vv + vb);
++		do_div(line_time_in_us, ctx->fps_n);
++
++		meter->mipi_pixel_rate = mipi_pixel_rate;
++		meter->vb_in_us = vb_in_us;
++		meter->hb_in_us = hb_in_us;
++		meter->line_time_in_us = line_time_in_us;
++	} else {
++		meter->mipi_pixel_rate = -1;
++		meter->vb_in_us = -1;
++		meter->hb_in_us = -1;
++		meter->line_time_in_us = -1;
++	}
++
++	meter->width = w;
++	meter->height = h;
++
++	meter->h_valid = hv;
++	meter->h_blank = hb;
++	meter->v_valid = vv;
++	meter->v_blank = vb;
++
++	return 0;
++}
++
++ssize_t mtk_cam_seninf_show_status(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	int i, len;
++	struct seninf_core *core;
++	struct seninf_ctx *ctx;
++	struct seninf_vc *vc;
++	struct media_link *link;
++	struct media_pad *pad;
++	struct mtk_cam_seninf_mux_meter meter;
++	void __iomem *csi2, *pmux;
++	void __iomem *rx, *pcammux;
++
++	core = dev_get_drvdata(dev);
++	len = 0;
++
++	mutex_lock(&core->mutex);
++
++	list_for_each_entry(ctx, &core->list, list) {
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\n[%s] port %d intf %d test %d cphy %d lanes %d\n",
++				ctx->subdev.name, ctx->port, ctx->seninf_idx,
++				ctx->is_test_model, ctx->is_cphy,
++				ctx->num_data_lanes);
++
++		pad = &ctx->pads[PAD_SINK];
++		list_for_each_entry(link, &pad->entity->links, list) {
++			if (link->sink == pad) {
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"source %s flags 0x%lx\n",
++						link->source->entity->name,
++						link->flags);
++			}
++		}
++
++		if (!ctx->streaming)
 +			continue;
++
++		csi2 = ctx->reg_if_csi2[ctx->seninf_idx];
++		rx = ctx->reg_ana_dphy_top[ctx->port];
++
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"csi2 irq_stat 0x%08x\n",
++				SENINF_READ_REG(csi2, SENINF_CSI2_IRQ_STATUS));
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"csi2 line_frame_num 0x%08x\n",
++				SENINF_READ_REG(csi2, SENINF_CSI2_LINE_FRAME_NUM));
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"csi2 packet_status 0x%08x\n",
++				SENINF_READ_REG(csi2, SENINF_CSI2_PACKET_STATUS));
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"csi2 packet_cnt_status 0x%08x\n",
++				SENINF_READ_REG(csi2, SENINF_CSI2_PACKET_CNT_STATUS));
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"rx-ana settle ck 0x%02x dt 0x%02x\n",
++				SENINF_READ_BITS(rx, DPHY_RX_CLOCK_LANE0_HS_PARAMETER,
++						 RG_DPHY_RX_LC0_HS_SETTLE_PARAMETER),
++				SENINF_READ_BITS(rx,
++						 DPHY_RX_DATA_LANE0_HS_PARAMETER,
++						 RG_CDPHY_RX_LD0_TRIO0_HS_SETTLE_PARAMETER));
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"rx-ana trail en %u param 0x%02x\n",
++				SENINF_READ_BITS(rx, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++						 RG_DPHY_RX_LD0_HS_TRAIL_EN),
++				SENINF_READ_BITS(rx, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++						 RG_DPHY_RX_LD0_HS_TRAIL_PARAMETER));
++
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"data_not_enough_cnt : <%d>",
++				ctx->data_not_enough_cnt);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"err_lane_resync_cnt : <%d>",
++				ctx->err_lane_resync_cnt);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"crc_err_cnt : <%d>", ctx->crc_err_flag);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"ecc_err_double_cnt : <%d>",
++				ctx->ecc_err_double_cnt);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"ecc_err_corrected_cnt : <%d>\n",
++				ctx->ecc_err_corrected_cnt);
++
++		for (i = 0; i < ctx->vcinfo.cnt; i++) {
++			vc = &ctx->vcinfo.vc[i];
++			pmux = ctx->reg_if_mux[vc->mux];
++			pcammux = ctx->reg_if_cam_mux;
++
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"[%d] vc 0x%x dt 0x%x mux %d cam %d\n",
++					i, vc->vc, vc->dt, vc->mux, vc->cam);
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\tmux[%d] en %d src %d irq_stat 0x%x\n",
++					vc->mux,
++					mtk_cam_seninf_is_mux_used(ctx, vc->mux),
++					mtk_cam_seninf_get_top_mux_ctrl(ctx, vc->mux),
++					SENINF_READ_REG(pmux, SENINF_MUX_IRQ_STATUS));
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\t\tfifo_overrun_cnt : <%d>\n",
++					ctx->fifo_overrun_cnt);
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\tcam[%d] en %d src %d exp 0x%x res 0x%x irq_stat 0x%x\n",
++					vc->cam,
++					mtk_cam_seninf_is_cammux_used(ctx, vc->cam),
++					mtk_cam_seninf_get_cammux_ctrl(ctx, vc->cam),
++					mtk_cam_seninf_get_cammux_exp(ctx, vc->cam),
++					mtk_cam_seninf_get_cammux_res(ctx, vc->cam),
++					SENINF_READ_REG(pcammux,
++							SENINF_CAM_MUX_IRQ_STATUS));
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\t\tsize_err_cnt : <%d>\n",
++					ctx->size_err_cnt);
++
++			if (vc->feature == VC_RAW_DATA ||
++			    vc->feature == VC_STAGGER_NE ||
++			    vc->feature == VC_STAGGER_ME ||
++			    vc->feature == VC_STAGGER_SE) {
++				mtk_cam_seninf_get_mux_meter(ctx, vc->mux,
++							     &meter);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\t--- mux meter ---\n");
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\twidth %d height %d\n",
++						meter.width, meter.height);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\th_valid %d, h_blank %d\n",
++						meter.h_valid, meter.h_blank);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\tv_valid %d, v_blank %d\n",
++						meter.v_valid, meter.v_blank);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\tmipi_pixel_rate %lld\n",
++						meter.mipi_pixel_rate);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\tv_blank %lld us\n",
++						meter.vb_in_us);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\th_blank %lld us\n",
++						meter.hb_in_us);
++				len += snprintf(buf + len, PAGE_SIZE - len,
++						"\tline_time %lld us\n",
++						meter.line_time_in_us);
++			}
 +		}
++	}
 +
-+		raw_dev = dev_get_drvdata(consumer);
-+		yuv_dev = dev_get_drvdata(supplier);
-+		raw_dev->yuv_base = yuv_dev->base;
++	mutex_unlock(&core->mutex);
 +
-+		link = device_link_add(consumer, supplier,
-+				       DL_FLAG_AUTOREMOVE_CONSUMER |
-+				       DL_FLAG_PM_RUNTIME);
-+		if (!link) {
-+			dev_err(dev, "Unable to create link between %s and %s\n",
-+				dev_name(consumer), dev_name(supplier));
-+			return -ENODEV;
++	return len;
++}
++
++#define SENINF_DRV_DEBUG_MAX_DELAY 400
++
++static inline void
++mtk_cam_seninf_clear_matched_cam_mux_irq(struct seninf_ctx *ctx,
++					 u32 cam_mux_idx,
++					 u32 vc_idx,
++					 s32 enabled)
++{
++	u8 used_cammux;
++
++	if (cam_mux_idx >= SENINF_CAM_MUX_NUM) {
++		dev_info(ctx->dev, "unsupport cam_mux(%u)", cam_mux_idx);
++		return;
++	}
++	if (vc_idx >= SENINF_VC_MAXCNT) {
++		dev_info(ctx->dev, "unsupport vc_idx(%u)", vc_idx);
++		return;
++	}
++
++	used_cammux = ctx->vcinfo.vc[vc_idx].cam;
++	if (used_cammux == cam_mux_idx &&
++	    enabled & (1 << cam_mux_idx)) {
++		dev_dbg(ctx->dev,
++			"before clear cam mux%u recSize = 0x%x, irq = 0x%x",
++			cam_mux_idx,
++			SENINF_READ_REG(ctx->reg_if_cam_mux,
++					SENINF_CAM_MUX0_CHK_RES + (0x10 * cam_mux_idx)),
++			SENINF_READ_REG(ctx->reg_if_cam_mux,
++					SENINF_CAM_MUX_IRQ_STATUS));
++
++		SENINF_WRITE_REG(ctx->reg_if_cam_mux,
++				 SENINF_CAM_MUX_IRQ_STATUS,
++				 3 << (cam_mux_idx * 2));
++	}
++}
++
++static inline void mtk_cam_seninf_check_matched_cam_mux(struct seninf_ctx *ctx,
++							u32 cam_mux_idx,
++							u32 vc_idx,
++							s32 enabled,
++							s32 irq_status)
++{
++	u8 used_cammux;
++
++	if (cam_mux_idx >= SENINF_CAM_MUX_NUM) {
++		dev_info(ctx->dev, "unsupport cam_mux(%u)", cam_mux_idx);
++		return;
++	}
++	if (vc_idx >= SENINF_VC_MAXCNT) {
++		dev_info(ctx->dev, "unsupport vc_idx(%u)", vc_idx);
++		return;
++	}
++
++	used_cammux = ctx->vcinfo.vc[vc_idx].cam;
++
++	if (used_cammux == cam_mux_idx && enabled & (1 << cam_mux_idx)) {
++		int rec_size = SENINF_READ_REG(ctx->reg_if_cam_mux,
++			SENINF_CAM_MUX0_CHK_RES + (0x10 * cam_mux_idx));
++		int exp_size = SENINF_READ_REG(ctx->reg_if_cam_mux,
++			SENINF_CAM_MUX0_CHK_CTL_1 + (0x10 * cam_mux_idx));
++		if (rec_size != exp_size) {
++			dev_dbg(ctx->dev,
++				"cam mux%u size mismatch, (rec, exp) = (0x%x, 0x%x)",
++				cam_mux_idx, rec_size, exp_size);
++		}
++		if ((irq_status &
++		     (3 << (cam_mux_idx * 2))) != 0) {
++			dev_dbg(ctx->dev,
++				"cam mux%u size mismatch!, irq = 0x%x",
++				cam_mux_idx, irq_status);
 +		}
 +	}
-+
-+	return 0;
 +}
 +
-+int mtk_cam_raw_register_entities(struct mtk_raw *raw, struct v4l2_device *v4l2_dev)
++int mtk_cam_seninf_debug(struct seninf_ctx *ctx)
 +{
-+	struct device *dev = raw->cam_dev;
-+	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
-+	unsigned int i;
-+	int ret;
++	void __iomem *base_ana, *base_cphy, *base_dphy, *base_csi, *base_mux;
++	unsigned int temp = 0;
++	int pkg_cnt_changed = 0;
++	unsigned int mipi_packet_cnt = 0;
++	unsigned int tmp_mipi_packet_cnt = 0;
++	unsigned long total_delay = 0;
++	int irq_status = 0;
++	int enabled = 0;
++	int ret = 0;
++	int j, k;
++	unsigned long debug_ft = 33;
++	unsigned long debug_vb = 1;
 +
-+	for (i = 0; i < cam_dev->num_raw_devices; i++) {
-+		struct mtk_raw_pipeline *pipe = raw->pipelines + i;
-+
-+		pipe->raw = raw;
-+		memset(pipe->cfg, 0, sizeof(*pipe->cfg));
-+		ret = mtk_raw_pipeline_register(MTKCAM_SUBDEV_RAW_0 + i,
-+						raw->devs[i],
-+						raw->pipelines + i, v4l2_dev);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+void mtk_cam_raw_unregister_entities(struct mtk_raw *raw)
-+{
-+	struct device *dev = raw->cam_dev;
-+	struct mtk_cam_device *cam_dev = dev_get_drvdata(dev);
-+	unsigned int i;
-+
-+	for (i = 0; i < cam_dev->num_raw_devices; i++)
-+		mtk_raw_pipeline_unregister(raw->pipelines + i);
-+}
-+
-+static int mtk_raw_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_raw_device *raw_dev;
-+	struct v4l2_subdev *sd;
-+	int ret;
-+
-+	dev_dbg(dev, "camsys | start %s\n", __func__);
-+
-+	raw_dev = devm_kzalloc(dev, sizeof(*raw_dev), GFP_KERNEL);
-+	if (!raw_dev)
-+		return -ENOMEM;
-+
-+	raw_dev->dev = dev;
-+	dev_set_drvdata(dev, raw_dev);
-+
-+	ret = mtk_raw_of_probe(pdev, raw_dev);
-+	if (ret)
-+		return ret;
-+
-+	raw_dev->fifo_size =
-+		roundup_pow_of_two(8 * sizeof(struct mtk_camsys_irq_info));
-+	raw_dev->msg_buffer = devm_kzalloc(dev, raw_dev->fifo_size, GFP_KERNEL);
-+	if (!raw_dev->msg_buffer)
-+		return -ENOMEM;
-+
-+	/* register raw as mtk_cam async child */
-+	sd = &raw_dev->subdev;
-+	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
-+	sd->internal_ops = &mtk_raw_subdev_internal_ops;
-+	snprintf(sd->name, sizeof(sd->name), "%s",
-+		 of_node_full_name(dev->of_node));
-+	sd->dev = dev;
-+	sd->owner = THIS_MODULE;
-+
-+	ret = v4l2_async_register_subdev(sd);
-+	if (ret) {
-+		dev_err(dev, "%s failed on async_register_subdev\n", __func__);
-+		return ret;
-+	}
-+	dev_dbg(dev, "%s id:%d register subdev\n", __func__, raw_dev->id);
-+
-+	pm_runtime_enable(dev);
-+
-+	dev_info(dev, "camsys | [%s] success\n", __func__);
-+
-+	return 0;
-+}
-+
-+static void mtk_raw_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_raw_device *raw_dev = dev_get_drvdata(dev);
-+	struct v4l2_subdev *sd = &raw_dev->subdev;
-+
-+	dev_dbg(dev, "camsys | start %s\n", __func__);
-+
-+	unregister_pm_notifier(&raw_dev->pm_notifier);
-+
-+	pm_runtime_disable(dev);
-+
-+	v4l2_async_unregister_subdev(sd);
-+}
-+
-+static int mtk_raw_runtime_suspend(struct device *dev)
-+{
-+	struct mtk_raw_device *drvdata = dev_get_drvdata(dev);
-+
-+	dev_dbg(dev, "%s:disable clock\n", __func__);
-+
-+	disable_irq(drvdata->irq);
-+
-+	mtk_cam_raw_reset(drvdata);
-+
-+	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
-+
-+	return 0;
-+}
-+
-+static int mtk_raw_runtime_resume(struct device *dev)
-+{
-+	struct mtk_raw_device *drvdata = dev_get_drvdata(dev);
-+	int ret;
-+
-+	/* reset_msgfifo before enable_irq */
-+	ret = reset_msgfifo(drvdata);
-+	if (ret)
-+		return ret;
-+
-+	enable_irq(drvdata->irq);
-+
-+	dev_dbg(dev, "%s:enable clock\n", __func__);
-+
-+	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clk_b);
-+	if (ret) {
-+		dev_info(dev, "failed at clk_bulk_prepare_enable, ret = %d\n", ret);
-+		clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
-+		return ret;
++	for (j = CSI_PORT_0A; j < CSI_PORT_3A; j++) {
++		base_ana = ctx->reg_ana_csi_rx[j];
++		dev_dbg(ctx->dev,
++			"MipiRx_ANA%d: CDPHY_RX_ANA_0(0x%x) ANA_2(0x%x) ANA_4(0x%x) ANA_5(0x%x) ANA_8(0x%x)\n",
++			j - 3,
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_0),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_2),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_4),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_5),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_8));
++		dev_dbg(ctx->dev,
++			"MipiRx_ANA%d: CDPHY_RX_ANA_AD_0(0x%x) AD_HS_0(0x%x) AD_HS_1(0x%x)\n",
++			j - 3,
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_AD_0),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_AD_HS_0),
++			SENINF_READ_REG(base_ana, CDPHY_RX_ANA_AD_HS_1));
 +	}
 +
-+	mtk_cam_raw_reset(drvdata);
++	for (j = CSI_PORT_0; j < CSI_PORT_3; j++) {
++		base_cphy = ctx->reg_ana_cphy_top[j];
++		base_dphy = ctx->reg_ana_dphy_top[j];
 +
-+	return 0;
-+}
++		dev_dbg(ctx->dev,
++			"Csi%d_Dphy_Top: LANE_EN(0x%x) LANE_SELECT(0x%x) DATA_LANE0_HS(0x%x) DATA_LANE1_HS(0x%x) DATA_LANE2_HS(0x%x) DATA_LANE3_HS(0x%x)\n",
++			j, SENINF_READ_REG(base_dphy, DPHY_RX_LANE_EN),
++			SENINF_READ_REG(base_dphy, DPHY_RX_LANE_SELECT),
++			SENINF_READ_REG(base_dphy,
++					DPHY_RX_DATA_LANE0_HS_PARAMETER),
++			SENINF_READ_REG(base_dphy,
++					DPHY_RX_DATA_LANE1_HS_PARAMETER),
++			SENINF_READ_REG(base_dphy,
++					DPHY_RX_DATA_LANE2_HS_PARAMETER),
++			SENINF_READ_REG(base_dphy,
++					DPHY_RX_DATA_LANE3_HS_PARAMETER));
 +
-+static const struct dev_pm_ops mtk_raw_pm_ops = {
-+	SET_RUNTIME_PM_OPS(mtk_raw_runtime_suspend, mtk_raw_runtime_resume,
-+			   NULL)
-+};
-+
-+static const struct of_device_id mtk_raw_of_ids[] = {
-+	{.compatible = "mediatek,cam-raw",},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mtk_raw_of_ids);
-+
-+struct platform_driver mtk_cam_raw_driver = {
-+	.probe   = mtk_raw_probe,
-+	.remove  = mtk_raw_remove,
-+	.driver  = {
-+		.name  = "mtk-cam raw",
-+		.of_match_table = of_match_ptr(mtk_raw_of_ids),
-+		.pm     = &mtk_raw_pm_ops,
++		dev_dbg(ctx->dev,
++			"Csi%d_Cphy_Top: CPHY_RX_CTRL(0x%x) CPHY_RX_DETECT_CTRL_POST(0x%x)\n",
++			j, SENINF_READ_REG(base_cphy, CPHY_RX_CTRL),
++			SENINF_READ_REG(base_cphy, CPHY_RX_DETECT_CTRL_POST));
 +	}
-+};
 +
-+static inline unsigned int mtk_yuv_get_err_status(unsigned int irq_status)
-+{
-+	return irq_status & YUV_DMA_ERR_ST;
-+}
++	dev_dbg(ctx->dev,
++		"SENINF_TOP_MUX_CTRL_0(0x%x) SENINF_TOP_MUX_CTRL_1(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_top, SENINF_TOP_MUX_CTRL_0),
++		SENINF_READ_REG(ctx->reg_if_top, SENINF_TOP_MUX_CTRL_1));
 +
-+static irqreturn_t mtk_irq_yuv(int irq, void *data)
-+{
-+	struct mtk_yuv_device *drvdata = (struct mtk_yuv_device *)data;
-+	struct device *dev = drvdata->dev;
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX_CTRL_0(0x%x) SENINF_CAM_MUX_CTRL_1(0x%x) SENINF_CAM_MUX_CTRL_2(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_CTRL_0),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_CTRL_1),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_CTRL_2));
 +
-+	unsigned int irq_status, err_status, dma_done_status;
-+	unsigned int drop_status, dma_ofl_status;
++	enabled = SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_EN);
++	/* clear cam mux irq */
++	for (j = 0; j < ctx->vcinfo.cnt; j++) {
++		if (ctx->vcinfo.vc[j].enable)
++			for (k = SENINF_CAM_MUX0; k < SENINF_CAM_MUX_NUM; k++)
++				mtk_cam_seninf_clear_matched_cam_mux_irq(ctx, k, j, enabled);
++	}
++
++	/* Seninf_csi status IRQ */
++	for (j = SENINF_1; j < _seninf_cfg.seninf_num; j++) {
++		base_csi = ctx->reg_if_csi2[j];
++		temp = SENINF_READ_REG(base_csi, SENINF_CSI2_IRQ_STATUS);
++		if (temp & ~(0x324)) {
++			SENINF_WRITE_REG(base_csi, SENINF_CSI2_IRQ_STATUS,
++					 0xffffffff);
++		}
++		dev_dbg(ctx->dev,
++			"SENINF%d_CSI2_EN(0x%x) SENINF_CSI2_OPT(0x%x) SENINF_CSI2_IRQ_STATUS(0x%x)\n",
++			j, SENINF_READ_REG(base_csi, SENINF_CSI2_EN),
++			SENINF_READ_REG(base_csi, SENINF_CSI2_OPT), temp);
++	}
++
++	/* Seninf_csi packet count */
++	pkg_cnt_changed = 0;
++	base_csi = ctx->reg_if_csi2[(uint32_t)ctx->seninf_idx];
++	if (SENINF_READ_REG(base_csi, SENINF_CSI2_EN) & 0x1) {
++		SENINF_BITS(base_csi, SENINF_CSI2_DBG_CTRL,
++			    RG_CSI2_DBG_PACKET_CNT_EN, 1);
++		mipi_packet_cnt = SENINF_READ_REG(base_csi,
++						  SENINF_CSI2_PACKET_CNT_STATUS);
++
++		dev_dbg(ctx->dev, "total_delay %ld SENINF%d_PkCnt(0x%x)\n",
++			total_delay, ctx->seninf_idx, mipi_packet_cnt);
++
++		while (total_delay <= debug_ft) {
++			tmp_mipi_packet_cnt = mipi_packet_cnt & 0xFFFF;
++			mdelay(debug_vb);
++			total_delay += debug_vb;
++			mipi_packet_cnt = SENINF_READ_REG(base_csi,
++							  SENINF_CSI2_PACKET_CNT_STATUS);
++			dev_dbg(ctx->dev,
++				"total_delay %ld SENINF%d_PkCnt(0x%x)\n",
++				total_delay, ctx->seninf_idx, mipi_packet_cnt);
++			if (tmp_mipi_packet_cnt != (mipi_packet_cnt & 0xFFFF)) {
++				pkg_cnt_changed = 1;
++				break;
++			}
++		}
++	}
++	if (!pkg_cnt_changed)
++		ret = -1;
++
++	/* Check csi status again */
++	if (debug_ft > total_delay) {
++		mdelay(debug_ft - total_delay);
++		total_delay = debug_ft;
++	}
++	temp = SENINF_READ_REG(base_csi, SENINF_CSI2_IRQ_STATUS);
++	dev_dbg(ctx->dev, "SENINF%d_CSI2_IRQ_STATUS(0x%x)\n",
++		ctx->seninf_idx, temp);
++	if (total_delay < SENINF_DRV_DEBUG_MAX_DELAY) {
++		if (total_delay + debug_ft < SENINF_DRV_DEBUG_MAX_DELAY)
++			mdelay(debug_ft);
++		else
++			mdelay(SENINF_DRV_DEBUG_MAX_DELAY - total_delay);
++	}
++	temp = SENINF_READ_REG(base_csi, SENINF_CSI2_IRQ_STATUS);
++	dev_dbg(ctx->dev, "SENINF%d_CSI2_IRQ_STATUS(0x%x)\n",
++		ctx->seninf_idx, temp);
++	if ((temp & 0xD0) != 0)
++		ret = -2; /* multi lanes sync error, crc error, ecc error */
++
++	/* SENINF_MUX */
++	for (j = SENINF_MUX1; j < _seninf_cfg.mux_num; j++) {
++		base_mux = ctx->reg_if_mux[j];
++		dev_dbg(ctx->dev,
++			"SENINF%d_MUX_CTRL0(0x%x) SENINF%d_MUX_CTRL1(0x%x) SENINF_MUX_IRQ_STATUS(0x%x) SENINF%d_MUX_SIZE(0x%x) SENINF_MUX_ERR_SIZE(0x%x) SENINF_MUX_EXP_SIZE(0x%x)\n",
++			j,
++			SENINF_READ_REG(base_mux, SENINF_MUX_CTRL_0),
++			j,
++			SENINF_READ_REG(base_mux, SENINF_MUX_CTRL_1),
++			SENINF_READ_REG(base_mux, SENINF_MUX_IRQ_STATUS),
++			j,
++			SENINF_READ_REG(base_mux, SENINF_MUX_SIZE),
++			SENINF_READ_REG(base_mux, SENINF_MUX_ERR_SIZE),
++			SENINF_READ_REG(base_mux, SENINF_MUX_IMG_SIZE));
++
++		if (SENINF_READ_REG(base_mux, SENINF_MUX_IRQ_STATUS) & 0x1) {
++			SENINF_WRITE_REG(base_mux, SENINF_MUX_IRQ_STATUS,
++					 0xffffffff);
++			mdelay(debug_ft);
++			dev_dbg(ctx->dev,
++				"after reset overrun, SENINF_MUX_IRQ_STATUS(0x%x) SENINF%d_MUX_SIZE(0x%x)\n",
++				SENINF_READ_REG(base_mux, SENINF_MUX_IRQ_STATUS),
++				j, SENINF_READ_REG(base_mux, SENINF_MUX_SIZE));
++		}
++	}
 +
 +	irq_status =
-+		readl_relaxed(drvdata->base + REG_CTL_RAW_INT_STAT);
-+	dma_done_status =
-+		readl_relaxed(drvdata->base + REG_CTL_RAW_INT2_STAT);
-+	drop_status =
-+		readl_relaxed(drvdata->base + REG_CTL_RAW_INT4_STAT);
-+	dma_ofl_status =
-+		readl_relaxed(drvdata->base + REG_CTL_RAW_INT5_STAT);
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_IRQ_STATUS);
 +
-+	err_status = mtk_yuv_get_err_status(irq_status);
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX_EN 0x%x SENINF_CAM_MUX_IRQ_EN 0x%x SENINF_CAM_MUX_IRQ_STATUS 0x%x",
++		enabled,
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX_IRQ_EN),
++		irq_status);
 +
-+	if (unlikely(debug_raw))
-+		dev_dbg(dev, "YUV-INT:0x%x(err:0x%x) INT2/4/5 0x%x/0x%x/0x%x\n",
-+			irq_status, err_status,
-+			dma_done_status, drop_status, dma_ofl_status);
++	/* check SENINF_CAM_MUX size */
++	for (j = 0; j < ctx->vcinfo.cnt; j++) {
++		if (ctx->vcinfo.vc[j].enable)
++			for (k = SENINF_CAM_MUX0; k < SENINF_CAM_MUX_NUM; k++)
++				mtk_cam_seninf_check_matched_cam_mux(ctx, k, j,
++								     enabled,
++								     irq_status);
++	}
 +
-+	return IRQ_HANDLED;
-+}
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX size: MUX0(0x%x) MUX1(0x%x) MUX2(0x%x) MUX3(0x%x) MUX4(0x%x) MUX5(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX0_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX1_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX2_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX3_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX4_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX5_CHK_RES));
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX size: MUX6(0x%x) MUX7(0x%x) MUX8(0x%x) MUX9(0x%x) MUX10(0x%x) MUX1(0x%x) MUX12(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX6_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX7_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX8_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX9_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX10_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX11_CHK_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX12_CHK_RES));
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX err size: MUX0(0x%x) MUX1(0x%x) MUX2(0x%x) MUX3(0x%x) MUX4(0x%x) MUX5(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX0_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX1_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX2_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX3_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX4_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX5_CHK_ERR_RES));
++	dev_dbg(ctx->dev,
++		"SENINF_CAM_MUX err size: MUX6(0x%x) MUX7(0x%x) MUX8(0x%x) MUX9(0x%x) MUX10(0x%x) MUX11(0x%x) MUX12(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX6_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX7_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX8_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX9_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX10_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX11_CHK_ERR_RES),
++		SENINF_READ_REG(ctx->reg_if_cam_mux,
++				SENINF_CAM_MUX12_CHK_ERR_RES));
 +
-+static int mtk_yuv_pm_suspend_prepare(struct mtk_yuv_device *dev)
-+{
-+	int ret;
++	/* check VC/DT split */
++	dev_dbg(ctx->dev,
++		"VC/DT split:SENINF_CAM_MUX0_OPT(0x%x) MUX1(0x%x) MUX2(0x%x) MUX3(0x%x) MUX4(0x%x) MUX5(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX0_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX1_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX2_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX3_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX4_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX5_OPT));
++	dev_dbg(ctx->dev,
++		"VC/DT split:SENINF_CAM_MUX6_OPT(0x%x) MUX7(0x%x) MUX8(0x%x) MUX9(0x%x) MUX10(0x%x) MUX11(0x%x) MUX12(0x%x)\n",
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX6_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX7_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX8_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX9_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX10_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX11_OPT),
++		SENINF_READ_REG(ctx->reg_if_cam_mux, SENINF_CAM_MUX12_OPT));
 +
-+	dev_dbg(dev->dev, "- %s\n", __func__);
++	dev_dbg(ctx->dev, "ret = %d", ret);
 +
-+	if (pm_runtime_suspended(dev->dev))
-+		return 0;
-+
-+	/* Force ISP HW to idle */
-+	ret = pm_runtime_force_suspend(dev->dev);
 +	return ret;
 +}
 +
-+static int mtk_yuv_pm_post_suspend(struct mtk_yuv_device *dev)
++ssize_t mtk_cam_seninf_show_err_status(struct device *dev,
++				       struct device_attribute *attr, char *buf)
 +{
-+	int ret;
++	int i, len;
++	struct seninf_core *core;
++	struct seninf_ctx *ctx;
++	struct seninf_vc *vc;
 +
-+	dev_dbg(dev->dev, "- %s\n", __func__);
++	core = dev_get_drvdata(dev);
++	len = 0;
 +
-+	if (pm_runtime_suspended(dev->dev))
++	mutex_lock(&core->mutex);
++
++	list_for_each_entry(ctx, &core->list, list) {
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\n[%s] port %d intf %d test %d cphy %d lanes %d\n",
++				ctx->subdev.name, ctx->port, ctx->seninf_idx,
++				ctx->is_test_model, ctx->is_cphy,
++				ctx->num_data_lanes);
++
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"---flag = errs exceed theshhold ? 1 : 0---\n");
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\tdata_not_enough error flag : <%d>",
++				ctx->data_not_enough_flag);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\terr_lane_resync error flag : <%d>",
++				ctx->err_lane_resync_flag);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\tcrc_err error flag : <%d>",
++				ctx->crc_err_flag);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\tecc_err_double error flag : <%d>",
++				ctx->ecc_err_double_flag);
++		len += snprintf(buf + len, PAGE_SIZE - len,
++				"\tecc_err_corrected error flag : <%d>\n",
++				ctx->ecc_err_corrected_flag);
++
++		for (i = 0; i < ctx->vcinfo.cnt; i++) {
++			vc = &ctx->vcinfo.vc[i];
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"[%d] vc 0x%x dt 0x%x mux %d cam %d\n",
++					i, vc->vc, vc->dt, vc->mux, vc->cam);
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\tfifo_overrun error flag : <%d>",
++					ctx->fifo_overrun_flag);
++			len += snprintf(buf + len, PAGE_SIZE - len,
++					"\tsize_err error flag : <%d>\n",
++					ctx->size_err_flag);
++		}
++	}
++
++	mutex_unlock(&core->mutex);
++
++	return len;
++}
++
++#define SBUF 256
++int mtk_cam_seninf_irq_handler(int irq, void *data)
++{
++	struct seninf_core *core = (struct seninf_core *)data;
++	unsigned long flags; /* for mipi err detection */
++	struct seninf_ctx *ctx;
++	struct seninf_vc *vc;
++	void __iomem *csi2, *pmux, *seninf_cam_mux;
++	int i;
++	unsigned int csi_irq_ro;
++	unsigned int mux_irq_ro;
++	unsigned int cam_irq_exp_ro;
++	unsigned int cam_irq_res_ro;
++	char seninf_log[SBUF];
++	unsigned int wcnt = 0;
++
++	spin_lock_irqsave(&core->spinlock_irq, flags);
++
++	/* debug for set_reg case: REG_KEY_CSI_IRQ_EN */
++	if (core->csi_irq_en_flag) {
++		list_for_each_entry(ctx, &core->list, list) {
++			csi2 = ctx->reg_if_csi2[ctx->seninf_idx];
++			csi_irq_ro =
++				SENINF_READ_REG(csi2, SENINF_CSI2_IRQ_STATUS);
++
++			if (csi_irq_ro) {
++				SENINF_WRITE_REG(csi2, SENINF_CSI2_IRQ_STATUS,
++						 0xFFFFFFFF);
++			}
++
++			if (csi_irq_ro & (0x1 << RO_CSI2_ECC_ERR_CORRECTED_IRQ_SHIFT))
++				ctx->ecc_err_corrected_cnt++;
++			if (csi_irq_ro & (0x1 << RO_CSI2_ECC_ERR_DOUBLE_IRQ_SHIFT))
++				ctx->ecc_err_double_cnt++;
++			if (csi_irq_ro & (0x1 << RO_CSI2_CRC_ERR_IRQ_SHIFT))
++				ctx->crc_err_cnt++;
++			if (csi_irq_ro & (0x1 << RO_CSI2_ERR_LANE_RESYNC_IRQ_SHIFT))
++				ctx->err_lane_resync_cnt++;
++			if (csi_irq_ro & (0x1 << RO_CSI2_RECEIVE_DATA_NOT_ENOUGH_IRQ_SHIFT))
++				ctx->data_not_enough_cnt++;
++
++			for (i = 0; i < ctx->vcinfo.cnt; i++) {
++				vc = &ctx->vcinfo.vc[i];
++				pmux = ctx->reg_if_mux[vc->mux];
++				seninf_cam_mux = ctx->reg_if_cam_mux;
++
++				mux_irq_ro = SENINF_READ_REG(pmux,
++							     SENINF_MUX_IRQ_STATUS);
++
++				cam_irq_exp_ro = SENINF_READ_REG(seninf_cam_mux,
++								 SENINF_CAM_MUX0_CHK_CTL_1 +
++								 (0x10 * (vc->cam)));
++
++				cam_irq_res_ro = SENINF_READ_REG(seninf_cam_mux,
++								 SENINF_CAM_MUX0_CHK_RES +
++								 (0x10 * (vc->cam)));
++
++				if (mux_irq_ro)
++					SENINF_WRITE_REG(pmux,
++							 SENINF_MUX_IRQ_STATUS,
++							 0xFFFFFFFF);
++
++				if (cam_irq_res_ro != cam_irq_exp_ro)
++					SENINF_WRITE_REG(seninf_cam_mux,
++							 SENINF_CAM_MUX0_CHK_RES +
++							 (0x10 * (vc->cam)),
++							 0xFFFFFFFF);
++
++				if (mux_irq_ro & (0x1 << 0))
++					ctx->fifo_overrun_cnt++;
++
++				if (cam_irq_res_ro != cam_irq_exp_ro)
++					ctx->size_err_cnt++;
++			}
++
++			/* dump status counter: debug for electrical signal */
++			if (ctx->data_not_enough_cnt >= core->detection_cnt ||
++			    ctx->err_lane_resync_cnt >= core->detection_cnt ||
++			    ctx->crc_err_cnt >= core->detection_cnt ||
++			    ctx->ecc_err_double_cnt >= core->detection_cnt ||
++			    ctx->ecc_err_corrected_cnt >= core->detection_cnt ||
++			    ctx->fifo_overrun_cnt >= core->detection_cnt ||
++			    ctx->size_err_cnt >= core->detection_cnt) {
++				/* disable all interrupts */
++				SENINF_WRITE_REG(csi2, SENINF_CSI2_IRQ_EN, 0x80000000);
++
++				if (ctx->data_not_enough_cnt >= core->detection_cnt)
++					ctx->data_not_enough_flag = 1;
++				if (ctx->err_lane_resync_cnt >= core->detection_cnt)
++					ctx->err_lane_resync_flag = 1;
++				if (ctx->crc_err_cnt >= core->detection_cnt)
++					ctx->crc_err_flag = 1;
++				if (ctx->ecc_err_double_cnt >= core->detection_cnt)
++					ctx->ecc_err_double_flag = 1;
++				if (ctx->ecc_err_corrected_cnt >= core->detection_cnt)
++					ctx->ecc_err_corrected_flag = 1;
++				if (ctx->fifo_overrun_cnt >= core->detection_cnt)
++					ctx->fifo_overrun_flag = 1;
++				if (ctx->size_err_cnt >= core->detection_cnt)
++					ctx->size_err_flag = 1;
++
++				wcnt = snprintf(seninf_log, SBUF, "info: %s", __func__);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   data_not_enough_count: %d",
++					ctx->data_not_enough_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   err_lane_resync_count: %d",
++					ctx->err_lane_resync_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   crc_err_count: %d",
++					ctx->crc_err_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   ecc_err_double_count: %d",
++					ctx->ecc_err_double_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   ecc_err_corrected_count: %d",
++					ctx->ecc_err_corrected_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   fifo_overrun_count: %d",
++					ctx->fifo_overrun_cnt);
++				wcnt += snprintf(seninf_log + wcnt, SBUF - wcnt,
++					"   size_err_count: %d",
++					ctx->size_err_cnt);
++			}
++		}
++	}
++
++	spin_unlock_irqrestore(&core->spinlock_irq, flags);
++
++	return 0;
++}
++
++int mtk_cam_seninf_set_sw_cfg_busy(struct seninf_ctx *ctx, bool enable,
++				   int index)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++
++	if (index == 0)
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_CTRL,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_BSY0, enable);
++	else
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_CTRL,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_BSY1, enable);
++	return 0;
++}
++
++int mtk_cam_seninf_set_cam_mux_dyn_en(struct seninf_ctx *ctx, bool enable,
++				      int cam_mux, int index)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++	u32 tmp = 0;
++
++	if (index == 0) {
++		tmp = SENINF_READ_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++				       RG_SENINF_CAM_MUX_DYN_SWITCH_EN0);
++		if (enable)
++			tmp = tmp | (1 << cam_mux);
++		else
++			tmp = tmp & ~(1 << cam_mux);
++
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_EN0, tmp);
++	} else {
++		tmp = SENINF_READ_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++				       RG_SENINF_CAM_MUX_DYN_SWITCH_EN1);
++		if (enable)
++			tmp = tmp | (1 << cam_mux);
++		else
++			tmp = tmp & ~(1 << cam_mux);
++
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_EN1, tmp);
++	}
++
++	return 0;
++}
++
++int mtk_cam_seninf_reset_cam_mux_dyn_en(struct seninf_ctx *ctx, int index)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++
++	if (index == 0)
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_EN0, 0);
++	else
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_DYN_EN,
++			    RG_SENINF_CAM_MUX_DYN_SWITCH_EN1, 0);
++
++	return 0;
++}
++
++int mtk_cam_seninf_enable_global_drop_irq(struct seninf_ctx *ctx, bool enable,
++					  int index)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++
++	if (index == 0)
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_IRQ_EN,
++			    RG_SENINF_CAM_MUX15_HSIZE_ERR_IRQ_EN, enable);
++	else
++		SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_IRQ_EN,
++			    RG_SENINF_CAM_MUX15_VSIZE_ERR_IRQ_EN, enable);
++
++	return 0;
++}
++
++int mtk_cam_seninf_enable_cam_mux_vsync_irq(struct seninf_ctx *ctx, bool enable,
++					    int cam_mux)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++	int tmp = 0;
++
++	tmp = SENINF_READ_BITS(seninf_cam_mux, SENINF_CAM_MUX_VSYNC_IRQ_EN,
++			       RG_SENINF_CAM_MUX_VSYNC_IRQ_EN);
++	if (enable)
++		tmp |= (enable << cam_mux);
++	else
++		tmp &= ~(enable << cam_mux);
++
++	SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_VSYNC_IRQ_EN,
++		    RG_SENINF_CAM_MUX_VSYNC_IRQ_EN, tmp);
++	return 0;
++}
++
++int mtk_cam_seninf_disable_all_cam_mux_vsync_irq(struct seninf_ctx *ctx)
++{
++	void __iomem *seninf_cam_mux = ctx->reg_if_cam_mux;
++
++	SENINF_BITS(seninf_cam_mux, SENINF_CAM_MUX_VSYNC_IRQ_EN,
++		    RG_SENINF_CAM_MUX_VSYNC_IRQ_EN, 0);
++	return 0;
++}
++
++int mtk_cam_seninf_set_reg(struct seninf_ctx *ctx, u32 key, u32 val)
++{
++	int i;
++	void __iomem *base = ctx->reg_ana_dphy_top[ctx->port];
++	void __iomem *csi2 = ctx->reg_if_csi2[ctx->seninf_idx];
++	void __iomem *pmux, *pcammux;
++	struct seninf_vc *vc;
++	struct seninf_core *core;
++	struct seninf_ctx *ctx_;
++	void __iomem *csi2_;
++
++	core = dev_get_drvdata(ctx->dev->parent);
++
++	if (!ctx->streaming)
 +		return 0;
 +
-+	/* Force ISP HW to resume */
-+	ret = pm_runtime_force_resume(dev->dev);
-+	if (ret)
-+		return ret;
++	dev_dbg(ctx->dev, "%s key = 0x%x, val = 0x%x\n", __func__, key, val);
 +
-+	return 0;
-+}
-+
-+static int yuv_pm_notifier(struct notifier_block *nb,
-+			   unsigned long action, void *data)
-+{
-+	struct mtk_yuv_device *yuv_dev =
-+			container_of(nb, struct mtk_yuv_device, pm_notifier);
-+
-+	switch (action) {
-+	case PM_SUSPEND_PREPARE:
-+		mtk_yuv_pm_suspend_prepare(yuv_dev);
++	switch (key) {
++	case REG_KEY_SETTLE_CK:
++		SENINF_BITS(base, DPHY_RX_CLOCK_LANE0_HS_PARAMETER,
++			    RG_DPHY_RX_LC0_HS_SETTLE_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_CLOCK_LANE1_HS_PARAMETER,
++			    RG_DPHY_RX_LC1_HS_SETTLE_PARAMETER, val);
 +		break;
-+	case PM_POST_SUSPEND:
-+		mtk_yuv_pm_post_suspend(yuv_dev);
++	case REG_KEY_SETTLE_DT:
++		SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++			    RG_CDPHY_RX_LD0_TRIO0_HS_SETTLE_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++			    RG_CDPHY_RX_LD1_TRIO1_HS_SETTLE_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++			    RG_CDPHY_RX_LD2_TRIO2_HS_SETTLE_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++			    RG_CDPHY_RX_LD3_TRIO3_HS_SETTLE_PARAMETER, val);
 +		break;
-+	default:
++	case REG_KEY_HS_TRAIL_EN:
++		SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++			    RG_DPHY_RX_LD0_HS_TRAIL_EN, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++			    RG_DPHY_RX_LD1_HS_TRAIL_EN, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++			    RG_DPHY_RX_LD2_HS_TRAIL_EN, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++			    RG_DPHY_RX_LD3_HS_TRAIL_EN, val);
 +		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static int mtk_yuv_of_probe(struct platform_device *pdev,
-+			    struct mtk_yuv_device *drvdata)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *res;
-+	int irq, ret;
-+	int n_clks;
-+
-+	ret = of_property_read_u32(dev->of_node, "mediatek,cam-id",
-+				   &drvdata->id);
-+	if (ret) {
-+		dev_dbg(dev, "missing camid property\n");
-+		return ret;
-+	}
-+
-+	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34))) {
-+		dev_err(dev, "%s: No suitable DMA available\n", __func__);
-+		return -EIO;
-+	}
-+
-+	if (!dev->dma_parms) {
-+		dev->dma_parms =
-+			devm_kzalloc(dev, sizeof(*dev->dma_parms), GFP_KERNEL);
-+		if (!dev->dma_parms)
-+			return -ENOMEM;
-+	}
-+
-+	dma_set_max_seg_size(dev, UINT_MAX);
-+
-+	/* base outer register */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "base");
-+	if (!res) {
-+		dev_err(dev, "failed to get mem\n");
-+		return -ENODEV;
-+	}
-+
-+	drvdata->base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(drvdata->base)) {
-+		dev_dbg(dev, "failed to map register base\n");
-+		return PTR_ERR(drvdata->base);
-+	}
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		dev_err(dev, "failed to get irq\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = devm_request_irq(dev, irq, mtk_irq_yuv, 0,
-+			       dev_name(dev), drvdata);
-+	if (ret) {
-+		dev_err(dev, "failed to request irq=%d\n", irq);
-+		return ret;
-+	}
-+	dev_dbg(dev, "registered irq=%d\n", irq);
-+
-+	n_clks = devm_clk_bulk_get_all(dev, &drvdata->clk_b);
-+	if (n_clks < 0) {
-+		dev_err(dev, "failed to devm_clk_bulk_get_all=%d\n", n_clks);
-+		return n_clks;
-+	}
-+
-+	drvdata->num_clks = n_clks;
-+	dev_info(dev, "clk_num:%d\n", drvdata->num_clks);
-+
-+#ifdef CONFIG_PM_SLEEP
-+	drvdata->pm_notifier.notifier_call = yuv_pm_notifier;
-+	ret = register_pm_notifier(&drvdata->pm_notifier);
-+	if (ret) {
-+		dev_err(dev, "failed to register notifier block.\n");
-+		return ret;
-+	}
-+#endif
-+
-+	return 0;
-+}
-+
-+static int mtk_yuv_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_yuv_device *drvdata;
-+	struct v4l2_subdev *sd;
-+	int ret;
-+
-+	dev_dbg(dev, "camsys | start %s\n", __func__);
-+
-+	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
-+
-+	drvdata->dev = dev;
-+	dev_set_drvdata(dev, drvdata);
-+
-+	ret = mtk_yuv_of_probe(pdev, drvdata);
-+	if (ret) {
-+		dev_info(dev, "mtk_yuv_of_probe failed\n");
-+		return ret;
-+	}
-+
-+	/* register yuv as mtk_cam async child */
-+	sd = &drvdata->subdev;
-+	v4l2_subdev_init(sd, &mtk_raw_subdev_ops);
-+	sd->internal_ops = &mtk_raw_subdev_internal_ops;
-+	snprintf(sd->name, sizeof(sd->name), "%s",
-+		 of_node_full_name(dev->of_node));
-+	sd->dev = dev;
-+	sd->owner = THIS_MODULE;
-+
-+	ret = v4l2_async_register_subdev(sd);
-+	if (ret) {
-+		dev_err(dev, "%s failed on async_register_subdev\n", __func__);
-+		return ret;
-+	}
-+
-+	pm_runtime_enable(dev);
-+
-+	dev_info(dev, "camsys | [%s] success\n", __func__);
-+
-+	return 0;
-+}
-+
-+static void mtk_yuv_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_yuv_device *yuv_dev = dev_get_drvdata(dev);
-+	struct v4l2_subdev *sd = &yuv_dev->subdev;
-+
-+	dev_dbg(dev, "camsys | start %s\n", __func__);
-+
-+	unregister_pm_notifier(&yuv_dev->pm_notifier);
-+
-+	pm_runtime_disable(dev);
-+
-+	v4l2_async_unregister_subdev(sd);
-+}
-+
-+/* driver for yuv part */
-+static int mtk_yuv_runtime_suspend(struct device *dev)
-+{
-+	struct mtk_yuv_device *drvdata = dev_get_drvdata(dev);
-+
-+	dev_info(dev, "%s:disable clock\n", __func__);
-+
-+	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
-+
-+	return 0;
-+}
-+
-+static int mtk_yuv_runtime_resume(struct device *dev)
-+{
-+	struct mtk_yuv_device *drvdata = dev_get_drvdata(dev);
-+	int ret;
-+
-+	dev_info(dev, "%s:enable clock\n", __func__);
-+
-+	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clk_b);
-+	if (ret) {
-+		dev_info(dev, "failed at clk_bulk_prepare_enable, ret = %d\n", ret);
-+		clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clk_b);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops mtk_yuv_pm_ops = {
-+	SET_RUNTIME_PM_OPS(mtk_yuv_runtime_suspend, mtk_yuv_runtime_resume,
-+			   NULL)
-+};
-+
-+static const struct of_device_id mtk_yuv_of_ids[] = {
-+	{.compatible = "mediatek,cam-yuv",},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mtk_yuv_of_ids);
-+
-+struct platform_driver mtk_cam_yuv_driver = {
-+	.probe   = mtk_yuv_probe,
-+	.remove  = mtk_yuv_remove,
-+	.driver  = {
-+		.name  = "mtk-cam yuv",
-+		.of_match_table = of_match_ptr(mtk_yuv_of_ids),
-+		.pm     = &mtk_yuv_pm_ops,
-+	}
-+};
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
-new file mode 100644
-index 000000000000..09a92df5d20a
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw.h
-@@ -0,0 +1,325 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAM_RAW_H
-+#define __MTK_CAM_RAW_H
-+
-+#include <linux/kfifo.h>
-+#include <media/v4l2-subdev.h>
-+#include "mtk_cam-video.h"
-+#include "mtk_camera-v4l2-controls.h"
-+
-+struct mtk_cam_request_stream_data;
-+
-+/* ISP7_1 control */
-+#define RAW_PIPELINE_NUM 3
-+
-+#define SCQ_DEADLINE_MS  15 /* ~1/2 frame length */
-+#define SCQ_DEFAULT_CLK_RATE 208 /* default 208MHz */
-+
-+#define MTK_CAMSYS_RES_STEP_NUM	8
-+
-+/* ISP7_1 image */
-+#define IMG_MAX_WIDTH		12000
-+#define IMG_MAX_HEIGHT		9000
-+
-+#define IMG_MIN_WIDTH		80
-+#define IMG_MIN_HEIGHT		60
-+#define YUV_GROUP1_MAX_WIDTH	8160
-+#define YUV_GROUP1_MAX_HEIGHT	3896
-+#define YUV_GROUP2_MAX_WIDTH	3060
-+#define YUV_GROUP2_MAX_HEIGHT	1145
-+#define YUV1_MAX_WIDTH		8160
-+#define YUV1_MAX_HEIGHT		2290
-+#define YUV2_MAX_WIDTH		3060
-+#define YUV2_MAX_HEIGHT		1145
-+#define YUV3_MAX_WIDTH		7794
-+#define YUV3_MAX_HEIGHT		3896
-+#define YUV4_MAX_WIDTH		1530
-+#define YUV4_MAX_HEIGHT		572
-+#define YUV5_MAX_WIDTH		1530
-+#define YUV5_MAX_HEIGHT		572
-+#define DRZS4NO1_MAX_WIDTH	2400
-+#define DRZS4NO1_MAX_HEIGHT	1080
-+#define DRZS4NO2_MAX_WIDTH	2400
-+#define DRZS4NO2_MAX_HEIGHT	1080
-+#define DRZS4NO3_MAX_WIDTH	576
-+#define DRZS4NO3_MAX_HEIGHT	432
-+#define RZH1N2TO1_MAX_WIDTH	1280
-+#define RZH1N2TO1_MAX_HEIGHT	600
-+#define RZH1N2TO2_MAX_WIDTH	512
-+#define RZH1N2TO2_MAX_HEIGHT	512
-+#define RZH1N2TO3_MAX_WIDTH	1280
-+#define RZH1N2TO3_MAX_HEIGHT	600
-+
-+#define IMG_PIX_ALIGN		2
-+
-+enum raw_module_id {
-+	RAW_A = 0,
-+	RAW_B = 1,
-+	RAW_C = 2,
-+	RAW_NUM,
-+};
-+
-+/* feature mask to categorize all raw functions */
-+#define MTK_CAM_FEATURE_HDR_MASK		0x0000000F
-+#define MTK_CAM_FEATURE_SUBSAMPLE_MASK		0x000000F0
-+#define MTK_CAM_FEATURE_OFFLINE_M2M_MASK	0x00000100
-+#define MTK_CAM_FEATURE_PURE_OFFLINE_M2M_MASK	0x00000200
-+
-+enum raw_function_id {
-+	/* bit [0~3] hdr */
-+	/* bit [4~7] fps */
-+	/* bit [8~9] m2m */
-+	OFFLINE_M2M			= (1 << 8),
-+	PURE_OFFLINE_M2M		= (1 << 9),
-+	RAW_FUNCTION_END		= 0xF0000000,
-+};
-+
-+enum hardware_mode_id {
-+	DEFAULT			= 0,
-+	ON_THE_FLY		= 1,
-+	DCIF			= 2,
-+};
-+
-+/* enum for pads of raw pipeline */
-+enum {
-+	MTK_RAW_SINK_BEGIN = 0,
-+	MTK_RAW_SINK = MTK_RAW_SINK_BEGIN,
-+	MTK_RAW_SINK_NUM,
-+	MTK_RAW_META_IN = MTK_RAW_SINK_NUM,
-+	MTK_RAW_RAWI_2_IN,
-+	MTK_RAW_RAWI_3_IN,
-+	MTK_RAW_RAWI_4_IN,
-+	MTK_RAW_SOURCE_BEGIN,
-+	MTK_RAW_MAIN_STREAM_OUT = MTK_RAW_SOURCE_BEGIN,
-+	MTK_RAW_YUVO_1_OUT,
-+	MTK_RAW_YUVO_2_OUT,
-+	MTK_RAW_YUVO_3_OUT,
-+	MTK_RAW_YUVO_4_OUT,
-+	MTK_RAW_YUVO_5_OUT,
-+	MTK_RAW_DRZS4NO_1_OUT,
-+	MTK_RAW_DRZS4NO_2_OUT,
-+	MTK_RAW_DRZS4NO_3_OUT,
-+	MTK_RAW_RZH1N2TO_1_OUT,
-+	MTK_RAW_RZH1N2TO_2_OUT,
-+	MTK_RAW_RZH1N2TO_3_OUT,
-+	MTK_RAW_META_OUT_BEGIN,
-+	MTK_RAW_META_OUT_0 = MTK_RAW_META_OUT_BEGIN,
-+	MTK_RAW_META_OUT_1,
-+	MTK_RAW_META_OUT_2,
-+	MTK_RAW_PIPELINE_PADS_NUM,
-+};
-+
-+static inline bool is_yuv_node(u32 desc_id)
-+{
-+	switch (desc_id) {
-+	case MTK_RAW_YUVO_1_OUT:
-+	case MTK_RAW_YUVO_2_OUT:
-+	case MTK_RAW_YUVO_3_OUT:
-+	case MTK_RAW_YUVO_4_OUT:
-+	case MTK_RAW_YUVO_5_OUT:
-+	case MTK_RAW_DRZS4NO_1_OUT:
-+	case MTK_RAW_DRZS4NO_2_OUT:
-+	case MTK_RAW_DRZS4NO_3_OUT:
-+	case MTK_RAW_RZH1N2TO_1_OUT:
-+	case MTK_RAW_RZH1N2TO_2_OUT:
-+	case MTK_RAW_RZH1N2TO_3_OUT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+/* max(pdi_table1, pdi_table2, ...) */
-+#define RAW_STATS_CFG_VARIOUS_SIZE ALIGN(0x7500, SZ_1K)
-+
-+#define MTK_RAW_TOTAL_NODES (MTK_RAW_PIPELINE_PADS_NUM - MTK_RAW_SINK_NUM)
-+
-+struct mtk_cam_dev;
-+struct mtk_cam_ctx;
-+
-+struct mtk_raw_pde_config {
-+	struct mtk_cam_pde_info pde_info;
-+};
-+
-+struct mtk_cam_resource_config {
-+	struct v4l2_subdev *seninf;
-+	struct mutex resource_lock; /* protect resource calculation */
-+	struct v4l2_fract interval;
-+	s64 pixel_rate;
-+	u32 bin_limit;
-+	u32 frz_limit;
-+	u32 hwn_limit_max;
-+	u32 hwn_limit_min;
-+	s64 hblank;
-+	s64 vblank;
-+	s64 sensor_pixel_rate;
-+	u32 res_plan;
-+	u32 raw_feature;
-+	u32 res_strategy[MTK_CAMSYS_RES_STEP_NUM];
-+	u32 clk_target;
-+	u32 raw_num_used;
-+	u32 bin_enable;
-+	u32 frz_enable;
-+	u32 frz_ratio;
-+	u32 tgo_pxl_mode;
-+	u32 raw_path;
-+	/* sink fmt adjusted according resource used*/
-+	struct v4l2_mbus_framefmt sink_fmt;
-+};
-+
-+struct mtk_raw_pad_config {
-+	struct v4l2_mbus_framefmt mbus_fmt;
-+	struct v4l2_rect crop;
-+};
-+
-+/*
-+ * struct mtk_raw_pipeline - sub dev to use raws.
-+ *
-+ * @feature_pending: keep the user value of S_CTRL V4L2_CID_MTK_CAM_FEATURE.
-+ *		     It it safe save to be used in mtk_cam_vidioc_s_fmt,
-+ *		     mtk_cam_vb2_queue_setup and mtk_cam_vb2_buf_queue
-+ *		     But considering that we can't when the user calls S_CTRL,
-+ *		     please use mtk_cam_request_stream_data's
-+ *		     feature.raw_feature field
-+ *		     to avoid the CTRL value change tming issue.
-+ * @feature_active: The active feature during streaming. It can't be changed
-+ *		    during streaming and can only be used after streaming on.
-+ *
-+ */
-+struct mtk_raw_pipeline {
-+	unsigned int id;
-+	struct v4l2_subdev subdev;
-+	struct media_pad pads[MTK_RAW_PIPELINE_PADS_NUM];
-+	struct mtk_cam_video_device vdev_nodes[MTK_RAW_TOTAL_NODES];
-+	struct mtk_raw *raw;
-+	struct mtk_raw_pad_config cfg[MTK_RAW_PIPELINE_PADS_NUM];
-+
-+	/* cached settings */
-+	unsigned int enabled_raw;
-+	unsigned long enabled_dmas;
-+	/* resource controls */
-+	struct v4l2_ctrl_handler ctrl_handler;
-+	s64 feature_pending;
-+	s64 feature_active;
-+
-+	struct mtk_cam_resource user_res;
-+	struct mtk_cam_resource_config res_config;
-+	struct mtk_cam_resource_config try_res_config;
-+	int sensor_mode_update;
-+	s64 sync_id;
-+	/* pde module */
-+	struct mtk_raw_pde_config pde_config;
-+	s64 hw_mode;
-+};
-+
-+struct mtk_raw_device {
-+	struct v4l2_subdev subdev;
-+	struct device *dev;
-+	struct mtk_cam_device *cam;
-+	unsigned int id;
-+	int irq;
-+	void __iomem *base;
-+	void __iomem *base_inner;
-+	void __iomem *yuv_base;
-+	unsigned int num_clks;
-+	struct clk_bulk_data *clk_b;
-+#ifdef CONFIG_PM_SLEEP
-+	struct notifier_block pm_notifier;
-+#endif
-+
-+	unsigned int	fifo_size;
-+	void		*msg_buffer;
-+	struct kfifo	msg_fifo;
-+	atomic_t	is_fifo_overflow;
-+
-+	struct mtk_raw_pipeline *pipeline;
-+	bool is_sub;
-+
-+	u64 sof_count;
-+	u64 vsync_count;
-+
-+	atomic_t vf_en;
-+	int overrun_debug_dump_cnt;
-+};
-+
-+struct mtk_yuv_device {
-+	struct v4l2_subdev subdev;
-+	struct device *dev;
-+	unsigned int id;
-+	void __iomem *base;
-+	unsigned int num_clks;
-+	struct clk_bulk_data *clk_b;
-+#ifdef CONFIG_PM_SLEEP
-+	struct notifier_block pm_notifier;
-+#endif
-+};
-+
-+/* AE information */
-+struct mtk_ae_debug_data {
-+	u64 obc_r1_sum[4];
-+	u64 obc_r2_sum[4];
-+	u64 obc_r3_sum[4];
-+	u64 aa_sum[4];
-+	u64 ltm_sum[4];
-+};
-+
-+/*
-+ * struct mtk_raw - the raw device information
-+ */
-+struct mtk_raw {
-+	struct device *cam_dev;
-+	struct device *devs[RAW_PIPELINE_NUM];
-+	struct device *yuvs[RAW_PIPELINE_NUM];
-+	struct mtk_raw_pipeline pipelines[RAW_PIPELINE_NUM];
-+};
-+
-+static inline struct mtk_raw_pipeline *
-+mtk_cam_ctrl_handler_to_raw_pipeline(struct v4l2_ctrl_handler *handler)
-+{
-+	return container_of(handler, struct mtk_raw_pipeline, ctrl_handler);
-+};
-+
-+int mtk_cam_raw_setup_dependencies(struct mtk_raw *raw);
-+
-+int mtk_cam_raw_register_entities(struct mtk_raw *raw,
-+				  struct v4l2_device *v4l2_dev);
-+void mtk_cam_raw_unregister_entities(struct mtk_raw *raw);
-+
-+int mtk_cam_raw_select(struct mtk_cam_ctx *ctx,
-+		       struct mtkcam_ipi_input_param *cfg_in_param);
-+
-+void mtk_cam_raw_initialize(struct mtk_raw_device *dev, int is_sub);
-+
-+void mtk_cam_raw_stream_on(struct mtk_raw_device *dev, int on);
-+
-+void mtk_cam_raw_apply_cq(struct mtk_raw_device *dev, dma_addr_t cq_addr,
-+			  unsigned int cq_size, unsigned int cq_offset,
-+			  unsigned int sub_cq_size, unsigned int sub_cq_offset);
-+
-+void mtk_cam_raw_trigger_rawi(struct mtk_raw_device *dev,
-+			      struct mtk_cam_ctx *ctx,
-+			      signed int hw_scene);
-+
-+void mtk_cam_raw_reset(struct mtk_raw_device *dev);
-+
-+void mtk_cam_raw_dump_aa_info(struct mtk_cam_ctx *ctx,
-+			      struct mtk_ae_debug_data *ae_info);
-+
-+extern struct platform_driver mtk_cam_raw_driver;
-+extern struct platform_driver mtk_cam_yuv_driver;
-+
-+static inline u32 dmaaddr_lsb(dma_addr_t addr)
-+{
-+	return addr & (u32)U32_MAX;
-+}
-+
-+static inline u32 dmaaddr_msb(dma_addr_t addr)
-+{
-+	return (u64)addr >> 32;
-+}
-+
-+#endif /*__MTK_CAM_RAW_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
-new file mode 100644
-index 000000000000..bd81ce53b251
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.c
-@@ -0,0 +1,403 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2022 MediaTek Inc.
-+
-+#include <linux/device.h>
-+#include <linux/io.h>
-+
-+#include "mtk_cam-regs-mt8188.h"
-+
-+#include "mtk_cam-raw_debug.h"
-+
-+#define ADD_FBC_DMA(name)	 #name
-+static const char * const fbc_r1_list[] = {
-+	ADD_FBC_DMA(IMGO_R1),
-+	ADD_FBC_DMA(FHO_R1),
-+	ADD_FBC_DMA(AAHO_R1),
-+	ADD_FBC_DMA(PDO_R1),
-+	ADD_FBC_DMA(AAO_R1),
-+	ADD_FBC_DMA(TSFSO_R1),
-+	ADD_FBC_DMA(LTMSO_R1),
-+	ADD_FBC_DMA(AFO_R1),
-+	ADD_FBC_DMA(FLKO_R1),
-+	ADD_FBC_DMA(UFEO_R1),
-+	ADD_FBC_DMA(TSFSO_R2),
-+};
-+
-+static const char * const fbc_r2_list[] = {
-+	ADD_FBC_DMA(YUVO_R1),
-+	ADD_FBC_DMA(YUVBO_R1),
-+	ADD_FBC_DMA(YUVCO_R1),
-+	ADD_FBC_DMA(YUVDO_R1),
-+	ADD_FBC_DMA(YUVO_R3),
-+	ADD_FBC_DMA(YUVBO_R3),
-+	ADD_FBC_DMA(YUVCO_R3),
-+	ADD_FBC_DMA(YUVDO_R3),
-+	ADD_FBC_DMA(YUVO_R2),
-+	ADD_FBC_DMA(YUVBO_R2),
-+	ADD_FBC_DMA(YUVO_R4),
-+	ADD_FBC_DMA(YUVBO_R4),
-+	ADD_FBC_DMA(RZH1N2TO_R1),
-+	ADD_FBC_DMA(RZH1N2TBO_R1),
-+	ADD_FBC_DMA(RZH1N2TO_R2),
-+	ADD_FBC_DMA(RZH1N2TO_R3),
-+	ADD_FBC_DMA(RZH1N2TBO_R3),
-+	ADD_FBC_DMA(DRZS4NO_R1),
-+	ADD_FBC_DMA(DRZS4NO_R2),
-+	ADD_FBC_DMA(DRZS4NO_R3),
-+	ADD_FBC_DMA(TNCSO_R1),
-+	ADD_FBC_DMA(TNCSYO_R1),
-+	ADD_FBC_DMA(TNCSBO_R1),
-+	ADD_FBC_DMA(TNCSHO_R1),
-+	ADD_FBC_DMA(ACTSO_R1),
-+	ADD_FBC_DMA(YUVO_R5),
-+	ADD_FBC_DMA(YUVBO_R5),
-+};
-+
-+#define LOGGER_PREFIX_SIZE 16
-+#define LOGGER_BUFSIZE 128
-+struct buffered_logger {
-+	struct device *dev;
-+	void (*log_handler)(struct buffered_logger *log);
-+
-+	char prefix[LOGGER_PREFIX_SIZE];
-+	char buf[LOGGER_BUFSIZE + 1];
-+	unsigned int size;
-+};
-+
-+static void mtk_cam_init_logger(struct buffered_logger *logger,
-+				struct device *dev,
-+				void (*_hdl)(struct buffered_logger *))
-+{
-+	logger->dev = dev;
-+	logger->log_handler = _hdl;
-+	logger->prefix[0] = '\0';
-+	logger->buf[LOGGER_BUFSIZE] = '\0';
-+	logger->size = 0;
-+}
-+
-+static __printf(2, 3)
-+void mtk_cam_log_set_prefix(struct buffered_logger *log, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vscnprintf(log->prefix, LOGGER_PREFIX_SIZE, fmt, args);
-+	va_end(args);
-+}
-+
-+static void mtk_cam_log_handle_limited(struct buffered_logger *log)
-+{
-+	dev_info_ratelimited(log->dev, "%s: %.*s\n",
-+			     log->prefix, log->size, log->buf);
-+	log->size = 0;
-+}
-+
-+static void mtk_cam_log_handle_info(struct buffered_logger *log)
-+{
-+	dev_info(log->dev, "%s: %.*s\n", log->prefix, log->size, log->buf);
-+	log->size = 0;
-+}
-+
-+static void mtk_cam_log_flush(struct buffered_logger *log)
-+{
-+	log->log_handler(log);
-+}
-+
-+static __printf(2, 3)
-+void mtk_cam_log_push(struct buffered_logger *log, const char *fmt, ...)
-+{
-+	va_list args;
-+	int len;
-+
-+	va_start(args, fmt);
-+	len = vscnprintf(log->buf + log->size, LOGGER_BUFSIZE - log->size + 1,
-+			 fmt, args);
-+	va_end(args);
-+
-+	if (len + log->size < LOGGER_BUFSIZE) {
-+		log->size += len;
-+		return;
-+	}
-+
-+	mtk_cam_log_flush(log);
-+
-+	va_start(args, fmt);
-+	len = vscnprintf(log->buf + log->size, LOGGER_BUFSIZE - log->size + 1,
-+			 fmt, args);
-+	va_end(args);
-+
-+	log->size += len;
-+
-+	if (len == LOGGER_BUFSIZE)
-+		dev_info(log->dev, "log buffer size not enough: %d\n",
-+			 LOGGER_BUFSIZE);
-+}
-+
-+void mtk_cam_raw_dump_fbc(struct device *dev,
-+			  void __iomem *base, void __iomem *yuvbase)
-+{
-+	struct buffered_logger log;
-+	int fbc_r1_ctl2[ARRAY_SIZE(fbc_r1_list)];
-+	int fbc_r2_ctl2[ARRAY_SIZE(fbc_r2_list)];
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(fbc_r1_list); i++)
-+		fbc_r1_ctl2[i] = readl(base + REG_FBC_CTL2(FBC_R1A_BASE, i));
-+
-+	for (i = 0; i < ARRAY_SIZE(fbc_r2_list); i++)
-+		fbc_r2_ctl2[i] = readl(yuvbase + REG_FBC_CTL2(FBC_R2A_BASE, i));
-+
-+	mtk_cam_init_logger(&log, dev, mtk_cam_log_handle_info);
-+
-+	mtk_cam_log_set_prefix(&log, "%s", "RAW FBC");
-+	for (i = 0; i < ARRAY_SIZE(fbc_r1_list); i++)
-+		if (fbc_r1_ctl2[i] & 0xffffff) /* if has been used */
-+			mtk_cam_log_push(&log, " %s: 0x%08x",
-+					 fbc_r1_list[i], fbc_r1_ctl2[i]);
-+	mtk_cam_log_flush(&log);
-+
-+	mtk_cam_log_set_prefix(&log, "%s", "YUV FBC");
-+	for (i = 0; i < ARRAY_SIZE(fbc_r2_list); i++)
-+		if (fbc_r2_ctl2[i] & 0xffffff) /* if has been used */
-+			mtk_cam_log_push(&log, " %s: 0x%08x",
-+					 fbc_r2_list[i], fbc_r2_ctl2[i]);
-+	mtk_cam_log_flush(&log);
-+}
-+
-+struct reg_to_dump {
-+	const char *name;
-+	unsigned int reg;
-+};
-+
-+#define ADD_DMA(name)	{ #name, REG_ ## name ## _BASE + DMA_OFFSET_ERR_STAT }
-+static const struct reg_to_dump raw_dma_list[] = {
-+	ADD_DMA(IMGO_R1),
-+	ADD_DMA(IMGO_R1),
-+	ADD_DMA(UFEO_R1),
-+	ADD_DMA(PDO_R1),
-+	ADD_DMA(FLKO_R1),
-+	ADD_DMA(TSFSO_R1),
-+	ADD_DMA(TSFSO_R2),
-+	ADD_DMA(AAO_R1),
-+	ADD_DMA(AAHO_R1),
-+	ADD_DMA(AFO_R1),
-+	ADD_DMA(LTMSO_R1),
-+	ADD_DMA(FHO_R1),
-+	/* ADD_DMA(BPCO_R1), */
-+
-+	ADD_DMA(RAWI_R2),
-+	ADD_DMA(UFDI_R2),
-+	ADD_DMA(BPCI_R1),
-+	ADD_DMA(LSCI_R1),
-+	ADD_DMA(AAI_R1),
-+	ADD_DMA(PDI_R1),
-+	ADD_DMA(BPCI_R2),
-+	ADD_DMA(RAWI_R3),
-+	ADD_DMA(UFDI_R3),
-+	ADD_DMA(BPCI_R3),
-+	/* ADD_DMA(RAWI_R4), */
-+	/* ADD_DMA(BPCI_R4), */
-+	/* ADD_DMA(RAWI_R5), */
-+	ADD_DMA(RAWI_R6),
-+	ADD_DMA(CACI_R1),
-+};
-+
-+static const struct reg_to_dump yuv_dma_list[] = {
-+	ADD_DMA(ACTSO_R1),
-+	ADD_DMA(TNCSO_R1),
-+	ADD_DMA(TNCSBO_R1),
-+	ADD_DMA(TNCSHO_R1),
-+	ADD_DMA(TNCSYO_R1),
-+	ADD_DMA(DRZS4NO_R1),
-+	ADD_DMA(DRZS4NO_R2),
-+	ADD_DMA(DRZS4NO_R3),
-+	ADD_DMA(RZH1N2TO_R1),
-+	ADD_DMA(RZH1N2TBO_R1),
-+	ADD_DMA(RZH1N2TO_R2),
-+	ADD_DMA(RZH1N2TO_R3),
-+	ADD_DMA(RZH1N2TBO_R3),
-+	ADD_DMA(YUVO_R1),
-+	ADD_DMA(YUVBO_R1),
-+	ADD_DMA(YUVCO_R1),
-+	ADD_DMA(YUVDO_R1),
-+	ADD_DMA(YUVO_R2),
-+	ADD_DMA(YUVBO_R2),
-+	ADD_DMA(YUVO_R3),
-+	ADD_DMA(YUVBO_R3),
-+	ADD_DMA(YUVCO_R3),
-+	ADD_DMA(YUVDO_R3),
-+	ADD_DMA(YUVO_R4),
-+	ADD_DMA(YUVBO_R4),
-+	ADD_DMA(YUVO_R5),
-+	ADD_DMA(YUVBO_R5),
-+};
-+
-+static void mtk_cam_dump_dma_err_st(struct device *dev, void __iomem *base,
-+				    const char *prefix,
-+				    const struct reg_to_dump *from,
-+				    const struct reg_to_dump *to)
-+{
-+	struct buffered_logger log;
-+	int err_found = 0;
-+	int err_st;
-+
-+	mtk_cam_init_logger(&log, dev, mtk_cam_log_handle_limited);
-+	mtk_cam_log_set_prefix(&log, "%s", prefix);
-+
-+	while (from < to) {
-+		err_st = readl_relaxed(base + from->reg);
-+
-+		/* [15:0] ERR_STAT */
-+		if (err_st & 0xffff) {
-+			mtk_cam_log_push(&log, " %s: 0x%08x",
-+					 from->name, err_st);
-+			err_found = 1;
++	case REG_KEY_HS_TRAIL_PARAM:
++		SENINF_BITS(base, DPHY_RX_DATA_LANE0_HS_PARAMETER,
++			    RG_DPHY_RX_LD0_HS_TRAIL_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE1_HS_PARAMETER,
++			    RG_DPHY_RX_LD1_HS_TRAIL_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE2_HS_PARAMETER,
++			    RG_DPHY_RX_LD2_HS_TRAIL_PARAMETER, val);
++		SENINF_BITS(base, DPHY_RX_DATA_LANE3_HS_PARAMETER,
++			    RG_DPHY_RX_LD3_HS_TRAIL_PARAMETER, val);
++		break;
++	case REG_KEY_CSI_IRQ_STAT:
++		SENINF_WRITE_REG(csi2, SENINF_CSI2_IRQ_STATUS,
++				 val & 0xFFFFFFFF);
++		break;
++	case REG_KEY_MUX_IRQ_STAT:
++		for (i = 0; i < ctx->vcinfo.cnt; i++) {
++			vc = &ctx->vcinfo.vc[i];
++			pmux = ctx->reg_if_mux[vc->mux];
++			SENINF_WRITE_REG(pmux, SENINF_MUX_IRQ_STATUS,
++					 val & 0xFFFFFFFF);
 +		}
-+		from++;
++		break;
++	case REG_KEY_CAMMUX_IRQ_STAT:
++		for (i = 0; i < ctx->vcinfo.cnt; i++) {
++			vc = &ctx->vcinfo.vc[i];
++			pcammux = ctx->reg_if_cam_mux;
++			SENINF_WRITE_REG(pcammux, SENINF_CAM_MUX_IRQ_STATUS,
++					 val & 0xFFFFFFFF);
++		}
++		break;
++	case REG_KEY_CSI_IRQ_EN:
++		{
++			if (!val) {
++				core->csi_irq_en_flag = 0;
++				return 0;
++			}
++
++			core->csi_irq_en_flag = 1;
++			core->detection_cnt = val;
++			list_for_each_entry(ctx_, &core->list, list) {
++				csi2_ = ctx_->reg_if_csi2[ctx_->seninf_idx];
++				SENINF_WRITE_REG(csi2_, SENINF_CSI2_IRQ_EN,
++						 0xA0002058);
++			}
++		}
++		break;
 +	}
 +
-+	if (err_found)
-+		mtk_cam_log_flush(&log);
++	return 0;
 +}
-+
-+void mtk_cam_raw_dump_dma_err_st(struct device *dev, void __iomem *base)
-+{
-+	mtk_cam_dump_dma_err_st(dev, base, "RAW DMA_ERR",
-+				raw_dma_list,
-+				raw_dma_list + ARRAY_SIZE(raw_dma_list));
-+}
-+
-+void mtk_cam_yuv_dump_dma_err_st(struct device *dev, void __iomem *base)
-+{
-+	mtk_cam_dump_dma_err_st(dev, base, "YUV DMA_ERR",
-+				yuv_dma_list,
-+				yuv_dma_list + ARRAY_SIZE(yuv_dma_list));
-+}
-+
-+void mtk_cam_dump_req_rdy_status(struct device *dev,
-+				 void __iomem *base, void __iomem *yuvbase)
-+{
-+	dev_dbg_ratelimited(dev,
-+			    "REQ RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
-+			    readl_relaxed(base + REG_CTL_RAW_MOD_REQ_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD2_REQ_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD3_REQ_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD5_REQ_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD6_REQ_STAT));
-+	dev_dbg_ratelimited(dev,
-+			    "RDY RAW/2/3 DMA/2:%08x/%08x/%08x/%08x/%08x\n",
-+			    readl_relaxed(base + REG_CTL_RAW_MOD_RDY_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD2_RDY_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD3_RDY_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD5_RDY_STAT),
-+			    readl_relaxed(base + REG_CTL_RAW_MOD6_RDY_STAT));
-+	dev_dbg_ratelimited(dev,
-+			    "REQ YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD_REQ_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD2_REQ_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD3_REQ_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD4_REQ_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD5_REQ_STAT));
-+	dev_dbg_ratelimited(dev,
-+			    "RDY YUV/2/3/4 WDMA:%08x/%08x/%08x/%08x/%08x\n",
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD_RDY_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD2_RDY_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD3_RDY_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD4_RDY_STAT),
-+			    readl_relaxed(yuvbase + REG_CTL_RAW_MOD5_RDY_STAT));
-+}
-+
-+void mtk_cam_dump_dma_debug(struct device *dev,
-+			    void __iomem *dmatop_base,
-+			    const char *dma_name,
-+			    struct dma_debug_item *items, int n)
-+{
-+	void __iomem *dbg_sel = dmatop_base + 0x70;
-+	void __iomem *dbg_port = dmatop_base + 0x74;
-+	int i = 0;
-+	unsigned int vals[16];
-+
-+	if (n >= 16) {
-+		dev_dbg(dev, "%s: should enlarge array size for n(%d)\n",
-+			__func__, n);
-+		return;
-+	}
-+
-+	for (i = 0; i < n; i++) {
-+		writel(items[i].debug_sel, dbg_sel);
-+		if (readl(dbg_sel) != items[i].debug_sel)
-+			dev_dbg(dev, "failed to write dbg_sel %08x\n",
-+				items[i].debug_sel);
-+
-+		vals[i] = readl(dbg_port);
-+	};
-+
-+	dev_dbg(dev, "%s: %s, n = %d", __func__, dma_name, n);
-+	for (i = 0; i < n; i++)
-+		dev_dbg(dev, "%08x: %08x [%s]\n",
-+			items[i].debug_sel, vals[i], items[i].msg);
-+}
-+
-+void mtk_cam_set_topdebug_rdyreq(struct device *dev,
-+				 void __iomem *base, void __iomem *yuvbase,
-+				 u32 event)
-+{
-+	u32 val = event << 16 | 0xa << 12;
-+
-+	writel(val, base + REG_CTL_DBG_SET);
-+	writel(event, base + REG_CTL_DBG_SET2);
-+	writel(val, yuvbase + REG_CTL_DBG_SET);
-+	dev_info(dev,
-+		 "set CAMCTL_DBG_SET2/CAMCTL_DBG_SET (RAW/YUV) 0x%08x/0x%08x\n",
-+		 event, val);
-+}
-+
-+void mtk_cam_dump_topdebug_rdyreq(struct device *dev,
-+				  void __iomem *base, void __iomem *yuvbase)
-+{
-+	static const u32 debug_sel[] = {
-+		/* req group 1~7 */
-+		0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6,
-+		/* rdy group 1~7 */
-+		0x8, 0x9, 0xA, 0xB, 0xC, 0xD, 0xE,
-+		/* latched_events */
-+		0xF,
-+	};
-+	void __iomem *dbg_set;
-+	void __iomem *dbg_port;
-+	u32 set;
-+	int i;
-+
-+	/* CAMCTL_DBG_SET
-+	 *   CAMCTL_SNAPSHOT_SEL  [23:16]
-+	 *   CAMCTL_DEBUG_TOP_SEL [15:12]
-+	 *   CAMCTL_DEBUG_SEL     [11: 8]
-+	 *   CAMCTL_DEBUG_MOD_SEL [ 7: 0]
-+	 */
-+
-+	/* CAMCTL_DEBUG_MOD_SEL
-+	 *   0: tg_scq_cnt_sub_pass1_done
-+	 *   1: rdyreq_dbg_data
-+	 */
-+
-+	dbg_set = base + REG_CTL_DBG_SET;
-+	dbg_port = base + REG_CTL_DBG_PORT;
-+
-+	set = (readl(dbg_set) & 0xfff000) | 0x1;
-+	for (i = 0; i < ARRAY_SIZE(debug_sel); i++) {
-+		writel(set | debug_sel[i] << 8, dbg_set);
-+		dev_info(dev, "RAW debug_set 0x%08x port 0x%08x\n",
-+			 readl(dbg_set), readl(dbg_port));
-+	}
-+
-+	dbg_set = yuvbase + REG_CTL_DBG_SET;
-+	dbg_port = yuvbase + REG_CTL_DBG_PORT;
-+
-+	set = (readl(dbg_set) & 0xfff000) | 0x1;
-+	for (i = 0; i < ARRAY_SIZE(debug_sel); i++) {
-+		writel(set | debug_sel[i] << 8, dbg_set);
-+		dev_info(dev, "YUV debug_set 0x%08x port 0x%08x\n",
-+			 readl(dbg_set), readl(dbg_port));
-+	}
-+}
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h
 new file mode 100644
-index 000000000000..8d457403a5b0
+index 000000000000..7c95b4fb840d
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_cam-raw_debug.h
-@@ -0,0 +1,39 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-mipi-rx-ana-cdphy-csi0a.h
+@@ -0,0 +1,257 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2022 MediaTek Inc.
 + */
 +
-+#ifndef _MTK_CAM_RAW_DEBUG_H
-+#define _MTK_CAM_RAW_DEBUG_H
++#ifndef __MIPI_RX_ANA_CDPHY_CSI0A_H__
++#define __MIPI_RX_ANA_CDPHY_CSI0A_H__
 +
-+enum topdebug_event {
-+	ALL_THE_TIME	= BIT(0),
-+	TG_OVERRUN	= BIT(1),
-+	CQ_MAIN_VS_ERR	= BIT(2),
-+	CQ_SUB_VS_ERR	= BIT(3),
-+	RAW_DMA_ERR	= BIT(4),
-+	YUV_DMA_ERR	= BIT(5),
-+};
++#define CDPHY_RX_ANA_0 0x0000
++#define RG_CSI0_BG_CORE_EN_SHIFT 0
++#define RG_CSI0_BG_CORE_EN_MASK (0x1 << 0)
++#define RG_CSI0_BG_LPF_EN_SHIFT 1
++#define RG_CSI0_BG_LPF_EN_MASK (0x1 << 1)
++#define RG_CSI0_EQ_PROTECT_EN_SHIFT 4
++#define RG_CSI0_EQ_PROTECT_EN_MASK (0x1 << 4)
++#define RG_CSI0_BYTE_CK_RSTB_SEL_SHIFT 5
++#define RG_CSI0_BYTE_CK_RSTB_SEL_MASK (0x1 << 5)
++#define RG_CSI0_DPHY_L0_CKSEL_SHIFT 8
++#define RG_CSI0_DPHY_L0_CKSEL_MASK (0x1 << 8)
++#define RG_CSI0_DPHY_L1_CKSEL_SHIFT 9
++#define RG_CSI0_DPHY_L1_CKSEL_MASK (0x1 << 9)
++#define RG_CSI0_DPHY_L2_CKSEL_SHIFT 10
++#define RG_CSI0_DPHY_L2_CKSEL_MASK (0x1 << 10)
++#define RG_CSI0_DPHY_L0_CKMODE_EN_SHIFT 12
++#define RG_CSI0_DPHY_L0_CKMODE_EN_MASK (0x1 << 12)
++#define RG_CSI0_DPHY_L1_CKMODE_EN_SHIFT 13
++#define RG_CSI0_DPHY_L1_CKMODE_EN_MASK (0x1 << 13)
++#define RG_CSI0_DPHY_L2_CKMODE_EN_SHIFT 14
++#define RG_CSI0_DPHY_L2_CKMODE_EN_MASK (0x1 << 14)
++#define RG_CSI0_CDPHY_L0_T0_BYTECK_INVERT_SHIFT 16
++#define RG_CSI0_CDPHY_L0_T0_BYTECK_INVERT_MASK (0x1 << 16)
++#define RG_CSI0_DPHY_L1_BYTECK_INVERT_SHIFT 17
++#define RG_CSI0_DPHY_L1_BYTECK_INVERT_MASK (0x1 << 17)
++#define RG_CSI0_CDPHY_L2_T1_BYTECK_INVERT_SHIFT 18
++#define RG_CSI0_CDPHY_L2_T1_BYTECK_INVERT_MASK (0x1 << 18)
++#define RG_CSI0_CPHY_EN_SHIFT 20
++#define RG_CSI0_CPHY_EN_MASK (0x1 << 20)
++#define RG_CSI0_CPHY_T0_CDR_FIRST_EDGE_EN_SHIFT 21
++#define RG_CSI0_CPHY_T0_CDR_FIRST_EDGE_EN_MASK (0x1 << 21)
++#define RG_CSI0_CPHY_T1_CDR_FIRST_EDGE_EN_SHIFT 22
++#define RG_CSI0_CPHY_T1_CDR_FIRST_EDGE_EN_MASK (0x1 << 22)
++#define RG_CSI0_CDPHY_L0_T0_FORCE_INIT_SHIFT 24
++#define RG_CSI0_CDPHY_L0_T0_FORCE_INIT_MASK (0x1 << 24)
++#define RG_CSI0_DPHY_L1_FORCE_INIT_SHIFT 25
++#define RG_CSI0_DPHY_L1_FORCE_INIT_MASK (0x1 << 25)
++#define RG_CSI0_CDPHY_L2_T1_FORCE_INIT_SHIFT 26
++#define RG_CSI0_CDPHY_L2_T1_FORCE_INIT_MASK (0x1 << 26)
++#define RG_CSI0_CDPHY_L0_T0_SYNC_INIT_CTRL_SHIFT 28
++#define RG_CSI0_CDPHY_L0_T0_SYNC_INIT_CTRL_MASK (0x1 << 28)
++#define RG_CSI0_DPHY_L1_SYNC_INIT_CTRL_SHIFT 29
++#define RG_CSI0_DPHY_L1_SYNC_INIT_CTRL_MASK (0x1 << 29)
++#define RG_CSI0_CDPHY_L2_T1_SYNC_INIT_CTRL_SHIFT 30
++#define RG_CSI0_CDPHY_L2_T1_SYNC_INIT_CTRL_MASK (0x1 << 30)
++#define RG_CSI0_FORCE_HSRT_EN_SHIFT 31
++#define RG_CSI0_FORCE_HSRT_EN_MASK (0x1 << 31)
 +
-+struct dma_debug_item {
-+	unsigned int	debug_sel;
-+	const char	*msg;
-+};
++#define CDPHY_RX_ANA_1 0x0004
++#define RG_CSI0_BG_LPRX_VTL_SEL_SHIFT 0
++#define RG_CSI0_BG_LPRX_VTL_SEL_MASK (0x7 << 0)
++#define RG_CSI0_BG_LPRX_VTH_SEL_SHIFT 4
++#define RG_CSI0_BG_LPRX_VTH_SEL_MASK (0x7 << 4)
++#define RG_CSI0_BG_VREF_SEL_SHIFT 8
++#define RG_CSI0_BG_VREF_SEL_MASK (0xf << 8)
++#define RG_CSI0_CDPHY_DELAYCAL_CK_SEL_SHIFT 12
++#define RG_CSI0_CDPHY_DELAYCAL_CK_SEL_MASK (0x7 << 12)
++#define RG_CSI0_CDPHY_EQ_DES_VREF_SEL_SHIFT 16
++#define RG_CSI0_CDPHY_EQ_DES_VREF_SEL_MASK (0x7 << 16)
++#define RG_CSI0_CDPHY_DELAY_VREF_SEL_SHIFT 20
++#define RG_CSI0_CDPHY_DELAY_VREF_SEL_MASK (0x7 << 20)
++#define RG_CSI0_DPHY_L0_DELAYCAL_EN_SHIFT 24
++#define RG_CSI0_DPHY_L0_DELAYCAL_EN_MASK (0x1 << 24)
++#define RG_CSI0_DPHY_L1_DELAYCAL_EN_SHIFT 25
++#define RG_CSI0_DPHY_L1_DELAYCAL_EN_MASK (0x1 << 25)
++#define RG_CSI0_DPHY_L2_DELAYCAL_EN_SHIFT 26
++#define RG_CSI0_DPHY_L2_DELAYCAL_EN_MASK (0x1 << 26)
++#define RG_CSI0_DPHY_L0_DELAYCAL_RSTB_SHIFT 28
++#define RG_CSI0_DPHY_L0_DELAYCAL_RSTB_MASK (0x1 << 28)
++#define RG_CSI0_DPHY_L1_DELAYCAL_RSTB_SHIFT 29
++#define RG_CSI0_DPHY_L1_DELAYCAL_RSTB_MASK (0x1 << 29)
++#define RG_CSI0_DPHY_L2_DELAYCAL_RSTB_SHIFT 30
++#define RG_CSI0_DPHY_L2_DELAYCAL_RSTB_MASK (0x1 << 30)
 +
-+void mtk_cam_raw_dump_fbc(struct device *dev,
-+			  void __iomem *base, void __iomem *yuvbase);
-+void mtk_cam_raw_dump_dma_err_st(struct device *dev, void __iomem *base);
-+void mtk_cam_yuv_dump_dma_err_st(struct device *dev, void __iomem *yuvbase);
-+void mtk_cam_dump_req_rdy_status(struct device *dev,
-+				 void __iomem *base, void __iomem *yuvbase);
-+void mtk_cam_dump_dma_debug(struct device *dev,
-+			    void __iomem *dmatop_base,
-+			    const char *dma_name,
-+			    struct dma_debug_item *items, int n);
-+void mtk_cam_set_topdebug_rdyreq(struct device *dev,
-+				 void __iomem *base, void __iomem *yuvbase,
-+				 u32 event);
-+void mtk_cam_dump_topdebug_rdyreq(struct device *dev,
-+				  void __iomem *base, void __iomem *yuvbase);
++#define CDPHY_RX_ANA_2 0x0008
++#define RG_CSI0_L0P_T0A_HSRT_CODE_SHIFT 0
++#define RG_CSI0_L0P_T0A_HSRT_CODE_MASK (0x1f << 0)
++#define RG_CSI0_L0N_T0B_HSRT_CODE_SHIFT 8
++#define RG_CSI0_L0N_T0B_HSRT_CODE_MASK (0x1f << 8)
++#define RG_CSI0_CPHY_T0_CDR_SELF_CAL_EN_SHIFT 16
++#define RG_CSI0_CPHY_T0_CDR_SELF_CAL_EN_MASK (0x1 << 16)
++#define RG_CSI0_CPHY_T1_CDR_SELF_CAL_EN_SHIFT 17
++#define RG_CSI0_CPHY_T1_CDR_SELF_CAL_EN_MASK (0x1 << 17)
++#define RG_CSI0_BG_ALP_RX_VTH_SEL_SHIFT 24
++#define RG_CSI0_BG_ALP_RX_VTH_SEL_MASK (0x7 << 24)
++#define RG_CSI0_BG_ALP_RX_VTL_SEL_SHIFT 28
++#define RG_CSI0_BG_ALP_RX_VTL_SEL_MASK (0x7 << 28)
 +
-+#endif	/* _MTK_CAM_RAW_DEBUG_H */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
++#define CDPHY_RX_ANA_3 0x000c
++#define RG_CSI0_L1P_T0C_HSRT_CODE_SHIFT 0
++#define RG_CSI0_L1P_T0C_HSRT_CODE_MASK (0x1f << 0)
++#define RG_CSI0_L1N_T1A_HSRT_CODE_SHIFT 8
++#define RG_CSI0_L1N_T1A_HSRT_CODE_MASK (0x1f << 8)
++#define RG_CSI0_OS_CAL_CNT_SEL_SHIFT 16
++#define RG_CSI0_OS_CAL_CNT_SEL_MASK (0x3 << 16)
++#define RG_CSI0_EQ_DES_VREF_SEL_SHIFT 20
++#define RG_CSI0_EQ_DES_VREF_SEL_MASK (0x3f << 20)
++
++#define CDPHY_RX_ANA_4 0x0010
++#define RG_CSI0_L2P_T1B_HSRT_CODE_SHIFT 0
++#define RG_CSI0_L2P_T1B_HSRT_CODE_MASK (0x1f << 0)
++#define RG_CSI0_L2N_T1C_HSRT_CODE_SHIFT 8
++#define RG_CSI0_L2N_T1C_HSRT_CODE_MASK (0x1f << 8)
++
++#define CDPHY_RX_ANA_5 0x0014
++#define RG_CSI0_CDPHY_EQ_BW_SHIFT 0
++#define RG_CSI0_CDPHY_EQ_BW_MASK (0x3 << 0)
++#define RG_CSI0_CDPHY_EQ_IS_SHIFT 2
++#define RG_CSI0_CDPHY_EQ_IS_MASK (0x3 << 2)
++#define RG_CSI0_CDPHY_EQ_DG0_EN_SHIFT 4
++#define RG_CSI0_CDPHY_EQ_DG0_EN_MASK (0x1 << 4)
++#define RG_CSI0_CDPHY_EQ_DG1_EN_SHIFT 5
++#define RG_CSI0_CDPHY_EQ_DG1_EN_MASK (0x1 << 5)
++#define RG_CSI0_CDPHY_EQ_LATCH_EN_SHIFT 6
++#define RG_CSI0_CDPHY_EQ_LATCH_EN_MASK (0x1 << 6)
++#define RG_CSI0_CDPHY_EQ_SR0_SHIFT 8
++#define RG_CSI0_CDPHY_EQ_SR0_MASK (0xf << 8)
++#define RG_CSI0_CDPHY_EQ_SR1_SHIFT 12
++#define RG_CSI0_CDPHY_EQ_SR1_MASK (0xf << 12)
++#define RG_CSI0_L0_T0AB_EQ_MON_EN_SHIFT 16
++#define RG_CSI0_L0_T0AB_EQ_MON_EN_MASK (0x1 << 16)
++#define RG_CSI0_L1_T1AB_EQ_MON_EN_SHIFT 17
++#define RG_CSI0_L1_T1AB_EQ_MON_EN_MASK (0x1 << 17)
++#define RG_CSI0_L2_T1BC_EQ_MON_EN_SHIFT 18
++#define RG_CSI0_L2_T1BC_EQ_MON_EN_MASK (0x1 << 18)
++#define RG_CSI0_XX_T0BC_EQ_MON_EN_SHIFT 24
++#define RG_CSI0_XX_T0BC_EQ_MON_EN_MASK (0x1 << 24)
++#define RG_CSI0_XX_T0CA_EQ_MON_EN_SHIFT 25
++#define RG_CSI0_XX_T0CA_EQ_MON_EN_MASK (0x1 << 25)
++#define RG_CSI0_XX_T1CA_EQ_MON_EN_SHIFT 26
++#define RG_CSI0_XX_T1CA_EQ_MON_EN_MASK (0x1 << 26)
++
++#define CDPHY_RX_ANA_6 0x0018
++#define RG_CSI0_CPHY_T0_CDR_AB_WIDTH_SHIFT 0
++#define RG_CSI0_CPHY_T0_CDR_AB_WIDTH_MASK (0x3f << 0)
++#define RG_CSI0_CPHY_T0_CDR_BC_WIDTH_SHIFT 8
++#define RG_CSI0_CPHY_T0_CDR_BC_WIDTH_MASK (0x3f << 8)
++#define RG_CSI0_CPHY_T0_CDR_CA_WIDTH_SHIFT 16
++#define RG_CSI0_CPHY_T0_CDR_CA_WIDTH_MASK (0x3f << 16)
++#define RG_CSI0_CPHY_T0_CDR_CK_DELAY_SHIFT 24
++#define RG_CSI0_CPHY_T0_CDR_CK_DELAY_MASK (0x3f << 24)
++
++#define CDPHY_RX_ANA_7 0x001c
++#define RG_CSI0_CPHY_T1_CDR_AB_WIDTH_SHIFT 0
++#define RG_CSI0_CPHY_T1_CDR_AB_WIDTH_MASK (0x3f << 0)
++#define RG_CSI0_CPHY_T1_CDR_BC_WIDTH_SHIFT 8
++#define RG_CSI0_CPHY_T1_CDR_BC_WIDTH_MASK (0x3f << 8)
++#define RG_CSI0_CPHY_T1_CDR_CA_WIDTH_SHIFT 16
++#define RG_CSI0_CPHY_T1_CDR_CA_WIDTH_MASK (0x3f << 16)
++#define RG_CSI0_CPHY_T1_CDR_CK_DELAY_SHIFT 24
++#define RG_CSI0_CPHY_T1_CDR_CK_DELAY_MASK (0x3f << 24)
++
++#define CDPHY_RX_ANA_8 0x0020
++#define RGS_CSI0_CDPHY_L0_T0AB_OS_CAL_CPLT_SHIFT 0
++#define RGS_CSI0_CDPHY_L0_T0AB_OS_CAL_CPLT_MASK (0x1 << 0)
++#define RGS_CSI0_CDPHY_L1_T1AB_OS_CAL_CPLT_SHIFT 1
++#define RGS_CSI0_CDPHY_L1_T1AB_OS_CAL_CPLT_MASK (0x1 << 1)
++#define RGS_CSI0_CDPHY_L2_T1BC_OS_CAL_CPLT_SHIFT 2
++#define RGS_CSI0_CDPHY_L2_T1BC_OS_CAL_CPLT_MASK (0x1 << 2)
++#define RGS_CSI0_CPHY_T0BC_OS_CAL_CPLT_SHIFT 3
++#define RGS_CSI0_CPHY_T0BC_OS_CAL_CPLT_MASK (0x1 << 3)
++#define RGS_CSI0_CPHY_T0CA_OS_CAL_CPLT_SHIFT 4
++#define RGS_CSI0_CPHY_T0CA_OS_CAL_CPLT_MASK (0x1 << 4)
++#define RGS_CSI0_CPHY_T1CA_OS_CAL_CPLT_SHIFT 5
++#define RGS_CSI0_CPHY_T1CA_OS_CAL_CPLT_MASK (0x1 << 5)
++#define RGS_CSI0_OS_CAL_CODE_SHIFT 8
++#define RGS_CSI0_OS_CAL_CODE_MASK (0xff << 8)
++#define RG_CSI0_L0_T0AB_EQ_OS_CAL_EN_SHIFT 16
++#define RG_CSI0_L0_T0AB_EQ_OS_CAL_EN_MASK (0x1 << 16)
++#define RG_CSI0_L1_T1AB_EQ_OS_CAL_EN_SHIFT 17
++#define RG_CSI0_L1_T1AB_EQ_OS_CAL_EN_MASK (0x1 << 17)
++#define RG_CSI0_L2_T1BC_EQ_OS_CAL_EN_SHIFT 18
++#define RG_CSI0_L2_T1BC_EQ_OS_CAL_EN_MASK (0x1 << 18)
++#define RG_CSI0_XX_T0BC_EQ_OS_CAL_EN_SHIFT 19
++#define RG_CSI0_XX_T0BC_EQ_OS_CAL_EN_MASK (0x1 << 19)
++#define RG_CSI0_XX_T0CA_EQ_OS_CAL_EN_SHIFT 20
++#define RG_CSI0_XX_T0CA_EQ_OS_CAL_EN_MASK (0x1 << 20)
++#define RG_CSI0_XX_T1CA_EQ_OS_CAL_EN_SHIFT 21
++#define RG_CSI0_XX_T1CA_EQ_OS_CAL_EN_MASK (0x1 << 21)
++#define RG_CSI0_OS_CAL_SEL_SHIFT 24
++#define RG_CSI0_OS_CAL_SEL_MASK (0x7 << 24)
++#define RG_CSI0_OS_CAL_DIV_SHIFT 28
++#define RG_CSI0_OS_CAL_DIV_MASK (0x7 << 28)
++
++#define CDPHY_RX_ANA_9 0x0024
++#define RGS_CSI0_CPHY_T0_DLL_CODE_SHIFT 0
++#define RGS_CSI0_CPHY_T0_DLL_CODE_MASK (0xf << 0)
++#define RGS_CSI0_CPHY_T0_MASK_CAL_CPLT_SHIFT 4
++#define RGS_CSI0_CPHY_T0_MASK_CAL_CPLT_MASK (0x1 << 4)
++#define RGS_CSI0_CPHY_T0_MASK_CAL_OF_SHIFT 5
++#define RGS_CSI0_CPHY_T0_MASK_CAL_OF_MASK (0x1 << 5)
++#define RGS_CSI0_CPHY_T1_DLL_CODE_SHIFT 8
++#define RGS_CSI0_CPHY_T1_DLL_CODE_MASK (0xf << 8)
++#define RGS_CSI0_CPHY_T1_MASK_CAL_CPLT_SHIFT 12
++#define RGS_CSI0_CPHY_T1_MASK_CAL_CPLT_MASK (0x1 << 12)
++#define RGS_CSI0_CPHY_T1_MASK_CAL_OF_SHIFT 13
++#define RGS_CSI0_CPHY_T1_MASK_CAL_OF_MASK (0x1 << 13)
++#define RG_CSI0_RESERVE_SHIFT 16
++#define RG_CSI0_RESERVE_MASK (0xffff << 16)
++
++#define CDPHY_RX_ANA_AD_0 0x0048
++#define RO_AD_CSI0_CDPHY_L0P_T0A_LPRX_OUT_SHIFT 0
++#define RO_AD_CSI0_CDPHY_L0P_T0A_LPRX_OUT_MASK (0x1 << 0)
++#define RO_AD_CSI0_CDPHY_L0N_T0B_LPRX_OUT_SHIFT 1
++#define RO_AD_CSI0_CDPHY_L0N_T0B_LPRX_OUT_MASK (0x1 << 1)
++#define RO_AD_CSI0_CDPHY_L1P_T0C_LPRX_OUT_SHIFT 4
++#define RO_AD_CSI0_CDPHY_L1P_T0C_LPRX_OUT_MASK (0x1 << 4)
++#define RO_AD_CSI0_CDPHY_L1N_T1A_LPRX_OUT_SHIFT 5
++#define RO_AD_CSI0_CDPHY_L1N_T1A_LPRX_OUT_MASK (0x1 << 5)
++#define RO_AD_CSI0_CDPHY_L2P_T1B_LPRX_OUT_SHIFT 8
++#define RO_AD_CSI0_CDPHY_L2P_T1B_LPRX_OUT_MASK (0x1 << 8)
++#define RO_AD_CSI0_CDPHY_L2N_T1C_LPRX_OUT_SHIFT 9
++#define RO_AD_CSI0_CDPHY_L2N_T1C_LPRX_OUT_MASK (0x1 << 9)
++
++#define CDPHY_RX_ANA_AD_HS_0 0x00a0
++#define RO_AD_CSI0_CPHY_T0CA_SHIFT 0
++#define RO_AD_CSI0_CPHY_T0CA_MASK (0xff << 0)
++#define RO_AD_CSI0_CPHY_T0BC_SHIFT 8
++#define RO_AD_CSI0_CPHY_T0BC_MASK (0xff << 8)
++#define RO_AD_CSI0_CDPHY_L0_T0AB_SHIFT 16
++#define RO_AD_CSI0_CDPHY_L0_T0AB_MASK (0xff << 16)
++
++#define CDPHY_RX_ANA_AD_HS_1 0x00a4
++#define RO_AD_CSI0_DPHY_L1_SHIFT 16
++#define RO_AD_CSI0_DPHY_L1_MASK (0xff << 16)
++
++#define CDPHY_RX_ANA_AD_HS_2 0x00a8
++#define RO_AD_CSI0_CPHY_T1CA_SHIFT 8
++#define RO_AD_CSI0_CPHY_T1CA_MASK (0xff << 8)
++#define RO_AD_CSI0_CDPHY_L2_T1BC_SHIFT 16
++#define RO_AD_CSI0_CDPHY_L2_T1BC_MASK (0xff << 16)
++#define RO_AD_CSI0_CPHY_T1AB_SHIFT 24
++#define RO_AD_CSI0_CPHY_T1AB_MASK (0xff << 24)
++
++#define CDPHY_RX_ANA_SETTING_0 0x00f0
++#define CSR_CSI_CLK_MON_SHIFT 0
++#define CSR_CSI_CLK_MON_MASK (0x1 << 0)
++#define CSR_CSI_CLK_EN_SHIFT 1
++#define CSR_CSI_CLK_EN_MASK (0x1 << 1)
++#define CSR_ASYNC_FIFO_GATING_SEL_SHIFT 4
++#define CSR_ASYNC_FIFO_GATING_SEL_MASK (0xf << 4)
++#define CSR_CSI_MON_MUX_SHIFT 8
++#define CSR_CSI_MON_MUX_MASK (0xff << 8)
++#define CSR_CSI_RST_MODE_SHIFT 16
++#define CSR_CSI_RST_MODE_MASK (0x3 << 16)
++#define CSR_SW_RST_SHIFT 24
++#define CSR_SW_RST_MASK (0xf << 24)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-csi2.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-csi2.h
 new file mode 100644
-index 000000000000..b775e6c30aa1
+index 000000000000..1421f0baa419
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_camera-v4l2-controls.h
-@@ -0,0 +1,65 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-csi2.h
+@@ -0,0 +1,415 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2022 MediaTek Inc.
 + */
 +
-+#ifndef __MTK_CAMERA_V4l2_CONTROLS_H
-+#define __MTK_CAMERA_V4l2_CONTROLS_H
++#ifndef __SENINF1_CSI2_H__
++#define __SENINF1_CSI2_H__
 +
-+#include <linux/videodev2.h>
-+#include <linux/v4l2-controls.h>
-+#include <linux/mtkisp_camsys.h>
++#define SENINF_CSI2_EN 0x0000
++#define CSI2_LANE0_EN_SHIFT 0
++#define CSI2_LANE0_EN_MASK (0x1 << 0)
++#define CSI2_LANE1_EN_SHIFT 1
++#define CSI2_LANE1_EN_MASK (0x1 << 1)
++#define CSI2_LANE2_EN_SHIFT 2
++#define CSI2_LANE2_EN_MASK (0x1 << 2)
++#define CSI2_LANE3_EN_SHIFT 3
++#define CSI2_LANE3_EN_MASK (0x1 << 3)
 +
-+/* Allowed value of V4L2_CID_MTK_CAM_RAW_PATH_SELECT */
-+#define V4L2_MTK_CAM_RAW_PATH_SELECT_BPC	1
-+#define V4L2_MTK_CAM_RAW_PATH_SELECT_FUS	3
-+#define V4L2_MTK_CAM_RAW_PATH_SELECT_DGN	4
-+#define V4L2_MTK_CAM_RAW_PATH_SELECT_LSC	5
-+#define V4L2_MTK_CAM_RAW_PATH_SELECT_LTM	7
++#define SENINF_CSI2_OPT 0x0004
++#define RG_CSI2_CPHY_SEL_SHIFT 0
++#define RG_CSI2_CPHY_SEL_MASK (0x1 << 0)
++#define RG_CSI2_ECC_EN_SHIFT 1
++#define RG_CSI2_ECC_EN_MASK (0x1 << 1)
++#define RG_CSI2_B2P_EN_SHIFT 2
++#define RG_CSI2_B2P_EN_MASK (0x1 << 2)
++#define RG_CSI2_GENERIC_LONG_PACKET_EN_SHIFT 3
++#define RG_CSI2_GENERIC_LONG_PACKET_EN_MASK (0x1 << 3)
++#define RG_CSI2_IMG_PACKET_EN_SHIFT 4
++#define RG_CSI2_IMG_PACKET_EN_MASK (0x1 << 4)
++#define RG_CSI2_SPEC_V2P0_SEL_SHIFT 5
++#define RG_CSI2_SPEC_V2P0_SEL_MASK (0x1 << 5)
++#define RG_CSI2_DESCRAMBLE_EN_SHIFT 6
++#define RG_CSI2_DESCRAMBLE_EN_MASK (0x1 << 6)
++#define RG_CSI2_VS_OUTPUT_MODE_SHIFT 8
++#define RG_CSI2_VS_OUTPUT_MODE_MASK (0x1 << 8)
++#define RG_CSI2_VS_OUTPUT_LEN_SEL_SHIFT 9
++#define RG_CSI2_VS_OUTPUT_LEN_SEL_MASK (0x1 << 9)
++#define RG_CSI2_HSYNC_POL_SHIFT 12
++#define RG_CSI2_HSYNC_POL_MASK (0x1 << 12)
++#define RG_CSI2_VSYNC_POL_SHIFT 13
++#define RG_CSI2_VSYNC_POL_MASK (0x1 << 13)
++#define RG_CSI2_FIFO_PUSH_EN_SHIFT 16
++#define RG_CSI2_FIFO_PUSH_EN_MASK (0x3f << 16)
 +
-+#define V4L2_MBUS_FRAMEFMT_PAD_ENABLE  BIT(1)
++#define SENINF_CSI2_HDR_MODE_0 0x0008
++#define RG_CSI2_HEADER_MODE_SHIFT 0
++#define RG_CSI2_HEADER_MODE_MASK (0xff << 0)
++#define RG_CSI2_HEADER_LEN_SHIFT 8
++#define RG_CSI2_HEADER_LEN_MASK (0x7 << 8)
 +
-+#define MEDIA_BUS_FMT_MTISP_SBGGR10_1X10		0x8001
-+#define MEDIA_BUS_FMT_MTISP_SBGGR12_1X12		0x8002
-+#define MEDIA_BUS_FMT_MTISP_SBGGR14_1X14		0x8003
-+#define MEDIA_BUS_FMT_MTISP_SGBRG10_1X10		0x8004
-+#define MEDIA_BUS_FMT_MTISP_SGBRG12_1X12		0x8005
-+#define MEDIA_BUS_FMT_MTISP_SGBRG14_1X14		0x8006
-+#define MEDIA_BUS_FMT_MTISP_SGRBG10_1X10		0x8007
-+#define MEDIA_BUS_FMT_MTISP_SGRBG12_1X12		0x8008
-+#define MEDIA_BUS_FMT_MTISP_SGRBG14_1X14		0x8009
-+#define MEDIA_BUS_FMT_MTISP_SRGGB10_1X10		0x800a
-+#define MEDIA_BUS_FMT_MTISP_SRGGB12_1X12		0x800b
-+#define MEDIA_BUS_FMT_MTISP_SRGGB14_1X14		0x800c
-+#define MEDIA_BUS_FMT_MTISP_BAYER8_UFBC			0x800d
-+#define MEDIA_BUS_FMT_MTISP_BAYER10_UFBC		0x800e
-+#define MEDIA_BUS_FMT_MTISP_BAYER12_UFBC		0x8010
-+#define MEDIA_BUS_FMT_MTISP_BAYER14_UFBC		0x8011
-+#define MEDIA_BUS_FMT_MTISP_BAYER16_UFBC		0x8012
-+#define MEDIA_BUS_FMT_MTISP_NV12			0x8013
-+#define MEDIA_BUS_FMT_MTISP_NV21			0x8014
-+#define MEDIA_BUS_FMT_MTISP_NV12_10			0x8015
-+#define MEDIA_BUS_FMT_MTISP_NV21_10			0x8016
-+#define MEDIA_BUS_FMT_MTISP_NV12_10P			0x8017
-+#define MEDIA_BUS_FMT_MTISP_NV21_10P			0x8018
-+#define MEDIA_BUS_FMT_MTISP_NV12_12			0x8019
-+#define MEDIA_BUS_FMT_MTISP_NV21_12			0x801a
-+#define MEDIA_BUS_FMT_MTISP_NV12_12P			0x801b
-+#define MEDIA_BUS_FMT_MTISP_NV21_12P			0x801c
-+#define MEDIA_BUS_FMT_MTISP_YUV420			0x801d
-+#define MEDIA_BUS_FMT_MTISP_NV12_UFBC			0x801e
-+#define MEDIA_BUS_FMT_MTISP_NV21_UFBC			0x8020
-+#define MEDIA_BUS_FMT_MTISP_NV12_10_UFBC		0x8021
-+#define MEDIA_BUS_FMT_MTISP_NV21_10_UFBC		0x8022
-+#define MEDIA_BUS_FMT_MTISP_NV12_12_UFBC		0x8023
-+#define MEDIA_BUS_FMT_MTISP_NV21_12_UFBC		0x8024
-+#define MEDIA_BUS_FMT_MTISP_NV16			0x8025
-+#define MEDIA_BUS_FMT_MTISP_NV61			0x8026
-+#define MEDIA_BUS_FMT_MTISP_NV16_10			0x8027
-+#define MEDIA_BUS_FMT_MTISP_NV61_10			0x8028
-+#define MEDIA_BUS_FMT_MTISP_NV16_10P			0x8029
-+#define MEDIA_BUS_FMT_MTISP_NV61_10P			0x802a
++#define SENINF_CSI2_RESYNC_MERGE_CTRL 0x0010
++#define RG_CSI2_RESYNC_CYCLE_CNT_SHIFT 0
++#define RG_CSI2_RESYNC_CYCLE_CNT_MASK (0x1f << 0)
++#define RG_CSI2_RESYNC_CYCLE_CNT_OPT_SHIFT 8
++#define RG_CSI2_RESYNC_CYCLE_CNT_OPT_MASK (0x1 << 8)
++#define RG_CSI2_RESYNC_DATAOUT_OPT_SHIFT 9
++#define RG_CSI2_RESYNC_DATAOUT_OPT_MASK (0x1 << 9)
++#define RG_CSI2_RESYNC_BYPASS_SHIFT 10
++#define RG_CSI2_RESYNC_BYPASS_MASK (0x1 << 10)
 +
-+#define MTK_CAM_RESOURCE_DEFAULT	0xFFFF
++#define RG_CSI2_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_VC_SEL_SHIFT 8
++#define RG_CSI2_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_DT_SEL_SHIFT 16
++#define RG_CSI2_DT_SEL_MASK (0x3f << 16)
 +
-+#endif /* __MTK_CAMERA_V4l2_CONTROLS_H */
++#define SENINF_CSI2_S0_DI_CTRL 0x0020
++#define RG_CSI2_S0_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S0_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S0_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S0_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S0_VC_SEL_SHIFT 8
++#define RG_CSI2_S0_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S0_DT_SEL_SHIFT 16
++#define RG_CSI2_S0_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S1_DI_CTRL 0x0024
++#define RG_CSI2_S1_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S1_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S1_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S1_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S1_VC_SEL_SHIFT 8
++#define RG_CSI2_S1_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S1_DT_SEL_SHIFT 16
++#define RG_CSI2_S1_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S2_DI_CTRL 0x0028
++#define RG_CSI2_S2_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S2_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S2_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S2_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S2_VC_SEL_SHIFT 8
++#define RG_CSI2_S2_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S2_DT_SEL_SHIFT 16
++#define RG_CSI2_S2_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S3_DI_CTRL 0x002c
++#define RG_CSI2_S3_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S3_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S3_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S3_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S3_VC_SEL_SHIFT 8
++#define RG_CSI2_S3_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S3_DT_SEL_SHIFT 16
++#define RG_CSI2_S3_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S4_DI_CTRL 0x0030
++#define RG_CSI2_S4_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S4_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S4_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S4_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S4_VC_SEL_SHIFT 8
++#define RG_CSI2_S4_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S4_DT_SEL_SHIFT 16
++#define RG_CSI2_S4_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S5_DI_CTRL 0x0034
++#define RG_CSI2_S5_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S5_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S5_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S5_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S5_VC_SEL_SHIFT 8
++#define RG_CSI2_S5_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S5_DT_SEL_SHIFT 16
++#define RG_CSI2_S5_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S6_DI_CTRL 0x0038
++#define RG_CSI2_S6_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S6_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S6_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S6_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S6_VC_SEL_SHIFT 8
++#define RG_CSI2_S6_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S6_DT_SEL_SHIFT 16
++#define RG_CSI2_S6_DT_SEL_MASK (0x3f << 16)
++
++#define SENINF_CSI2_S7_DI_CTRL 0x003c
++#define RG_CSI2_S7_VC_INTERLEAVE_EN_SHIFT 0
++#define RG_CSI2_S7_VC_INTERLEAVE_EN_MASK (0x1 << 0)
++#define RG_CSI2_S7_DT_INTERLEAVE_MODE_SHIFT 4
++#define RG_CSI2_S7_DT_INTERLEAVE_MODE_MASK (0x3 << 4)
++#define RG_CSI2_S7_VC_SEL_SHIFT 8
++#define RG_CSI2_S7_VC_SEL_MASK (0x1f << 8)
++#define RG_CSI2_S7_DT_SEL_SHIFT 16
++#define RG_CSI2_S7_DT_SEL_MASK (0x3f << 16)
++
++#define RG_CSI2_GRP_MODE_SHIFT 0
++#define RG_CSI2_GRP_MODE_MASK (0x1 << 0)
++#define RG_CSI2_VSYNC_BYPASS_SHIFT 1
++#define RG_CSI2_VSYNC_BYPASS_MASK (0x1 << 1)
++#define RG_CSI2_S0_GRP_EN_SHIFT 8
++#define RG_CSI2_S0_GRP_EN_MASK (0x1 << 8)
++#define RG_CSI2_S1_GRP_EN_SHIFT 9
++#define RG_CSI2_S1_GRP_EN_MASK (0x1 << 9)
++#define RG_CSI2_S2_GRP_EN_SHIFT 10
++#define RG_CSI2_S2_GRP_EN_MASK (0x1 << 10)
++#define RG_CSI2_S3_GRP_EN_SHIFT 11
++#define RG_CSI2_S3_GRP_EN_MASK (0x1 << 11)
++#define RG_CSI2_S4_GRP_EN_SHIFT 12
++#define RG_CSI2_S4_GRP_EN_MASK (0x1 << 12)
++#define RG_CSI2_S5_GRP_EN_SHIFT 13
++#define RG_CSI2_S5_GRP_EN_MASK (0x1 << 13)
++#define RG_CSI2_S6_GRP_EN_SHIFT 14
++#define RG_CSI2_S6_GRP_EN_MASK (0x1 << 14)
++#define RG_CSI2_S7_GRP_EN_SHIFT 15
++#define RG_CSI2_S7_GRP_EN_MASK (0x1 << 15)
++
++#define SENINF_CSI2_CH0_CTRL 0x0060
++#define RG_CSI2_CH0_GRP_MODE_SHIFT 0
++#define RG_CSI2_CH0_GRP_MODE_MASK (0x1 << 0)
++#define RG_CSI2_CH0_VSYNC_BYPASS_SHIFT 1
++#define RG_CSI2_CH0_VSYNC_BYPASS_MASK (0x1 << 1)
++#define RG_CSI2_CH0_S0_GRP_EN_SHIFT 8
++#define RG_CSI2_CH0_S0_GRP_EN_MASK (0x1 << 8)
++#define RG_CSI2_CH0_S1_GRP_EN_SHIFT 9
++#define RG_CSI2_CH0_S1_GRP_EN_MASK (0x1 << 9)
++#define RG_CSI2_CH0_S2_GRP_EN_SHIFT 10
++#define RG_CSI2_CH0_S2_GRP_EN_MASK (0x1 << 10)
++#define RG_CSI2_CH0_S3_GRP_EN_SHIFT 11
++#define RG_CSI2_CH0_S3_GRP_EN_MASK (0x1 << 11)
++#define RG_CSI2_CH0_S4_GRP_EN_SHIFT 12
++#define RG_CSI2_CH0_S4_GRP_EN_MASK (0x1 << 12)
++#define RG_CSI2_CH0_S5_GRP_EN_SHIFT 13
++#define RG_CSI2_CH0_S5_GRP_EN_MASK (0x1 << 13)
++#define RG_CSI2_CH0_S6_GRP_EN_SHIFT 14
++#define RG_CSI2_CH0_S6_GRP_EN_MASK (0x1 << 14)
++#define RG_CSI2_CH0_S7_GRP_EN_SHIFT 15
++#define RG_CSI2_CH0_S7_GRP_EN_MASK (0x1 << 15)
++
++#define SENINF_CSI2_CH1_CTRL 0x0064
++#define RG_CSI2_CH1_GRP_MODE_SHIFT 0
++#define RG_CSI2_CH1_GRP_MODE_MASK (0x1 << 0)
++#define RG_CSI2_CH1_VSYNC_BYPASS_SHIFT 1
++#define RG_CSI2_CH1_VSYNC_BYPASS_MASK (0x1 << 1)
++#define RG_CSI2_CH1_S0_GRP_EN_SHIFT 8
++#define RG_CSI2_CH1_S0_GRP_EN_MASK (0x1 << 8)
++#define RG_CSI2_CH1_S1_GRP_EN_SHIFT 9
++#define RG_CSI2_CH1_S1_GRP_EN_MASK (0x1 << 9)
++#define RG_CSI2_CH1_S2_GRP_EN_SHIFT 10
++#define RG_CSI2_CH1_S2_GRP_EN_MASK (0x1 << 10)
++#define RG_CSI2_CH1_S3_GRP_EN_SHIFT 11
++#define RG_CSI2_CH1_S3_GRP_EN_MASK (0x1 << 11)
++#define RG_CSI2_CH1_S4_GRP_EN_SHIFT 12
++#define RG_CSI2_CH1_S4_GRP_EN_MASK (0x1 << 12)
++#define RG_CSI2_CH1_S5_GRP_EN_SHIFT 13
++#define RG_CSI2_CH1_S5_GRP_EN_MASK (0x1 << 13)
++#define RG_CSI2_CH1_S6_GRP_EN_SHIFT 14
++#define RG_CSI2_CH1_S6_GRP_EN_MASK (0x1 << 14)
++#define RG_CSI2_CH1_S7_GRP_EN_SHIFT 15
++#define RG_CSI2_CH1_S7_GRP_EN_MASK (0x1 << 15)
++
++#define SENINF_CSI2_CH2_CTRL 0x0068
++#define RG_CSI2_CH2_GRP_MODE_SHIFT 0
++#define RG_CSI2_CH2_GRP_MODE_MASK (0x1 << 0)
++#define RG_CSI2_CH2_VSYNC_BYPASS_SHIFT 1
++#define RG_CSI2_CH2_VSYNC_BYPASS_MASK (0x1 << 1)
++#define RG_CSI2_CH2_S0_GRP_EN_SHIFT 8
++#define RG_CSI2_CH2_S0_GRP_EN_MASK (0x1 << 8)
++#define RG_CSI2_CH2_S1_GRP_EN_SHIFT 9
++#define RG_CSI2_CH2_S1_GRP_EN_MASK (0x1 << 9)
++#define RG_CSI2_CH2_S2_GRP_EN_SHIFT 10
++#define RG_CSI2_CH2_S2_GRP_EN_MASK (0x1 << 10)
++#define RG_CSI2_CH2_S3_GRP_EN_SHIFT 11
++#define RG_CSI2_CH2_S3_GRP_EN_MASK (0x1 << 11)
++#define RG_CSI2_CH2_S4_GRP_EN_SHIFT 12
++#define RG_CSI2_CH2_S4_GRP_EN_MASK (0x1 << 12)
++#define RG_CSI2_CH2_S5_GRP_EN_SHIFT 13
++#define RG_CSI2_CH2_S5_GRP_EN_MASK (0x1 << 13)
++#define RG_CSI2_CH2_S6_GRP_EN_SHIFT 14
++#define RG_CSI2_CH2_S6_GRP_EN_MASK (0x1 << 14)
++#define RG_CSI2_CH2_S7_GRP_EN_SHIFT 15
++#define RG_CSI2_CH2_S7_GRP_EN_MASK (0x1 << 15)
++
++#define SENINF_CSI2_CH3_CTRL 0x006c
++#define RG_CSI2_CH3_GRP_MODE_SHIFT 0
++#define RG_CSI2_CH3_GRP_MODE_MASK (0x1 << 0)
++#define RG_CSI2_CH3_VSYNC_BYPASS_SHIFT 1
++#define RG_CSI2_CH3_VSYNC_BYPASS_MASK (0x1 << 1)
++#define RG_CSI2_CH3_S0_GRP_EN_SHIFT 8
++#define RG_CSI2_CH3_S0_GRP_EN_MASK (0x1 << 8)
++#define RG_CSI2_CH3_S1_GRP_EN_SHIFT 9
++#define RG_CSI2_CH3_S1_GRP_EN_MASK (0x1 << 9)
++#define RG_CSI2_CH3_S2_GRP_EN_SHIFT 10
++#define RG_CSI2_CH3_S2_GRP_EN_MASK (0x1 << 10)
++#define RG_CSI2_CH3_S3_GRP_EN_SHIFT 11
++#define RG_CSI2_CH3_S3_GRP_EN_MASK (0x1 << 11)
++#define RG_CSI2_CH3_S4_GRP_EN_SHIFT 12
++#define RG_CSI2_CH3_S4_GRP_EN_MASK (0x1 << 12)
++#define RG_CSI2_CH3_S5_GRP_EN_SHIFT 13
++#define RG_CSI2_CH3_S5_GRP_EN_MASK (0x1 << 13)
++#define RG_CSI2_CH3_S6_GRP_EN_SHIFT 14
++#define RG_CSI2_CH3_S6_GRP_EN_MASK (0x1 << 14)
++#define RG_CSI2_CH3_S7_GRP_EN_SHIFT 15
++#define RG_CSI2_CH3_S7_GRP_EN_MASK (0x1 << 15)
++
++#define SENINF_CSI2_IRQ_EN 0x00c0
++#define RG_CSI2_ERR_FRAME_SYNC_IRQ_EN_SHIFT 0
++#define RG_CSI2_ERR_FRAME_SYNC_IRQ_EN_MASK (0x1 << 0)
++#define RG_CSI2_ERR_ID_IRQ_EN_SHIFT 1
++#define RG_CSI2_ERR_ID_IRQ_EN_MASK (0x1 << 1)
++#define RG_CSI2_ECC_ERR_UNDETECTED_IRQ_EN_SHIFT 2
++#define RG_CSI2_ECC_ERR_UNDETECTED_IRQ_EN_MASK (0x1 << 2)
++#define RG_CSI2_ECC_ERR_CORRECTED_IRQ_EN_SHIFT 3
++#define RG_CSI2_ECC_ERR_CORRECTED_IRQ_EN_MASK (0x1 << 3)
++#define RG_CSI2_ECC_ERR_DOUBLE_IRQ_EN_SHIFT 4
++#define RG_CSI2_ECC_ERR_DOUBLE_IRQ_EN_MASK (0x1 << 4)
++#define RG_CSI2_CRC_CORRECT_IRQ_EN_SHIFT 5
++#define RG_CSI2_CRC_CORRECT_IRQ_EN_MASK (0x1 << 5)
++#define RG_CSI2_CRC_ERR_IRQ_EN_SHIFT 6
++#define RG_CSI2_CRC_ERR_IRQ_EN_MASK (0x1 << 6)
++#define RG_CSI2_ERR_MULTI_LANE_SYNC_IRQ_EN_SHIFT 7
++#define RG_CSI2_ERR_MULTI_LANE_SYNC_IRQ_EN_MASK (0x1 << 7)
++#define RG_CSI2_FS_RECEIVE_IRQ_EN_SHIFT 8
++#define RG_CSI2_FS_RECEIVE_IRQ_EN_MASK (0x1 << 8)
++#define RG_CSI2_FE_RECEIVE_IRQ_EN_SHIFT 9
++#define RG_CSI2_FE_RECEIVE_IRQ_EN_MASK (0x1 << 9)
++#define RG_CSI2_LS_RECEIVE_IRQ_EN_SHIFT 10
++#define RG_CSI2_LS_RECEIVE_IRQ_EN_MASK (0x1 << 10)
++#define RG_CSI2_LE_RECEIVE_IRQ_EN_SHIFT 11
++#define RG_CSI2_LE_RECEIVE_IRQ_EN_MASK (0x1 << 11)
++#define RG_CSI2_GS_RECEIVE_IRQ_EN_SHIFT 12
++#define RG_CSI2_GS_RECEIVE_IRQ_EN_MASK (0x1 << 12)
++#define RG_CSI2_ERR_LANE_RESYNC_IRQ_EN_SHIFT 13
++#define RG_CSI2_ERR_LANE_RESYNC_IRQ_EN_MASK (0x1 << 13)
++#define RG_CSI2_LANE_MERGE_FIFO_AF_IRQ_EN_SHIFT 14
++#define RG_CSI2_LANE_MERGE_FIFO_AF_IRQ_EN_MASK (0x1 << 14)
++#define RG_CSI2_ERR_FRAME_SYNC_S0_IRQ_EN_SHIFT 16
++#define RG_CSI2_ERR_FRAME_SYNC_S0_IRQ_EN_MASK (0x1 << 16)
++#define RG_CSI2_ERR_FRAME_SYNC_S1_IRQ_EN_SHIFT 17
++#define RG_CSI2_ERR_FRAME_SYNC_S1_IRQ_EN_MASK (0x1 << 17)
++#define RG_CSI2_ERR_FRAME_SYNC_S2_IRQ_EN_SHIFT 18
++#define RG_CSI2_ERR_FRAME_SYNC_S2_IRQ_EN_MASK (0x1 << 18)
++#define RG_CSI2_ERR_FRAME_SYNC_S3_IRQ_EN_SHIFT 19
++#define RG_CSI2_ERR_FRAME_SYNC_S3_IRQ_EN_MASK (0x1 << 19)
++#define RG_CSI2_ERR_FRAME_SYNC_S4_IRQ_EN_SHIFT 20
++#define RG_CSI2_ERR_FRAME_SYNC_S4_IRQ_EN_MASK (0x1 << 20)
++#define RG_CSI2_ERR_FRAME_SYNC_S5_IRQ_EN_SHIFT 21
++#define RG_CSI2_ERR_FRAME_SYNC_S5_IRQ_EN_MASK (0x1 << 21)
++#define RG_CSI2_ERR_FRAME_SYNC_S6_IRQ_EN_SHIFT 22
++#define RG_CSI2_ERR_FRAME_SYNC_S6_IRQ_EN_MASK (0x1 << 22)
++#define RG_CSI2_ERR_FRAME_SYNC_S7_IRQ_EN_SHIFT 23
++#define RG_CSI2_ERR_FRAME_SYNC_S7_IRQ_EN_MASK (0x1 << 23)
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L0_IRQ_EN_SHIFT 24
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L0_IRQ_EN_MASK (0x1 << 24)
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L1_IRQ_EN_SHIFT 25
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L1_IRQ_EN_MASK (0x1 << 25)
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L2_IRQ_EN_SHIFT 26
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L2_IRQ_EN_MASK (0x1 << 26)
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L3_IRQ_EN_SHIFT 27
++#define RG_CSI2_RESYNC_FIFO_OVERFLOW_L3_IRQ_EN_MASK (0x1 << 27)
++#define RG_CSI2_ASYNC_FIFO_OVERRUN_IRQ_EN_SHIFT 28
++#define RG_CSI2_ASYNC_FIFO_OVERRUN_IRQ_EN_MASK (0x1 << 28)
++#define RG_CSI2_RECEIVE_DATA_NOT_ENOUGH_IRQ_EN_SHIFT 29
++#define RG_CSI2_RECEIVE_DATA_NOT_ENOUGH_IRQ_EN_MASK (0x1 << 29)
++#define RG_CSI2_IRQ_CLR_MODE_SHIFT 31
++#define RG_CSI2_IRQ_CLR_MODE_MASK (0x1 << 31)
++
++#define SENINF_CSI2_IRQ_STATUS 0x00c8
++#define RO_CSI2_ERR_FRAME_SYNC_IRQ_SHIFT 0
++#define RO_CSI2_ERR_FRAME_SYNC_IRQ_MASK (0x1 << 0)
++#define RO_CSI2_ERR_ID_IRQ_SHIFT 1
++#define RO_CSI2_ERR_ID_IRQ_MASK (0x1 << 1)
++#define RO_CSI2_ECC_ERR_UNDETECTED_IRQ_SHIFT 2
++#define RO_CSI2_ECC_ERR_UNDETECTED_IRQ_MASK (0x1 << 2)
++#define RO_CSI2_ECC_ERR_CORRECTED_IRQ_SHIFT 3
++#define RO_CSI2_ECC_ERR_CORRECTED_IRQ_MASK (0x1 << 3)
++#define RO_CSI2_ECC_ERR_DOUBLE_IRQ_SHIFT 4
++#define RO_CSI2_ECC_ERR_DOUBLE_IRQ_MASK (0x1 << 4)
++#define RO_CSI2_CRC_CORRECT_IRQ_SHIFT 5
++#define RO_CSI2_CRC_CORRECT_IRQ_MASK (0x1 << 5)
++#define RO_CSI2_CRC_ERR_IRQ_SHIFT 6
++#define RO_CSI2_CRC_ERR_IRQ_MASK (0x1 << 6)
++#define RO_CSI2_ERR_MULTI_LANE_SYNC_IRQ_SHIFT 7
++#define RO_CSI2_ERR_MULTI_LANE_SYNC_IRQ_MASK (0x1 << 7)
++#define RO_CSI2_FS_RECEIVE_IRQ_SHIFT 8
++#define RO_CSI2_FS_RECEIVE_IRQ_MASK (0x1 << 8)
++#define RO_CSI2_FE_RECEIVE_IRQ_SHIFT 9
++#define RO_CSI2_FE_RECEIVE_IRQ_MASK (0x1 << 9)
++#define RO_CSI2_LS_RECEIVE_IRQ_SHIFT 10
++#define RO_CSI2_LS_RECEIVE_IRQ_MASK (0x1 << 10)
++#define RO_CSI2_LE_RECEIVE_IRQ_SHIFT 11
++#define RO_CSI2_LE_RECEIVE_IRQ_MASK (0x1 << 11)
++#define RO_CSI2_GS_RECEIVE_IRQ_SHIFT 12
++#define RO_CSI2_GS_RECEIVE_IRQ_MASK (0x1 << 12)
++#define RO_CSI2_ERR_LANE_RESYNC_IRQ_SHIFT 13
++#define RO_CSI2_ERR_LANE_RESYNC_IRQ_MASK (0x1 << 13)
++#define RO_CSI2_LANE_MERGE_FIFO_AF_IRQ_SHIFT 14
++#define RO_CSI2_LANE_MERGE_FIFO_AF_IRQ_MASK (0x1 << 14)
++#define RO_CSI2_ERR_FRAME_SYNC_S0_IRQ_SHIFT 16
++#define RO_CSI2_ERR_FRAME_SYNC_S0_IRQ_MASK (0x1 << 16)
++#define RO_CSI2_ERR_FRAME_SYNC_S1_IRQ_SHIFT 17
++#define RO_CSI2_ERR_FRAME_SYNC_S1_IRQ_MASK (0x1 << 17)
++#define RO_CSI2_ERR_FRAME_SYNC_S2_IRQ_SHIFT 18
++#define RO_CSI2_ERR_FRAME_SYNC_S2_IRQ_MASK (0x1 << 18)
++#define RO_CSI2_ERR_FRAME_SYNC_S3_IRQ_SHIFT 19
++#define RO_CSI2_ERR_FRAME_SYNC_S3_IRQ_MASK (0x1 << 19)
++#define RO_CSI2_ERR_FRAME_SYNC_S4_IRQ_SHIFT 20
++#define RO_CSI2_ERR_FRAME_SYNC_S4_IRQ_MASK (0x1 << 20)
++#define RO_CSI2_ERR_FRAME_SYNC_S5_IRQ_SHIFT 21
++#define RO_CSI2_ERR_FRAME_SYNC_S5_IRQ_MASK (0x1 << 21)
++#define RO_CSI2_ERR_FRAME_SYNC_S6_IRQ_SHIFT 22
++#define RO_CSI2_ERR_FRAME_SYNC_S6_IRQ_MASK (0x1 << 22)
++#define RO_CSI2_ERR_FRAME_SYNC_S7_IRQ_SHIFT 23
++#define RO_CSI2_ERR_FRAME_SYNC_S7_IRQ_MASK (0x1 << 23)
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L0_IRQ_SHIFT 24
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L0_IRQ_MASK (0x1 << 24)
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L1_IRQ_SHIFT 25
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L1_IRQ_MASK (0x1 << 25)
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L2_IRQ_SHIFT 26
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L2_IRQ_MASK (0x1 << 26)
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L3_IRQ_SHIFT 27
++#define RO_CSI2_RESYNC_FIFO_OVERFLOW_L3_IRQ_MASK (0x1 << 27)
++#define RO_CSI2_ASYNC_FIFO_OVERRUN_IRQ_SHIFT 28
++#define RO_CSI2_ASYNC_FIFO_OVERRUN_IRQ_MASK (0x1 << 28)
++#define RO_CSI2_RECEIVE_DATA_NOT_ENOUGH_IRQ_SHIFT 29
++#define RO_CSI2_RECEIVE_DATA_NOT_ENOUGH_IRQ_MASK (0x1 << 29)
++
++#define SENINF_CSI2_LINE_FRAME_NUM 0x00d0
++#define RO_CSI2_LINE_NUM_SHIFT 0
++#define RO_CSI2_LINE_NUM_MASK (0xffff << 0)
++#define RO_CSI2_FRAME_NUM_SHIFT 16
++#define RO_CSI2_FRAME_NUM_MASK (0xffff << 16)
++
++#define SENINF_CSI2_PACKET_STATUS 0x00d4
++#define RO_CSI2_PACKET_DT_SHIFT 0
++#define RO_CSI2_PACKET_DT_MASK (0x3f << 0)
++#define RO_CSI2_PACKET_VC_SHIFT 8
++#define RO_CSI2_PACKET_VC_MASK (0x1f << 8)
++#define RO_CSI2_PACKET_WC_SHIFT 16
++#define RO_CSI2_PACKET_WC_MASK (0xffff << 16)
++
++#define SENINF_CSI2_GEN_SHORT_PACKET_STATUS 0x00d8
++#define RO_CSI2_GENERIC_SHORT_PACKET_DT_SHIFT 0
++#define RO_CSI2_GENERIC_SHORT_PACKET_DT_MASK (0x3f << 0)
++#define RO_CSI2_GENERIC_SHORT_PACKET_WC_SHIFT 16
++#define RO_CSI2_GENERIC_SHORT_PACKET_WC_MASK (0xffff << 16)
++
++#define SENINF_CSI2_PACKET_CNT_STATUS 0x00dc
++#define RO_CSI2_PACKET_CNT_SHIFT 0
++#define RO_CSI2_PACKET_CNT_MASK (0xffff << 0)
++#define RO_CSI2_PACKET_CNT_BUF_SHIFT 16
++#define RO_CSI2_PACKET_CNT_BUF_MASK (0xffff << 16)
++
++#define SENINF_CSI2_DBG_CTRL 0x00e0
++#define RG_CSI2_DBG_SEL_SHIFT 0
++#define RG_CSI2_DBG_SEL_MASK (0xff << 0)
++#define RG_CSI2_DBG_EN_SHIFT 16
++#define RG_CSI2_DBG_EN_MASK (0x1 << 16)
++#define RG_CSI2_DBG_PACKET_CNT_EN_SHIFT 17
++#define RG_CSI2_DBG_PACKET_CNT_EN_MASK (0x1 << 17)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-mux.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-mux.h
+new file mode 100644
+index 000000000000..696b39dc6c9a
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1-mux.h
+@@ -0,0 +1,147 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __SENINF1_MUX_H__
++#define __SENINF1_MUX_H__
++
++#define SENINF_MUX_CTRL_0 0x0000
++#define SENINF_MUX_EN_SHIFT 0
++#define SENINF_MUX_EN_MASK (0x1 << 0)
++#define SENINF_MUX_IRQ_SW_RST_SHIFT 1
++#define SENINF_MUX_IRQ_SW_RST_MASK (0x1 << 1)
++#define SENINF_MUX_SW_RST_SHIFT 2
++#define SENINF_MUX_SW_RST_MASK (0x1 << 2)
++
++#define SENINF_MUX_CTRL_1 0x0004
++#define RG_SENINF_MUX_SRC_SEL_SHIFT 0
++#define RG_SENINF_MUX_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_MUX_PIX_MODE_SEL_SHIFT 8
++#define RG_SENINF_MUX_PIX_MODE_SEL_MASK (0x3 << 8)
++#define RG_SENINF_MUX_FIFO_PUSH_EN_SHIFT 16
++#define RG_SENINF_MUX_FIFO_PUSH_EN_MASK (0x3f << 16)
++#define RG_SENINF_MUX_RDY_FORCE_MODE_EN_SHIFT 24
++#define RG_SENINF_MUX_RDY_FORCE_MODE_EN_MASK (0x1 << 24)
++#define RG_SENINF_MUX_RDY_FORCE_MODE_VAL_SHIFT 25
++#define RG_SENINF_MUX_RDY_FORCE_MODE_VAL_MASK (0x1 << 25)
++#define RG_SENINF_MUX_CROP_EN_SHIFT 28
++#define RG_SENINF_MUX_CROP_EN_MASK (0x1 << 28)
++
++#define SENINF_MUX_OPT 0x0008
++#define RG_SENINF_MUX_CNT_INIT_OPT_SHIFT 0
++#define RG_SENINF_MUX_CNT_INIT_OPT_MASK (0x3 << 0)
++#define RG_SENINF_MUX_FIFO_FULL_OUTPUT_OPT_SHIFT 8
++#define RG_SENINF_MUX_FIFO_FULL_OUTPUT_OPT_MASK (0x3 << 8)
++#define RG_SENINF_MUX_FIFO_FULL_WR_MODE_SHIFT 10
++#define RG_SENINF_MUX_FIFO_FULL_WR_MODE_MASK (0x3 << 10)
++#define RG_SENINF_MUX_FIFO_OVERRUN_RST_EN_SHIFT 12
++#define RG_SENINF_MUX_FIFO_OVERRUN_RST_EN_MASK (0x1 << 12)
++#define RG_SENINF_MUX_HSYNC_POL_SHIFT 16
++#define RG_SENINF_MUX_HSYNC_POL_MASK (0x1 << 16)
++#define RG_SENINF_MUX_VSYNC_POL_SHIFT 17
++#define RG_SENINF_MUX_VSYNC_POL_MASK (0x1 << 17)
++
++#define SENINF_MUX_IRQ_EN 0x0010
++#define RG_SENINF_MUX_FIFO_OVERRUN_IRQ_EN_SHIFT 0
++#define RG_SENINF_MUX_FIFO_OVERRUN_IRQ_EN_MASK (0x1 << 0)
++#define RG_SENINF_MUX_FSM_ERR_IRQ_EN_SHIFT 1
++#define RG_SENINF_MUX_FSM_ERR_IRQ_EN_MASK (0x1 << 1)
++#define RG_SENINF_MUX_HSIZE_ERR_IRQ_EN_SHIFT 2
++#define RG_SENINF_MUX_HSIZE_ERR_IRQ_EN_MASK (0x1 << 2)
++#define RG_SENINF_MUX_VSIZE_ERR_IRQ_EN_SHIFT 3
++#define RG_SENINF_MUX_VSIZE_ERR_IRQ_EN_MASK (0x1 << 3)
++#define RG_SENINF_MUX_IRQ_CLR_MODE_SHIFT 31
++#define RG_SENINF_MUX_IRQ_CLR_MODE_MASK (0x1 << 31)
++
++#define SENINF_MUX_IRQ_STATUS 0x0018
++#define RO_SENINF_MUX_FIFO_OVERRUN_IRQ_SHIFT 0
++#define RO_SENINF_MUX_FIFO_OVERRUN_IRQ_MASK (0x1 << 0)
++#define RO_SENINF_MUX_FSM_ERR_IRQ_SHIFT 1
++#define RO_SENINF_MUX_FSM_ERR_IRQ_MASK (0x1 << 1)
++#define RO_SENINF_MUX_HSIZE_ERR_IRQ_SHIFT 2
++#define RO_SENINF_MUX_HSIZE_ERR_IRQ_MASK (0x1 << 2)
++#define RO_SENINF_MUX_VSIZE_ERR_IRQ_SHIFT 3
++#define RO_SENINF_MUX_VSIZE_ERR_IRQ_MASK (0x1 << 3)
++
++#define SENINF_MUX_IMG_SIZE 0x0020
++#define RG_SENINF_MUX_EXPECT_HSIZE_SHIFT 0
++#define RG_SENINF_MUX_EXPECT_HSIZE_MASK (0xffff << 0)
++#define RG_SENINF_MUX_EXPECT_VSIZE_SHIFT 16
++#define RG_SENINF_MUX_EXPECT_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_MUX_CROP_PIX_CTRL 0x0028
++#define RG_SENINF_MUX_CROP_START_8PIX_CNT_SHIFT 0
++#define RG_SENINF_MUX_CROP_START_8PIX_CNT_MASK (0xfff << 0)
++#define RG_SENINF_MUX_CROP_END_8PIX_CNT_SHIFT 16
++#define RG_SENINF_MUX_CROP_END_8PIX_CNT_MASK (0xfff << 16)
++
++#define SENINF_MUX_SIZE 0x0030
++#define RO_SENINF_MUX_RCV_HSIZE_SHIFT 0
++#define RO_SENINF_MUX_RCV_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_MUX_RCV_VSIZE_SHIFT 16
++#define RO_SENINF_MUX_RCV_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_MUX_ERR_SIZE 0x0034
++#define RO_SENINF_MUX_RCV_ERR_HSIZE_SHIFT 0
++#define RO_SENINF_MUX_RCV_ERR_HSIZE_MASK (0xffff << 0)
++#define RO_SENINF_MUX_RCV_ERR_VSIZE_SHIFT 16
++#define RO_SENINF_MUX_RCV_ERR_VSIZE_MASK (0xffff << 16)
++
++#define SENINF_MUX_FIFO_STATUS 0x0040
++#define RO_SENINF_MUX_FIFO_WA_SHIFT 0
++#define RO_SENINF_MUX_FIFO_WA_MASK (0x1ff << 0)
++#define RO_SENINF_MUX_FIFO_WCS_SHIFT 12
++#define RO_SENINF_MUX_FIFO_WCS_MASK (0x1 << 12)
++#define RO_SENINF_MUX_FIFO_RA_SHIFT 16
++#define RO_SENINF_MUX_FIFO_RA_MASK (0x1ff << 16)
++#define RO_SENINF_MUX_FIFO_RCS_SHIFT 28
++#define RO_SENINF_MUX_FIFO_RCS_MASK (0x1 << 28)
++
++#define SENINF_MUX_DBG_CTRL 0x0080
++#define RG_SENINF_MUX_DBG_EN_SHIFT 0
++#define RG_SENINF_MUX_DBG_EN_MASK (0x1 << 0)
++#define RG_SENINF_MUX_DBG_SEL_SHIFT 8
++#define RG_SENINF_MUX_DBG_SEL_MASK (0xff << 8)
++
++#define SENINF_MUX_DBG_OUT 0x0088
++#define RO_SENINF_MUX_DBG_OUT_SHIFT 0
++#define RO_SENINF_MUX_DBG_OUT_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_CAM_MON 0x00a0
++#define RO_SENINF_MUX_CAM_MON_0_SHIFT 0
++#define RO_SENINF_MUX_CAM_MON_0_MASK (0xffff << 0)
++#define RO_SENINF_MUX_CAM_MON_1_SHIFT 16
++#define RO_SENINF_MUX_CAM_MON_1_MASK (0xffff << 16)
++
++#define SENINF_MUX_PIX_CNT 0x00a4
++#define RO_SENINF_MUX_PIX_CNT_SHIFT 0
++#define RO_SENINF_MUX_PIX_CNT_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_FRAME_SIZE_MON_CTRL 0x00a8
++#define RG_SENINF_MUX_FRAME_SIZE_MON_EN_SHIFT 0
++#define RG_SENINF_MUX_FRAME_SIZE_MON_EN_MASK (0x1 << 0)
++
++#define SENINF_MUX_FRAME_SIZE_MON_H_VALID 0x00b0
++#define RO_SENINF_MUX_FRAME_H_VALID_SHIFT 0
++#define RO_SENINF_MUX_FRAME_H_VALID_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_FRAME_SIZE_MON_H_BLANK 0x00b4
++#define RO_SENINF_MUX_FRAME_H_BLANK_SHIFT 0
++#define RO_SENINF_MUX_FRAME_H_BLANK_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_FRAME_SIZE_MON_V_VALID 0x00b8
++#define RO_SENINF_MUX_FRAME_V_VALID_SHIFT 0
++#define RO_SENINF_MUX_FRAME_V_VALID_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_FRAME_SIZE_MON_V_BLANK 0x00bc
++#define RO_SENINF_MUX_FRAME_V_BLANK_SHIFT 0
++#define RO_SENINF_MUX_FRAME_V_BLANK_MASK (0xffffffff << 0)
++
++#define SENINF_MUX_SPARE 0x00f0
++#define RG_SENINF_MUX_SPARE_0_SHIFT 0
++#define RG_SENINF_MUX_SPARE_0_MASK (0xff << 0)
++#define RG_SENINF_MUX_SPARE_1_SHIFT 16
++#define RG_SENINF_MUX_SPARE_1_MASK (0xff << 16)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1.h
+new file mode 100644
+index 000000000000..4d021906ba07
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-seninf1.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __SENINF1_H__
++#define __SENINF1_H__
++
++#define SENINF_CTRL 0x0000
++#define SENINF_EN_SHIFT 0
++#define SENINF_EN_MASK (0x1 << 0)
++
++#define SENINF_DBG 0x0004
++#define RG_SENINF_DBG_SEL_SHIFT 0
++#define RG_SENINF_DBG_SEL_MASK (0xf << 0)
++
++#define SENINF_CSI2_CTRL 0x0010
++#define RG_SENINF_CSI2_EN_SHIFT 0
++#define RG_SENINF_CSI2_EN_MASK (0x1 << 0)
++#define SENINF_CSI2_SW_RST_SHIFT 4
++#define SENINF_CSI2_SW_RST_MASK (0x1 << 4)
++
++#define SENINF_TESTMDL_CTRL 0x0020
++#define RG_SENINF_TESTMDL_EN_SHIFT 0
++#define RG_SENINF_TESTMDL_EN_MASK (0x1 << 0)
++#define SENINF_TESTMDL_SW_RST_SHIFT 4
++#define SENINF_TESTMDL_SW_RST_MASK (0x1 << 4)
++
++#define SENINF_TG_CTRL 0x0030
++#define SENINF_TG_SW_RST_SHIFT 4
++#define SENINF_TG_SW_RST_MASK (0x1 << 4)
++
++#define SENINF_SCAM_CTRL 0x0040
++#define RG_SENINF_SCAM_EN_SHIFT 0
++#define RG_SENINF_SCAM_EN_MASK (0x1 << 0)
++#define SENINF_SCAM_SW_RST_SHIFT 4
++#define SENINF_SCAM_SW_RST_MASK (0x1 << 4)
++
++#define SENINF_PCAM_CTRL 0x0050
++#define RG_SENINF_PCAM_DATA_SEL_SHIFT 0
++#define RG_SENINF_PCAM_DATA_SEL_MASK (0x7 << 0)
++
++#define SENINF_CCIR_CTRL 0x0060
++#define SENINF_CCIR_SW_RST_SHIFT 4
++#define SENINF_CCIR_SW_RST_MASK (0x1 << 4)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-tg1.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-tg1.h
+new file mode 100644
+index 000000000000..3bd0d4a5b42e
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-tg1.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __SENINF_TG1_H__
++#define __SENINF_TG1_H__
++
++#define TM_CTL 0x0008
++#define TM_EN_SHIFT 0
++#define TM_EN_MASK (0x1 << 0)
++#define TM_RST_SHIFT 1
++#define TM_RST_MASK (0x1 << 1)
++#define TM_FMT_SHIFT 2
++#define TM_FMT_MASK (0x1 << 2)
++#define TM_BIN_IMG_SWITCH_EN_SHIFT 3
++#define TM_BIN_IMG_SWITCH_EN_MASK (0x1 << 3)
++#define TM_PAT_SHIFT 4
++#define TM_PAT_MASK (0x1f << 4)
++
++#define TM_SIZE 0x000c
++#define TM_PXL_SHIFT 0
++#define TM_PXL_MASK (0xffff << 0)
++#define TM_LINE_SHIFT 16
++#define TM_LINE_MASK (0xffff << 16)
++
++#define TM_CLK 0x0010
++#define TM_CLK_CNT_SHIFT 0
++#define TM_CLK_CNT_MASK (0xff << 0)
++#define TM_CLRBAR_OFT_SHIFT 8
++#define TM_CLRBAR_OFT_MASK (0x1fff << 8)
++#define TM_CLRBAR_IDX_SHIFT 28
++#define TM_CLRBAR_IDX_MASK (0x7 << 28)
++
++#define TM_DUM 0x0018
++#define TM_DUMMYPXL_SHIFT 0
++#define TM_DUMMYPXL_MASK (0xffff << 0)
++#define TM_VSYNC_SHIFT 16
++#define TM_VSYNC_MASK (0xffff << 16)
++
++#define TM_RAND_SEED 0x001c
++#define TM_SEED_SHIFT 0
++#define TM_SEED_MASK (0xffffffff << 0)
++
++#define TM_RAND_CTL 0x0020
++#define TM_DIFF_FRM_SHIFT 0
++#define TM_DIFF_FRM_MASK (0x1 << 0)
++
++#endif
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-top-ctrl.h b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-top-ctrl.h
+new file mode 100644
+index 000000000000..eeb7e06a20e3
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/camsys/mtk_csi_phy_2_0/mtk_cam-seninf-top-ctrl.h
+@@ -0,0 +1,99 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022 MediaTek Inc.
++ */
++
++#ifndef __SENINF_TOP_H__
++#define __SENINF_TOP_H__
++
++#define SENINF_TOP_CTRL 0x0000
++#define SENINF_TOP_SW_RST_SHIFT 0
++#define SENINF_TOP_SW_RST_MASK (0x1 << 0)
++#define SENINF_TOP_N3D_SW_RST_SHIFT 4
++#define SENINF_TOP_N3D_SW_RST_MASK (0x1 << 4)
++#define RG_SENINF1_PCAM_PCLK_SEL_SHIFT 8
++#define RG_SENINF1_PCAM_PCLK_SEL_MASK (0x1 << 8)
++#define RG_SENINF2_PCAM_PCLK_SEL_SHIFT 9
++#define RG_SENINF2_PCAM_PCLK_SEL_MASK (0x1 << 9)
++#define RG_SENINF1_PCAM_PCLK_EN_SHIFT 12
++#define RG_SENINF1_PCAM_PCLK_EN_MASK (0x1 << 12)
++#define RG_SENINF2_PCAM_PCLK_EN_SHIFT 13
++#define RG_SENINF2_PCAM_PCLK_EN_MASK (0x1 << 13)
++#define RG_SLICE_FIFO_FULL_OPT_SHIFT 16
++#define RG_SLICE_FIFO_FULL_OPT_MASK (0x1 << 16)
++
++#define SENINF_TOP_MUX_CTRL_0 0x0010
++#define RG_SENINF_MUX1_SRC_SEL_SHIFT 0
++#define RG_SENINF_MUX1_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_MUX2_SRC_SEL_SHIFT 8
++#define RG_SENINF_MUX2_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_MUX3_SRC_SEL_SHIFT 16
++#define RG_SENINF_MUX3_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_MUX4_SRC_SEL_SHIFT 24
++#define RG_SENINF_MUX4_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_TOP_MUX_CTRL_1 0x0014
++#define RG_SENINF_MUX5_SRC_SEL_SHIFT 0
++#define RG_SENINF_MUX5_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_MUX6_SRC_SEL_SHIFT 8
++#define RG_SENINF_MUX6_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_MUX7_SRC_SEL_SHIFT 16
++#define RG_SENINF_MUX7_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_MUX8_SRC_SEL_SHIFT 24
++#define RG_SENINF_MUX8_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_TOP_MUX_CTRL_2 0x0018
++#define RG_SENINF_MUX9_SRC_SEL_SHIFT 0
++#define RG_SENINF_MUX9_SRC_SEL_MASK (0xf << 0)
++#define RG_SENINF_MUX10_SRC_SEL_SHIFT 8
++#define RG_SENINF_MUX10_SRC_SEL_MASK (0xf << 8)
++#define RG_SENINF_MUX11_SRC_SEL_SHIFT 16
++#define RG_SENINF_MUX11_SRC_SEL_MASK (0xf << 16)
++#define RG_SENINF_MUX12_SRC_SEL_SHIFT 24
++#define RG_SENINF_MUX12_SRC_SEL_MASK (0xf << 24)
++
++#define SENINF_TOP_MUX_CTRL_3 0x001c
++#define RG_SENINF_MUX13_SRC_SEL_SHIFT 0
++#define RG_SENINF_MUX13_SRC_SEL_MASK (0xf << 0)
++
++#define SENINF_TOP_PHY_CTRL_CSI0 0x0060
++#define PHY_SENINF_MUX0_DPHY_EN_SHIFT 0
++#define PHY_SENINF_MUX0_DPHY_EN_MASK (0x1 << 0)
++#define PHY_SENINF_MUX0_CPHY_EN_SHIFT 1
++#define PHY_SENINF_MUX0_CPHY_EN_MASK (0x1 << 1)
++#define RG_PHY_SENINF_MUX0_CPHY_MODE_SHIFT 8
++#define RG_PHY_SENINF_MUX0_CPHY_MODE_MASK (0x3 << 8)
++
++#define SENINF_TOP_PHY_CTRL_CSI1 0x0064
++#define PHY_SENINF_MUX1_DPHY_EN_SHIFT 0
++#define PHY_SENINF_MUX1_DPHY_EN_MASK (0x1 << 0)
++#define PHY_SENINF_MUX1_CPHY_EN_SHIFT 1
++#define PHY_SENINF_MUX1_CPHY_EN_MASK (0x1 << 1)
++#define RG_PHY_SENINF_MUX1_CPHY_MODE_SHIFT 8
++#define RG_PHY_SENINF_MUX1_CPHY_MODE_MASK (0x3 << 8)
++
++#define SENINF_TOP_PHY_CTRL_CSI2 0x0068
++#define PHY_SENINF_MUX2_DPHY_EN_SHIFT 0
++#define PHY_SENINF_MUX2_DPHY_EN_MASK (0x1 << 0)
++#define PHY_SENINF_MUX2_CPHY_EN_SHIFT 1
++#define PHY_SENINF_MUX2_CPHY_EN_MASK (0x1 << 1)
++#define RG_PHY_SENINF_MUX2_CPHY_MODE_SHIFT 8
++#define RG_PHY_SENINF_MUX2_CPHY_MODE_MASK (0x3 << 8)
++
++#define SENINF_TOP_PHY_CTRL_CSI3 0x006c
++#define PHY_SENINF_MUX3_DPHY_EN_SHIFT 0
++#define PHY_SENINF_MUX3_DPHY_EN_MASK (0x1 << 0)
++#define PHY_SENINF_MUX3_CPHY_EN_SHIFT 1
++#define PHY_SENINF_MUX3_CPHY_EN_MASK (0x1 << 1)
++#define RG_PHY_SENINF_MUX3_CPHY_MODE_SHIFT 8
++#define RG_PHY_SENINF_MUX3_CPHY_MODE_MASK (0x3 << 8)
++
++#define SENINF_TOP_PHY_CTRL_CSI4 0x0070
++#define PHY_SENINF_MUX4_DPHY_EN_SHIFT 0
++#define PHY_SENINF_MUX4_DPHY_EN_MASK (0x1 << 0)
++#define PHY_SENINF_MUX4_CPHY_EN_SHIFT 1
++#define PHY_SENINF_MUX4_CPHY_EN_MASK (0x1 << 1)
++#define RG_PHY_SENINF_MUX4_CPHY_MODE_SHIFT 8
++#define RG_PHY_SENINF_MUX4_CPHY_MODE_MASK (0x3 << 8)
++
++#endif
 -- 
 2.18.0
 
