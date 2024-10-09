@@ -1,58 +1,50 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917E3194C9E
-	for <linux-media@vger.kernel.org>; Wed,  9 Oct 2024 13:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56932291E;
+	Wed,  9 Oct 2024 13:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728478973; cv=none; b=I6DMkceF/ZfiwcDyAWYsdzptfMgkB44YF3a52/VmgHbxith2+u6Fz8wtXYd4C6H5tcsh7Phb3My7aqxzGvPJBLudrXs0dBWPPlEVROSm7lH+cn4ao/tQbA7xErMci34wR0keqWZZGFlmHEMdkiH5n6MuboZVIDtAUUQCXMoP4fI=
+	t=1728479673; cv=none; b=apr2C+vhmbZwswFjUiiLZjE6r5TkWlxQaGbN+gcqJRhGAi7dCb2w9Ynx//VKXBP0jrlAQS584jElRaj3xBtJoqfGxlM1BBQRBfUwFIgOkM27nL3oAuggrOBDP8yRNNGpmIOlVrV9NAzhqwtVGTuGukBtAsqbYeIwGLI3ufXe8LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728478973; c=relaxed/simple;
-	bh=GjnPV5sOZgTZMm2KQG/PI/BeyRDCSFbmBjidp8mCRPI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lTA0FlCeC4ShcCxOEplHkekxfnrgXDhUXCpPBq/ewzP8KT3nUNIo7t4xl8v1rmmo0UhDkJAFefxX+Fk5yC5K62RPmZFGhY0m5jP+AbYysjQUTN4wsZuQUG2MVFWXu1HEeLtBOzxrgycYoGqTriHPPBXG4WC+xKObUYZcZQa5IZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KGo/OZ7C; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1728479673; c=relaxed/simple;
+	bh=YINrfZsek2PYwQzx5aXAqFR5N5hGjnKx66rviiTj1Yw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YS+pyLemzjnTE0fRNtxOYrvsSJrTgTwoEqEfmDpAs25sPM+Gw0CmKDxQSPZV1qOE0jbHEPigc8EWFjta6r0kKFRH5SkUQHJRpord6nveTPWGGNOIdpiTLN12Qvva2BTb25b/AKxInxhdxmzn5JsWFy0WdR3eejWUfkmKugUlOnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=WI0sVayc; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KGo/OZ7C"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fac47f0b1aso80874701fa.1
-        for <linux-media@vger.kernel.org>; Wed, 09 Oct 2024 06:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728478970; x=1729083770; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XQ4P68ZRxv+hHVO0lABXJo+8ycp2fDd9E94BHF6XTqI=;
-        b=KGo/OZ7CeSkYNepRjkbja0zq7ynXI/m82wP2RCVicKaN3jIUkehf2Cw8AqOiqOW7ja
-         b1+nTpNCYkCvkim+AB0qAy5qaCkXGzX8eeWWdkWeNSc8Q8tbiCN06pS+QXXTyepLwHu2
-         WqL5zhbb0/d5NtEi+HLRoIbU/dqq8UHAFeL4HDpvrsUGWHtV6oV66jWzUwPTd4bWzz17
-         uAsyb3y+rY1lF/0r2sIQwEd8sqpdyMOKQ79dG0PK9rMoan/QkPFuSF35D6F7ImqsOnFH
-         j7KOb/ylNcaZwDqNWSm3MtiHA7mRhuSFmWTDn7vAxwwqlXdhjE+ms5GwQbIJ8YIgOj9N
-         bn5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728478970; x=1729083770;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQ4P68ZRxv+hHVO0lABXJo+8ycp2fDd9E94BHF6XTqI=;
-        b=O6LUkNMWI5ifQ8cAzALEvWwrdYrpjTTiJMILflHFJsZrhstB6N8yTg9coxLVjJKDtg
-         s9H3pmvHVGFUYtG3Emecw/71/mR+krr4+XoJsw6E295lG+5cPG8tDETgXIlpuJKxf9Sz
-         58vd6x8FZtShagOtq+PBt0bBbuLVDdK5AJgGHkF2FLVUuGvLq2qWhjkmQrPW/fpqFsAZ
-         OMxFqsHSyVrGn/m/9l474NORcTXWUXLOmoaRzAo+IINLvCgJYAq5C9CkRcpXmsbd9E5S
-         cxZff2Zc4d4qj2p8FFD6uDKPJ4qzsTySdryKrX+WNhdm/U0NSX0k9wtOB92h4A6LmUHf
-         A5Ew==
-X-Gm-Message-State: AOJu0YyL8b+LcdkcdHRxHuqkZwQOMY1rA+YIQu+FcV3KvWBvrPmvTJ7r
-	mlL/X+2rrYHQDvAh3INcjTGz2qWh/7C+EzGeIPJ8ENdZ5Ipa4n+P/cWTatdn61k=
-X-Google-Smtp-Source: AGHT+IELZkj89u1afBb7PSQ9wwNotzJkcSezbWUcteXtw7nUEW52WKbZA04/L2zb0pBTJV+mK2zu8Q==
-X-Received: by 2002:a2e:d1a:0:b0:2fa:de13:5c2a with SMTP id 38308e7fff4ca-2fb187a1883mr12341611fa.25.1728478969628;
-        Wed, 09 Oct 2024 06:02:49 -0700 (PDT)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05c0dc1sm5461539a12.52.2024.10.09.06.02.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 06:02:49 -0700 (PDT)
-Message-ID: <58958e05-882d-4866-809b-1daec897f59a@linaro.org>
-Date: Wed, 9 Oct 2024 14:02:48 +0100
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="WI0sVayc"
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4994xc0x003245;
+	Wed, 9 Oct 2024 07:48:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=b9CbWLDMZti2ojgRTihH3RA0WYLUzEcG7aX6pdihoQY=; b=
+	WI0sVaycTZYkwMgmtYcXXMdvigsiua8Ix4Qh02mNCGH2fBXcoCmYBNNsEO5BXVde
+	1Bz9WSIl3H9aytV4MjeLGq5iNgl4nMnifXKD7gZBG7Nh0M0RDNAmEax34ZlRrQpc
+	BqxwXp6rQsj7d8HBI3neZNecBDiZiUXrqk9SjO/XH7GSP3KBa0vc3lo3Nh2evgTs
+	vMpU/eouIhXwHQgJkPlVYadHgMk2W3tKDA7WeoPiKLk9i2DcqwNiAeCbgFtNS1E3
+	D/03y3ryRn8KcZ7U0bo3WMxdHCmB9tG9qfIm/V0gyX7oGE/Hh+fOgbX3EkFod4UH
+	WWLlkgIPTShr+Vylj7CyYA==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 4232uy5xfs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 07:48:17 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 9 Oct 2024
+ 13:48:15 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Wed, 9 Oct 2024 13:48:15 +0100
+Received: from [198.90.208.18] (ediswws06.ad.cirrus.com [198.90.208.18])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 33C5E82024A;
+	Wed,  9 Oct 2024 12:48:15 +0000 (UTC)
+Message-ID: <41a0ad69-912b-4eb3-84f7-fb385433c056@opensource.cirrus.com>
+Date: Wed, 9 Oct 2024 13:48:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -60,80 +52,137 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/4] media: dt-bindings: Add OmniVision OV08X40
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Jason Chen <jason.z.chen@intel.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20241005-b4-master-24-11-25-ov08x40-v5-0-5f1eb2e11036@linaro.org>
- <20241005-b4-master-24-11-25-ov08x40-v5-2-5f1eb2e11036@linaro.org>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241005-b4-master-24-11-25-ov08x40-v5-2-5f1eb2e11036@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 00/51] treewide: Switch to __pm_runtime_put_autosuspend()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson
+	<ulf.hansson@linaro.org>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus
+	<sakari.ailus@linux.intel.com>
+CC: <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-bluetooth@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+        <nouveau@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-i3c@lists.infradead.org>, <linux-iio@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <iommu@lists.linux.dev>, <imx@lists.linux.dev>,
+        <linux-mediatek@lists.infradead.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-pwm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-staging@lists.linux.dev>, <linux-usb@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <greybus-dev@lists.linaro.org>,
+        <asahi@lists.linux.dev>, Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20241004094101.113349-1-sakari.ailus@linux.intel.com>
+ <CAPDyKFp0N6UJhnHS164Tdf=xkWB0jzq65L9TdvYazeBQ-6WjeQ@mail.gmail.com>
+ <20241007184924.GH14766@pendragon.ideasonboard.com>
+ <CAPDyKFpQVnF7eQv3dup8k-3EijnMjuveCG9sZ=Rpey1Y6MBJEg@mail.gmail.com>
+ <20241007222502.GG30699@pendragon.ideasonboard.com>
+ <CAPDyKFrGNwna6Y2pqSRaBbRYHKRaD2ayqQHLtoqLPOu9Et7qTg@mail.gmail.com>
+ <CAJZ5v0jvJyS7D5-wURi2kyWN-rmNa+YqupeQJ000pQRVd9VBcQ@mail.gmail.com>
+Content-Language: en-GB
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <CAJZ5v0jvJyS7D5-wURi2kyWN-rmNa+YqupeQJ000pQRVd9VBcQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: ltWPFp1gnPUjzPmaRQ9EaXCq91PhMVjU
+X-Proofpoint-ORIG-GUID: ltWPFp1gnPUjzPmaRQ9EaXCq91PhMVjU
+X-Proofpoint-Spam-Reason: safe
 
-On 05/10/2024 11:31, Bryan O'Donoghue wrote:
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          data-lanes:
-> +            oneOf:
-> +              - items:
-> +                  - const: 1
-> +                  - const: 2
-> +              - items:
-> +                  - const: 1
-> +                  - const: 2
-> +                  - const: 3
-> +                  - const: 4
-> +
-> +        required:
-> +          - data-lanes
-> +          - link-frequencies
+On 08/10/2024 7:24 pm, Rafael J. Wysocki wrote:
+> On Tue, Oct 8, 2024 at 12:35 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>>
+>> On Tue, 8 Oct 2024 at 00:25, Laurent Pinchart
+>> <laurent.pinchart@ideasonboard.com> wrote:
+>>>
+>>> Hi Ulf,
+>>>
+>>> On Tue, Oct 08, 2024 at 12:08:24AM +0200, Ulf Hansson wrote:
+>>>> On Mon, 7 Oct 2024 at 20:49, Laurent Pinchart wrote:
+>>>>> On Fri, Oct 04, 2024 at 04:38:36PM +0200, Ulf Hansson wrote:
+>>>>>> On Fri, 4 Oct 2024 at 11:41, Sakari Ailus wrote:
+>>>>>>>
+>>>>>>> Hello everyone,
+>>>>>>>
+>>>>>>> This set will switch the users of pm_runtime_put_autosuspend() to
+>>>>>>> __pm_runtime_put_autosuspend() while the former will soon be re-purposed
+>>>>>>> to include a call to pm_runtime_mark_last_busy(). The two are almost
+>>>>>>> always used together, apart from bugs which are likely common. Going
+>>>>>>> forward, most new users should be using pm_runtime_put_autosuspend().
+>>>>>>>
+>>>>>>> Once this conversion is done and pm_runtime_put_autosuspend() re-purposed,
+>>>>>>> I'll post another set to merge the calls to __pm_runtime_put_autosuspend()
+>>>>>>> and pm_runtime_mark_last_busy().
+>>>>>>
+>>>>>> That sounds like it could cause a lot of churns.
+>>>>>>
+>>>>>> Why not add a new helper function that does the
+>>>>>> pm_runtime_put_autosuspend() and the pm_runtime_mark_last_busy()
+>>>>>> things? Then we can start moving users over to this new interface,
+>>>>>> rather than having this intermediate step?
+>>>>>
+>>>>> I think the API would be nicer if we used the shortest and simplest
+>>>>> function names for the most common use cases. Following
+>>>>> pm_runtime_put_autosuspend() with pm_runtime_mark_last_busy() is that
+>>>>> most common use case. That's why I like Sakari's approach of repurposing
+>>>>> pm_runtime_put_autosuspend(), and introducing
+>>>>> __pm_runtime_put_autosuspend() for the odd cases where
+>>>>> pm_runtime_mark_last_busy() shouldn't be called.
+>>>>
+>>>> Okay, so the reason for this approach is because we couldn't find a
+>>>> short and descriptive name that could be used in favor of
+>>>> pm_runtime_put_autosuspend(). Let me throw some ideas at it and maybe
+>>>> you like it - or not. :-)
+>>>
+>>> I like the idea at least :-)
+>>>
+>>>> I don't know what options you guys discussed, but to me the entire
+>>>> "autosuspend"-suffix isn't really that necessary in my opinion. There
+>>>> are more ways than calling pm_runtime_put_autosuspend() that triggers
+>>>> us to use the RPM_AUTO flag for rpm_suspend(). For example, just
+>>>> calling pm_runtime_put() has the similar effect.
+>>>
+>>> To be honest, I'm lost there. pm_runtime_put() calls
+>>> __pm_runtime_idle(RPM_GET_PUT | RPM_ASYNC), while
+>>> pm_runtime_put_autosuspend() calls __pm_runtime_suspend(RPM_GET_PUT |
+>>> RPM_ASYNC | RPM_AUTO).
+>>
+>> __pm_runtime_idle() ends up calling rpm_idle(), which may call
+>> rpm_suspend() - if it succeeds to idle the device. In that case, it
+>> tags on the RPM_AUTO flag in the call to rpm_suspend(). Quite similar
+>> to what is happening when calling pm_runtime_put_autosuspend().
+> 
+> Right.
+> 
+> For almost everybody, except for a small bunch of drivers that
+> actually have a .runtime_idle() callback, pm_runtime_put() is
+> literally equivalent to pm_runtime_put_autosuspend().
+> 
+> So really the question is why anyone who doesn't provide a
+> .runtime_idle() callback bothers with using this special
+> pm_runtime_put_autosuspend() thing,
 
-I had some offline discussion with Laurent about this since, the logical 
-conclusion of this would be anything from 
-schemas/media/video-interfaces.yaml# would be valid.
+Because they are following the documentation? It says:
 
-And I'll admit I looked @ upstream examples and copied/pasted which also 
-implies that the upstream examples aren't correct.
+"Drivers should call pm_runtime_mark_last_busy() to update this field
+after carrying out I/O, typically just before calling
+pm_runtime_put_autosuspend()."
 
-So, I'll v6 this with
+and
 
-    properties:
-      endpoint:
-        $ref: /schemas/media/video-interfaces.yaml#
-        _additionalProperties_: false
+"In order to use autosuspend, subsystems or drivers must call
+pm_runtime_use_autosuspend() (...), and thereafter they should use the
+various `*_autosuspend()` helper functions instead of the non#
+autosuspend counterparts"
 
-        properties:
-          link-frequencies: true
-          data-lanes:
-            oneOf:
-              - items:
-                  - const: 1
-                  - const: 2
-              - items:
-                  - const: 1
-                  - const: 2
-                  - const: 3
-                  - const: 4
+So the documentation says I should be using pm_runtime_put_autosuspend()
+instead of pm_runtime_put().
 
-        required:
-          - data-lanes
-          - link-frequencies
+Seems unfair to criticise people for following the documentation.
 
-and then change the relevant upstream examples of unevaluatedProperties: 
-false to additionalProperties: false.
-
----
-bod
