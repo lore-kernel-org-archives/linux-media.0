@@ -1,59 +1,59 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7391C0DFB
-	for <linux-media@vger.kernel.org>; Thu, 10 Oct 2024 12:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136E81C9B63
+	for <linux-media@vger.kernel.org>; Thu, 10 Oct 2024 12:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728563606; cv=none; b=Mba+vaveOX+SI0Jn1PJe3Fk03/IC1I0JjvjU9uiN09Frsrd6oTx2L3DbhHe6MJAjPwdksvkz7pK5cGdlD6zJ4k5qi/WZ/C7F0SKHZY1BlN9H55oMMTn8RpEkdgkh2M0jRWeQlHzLS/0VlPIqubFklvPF9IrMGiiupz7fQ8qJSOM=
+	t=1728563610; cv=none; b=pm3+aYkd3L0VSEiL5GId1NiRqy/U9srL8GJ8y8qMH0p5uLDswlrsg+boQi7fvPkmUvo5otAfNOAnfHvXEUII9QJ3fzkSYr1fX4e7Nzt2vl1A0JNAzsT3f9O9KIW0ZcXGcYyJcicXeE55PzDZvaFHEbslsnVYrEVkckzYFoqzEhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728563606; c=relaxed/simple;
-	bh=fCv2ql3x5MRYj+V94Droy/AZAMcQ97gJ5jPEcJz0y8c=;
+	s=arc-20240116; t=1728563610; c=relaxed/simple;
+	bh=MZdA/sRLAsmvUPZP3TphhP3dJzkLom00eAxDcabblxk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fslswSsR1QjBmyL9H5f/tW0erSkhqLQ08wYr+l8HjsU2hWVRqKar6NfqamA1ikQp3K2EFF8Yi4E3REmriFeuumbN5wlN4U84L+o9x/JG35aV6r6zuI2Gq31wU1Y3TFRzqhGBqk5NOaWNMmMJO7tyktzv4tUI/ENctDWOXVctQbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tOUKZjjY; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:To:Cc; b=B3ivH13DWkmA6tA91ftxjzgb55MQyZNRnr1ZBIfVdkHS/5KYzZdKSb7YHmJWvOf1E21OAs2NPrzVU3uREryfqW4xsX18aci4xXs/XRq4MMh88ymg9w092gGNzPUZpdqgG3V6RoeD37D6mLongUCE2xNTwGE+iP7B/Y82Biodwx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SM97DiMr; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tOUKZjjY"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9950d27234so128257466b.1
-        for <linux-media@vger.kernel.org>; Thu, 10 Oct 2024 05:33:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SM97DiMr"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a99422929c5so102879566b.0
+        for <linux-media@vger.kernel.org>; Thu, 10 Oct 2024 05:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728563602; x=1729168402; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1728563604; x=1729168404; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FCl/oQotG7Ck6NtzjioXPnOyFASYLcPzzgeAry7FXvU=;
-        b=tOUKZjjYtIa54LTxqTIkiLk+S9Rccq6e7HiciRFh+Q8kyEL5KvvKJlzCJ+//jdCM1i
-         HuruiQubn2wtSj4oEPoryoBsmLFUBXn0yFzXZNir7vu9+PGoUXaYA8GfWunKCawjVegR
-         A80uN+BdexxJQIQoa/iPqZzyb+QDYvsNk5uFXKP5OI7MJ+ag0r9ggzPaLApiOjkD7gTT
-         D3k2PILwjKBOS86qY8vdwsHpp2bmlVuW1qe2XRr8V4F+yWXm2LARgmXl3SGusVbqMYQx
-         zu1opxXBH0fam6T1Sq1TeYdofOIWDzRDH2dzcf+QxBSP735juoTdUE9bhstEwBsTF7fX
-         93rg==
+        bh=pseR3SnwJF/ltwSCthgN9v3QXyD9/cz3sKkOTqoReDs=;
+        b=SM97DiMrnC83JeUIKj9RF1EU1iNcSYc3E//vBWdPPgjA/1zvakx9tEc3HNhCPIpj3d
+         hKbrsqSoPDAgE2KwcsGiF3rkaPdvpPvZ/QetAfunH7PLArJrWtBgTLCxmPirL5tcBSBK
+         8XlwyPDzVsLZWn99v2VCHyPN2ze7pwgFdPgZfOGsRfmdTWCpgBEvG0xOIDVQBxVo/CGO
+         FBwQhIPvDEFuubctGrGlb2ZN5QxdTOANuM0mIy9e4aAta6Y766q7TqE7lpgy6IrFWd5o
+         t4GOXTLkS/61t+tvNGas81blbxvcKX1hSjHJ3taAAy2ApDFkPGqzn/cJsGjje+NDqLdG
+         Z5vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728563602; x=1729168402;
+        d=1e100.net; s=20230601; t=1728563604; x=1729168404;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FCl/oQotG7Ck6NtzjioXPnOyFASYLcPzzgeAry7FXvU=;
-        b=CBx6dkrkzZszUCHliz2/bL4vtouZA9vhIKzUVOl8o++rvyJUQ7uWNvdy8bA6QpPoyz
-         r0WgnRdFzVf5JSS2t86VjPV927BkZE+i3EQhWAI5wiwByJqjSRk39hZVrG1wMM8Ho3Y1
-         6pp2hS5J7x7BcpOGQOivBslKmO/6hyoyiTf02YpUz3skdk4oqAapOvMGS1i8HBQ+pMWK
-         caXhH87d+T56JzIXmHDSLzzOCqtKnjjJw4WzN7sjs+t3gmQsBbtC4MiOIq6mKxkqkKwx
-         H8s6gm30O4lO0ILooV5Ar8z/+JGMJRPHDoHMn0OqzAD6LaXgRzeXjpjD0Ati3MjsJ97Q
-         cpgQ==
-X-Gm-Message-State: AOJu0YzRQ+cc8RbYxpMFbNzw0M0Qsd81j2WfcTCUOxXzR0xZR3OiC+a4
-	RzqiwxdY4l/4e22ApyRenc90i5M2UiAW5XkNH6BHzEe1uNC5OwFqEl0T514/UTM=
-X-Google-Smtp-Source: AGHT+IEN8tvLkNd2SXFiSFvvdTshSPJa0h2Z7P/ZCsSDK9uL+ad6NWD80/M3p3V1zOus1/1nyuyRDg==
-X-Received: by 2002:a17:907:60d6:b0:a99:4982:da46 with SMTP id a640c23a62f3a-a998d3299a8mr448933766b.63.1728563601693;
-        Thu, 10 Oct 2024 05:33:21 -0700 (PDT)
+        bh=pseR3SnwJF/ltwSCthgN9v3QXyD9/cz3sKkOTqoReDs=;
+        b=iynNuMmHC8/iT8HxZfA23k+36ogtxft3pPFvx8yYEjjJuBTdlY0/D6j5uuIkVkgX3S
+         gDjmYzb0Z8gliIpn79XWN3b8ALSpoSIYYe6KjEVmHbofgW99UPqHhw3xvE01CgnzGLKe
+         yVBJSDXTZ3YvKNIw2+HJ2gATH6u7vTpCMc5KUUnZLU4PlcCHD6OLs4nJpz3jBH0O/Wrj
+         mtiUhl5DgO4VosMBFXC0b0eweHn9lSZHdg5JLcGeHQnXqkDTbtyezYnDgGRw2JaQfetl
+         kzJxGCHqShElyPQacSeS6MwfDEDO5f9A8vX//2rptdiqyW6ca/bDZTvOdUdALS8XGFA0
+         W3CA==
+X-Gm-Message-State: AOJu0YyQ3CJW4+XtahqMv41SvhuSossMT8Ss4AyL9N7lJyoq6RYbdtMG
+	n3oFCESSisy5fKa7yf548Ru9bMgpKSIyAAMCfYlcbsQhhvpdKNrq2Kny02H2V+g=
+X-Google-Smtp-Source: AGHT+IGsEAwOniVhOvr2BEUkHjs15aSsr0j0fhFXCgyZqFO3bbPu9rpUCfEpdMrHQ3cxSH31yKbA/A==
+X-Received: by 2002:a17:907:940f:b0:a99:375f:4523 with SMTP id a640c23a62f3a-a998d32b90bmr588588766b.44.1728563604259;
+        Thu, 10 Oct 2024 05:33:24 -0700 (PDT)
 Received: from [127.0.0.1] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a80c0723sm82416666b.135.2024.10.10.05.33.20
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a80c0723sm82416666b.135.2024.10.10.05.33.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 05:33:21 -0700 (PDT)
+        Thu, 10 Oct 2024 05:33:23 -0700 (PDT)
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date: Thu, 10 Oct 2024 13:33:18 +0100
-Subject: [PATCH v6 2/4] media: dt-bindings: Add OmniVision OV08X40
+Date: Thu, 10 Oct 2024 13:33:20 +0100
+Subject: [PATCH v6 4/4] media: ov08x40: Add OF probe support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241010-b4-master-24-11-25-ov08x40-v6-2-cf966e34e685@linaro.org>
+Message-Id: <20241010-b4-master-24-11-25-ov08x40-v6-4-cf966e34e685@linaro.org>
 References: <20241010-b4-master-24-11-25-ov08x40-v6-0-cf966e34e685@linaro.org>
 In-Reply-To: <20241010-b4-master-24-11-25-ov08x40-v6-0-cf966e34e685@linaro.org>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
@@ -76,140 +76,268 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 X-Mailer: b4 0.15-dev-dedf8
 
-Add bindings for the already upstream OV08X40 to enable usage of this
-sensor on DTS based systems.
+The ACPI version of this driver "just works" on dts based systems with a
+few extensions to facilitate.
 
+- Add support for DT based probing
+- Add support for taking the part out of reset via a GPIO reset pin
+- Add in regulator bulk on/off logic for the power rails.
+
+Once done this sensor works nicely on a Qualcomm X1E80100 CRD.
+
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # x1e80100-crd
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- .../bindings/media/i2c/ovti,ov08x40.yaml           | 120 +++++++++++++++++++++
- 1 file changed, 120 insertions(+)
+ drivers/media/i2c/ov08x40.c | 140 +++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 125 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov08x40.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov08x40.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..552efdf8934f73f8f202f5555351f1123b91a252
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov08x40.yaml
-@@ -0,0 +1,120 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (c) 2024 Linaro Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/ovti,ov08x40.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/media/i2c/ov08x40.c b/drivers/media/i2c/ov08x40.c
+index 3ab8b51df157af78fcccc1aaef73aedb2ae759c9..ff17e09a1f96175d598c395bcae0cdf01d68a79f 100644
+--- a/drivers/media/i2c/ov08x40.c
++++ b/drivers/media/i2c/ov08x40.c
+@@ -3,10 +3,13 @@
+ 
+ #include <asm-generic/unaligned.h>
+ #include <linux/acpi.h>
++#include <linux/clk.h>
+ #include <linux/i2c.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-fwnode.h>
+@@ -1279,6 +1282,12 @@ static const struct ov08x40_mode supported_modes[] = {
+ 	},
+ };
+ 
++static const char * const ov08x40_supply_names[] = {
++	"dovdd",	/* Digital I/O power */
++	"avdd",		/* Analog power */
++	"dvdd",		/* Digital core power */
++};
 +
-+title: Omnivision OV08X40 CMOS Sensor
+ struct ov08x40 {
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pad;
+@@ -1291,6 +1300,10 @@ struct ov08x40 {
+ 	struct v4l2_ctrl *hblank;
+ 	struct v4l2_ctrl *exposure;
+ 
++	struct clk		*xvclk;
++	struct gpio_desc	*reset_gpio;
++	struct regulator_bulk_data supplies[ARRAY_SIZE(ov08x40_supply_names)];
 +
-+maintainers:
-+  - Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+ 	/* Current mode */
+ 	const struct ov08x40_mode *cur_mode;
+ 
+@@ -1303,6 +1316,61 @@ struct ov08x40 {
+ 
+ #define to_ov08x40(_sd)	container_of(_sd, struct ov08x40, sd)
+ 
++static int ov08x40_power_on(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov08x40 *ov08x = to_ov08x40(sd);
++	int ret;
 +
-+description: |
-+  The Omnivision OV08X40 is a 9.2 megapixel, CMOS image sensor which supports:
-+  - Automatic black level calibration (ABLC)
-+  - Programmable controls for frame rate, mirror and flip, binning, cropping
-+    and windowing
-+  - Output formats 10-bit 4C RGB RAW, 10-bit Bayer RAW
-+  - 4-lane MIPI D-PHY TX @ 1 Gbps per lane
-+  - 2-lane MPIP D-PHY TX @ 2 Gbps per lane
-+  - Dynamic defect pixel cancellation
-+  - Standard SCCB command interface
++	if (is_acpi_node(dev_fwnode(dev)))
++		return 0;
 +
-+allOf:
-+  - $ref: /schemas/media/video-interface-devices.yaml#
++	ret = clk_prepare_enable(ov08x->xvclk);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable xvclk\n");
++		return ret;
++	}
 +
-+properties:
-+  compatible:
-+    const: ovti,ov08x40
++	if (ov08x->reset_gpio) {
++		gpiod_set_value_cansleep(ov08x->reset_gpio, 1);
++		usleep_range(1000, 2000);
++	}
 +
-+  reg:
-+    maxItems: 1
++	ret = regulator_bulk_enable(ARRAY_SIZE(ov08x40_supply_names),
++				    ov08x->supplies);
++	if (ret < 0) {
++		dev_err(dev, "failed to enable regulators\n");
++		goto disable_clk;
++	}
 +
-+  clocks:
-+    maxItems: 1
++	gpiod_set_value_cansleep(ov08x->reset_gpio, 0);
++	usleep_range(1500, 1800);
 +
-+  avdd-supply:
-+    description: Analogue circuit voltage supply.
++	return 0;
 +
-+  dovdd-supply:
-+    description: I/O circuit voltage supply.
++disable_clk:
++	gpiod_set_value_cansleep(ov08x->reset_gpio, 1);
++	clk_disable_unprepare(ov08x->xvclk);
 +
-+  dvdd-supply:
-+    description: Digital circuit voltage supply.
++	return ret;
++}
 +
-+  reset-gpios:
-+    description: Active low GPIO connected to XSHUTDOWN pad of the sensor.
++static int ov08x40_power_off(struct device *dev)
++{
++	struct v4l2_subdev *sd = dev_get_drvdata(dev);
++	struct ov08x40 *ov08x = to_ov08x40(sd);
 +
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
++	if (is_acpi_node(dev_fwnode(dev)))
++		return 0;
 +
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        additionalProperties: false
++	gpiod_set_value_cansleep(ov08x->reset_gpio, 1);
++	regulator_bulk_disable(ARRAY_SIZE(ov08x40_supply_names),
++			       ov08x->supplies);
++	clk_disable_unprepare(ov08x->xvclk);
 +
-+        properties:
-+          data-lanes:
-+            oneOf:
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
-+          link-frequencies: true
-+          remote-endpoint: true
++	return 0;
++}
 +
-+        required:
-+          - data-lanes
-+          - link-frequencies
-+          - remote-endpoint
+ /* Read registers up to 4 at a time */
+ static int ov08x40_read_reg(struct ov08x40 *ov08x,
+ 			    u16 reg, u32 len, u32 *val)
+@@ -2072,7 +2140,7 @@ static void ov08x40_free_controls(struct ov08x40 *ov08x)
+ 	mutex_destroy(&ov08x->mutex);
+ }
+ 
+-static int ov08x40_check_hwcfg(struct device *dev)
++static int ov08x40_check_hwcfg(struct ov08x40 *ov08x, struct device *dev)
+ {
+ 	struct v4l2_fwnode_endpoint bus_cfg = {
+ 		.bus_type = V4L2_MBUS_CSI2_DPHY
+@@ -2086,11 +2154,36 @@ static int ov08x40_check_hwcfg(struct device *dev)
+ 	if (!fwnode)
+ 		return -ENXIO;
+ 
+-	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
+-				       &xvclk_rate);
+-	if (ret) {
+-		dev_err(dev, "can't get clock frequency");
+-		return ret;
++	if (!is_acpi_node(fwnode)) {
++		ov08x->xvclk = devm_clk_get(dev, NULL);
++		if (IS_ERR(ov08x->xvclk)) {
++			dev_err(dev, "could not get xvclk clock (%pe)\n",
++				ov08x->xvclk);
++			return PTR_ERR(ov08x->xvclk);
++		}
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - port
++		xvclk_rate = clk_get_rate(ov08x->xvclk);
 +
-+unevaluatedProperties: false
++		ov08x->reset_gpio = devm_gpiod_get_optional(dev, "reset",
++							    GPIOD_OUT_LOW);
++		if (IS_ERR(ov08x->reset_gpio))
++			return PTR_ERR(ov08x->reset_gpio);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
++		for (i = 0; i < ARRAY_SIZE(ov08x40_supply_names); i++)
++			ov08x->supplies[i].supply = ov08x40_supply_names[i];
 +
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++		ret = devm_regulator_bulk_get(dev,
++					      ARRAY_SIZE(ov08x40_supply_names),
++					      ov08x->supplies);
++		if (ret)
++			return ret;
++	} else {
++		ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
++					       &xvclk_rate);
++		if (ret) {
++			dev_err(dev, "can't get clock frequency");
++			return ret;
++		}
+ 	}
+ 
+ 	if (xvclk_rate != OV08X40_XVCLK) {
+@@ -2143,32 +2236,37 @@ static int ov08x40_check_hwcfg(struct device *dev)
+ }
+ 
+ static int ov08x40_probe(struct i2c_client *client)
+-{
+-	struct ov08x40 *ov08x;
++{	struct ov08x40 *ov08x;
+ 	int ret;
+ 	bool full_power;
+ 
++	ov08x = devm_kzalloc(&client->dev, sizeof(*ov08x), GFP_KERNEL);
++	if (!ov08x)
++		return -ENOMEM;
 +
-+        ov08x40: camera@36 {
-+            compatible = "ovti,ov08x40";
-+            reg = <0x36>;
+ 	/* Check HW config */
+-	ret = ov08x40_check_hwcfg(&client->dev);
++	ret = ov08x40_check_hwcfg(ov08x, &client->dev);
+ 	if (ret) {
+ 		dev_err(&client->dev, "failed to check hwcfg: %d", ret);
+ 		return ret;
+ 	}
+ 
+-	ov08x = devm_kzalloc(&client->dev, sizeof(*ov08x), GFP_KERNEL);
+-	if (!ov08x)
+-		return -ENOMEM;
+-
+ 	/* Initialize subdev */
+ 	v4l2_i2c_subdev_init(&ov08x->sd, client, &ov08x40_subdev_ops);
+ 
+ 	full_power = acpi_dev_state_d0(&client->dev);
+ 	if (full_power) {
++		ret = ov08x40_power_on(&client->dev);
++		if (ret) {
++			dev_err(&client->dev, "failed to power on\n");
++			return ret;
++		}
 +
-+            reset-gpios = <&tlmm 111 GPIO_ACTIVE_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&cam_rgb_defaultt>;
+ 		/* Check module identity */
+ 		ret = ov08x40_identify_module(ov08x);
+ 		if (ret) {
+ 			dev_err(&client->dev, "failed to find sensor: %d\n", ret);
+-			return ret;
++			goto probe_power_off;
+ 		}
+ 	}
+ 
+@@ -2177,7 +2275,7 @@ static int ov08x40_probe(struct i2c_client *client)
+ 
+ 	ret = ov08x40_init_controls(ov08x);
+ 	if (ret)
+-		return ret;
++		goto probe_power_off;
+ 
+ 	/* Initialize subdev */
+ 	ov08x->sd.internal_ops = &ov08x40_internal_ops;
+@@ -2210,6 +2308,9 @@ static int ov08x40_probe(struct i2c_client *client)
+ error_handler_free:
+ 	ov08x40_free_controls(ov08x);
+ 
++probe_power_off:
++	ov08x40_power_off(&client->dev);
 +
-+            clocks = <&ov08x40_clk>;
+ 	return ret;
+ }
+ 
+@@ -2224,6 +2325,8 @@ static void ov08x40_remove(struct i2c_client *client)
+ 
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
 +
-+            assigned-clocks = <&ov08x40_clk>;
-+            assigned-clock-parents = <&ov08x40_clk_parent>;
-+            assigned-clock-rates = <19200000>;
++	ov08x40_power_off(&client->dev);
+ }
+ 
+ #ifdef CONFIG_ACPI
+@@ -2235,10 +2338,17 @@ static const struct acpi_device_id ov08x40_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, ov08x40_acpi_ids);
+ #endif
+ 
++static const struct of_device_id ov08x40_of_match[] = {
++	{ .compatible = "ovti,ov08x40" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ov08x40_of_match);
 +
-+            avdd-supply = <&vreg_l7b_2p8>;
-+            dvdd-supply = <&vreg_l7b_1p8>;
-+            dovdd-supply = <&vreg_l3m_1p8>;
-+
-+            port {
-+                ov08x40_ep: endpoint {
-+                    remote-endpoint = <&csiphy4_ep>;
-+                    data-lanes = <1 2 3 4>;
-+                    link-frequencies = /bits/ 64 <400000000>;
-+                };
-+            };
-+        };
-+    };
-+...
+ static struct i2c_driver ov08x40_i2c_driver = {
+ 	.driver = {
+ 		.name = "ov08x40",
+ 		.acpi_match_table = ACPI_PTR(ov08x40_acpi_ids),
++		.of_match_table = ov08x40_of_match,
+ 	},
+ 	.probe = ov08x40_probe,
+ 	.remove = ov08x40_remove,
 
 -- 
 2.46.2
