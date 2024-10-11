@@ -1,153 +1,262 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E003209F46
-	for <linux-media@vger.kernel.org>; Fri, 11 Oct 2024 07:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88474209F58
+	for <linux-media@vger.kernel.org>; Fri, 11 Oct 2024 08:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728633358; cv=none; b=ZOY/5FV4CNDf1FRaHFCqAPIC1nB6yARguUv4tM9Vl9bWfKwNO2jBvONK37JhvIvtputN39ToFMtl0sQGf9azgpUjVJ5rrO4viWDgn4avPQQ4HeDPN5RJVwDqeXll0PWaBoh39QwRWl8sM/7q8vX350JG+xVYI6g1Wsd+cJdaQTY=
+	t=1728634974; cv=none; b=PWw0H1in3JYqJOCIpNiWti2UoDVKvJ4rlQ3F2zuX+9YPViMF9alnIToyfyylSCHzHvEsGxjKeyyaRWo0lkCWTykmkOm65kSemS938nosESk+TttbVzV3CJvZvV2D7jw+avoTKoD4XIQBnZ+Br27SGqkq8Zp3QT6A53gAANqnb7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728633358; c=relaxed/simple;
-	bh=rMlaKMiEcIbBa4rkrlctLGvnmE7VbLQy0DLu7cD7cF0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DYvEV7u9XsglMma+4yQli+KE44IGKH/qD9IHB2ULzO7eiB6Ic3OdrMmDOXnilsmEyT4sAGSJxtghxOvnudayl8z6T6QiOKmVwAKwyuhGqrY8pbhaAQ2QTi+ueMhNZlZ7JI6dVLtq3oMWx+2YDzhKGT5gYr3NNrbYjsibxH67ewg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eSCYbR8g; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eSCYbR8g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728633357; x=1760169357;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rMlaKMiEcIbBa4rkrlctLGvnmE7VbLQy0DLu7cD7cF0=;
-  b=eSCYbR8gXceTNMzOIZZsaFPB1cCo7s8PA17whXlb/vCMS5IkREvm+lKt
-   p3/3Bi1E8LwGFqVffXzXpndfUJj33ogZXjvC56D21UEGsP19SyTTBvj23
-   pLvA2KlDbqrXnJAM1dz5XJJGCT3kv/B1UoZmyboEyxJUEM6YsJ1dLvOqN
-   dzvajyn5SSsw7dP7lKhmryn4Psd483zY64TiJC+rwYp/YH7F4nYZfjOjN
-   TnFMSbzSKE0IcgagiH8Mg1Z0os3U9kkuhmZ1lLLKD8uO39EDB4sP+ZFzp
-   c4qtSS1W1MgDvkXJMyJGF9S4x3D8qF26yifptnQ2f1cKbFAZaICob6Wbg
-   A==;
-X-CSE-ConnectionGUID: nZmf+gLtRX+VgP6wFsLFyA==
-X-CSE-MsgGUID: FIzSHGHHSPypR99IvyiHAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="30898414"
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="30898414"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 00:55:57 -0700
-X-CSE-ConnectionGUID: HczDxgDPSBiRBO/51at+lA==
-X-CSE-MsgGUID: oXKOAn/6QwmcxIQT7bWEpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="81826907"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 00:55:53 -0700
-Received: from svinhufvud.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 19BB911F984;
-	Fri, 11 Oct 2024 10:55:48 +0300 (EEST)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: hverkuil@xs4all.nl,
-	laurent.pinchart@ideasonboard.com,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Kate Hsuan <hpa@redhat.com>,
-	Alexander Shiyan <eagle.alexander923@gmail.com>,
-	Mikhail Rudenko <mike.rudenko@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Tommaso Merciai <tomm.merciai@gmail.com>,
-	Umang Jain <umang.jain@ideasonboard.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Julien Massot <julien.massot@collabora.com>,
-	Naushir Patuck <naush@raspberrypi.com>
-Subject: [RFC 4/4] media: v4l: ctrl: Add V4L2_CID_CONFIG_MODEL control
-Date: Fri, 11 Oct 2024 10:55:35 +0300
-Message-Id: <20241011075535.588140-5-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241011075535.588140-1-sakari.ailus@linux.intel.com>
-References: <20241011075535.588140-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1728634974; c=relaxed/simple;
+	bh=xIPmI62mjvIc+yGQ8817ugI3HrzYosNchuoqNYT9gbQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=grZ/d1zo2/i/pzAEX0JzxGXP5pqdqfTuE/65Et+95R/uSj+fMD8syKiRpiaiPk3okChWNTFnuwZhGLSSg/PDRXv1eZRfpIHTHNVp5Ej9qX+UW2qCCEmR6kIXN7+QkTlq50bhHA737QXvl7VfEy/WQHpMISroFa/VrMGkFuCSJPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA741C4CEC3;
+	Fri, 11 Oct 2024 08:22:52 +0000 (UTC)
+Message-ID: <9099910b-5b9e-4d2d-bb34-41491a361eb8@xs4all.nl>
+Date: Fri, 11 Oct 2024 10:22:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [drivers/media/dvb-core] WARNING in vb2_core_reqbufs
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+ Chenyuan Yang <chenyuan0y@gmail.com>
+Cc: mchehab@kernel.org, linux-media@vger.kernel.org,
+ syzkaller@googlegroups.com, Zijie Zhao <zzjas98@gmail.com>
+References: <CALGdzuopL9-zNbhsaz71Ndi8WY0HLH+vTHnyJULHRu9mqeXG=Q@mail.gmail.com>
+ <20241011062814.50094a03@foz.lan>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20241011062814.50094a03@foz.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the V4L2_CID_CONFIG_MODEL control for the configuration model.
+On 11/10/2024 06:28, Mauro Carvalho Chehab wrote:
+> Em Thu, 10 Oct 2024 11:08:25 -0500
+> Chenyuan Yang <chenyuan0y@gmail.com> escreveu:
+> 
+>> Dear Linux Developers for DVB,
+>>
+>> We encountered "WARNING in vb2_core_reqbufs" when testing the
+>> DVB driver with Syzkaller and our generated specifications.
+>>
+>> It seems that when invoking `ioctl$DMX_REQBUFS`, it will fail the
+>> following WARN_ON in
+>> https://elixir.bootlin.com/linux/v6.12-rc2/source/drivers/media/common/videobuf2/videobuf2-core.c#L956
+>>
+>> ```
+>> for (i = 0; i < num_planes; i++)
+>> if (WARN_ON(!plane_sizes[i])) {
+>> ret = -EINVAL;
+>> goto error;
+>> }
+>> ```
+> 
+> This is by purpose. This is part of mmap user interface. There is an
+> specific sequence for such ioctls to be called, together with the need
+> of memory-mapped buffers.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- .../userspace-api/media/v4l/ext-ctrls-image-process.rst      | 4 ++++
- .../userspace-api/media/v4l/subdev-config-model.rst          | 2 ++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c                    | 5 +++++
- include/uapi/linux/v4l2-controls.h                           | 3 +++
- 4 files changed, 14 insertions(+)
+Yes, but this suggest a driver bug, it should never call vb2_core_reqbufs with
+such values. This is probably using vidtv.
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-index 27803dca8d3e..928e8e3eed7f 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-@@ -55,3 +55,7 @@ Image Process Control IDs
-     control value divided by e.g. 0x100, meaning that to get no
-     digital gain the control value needs to be 0x100. The no-gain
-     configuration is also typically the default.
-+
-+``V4L2_CID_CONFIG_MODEL (bitmask)``
-+    Which configuration models the sub-device supports. Please see
-+    :ref:`media_subdev_config_model`.
-diff --git a/Documentation/userspace-api/media/v4l/subdev-config-model.rst b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
-index 8ec801998f5f..d4ae921b69c8 100644
---- a/Documentation/userspace-api/media/v4l/subdev-config-model.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
-@@ -1,5 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
- 
-+.. _media_subdev_config_model:
-+
- Sub-device configuration models
- ===============================
- 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 6b9188a4a220..378657a52cd5 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1167,6 +1167,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_TEST_PATTERN:		return "Test Pattern";
- 	case V4L2_CID_DEINTERLACING_MODE:	return "Deinterlacing Mode";
- 	case V4L2_CID_DIGITAL_GAIN:		return "Digital Gain";
-+	case V4L2_CID_CONFIG_MODEL:		return "Sub-device configuration model";
- 
- 	/* DV controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1489,6 +1490,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_DV_RX_POWER_PRESENT:
- 		*type = V4L2_CTRL_TYPE_BITMASK;
- 		break;
-+	case V4L2_CID_CONFIG_MODEL:
-+		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+		*type = V4L2_CTRL_TYPE_BITMASK;
-+		break;
- 	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
- 	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 974fd254e573..0152240229ab 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1225,6 +1225,9 @@ enum v4l2_jpeg_chroma_subsampling {
- #define V4L2_CID_TEST_PATTERN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 3)
- #define V4L2_CID_DEINTERLACING_MODE		(V4L2_CID_IMAGE_PROC_CLASS_BASE + 4)
- #define V4L2_CID_DIGITAL_GAIN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 5)
-+#define V4L2_CID_CONFIG_MODEL			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 6)
-+
-+#define V4L2_CID_CONFIG_MODEL_COMMON_RAW	(1ULL << 0)
- 
- /*  DV-class control IDs defined by V4L2 */
- #define V4L2_CID_DV_CLASS_BASE			(V4L2_CTRL_CLASS_DV | 0x900)
--- 
-2.39.5
+At line 950 there is the comment: /* Check that driver has set sane values */
+
+So it looks like a vidtv bug, or possibly a bug elsewhere in the DVB core.
+
+Regards,
+
+	Hans
+
+> 
+>>
+>> Linux version: Linux 6.12-rc2 (8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b)
+>> Configuration is attached (with `CONFIG_DVB_MMAP=y`)
+>> Syz and C reproducers are as below:
+>>
+>> ```
+>> Syzkaller hit 'WARNING in vb2_core_reqbufs' bug.
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 10407 at
+>> drivers/media/common/videobuf2/videobuf2-core.c:957
+>> vb2_core_reqbufs+0x128d/0x17a0
+>> drivers/media/common/videobuf2/videobuf2-core.c:957
+>> Modules linked in:
+>> CPU: 0 UID: 0 PID: 10407 Comm: syz-executor171 Not tainted
+>> 6.12.0-rc2-g8cf0b93919e1 #2
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+>> RIP: 0010:vb2_core_reqbufs+0x128d/0x17a0
+>> drivers/media/common/videobuf2/videobuf2-core.c:957
+>> Code: 49 8d b6 28 02 00 00 48 c7 c7 a0 5a 04 8e 48 c7 c2 9d 12 4d 8f
+>> e8 03 81 d7 03 4c 8b 7c 24 28 e9 02 f5 ff ff e8 b4 87 db f8 90 <0f> 0b
+>> 90 41 bd ea ff ff ff 49 bc 00 00 00 00 00 fc ff df 4c 8b 7c
+>> RSP: 0018:ffffc9000e7f7b40 EFLAGS: 00010293
+>> RAX: ffffffff88bedbbc RBX: 0000000000000000 RCX: ffff8880463d0000
+>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>> RBP: ffffc9000e7f7ce8 R08: ffffffff88bed5e0 R09: 1ffff92001cfef58
+>> R10: dffffc0000000000 R11: ffffffff88b4fd00 R12: 0000000000000000
+>> R13: ffffc9000e7f7c20 R14: ffffc9000652c260 R15: ffffc9000e7f7c40
+>> FS:  0000555565e823c0(0000) GS:ffff88802c200000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000020000098 CR3: 0000000020696000 CR4: 0000000000752ef0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
+>> PKRU: 55555554
+>> Call Trace:
+>>  <TASK>
+>>  dvb_vb2_reqbufs+0xfe/0x3c0 drivers/media/dvb-core/dvb_vb2.c:338
+>>  dvb_demux_do_ioctl+0x5f9/0x760 drivers/media/dvb-core/dmxdev.c:1132
+>>  dvb_usercopy+0x170/0x270 drivers/media/dvb-core/dvbdev.c:993
+>>  dvb_demux_ioctl+0x2e/0x40 drivers/media/dvb-core/dmxdev.c:1185
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:907 [inline]
+>>  __se_sys_ioctl+0xfa/0x170 fs/ioctl.c:893
+>>  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>>  do_syscall_64+0xf9/0x280 arch/x86/entry/common.c:83
+>>  entry_SYSCALL_64_after_hwframe+0x67/0x6f
+>> RIP: 0033:0x7f54a9a8ba8d
+>> Code: 28 c3 e8 46 1e 00 00 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+>> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007ffd57732608 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007ffd57732808 RCX: 00007f54a9a8ba8d
+>> RDX: 0000000020000280 RSI: 00000000c0086f3c RDI: 0000000000000003
+>> RBP: 0000000000000001 R08: 0000000000000000 R09: 00007ffd57732808
+>> R10: 000000000000000f R11: 0000000000000246 R12: 0000000000000001
+>> R13: 00007ffd577327f8 R14: 00007f54a9b09530 R15: 0000000000000001
+>>  </TASK>
+>>
+>>
+>> Syzkaller reproducer:
+>> # {Threaded:false Repeat:false RepeatTimes:0 Procs:1 Slowdown:1
+>> Sandbox: SandboxArg:0 Leak:false NetInjection:false NetDevices:false
+>> NetReset:false Cgroups:false BinfmtMisc:false CloseFDs:false
+>> KCSAN:false DevlinkPCI:false NicVF:false USB:false VhciInjection:false
+>> Wifi:false IEEE802154:false Sysctl:false Swap:false UseTmpDir:false
+>> HandleSegv:false Repro:false Trace:false LegacyOptions:{Collide:false
+>> Fault:false FaultCall:0 FaultNth:0}}
+>> r0 = syz_open_dev$KGPT_dvb_demux_syzkalm(&(0x7f0000000080), 0x0, 0x60200)
+>> ioctl$KGPT_DMX_REQBUFS_0_dup(r0, 0xc0086f3c, &(0x7f0000000280)={0x1ff})
+>>
+>>
+>> C reproducer:
+>> // autogenerated by syzkaller (https://github.com/google/syzkaller)
+>>
+>> #define _GNU_SOURCE
+>>
+>> #include <endian.h>
+>> #include <fcntl.h>
+>> #include <stdint.h>
+>> #include <stdio.h>
+>> #include <stdlib.h>
+>> #include <string.h>
+>> #include <sys/stat.h>
+>> #include <sys/syscall.h>
+>> #include <sys/types.h>
+>> #include <unistd.h>
+>>
+>> static long syz_open_dev(volatile long a0, volatile long a1, volatile long a2)
+>> {
+>>   if (a0 == 0xc || a0 == 0xb) {
+>>     char buf[128];
+>>     sprintf(buf, "/dev/%s/%d:%d", a0 == 0xc ? "char" : "block", (uint8_t)a1,
+>>             (uint8_t)a2);
+>>     return open(buf, O_RDWR, 0);
+>>   } else {
+>>     char buf[1024];
+>>     char* hash;
+>>     strncpy(buf, (char*)a0, sizeof(buf) - 1);
+>>     buf[sizeof(buf) - 1] = 0;
+>>     while ((hash = strchr(buf, '#'))) {
+>>       *hash = '0' + (char)(a1 % 10);
+>>       a1 /= 10;
+>>     }
+>>     return open(buf, a2, 0);
+>>   }
+>> }
+>>
+>> uint64_t r[1] = {0xffffffffffffffff};
+>>
+>> int main(void)
+>> {
+>>   syscall(__NR_mmap, /*addr=*/0x1ffff000ul, /*len=*/0x1000ul, /*prot=*/0ul,
+>>           /*flags=*/0x32ul, /*fd=*/-1, /*offset=*/0ul);
+>>   syscall(__NR_mmap, /*addr=*/0x20000000ul, /*len=*/0x1000000ul, /*prot=*/7ul,
+>>           /*flags=*/0x32ul, /*fd=*/-1, /*offset=*/0ul);
+>>   syscall(__NR_mmap, /*addr=*/0x21000000ul, /*len=*/0x1000ul, /*prot=*/0ul,
+>>           /*flags=*/0x32ul, /*fd=*/-1, /*offset=*/0ul);
+>>   intptr_t res = 0;
+>>   memcpy((void*)0x20000080, "/dev/dvb/adapter#/demux#\000", 25);
+>>   res = -1;
+>>   res = syz_open_dev(/*dev=*/0x20000080, /*id=*/0, /*flags=*/0x60200);
+>>   if (res != -1)
+>>     r[0] = res;
+>>   *(uint32_t*)0x20000280 = 0x1ff;
+>>   *(uint32_t*)0x20000284 = 0;
+>>   syscall(__NR_ioctl, /*fd=*/r[0], /*cmd=*/0xc0086f3c, /*arg=*/0x20000280ul);
+>>   return 0;
+>> }
+>> ```
+>>
+>> If you have any questions or require more information, please feel
+>> free to contact us.
+>>
+>> Reported-by: Chenyuan Yang <chenyuan0y@gmail.com>
+>>
+>> Best,
+>> Chenyuan
+> 
+> 
+> 
+> Thanks,
+> Mauro
+> 
 
