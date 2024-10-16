@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570AB2071E9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665E22071F8;
 	Wed, 16 Oct 2024 10:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074158; cv=none; b=mzFh+D1Y1RPQ4n+Kut9m+DB98Y0r4AlYgY3uIsXXJuC1mN6JDxBFRWerv20t7BQ5+H4b4d98lzu7VetdRPs6RX/GvdZdCVr0QozvtmwPJbNWdei4fV8HYnhAqkBsa7Ym/S8HWG8EyE12O+E/Ug1V9Izmh0Vd5RSBx+OuxAM9P5E=
+	t=1729074158; cv=none; b=uN122EBEbuEr43Ep/KWQz1Me1UvD+gxjI6ZF/xWrON+dfUVIBcy0UWcS7wCWgWW6veGs9rNY6F5uxrENuigrTEQSC3SsbnX+C9siREgcvO6nyyvrCU2URqvxINzH8/JGJF9F2GjsbfxXtql/kjEyc33QPqUnKhsCFX4ZIl3K3rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729074158; c=relaxed/simple;
-	bh=SLmUaXbraeATMVHmFTi+JPax/3jn/YG3CdMafhTLceU=;
+	bh=Cn5sdvVgySd2SkhlcB6D2dHU5pDMU4RvB8S/dtW3Ge4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IY+CIudelpi265KmbbMusYN6Fxsx+XRDOF1RdttwkzmnJaKfRUttMc6UG9jgJTSi1HvRUHJsosPQKboqv5v8u/FgTMF1KKuBrEYvilg8LtEDOYYGd4329ztRocLEPbdtgU+9UIEeL9va8DN96ztXNcrQwfLVUuoadXDBwyxC5jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aawmd90C; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=RQZ0/UZp5IZaAJas8+b22k+wUNA1ZaI2po+6jBLPH5Wz0PKiM1niVNzwqhtGoG9MFBo/Xeegv0G9gPjCTxAIYVV/lVWyh9iVEMbedFBjnkuby1n6m8buDwI2A42zAk351LfP3OLaI+HJ3mI/cuKoZTyOUwWnohbPgrl0Q64iNHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrwtMAld; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aawmd90C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4352C4CED9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrwtMAld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8C5C4CED6;
 	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729074157;
-	bh=SLmUaXbraeATMVHmFTi+JPax/3jn/YG3CdMafhTLceU=;
+	bh=Cn5sdvVgySd2SkhlcB6D2dHU5pDMU4RvB8S/dtW3Ge4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Aawmd90CzbQ6C/1SR6xMZAaWhZyacmr2jSouZGOf7tSmToo121gHJ9LVzRkiqP5a5
-	 sZYPuSJdWeTgDS8KR6BEPfayb62Bp4EZvKYZZQ9ekG8J1qpY6V+WALl4+OEHB0+Cwm
-	 yvbkPo1Rd7itxpOBZFAMJ0d5/kXDm9n7uNn0qUJwaJHfPq6uTxVxv29yvczp7ivEDI
-	 4QOBJMwujxLiroX9CiSRhyLFZB6p6RnmUv2esEvTe7+b5vDWHs+rYvLHfsjPx2UNKu
-	 TzDuZXxHLY3ls4obSxzm41vqpbBsZovGwHw9MRh+63HUJZu7St+1hxhQCQV+CRqTRT
-	 lRAaynNYT9d6A==
+	b=DrwtMAldEiwsCGnw5o6X4y3LRrz9siEXi3jAEQ77C2u/+7C7L8wBEM3jNqgIim1yk
+	 c66U+yFzarA3Ze/f09jhRdPRxXAT0K6zS48SlTOEnDq9YckYxmjuZlWwky+9pXN6KK
+	 dpaDY2tgHrehE92gVxC2YsMItccNU/ClIfSll003XuFNY6d0jJL7BKlXvAii/kPH9c
+	 XXE6wdDGfnR0S8lSPc9NP8r9+E93hprLiR/9HyWaQCQZM1md3SEonA6Up5U58XtqCg
+	 XlnLiwT1q5XvZxytaxhXyt68gEdKgYqswOpct76kHvesoX9xucyYshqu6wefwtLpaE
+	 SBjkhJJ07ng3g==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t11Ap-00000004Yn7-2tGA;
+	id 1t11Ap-00000004YnF-36Qm;
 	Wed, 16 Oct 2024 12:22:35 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Manu Abraham <abraham.manu@gmail.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 11/13] media: stb0899_algo: initialize cfr before using it
-Date: Wed, 16 Oct 2024 12:22:27 +0200
-Message-ID: <cb84bd8b0a224b7976d91051b5c1e22a93fac928.1729074076.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 13/13] media: pulse8-cec: fix data timestamp at pulse8_setup()
+Date: Wed, 16 Oct 2024 12:22:29 +0200
+Message-ID: <8d5dfc87d297a92d5ccc750c5c002bbc4226d3ad.1729074076.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729074076.git.mchehab+huawei@kernel.org>
 References: <cover.1729074076.git.mchehab+huawei@kernel.org>
@@ -53,31 +53,56 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The loop at stb0899_search_carrier() starts with a random
-value for cfr. Initialize it to zero, just like
-stb0899_dvbs_algo() to ensure that carrier search won't
-bail out.
+There is a hidden overflow condition there. As date is signed
+and u8 is unsigned, doing:
 
-Fixes: 8bd135bab91f ("V4L/DVB (9375): Add STB0899 support")
+	date = (data[0] << 24)
+
+With a value bigger than 07f will make all upper bits of date
+0xffffffff. This can be demonstrated with this small code:
+
+<code>
+
+typedef int64_t time64_t;
+typedef uint8_t u8;
+
+int main(void)
+{
+	u8 data[] = { 0xde ,0xad , 0xbe, 0xef };
+	time64_t date;
+
+	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+	printf("Invalid data = 0x%08lx\n", date);
+
+	date = ((unsigned)data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+	printf("Expected data = 0x%08lx\n", date);
+
+	return 0;
+}
+</code>
+
+Fix it by converting the upper bit calculation to unsigned.
+
+Fixes: cea28e7a55e7 ("media: pulse8-cec: reorganize function order")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/dvb-frontends/stb0899_algo.c | 2 +-
+ drivers/media/cec/usb/pulse8/pulse8-cec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/stb0899_algo.c b/drivers/media/dvb-frontends/stb0899_algo.c
-index df89c33dac23..40537c4ccb0d 100644
---- a/drivers/media/dvb-frontends/stb0899_algo.c
-+++ b/drivers/media/dvb-frontends/stb0899_algo.c
-@@ -269,7 +269,7 @@ static enum stb0899_status stb0899_search_carrier(struct stb0899_state *state)
+diff --git a/drivers/media/cec/usb/pulse8/pulse8-cec.c b/drivers/media/cec/usb/pulse8/pulse8-cec.c
+index ba67587bd43e..171366fe3544 100644
+--- a/drivers/media/cec/usb/pulse8/pulse8-cec.c
++++ b/drivers/media/cec/usb/pulse8/pulse8-cec.c
+@@ -685,7 +685,7 @@ static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
+ 	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 4);
+ 	if (err)
+ 		return err;
+-	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
++	date = ((unsigned)data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
+ 	dev_info(pulse8->dev, "Firmware build date %ptT\n", &date);
  
- 	short int derot_freq = 0, last_derot_freq = 0, derot_limit, next_loop = 3;
- 	int index = 0;
--	u8 cfr[2];
-+	u8 cfr[2] = {0};
- 	u8 reg;
- 
- 	internal->status = NOCARRIER;
+ 	dev_dbg(pulse8->dev, "Persistent config:\n");
 -- 
 2.47.0
 
