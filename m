@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558352071E7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543272071E6;
 	Wed, 16 Oct 2024 10:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074158; cv=none; b=o5jmXKCgKPo6aZP0erUos4AbChlVNt14hUTTPMXs0xi7TtScX4t4aCjM+tvgUp7h/l361/0lkb31CchzzgEELuOg3fuwYGgLl57Vo731dAnn84+tR0D0L2HD9y5spcki6O5y96yg+t8dRSKFVPE79AvrYQX22omHlhOBUfuAY2o=
+	t=1729074158; cv=none; b=CnOWybx0/1mh+FJG3ctU8ENf+MgIboMUzZ2cGIhFFJKF7aCRxwU4/zKsqnNDu8FN4fRGerb3Jv0gTUtUf0f8zF+rcEQZaENpxe1oLiL3XV3dEtQgP45Sea6/zAzQkD4ERkWKuwus74j4SWNPjwz2I4G9HbJac7+g9xCxGAWDfYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729074158; c=relaxed/simple;
-	bh=X/tpMzX5sWaZm7bI/IQfEVsIrHbC90ecUHkZSJsDhWQ=;
+	bh=Bn2f3bmb+9nMMRejNorJo9NsRZzQIn1Q3kUP79AKzdo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rCCXDVyF1mnd1f63BXazl30qzSCam7p4GYKtDSa9VNqzGOr4aNOVp/iKCVhvVaJItO+jLqmTNH5wQqjB/Cd2bLqA0KRGFppNWlb10sYD67YoQGpRzjAJwowXFBYYJBSQSFkjA/fhQJcYdQa3TfaL7fTeBQglC+kzGkfjGHN2S4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hgXpLv48; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=F0ysCsMTk7cMsugps3FZiyxNA7LrtJ1uAkISHS983FreHODf1yW2OV9s5UsMZZgTSnvzJqtn3oo6uPYw1BlCCv3gCdl3sHTR32l/hnO5HHDbYzgFeot53/xSEeQp11x+hRTl8Mfpqu6nEIX4DmQWObp7RjZ2AT3jAz08Uxvnk2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NxK6WtW9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hgXpLv48"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DADBEC4CED3;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NxK6WtW9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD5BDC4CED5;
 	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729074157;
-	bh=X/tpMzX5sWaZm7bI/IQfEVsIrHbC90ecUHkZSJsDhWQ=;
+	bh=Bn2f3bmb+9nMMRejNorJo9NsRZzQIn1Q3kUP79AKzdo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hgXpLv48hBKuLrlVyWNEhsjguV17uqYvM3igvsfgGt+rO0plqekNBuDW2aSoph1Oh
-	 y4BbCXESQmGC/w5gsWBu9zTJBvCYy0xn8mUO3zm2WGLNYAxLsBOy8ZqEFID7Bgfmgn
-	 D6trMvK58fZFPgDyDltkaXICSKdqS0bPRoB9kjXGRWbSKNdZ4cQpXgNSrJWz2aYiWm
-	 Jmb2ZcOTXyTrMg/WMZi6YB1tFx1FiKbGIiFLLcb0nEoolsc19H4loIl3eUZRQYMESW
-	 K7pqTjazOr7sTNJVcG+9BK0dk6z7g/am2YSeJgJA+vQyO3dBo3YnUciCxbt8Tbm3Jm
-	 wSPbHuZtxR2Bg==
+	b=NxK6WtW903tq2pITJtkGQe7E3238/Yrh4e9X53qcPnv2n335x6iJgZqglhp3YsU1U
+	 awUoSIS+NTxiReF0vwobovRaMXCvLmzJzyk3dX0rs4TfU/lV79SNgNr15RaceuKgFt
+	 fBzngsKUGd4Tfs0eU+DZdRySBm2fKVcJE9is/purQU984xcfQ5aWHL4b8iRGHzYPnw
+	 /r3SQnSOND2THFszDVKFLMpJ8fkQPsbsVMqbXT428J7+RJs75KLpbT6RZh2G+hBhyB
+	 43yHirILOsLJsEbEaRtwxx1a2SekxaAaDHpicSn9H3xuZ5yxJDyHMub6upkxWOvVsh
+	 MAQqWurci5xUA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t11Ap-00000004YnB-2zm7;
+	id 1t11Ap-00000004Ymx-2g4X;
 	Wed, 16 Oct 2024 12:22:35 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Steven Toth <stoth@linuxtv.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 12/13] media: cec: extron-da-hd-4k-plus: don't use -1 as an error code
-Date: Wed, 16 Oct 2024 12:22:28 +0200
-Message-ID: <21a4b368b49aaa46e9d78cccd855bb11b49ab39c.1729074076.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 09/13] media: cx24116: prevent overflows on SNR calculus
+Date: Wed, 16 Oct 2024 12:22:25 +0200
+Message-ID: <644e1a8c55b7cabad791c398e488e2a825fdefb9.1729074076.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729074076.git.mchehab+huawei@kernel.org>
 References: <cover.1729074076.git.mchehab+huawei@kernel.org>
@@ -53,47 +53,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The logic at get_edid_tag_location() returns either an offset
-or an error condition. However, the error condition uses a
-non-standard "-1" value.
+If reading SNR registers fail, a negative number will be
+returned, causing an underflow when reading SNR registers.
 
-Use instead -ENOENT to indicate that the tag was not found.
+Prevent that.
 
-Fixes: 056f2821b631 ("media: cec: extron-da-hd-4k-plus: add the Extron DA HD 4K Plus CEC driver")
+Fixes: 8953db793d5b ("V4L/DVB (9178): cx24116: Add module parameter to return SNR as ESNO.")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c     | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/dvb-frontends/cx24116.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c b/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-index a526464af88c..7d03a36df5cf 100644
---- a/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-+++ b/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-@@ -348,12 +348,12 @@ static int get_edid_tag_location(const u8 *edid, unsigned int size,
+diff --git a/drivers/media/dvb-frontends/cx24116.c b/drivers/media/dvb-frontends/cx24116.c
+index 8b978a9f74a4..f5dd3a81725a 100644
+--- a/drivers/media/dvb-frontends/cx24116.c
++++ b/drivers/media/dvb-frontends/cx24116.c
+@@ -741,6 +741,7 @@ static int cx24116_read_snr_pct(struct dvb_frontend *fe, u16 *snr)
+ {
+ 	struct cx24116_state *state = fe->demodulator_priv;
+ 	u8 snr_reading;
++	int ret;
+ 	static const u32 snr_tab[] = { /* 10 x Table (rounded up) */
+ 		0x00000, 0x0199A, 0x03333, 0x04ccD, 0x06667,
+ 		0x08000, 0x0999A, 0x0b333, 0x0cccD, 0x0e667,
+@@ -749,7 +750,11 @@ static int cx24116_read_snr_pct(struct dvb_frontend *fe, u16 *snr)
  
- 	/* Return if not a CTA-861 extension block */
- 	if (size < 256 || edid[0] != 0x02 || edid[1] != 0x03)
--		return -1;
-+		return -ENOENT;
+ 	dprintk("%s()\n", __func__);
  
- 	/* search tag */
- 	d = edid[0x02] & 0x7f;
- 	if (d <= 4)
--		return -1;
-+		return -ENOENT;
+-	snr_reading = cx24116_readreg(state, CX24116_REG_QUALITY0);
++	ret = cx24116_readreg(state, CX24116_REG_QUALITY0);
++	if (ret  < 0)
++		return ret;
++
++	snr_reading = ret;
  
- 	i = 0x04;
- 	end = 0x00 + d;
-@@ -371,7 +371,7 @@ static int get_edid_tag_location(const u8 *edid, unsigned int size,
- 			return offset + i;
- 		i += len + 1;
- 	} while (i < end);
--	return -1;
-+	return -ENOENT;
- }
- 
- static void extron_edid_crc(u8 *edid)
+ 	if (snr_reading >= 0xa0 /* 100% */)
+ 		*snr = 0xffff;
 -- 
 2.47.0
 
