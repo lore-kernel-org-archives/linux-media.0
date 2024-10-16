@@ -1,129 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8165220720D;
-	Wed, 16 Oct 2024 10:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D81206E66;
+	Wed, 16 Oct 2024 10:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074158; cv=none; b=fk31wpdW/jwWS7h5UbgFwZYDAzDOELt0ZVyyvQ/s0unEGO6+sF09KXVkrFdvD81yPL7R+24Dj5/M0jO3gfCClC4TGp3z1LIbXbYiXMdqBGExCtPycNM6Bo84gay8TMNftToqcshn7PX7lESYUck/JHxsab6N/OveIcGjvVdNg1M=
+	t=1729074617; cv=none; b=scLSU6kO6tUcodZOP8a/hw53yhG41ipYS3+/dpHTpZjAMo71c6OScENr2tWyYAVXz2j5X+RtOjI34haVaiRAzSSWOINsQHK8brsNEBWCw73Go4iwuxJ65tj/BpFXUrzR7EaYmKTBYQWne6metwqcLQXjX6BMF//Bx/uhcVtGbfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729074158; c=relaxed/simple;
-	bh=TkxiQZ67z39iRcOBi+pEl9tz3Z92UapKNSmknM4EeH8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mvjflv+O18knZWUyw09pN38B7N+0oRSFvag2mQ42uktLiFgrwJI2Asg7Seat6VpavZaqCglODwBHkJUu6AHuFzB4BRi02PWgNAxmGQ9IRuqIwWE5HyqJGRwoiiBcDkwUGWcWtXaj1OSvc04gyrwlNGN/WVS7+H1wqhlbF4WdHi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZM2f2/GW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729074617; c=relaxed/simple;
+	bh=cRAgtSIsyIr9GAtElLAGSrRFE8VIKMnNg9VaP5MYO2U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QQT5j52/pl8yUbaMUC58HF0MyCnBNautrDIogK15wcZcWc/hvxVNOSvuaFOr2wH/CpzB1Oyk3UTyR0uw2G/WYvs3zmo7KZLmPsQglIPyUdIUBYkYOPYccfMsXwKJv5gxj16Z9ARb3VHpZ6q8rBV3qz50O4HLuQb5ryQjrwG13YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XuTX012g; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZM2f2/GW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8910C4CED4;
-	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729074157;
-	bh=TkxiQZ67z39iRcOBi+pEl9tz3Z92UapKNSmknM4EeH8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZM2f2/GWuDRz9BkxagiAlhdizIGgSDskUyVBVsMevCTnXqVP446Fmm7lwsYA/QvJm
-	 u3FyQhd7FcY/xQ01XbOzcCoSwHhEcC2c6SwU+xWrx9qgxdfqNh3s8H1ZD7FKvMsH/P
-	 0beKGDIfFm8lc/68ex0e59VfSds0Zldp1p5W+Uu/Q9JR/isKlQOlYFppe0yJMtLdRI
-	 aIWqPdsi2vBZeSZS6lUDXuSgWDY0ngE9o76ZpXsMNwLPfGy8b1EVRTgHAhXQkqIs0Z
-	 d5SZdEQKFyTQdsKx2P9myej7HgzTpPmTcTtX00jeG1q1L1qva9sjkW/KuYAtMMzbYu
-	 SIQEjTzLnDUdA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t11Ap-00000004YmZ-21f1;
-	Wed, 16 Oct 2024 12:22:35 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: 
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Andreas Oberritter <obi@linuxtv.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Zhipeng Lu <alexious@zju.edu.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH 03/13] media: dvbdev: prevent the risk of out of memory access
-Date: Wed, 16 Oct 2024 12:22:19 +0200
-Message-ID: <3df78d0131f8f6730043df28a9e03ee955fdeb96.1729074076.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1729074076.git.mchehab+huawei@kernel.org>
-References: <cover.1729074076.git.mchehab+huawei@kernel.org>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XuTX012g"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G8Q8ck026699;
+	Wed, 16 Oct 2024 10:30:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	F8OUigvW89v160sjD6OuJdUfPjC11GaxwgQ6XpOluJw=; b=XuTX012gytkC8CDK
+	s++23YnplGId90xyQ+hz8EVNjN5xU5F0MymIHMxEIppcGEfQKvscoEWVEfsx1vq1
+	mlOQezC+wyQ97iexRdyhmgedpKAadPwgrb/z7ixABZ6nR4iWYFLMywddEylbaXmG
+	XvWHXH8mztX+8bKGn+HlqXSLa30Ht1+oYBxqYAi0b/68B5zJRlGxgBu9f1NVKTOq
+	C//6MTAyREetIlBHK7ba+LocTw2WzMoRfr146H/p4JLukdwnkLz2WmPOw044L13o
+	hQ9dc+Ty2VACkNAOx0kU71NDhqOfGxoqc6w2sYzM162dxIhyUtHFKeY+BLz82w74
+	Bv+N7w==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42a8w6gmvw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 10:30:05 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49GAU4Fo009153
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 10:30:04 GMT
+Received: from [10.204.101.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 16 Oct
+ 2024 03:30:00 -0700
+Message-ID: <66cf771e-1663-e85c-02e8-524427ab40ec@quicinc.com>
+Date: Wed, 16 Oct 2024 15:59:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4 02/28] media: iris: add platform driver for iris video
+ device
+To: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@baylibre.com>
+CC: Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Abhinav Kumar
+	<quic_abhinavk@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Hans
+ Verkuil" <hverkuil@xs4all.nl>,
+        Sebastian Fricke
+	<sebastian.fricke@collabora.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241014-qcom-video-iris-v4-v4-0-c5eaa4e9ab9e@quicinc.com>
+ <20241014-qcom-video-iris-v4-v4-2-c5eaa4e9ab9e@quicinc.com>
+ <r7p4glfxjkcecm7fi4qkl3utn3damrun6lfzkmn5wddcd7pxq7@fpav7mavmckn>
+Content-Language: en-US
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <r7p4glfxjkcecm7fi4qkl3utn3damrun6lfzkmn5wddcd7pxq7@fpav7mavmckn>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9Tf6QqAziIYesTm4yMc4U2jZAa81b_Ki
+X-Proofpoint-ORIG-GUID: 9Tf6QqAziIYesTm4yMc4U2jZAa81b_Ki
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ phishscore=0 lowpriorityscore=0 clxscore=1011 mlxlogscore=999
+ malwarescore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410160065
 
-The dvbdev contains a static variable used to store dvb minors.
 
-The behavior of it depends if CONFIG_DVB_DYNAMIC_MINORS is set
-or not. When not set, dvb_register_device() won't check for
-boundaries, as it will rely that a previous call to
-dvb_register_adapter() would already be enforcing it.
 
-On a similar way, dvb_device_open() uses the assumption
-that the register functions already did the needed checks.
+On 10/16/2024 3:08 PM, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Mon, Oct 14, 2024 at 02:37:23PM +0530, Dikshita Agarwal wrote:
+>> +static struct platform_driver qcom_iris_driver = {
+>> +	.probe = iris_probe,
+>> +	.remove_new = iris_remove,
+>> +	.driver = {
+>> +		.name = "qcom-iris",
+>> +		.of_match_table = iris_dt_match,
+>> +	},
+>> +};
+> 
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers. Please just drop "_new".
+> 
+Noted, Thanks!
 
-This can be fragile if some device ends using different
-calls. This also generate warnings on static check analysers.
-
-So, add explicit guards to prevent potential risk of OOM issues.
-
-Fixes: 5dd3f3071070 ("V4L/DVB (9361): Dynamic DVB minor allocation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/dvb-core/dvbdev.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index b43695bc51e7..14f323fbada7 100644
---- a/drivers/media/dvb-core/dvbdev.c
-+++ b/drivers/media/dvb-core/dvbdev.c
-@@ -86,10 +86,15 @@ static DECLARE_RWSEM(minor_rwsem);
- static int dvb_device_open(struct inode *inode, struct file *file)
- {
- 	struct dvb_device *dvbdev;
-+	unsigned int minor = iminor(inode);
-+
-+	if (minor >= MAX_DVB_MINORS)
-+		return -ENODEV;
- 
- 	mutex_lock(&dvbdev_mutex);
- 	down_read(&minor_rwsem);
--	dvbdev = dvb_minors[iminor(inode)];
-+
-+	dvbdev = dvb_minors[minor];
- 
- 	if (dvbdev && dvbdev->fops) {
- 		int err = 0;
-@@ -525,7 +530,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	for (minor = 0; minor < MAX_DVB_MINORS; minor++)
- 		if (!dvb_minors[minor])
- 			break;
--	if (minor == MAX_DVB_MINORS) {
-+	if (minor >= MAX_DVB_MINORS) {
- 		if (new_node) {
- 			list_del(&new_node->list_head);
- 			kfree(dvbdevfops);
-@@ -540,6 +545,14 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
- 	}
- #else
- 	minor = nums2minor(adap->num, type, id);
-+	if (minor >= MAX_DVB_MINORS) {
-+		dvb_media_device_free(dvbdev);
-+		list_del(&dvbdev->list_head);
-+		kfree(dvbdev);
-+		*pdvbdev = NULL;
-+		mutex_unlock(&dvbdev_register_lock);
-+		return ret;
-+	}
- #endif
- 	dvbdev->minor = minor;
- 	dvb_minors[minor] = dvb_device_get(dvbdev);
--- 
-2.47.0
-
+Regards,
+Dikshita
+> Best regards
+> Uwe
