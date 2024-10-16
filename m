@@ -1,47 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D07F206E66;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D145206E84;
 	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074158; cv=none; b=MNHpc4sf+WjQCfdQ9gQpHjR6WIfLDoDDV+an4sYEww/iZlcK9DkyTdp3ZQDEH4st6WnggAs0gV2EaJh5xTRazW22XSUpUBX4LkZ1kOlPN4my2c01pTVzpouZYPLWWD6kP+to8EXDHZyBDQ3UOKF9vxlpoC7FvzmxHUJ8sbSvpCs=
+	t=1729074158; cv=none; b=Y2IXH+ulOn1VDknCYxJETbrIhk6G2Prq1qUE52przT7lAiMqH/rMotQN0IFuAh9DUrCixrSd028rMPlGquoo9jEnifiAkyNBye4yW5OPI77+JwlbYEdSoLOZt3H501VHL7pG0ogW5ce5UQS0FQkufkvcJzXoOBRZpzDO2QReErA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729074158; c=relaxed/simple;
-	bh=ZgpHQI6GK409XtLuLgOrMuqhCtgYxGC5WDTbMjcGNCQ=;
+	bh=Y+m0IthLg3u7yCjeAZDbNuZ1g4iek7tN6vPFOcl1koE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fz/FJU+saG0DtUaVGqrf47Rpcsp0mgJUDZwZ7DiiB+cbgi/ztClPhCtSYzmP8N7bfM1AByy4cL2R+tjmX3faBmc7Z2GUFIwDs/dswkRAiOsaybfCswpUt88EK3Km3eDCDdcS5ltMjjMNsoMDdHtPdfD2/Acs4QfjI0cfm00rNec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dNp90kIq; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=tmNoPhL09aWnW6eSFeD/GD7Hxmb6dWrPYgdTGnCmQciGW5fUQ3I70Lmwpq5TFg2nJgl6JPrMfdAXjnkEao+D5EXi2+grdUcPOzOVOgCvm+aQU7rIVaO+y0XVsrty6TOyf1FTRCcMNSax2pPw3tt1wmIIDqLDHoLDavvD9nrZCaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lstqbken; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dNp90kIq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C43C4CEC5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lstqbken"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4073C4CED0;
 	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729074157;
-	bh=ZgpHQI6GK409XtLuLgOrMuqhCtgYxGC5WDTbMjcGNCQ=;
+	bh=Y+m0IthLg3u7yCjeAZDbNuZ1g4iek7tN6vPFOcl1koE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dNp90kIqW6eaRwDQqDdml2VoOGQ3FJrQsvWIyRrY8m7PZR1MTTNxXOIt4IOwp6Zv6
-	 Pv6jsrLUW5obGPukd6tm6T4yigUTXmIBDU1dghMRLAry2CYfvBCogdEm80vtKN5jRr
-	 6AGbSbmLOhvAjD+hAkVHY5uRTEsPvzWOc+WV0s/0NLpxuLygcsnjZaC14PHJihx022
-	 E/WrhiJal1MNMcPPYTCie/sQUIyiYvbvvO1gub2qnAGuKsAG+77abI2srR1Pm43vRy
-	 lBQOGwQjlAag0wFMkmLpPOHfQXDxdg7El4EsGByA1tw5u3t1DtzkdB/iBROwciGjxl
-	 mad3NNIHA9kzg==
+	b=LstqbkenFPU1P+OOL0SsFM+AsVqiV6wOxMSYEz/dPKEOcoC04Gl7gCWX1RrGrRrlu
+	 r65s0aq1C4u5173cWZvQwFanEl+wc5XVQkXAKtqKCpxSrWKObHGocSbzY0MYp5PcFs
+	 dE+4YrT5pq7k0WPy7f3NZQOV97qHWcO7stfRcxyTov//KIh1lyGb05UePMKmok/+gb
+	 0O9H8ZXiPs8T5X/4yJyLOHTpA5KoE3TIZRJH5qV+i3yb3DeB/4C98igsq4tsvTZnBA
+	 yvZxsF8m5En/iuVlrXTK0M+hcHolH+tO/j2674ukaSLasmdBmVhME60Xe6b/u8ymuu
+	 r9bhJyVOisSwQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t11Ap-00000004Ymh-2F9J;
+	id 1t11Ap-00000004YmU-1ulY;
 	Wed, 16 Oct 2024 12:22:35 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Zhipeng Lu <alexious@zju.edu.cn>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 05/13] media: mgb4: protect driver against spectre
-Date: Wed, 16 Oct 2024 12:22:21 +0200
-Message-ID: <4675c8e726c7d55bbecf9f4772370daa8b46ccd3.1729074076.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 02/13] media: v4l2-tpg: prevent the risk of a division by zero
+Date: Wed, 16 Oct 2024 12:22:18 +0200
+Message-ID: <953ea061a4fbe43b10f15308aa8d792afb493e44.1729074076.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729074076.git.mchehab+huawei@kernel.org>
 References: <cover.1729074076.git.mchehab+huawei@kernel.org>
@@ -54,34 +54,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Frequency range is set from sysfs via frequency_range_store(),
-being vulnerable to spectre, as reported by smatch:
+The logic at tpg_precalculate_line() blindly rescales the
+buffer even when scaled_witdh is equal to zero. If this ever
+happens, this will cause a division by zero.
 
-	drivers/media/pci/mgb4/mgb4_cmt.c:231 mgb4_cmt_set_vin_freq_range() warn: potential spectre issue 'cmt_vals_in' [r]
-	drivers/media/pci/mgb4/mgb4_cmt.c:238 mgb4_cmt_set_vin_freq_range() warn: possible spectre second half.  'reg_set'
+Instead, add a WARN_ON() to trigger such cases and return
+without doing any precalculation.
 
-Fix it.
-
-Fixes: 0ab13674a9bd ("media: pci: mgb4: Added Digiteq Automotive MGB4 driver")
+Fixes: 63881df94d3e ("[media] vivid: add the Test Pattern Generator")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/pci/mgb4/mgb4_cmt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_cmt.c b/drivers/media/pci/mgb4/mgb4_cmt.c
-index 70dc78ef193c..a25b68403bc6 100644
---- a/drivers/media/pci/mgb4/mgb4_cmt.c
-+++ b/drivers/media/pci/mgb4/mgb4_cmt.c
-@@ -227,6 +227,8 @@ void mgb4_cmt_set_vin_freq_range(struct mgb4_vin_dev *vindev,
- 	u32 config;
- 	size_t i;
+diff --git a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
+index c86343a4d0bf..a22f31515d7e 100644
+--- a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
++++ b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
+@@ -1795,6 +1795,9 @@ static void tpg_precalculate_line(struct tpg_data *tpg)
+ 	unsigned p;
+ 	unsigned x;
  
-+	freq_range = array_index_nospec(freq_range, ARRAY_SIZE(cmt_vals_in));
++	if (WARN_ON(tpg->src_width == 0))
++		return;
 +
- 	addr = cmt_addrs_in[vindev->config->id];
- 	reg_set = cmt_vals_in[freq_range];
- 
+ 	switch (tpg->pattern) {
+ 	case TPG_PAT_GREEN:
+ 		contrast = TPG_COLOR_100_RED;
 -- 
 2.47.0
 
