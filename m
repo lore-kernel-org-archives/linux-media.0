@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665E22071F8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D842071F7;
 	Wed, 16 Oct 2024 10:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074158; cv=none; b=uN122EBEbuEr43Ep/KWQz1Me1UvD+gxjI6ZF/xWrON+dfUVIBcy0UWcS7wCWgWW6veGs9rNY6F5uxrENuigrTEQSC3SsbnX+C9siREgcvO6nyyvrCU2URqvxINzH8/JGJF9F2GjsbfxXtql/kjEyc33QPqUnKhsCFX4ZIl3K3rg=
+	t=1729074158; cv=none; b=kRYF7+b3ouISpDfXa0+rWA36bXjegs7DxEijQFoWt2KteM+nqT/Q+FZ1tTPL5XNvrV77WeWleDfwx6KZMUJUNuXtML9d0Ta83GGQLFxIASkqWKhk4GMx1RFYvLCGFrpGwZTUaa+Mqi+QSZMJzAxqo4M1kLrHXtYxRAaUfhRptWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729074158; c=relaxed/simple;
-	bh=Cn5sdvVgySd2SkhlcB6D2dHU5pDMU4RvB8S/dtW3Ge4=;
+	bh=6DCqyEDP1eYPPtQ1JbTV1frxNx/jykhPfGF62FWOYy0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RQZ0/UZp5IZaAJas8+b22k+wUNA1ZaI2po+6jBLPH5Wz0PKiM1niVNzwqhtGoG9MFBo/Xeegv0G9gPjCTxAIYVV/lVWyh9iVEMbedFBjnkuby1n6m8buDwI2A42zAk351LfP3OLaI+HJ3mI/cuKoZTyOUwWnohbPgrl0Q64iNHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrwtMAld; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=crGuyUg9ubv5+Yx/1PLyHmUXSfY3dZdfrwHAuoURhqh5oW2NWLcyFoXOZxcdRM7fBaT1sfT/k8261K2cbAa4ZzVdsUCJ7uVLM6/aEiWDr97ndiJY3ESTFaXOYzI1/fHrX57V1BxM46xWfwGEP/J+1MVOtxKilr+U7hqVNSbCAh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DqqBdHIf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrwtMAld"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8C5C4CED6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DqqBdHIf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CF9C4CED7;
 	Wed, 16 Oct 2024 10:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729074157;
-	bh=Cn5sdvVgySd2SkhlcB6D2dHU5pDMU4RvB8S/dtW3Ge4=;
+	bh=6DCqyEDP1eYPPtQ1JbTV1frxNx/jykhPfGF62FWOYy0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DrwtMAldEiwsCGnw5o6X4y3LRrz9siEXi3jAEQ77C2u/+7C7L8wBEM3jNqgIim1yk
-	 c66U+yFzarA3Ze/f09jhRdPRxXAT0K6zS48SlTOEnDq9YckYxmjuZlWwky+9pXN6KK
-	 dpaDY2tgHrehE92gVxC2YsMItccNU/ClIfSll003XuFNY6d0jJL7BKlXvAii/kPH9c
-	 XXE6wdDGfnR0S8lSPc9NP8r9+E93hprLiR/9HyWaQCQZM1md3SEonA6Up5U58XtqCg
-	 XlnLiwT1q5XvZxytaxhXyt68gEdKgYqswOpct76kHvesoX9xucyYshqu6wefwtLpaE
-	 SBjkhJJ07ng3g==
+	b=DqqBdHIfFic7shVPcz1idQtvB8DJggll64d52dgmZn2SepvdNI4jr8U7fu9NBv+bn
+	 rIbDjT2IcQ9PN4X1IWdhey7gPKjAZ6KkjqC4L+OnPrY9NECYpVE5pW1qmg06QL1+Vr
+	 gZM7SISvdS0JDFJ+8bHytsTgMO9hVKC9axmYzVbmXi7Cwe9yR+O7mYcY3T/mgvC/HE
+	 MnU2q98OODBs0ay7Mhiot93GzOZAyzuEarVgWp2QKXsX4e/oFtdvlMxvXt5ow515Of
+	 PFq/A7YqZo8BnsvvYxM8rPOI03yY4uQkiMrqFjU1Ha3yMSCQntJQgcZhTJpl1tC22Z
+	 mAPMvnhpfywKg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t11Ap-00000004YnF-36Qm;
+	id 1t11Ap-00000004Yn1-2mf4;
 	Wed, 16 Oct 2024 12:22:35 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
@@ -38,9 +38,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 13/13] media: pulse8-cec: fix data timestamp at pulse8_setup()
-Date: Wed, 16 Oct 2024 12:22:29 +0200
-Message-ID: <8d5dfc87d297a92d5ccc750c5c002bbc4226d3ad.1729074076.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 10/13] media: adv7604 prevent underflow condition when reporting colorspace
+Date: Wed, 16 Oct 2024 12:22:26 +0200
+Message-ID: <41d12c1afd6571f9cc56c1b920df6ba558d0b927.1729074076.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729074076.git.mchehab+huawei@kernel.org>
 References: <cover.1729074076.git.mchehab+huawei@kernel.org>
@@ -53,56 +53,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-There is a hidden overflow condition there. As date is signed
-and u8 is unsigned, doing:
+Currently, adv76xx_log_status() reads some date using
+io_read() which may return negative values. The current logi
+doesn't check such errors, causing colorspace to be reported
+on a wrong way at adv76xx_log_status().
 
-	date = (data[0] << 24)
+If I/O error happens there, print a different message, instead
+of reporting bogus messages to userspace.
 
-With a value bigger than 07f will make all upper bits of date
-0xffffffff. This can be demonstrated with this small code:
-
-<code>
-
-typedef int64_t time64_t;
-typedef uint8_t u8;
-
-int main(void)
-{
-	u8 data[] = { 0xde ,0xad , 0xbe, 0xef };
-	time64_t date;
-
-	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-	printf("Invalid data = 0x%08lx\n", date);
-
-	date = ((unsigned)data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-	printf("Expected data = 0x%08lx\n", date);
-
-	return 0;
-}
-</code>
-
-Fix it by converting the upper bit calculation to unsigned.
-
-Fixes: cea28e7a55e7 ("media: pulse8-cec: reorganize function order")
+Fixes: 54450f591c99 ("[media] adv7604: driver for the Analog Devices ADV7604 video decoder")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/cec/usb/pulse8/pulse8-cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/adv7604.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/cec/usb/pulse8/pulse8-cec.c b/drivers/media/cec/usb/pulse8/pulse8-cec.c
-index ba67587bd43e..171366fe3544 100644
---- a/drivers/media/cec/usb/pulse8/pulse8-cec.c
-+++ b/drivers/media/cec/usb/pulse8/pulse8-cec.c
-@@ -685,7 +685,7 @@ static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
- 	err = pulse8_send_and_wait(pulse8, cmd, 1, cmd[0], 4);
- 	if (err)
- 		return err;
--	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
-+	date = ((unsigned)data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
- 	dev_info(pulse8->dev, "Firmware build date %ptT\n", &date);
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 48230d5109f0..272945a878b3 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -2519,10 +2519,10 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
+ 	const struct adv76xx_chip_info *info = state->info;
+ 	struct v4l2_dv_timings timings;
+ 	struct stdi_readback stdi;
+-	u8 reg_io_0x02 = io_read(sd, 0x02);
++	int ret;
++	u8 reg_io_0x02;
+ 	u8 edid_enabled;
+ 	u8 cable_det;
+-
+ 	static const char * const csc_coeff_sel_rb[16] = {
+ 		"bypassed", "YPbPr601 -> RGB", "reserved", "YPbPr709 -> RGB",
+ 		"reserved", "RGB -> YPbPr601", "reserved", "RGB -> YPbPr709",
+@@ -2621,13 +2621,21 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
+ 	v4l2_info(sd, "-----Color space-----\n");
+ 	v4l2_info(sd, "RGB quantization range ctrl: %s\n",
+ 			rgb_quantization_range_txt[state->rgb_quantization_range]);
+-	v4l2_info(sd, "Input color space: %s\n",
+-			input_color_space_txt[reg_io_0x02 >> 4]);
+-	v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
+-			(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
+-			(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
+-				"(16-235)" : "(0-255)",
+-			(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
++
++	ret = io_read(sd, 0x02);
++	if (ret < 0) {
++		v4l2_info(sd, "Can't read Input/Output color space\n");
++	} else {
++		reg_io_0x02 = ret;
++
++		v4l2_info(sd, "Input color space: %s\n",
++				input_color_space_txt[reg_io_0x02 >> 4]);
++		v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
++				(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
++				(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
++					"(16-235)" : "(0-255)",
++				(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
++	}
+ 	v4l2_info(sd, "Color space conversion: %s\n",
+ 			csc_coeff_sel_rb[cp_read(sd, info->cp_csc) >> 4]);
  
- 	dev_dbg(pulse8->dev, "Persistent config:\n");
 -- 
 2.47.0
 
