@@ -1,50 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253ED17C9B9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2543E17C9F1;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=RSYA+DhpDJIiu0mvz05QxVDAbfj6BIGCjFZ0MMXg/CBCNX8ymqWsHvR9zMk+PPmk41EX08FrJlN/Yxg04O2ZfyldAgkYO+7/DQxzsmSRQyaf1yBsuv/oPBG373U0WP88DHKMlIlzsS4jHbntd5l2Fhr/4nDjk0RIosO89g/lkgk=
+	t=1729230807; cv=none; b=KzVajnWqqwqmR0jrMK9mXzqsYxoPmz2GCp/bC5bIABLYKT0LgteIs/iJke7lU2xj8ngGDTXLy/2d7fiiiQGalf38d4kdT2ns+Zk8mbVBvlmuO9y4EUxyeB75xSLFdEsDs4DY/HEroQWoArmJV3LOzoffS8cE3/Byo1qbDbd2vQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=wVXSfTdlzHbzFNnkVyQi+BQqJKzdBu2IARFn0RCaO+M=;
+	bh=EslwWem0URL7HGO0wGR9dgXiEgLFlOjHPztcB3xbGHw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dvomTix8m0hxaXCbSBs1AUZoKpIxZgvnyP8gBo6FexFXsIulpDwgYZgiyygq3T6IOhOocw1MKpMnklodZeK7zkSstXXMba0X9Rb/y+xqa0j4/IIB1s2AWSMVw/pXQRMGqDEblVlCqeePkg8Jpl4KW/jfW0e59FJckdE1GYLf+uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcKa8wDU; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=eP2eRr22ebD0jQfkFVcIZLeBC+GCL0g8SmU+6Lf8XSOG6yrnnvCSXJtsxFytgdGQrFxJN/mKOymKvFygEVpTGigUPz9J75gxRpNa2Y6EGjiI6M44OicgtNLyFabTVgoVPnW7TeNEzYjnjLHPDeLuYNdsNWqQ0VFbigSqZQ7w9Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+4M4QAJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcKa8wDU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F92C4CED1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+4M4QAJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E05C4CEC5;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=wVXSfTdlzHbzFNnkVyQi+BQqJKzdBu2IARFn0RCaO+M=;
+	bh=EslwWem0URL7HGO0wGR9dgXiEgLFlOjHPztcB3xbGHw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rcKa8wDUnwuY0FJLrBxIUAGN44E/2NnZ8QzxgE9pfKxNX4Xuof00SUbx2CQeqlDan
-	 /wzOt+/tae2mSufNC8k0DATXp1O8oS2PDiNErWX2dNKhnlVaydX9cb5+RLZMx0mncS
-	 67Jc+9ErK3C7ycsuH0VMell/QtaFRBVXIsqnUI+0J+O41mBqxK24rE6xzrmAMd8Cm6
-	 zQt2CbfnZ8pSYP9slekMPX7+gPo+8RJAoqXcSGhAe6bysAvY9O1rCOPBxEud/Y/lm1
-	 3rYHGjceh2E+v3ESEC7YJdTGlI6vx4AGaIeelBXpJNv0ebOzjTrMrdOs4tWVpSQAN1
-	 N1O2YYH/EwDsg==
+	b=s+4M4QAJ9NeQhp+U1BtM50Ej1Wpn9EQIGRoEmMNJ0LQmzUuBi2xb0Yzfm7yl1pbNN
+	 KpobAQpYDa/+z4rvECsuKGZwJNUnmZfxXUCsCcdnSI8m51E8t5kZh0au7EBAwROKZq
+	 HD2zU3YoBV4pOMvjoNjqrfNz8W4tUZ7Up1tjVa04YRtp+f6yQdgoRqR0/zLxf5vjju
+	 Y9AGHaqz3eCZ2lKZE1c7qqUWkOxFMiJ/1uRIxQ1O4E2hek79tmD3Z187AZUASG4sPj
+	 QbW3lWJxCj/PxbBOD6dpqoHdwSxcVzwk3U0TnNfG7wWq1Vbdc3ivbmEsria2udDBXD
+	 JkBzSCIAYN/Dg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005MeL-1uTx;
+	id 1t1fvQ-00000005MeX-2Ehh;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Hans Verkuil <hans.verkuil@cisco.com>,
-	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2 07/13] media: s5p-jpeg: prevent buffer overflows
-Date: Fri, 18 Oct 2024 07:53:09 +0200
-Message-ID: <172461a2e8b2a1a4f01add73afae777463ea0fb8.1729230718.git.mchehab+huawei@kernel.org>
+	linux-media@vger.kernel.org
+Subject: [PATCH v2 10/13] media: adv7604: prevent underflow condition when reporting colorspace
+Date: Fri, 18 Oct 2024 07:53:12 +0200
+Message-ID: <be3f7dbb52adf5b39edb4e509f4f3d973797af49.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
 References: <cover.1729230718.git.mchehab+huawei@kernel.org>
@@ -57,85 +52,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The current logic allows word to be less than 2. If this happens,
-there will be buffer overflows, as reported by smatch. Add extra
-checks to prevent it.
+Currently, adv76xx_log_status() reads some date using
+io_read() which may return negative values. The current logic
+doesn't check such errors, causing colorspace to be reported
+on a wrong way at adv76xx_log_status(), as reported by Coverity.
 
-While here, remove an unused word = 0 assignment.
+If I/O error happens there, print a different message, instead
+of reporting bogus messages to userspace.
 
-Fixes: 6c96dbbc2aa9 ("[media] s5p-jpeg: add support for 5433")
-Cc: stable@vger.kernel.org
+Fixes: 54450f591c99 ("[media] adv7604: driver for the Analog Devices ADV7604 video decoder")
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Reviewed-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
 ---
- .../media/platform/samsung/s5p-jpeg/jpeg-core.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/media/i2c/adv7604.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-index d2c4a0178b3c..1db4609b3557 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-@@ -775,11 +775,14 @@ static void exynos4_jpeg_parse_decode_h_tbl(struct s5p_jpeg_ctx *ctx)
- 		(unsigned long)vb2_plane_vaddr(&vb->vb2_buf, 0) + ctx->out_q.sos + 2;
- 	jpeg_buffer.curr = 0;
- 
--	word = 0;
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 48230d5109f0..272945a878b3 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -2519,10 +2519,10 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
+ 	const struct adv76xx_chip_info *info = state->info;
+ 	struct v4l2_dv_timings timings;
+ 	struct stdi_readback stdi;
+-	u8 reg_io_0x02 = io_read(sd, 0x02);
++	int ret;
++	u8 reg_io_0x02;
+ 	u8 edid_enabled;
+ 	u8 cable_det;
 -
- 	if (get_word_be(&jpeg_buffer, &word))
- 		return;
--	jpeg_buffer.size = (long)word - 2;
+ 	static const char * const csc_coeff_sel_rb[16] = {
+ 		"bypassed", "YPbPr601 -> RGB", "reserved", "YPbPr709 -> RGB",
+ 		"reserved", "RGB -> YPbPr601", "reserved", "RGB -> YPbPr709",
+@@ -2621,13 +2621,21 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
+ 	v4l2_info(sd, "-----Color space-----\n");
+ 	v4l2_info(sd, "RGB quantization range ctrl: %s\n",
+ 			rgb_quantization_range_txt[state->rgb_quantization_range]);
+-	v4l2_info(sd, "Input color space: %s\n",
+-			input_color_space_txt[reg_io_0x02 >> 4]);
+-	v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
+-			(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
+-			(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
+-				"(16-235)" : "(0-255)",
+-			(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
 +
-+	if (word < 2)
-+		jpeg_buffer.size = 0;
-+	else
-+		jpeg_buffer.size = (long)word - 2;
++	ret = io_read(sd, 0x02);
++	if (ret < 0) {
++		v4l2_info(sd, "Can't read Input/Output color space\n");
++	} else {
++		reg_io_0x02 = ret;
 +
- 	jpeg_buffer.data += 2;
- 	jpeg_buffer.curr = 0;
++		v4l2_info(sd, "Input color space: %s\n",
++				input_color_space_txt[reg_io_0x02 >> 4]);
++		v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
++				(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
++				(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
++					"(16-235)" : "(0-255)",
++				(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
++	}
+ 	v4l2_info(sd, "Color space conversion: %s\n",
+ 			csc_coeff_sel_rb[cp_read(sd, info->cp_csc) >> 4]);
  
-@@ -1058,6 +1061,7 @@ static int get_word_be(struct s5p_jpeg_buffer *buf, unsigned int *word)
- 	if (byte == -1)
- 		return -1;
- 	*word = (unsigned int)byte | temp;
-+
- 	return 0;
- }
- 
-@@ -1145,7 +1149,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
- 			if (get_word_be(&jpeg_buffer, &word))
- 				break;
- 			length = (long)word - 2;
--			if (!length)
-+			if (length <= 0)
- 				return false;
- 			sof = jpeg_buffer.curr; /* after 0xffc0 */
- 			sof_len = length;
-@@ -1176,7 +1180,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
- 			if (get_word_be(&jpeg_buffer, &word))
- 				break;
- 			length = (long)word - 2;
--			if (!length)
-+			if (length <= 0)
- 				return false;
- 			if (n_dqt >= S5P_JPEG_MAX_MARKER)
- 				return false;
-@@ -1189,7 +1193,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
- 			if (get_word_be(&jpeg_buffer, &word))
- 				break;
- 			length = (long)word - 2;
--			if (!length)
-+			if (length <= 0)
- 				return false;
- 			if (n_dht >= S5P_JPEG_MAX_MARKER)
- 				return false;
-@@ -1214,6 +1218,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
- 			if (get_word_be(&jpeg_buffer, &word))
- 				break;
- 			length = (long)word - 2;
-+			/* No need to check underflows as skip() does it  */
- 			skip(&jpeg_buffer, length);
- 			break;
- 		}
 -- 
 2.47.0
 
