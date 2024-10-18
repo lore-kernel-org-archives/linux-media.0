@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACD3187862;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC76187861;
 	Fri, 18 Oct 2024 05:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=nM8a7niHciXG18wT6O3J4cMV2/6Mqc6U0fFY1Rh3EivAtKJ/2EspW+4qQWHSpHNxnTS2XT8kr6n+mud9TnveVDlFaWiu675mRsvI9poH4kjf66ogqchkjtJQzouSXguDeLxEOJXSOvSZHq2EQHMHA9jL1zjKp1GI2QujwdXYv2w=
+	t=1729230807; cv=none; b=KwxE0NV4MLmxeDDhIsexsrzSPqOkD8qFTRheJ6ze9VVpZMwFEzBbInYQwJVuiNgOcntD03eOmv+pFZnJg0lwPZVpnHaTkrMsipFiLrGmKWm5Y40UxlbseqUxDbHogHdxcoZFiS3tueOHcI21r8EqWv2e/bVCivICh0buVDez08c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=lGWpAXxWV3zz4XGNsiMpE6t375yXbG2Tiq87XA+eXFc=;
+	bh=dURN9dIELtyC2m0Zlh5rzANJ1Ev1GACofUTUaXFiXig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F4L8e/lbEvAz0c+3Jg8HhF1/nT4B5JpTS2s4Yyym36juXQWVJ4cqS63romTlf0NfsdAbO7g2sSQNdZnb81HDE6nkanEUk5bJIph4tHsFBEt2EpZ7f3VJ9L4XYP34pbiAMtSZoco6dvHdrV2ZmDDqt/j2aQIgHybr2EQ9hoMRSUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gX8Vei/t; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=kLePTdgYFRdY6R/V3NnOdem7qgkgY8yAvD6ABIRITVYQdCwvR/fGpwuglXkS5kOO7yY9Ql9Zi3T8XE5AEhgrUU/G590Rx4oS+Bi3a1/Z1A6MU+bttEpoffen2v2woGtT70IVVuMdIwq+vvs+Kb0jgDzwe323HjR+3tzhL5pHriQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYWWJJ6m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gX8Vei/t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD63C4CED2;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYWWJJ6m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22CAC4CED6;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=lGWpAXxWV3zz4XGNsiMpE6t375yXbG2Tiq87XA+eXFc=;
+	bh=dURN9dIELtyC2m0Zlh5rzANJ1Ev1GACofUTUaXFiXig=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gX8Vei/tEEktbLeGqPL31wg87cH7/bnX6mQdsiTAZxq3oFxpXT51xPFppxECcf8qV
-	 2K+Fd6J1w7OBkzSlWVXsjuOKte+IEUvp9LMJr9JZ+W/AJ04LePmjHgchRRfW9gZ9ik
-	 qr6c+OJ+/CVxxXo4xsdR9f0XeNmT8yff//sR3OZIczW9MtRHsMs5JRVpNNEOAtYKiU
-	 gDFzS9oRLfeHab5Y4tLURTNMWa8PHqn4xeGvnrBEDggxX3pYWvlvK6cJkoSqIvEIXb
-	 Yl5Fqg/bXR5pEUi9bYu9p4xqzmRr4RvByak9tS2bA8XwrK15fPORdZpR27r0un7ASi
-	 HY9IdjGSHVdrw==
+	b=FYWWJJ6mf9ei+25Y/KLX5XAHvQZZrcfbkmbsbO5vWYyaJEWjWAUE3NiYmqzjgu2y+
+	 N9SMt+ij9o6yFeEfumEkPcg9OoBzffxNRS+J7IS/c2YCZW4CQElb9eGQZkV20u1+uu
+	 wrOPmafBLg9Z6ayfJ1ze95ndteQhUPYFVHQL65t+XaUoN4pBE5raJpDksC1cNeFSfH
+	 mNzWFoJ9I3XNgS0x8ZbT2tNxmPJrrL6UrlKhd4Xrg37d7fmVr7Cz3vmikNnLpjDuwD
+	 o04QQpjxr1jAzWE4FDEsoHTBcpCZ+NhbMY9sBDlkQpOLK6NrxHV56GUUGcFmzc6+fY
+	 tk3ixUG26PRkg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005MeD-1goc;
+	id 1t1fvQ-00000005MeT-27wx;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Steven Toth <stoth@linuxtv.org>,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH v2 05/13] media: mgb4: protect driver against spectre
-Date: Fri, 18 Oct 2024 07:53:07 +0200
-Message-ID: <e03711da05ae943790106a72b4790a96464e0179.1729230718.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 09/13] media: cx24116: prevent overflows on SNR calculus
+Date: Fri, 18 Oct 2024 07:53:11 +0200
+Message-ID: <b7e7f344d57ce1dd8c1bb0f82abfc8e5967eaec4.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
 References: <cover.1729230718.git.mchehab+huawei@kernel.org>
@@ -51,39 +50,47 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Frequency range is set from sysfs via frequency_range_store(),
-being vulnerable to spectre, as reported by smatch:
+as reported by Coverity, if reading SNR registers fail, a negative
+number will be returned, causing an underflow when reading SNR
+registers.
 
-	drivers/media/pci/mgb4/mgb4_cmt.c:231 mgb4_cmt_set_vin_freq_range() warn: potential spectre issue 'cmt_vals_in' [r]
-	drivers/media/pci/mgb4/mgb4_cmt.c:238 mgb4_cmt_set_vin_freq_range() warn: possible spectre second half.  'reg_set'
+Prevent that.
 
-Fix it.
-
-Fixes: 0ab13674a9bd ("media: pci: mgb4: Added Digiteq Automotive MGB4 driver")
+Fixes: 8953db793d5b ("V4L/DVB (9178): cx24116: Add module parameter to return SNR as ESNO.")
 Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Reviewed-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 ---
- drivers/media/pci/mgb4/mgb4_cmt.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/dvb-frontends/cx24116.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/mgb4/mgb4_cmt.c b/drivers/media/pci/mgb4/mgb4_cmt.c
-index 70dc78ef193c..a25b68403bc6 100644
---- a/drivers/media/pci/mgb4/mgb4_cmt.c
-+++ b/drivers/media/pci/mgb4/mgb4_cmt.c
-@@ -227,6 +227,8 @@ void mgb4_cmt_set_vin_freq_range(struct mgb4_vin_dev *vindev,
- 	u32 config;
- 	size_t i;
+diff --git a/drivers/media/dvb-frontends/cx24116.c b/drivers/media/dvb-frontends/cx24116.c
+index 8b978a9f74a4..f5dd3a81725a 100644
+--- a/drivers/media/dvb-frontends/cx24116.c
++++ b/drivers/media/dvb-frontends/cx24116.c
+@@ -741,6 +741,7 @@ static int cx24116_read_snr_pct(struct dvb_frontend *fe, u16 *snr)
+ {
+ 	struct cx24116_state *state = fe->demodulator_priv;
+ 	u8 snr_reading;
++	int ret;
+ 	static const u32 snr_tab[] = { /* 10 x Table (rounded up) */
+ 		0x00000, 0x0199A, 0x03333, 0x04ccD, 0x06667,
+ 		0x08000, 0x0999A, 0x0b333, 0x0cccD, 0x0e667,
+@@ -749,7 +750,11 @@ static int cx24116_read_snr_pct(struct dvb_frontend *fe, u16 *snr)
  
-+	freq_range = array_index_nospec(freq_range, ARRAY_SIZE(cmt_vals_in));
+ 	dprintk("%s()\n", __func__);
+ 
+-	snr_reading = cx24116_readreg(state, CX24116_REG_QUALITY0);
++	ret = cx24116_readreg(state, CX24116_REG_QUALITY0);
++	if (ret  < 0)
++		return ret;
 +
- 	addr = cmt_addrs_in[vindev->config->id];
- 	reg_set = cmt_vals_in[freq_range];
++	snr_reading = ret;
  
+ 	if (snr_reading >= 0xa0 /* 100% */)
+ 		*snr = 0xffff;
 -- 
 2.47.0
 
