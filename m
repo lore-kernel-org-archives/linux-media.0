@@ -1,99 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791D818785D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D606187FE3;
 	Fri, 18 Oct 2024 05:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=KyC2Fn8pGFYivFz9EvtLKl6KyCOtvijiuZ/kkaFG/Wbe2AMxh2xvgKmyE4/M9uzfsk79ApqjaTxaHsymkw7G4UjFzELKbd25gvLVK9WpP+yDlqPYWIT2byNkTwfqkticvpaHFw2YlLRWzKY8jTPJD1vn0qzs8CT8R+dhcHCu3Ks=
+	t=1729230807; cv=none; b=gGvLiJSRee36odKdM8lab1TrnH3oWmskecsXjlH8g7/nE+BeyDDm+Cpm00f0jCQS08U5SWcQqohnylqD1OdOC7VsL6T+CdN4nBUyRstqJs6QhkSS+cGijCkCYv6BK32mR2vNAKbANgVJyGzqESRS3kWDkPJ+oryRjEPkqWBKA9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=aG6hoMo4uzmVEhnDz98AaAEGaoD34QTsOAO33KKqS9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XC1s1pgiwn3ZdcN2C2IH6D5BZxuqFj6yQvwDL0r+q28P/ddCmd4aBqLUaxrkuaO1AKGOZgXtg3FhGhc9Q90FJYrcZl8w8CmgCuCbKUBYYP19i4K8XDRJYgHtOCk2VjL9Rx9VYtU3BzRYWe9f8WE1rVBD2zyugcPk/v6IXh/s5k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mr2euONv; arc=none smtp.client-ip=10.30.226.201
+	bh=HfALoVly1ujnpj+hXBkW4Goy8KItNqyAYKrdPlBXqkY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LR33+Jx2zb9XXXYqNVuqIikevSFt2Zte7XjE53z/h6x7gL12PLmW9IPU8Fn5tpdJ44/o1i048oDJ7DUJ9vye0TMeaucRtfrtiGye74wzAonlbYVY1QISVhEY3d8pNJlTSucUnIwOWSFfr9YGgS/d3Seb+KRl1xJ09UjO0fgifQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hoxGKoa8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mr2euONv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFCCC4CED4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hoxGKoa8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70D2C4AF09;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=aG6hoMo4uzmVEhnDz98AaAEGaoD34QTsOAO33KKqS9g=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Mr2euONv4fUfZDP/s3EqyB2EvuHMXCn53FiDk83Ep31dnZX5NT9xksVhYGFJ9AZub
-	 WLiyV9o5/SGvI1a5R3mbU5b6Cc6jhPC8PLIp8AU2d1YzwVcVz7ug+uL3TkOVnLeJMH
-	 /45FX3+jmX8kQMtQ9OPF/cWVG7bfYCAJ+BYdSg+i9pPiO7aqUqalA70ohGe4/YhHKE
-	 Vpam9QFxLYw3tGa8feJ8endFQyjYQp2ss6AGczaSUYrPL89mkdh2EDmdCQFr0VDhHh
-	 DT8jU+y8BEZDjh5LJUeJtE1AHccZfzpIaWVtaSTpFki0Dmuh1kKAOy/jQwGeiwMgRA
-	 z+wXkxCJH2lvw==
+	bh=HfALoVly1ujnpj+hXBkW4Goy8KItNqyAYKrdPlBXqkY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hoxGKoa8a8H4gQVzxUWJb8iJMT1OFvpl1Hzhhx7QSiUnV3OuNqTdN1Plloe3for+Y
+	 Aa8QPhkXSHwAKX6za4Ga5LDhBX9dlfLKPg2QEieRMo96hPyWUl3h7AKdY4qb0NyQ5h
+	 0w6Ix5yR4lxPRtBeWV1lgjPLoOIkv0NYNBpj6kJ9Y3agfIZm/GofC+QXck0P6B4Ob7
+	 9tw1nbMUoed9gR0CFxfyAoZPxvGb7DWxBKyg5vJdyfUem5eKctOPk2gpP+b7Etns7z
+	 ta0sN+d/e0zE6taF2IhNFFMImd2J7LElJa4BWV099zxxpyUxwq0zummD1EAFgcydpR
+	 N8G21WdGnR0zg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005Mdu-18To;
+	id 1t1fvQ-00000005Meb-2LHs;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Manu Abraham <abraham.manu@gmail.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Subject: [PATCH v2 00/13] Media: fix several issues on drivers
-Date: Fri, 18 Oct 2024 07:53:02 +0200
-Message-ID: <cover.1729230718.git.mchehab+huawei@kernel.org>
+	stable@vger.kernel.org
+Subject: [PATCH v2 11/13] media: stb0899_algo: initialize cfr before using it
+Date: Fri, 18 Oct 2024 07:53:13 +0200
+Message-ID: <010d5654f49b0b1e6e9d84a2f40acc0e54894ff3.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
+References: <cover.1729230718.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-There are a number of issues that aren't passing on smatch or Coverity.
+The loop at stb0899_search_carrier() starts with a random
+value for cfr, as reported by Coverity.
 
-Address some of them.
+Initialize it to zero, just like stb0899_dvbs_algo() to ensure
+that carrier search won't bail out.
 
-Mauro Carvalho Chehab (13):
-  media: v4l2-ctrls-api: fix error handling for v4l2_g_ctrl()
-  media: v4l2-tpg: prevent the risk of a division by zero
-  media: dvbdev: prevent the risk of out of memory access
-  media: dvb_frontend: don't play tricks with underflow values
-  media: mgb4: protect driver against spectre
-  media: av7110: fix a spectre vulnerability
-  media: s5p-jpeg: prevent buffer overflows
-  media: ar0521: don't overflow when checking PLL values
-  media: cx24116: prevent overflows on SNR calculus
-  media: adv7604: prevent underflow condition when reporting colorspace
-  media: stb0899_algo: initialize cfr before using it
-  media: cec: extron-da-hd-4k-plus: don't use -1 as an error code
-  media: pulse8-cec: fix data timestamp at pulse8_setup()
+Fixes: 8bd135bab91f ("V4L/DVB (9375): Add STB0899 support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/media/dvb-frontends/stb0899_algo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- .../extron-da-hd-4k-plus.c                    |  6 ++---
- drivers/media/cec/usb/pulse8/pulse8-cec.c     |  2 +-
- drivers/media/common/v4l2-tpg/v4l2-tpg-core.c |  3 +++
- drivers/media/dvb-core/dvb_frontend.c         |  4 +--
- drivers/media/dvb-core/dvbdev.c               | 17 ++++++++++--
- drivers/media/dvb-frontends/cx24116.c         |  7 ++++-
- drivers/media/dvb-frontends/stb0899_algo.c    |  2 +-
- drivers/media/i2c/adv7604.c                   | 26 ++++++++++++-------
- drivers/media/i2c/ar0521.c                    |  4 +--
- drivers/media/pci/mgb4/mgb4_cmt.c             |  2 ++
- .../platform/samsung/s5p-jpeg/jpeg-core.c     | 17 +++++++-----
- drivers/media/v4l2-core/v4l2-ctrls-api.c      | 16 ++++++++----
- drivers/staging/media/av7110/av7110.h         |  4 ++-
- drivers/staging/media/av7110/av7110_ca.c      | 25 ++++++++++++------
- 14 files changed, 94 insertions(+), 41 deletions(-)
-
+diff --git a/drivers/media/dvb-frontends/stb0899_algo.c b/drivers/media/dvb-frontends/stb0899_algo.c
+index df89c33dac23..40537c4ccb0d 100644
+--- a/drivers/media/dvb-frontends/stb0899_algo.c
++++ b/drivers/media/dvb-frontends/stb0899_algo.c
+@@ -269,7 +269,7 @@ static enum stb0899_status stb0899_search_carrier(struct stb0899_state *state)
+ 
+ 	short int derot_freq = 0, last_derot_freq = 0, derot_limit, next_loop = 3;
+ 	int index = 0;
+-	u8 cfr[2];
++	u8 cfr[2] = {0};
+ 	u8 reg;
+ 
+ 	internal->status = NOCARRIER;
 -- 
 2.47.0
-
 
