@@ -1,45 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27EB317CA0B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253ED17C9B9;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=rAX8q3x4gz3IsTE2W3UduHQCuHlRkavt7lCVel+iRslXUOtHw5s9l/ceQvGA1uwYgb0LKoNrnkoocR/ASL/cUv5qT8nxbmKme7BbHjw6dAPUjlchgbqT8YhApVIE2ewtGpwUI6mWmlCQNRxl6zhz+S0DPJyZcbge9vz5xNRSTjk=
+	t=1729230807; cv=none; b=RSYA+DhpDJIiu0mvz05QxVDAbfj6BIGCjFZ0MMXg/CBCNX8ymqWsHvR9zMk+PPmk41EX08FrJlN/Yxg04O2ZfyldAgkYO+7/DQxzsmSRQyaf1yBsuv/oPBG373U0WP88DHKMlIlzsS4jHbntd5l2Fhr/4nDjk0RIosO89g/lkgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=0mACDK++z3gYpIXaJs1fswOXuXPX4SSUmn45ykw9UT4=;
+	bh=wVXSfTdlzHbzFNnkVyQi+BQqJKzdBu2IARFn0RCaO+M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=egQamZ7NLt7jmavOoZTz4Rm50479gHM2t044oCgh+NFMqYoW6azesL13JEIJZorusaUMkxQWfYwbGDh/F92vqXsqNbT0DlcRpUf9duDLS3q29+Ac38l0xjrd1t08Q474/ofxkAjvxP0E3JNNKViN1mvwOOyV3+8YatVDCd50SfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3mLxixd; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=dvomTix8m0hxaXCbSBs1AUZoKpIxZgvnyP8gBo6FexFXsIulpDwgYZgiyygq3T6IOhOocw1MKpMnklodZeK7zkSstXXMba0X9Rb/y+xqa0j4/IIB1s2AWSMVw/pXQRMGqDEblVlCqeePkg8Jpl4KW/jfW0e59FJckdE1GYLf+uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcKa8wDU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3mLxixd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F50C4CECF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcKa8wDU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F92C4CED1;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=0mACDK++z3gYpIXaJs1fswOXuXPX4SSUmn45ykw9UT4=;
+	bh=wVXSfTdlzHbzFNnkVyQi+BQqJKzdBu2IARFn0RCaO+M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=M3mLxixdkL3zLYHqT+OhPE/LSE64zcD/p58v4ZhMT2MSNrYIhhISlDmfM1uR9vxy/
-	 tBY/Ekr6JYlcNDV6sXIyLvLuOpYWPozDUEN2y78hrxfj0GSZh4U00Fs0QehiZq5FRn
-	 k4V7p/ZF0r2CvFxJzO53jAxNxMx4A1gfiQ0emlUPB+CtQ/paiMz825krSi4a3xV0Y2
-	 g1vUghpH/Egv0N7Xejl+gIxGMIrGoh4qNIljLw+2hMfaNapQw4vhpQRynblSawkw9g
-	 QpiOiNvlKT8L7y6vCkCCu+I/YVtyDTQNBZaAbayHJR7aX3s0tD5XFjR+daa0cLcep5
-	 pYc0nu3jGjjhw==
+	b=rcKa8wDUnwuY0FJLrBxIUAGN44E/2NnZ8QzxgE9pfKxNX4Xuof00SUbx2CQeqlDan
+	 /wzOt+/tae2mSufNC8k0DATXp1O8oS2PDiNErWX2dNKhnlVaydX9cb5+RLZMx0mncS
+	 67Jc+9ErK3C7ycsuH0VMell/QtaFRBVXIsqnUI+0J+O41mBqxK24rE6xzrmAMd8Cm6
+	 zQt2CbfnZ8pSYP9slekMPX7+gPo+8RJAoqXcSGhAe6bysAvY9O1rCOPBxEud/Y/lm1
+	 3rYHGjceh2E+v3ESEC7YJdTGlI6vx4AGaIeelBXpJNv0ebOzjTrMrdOs4tWVpSQAN1
+	 N1O2YYH/EwDsg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005Mef-2Rt6;
+	id 1t1fvQ-00000005MeL-1uTx;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Hans Verkuil <hans.verkuil@cisco.com>,
+	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [PATCH v2 12/13] media: cec: extron-da-hd-4k-plus: don't use -1 as an error code
-Date: Fri, 18 Oct 2024 07:53:14 +0200
-Message-ID: <86725525d38f8c79897d646c55c3341559f62640.1729230718.git.mchehab+huawei@kernel.org>
+	linux-media@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2 07/13] media: s5p-jpeg: prevent buffer overflows
+Date: Fri, 18 Oct 2024 07:53:09 +0200
+Message-ID: <172461a2e8b2a1a4f01add73afae777463ea0fb8.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
 References: <cover.1729230718.git.mchehab+huawei@kernel.org>
@@ -52,48 +57,85 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The logic at get_edid_tag_location() returns either an offset
-or an error condition. However, the error condition uses a
-non-standard "-1" value. This hits a Coverity bug, as Coverity
-assumes that positive values are underflow. While this is a
-false positive, returning error codes as -1 is an issue.
+The current logic allows word to be less than 2. If this happens,
+there will be buffer overflows, as reported by smatch. Add extra
+checks to prevent it.
 
-So, instead, use -ENOENT to indicate that the tag was not found.
+While here, remove an unused word = 0 assignment.
 
-Fixes: 056f2821b631 ("media: cec: extron-da-hd-4k-plus: add the Extron DA HD 4K Plus CEC driver")
+Fixes: 6c96dbbc2aa9 ("[media] s5p-jpeg: add support for 5433")
+Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
 ---
- .../cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c     | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../media/platform/samsung/s5p-jpeg/jpeg-core.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c b/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-index a526464af88c..7d03a36df5cf 100644
---- a/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-+++ b/drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
-@@ -348,12 +348,12 @@ static int get_edid_tag_location(const u8 *edid, unsigned int size,
+diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+index d2c4a0178b3c..1db4609b3557 100644
+--- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+@@ -775,11 +775,14 @@ static void exynos4_jpeg_parse_decode_h_tbl(struct s5p_jpeg_ctx *ctx)
+ 		(unsigned long)vb2_plane_vaddr(&vb->vb2_buf, 0) + ctx->out_q.sos + 2;
+ 	jpeg_buffer.curr = 0;
  
- 	/* Return if not a CTA-861 extension block */
- 	if (size < 256 || edid[0] != 0x02 || edid[1] != 0x03)
--		return -1;
-+		return -ENOENT;
+-	word = 0;
+-
+ 	if (get_word_be(&jpeg_buffer, &word))
+ 		return;
+-	jpeg_buffer.size = (long)word - 2;
++
++	if (word < 2)
++		jpeg_buffer.size = 0;
++	else
++		jpeg_buffer.size = (long)word - 2;
++
+ 	jpeg_buffer.data += 2;
+ 	jpeg_buffer.curr = 0;
  
- 	/* search tag */
- 	d = edid[0x02] & 0x7f;
- 	if (d <= 4)
--		return -1;
-+		return -ENOENT;
- 
- 	i = 0x04;
- 	end = 0x00 + d;
-@@ -371,7 +371,7 @@ static int get_edid_tag_location(const u8 *edid, unsigned int size,
- 			return offset + i;
- 		i += len + 1;
- 	} while (i < end);
--	return -1;
-+	return -ENOENT;
+@@ -1058,6 +1061,7 @@ static int get_word_be(struct s5p_jpeg_buffer *buf, unsigned int *word)
+ 	if (byte == -1)
+ 		return -1;
+ 	*word = (unsigned int)byte | temp;
++
+ 	return 0;
  }
  
- static void extron_edid_crc(u8 *edid)
+@@ -1145,7 +1149,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
+ 			if (get_word_be(&jpeg_buffer, &word))
+ 				break;
+ 			length = (long)word - 2;
+-			if (!length)
++			if (length <= 0)
+ 				return false;
+ 			sof = jpeg_buffer.curr; /* after 0xffc0 */
+ 			sof_len = length;
+@@ -1176,7 +1180,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
+ 			if (get_word_be(&jpeg_buffer, &word))
+ 				break;
+ 			length = (long)word - 2;
+-			if (!length)
++			if (length <= 0)
+ 				return false;
+ 			if (n_dqt >= S5P_JPEG_MAX_MARKER)
+ 				return false;
+@@ -1189,7 +1193,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
+ 			if (get_word_be(&jpeg_buffer, &word))
+ 				break;
+ 			length = (long)word - 2;
+-			if (!length)
++			if (length <= 0)
+ 				return false;
+ 			if (n_dht >= S5P_JPEG_MAX_MARKER)
+ 				return false;
+@@ -1214,6 +1218,7 @@ static bool s5p_jpeg_parse_hdr(struct s5p_jpeg_q_data *result,
+ 			if (get_word_be(&jpeg_buffer, &word))
+ 				break;
+ 			length = (long)word - 2;
++			/* No need to check underflows as skip() does it  */
+ 			skip(&jpeg_buffer, length);
+ 			break;
+ 		}
 -- 
 2.47.0
 
