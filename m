@@ -1,45 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2543E17C9F1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2548B17CA03;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=KzVajnWqqwqmR0jrMK9mXzqsYxoPmz2GCp/bC5bIABLYKT0LgteIs/iJke7lU2xj8ngGDTXLy/2d7fiiiQGalf38d4kdT2ns+Zk8mbVBvlmuO9y4EUxyeB75xSLFdEsDs4DY/HEroQWoArmJV3LOzoffS8cE3/Byo1qbDbd2vQ4=
+	t=1729230807; cv=none; b=LClohbfwixkf/b0rysoSsTs0xaVJ8RITy2snf8h80B/JgiYhg8v7rl/gwD0/35ZdvBSYiHyC+ssCFoZhUS6P0tYOV2sZHcG6kmP1FrRuxOwZfGR5bQfYP6zOJX56cVqCabj1mH9TWd8USmidg0+RsvyfQ2B0kq/DvJJgjNVpUog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=EslwWem0URL7HGO0wGR9dgXiEgLFlOjHPztcB3xbGHw=;
+	bh=uwXxWFWVLKeBra7Pb/skSKfPY8KH3t9pzk1shDbiY6g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eP2eRr22ebD0jQfkFVcIZLeBC+GCL0g8SmU+6Lf8XSOG6yrnnvCSXJtsxFytgdGQrFxJN/mKOymKvFygEVpTGigUPz9J75gxRpNa2Y6EGjiI6M44OicgtNLyFabTVgoVPnW7TeNEzYjnjLHPDeLuYNdsNWqQ0VFbigSqZQ7w9Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+4M4QAJ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=dQcY23RqxPXav5AZdRhVHUmnlQm1RKQQ+SmdJgNG62pRGh1DnwLuY+HxHx6wilv0aBJ1XRXU/CDsuMG8RucgcoMmLh9olD+jPSkuoA4e9qbF0hlByL29C0xB8XeIocBxhe8rMC+xA0od3PmRaMfn2dzRamn6+d9Fys3+A8QJzPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJOGoIU2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+4M4QAJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4E05C4CEC5;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJOGoIU2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5E3C4CEC3;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=EslwWem0URL7HGO0wGR9dgXiEgLFlOjHPztcB3xbGHw=;
+	bh=uwXxWFWVLKeBra7Pb/skSKfPY8KH3t9pzk1shDbiY6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s+4M4QAJ9NeQhp+U1BtM50Ej1Wpn9EQIGRoEmMNJ0LQmzUuBi2xb0Yzfm7yl1pbNN
-	 KpobAQpYDa/+z4rvECsuKGZwJNUnmZfxXUCsCcdnSI8m51E8t5kZh0au7EBAwROKZq
-	 HD2zU3YoBV4pOMvjoNjqrfNz8W4tUZ7Up1tjVa04YRtp+f6yQdgoRqR0/zLxf5vjju
-	 Y9AGHaqz3eCZ2lKZE1c7qqUWkOxFMiJ/1uRIxQ1O4E2hek79tmD3Z187AZUASG4sPj
-	 QbW3lWJxCj/PxbBOD6dpqoHdwSxcVzwk3U0TnNfG7wWq1Vbdc3ivbmEsria2udDBXD
-	 JkBzSCIAYN/Dg==
+	b=FJOGoIU2Q45yW0qt/8ilOvDJLoCye2VDr0j86pQ8A/A5UKO0rfBpLyksmQsXYUYNZ
+	 vHzw93zra8s62utOy1gHXsktkCvX2H/ACGVj2MC1934mZfVSVz6edB5WYLuaB9Ki72
+	 q9lt4vlODPaFAV2OS/SXk3+JoZ+9rkakrfKOsqrUfGVwQrGev05CnSNVxgh9zXDwtJ
+	 JwZHZfYQWIkWT5G/i7JRPSqsCrp+BmUL0xhGfsCxcArQ4jqU+WFh4/KKWsqFB6APKz
+	 2GP/dG17ficpIRkPIXnBVkREz47jpCLwT4B7+RovnObgOV0aHjkkndHhznAaIGQBGe
+	 a6bIXzTEM3MtQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005MeX-2Ehh;
+	id 1t1fvQ-00000005MeH-1nY0;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Stefan Herdler <herdler@nurfuerspam.de>,
 	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [PATCH v2 10/13] media: adv7604: prevent underflow condition when reporting colorspace
-Date: Fri, 18 Oct 2024 07:53:12 +0200
-Message-ID: <be3f7dbb52adf5b39edb4e509f4f3d973797af49.1729230718.git.mchehab+huawei@kernel.org>
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v2 06/13] media: av7110: fix a spectre vulnerability
+Date: Fri, 18 Oct 2024 07:53:08 +0200
+Message-ID: <be72ed55123427ec9678695eb78501621d2c87d4.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
 References: <cover.1729230718.git.mchehab+huawei@kernel.org>
@@ -52,66 +56,101 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Currently, adv76xx_log_status() reads some date using
-io_read() which may return negative values. The current logic
-doesn't check such errors, causing colorspace to be reported
-on a wrong way at adv76xx_log_status(), as reported by Coverity.
+As warned by smatch:
+	drivers/staging/media/av7110/av7110_ca.c:270 dvb_ca_ioctl() warn: potential spectre issue 'av7110->ci_slot' [w] (local cap)
 
-If I/O error happens there, print a different message, instead
-of reporting bogus messages to userspace.
+There is a spectre-related vulnerability at the code. Fix it.
 
-Fixes: 54450f591c99 ("[media] adv7604: driver for the Analog Devices ADV7604 video decoder")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
 ---
- drivers/media/i2c/adv7604.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+ drivers/staging/media/av7110/av7110.h    |  4 +++-
+ drivers/staging/media/av7110/av7110_ca.c | 25 ++++++++++++++++--------
+ 2 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
-index 48230d5109f0..272945a878b3 100644
---- a/drivers/media/i2c/adv7604.c
-+++ b/drivers/media/i2c/adv7604.c
-@@ -2519,10 +2519,10 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
- 	const struct adv76xx_chip_info *info = state->info;
- 	struct v4l2_dv_timings timings;
- 	struct stdi_readback stdi;
--	u8 reg_io_0x02 = io_read(sd, 0x02);
-+	int ret;
-+	u8 reg_io_0x02;
- 	u8 edid_enabled;
- 	u8 cable_det;
--
- 	static const char * const csc_coeff_sel_rb[16] = {
- 		"bypassed", "YPbPr601 -> RGB", "reserved", "YPbPr709 -> RGB",
- 		"reserved", "RGB -> YPbPr601", "reserved", "RGB -> YPbPr709",
-@@ -2621,13 +2621,21 @@ static int adv76xx_log_status(struct v4l2_subdev *sd)
- 	v4l2_info(sd, "-----Color space-----\n");
- 	v4l2_info(sd, "RGB quantization range ctrl: %s\n",
- 			rgb_quantization_range_txt[state->rgb_quantization_range]);
--	v4l2_info(sd, "Input color space: %s\n",
--			input_color_space_txt[reg_io_0x02 >> 4]);
--	v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
--			(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
--			(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
--				"(16-235)" : "(0-255)",
--			(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
+diff --git a/drivers/staging/media/av7110/av7110.h b/drivers/staging/media/av7110/av7110.h
+index ec461fd187af..b584754f4be0 100644
+--- a/drivers/staging/media/av7110/av7110.h
++++ b/drivers/staging/media/av7110/av7110.h
+@@ -88,6 +88,8 @@ struct infrared {
+ 	u32			ir_config;
+ };
+ 
++#define MAX_CI_SLOTS	2
 +
-+	ret = io_read(sd, 0x02);
-+	if (ret < 0) {
-+		v4l2_info(sd, "Can't read Input/Output color space\n");
-+	} else {
-+		reg_io_0x02 = ret;
+ /* place to store all the necessary device information */
+ struct av7110 {
+ 	/* devices */
+@@ -163,7 +165,7 @@ struct av7110 {
+ 
+ 	/* CA */
+ 
+-	struct ca_slot_info	ci_slot[2];
++	struct ca_slot_info	ci_slot[MAX_CI_SLOTS];
+ 
+ 	enum av7110_video_mode	vidmode;
+ 	struct dmxdev		dmxdev;
+diff --git a/drivers/staging/media/av7110/av7110_ca.c b/drivers/staging/media/av7110/av7110_ca.c
+index 6ce212c64e5d..fce4023c9dea 100644
+--- a/drivers/staging/media/av7110/av7110_ca.c
++++ b/drivers/staging/media/av7110/av7110_ca.c
+@@ -26,23 +26,28 @@
+ 
+ void CI_handle(struct av7110 *av7110, u8 *data, u16 len)
+ {
++	unsigned slot_num;
 +
-+		v4l2_info(sd, "Input color space: %s\n",
-+				input_color_space_txt[reg_io_0x02 >> 4]);
-+		v4l2_info(sd, "Output color space: %s %s, alt-gamma %s\n",
-+				(reg_io_0x02 & 0x02) ? "RGB" : "YCbCr",
-+				(((reg_io_0x02 >> 2) & 0x01) ^ (reg_io_0x02 & 0x01)) ?
-+					"(16-235)" : "(0-255)",
-+				(reg_io_0x02 & 0x08) ? "enabled" : "disabled");
-+	}
- 	v4l2_info(sd, "Color space conversion: %s\n",
- 			csc_coeff_sel_rb[cp_read(sd, info->cp_csc) >> 4]);
+ 	dprintk(8, "av7110:%p\n", av7110);
+ 
+ 	if (len < 3)
+ 		return;
+ 	switch (data[0]) {
+ 	case CI_MSG_CI_INFO:
+-		if (data[2] != 1 && data[2] != 2)
++		if (data[2] != 1 && data[2] != MAX_CI_SLOTS)
+ 			break;
++
++		slot_num = array_index_nospec(data[2] - 1, MAX_CI_SLOTS);
++
+ 		switch (data[1]) {
+ 		case 0:
+-			av7110->ci_slot[data[2] - 1].flags = 0;
++			av7110->ci_slot[slot_num].flags = 0;
+ 			break;
+ 		case 1:
+-			av7110->ci_slot[data[2] - 1].flags |= CA_CI_MODULE_PRESENT;
++			av7110->ci_slot[slot_num].flags |= CA_CI_MODULE_PRESENT;
+ 			break;
+ 		case 2:
+-			av7110->ci_slot[data[2] - 1].flags |= CA_CI_MODULE_READY;
++			av7110->ci_slot[slot_num].flags |= CA_CI_MODULE_READY;
+ 			break;
+ 		}
+ 		break;
+@@ -262,15 +267,19 @@ static int dvb_ca_ioctl(struct file *file, unsigned int cmd, void *parg)
+ 	case CA_GET_SLOT_INFO:
+ 	{
+ 		struct ca_slot_info *info = (struct ca_slot_info *)parg;
++		unsigned int slot_num;
+ 
+ 		if (info->num < 0 || info->num > 1) {
+ 			mutex_unlock(&av7110->ioctl_mutex);
+ 			return -EINVAL;
+ 		}
+-		av7110->ci_slot[info->num].num = info->num;
+-		av7110->ci_slot[info->num].type = FW_CI_LL_SUPPORT(av7110->arm_app) ?
+-							CA_CI_LINK : CA_CI;
+-		memcpy(info, &av7110->ci_slot[info->num], sizeof(struct ca_slot_info));
++		slot_num = array_index_nospec(info->num, MAX_CI_SLOTS);
++
++		av7110->ci_slot[slot_num].num = info->num;
++		av7110->ci_slot[slot_num].type = FW_CI_LL_SUPPORT(av7110->arm_app) ?
++						 CA_CI_LINK : CA_CI;
++		memcpy(info, &av7110->ci_slot[slot_num],
++		       sizeof(struct ca_slot_info));
+ 		break;
+ 	}
  
 -- 
 2.47.0
