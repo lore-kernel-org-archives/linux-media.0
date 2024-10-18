@@ -1,90 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6A3187FE0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791D818785D;
 	Fri, 18 Oct 2024 05:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729230807; cv=none; b=F7BLBQzumm5YDvwWoQV2D28mpqOS8b3UQ43mxx5wXPns2QzrlU2Hy9whed1brHjKO4D9JMvY9VmQsYKBZO607G7rA5AnHctptWYfOCb+0gRvRcaj4DyjYTOsJOpRYctkSq9UR43Zev+mhGSpSTVVOoLQvEVyhEq+IAqjWzMV7wo=
+	t=1729230807; cv=none; b=KyC2Fn8pGFYivFz9EvtLKl6KyCOtvijiuZ/kkaFG/Wbe2AMxh2xvgKmyE4/M9uzfsk79ApqjaTxaHsymkw7G4UjFzELKbd25gvLVK9WpP+yDlqPYWIT2byNkTwfqkticvpaHFw2YlLRWzKY8jTPJD1vn0qzs8CT8R+dhcHCu3Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729230807; c=relaxed/simple;
-	bh=O3hpbSeOL0uAXgzCljfnSBcEgFxc7j1/lfQWoHbchgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ckx6xNybMmsWtyAAeOALr9av6WKuD/Okg17OpJMnQGeA66xP3IWnQ/BmdEQQQVTTNvefzzA1HYYYbbpNgJswZ8c7/amQDIcU04XhyOPP/RuAXMmGxAf3tnRCc4hTbdmtf0aV4ACSCQ660d71oFCJlZh7wuk8ORjzUgSJ1Rh544Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuxLdK4g; arc=none smtp.client-ip=10.30.226.201
+	bh=aG6hoMo4uzmVEhnDz98AaAEGaoD34QTsOAO33KKqS9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XC1s1pgiwn3ZdcN2C2IH6D5BZxuqFj6yQvwDL0r+q28P/ddCmd4aBqLUaxrkuaO1AKGOZgXtg3FhGhc9Q90FJYrcZl8w8CmgCuCbKUBYYP19i4K8XDRJYgHtOCk2VjL9Rx9VYtU3BzRYWe9f8WE1rVBD2zyugcPk/v6IXh/s5k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mr2euONv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuxLdK4g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7034C4CED9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mr2euONv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFCCC4CED4;
 	Fri, 18 Oct 2024 05:53:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729230806;
-	bh=O3hpbSeOL0uAXgzCljfnSBcEgFxc7j1/lfQWoHbchgM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cuxLdK4gBqS2R0swC80bPRnaFtVyfJxdsfDtSfTKX+y6+suQ6QP83aHyUQMfMmrMm
-	 2xcCh/m61LZydV47EM0tej5yVlJY1xx+UfW10I2dvTZ6bg9SfUafUkWVNdoKtHqmoU
-	 2u9Da5GzfToHh0c6E+NQeT6F1AB8YTilpx78F91EmWCpWZ6/C0fXhOMM2ZNMc/NFg2
-	 q3QczZuUuZfNeNoAD1KpQqWE1cdhAF7TZ8JUMpRjkpJ4tTWnavEhgdQ5LEKuWoK7kW
-	 upy1qWsY8aCS4kWDMmL1AVUfK2Ko53Y0aFdHYJXwK1wyxNQt9ZTryW3YCxiWGbw+UV
-	 OWGDADwHx50Dw==
+	bh=aG6hoMo4uzmVEhnDz98AaAEGaoD34QTsOAO33KKqS9g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Mr2euONv4fUfZDP/s3EqyB2EvuHMXCn53FiDk83Ep31dnZX5NT9xksVhYGFJ9AZub
+	 WLiyV9o5/SGvI1a5R3mbU5b6Cc6jhPC8PLIp8AU2d1YzwVcVz7ug+uL3TkOVnLeJMH
+	 /45FX3+jmX8kQMtQ9OPF/cWVG7bfYCAJ+BYdSg+i9pPiO7aqUqalA70ohGe4/YhHKE
+	 Vpam9QFxLYw3tGa8feJ8endFQyjYQp2ss6AGczaSUYrPL89mkdh2EDmdCQFr0VDhHh
+	 DT8jU+y8BEZDjh5LJUeJtE1AHccZfzpIaWVtaSTpFki0Dmuh1kKAOy/jQwGeiwMgRA
+	 z+wXkxCJH2lvw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1t1fvQ-00000005MeP-21Cp;
+	id 1t1fvQ-00000005Mdu-18To;
 	Fri, 18 Oct 2024 07:53:24 +0200
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	=?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2 08/13] media: ar0521: don't overflow when checking PLL values
-Date: Fri, 18 Oct 2024 07:53:10 +0200
-Message-ID: <384bc1320658b93b43838a337b37d52dc8485df2.1729230718.git.mchehab+huawei@kernel.org>
+	linux-staging@lists.linux.dev
+Subject: [PATCH v2 00/13] Media: fix several issues on drivers
+Date: Fri, 18 Oct 2024 07:53:02 +0200
+Message-ID: <cover.1729230718.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1729230718.git.mchehab+huawei@kernel.org>
-References: <cover.1729230718.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The PLL checks are comparing 64 bit integers with 32 bit
-ones, as reported by Coverity. Depending on the values of
-the variables, this may underflow.
+There are a number of issues that aren't passing on smatch or Coverity.
 
-Fix it ensuring that both sides of the expression are u64.
+Address some of them.
 
-Fixes: 852b50aeed15 ("media: On Semi AR0521 sensor driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ar0521.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Mauro Carvalho Chehab (13):
+  media: v4l2-ctrls-api: fix error handling for v4l2_g_ctrl()
+  media: v4l2-tpg: prevent the risk of a division by zero
+  media: dvbdev: prevent the risk of out of memory access
+  media: dvb_frontend: don't play tricks with underflow values
+  media: mgb4: protect driver against spectre
+  media: av7110: fix a spectre vulnerability
+  media: s5p-jpeg: prevent buffer overflows
+  media: ar0521: don't overflow when checking PLL values
+  media: cx24116: prevent overflows on SNR calculus
+  media: adv7604: prevent underflow condition when reporting colorspace
+  media: stb0899_algo: initialize cfr before using it
+  media: cec: extron-da-hd-4k-plus: don't use -1 as an error code
+  media: pulse8-cec: fix data timestamp at pulse8_setup()
 
-diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
-index fc27238dd4d3..24873149096c 100644
---- a/drivers/media/i2c/ar0521.c
-+++ b/drivers/media/i2c/ar0521.c
-@@ -255,10 +255,10 @@ static u32 calc_pll(struct ar0521_dev *sensor, u32 freq, u16 *pre_ptr, u16 *mult
- 			continue; /* Minimum value */
- 		if (new_mult > 254)
- 			break; /* Maximum, larger pre won't work either */
--		if (sensor->extclk_freq * (u64)new_mult < AR0521_PLL_MIN *
-+		if (sensor->extclk_freq * (u64)new_mult < (u64)AR0521_PLL_MIN *
- 		    new_pre)
- 			continue;
--		if (sensor->extclk_freq * (u64)new_mult > AR0521_PLL_MAX *
-+		if (sensor->extclk_freq * (u64)new_mult > (u64)AR0521_PLL_MAX *
- 		    new_pre)
- 			break; /* Larger pre won't work either */
- 		new_pll = div64_round_up(sensor->extclk_freq * (u64)new_mult,
+ .../extron-da-hd-4k-plus.c                    |  6 ++---
+ drivers/media/cec/usb/pulse8/pulse8-cec.c     |  2 +-
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c |  3 +++
+ drivers/media/dvb-core/dvb_frontend.c         |  4 +--
+ drivers/media/dvb-core/dvbdev.c               | 17 ++++++++++--
+ drivers/media/dvb-frontends/cx24116.c         |  7 ++++-
+ drivers/media/dvb-frontends/stb0899_algo.c    |  2 +-
+ drivers/media/i2c/adv7604.c                   | 26 ++++++++++++-------
+ drivers/media/i2c/ar0521.c                    |  4 +--
+ drivers/media/pci/mgb4/mgb4_cmt.c             |  2 ++
+ .../platform/samsung/s5p-jpeg/jpeg-core.c     | 17 +++++++-----
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 16 ++++++++----
+ drivers/staging/media/av7110/av7110.h         |  4 ++-
+ drivers/staging/media/av7110/av7110_ca.c      | 25 ++++++++++++------
+ 14 files changed, 94 insertions(+), 41 deletions(-)
+
 -- 
 2.47.0
+
 
