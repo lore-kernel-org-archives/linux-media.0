@@ -1,142 +1,106 @@
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3B515746E;
-	Wed, 23 Oct 2024 08:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.100.241.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0404861FF2
+	for <linux-media@vger.kernel.org>; Wed, 23 Oct 2024 08:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729671976; cv=none; b=ZIpOuTqxY1xY2kbNSeWTT6sgQAXeyDNSvGwk1CZjOt4ltEWLOXVN5Fb3Pjl1Ax4yiFQjMMtykUhKzm4gRxzmxKHgoMG3/4ikZRhIsxWE0Is/enKSh8Qh9e9gma/ZoQ0ljoO9cmrVdJreFZgaciIPT7QHVwgZd4pO7xXoRyw3TwM=
+	t=1729672262; cv=none; b=qGo2P9XDEqlvYdmt4oQ7cCejUzcBp5cIyHOStHeUoedTBQs3JEzG90UNeSSFL7pHPbKTOJ/5iaVPHzjDOl89yICGh9UoSOPK56A9LQ6zbUJxQAZ2isBl0kqRv5Zx2YZWCZoeYVc+TkePM18BkVAU85OTS5Sqv4l1vw0TElGLbWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729671976; c=relaxed/simple;
-	bh=3IJxynij3iV8P5vDgPCGIgHicDhSoCTbzTZ2CMUqVNo=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=nq+/8hjZOIg4M5ejeYlDIIVxSBiCqNMaAOSADqkGexstan/YUDruRjOt0etmsLEssFG/08RLGQvZVUzpfHHK2wwVj+WTuf+oJ0zj5UUD8NwUNz6nWOV1dQoZayVUttBgFTPUv52n7Nff50tD5ijtOCiu6Ga6AXSx12np3kHO4pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=ymUA7U2g; arc=none smtp.client-ip=159.100.241.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
+	s=arc-20240116; t=1729672262; c=relaxed/simple;
+	bh=OdA/Lx/g/+rhQ0Eyv42s39kdQJ47dqmOO55WQ9F/BNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DOUDf+CRWQ0N0vmIyo9SUt05Sad5PhhSIVTp7YtGM17sIY5jyhXdx0VyghmNjfePrF50YUv2OxHsM6y2eluCUroa5GBt5gTm9o/VeCQsGPBszrD5kAg1vmSHkUo5/UTQkqr45hhCqeVMs/LBKuvyJ+ZuPpoJmjvylkMaMXRvpgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UCffsi8r; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="ymUA7U2g"
-Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [151.80.165.199])
-	by relay5.mymailcheap.com (Postfix) with ESMTPS id 6F54720056;
-	Wed, 23 Oct 2024 08:26:13 +0000 (UTC)
-Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
-	by relay2.mymailcheap.com (Postfix) with ESMTPS id D42DA3E8E3;
-	Wed, 23 Oct 2024 10:26:03 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-	by nf2.mymailcheap.com (Postfix) with ESMTPSA id ECDC240071;
-	Wed, 23 Oct 2024 08:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-	t=1729671961; bh=3IJxynij3iV8P5vDgPCGIgHicDhSoCTbzTZ2CMUqVNo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ymUA7U2gTBz+Vd/OJ5ZZtxcNrrxh00VAGv/QpZuFHB6Z3cDCMc+882elOcoJ68pUR
-	 CfsVTJ9GlTT5JVTNgGt2cHIhDHv/D4dYcHzQt2j1XOAnl/Yj6hVTmJ98bgdt9WjYci
-	 e2CZXP/ddqBkRZ7uSUXEGX7KS91FknvE+WCJcjT0=
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 0D5F04127C;
-	Wed, 23 Oct 2024 08:26:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UCffsi8r"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37d58377339so6755507f8f.1
+        for <linux-media@vger.kernel.org>; Wed, 23 Oct 2024 01:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729672259; x=1730277059; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJjPAsY+OlQh98BPt/llnxV3HvdF91YFt70SYWdsuBw=;
+        b=UCffsi8ruJeTbOB+j7Ita1rNp5XIQYORV4U4xd1kLr3gJsfTp2Eky9MjmnpvE0aNb2
+         pk7lzbpud6jko6DJyrxuvm79bc/f8UPsCOjbUcW98QmumfFLiAoPYnbgSKpiA609wFoP
+         vFJ9IBwRXeCD++rhCJj07wxdjiqhr8QSkdNdBqzg+bg0Exr9p11qQgogbT2nqmrILBnm
+         jbQbSNbwYXY6Z8HOt/dTgqMM1Uynpee82hM9QQZUTgYZsje4MY7qBArIACjyo8pcYA3t
+         IrxK5fM3h6STIsF1hEwQgC9w2483mS7uqPmHyuf8M2hkhGft89NzqHxy8rEbPwznqRls
+         CoYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729672259; x=1730277059;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJjPAsY+OlQh98BPt/llnxV3HvdF91YFt70SYWdsuBw=;
+        b=nLPDnDORR4V689ONXVo6roP05dp5+xzAf/9FDHnBWbRZCioOb659ahcYqEsRmwMCyA
+         +WzLwj0OMYQqM2JZUAAwyixIVHOe9uc93X1/e/FgNjUgoRXOIWBFXHHfz9ivCGOAe3V5
+         G24dNLm9oM9XokSuTWlqC5YjtYwd/dFjscDlHGhfDfno7EAlcPDUeOXRiF51Yw83yORs
+         qRa8OHYdiv8tvh2sDZzdUiFfgv99N6WDwCvfVSBbsWYWls8T6Yz4wjXpTOAfsRyqRyA4
+         cnniidGZDXeHj2awBu+zDNPpbSarvJcqi6PURMREAHhAPF9sZdgYKsX6xIvZHbH55ATQ
+         K1AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWjdaNFl8fJDacl4e6wlQhc+8m++fRr8jptiUBJmwlqqKosVevCswfYCw0LxwxNJa+4brPP0a90QLgjQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkRqL5M8hvzPV8L1ctYATU8mfaYkzIzI2wUyAqFdee1xGGkNQN
+	1ojZ7f4FoN36ij8W3cX+S9Y0bSXGtkp+fArt4wlkc6uuo82szaShzfnzo7+8bqo=
+X-Google-Smtp-Source: AGHT+IHPU6nYNwgDM+9I4opxX+G8CARI27qe3xwEGfD9/YcLKJqmhTD/E8EfYj2M4UlFJjONaqKbmA==
+X-Received: by 2002:a5d:51c4:0:b0:37d:47e0:45fb with SMTP id ffacd0b85a97d-37efcf060f6mr1389418f8f.21.1729672259340;
+        Wed, 23 Oct 2024 01:30:59 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a58cc2sm8381119f8f.54.2024.10.23.01.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 01:30:58 -0700 (PDT)
+Date: Wed, 23 Oct 2024 11:30:55 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Naushir Patuck <naush@raspberrypi.com>, linux-media@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH next] media: raspberrypi: Do some cleanup in probe()
+Message-ID: <fff40b7a-20cd-4933-9534-1f72435bded8@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 23 Oct 2024 16:26:00 +0800
-From: Mingcong Bai <jeffbai@aosc.io>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: gregkh@linuxfoundation.org, patches@lists.linux.dev, nikita@trvn.ru,
- ink@jurassic.park.msu.ru, shc_work@mail.ru, richard.henderson@linaro.org,
- mattst88@gmail.com, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, fancer.lancer@gmail.com,
- linux-hwmon@vger.kernel.org, dmaengine@vger.kernel.org, xeb@mail.ru,
- netdev@vger.kernel.org, s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
- serjk@netup.ru, aospan@netup.ru, linux-media@vger.kernel.org,
- ddrokosov@sberdevices.ru, linux-iio@vger.kernel.org, v.georgiev@metrotek.ru,
- linux-mips@vger.kernel.org, ntb@lists.linux.dev,
- linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-spi@vger.kernel.org, dushistov@mail.ru,
- manivannan.sadhasivam@linaro.org, conor.dooley@microchip.com,
- linux-fpga@vger.kernel.org, tsbogend@alpha.franken.de,
- hoan@os.amperecomputing.com, geert@linux-m68k.org,
- wsa+renesas@sang-engineering.com
-Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various
- compliance requirements.
-In-Reply-To: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
-References: <2024101835-tiptop-blip-09ed@gregkh>
- <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
- <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
-Message-ID: <444fa53bdfdee75522a1af41655a99b0@aosc.io>
-X-Sender: jeffbai@aosc.io
-Organization: Anthon Open Source Community
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Server: nf2.mymailcheap.com
-X-Rspamd-Queue-Id: ECDC240071
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [1.40 / 10.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MIME_GOOD(-0.10)[text/plain];
-	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ONE(0.00)[1];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	TAGGED_RCPT(0.00)[renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,mail.ru];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,lists.linux.dev,trvn.ru,jurassic.park.msu.ru,mail.ru,linaro.org,gmail.com,vger.kernel.org,lists.infradead.org,omp.ru,netup.ru,sberdevices.ru,metrotek.ru,microchip.com,alpha.franken.de,os.amperecomputing.com,linux-m68k.org,sang-engineering.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MISSING_XM_UA(0.00)[]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-No, no, no. Nuh, uh.
+If devm_clk_get() fails then we need to free "cfe" before returning.
 
-Greg has unfortunately decided to respond in private over a matter that 
-by no means should be glossed over. Here below is our conversation:
-
+Fixes: 6edb685abb2a ("media: raspberrypi: Add support for RP1-CFE")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
+ drivers/media/platform/raspberrypi/rp1-cfe/cfe.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Greetings,
+diff --git a/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c b/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
+index 045910de6c57..1da58b07c1d3 100644
+--- a/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
++++ b/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
+@@ -2343,9 +2343,11 @@ static int cfe_probe(struct platform_device *pdev)
+ 
+ 	/* TODO: Enable clock only when running. */
+ 	cfe->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(cfe->clk))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(cfe->clk),
+-				     "clock not found\n");
++	if (IS_ERR(cfe->clk)) {
++		ret = dev_err_probe(&pdev->dev, PTR_ERR(cfe->clk),
++				    "clock not found\n");
++		goto err_cfe_put;
++	}
+ 
+ 	cfe->mdev.dev = &pdev->dev;
+ 	cfe->mdev.ops = &cfe_media_device_ops;
+-- 
+2.45.2
 
-在 2024-10-23 15:55，Greg KH 写道：
-
-> On Wed, Oct 23, 2024 at 03:32:50PM +0800, Mingcong Bai wrote:
-> 
->> Greetings all,
-> 
-> <offlist>
-
-Request declined. Your response is now public knowledge (and hey, if 
-this is not by your will, my apologies). Again, this matter requires 
-public response.
-
-> 在 2024-10-23 14:30，WangYuli 写道： Although this commit has been merged, 
-> it's still important to know the
-> specific reason (or even an example) that triggered this change for
-> everyone here, right?
-> 
-> And those maintainers who have been removed should be notified.
-> Seconded.
-
-Sorry, but that's not how this is allowed to work.  Please contact your
-company lawyers if you have any questions about this.  And this only
-affects maintainers, as you aren't listed in the MAINTAINERS file, there
-should not be any issue, but again, contact your company if you have any
-questions as they know what is going on.
-
-Just *wink* if you were compelled into this.
-
-> thanks,
-> 
-> greg k-h
-
-Best Regards,
-Mingcong Bai
