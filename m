@@ -1,185 +1,267 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6266189BB9
-	for <linux-media@vger.kernel.org>; Thu, 24 Oct 2024 06:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A758166F14
+	for <linux-media@vger.kernel.org>; Thu, 24 Oct 2024 07:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729750703; cv=none; b=gx9p1oBIeV93o3v/9OvNni7g7FIAoZaTT4KNPC53kii8TH9/mbv+sWxXz3YvxLk4axn+b8ej1h/40ESS50bSO52GczPY1ivuZxvdCOB9EWdjQxRWNa3u+isSw1sABUrCGa/ZPspRNoC9Z41hl4iaILHBCh29gcnLGQC6xYEoNgM=
+	t=1729754888; cv=none; b=shrIJ5BstA3cJyEt3mFR1TFshkGuKIk6lJnDOsQ9P1tSW1w9mRxq0c6lQPTMhilUlYBjlAANZiig7PdMxFxZxba8aj4bQlv4c56GlgKheUJfNEUSdhhm3frqrIWNjGtOGro4v/q/RZqM94hKwX1ckXdue2aIrjLvp1P/xCH68/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729750703; c=relaxed/simple;
-	bh=WuW3DSRWAirPU5hoOMSkM7ECIZU6B8b6JvmaEpe9eXM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FXg5+l/QYRXFKNXm9uGCC3H3WsmfLgFF9hkRmTJaeAUdU0or2SHAM2imev2ULKoAQQoQ+rW3z0T96jeQSqq+vmy2vdr5rNorwhpL5Q9LLj4fEndUGWoq5yEUNWQSisMFzcMo+HQYR0NkSqRcSDyUqgF9IEDhG+NJWx6HWnT/Rx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=F3JvfKWB; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1729754888; c=relaxed/simple;
+	bh=qBnt9agVmzFcipNsdMc0yoEhzAnQMrB0WlPk43NEI2Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ukVqGc0qWFSkssXUvUIJzi+YlgOgQnFVPDduq9eQHszQPCgNycvhFCCW2HxghpNFe5j0n2+zn7KGUM27Bic6Lrzc6uHrFS5w8ZUwUhZfyqbbNwNkN5kAF6rSimHodr7nwL9OWNMkoOdePuTMT/dF9pHvjGDu+zp07a8Ct+MSe7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GCiNEpM7; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F3JvfKWB"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20b5affde14so3425755ad.3
-        for <linux-media@vger.kernel.org>; Wed, 23 Oct 2024 23:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729750701; x=1730355501; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f0OqRfY2laRwHMvcPD1Pi9U6AIj3M+h1HSZ0JUx96vI=;
-        b=F3JvfKWBfvM1nF5EXBeImSyb7m4kuQa+pu7UNX3NqOTKgVk3UXxy4j1bCPz7nxvqXp
-         cshoOThG8TNEXx3nQC0V+m/5j045UpjCabhavKsOSG2qNt9xPF7vV7QRQvUkG12Jrx9S
-         fWIRMUOd7MGhXtYKMgPE/hHeuqRu8JVcFnzXk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729750701; x=1730355501;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f0OqRfY2laRwHMvcPD1Pi9U6AIj3M+h1HSZ0JUx96vI=;
-        b=c6COOuBmx1mqOtr2mqUtm6ACEhx1DSMYUaCAR3AYFwTIyiloDYbIZGXAueeB5zSdnp
-         dDfADOJEL4d8LYwe1dM84ekV7K6hPED9UVn2uQdAnSOP7QD0JlqYMlRQ5/njGLi6odyI
-         q33LJngTKZ6qWK+24A0uEDXK9bAi9FsM+O0jXRMCsegTFSTmOFg9qCq0WlltEew8jaJY
-         lCB4vfVV1qX75g3YpdID3qIXCWiS5w8Y4UzJuqr4ZC4MLI+D0MgWxSua9h+LWI1wqYI9
-         RkCVyZ5egJ//KSbf0JGyoPOhIu1ZqmbP4NMl49uzM3ICsMHlBnLX7Jyb8TpVHynI5byx
-         VWmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUWiT9VdQNX3IEEk8tR3NpSTK6k5aIHTakQAzGwt3Lv8aoAMTAfApcw+3Yc8n0p58ACE8FkzCETLXkyig==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzH5MDwlyP15XVzohjnNC+x1g24+0RvrDQ9TTZ6Ts2mUsVW5V6s
-	fcs7lNA/VsUpc/AftCiAXvLVOx8S0BDozwdR7xOEQnt9AuXzTErjFYjVoEqv2g==
-X-Google-Smtp-Source: AGHT+IGyrwOn7tzkbta+g7U9TkeZyz17lEZfo9cb63EG+ys7jvJGIRRiUSGDj69jHCpOWx+csWxVJw==
-X-Received: by 2002:a17:902:da84:b0:20c:a644:c5bf with SMTP id d9443c01a7336-20fb99d958bmr7388245ad.31.1729750700921;
-        Wed, 23 Oct 2024 23:18:20 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:9422:d958:f749:9a30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0bd561sm66418885ad.179.2024.10.23.23.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 23:18:20 -0700 (PDT)
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>
-Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv2 2/2] media: venus: sync with threaded IRQ during inst destruction
-Date: Thu, 24 Oct 2024 15:16:58 +0900
-Message-ID: <20241024061809.400260-3-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-In-Reply-To: <20241024061809.400260-1-senozhatsky@chromium.org>
-References: <20241024061809.400260-1-senozhatsky@chromium.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GCiNEpM7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729754886; x=1761290886;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=qBnt9agVmzFcipNsdMc0yoEhzAnQMrB0WlPk43NEI2Q=;
+  b=GCiNEpM7lbAx2Do4mTZyOcBPPLv63NEy1uF7eTOc42CT4UunLKBEywX/
+   dZAWt8sisATCz1RbII0qGOUMklTPf9FO4Cs5dFGcefP5u0hVwo5U5flpr
+   8kvgwVTWKzDUOxp27Lhx3fMohLMeuW+nna4ezeHrfxMwXwzTvPm1BfqMX
+   2M9RVERVkCWSqJbHILTmZaOgOvglGL8VKWqMJ0jTSMlovxk/1NRRATlza
+   Lgz9LpzniAAf2ESw7B5LYjnWOpffHVk824XrpmFfxvxFDh35TiS9h71fV
+   C3OQPjxtwG3HL0J6DIC1/0xAx9eXn1PkTKNSreL2/onIwURQvwG+/SgtA
+   A==;
+X-CSE-ConnectionGUID: 0HNFFKvGRJ+ExOxmR8SwFg==
+X-CSE-MsgGUID: 0kRPJXjIShyzO5Ry3JW25g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39913994"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="39913994"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 00:27:59 -0700
+X-CSE-ConnectionGUID: xHItnWmAT0uNJYGWg2OIyA==
+X-CSE-MsgGUID: aMUxyskzSSucXOWV/wAUSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,228,1725346800"; 
+   d="scan'208";a="103826735"
+Received: from ipu5-build.bj.intel.com ([10.238.232.136])
+  by fmviesa002.fm.intel.com with ESMTP; 24 Oct 2024 00:27:52 -0700
+From: Bingbu Cao <bingbu.cao@intel.com>
+To: linux-media@vger.kernel.org,
+	sakari.ailus@linux.intel.com
+Cc: bingbu.cao@intel.com,
+	bingbu.cao@linux.intel.com
+Subject: [PATCH 2/4] media: ipu6: optimize the IPU6 MMU mapping flow
+Date: Thu, 24 Oct 2024 15:24:37 +0800
+Message-Id: <1729754679-6402-2-git-send-email-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1729754679-6402-1-git-send-email-bingbu.cao@intel.com>
+References: <1729754679-6402-1-git-send-email-bingbu.cao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-When destroying an inst we should make sure that we don't race
-against threaded IRQ (or pending IRQ), otherwise we can concurrently
-kfree() inst context and inst itself.
+ipu6_mmu_map() operated on a per-page basis, it leads frequent
+spin_lock/unlock() and clflush_cache_range() for each page, it
+will cause inefficiencies especially when handling dma-bufs
+with large number of pages. However, the pages are likely concentrated
+pages by IOMMU DMA driver, IPU MMU driver can map the concentrated
+pages into less entries in l1 table.
 
-BUG: KASAN: slab-use-after-free in vb2_queue_error+0x80/0x90
-Call trace:
-dump_backtrace+0x1c4/0x1f8
-show_stack+0x38/0x60
-dump_stack_lvl+0x168/0x1f0
-print_report+0x170/0x4c8
-kasan_report+0x94/0xd0
-__asan_report_load2_noabort+0x20/0x30
-vb2_queue_error+0x80/0x90
-venus_helper_vb2_queue_error+0x54/0x78
-venc_event_notify+0xec/0x158
-hfi_event_notify+0x878/0xd20
-hfi_process_msg_packet+0x27c/0x4e0
-venus_isr_thread+0x258/0x6e8
-hfi_isr_thread+0x70/0x90
-venus_isr_thread+0x34/0x50
-irq_thread_fn+0x88/0x130
-irq_thread+0x160/0x2c0
-kthread+0x294/0x328
-ret_from_fork+0x10/0x20
+This change enhances ipu6_mmu_map() with batching process multiple
+contiguous pages. It significantly reduces calls for spin_lock/unlock
+and clflush_cache_range() and improve the performance.
 
-Allocated by task 20291:
-kasan_set_track+0x4c/0x80
-kasan_save_alloc_info+0x28/0x38
-__kasan_kmalloc+0x84/0xa0
-kmalloc_trace+0x7c/0x98
-v4l2_m2m_ctx_init+0x74/0x280
-venc_open+0x444/0x6d0
-v4l2_open+0x19c/0x2a0
-chrdev_open+0x374/0x3f0
-do_dentry_open+0x710/0x10a8
-vfs_open+0x88/0xa8
-path_openat+0x1e6c/0x2700
-do_filp_open+0x1a4/0x2e0
-do_sys_openat2+0xe8/0x508
-do_sys_open+0x15c/0x1a0
-__arm64_sys_openat+0xa8/0xc8
-invoke_syscall+0xdc/0x270
-el0_svc_common+0x1ec/0x250
-do_el0_svc+0x54/0x70
-el0_svc+0x50/0xe8
-el0t_64_sync_handler+0x48/0x120
-el0t_64_sync+0x1a8/0x1b0
-
-Re-arragne inst destruction.  First remove the inst from the
-core ->instacnes list, second synchronize IRQ/IRQ-thread to
-make sure that nothing else would see the inst while we take
-it down.
-
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+Signed-off-by: Jianhui Dai <jianhui.j.dai@intel.com>
 ---
- drivers/media/platform/qcom/venus/vdec.c | 12 +++++++++++-
- drivers/media/platform/qcom/venus/venc.c | 12 +++++++++++-
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ drivers/media/pci/intel/ipu6/ipu6-mmu.c | 144 +++++++++++++++-----------------
+ 1 file changed, 69 insertions(+), 75 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 0013c4704f03..b3192a36f388 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1750,10 +1750,20 @@ static int vdec_close(struct file *file)
- 	vdec_pm_get(inst);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-mmu.c b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+index 9ea6789bca5e..e957ccb4691d 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-mmu.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+@@ -295,72 +295,90 @@ static size_t l2_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+ static int l2_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+ 		  phys_addr_t paddr, size_t size)
+ {
+-	u32 l1_idx = iova >> ISP_L1PT_SHIFT;
+-	u32 iova_start = iova;
++	struct device *dev = mmu_info->dev;
++	unsigned int l2_entries;
+ 	u32 *l2_pt, *l2_virt;
+ 	unsigned int l2_idx;
+ 	unsigned long flags;
++	size_t mapped = 0;
+ 	dma_addr_t dma;
+ 	u32 l1_entry;
+-
+-	dev_dbg(mmu_info->dev,
+-		"mapping l2 page table for l1 index %u (iova %8.8x)\n",
+-		l1_idx, (u32)iova);
++	u32 l1_idx;
++	int err = 0;
  
- 	cancel_work_sync(&inst->delayed_process_work);
-+	/*
-+	 * First, remove the inst from the ->instances list, so that
-+	 * to_instance() will return NULL.
-+	 */
-+	hfi_session_destroy(inst);
-+	/*
-+	 * Second, make sure we don't have IRQ/IRQ-thread currently running
-+	 * or pending execution, which would race with the inst destruction.
-+	 */
-+	synchronize_irq(inst->core->irq);
+ 	spin_lock_irqsave(&mmu_info->lock, flags);
+-	l1_entry = mmu_info->l1_pt[l1_idx];
+-	if (l1_entry == mmu_info->dummy_l2_pteval) {
+-		l2_virt = mmu_info->l2_pts[l1_idx];
+-		if (likely(!l2_virt)) {
+-			l2_virt = alloc_l2_pt(mmu_info);
+-			if (!l2_virt) {
+-				spin_unlock_irqrestore(&mmu_info->lock, flags);
+-				return -ENOMEM;
+-			}
+-		}
+-
+-		dma = map_single(mmu_info, l2_virt);
+-		if (!dma) {
+-			dev_err(mmu_info->dev, "Failed to map l2pt page\n");
+-			free_page((unsigned long)l2_virt);
+-			spin_unlock_irqrestore(&mmu_info->lock, flags);
+-			return -EINVAL;
+-		}
+-
+-		l1_entry = dma >> ISP_PADDR_SHIFT;
+-
+-		dev_dbg(mmu_info->dev, "page for l1_idx %u %p allocated\n",
+-			l1_idx, l2_virt);
+-		mmu_info->l1_pt[l1_idx] = l1_entry;
+-		mmu_info->l2_pts[l1_idx] = l2_virt;
+-		clflush_cache_range((void *)&mmu_info->l1_pt[l1_idx],
+-				    sizeof(mmu_info->l1_pt[l1_idx]));
+-	}
+-
+-	l2_pt = mmu_info->l2_pts[l1_idx];
+-
+-	dev_dbg(mmu_info->dev, "l2_pt at %p with dma 0x%x\n", l2_pt, l1_entry);
+ 
+ 	paddr = ALIGN(paddr, ISP_PAGE_SIZE);
++	for (l1_idx = iova >> ISP_L1PT_SHIFT;
++	     size > 0 && l1_idx < ISP_L1PT_PTES; l1_idx++) {
++		dev_dbg(dev,
++			"mapping l2 page table for l1 index %u (iova %8.8x)\n",
++			l1_idx, (u32)iova);
+ 
+-	l2_idx = (iova_start & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT;
++		l1_entry = mmu_info->l1_pt[l1_idx];
++		if (l1_entry == mmu_info->dummy_l2_pteval) {
++			l2_virt = mmu_info->l2_pts[l1_idx];
++			if (likely(!l2_virt)) {
++				l2_virt = alloc_l2_pt(mmu_info);
++				if (!l2_virt) {
++					err = -ENOMEM;
++					goto error;
++				}
++			}
+ 
+-	dev_dbg(mmu_info->dev, "l2_idx %u, phys 0x%8.8x\n", l2_idx,
+-		l2_pt[l2_idx]);
+-	if (l2_pt[l2_idx] != mmu_info->dummy_page_pteval) {
+-		spin_unlock_irqrestore(&mmu_info->lock, flags);
+-		return -EINVAL;
++			dma = map_single(mmu_info, l2_virt);
++			if (!dma) {
++				dev_err(dev, "Failed to map l2pt page\n");
++				free_page((unsigned long)l2_virt);
++				err = -EINVAL;
++				goto error;
++			}
 +
- 	v4l2_m2m_ctx_release(inst->m2m_ctx);
- 	v4l2_m2m_release(inst->m2m_dev);
- 	ida_destroy(&inst->dpb_ids);
--	hfi_session_destroy(inst);
- 	v4l2_fh_del(&inst->fh);
- 	v4l2_fh_exit(&inst->fh);
- 	vdec_ctrl_deinit(inst);
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 6a26a6592424..36981ce448f5 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -1517,9 +1517,19 @@ static int venc_close(struct file *file)
- 
- 	venc_pm_get(inst);
- 
-+	/*
-+	 * First, remove the inst from the ->instances list, so that
-+	 * to_instance() will return NULL.
-+	 */
-+	hfi_session_destroy(inst);
-+	/*
-+	 * Second, make sure we don't have IRQ/IRQ-thread currently running
-+	 * or pending execution, which would race with the inst destruction.
-+	 */
-+	synchronize_irq(inst->core->irq);
++			l1_entry = dma >> ISP_PADDR_SHIFT;
 +
- 	v4l2_m2m_ctx_release(inst->m2m_ctx);
- 	v4l2_m2m_release(inst->m2m_dev);
--	hfi_session_destroy(inst);
- 	v4l2_fh_del(&inst->fh);
- 	v4l2_fh_exit(&inst->fh);
- 	venc_ctrl_deinit(inst);
++			dev_dbg(dev, "page for l1_idx %u %p allocated\n",
++				l1_idx, l2_virt);
++			mmu_info->l1_pt[l1_idx] = l1_entry;
++			mmu_info->l2_pts[l1_idx] = l2_virt;
++
++			clflush_cache_range(&mmu_info->l1_pt[l1_idx],
++					    sizeof(mmu_info->l1_pt[l1_idx]));
++		}
++
++		l2_pt = mmu_info->l2_pts[l1_idx];
++		l2_entries = 0;
++
++		for (l2_idx = (iova & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT;
++		     size > 0 && l2_idx < ISP_L2PT_PTES; l2_idx++) {
++			l2_pt[l2_idx] = paddr >> ISP_PADDR_SHIFT;
++
++			dev_dbg(dev, "l2 index %u mapped as 0x%8.8x\n", l2_idx,
++				l2_pt[l2_idx]);
++
++			iova += ISP_PAGE_SIZE;
++			paddr += ISP_PAGE_SIZE;
++			mapped += ISP_PAGE_SIZE;
++			size -= ISP_PAGE_SIZE;
++
++			l2_entries++;
++		}
++
++		WARN_ON_ONCE(!l2_entries);
++		clflush_cache_range(&l2_pt[l2_idx - l2_entries],
++				    sizeof(l2_pt[0]) * l2_entries);
+ 	}
+ 
+-	l2_pt[l2_idx] = paddr >> ISP_PADDR_SHIFT;
+-
+-	clflush_cache_range((void *)&l2_pt[l2_idx], sizeof(l2_pt[l2_idx]));
+ 	spin_unlock_irqrestore(&mmu_info->lock, flags);
+ 
+-	dev_dbg(mmu_info->dev, "l2 index %u mapped as 0x%8.8x\n", l2_idx,
+-		l2_pt[l2_idx]);
+-
+ 	return 0;
++
++error:
++	spin_unlock_irqrestore(&mmu_info->lock, flags);
++	/* unroll mapping in case something went wrong */
++	if (mapped)
++		l2_unmap(mmu_info, iova - mapped, paddr - mapped, mapped);
++
++	return err;
+ }
+ 
+ static int __ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+@@ -692,10 +710,7 @@ size_t ipu6_mmu_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+ int ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+ 		 phys_addr_t paddr, size_t size)
+ {
+-	unsigned long orig_iova = iova;
+ 	unsigned int min_pagesz;
+-	size_t orig_size = size;
+-	int ret = 0;
+ 
+ 	if (mmu_info->pgsize_bitmap == 0UL)
+ 		return -ENODEV;
+@@ -718,28 +733,7 @@ int ipu6_mmu_map(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+ 	dev_dbg(mmu_info->dev, "map: iova 0x%lx pa %pa size 0x%zx\n",
+ 		iova, &paddr, size);
+ 
+-	while (size) {
+-		size_t pgsize = ipu6_mmu_pgsize(mmu_info->pgsize_bitmap,
+-						iova | paddr, size);
+-
+-		dev_dbg(mmu_info->dev,
+-			"mapping: iova 0x%lx pa %pa pgsize 0x%zx\n",
+-			iova, &paddr, pgsize);
+-
+-		ret = __ipu6_mmu_map(mmu_info, iova, paddr, pgsize);
+-		if (ret)
+-			break;
+-
+-		iova += pgsize;
+-		paddr += pgsize;
+-		size -= pgsize;
+-	}
+-
+-	/* unroll mapping in case something went wrong */
+-	if (ret)
+-		ipu6_mmu_unmap(mmu_info, orig_iova, orig_size - size);
+-
+-	return ret;
++	return __ipu6_mmu_map(mmu_info, iova, paddr, size);
+ }
+ 
+ static void ipu6_mmu_destroy(struct ipu6_mmu *mmu)
 -- 
-2.47.0.163.g1226f6d8fa-goog
+2.7.4
 
