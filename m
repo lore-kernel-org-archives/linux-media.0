@@ -1,174 +1,227 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C151ABEB1;
-	Thu, 24 Oct 2024 10:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B0D1B85DF
+	for <linux-media@vger.kernel.org>; Thu, 24 Oct 2024 10:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729764086; cv=none; b=c3deY2buR/TSUyOa2t+z9mU9JLLPZIMrq1XN1xyYuedlJyjIVi72doWTLbvpHmLdr7yr7qeUwuLtnN5whFMafUrDGjoucrug+3uWFVkGhwRT099uMV7vYrYM7N29guP3Qvd9btpnrzFm19SeH9vRtdF/Q2nUW9+95M7KURrDULU=
+	t=1729764545; cv=none; b=GwEh+fDy5hRxGu2tAIvuFCEKWGb3pmVxY1sq3gDN5g7U3zFWPUybpCdAtXt0PvxnSWHm3uXKe3wHx+DKN9PiLGC33ZrCH5d9Qbia7Kzc2etbFfqfxke3+pz5k8bBiHK9dNMx1vRvOmJy54tleh3xR2FT6vqlhjbEEgnfomqS1Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729764086; c=relaxed/simple;
-	bh=iY1/51zaPHjVqosPGel6QiZiJ04KavIR7kHi6cy2EJM=;
+	s=arc-20240116; t=1729764545; c=relaxed/simple;
+	bh=k1nBt95mDbyhDxbPCLlaIKpMahAyfs6sWuDAOOUJkK4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jTaKuz3oDPCtoPxNuNPdqYHLrKrAOfCXTX5JrKe1cc7lkXNuYKlwJzdamKZalD3Yh6gDIkF4qOYzX7XDoUuJ913lQ0/1JtNZdZXjNNDMC/sJ2AAohunhP9moollVU0cThI3Vsx1khdA+v5bFKpbt6k/CWOJYB421niKwoeW2v+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.ru; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 3854C72C8F5;
-	Thu, 24 Oct 2024 12:53:39 +0300 (MSK)
-Received: by imap.altlinux.org (Postfix, from userid 705)
-	id 336F236D070D; Thu, 24 Oct 2024 12:53:39 +0300 (MSK)
-Date: Thu, 24 Oct 2024 12:53:39 +0300
-From: Michael Shigorin <mike@altlinux.ru>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Tor Vic <torvic9@mailbox.org>, Kexy Biscuit <kexybiscuit@aosc.io>,
-	jeffbai@aosc.io, gregkh@linuxfoundation.org, wangyuli@uniontech.com,
-	aospan@netup.ru, conor.dooley@microchip.com,
-	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org,
-	dushistov@mail.ru, fancer.lancer@gmail.com, geert@linux-m68k.org,
-	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
-	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
-	ntb@lists.linux.dev, patches@lists.linux.dev,
-	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
-	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
-	wsa+renesas@sang-engineering.com, xeb@mail.ru
-Subject: what about CoC? (was: [PATCH] Revert "MAINTAINERS: Remove some
- entries due to various compliance requirements.")
-Message-ID: <20241024095339.GA32487@imap.altlinux.org>
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
- <20241023080935.2945-2-kexybiscuit@aosc.io>
- <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
- <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=V2fejbOjMtBU3KR/szyOMt+iciPHul4aCxLYaPUwonN6NLNZZZNL8dcbHNSvqvRw6NFFUMuyIEOUEDkF1RFJgWBxUkcD8e8xrQPFNZRsnWKWVkZM6JojwGr+PnBZwCfpDwMmkw+X6m3tPTgEvDTupdLfsR8WhUp9G1gO25gk2ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=i3xWoBIO; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="i3xWoBIO"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-208cf673b8dso5360315ad.3
+        for <linux-media@vger.kernel.org>; Thu, 24 Oct 2024 03:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1729764542; x=1730369342; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gURJbTxvaaJOpeAsWXo2fQU4uT2CG3ZOcVs4p24pfVc=;
+        b=i3xWoBIO1r0IIGe+me+s6FBREHfZ7aE7hf+uhcy0rD63pyZ9tovl6qJcwIWneooKNV
+         TeQGdAOufkSDxLPgdUNtJCNUlQ4SCakPWI+D20nnAnSI3n0iKPPmfFiaSoKulVeU20ut
+         gT8IFTurOwNsFTx4g28IdMXGlrtZues1U/j4k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729764542; x=1730369342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gURJbTxvaaJOpeAsWXo2fQU4uT2CG3ZOcVs4p24pfVc=;
+        b=JHR9uTUcyFCDCXLzu9UmJobezRboZNi8D28nEvdWe34vRCGCFF6HYS9ub108IzYbSw
+         8MyjRxCkVfnP1VyPKOt9ptgdhq/+NUxhZikaqw56ba/s2RcikAk1huQz9aUZKKJ26VoE
+         v/LaOP3KSDSDQU3WSvIa/DdBs7AMoYzb4/DY1+SD57YmJlAUROpPvQUSIw62UoP6CKTQ
+         AjPeqWgedUx3Ky2DD6dXi/VmEoFF6bT9fujA02CLri1BRtCwRGqrdCbP9Nlea4fn/goQ
+         iySum/15mhBVkiVJNwr8g/eapdJNHvyRz3Wb17EhmZr3kUlB6ckHecwZpTysRap0bcHw
+         Ks2w==
+X-Forwarded-Encrypted: i=1; AJvYcCW9q+uon+ITcGT0TGEOLEDKlnmORP6FBv/AckrhscN8zATy0D56e6WndwtWcFi4vqXXeVT84ES35lABCQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY53QfLvH4ENcIBrG0vjFT+S0x7cAsHNMdxHrw0rID3tfVvZII
+	1UfgwjOZC9Q8hH86lnNx+74dJ2lGLQd5uqh0ANu0d5laaPL2IFWpAGql/diOZg==
+X-Google-Smtp-Source: AGHT+IHtc6rcq2Eb1JDmXfRILd21AGwvkS2Xsm8gNi7W7PV3DUsh33c9JpHQfgKlZmJXi+AV56J0mg==
+X-Received: by 2002:a17:903:32c2:b0:20c:a7d8:e428 with SMTP id d9443c01a7336-20fb98902a4mr15880505ad.7.1729764542247;
+        Thu, 24 Oct 2024 03:09:02 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:c7f5:2aa6:333b:bb6d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7eee681fsm69715985ad.55.2024.10.24.03.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 03:09:01 -0700 (PDT)
+Date: Thu, 24 Oct 2024 19:08:57 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 2/2] media: venus: sync with threaded IRQ during inst
+ destruction
+Message-ID: <20241024100857.GN1279924@google.com>
+References: <20241024061809.400260-1-senozhatsky@chromium.org>
+ <20241024061809.400260-3-senozhatsky@chromium.org>
+ <4b96f1f8-e084-4599-abe9-05039bfac569@linaro.org>
+ <20241024093916.GM1279924@google.com>
+ <b9a42abd-a078-4740-b070-ba5c86855e73@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <b9a42abd-a078-4740-b070-ba5c86855e73@linaro.org>
 
-как хорошо, что по-русски можно писать то, что думаешь
+On (24/10/24 10:43), Bryan O'Donoghue wrote:
+> > > It also occurs to me that most of the close() operation code is shared
+> > > between venc_close() and vdec_close() a welcome patch for V3 would be to
+> > > functionally decompose the common code to a shared location.
+> > 
+> > Any preferences where that "shared location" should be?
+> 
+> Probably core.c is the only place we can jam stuff to be shared
 
+Ack.
 
-On Wed, Oct 23, 2024 at 10:45:47AM -0700, Linus Torvalds wrote:
-> It's entirely clear why the change was done
+So, we need to
+- export a couple of symbols
+- include vdec header in core
 
-Might seem so to you, but apparently not to those wondering.
+Does something like this look OK to you?
 
-> And FYI for the actual innocent bystanders who aren't troll
-> farm accounts - the "various compliance requirements" are not
-> just a US thing.
+---
 
-US is just another victim of those trotzkist slugs --
-you can ask your father, he must know better *why*
-those have been expelled even by their own ilk
-a century ago here in Russia.
-
-> If you haven't heard of Russian sanctions yet, you should try
-> to read the news some day.  And by "news", I don't mean Russian
-> state-sponsored spam.
-
-Linus, those "news" have cost your family a child already,
-and Elon has paid a similar tax.  You have been limited in
-your right to tell what you think right here in linux-kernel@
-(unless you speak hate against *all* of the Russians, yeah).
-
-You've agreed that black is white and vice versa.  It is not.
-
-> As to sending me a revert patch - please use whatever mush
-> you call brains.
-
-It's not about the patch but rather about the attitude;
-Documentation/process/code-of-conduct-interpretation.rst:
-
-"regardless of ... ethnicity, ... nationality, ... race"
-"Focusing on what is best for the community"
-
-"Examples of unacceptable behavior ... insulting/derogatory
-comments ... Public or private harassment"
-
-Get back to single-standard integrity for yor own's sake.
-
-> I'm Finnish. Did you think I'd be *supporting* Russian
-> aggression?
-
-Have you heard of casus belli?  Do you think these were one?
-
-http://nypost.com/2022/02/21/russia-kills-5-ukrainian-saboteurs-allegedly-trying-to-breach-border/
-http://reuters.com/world/europe/russias-fsb-says-shell-ukrainian-territory-destroys-russian-border-guard-post-2022-02-21/
-
-That's February 21, 2022.  If I yelled all over the place
-about "Finnish invasion" after Russian IFVs have rovered
-Finland *first* for no good reason, would I be right?
-
-Feel free to ask, I actually grew up in Kiev and e.g.
-this bug fix was done there as well:
-
-http://bugzilla.kernel.org/show_bug.cgi?id=15658
-http://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c9e2fbd909c20b165b2b9ffb59f8b674cf0a55b0
-
-Please do revert it too then.
-
-Drop Linux network stack while at that, that "roomful
-of Russian mathematicians" is now declared untermensch.
-
-> Apparently it's not just lack of real news,
-> it's lack of history knowledge too.
-
-On your side, Linus.
-On your side.
-
-Hope you're still Finnish, not a Finnish nazi
-(swap "Russians" with "Jews" in your email and
-re-read it; it's my homegrown "nazi test" --
-if this change suddenly makes a text "nazist",
-it was).
-
-It is the US that has pushed Finland towards NATO,
-basically to follow the grim destiny that the former
-Ukraine currently harvests, and that was prepared
-for Georgia (that evades it), Moldavia (that rishes
-full speed towards destruction), Poland, the three
-Baltic states, and now your homeland.
-
-There is no regulation that can force your own heart.
-Listen to it.  Not to emotions, but to the deep truth
-that never cries aloud.
-
-You bow to the jerks who are *afraid* of opposition,
-because there is no truth in their father.
-
-Remember those who yelled "Assad must go"?
-How many of them are still around?
-Those siding with them perish with them.
-
-
-PS: last time I've seen RMS in Moscow, he declared
-his support "to the Moscow protesters"; I've asked him
-whether he knows that the initial issue was that the
-dead people were identified en masse as those "voting"
-for "democratic" candidates in 2019 elections, and he
-stared at me and answered, "nonsense".  I've emailed
-him after BLM affairs to ask if what he sees makes
-sense but never seen a reply this time -- and dead
-voters turned out to be not a purely export-only
-"technology" a bit later (pretty cosmopolitan).
-
-
-Господи, спаси и сохрани раба Твоего заблуждшего
-Линуса и ближних его во веки веков; аминь!
-
--- 
-Michael Shigorin
-(whose first book on programming was
-Hyvonen and Seppanen's one on LISP)
-http://t.me/anna_news
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 31ea0982f58e..e7c69a292b3c 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -500,6 +500,31 @@ static __maybe_unused int venus_runtime_suspend(struct device *dev)
+ 	return ret;
+ }
+ 
++void venus_close_common(struct venus_inst *inst)
++{
++	/*
++	 * First, remove the inst from the ->instances list, so that
++	 * to_instance() will return NULL.
++	 */
++	hfi_session_destroy(inst);
++	/*
++	 * Second, make sure we don't have IRQ/IRQ-thread currently running
++	 * or pending execution, which would race with the inst destruction.
++	 */
++	synchronize_irq(inst->core->irq);
++
++	v4l2_m2m_ctx_release(inst->m2m_ctx);
++	v4l2_m2m_release(inst->m2m_dev);
++	ida_destroy(&inst->dpb_ids);
++	v4l2_fh_del(&inst->fh);
++	v4l2_fh_exit(&inst->fh);
++	vdec_ctrl_deinit(inst);
++
++	mutex_destroy(&inst->lock);
++	mutex_destroy(&inst->ctx_q_lock);
++}
++EXPORT_SYMBOL_GPL(venus_close_common);
++
+ static __maybe_unused int venus_runtime_resume(struct device *dev)
+ {
+ 	struct venus_core *core = dev_get_drvdata(dev);
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 3748a9a74dce..75e9b29d1b01 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -17,6 +17,7 @@
+ #include "hfi.h"
+ #include "hfi_platform.h"
+ #include "hfi_helper.h"
++#include "vdec.h"
+ 
+ #define VDBGL	"VenusLow : "
+ #define VDBGM	"VenusMed : "
+@@ -569,4 +570,6 @@ is_fw_rev_or_older(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
+ 		(core)->venus_ver.minor == vminor &&
+ 		(core)->venus_ver.rev <= vrev);
+ }
++
++void venus_close_common(struct venus_inst *inst);
+ #endif
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index d802ece8948f..b7d4801222cb 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -1746,29 +1746,8 @@ static int vdec_close(struct file *file)
+ 	struct venus_inst *inst = to_inst(file);
+ 
+ 	vdec_pm_get(inst);
+-
+ 	cancel_work_sync(&inst->delayed_process_work);
+-	/*
+-	 * First, remove the inst from the ->instances list, so that
+-	 * to_instance() will return NULL.
+-	 */
+-	hfi_session_destroy(inst);
+-	/*
+-	 * Second, make sure we don't have IRQ/IRQ-thread currently running
+-	 * or pending execution, which would race with the inst destruction.
+-	 */
+-	synchronize_irq(inst->core->irq);
+-
+-	v4l2_m2m_ctx_release(inst->m2m_ctx);
+-	v4l2_m2m_release(inst->m2m_dev);
+-	ida_destroy(&inst->dpb_ids);
+-	v4l2_fh_del(&inst->fh);
+-	v4l2_fh_exit(&inst->fh);
+-	vdec_ctrl_deinit(inst);
+-
+-	mutex_destroy(&inst->lock);
+-	mutex_destroy(&inst->ctx_q_lock);
+-
++	venus_close_common(inst);
+ 	vdec_pm_put(inst, false);
+ 
+ 	kfree(inst);
+diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+index 7e0f29bf7fae..2b6b2eee619c 100644
+--- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
++++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+@@ -192,3 +192,4 @@ void vdec_ctrl_deinit(struct venus_inst *inst)
+ {
+ 	v4l2_ctrl_handler_free(&inst->ctrl_handler);
+ }
++EXPORT_SYMBOL_GPL(vdec_ctrl_deinit);
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index a72681de1179..55108117d085 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -1537,28 +1537,8 @@ static int venc_close(struct file *file)
+ 	struct venus_inst *inst = to_inst(file);
+ 
+ 	venc_pm_get(inst);
+-
+-	/*
+-	 * First, remove the inst from the ->instances list, so that
+-	 * to_instance() will return NULL.
+-	 */
+-	hfi_session_destroy(inst);
+-	/*
+-	 * Second, make sure we don't have IRQ/IRQ-thread currently running
+-	 * or pending execution, which would race with the inst destruction.
+-	 */
+-	synchronize_irq(inst->core->irq);
+-
+-	v4l2_m2m_ctx_release(inst->m2m_ctx);
+-	v4l2_m2m_release(inst->m2m_dev);
+-	v4l2_fh_del(&inst->fh);
+-	v4l2_fh_exit(&inst->fh);
+-	venc_ctrl_deinit(inst);
+-
++	venus_close_common(inst);
+ 	inst->enc_state = VENUS_ENC_STATE_DEINIT;
+-	mutex_destroy(&inst->lock);
+-	mutex_destroy(&inst->ctx_q_lock);
+-
+ 	venc_pm_put(inst, false);
+ 
+ 	kfree(inst);
