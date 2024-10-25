@@ -1,81 +1,138 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E0E1632F6
-	for <linux-media@vger.kernel.org>; Fri, 25 Oct 2024 13:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE24F206500
+	for <linux-media@vger.kernel.org>; Fri, 25 Oct 2024 13:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729861300; cv=none; b=VqQ6vXwXvWYI7xgghxf4WKt5h+26LW9dLv0ZKOunDHLhF4wlllAagloYtXt2crFSwa3pNR5drwJLkYdY1Hsu3IA09f/+YdG/XIMLUZ1W8fP2PXVIrKmGwv0l1XypAd5zlzzE3HR9t1pjr24Eh1evCbfQGRBT5vAfG7FXn2rZkS8=
+	t=1729861407; cv=none; b=BQ1L8Kvgwkp2MXetJCpk2p0kIHtapDtQ5sL6AovzUHlRV+uKGNPlYSQfVlWc9rxek2UFr0uvAPWGK3gzYG1budgO5yGX4ROFlxiFsnFCiCIv2fPHWsum0jb2dpp9+EXESn83nzhfYbQwzqpTkeiv6nvMkZ3V0ebJH1fQxy1tZjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729861300; c=relaxed/simple;
-	bh=yiHeZgw/FeP5ohbEYLqHAFPfeJLUA2zOv6polMDZ77A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eV/JLUf6KVCn9EYa1Tbnkn208Do5ak2r6RTC6IcuOPkblE/B0zWkoX3wUYll9DdGcPS3nlamcakWwTFApoQ8xQN/ECqkXcKlFmogzQ/9+Xnr+MSn/avYHWx7bBqcBTcI+pZpUc2gYA7Yl6IKwrMD5GtfRLoXwOpM92qNn2ksZ8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DS/LncaL; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1729861407; c=relaxed/simple;
+	bh=Bifk+jE1WunCg65HBGm/KqkzAgaA8iNwDTwL+jGd1MQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nwsQa3MIZE8ChG1sYJtenoQ7SWKhi+x2tZaWVyyrT2rOLlnLWb7GDks+qGb2cz1nQXGy6VFfaV196HtSQQ7wxgDSguGlJhDsXfgzi3dR7o/Y0LRsLq5cNwI/spA73VYHHGR3ApwmC+UHQ50cByqbcjAJp+JvXSeVW1Tu01fy4nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=NFapoBFS; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DS/LncaL"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2e56df894d4so1519008a91.3
-        for <linux-media@vger.kernel.org>; Fri, 25 Oct 2024 06:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729861298; x=1730466098; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QG9onz68AihZ0/QQ3v1B+iArWlqGlmXiJf2wzvXf6Xg=;
-        b=DS/LncaLYXjhKu+du7HWEc4WTLTr5NXqNE5kQBsXqTHEVe8HilkOQULfuTupG6OctF
-         D5xhewqJtSIsmZkbQ89h+yL6vL5mXCxzCKqpXZ6yBlglX7MGace6DbtqnITOga/ToMZq
-         bAxerFrFpwYuqqxfUzuhOESHbQVBoyQ6KIQ9k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729861298; x=1730466098;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QG9onz68AihZ0/QQ3v1B+iArWlqGlmXiJf2wzvXf6Xg=;
-        b=fDE5dll7t3u47yvmjCZxeABWLd60CBkqH/Wt93NT2fM5B+vazLmqZnQXCdspmUDAIU
-         O98H4KjHXS9Jb7g6bjYz+Tu2wweYFut0NApb6mNRTNAl2tsYtkUmtg96V/kMgAUatJ6f
-         3iObzeucB0Ypq9TrcAbp+gJt9DkBlPIPCN5FQSwuS5iPJBY08sgXkjy3iQwbnOEIwqkR
-         hvS613vieMzgVL3QyuIudYpKe2k0LWaJ2liid6seSMPls9u9cCNxHqBNvBHdX13JBXld
-         LX42OWLN1SR1FnhDpFTWjJeUACPQEMv8m1LBibQ9G7YZSsnPPPcnxcyjziVTTvDQ8LQm
-         pQEw==
-X-Forwarded-Encrypted: i=1; AJvYcCWzF33OxiQ/m1gwGK7R7xYRTR9eO+DsNk8VSWjkoCfxJgk8Mmh/XVXMk/utYpLed1XPGCVQc66bra+BXw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/VO3iAbt+OlSd8jo1uhmidevKzuICTLxhUC5nm/XDg0pn7oa1
-	uiyLKYX/q7CKJYXaT9px3d8Miht92cpykOZl3dyyy6bBj0HGkg9SJeY0FaLnuQ==
-X-Google-Smtp-Source: AGHT+IHJnUX93Wrtcww1umjqUe+zoRfp3BcM9ILQsEjYqI3VR2JRbMI+0HgRNN0sieyWVCzDDZYsng==
-X-Received: by 2002:a17:90a:e2ca:b0:2dd:6969:2096 with SMTP id 98e67ed59e1d1-2e76b70c545mr9870731a91.38.1729861297790;
-        Fri, 25 Oct 2024 06:01:37 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:bd37:bccf:f3e:a9ef])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e8e36a044bsm1352978a91.25.2024.10.25.06.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 06:01:37 -0700 (PDT)
-Date: Fri, 25 Oct 2024 22:01:33 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/3] media: venus: factor out inst destruction routine
-Message-ID: <20241025130133.GQ1279924@google.com>
-References: <20241025105104.723764-1-senozhatsky@chromium.org>
- <20241025105104.723764-4-senozhatsky@chromium.org>
- <f5a8c042-53f5-43e2-bf76-82243ec77ee2@linaro.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NFapoBFS"
+Received: from umang.jain (unknown [IPv6:2405:201:2015:f873:55d7:c02e:b2eb:ee3f])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E3DFA229;
+	Fri, 25 Oct 2024 15:01:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1729861289;
+	bh=Bifk+jE1WunCg65HBGm/KqkzAgaA8iNwDTwL+jGd1MQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NFapoBFSxAY773H7mbmKWBa7IIuT30pQ/rqTAnv4kj0a9zrllhSaRNAVGRyFZ5MCY
+	 fDUHhc6ykYeYKzkzzhuoVEYhAHtnB97aSjq2K9shRy2m5qGMPx2twW2wrcpbbsj5MG
+	 ux3HKAHHtm4qF8hu032wNU34ANxb3lFXEaBf48hs=
+From: Umang Jain <umang.jain@ideasonboard.com>
+To: linux-media@vger.kernel.org,
+	Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH] media: dw100: Rectify rounding error
+Date: Fri, 25 Oct 2024 18:33:00 +0530
+Message-ID: <20241025130300.227817-1-umang.jain@ideasonboard.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5a8c042-53f5-43e2-bf76-82243ec77ee2@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On (24/10/25 12:43), Bryan O'Donoghue wrote:
-> On 25/10/2024 11:50, Sergey Senozhatsky wrote:
-> > -	venc_ctrl_deinit(inst);
-> 
-> Shouldn't you be dropping venc_ctrl_deinit as you have done with
-> vdec_ctrl_deinit ?
+From: Stefan Klug <stefan.klug@ideasonboard.com>
 
-Oh, yes, will send out v5 in a bit.
+The current scaler code fails in many cases which can be validated
+by the following python script:
+
+```
+error_count = 0
+valid_count = 0
+
+def check_scaling_error(src_w, dst_w, add_point_five):
+    global error_count
+    global valid_count
+
+    qscale = (dst_w << 16) // src_w
+
+    if (add_point_five):
+        delta = 1 << 15; # 0.5 in Q16.16
+    else:
+        delta = 0
+
+    scaled_w = ((((src_w << 16) + delta) * qscale) >> 32)
+    if dst_w != scaled_w:
+        print(f'scale_error: src_w: {src_w} | dst_w:{dst_w} | scaled_w:{scaled_w}')
+        error_count += 1
+    else:
+        valid_count += 1
+
+print(f'==== Test without delta=0.5 ====\n')
+for i in range(1000, 1920):
+    check_scaling_error(1920, i, False)
+print(f'Error: {error_count} | Valid: {valid_count}\n\n')
+
+error_count = 0
+print(f'==== Test with delta=0.5 ====')
+for i in range(1000, 1920):
+    check_scaling_error(1920, i, True)
+print(f'Error: {error_count} | Valid: {valid_count}\n\n')
+```
+
+Excerpt of the output is retrieved:
+```
+	==== Test without delta=0.5 ====
+	...
+	...
+	scale_error: src_w: 1920 | dst_w:1915 | scaled_w:1914
+	scale_error: src_w: 1920 | dst_w:1916 | scaled_w:1915
+	scale_error: src_w: 1920 | dst_w:1917 | scaled_w:1916
+	scale_error: src_w: 1920 | dst_w:1918 | scaled_w:1917
+	scale_error: src_w: 1920 | dst_w:1919 | scaled_w:1918
+	Error: 859 | Valid: 61
+
+	==== Test with delta=0.5 ====
+	Error: 0 | Valid: 981
+```
+Hence, fixing the scaling rounding error by adding 0.5 to the
+frame dimensions before applying the scale.
+
+Signed-off-by: Stefan Klug <stefan.klug@ideasonboard.com>
+Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+---
+ drivers/media/platform/nxp/dw100/dw100.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
+index 42712ccff754..541706f0aec4 100644
+--- a/drivers/media/platform/nxp/dw100/dw100.c
++++ b/drivers/media/platform/nxp/dw100/dw100.c
+@@ -984,6 +984,7 @@ static int dw100_s_selection(struct file *file, void *fh,
+ 	u32 qscalex, qscaley, qscale;
+ 	int x, y, w, h;
+ 	unsigned int wframe, hframe;
++	uint32_t zero_point_five;
+ 
+ 	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
+ 		return -EINVAL;
+@@ -1032,8 +1033,9 @@ static int dw100_s_selection(struct file *file, void *fh,
+ 			}
+ 		}
+ 
+-		w = (u32)((((u64)wframe << 16) * qscale) >> 32);
+-		h = (u32)((((u64)hframe << 16) * qscale) >> 32);
++		zero_point_five = 1 << 15;
++		w = (u32)(((((u64)wframe << 16)+zero_point_five) * qscale) >> 32);
++		h = (u32)(((((u64)hframe << 16)+zero_point_five) * qscale) >> 32);
+ 		x = x + (sel->r.width  - w) / 2;
+ 		y = y + (sel->r.height  - h) / 2;
+ 		x = min(wframe - w, (unsigned int)max(0, x));
+-- 
+2.45.2
+
