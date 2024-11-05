@@ -1,229 +1,149 @@
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E652AF0B;
-	Tue,  5 Nov 2024 07:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34151FE0F7
+	for <linux-media@vger.kernel.org>; Tue,  5 Nov 2024 07:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730792915; cv=none; b=ASJ2N6kF1JhcKnlzogbKu/52s51gW6FSfCuBOXMdpP8g6ptTzh0FuPOnoyiGY30361ptzGZvXQoaswIxq40nV5SsyiRvvdZzGThq1J26+d8ykcAfPb3o/+0vZo3+d2DcwCV5LKtBos9tgmoWzuLGWCmKpGLCEa4nPM6THjAON6M=
+	t=1730793041; cv=none; b=qnt81zQMHdGIkuaAlFAtMt0nC1yjS34hBji6Q4kipipK8KH0L4q1TxN5fYqI7FcXUSwh4jZrG8Oetncr5SkgWoCnqgzhVAFEjE5Ka7IKZZ9RsA+ywv5BCwYvCcMyqqaRJ6sJDgWu5BgiVjbZ7N8BFHjhjHoTHpZaEwiubXokG18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730792915; c=relaxed/simple;
-	bh=BRyDByHc1x4h+UTPW8KbOka3OgDty57E7fMzunRfbZQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHazmOWiviz4KE2x1sWrWCgHAlQdLYUWCXw1BI33ikOX+HVwfFgTL9A8eq9DZmPEFgPrGWTq0TAnGQijxRBvLLSb2h6sWHI2OtebPQnGwYJFmOJ2pgIMKYaSRTE29XoCE6eKJp40AcqMkHFweCaq01TVT2pJ+uxgHJTcTVltnfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=a2TrC+Mk; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="a2TrC+Mk"
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A5504Ar010867;
-	Tue, 5 Nov 2024 08:48:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=selector1; bh=CE1Ann0N54YMVcubl0bdIuho
-	D0dbS3Lrp2O1zrujtXA=; b=a2TrC+MkfgqcIksGa6RUg20sxh1OXUUwRo+zdmMw
-	o1QMeG0MKNbEu3blOmlFzxX40Fzw0f69u+QlaLa3n7W7/iCsvjNFVcDgMQl8j1E6
-	hApY+vKZt1Ud8fO4mN7hIJCC1M3iuYjwdUPHXEohRuL9PBUwYeUxOn58PWhEh7+2
-	gsMMGg1SlNxuU7koI6OTq0Hy6sJt2r5M9sW2f1u+/wsS0J+jfMUO7KIIAH3An5uR
-	tblBbxA4qqZcl3z1Az+EoewQq+vdlI+F1re/nSqMdqbBeL+YFkPO7/xZ2hEPv0fW
-	shza+F96TN+/h+PkAC9V/mXuLh8v/9awt+dTen/lWPa7iw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42nywn88cs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Nov 2024 08:48:08 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 6230E40046;
-	Tue,  5 Nov 2024 08:46:53 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 21D3124A466;
-	Tue,  5 Nov 2024 08:45:55 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 5 Nov
- 2024 08:45:54 +0100
-Date: Tue, 5 Nov 2024 08:45:53 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Hans Verkuil
-	<hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 15/15] arm64: dts: st: enable imx335/csi/dcmipp pipeline
- on stm32mp257f-ev1
-Message-ID: <20241105074553.GC1413559@gnbcxd0016.gnb.st.com>
-References: <20241008-csi_dcmipp_mp25-v1-0-e3fd0ed54b31@foss.st.com>
- <20241008-csi_dcmipp_mp25-v1-15-e3fd0ed54b31@foss.st.com>
- <fgxjk5tikvd5vihlzslovhlpy5xbbgnr3kywkvkd62ppx6ttm7@2rbaqvllyb25>
+	s=arc-20240116; t=1730793041; c=relaxed/simple;
+	bh=4nasykzaW8q7BQuuw3gGmamOivBETII5v/jb832h3Us=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=rZvZcA5HfJgmuSLNoWGLxIqVkdek7fGiLgpgCt68DmlMItWAUB6nvffq7l7ipfnAG4OcAAEnagMVEU6bQWycm3zpIq83MIvXwmXMU8EdMG6VhmHucRAqELYfbM+CWpEJZfifDoo3X6hbwyC1ubCenZ2rhm4z1ukjm2nr+QPKHSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406F2C4CECF
+	for <linux-media@vger.kernel.org>; Tue,  5 Nov 2024 07:50:41 +0000 (UTC)
+Message-ID: <3c0362e5-aa47-4545-a81e-e696b0e01440@xs4all.nl>
+Date: Tue, 5 Nov 2024 08:50:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <fgxjk5tikvd5vihlzslovhlpy5xbbgnr3kywkvkd62ppx6ttm7@2rbaqvllyb25>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, nl
+To: Linux Media Mailing List <linux-media@vger.kernel.org>
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCHv3] media: vicodec: add V4L2_CID_MIN_BUFFERS_FOR_* controls
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
+Stateful codecs must support the V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
+and V4L2_CID_MIN_BUFFERS_FOR_CAPTURE controls. The vicodec driver
+was missing support for these controls. Add them.
 
-On Tue, Oct 08, 2024 at 03:42:42PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, Oct 08, 2024 at 01:18:17PM +0200, Alain Volmat wrote:
-> > Enable the camera pipeline with a imx335 sensor connected to the
-> > dcmipp via the csi interface.
-> > 
-> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> > ---
-> >  arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 87 ++++++++++++++++++++++++++++++
-> >  1 file changed, 87 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-> > index 214191a8322b..599af4801d82 100644
-> > --- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-> > +++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-> > @@ -27,6 +27,38 @@ chosen {
-> >  		stdout-path = "serial0:115200n8";
-> >  	};
-> >  
-> > +	clocks {
-> > +		clk_ext_camera: clk-ext-camera {
-> > +			#clock-cells = <0>;
-> > +			compatible = "fixed-clock";
-> > +			clock-frequency = <24000000>;
-> > +		};
-> > +	};
-> > +
-> > +	imx335_2v9: imx335-2v9 {
-> 
-> Please use name for all fixed regulators which matches current format
-> recommendation: 'regulator-[0-9]v[0-9]'
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml?h=v6.11-rc1#n46
+Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+---
+Change since v2: set min_reqbufs_allocation to the same value
+as used for V4L2_CID_MIN_BUFFERS_FOR_OUTPUT/CAPTURE.
+Change since v1: V4L2_CID_MIN_BUFFERS_FOR_OUTPUT was already
+supported, so that patch led to duplicated controls. That's now
+fixed.
+---
+ .../media/test-drivers/vicodec/vicodec-core.c | 22 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-Done in v2 for all 3 fixed-regulators.
+diff --git a/drivers/media/test-drivers/vicodec/vicodec-core.c b/drivers/media/test-drivers/vicodec/vicodec-core.c
+index 00c84a06f343..556ec2a3d411 100644
+--- a/drivers/media/test-drivers/vicodec/vicodec-core.c
++++ b/drivers/media/test-drivers/vicodec/vicodec-core.c
+@@ -43,6 +43,8 @@ MODULE_PARM_DESC(debug, " activates debug info");
+ #define MIN_WIDTH		640U
+ #define MAX_HEIGHT		2160U
+ #define MIN_HEIGHT		360U
++/* Recommended number of buffers for the stateful codecs */
++#define VICODEC_REC_BUFS	2
 
-> 
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "imx335-avdd";
-> > +		regulator-min-microvolt = <2900000>;
-> > +		regulator-max-microvolt = <2900000>;
-> > +		regulator-always-on;
-> > +	};
-> > +
-> > +	imx335_1v8: imx335-1v8 {
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "imx335-ovdd";
-> > +		regulator-min-microvolt = <1800000>;
-> > +		regulator-max-microvolt = <1800000>;
-> > +		regulator-always-on;
-> > +	};
-> > +
-> > +	imx335_1v2: imx335-1v2 {
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "imx335-dvdd";
-> > +		regulator-min-microvolt = <1200000>;
-> > +		regulator-max-microvolt = <1200000>;
-> > +		regulator-always-on;
-> > +	};
-> > +
-> >  	memory@80000000 {
-> >  		device_type = "memory";
-> >  		reg = <0x0 0x80000000 0x1 0x0>;
-> > @@ -50,6 +82,40 @@ &arm_wdt {
-> >  	status = "okay";
-> >  };
-> >  
-> > +&csi {
-> > +	vdd-supply =  <&scmi_vddcore>;
-> > +	vdda18-supply = <&scmi_v1v8>;
-> > +	status = "okay";
-> > +	ports {
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +		port@0 {
-> > +			reg = <0>;
-> > +			csi_sink: endpoint {
-> > +				remote-endpoint = <&imx335_ep>;
-> > +				data-lanes = <0 1>;
-> > +				bus-type = <4>;
-> > +			};
-> > +		};
-> > +		port@1 {
-> > +			reg = <1>;
-> > +			csi_source: endpoint {
-> > +				remote-endpoint = <&dcmipp_0>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&dcmipp {
-> > +	status = "okay";
-> > +	port {
-> > +		dcmipp_0: endpoint {
-> > +			remote-endpoint = <&csi_source>;
-> > +			bus-type = <4>;
-> > +		};
-> > +	};
-> > +};
-> > +
-> >  &ethernet2 {
-> >  	pinctrl-names = "default", "sleep";
-> >  	pinctrl-0 = <&eth2_rgmii_pins_a>;
-> > @@ -81,6 +147,27 @@ &i2c2 {
-> >  	i2c-scl-falling-time-ns = <13>;
-> >  	clock-frequency = <400000>;
-> >  	status = "okay";
-> > +
-> > +	imx335: imx335@1a {
-> 
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+ #define dprintk(dev, fmt, arg...) \
+ 	v4l2_dbg(1, debug, &dev->v4l2_dev, "%s: " fmt, __func__, ## arg)
+@@ -1705,12 +1707,14 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	src_vq->ops = &vicodec_qops;
+ 	src_vq->mem_ops = &vb2_vmalloc_memops;
+ 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+-	if (ctx->is_enc)
++	if (ctx->is_enc) {
+ 		src_vq->lock = &ctx->dev->stateful_enc.mutex;
+-	else if (ctx->is_stateless)
++		src_vq->min_reqbufs_allocation = VICODEC_REC_BUFS;
++	} else if (ctx->is_stateless) {
+ 		src_vq->lock = &ctx->dev->stateless_dec.mutex;
+-	else
++	} else {
+ 		src_vq->lock = &ctx->dev->stateful_dec.mutex;
++	}
+ 	src_vq->supports_requests = ctx->is_stateless;
+ 	src_vq->requires_requests = ctx->is_stateless;
+ 	ret = vb2_queue_init(src_vq);
+@@ -1728,6 +1732,8 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	dst_vq->mem_ops = &vb2_vmalloc_memops;
+ 	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+ 	dst_vq->lock = src_vq->lock;
++	if (!ctx->is_stateless && !ctx->is_enc)
++		dst_vq->min_reqbufs_allocation = VICODEC_REC_BUFS;
 
-Changed to camera@1a.
+ 	return vb2_queue_init(dst_vq);
+ }
+@@ -1852,9 +1858,13 @@ static int vicodec_open(struct file *file)
+ 			  1, 31, 1, 20);
+ 	v4l2_ctrl_new_std(hdl, &vicodec_ctrl_ops, V4L2_CID_FWHT_P_FRAME_QP,
+ 			  1, 31, 1, 20);
+-	if (ctx->is_enc)
+-		v4l2_ctrl_new_std(hdl, &vicodec_ctrl_ops,
+-				  V4L2_CID_MIN_BUFFERS_FOR_OUTPUT, 1, 1, 1, 1);
++	if (!ctx->is_stateless)
++		v4l2_ctrl_new_std(hdl, &vicodec_ctrl_ops, ctx->is_enc ?
++				  V4L2_CID_MIN_BUFFERS_FOR_OUTPUT :
++				  V4L2_CID_MIN_BUFFERS_FOR_CAPTURE,
++				  VICODEC_REC_BUFS, VICODEC_REC_BUFS, 1,
++				  VICODEC_REC_BUFS);
++
+ 	if (ctx->is_stateless)
+ 		v4l2_ctrl_new_custom(hdl, &vicodec_ctrl_stateless_state, NULL);
+ 	if (hdl->error) {
+-- 
+2.45.2
 
-> 
-> > +		compatible = "sony,imx335";
-> > +		reg = <0x1a>;
-> > +		clocks = <&clk_ext_camera>;
-> > +		avdd-supply = <&imx335_2v9>;
-> > +		ovdd-supply = <&imx335_1v8>;
-> > +		dvdd-supply = <&imx335_1v2>;
-> > +		reset-gpios = <&gpioi 7 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
-> > +		powerdown-gpios = <&gpioi 0 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
-> > +		status = "okay";
-> 
-> Why? Didi you disable it anywhere?
-
-status property dropped in v2.  powerdown-gpios property dropped as
-well since not necessary nor described in the sensor yaml.
-reset-gpios polarity is as well corrected in v2, following an change
-within the imx335 sensor.
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Regards,
-Alain
