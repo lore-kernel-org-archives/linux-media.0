@@ -1,52 +1,51 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2561FEFAC;
-	Tue,  5 Nov 2024 07:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60F8200B99;
+	Tue,  5 Nov 2024 07:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730793162; cv=none; b=CQZUhOuAq+okYWfv9NH+lYf62/fDQeEPCgFbipJmvDh7zyo+itfymzFtPDMmDxS4VcaSfBPdkJjWqAfS6t7FaR1b4n5ZLcHHdGfWjUMkTlxdlTak2tD6d+tgtutFHIoho80shLeLBhfhnYzYacZGWu8d5+PJ4jqg5Sk2yJrEwLg=
+	t=1730793167; cv=none; b=IPwjl6PngsUo1od4GkVznqOIh9CgQLS6Teymk20pQ9EadZwbJYUVAM1BWPOEgRctLb/QkvX5Tc7orn/6lhBKDcGcpR/g6Y9/c5ZqD9+G6pDwD9ft0CJsE119EoBH9xf47DZZ/4optXYPBsqS37C6U44NA5JBZ5pR6Zjl+i/xyvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730793162; c=relaxed/simple;
-	bh=a1OVlPf5Odsut2kjBhNTJuvJTaMz6Fm/zZor5eKkscE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=ijElAvCEfkLoLTKuOSUpCGR9/Z++NZWYUlsPlC2dkk7NkZfIiYGfQjL1i41KY4ba8cVEGPFcHE6jdsZGfP7EHNU2lKCRBVT28L6e2C94Oun8Fy2vM0avXJ/FA9jdr4GG3OyyxL7gc5MhmwQIKuu+GmIjFZlLVX35r+/UJTWotAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=XpkexCjy; arc=none smtp.client-ip=185.132.182.106
+	s=arc-20240116; t=1730793167; c=relaxed/simple;
+	bh=a4KN63ozK/U/DO5Z8An+hnCU8zIz1e1hJmlYqU83ZQQ=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=pNONPZdd8X5WqrPOjt7h6Il7ZtmSutmUH0v/q3xri0IyY9oO8+2FDSMAl/qL7BekkK//YD/fzn+/zhQMowIXr3lr7K74ttVt4d+D5/wEBK5shEgAUjHAD1pWv5QBQnJdDw8/tNIYB4FnejHSkzg+axFiaVXkLEF4vEQ5xKFeCV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Sqnz5xY5; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="XpkexCjy"
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A56uQp6022315;
-	Tue, 5 Nov 2024 08:52:27 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Sqnz5xY5"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A55w2xZ013578;
+	Tue, 5 Nov 2024 08:52:32 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	kO/XdeoBo7X02W334+E6LhxLlDrGOL8A5vE8mC37cg8=; b=XpkexCjym+l4hQgo
-	U6c1wzZjWYwCdjZqsUb7tcu4lZelqK17QRqJJkf+eLkVd0EK8n0xLUUmFpEVd4H4
-	HmVC+eMUmnfePgGeTlfkepYwIgmAXvbQts7BTPj3gp66aBIHYviZ09QnG89nnQZM
-	fFwy45+NXFMYDthNLbpJMcs0Gi3j/Cdr5TIm4mmc15h/2cWdIYv2loDMIS1wyQ3J
-	O1adt7S/XWxj8bdQ/moGAXiQFXL+M/D68QtqHs1uV7qIvvoTnuaLqVus8AEOn+h+
-	n0UYYt1D3QNamd4dq8SOQ9XMXMQYMKaOGzT6/xezRaXMQMUn2v2g/WYOwCcCapS4
-	wWe9cQ==
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=1XmRoaQ0Ln4FWc9Gb1ev9K
+	U6ZfQ/ZXphB8INN4f+D9w=; b=Sqnz5xY5u/t0a30Zvr0MhnqB21Haoma5VoAAh0
+	DbR+RpXcAaUZNHcg7YrvoF0AqQ8FKTl2oCOSIjsG3+WtNlpv5XSr3LisWXqrr1Un
+	JvwF1fw1CLlstoHouuU9+plO3AQaK+oEUw1uKpVzCCP+fo+t4PkniiUwK620vy6R
+	r9Sbc9mRmdKme50gMErJpjj644aJPyjnxWJozrjFwejMOweeYuCckcwzTdDOJBlK
+	xTo+L8Yim+7Q1CnerQmYY2jedBY2SU/wNTeLm/Hwu6Dh0Yt5pkwDWPkZ7wW0PZ9s
+	R5W1f1Gf4HpPmsLKHFT7cd98nNdDiYQxbuDQpcTJZn2Ajzbg==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42ncxbtucv-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42nd00jdnj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Nov 2024 08:52:27 +0100 (CET)
+	Tue, 05 Nov 2024 08:52:32 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 9C6E440047;
-	Tue,  5 Nov 2024 08:50:26 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 07BF540053;
+	Tue,  5 Nov 2024 08:50:27 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 64495250FA3;
-	Tue,  5 Nov 2024 08:49:33 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8607C24FE45;
+	Tue,  5 Nov 2024 08:49:28 +0100 (CET)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 5 Nov
- 2024 08:49:33 +0100
+ 2024 08:49:28 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Tue, 5 Nov 2024 08:49:11 +0100
-Subject: [PATCH v2 08/15] media: stm32: dcmipp: add bayer 10~14 bits
- formats
+Subject: [PATCH v2 00/15] media: stm32: introduction of CSI / DCMIPP for
+ STM32MP25
+Date: Tue, 5 Nov 2024 08:49:03 +0100
+Message-ID: <20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,9 +54,10 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241105-csi_dcmipp_mp25-v2-8-b9fc8a7273c2@foss.st.com>
-References: <20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com>
-In-Reply-To: <20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com>
+X-B4-Tracking: v=1; b=H4sIAO/NKWcC/x3MQQqAIBBA0avIrBNMsqGuEhGiY83CEoUIwrsnL
+ d/i/xcKZaYCs3gh082Fr7NBdwLcYc+dJPtm0EoPvVIoXeHNu8gpbTFpIxFxGlUfDHoLrUqZAj/
+ /cVlr/QAM9CI+YQAAAA==
+X-Change-ID: 20241007-csi_dcmipp_mp25-7779601f57da
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Mauro Carvalho Chehab
 	<mchehab@kernel.org>,
@@ -75,7 +75,8 @@ To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Philipp Zabel <p.zabel@pengutronix.de>
 CC: <linux-media@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>
+        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>,
+        <stable@vger.kernel.org>
 X-Mailer: b4 0.14.2
 X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
  (10.75.129.69)
@@ -83,61 +84,59 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Add support for bayer formats from 10 to 14 bits.
+This series introduces the camera pipeline support for the
+STM32MP25 SOC.  The STM32MP25 has 3 pipelines, fed from a
+single camera input which can be either parallel or csi.
+
+This series adds the basic support for the 1st pipe (dump)
+which, in term of features is same as the one featured on
+the STM32MP13 SOC.  It focuses on introduction of the
+CSI input stage for the DCMIPP, and the CSI specific new
+control code for the DCMIPP.
+One of the subdev of the DCMIPP, dcmipp_parallel is now
+renamed as dcmipp_input since it allows to not only control
+the parallel but also the csi interface.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- .../media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c    | 12 ++++++++++++
- .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c   | 12 ++++++++++++
- 2 files changed, 24 insertions(+)
+Alain Volmat (15):
+      media: stm32: dcmipp: correct dma_set_mask_and_coherent mask value
+      dt-bindings: media: add description of stm32 csi
+      media: stm32: csi: addition of the STM32 CSI driver
+      media: stm32: dcmipp: use v4l2_subdev_is_streaming
+      media: stm32: dcmipp: replace s_stream with enable/disable_streams
+      media: stm32: dcmipp: rename dcmipp_parallel into dcmipp_input
+      media: stm32: dcmipp: add support for csi input into dcmipp-input
+      media: stm32: dcmipp: add bayer 10~14 bits formats
+      media: stm32: dcmipp: add 1X16 RGB / YUV formats support
+      media: stm32: dcmipp: avoid duplicated format on enum in bytecap
+      media: stm32: dcmipp: fill media ctl hw_revision field
+      dt-bindings: media: add the stm32mp25 compatible of DCMIPP
+      media: stm32: dcmipp: add core support for the stm32mp25
+      arm64: dts: st: add csi & dcmipp node in stm32mp25
+      arm64: dts: st: enable imx335/csi/dcmipp pipeline on stm32mp257f-ev1
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 48596592bfd517b9d46946d27f154f0d17ebed78..d6fad99e44bba5bcab1df056ba9208e82aff4bea 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -65,6 +65,18 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
- 	PIXMAP_MBUS_PFMT(SGBRG8_1X8, SGBRG8),
- 	PIXMAP_MBUS_PFMT(SGRBG8_1X8, SGRBG8),
- 	PIXMAP_MBUS_PFMT(SRGGB8_1X8, SRGGB8),
-+	PIXMAP_MBUS_PFMT(SBGGR10_1X10, SBGGR10),
-+	PIXMAP_MBUS_PFMT(SGBRG10_1X10, SGBRG10),
-+	PIXMAP_MBUS_PFMT(SGRBG10_1X10, SGRBG10),
-+	PIXMAP_MBUS_PFMT(SRGGB10_1X10, SRGGB10),
-+	PIXMAP_MBUS_PFMT(SBGGR12_1X12, SBGGR12),
-+	PIXMAP_MBUS_PFMT(SGBRG12_1X12, SGBRG12),
-+	PIXMAP_MBUS_PFMT(SGRBG12_1X12, SGRBG12),
-+	PIXMAP_MBUS_PFMT(SRGGB12_1X12, SRGGB12),
-+	PIXMAP_MBUS_PFMT(SBGGR14_1X14, SBGGR14),
-+	PIXMAP_MBUS_PFMT(SGBRG14_1X14, SGBRG14),
-+	PIXMAP_MBUS_PFMT(SGRBG14_1X14, SGRBG14),
-+	PIXMAP_MBUS_PFMT(SRGGB14_1X14, SRGGB14),
- 	PIXMAP_MBUS_PFMT(JPEG_1X8, JPEG),
- };
- 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index a19c8235af565fb5f673ba90b37ebfcadf03d72e..72f1bb4c64ad4c194c14467dfc354a04bc69e208 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -57,6 +57,18 @@ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
- 	PIXMAP_MBUS_BPP(SGBRG8_1X8, 1),
- 	PIXMAP_MBUS_BPP(SGRBG8_1X8, 1),
- 	PIXMAP_MBUS_BPP(SRGGB8_1X8, 1),
-+	PIXMAP_MBUS_BPP(SBGGR10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SGBRG10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SGRBG10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SRGGB10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SBGGR12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SGBRG12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SGRBG12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SRGGB12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SBGGR14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SGBRG14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SGRBG14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SRGGB14_1X14, 2),
- 	PIXMAP_MBUS_BPP(JPEG_1X8, 1),
- };
- 
+ .../devicetree/bindings/media/st,stm32-dcmipp.yaml |   53 +-
+ .../bindings/media/st,stm32mp25-csi.yaml           |  125 +++
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi             |   23 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts         |   85 ++
+ drivers/media/platform/st/stm32/Kconfig            |   14 +
+ drivers/media/platform/st/stm32/Makefile           |    1 +
+ drivers/media/platform/st/stm32/stm32-csi.c        | 1144 ++++++++++++++++++++
+ .../media/platform/st/stm32/stm32-dcmipp/Makefile  |    2 +-
+ .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c         |  128 ++-
+ .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c        |  119 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-common.h |    4 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   |  116 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-input.c  |  540 +++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-parallel.c        |  440 --------
+ 15 files changed, 2226 insertions(+), 576 deletions(-)
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20241007-csi_dcmipp_mp25-7779601f57da
 
+Best regards,
 -- 
-2.25.1
+Alain Volmat <alain.volmat@foss.st.com>
 
