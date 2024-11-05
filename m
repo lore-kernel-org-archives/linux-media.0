@@ -1,52 +1,52 @@
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2DC1FEFC5;
-	Tue,  5 Nov 2024 07:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B56282F1;
+	Tue,  5 Nov 2024 07:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730793161; cv=none; b=p+pfg7bthwNYhnLPvb8JosIwP9egxRLPXybpjTRYax15Gl+eXD+lItvawU8wkuo/BtpgDJLyFET9SCu/8Nxvg8tSVed2fNuKa/pn6KTgD/r9YlMZS0BY6KJUtxGLq6hU1rIVdMmfq6Zct21gs7ytCIYlJQVCKktRCAzBmDfpMNs=
+	t=1730793162; cv=none; b=W0Ck2dI/Hpz1IDbaj02DSNgFXDe2KU+3j6vM7E2F/uAr6YHU2nYtzcblXawB3M0Fvn0+PFHktXNSnCEh/CktJ9vNTKFYiOzroabHMidOckiiwsR0jUV9tLmF4JriRh3cZXkPB1frpAUmCL84W8YdvJXmSP0n6OXA2hmTvFTVycI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730793161; c=relaxed/simple;
-	bh=GOKG+WYlTeedFL3kFxhYDlA0nfvxaCGr7DSSSCv1Y2E=;
+	s=arc-20240116; t=1730793162; c=relaxed/simple;
+	bh=V1zV4dk2RexT0VlhFpEXjyqddvw7mzRMMkBenDXXQzs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=fqCxX93/lI141IvLs2CedqMFV4WAkOCbEa3EaY4RjZcvOcoROfJchI46JNicKzJtduCm4BpRk2klySFOt5zrVQP+2ah+w6pycxYvQelF9aJixeYG+JfDoZ1lPII98Lw1ZED7sBMsqJOgQfEvBhCaQXWw6HvmWFxyQMjBIPpsqvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=SQSUSbUM; arc=none smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=mf6ZE5mRYMLIabJUn3ZFE+9quKlBNHtPnB9QfYha5MLDdrNVt1oykCj7lZyqfi6OppdxjtuYEQq9UQ/ad0SV9ptPwner0Bxs/u0iiN1w61jqhIEGHGhRKcnxtQph+b5PtpVU0MyAnZrJtcloQQAIGVjNb9NjKq5l0806vI0cCJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=AcmwMSyn; arc=none smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="SQSUSbUM"
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A53GSeY022439;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="AcmwMSyn"
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A549V48025479;
 	Tue, 5 Nov 2024 08:52:27 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	UMjisKeEpQSwI1Wvbjb6PN1AjDm43YkTXsgIuNYi82g=; b=SQSUSbUM2zkhZuws
-	PBy6S0AJewSp/6u3emy5wgWhSViEBlty0Wa9jCWGWeq3OnZTW+yDBQa5tdKRad+t
-	nhL/+BPn1tfwKUS9wVq7Z+5WnGo4lsSqpD1NX63G9FiXDzUIM61z8YTkdYksIgxp
-	MISSsopE+EBSc3bAYEArY8UYMiMf5UvK1byNc2zszl27ZiLCo9bvqkgIN/yiD0J5
-	DACOi5g36lZdDhU94mHYSYg2nhnO4ja2nWUQ3sxfW3VR6DWCJDKln4ohFJTLLcJ0
-	dT6WFF2mrB96vHBBXa5bRk/2av2m0Esa5r/tKbmUHE6V4uR2c6DnKLjO24EBt/UZ
-	kA2+bQ==
+	XnAbYm4VWUKZ0F1ePtL5cGK91Okpi3RKOo0VHnxT3ak=; b=AcmwMSynS2cZtSqX
+	TJVEsdn86r9uuFsyt5bwqAuKA6eYiWjgAOVfMgvxnFfzjRIP8ZrWBtAp1vQfpKSG
+	8Gtiy+06sRCuPSlE6TzCvrksd4ohbFRY/hoYZJ/cLfWAlGHmTro32+wdUhIPG+Dn
+	6O5DA8Bv2erZBoZfKnn6HblXPNyX/38TCs/y1OmW5UGBeQUomZd4HAtY5PUCl1ai
+	tjR37UNjcJngxsxG9yXO+8GdUw8boCcwu5ZbbZVS7UWiU/g28FPycM3/tF4S5uIH
+	98N68fD+p/V2oFqS2IlHHz6XwQPCZX4MQOFcv5TXw5SzY6TiePr/DZDnWLn960rr
+	+Zeqcg==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42nxh3rnmj-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42ncxbtucu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 05 Nov 2024 08:52:27 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id D735C40052;
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id AE4F040050;
 	Tue,  5 Nov 2024 08:50:26 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2DBCA250FA5;
-	Tue,  5 Nov 2024 08:49:35 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 088E72513C1;
+	Tue,  5 Nov 2024 08:49:37 +0100 (CET)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 5 Nov
- 2024 08:49:34 +0100
+ 2024 08:49:36 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Tue, 5 Nov 2024 08:49:14 +0100
-Subject: [PATCH v2 11/15] media: stm32: dcmipp: fill media ctl hw_revision
- field
+Date: Tue, 5 Nov 2024 08:49:17 +0100
+Subject: [PATCH v2 14/15] arm64: dts: st: add csi & dcmipp node in
+ stm32mp25
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241105-csi_dcmipp_mp25-v2-11-b9fc8a7273c2@foss.st.com>
+Message-ID: <20241105-csi_dcmipp_mp25-v2-14-b9fc8a7273c2@foss.st.com>
 References: <20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com>
 In-Reply-To: <20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -83,49 +83,48 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Add hw_revision field information of the media controller so that
-application can distinguish between variants of DCMIPP implementations.
+Add nodes describing the csi and dcmipp controllers handling the
+camera pipeline on the stm32mp25x.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-index 50b9b964fbc4674b870189736a49f1d6a02b2503..d2cc19bb40d77f67a1f5fe565bc62f45eff2d266 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
-@@ -87,6 +87,7 @@ struct dcmipp_pipeline_config {
- 	size_t num_ents;
- 	const struct dcmipp_ent_link *links;
- 	size_t num_links;
-+	u32 hw_revision;
- };
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 1167cf63d7e87aaa15c5c1ed70a9f6511fd818d4..6f8cabf2c5985f358689f15296300de24e9d9b25 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -518,6 +518,29 @@ i2c8: i2c@46040000 {
+ 				status = "disabled";
+ 			};
  
- /* --------------------------------------------------------------------------
-@@ -122,11 +123,13 @@ static const struct dcmipp_ent_link stm32mp13_ent_links[] = {
- 			MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE),
- };
- 
-+#define DCMIPP_STM32MP13_VERR	0x10
- static const struct dcmipp_pipeline_config stm32mp13_pipe_cfg = {
- 	.ents		= stm32mp13_ent_config,
- 	.num_ents	= ARRAY_SIZE(stm32mp13_ent_config),
- 	.links		= stm32mp13_ent_links,
--	.num_links	= ARRAY_SIZE(stm32mp13_ent_links)
-+	.num_links	= ARRAY_SIZE(stm32mp13_ent_links),
-+	.hw_revision	= DCMIPP_STM32MP13_VERR
- };
- 
- #define LINK_FLAG_TO_STR(f) ((f) == 0 ? "" :\
-@@ -496,6 +499,7 @@ static int dcmipp_probe(struct platform_device *pdev)
- 	/* Initialize media device */
- 	strscpy(dcmipp->mdev.model, DCMIPP_MDEV_MODEL_NAME,
- 		sizeof(dcmipp->mdev.model));
-+	dcmipp->mdev.hw_revision = pipe_cfg->hw_revision;
- 	dcmipp->mdev.dev = &pdev->dev;
- 	media_device_init(&dcmipp->mdev);
- 
++			csi: csi@48020000 {
++				compatible = "st,stm32mp25-csi";
++				reg = <0x48020000 0x2000>;
++				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
++				resets = <&rcc CSI_R>;
++				clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>,
++					 <&rcc CK_KER_CSIPHY>;
++				clock-names = "pclk", "txesc", "csi2phy";
++				access-controllers = <&rifsc 86>;
++				status = "disabled";
++			};
++
++			dcmipp: dcmipp@48030000 {
++				compatible = "st,stm32mp25-dcmipp";
++				reg = <0x48030000 0x1000>;
++				interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>;
++				resets = <&rcc DCMIPP_R>;
++				clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
++				clock-names = "kclk", "mclk";
++				access-controllers = <&rifsc 87>;
++				status = "disabled";
++			};
++
+ 			sdmmc1: mmc@48220000 {
+ 				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
+ 				arm,primecell-periphid = <0x00353180>;
 
 -- 
 2.25.1
