@@ -1,36 +1,39 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B62212EE3
-	for <linux-media@vger.kernel.org>; Thu,  7 Nov 2024 14:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D7680C02
+	for <linux-media@vger.kernel.org>; Thu,  7 Nov 2024 15:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730991218; cv=none; b=IJknW7fe0EFroJ/8oDbd9n1upZbb6x+Db/C+L1T872Q4XSz57ZWg/8y5NMBBZ9jhmR+j2d5g2JRI9KN8vrrttzRwx5YNhflbkrxCQwl983ldqQyXLeJcZvf4O0aYAnWkRF5OByghcBnHM9GbmYKmU06D+7rXYIINg8vE5l2c0zE=
+	t=1730991883; cv=none; b=PvCSDGJ+hkpUdTIXexLmQHN0zpGJ1JdADnpExMo6IDf014r3YCdBudj7u5HPGI39COpB9mvRVSUS2aEWRXeeZf5Iub9+PoPBz61zF4ddsZRJIVVR1rx33TOecgKW2TgLObGiR++uEW106HZDnFJo7aVSqqnmxBOcg6eet/U9wJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730991218; c=relaxed/simple;
-	bh=CzPNxPovei5cRURWdCV2D86lquacmssp7WHUgdcfy6U=;
+	s=arc-20240116; t=1730991883; c=relaxed/simple;
+	bh=IweKoLZ0DPzTmKU0/ojOyQK2aOLddZArsMI8apEyTBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HK5UB/pyq1LAw8cn9KBwi8qkCpnZnNAROlsK3LuaghCHAvh1LWSPAyYR0IkfDvCLEK+wie8/w76AJg24OpL9WNqiT/XpxElOG9J4Ax7SatYm6oHzeocPqrflfXuPwco3tcIvaWagvQNs7IHoxDJXsAkfKjynifxLAtL5cn8lJTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0cdaMD/d; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bkZQIY/oFck20CEMv1lL9cczQVLPOfuIVP3z7pIY+Yzckw2jsZ+0rjSs8/CZ9hSa6A+JeK8CfdmiEdi9nB0EoR7eMAcwVysRpkwOD0IIxgpgq2adGUQLUs+lBsN77uvENDpnq35c5KkmO6dR/tFP3mAeICKD6xXMNwSSx0VJ3+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=h33k/CuK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0cdaMD/d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC26C4CECC;
-	Thu,  7 Nov 2024 14:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730991217;
-	bh=CzPNxPovei5cRURWdCV2D86lquacmssp7WHUgdcfy6U=;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="h33k/CuK"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5854022A;
+	Thu,  7 Nov 2024 16:04:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1730991869;
+	bh=IweKoLZ0DPzTmKU0/ojOyQK2aOLddZArsMI8apEyTBY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0cdaMD/d0vqRut3l5/fbi9Wi5chLGDISrnSpP0GlKV4ZnnkD/lO9ovUStN+MaPTVs
-	 pQGfW1xNbr7fsdNCjArhVxWmDzUjN2hAVPdGhPagQrN66cDT8TKBG26SttO3t+TF3q
-	 wTGHhxmstzrY5XjzQNB5ZgPnFi+gvujIn32qLksk=
-Date: Thu, 7 Nov 2024 15:53:17 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
+	b=h33k/CuKh+7rAFLa27PzQX718I99vR8ELK+4GSzmRUvmc4cbl0b0/sEW33L7AWC3Y
+	 2nqNckP6cai0qvYaVuSTxK1UrHRoCtQ+HQx0RLfw9NwNbhdm++wVFwaDvkQxzyqv4G
+	 RbW2FzELJFlhklPUM/hhS9h7z3KG5zNxoO/23wZE=
+Date: Thu, 7 Nov 2024 17:04:32 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Benoit Sevens <bsevens@google.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	linux-media@vger.kernel.org, stable@kernel.org
+Cc: linux-media@vger.kernel.org, gregkh@linuxfoundation.org,
+	stable@kernel.org
 Subject: Re: [PATCH v1 1/2] media: uvcvideo: Skip parsing frames of type
  UVC_VS_UNDEFINED in uvc_parse_format
-Message-ID: <2024110700-removing-diocese-fbb4@gregkh>
+Message-ID: <20241107150432.GD31474@pendragon.ideasonboard.com>
 References: <20241107142204.1182969-1-bsevens@google.com>
  <20241107142204.1182969-2-bsevens@google.com>
 Precedence: bulk
@@ -39,9 +42,14 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20241107142204.1182969-2-bsevens@google.com>
+
+Hi Benoît,
+
+Thank you for the patch.
 
 On Thu, Nov 07, 2024 at 02:22:02PM +0000, Benoit Sevens wrote:
 > This can lead to out of bounds writes since frames of this type were not
@@ -51,6 +59,27 @@ On Thu, Nov 07, 2024 at 02:22:02PM +0000, Benoit Sevens wrote:
 > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
 > Signed-off-by: Benoit Sevens <bsevens@google.com>
 
-Cc: stable <stable@kernel.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 0fac689c6350..13db0026dc1a 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -371,7 +371,7 @@ static int uvc_parse_format(struct uvc_device *dev,
+>  	 * Parse the frame descriptors. Only uncompressed, MJPEG and frame
+>  	 * based formats have frame descriptors.
+>  	 */
+> -	while (buflen > 2 && buffer[1] == USB_DT_CS_INTERFACE &&
+> +	while (ftype && buflen > 2 && buffer[1] == USB_DT_CS_INTERFACE &&
+>  	       buffer[2] == ftype) {
+>  		unsigned int maxIntervalIndex;
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
