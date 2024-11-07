@@ -1,181 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8321EF097
-	for <linux-media@vger.kernel.org>; Thu,  7 Nov 2024 10:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2841EF943;
+	Thu,  7 Nov 2024 10:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730976582; cv=none; b=I+fF8xBsZqkCXAD//5rUi6zYcEAhI1QH6bD+TJ1mbpwo7TbwSJKgwliS4oqNhP8qTy2m6A1/LMcA4gJpBzRA3Ul8smZxyrKhTpmjr6sj83dV2AqROq9LYmZn5lznbBQa/Cz4ioiN1ep4JM4uUciPkGhuwTNhy/rqzWr/+HRprQ4=
+	t=1730976774; cv=none; b=pG/6cpIYsmprLTfYjzhFnIqv7re9W/krxWmuz0g/Wz3VpgEIrXQPue9cSnHkXQIwI7uXYIohJGBzLcw9sGk8ZFEyTwv1q4TuN7KP9/a9xoBiNr3g8P+C2PTIW9J+s0OQeKZgmOVxMsMju0YqFa+O+3UgbhAG9a7VW2xXqicRMpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730976582; c=relaxed/simple;
-	bh=N6gxq4txE8IMqQjnpSjB6KKPFupDl1rpCErBvTv63k8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pwyDQum8acmWZsJ2WWOmdtRryVcO7IpcEzdwB4t4tgV8nqmS6vfev9kFep0v7Lub9fAYICExB9PaC2D2iPCHX0ygVo09XqtgWDVpGw+pJ7Eh4jOiX3st5eaJC6+JJS8eqcG74amnFzutk3ugUPb38PEgZUtj0tsVugsjZlI6Lb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dJmf04Lo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1730976774; c=relaxed/simple;
+	bh=cnpp2TKMHv1gK8Yy2Zpt8olDnfx3n0TPEPZ9lucWymU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fZ3mq4Au5VVAJ9t0F7FXVXlH9JoptET02xmsdl6B+39nqQWo0XD5wtZyT1+41VtB8+nxVLPnZxwrmDeVunrm9dohrozmJkQwCNsb+2dupmzKMiV/uv8YWuBrEMbjXLJGBUzluQXNd2NjgjrRMBDLuJF2xDWHqQ0gvT61TfWIAL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=gHOmQb2g; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dJmf04Lo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730976579;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=76GaoI35Nv1l2CfX1dWTekftwF759WCk+Ljllj9qEcU=;
-	b=dJmf04LosCMQmEF6cfqi+hRmD2y2UiFWkLMwXnZEZy1aN/VO+6W/jntSX6EPJ9/rbPW3LG
-	CCQabLDxu9pz7FM661o9UuzByC8gI3RsrBjI7D8JaEhfg8Rlc81asQ0x0iIyiaYgpV9bon
-	+/rsxFgJ8XW4hl6vtSOkeRz6hy1u6mc=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-226-ipj-O8y0MFGpRg3-OtfEFw-1; Thu,
- 07 Nov 2024 05:49:33 -0500
-X-MC-Unique: ipj-O8y0MFGpRg3-OtfEFw-1
-X-Mimecast-MFC-AGG-ID: ipj-O8y0MFGpRg3-OtfEFw
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gHOmQb2g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1730976770;
+	bh=cnpp2TKMHv1gK8Yy2Zpt8olDnfx3n0TPEPZ9lucWymU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gHOmQb2gzrh17lPVK0V41gcSYPwvUfOVnvZPfNkDhFRD2ruZlgjqo2mqNiyqdLELn
+	 UedWM4hWzT0LGQetXp1QTN4MMTnp1XtrqcchepmWo4dI9M3hCMxfKwEDeCOIH9M/9z
+	 Nqu7SM6F/E49HialrekHtJFcr3TKvWgz4r2wzMWkAaA8D4+XtlKuTZKanrV76dx3GZ
+	 ZbXL/uyODk9XNtdOKS8cJJ5Z2JhiHbsHD2bY+fvl0oZuEOeurB/Tm4gzHAPgdv9NWG
+	 dyp8z2XjxfcUwjtdReLPNTKFe/kqgflUIuXeF2M3x5O23BpjNAdeC5r579cU7pzfxD
+	 iQoTKTUqohyDw==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 200381955F77;
-	Thu,  7 Nov 2024 10:49:32 +0000 (UTC)
-Received: from shalem.redhat.com (unknown [10.39.194.177])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 18F8C1953882;
-	Thu,  7 Nov 2024 10:49:29 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	linux-media@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v2 1/2] media: i2c: Automatically select common options for lens drivers
-Date: Thu,  7 Nov 2024 11:49:25 +0100
-Message-ID: <20241107104926.257636-2-hdegoede@redhat.com>
-In-Reply-To: <20241107104926.257636-1-hdegoede@redhat.com>
-References: <20241107104926.257636-1-hdegoede@redhat.com>
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id F330217E35DC;
+	Thu,  7 Nov 2024 11:52:49 +0100 (CET)
+Message-ID: <90fe898c-0352-46da-aee3-898cdf2b5d26@collabora.com>
+Date: Thu, 7 Nov 2024 11:52:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] media: mediatek: vcodec: support extended h264
+ decode
+To: Yunfei Dong <yunfei.dong@mediatek.com>,
+ =?UTF-8?Q?N=C3=ADcolas_F_=2E_R_=2E_A_=2E_Prado?= <nfraprado@collabora.com>,
+ Sebastian Fricke <sebastian.fricke@collabora.com>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Nathan Hebert <nhebert@chromium.org>
+Cc: Hsin-Yi Wang <hsinyi@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>,
+ Fritz Koenig <frkoenig@chromium.org>, Daniel Vetter <daniel@ffwll.ch>,
+ Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20241107074603.31998-1-yunfei.dong@mediatek.com>
+ <20241107074603.31998-3-yunfei.dong@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20241107074603.31998-3-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In commit 7d3c7d2a2914 ("media: i2c: Add a camera sensor top level menu")
-a top level menu was added for sensor drivers so that all sensor drivers
-would depend on I2C and so that MEDIA_CONTROLLER, FWNODE and
-VIDEO_V4L2_SUBDEV_API would be automatically selected for all sensor
-drivers.
+Il 07/11/24 08:45, Yunfei Dong ha scritto:
+> The address end of working buffer can't be calculated directly with buffer
+> size in kernel for some special architecture. Adding new extend vsi_ex to
+> calculate the address end in firmware.
+> Adding capability to separate extend and non extend driver for different
+> platform.
+> At last, hardware can parse the syntax to get nal information in firmware
+> for extend architecture, needn't to parse it again in kernel.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>   .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   2 +
+>   .../decoder/vdec/vdec_h264_req_multi_if.c     | 487 +++++++++++++++++-
+>   2 files changed, 472 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> index 886fa385e2e6..1e697bc810b0 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+> @@ -17,6 +17,7 @@
+>   
+>   #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+>   #define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
+> +#define IS_VDEC_SUPPORT_EX(capability) ((capability) & MTK_VDEC_IS_SUPPORT_EX)
+>   
+>   enum mtk_vcodec_dec_chip_name {
+>   	MTK_VDEC_INVAL = 0,
+> @@ -42,6 +43,7 @@ enum mtk_vdec_format_types {
+>   	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
+>   	MTK_VCODEC_INNER_RACING = 0x20000,
+>   	MTK_VDEC_IS_SUPPORT_10BIT = 0x40000,
+> +	MTK_VDEC_IS_SUPPORT_EX = 0x80000,
+>   };
+>   
+>   /*
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
+> index 851a8490b828..d0aecd9621d9 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
 
-All lens drivers must depend on I2C and VIDEO_DEV and must select
-MEDIA_CONTROLLER, V4L2_FWNODE and VIDEO_V4L2_SUBDEV_API and most already
-do, but e.g. VIDEO_V4L2_SUBDEV_API is not consistenly selected.
+..snip..
 
-Change the "Lens drivers" menu into a menuconfig option with
-the necessary depends and selects. This ensures that these options are
-depended on / selected consistently and simplifies the Kconfig snippets
-for the various lens voice coil drivers.
+>   	inst->vsi_ctx.dec.y_fb_dma = y_fb_dma;
+> @@ -816,8 +1260,17 @@ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+>   	if (!h_vdec)
+>   		return -EINVAL;
+>   
+> -	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
+> -		ret = vdec_h264_slice_single_decode(h_vdec, bs, unused, res_chg);
+> +	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE) {
+> +		if (IS_VDEC_SUPPORT_EX(inst->ctx->dev->dec_capability))
+> +			ret = vdec_h264_slice_single_decode_ex(h_vdec, bs, unused, res_chg);
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202411061152.VKd9JYpa-lkp@intel.com/
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/media/i2c/Kconfig | 37 +++++++++++--------------------------
- 1 file changed, 11 insertions(+), 26 deletions(-)
+I wonder if we can use function pointers here, as I feel like vcodec is becoming
+a bit "full of branches here and there"...
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 65cfe6cae8cc..0a30f309cd6b 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -742,24 +742,25 @@ config VIDEO_THP7312
- 
- endmenu
- 
--menu "Lens drivers"
--	visible if MEDIA_CAMERA_SUPPORT
-+menuconfig VIDEO_CAMERA_LENS
-+	bool "Lens drivers"
-+	depends on MEDIA_CAMERA_SUPPORT && I2C
-+	select MEDIA_CONTROLLER
-+	select V4L2_FWNODE
-+	select VIDEO_V4L2_SUBDEV_API
-+	default y
-+
-+if VIDEO_CAMERA_LENS
- 
- config VIDEO_AD5820
- 	tristate "AD5820 lens voice coil support"
--	depends on GPIOLIB && I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select V4L2_ASYNC
-+	depends on GPIOLIB
- 	help
- 	  This is a driver for the AD5820 camera lens voice coil.
- 	  It is used for example in Nokia N900 (RX-51).
- 
- config VIDEO_AK7375
- 	tristate "AK7375 lens voice coil support"
--	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select V4L2_ASYNC
- 	help
- 	  This is a driver for the AK7375 camera lens voice coil.
- 	  AK7375 is a 12 bit DAC with 120mA output current sink
-@@ -768,10 +769,6 @@ config VIDEO_AK7375
- 
- config VIDEO_DW9714
- 	tristate "DW9714 lens voice coil support"
--	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select V4L2_ASYNC
- 	help
- 	  This is a driver for the DW9714 camera lens voice coil.
- 	  DW9714 is a 10 bit DAC with 120mA output current sink
-@@ -780,10 +777,6 @@ config VIDEO_DW9714
- 
- config VIDEO_DW9719
- 	tristate "DW9719 lens voice coil support"
--	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select V4L2_ASYNC
- 	select V4L2_CCI_I2C
- 	help
- 	  This is a driver for the DW9719 camera lens voice coil.
-@@ -792,10 +785,6 @@ config VIDEO_DW9719
- 
- config VIDEO_DW9768
- 	tristate "DW9768 lens voice coil support"
--	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select V4L2_FWNODE
- 	help
- 	  This is a driver for the DW9768 camera lens voice coil.
- 	  DW9768 is a 10 bit DAC with 100mA output current sink
-@@ -804,17 +793,13 @@ config VIDEO_DW9768
- 
- config VIDEO_DW9807_VCM
- 	tristate "DW9807 lens voice coil support"
--	depends on I2C && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	select V4L2_ASYNC
- 	help
- 	  This is a driver for the DW9807 camera lens voice coil.
- 	  DW9807 is a 10 bit DAC with 100mA output current sink
- 	  capability. This is designed for linear control of
- 	  voice coil motors, controlled via I2C serial interface.
- 
--endmenu
-+endif
- 
- menu "Flash devices"
- 	visible if MEDIA_CAMERA_SUPPORT
--- 
-2.47.0
+The rough idea is:
 
+/* there, or somewhere that's called only once in the driver lifetime anyway */
+static int vdec_h264_slice_init(.....)
+{
+	........
+
+	if (hw_arch == MTK_VDEC_PURE_SINGLE_CORE) {
+		if (inst->ctx->dev->dec_capability & MTK_VDEC_IS_SUPPORT_EX)
+			inst->decode = vdec_h264_slice_single_decode_ex;
+		else
+			inst->decode = vdec_h264_slice_single_decode;
+	}  else {
+		if (inst->ctx->dev->dec_capability & MTK_VDEC_IS_SUPPORT_EX)
+			inst->decode = vdec_h264_slice_lat_decode_ex;
+		else
+			inst->decode = vdec_h264_slice_lat_decode;
+	}
+
+	......
+}
+
+static int vdec_h264_slice_decode(...)
+{
+	if (!inst)
+		return -EINVAL;
+
+	return inst->decode( .... )
+}
+
+...less branches during decoding *of each frame* :-)
+
+Cheers,
+Angelo
