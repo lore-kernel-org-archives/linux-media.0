@@ -1,80 +1,99 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0C4216A20;
-	Thu,  7 Nov 2024 16:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730998225; cv=none; b=bL2VXOtHHO053asl+ZfksUboCC//5je09p6LPxHs1ylFJCNmC6yjlc1LEk+NWq6GL3aRuhQHsHhfHDBV98QGsA0cDKmqTYP0YWhKl2oUi0lyGaxoyjvuoe0/2rD9fT4t3AEKKvMirlmbAOklour6AwoCXqFTQrjWQe9ZmBJx8Wc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730998225; c=relaxed/simple;
-	bh=rNoa7mRnZwJ/KTYmtyEmTizUmSewi0zvkmHKYsN3uZ0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Zgnw1SaWyo9lf+SfRIFPQatUobelTkl+ZWFcIy3PW/ioeTOAD15JyYPK6d1C7XJ9W/8GIHCMMfcaMYSvP+ITrwSnID9S5hjIv9zSvbWAu3Pfdzsaq3rxskAY6ShlXyn+lZ5McKsD+p4vllsO7ibhJSALbUwyi5hfbzD2xNxTvmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=gXGx+7RO; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E92621315C;
+	Thu,  7 Nov 2024 17:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731002295; cv=pass; b=gdbw+AyyvWeW0WByncjL/jHJwNqTZfR+Eu2A4aqTLJnwyQNgkm2CvNUQ89sdlhtwIvdVVkULFos+5RZkGiYh51GiY/+/zyNhlYFYn9/tmKgPoBe/zYuyY/hFWmy0aqx5pZkRd2NNSEgvhl/PJ2dTH0keKG0eJPgQjDKOpUxN7DY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731002295; c=relaxed/simple;
+	bh=Qi6g7F8k0JBc5E6QkTEzTkFAtQSM8yWD2ngfjTGKb4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4VuzQySr0608dBzPwnV1pooS96MnrXmPfctdRIwDvLP+n0HZpChadcUS9YhlRLTLD6ZqogOq0F1NKeL9uRniUgpbEj8mBQF+4nv+elgixAOy+rxiOEhDkYqdUusb88RVTJJK1AYV0PxkUi+aBwxP4P/bEgXsd5Sd/S+ZWwc2o0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b=PxNC7pBh; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="gXGx+7RO"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A7F1842C18
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1730997903; bh=OF2OmjsYyh2AJqblU+JyZH89+Sa1MgWYtrIS8n5K7Ws=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=gXGx+7RO6HDb3juKi+lieA6V3k5D5CQCRJtDFFlC/Auyj7ecgvC75gsk2GbQMWnR9
-	 tAiFGOKBhLUo8H4SNKnKGTbCJjpDl7YORhXHowmUcanCWekbkJ0JyjUclO6JTrM/D6
-	 r0R3NkL8Bb3BtyXzfcJp5n565K/otB5fuTOQIfy7z2k8ob946Na6e1BnN2OSqW8dxf
-	 Qw9WaoMAf/eUr1m3eSdzgZvZplMulQ/xEIqWrXele+12cK2s64xn1U8rBCQDB2MAmi
-	 ZdqDwYCKsK3hP2M5vMO85DwVLIZRARDIbaVbeYvvb+BM4M6nU5+Gz7GSZkSjDmtRtv
-	 r7E+9CS1cCZ6Q==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id A7F1842C18;
-	Thu,  7 Nov 2024 16:45:03 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Sebastian Fricke <sebastian.fricke@collabora.com>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b="PxNC7pBh"
+ARC-Seal: i=1; a=rsa-sha256; t=1731002277; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=mgK/DLF99LJx79M7uwPPi7LSMQufualEYQ5D5DB5W784YfcgbVQgown8YgkNoAWWlX0MKIohsq1lPsH9B4YWffj1/jmu4sGiX/RSMm8eNFSd8R94GvTOw186eQ4BDQR1a5T35ql7Fvk6EIJrXE8FUQZqfIemVtLwOWW1/BY7jn8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1731002277; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=sls/wkVJ47W5gvv/QQf49njHmwYUvRDdW8tOQBTRFVU=; 
+	b=V7TsTCJRZB6raf+IWh9yPIDcYnptqDBWXWp/cAto7q6bCxHqlUJV16uI9prvdLZ0GHFZhYDaZu5V4Lm56mUUwe+NEFH+MBD4c6j3jiDyHKNxZnuF7HzkIJ1FXMvX0FNEVfH/0x6Dy2WpxHZFD4YSxF4L09itZ36osSBQYyyxIkA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.fricke@collabora.com;
+	dmarc=pass header.from=<sebastian.fricke@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1731002277;
+	s=zohomail; d=collabora.com; i=sebastian.fricke@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=sls/wkVJ47W5gvv/QQf49njHmwYUvRDdW8tOQBTRFVU=;
+	b=PxNC7pBhXaWRPCQadTgaTATWNIzwYWiWjVBZl6EvpjMyveu/xTKiA+Q8QYFCCNJG
+	9DeQJWZYEESO8rSBxvzrlh6Tsa4ifFioPAgflgCqj4ygF2pVTKRneb1lClOdRjUWPkb
+	uGEpPZNBN/tY8C3fs/aN0+orvG88tx2LcvlvlOZc=
+Received: by mx.zohomail.com with SMTPS id 173100227513635.06961771683052;
+	Thu, 7 Nov 2024 09:57:55 -0800 (PST)
+Date: Thu, 7 Nov 2024 18:57:50 +0100
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+To: Jonathan Corbet <corbet@lwn.net>
 Cc: bagasdotme@gmail.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl,
- mauro.chehab@linux.intel.com, kernel@collabora.com,
- bob.beckett@collabora.com, nicolas.dufresne@collabora.com, Sebastian
- Fricke <sebastian.fricke@collabora.com>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl,
+	mauro.chehab@linux.intel.com, kernel@collabora.com,
+	bob.beckett@collabora.com, nicolas.dufresne@collabora.com
 Subject: Re: [PATCH 0/2] Documentation: Debugging guide
-In-Reply-To: <20241028-media_docs_improve_v3-v1-0-2b1b486c223e@collabora.com>
+Message-ID: <20241107175750.y7tuzqulfbjl5k4f@basti-XPS-13-9310>
 References: <20241028-media_docs_improve_v3-v1-0-2b1b486c223e@collabora.com>
-Date: Thu, 07 Nov 2024 09:45:02 -0700
-Message-ID: <87ttcj0z8x.fsf@trenco.lwn.net>
+ <87ttcj0z8x.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <87ttcj0z8x.fsf@trenco.lwn.net>
+X-ZohoMailClient: External
 
-Sebastian Fricke <sebastian.fricke@collabora.com> writes:
+Hey Jon,
 
-> The series contains:
-> - a general debugging guide split into debugging for driver developers and
-> debugging from userspace
-> - a new summary page for all media related documentation. This is inspired by
-> other subsystems, which first of all allows a user to find the subsystem
-> under the subsystems page and secondly eases general navigation through the
-> documentation that is sprinkled onto multiple places.
-> - a guide on how to debug code in the media subsystem, which points to the
-> parts of the general documentation and adds own routines.
+On 07.11.2024 09:45, Jonathan Corbet wrote:
+>Sebastian Fricke <sebastian.fricke@collabora.com> writes:
+>
+>> The series contains:
+>> - a general debugging guide split into debugging for driver developers and
+>> debugging from userspace
+>> - a new summary page for all media related documentation. This is inspired by
+>> other subsystems, which first of all allows a user to find the subsystem
+>> under the subsystems page and secondly eases general navigation through the
+>> documentation that is sprinkled onto multiple places.
+>> - a guide on how to debug code in the media subsystem, which points to the
+>> parts of the general documentation and adds own routines.
+>
+>So I am just getting into looking at this; the fact that I had a hard
+>time applying the series has not helped...
+>
+>> base-commit: 8c64f4cdf4e6cc5682c52523713af8c39c94e6d5
+>
+>That is ... 6.9?  Why are you basing your patches on such an ancient
+>kernel?  If you want me to apply them for 6.12 (not guaranteed in any
+>case, it's getting late) you'll need to bring them forward to current
+>docs-next.
 
-So I am just getting into looking at this; the fact that I had a hard
-time applying the series has not helped...
+Yes sorry something must be wrong in with my master tree here, I will
+rebase on docs-next and do a respin once I know whether something else
+needs to be fixed.
 
-> base-commit: 8c64f4cdf4e6cc5682c52523713af8c39c94e6d5
+>
+>Thanks,
+>
+>jon
+>
 
-That is ... 6.9?  Why are you basing your patches on such an ancient
-kernel?  If you want me to apply them for 6.12 (not guaranteed in any
-case, it's getting late) you'll need to bring them forward to current
-docs-next.
+Regards,
 
-Thanks,
-
-jon
+Sebastian Fricke
