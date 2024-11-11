@@ -1,189 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC8E14D70E;
-	Mon, 11 Nov 2024 13:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24D218BBA8;
+	Mon, 11 Nov 2024 14:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731332640; cv=none; b=YZamZnDY/yKPKAnxyHDIk/WFvYxgVGRV7fE6q+G2+NSD2lhC60GOqtqLh8yC1cU3VeKakgVLPcjiSbEcWAjU61OzrvLtmrb/Fb7mgu/GTNZFoMcL8TJMHk0OGCWc41mrYj2xr0HAiiPrhPzGwN8JqMVkx7LWxYlMLVg7GZASL24=
+	t=1731333786; cv=none; b=PD8K5wBnwMORYP6A3O/0DTyW2i0/9SSfeWAQmworsnATynY2xumZpR/1q6xbGnlnvghgVYl4WS/VUhHqLNJx2J9Kq6JnjHsddAFysr8B0p5x7+dg26wocch6HeK8RtQYBuRoAJ+44raP+6zKDyov9CiZIkw6RQB9vW06vGaWTaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731332640; c=relaxed/simple;
-	bh=8KBvcpOBN/X2BF/ZldtfXAsIa2zzQe8iYbB2KTJR1dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WDFdHyDCks61UT9/kguXlwSifHliKhJGlU8P+NX1NDLS4bJoEiUCLCgPueRbuCus/qLZtdNnie+GECwEwQsh8O09kBrM7YeolmSmJkbyaJgEiCEEatZAhiaOwMV0mLyZk9+1gV7wJbMWbkeq3vr9s4JoJMQ21muQ5u794quXMfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bz8Kzokr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731333786; c=relaxed/simple;
+	bh=HaaDV+WLpR0Ia/MD/rolnSMvCpQVGSdfRgdfsEk7FwM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nrTGDdjYJkReDCtQfPfHcZubmO2FXsDkfRIUU3IUWvMsFDiwZ5pX4ABSKM8TgzybuozoAY3qoRFvRW4oxw2LCsCA3vmo/0HPv/pI2k5Z5TJWxGvYKPHijSYNefsHn92dScBSrLiJ+X/qWM1+G7jl6N+ngQsVpN2BPJXqqj+soRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ahgggQo+; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bz8Kzokr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAEEC4CECF;
-	Mon, 11 Nov 2024 13:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731332639;
-	bh=8KBvcpOBN/X2BF/ZldtfXAsIa2zzQe8iYbB2KTJR1dc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bz8Kzokr11U86eIVk+YnVU+RXlmRHMdSc+/TwFSN5kKaVEv17Z//KEVwjfQ0KXQGT
-	 ibMrDbTXc7km+yK4elJdYeY7+tG5ofN71kzuUWoOwJAV6I8QXiReJnrSqOwb0Jg7KV
-	 XW/aqjpOhM8LfC51Rb3nBlXW2F2RRmJYnXffU8L1aOjbhMMHeL8GaWFYn+WIOBFRRX
-	 bVMgCirhCL/EaLFbZLcmko9jWQNL21Ic/7ochUuYos49eqBfSRgIchFrBcrp3bov3G
-	 OgwXEMvySgLcXG+u1li/iwbt7Xt/Wuo+BB7CnogecEYoNUHQxW7vqL5tZzykV6JDLE
-	 1wCfuZtY0An5w==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1tAUhw-0000000CSax-0kdW;
-	Mon, 11 Nov 2024 14:43:56 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: 
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Kevin Hao <haokexin@gmail.com>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Philipp Stanner <pstanner@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [PATCH] media: dvb_frontend: cleanup zigzag drift/inversion logic
-Date: Mon, 11 Nov 2024 14:43:54 +0100
-Message-ID: <d24601442407717bed6f101d3186dac5b6de7fc4.1731332632.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.47.0
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ahgggQo+"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABDDgIM000996;
+	Mon, 11 Nov 2024 14:03:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	1rvycK1m43BFAJNc0igbgy2/qw11w87AKvHkvR3c3LM=; b=ahgggQo+xE2P5k62
+	Z7anENshxFQ1LHRr15yJY2VbdyPfnSk7JS2P+it2cbndwBH1VD6FzNWDCQXguJ00
+	TgJ1jq2n4XFuMGStl8w7X/adyZQ3wAmaZcl0t8qnKPW0tjncWMn6H9DySmKNG2KB
+	07sI30kMbByZqkw5/DymNo2EmviDZc6v7KmCEqJpiK1udogicyEwVd4Y0e8oL/dD
+	aouBShAwkFZKLyBPL2Qd0dAgVxs+vIZguz9QKN6rLBK06jKOn7ZXgi1RSr8Mx4pv
+	0BJxVER+V6LepQUKqcPQHsdBvR0Hf6tLkZTT2FyH82JHka83z8nPjVa24PxUskru
+	qRrLOA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42t0wjv7g8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Nov 2024 14:02:59 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ABE2xHW005786
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Nov 2024 14:02:59 GMT
+Received: from [10.204.100.69] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 11 Nov
+ 2024 06:02:56 -0800
+Message-ID: <e2b31dbc-2681-1bd8-e013-d65ec52bbf1a@quicinc.com>
+Date: Mon, 11 Nov 2024 19:32:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 1/4] media: venus: hfi_parser: add check to avoid out of
+ bound access
+Content-Language: en-US
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>
+CC: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20241105-venus_oob-v1-0-8d4feedfe2bb@quicinc.com>
+ <20241105-venus_oob-v1-1-8d4feedfe2bb@quicinc.com>
+ <b2yvyaycylsxo2bmynlrqp3pzhge2tjvtvzhmpvon2lzyx3bb4@747g3erapcro>
+ <81d6a054-e02a-7c98-0479-0e17076fabd7@quicinc.com>
+ <ndlf4bsijb723cctkvd7hkwmo7plbzr3q2dhqc3tpyujbfcr3z@g4rvg5p7vhfs>
+ <975f4ecd-2029-469a-8ecf-fbd6397547d4@linaro.org>
+ <57544d01-a7c6-1ea6-d408-ffe1678e0b5e@quicinc.com>
+ <ql6hftuo7udkqachofws6lcpwx7sbjakonoehm7zsh43kqndsf@rwmiwqngldn2>
+ <781ea2fd-637f-b896-aad4-d70f43ad245c@quicinc.com>
+ <oxbpd3tfemwci6aiv5gs6rleg6lmsuabvvccqibbqddczjklpi@aln6hfloqizo>
+ <37982a05-2057-45f4-923e-7562c683706d@linaro.org>
+From: Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <37982a05-2057-45f4-923e-7562c683706d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mH0y1_oUWsPqZ4a-YRUqNnErAZQGOabM
+X-Proofpoint-ORIG-GUID: mH0y1_oUWsPqZ4a-YRUqNnErAZQGOabM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 impostorscore=0 adultscore=0
+ phishscore=0 suspectscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411110116
 
-Move the logic which sets LNB drift and inversion to a separate
-function, to make the code cleaner.
 
-No functional changes.
+On 11/8/2024 5:13 PM, Bryan O'Donoghue wrote:
+> On 07/11/2024 13:54, Dmitry Baryshkov wrote:
+>>>> I'd say, don't overwrite the array. Instead the driver should extend it
+>>>> with the new information.
+>>> That is exactly the existing patch is currently doing.
+>> _new_ information, not a copy of the existing information.
+> 
+> But is this _really_ new information or is it guarding from "malicious"
+> additional messages ?
+> 
+> @Vikash is it even a valid use-case for firmware to send one set of capabilities
+> and then send a new set ?
+> 
+> It seems to me this should only happen once when the firmware starts up - the
+> firmware won't acquire any new abilities once it has enumerated its set to APSS.
+> 
+> So why is it valid to process an additional message at all ?
+> 
+> Shouldn't we instead be throwing away redundant updates either silently or with
+> some kind of complaint ?
+> 
+> If there's no new data - then this is data we shouldn't bother processing.
+> 
+> If it is new data then surely it should be the _current_ and _only_ valid set of
+> data.
+> 
+> And if the update is considered "invalid" then why _would_ we accept the update ?
+> 
+> I get we're fixing the OOB but I think we should be clear on the validity of the
+> content of the packet.
+The payload [1] is all about 2 u32s each for decoder and encoder bit masks,
+while each bit signifies which codec each supports. So in a good case, it would
+be always first iteration which would be sufficient. Its a very hypothetical
+case where a good case would that there are 8 payloads (consider there are 8
+supported codecs) with one bit set in each of those 8 payloads. I was initially
+thinking to cover for this case as well, seems could be a bit of over designing.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/dvb-core/dvb_frontend.c | 83 +++++++++++++++------------
- 1 file changed, 45 insertions(+), 38 deletions(-)
+Maybe set core->codecs_count (to 0) in the beginning of the API should cover the
+working case. In malicious case, let it continue to override ?
 
-diff --git a/drivers/media/dvb-core/dvb_frontend.c b/drivers/media/dvb-core/dvb_frontend.c
-index a05aa271a1ba..6ee46bf6e45a 100644
---- a/drivers/media/dvb-core/dvb_frontend.c
-+++ b/drivers/media/dvb-core/dvb_frontend.c
-@@ -375,32 +375,13 @@ static void dvb_frontend_swzigzag_update_delay(struct dvb_frontend_private *fepr
- 	fepriv->delay = fepriv->min_delay + q2 * HZ / (128 * 128);
- }
- 
--/**
-- * dvb_frontend_swzigzag_autotune - Performs automatic twiddling of frontend
-- *	parameters.
-- *
-- * @fe: The frontend concerned.
-- * @check_wrapped: Checks if an iteration has completed.
-- *		   DO NOT SET ON THE FIRST ATTEMPT.
-- *
-- * return: Number of complete iterations that have been performed.
-- */
--static int dvb_frontend_swzigzag_autotune(struct dvb_frontend *fe, int check_wrapped)
-+static void dvb_frontend_swzigzag_inversion_drift(struct dvb_frontend *fe,
-+						  int autoinversion)
- {
--	int autoinversion;
--	int ready = 0;
--	int fe_set_err = 0;
- 	struct dvb_frontend_private *fepriv = fe->frontend_priv;
--	struct dtv_frontend_properties *c = &fe->dtv_property_cache, tmp;
--	int original_inversion = c->inversion;
--	u32 original_frequency = c->frequency;
--
--	/* are we using autoinversion? */
--	autoinversion = ((!(fe->ops.info.caps & FE_CAN_INVERSION_AUTO)) &&
--			 (c->inversion == INVERSION_AUTO));
- 
- 	/* setup parameters correctly */
--	while (!ready) {
-+	while (1) {
- 		/* calculate the lnb_drift */
- 		fepriv->lnb_drift = fepriv->auto_step * fepriv->step_size;
- 
-@@ -415,40 +396,66 @@ static int dvb_frontend_swzigzag_autotune(struct dvb_frontend *fe, int check_wra
- 		switch (fepriv->auto_sub_step) {
- 		case 0:
- 			/* try with the current inversion and current drift setting */
--			ready = 1;
--			break;
-+			return;
- 
- 		case 1:
--			if (!autoinversion) break;
-+			if (!autoinversion)
-+				return;
- 
--			fepriv->inversion = (fepriv->inversion == INVERSION_OFF) ? INVERSION_ON : INVERSION_OFF;
--			ready = 1;
--			break;
-+			fepriv->inversion = (fepriv->inversion == INVERSION_OFF) ?
-+					    INVERSION_ON : INVERSION_OFF;
-+			return;
- 
- 		case 2:
--			if (fepriv->lnb_drift == 0) break;
-+			if (fepriv->lnb_drift == 0)
-+				return;
- 
- 			fepriv->lnb_drift = -fepriv->lnb_drift;
--			ready = 1;
--			break;
-+			return;
- 
- 		case 3:
--			if (fepriv->lnb_drift == 0) break;
--			if (!autoinversion) break;
-+			if (fepriv->lnb_drift == 0)
-+				return;
-+			if (!autoinversion)
-+				return;
- 
--			fepriv->inversion = (fepriv->inversion == INVERSION_OFF) ? INVERSION_ON : INVERSION_OFF;
-+			fepriv->inversion = (fepriv->inversion == INVERSION_OFF) ?
-+					    INVERSION_ON : INVERSION_OFF;
- 			fepriv->lnb_drift = -fepriv->lnb_drift;
--			ready = 1;
--			break;
-+			return;
- 
- 		default:
- 			fepriv->auto_step++;
- 			fepriv->auto_sub_step = 0;
- 			continue;
- 		}
--
--		if (!ready) fepriv->auto_sub_step++;
- 	}
-+}
-+/**
-+ * dvb_frontend_swzigzag_autotune - Performs automatic twiddling of frontend
-+ *	parameters.
-+ *
-+ * @fe: The frontend concerned.
-+ * @check_wrapped: Checks if an iteration has completed.
-+ *		   DO NOT SET ON THE FIRST ATTEMPT.
-+ *
-+ * return: Number of complete iterations that have been performed.
-+ */
-+static int dvb_frontend_swzigzag_autotune(struct dvb_frontend *fe, int check_wrapped)
-+{
-+	int fe_set_err = 0;
-+	struct dvb_frontend_private *fepriv = fe->frontend_priv;
-+	struct dtv_frontend_properties *c = &fe->dtv_property_cache, tmp;
-+	int original_inversion = c->inversion;
-+	u32 original_frequency = c->frequency;
-+	int autoinversion;
-+
-+	/* are we using autoinversion? */
-+	autoinversion = ((!(fe->ops.info.caps & FE_CAN_INVERSION_AUTO)) &&
-+			 (c->inversion == INVERSION_AUTO));
-+
-+	/* setup parameters correctly */
-+	dvb_frontend_swzigzag_inversion_drift(fe, autoinversion);
- 
- 	/* if this attempt would hit where we started, indicate a complete
- 	 * iteration has occurred */
--- 
-2.47.0
+Regards,
+Vikash
 
+[1]
+https://elixir.bootlin.com/linux/v6.12-rc7/source/drivers/media/platform/qcom/venus/hfi_parser.c#L193
