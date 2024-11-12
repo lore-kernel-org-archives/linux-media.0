@@ -1,163 +1,140 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C606E1FF7CF
-	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 14:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB988209688
+	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 17:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731422243; cv=none; b=Z7EuIRvtM/udkOUf+/ebQ3dnR0+AijpVRzJ7ieIBJyCY3NUU4BIK+jK9hkAIy3pgRZ3zqoZTZdIdMJQq9arBK6UzF3M05e5UKx3sDn/oh0oDp9ncgpNsGMO8pwFReKVN5GKOZCD9Fb/+zjyNLMHFn0H7Z3/ZrvLP9lkrvhGEek4=
+	t=1731432663; cv=none; b=C6SfLXrAgsel3suPlwhhPUyUnEor2dfyb3U6VOMVrNVnWbqvQ+v+kMTFDxPbcrzkkibN/Ggw9WXZ47dbLIOUAeQXx0LyVQISGX45V27Kb3Ab4AcA8VseEtuCmE2x6CE3ygA9FCu3a6QyVwV6GlsWAHRsq/ddgfIRpB3Vw6t7eKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731422243; c=relaxed/simple;
-	bh=RD6lW0mPngnJyYiLTu8XV9ZT8JPbTTuChmdppLn195Q=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=cqTpMa5/c7hY7leULkBRhhq4Ib/t4UV8lDBb+DfTHyCmipBfpGy2o/2dbjRCxEtv4V8yp36HgLnZOEezvD0epj4hSL48sJZku0nSGjKCBJr4nVV54Miz3o6fZghynLX3gC+2W5p7FsCrAWEl09UlvJ1OV3o8mmos6a7wALnJFDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ByD+3gUs; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1731432663; c=relaxed/simple;
+	bh=uHvRxnCwxSPwoWBt7s6p7RnvISj6q1/A38c/hPBn/Oo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TzoeayVPxwH17qK1gxBNkjMeqc+/hfEwo51xbl7U8t1IG+RSThakxiVeS2YrhUDNCgQ7nveiynTbYfazIy7lTgA1KoHtybeaMZwk7oyjOS7Vefk24SWefRrOcFh/Shx5RJ+ynqxNNZ5/XEJZJyJFjY+g60FFHj1cgsdWUsTJPNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Y6MRz86y; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ByD+3gUs"
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 81116512;
-	Tue, 12 Nov 2024 15:37:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1731422226;
-	bh=RD6lW0mPngnJyYiLTu8XV9ZT8JPbTTuChmdppLn195Q=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=ByD+3gUshLEQVvfWomNXeBQc9aDp7lQncwwgoiNZFnfWmZL/BWHPflyi5KP3yQbgX
-	 2xZKx6urmCZj9ng30HQTuoDGEn70n1RFEg1DEOHgNQpk1imz10LdCvWuLdiabEGEWt
-	 BSxyyPfqcTfw0w4ZmDbKwLfrU1sF+VcLyfoNWBBU=
-Message-ID: <839ce511-88da-4ee4-a23e-59604b8f8722@ideasonboard.com>
-Date: Tue, 12 Nov 2024 14:37:16 +0000
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Y6MRz86y"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b147a2ff04so444970785a.3
+        for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 09:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1731432660; x=1732037460; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fNnLmwM6k2wna/0wjImN/u+vOWZSQ1LYfyw6a2jXzJ8=;
+        b=Y6MRz86yPlcWXEfyD7YCtcJj35Kuevwrg9TnH7I4AIGVDnQZRAjgt1LgADTvnz4feS
+         GH7nukySUTB8yRjxrDL6gwxxEtN0ddF+sOg8XwHxDk4qRJi9d7E8hd5hfMY4z9LrEzqt
+         hCVQq0U4NPxcm8rK93EvpKZXq22xvtwU5iZmc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731432660; x=1732037460;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fNnLmwM6k2wna/0wjImN/u+vOWZSQ1LYfyw6a2jXzJ8=;
+        b=mXApDA7S1FhnC6UvhVOsPDsFXqBMGerbM3cw0i/vZL6zrn1IXfkXPR52BeEhyQ0GCK
+         XHPI3LTt0W/GllCGZIZhW3IPAaW3JNOhTpi0obkhQcfzglOv0BpLjuMa7bjNeI487lGp
+         6ocxxVqmVOIQ/Nenvzep4F3mhrb3XaLF9u+kYOGT6e7UvDpBMnSXguqe0fV8heXGtu2K
+         g3IhxRYRGy9RH0AFp5UowV4W7ojxFhBLQcHVLUj0WzcdhObcEzmEbKTBnPvnzg1GNWG+
+         qb7u+xL2ZKwOoaIpfhmOLIJKidM1vYdszbzthBFb+ExYHPW0HXJ+TBbGYpv8tALJ4n5k
+         RHLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXeuL8jb0kT5cSI2vSfh68EuXwzIK3SKpcGUGpkNS+pHxuDU/O3XdVhm13a85POYR4zRn/H2n0Y4Ky7XQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDtyWdeXIV+q1auXZD1t8HTxEp9HQaY13Og8Ex6OHsEd8sHYrn
+	xvh+BEPGXj1i88U8CT/TzjBSr9ArI0C09UtlrILQE3EiTO+Pa2WHkUnCWCu6gw==
+X-Google-Smtp-Source: AGHT+IEqc2TDtyerxS7bC/9aGU2bzWGZBxZv6iEwNKljp7OmEq6pHR5Uiz4/K5WvZFBjN8dhnkGfug==
+X-Received: by 2002:a05:620a:4495:b0:7b1:5143:8da1 with SMTP id af79cd13be357-7b331f20600mr2305215085a.43.1731432660551;
+        Tue, 12 Nov 2024 09:31:00 -0800 (PST)
+Received: from denia.c.googlers.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b32ac2dcebsm608292285a.7.2024.11.12.09.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 09:30:59 -0800 (PST)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v3 0/8] media: uvcvideo: Implement the Privacy GPIO as a
+ evdev
+Date: Tue, 12 Nov 2024 17:30:43 +0000
+Message-Id: <20241112-uvc-subdev-v3-0-0ea573d41a18@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] media: platform: rzg2l-cru: Use
- v4l2_get_link_freq()
-From: Dan Scally <dan.scally@ideasonboard.com>
-To: linux-media@vger.kernel.org
-Cc: hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
- laurent.pinchart@ideasonboard.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
- jacopo.mondi@ideasonboard.com,
- Daniel Scally <dan.scally+renesas@ideasonboard.com>,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-References: <20241112124614.646281-1-dan.scally@ideasonboard.com>
- <20241112124614.646281-3-dan.scally@ideasonboard.com>
-Content-Language: en-US
-Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20241112124614.646281-3-dan.scally@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMSQM2cC/13MSw7CIBSF4a2YOxZzL/SBjtyHcUCBtgxaDFiia
+ bp3aRPjY3hO8n8zRBucjXDazRBsctH5MQ+x34Hu1dhZ5kzewJEXhALZlDSLU2NsYvLYFkVVK8S
+ mhBzcgm3dY8Mu17x7F+8+PDc70fq+GfpmEjFkqpJCkLbG1Pys++AHNw0HHzpYpcQ/NaH8qXmuZ
+ WmkwpKUMOKvXpblBSRkygLlAAAA
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ Yunke Cao <yunkec@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
+ Hans de Goede <hdegoede@redhat.com>, Ricardo Ribalda <ribalda@chromium.org>, 
+ stable@vger.kernel.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+X-Mailer: b4 0.13.0
 
+Some notebooks have a button to disable the camera (not to be mistaken
+with the mechanical cover). This is a standard GPIO linked to the
+camera via the ACPI table.
 
-On 12/11/2024 12:46, Daniel Scally wrote:
-> From: Daniel Scally <dan.scally+renesas@ideasonboard.com>
->
-> The rzg2l_csi2_calc_mbps() function currently tries to calculate the
-> link frequency for a CSI2 bus using the V4L2_CID_PIXEL_RATE control
-> of the remote subdevice. Switch the function to v4l2_get_link_freq()
-> which correctly targets V4L2_CID_LINK_FREQ before falling back on
-> V4L2_CID_PIXEL_RATE if the former is unavailable.
->
-> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Signed-off-by: Daniel Scally <dan.scally+renesas@ideasonboard.com>
-> ---
-> Changes in v2:
->
-> 	- None
->
->   .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   | 25 ++++++++-----------
->   1 file changed, 10 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-> index 881e910dce02..cbefd43de09b 100644
-> --- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-> +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-> @@ -242,28 +242,23 @@ static int rzg2l_csi2_calc_mbps(struct rzg2l_csi2 *csi2)
->   	const struct rzg2l_csi2_format *format;
->   	const struct v4l2_mbus_framefmt *fmt;
->   	struct v4l2_subdev_state *state;
-> -	struct v4l2_ctrl *ctrl;
->   	u64 mbps;
->   
-> -	/* Read the pixel rate control from remote. */
-> -	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
-> -	if (!ctrl) {
-> -		dev_err(csi2->dev, "no pixel rate control in subdev %s\n",
-> -			source->name);
-> -		return -EINVAL;
-> -	}
-> -
->   	state = v4l2_subdev_lock_and_get_active_state(&csi2->subdev);
->   	fmt = v4l2_subdev_state_get_format(state, RZG2L_CSI2_SINK);
->   	format = rzg2l_csi2_code_to_fmt(fmt->code);
->   	v4l2_subdev_unlock_state(state);
->   
-> -	/*
-> -	 * Calculate hsfreq in Mbps
-> -	 * hsfreq = (pixel_rate * bits_per_sample) / number_of_lanes
-> -	 */
-> -	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * format->bpp;
-> -	do_div(mbps, csi2->lanes * 1000000);
-> +	/* Read the link frequency from remote subdevice. */
-> +	mbps = v4l2_get_link_freq(source->ctrl_handler, format->bpp,
-> +				  csi2->lanes);
-> +	if (mbps < 0) {
-CI points out to me that mbps is unsigned and so this check is meaningless - I'll fix that in a v3
-> +		dev_err(csi2->dev, "can't retrieve link freq from subdev %s\n",
-> +			source->name);
-> +		return -EINVAL;
-> +	}
-> +
-> +	do_div(mbps, 1000000);
->   
->   	return mbps;
->   }
+4 years ago we added support for this button in UVC via the Privacy control.
+This has three issues:
+- If the camera has its own privacy control, it will be masked.
+- We need to power-up the camera to read the privacy control gpio.
+- Other drivers have not followed this approach and have used evdev.
+
+We tried to fix the power-up issues implementing "granular power
+saving" but it has been more complicated than anticipated...
+
+This patchset implements the Privacy GPIO as a evdev.
+
+The first patch of this set is already in Laurent's tree... but I
+include it to get some CI coverage.
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v3:
+- CodeStyle (Thanks Sakari)
+- Re-implement as input device
+- Make the code depend on UVC_INPUT_EVDEV
+- Link to v2: https://lore.kernel.org/r/20241108-uvc-subdev-v2-0-85d8a051a3d3@chromium.org
+
+Changes in v2:
+- Rebase on top of https://patchwork.linuxtv.org/project/linux-media/patch/20241106-uvc-crashrmmod-v6-1-fbf9781c6e83@chromium.org/
+- Create uvc_gpio_cleanup and uvc_gpio_deinit
+- Refactor quirk: do not disable irq
+- Change define number for MEDIA_ENT_F_GPIO
+- Link to v1: https://lore.kernel.org/r/20241031-uvc-subdev-v1-0-a68331cedd72@chromium.org
+
+---
+Ricardo Ribalda (8):
+      media: uvcvideo: Fix crash during unbind if gpio unit is in use
+      media: uvcvideo: Factor out gpio functions to its own file
+      media: uvcvideo: Re-implement privacy GPIO as an input device
+      Revert "media: uvcvideo: Allow entity-defined get_info and get_cur"
+      media: uvcvideo: Create ancillary link for GPIO subdevice
+      media: v4l2-core: Add new MEDIA_ENT_F_GPIO
+      media: uvcvideo: Use MEDIA_ENT_F_GPIO for the GPIO entity
+      media: uvcvideo: Introduce UVC_QUIRK_PRIVACY_DURING_STREAM
+
+ .../userspace-api/media/mediactl/media-types.rst   |   4 +
+ drivers/media/usb/uvc/Kconfig                      |   2 +-
+ drivers/media/usb/uvc/Makefile                     |   3 +
+ drivers/media/usb/uvc/uvc_ctrl.c                   |  40 +-----
+ drivers/media/usb/uvc/uvc_driver.c                 | 112 +---------------
+ drivers/media/usb/uvc/uvc_entity.c                 |  21 ++-
+ drivers/media/usb/uvc/uvc_gpio.c                   | 144 +++++++++++++++++++++
+ drivers/media/usb/uvc/uvc_status.c                 |  13 +-
+ drivers/media/usb/uvc/uvc_video.c                  |   4 +
+ drivers/media/usb/uvc/uvcvideo.h                   |  31 +++--
+ drivers/media/v4l2-core/v4l2-async.c               |   3 +-
+ include/uapi/linux/media.h                         |   1 +
+ 12 files changed, 223 insertions(+), 155 deletions(-)
+---
+base-commit: 1b3bb4d69f20be5931abc18a6dbc24ff687fa780
+change-id: 20241030-uvc-subdev-89f4467a00b5
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
+
