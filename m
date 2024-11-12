@@ -1,31 +1,31 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F65B14D6EF
-	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 12:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538B915665D
+	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 12:46:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731415604; cv=none; b=dgjZXTj9voC/anQyNiZJKY1CxtwOevAVaHhe4C5ajNeLhIqPUPLxJVJtButwL6cKXRMHXhEdCoQLnJHb/w00kepc7HNq+ty6cG355mPfq3Dvy5liA5DBZlbpRVPloYLuQI2GILtWSpcjFrR+WcVRMMIB2GcaWdDSZxeQvCpX72c=
+	t=1731415607; cv=none; b=ItsjfkpDcGBndYcy4Z4NnmSRsYNn9y6UrS5ZXxRoQC1Kb4iOV3uGP0Oyb+p7aRbPI9YHb/tsYXdfhFu0xfMFqTDaHPd1vLhw2sUMhp53IrLBO3z/Laa+VDV7k/5oi7XDWnZVt8crMbaPiwL/xgyNGD3tXl6BqbG+GWLS82/gtOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731415604; c=relaxed/simple;
-	bh=G27lWzdI4RPfeFoJf2uhHD+hWokOW90RYnNXh2E7vUg=;
+	s=arc-20240116; t=1731415607; c=relaxed/simple;
+	bh=XW4SZSWlytSUq0gNRIozrhcA/mfclGBNKDhpujhUi/w=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fnkVjGM66IU2gcIunpgFSF5IK/Fdz0MbtHvVWItiSUDXtpUZMXZAEATgeFfPbnz5eiRnH7aL97IShG7Aj4I1cMydO9PBe7eKM/8DXR71dTiaCd8SabMt0P5JfHeRNlX0IEhW6OXQGidflQ7oFS8x+k4wzLVJVMwL3JZqorFzklE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=rXvUgIsp; arc=none smtp.client-ip=213.167.242.64
+	 MIME-Version; b=dbwfgHU10XlMZGjqnTCM9H1r8JWnNq2tpO+cZ23iBc/8PiQdOnvso7uOtWvkk8nQ8hgcqIhfCUgbl4UF118Qz/sABgp2JQjRDUnYxP2anUUZidrMBXqoHzUw8y/XS2HA10+2xuTyyNDb8oPCZT59nINmOB9sNemqOyn6ogWlj3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=g6R8/VTd; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rXvUgIsp"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="g6R8/VTd"
 Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7C1B4132B;
-	Tue, 12 Nov 2024 13:46:23 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 126021659;
+	Tue, 12 Nov 2024 13:46:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1731415583;
-	bh=G27lWzdI4RPfeFoJf2uhHD+hWokOW90RYnNXh2E7vUg=;
+	s=mail; t=1731415584;
+	bh=XW4SZSWlytSUq0gNRIozrhcA/mfclGBNKDhpujhUi/w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rXvUgIspNK4qXXwLtUb7jEi/Y/D8ge5CMkHsZUf3CORpJ5WW4l4y9haC3/SIw6DsK
-	 Rdky8zMlikMOTUnvjSvU3Sz6ArKqH2CHrNqO6NsQoodd8B6jzpxvnJdG74WmvnSJkJ
-	 1o4hIU3nv1OodPa6qr1WLkNUboHBHTrYdQJvx85k=
+	b=g6R8/VTdt2IqBp2k6jjiaBcTXLBmEdUm1XLR9ge/SMJr/y4EVB+kDcoyd148EgmzX
+	 afzaIoyDkHIOjFuuUIMo5s/JcTQ7hulOYXheji/dVEaDSqpCXblSwOZ4yD/TE2UocY
+	 K7lHUOpKJbXdYT5VyJRgmDzHXGHqUobepa9Jk5eQ=
 From: Daniel Scally <dan.scally@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: hverkuil-cisco@xs4all.nl,
@@ -33,11 +33,10 @@ Cc: hverkuil-cisco@xs4all.nl,
 	laurent.pinchart@ideasonboard.com,
 	prabhakar.mahadev-lad.rj@bp.renesas.com,
 	jacopo.mondi@ideasonboard.com,
-	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 3/4] media: platform: rzg2l-cru: Use v4l2_fill_pixfmt()
-Date: Tue, 12 Nov 2024 12:46:13 +0000
-Message-Id: <20241112124614.646281-4-dan.scally@ideasonboard.com>
+	Daniel Scally <dan.scally+renesas@ideasonboard.com>
+Subject: [PATCH v2 4/4] media: platform: rzg2l-cru: Add support for RAW10/12/14 data
+Date: Tue, 12 Nov 2024 12:46:14 +0000
+Message-Id: <20241112124614.646281-5-dan.scally@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241112124614.646281-1-dan.scally@ideasonboard.com>
 References: <20241112124614.646281-1-dan.scally@ideasonboard.com>
@@ -51,107 +50,138 @@ Content-Transfer-Encoding: 8bit
 
 From: Daniel Scally <dan.scally+renesas@ideasonboard.com>
 
-Rather than open-code a calculation of the format's bytesperline
-and sizeimage, use the v4l2_fill_pixfmt() helper. This makes it
-easier to support the CRU packed pixel formats without over
-complicating the driver.
+Add support to the rzg2l-cru driver to capture 10/12/14 bit bayer
+data and output it into the CRU's 64-bit packed pixel format.
 
-This change makes the .bpp member of struct rzg2l_cru_ip_format
-superfluous - remove them.
-
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Signed-off-by: Daniel Scally <dan.scally+renesas@ideasonboard.com>
 ---
 Changes in v2:
 
-	- Minor changes due to rebase
+	- Minor updates accounting for rebase
 
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h   | 2 --
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c    | 5 -----
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c | 3 +--
- 3 files changed, 1 insertion(+), 9 deletions(-)
+ .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   | 12 +++
+ .../platform/renesas/rzg2l-cru/rzg2l-ip.c     | 84 +++++++++++++++++++
+ 2 files changed, 96 insertions(+)
 
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-index 8b898ce05b84..aaf85054f884 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-@@ -68,7 +68,6 @@ struct rzg2l_cru_ip {
-  * @datatype: MIPI CSI2 data type
-  * @format: 4CC format identifier (V4L2_PIX_FMT_*)
-  * @icndmr: ICnDMR register value
-- * @bpp: bytes per pixel
-  * @yuv: Flag to indicate whether the format is YUV-based.
-  */
- struct rzg2l_cru_ip_format {
-@@ -76,7 +75,6 @@ struct rzg2l_cru_ip_format {
- 	u32 datatype;
- 	u32 format;
- 	u32 icndmr;
--	u8 bpp;
- 	bool yuv;
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+index cbefd43de09b..e77cce2a8ddf 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+@@ -192,6 +192,18 @@ static const struct rzg2l_csi2_format rzg2l_csi2_formats[] = {
+ 	{ .code = MEDIA_BUS_FMT_SGBRG8_1X8, .bpp = 8, },
+ 	{ .code = MEDIA_BUS_FMT_SGRBG8_1X8, .bpp = 8, },
+ 	{ .code = MEDIA_BUS_FMT_SRGGB8_1X8, .bpp = 8, },
++	{ .code = MEDIA_BUS_FMT_SBGGR10_1X10, .bpp = 10, },
++	{ .code = MEDIA_BUS_FMT_SGBRG10_1X10, .bpp = 10, },
++	{ .code = MEDIA_BUS_FMT_SGRBG10_1X10, .bpp = 10, },
++	{ .code = MEDIA_BUS_FMT_SRGGB10_1X10, .bpp = 10, },
++	{ .code = MEDIA_BUS_FMT_SBGGR12_1X12, .bpp = 12, },
++	{ .code = MEDIA_BUS_FMT_SGBRG12_1X12, .bpp = 12, },
++	{ .code = MEDIA_BUS_FMT_SGRBG12_1X12, .bpp = 12, },
++	{ .code = MEDIA_BUS_FMT_SRGGB12_1X12, .bpp = 12, },
++	{ .code = MEDIA_BUS_FMT_SBGGR14_1X14, .bpp = 14, },
++	{ .code = MEDIA_BUS_FMT_SGBRG14_1X14, .bpp = 14, },
++	{ .code = MEDIA_BUS_FMT_SGRBG14_1X14, .bpp = 14, },
++	{ .code = MEDIA_BUS_FMT_SRGGB14_1X14, .bpp = 14, },
  };
  
+ static inline struct rzg2l_csi2 *sd_to_csi2(struct v4l2_subdev *sd)
 diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
-index 76a2b451f1da..399a337dbafb 100644
+index 399a337dbafb..3e93c801f1b5 100644
 --- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
 +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
-@@ -16,7 +16,6 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 		.code = MEDIA_BUS_FMT_UYVY8_1X16,
- 		.datatype = MIPI_CSI2_DT_YUV422_8B,
- 		.format = V4L2_PIX_FMT_UYVY,
--		.bpp = 2,
- 		.icndmr = ICnDMR_YCMODE_UYVY,
- 		.yuv = true,
- 	},
-@@ -24,7 +23,6 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
- 		.format = V4L2_PIX_FMT_SBGGR8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
--		.bpp = 1,
+@@ -47,6 +47,90 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
  		.icndmr = 0,
  		.yuv = false,
  	},
-@@ -32,7 +30,6 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
- 		.format = V4L2_PIX_FMT_SGBRG8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
--		.bpp = 1,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
-@@ -40,7 +37,6 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
- 		.format = V4L2_PIX_FMT_SGRBG8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
--		.bpp = 1,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
-@@ -48,7 +44,6 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
- 		.format = V4L2_PIX_FMT_SRGGB8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
--		.bpp = 1,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-index 17a1af507a27..028b390488c8 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-@@ -711,8 +711,7 @@ static void rzg2l_cru_format_align(struct rzg2l_cru_dev *cru,
- 	v4l_bound_align_image(&pix->width, 320, RZG2L_CRU_MAX_INPUT_WIDTH, 1,
- 			      &pix->height, 240, RZG2L_CRU_MAX_INPUT_HEIGHT, 2, 0);
++	{
++		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
++		.format = V4L2_PIX_FMT_CRU_SBGGR10,
++		.datatype = MIPI_CSI2_DT_RAW10,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
++		.format = V4L2_PIX_FMT_CRU_SGBRG10,
++		.datatype = MIPI_CSI2_DT_RAW10,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
++		.format = V4L2_PIX_FMT_CRU_SGRBG10,
++		.datatype = MIPI_CSI2_DT_RAW10,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
++		.format = V4L2_PIX_FMT_CRU_SRGGB10,
++		.datatype = MIPI_CSI2_DT_RAW10,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
++		.format = V4L2_PIX_FMT_CRU_SBGGR12,
++		.datatype = MIPI_CSI2_DT_RAW12,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
++		.format = V4L2_PIX_FMT_CRU_SGBRG12,
++		.datatype = MIPI_CSI2_DT_RAW12,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
++		.format = V4L2_PIX_FMT_CRU_SGRBG12,
++		.datatype = MIPI_CSI2_DT_RAW12,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
++		.format = V4L2_PIX_FMT_CRU_SRGGB12,
++		.datatype = MIPI_CSI2_DT_RAW12,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SBGGR14_1X14,
++		.format = V4L2_PIX_FMT_CRU_SBGGR14,
++		.datatype = MIPI_CSI2_DT_RAW14,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGBRG14_1X14,
++		.format = V4L2_PIX_FMT_CRU_SGBRG14,
++		.datatype = MIPI_CSI2_DT_RAW14,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SGRBG14_1X14,
++		.format = V4L2_PIX_FMT_CRU_SGRBG14,
++		.datatype = MIPI_CSI2_DT_RAW14,
++		.icndmr = 0,
++		.yuv = false,
++	},
++	{
++		.code = MEDIA_BUS_FMT_SRGGB14_1X14,
++		.format = V4L2_PIX_FMT_CRU_SRGGB14,
++		.datatype = MIPI_CSI2_DT_RAW14,
++		.icndmr = 0,
++		.yuv = false,
++	},
+ };
  
--	pix->bytesperline = pix->width * fmt->bpp;
--	pix->sizeimage = pix->bytesperline * pix->height;
-+	v4l2_fill_pixfmt(pix, pix->pixelformat, pix->width, pix->height);
- 
- 	dev_dbg(cru->dev, "Format %ux%u bpl: %u size: %u\n",
- 		pix->width, pix->height, pix->bytesperline, pix->sizeimage);
+ const struct rzg2l_cru_ip_format *rzg2l_cru_ip_code_to_fmt(unsigned int code)
 -- 
 2.34.1
 
