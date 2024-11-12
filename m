@@ -1,205 +1,138 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8BF2139A7
-	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 11:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06054170A3A
+	for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 11:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731410270; cv=none; b=LheVuxUx2xEEgIUZxiPui94AV2GlKc4czdHVgoPjS6IQGO2FgQK2FFCo8rIPCynGBLB//5/oIFJ8jpt8vCjfARlP2wovVlGZ2OTo7QVhG4rtsvYCO3pApLAydHf5sAivCNYGYHAO7UFxT5AS7f91/2B5FZAalI6LMY7fblUlBgo=
+	t=1731410975; cv=none; b=Pr0T+9eNca9AaN/aWxePv2IDTMqCQ65NhRwDYS/ybUXn2cyjLBAFCA1Wq7rS5/RGJdXmZzx1ZcUrQb6Pu5XyNXaYJgDl6EvUTcgtXHnNP1m6IJo+xs39bZUAPrHoqLNKBlO+gYKC04EWfTk5KAVmNyqu9QPFm1lGh0CVZMhCxbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731410270; c=relaxed/simple;
-	bh=pX3ZsBEZbDSOWWHgNQFnA+7zErsVd56w2urC4gYof0k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hxBOiNx+7AUvUAQ1ljNzhHIh549kcMWGHLENBoIWSEwrRWB7fiRvOBoKVUJVKhSygYf+A4sB1bjrHxgVrJ21V6xqcqgb9dO8GfRYCWfyh1g/kItVD1OHFzNXZCQEaYM7cKhGfpmbfvzCMyAm/z7035zIUXkQaXQHnk20/PQqYiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X+XgE4BB; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1731410975; c=relaxed/simple;
+	bh=9AqS5GlG/9hFZkCE3u0l0TNgjC4odZ8HeUejoyQztcQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DQ0ObD0MsrhwohHbwBiarpOgN/VRZPP0X66QdfHB8c8v6FWiEhG2+pQNEbVSDpW19V7bZd7pCm6gThE6xBhacx01WvKrKdFspjqHn2CRmGza/KAxRl+L+LVgpEZiW041bqPqAvCqi7rGjrqskR15Aq/UGyD5mufyBS3QUHL9rL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Wt+0LSIp; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X+XgE4BB"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315c1c7392so48808955e9.1
-        for <linux-media@vger.kernel.org>; Tue, 12 Nov 2024 03:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731410267; x=1732015067; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dWJ4Wcr1DDF3OrOWnRqKL1IZGwMD1FboXeJ/D4aEFDY=;
-        b=X+XgE4BBdIkeP6q12SpSAfL6MbJnpQPSh4EuqoJ2vQvOywfLYISd0SoCTYr3V9XwIQ
-         7DvlWWt7txbdZGfMS8nu6eVQmLXrVTaoBeH/qvwizvcLNE/fswmBCXoggaqDwjRdZmON
-         Hg42O2SxeDm66YNO1rpO72PqxVIUahMk1oMoc8QN423sblreUEzasMuWyJOvo/9gQUij
-         +hGaKPuoNBBUOfDjcfLmyonOyPkqwhdYr3LgmgPBjZfHH1/W5eXgU6GN9htb1OyuCI/O
-         W0iRjgHbNvRyi7ua6zT0uL3s6BkT/j9S1/TI7GrGvYcVjgd5eR75oMYyEsKnbbpNTls/
-         Z8lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731410267; x=1732015067;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWJ4Wcr1DDF3OrOWnRqKL1IZGwMD1FboXeJ/D4aEFDY=;
-        b=Wpvx6dyHea9xgAlU8R4rUVVhN0kU4Zmjg8HRLq7wrNVbJPpUM/UBcYjD6F9/aHCBtF
-         e2AD3dFArhVjotC0xiwmFkxj61msVCd+ON3koTDACngDB7YXTCgICy0dD1CYP0o0h6ny
-         buSc8pXgxP2InWemR/dIrNOo16xELm+rC5m5pO/ENVc9asxYRMgu3+hEz17VIjDmi8lS
-         lOTA1TtWoa0SYrw+3KgXDJaP4iJsGg6g2/tuKR/+4x6P3ssrH9YpexsLF+kh7SDOp+xQ
-         NsXR/DXuN6KIgq9H0Hc0EPQBsuVjDDNQzuHY+oBvhzbO/m8tsq4EPQOgcYDngs0TOKML
-         ZOeQ==
-X-Gm-Message-State: AOJu0YyjYD46n8T4sxYiwwG78jg3xlv3ZqqDHiNaDyk2PjSZMnx3vMAA
-	XJ+UCuyUvNsCDbGErgmNgDVjbOZx1SQWXnttPYa9KJvENXDRIOi/TL+orooZGWo=
-X-Google-Smtp-Source: AGHT+IHdyVKh8yiDtEYPmTAcLgcs8M/v+k6vo/2n4BcU3ilUc3c9bFTnx7DhiZaKwNyqsYQKeh+Q7A==
-X-Received: by 2002:a05:600c:35d5:b0:431:5f8c:ccbd with SMTP id 5b1f17b1804b1-432b74fda62mr141755165e9.4.1731410267558;
-        Tue, 12 Nov 2024 03:17:47 -0800 (PST)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b053ff08sm209961455e9.10.2024.11.12.03.17.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 03:17:47 -0800 (PST)
-Message-ID: <f6e661da-6a8f-4555-881e-264e8518f50c@linaro.org>
-Date: Tue, 12 Nov 2024 11:17:46 +0000
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Wt+0LSIp"
+Received: from isaac-ThinkPad-T16-Gen-2.local (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id EA36778C;
+	Tue, 12 Nov 2024 12:29:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1731410960;
+	bh=9AqS5GlG/9hFZkCE3u0l0TNgjC4odZ8HeUejoyQztcQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Wt+0LSIpgpk9tgkAjcSoig9uN9IAT7U14m8jnclkyB2/Mci8FgHp0RlpmadidERat
+	 7gyhHj/RdaPtoUfHPrwGy8HvjgL0xNFwdQBnBUYi+AwrGLMsI+X08yfUS5z+BEdMft
+	 Vf8hQ1WojLYx9V1HNHOoT0ylvpW/pyLIzQhO/bMc=
+From: Isaac Scott <isaac.scott@ideasonboard.com>
+To: laurent.pinchart@ideasonboard.com
+Cc: mchehab@kernel.org,
+	linux-media@vger.kernel.org,
+	Isaac Scott <isaac.scott@ideasonboard.com>
+Subject: [PATCH v7 1/2] media: uvcvideo: Implement dual stream quirk to fix loss of usb packets
+Date: Tue, 12 Nov 2024 11:29:25 +0000
+Message-ID: <20241112112926.17848-2-isaac.scott@ideasonboard.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241112112926.17848-1-isaac.scott@ideasonboard.com>
+References: <20241112112926.17848-1-isaac.scott@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] media: venus: hfi_parser: avoid OOB access beyond
- payload word count
-To: Vikash Garodia <quic_vgarodia@quicinc.com>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20241105-venus_oob-v1-0-8d4feedfe2bb@quicinc.com>
- <20241105-venus_oob-v1-2-8d4feedfe2bb@quicinc.com>
- <474d3c62-5747-45b9-b5c3-253607b0c17a@linaro.org>
- <9098b8ef-76e0-f976-2f4e-1c6370caf59e@quicinc.com>
- <f53a359a-cffe-4c3a-9f83-9114d666bf04@linaro.org>
- <c9783a99-724a-cdf0-7e76-7cbf2c77d63f@quicinc.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <c9783a99-724a-cdf0-7e76-7cbf2c77d63f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/11/2024 08:05, Vikash Garodia wrote:
-> You did not printed the last iteration without the proposed fix. In the last
-> iteration (Myword 1), it would access the data beyond allocated size of somebuf.
-> So we can see how the fix protects from OOB situation.
+Some cameras, such as the Sonix Technology Co. 292A, exhibit issues when
+running two parallel streams, causing USB packets to be dropped when an
+H.264 stream posts a keyframe while an MJPEG stream is running
+simultaneously. This occasionally causes the driver to erroneously
+output two consecutive JPEG images as a single frame.
 
-Right but the loop _can't_ be correct. What's the point in fixing an OOB 
-in a loop that doesn't work ?
+To fix this, we inspect the buffer, and trigger a new frame when we
+find an SOI.
 
-This is the loop:
-
-#define BUF_SIZE 0x20  // BUF_SIZE doesn't really matter
-
-char somebuf[BUF_SIZE];
-u32 *word = somebuf[0];
-u32 words = ARRAY_SIZE(somebuf);
-
-while (words > 1) {
-     data = word + 1;  // this
-     word++;           // and this
-     words--;
-}
-
-On the first loop
-word = somebuf[0];
-data = somebuf[3];
-
-On the second loop
-word = somebuf[3]; // the same value as *data in the previous loop
-
-and that's just broken because on the second loop *word == *data in the 
-first loop !
-
-That's what my program showed you
-
-word 4 == 0x03020100 data=0x07060504
-
-// word == data from previous loop
-word 3 == 0x07060504 data=0x0b0a0908
-
-// word == data from previous loop
-word 2 == 0x0b0a0908 data=0x0f0e0d0c
-
-The step size, the number of bytes this loop increments is fundamentally 
-wrong because
-
-a) Its a fixed size [1]
-b) *word in loop(n+1) == *data in loop(n)
-
-Which cannot ever parse more than one data item - in effect never loop - 
-in one go.
-
-> For the functionality part, packet from firmware would come as <prop type>
-> followed by <payload for that prop> i.e
-> *word = HFI_PROPERTY_PARAM_CODEC_SUPPORTED
-> *data = payload --> hence here data is pointed to next u32 to point and parse
-> payload for HFI_PROPERTY_PARAM_CODEC_SUPPORTED.
-> likewise for other properties in the same packet
-
-[1]
-
-But we've established that word increments by one word.
-We wouldn't fix this loop by just making it into
-
-while (words > 1) {
-     data = word + 1;
-     word = data + 1;
-     words -= 2;
-}
-
-Because the consumers of the data have different step sizes, different 
-number of bytes they consume for the structs they cast.
-
-=>
-
-case HFI_PROPERTY_PARAM_CODEC_SUPPORTED:
-	parse_codecs(core, data);
-	// consumes sizeof(struct hfi_codec_supported)
-	struct hfi_codec_supported {
-		u32 dec_codecs;
-		u32 enc_codecs;
-	};
-
-
-case HFI_PROPERTY_PARAM_MAX_SESSIONS_SUPPORTED:
-	parse_max_sessions(core, data);
-	// consumes sizeof(struct hfi_max_sessions_supported)
-	struct hfi_max_sessions_supported {
-		u32 max_sessions;
-	};
-
-case HFI_PROPERTY_PARAM_CODEC_MASK_SUPPORTED:
-	parse_codecs_mask(&codecs, &domain, data);
-	// consumes sizeof(struct hfi_codec_mask_supported)
-	struct hfi_codec_mask_supported {
-         	u32 codecs;
-	        u32 video_domains;
-	};
-
-case HFI_PROPERTY_PARAM_UNCOMPRESSED_FORMAT_SUPPORTED:
-	parse_raw_formats(core, codecs, domain, data);
-	// consumes sizeof(struct hfi_uncompressed_format_supported)
-	struct hfi_uncompressed_format_supported {
-		u32 buffer_type;
-		u32 format_entries;
-		struct hfi_uncompressed_plane_info plane_info;
-	};
-
-case HFI_PROPERTY_PARAM_CAPABILITY_SUPPORTED:
-	parse_caps(core, codecs, domain, data);
-	
-	struct hfi_capabilities {
-		u32 num_capabilities;
-		struct hfi_capability data[];
-	};
-
-	where
-	hfi_platform.h:#define MAX_CAP_ENTRIES		32
-
-I'll stop there.
-
-This routine needs a rewrite.
-
+Signed-off-by: Isaac Scott <isaac.scott@ideasonboard.com>
 ---
-bod
+ drivers/media/usb/uvc/uvc_video.c | 27 ++++++++++++++++++++++++++-
+ drivers/media/usb/uvc/uvcvideo.h  |  1 +
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index e00f38dd07d9..9bb41362c48d 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -20,6 +20,7 @@
+ #include <linux/atomic.h>
+ #include <linux/unaligned.h>
+ 
++#include <media/jpeg.h>
+ #include <media/v4l2-common.h>
+ 
+ #include "uvcvideo.h"
+@@ -1116,6 +1117,7 @@ static void uvc_video_stats_stop(struct uvc_streaming *stream)
+ static int uvc_video_decode_start(struct uvc_streaming *stream,
+ 		struct uvc_buffer *buf, const u8 *data, int len)
+ {
++	u8 header_len;
+ 	u8 fid;
+ 
+ 	/*
+@@ -1129,6 +1131,7 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+ 		return -EINVAL;
+ 	}
+ 
++	header_len = data[0];
+ 	fid = data[1] & UVC_STREAM_FID;
+ 
+ 	/*
+@@ -1210,9 +1213,31 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+ 		return -EAGAIN;
+ 	}
+ 
++	/*
++	 * Some cameras, when running two parallel streams (one MJPEG alongside
++	 * another non-MJPEG stream), are known to lose the EOF packet for a frame.
++	 * We can detect the end of a frame by checking for a new SOI marker, as
++	 * the SOI always lies on the packet boundary between two frames for
++	 * these devices.
++	 */
++	if (stream->dev->quirks & UVC_QUIRK_MJPEG_NO_EOF &&
++	   (stream->cur_format->fcc == V4L2_PIX_FMT_MJPEG ||
++	    stream->cur_format->fcc == V4L2_PIX_FMT_JPEG)) {
++		const u8 *packet = ((const u8 *)data) + header_len;
++
++		if (len >= header_len + 2 &&
++		    packet[0] == 0xff && packet[1] == JPEG_MARKER_SOI &&
++		    buf->bytesused != 0) {
++			buf->state = UVC_BUF_STATE_READY;
++			buf->error = 1;
++			stream->last_fid ^= UVC_STREAM_FID;
++			return -EAGAIN;
++		}
++	}
++
+ 	stream->last_fid = fid;
+ 
+-	return data[0];
++	return header_len;
+ }
+ 
+ static inline enum dma_data_direction uvc_stream_dir(
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index b7d24a853ce4..040073326a24 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -76,6 +76,7 @@
+ #define UVC_QUIRK_NO_RESET_RESUME	0x00004000
+ #define UVC_QUIRK_DISABLE_AUTOSUSPEND	0x00008000
+ #define UVC_QUIRK_INVALID_DEVICE_SOF	0x00010000
++#define UVC_QUIRK_MJPEG_NO_EOF		0x00020000
+ 
+ /* Format flags */
+ #define UVC_FMT_FLAG_COMPRESSED		0x00000001
+-- 
+2.43.0
+
