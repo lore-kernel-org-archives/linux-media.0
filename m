@@ -1,57 +1,57 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F0F19CCF9
-	for <linux-media@vger.kernel.org>; Thu, 14 Nov 2024 19:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDD218A95D
+	for <linux-media@vger.kernel.org>; Thu, 14 Nov 2024 19:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731611451; cv=none; b=N2xCjHAGLx5fVSXdAl+dQMo4UzMe6eg0nVDKuwV/TRjOiLp6tquQcnXqzuyC6obeo21JELZtMKCnhc/iiCkqZU8EmDG6acQabjzFNQTdRC64hofAAJOxA8CRKiY/saG4KjIdTHAyt8QwnmZTP+yKcoxbk/m8EOQwn13pU/r9Uqg=
+	t=1731611452; cv=none; b=tnMl1JAxcDPeiI0suUW+UOQMpSf/EhWB5qaY5gHSIyN5PGe2CcS2+itzzwN55fz7gFdxLMg7UTKkALQRdMpatBZv5mX5e4+NAAl+Nca0kZDGzQHPS5GGgoW40vyN5m28oyQH1NtMaDieXBibD35qfj7u2dAZTrkWx6vbwH2XQe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731611451; c=relaxed/simple;
-	bh=HxxCa8aCZqw7+XgedrXryM3g+ejWKITG5YuSOaGTAys=;
+	s=arc-20240116; t=1731611452; c=relaxed/simple;
+	bh=891vgr8ZfTyBnkF2hdx6x/M+sg6ZKCMBjz6/1SYlOIY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I6ESn8ZI47x/3yBHfFOOlFBUhgh4d27BXaX2Cd2bJqdLuPhD7C6x2wF7vFoygeakC/2ItIGcTHPsKCZay47b/m7awmXVglve5h6xgwaahKTq0+e27Aj+ZzPwyhpg/z1ulqVIbgGSIJ8ASJTKeiHmXQFSDufJFiKM/zrUOfyip04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=e+YQAeE0; arc=none smtp.client-ip=209.85.219.51
+	 In-Reply-To:To:Cc; b=GW+gMUNVPw/CP1XSjqqf8o80RFQ9uaI0DDTKKAj7E/GowYTVAtSiV8XH1javLl3DSU/HI641SprintGkThWR60gSoeF3tT1gP899S/eIiSvrWnlyxvl7iV7r5kb0kN7CUAAjrKgQ+iHB4I6vXK1WcSELTCiujeLKMazd+n+DTrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Tg3svBF9; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="e+YQAeE0"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbd00dd21cso4884526d6.3
-        for <linux-media@vger.kernel.org>; Thu, 14 Nov 2024 11:10:49 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Tg3svBF9"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7b15eadee87so57290185a.2
+        for <linux-media@vger.kernel.org>; Thu, 14 Nov 2024 11:10:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731611448; x=1732216248; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1731611449; x=1732216249; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1HI5lZXxKp42G1HCdhF2Z7i3opylcCsNhfoyIRTMS9o=;
-        b=e+YQAeE0PLo4F9YV3TD5LJIvY1VTrmme8XYxDMNERysNMNkGySY2lHKmFW7fNSjvV0
-         Z91JUB1DM1GIs909S9FyvXqyanWhFAXctr+aTQfFMCFCXcqvuTP4evGstko+WJp88K5w
-         3xegb1di8HLTGCB8+i2YoT6dFxHNIxFd9ROJQ=
+        bh=69mn13H1PoKT9uFw0cFCsSqSTFJ/p7+Sw2nsU0oDXCo=;
+        b=Tg3svBF9/IZyK6wj1cqMuySbmmqZm8zAft/J3IRBICwjFpKe/cNBe1tkSInM1J2fNZ
+         qoxy5iVT43v1lIipA/XOxTz4pntAEVl0ZPEFIicGtTXoGBj2p68sUhEVD3B6TI7ntibl
+         gYJXboqRQ3e6SWdGteUmqTij297V2mzqsBBYs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731611448; x=1732216248;
+        d=1e100.net; s=20230601; t=1731611449; x=1732216249;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1HI5lZXxKp42G1HCdhF2Z7i3opylcCsNhfoyIRTMS9o=;
-        b=WPtmPK2ykF8ACJcmbD5EUcY9cwe1ME3Xue+TmEZYXFzdJqJ5utLEA9KasmjMobBWOA
-         gK1RHgKveXRcvsGvlwz7bgBIy2+VJ8DJY9WM9WGqvxUH4s0UjlVkGU9Q7ST/gwTg32WR
-         N3vfq+LffWjZLC2Z78vd6AQg5SWqIYtDlOufLxWCAmeqY0jp0ZBydOPQi0UonEJpBR5C
-         lkMCdVrU3rGxK6v18w39/VYcDCXeMewNDVVGVl5FdJbgqQqPJxlr12dWJ/9ZVgBuZRxQ
-         KaJLIo6L61vCsx2SgwVbZ600sEKP1Xas1i9mxM0pEYeLZ/oqeegnNYdkqgx2yKr3BHlE
-         lV8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUXE6EeuK9+TaLVJo7InaUw/6X8gEAwnNPqGUuHtziRIyjEnebmJJcVdeVNeNcmW3mDjbGi3HLB5Mq2tg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGp1E1wOltX60HkBUImDXl7u+hZEnIxyeVB6jmZyz+vDrLlGg3
-	OdHkc9mjBFFFRARI+/KwIhUquoFIWKYR9SvPoDdzP3a6BRyxA6loVB3njABWUw==
-X-Google-Smtp-Source: AGHT+IG2l3VxNXtNXIcocUyYR/QdBi0pnQ7Ege9NiZqMMQCPuL9w1s2C20GN87XZMBlYsQpbVArMSQ==
-X-Received: by 2002:a05:6214:3bc7:b0:6d3:9b88:db62 with SMTP id 6a1803df08f44-6d3d00bfd7dmr154515706d6.17.1731611446897;
-        Thu, 14 Nov 2024 11:10:46 -0800 (PST)
+        bh=69mn13H1PoKT9uFw0cFCsSqSTFJ/p7+Sw2nsU0oDXCo=;
+        b=NtyNAGKY3qHr/7/njEra7+SOWagnbD2ev51GZnnO62Tk9iWLfzoMP9nyAewuuAcjzz
+         PHi3myyIRZPn7T9dLdqo3q4mwq2Nj1h99s2YokW94OKqdJb2aFEdSSCbvxzvkGN713IZ
+         CvRJIPLIJGa2WxHiPlwH4Atx7gGW0hbLjnF0TIBxwbeipkh0bFKlqs8jEANSsXnHnV05
+         9cEtaLlskhxKcOySn/7rAqmvzFSOXDip+yOUaFtCSzdAj1hZ0eA0Lfju453syC3/0sI3
+         YRAxlI0R1iU+EpH+jzJbCnSpelGKaVoIxHp1hiO7KMi7f7hPZK+Wzr+9l5Gp0Y1wiv3Y
+         lRIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwVh07o0mB2ZlUgS/7Cg+YKkhi/L8vSqalNJW4h1qun5OsJ2MlLWCHkaYIgCDdAJxYexHE+H2Yi9wEiw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN05lcKJQoa/UOZuhYOr5ZVZ3j2Rhq0/P+g6FZBF/LkUwAyDMF
+	5UVf8LODbIBsp/cdc84e/lsydgafBg6frL8iDKx4SVf/5XQLVcgij33Ytue5wQ==
+X-Google-Smtp-Source: AGHT+IF0l8bNoHEVEJoX/hMNb/j5aEKx9CFbpJx4t69EN9a8/Orafd02Wytr+RNNBbEhefyTuVpv4w==
+X-Received: by 2002:a05:6214:448c:b0:6cb:d376:2b27 with SMTP id 6a1803df08f44-6d3dd060784mr99646816d6.29.1731611449136;
+        Thu, 14 Nov 2024 11:10:49 -0800 (PST)
 Received: from denia.c.googlers.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3ee7cc7e1sm8857766d6.53.2024.11.14.11.10.46
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3ee7cc7e1sm8857766d6.53.2024.11.14.11.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 11:10:46 -0800 (PST)
+        Thu, 14 Nov 2024 11:10:48 -0800 (PST)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 14 Nov 2024 19:10:31 +0000
-Subject: [PATCH v15 02/19] media: v4l2_ctrl: Add V4L2_CTRL_TYPE_RECT
+Date: Thu, 14 Nov 2024 19:10:33 +0000
+Subject: [PATCH v15 04/19] media: vivid: Add a rectangle control
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241114-uvc-roi-v15-2-64cfeb56b6f8@chromium.org>
+Message-Id: <20241114-uvc-roi-v15-4-64cfeb56b6f8@chromium.org>
 References: <20241114-uvc-roi-v15-0-64cfeb56b6f8@chromium.org>
 In-Reply-To: <20241114-uvc-roi-v15-0-64cfeb56b6f8@chromium.org>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
@@ -70,166 +70,80 @@ To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
  Hans Verkuil <hverkuil@xs4all.nl>
 Cc: Yunke Cao <yunkec@chromium.org>, linux-media@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
- Yunke Cao <yunkec@google.com>, 
- Sergey Senozhatsky <senozhatsky@chromium.org>, 
- Daniel Scally <dan.scally@ideasonboard.com>, 
- Hans Verkuil <hverkuil@xs4all.nl>
+ Yunke Cao <yunkec@google.com>, Hans Verkuil <hverkuil@xs4all.nl>
 X-Mailer: b4 0.13.0
 
 From: Yunke Cao <yunkec@google.com>
 
-Add p_rect to struct v4l2_ext_control with basic support in
-v4l2-ctrls.
+This control represents a generic read/write rectangle.
+It supports V4L2_CTRL_WHICH_MIN/MAX_VAL.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
 Signed-off-by: Yunke Cao <yunkec@google.com>
 Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- .../userspace-api/media/v4l/vidioc-g-ext-ctrls.rst       |  4 ++++
- .../userspace-api/media/v4l/vidioc-queryctrl.rst         |  7 +++++++
- .../userspace-api/media/videodev2.h.rst.exceptions       |  1 +
- drivers/media/v4l2-core/v4l2-ctrls-core.c                | 16 +++++++++++++++-
- include/media/v4l2-ctrls.h                               |  2 ++
- include/uapi/linux/videodev2.h                           |  2 ++
- 6 files changed, 31 insertions(+), 1 deletion(-)
+ drivers/media/test-drivers/vivid/vivid-ctrls.c | 34 ++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-index 4d56c0528ad7..b74a74ac06fc 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-g-ext-ctrls.rst
-@@ -199,6 +199,10 @@ still cause this situation.
-       - ``p_area``
-       - A pointer to a struct :c:type:`v4l2_area`. Valid if this control is
-         of type ``V4L2_CTRL_TYPE_AREA``.
-+    * - struct :c:type:`v4l2_rect` *
-+      - ``p_rect``
-+      - A pointer to a struct :c:type:`v4l2_rect`. Valid if this control is
-+        of type ``V4L2_CTRL_TYPE_RECT``.
-     * - struct :c:type:`v4l2_ctrl_h264_sps` *
-       - ``p_h264_sps``
-       - A pointer to a struct :c:type:`v4l2_ctrl_h264_sps`. Valid if this control is
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-index 4d38acafe8e1..56d5c8b0b88b 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-@@ -441,6 +441,13 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_area`, containing the width and the height
-         of a rectangular area. Units depend on the use case.
-+    * - ``V4L2_CTRL_TYPE_RECT``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_rect`, containing a rectangle described by
-+	the position of its top-left corner, the width and the height. Units
-+	depend on the use case.
-     * - ``V4L2_CTRL_TYPE_H264_SPS``
-       - n/a
-       - n/a
-diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-index 429b5cdf05c3..3cf1380b52b0 100644
---- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
-@@ -150,6 +150,7 @@ replace symbol V4L2_CTRL_TYPE_HEVC_SPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_PPS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_AREA :c:type:`v4l2_ctrl_type`
-+replace symbol V4L2_CTRL_TYPE_RECT :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_FWHT_PARAMS :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP8_FRAME :c:type:`v4l2_ctrl_type`
- replace symbol V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR :c:type:`v4l2_ctrl_type`
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index eeab6a5eb7ba..4c8744c8cd96 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -370,7 +370,11 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
- 	case V4L2_CTRL_TYPE_AV1_FILM_GRAIN:
- 		pr_cont("AV1_FILM_GRAIN");
- 		break;
--
-+	case V4L2_CTRL_TYPE_RECT:
-+		pr_cont("%ux%u@%dx%d",
-+			ptr.p_rect->width, ptr.p_rect->height,
-+			ptr.p_rect->left, ptr.p_rect->top);
-+		break;
- 	default:
- 		pr_cont("unknown type %d", ctrl->type);
- 		break;
-@@ -815,6 +819,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
- 	struct v4l2_ctrl_hevc_decode_params *p_hevc_decode_params;
- 	struct v4l2_area *area;
-+	struct v4l2_rect *rect;
- 	void *p = ptr.p + idx * ctrl->elem_size;
- 	unsigned int i;
+diff --git a/drivers/media/test-drivers/vivid/vivid-ctrls.c b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+index 2b5c8fbcd0a2..57346b714534 100644
+--- a/drivers/media/test-drivers/vivid/vivid-ctrls.c
++++ b/drivers/media/test-drivers/vivid/vivid-ctrls.c
+@@ -37,6 +37,7 @@
+ #define VIVID_CID_U8_PIXEL_ARRAY	(VIVID_CID_CUSTOM_BASE + 14)
+ #define VIVID_CID_S32_ARRAY		(VIVID_CID_CUSTOM_BASE + 15)
+ #define VIVID_CID_S64_ARRAY		(VIVID_CID_CUSTOM_BASE + 16)
++#define VIVID_CID_RECT			(VIVID_CID_CUSTOM_BASE + 17)
  
-@@ -1172,6 +1177,12 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 			return -EINVAL;
- 		break;
- 
-+	case V4L2_CTRL_TYPE_RECT:
-+		rect = p;
-+		if (!rect->width || !rect->height)
-+			return -EINVAL;
-+		break;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1872,6 +1883,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_AREA:
- 		elem_size = sizeof(struct v4l2_area);
- 		break;
-+	case V4L2_CTRL_TYPE_RECT:
-+		elem_size = sizeof(struct v4l2_rect);
-+		break;
- 	default:
- 		if (type < V4L2_CTRL_COMPOUND_TYPES)
- 			elem_size = sizeof(s32);
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 59679a42b3e7..b0db167a3ac4 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -56,6 +56,7 @@ struct video_device;
-  * @p_av1_tile_group_entry:	Pointer to an AV1 tile group entry structure.
-  * @p_av1_frame:		Pointer to an AV1 frame structure.
-  * @p_av1_film_grain:		Pointer to an AV1 film grain structure.
-+ * @p_rect:			Pointer to a rectangle.
-  * @p:				Pointer to a compound value.
-  * @p_const:			Pointer to a constant compound value.
-  */
-@@ -89,6 +90,7 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_av1_tile_group_entry *p_av1_tile_group_entry;
- 	struct v4l2_ctrl_av1_frame *p_av1_frame;
- 	struct v4l2_ctrl_av1_film_grain *p_av1_film_grain;
-+	struct v4l2_rect *p_rect;
- 	void *p;
- 	const void *p_const;
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -360,6 +361,38 @@ static const struct v4l2_ctrl_config vivid_ctrl_ro_int32 = {
+ 	.step = 1,
  };
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index e7c4dce39007..c1c2ae150d30 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1859,6 +1859,7 @@ struct v4l2_ext_control {
- 		__s32 __user *p_s32;
- 		__s64 __user *p_s64;
- 		struct v4l2_area __user *p_area;
-+		struct v4l2_rect __user *p_rect;
- 		struct v4l2_ctrl_h264_sps __user *p_h264_sps;
- 		struct v4l2_ctrl_h264_pps __user *p_h264_pps;
- 		struct v4l2_ctrl_h264_scaling_matrix __user *p_h264_scaling_matrix;
-@@ -1929,6 +1930,7 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_U16	     = 0x0101,
- 	V4L2_CTRL_TYPE_U32	     = 0x0102,
- 	V4L2_CTRL_TYPE_AREA          = 0x0106,
-+	V4L2_CTRL_TYPE_RECT	     = 0x0107,
  
- 	V4L2_CTRL_TYPE_HDR10_CLL_INFO		= 0x0110,
- 	V4L2_CTRL_TYPE_HDR10_MASTERING_DISPLAY	= 0x0111,
++static const struct v4l2_rect rect_def = {
++	.top = 100,
++	.left = 200,
++	.width = 300,
++	.height = 400,
++};
++
++static const struct v4l2_rect rect_min = {
++	.top = 0,
++	.left = 0,
++	.width = 1,
++	.height = 1,
++};
++
++static const struct v4l2_rect rect_max = {
++	.top = 0,
++	.left = 0,
++	.width = 1000,
++	.height = 2000,
++};
++
++static const struct v4l2_ctrl_config vivid_ctrl_rect = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_RECT,
++	.name = "Rect",
++	.type = V4L2_CTRL_TYPE_RECT,
++	.flags = V4L2_CTRL_FLAG_HAS_WHICH_MIN_MAX,
++	.p_def.p_const = &rect_def,
++	.p_min.p_const = &rect_min,
++	.p_max.p_const = &rect_max,
++};
++
+ /* Framebuffer Controls */
+ 
+ static int vivid_fb_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -1685,6 +1718,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	dev->int_menu = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_int_menu, NULL);
+ 	dev->ro_int32 = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_ro_int32, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
++	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_rect, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_dyn_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
 
 -- 
 2.47.0.338.g60cca15819-goog
