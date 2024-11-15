@@ -1,444 +1,783 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303612F26;
-	Fri, 15 Nov 2024 05:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15F416F851;
+	Fri, 15 Nov 2024 05:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731647230; cv=none; b=TuKu/AtVWPJvQKsA1noi5jOjzyHeMrr0ZY645Oc+RcVx+jnka+epvURjWof+rvmYeTK2ur1+AC/+w1T5XAVHnpWV5Ezx1RwIelyAP82Bl9vWfBYf89R85pbbPW8aCyFfgJD7Zkucf5wvf6HDE5gFZsyOnBcvUz4O+4hzN8BOkVc=
+	t=1731649871; cv=none; b=tjET8DB/saVWzPCFOjqbwDf2cph700lQ5gMsS/YY+jLJeMyMBn46DAoslTFP4G+wvF4xAsZg5QE+Oodcej+8ubTc6pI8qfdQ45eME68uYHLWyNpPlhbKVuJXtewdhcaP4w+/4ihm2/8n6tXImroH8BgkYTmsx5QwqlLg1tgXFUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731647230; c=relaxed/simple;
-	bh=El/eeZvGnZ8uEhr+u283CTuXNW1Oe+4ae85gYVBx3pw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=spxT5uejhsUiYNtMi/MZsh7H2yWGWVtW+0aElGVBAIlHkoQUFJttdgk5zhGT3Pg0LocN320tCr35Z0ZihqfuCTsV2bUQqvuUBKgvKHInQ4UG0kir+AfUoJRCszmmqbm83BZUz/JWKRjQt/eEWbYyqZ4A4YmRQi01UV9fei8Ox9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gzcylA7x; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1731649871; c=relaxed/simple;
+	bh=sKLCGnz+HkUlVOMLHBZoxWyShygUnNuxGSFXxCKRu3g=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ND/VX6/BwZhi+kod9gblWlxe9gsVETyLlHPfXuFX18meLNpihxiSuQVRymSGzrLV5Ze02aoF/6FxvoBxqRsbQ7gPD1Y/o2BIjIC+W4/aUBsmuoyiarj5MUiJjdzz79Mo+WXX6KVicQVFQBBlrkIlpbz2Zev3wO9Mvuo0kbrPVHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ot7gBJnw; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gzcylA7x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=N9aQtAImZopfyOv5zhJRxixkotiB87MZ1qMsusX6hHY=; b=gzcylA7x8RRn1kEXLhYmuvlIUy
-	qtmfBWH4oWgA2sfHuSo1u+A1KVsb2B5zLI/BkHHCXr7eM8ISH42udL2D1bTXVrL5Bz1urkBkHzfMQ
-	eH2WWLmhyQoQDmOK9nJcWItGq5615qcRnQbwQYwD7g5/EzSG69Zhid/CASyBVvvB/7T26KfSySASJ
-	9YsO2QjsQ5x24SF3bihpWkpI/OOuzhyYgMbbqkWbmK0ZpUvszX4wxPzlFWy1SEdlRt4zPyqIwuMRZ
-	gN/N9vvcvdP3ExvBuXetxClAYIXPCEQzDVO5CZ7gUkF65+ZmodUWCBD15sIra50WuPPISemIyfX17
-	D2fLzWvQ==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tBoXs-00000000tQv-2UVa;
-	Fri, 15 Nov 2024 05:07:00 +0000
-Message-ID: <5dbe1671-e5bd-44e1-b2cf-21ad30339024@infradead.org>
-Date: Thu, 14 Nov 2024 21:06:54 -0800
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ot7gBJnw"
+X-UUID: 98b7d800a31511ef99858b75a2457dd9-20241115
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=bIOBHjftDf5Qy/xWJ8efU/VTXnH/XUlMEk3vPPl1KoA=;
+	b=ot7gBJnw+6TgvcV+Og/NMQ4+Yrf1g2v/rea1whjNKXk4oH02Ayb+eBKlu8gr4TO6c6DZeW7RQNK+W7Bb+FZIugwQVDYr1tQ2yuW3uvCD4k/pWloFKrKup3wHwDYCEKFQm2IEGNUPAPg7nXt86rHoWN4YiG+I3ssHTm8eEhvURTk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.43,REQID:01aca66b-ae49-418f-9fc2-d43b2e8becbd,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:ce19b8a,CLOUDID:33e71e07-6ce0-4172-9755-bd2287e50583,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0,EDM:-3,IP
+	:nil,URL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 98b7d800a31511ef99858b75a2457dd9-20241115
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
+	(envelope-from <yunfei.dong@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1603818893; Fri, 15 Nov 2024 13:51:02 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 15 Nov 2024 13:51:01 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 15 Nov 2024 13:51:00 +0800
+From: Yunfei Dong <yunfei.dong@mediatek.com>
+To: =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
+	<nfraprado@collabora.com>, Sebastian Fricke <sebastian.fricke@collabora.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>, Hans Verkuil
+	<hverkuil-cisco@xs4all.nl>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Benjamin Gaignard
+	<benjamin.gaignard@collabora.com>, Nathan Hebert <nhebert@chromium.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>
+CC: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
+	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, Yunfei
+ Dong <yunfei.dong@mediatek.com>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5 2/3] media: mediatek: vcodec: support extended h264 decode
+Date: Fri, 15 Nov 2024 13:50:47 +0800
+Message-ID: <20241115055056.29917-3-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20241115055056.29917-1-yunfei.dong@mediatek.com>
+References: <20241115055056.29917-1-yunfei.dong@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] docs: Add debugging section to process
-To: Sebastian Fricke <sebastian.fricke@collabora.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: bagasdotme@gmail.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl,
- mchehab@kernel.org, kernel@collabora.com, bob.beckett@collabora.com,
- nicolas.dufresne@collabora.com
-References: <20241028-media_docs_improve_v3-v2-0-f1960ae22c5d@collabora.com>
- <20241028-media_docs_improve_v3-v2-1-f1960ae22c5d@collabora.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20241028-media_docs_improve_v3-v2-1-f1960ae22c5d@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
+The address end of working buffer can't be calculated directly with buffer
+size in kernel for some special architecture. Adding new extend vsi_ex to
+calculate the address end in firmware.
+Adding capability to separate extend and non extend driver for different
+platform.
+At last, hardware can parse the syntax to get nal information in firmware
+for extend architecture, needn't to parse it again in kernel.
 
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../vcodec/decoder/mtk_vcodec_dec_drv.h       |   2 +
+ .../decoder/vdec/vdec_h264_req_multi_if.c     | 571 ++++++++++++++++--
+ 2 files changed, 514 insertions(+), 59 deletions(-)
 
-On 11/13/24 3:17 AM, Sebastian Fricke wrote:
-> This idea was formed after noticing that new developers experience
-> certain difficulty to navigate within the multitude of different
-> debugging options in the Kernel and while there often is good
-> documentation for the tools, the developer has to know first that they
-> exist and where to find them.
-> Add a general debugging section to the Kernel documentation, as an
-> easily locatable entry point to other documentation and as a general
-> guideline for the topic.
-> 
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> ---
->  .../driver_development_debugging_guide.rst         | 214 ++++++++++++++++
->  Documentation/process/debugging/index.rst          |  65 +++++
->  .../debugging/userspace_debugging_guide.rst        | 278 +++++++++++++++++++++
->  Documentation/process/index.rst                    |   8 +-
->  4 files changed, 562 insertions(+), 3 deletions(-)
-> 
-
-
-> diff --git a/Documentation/process/debugging/userspace_debugging_guide.rst b/Documentation/process/debugging/userspace_debugging_guide.rst
-> new file mode 100644
-> index 000000000000..a7c94407bcae
-> --- /dev/null
-> +++ b/Documentation/process/debugging/userspace_debugging_guide.rst
-> @@ -0,0 +1,278 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +==========================
-> +Userspace debugging advice
-> +==========================
-> +
-> +A brief overview of common tools to debug the Linux Kernel from userspace.
-
-Make that a sentence?
-
-> +For debugging advice aimed at driver developer go :doc:`here
-> +</process/debugging/driver_development_debugging_guide>`.
-> +For general debugging advice, see :doc:`general advice document
-> +</process/debugging/index>`.
-> +
-> +.. contents::
-> +    :depth: 3
-> +
-> +The following sections show you the available tools.
-> +
-> +Dynamic debug
-> +-------------
-> +
-> +Mechanism to filter what ends up in the kernel log by dis-/en-abling log
-> +messages.
-> +
-> +Prerequisite: ``CONFIG_DYNAMIC_DEBUG``
-> +
-> +Dynamic debug is only able to target:
-> +
-> +- pr_debug()
-> +- dev_dbg()
-> +- print_hex_dump_debug()
-> +- print_hex_dump_bytes()
-> +
-> +Therefore the usability of this tool is, as of now, quite limited as there is
-> +no uniform rule for adding debug prints to the codebase, resulting in a variety
-> +of ways these prints are implemented.
-> +
-> +Also, note that most debug statements are implemented as a variation of
-> +dprintk(), which have to be activated via a parameter in respective module,
-
-                                                         in the respective module;
-
-> +dynamic debug is unable to do that step for you.
-> +
-> +Here is one example, that enables all available pr_debug() 's within the file::
-
-                                                    no space ^
-
-> +
-> +  $ alias ddcmd='echo $* > /proc/dynamic_debug/control'
-> +  $ ddcmd '-p; file v4l2-h264.c +p'
-> +  $ grep =p /proc/dynamic_debug/control
-> +   drivers/media/v4l2-core/v4l2-h264.c:372 [v4l2_h264]print_ref_list_b =p
-> +   "ref_pic_list_b%u (cur_poc %u%c) %s"
-> +   drivers/media/v4l2-core/v4l2-h264.c:333 [v4l2_h264]print_ref_list_p =p
-> +   "ref_pic_list_p (cur_poc %u%c) %s\n"
-> +
-> +**When should you use this over Ftrace ?**
-> +
-> +- When the code contains one of the valid print statements (see above) or when
-> +  you have added multiple pr_debug() statements during development
-> +- When timing is not an issue, meaning if multiple pr_debug() statements in
-> +  the code won't cause delays
-> +- When you care more about receiving specific log messages than tracing the
-> +  pattern of how a function is called
-> +
-> +For the full documentation see :doc:`/admin-guide/dynamic-debug-howto`
-> +
-> +Ftrace
-> +------
-> +
-> +Prerequisite: ``CONFIG_DYNAMIC_FTRACE``
-> +
-> +This tool uses the tracefs file system for the control files and output files,
-
-                                                                           files.
-
-> +that file system will be mounted as a ``tracing`` folder, which can be found in
-
-   That
-
-> +either ``/sys/kernel/`` or ``/sys/debug/kernel/``.
-> +
-> +Some of the most important operations for debugging are:
-> +
-> +- You can perform a function trace by adding a function name to the
-> +  ``set_ftrace_filter`` file (which accepts any function name found within the
-> +  ``available_filter_functions`` file) or you can specifically disable certain
-> +  functions by adding their names to the ``set_ftrace_notrace`` file (More info
-
-                                                                         more
-
-> +  at: :ref:`trace/ftrace:dynamic ftrace`).
-> +- In order to find out where the calls originates from you can activate the
-
-                          where calls originate from
-
-> +  ``func_stack_trace`` option under ``options/func_stack_trace``.
-> +- Tracing the children of a function call and showing the return values is
-
-                                                                           are
-
-> +  possible by adding the desired function in the ``set_graph_function`` file
-> +  (requires config ``FUNCTION_GRAPH_RETVAL``) more info at
-
-                                               );
-
-> +  :ref:`trace/ftrace:dynamic ftrace with the function graph tracer`.
-> +
-> +For the full Ftrace documentation see :doc:`/trace/ftrace`
-> +
-> +Or you could also trace for specific events by :ref:`using event tracing
-> +<trace/events:2. using event tracing>`, which can be defined as described here:
-> +:ref:`Creating a custom Ftrace tracepoint
-> +<process/debugging/driver_development_debugging_guide:ftrace>`.
-> +
-> +For the full Ftrace event tracing documentation see :doc:`/trace/events`
-> +
-> +.. _read_ftrace_log:
-> +
-> +Reading the ftrace log
-> +~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The ``trace`` file can be read just like any other file (``cat``, ``tail``, ``head``,
-> +``vim``, etc.), the size of the file is limited by the ``buffer_size_kb`` (``echo
-> +1000 > buffer_size_kb``). The :ref:`trace/ftrace:trace_pipe` will behave
-> +similar to the ``trace`` file, but whenever you read from the file the content is
-
-   similarly
-IMO but not a big deal.
-
-> +consumed.
-> +
-> +Kernelshark
-> +~~~~~~~~~~~
-> +
-> +A GUI interface to visualize the traces as a graph and list view from the
-> +output of the `trace-cmd
-> +<https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/>`__ application.
-> +
-> +For the full documentation see `<https://kernelshark.org/Documentation.html>`__
-> +
-> +Perf & alternatives
-> +-------------------
-> +
-> +The tools mentioned above provide ways to inspect kernel code, results, variable values, etc.
-> +Sometimes you have to find out first where to look and for those cases, a box of
-> +performance tracking tools can help you to frame the issue.
-> +
-> +Why should you do a performance analysis?
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +A performance analysis is a good first step when among other reasons:
-> +
-> +- you cannot define the issue
-> +- you do not know where it occurs
-> +- the running system should not be interrupted or it is a remote system, where
-> +  you cannot install a new module/kernel
-> +
-> +How to do a simple analysis with linux tools?
-
-                                    Linux
-
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +For the start of a performance analysis, you can start with the usual tools
-> +like:
-> +
-> +- ``top`` / ``htop`` / ``atop`` (*get an overview of the system load, see spikes on
-> +  specific processes*)
-> +- ``mpstat -P ALL`` (*look at the load distribution among CPUs*)
-> +- ``iostat -x`` (*observe input and output devices utilization and performance*)
-> +- ``vmstat`` (*overview of memory usage on the system*)
-> +- ``pidstat`` (*similar to* ``vmstat`` *but per process, to dial it down to the
-> +  target*)
-> +- ``strace -tp $PID`` (*once you know the process, you can figure out how it
-> +  communicates with the Kernel*)
-> +
-> +These should help to narrow down the areas to look at sufficiently.
-> +
-> +Diving deeper with perf
-> +~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The **perf** tool provides a series of metrics and events to further dial down
-> +on issues.
-> +
-> +Prerequisite: build or install perf on your system
-> +
-> +Gather statistics data for finding all files starting with ``gcc`` in ``/usr``::
-> +
-> +  # perf stat -d find /usr -name 'gcc*' | wc -l
-> +
-> +   Performance counter stats for 'find /usr -name gcc*':
-> +
-> +     1277.81 msec    task-clock             #    0.997 CPUs utilized
-> +     9               context-switches       #    7.043 /sec
-> +     1               cpu-migrations         #    0.783 /sec
-> +     704             page-faults            #  550.943 /sec
-> +     766548897       cycles                 #    0.600 GHz                         (97.15%)
-> +     798285467       instructions           #    1.04  insn per cycle              (97.15%)
-> +     57582731        branches               #   45.064 M/sec                       (2.85%)
-> +     3842573         branch-misses          #    6.67% of all branches             (97.15%)
-> +     281616097       L1-dcache-loads        #  220.390 M/sec                       (97.15%)
-> +     4220975         L1-dcache-load-misses  #    1.50% of all L1-dcache accesses   (97.15%)
-> +     <not supported> LLC-loads
-> +     <not supported> LLC-load-misses
-> +
-> +   1.281746009 seconds time elapsed
-> +
-> +   0.508796000 seconds user
-> +   0.773209000 seconds sys
-> +
-> +
-> +  52
-> +
-> +The availability of events and metrics depends on the system you are running.
-> +
-> +For the full documentation see
-> +`<https://perf.wiki.kernel.org/index.php/Main_Page>`__
-> +
-> +Perfetto
-> +~~~~~~~~
-> +
-> +A set of tools to measure and analyze how well applications and systems perform.
-> +You can use it to:
-> +
-> +* identify bottlenecks
-> +* optimize code
-> +* make software run faster and more efficiently.
-> +
-> +**What is the difference between perfetto and perf?**
-> +
-> +* perf is tool as part of and specialized for the Linux Kernel and has CLI user
-> +  interface.
-> +* perfetto cross-platform performance analysis stack, has extended
-> +  functionality into userspace and provides a WEB user interface.
-> +
-> +For the full documentation see `<https://perfetto.dev/docs/>`__
-
-config PSI
-	bool "Pressure stall information tracking"
-might also be useful here.
-
-> +
-> +Kernel panic analysis tools
-> +---------------------------
-> +
-> +  To capture the crash dump please use ``Kdump`` & ``Kexec``. Below you can find
-> +  some advice for analysing the data.
-> +
-> +  For the full documentation see the :doc:`/admin-guide/kdump/kdump`
-> +
-> +  In order to find the corresponding line in the code you can use `faddr2line
-> +  <https://elixir.bootlin.com/linux/v6.11.6/source/scripts/faddr2line>`__, note
-
-                                                                            ; note
-
-> +  that you need to enable ``CONFIG_DEBUG_INFO`` for that to work.
-> +
-> +  An alternative to using ``faddr2line`` is the use of ``objdump`` (and it's
-
-                                                                           its
-
-> +  derivatives for the different platforms like ``aarch64-linux-gnu-objdump``),
-
-                                                                               ).
-
-> +  take this line as an example:
-
-     Take
-
-> +
-> +  ``[  +0.000240]  rkvdec_device_run+0x50/0x138 [rockchip_vdec]``.
-> +
-> +  We can find the corresponding line of code by executing::
-> +
-> +    aarch64-linux-gnu-objdump -dS drivers/staging/media/rkvdec/rockchip-vdec.ko | grep rkvdec_device_run\>: -A 40
-> +    0000000000000ac8 <rkvdec_device_run>:
-> +     ac8:	d503201f 	nop
-> +     acc:	d503201f 	nop
-> +    {
-> +     ad0:	d503233f 	paciasp
-> +     ad4:	a9bd7bfd 	stp	x29, x30, [sp, #-48]!
-> +     ad8:	910003fd 	mov	x29, sp
-> +     adc:	a90153f3 	stp	x19, x20, [sp, #16]
-> +     ae0:	a9025bf5 	stp	x21, x22, [sp, #32]
-> +        const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
-> +     ae4:	f9411814 	ldr	x20, [x0, #560]
-> +        struct rkvdec_dev *rkvdec = ctx->dev;
-> +     ae8:	f9418015 	ldr	x21, [x0, #768]
-> +        if (WARN_ON(!desc))
-> +     aec:	b4000654 	cbz	x20, bb4 <rkvdec_device_run+0xec>
-> +        ret = pm_runtime_resume_and_get(rkvdec->dev);
-> +     af0:	f943d2b6 	ldr	x22, [x21, #1952]
-> +        ret = __pm_runtime_resume(dev, RPM_GET_PUT);
-> +     af4:	aa0003f3 	mov	x19, x0
-> +     af8:	52800081 	mov	w1, #0x4                   	// #4
-> +     afc:	aa1603e0 	mov	x0, x22
-> +     b00:	94000000 	bl	0 <__pm_runtime_resume>
-> +        if (ret < 0) {
-> +     b04:	37f80340 	tbnz	w0, #31, b6c <rkvdec_device_run+0xa4>
-> +        dev_warn(rkvdec->dev, "Not good\n");
-> +     b08:	f943d2a0 	ldr	x0, [x21, #1952]
-> +     b0c:	90000001 	adrp	x1, 0 <rkvdec_try_ctrl-0x8>
-> +     b10:	91000021 	add	x1, x1, #0x0
-> +     b14:	94000000 	bl	0 <_dev_warn>
-> +        *bad = 1;
-> +     b18:	d2800001 	mov	x1, #0x0                   	// #0
-> +     ...
-> +
-> +  Meaning, in this line from the crash dump::
-> +
-> +    [  +0.000240]  rkvdec_device_run+0x50/0x138 [rockchip_vdec]
-> +
-> +  I can take the ``0x50`` as offset, which I have to add to the base address
-> +  of the corresponding function, which I find in this line::
-> +
-> +    0000000000000ac8 <rkvdec_device_run>:
-> +
-> +  The result of ``0xac8 + 0x50 = 0xb18``
-> +  And when I search for that address within the function I get the
-> +  following line::
-> +
-> +    *bad = 1;
-> +    b18:      d2800001        mov     x1, #0x0
-> +
-> +**Copyright** ©2024 : Collabora
-> diff --git a/Documentation/process/index.rst b/Documentation/process/index.rst
-> index 6455eba3ef0c..aa12f2660194 100644
-> --- a/Documentation/process/index.rst
-> +++ b/Documentation/process/index.rst
-> @@ -72,13 +72,15 @@ beyond).
->  Dealing with bugs
->  -----------------
->  
-> -Bugs are a fact of life; it is important that we handle them properly.
-> -The documents below describe our policies around the handling of a couple
-> -of special classes of bugs: regressions and security problems.
-> +Bugs are a fact of life; it is important that we handle them properly. The
-> +documents below provide general advice about debugging and describe our
-> +policies around the handling of a couple of special classes of bugs:
-> +regressions and security problems.
->  
->  .. toctree::
->     :maxdepth: 1
->  
-> +   debugging/index
->     handling-regressions
->     security-bugs
->     cve
-> 
-
-Thanks.
-
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+index ac568ed14fa2..a0bb23962209 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+@@ -17,6 +17,7 @@
+ 
+ #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+ #define IS_VDEC_INNER_RACING(capability) ((capability) & MTK_VCODEC_INNER_RACING)
++#define IS_VDEC_SUPPORT_EX(capability) ((capability) & MTK_VDEC_IS_SUPPORT_EX)
+ 
+ enum mtk_vcodec_dec_chip_name {
+ 	MTK_VDEC_INVAL = 0,
+@@ -42,6 +43,7 @@ enum mtk_vdec_format_types {
+ 	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
+ 	MTK_VCODEC_INNER_RACING = 0x20000,
+ 	MTK_VDEC_IS_SUPPORT_10BIT = 0x40000,
++	MTK_VDEC_IS_SUPPORT_EX = 0x80000,
+ };
+ 
+ /*
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
+index ab192ce0b851..21ddc6d6f1ba 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_h264_req_multi_if.c
+@@ -128,6 +128,83 @@ struct vdec_h264_slice_share_info {
+ 	u16 nal_info;
+ };
+ 
++/*
++ * struct vdec_h264_slice_mem - memory address and size (shared interface with firmware)
++ */
++struct vdec_h264_slice_mem {
++	union {
++		u64 buf;
++		u64 dma_addr;
++	};
++	union {
++		size_t size;
++		u64 dma_addr_end;
++	};
++};
++
++/**
++ * struct vdec_h264_slice_fb - frame buffer for decoding (shared interface with firmware)
++ *
++ * @y:  current y buffer address info
++ * @c:  current c buffer address info
++ */
++struct vdec_h264_slice_fb {
++	struct vdec_h264_slice_mem y;
++	struct vdec_h264_slice_mem c;
++};
++
++/**
++ * struct vdec_h264_slice_info_ex - extend decode information (shared interface with firmware)
++ *
++ * @wdma_end_addr_offset:	offset from buffer start
++ * @nal_info:		nal info of current picture
++ * @timeout:		Decode timeout: 1 timeout, 0 no timeout
++ * @reserved:		reserved
++ * @vdec_fb_va:	VDEC frame buffer struct virtual address
++ * @crc:		Used to check whether hardware's status is right
++ */
++struct vdec_h264_slice_info_ex {
++	u64 wdma_end_addr_offset;
++	u16 nal_info;
++	u16 timeout;
++	u32 reserved;
++	u64 vdec_fb_va;
++	u32 crc[8];
++};
++
++/**
++ * struct vdec_h264_slice_vsi_ex - extend shared memory for decode information exchange
++ *        between SCP and Host (shared interface with firmware).
++ *
++ * @bs:		input buffer info
++ * @fb:		current y/c buffer
++ *
++ * @ube:		ube buffer
++ * @trans:		transcoded buffer
++ * @row_info:		row info buffer
++ * @err_map:		err map buffer
++ * @slice_bc:		slice buffer
++ *
++ * @mv_buf_dma:	HW working motion vector buffer
++ * @dec:		decode information (AP-R, VPU-W)
++ * @h264_slice_params:	decode parameters for hw used
++ */
++struct vdec_h264_slice_vsi_ex {
++	/* LAT dec addr */
++	struct vdec_h264_slice_mem bs;
++	struct vdec_h264_slice_fb fb;
++
++	struct vdec_h264_slice_mem ube;
++	struct vdec_h264_slice_mem trans;
++	struct vdec_h264_slice_mem row_info;
++	struct vdec_h264_slice_mem err_map;
++	struct vdec_h264_slice_mem slice_bc;
++
++	struct vdec_h264_slice_mem mv_buf_dma[H264_MAX_MV_NUM];
++	struct vdec_h264_slice_info_ex dec;
++	struct vdec_h264_slice_lat_dec_param h264_slice_params;
++};
++
+ /**
+  * struct vdec_h264_slice_inst - h264 decoder instance
+  *
+@@ -136,10 +213,10 @@ struct vdec_h264_slice_share_info {
+  * @pred_buf:		HW working prediction buffer
+  * @mv_buf:		HW working motion vector buffer
+  * @vpu:		VPU instance
+- * @vsi:		vsi used for lat
+- * @vsi_core:		vsi used for core
++ * @vsi_ex:		extend vsi used for lat
++ * @vsi_core_ex:	extend vsi used for core
+  *
+- * @vsi_ctx:		Local VSI data for this decoding context
++ * @vsi_ctx_ex:	Local extend vsi data for this decoding context
+  * @h264_slice_param:	the parameters that hardware use to decode
+  *
+  * @resolution_changed:resolution changed
+@@ -156,10 +233,18 @@ struct vdec_h264_slice_inst {
+ 	struct mtk_vcodec_mem pred_buf;
+ 	struct mtk_vcodec_mem mv_buf[H264_MAX_MV_NUM];
+ 	struct vdec_vpu_inst vpu;
+-	struct vdec_h264_slice_vsi *vsi;
+-	struct vdec_h264_slice_vsi *vsi_core;
+-
+-	struct vdec_h264_slice_vsi vsi_ctx;
++	union {
++		struct {
++			struct vdec_h264_slice_vsi *vsi;
++			struct vdec_h264_slice_vsi *vsi_core;
++			struct vdec_h264_slice_vsi vsi_ctx;
++		};
++		struct {
++			struct vdec_h264_slice_vsi_ex *vsi_ex;
++			struct vdec_h264_slice_vsi_ex *vsi_core_ex;
++			struct vdec_h264_slice_vsi_ex vsi_ctx_ex;
++		};
++	};
+ 	struct vdec_h264_slice_lat_dec_param h264_slice_param;
+ 
+ 	unsigned int resolution_changed;
+@@ -168,6 +253,9 @@ struct vdec_h264_slice_inst {
+ 
+ 	struct v4l2_h264_dpb_entry dpb[16];
+ 	bool is_field_bitstream;
++
++	int (*decode)(void *h_vdec, struct mtk_vcodec_mem *bs,
++		      struct vdec_fb *unused, bool *res_chg);
+ };
+ 
+ static int vdec_h264_slice_fill_decode_parameters(struct vdec_h264_slice_inst *inst,
+@@ -389,62 +477,143 @@ static void vdec_h264_slice_get_crop_info(struct vdec_h264_slice_inst *inst,
+ 		       cr->left, cr->top, cr->width, cr->height);
+ }
+ 
+-static int vdec_h264_slice_init(struct mtk_vcodec_dec_ctx *ctx)
++static void vdec_h264_slice_setup_lat_buffer_ex(struct vdec_h264_slice_inst *inst,
++						struct mtk_vcodec_mem *bs,
++						struct vdec_lat_buf *lat_buf)
+ {
+-	struct vdec_h264_slice_inst *inst;
+-	int err, vsi_size;
++	struct mtk_vcodec_mem *mem;
++	int i;
+ 
+-	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
+-	if (!inst)
+-		return -ENOMEM;
++	inst->vsi_ex->bs.dma_addr = (u64)bs->dma_addr;
++	inst->vsi_ex->bs.size = bs->size;
+ 
+-	inst->ctx = ctx;
++	for (i = 0; i < H264_MAX_MV_NUM; i++) {
++		mem = &inst->mv_buf[i];
++		inst->vsi_ex->mv_buf_dma[i].dma_addr = mem->dma_addr;
++		inst->vsi_ex->mv_buf_dma[i].size = mem->size;
++	}
++	inst->vsi_ex->ube.dma_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
++	inst->vsi_ex->ube.size = lat_buf->ctx->msg_queue.wdma_addr.size;
+ 
+-	inst->vpu.id = SCP_IPI_VDEC_LAT;
+-	inst->vpu.core_id = SCP_IPI_VDEC_CORE;
+-	inst->vpu.ctx = ctx;
+-	inst->vpu.codec_type = ctx->current_codec;
+-	inst->vpu.capture_type = ctx->capture_fourcc;
++	inst->vsi_ex->row_info.dma_addr = 0;
++	inst->vsi_ex->row_info.size = 0;
+ 
+-	err = vpu_dec_init(&inst->vpu);
+-	if (err) {
+-		mtk_vdec_err(ctx, "vdec_h264 init err=%d", err);
+-		goto error_free_inst;
++	inst->vsi_ex->err_map.dma_addr = lat_buf->wdma_err_addr.dma_addr;
++	inst->vsi_ex->err_map.size = lat_buf->wdma_err_addr.size;
++
++	inst->vsi_ex->slice_bc.dma_addr = lat_buf->slice_bc_addr.dma_addr;
++	inst->vsi_ex->slice_bc.size = lat_buf->slice_bc_addr.size;
++
++	inst->vsi_ex->trans.dma_addr_end = inst->ctx->msg_queue.wdma_rptr_addr;
++	inst->vsi_ex->trans.dma_addr = inst->ctx->msg_queue.wdma_wptr_addr;
++}
++
++static int vdec_h264_slice_setup_core_buffer_ex(struct vdec_h264_slice_inst *inst,
++						struct vdec_h264_slice_share_info *share_info,
++						struct vdec_lat_buf *lat_buf)
++{
++	struct mtk_vcodec_mem *mem;
++	struct mtk_vcodec_dec_ctx *ctx = inst->ctx;
++	struct vb2_v4l2_buffer *vb2_v4l2;
++	struct vdec_fb *fb;
++	u64 y_fb_dma, c_fb_dma = 0;
++	int i;
++
++	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
++	if (!fb) {
++		mtk_vdec_err(ctx, "fb buffer is NULL");
++		return -EBUSY;
+ 	}
+ 
+-	vsi_size = round_up(sizeof(struct vdec_h264_slice_vsi), VCODEC_DEC_ALIGNED_64);
+-	inst->vsi = inst->vpu.vsi;
+-	inst->vsi_core =
+-		(struct vdec_h264_slice_vsi *)(((char *)inst->vpu.vsi) + vsi_size);
+-	inst->resolution_changed = true;
+-	inst->realloc_mv_buf = true;
++	y_fb_dma = (u64)fb->base_y.dma_addr;
++	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 1)
++		c_fb_dma =
++			y_fb_dma + inst->ctx->picinfo.buf_w * inst->ctx->picinfo.buf_h;
++	else
++		c_fb_dma = (u64)fb->base_c.dma_addr;
+ 
+-	mtk_vdec_debug(ctx, "lat struct size = %d,%d,%d,%d vsi: %d\n",
+-		       (int)sizeof(struct mtk_h264_sps_param),
+-		       (int)sizeof(struct mtk_h264_pps_param),
+-		       (int)sizeof(struct vdec_h264_slice_lat_dec_param),
+-		       (int)sizeof(struct mtk_h264_dpb_info),
+-		       vsi_size);
+-	mtk_vdec_debug(ctx, "lat H264 instance >> %p, codec_type = 0x%x",
+-		       inst, inst->vpu.codec_type);
++	mtk_vdec_debug(ctx, "[h264-core] y/c addr = 0x%llx 0x%llx", y_fb_dma, c_fb_dma);
+ 
+-	ctx->drv_handle = inst;
+-	return 0;
++	inst->vsi_core_ex->fb.y.dma_addr = y_fb_dma;
++	inst->vsi_core_ex->fb.y.size = ctx->picinfo.fb_sz[0];
++	inst->vsi_core_ex->fb.c.dma_addr = c_fb_dma;
++	inst->vsi_core_ex->fb.c.size = ctx->picinfo.fb_sz[1];
+ 
+-error_free_inst:
+-	kfree(inst);
+-	return err;
++	inst->vsi_core_ex->dec.vdec_fb_va = (unsigned long)fb;
++	inst->vsi_core_ex->dec.nal_info = share_info->nal_info;
++
++	inst->vsi_core_ex->ube.dma_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
++	inst->vsi_core_ex->ube.size = lat_buf->ctx->msg_queue.wdma_addr.size;
++
++	inst->vsi_core_ex->err_map.dma_addr = lat_buf->wdma_err_addr.dma_addr;
++	inst->vsi_core_ex->err_map.size = lat_buf->wdma_err_addr.size;
++
++	inst->vsi_core_ex->slice_bc.dma_addr = lat_buf->slice_bc_addr.dma_addr;
++	inst->vsi_core_ex->slice_bc.size = lat_buf->slice_bc_addr.size;
++
++	inst->vsi_core_ex->row_info.dma_addr = 0;
++	inst->vsi_core_ex->row_info.size = 0;
++
++	inst->vsi_core_ex->trans.dma_addr = share_info->trans_start;
++	inst->vsi_core_ex->trans.dma_addr_end = share_info->trans_end;
++
++	for (i = 0; i < H264_MAX_MV_NUM; i++) {
++		mem = &inst->mv_buf[i];
++		inst->vsi_core_ex->mv_buf_dma[i].dma_addr = mem->dma_addr;
++		inst->vsi_core_ex->mv_buf_dma[i].size = mem->size;
++	}
++
++	vb2_v4l2 = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
++	v4l2_m2m_buf_copy_metadata(&lat_buf->ts_info, vb2_v4l2, true);
++
++	return 0;
+ }
+ 
+-static void vdec_h264_slice_deinit(void *h_vdec)
++static int vdec_h264_slice_core_decode_ex(struct vdec_lat_buf *lat_buf)
+ {
+-	struct vdec_h264_slice_inst *inst = h_vdec;
++	int err, timeout;
++	struct mtk_vcodec_dec_ctx *ctx = lat_buf->ctx;
++	struct vdec_h264_slice_inst *inst = ctx->drv_handle;
++	struct vdec_h264_slice_share_info *share_info = lat_buf->private_data;
++	struct vdec_vpu_inst *vpu = &inst->vpu;
+ 
+-	vpu_dec_deinit(&inst->vpu);
+-	vdec_h264_slice_free_mv_buf(inst);
+-	vdec_msg_queue_deinit(&inst->ctx->msg_queue, inst->ctx);
++	mtk_vdec_debug(ctx, "[h264-core] vdec_h264 core decode");
++	memcpy(&inst->vsi_core_ex->h264_slice_params, &share_info->h264_slice_params,
++	       sizeof(share_info->h264_slice_params));
+ 
+-	kfree(inst);
++	err = vdec_h264_slice_setup_core_buffer_ex(inst, share_info, lat_buf);
++	if (err)
++		goto vdec_dec_end;
++
++	vdec_h264_slice_fill_decode_reflist(inst, &inst->vsi_core_ex->h264_slice_params,
++					    share_info);
++	err = vpu_dec_core(vpu);
++	if (err) {
++		mtk_vdec_err(ctx, "core decode err=%d", err);
++		goto vdec_dec_end;
++	}
++
++	/* wait decoder done interrupt */
++	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
++					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
++	if (timeout)
++		mtk_vdec_err(ctx, "core decode timeout: pic_%d", ctx->decoded_frame_cnt);
++	inst->vsi_core_ex->dec.timeout = !!timeout;
++
++	vpu_dec_core_end(vpu);
++	mtk_vdec_debug(ctx, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
++		       ctx->decoded_frame_cnt,
++		       inst->vsi_core_ex->dec.crc[0], inst->vsi_core_ex->dec.crc[1],
++		       inst->vsi_core_ex->dec.crc[2], inst->vsi_core_ex->dec.crc[3],
++		       inst->vsi_core_ex->dec.crc[4], inst->vsi_core_ex->dec.crc[5],
++		       inst->vsi_core_ex->dec.crc[6], inst->vsi_core_ex->dec.crc[7]);
++
++vdec_dec_end:
++	vdec_msg_queue_update_ube_rptr(&lat_buf->ctx->msg_queue, share_info->trans_end);
++	ctx->dev->vdec_pdata->cap_to_disp(ctx, !!err, lat_buf->src_buf_req);
++	mtk_vdec_debug(ctx, "core decode done err=%d", err);
++	ctx->decoded_frame_cnt++;
++	return 0;
+ }
+ 
+ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
+@@ -559,6 +728,127 @@ static void vdec_h264_insert_startcode(struct mtk_vcodec_dec_dev *vcodec_dev, un
+ 	(*bs_size) += 4;
+ }
+ 
++static int vdec_h264_slice_lat_decode_ex(void *h_vdec, struct mtk_vcodec_mem *bs,
++					 struct vdec_fb *fb, bool *res_chg)
++{
++	struct vdec_h264_slice_inst *inst = h_vdec;
++	struct vdec_vpu_inst *vpu = &inst->vpu;
++	struct mtk_video_dec_buf *src_buf_info;
++	int err, timeout = 0;
++	unsigned int data[2];
++	struct vdec_lat_buf *lat_buf;
++	struct vdec_h264_slice_share_info *share_info;
++
++	if (vdec_msg_queue_init(&inst->ctx->msg_queue, inst->ctx,
++				vdec_h264_slice_core_decode_ex,
++				sizeof(*share_info)))
++		return -ENOMEM;
++
++	/* bs NULL means flush decoder */
++	if (!bs) {
++		vdec_msg_queue_wait_lat_buf_full(&inst->ctx->msg_queue);
++		return vpu_dec_reset(vpu);
++	}
++
++	if (inst->is_field_bitstream)
++		return -EINVAL;
++
++	lat_buf = vdec_msg_queue_dqbuf(&inst->ctx->msg_queue.lat_ctx);
++	if (!lat_buf) {
++		mtk_vdec_debug(inst->ctx, "failed to get lat buffer");
++		return -EAGAIN;
++	}
++	share_info = lat_buf->private_data;
++	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
++
++	lat_buf->src_buf_req = src_buf_info->m2m_buf.vb.vb2_buf.req_obj.req;
++	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &lat_buf->ts_info, true);
++
++	err = vdec_h264_slice_fill_decode_parameters(inst, share_info,
++						     &inst->vsi_ex->h264_slice_params);
++	if (err)
++		goto err_free_fb_out;
++
++	vdec_h264_insert_startcode(inst->ctx->dev, bs->va, &bs->size,
++				   &share_info->h264_slice_params.pps);
++
++	*res_chg = inst->resolution_changed;
++	if (inst->resolution_changed) {
++		mtk_vdec_debug(inst->ctx, "- resolution changed -");
++		if (inst->realloc_mv_buf) {
++			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
++			inst->realloc_mv_buf = false;
++			if (err)
++				goto err_free_fb_out;
++		}
++		inst->resolution_changed = false;
++	}
++
++	vdec_h264_slice_setup_lat_buffer_ex(inst, bs, lat_buf);
++	mtk_vdec_debug(inst->ctx, "lat:trans(0x%llx 0x%lx) err:0x%llx",
++		       inst->vsi_ex->ube.dma_addr, (unsigned long)inst->vsi_ex->ube.size,
++		       inst->vsi_ex->err_map.dma_addr);
++
++	mtk_vdec_debug(inst->ctx, "slice(0x%llx 0x%lx) rprt((0x%llx 0x%llx))",
++		       inst->vsi_ex->slice_bc.dma_addr, (unsigned long)inst->vsi_ex->slice_bc.size,
++		       inst->vsi_ex->trans.dma_addr, inst->vsi_ex->trans.dma_addr_end);
++
++	err = vpu_dec_start(vpu, data, 2);
++	if (err) {
++		mtk_vdec_debug(inst->ctx, "lat decode err: %d", err);
++		goto err_free_fb_out;
++	}
++
++	share_info->trans_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
++		inst->vsi_ex->dec.wdma_end_addr_offset;
++
++	share_info->trans_start = inst->ctx->msg_queue.wdma_wptr_addr;
++	share_info->nal_info = inst->vsi_ex->dec.nal_info;
++
++	if (IS_VDEC_INNER_RACING(inst->ctx->dev->dec_capability)) {
++		memcpy(&share_info->h264_slice_params, &inst->vsi_ex->h264_slice_params,
++		       sizeof(share_info->h264_slice_params));
++		vdec_msg_queue_qbuf(&inst->ctx->msg_queue.core_ctx, lat_buf);
++	}
++
++	/* wait decoder done interrupt */
++	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
++					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
++	if (timeout)
++		mtk_vdec_err(inst->ctx, "lat decode timeout: pic_%d", inst->slice_dec_num);
++	inst->vsi_ex->dec.timeout = !!timeout;
++
++	err = vpu_dec_end(vpu);
++	if (err == SLICE_HEADER_FULL || err == TRANS_BUFFER_FULL) {
++		if (!IS_VDEC_INNER_RACING(inst->ctx->dev->dec_capability))
++			vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
++		inst->slice_dec_num++;
++		mtk_vdec_err(inst->ctx, "lat dec fail: pic_%d err:%d", inst->slice_dec_num, err);
++		return -EINVAL;
++	}
++
++	share_info->trans_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
++		inst->vsi_ex->dec.wdma_end_addr_offset;
++
++	vdec_msg_queue_update_ube_wptr(&lat_buf->ctx->msg_queue, share_info->trans_end);
++
++	if (!IS_VDEC_INNER_RACING(inst->ctx->dev->dec_capability)) {
++		memcpy(&share_info->h264_slice_params, &inst->vsi_ex->h264_slice_params,
++		       sizeof(share_info->h264_slice_params));
++		vdec_msg_queue_qbuf(&inst->ctx->msg_queue.core_ctx, lat_buf);
++	}
++	mtk_vdec_debug(inst->ctx, "dec num: %d lat crc: 0x%x 0x%x 0x%x", inst->slice_dec_num,
++		       inst->vsi_ex->dec.crc[0], inst->vsi_ex->dec.crc[1],
++		       inst->vsi_ex->dec.crc[2]);
++
++	inst->slice_dec_num++;
++	return 0;
++err_free_fb_out:
++	vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
++	mtk_vdec_err(inst->ctx, "slice dec number: %d err: %d", inst->slice_dec_num, err);
++	return err;
++}
++
+ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 				      struct vdec_fb *fb, bool *res_chg)
+ {
+@@ -704,18 +994,17 @@ static int vdec_h264_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	return err;
+ }
+ 
+-static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+-					 struct vdec_fb *unused, bool *res_chg)
++static int vdec_h264_slice_single_decode_ex(void *h_vdec, struct mtk_vcodec_mem *bs,
++					    struct vdec_fb *unused, bool *res_chg)
+ {
+ 	struct vdec_h264_slice_inst *inst = h_vdec;
+ 	struct vdec_vpu_inst *vpu = &inst->vpu;
+ 	struct mtk_video_dec_buf *src_buf_info, *dst_buf_info;
+ 	struct vdec_fb *fb;
+-	unsigned char *buf;
+ 	unsigned int data[2], i;
+ 	u64 y_fb_dma, c_fb_dma;
+ 	struct mtk_vcodec_mem *mem;
+-	int err, nal_start_idx;
++	int err;
+ 
+ 	/* bs NULL means flush decoder */
+ 	if (!bs)
+@@ -735,6 +1024,96 @@ static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs
+ 	mtk_vdec_debug(inst->ctx, "[h264-dec] [%d] y_dma=%llx c_dma=%llx",
+ 		       inst->ctx->decoded_frame_cnt, y_fb_dma, c_fb_dma);
+ 
++	inst->vsi_ctx_ex.bs.dma_addr = (u64)bs->dma_addr;
++	inst->vsi_ctx_ex.bs.size = bs->size;
++	inst->vsi_ctx_ex.fb.y.dma_addr = y_fb_dma;
++	inst->vsi_ctx_ex.fb.c.dma_addr = c_fb_dma;
++	inst->vsi_ctx_ex.dec.vdec_fb_va = (u64)(uintptr_t)fb;
++
++	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb,
++				   &dst_buf_info->m2m_buf.vb, true);
++	err = get_vdec_sig_decode_parameters(inst);
++	if (err)
++		goto err_free_fb_out;
++
++	memcpy(&inst->vsi_ctx_ex.h264_slice_params, &inst->h264_slice_param,
++	       sizeof(inst->vsi_ctx_ex.h264_slice_params));
++
++	*res_chg = inst->resolution_changed;
++	if (inst->resolution_changed) {
++		mtk_vdec_debug(inst->ctx, "- resolution changed -");
++		if (inst->realloc_mv_buf) {
++			err = vdec_h264_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
++			inst->realloc_mv_buf = false;
++			if (err)
++				goto err_free_fb_out;
++		}
++		inst->resolution_changed = false;
++
++		for (i = 0; i < H264_MAX_MV_NUM; i++) {
++			mem = &inst->mv_buf[i];
++			inst->vsi_ctx_ex.mv_buf_dma[i].dma_addr = mem->dma_addr;
++		}
++	}
++
++	memcpy(inst->vpu.vsi, &inst->vsi_ctx_ex, sizeof(inst->vsi_ctx_ex));
++	err = vpu_dec_start(vpu, data, 2);
++	if (err)
++		goto err_free_fb_out;
++
++	/* wait decoder done interrupt */
++	err = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
++					   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
++	if (err)
++		mtk_vdec_err(inst->ctx, "decode timeout: pic_%d", inst->ctx->decoded_frame_cnt);
++
++	inst->vsi_ex->dec.timeout = !!err;
++	err = vpu_dec_end(vpu);
++	if (err)
++		goto err_free_fb_out;
++
++	memcpy(&inst->vsi_ctx_ex, inst->vpu.vsi, sizeof(inst->vsi_ctx_ex));
++	mtk_vdec_debug(inst->ctx, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
++		       inst->ctx->decoded_frame_cnt,
++		       inst->vsi_ctx_ex.dec.crc[0], inst->vsi_ctx_ex.dec.crc[1],
++		       inst->vsi_ctx_ex.dec.crc[2], inst->vsi_ctx_ex.dec.crc[3],
++		       inst->vsi_ctx_ex.dec.crc[4], inst->vsi_ctx_ex.dec.crc[5],
++		       inst->vsi_ctx_ex.dec.crc[6], inst->vsi_ctx_ex.dec.crc[7]);
++
++	inst->ctx->decoded_frame_cnt++;
++	return 0;
++
++err_free_fb_out:
++	mtk_vdec_err(inst->ctx, "dec frame number: %d err: %d", inst->ctx->decoded_frame_cnt, err);
++	return err;
++}
++
++static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
++					 struct vdec_fb *unused, bool *res_chg)
++{
++	struct vdec_h264_slice_inst *inst = h_vdec;
++	struct vdec_vpu_inst *vpu = &inst->vpu;
++	struct mtk_video_dec_buf *src_buf_info, *dst_buf_info;
++	struct vdec_fb *fb;
++	unsigned char *buf;
++	unsigned int data[2], i;
++	u64 y_fb_dma, c_fb_dma;
++	struct mtk_vcodec_mem *mem;
++	int err, nal_start_idx;
++
++	/* bs NULL means flush decoder */
++	if (!bs)
++		return vpu_dec_reset(vpu);
++
++	fb = inst->ctx->dev->vdec_pdata->get_cap_buffer(inst->ctx);
++	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
++	dst_buf_info = container_of(fb, struct mtk_video_dec_buf, frame_buffer);
++
++	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
++	c_fb_dma = fb ? (u64)fb->base_c.dma_addr : 0;
++	mtk_vdec_debug(inst->ctx, "[h264-dec] [%d] y_dma=%llx c_dma=%llx",
++		       inst->ctx->decoded_frame_cnt, y_fb_dma, c_fb_dma);
++
+ 	inst->vsi_ctx.dec.bs_buf_addr = (u64)bs->dma_addr;
+ 	inst->vsi_ctx.dec.bs_buf_size = bs->size;
+ 	inst->vsi_ctx.dec.y_fb_dma = y_fb_dma;
+@@ -807,21 +1186,95 @@ static int vdec_h264_slice_single_decode(void *h_vdec, struct mtk_vcodec_mem *bs
+ 	return err;
+ }
+ 
++static int vdec_h264_slice_init(struct mtk_vcodec_dec_ctx *ctx)
++{
++	struct vdec_h264_slice_inst *inst;
++	int err, vsi_size;
++	unsigned char *temp;
++
++	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
++	if (!inst)
++		return -ENOMEM;
++
++	inst->ctx = ctx;
++
++	inst->vpu.id = SCP_IPI_VDEC_LAT;
++	inst->vpu.core_id = SCP_IPI_VDEC_CORE;
++	inst->vpu.ctx = ctx;
++	inst->vpu.codec_type = ctx->current_codec;
++	inst->vpu.capture_type = ctx->capture_fourcc;
++
++	err = vpu_dec_init(&inst->vpu);
++	if (err) {
++		mtk_vdec_err(ctx, "vdec_h264 init err=%d", err);
++		goto error_free_inst;
++	}
++
++	if (IS_VDEC_SUPPORT_EX(ctx->dev->dec_capability)) {
++		vsi_size = sizeof(struct vdec_h264_slice_vsi_ex);
++
++		vsi_size = round_up(vsi_size, VCODEC_DEC_ALIGNED_64);
++		inst->vsi_ex = inst->vpu.vsi;
++		temp = (unsigned char *)inst->vsi_ex;
++		inst->vsi_core_ex = (struct vdec_h264_slice_vsi_ex *)(temp + vsi_size);
++
++		if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
++			inst->decode = vdec_h264_slice_single_decode_ex;
++		else
++			inst->decode = vdec_h264_slice_lat_decode_ex;
++	} else {
++		vsi_size = sizeof(struct vdec_h264_slice_vsi);
++
++		vsi_size = round_up(vsi_size, VCODEC_DEC_ALIGNED_64);
++		inst->vsi = inst->vpu.vsi;
++		temp = (unsigned char *)inst->vsi;
++		inst->vsi_core = (struct vdec_h264_slice_vsi *)(temp + vsi_size);
++
++		if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
++			inst->decode = vdec_h264_slice_single_decode;
++		else
++			inst->decode = vdec_h264_slice_lat_decode;
++	}
++	inst->resolution_changed = true;
++	inst->realloc_mv_buf = true;
++
++	mtk_vdec_debug(ctx, "lat struct size = %d,%d,%d,%d vsi: %d\n",
++		       (int)sizeof(struct mtk_h264_sps_param),
++		       (int)sizeof(struct mtk_h264_pps_param),
++		       (int)sizeof(struct vdec_h264_slice_lat_dec_param),
++		       (int)sizeof(struct mtk_h264_dpb_info),
++		       vsi_size);
++	mtk_vdec_debug(ctx, "lat H264 instance >> %p, codec_type = 0x%x",
++		       inst, inst->vpu.codec_type);
++
++	ctx->drv_handle = inst;
++	return 0;
++
++error_free_inst:
++	kfree(inst);
++	return err;
++}
++
++static void vdec_h264_slice_deinit(void *h_vdec)
++{
++	struct vdec_h264_slice_inst *inst = h_vdec;
++
++	vpu_dec_deinit(&inst->vpu);
++	vdec_h264_slice_free_mv_buf(inst);
++	vdec_msg_queue_deinit(&inst->ctx->msg_queue, inst->ctx);
++
++	kfree(inst);
++}
++
+ static int vdec_h264_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 				  struct vdec_fb *unused, bool *res_chg)
+ {
+ 	struct vdec_h264_slice_inst *inst = h_vdec;
+-	int ret;
+ 
+ 	if (!h_vdec)
+ 		return -EINVAL;
+ 
+-	if (inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
+-		ret = vdec_h264_slice_single_decode(h_vdec, bs, unused, res_chg);
+-	else
+-		ret = vdec_h264_slice_lat_decode(h_vdec, bs, unused, res_chg);
+-
+-	return ret;
++	return inst->decode(h_vdec, bs, unused, res_chg);
+ }
+ 
+ static int vdec_h264_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
 -- 
-~Randy
+2.46.0
 
