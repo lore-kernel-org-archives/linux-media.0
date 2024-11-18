@@ -1,52 +1,52 @@
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6C21A0B05;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D57453A7;
 	Mon, 18 Nov 2024 13:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731937216; cv=none; b=mj53wd0WbY7Z3tqnc1KXXgnhfYrLmOGxaKQz+8BK6Wj2t1pk1f5Gs0Vfw1ILOpeJLYLQF1647gcyEV2yDhRydJiFRDjAa8h+vHIqiOjS6rXphJBKBboHBxuAG3SXTszylGF0bWed7PlvSIrex1kZcdJR20kAOpueNRW0ZTMzaIo=
+	t=1731937216; cv=none; b=WKn8uuyq6IZowelBJ0fODxvHJgCpVblAZlXT/kqGNuOttm/OhEIfqhhvR7Dki8Cr1KBAtYKyOKcL+/E1MyOLVzlmu/QcKTUUkwb2xwrEQQ/mos+o5fa5dL03dbwbXy9taeekhj/fC4RuwpvOIbp/eT5iyXFL6Xp0aVzGqwJ63ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731937216; c=relaxed/simple;
-	bh=a1OVlPf5Odsut2kjBhNTJuvJTaMz6Fm/zZor5eKkscE=;
+	bh=t0g3tyGLXDa9mEU8ERU+pY2ZJyv+jnWCEShMpLm4R7o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=VAUcG+eHnkX5icxanzchlFjkEoAynwS+3HYFqydOSJ/Bbh2PK9L8VJ5ZyzgTfKgOSIw56RHPr9/UG/wSqbYAGVSN8++vtLU9u8b3AZ2UMEI1Y1hA0rj1X9HA5Idi7RPfWOQ1K9Doy2+MHBtClLoekFcBKvXA7pABb8uZbUhcqgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=TDdKmm2/; arc=none smtp.client-ip=91.207.212.93
+	 In-Reply-To:To:CC; b=Q/qBKTh++pqFqhiwj1Dwi26KWx6EZzzzJOVZoS+nH5I0b+FFUu1K+KWr+mHmMrif9G1HjUAmPU5+MKRK5MADtGKuyTUeAl2ln60NxlFKpKqfoftnkqzQsWt8oJHHmImL2Y3uTocSahfyTPLidmxQ4VhTvatp7wbV9cvTi8Vbj2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=WsGmFeZN; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="TDdKmm2/"
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIBDkP6027114;
-	Mon, 18 Nov 2024 14:39:52 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="WsGmFeZN"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIBWncd032001;
+	Mon, 18 Nov 2024 14:39:40 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	kO/XdeoBo7X02W334+E6LhxLlDrGOL8A5vE8mC37cg8=; b=TDdKmm2/csD8ICFl
-	s9jjVnrmzUOwf/krJUiDOGR6VQdbkDtIoEsdHsq1bUfYk4CiE6ZVb8RFTvos5QxM
-	UpzQ0yBHOKY4xpRxVs4N9C+hfcxgVucgAA+0sqZNg8+nfVwjkBcImmA7k7dKXxcW
-	ucnUn2ph2RKqHVvFL9iyXbQGBMOAV0y7zDYMvxai/r6f1jzSvJf+WBZL97XLA7LF
-	aILmlHKesQniNIH/GuM9hXsCIujbSgVxSuO7pMZZF+J3ccTNUcATBMYcRiQ81ziL
-	Y0Nl7WRMl8IhmvFCVBgwN9vrEjOoODvqt3/q4BDV5zwbCa4tVjIydfxgpGyMBoQE
-	NMPw9w==
+	i0SEXjer4NUU2DKUJapl8bqAlE+SwlDXXIr03qjV7WU=; b=WsGmFeZNfXpWzr1t
+	ZjPJIzd5lXu2bbvc8+LL0V1RSkYcDytf3M2dgkQB8/XI0PpHJJnnNJBoaP7hoUV3
+	mA/a/pabRama9ZeoV5ykwjChXY4pKG4Z+wDOqqC6FSS867LnUWVMqG7Hn/Hc7qnH
+	NqPxnUZd750F3HOERDZOJWmcRlpfQWIbrSyKV+eVafx53dMD2CqP/PVly4liwbWT
+	AHkJBQVPFmhPUyks+kwfEUFxRKQ0b82Hd5O+byr488e6JPAxVkXkkHjUSLcbLI90
+	PV7czHidpOnRDAOJptOYLbj8l6xXXvjOsQIGdKSpyqWSQT3ihLLYtVSBVLBLAL5Y
+	wLunow==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42xkqeq7s2-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42xkqh77nv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 14:39:52 +0100 (CET)
+	Mon, 18 Nov 2024 14:39:39 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 65AF140060;
-	Mon, 18 Nov 2024 14:38:33 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B030A40046;
+	Mon, 18 Nov 2024 14:38:35 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 30BAD27564C;
-	Mon, 18 Nov 2024 14:35:31 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6318D2786FB;
+	Mon, 18 Nov 2024 14:35:35 +0100 (CET)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 18 Nov
- 2024 14:35:30 +0100
+ 2024 14:35:35 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Mon, 18 Nov 2024 14:35:31 +0100
-Subject: [PATCH v3 08/15] media: stm32: dcmipp: add bayer 10~14 bits
- formats
+Date: Mon, 18 Nov 2024 14:35:38 +0100
+Subject: [PATCH v3 15/15] arm64: dts: st: enable imx335/csi/dcmipp pipeline
+ on stm32mp257f-ev1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241118-csi_dcmipp_mp25-v3-8-c1914afb0a0f@foss.st.com>
+Message-ID: <20241118-csi_dcmipp_mp25-v3-15-c1914afb0a0f@foss.st.com>
 References: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
 In-Reply-To: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -83,60 +83,132 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Add support for bayer formats from 10 to 14 bits.
+Enable the camera pipeline with a imx335 sensor connected to the
+dcmipp via the csi interface.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- .../media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c    | 12 ++++++++++++
- .../media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c   | 12 ++++++++++++
- 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-index 48596592bfd517b9d46946d27f154f0d17ebed78..d6fad99e44bba5bcab1df056ba9208e82aff4bea 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-bytecap.c
-@@ -65,6 +65,18 @@ static const struct dcmipp_bytecap_pix_map dcmipp_bytecap_pix_map_list[] = {
- 	PIXMAP_MBUS_PFMT(SGBRG8_1X8, SGBRG8),
- 	PIXMAP_MBUS_PFMT(SGRBG8_1X8, SGRBG8),
- 	PIXMAP_MBUS_PFMT(SRGGB8_1X8, SRGGB8),
-+	PIXMAP_MBUS_PFMT(SBGGR10_1X10, SBGGR10),
-+	PIXMAP_MBUS_PFMT(SGBRG10_1X10, SGBRG10),
-+	PIXMAP_MBUS_PFMT(SGRBG10_1X10, SGRBG10),
-+	PIXMAP_MBUS_PFMT(SRGGB10_1X10, SRGGB10),
-+	PIXMAP_MBUS_PFMT(SBGGR12_1X12, SBGGR12),
-+	PIXMAP_MBUS_PFMT(SGBRG12_1X12, SGBRG12),
-+	PIXMAP_MBUS_PFMT(SGRBG12_1X12, SGRBG12),
-+	PIXMAP_MBUS_PFMT(SRGGB12_1X12, SRGGB12),
-+	PIXMAP_MBUS_PFMT(SBGGR14_1X14, SBGGR14),
-+	PIXMAP_MBUS_PFMT(SGBRG14_1X14, SGBRG14),
-+	PIXMAP_MBUS_PFMT(SGRBG14_1X14, SGRBG14),
-+	PIXMAP_MBUS_PFMT(SRGGB14_1X14, SRGGB14),
- 	PIXMAP_MBUS_PFMT(JPEG_1X8, JPEG),
+---
+
+v2:
+  - correct regulators & camera node names
+  - removal of powerdown property within imx335 node
+  - removal of useless status property within imx335 node
+  - correct imx335 reset-gpio polarity
+---
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 85 ++++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+index 214191a8322b81e7ae453503863b4465d9b625e0..d45851b3904d760f73298bf7b260f917b582db55 100644
+--- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
++++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+@@ -27,6 +27,38 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	clocks {
++		clk_ext_camera: clk-ext-camera {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <24000000>;
++		};
++	};
++
++	imx335_2v9: regulator-2v9 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-avdd";
++		regulator-min-microvolt = <2900000>;
++		regulator-max-microvolt = <2900000>;
++		regulator-always-on;
++	};
++
++	imx335_1v8: regulator-1v8 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-ovdd";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++	};
++
++	imx335_1v2: regulator-1v2 {
++		compatible = "regulator-fixed";
++		regulator-name = "imx335-dvdd";
++		regulator-min-microvolt = <1200000>;
++		regulator-max-microvolt = <1200000>;
++		regulator-always-on;
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x80000000 0x1 0x0>;
+@@ -50,6 +82,40 @@ &arm_wdt {
+ 	status = "okay";
  };
  
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index a19c8235af565fb5f673ba90b37ebfcadf03d72e..72f1bb4c64ad4c194c14467dfc354a04bc69e208 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -57,6 +57,18 @@ static const struct dcmipp_byteproc_pix_map dcmipp_byteproc_pix_map_list[] = {
- 	PIXMAP_MBUS_BPP(SGBRG8_1X8, 1),
- 	PIXMAP_MBUS_BPP(SGRBG8_1X8, 1),
- 	PIXMAP_MBUS_BPP(SRGGB8_1X8, 1),
-+	PIXMAP_MBUS_BPP(SBGGR10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SGBRG10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SGRBG10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SRGGB10_1X10, 2),
-+	PIXMAP_MBUS_BPP(SBGGR12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SGBRG12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SGRBG12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SRGGB12_1X12, 2),
-+	PIXMAP_MBUS_BPP(SBGGR14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SGBRG14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SGRBG14_1X14, 2),
-+	PIXMAP_MBUS_BPP(SRGGB14_1X14, 2),
- 	PIXMAP_MBUS_BPP(JPEG_1X8, 1),
++&csi {
++	vdd-supply =  <&scmi_vddcore>;
++	vdda18-supply = <&scmi_v1v8>;
++	status = "okay";
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		port@0 {
++			reg = <0>;
++			csi_sink: endpoint {
++				remote-endpoint = <&imx335_ep>;
++				data-lanes = <1 2>;
++				bus-type = <4>;
++			};
++		};
++		port@1 {
++			reg = <1>;
++			csi_source: endpoint {
++				remote-endpoint = <&dcmipp_0>;
++			};
++		};
++	};
++};
++
++&dcmipp {
++	status = "okay";
++	port {
++		dcmipp_0: endpoint {
++			remote-endpoint = <&csi_source>;
++			bus-type = <4>;
++		};
++	};
++};
++
+ &ethernet2 {
+ 	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&eth2_rgmii_pins_a>;
+@@ -81,6 +147,25 @@ &i2c2 {
+ 	i2c-scl-falling-time-ns = <13>;
+ 	clock-frequency = <400000>;
+ 	status = "okay";
++
++	imx335: camera@1a {
++		compatible = "sony,imx335";
++		reg = <0x1a>;
++		clocks = <&clk_ext_camera>;
++		avdd-supply = <&imx335_2v9>;
++		ovdd-supply = <&imx335_1v8>;
++		dvdd-supply = <&imx335_1v2>;
++		reset-gpios = <&gpioi 7 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
++
++		port {
++			imx335_ep: endpoint {
++				remote-endpoint = <&csi_sink>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++				link-frequencies = /bits/ 64 <594000000>;
++			};
++		};
++	};
  };
  
+ &i2c8 {
 
 -- 
 2.25.1
