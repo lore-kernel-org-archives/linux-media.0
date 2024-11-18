@@ -1,317 +1,400 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C6E1B982E;
-	Mon, 18 Nov 2024 13:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6579D19F42D
+	for <linux-media@vger.kernel.org>; Mon, 18 Nov 2024 13:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731937222; cv=none; b=X208pzobmH6sh/qwGoEvZwgtteEaW8lcaVoTsnnjzfn6QYMb6J6K0fjkx/d/ktJiL0Kpzqumb1A+dqIBLwKVmlhkndBb6bK96L3mHELH5ZnJ0DBdZOBynNtMFqGIiAxcZdxfMjkUJoq/Lg2RdtuFedmBpsm9tSVYYt9X25861+M=
+	t=1731937583; cv=none; b=rd0BxVLcGPiOJcslq12xa+KVPRekKvdOW+zbnn4xyZO/ieAuaLfstYJehZcWqBeaVksQEs9EzgOUeDmfUWnGuTs/eGqauY51lKXGKQ3+OH+vks0QnrGqgdgD/1JdxNwZ04rsXlhFq2k3NDyDyISFHQ01TZIIZEpyadBpmELX/l0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731937222; c=relaxed/simple;
-	bh=RAbKXpSxicJQY5KFlUMpktE5KJy3SfEZldaI12SGjGg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=GlB/pe5bOKdR6G4A3pclBeWCm/T30fcOH3D4t0Uxj0wATa61LjnlGtiA2opc3h3SG/8NV1u6mSX7evlO+5LpsTIMVGggyOMMOxzujx4d2vtyDcTF1wMtv9Q5PTlwZJ1Z8cZTXD69sIrrJEAGXzPKoePxgALomCL/wIXiVILU14Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=JktS9fUb; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1731937583; c=relaxed/simple;
+	bh=GxVrwZfFpDuQIIZLcpdosSJ1UNkV5LF++RPRF7SCrqM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oWPycmjKqUD/q6ZC0oF8pVjwZsc9dyuLtXh7w515tAX/iE+MGFbCwaUoxNFz0Ku1xGmqd+uxNGUoTMa6zr5/90KDNQc0D+IEQgVFAYmMQbNVM5w6yYLSBuvr5DwWm60IOcD/G+LzlP7fdLZ4/QIORcTZXl5TbIOXZLnTsNekgH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NArle4Q+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="JktS9fUb"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIDRGIJ015951;
-	Mon, 18 Nov 2024 14:39:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	iHx2eom3Akmcm5QWtlSVlU1UQOIIrq4QkF16il1vv7A=; b=JktS9fUbe+jM9X4Q
-	BYOYGWCBrPHf7Fc3IEQinBlqw7ri5yRdFwbR7xgj6CxqvKfc6WTzJpeqwRJOrOyJ
-	Jl2yor/X1MGBRojo2YVN4fA7uHNZ/Dv7+j6V063migsgMmuWg1rf0wJNyrYRYdPL
-	pgXDLi+gLF5cwc6LOqBlQmrf0oeWvFNxLfdrF3OM9HpktgNVnweJp5UvjkqZqPNs
-	/fEiRrVBwVK6BCbAZBwwgc4o7ALloTXRCzcn4q/pHHPK/FFOLNYo4E+gzimotp+x
-	tPIMUvUhJpRwxuIT3Dy1AnUasDAdzxUhl7YlNjt/lpAWjUM5eYwqu5LDp2eDyVyP
-	cJbbew==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42xkqh77pe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 14:39:52 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 153614005F;
-	Mon, 18 Nov 2024 14:38:33 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 91F38275645;
-	Mon, 18 Nov 2024 14:35:30 +0100 (CET)
-Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 18 Nov
- 2024 14:35:30 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Mon, 18 Nov 2024 14:35:30 +0100
-Subject: [PATCH v3 07/15] media: stm32: dcmipp: add support for csi input
- into dcmipp-input
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NArle4Q+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731937580;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OvAoDtmrfq/Vy5twjl/brnF7tQdLECbbdJmDLc03Iec=;
+	b=NArle4Q++A7OTCF5kYfToAcrXObDQTNGuY2Vxwto419nym6IgxIwcKNQRd5wLMdDS0ZUpR
+	jn6VgKM56uVpoHR4TR0HiJqHqPFYx5XE7T9w1/e7lYVvxA1+1D8X4YeNxXC+FjBqNWyA8H
+	Eo0nGDIKStz9ZWcW4KWrrv3o7Qrezw4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-662-tmapCZYsPUqE9RE4giZ7Ng-1; Mon, 18 Nov 2024 08:46:19 -0500
+X-MC-Unique: tmapCZYsPUqE9RE4giZ7Ng-1
+X-Mimecast-MFC-AGG-ID: tmapCZYsPUqE9RE4giZ7Ng
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-a9a0c259715so75145766b.0
+        for <linux-media@vger.kernel.org>; Mon, 18 Nov 2024 05:46:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731937578; x=1732542378;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OvAoDtmrfq/Vy5twjl/brnF7tQdLECbbdJmDLc03Iec=;
+        b=a0nbgWpH9dNxTIdseELYkV/bEpTcmi1Qqj4t21XjoFmkz/URp4awJyExI/uy1bMEOV
+         OcQSRLgPsdBMBnGi31XvWcf5oerI878ZHK+9iJLmtCCBSwPSfOwaQny7JD8DWetc5FoV
+         5WnPxMus5VJVwyjBCcAaTHLA9mZLTsUz1H7dPVmL9gsUOYVZh85NDZ+0HVUY94IJFJ4L
+         wuAkI7gF07qgL4um6VxtV+TtrAjTJqH50BNxdvrOmCftYw8RuzWQDxDDLR6M4fmYkjSa
+         2+JThwop8yO2QNR0pGvlxVCAOmJ8t5iRZiAAg2KMCEDGmqdv5tynvngiYg7Wy9uMBakm
+         5WKw==
+X-Gm-Message-State: AOJu0YyCrW1i49mA2x3M8gTL0h7OHrhq7+IO/1tWsVFzFnf/Sz3Vqgxl
+	JuQCuqGmerO9GIwhyVugtxcKlN/OQJ1VbUTeH6RCSjsU+JhlJV3ocdlmccGY/cGB/6rxEbKX9hB
+	gF9jSFT7FvsfA/fZ3anNJLuBir2HPZj0dpaoWBh+bp0KW2TNTWHY1NojXt1uM
+X-Received: by 2002:a17:907:3f15:b0:aa2:be2:f21e with SMTP id a640c23a62f3a-aa4834138efmr1171353166b.24.1731937577830;
+        Mon, 18 Nov 2024 05:46:17 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFlwxV/QOGuaU7RJAVsVFB3aCI4Mp5mNASzAcO2+dyyrrI6/VwBVpdz/ZkHqvLCg+z752SY8w==
+X-Received: by 2002:a17:907:3f15:b0:aa2:be2:f21e with SMTP id a640c23a62f3a-aa4834138efmr1171351566b.24.1731937577442;
+        Mon, 18 Nov 2024 05:46:17 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df26acasm551961966b.21.2024.11.18.05.46.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2024 05:46:17 -0800 (PST)
+Message-ID: <5c89b3ad-58d7-4100-998c-19f646306c93@redhat.com>
+Date: Mon, 18 Nov 2024 14:46:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] media: i2c: Add Omnivision OCV02C10 sensor driver
+To: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+ sakari.ailus@linux.intel.com, hao.yao@intel.com, mchehab@kernel.org
+Cc: linux-media@vger.kernel.org, joachim.reichel@posteo.de
+References: <20241116144254.23863-1-heimir.sverrisson@gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20241116144254.23863-1-heimir.sverrisson@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241118-csi_dcmipp_mp25-v3-7-c1914afb0a0f@foss.st.com>
-References: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
-In-Reply-To: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
-To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Hans Verkuil
-	<hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC: <linux-media@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-On stm32mp25, the dcmipp can accept data coming from a CSI bus in
-addition to the parallel interface.  Add this support into
-dcmipp-input subdev.
+Hi Heimir,
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- .../platform/st/stm32/stm32-dcmipp/dcmipp-input.c  | 134 +++++++++++++++++----
- 1 file changed, 110 insertions(+), 24 deletions(-)
+On 16-Nov-24 3:42 PM, Heimir Thor Sverrisson wrote:
+> Add a new driver for the Omnivision OCV02C10 camera sensor. This is based
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-index 689eb4c72e1808bc30a2a175d907229c0910542d..7e5311b67d7ea4e84dec1456c58491153d69ef17 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-input.c
-@@ -9,6 +9,7 @@
-  */
- 
- #include <linux/v4l2-mediabus.h>
-+#include <media/mipi-csi2.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-subdev.h>
- 
-@@ -19,6 +20,9 @@
- #define DCMIPP_PRCR_FORMAT_YUV422	0x1e
- #define DCMIPP_PRCR_FORMAT_RGB565	0x22
- #define DCMIPP_PRCR_FORMAT_RAW8		0x2a
-+#define DCMIPP_PRCR_FORMAT_RAW10	0x2b
-+#define DCMIPP_PRCR_FORMAT_RAW12	0x2c
-+#define DCMIPP_PRCR_FORMAT_RAW14	0x2d
- #define DCMIPP_PRCR_FORMAT_G8		0x4a
- #define DCMIPP_PRCR_FORMAT_BYTE_STREAM	0x5a
- #define DCMIPP_PRCR_ESS			BIT(4)
-@@ -31,43 +35,75 @@
- #define DCMIPP_PRESCR	0x108
- #define DCMIPP_PRESUR	0x10c
- 
-+#define DCMIPP_CMCR	0x204
-+#define DCMIPP_CMCR_INSEL	BIT(0)
-+
-+#define DCMIPP_P0FSCR	0x404
-+#define DCMIPP_P0FSCR_DTMODE_MASK	GENMASK(17, 16)
-+#define DCMIPP_P0FSCR_DTMODE_SHIFT	16
-+#define DCMIPP_P0FSCR_DTMODE_DTIDA	0x00
-+#define DCMIPP_P0FSCR_DTMODE_ALLDT	0x03
-+#define DCMIPP_P0FSCR_DTIDA_MASK	GENMASK(5, 0)
-+#define DCMIPP_P0FSCR_DTIDA_SHIFT	0
-+
- #define IS_SINK(pad) (!(pad))
- #define IS_SRC(pad)  ((pad))
- 
- struct dcmipp_inp_pix_map {
- 	unsigned int code_sink;
- 	unsigned int code_src;
-+	/* Parallel related information */
- 	u8 prcr_format;
- 	u8 prcr_swapcycles;
-+	/* CSI related information */
-+	unsigned int dt;
- };
- 
--#define PIXMAP_SINK_SRC_PRCR_SWAP(sink, src, prcr, swap)	\
-+#define PIXMAP_SINK_SRC_PRCR_SWAP(sink, src, prcr, swap, data_type)	\
- 	{							\
- 		.code_sink = MEDIA_BUS_FMT_##sink,		\
- 		.code_src = MEDIA_BUS_FMT_##src,		\
- 		.prcr_format = DCMIPP_PRCR_FORMAT_##prcr,	\
- 		.prcr_swapcycles = swap,			\
-+		.dt = data_type,				\
- 	}
- static const struct dcmipp_inp_pix_map dcmipp_inp_pix_map_list[] = {
- 	/* RGB565 */
--	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_LE, RGB565_2X8_LE, RGB565, 1),
--	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_BE, RGB565_2X8_LE, RGB565, 0),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_LE, RGB565_2X8_LE, RGB565, 1, MIPI_CSI2_DT_RGB565),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_2X8_BE, RGB565_2X8_LE, RGB565, 0, MIPI_CSI2_DT_RGB565),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(RGB565_1X16, RGB565_1X16, RGB565, 0, MIPI_CSI2_DT_RGB565),
- 	/* YUV422 */
--	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, YUYV8_2X8, YUV422, 1),
--	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, UYVY8_2X8, YUV422, 0),
--	PIXMAP_SINK_SRC_PRCR_SWAP(UYVY8_2X8, UYVY8_2X8, YUV422, 1),
--	PIXMAP_SINK_SRC_PRCR_SWAP(UYVY8_2X8, YUYV8_2X8, YUV422, 0),
--	PIXMAP_SINK_SRC_PRCR_SWAP(YVYU8_2X8, YVYU8_2X8, YUV422, 1),
--	PIXMAP_SINK_SRC_PRCR_SWAP(VYUY8_2X8, VYUY8_2X8, YUV422, 1),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, YUYV8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_1X16, YUYV8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(YUYV8_2X8, UYVY8_2X8, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(UYVY8_2X8, UYVY8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(UYVY8_1X16, UYVY8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(UYVY8_2X8, YUYV8_2X8, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(YVYU8_2X8, YVYU8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(YVYU8_1X16, YVYU8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(VYUY8_2X8, VYUY8_2X8, YUV422, 1, MIPI_CSI2_DT_YUV422_8B),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(VYUY8_1X16, VYUY8_1X16, YUV422, 0, MIPI_CSI2_DT_YUV422_8B),
- 	/* GREY */
--	PIXMAP_SINK_SRC_PRCR_SWAP(Y8_1X8, Y8_1X8, G8, 0),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(Y8_1X8, Y8_1X8, G8, 0, MIPI_CSI2_DT_RAW8),
- 	/* Raw Bayer */
--	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR8_1X8, SBGGR8_1X8, RAW8, 0),
--	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG8_1X8, SGBRG8_1X8, RAW8, 0),
--	PIXMAP_SINK_SRC_PRCR_SWAP(SGRBG8_1X8, SGRBG8_1X8, RAW8, 0),
--	PIXMAP_SINK_SRC_PRCR_SWAP(SRGGB8_1X8, SRGGB8_1X8, RAW8, 0),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR8_1X8, SBGGR8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG8_1X8, SGBRG8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGRBG8_1X8, SGRBG8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SRGGB8_1X8, SRGGB8_1X8, RAW8, 0, MIPI_CSI2_DT_RAW8),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR10_1X10, SBGGR10_1X10, RAW10, 0, MIPI_CSI2_DT_RAW10),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG10_1X10, SGBRG10_1X10, RAW10, 0, MIPI_CSI2_DT_RAW10),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGRBG10_1X10, SGRBG10_1X10, RAW10, 0, MIPI_CSI2_DT_RAW10),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SRGGB10_1X10, SRGGB10_1X10, RAW10, 0, MIPI_CSI2_DT_RAW10),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR12_1X12, SBGGR12_1X12, RAW12, 0, MIPI_CSI2_DT_RAW12),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG12_1X12, SGBRG12_1X12, RAW12, 0, MIPI_CSI2_DT_RAW12),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGRBG12_1X12, SGRBG12_1X12, RAW12, 0, MIPI_CSI2_DT_RAW12),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SRGGB12_1X12, SRGGB12_1X12, RAW12, 0, MIPI_CSI2_DT_RAW12),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SBGGR14_1X14, SBGGR14_1X14, RAW14, 0, MIPI_CSI2_DT_RAW14),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGBRG14_1X14, SGBRG14_1X14, RAW14, 0, MIPI_CSI2_DT_RAW14),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SGRBG14_1X14, SGRBG14_1X14, RAW14, 0, MIPI_CSI2_DT_RAW14),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(SRGGB14_1X14, SRGGB14_1X14, RAW14, 0, MIPI_CSI2_DT_RAW14),
- 	/* JPEG */
--	PIXMAP_SINK_SRC_PRCR_SWAP(JPEG_1X8, JPEG_1X8, BYTE_STREAM, 0),
-+	PIXMAP_SINK_SRC_PRCR_SWAP(JPEG_1X8, JPEG_1X8, BYTE_STREAM, 0, 0),
- };
- 
- /*
-@@ -260,8 +296,8 @@ static int dcmipp_inp_set_fmt(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
--static int dcmipp_inp_configure(struct dcmipp_inp_device *inp,
--				struct v4l2_subdev_state *state)
-+static int dcmipp_inp_configure_parallel(struct dcmipp_inp_device *inp,
-+					 struct v4l2_subdev_state *state)
- {
- 	u32 val = 0;
- 	const struct dcmipp_inp_pix_map *vpix;
-@@ -315,6 +351,52 @@ static int dcmipp_inp_configure(struct dcmipp_inp_device *inp,
- 
- 	reg_write(inp, DCMIPP_PRCR, val);
- 
-+	/* Select the DCMIPP parallel interface */
-+	reg_write(inp, DCMIPP_CMCR, 0);
-+
-+	/* Enable parallel interface */
-+	reg_set(inp, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
-+
-+	return 0;
-+}
-+
-+static int dcmipp_inp_configure_csi(struct dcmipp_inp_device *inp,
-+				    struct v4l2_subdev_state *state)
-+{
-+	const struct dcmipp_inp_pix_map *vpix;
-+	struct v4l2_mbus_framefmt *sink_fmt;
-+	struct v4l2_mbus_framefmt *src_fmt;
-+
-+	/* Get format information */
-+	sink_fmt = v4l2_subdev_state_get_format(state, 0);
-+	src_fmt = v4l2_subdev_state_get_format(state, 1);
-+
-+	vpix = dcmipp_inp_pix_map_by_code(sink_fmt->code, src_fmt->code);
-+	if (!vpix) {
-+		dev_err(inp->dev, "Invalid sink/src format configuration\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Apply configuration on each input pipe */
-+	reg_clear(inp, DCMIPP_P0FSCR,
-+		  DCMIPP_P0FSCR_DTMODE_MASK | DCMIPP_P0FSCR_DTIDA_MASK);
-+
-+	/* In case of JPEG we don't know the DT so we allow all data */
-+	/*
-+	 * TODO - check instead dt == 0 for the time being to allow other
-+	 * unknown data-type
-+	 */
-+	if (!vpix->dt)
-+		reg_set(inp, DCMIPP_P0FSCR,
-+			DCMIPP_P0FSCR_DTMODE_ALLDT << DCMIPP_P0FSCR_DTMODE_SHIFT);
-+	else
-+		reg_set(inp, DCMIPP_P0FSCR,
-+			vpix->dt << DCMIPP_P0FSCR_DTIDA_SHIFT |
-+			DCMIPP_P0FSCR_DTMODE_DTIDA);
-+
-+	/* Select the DCMIPP CSI interface */
-+	reg_write(inp, DCMIPP_CMCR, DCMIPP_CMCR_INSEL);
-+
- 	return 0;
- }
- 
-@@ -326,7 +408,7 @@ static int dcmipp_inp_enable_streams(struct v4l2_subdev *sd,
- 				container_of(sd, struct dcmipp_inp_device, sd);
- 	struct v4l2_subdev *s_subdev;
- 	struct media_pad *s_pad;
--	int ret;
-+	int ret = 0;
- 
- 	/* Get source subdev */
- 	s_pad = media_pad_remote_pad_first(&sd->entity.pads[0]);
-@@ -334,13 +416,14 @@ static int dcmipp_inp_enable_streams(struct v4l2_subdev *sd,
- 		return -EINVAL;
- 	s_subdev = media_entity_to_v4l2_subdev(s_pad->entity);
- 
--	ret = dcmipp_inp_configure(inp, state);
-+	if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
-+	    inp->ved.bus_type == V4L2_MBUS_BT656)
-+		ret = dcmipp_inp_configure_parallel(inp, state);
-+	else if (inp->ved.bus_type == V4L2_MBUS_CSI2_DPHY)
-+		ret = dcmipp_inp_configure_csi(inp, state);
- 	if (ret)
- 		return ret;
- 
--	/* Enable parallel interface */
--	reg_set(inp, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
--
- 	ret = v4l2_subdev_enable_streams(s_subdev, s_pad->index, BIT_ULL(0));
- 	if (ret < 0) {
- 		dev_err(inp->dev,
-@@ -374,8 +457,11 @@ static int dcmipp_inp_disable_streams(struct v4l2_subdev *sd,
- 		return ret;
- 	}
- 
--	/* Disable parallel interface */
--	reg_clear(inp, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
-+	if (inp->ved.bus_type == V4L2_MBUS_PARALLEL ||
-+	    inp->ved.bus_type == V4L2_MBUS_BT656) {
-+		/* Disable parallel interface */
-+		reg_clear(inp, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
-+	}
- 
- 	return 0;
- }
+I'm not sure where the "C" in OCV above and in the Subject (first
+line of commit message) come from. Please do:
 
--- 
-2.25.1
+s/OCV02C10/OV02C10/ on the commit message.
+
+> on the out of tree driver by Hao Yao <hao.yao@intel.com> from:
+> https://github.com/intel/ipu6-drivers/blob/master/drivers/media/i2c/ov02c10.c
+> 
+> This has been tested on a Dell XPS 9440 together with the IPU6 isys CSI
+> driver and the libcamera software ISP code.
+> 
+> Tested-by: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
+> Signed-off-by: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
+> ---
+>  drivers/media/i2c/Kconfig   |   10 +
+>  drivers/media/i2c/Makefile  |    1 +
+>  drivers/media/i2c/ov02c10.c | 1393 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 1404 insertions(+)
+>  create mode 100644 drivers/media/i2c/ov02c10.c
+
+<snip>
+
+> diff --git a/drivers/media/i2c/ov02c10.c b/drivers/media/i2c/ov02c10.c
+> new file mode 100644
+> index 000000000000..86ae15b8475e
+> --- /dev/null
+> +++ b/drivers/media/i2c/ov02c10.c
+> @@ -0,0 +1,1393 @@
+
+<snip>
+
+> +static int ov02c10_read_mipi_lanes(struct ov02c10 *ov02c10, struct device *dev)
+> +{
+> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
+> +	struct v4l2_fwnode_endpoint bus_cfg = {
+> +		.bus_type = V4L2_MBUS_CSI2_DPHY
+> +	};
+> +	struct fwnode_handle *ep;
+> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+> +
+
+Since you are now getting the mipi-lanes from the fwnode, all
+the ACPI stuff here is no longer necessary. Sorry I missed this
+before when we were preparing the driver for submitting it
+upstream off-list.
+
+So you can drop everything starting here:
+
+> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+> +	union acpi_object *obj;
+> +	acpi_status status;
+> +	int ret;
+> +
+> +	if (!adev) {
+> +		dev_info(&client->dev, "Not ACPI device\n");
+> +		return -EBADF;
+> +	}
+> +	status = acpi_evaluate_object(adev->handle, "SSDB", NULL, &buffer);
+> +	if (ACPI_FAILURE(status)) {
+> +		dev_info(&client->dev, "ACPI fail: %d\n", -ENODEV);
+> +		return -EBADF;
+> +	}
+> +
+> +	obj = buffer.pointer;
+> +	if (!obj) {
+> +		dev_info(&client->dev, "Couldn't locate ACPI buffer\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	if (obj->type != ACPI_TYPE_BUFFER) {
+> +		dev_info(&client->dev, "Not an ACPI buffer\n");
+> +		goto out_free_buff;
+> +	}
+
+Up to here, notice buffer / obj is never used below again except
+for the kfree(buffer.pointer) which of course also can be dropped.
+
+Regards,
+
+Hans
+
+
+
+
+
+> +
+> +	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+> +	if (!ep)
+> +		return -ENXIO;
+> +
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+> +	fwnode_handle_put(ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 2 &&
+> +	    bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
+> +		dev_err(dev, "number of CSI2 data lanes %d is not supported",
+> +			bus_cfg.bus.mipi_csi2.num_data_lanes);
+> +		ret = -EINVAL;
+> +		goto out_free_buff;
+> +	}
+> +	ov02c10->mipi_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
+> +	ret = 0;
+> +out_free_buff:
+> +	kfree(buffer.pointer);
+> +	return ret;
+> +}
+> +
+> +static int ov02c10_identify_module(struct ov02c10 *ov02c10)
+> +{
+> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
+> +	u64 chip_id;
+> +	u32 ret = 0;
+> +
+> +	ov02c10->regmap = devm_cci_regmap_init_i2c(client, 16);
+> +	cci_read(ov02c10->regmap, OV02C10_REG_CHIP_ID, &chip_id, &ret);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (chip_id != OV02C10_CHIP_ID) {
+> +		dev_err(&client->dev, "chip id mismatch: %x!=%llx",
+> +			OV02C10_CHIP_ID, chip_id);
+> +		return -ENXIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ov02c10_check_hwcfg(struct device *dev)
+> +{
+> +	struct v4l2_fwnode_endpoint bus_cfg = {
+> +		.bus_type = V4L2_MBUS_CSI2_DPHY
+> +	};
+> +	struct fwnode_handle *ep;
+> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+> +	unsigned int i, j;
+> +	int ret;
+> +	u32 ext_clk;
+> +
+> +	if (!fwnode)
+> +		return -ENXIO;
+> +
+> +	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+> +	if (!ep)
+> +		return -EPROBE_DEFER;
+> +
+> +	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
+> +				       &ext_clk);
+> +	if (ret) {
+> +		dev_err(dev, "can't get clock frequency");
+> +		return ret;
+> +	}
+> +
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+> +	fwnode_handle_put(ep);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!bus_cfg.nr_of_link_frequencies) {
+> +		dev_err(dev, "no link frequencies defined");
+> +		ret = -EINVAL;
+> +		goto out_err;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
+> +		for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {
+> +			if (link_freq_menu_items[i] ==
+> +				bus_cfg.link_frequencies[j])
+> +				break;
+> +		}
+> +
+> +		if (j == bus_cfg.nr_of_link_frequencies) {
+> +			dev_err(dev, "no link frequency %lld supported",
+> +				link_freq_menu_items[i]);
+> +			ret = -EINVAL;
+> +			goto out_err;
+> +		}
+> +	}
+> +
+> +out_err:
+> +	v4l2_fwnode_endpoint_free(&bus_cfg);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ov02c10_remove(struct i2c_client *client)
+> +{
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+> +
+> +	v4l2_async_unregister_subdev(sd);
+> +	media_entity_cleanup(&sd->entity);
+> +	v4l2_ctrl_handler_free(sd->ctrl_handler);
+> +	pm_runtime_disable(&client->dev);
+> +	mutex_destroy(&ov02c10->mutex);
+> +}
+> +
+> +static int ov02c10_probe(struct i2c_client *client)
+> +{
+> +	struct ov02c10 *ov02c10;
+> +	int ret = 0;
+> +
+> +	/* Check HW config */
+> +	ret = ov02c10_check_hwcfg(&client->dev);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to check hwcfg: %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	ov02c10 = devm_kzalloc(&client->dev, sizeof(*ov02c10), GFP_KERNEL);
+> +	if (!ov02c10)
+> +		return -ENOMEM;
+> +
+> +	v4l2_i2c_subdev_init(&ov02c10->sd, client, &ov02c10_subdev_ops);
+> +	ov02c10_get_pm_resources(&client->dev);
+> +
+> +	ret = ov02c10_power_on(&client->dev);
+> +	if (ret) {
+> +		dev_err_probe(&client->dev, ret, "failed to power on\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = ov02c10_identify_module(ov02c10);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to find sensor: %d", ret);
+> +		goto probe_error_ret;
+> +	}
+> +
+> +	ret = ov02c10_read_mipi_lanes(ov02c10, &client->dev);
+> +	if (ret)
+> +		goto probe_error_ret;
+> +
+> +	mutex_init(&ov02c10->mutex);
+> +	ov02c10->cur_mode = &supported_modes[0];
+> +	if (ov02c10->mipi_lanes == 2)
+> +		ov02c10->cur_mode = &supported_modes[1];
+> +	ret = ov02c10_init_controls(ov02c10);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to init controls: %d", ret);
+> +		goto probe_error_v4l2_ctrl_handler_free;
+> +	}
+> +
+> +	ov02c10->sd.internal_ops = &ov02c10_internal_ops;
+> +	ov02c10->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	ov02c10->sd.entity.ops = &ov02c10_subdev_entity_ops;
+> +	ov02c10->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> +	ov02c10->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +	ret = media_entity_pads_init(&ov02c10->sd.entity, 1, &ov02c10->pad);
+> +	if (ret) {
+> +		dev_err(&client->dev, "failed to init entity pads: %d", ret);
+> +		goto probe_error_v4l2_ctrl_handler_free;
+> +	}
+> +
+> +	ret = v4l2_async_register_subdev_sensor(&ov02c10->sd);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+> +			ret);
+> +		goto probe_error_media_entity_cleanup;
+> +	}
+> +
+> +	/*
+> +	 * Device is already turned on by i2c-core with ACPI domain PM.
+> +	 * Enable runtime PM and turn off the device.
+> +	 */
+> +	pm_runtime_set_active(&client->dev);
+> +	pm_runtime_enable(&client->dev);
+> +	pm_runtime_idle(&client->dev);
+> +
+> +	return 0;
+> +
+> +probe_error_media_entity_cleanup:
+> +	media_entity_cleanup(&ov02c10->sd.entity);
+> +
+> +probe_error_v4l2_ctrl_handler_free:
+> +	v4l2_ctrl_handler_free(ov02c10->sd.ctrl_handler);
+> +	mutex_destroy(&ov02c10->mutex);
+> +
+> +probe_error_ret:
+> +	ov02c10_power_off(&client->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct dev_pm_ops ov02c10_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(ov02c10_suspend, ov02c10_resume)
+> +	SET_RUNTIME_PM_OPS(ov02c10_power_off, ov02c10_power_on, NULL)
+> +};
+> +
+> +#ifdef CONFIG_ACPI
+> +static const struct acpi_device_id ov02c10_acpi_ids[] = {
+> +	{"OVTI02C1"},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(acpi, ov02c10_acpi_ids);
+> +#endif
+> +
+> +static struct i2c_driver ov02c10_i2c_driver = {
+> +	.driver = {
+> +		.name = "ov02c10",
+> +		.pm = &ov02c10_pm_ops,
+> +		.acpi_match_table = ACPI_PTR(ov02c10_acpi_ids),
+> +	},
+> +	.probe = ov02c10_probe,
+> +	.remove = ov02c10_remove,
+> +};
+> +
+> +module_i2c_driver(ov02c10_i2c_driver);
+> +
+> +MODULE_AUTHOR("Hao Yao <hao.yao@intel.com>");
+> +MODULE_DESCRIPTION("OmniVision OV02C10 sensor driver");
+> +MODULE_LICENSE("GPL");
 
