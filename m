@@ -1,52 +1,51 @@
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D57453A7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5CA1990C7;
 	Mon, 18 Nov 2024 13:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731937216; cv=none; b=WKn8uuyq6IZowelBJ0fODxvHJgCpVblAZlXT/kqGNuOttm/OhEIfqhhvR7Dki8Cr1KBAtYKyOKcL+/E1MyOLVzlmu/QcKTUUkwb2xwrEQQ/mos+o5fa5dL03dbwbXy9taeekhj/fC4RuwpvOIbp/eT5iyXFL6Xp0aVzGqwJ63ss=
+	t=1731937217; cv=none; b=fT3mPlNLBmRzeCBCeILiZy5OsEX3aRlepL8NSnEeH/nc0IR+8BJ43GVVsj/Y3b3CCbLLNXv3KxNVbyaQaQ3TtrNWM3z8edwZDdGL7MLEVY9rU7FVGCqF7gYUbmrw+sNsaUuXKCEQAub0g9Knyg1NLxSglGTFyJZbubvZuYUEbiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731937216; c=relaxed/simple;
-	bh=t0g3tyGLXDa9mEU8ERU+pY2ZJyv+jnWCEShMpLm4R7o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Q/qBKTh++pqFqhiwj1Dwi26KWx6EZzzzJOVZoS+nH5I0b+FFUu1K+KWr+mHmMrif9G1HjUAmPU5+MKRK5MADtGKuyTUeAl2ln60NxlFKpKqfoftnkqzQsWt8oJHHmImL2Y3uTocSahfyTPLidmxQ4VhTvatp7wbV9cvTi8Vbj2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=WsGmFeZN; arc=none smtp.client-ip=91.207.212.93
+	s=arc-20240116; t=1731937217; c=relaxed/simple;
+	bh=XnyYllDzL0LL/+HkkTfZ2htDmi7RlBBYQfsAV/1yFHg=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=QDZzeGPBESqAqzucUCv1GfTnAI4M5mLQwB3RQkz4eHUI2Zx6UY3o+kMuKQxV9SpOjMD3GE8xG7J5JfgCvfWiFsWURCocXUNomiQ8DKwyHBBEHjmh46sLr5RZLkkcWWkO9HAPI/UZKOpIg6O0/m/IubzI6fZremeXE87gKZpt1Ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=nE2XcsPf; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="WsGmFeZN"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIBWncd032001;
-	Mon, 18 Nov 2024 14:39:40 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="nE2XcsPf"
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIBbYPa032344;
+	Mon, 18 Nov 2024 14:39:41 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	i0SEXjer4NUU2DKUJapl8bqAlE+SwlDXXIr03qjV7WU=; b=WsGmFeZNfXpWzr1t
-	ZjPJIzd5lXu2bbvc8+LL0V1RSkYcDytf3M2dgkQB8/XI0PpHJJnnNJBoaP7hoUV3
-	mA/a/pabRama9ZeoV5ykwjChXY4pKG4Z+wDOqqC6FSS867LnUWVMqG7Hn/Hc7qnH
-	NqPxnUZd750F3HOERDZOJWmcRlpfQWIbrSyKV+eVafx53dMD2CqP/PVly4liwbWT
-	AHkJBQVPFmhPUyks+kwfEUFxRKQ0b82Hd5O+byr488e6JPAxVkXkkHjUSLcbLI90
-	PV7czHidpOnRDAOJptOYLbj8l6xXXvjOsQIGdKSpyqWSQT3ihLLYtVSBVLBLAL5Y
-	wLunow==
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=7O5nEKFBIBm1GCz6ZDzn1l
+	9NyOXSXAkg3gdqNTBw/HY=; b=nE2XcsPfH3AzQg1iYCU7fjXmHVVhj3gQQmL2SJ
+	P9RXzEE/UBI70MbQ+E2n1ytEhHrHr5mmXbxb6pMRdFraFww5wWNws3itwLP40K3E
+	13m3NS+MerDYrS+1rHHJNR8AV9qNRLimWORgfxvpDGKUH1I7eqsnsGVq2a2zmXWH
+	0t0PFd7ytjQFgfUvZsb2kw8ITw8dKAtCiXshX0Rlz1gLuOwePA/TuZEk0zAMWXf9
+	7MelT8lBC+UuSLdxehjkkRyudRBSsNRg5hKbUSPpdQlGddKYzrsLQlm9oGZZnGtZ
+	oi59IJ8jjS9qBLZs23zG8Aix4GzBLs3miGhuRPkXn1qGAVPw==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42xkqh77nv-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42xkqeq7rh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Nov 2024 14:39:39 +0100 (CET)
+	Mon, 18 Nov 2024 14:39:41 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B030A40046;
-	Mon, 18 Nov 2024 14:38:35 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7574E40053;
+	Mon, 18 Nov 2024 14:38:29 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6318D2786FB;
-	Mon, 18 Nov 2024 14:35:35 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D14026E70C;
+	Mon, 18 Nov 2024 14:35:26 +0100 (CET)
 Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 18 Nov
- 2024 14:35:35 +0100
+ 2024 14:35:25 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Mon, 18 Nov 2024 14:35:38 +0100
-Subject: [PATCH v3 15/15] arm64: dts: st: enable imx335/csi/dcmipp pipeline
- on stm32mp257f-ev1
+Subject: [PATCH v3 00/15] media: stm32: introduction of CSI / DCMIPP for
+ STM32MP25
+Date: Mon, 18 Nov 2024 14:35:23 +0100
+Message-ID: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,9 +54,11 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241118-csi_dcmipp_mp25-v3-15-c1914afb0a0f@foss.st.com>
-References: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
-In-Reply-To: <20241118-csi_dcmipp_mp25-v3-0-c1914afb0a0f@foss.st.com>
+X-B4-Tracking: v=1; b=H4sIAJtCO2cC/2WNQQ6CMBBFr0JmbUkZxBFW3sMQgqWVWUCbDiEaw
+ t2tuHT5XvLf30BsZCvQZBtEu7KwnxOUpwzM2M9Pq3hIDKjxXGhNygh3g5k4hG4KWCkiqi+6cBU
+ NPaRViNbx6yje28Qjy+Lj+zhY8Wt/rUJXf60VlVaP2plrT0ilwZvzIrksufETtPu+fwA3Eyy4s
+ AAAAA==
+X-Change-ID: 20241007-csi_dcmipp_mp25-7779601f57da
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Mauro Carvalho Chehab
 	<mchehab@kernel.org>,
@@ -75,7 +76,10 @@ To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Philipp Zabel <p.zabel@pengutronix.de>
 CC: <linux-media@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>
+        <devicetree@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>,
+        <stable@vger.kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
 X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
  (10.75.129.69)
@@ -83,133 +87,65 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Enable the camera pipeline with a imx335 sensor connected to the
-dcmipp via the csi interface.
+This series introduces the camera pipeline support for the
+STM32MP25 SOC.  The STM32MP25 has 3 pipelines, fed from a
+single camera input which can be either parallel or csi.
+
+This series adds the basic support for the 1st pipe (dump)
+which, in term of features is same as the one featured on
+the STM32MP13 SOC.  It focuses on introduction of the
+CSI input stage for the DCMIPP, and the CSI specific new
+control code for the DCMIPP.
+One of the subdev of the DCMIPP, dcmipp_parallel is now
+renamed as dcmipp_input since it allows to not only control
+the parallel but also the csi interface.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+Changes in v3:
+* stm32-csi: use clk_bulk api
+* stm32-csiL perform reset control within the probe
+- Link to v2: https://lore.kernel.org/r/20241105-csi_dcmipp_mp25-v2-0-b9fc8a7273c2@foss.st.com
 
 ---
+Alain Volmat (15):
+      media: stm32: dcmipp: correct dma_set_mask_and_coherent mask value
+      dt-bindings: media: add description of stm32 csi
+      media: stm32: csi: addition of the STM32 CSI driver
+      media: stm32: dcmipp: use v4l2_subdev_is_streaming
+      media: stm32: dcmipp: replace s_stream with enable/disable_streams
+      media: stm32: dcmipp: rename dcmipp_parallel into dcmipp_input
+      media: stm32: dcmipp: add support for csi input into dcmipp-input
+      media: stm32: dcmipp: add bayer 10~14 bits formats
+      media: stm32: dcmipp: add 1X16 RGB / YUV formats support
+      media: stm32: dcmipp: avoid duplicated format on enum in bytecap
+      media: stm32: dcmipp: fill media ctl hw_revision field
+      dt-bindings: media: add the stm32mp25 compatible of DCMIPP
+      media: stm32: dcmipp: add core support for the stm32mp25
+      arm64: dts: st: add csi & dcmipp node in stm32mp25
+      arm64: dts: st: enable imx335/csi/dcmipp pipeline on stm32mp257f-ev1
 
-v2:
-  - correct regulators & camera node names
-  - removal of powerdown property within imx335 node
-  - removal of useless status property within imx335 node
-  - correct imx335 reset-gpio polarity
+ .../devicetree/bindings/media/st,stm32-dcmipp.yaml |   53 +-
+ .../bindings/media/st,stm32mp25-csi.yaml           |  125 +++
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi             |   23 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts         |   85 ++
+ drivers/media/platform/st/stm32/Kconfig            |   14 +
+ drivers/media/platform/st/stm32/Makefile           |    1 +
+ drivers/media/platform/st/stm32/stm32-csi.c        | 1137 ++++++++++++++++++++
+ .../media/platform/st/stm32/stm32-dcmipp/Makefile  |    2 +-
+ .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c         |  128 ++-
+ .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c        |  119 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-common.h |    4 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   |  116 +-
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-input.c  |  540 ++++++++++
+ .../st/stm32/stm32-dcmipp/dcmipp-parallel.c        |  440 --------
+ 15 files changed, 2219 insertions(+), 576 deletions(-)
 ---
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 85 ++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20241007-csi_dcmipp_mp25-7779601f57da
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index 214191a8322b81e7ae453503863b4465d9b625e0..d45851b3904d760f73298bf7b260f917b582db55 100644
---- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-+++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -27,6 +27,38 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	clocks {
-+		clk_ext_camera: clk-ext-camera {
-+			#clock-cells = <0>;
-+			compatible = "fixed-clock";
-+			clock-frequency = <24000000>;
-+		};
-+	};
-+
-+	imx335_2v9: regulator-2v9 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx335-avdd";
-+		regulator-min-microvolt = <2900000>;
-+		regulator-max-microvolt = <2900000>;
-+		regulator-always-on;
-+	};
-+
-+	imx335_1v8: regulator-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx335-ovdd";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+
-+	imx335_1v2: regulator-1v2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx335-dvdd";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		regulator-always-on;
-+	};
-+
- 	memory@80000000 {
- 		device_type = "memory";
- 		reg = <0x0 0x80000000 0x1 0x0>;
-@@ -50,6 +82,40 @@ &arm_wdt {
- 	status = "okay";
- };
- 
-+&csi {
-+	vdd-supply =  <&scmi_vddcore>;
-+	vdda18-supply = <&scmi_v1v8>;
-+	status = "okay";
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		port@0 {
-+			reg = <0>;
-+			csi_sink: endpoint {
-+				remote-endpoint = <&imx335_ep>;
-+				data-lanes = <1 2>;
-+				bus-type = <4>;
-+			};
-+		};
-+		port@1 {
-+			reg = <1>;
-+			csi_source: endpoint {
-+				remote-endpoint = <&dcmipp_0>;
-+			};
-+		};
-+	};
-+};
-+
-+&dcmipp {
-+	status = "okay";
-+	port {
-+		dcmipp_0: endpoint {
-+			remote-endpoint = <&csi_source>;
-+			bus-type = <4>;
-+		};
-+	};
-+};
-+
- &ethernet2 {
- 	pinctrl-names = "default", "sleep";
- 	pinctrl-0 = <&eth2_rgmii_pins_a>;
-@@ -81,6 +147,25 @@ &i2c2 {
- 	i2c-scl-falling-time-ns = <13>;
- 	clock-frequency = <400000>;
- 	status = "okay";
-+
-+	imx335: camera@1a {
-+		compatible = "sony,imx335";
-+		reg = <0x1a>;
-+		clocks = <&clk_ext_camera>;
-+		avdd-supply = <&imx335_2v9>;
-+		ovdd-supply = <&imx335_1v8>;
-+		dvdd-supply = <&imx335_1v2>;
-+		reset-gpios = <&gpioi 7 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
-+
-+		port {
-+			imx335_ep: endpoint {
-+				remote-endpoint = <&csi_sink>;
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+				link-frequencies = /bits/ 64 <594000000>;
-+			};
-+		};
-+	};
- };
- 
- &i2c8 {
-
+Best regards,
 -- 
-2.25.1
+Alain Volmat <alain.volmat@foss.st.com>
 
