@@ -1,21 +1,21 @@
 Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D161D07AA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AA41D097F;
 	Wed, 20 Nov 2024 14:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.14.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732114565; cv=none; b=AiD5/ku253ycA5C/0jMZ9aEOrpEYIIMNDVj+IW3hZvbEknmKszS6RqY7cwzi1ywsVfUuo1MlPYOprKADxToS+HlufMUo76NSIXFaRUt9Qv/VGl/AXSA0gXLyvWnHuKXb2DqVxmq3SLwsQQ3X3T7/yjo7IRafBLnGHqxCcT0kjsg=
+	t=1732114565; cv=none; b=Li6kSyt2BUTkNsTuAGvbL6iXumRne0PPQ8tiaHaRMKpfXwXMmPr/S8r/o2o+/ikLvdH38cO4/JWxYBsk3nUjfXLQJNPX4etsIVFlX2g5aRVSU0faWQmy2uSx6QFdo0j3dFV1pv+qHf/18x3vdleo3LvLxzLF4dl38d3ROoFqxsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732114565; c=relaxed/simple;
-	bh=KsSihiy76LbZ2/MXevnwwuWQZ8IUD22/mICYYrrkre8=;
+	bh=kIG+NzLjc40LveG2RWiM3dyEoF6S9l1AQNPYWTk+x+A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d8kTj87nQf96NFpegFELBQ2L2c8p0IX9eOQVj7s54Skxs6btJJuppCqKWTNpKFEWIewYSZSovvMKRhkh9tGaF843tcZu+cNjKiX6Ohpq48aeF5pLTw+mVeUZvqRlL2XAOlWtH/s/dE10WLzlDVLyMilocFpjKLwsQzRWTKVAUng=
+	 MIME-Version:Content-Type; b=ggH08U7PCyMuCz2n/In0mjHRxSssatbpvqKxeJQHrjGt5VbroLR9/zj209P/ImMwb9V5LknQKESOtKaRarWngL3MhMgzKj0ZU+d2CgLeowuxHqr6DoJmQasRwd8eyQJGs2Q8SR6mo++XvUbKuRjJAKj6soZ4OEMss4Ad8Hfxq44=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org; spf=pass smtp.mailfrom=gpxsee.org; arc=none smtp.client-ip=37.205.14.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gpxsee.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gpxsee.org
 Received: from mgb4.. (unknown [62.77.71.229])
-	by mx.gpxsee.org (Postfix) with ESMTPSA id AA38262BC0;
+	by mx.gpxsee.org (Postfix) with ESMTPSA id B69F1633E7;
 	Wed, 20 Nov 2024 15:48:54 +0100 (CET)
 From: tumic@gpxsee.org
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -23,9 +23,9 @@ To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc: linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Martin=20T=C5=AFma?= <martin.tuma@digiteqautomotive.com>
-Subject: [PATCH 1/3] media: mgb4: Unify the outputs padding logic with the inputs
-Date: Wed, 20 Nov 2024 15:48:44 +0100
-Message-ID: <20241120144846.2271-2-tumic@gpxsee.org>
+Subject: [PATCH 3/3] media: mgb4: Defines cleanup
+Date: Wed, 20 Nov 2024 15:48:46 +0100
+Message-ID: <20241120144846.2271-4-tumic@gpxsee.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241120144846.2271-1-tumic@gpxsee.org>
 References: <20241120144846.2271-1-tumic@gpxsee.org>
@@ -40,45 +40,74 @@ Content-Transfer-Encoding: 8bit
 
 From: Martin Tůma <martin.tuma@digiteqautomotive.com>
 
-Write the padding to the HW registers at the same place as the input logic
-does.
+Do not define stuff used in a single source file in a global header.
+Do not mix defines with "bare" values in the initialization.
 
 Signed-off-by: Martin Tůma <martin.tuma@digiteqautomotive.com>
 ---
- drivers/media/pci/mgb4/mgb4_vout.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/pci/mgb4/mgb4_core.c | 4 +++-
+ drivers/media/pci/mgb4/mgb4_core.h | 3 ---
+ drivers/media/pci/mgb4/mgb4_vout.c | 9 ++-------
+ 3 files changed, 5 insertions(+), 11 deletions(-)
 
+diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+index bc63dc81bcae..8ceaed5c1453 100644
+--- a/drivers/media/pci/mgb4/mgb4_core.c
++++ b/drivers/media/pci/mgb4/mgb4_core.c
+@@ -40,7 +40,9 @@
+ #include "mgb4_trigger.h"
+ #include "mgb4_core.h"
+ 
+-#define MGB4_USER_IRQS 16
++#define MGB4_USER_IRQS  16
++#define MGB4_MGB4_BAR_ID 0
++#define MGB4_XDMA_BAR_ID 1
+ 
+ #define DIGITEQ_VID 0x1ed8
+ #define T100_DID    0x0101
+diff --git a/drivers/media/pci/mgb4/mgb4_core.h b/drivers/media/pci/mgb4/mgb4_core.h
+index 9aec62514c0b..e86742d7b6c4 100644
+--- a/drivers/media/pci/mgb4/mgb4_core.h
++++ b/drivers/media/pci/mgb4/mgb4_core.h
+@@ -18,9 +18,6 @@
+ #define MGB4_VIN_DEVICES  2
+ #define MGB4_VOUT_DEVICES 2
+ 
+-#define MGB4_MGB4_BAR_ID  0
+-#define MGB4_XDMA_BAR_ID  1
+-
+ #define MGB4_IS_GMSL(mgbdev) \
+ 	((mgbdev)->module_version >> 4 == 2)
+ #define MGB4_IS_FPDL3(mgbdev) \
 diff --git a/drivers/media/pci/mgb4/mgb4_vout.c b/drivers/media/pci/mgb4/mgb4_vout.c
-index 6b2791e29de1..600f858918e7 100644
+index 600f858918e7..14c5725bd4d8 100644
 --- a/drivers/media/pci/mgb4/mgb4_vout.c
 +++ b/drivers/media/pci/mgb4/mgb4_vout.c
-@@ -180,7 +180,10 @@ static void stop_streaming(struct vb2_queue *vq)
+@@ -24,10 +24,6 @@
+ #include "mgb4_cmt.h"
+ #include "mgb4_vout.h"
  
- 	xdma_disable_user_irq(mgbdev->xdev, irq);
- 	cancel_work_sync(&voutdev->dma_work);
-+
- 	mgb4_mask_reg(&mgbdev->video, voutdev->config->regs.config, 0x2, 0x0);
-+	mgb4_write_reg(&mgbdev->video, voutdev->config->regs.padding, 0);
-+
- 	return_all_buffers(voutdev, VB2_BUF_STATE_ERROR);
- }
+-#define DEFAULT_WIDTH     1280
+-#define DEFAULT_HEIGHT    640
+-#define DEFAULT_PERIOD    (MGB4_HW_FREQ / 60)
+-
+ ATTRIBUTE_GROUPS(mgb4_fpdl3_out);
+ ATTRIBUTE_GROUPS(mgb4_gmsl_out);
  
-@@ -196,6 +199,7 @@ static int start_streaming(struct vb2_queue *vq, unsigned int count)
- 	int rv;
- 	u32 addr;
+@@ -664,11 +660,10 @@ static void fpga_init(struct mgb4_vout_dev *voutdev)
+ 	const struct mgb4_vout_regs *regs = &voutdev->config->regs;
  
-+	mgb4_write_reg(video, config->regs.padding, voutdev->padding);
- 	mgb4_mask_reg(video, config->regs.config, 0x2, 0x2);
+ 	mgb4_write_reg(video, regs->config, 0x00000011);
+-	mgb4_write_reg(video, regs->resolution,
+-		       (DEFAULT_WIDTH << 16) | DEFAULT_HEIGHT);
++	mgb4_write_reg(video, regs->resolution, (1280 << 16) | 640);
+ 	mgb4_write_reg(video, regs->hsync, 0x00283232);
+ 	mgb4_write_reg(video, regs->vsync, 0x40141F1E);
+-	mgb4_write_reg(video, regs->frame_limit, DEFAULT_PERIOD);
++	mgb4_write_reg(video, regs->frame_limit, MGB4_HW_FREQ / 60);
+ 	mgb4_write_reg(video, regs->padding, 0x00000000);
  
- 	addr = mgb4_read_reg(video, config->regs.address);
-@@ -359,7 +363,6 @@ static int vidioc_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 
- 	voutdev->padding = (f->fmt.pix.bytesperline - (f->fmt.pix.width
- 			    * pixelsize)) / pixelsize;
--	mgb4_write_reg(video, voutdev->config->regs.padding, voutdev->padding);
- 
- 	return 0;
- }
+ 	voutdev->freq = mgb4_cmt_set_vout_freq(voutdev, 61150 >> 1) << 1;
 -- 
 2.47.0
 
