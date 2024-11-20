@@ -1,241 +1,146 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0831DE2C3;
-	Wed, 20 Nov 2024 14:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0A44C74;
+	Wed, 20 Nov 2024 14:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732114166; cv=none; b=tGd24/fuJD9sLfl58ZWfqYrOKAOwqjGZGkJZHJ53Ac4g9XFqtIq+aefJYMHozmQ4T9iyMARlTWk/aI+xB/JrDZrRAMSdigkdWYzVpynqSna6UMVVG/7KfFDw3ruiGgiTN6PkRdBnhzLB7U8vbAXruL4+dmbC1DLSxPPWc9AECpE=
+	t=1732114434; cv=none; b=sVGDVwKTbIh5CuRn3OSGiTg5Y4BPIqgXGM2VFmdiN7IZzLzB7tWfPp6VctvUrPqOT64/rTdWP4LQalEJD9cQdCbWOxQ69Rhhv5SaWvgFf+HaXoE7SmLuHkTibAnP4prMlCV++4vkJ4Fh+Zfu2lVf9fPeaScVp+/d8XoFlikmRkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732114166; c=relaxed/simple;
-	bh=x28STAYFolWfEoZ22/KnQCtaHiStAuNaFgZEgFxEUwU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=bBpWHgg13CtjoEL6LqiWlG2CKMnD1QSvF+RLzcaCS3/cpeEWnbbB+pZj/R/ZqSDKdCqhQGrpqYlCVrbThKp6PjYiX75sEW1MDMoVJ4IWHhiiIDB5M0tzhssxJUofyafIfjLL7rWT8UMkSJFt88amxg6VpXSowSB/UaTHH/Xvt1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fwGIJxkB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1732114434; c=relaxed/simple;
+	bh=mEidYxqzvijE7R/rD2WNYR7lU8E3yrAz7qB1aBUi8Is=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kj20bVtw9wJEFqO41MbEzO02BsSJYy2iSwF9ceetZA3WvKKvE8Cp6ZUKifG+pkPwqvi4XKfC+tzFJBv0ey9t9uPKzmltssfmSVLFF3/UnbT0+ti0nVv/tQsQmoJ//5i7gd+W7qjPx/01MRbgznQux4G9KDM/cVJsN8wPxHZrTsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Hf3ND7ru; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fwGIJxkB"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AK9FL5j003946;
-	Wed, 20 Nov 2024 14:49:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	B2yagOTuat//51o0fk/IwmqkCygqht3psurGMbuF0eI=; b=fwGIJxkB6J6ipDQe
-	77ai76LbOXUCXTitRNURDw98KX4sFktDYakOxhnG56i1Dfi/Zp1AX3v98EemQwCy
-	53gBmtMIizixsWXUSnhGki/aefb509l+soODXcb7tQlNsZ/1trgQpUsOAS5bpHRa
-	h9F7p34QhrLQZdih5VKElV2RVjPF7GcaaTeqKFxFU4PDssfGqxdb8Uu92HLLjocf
-	tGAzuevoZ+d7za5mTMzAv81802aVacUKdZjulXpWR9Y9FCLWcyby+EGW2pKAQQ87
-	U4/6qRpWQT3cfQZGo8wtrbZ322gM96JtlpHVGr+exfCP2rGEnLIDpMXIGWDiUxM9
-	XtEurw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431ce38x80-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Nov 2024 14:49:00 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AKEn0iO027643
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Nov 2024 14:49:00 GMT
-Received: from hu-dikshita-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 20 Nov 2024 06:48:54 -0800
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Date: Wed, 20 Nov 2024 20:16:16 +0530
-Subject: [PATCH v6 26/28] media: iris: add check to allow sub states
- transitions
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Hf3ND7ru"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id F0B6F55A;
+	Wed, 20 Nov 2024 15:53:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1732114413;
+	bh=mEidYxqzvijE7R/rD2WNYR7lU8E3yrAz7qB1aBUi8Is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hf3ND7ruDmEKp58wFrpBgo+Lx2JlykKOzp+WKJgDMQUzRIBf6VrZE2NrlQZPnWak4
+	 A0gsnIs+VjTYZ0A/QwyhBg7hCVCpGB2RKsfy8SYeJb7+wDmkMIKqPMrLskZo3ij7Py
+	 AC6zcvZNcfot3XX3/QqburwIEkxHnOQZ+vUDE2K0=
+Date: Wed, 20 Nov 2024 16:53:41 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@linux.intel.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] media: uvcvideo: Support partial control reads
+Message-ID: <20241120145341.GX12409@pendragon.ideasonboard.com>
+References: <20241118-uvc-readless-v3-0-d97c1a3084d0@chromium.org>
+ <20241118-uvc-readless-v3-1-d97c1a3084d0@chromium.org>
+ <20241120140526.GW12409@pendragon.ideasonboard.com>
+ <CANiDSCvazZ4Y3OZ9X7chU-_N-4HbeQKUh23eOWkmkAxGaks2QA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20241120-qcom-video-iris-v6-26-a8cf6704e992@quicinc.com>
-References: <20241120-qcom-video-iris-v6-0-a8cf6704e992@quicinc.com>
-In-Reply-To: <20241120-qcom-video-iris-v6-0-a8cf6704e992@quicinc.com>
-To: Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Abhinav Kumar
-	<quic_abhinavk@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rob
- Herring" <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC: Hans Verkuil <hverkuil@xs4all.nl>,
-        Sebastian Fricke
-	<sebastian.fricke@collabora.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Nicolas Dufresne
-	<nicolas@ndufresne.ca>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@baylibre.com>,
-        Jianhua Lu <lujianhua000@gmail.com>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Dikshita
- Agarwal" <quic_dikshita@quicinc.com>,
-        Vedang Nagar <quic_vnagar@quicinc.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732113983; l=5132;
- i=quic_dikshita@quicinc.com; s=20240917; h=from:subject:message-id;
- bh=pH2n+gEdApaTchQwHQ0q0A+CBGKgbQ24Pvt9VdnZh4o=;
- b=6WTdcCKgmoMSDarQ7hTk4J/X4tyuCFW0ysaoMqDBAokhhSHNjVEKsehkJ+NtXo/N7dKukBI/3
- pv032wX5E72CEY9yF+dSNhyGDgFkwOQRMefm+B/f+uCuxQC4STVsc92
-X-Developer-Key: i=quic_dikshita@quicinc.com; a=ed25519;
- pk=EEvKY6Ar1OI5SWf44FJ1Ebo1KuQEVbbf5UNPO+UHVhM=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YkBbwzinLOum9ckiZjKGZKqsyOuXZ3Xa
-X-Proofpoint-ORIG-GUID: YkBbwzinLOum9ckiZjKGZKqsyOuXZ3Xa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- bulkscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2411200098
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCvazZ4Y3OZ9X7chU-_N-4HbeQKUh23eOWkmkAxGaks2QA@mail.gmail.com>
 
-From: Vedang Nagar <quic_vnagar@quicinc.com>
+On Wed, Nov 20, 2024 at 03:43:22PM +0100, Ricardo Ribalda wrote:
+> On Wed, 20 Nov 2024 at 15:05, Laurent Pinchart wrote:
+> > On Mon, Nov 18, 2024 at 05:16:51PM +0000, Ricardo Ribalda wrote:
+> > > Some cameras, like the ELMO MX-P3, do not return all the bytes
+> > > requested from a control if it can fit in less bytes.
+> > > Eg: Returning 0xab instead of 0x00ab.
+> > > usb 3-9: Failed to query (GET_DEF) UVC control 3 on unit 2: 1 (exp. 2).
+> > >
+> > > Extend the returned value from the camera and return it.
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: a763b9fb58be ("media: uvcvideo: Do not return positive errors in uvc_query_ctrl()")
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > >  drivers/media/usb/uvc/uvc_video.c | 16 +++++++++++++++-
+> > >  1 file changed, 15 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > > index cd9c29532fb0..e165850397a0 100644
+> > > --- a/drivers/media/usb/uvc/uvc_video.c
+> > > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > > @@ -76,8 +76,22 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+> > >
+> > >       ret = __uvc_query_ctrl(dev, query, unit, intfnum, cs, data, size,
+> > >                               UVC_CTRL_CONTROL_TIMEOUT);
+> > > -     if (likely(ret == size))
+> > > +     if (ret > 0) {
+> > > +             if (size == ret)
+> > > +                     return 0;
+> >
+> > Why is this within the ret > 0 block ? I would write
+> >
+> >         if (likely(ret == size))
+> >                 return 0;
+> >
+> >         if (ret > 0) {
+> >
+> > > +
+> > > +             /*
+> > > +              * In UVC the data is represented in little-endian by default.
+> >
+> > By default, or always ?
+> >
+> > > +              * Some devices return shorter control packages that expected
+> >
+> > What's a "control package" ?
+> 
+> usb control transfers.
 
-Based on state machine design, add allow checks to transition from one
-sub-state to another sub-states.
+Ah, did you mean "packet" instead of "package" ?
 
-Signed-off-by: Vedang Nagar <quic_vnagar@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- .../platform/qcom/iris/iris_hfi_gen1_command.c     | 12 ++++++-
- drivers/media/platform/qcom/iris/iris_state.c      | 40 ++++++++++++++++++++++
- drivers/media/platform/qcom/iris/iris_state.h      |  3 ++
- 3 files changed, 54 insertions(+), 1 deletion(-)
+> > I think you meants "than expected", not "that expected".
+> >
+> > > +              * if the return value can fit in less bytes.
+> > > +              * Zero all the bytes that the device have not written.
+> > > +              */
+> >
+> > Do we want to apply this workaround to GET_INFO and GET_LEN, or can we
+> > restrict it to GET_CUR, GET_MIN, GET_MAX and GET_RES ?
+> 
+> I believe that the original behaviour before
+> a763b9fb58be ("media: uvcvideo: Do not return positive errors in
+> uvc_query_ctrl()")
+> was used for all types. I think the safest thing to do is to go back
+> to the old behaviour.
 
-diff --git a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
-index e1fbbb3c196d..64f887d9a17d 100644
---- a/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
-+++ b/drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
-@@ -135,6 +135,9 @@ static int iris_hfi_gen1_session_start(struct iris_inst *inst, u32 plane)
- 	if (!V4L2_TYPE_IS_OUTPUT(plane))
- 		return 0;
- 
-+	if (inst->sub_state & IRIS_INST_SUB_LOAD_RESOURCES)
-+		return 0;
-+
- 	reinit_completion(&inst->completion);
- 	iris_hfi_gen1_packet_session_cmd(inst, &packet, HFI_CMD_SESSION_LOAD_RESOURCES);
- 
-@@ -153,7 +156,11 @@ static int iris_hfi_gen1_session_start(struct iris_inst *inst, u32 plane)
- 	if (ret)
- 		return ret;
- 
--	return iris_wait_for_session_response(inst, false);
-+	ret = iris_wait_for_session_response(inst, false);
-+	if (ret)
-+		return ret;
-+
-+	return iris_inst_change_sub_state(inst, 0, IRIS_INST_SUB_LOAD_RESOURCES);
- }
- 
- static int iris_hfi_gen1_session_stop(struct iris_inst *inst, u32 plane)
-@@ -180,6 +187,9 @@ static int iris_hfi_gen1_session_stop(struct iris_inst *inst, u32 plane)
- 		ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
- 		if (!ret)
- 			ret = iris_wait_for_session_response(inst, false);
-+
-+		iris_inst_change_sub_state(inst, IRIS_INST_SUB_LOAD_RESOURCES, 0);
-+
- 		iris_helper_buffers_done(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
- 					 VB2_BUF_STATE_ERROR);
- 		iris_helper_buffers_done(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-diff --git a/drivers/media/platform/qcom/iris/iris_state.c b/drivers/media/platform/qcom/iris/iris_state.c
-index f12306e735ec..5976e926c83d 100644
---- a/drivers/media/platform/qcom/iris/iris_state.c
-+++ b/drivers/media/platform/qcom/iris/iris_state.c
-@@ -105,6 +105,43 @@ int iris_inst_state_change_streamoff(struct iris_inst *inst, u32 plane)
- 	return iris_inst_change_state(inst, new_state);
- }
- 
-+static bool iris_inst_allow_sub_state(struct iris_inst *inst, enum iris_inst_sub_state sub_state)
-+{
-+	if (!sub_state)
-+		return true;
-+
-+	switch (inst->state) {
-+	case IRIS_INST_INIT:
-+		if (sub_state & IRIS_INST_SUB_LOAD_RESOURCES)
-+			return true;
-+		return false;
-+	case IRIS_INST_INPUT_STREAMING:
-+		if (sub_state & (IRIS_INST_SUB_FIRST_IPSC | IRIS_INST_SUB_DRC |
-+			IRIS_INST_SUB_DRAIN | IRIS_INST_SUB_INPUT_PAUSE))
-+			return true;
-+		return false;
-+	case IRIS_INST_OUTPUT_STREAMING:
-+		if (sub_state & (IRIS_INST_SUB_DRC_LAST |
-+			IRIS_INST_SUB_DRAIN_LAST | IRIS_INST_SUB_OUTPUT_PAUSE))
-+			return true;
-+		return false;
-+	case IRIS_INST_STREAMING:
-+		if (sub_state & (IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRAIN |
-+			IRIS_INST_SUB_DRC_LAST | IRIS_INST_SUB_DRAIN_LAST |
-+			IRIS_INST_SUB_INPUT_PAUSE | IRIS_INST_SUB_OUTPUT_PAUSE))
-+			return true;
-+		return false;
-+	case IRIS_INST_DEINIT:
-+		if (sub_state & (IRIS_INST_SUB_DRC | IRIS_INST_SUB_DRAIN |
-+			IRIS_INST_SUB_DRC_LAST | IRIS_INST_SUB_DRAIN_LAST |
-+			IRIS_INST_SUB_INPUT_PAUSE | IRIS_INST_SUB_OUTPUT_PAUSE))
-+			return true;
-+		return false;
-+	default:
-+		return false;
-+	}
-+}
-+
- int iris_inst_change_sub_state(struct iris_inst *inst,
- 			       enum iris_inst_sub_state clear_sub_state,
- 			       enum iris_inst_sub_state set_sub_state)
-@@ -124,6 +161,9 @@ int iris_inst_change_sub_state(struct iris_inst *inst,
- 
- 	prev_sub_state = inst->sub_state;
- 
-+	if (!iris_inst_allow_sub_state(inst, set_sub_state))
-+		return -EINVAL;
-+
- 	inst->sub_state |= set_sub_state;
- 	inst->sub_state &= ~clear_sub_state;
- 
-diff --git a/drivers/media/platform/qcom/iris/iris_state.h b/drivers/media/platform/qcom/iris/iris_state.h
-index bf645f6f879c..4bb37423ed05 100644
---- a/drivers/media/platform/qcom/iris/iris_state.h
-+++ b/drivers/media/platform/qcom/iris/iris_state.h
-@@ -113,6 +113,8 @@ enum iris_inst_state {
-  * IRIS_INST_SUB_OUTPUT_PAUSE: last buffer is received form firmware as part
-  *                             of drc sequence. This indicates that
-  *                             firmware is paused to process any further output frames.
-+ * IRIS_INST_SUB_LOAD_RESOURCES: indicates all the resources have been loaded by the
-+ *                               firmware and it is ready for processing.
-  */
- enum iris_inst_sub_state {
- 	IRIS_INST_SUB_FIRST_IPSC	= BIT(0),
-@@ -122,6 +124,7 @@ enum iris_inst_sub_state {
- 	IRIS_INST_SUB_DRAIN_LAST	= BIT(4),
- 	IRIS_INST_SUB_INPUT_PAUSE	= BIT(5),
- 	IRIS_INST_SUB_OUTPUT_PAUSE	= BIT(6),
-+	IRIS_INST_SUB_LOAD_RESOURCES	= BIT(7),
- };
- 
- int iris_inst_change_state(struct iris_inst *inst,
+I don't see how reverting that commit would help, or how that's related
+to the question at hand.
+
+I understand the device you're dealing with shortens transfers for
+integer values when they would contain leading 0x00 bytes. The
+workaround should be OK when retrieving the control value or its limits
+and resolution. I wonder if it would be dangerous for GET_INFO, which
+retrieves a bitmask. Does the device you've tested this with skip the
+MSB for GET_INFO as well ?
+
+Conceptually GET_LEN could be similarly excluded from the workaround,
+but it will never take this code path as it's a 1 byte value.
+
+> Let me know what you prefer.
+> 
+> > > +             memset(data + ret, 0, size - ret);
+> > > +             dev_warn_once(&dev->udev->dev,
+> > > +                           "UVC non compliance: %s control %u on unit %u returned %d bytes when we expected %u.\n",
+> > > +                           uvc_query_name(query), cs, unit, ret, size);
+> > >               return 0;
+> > > +     }
+> > >
+> > >       if (ret != -EPIPE) {
+> > >               dev_err(&dev->udev->dev,
 
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
