@@ -1,173 +1,287 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E0A1AD5DE
-	for <linux-media@vger.kernel.org>; Wed, 20 Nov 2024 14:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75ABA481B3;
+	Wed, 20 Nov 2024 14:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732113819; cv=none; b=beEbqBlhUbpZTKkyTFQi6B95ogz/GzGs9L5KMS1Ki0GCfjzNNDUmixJh1mQMrmohMN+/PfcSWsgE6/RAjrDmUwC3P6hLc3sDTluum31pa4O/66LPA5y0GnjMq64DjrqTRpyc++W9jzjohw9XvOrKSYMBATqYT7rft7gcr1VIKGg=
+	t=1732114007; cv=none; b=hqI4NgZX66SsrACYCvAe5lrF2bQki6J2JNeirfS6LipoZBy2JXnWf5PmOPcSeWOLPniJ0AtZY6EQMZD/igMA6Eyec6cmYtOgSp3QfHeuY+S3ix3X71TGwtYQxJv4tGs6OkHIuz1JXnuiild1KLlg0kQ2uCMbab1W4IiFj5uyIfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732113819; c=relaxed/simple;
-	bh=3H0qJXOUKg7BZKQpQxV+nwwmTnCQUnU4BeIQFsGiWSs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PrfCrcgT+UOXraKcKGRylT2emqFDdM3afG5zQrMd3dbfPENVit+kxubtPPYRrWVNdggVB70qyAKlbdhlSXaaXb+1730r+M+fMDjaOtRs4WF4pjUpFnkAtz7PRsWeik54lPB7hdr7KlBFE2zAVrU3tOthD1c/0aSzQl4pMAV4SQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=V2eiVaol; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1732114007; c=relaxed/simple;
+	bh=Y8PK8dUWMEksp15DLcPpjOQuw5z0AL/OoZDUvpeB/9I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=iauGG0JGWZhEoMisDKdHQfJg5p/aiYEbj6wDtEmepr+ysdgoCcfG2J9tSgHgo5axUfsw0bIFevy64+5l8Qy21KyKIiC1XRas60xDBIK/VP4zA+QzSaFGCq7jUHV7NVfd9pEfpb4jxqoyvHN3bF+pCQ4BPOy/Ei7JcbbtnpjrTzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Mah+j7KD; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="V2eiVaol"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-723db2798caso5513353b3a.0
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2024 06:43:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1732113816; x=1732718616; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r2sFP2NARD2FOImCkIlq0O7UZoSIEEdwWYR8ebMsnZM=;
-        b=V2eiVaolQu4fccQ3F50ghvTq/VMQjUFyb0Bs+/xs1wgMDepi3QiziyjxEVb9d9QoCe
-         lUWL7BxcYCKdYrfuJ2mNwjhOct80YAjcQ+EAAPzZt6z8Pq7I3gT/ciJPIvrkSzfff7Xx
-         tqtfKBy1IfA6j6aRiN9QyyiR5Xv0MKgYlIpoY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732113816; x=1732718616;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r2sFP2NARD2FOImCkIlq0O7UZoSIEEdwWYR8ebMsnZM=;
-        b=FjjR8ehxNMQ/7ruP2kOlDvWsmWDOKyhKlXHMRRL7paO0yKysrDqZWSFoFk9ZAaiL9s
-         tMzyBfvs2pTWdgYd+xdWbopN9/sCOVGwEv7I05LAVq8zHRzmiEtZh6qOqLUI5HlnNe2e
-         bPocooyZDsvV8lMdX0HLXhE4G6xn4RlII1QFSHzRoOpx1hJk9UJlKCVWwiP94MoOr4jF
-         u5qLmTNO7qSJmq1nekZplFFxOvJFS3luH50ipvrAOp3oGdVr0PMrwh9U7KeVTXNZY627
-         A1HRezs1IE/wMqwpGu26ZIpT+wEUHg7X+BXNdAFGHBOQsoi1KJXYajF39Mn0hHZfi7AP
-         FPfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUb+XNKeSN5ORP1fKwt+Pm248kqnZvAbMvFaPtdct/vZT1wbHYDhI3PoWCvO/yZaai1P0D3GbrUSdwIfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpA713gTkVl/QUeIuQZd5BygfznnYyC+NPLQ9HMIQ59z4u34Fz
-	hR7sXTmYiOcgud312qnjhDAOw53s97NWraLoDS8cyEBAEtsLWN/j5sZDsVTeuFnsGHBbnqlnO8E
-	=
-X-Google-Smtp-Source: AGHT+IH/GbKpwJdnN/YzjSNvQDJ4nSOJP7sGZLk8G8YoO4KB0VRGBqSg95knPsC31kVgo3OlXZVaFw==
-X-Received: by 2002:a05:6a00:ac8:b0:71e:587d:f268 with SMTP id d2e1a72fcca58-724bec87c0bmr4237450b3a.4.1732113816008;
-        Wed, 20 Nov 2024 06:43:36 -0800 (PST)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com. [209.85.215.172])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724befe9a91sm1750239b3a.183.2024.11.20.06.43.34
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 06:43:34 -0800 (PST)
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7e6cbf6cd1dso4638490a12.3
-        for <linux-media@vger.kernel.org>; Wed, 20 Nov 2024 06:43:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX+AzdnzRtZ/8SZakV84ge43gpM19wwWW3MX/ZoQbxfZhyAXvrzRJrQV4WIqggyCrdNSszgDZ54OR+7CQ==@vger.kernel.org
-X-Received: by 2002:a05:6a20:9f09:b0:1db:d980:440e with SMTP id
- adf61e73a8af0-1ddae5e0c52mr4938722637.14.1732113813781; Wed, 20 Nov 2024
- 06:43:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Mah+j7KD"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AKAjsmh004590;
+	Wed, 20 Nov 2024 14:46:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	N5R4J8PKqDJCZGg10GmHEvClQtSODaids6niAdmQL4o=; b=Mah+j7KDKSVu+8B1
+	f8pBoKVObowIgH+ZdFDXiDlCpPhEi53am0eozzGE6e6MBx3yEz/DZl6w6BHHhNv0
+	f+27w/Ug8nKYjG7iWB9T9Vhj9YUuinoj6O8APUoxpTL6adjtMnoS0cUKqZH+ztW4
+	pVZcxiCkaOcmbkydKBcLm/loOipVdvu2qAB7rCxxEEFZivTvnfI4MlNY831hnJu7
+	R3uFM1zBHjMa6vXyf3zJzGvs+dX4K8m+xMIw+E8FEFmeiwvaK2FITtClr0fYUUwd
+	+bJtYB/cwKU7yR+CY9T8FeOkbjQGdGCTH+UMtY0ojFcR640NzbUZbd/z5K2oa8vQ
+	CW1JFA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431ea70jwc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 14:46:36 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AKEkZiQ024828
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 14:46:35 GMT
+Received: from hu-dikshita-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 20 Nov 2024 06:46:30 -0800
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Date: Wed, 20 Nov 2024 20:15:51 +0530
+Subject: [PATCH v6 01/28] dt-bindings: media: Add video support for QCOM
+ SM8550 SoC
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241118-uvc-readless-v3-0-d97c1a3084d0@chromium.org>
- <20241118-uvc-readless-v3-1-d97c1a3084d0@chromium.org> <20241120140526.GW12409@pendragon.ideasonboard.com>
-In-Reply-To: <20241120140526.GW12409@pendragon.ideasonboard.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Wed, 20 Nov 2024 15:43:22 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvazZ4Y3OZ9X7chU-_N-4HbeQKUh23eOWkmkAxGaks2QA@mail.gmail.com>
-Message-ID: <CANiDSCvazZ4Y3OZ9X7chU-_N-4HbeQKUh23eOWkmkAxGaks2QA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] media: uvcvideo: Support partial control reads
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Hans de Goede <hdegoede@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20241120-qcom-video-iris-v6-1-a8cf6704e992@quicinc.com>
+References: <20241120-qcom-video-iris-v6-0-a8cf6704e992@quicinc.com>
+In-Reply-To: <20241120-qcom-video-iris-v6-0-a8cf6704e992@quicinc.com>
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Abhinav Kumar
+	<quic_abhinavk@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob
+ Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC: Hans Verkuil <hverkuil@xs4all.nl>,
+        Sebastian Fricke
+	<sebastian.fricke@collabora.com>,
+        Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Nicolas Dufresne
+	<nicolas@ndufresne.ca>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
+	<u.kleine-koenig@baylibre.com>,
+        Jianhua Lu <lujianhua000@gmail.com>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Dikshita
+ Agarwal" <quic_dikshita@quicinc.com>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732113983; l=5152;
+ i=quic_dikshita@quicinc.com; s=20240917; h=from:subject:message-id;
+ bh=Y8PK8dUWMEksp15DLcPpjOQuw5z0AL/OoZDUvpeB/9I=;
+ b=vPrG9Vjh/q2H64tVGLBRXfI1pbra/HKDiD0kr4LRv3OZz2vrqHAh4REpEffNEo579mRcO87PA
+ 9sj36Ke7yYoCIfbS5Yu9OEByrqvo20gKS/A3zfjufIQlY/NN0sRqh5W
+X-Developer-Key: i=quic_dikshita@quicinc.com; a=ed25519;
+ pk=EEvKY6Ar1OI5SWf44FJ1Ebo1KuQEVbbf5UNPO+UHVhM=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: khvfuAc22qZCbA3wv0rPY2Pb0-gYx--p
+X-Proofpoint-ORIG-GUID: khvfuAc22qZCbA3wv0rPY2Pb0-gYx--p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411200098
 
-Hi Laurent
+Introduce support for Qualcomm new video acceleration hardware i.e.
+iris, used for video stream decoding and encoding on QCOM SM8550 SoC.
 
-On Wed, 20 Nov 2024 at 15:05, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> Thank you for the patch.
->
-> On Mon, Nov 18, 2024 at 05:16:51PM +0000, Ricardo Ribalda wrote:
-> > Some cameras, like the ELMO MX-P3, do not return all the bytes
-> > requested from a control if it can fit in less bytes.
-> > Eg: Returning 0xab instead of 0x00ab.
-> > usb 3-9: Failed to query (GET_DEF) UVC control 3 on unit 2: 1 (exp. 2).
-> >
-> > Extend the returned value from the camera and return it.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: a763b9fb58be ("media: uvcvideo: Do not return positive errors in uvc_query_ctrl()")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  drivers/media/usb/uvc/uvc_video.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> > index cd9c29532fb0..e165850397a0 100644
-> > --- a/drivers/media/usb/uvc/uvc_video.c
-> > +++ b/drivers/media/usb/uvc/uvc_video.c
-> > @@ -76,8 +76,22 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
-> >
-> >       ret = __uvc_query_ctrl(dev, query, unit, intfnum, cs, data, size,
-> >                               UVC_CTRL_CONTROL_TIMEOUT);
-> > -     if (likely(ret == size))
-> > +     if (ret > 0) {
-> > +             if (size == ret)
-> > +                     return 0;
->
-> Why is this within the ret > 0 block ? I would write
->
->         if (likely(ret == size))
->                 return 0;
->
->         if (ret > 0) {
->
-> > +
-> > +             /*
-> > +              * In UVC the data is represented in little-endian by default.
->
-> By default, or always ?
->
-> > +              * Some devices return shorter control packages that expected
->
-> What's a "control package" ?
+Cc: devicetree@vger.kernel.org
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+---
+ .../bindings/media/qcom,sm8550-iris.yaml           | 158 +++++++++++++++++++++
+ 1 file changed, 158 insertions(+)
 
-usb control transfers.
->
-> I think you meants "than expected", not "that expected".
->
-> > +              * if the return value can fit in less bytes.
-> > +              * Zero all the bytes that the device have not written.
-> > +              */
->
-> Do we want to apply this workaround to GET_INFO and GET_LEN, or can we
-> restrict it to GET_CUR, GET_MIN, GET_MAX and GET_RES ?
-
-I believe that the original behaviour before
-a763b9fb58be ("media: uvcvideo: Do not return positive errors in
-uvc_query_ctrl()")
-was used for all types. I think the safest thing to do is to go back
-to the old behaviour.
-
-Let me know what you prefer.
-
-
->
-> > +             memset(data + ret, 0, size - ret);
-> > +             dev_warn_once(&dev->udev->dev,
-> > +                           "UVC non compliance: %s control %u on unit %u returned %d bytes when we expected %u.\n",
-> > +                           uvc_query_name(query), cs, unit, ret, size);
-> >               return 0;
-> > +     }
-> >
-> >       if (ret != -EPIPE) {
-> >               dev_err(&dev->udev->dev,
-> >
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
+diff --git a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+new file mode 100644
+index 000000000000..e424ea84c211
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+@@ -0,0 +1,158 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/qcom,sm8550-iris.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm iris video encode and decode accelerators
++
++maintainers:
++  - Vikash Garodia <quic_vgarodia@quicinc.com>
++  - Dikshita Agarwal <quic_dikshita@quicinc.com>
++
++description:
++  The iris video processing unit is a video encode and decode accelerator
++  present on Qualcomm platforms.
++
++allOf:
++  - $ref: qcom,venus-common.yaml#
++
++properties:
++  compatible:
++    const: qcom,sm8550-iris
++
++  power-domains:
++    maxItems: 4
++
++  power-domain-names:
++    items:
++      - const: venus
++      - const: vcodec0
++      - const: mxc
++      - const: mmcx
++
++  clocks:
++    maxItems: 3
++
++  clock-names:
++    items:
++      - const: iface
++      - const: core
++      - const: vcodec0_core
++
++  interconnects:
++    maxItems: 2
++
++  interconnect-names:
++    items:
++      - const: cpu-cfg
++      - const: video-mem
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: bus
++
++  iommus:
++    maxItems: 2
++
++  dma-coherent: true
++
++  operating-points-v2: true
++
++  opp-table:
++    type: object
++
++required:
++  - compatible
++  - power-domain-names
++  - interconnects
++  - interconnect-names
++  - resets
++  - reset-names
++  - iommus
++  - dma-coherent
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    #include <dt-bindings/clock/qcom,sm8550-gcc.h>
++    #include <dt-bindings/clock/qcom,sm8450-videocc.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interconnect/qcom,icc.h>
++    #include <dt-bindings/interconnect/qcom,sm8550-rpmh.h>
++    #include <dt-bindings/power/qcom-rpmpd.h>
++    #include <dt-bindings/power/qcom,rpmhpd.h>
++
++    video-codec@aa00000 {
++        compatible = "qcom,sm8550-iris";
++        reg = <0x0aa00000 0xf0000>;
++        interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
++
++        power-domains = <&videocc VIDEO_CC_MVS0C_GDSC>,
++                        <&videocc VIDEO_CC_MVS0_GDSC>,
++                        <&rpmhpd RPMHPD_MXC>,
++                        <&rpmhpd RPMHPD_MMCX>;
++        power-domain-names = "venus", "vcodec0", "mxc", "mmcx";
++
++        clocks = <&gcc GCC_VIDEO_AXI0_CLK>,
++                 <&videocc VIDEO_CC_MVS0C_CLK>,
++                 <&videocc VIDEO_CC_MVS0_CLK>;
++        clock-names = "iface", "core", "vcodec0_core";
++
++        interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ALWAYS
++                         &config_noc SLAVE_VENUS_CFG QCOM_ICC_TAG_ALWAYS>,
++                        <&mmss_noc MASTER_VIDEO QCOM_ICC_TAG_ALWAYS
++                         &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
++        interconnect-names = "cpu-cfg", "video-mem";
++
++        memory-region = <&video_mem>;
++
++        resets = <&gcc GCC_VIDEO_AXI0_CLK_ARES>;
++        reset-names = "bus";
++
++        iommus = <&apps_smmu 0x1940 0x0000>,
++                 <&apps_smmu 0x1947 0x0000>;
++        dma-coherent;
++
++        operating-points-v2 = <&iris_opp_table>;
++
++        iris_opp_table: opp-table {
++            compatible = "operating-points-v2";
++
++            opp-240000000 {
++                opp-hz = /bits/ 64 <240000000>;
++                required-opps = <&rpmhpd_opp_svs>,
++                                <&rpmhpd_opp_low_svs>;
++            };
++
++            opp-338000000 {
++                opp-hz = /bits/ 64 <338000000>;
++                required-opps = <&rpmhpd_opp_svs>,
++                                <&rpmhpd_opp_svs>;
++            };
++
++            opp-366000000 {
++                opp-hz = /bits/ 64 <366000000>;
++                required-opps = <&rpmhpd_opp_svs_l1>,
++                                <&rpmhpd_opp_svs_l1>;
++            };
++
++            opp-444000000 {
++                opp-hz = /bits/ 64 <444000000>;
++                required-opps = <&rpmhpd_opp_turbo>,
++                                <&rpmhpd_opp_turbo>;
++            };
++
++            opp-533333334 {
++                opp-hz = /bits/ 64 <533333334>;
++                required-opps = <&rpmhpd_opp_turbo_l1>,
++                                <&rpmhpd_opp_turbo_l1>;
++            };
++        };
++    };
++...
 
 -- 
-Ricardo Ribalda
+2.34.1
+
