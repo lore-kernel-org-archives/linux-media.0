@@ -1,103 +1,117 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D1023099D;
-	Thu, 21 Nov 2024 03:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0F41DFF7;
+	Thu, 21 Nov 2024 04:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732161587; cv=none; b=uWRdDiSbnwOaRhzqNG4T7J1SXpT7b5hk7h7HthIcfWiRtFDltZJbfZKjrjS6L4MiAbr/ZCAHp1EgWqq1F5TSVXCXjGKRpghPHoQHdDSed5K/4eaV7zDBZsKDj4srp/m5onf9kxyCz/SPlC2AUt4mTW3jUBMRkT6URbneC/1g4W0=
+	t=1732163173; cv=none; b=jg6zzQ+7w/4WE8cbu4mqxH6nrfq39VskXpcT6EDrVuDAkB95qZm/am11r+bKxB2rEPQPim/So46I1u3u0h3WY3Wjn/5tS/P4/9iqWFxCnic7vh49jW5NXH98Pi1bvxfcvD6oRGVjc1s//HDfxBV/gg97qA/eNTdPXy9OTIOG9sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732161587; c=relaxed/simple;
-	bh=xRQ+NukL96XVgf0TjxScXjTeGDznVFzspHowFnHfHyg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gM7jp5qqQiSc9P/UV6FUwB8DzNYOUdb3DvzRWeTWyMuJfa3H1pSkV4ymvx0+5fqfaahakf14Db0ZB14TOWdqOflnSxNZ9JOoRCICs07a4kYCYkDnccIYwrkCR0snUUliFSl7RM9Asfa0Mt4LDj7dkGYGD6twQgDjeyEYy+x+N/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GNYvIKjm; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1732163173; c=relaxed/simple;
+	bh=mPInx/1iVPYxy5cEKjwNUPOx/as7pqaQT12151YN05Y=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sLahOjd74DllTrnwc55WphKsBAXE7WVbLku2YMYBhUP0H1urJd3vX9mGCFl2+6S8cmY+vmuVIFzproiMy2voYBkLmgw7IUOb6b9O14jsHfO1WGEPnUIrDlEDc/anZqjNvo+DOqLTHdS7Mk6EwvxM0nh9bb2PoyvXaqZpouJYwt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=T93JvMCJ; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GNYvIKjm"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=Z1G3HjME0MUpLj8hYZp8r4/+FSgSZ05odH8oiA0RgU0=; b=GNYvIKjmL9Uh3sdHrNf+aDS1R/
-	TXwip7IOhCyudtu6L4x3CVedsP6BKnxZ+l5v6yaE2PQogfEauobLhocYUQJ8sEYPvUftWAw/z9Q94
-	EgPsB1R8JKb6IRh2UY6G61PJptzEEOHr+LOAz/RXSoZLfXxblQXWmu8xV+XE5Hw8P9MARn2JRqcVI
-	UvmCqTbT6clNDejIj5R56XTCHoM+YAUPPW0V3qRtc4ewMtjje8Qom7/SHs0hJWQuTFCc//AqKwQty
-	63dKs5PqfhkIQXRKfzEzZKL0348cZtFi4ol/fpNCRITeo3jfvodcXZZhsWsbalxS7JqLasfInEzqA
-	hagJxUAA==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tDyM1-00000005vza-2wRh;
-	Thu, 21 Nov 2024 03:59:43 +0000
-Message-ID: <d26c4116-9ec1-44a7-bd61-a5de3ff9d257@infradead.org>
-Date: Wed, 20 Nov 2024 19:59:36 -0800
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="T93JvMCJ"
+X-UUID: b988652ca7c011ef99858b75a2457dd9-20241121
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=2A1gVmEsv9iSPpIpyfpWVjAEBsuCxHX96ctzdzXQSmE=;
+	b=T93JvMCJqI+w63LDlcpkgPF0ptOSmxlZn4Wz+z6pJT8jN3kBMyLEEsW1D6uvx04YOe0MY2bTEG5/iBk2Y1zR3xWpoHWmZiHz/xEF6EmIVi+/bVfPSG0TNuR1zioJmI1DQhNwE90Cz7JXm7u5P+s04vrYYyg5khfqwp4lplMTKGI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.44,REQID:320a8263-6ae9-4d49-a13b-471ce030b8fe,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:464815b,CLOUDID:d21a8fa0-f395-4dfc-8188-ce2682df7fd8,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0,EDM:-3,IP
+	:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
+	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: b988652ca7c011ef99858b75a2457dd9-20241121
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1489044708; Thu, 21 Nov 2024 12:26:06 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 21 Nov 2024 12:26:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 21 Nov 2024 12:26:04 +0800
+From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+To: Jassi Brar <jassisinghbrar@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Moudy
+ Ho <moudy.ho@mediatek.com>, <linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-mediatek@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-media@vger.kernel.org>, "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
+	Singo Chang <singo.chang@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 7/8] drm/mediatek: Add pa_base due to CMDQ API change
+Date: Thu, 21 Nov 2024 12:26:01 +0800
+Message-ID: <20241121042602.32730-8-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20241121042602.32730-1-jason-jh.lin@mediatek.com>
+References: <20241121042602.32730-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] docs: Add debugging section to process
-To: Sebastian Fricke <sebastian.fricke@collabora.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, laurent.pinchart@ideasonboard.com,
- hverkuil-cisco@xs4all.nl, mchehab@kernel.org, kernel@collabora.com,
- bob.beckett@collabora.com, nicolas.dufresne@collabora.com
-References: <20241028-media_docs_improve_v3-v3-0-edf5c5b3746f@collabora.com>
- <20241028-media_docs_improve_v3-v3-1-edf5c5b3746f@collabora.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20241028-media_docs_improve_v3-v3-1-edf5c5b3746f@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK: N
 
+To support non-subsys ID hardware on new SoCs, the CMDQ API has been
+changed to include the pa_base parameter. This change accommodates
+the new interface requirements.
 
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+---
+ drivers/gpu/drm/mediatek/mtk_ddp_comp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 11/17/24 11:03 PM, Sebastian Fricke wrote:
-> This idea was formed after noticing that new developers experience
-> certain difficulty to navigate within the multitude of different
-> debugging options in the Kernel and while there often is good
-> documentation for the tools, the developer has to know first that they
-> exist and where to find them.
-> Add a general debugging section to the Kernel documentation, as an
-> easily locatable entry point to other documentation and as a general
-> guideline for the topic.
-> 
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> ---
->  .../driver_development_debugging_guide.rst         | 223 ++++++++++++++++
->  Documentation/process/debugging/index.rst          |  65 +++++
->  .../debugging/userspace_debugging_guide.rst        | 280 +++++++++++++++++++++
->  Documentation/process/index.rst                    |   8 +-
->  4 files changed, 573 insertions(+), 3 deletions(-)
-> 
-
-> diff --git a/Documentation/process/debugging/index.rst b/Documentation/process/debugging/index.rst
-> new file mode 100644
-> index 000000000000..10fa673f0fe3
-> --- /dev/null
-> +++ b/Documentation/process/debugging/index.rst
-> @@ -0,0 +1,65 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-
-[snip]
-
-> +
-> +How to do a simple analysis with linux tools?
-
-                                    Linux
-
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+diff --git a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
+index edc6417639e6..8d999bfb25b6 100644
+--- a/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_ddp_comp.c
+@@ -72,7 +72,7 @@ void mtk_ddp_write(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ {
+ #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+ 	if (cmdq_pkt)
+-		cmdq_pkt_write(cmdq_pkt, cmdq_reg->subsys,
++		cmdq_pkt_write(cmdq_pkt, cmdq_reg->subsys, cmdq_reg->pa_base,
+ 			       cmdq_reg->offset + offset, value);
+ 	else
+ #endif
+@@ -85,7 +85,7 @@ void mtk_ddp_write_relaxed(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ {
+ #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+ 	if (cmdq_pkt)
+-		cmdq_pkt_write(cmdq_pkt, cmdq_reg->subsys,
++		cmdq_pkt_write(cmdq_pkt, cmdq_reg->subsys, cmdq_reg->pa_base,
+ 			       cmdq_reg->offset + offset, value);
+ 	else
+ #endif
+@@ -98,7 +98,7 @@ void mtk_ddp_write_mask(struct cmdq_pkt *cmdq_pkt, unsigned int value,
+ {
+ #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+ 	if (cmdq_pkt) {
+-		cmdq_pkt_write_mask(cmdq_pkt, cmdq_reg->subsys,
++		cmdq_pkt_write_mask(cmdq_pkt, cmdq_reg->subsys, cmdq_reg->pa_base,
+ 				    cmdq_reg->offset + offset, value, mask);
+ 	} else {
+ #endif
 -- 
-~Randy
+2.43.0
+
