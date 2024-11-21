@@ -1,47 +1,48 @@
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FA96CDAF;
-	Thu, 21 Nov 2024 04:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910BB149011;
+	Thu, 21 Nov 2024 04:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732163173; cv=none; b=jHnfmBjl85XiKzbmKVdbDx6pvmq13xlD4d9WTI78Fx+WLA+36O0oxt+SWlImK7SnuW6V95yQ1l99ifsmMPpsqnSBmGL+TRxw77ofBtSq7EuDG8kGyU0d+MqOeNM7rMKcQMVY7yaiuvGGjGuCbhtt47EVoXpuiaoVcA4TCOOBz8s=
+	t=1732163173; cv=none; b=oGifiwM1ziMVdX8PbacBxsxXIY3x0q8cJOnxpbDk4RMhYXHqGn/d814itKfxnVTGb62ZicnsoggO7XvqZxqj86PsDF6+iTDWwIzQp7fze9tSXpbY/6HVaYnSq1I0bbB4ErZlka9QEvCmBOg+WL8pLpzUkYHTQ4zV2Szp/IT+Jq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732163173; c=relaxed/simple;
-	bh=CbFkLN5U5lhpU1ZKhnsC0bTjZy+0MEPfPMKMkXTJM4U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FKGRhXSGGiKmrThVRAijeMHxVB54neQy9dqOLRb+agWKeOhfr+O6puwqdHbEcT+hc0gK++TheL0kHi0LuAb3X/im4RdVgxlfu3XdCKEnYmYijLzomVJF74DnJdFYoU2SM0sefEZREsfuSq8hdW8yYRCgJMkeb5k6/MNjKKMTqsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=N9pgPn37; arc=none smtp.client-ip=60.244.123.138
+	bh=h7xF7qzQH+4asbQvWDK+eJM8NqxpJys5ZkVVO6WWAXE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VEevf+R63tXGBCdEMsNgXlnQmda7m+IV0GNGYAMrL9q+FUHvlranWBLasbFXTK95w2bL2/yYgTRANAVAO9ix/iSvG6mXIfdCl8fdup7+V94SNYoKT2PvbT/QY6ugWphIWcUCxLqG2ryzGl6scN2DSNWFMhcZMDXdhs8Nn7hVmrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lJ7Fk6GJ; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="N9pgPn37"
-X-UUID: b8fe20eca7c011ef99858b75a2457dd9-20241121
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lJ7Fk6GJ"
+X-UUID: b985490aa7c011ef99858b75a2457dd9-20241121
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=3ghlE111DUE2HnHAtWYt9SyfO1QWC8nbhrgrUa0cNfI=;
-	b=N9pgPn372/aPBMUI+HOi9jPojmToV3KnashYuPGNTGcWPIa3UA+XPb7qe8w16rr9y4tbngRGOo6JsvnvQH6mOBFt+uq/Xp8NoKJwRUjwi/EOk1IzAGL6pXpGSFGU00fopDHO3qnmsfXK/8e3rSuB9IIKX5SYf4Sxjvm1Ntc5CEE=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mJDZ8TbEOg8kfWuALOz+YShjGUyzgs27hJEVqgGGWq4=;
+	b=lJ7Fk6GJHltgO5mTmTR7V8w82jcMT+ncF2fNdF0gODkrxb4fHG1+Oxwewpy5y6gwEzyeQxPxtzuMWrVsfWK3zSwQbYWL+QR8kZQMCuBTFgPf3EJSfWYgTwG53Mu/ysY4i2pc281E4FWX/SqErO60Nc2wpaXkvudeN2FJsxxHGqc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.44,REQID:c17f987b-b037-4069-8508-48cb68c87b11,IP:0,U
-	RL:0,TC:0,Content:50,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:50
-X-CID-META: VersionHash:464815b,CLOUDID:601c27b9-596a-4e31-81f2-cae532fa1b81,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|801,TC:nil,Content:3,EDM:-3,IP:n
-	il,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LE
-	S:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.1.44,REQID:7072b010-d679-496a-83b1-da887196d3be,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:464815b,CLOUDID:8e35d6fe-58af-4a77-b036-41f515d81476,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0,EDM:-3,IP
+	:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
+	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: b8fe20eca7c011ef99858b75a2457dd9-20241121
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+X-UUID: b985490aa7c011ef99858b75a2457dd9-20241121
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
 	(envelope-from <jason-jh.lin@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1033751027; Thu, 21 Nov 2024 12:26:05 +0800
+	with ESMTP id 1235469517; Thu, 21 Nov 2024 12:26:05 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 21 Nov 2024 12:26:03 +0800
+ 15.2.1118.26; Thu, 21 Nov 2024 12:26:04 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 21 Nov 2024 12:26:03 +0800
+ 15.2.1118.26 via Frontend Transport; Thu, 21 Nov 2024 12:26:04 +0800
 From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
 To: Jassi Brar <jassisinghbrar@gmail.com>, Chun-Kuang Hu
 	<chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
@@ -56,10 +57,12 @@ CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Moudy
 	<linux-media@vger.kernel.org>, "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
 	Singo Chang <singo.chang@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 0/8] Add GCE support for MT8196
-Date: Thu, 21 Nov 2024 12:25:54 +0800
-Message-ID: <20241121042602.32730-1-jason-jh.lin@mediatek.com>
+Subject: [PATCH 5/8] soc: mediatek: mtk-cmdq: Add mminfra_offset compatibility for DRAM address
+Date: Thu, 21 Nov 2024 12:25:59 +0800
+Message-ID: <20241121042602.32730-6-jason-jh.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20241121042602.32730-1-jason-jh.lin@mediatek.com>
+References: <20241121042602.32730-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,36 +72,129 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-This patch series adds support for the MediaTek MT8196 SoC in the CMDQ
-driver and related subsystems. The changes include adding compatible
-names and properties, updating driver data to accommodate hardware
-changes, and modifying the CMDQ API to support non-subsys ID hardware.
+Since GCE has been moved to mminfra in MT8196, all transactions from
+mminfra to DRAM will have their addresses adjusted by subtracting a
+mminfra offset.
+This information should be handled inside the CMDQ driver, allowing
+CMDQ users to call CMDQ APIs as usual.
 
-Jason-JH.Lin (8):
-  dt-bindings: mailbox: mediatek: Add GCE header file for MT8196
-  dt-bindings: mailbox: mediatek: Add MT8196 support for gce-mailbox
-  mailbox: mtk-cmdq: Add driver data to support for MT8196
-  soc: mediatek: mtk-cmdq: Add unsupported subsys ID programing flow
-  soc: mediatek: mtk-cmdq: Add mminfra_offset compatibility for DRAM
-    address
-  soc: mediatek: Add pa_base due to CMDQ API change
-  drm/mediatek: Add pa_base due to CMDQ API change
-  media: mediatek: mdp3: Add pa_base due to CMDQ API change
+Therefore, CMDQ driver needs to use the mbox API to get the
+mminfra_offset value of the SoC, and then add it to the DRAM address
+when generating instructions to ensure GCE accesses the correct DRAM
+address.
 
- .../mailbox/mediatek,gce-mailbox.yaml         |    4 +
- drivers/gpu/drm/mediatek/mtk_ddp_comp.c       |    6 +-
- drivers/mailbox/mtk-cmdq-mailbox.c            |  107 +-
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |    4 +-
- .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |    4 +-
- drivers/soc/mediatek/mtk-cmdq-helper.c        |  133 +-
- drivers/soc/mediatek/mtk-mmsys.c              |    1 +
- drivers/soc/mediatek/mtk-mutex.c              |    2 +-
- .../dt-bindings/mailbox/mediatek,mt8196-gce.h | 1449 +++++++++++++++++
- include/linux/mailbox/mtk-cmdq-mailbox.h      |    3 +
- include/linux/soc/mediatek/mtk-cmdq.h         |   22 +-
- 11 files changed, 1698 insertions(+), 37 deletions(-)
- create mode 100755 include/dt-bindings/mailbox/mediatek,mt8196-gce.h
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-cmdq-helper.c | 43 +++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
+index ffdf3cecf6fe..bd2aa9152afc 100644
+--- a/drivers/soc/mediatek/mtk-cmdq-helper.c
++++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+@@ -222,6 +222,9 @@ int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base, u16 offset, u32
+ 	if (cmdq_subsys_is_valid(cl->chan, subsys)) {
+ 		err = cmdq_pkt_append_command(pkt, inst);
+ 	} else {
++		if (cmdq_addr_need_offset(cl->chan, pa_base))
++			pa_base += cmdq_get_offset_pa(cl->chan);
++
+ 		err = cmdq_pkt_assign(pkt, 0, CMDQ_ADDR_HIGH(pa_base));
+ 		if (err < 0)
+ 			return err;
+@@ -255,12 +258,16 @@ int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base,
+ 		}
+ 		err = cmdq_pkt_write(pkt, subsys, pa_base, offset_mask, value);
+ 	} else {
++		if (cmdq_addr_need_offset(cl->chan, pa_base))
++			pa_base += cmdq_get_offset_pa(cl->chan);
++
+ 		err = cmdq_pkt_assign(pkt, 0, CMDQ_ADDR_HIGH(pa_base));
+ 		if (err < 0)
+ 			return err;
+ 
+ 		err = cmdq_pkt_write_s_mask_value(pkt, 0, CMDQ_ADDR_LOW(offset), value, mask);
+ 	}
++
+ 	return err;
+ }
+ EXPORT_SYMBOL(cmdq_pkt_write_mask);
+@@ -347,10 +354,22 @@ EXPORT_SYMBOL(cmdq_pkt_write_s_mask_value);
+ 
+ int cmdq_pkt_mem_move(struct cmdq_pkt *pkt, dma_addr_t src_addr, dma_addr_t dst_addr)
+ {
++	struct cmdq_client *cl = (struct cmdq_client *)pkt->cl;
+ 	const u16 high_addr_reg_idx  = CMDQ_THR_SPR_IDX0;
+ 	const u16 value_reg_idx = CMDQ_THR_SPR_IDX1;
+ 	int ret;
+ 
++	if (!cl) {
++		pr_err("%s %d: pkt->cl is NULL!\n", __func__, __LINE__);
++		return -EINVAL;
++	}
++
++	if (cmdq_addr_need_offset(cl->chan, src_addr))
++		src_addr += cmdq_get_offset_pa(cl->chan);
++
++	if (cmdq_addr_need_offset(cl->chan, dst_addr))
++		dst_addr += cmdq_get_offset_pa(cl->chan);
++
+ 	/* read the value of src_addr into high_addr_reg_idx */
+ 	ret = cmdq_pkt_assign(pkt, high_addr_reg_idx, CMDQ_ADDR_HIGH(src_addr));
+ 	if (ret < 0)
+@@ -450,6 +469,9 @@ int cmdq_pkt_poll(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base,
+ 	}
+ 
+ 	if (!cmdq_subsys_is_valid(cl->chan, subsys)) {
++		if (cmdq_addr_need_offset(cl->chan, pa_base))
++			pa_base += cmdq_get_offset_pa(cl->chan);
++
+ 		err = cmdq_pkt_assign(pkt, CMDQ_POLL_ADDR_GPR, pa_base);
+ 		if (err < 0)
+ 			return err;
+@@ -480,10 +502,19 @@ EXPORT_SYMBOL(cmdq_pkt_poll_mask);
+ 
+ int cmdq_pkt_poll_addr(struct cmdq_pkt *pkt, dma_addr_t addr, u32 value, u32 mask)
+ {
++	struct cmdq_client *cl = (struct cmdq_client *)pkt->cl;
+ 	struct cmdq_instruction inst = { {0} };
+ 	u8 use_mask = 0;
+ 	int ret;
+ 
++	if (!cl) {
++		pr_err("%s %d: pkt->cl is NULL!\n", __func__, __LINE__);
++		return -EINVAL;
++	}
++
++	if (cmdq_addr_need_offset(cl->chan, addr))
++		addr += cmdq_get_offset_pa(cl->chan);
++
+ 	/*
+ 	 * Append an MASK instruction to set the mask for following POLL instruction
+ 	 * which enables use_mask bit.
+@@ -561,11 +592,21 @@ EXPORT_SYMBOL(cmdq_pkt_assign);
+ 
+ int cmdq_pkt_jump_abs(struct cmdq_pkt *pkt, dma_addr_t addr, u8 shift_pa)
+ {
++	struct cmdq_client *cl = (struct cmdq_client *)pkt->cl;
+ 	struct cmdq_instruction inst = {
+ 		.op = CMDQ_CODE_JUMP,
+ 		.offset = CMDQ_JUMP_ABSOLUTE,
+-		.value = addr >> shift_pa
+ 	};
++
++	if (!cl) {
++		pr_err("%s %d: pkt->cl is NULL!\n", __func__, __LINE__);
++		return -EINVAL;
++	}
++
++	if (cmdq_addr_need_offset(cl->chan, addr))
++		addr += cmdq_get_offset_pa(cl->chan);
++
++	inst.value = addr >> shift_pa;
+ 	return cmdq_pkt_append_command(pkt, inst);
+ }
+ EXPORT_SYMBOL(cmdq_pkt_jump_abs);
 -- 
 2.43.0
 
