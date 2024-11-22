@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6EC1D90BC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6B21DEFC8
 	for <linux-media@vger.kernel.org>; Fri, 22 Nov 2024 10:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732270021; cv=none; b=F8g0QKEh+4TzHk+26/fErKKPpsVBPlV8q+JNy5N13O9gMfMKyjZNE68fOEJLmOboyhPmP8Px2cNJH8oMSuZM/VMx6pSKSM7/vFNYan5o0ACx5W/K1QLPACAs9X2kVPZHdOc4l5Gzs1N5ukvG6Rt/aJbFgEnCJGpNB26FhTUKVvQ=
+	t=1732270021; cv=none; b=bzzckiyLSwtsIiHVByDu7K362zuqo4RYiPd9VHT3qVSzrk4Ta9UKoneWIR3KNPEc45NfPDNQoMyM5OwlX0o3c7fNc6whcchAli26xF/bem/4I4zPO4qGHxBsdwMv+FC90geVNewnYR98YHfnO50ZuDLvBLZwJe7QtnepyHOD1Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732270021; c=relaxed/simple;
-	bh=XjzA4XGwvHVywRyLTBD+N3yhShUwTqaQr4zXrHO3Xs0=;
+	bh=IBTh2/UEgKNe0qezwT15xLhzZdfHtCfTU4PgLROp9Cc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=my0aGUDqofZbD6pldHmjD0zz/9ZvtfR7rnVxAecgFJ5eFgj2fxJgwkjsMvDTy/RtBfCjbiRnMspGKvnbGxDbeqUVVEeNpop9ZUPrQpfu5KJ/P6fpv1l5thTuqwXLNdSHdlhTCfx0a0uRW1aAPu5c9Mey6wfv4UQ/uykZ3AP6rNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nwMDBuev; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=nfpNA9Id3HCZ3d9pzL0WHNR7UxFp9Hr6BEvVqt/sqt0ZLdUXGNYNg8+gs6mcGARA+M6vojTWM2ARdV1xiMHcYyw2fv/FvaYbo6bhlL4rEfSjKh5u7an4vUjYmig/05I/Yyu5GpYPUItahEEY9ts8nMZ+Qiq0NPO8xog0St6feB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QoR9RvPn; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nwMDBuev"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QoR9RvPn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732270020; x=1763806020;
+  t=1732270021; x=1763806021;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XjzA4XGwvHVywRyLTBD+N3yhShUwTqaQr4zXrHO3Xs0=;
-  b=nwMDBuevmwkbEeFaAY/K7MoOlxWBlGQ48q3yv7XVgzDeg0EdukU5e31l
-   D1FVBSrQTm3kAsKzIcUuViW2WTgnIUhMPYblQNxWmU+cXBk6vmoH930s+
-   pxSN0ru6kI8wG+ckAk2fh5cbLW3gI1MHCRWQ7te7bEH6N4ixCNVUVQ9+6
-   PmvqZFyakEzbo0Al/xL1+NQecPsVEoPA5vEsX5vrnGY2SJTCs1LBwmQWv
-   HSjklBsKoOpLl3F5pEWjF16KQnYn63aLQ3EK2FB5QJCjztXxrdewJ/JSB
-   VjnzukidiNVRMMkErXxSnXmRFkAMnJ+LpXCcFDGPWEc4EcNcUhLv4ORkc
-   g==;
-X-CSE-ConnectionGUID: sWsMq2EHRd6rZ/+R27pLcQ==
-X-CSE-MsgGUID: WwiNXYBPQy2fm1UjZswOug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="54927630"
+  bh=IBTh2/UEgKNe0qezwT15xLhzZdfHtCfTU4PgLROp9Cc=;
+  b=QoR9RvPnE9h8ow8FtrL7tKKmOOhTUjHdjQhIDqZ9C2eXYsJDaO68xxxv
+   xHa6Ez3Gltb0gMYvkpkeQulyrZ13KRy9vnsNiEDkMPlYlcYKgx5QHBpAd
+   nHmqthhkXdzdmRO5ahTjYvRvVCOcxT4TJ+fbI3cer7PERb9Siarrw9D1a
+   quN3cmJSQlYEqUQq5+3WRGhgPCQv3Fq43Tm/ctrDh8g4ZR8cuDWHSvWqW
+   e8vPlBp9wUYQA9rEklZSOSv+QOpURG4WAzGQczNv5vuJOOeDpSkMV/6qH
+   4yaYt3CpgcatCVz4T0Jj065nhDHsSMBh3I8XIZwQYFyHg0ptMamDh7N/r
+   Q==;
+X-CSE-ConnectionGUID: aBh9ySxHQLGRAfCMYOHJRw==
+X-CSE-MsgGUID: bIZNXSLNSEKmnUWcKZAw9g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="54927640"
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="54927630"
+   d="scan'208";a="54927640"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:07:00 -0800
-X-CSE-ConnectionGUID: +bx3UJXIT4Sc5p1vMRdEcw==
-X-CSE-MsgGUID: bmOV2JlWQuWxklPWZ3wYVA==
+X-CSE-ConnectionGUID: rRStLNDlRvCRrd4UikTPYg==
+X-CSE-MsgGUID: 6JlMIGMhQbCzMZ/FL5PSAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="121403089"
+   d="scan'208";a="121403091"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:06:54 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9565012072C;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9DE05120B22;
 	Fri, 22 Nov 2024 12:06:43 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1tEQYl-0002LW-1u;
+	id 1tEQYl-0002Lg-22;
 	Fri, 22 Nov 2024 12:06:43 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -78,9 +78,9 @@ Cc: hverkuil@xs4all.nl,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
 	Mehdi Djait <mehdi.djait@linux.intel.com>
-Subject: [PATCH 5/8] media: uapi: Add V4L2_CID_CONFIG_MODEL control
-Date: Fri, 22 Nov 2024 12:06:30 +0200
-Message-Id: <20241122100633.8971-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH 7/8] media: uapi: Add controls for sub-sampling configuration
+Date: Fri, 22 Nov 2024 12:06:32 +0200
+Message-Id: <20241122100633.8971-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241122100633.8971-1-sakari.ailus@linux.intel.com>
 References: <20241122100633.8971-1-sakari.ailus@linux.intel.com>
@@ -92,65 +92,96 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the V4L2_CID_CONFIG_MODEL control for the configuration model.
+Sub-sampling is a way to decrease the data rates after the pixel array by
+systematically discarding some samples, either vertically or horizontally
+or both. Add two controls for the purpose and document them. The
+sub-sampling configuration is taken into account in the compose rectangle.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-image-process.rst      | 4 ++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c                    | 5 +++++
- include/uapi/linux/v4l2-controls.h                           | 3 +++
- 3 files changed, 12 insertions(+)
+ .../userspace-api/media/drivers/camera-sensor.rst  | 14 ++++++++++++--
+ .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 11 +++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  2 ++
+ include/uapi/linux/v4l2-controls.h                 |  2 ++
+ 4 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-index 27803dca8d3e..928e8e3eed7f 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
-@@ -55,3 +55,7 @@ Image Process Control IDs
-     control value divided by e.g. 0x100, meaning that to get no
-     digital gain the control value needs to be 0x100. The no-gain
-     configuration is also typically the default.
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index c6167c91f46c..e65e82c5940a 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -107,8 +107,8 @@ values programmed by the register sequences. The default values of these
+ controls shall be 0 (disabled). Especially these controls shall not be inverted,
+ independently of the sensor's mounting rotation.
+ 
+-Binning
+--------
++Binning and sub-sampling
++------------------------
+ 
+ Binning has traditionally been configured using :ref:`the compose selection
+ rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
+@@ -117,6 +117,16 @@ users should use it when it's available. Drivers supporting the control shall
+ also support the compose rectangle, albeit the rectangle may be read-only when
+ the control is present.
+ 
++Sub-sampling is often supported as part of a camera sensor's binning
++functionality and performed after the binning operation. Sub-sampling typically
++produces quality-wise worse results than binning. Sub-sampling factors are
++independent horizontally and vertically and they are controlled using two
++controls, :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
++V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`. In
++sub-sampling, the image size before sub-sampling is horizontally and vertically
++divided by the respective sub-sampling factors. Drivers supporting the control shall
++also reflect the sub-sampling configuration in the compose rectangle.
 +
-+``V4L2_CID_CONFIG_MODEL (bitmask)``
-+    Which configuration models the sub-device supports. Please see
-+    :ref:`media_subdev_config_model`.
+ .. _media_using_camera_sensor_drivers_embedded_data:
+ 
+ Embedded data
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+index 3fbab0e78719..38fa97397793 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+@@ -701,3 +701,14 @@ enum v4l2_scene_mode -
+ 
+ For instance, a value of ``0x0001000300020003`` indicates binning by 3
+ (horizontally) * 3/2 (vertically).
++
++.. _v4l2-cid-camera-sensor-subsampling:
++
++``V4L2_CID_SUBSAMPLING_HORIZONTAL`` and ``V4L2_CID_SUBSAMPLING_VERTICAL``
++(integer)
++
++    Horizontal and vertical subsampling factors.
++
++    Sub-sampling is used to downscale an image, horizontally and vertically, by
++    discarding a part of the image data. Typically sub-sampling produces lower
++    quality images than binning.
 diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 1ea52011247a..24c9c25e20d1 100644
+index 3a84051ec11c..62d19b09fd6d 100644
 --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
 +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1164,6 +1164,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_TEST_PATTERN:		return "Test Pattern";
- 	case V4L2_CID_DEINTERLACING_MODE:	return "Deinterlacing Mode";
- 	case V4L2_CID_DIGITAL_GAIN:		return "Digital Gain";
-+	case V4L2_CID_CONFIG_MODEL:		return "Sub-device configuration model";
+@@ -1088,6 +1088,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
+ 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
+ 	case V4L2_CID_BINNING:			return "Binning Factors";
++	case V4L2_CID_SUBSAMPLING_HORIZONTAL:	return "Sub-Sampling Factor, Horizontal";
++	case V4L2_CID_SUBSAMPLING_VERTICAL:	return "Sub-Sampling Factor, Vertical";
  
- 	/* DV controls */
+ 	/* FM Radio Modulator controls */
  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1481,6 +1482,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_DV_RX_POWER_PRESENT:
- 		*type = V4L2_CTRL_TYPE_BITMASK;
- 		break;
-+	case V4L2_CID_CONFIG_MODEL:
-+		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+		*type = V4L2_CTRL_TYPE_BITMASK;
-+		break;
- 	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
- 	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
 diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 974fd254e573..0152240229ab 100644
+index 8d5815a058d7..e85747e2181b 100644
 --- a/include/uapi/linux/v4l2-controls.h
 +++ b/include/uapi/linux/v4l2-controls.h
-@@ -1225,6 +1225,9 @@ enum v4l2_jpeg_chroma_subsampling {
- #define V4L2_CID_TEST_PATTERN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 3)
- #define V4L2_CID_DEINTERLACING_MODE		(V4L2_CID_IMAGE_PROC_CLASS_BASE + 4)
- #define V4L2_CID_DIGITAL_GAIN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 5)
-+#define V4L2_CID_CONFIG_MODEL			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 6)
-+
-+#define V4L2_CID_CONFIG_MODEL_COMMON_RAW	(1ULL << 0)
+@@ -1089,6 +1089,8 @@ enum v4l2_auto_focus_range {
  
- /*  DV-class control IDs defined by V4L2 */
- #define V4L2_CID_DV_CLASS_BASE			(V4L2_CTRL_CLASS_DV | 0x900)
+ #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
+ #define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
++#define V4L2_CID_SUBSAMPLING_HORIZONTAL		(V4L2_CID_CAMERA_CLASS_BASE+38)
++#define V4L2_CID_SUBSAMPLING_VERTICAL		(V4L2_CID_CAMERA_CLASS_BASE+39)
+ 
+ /* FM Modulator class control IDs */
+ 
 -- 
 2.39.5
 
