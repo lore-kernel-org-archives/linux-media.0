@@ -1,166 +1,132 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F731DED5A;
-	Fri, 22 Nov 2024 10:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2541A187321;
+	Fri, 22 Nov 2024 10:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732271537; cv=none; b=bD2alt+fo8o9NmLPC9nre9lFS9AVNDNj7oxcjvkBQg1TlAuTdeH4IcaB5j9xNP9bkTLpBmpirGVC6zV5uSr2j3LWbzmE1I5m8E+gNmmxIoMW0cNb/OCaKG8Ff+5W/+2o6MBSPGdCZTLTJbQPWDF3sAGkiOuP2LRLkK9KqCAjUos=
+	t=1732272203; cv=none; b=Joa1/GFVK5PQTmHPrWBYozIUdUEdrCihTn/2Bnk2slod8GhtDornucy+rr/aqLLEHbxSnNGkjEld8/2k7RvsOg9gzjf8clIBuhmz3kvkfMOriHDJhPqDwZrpKwwj8WIwuW2FWxw6hTD/fBFqcJ68pUZ6t084Fc8fKAZpUmOJ/Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732271537; c=relaxed/simple;
-	bh=+/6ymI2gxodvy4p0D6VcTcHJuB8emEerX+YHB0Wuy38=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=nc2RSLbZ1xvU7a+B+r7qzMMIPhwU1iQ3hhtfGWHoWeqw3HeieW8wNy3h7zipQ+OeJFMK1bY7WugFa3jY+KRKWPoPb8N5tCuAkEwsgFIwomLNZVrKxarpSAP65fbt5TDAOEBxAK06DcCIotC5VSpFkFbUjYqgzWw9V53WNQ6iHhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=E7Q1Trti; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1732272203; c=relaxed/simple;
+	bh=x0J7TmMtWw4m8MrhPi0Qs99f62vfNGRcSXHSXU9CiEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kMoUHFQX9eK9SFUWOOkfW/xnhWLQ9i0piCtQGHrT2fSMyVZDplSIQDn9lXymRHTK0BYboKNX41G8Iuaclen5PwoLoQmw2i4bfbQyBqkWoKdz3HDpsrATILxbAgwSkvMn2DABMqYF8zNxT3qx/brSdicKhPq3A8OSNVbih9beNHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDyF6Tux; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E7Q1Trti"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AM9O39t003950;
-	Fri, 22 Nov 2024 10:32:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	BA3Q4EFy5gQR7GO/ZWbGXRYPqEOGYTkutQVPdzM+ZrI=; b=E7Q1TrtiVHdqoCpQ
-	pd1pf1FxJugJO0VPZiomMmaMnhjm8q3wB8p2M/DTzMLY9nE7BKxwmWyIH/EuFPpn
-	nj8WvFFfgk2d+wtwz5vcjC6dLhG9/f0OrT6h/Vi24wo2EefA1TbjhXiDXSLL/c+/
-	XLDobqtJ7g0d8wulaJ7iXkICFaZUM/Sk5qw1ymX4voWyfCn8HAPQsdA/mAnCjQGw
-	vhl9mkHFS5CYfvodTSC8GABJ4s5slq76Xw73HLBXwfm9cT875iYxCWWZcSqh1Mz0
-	v2Vuf0tVOrELOXddIJ/FTpS9VFiDlPKTdxWh9aysnfgXiVylCs5wGttbREdngutR
-	B16yHg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431ce3f1ry-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 10:32:10 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AMAW986025645
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Nov 2024 10:32:09 GMT
-Received: from hu-renjiang-sha.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 22 Nov 2024 02:32:06 -0800
-From: Renjiang Han <quic_renjiang@quicinc.com>
-Date: Fri, 22 Nov 2024 16:01:46 +0530
-Subject: [PATCH 2/2] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to
- switch GDSC mode on V4
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDyF6Tux"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732272202; x=1763808202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=x0J7TmMtWw4m8MrhPi0Qs99f62vfNGRcSXHSXU9CiEg=;
+  b=jDyF6TuxSXcqtVygpW1Ym6cq79zl8p3xgKVRSx4RoIbC8DdUIsoUA0kJ
+   3fpaqC50fu08IbmwRoQ1ksxymztcDfl0N2oFjW/08NtSNpKDPntkjw4RV
+   5RUTKiLMk7B1Gp68FFiSKqXPyEjOkoHGr2fTvuBeyp340GBXrq/+/TfH2
+   4PI+d3txFrhGTwWBMKmgEILVf1ZBQQg2MDN6b8cH1Fnu/EHcC30MdQVIq
+   9P9ewVn2bh1gwFXqYDjdru27TSuXrrephft0vzRezQ1AX142n0xGecqYc
+   0npWTd9L87I1q2KUhTuVjcj4kOuV8XmIhFhm+/qEu3v0qPeqLf8M0uKz/
+   w==;
+X-CSE-ConnectionGUID: FPpFIHiYTBaT36CG17lw6A==
+X-CSE-MsgGUID: xbukUEG5TveHDpuyE9YXag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32281235"
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="32281235"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:43:22 -0800
+X-CSE-ConnectionGUID: 26W8L4aLRFGAlM7FXXlq2Q==
+X-CSE-MsgGUID: tslC0Lf6TXWojTN2pUn7kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
+   d="scan'208";a="113818793"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:43:19 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id D110A11F726;
+	Fri, 22 Nov 2024 12:43:16 +0200 (EET)
+Date: Fri, 22 Nov 2024 10:43:16 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Cc: =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	sakari.ailus@iki.fi
+Subject: Re: [PATCH v2 09/13] media: i2c: imx214: Extract format and crop
+ settings
+Message-ID: <Z0BgRIlK-Tdcm8AV@kekkonen.localdomain>
+References: <20241021-imx214-v2-0-fbd23e99541e@apitzsch.eu>
+ <20241021-imx214-v2-9-fbd23e99541e@apitzsch.eu>
+ <CAPybu_09-1E4+Xe1Tnaue01i4JPtOHz15OUei=4q=Roqcuoz2Q@mail.gmail.com>
+ <f927d1aa8718568cd7cecc90255f73ddbd673a41.camel@apitzsch.eu>
+ <CAPybu_2xPkrL=jTT0O_10KuCgyfe3BU033Y+q2+jq9ErPU9ACA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20241122-switch_gdsc_mode-v1-2-365f097ecbb0@quicinc.com>
-References: <20241122-switch_gdsc_mode-v1-0-365f097ecbb0@quicinc.com>
-In-Reply-To: <20241122-switch_gdsc_mode-v1-0-365f097ecbb0@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        Renjiang Han
-	<quic_renjiang@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732271519; l=2837;
- i=quic_renjiang@quicinc.com; s=20241001; h=from:subject:message-id;
- bh=+/6ymI2gxodvy4p0D6VcTcHJuB8emEerX+YHB0Wuy38=;
- b=0x9OuHKbDiCM+9ofr80qnRwYqHSUcw6lCARacUr9j4nRNoKIEgid+ba8DGK4Dke3viH7QCkTt
- yVTYmFR8a/yD4FTYKM4Cj2UndKWEaMM0cTEPKqGh8PT/XsfRoR4MTi/
-X-Developer-Key: i=quic_renjiang@quicinc.com; a=ed25519;
- pk=8N59kMJUiVH++5QxJzTyHB/wh/kG5LxQ44j9zhUvZmw=
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SeERNGgbhgOSKcs7wqDCw6BemL2Qnpyb
-X-Proofpoint-ORIG-GUID: SeERNGgbhgOSKcs7wqDCw6BemL2Qnpyb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- bulkscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2411220089
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPybu_2xPkrL=jTT0O_10KuCgyfe3BU033Y+q2+jq9ErPU9ACA@mail.gmail.com>
 
-The POWER_CONTROL register addresses are not constant and can vary across
-the variants. Also as per the HW recommendation, the GDSC mode switching
-needs to be controlled from respective GDSC register and this is a uniform
-approach across all the targets. Hence use dev_pm_genpd_set_hwmode() API
-which controls GDSC mode switching using its respective GDSC register.
+Hi Ricardo,
 
-In venus v4 variants, the vcodec gdsc gets enabled in SW mode by default
-with new HW_CTRL_TRIGGER flag and there is no need to switch it to SW mode
-again after enable, hence add check to avoid switching gdsc to SW mode
-again after gdsc enable. Similarly add check to avoid switching GDSC to HW
-mode before disabling the GDSC, so GDSC gets enabled in SW mode in the
-next enable.
+On Wed, Nov 20, 2024 at 10:22:54PM +0100, Ricardo Ribalda Delgado wrote:
+> Hi André
+> 
+> On Wed, Nov 20, 2024 at 9:07 PM André Apitzsch <git@apitzsch.eu> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > Am Mittwoch, dem 30.10.2024 um 13:10 +0100 schrieb Ricardo Ribalda
+> > Delgado:
+> > > Hi
+> > >
+> > > Aren't you changing the binning mode for 1920x1080  with this patch?
+> > > I think that could be considered an ABI change.
+> >
+> > Is the problem that the ABI changes or that it is not mentioned in the
+> > commit message?
+> 
+> I think it is a combination of both. There will be products out there
+> that after applying this change will get different frames using the
+> same configuration.
+> 
+> @Sakari Ailus  What do we usually do in these cases?
 
-Signed-off-by: Renjiang Han <quic_renjiang@quicinc.com>
----
- drivers/media/platform/qcom/venus/pm_helpers.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Good question. Always when something is changed in the UAPI there's a
+chance for breakages and these are a big no-no, at least in principle.
+Keeping the old behaviour in place is how you generally can avoid breakages
+but this has its issues, too.
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 33a5a659c0ada0ca97eebb5522c5f349f95c49c7..a2062b366d4aedba3eb5e4be456a005847eaec0b 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -412,7 +412,7 @@ static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
- 	u32 val;
- 	int ret;
- 
--	if (IS_V6(core))
-+	if (IS_V6(core) || IS_V4(core))
- 		return dev_pm_genpd_set_hwmode(core->pmdomains->pd_devs[coreid], !enable);
- 	else if (coreid == VIDC_CORE_ID_1) {
- 		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
-@@ -450,7 +450,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 
- 		vcodec_clks_disable(core, core->vcodec0_clks);
- 
--		if (!IS_V6(core)) {
-+		if (!IS_V6(core) && !IS_V4(core)) {
- 			ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
- 			if (ret)
- 				return ret;
-@@ -468,7 +468,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 
- 		vcodec_clks_disable(core, core->vcodec1_clks);
- 
--		if (!IS_V6(core)) {
-+		if (!IS_V6(core) && !IS_V4(core)) {
- 			ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
- 			if (ret)
- 				return ret;
-@@ -491,7 +491,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret < 0)
- 			return ret;
- 
--		if (!IS_V6(core)) {
-+		if (!IS_V6(core) && !IS_V4(core)) {
- 			ret = vcodec_control_v4(core, VIDC_CORE_ID_1, true);
- 			if (ret)
- 				return ret;
-@@ -511,7 +511,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret < 0)
- 			return ret;
- 
--		if (!IS_V6(core)) {
-+		if (!IS_V6(core) && !IS_V4(core)) {
- 			ret = vcodec_control_v4(core, VIDC_CORE_ID_2, true);
- 			if (ret)
- 				return ret;
+We're in the process to make changes to the sensor APIs in general,
+while old drivers would need to maintain current functionality. See
+<20241122100633.8971-1-sakari.ailus@linux.intel.com> on LMML.
+
+Ricardo: I'll cc you to the next version.
+
+> 
+> > >
+> > > Also, if we are not letting the user change the value, I do not see
+> > > much value in setting the cropping programmatically, I'd rather not
+> > > take this change.
+> >
+> > I assume the first "value" refers to "binning value", that cannot be
+> > changed by the user. Is it right, that .set_selection needs to be
+> > implemented to change that?
+> 
+> I believe set_selection is the correct way, yes. Sakari again to keep
+> me honest :)
+
+Please see the RFC set.
 
 -- 
-2.34.1
+Kind regards,
 
+Sakari Ailus
