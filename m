@@ -1,76 +1,76 @@
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0402FC23;
-	Fri, 22 Nov 2024 19:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B152B189BAE;
+	Fri, 22 Nov 2024 20:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732305210; cv=none; b=p5JLov1eqRjmeRTJSjLStgc1tbMjbNsDdtk/T63nujRvwcIovdd0S7jDnB94c1kJWwnK7ErZldu9zZQJfn9Ygqusb3kuSoSjZFLucem/i1UcyTDd/Q0XkbQDmeJhhC+D4VeFJNP28RZz80+IVK3894uN2JK4qwrfN2ssi4EYeHw=
+	t=1732308370; cv=none; b=nLCmPOg7yeJlKh8IOhv9bVZ5KF/oKtkDiJmAUJcME7rWHtrrWfEKVZnMWXU3AwRY0HJ/BjA4Oji7AH4lAsLhjjp99JXP5N+wUaccKP9CkjzFfOwAfX8dH8K/g/YtZJcjIMALWOxDmugFcT3q0FLWvEwHHPtW2a08OjOj2KHj13w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732305210; c=relaxed/simple;
-	bh=E/5sdOL/jkUCbV3WEL3b/0KOfVk/fXbHHdo2d90g7Q4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dxGyTGK1HqQHHJ/qwiVLAmyvdPDDtKT6YAi/ighixBHBGjDab01UncI8I9Pknl0AkUX42uDOGR541GUicbjL+ODarwJbYI3n+/b26gR4XPiVlW5EXVDCCAE+Nz3DUjYXhqc91HHw3YJii0M9Cs3Slss1uzFdYdSBP0OBuC16z3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XV/6I1Bz; arc=none smtp.client-ip=209.85.161.49
+	s=arc-20240116; t=1732308370; c=relaxed/simple;
+	bh=rfLGix8VQmuESlqsseWvC99WsyP4jvOiWI4xbdEeIFg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q1aQYLJQfD0+OxCuM5L+SuohXXBzS+qFI+kGdnDsQ51t4T0mwpE22yI6lb1dvh98x7nwt2IZ7cGxtfg5ayFweTCWM/yfZ1xB/BdzVbiiGOQlaySQ01JsP2vwpxlY93RkHVE9Yxq6epAnCuD/0Yo2ZrXGM1zSDewtQloigx7smA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJOPxT6D; arc=none smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XV/6I1Bz"
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5ebc0e13d25so1027718eaf.1;
-        Fri, 22 Nov 2024 11:53:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJOPxT6D"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-460c2418e37so16706701cf.0;
+        Fri, 22 Nov 2024 12:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732305205; x=1732910005; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732308366; x=1732913166; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m8k+BU9sp4jwI3J04BZciS+UktHrfNJa8h5d00+WG0I=;
-        b=XV/6I1BzwMNqJk+WhlPtMTNM9pPiza1iqOqvHrsxXNm4rIdO1ldhpdrlraAJhO9CD1
-         sKO+J+qLh2CcN6RrRvqxau2N9QGioTUjQivYoJWFnzF9+NZtOl7f0aPkcRbbPX4qwCdA
-         IsIEkvlwyzs590VNY1NuBaOa4lx4EuUiNCfcadmLd5PPsGdrpFRJtoPmf4DQaGDwCXZM
-         V+Q8fGaIDsV2QCgrcIjeAPNotz8Vpd6mgQrGFPAc+BB2boV1Yzv93Mbx0KQDf/qofCad
-         i0206LSTQx5lrJz5Rg1mzjcIL9ooX/j0KvxPd9mQqCr4YR+YhqPpgsfX10OhiRxFku0C
-         5fwg==
+        bh=KdfcoTAixo+mlxOpXRifnZy9GhI+cyrUE3VMtPIwmvg=;
+        b=hJOPxT6D/pvZL0guv9MUb0YNONDWlP694kHaF6eX8Mj8HMVoxgHdzJ/5k7czlZIPHp
+         410dXfiVVSHEf16+0WSHnFykA4+ip/9i0tQP6okPn/Y7rqGfyQiwaDnlym+hXEjvc0M/
+         5nuDDCl/BIy6fA9Rqpd6MNH1s4o7c0SvqVSOIScY+46motmYcTVtipRAymsdtCoA8gZL
+         NR+8ZKSRNCdIQgjJYHyWqlvsPB6IiEpj+wrK58EQVfz7YgQRzRI7yGU7ISXyOtOJMen/
+         WxunGnKYCaKddUGIgjntz6PIPaEc3A2fSohnRzPOO7Bnpb/+UEFo9N2gUon6xrfK3f2w
+         q8aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732305205; x=1732910005;
+        d=1e100.net; s=20230601; t=1732308366; x=1732913166;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m8k+BU9sp4jwI3J04BZciS+UktHrfNJa8h5d00+WG0I=;
-        b=cY19Pebqpk42QgVnOtFRIRh9owQWHSJ4I/D5lfVioGBR6caWlZMDIJGdOqGKpouBSk
-         2e+00ZIk9ozb0v8yqxris1PHSCLnJg9k5v8N7561AyDVEBnj7vM5GEkTtOynDBGgi8kD
-         ZvbqBVF2lg7vJtKcL9aUl0poGi4AVcduyodglt36pD9HgH+RqBIqGm4cIuqSi1lj0+C+
-         wfBH1KgwgQDnXWLU8BMPSkL1rKW2qsOm/UfGo0kXYnrZmk2zH2SjFhog2nSKDd8MFY0L
-         ixGT4zRiLCDcfVu7h0Iz+ssllGVSnjR6qjI7QFxM+Rp741n20Jp8yxY+qxV413TEoBPX
-         EoAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCSWTwS6/UFEia8857L+mtk1WVxrqH0iAF69kuLqO6i/1ap3193/px1OezzeJ3FdwdcgTbnjvop6zS9vVatKfbRnw=@vger.kernel.org, AJvYcCWeP63/BqScBbRoE+I/b1BKaSRQ+emrJWVjudLn9jNeBli4xD3/G9doUCsuudUwcG22rej9G2wx/ENG/nA=@vger.kernel.org, AJvYcCXTaBgMV/CuvcSO2xNth2ZK6P/ceSbIFG2xzobizz/P8Bmuiu7gwZrBN9k2yhr+o2/7+PXGzdh2JVsxGFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/rCLeOFJIXMv4MDg+PzImRUB6309B1HSBNbA+/BWPREIL8GoS
-	4ehDbWiq6oNmYX5evJ/9yOCHo0L2ogHNkEm+HXnEBmpwpUhP7TyI
-X-Gm-Gg: ASbGncvFUeFKmXhNI7OYqRdomzPJ1Bg1YSi3SslSIgYYrbCA3NWFT5/DjdX/ued1gE5
-	MZQHNCnBvhILMizdrvuE8m0xB4RQbFPkyLwPnZATqv5L70ST9DRT6Y4Gn9qUfxSompuIeUyMQLh
-	4+5qKT5K8K4CiZlshIwV86JioLXBXq2VzsEh3bYFKZ4aSGt7E+mLPkG7aYPnaGxAUIA4H0fvQsh
-	6fFPrGj82nk8PYUD4Kk8NSh2KBAw4xamTaVtrg6Vp8PTBUduiPnzpG2+QUQ+QKv8dErt4SU
-X-Google-Smtp-Source: AGHT+IGG9LZL6Q/86WX74N5XZj9qYPlo3OR250a6F4l7/ScFyw2yctiaAwQR6Ax+KIbBRfxQwQ330Q==
-X-Received: by 2002:a05:6358:42a0:b0:1c3:7b75:24ec with SMTP id e5c5f4694b2df-1ca7977c9a1mr446366855d.15.1732305205386;
-        Fri, 22 Nov 2024 11:53:25 -0800 (PST)
+        bh=KdfcoTAixo+mlxOpXRifnZy9GhI+cyrUE3VMtPIwmvg=;
+        b=qFH+D5RWs9vXWabwrSzM3EaZ+f1Sr+CAnmJA7a7Em4qLC8b0kTnOPGG79eV8XmvgGK
+         aT0M8WgvF5W4puGYXXt4gyLRZTLD1MNE2UbF/Hx3fti9V9E6J8meG16R9Osj42fJyCSA
+         DcRIWcAAptv0WoHOBQW88AR9v8Uoy58OUeYrhDFKY5vkR36wwPHm0teNJpxaeitiY5k/
+         1dF1RLWjTepVpOioOOI4YkliZdaZMyQlHEbMbmXnp6OkXBdHmBxQpdjQufgfYD6NgVAG
+         FrUGkbz9pS84BFIj7mH76TNzIpmb+ynscdJDgqxVkP6W/bQ3LQJH+Ruv5BZsBo/VWJYd
+         2hHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJnnMeimHomPOBuJm8h2y7KzGKwFk9bqfmqUyi7bfAPO+qomYnlzECYC2gxUIpgIRBvD0/kaoAdRaLoVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyC23T7NwNrVlTrNf66BHB+M2EFj9pahSKYkhJUW/PTSrMv10fE
+	MXVywjxZx6kg5vpgbXdz8DGJqloAq7pa73hT60H/dLY4KqgecAwn
+X-Gm-Gg: ASbGncsJVVFFsI3s4CwKbhN8JmsC9WGoV4iEk32A7G6AnmWJhj8X2G0bwtEvRHZLzud
+	nl20q1VUalO3XYGqIMVtH3AKtAlw9Fg2H/m8Bov2fLkFEePKxr/j0xqSDWW3IZpfMMyaX83Y4ib
+	Rgs1au9QGum23BDbtcRttoRUfZSnQb7fPmSbtH1bHiFNc0ybQ87UrAaoL/MuQLAKb9hVPKQbANU
+	p9wFJKZGWW7bX5/dTwr9b6sMO8xFxP5esnIzyNX3itkQ2qUsNvLHYqynagB1VqWl1LSXys6
+X-Google-Smtp-Source: AGHT+IEDZRkTO5+DQwSrlRCcw21oaJiFGCJZnGNbrmx62J2fNbuC3IdPrM/AFVV8d9sqgagVOv+RJg==
+X-Received: by 2002:ac8:7d92:0:b0:45d:9525:42ff with SMTP id d75a77b69052e-4653d632068mr45585081cf.54.1732308366553;
+        Fri, 22 Nov 2024 12:46:06 -0800 (PST)
 Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4653c3ee8cesm15535781cf.25.2024.11.22.11.53.24
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4653c3ed111sm16082051cf.20.2024.11.22.12.46.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 11:53:25 -0800 (PST)
+        Fri, 22 Nov 2024 12:46:06 -0800 (PST)
 From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-To: krzk@kernel.org
-Cc: sylvester.nawrocki@gmail.com,
-	mchehab@kernel.org,
-	dron0gus@gmail.com,
-	tomasz.figa@gmail.com,
-	alim.akhtar@samsung.com,
-	kyungmin.park@samsung.com,
-	laurent.pinchart@ideasonboard.com,
-	linux-media@vger.kernel.org,
+To: mchehab@kernel.org,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	hverkuil@xs4all.nl,
+	u.kleine-koenig@baylibre.com,
+	neil.armstrong@linaro.org,
+	andrzejtp2010@gmail.com,
+	dillon.minfei@gmail.com
+Cc: linux-media@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jiasheng Jiang <jiashengjiangcool@gmail.com>
-Subject: [PATCH 2/2] media: camif-core: Add check for clk_enable()
-Date: Fri, 22 Nov 2024 19:53:21 +0000
-Message-Id: <20241122195322.42289-1-jiashengjiangcool@gmail.com>
+Subject: [PATCH] media: platform: stm32: Add check for clk_enable()
+Date: Fri, 22 Nov 2024 20:46:03 +0000
+Message-Id: <20241122204603.44419-1-jiashengjiangcool@gmail.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -82,38 +82,26 @@ Content-Transfer-Encoding: 8bit
 
 Add check for the return value of clk_enable() to gurantee the success.
 
-Fixes: babde1c243b2 ("[media] V4L: Add driver for S3C24XX/S3C64XX SoC series camera interface")
+Fixes: 002e8f0d5927 ("media: stm32-dma2d: STM32 DMA2D driver")
 Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
 ---
- .../media/platform/samsung/s3c-camif/camif-core.c   | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/media/platform/st/stm32/dma2d/dma2d.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/samsung/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-index de6e8f151849..221e3c447f36 100644
---- a/drivers/media/platform/samsung/s3c-camif/camif-core.c
-+++ b/drivers/media/platform/samsung/s3c-camif/camif-core.c
-@@ -527,10 +527,19 @@ static void s3c_camif_remove(struct platform_device *pdev)
- static int s3c_camif_runtime_resume(struct device *dev)
- {
- 	struct camif_dev *camif = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = clk_enable(camif->clock[CLK_GATE]);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.c b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+index b6c8400fb92d..48fa781aab06 100644
+--- a/drivers/media/platform/st/stm32/dma2d/dma2d.c
++++ b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+@@ -490,7 +490,8 @@ static void device_run(void *prv)
+ 	dst->sequence = frm_cap->sequence++;
+ 	v4l2_m2m_buf_copy_metadata(src, dst, true);
  
--	clk_enable(camif->clock[CLK_GATE]);
- 	/* null op on s3c244x */
--	clk_enable(camif->clock[CLK_CAM]);
-+	ret = clk_enable(camif->clock[CLK_CAM]);
-+	if (ret) {
-+		clk_disable(camif->clock[CLK_GATE]);
-+		return ret;
-+	}
-+
- 	return 0;
- }
+-	clk_enable(dev->gate);
++	if (clk_enable(dev->gate))
++		goto end;
  
+ 	dma2d_config_fg(dev, frm_out,
+ 			vb2_dma_contig_plane_dma_addr(&src->vb2_buf, 0));
 -- 
 2.25.1
 
