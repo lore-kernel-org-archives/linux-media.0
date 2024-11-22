@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5431DEFE3
-	for <linux-media@vger.kernel.org>; Fri, 22 Nov 2024 10:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E341DEFE9
+	for <linux-media@vger.kernel.org>; Fri, 22 Nov 2024 10:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732270023; cv=none; b=OJbJx/xgHSk7xxDZf5TGKkDWVLNO6alJxn5+f5dE03pfnAx2FKZGdlyZ7IGWWk8Vs+ZysAx7TtTeR2HULIoizLkVkBCKb5pL5HD54gN92tyXvHLmiP9VoH+PrrAuiyy0NZ5JpsTOlQ8XKkxLab6aohI/ntrptnDOVYtMMVpYJ60=
+	t=1732270023; cv=none; b=brnacnp0dy+GbblHMNLcHrSvPcb7Zxvh3bHgZkay9PSSXIpDSc3ZuzIUQcNTN9qQ57rtUe4zva8Sq2mu2fPimJWs9YF9qB9SpuslxJO4DAmrvgNT+KcQMTVrA99a41FA/ffY1W907i/t7UTZ7dV0Tejg6D/uNf20rLLZOu87+RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732270023; c=relaxed/simple;
-	bh=KdOyJnEFP41SwVnq1Bd9ebJvMIo6Ja44dGwb30mHvn0=;
+	bh=WG1qQIgFnvy4XQTRrFc8isXGbG8ujiIiT4N+wUKpJ/8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sOQ422Qpd4dCZCGHg7eKZkc8wrfyYuqjStoyICOx1tOhJ6RsMSvGSUmpARKhqloWrkIk4WZ2pUvoiJ/JyWLZrThhr1o8ilsMvnB3wtDFvmorKx+1l+pzr5uwhWvGYRXxxxiIiWcFP55V1vHtsah86+DsxWm/hn0dCh3F8Vd6HOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nhLeaT3L; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=lekdyCD580muTAB0JVjx+4QGN4mpgX3pSyax2nEWnC3S90vMPH7DiZA1kA2eTYvqSg+t6JW9aHQLptl/tysfr2I4jcRHkqkJIkOpvTLEr++jvtAA6ZaUfNaxxeDRrxBjz0BtPFeNMBe19jNJdt/HdkUdnLtp6UPtYwir0AYPGH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m1wUDwLf; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhLeaT3L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m1wUDwLf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1732270022; x=1763806022;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KdOyJnEFP41SwVnq1Bd9ebJvMIo6Ja44dGwb30mHvn0=;
-  b=nhLeaT3LpDb1IUq0nh+V9ebvLaZYYVpLRHUHBs7zpZLl1nG7Y8A5CBNv
-   JMoM9DjcPK7vLB6gG1SZLTCqKpOA+C59fzitzP49QUABXPaO34o2fbaML
-   SUpojylqCUH9MPDtJBoqKd/E7Bk/u+iLLhgXQHlA6pNSbU4FY35IvA6Rq
-   A90f849/BB/4AO6I/Mrjg/nhHclP8KfDwXmft+Qo32cqTXxqBvE8Yts/y
-   max7xpybPtKQZDKkQDSiwwji2hRdndkxX2zroLAqOkoXiYPYhvoUk/tzo
-   rXvx0M1tpm5+0emBVwrUPmYdU5PwSh8eYo2xz4nweujr2/risTc03pf6j
-   A==;
-X-CSE-ConnectionGUID: UDsRF5HXSEeroHw9WmKTxg==
-X-CSE-MsgGUID: yCczUd+SRaGFleYlWhkfDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="54927647"
+  bh=WG1qQIgFnvy4XQTRrFc8isXGbG8ujiIiT4N+wUKpJ/8=;
+  b=m1wUDwLfHJFVx4eB0cg1KJbWodQWYecvvRBjLm1edFJrwioISm+N66iI
+   HjqBZl3hErgkNZAKWw/NZtHJwR1Wy2Q/hLwbHpwGIWd72OPyrcxQIGfMm
+   E0aaTEF6NgrVejYLr8IP0fuaDiAtnSsbx35o2I91B1uzWhGPt36tqq0xQ
+   qKi3BejzyY0WH5m+P/jwme9a3pgAacJ1aQFEmtBEFPKi+Gw7jcsD9Pyrh
+   jkNhdjxDDQRukAVy8dI3zF2c0z5RyTI4WkkmhL0O5nHMibZ6FEjQXd+Ir
+   v77/HPheQ0q7vNbrmdGvznWHeSD37aTsB3xSOP/RA39FGhbGQL9RltSfj
+   Q==;
+X-CSE-ConnectionGUID: DnRQekF8RuibaeWGI1t45A==
+X-CSE-MsgGUID: 6yB37lmtSuyHXg7yEJ1T+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="54927658"
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="54927647"
+   d="scan'208";a="54927658"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:07:00 -0800
-X-CSE-ConnectionGUID: rfN03+GySaC3zbDA4rhOeQ==
-X-CSE-MsgGUID: rLqzz+4DT7SqfaLrwtlEAQ==
+X-CSE-ConnectionGUID: eL2AiauEQf+xvysmoqXusg==
+X-CSE-MsgGUID: WzWdMH5KQqmN7UUJKXcodg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="121403093"
+   d="scan'208";a="121403095"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:06:54 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 02:06:55 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 99FB6120A78;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id A1BB3120D28;
 	Fri, 22 Nov 2024 12:06:43 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1tEQYl-0002Lb-1y;
+	id 1tEQYl-0002Ll-25;
 	Fri, 22 Nov 2024 12:06:43 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -78,9 +78,9 @@ Cc: hverkuil@xs4all.nl,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
 	Mehdi Djait <mehdi.djait@linux.intel.com>
-Subject: [PATCH 6/8] media: uapi: Add V4L2_CID_BINNING control for binning configuration
-Date: Fri, 22 Nov 2024 12:06:31 +0200
-Message-Id: <20241122100633.8971-7-sakari.ailus@linux.intel.com>
+Subject: [PATCH 8/8] media: Documentation: Add binning and sub-sampling controls
+Date: Fri, 22 Nov 2024 12:06:33 +0200
+Message-Id: <20241122100633.8971-9-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241122100633.8971-1-sakari.ailus@linux.intel.com>
 References: <20241122100633.8971-1-sakari.ailus@linux.intel.com>
@@ -92,110 +92,37 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add V4L2_CID_BINNING control for configuting binning and enumerating a
-camera sensor's binning capabilities. The control combines horizontal and
-vertical binning into a single control as the two are generally related.
-
-New drivers should use this control to configure binning.
+Document the binning and scaling controls (V4L2_CID_BINNING and
+V4L2_CID_SUBSAMPLING_{HORIZONTAL,VERTICAL}) in the common raw sensor
+model.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- .../media/drivers/camera-sensor.rst           | 10 +++++++
- .../media/v4l/ext-ctrls-camera.rst            | 29 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  2 ++
- include/uapi/linux/v4l2-controls.h            |  1 +
- 4 files changed, 42 insertions(+)
+ .../userspace-api/media/v4l/subdev-config-model.rst   | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-index 5bc4c79d230c..c6167c91f46c 100644
---- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
-+++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-@@ -107,6 +107,16 @@ values programmed by the register sequences. The default values of these
- controls shall be 0 (disabled). Especially these controls shall not be inverted,
- independently of the sensor's mounting rotation.
- 
-+Binning
-+-------
-+
-+Binning has traditionally been configured using :ref:`the compose selection
-+rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
-+<v4l2-cid-camera-sensor-binning>` is also available for binning configuration and
-+users should use it when it's available. Drivers supporting the control shall
-+also support the compose rectangle, albeit the rectangle may be read-only when
-+the control is present.
-+
- .. _media_using_camera_sensor_drivers_embedded_data:
- 
- Embedded data
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-index cdc515c60468..3fbab0e78719 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-@@ -672,3 +672,32 @@ enum v4l2_scene_mode -
- 
-     As modes differ for each sensor, menu items are not standardized by this
-     control and are left to the programmer.
-+
-+.. _v4l2-cid-camera-sensor-binning:
-+
-+``V4L2_CID_BINNING (integer menu)``
-+
-+    Horizontal and vertical binning factors. Binning combines several
-+    horizontal, vertical or both pixel values into a single pixel. It is a way
-+    to scale an image. Binning typically produces fairly good quality output.
-+
-+    Determines both horizontal and vertical binning factors for a camera
-+    sensor. The values are encoded in the following way:
-+
-+.. flat-table::
-+    :header-rows:  1
-+    :stub-columns: 0
-+
-+    * - Bits
-+      - Synopsis
-+    * - 48--63
-+      - Horizontal binning numerator.
-+    * - 32--47
-+      - Horizontal binning denominator.
-+    * - 16--31
-+      - Vertical binning numerator.
-+    * - 0--15
-+      - Vertical binning denominator.
-+
-+For instance, a value of ``0x0001000300020003`` indicates binning by 3
-+(horizontally) * 3/2 (vertically).
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 24c9c25e20d1..3a84051ec11c 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1087,6 +1087,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
- 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
- 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
-+	case V4L2_CID_BINNING:			return "Binning Factors";
- 
- 	/* FM Radio Modulator controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1424,6 +1425,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_HDR_SENSOR_MODE:
- 		*type = V4L2_CTRL_TYPE_MENU;
- 		break;
-+	case V4L2_CID_BINNING:
- 	case V4L2_CID_LINK_FREQ:
- 		*type = V4L2_CTRL_TYPE_INTEGER_MENU;
- 		break;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 0152240229ab..8d5815a058d7 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1088,6 +1088,7 @@ enum v4l2_auto_focus_range {
- #define V4L2_CID_CAMERA_SENSOR_ROTATION		(V4L2_CID_CAMERA_CLASS_BASE+35)
- 
- #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
-+#define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
- 
- /* FM Modulator class control IDs */
- 
+diff --git a/Documentation/userspace-api/media/v4l/subdev-config-model.rst b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+index 25030b80734f..ae39a1bfd2f7 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-config-model.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+@@ -161,9 +161,14 @@ Also refer to :ref:`Selection targets <v4l2-selection-targets-table>`.
+       - \-
+       - X
+       - Binning, sub-sampling and scaling. This rectangle is relative to the
+-        V4L2_SEL_TGT_CROP rectangle on the same (pad, stream). The combination
+-        of binning, sub-sampling and scaling is configured using this selection
+-        target.
++        V4L2_SEL_TGT_CROP rectangle on the same (pad, stream). Binning is
++        configured using the :ref:`V4L2_CID_BINNING
++        <v4l2-cid-camera-sensor-binning>` control and sub-sampling is configured
++        using the :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
++        V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`
++        controls. Further on, scaling may be configured by setting the compose
++        rectangle, relative to analogue crop rectangle after binning and
++        sub-sampling.
+     * - 2/0
+       - Format
+       - X
 -- 
 2.39.5
 
