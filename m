@@ -1,234 +1,219 @@
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1801.securemx.jp [210.130.202.160])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C48192B90;
-	Mon, 25 Nov 2024 10:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EB11632F6;
+	Mon, 25 Nov 2024 11:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732531753; cv=none; b=Y6fqfRnn8ktX30CBamx2Mi8vVWuhXAM8b1xB3Tv5Cf4o5Kz5jDWRle+BcU9BIar+mWWOafQgQmXgpufp4UOF10xzrYUDKO+kVxUto4d2cCRf0DByh9SQXH1RwzRmBM/bjddyCzkrZm74g9AglrkBVjI3ROi34o3iunKWv/NpQk0=
+	t=1732532421; cv=none; b=FdEhakI2/PEuxy+fPKRWaTtRIWkDShISIkFiGfZhcCzZ/RaXSh8pIBP5fiDaT13loLlwH2LTHX59mr/SN5UYkCWoScAls3K2HE2ICL5zCO0Pz+luqelF08j53Y8opjrZVAu2dr1jNM1l1OBezmY0r/KLQ1oQo5kLT/8akpnm0KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732531753; c=relaxed/simple;
-	bh=Qr2pR5iOFRSZ7+g1nq5Xf9e/SUtdQos9mUpQSfloGDA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FUVjVsCjBxxAgtwf2amQIuZvRyj/dO2IASejRBlUlfJvndQ3rU2370OPZBSWlUWbvv1h6insymmqJikbT+/ad7YXkXV8+QHHRKUTPDLYawuMQ2LjkdWhHotRiSWljRLuqohullCADYcuV/6HgykghMr0GYOXnxIrXxaKzt0AkgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=lvIL7ATL; arc=none smtp.client-ip=210.130.202.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
+	s=arc-20240116; t=1732532421; c=relaxed/simple;
+	bh=k9JUBHrbFirv/F/2UQa8HE0e/OFWAJLM9MtmGssX4Wc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jmYKlcjarDUEHzwLZ7bFWXKOi5sR810hI0H/9YjvIuHfvDTWE1jsXfdYdAjomnO5VY1I8D/sy98oXLJgG0VES65AcaW+9qludv4SwYUS0o7Meb/FiNneDj4l1igGjTe971EDfhTakIK2QzWfr9T6lesh5O03PQHyB29exu8NpeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=W3oI44UN; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="lvIL7ATL"
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1801) id 4AP9RkbI2159794; Mon, 25 Nov 2024 18:27:47 +0900
-DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
-	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key2.smx;t=
-	1732526832;x=1733736432;bh=Qr2pR5iOFRSZ7+g1nq5Xf9e/SUtdQos9mUpQSfloGDA=;b=lvI
-	L7ATLHp6dSGjnKwSK8Da4e0uIogyTReWWuXo5KI0bM59tSckzXRoE2qzlW1hThceXYDpLFTjsDmqd
-	LtC8ko4GmAltxivM3q3uq9FmXDdd7LWTOXT4gLxpx9GFblKkxyf04tIm38QWEn01CybXqDWBglxJy
-	wfKH2It+dBRWwOwBXQCtrkDIv5+jtHfeDWFCOcOlTizfBXtaKZ4jK9sRMFmlr/Y86Ty2kBH1UFxZy
-	UscyqlwwHknh3T67GJFs2mN7qWSO0z5JTMxQSRCdYtLXxZeDXQvrN9KNlQ8HRgGBAV48mKYyaZBKL
-	EO+mcM50BA3FDWM03YI+cgEbqa92/cg==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1800) id 4AP9RBDL023848; Mon, 25 Nov 2024 18:27:11 +0900
-X-Iguazu-Qid: 2yAb1JZRvDQIMBFaAE
-X-Iguazu-QSIG: v=2; s=0; t=1732526831; q=2yAb1JZRvDQIMBFaAE; m=/swN041lxFAH+9+RIDcVzDvhh2V5tx9Y49KeY+kjvec=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-	by relay.securemx.jp (mx-mr1801) id 4AP9R9Wd512264
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 18:27:10 +0900
-X-SA-MID: 32872672
-From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH v12 2/8] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface
-Date: Mon, 25 Nov 2024 18:21:40 +0900
-X-TSB-HOP2: ON
-Message-Id: <20241125092146.1561901-3-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="W3oI44UN"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 409236B5;
+	Mon, 25 Nov 2024 11:59:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1732532396;
+	bh=k9JUBHrbFirv/F/2UQa8HE0e/OFWAJLM9MtmGssX4Wc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W3oI44UNKWw6fh24wF2C+Fzf4v+A4r3Bh0Tv3O1diIs5Y+1gHXi8KXzJnqq8aDadB
+	 rX0imuwmjCKAgmlo7moZ+guM+gdbLoY8Ixz58igrHn3Q0AxcQMwhx+mI5TjhtSXY5o
+	 5olhmf+pZQYFPsKIuZ59pGb8I+9J+LfoKL8+72bk=
+Date: Mon, 25 Nov 2024 13:00:08 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Naushir Patuck <naush@raspberrypi.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH v1 5/5] drivers: media: bcm2835-unicam: Correctly handle
+ FS + FE ISR condition
+Message-ID: <20241125110008.GH19573@pendragon.ideasonboard.com>
+References: <xy44zndazbw7ehpzbc6hexgptjymevvupjhuy2x6zxp54qtepm@vlbb6js62cq4>
+ <CAEmqJPrrAhhukn2H4nUhe1njVi-dyW9q=u1h8YgafvJGbYRG6Q@mail.gmail.com>
+ <xadxi6rjcnmgjiqhinqnawj3mgps4b3xp6ftozap4ps6q5xaz7@bsdwrrkyniwt>
+ <deremuh7mawzt6ke3c67fvzfyuksmuwon3dhorxbm5mr5rllmf@fbj2f5qvfpjd>
+ <20241124070428.GG19573@pendragon.ideasonboard.com>
+ <CAEmqJPrDvhz+np4MxKiwfrKyjxG0HnO45T+U2=Bpbmm6MW1uXg@mail.gmail.com>
+ <20241125092335.GL19381@pendragon.ideasonboard.com>
+ <CAEmqJPo58OCosJhKZeut4=ZGQfk3CCJR_G8ZZZvmAUNTwfmKjw@mail.gmail.com>
+ <20241125102707.GP19381@pendragon.ideasonboard.com>
+ <CAEmqJPrDb5_L-9tv7nEuG7GoN6naKhM-vsC0tPfLQaAQYisqjg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAEmqJPrDb5_L-9tv7nEuG7GoN6naKhM-vsC0tPfLQaAQYisqjg@mail.gmail.com>
 
-Adds the Device Tree binding documentation that allows to describe
-the Video Input Interface found in Toshiba Visconti SoCs.
+Hi Naush,
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
-Changelog v2:
-- no change
+On Mon, Nov 25, 2024 at 10:46:01AM +0000, Naushir Patuck wrote:
+> On Mon, 25 Nov 2024 at 10:27, Laurent Pinchart wrote:
+> > On Mon, Nov 25, 2024 at 09:46:26AM +0000, Naushir Patuck wrote:
+> > > On Mon, 25 Nov 2024 at 09:23, Laurent Pinchart wrote:
+> > > > On Mon, Nov 25, 2024 at 08:37:22AM +0000, Naushir Patuck wrote:
+> > > > > On Sun, 24 Nov 2024 at 07:04, Laurent Pinchart wrote:
+> > > > > > On Fri, Nov 22, 2024 at 03:48:11PM +0100, Jacopo Mondi wrote:
+> > > > > > >
+> > > > > > > With Hans Sakari and Laurent in cc for real now
+> > > > > > >
+> > > > > > > On Fri, Nov 22, 2024 at 03:41:31PM +0100, Jacopo Mondi wrote:
+> > > > > > > > On Fri, Nov 22, 2024 at 11:40:26AM +0000, Naushir Patuck wrote:
+> > > > > > > > > On Fri, 22 Nov 2024 at 11:16, Jacopo Mondi wrote:
+> > > > > > > > > > On Fri, Nov 22, 2024 at 08:41:52AM +0000, Naushir Patuck wrote:
+> > > > > > > > > > > This change aligns the FS/FE interrupt handling with the Raspberry Pi
+> > > > > > > > > > > kernel downstream Unicam driver.
+> > > > > > > > > > >
+> > > > > > > > > > > If we get a simultaneous FS + FE interrupt for the same frame, it cannot
+> > > > > > > > > > > be marked as completed and returned to userland as the framebuffer will
+> > > > > > > > > > > be refilled by Unicam on the next sensor frame. Additionally, the
+> > > > > > > > > > > timestamp will be set to 0 as the FS interrupt handling code will not
+> > > > > > > > > > > have run yet.
+> > > > > > > > > > >
+> > > > > > > > > > > To avoid these problems, the frame is considered dropped in the FE
+> > > > > > > > > > > handler, and will be returned to userland on the subsequent sensor frame.
+> > > > > > > > > > >
+> > > > > > > > > > > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > > > > > > > > > > ---
+> > > > > > > > > > >  .../media/platform/broadcom/bcm2835-unicam.c  | 39 +++++++++++++++++--
+> > > > > > > > > > >  1 file changed, 35 insertions(+), 4 deletions(-)
+> > > > > > > > > > >
+> > > > > > > > > > > diff --git a/drivers/media/platform/broadcom/bcm2835-unicam.c b/drivers/media/platform/broadcom/bcm2835-unicam.c
+> > > > > > > > > > > index f10064107d54..0d2aa25d483f 100644
+> > > > > > > > > > > --- a/drivers/media/platform/broadcom/bcm2835-unicam.c
+> > > > > > > > > > > +++ b/drivers/media/platform/broadcom/bcm2835-unicam.c
+> > > > > > > > > > > @@ -773,10 +773,26 @@ static irqreturn_t unicam_isr(int irq, void *dev)
+> > > > > > > > > > >                        * as complete, as the HW will reuse that buffer.
+> > > > > > > > > > >                        */
+> > > > > > > > > > >                       if (node->cur_frm && node->cur_frm != node->next_frm) {
+> > > > > > > > > > > +                             /*
+> > > > > > > > > > > +                              * This condition checks if FE + FS for the same
+> > > > > > > > > > > +                              * frame has occurred. In such cases, we cannot
+> > > > > > > > > > > +                              * return out the frame, as no buffer handling
+> > > > > > > > > > > +                              * or timestamping has yet been done as part of
+> > > > > > > > > > > +                              * the FS handler.
+> > > > > > > > > > > +                              */
+> > > > > > > > > > > +                             if (!node->cur_frm->vb.vb2_buf.timestamp) {
+> > > > > > > > > > > +                                     dev_dbg(unicam->v4l2_dev.dev,
+> > > > > > > > > > > +                                             "ISR: FE without FS, dropping frame\n");
+> > > > > > > > > > > +                                     continue;
+> > > > > > > > > > > +                             }
+> > > > > > > > > > > +
+> > > > > > > > > > >                               unicam_process_buffer_complete(node, sequence);
+> > > > > > > > > > > +                             node->cur_frm = node->next_frm;
+> > > > > > > > > > > +                             node->next_frm = NULL;
+> > > > > > > > > > >                               inc_seq = true;
+> > > > > > > > > > > +                     } else {
+> > > > > > > > > > > +                             node->cur_frm = node->next_frm;
+> > > > > > > > > > >                       }
+> > > > > > > > > > > -                     node->cur_frm = node->next_frm;
+> > > > > > > > > > >               }
+> > > > > > > > > > >
+> > > > > > > > > > >               /*
+> > > > > > > > > > > @@ -812,10 +828,25 @@ static irqreturn_t unicam_isr(int irq, void *dev)
+> > > > > > > > > > >                                       i);
+> > > > > > > > > > >                       /*
+> > > > > > > > > > >                        * Set the next frame output to go to a dummy frame
+> > > > > > > > > > > -                      * if we have not managed to obtain another frame
+> > > > > > > > > > > -                      * from the queue.
+> > > > > > > > > > > +                      * if no buffer currently queued.
+> > > > > > > > > > >                        */
+> > > > > > > > > > > -                     unicam_schedule_dummy_buffer(node);
+> > > > > > > > > > > +                     if (!node->next_frm ||
+> > > > > > > > > > > +                         node->next_frm == node->cur_frm) {
+> > > > > > > > > > > +                             unicam_schedule_dummy_buffer(node);
+> > > > > > > > > > > +                     } else if (unicam->node[i].cur_frm) {
+> > > > > > > > > > > +                             /*
+> > > > > > > > > > > +                              * Repeated FS without FE. Hardware will have
+> > > > > > > > > > > +                              * swapped buffers, but the cur_frm doesn't
+> > > > > > > > > > > +                              * contain valid data. Return cur_frm to the
+> > > > > > > > > > > +                              * queue.
+> > > > > > > > > >
+> > > > > > > > > > So the buffer gets silently recycled ? Or should it be returned with
+> > > > > > > > > > errors to userspace ?
+> > > > > > > > >
+> > > > > > > > > The buffer silently gets recycled and we dequeue when we are sure it
+> > > > > > > > > is valid and will not get overwritten.  If we were to return to
+> > > > > > > >
+> > > > > > > > I haven't find in the v4l2 specs any reference to what the behaviour
+> > > > > > > > should be.
+> > > > > > > >
+> > > > > > > > If I can summarize it: When a frame capture is aborted after the DMA
+> > > > > > > > transfer has already started, should the corresponding capture buffer
+> > > > > > > > be returned to the user in error state or the frame drop can go
+> > > > > > > > silently ignored ?
+> > > > > >
+> > > > > > If the DMA tranfer is aborted, I would return the buffer to userspace.
+> > > > > > This will indicate a frame loss better than deducing it from a gap in
+> > > > > > the sequence numbers.
+> > > > > >
+> > > > > > Is the DMA really aborted here though ?
+> > > > >
+> > > > > No, the DMA continues, causing possilbe overwrite/tearing in the
+> > > > > framebuffer.  Hence we defer returning it until we can ensure we don't
+> > > > > overwrite into the buffer on the next frame.
+> > > >
+> > > > If the DMA continues then we certainly can't return the buffer to
+> > > > userspace. Is it the next frame being DMA'ed to the same buffer, or does
+> > > > the hardware put it the buffer at the back of its queue ?
+> > >
+> > > The next frame will be DMA'ed into the same buffer in this error
+> > > condition. The hardware really only has a 2-deep buffer queue (current
+> > > + next frame), and no reliable way of telling if next has been swapped
+> > > to been swapped.
+> >
+> > OK, that makes sense.
+> >
+> > In that case, is putting the buffer back to the back of the dma_queue
+> > the right option ? Shouldn't it be kept current and "just" be completed
+> > one frame later ? Or did I misunderstand the patch ?
+> 
+> Yes, I agree that the buffer handling logic below does seem
+> contradictory.  I'm going to need time to look into this in more
+> detail, it's been quite some time since I looked into this.  I would
+> suggest we remove this particular patch from the series until I get a
+> better understanding of the change.
 
-Changelog v3:
-- no change
+Fine with me.
 
-Changelog v4:
-- fix style problems at the v3 patch
-- remove "index" member
-- update example
+> > > > > > > > Cc-ing Hans Sakari and Laurent for opinions.
+> > > > > > > >
+> > > > > > > > > userspace with an error, there is still a race condition on the name
+> > > > > > > > > frame/buffer which will also have to return as error.
+> > > > > > > >
+> > > > > > > > I'm sorry I didn't get this part :)
+> > > > > > > >
+> > > > > > > > > > > +                              */
+> > > > > > > > > > > +                             spin_lock(&node->dma_queue_lock);
+> > > > > > > > > > > +                             list_add_tail(&node->cur_frm->list,
+> > > > > > > > > > > +                                           &node->dma_queue);
+> > > > > > > > > > > +                             spin_unlock(&node->dma_queue_lock);
+> > > > > > > > > > > +                             node->cur_frm = node->next_frm;
+> > > > > > > > > > > +                             node->next_frm = NULL;
+> > > > > > > > > > > +                     }
+> > > > > > > > > > >               }
+> > > > > > > > > > >
+> > > > > > > > > > >               unicam_queue_event_sof(unicam);
 
-Changelog v5:
-- no change
-
-Changelog v6:
-- add register definition of BUS-IF and MPU
-
-Changelog v7:
-- remove trailing "bindings" from commit header message
-- remove trailing "Device Tree Bindings" from title
-- fix text wrapping of description
-- change compatible to visconti5-viif
-- explicitly define allowed properties for port::endpoint
-
-Changelog v8:
-- Suggestion from Krzysztof Kozlowski
-  - rename bindings description file
-  - use block style array instead of inline style
-  - remove clock-lane (as it is fixed at position 0)
-  - update sample node's name
-  - use lowercase hex for literals
-- Suggestion from Laurent Pinchart
-  - update description message port::description
-  - remove port::endpoint::bus-type as it is fixed to <4>
-  - remove port::endpoint::clock-lanes from example
-  - add port::endpoint::data-lanes to required parameters list
-  - fix sequence of data-lanes: <1 2 3 4> because current driver does not support data reordering
-  - update port::endpoint::data-lanes::description
-  - remove redundant type definition for port::endpoint::data-lanes
-
-Changelog v9:
-- place "required" after "properties"
-- dictionary ordering of properties
-
-Changelog v10:
-- no change
-
-Changelog v11:
-- no change
-
-Changelog v12:
-- remove property "clock-noncontinuous" as VIIF switches both modes automatically
-- remove property "link-frequencies" as VIIF does not use the information
-- remove reg[2] and interrupts[3] which are used for CSI2RX driver
-- update example to refer csi2rx for remote-endpoint
-
- .../media/toshiba,visconti5-viif.yaml         | 95 +++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti5-viif.yaml
-
-diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti5-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti5-viif.yaml
-new file mode 100644
-index 000000000000..ef0452a47e98
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/toshiba,visconti5-viif.yaml
-@@ -0,0 +1,95 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/toshiba,visconti5-viif.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Toshiba Visconti5 SoC Video Input Interface
-+
-+maintainers:
-+  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-+
-+description: |-
-+  Toshiba Visconti5 SoC Video Input Interface (VIIF) receives videostream
-+  from MIPI CSI-2 receiver device, processes the stream with image signal
-+  processors (L1ISP, L2ISP), then stores pictures to main memory.
-+
-+properties:
-+  compatible:
-+    const: toshiba,visconti5-viif
-+
-+  reg:
-+    items:
-+      - description: Registers for capture control
-+      - description: Registers for bus interface unit control
-+      - description: Registers for Memory Protection Unit
-+
-+  interrupts:
-+    items:
-+      - description: Sync Interrupt
-+      - description: Status (Error) Interrupt
-+      - description: L1ISP Interrupt
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    unevaluatedProperties: false
-+    description: CSI-2 input port, with a single endpoint connected to the CSI-2 transmitter.
-+
-+    properties:
-+      endpoint:
-+        $ref: video-interfaces.yaml#
-+        additionalProperties: false
-+
-+        properties:
-+          data-lanes:
-+            description: VIIF supports 1, 2, 3 or 4 data lanes
-+            minItems: 1
-+            items:
-+              - const: 1
-+              - const: 2
-+              - const: 3
-+              - const: 4
-+
-+          remote-endpoint: true
-+
-+        required:
-+          - data-lanes
-+          - remote-endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        video@1c000000 {
-+            compatible = "toshiba,visconti5-viif";
-+            reg = <0 0x1c000000 0 0x6000>,
-+                  <0 0x1c00e000 0 0x1000>,
-+                  <0 0x2417a000 0 0x1000>;
-+            interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
-+
-+            port {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                csi_in0: endpoint {
-+                    data-lanes = <1 2>;
-+                    remote-endpoint = <&csi2rx_out0>;
-+                };
-+            };
-+        };
-+    };
 -- 
-2.25.1
+Regards,
 
-
+Laurent Pinchart
