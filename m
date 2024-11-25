@@ -1,210 +1,116 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1800.securemx.jp [210.130.202.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25061198A25;
-	Mon, 25 Nov 2024 11:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D94199924;
+	Mon, 25 Nov 2024 11:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732533852; cv=none; b=KBZSHiW6JNZuKs1L3C5fAHkdNCotwF8mG+qeeReCdsWUFHo8+TH6vuubcehp2SMQ86j6H0Q9tF3h/IcT+aLkEBNJnb3FgwA2e/RTt9lDupZKMzNTNH6g/4MoyD1GyqSzCaxu8jnZba1B3xTdIVG8bc525J5gYJJ84LGRHVjOU/w=
+	t=1732534082; cv=none; b=aueUtsfXFKnJVUorJYe8NPDMCXGUwqxkVM70GWQlKV9jNmSS65kTkabymAvLCbS9L9hVgsYf2yndbmeRopPpcXf3xHMgwBXYb8gA+nXqrzsOCYhBS5W+QGw4TKNQX+FPNHWcCzJViVM3gKElcQEU+rNISxLiiMNXlZnj0ObreFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732533852; c=relaxed/simple;
-	bh=9XSrtMyvUrSDpVncOK3Cu4eq7Kbx4R6lVGbVFgG8+ic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oq+09Ceppz1YmjHh+qVVhGogNGri4GvtJlA2lu8wo3Fbx+ikwkQuUy4p9maXTTFdtSn2RpXzYy9+GAhEGJby2jCutJApByJwwFdn9TLGwy3EvKnbv3tE4XbpHZl1oTXLBniawi3EcMFBhOrBB6jKPBfvgDPvsDztAjOpA/TtSOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=lNUv0XCS; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1732534082; c=relaxed/simple;
+	bh=J0mvAuwvV6YMmHv11HyZs8PDqoQuS1HOBJbGPaB7TSA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=L5z/8/TP8uH1qfkUEnlMhAG5F2M3LsFLTy4cajZNEH5y2a7CeG7nFy/Xa2wVf0X58M4PIn5fpUGjCvtEGi2l9gDVtAIpUSzhTbuRLCTxz4ZXv06nIOacS5uJVKMjydyZFT7gYKMf5aeX5Z13AIDH+bzmoNpLCubQE0/mwt7FIg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=PZeHxaCb; arc=none smtp.client-ip=210.130.202.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lNUv0XCS"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id B8A206B5;
-	Mon, 25 Nov 2024 12:23:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1732533827;
-	bh=9XSrtMyvUrSDpVncOK3Cu4eq7Kbx4R6lVGbVFgG8+ic=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lNUv0XCSX8ExKTvjC7nk7Ekdpied3X/jF7Sv5GUef6pfX26pFLYWQNkKixsEbYaCc
-	 lZlC5tKn+Ke+8XtcFpuiXX3yOAKUYjQpj1XP/sD5FzDhWDWoFwV3g+dt5CQDOu2v3/
-	 7Edm0c1XkhgXFe9E+ewgTLFZDRjFFnyYB0AcFb3w=
-Date: Mon, 25 Nov 2024 13:24:00 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Julien Stephan <jstephan@baylibre.com>
-Cc: Andy Hsieh <andy.hsieh@mediatek.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v7 2/5] dt-bindings: media: add mediatek ISP3.0 camsv
-Message-ID: <20241125112400.GQ19381@pendragon.ideasonboard.com>
-References: <20241121-add-mtk-isp-3-0-support-v7-0-b04dc9610619@baylibre.com>
- <20241121-add-mtk-isp-3-0-support-v7-2-b04dc9610619@baylibre.com>
+	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="PZeHxaCb"
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1800) id 4AP9RlYD2993029; Mon, 25 Nov 2024 18:27:47 +0900
+DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
+	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key2.smx;t=
+	1732526834;x=1733736434;bh=J0mvAuwvV6YMmHv11HyZs8PDqoQuS1HOBJbGPaB7TSA=;b=PZe
+	HxaCbq2+aeXygF6D8+UCUIvv4geY7nKngbrTSugMHeKlonV68X246PBwATrTKI63UidHGsw0DjmO3
+	Fg41hpsIvxUik02rwer7UiIR6MmCEARv5WtDbAdbkJbcV/TbZEY1f6/dTtrhs2gM3pjq4XAsHImuJ
+	ODhgNYcX1mXxJkEcwT8WlDykmlo6u5xQZdHq85ZklRGNuuf5HBdESMqU5tIq3c1W6mE08i5fd9GjM
+	EX+ckdbynk1htQAqI5Q8RB4eVuSWM2qQAlul5wee/yxrXO239O0ut96gZ+Jqfco3K4Tf72aYejqvX
+	jhJKrBr+s+JiH2U7I1mg6y1Yp3VD/bA==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1800) id 4AP9RDcG023988; Mon, 25 Nov 2024 18:27:14 +0900
+X-Iguazu-Qid: 2yAa5GSxJ6lY5CrZGV
+X-Iguazu-QSIG: v=2; s=0; t=1732526833; q=2yAa5GSxJ6lY5CrZGV; m=zfO2799Q2c8IvxS+F5k0v2J48l4RBfpfn/qT1hIeQLg=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+	by relay.securemx.jp (mx-mr1802) id 4AP9RCIP4129100
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 25 Nov 2024 18:27:12 +0900
+X-SA-MID: 35004178
+From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH v12 3/8] media: uapi: add visconti viif meta buffer format
+Date: Mon, 25 Nov 2024 18:21:41 +0900
+X-TSB-HOP2: ON
+Message-Id: <20241125092146.1561901-4-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
+References: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241121-add-mtk-isp-3-0-support-v7-2-b04dc9610619@baylibre.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Julien,
+Adds the Toshiba Visconti VIIF specific metadata format
 
-Thank you for the patch.
+- V4L2_META_FMT_VISCONTI_VIIF_PARAMS for ISP parameters
+- V4L2_META_FMT_VISCONTI_VIIF_STATS for ISP statistics
 
-On Thu, Nov 21, 2024 at 09:53:16AM +0100, Julien Stephan wrote:
-> From: Phi-bang Nguyen <pnguyen@baylibre.com>
-> 
-> This adds the bindings, for the ISP3.0 camsv module embedded in
-> some Mediatek SoC, such as the mt8365
-> 
-> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../bindings/media/mediatek,mt8365-camsv.yaml      | 109 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 110 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..fdd07675645917fbcd692606c836efd07e50ac0c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
-> @@ -0,0 +1,109 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2023 MediaTek, BayLibre
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/mediatek,mt8365-camsv.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek CAMSV 3.0
-> +
-> +maintainers:
-> +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> +  - Julien Stephan <jstephan@baylibre.com>
-> +  - Andy Hsieh <andy.hsieh@mediatek.com>
-> +
-> +description:
-> +  The CAMSV is a video capture device that includes a DMA engine connected to
-> +  the SENINF CSI-2 receivers. The number of CAMSVs depend on the SoC model.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8365-camsv
-> +
-> +  reg:
-> +    items:
-> +      - description: camsv base
-> +      - description: img0 base
-> +      - description: tg base
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: cam clock
-> +      - description: camtg clock
-> +      - description: camsv clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cam
-> +      - const: camtg
-> +      - const: camsv
-> +
-> +  iommus:
-> +    maxItems: 1
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Connection to the SENINF output
-> +
-> +    required:
-> +      - port@0
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - power-domains
-> +  - iommus
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/mediatek,mt8365-clk.h>
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+---
+Changelog v10:
+- add entry for V4L2_META_FMT_VISCONTI_VIIF_PARAMS
+- add entry for V4L2_META_FMT_VISCONTI_VIIF_STATS
 
-I would sort the headers alphabetically.
+Changelog v11:
+- no change
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Changelog v12:
+- add description for meta formats at v4l2-ioctl.c
 
-> +    #include <dt-bindings/memory/mediatek,mt8365-larb-port.h>
-> +    #include <dt-bindings/power/mediatek,mt8365-power.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        camsv@15050000 {
-> +            compatible = "mediatek,mt8365-camsv";
-> +            reg = <0 0x15050000 0 0x0040>,
-> +                  <0 0x15050208 0 0x0020>,
-> +                  <0 0x15050400 0 0x0100>;
-> +            interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_LOW>;
-> +            clocks = <&camsys CLK_CAM>,
-> +                     <&camsys CLK_CAMTG>,
-> +                     <&camsys CLK_CAMSV0>;
-> +            clock-names = "cam", "camtg", "camsv";
-> +            iommus = <&iommu M4U_PORT_CAM_IMGO>;
-> +            power-domains = <&spm MT8365_POWER_DOMAIN_CAM>;
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                port@0 {
-> +                    reg = <0>;
-> +                    camsv1_endpoint: endpoint {
-> +                        remote-endpoint = <&seninf_camsv1_endpoint>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 242c54c88a4a22fc0cbe5c4fc5d7b0d0f84b329e..6147629405c8d40b00c4755a4ee27a746b26f782 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14570,6 +14570,7 @@ M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  M:	Julien Stephan <jstephan@baylibre.com>
->  M:	Andy Hsieh <andy.hsieh@mediatek.com>
->  S:	Supported
-> +F:	Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
->  F:	Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
->  
->  MEDIATEK SMI DRIVER
+ drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
+ include/uapi/linux/videodev2.h       | 4 ++++
+ 2 files changed, 6 insertions(+)
 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 0304daa8471d..f7facb63b8ea 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1470,6 +1470,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_META_FMT_RPI_BE_CFG:	descr = "RPi PiSP BE Config format"; break;
+ 	case V4L2_META_FMT_RPI_FE_CFG:  descr = "RPi PiSP FE Config format"; break;
+ 	case V4L2_META_FMT_RPI_FE_STATS: descr = "RPi PiSP FE Statistics format"; break;
++	case V4L2_META_FMT_VISCONTI_VIIF_PARAMS: descr = "Visconti ISP Parameters"; break;
++	case V4L2_META_FMT_VISCONTI_VIIF_STATS: descr = "Visconti ISP Statistics"; break;
+ 	case V4L2_META_FMT_GENERIC_8:	descr = "8-bit Generic Metadata"; break;
+ 	case V4L2_META_FMT_GENERIC_CSI2_10:	descr = "8-bit Generic Meta, 10b CSI-2"; break;
+ 	case V4L2_META_FMT_GENERIC_CSI2_12:	descr = "8-bit Generic Meta, 12b CSI-2"; break;
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index a5418759e2ba..9e1f66fdf038 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -863,6 +863,10 @@ struct v4l2_pix_format {
+ #define V4L2_META_FMT_RPI_FE_CFG	v4l2_fourcc('R', 'P', 'F', 'C') /* PiSP FE configuration */
+ #define V4L2_META_FMT_RPI_FE_STATS	v4l2_fourcc('R', 'P', 'F', 'S') /* PiSP FE stats */
+ 
++/* Vendor specific - used for Visconti VIIF sub-system */
++#define V4L2_META_FMT_VISCONTI_VIIF_PARAMS	v4l2_fourcc('V', 'I', 'F', 'P') /* ISP Params */
++#define V4L2_META_FMT_VISCONTI_VIIF_STATS	v4l2_fourcc('V', 'I', 'F', 'S') /* ISP Stats */
++
+ #ifdef __KERNEL__
+ /*
+  * Line-based metadata formats. Remember to update v4l_fill_fmtdesc() when
 -- 
-Regards,
+2.25.1
 
-Laurent Pinchart
+
