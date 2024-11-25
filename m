@@ -1,191 +1,127 @@
-Received: from mo-csw-fb.securemx.jp (mo-csw-fb1802.securemx.jp [210.130.202.161])
+Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3547AA35;
-	Mon, 25 Nov 2024 11:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A0B376E0
+	for <linux-media@vger.kernel.org>; Mon, 25 Nov 2024 11:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732534516; cv=none; b=jme9rGNx5Ye6ode0oOhGv58wJf150rb3vq7RBSjnXZb7fENbeJ/z6SeUdFlvaeFLckDrtVLm1mupvnOzsuDrxjsdJdudiURCNexVhR++NgqmIx1Z4gAgBG48wLKx6rXMJyJ2DgN402dwdFvFKQh51S/crT47Ic2x7trIXRn0AsU=
+	t=1732535843; cv=none; b=sT+0WofowZSwPBsjJImXFusfRTf1ugzeVGUHH0/jeOev/dOP0vlkTDsP+HrImU9oJS1kYKA5R1uAgWTOMS/2GZvD0b4SEpQe2eEI8EL8xvqXx4oWoRixrW8GoSnZZQi92YZJmnu9LdltwD1wjUT+iBF5gXTjcvH76Z3Hn28RQRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732534516; c=relaxed/simple;
-	bh=s2QBTYvjALWbK/9t34XSfK/DRgxA5dhcbwCLcFUYzbo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=t1Lg6glUQrQEq5GAIl8I3MeqGr1WePP5lXG9BvG+Z9f/r8hs1Ps9NTkiWAoMEw2ZjxQ7xpRJsGBnu77bIlbXhP7VBzpRbJkhIvwstQUys7ZgUR4eEzxpBomMmvJbQzFpbfI0rt9T7+BnBsTM2a2E4twORXRIyQ7uBjGY/3Yu83A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=ptyofG6g; arc=none smtp.client-ip=210.130.202.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
+	s=arc-20240116; t=1732535843; c=relaxed/simple;
+	bh=kILxfPL3dcoFTEgvPSkAfQOYtmQ0dsIeqD86prk+2I0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FZqyASAUL0bTBAQhrqvgmtDLCnCBxfibOAHqLiYakXjn3YCql2Wx+bHuBaBEP2ruclYEW0B1NFab8VjXCn+VIY2+4PyZ/tvrs3ylGvk96uAMJFpMkY74rmU91Rftwx4YZrl7+DY2qT8WDBmKUUbb4jBxqX2aTnSlgmyEo+LGK3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YSjOOpef; arc=none smtp.client-ip=209.85.208.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="ptyofG6g"
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1802) id 4AP9RmHF2534971; Mon, 25 Nov 2024 18:27:48 +0900
-DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
-	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key2.smx;t=
-	1732526832;x=1733736432;bh=s2QBTYvjALWbK/9t34XSfK/DRgxA5dhcbwCLcFUYzbo=;b=pty
-	ofG6gvZXuTXmZGloaGRHFDN5vnjmOEroyjENtiofn8xO4VTjp1TLme5RC2i6D8x3XF0t0m8T9w7Ax
-	eObOVKuKAH7pi/SsJ7ANV+MV6BWFBqbouVlZj4HaG8jW+vh1YfDx9t1jImAXui5x6rX/G28eqTtRy
-	5ez1eumDiY5rFvYCj/es1wcgnRSm5/M6LTcL00EIdz1d+wSL2X9qcV4TGJzIAntKwhmHyrsf6Gsx+
-	9v2kYeJIQDRaI4j+xqsjjoWCbhpo3v0VKpvpXsC+SmUdq1Mr/0VCfB2Xd/96ZHRXWL1/6z7D0dLY2
-	gWYDXlRF9EAjG51TwXKBuivXBa19y3A==;
-Received: by mo-csw.securemx.jp (mx-mo-csw1801) id 4AP9RCWA2549162; Mon, 25 Nov 2024 18:27:12 +0900
-X-Iguazu-Qid: 2yAb1JZRvDQIMBFaAK
-X-Iguazu-QSIG: v=2; s=0; t=1732526831; q=2yAb1JZRvDQIMBFaAK; m=N3BxzmwQ7zs0tp7sqbG9wCdMkvuwdICtP93CLzazhJo=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-	by relay.securemx.jp (mx-mr1802) id 4AP9R9Gm4129038
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 18:27:10 +0900
-X-SA-MID: 32872668
-From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH v12 1/8] dt-bindings: media: platform: visconti: Add Toshiba Visconti MIPI CSI-2 Receiver
-Date: Mon, 25 Nov 2024 18:21:39 +0900
-X-TSB-HOP2: ON
-Message-Id: <20241125092146.1561901-2-yuji2.ishikawa@toshiba.co.jp>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
-References: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YSjOOpef"
+Received: by mail-lj1-f193.google.com with SMTP id 38308e7fff4ca-2fb5cdabac0so2063351fa.0
+        for <linux-media@vger.kernel.org>; Mon, 25 Nov 2024 03:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732535839; x=1733140639; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+KtFQm4yfSYkfhhIvB8KFwyzOv3qtl4+nYPNp2E79ho=;
+        b=YSjOOpefg6dAE9GktTl6ZKktdSE3Ks5OOWDHPdtKyyaORZnVz7cPHZ9ZWvzZnT7TuT
+         YObqDE0EpKIxQ6Zz8g5L86JcqhHQmaEZfEFBP5EcnW6SjKeVxYICUtpu9ykdC5MQX3M1
+         QrNRLS2mNY/jFdYR3up/xk85Zz7DnyHIApgyrhjfKz+aLW3SpcLqHPoTUPG4KpWYcFl4
+         CQbfVJ1fyEicU/zNYMO/y1H22wl2MZLxaWgpc7y8jU6Qork5LB6GrojyiIF6nUUjSoe8
+         2lwDqd60haY3Lp1hYYd098n6jJNk6YrI8yrzGWH28CwZCcnAU+4U/zdOpmVpjjT+Gc/4
+         WRzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732535839; x=1733140639;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+KtFQm4yfSYkfhhIvB8KFwyzOv3qtl4+nYPNp2E79ho=;
+        b=okzWp2uQ7SjfevVXK8ZtPMWpqcT0JHHwWhzVps3jwYnfku2PwSBRp74eCCDT/KYoHZ
+         NrBJ0vX2sLjgw5jr8ifMTWf1RNoA+rvMQiPLRHUAzjwcKBnWRaLFUTptlJuPp+LSOK6E
+         np1E3FF00RS6s4SLdzIQzmR837OImjZKsIJYctKTHiLAJK/VAEGjDXmGVm+nD/sKwSNc
+         xCP1RckgM09pOgcRQYsUiffA3YH54j6Re5dXCV7tp3/XAlfAMpdBPFdxuSFwpOOotV2m
+         I6+t2iXpTA25jA43c7aBy5l1NdN24AfMT+4juAMSjOeJLTQ4VORz1wyJsOFkjhgygYAS
+         6uXA==
+X-Gm-Message-State: AOJu0YxdgCED2LryhfVb7arqsGbkXOv6tjHM9iqcDOYdXXQgj/CHMrje
+	i9D7H/Djzrq3aQMGuyiYyJhPC19v9sy1YnSgMBjptBPIFvfHkp4VYcFNqQXPPnw=
+X-Gm-Gg: ASbGncup/EVdjwliZ5RDAIHA5GcWqDN1tnc8J3SvmWyMJqwLRxleOq83lQAX7/KoWUY
+	1ex8tbp604gsEEyVVOhtVcfnFp9JRw0vvtqObm1hzuAbyTgb4ALkoDZCERiJT/bQ09yupHp3FMA
+	2AiBBVutGWmUhuHGrP3+G42m3jkRWu1jVyEGKjaK3/fuzyMDFUDpUNiyIgGdDa7z1jiuynE6JId
+	xuml5ln4YOHc909kPAL7xpITKNpILHn6x+smvgYyE9kY0wwduGG3Yd/6C2gIZCpYSaj/3iRuJQO
+	njXQfEt1TfkFLmma2dhtyaOwR3HF
+X-Google-Smtp-Source: AGHT+IHNiHpUib9cbIEp9vFtClnvik1BHvDf3MMHQDLa/wfG5jjn9JO3VfQWjVKdCea/NjqKmbaD9g==
+X-Received: by 2002:a2e:b891:0:b0:2fb:4ad6:a5fb with SMTP id 38308e7fff4ca-2ffa711f089mr18571851fa.6.1732535839297;
+        Mon, 25 Nov 2024 03:57:19 -0800 (PST)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ffb8180bddsm7991461fa.96.2024.11.25.03.57.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 03:57:18 -0800 (PST)
+Message-ID: <b27fe267-c722-4133-ad7c-bdb1ff573ee7@linaro.org>
+Date: Mon, 25 Nov 2024 13:57:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/2] media: qcom: camss: Re-structure
+ camss_link_entities
+Content-Language: en-US
+To: Vikram Sharma <quic_vikramsa@quicinc.com>, rfoss@kernel.org,
+ todor.too@gmail.com, bryan.odonoghue@linaro.org
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@quicinc.com
+References: <20241125103457.1970608-1-quic_vikramsa@quicinc.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20241125103457.1970608-1-quic_vikramsa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Adds the Device Tree binding documentation that allows to describe
-the MIPI CSI-2 Receiver found in Toshiba Visconti SoCs.
+Hi Vikram,
 
-Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
+On 11/25/24 12:34, Vikram Sharma wrote:
+> Refactor the camss_link_entities function by breaking it down into
+> three distinct functions. Each function will handle the linking of
+> a specific entity separately, enhancing readability.
+> 
+> Changes in V3:
+> - Broke down the change in 2 patches. first one to functionally
+> decompose link error message. second to restrcture the link
+> function.
+> - Removed the declarion of camss_link_error from header file.
+> - Link to v2: https://lore.kernel.org/linux-arm-msm/20241112133846.2397017-1-quic_vikramsa@quicinc.com/
 
-Changelog v12:
-- Newly add bindings for CSI2RX driver 
+as I said last time I don't see the value of these changes.
 
- .../media/toshiba,visconti5-csi2rx.yaml       | 104 ++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
+Since the changes are non-functional, then hopefully there should be
+no issues with them, however I really miss the point of adding 65
+lines of code for a questionable reason and at the price of increased
+complexity.
 
-diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
-new file mode 100644
-index 000000000000..5488072bc82a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
-@@ -0,0 +1,104 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/toshiba,visconti5-csi2rx.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Toshiba Visconti5 SoC MIPI CSI-2 receiver
-+
-+maintainers:
-+  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-+
-+description: |-
-+  Toshiba Visconti5 SoC MIPI CSI-2 receiver device receives MIPI CSI-2 video
-+  stream. Use with VIIF device. T.B.D
-+
-+properties:
-+  compatible:
-+    const: toshiba,visconti5-csi2rx
-+
-+  reg:
-+    items:
-+      - description: Registers for CSI2 receiver control
-+
-+  interrupts:
-+    items:
-+      - description: CSI2 Receiver Interrupt
-+
-+  ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+
-+    properties:
-+      port@0:
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        unevaluatedProperties: false
-+        description:
-+          Input port node, single endpoint describing the CSI-2 transmitter.
-+
-+        properties:
-+          endpoint:
-+            $ref: video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+            properties:
-+              data-lanes:
-+                description: CSI2 receiver supports 1, 2, 3 or 4 data lanes
-+                minItems: 1
-+                items:
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
-+            required:
-+              - data-lanes
-+
-+      port@1:
-+        $ref: /schemas/graph.yaml#/properties/port
-+        description:
-+          Output port node, single endpoint describing the Visconti VIIF.
-+
-+    required:
-+      - port@0
-+      - port@1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - ports
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        csi2rx@1c008000 {
-+            compatible = "toshiba,visconti5-csi2rx";
-+            reg = <0 0x1c008000 0 0x400>;
-+            interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                port@0 {
-+                    reg = <0>;
-+                    csi2rx_in0: endpoint {
-+                        data-lanes = <1 2>;
-+                        remote-endpoint = <&imx219_out0>;
-+                    };
-+                };
-+                port@1 {
-+                    reg = <1>;
-+                    csi2rx_out0: endpoint {
-+                        remote-endpoint = <&csi_in0>;
-+                    };
-+                };
-+            };
-+        };
-+    };
--- 
-2.25.1
+Is there a good reason not to drop the series?
 
+> Changes in V2:
+> - Declared variables in reverse christmas tree order.
+> - Functionally decomposed link error message.
+> - Link to v1: https://lore.kernel.org/linux-arm-msm/20241111173845.1773553-1-quic_vikramsa@quicinc.com/
+> 
+>    To: Robert Foss <rfoss@kernel.org>
+>    To: Todor Tomov <todor.too@gmail.com>
+>    To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>    Cc: linux-media@vger.kernel.org
+>    Cc: linux-kernel@vger.kernel.org
+> 
+> Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
+> 
+> Vikram Sharma (2):
+>    media: qcom: camss: reducing the repitious error message string
+>    media: qcom: camss: Restructure camss_link_entities
+> 
+>   drivers/media/platform/qcom/camss/camss.c | 195 ++++++++++++++--------
+>   1 file changed, 130 insertions(+), 65 deletions(-)
+> 
 
+--
+Best wishes,
+Vladimir
