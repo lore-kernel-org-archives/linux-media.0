@@ -1,145 +1,191 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1802.securemx.jp [210.130.202.161])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DA817BED0;
-	Mon, 25 Nov 2024 11:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3547AA35;
+	Mon, 25 Nov 2024 11:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.130.202.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732534402; cv=none; b=q8iqGeGhA6+d9NNmTaQc3OKYFQrWWQiuELewAyN8cpp4Ni9ay2HxS2zWv0g+ZmqL6VbcYXboCxYXTQjO9ol4oF9amfV6QukQshshKr3g6lgm2ZtWeq4whSSvcZfmP1736EpGR1C+ntY71GF+4oNlap5UTTorRjEqX/KKA6YEeR4=
+	t=1732534516; cv=none; b=jme9rGNx5Ye6ode0oOhGv58wJf150rb3vq7RBSjnXZb7fENbeJ/z6SeUdFlvaeFLckDrtVLm1mupvnOzsuDrxjsdJdudiURCNexVhR++NgqmIx1Z4gAgBG48wLKx6rXMJyJ2DgN402dwdFvFKQh51S/crT47Ic2x7trIXRn0AsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732534402; c=relaxed/simple;
-	bh=P518NXJ0Q6lKfCMBhQpcn8O8iGY86ggsLm0eAR7/Tq8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J0dpCFGpp0StWjz3xEGi942d4d9i6QK92trb9DUrkNrirtCTcAeh5O6mOYjWcTl+DPFSZzg6zWLO+jzVH87uX8CG6mbxRAtLs6ftISOZKTpK5x0en8d//bXLhS/lT5L3IrhgWDZht5pGsXcsYvJ5kNTHmhmGMfn/KuGixbfkCkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=JKhUcyxk; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1732534516; c=relaxed/simple;
+	bh=s2QBTYvjALWbK/9t34XSfK/DRgxA5dhcbwCLcFUYzbo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=t1Lg6glUQrQEq5GAIl8I3MeqGr1WePP5lXG9BvG+Z9f/r8hs1Ps9NTkiWAoMEw2ZjxQ7xpRJsGBnu77bIlbXhP7VBzpRbJkhIvwstQUys7ZgUR4eEzxpBomMmvJbQzFpbfI0rt9T7+BnBsTM2a2E4twORXRIyQ7uBjGY/3Yu83A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp; spf=pass smtp.mailfrom=toshiba.co.jp; dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b=ptyofG6g; arc=none smtp.client-ip=210.130.202.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toshiba.co.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toshiba.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JKhUcyxk"
-Received: from [192.168.88.20] (91-157-155-49.elisa-laajakaista.fi [91.157.155.49])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30C026B5;
-	Mon, 25 Nov 2024 12:32:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1732534377;
-	bh=P518NXJ0Q6lKfCMBhQpcn8O8iGY86ggsLm0eAR7/Tq8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JKhUcyxkc08xKOK/SJ8c41NOg6ASWth9+UMx9BQsVP+vk5UxO3jqBNgynxyql1GnT
-	 7avD3pc/5aQ2PCPNYaqnwMhGk7VMl7ugLQnePmCTedL4czWXxb/IYmMviOYCg9TGjP
-	 HRcL1Kb4WPMmfHxGiM55QeM4kvFbvT9WwMaAoLBc=
-Message-ID: <0ff25743-30c6-4c26-955f-c4c26578ebb6@ideasonboard.com>
-Date: Mon, 25 Nov 2024 13:33:15 +0200
+	dkim=pass (2048-bit key) header.d=toshiba.co.jp header.i=yuji2.ishikawa@toshiba.co.jp header.b="ptyofG6g"
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1802) id 4AP9RmHF2534971; Mon, 25 Nov 2024 18:27:48 +0900
+DKIM-Signature: v=1;a=rsa-sha256;c=relaxed/simple;d=toshiba.co.jp;h=From:To:Cc
+	:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding;i=yuji2.ishikawa@toshiba.co.jp;s=key2.smx;t=
+	1732526832;x=1733736432;bh=s2QBTYvjALWbK/9t34XSfK/DRgxA5dhcbwCLcFUYzbo=;b=pty
+	ofG6gvZXuTXmZGloaGRHFDN5vnjmOEroyjENtiofn8xO4VTjp1TLme5RC2i6D8x3XF0t0m8T9w7Ax
+	eObOVKuKAH7pi/SsJ7ANV+MV6BWFBqbouVlZj4HaG8jW+vh1YfDx9t1jImAXui5x6rX/G28eqTtRy
+	5ez1eumDiY5rFvYCj/es1wcgnRSm5/M6LTcL00EIdz1d+wSL2X9qcV4TGJzIAntKwhmHyrsf6Gsx+
+	9v2kYeJIQDRaI4j+xqsjjoWCbhpo3v0VKpvpXsC+SmUdq1Mr/0VCfB2Xd/96ZHRXWL1/6z7D0dLY2
+	gWYDXlRF9EAjG51TwXKBuivXBa19y3A==;
+Received: by mo-csw.securemx.jp (mx-mo-csw1801) id 4AP9RCWA2549162; Mon, 25 Nov 2024 18:27:12 +0900
+X-Iguazu-Qid: 2yAb1JZRvDQIMBFaAK
+X-Iguazu-QSIG: v=2; s=0; t=1732526831; q=2yAb1JZRvDQIMBFaAK; m=N3BxzmwQ7zs0tp7sqbG9wCdMkvuwdICtP93CLzazhJo=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+	by relay.securemx.jp (mx-mr1802) id 4AP9R9Gm4129038
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 25 Nov 2024 18:27:10 +0900
+X-SA-MID: 32872668
+From: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH v12 1/8] dt-bindings: media: platform: visconti: Add Toshiba Visconti MIPI CSI-2 Receiver
+Date: Mon, 25 Nov 2024 18:21:39 +0900
+X-TSB-HOP2: ON
+Message-Id: <20241125092146.1561901-2-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
+References: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: v4l: subdev: Prevent NULL routes access
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Cosmin Tanislav <demonsingur@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- Hans Verkuil <hverkuil@xs4all.nl>, =?UTF-8?Q?Pawe=C5=82_Anikiel?=
- <panikiel@google.com>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241122143717.173344-1-demonsingur@gmail.com>
- <Z0Q3ukermwmPax2b@kekkonen.localdomain>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- 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
-In-Reply-To: <Z0Q3ukermwmPax2b@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Adds the Device Tree binding documentation that allows to describe
+the MIPI CSI-2 Receiver found in Toshiba Visconti SoCs.
 
-On 25/11/2024 10:39, Sakari Ailus wrote:
-> Hi Cosmin,
-> 
-> Thanks for the patch.
-> 
-> On Fri, Nov 22, 2024 at 04:37:12PM +0200, Cosmin Tanislav wrote:
->> When using v4l2_subdev_set_routing to set a subdev's routing, and the
->> passed routing.num_routes is 0, kmemdup is not called to populate the
->> routes of the new routing (which is fine, since we wouldn't want to pass
->> a possible NULL value to kmemdup).
->>
->> This results in subdev's routing.routes to be NULL.
->>
->> routing.routes is further used in some places without being guarded by
->> the same num_routes non-zero condition.
->>
->> Fix it.
-> 
-> While I think moving the code to copy the routing table seems reasonable,
-> is there a need to make num_routes == 0 a special case? No memcpy()
-> implementation should access destination or source if the size is 0.
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
 
-I think so too, but Cosmin convinced me that the spec says otherwise.
+Changelog v12:
+- Newly add bindings for CSI2RX driver 
 
- From the C spec I have, in "7.21.1 String function conventions":
+ .../media/toshiba,visconti5-csi2rx.yaml       | 104 ++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
 
-"
-Where an argument declared as size_t n specifies the length of the array 
-for a
-function, n can have the value zero on a call to that function. Unless 
-explicitly stated
-otherwise in the description of a particular function in this subclause, 
-pointer arguments
-on such a call shall still have valid values, as described in 7.1.4.
-"
+diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
+new file mode 100644
+index 000000000000..5488072bc82a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/toshiba,visconti5-csi2rx.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/toshiba,visconti5-csi2rx.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Toshiba Visconti5 SoC MIPI CSI-2 receiver
++
++maintainers:
++  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++
++description: |-
++  Toshiba Visconti5 SoC MIPI CSI-2 receiver device receives MIPI CSI-2 video
++  stream. Use with VIIF device. T.B.D
++
++properties:
++  compatible:
++    const: toshiba,visconti5-csi2rx
++
++  reg:
++    items:
++      - description: Registers for CSI2 receiver control
++
++  interrupts:
++    items:
++      - description: CSI2 Receiver Interrupt
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description:
++          Input port node, single endpoint describing the CSI-2 transmitter.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes:
++                description: CSI2 receiver supports 1, 2, 3 or 4 data lanes
++                minItems: 1
++                items:
++                  - const: 1
++                  - const: 2
++                  - const: 3
++                  - const: 4
++            required:
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Output port node, single endpoint describing the Visconti VIIF.
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        csi2rx@1c008000 {
++            compatible = "toshiba,visconti5-csi2rx";
++            reg = <0 0x1c008000 0 0x400>;
++            interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                port@0 {
++                    reg = <0>;
++                    csi2rx_in0: endpoint {
++                        data-lanes = <1 2>;
++                        remote-endpoint = <&imx219_out0>;
++                    };
++                };
++                port@1 {
++                    reg = <1>;
++                    csi2rx_out0: endpoint {
++                        remote-endpoint = <&csi_in0>;
++                    };
++                };
++            };
++        };
++    };
+-- 
+2.25.1
 
-The memcpy section has no explicit mention that would hint otherwise.
-
-In 7.1.4 Use of library functions it says that unless explicitly stated 
-otherwise, a null pointer is an invalid value.
-
-That said, I would still consider memcpy() with size 0 always ok, 
-regardless of the src or dst, as the only memcpy implementation we need 
-to care about is the kernel's.
-
-  Tomi
 
