@@ -1,156 +1,177 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD209149E00;
-	Mon, 25 Nov 2024 08:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1A38827;
+	Mon, 25 Nov 2024 08:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732521993; cv=none; b=TDXgTsmrZhQMlctDYTqCkgQcXI5CwTYHLBr6x1qSJccHpl9zyqMsNQek/ciHJ5U8W7+Qy6r/lznCz4aT4RicrP5gYl2NvUKOBHZ5lGRViczxenNTwkB6qycVrFfcIMBCXffu3uKeDwezbL0qfaFYKvgFP7D1YTdJRDsuYqEyPpE=
+	t=1732522244; cv=none; b=BzBW0jaXBBtZ5l7C3hII8H9C6gL/BnqqOVWfYnJwliqSuD6s8AWy5TETUk3t/dc3lKRkMaI0oMV75y3FX0AOE5fxzgK0pReBjMuqF5JvH23aL7pSMU+fcRNS4zsR2kf5h40wZ2ST5KLZu0edpBAqcuMgA+XUEiEYODyHY05b0rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732521993; c=relaxed/simple;
-	bh=VDmBHQw+1inSAmkEdS1dzrXyMAXxsml2uhZew3IM5jk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Z8m/vfiIvoEKMRQz/bOngDCyPPhcGrwgwcA+LP6QZ+aXUAQ7Pg2saDI2unPzIPwhHDvU7FepZqP/k0L2IfoddIWl0MZc5WztbS4C/VpV4dWqCHn/xx5fw/fXuL7N8W8IHRcYrj+Byg5u3BQfwUN5Gvy1RFr3DvO2bYg39ro1MkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KP7KxDk9; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1732522244; c=relaxed/simple;
+	bh=CAeJ4TBeE4F6WgCR4Tq0ZhhVGFmTZMlXsT3ZeSniNqw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=uQ6KXOwbvXfUxJVlosspvDw/22U306A8Nf7YaQf8RN5dOCQGTRIejrGOG9DzoBkaEXj6Z5Mf031G/rehf8z1m9e7nmM8XVrzhYHPkOZRBS2ADfGlO186SwlGkttIesqLUpXNzOLpnKBoFCdhLGDuiM0rAQaog2PF7RP6t5fY+iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=aneOgUSW; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KP7KxDk9"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AP7VmVf010664;
-	Mon, 25 Nov 2024 08:06:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="aneOgUSW"
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AP0pxIm014099;
+	Mon, 25 Nov 2024 08:52:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PA7ap52fxusih88B1d6kk7JuuHnNkXCa/1+M5ouLd5I=; b=KP7KxDk9mbhaLYkx
-	siF5JLSjny6H51tDsKbuZ3uNjaGctec4w4rYoF5Y7ELLnvUga5umTll1rBf9CMts
-	npgc1fzIiLy+B0H21jjmGStopoHQaAEctdbbpE5TiEJ4KZtsLKjYZIQfiLgeDcM9
-	WSdRZM7Zf6yZIijG8cuMQZ/hIrnWo+BQigk7U7LhGXnWwOhnXULVUedFCwSzlFlO
-	Gxvyj/L8PeJhwLRlCl9Pb1L3U7kitDuPiFjQTFTUw49NS2ewEilolcFBRdH0xZHC
-	E3NKvhd7lAop4bTWwsFP/V9BGzQ37F0iB2Lo8YDWJnunXLHQ854FZCqwru7fqrU1
-	j5EDcA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 434mx702ff-1
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	8uBVTRIhltASLptHNO7ciiwgZge8tWTzAnEQix+o5ms=; b=aneOgUSW5PDCg37+
+	DG9relJ49AvPvEuOXPn8ES9/OQulIf/AbqSTo4GOLNn3o+370d5JyWNNridoQ3IA
+	Eu+PCeRVTkNuzS4+DqGOzvF+70dxS3HibdT75Y7IGfLYKAoRFziUSKwS08bgGZI8
+	1fq2Ra9oSfTmZTg7HCxp8L+KsrvhGagmLz1UZvbSpCqOmEaDI0cb5GuNH74arWlP
+	+DfFk8coZpGZtXctottRwO9TRJAAiJ/yrNmQW9EFhyXhFJYPMWL0iChZC4rKeDdu
+	w6HNpaZp4o8iFUwCJ+j4Mc6Rg8MmQKeGqTSSZR/OoghJxTuytpgk6HcsMzFeKpsA
+	KzV+Ig==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 433791p7e4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 08:06:27 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AP86Qht018326
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 08:06:26 GMT
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 25 Nov 2024 00:06:25 -0800
-Received: from nalasex01c.na.qualcomm.com ([fe80::5da8:4d0f:c16a:a1d]) by
- nalasex01c.na.qualcomm.com ([fe80::5da8:4d0f:c16a:a1d%11]) with mapi id
- 15.02.1544.009; Mon, 25 Nov 2024 00:06:25 -0800
-From: "Renjiang Han (QUIC)" <quic_renjiang@quicinc.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-CC: "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Mauro Carvalho
- Chehab" <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Konrad Dybcio" <konradybcio@kernel.org>,
-        "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "bryan.odonoghue@linaro.org"
-	<bryan.odonoghue@linaro.org>
-Subject: RE: [PATCH v3 1/4] dt-bindings: qcom,qcs615-venus: add support for
- video hardware
-Thread-Topic: [PATCH v3 1/4] dt-bindings: qcom,qcs615-venus: add support for
- video hardware
-Thread-Index: AQHbPvvNBcmhQ7jCvUeLTdcFK605vrLIEToA//99IeA=
-Date: Mon, 25 Nov 2024 08:06:25 +0000
-Message-ID: <558dd362d6564cd58bfcf53c12d91f0a@quicinc.com>
-References: <20241125-add-venus-for-qcs615-v3-0-5a376b97a68e@quicinc.com>
- <20241125-add-venus-for-qcs615-v3-1-5a376b97a68e@quicinc.com>
- <173251666879.249116.13599300666564865920.robh@kernel.org>
-In-Reply-To: <173251666879.249116.13599300666564865920.robh@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	Mon, 25 Nov 2024 08:52:53 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 305AE4002D;
+	Mon, 25 Nov 2024 08:51:02 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2A74C26550D;
+	Mon, 25 Nov 2024 08:49:47 +0100 (CET)
+Received: from [10.48.86.208] (10.48.86.208) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 25 Nov
+ 2024 08:49:46 +0100
+Message-ID: <f989e43a-8622-43cb-af6d-fd02b2374ac1@foss.st.com>
+Date: Mon, 25 Nov 2024 08:49:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _8qZVuD2uytzZFl4Xy-e4JaRIBYkkk29
-X-Proofpoint-ORIG-GUID: _8qZVuD2uytzZFl4Xy-e4JaRIBYkkk29
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/3] Add WebP support to hantro decoder
+To: Adam Ford <aford173@gmail.com>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia
+	<ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Sebastian Fricke
+	<sebastian.fricke@collabora.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Erling Ljunggren <hljunggr@cisco.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus
+	<sakari.ailus@linux.intel.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        Benjamin
+ Gaignard <benjamin.gaignard@collabora.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20241121131904.261230-1-hugues.fruchet@foss.st.com>
+ <CAHCN7xJr-sXPGMr7aPH=-Cg+-YQMYChY0u6UNuH5rH8g6cpXhg@mail.gmail.com>
+Content-Language: en-US
+From: Hugues FRUCHET <hugues.fruchet@foss.st.com>
+In-Reply-To: <CAHCN7xJr-sXPGMr7aPH=-Cg+-YQMYChY0u6UNuH5rH8g6cpXhg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411250069
 
-On Monday, November 25, 2024 2:38 PM, Rob Herring (Arm) wrote:
-> On Mon, 25 Nov 2024 11:04:49 +0530, Renjiang Han wrote:
-> > Add support for Qualcomm video acceleration hardware used for video=20
-> > stream decoding and encoding on QCOM QCS615.
-> >
-> > Signed-off-by: Renjiang Han <quic_renjiang@quicinc.com>
-> > ---
-> >  .../bindings/media/qcom,qcs615-venus.yaml          | 182 +++++++++++++=
-++++++++
-> >  1 file changed, 182 insertions(+)
-> >
+Hi Adam,
 
-> My bot found errors running 'make dt_binding_check' on your patch:
+On 11/24/24 04:09, Adam Ford wrote:
+> On Thu, Nov 21, 2024 at 7:22 AM Hugues Fruchet
+> <hugues.fruchet@foss.st.com> wrote:
+>>
+>> Add WebP image decoding support to stateless V4L2 VP8 decoder.
+>>
+>> This have been tested on STM32MP257-EV board using GStreamer.
+> 
+> I want to test this on an i.MX8M Mini.  Is there a certain gstreamer
+> version or branch I should use, or is 1.24 sufficient?
 
-> yamllint warnings/errors:
 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/media/qcom,qcs615-venus.example.dts:25:=
-18: fatal error: dt-bindings/clock/qcom,qcs615-videocc.h: No such file or d=
-irectory
->    25 |         #include <dt-bindings/clock/qcom,qcs615-videocc.h>
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[2]: *** [scripts/Makefile.dtbs:129: Documentation/devicetree/binding=
-s/media/qcom,qcs615-venus.example.dtb] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1442: dt_bin=
-ding_check] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
+The corresponding GStreamer code has been pushed here (v4l2slwebpdec):
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7939
 
-Thanks for your reply. "dt-bindings/clock/qcom,qcs615-videocc.h" has been a=
-dded in https://lore.kernel.org/all/20241108-qcs615-mm-clockcontroller-v3-0=
--7d3b2d235fdf@quicinc.com/.
+BR,
+Hugues.
 
-> doc reference errors (make refcheckdocs):
-
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202411=
-25-add-venus-for-qcs615-v3-1-5a376b97a68e@quicinc.com
-
-> The base for the series is generally the latest rc1. A different dependen=
-cy should be noted in *this* patch.
-
-> If you already ran 'make dt_binding_check' and didn't see the above error=
-(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-
-> pip3 install dtschema --upgrade
-
-> Please check and re-submit after running the above command yourself. Note=
- that DT_SCHEMA_FILES can be set to your schema file to speed up checking y=
-our schema. However, it must be unset to test all  examples with your schem=
-a.
+> 
+> adam
+>>
+>> Simple basic test:
+>> $> wget https://www.gstatic.com/webp/gallery/1.webp
+>> $> gst-launch-1.0 filesrc location= 1.webp ! typefind ! v4l2slwebpdec ! imagefreeze num-buffers=20 ! waylandsink fullscreen=true
+>>
+>> Slideshow of a set of WebP pictures and WebM video files:
+>> $> wget https://www.gstatic.com/webp/gallery/2.webp
+>> $> wget https://www.gstatic.com/webp/gallery/3.webp
+>> $> wget https://www.gstatic.com/webp/gallery/4.webp
+>> $> wget https://www.gstatic.com/webp/gallery/5.webp
+>> $> wget https://samplemedia.linaro.org/VP8/big_buck_bunny_480p_VP8_VORBIS_25fps_1900K_short.WebM
+>> $> gst-play-1.0 *.webp *.webm *.WebM --wait-on-eos
+>> <hit key ">" to display next file >
+>>
+>> Large WebP image > 16777215 (size > 2^24)
+>> $> gst-launch-1.0 fakesrc num-buffers=1 format=4 do-timestamp=true filltype=3 sizetype=2 sizemax=25165824 blocksize=25165824 ! video/x-raw, format=I420, width=4096, height=3072, framerate=1/1 ! webpenc quality=100 ! filesink location=4096x3072_HQ_random.webp
+>> $> ls -l 4096x3072_HQ_random.webp
+>> [...] 16877404 Nov 20 11:40 4096x3072_HQ_random.webp
+>> $> gst-launch-1.0 filesrc location= 4096x3072_HQ_random.webp blocksize=16876610 ! image/webp, width=1, height=1, framerate=0/1 ! v4l2slwebpdec ! imagefreeze num-buffers=20 ! waylandsink fullscreen=true
+>>
+>> Large WebP image decoding using post-processor is untested because of lack
+>> of hardware support on this platform, nevertheless support is provided in
+>> this serie for further testing on another platform having post-processor
+>> support.
+>>
+>> ===========
+>> = history =
+>> ===========
+>> version 3:
+>>     - Fix remarks from Nicolas Dufresne:
+>>      - Document constraint about key frame only for WebP
+>>      - Fix rebase issue
+>>     - Fix typo detected by Diederik de Haas
+>>
+>> version 2:
+>>     - Fix remarks from Nicolas Dufresne:
+>>      - Use bytesperline helper to compute chroma size
+>>      - Introduce a new explicit WEBP frame compressed format
+>>        instead of relying on VP8 + WebP flag
+>>      - 4K support in both decoder and post-proc
+>>
+>> version 1:
+>>    - Initial submission
+>>
+>> Hugues Fruchet (3):
+>>    media: uapi: add WebP uAPI
+>>    media: verisilicon: add WebP decoding support
+>>    media: verisilicon: postproc: 4K support
+>>
+>>   .../userspace-api/media/v4l/biblio.rst          |  9 +++++++++
+>>   .../media/v4l/pixfmt-compressed.rst             | 17 +++++++++++++++++
+>>   drivers/media/platform/verisilicon/hantro.h     |  2 ++
+>>   .../media/platform/verisilicon/hantro_g1_regs.h |  3 ++-
+>>   .../platform/verisilicon/hantro_g1_vp8_dec.c    | 14 ++++++++++++++
+>>   .../platform/verisilicon/hantro_postproc.c      |  6 +++++-
+>>   .../media/platform/verisilicon/hantro_v4l2.c    |  2 ++
+>>   .../platform/verisilicon/stm32mp25_vpu_hw.c     | 17 +++++++++++++++--
+>>   drivers/media/v4l2-core/v4l2-ioctl.c            |  1 +
+>>   include/uapi/linux/videodev2.h                  |  1 +
+>>   10 files changed, 68 insertions(+), 4 deletions(-)
+>>
+>> --
+>> 2.25.1
+>>
+>>
