@@ -1,61 +1,61 @@
-Received: from mail-lj1-f227.google.com (mail-lj1-f227.google.com [209.85.208.227])
+Received: from mail-wm1-f99.google.com (mail-wm1-f99.google.com [209.85.128.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46D91EF099
-	for <linux-media@vger.kernel.org>; Wed, 27 Nov 2024 11:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC62E1EF0AD
+	for <linux-media@vger.kernel.org>; Wed, 27 Nov 2024 11:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732706123; cv=none; b=jDRlROsl9Zskgf29cVcEE++m7XhTTYl6O5pVyMTiLFPnXZJK1JRO4DKvEdPzUOFmqtyd90wvw53v2uV4eh2XCorKpgG0iWMmJDzfj+J+u5LeqfhgAYrM3cMdILh0Y2PMcNmzvmfXeErelCJP1+pkuKgXfkB4DnTSB7rDtgm9VdM=
+	t=1732706124; cv=none; b=jkaWaQWUyL9lBVBJRbvQI9Iiqf412WipJSg8DZRZ+aSqKdut92MO5d2TD6s+njpW2/ZCdliGjVv0PgpckyMJFtFiXlozGCFjw4MHkXOkX09QQUzJqRHiMg6E5QrRYNRNbVK5ChN62CiQWc6ubxJIv2yu8L/I6zWEjIc7fW1FbBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732706123; c=relaxed/simple;
-	bh=wnthNX/wVIc0cJrqj82UcQ/NTxF5OCTEjQVgalgz04g=;
+	s=arc-20240116; t=1732706124; c=relaxed/simple;
+	bh=6GnAB8AluBnog7NYl4+hJYVAAOZJGkmDUBrswi9xVtY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p8PH+OctdP0K4wGU1yrBmtCplSs0D8XE4Lg2Nj9B0W2WcuI8x+8fEYJgdgj3v0wKOhtEwAVOYWvvuorVgb4N3KROB6tYSZvRqsrs1XQOr6uagQW9hgL/+vUJngFeAuLioFOitZ/WXYGGb0FLxqlkDAmc0QzoCmyiQHrFmGf6u+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=GvFlc/eV; arc=none smtp.client-ip=209.85.208.227
+	 MIME-Version; b=hy2yXWXIq+9eWWh0s9VUb9NDzehkabapEPUYXINQFkdxgZEOJutzhZu2rSYsxqLV3lZi3G0LIWgtrvdlujEr/Zaga7OXYMtX664YcB1ZJiKq5nBgm5W1epMUeozdNSvq+5575KNu2bkjqdTh6Bm4OOg5crAW1JzEbq5ODoMBQbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=AobZesyZ; arc=none smtp.client-ip=209.85.128.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="GvFlc/eV"
-Received: by mail-lj1-f227.google.com with SMTP id 38308e7fff4ca-2ffa3e8e917so67315351fa.3
-        for <linux-media@vger.kernel.org>; Wed, 27 Nov 2024 03:15:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="AobZesyZ"
+Received: by mail-wm1-f99.google.com with SMTP id 5b1f17b1804b1-434a044dce2so33469075e9.2
+        for <linux-media@vger.kernel.org>; Wed, 27 Nov 2024 03:15:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1732706120; x=1733310920; darn=vger.kernel.org;
+        d=raspberrypi.com; s=google; t=1732706121; x=1733310921; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NDLmlhfFf3fKmWcDI3ja5XlaBhDY7yQ7y51lLCUjcJ4=;
-        b=GvFlc/eVExxzD77pgreiWaDXtUAgGU142RVCehNvGc0t4aDDdxIFVb88ix1QtkxYvK
-         696J2bvfQKFeEAcuANqlUOjuXJlRd2Mud49J0n5Scw2U/pfAu/yZggLyZVxGHSrNsoK5
-         pvYA5UAJhGgLlQeWFjt0X2m8MMHaQIIZfHp7GHketMHBUEGgp3bQ9iVhVozj5TvF/tSN
-         hDotuKg0s5R91uS5smnboBCAQRI3UbErGrGQnHen9rylmsFhdZKAGjlorhFVlhltmfDK
-         VCJixSdP0Nq2/MdMnNsBcdrIB5E/viMmY+jKTwLB7rOO61cs+EAj8dS3VrC3hsHaLTry
-         +hbQ==
+        bh=E8u/tqgNbTDWlnzWRktGlQ9tYzEXbqX8e0KFyaCvDAo=;
+        b=AobZesyZ8E7j3C71TYrOJAH7NDf1o5LrcepcRO3w580ZEYfIdebIP1hP/KD409sMJQ
+         NfiWVntSB5ezBYpHSgfvJTVL5W8W4b3eylFzL4hCp4dDlhPZnHT5gjTh9IXr5BjZHs6+
+         LWdEaVJdSg4lbjuk4lAO4bh1lzdf4Sfh6KrF9kSvQgLf0lHfGo61tepnt9aFoDtSk/dP
+         GFxxYjBCUDa1KwRzJk6OhMQipu0x5I5De+oqEZMpCvbX46jUpS/klBappqowMNEz7W2h
+         kS/PjpDSibO2uhM6jtcfUVu6/g5TJYnAUcIZIEtikiTOFz5bI3kt/1ITh4b306OLuNu6
+         M/xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732706120; x=1733310920;
+        d=1e100.net; s=20230601; t=1732706121; x=1733310921;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NDLmlhfFf3fKmWcDI3ja5XlaBhDY7yQ7y51lLCUjcJ4=;
-        b=OE80oMiyYj++YAKS0xZtOB4I53Wb7n/DaRbpQv5OAq6o3ZDiLrd/GkiLlJFVhUYtze
-         0YY4u9hlFtNugoozZLaMzoh6pdck0NqD/5+xNw24IHNC2NPWx8xBYOiePXNzVemBOEmW
-         g8+D+W/VvwsP0mLCXJWzFbm2+h4WhHhcRsPsQxANOIQLSMCF5N6eR8hR6ZaxSlYPAqql
-         4ZOQBmLr0wLaNmoHYOS8zjcn72hNd+bP3iMbCm/HAtyTWbiy5sotmXYxJ0qj+kHmzKgg
-         zdlnVPHCrPv7onngRnalpFlm9XzhmDvh+tJgwx5kmthz9h4H3qnAx60RgTyy53AxjH5b
-         hLTQ==
-X-Gm-Message-State: AOJu0YxXwjGVhssw4iPFfrFWbfvp5oATzNN4TVyyAnk784Coq3vVvV/B
-	oHkUvtNwrKmyjUD17ib0MP+K4atg5K1dbZdA/yPV2Gu5E+BG7X97A6RjOcpHNwj8GIL0Hbb5BKK
-	3NtUnWAnJQDESLq77EPAnVsT/MnG+tOcF
-X-Gm-Gg: ASbGncsux5bl+ZhJMRe2KMx6Iq/RM8WjsstAP4MfFh8sFakmMmIIdscLi8J2BJ5NhAo
-	BSgraGOpitNpPQ0WevZ3HBV8KFTnaR9H5GTRgogehTjNllXpiJ9mqojz2/R0in/fnN/wBGzadzi
-	Bu/cWFdnOYzCcUHKV+mwmSyx4VtL6IPifhHyTTTFaRy3SSinOykm3L6yzzRLmFYZxSnuknaL8gD
-	oDId5F7Dm8Tp90Pc8u8DrgfkhkyAfybMMUfHTfkdELxUY72X1EjpLa5Qzxo0gK9tg==
-X-Google-Smtp-Source: AGHT+IGTwoCSNs5BBDwFG/AtnZDnL6h+6Oxq6PET6Ihsy3bf1ZEmlnpsnNPW65FRF37uJIGFAM/fVa2LEDdW
-X-Received: by 2002:a05:651c:211a:b0:2ff:c67f:5197 with SMTP id 38308e7fff4ca-2ffd605a257mr12586081fa.13.1732706119878;
-        Wed, 27 Nov 2024 03:15:19 -0800 (PST)
+        bh=E8u/tqgNbTDWlnzWRktGlQ9tYzEXbqX8e0KFyaCvDAo=;
+        b=Gntj64OEKQcwSvpFt0z5OGRF7E0T3XCyjLMRgiTJxIxAq9D6RKWKIh5t4Cgl2rrEQP
+         vl9622Zg+CuISqVH5jF2BHHmbBdiiZ60RFmH8k+uVdz+8SbdmcQTIOwX4x+IR/+RIAjm
+         71UorK6RuVrBE8IBGOlF+xVeYZvtH5w2LPR5em6KVfj1nr5zO0rCQtHK8RAJ09fRiith
+         /CpOhkQyZ4tecwPfivKNhPleJhLl3lOVTiHKTi/6SYAJClFpcFdVYQdKd3gojaikFvs5
+         XPaGdlirqh+HF9RYSgg0qhkSK+IpWixFgi1Fvnx2yEd5Um1j/lQoWwjKhbvfNiatwXeR
+         JldQ==
+X-Gm-Message-State: AOJu0Yzxll782LGGA42jVMwx/D+jiU1u+AlMdooBq6YF4Bo+68JFju7f
+	AzoG+oEQPv3XQHQbwYw8BxnYK8LPrCW2ah7N2wOfy5L8FqRAkIHMnec+5e2iNZzHCuFGX6im/kk
+	D9RP96Y3lxSJFDKa5hJu/mPzavIzgnyrk
+X-Gm-Gg: ASbGncuRskbK06sTixMHpJjzLK5b1N/d5nJ8xzh1FrDUCH9r+kFS7OAvCH/w2+gLPTY
+	Jaho8bjTtJg6SVEprPyu5K+KssgulrMAZn1++ZZ9nt7rrgihFU8VEhDIG+vxyyK+e3vNfcdDCf1
+	WRohDOGpK2ZDbL9D62rLmDwvn0sAEG8g78xaLYFFiYGHKLCu6Er1og6YSZRar1uFNf+4G1Flc3u
+	WqWMecqmlJGuUwa1oFnqi7jfV67v3mRXNjQSZU4xW2lKwpzSASZy4gW5R0LIaDVGA==
+X-Google-Smtp-Source: AGHT+IF6UYuhlMZWwu6G6XRnHvnHedKpIlZ7ngLVPHb1A9KO+apfgpcWvh597QK+I/YFytjWK0k3yOJSuLhK
+X-Received: by 2002:a05:6000:389:b0:381:d890:b5b7 with SMTP id ffacd0b85a97d-385c6edd314mr2620035f8f.52.1732706121160;
+        Wed, 27 Nov 2024 03:15:21 -0800 (PST)
 Received: from raspberrypi.com ([93.93.133.154])
-        by smtp-relay.gmail.com with ESMTPS id 38308e7fff4ca-2ffa5eddedcsm1274321fa.59.2024.11.27.03.15.18
+        by smtp-relay.gmail.com with ESMTPS id ffacd0b85a97d-3825fbee19dsm441144f8f.82.2024.11.27.03.15.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2024 03:15:19 -0800 (PST)
+        Wed, 27 Nov 2024 03:15:21 -0800 (PST)
 X-Relaying-Domain: raspberrypi.com
 From: Naushir Patuck <naush@raspberrypi.com>
 To: Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
@@ -71,9 +71,9 @@ Cc: linux-media@vger.kernel.org,
 	jacopo.mondi@ideasonboard.com,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Naushir Patuck <naush@raspberrypi.com>
-Subject: [PATCH v2 1/4] drivers: media: bcm2835-unicam: Improve frame sequence count handling
-Date: Wed, 27 Nov 2024 11:15:12 +0000
-Message-Id: <20241127111515.565992-2-naush@raspberrypi.com>
+Subject: [PATCH v2 3/4] drivers: media: bcm2835-unicam: Disable trigger mode operation
+Date: Wed, 27 Nov 2024 11:15:14 +0000
+Message-Id: <20241127111515.565992-4-naush@raspberrypi.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241127111515.565992-1-naush@raspberrypi.com>
 References: <20241127111515.565992-1-naush@raspberrypi.com>
@@ -85,84 +85,48 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Ensure that the frame sequence counter is incremented only if a previous
-frame start interrupt has occurred, or a frame start + frame end has
-occurred simultaneously.
+The imx219/imx708 sensors frequently generate a single corrupt frame
+(image or embedded data) when the sensor first starts. This can either
+be a missing line, or invalid samples within the line. This only occurrs
+using the upstream Unicam kernel driver.
 
-This corresponds the sequence number with the actual number of frames
-produced by the sensor, not the number of frame buffers dequeued back
-to userland.
+Disabling trigger mode elimiates this corruption. Since trigger mode is
+a legacy feature copied from the firmware driver and not expected to be
+needed, remove it. Tested on the Raspberry Pi cameras and shows no ill
+effects.
 
 Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
 Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- .../media/platform/broadcom/bcm2835-unicam.c  | 22 +++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ drivers/media/platform/broadcom/bcm2835-unicam.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/drivers/media/platform/broadcom/bcm2835-unicam.c b/drivers/media/platform/broadcom/bcm2835-unicam.c
-index 3aed0e493c81..36fb186a0421 100644
+index d573d4d89881..550eb1b064f1 100644
 --- a/drivers/media/platform/broadcom/bcm2835-unicam.c
 +++ b/drivers/media/platform/broadcom/bcm2835-unicam.c
-@@ -199,6 +199,7 @@ struct unicam_device {
- 	/* subdevice async notifier */
- 	struct v4l2_async_notifier notifier;
- 	unsigned int sequence;
-+	bool frame_started;
- 
- 	/* Sensor node */
- 	struct {
-@@ -742,6 +743,8 @@ static irqreturn_t unicam_isr(int irq, void *dev)
- 	 * buffer forever.
- 	 */
- 	if (fe) {
-+		bool inc_seq = unicam->frame_started;
-+
- 		/*
- 		 * Ensure we have swapped buffers already as we can't
- 		 * stop the peripheral. If no buffer is available, use a
-@@ -761,11 +764,24 @@ static irqreturn_t unicam_isr(int irq, void *dev)
- 			 * + FS + LS). In this case, we cannot signal the buffer
- 			 * as complete, as the HW will reuse that buffer.
- 			 */
--			if (node->cur_frm && node->cur_frm != node->next_frm)
-+			if (node->cur_frm && node->cur_frm != node->next_frm) {
- 				unicam_process_buffer_complete(node, sequence);
-+				inc_seq = true;
-+			}
- 			node->cur_frm = node->next_frm;
+@@ -834,11 +834,6 @@ static irqreturn_t unicam_isr(int irq, void *dev)
  		}
--		unicam->sequence++;
-+
-+		/*
-+		 * Increment the sequence number conditionally on either a FS
-+		 * having already occurred, or in the FE + FS condition as
-+		 * caught in the FE handler above. This ensures the sequence
-+		 * number corresponds to the frames generated by the sensor, not
-+		 * the frames dequeued to userland.
-+		 */
-+		if (inc_seq) {
-+			unicam->sequence++;
-+			unicam->frame_started = false;
-+		}
  	}
  
- 	if (ista & UNICAM_FSI) {
-@@ -795,6 +811,7 @@ static irqreturn_t unicam_isr(int irq, void *dev)
- 		}
+-	if (unicam_reg_read(unicam, UNICAM_ICTL) & UNICAM_FCM) {
+-		/* Switch out of trigger mode if selected */
+-		unicam_reg_write_field(unicam, UNICAM_ICTL, 1, UNICAM_TFC);
+-		unicam_reg_write_field(unicam, UNICAM_ICTL, 0, UNICAM_FCM);
+-	}
+ 	return IRQ_HANDLED;
+ }
  
- 		unicam_queue_event_sof(unicam);
-+		unicam->frame_started = true;
- 	}
+@@ -1002,8 +997,7 @@ static void unicam_start_rx(struct unicam_device *unicam,
  
- 	/*
-@@ -1413,6 +1430,7 @@ static int unicam_sd_enable_streams(struct v4l2_subdev *sd,
- 		if (unicam->pipe.nodes & BIT(UNICAM_METADATA_NODE))
- 			unicam_start_metadata(unicam);
+ 	unicam_reg_write_field(unicam, UNICAM_ANA, 0, UNICAM_DDL);
  
-+		unicam->frame_started = false;
- 		unicam_start_rx(unicam, state);
- 	}
- 
+-	/* Always start in trigger frame capture mode (UNICAM_FCM set) */
+-	val = UNICAM_FSIE | UNICAM_FEIE | UNICAM_FCM | UNICAM_IBOB;
++	val = UNICAM_FSIE | UNICAM_FEIE | UNICAM_IBOB;
+ 	line_int_freq = max(fmt->height >> 2, 128);
+ 	unicam_set_field(&val, line_int_freq, UNICAM_LCIE_MASK);
+ 	unicam_reg_write(unicam, UNICAM_ICTL, val);
 -- 
 2.34.1
 
