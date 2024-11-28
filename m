@@ -1,50 +1,50 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDA613D893;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D9D146590;
 	Thu, 28 Nov 2024 05:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732770340; cv=none; b=rtO8k6DoVhu4vfPup0fIEqmjQEbESmtDGE/WRoLQLzC/cyTicAtsUG9eNqLKCKzh1qSPtyfPrP56VJ0pD9+pFvy1lzedKjO47glXIY4jkORpabZbluo8+2qB1V4DSWu65MYzs5kfEZwiYoJeHfo6pkQInEuJfiPO0P1ITr4KG+g=
+	t=1732770341; cv=none; b=qtn9tQDH1e5GJyghJGKmtw/XyRcBONAalxU7meomUaqM6TOeWZOKCUR02xXHFVY6fwg8SxXin3aSWnFMQCZ3ruG6ieg1lguInxH1FCsh1BH+9jyDNN5dIUFKGC/QYhnqjYPbE4eCR2gmIgbauiq/phTM5KLCIXIgVVaarJfgUIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732770340; c=relaxed/simple;
-	bh=fNHU+7Khoi1sWwvyzvZ7mMCWDf62+ZMBgq5o6LZY6Ok=;
+	s=arc-20240116; t=1732770341; c=relaxed/simple;
+	bh=jyxVh72zpOzeJT4UKUZq97UvMPLjQY6a4C2jg+FkD5o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=vCkA1WQ//o5+M7CYNc5JYBduSJR96N+gy3Yq4ZaMxDPioXKoQ8n8/1hdMJgLBBq1L+6X3UPDR2pK0Rs2XV3N6kgvynIhVkcSZDZ6rx5b59TZsnPPxHbHScOqlklFpqRtA2tI3PlT+Ube3fFcNnfhoXH4TMCNf8paWZJE8XP4jVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MyZd2ybC; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:To:CC; b=aI0PwhWb/MU5hkdpRBQYccmY3p4s8nU0aC3J797slNyhQYBp8Ec7y/cDXSMXhl2mQsD7YSGTOL9d4Cssu6Kb8SWll9H4Lo0fROAcx2TjzaFQXGGwhDm+mOGNyMagocecnFl2ZfEGtBMTjCoJKpIykiTzlsqZHVo7trS0FJO/o+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a6sBLb6g; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MyZd2ybC"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ARGQp62028646;
-	Thu, 28 Nov 2024 05:05:27 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a6sBLb6g"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ARGS8Xx020148;
+	Thu, 28 Nov 2024 05:05:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/SzrY/qrhDl/no6+92M34M3F2ytZ4+21hmBn1SvPs3k=; b=MyZd2ybC9aEHtgef
-	0iy5ODErzsKD96sF14D9540Y2J86jMRUElmb8dG5mcy/FgGqyPBxFRD9lRQHkRtF
-	L0Gollvy9brXphYngIu4nlw73Z53KrmkuR6jJx5dz/zRX+5OG6ltSE7bGRJrBAPm
-	9OkP9YwXhPn0ULQ/tAAsaCYumaltpOIGBmufIpznlsmINvpGI3wGM+XwfQW32ziU
-	P8PzDrVk0Sdkjw/xfh9eUQOuZoYFZ7hd+XxpIKLLBfUcaF7ksjv4ZIlOBzhk8eC/
-	xVWCa0nCF7WxL2rFYQUWWKMiaEZW5dge5z2RXrCtVjDqe8vrUTpih0X5Lc2wZeBW
-	0CA94Q==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4366xwscat-1
+	QNoEP/x9RjeXJQhOtJc2kXmTr7UWnAk64kC/+PqHe+s=; b=a6sBLb6ggB2x2I7E
+	mfIsPUf8S9k++t6ZSLSRMR+7HYdptMJ1cWTHBf+MGdTYKItOZuqO6K5PC+ltB+wN
+	xsAuWqY7auRkoWDY66anwNPXcFJMstGDqMPKLf8KYnTN3vjtPsFj18s1dHwWPNZ+
+	SgBBC6EkTplj+eh7U9BJYIY6W/nn9D1J2Jm+UtQZBqwl6iCpuaByEvi7vRPVIkFy
+	jGb2oFPUae3QJiwXWjuv1vU+RPcu7RPwk+074UiSjMpJDetGMFi4YO3t98ZJWmkh
+	EK8mp3HE++U/NKEDYanVCye2G1cXjKPAZ1g7hgEjUyuLaV3I/sNn9/w8v6LDoSbg
+	ZpUtRQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4366y01cbw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 05:05:26 +0000 (GMT)
+	Thu, 28 Nov 2024 05:05:34 +0000 (GMT)
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AS55QB5003047
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AS55XTO023566
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 05:05:26 GMT
+	Thu, 28 Nov 2024 05:05:33 GMT
 Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 27 Nov 2024 21:05:22 -0800
+ 15.2.1544.9; Wed, 27 Nov 2024 21:05:30 -0800
 From: Vikash Garodia <quic_vgarodia@quicinc.com>
-Date: Thu, 28 Nov 2024 10:35:11 +0530
-Subject: [PATCH v2 1/4] media: venus: hfi_parser: add check to avoid out of
- bound access
+Date: Thu, 28 Nov 2024 10:35:13 +0530
+Subject: [PATCH v2 3/4] media: venus: hfi: add check to handle incorrect
+ queue size
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241128-venus_oob_2-v2-1-483ae0a464b8@quicinc.com>
+Message-ID: <20241128-venus_oob_2-v2-3-483ae0a464b8@quicinc.com>
 References: <20241128-venus_oob_2-v2-0-483ae0a464b8@quicinc.com>
 In-Reply-To: <20241128-venus_oob_2-v2-0-483ae0a464b8@quicinc.com>
 To: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -70,52 +70,77 @@ CC: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         <linux-kernel@vger.kernel.org>,
         Vikash Garodia <quic_vgarodia@quicinc.com>, <stable@vger.kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732770318; l=1208;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732770318; l=1783;
  i=quic_vgarodia@quicinc.com; s=20241104; h=from:subject:message-id;
- bh=fNHU+7Khoi1sWwvyzvZ7mMCWDf62+ZMBgq5o6LZY6Ok=;
- b=F5PK1bwvYsNFqDM4BBznum85afpQA2W2Pl59s/3tC/Z+h6dYlc2n7TEwW04v9tcQwJfzp0VGI
- j5tDWnx5QzcCpCJC1wn6wnzpK4bnecSH6bdLVbLXLingDA242BfPY+u
+ bh=jyxVh72zpOzeJT4UKUZq97UvMPLjQY6a4C2jg+FkD5o=;
+ b=WtY55EEy1ovO7sc0lUafkMoUignvg9EStZi5y6LBX3Tot6bit6pI/xZqlMlcsLH47tls0WcF5
+ S29SJThCX4pDmE4/CMDU5NbZ8SJRjs6nBQWSc7qYBX5LDN3M5hLha37
 X-Developer-Key: i=quic_vgarodia@quicinc.com; a=ed25519;
  pk=LY9Eqp4KiHWxzGNKGHbwRFEJOfRCSzG/rxQNmvZvaKE=
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: g6c8OSjScI_srl1Xt5j7X-SvqqVpQrMZ
-X-Proofpoint-ORIG-GUID: g6c8OSjScI_srl1Xt5j7X-SvqqVpQrMZ
+X-Proofpoint-ORIG-GUID: m4iJS9lm8rB6xMcLPLCdzpeUV6Wxdi_A
+X-Proofpoint-GUID: m4iJS9lm8rB6xMcLPLCdzpeUV6Wxdi_A
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 clxscore=1011 lowpriorityscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2411280039
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ mlxlogscore=703 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2411280039
 
-There is a possibility that init_codecs is invoked multiple times during
-manipulated payload from video firmware. In such case, if codecs_count
-can get incremented to value more than MAX_CODEC_NUM, there can be OOB
-access. Reset the count so that it always starts from beginning.
+qsize represents size of shared queued between driver and video
+firmware. Firmware can modify this value to an invalid large value. In
+such situation, empty_space will be bigger than the space actually
+available. Since new_wr_idx is not checked, so the following code will
+result in an OOB write.
+...
+qsize = qhdr->q_size
+
+if (wr_idx >= rd_idx)
+ empty_space = qsize - (wr_idx - rd_idx)
+....
+if (new_wr_idx < qsize) {
+ memcpy(wr_ptr, packet, dwords << 2) --> OOB write
+
+Add check to ensure qsize is within the allocated size while
+reading and writing packets into the queue.
 
 Cc: stable@vger.kernel.org
-Fixes: 1a73374a04e5 ("media: venus: hfi_parser: add common capability parser")
+Fixes: d96d3f30c0f2 ("[media] media: venus: hfi: add Venus HFI files")
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- drivers/media/platform/qcom/venus/hfi_parser.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/qcom/venus/hfi_venus.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
-index 3df241dc3a118bcdeb2c28a6ffdb907b644d5653..1cc17f3dc8948160ea6c3015d2c03e475b8aa29e 100644
---- a/drivers/media/platform/qcom/venus/hfi_parser.c
-+++ b/drivers/media/platform/qcom/venus/hfi_parser.c
-@@ -17,6 +17,7 @@ typedef void (*func)(struct hfi_plat_caps *cap, const void *data,
- static void init_codecs(struct venus_core *core)
- {
- 	struct hfi_plat_caps *caps = core->caps, *cap;
-+	core->codecs_count = 0;
- 	unsigned long bit;
+diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+index f9437b6412b91c2483670a2b11f4fd43f3206404..6b615270c5dae470c6fad408c9b5bc037883e56e 100644
+--- a/drivers/media/platform/qcom/venus/hfi_venus.c
++++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+@@ -187,6 +187,9 @@ static int venus_write_queue(struct venus_hfi_device *hdev,
+ 	/* ensure rd/wr indices's are read from memory */
+ 	rmb();
  
- 	if (hweight_long(core->dec_codecs) + hweight_long(core->enc_codecs) > MAX_CODEC_NUM)
++	if (qsize > IFACEQ_QUEUE_SIZE / 4)
++		return -EINVAL;
++
+ 	if (wr_idx >= rd_idx)
+ 		empty_space = qsize - (wr_idx - rd_idx);
+ 	else
+@@ -255,6 +258,9 @@ static int venus_read_queue(struct venus_hfi_device *hdev,
+ 	wr_idx = qhdr->write_idx;
+ 	qsize = qhdr->q_size;
+ 
++	if (qsize > IFACEQ_QUEUE_SIZE / 4)
++		return -EINVAL;
++
+ 	/* make sure data is valid before using it */
+ 	rmb();
+ 
 
 -- 
 2.34.1
