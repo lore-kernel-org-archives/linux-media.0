@@ -1,115 +1,150 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB724AD4B;
-	Thu, 28 Nov 2024 19:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826EB1C1ACF
+	for <linux-media@vger.kernel.org>; Thu, 28 Nov 2024 20:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732822792; cv=none; b=t/C/vDUI5MJt5Brk/ds76ynRm7ZtmSW2zgDXWUlLEC/K8DOTMFq8dwZ3fLqCJYKx1g6+WcKj7lxMoCvR04rEicvMJ/Gx2hGw8q9FeNKVKhUx5n5CbAE6H7lpiLP/K82Hv0kRHQe+8RSw4Q5sz3LkMmnIJS7go3wjESc6+KeRA8U=
+	t=1732824131; cv=none; b=j+ytQNzFcRCj7rrK6aQrXYV/TkrL8TohVfl0hPCdPQvjtWmtukvg/PePuQmqrvyycJGg1Rs2t6n+Uv9Y4AI41NuwcyHB8KonPoVP2WffO+Ikc4QGOYVaZ0i9JdHN45O+JQYtup/o0Wbgbwc9FJ3KSzdneizFtNHbhGRiS8MwKZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732822792; c=relaxed/simple;
-	bh=fo0QL5lRbW8+EcGku5BR4zfg9S5ssZnecDlbvwSvW9A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Cqz2lrwr3cKGnBbquACxyOCQdqm3Wpiwhxw/EZK1kpOS/KJp4pYRa2SMe5IvlXQQUDOjWuZVeB4w4DSMhJIqnDVQrXl/uF4oRZbxJ0StC0b7E+l8NgyhKktfN//iUWyYddqAl9aMEsJRjC6u3kldSnopLtnqjaOTtC2Vy9AQFn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=U7nV+5JW; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1732824131; c=relaxed/simple;
+	bh=qTIa5ewcdNKi4ufBLVG/FfPhgpbjosm13dgaf9cJ054=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cLNWmsNgsH5gwi+hlcQlexRUKfmuPaHRXKMfarMFc9ollBhBoyP1KBRJ4A7QLJBt905lFnDKzhMEc5wZ246ecY+pJzaFYmE9Mzz6EbotkBL3tu8Bn6uFGveiDA3Hxni004N12cVkGLUW/jS0nePgktn4XEj6UZ/9iDt1h48tLeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UvUiWNMK; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="U7nV+5JW"
-Received: from [192.168.115.162] (254C15C0.nat.pool.telekom.hu [37.76.21.192])
-	by mail.mainlining.org (Postfix) with ESMTPSA id ECBE2E4804;
-	Thu, 28 Nov 2024 19:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1732822788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=udSxRHucipPKVvHUnssy5yglHd6VLYZkCL7xgS1KLhA=;
-	b=U7nV+5JWWvbd/7fEMHNfZ7Yl7OlxrL94tsD+ip3LhI33Fzn+YLO5h/0bF2Pn9NtP9yr44V
-	GNHLGMXt2FSDvq6hn0theeNwdy/TD1J+dDm5jK4BoJpwkHu9XVjsOnUnCWxfAxDMB7HAb3
-	N2M9mitvnatbMKFiG7NCh8uPwoz6KaNhPBQ7RIUoACZ7qk4DAgUaD1TF4s9FJs/JIwbtei
-	JHYvnL1RIa+Gth8uxacMsJks+2LOYiO8y+IQnQznt54yvnLuZU/2qKxoVDco+/GIE6YGdM
-	YykkbyR+1cNCXpEq4zTILt7c9rW2Hj7AOWva64XfpGxa3dUS+M0/zzKT7sZn+Q==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Thu, 28 Nov 2024 20:39:46 +0100
-Subject: [PATCH v2] media: qcom: camss: fix VFE pm domain off
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UvUiWNMK"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ASI02lX025832
+	for <linux-media@vger.kernel.org>; Thu, 28 Nov 2024 20:02:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4ryxQrLv394JJ73iyw7kDdXCsPIHG185hp0I0Nvmu6c=; b=UvUiWNMKnpTDutQc
+	WV3kG2XZiNzbBtXjAZ829NKkce5K2CLccRZhnSLVk4Cbi2NxLiV5DMW7vhbD1O16
+	tTNRm11Y7hZkbQGPaeLW4kE1sMIzxnSHoMFNW14C55+CzGe59T86T5nZER7Vowma
+	xdloOROkBGn180TCqdQTAB0XK8q4ZOEQeiL3hSORHrsMc7J9Ds+Xai8UHOM0zyxG
+	mr70Tq67GMlXPNk9BUeUmgCqwAVRRZSpTlo6/uAyCCSQYcutwFTfu7SjgBfIyC5q
+	ChJkf2SsZhlWy6FPEKD6ZgEz8GLjAQGwHRGjXPIyZ+JfDNSgCbS+Ia64XYTgIH0m
+	FyLADw==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43673jbk4k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Thu, 28 Nov 2024 20:02:08 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6d421ff3e39so2936776d6.1
+        for <linux-media@vger.kernel.org>; Thu, 28 Nov 2024 12:02:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732824127; x=1733428927;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ryxQrLv394JJ73iyw7kDdXCsPIHG185hp0I0Nvmu6c=;
+        b=fHJ+Zliym2X+C5iG/lODZxa5E7scJd/cC2KkJcGq/UMLUxevApUx83L/Rghbc+4neV
+         PrYqakLiWS9CcttWHcQsseaEZ1NYVFnoXWhnT6q7hYAzbNsFs+2mk5o4PtaefrusJqNg
+         2pv4QYIZg9lqatZN0g5YOIhRJU8ezOYUxHWwP9kM9fTXK9QaNwAocXzSlNoAyGYNmZqZ
+         rbTTM9uOkjIPQWUdcDLlGz/QVQn3xo55rpBs0GwZYtlqLozQybBSwqgtAgiycYRyQwVH
+         L1x3fxF0nP6i9TrVyLJB05oJmQs0ffZ4d364RguvdRM5KJSEifFD+r+OoK2ArCwvRoRb
+         8dBg==
+X-Forwarded-Encrypted: i=1; AJvYcCVevsGBamy3eCRQqnCbWNi6iS7K+i1xiKh9rPfdKiix7FG8QSLfemt5MAkL3i0vEYCr9n0OFmoYuJHKXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYPLqD3FZxIcHRju82tTloRBdclmyY0TDt8uOE4TtivA47iffc
+	69vSRYDxDLPFL5aa957N+f8PggfXrBxCl0xx2ihB0ltbPyDVuDu9CxsDQ6xVlGGDVxsehndP3Xc
+	s6EOQbjtVvcSpl+OYeOeDpV7rHHYi1SeCpuS2yB0P+v5WIlmktQtGDM5Sm8OtCA==
+X-Gm-Gg: ASbGncuZA7TC3DTfJryU9ktGgMNbCmKHqwAqbBmKftA5i/0qWtQisOZTS9LqMY+NF9U
+	67nZt4bhVfRC9qJ+i2FhpxoEF8FRxAJB5F4b+qWfKOOrPSQDr1EtY7DRnsanxpJjLgs/UTe3TYq
+	NqbUgUyxqh2WfS9M4C4BP9u3rjIirTi0y9fcGWQZ7o9F4UwsEC6n23gizG9GIi0KqGfQH3vOQQK
+	+5ok+H/4zJ3TKWmBaMP/Hb1OKWt0wxTA+UsLW+ko3x8U0K0uxkaJy6NWKooXo9t/q8A1v61Abfc
+	r9Y5l7APMtZSB0qfnwHZ6VNowvp7Wt8=
+X-Received: by 2002:a05:622a:cf:b0:466:8033:7dd2 with SMTP id d75a77b69052e-466b365e8d0mr60111061cf.15.1732824127025;
+        Thu, 28 Nov 2024 12:02:07 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEe2yFrYKlH7GKamBIcOIr6tSYjrJg4Yf/IcqIpvGJ2yK7SICcuObbV3wRHzWvvMeRae6au7w==
+X-Received: by 2002:a05:622a:cf:b0:466:8033:7dd2 with SMTP id d75a77b69052e-466b365e8d0mr60110791cf.15.1732824126611;
+        Thu, 28 Nov 2024 12:02:06 -0800 (PST)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d097e8dce0sm1031189a12.66.2024.11.28.12.02.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Nov 2024 12:02:05 -0800 (PST)
+Message-ID: <7d344377-f1cf-400e-a9c4-442123dcf4ab@oss.qualcomm.com>
+Date: Thu, 28 Nov 2024 21:02:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241128-vfe_pm_domain_off-v2-1-0bcbbe7daaaf@mainlining.org>
-X-B4-Tracking: v=1; b=H4sIAAHHSGcC/32NUQqDMBBEryL73RQ3NSr96j2KiJhNXKiJJCW0S
- O7e6AH6+WaYNztECkwR7tUOgRJH9q6AvFQwL5OzJFgXBlnLBlFKkQyN2zpqv07sRm+MmFVX1z2
- pBtsOym4LZPhzOp9D4YXj24fveZHwSP/ZEgoUPWrsjWpVe9OPo3qxY2evPlgYcs4/UCsWErcAA
- AA=
-X-Change-ID: 20241122-vfe_pm_domain_off-c57008e54167
-To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Yassine Oudjana <y.oudjana@protonmail.com>, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732822787; l=1871;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=fo0QL5lRbW8+EcGku5BR4zfg9S5ssZnecDlbvwSvW9A=;
- b=9B6aF+iDemJKll545evaMgTTwP3sjNn4x+3AS2xS20ZtfTvvRlv7FF9gAlQZVk0JURj/+cC50
- BdMb3UdqL+5DmYldVGZYuo7p4N9ueAcJWJAOMe1TpEnsSCeohNxbRZQ
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] media: venus: Add support for static video
+ encoder/decoder declarations
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc: quic_renjiang@quicinc.com, quic_vnagar@quicinc.com,
+        quic_dikshita@quicinc.com, konradybcio@kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20241127-media-staging-24-11-25-rb3-hw-compat-string-v1-0-99c16f266b46@linaro.org>
+ <20241127-media-staging-24-11-25-rb3-hw-compat-string-v1-1-99c16f266b46@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241127-media-staging-24-11-25-rb3-hw-compat-string-v1-1-99c16f266b46@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: -EwAEMS3BtQMoh673pLn3cUjqlCB8w8D
+X-Proofpoint-ORIG-GUID: -EwAEMS3BtQMoh673pLn3cUjqlCB8w8D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2411280159
 
-Fix NULL pointer check before device_link_del
-is called.
+On 27.11.2024 2:34 AM, Bryan O'Donoghue wrote:
+> Add resource structure data and probe() logic to support static
+> declarations of encoder and decoder.
+> 
+> Right now we rely on video encoder/decoder selection happening in the dtb
+> but, this goes against the remit of device tree which is supposed to
+> describe hardware, not select functional logic in Linux drivers.
+> 
+> Provide two strings in the venus resource structure enc_nodename and
+> dec_nodename.
+> 
+> When set the venus driver will create an OF entry in-memory consistent
+> with:
+> 
+> dec_nodename {
+>     compat = "video-decoder";
+> };
+> 
+> and/or
+> 
+> enc_nodename {
+>     compat = "video-encoder";
+> };
+> 
+> This will allow us to reuse the existing driver scheme of relying on compat
+> names maintaining compatibility with old dtb files.
+> 
+> dec_nodename can be "video-decoder" or "video0"
+> enc_nodename can be "video-encoder" or "video1"
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
 
-Unable to handle kernel NULL pointer dereference at virtual address 000000000000032c
-Call trace:
- device_link_put_kref+0xc/0xb8
- device_link_del+0x30/0x48
- vfe_pm_domain_off+0x24/0x38 [qcom_camss]
- vfe_put+0x9c/0xd0 [qcom_camss]
- vfe_set_power+0x48/0x58 [qcom_camss]
- pipeline_pm_power_one+0x154/0x158 [videodev]
- pipeline_pm_power+0x74/0xfc [videodev]
- v4l2_pipeline_pm_use+0x54/0x90 [videodev]
- v4l2_pipeline_pm_put+0x14/0x34 [videodev]
- video_release+0x2c/0x44 [qcom_camss]
- v4l2_release+0xe4/0xec [videodev]
+Bryan,
 
-Fixes: eb73facec2c2 ("media: qcom: camss: Use common VFE pm_domain_on/pm_domain_off where applicable")
-Tested-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
-Changes in v2:
-- Add backtrace to the commit message.
-- Link to v1: https://lore.kernel.org/r/20241122-vfe_pm_domain_off-v1-1-81d18f56563d@mainlining.org
----
- drivers/media/platform/qcom/camss/camss-vfe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm still not sure if keeping the logic behind this makes sense at all.
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-index 80a62ba11295042802cbaec617fb87c492ea6a55..1bf1473331f63b9ab106d21ea263c84d851c8a31 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-@@ -595,7 +595,7 @@ void vfe_isr_reset_ack(struct vfe_device *vfe)
-  */
- void vfe_pm_domain_off(struct vfe_device *vfe)
- {
--	if (!vfe->genpd)
-+	if (!vfe->genpd_link)
- 		return;
- 
- 	device_link_del(vfe->genpd_link);
+Could we not just call platform_device_register_data() with a static
+configuration of 1 core being enc and the other dec?
 
----
-base-commit: ed9a4ad6e5bd3a443e81446476718abebee47e82
-change-id: 20241122-vfe_pm_domain_off-c57008e54167
-
-Best regards,
--- 
-Barnabás Czémán <barnabas.czeman@mainlining.org>
-
+Konrad
