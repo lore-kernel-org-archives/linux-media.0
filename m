@@ -1,866 +1,352 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B520EAD5A
-	for <linux-media@vger.kernel.org>; Sun,  1 Dec 2024 16:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8B61B6555;
+	Sun,  1 Dec 2024 18:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733071246; cv=none; b=cG6iS4MyUdYaWIMXm1JaUkF9gVGYQYYZALjnxtNOXfRTg4EqBy/4tgr9udg1EBH4SHsMfuXZn8fd8DeY1LSa5QbXAk1x9UraUiBDH9qCAmsaExvEU/AGrDZEhbMfKST/OK9OlQVFbC1Anmf32UPTJh6A53/YTQ+7qmQr3Mvi+XM=
+	t=1733078500; cv=none; b=s5inbYR014hkETGllPK/rGmeE0qFXiDR8/41bUlfl1HjB+tbVZm7xTFrO7+vS/3cBZHt5bIGMLFqxpyIQ4qUlaXlKLGfhcubzgC6CRWjRMyAjeLGmspJlmEtnbiipmnrb+7vONyw2/VN8WvfGEWIhNzKsrKFpH442QXTWCMzJ3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733071246; c=relaxed/simple;
-	bh=QumZBxmFOcvEdd38qJ4kPtiQ0JK6cqr5DNLu1kTaVqU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N5FkjjHBM5EOHMs9zvXuUFHUPMhNZHculca7MleQIttA4SEOvQQBf0j4Pbp57dX0oY3T7XdId3d3a00im/Lhn5TUVfRUrfRF8CZFhifRj+YnOdkH6vIIzLCsxZGQFC/1SBoyaqiDk9YEkU3bylWnmlUghycyDJni/G7MRJ0xG3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lTd91Y22; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1733078500; c=relaxed/simple;
+	bh=IlEkk/mLLWIv2tORyL5RH5JLgT9X/vX8RgnWOCca7Bk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fTvqoH3dHUu3JOwchTBGrsEi2Wr9R2wnnzG5AKjGoIbT46Yh+d/0t3moRCcUD6l4SuVuQ56cmQOE/5flYhwuDRxpaGFQ3P7j4r9bnWefx0tH/ghXvFKsGkoNcDT0qg3AgQURWwHx5C7J6q5Gr5cyHC0wD+izcwDI/epiZS41q94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=h983rXC7; arc=none smtp.client-ip=168.119.26.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTd91Y22"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733071244; x=1764607244;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QumZBxmFOcvEdd38qJ4kPtiQ0JK6cqr5DNLu1kTaVqU=;
-  b=lTd91Y22ufyOKu11x5wtrcb2YyFEKaMyANAkyW+N8g42fW2nIEk4Z1Y/
-   EfS081plEbzNiEuSEpmRpk7MLafzxGijeAgiYfgY4YN0g0sM2wsVFYwTV
-   q70IkNODIy0wkWxxmqpF4OGvchYcTBaXJnVBh0Dn2XbA/Wz8ewZyXJAv5
-   WuqVjACzfsMCGLg8aI/E9ES19GYpc+Geed5rfWt8FkRLBkjmcFEH0XOVt
-   rKPLYXmWvli5WhfH26W8lMoaBMgjl3KSB6bA9yrb9MQMFPXWGzOt9Ng61
-   jvi8QIQ+dTzXJNgmUANnVKpttXh3biK1O6IHzjYKJLqSJDyii8oZAeTZE
-   w==;
-X-CSE-ConnectionGUID: NzNx5yN1TuG/WZGL9vX/VA==
-X-CSE-MsgGUID: y2PPWXbESN6X7rKSuJV2hQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11273"; a="33482949"
-X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
-   d="scan'208";a="33482949"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2024 08:40:43 -0800
-X-CSE-ConnectionGUID: d9fxa0i+R8aVjX8wwEqiDA==
-X-CSE-MsgGUID: jGhA/OHrQdCg7zMckdz/Cw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
-   d="scan'208";a="92521980"
-Received: from yandongc-mobl1.ccr.corp.intel.com (HELO [10.124.17.244]) ([10.124.17.244])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2024 08:40:41 -0800
-Message-ID: <ad245e57-ebbd-43c3-aec2-d50022d6a496@linux.intel.com>
-Date: Mon, 2 Dec 2024 00:40:36 +0800
+	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="h983rXC7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
+	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
+	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=IlEkk/mLLWIv2tORyL5RH5JLgT9X/vX8RgnWOCca7Bk=; b=h983rXC7AY1VIUJSpXZlgyivRV
+	6pZczM0/ywLRvxnHKOinlIkC9qhYg8Cue3iA9dDqoE25RYAHTBv9kRefHt8EWblEPio+xju5ON75l
+	qPA76TgOGGkUFXfWtzavjzQYOww0vfdiOQB9KZgHfkH1EQVkfjIgK3PhxAaWrHbtFlhW9wJ0NW0DD
+	UUijRwbIgyQn9BYyA4YGwte7e6w2wUdgsLSayiAQEdh4/cbBgewykfCzmH3Sa7fLeP5xP75CMY4vx
+	f+bm24vSF78V0kwcVLNHc2fBpehTmTpSbA/gebi5TLddTccs0c+rTDbr86serlCmBKqRbZHsmAkvY
+	+ExDB0Bg==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <git@apitzsch.eu>)
+	id 1tHost-0006Ab-12;
+	Sun, 01 Dec 2024 19:41:31 +0100
+Received: from [77.64.252.106] (helo=framework.lan)
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <git@apitzsch.eu>)
+	id 1tHost-000MKA-1v;
+	Sun, 01 Dec 2024 19:41:31 +0100
+Message-ID: <3a8cbb8f0eeab1bfbb3bd539405e646bd081ea06.camel@apitzsch.eu>
+Subject: Re: [PATCH v2 02/13] media: i2c: imx214: Use subdev active state
+From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+To: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Sakari Ailus	
+ <sakari.ailus@linux.intel.com>, ~postmarketos/upstreaming@lists.sr.ht, 
+	phone-devel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Dave Stevenson
+ <dave.stevenson@raspberrypi.com>
+Date: Sun, 01 Dec 2024 19:41:30 +0100
+In-Reply-To: <CAPybu_2eeUCPgeg9-D9DRTFgZXDRMwwrwfeW29_yr8Se50+gGA@mail.gmail.com>
+References: <20241021-imx214-v2-0-fbd23e99541e@apitzsch.eu>
+	 <20241021-imx214-v2-2-fbd23e99541e@apitzsch.eu>
+	 <CAPybu_2eeUCPgeg9-D9DRTFgZXDRMwwrwfeW29_yr8Se50+gGA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] media: i2c: add lt6911uxe hdmi bridge driver
-To: Hans Verkuil <hverkuil@xs4all.nl>, Dongcheng Yan
- <dongcheng.yan@intel.com>, linux-media@vger.kernel.org,
- sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
-Cc: tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
- daxing.li@intel.com, hao.yao@intel.com, bingbu.cao@intel.com,
- ong.hock.yu@intel.com, xiaohong.zou@intel.com
-References: <20241017030831.3248879-1-dongcheng.yan@intel.com>
- <5b42e37a-810d-45e4-8552-c9299837a16a@xs4all.nl>
- <4c2322d8-03cb-4d5d-97a8-3d9c327d3a72@linux.intel.com>
- <e0e255b6-9907-4268-acae-84467e5ec9d2@xs4all.nl>
- <a49a78f8-ddc7-45b6-9ed6-7ddf9648cc84@linux.intel.com>
- <8bcd01a7-4f54-4b04-801c-1ced92fef4f6@xs4all.nl>
-Content-Language: en-US
-From: "Yan, Dongcheng" <dongcheng.yan@linux.intel.com>
-In-Reply-To: <8bcd01a7-4f54-4b04-801c-1ced92fef4f6@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: andre@apitzsch.eu
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27474/Sun Dec  1 10:42:26 2024)
 
-Hi Hans,
-
-On 11/29/2024 9:16 PM, Hans Verkuil wrote:
-> On 29/11/2024 07:13, Yan, Dongcheng wrote:
->> Hi hans,
->>
->> On 10/25/2024 2:58 PM, Hans Verkuil wrote:
->>> On 25/10/2024 06:06, Yan, Dongcheng wrote:
->>>> Hi Hans,
->>>>
->>>> On 10/23/2024 8:28 PM, Hans Verkuil wrote:
->>>>> Hi Dongcheng,
->>>>>
->>>>> Since this is an HDMI receiver, you need to implement the DV Timings API.
->>>>>
->>>>> drivers/media/i2c/tc358743.c is a good example of this.
->>>>>
->>>>> The LINK_FREQ/PIXEL_RATE controls do not apply to HDMI receivers, instead
->>>>> the dv timings pad ops must be used.
->>>>
->>>>
->>>> This is a HDMI to CSI2 bridge, more like a CSI-2 receiver rather than an HDMI receiver.
->>>>
->>>> I will implement DV timing API and refer to tc358743, thx for your suggestion.
->>>>
->>>> But LINK_FREQ/PIXEL_RATE is still needed in MIPI config programing. Do you think so?
->>>
->>> The other HDMI to CSI bridges do not need this, take a look how the  tc358743
->>> driver handles it.
->>>
->>>>
->>>>> I'm also missing EDID support.
->>>>
->>>>
->>>> Since it is a MIPI CSI-2 receiver, I don't know EDID before, I think you may have
->>>>
->>>> misunderstood LT6911UXE, it does not need this support in my sight.
->>>
->>> Yes, it does. I think it comes with a default EDID, but you want to be able to change
->>> it. Often the EDID capabilities are not only defined by the capabilities of the
->>> receiver, but also by the capabilities of the device as a whole. E.g., does the
->>> video pipeline support interlaced formats or not?
->>>
->>> So for a proper driver you need to support it. I worked with this bridge myself and
->>> I know there is documentation on how to read/write the EDID.
->>>
->> "lt6911uxe provides editable EDID for customers, and edited like
->> updating flash", we tend to used .bin file written to flash in the past.
->> Also I have never been involved in an EDID-related project, can you
->> provide me some documentations or add this {get/set_edid} api to this
->> driver patch directly? Since you have a lot of experience with
->> lt6911uxe, I believe you can implement this API more accurately and
->> co-delop for lt6911uxe.
-> 
-> Actually, you are correct. The standard firmware sadly hardcodes the EDID.
-> As a result, you can't change the EDID so the EDID operations are indeed
-> unavailable.
-> 
-> Add a comment to the source code (probably somewhere in the beginning)
-> that due to this limitation it is not possible to implement EDID support.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-Thank you for your suggestion, I will add this comment in patch v5.
-Before receiving your reply, I have already sent patch v4 to LKML, added 
-Dv_timing api and tested on Intel platform, hoping to get your review.
-
-Best Regards,
-Dongcheng
-
-
->>
->> Thanks,
->> Dongcheng
->>
->>> Regards,
->>>
->>> 	Hans
->>>
->>>>
->>>>
->>>>> So this needs quite a bit more work, I'm afraid.
->>>>>
->>>>> How are you testing this device? Connected to a Raspberry Pi or something like that?
->>>>
->>>>
->>>> Yes, I used it in my poject based on IPU6 which is an ISP engine, this driver has been applied in many products.
->>>>
->>>> IPU6 driver is also upstreamed and you can find it in "/drivers/media/pci/intel/ipu6/".
->>>>
->>>>
->>>> Thanks,
->>>>
->>>> Dongcheng
->>>>
->>>>> Regards,
->>>>>
->>>>> 	Hans
->>>>>
->>>>> On 17/10/2024 05:08, Dongcheng Yan wrote:
->>>>>> Lontium LT9611UXE is a HDMI to MIPI CSI-2 bridge,
->>>>>> It supports modes up to 4k60fps, switches current mode when
->>>>>> plugging HDMI or changing the source active signal mode.
->>>>>>
->>>>>> Signed-off-by: Dongcheng Yan <dongcheng.yan@intel.com>
->>>>>> ---
->>>>>> v1 -> v2: replaced mutex with state_lock
->>>>>> v2 -> v3: fixed some pm_runtime err handlings
->>>>>>
->>>>>> ---
->>>>>>    drivers/media/i2c/Kconfig     |  12 +
->>>>>>    drivers/media/i2c/Makefile    |   1 +
->>>>>>    drivers/media/i2c/lt6911uxe.c | 627 ++++++++++++++++++++++++++++++++++
->>>>>>    3 files changed, 640 insertions(+)
->>>>>>    create mode 100644 drivers/media/i2c/lt6911uxe.c
->>>>>>
->>>>>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
->>>>>> index 8ba096b8ebca..fbe3d0fe4ce6 100644
->>>>>> --- a/drivers/media/i2c/Kconfig
->>>>>> +++ b/drivers/media/i2c/Kconfig
->>>>>> @@ -1526,6 +1526,18 @@ config VIDEO_I2C
->>>>>>    	  To compile this driver as a module, choose M here: the
->>>>>>    	  module will be called video-i2c
->>>>>>    
->>>>>> +config VIDEO_LT6911UXE
->>>>>> +        tristate "Lontium LT6911UXE decoder"
->>>>>> +        depends on ACPI && VIDEO_DEV
->>>>>> +        select V4L2_FWNODE
->>>>>> +        select V4L2_CCI_I2C
->>>>>> +        help
->>>>>> +          This is a Video4Linux2 sensor-level driver for the Lontium
->>>>>> +          LT6911UXE HDMI to MIPI CSI-2 bridge.
->>>>>> +
->>>>>> +          To compile this driver as a module, choose M here: the
->>>>>> +          module will be called lt6911uxe.
->>>>>> +
->>>>>>    config VIDEO_M52790
->>>>>>    	tristate "Mitsubishi M52790 A/V switch"
->>>>>>    	depends on VIDEO_DEV && I2C
->>>>>> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
->>>>>> index fbb988bd067a..6c23a4463527 100644
->>>>>> --- a/drivers/media/i2c/Makefile
->>>>>> +++ b/drivers/media/i2c/Makefile
->>>>>> @@ -64,6 +64,7 @@ obj-$(CONFIG_VIDEO_ISL7998X) += isl7998x.o
->>>>>>    obj-$(CONFIG_VIDEO_KS0127) += ks0127.o
->>>>>>    obj-$(CONFIG_VIDEO_LM3560) += lm3560.o
->>>>>>    obj-$(CONFIG_VIDEO_LM3646) += lm3646.o
->>>>>> +obj-$(CONFIG_VIDEO_LT6911UXE) += lt6911uxe.o
->>>>>>    obj-$(CONFIG_VIDEO_M52790) += m52790.o
->>>>>>    obj-$(CONFIG_VIDEO_MAX9271_LIB) += max9271.o
->>>>>>    obj-$(CONFIG_VIDEO_MAX9286) += max9286.o
->>>>>> diff --git a/drivers/media/i2c/lt6911uxe.c b/drivers/media/i2c/lt6911uxe.c
->>>>>> new file mode 100644
->>>>>> index 000000000000..61115b2bb92f
->>>>>> --- /dev/null
->>>>>> +++ b/drivers/media/i2c/lt6911uxe.c
->>>>>> @@ -0,0 +1,627 @@
->>>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>>> +// Copyright (c) 2023 - 2024 Intel Corporation.
->>>>>> +
->>>>>> +#include <linux/acpi.h>
->>>>>> +#include <linux/delay.h>
->>>>>> +#include <linux/gpio/consumer.h>
->>>>>> +#include <linux/i2c.h>
->>>>>> +#include <linux/interrupt.h>
->>>>>> +#include <linux/module.h>
->>>>>> +#include <linux/pm_runtime.h>
->>>>>> +#include <linux/regmap.h>
->>>>>> +#include <media/v4l2-cci.h>
->>>>>> +#include <media/v4l2-ctrls.h>
->>>>>> +#include <media/v4l2-device.h>
->>>>>> +#include <media/v4l2-event.h>
->>>>>> +#include <media/v4l2-fwnode.h>
->>>>>> +
->>>>>> +#define LT6911UXE_CHIP_ID		0x2102
->>>>>> +#define REG_CHIP_ID			CCI_REG16(0xe100)
->>>>>> +
->>>>>> +#define REG_ENABLE_I2C			CCI_REG8(0xe0ee)
->>>>>> +#define REG_PIX_CLK			CCI_REG24(0xe085)
->>>>>> +#define REG_BYTE_CLK			CCI_REG24(0xe092)
->>>>>> +#define REG_H_TOTAL			CCI_REG16(0xe088)
->>>>>> +#define REG_V_TOTAL			CCI_REG16(0xe08a)
->>>>>> +#define REG_HALF_H_ACTIVE		CCI_REG16(0xe08c)
->>>>>> +#define REG_V_ACTIVE			CCI_REG16(0xe08e)
->>>>>> +#define REG_MIPI_FORMAT			CCI_REG8(0xe096)
->>>>>> +#define REG_MIPI_TX_CTRL		CCI_REG8(0xe0b0)
->>>>>> +
->>>>>> +/* Interrupts */
->>>>>> +#define REG_INT_HDMI			CCI_REG8(0xe084)
->>>>>> +#define INT_VIDEO_DISAPPEAR		0x0
->>>>>> +#define INT_VIDEO_READY			0x1
->>>>>> +
->>>>>> +#define LT6911UXE_DEFAULT_WIDTH		3840
->>>>>> +#define LT6911UXE_DEFAULT_HEIGHT	2160
->>>>>> +#define LT6911UXE_DEFAULT_LANES		4
->>>>>> +#define LT6911UXE_DEFAULT_FPS		30
->>>>>> +#define LT6911UXE_MAX_LINK_FREQ		297000000
->>>>>> +#define LT9611_PAGE_CONTROL		0xff
->>>>>> +#define YUV422_8_BIT			0x7
->>>>>> +
->>>>>> +static const struct regmap_range_cfg lt9611uxe_ranges[] = {
->>>>>> +	{
->>>>>> +		.name = "register_range",
->>>>>> +		.range_min =  0,
->>>>>> +		.range_max = 0xffff,
->>>>>> +		.selector_reg = LT9611_PAGE_CONTROL,
->>>>>> +		.selector_mask = 0xff,
->>>>>> +		.selector_shift = 0,
->>>>>> +		.window_start = 0,
->>>>>> +		.window_len = 0x100,
->>>>>> +	},
->>>>>> +};
->>>>>> +
->>>>>> +static const struct regmap_config lt9611uxe_regmap_config = {
->>>>>> +	.reg_bits = 8,
->>>>>> +	.val_bits = 8,
->>>>>> +	.max_register = 0xffff,
->>>>>> +	.ranges = lt9611uxe_ranges,
->>>>>> +	.num_ranges = ARRAY_SIZE(lt9611uxe_ranges),
->>>>>> +};
->>>>>> +
->>>>>> +struct lt6911uxe_mode {
->>>>>> +	u32 width;
->>>>>> +	u32 height;
->>>>>> +	u32 code;
->>>>>> +	u32 fps;
->>>>>> +	u32 lanes;
->>>>>> +	s64 link_freq;
->>>>>> +};
->>>>>> +
->>>>>> +struct lt6911uxe {
->>>>>> +	struct v4l2_subdev sd;
->>>>>> +	struct media_pad pad;
->>>>>> +	struct v4l2_ctrl_handler ctrl_handler;
->>>>>> +	struct v4l2_ctrl *pixel_rate;
->>>>>> +	struct v4l2_ctrl *link_freq;
->>>>>> +
->>>>>> +	struct lt6911uxe_mode cur_mode;
->>>>>> +	struct regmap *regmap;
->>>>>> +	struct gpio_desc *reset_gpio;
->>>>>> +	struct gpio_desc *irq_gpio;
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_event lt6911uxe_ev_source_change = {
->>>>>> +	.type = V4L2_EVENT_SOURCE_CHANGE,
->>>>>> +	.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_event lt6911uxe_ev_stream_end = {
->>>>>> +	.type = V4L2_EVENT_EOS,
->>>>>> +};
->>>>>> +
->>>>>> +static inline struct lt6911uxe *to_lt6911uxe(struct v4l2_subdev *sd)
->>>>>> +{
->>>>>> +	return container_of(sd, struct lt6911uxe, sd);
->>>>>> +}
->>>>>> +
->>>>>> +static const struct lt6911uxe_mode default_mode = {
->>>>>> +	.width = LT6911UXE_DEFAULT_WIDTH,
->>>>>> +	.height = LT6911UXE_DEFAULT_HEIGHT,
->>>>>> +	.code = MEDIA_BUS_FMT_UYVY8_1X16,
->>>>>> +	.fps = LT6911UXE_DEFAULT_FPS,
->>>>>> +	.lanes = LT6911UXE_DEFAULT_LANES,
->>>>>> +	.link_freq = LT6911UXE_MAX_LINK_FREQ,
->>>>>> +};
->>>>>> +
->>>>>> +static s64 get_pixel_rate(struct lt6911uxe *lt6911uxe)
->>>>>> +{
->>>>>> +	s64 pixel_rate;
->>>>>> +
->>>>>> +	pixel_rate = (s64)lt6911uxe->cur_mode.width *
->>>>>> +		     lt6911uxe->cur_mode.height *
->>>>>> +		     lt6911uxe->cur_mode.fps * 16;
->>>>>> +	do_div(pixel_rate, lt6911uxe->cur_mode.lanes);
->>>>>> +
->>>>>> +	return pixel_rate;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_status_update(struct lt6911uxe *lt6911uxe)
->>>>>> +{
->>>>>> +	struct i2c_client *client = v4l2_get_subdevdata(&lt6911uxe->sd);
->>>>>> +	u64 int_event;
->>>>>> +	u64 byte_clk, pixel_clk, fps, format;
->>>>>> +	u64 htotal, vtotal, half_width, height;
->>>>>> +	int ret = 0;
->>>>>> +
->>>>>> +	/* Read interrupt event */
->>>>>> +	cci_read(lt6911uxe->regmap, REG_INT_HDMI, &int_event, &ret);
->>>>>> +	if (ret)
->>>>>> +		return dev_err_probe(&client->dev, ret,
->>>>>> +				     "failed to read interrupt event\n");
->>>>>> +
->>>>>> +	switch (int_event) {
->>>>>> +	case INT_VIDEO_READY:
->>>>>> +		cci_read(lt6911uxe->regmap, REG_BYTE_CLK, &byte_clk, &ret);
->>>>>> +		byte_clk *= 1000;
->>>>>> +		cci_read(lt6911uxe->regmap, REG_PIX_CLK, &pixel_clk, &ret);
->>>>>> +		pixel_clk *= 1000;
->>>>>> +
->>>>>> +		if (ret || byte_clk == 0 || pixel_clk == 0) {
->>>>>> +			dev_err(&client->dev,
->>>>>> +				"invalid ByteClock or PixelClock\n");
->>>>>> +			return -EINVAL;
->>>>>> +		}
->>>>>> +
->>>>>> +		cci_read(lt6911uxe->regmap, REG_H_TOTAL, &htotal, &ret);
->>>>>> +		cci_read(lt6911uxe->regmap, REG_V_TOTAL, &vtotal, &ret);
->>>>>> +		if (ret || htotal == 0 || vtotal == 0) {
->>>>>> +			dev_err(&client->dev, "invalid htotal or vtotal\n");
->>>>>> +			return -EINVAL;
->>>>>> +		}
->>>>>> +
->>>>>> +		fps = div_u64(pixel_clk, htotal * vtotal);
->>>>>> +		if (fps > 60) {
->>>>>> +			dev_err(&client->dev,
->>>>>> +				"max fps is 60, current fps: %llu\n", fps);
->>>>>> +			return -EINVAL;
->>>>>> +		}
->>>>>> +
->>>>>> +		cci_read(lt6911uxe->regmap, REG_HALF_H_ACTIVE,
->>>>>> +			 &half_width, &ret);
->>>>>> +		cci_read(lt6911uxe->regmap, REG_V_ACTIVE, &height, &ret);
->>>>>> +		if (ret || half_width == 0 || half_width * 2 > 3840 ||
->>>>>> +		    height == 0 || height > 2160) {
->>>>>> +			dev_err(&client->dev, "invalid width or height\n");
->>>>>> +			return -EINVAL;
->>>>>> +		}
->>>>>> +
->>>>>> +		/*
->>>>>> +		 * Get MIPI format, YUV422_8_BIT is expected in lt6911uxe
->>>>>> +		 */
->>>>>> +		cci_read(lt6911uxe->regmap, REG_MIPI_FORMAT, &format, &ret);
->>>>>> +		if (format != YUV422_8_BIT) {
->>>>>> +			dev_err(&client->dev, "invalid MIPI format\n");
->>>>>> +			return -EINVAL;
->>>>>> +		}
->>>>>> +
->>>>>> +		lt6911uxe->cur_mode.height = height;
->>>>>> +		lt6911uxe->cur_mode.width = half_width * 2;
->>>>>> +		lt6911uxe->cur_mode.fps = fps;
->>>>>> +		/* MIPI Clock Rate = ByteClock × 4, defined in lt6911uxe spec */
->>>>>> +		lt6911uxe->cur_mode.link_freq = byte_clk * 4;
->>>>>> +		v4l2_subdev_notify_event(&lt6911uxe->sd,
->>>>>> +					 &lt6911uxe_ev_source_change);
->>>>>> +		break;
->>>>>> +
->>>>>> +	case INT_VIDEO_DISAPPEAR:
->>>>>> +		cci_write(lt6911uxe->regmap, REG_MIPI_TX_CTRL, 0x0, NULL);
->>>>>> +		lt6911uxe->cur_mode.height = 0;
->>>>>> +		lt6911uxe->cur_mode.width = 0;
->>>>>> +		lt6911uxe->cur_mode.fps = 0;
->>>>>> +		lt6911uxe->cur_mode.link_freq = 0;
->>>>>> +		v4l2_subdev_notify_event(&lt6911uxe->sd,
->>>>>> +					 &lt6911uxe_ev_stream_end);
->>>>>> +		break;
->>>>>> +
->>>>>> +	default:
->>>>>> +		return  -ENOLINK;
->>>>>> +	}
->>>>>> +
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_init_controls(struct lt6911uxe *lt6911uxe)
->>>>>> +{
->>>>>> +	struct v4l2_ctrl_handler *ctrl_hdlr;
->>>>>> +	s64 pixel_rate;
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ctrl_hdlr = &lt6911uxe->ctrl_handler;
->>>>>> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
->>>>>> +	if (ret)
->>>>>> +		return ret;
->>>>>> +
->>>>>> +	lt6911uxe->link_freq = v4l2_ctrl_new_std(ctrl_hdlr, NULL,
->>>>>> +						 V4L2_CID_CUR_LINK_FREQ, 0,
->>>>>> +						 LT6911UXE_MAX_LINK_FREQ, 1,
->>>>>> +						 lt6911uxe->cur_mode.link_freq);
->>>>>> +
->>>>>> +	pixel_rate = get_pixel_rate(lt6911uxe);
->>>>>> +	lt6911uxe->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, NULL,
->>>>>> +						  V4L2_CID_PIXEL_RATE,
->>>>>> +						  pixel_rate, pixel_rate, 1,
->>>>>> +						  pixel_rate);
->>>>>> +
->>>>>> +	if (ctrl_hdlr->error) {
->>>>>> +		ret = ctrl_hdlr->error;
->>>>>> +		goto hdlr_free;
->>>>>> +	}
->>>>>> +	lt6911uxe->sd.ctrl_handler = ctrl_hdlr;
->>>>>> +
->>>>>> +	return 0;
->>>>>> +
->>>>>> +hdlr_free:
->>>>>> +	v4l2_ctrl_handler_free(ctrl_hdlr);
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static void lt6911uxe_update_pad_format(const struct lt6911uxe_mode *mode,
->>>>>> +					struct v4l2_mbus_framefmt *fmt)
->>>>>> +{
->>>>>> +	fmt->width = mode->width;
->>>>>> +	fmt->height = mode->height;
->>>>>> +	fmt->code = mode->code;
->>>>>> +	fmt->field = V4L2_FIELD_NONE;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_enable_streams(struct v4l2_subdev *sd,
->>>>>> +				    struct v4l2_subdev_state *state,
->>>>>> +				    u32 pad, u64 streams_mask)
->>>>>> +{
->>>>>> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = pm_runtime_resume_and_get(&client->dev);
->>>>>> +	if (ret < 0)
->>>>>> +		return ret;
->>>>>> +
->>>>>> +	cci_write(lt6911uxe->regmap, REG_MIPI_TX_CTRL, 0x1, &ret);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(&client->dev, "failed to start stream: %d\n", ret);
->>>>>> +		goto err_rpm_put;
->>>>>> +	}
->>>>>> +
->>>>>> +	return 0;
->>>>>> +
->>>>>> +err_rpm_put:
->>>>>> +	pm_runtime_put(&client->dev);
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_disable_streams(struct v4l2_subdev *sd,
->>>>>> +				     struct v4l2_subdev_state *state,
->>>>>> +				     u32 pad, u64 streams_mask)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +	struct i2c_client *client = v4l2_get_subdevdata(&lt6911uxe->sd);
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	ret = cci_write(lt6911uxe->regmap, REG_MIPI_TX_CTRL, 0x0, NULL);
->>>>>> +	if (ret)
->>>>>> +		dev_err(&client->dev, "failed to stop stream: %d\n", ret);
->>>>>> +
->>>>>> +	pm_runtime_put(&client->dev);
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_set_format(struct v4l2_subdev *sd,
->>>>>> +				struct v4l2_subdev_state *sd_state,
->>>>>> +				struct v4l2_subdev_format *fmt)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +	u64 pixel_rate, link_freq;
->>>>>> +
->>>>>> +	lt6911uxe_update_pad_format(&lt6911uxe->cur_mode, &fmt->format);
->>>>>> +	*v4l2_subdev_state_get_format(sd_state, fmt->pad) = fmt->format;
->>>>>> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
->>>>>> +		return 0;
->>>>>> +
->>>>>> +	pixel_rate = get_pixel_rate(lt6911uxe);
->>>>>> +	__v4l2_ctrl_modify_range(lt6911uxe->pixel_rate, pixel_rate,
->>>>>> +				 pixel_rate, 1, pixel_rate);
->>>>>> +
->>>>>> +	link_freq = lt6911uxe->cur_mode.link_freq;
->>>>>> +	__v4l2_ctrl_modify_range(lt6911uxe->link_freq, link_freq,
->>>>>> +				 link_freq, 1, link_freq);
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_enum_mbus_code(struct v4l2_subdev *sd,
->>>>>> +				    struct v4l2_subdev_state *sd_state,
->>>>>> +				    struct v4l2_subdev_mbus_code_enum *code)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +
->>>>>> +	if (code->index)
->>>>>> +		return -EINVAL;
->>>>>> +
->>>>>> +	code->code = lt6911uxe->cur_mode.code;
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_enum_frame_size(struct v4l2_subdev *sd,
->>>>>> +				     struct v4l2_subdev_state *sd_state,
->>>>>> +				     struct v4l2_subdev_frame_size_enum *fse)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +
->>>>>> +	if (fse->index != 0)
->>>>>> +		return -EINVAL;
->>>>>> +
->>>>>> +	if (fse->code != MEDIA_BUS_FMT_UYVY8_1X16)
->>>>>> +		return -EINVAL;
->>>>>> +
->>>>>> +	fse->min_width = lt6911uxe->cur_mode.width;
->>>>>> +	fse->max_width = fse->min_width;
->>>>>> +	fse->min_height = lt6911uxe->cur_mode.height;
->>>>>> +	fse->max_height = fse->min_height;
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_enum_frame_interval(struct v4l2_subdev *sd,
->>>>>> +		struct v4l2_subdev_state *sd_state,
->>>>>> +		struct v4l2_subdev_frame_interval_enum *fie)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +
->>>>>> +	if (fie->index != 0)
->>>>>> +		return -EINVAL;
->>>>>> +
->>>>>> +	fie->interval.numerator = 1;
->>>>>> +	fie->interval.denominator = lt6911uxe->cur_mode.fps;
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_init_state(struct v4l2_subdev *sd,
->>>>>> +				struct v4l2_subdev_state *sd_state)
->>>>>> +{
->>>>>> +	struct v4l2_subdev_format fmt = {
->>>>>> +		.which = V4L2_SUBDEV_FORMAT_TRY,
->>>>>> +		.pad = 0,
->>>>>> +		.format = {
->>>>>> +			.code = MEDIA_BUS_FMT_UYVY8_1X16,
->>>>>> +			.width = LT6911UXE_DEFAULT_WIDTH,
->>>>>> +			.height = LT6911UXE_DEFAULT_HEIGHT,
->>>>>> +		},
->>>>>> +	};
->>>>>> +
->>>>>> +	return lt6911uxe_set_format(sd, sd_state, &fmt);
->>>>>> +}
->>>>>> +
->>>>>> +static const struct v4l2_subdev_video_ops lt6911uxe_video_ops = {
->>>>>> +	.s_stream = v4l2_subdev_s_stream_helper,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_subdev_pad_ops lt6911uxe_pad_ops = {
->>>>>> +	.set_fmt = lt6911uxe_set_format,
->>>>>> +	.get_fmt = v4l2_subdev_get_fmt,
->>>>>> +	.enable_streams = lt6911uxe_enable_streams,
->>>>>> +	.disable_streams = lt6911uxe_disable_streams,
->>>>>> +	.enum_mbus_code = lt6911uxe_enum_mbus_code,
->>>>>> +	.enum_frame_size = lt6911uxe_enum_frame_size,
->>>>>> +	.enum_frame_interval = lt6911uxe_enum_frame_interval,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_subdev_core_ops lt6911uxe_subdev_core_ops = {
->>>>>> +	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
->>>>>> +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_subdev_ops lt6911uxe_subdev_ops = {
->>>>>> +	.core = &lt6911uxe_subdev_core_ops,
->>>>>> +	.video = &lt6911uxe_video_ops,
->>>>>> +	.pad = &lt6911uxe_pad_ops,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct media_entity_operations lt6911uxe_subdev_entity_ops = {
->>>>>> +	.link_validate = v4l2_subdev_link_validate,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct v4l2_subdev_internal_ops lt6911uxe_internal_ops = {
->>>>>> +	.init_state = lt6911uxe_init_state,
->>>>>> +};
->>>>>> +
->>>>>> +static int lt6911uxe_fwnode_parse(struct lt6911uxe *lt6911uxe,
->>>>>> +				  struct device *dev)
->>>>>> +{
->>>>>> +	struct fwnode_handle *endpoint;
->>>>>> +	struct v4l2_fwnode_endpoint bus_cfg = {
->>>>>> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
->>>>>> +	};
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	endpoint = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0,
->>>>>> +						   FWNODE_GRAPH_ENDPOINT_NEXT);
->>>>>> +	if (!endpoint)
->>>>>> +		return dev_err_probe(dev, -EPROBE_DEFER,
->>>>>> +				     "endpoint node not found\n");
->>>>>> +
->>>>>> +	ret = v4l2_fwnode_endpoint_parse(endpoint, &bus_cfg);
->>>>>> +	fwnode_handle_put(endpoint);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dev, "failed to parse endpoint node: %d\n", ret);
->>>>>> +		goto out_err;
->>>>>> +	}
->>>>>> +
->>>>>> +	/*
->>>>>> +	 * Check the number of MIPI CSI2 data lanes,
->>>>>> +	 * lt6911uxe only support 4 lanes.
->>>>>> +	 */
->>>>>> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != LT6911UXE_DEFAULT_LANES) {
->>>>>> +		dev_err(dev, "only 4 data lanes are currently supported\n");
->>>>>> +		goto out_err;
->>>>>> +	}
->>>>>> +
->>>>>> +	return 0;
->>>>>> +
->>>>>> +out_err:
->>>>>> +	v4l2_fwnode_endpoint_free(&bus_cfg);
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_identify_module(struct lt6911uxe *lt6911uxe,
->>>>>> +				     struct device *dev)
->>>>>> +{
->>>>>> +	u64 val;
->>>>>> +	int ret = 0;
->>>>>> +
->>>>>> +	/* Chip ID should be confirmed when the I2C slave is active */
->>>>>> +	cci_write(lt6911uxe->regmap, REG_ENABLE_I2C, 0x1, &ret);
->>>>>> +	cci_read(lt6911uxe->regmap, REG_CHIP_ID, &val, &ret);
->>>>>> +	cci_write(lt6911uxe->regmap, REG_ENABLE_I2C, 0x0, &ret);
->>>>>> +	if (ret)
->>>>>> +		return dev_err_probe(dev, ret, "fail to read chip id\n");
->>>>>> +
->>>>>> +	if (val != LT6911UXE_CHIP_ID) {
->>>>>> +		return dev_err_probe(dev, -ENXIO, "chip id mismatch: %x!=%x\n",
->>>>>> +				     LT6911UXE_CHIP_ID, (u16)val);
->>>>>> +	}
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static irqreturn_t lt6911uxe_threaded_irq_fn(int irq, void *dev_id)
->>>>>> +{
->>>>>> +	struct v4l2_subdev *sd = dev_id;
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +	struct v4l2_subdev_state *state;
->>>>>> +
->>>>>> +	state = v4l2_subdev_lock_and_get_active_state(sd);
->>>>>> +	lt6911uxe_status_update(lt6911uxe);
->>>>>> +	v4l2_subdev_unlock_state(state);
->>>>>> +
->>>>>> +	return IRQ_HANDLED;
->>>>>> +}
->>>>>> +
->>>>>> +static void lt6911uxe_remove(struct i2c_client *client)
->>>>>> +{
->>>>>> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
->>>>>> +	struct lt6911uxe *lt6911uxe = to_lt6911uxe(sd);
->>>>>> +
->>>>>> +	free_irq(gpiod_to_irq(lt6911uxe->irq_gpio), lt6911uxe);
->>>>>> +	v4l2_async_unregister_subdev(sd);
->>>>>> +	v4l2_subdev_cleanup(sd);
->>>>>> +	media_entity_cleanup(&sd->entity);
->>>>>> +	v4l2_ctrl_handler_free(&lt6911uxe->ctrl_handler);
->>>>>> +	pm_runtime_disable(&client->dev);
->>>>>> +	pm_runtime_set_suspended(&client->dev);
->>>>>> +}
->>>>>> +
->>>>>> +static int lt6911uxe_probe(struct i2c_client *client)
->>>>>> +{
->>>>>> +	struct lt6911uxe *lt6911uxe;
->>>>>> +	struct device *dev = &client->dev;
->>>>>> +	u64 irq_pin_flags;
->>>>>> +	int ret;
->>>>>> +
->>>>>> +	lt6911uxe = devm_kzalloc(dev, sizeof(*lt6911uxe), GFP_KERNEL);
->>>>>> +	if (!lt6911uxe)
->>>>>> +		return -ENOMEM;
->>>>>> +
->>>>>> +	/* define default mode: 4k@60fps, changed when interrupt occurs. */
->>>>>> +	lt6911uxe->cur_mode = default_mode;
->>>>>> +
->>>>>> +	lt6911uxe->regmap = devm_regmap_init_i2c(client,
->>>>>> +						 &lt9611uxe_regmap_config);
->>>>>> +	if (IS_ERR(lt6911uxe->regmap))
->>>>>> +		return dev_err_probe(dev, PTR_ERR(lt6911uxe->regmap),
->>>>>> +				     "failed to init CCI\n");
->>>>>> +
->>>>>> +	v4l2_i2c_subdev_init(&lt6911uxe->sd, client, &lt6911uxe_subdev_ops);
->>>>>> +
->>>>>> +	lt6911uxe->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_IN);
->>>>>> +	if (IS_ERR(lt6911uxe->reset_gpio))
->>>>>> +		return dev_err_probe(dev, PTR_ERR(lt6911uxe->reset_gpio),
->>>>>> +				     "failed to get reset gpio\n");
->>>>>> +
->>>>>> +	lt6911uxe->irq_gpio = devm_gpiod_get(dev, "readystat", GPIOD_IN);
->>>>>> +	if (IS_ERR(lt6911uxe->irq_gpio))
->>>>>> +		return dev_err_probe(dev, PTR_ERR(lt6911uxe->irq_gpio),
->>>>>> +				     "failed to get ready_stat gpio\n");
->>>>>> +
->>>>>> +	ret = lt6911uxe_fwnode_parse(lt6911uxe, dev);
->>>>>> +	if (ret)
->>>>>> +		return ret;
->>>>>> +
->>>>>> +	usleep_range(10000, 10500);
->>>>>> +
->>>>>> +	ret = lt6911uxe_identify_module(lt6911uxe, dev);
->>>>>> +	if (ret)
->>>>>> +		return dev_err_probe(dev, ret, "failed to find chip\n");
->>>>>> +
->>>>>> +	ret = lt6911uxe_init_controls(lt6911uxe);
->>>>>> +	if (ret)
->>>>>> +		return dev_err_probe(dev, ret, "failed to init control\n");
->>>>>> +
->>>>>> +	lt6911uxe->sd.dev = dev;
->>>>>> +	lt6911uxe->sd.internal_ops = &lt6911uxe_internal_ops;
->>>>>> +	lt6911uxe->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
->>>>>> +			       V4L2_SUBDEV_FL_HAS_EVENTS;
->>>>>> +	lt6911uxe->sd.entity.ops = &lt6911uxe_subdev_entity_ops;
->>>>>> +	lt6911uxe->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
->>>>>> +	lt6911uxe->pad.flags = MEDIA_PAD_FL_SOURCE;
->>>>>> +	ret = media_entity_pads_init(&lt6911uxe->sd.entity, 1, &lt6911uxe->pad);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dev, "failed to init entity pads: %d\n", ret);
->>>>>> +		goto v4l2_ctrl_handler_free;
->>>>>> +	}
->>>>>> +
->>>>>> +	/*
->>>>>> +	 * Device is already turned on by i2c-core with ACPI domain PM.
->>>>>> +	 * Enable runtime PM and turn off the device.
->>>>>> +	 */
->>>>>> +	pm_runtime_set_active(dev);
->>>>>> +	pm_runtime_enable(dev);
->>>>>> +	pm_runtime_idle(dev);
->>>>>> +
->>>>>> +	ret = v4l2_subdev_init_finalize(&lt6911uxe->sd);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dev, "failed to init v4l2 subdev: %d\n", ret);
->>>>>> +		goto media_entity_cleanup;
->>>>>> +	}
->>>>>> +
->>>>>> +	/* Setting irq */
->>>>>> +	irq_pin_flags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING |
->>>>>> +			IRQF_ONESHOT;
->>>>>> +
->>>>>> +	ret = request_threaded_irq(gpiod_to_irq(lt6911uxe->irq_gpio), NULL,
->>>>>> +				   lt6911uxe_threaded_irq_fn,
->>>>>> +				   irq_pin_flags, NULL, lt6911uxe);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dev, "failed to request IRQ: %d\n", ret);
->>>>>> +		goto subdev_cleanup;
->>>>>> +	}
->>>>>> +
->>>>>> +	ret = v4l2_async_register_subdev_sensor(&lt6911uxe->sd);
->>>>>> +	if (ret) {
->>>>>> +		dev_err(dev, "failed to register V4L2 subdev: %d\n", ret);
->>>>>> +		goto free_irq;
->>>>>> +	}
->>>>>> +
->>>>>> +	return 0;
->>>>>> +
->>>>>> +free_irq:
->>>>>> +	free_irq(gpiod_to_irq(lt6911uxe->irq_gpio), lt6911uxe);
->>>>>> +
->>>>>> +subdev_cleanup:
->>>>>> +	v4l2_subdev_cleanup(&lt6911uxe->sd);
->>>>>> +
->>>>>> +media_entity_cleanup:
->>>>>> +	pm_runtime_disable(dev);
->>>>>> +	pm_runtime_set_suspended(dev);
->>>>>> +	media_entity_cleanup(&lt6911uxe->sd.entity);
->>>>>> +
->>>>>> +v4l2_ctrl_handler_free:
->>>>>> +	v4l2_ctrl_handler_free(lt6911uxe->sd.ctrl_handler);
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static const struct acpi_device_id lt6911uxe_acpi_ids[] = {
->>>>>> +	{ "INTC10C5" },
->>>>>> +	{}
->>>>>> +};
->>>>>> +MODULE_DEVICE_TABLE(acpi, lt6911uxe_acpi_ids);
->>>>>> +
->>>>>> +static struct i2c_driver lt6911uxe_i2c_driver = {
->>>>>> +	.driver = {
->>>>>> +		.name = "lt6911uxe",
->>>>>> +		.acpi_match_table = ACPI_PTR(lt6911uxe_acpi_ids),
->>>>>> +	},
->>>>>> +	.probe = lt6911uxe_probe,
->>>>>> +	.remove = lt6911uxe_remove,
->>>>>> +};
->>>>>> +
->>>>>> +module_i2c_driver(lt6911uxe_i2c_driver);
->>>>>> +
->>>>>> +MODULE_AUTHOR("Yan Dongcheng <dongcheng.yan@intel.com>");
->>>>>> +MODULE_DESCRIPTION("Lontium lt6911uxe HDMI to MIPI Bridge Driver");
->>>>>> +MODULE_LICENSE("GPL");
->>>>>>
->>>>>> base-commit: 2f87d0916ce0d2925cedbc9e8f5d6291ba2ac7b2
->>>
->>>
->>
-> 
+SGksCgpBbSBNaXR0d29jaCwgZGVtIDMwLjEwLjIwMjQgdW0gMTI6MzYgKzAxMDAgc2NocmllYiBS
+aWNhcmRvIFJpYmFsZGEKRGVsZ2FkbzoKPiBIaQo+IAo+IEl0IGxvb2tzIGdvb2QgdG8gbWUsIGJ1
+dCBJIHdvdWxkIGxpa2UgU2FrYXJpIHRvIHJldmlldyBpdC4gSSBhbSBub3QKPiBzdXJlIGlmIGl0
+IGlzIG9rIHRvIGtlZXAgdGhlIGN1cl9tb2RlIHZhcmlhYmxlLgo+IAo+IE9uIE1vbiwgT2N0IDIx
+LCAyMDI0IGF0IDEyOjE04oCvQU0gQW5kcsOpIEFwaXR6c2NoIHZpYSBCNCBSZWxheQo+IDxkZXZu
+dWxsK2dpdC5hcGl0enNjaC5ldUBrZXJuZWwub3JnPiB3cm90ZToKPiA+IAo+ID4gRnJvbTogQW5k
+csOpIEFwaXR6c2NoIDxnaXRAYXBpdHpzY2guZXU+Cj4gPiAKPiA+IFBvcnQgdGhlIGlteDIxNCBz
+ZW5zb3IgZHJpdmVyIHRvIHVzZSB0aGUgc3ViZGV2IGFjdGl2ZSBzdGF0ZS4KPiA+IAo+ID4gTW92
+ZSBhbGwgdGhlIGZvcm1hdCBjb25maWd1cmF0aW9uIHRvIHRoZSBzdWJkZXZpY2Ugc3RhdGUgYW5k
+Cj4gPiBzaW1wbGlmeQo+ID4gdGhlIGZvcm1hdCBoYW5kbGluZywgbG9ja2luZyBhbmQgaW5pdGlh
+bGl6YXRpb24uCj4gPiAKPiA+IFdoaWxlIGF0IGl0LCBzaW1wbGlmeSBpbXgyMTRfc3RhcnRfc3Ry
+ZWFtaW5nKCkgYnkgcmVtb3ZpbmcgdW5uZWVkZWQKPiA+IGdvdG8KPiA+IHN0YXRlbWVudHMgYW5k
+IHRoZSBjb3JyZXNwb25kaW5nIGVycm9yIGxhYmVsLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBB
+bmRyw6kgQXBpdHpzY2ggPGdpdEBhcGl0enNjaC5ldT4KPiA+IC0tLQo+ID4gwqBkcml2ZXJzL21l
+ZGlhL2kyYy9pbXgyMTQuYyB8IDE1OSArKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0K
+PiA+IC0tLS0tLS0tLS0tLQo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgNTMgaW5zZXJ0aW9ucygrKSwg
+MTA2IGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS9pMmMv
+aW14MjE0LmMKPiA+IGIvZHJpdmVycy9tZWRpYS9pMmMvaW14MjE0LmMKPiA+IGluZGV4Cj4gPiA1
+ZDQxMTQ1MmQzNDJmZGIxNzc2MTljZDFjOWZkOTY1MGQzMTA4OWJiLi45OTBmZDA4MTE5MDRmYzQ3
+OGMwNWQ2NDA1Cj4gPiA0MDg5ZmMyODc5Y2FlOTQgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL21l
+ZGlhL2kyYy9pbXgyMTQuYwo+ID4gKysrIGIvZHJpdmVycy9tZWRpYS9pMmMvaW14MjE0LmMKPiA+
+IEBAIC01OSw4ICs1OSw2IEBAIHN0cnVjdCBpbXgyMTQgewo+ID4gCj4gPiDCoMKgwqDCoMKgwqDC
+oCBzdHJ1Y3QgdjRsMl9zdWJkZXYgc2Q7Cj4gPiDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgbWVkaWFf
+cGFkIHBhZDsKPiA+IC3CoMKgwqDCoMKgwqAgc3RydWN0IHY0bDJfbWJ1c19mcmFtZWZtdCBmbXQ7
+Cj4gPiAtwqDCoMKgwqDCoMKgIHN0cnVjdCB2NGwyX3JlY3QgY3JvcDsKPiA+IAo+ID4gwqDCoMKg
+wqDCoMKgwqAgc3RydWN0IHY0bDJfY3RybF9oYW5kbGVyIGN0cmxzOwo+ID4gwqDCoMKgwqDCoMKg
+wqAgc3RydWN0IHY0bDJfY3RybCAqcGl4ZWxfcmF0ZTsKPiA+IEBAIC02OCwxNSArNjYsMTEgQEAg
+c3RydWN0IGlteDIxNCB7Cj4gPiDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9jdHJsICpleHBv
+c3VyZTsKPiA+IMKgwqDCoMKgwqDCoMKgIHN0cnVjdCB2NGwyX2N0cmwgKnVuaXRfc2l6ZTsKPiA+
+IAo+ID4gK8KgwqDCoMKgwqDCoCBjb25zdCBzdHJ1Y3QgaW14MjE0X21vZGUgKmN1cl9tb2RlOwo+
+ID4gKwo+ID4gwqDCoMKgwqDCoMKgwqAgc3RydWN0IHJlZ3VsYXRvcl9idWxrX2RhdGHCoMKgwqDC
+oMKgCj4gPiBzdXBwbGllc1tJTVgyMTRfTlVNX1NVUFBMSUVTXTsKPiA+IAo+ID4gwqDCoMKgwqDC
+oMKgwqAgc3RydWN0IGdwaW9fZGVzYyAqZW5hYmxlX2dwaW87Cj4gPiAtCj4gPiAtwqDCoMKgwqDC
+oMKgIC8qCj4gPiAtwqDCoMKgwqDCoMKgwqAgKiBTZXJpYWxpemUgY29udHJvbCBhY2Nlc3MsIGdl
+dC9zZXQgZm9ybWF0LCBnZXQgc2VsZWN0aW9uCj4gPiAtwqDCoMKgwqDCoMKgwqAgKiBhbmQgc3Rh
+cnQgc3RyZWFtaW5nLgo+ID4gLcKgwqDCoMKgwqDCoMKgICovCj4gPiAtwqDCoMKgwqDCoMKgIHN0
+cnVjdCBtdXRleCBtdXRleDsKPiA+IMKgfTsKPiA+IAo+ID4gwqBzdHJ1Y3QgcmVnXzggewo+ID4g
+QEAgLTQ5MCw2ICs0ODQsMjIgQEAgc3RhdGljIGludCBfX21heWJlX3VudXNlZAo+ID4gaW14MjE0
+X3Bvd2VyX29mZihzdHJ1Y3QgZGV2aWNlICpkZXYpCj4gPiDCoMKgwqDCoMKgwqDCoCByZXR1cm4g
+MDsKPiA+IMKgfQo+ID4gCj4gPiArc3RhdGljIHZvaWQgaW14MjE0X3VwZGF0ZV9wYWRfZm9ybWF0
+KHN0cnVjdCBpbXgyMTQgKmlteDIxNCwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0IHN0cnVjdCBp
+bXgyMTRfbW9kZQo+ID4gKm1vZGUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9tYnVz
+X2ZyYW1lZm10Cj4gPiAqZm10LCB1MzIgY29kZSkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgIGZt
+dC0+Y29kZSA9IElNWDIxNF9NQlVTX0NPREU7Cj4gPiArwqDCoMKgwqDCoMKgIGZtdC0+d2lkdGgg
+PSBtb2RlLT53aWR0aDsKPiA+ICvCoMKgwqDCoMKgwqAgZm10LT5oZWlnaHQgPSBtb2RlLT5oZWln
+aHQ7Cj4gPiArwqDCoMKgwqDCoMKgIGZtdC0+ZmllbGQgPSBWNEwyX0ZJRUxEX05PTkU7Cj4gPiAr
+wqDCoMKgwqDCoMKgIGZtdC0+Y29sb3JzcGFjZSA9IFY0TDJfQ09MT1JTUEFDRV9TUkdCOwo+ID4g
+K8KgwqDCoMKgwqDCoCBmbXQtPnljYmNyX2VuYyA9IFY0TDJfTUFQX1lDQkNSX0VOQ19ERUZBVUxU
+KGZtdC0KPiA+ID5jb2xvcnNwYWNlKTsKPiA+ICvCoMKgwqDCoMKgwqAgZm10LT5xdWFudGl6YXRp
+b24gPSBWNEwyX01BUF9RVUFOVElaQVRJT05fREVGQVVMVCh0cnVlLAo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZm10LQo+ID4gPmNv
+bG9yc3BhY2UsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBmbXQtCj4gPiA+eWNiY3JfZW5jKTsKPiA+ICvCoMKgwqDCoMKgwqAgZm10
+LT54ZmVyX2Z1bmMgPSBWNEwyX01BUF9YRkVSX0ZVTkNfREVGQVVMVChmbXQtCj4gPiA+Y29sb3Jz
+cGFjZSk7Cj4gPiArfQo+ID4gKwo+ID4gwqBzdGF0aWMgaW50IGlteDIxNF9lbnVtX21idXNfY29k
+ZShzdHJ1Y3QgdjRsMl9zdWJkZXYgKnNkLAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9zdWJkZXZf
+c3RhdGUKPiA+ICpzZF9zdGF0ZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHY0bDJfc3ViZGV2X21idXNf
+Y29kZV9lbnVtCj4gPiAqY29kZSkKPiA+IEBAIC01NDksNTIgKzU1OSw2IEBAIHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgdjRsMl9zdWJkZXZfY29yZV9vcHMKPiA+IGlteDIxNF9jb3JlX29wcyA9IHsKPiA+
+IMKgI2VuZGlmCj4gPiDCoH07Cj4gPiAKPiA+IC1zdGF0aWMgc3RydWN0IHY0bDJfbWJ1c19mcmFt
+ZWZtdCAqCj4gPiAtX19pbXgyMTRfZ2V0X3BhZF9mb3JtYXQoc3RydWN0IGlteDIxNCAqaW14MjE0
+LAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVj
+dCB2NGwyX3N1YmRldl9zdGF0ZSAqc2Rfc3RhdGUsCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdW5zaWduZWQgaW50IHBhZCwKPiA+IC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbnVtIHY0bDJfc3ViZGV2X2Zvcm1h
+dF93aGVuY2Ugd2hpY2gpCj4gPiAtewo+ID4gLcKgwqDCoMKgwqDCoCBzd2l0Y2ggKHdoaWNoKSB7
+Cj4gPiAtwqDCoMKgwqDCoMKgIGNhc2UgVjRMMl9TVUJERVZfRk9STUFUX1RSWToKPiA+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiB2NGwyX3N1YmRldl9zdGF0ZV9nZXRfZm9y
+bWF0KHNkX3N0YXRlLCBwYWQpOwo+ID4gLcKgwqDCoMKgwqDCoCBjYXNlIFY0TDJfU1VCREVWX0ZP
+Uk1BVF9BQ1RJVkU6Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gJmlt
+eDIxNC0+Zm10Owo+ID4gLcKgwqDCoMKgwqDCoCBkZWZhdWx0Ogo+ID4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgcmV0dXJuIE5VTEw7Cj4gPiAtwqDCoMKgwqDCoMKgIH0KPiA+IC19Cj4g
+PiAtCj4gPiAtc3RhdGljIGludCBpbXgyMTRfZ2V0X2Zvcm1hdChzdHJ1Y3QgdjRsMl9zdWJkZXYg
+KnNkLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBzdHJ1Y3QgdjRsMl9zdWJkZXZfc3RhdGUgKnNkX3N0YXRlLAo+ID4gLcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRs
+Ml9zdWJkZXZfZm9ybWF0ICpmb3JtYXQpCj4gPiAtewo+ID4gLcKgwqDCoMKgwqDCoCBzdHJ1Y3Qg
+aW14MjE0ICppbXgyMTQgPSB0b19pbXgyMTQoc2QpOwo+ID4gLQo+ID4gLcKgwqDCoMKgwqDCoCBt
+dXRleF9sb2NrKCZpbXgyMTQtPm11dGV4KTsKPiA+IC3CoMKgwqDCoMKgwqAgZm9ybWF0LT5mb3Jt
+YXQgPSAqX19pbXgyMTRfZ2V0X3BhZF9mb3JtYXQoaW14MjE0LCBzZF9zdGF0ZSwKPiA+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZm9ybWF0LT5wYWQsCj4gPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvcm1hdC0+d2hpY2gpOwo+ID4g
+LcKgwqDCoMKgwqDCoCBtdXRleF91bmxvY2soJmlteDIxNC0+bXV0ZXgpOwo+ID4gLQo+ID4gLcKg
+wqDCoMKgwqDCoCByZXR1cm4gMDsKPiA+IC19Cj4gPiAtCj4gPiAtc3RhdGljIHN0cnVjdCB2NGwy
+X3JlY3QgKgo+ID4gLV9faW14MjE0X2dldF9wYWRfY3JvcChzdHJ1Y3QgaW14MjE0ICppbXgyMTQs
+Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRs
+Ml9zdWJkZXZfc3RhdGUgKnNkX3N0YXRlLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgdW5zaWduZWQgaW50IHBhZCwgZW51bQo+ID4gdjRsMl9zdWJkZXZfZm9y
+bWF0X3doZW5jZSB3aGljaCkKPiA+IC17Cj4gPiAtwqDCoMKgwqDCoMKgIHN3aXRjaCAod2hpY2gp
+IHsKPiA+IC3CoMKgwqDCoMKgwqAgY2FzZSBWNEwyX1NVQkRFVl9GT1JNQVRfVFJZOgo+ID4gLcKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHY0bDJfc3ViZGV2X3N0YXRlX2dldF9j
+cm9wKHNkX3N0YXRlLCBwYWQpOwo+ID4gLcKgwqDCoMKgwqDCoCBjYXNlIFY0TDJfU1VCREVWX0ZP
+Uk1BVF9BQ1RJVkU6Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gJmlt
+eDIxNC0+Y3JvcDsKPiA+IC3CoMKgwqDCoMKgwqAgZGVmYXVsdDoKPiA+IC3CoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHJldHVybiBOVUxMOwo+ID4gLcKgwqDCoMKgwqDCoCB9Cj4gPiAtfQo+
+ID4gLQo+ID4gwqBzdGF0aWMgaW50IGlteDIxNF9zZXRfZm9ybWF0KHN0cnVjdCB2NGwyX3N1YmRl
+diAqc2QsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9zdWJkZXZfc3RhdGUgKnNkX3N0YXRlLAo+ID4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0
+IHY0bDJfc3ViZGV2X2Zvcm1hdCAqZm9ybWF0KQo+ID4gQEAgLTYwNCwzNCArNTY4LDI1IEBAIHN0
+YXRpYyBpbnQgaW14MjE0X3NldF9mb3JtYXQoc3RydWN0Cj4gPiB2NGwyX3N1YmRldiAqc2QsCj4g
+PiDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9yZWN0ICpfX2Nyb3A7Cj4gPiDCoMKgwqDCoMKg
+wqDCoCBjb25zdCBzdHJ1Y3QgaW14MjE0X21vZGUgKm1vZGU7Cj4gPiAKPiA+IC3CoMKgwqDCoMKg
+wqAgbXV0ZXhfbG9jaygmaW14MjE0LT5tdXRleCk7Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgIF9f
+Y3JvcCA9IF9faW14MjE0X2dldF9wYWRfY3JvcChpbXgyMTQsIHNkX3N0YXRlLCBmb3JtYXQtCj4g
+PiA+cGFkLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvcm1hdC0+d2hpY2gpOwo+ID4gLQo+ID4g
+wqDCoMKgwqDCoMKgwqAgbW9kZSA9IHY0bDJfZmluZF9uZWFyZXN0X3NpemUoaW14MjE0X21vZGVz
+LAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQVJSQVlfU0laRShpbXgyMTRfbW9kZXMpLAo+ID4gd2lk
+dGgsIGhlaWdodCwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvcm1hdC0+Zm9ybWF0LndpZHRoLAo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgZm9ybWF0LT5mb3JtYXQuaGVpZ2h0KTsKPiA+IAo+ID4gLcKg
+wqDCoMKgwqDCoCBfX2Nyb3AtPndpZHRoID0gbW9kZS0+d2lkdGg7Cj4gPiAtwqDCoMKgwqDCoMKg
+IF9fY3JvcC0+aGVpZ2h0ID0gbW9kZS0+aGVpZ2h0Owo+ID4gK8KgwqDCoMKgwqDCoCBpbXgyMTRf
+dXBkYXRlX3BhZF9mb3JtYXQoaW14MjE0LCBtb2RlLCAmZm9ybWF0LT5mb3JtYXQsCj4gPiBmb3Jt
+YXQtPmZvcm1hdC5jb2RlKTsKPiA+ICvCoMKgwqDCoMKgwqAgX19mb3JtYXQgPSB2NGwyX3N1YmRl
+dl9zdGF0ZV9nZXRfZm9ybWF0KHNkX3N0YXRlLCAwKTsKPiA+IAo+ID4gLcKgwqDCoMKgwqDCoCBf
+X2Zvcm1hdCA9IF9faW14MjE0X2dldF9wYWRfZm9ybWF0KGlteDIxNCwgc2Rfc3RhdGUsCj4gPiBm
+b3JtYXQtPnBhZCwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvcm1hdC0+d2hpY2gp
+Owo+ID4gLcKgwqDCoMKgwqDCoCBfX2Zvcm1hdC0+d2lkdGggPSBfX2Nyb3AtPndpZHRoOwo+ID4g
+LcKgwqDCoMKgwqDCoCBfX2Zvcm1hdC0+aGVpZ2h0ID0gX19jcm9wLT5oZWlnaHQ7Cj4gPiAtwqDC
+oMKgwqDCoMKgIF9fZm9ybWF0LT5jb2RlID0gSU1YMjE0X01CVVNfQ09ERTsKPiA+IC3CoMKgwqDC
+oMKgwqAgX19mb3JtYXQtPmZpZWxkID0gVjRMMl9GSUVMRF9OT05FOwo+ID4gLcKgwqDCoMKgwqDC
+oCBfX2Zvcm1hdC0+Y29sb3JzcGFjZSA9IFY0TDJfQ09MT1JTUEFDRV9TUkdCOwo+ID4gLcKgwqDC
+oMKgwqDCoCBfX2Zvcm1hdC0+eWNiY3JfZW5jID0gVjRMMl9NQVBfWUNCQ1JfRU5DX0RFRkFVTFQo
+X19mb3JtYXQtCj4gPiA+Y29sb3JzcGFjZSk7Cj4gPiAtwqDCoMKgwqDCoMKgIF9fZm9ybWF0LT5x
+dWFudGl6YXRpb24gPQo+ID4gVjRMMl9NQVBfUVVBTlRJWkFUSU9OX0RFRkFVTFQodHJ1ZSwKPiA+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgX19mb3JtYXQtPmNvbG9yc3BhY2UsIF9fZm9ybWF0LQo+ID4gPnljYmNyX2VuYyk7Cj4g
+PiAtwqDCoMKgwqDCoMKgIF9fZm9ybWF0LT54ZmVyX2Z1bmMgPSBWNEwyX01BUF9YRkVSX0ZVTkNf
+REVGQVVMVChfX2Zvcm1hdC0KPiA+ID5jb2xvcnNwYWNlKTsKPiA+ICvCoMKgwqDCoMKgwqAgaWYg
+KGlteDIxNC0+Y3VyX21vZGUgPT0gbW9kZSAmJiBfX2Zvcm1hdC0+Y29kZSA9PSBmb3JtYXQtCj4g
+PiA+Zm9ybWF0LmNvZGUpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4g
+MDsKPiA+IAo+IAo+IElzbnQnwqDCoCBpZiAoaW14MjE0LT5jdXJfbW9kZSA9PSBtb2RlKSBlbm91
+Z2g/Cj4gCgpJJ2xsIGRyb3AgdGhlIGNvbXBsZXRlIGNoZWNrLCBhcyBpdCB3YXMgZG9uZSBmb3Ig
+aW14MjE5IGluCmZhZWNlNGFkNzJiMCAoIm1lZGlhOiBpMmM6IGlteDIxOTogUGVyZm9ybSBhIGZ1
+bGwgbW9kZSBzZXQgdW5jb25kaXRpb25hbGx5IikKCkJlc3QgcmVnYXJkcywKQW5kcsOpCgo+IAo+
+ID4gLcKgwqDCoMKgwqDCoCBmb3JtYXQtPmZvcm1hdCA9ICpfX2Zvcm1hdDsKPiA+ICvCoMKgwqDC
+oMKgwqAgKl9fZm9ybWF0ID0gZm9ybWF0LT5mb3JtYXQ7Cj4gPiAKPiA+IC3CoMKgwqDCoMKgwqAg
+bXV0ZXhfdW5sb2NrKCZpbXgyMTQtPm11dGV4KTsKPiA+ICvCoMKgwqDCoMKgwqAgX19jcm9wID0g
+djRsMl9zdWJkZXZfc3RhdGVfZ2V0X2Nyb3Aoc2Rfc3RhdGUsIDApOwo+ID4gK8KgwqDCoMKgwqDC
+oCBfX2Nyb3AtPndpZHRoID0gbW9kZS0+d2lkdGg7Cj4gPiArwqDCoMKgwqDCoMKgIF9fY3JvcC0+
+aGVpZ2h0ID0gbW9kZS0+aGVpZ2h0Owo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoCBpZiAoZm9ybWF0
+LT53aGljaCA9PSBWNEwyX1NVQkRFVl9GT1JNQVRfQUNUSVZFKQo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgaW14MjE0LT5jdXJfbW9kZSA9IG1vZGU7Cj4gPiAKPiA+IMKgwqDCoMKg
+wqDCoMKgIHJldHVybiAwOwo+ID4gwqB9Cj4gPiBAQCAtNjQwLDE0ICs1OTUsOSBAQCBzdGF0aWMg
+aW50IGlteDIxNF9nZXRfc2VsZWN0aW9uKHN0cnVjdAo+ID4gdjRsMl9zdWJkZXYgKnNkLAo+ID4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgc3RydWN0IHY0bDJfc3ViZGV2X3N0YXRlICpzZF9zdGF0ZSwKPiA+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVj
+dCB2NGwyX3N1YmRldl9zZWxlY3Rpb24gKnNlbCkKPiA+IMKgewo+ID4gLcKgwqDCoMKgwqDCoCBz
+dHJ1Y3QgaW14MjE0ICppbXgyMTQgPSB0b19pbXgyMTQoc2QpOwo+ID4gLQo+ID4gwqDCoMKgwqDC
+oMKgwqAgc3dpdGNoIChzZWwtPnRhcmdldCkgewo+ID4gwqDCoMKgwqDCoMKgwqAgY2FzZSBWNEwy
+X1NFTF9UR1RfQ1JPUDoKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG11dGV4X2xv
+Y2soJmlteDIxNC0+bXV0ZXgpOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2Vs
+LT5yID0gKl9faW14MjE0X2dldF9wYWRfY3JvcChpbXgyMTQsIHNkX3N0YXRlLAo+ID4gc2VsLT5w
+YWQsCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsLT53aGljaCk7
+Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBtdXRleF91bmxvY2soJmlteDIxNC0+
+bXV0ZXgpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsLT5yID0gKnY0bDJf
+c3ViZGV2X3N0YXRlX2dldF9jcm9wKHNkX3N0YXRlLCAwKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCByZXR1cm4gMDsKPiA+IAo+ID4gwqDCoMKgwqDCoMKgwqAgY2FzZSBWNEwy
+X1NFTF9UR1RfTkFUSVZFX1NJWkU6Cj4gPiBAQCAtODI2LDQwICs3NzYsMjggQEAgc3RhdGljIGlu
+dCBpbXgyMTRfd3JpdGVfdGFibGUoc3RydWN0IGlteDIxNAo+ID4gKmlteDIxNCwKPiA+IAo+ID4g
+wqBzdGF0aWMgaW50IGlteDIxNF9zdGFydF9zdHJlYW1pbmcoc3RydWN0IGlteDIxNCAqaW14MjE0
+KQo+ID4gwqB7Cj4gPiAtwqDCoMKgwqDCoMKgIGNvbnN0IHN0cnVjdCBpbXgyMTRfbW9kZSAqbW9k
+ZTsKPiA+IMKgwqDCoMKgwqDCoMKgIGludCByZXQ7Cj4gPiAKPiA+IC3CoMKgwqDCoMKgwqAgbXV0
+ZXhfbG9jaygmaW14MjE0LT5tdXRleCk7Cj4gPiDCoMKgwqDCoMKgwqDCoCByZXQgPSBpbXgyMTRf
+d3JpdGVfdGFibGUoaW14MjE0LCBtb2RlX3RhYmxlX2NvbW1vbik7Cj4gPiDCoMKgwqDCoMKgwqDC
+oCBpZiAocmV0IDwgMCkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldl9l
+cnIoaW14MjE0LT5kZXYsICJjb3VsZCBub3Qgc2VudCBjb21tb24gdGFibGUKPiA+ICVkXG4iLCBy
+ZXQpOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBlcnJvcjsKPiA+ICvC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7Cj4gPiDCoMKgwqDCoMKgwqDC
+oCB9Cj4gPiAKPiA+IC3CoMKgwqDCoMKgwqAgbW9kZSA9IHY0bDJfZmluZF9uZWFyZXN0X3NpemUo
+aW14MjE0X21vZGVzLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBBUlJBWV9TSVpFKGlteDIxNF9tb2RlcyksIHdpZHRoLAo+
+ID4gaGVpZ2h0LAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBpbXgyMTQtPmZtdC53aWR0aCwgaW14MjE0LQo+ID4gPmZtdC5o
+ZWlnaHQpOwo+ID4gLcKgwqDCoMKgwqDCoCByZXQgPSBpbXgyMTRfd3JpdGVfdGFibGUoaW14MjE0
+LCBtb2RlLT5yZWdfdGFibGUpOwo+ID4gK8KgwqDCoMKgwqDCoCByZXQgPSBpbXgyMTRfd3JpdGVf
+dGFibGUoaW14MjE0LCBpbXgyMTQtPmN1cl9tb2RlLQo+ID4gPnJlZ190YWJsZSk7Cj4gPiDCoMKg
+wqDCoMKgwqDCoCBpZiAocmV0IDwgMCkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGRldl9lcnIoaW14MjE0LT5kZXYsICJjb3VsZCBub3Qgc2VudCBtb2RlIHRhYmxlCj4gPiAl
+ZFxuIiwgcmV0KTsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdvdG8gZXJyb3I7
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ID4gwqDCoMKg
+wqDCoMKgwqAgfQo+ID4gwqDCoMKgwqDCoMKgwqAgcmV0ID0gX192NGwyX2N0cmxfaGFuZGxlcl9z
+ZXR1cCgmaW14MjE0LT5jdHJscyk7Cj4gPiDCoMKgwqDCoMKgwqDCoCBpZiAocmV0IDwgMCkgewo+
+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldl9lcnIoaW14MjE0LT5kZXYsICJj
+b3VsZCBub3Qgc3luYyB2NGwyCj4gPiBjb250cm9sc1xuIik7Cj4gPiAtwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBnb3RvIGVycm9yOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgcmV0dXJuIHJldDsKPiA+IMKgwqDCoMKgwqDCoMKgIH0KPiA+IMKgwqDCoMKgwqDCoMKgIHJl
+dCA9IHJlZ21hcF93cml0ZShpbXgyMTQtPnJlZ21hcCwgSU1YMjE0X1JFR19NT0RFX1NFTEVDVCwK
+PiA+IElNWDIxNF9NT0RFX1NUUkVBTUlORyk7Cj4gPiAtwqDCoMKgwqDCoMKgIGlmIChyZXQgPCAw
+KSB7Cj4gPiArwqDCoMKgwqDCoMKgIGlmIChyZXQgPCAwKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIGRldl9lcnIoaW14MjE0LT5kZXYsICJjb3VsZCBub3Qgc2VudCBzdGFydCB0
+YWJsZQo+ID4gJWRcbiIsIHJldCk7Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBn
+b3RvIGVycm9yOwo+ID4gLcKgwqDCoMKgwqDCoCB9Cj4gPiAKPiA+IC3CoMKgwqDCoMKgwqAgbXV0
+ZXhfdW5sb2NrKCZpbXgyMTQtPm11dGV4KTsKPiA+IC3CoMKgwqDCoMKgwqAgcmV0dXJuIDA7Cj4g
+PiAtCj4gPiAtZXJyb3I6Cj4gPiAtwqDCoMKgwqDCoMKgIG11dGV4X3VubG9jaygmaW14MjE0LT5t
+dXRleCk7Cj4gPiDCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ID4gwqB9Cj4gPiAKPiA+IEBA
+IC04NzcsNiArODE1LDcgQEAgc3RhdGljIGludCBpbXgyMTRfc3RvcF9zdHJlYW1pbmcoc3RydWN0
+IGlteDIxNAo+ID4gKmlteDIxNCkKPiA+IMKgc3RhdGljIGludCBpbXgyMTRfc19zdHJlYW0oc3Ry
+dWN0IHY0bDJfc3ViZGV2ICpzdWJkZXYsIGludCBlbmFibGUpCj4gPiDCoHsKPiA+IMKgwqDCoMKg
+wqDCoMKgIHN0cnVjdCBpbXgyMTQgKmlteDIxNCA9IHRvX2lteDIxNChzdWJkZXYpOwo+ID4gK8Kg
+wqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9zdWJkZXZfc3RhdGUgKnN0YXRlOwo+ID4gwqDCoMKgwqDC
+oMKgwqAgaW50IHJldDsKPiA+IAo+ID4gwqDCoMKgwqDCoMKgwqAgaWYgKGVuYWJsZSkgewo+ID4g
+QEAgLTg4NCw3ICs4MjMsOSBAQCBzdGF0aWMgaW50IGlteDIxNF9zX3N0cmVhbShzdHJ1Y3QgdjRs
+Ml9zdWJkZXYKPiA+ICpzdWJkZXYsIGludCBlbmFibGUpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgaWYgKHJldCA8IDApCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7Cj4gPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHN0YXRlID0KPiA+IHY0bDJfc3ViZGV2X2xvY2tfYW5kX2dldF9hY3RpdmVf
+c3RhdGUoc3ViZGV2KTsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXQgPSBp
+bXgyMTRfc3RhcnRfc3RyZWFtaW5nKGlteDIxNCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB2NGwyX3N1YmRldl91bmxvY2tfc3RhdGUoc3RhdGUpOwo+ID4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIGlmIChyZXQgPCAwKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIGVycl9ycG1fcHV0Owo+ID4gwqDCoMKgwqDC
+oMKgwqAgfSBlbHNlIHsKPiA+IEBAIC05NDgsNyArODg5LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVj
+dCB2NGwyX3N1YmRldl9wYWRfb3BzCj4gPiBpbXgyMTRfc3ViZGV2X3BhZF9vcHMgPSB7Cj4gPiDC
+oMKgwqDCoMKgwqDCoCAuZW51bV9tYnVzX2NvZGUgPSBpbXgyMTRfZW51bV9tYnVzX2NvZGUsCj4g
+PiDCoMKgwqDCoMKgwqDCoCAuZW51bV9mcmFtZV9zaXplID0gaW14MjE0X2VudW1fZnJhbWVfc2l6
+ZSwKPiA+IMKgwqDCoMKgwqDCoMKgIC5lbnVtX2ZyYW1lX2ludGVydmFsID0gaW14MjE0X2VudW1f
+ZnJhbWVfaW50ZXJ2YWwsCj4gPiAtwqDCoMKgwqDCoMKgIC5nZXRfZm10ID0gaW14MjE0X2dldF9m
+b3JtYXQsCj4gPiArwqDCoMKgwqDCoMKgIC5nZXRfZm10ID0gdjRsMl9zdWJkZXZfZ2V0X2ZtdCwK
+PiA+IMKgwqDCoMKgwqDCoMKgIC5zZXRfZm10ID0gaW14MjE0X3NldF9mb3JtYXQsCj4gPiDCoMKg
+wqDCoMKgwqDCoCAuZ2V0X3NlbGVjdGlvbiA9IGlteDIxNF9nZXRfc2VsZWN0aW9uLAo+ID4gwqDC
+oMKgwqDCoMKgwqAgLmdldF9mcmFtZV9pbnRlcnZhbCA9IGlteDIxNF9nZXRfZnJhbWVfaW50ZXJ2
+YWwsCj4gPiBAQCAtMTA3OSwxMyArMTAyMCwxMyBAQCBzdGF0aWMgaW50IGlteDIxNF9wcm9iZShz
+dHJ1Y3QgaTJjX2NsaWVudAo+ID4gKmNsaWVudCkKPiA+IMKgwqDCoMKgwqDCoMKgIHBtX3J1bnRp
+bWVfZW5hYmxlKGlteDIxNC0+ZGV2KTsKPiA+IMKgwqDCoMKgwqDCoMKgIHBtX3J1bnRpbWVfaWRs
+ZShpbXgyMTQtPmRldik7Cj4gPiAKPiA+ICvCoMKgwqDCoMKgwqAgLyogU2V0IGRlZmF1bHQgbW9k
+ZSB0byBtYXggcmVzb2x1dGlvbiAqLwo+ID4gK8KgwqDCoMKgwqDCoCBpbXgyMTQtPmN1cl9tb2Rl
+ID0gJmlteDIxNF9tb2Rlc1swXTsKPiA+ICsKPiA+IMKgwqDCoMKgwqDCoMKgIHJldCA9IGlteDIx
+NF9jdHJsc19pbml0KGlteDIxNCk7Cj4gPiDCoMKgwqDCoMKgwqDCoCBpZiAocmV0IDwgMCkKPiA+
+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIGVycm9yX3Bvd2VyX29mZjsKPiA+
+IAo+ID4gLcKgwqDCoMKgwqDCoCBtdXRleF9pbml0KCZpbXgyMTQtPm11dGV4KTsKPiA+IC3CoMKg
+wqDCoMKgwqAgaW14MjE0LT5jdHJscy5sb2NrID0gJmlteDIxNC0+bXV0ZXg7Cj4gPiAtCj4gPiDC
+oMKgwqDCoMKgwqDCoCBpbXgyMTQtPnNkLmZsYWdzIHw9IFY0TDJfU1VCREVWX0ZMX0hBU19ERVZO
+T0RFOwo+ID4gwqDCoMKgwqDCoMKgwqAgaW14MjE0LT5wYWQuZmxhZ3MgPSBNRURJQV9QQURfRkxf
+U09VUkNFOwo+ID4gwqDCoMKgwqDCoMKgwqAgaW14MjE0LT5zZC5kZXYgPSAmY2xpZW50LT5kZXY7
+Cj4gPiBAQCAtMTA5NywyMCArMTAzOCwyNyBAQCBzdGF0aWMgaW50IGlteDIxNF9wcm9iZShzdHJ1
+Y3QgaTJjX2NsaWVudAo+ID4gKmNsaWVudCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBnb3RvIGZyZWVfY3RybDsKPiA+IMKgwqDCoMKgwqDCoMKgIH0KPiA+IAo+ID4gLcKgwqDC
+oMKgwqDCoCBpbXgyMTRfZW50aXR5X2luaXRfc3RhdGUoJmlteDIxNC0+c2QsIE5VTEwpOwo+ID4g
+K8KgwqDCoMKgwqDCoCBpbXgyMTQtPnNkLnN0YXRlX2xvY2sgPSBpbXgyMTQtPmN0cmxzLmxvY2s7
+Cj4gPiArwqDCoMKgwqDCoMKgIHJldCA9IHY0bDJfc3ViZGV2X2luaXRfZmluYWxpemUoJmlteDIx
+NC0+c2QpOwo+ID4gK8KgwqDCoMKgwqDCoCBpZiAocmV0IDwgMCkgewo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgZGV2X2VycihkZXYsICJzdWJkZXYgaW5pdCBlcnJvcjogJWRcbiIs
+IHJldCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIGZyZWVfZW50aXR5
+Owo+ID4gK8KgwqDCoMKgwqDCoCB9Cj4gPiAKPiA+IMKgwqDCoMKgwqDCoMKgIHJldCA9IHY0bDJf
+YXN5bmNfcmVnaXN0ZXJfc3ViZGV2X3NlbnNvcigmaW14MjE0LT5zZCk7Cj4gPiDCoMKgwqDCoMKg
+wqDCoCBpZiAocmV0IDwgMCkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRl
+dl9lcnIoZGV2LCAiY291bGQgbm90IHJlZ2lzdGVyIHY0bDIgZGV2aWNlXG4iKTsKPiA+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdvdG8gZnJlZV9lbnRpdHk7Cj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIGVycm9yX3N1YmRldl9jbGVhbnVwOwo+ID4gwqDCoMKg
+wqDCoMKgwqAgfQo+ID4gCj4gPiDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsKPiA+IAo+ID4gK2Vy
+cm9yX3N1YmRldl9jbGVhbnVwOgo+ID4gK8KgwqDCoMKgwqDCoCB2NGwyX3N1YmRldl9jbGVhbnVw
+KCZpbXgyMTQtPnNkKTsKPiA+ICsKPiA+IMKgZnJlZV9lbnRpdHk6Cj4gPiDCoMKgwqDCoMKgwqDC
+oCBtZWRpYV9lbnRpdHlfY2xlYW51cCgmaW14MjE0LT5zZC5lbnRpdHkpOwo+ID4gwqBmcmVlX2N0
+cmw6Cj4gPiAtwqDCoMKgwqDCoMKgIG11dGV4X2Rlc3Ryb3koJmlteDIxNC0+bXV0ZXgpOwo+ID4g
+wqDCoMKgwqDCoMKgwqAgdjRsMl9jdHJsX2hhbmRsZXJfZnJlZSgmaW14MjE0LT5jdHJscyk7Cj4g
+PiDCoGVycm9yX3Bvd2VyX29mZjoKPiA+IMKgwqDCoMKgwqDCoMKgIHBtX3J1bnRpbWVfZGlzYWJs
+ZShpbXgyMTQtPmRldik7Cj4gPiBAQCAtMTEyNSwxMyArMTA3MywxMiBAQCBzdGF0aWMgdm9pZCBp
+bXgyMTRfcmVtb3ZlKHN0cnVjdCBpMmNfY2xpZW50Cj4gPiAqY2xpZW50KQo+ID4gwqDCoMKgwqDC
+oMKgwqAgc3RydWN0IGlteDIxNCAqaW14MjE0ID0gdG9faW14MjE0KHNkKTsKPiA+IAo+ID4gwqDC
+oMKgwqDCoMKgwqAgdjRsMl9hc3luY191bnJlZ2lzdGVyX3N1YmRldigmaW14MjE0LT5zZCk7Cj4g
+PiArwqDCoMKgwqDCoMKgIHY0bDJfc3ViZGV2X2NsZWFudXAoc2QpOwo+ID4gwqDCoMKgwqDCoMKg
+wqAgbWVkaWFfZW50aXR5X2NsZWFudXAoJmlteDIxNC0+c2QuZW50aXR5KTsKPiA+IMKgwqDCoMKg
+wqDCoMKgIHY0bDJfY3RybF9oYW5kbGVyX2ZyZWUoJmlteDIxNC0+Y3RybHMpOwo+ID4gCj4gPiDC
+oMKgwqDCoMKgwqDCoCBwbV9ydW50aW1lX2Rpc2FibGUoJmNsaWVudC0+ZGV2KTsKPiA+IMKgwqDC
+oMKgwqDCoMKgIHBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZCgmY2xpZW50LT5kZXYpOwo+ID4gLQo+
+ID4gLcKgwqDCoMKgwqDCoCBtdXRleF9kZXN0cm95KCZpbXgyMTQtPm11dGV4KTsKPiA+IMKgfQo+
+ID4gCj4gPiDCoHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGlteDIxNF9vZl9tYXRj
+aFtdID0gewo+ID4gCj4gPiAtLQo+ID4gMi40Ny4wCj4gPiAKPiA+IAoK
 
