@@ -1,185 +1,243 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E240F1C6F56;
-	Mon,  2 Dec 2024 11:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1320F207A03
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 12:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733140711; cv=none; b=dOoWGY2FDLNfFcdTGLL3/M8HByXtJgm+drJdRN+KIJ6KqQZDvBjSYDhBstt5jdagnTVyLU/4lZwSSTyahsCPlrF8/ojSSwi65sxw7ZCe8m8ik3LGGRKCN5d5BxH7lmV6nS2myUAsQx4i0WDsI7WriRGd08l8iCWNIQqu+yFulag=
+	t=1733141300; cv=none; b=lA1vOPhfnM3ZuYLrE8aW+p2T4SJ5RPbyBNIAtTiw8mvy53mtnn+rh+LiON2QPpsfwv/iFiZ6aK4OdnI+MoAuqR9sz7kFCbYtS2u4SabDmqgVT1eor+xRImqBvLu6s5p+vaCkpWe5H38M7KcPmTfq3QQAAhH27TlataEEZQMxV+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733140711; c=relaxed/simple;
-	bh=xWdd34sIxw1QC1x4Q76ZWScjmX8Hy+8IhaCa3EtPKkg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CLw58KWRQLitmxTCRZ0ZFxjVVxCxL0reoTyS+CafRk81yoy08XgnnON/XJPlVbZOY+BeyM13TuAQTRml59G1KCUqBJoLT74MTDbc12L63uUXBLiBQLF9H9WOkF9jXWUSAFMg434YW58kKz5DSyo5mUE6w1TED9LFbCVfD3yKdIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pTG74Dfp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733141300; c=relaxed/simple;
+	bh=cGAQSWJepBzc0MT/FCsHTfnVoA3MyBRgT1+4kNWkF+o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o9o+HLOghV8rc27py3UpHi+aV+3KyyY5udM8ojFCF1W+GXDFcpJpC8JH30wMZfLUEm12pgCtDssDfZ92nSyhgpRdvmNVxWDaK2ffwl6DRKmIwqSCoZhBd4nH2iGYckdB39KAEWpPsJHWj5FXXHktsqyuBAxOycdbnBgO2/zvADE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GUe85AoL; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pTG74Dfp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3FBC4CED1;
-	Mon,  2 Dec 2024 11:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733140710;
-	bh=xWdd34sIxw1QC1x4Q76ZWScjmX8Hy+8IhaCa3EtPKkg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pTG74DfpO7n6pT6UlLdkSl6z8ruFuFabicESGoIsGLuFdOAEJz5VHSsCx7HBZqw4i
-	 0dgtTI/hbPMOBs0miUx4pIcVFWR+jxDuYwITDqzh2e8kkTgZIVw6Fn2jGjIn02YNRT
-	 uqLPMxjp5KRnAUBpaCC5smc3PrSXYUA7b7J3UXIe75C4tPax25Vf4nYgkVYRD8ikk1
-	 ay+XCU0hQ0DWFGWWfX9m4qKw/Gge0DXZJCyAniIX6+0Xz8rAPx17XWjDn6kiZZHDE7
-	 MXWoH/tkYjJTPwwDvclNVJPdsDOrnCqbmHEh7d4aRfU3HzZpz/JS+YtIV6PIdhSY/m
-	 3WiXN4BwAiFNg==
-From: Maxime Ripard <mripard@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Maxime Ripard <mripard@kernel.org>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Brian Starkey <Brian.Starkey@arm.com>,
-	John Stultz <jstultz@google.com>,
-	"T.J. Mercier" <tjmercier@google.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-media@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v2] Documentation: dma-buf: heaps: Add heap name definitions
-Date: Mon,  2 Dec 2024 12:58:27 +0100
-Message-ID: <20241202115827.50388-1-mripard@kernel.org>
-X-Mailer: git-send-email 2.47.1
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GUe85AoL"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-434aa472617so34986685e9.3
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 04:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733141296; x=1733746096; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1vgAdGJhbCaRsQHQEZj6qz9LHLA0TDdshcMw+CfT8UI=;
+        b=GUe85AoLq10mPQKAmqXwklw5rFe3YEMW5lRva/HHjuQfRZx6hh7ljOQJfvxbMoiORi
+         9YCH7vw3mJfEdeJkXVu2HqnI4fFSHvOWsk+317eqtwVt/YnIE67yS8nVcuGraKL005mz
+         89Td+RPAgQJi0VBT34OoRLXTnY5v3Xp1cvR3LdquxoZa214A8Hs52qM38V9MrpBJD84T
+         bZSUSx9JI+DnsMU0Nj9OY2FXNiJyst3oBZQSQPfl4Nid8xGU9awP+CUNm2byvteOEJaU
+         PNJ+CpxnLBoNjuyuF8bvKa3OiXVnZTqOy3AfNI6vgVe0y5UMdYMx64XbJNed7FP3DkVv
+         uLmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733141296; x=1733746096;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1vgAdGJhbCaRsQHQEZj6qz9LHLA0TDdshcMw+CfT8UI=;
+        b=OijgkBQxRhwzDrx/qdwzfXzGvxY0G0AQ8u3nY0hts5YqYYSUue+JHeQGQBEJ1GFPQm
+         n3JgOLpiRsZ3CSK1E8XXQjf5CPDoxmqd5DOMmTOvlLxM5+50p5tvxZJCzruVfdWQCt7t
+         +RQoGe7MhPO6B0LAt4abR1peI4Qt63zONIIG3T9RCyR70gc5L+JPRcs3UcbHIfD0IQHG
+         +F0xdVnUqfdj99iqMg2ofcdgrrhlRubBW2ZJlxKw5EDyCN/i1Ur3E5Ig+V9RV6sb2458
+         Po6ytRj+39abBDyIeZOYPb1oRCCei5yPUGqn5awnTeJVBrIaMaohAUvD30T5BsDyeFnb
+         9EBg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmsOC94g+o+LyufKs7x1165RF10jGXrUNthfE4Bbk+i/EZ+vcqm2jnJPmafC58dMYRxPyJwivgYjultg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOUoVgsRT/3aDi3TV7a1BzCKpBWTLzqt9e6SOrh3bnO836OfKS
+	rQuUc8bRdcwyzJ4UJqtA6pZ7Mf3zkhByrwa8g+VLDqC9W6UP7rObtxoizUFKazQ=
+X-Gm-Gg: ASbGnct6Jdy17hlLvfIH5zw4h26s2coJMRunh/9seDTNCO4qGAxPRnJAT4B9VPQ5M7F
+	B1A5QJ/+n+c3vrqcH0t9RllMOXxKzu8PZRS+OHSW7clWr+hOTdLNP6uZfwyxaDnNwaiLzaAzmEb
+	WIOsBr991BVTw3yg+azk/LJr/xsoULbpHoOUPoOgaTLmIK++pfGTaJkRlSS1cIbhMDEfCLDjnq5
+	R2Fb108P+TTf3DWrhqGQTEYA1EH5GoSHnkwOR7gprrmSMsYczoWqUxJWel5lNQ=
+X-Google-Smtp-Source: AGHT+IHwCI1uRKBu+CoSDtG3FpsX3X/yGCnxOmulEY/MrLWnsn3+gjARG1kvTaE8N/uMJfcAAEFB4w==
+X-Received: by 2002:a05:600c:1c8d:b0:42c:bae0:f05b with SMTP id 5b1f17b1804b1-434a9db7e8dmr172697185e9.1.1733141296136;
+        Mon, 02 Dec 2024 04:08:16 -0800 (PST)
+Received: from [192.168.0.40] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d1a90sm180872265e9.32.2024.12.02.04.08.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 04:08:15 -0800 (PST)
+Message-ID: <65002924-3b8b-47ab-aa90-4733ccc2f728@linaro.org>
+Date: Mon, 2 Dec 2024 12:08:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/4] media: venus: hfi_parser: avoid OOB access beyond
+ payload word count
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Tomasz Figa
+ <tfiga@chromium.org>, Hans Verkuil <hans.verkuil@cisco.com>
+Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+ Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20241128-venus_oob_2-v2-0-483ae0a464b8@quicinc.com>
+ <20241128-venus_oob_2-v2-2-483ae0a464b8@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20241128-venus_oob_2-v2-2-483ae0a464b8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Following a recent discussion at last Plumbers, John Stultz, Sumit
-Sewal, TJ Mercier and I came to an agreement that we should document
-what the dma-buf heaps names are expected to be, and what the buffers
-attributes you'll get should be documented.
+On 28/11/2024 05:05, Vikash Garodia wrote:
+> words_count denotes the number of words in total payload, while data
+> points to payload of various property within it. When words_count
+> reaches last word, data can access memory beyond the total payload. This
+> can lead to OOB access. Refactor the parsing logic such that the
+> remaining payload is checked before parsing it.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1a73374a04e5 ("media: venus: hfi_parser: add common capability parser")
+> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> ---
+>   drivers/media/platform/qcom/venus/hfi_parser.c | 57 +++++++++++++++++++++-----
+>   1 file changed, 46 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+> index 1cc17f3dc8948160ea6c3015d2c03e475b8aa29e..14349c2f84b205a8b79dee3acff1408bb63ac54a 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_parser.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+> @@ -282,8 +282,8 @@ static int hfi_platform_parser(struct venus_core *core, struct venus_inst *inst)
+>   u32 hfi_parser(struct venus_core *core, struct venus_inst *inst, void *buf,
+>   	       u32 size)
+>   {
+> +	u32 *words = buf, *payload, codecs = 0, domain = 0;
+>   	unsigned int words_count = size >> 2;
+> -	u32 *word = buf, *data, codecs = 0, domain = 0;
+>   	int ret;
+>   
+>   	ret = hfi_platform_parser(core, inst);
+> @@ -301,36 +301,71 @@ u32 hfi_parser(struct venus_core *core, struct venus_inst *inst, void *buf,
+>   	}
+>   
+>   	while (words_count) {
+> -		data = word + 1;
+> +		payload = words + 1;
+>   
+> -		switch (*word) {
+> +		switch (*words) {
+>   		case HFI_PROPERTY_PARAM_CODEC_SUPPORTED:
+> -			parse_codecs(core, data);
+> +			if (words_count < sizeof(struct hfi_codec_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_codecs(core, payload);
+>   			init_codecs(core);
+> +			words_count -= sizeof(struct hfi_codec_supported);
+> +			words += sizeof(struct hfi_codec_supported);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_MAX_SESSIONS_SUPPORTED:
+> -			parse_max_sessions(core, data);
+> +			if (words_count < sizeof(struct hfi_max_sessions_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_max_sessions(core, payload);
+> +			words_count -= sizeof(struct hfi_max_sessions_supported);
+> +			words += sizeof(struct hfi_max_sessions_supported);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_CODEC_MASK_SUPPORTED:
+> -			parse_codecs_mask(&codecs, &domain, data);
+> +			if (words_count < sizeof(struct hfi_codec_mask_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_codecs_mask(&codecs, &domain, payload);
+> +			words_count -= sizeof(struct hfi_codec_mask_supported);
+> +			words += sizeof(struct hfi_codec_mask_supported);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_UNCOMPRESSED_FORMAT_SUPPORTED:
+> -			parse_raw_formats(core, codecs, domain, data);
+> +			if (words_count < sizeof(struct hfi_uncompressed_format_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_raw_formats(core, codecs, domain, payload);
+> +			words_count -= sizeof(struct hfi_uncompressed_format_supported);
+> +			words += sizeof(struct hfi_uncompressed_format_supported);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_CAPABILITY_SUPPORTED:
+> -			parse_caps(core, codecs, domain, data);
+> +			if (words_count < sizeof(struct hfi_capabilities))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_caps(core, codecs, domain, payload);
+> +			words_count -= sizeof(struct hfi_capabilities);
+> +			words += sizeof(struct hfi_capabilities);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_PROFILE_LEVEL_SUPPORTED:
+> -			parse_profile_level(core, codecs, domain, data);
+> +			if (words_count < sizeof(struct hfi_profile_level_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_profile_level(core, codecs, domain, payload);
+> +			words_count -= sizeof(struct hfi_profile_level_supported);
+> +			words += sizeof(struct hfi_profile_level_supported);
+>   			break;
+>   		case HFI_PROPERTY_PARAM_BUFFER_ALLOC_MODE_SUPPORTED:
+> -			parse_alloc_mode(core, codecs, domain, data);
+> +			if (words_count < sizeof(struct hfi_buffer_alloc_mode_supported))
+> +				return HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> +
+> +			parse_alloc_mode(core, codecs, domain, payload);
+> +			words_count -= sizeof(struct hfi_buffer_alloc_mode_supported);
+> +			words += sizeof(struct hfi_buffer_alloc_mode_supported);
+>   			break;
+>   		default:
+>   			break;
+>   		}
+>   
+> -		word++;
+> +		words++;
+>   		words_count--;
+>   	}
+>   
+> 
 
-Let's create that doc to make sure those attributes and names are
-guaranteed going forward.
+I like the changes made here.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
+Let me suggest you have the parse_something() return the size of the 
+buffer consumed or an error code.
+
+If you calculate the maximum pointer instead of the words_count
+
+frame_size = payload + max;
+
+/* Your while can look like this */
+
+while (words < frame_size)
+switch(*words){
+case HFI_PROPERTY_X:
+     /* if the function returns the bytes consumed */
+     ret = parse_x();
+     break;
+case HFI_PROPERTY_X:
+     ret = parse_x();
+     break;
+}
+
+if (ret < 0)
+     return -ret;
+
+/* you can increment the pointer once at the bottom of the loop */
+words += ret;
+}
+
+
+That way you can
+
+1. Get rid of words_count and not have to decrement it
+2. Have one variable words which is checked against the maximum
+    size while(words < frame_size)
+3. Have the function that consumes the data return
+    how much buffer it has consumed, instead of inlining in the
+    switch
+4. Increment at the bottom of the switch once instead
+    of several times in the switch
+
+IMO it would be clearer/neater that way. Please consider.
 
 ---
-Changes from v1:
-  - Add the mention that the cma / reserved heap is optional.
-
-To: Jonathan Corbet <corbet@lwn.net>
-To: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc: Brian Starkey <Brian.Starkey@arm.com>
-Cc: John Stultz <jstultz@google.com>
-Cc: "T.J. Mercier" <tjmercier@google.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-media@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
----
- Documentation/userspace-api/dma-buf-heaps.rst | 76 +++++++++++++++++++
- Documentation/userspace-api/index.rst         |  1 +
- 2 files changed, 77 insertions(+)
- create mode 100644 Documentation/userspace-api/dma-buf-heaps.rst
-
-diff --git a/Documentation/userspace-api/dma-buf-heaps.rst b/Documentation/userspace-api/dma-buf-heaps.rst
-new file mode 100644
-index 000000000000..68be7ddea150
---- /dev/null
-+++ b/Documentation/userspace-api/dma-buf-heaps.rst
-@@ -0,0 +1,76 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==============================
-+Allocating dma-buf using heaps
-+==============================
-+
-+Dma-buf Heaps are a way for userspace to allocate dma-buf objects. They are
-+typically used to allocate buffers from a specific allocation pool, or to share
-+buffers across frameworks.
-+
-+Heaps
-+=====
-+
-+A heap represent a specific allocator. The Linux kernel currently supports the
-+following heaps:
-+
-+ - The ``system`` heap allocates virtually contiguous, cacheable, buffers
-+
-+ - The ``reserved`` heap allocates physically contiguous, cacheable,
-+   buffers. Only present if a CMA region is present. Such a region is
-+   usually created either through the kernel commandline through the
-+   `cma` parameter, a memory region Device-Tree node with the
-+   `linux,cma-default` property set, or through the `CMA_SIZE_MBYTES` or
-+   `CMA_SIZE_PERCENTAGE` Kconfig options. Depending on the platform, it
-+   might be called differently:
-+
-+    - Acer Iconia Tab A500: ``linux,cma``
-+    - Allwinner sun4i, sun5i and sun7i families: ``default-pool``
-+    - Amlogic A1: ``linux,cma``
-+    - Amlogic G12A/G12B/SM1: ``linux,cma``
-+    - Amlogic GXBB/GXL: ``linux,cma``
-+    - ASUS EeePad Transformer TF101: ``linux,cma``
-+    - ASUS Google Nexus 7 (Project Bach / ME370TG) E1565: ``linux,cma``
-+    - ASUS Google Nexus 7 (Project Nakasi / ME370T) E1565: ``linux,cma``
-+    - ASUS Google Nexus 7 (Project Nakasi / ME370T) PM269: ``linux,cma``
-+    - Asus Transformer Infinity TF700T: ``linux,cma``
-+    - Asus Transformer Pad 3G TF300TG: ``linux,cma``
-+    - Asus Transformer Pad TF300T: ``linux,cma``
-+    - Asus Transformer Pad TF701T: ``linux,cma``
-+    - Asus Transformer Prime TF201: ``linux,cma``
-+    - ASUS Vivobook S 15: ``linux,cma``
-+    - Cadence KC705: ``linux,cma``
-+    - Digi International ConnectCore 6UL: ``linux,cma``
-+    - Freescale i.MX8DXL EVK: ``linux,cma``
-+    - Freescale TQMa8Xx: ``linux,cma``
-+    - Hisilicon Hikey: ``linux,cma``
-+    - Lenovo ThinkPad T14s Gen 6: ``linux,cma``
-+    - Lenovo ThinkPad X13s: ``linux,cma``
-+    - Lenovo Yoga Slim 7x: ``linux,cma``
-+    - LG Optimus 4X HD P880: ``linux,cma``
-+    - LG Optimus Vu P895: ``linux,cma``
-+    - Loongson 2k0500, 2k1000 and 2k2000: ``linux,cma``
-+    - Microsoft Romulus: ``linux,cma``
-+    - NXP i.MX8ULP EVK: ``linux,cma``
-+    - NXP i.MX93 9x9 QSB: ``linux,cma``
-+    - NXP i.MX93 11X11 EVK: ``linux,cma``
-+    - NXP i.MX93 14X14 EVK: ``linux,cma``
-+    - NXP i.MX95 19X19 EVK: ``linux,cma``
-+    - Ouya Game Console: ``linux,cma``
-+    - Pegatron Chagall: ``linux,cma``
-+    - PHYTEC phyCORE-AM62A SOM: ``linux,cma``
-+    - PHYTEC phyCORE-i.MX93 SOM: ``linux,cma``
-+    - Qualcomm SC8280XP CRD: ``linux,cma``
-+    - Qualcomm X1E80100 CRD: ``linux,cma``
-+    - Qualcomm X1E80100 QCP: ``linux,cma``
-+    - RaspberryPi: ``linux,cma``
-+    - Texas Instruments AM62x SK board family: ``linux,cma``
-+    - Texas Instruments AM62A7 SK: ``linux,cma``
-+    - Toradex Apalis iMX8: ``linux,cma``
-+    - TQ-Systems i.MX8MM TQMa8MxML: ``linux,cma``
-+    - TQ-Systems i.MX8MN TQMa8MxNL: ``linux,cma``
-+    - TQ-Systems i.MX8MPlus TQMa8MPxL: ``linux,cma``
-+    - TQ-Systems i.MX8MQ TQMa8MQ: ``linux,cma``
-+    - TQ-Systems i.MX93 TQMa93xxLA/TQMa93xxCA SOM: ``linux,cma``
-+    - TQ-Systems MBA6ULx Baseboard: ``linux,cma``
-+
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index 274cc7546efc..4901ce7c6cb7 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -41,10 +41,11 @@ Devices and I/O
- 
- .. toctree::
-    :maxdepth: 1
- 
-    accelerators/ocxl
-+   dma-buf-heaps
-    dma-buf-alloc-exchange
-    gpio/index
-    iommufd
-    media/index
-    dcdbas
--- 
-2.47.1
-
+bod
