@@ -1,70 +1,64 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19A320899D
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 14:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCEB3209666
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 14:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733150764; cv=none; b=Ap/nwrl8trnx1YYGzNWL0PSTNZcuCwyOKNZjvdibhHd1LEcvFE4axcSV3uvmMHwlhLXNrWcwGxk5imf9AgkDI9qlBVoQbJql3tnyrbBfv/1n4oNu3mbhANnEs2emeSOqua1aPS59f5LlFRaXY5Nf7mvOVNGJTbZP+d6CtSkE3MI=
+	t=1733150809; cv=none; b=HAhYVs+OaroGqhdRfiw2AJSzczV86K9Q34KAk74Oa5n32KznnKkuYWLo9pb/JbMhV7/nQ2TdFjI2au1n9+HqkxtO1BIK2wpJChYzP+V1581OSh2IN8VrBhDBfaRjrY8XXOylbphTRPmuq479bdG8Wsv9efwiL+6sWeTlYG5yEV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733150764; c=relaxed/simple;
-	bh=XEG1RcerCs7zfuWQTNGzh5BC5VO3k1qcRF/ckT5aKsE=;
+	s=arc-20240116; t=1733150809; c=relaxed/simple;
+	bh=YDs+AUP8/sPXPpRK2RvKyuumBkR2iVV6ym1xSAp2m1o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmExi6FmChIhNxSnp7JKQvP8b84QCrR7PmSoIRgzAEic/zlLeakAe46ahUEVJrUbT71h39X5LAwRIEiMfCHnw+HZSvkaHpikY4H//5I78T2MAYY3oHL+6Jjhqiq40cM4Q9/7mRWBuaeYzu09Okl2EcVGN0V9510L3bBO7QiDZO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yw4Ai/Iv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=JM1Jl1gTYPsHj0a0dYlntnb/hP3A1T3gpl060o3NHPu2gOMeLCOA35Hdvii1fby3HipZc0qnQ3MgKKJmGD8zH8GkiSTOQtAyMSuaiYWLCNzIGroe0M1+sQ/pJvZNID6Hmuaa21/TznNHrXuP+G15+UGBHjw2CL+jO1H1vEGO6Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SyzuzLdu; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yw4Ai/Iv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733150761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H/n54QHe1NzMvOrCOYdJyhQRev16QpKhheU+kQiQcBU=;
-	b=Yw4Ai/IvWwVRqRX+NxzENVg1UvEaSTLh+KZoVyL04hpYU/P7En6D4dAAs7fIyHAzhu8yVH
-	mEtdSbtGsRtUHRYoFae7XAg7UhssDq/9JC0y94BGH+p1WtM9Jwm1+J+RgGrgT5slGXVOYH
-	JLnUwc5BidPJRjawgUS2QnCyaNonGdE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-yW1683hDNHuEa-Pmen60xw-1; Mon, 02 Dec 2024 09:46:00 -0500
-X-MC-Unique: yW1683hDNHuEa-Pmen60xw-1
-X-Mimecast-MFC-AGG-ID: yW1683hDNHuEa-Pmen60xw
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-aa529e35844so518077766b.0
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 06:46:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SyzuzLdu"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434aabd688fso27611245e9.3
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 06:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733150806; x=1733755606; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4jngKSnV1SnlkeqtipOyUqxY6v4EepIgqkXVcaaXUUg=;
+        b=SyzuzLduOoNRgG6ZuNKAtCFUvrAy0lRXR5iCtS+Q/NEL3NfPCj/B6fG+3Y8EqgG5lr
+         RrVV0jda6qkHmf7r80zgEUywWKiIY5x1RfMCmbNF3me9CK3DXszFEs8EZQ9lsnfBoTit
+         COVjEnOtyumcNN5olTi9T/zbMLSUQeYQZm89Bn/QD2JHmMIlGlovOrlk1QHWrZlZF8mf
+         WfOCxSVidxfoO7e4jlY6nN4z3uhG+lgeM8EAQ6dfwNTR/4GGqjbW8avpEeIiXqSVa//9
+         sEZM8oR3bfiNmHDNmyB/3bEtsJU5lznAHoGH+WWwfirclFDsRdOqkRSO5vi4/qNyk6Sk
+         MkFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733150759; x=1733755559;
+        d=1e100.net; s=20230601; t=1733150806; x=1733755606;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H/n54QHe1NzMvOrCOYdJyhQRev16QpKhheU+kQiQcBU=;
-        b=hD/DiP61vE9sEl6fH/JJ6UjIoUNIbShm0wt2fzd5RLD9bAJ02STggNXEsxn2QD3tsS
-         w7fn5Jgcs7cH0W6gX101OiGcjCII7PbwqDyJBG/aXStBSKvtddCO3TdVhdBFF9d1FQA9
-         uKH3CZ77V9M/duI/RWQ7oquk1RsFQfGq+XRBCq9UTn3h5a+oLOcuDdYDBFV+OSul0+UE
-         Orhz8iMviiblN7j3f4+J839WZF89KZvYBbPcFfBEKsVwzY2bdXsbV1tyu5Xp+5H1jo0s
-         hfVr/cYyQ9uJY70TiITo6yYk/ko9xXTa7Av3wb8OSe8cxmSo2f7vXJtkzJvuXRNdwS4b
-         7NYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDbRbz8HD/xFAM9aCEBVokn0FOkDQaOeIgZs75yMA6o2B1dWzc5odr5ujVEzYaq1HpyJbRNQTDn9ISdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcTCeouJM287a6tzyJW6ifEFSghfsa0x67JVu5iIN9/CRYQNdg
-	Zg2EjCgA6E8HJ9nIu2abH6e5PO3AR70W0VYA76pSFNgRENdEOHPQj0U1TbPWLQVgGWiM5Y1rhN+
-	6ZAXOLS8f02qkF6vSNLJW/QIIC8DUXXgWGptApsGmUeE0u0B4a+MUGZtf8pwKngKXCvWR
-X-Gm-Gg: ASbGncuvILJgfBEyRSDR/owW1t5VStYL8d8gzlLa2343Tsu85mKIflCDVYkyWMK0NJs
-	0omW3B0ZcLbHUS6IUOPLI7RxrEVciIkWZjlSbyalJwFxku6NvOQfIVBi4BoSihVJ6v83rvxni5X
-	GxfjMvLlHoQkABpsVD9Qv3S9N4JpLeJF6K+ikobPMWaSOpeqehDda0G7MpPbl3qLGwmqkl94czd
-	3xT1mBi/VrjJMEVzCb0gTKdPp6UoE13AKu2sN5PMYdmeTHfZGzNpA==
-X-Received: by 2002:a17:906:3188:b0:aa5:1cdf:7bfd with SMTP id a640c23a62f3a-aa5945058bbmr2041913766b.7.1733150758896;
-        Mon, 02 Dec 2024 06:45:58 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF8HqwPhXUO9252fmA3AzlzqGEYvuYGwKNOG5zyj1I7gJ6jPWtLqvor8xH6GhcSZADZyL1TlA==
-X-Received: by 2002:a17:906:3188:b0:aa5:1cdf:7bfd with SMTP id a640c23a62f3a-aa5945058bbmr2041908566b.7.1733150758467;
-        Mon, 02 Dec 2024 06:45:58 -0800 (PST)
-Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa59990a777sm515948666b.154.2024.12.02.06.45.57
+        bh=4jngKSnV1SnlkeqtipOyUqxY6v4EepIgqkXVcaaXUUg=;
+        b=fHCZzvqoG6tkvgYa7HRbL/nuxQh0jgZ8hhiVovBM8AW88d8VWYEVGRv5lGbX1YZPfj
+         q3q/m9joT1pu0Ml/YCnR076R8+xarJqYzmqR+kLDGYP/RH/doWL0aLFLOiK9ovo45Ks5
+         HGTqAVhjj1TV0bDFM3LPuV5VJ+/BhikJAYr7qlBgyeF/PeNPVX2q3m5XOkTTShxTk90O
+         zoxYHsNG0atOq6bGfdyfY2k/n/ll4U4rs4HaQmmMSLPrNwgcU0GBLcN8eMSQ2S4yJ96w
+         zesbVO5LY8T3UwPmW0rHWjJhiyXp/A6JRzZH1xkgtkjQMhO+OiL91Mhy0jRR3brF9Ayr
+         UUzw==
+X-Forwarded-Encrypted: i=1; AJvYcCWKnF+jj2ymSoE7a73oUnE3Yg2W6MRzYD/v5y3EZpR3+nkb3JjfCBl1CzHbvdYbtbsN6FRThzLKiuq+NQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq6a6jtGKY/TJY3YTvFFoB3Ha6KPTXnn9GMCgYHnLZFAjshMfi
+	EY7aeUpI0g4Z+0p5rnaYvGyzD6PG12yR+JahrEW4Quz7xhBKjQkdfrTwyIpM7xbG9KneOVjtK8n
+	3rPc=
+X-Gm-Gg: ASbGncs5gjOZooJOU0orUkFGE9X7mhxpONNDHj9ZKbGea/Rr6Gydw0pV4VeCZpl7T4W
+	wVqEd+rab1NLEmVnkI3CVOouKhy7BJYWhJWIeaZVP99Wj6EHecHMtA1C6/t+TxYJ10KdUDJtebQ
+	BxZH2EttqFIFNQOg6lDuxuP2mxZV36hx7zR/265lQfY1vw3SHwhJb1nRDUWMUDO/jB/sp9POlJo
+	sDKjm94p2idEiyXpshd2wz7PaZnJjNnDlyBQYkXleHuJyxQnvU1cudBRVu9w7w=
+X-Google-Smtp-Source: AGHT+IE49b8JjMPBK9ZvR+0YrEE6wFU50bpMjnp0L2s2ALML5mrxtbe7syEjF4yg8qOV9t5qAfufhg==
+X-Received: by 2002:a05:600c:b87:b0:434:a1e7:27b0 with SMTP id 5b1f17b1804b1-434a9dc3d08mr207426355e9.11.1733150806267;
+        Mon, 02 Dec 2024 06:46:46 -0800 (PST)
+Received: from [192.168.0.40] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa74efbesm185888475e9.7.2024.12.02.06.46.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 06:45:57 -0800 (PST)
-Message-ID: <67f78128-dcc0-4253-a6f7-5905ca375b06@redhat.com>
-Date: Mon, 2 Dec 2024 15:45:57 +0100
+        Mon, 02 Dec 2024 06:46:45 -0800 (PST)
+Message-ID: <1a063942-22a5-4ffd-807f-67b681ddedf5@linaro.org>
+Date: Mon, 2 Dec 2024 14:46:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -72,64 +66,45 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] media: uvcvideo: Flush the control cache when we
- get an event
-To: Ricardo Ribalda <ribalda@chromium.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>,
+Subject: Re: [PATCH v2 2/4] media: venus: hfi_parser: avoid OOB access beyond
+ payload word count
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Tomasz Figa
+ <tfiga@chromium.org>, Hans Verkuil <hans.verkuil@cisco.com>
+Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
  Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241202-uvc-fix-async-v5-0-6658c1fe312b@chromium.org>
- <20241202-uvc-fix-async-v5-5-6658c1fe312b@chromium.org>
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20241128-venus_oob_2-v2-0-483ae0a464b8@quicinc.com>
+ <20241128-venus_oob_2-v2-2-483ae0a464b8@quicinc.com>
+ <65002924-3b8b-47ab-aa90-4733ccc2f728@linaro.org>
+ <1a6d05d8-08aa-cb84-ca36-859be3c589c3@quicinc.com>
 Content-Language: en-US
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241202-uvc-fix-async-v5-5-6658c1fe312b@chromium.org>
-Content-Type: text/plain; charset=UTF-8
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <1a6d05d8-08aa-cb84-ca36-859be3c589c3@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi,
+On 02/12/2024 13:24, Vikash Garodia wrote:
+> If you see, words_count is doing the role of remaining_size. In existing
+> implementation as well, we can move those increments per case to once per loop,
+> just that to avoid incrementing for default case.
 
-On 2-Dec-24 3:24 PM, Ricardo Ribalda wrote:
-> Asynchronous controls trigger an event when they have completed their
-> operation.
-> 
-> This can make that the control cached value does not match the value in
-> the device.
-> 
-> Let's flush the cache to be on the safe side.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index e90bf2aeb5e4..75d534072f50 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1672,6 +1672,9 @@ bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video_chain *chain,
->  	struct uvc_device *dev = chain->dev;
->  	struct uvc_ctrl_work *w = &dev->async_ctrl;
->  
-> +	/* Flush the control cache, the data might have changed. */
-> +	ctrl->loaded = 0;
-> +
->  	if (list_empty(&ctrl->info.mappings))
->  		return false;
->  
->
+Yes.
 
+To me it seems
 
-Thank you for the patch.
+- A redundant step to have words_count
+- That the functions themselves should return the amount of bytes
+   words += should increment by
+- That you could do that words += outside of the switch instead of
+   at each case:
 
-I'm not familiar enough with UVC yet to really have an opinion on this one,
-so I'll defer reviewing this one to Laurent.
+but to be clear the logic of incrementing the words looks right to me 
+now, I'm suggesting additional stylistic change.
 
-Regards,
-
-Hans
-
-
-
+---
+bod
