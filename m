@@ -1,62 +1,61 @@
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F693126C13
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6921770ED
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733154446; cv=none; b=fncGV7L2Z+sgHI4sQ1NvvjwSZoSby43OudRSlSSNzrJEYLxw7dh0jvTiM/MpSeXYOj3FekGjDqpbhTqGQJ0biMq9pjGCxVdH/Fsy9+6W2D1AYZA3YJn47wtWYeREsRco8kedjtwLKGH09ZG/vmw5dmSts8FJhBejJ3tGddzV8rI=
+	t=1733154449; cv=none; b=SrGla+XC44CRl2TEHT5n8SjUJqZLebyoUWz4HxUxNJdmzxkZYBZdecMJppabfsuBuOiRt8kBdXFoduOCuldzHPII0RuFSTVNLBZ4zgTP+A5Y1h+vY6VJygZn1aTxgOjquW6F5edMMKl/EUVZDa/2JQJBmHuNZY4H7SHa6im1MZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733154446; c=relaxed/simple;
-	bh=rjvM8q19fcbBsiIYtenn0hKh0vxaDX+5kJuh6tcl068=;
+	s=arc-20240116; t=1733154449; c=relaxed/simple;
+	bh=NQt98Z0M5QNA/TsO8gh1YDS9GMK76KynhZ9aabRaUlg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=siJ88f/XQpePwp21GaecryP6TeUrFZKnSIoB3sVjgvm0K58S3qpiL8Qm5AEfZKFfbx0vE3ppRkBzJy9B5E01LjiMT91KYeYO/lNptjJhLnTEKqLhK6ttUbUHN+mjGaze/sTi2gvNZRCc4gmN7psUEhF/X3lS4CR5dvuanpYw3yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YqqnGscm; arc=none smtp.client-ip=209.85.222.49
+	 In-Reply-To:To:Cc; b=E9NJHh2KZIEPjMhvYz/nfRScaeWL1O2eNl+ulQcBtuUttNzWJD/zsbPdmpSVmmpjERQDUUB5tjZnYSunBWNgsBcRibT9gfj+iikx7Y1Fc8cwax4Q/449xqr9o2kGy/btLYFlCFhl+VLKu3dW9CyYDO69LbLDc//qCo5Rt+GEDGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=L7Gmv2zv; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YqqnGscm"
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-85bafa89d73so309516241.2
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:47:24 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L7Gmv2zv"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6d88cb85987so22641596d6.1
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:47:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733154443; x=1733759243; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1733154445; x=1733759245; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4pxSoz1ajcI3n8y8uPzRsEcpmfNX2HaWKguXvR+KRDQ=;
-        b=YqqnGscmJ2HFm+aU/E53L8QmkLzpSc5bLPhTe0GeXcHOfQwkFy4QjhbwzNlwXr2BRt
-         6gBnvHToqw7pXxW1/KnR8Su/9TjeFRDj3xbqtNLm8qwBuqt6vduXJMMUmjd1dsQFRN0j
-         3uF3WGeWGZRksIeAraBkdqr09H6YMW/Y5ho5Q=
+        bh=l2F2lVT/48t59mZz2zC2oH5sxyMbSECeGcR5hkq1C/k=;
+        b=L7Gmv2zvrBkVAJTmF5xBrM9r0j/frnToHTvotHEjxhCbFDhji/SvvD+8eNb2A5NCoN
+         CgGDzV9PuCJ2uw0j+L3rT3rDawUrPBOJvUKbVNYwStlfEWluY7vYbtFBR+eVJ+5/0JeX
+         JITPQD0mClFdKEgs2jmct8LMMnXjJ9WWBRWcY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733154443; x=1733759243;
+        d=1e100.net; s=20230601; t=1733154445; x=1733759245;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4pxSoz1ajcI3n8y8uPzRsEcpmfNX2HaWKguXvR+KRDQ=;
-        b=r+hMgctTdP1s15AKTZHG3qqnrHGYDlBuc71VwbNWdOWlx8gIwuAKchTNUIjfLkYCj9
-         0DwTzja58d4lAbam8/g6WtCCGaBW3lPNKL09cbPAi5itt17ajAEkujsfDAIdbDyFDh7g
-         AVLqIfWax5XUJEvUiSgNXY3leRRRmV8eyeh0OrWaON1h+7M+riDKhStLNKq/DWtbxW/O
-         BaVsZBiVRPiOnbCGavLzwH8MRDkWsC+XNV2PycFAZLAhlCHyB3KOBOqXDfskmw1/6sFF
-         QbIR5voX7Vxx5naTG8TNQIta1/zb3H6Whv0dgmEFRnNsHgSBbOP1+MyDUyEXgspMdCQw
-         ixBw==
-X-Gm-Message-State: AOJu0YyEHEURw+PEGBt8W7GU+pEoMAh8jP6oiKypvGkfMgqSHdlrpHL2
-	sWO2WcdkWE9sxUnRwizSAGgb6lirtji/lFQowNOYlCIdmHZ7yLwd6JgG8QMmxg==
-X-Gm-Gg: ASbGnctyzXq5xwoVtOfac3YktmgeOvZr3XNc0cXEERHhu/Ub+4K3CblZF9l2MaxP8Ov
-	yYjpt6+sy2HFT8j1B9zFTnbEJaSft4jo/96R9uHArfUYVjKwERSbiZjWH2ijdzsdOcWkerj1Ic3
-	yjTjLSqR+UgYQukQZ/RCeJe473bOS0Gh9dLhIzD3tekO9rtgRscyNIIj7Tl3/SRC6xL94ub9uOD
-	mE5SQlGaiiPw6wRQjJhQIGu1TIbTlhmaXZHw+jktMCc94yqrhVt5JDkH3ClXofA0/2mJvxMctjP
-	7PBY2R9wHRhnfydy1mNSiOTe
-X-Google-Smtp-Source: AGHT+IGaWcZbV6qtojnjaBkX2eRGECUPG2dd+i3FQicKN4gnW5JGkqWcKAek6j+Ilms9M2b0vFq/qA==
-X-Received: by 2002:a05:6122:3c4f:b0:515:3bfb:c7b7 with SMTP id 71dfb90a1353d-515568dab17mr30842699e0c.3.1733154443629;
-        Mon, 02 Dec 2024 07:47:23 -0800 (PST)
+        bh=l2F2lVT/48t59mZz2zC2oH5sxyMbSECeGcR5hkq1C/k=;
+        b=aVqNGp042KwbGeDE0H/EHGdXf18Y/4cLTFsa5LECuE5yChdGz3srPx8ggDT9g6br7v
+         1kETa0rZ6RED+Wx2fKlZ8jT3dpFg9dpfPekcWSnlz2+1Eg4S+imwG+Y9Q0SE4iNfcSnV
+         VvepyapJWuDifdM3IkjrHJWDDNe51TrzF5cAFmgvS9fNF8OhTfzdgSeGrxMtpUsV9DQo
+         7mkMN5hNgDh5nscBW7YbeyhMIdc+hL33GzcGoBPzkjEjhCIYP3ONldDiuMQZaH5wb17T
+         HGo9WOSkDgMcl9fu/zq5NY/RP0QK7Z7gMexhYCyV4wy9o71Hea3ZR9YYTv45HiGuz2nw
+         SSLg==
+X-Gm-Message-State: AOJu0Yxh1jZKtVeNg6MnU6lD/J6U3Cw1VtSLpF4l74ov7h1AwVePTsbR
+	0vXHHCFPDeGLf9D+uNpnOedgI2G9TbACz5dRdhXo6EvVoPegvqXFNbIIXT+Pag==
+X-Gm-Gg: ASbGnctCCobahSkv+t3uiNUGBsQe+ef1IpAgj1/hB1OyjAZGeKxAcy6KEYQzTGEZ6CO
+	oDEhSfbNeM0iO44xw24BXtFGYHcrwvh1n5VbqbafZ8wYJPybqD72CsJk60VIFANjlplGQKuP2a5
+	ExuGLniPRwSKqs2GTuiKGQiAx63pHeRATik3Ya6gB11BuBzq2DVJpm6DyEgooXy6i0qRucAQyVA
+	thGnCvCYbatYIs6v29CETJdojSOzcdJzWuld3UGSxKKpDi0Fhz8ppkWXPDfpiQl+Xk/npYs5Bv7
+	4knZX/Tvsn95TiHnm3zMX1dG
+X-Google-Smtp-Source: AGHT+IGi/PMi7HKxN0drYRNoeMrQehkEDZgCgHDgtdOzyjj8HEWJDMxx4Dj3/iwSYHFuTdJy9nQktg==
+X-Received: by 2002:a05:6214:626:b0:6d8:a1b4:b58f with SMTP id 6a1803df08f44-6d8a1b4bb2amr99633466d6.11.1733154445272;
+        Mon, 02 Dec 2024 07:47:25 -0800 (PST)
 Received: from denia.c.googlers.com (5.236.236.35.bc.googleusercontent.com. [35.236.236.5])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5156d0f8ad6sm1159729e0c.49.2024.12.02.07.47.21
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5156d0f8ad6sm1159729e0c.49.2024.12.02.07.47.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 07:47:22 -0800 (PST)
+        Mon, 02 Dec 2024 07:47:24 -0800 (PST)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 02 Dec 2024 15:47:16 +0000
-Subject: [PATCH 2/3] media: atomisp: Use the actual value of the enum
- instead of the enum
+Date: Mon, 02 Dec 2024 15:47:17 +0000
+Subject: [PATCH 3/3] media: mediatek: vcodec: Workaround a compiler warning
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,7 +64,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-fix-llvm9-v1-2-2a50f5acfd0b@chromium.org>
+Message-Id: <20241202-fix-llvm9-v1-3-2a50f5acfd0b@chromium.org>
 References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
 In-Reply-To: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -87,37 +86,42 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.13.0
 
-hrt_isp_css_irq_sw_pin_0 has a different enum type than
-irq_sw_channel_id_t.
+llvm identifies that the SCP_IPI_VENC_H264 and IPI_VENC_H264 are from
+the same enum type, but their are part of the same ternary operator.
 
-Replace it with the actual value of hrt_isp_css_irq_sw_pin_0 to avoid
-arithmetic operations between different enum types (and make the
-compiler happy).
-
-It is required to build with llvm 9 without these warnings:
-drivers/staging/media/atomisp/pci/sh_css_hrt.c:68:19: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-drivers/staging/media/atomisp/pci/sh_css.c:1233:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-drivers/staging/media/atomisp/pci/sh_css.c:1237:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-ro
+vpu_inst.id is of type int, so we can just rewrite a bit the code and
+avoid the following llvm9 warning:
+drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:597:29: warning: conditional expression between different enumeration types ('enum scp_ipi_id' and 'enum ipi_id') [-Wenum-compare-conditional]
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/staging/media/atomisp/pci/hive_isp_css_common/irq_global.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/hive_isp_css_common/irq_global.h b/drivers/staging/media/atomisp/pci/hive_isp_css_common/irq_global.h
-index 2c47e7820bd7..69e68ecd6bc3 100644
---- a/drivers/staging/media/atomisp/pci/hive_isp_css_common/irq_global.h
-+++ b/drivers/staging/media/atomisp/pci/hive_isp_css_common/irq_global.h
-@@ -18,7 +18,7 @@
- #endif
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
+index f8145998fcaf..4786062e879a 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
+@@ -584,7 +584,6 @@ static void h264_encode_filler(struct venc_h264_inst *inst, void *buf,
  
- /* The IRQ is not mapped uniformly on its related interfaces */
--#define	IRQ_SW_CHANNEL_OFFSET	hrt_isp_css_irq_sw_pin_0
-+#define	IRQ_SW_CHANNEL_OFFSET	HIVE_GP_DEV_IRQ_SW_PIN_0_BIT_ID
+ static int h264_enc_init(struct mtk_vcodec_enc_ctx *ctx)
+ {
+-	const bool is_ext = MTK_ENC_CTX_IS_EXT(ctx);
+ 	int ret = 0;
+ 	struct venc_h264_inst *inst;
  
- typedef enum {
- 	IRQ_SW_CHANNEL0_ID = hrt_isp_css_irq_sw_pin_0 - IRQ_SW_CHANNEL_OFFSET,
+@@ -594,7 +593,10 @@ static int h264_enc_init(struct mtk_vcodec_enc_ctx *ctx)
+ 
+ 	inst->ctx = ctx;
+ 	inst->vpu_inst.ctx = ctx;
+-	inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
++	if (MTK_ENC_CTX_IS_EXT(ctx))
++		inst->vpu_inst.id = SCP_IPI_VENC_H264;
++	else
++		inst->vpu_inst.id = IPI_VENC_H264;
+ 	inst->hw_base = mtk_vcodec_get_reg_addr(inst->ctx->dev->reg_base, VENC_SYS);
+ 
+ 	ret = vpu_enc_init(&inst->vpu_inst);
 
 -- 
 2.47.0.338.g60cca15819-goog
