@@ -1,61 +1,61 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC60A42AA9
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6073747A5C
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733154442; cv=none; b=Bks4AN9sHwuIEz4lmPGMeznvadIi7oI01/3bznnagip8nv7S7fqBg/EB2jax2FFey+Vexynbl5Hjxasqab9Y4I8TkHpTqYC3NZPAmMFOC2eFg69o/+FnlvbJUDFXKkK9lYDBBJWHMp5tWQuCXnHBbnsli3MtUIq/FtCrLlWN2kw=
+	t=1733154444; cv=none; b=qxJfz1p0fIa7C69hUD/wle/tlduTENYVDpDXB4+qkmTaQguHACGnwemO6YYixfjsvGL6fJWJlJ7U7GFjTG4g2gptnhAn+rsf8ET3tHcBPrf0EPa7PCPzQgVlud+6EXxp14LkS+BhddE7cAUsXbrfp2gga15Hm6P82rIjNuwVFvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733154442; c=relaxed/simple;
-	bh=8u8fF5ha9BCebV7dj4HE28mCFH9G7mXA1hYQMfM+p5U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kuhRasXXIkld68XqSmlosfqxaZqwMacGygcAPjEUAqRtwpb/dvACGyWwYk1eFBe7kQZ4oVaO+1xiTkZyLKZjC9dHn2IYK4JY/NX2Mq3IqFdp1vL53gZpoTwks2LySngoyj88jpzjX2yBc2OXyHU5Q7UliLvvejUTEWl+FDN1V6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ToMIJWYd; arc=none smtp.client-ip=209.85.167.178
+	s=arc-20240116; t=1733154444; c=relaxed/simple;
+	bh=mtiQtlXyI3b6sJIsjA4TwpaNavz3zj9aF+MIz5P2kic=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jYSJ/i9whFZU+JwKKo2n0wyELKAEYeKmotu9mqpjc0V5w5NnE5Hm56duyxpCfMWAaYCRrXsPEH05+jERCtx5WmKhv2q6n0CLckT6lPGUuJwDCO91HV9S/HPGCmywFliMY875risOGNYIM9SaU4XkdK2stWm9d+WwCBkY5PL1RGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OEhgyWGc; arc=none smtp.client-ip=209.85.222.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ToMIJWYd"
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3ea33a922afso2111489b6e.3
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:47:19 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OEhgyWGc"
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-85bc6a1a48cso750533241.0
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:47:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733154439; x=1733759239; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QNctqgbgKX4M7vIwY0GeY040xXoP0R2au1vBq2qCPD0=;
-        b=ToMIJWYdjn1xjRNOSE7806aXxCZX3OETaQJaAjQRFuaoSkOeO1dUmVOlW/2aEzZI70
-         r2WHSEfa4rS4xxfVkw+es8Im6eaDw884Ck4Sgna9YI4YCIP+aNKJjawdYMEEjkTC/+8m
-         auvhAd/zsa7X9NbSuoKyWeQztCuHgMR+vwDqc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733154439; x=1733759239;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=chromium.org; s=google; t=1733154441; x=1733759241; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QNctqgbgKX4M7vIwY0GeY040xXoP0R2au1vBq2qCPD0=;
-        b=pS6flz6w2ZpkJnCg2TLdutsUobKsQ1Of582Alou06UXAlzZkACylt37PLIMzmvuQq/
-         5o5i0t7GGLVPY4u7TOJorXcv3xDgeKk8G6vEshFhB8x3BvcRP2fHkNmI8PQdVygbleFY
-         vqRGei4tFPUxfwQLlWxcXgXhMhI9wuZlpV5NnNU+SSRHVYlY4gBMZTVnFfNScWTvgE9m
-         /UwO2Pe1bQsZsD7Xl+nTtz8pIGJMTc/anAUHFVA++U5OLkSBLuoCaJ15GB6xtT3MWSaQ
-         mvXnajrceJlwxDxoF+FJnuA276LgotheuwQu5I/H1QD/OFA0kGkH/RKSYDU2z2ohFVe/
-         1UUQ==
-X-Gm-Message-State: AOJu0YzJQgH8HvSE6zhPvSnyvOMUzdGQ/mcRilaR6Q0xWJNJ0E0uk2Y9
-	+Vr/UB2RE4lBe+Qmm0DYc5v59iOSp2x6PmU4p4v3qft3cORVppLbqsa6GiouV+SaJKaRLp/Wla0
-	=
-X-Gm-Gg: ASbGncsz8oLYkKYvCS5QbHU49k8Y7LxakZydps5DrqUgcVhVnVH+ggTWtKP7OZZO+Y/
-	UFqva0F44aMBCmr5HqVCRCFZMqXazpXx6Q5atNVAkdkpg7c4ye8GNbwYTvnFPa0XTQ1bqh1L/IU
-	A+5SPWOrckWkUE8BIuRqa/hjM6PdEj4O7h/mp25C6e7VA948uVsd2VH4P+RczOY5J91vLj3m6WS
-	onfd5HBHPzaGkkPrgt13uhdpZS3vyrWTiZ6uoeufiSCptQ6FGQj3U8CG++JlrGkHqJSZJTbB3H1
-	r9oBB/4cpURUYOhFtwKmrNbA
-X-Google-Smtp-Source: AGHT+IH/7hpTfNse9nN9Jr+DgfzObAaRxU/S7oa2RXexy0e4f94BDSUNP4uGp0FObZdTBwMHoHxTgQ==
-X-Received: by 2002:a05:6808:1589:b0:3e6:2471:4d10 with SMTP id 5614622812f47-3ea6dbd43f1mr21613568b6e.11.1733154438947;
-        Mon, 02 Dec 2024 07:47:18 -0800 (PST)
+        bh=RkEW/0Y6zT4/Atf/d+puMl0WcNDtT8U8UDsIe65uvgE=;
+        b=OEhgyWGcKXzsgFxQ5qCx3Qve3IiYC8Tcdya5BUHVAlcLvExGxT4hLwlBAA53vHG+fc
+         ICMI1w4R6nH4/27DtxQZEHDyqGmuS5/JEMHTy9w6Tvl4m5shGwUWY1X7Yf3LW+gN59dT
+         F+gcfmO4Q2sBal5m7xgJ2aAo7b22Y1Y+itZuw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733154441; x=1733759241;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RkEW/0Y6zT4/Atf/d+puMl0WcNDtT8U8UDsIe65uvgE=;
+        b=i+nlIQU5Q4Q+5yqV54CJ9EfsreolC7pvz3GF0Ss3P3bdOfPw8/Z9KyCtvldQbtCGdX
+         SvmGEClgozoG7n45QIpaHtQFCwu8EJzCYyJ+Nk2V36V+0wE+uc+au0d+fUU2jIZDQpbn
+         XihgS2PqvuE/BTrUa8ZctD9pQwhNUJQXm3OuxsxrLV3CYAGlOzt5q/IEYd2u0vo7l70q
+         OivhB+CqEteeLAxD8DcLQ8lvBq06rpYk6KHDpNYegnQZWSbN7NYNbjbquLDhUIr9M3nG
+         3QOMA2pwGxhKl8DljH9zyAQ9QF0kw4F55yEYA/EibgFecN3ClHDsbxYu8Aop1EMfJhcb
+         ifQg==
+X-Gm-Message-State: AOJu0YytatvEnMeg/lsazLywQ0hfBew1TJIFRwxiSQWn2EhGE1Rd0Xk2
+	HhyedisSTXkcHT8Rw3zQcWdemrOpdMsrC9hHzp9bYw7b9abP1x1LTuwGzE/ZaA==
+X-Gm-Gg: ASbGncuPQEGx4Bjv0yb6XfVHGANpvBknqwI1j05Z48PMUVbxSp7YMIzVHWktFQKxXVB
+	fc3VHfNcGjUByU+3zZfR1NP5aIOMwktViy3BkWxJ3+321gbefgKg6uzi07wNH10l+yiWFmK1TWB
+	WG+pu2WD2RTKML49DANlnqp6MsOfCQofjJwSCdLk17FVG05UY3CFlWWH1mb08brlzqFPSymhM2f
+	F5QbiTbdVnd/N1zGSoPsNRp7Voer4XighIebFgTmkwMTy+SSpdt47lzSCJDG701Ivyj/KAVuNGi
+	zsmcAkPfwvMXtDvMggHTAyP9
+X-Google-Smtp-Source: AGHT+IGBHPCXG9TwBD4LE/oxUh/BqCKafbDdQlV9UV4NbH/ohrUS+/WPS+6wYQbT3toO5YK2KCH6Sw==
+X-Received: by 2002:a05:6122:500e:10b0:515:20e6:7861 with SMTP id 71dfb90a1353d-5156a8069d4mr18897232e0c.2.1733154441340;
+        Mon, 02 Dec 2024 07:47:21 -0800 (PST)
 Received: from denia.c.googlers.com (5.236.236.35.bc.googleusercontent.com. [35.236.236.5])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5156d0f8ad6sm1159729e0c.49.2024.12.02.07.47.16
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5156d0f8ad6sm1159729e0c.49.2024.12.02.07.47.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 07:47:17 -0800 (PST)
+        Mon, 02 Dec 2024 07:47:20 -0800 (PST)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH 0/3] media: Fix warnings with llvm9
-Date: Mon, 02 Dec 2024 15:47:14 +0000
-Message-Id: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
+Date: Mon, 02 Dec 2024 15:47:15 +0000
+Subject: [PATCH 1/3] media: cx231xx: Convert enum into a define
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -64,9 +64,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIPWTWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDIKGbllmhm5NTlmupa5JskWJuYJpsmWqcqgRUX1CUCpQEmxUdW1sLAOK
- puwFbAAAA
+Message-Id: <20241202-fix-llvm9-v1-1-2a50f5acfd0b@chromium.org>
+References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
+In-Reply-To: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <ndesaulniers@google.com>, 
@@ -86,25 +86,71 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.13.0
 
-When we tried to build media with llvm we got some new warnings, lets
-try to fix them before llvm is part of our CI.
+The code is running arithmentics with the enum, which when not done with
+care makes the compiler a bit nervous.
+
+Because those enums are only used as defines (no argument or variable
+from that enumeration type), convert it into a define and move on.
+
+It is required to build with llvm 9 without these warnings:
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:673:17: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:680:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:687:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:702:17: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:709:21: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:718:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:727:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:737:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
+drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:749:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
 
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
-Ricardo Ribalda (3):
-      media: cx231xx: Convert enum into a define
-      media: atomisp: Use the actual value of the enum instead of the enum
-      media: mediatek: vcodec: Workaround a compiler warning
+ drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
- .../mediatek/vcodec/encoder/venc/venc_h264_if.c        |  6 ++++--
- drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h            | 18 +++++++-----------
- .../media/atomisp/pci/hive_isp_css_common/irq_global.h |  2 +-
- 3 files changed, 12 insertions(+), 14 deletions(-)
----
-base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
-change-id: 20241202-fix-llvm9-4c8d705c9e3e
+diff --git a/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h b/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
+index 5bc44f194d0a..62ffa16bb82c 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
++++ b/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
+@@ -57,19 +57,17 @@ enum USB_SPEED{
+ };
+ 
+ #define TS_MASK         0x6
+-enum TS_PORT{
+-	NO_TS_PORT = 0x0,	/* 2'b00: Neither port used. PCB not a Hybrid,
++#define NO_TS_PORT	0x0	/* 2'b00: Neither port used. PCB not a Hybrid,
+ 				   only offers Analog TV or Video */
+-	TS1_PORT = 0x4,		/* 2'b10: TS1 Input (Hybrid mode :
++#define TS1_PORT	0x4	/* 2'b10: TS1 Input (Hybrid mode :
+ 				Digital or External Analog/Compressed source) */
+-	TS1_TS2_PORT = 0x6,	/* 2'b11: TS1 & TS2 Inputs
++#define TS1_TS2_PORT	0x6	/* 2'b11: TS1 & TS2 Inputs
+ 				(Dual inputs from Digital and/or
+ 				External Analog/Compressed sources) */
+-	TS1_EXT_CLOCK = 0x6,	/* 2'b11: TS1 & TS2 as selector
++#define TS1_EXT_CLOCK	0x6	/* 2'b11: TS1 & TS2 as selector
+ 						to external clock */
+-	TS1VIP_TS2_PORT = 0x2	/* 2'b01: TS1 used as 656/VIP Output,
++#define TS1VIP_TS2_PORT 0x2	/* 2'b01: TS1 used as 656/VIP Output,
+ 				   TS2 Input (from Compressor) */
+-};
+ 
+ #define EAVP_MASK       0x8
+ enum EAV_PRESENT{
+@@ -89,10 +87,8 @@ enum AT_MODE{
+ };
+ 
+ #define PWR_SEL_MASK    0x40
+-enum POWE_TYPE{
+-	SELF_POWER = 0x0,	/* 0: self power */
+-	BUS_POWER = 0x40	/* 1: bus power */
+-};
++#define SELF_POWER	0x0	/* 0: self power */
++#define BUS_POWER	0x40	/* 1: bus power */
+ 
+ enum USB_POWE_TYPE{
+ 	USB_SELF_POWER = 0,
 
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.47.0.338.g60cca15819-goog
 
