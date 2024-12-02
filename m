@@ -1,70 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7ED91F9EB8
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 12:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789FB1FECA4
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 12:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733141962; cv=none; b=kHlbc70f81PPX7L9D2DKz9JEQ4VX5EEGSLe10irNU6X+DfiVi2ysFv8SDHM8cVqwqCLaRGfEqMADgYJj7ez9wU05nQEVLWyZUO1kHl6OD0omMdiJJVzIZGufqqaeVbVqwnXmtNi2f8t/tz32ogTxrEP8N9QlWWhkmZwXaxAP4Cw=
+	t=1733142576; cv=none; b=ozbx/n+A2sp/6R5dAvrHtMCuWb6SHFSbes2AB4UmMa2QGY4/3lSOA1EP0ypr9aBw9497rBBvkkxrhVpX2p98Vg3FbdrHBIEDJGSFp5lTWQgitKqlOYSzsDuvgR5ScOVCi9lT+OR/CvyUuqL14ZwBxSno/uiEqR1ovTF90UO+NQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733141962; c=relaxed/simple;
-	bh=sSiuPaTUCCyAZN1evUN4Y9DqyywDi/o7qDU0v27casw=;
+	s=arc-20240116; t=1733142576; c=relaxed/simple;
+	bh=aNiRtLbOimTkWCo2rlAD0jQGj9rz6eMaM3ZI18vJbMY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p3mKE1+y0VYuO5jDHbEhdRY19vU3mKLoz7YQSkAcUHIN71pqnxz1Iy8dHKS1vwU3iTH9f7Rt3dbXFvQxRHigt3uA3azygXIwlWY12101kV9kBAUajVwCuAaf/riby8eJwbSlPBHO3Sqau0oi1SqZGrekNK4MPZxZHMrgqjDQJUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KHfueHpO; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=IjGafPC/DqAzqEFYKflt4EyFD23wM9ePxfrGIwehbOFusP2BkanWflGLfccVeARtEdZlDiYBsCUFN0E0kOkfoSimbqUUyyQd8Kh3CVeK+YIdY1iSyDUSCqdOyOm9JhDaWBmsQrEV7v2Wuu73jlPj+mOl6ubl5pj2Y80SWvCsa0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AnpOSNUy; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KHfueHpO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AnpOSNUy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733141959;
+	s=mimecast20190719; t=1733142573;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QQ5mnOT2GiMijbzhlUUlxiYVQNYgpReCXid7KH016QE=;
-	b=KHfueHpOPVvKEJT+LcaMSG+jdLegwrGChWFuUcsCAH57LMk19tu1nZMsmbVbAYIGC6C2/t
-	xBrUCcWDpndsfGe9ZVLWCZLzJ4npEYA+SwgoZX4akbF+VD+N54FzJ1UiLV3knp1nMuo+8q
-	FVkcUjcHQ08PfahS+GmOld8fsmV5iNc=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=u8oQajwWGK2SYHd+94BnqtL/H4hap/syqF+etOfzB6k=;
+	b=AnpOSNUy6LNxb/isZPraHB2/NqorKx9Jquo8WAHtydIbxIjFwE9wYEq4Cx9zf8ygypWcKa
+	4R8FzH6bEowD+3yrQAQY5MnQBBUdFH48d6DU/PlAa9JkQPGqA4EJN2K5q2YUdZuwSfB7gX
+	MkGJ6kVlYBkp5MXvsNm+3VBys/rXXqE=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-263-QIrZpaysNpK8MYK6uVajUQ-1; Mon, 02 Dec 2024 07:19:18 -0500
-X-MC-Unique: QIrZpaysNpK8MYK6uVajUQ-1
-X-Mimecast-MFC-AGG-ID: QIrZpaysNpK8MYK6uVajUQ
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-aa5a0a35384so219482066b.2
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 04:19:18 -0800 (PST)
+ us-mta-308-aW6q5ziROOq1BDm-DCsZLw-1; Mon, 02 Dec 2024 07:29:31 -0500
+X-MC-Unique: aW6q5ziROOq1BDm-DCsZLw-1
+X-Mimecast-MFC-AGG-ID: aW6q5ziROOq1BDm-DCsZLw
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-aa527da110bso283839566b.0
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 04:29:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733141956; x=1733746756;
+        d=1e100.net; s=20230601; t=1733142571; x=1733747371;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQ5mnOT2GiMijbzhlUUlxiYVQNYgpReCXid7KH016QE=;
-        b=ts2T36LaCLXp59Hn/IUuTwPw01kkzg8rDUm1dTSnmHdzvnkZ6enL8LzTJZhYwMCapE
-         NZc5FK48d2xzGz1xiffCrgB7Ekvm4dUXqx3oTyQ1MhtEUh4fo+w14nZN+YMQq2S5SnEu
-         p5UPPJfASRxYgKj6LKjDj0XtPjcXXUsDORt/P2B0G6sA+jU1+eQPif0x3Ixk/EsUosmG
-         XgokKZC1FSOkwv79IHqbAiVfCLwGj6aDTddOEVDRoMkSJJqoNH31TrCQhen9H0kVuz8S
-         atpgeLL7mENAnOM6caq42G21v968t6bXkoTK3Dhxg1GjK6E98qNUSRjqPDjuo+ZvPAsG
-         uYUg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqckCiXTpI/mK8Ct0alEhBp360RS6rmNJmDYhuWj3gbFHUAEfBXc+j9TMJ5G5drgRJVc4AQRjMQvjpuA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtD8nSyO7Om4hPjdxcnkFOuT4tP6rhAakx6a9JelhHQRNSOhtf
-	QhmzUQ2NJPqftk0hOmJfCL7FuSLALXSKexSeulfbXOzqz/jFH8oeVU2dPfIql47Tbrr3EB5fmZ9
-	31HEggf7pwNcWG3S/4AgJy5qLgaPRzBHrug7OZcnXmoFOwcUemRsiaNx1l4WT
-X-Gm-Gg: ASbGncs9IJfDD/mz0/9c4QPgT0ls9Ty1Wqh0UNZQ1LZfRQ9V2Mdkp+6qD8pKqmFvrAM
-	89cllJqbU7bK5lcZzAJXvAVcqg3bl5UkjLe5S9uNCwkb5gCWGm5VjGZhpO//cknkf1vSouVcJU4
-	Tz0a8CCeAzPO+gkOqBw9+pGO0e1R6Yj2gb7hs+48bvUEOSsilaxxXZQqLlCBQKz8w9/zyqhOC3U
-	U16Ue/ohLnCsNQHJvgnL23kCCQcUcw8Fcpy1iCIDIfSe2lFZ3/qPw==
-X-Received: by 2002:a17:907:7751:b0:a9a:6bc2:c0a3 with SMTP id a640c23a62f3a-aa580edf6demr1860799266b.7.1733141956325;
-        Mon, 02 Dec 2024 04:19:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFU4Z1AXXClYhqscv3q7o7JxJFTB6otyACt5NBuflpMhMdUPhZFcucr0pT1mo5iuKQUOvdJxA==
-X-Received: by 2002:a17:907:7751:b0:a9a:6bc2:c0a3 with SMTP id a640c23a62f3a-aa580edf6demr1860795866b.7.1733141955731;
-        Mon, 02 Dec 2024 04:19:15 -0800 (PST)
+        bh=u8oQajwWGK2SYHd+94BnqtL/H4hap/syqF+etOfzB6k=;
+        b=FkHEVOrJYkgWmijblNEil3NcNdOi1HNBqAFIFJc4rL//hWw0Tq5dtKZt4AoWRcirja
+         qEWv/jxa6j6iu2D2UgBle6YgG7KPd+HiVzBkij+G0yi8MMRX3FjhT8THyzeiJE6aLcEb
+         qyrcnMERSWsBy+LxjOQsnvGCkQl8p/PzFMFPPaBWw1x9pcJbD4QIt0CqSO+7fK8OvrD9
+         Cr+s+p1NyRYtHxaBrYPtTrSzw3ryjS8a2/jyT6PwqnzKCem7NX369e/gx70P02VLj/fQ
+         vuJ/ruT84TjCc40CBCK3b9o1ts7392oq+N7H/uZ4xmBIfVgqbkXT+lPLemsNTTQQiOK5
+         2jEw==
+X-Gm-Message-State: AOJu0Yxix+BKNKQaqbH/9gJkkCRrkigXCHorylmg5jeQfxFA8IJU4nZZ
+	PZT/APvwqFNlRPmlo892NeIIwDQpvRCuxDKiXb+0BO034Y+2KFMtFlQuV5LifAcWpf6O1VsJcOd
+	fV+2ezm81/OZ0eKWDKugjPQt0LFb5Hfbf0fq27dJIVbW4VR/SlomNNkIodHrI
+X-Gm-Gg: ASbGnctCtG8Q4Ri2fTdSq8IJ+8isLuCxU7+5IbPr8zYXb1qSda+5St2ebr2xlwPsSs0
+	K1/3v5F+//Tq1+BUf/enJeVfNP711vPjjGvVsGos1Olj6P+ZrnK1w2h8v0ExMDhESz45lYkzzls
+	1/62hjAKAqyix/1OcHObg37TUh2btVb5cbZdgJiZS1Bs5mr2r6ifBEgFWvlO3YX0pm6qwO9VMfk
+	H1L2Cp92RfoSV1LyChmv0kjOqUS+GcrlbDWvmEw2t0l80Od5c68bw==
+X-Received: by 2002:a17:906:318c:b0:a99:7bc0:bca9 with SMTP id a640c23a62f3a-aa580ef0e02mr1922320166b.3.1733142570723;
+        Mon, 02 Dec 2024 04:29:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHSFIk8p9vy3zMXG9JnW6z6GRYhLTcuhYCujduAfv14X6b3tuHYI6lnj/f7QICv4Gb+Pk8CEg==
+X-Received: by 2002:a17:906:318c:b0:a99:7bc0:bca9 with SMTP id a640c23a62f3a-aa580ef0e02mr1922318666b.3.1733142570355;
+        Mon, 02 Dec 2024 04:29:30 -0800 (PST)
 Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5998e69dfsm514682266b.122.2024.12.02.04.19.14
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5998e6dd9sm504136066b.92.2024.12.02.04.29.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 04:19:15 -0800 (PST)
-Message-ID: <839446b3-1d16-4af8-997a-f2a37eb4711e@redhat.com>
-Date: Mon, 2 Dec 2024 13:19:13 +0100
+        Mon, 02 Dec 2024 04:29:29 -0800 (PST)
+Message-ID: <bb195fae-1794-4936-8874-3233a28dfe51@redhat.com>
+Date: Mon, 2 Dec 2024 13:29:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -72,334 +71,326 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] media: uvcvideo: Do not set an async control owned
- by other fh
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Subject: Re: [PATCH v2] media: uvcvideo: Remove duplicated cap/out code
+To: Ricardo Ribalda <ribalda@chromium.org>,
  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
- Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <CANiDSCseF3fsufMc-Ovoy-bQH85PqfKDM+zmfoisLw+Kq1biAw@mail.gmail.com>
- <20241129110640.GB4108@pendragon.ideasonboard.com>
- <CANiDSCvdjioy-OgC+dHde2zHAAbyfN2+MAY+YsLNdUSawjQFHw@mail.gmail.com>
- <e95b7d74-2c56-4f5a-a2f2-9c460d52fdb4@xs4all.nl>
- <CANiDSCvj4VVAcQOpR-u-BcnKA+2ifcuq_8ZML=BNOHT_55fBog@mail.gmail.com>
- <CANiDSCvwzY3DJ+U3EyzA7TCQu2qMUL6L1eTmZYbM+_Tk6DsPaA@mail.gmail.com>
- <20241129220339.GD2652@pendragon.ideasonboard.com>
- <CANiDSCsXi-WQLpbeXMat5FoM8AnYoJ0nVeCkTDMvEus8pXCC3w@mail.gmail.com>
- <20241202001846.GD6105@pendragon.ideasonboard.com>
- <fb321ade-40e7-4b1e-8fcd-c6475767239d@xs4all.nl>
- <20241202081157.GB16635@pendragon.ideasonboard.com>
- <445e551c-c527-443c-8913-6999455bd366@xs4all.nl>
- <633ca07b-6795-429f-874d-474a68396f45@redhat.com>
- <CANiDSCvmRrf1vT3g9Mzkc790RUo3GuQaFzu5+_G66b3_62RuXw@mail.gmail.com>
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241129-uvc-dup-cap-out-v2-1-596cb9bdd5e8@chromium.org>
 Content-Language: en-US
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CANiDSCvmRrf1vT3g9Mzkc790RUo3GuQaFzu5+_G66b3_62RuXw@mail.gmail.com>
+In-Reply-To: <20241129-uvc-dup-cap-out-v2-1-596cb9bdd5e8@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Ricardo,
 
-On 2-Dec-24 11:50 AM, Ricardo Ribalda wrote:
-> On Mon, 2 Dec 2024 at 11:27, Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 2-Dec-24 9:44 AM, Hans Verkuil wrote:
->>> On 02/12/2024 09:11, Laurent Pinchart wrote:
->>>> On Mon, Dec 02, 2024 at 09:05:07AM +0100, Hans Verkuil wrote:
->>>>> On 02/12/2024 01:18, Laurent Pinchart wrote:
->>>>>> On Fri, Nov 29, 2024 at 11:18:54PM +0100, Ricardo Ribalda wrote:
->>>>>>> On Fri, 29 Nov 2024 at 23:03, Laurent Pinchart wrote:
->>>>>>>> On Fri, Nov 29, 2024 at 07:47:31PM +0100, Ricardo Ribalda wrote:
->>>>>>>>> Before we all go on a well deserved weekend, let me recap what we
->>>>>>>>> know. If I did not get something correctly, let me know.
->>>>>>>>>
->>>>>>>>> 1) Well behaved devices do not allow to set or get an incomplete async
->>>>>>>>> control. They will stall instead (ref: Figure 2-21 in UVC 1.5 )
->>>>>>>>> 2) Both Laurent and Ricardo consider that there is a big chance that
->>>>>>>>> some camera modules do not implement this properly. (ref: years of
->>>>>>>>> crying over broken module firmware :) )
->>>>>>>>>
->>>>>>>>> 3) ctrl->handle is designed to point to the fh that originated the
->>>>>>>>> control. So the logic can decide if the originator needs to be
->>>>>>>>> notified or not. (ref: uvc_ctrl_send_event() )
->>>>>>>>> 4) Right now we replace the originator in ctrl->handle for unfinished
->>>>>>>>> async controls.  (ref:
->>>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/usb/uvc/uvc_ctrl.c#n2050)
->>>>>>>>>
->>>>>>>>> My interpretation is that:
->>>>>>>>> A) We need to change 4). We shall not change the originator of
->>>>>>>>> unfinished ctrl->handle.
->>>>>>>>> B) Well behaved cameras do not need the patch "Do not set an async
->>>>>>>>> control owned by another fh"
->>>>>>>>> C) For badly behaved cameras, it is fine if we slightly break the
->>>>>>>>> v4l2-compliance in corner cases, if we do not break any internal data
->>>>>>>>> structure.
->>>>>>>>
->>>>>>>> The fact that some devices may not implement the documented behaviour
->>>>>>>> correctly may not be a problem. Well-behaved devices will stall, which
->>>>>>>> means we shouldn't query the device while as async update is in
->>>>>>>> progress. Badly-behaved devices, whatever they do when queried, should
->>>>>>>> not cause any issue if we don't query them.
->>>>>>>
->>>>>>> I thought we could detect the stall and return safely. Isn't that the case?
->>>>>>
->>>>>> We could, but if we know the device will stall anyway, is there a reason
->>>>>> not to avoid issuing the request in the first place ?
->>>>>>
->>>>>>> Why we have not seen issues with this?
->>>>>>
->>>>>> I haven't tested a PTZ device for a very long time, and you would need
->>>>>> to hit a small time window to see the issue.
->>>>>>
->>>>>>>> We should not send GET_CUR and SET_CUR requests to the device while an
->>>>>>>> async update is in progress, and use cached values instead. When we
->>>>>>>> receive the async update event, we should clear the cache. This will be
->>>>>>>> the same for both well-behaved and badly-behaved devices, so we can
->>>>>>>> expose the same behaviour towards userspace.
->>>>>>>
->>>>>>> seting ctrl->loaded = 0 when we get an event sounds like a good idea
->>>>>>> and something we can implement right away.
->>>>>>> If I have to resend the set I will add it to the end.
->>>>>>>
->>>>>>>> We possibly also need some kind of timeout mechanism to cope with the
->>>>>>>> async update event not being delivered by the device.
->>>>>>>
->>>>>>> This is the part that worries me the most:
->>>>>>> - timeouts make the code fragile
->>>>>>> - What is a good value for timeout? 1 second, 30, 300? I do not think
->>>>>>> that we can find a value.
->>>>>>
->>>>>> I've been thinking about the implementation of uvc_fh cleanup over the
->>>>>> weekend, and having a timeout would have the nice advantage that we
->>>>>> could reference-count uvc_fh instead of implementing a cleanup that
->>>>>> walks over all controls when closing a file handle. I think it would
->>>>>> make the code simpler, and possibly safer too.
->>>>>>
->>>>>>>> Regarding the userspace behaviour during an auto-update, we have
->>>>>>>> multiple options:
->>>>>>>>
->>>>>>>> For control get,
->>>>>>>>
->>>>>>>> - We can return -EBUSY
->>>>>>>> - We can return the old value from the cache
->>>>>
->>>>> This would match the control behavior best. Only when the operation is
->>>>> done is the control updated and the control event sent.
->>>>>
->>>>> Some questions: is any of this documented for UVC? Because this is non-standard
->>>>
->>>> No this isn't documented.
->>>>
->>>>> behavior. Are there applications that rely on this? Should we perhaps add
->>>>
->>>> I don't know.
->>>>
->>>>> proper support for this to the control framework? E.g. add an ASYNC flag and
->>>>> document this?
->>>>
->>>> We could, but this is such a specific use case that I don't think is
->>>> worth adding complexity to the already complex control framework would
->>>> be worth it. What we could do is perhaps adding a flag for the userspace
->>>> API, but even there, I never like modelling an API with a single user.
->>>
->>> Well, it might be a single driver that uses this, but it is also the most
->>> used driver by far. I think the only change is to add a flag for this and
->>> describe how it should behave. And add v4l2-compliance tests for it.
->>>
->>> Otherwise no changes to the control framework are needed, I think.
->>>
->>> Controls with the ASYNC flag set would:
->>>
->>> - return the old value from the cache.
->>> - document that setting a new value while the operation is in progress
->>>   results in EBUSY. Document that if the new value is equal to the old value,
->>>   then return 0 and do nothing (alternative is to just immediately send
->>>   the control changed event, but that might require a control framework change).
->>> - when the operation finishes, update the cache to the new value and
->>>   send the control changed event.
->>> - document that userspace should specify V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK
->>>   when subscribing to the control if you calling fh wants to know when
->>>   the operation finishes.
->>> - document how timeouts should be handled: this is tricky, especially with
->>>   bad hardware. I.e. if the hw doesn't send the event, does that mean that
->>>   you are never able to set the control since it will stall?
->>>   In the end this will just reflect how UVC handles this.
->>
->> I have been catching up on this thread (I have not read the v3 and v4
->> threads yet).
->>
->> This all started with Ricardo noticing that ctrl->handle may get
->> overwritten when another app sets the ctrl, causing the first app
->> to set the ctrl to get a V4L2_EVENT for the ctrl (if subscribed)
->> even though it set the ctrl itself.
->>
->> My observations so far:
->>
->> 1. This is only hit when another app changes the ctrl after the first app,
->> in this case, if there is no stall issued by the hw for the second app's
->> request, arguably the first app getting the event for the ctrl is correct
+On 29-Nov-24 8:28 PM, Ricardo Ribalda wrote:
+> The *_vid_cap and *_vid_out helpers seem to be identical:
+> - Remove all the cap/out duplicated code.
+> - Remove s/g_parm helpers
+> - Reorder uvc_ioctl_ops
 > 
-> In other words, for non compliant cameras the current behaviour is
-> correct. For compliant cameras it is broken.
+> And now that we are at it, fix a comment for uvc_acquire_privileges()
 > 
->> since it was changed by the second app. IOW I think the current behavior
->> is not only fine, but even desirable. Assuming we only override ctrl->handle
->> after successfully sending the set-ctrl request to the hardware.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> Unless I miss something, cap and out helpers are identical. So there is
+> no need to duplicate code
+> ---
+> Changes in v2:
+> - Add missing acquire_privileges.
+> - Also remove helper for s/g_parm.
+> - Reorder callbacks.
+> - Link to v1: https://lore.kernel.org/r/20241127-uvc-dup-cap-out-v1-1-1bdcad2dabb0@chromium.org
+> ---
+>  drivers/media/usb/uvc/uvc_v4l2.c | 162 +++++++++++----------------------------
+>  1 file changed, 43 insertions(+), 119 deletions(-)
 > 
-> We are overriding ctrl->handle unconditionally, even if set-ctrl stalls.
-
-Right I was just looking at that. Since we hold chain->ctrl_mutex
-from the start of uvc_ioctl_s_try_ext_ctrls() until we finish
-uvc_ctrl_commit() we can delay setting ctrl->handle until
-a successful commit.
-
-Actually looking at this I think I've found another bug, uvc_ctrl_set()
-always sets ctrl->handle also in the VIDIOC_TRY_EXT_CTRLS case in
-which case we never send the SET_CUR command to the camera.
-
-And the handle is not part of the data backed up / restored by
-a rollback.
-
-Moving the storing of the handle to a successful commit fixes
-both the overriding of the handle in the stall case as well
-as the bogus setting of the handle on VIDIOC_TRY_EXT_CTRLS.
-
-So my suggestion would be not touching ctrl->handle from
-ctrl_set() instead store the handle in a new ctrl->new_handle
-variable there and copy the new_handle values to handle for affected
-controls after a successful commit (before releasing the lock).
-
-This will also successfully replace the handle for buggy
-devices which do not report a stall but instead accept the
-second SET_CUR. This replacement of handle is the correct thing
-todo in this case since after the second SET_CUR is accepted
-there is a change of the ctrl happening from the pov of the
-issuer of the first SET_CUR.
-
->> 2. This adds a lot of complexity for not sending an event to the app
->> which made the change. Hans V. suggested maybe adding some sort of flag
->> for async ctrls to the userspace API. I wonder if we should not just
->> get rid of this complexity and document that these controls will always
->> generate events independent of V4L2_EVENT_SUB_FL_ALLOW_FEEDBACK ?
->> That would certainly simplify things, but it raises the questions if
->> this will cause issues for existing applications.
-> 
-> To be honest, I am more concerned about the dangling pointers than the event.
-
-Ack.
-
-> Updating the doc to say that  ASYC controls always generate events
-> sounds good to me. But until we reach an agreement on the specifics
-> I'd rather land this fix and then we can take time to design an API
-> that works for compliant and non compliant hardware.
-
-I agree that we should focus on fixing the dangling pointer problem
-and your v4 series is heading in the right direction there.
-
-I'm not sure if we should take your v4 series as is though, see above.
-
-At a minimum I think the issue with setting ctrl->handle in
-the VIDIOC_TRY_EXT_CTRLS case needs to be fixed.
-
->> Note that if we simply return -EBUSY on set until acked by a status
->> event we also avoid the issue of ctrl->handle getting overwritten,
->> but that relies on reliable status events; or requires timeout handling.
->>
->> 3. I agree with Ricardo that a timeout based approach for cameras which
->> to not properly send status events for async ctrls is going to be
->> problematic. Things like pan/tilt homing can take multiple seconds which
->> is really long to use as a timeout if we plan to return -EBUSY until
->> the timeout triggers. I think it would be better to just rely on
->> the hardware sending a stall, or it accepting and correctly handling
->> a new CUR_SET command while the previous one is still being processed.
->>
->> I guess we can track if the hw does send status events when async ctrls
->> complete and then do the -EBUSY thing without going out to the hw after
->> the first time an async ctrl has been acked by a status event.
->>
->> And then combine that with the current behavior of overwriting ctrl->handle
->> until the ctrl has been marked as having working status events. So:
->>
->> a) In case we do not know yet if a ctrl gets status-event acks; and
->> on devices without reliable status events keep current behavior.
->>
->> b) As soon as we know a ctrl has reliable status events, switch to
->> returning -EBUSY if a set is pending (as indicated by ctrl->handle
->> being set).
->>
->> I don't like the fact that this changes the behavior after the first
->> status event acking an async ctrl, but I don't really see another way.
-> 
-> If I understood you correctly, you are proposing the following quirk:
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index f0e8a436a306..1a554afeaa2f 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1132,6 +1132,9 @@ static int __uvc_ctrl_get(struct uvc_video_chain *chain,
->         if ((ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) == 0)
->                 return -EACCES;
-> 
-> +       if (ctrl->handle && ctrl->async_event_works)
-> +               return -EBUSY;
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 97c5407f6603..42f0f8a89865 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -26,6 +26,8 @@
+>  
+>  #include "uvcvideo.h"
+>  
+> +static int uvc_acquire_privileges(struct uvc_fh *handle);
 > +
->         ret = __uvc_ctrl_load_cur(chain, ctrl);
->         if (ret < 0)
->                 return ret;
-> @@ -1672,6 +1675,8 @@ bool uvc_ctrl_status_event_async(struct urb> *urb, struct uvc_video_chain *chain,
->         /* Flush the control cache, the data might have changed. */
->         ctrl->loaded = 0;
-> 
-> +       ctrl->async_event_works = true;
-> +
->         if (list_empty(&ctrl->info.mappings))
->                 return false;
-> 
-> @@ -1982,6 +1987,9 @@ int uvc_ctrl_set(struct uvc_fh *handle,
->         if (!(ctrl->info.flags & UVC_CTRL_FLAG_SET_CUR))
->                 return -EACCES;
-> 
-> +       if (ctrl->handle && ctrl->async_event_works)
-> +               return -EBUSY;
+>  static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
+>  				      struct uvc_control_mapping *map,
+>  				      const struct uvc_xu_control_mapping *xmap)
+> @@ -361,9 +363,11 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
+>  	return ret;
+>  }
+>  
+> -static int uvc_v4l2_get_format(struct uvc_streaming *stream,
+> -	struct v4l2_format *fmt)
+> +static int uvc_ioctl_g_fmt(struct file *file, void *fh,
+> +			   struct v4l2_format *fmt)
+>  {
+> +	struct uvc_fh *handle = fh;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	const struct uvc_format *format;
+>  	const struct uvc_frame *frame;
+>  	int ret = 0;
+> @@ -395,14 +399,20 @@ static int uvc_v4l2_get_format(struct uvc_streaming *stream,
+>  	return ret;
+>  }
+>  
+> -static int uvc_v4l2_set_format(struct uvc_streaming *stream,
+> -	struct v4l2_format *fmt)
+> +static int uvc_ioctl_s_fmt(struct file *file, void *fh,
+> +			   struct v4l2_format *fmt)
+>  {
+> +	struct uvc_fh *handle = fh;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	struct uvc_streaming_control probe;
+>  	const struct uvc_format *format;
+>  	const struct uvc_frame *frame;
+>  	int ret;
+>  
+> +	ret = uvc_acquire_privileges(handle);
+> +	if (ret)
+> +		return ret;
 > +
 
-Yes this is what I'm proposing, except that this check should be
-skipped in the VIDIOC_TRY_EXT_CTRLS case. I think we need to add
-a "bool try" parameter to uvc_ctrl_set() and not look at / set
-[new_]handle when this is set.
+The original code used "if (ret < 0)" here and so does this patch in
+uvc_ioctl_s_parm() below.
 
+Please change this to "if (ret < 0)" for consistency.
 
+Otherwise this looks good to me:
 
->         /* Clamp out of range values. */
->         switch (mapping->v4l2_type) {
->         case V4L2_CTRL_TYPE_INTEGER:
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index e0e4f099a210..0ef7c594eecb 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -154,6 +154,7 @@ struct uvc_control {
->                                  * File handle that initially changed the
->                                  * async control.
->                                  */
-> +       bool async_event_works;
->  };
-> 
-> The benefit is that we can predict a device returning STALL without
-> having to actually do the set/get operation.
-> 
-> We can add it as a follow-up patch.
-
-Another benefit would be correctly returning -EBUSY when trying to get
-the ctrl. I agree this could be done as a follow-up.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
 
 Hans
 
+
+
+>  	if (fmt->type != stream->type)
+>  		return -EINVAL;
+>  
+> @@ -426,10 +436,12 @@ static int uvc_v4l2_set_format(struct uvc_streaming *stream,
+>  	return ret;
+>  }
+>  
+> -static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+> -		struct v4l2_streamparm *parm)
+> +static int uvc_ioctl_g_parm(struct file *file, void *fh,
+> +			    struct v4l2_streamparm *parm)
+>  {
+>  	u32 numerator, denominator;
+> +	struct uvc_fh *handle = fh;
+> +	struct uvc_streaming *stream = handle->stream;
+>  
+>  	if (parm->type != stream->type)
+>  		return -EINVAL;
+> @@ -461,9 +473,11 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+>  	return 0;
+>  }
+>  
+> -static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+> -		struct v4l2_streamparm *parm)
+> +static int uvc_ioctl_s_parm(struct file *file, void *fh,
+> +			    struct v4l2_streamparm *parm)
+>  {
+> +	struct uvc_fh *handle = fh;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	struct uvc_streaming_control probe;
+>  	struct v4l2_fract timeperframe;
+>  	const struct uvc_format *format;
+> @@ -472,6 +486,10 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+>  	unsigned int i;
+>  	int ret;
+>  
+> +	ret = uvc_acquire_privileges(handle);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	if (parm->type != stream->type)
+>  		return -EINVAL;
+>  
+> @@ -573,6 +591,7 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+>   * - VIDIOC_S_INPUT
+>   * - VIDIOC_S_PARM
+>   * - VIDIOC_S_FMT
+> + * - VIDIOC_CREATE_BUFS
+>   * - VIDIOC_REQBUFS
+>   */
+>  static int uvc_acquire_privileges(struct uvc_fh *handle)
+> @@ -685,11 +704,13 @@ static int uvc_ioctl_querycap(struct file *file, void *fh,
+>  	return 0;
+>  }
+>  
+> -static int uvc_ioctl_enum_fmt(struct uvc_streaming *stream,
+> +static int uvc_ioctl_enum_fmt(struct file *file, void *fh,
+>  			      struct v4l2_fmtdesc *fmt)
+>  {
+> -	const struct uvc_format *format;
+> +	struct uvc_fh *handle = fh;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	enum v4l2_buf_type type = fmt->type;
+> +	const struct uvc_format *format;
+>  	u32 index = fmt->index;
+>  
+>  	if (fmt->type != stream->type || fmt->index >= stream->nformats)
+> @@ -707,82 +728,8 @@ static int uvc_ioctl_enum_fmt(struct uvc_streaming *stream,
+>  	return 0;
+>  }
+>  
+> -static int uvc_ioctl_enum_fmt_vid_cap(struct file *file, void *fh,
+> -				      struct v4l2_fmtdesc *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -
+> -	return uvc_ioctl_enum_fmt(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_enum_fmt_vid_out(struct file *file, void *fh,
+> -				      struct v4l2_fmtdesc *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -
+> -	return uvc_ioctl_enum_fmt(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_g_fmt_vid_cap(struct file *file, void *fh,
+> -				   struct v4l2_format *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -
+> -	return uvc_v4l2_get_format(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_g_fmt_vid_out(struct file *file, void *fh,
+> -				   struct v4l2_format *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -
+> -	return uvc_v4l2_get_format(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_s_fmt_vid_cap(struct file *file, void *fh,
+> -				   struct v4l2_format *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -	int ret;
+> -
+> -	ret = uvc_acquire_privileges(handle);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return uvc_v4l2_set_format(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_s_fmt_vid_out(struct file *file, void *fh,
+> -				   struct v4l2_format *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -	int ret;
+> -
+> -	ret = uvc_acquire_privileges(handle);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return uvc_v4l2_set_format(stream, fmt);
+> -}
+> -
+> -static int uvc_ioctl_try_fmt_vid_cap(struct file *file, void *fh,
+> -				     struct v4l2_format *fmt)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -	struct uvc_streaming_control probe;
+> -
+> -	return uvc_v4l2_try_format(stream, fmt, &probe, NULL, NULL);
+> -}
+> -
+> -static int uvc_ioctl_try_fmt_vid_out(struct file *file, void *fh,
+> -				     struct v4l2_format *fmt)
+> +static int uvc_ioctl_try_fmt(struct file *file, void *fh,
+> +			     struct v4l2_format *fmt)
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_streaming *stream = handle->stream;
+> @@ -1212,29 +1159,6 @@ static int uvc_ioctl_g_selection(struct file *file, void *fh,
+>  	return 0;
+>  }
+>  
+> -static int uvc_ioctl_g_parm(struct file *file, void *fh,
+> -			    struct v4l2_streamparm *parm)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -
+> -	return uvc_v4l2_get_streamparm(stream, parm);
+> -}
+> -
+> -static int uvc_ioctl_s_parm(struct file *file, void *fh,
+> -			    struct v4l2_streamparm *parm)
+> -{
+> -	struct uvc_fh *handle = fh;
+> -	struct uvc_streaming *stream = handle->stream;
+> -	int ret;
+> -
+> -	ret = uvc_acquire_privileges(handle);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	return uvc_v4l2_set_streamparm(stream, parm);
+> -}
+> -
+>  static int uvc_ioctl_enum_framesizes(struct file *file, void *fh,
+>  				     struct v4l2_frmsizeenum *fsize)
+>  {
+> @@ -1543,15 +1467,17 @@ static unsigned long uvc_v4l2_get_unmapped_area(struct file *file,
+>  #endif
+>  
+>  const struct v4l2_ioctl_ops uvc_ioctl_ops = {
+> +	.vidioc_g_fmt_vid_cap = uvc_ioctl_g_fmt,
+> +	.vidioc_g_fmt_vid_out = uvc_ioctl_g_fmt,
+> +	.vidioc_s_fmt_vid_cap = uvc_ioctl_s_fmt,
+> +	.vidioc_s_fmt_vid_out = uvc_ioctl_s_fmt,
+> +	.vidioc_g_parm = uvc_ioctl_g_parm,
+> +	.vidioc_s_parm = uvc_ioctl_s_parm,
+>  	.vidioc_querycap = uvc_ioctl_querycap,
+> -	.vidioc_enum_fmt_vid_cap = uvc_ioctl_enum_fmt_vid_cap,
+> -	.vidioc_enum_fmt_vid_out = uvc_ioctl_enum_fmt_vid_out,
+> -	.vidioc_g_fmt_vid_cap = uvc_ioctl_g_fmt_vid_cap,
+> -	.vidioc_g_fmt_vid_out = uvc_ioctl_g_fmt_vid_out,
+> -	.vidioc_s_fmt_vid_cap = uvc_ioctl_s_fmt_vid_cap,
+> -	.vidioc_s_fmt_vid_out = uvc_ioctl_s_fmt_vid_out,
+> -	.vidioc_try_fmt_vid_cap = uvc_ioctl_try_fmt_vid_cap,
+> -	.vidioc_try_fmt_vid_out = uvc_ioctl_try_fmt_vid_out,
+> +	.vidioc_enum_fmt_vid_cap = uvc_ioctl_enum_fmt,
+> +	.vidioc_enum_fmt_vid_out = uvc_ioctl_enum_fmt,
+> +	.vidioc_try_fmt_vid_cap = uvc_ioctl_try_fmt,
+> +	.vidioc_try_fmt_vid_out = uvc_ioctl_try_fmt,
+>  	.vidioc_reqbufs = uvc_ioctl_reqbufs,
+>  	.vidioc_querybuf = uvc_ioctl_querybuf,
+>  	.vidioc_qbuf = uvc_ioctl_qbuf,
+> @@ -1570,8 +1496,6 @@ const struct v4l2_ioctl_ops uvc_ioctl_ops = {
+>  	.vidioc_try_ext_ctrls = uvc_ioctl_try_ext_ctrls,
+>  	.vidioc_querymenu = uvc_ioctl_querymenu,
+>  	.vidioc_g_selection = uvc_ioctl_g_selection,
+> -	.vidioc_g_parm = uvc_ioctl_g_parm,
+> -	.vidioc_s_parm = uvc_ioctl_s_parm,
+>  	.vidioc_enum_framesizes = uvc_ioctl_enum_framesizes,
+>  	.vidioc_enum_frameintervals = uvc_ioctl_enum_frameintervals,
+>  	.vidioc_subscribe_event = uvc_ioctl_subscribe_event,
+> 
+> ---
+> base-commit: 72ad4ff638047bbbdf3232178fea4bec1f429319
+> change-id: 20241127-uvc-dup-cap-out-6a03c01e30a3
+> 
+> Best regards,
 
