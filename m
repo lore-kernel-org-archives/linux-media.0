@@ -1,353 +1,163 @@
-Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84371B6555;
-	Sun,  1 Dec 2024 18:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40514A01;
+	Mon,  2 Dec 2024 00:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733078685; cv=none; b=gPYumq7yl+Vyfk+wW26QQJtFVW0Rp4OrKs1/1XI05jJch2b0IsbnwHjItFvB6z7ccvHy2jqoRnPK9tDvCIhnKpDObC0KfhWwLRi0xB1EMCP23LdCas+RHrInlaEWgDOhF21zWo1f7/uW9kAnEsmZJHU+Gw01NyrOrVXjJUt/vDU=
+	t=1733098748; cv=none; b=jl0u/G0hsFbV2Ac/kZW06f4etwiPPJpqJjEzZVM69J4KaIdDDkZ9l03VnMp3c+5rUVif7uyMWEF2usWl2vQEwWgtUTfNWcVrWwHhI0cg3IA2jiLgPHIhmf/kTmPnEvApXklX7H+hb89/sapNYJp/RTfwsDy0US9pREkDIpEEfBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733078685; c=relaxed/simple;
-	bh=7RnqtiIs3yxjelXw16vVWhcdS9fqa1m8NOdcsIZw86Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HzMYFzy6Yi303VTkWs0tajQoXnEd6bSNqiLrFIJacSbMfPElIXGadhY7yubz63cezFLjMq4Kt1+nB0QPj4QcvDZ3zYM2YdVFGQO6X34il3m7ySKeFVQmuyBi2XK2+wctQ3J6bOJyvdL1Y7eeuZ85QFSnZCI+aGtRMq5pWn+pgrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=aWMQqYrV; arc=none smtp.client-ip=168.119.26.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
+	s=arc-20240116; t=1733098748; c=relaxed/simple;
+	bh=uKByVRGJnnD8SRISLfagtyDrkyUPbnDvC+iinYG8u/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BbW/9EGb50h0yLl//vLUorMmY0SObCHvbDb9vD0vzC3fganoc2V9MqtB0I5WWTvK9liOy3AdXKjH1BNCSixa8qF3kgurAwluETo6jbvjoGCY3BA1fuAMkdoqCYEsQmPBlTyK+YycgxfIlvAQRPhHEnqTcDj/PNUW5MbdlJeHpQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=LoDpXO/f; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="aWMQqYrV"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
-	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=/4nI2FAaoA3rsXi7OjP//bqodmp6s6H263icRSEzEr8=; b=aWMQqYrVsUnFUbN7iY4fxIj3+t
-	qjZzkiDXaLKSAuBsk2Cv7acHxaVYDjk2jwEEcXaZ+aZ5zR67RZnxOq2KtzJ0CYh2aLYCcKvb9Qwc8
-	FFqYdYx4RYKeyFoRWBnz5EzMjHgOJ10FcAlH6mGlCc/LerFbfwN/uNC1GEvyFVOt7AkzvtDFJU34y
-	Dvvo7IiNgrVlkDyEYznMnceghUQ8nDdjyZJepWl2Au9GK8h1ZJA27pTlgc1FNFKD6UdfUK3NbfrGu
-	Os/aFsqqjFUve+2hadRIMDvkwleKnyly8TsH6l5KYOYMWFL0PwFDYq+mJvn5C2QXjFgJ2/8zcUeLH
-	RZrc84WQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <git@apitzsch.eu>)
-	id 1tHob6-0005M6-0V;
-	Sun, 01 Dec 2024 19:23:08 +0100
-Received: from [77.64.252.106] (helo=framework.lan)
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <git@apitzsch.eu>)
-	id 1tHob6-000NxA-15;
-	Sun, 01 Dec 2024 19:23:08 +0100
-Message-ID: <16eebeed3cbc45394d12a67a393315a454cdbd5a.camel@apitzsch.eu>
-Subject: Re: [PATCH v2 09/13] media: i2c: imx214: Extract format and crop
- settings
-From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-To: Ricardo Ribalda <ribalda@kernel.org>, Mauro Carvalho Chehab
-	 <mchehab@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, Dave Stevenson
-	 <dave.stevenson@raspberrypi.com>
-Date: Sun, 01 Dec 2024 19:23:07 +0100
-In-Reply-To: <20241021-imx214-v2-9-fbd23e99541e@apitzsch.eu>
-References: <20241021-imx214-v2-0-fbd23e99541e@apitzsch.eu>
-	 <20241021-imx214-v2-9-fbd23e99541e@apitzsch.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="LoDpXO/f"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9096E827;
+	Mon,  2 Dec 2024 01:18:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1733098711;
+	bh=uKByVRGJnnD8SRISLfagtyDrkyUPbnDvC+iinYG8u/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LoDpXO/fAdtjl6KsyvTZ0gKNlzB66XsWgwm658uIF9cpe4JelQC9frf1th3Tq2Kiy
+	 ASzl3KDxZWDnn/RWFmiB8YODWhbPbd1y/wmAUs7ihh6z5DB6UcrXu7whLu6iUoxhQV
+	 C+gzXWPDm4SJGQOg0iJAiRX+5x3kIw4Q2jutIzcY=
+Date: Mon, 2 Dec 2024 02:18:46 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
+	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] media: uvcvideo: Do not set an async control
+ owned by other fh
+Message-ID: <20241202001846.GD6105@pendragon.ideasonboard.com>
+References: <20241128223343.GH25731@pendragon.ideasonboard.com>
+ <7eeab6bd-ce02-41a6-bcc1-7c2750ce0359@xs4all.nl>
+ <CANiDSCseF3fsufMc-Ovoy-bQH85PqfKDM+zmfoisLw+Kq1biAw@mail.gmail.com>
+ <20241129110640.GB4108@pendragon.ideasonboard.com>
+ <CANiDSCvdjioy-OgC+dHde2zHAAbyfN2+MAY+YsLNdUSawjQFHw@mail.gmail.com>
+ <e95b7d74-2c56-4f5a-a2f2-9c460d52fdb4@xs4all.nl>
+ <CANiDSCvj4VVAcQOpR-u-BcnKA+2ifcuq_8ZML=BNOHT_55fBog@mail.gmail.com>
+ <CANiDSCvwzY3DJ+U3EyzA7TCQu2qMUL6L1eTmZYbM+_Tk6DsPaA@mail.gmail.com>
+ <20241129220339.GD2652@pendragon.ideasonboard.com>
+ <CANiDSCsXi-WQLpbeXMat5FoM8AnYoJ0nVeCkTDMvEus8pXCC3w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Authenticated-Sender: andre@apitzsch.eu
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27474/Sun Dec  1 10:42:26 2024)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCsXi-WQLpbeXMat5FoM8AnYoJ0nVeCkTDMvEus8pXCC3w@mail.gmail.com>
 
-Hi,
+On Fri, Nov 29, 2024 at 11:18:54PM +0100, Ricardo Ribalda wrote:
+> On Fri, 29 Nov 2024 at 23:03, Laurent Pinchart wrote:
+> > On Fri, Nov 29, 2024 at 07:47:31PM +0100, Ricardo Ribalda wrote:
+> > > Before we all go on a well deserved weekend, let me recap what we
+> > > know. If I did not get something correctly, let me know.
+> > >
+> > > 1) Well behaved devices do not allow to set or get an incomplete async
+> > > control. They will stall instead (ref: Figure 2-21 in UVC 1.5 )
+> > > 2) Both Laurent and Ricardo consider that there is a big chance that
+> > > some camera modules do not implement this properly. (ref: years of
+> > > crying over broken module firmware :) )
+> > >
+> > > 3) ctrl->handle is designed to point to the fh that originated the
+> > > control. So the logic can decide if the originator needs to be
+> > > notified or not. (ref: uvc_ctrl_send_event() )
+> > > 4) Right now we replace the originator in ctrl->handle for unfinished
+> > > async controls.  (ref:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/usb/uvc/uvc_ctrl.c#n2050)
+> > >
+> > > My interpretation is that:
+> > > A) We need to change 4). We shall not change the originator of
+> > > unfinished ctrl->handle.
+> > > B) Well behaved cameras do not need the patch "Do not set an async
+> > > control owned by another fh"
+> > > C) For badly behaved cameras, it is fine if we slightly break the
+> > > v4l2-compliance in corner cases, if we do not break any internal data
+> > > structure.
+> >
+> > The fact that some devices may not implement the documented behaviour
+> > correctly may not be a problem. Well-behaved devices will stall, which
+> > means we shouldn't query the device while as async update is in
+> > progress. Badly-behaved devices, whatever they do when queried, should
+> > not cause any issue if we don't query them.
+> 
+> I thought we could detect the stall and return safely. Isn't that the case?
 
-I'll drop this patch for now. The changes included are not needed to
-make imx214 work with libcamera. And with [1] the patch might need a
-rework anyway.
+We could, but if we know the device will stall anyway, is there a reason
+not to avoid issuing the request in the first place ?
 
-Best regards,
-Andr=C3=A9
+> Why we have not seen issues with this?
 
-[1]
-https://lore.kernel.org/linux-media/20241129095142.87196-1-sakari.ailus@lin=
-ux.intel.com/
+I haven't tested a PTZ device for a very long time, and you would need
+to hit a small time window to see the issue.
 
-Am Montag, dem 21.10.2024 um 00:13 +0200 schrieb Andr=C3=A9 Apitzsch via B4
-Relay:
-> From: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
->=20
-> Remove format and crop settings from register sequences and set them
-> programmatically.
->=20
-> Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
-> ---
-> =C2=A0drivers/media/i2c/imx214.c | 129 ++++++++++++++++++++++++++++++++++=
--
-> ----------
-> =C2=A01 file changed, 97 insertions(+), 32 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-> index
-> cb443d8bee6fe72dc9378b2c2d3caae09f8642c5..87a03e292e19ccd71f1b2dcee34
-> 09826b2f5cb6f 100644
-> --- a/drivers/media/i2c/imx214.c
-> +++ b/drivers/media/i2c/imx214.c
-> @@ -96,6 +96,9 @@
-> =C2=A0#define IMX214_REG_PREPLLCK_VT_DIV	CCI_REG8(0x0305)
-> =C2=A0#define IMX214_REG_PLL_VT_MPY		CCI_REG16(0x0306)
-> =C2=A0#define IMX214_REG_OPPXCK_DIV		CCI_REG8(0x0309)
-> +#define IMX214_OPPXCK_DIV_COMP6		6
-> +#define IMX214_OPPXCK_DIV_COMP8		8
-> +#define IMX214_OPPXCK_DIV_RAW10		10
-> =C2=A0#define IMX214_REG_OPSYCK_DIV		CCI_REG8(0x030b)
-> =C2=A0#define IMX214_REG_PLL_MULT_DRIV	CCI_REG8(0x0310)
-> =C2=A0#define IMX214_PLL_SINGLE		0
-> @@ -132,6 +135,9 @@
-> =C2=A0#define IMX214_BINNING_NONE		0
-> =C2=A0#define IMX214_BINNING_ENABLE		1
-> =C2=A0#define IMX214_REG_BINNING_TYPE		CCI_REG8(0x0901)
-> +#define IMX214_BINNING_1X1		0
-> +#define IMX214_BINNING_2X2		0x22
-> +#define IMX214_BINNING_4X4		0x44
-> =C2=A0#define IMX214_REG_BINNING_WEIGHTING	CCI_REG8(0x0902)
-> =C2=A0#define IMX214_BINNING_AVERAGE		0x00
-> =C2=A0#define IMX214_BINNING_SUMMED		0x01
-> @@ -211,36 +217,22 @@ static const struct cci_reg_sequence
-> mode_4096x2304[] =3D {
-> =C2=A0	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
-> =C2=A0	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH
-> },
-> =C2=A0	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-> -	{ IMX214_REG_X_ADD_STA, 56 },
-> -	{ IMX214_REG_Y_ADD_STA, 408 },
-> -	{ IMX214_REG_X_ADD_END, 4151 },
-> -	{ IMX214_REG_Y_ADD_END, 2711 },
-> =C2=A0	{ IMX214_REG_X_EVEN_INC, 1 },
-> =C2=A0	{ IMX214_REG_X_ODD_INC, 1 },
-> =C2=A0	{ IMX214_REG_Y_EVEN_INC, 1 },
-> =C2=A0	{ IMX214_REG_Y_ODD_INC, 1 },
-> -	{ IMX214_REG_BINNING_MODE, IMX214_BINNING_NONE },
-> -	{ IMX214_REG_BINNING_TYPE, 0 },
-> =C2=A0	{ IMX214_REG_BINNING_WEIGHTING, IMX214_BINNING_AVERAGE },
-> =C2=A0	{ CCI_REG8(0x3000), 0x35 },
-> =C2=A0	{ CCI_REG8(0x3054), 0x01 },
-> =C2=A0	{ CCI_REG8(0x305C), 0x11 },
-> =C2=A0
-> -	{ IMX214_REG_CSI_DATA_FORMAT, IMX214_CSI_DATA_FORMAT_RAW10
-> },
-> -	{ IMX214_REG_X_OUTPUT_SIZE, 4096 },
-> -	{ IMX214_REG_Y_OUTPUT_SIZE, 2304 },
-> =C2=A0	{ IMX214_REG_SCALE_MODE, IMX214_SCALE_NONE },
-> =C2=A0	{ IMX214_REG_SCALE_M, 2 },
-> -	{ IMX214_REG_DIG_CROP_X_OFFSET, 0 },
-> -	{ IMX214_REG_DIG_CROP_Y_OFFSET, 0 },
-> -	{ IMX214_REG_DIG_CROP_WIDTH, 4096 },
-> -	{ IMX214_REG_DIG_CROP_HEIGHT, 2304 },
-> =C2=A0
-> =C2=A0	{ IMX214_REG_VTPXCK_DIV, 5 },
-> =C2=A0	{ IMX214_REG_VTSYCK_DIV, 2 },
-> =C2=A0	{ IMX214_REG_PREPLLCK_VT_DIV, 3 },
-> =C2=A0	{ IMX214_REG_PLL_VT_MPY, 150 },
-> -	{ IMX214_REG_OPPXCK_DIV, 10 },
-> =C2=A0	{ IMX214_REG_OPSYCK_DIV, 1 },
-> =C2=A0	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
-> =C2=A0
-> @@ -281,36 +273,22 @@ static const struct cci_reg_sequence
-> mode_1920x1080[] =3D {
-> =C2=A0	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
-> =C2=A0	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH
-> },
-> =C2=A0	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-> -	{ IMX214_REG_X_ADD_STA, 1144 },
-> -	{ IMX214_REG_Y_ADD_STA, 1020 },
-> -	{ IMX214_REG_X_ADD_END, 3063 },
-> -	{ IMX214_REG_Y_ADD_END, 2099 },
-> =C2=A0	{ IMX214_REG_X_EVEN_INC, 1 },
-> =C2=A0	{ IMX214_REG_X_ODD_INC, 1 },
-> =C2=A0	{ IMX214_REG_Y_EVEN_INC, 1 },
-> =C2=A0	{ IMX214_REG_Y_ODD_INC, 1 },
-> -	{ IMX214_REG_BINNING_MODE, IMX214_BINNING_NONE },
-> -	{ IMX214_REG_BINNING_TYPE, 0 },
-> =C2=A0	{ IMX214_REG_BINNING_WEIGHTING, IMX214_BINNING_AVERAGE },
-> =C2=A0	{ CCI_REG8(0x3000), 0x35 },
-> =C2=A0	{ CCI_REG8(0x3054), 0x01 },
-> =C2=A0	{ CCI_REG8(0x305C), 0x11 },
-> =C2=A0
-> -	{ IMX214_REG_CSI_DATA_FORMAT, IMX214_CSI_DATA_FORMAT_RAW10
-> },
-> -	{ IMX214_REG_X_OUTPUT_SIZE, 1920 },
-> -	{ IMX214_REG_Y_OUTPUT_SIZE, 1080 },
-> =C2=A0	{ IMX214_REG_SCALE_MODE, IMX214_SCALE_NONE },
-> =C2=A0	{ IMX214_REG_SCALE_M, 2 },
-> -	{ IMX214_REG_DIG_CROP_X_OFFSET, 0 },
-> -	{ IMX214_REG_DIG_CROP_Y_OFFSET, 0 },
-> -	{ IMX214_REG_DIG_CROP_WIDTH, 1920 },
-> -	{ IMX214_REG_DIG_CROP_HEIGHT, 1080 },
-> =C2=A0
-> =C2=A0	{ IMX214_REG_VTPXCK_DIV, 5 },
-> =C2=A0	{ IMX214_REG_VTSYCK_DIV, 2 },
-> =C2=A0	{ IMX214_REG_PREPLLCK_VT_DIV, 3 },
-> =C2=A0	{ IMX214_REG_PLL_VT_MPY, 150 },
-> -	{ IMX214_REG_OPPXCK_DIV, 10 },
-> =C2=A0	{ IMX214_REG_OPSYCK_DIV, 1 },
-> =C2=A0	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
-> =C2=A0
-> @@ -623,6 +601,7 @@ static int imx214_set_format(struct v4l2_subdev
-> *sd,
-> =C2=A0	struct v4l2_mbus_framefmt *__format;
-> =C2=A0	struct v4l2_rect *__crop;
-> =C2=A0	const struct imx214_mode *mode;
-> +	unsigned int bin_h, bin_v, bin;
-> =C2=A0
-> =C2=A0	mode =3D v4l2_find_nearest_size(imx214_modes,
-> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ARRAY_SIZE(imx214_modes),
-> width, height,
-> @@ -637,9 +616,32 @@ static int imx214_set_format(struct v4l2_subdev
-> *sd,
-> =C2=A0
-> =C2=A0	*__format =3D format->format;
-> =C2=A0
-> +	/*
-> +	 * Use binning to maximize the crop rectangle size, and
-> centre it in the
-> +	 * sensor.
-> +	 */
-> +	bin_h =3D IMX214_PIXEL_ARRAY_WIDTH / __format->width;
-> +	bin_v =3D IMX214_PIXEL_ARRAY_HEIGHT / __format->height;
-> +
-> +	switch (min(bin_h, bin_v)) {
-> +	case 1:
-> +		bin =3D 1;
-> +		break;
-> +	case 2:
-> +	case 3:
-> +		bin =3D 2;
-> +		break;
-> +	case 4:
-> +	default:
-> +		bin =3D 4;
-> +		break;
-> +	}
-> +
-> =C2=A0	__crop =3D v4l2_subdev_state_get_crop(sd_state, 0);
-> -	__crop->width =3D mode->width;
-> -	__crop->height =3D mode->height;
-> +	__crop->width =3D __format->width * bin;
-> +	__crop->height =3D __format->height * bin;
-> +	__crop->left =3D (IMX214_NATIVE_WIDTH - __crop->width) / 2;
-> +	__crop->top =3D (IMX214_NATIVE_HEIGHT - __crop->height) / 2;
-> =C2=A0
-> =C2=A0	if (format->which =3D=3D V4L2_SUBDEV_FORMAT_ACTIVE) {
-> =C2=A0		int exposure_max;
-> @@ -847,7 +849,62 @@ static int imx214_ctrls_init(struct imx214
-> *imx214)
-> =C2=A0	return 0;
-> =C2=A0};
-> =C2=A0
-> -static int imx214_start_streaming(struct imx214 *imx214)
-> +static int imx214_set_framefmt(struct imx214 *imx214,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_subdev_state *state)
-> +{
-> +	const struct v4l2_mbus_framefmt *format;
-> +	const struct v4l2_rect *crop;
-> +	u64 bin_mode;
-> +	u64 bin_type;
-> +	int ret =3D 0;
-> +
-> +	format =3D v4l2_subdev_state_get_format(state, 0);
-> +	crop =3D v4l2_subdev_state_get_crop(state, 0);
-> +
-> +	cci_write(imx214->regmap, IMX214_REG_X_ADD_STA,
-> +		=C2=A0 crop->left - IMX214_PIXEL_ARRAY_LEFT, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_X_ADD_END,
-> +		=C2=A0 crop->left - IMX214_PIXEL_ARRAY_LEFT + crop->width
-> - 1, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_Y_ADD_STA,
-> +		=C2=A0 crop->top - IMX214_PIXEL_ARRAY_TOP, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_Y_ADD_END,
-> +		=C2=A0 crop->top - IMX214_PIXEL_ARRAY_TOP + crop->height
-> - 1, &ret);
-> +
-> +	/* Proper setting is required even if cropping is not used
-> */
-> +	cci_write(imx214->regmap, IMX214_REG_DIG_CROP_WIDTH, crop-
-> >width, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_DIG_CROP_HEIGHT, crop-
-> >height, &ret);
-> +
-> +	switch (crop->width / format->width) {
-> +	case 1:
-> +	default:
-> +		bin_mode =3D IMX214_BINNING_NONE;
-> +		bin_type =3D IMX214_BINNING_1X1;
-> +		break;
-> +	case 2:
-> +		bin_mode =3D IMX214_BINNING_ENABLE;
-> +		bin_type =3D IMX214_BINNING_2X2;
-> +		break;
-> +	case 4:
-> +		bin_mode =3D IMX214_BINNING_ENABLE;
-> +		bin_type =3D IMX214_BINNING_4X4;
-> +		break;
-> +	}
-> +
-> +	cci_write(imx214->regmap, IMX214_REG_BINNING_MODE, bin_mode,
-> &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_BINNING_TYPE, bin_type,
-> &ret);
-> +
-> +	cci_write(imx214->regmap, IMX214_REG_X_OUTPUT_SIZE, format-
-> >width, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_Y_OUTPUT_SIZE, format-
-> >height, &ret);
-> +
-> +	cci_write(imx214->regmap, IMX214_REG_CSI_DATA_FORMAT,
-> +		=C2=A0 IMX214_CSI_DATA_FORMAT_RAW10, &ret);
-> +	cci_write(imx214->regmap, IMX214_REG_OPPXCK_DIV,
-> IMX214_OPPXCK_DIV_RAW10, &ret);
-> +
-> +	return ret;
-> +};
-> +
-> +static int imx214_start_streaming(struct imx214 *imx214,
-> +				=C2=A0 struct v4l2_subdev_state *state)
-> =C2=A0{
-> =C2=A0	int ret;
-> =C2=A0
-> @@ -865,6 +922,14 @@ static int imx214_start_streaming(struct imx214
-> *imx214)
-> =C2=A0		return ret;
-> =C2=A0	}
-> =C2=A0
-> +	/* Apply format and crop settings */
-> +	ret =3D imx214_set_framefmt(imx214, state);
-> +	if (ret) {
-> +		dev_err(imx214->dev, "%s failed to set frame format:
-> %d\n",
-> +			__func__, ret);
-> +		return ret;
-> +	}
-> +
-> =C2=A0	ret =3D cci_multi_reg_write(imx214->regmap, imx214->cur_mode-
-> >reg_table,
-> =C2=A0				=C2=A0 imx214->cur_mode->num_of_regs,
-> NULL);
-> =C2=A0	if (ret < 0) {
-> @@ -913,7 +978,7 @@ static int imx214_s_stream(struct v4l2_subdev
-> *subdev, int enable)
-> =C2=A0			return ret;
-> =C2=A0
-> =C2=A0		state =3D
-> v4l2_subdev_lock_and_get_active_state(subdev);
-> -		ret =3D imx214_start_streaming(imx214);
-> +		ret =3D imx214_start_streaming(imx214, state);
-> =C2=A0		v4l2_subdev_unlock_state(state);
-> =C2=A0		if (ret < 0)
-> =C2=A0			goto err_rpm_put;
->=20
+> > We should not send GET_CUR and SET_CUR requests to the device while an
+> > async update is in progress, and use cached values instead. When we
+> > receive the async update event, we should clear the cache. This will be
+> > the same for both well-behaved and badly-behaved devices, so we can
+> > expose the same behaviour towards userspace.
+> 
+> seting ctrl->loaded = 0 when we get an event sounds like a good idea
+> and something we can implement right away.
+> If I have to resend the set I will add it to the end.
+> 
+> > We possibly also need some kind of timeout mechanism to cope with the
+> > async update event not being delivered by the device.
+> 
+> This is the part that worries me the most:
+> - timeouts make the code fragile
+> - What is a good value for timeout? 1 second, 30, 300? I do not think
+> that we can find a value.
 
+I've been thinking about the implementation of uvc_fh cleanup over the
+weekend, and having a timeout would have the nice advantage that we
+could reference-count uvc_fh instead of implementing a cleanup that
+walks over all controls when closing a file handle. I think it would
+make the code simpler, and possibly safer too.
+
+> > Regarding the userspace behaviour during an auto-update, we have
+> > multiple options:
+> >
+> > For control get,
+> >
+> > - We can return -EBUSY
+> > - We can return the old value from the cache
+> > - We can return the new value fromt he cache
+> >
+> > Returning -EBUSY would be simpler to implement.
+>
+> Not only easy, I think it is the most correct,
+> 
+> > I don't think the behaviour should depend on whether the control is read
+> > on the file handle that initiated the async operation or on a different
+> > file handle.
+> >
+> > For control set, I don't think we can do much else than returning
+> > -EBUSY, regardless of which file handle the control is set on.
+> 
+> ACK.
+> 
+> > > I will send a new version with my interpretation.
+> > >
+> > > Thanks for a great discussion
+> 
+> Looking with some perspective... I believe that we should look into
+> the "userspace behaviour for auto controls" in a different patchset.
+> It is slightly unrelated to this discussion.
+
+-- 
+Regards,
+
+Laurent Pinchart
