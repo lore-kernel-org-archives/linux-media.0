@@ -1,128 +1,103 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6921770ED
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF92172BB9;
+	Mon,  2 Dec 2024 16:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733154449; cv=none; b=SrGla+XC44CRl2TEHT5n8SjUJqZLebyoUWz4HxUxNJdmzxkZYBZdecMJppabfsuBuOiRt8kBdXFoduOCuldzHPII0RuFSTVNLBZ4zgTP+A5Y1h+vY6VJygZn1aTxgOjquW6F5edMMKl/EUVZDa/2JQJBmHuNZY4H7SHa6im1MZk=
+	t=1733156084; cv=none; b=iD4+FvqsJL5xnMkGuGkgKVjq0bJJN3TYZrjzytYyZb+c4KYmRUt248W29BTPK69C/eM3rvRg3zczUSdO2bFdhFAV4CFP0oAyBWdKtD9QR3H731h58Ufc80SOSy+UubzZMOnc91/rI13daQophFyJeqRynXU9rCN4OaNOOQZBfXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733154449; c=relaxed/simple;
-	bh=NQt98Z0M5QNA/TsO8gh1YDS9GMK76KynhZ9aabRaUlg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E9NJHh2KZIEPjMhvYz/nfRScaeWL1O2eNl+ulQcBtuUttNzWJD/zsbPdmpSVmmpjERQDUUB5tjZnYSunBWNgsBcRibT9gfj+iikx7Y1Fc8cwax4Q/449xqr9o2kGy/btLYFlCFhl+VLKu3dW9CyYDO69LbLDc//qCo5Rt+GEDGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=L7Gmv2zv; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L7Gmv2zv"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6d88cb85987so22641596d6.1
-        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733154445; x=1733759245; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l2F2lVT/48t59mZz2zC2oH5sxyMbSECeGcR5hkq1C/k=;
-        b=L7Gmv2zvrBkVAJTmF5xBrM9r0j/frnToHTvotHEjxhCbFDhji/SvvD+8eNb2A5NCoN
-         CgGDzV9PuCJ2uw0j+L3rT3rDawUrPBOJvUKbVNYwStlfEWluY7vYbtFBR+eVJ+5/0JeX
-         JITPQD0mClFdKEgs2jmct8LMMnXjJ9WWBRWcY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733154445; x=1733759245;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2F2lVT/48t59mZz2zC2oH5sxyMbSECeGcR5hkq1C/k=;
-        b=aVqNGp042KwbGeDE0H/EHGdXf18Y/4cLTFsa5LECuE5yChdGz3srPx8ggDT9g6br7v
-         1kETa0rZ6RED+Wx2fKlZ8jT3dpFg9dpfPekcWSnlz2+1Eg4S+imwG+Y9Q0SE4iNfcSnV
-         VvepyapJWuDifdM3IkjrHJWDDNe51TrzF5cAFmgvS9fNF8OhTfzdgSeGrxMtpUsV9DQo
-         7mkMN5hNgDh5nscBW7YbeyhMIdc+hL33GzcGoBPzkjEjhCIYP3ONldDiuMQZaH5wb17T
-         HGo9WOSkDgMcl9fu/zq5NY/RP0QK7Z7gMexhYCyV4wy9o71Hea3ZR9YYTv45HiGuz2nw
-         SSLg==
-X-Gm-Message-State: AOJu0Yxh1jZKtVeNg6MnU6lD/J6U3Cw1VtSLpF4l74ov7h1AwVePTsbR
-	0vXHHCFPDeGLf9D+uNpnOedgI2G9TbACz5dRdhXo6EvVoPegvqXFNbIIXT+Pag==
-X-Gm-Gg: ASbGnctCCobahSkv+t3uiNUGBsQe+ef1IpAgj1/hB1OyjAZGeKxAcy6KEYQzTGEZ6CO
-	oDEhSfbNeM0iO44xw24BXtFGYHcrwvh1n5VbqbafZ8wYJPybqD72CsJk60VIFANjlplGQKuP2a5
-	ExuGLniPRwSKqs2GTuiKGQiAx63pHeRATik3Ya6gB11BuBzq2DVJpm6DyEgooXy6i0qRucAQyVA
-	thGnCvCYbatYIs6v29CETJdojSOzcdJzWuld3UGSxKKpDi0Fhz8ppkWXPDfpiQl+Xk/npYs5Bv7
-	4knZX/Tvsn95TiHnm3zMX1dG
-X-Google-Smtp-Source: AGHT+IGi/PMi7HKxN0drYRNoeMrQehkEDZgCgHDgtdOzyjj8HEWJDMxx4Dj3/iwSYHFuTdJy9nQktg==
-X-Received: by 2002:a05:6214:626:b0:6d8:a1b4:b58f with SMTP id 6a1803df08f44-6d8a1b4bb2amr99633466d6.11.1733154445272;
-        Mon, 02 Dec 2024 07:47:25 -0800 (PST)
-Received: from denia.c.googlers.com (5.236.236.35.bc.googleusercontent.com. [35.236.236.5])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5156d0f8ad6sm1159729e0c.49.2024.12.02.07.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 07:47:24 -0800 (PST)
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 02 Dec 2024 15:47:17 +0000
-Subject: [PATCH 3/3] media: mediatek: vcodec: Workaround a compiler warning
+	s=arc-20240116; t=1733156084; c=relaxed/simple;
+	bh=v1Hx6Kf34Um/vEhgVQ34LyNEJEbqTYzx6TgGdRu2Sis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XIlbsRb/LtBxsH3VuVHlJYnUSzEw85t61fYaIAEdpKdt72b6+XwzAmLfzWnAnBIIY6pkueshSLj3fcI+MfWG4eCL8KmmlV/SwAi4J+0F1li31plxb7mSSwh7Yp7E0ClvE24JemlakoFK0wzAtfudgqY/I9t5R5lER+kYEwIXeA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: yJ8hWheeSQmwMfFpYlpuiA==
+X-CSE-MsgGUID: ye5OnO2kSmGFSOmMaK4aZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="43942115"
+X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
+   d="scan'208";a="43942115"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 08:14:42 -0800
+X-CSE-ConnectionGUID: vjG8tfL3ShOB4efcJxu2NA==
+X-CSE-MsgGUID: K3lM3hHaQ8ClrOhRcJhPSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
+   d="scan'208";a="93976735"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 08:14:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1tI94E-00000003BnJ-1QEb;
+	Mon, 02 Dec 2024 18:14:34 +0200
+Date: Mon, 2 Dec 2024 18:14:33 +0200
+From: Andy Shevchenko <andy@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-staging@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 2/3] media: atomisp: Use the actual value of the enum
+ instead of the enum
+Message-ID: <Z03c6ZHOP9rUFtP_@smile.fi.intel.com>
+References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
+ <20241202-fix-llvm9-v1-2-2a50f5acfd0b@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-fix-llvm9-v1-3-2a50f5acfd0b@chromium.org>
-References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
-In-Reply-To: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Hans de Goede <hdegoede@redhat.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Andy Shevchenko <andy@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Tiffany Lin <tiffany.lin@mediatek.com>, 
- Andrew-CT Chen <andrew-ct.chen@mediatek.com>, 
- Yunfei Dong <yunfei.dong@mediatek.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-staging@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241202-fix-llvm9-v1-2-2a50f5acfd0b@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-llvm identifies that the SCP_IPI_VENC_H264 and IPI_VENC_H264 are from
-the same enum type, but their are part of the same ternary operator.
+On Mon, Dec 02, 2024 at 03:47:16PM +0000, Ricardo Ribalda wrote:
+> hrt_isp_css_irq_sw_pin_0 has a different enum type than
+> irq_sw_channel_id_t.
+> 
+> Replace it with the actual value of hrt_isp_css_irq_sw_pin_0 to avoid
+> arithmetic operations between different enum types (and make the
+> compiler happy).
+> 
+> It is required to build with llvm 9 without these warnings:
 
-vpu_inst.id is of type int, so we can just rewrite a bit the code and
-avoid the following llvm9 warning:
-drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:597:29: warning: conditional expression between different enumeration types ('enum scp_ipi_id' and 'enum ipi_id') [-Wenum-compare-conditional]
+9?! Maybe 19?
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> drivers/staging/media/atomisp/pci/sh_css_hrt.c:68:19: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+> drivers/staging/media/atomisp/pci/sh_css.c:1233:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+> drivers/staging/media/atomisp/pci/sh_css.c:1237:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+> ro
 
-diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-index f8145998fcaf..4786062e879a 100644
---- a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-@@ -584,7 +584,6 @@ static void h264_encode_filler(struct venc_h264_inst *inst, void *buf,
- 
- static int h264_enc_init(struct mtk_vcodec_enc_ctx *ctx)
- {
--	const bool is_ext = MTK_ENC_CTX_IS_EXT(ctx);
- 	int ret = 0;
- 	struct venc_h264_inst *inst;
- 
-@@ -594,7 +593,10 @@ static int h264_enc_init(struct mtk_vcodec_enc_ctx *ctx)
- 
- 	inst->ctx = ctx;
- 	inst->vpu_inst.ctx = ctx;
--	inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
-+	if (MTK_ENC_CTX_IS_EXT(ctx))
-+		inst->vpu_inst.id = SCP_IPI_VENC_H264;
-+	else
-+		inst->vpu_inst.id = IPI_VENC_H264;
- 	inst->hw_base = mtk_vcodec_get_reg_addr(inst->ctx->dev->reg_base, VENC_SYS);
- 
- 	ret = vpu_enc_init(&inst->vpu_inst);
+You can make the above lines shorter by dropping the obvious an duplicated (in
+other places) part, i.e.  drivers/staging/media/atomisp/. I usually replace
+this with "...".
+
+.../pci/sh_css_hrt.c:68:19: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+.../pci/sh_css.c:1233:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+.../pci/sh_css.c:1237:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
+
+Otherwise LGTM,
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
 -- 
-2.47.0.338.g60cca15819-goog
+With Best Regards,
+Andy Shevchenko
+
 
