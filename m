@@ -1,239 +1,127 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483B4208969
-	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 14:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C7C202F95
+	for <linux-media@vger.kernel.org>; Mon,  2 Dec 2024 15:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733151531; cv=none; b=s/9Oq5eun+c8ASNcS++50GamUel143Ike1yb1SgqeDY5itYVsceZq3y/OOti/vF0GKJzH8C9P2DgZfNPXngfGPyZ48YpSvO82jl/k6YDMQBAqoEl8TeipXpoZq8/RTpCAyXRGooP7sUj6JFQT9q+Rw4k8St0xdVXhMABKmYUuCc=
+	t=1733151751; cv=none; b=G83cOoAI/ZE9ciBqNnRHEwjBYNVari89ryqCie3u9HoY21ZXjhzIQgYkIEWqAVIw5488y+cvUrf5Ag+Xc2AY5I0730AgupAH8JTaXt+8ShwGz3DsI30qzX1/V6aiAUXiDftri7uUXHlhG5v6lofbNeNSuU0AsNgah4QRqx0eSg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733151531; c=relaxed/simple;
-	bh=KMThR1ftkkd2GZtT3jZFUOmNERSEZJ3FC4H3QwJCiSs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ufywhvt0QkTwuXfTsKIlKubUOFG8JmPR2LZHCtWL2I8j2Dbdwob6F/+GAKc7+DxyLATNIrQ/UZixyMYLwky4e95fd8ssVIEICP+9RHbPFr6ggP8qL5Kwdoo+gy3WWGLjaMPxuYonTHodEghukqdyzQ3b1UZNG4ELM02+6qfmHaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Fpz4Bnxc; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1733151751; c=relaxed/simple;
+	bh=Tss2wX7BVTMGLLgBPwI3Bxd0nhDmhT/WVBqiMlc+Up8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VUmmGNEcvd70qVugxJkFk8KzXYuH7rvdAzh2H9nOi9/nkuKpIn7c6JSPkI9ky9uh/uv+oAGYqMEwgOu52gxMybiTfmzDyiOxBPLC/PdhX4kCuNH3lExa63/wIBq2KOO9QyCeuqIC53Pc0NtjTG19mpELzeQx+RIl7eIRGcMZRl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gBqXi62I; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Fpz4Bnxc"
-Received: from mail.ideasonboard.com (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1D1B21046;
-	Mon,  2 Dec 2024 15:58:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1733151495;
-	bh=KMThR1ftkkd2GZtT3jZFUOmNERSEZJ3FC4H3QwJCiSs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Fpz4BnxcJtLWy18kRjGkO9yo1VQ9uB9TgSxWw6VdSENDidf4YWUA4o4r8GDvaYk9x
-	 w4y6quK5H8D6kK1szMCS/39NWJtIwixwO1rUcaUVxsVuCoL3M86RA5C0FOER9P009k
-	 7phVMk2FqIk1JN2inal4zxIeWjwFhkl3NciO2doo=
-From: Daniel Scally <dan.scally@ideasonboard.com>
-To: linux-media@vger.kernel.org
-Cc: hverkuil-cisco@xs4all.nl,
-	sakari.ailus@linux.intel.com,
-	laurent.pinchart@ideasonboard.com,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	jacopo.mondi@ideasonboard.com,
-	isaac.scott@ideasonboard.com,
-	Daniel Scally <dan.scally@ideasonboard.com>
-Subject: [PATCH v3 4/5] media: rzg2l-cru: Support multiple mbus codes per pixel format
-Date: Mon,  2 Dec 2024 14:58:30 +0000
-Message-Id: <20241202145831.127297-5-dan.scally@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241202145831.127297-1-dan.scally@ideasonboard.com>
-References: <20241202145831.127297-1-dan.scally@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gBqXi62I"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53ddd4705f8so4164776e87.0
+        for <linux-media@vger.kernel.org>; Mon, 02 Dec 2024 07:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733151747; x=1733756547; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/YvM66VLjGaWFMoBlw0v965vjYa9KnUHS0gdOSnCBuU=;
+        b=gBqXi62I/Aag3MjA+zhShuDWP3UFuchk2GVFlIRZKWrbvYGMzXko5zbPLI9gwRItP5
+         6K0hMuwez0ls52h28yW731k1xIqGRkxipaqqwvvIiEp9Rac3YyrNDlHM6E+bCdkzyl5W
+         0c720nvOv1XODUMKy/WTpvLq1WSCiZRm2wCUQt1Zplc5dHfT7NmCqrPG0KpGE56ECgb7
+         Bq8CYdPP0MZ8FrzdYQqJ+ijpwjLJG8rqH1QfpRkhgbOgNQiYrEwHObrMeronAlVpeJ2T
+         kWSZhat9PugcZz2PtwXJw7cDCN9uG0MKucA04EnsM5wWCpEtsHcz9W9bNO/squ+CjYFV
+         Uapg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733151747; x=1733756547;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/YvM66VLjGaWFMoBlw0v965vjYa9KnUHS0gdOSnCBuU=;
+        b=gYF/HkX+LBsfNLz0s6JjcuNsqQWHWuaXZXwjqziX5vBXigCPeTmjdrQkpWaQAJwj8u
+         FcsU+ovz+67Qn1Y7tA7JRwhQjg5IQ77k3JDNHx1QO5WmJVnFPaE+R9nq7BIv5cW3AJsy
+         E66LOKUIONrWiAt8Y4XnrdIccgZu4eH0ieoYp0Sa14Wa+2nPSvE5K5TmcIoBsXQLClZI
+         5N4Cl3qArj55P/yRrqub9+bffUGvbhU6J2j5WiO0+9IJ+N015EHFI7LR9Y3OUMuUloxN
+         RERr7HwksblkDJ+HwceSw4zY8Bi7i94lecoYfeqNb17ZEynaAwjeEoGwx1eRa1LEU2pW
+         S1kg==
+X-Forwarded-Encrypted: i=1; AJvYcCVpUbdBgH4/al9UrzpN1hOsqxuDWkDm4nCf541oXOw9Nh4ero0XnCjXHrUhgGbER/6mR/6qSsPmru5Vjw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvA8cTqP1cxM5p+zHJfiZ7WaLGW2riu2hEgkYfA0WtgwEuVY14
+	qYerRlVxiFUCd08vpnIKlQvxE01WHktCMQm3MvH82K5X26LNIzoi9dCu+NvkYxI=
+X-Gm-Gg: ASbGncuzGfbDKo/pdD61nC23e7o82WE1qPKDTeQ+g49iAYAuBvyIw1gUvWXlI0BtsRr
+	0i+v7l/Wc4cFRTr/EwTwCSzpJlVPEO0fewft0Ksm0OKjpATYX2o+y5fy29KGpsIkVugd7spW1P/
+	t3WUM+VVamLdK+7+yfAhQysS8V4SrxR3xAol05yppHiA2jvpRkXah+xWx1Ph7ylBxhY6cDmw1SY
+	eI/x4YXXfGJUwkNaAzFgiRVAxasy4qR+zXrhGC5sdQPiaQtmbpvUwXDkwpjq8jKKageG7cYkQ/Q
+	j1sSU7ijSh+1nusw8dlXDhyIAGmzew==
+X-Google-Smtp-Source: AGHT+IGpWLZTubAjL+EcRvPsaRs1q62SFavCte2XH3l1UUlQtQ0yI4iXJlCQ+K7wtS1kFUnHwKp47w==
+X-Received: by 2002:a05:6512:3b0f:b0:53d:f786:c364 with SMTP id 2adb3069b0e04-53df786c447mr5437857e87.19.1733151744243;
+        Mon, 02 Dec 2024 07:02:24 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53df6442e26sm1491277e87.67.2024.12.02.07.02.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 07:02:22 -0800 (PST)
+Date: Mon, 2 Dec 2024 17:02:20 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+	Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+	Jagadeesh Kona <quic_jkona@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+	linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: x1e80100: Add CAMCC block
+ definition
+Message-ID: <2chygbm3yjozhkhps64oae5gwirdk5b3orsybss7jgutu5g7ke@4jskpnermxfm>
+References: <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-0-54075d75f654@linaro.org>
+ <20241119-b4-linux-next-24-11-18-dtsi-x1e80100-camss-v1-4-54075d75f654@linaro.org>
+ <02dd5593-38ba-4344-aa64-0913eca45808@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02dd5593-38ba-4344-aa64-0913eca45808@oss.qualcomm.com>
 
-As a preliminary step for supporting the CRU pixel formats, extend
-the driver such that multiple media bus codes can support each of
-the output pixel formats.
+On Mon, Dec 02, 2024 at 03:27:11PM +0100, Konrad Dybcio wrote:
+> On 19.11.2024 2:10 PM, Bryan O'Donoghue wrote:
+> > Add the CAMCC block for x1e80100. The x1e80100 CAMCC block is an iteration
+> > of previous CAMCC blocks with the exception of having two required
+> > power-domains not just one.
+> > 
+> > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> > index c18b99765c25c901b3d0a3fbaddc320c0a8c1716..5119cf64b461eb517e9306869ad0ec1b2cae629e 100644
+> > --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> > @@ -3,6 +3,7 @@
+> >   * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> >   */
+> >  
+> > +#include <dt-bindings/clock/qcom,x1e80100-camcc.h>
+> >  #include <dt-bindings/clock/qcom,rpmh.h>
+> >  #include <dt-bindings/clock/qcom,sc8280xp-lpasscc.h>
+> >  #include <dt-bindings/clock/qcom,x1e80100-dispcc.h>
+> > @@ -4647,6 +4648,22 @@ usb_1_ss1_dwc3_ss: endpoint {
+> >  			};
+> >  		};
+> >  
+> > +		camcc: clock-controller@ade0000 {
+> > +			compatible = "qcom,x1e80100-camcc";
+> > +			reg = <0 0x0ade0000 0 0x20000>;
+> > +			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+> 
+> This clock is not registered with the CCF
 
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
-Changes in v3:
+Isn't that be going to be handled by the CCF on its own (like orphans,
+etc)?
 
-	- New patch due to changes to patch 1
-
- .../platform/renesas/rzg2l-cru/rzg2l-cru.h    |  8 ++-
- .../platform/renesas/rzg2l-cru/rzg2l-ip.c     | 67 +++++++++++++++----
- .../platform/renesas/rzg2l-cru/rzg2l-video.c  |  2 +-
- 3 files changed, 61 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-index aaf85054f8842..ab923bfa3becf 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-cru.h
-@@ -71,7 +71,11 @@ struct rzg2l_cru_ip {
-  * @yuv: Flag to indicate whether the format is YUV-based.
-  */
- struct rzg2l_cru_ip_format {
--	u32 code;
-+	/*
-+	 * RAW output formats might be produced by RAW media codes with any one
-+	 * of the 4 common bayer patterns.
-+	 */
-+	u32 codes[4];
- 	u32 datatype;
- 	u32 format;
- 	u32 icndmr;
-@@ -169,5 +173,7 @@ struct v4l2_mbus_framefmt *rzg2l_cru_ip_get_src_fmt(struct rzg2l_cru_dev *cru);
- const struct rzg2l_cru_ip_format *rzg2l_cru_ip_code_to_fmt(unsigned int code);
- const struct rzg2l_cru_ip_format *rzg2l_cru_ip_format_to_fmt(u32 format);
- const struct rzg2l_cru_ip_format *rzg2l_cru_ip_index_to_fmt(u32 index);
-+bool rzg2l_cru_ip_fmt_supports_mbus_code(const struct rzg2l_cru_ip_format *fmt,
-+					 unsigned int code);
- 
- #endif
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
-index 399a337dbafbf..54a79d5c13e10 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-ip.c
-@@ -13,35 +13,45 @@
- 
- static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 	{
--		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.codes = {
-+			MEDIA_BUS_FMT_UYVY8_1X16,
-+		},
- 		.datatype = MIPI_CSI2_DT_YUV422_8B,
- 		.format = V4L2_PIX_FMT_UYVY,
- 		.icndmr = ICnDMR_YCMODE_UYVY,
- 		.yuv = true,
- 	},
- 	{
--		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.codes = {
-+			MEDIA_BUS_FMT_SBGGR8_1X8,
-+		},
- 		.format = V4L2_PIX_FMT_SBGGR8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
- 	{
--		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.codes = {
-+			MEDIA_BUS_FMT_SGBRG8_1X8,
-+		},
- 		.format = V4L2_PIX_FMT_SGBRG8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
- 	{
--		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.codes = {
-+			MEDIA_BUS_FMT_SGRBG8_1X8,
-+		},
- 		.format = V4L2_PIX_FMT_SGRBG8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
- 		.icndmr = 0,
- 		.yuv = false,
- 	},
- 	{
--		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.codes = {
-+			MEDIA_BUS_FMT_SRGGB8_1X8,
-+		},
- 		.format = V4L2_PIX_FMT_SRGGB8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
- 		.icndmr = 0,
-@@ -51,11 +61,14 @@ static const struct rzg2l_cru_ip_format rzg2l_cru_ip_formats[] = {
- 
- const struct rzg2l_cru_ip_format *rzg2l_cru_ip_code_to_fmt(unsigned int code)
- {
--	unsigned int i;
-+	unsigned int i, j;
- 
--	for (i = 0; i < ARRAY_SIZE(rzg2l_cru_ip_formats); i++)
--		if (rzg2l_cru_ip_formats[i].code == code)
--			return &rzg2l_cru_ip_formats[i];
-+	for (i = 0; i < ARRAY_SIZE(rzg2l_cru_ip_formats); i++) {
-+		for (j = 0; j < ARRAY_SIZE(rzg2l_cru_ip_formats[i].codes); j++) {
-+			if (rzg2l_cru_ip_formats[i].codes[j] == code)
-+				return &rzg2l_cru_ip_formats[i];
-+		}
-+	}
- 
- 	return NULL;
- }
-@@ -80,6 +93,17 @@ const struct rzg2l_cru_ip_format *rzg2l_cru_ip_index_to_fmt(u32 index)
- 	return &rzg2l_cru_ip_formats[index];
- }
- 
-+bool rzg2l_cru_ip_fmt_supports_mbus_code(const struct rzg2l_cru_ip_format *fmt,
-+					 unsigned int code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(fmt->codes); i++)
-+		if (fmt->codes[i] == code)
-+			return true;
-+
-+	return false;
-+}
- struct v4l2_mbus_framefmt *rzg2l_cru_ip_get_src_fmt(struct rzg2l_cru_dev *cru)
- {
- 	struct v4l2_subdev_state *state;
-@@ -155,7 +179,7 @@ static int rzg2l_cru_ip_set_format(struct v4l2_subdev *sd,
- 	sink_format = v4l2_subdev_state_get_format(state, fmt->pad);
- 
- 	if (!rzg2l_cru_ip_code_to_fmt(fmt->format.code))
--		sink_format->code = rzg2l_cru_ip_formats[0].code;
-+		sink_format->code = rzg2l_cru_ip_formats[0].codes[0];
- 	else
- 		sink_format->code = fmt->format.code;
- 
-@@ -181,11 +205,26 @@ static int rzg2l_cru_ip_enum_mbus_code(struct v4l2_subdev *sd,
- 				       struct v4l2_subdev_state *state,
- 				       struct v4l2_subdev_mbus_code_enum *code)
- {
--	if (code->index >= ARRAY_SIZE(rzg2l_cru_ip_formats))
--		return -EINVAL;
-+	unsigned int index = code->index;
-+	unsigned int i, j;
- 
--	code->code = rzg2l_cru_ip_formats[code->index].code;
--	return 0;
-+	for (i = 0; i < ARRAY_SIZE(rzg2l_cru_ip_formats); i++) {
-+		const struct rzg2l_cru_ip_format *fmt = &rzg2l_cru_ip_formats[i];
-+
-+		for (j = 0; j < ARRAY_SIZE(fmt->codes); j++) {
-+			if (!fmt->codes[j])
-+				continue;
-+
-+			if (!index) {
-+				code->code = fmt->codes[j];
-+				return 0;
-+			}
-+
-+			index--;
-+		}
-+	}
-+
-+	return -EINVAL;
- }
- 
- static int rzg2l_cru_ip_enum_frame_size(struct v4l2_subdev *sd,
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-index 028b390488c84..57d1ff45ce1e9 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-video.c
-@@ -891,7 +891,7 @@ static int rzg2l_cru_video_link_validate(struct media_link *link)
- 	if (fmt.format.width != cru->format.width ||
- 	    fmt.format.height != cru->format.height ||
- 	    fmt.format.field != cru->format.field ||
--	    video_fmt->code != fmt.format.code)
-+	    !rzg2l_cru_ip_fmt_supports_mbus_code(video_fmt, fmt.format.code))
- 		return -EPIPE;
- 
- 	return 0;
 -- 
-2.34.1
-
+With best wishes
+Dmitry
