@@ -1,108 +1,107 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E456E1EF080
-	for <linux-media@vger.kernel.org>; Tue,  3 Dec 2024 13:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F411632D9
+	for <linux-media@vger.kernel.org>; Tue,  3 Dec 2024 13:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733231341; cv=none; b=atelsyJyN2/yLLNrzq+Ul1vnv842nmmRgk08GRMqTaNDUPH9pDBwInA126diPo0ESyGOdBi0WMpJHU0pCGYKH8MhPB2QlApIf1FdwPk7BigdLjwLdvlQqwf1qW12l12K4os1qNuRfvstLrD/ZutLzWIt3XE8Lq/lmnDnUPP1OUI=
+	t=1733232057; cv=none; b=DTktmRJvWxSkuzensAfnFwykcJr/26J+t94w1i/pgPDEy908ABjggvJYK9MF4LwSVn0HWLGG45aTJcBp1WPXeRHteoxMd+0UBZLDo+wLOs5QuRJCm+f9gSE0akQk125ur+U8ctwF4b72BMdofbLxwcyyDiszTPE3hfzzo+asKIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733231341; c=relaxed/simple;
-	bh=WoMHRJb0tkxTD9vjf51l2F+vHsZpZpKuGhGA2Oq1gss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCiXpXsmhsqAb0Qoz4HyfizK8696dm/PpQF5Z9MNXyttdYzXTMM5ZoOCrl7Pb7Scc7p3iqs0JJeckvwcY5XTC3wkpPZ2zSQNzDwLhF9hKNJ0zZnZ4lzHPP4EWqnSiVXRy91VqdDddPRmYTi/IhfOOEeiGoHoMlTLUb35dGS8Bbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wzfxKmuY; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1733232057; c=relaxed/simple;
+	bh=UxBvzuYf8AmF7Zl4yUcB1j2gkkJTnoNVIgRbn5cpwEs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cYfXEHTAjfi0zbj8EIcIMfAitj23BpBNQsRlunb5Sx5yVYOmPFl6rMuYeLkp1hgef6O9ziHMW5Ww1xIuNrqH4YXiBjq22L9761yijj0qr27/w8mxZriziEK7YaoeCoajlyDpnjfipGeESBM5xPcWYhVyQCTOc3C3yInHszqd5+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ufj8fqTn; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wzfxKmuY"
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3001490ba93so1154931fa.0
-        for <linux-media@vger.kernel.org>; Tue, 03 Dec 2024 05:08:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733231338; x=1733836138; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/lL5pAiR2kE/Mua5K3k92X0rB9806Pb8dHr6N7ntE4=;
-        b=wzfxKmuYk5ozemAQGpcNecfNwB1VoPsCN0nT8udbJgCnd4C128IpW7bfZ7EmHeHFfb
-         geQgPtClkssTwkbCqtfQU3Zo/VfMBZy+J9enEoSYswfL0FPFvnwKtBSuvCbna8fld9Z/
-         88FyWdMGgHSp8Jv/uEKMnoBGJZl2fwCht80Ustv9gMstEyZA91OfbZpZidEekDR/lymH
-         GYSFQRr2Xr6xJzKRxedoIMW7CgRDn9PtY1XJ/NVzKg0+MVTX7uJC17i4mNm+91aUxMKo
-         X3jiuJa5hSZyXMviaywgKgzI+akl/s9cBFZF2qczSp15ktgGYgwf5v5P9fuymPaNlzjb
-         Ml6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733231338; x=1733836138;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I/lL5pAiR2kE/Mua5K3k92X0rB9806Pb8dHr6N7ntE4=;
-        b=OOYvOq424lMBGcDAlbuEYETsXeEU3IGtJ5NNY49+thKIs9LXyQm7C03E4XlkuDpgT8
-         LJLsEXNR5nCQDrMSTorP1PW+sTuUdA9A1qT57APadhPC6Efr4wLMimpy0jTEb/Bo/uTe
-         7GxPdFh+1PsHXH6KXHH2hVZN2v+DCgV4rstphmoScBNE864E9P9LRgv3JvAQxSwSYBfh
-         fZ2I1b6ur45YFzqtuBWROjkXOo/kkaOUQQ2iFa1ZmtPykJU3ocD9AuIg45gubhQvpM2L
-         MBUd7qei5D7s2a2fTeA9KIoY0uL7tVZ2YdiMn9x3ZD0O7Pd8ZclEahP9RLsUuMHTnnJ0
-         GGdg==
-X-Forwarded-Encrypted: i=1; AJvYcCWz8RgyY/fv0SJbuQZh7K6CfTT4JOq8cLthDrBz+mxVhQThMNmMqA2vEKXI8wx5cpbokZL5tvdJf8Id8Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8otR7rvkZUljgE7NAns9VZLsfP1A2Oddfu9qGxZCbzQBXSX25
-	UDtdgLvQswar4u+YV61X7C3vkBSaVmSqauaThK9gRgrH4QLaCygaeHfR2vQ3r18=
-X-Gm-Gg: ASbGnct9SzUPzCav/ZHDPxy7T1Vt4ADqlfON5f7uLuMBneYW34TXGS8r5uKMjO82O7R
-	IW+o6AqeqP1SuZB8dzc8wl94LgBuALJp+AJjWnLUdx4GXf1c0bsmoqSW+x0JziNqJBs18Zm/ame
-	7Gu5VRmcFGNGRjwWt6N9ysBrILxROh3QcgR+B5NrFcGqg0KXdIrZZp0fuBJEeOQvFIkcyLbsg6f
-	Fz+y2zI0n6yM1EV6otg7VDyehFcOAiT1xG5H+m+tYos4CJNLrtN3ZVkE2FUKbFCj6InZyIgdBKA
-	+sByftBjQHsnMkl3656I5QY4U2cwrw==
-X-Google-Smtp-Source: AGHT+IFThbwM7lX3Y2ipfgIhRvnqePc6hLDMc8QwYoeSkbRqOQTvnGXT+2fwk+HTyaWcY0FW9Hg0Cw==
-X-Received: by 2002:a05:651c:503:b0:2ff:c349:8d08 with SMTP id 38308e7fff4ca-30009c73a30mr17954081fa.8.1733231338062;
-        Tue, 03 Dec 2024 05:08:58 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3000a3fb991sm1970151fa.70.2024.12.03.05.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 05:08:56 -0800 (PST)
-Date: Tue, 3 Dec 2024 15:08:53 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: "Yu Zhang(Yuriy)" <quic_yuzha@quicinc.com>
-Cc: andersson@kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, agross@kernel.org, 
-	ath11k@lists.infradead.org, konradybcio@kernel.org, kvalo@kernel.org, 
-	linux-media@vger.kernel.org, mchehab@kernel.org, quic_jjohnson@quicinc.com, 
-	quic_miaoqing@quicinc.com, quic_vgarodia@quicinc.com, stanimir.k.varbanov@gmail.com, 
-	quic_jiaymao@quicinc.com
-Subject: Re: [PATCH v3] arm64: dts: qcom: qcs615: add WiFi/BT nodes
-Message-ID: <vpnvycgbjtksjbktiksaltb73w34ogdxt5satz7cpmel63j3mm@aqvih2idpdfw>
-References: <20241203060318.1750927-1-quic_yuzha@quicinc.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ufj8fqTn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733232055; x=1764768055;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UxBvzuYf8AmF7Zl4yUcB1j2gkkJTnoNVIgRbn5cpwEs=;
+  b=Ufj8fqTnuw7mJUtuEmYIugFUZrENwKeVZ4+QTY5H+Z8Ld8fcTEp35Ifl
+   dgrzHqPbmZhJ5C3ZjOTnFu94mRjvj+4lok8z2dj/zE5Wbfi2rogWsYDBK
+   G9NO5JJBEbeO6sdHBI76ewxk9q3GwoarbZJ+swTVsKCn7QqM2GgsohyTe
+   MaGkkJvUz0ila7O+3fm7STtmTkjU95k9wXTVrcADNhwX4Mtvh0inBbkSP
+   LOjVtVLEwCZm5MrnTQrodbZx8LYP1j2LYSRr3xoo0pBKIRXVPQQZKIZiX
+   mXgQLPNGgvJFc8gNFQiP/SVlmDU3k+JC1OogYBiE5mYV5M/m1jgRNTvuw
+   Q==;
+X-CSE-ConnectionGUID: 9WPY/lrCTEql+I5Ccrk9nQ==
+X-CSE-MsgGUID: /73KmMdFRLiMPqH9+IQOTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="33575966"
+X-IronPort-AV: E=Sophos;i="6.12,205,1728975600"; 
+   d="scan'208";a="33575966"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 05:20:55 -0800
+X-CSE-ConnectionGUID: BUFLK/nyTzOXm8zL5alvEg==
+X-CSE-MsgGUID: 3nsutMe4S2afOfMcznVp1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,205,1728975600"; 
+   d="scan'208";a="93319731"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 05:20:54 -0800
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 6EE5E11F89A;
+	Tue,  3 Dec 2024 15:20:51 +0200 (EET)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1tISpf-005Ia7-14;
+	Tue, 03 Dec 2024 15:20:51 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: david@ixit.cz
+Subject: [PATCH v2 1/1] media: ccs: Clean up parsed CCS static data on parse failure
+Date: Tue,  3 Dec 2024 15:20:41 +0200
+Message-Id: <20241203132041.1263059-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203060318.1750927-1-quic_yuzha@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 03, 2024 at 02:03:18PM +0800, Yu Zhang(Yuriy) wrote:
-> Add a node for the PMU module of the WCN6855 present on the qcs615
-> board. Assign its LDO power outputs to the existing WiFi/BT module.
-> 
-> This patch depends on below patch series:
-> - base
-> https://lore.kernel.org/all/20241104-add_initial_support_for_qcs615-v5-0-9dde8d7b80b0@quicinc.com/
-> - pmic
-> https://lore.kernel.org/all/20241202-adds-spmi-pmic-peripherals-for-qcs615-v6-0-bdd306b4940d@quicinc.com/
-> - pci
-> https://lore.kernel.org/all/20241122023314.1616353-1-quic_ziyuzhan@quicinc.com/
+ccs_data_parse() releases the allocated in-memory data structure when the
+parser fails, but it does not clean up parsed metadata that is there to
+help access the actual data. Do that, in order to return the data
+structure in a sane state.
 
-This doesn't belong to the commit message. The list of dependncies makes
-no sense once they land upstream. Please switch to the b4 tool, use b4
-prep --edit-cover to list such info (it will be automatically added to a
-non-commit part of the email) and b4 prep --edit-deps to list
-dependncies in a machine-readable format.
+Reported-by: David Heidelberg <david@ixit.cz>
+Fixes: a6b396f410b1 ("media: ccs: Add CCS static data parser library")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+since v1:
 
-The patch itself looks good to me.
+- Add a necessary header and fix a typo.
 
-> 
-> Signed-off-by: Yu Zhang(Yuriy) <quic_yuzha@quicinc.com>
-> 
-> 
+ drivers/media/i2c/ccs/ccs-data.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/media/i2c/ccs/ccs-data.c b/drivers/media/i2c/ccs/ccs-data.c
+index 9d42137f4799..0afdc73ead16 100644
+--- a/drivers/media/i2c/ccs/ccs-data.c
++++ b/drivers/media/i2c/ccs/ccs-data.c
+@@ -10,6 +10,7 @@
+ #include <linux/limits.h>
+ #include <linux/mm.h>
+ #include <linux/slab.h>
++#include <linux/string.h>
+ 
+ #include "ccs-data-defs.h"
+ 
+@@ -974,6 +975,7 @@ int ccs_data_parse(struct ccs_data_container *ccsdata, const void *data,
+ 
+ out_free:
+ 	kvfree(bin.base);
++	memset(ccsdata, 0, sizeof(*ccsdata));
+ 
+ 	return rval;
+ }
 -- 
-With best wishes
-Dmitry
+2.39.5
+
