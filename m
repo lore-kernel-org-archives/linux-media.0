@@ -1,154 +1,138 @@
-Received: from mr85p00im-ztdg06021801.me.com (mr85p00im-ztdg06021801.me.com [17.58.23.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31AA71EBFE6
-	for <linux-media@vger.kernel.org>; Tue,  3 Dec 2024 13:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C391EE03D;
+	Tue,  3 Dec 2024 13:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733231024; cv=none; b=K5F2+XsPvbcOPw+ZuotJc8t+8RK4T1H0SXICFHwSfFS14LE3U8scOg/7ybEqywFoEFM0n/qaMdYW4lO1LDiSB6FC1e9Rb9Wm9osN4rHvtXON3/zAUdlmEEEh3UQztp3pDF/ITJj3w/pj2d4wfFgCAZWwhWAoxnEGYX92OAjtm2U=
+	t=1733231239; cv=none; b=tacwTI5MfgeBypNz0xji1PHr1zv+fQXNGUmAcJgFwGvVi9WaC+Q9GFC55si9t1kRb8gk8xAxuN2z6dlFDGlMiYYHodo10wNThwIQs3XWGO3IyljPVuKGGoZ8O/WgVTirdj6OyFGbG1s8tlSmm7pp0Evj0ek7W+KZVs6ba4gjEBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733231024; c=relaxed/simple;
-	bh=PMZl124fAJi/9a12repkCEPo/NdFlnbWHM0+eGs6QGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BhU3+2oyBZ9jbiH7DxS4s5utfP/DGBGssciLQm6KyoVYvgdn21rt3kvLkDikGdHUV5Z9GsXTA+gL9rt1cCsjXRWgm+1aVDuhSEUA5bs2391bv4PEuMi/XpUhruvCoTsh2nYx36x+Kla4UUbIqfzaiePU3FMAI3nQYOCNfwfT9+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Kc4yhuXu; arc=none smtp.client-ip=17.58.23.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+	s=arc-20240116; t=1733231239; c=relaxed/simple;
+	bh=nBqtovQP67JSM9MJxax389v7WGawj+GxFUiHn7+fRz8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sYAGkdVLuEFPOnEiYX2hPnBj8+VD/Qo6Nj66GL1vzSGk+jbblGMEwWJYb67fAPedy3ypCB5ic0e2/nj9AHvlqKsmB/wdLHGgBb9wejMEzMKToW98A8DYBrFxJ5L9P8uTRBDv5sVeHE5stIsYZnklUfc8wIUSYfCDdlqfhvdUDtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4GXuiUO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Kc4yhuXu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733231020;
-	bh=QEJ75x+TqYUJVxmVF6uQZZWFOEl0WJRfUhXN2h5KpKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=Kc4yhuXugc/D/qtZZ41v8wAnuwEzwggEWUway63IXkClqixwU1cfn/v3YVm8Qsiaw
-	 28NLlORRwJjFZX7JY4DZlIgrQ1s8zKvPJAQ+RXHBAEkcNRuUPk0OyxBiAs9kB0GBL/
-	 4jgwTolEa8TiqyUyeuv6tr/7DG898UMLRPOw8P2qzUVkHb/i6BK0gmuVjOCVuRaOL4
-	 yVOUtS8ijY+iNGs/3oFthLPmtWg3RPz3zQCNIexvybyNTkT8kJ+0hPmRIWLu7xxlpo
-	 9HqUza+TM66+s3TNEHqlu5QAj7PkxbSr1VPZfaRzmcsea2BKweNx4LzKqRftuLVcUB
-	 Ma8BwRHqOq26Q==
-Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-ztdg06021801.me.com (Postfix) with ESMTPSA id 67D49442839;
-	Tue,  3 Dec 2024 13:03:18 +0000 (UTC)
-Message-ID: <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
-Date: Tue, 3 Dec 2024 21:02:59 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4GXuiUO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A545C4CECF;
+	Tue,  3 Dec 2024 13:07:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733231236;
+	bh=nBqtovQP67JSM9MJxax389v7WGawj+GxFUiHn7+fRz8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=b4GXuiUOJP+z2PLHpo1PMILKVjvdmouR0XQzWM4ynguWJF+I301XUKCWoyq1RMch4
+	 yabH9gGtQxZHH1UuC3zkLrZJ0zNrsqEOsqIUlo7vgQWOP2G44d3X+CSMKGG+s9zCeY
+	 I7zYK0d35vzYk+ol7L5wzH5s6UksAzdXLUXFbbSVhBYRmY1RpcVrPR3MNER8ZwK8nh
+	 +/FQrShaIyCngnCSfcwfCBJGSdxsGecEcmtnZ017g+hFH+epPTueSV5Q8UKGPLGx4M
+	 5aVwrWOavxzPk4KzDgf5B/JPCY20T9G0ypjLH2ouvzSjS6jVXEscmJlcp9E0camc8q
+	 zgVHIBgOG5LUA==
+Date: Tue, 3 Dec 2024 14:07:12 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org, Jonathan
+ Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, workflows@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Document the new media-committer's model
+Message-ID: <20241203140712.57daa65f@foz.lan>
+In-Reply-To: <20241203112209.GR10736@pendragon.ideasonboard.com>
+References: <cover.1733131405.git.mchehab+huawei@kernel.org>
+	<b0843e80-c46c-4344-b9f1-1d3b57dd2bbe@xs4all.nl>
+	<20241203081958.6c186835@foz.lan>
+	<20241203112209.GR10736@pendragon.ideasonboard.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
- and adapt for various existing usages
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Martin Tuma <martin.tuma@digiteqautomotive.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>,
- Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
- Ira Weiny <ira.weiny@intel.com>, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
- Jiri Slaby <jirislaby@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
- Mike Christie <michael.christie@oracle.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nilesh Javali <njavali@marvell.com>,
- Manish Rangankar <mrangankar@marvell.com>,
- GR-QLogic-Storage-Upstream@marvell.com, Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Andreas Larsson <andreas@gaisler.com>, Stuart Yoder <stuyoder@gmail.com>,
- Laurentiu Tudor <laurentiu.tudor@nxp.com>, Jens Axboe <axboe@kernel.dk>,
- Sudeep Holla <sudeep.holla@arm.com>,
- Cristian Marussi <cristian.marussi@arm.com>, Ard Biesheuvel
- <ardb@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
- linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
- linux-pwm@vger.kernel.org, nvdimm@lists.linux.dev,
- linux1394-devel@lists.sourceforge.net, linux-serial@vger.kernel.org,
- linux-sound@vger.kernel.org, open-iscsi@googlegroups.com,
- linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org,
- linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
- <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
- <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
- <2024120320-manual-jockey-dfd1@gregkh>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <2024120320-manual-jockey-dfd1@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
-X-Proofpoint-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-03_02,2024-12-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412030113
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2024/12/3 20:41, Greg Kroah-Hartman wrote:
-> On Tue, Dec 03, 2024 at 08:23:45PM +0800, Zijun Hu wrote:
->> On 2024/12/3 20:00, Uwe Kleine-König wrote:
->>> Hello,
->>>
->>> On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
->>>> This patch series is to constify the following API:
->>>> struct device *device_find_child(struct device *dev, void *data,
->>>> 		int (*match)(struct device *dev, void *data));
->>>> To :
->>>> struct device *device_find_child(struct device *dev, const void *data,
->>>> 				 device_match_t match);
->>>> typedef int (*device_match_t)(struct device *dev, const void *data);
->>>
->>> This series isn't bisectible. With only the first two patches applied I
->>> hit:
->>
->> yes. such patch series needs to be merge as atomic way.
->>
->> Hi Greg,
->>
->> is it possible to ONLY merge such patch series by atomic way into your
->> driver-core tree?
-> 
-> Nope!
-> 
->> or squash such patch series into a single patch ?
->>
->> various subsystem maintainers may not like squashing way.
-> 
-> Agreed, so look into either doing it in a bisectable way if at all
-> possible.  As I don't see a full series here, I can't suggest how it
-> needs to happen :(
-> 
+Em Tue, 3 Dec 2024 13:22:09 +0200
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
 
-let me send you a full series later and discuss how to solve this issue.
-
-> thanks,
+> On Tue, Dec 03, 2024 at 08:19:58AM +0100, Mauro Carvalho Chehab wrote:
+> > Em Mon, 2 Dec 2024 16:03:45 +0100 Hans Verkuil escreveu:  
+> > > On 02/12/2024 10:26, Mauro Carvalho Chehab wrote:  
+> > > > The media subsystem used to have a multi-commiter's model in the
+> > > > past, but things didn't go well on that time, and we had to move to
+> > > > a centralized model.
+> > > > 
+> > > > As the community has evolved, and as there are now new policies in
+> > > > place like CoC, let's experiment with a multi-committers again.
+> > > > 
+> > > > The model we're using was inspired by the DRM multi-committers
+> > > > model. Yet, media subsystem is different on several aspects, so the
+> > > > model is not exactly the same.
+> > > > 
+> > > > The implementation will be in phases. For this phase, the goal is that 
+> > > > all committers will be people listed at MAINTAINERS.
+> > > > 
+> > > > On this series,:
+> > > > 
+> > > > patch 1: updates the  media maintainer's entry profile and adds the
+> > > > workflow that will be used with the new model. While here, it also
+> > > > adds a missing "P:" tag at the MAINTAINERS file, pointing to it;
+> > > > 
+> > > > patch 2: adds a new document focused at the new maintainers
+> > > > process. Its target is for developers that will be granted with
+> > > > commit rights at the new media-maintainers.git tree. It also
+> > > > contains a reference tag addition to kernel.org PGP chain
+> > > > at process/maintainer-pgp-guide.rst.
+> > > > 
+> > > > patch 3: make documents cleared about maintainership duties.    
+> > > 
+> > > At least from my perspective, v3 is close to being ready and I hope
+> > > that v4 will be good enough to be merged.
+> > > 
+> > > That said, what is missing in all this is that there is nothing here
+> > > that explains why you would want to become a media committer. It is all
+> > > very dry stuff, lots of 'shall's, and 'rights' and 'trust' and obligations,
+> > > but nothing about the satisfaction you get when you get the responsibility
+> > > of a part of the kernel and being able to guide the development of that
+> > > area.
+> > > 
+> > > It's good enough to get the multi-committer process off the ground, but
+> > > it definitely needs more work to make it more inviting to become a media
+> > > committer. Because right now it is as dry as dust.  
+> > 
+> > Agreed. We focused on getting a document describing what it is expected
+> > by committers, in order to start with the model. My view is that it works
+> > fine for such purpose. I also feel that we're close to the final document.
+> > 
+> > I'm sending today a v4 addressing the comments since last review.
+> > 
+> > Once we get people that are already interested and ready to be on board,
+> > and we know that the model and infrastructure works properly, we may implement
+> > a phase 2 focusing on allowing more committers. For such purpose, we need to 
+> > document the benefits/satisfaction of becoming a new committer. Depending how
+> > it goes, either on phase 2 or on phase 3, we can change the model from 
+> > invitation-only to volunteer-requests.  
 > 
-> greg k-h
+> What's phase 3 ?
 
+The idea is to gradually open media-committers to more people, as each
+phase succeeds, addressing infra, procedures, etc.
+
+My rough idea is to do:
+
+- Phase 0.99: beta testers;
+- Phase 1 is to invite people that regularly submit PRs;
+- Phase 2 is to invite other active maintainers;
+- Phase 3 (or 2?, TBD) to open for non-maintainers.
+
+We shouldn't rush it, as there are a lot to be done before opening it
+broadly. So, I would say that:
+- phase 0.99 would start in -rc2 (if things go well during this week); 
+- phase 1 may still happen on this merge window, but as there will be
+  only a few weeks between -rc2 and -rc6, and people usually get
+  holidays in Dec/Jan, it is more likely that it will start for
+  6.14-rc1, again if we didn't notice big issues on phase 0.99.
+
+  We should wait at least for a couple of releases on phase 1,
+  again to cleanup process and fine-tune infra. If things go well, 
+  we can move to phase 2.
+
+Thanks,
+Mauro
