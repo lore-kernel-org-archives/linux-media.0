@@ -1,42 +1,43 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE111F7561;
-	Tue,  3 Dec 2024 15:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7328D1F76AD;
+	Tue,  3 Dec 2024 15:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733241341; cv=none; b=dbzLAR4j+EJGhso34AMWHWx38aB/aaB1qO6JBqgkfAXqflDuYIxLuYhtTEPRs7W1HW+midJh3P4c3mM+TsHFgBnQVXPibEFzy0AzMkHLi9sgVpiox8vrIiP5dy+n2o7A3FbgJwiBOCkaHeD30zOKpRsTNIMyvGivIKIshiJv+3c=
+	t=1733241540; cv=none; b=FuWYv4EHcaEqBXfNjbJ/yR5fSeavOzNkLg+CJs3rjYQKRslW/eqwZD7ogU0hHL6M9rIsCqzQ4e0OQq7S+7FC9QjSSexgYLRVYsG48+5O3YvV4dLUXhMo/C5oaPQQBnI4XBZShaKnf9iS0org4MkXsCo6xCHdeZe/1eifiOoJfAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733241341; c=relaxed/simple;
-	bh=hqpkMBm3NuV63rfCkCEywvqgAAX+X8aBzBPdBfquESU=;
+	s=arc-20240116; t=1733241540; c=relaxed/simple;
+	bh=aNIYOm+BmWWU2hBdJEYlLVbxaTdWTBaUP7RaDpWKdts=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eVCYvA75MJgIEpcc/iWkS5eGLiAVRj06AZN+CUo7SDp+o8Fawdr7b5IHb6hwBvSBYO/071v/OyoSuv7pbL1tDRJxL8SPw4W5lTF3q2lNSZekpd8DVzRD1287YiU6i0ROejB2xUQecXuqGBJdIDJ9PKh9vWcZjWV0OhABitpY0e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tp6R/WZg; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=CYOK3l4aaScP9eqKQCFhmzb8lzIR7QaI2kBKLUJZCGsKWHz23qw9ttt/iKeAKXrpBRuGqmnDGSdzYNh0rYX1T17VJ0D2XHGX16aCtOn7OX3RVi5PF4RZrKVBnOAIAobg68ak2pOvb86sJxmS54BwjqWNzD4E0sWqAbKB9r/0Y5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=HASqnMMs; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tp6R/WZg"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HASqnMMs"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A9E0B8DB;
-	Tue,  3 Dec 2024 16:55:09 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0DD324CE;
+	Tue,  3 Dec 2024 16:58:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1733241309;
-	bh=hqpkMBm3NuV63rfCkCEywvqgAAX+X8aBzBPdBfquESU=;
+	s=mail; t=1733241508;
+	bh=aNIYOm+BmWWU2hBdJEYlLVbxaTdWTBaUP7RaDpWKdts=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tp6R/WZgqynPpzj2ON6vEPkWvH55Bd14Q4ZGXw7/KJYXi1Z5E37wFoVE+mFoRAmjS
-	 O1SItt9niyqYmQq8/d+4EBleloV5t1J/OeSwTT4QcqjoUtFz0TkXP+UJNe8dwmQIky
-	 o43vRIFBSVGI3YutoI78qiZsDJVuqmva4rp7ACoU=
-Date: Tue, 3 Dec 2024 17:55:25 +0200
+	b=HASqnMMspCV6QhzACwvbRATGG2CxDEtCBg0DPNjfj7VYbJBSpuXN9qkBHh25UfpPa
+	 k6NGQ4AJD8Q1JSKXt3/XRW4yX2rnl+qeUiasiZkiPoObEx6S54anBZaxvFpa6kcs1M
+	 uxWUUtMb7fghXAczjVImTsldDPBj84DEMjNU1JYQ=
+Date: Tue, 3 Dec 2024 17:58:43 +0200
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Ricardo Ribalda <ribalda@chromium.org>
 Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] media: uvcvideo: Support partial control reads
-Message-ID: <20241203155525.GB26936@pendragon.ideasonboard.com>
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v5 2/2] media: uvcvideo: Add more logging to
+ uvc_query_ctrl()
+Message-ID: <20241203155843.GD26936@pendragon.ideasonboard.com>
 References: <20241128-uvc-readless-v5-0-cf16ed282af8@chromium.org>
- <20241128-uvc-readless-v5-1-cf16ed282af8@chromium.org>
+ <20241128-uvc-readless-v5-2-cf16ed282af8@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -45,59 +46,47 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241128-uvc-readless-v5-1-cf16ed282af8@chromium.org>
+In-Reply-To: <20241128-uvc-readless-v5-2-cf16ed282af8@chromium.org>
 
-On Thu, Nov 28, 2024 at 08:53:41PM +0000, Ricardo Ribalda wrote:
-> Some cameras, like the ELMO MX-P3, do not return all the bytes
-> requested from a control if it can fit in less bytes.
-> Eg: Returning 0xab instead of 0x00ab.
-> usb 3-9: Failed to query (GET_DEF) UVC control 3 on unit 2: 1 (exp. 2).
+On Thu, Nov 28, 2024 at 08:53:42PM +0000, Ricardo Ribalda wrote:
+> If we fail to query the ctrl error code there is no information on dmesg
+
+s/ctrl/control/
+
+> or in uvc_dbg. This makes difficult to debug the issue.
 > 
-> Extend the returned value from the camera and return it.
+> Print a proper error message when we cannot retrieve the error code from
+> the device.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: a763b9fb58be ("media: uvcvideo: Do not return positive errors in uvc_query_ctrl()")
 > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
+I'll update the commit message, no need to resend.
+
 > ---
->  drivers/media/usb/uvc/uvc_video.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+>  drivers/media/usb/uvc/uvc_video.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index cd9c29532fb0..67f714bca417 100644
+> index 67f714bca417..a650d886e922 100644
 > --- a/drivers/media/usb/uvc/uvc_video.c
 > +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -79,6 +79,27 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
->  	if (likely(ret == size))
->  		return 0;
+> @@ -117,8 +117,12 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
+>  	error = *(u8 *)data;
+>  	*(u8 *)data = tmp;
 >  
-> +	/*
-> +	 * Some devices return shorter USB control packets than expected if the
-> +	 * returned value can fit in less bytes. Zero all the bytes that the
-> +	 * device has not written.
-> +	 *
-> +	 * This quirk is applied to all controls, regardless of their data type.
-> +	 * Most controls are little-endian integers, in which case the missing
-> +	 * bytes become 0 MSBs. For other data types, a different heuristic
-> +	 * could be implemented if a device is found needing it.
-> +	 *
-> +	 * We exclude UVC_GET_INFO from the quirk. UVC_GET_LEN does not need
-> +	 * to be excluded because its size is always 1.
-> +	 */
-> +	if (ret > 0 && query != UVC_GET_INFO) {
-> +		memset(data + ret, 0, size - ret);
-> +		dev_warn_once(&dev->udev->dev,
-> +			      "UVC non compliance: %s control %u on unit %u returned %d bytes when we expected %u.\n",
-> +			      uvc_query_name(query), cs, unit, ret, size);
-> +		return 0;
+> -	if (ret != 1)
+> +	if (ret != 1) {
+> +		dev_err_ratelimited(&dev->udev->dev,
+> +				    "Failed to query (%s) UVC error code control %u on unit %u: %d (exp. 1).\n",
+> +				    uvc_query_name(query), cs, unit, ret);
+>  		return ret < 0 ? ret : -EPIPE;
 > +	}
-> +
->  	if (ret != -EPIPE) {
->  		dev_err(&dev->udev->dev,
->  			"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
+>  
+>  	uvc_dbg(dev, CONTROL, "Control error %u\n", error);
+>  
 
 -- 
 Regards,
