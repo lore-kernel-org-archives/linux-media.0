@@ -1,47 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3E11DFD9E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E4D1DFE07;
 	Tue,  3 Dec 2024 09:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733218558; cv=none; b=TFNXovEsmZbmDQfwaNjDa+auBCS7R9VE80CaBBZiidiubTukry4R3gRe80lR8aQeOFnSldNUChJqhcGgejrDEI3+VENPcszM3y/XAigzfEHBhoIhVLx8VuLc9JtEsLZ5P7ksXnSQ4lwCMz2kyYR0q4cH02NTprMnfP6bauvSxmc=
+	t=1733218558; cv=none; b=NhfsayW4WzOpIU5rp5hjzA03WdVN9FPk4LvRqAlMMeoxu7SINlvJnAKT6DAQ21pK5xNdSPwEInBlsVvbIuvGPGleCu1CcljEox6Kiq31uPKUWKfj3pHx5I5wC0Mmug+hZexccVonpERRcz1cF5xUxHIqWIl0QkuDDDHXTFU5pMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733218558; c=relaxed/simple;
-	bh=UlqrgZNX32gBjaTFgYtp4qGVc28pfjxVMRY2vOsdL3k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b+j++AmolsV5D2vz/9Eddn9SgXFP1AQwzDKgcsMWa4qkIS1I087aBA9F5v46gHcHhhqsC9tuxQqwvG0eA/XwkAiDmTOXdPdCdZjwQcZLNJ+zQMOA0nlFOv60Kb8Mb4H3Dh1KS6u6CAJmGdl06gKDqA5b9OYml/xE9q4ReFDDVVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fX4woRI3; arc=none smtp.client-ip=10.30.226.201
+	bh=a8DOKAbHHk3Uoi98wRsfxUMOehnt2Xr/DWBiY9unq5Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IwY3b8o606m1YZvLD9YyVM0Y+qD4l1llI7syE2dcF1I9fKkpzlPjbgwKHSuHMRs9Mg4CUq6ink4bORtWztRi0e/yDDvj0HXc2nqxhOgUmEqjGkDzc7NG56FSlIlOH+JFWVoA1D98AM1ioGK2NZXHlIwsot1bGnQJNzcVF0mX3rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzByEBuA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fX4woRI3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7BD8C4CECF;
-	Tue,  3 Dec 2024 09:35:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzByEBuA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57363C4CECF;
+	Tue,  3 Dec 2024 09:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733218557;
-	bh=UlqrgZNX32gBjaTFgYtp4qGVc28pfjxVMRY2vOsdL3k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=fX4woRI37SkUiB//HD3HvzxP7c46UEffoVuQW1F3MlOxvi/z2zD64YkuFpmUSV807
-	 eSc3BX+bjMqbaf26bUaY/D43qSOUBzNnLn4ot8qxoIEd8HXnh/Ac1NRXX9l1MLWdIx
-	 DO43gkm9e33B1F4stGu+KyueeweVDs/FUTFcA8Zxlbfdh0UwoEZnqwniBQPUm6XpTs
-	 5rnenbyFMfsNRiV7BqP71URDGzWgK8M7E87KqjNFZe8k5a21vj+CK7jSStO3NiegJv
-	 cHkf6GdVa5VtDvNPCA175yQ+oQKTfigLlSU7xIX1zDLiqvafXyi6O6pANxL5dcZMSq
-	 JAnkuLiahJW5A==
+	s=k20201202; t=1733218558;
+	bh=a8DOKAbHHk3Uoi98wRsfxUMOehnt2Xr/DWBiY9unq5Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OzByEBuA1gRLIgTyuFUtUbv0qEFmB80uw6hlvCRr3MhMD6+ZyG3TgVRh/o6PuzwV6
+	 UWibBdDCqGCdNXAe+hIbRC/cVQ3QBFfeQV/jRoXccKqhPzxR7XbqQhz4RYPRmZDBkX
+	 qjhEFyxw54dL4pJVMPs9jPU0p8SuBBjwOUH75Uy7jrvNGkoaKypIATHY9D1Mt2hLKm
+	 9jjlq8nI4YM0lZPILcJTJOZmF4TDBh33+LG0xVUotEqjXI/RVwE0MD9yrQX6qooDOp
+	 Uqyh43eCQb+ysJnyfyzT2aO20mKLn8lnDyogjjlkdQD01PRtwZ5jR97Fn1cU7sav1W
+	 8Z98W45LVRvVQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.98)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1tIPK0-00000002ZIf-0kUw;
+	id 1tIPK0-00000002ZIy-1Is6;
 	Tue, 03 Dec 2024 10:35:56 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: 
 Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	workflows@vger.kernel.org
-Subject: [PATCH v4 0/5]Document the new media-committer's model
-Date: Tue,  3 Dec 2024 10:35:44 +0100
-Message-ID: <cover.1733218348.git.mchehab+huawei@kernel.org>
+	linux-media@vger.kernel.org
+Subject: [PATCH v4 5/5] docs: media: profile: make it clearer about maintainership duties
+Date: Tue,  3 Dec 2024 10:35:49 +0100
+Message-ID: <f74d32eba4c1799fe7fd407a3889a3de91fb09f2.1733218348.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <cover.1733218348.git.mchehab+huawei@kernel.org>
+References: <cover.1733218348.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -51,68 +51,69 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The media subsystem used to have a multi-commiter's model in the
-past, but things didn't go well on that time, and we had to move to
-a centralized model.
+During the review of the media committer's profile, it was noticed
+that the responsibility for timely review patches was not clear:
+such review is expected that all developers listed at MAINTAINERS
+with the "M:" tag (e.g. "maintainers" on its broad sense).
 
-As the community has evolved, and as there are now new policies in
-place like CoC, let's experiment with a multi-committers again.
+This is orthogonal of being a media committer or not. Such duty
+is implied at:
 
-The model we're using was inspired by the DRM multi-committers
-model. Yet, media subsystem is different on several aspects, so the
-model is not exactly the same.
+	Documentation/admin-guide/reporting-issues.rst
 
-The implementation will be in phases. For this phase, the goal is that 
-all committers will be people listed at MAINTAINERS.
+and at the MAINTAINERS header, when it says that even when the
+status is "odd fixes", the patches will flow in.
 
-On this series:
+So, let make it explicit at the maintainer-entry-profile that
+maintainers need to do timely reviews.
 
-patch 1 adds a reference for PGP kernel keychain, in preparation for
-links to it;
+Also, while right now our focus is on granting committer rights to
+maintainers, the media-committer model may evolve in the future to
+accept other committers that don't have such duties.
 
-patch 2 fix two issues at the media MAINTAINERS file (S: and P:) tags;
+So, make it clear at the media-committer.rst that the duties
+related to reviewing patches from others are for the drivers
+they are maintainers as well.
 
-patch 3: updates the  media maintainer's entry profile and adds the
-workflow that will be used with the new model;
-
-patch 4: adds a new document focused at the new maintainers
-process. Its target is for developers that will be granted with
-commit rights at the new media-maintainers.git tree. It also
-contains a reference tag addition to kernel.org PGP chain
-at process/maintainer-pgp-guide.rst.
-
-patch 5: make documents cleared about maintainership duties.
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-v4:
-- patches 1 and 2 were split from other patches;
-- minor editorial changes as proposed by Hans, Sakari and Ricardo.
+ Documentation/driver-api/media/maintainer-entry-profile.rst | 5 +++++
+ Documentation/driver-api/media/media-committer.rst          | 6 +++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-v3:
-- added patch 3;
-- addressed nits pointed by Ricardo during his review;
-- did minor editorial changes to improve Sphinx html output.
-
-v2: I tried to address most of the suggestions where there was an agreement
-from Laurent's review and further comments. As there were several changes,
-on separate threads, I could have missed something.
-
-Mauro Carvalho Chehab (5):
-  docs: maintainer-pgp-guide.rst: add a reference for kernel.org sign
-  MAINTAINERS: fix a couple issues at media input infrastructure
-  docs: media: update maintainer-entry-profile for multi-committers
-  docs: media: document media multi-committers rules and process
-  docs: media: profile: make it clearer about maintainership duties
-
- Documentation/driver-api/media/index.rst      |   1 +
- .../media/maintainer-entry-profile.rst        | 252 ++++++++++++----
- .../driver-api/media/media-committer.rst      | 280 ++++++++++++++++++
- .../process/maintainer-pgp-guide.rst          |   2 +
- MAINTAINERS                                   |   3 +-
- 5 files changed, 486 insertions(+), 52 deletions(-)
- create mode 100644 Documentation/driver-api/media/media-committer.rst
-
+diff --git a/Documentation/driver-api/media/maintainer-entry-profile.rst b/Documentation/driver-api/media/maintainer-entry-profile.rst
+index fa28059f7b3f..87b71f89b1df 100644
+--- a/Documentation/driver-api/media/maintainer-entry-profile.rst
++++ b/Documentation/driver-api/media/maintainer-entry-profile.rst
+@@ -173,6 +173,11 @@ b. Committers' workflow: patches are handled by media committers::
+ On both workflows, all patches shall be properly reviewed at
+ linux-media@vger.kernel.org (LMML) before being merged at media-committers.git.
+ 
++Such patches will be reviewed timely by the maintainers and reviewers as
++listed in the MAINTAINERS file. The subsystem maintainers will follow one of
++the above workflows, e. g. they will either send a pull request or merge
++patches directly at the media-committers tree.
++
+ When patches are picked by patchwork and when merged at media-committers,
+ CI bots will check for errors and may provide e-mail feedback about
+ patch problems. When this happens, the patch submitter must fix them, or
+diff --git a/Documentation/driver-api/media/media-committer.rst b/Documentation/driver-api/media/media-committer.rst
+index 3d0987a8a93b..0bc038a0fdcc 100644
+--- a/Documentation/driver-api/media/media-committer.rst
++++ b/Documentation/driver-api/media/media-committer.rst
+@@ -90,9 +90,9 @@ be a part of their maintenance tasks.
+ Due to that, to become a committer or a core committer, a consensus between
+ all subsystem maintainers is required, as they all need to trust a developer
+ well enough to be delegated the responsibility to maintain part of the code
+-and to properly review patches from third parties, in a timely manner and
+-keeping the status of the reviewed code at https://patchwork.linuxtv.org
+-updated.
++and to properly review patches from third parties for the drivers that they
++maintain in a timely manner and keeping the status of the patches at
++https://patchwork.linuxtv.org updated.
+ 
+ .. Note::
+ 
 -- 
 2.47.1
-
 
