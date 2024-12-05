@@ -1,186 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897CA1D90AE;
-	Thu,  5 Dec 2024 09:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4DA17B506
+	for <linux-media@vger.kernel.org>; Thu,  5 Dec 2024 09:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733389474; cv=none; b=jBPckLelqJgRK1yC9+/3LGGt4R7GX9+AT/ypTnzUzbY67rW8yQ2KsUsRaqYxtz8ppsEBX4bpbb/3PsYcrN81/ZVsBpxfdBk6sTH1eJ/ufxbTMfvGuyjkK+OKccTZ01eqW+sFMH9vhgj9k7WKe03GXEUk7qc/oyjkoF8ia4sye78=
+	t=1733390001; cv=none; b=UTNunoAqM/JLNsGf9imzMB368zuPwyegbTWHTvoeCk2NhhL6bDZuP/D7aiW8VYrMMmI7OLgwMmqtDgye8aJFvhl2FMl2ZmNfdJkTpMczUUHWDOW+FvficPC3eHvzwBPZSestchbVkKPH8WYouymgQ6gMUA3UMX/7YnfSXom7uIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733389474; c=relaxed/simple;
-	bh=Y4LNlQgDRkGGH3pRrF3lfzWftBYE8JNVFkZvolfRl54=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FvXxD/liwz5PvI/AHaMJkg3P/OUn0QFSg/MLjg9OiItPM93+VZX049Y63yGRKbE2y/079iEosivdnrHnXymlnW0zAx2NKZtbqFhDx0r0RAGpRNhN6kFd71H2PSDVoDxFLu6SbukH5JmGRewds8K9Y2K9o2W8v1V5xCCKwTxszFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFlPnn/L; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733390001; c=relaxed/simple;
+	bh=n/qmFQtWcorIOIBiJzXnlneYGKR1JBCc9lTPSR4Q13Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bcJBGWcjxm4Bs7iB5jU0zEFgLr2rS79Q0OvMbcXjVoPjaTsQqy0mRwkKG4f4RhKux2k5NKK+IJX9Ivy3FV7lSwRkTWHwV9xREzjQfWcih6OYkBEoFeAkFIeUwQNu5G+3PEIv7V0X17K5GUQR8VkmeGffqYME4LQkkqESsN3nZQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F0ALNzqe; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFlPnn/L"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 66FB2C113D0;
-	Thu,  5 Dec 2024 09:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733389474;
-	bh=Y4LNlQgDRkGGH3pRrF3lfzWftBYE8JNVFkZvolfRl54=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=GFlPnn/LHO3LDYsXqxA1Dsy8maigvTmEUNLEOepExj8Eub5WSKG5QW7p67T+o2Dy3
-	 B0gbuA+WTbvkweyuuAbI0cQ+Stp1E8P8N86odMUrM6NvrlfMYCeq8YEXG/xe/q+GQk
-	 yr4lV0p70helrS1LkT3zxTf+DlXAdTvDVDe7TbN9kcJZof7Arr45YcZz/rRJrnE1RM
-	 wPVNrRwIeUgMASLF8ZCR3Q86ctUNsOqFAXp96uc+L/Aqq5ZwR5Im0XloU+3ipSDrgC
-	 +Cq6SEKVXJj79RhBwYVjmfNBLe7W6vFJV8zL0gN+hAK2+wEdLjJKnvg4uvXfVjAAyY
-	 KryCLY4xVF7AA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CD03E77171;
-	Thu,  5 Dec 2024 09:04:34 +0000 (UTC)
-From: Keke Li via B4 Relay <devnull+keke.li.amlogic.com@kernel.org>
-Date: Thu, 05 Dec 2024 17:04:35 +0800
-Subject: [PATCH v4 09/10] Documentation: media: add documentation file
- metafmt-c3-isp.rst
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F0ALNzqe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733390000; x=1764926000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n/qmFQtWcorIOIBiJzXnlneYGKR1JBCc9lTPSR4Q13Y=;
+  b=F0ALNzqe2DhRqi5ZVh8+8wILFPF4LuII9Ht8Yww9XQmQ49HCFhCiGl4c
+   8kvCYY6ZgroRC94lpPgTUwznSFmt9rWkJBZhP/xjnIdymQfV0ahyyG0Qo
+   mMfjwbdr+WQ0847wH3GQABcwCXGQNvY9lPrpHkzyQ/+6q8nk7rn/rbhBk
+   SZDyre8ZXFYIAW8DQte2slvsu20yBysaGonAizM4d+T5hwTMOGmhIMnZn
+   aLXNdZrt2GBhnK/BSioxAlHa3f3QWaXLEbl2mfeP79y6TLuBLHUb9w2KF
+   MICW+SBlAYgFtBQUu7Mr9HdltBnMMBHWybQ3aj5Oi7Q2YxmC/Hq/IVe4I
+   A==;
+X-CSE-ConnectionGUID: vNVMcr+TTwSR6BBa5Q4ZJw==
+X-CSE-MsgGUID: 41zDNxQGRv+4nwCE5hlitA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33430165"
+X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
+   d="scan'208";a="33430165"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 01:13:20 -0800
+X-CSE-ConnectionGUID: nicBO9FrRySRGDjRxjwDew==
+X-CSE-MsgGUID: 2AEwXjYUSqyeH9DJeZh8+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
+   d="scan'208";a="124957830"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 01:13:13 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id ED4D811F775;
+	Thu,  5 Dec 2024 11:13:10 +0200 (EET)
+Date: Thu, 5 Dec 2024 09:13:10 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+	laurent.pinchart@ideasonboard.com,
+	Prabhakar <prabhakar.csengg@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>,
+	Mikhail Rudenko <mike.rudenko@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Julien Massot <julien.massot@collabora.com>,
+	Naushir Patuck <naush@raspberrypi.com>,
+	"Yan, Dongcheng" <dongcheng.yan@intel.com>,
+	"Cao, Bingbu" <bingbu.cao@intel.com>,
+	"Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
+	"Wang, Hongju" <hongju.wang@intel.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Mirela Rabulea <mirela.rabulea@nxp.com>,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
+	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Mehdi Djait <mehdi.djait@linux.intel.com>,
+	Ricardo Ribalda Delgado <ribalda@kernel.org>
+Subject: Re: [RFC v3 6/9] media: uapi: Add V4L2_CID_CONFIG_MODEL control
+Message-ID: <Z1FuprFCIcIDL7t9@kekkonen.localdomain>
+References: <20241129095142.87196-1-sakari.ailus@linux.intel.com>
+ <20241129095142.87196-7-sakari.ailus@linux.intel.com>
+ <xn6tlmb5ntq63mgss263ezicnniuhy6553sr4bhp2iav5hz4fs@tlnp2hhpzd52>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241205-c3isp-v4-9-cb1868be0105@amlogic.com>
-References: <20241205-c3isp-v4-0-cb1868be0105@amlogic.com>
-In-Reply-To: <20241205-c3isp-v4-0-cb1868be0105@amlogic.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com, 
- laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
- Keke Li <keke.li@amlogic.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733389471; l=4461;
- i=keke.li@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=cycv5nQxMqObTEo6l1J/pT4F4f5SqpgiP9i/foLEh0s=;
- b=PUiHf2Z8Y6PSnV9Y6KLZ11x2uRzmPwWcor9LG2uBmg30hZ7mzsw/DQ5wJy97q3/18ueaAd/gw
- Nspi0ymBqWnBMRoLYT+r9DBenPUXSlAUiRscaLCMo7DfWTuD06HdVvH
-X-Developer-Key: i=keke.li@amlogic.com; a=ed25519;
- pk=XxNPTsQ0YqMJLLekV456eoKV5gbSlxnViB1k1DhfRmU=
-X-Endpoint-Received: by B4 Relay for keke.li@amlogic.com/20240902 with
- auth_id=204
-X-Original-From: Keke Li <keke.li@amlogic.com>
-Reply-To: keke.li@amlogic.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xn6tlmb5ntq63mgss263ezicnniuhy6553sr4bhp2iav5hz4fs@tlnp2hhpzd52>
 
-From: Keke Li <keke.li@amlogic.com>
+Hi Jacopo,
 
-Add the file 'metafmt-c3-isp.rst' that documents
-the meta format of c3-isp.
+On Thu, Dec 05, 2024 at 09:43:35AM +0100, Jacopo Mondi wrote:
+> Hi Sakari
+> 
+> On Fri, Nov 29, 2024 at 11:51:39AM +0200, Sakari Ailus wrote:
+> > Add the V4L2_CID_CONFIG_MODEL control for the configuration model.
+> >
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > ---
+> >  .../userspace-api/media/v4l/ext-ctrls-image-process.rst      | 4 ++++
+> >  drivers/media/v4l2-core/v4l2-ctrls-defs.c                    | 5 +++++
+> >  include/uapi/linux/v4l2-controls.h                           | 3 +++
+> >  3 files changed, 12 insertions(+)
+> >
+> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+> > index 27803dca8d3e..928e8e3eed7f 100644
+> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-process.rst
+> 
+> I was initially not sure this belongs to "Image process" controls, but
+> having had a look at the existing ones I'm not sure there are better
+> places.
 
-Signed-off-by: Keke Li <keke.li@amlogic.com>
----
- .../userspace-api/media/v4l/meta-formats.rst       |  1 +
- .../userspace-api/media/v4l/metafmt-c3-isp.rst     | 86 ++++++++++++++++++++++
- 2 files changed, 87 insertions(+)
+Good question. Let's keep it here for the time being. I'm not sure any
+other extended control class is a better target. Maybe old user controls? I
+wonder what Hans would think.
 
-diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-index 86ffb3bc8ade..bb6876cfc271 100644
---- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-@@ -12,6 +12,7 @@ These formats are used for the :ref:`metadata` interface only.
- .. toctree::
-     :maxdepth: 1
- 
-+    metafmt-c3-isp
-     metafmt-d4xx
-     metafmt-generic
-     metafmt-intel-ipu3
-diff --git a/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst b/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst
-new file mode 100644
-index 000000000000..8a025900d3fd
---- /dev/null
-+++ b/Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst
-@@ -0,0 +1,86 @@
-+.. SPDX-License-Identifier: (GPL-2.0-only OR MIT)
-+
-+.. _v4l2-meta-fmt-c3isp-stats:
-+.. _v4l2-meta-fmt-c3isp-params:
-+
-+***********************************************************************
-+V4L2_META_FMT_C3ISP_STATS ('CSTS'), V4L2_META_FMT_C3ISP_PARAMS ('CPRM')
-+***********************************************************************
-+
-+.. c3_isp_stats_buffer
-+
-+3A Statistics
-+=============
-+
-+The C3 ISP can collect different statistics over an input Bayer frame.
-+Those statistics are obtained from the "c3-isp-stats" metadata capture video nodes,
-+using the :c:type:`v4l2_meta_format` interface.
-+They are formatted as described by the :c:type:`c3_isp_stats_buffer` structure.
-+
-+The statistics collected are  Auto-white balance,
-+Auto-exposure and Auto-focus information.
-+
-+.. c3_isp_params_cfg
-+
-+Configuration Parameters
-+========================
-+
-+The configuration parameters are passed to the c3-isp-params metadata output video node,
-+using the :c:type:`v4l2_meta_format` interface. Rather than a single struct containing
-+sub-structs for each configurable area of the ISP, parameters for the C3-ISP
-+are defined as distinct structs or "blocks" which may be added to the data
-+member of :c:type:`c3_isp_params_cfg`. Userspace is responsible for
-+populating the data member with the blocks that need to be configured by the driver, but
-+need not populate it with **all** the blocks, or indeed with any at all if there
-+are no configuration changes to make. Populated blocks **must** be consecutive
-+in the buffer. To assist both userspace and the driver in identifying the
-+blocks each block-specific struct embeds
-+:c:type:`c3_isp_params_block_header` as its first member and userspace
-+must populate the type member with a value from
-+:c:type:`c3_isp_params_block_type`. Once the blocks have been populated
-+into the data buffer, the combined size of all populated blocks shall be set in
-+the data_size member of :c:type:`c3_isp_params_cfg`. For example:
-+
-+.. code-block:: c
-+
-+	struct c3_isp_params_cfg *params =
-+		(struct c3_isp_params_cfg *)buffer;
-+
-+	params->version = C3_ISP_PARAM_BUFFER_V0;
-+	params->data_size = 0;
-+
-+	void *data = (void *)params->data;
-+
-+	struct c3_isp_params_awb_gains *gains =
-+		(struct c3_isp_params_awb_gains *)data;
-+
-+	gains->header.type = C3_ISP_PARAMS_BLOCK_AWB_GAINS;
-+	gains->header.flags = C3_ISP_PARAMS_BLOCK_FL_NONE;
-+	gains->header.size = sizeof(struct c3_isp_params_awb_gains);
-+
-+	gains->gr_gain = 256;
-+	gains->r_gain = 256;
-+	gains->b_gain = 256;
-+	gains->gb_gain = 256;
-+
-+	data += sizeof(struct c3_isp__params_awb_gains);
-+	params->data_size += sizeof(struct c3_isp_params_awb_gains);
-+
-+	struct c3_isp_params_awb_config *awb_cfg =
-+		(struct c3_isp_params_awb_config *)data;
-+
-+	awb_cfg->header.type = C3_ISP_PARAMS_BLOCK_AWB_CONFIG;
-+	awb_cfg->header.flags = C3_ISP_PARAMS_BLOCK_FL_NONE;
-+	awb_cfg->header.size = sizeof(struct c3_isp_params_awb_config);
-+
-+	awb_cfg->tap_point = C3_ISP_AWB_STATS_TAP_BEFORE_WB;
-+	awb_cfg->satur = 1;
-+	awb_cfg->horiz_zones_num = 32;
-+	awb_cfg->vert_zones_num = 24;
-+
-+	params->data_size += sizeof(struct c3_isp_params_awb_config);
-+
-+Amlogic C3 ISP uAPI data types
-+===============================
-+
-+.. kernel-doc:: include/uapi/linux/media/amlogic/c3-isp-config.h
+> 
+> I would have considered "Camera Controls" but I'm not sure it's -that-
+> better
+> 
+> > @@ -55,3 +55,7 @@ Image Process Control IDs
+> >      control value divided by e.g. 0x100, meaning that to get no
+> >      digital gain the control value needs to be 0x100. The no-gain
+> >      configuration is also typically the default.
+> > +
+> > +``V4L2_CID_CONFIG_MODEL (bitmask)``
+> > +    Which configuration models the sub-device supports. Please see
+> > +    :ref:`media_subdev_config_model`.
+> 
+> Other RO controls in the file (such as PIXEL_RATE) specify "this
+> control is read-only"
+
+I'll add that.
+
+> 
+> > diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > index 1ea52011247a..24c9c25e20d1 100644
+> > --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > @@ -1164,6 +1164,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> >  	case V4L2_CID_TEST_PATTERN:		return "Test Pattern";
+> >  	case V4L2_CID_DEINTERLACING_MODE:	return "Deinterlacing Mode";
+> >  	case V4L2_CID_DIGITAL_GAIN:		return "Digital Gain";
+> > +	case V4L2_CID_CONFIG_MODEL:		return "Sub-device configuration model";
+> >
+> >  	/* DV controls */
+> >  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+> > @@ -1481,6 +1482,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+> >  	case V4L2_CID_DV_RX_POWER_PRESENT:
+> >  		*type = V4L2_CTRL_TYPE_BITMASK;
+> >  		break;
+> > +	case V4L2_CID_CONFIG_MODEL:
+> > +		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > +		*type = V4L2_CTRL_TYPE_BITMASK;
+> > +		break;
+> >  	case V4L2_CID_MIN_BUFFERS_FOR_CAPTURE:
+> >  	case V4L2_CID_MIN_BUFFERS_FOR_OUTPUT:
+> >  		*type = V4L2_CTRL_TYPE_INTEGER;
+> > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> > index 974fd254e573..0152240229ab 100644
+> > --- a/include/uapi/linux/v4l2-controls.h
+> > +++ b/include/uapi/linux/v4l2-controls.h
+> > @@ -1225,6 +1225,9 @@ enum v4l2_jpeg_chroma_subsampling {
+> >  #define V4L2_CID_TEST_PATTERN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 3)
+> >  #define V4L2_CID_DEINTERLACING_MODE		(V4L2_CID_IMAGE_PROC_CLASS_BASE + 4)
+> >  #define V4L2_CID_DIGITAL_GAIN			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 5)
+> > +#define V4L2_CID_CONFIG_MODEL			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 6)
+> > +
+> > +#define V4L2_CID_CONFIG_MODEL_COMMON_RAW	(1ULL << 0)
+> 
+> I wonder if "COMMON_" couldn't be removed.
+
+We might have different models for raw sensors. These are just for the
+current ones but new ones will have new functionality and we may need to
+make changes that won't be compliant. Maybe in that case we'd have v2 or
+something though.
+
+> 
+> Anyway, all nits or mostly questions, whatever is fine really
+> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+
+Thank you!
 
 -- 
-2.47.0
+Kind regards,
 
-
+Sakari Ailus
