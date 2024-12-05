@@ -1,214 +1,145 @@
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C85D21A425;
-	Thu,  5 Dec 2024 15:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAEE199920;
+	Thu,  5 Dec 2024 15:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733413184; cv=none; b=tbHjXHOFHXpZSCvGpgtKHqayDVqozlNZBmyCrGfYMS/EC0mmHjEHCxrJa3OWz75abOoJWDdUfRV3g10y/+G/eL8nYGyW9XNllZBX/nHjKPJ7xFpd7hgBho9wk5B0GWid48PzaDGldjRwjMCd5GQBrcc2cQyCLj8qd+3RCgsOKkc=
+	t=1733414182; cv=none; b=e26i8WvjkLSSfg+zBvRRiBm8KjP5rKbbSpAD1N9Z3G0UvORAZ4mvl6WL4pJ59craL3glaHvsGTyUG8iYyCtsbeVl7nZMOHd1hn1FcFKVsYNz7J0QMO1To/Q3sP5U7W6gKO3NcrgcF62TcDMXPqvNx24Sy77tC1zCEUC2Jav3q/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733413184; c=relaxed/simple;
-	bh=5+7hECp5xkP8gbtm0wMjU8SewxcsbplPrOFyu+3WZMY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YvJ7oRyi1f0Dusyx7sYGUMLt41AHlBg/6dvKEVr5v6c+qeKmKwj2FYrMfTWfrBpEVEkLkQgE/3vIDcHFLdiNMDWTu5msqI+PUY/jg3PdIp4l5Fv1VldmuHKWSNenfk0uBAQNjcRCt2GE4B49vDuCMFKgzgVdTVdrINSXg6C0Azo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=UoqO9PPk; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=jglWqUKt reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1733414182; c=relaxed/simple;
+	bh=s+Ej9Z2BPnXOnQnLYmrvnOBRG/9Z5vaG+mBMOPwH4xA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ock8YdCXVu2gNyL8bd1SZK7WdTJTPBrzDPs2IZFBGmKvTfFgDomcc6ORGxneztsRl1SQ9iTVDSpsTrXZjNbX4TVcqCDhCwrRJyxL+POpbdwWz6YI5NM6IeQ3rHCVtQZdVlPErNgnV6wY9rJgAqp5FqowEXs6cN3wyvMiWZxdHzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oe5Sz0Ho; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="UoqO9PPk";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="jglWqUKt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1733413180; x=1764949180;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bITlpbaxJZ/ELoBexWwZ37dzybUATEmdzTJTeCJOdUs=;
-  b=UoqO9PPklD4wNdll1vza8hu2Cawu/GNqhhOoI2CfB+T4+9ctNbBReK/n
-   hciYpqUa4LsYcB1ArOtFhmNOi78TFLv0LePrGt8IqYRX8/W3Uo2mG6cmh
-   rpmbXQRmWs5IIMC3Pa21OcjkczE8pXX53B0OyLZh1AqfODxLx7k9Pseki
-   yOiIXcVF4B+E3SYT+4xaLPeVwM5ltkjU5pzJi72p83CBteAEGWQPGKZQB
-   7OKMQT+liX2UIFmrzoWhebJgcAujKn6ixk6lGxQeTYzAvE97f8CDUuR4M
-   3dPIsxGzhlrr2emkapTBh9a+1ErWfyP30mZ9wx0YqcdplNOFJn/C4f9tq
-   w==;
-X-CSE-ConnectionGUID: QIQQHHRvSUCxCFxzGq0uLg==
-X-CSE-MsgGUID: lciEpNtRTu+EqC5iYhRfKA==
-X-IronPort-AV: E=Sophos;i="6.12,210,1728943200"; 
-   d="scan'208";a="40435594"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 05 Dec 2024 16:39:37 +0100
-X-CheckPoint: {6751C939-10-F5DC7025-F79421CB}
-X-MAIL-CPID: D7BACB0F9DFF492E6B3DFE2FE5CB2D96_0
-X-Control-Analysis: str=0001.0A682F28.6751C93A.0019,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A1D60160A43;
-	Thu,  5 Dec 2024 16:39:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1733413173;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bITlpbaxJZ/ELoBexWwZ37dzybUATEmdzTJTeCJOdUs=;
-	b=jglWqUKtPxsplmsR67CkjKnm3GPFeNYZ+33ZpbMDegN2VzbsUsSNStUMqWq7f/NAamdhvz
-	ys19VGl9kakyogCFGseboz6ZPnonF1lhFtEVpLxcK1SvVLCbhGgVO0i8igUPUJ+gyn7syu
-	e5NPqbOjafNf9UroaitX+VbIYEQarWaYOAsDWEWpP2HKsrVKVPf4hjbNLmIHfyRJQ3Z4Dh
-	IuVgmLi8a2IN/pI1Us8rRht0xzd+qW4qRKNsslp2X2AVTD/mxk9ADpvGbDpXqGtS7jcfk1
-	kKF2ZX8T/aeyLGjQIiTx06a/tlO0O91Lpr64iyLW4glg8fxPkfTBnENVxwdQTA==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] media: i2c: imx290: Limit analogue gain according to module
-Date: Thu, 05 Dec 2024 16:39:30 +0100
-Message-ID: <2214258.irdbgypaU6@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <CAPY8ntCeYOtBhEKCcygsT-aAHJ8rxo5qP0NdjE9DMJmHCxZzsA@mail.gmail.com>
-References: <20241120-media-imx290-imx462-v2-0-7e562cf191d8@raspberrypi.com> <4950196.GXAFRqVoOG@steina-w> <CAPY8ntCeYOtBhEKCcygsT-aAHJ8rxo5qP0NdjE9DMJmHCxZzsA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oe5Sz0Ho"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B59wqXu031127;
+	Thu, 5 Dec 2024 15:56:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	9tQGtDkEgurzejqoXBOvxO/giBPOKZaTWmMI8PVj/bs=; b=oe5Sz0Hof3Q1oQ0V
+	odMzZBVSzYy4DYZYw+IJqZTyzx+aZQhHB+8doWUMKk6D4gEjZSI2lTWkXvj7Nd2i
+	eBo0KfkCQzLYE+BXzokfDpm6T5Q32wqEBfrQVA/AdzDwrqe/0a1IqgKQpXzmWA+7
+	QJQyBFGPEYPeIQ5KvMLUPILpdwaSJ8XeoRirE6HFML6EmXm+1lOh3KVBxk3miNuT
+	4kJsfz6JbpHd7zeOmCtHdX2+izFyOx+TPfjeWd4bUEloBhiG+LUHHPt60vRcTNwT
+	lA/pAOIlDyx2CfY6G53+CO2Xn3HNiKCSp281H9BSryXFvSUa5CLnVAS03SAw4v/I
+	rjDkQA==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ba140y7x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Dec 2024 15:56:15 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B5FuEie023406
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 5 Dec 2024 15:56:14 GMT
+Received: from hu-depengs-sha.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 5 Dec 2024 07:56:08 -0800
+From: Depeng Shao <quic_depengs@quicinc.com>
+To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
+        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <vladimir.zapolskiy@linaro.org>
+CC: <quic_eberman@quicinc.com>, <quic_depengs@quicinc.com>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@quicinc.com>
+Subject: [PATCH 03/16] media: qcom: camss: csiphy-3ph: Rename struct
+Date: Thu, 5 Dec 2024 21:25:25 +0530
+Message-ID: <20241205155538.250743-4-quic_depengs@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241205155538.250743-1-quic_depengs@quicinc.com>
+References: <20241205155538.250743-1-quic_depengs@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2L6smHhvVRUO2q86LswnZl60F8G5W8eO
+X-Proofpoint-ORIG-GUID: 2L6smHhvVRUO2q86LswnZl60F8G5W8eO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412050115
 
-Hi Dave,
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-Am Donnerstag, 5. Dezember 2024, 16:37:01 CET schrieb Dave Stevenson:
-> Hi Alexander
->=20
-> On Thu, 5 Dec 2024 at 15:22, Alexander Stein
-> <alexander.stein@ew.tq-group.com> wrote:
-> >
-> > Hi Dave,
-> >
-> > Am Mittwoch, 20. November 2024, 20:17:03 CET schrieb Dave Stevenson:
-> > > The imx327 only supports up to 29.4dB of analogue gain, vs
-> > > the imx290 going up to 30dB. Both are in 0.3dB steps.
-> >
-> > While I agree for 30dB on imx290, my (maybe outdated) Rev0.2 datasheet =
-says
-> > up to 27dB in 0.3dB steps.
->=20
-> For IMX327, I have revision E17Z06B93 2019/03/25.
->=20
-> The revision control section for Rev0.3 lists
-> Page 1: "Correction: Max analog gain 27dB - 29.4dB"
-> Page 74: "Correction: Max Gain 69dB -> 71.4dB"
->=20
-> The graph in "Gain Adjustment Function" (page 74) also shows values
-> above 27dB as being purely analogue gain. Certainly 0x62 is red for
-> analogue, which would be a gain of 29.4dB. The next dot is 0x64 (30dB)
-> and blue, so we have to trust the text for 0x63 being 29.4dB analogue
-> and 0.3dB digital gain.
->=20
-> So I'm happy that the limit is 29.4dB.
+The existing structure captures the configuration of CSIPHY lane registers.
+Rename to struct csiphy_lane_regs to reflect.
 
-Okay, this is a newer datasheet. So assume this is correct.
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
+Reviewed-by: Elliot Berman <quic_eberman@quicinc.com>
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+---
+ .../media/platform/qcom/camss/camss-csiphy-3ph-1-0.c   | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for clarification.
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-Best regards,
-Alexander
-
-
->   Dave
->=20
-> > Despite that this change looks good.
-> >
-> > Best regards,
-> > Alexander
-> >
-> > > As we now have model specific config, fix this mismatch,
-> > > and delete the comment referencing it.
-> > >
-> > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > ---
-> > >  drivers/media/i2c/imx290.c | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-> > > index ee698c99001d..da654deb444a 100644
-> > > --- a/drivers/media/i2c/imx290.c
-> > > +++ b/drivers/media/i2c/imx290.c
-> > > @@ -176,6 +176,7 @@ struct imx290_model_info {
-> > >       enum imx290_colour_variant colour_variant;
-> > >       const struct cci_reg_sequence *init_regs;
-> > >       size_t init_regs_num;
-> > > +     unsigned int max_analog_gain;
-> > >       const char *name;
-> > >  };
-> > >
-> > > @@ -876,14 +877,10 @@ static int imx290_ctrl_init(struct imx290 *imx2=
-90)
-> > >        * up to 72.0dB (240) add further digital gain. Limit the range=
- to
-> > >        * analog gain only, support for digital gain can be added sepa=
-rately
-> > >        * if needed.
-> > > -      *
-> > > -      * The IMX327 and IMX462 are largely compatible with the IMX290=
-, but
-> > > -      * have an analog gain range of 0.0dB to 29.4dB and 42dB of dig=
-ital
-> > > -      * gain. When support for those sensors gets added to the drive=
-r, the
-> > > -      * gain control should be adjusted accordingly.
-> > >        */
-> > >       v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-> > > -                       V4L2_CID_ANALOGUE_GAIN, 0, 100, 1, 0);
-> > > +                       V4L2_CID_ANALOGUE_GAIN, 0,
-> > > +                       imx290->model->max_analog_gain, 1, 0);
-> > >
-> > >       /*
-> > >        * Correct range will be determined through imx290_ctrl_update =
-setting
-> > > @@ -1441,18 +1438,21 @@ static const struct imx290_model_info imx290_=
-models[] =3D {
-> > >               .colour_variant =3D IMX290_VARIANT_COLOUR,
-> > >               .init_regs =3D imx290_global_init_settings_290,
-> > >               .init_regs_num =3D ARRAY_SIZE(imx290_global_init_settin=
-gs_290),
-> > > +             .max_analog_gain =3D 100,
-> > >               .name =3D "imx290",
-> > >       },
-> > >       [IMX290_MODEL_IMX290LLR] =3D {
-> > >               .colour_variant =3D IMX290_VARIANT_MONO,
-> > >               .init_regs =3D imx290_global_init_settings_290,
-> > >               .init_regs_num =3D ARRAY_SIZE(imx290_global_init_settin=
-gs_290),
-> > > +             .max_analog_gain =3D 100,
-> > >               .name =3D "imx290",
-> > >       },
-> > >       [IMX290_MODEL_IMX327LQR] =3D {
-> > >               .colour_variant =3D IMX290_VARIANT_COLOUR,
-> > >               .init_regs =3D imx290_global_init_settings_327,
-> > >               .init_regs_num =3D ARRAY_SIZE(imx290_global_init_settin=
-gs_327),
-> > > +             .max_analog_gain =3D 98,
-> > >               .name =3D "imx327",
-> > >       },
-> > >  };
-> > >
-> > >
-> >
-> >
-> > --
-> > TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-> > Amtsgericht M=FCnchen, HRB 105018
-> > Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-> > http://www.tq-group.com/
-> >
-> >
->=20
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+index 39269ae31709..bc4834ee2dcc 100644
+--- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
++++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+@@ -56,7 +56,7 @@
+ #define CSIPHY_2PH_REGS			5
+ #define CSIPHY_3PH_REGS			6
+ 
+-struct csiphy_reg_t {
++struct csiphy_lane_regs {
+ 	s32 reg_addr;
+ 	s32 reg_data;
+ 	s32 delay;
+@@ -65,7 +65,7 @@ struct csiphy_reg_t {
+ 
+ /* GEN2 1.0 2PH */
+ static const struct
+-csiphy_reg_t lane_regs_sdm845[] = {
++csiphy_lane_regs lane_regs_sdm845[] = {
+ 	{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x002C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x0034, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
+@@ -140,7 +140,7 @@ csiphy_reg_t lane_regs_sdm845[] = {
+ 
+ /* GEN2 1.1 2PH */
+ static const struct
+-csiphy_reg_t lane_regs_sc8280xp[] = {
++csiphy_lane_regs lane_regs_sc8280xp[] = {
+ 	{0x0004, 0x0C, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x002C, 0x01, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x0034, 0x0F, 0x00, CSIPHY_DEFAULT_PARAMS},
+@@ -215,7 +215,7 @@ csiphy_reg_t lane_regs_sc8280xp[] = {
+ 
+ /* GEN2 1.2.1 2PH */
+ static const struct
+-csiphy_reg_t lane_regs_sm8250[] = {
++csiphy_lane_regs lane_regs_sm8250[] = {
+ 	{0x0030, 0x00, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x0900, 0x05, 0x00, CSIPHY_DEFAULT_PARAMS},
+ 	{0x0908, 0x10, 0x00, CSIPHY_DEFAULT_PARAMS},
+@@ -470,7 +470,7 @@ static void csiphy_gen1_config_lanes(struct csiphy_device *csiphy,
+ static void csiphy_gen2_config_lanes(struct csiphy_device *csiphy,
+ 				     u8 settle_cnt)
+ {
+-	const struct csiphy_reg_t *r;
++	const struct csiphy_lane_regs *r;
+ 	int i, array_size;
+ 	u32 val;
+ 
+-- 
+2.34.1
 
