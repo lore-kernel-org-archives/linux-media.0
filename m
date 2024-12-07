@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F340115A863;
-	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB9E18858E;
+	Sat,  7 Dec 2024 20:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733604507; cv=none; b=FPfjGrsL7zm8s93FWl4rM3O8hZlljfXVQE0OVuJEUEQvTmD9qKQMOPI4Ng0Ya/LKpqA06jV59PxXkcHc1ikkqzuYODk/uy4h//NmmCbtT1b+X0tflI1onnLOJgIef14mSvbLNnwCPyvcvoBZ4UxIrqGmEP3WZrDEx5SYBKFfxkU=
+	t=1733604507; cv=none; b=LZYEzZQ0yk/1T9I5+v7x+eZuikH82RyNEO89mRdaYNk0DZvVj4tBywYcdBD6safmfR4yCRMlCt0ysIawtbFItnuMO1TssvoDP9xmYPq36wd/cBGh7urhLGS4G+xzGO+a2cd6IL7+INvkFglMkQFglO8gbahyzpLAHSXSI2F+02Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733604507; c=relaxed/simple;
-	bh=Ui+5hYNv2BAzYXeEy6Nbqwxz7ajppthVoNCTh4ERAKA=;
+	bh=Mqy4WixNi5RwLDXjhFRtSeRrgM7vvSO+UwG+9pvObmg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=s1CKSPmyuZHYBZCMPqlHT+zN2dcRHDB+BEtCx+cSZHS9DVnYTTSFkc94EMHkbzWJyyzaK2DxYmMiEYyrPlnIMiYqs2KBCrJ1uAOHvkxrubvwO7R2mC7qaGE5W+J5xdtvmPGpeX4BpBHtdO+ZE71OjfzzCQf1G68DH4anoIseO88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AtKVTZtk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=fpnDXQsTOh2i8c6sE2bukhPHQKtGQwx2TfQx9QOCajF5BxNgWmzWImOu0r3wRWCZwcDh9bEpASgxgFJ+1SnUi17c5yVNgnfDn6iPGqXxvNRnWZ3vk3Y9EXvx9KFAHlT57ORW/mYInNSVn7JeMqq0Q/jSBEjWfp4iOymKfZCASWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAPk/2Aj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AtKVTZtk"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74EC0C4CEEB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAPk/2Aj"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CAEAAC4CEF8;
 	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1733604506;
-	bh=Ui+5hYNv2BAzYXeEy6Nbqwxz7ajppthVoNCTh4ERAKA=;
+	bh=Mqy4WixNi5RwLDXjhFRtSeRrgM7vvSO+UwG+9pvObmg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=AtKVTZtk/YeUbAk0b9wTmLhNfq/zbxAmkxq9+RakwUgbaGRhu0n/rYzwjzBg8VfB2
-	 DachadeNVvb6OtLj1VWFxRaQsva5+WNSUu/PTb7v0sHlHy1DwumIGdf6d8cXp6qvBu
-	 FjNmm+X7b7wiLcAwOFBiQC+3VkqFHELYgEXV1hXNioLULZnSN6Kpp7o3iP8m48d+YU
-	 VOU4eTeUUSCpyaSvkpq0NsUs44gtQpAzeueVqVF0kVvE9f8Dfns2RuZ/pciTkv9HZs
-	 DPlg50o7hb3LZjzZ3fNd64YKLshVcdDxQ3/hQ54OmlwoaX5bSQBIEkdPwhRkhG7IOY
-	 swm4T4QOnlf1g==
+	b=iAPk/2Aj/3bEncu2/JwuUdsbZDJ8ZLku1K0ydYdIMv7EmZfAqIKACMM5LGb07v/AZ
+	 BltDThK9t0qdb2Zrh8EQjkZywxVzfJCYx/aLZrc9CrlnmfMRUcxC4zxgn9z0NeB+nK
+	 LvK6PQBEzC+bgFvxJKP6/tHspxU5VOHA1VjJaiEnshA164GSOH2KdjkPScEGbwqvXn
+	 pRZvzjDH54bkz3nGVYQ9sVmZgmu2U842EIEess7ByXV86/djkdVyv25QhBxE5+WgBJ
+	 zVs++1nHSANAMYlP1SSLh090UpwcAgralc1pWjWQ8TKEuq380pBSBxzr460jBq6+O7
+	 TiUffbFiYDE+g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE43E77180;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2380E7717F;
 	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 07 Dec 2024 21:47:55 +0100
-Subject: [PATCH v3 06/12] media: i2c: imx214: Check number of lanes from
- device tree
+Date: Sat, 07 Dec 2024 21:48:00 +0100
+Subject: [PATCH v3 11/12] media: i2c: imx214: Add test pattern control
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241207-imx214-v3-6-ab60af7ee915@apitzsch.eu>
+Message-Id: <20241207-imx214-v3-11-ab60af7ee915@apitzsch.eu>
 References: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
 In-Reply-To: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
 To: Ricardo Ribalda <ribalda@kernel.org>, 
@@ -51,13 +50,14 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dave Stevenson <dave.stevenson@raspberrypi.com>, 
  Vincent Knecht <vincent.knecht@mailoo.org>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733604504; l=2204;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733604504; l=4254;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=weqeUMKe5uTQdP5hFWSGU8a0VftNGSL8fbygsOgcwtY=;
- b=qNhFiB/DINxdKCO0xPKRF66ZWxbzd3JCRVetLAw37s2c/XeNWeFjHhFt0wLFSzU9PLhBH+F+V
- u4B+E882FSyDVA+qJO+TpC3jf0pVHHiRrGerMpuhIVpcjSLRHsdgpBX
+ bh=kI43FGNr0/A9AYM02ovoJRR2i0LsrPkfQmL8k++QyfU=;
+ b=tkWx6k/1aKLsm+re7zWsBnrgDkHFBW0qMQOuYiH6BCe7Uc22OfN7mHpxIvxE+u0uxDfKge4uq
+ gITDyGEprElDKzf5WXyZPoWLTgTXD8LGB9IgwAC0rnvVMvQJ7D9mHbj
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -67,64 +67,136 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-The imx214 camera is capable of either two-lane or four-lane operation.
+This adds V4L2_CID_TEST_PATTERN control support.
 
-Currently only the four-lane mode is supported, as proper pixel rates
-and link frequences for the two-lane mode are unknown.
-
+Acked-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx214.c | 77 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 07926f7257877155548f7bcf0e7ee80037b4ce6c..f1c72db0775eaf4810f762e8798d301c5ad9923c 100644
+index 3cd64bb91795d8490acad5926940c111fb95fae5..1330f13207beec0960c384681bf0b49e99fe860f 100644
 --- a/drivers/media/i2c/imx214.c
 +++ b/drivers/media/i2c/imx214.c
-@@ -199,7 +199,6 @@ struct imx214 {
+@@ -177,6 +177,23 @@
  
- /*From imx214_mode_tbls.h*/
- static const struct cci_reg_sequence mode_4096x2304[] = {
--	{ IMX214_REG_CSI_LANE_MODE, IMX214_CSI_4_LANE_MODE },
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-@@ -272,7 +271,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
+ #define IMX214_REG_ATR_FAST_MOVE	CCI_REG8(0x9300)
+ 
++/* Test Pattern Control */
++#define IMX214_REG_TEST_PATTERN		CCI_REG16(0x0600)
++#define IMX214_TEST_PATTERN_DISABLE	0
++#define IMX214_TEST_PATTERN_SOLID_COLOR	1
++#define IMX214_TEST_PATTERN_COLOR_BARS	2
++#define IMX214_TEST_PATTERN_GREY_COLOR	3
++#define IMX214_TEST_PATTERN_PN9		4
++
++/* Test pattern colour components */
++#define IMX214_REG_TESTP_RED		CCI_REG16(0x0602)
++#define IMX214_REG_TESTP_GREENR		CCI_REG16(0x0604)
++#define IMX214_REG_TESTP_BLUE		CCI_REG16(0x0606)
++#define IMX214_REG_TESTP_GREENB		CCI_REG16(0x0608)
++#define IMX214_TESTP_COLOUR_MIN		0
++#define IMX214_TESTP_COLOUR_MAX		0x03ff
++#define IMX214_TESTP_COLOUR_STEP	1
++
+ /* IMX214 native and active pixel array size */
+ #define IMX214_NATIVE_WIDTH		4224U
+ #define IMX214_NATIVE_HEIGHT		3136U
+@@ -209,6 +226,22 @@ static const u32 imx214_mbus_formats[] = {
+ 	MEDIA_BUS_FMT_SBGGR10_1X10,
  };
  
- static const struct cci_reg_sequence mode_1920x1080[] = {
--	{ IMX214_REG_CSI_LANE_MODE, IMX214_CSI_4_LANE_MODE },
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-@@ -788,6 +786,13 @@ static int imx214_start_streaming(struct imx214 *imx214)
++static const char * const imx214_test_pattern_menu[] = {
++	"Disabled",
++	"Color Bars",
++	"Solid Color",
++	"Grey Color Bars",
++	"PN9"
++};
++
++static const int imx214_test_pattern_val[] = {
++	IMX214_TEST_PATTERN_DISABLE,
++	IMX214_TEST_PATTERN_COLOR_BARS,
++	IMX214_TEST_PATTERN_SOLID_COLOR,
++	IMX214_TEST_PATTERN_GREY_COLOR,
++	IMX214_TEST_PATTERN_PN9,
++};
++
+ struct imx214 {
+ 	struct device *dev;
+ 	struct clk *xclk;
+@@ -809,6 +842,26 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		cci_write(imx214->regmap, IMX214_REG_FRM_LENGTH_LINES,
+ 			  format->height + ctrl->val, &ret);
+ 		break;
++	case V4L2_CID_TEST_PATTERN:
++		cci_write(imx214->regmap, IMX214_REG_TEST_PATTERN,
++			  imx214_test_pattern_val[ctrl->val], &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_RED:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_RED,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENR:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENR,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_BLUE:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_BLUE,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENB:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENB,
++			  ctrl->val, &ret);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -836,14 +889,14 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 	struct v4l2_ctrl_handler *ctrl_hdlr;
+ 	int exposure_max, exposure_def;
+ 	int hblank;
+-	int ret;
++	int i, ret;
+ 
+ 	ret = v4l2_fwnode_device_parse(imx214->dev, &props);
+ 	if (ret < 0)
  		return ret;
- 	}
  
-+	ret = cci_write(imx214->regmap, IMX214_REG_CSI_LANE_MODE,
-+			IMX214_CSI_4_LANE_MODE, NULL);
-+	if (ret) {
-+		dev_err(imx214->dev, "%s failed to configure lanes\n", __func__);
-+		return ret;
+ 	ctrl_hdlr = &imx214->ctrls;
+-	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 12);
++	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 13);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -911,6 +964,26 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 
+ 	v4l2_ctrl_cluster(2, &imx214->hflip);
+ 
++	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &imx214_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(imx214_test_pattern_menu) - 1,
++				     0, 0, imx214_test_pattern_menu);
++	for (i = 0; i < 4; i++) {
++		/*
++		 * The assumption is that
++		 * V4L2_CID_TEST_PATTERN_GREENR == V4L2_CID_TEST_PATTERN_RED + 1
++		 * V4L2_CID_TEST_PATTERN_BLUE   == V4L2_CID_TEST_PATTERN_RED + 2
++		 * V4L2_CID_TEST_PATTERN_GREENB == V4L2_CID_TEST_PATTERN_RED + 3
++		 */
++		v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
++				  V4L2_CID_TEST_PATTERN_RED + i,
++				  IMX214_TESTP_COLOUR_MIN,
++				  IMX214_TESTP_COLOUR_MAX,
++				  IMX214_TESTP_COLOUR_STEP,
++				  IMX214_TESTP_COLOUR_MAX);
++		/* The "Solid color" pattern is white by default */
 +	}
 +
- 	ret = cci_multi_reg_write(imx214->regmap, imx214->cur_mode->reg_table,
- 				  imx214->cur_mode->num_of_regs, NULL);
- 	if (ret < 0) {
-@@ -948,6 +953,13 @@ static int imx214_parse_fwnode(struct device *dev)
- 		goto done;
- 	}
- 
-+	/* Check the number of MIPI CSI2 data lanes */
-+	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "only 4 data lanes are currently supported\n");
-+		goto done;
-+	}
-+
- 	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
- 		if (bus_cfg.link_frequencies[i] == IMX214_DEFAULT_LINK_FREQ)
- 			break;
+ 	imx214->unit_size = v4l2_ctrl_new_std_compound(ctrl_hdlr,
+ 				NULL,
+ 				V4L2_CID_UNIT_CELL_SIZE,
 
 -- 
 2.47.1
