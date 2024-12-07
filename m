@@ -1,253 +1,388 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C21156661;
-	Sat,  7 Dec 2024 16:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7730155C8A;
+	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733588292; cv=none; b=EulTlZNoAFdNaJVwN6YsDA6QhhOWJ4LwyJ2okcSQoHZEuQkF0v4XbYugW71U1qPuNJSRJpPP8pXEB1LgzhsBp8gNsz0ZNJhG5Jrs4TAO4DUmZwpOwPWuANR7LM7DPYXluzVKfFg5JeFBLhRUBV53061bSA45xn1BdmxXrhMYhNQ=
+	t=1733604506; cv=none; b=F9bi1Gu071lni61b17/IrQHgSO01/eKY35z7DBWS9td0fr4btstruJTrU+W40oXBM9MBIi83b8219N+BS2MXocWC6IlKwfgbXI5UrZZ2BpADjYngkxrDNBqYg+vt2Pz7bGVi1AS0XGUJsl/pkP9yAfXiJgU6NFZN7rVy8x6CZRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733588292; c=relaxed/simple;
-	bh=MthxseiiB1qweTv/ZsRRJcdWTkF+jsxsAi3/Ie+L3Kc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X9cdvQ6zs+YB6Oqt1JwKvdte4PCZI4KMgH052WG+Iu2Ekz8Tw/Oa3M1jBVQqRiNRWpWiKtJJJOXtF/e8jga/X5sf0rw+fLWXraGS78EdATGf4EV0jZ96YhKu4kJiYbQvci/b2ExHIPiSu9HwuhS32d/2m1hi/Y5lSa4sRp9IwCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mLst9bBa; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733604506; c=relaxed/simple;
+	bh=tJ4OwUAcUq7WzrqLPG9ABeIx+l4b2QN9Zwvg8PvBIXA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Q1bNeYBKzX+rpCJGigtewl3rf15ouxIZtCm1HqAxHURTGUolbQRBg22abwloAilpw4n7JLcvn6UpJ5P3uEVdHqtCnce6Pz4ATrkTcRaCNvX7t11UZe3WftL8dkXbSr1VhG8Lu9FZvjlILpMsUMEO1m21bekG78TUViu+JR9J8hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UDTAA0ow; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mLst9bBa"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7256dc42176so3399351b3a.3;
-        Sat, 07 Dec 2024 08:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733588290; x=1734193090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IyIQTPEzZRAeS1qQla708q/4zgKpLleeCQ9ko3M4emo=;
-        b=mLst9bBaFEeZC1g1+ZYFj7sVJOWGBazByg55o2rH9v2UDuqI3Bl+LCo7QU3JA/XQRx
-         ie48tUW1KZ9hY81WqzIQvIz3ECh09+fOCTd62oKoiL6nSdwyn+EBt2uY9Zy8naYEPswG
-         K5WasLgIotfbGpDrkDyQFGDtVaeY3h31EVyNJbIPardvIMuTeSeyIj2CHQxHAgwsU15J
-         iYF7kCd6avSrKwyb0Y4mcNVsCCnc1XW3lhKMOerpPyG/R7Yng1WeyjVeiqWMEUsYE7nX
-         Yna4C66TF/jr8Lx8Lr+vHdh0rl42GnSDaacGQSp/a2J7a403KNoW4TF2/Cd/qzKJV0+W
-         /dQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733588290; x=1734193090;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IyIQTPEzZRAeS1qQla708q/4zgKpLleeCQ9ko3M4emo=;
-        b=WRwULVQcIKUMkMIVT4SoZbQvuXe06Iw9iCMjlOYAWkmwBnaqMNJa0i/wEz926AV/E4
-         O5VxnvnG1CFehCApo7dTDSxttO0QhivqozT59zspHVFVvFh9uewC9iV0PrRav4spz/2y
-         97XW5bO0puy0vP5W6yTJu5nej0DGro7BBLqoVuxKhxvA9rK2TgseJ+RL3QH9iSU6Aas3
-         CAYvE9I+sh5rf3MbeYrkye5BNTYG2fr69361an7K5fTqege/lxTYzgeoeO6wqSXakYpA
-         pYunpZCCsMyvyJxJ6ConBQ5+wuF77wjbIqDCLRM2HpGWrB1YsaaTlGnmOhNsFVcLvF2g
-         gTJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUG7DMNshyEJBSr5JlT6hfSkOcNUkP6Hilw5XyAQ4upoR0tFRmNzKIo4CWVkxtMJrca0XDZd4kgWutDN2iA@vger.kernel.org, AJvYcCVOP/hxQerCrd4dyvUx5jnq6sdqnOwj5uNJc/UHnBKZ4mB2LnNKbzSgSNThIezQhxJXMq96w0hTa0RLlYjF@vger.kernel.org, AJvYcCXf9sA8z2M0Gvm9KaRzeVlggeuzKwRWXxEJMx9NVAxh6he2wjtUwKhWvvpDpHHfgW36oMHpaOmA4I2uqYA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTrGZd9+gGmv8aOaxAMj2PKhf3nGltLikYD8O0GYEQILDy/6xh
-	8xXYiB/081Ei02flZgyLvTofYk7kxhemgg4MAk7khKNXBjvzLnwe
-X-Gm-Gg: ASbGncutdaz35lzt6L7ve6MDG8QoXl9jAxRy581J1MfK04lRPMAVWTmL7/sUQFGElFi
-	jbWcnxee7uCCTf+yVL1X7zFVmfKMgBPT1C8LdyOz0BoPHSzOEmkunYkp2Ig3uh8m0O4eq0HI9ed
-	o+Fqye8ztiAFjeWLzv6FNanExDfg2m1y8PuNZ/XcKf/qG+KXPmwmvwE4dOv3XRdg954FEIrdaWX
-	yg/zGxjWD9I8mqkKHEqlP12Ic9MbP1aIZrE/zWILXYZpMdziWQBL1N9g9vFGLADrD2gN249UcT1
-	pjGgxM8i
-X-Google-Smtp-Source: AGHT+IH4HL1U3hdxxpSBUgHr8euIo6pL350TQqGVjNEoKJJrUHlPQJvlC5hz1/gTOJO0CknwxlmDkg==
-X-Received: by 2002:a05:6a20:6a07:b0:1d8:a9c0:8853 with SMTP id adf61e73a8af0-1e1870c78e5mr9414508637.23.1733588290215;
-        Sat, 07 Dec 2024 08:18:10 -0800 (PST)
-Received: from localhost (c-73-37-105-206.hsd1.or.comcast.net. [73.37.105.206])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2ca671asm4650775b3a.153.2024.12.07.08.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Dec 2024 08:18:09 -0800 (PST)
-From: Rob Clark <robdclark@gmail.com>
-To: dri-devel@lists.freedesktop.org
-Cc: freedreno@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	Connor Abbott <cwabbott0@gmail.com>,
-	Akhil P Oommen <quic_akhilpo@quicinc.com>,
-	Rob Clark <robdclark@chromium.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
-	linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b)
-Subject: [RFC 18/24] drm/msm: Add _NO_SHARE flag
-Date: Sat,  7 Dec 2024 08:15:18 -0800
-Message-ID: <20241207161651.410556-19-robdclark@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241207161651.410556-1-robdclark@gmail.com>
-References: <20241207161651.410556-1-robdclark@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UDTAA0ow"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F747C4CED2;
+	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733604506;
+	bh=tJ4OwUAcUq7WzrqLPG9ABeIx+l4b2QN9Zwvg8PvBIXA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=UDTAA0owOzcv/UOPMX61e7GLNllIBetPKCNd3Iftq0JZHHmuJBfevNn+bGSurioEV
+	 KqKX8slAeOLJHTjbQtD8+iWUyd1ivFGy4NCdq5iWUlBBi2+dV4F8GScvFh4pLR9fgb
+	 YVRtneOjoFZjtdTj17lsPf6WTOHHR/F0m3FsWzW83GtdOtMGZUdzRN/mtAGb4MLYEb
+	 VgoOzWWIZYMzDlnqnD4DWslF9UXqztTji2fE0QiCnsKbVrfyAp674h9yBYQPgoH6+v
+	 kABHvPGNB37ZoKDhv/0L+qJ22mfOtCQFssW3QKUdATsaUOwx0n4/H4/a15J7F9/rJi
+	 BstLcGQXmbWbg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D454E7717F;
+	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
+From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
+Date: Sat, 07 Dec 2024 21:47:50 +0100
+Subject: [PATCH v3 01/12] media: i2c: imx214: Use subdev active state
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20241207-imx214-v3-1-ab60af7ee915@apitzsch.eu>
+References: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
+In-Reply-To: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
+To: Ricardo Ribalda <ribalda@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ Vincent Knecht <vincent.knecht@mailoo.org>, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733604504; l=9789;
+ i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
+ bh=7jjaHEv0bY8J3xMvrgzrSBWM/eKhHWc6WkK4AJAZKZU=;
+ b=T/qgxYwLqzTzvnF6m78+U8tuHbwtLvDxv3+qrVuLH8oW1+u821v847I9qsjKdkWZUEkNBA7uH
+ J4sBmCJuf9UCHIJ+bEpQP2vGhtxuxNvF7Tset3VLOABwkXQ+TMoXuAT
+X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
+ pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
+X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
+ auth_id=142
+X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Reply-To: git@apitzsch.eu
 
-From: Rob Clark <robdclark@chromium.org>
+From: André Apitzsch <git@apitzsch.eu>
 
-Buffers that are not shared between contexts can share a single resv
-object.  This way drm_gpuvm will not track them as external objects, and
-submit-time validating overhead will be O(1) for all N non-shared BOs,
-instead of O(n).
+Port the imx214 sensor driver to use the subdev active state.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Move all the format configuration to the subdevice state and simplify
+the format handling, locking and initialization.
+
+While at it, simplify imx214_start_streaming() by removing unneeded goto
+statements and the corresponding error label.
+
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/gpu/drm/msm/msm_drv.h       |  1 +
- drivers/gpu/drm/msm/msm_gem.c       | 23 +++++++++++++++++++++++
- drivers/gpu/drm/msm/msm_gem_prime.c | 15 +++++++++++++++
- include/uapi/drm/msm_drm.h          | 14 ++++++++++++++
- 4 files changed, 53 insertions(+)
+ drivers/media/i2c/imx214.c | 156 +++++++++++++++------------------------------
+ 1 file changed, 50 insertions(+), 106 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index 80582c0c2bf7..4c7ff83a0a20 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -246,6 +246,7 @@ int msm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map);
- void msm_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
- struct drm_gem_object *msm_gem_prime_import_sg_table(struct drm_device *dev,
- 		struct dma_buf_attachment *attach, struct sg_table *sg);
-+struct dma_buf *msm_gem_prime_export(struct drm_gem_object *obj, int flags);
- int msm_gem_prime_pin(struct drm_gem_object *obj);
- void msm_gem_prime_unpin(struct drm_gem_object *obj);
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 4962cfe7c83d62425aeccb46a400fa93146f14ea..435d1ee12c3a0959ae751c3e7a8b4e7fa1a4c303 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -59,8 +59,6 @@ struct imx214 {
  
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 66332481c4c3..c21e1284f289 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -511,6 +511,9 @@ static int get_and_pin_iova_range_locked(struct drm_gem_object *obj,
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pad;
+-	struct v4l2_mbus_framefmt fmt;
+-	struct v4l2_rect crop;
  
- 	msm_gem_assert_locked(obj);
+ 	struct v4l2_ctrl_handler ctrls;
+ 	struct v4l2_ctrl *pixel_rate;
+@@ -68,15 +66,11 @@ struct imx214 {
+ 	struct v4l2_ctrl *exposure;
+ 	struct v4l2_ctrl *unit_size;
  
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return -EINVAL;
++	const struct imx214_mode *cur_mode;
 +
- 	vma = get_vma_locked(obj, vm, range_start, range_end);
- 	if (IS_ERR(vma))
- 		return PTR_ERR(vma);
-@@ -1026,6 +1029,16 @@ static void msm_gem_free_object(struct drm_gem_object *obj)
- 		put_iova_vmas(obj);
- 	}
+ 	struct regulator_bulk_data	supplies[IMX214_NUM_SUPPLIES];
  
-+	if (msm_obj->flags & MSM_BO_NO_SHARE) {
-+		struct drm_gem_object *r_obj =
-+			container_of(obj->resv, struct drm_gem_object, _resv);
-+
-+		BUG_ON(obj->resv == &obj->_resv);
-+
-+		/* Drop reference we hold to shared resv obj: */
-+		drm_gem_object_put(r_obj);
-+	}
-+
- 	drm_gem_object_release(obj);
+ 	struct gpio_desc *enable_gpio;
+-
+-	/*
+-	 * Serialize control access, get/set format, get selection
+-	 * and start streaming.
+-	 */
+-	struct mutex mutex;
+ };
  
- 	kfree(msm_obj->metadata);
-@@ -1058,6 +1071,15 @@ int msm_gem_new_handle(struct drm_device *dev, struct drm_file *file,
- 	if (name)
- 		msm_gem_object_set_name(obj, "%s", name);
- 
-+	if (flags & MSM_BO_NO_SHARE) {
-+		struct msm_context *ctx = file->driver_priv;
-+		struct drm_gem_object *r_obj = drm_gpuvm_resv_obj(ctx->vm);
-+
-+		drm_gem_object_get(r_obj);
-+
-+		obj->resv = r_obj->resv;
-+	}
-+
- 	ret = drm_gem_handle_create(file, obj, handle);
- 
- 	/* drop reference from allocate - handle holds it now */
-@@ -1090,6 +1112,7 @@ static const struct drm_gem_object_funcs msm_gem_object_funcs = {
- 	.free = msm_gem_free_object,
- 	.open = msm_gem_open,
- 	.close = msm_gem_close,
-+	.export = msm_gem_prime_export,
- 	.pin = msm_gem_prime_pin,
- 	.unpin = msm_gem_prime_unpin,
- 	.get_sg_table = msm_gem_prime_get_sg_table,
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index ee267490c935..1a6d8099196a 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -16,6 +16,9 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
- 	int npages = obj->size >> PAGE_SHIFT;
- 
-+	if (msm_obj->flags & MSM_BO_NO_SHARE)
-+		return ERR_PTR(-EINVAL);
-+
- 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -45,6 +48,15 @@ struct drm_gem_object *msm_gem_prime_import_sg_table(struct drm_device *dev,
- 	return msm_gem_import(dev, attach->dmabuf, sg);
+ struct reg_8 {
+@@ -490,6 +484,22 @@ static int __maybe_unused imx214_power_off(struct device *dev)
+ 	return 0;
  }
  
-+
-+struct dma_buf *msm_gem_prime_export(struct drm_gem_object *obj, int flags)
++static void imx214_update_pad_format(struct imx214 *imx214,
++				     const struct imx214_mode *mode,
++				     struct v4l2_mbus_framefmt *fmt, u32 code)
 +{
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return ERR_PTR(-EPERM);
-+
-+	return drm_gem_prime_export(obj, flags);
++	fmt->code = IMX214_MBUS_CODE;
++	fmt->width = mode->width;
++	fmt->height = mode->height;
++	fmt->field = V4L2_FIELD_NONE;
++	fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
++	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
++							  fmt->colorspace,
++							  fmt->ycbcr_enc);
++	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
 +}
 +
- int msm_gem_prime_pin(struct drm_gem_object *obj)
+ static int imx214_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -549,52 +559,6 @@ static const struct v4l2_subdev_core_ops imx214_core_ops = {
+ #endif
+ };
+ 
+-static struct v4l2_mbus_framefmt *
+-__imx214_get_pad_format(struct imx214 *imx214,
+-			struct v4l2_subdev_state *sd_state,
+-			unsigned int pad,
+-			enum v4l2_subdev_format_whence which)
+-{
+-	switch (which) {
+-	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_state_get_format(sd_state, pad);
+-	case V4L2_SUBDEV_FORMAT_ACTIVE:
+-		return &imx214->fmt;
+-	default:
+-		return NULL;
+-	}
+-}
+-
+-static int imx214_get_format(struct v4l2_subdev *sd,
+-			     struct v4l2_subdev_state *sd_state,
+-			     struct v4l2_subdev_format *format)
+-{
+-	struct imx214 *imx214 = to_imx214(sd);
+-
+-	mutex_lock(&imx214->mutex);
+-	format->format = *__imx214_get_pad_format(imx214, sd_state,
+-						  format->pad,
+-						  format->which);
+-	mutex_unlock(&imx214->mutex);
+-
+-	return 0;
+-}
+-
+-static struct v4l2_rect *
+-__imx214_get_pad_crop(struct imx214 *imx214,
+-		      struct v4l2_subdev_state *sd_state,
+-		      unsigned int pad, enum v4l2_subdev_format_whence which)
+-{
+-	switch (which) {
+-	case V4L2_SUBDEV_FORMAT_TRY:
+-		return v4l2_subdev_state_get_crop(sd_state, pad);
+-	case V4L2_SUBDEV_FORMAT_ACTIVE:
+-		return &imx214->crop;
+-	default:
+-		return NULL;
+-	}
+-}
+-
+ static int imx214_set_format(struct v4l2_subdev *sd,
+ 			     struct v4l2_subdev_state *sd_state,
+ 			     struct v4l2_subdev_format *format)
+@@ -604,34 +568,22 @@ static int imx214_set_format(struct v4l2_subdev *sd,
+ 	struct v4l2_rect *__crop;
+ 	const struct imx214_mode *mode;
+ 
+-	mutex_lock(&imx214->mutex);
+-
+-	__crop = __imx214_get_pad_crop(imx214, sd_state, format->pad,
+-				       format->which);
+-
+ 	mode = v4l2_find_nearest_size(imx214_modes,
+ 				      ARRAY_SIZE(imx214_modes), width, height,
+ 				      format->format.width,
+ 				      format->format.height);
+ 
+-	__crop->width = mode->width;
+-	__crop->height = mode->height;
++	imx214_update_pad_format(imx214, mode, &format->format, format->format.code);
++	__format = v4l2_subdev_state_get_format(sd_state, 0);
+ 
+-	__format = __imx214_get_pad_format(imx214, sd_state, format->pad,
+-					   format->which);
+-	__format->width = __crop->width;
+-	__format->height = __crop->height;
+-	__format->code = IMX214_MBUS_CODE;
+-	__format->field = V4L2_FIELD_NONE;
+-	__format->colorspace = V4L2_COLORSPACE_SRGB;
+-	__format->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(__format->colorspace);
+-	__format->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
+-				__format->colorspace, __format->ycbcr_enc);
+-	__format->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(__format->colorspace);
++	*__format = format->format;
+ 
+-	format->format = *__format;
++	__crop = v4l2_subdev_state_get_crop(sd_state, 0);
++	__crop->width = mode->width;
++	__crop->height = mode->height;
+ 
+-	mutex_unlock(&imx214->mutex);
++	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
++		imx214->cur_mode = mode;
+ 
+ 	return 0;
+ }
+@@ -640,14 +592,9 @@ static int imx214_get_selection(struct v4l2_subdev *sd,
+ 				struct v4l2_subdev_state *sd_state,
+ 				struct v4l2_subdev_selection *sel)
  {
- 	struct page **pages;
-@@ -53,6 +65,9 @@ int msm_gem_prime_pin(struct drm_gem_object *obj)
- 	if (obj->import_attach)
+-	struct imx214 *imx214 = to_imx214(sd);
+-
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP:
+-		mutex_lock(&imx214->mutex);
+-		sel->r = *__imx214_get_pad_crop(imx214, sd_state, sel->pad,
+-						sel->which);
+-		mutex_unlock(&imx214->mutex);
++		sel->r = *v4l2_subdev_state_get_crop(sd_state, 0);
  		return 0;
  
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return -EINVAL;
+ 	case V4L2_SEL_TGT_NATIVE_SIZE:
+@@ -826,40 +773,28 @@ static int imx214_write_table(struct imx214 *imx214,
+ 
+ static int imx214_start_streaming(struct imx214 *imx214)
+ {
+-	const struct imx214_mode *mode;
+ 	int ret;
+ 
+-	mutex_lock(&imx214->mutex);
+ 	ret = imx214_write_table(imx214, mode_table_common);
+ 	if (ret < 0) {
+ 		dev_err(imx214->dev, "could not sent common table %d\n", ret);
+-		goto error;
++		return ret;
+ 	}
+ 
+-	mode = v4l2_find_nearest_size(imx214_modes,
+-				ARRAY_SIZE(imx214_modes), width, height,
+-				imx214->fmt.width, imx214->fmt.height);
+-	ret = imx214_write_table(imx214, mode->reg_table);
++	ret = imx214_write_table(imx214, imx214->cur_mode->reg_table);
+ 	if (ret < 0) {
+ 		dev_err(imx214->dev, "could not sent mode table %d\n", ret);
+-		goto error;
++		return ret;
+ 	}
+ 	ret = __v4l2_ctrl_handler_setup(&imx214->ctrls);
+ 	if (ret < 0) {
+ 		dev_err(imx214->dev, "could not sync v4l2 controls\n");
+-		goto error;
++		return ret;
+ 	}
+ 	ret = regmap_write(imx214->regmap, IMX214_REG_MODE_SELECT, IMX214_MODE_STREAMING);
+-	if (ret < 0) {
++	if (ret < 0)
+ 		dev_err(imx214->dev, "could not sent start table %d\n", ret);
+-		goto error;
+-	}
+ 
+-	mutex_unlock(&imx214->mutex);
+-	return 0;
+-
+-error:
+-	mutex_unlock(&imx214->mutex);
+ 	return ret;
+ }
+ 
+@@ -877,6 +812,7 @@ static int imx214_stop_streaming(struct imx214 *imx214)
+ static int imx214_s_stream(struct v4l2_subdev *subdev, int enable)
+ {
+ 	struct imx214 *imx214 = to_imx214(subdev);
++	struct v4l2_subdev_state *state;
+ 	int ret;
+ 
+ 	if (enable) {
+@@ -884,7 +820,9 @@ static int imx214_s_stream(struct v4l2_subdev *subdev, int enable)
+ 		if (ret < 0)
+ 			return ret;
+ 
++		state = v4l2_subdev_lock_and_get_active_state(subdev);
+ 		ret = imx214_start_streaming(imx214);
++		v4l2_subdev_unlock_state(state);
+ 		if (ret < 0)
+ 			goto err_rpm_put;
+ 	} else {
+@@ -948,7 +886,7 @@ static const struct v4l2_subdev_pad_ops imx214_subdev_pad_ops = {
+ 	.enum_mbus_code = imx214_enum_mbus_code,
+ 	.enum_frame_size = imx214_enum_frame_size,
+ 	.enum_frame_interval = imx214_enum_frame_interval,
+-	.get_fmt = imx214_get_format,
++	.get_fmt = v4l2_subdev_get_fmt,
+ 	.set_fmt = imx214_set_format,
+ 	.get_selection = imx214_get_selection,
+ 	.get_frame_interval = imx214_get_frame_interval,
+@@ -1079,13 +1017,13 @@ static int imx214_probe(struct i2c_client *client)
+ 	pm_runtime_enable(imx214->dev);
+ 	pm_runtime_idle(imx214->dev);
+ 
++	/* Set default mode to max resolution */
++	imx214->cur_mode = &imx214_modes[0];
 +
- 	pages = msm_gem_pin_pages_locked(obj);
- 	if (IS_ERR(pages))
- 		ret = PTR_ERR(pages);
-diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-index 39b55c8d7413..a7e48ee1dd95 100644
---- a/include/uapi/drm/msm_drm.h
-+++ b/include/uapi/drm/msm_drm.h
-@@ -138,6 +138,19 @@ struct drm_msm_param {
+ 	ret = imx214_ctrls_init(imx214);
+ 	if (ret < 0)
+ 		goto error_power_off;
  
- #define MSM_BO_SCANOUT       0x00000001     /* scanout capable */
- #define MSM_BO_GPU_READONLY  0x00000002
-+/* Private buffers do not need to be explicitly listed in the SUBMIT
-+ * ioctl, unless referenced by a drm_msm_gem_submit_cmd.  Private
-+ * buffers may NOT be imported/exported or used for scanout (or any
-+ * other situation where buffers can be indefinitely pinned, but
-+ * cases other than scanout are all kernel owned BOs which are not
-+ * visible to userspace).
-+ *
-+ * In exchange for those constraints, all private BOs associated with
-+ * a single context (drm_file) share a single dma_resv, and if there
-+ * has been no eviction since the last submit, there are no per-BO
-+ * bookeeping to do, significantly cutting the SUBMIT overhead.
-+ */
-+#define MSM_BO_NO_SHARE      0x00000004
- #define MSM_BO_CACHE_MASK    0x000f0000
- /* cache modes */
- #define MSM_BO_CACHED        0x00010000
-@@ -147,6 +160,7 @@ struct drm_msm_param {
+-	mutex_init(&imx214->mutex);
+-	imx214->ctrls.lock = &imx214->mutex;
+-
+ 	imx214->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	imx214->pad.flags = MEDIA_PAD_FL_SOURCE;
+ 	imx214->sd.dev = &client->dev;
+@@ -1097,20 +1035,27 @@ static int imx214_probe(struct i2c_client *client)
+ 		goto free_ctrl;
+ 	}
  
- #define MSM_BO_FLAGS         (MSM_BO_SCANOUT | \
-                               MSM_BO_GPU_READONLY | \
-+                              MSM_BO_NO_SHARE | \
-                               MSM_BO_CACHE_MASK)
+-	imx214_entity_init_state(&imx214->sd, NULL);
++	imx214->sd.state_lock = imx214->ctrls.lock;
++	ret = v4l2_subdev_init_finalize(&imx214->sd);
++	if (ret < 0) {
++		dev_err(dev, "subdev init error: %d\n", ret);
++		goto free_entity;
++	}
  
- struct drm_msm_gem_new {
+ 	ret = v4l2_async_register_subdev_sensor(&imx214->sd);
+ 	if (ret < 0) {
+ 		dev_err(dev, "could not register v4l2 device\n");
+-		goto free_entity;
++		goto error_subdev_cleanup;
+ 	}
+ 
+ 	return 0;
+ 
++error_subdev_cleanup:
++	v4l2_subdev_cleanup(&imx214->sd);
++
+ free_entity:
+ 	media_entity_cleanup(&imx214->sd.entity);
+ free_ctrl:
+-	mutex_destroy(&imx214->mutex);
+ 	v4l2_ctrl_handler_free(&imx214->ctrls);
+ error_power_off:
+ 	pm_runtime_disable(imx214->dev);
+@@ -1125,13 +1070,12 @@ static void imx214_remove(struct i2c_client *client)
+ 	struct imx214 *imx214 = to_imx214(sd);
+ 
+ 	v4l2_async_unregister_subdev(&imx214->sd);
++	v4l2_subdev_cleanup(sd);
+ 	media_entity_cleanup(&imx214->sd.entity);
+ 	v4l2_ctrl_handler_free(&imx214->ctrls);
+ 
+ 	pm_runtime_disable(&client->dev);
+ 	pm_runtime_set_suspended(&client->dev);
+-
+-	mutex_destroy(&imx214->mutex);
+ }
+ 
+ static const struct of_device_id imx214_of_match[] = {
+
 -- 
 2.47.1
+
 
