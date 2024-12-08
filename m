@@ -1,136 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ixit.cz (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D621993B1;
-	Sat,  7 Dec 2024 20:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFE64690;
+	Sun,  8 Dec 2024 04:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.177.23.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733604508; cv=none; b=unDCrmooV+LHTVmgBMBzdqtamwkFsLk7eQ14w+1tu8apLywvXHnJBOKPL3Tq/wH4jYFHQKFPa2R24J89JNqm0dza5W3EOlRrD18k9okQLwYpEsc3j+htnVa7PvDBvHY8ufoysu4g79GGjwlouOZLo2rzyI0PQ5OBr5z3RlxjVYI=
+	t=1733630479; cv=none; b=TJZ2PwY4dHGhexuZ04RP3FFWygBt3N3PH0Ps48Q5lxWqxM7GhOLaRakRolrUTTSyI0aI4OZEZc1i9vItBSVYBjv++kTrJjhiWaj5br8UcSvWLhX0gK6I4i+gBPoHDQ5GiqMFYbjFgZVBRdoTdz3a+wES6LjwWhCt81ESsm5JJNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733604508; c=relaxed/simple;
-	bh=zJ6ZzWRB3Z3aFVEgu8oPRX3v0KpPSqQf6B9+ebnyGCA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rCTPUBJx0S9+WzlnawWoa3r6Igy6LpDcUCdEw575UejdUF6pg2UDAEmP4uv5tlON/UT02GZDHPHa9QQoNzn75gnpdjg59gb/NgwltmpHgFNZtcTmhHOL1rm1KMUwWQvB+ytWuWArsA0ME2+z5OWL4ZjNEv4NqHJxBm9wgtuVYF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzjyLr8J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733630479; c=relaxed/simple;
+	bh=rywh8j+vsOGen2cnijZ4sX5uDqP9nf0EX8pEGP499QM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VF7GmtHDClNP5FrV0PRIB87+gD2xtCAA+g9HD+XOwmyUc3ZCCFangt7EGCFXOfHip7AVkF0B2Eb5lmzYWKmxKbJzAulohL7DBtEtd95xuvKgCzQtznIChSRJFew+aynUn1H95nzcKQOfT8CTObp4L8MWGWBcQn5zzFQ1AVB8JSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=r2bNnv0L; arc=none smtp.client-ip=89.177.23.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzjyLr8J"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BA579C4CEF5;
-	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733604506;
-	bh=zJ6ZzWRB3Z3aFVEgu8oPRX3v0KpPSqQf6B9+ebnyGCA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=kzjyLr8JuITI0bU7SgV/QyTCuZM7u6hvvpupK11hUUJzNoNg0Yvv/fDR3/IHtsECL
-	 YxM5wCAkVLaWwCXk52N2hTRYi29OEX6/CoFbKC5NfO7e2w0IiAqXywDhHBaZTPmajB
-	 Nw1Ovlz/GFKKvrMcCFb1Q9kzsFeDmDgaBputr54s3KeALNJ7/Cyqp5OPDiYUm/m2gD
-	 5hCR8YqdkFWyKXLo174A3PEUbkAJ3sHfPGu/G6MmtvZKOnwmT52VHQM4Dn/Y1TFXmr
-	 MRv5hs25qUnSQ8XxQiEy1Xs171S28pk9I2zD+Rqv2dHndJos/fn9wFn67iR0OWl8wM
-	 8dFOY6AtRGM4g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1440E77180;
-	Sat,  7 Dec 2024 20:48:26 +0000 (UTC)
-From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Sat, 07 Dec 2024 21:47:59 +0100
-Subject: [PATCH v3 10/12] media: i2c: imx214: Verify chip ID
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="r2bNnv0L"
+Received: from newone.lan (99-158-29-91.lightspeed.miamfl.sbcglobal.net [99.158.29.91])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id A321E1662D2;
+	Sun,  8 Dec 2024 05:01:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1733630465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kv9gGodx3BkdkBDxZJOBxwhrGWYOwsmC1Hy2kXTJCJY=;
+	b=r2bNnv0LZj/3CGFgy/YbDmOCOvo82yIZQFgsWpk0j0wB7FMupD/4cYa8UEVtDkIWsG2Pag
+	tt4nf3O5t9/XWK1tGmECng5uhts1qlJCEaTXnC5VBgV3K7eDqGLBqZevyvDyQ9WYzjCVSN
+	P4URMmOzeA8738QYfOPBh6fUkbipP5Q=
+From: David Heidelberg <david@ixit.cz>
+To: Robert Foss <rfoss@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Caleb Connolly <caleb.connolly@linaro.org>,
+	David Heidelberg <david@ixit.cz>,
+	linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] media: qcom: camss: Add sm845 named power-domain support
+Date: Sat,  7 Dec 2024 23:00:48 -0500
+Message-ID: <20241208040055.30509-1-david@ixit.cz>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241207-imx214-v3-10-ab60af7ee915@apitzsch.eu>
-References: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
-In-Reply-To: <20241207-imx214-v3-0-ab60af7ee915@apitzsch.eu>
-To: Ricardo Ribalda <ribalda@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Vincent Knecht <vincent.knecht@mailoo.org>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
- Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733604504; l=1922;
- i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=TLL1L63CYz7vxWgfg6u2A7RVfVB86BDjDm4kG2L4gow=;
- b=hiIysf/xZoKo2oL7O428EUzFOxPOqrxDF9dOfDUbox1dr75KqpzKJXmds2TK/Eteviypfplcu
- rL6KlQ2m2tAD2P7VrH7lGSOw/mYr1nv+R72FkvF2pMXSf8yOA6nKjzJ
-X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
- pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
-X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
- auth_id=142
-X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Reply-To: git@apitzsch.eu
 
-From: André Apitzsch <git@apitzsch.eu>
+From: Caleb Connolly <caleb.connolly@linaro.org>
 
-Check the chip ID and stop probing if it is no imx214 sensor.
+Declare power-domain names "top", "ife0" and "ife1" eponymously for the
+power-domains TITAN_TOP_GDSC, IFE_0_GDSC and IFE_1_GDSC respectively.
 
-Acked-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
+Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- drivers/media/i2c/imx214.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/media/platform/qcom/camss/camss.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index a35e4e60e55c2b9d9e3090c98e695f78d099cf44..3cd64bb91795d8490acad5926940c111fb95fae5 100644
---- a/drivers/media/i2c/imx214.c
-+++ b/drivers/media/i2c/imx214.c
-@@ -20,6 +20,10 @@
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-subdev.h>
+diff --git ./drivers/media/platform/qcom/camss/camss.c ./drivers/media/platform/qcom/camss/camss.c
+index 67fb11cbe865..62c556c4fcf8 100644
+--- ./drivers/media/platform/qcom/camss/camss.c
++++ ./drivers/media/platform/qcom/camss/camss.c
+@@ -927,6 +927,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 		.interrupt = { "vfe0" },
+ 		.vfe = {
+ 			.line_num = 4,
++			.pd_name = "ife0",
+ 			.has_pd = true,
+ 			.hw_ops = &vfe_ops_170,
+ 			.formats_rdi = &vfe_formats_rdi_845,
+@@ -954,6 +955,7 @@ static const struct camss_subdev_resources vfe_res_845[] = {
+ 		.interrupt = { "vfe1" },
+ 		.vfe = {
+ 			.line_num = 4,
++			.pd_name = "ife1",
+ 			.has_pd = true,
+ 			.hw_ops = &vfe_ops_170,
+ 			.formats_rdi = &vfe_formats_rdi_845,
+@@ -2647,6 +2649,7 @@ static const struct camss_resources sdm660_resources = {
  
-+/* Chip ID */
-+#define IMX214_REG_CHIP_ID		CCI_REG16(0x0016)
-+#define IMX214_CHIP_ID			0x0214
-+
- #define IMX214_REG_MODE_SELECT		CCI_REG8(0x0100)
- #define IMX214_MODE_STANDBY		0x00
- #define IMX214_MODE_STREAMING		0x01
-@@ -1092,6 +1096,27 @@ static int imx214_get_regulators(struct device *dev, struct imx214 *imx214)
- 				       imx214->supplies);
- }
- 
-+/* Verify chip ID */
-+static int imx214_identify_module(struct imx214 *imx214)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx214->sd);
-+	int ret;
-+	u64 val;
-+
-+	ret = cci_read(imx214->regmap, IMX214_REG_CHIP_ID, &val, NULL);
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "failed to read chip id %x\n",
-+				     IMX214_CHIP_ID);
-+
-+	if (val != IMX214_CHIP_ID)
-+		return dev_err_probe(&client->dev, -EIO,
-+				     "chip id mismatch: %x!=%llx\n",
-+				     IMX214_CHIP_ID, val);
-+
-+	return 0;
-+}
-+
- static int imx214_parse_fwnode(struct device *dev)
- {
- 	struct fwnode_handle *endpoint;
-@@ -1184,6 +1209,10 @@ static int imx214_probe(struct i2c_client *client)
- 	 */
- 	imx214_power_on(imx214->dev);
- 
-+	ret = imx214_identify_module(imx214);
-+	if (ret)
-+		goto error_power_off;
-+
- 	pm_runtime_set_active(imx214->dev);
- 	pm_runtime_enable(imx214->dev);
- 	pm_runtime_idle(imx214->dev);
-
+ static const struct camss_resources sdm845_resources = {
+ 	.version = CAMSS_845,
++	.pd_name = "top",
+ 	.csiphy_res = csiphy_res_845,
+ 	.csid_res = csid_res_845,
+ 	.vfe_res = vfe_res_845,
 -- 
-2.47.1
-
+2.45.2
 
