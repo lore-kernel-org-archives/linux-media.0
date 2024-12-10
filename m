@@ -1,138 +1,261 @@
-Received: from s1.sapience.com (s1.sapience.com [72.84.236.66])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706252153DC;
-	Tue, 10 Dec 2024 16:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=72.84.236.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AAA23ED5F;
+	Tue, 10 Dec 2024 17:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733849631; cv=fail; b=d7NVX1RShL0j+jcJR4+fxQbxvnULAHXQGmgiSQ8qXQ/rQnynU89aaItlFXZruLnf1GxAS5gSB8VvRYsrpuUmaTyFhCabLJkk6Jxac+4HqiJxtomVCeoBWseKKE8LcqQV3YppteyoNYEZpi9a2mEAm1xKYXY4eHPmIs+Kpbh0R1w=
+	t=1733852779; cv=fail; b=EM8zT5hNfie6mSmNKegAK6yGRwUdwqEqszbKOQWcihuRb45f6ZlCEbC0Ppg2UwdDDqdUTWy9bGzLtuvN8YatpDs4Yvhry/bU+qIP864pVpHnhM23l5gbFBw8SzPu0ZCvE7CTrGRzmfld9dU/1KpEO+rEo2h8OsVVW0I+ctn2rr8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733849631; c=relaxed/simple;
-	bh=PPV/GHXwYA75Qk+vBJmS5CKvRytPVt2P7mQWbvhA7KA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WqBFrZyuvVeRyp//MmDS9SHf9cNbYj3Gfm58ipJADIw2eeXyreSX1pcSqz/TgpicXNved+8oZFnmJ5eigRn3+4J87xHcd7VN3IWtIHnfHgbYwZseDfIcQKVJf9uDkDONRbqao7QPmyScxPcOO/CfTd0YuqiWT9omHqAvFh5oR1c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sapience.com; spf=pass smtp.mailfrom=sapience.com; dkim=permerror (0-bit key) header.d=sapience.com header.i=@sapience.com header.b=wD3UMRxD; dkim=pass (2048-bit key) header.d=sapience.com header.i=@sapience.com header.b=BPkmprzB; arc=fail smtp.client-ip=72.84.236.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sapience.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sapience.com
+	s=arc-20240116; t=1733852779; c=relaxed/simple;
+	bh=D7jZMKlwr6UGiAyelYH4rp816Fs/7Pnl/KFU2+Yb9Fs=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Lv/l9KXelTC4UPAelYnEDILxPruvL5XtaRBczl+mGLA1CbAe/Nvk/rBQEVgUtW4wv4cbPY2hK6llS+GIBWti5t4GpKM/HJyzjD1mWMnbHHLqGq3Jzq/adk/+sqxZG3qW86vTo1r4S4ercv9Kj0lhmHrFhKYV2oqfEbxkMPb2LfU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IRHAbj5l; arc=fail smtp.client-ip=40.107.94.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=sapience.com header.i=@sapience.com header.b="wD3UMRxD";
-	dkim=pass (2048-bit key) header.d=sapience.com header.i=@sapience.com header.b="BPkmprzB"
-Authentication-Results: dkim-srvy7; dkim=pass (Good ed25519-sha256 
-   signature) header.d=sapience.com header.i=@sapience.com 
-   header.a=ed25519-sha256; dkim=pass (Good 2048 bit rsa-sha256 signature) 
-   header.d=sapience.com header.i=@sapience.com header.a=rsa-sha256
-Received: from srv8.sapience.com (srv8.sapience.com [x.x.x.x])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by s1.sapience.com (Postfix) with ESMTPS id 2D403480525;
-	Tue, 10 Dec 2024 11:53:49 -0500 (EST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=sapience.com;
- i=@sapience.com; q=dns/txt; s=dk-ed25519-220413; t=1733849628;
- h=message-id : subject : from : to : cc : date : in-reply-to :
- references : content-type : mime-version : from;
- bh=PPV/GHXwYA75Qk+vBJmS5CKvRytPVt2P7mQWbvhA7KA=;
- b=wD3UMRxDuXgwaGrlzzvtlsdAYUd6ZthHn7SPY+6HWtZPuNwRQzCh6+vT6KQv4tzwg3GGo
- uv79hJXIqw7QqvSCQ==
-ARC-Seal: i=1; a=rsa-sha256; d=sapience.com; s=arc6-rsa-220412; t=1733849628;
-	cv=none; b=uKYreAe9nlsKlDkyS3y2eEjNHuEKJP2uKchljXhQbQ8PsoDv9xuLCHdyuA9tkQROru8IyBt9xQmrF+B2iadVVjODM8dzIoVymeaDQf9pJkEZjRHer80/NbTPBoYFU9R2pEdMthyKIUnigeeSSFrYRViiVHmzgC/3YKzL5t3jF83vbpdigi6gTOEVWTu5+65xYBs3wLfYompsMR/7bQgYeZdHHVtEdXTiQECRwpwxbFog87a4cNWKt32jLdGCDIuvHqEYoNVdj6RQ6SCDc6Zmer7O92S0EgNN1A9A9XV0hf4jMaTp4BK0lA99FIW8h+v83OgFUHitdWATzqe75yy8Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; d=sapience.com; s=arc6-rsa-220412;
-	t=1733849628; c=relaxed/simple;
-	bh=PPV/GHXwYA75Qk+vBJmS5CKvRytPVt2P7mQWbvhA7KA=;
-	h=DKIM-Signature:DKIM-Signature:Message-ID:Subject:From:To:Cc:Date:
-	 In-Reply-To:References:Autocrypt:Content-Type:User-Agent:
-	 MIME-Version; b=ZNDdmjHEFbnQrxn73CA8+FXO1RhRXZ+SVueJS1DfPUqXhVhkWTiMztqTf2w8LyIsCOadkQ9hQ3TSB8GFYA+rwzjSz0qc/ucy02/L7EBI87KdIjDoYXE1b1wMoRTI5SjiI+8xZD79NMXLS4cnws2tQvbfvHVxUGPMYffD/FgwbDYcgEwma0ojy5JuuLaMpOWvmWWCQtvGImPfbJ2GMDVmHu+wGHir1app/knB4Zscnw0Lla3sEkQiS9SGYPB3S7xM1S7iBt+mQIAEEh0nPZ8zPrRxVxRPDf8fI6sUgfG6KIs1QZHsGZcVVRAMQv4K3wGIc8PmKDnqIQ/RZTQs3z4i4A==
-ARC-Authentication-Results: i=1; arc-srv8.sapience.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sapience.com;
- i=@sapience.com; q=dns/txt; s=dk-rsa-220413; t=1733849628;
- h=message-id : subject : from : to : cc : date : in-reply-to :
- references : content-type : mime-version : from;
- bh=PPV/GHXwYA75Qk+vBJmS5CKvRytPVt2P7mQWbvhA7KA=;
- b=BPkmprzBZOodw8hR206xK5QG40OfcEf8XX3vi3gw8cmATqc1qUi7rNNtm8f4lgHNVmzsj
- 2UBEwTAYxiMlt4IUVP81fdZkP4C9N5pEcW6eg0kenh/llFU9IDIGZ6naP3sYwkvWyNptipy
- 9+fa1dTFi159z2Sv2qPtHdgtZ4avomBPZ30IIBA4xRwX7y8r7APq7JQIoE4hVgkk2O49vIx
- aJBbHf2JybZpQwmSLYahuoRQXZBSd7sN2seGC4PcheiU/uJT7z8coItuRy3jaE2PQ5hMW5T
- wbjS188+U2AON0y53pIRuGfam7BvGVFJ2X/1lp8dBNQiHfErCBt4ce85gN1A==
-Received: from lap7.sapience.com (lap7w.sapience.com [x.x.x.x])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(No client certificate requested)
-	by srv8.sapience.com (Postfix) with ESMTPS id DAD31280015;
-	Tue, 10 Dec 2024 11:53:48 -0500 (EST)
-Message-ID: <d42a3c2b47fbcce8be3c4aa613451ce431c281a8.camel@sapience.com>
-Subject: Re: Linux 6.12.4 - crash dma_alloc_attrs+0x12b via ipu6
-From: Genes Lists <lists@sapience.com>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Greg
- Kroah-Hartman	 <gregkh@linuxfoundation.org>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, Sakari Ailus	
- <sakari.ailus@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	akpm@linux-foundation.org, torvalds@linux-foundation.org,
- stable@vger.kernel.org, 	linux-media@vger.kernel.org, bingbu.cao@intel.com,
- Rodrigo Vivi	 <rodrigo.vivi@intel.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>,  Tvrtko Ursulin <tursulin@ursulin.net>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org
-Date: Tue, 10 Dec 2024 11:53:48 -0500
-In-Reply-To: <Z1hbyNXUubokloda@linux.intel.com>
-References: <2024120917-vision-outcast-85f2@gregkh>
-	 <c0e94be466b367f1a3cfdc3cb7b1a4f47e5953ae.camel@sapience.com>
-	 <Z1fqitbWlmELb5pj@kekkonen.localdomain> <87seqvzzg6.fsf@intel.com>
-	 <c1805642a6c5da6fef3927c70358c8cb851d2784.camel@sapience.com>
-	 <87bjxjzpwn.fsf@intel.com> <2024121001-senator-raffle-a371@gregkh>
-	 <Z1hbyNXUubokloda@linux.intel.com>
-Autocrypt: addr=lists@sapience.com; prefer-encrypt=mutual;
- keydata=mDMEXSY9GRYJKwYBBAHaRw8BAQdAwzFfmp+m0ldl2vgmbtPC/XN7/k5vscpADq3BmRy5R
- 7y0LU1haWwgTGlzdHMgKEwwIDIwMTkwNzEwKSA8bGlzdHNAc2FwaWVuY2UuY29tPoiWBBMWCAA+Ah
- sBBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAFiEE5YMoUxcbEgQOvOMKc+dlCv6PxQAFAmPJfooFCRl
- vRHEACgkQc+dlCv6PxQAc/wEA/Dbmg91DOGXll0OW1GKaZQGQDl7fHibMOKRGC6X/emoA+wQR5FIz
- BnV/PrXbao8LS/h0tSkeXgPsYxrzvfZInIAC
-Content-Type: multipart/signed; micalg="pgp-sha384";
-	protocol="application/pgp-signature"; boundary="=-bHGp4P46otAfPh8D5/ik"
-User-Agent: Evolution 3.54.2 
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IRHAbj5l"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nHHJ8D+KZu/fuTRLFH01Fii+9nPZWojaKxt59El4lD/ZINbUyQj82s3xRMXOriNaIuDH4izRwbO13pYduJorjUfYwwWL8WozekzI6eF0KPxTGyMxbeINepCvML2r0XL7462q+LNpVlrSa6eGO8YHx8D7YQAY+A0LTjZ/5cH8tK7y0luNfUpWS1auOQKQAU1OOu1rK9CpXwqSptoizEZFZ17A+zCFVGijlCumdIeumd16+1dJ4LWGhuEt0jBEAwyM14Ibg+sEFyxDgqMcrkYhvs0fwm/7ZjoVeQRRDPhXIZbmAb2+KYhMUqSapmYbgE6SYQVw2pDUhocaRtuC80+vLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DIHpgc503MwlsXlWBMNYsvDAJnlykYQzOYEUtHQHp/4=;
+ b=vC8iLPzGRBjyg/tr+6/cjKOCiowAWEvpOPw0O6v7KRBi8q6SgWYMHpwpDygWwpG5Gr5oNdeuoYIyWUqGQkm171Js1G9IPJbE+iU2M19q7sObWweHjNI8l99hCK3qMekdhH6YTmugyo9eGTqZy/MCMpOrr5fDNDpxTQ2/FwFnFvUdabkuPjuQWe95tSKPfRFkGzlSi/eibZ6AZOsZIh1JGMm6x9PJsIYvvQ24a5KB6aSn9xpDnFBbz0/XCEYoHowt8IridHV5juqLiXqcM4W7u+l9E7yKnQnbGHTLMaXfLO4VqrlRWo2zFZujMQGJ7SmvcTqTed+02SHWmy+pPgCFzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DIHpgc503MwlsXlWBMNYsvDAJnlykYQzOYEUtHQHp/4=;
+ b=IRHAbj5lgdyT87s67AUGBvah7pbbY07TwEbwYFTj4IdoCsvDYxuxyo1nV7GlQrCcYpWEgZfO5X4ZkFThUYpGcQ/dBARkOqTcYmRKEjX3ij2O5/J+zlhz3Bj1KS+zqeVVshDAGKLQw4vfIa2m7J39WqSFzWJxDtM5bIyxdj3uWvqaqFAl53JJv4ZKFLISdoRHVhxmzNk52CxbpL9VAtLfHIq35k+7l87gFlUnjf1r49wQKU3cJlFpHPWgJsLaVWx7H/U84zKBZGpfId7BE1YT9j42aWIDQptYpOLhMWdBzHr3coHS25oIh2elqIgsDLIG4nWGWaIOPinUCuRk/8mdRw==
+Received: from SN7P220CA0029.NAMP220.PROD.OUTLOOK.COM (2603:10b6:806:123::34)
+ by CH2PR12MB4309.namprd12.prod.outlook.com (2603:10b6:610:a4::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.14; Tue, 10 Dec
+ 2024 17:46:13 +0000
+Received: from SA2PEPF00001508.namprd04.prod.outlook.com
+ (2603:10b6:806:123:cafe::83) by SN7P220CA0029.outlook.office365.com
+ (2603:10b6:806:123::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.18 via Frontend Transport; Tue,
+ 10 Dec 2024 17:46:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SA2PEPF00001508.mail.protection.outlook.com (10.167.242.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8230.7 via Frontend Transport; Tue, 10 Dec 2024 17:46:12 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 10 Dec
+ 2024 09:45:57 -0800
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Tue, 10 Dec 2024 09:45:57 -0800
+Received: from thinkpad-t480.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Tue, 10 Dec 2024 09:45:56 -0800
+From: Johnny Liu <johnliu@nvidia.com>
+To: <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+	<skomatineni@nvidia.com>, <luca.ceresoli@bootlin.com>,
+	<mperttunen@nvidia.com>, <maarten.lankhorst@linux.intel.com>,
+	<mripard@kernel.org>, <tzimmermann@suse.de>, <airlied@gmail.com>,
+	<simona@ffwll.ch>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Johnny Liu <johnliu@nvidia.com>
+Subject: [PATCH v1 1/5] dt-bindings: display: tegra: Add actmon information
+Date: Tue, 10 Dec 2024 09:45:50 -0800
+Message-ID: <20241210174554.18869-2-johnliu@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20241210174554.18869-1-johnliu@nvidia.com>
+References: <20241210174554.18869-1-johnliu@nvidia.com>
+X-NVConfidentiality: public
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001508:EE_|CH2PR12MB4309:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b4cb8b2-85cb-469c-c05e-08dd194289f1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|1800799024|376014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?SguUD1MUf5DL2o1ckSkhVeErXnHj22RZ0RfjLNVf26n16/+6//B4Zg8P+uNb?=
+ =?us-ascii?Q?nklLtuPy5+W2SgpPl5jIoyRpOw/7VNTeO2ywg5Zh9GD8vW7x6uEaefgHkV7B?=
+ =?us-ascii?Q?jxL2iXpR40hhieIla7RXVU79AhIXe/p8h0qxdu/mYAWp8J/5t4F3Lu3d9VcH?=
+ =?us-ascii?Q?wlXSTA1w7M9xIWDIbnbqYXbkiA7e/Qo/JiVwK/OYyXMn++r0F26IkC7SYR+0?=
+ =?us-ascii?Q?naeWtHCGqqRoWxnBiTpnH1hYbg+z+pXF9JJ9kngcGTUG8T3IfyRiKStYvmQI?=
+ =?us-ascii?Q?qatQhbhUVUVyIMa9USl1vIMtUg2As+ZQH9VMDy4266oTmA2uWe6TfU+nNEnN?=
+ =?us-ascii?Q?2LBnfdBYPmNSsl3inHOWkUUnptzo7uk/1TXu2QsU1vfMfCHyjDST6q+2/zEb?=
+ =?us-ascii?Q?GkpzGYfIxo96i8+yJYPok/rtzaGiib75aL7E9Ez5x8NHC1ZSn/HetU8Bh2p0?=
+ =?us-ascii?Q?wGNc5I6N8V9QlVNH9MibiVywKjsj5OZVvqmYNFDSJfSVwnCBfCXjUVUGz/qX?=
+ =?us-ascii?Q?/Kzgu0Txq0yZjrBDtjkRMz11T0/OV9R0KQHWc3aNaYWBswJe0xQZH9HGGm2S?=
+ =?us-ascii?Q?y4wOQYkeY8jOTUZlz/ID1NdKD9Rjg+6s2Muk5To+YkyVns9WHr8IDJ9C28mB?=
+ =?us-ascii?Q?QvPFiLW0QD8OPeoaOS2LyncaR5ihjrj2xNyNL0K92Xkl8Z7aNYWu7Xn98lxy?=
+ =?us-ascii?Q?uOrBZQHCRH43Vp9rO2n1yxhTOSPKgXfDchqZucLFub6dLjm1uRbACGDQb+VS?=
+ =?us-ascii?Q?EifCdv4islLtnIKPl7O4gkcfpgkkDa4q0JhYw4JBDmKE2bpFF0h6+B7lLKmt?=
+ =?us-ascii?Q?XUctwHHoqCuX/GyFX/URfyTVlFJJzqZXlOpULLLHRlvmvzB6CPplpIJnAmY5?=
+ =?us-ascii?Q?+z+kUGIWG6vckQgPYDsw+03yjPwW3q4Jh1UX1uLqbJW45G+3p7IOmpEqMqMU?=
+ =?us-ascii?Q?WxmxcWWfCjQ497rSTlf5GvszejI6znTm96u/wtguFQzrwspdH8tbkEb+8+MT?=
+ =?us-ascii?Q?86LHkyEn8XRKCUzIGnuKxt7zEatHo+VaNhkegA5gDhOIEHEyC9RIS/wqlI2p?=
+ =?us-ascii?Q?lmwcCE/UfYmoeXQaLAGnpwBkllW/UTPTdXML3IAYD6N5e0iOBhqRIRr8AD3m?=
+ =?us-ascii?Q?4BgJSvu9wZsvh1Fv5VACsDuVMogPRJwo/6hsdOQqNOyJQQB5gmTz4XEutb7u?=
+ =?us-ascii?Q?8gvFw3H6BlgSljOEtgknXhEYo4tZZlsic7vUaL1YtNZ1E/oEjauzwNWZ6rDQ?=
+ =?us-ascii?Q?l3l/mcONK9dKhM55n6B0dHyP22/MR3WN3cicLfB02UDeWfUTUXmXYj6NGoH3?=
+ =?us-ascii?Q?pEy5XwLyk/970fIaM3PDod2b17Qpf9yZdxNeeHYzOp8/rwQIvNRwREN92Ht4?=
+ =?us-ascii?Q?EibmEZ+MkU3N/jVYxjuGX8JQiGEg0fcsezS/q9i5x5fOC3qmZg/nnU+tlZAF?=
+ =?us-ascii?Q?Y41K6zQpSxW7vuzc2KNUYYsrCumM83CJwcdozftxkrp96ah/GD9Okw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(1800799024)(376014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2024 17:46:12.7930
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b4cb8b2-85cb-469c-c05e-08dd194289f1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00001508.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4309
 
+An activity monitor (actmon) is used to measure the device runtime
+utilization to help drive software power management policies.
 
---=-bHGp4P46otAfPh8D5/ik
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Extend the reg space to include actmon aperture for actmon configuration
+through host1x.
 
-On Tue, 2024-12-10 at 16:18 +0100, Stanislaw Gruszka wrote:
->=20
-> The problem will disappear after applying:
-> https://lore.kernel.org/stable/20241209175416.59433-1-
-> stanislaw.gruszka@linux.intel.com/
-> since the allocation will not longer fail.
->=20
-> ...
-> Regards
-> Stanislaw
+Extend the number of clocks to include actmon clock, which is shared
+between unit actmons for different host1x clients.
 
-I confirm that (6.12.4 + above patch) now boots without problems.
+Signed-off-by: Johnny Liu <johnliu@nvidia.com>
+---
+ .../display/tegra/nvidia,tegra20-host1x.yaml  | 45 ++++++++++++++++---
+ 1 file changed, 39 insertions(+), 6 deletions(-)
 
-Thank you for sorting it out.
+diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
+index 3563378a01af4..46e1d27ddef8b 100644
+--- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
++++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
+@@ -32,11 +32,11 @@ properties:
+ 
+   reg:
+     minItems: 1
+-    maxItems: 3
++    maxItems: 4
+ 
+   reg-names:
+     minItems: 1
+-    maxItems: 3
++    maxItems: 4
+ 
+   interrupts:
+     minItems: 1
+@@ -60,12 +60,12 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    description: Must contain one entry, for the module clock. See
+-      ../clocks/clock-bindings.txt for details.
++    minItems: 1
++    maxItems: 2
+ 
+   clock-names:
+-    items:
+-      - const: host1x
++    minItems: 1
++    maxItems: 2
+ 
+   resets:
+     minItems: 1 # MC reset is optional on Tegra186 and later
+@@ -132,6 +132,15 @@ allOf:
+           items:
+             - const: syncpt
+             - const: host1x
++
++        clocks:
++          items:
++            - description: host1x clock
++
++        clock-names:
++          items:
++            - const: host1x
++
+       required:
+         - resets
+         - reset-names
+@@ -170,6 +179,14 @@ allOf:
+             - const: syncpt
+             - const: host1x
+ 
++        clocks:
++          items:
++            - description: host1x clock
++
++        clock-names:
++          items:
++            - const: host1x
++
+         iommu-map:
+           description: Specification of stream IDs available for memory context device
+             use. Should be a mapping of IDs 0..n to IOMMU entries corresponding to
+@@ -195,16 +212,20 @@ allOf:
+     then:
+       properties:
+         reg-names:
++          minItems: 3
+           items:
+             - const: common
+             - const: hypervisor
+             - const: vm
++            - const: actmon
+ 
+         reg:
++          minItems: 3
+           items:
+             - description: region used by host1x server
+             - description: region used by the hypervisor
+             - description: region assigned to the virtual machine
++            - description: region used for configuring actmon for host1x clients
+ 
+         interrupts:
+           items:
+@@ -230,6 +251,18 @@ allOf:
+             - const: syncpt7
+             - const: host1x
+ 
++        clocks:
++          minItems: 1
++          items:
++            - description: host1x clock
++            - description: actmon clock
++
++        clock-names:
++          minItems: 1
++          items:
++            - const: host1x
++            - const: actmon
++
+         iommu-map:
+           description: Specification of stream IDs available for memory context device
+             use. Should be a mapping of IDs 0..n to IOMMU entries corresponding to
+-- 
+2.34.1
 
-
-
---=20
-Gene
-
-
---=-bHGp4P46otAfPh8D5/ik
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYJAB0WIQRByXNdQO2KDRJ2iXo5BdB0L6Ze2wUCZ1hyHAAKCRA5BdB0L6Ze
-22qyAQCiow8EKie6x4WLJm79+9e46CEZ9gd5lJR0bGTh39txpQEAx4xNEdphp9mz
-xnLYva4vWbPImT2BELnv4B97Yw8B6QU=
-=+KY4
------END PGP SIGNATURE-----
-
---=-bHGp4P46otAfPh8D5/ik--
