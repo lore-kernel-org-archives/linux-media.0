@@ -1,142 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9711F2360;
-	Wed, 11 Dec 2024 08:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570D9240361;
+	Wed, 11 Dec 2024 09:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733907438; cv=none; b=aMid4V/qR9ttoJwK15xr5Tsblj30QYwFwkRXpGjaSpA5w3wlCy+h8Dx0FKCNpEK5/WLTi1+MiWUSKBprOmBtliEAWRKQ214oNwNUkPAnplL8mRP5tWtkhjhcv/nMWnTV6N1d8M5xD2o3Ei4K4aQd7rViKEcwWpy4NF1x57nuPOU=
+	t=1733907917; cv=none; b=b+unhi4ec3FewQg9EPIe3nXuVLF2K7evE49Y1dNTHHpEXQymZuhIDMYLiyD0vDgSTJ7B2QB5wmy3QntqWZdjZocJU4/pcO8werfFdmPJaDNgS/hAgltt1oQRHWViKJgDiAmyRXc9NcEo9EOEULwAeivDObU6Yfr/wdRRiK1tc8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733907438; c=relaxed/simple;
-	bh=le+Mh1wjBLqBi2bTTLZH6gClWn3WW5fXnLXugLgMUN0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Bv4A/wkZP4tNMhHMMOq0GadJFFSiyZ++cRsC3UVfg1lwG9zVm7o4M8s3xMp3Lj0iKfcujx7av9KeWwMJmjsrm2AyRreXzsBlJ8ltXnaXL7IGNkV/AISVgO6u1kZCsQuz5WZ7Cp4vb5QeXQODXj971Lt3Hm44to33A3rA0XDczfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4x8tEW6; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4x8tEW6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC81C4CED2;
-	Wed, 11 Dec 2024 08:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733907437;
-	bh=le+Mh1wjBLqBi2bTTLZH6gClWn3WW5fXnLXugLgMUN0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=G4x8tEW6qh3o72XqlueHI99hHI5sdgY7JzBvC/ssQPnsr241HDBap/SW6bpTjx29d
-	 1OyEje2fmgLrmgDzruHlDK2OHbxeIngPoRdhxiyB7KBMVaW7Kf0GvYwMZLkF2uHOBI
-	 Y20t+42nJ/OR/sZzpFGNg2TIyKZ//bMFf/elyM8fYnm+rqK9rCtn48zOa6w0e51SnQ
-	 kRCAyg4M0AT55he3dau35ARu/sHsK5r65wiqSwU6yrxE51k3uAChFn4osqSab8XTSQ
-	 Q1MlUhtD0890xIk4ZrVHrI0MsihvikSh/Uv39l1WF1ly7AVy53dx9aqmGDycfYWvnY
-	 gM7y5fcXPIEhw==
-Date: Wed, 11 Dec 2024 09:57:11 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Ricardo Ribalda <ribalda@chromium.org>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown
- <lenb@kernel.org>, Robert Moore <robert.moore@intel.com>, "Rafael J.
- Wysocki" <rafael.j.wysocki@intel.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- acpica-devel@lists.linux.dev
-Subject: Re: [PATCH v3 6/7] ACPI: bus: implement acpi_device_hid when !ACPI
-Message-ID: <20241211095711.19909f0b@foz.lan>
-In-Reply-To: <Z1lR869cuIw_p2-l@kekkonen.localdomain>
-References: <20241210-fix-ipu-v3-0-00e409c84a6c@chromium.org>
-	<20241210-fix-ipu-v3-6-00e409c84a6c@chromium.org>
-	<Z1isHpuHqHSX-jHd@kekkonen.localdomain>
-	<CANiDSCt64N5iheWgE0UhmTriLC8duraAaTaiX5fb7+NpXBRiUw@mail.gmail.com>
-	<Z1lF0ij99KpbVKQs@kekkonen.localdomain>
-	<20241211094037.26aa369a@foz.lan>
-	<Z1lR869cuIw_p2-l@kekkonen.localdomain>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1733907917; c=relaxed/simple;
+	bh=S3ynFn5IQhrduAB8uFXzMnIMijqyL8bdZHhsSiOAqM0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=W+MuVxQ50BTsqNvSFsNOsJKuaA6Mf8Nj2o4PFl/NlYjlElKkGbY3TMh/KMXZLpEdnEHXFvoqCYzINv89vkO57pUUcRBs1pw/fFx+3+s53hUr++1ozJaNlU8wpo+6g8nhS+Z5b+0hMfKnewrK78tkYdiNp6syMzzknLAEDiabtPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BB5e2Pp018795;
+	Wed, 11 Dec 2024 09:05:00 GMT
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 43cx4xby43-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 11 Dec 2024 09:05:00 +0000 (GMT)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Wed, 11 Dec 2024 01:04:59 -0800
+Received: from pek-lpg-core1.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Wed, 11 Dec 2024 01:04:55 -0800
+From: <jianqi.ren.cn@windriver.com>
+To: <fullwaywang@outlook.com>, <gregkh@linuxfoundation.org>
+CC: <patches@lists.linux.dev>, <mchehab@kernel.org>, <stable@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tiffany.lin@mediatek.com>,
+        <andrew-ct.chen@mediatek.com>, <yunfei.dong@mediatek.com>,
+        <matthias.bgg@gmail.com>, <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 6.1.y] media: mtk-vcodec: potential null pointer deference in SCP
+Date: Wed, 11 Dec 2024 18:02:49 +0800
+Message-ID: <20241211100249.2069678-1-jianqi.ren.cn@windriver.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: t5larzgu96DdKIKCqkQ-HSRK5T69ExlY
+X-Proofpoint-ORIG-GUID: t5larzgu96DdKIKCqkQ-HSRK5T69ExlY
+X-Authority-Analysis: v=2.4 cv=Y/UCsgeN c=1 sm=1 tr=0 ts=675955bc cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=RZcAm9yDv7YA:10 a=VwQbUJbxAAAA:8 a=UqCG9HQmAAAA:8 a=t7CeM3EgAAAA:8 a=7f2alXSBUxmpNkzq_swA:9 a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-11_08,2024-12-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 clxscore=1011 malwarescore=0 priorityscore=1501
+ phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 classifier=spam authscore=0 adjust=0 reason=mlx
+ scancount=1 engine=8.21.0-2411120000 definitions=main-2412110068
 
-Em Wed, 11 Dec 2024 08:48:51 +0000
-Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
+From: Fullway Wang <fullwaywang@outlook.com>
 
-> Hi Mauro,
-> 
-> On Wed, Dec 11, 2024 at 09:40:37AM +0100, Mauro Carvalho Chehab wrote:
-> > Em Wed, 11 Dec 2024 07:57:06 +0000
-> > Sakari Ailus <sakari.ailus@linux.intel.com> escreveu:
-> >   
-> > > Hi Ricardo,
-> > > 
-> > > On Tue, Dec 10, 2024 at 11:35:35PM +0100, Ricardo Ribalda wrote:  
-> > > > On Tue, 10 Dec 2024 at 22:01, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:    
-> > > > >
-> > > > > Hi Ricardo,
-> > > > >
-> > > > > On Tue, Dec 10, 2024 at 07:56:03PM +0000, Ricardo Ribalda wrote:    
-> > > > > > Provide an implementation of acpi_device_hid that can be used when
-> > > > > > CONFIG_ACPI is not set.
-> > > > > >
-> > > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > > ---
-> > > > > >  include/acpi/acpi_bus.h | 5 +++++
-> > > > > >  1 file changed, 5 insertions(+)
-> > > > > >
-> > > > > > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > > > > > index 4f1b3a6f107b..c25914a152ee 100644
-> > > > > > --- a/include/acpi/acpi_bus.h
-> > > > > > +++ b/include/acpi/acpi_bus.h
-> > > > > > @@ -1003,6 +1003,11 @@ static inline int unregister_acpi_bus_type(void *bus) { return 0; }
-> > > > > >
-> > > > > >  static inline int acpi_wait_for_acpi_ipmi(void) { return 0; }
-> > > > > >
-> > > > > > +static inline const char *acpi_device_hid(struct acpi_device *device)
-> > > > > > +{
-> > > > > > +     return "";
-> > > > > > +}    
-> > > > >
-> > > > > I wonder if any caller might expect something of a string if provided?
-> > > > > Valid _HIDs are either 7 or 8 characters whereas the proper version of the
-> > > > > function returns "device" when one cannot be found (dummy_hid in
-> > > > > drivers/acpi/scan.c). Unlikely to be a problem perhaps.    
-> > > > 
-> > > > Good point. I changed it to return "device"    
-> > > 
-> > > When ACPI is disabled, it's unlikely that string would be used anyway, vs.
-> > > the case when ACPI is enabled but there's no _HID. So I think an empty
-> > > string should be fine. I wonder what others think.
-> > >   
-> > Returning "" also caused me some attention at the original patch. IMO,
-> > placing a pseudo-valid HID would be better, but I guess "device" is also
-> > invalid, as, at least I always saw HIDs in uppercase. Also, I guess it
-> > is always a vendor ID + a 4 digit number.
-> > 
-> > so, IMHO, something like "DEVC9999" would be a better name if we fill it.  
-> 
-> How about post a patch changing "device" in drivers/acpi/scan.c? :-)
+[ Upstream commit 53dbe08504442dc7ba4865c09b3bbf5fe849681b ]
 
-Yeah, keeping it coherent makes sense, but see:
+The return value of devm_kzalloc() needs to be checked to avoid
+NULL pointer deference. This is similar to CVE-2022-3113.
 
-	static const char *dummy_hid = "device";
+Link: https://lore.kernel.org/linux-media/PH7PR20MB5925094DAE3FD750C7E39E01BF712@PH7PR20MB5925.namprd20.prod.outlook.com
+Signed-off-by: Fullway Wang <fullwaywang@outlook.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Jianqi Ren <jianqi.ren.cn@windriver.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This is compiled for production kernels, and not just for COMPILE_TEST,
-while:
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
+index d8e66b645bd8..27f08b1d34d1 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
+@@ -65,6 +65,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev)
+ 	}
+ 
+ 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	if (!fw)
++		return ERR_PTR(-ENOMEM);
+ 	fw->type = SCP;
+ 	fw->ops = &mtk_vcodec_rproc_msg;
+ 	fw->scp = scp;
+-- 
+2.25.1
 
-	static inline const char *acpi_device_hid(struct acpi_device *device)
-	{
-		return "foo";
-	}
-
-is only COMPILE_TEST. They don't need to be aligned.
-
-> But I
-> think the string also needs to be an invalid as a _HID object so it's not
-> masking an actual hardware ID used by a real device.
-
-It doesn't matter if if ever conflicts to a real device, as this is
-for COMPILE_TEST only.
-
-Anyway, from my side, I'm just giving my 2 cents. I'm ok either way: 
-"", "device", "DEVC999", ...
-
-Thanks,
-Mauro
