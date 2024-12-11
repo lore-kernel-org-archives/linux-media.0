@@ -1,126 +1,158 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657F2AD5E;
-	Wed, 11 Dec 2024 00:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6ED920C027;
+	Wed, 11 Dec 2024 03:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733877049; cv=none; b=H+oSi6c3+Tro7m5lu08nfP47sqzK90ScY9tuDemkTdVeAgPNEh2xqSv1vxvdEZhBMNhY0b6OeBgbnXHxA1I8lG4UL9+WcxPXXFcvoGjIOcwdlqscxPOYFoO1Q1RGvTJ54f9uBeRcwRksC24icws/lDAhQrlPylNUTt3FNqN3aGM=
+	t=1733887386; cv=none; b=tGBPOWMl1MXnyXqQ71gb1+fp76F7qd7ZhfuzUVvOfqkfPpJL+MH+zJfmXzLqtSFnI6Y8KYyGCM0HEwTcVGIeX32zDSBhWfEpgTx2N+o5XVldfGSYTdI7LMWqx4Tm9h3+mAlB0RDEoQJ6C4RHdBkHBeQTTvsxDqc372TgWD6qykA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733877049; c=relaxed/simple;
-	bh=zfnL3T4fjWRklKZ7QwDKYimyih0yvUm1HdG4fl8TH2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=maYFK7nmop1ZFk2lFnhDDr59qMZ2e+ikd16UYtee47cg3EtLi4+GDoS+N7MWVDntDioGmcabWeBDg7tN7Z20PCcrS8vYmVpIRH0bi+rLvtKZLMHouMoe7qO8Q25Wr7fEl+l7+K50Zpipyq5YsqCDBCO2dKA5zYO1chUJw3uG2co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfwugTo1; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733887386; c=relaxed/simple;
+	bh=xyrqhSTrfAChIcSZfpA10SYVxwtUoWrjj+NPUBw/pT4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cqpKlWGsta6emrfhjqdDkc+KECFQTGx+Yky2xkJNmmmccv9p47xtQtChF+2tTjokJKzAur4/F/AQl+cNIJal/vhGe2A3lBNuD8b8PW7Z0bR5dzwhZ/iYDLUOfiA7H5aH1KJEeZgwofk7CAEseC/h4DJiuDp+jpX/BiY0x8871E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=uIQ3GXjz; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfwugTo1"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b6ed0de64aso2162485a.0;
-        Tue, 10 Dec 2024 16:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733877047; x=1734481847; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8G/UOeJH2Z5HF5N1QDZ/736SvvRIiY1q2rQowPJk9I4=;
-        b=jfwugTo1R6G6d6K7WjiRT2Os8C2J0et0NAQxzt5lb+U6CwzNnT8Zmv8y0ikavZqhUI
-         GWEFpxomxr5Y7b1VSpzDg9+3valw51QqQAVnhAua/wUNITh5XDfxv9ApNqokRvgIxMgK
-         k42svmKd8tLXXgGkwaFH+n6v7hy+LXZgK1SRGbhcfTk/1uamn8ioJgLow2t/OjN6IbVo
-         6nsbgXnHve3Spm7fI39oi4QEQ4+DFGhyr41EZom1RYhjrwVwMTVfU2Nid2Wv1fFiZKHg
-         4MG8BhS6TpnXXAXAEEgtLnE8jU36EXZsNlnCnDaJF9//RpWRKj8UACOfirDKobJ7gzt+
-         ztVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733877047; x=1734481847;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8G/UOeJH2Z5HF5N1QDZ/736SvvRIiY1q2rQowPJk9I4=;
-        b=fy/+ljSJTLVV4ss/ordS7pJCXryEqhmHypz3LUBulGk8cNisceWzm2Nj5xmQnfZWE1
-         b2ZK05HNVEVfBRGLbPRtTELoWJFdgbNnEJ929zu0e4in3UXx+gZZv5UydfJEjdSMLmTN
-         PhMC1pMXFb3x9hyk+0R6H60X/9ZLUzT2ps079BBPi+Zx2id0ZuTWFrz9S4MS4NbuBJCG
-         B01pPfAgKcBMJH2cBTcz/aUsSQ1raITrEZjDQd4T8U527OUj8GqQqpjPPRkBh+JJXyh6
-         zDY9iO7nsdmXb3NXedd3bx9UfpGpHWMACQpx0uHNzWTRInUod6JfYu+ElS7zS/2xOGUf
-         17/w==
-X-Forwarded-Encrypted: i=1; AJvYcCViUapANMFhvdBupmr+f1bbu23TwPKJfeXa5Ri7TYjtcoqpxqgTpO5GgmEi1b38dn2prGqiKwGmCoEXv1pOQQ==@vger.kernel.org, AJvYcCW/0DLWOxZUv5JhObPIk/aCeixouaN9mBobKMv/Qt81iIhLHzkRAGSe0ErOEIUAELeizuCoji1gYlmT@vger.kernel.org, AJvYcCXCKtP/eorJixunlg2AsMeDzIiHW231m2MkAgwGoyZc4ptNfN0Z8/o2mv4rtdNCkSMpOpmsVurJSUNHT4w=@vger.kernel.org, AJvYcCXqVNJ07HBeWJEdLfK7L/ROimH73Ke+iw63vVbnIO6VqTgRCSEBwouNFNwQWin8oGLzeCQycr95Yuu0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKeZd+mZmQZrfHvCySRW9VVlqTFvHSxgQglWAr+IgPBsn/EKSw
-	nLsLgpDiNkOazUlZwGM9OHBh02LVNQZt/CF1CWKGxQCuIp6VKi24
-X-Gm-Gg: ASbGncv5lH6cKKhxKCtIzXjDbDtGRbpURjuFyV+qUqpSLxHKcywwXMDhHBsf4JewNF4
-	yKNxtfcqBq7jfofkF3tEgz50BRnhc0wPCdfn5yxi/BAvOvXXlMBh65eQOd/6TExs7uCOaekqgkP
-	T4TTs/2kS8pV96FzcZ6U2QjgOt86xblasYhJGGeUtJ8+tb+h//gjzJimu52Dlx4F2qWFi0mQKej
-	EpO8xxrab3E6bivmPuVde8VPdFjewByD7ALajV8Yg==
-X-Google-Smtp-Source: AGHT+IGJjTwiDSy9y0Z/4YUAm05vyvap6CL7ctnNDpSLs0/ro7VuqA8lXU6SvI3JB8AkwPkgMsbX7g==
-X-Received: by 2002:a05:620a:4594:b0:7b6:cb3c:cb81 with SMTP id af79cd13be357-7b6ebc6e5a3mr131819485a.18.1733877047280;
-        Tue, 10 Dec 2024 16:30:47 -0800 (PST)
-Received: from localhost ([2607:fea8:52a3:d200::6d3f])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b6dcd91ce6sm154812985a.127.2024.12.10.16.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 16:30:46 -0800 (PST)
-Date: Tue, 10 Dec 2024 19:30:45 -0500
-From: Richard Acayan <mailingradian@gmail.com>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
-	Todor Tomov <todor.too@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: [PATCH v7 5/5] arm64: dts: qcom: sdm670: add camss and cci
-Message-ID: <Z1jdNaeoictuCK7N@radian>
-References: <20241210233534.614520-7-mailingradian@gmail.com>
- <20241210233534.614520-12-mailingradian@gmail.com>
- <fe8dbb4e-9d0e-4ecf-874b-be9225ae1487@linaro.org>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="uIQ3GXjz"
+X-UUID: 39626ddeb76f11efbd192953cf12861f-20241211
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=WWVBpx6kIE9j12QdCFxTHZgkyE+RzxbJALQBeccRuJ8=;
+	b=uIQ3GXjzgJBULQjEXFJn7M3UkOrezAXri4MJyZ8cP98bPK0d3NSBrK7HgOX3PI+o1O6lHHHq1Os1EF6LXnqMI56tpPu6azzx6RcH8Q1451jb+sWzu2C+MJt8WkdkZzxn7doWjhkn/M41fgDzrQ8vhCCgMCkifgmv8XWyeRSYda4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.45,REQID:082da553-0c26-4554-baf5-4d1cd7db7a53,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6493067,CLOUDID:28532dc1-1c82-4420-82d9-d6eb228f5c4a,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0,EDM:-3,IP
+	:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
+	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 39626ddeb76f11efbd192953cf12861f-20241211
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 748043963; Wed, 11 Dec 2024 11:23:00 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 11 Dec 2024 11:22:59 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 11 Dec 2024 11:22:59 +0800
+From: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+To: Jassi Brar <jassisinghbrar@gmail.com>, Chun-Kuang Hu
+	<chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>,
+	"Jason-JH . Lin" <jason-jh.lin@mediatek.com>, Singo Chang
+	<singo.chang@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>, Moudy Ho
+	<moudy.ho@mediatek.com>, Xavier Chang <xavier.chang@mediatek.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2 6/8] soc: mediatek: Add programming flow for unsupported subsys ID hardware
+Date: Wed, 11 Dec 2024 11:22:54 +0800
+Message-ID: <20241211032256.28494-7-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20241211032256.28494-1-jason-jh.lin@mediatek.com>
+References: <20241211032256.28494-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe8dbb4e-9d0e-4ecf-874b-be9225ae1487@linaro.org>
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--6.341800-8.000000
+X-TMASE-MatchedRID: wDTc/wNgEcNYXTxImR5ZvBes/RxhysDbu56wFPSkMVEs/uUAk6xP7PlY
+	oV6p/cSxrKWVhE5vxYb5CFR3bPuHIixDojmF3AkddAg4yd14qAThKQh1LCmGBjb9TB28Ubkiz1r
+	LcNpRkyiTFmqgSxbocJ9vpuXVh9T3HxPMjOKY7A8LbigRnpKlKSPzRlrdFGDw70DvyaD6XnZqRZ
+	ljJQ6IE4pKEUj+UU0L4qutW8oZlIcWM7ewxYxMMg==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--6.341800-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: 5D7B39F7E5620480764DF7006E5915F7D7D095FAA3FB6039B2710A021656D7A22000:8
+X-MTK: N
 
-On Tue, Dec 10, 2024 at 11:49:20PM +0000, Bryan O'Donoghue wrote:
-> On 10/12/2024 23:35, Richard Acayan wrote:
-> > +			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-> > +				 <&gcc GCC_CAMERA_AXI_CLK>,
-> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
-> > +				 <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY0_CLK>,
-> > +				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY1_CLK>,
-> > +				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY2_CLK>,
-> > +				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_AXI_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CPHY_RX_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_AXI_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CPHY_RX_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>;
-> > +			clock-names = "gcc_camera_ahb",
-> > +				      "gcc_camera_axi",
-> > +				      "soc_ahb",
-> > +				      "camnoc_axi",
-> > +				      "cpas_ahb",
-> 
-> I think you sorted the regs, interrupts but forgot the clocks ?
+To support hardware without subsys IDs on new SoCs, add a programming
+flow that checks whether the subsys ID is valid. If the subsys ID is
+invalid, the flow will call 2 alternative CMDQ APIs:
+cmdq_pkt_assign() and cmdq_pkt_write_s_value() to achieve the same
+functionality.
 
-Do you mean the first three clocks placed first? The order was suggested
-by Vladimir in [1], but I can undo it.
+Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-mmsys.c | 16 +++++++++++++---
+ drivers/soc/mediatek/mtk-mutex.c | 12 ++++++++++--
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
-[1] https://lore.kernel.org/r/40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index bb4639ca0b8c..fbf97ae9dc28 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -167,9 +167,19 @@ static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask,
+ 	u32 tmp;
+ 
+ 	if (mmsys->cmdq_base.size && cmdq_pkt) {
+-		ret = cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
+-					  mmsys->cmdq_base.offset + offset, val,
+-					  mask);
++		struct cmdq_client *cl = (struct cmdq_client *)cmdq_pkt->cl;
++
++		offset += mmsys->cmdq_base.offset;
++		if (cmdq_subsys_is_valid(cl->chan, mmsys->cmdq_base.subsys)) {
++			ret = cmdq_pkt_write_mask(cmdq_pkt, mmsys->cmdq_base.subsys,
++						  offset, val, mask);
++		} else {
++			/* only MMIO access, no need to check mminfro_offset */
++			ret = cmdq_pkt_assign(cmdq_pkt, 0,
++					      CMDQ_ADDR_HIGH(mmsys->cmdq_base.pa_base));
++			ret |= cmdq_pkt_write_s_mask_value(cmdq_pkt, 0,
++							   CMDQ_ADDR_LOW(offset), val, mask);
++		}
+ 		if (ret)
+ 			pr_debug("CMDQ unavailable: using CPU write\n");
+ 		else
+diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+index 5250c1d702eb..e94df5b783ce 100644
+--- a/drivers/soc/mediatek/mtk-mutex.c
++++ b/drivers/soc/mediatek/mtk-mutex.c
+@@ -963,6 +963,8 @@ int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
+ 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
+ 						 mutex[mutex->id]);
+ 	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
++	struct cmdq_client *cl = (struct cmdq_client *)cmdq_pkt->cl;
++	dma_addr_t en_addr = mtx->addr + DISP_REG_MUTEX_EN(mutex->id);
+ 
+ 	WARN_ON(&mtx->mutex[mutex->id] != mutex);
+ 
+@@ -971,8 +973,14 @@ int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
+ 		return -ENODEV;
+ 	}
+ 
+-	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
+-		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
++	if (cmdq_subsys_is_valid(cl->chan, mtx->cmdq_reg.subsys)) {
++		cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys, en_addr, 1);
++	} else {
++		/* only MMIO access, no need to check mminfro_offset */
++		cmdq_pkt_assign(cmdq_pkt, 0, CMDQ_ADDR_HIGH(en_addr));
++		cmdq_pkt_write_s_value(cmdq_pkt, 0, CMDQ_ADDR_LOW(en_addr), 1);
++	}
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
+-- 
+2.43.0
 
-> 
-> ---
-> bod
