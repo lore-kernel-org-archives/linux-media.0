@@ -1,114 +1,109 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B688A2153EC;
-	Thu, 12 Dec 2024 13:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9C6215783
+	for <linux-media@vger.kernel.org>; Thu, 12 Dec 2024 13:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734010817; cv=none; b=EPKUgBItwXmjsr9DdfgbOBRs56c5qHz1ZcdthtWsrpknBxZHMQ69lsG6Vbkwn6aPNCbnd/vTD8Pvvydy/ljBFTHmCWW5TwKnUoAuOAigGl6BWCocPP8umSDwYfboj7HbpumCvv+YKY1ep7K8d2wk3U6OgE3mKSyIflMLOKCCTYM=
+	t=1734010819; cv=none; b=GZaQ6zkN7jBuUPhrT7oloIL3QFUxoRN7b4AaDZYCCq7ltAhbtDM3bgZ8cn5By0/hDyxr7sW9BegvyORqvSR2bnMuL9c3LK9iI5jfYjz2xIQUeUtR82xl0rU/tc0bgj4avJ6CVkj4gEta0Tg+cod+2b2+JhCSvyrLa02JSegiCCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734010817; c=relaxed/simple;
-	bh=jVvhvxo08oMfxjmztohSudN71ehY7yU6sVeC/s1ugTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YFsjwDSLG3ipuW8gsQ6KlHWvUGnXT/p0Crab7q2Qa60dBRb6t+mC4GFUNLvAnMGWhM9KYHBl1i0DYdYuOJWEqH1LAXwZ26Bmw3pAfoVMa/JyRgGRppID/VgH6PAu0ngGLYGAvkpJZV/4xmpwMpfiU7LLKeNeKMbgbKUfSt0SFn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NtFPOP6i; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1734010819; c=relaxed/simple;
+	bh=sSxAAUBdMDTPYDbxrQbFDlNR6FhW8ed0WM9guv9gkbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jcPm1z5GrhnC36G5iRMw4VhrGHtCDCdlmuIafX3ZO8hkGGxNCwnwclHwXmseuGPHV3u1AiVrwUt65R1NmpKJHIhLVG4aoP3AyXORYxFS4C6T+XtN03aZwDAQxc6Wsfyw5MDt52qHmj2BXzS8b/vBEYBcKCLZPJR2L29sBgDUXKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BkA8s3NT; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NtFPOP6i"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC8K3CT028100;
-	Thu, 12 Dec 2024 13:40:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	no2kTIvkCui7mJdpXu4zGYtIWboKW1PAu+eHBL3uA5g=; b=NtFPOP6ivp7Eg4Dh
-	YfxESKt8qfcH87xk8CS1bNbAVD7TcfLWWri2zttIw2S29DQuaC9n3woZYQXnoJXR
-	2W3hXqM9CH+SKR91PZC4hR4bfCsNruSzsbJHtLpMFAl/agwLmbn3xPfvoxbYeLjL
-	RZJwjACx65YBCHL8UV52IlYg7WMFXmjB2zVREJ1600s6kEOyKbXbijFru9O9R3JE
-	d/VAwna9JnG2SrjVWzEr1i40/9iTKzGaQjTccW+EvovnE0K5qOCeNg+czKGOXOVD
-	yR2QoHp84vMDAuCCnY4t3gaP850riStRK9aCbQSy9LtoLxkpiSprS9OjwpG/Qvbh
-	TLzfPw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43fd4xu3rx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 13:40:10 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BCDe9sK023928
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 13:40:09 GMT
-Received: from [10.239.97.152] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 12 Dec
- 2024 05:40:02 -0800
-Message-ID: <82f61951-89c3-4793-82c9-581f737b5303@quicinc.com>
-Date: Thu, 12 Dec 2024 21:39:59 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BkA8s3NT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734010818; x=1765546818;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sSxAAUBdMDTPYDbxrQbFDlNR6FhW8ed0WM9guv9gkbE=;
+  b=BkA8s3NTHXMB/JejTdFnuRIrWDDl3paSF9pPPDQw38LCveiJdr70z3N4
+   6Q6C/Kwc78Tnm2lfIaqUOCjy3+5jfmjD0Sg6K1HYEJwiuDl8af7gmWCcW
+   avnseSEb1QSftX9P9IVxw/aUmzDIF8AqO/h5ltjzU4t5hQ7REr0nozCtR
+   XaG05qhqx6QNlvz3rzhTbKvVpDxE+jfnUEEmtmqrjLsSIpS35uQHkF2WP
+   F8QduKXFDXxlfAmJxFhsuMk+9hrtnw9sFhzKDUoLeYjj5dxu2M01gyDmi
+   UlZ5xlNpUe8boKbHk5n45CjD0VzsdAxXTzq0YbkLEEvIGbjcVt7kODW/l
+   A==;
+X-CSE-ConnectionGUID: YPKW9gWlQHiWOVqKgPSjiA==
+X-CSE-MsgGUID: PrczxbCoQWSbrV5vLjVeTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11284"; a="38210287"
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="38210287"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 05:40:18 -0800
+X-CSE-ConnectionGUID: ofOteAnSRfSU2DA6x3ozYw==
+X-CSE-MsgGUID: fs38XaZ5S9uRZgxzGMliQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="101250113"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO mdjait-mobl.intel.com) ([10.245.245.124])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 05:40:16 -0800
+From: Mehdi Djait <mehdi.djait@linux.intel.com>
+To: sakari.ailus@linux.intel.com
+Cc: linux-media@vger.kernel.org,
+	Mehdi Djait <mehdi.djait@linux.intel.com>
+Subject: [PATCH v2 2/2] media: ccs: Fail the probe on CCS static data parser failure
+Date: Thu, 12 Dec 2024 14:40:04 +0100
+Message-ID: <453d8e099752c5216c465dfd71429e9e0e53d1fd.1734010609.git.mehdi.djait@linux.intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <dbbf14a0003016c7fd4529918d0e9e8f0c828a7e.1734010609.git.mehdi.djait@linux.intel.com>
+References: <dbbf14a0003016c7fd4529918d0e9e8f0c828a7e.1734010609.git.mehdi.djait@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/16] dt-bindings: media: camss: Add qcom,sm8550-camss
- binding
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, <rfoss@kernel.org>,
-        <todor.too@gmail.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <vladimir.zapolskiy@linaro.org>
-CC: <quic_eberman@quicinc.com>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>,
-        Yongsheng Li
-	<quic_yon@quicinc.com>
-References: <20241211140738.3835588-1-quic_depengs@quicinc.com>
- <20241211140738.3835588-13-quic_depengs@quicinc.com>
- <d8b73275-a52a-4cfb-91d7-948686d3a5f1@linaro.org>
-Content-Language: en-US
-From: Depeng Shao <quic_depengs@quicinc.com>
-In-Reply-To: <d8b73275-a52a-4cfb-91d7-948686d3a5f1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jt-p3Edx7fpvv5crQjGHWS-CWpgPa3Pv
-X-Proofpoint-GUID: jt-p3Edx7fpvv5crQjGHWS-CWpgPa3Pv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=843 phishscore=0 adultscore=0
- suspectscore=0 spamscore=0 mlxscore=0 impostorscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412120098
 
-Hi Bryan,
+No need to continue probing when the CCS static data parser fails. Improve this
+by checking the return value and correctly exiting on failure.
 
-On 12/11/2024 11:17 PM, Bryan O'Donoghue wrote:
-> On 11/12/2024 14:07, Depeng Shao wrote:
->> +            interconnects = <&gem_noc MASTER_APPSS_PROC 0 &config_noc 
->> SLAVE_CAMERA_CFG 0>,
->> +                            <&mmss_noc MASTER_CAMNOC_HF 0 &mc_virt 
->> SLAVE_EBI1 0>,
->> +                            <&mmss_noc MASTER_CAMNOC_ICP 0 &mc_virt 
->> SLAVE_EBI1 0>,
->> +                            <&mmss_noc MASTER_CAMNOC_SF 0 &mc_virt 
->> SLAVE_EBI1 0>;
-> 
-> Have a look at 7280.
-> 
-> The parameters to the NOC should be named.
-> 
-> https://lore.kernel.org/all/20241206191900.2545069-2- 
-> quic_vikramsa@quicinc.com
-> 
+Signed-off-by: Mehdi Djait <mehdi.djait@linux.intel.com>
+---
+v1 -> v2:
+- no changes: this patch is introduced in the v2
 
-Do you mean use QCOM_ICC_TAG_ACTIVE_ONLY and QCOM_ICC_TAG_ALWAYS?
-And, I will also remove the ICP and SF interconnects which are used by 
-offline HW, rather than real time VFE.
+ drivers/media/i2c/ccs/ccs-core.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Thanks,
-Depeng
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index f3af8aed1485..b3fd7f75bf62 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -3756,9 +3756,11 @@ static int ccs_probe(struct i2c_client *client)
+ 
+ 	rval = request_firmware(&fw, filename, &client->dev);
+ 	if (!rval) {
+-		ccs_data_parse(&sensor->sdata, fw->data, fw->size, &client->dev,
+-			       true);
++		rval = ccs_data_parse(&sensor->sdata, fw->data, fw->size,
++				      &client->dev, true);
+ 		release_firmware(fw);
++		if (rval)
++			goto out_power_off;
+ 	}
+ 
+ 	if (!(ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA) ||
+@@ -3772,9 +3774,11 @@ static int ccs_probe(struct i2c_client *client)
+ 
+ 		rval = request_firmware(&fw, filename, &client->dev);
+ 		if (!rval) {
+-			ccs_data_parse(&sensor->mdata, fw->data, fw->size,
+-				       &client->dev, true);
++			rval = ccs_data_parse(&sensor->mdata, fw->data,
++					      fw->size, &client->dev, true);
+ 			release_firmware(fw);
++			if (rval)
++				goto out_release_sdata;
+ 		}
+ 	}
+ 
+-- 
+2.47.1
 
