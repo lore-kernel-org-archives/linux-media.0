@@ -1,52 +1,52 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0620D21129A;
-	Thu, 12 Dec 2024 09:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505352116EC;
+	Thu, 12 Dec 2024 09:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733995235; cv=none; b=KpLt431c2zxAY0dDBswmiycPyBw6wNV1FaTZSN/TpQfl+YrHp2optLqdzxrgiB7FPL2AxXDAqUSD5UqJADm3A1BSUZPTNkfkllbcniXrvvlRG+FAPgon8Mp1p9hGk157zdbjNjEBZR3DbYrEEFfdLsqFyKJKGPKHmQMXYvEMudE=
+	t=1733995237; cv=none; b=ffHNsTM+u8NbC2jEKVKS6M0HJgZP+h+o/Yk2XocY5EqLM2R62HTTRwkNvGUmYVuGN5jiIE6NB8j/9VFUuyIhaDsAM+jYI2CLhCa+AaJc0Ihl2/IfRHRqcDTSlIlu52hiinKWozuh22UNaA9zAkOl1U1fmckAnTLEJbppQ8Ogjp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733995235; c=relaxed/simple;
-	bh=yS0eaJ9QkepA4L2dczi4Ziux2EGlfGwnUtQfplSAYao=;
+	s=arc-20240116; t=1733995237; c=relaxed/simple;
+	bh=3sTRjpEDCvD1k4LIZneHYv+f0hpQymNnSbTL1tSSuTc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Q5+DCJN12iuWEvhYyS+Sy2QD8wir9+7tLhhgUBhWQv4YW8X51p2pUfeFD2f0IbENoDAconHhXIT/yA4HvgSRrpNozdOtg1UCyihxB7/A8JZYCb/MrByNh4gurGimXqzMvKFGjskS3YJcY8T1AuEbJhVN02qZIUWL2igtju/h214=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=aMHRP4UN; arc=none smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=P/cNN6X4Wiok4AXn04SIrevlihOKJepGc/1TwZJC856x3pwetBcKUunHrYKEsosy3ipHHfA59/U+6ojiZaCd88hFrQZ38BuLpIqlhj0uO60hEo8nFQsxB6MtW+1hm/tOd+OOU1v1prGzyhJHyAWLztEaHFLu1zWBjYOrUssgLKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=HhlDGIVO; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="aMHRP4UN"
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC1QTlL013783;
-	Thu, 12 Dec 2024 10:20:20 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="HhlDGIVO"
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC2BoVJ030060;
+	Thu, 12 Dec 2024 10:20:04 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	Vf2AtT7k0gjZJxs1Xixe+8MbDgbZWn0VAwNA6KSbb1A=; b=aMHRP4UNh6AWHj6b
-	Uoq1tPBDdEyQZNKdxqTL2eM7MVpvli+og6AWmBcdralkiwqiXZF/5gfFVCpNLU8x
-	t5MxpJhjhIpGEcIIcBd99DC1EomNz0Nf8nfGEWccgJ2RyeyBge+uFYpamcqhhbTY
-	qsCfSi1Rf6FmWN207hjKNkTufL1xTJ4y5+/DOMMRyTFgjbXoJhLe+GTRl7ZhSWta
-	Ior1vlDMUs82Tei3Hw7J0eQctQA7G8oDzuM5yRJ1ZkRf0dGbc2kfpoZO6zBoozNr
-	YBTcSS+TRsV9fxN3YeTJoHoeWnWW8pMBzOWflg7cFkr5RslgTffbUpPu7L+/lpiu
-	pTprXA==
+	A+I2sQNCOspKXW15qlRoZ8z7b8AANxdExIxiTD96CPE=; b=HhlDGIVOpvpP049R
+	G3mSJgUbhizfCV5fe0ZLjUvijyoJkZd+2OmEMaqhqSgHgyHswk+EUMBZYthuWC0P
+	WayJSUgEb/k0SQ2CbqUXPBv7PJKN5+HV3ZdvZ4FRPUGaNEMabL91FcoN5I8ysvvu
+	vDrmvZu9Ksdgwv8R07fJG+w8Zqir+EFef9aGew3FYZrEXXKIln8pgzXs5WpMQTKp
+	QFLaD3HJ+7P1venlBez7Y2sjdTzyD4WR2ARchT1GpI/G9EjWsWZLJ6yMlHvlc0DI
+	26j7qjozrhv+9+UCxQCO1++6fuNmGQUFfdsnfD37gcGcJuCsqWiS0pFal64i/UKn
+	7JtSFA==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 43ccnmf78p-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 43d26nm8mx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 10:20:20 +0100 (CET)
+	Thu, 12 Dec 2024 10:20:04 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1325840048;
-	Thu, 12 Dec 2024 10:18:58 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 6A56F40055;
+	Thu, 12 Dec 2024 10:19:05 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 62313254292;
-	Thu, 12 Dec 2024 10:18:05 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B7EB7250107;
+	Thu, 12 Dec 2024 10:18:11 +0100 (CET)
 Received: from localhost (10.129.178.65) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 12 Dec
- 2024 10:18:05 +0100
+ 2024 10:18:11 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Thu, 12 Dec 2024 10:17:28 +0100
-Subject: [PATCH v4 04/15] media: stm32: dcmipp: use
- v4l2_subdev_is_streaming
+Date: Thu, 12 Dec 2024 10:17:38 +0100
+Subject: [PATCH v4 14/15] arm64: dts: st: add csi & dcmipp node in
+ stm32mp25
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20241212-csi_dcmipp_mp25-v4-4-fbeb55a05ed7@foss.st.com>
+Message-ID: <20241212-csi_dcmipp_mp25-v4-14-fbeb55a05ed7@foss.st.com>
 References: <20241212-csi_dcmipp_mp25-v4-0-fbeb55a05ed7@foss.st.com>
 In-Reply-To: <20241212-csi_dcmipp_mp25-v4-0-fbeb55a05ed7@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -84,79 +84,48 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Rely on v4l2_subdev_is_streaming in order to know if the subdev
-is streaming or not instead of relying on a local variable.
+Add nodes describing the csi and dcmipp controllers handling the
+camera pipeline on the stm32mp25x.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c | 6 +-----
- drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c | 5 +----
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ arch/arm64/boot/dts/st/stm32mp251.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-index 5a361ad6b023..50500112eab9 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-byteproc.c
-@@ -78,7 +78,6 @@ struct dcmipp_byteproc_device {
- 	struct v4l2_subdev sd;
- 	struct device *dev;
- 	void __iomem *regs;
--	bool streaming;
- };
+diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+index 6fe12e3bd7dd..0176ccafa03f 100644
+--- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
++++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+@@ -603,6 +603,29 @@ i2c8: i2c@46040000 {
+ 				status = "disabled";
+ 			};
  
- static const struct v4l2_mbus_framefmt fmt_default = {
-@@ -239,11 +238,10 @@ static int dcmipp_byteproc_set_fmt(struct v4l2_subdev *sd,
- 				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_format *fmt)
- {
--	struct dcmipp_byteproc_device *byteproc = v4l2_get_subdevdata(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 	struct v4l2_rect *crop, *compose;
- 
--	if (byteproc->streaming)
-+	if (v4l2_subdev_is_streaming(sd))
- 		return -EBUSY;
- 
- 	mf = v4l2_subdev_state_get_format(sd_state, fmt->pad);
-@@ -495,8 +493,6 @@ static int dcmipp_byteproc_s_stream(struct v4l2_subdev *sd, int enable)
- 		}
- 	}
- 
--	byteproc->streaming = enable;
--
- 	return 0;
- }
- 
-diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
-index 62c5c3331cfe..05e8897ae37a 100644
---- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
-+++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-parallel.c
-@@ -129,7 +129,6 @@ struct dcmipp_par_device {
- 	struct v4l2_subdev sd;
- 	struct device *dev;
- 	void __iomem *regs;
--	bool streaming;
- };
- 
- static const struct v4l2_mbus_framefmt fmt_default = {
-@@ -230,7 +229,7 @@ static int dcmipp_par_set_fmt(struct v4l2_subdev *sd,
- 	struct dcmipp_par_device *par = v4l2_get_subdevdata(sd);
- 	struct v4l2_mbus_framefmt *mf;
- 
--	if (par->streaming)
-+	if (v4l2_subdev_is_streaming(sd))
- 		return -EBUSY;
- 
- 	mf = v4l2_subdev_state_get_format(sd_state, fmt->pad);
-@@ -370,8 +369,6 @@ static int dcmipp_par_s_stream(struct v4l2_subdev *sd, int enable)
- 		reg_clear(par, DCMIPP_PRCR, DCMIPP_PRCR_ENABLE);
- 	}
- 
--	par->streaming = enable;
--
- 	return ret;
- }
- 
++			csi: csi@48020000 {
++				compatible = "st,stm32mp25-csi";
++				reg = <0x48020000 0x2000>;
++				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
++				resets = <&rcc CSI_R>;
++				clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>,
++					 <&rcc CK_KER_CSIPHY>;
++				clock-names = "pclk", "txesc", "csi2phy";
++				access-controllers = <&rifsc 86>;
++				status = "disabled";
++			};
++
++			dcmipp: dcmipp@48030000 {
++				compatible = "st,stm32mp25-dcmipp";
++				reg = <0x48030000 0x1000>;
++				interrupts = <GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>;
++				resets = <&rcc DCMIPP_R>;
++				clocks = <&rcc CK_BUS_DCMIPP>, <&rcc CK_KER_CSI>;
++				clock-names = "kclk", "mclk";
++				access-controllers = <&rifsc 87>;
++				status = "disabled";
++			};
++
+ 			sdmmc1: mmc@48220000 {
+ 				compatible = "st,stm32mp25-sdmmc2", "arm,pl18x", "arm,primecell";
+ 				arm,primecell-periphid = <0x00353180>;
 
 -- 
 2.34.1
