@@ -1,325 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a7-47.smtp-out.eu-west-1.amazonses.com (a7-47.smtp-out.eu-west-1.amazonses.com [54.240.7.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719FB2185A0;
-	Thu, 12 Dec 2024 15:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F703217F46;
+	Thu, 12 Dec 2024 15:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734018019; cv=none; b=pNcZVJ+l7kmPFDhzF489YiqXwxyFJR5Sai06qamdHE0/1s9XpADvgNXwtoHti4v4e1CMrxzOslsQeqnNibjaMm9T0LPQve76Aj51niyLS+MUwIkn5RFqb2sIjUGAj+F8OMDAIwH3PiLs87islYdpanvMrGMp5gfyg0X7UNRe3aw=
+	t=1734018217; cv=none; b=aUVruf4JKEoXe95GS8UCLdMcSlDmYhmVjikeYKY1TnZrfmscJ+pVFLUeGbPZaI5TWiG0SoMjzfN3c5ocpj3ZmE5kVht1gKt7eT9dSzoZ9m6r/Y/rbrwMz447dAHLG/eUCaGvKZQA1RuxK73Zed1yH94c0w2/OrJHe2Q49C4ikBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734018019; c=relaxed/simple;
-	bh=0Q5tPvk0OGeW8zJNpUJUo6YFoo+m7zuOpluXSgK4BkM=;
+	s=arc-20240116; t=1734018217; c=relaxed/simple;
+	bh=BaXocg+MHIdJ5iEhJoO7IWpl2ct1VQ9kpsjJPFAitGM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XODHZpePxG6dw7OTbhFM4Lme4EPJ0Yeg2+QJ1PjWcV2dbpiyiDezrJgvt7jwjnvFzxJojafgkblC9fhxdItxdVOk/tq0K/DHWEunJ0NhX5eoVuTV5U4sJ9lWXLDezOigl4zR14XpN/i2NVRCi0x+DSqCGAgSA4IwIhpapSmAH8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CrO/ZNU2; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=imztafkx5XvwvBASVQ+b1zZdaTmmsCwzWT6ukioNu0tj2JF7DvmABMJ1wBXgABjoXWVIlMYcUwOejIopHaBWrpxEAhWpy8tS9Z8Jax5SCXgHb1fU1W44sITJMjNm2O5P23Yv7Jir/VLtlQDR0Mdmboi0CqzkodaSZviM3MVBQs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=GpY0p13a; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=EWJGSOPg; arc=none smtp.client-ip=54.240.7.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CrO/ZNU2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B96C4CED0;
-	Thu, 12 Dec 2024 15:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734018019;
-	bh=0Q5tPvk0OGeW8zJNpUJUo6YFoo+m7zuOpluXSgK4BkM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CrO/ZNU2WhTixzDVVCjMOVnv7D0sYrgBjnLi44MHSCi6WXdkh4jQnBTfT20wLNk0Z
-	 vv6uJKVhjQgLsV6/uc2S7TaFC92f7Of2rOKo+9uNoCZ8gLZkGIrmyy9/ydu9ZjAr8V
-	 7X33czRl+NM/dlsF15lihn0NDBrF9nGyJ7pWjny0=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Gustavo Padovan <gustavo@padovan.org>,
-	Friedrich Vock <friedrich.vock@gmx.de>,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 6.6 175/356] dma-fence: Use kernels sort for merging fences
-Date: Thu, 12 Dec 2024 15:58:14 +0100
-Message-ID: <20241212144251.549710679@linuxfoundation.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241212144244.601729511@linuxfoundation.org>
-References: <20241212144244.601729511@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GpY0p13a";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="EWJGSOPg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=bc7lryepznv65m6r2ewkpoafjt4fiq42; d=collabora.com; t=1734018213;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=BaXocg+MHIdJ5iEhJoO7IWpl2ct1VQ9kpsjJPFAitGM=;
+	b=GpY0p13aRAC2pqzDPl8thWNyJ73XW4f1/2KRl/Fa2+CiXNcrtbz9+fR0nuxM5pKh
+	6sPgTRukzo7H4IB/gHHZPzTATQoRcFLd0jsTZZjCJukqBFhKhuc4CLClOyG2B9CoOdJ
+	/kqJ+l6eWE8AjkaZkPvIUjk81D8sXIJr8uV7EwHMzxucmHvbIGucDgCR+Oyq3G4qexB
+	QBfDHZ5x7RH/El+JVanBsUNKxBnnnJEuEW9L8L7+bo1aRVWRofo8jzo5eac4wqAL7aA
+	MCp3df5sKmpycfIWNfAO584n+4Ptd0QHST+ndloI+RNW5AGkLW829rmgZCnOjeBUU+1
+	WNHguWxCZQ==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1734018213;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=BaXocg+MHIdJ5iEhJoO7IWpl2ct1VQ9kpsjJPFAitGM=;
+	b=EWJGSOPgUvy2agff9iG4gq75WKwbAhclFM0nAcLgkrcgbfT0sV08xLqn6tBPgNcT
+	qULgrLKkLJVi3iTXOt73ToJHRvqQbk8Da1Kp74JgksLQIy23yTSdAGbkuoYRhu/dKM/
+	LJ8MdS2DFCgS+tpyN8NkAHbPNTYEJqzJAwlvMz4Q=
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: p.zabel@pengutronix.de, mchehab@kernel.org, shawnguo@kernel.org, 
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, kernel@collabora.com, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: [PATCH v2 1/2] media: verisilicon: Store reference frames pixels format
+Date: Thu, 12 Dec 2024 15:43:33 +0000
+Message-ID: <01020193bb8a2706-6355fcf8-dd11-4685-8d3f-512a19423599-000000@eu-west-1.amazonses.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241212154328.84904-1-benjamin.gaignard@collabora.com>
+References: <20241212154328.84904-1-benjamin.gaignard@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
+X-SES-Outgoing: 2024.12.12-54.240.7.47
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+Hantro decoder always produce tiled pixels formats but
+when the post-processor is used the destination pixels
+format is a non tiled pixels format. This led to compute
+wrong reference frame size and offsets.
+Getting and saving the correct tiled pixels format for 8
+and 10 bit stream solve the computation issues.
 
-------------------
+Fluster VP9 score increase to 166/305 (vs 145/305).
+HEVC score is still 141/147.
 
-From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-
-commit fe52c649438b8489c9456681d93a9b3de3d38263 upstream.
-
-One alternative to the fix Christian proposed in
-https://lore.kernel.org/dri-devel/20241024124159.4519-3-christian.koenig@amd.com/
-is to replace the rather complex open coded sorting loops with the kernel
-standard sort followed by a context squashing pass.
-
-Proposed advantage of this would be readability but one concern Christian
-raised was that there could be many fences, that they are typically mostly
-sorted, and so the kernel's heap sort would be much worse by the proposed
-algorithm.
-
-I had a look running some games and vkcube to see what are the typical
-number of input fences. Tested scenarios:
-
-1) Hogwarts Legacy under Gamescope
-
-450 calls per second to __dma_fence_unwrap_merge.
-
-Percentages per number of fences buckets, before and after checking for
-signalled status, sorting and flattening:
-
-   N       Before      After
-   0       0.91%
-   1      69.40%
-  2-3     28.72%       9.4%  (90.6% resolved to one fence)
-  4-5      0.93%
-  6-9      0.03%
-  10+
-
-2) Cyberpunk 2077 under Gamescope
-
-1050 calls per second, amounting to 0.01% CPU time according to perf top.
-
-   N       Before      After
-   0       1.13%
-   1      52.30%
-  2-3     40.34%       55.57%
-  4-5      1.46%        0.50%
-  6-9      2.44%
-  10+      2.34%
-
-3) vkcube under Plasma
-
-90 calls per second.
-
-   N       Before      After
-   0
-   1
-  2-3      100%         0%   (Ie. all resolved to a single fence)
-  4-5
-  6-9
-  10+
-
-In the case of vkcube all invocations in the 2-3 bucket were actually
-just two input fences.
-
->From these numbers it looks like the heap sort should not be a
-disadvantage, given how the dominant case is <= 2 input fences which heap
-sort solves with just one compare and swap. (And for the case of one input
-fence we have a fast path in the previous patch.)
-
-A complementary possibility is to implement a different sorting algorithm
-under the same API as the kernel's sort() and so keep the simplicity,
-potentially moving the new sort under lib/ if it would be found more
-widely useful.
-
-v2:
- * Hold on to fence references and reduce commentary. (Christian)
- * Record and use latest signaled timestamp in the 2nd loop too.
- * Consolidate zero or one fences fast paths.
-
-v3:
- * Reverse the seqno sort order for a simpler squashing pass. (Christian)
-
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-Fixes: 245a4a7b531c ("dma-buf: generalize dma_fence unwrap & merging v3")
-Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/3617
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Gustavo Padovan <gustavo@padovan.org>
-Cc: Friedrich Vock <friedrich.vock@gmx.de>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: <stable@vger.kernel.org> # v6.0+
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20241115102153.1980-3-tursulin@igalia.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/dma-buf/dma-fence-unwrap.c |  126 +++++++++++++++++--------------------
- 1 file changed, 60 insertions(+), 66 deletions(-)
+Version 2:
+- rebased on top of media-commiter/next
+- Add reviewed-by tags
 
---- a/drivers/dma-buf/dma-fence-unwrap.c
-+++ b/drivers/dma-buf/dma-fence-unwrap.c
-@@ -12,6 +12,7 @@
- #include <linux/dma-fence-chain.h>
- #include <linux/dma-fence-unwrap.h>
- #include <linux/slab.h>
-+#include <linux/sort.h>
+ drivers/media/platform/verisilicon/hantro.h   |  2 ++
+ .../media/platform/verisilicon/hantro_g2.c    |  2 +-
+ .../platform/verisilicon/hantro_postproc.c    | 32 +++++++------------
+ .../media/platform/verisilicon/hantro_v4l2.c  | 21 ++++++++++++
+ 4 files changed, 35 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+index 811260dc3c77..14fc6a3e2878 100644
+--- a/drivers/media/platform/verisilicon/hantro.h
++++ b/drivers/media/platform/verisilicon/hantro.h
+@@ -227,6 +227,7 @@ struct hantro_dev {
+  * @src_fmt:		V4L2 pixel format of active source format.
+  * @vpu_dst_fmt:	Descriptor of active destination format.
+  * @dst_fmt:		V4L2 pixel format of active destination format.
++ * @ref_fmt:		V4L2 pixel format of the reference frames format.
+  *
+  * @ctrl_handler:	Control handler used to register controls.
+  * @jpeg_quality:	User-specified JPEG compression quality.
+@@ -255,6 +256,7 @@ struct hantro_ctx {
+ 	struct v4l2_pix_format_mplane src_fmt;
+ 	const struct hantro_fmt *vpu_dst_fmt;
+ 	struct v4l2_pix_format_mplane dst_fmt;
++	struct v4l2_pix_format_mplane ref_fmt;
  
- /* Internal helper to start new array iteration, don't use directly */
- static struct dma_fence *
-@@ -59,6 +60,25 @@ struct dma_fence *dma_fence_unwrap_next(
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	int jpeg_quality;
+diff --git a/drivers/media/platform/verisilicon/hantro_g2.c b/drivers/media/platform/verisilicon/hantro_g2.c
+index 5c1d799d8618..aae0b562fabb 100644
+--- a/drivers/media/platform/verisilicon/hantro_g2.c
++++ b/drivers/media/platform/verisilicon/hantro_g2.c
+@@ -47,7 +47,7 @@ irqreturn_t hantro_g2_irq(int irq, void *dev_id)
+ 
+ size_t hantro_g2_chroma_offset(struct hantro_ctx *ctx)
+ {
+-	return ctx->dst_fmt.width * ctx->dst_fmt.height * ctx->bit_depth / 8;
++	return ctx->ref_fmt.plane_fmt[0].bytesperline *	ctx->ref_fmt.height;
  }
- EXPORT_SYMBOL_GPL(dma_fence_unwrap_next);
  
-+
-+static int fence_cmp(const void *_a, const void *_b)
+ size_t hantro_g2_motion_vectors_offset(struct hantro_ctx *ctx)
+diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+index 232c93eea7ee..c435a393e0cb 100644
+--- a/drivers/media/platform/verisilicon/hantro_postproc.c
++++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+@@ -194,35 +194,25 @@ void hantro_postproc_free(struct hantro_ctx *ctx)
+ 
+ static unsigned int hantro_postproc_buffer_size(struct hantro_ctx *ctx)
+ {
+-	struct v4l2_pix_format_mplane pix_mp;
+-	const struct hantro_fmt *fmt;
+ 	unsigned int buf_size;
+ 
+-	/* this should always pick native format */
+-	fmt = hantro_get_default_fmt(ctx, false, ctx->bit_depth, HANTRO_AUTO_POSTPROC);
+-	if (!fmt)
+-		return 0;
+-
+-	v4l2_fill_pixfmt_mp(&pix_mp, fmt->fourcc, ctx->src_fmt.width,
+-			    ctx->src_fmt.height);
+-
+-	buf_size = pix_mp.plane_fmt[0].sizeimage;
++	buf_size = ctx->ref_fmt.plane_fmt[0].sizeimage;
+ 	if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_H264_SLICE)
+-		buf_size += hantro_h264_mv_size(pix_mp.width,
+-						pix_mp.height);
++		buf_size += hantro_h264_mv_size(ctx->ref_fmt.width,
++						ctx->ref_fmt.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_VP9_FRAME)
+-		buf_size += hantro_vp9_mv_size(pix_mp.width,
+-					       pix_mp.height);
++		buf_size += hantro_vp9_mv_size(ctx->ref_fmt.width,
++					       ctx->ref_fmt.height);
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_HEVC_SLICE) {
+-		buf_size += hantro_hevc_mv_size(pix_mp.width,
+-						pix_mp.height);
++		buf_size += hantro_hevc_mv_size(ctx->ref_fmt.width,
++						ctx->ref_fmt.height);
+ 		if (ctx->hevc_dec.use_compression)
+-			buf_size += hantro_hevc_compressed_size(pix_mp.width,
+-								pix_mp.height);
++			buf_size += hantro_hevc_compressed_size(ctx->ref_fmt.width,
++								ctx->ref_fmt.height);
+ 	}
+ 	else if (ctx->vpu_src_fmt->fourcc == V4L2_PIX_FMT_AV1_FRAME)
+-		buf_size += hantro_av1_mv_size(pix_mp.width,
+-					       pix_mp.height);
++		buf_size += hantro_av1_mv_size(ctx->ref_fmt.width,
++					       ctx->ref_fmt.height);
+ 
+ 	return buf_size;
+ }
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index 2513adfbd825..2bce940a5822 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -126,6 +126,24 @@ hantro_find_format(const struct hantro_ctx *ctx, u32 fourcc)
+ 	return NULL;
+ }
+ 
++static int
++hantro_set_reference_frames_format(struct hantro_ctx *ctx)
 +{
-+	struct dma_fence *a = *(struct dma_fence **)_a;
-+	struct dma_fence *b = *(struct dma_fence **)_b;
++	const struct hantro_fmt *fmt;
++	int dst_bit_depth = hantro_get_format_depth(ctx->vpu_dst_fmt->fourcc);
 +
-+	if (a->context < b->context)
-+		return -1;
-+	else if (a->context > b->context)
-+		return 1;
++	fmt = hantro_get_default_fmt(ctx, false, dst_bit_depth, HANTRO_AUTO_POSTPROC);
++	if (!fmt)
++		return -EINVAL;
 +
-+	if (dma_fence_is_later(b, a))
-+		return 1;
-+	else if (dma_fence_is_later(a, b))
-+		return -1;
++	ctx->ref_fmt.width = ctx->src_fmt.width;
++	ctx->ref_fmt.height = ctx->src_fmt.height;
 +
-+	return 0;
++	v4l2_apply_frmsize_constraints(&ctx->ref_fmt.width, &ctx->ref_fmt.height, &fmt->frmsize);
++	return v4l2_fill_pixfmt_mp(&ctx->ref_fmt, fmt->fourcc,
++				   ctx->ref_fmt.width, ctx->ref_fmt.height);
 +}
 +
- /* Implementation for the dma_fence_merge() marco, don't use directly */
- struct dma_fence *__dma_fence_unwrap_merge(unsigned int num_fences,
- 					   struct dma_fence **fences,
-@@ -67,8 +87,7 @@ struct dma_fence *__dma_fence_unwrap_mer
- 	struct dma_fence_array *result;
- 	struct dma_fence *tmp, **array;
- 	ktime_t timestamp;
--	unsigned int i;
--	size_t count;
-+	int i, j, count;
+ const struct hantro_fmt *
+ hantro_get_default_fmt(const struct hantro_ctx *ctx, bool bitstream,
+ 		       int bit_depth, bool need_postproc)
+@@ -595,6 +613,9 @@ static int hantro_set_fmt_cap(struct hantro_ctx *ctx,
  
- 	count = 0;
- 	timestamp = ns_to_ktime(0);
-@@ -96,80 +115,55 @@ struct dma_fence *__dma_fence_unwrap_mer
- 	if (!array)
- 		return NULL;
+ 	ctx->vpu_dst_fmt = hantro_find_format(ctx, pix_mp->pixelformat);
+ 	ctx->dst_fmt = *pix_mp;
++	ret = hantro_set_reference_frames_format(ctx);
++	if (ret)
++		return ret;
  
--	/*
--	 * This trashes the input fence array and uses it as position for the
--	 * following merge loop. This works because the dma_fence_merge()
--	 * wrapper macro is creating this temporary array on the stack together
--	 * with the iterators.
--	 */
--	for (i = 0; i < num_fences; ++i)
--		fences[i] = dma_fence_unwrap_first(fences[i], &iter[i]);
--
- 	count = 0;
--	do {
--		unsigned int sel;
--
--restart:
--		tmp = NULL;
--		for (i = 0; i < num_fences; ++i) {
--			struct dma_fence *next;
--
--			while (fences[i] && dma_fence_is_signaled(fences[i]))
--				fences[i] = dma_fence_unwrap_next(&iter[i]);
--
--			next = fences[i];
--			if (!next)
--				continue;
--
--			/*
--			 * We can't guarantee that inpute fences are ordered by
--			 * context, but it is still quite likely when this
--			 * function is used multiple times. So attempt to order
--			 * the fences by context as we pass over them and merge
--			 * fences with the same context.
--			 */
--			if (!tmp || tmp->context > next->context) {
--				tmp = next;
--				sel = i;
--
--			} else if (tmp->context < next->context) {
--				continue;
--
--			} else if (dma_fence_is_later(tmp, next)) {
--				fences[i] = dma_fence_unwrap_next(&iter[i]);
--				goto restart;
-+	for (i = 0; i < num_fences; ++i) {
-+		dma_fence_unwrap_for_each(tmp, &iter[i], fences[i]) {
-+			if (!dma_fence_is_signaled(tmp)) {
-+				array[count++] = dma_fence_get(tmp);
- 			} else {
--				fences[sel] = dma_fence_unwrap_next(&iter[sel]);
--				goto restart;
-+				ktime_t t = dma_fence_timestamp(tmp);
-+
-+				if (ktime_after(t, timestamp))
-+					timestamp = t;
- 			}
- 		}
-+	}
- 
--		if (tmp) {
--			array[count++] = dma_fence_get(tmp);
--			fences[sel] = dma_fence_unwrap_next(&iter[sel]);
--		}
--	} while (tmp);
-+	if (count == 0 || count == 1)
-+		goto return_fastpath;
- 
--	if (count == 0) {
--		tmp = dma_fence_allocate_private_stub(ktime_get());
--		goto return_tmp;
--	}
-+	sort(array, count, sizeof(*array), fence_cmp, NULL);
- 
--	if (count == 1) {
--		tmp = array[0];
--		goto return_tmp;
-+	/*
-+	 * Only keep the most recent fence for each context.
-+	 */
-+	j = 0;
-+	for (i = 1; i < count; i++) {
-+		if (array[i]->context == array[j]->context)
-+			dma_fence_put(array[i]);
-+		else
-+			array[++j] = array[i];
- 	}
-+	count = ++j;
- 
--	result = dma_fence_array_create(count, array,
--					dma_fence_context_alloc(1),
--					1, false);
--	if (!result) {
--		for (i = 0; i < count; i++)
--			dma_fence_put(array[i]);
--		tmp = NULL;
--		goto return_tmp;
-+	if (count > 1) {
-+		result = dma_fence_array_create(count, array,
-+						dma_fence_context_alloc(1),
-+						1, false);
-+		if (!result) {
-+			for (i = 0; i < count; i++)
-+				dma_fence_put(array[i]);
-+			tmp = NULL;
-+			goto return_tmp;
-+		}
-+		return &result->base;
- 	}
--	return &result->base;
-+
-+return_fastpath:
-+	if (count == 0)
-+		tmp = dma_fence_allocate_private_stub(timestamp);
-+	else
-+		tmp = array[0];
- 
- return_tmp:
- 	kfree(array);
-
+ 	/*
+ 	 * Current raw format might have become invalid with newly
+-- 
+2.43.0
 
