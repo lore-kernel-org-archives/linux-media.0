@@ -1,86 +1,89 @@
-Received: from a7-45.smtp-out.eu-west-1.amazonses.com (a7-45.smtp-out.eu-west-1.amazonses.com [54.240.7.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E50223323;
-	Thu, 12 Dec 2024 15:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734018219; cv=none; b=RhAB+sBNpIs7PRjS9hbxwqTyn6M9+ukT7+dt17snTXNoxJmDk6jG6kSVildj9Ueimro/canTVkNFcaHzaZ8D+cw51oYw4dpRj8hYmdKkXLUg6s2oX6M/KZvNBWQowFtSJuaZQSOa18JZ9n1Sr9xhWOzykdKXsVTe2vvBi4nu+kE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734018219; c=relaxed/simple;
-	bh=ltUDALF8WtRUBRtQU/ZvlBBXaB0jB77q/PnuMmcP0BA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kXYPWJohZrA41HP7QEOwVo5nIQeDaO1f1RhKSOECxNf2bdKGPQ1Bj0Fiek49qzzoeZk0HJ5sPVcSMpa/07YDwuQfcDbLvXQuRKboZTTr37LtcoI+J82Ew9iSmV2iXHVtBWlzfSbZlqfPWrkz9cO3F2Eu0zJpZ5RpkgR3CdhlSmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=U1wQpTr3; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=hfVElm0g; arc=none smtp.client-ip=54.240.7.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA870222D59;
+	Thu, 12 Dec 2024 15:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734018304; cv=pass; b=JwJvcjOWEvbdIiHNXEAEypEy/zSBvL2q2vd6g2pd+aSvqrMZnC2D+SdDBXZuWOz14YQ+jouexaCHI06qj0I3LdLRulop4INIIXw79i3KKTSFN9nvewMtWMBA8OU7vpAjhk2hsn2nHuC4nw5sjorVeEgrLQOquick+EM1P7Y6u0c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734018304; c=relaxed/simple;
+	bh=PVvOYhteQt/W34vlzLIOZu/OrN2/wktZb+MQBqw5I0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gjYqIiDfeckCsV+O6/P/Hm4svs4kTM/dfgla3DJrxyqf7JKNn2t6AwVO93PqVsyvNDgynV32xpTkQLPyIrWpcyIDOtli6VN3zauIMMOUk0jYmP9GrEfnalx4BaH83UV83FKKIVqmHhlh/hslEncTBhjJHsy21dMKiscIj21cvHk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=benjamin.gaignard@collabora.com header.b=jFwYQYLI; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="U1wQpTr3";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="hfVElm0g"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=bc7lryepznv65m6r2ewkpoafjt4fiq42; d=collabora.com; t=1734018213;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
-	bh=ltUDALF8WtRUBRtQU/ZvlBBXaB0jB77q/PnuMmcP0BA=;
-	b=U1wQpTr3k8eLSbyCBCHyrpP+wbs1XpZS9hsaqkvPRaoxq25BZr/dM6k1xQAk267h
-	RA5aOEbkc8rqk9RtQaIX+xl4oRR/h3CotlGUAvrd6J05OlHZTwauyYcdE+yjcn5hhew
-	6v2FVSJ/8hzUTRFdtt7IpFFG/5dfHZgHK11x+SyBo/p4RksDDs6W02B6shK1uB9xJ3K
-	tyfyd9N5rUU4WeK+EA+4SPx8BgFBzG5tjKntqL3LAcum9J3xETUWBWqxyDDOejpNpnU
-	bsRefvfbI/j9XGZEV68GLxyyXkrwfSssvjRaGNia40a+5TV2mTyNEdyec8jvOrlnRmP
-	sMO4u7KNAw==
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1734018213;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-	bh=ltUDALF8WtRUBRtQU/ZvlBBXaB0jB77q/PnuMmcP0BA=;
-	b=hfVElm0gkL4Grt7PQrESSMWpcfKYEgyVVCSfM2oBuEj4LnmE7/FKiGmRp5KC6fNY
-	hW1Sk8gIv52BHGqp5Ak2Z3dd5PdFzQ9mmnXWAfBvv7m1np5iAJRzjjQs9l5Zh1OlTvq
-	k2sYNA/KDD0SzebN6C92B88egzp1dsvD1taccRNM=
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To: p.zabel@pengutronix.de, mchehab@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, kernel@collabora.com, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 0/2] media: verisilicon: fix reference padding issue
-Date: Thu, 12 Dec 2024 15:43:33 +0000
-Message-ID: <01020193bb8a24ad-99eafebb-3b0b-40c0-9b28-3a0dbc84327a-000000@eu-west-1.amazonses.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=benjamin.gaignard@collabora.com header.b="jFwYQYLI"
+ARC-Seal: i=1; a=rsa-sha256; t=1734018279; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=bEzMQTO495WOxsE00l2/3H9gHcbvt1ILP7zAa3dkOhO40kA9C4/7fXmaQfDUNe0VEmJYYGjsyyHOcH8TfFV2R4Jo/Lzi62aVsslpOY+hb9lMpKqHp1v2MfgyyebfKMoI5Yk7BnseczjJfXAjbeF3zzrF/UdC576fKRN/b+n8VWo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1734018279; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=QRMCv1tG0lvAEJlwsZhhip2MIboiG2RgXcTqJTaG+EA=; 
+	b=b4R4Sqi+R04TU0FF8Ff4fWQALubLC+MIPdm/3yw8xhsbdilKLboyk2Sq6CrmZSLgN1zJexg2+SMyY5wIk4tFVygzku9kQ5Zgl87aeyI2DznbLSlrW5CF+df6UCO8AkQZMc+eGuNgrgSyneBt4nV8M+nnAUqZaItOyPwzRZc2e6Q=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=benjamin.gaignard@collabora.com;
+	dmarc=pass header.from=<benjamin.gaignard@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734018279;
+	s=zohomail; d=collabora.com; i=benjamin.gaignard@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=QRMCv1tG0lvAEJlwsZhhip2MIboiG2RgXcTqJTaG+EA=;
+	b=jFwYQYLI4atho5DbRERvwwWjwPHr9Qxwt1qhTSwFwaRDCrzk7rFTAmHOhIQqrz9l
+	P338+J/5FMdANB9/jj4tdSarxGbJoyBUQrojVNTSf+lqLH8x0PQuOfk82p3MsIWu0dG
+	W5sp/7P3zoi8UlYCZAkVrQpAsg3r/2imvtGplJ2c=
+Received: by mx.zohomail.com with SMTPS id 1734018277894547.7282054868983;
+	Thu, 12 Dec 2024 07:44:37 -0800 (PST)
+Message-ID: <c7af1854-cb98-41d5-946c-00fe4f4584bd@collabora.com>
+Date: Thu, 12 Dec 2024 16:44:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] media: hantro: Replacement maintainers
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc: ezequiel@vanguardiasur.com.ar, linux-media@vger.kernel.org,
+ hverkuil-cisco@xs4all.nl, mchehab@kernel.org, p.zabel@pengutronix.de,
+ kernel@collabora.com, linux-kernel@vger.kernel.org
+References: <20241210212518.1587395-1-nicolas.dufresne@collabora.com>
+Content-Language: en-US
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20241210212518.1587395-1-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
-X-SES-Outgoing: 2024.12.12-54.240.7.45
 
-Hantro hardware is splited into two parts: the decoder which produce
-tiled pixels formats and the post-processor which produce raster pixels
-formats.
-When post-processor is used the selected pixels format may not have the
-some padding/stride than the decoder output pixels format. This led to
-miscomputing chroma and motion vectors offsets so data are overlapping.
-This series introduce a reference pixels format that decoder use to
-compute the various needed offsets and size.
 
-With this series Fluster for VP9 tests is now 207/305 vs 145/305.
-HEVC test score isn't impacted by these patches (still 141/147).
+Le 10/12/2024 à 22:25, Nicolas Dufresne a écrit :
+> As per a long time request from Ezequiel who left the project around
+> 2020, replace the top maintainers with Benjamin and myself, keeping
+> Philipp who is still active in the subsystem.
+>
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Version 2:
-- rebased on top of media-commiter/next
-- Add reviewed-by tags
+Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-Benjamin Gaignard (2):
-  media: verisilicon: Store reference frames pixels format
-  media: verisilicon: Fix IMX8 native pixels format steps values
-
- drivers/media/platform/verisilicon/hantro.h   |  2 ++
- .../media/platform/verisilicon/hantro_g2.c    |  2 +-
- .../platform/verisilicon/hantro_postproc.c    | 32 +++++++------------
- .../media/platform/verisilicon/hantro_v4l2.c  | 21 ++++++++++++
- .../media/platform/verisilicon/imx8m_vpu_hw.c | 10 +++---
- 5 files changed, 40 insertions(+), 27 deletions(-)
-
--- 
-2.43.0
-
+> ---
+>   MAINTAINERS | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1e930c7a58b1..00e95d6512f7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10030,7 +10030,8 @@ F:	include/trace/events/handshake.h
+>   F:	net/handshake/
+>   
+>   HANTRO VPU CODEC DRIVER
+> -M:	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> +M:	Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> +M:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>   M:	Philipp Zabel <p.zabel@pengutronix.de>
+>   L:	linux-media@vger.kernel.org
+>   L:	linux-rockchip@lists.infradead.org
+>
+> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
