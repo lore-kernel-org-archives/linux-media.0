@@ -1,134 +1,160 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05213187870;
-	Thu, 12 Dec 2024 09:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED7A20E011;
+	Thu, 12 Dec 2024 09:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733995915; cv=none; b=hN2LINvUSwHzmHqnnzf/vofSobQNOX3MW96knGSzGgh6qUyEbYr79nCETZSziyTy/3FYysBR0gJmqMimmlWt/Y6v1B03YXYf8jgSJwemFeo0Bcdhdkp9aJ1u5qWhFSaHPN7PfcRTWNxEicptJv7VOoyLg2jQNQtouphra8iy0Ws=
+	t=1733996510; cv=none; b=GEAPRAeU3PNelflrAi+iruc6o3jhIxmbYa0I+7uUQoyoQFFWqUimknbc1MKitwf9MC7fcoJV2w1YYATS9S6lAxo+MEahfto3MZOIS48iuc5g7Jnq9GJjjhttAkVpkqaivLGxVlOUz41MpriW9wZAyrZRNu3lm5Ek6P5mqF+kj+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733995915; c=relaxed/simple;
-	bh=srm9IRLq79hE4aMy9Jn4FuLsYt9ZM6FKBMwRd2Nj+uM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gYXCsNwm1+/PAkK4sMQWwbOagRMMcRwSX0/5PA9xloTevkNoseVTxnDm7GaWClTaSVs/UQM4Yw9mHqctoBaLUQuxJFgwdVy33WDYELvvKv75DIMrrCoRZIr9S+l3KN4c5xU2R2g1bNaUrg06caIM61/VIXKa+305b8MgbRFsOkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HahhefW4; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1733996510; c=relaxed/simple;
+	bh=obaLmOxLmJXlb/CDjZv7Zm7XxIZBGmVcCgDa31nx99o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CHppzX0ZLn71cdu9NVgGGF/ZyW+yOV1J2mgQRmi0md7vnhhGMYl2hyqhMXygzTbhuh8UH6qZxcMazxNxB9o8poBVMdxVHtU1zDV5b5b8sbjpt8aa8y56Rwk6hVADBnl7DIr4Ul96Eh9OxpWhEUiQP3dE892YbCB3WyXbBSpHV2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=PLclz1s0; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HahhefW4"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC7qNjt002529;
-	Thu, 12 Dec 2024 09:31:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dfLzRkbbWjbIDD0l1aRS8trXE7dMUR71RudZ3Zd9IzE=; b=HahhefW4CCMMZuD9
-	sqHQ/8RePtZ+fXE/tdNAroviGfBpgDBJ9En+durPD2r2oOtDPuHJBlKtQv3SVpAc
-	msrw9K1xfuDEsIDA+7j8720qPi1qBWxYTROsLmshiIYaZHkWXXl6vo4s+l9iYWsJ
-	swO0Pw8kmQHm9h0I8AIeFqE6Bx0ueSNa3T7xrMafGml3jrCqa0KBVnbU42pzkezl
-	TiDOcd7E3vTpyARqZZWW0a+Xvd4IryKa5Z4f/psa1Syz+V7+fgJy3NZP1TZ8TOaF
-	aSUB0eSwvtu7vi4J1oJ5z84olCvlBDd9q+FBY9aUdgxT1o23y0zVbn/fDZ0BP1OR
-	KxSWOw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43eyg64x4x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 09:31:49 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BC9Vmqj027585
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Dec 2024 09:31:48 GMT
-Received: from [10.239.97.152] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 12 Dec
- 2024 01:31:42 -0800
-Message-ID: <db0e505c-2583-45ec-b90e-cb0539b44ce4@quicinc.com>
-Date: Thu, 12 Dec 2024 17:31:40 +0800
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PLclz1s0"
+Received: from ideasonboard.com (unknown [IPv6:2001:b07:6462:5de2:459e:1ee6:26ea:2d31])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 704D0229;
+	Thu, 12 Dec 2024 10:41:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1733996471;
+	bh=obaLmOxLmJXlb/CDjZv7Zm7XxIZBGmVcCgDa31nx99o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PLclz1s0qjNNBqIxl/K970Ib6OkbcTqMouuTpqmv/mxbDaPDWEtV7+UKlSW9Sqlcn
+	 8mzpmc+lMnONoa8Tq2Y2V9H2mNN3qKQBGWXHqex6yplhm1KGY7W2GPcVjOeVMrvIMr
+	 ONmGF/fEodK8ZPUjeBvXGi9DBj0XzGPD0LNIwbtw=
+Date: Thu, 12 Dec 2024 10:41:42 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Keke Li <keke.li@amlogic.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com, 
+	dan.scally@ideasonboard.com
+Subject: Re: [PATCH v4 02/10] media: platform: Add c3 mipi csi2 driver
+Message-ID: <2jc3sqihnj7sd7vjj7542nntc45eratyxi7diuaewlbqqbixbp@vlgkpv6vm6wr>
+References: <20241205-c3isp-v4-0-cb1868be0105@amlogic.com>
+ <20241205-c3isp-v4-2-cb1868be0105@amlogic.com>
+ <5sen6lv5xg4hjdc4j2l6k5iywqpllbutoaebyln74aeuplawtu@nmpmzgwkkgih>
+ <0fc7f15c-66be-4ba0-9549-51ba87f48690@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/16] media: qcom: camss: csiphy-3ph: Remove redundant
- PHY init sequence control loop
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, <rfoss@kernel.org>,
-        <todor.too@gmail.com>, <mchehab@kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <vladimir.zapolskiy@linaro.org>
-CC: <quic_eberman@quicinc.com>, <linux-media@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>
-References: <20241211140738.3835588-1-quic_depengs@quicinc.com>
- <20241211140738.3835588-3-quic_depengs@quicinc.com>
- <37523d35-c569-4bef-97aa-46b71236b1eb@linaro.org>
-Content-Language: en-US
-From: Depeng Shao <quic_depengs@quicinc.com>
-In-Reply-To: <37523d35-c569-4bef-97aa-46b71236b1eb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XCPJhsINOk7lUzUnTLpdSpZwW2IDHpXh
-X-Proofpoint-ORIG-GUID: XCPJhsINOk7lUzUnTLpdSpZwW2IDHpXh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412120066
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fc7f15c-66be-4ba0-9549-51ba87f48690@amlogic.com>
 
-Hi Bryan,
+Hi Keke
 
-On 12/11/2024 11:38 PM, Bryan O'Donoghue wrote:
-> On 11/12/2024 14:07, Depeng Shao wrote:
->> From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>
->> Adding a new CSIPHY init sequence using downstream as a reference 
->> prompted
->> me to look at why we are splitting up the init sequence into chunks.
->>
->> Right now we declare CSI PHY init sequences as an array of five equally
->> sized writes with a hard-coded control loop to iterate through each of 
->> the
->> five indexes. One bug in this model is that if you don't have an even
->> number of writes, you can't init the PHY as you wish.
->>
->> In downstream the original code has something of the character
->> phy_init_seq[MAX_LANES][MAX_PARAMS] which in upstream we have translated
->> into phy_init_seq[5][SOME_NUMBER_OF_EQUAL_WRITES];
->>
->> What the code does is take a pointer to the first index of the
->> r = &phy_init_seq[0][0]; and then literally does write(r, value); r++;
->>
->> The controlling loop that hard-codes '5' in-lieu of MAX_LANES does no
->> special sleep, fabric-coherence sync or even a printk() to justify its
->> existence. Our compilers are optimising all of this away anyway so lets
->> drop.
->>
->> Reduce the array declaration down to one flat aggregate init and let the
->> code just step through. As a happy side-effect we can then also handle
->> odd-number writes as the number of elements in the init sequence will no
->> longer have to be evenly divisible.
->>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
->> Reviewed-by: Elliot Berman <quic_eberman@quicinc.com>
->> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->> ---
-> 
-> A new version of this patch is required to ensure 7280 is handled
-> 
-> https://git.codelinaro.org/bryan.odonoghue/kernel/-/ 
-> commit/4c831fd58aa7629f994b5f4d8533b154a74d35cc
-> 
+On Thu, Dec 12, 2024 at 05:08:27PM +0800, Keke Li wrote:
+>
+> On 2024/12/12 16:41, Jacopo Mondi wrote:
+> > [ EXTERNAL EMAIL ]
+> >
+> > Hi Keke,
+> >    a question for Laurent and Sakari
+> >
+> > On Thu, Dec 05, 2024 at 05:04:28PM +0800, Keke Li via B4 Relay wrote:
+> > > From: Keke Li <keke.li@amlogic.com>
+> > >
+> > > This driver is used to receive mipi data from image sensor.
+> > >
+> > > Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> > > Signed-off-by: Keke Li <keke.li@amlogic.com>
+> > [snip]
+> >
+> > > +
+> > > +static int c3_mipi_csi_configure_clocks(struct csi_device *csi)
+> > > +{
+> > > +     const struct csi_info *info = csi->info;
+> > > +     int ret;
+> > > +     u32 i;
+> > > +
+> > > +     for (i = 0; i < info->clock_num; i++)
+> > > +             csi->clks[i].id = info->clocks[i];
+> > > +
+> > > +     ret = devm_clk_bulk_get(csi->dev, info->clock_num, csi->clks);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     for (i = 0; i < info->clock_num; i++) {
+> > > +             if (!info->clock_rates[i])
+> > > +                     continue;
+> > > +             ret = clk_set_rate(csi->clks[i].clk, info->clock_rates[i]);
+> > > +             if (ret) {
+> > > +                     dev_err(csi->dev, "Failed to set %s rate %u\n", info->clocks[i],
+> > > +                             info->clock_rates[i]);
+> > > +                     return ret;
+> > > +             }
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > [snip]
+> >
+> > > +
+> > > +static const struct csi_info c3_mipi_csi_info = {
+> > > +     .clocks = {"vapb", "phy0"},
+> > > +     .clock_rates = {0, 200000000},
+> > > +     .clock_num = 2
+> > > +};
+> > > +
+> > > +static const struct of_device_id c3_mipi_csi_of_match[] = {
+> > > +     { .compatible = "amlogic,c3-mipi-csi2",
+> > > +       .data = &c3_mipi_csi_info,
+> > > +     },
+> > > +     { },
+> > > +};
+> > All the drivers in this patch series implement the same pattern when
+> > it comes to handling clock. There's a list of clock providers in the
+> > driver associated with a clock frequency. The driver bulk_get the
+> > clocks and set_rate() using the per-compatible info table.
+> >
+> > Do you think this should rather come from dts using the
+> > assigned-clocks and assigned-clock-rates properties ?
+>
+> Yes,  I think your suggestion is OK.
+>
+> Will test it.
+>
+> If apply your suggestion, do I need to modify the relevant yaml file?
+>
 
-Sure, I will pick the latest version.
+Do you mean the binding files ?
 
-Thanks,
-Depeng
+You could add to the example
 
+--- a/Documentation/devicetree/bindings/media/amlogic,c3-isp.yaml
++++ b/Documentation/devicetree/bindings/media/amlogic,c3-isp.yaml
+@@ -73,6 +73,8 @@ examples:
+             clocks = <&clkc_periphs CLKID_VAPB>,
+                      <&clkc_periphs CLKID_ISP0>;
+             clock-names = "vapb", "isp0";
++            assigned-clocks = <&clkc_periphs CLKID_ISP0>;
++            assigned-clock-rates = <400000000>;
+             interrupts = <GIC_SPI 145 IRQ_TYPE_EDGE_RISING>;
+
+             port {
+
+
+As your binding document has "additionalProperties: false" I thought
+you had to add:
+
+  assigned-clocks: true
+  assigned-clock-rates: true
+
+As in my understanding "additionalProperties: false" means "whatever
+is not explicitly allowed is forbidden". However I might be wrong as
+validating the binding even without the two above entries work well
+(and I see other bindings doing the same)
+
+DT maintainers are in cc
