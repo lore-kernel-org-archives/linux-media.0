@@ -1,192 +1,185 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D56364D6;
-	Fri, 13 Dec 2024 09:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8E81B21A6
+	for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 09:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734082473; cv=none; b=nYRk+IPh6/GWpHLu8j5Aj5aH8YlWOtz2Rt5UyKqNUXaBhWbpfEifwUmYOIy/dDF1n4/DiJ5BUDzT+NzM0Md9VEry6eDJP0dI2bB3W6ufzYk8Iq2LXn0XXR8uCD+q4y6nJ/psKvlnPNhzB1Ww7XysYMS1ydnSsGuJXELb/V8LH1M=
+	t=1734082754; cv=none; b=dvfSfmw4a2z42cXVCxvJfGQn6X6+ugfF4UV5wMg2a8zP3iLg8DFG10C4JfmIOgM9HRZOv6gck36GnmiAT6lO1RTmwbmk7uaF0tb5Z83zGCmTy7TSdFNIvcHa921c6YS8oEo4WFiAw8TOqgDmdSwEVtLiHTwVi92HwC9l0YGMpas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734082473; c=relaxed/simple;
-	bh=pgCK4GDDXjPzcmcfY2qoLfzG9vozEGd+0DlmEDRuIhg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LF6AA1Nn49WHPA2R+uhMKOrNAVtlExsDG3+0j7seu+wqbiLnOlNf4SC7MA0uMR6rnd1/MxDETkQfis0wVxpFHcrVaOqdgmCA06ZQ2AyAK4FJR6kkB+lLPObZj6LK2wteABpCVf5AsRQSSPxQSBacnIck8ahPG3WM22mF2quT3lE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FPS6igd5; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1734082754; c=relaxed/simple;
+	bh=2dVHZNzyurcrnKSHioCNBqidibj8sEypNo67w3dWXbg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=aSvGum89aXuQwi5idVRlAiezdAd4nbhQzPKPUYNW42EZv0+sxkZH1MJ41rQ2L4xwqwNS/UPzCts3MtMQVrtppnd96McCsCoaeLgoedDzhRZ0S2xdLjBzG1XHlrSzMdyWNh/V4rX8RPr+kKboK7gTHeF2QOpkQG23ABW8mSfxuv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=g7OhLdu5; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FPS6igd5"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BBB70520;
-	Fri, 13 Dec 2024 10:33:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1734082436;
-	bh=pgCK4GDDXjPzcmcfY2qoLfzG9vozEGd+0DlmEDRuIhg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FPS6igd5UT9uW7x6KYbZ9rJbiTtlZioEz6Cx9hnVRy5NGvzgN82r95m74UlrgHHEV
-	 8k5Bnc85lqy6XDOhuf2d9xThNFvkEPTJMSfpGDX4dGsuyExDPC6sdfWeR8Rv9lSeYX
-	 hEG/UNv+4bDUF5hCVb77+nw9VkIAvJ0QLWD0pUJw=
-Date: Fri, 13 Dec 2024 11:34:13 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Cosmin Tanislav <demonsingur@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	=?utf-8?B?UGF3ZcWC?= Anikiel <panikiel@google.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: v4l: subdev: Use dev_err() to print errors and
- clarify
-Message-ID: <20241213093413.GB19755@pendragon.ideasonboard.com>
-References: <20241122153343.237308-1-demonsingur@gmail.com>
- <20241123213203.GC19573@pendragon.ideasonboard.com>
- <09aac96d-554c-400d-9ec1-c87617d9df65@gmail.com>
- <20241127072033.GU5461@pendragon.ideasonboard.com>
- <Z1vxRYy9tRqvT824@kekkonen.localdomain>
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="g7OhLdu5"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-385ed7f6605so781552f8f.3
+        for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 01:39:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1734082750; x=1734687550; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t4JqniyrUVA29zrwSIJYAdkpKjXdhEDlx602bvtZzJU=;
+        b=g7OhLdu5JF+wOJRljRkKcUYiMoR2IphW/B1mYJJOudFHF873xfXgc8Ie1n92m4ruDu
+         No7Ue6P3NIBv6exHD3+X6G6DFCLtjg9fpJFrVugbuz5y7p2e2+bbgcltBv/m2Maagpo9
+         y2pd4FunZqFaWEj+PlSbXvkpys8Anfe2vaazOSsrMJo6qQvyRKZfUNkVSKwzZ+6kdhJo
+         1dMgGdish7xXxQPwvaHm4dkLzogun6AX3+7QzRg7iQiTXdEKz2XQJ8gGbqbqKfMA7Q+r
+         oKIlkOcoBcPWf+LjwMIb5NiX2a00zY+awCASDakCDGilNmDU65shrr9/vCVQw4yVXWH6
+         2D7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734082750; x=1734687550;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=t4JqniyrUVA29zrwSIJYAdkpKjXdhEDlx602bvtZzJU=;
+        b=jYscqeUsW593QUmKatjCLXSi+uRIMr4wMFPI/v0LscWWHcXFKtnyYWxxlhzO7oEIiJ
+         o1DK2ck77IcsW0CfJtY7p45AVqdq09Agy3NwT1wbg2+D2zZsl53oZ123NXeUso36+xQd
+         e+y1JiUqmswkfaqeTns/VVytlF0wLn3Ma8wDYO+P8aBEy1LcPu3M2ds7ArGgGrOLCRk8
+         nc52uK+sDg73fPN1T5wcu2lxfjbr6A5UjtX5qxqNhR/82HTLDIt0PuemvOYkbbr/fzR5
+         IRNgKMRpMtPg86laziJQDpxhs9Op+L1AfwIQV6LbJslxqzpWaEM9NqbGTUfQcP5pPlWo
+         L+UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWDUOuuh9YWu245wlY1Wqgi2TjIxZwJSAfltXBL2D9oqhmAVDBozVlPWdeqdtq0pqWf9pNMEm7rRl0SQQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKHkq0ACDuErU+FA7MvVQHZ7owhQ3bcXc4rJc2Z+pE8sF3s2TY
+	qWAJGjneLA4vdVxIb4pRtv9A+trcjuGY3irYVxuB5a/KLLxCx+STzLiOpYZOHTE=
+X-Gm-Gg: ASbGncsZnLomd/vWpS7fHIc11Wp6dGsyOZ1kOJKTOGWsBW2VBp1RyjcTya8MddndnZT
+	F5QRkpW6GZYrxTNManLzEAzh9yeyWwvek6IlC/CgxVYzmReQvfGt4BN3mJFi1pmnfP74CEl5LuL
+	PdMI0goZfWYkYfCak3rd2c5kW6SY+ooW/faouztYa9GCsg5Q/BJVLDAOFngxliO284aZ3yik+WC
+	z6spVtr7hrIiTxYkLFa6pn0ZsWdbpn5dCepJ8oNDcctU+wN+17wRAxK2MOLAYorgrfwtEEaedw1
+	HyAIfgHpjR+3TQcwHri5YO8N+g==
+X-Google-Smtp-Source: AGHT+IH/9u8CkqVlx6cHHLvAJS9uDAoxtK09++pI/aUoVOp3EvdqqeNkdS8a6S0cwyVHTzYjlA51+A==
+X-Received: by 2002:a05:6000:4609:b0:386:39fd:5ec with SMTP id ffacd0b85a97d-3888e0c15c4mr1424272f8f.57.1734082749648;
+        Fri, 13 Dec 2024 01:39:09 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-387824c5c98sm6495726f8f.58.2024.12.13.01.39.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2024 01:39:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Z1vxRYy9tRqvT824@kekkonen.localdomain>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Dec 2024 10:39:08 +0100
+Message-Id: <D6AH15BCVPCD.Y8CO9YRUJZ3W@fairphone.com>
+Cc: "Robert Foss" <rfoss@kernel.org>, "Todor Tomov" <todor.too@gmail.com>,
+ "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, "Mauro Carvalho Chehab"
+ <mchehab@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Barnabas Czeman" <barnabas.czeman@mainlining.org>, "AngeloGioacchino Del
+ Regno" <angelogioacchino.delregno@somainline.org>, "Caleb Connolly"
+ <caleb.connolly@linaro.org>, "David Heidelberg" <david@ixit.cz>,
+ <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] media: dt-bindings: media: camss: Restrict bus-type
+ property
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241209-camss-dphy-v1-0-5f1b6f25ed92@fairphone.com>
+ <20241209-camss-dphy-v1-1-5f1b6f25ed92@fairphone.com>
+ <nqggstwkytqxpxy3iuhkl6tup5elf45lqi3qlgyv6eaizvnfdr@2uy57umdzqfa>
+In-Reply-To: <nqggstwkytqxpxy3iuhkl6tup5elf45lqi3qlgyv6eaizvnfdr@2uy57umdzqfa>
 
-On Fri, Dec 13, 2024 at 08:33:09AM +0000, Sakari Ailus wrote:
-> On Wed, Nov 27, 2024 at 09:20:33AM +0200, Laurent Pinchart wrote:
-> > On Mon, Nov 25, 2024 at 10:34:40PM +0200, Cosmin Tanislav wrote:
-> > > On 11/23/24 11:32 PM, Laurent Pinchart wrote:
-> > > > On Fri, Nov 22, 2024 at 05:33:39PM +0200, Cosmin Tanislav wrote:
-> > > >> The error values end up being returned to userspace, it makes sense to
-> > > >> have some useful information printed when debugging them, even if the
-> > > >> reason for the errors are bad configs or internal driver issues.
-> > > >>
-> > > >> Replace dev_dbg() with dev_err() for errors.
-> > > > 
-> > > > We use dev_dbg() on purpose for all errors that can be triggered
-> > > > directly by applications. This includes in particular all pipeline
-> > > > validation errors.
-> > > > 
-> > > > The error paths in this specific patch shouldn't be in that category, as
-> > > > all the validation should have been performed before starting subdevs
-> > > > (assuming all drivers are correctly implemented, which is of course not
-> > > > a given, but those issues should be fixed). I think we could therefore
-> > > > switch to dev_err() here. However, I'm wondering what kind of issues
-> > > > triggered this patch. What errors did you run into that would have
-> > > > benefited from being reported more loudly, and were they caused by
-> > > > driver bugs or userspace misconfiguring the device ?
-> > > 
-> > > I've had this patch in my GMSL2 tree for some time now, I believe indeed
-> > > the reasons why I've hit these error cases were the drivers being
-> > > slightly broken, but I still think it is worthwhile to show an error
-> > > message, to aid with debugging. Adding the entity name to the messages
-> > > makes it even more clear where exactly the code is breaking.
-> > > 
-> > > I can split it up into separate patches for dev_dbg() -> dev_err() and
-> > > adding the entity name to the print statements for V2.
-> > 
-> > I'm OK either way. If other people prefer keeping dev_dbg() then
-> > splitting the patch in two would make sense.
-> 
-> dev_dbg() seems the correct function here: these are user-triggerable
-> errors that aren't related to hardware conditions.
+On Fri Dec 13, 2024 at 10:34 AM CET, Krzysztof Kozlowski wrote:
+> On Mon, Dec 09, 2024 at 01:01:05PM +0100, Luca Weiss wrote:
+> > The CSIPHY of Qualcomm SoCs support both D-PHY and C-PHY standards for
+> > CSI-2, but not any others so restrict the bus-type property describing
+> > this to the supported values.
+> >=20
+> > The only exception here is MSM8916 which only supports D-PHY. C-PHY was
+> > introduced with newer SoCs.
+> >=20
+> > Do note, that currently the Linux driver only supports D-PHY.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> >  .../bindings/media/qcom,msm8916-camss.yaml         |  8 ++++++
+> >  .../bindings/media/qcom,msm8953-camss.yaml         | 15 +++++++++++
+> >  .../bindings/media/qcom,msm8996-camss.yaml         | 20 ++++++++++++++=
++
+> >  .../bindings/media/qcom,sc8280xp-camss.yaml        | 20 ++++++++++++++=
++
+> >  .../bindings/media/qcom,sdm660-camss.yaml          | 20 ++++++++++++++=
++
+> >  .../bindings/media/qcom,sdm845-camss.yaml          | 20 ++++++++++++++=
++
+> >  .../bindings/media/qcom,sm8250-camss.yaml          | 30 ++++++++++++++=
+++++++++
+> >  7 files changed, 133 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-camss=
+.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+> > index 9cc0a968a401836814560c1af3ee84d946500b4f..3de2a3d2b5b761106975aab=
+65ff614b2ef579ef5 100644
+> > --- a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+> > +++ b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+> > @@ -94,6 +94,10 @@ properties:
+> >                  minItems: 1
+> >                  maxItems: 4
+> > =20
+> > +              bus-type:
+> > +                enum:
+> > +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+> > +
+> >              required:
+> >                - data-lanes
+> > =20
+> > @@ -113,6 +117,10 @@ properties:
+> >                  minItems: 1
+> >                  maxItems: 4
+> > =20
+> > +              bus-type:
+> > +                enum:
+> > +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+> > +
+> >              required:
+> >                - data-lanes
+> > =20
+> > diff --git a/Documentation/devicetree/bindings/media/qcom,msm8953-camss=
+.yaml b/Documentation/devicetree/bindings/media/qcom,msm8953-camss.yaml
+> > index 8856fba385b1123d748199b46c5009c97700ad9b..6d776b0ca71140c0816b246=
+dbaf41ef376205bba 100644
+> > --- a/Documentation/devicetree/bindings/media/qcom,msm8953-camss.yaml
+> > +++ b/Documentation/devicetree/bindings/media/qcom,msm8953-camss.yaml
+> > @@ -112,6 +112,11 @@ properties:
+> >                  minItems: 1
+> >                  maxItems: 4
+> > =20
+> > +              bus-type:
+> > +                enum:
+> > +                  - 1 # MEDIA_BUS_TYPE_CSI2_CPHY
+>
+> Just 1
+>
+> > +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+>
+> Just 4
+>
+> The type and meaning is already stated by video-interfaces and the
+> binding headers.
 
-Are these user-triggerable in the absence of bugs in drivers ?
+This is actually something I find rather curious why this is not done
+more obvious, e.g. there's basically no link that a '4' is
+MEDIA_BUS_TYPE_CSI2_DPHY from dt-bindings/media/video-interfaces.h
 
-> > > >> Also, when using complex pipelines with multiple bridges between the
-> > > >> video device and multiple source sub devices, printing just the video
-> > > >> device name for each error does not provide enough context as to which
-> > > >> operation failed.
-> > > >>
-> > > >> Add sub device entity name to the messages where possible to clarify the
-> > > >> source of the errors.
-> > > > 
-> > > > This can be considered as a standalone patch.
-> > > > 
-> > > >> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-> > > >> ---
-> > > >>   drivers/media/v4l2-core/v4l2-subdev.c | 22 ++++++++++++----------
-> > > >>   1 file changed, 12 insertions(+), 10 deletions(-)
-> > > >>
-> > > >> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > >> index 4f0eecd7fd66f..d51b4594d11c5 100644
-> > > >> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> > > >> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> > > >> @@ -2303,20 +2303,21 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
-> > > >>   				    &found_streams, &enabled_streams);
-> > > >>   
-> > > >>   	if (found_streams != streams_mask) {
-> > > >> -		dev_dbg(dev, "streams 0x%llx not found on %s:%u\n",
-> > > >> +		dev_err(dev, "streams 0x%llx not found on %s:%u\n",
-> > > >>   			streams_mask & ~found_streams, sd->entity.name, pad);
-> > > >>   		ret = -EINVAL;
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
-> > > >>   	if (enabled_streams) {
-> > > >> -		dev_dbg(dev, "streams 0x%llx already enabled on %s:%u\n",
-> > > >> +		dev_err(dev, "streams 0x%llx already enabled on %s:%u\n",
-> > > >>   			enabled_streams, sd->entity.name, pad);
-> > > >>   		ret = -EALREADY;
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
-> > > >> -	dev_dbg(dev, "enable streams %u:%#llx\n", pad, streams_mask);
-> > > >> +	dev_dbg(dev, "enable streams %s:%u:%#llx\n",
-> > > >> +		sd->entity.name, pad, streams_mask);
-> > > >>   
-> > > >>   	already_streaming = v4l2_subdev_is_streaming(sd);
-> > > >>   
-> > > >> @@ -2333,8 +2334,8 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
-> > > >>   	}
-> > > >>   
-> > > >>   	if (ret) {
-> > > >> -		dev_dbg(dev, "enable streams %u:%#llx failed: %d\n", pad,
-> > > >> -			streams_mask, ret);
-> > > >> +		dev_err(dev, "enable streams %s:%u:%#llx failed: %d\n",
-> > > >> +			sd->entity.name, pad, streams_mask, ret);
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
-> > > >> @@ -2403,20 +2404,21 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
-> > > >>   				    &found_streams, &enabled_streams);
-> > > >>   
-> > > >>   	if (found_streams != streams_mask) {
-> > > >> -		dev_dbg(dev, "streams 0x%llx not found on %s:%u\n",
-> > > >> +		dev_err(dev, "streams 0x%llx not found on %s:%u\n",
-> > > >>   			streams_mask & ~found_streams, sd->entity.name, pad);
-> > > >>   		ret = -EINVAL;
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
-> > > >>   	if (enabled_streams != streams_mask) {
-> > > >> -		dev_dbg(dev, "streams 0x%llx already disabled on %s:%u\n",
-> > > >> +		dev_err(dev, "streams 0x%llx already disabled on %s:%u\n",
-> > > >>   			streams_mask & ~enabled_streams, sd->entity.name, pad);
-> > > >>   		ret = -EALREADY;
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
-> > > >> -	dev_dbg(dev, "disable streams %u:%#llx\n", pad, streams_mask);
-> > > >> +	dev_dbg(dev, "disable streams %s:%u:%#llx\n",
-> > > >> +		sd->entity.name, pad, streams_mask);
-> > > >>   
-> > > >>   	if (!use_s_stream) {
-> > > >>   		/* Call the .disable_streams() operation. */
-> > > >> @@ -2432,8 +2434,8 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
-> > > >>   	}
-> > > >>   
-> > > >>   	if (ret) {
-> > > >> -		dev_dbg(dev, "disable streams %u:%#llx failed: %d\n", pad,
-> > > >> -			streams_mask, ret);
-> > > >> +		dev_err(dev, "disable streams %s:%u:%#llx failed: %d\n",
-> > > >> +			sd->entity.name, pad, streams_mask, ret);
-> > > >>   		goto done;
-> > > >>   	}
-> > > >>   
+video-interfaces.yaml only states "- 4 # MIPI CSI-2 D-PHY" and it's then
+the users excercise to find MEDIA_BUS_TYPE_CSI2_DPHY for that.
 
--- 
-Regards,
+Regards
+Luca
 
-Laurent Pinchart
+>
+> Anyway:
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
+
