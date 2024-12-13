@@ -1,122 +1,134 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0801C3BF6;
-	Fri, 13 Dec 2024 10:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3071C3BFA
+	for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 11:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734087121; cv=none; b=lP0MqB1O5Jwa5TCyWogzD9vn5VrlvUb2dSXxsJJoH8d2euIorJ6u4s5n2fVSxcDHSmpa2ppHIVHPL6qsUhilQ2ZsGtfz+aL6CJMx/Gvs9kBJn6DtmvIQrphLBWmpTtc5Y54Xi0wE7zpUb2aoszFF5yeVKhOrBUW6/hmxR13AjB0=
+	t=1734087787; cv=none; b=MvXoMBsXfuyxcOqrw3vkNn5o8rG8Gq/Kf6cNFDOTb8MtXhchDslP45sILHbcKRvZlFofsnWLjQsu2b1T4QQ/jzdICf9+lPZStipftBgBjV8UFa9UG6ecZOhIQM0Hnssb84GkD6xH5FqsuP81jwzJEnSN74Jbl56NYIBk46ZJyHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734087121; c=relaxed/simple;
-	bh=r4zbm/BqPSCBaXCpv0C7xvbJT3mWEUSTLgIjjGccWhQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q6hi0yHBv0XrmYof4RgTsPk7gMzr77r/HHMcEQfWVrsy6yoG+BnnmMXZ34ylDJ6DN1s3N1ibhQd5E8GcQ2USZU14VMDdyRvp2iI0acuKUPVlYTlPe1i6AcxYNKKhv9jWHP1FbiXx4J058mYrIYfbVvzdJKr1XZUEunC0Tnj7wio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=V59d/Tca; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1734087787; c=relaxed/simple;
+	bh=qnkNPaMsb0tDHe6sxQvnBDZjuAa2B520VxXPvQjVm+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dAe9lc6zTVqy5GW/z8bxuG00ipZSEzR0sfPXq59LxwRBPzifIfS6YWlnHw84TwjEEJ+0zmenNBTzWww6V8TCqUkO4s0Nb/MVHY9jpxWBVNdzxieVYnJ+HDr1XG4ypXwl8Awa95jGnBIlyqGU4zFMu5PUNJF0fWo65Sm2bd+kHGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BWUcAC6q; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="V59d/Tca"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BDAW5Gf002214;
-	Fri, 13 Dec 2024 11:51:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	G5uSC3BK+YvGUsKSKx/YNrD4AlAFZtoOKclTkZr6p54=; b=V59d/Tcak9U2dgRH
-	IieiSNH5E9xkRhqCZH3nlT4/henx+nxTNXz4bglJg5tdoBYQs5nEMOhEAe0Zszq8
-	mev4UqwhRvA5G2uSm+THWcdqbkuELoqDsTb83kCYc9RqkbowUg1vPnKVJJfgtcwe
-	tIGMNxFh+U23kxQp1U1o3B0d/3ae+idNFqs85362zq3BZVamCxiwvctJV9iMomP+
-	+/5TGY7nLZL0k44sSR/4D1pA66lXhlKIXOQejNNmjKMfY+x+a418pD6J7XToKZeV
-	EEqn0RsO+wpR1U0X5jbe06mfIBz83J3Q/JYzlBdoBhMya+eaifghcKKP3XkNGATA
-	BK3MZg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 43ftj75wr4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Dec 2024 11:51:26 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 6D82F40056;
-	Fri, 13 Dec 2024 11:50:16 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C4BA268D8B;
-	Fri, 13 Dec 2024 11:49:30 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Fri, 13 Dec
- 2024 11:49:29 +0100
-Date: Fri, 13 Dec 2024 11:49:24 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Lukas Bulwahn <lbulwahn@redhat.com>
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil
-	<hverkuil@xs4all.nl>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@redhat.com>
-Subject: Re: [PATCH] MAINTAINERS: repair file entry in MEDIA DRIVERS FOR
- STM32 - CSI
-Message-ID: <20241213104924.GA3662210@gnbcxd0016.gnb.st.com>
-References: <20241213060011.67797-1-lukas.bulwahn@redhat.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BWUcAC6q"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53e395932c6so242404e87.2
+        for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 03:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734087782; x=1734692582; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cPrHEQPv1CwDbKkeMuoTmMG3oC4VaHuPVeckilyXmbw=;
+        b=BWUcAC6qpgqWTiAnCz9FHU7fz92V01XRRwf//jR/+EWtd2X9po+o2sS+p362e1iPD2
+         Tg0e4a/MunTkogXZXdfVX/d8vmFdmG6DSE7dAMIy1tfTMVsRZnTuJjgYp9yjeq0jdad9
+         oaDtMaWZyKTP/k+SWoatww2WjdftOsDHMSJe77MZsj8nvpj01tXY9cFm4TTZhTyxxh0r
+         AttqW0b3TJuK+QTv2h514FooI3bLEJ2Zmk2IAASJ0sFUL3T22xfSIy7ujldhnGwpfSk1
+         RpGituwnNMNw3rftBsT8DLnO59Jxd5REsH0WVCQb7LQQLqzRl9LlShlLIx7RcFuM4vfs
+         tenw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734087782; x=1734692582;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cPrHEQPv1CwDbKkeMuoTmMG3oC4VaHuPVeckilyXmbw=;
+        b=FfpwMfS2hQqoPezmvl7iaKn7nrtjRJdqesaPVoli6BLVehyxgPcHvlVD5kzV9pf22P
+         WP4hNcA+uS75eV8WKMDqM1c9D16g46s0GandekduAgF1D9YSisLXoGRUZEEOzQDnGqFk
+         B1eBMLZSGl2Of5Ide/V0E/8IBRr/MEz0ctSf/8ObSIpGcFGpuXT/k4WAhc01lw1/6Bs1
+         QrCLkP8xEbd+Lb02FcKINTJ+KsAowU8zyiTdgbDmeImKJzQw0lfxTOInoION7vs44uQD
+         tb16yo1N3OpI7Av8X4R1D+2/uX6IUg4kkqgtLJki0XUE+gdnAwYaSWh/q5LAFuNNfNWa
+         egFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXt3jXpRzyxch29ih1LZhel3pT+HPwUw6iSSb7j5//g9xS8eeq7+1+O+yLrjtjsHBh4LYwbksMExbDwKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5fa89ZvcOGtf276s643ufz6rcZzgPRynpJSfgYPPcMnCQVRNy
+	gLlS0ZjkzJjsLblzkJhy3vpm7aJ3PQnmZhimS0PXqjOT5nze1mE21PxvCkS32+Q=
+X-Gm-Gg: ASbGncvM7sWviTXAKr+npUL2OQpOvkWts9eVzYZKgCHMyx1BKBaVViZXUs3mSzm+Hus
+	heGBbXLiAEKE2nEUm6iFWafUPNRLmbe0cTvqsNg/TPoTBTkVPmsMMvhTJYc3p5HMxHePhHWVsbM
+	2yFQlSd+y3tcTdNTadovvLeqAQQzS12t7ub/FVhPPBcfMjer4XN07d+cM2ZytBQPgH8IKrN3Ctv
+	mAJO8n9X7ERjmdO9JzPFLEnAH3WUCcAPE7rMNW/e2L38YDkh5Q1HFe/FuLSEGrCPOamwZKBldY3
+	IV8W2CY+4uLz3CTH8RF3NcdiT4k9qLas+Ls=
+X-Google-Smtp-Source: AGHT+IF5+Ile5TFJDfu5dWJVDE0gHMtZwo3Q1j+ZWVbQP9H/N/T5Uylk2Nrnn2OcrR9w7ZkDQGevdA==
+X-Received: by 2002:a05:6512:2825:b0:540:3593:9fd8 with SMTP id 2adb3069b0e04-54090568008mr203132e87.7.1734087781891;
+        Fri, 13 Dec 2024 03:03:01 -0800 (PST)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5401fbe50a4sm1495464e87.200.2024.12.13.03.02.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2024 03:03:00 -0800 (PST)
+Message-ID: <a047e4b8-c2d6-4486-8037-e7b854660cb1@linaro.org>
+Date: Fri, 13 Dec 2024 13:02:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241213060011.67797-1-lukas.bulwahn@redhat.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] media: qcom: camss: Restrict endpoint bus-type to
+ D-PHY
+Content-Language: ru-RU
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Luca Weiss <luca.weiss@fairphone.com>, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Barnabas Czeman <barnabas.czeman@mainlining.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+ Caleb Connolly <caleb.connolly@linaro.org>, David Heidelberg <david@ixit.cz>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241209-camss-dphy-v1-0-5f1b6f25ed92@fairphone.com>
+ <20241209-camss-dphy-v1-2-5f1b6f25ed92@fairphone.com>
+ <9c89e6f4-a9af-4270-b266-537f3464ee32@linaro.org>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+In-Reply-To: <9c89e6f4-a9af-4270-b266-537f3464ee32@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Lukas,
+On 12/9/24 14:32, Bryan O'Donoghue wrote:
+> On 09/12/2024 12:01, Luca Weiss wrote:
+>> Currently the Qualcomm CAMSS driver only supports D-PHY while the
+>> hardware on most SoCs also supports C-PHY. Until this support is added,
+>> check for D-PHY to make it somewhat explicit that C-PHY won't work.
+>>
+>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>> ---
+>>    drivers/media/platform/qcom/camss/camss.c | 9 +++++++++
+>>    1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+>> index 9fb31f4c18adee886cd0bcf84438a8f27635e07f..b99af35074cdf6fa794a0d2f0d54ecf12ac354d9 100644
+>> --- a/drivers/media/platform/qcom/camss/camss.c
+>> +++ b/drivers/media/platform/qcom/camss/camss.c
+>> @@ -1855,6 +1855,15 @@ static int camss_of_parse_endpoint_node(struct device *dev,
+>>    	if (ret)
+>>    		return ret;
+>>    
+>> +	/*
+>> +	 * Most SoCs support both D-PHY and C-PHY standards, but currently only
+>> +	 * D-PHY is supported in the driver.
+>> +	 */
+>> +	if (vep.bus_type != V4L2_MBUS_CSI2_DPHY) {
+>> +		dev_err(dev, "Unsupported bus type %d\n", vep.bus_type);
+>> +		return -EINVAL;
+>> +	}
+>> +
 
-Indeed, thank you for the fix.
+Looks like it would break all old board dtbs, which is not just bad, but NAK.
 
-Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
+V4L2_MBUS_UNKNOWN shall be properly handled without the risk of regressions.
 
-Regards,
-Alain
+>>    	csd->interface.csiphy_id = vep.base.port;
+>>    
+>>    	mipi_csi2 = &vep.bus.mipi_csi2;
+>>
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> 
 
-On Fri, Dec 13, 2024 at 07:00:11AM +0100, Lukas Bulwahn wrote:
-> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-> 
-> Commit dcb0f4c16be5 ("media: stm32: csi: addition of the STM32 CSI driver")
-> adds a new driver at drivers/media/platform/st/stm32/stm32-csi.c, but
-> creates a new MAINTAINERS section MEDIA DRIVERS FOR STM32 - CSI with a file
-> entry pointing to drivers/media/platform/stm32/stm32-csi.c. Note that the
-> file entry is missing the ‘st’ directory in its path.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference. Repair this file entry in MEDIA DRIVERS FOR STM32 - CSI.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bff3d35f80b5..230b7a4ee95f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14551,7 +14551,7 @@ L:	linux-media@vger.kernel.org
->  S:	Supported
->  T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
-> -F:	drivers/media/platform/stm32/stm32-csi.c
-> +F:	drivers/media/platform/st/stm32/stm32-csi.c
->  
->  MEDIA DRIVERS FOR STM32 - DCMI / DCMIPP
->  M:	Hugues Fruchet <hugues.fruchet@foss.st.com>
-> -- 
-> 2.47.1
-> 
+--
+Best wishes,
+Vladimir
