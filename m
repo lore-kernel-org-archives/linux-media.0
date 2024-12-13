@@ -1,63 +1,64 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85841AB530
-	for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 11:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF9C1DEFF7
+	for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 11:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734089472; cv=none; b=sOzbQM0QohFvRMt9gcmntYejDAVxFaYuakNLf2mHS/I5Qf+5ZmSHOchE2IGNsTgzjA2A0N6Om3UOCMY5j966WZHvrSk8I50s/PHpkYuueG4GXH3NgFN6lc+D1kL2H4T5C2j3JZpOja/FhVwDri70tvRqXItT7qKPQT4b2Njga2o=
+	t=1734089670; cv=none; b=iooltYHkjvqzmRRpwnYX3XB0vuKKjRSGavntUlGzeqg4D5Xurei0/G+zndIl4jWTMyAE5mLpu9uGpEhgLuRHdnJG2PPmUQAkj9cz95smcahUJFDeUuY/YGaWv65fJjkWwzhd7++nObPYnPeIYymHBvU0EG38FMHgHx5hiKhfr94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734089472; c=relaxed/simple;
-	bh=FUAaikwISy2yCao/qOHxZDhQqBDvQRhKmpOYdt+b9y0=;
+	s=arc-20240116; t=1734089670; c=relaxed/simple;
+	bh=4XfO9sgRR89Q+W9l3UVT/d7WgRINh0RFlj7iisUzSSY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oOqZLROnJZV7XoIkbXbQBW2g45ziCkHrDuICRNlWcOrstpNelxAc4ZVt8YFaNsE0cRcJMya8pCiQgKl9NqmkjtnRKHyy37bNcR13yCEknJ5ASZ2D7EsrWDE5tK+wc11/ATl75J/pzjANufJ1hW+DBejotk+fcT3FS0it9g02RIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nm3ih19H; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=nX0BEaIR3b31UmPYMTMJ/9zK7DJ9GEkBHlgAX/1JggGwLScsgGabwcFroj2HXg56TXW5Qb2U9a/8ghq3kSH/AVah9yAUU23FWio9SvU1/Ryqs4EEeLZuOfrMZkChNXKE2VsbyRDOazWZO2IRR9x6mDQXQ3AqP+Eo+ehtiRW+bJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t8yg3K4H; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nm3ih19H"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4362f61757fso4288345e9.2
-        for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 03:31:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t8yg3K4H"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43618283dedso15481205e9.3
+        for <linux-media@vger.kernel.org>; Fri, 13 Dec 2024 03:34:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734089469; x=1734694269; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1734089666; x=1734694466; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4y10DVoW4HQIavObhRHig9NVjzLlQQfmJ/QJuh+fR6o=;
-        b=nm3ih19HBay+supzYW0II3jkqt9znNzcWOlDCycjAtrcZHQog1WT6RZyv9hdVXJV59
-         ai5qgW+o2ZLyAZgkqsV9qWpPDV17/Bm4b8Lx0aZnmq6XN+rr+0gnltD1IClZcTYdlhqP
-         RhQxMaygJ9cfBnQdjwFxAJdPSUO91RJAMT9gCuxGIJb1Ct+7LX/Ke3V99vUx5OJmuK+I
-         RSLVShrVJIg7w3vTGxoaqMK+/2k5Twj/+X7BZYDbiO5CV0ZqjX+sqe39lVof47A5IVMF
-         MCdvNJYLudr8WphC3sH8oa7zvKjhca9PJovOp2yL9dxSuYBMcn6H5Bnx8V883GGQXCxD
-         c40g==
+        bh=VoLSaqzOSgXTHhnrnBIXiVWZQerMmrmkF4OQm6gfaXQ=;
+        b=t8yg3K4HuJOQUWWwhafEpqBrJaKiZKZmA5y1s36J0W4dUmZmLI6y0nzF0S3u5eBbyU
+         thHcVU5L+OdrrnXZft4OTJK6APLOMrD7jaWmsFZvZZiPKuCTFXsk9h6NiezLuJej3QYj
+         fTrLxnSXOFrlgQGNxRbrA3KuUWmqK9Y6lx64vnsvFfEuZ6aGYDwNZ0YJGQyfi/0dtdVS
+         6fGEyGW7vBg3j/yLwMHqZjiRs2PIIU4wUQ+qjAR6irmZU/EowyNM7Ph7/KEky7hXLM2L
+         ZkiKZldsU9dpj2bvjOPaPHH5jYUF5dd15Lv/1UzXWDk1w458WwHAQfhAXRL3DZaBJL+D
+         v0/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734089469; x=1734694269;
+        d=1e100.net; s=20230601; t=1734089666; x=1734694466;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4y10DVoW4HQIavObhRHig9NVjzLlQQfmJ/QJuh+fR6o=;
-        b=lqmP3iXbVIxbDhiJb1ciY0pY/4+jeGI0/YszZAjfLuVV0gFuote+LqhryB0bxKoZbU
-         Ulds9T02hZ4nD9DhIQjs4dDBsZ4Qjqqnsj7Yq77a6LWQEcPQGlp7qulZme6ojz7XDhcP
-         xh+TrHgDkF9hdT8bsyVnEChhGHvtGB/i8hIGscHOYDd+CY9z3l8PE2hnV3k+0lv6KOS4
-         HwUwuctghigWIRSG3FBLGcjE/FRYX1n5sVgjaIS7yApKxVUWLneZgnP3LlAWlUDBfrAZ
-         XwlbSq1c+/tI0qM9aQwleL5Eab/TF+TAV7em4lthbi4tp3CdOWIl4dEB6gQZy2JTrn5I
-         s4Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZp4SfHKwGq0BReu3Jq4qKX6Pu51oZG945OL8QRbbMd3odPnnVMT2W6iSw4I0him39YKscYgqiooXV7Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMO1jAwxfqAx7UV3NjE0o4vMICxaVcOpJHxBZWEo+tlTiWXuQE
-	1No0xahi8EPvNkhFFUFSQ6Azmr9koCL7KSLpp2BLZbzgM5OnUn5fsva/A3gQ/20=
-X-Gm-Gg: ASbGnct4cXuU5dtQhSxNmaKzGsO1OQdFRefwQiKgIpdSJdC8u9vpMGUvkvTP51nybcY
-	RA6tztR8R3F9jmdNd1bdq+M0HEeAKNmyJBOJr4EApORbs+TRg3O/Cn6iHsdWhfdsz6pnx0RUMhW
-	85AOediJuVU6CGuHWDyvOl6a9ENqCI47c1SOwgFpHt2YyCguYzeZ9wKnj6SlxdMRztDhZ6h6YfV
-	91hSTE1vf5ciaz7S95/4XOh4hm/f8kYAUUZnaEVpgXu2rag9vLnMEI2V4RdW8IrVRYL8w==
-X-Google-Smtp-Source: AGHT+IETuPHPFuuNGFE6WzO5Hx+8zK5/GuDZNTK85Oe+eNBHryZXY+p4CHr5oTbKQs3HzS98KnozpQ==
-X-Received: by 2002:a05:600c:1e0d:b0:42c:b9c8:2bb0 with SMTP id 5b1f17b1804b1-4362aa27057mr17130235e9.4.1734089469166;
-        Fri, 13 Dec 2024 03:31:09 -0800 (PST)
+        bh=VoLSaqzOSgXTHhnrnBIXiVWZQerMmrmkF4OQm6gfaXQ=;
+        b=Scb/gxkqBzFu5uUI6t7YXoXJyccq8xTfSuhIQRXsaYc7VZEBseEaRR4GG0HF0WIQsV
+         wtHF37Y0nPPxhb19mjoMYJb5kuoAu0ZJYko25rGnqvemqfYZ0ZMscTaxdFjfA5m9YMWA
+         XSBZ1ody9Xrrle+9QXefP48MWsriQHPr/G0Hwuq+nnT7veWug/oYW9OOsNKfkX6BSnSu
+         8Ltg7ljdyHzRB4YlDCcflq/d2fTo7Kt00XIkrVQ9+4f3bt0PvsiNRhHlKe1ksF62kzwj
+         nqS64xjOyGzttXjvenfp5UmX00W1/rMmjf/0epuSKlKBq0Gb9M+P/1/1P4gE5+bX+p81
+         HpYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWR+fz3r1dIbb5ssC/Vpq+e99fYmQKQVlAaeVWREnVmKnmAnh9zgFMqstxInkg2BRzC5aycDEE/rxKbvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznvbMlfPXFNN7kCM/mGyMjCYKicwxXF+YZZkJKl357NR1HXZz2
+	3ANYXdd+gyOw4TLHLjudbexWw68ToPcN9QuutcWldfEzSSUuINBQczUCHygOD/RBkC1fOs5OPLn
+	P
+X-Gm-Gg: ASbGncvsddh8raj6Du1ObwqmpUVUB1Cm63DQGH2Dz+0SrE8Ve9CVBz7bsLG8b34al2b
+	T3ix/edPPGbhmW35QNo78bri1KBTB7TV/M392gdIc8W+vgfNTQFcUfl07g2LMxZKuTLck/AeUdz
+	WQo1Vza76B0pU8BLgdw2OyfKkrrc9JF9CuiRIP4xHAhI4sF/gW+QzlnPNhbnJTtGyR18XfhIo8Q
+	9Rdg0baELTGX5EYGcGPg/v/7a6aIHrtHldor2a9Olu3lTXVBBpMqrMLpD7HGnCaCiqnFA==
+X-Google-Smtp-Source: AGHT+IFa8ec15w1W+mCJa8qiRjb8wSbVwQDAXu4RYHaXXbcgV53ag8xsVJvsFwXS3y/+5di8npaPTQ==
+X-Received: by 2002:a05:600c:384e:b0:431:12a8:7f1a with SMTP id 5b1f17b1804b1-4362aa52e39mr20921645e9.16.1734089666146;
+        Fri, 13 Dec 2024 03:34:26 -0800 (PST)
 Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-387824bd634sm6943016f8f.45.2024.12.13.03.31.08
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-387824ca9absm6818336f8f.61.2024.12.13.03.34.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2024 03:31:08 -0800 (PST)
-Message-ID: <ae83acc2-534d-49de-a0ec-b2117e5bd4d1@linaro.org>
-Date: Fri, 13 Dec 2024 11:31:07 +0000
+        Fri, 13 Dec 2024 03:34:25 -0800 (PST)
+Message-ID: <d7e3076e-5b32-4ab8-afe8-f52458769f23@linaro.org>
+Date: Fri, 13 Dec 2024 11:34:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,48 +66,95 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: add venus node for the qcs615
-To: Renjiang Han <quic_renjiang@quicinc.com>,
- Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
+Subject: Re: [PATCH 1/2] media: dt-bindings: media: camss: Restrict bus-type
+ property
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
  Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Stanimir Varbanov <stanimir.varbanov@linaro.org>,
- linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241213-add-venus-for-qcs615-v4-0-7e2c9a72d309@quicinc.com>
- <20241213-add-venus-for-qcs615-v4-3-7e2c9a72d309@quicinc.com>
+ <conor+dt@kernel.org>, Barnabas Czeman <barnabas.czeman@mainlining.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+ Caleb Connolly <caleb.connolly@linaro.org>, David Heidelberg
+ <david@ixit.cz>, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241209-camss-dphy-v1-0-5f1b6f25ed92@fairphone.com>
+ <20241209-camss-dphy-v1-1-5f1b6f25ed92@fairphone.com>
+ <nqggstwkytqxpxy3iuhkl6tup5elf45lqi3qlgyv6eaizvnfdr@2uy57umdzqfa>
+ <e4bd515a-eb98-4ea1-8d73-4ba5e7c9b66e@linaro.org>
+ <D6AJ9U23ANWI.1DLHNPU5A6HQ4@fairphone.com>
 Content-Language: en-US
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241213-add-venus-for-qcs615-v4-3-7e2c9a72d309@quicinc.com>
+In-Reply-To: <D6AJ9U23ANWI.1DLHNPU5A6HQ4@fairphone.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 13/12/2024 09:56, Renjiang Han wrote:
-> +			video-decoder {
-> +				compatible = "venus-decoder";
-> +			};
-> +
-> +			video-encoder {
-> +				compatible = "venus-encoder";
-> +			};
+On 13/12/2024 11:24, Luca Weiss wrote:
+> On Fri Dec 13, 2024 at 11:50 AM CET, Vladimir Zapolskiy wrote:
+>> On 12/13/24 11:34, Krzysztof Kozlowski wrote:
+>>> On Mon, Dec 09, 2024 at 01:01:05PM +0100, Luca Weiss wrote:
+>>>> The CSIPHY of Qualcomm SoCs support both D-PHY and C-PHY standards for
+>>>> CSI-2, but not any others so restrict the bus-type property describing
+>>>> this to the supported values.
+>>>>
+>>>> The only exception here is MSM8916 which only supports D-PHY. C-PHY was
+>>>> introduced with newer SoCs.
+>>>>
+>>>> Do note, that currently the Linux driver only supports D-PHY.
+>>>>
+>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>>> ---
+>>>>    .../bindings/media/qcom,msm8916-camss.yaml         |  8 ++++++
+>>>>    .../bindings/media/qcom,msm8953-camss.yaml         | 15 +++++++++++
+>>>>    .../bindings/media/qcom,msm8996-camss.yaml         | 20 +++++++++++++++
+>>>>    .../bindings/media/qcom,sc8280xp-camss.yaml        | 20 +++++++++++++++
+>>>>    .../bindings/media/qcom,sdm660-camss.yaml          | 20 +++++++++++++++
+>>>>    .../bindings/media/qcom,sdm845-camss.yaml          | 20 +++++++++++++++
+>>>>    .../bindings/media/qcom,sm8250-camss.yaml          | 30 ++++++++++++++++++++++
+>>>>    7 files changed, 133 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+>>>> index 9cc0a968a401836814560c1af3ee84d946500b4f..3de2a3d2b5b761106975aab65ff614b2ef579ef5 100644
+>>>> --- a/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+>>>> +++ b/Documentation/devicetree/bindings/media/qcom,msm8916-camss.yaml
+>>>> @@ -94,6 +94,10 @@ properties:
+>>>>                    minItems: 1
+>>>>                    maxItems: 4
+>>>>    
+>>>> +              bus-type:
+>>>> +                enum:
+>>>> +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+>>>> +
+>>>>                required:
+>>>>                  - data-lanes
+>>>>    
+>>>> @@ -113,6 +117,10 @@ properties:
+>>>>                    minItems: 1
+>>>>                    maxItems: 4
+>>>>    
+>>>> +              bus-type:
+>>>> +                enum:
+>>>> +                  - 4 # MEDIA_BUS_TYPE_CSI2_DPHY
+>>>> +
+>>
+>> But is it really needed to specify the single supported bus-type?
+>>
+>> I believe it is not, at least it's not ever done for other media devices
+>> like sensors.
+> 
+> Through video-interfaces.yaml 'bus-type' is already allowed but not
+> restricted to the values that actually make any sense on such hardware,
+> so in my opinion this makes sense to have here.
+This is additive not prescriptive.
 
-To be honest, I'd prefer not to continue on doing this.
+New additions should include this bus-type number as we will need it 
+when we add CPHY support and the subsequently move to the PHY API for 
+CAMSS PHYs.
 
-Adding a compat string to existing yaml might work-around the issue but, 
-it doesn't really _account_ for the issue.
-
-I've posted a series to fix the problem
-
-20241209-media-staging-24-11-25-rb3-hw-compat-string-v5-0-ef7e5f85f302@linaro.org
-
-Either that or deeper rewrite of venus to remove the above dependencies 
-should go ahead.
-
-I'm not in favour of willfully continuing to do the wrong thing, 
-especially when per above, there's a working solution for it.
+So still in favour of this amendment.
 
 ---
 bod
