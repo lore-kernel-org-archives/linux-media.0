@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BC91E5708;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB871EB9ED;
 	Mon, 16 Dec 2024 21:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734382892; cv=none; b=QkWiymG98KjOQyiJmGvNGO2BrR8OZnq4RWlUPherJqqyLLBpi0Y38f4cF2VUwOEYn7xsIYp48I7jbAKUMw9pG41x03uJl9Dk9oPK2I1/N6aVuQ+9Mj8PxtBTp06PboSoemSuGRF9C7aDi2zo9mHOmhxTZM9+YytVuGxgVToLkek=
+	t=1734382892; cv=none; b=n+nqDXvCvEk8gl34t5HqSKWIj77RT4WgQEMTyziMgNHp2eZ3OXZILv6w6pP0/oL7SGgonRb8xH9UbYFqZcOVdW5YiOhSWjZ6t4EFbUelw8cNvBjmMTJ3QrsXn/CSAzJ+umwGFmYF5reEa9DVMwyM1Mu0j8HLuJ9oCxjuzTLlpBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734382892; c=relaxed/simple;
-	bh=RoQGnHKtaGUL8mOPn5pG0+xndTgAcQORe5hNPcXjc2A=;
+	bh=uayiAHJhpVkZ8FjjIys4MjRuoxMxNRxOAGpI8qX1ukU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hg9wr24PTasNsKB9kmoB3Um4b9reavt376Q+1qQC6cVbnqCyZOo4OIPaZ2Wm3Zh9ncTIw6Xhdh8owXr1U40bt+VgqdtoonsetipF3jMXMn0oUr5QvoE6zCe8+TtLtD/7aVgCXXwx+nZSwGe0XMzUMQNGMg+5GHnWQOu2OpnbbHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vt3Jg/uO; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=J1jOqLS2Tta7g8asBWEr2hVW9Ob6OomSvWMlaSq4SBzIcHVWhS+RtY39CmJswLhDJZ+7meCYQ2daZ53jHHqrFdc8pNF3dW1DbF8fDSzuF0qfRmc2JOgKCDXpJW25sG0o5aqJ3oHivWvILkYxjnzSxxr00Vdz+3Ujdlz4Bz0mFHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mizWw3XU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vt3Jg/uO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C819C4AF0C;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mizWw3XU"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C7FCC4AF09;
 	Mon, 16 Dec 2024 21:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734382892;
-	bh=RoQGnHKtaGUL8mOPn5pG0+xndTgAcQORe5hNPcXjc2A=;
+	bh=uayiAHJhpVkZ8FjjIys4MjRuoxMxNRxOAGpI8qX1ukU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Vt3Jg/uOldmnFk3qAS3m1NsZAxiZdt8y992ZN9ObZ0uFAamWHCixEf8yg4lODS5hX
-	 L63KNC9jEN/8wL/AoPJKglta98oJKCmlB+bBMdRqqHR5nzI7GaOEBQD+u4HvQ7TO0M
-	 WHMXBaL3LOAImw00GFlxCxCTckVcPvA8wx5jINrXfZ41erUaJRzo2fM8EfH6yjL7sX
-	 gdqFaROXTU29qDZSbLtDtSVCS2+xPyuqEEN79BbnlcggW7kJXFyPDOIOxoQdD5JoUW
-	 1Tn1rTBZPKBXjaA7Eh84S2fKL6yZ7wWDpsot5COQlYKAws8PGAZF7407QNSjsdRbvD
-	 usVb819TENyKQ==
+	b=mizWw3XULdBbo0caGr+bIG5y/xKbRKS4Ksr40pnk38KE7UFt1Z+CiN399DQYkhKNk
+	 OCealbfNqI/kd+uScQSR9pnxVqfFcFRlzDl65jHYUXFPyEQOOjXG4tCUdmBizNXrOT
+	 l8AZkk2owfpq4P/sWb/JVPcEQct4gMdz1mxJ5Inu0A/coRMoeEMZbv27vL3u4bTfVN
+	 I8kSmr3s5TE5syaSBTKFdRk0HEWsV5qVPR9QzYuZCF+SIRqXjYyWbWKoBqeVRUdtBL
+	 879IBWC1yzchmHzJ35w6eh1z/AtO0R2pPukJDofXgPjTpaQ9EH90zxlsaNr204Rwa1
+	 7aCPBXzqEDNqA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 422DBE77183;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 853C1E77184;
 	Mon, 16 Dec 2024 21:01:32 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Mon, 16 Dec 2024 22:00:53 +0100
-Subject: [PATCH v4 07/13] media: i2c: imx214: Add vblank and hblank
- controls
+Date: Mon, 16 Dec 2024 22:00:57 +0100
+Subject: [PATCH v4 11/13] media: i2c: imx214: Add test pattern control
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241216-imx214-v4-7-8cbda160fbce@apitzsch.eu>
+Message-Id: <20241216-imx214-v4-11-8cbda160fbce@apitzsch.eu>
 References: <20241216-imx214-v4-0-8cbda160fbce@apitzsch.eu>
 In-Reply-To: <20241216-imx214-v4-0-8cbda160fbce@apitzsch.eu>
 To: Ricardo Ribalda <ribalda@kernel.org>, 
@@ -51,13 +50,14 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dave Stevenson <dave.stevenson@raspberrypi.com>, 
  Vincent Knecht <vincent.knecht@mailoo.org>, 
- =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734382889; l=8430;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734382889; l=4254;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=eOJwvpUYsXRam1lhvnoI8p9eaVy/k0kSB+FipoWRS0s=;
- b=a+c2etu9itVseyS/0OW1RYBYxPexLeaEDZwEKnxN9OgMOrUO8NRBx9KXUiFN7PDRWOXIChLf3
- 4ltE+buDEFFCASEXb57ifZLHFeVMePPmCVMthM7FtuSswvksJxk4aAz
+ bh=3vD5FrELxm/5VmXfnNcujtJNf/0AwL57zazqPcCcNUQ=;
+ b=VVzUOyjYyismlle7DhjyJBz/FZbAvLUpidIERu8EMMQmDpJHzvucDke33vCiObbkyx3CKpz4X
+ XmCpZEQIYwkDXJp/vz+MQTa52X+ISdmT1m3mto032L66SbpcxPwicRJ
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -67,253 +67,136 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-Add vblank control to allow changing the framerate /
-higher exposure values.
+This adds V4L2_CID_TEST_PATTERN control support.
 
-The vblank and hblank controls are needed for libcamera support.
-
-While at it, fix the minimal exposure time according to the datasheet.
-
+Acked-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 109 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 98 insertions(+), 11 deletions(-)
+ drivers/media/i2c/imx214.c | 77 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 3e8264d12f3fda38bb7076cb2d63a30529b9afa2..804814f3e5886369090c6ac36c57fa07cde6d5ac 100644
+index 4779439974add96b0fcf5089ae40d8d3126d0ffa..d15422873e7ba0588914d78d3d26374d2769541c 100644
 --- a/drivers/media/i2c/imx214.c
 +++ b/drivers/media/i2c/imx214.c
-@@ -34,11 +34,17 @@
+@@ -177,6 +177,23 @@
  
- /* V-TIMING internal */
- #define IMX214_REG_FRM_LENGTH_LINES	CCI_REG16(0x0340)
-+#define IMX214_VTS_MAX			0xffff
-+
-+#define IMX214_VBLANK_MIN		890
-+
-+/* HBLANK control - read only */
-+#define IMX214_PPL_DEFAULT		5008
+ #define IMX214_REG_ATR_FAST_MOVE	CCI_REG8(0x9300)
  
- /* Exposure control */
- #define IMX214_REG_EXPOSURE		CCI_REG16(0x0202)
--#define IMX214_EXPOSURE_MIN		0
--#define IMX214_EXPOSURE_MAX		3184
-+#define IMX214_EXPOSURE_OFFSET		10
-+#define IMX214_EXPOSURE_MIN		1
- #define IMX214_EXPOSURE_STEP		1
- #define IMX214_EXPOSURE_DEFAULT		3184
- #define IMX214_REG_EXPOSURE_RATIO	CCI_REG8(0x0222)
-@@ -187,6 +193,8 @@ struct imx214 {
- 	struct v4l2_ctrl_handler ctrls;
- 	struct v4l2_ctrl *pixel_rate;
- 	struct v4l2_ctrl *link_freq;
-+	struct v4l2_ctrl *vblank;
-+	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *exposure;
- 	struct v4l2_ctrl *unit_size;
++/* Test Pattern Control */
++#define IMX214_REG_TEST_PATTERN		CCI_REG16(0x0600)
++#define IMX214_TEST_PATTERN_DISABLE	0
++#define IMX214_TEST_PATTERN_SOLID_COLOR	1
++#define IMX214_TEST_PATTERN_COLOR_BARS	2
++#define IMX214_TEST_PATTERN_GREY_COLOR	3
++#define IMX214_TEST_PATTERN_PN9		4
++
++/* Test pattern colour components */
++#define IMX214_REG_TESTP_RED		CCI_REG16(0x0602)
++#define IMX214_REG_TESTP_GREENR		CCI_REG16(0x0604)
++#define IMX214_REG_TESTP_BLUE		CCI_REG16(0x0606)
++#define IMX214_REG_TESTP_GREENB		CCI_REG16(0x0608)
++#define IMX214_TESTP_COLOUR_MIN		0
++#define IMX214_TESTP_COLOUR_MAX		0x03ff
++#define IMX214_TESTP_COLOUR_STEP	1
++
+ /* IMX214 native and active pixel array size */
+ #define IMX214_NATIVE_WIDTH		4224U
+ #define IMX214_NATIVE_HEIGHT		3136U
+@@ -209,6 +226,22 @@ static const u32 imx214_mbus_formats[] = {
+ 	MEDIA_BUS_FMT_SBGGR10_1X10,
+ };
  
-@@ -202,8 +210,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
--	{ IMX214_REG_FRM_LENGTH_LINES, 3194 },
--	{ IMX214_REG_LINE_LENGTH_PCK, 5008 },
- 	{ IMX214_REG_X_ADD_STA, 56 },
- 	{ IMX214_REG_Y_ADD_STA, 408 },
- 	{ IMX214_REG_X_ADD_END, 4151 },
-@@ -274,8 +280,6 @@ static const struct cci_reg_sequence mode_1920x1080[] = {
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
--	{ IMX214_REG_FRM_LENGTH_LINES, 3194 },
--	{ IMX214_REG_LINE_LENGTH_PCK, 5008 },
- 	{ IMX214_REG_X_ADD_STA, 1144 },
- 	{ IMX214_REG_Y_ADD_STA, 1020 },
- 	{ IMX214_REG_X_ADD_END, 3063 },
-@@ -359,6 +363,7 @@ static const struct cci_reg_sequence mode_table_common[] = {
- 	{ IMX214_REG_ORIENTATION, 0 },
- 	{ IMX214_REG_MASK_CORR_FRAMES, IMX214_CORR_FRAMES_MASK },
- 	{ IMX214_REG_FAST_STANDBY_CTRL, 1 },
-+	{ IMX214_REG_LINE_LENGTH_PCK, IMX214_PPL_DEFAULT },
- 	{ CCI_REG8(0x4550), 0x02 },
- 	{ CCI_REG8(0x4601), 0x00 },
- 	{ CCI_REG8(0x4642), 0x05 },
-@@ -462,18 +467,24 @@ static const struct cci_reg_sequence mode_table_common[] = {
- static const struct imx214_mode {
- 	u32 width;
- 	u32 height;
++static const char * const imx214_test_pattern_menu[] = {
++	"Disabled",
++	"Color Bars",
++	"Solid Color",
++	"Grey Color Bars",
++	"PN9"
++};
 +
-+	/* V-timing */
-+	unsigned int vts_def;
++static const int imx214_test_pattern_val[] = {
++	IMX214_TEST_PATTERN_DISABLE,
++	IMX214_TEST_PATTERN_COLOR_BARS,
++	IMX214_TEST_PATTERN_SOLID_COLOR,
++	IMX214_TEST_PATTERN_GREY_COLOR,
++	IMX214_TEST_PATTERN_PN9,
++};
 +
- 	unsigned int num_of_regs;
- 	const struct cci_reg_sequence *reg_table;
- } imx214_modes[] = {
- 	{
- 		.width = 4096,
- 		.height = 2304,
-+		.vts_def = 3194,
- 		.num_of_regs = ARRAY_SIZE(mode_4096x2304),
- 		.reg_table = mode_4096x2304,
- 	},
- 	{
- 		.width = 1920,
- 		.height = 1080,
-+		.vts_def = 3194,
- 		.num_of_regs = ARRAY_SIZE(mode_1920x1080),
- 		.reg_table = mode_1920x1080,
- 	},
-@@ -627,9 +638,36 @@ static int imx214_set_format(struct v4l2_subdev *sd,
- 	__crop->width = mode->width;
- 	__crop->height = mode->height;
- 
--	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-+	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
-+		int exposure_max;
-+		int exposure_def;
-+		int hblank;
-+
- 		imx214->cur_mode = mode;
- 
-+		/* Update blank limits */
-+		__v4l2_ctrl_modify_range(imx214->vblank, IMX214_VBLANK_MIN,
-+					 IMX214_VTS_MAX - mode->height, 2,
-+					 mode->vts_def - mode->height);
-+
-+		/* Update max exposure while meeting expected vblanking */
-+		exposure_max = mode->vts_def - IMX214_EXPOSURE_OFFSET;
-+		exposure_def = min(exposure_max, IMX214_EXPOSURE_DEFAULT);
-+		__v4l2_ctrl_modify_range(imx214->exposure,
-+					 imx214->exposure->minimum,
-+					 exposure_max, imx214->exposure->step,
-+					 exposure_def);
-+
-+		/*
-+		 * Currently PPL is fixed to IMX214_PPL_DEFAULT, so hblank
-+		 * depends on mode->width only, and is not changeable in any
-+		 * way other than changing the mode.
-+		 */
-+		hblank = IMX214_PPL_DEFAULT - mode->width;
-+		__v4l2_ctrl_modify_range(imx214->hblank, hblank, hblank, 1,
-+					 hblank);
-+	}
-+
- 	return 0;
- }
- 
-@@ -679,8 +717,26 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct imx214 *imx214 = container_of(ctrl->handler,
- 					     struct imx214, ctrls);
-+	const struct v4l2_mbus_framefmt *format = NULL;
-+	struct v4l2_subdev_state *state;
- 	int ret;
- 
-+	if (ctrl->id == V4L2_CID_VBLANK) {
-+		int exposure_max, exposure_def;
-+
-+		state = v4l2_subdev_get_locked_active_state(&imx214->sd);
-+		format = v4l2_subdev_state_get_format(state, 0);
-+
-+		/* Update max exposure while meeting expected vblanking */
-+		exposure_max =
-+			format->height + ctrl->val - IMX214_EXPOSURE_OFFSET;
-+		exposure_def = min(exposure_max, IMX214_EXPOSURE_DEFAULT);
-+		__v4l2_ctrl_modify_range(imx214->exposure,
-+					 imx214->exposure->minimum,
-+					 exposure_max, imx214->exposure->step,
-+					 exposure_def);
-+	}
-+
- 	/*
- 	 * Applying V4L2 control value only happens
- 	 * when power is up for streaming
-@@ -692,7 +748,10 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_EXPOSURE:
- 		cci_write(imx214->regmap, IMX214_REG_EXPOSURE, ctrl->val, &ret);
+ struct imx214 {
+ 	struct device *dev;
+ 	struct clk *xclk;
+@@ -811,6 +844,26 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		cci_write(imx214->regmap, IMX214_REG_FRM_LENGTH_LINES,
+ 			  format->height + ctrl->val, &ret);
  		break;
--
-+	case V4L2_CID_VBLANK:
-+		cci_write(imx214->regmap, IMX214_REG_FRM_LENGTH_LINES,
-+			  format->height + ctrl->val, &ret);
++	case V4L2_CID_TEST_PATTERN:
++		cci_write(imx214->regmap, IMX214_REG_TEST_PATTERN,
++			  imx214_test_pattern_val[ctrl->val], &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_RED:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_RED,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENR:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENR,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_BLUE:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_BLUE,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENB:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENB,
++			  ctrl->val, &ret);
 +		break;
  	default:
  		ret = -EINVAL;
  	}
-@@ -715,8 +774,11 @@ static int imx214_ctrls_init(struct imx214 *imx214)
- 		.width = 1120,
- 		.height = 1120,
- 	};
-+	const struct imx214_mode *mode = &imx214_modes[0];
- 	struct v4l2_fwnode_device_properties props;
+@@ -838,14 +891,14 @@ static int imx214_ctrls_init(struct imx214 *imx214)
  	struct v4l2_ctrl_handler *ctrl_hdlr;
-+	int exposure_max, exposure_def;
-+	int hblank;
- 	int ret;
+ 	int exposure_max, exposure_def;
+ 	int hblank;
+-	int ret;
++	int i, ret;
  
  	ret = v4l2_fwnode_device_parse(imx214->dev, &props);
-@@ -724,7 +786,7 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 	if (ret < 0)
  		return ret;
  
  	ctrl_hdlr = &imx214->ctrls;
--	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 6);
-+	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 8);
+-	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 12);
++	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 13);
  	if (ret)
  		return ret;
  
-@@ -750,12 +812,28 @@ static int imx214_ctrls_init(struct imx214 *imx214)
- 	 *
- 	 * Yours sincerely, Ricardo.
- 	 */
-+
-+	/* Initial vblank/hblank/exposure parameters based on current mode */
-+	imx214->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
-+					   V4L2_CID_VBLANK, IMX214_VBLANK_MIN,
-+					   IMX214_VTS_MAX - mode->height, 2,
-+					   mode->vts_def - mode->height);
-+
-+	hblank = IMX214_PPL_DEFAULT - mode->width;
-+	imx214->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
-+					   V4L2_CID_HBLANK, hblank, hblank,
-+					   1, hblank);
-+	if (imx214->hblank)
-+		imx214->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
-+	exposure_max = mode->vts_def - IMX214_EXPOSURE_OFFSET;
-+	exposure_def = min(exposure_max, IMX214_EXPOSURE_DEFAULT);
- 	imx214->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
- 					     V4L2_CID_EXPOSURE,
- 					     IMX214_EXPOSURE_MIN,
--					     IMX214_EXPOSURE_MAX,
-+					     exposure_max,
- 					     IMX214_EXPOSURE_STEP,
--					     IMX214_EXPOSURE_DEFAULT);
-+					     exposure_def);
+@@ -914,6 +967,26 @@ static int imx214_ctrls_init(struct imx214 *imx214)
  
+ 	v4l2_ctrl_cluster(2, &imx214->hflip);
+ 
++	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &imx214_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(imx214_test_pattern_menu) - 1,
++				     0, 0, imx214_test_pattern_menu);
++	for (i = 0; i < 4; i++) {
++		/*
++		 * The assumption is that
++		 * V4L2_CID_TEST_PATTERN_GREENR == V4L2_CID_TEST_PATTERN_RED + 1
++		 * V4L2_CID_TEST_PATTERN_BLUE   == V4L2_CID_TEST_PATTERN_RED + 2
++		 * V4L2_CID_TEST_PATTERN_GREENB == V4L2_CID_TEST_PATTERN_RED + 3
++		 */
++		v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
++				  V4L2_CID_TEST_PATTERN_RED + i,
++				  IMX214_TESTP_COLOUR_MIN,
++				  IMX214_TESTP_COLOUR_MAX,
++				  IMX214_TESTP_COLOUR_STEP,
++				  IMX214_TESTP_COLOUR_MAX);
++		/* The "Solid color" pattern is white by default */
++	}
++
  	imx214->unit_size = v4l2_ctrl_new_std_compound(ctrl_hdlr,
  				NULL,
-@@ -877,12 +955,21 @@ static int imx214_get_frame_interval(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
-+/*
-+ * Raw sensors should be using the VBLANK and HBLANK controls to determine
-+ * the frame rate. However this driver was initially added using the
-+ * [S|G|ENUM]_FRAME_INTERVAL ioctls with a fixed rate of 30fps.
-+ * Retain the frame_interval ops for backwards compatibility, but they do
-+ * nothing.
-+ */
- static int imx214_enum_frame_interval(struct v4l2_subdev *subdev,
- 				struct v4l2_subdev_state *sd_state,
- 				struct v4l2_subdev_frame_interval_enum *fie)
- {
- 	const struct imx214_mode *mode;
- 
-+	dev_warn_once(imx214->dev, "frame_interval functions return an unreliable value for compatibility reasons. Use the VBLANK and HBLANK controls to determine the correct frame rate.\n");
-+
- 	if (fie->index != 0)
- 		return -EINVAL;
- 
+ 				V4L2_CID_UNIT_CELL_SIZE,
 
 -- 
 2.47.1
