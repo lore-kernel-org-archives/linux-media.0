@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85261F9F6F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF901FA248;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734471563; cv=none; b=UrdMcS24O2x1HUTVRqlkSXLeVxe/Z53ALHoMjAXnaD2CDja8I4TBy5mdPOojB6/EwLiixlKSZjFF9g+y+bGG6Ix+0aHAc927MhyGp8RqFm1sLukzeL8QKgOKhxxGu8leyIlJjP5YeG0u2mTYNQS+KqPhlc8znGNzz97EBm32Deo=
+	t=1734471564; cv=none; b=WbzxbnNvAogi0XlNOF8ZWBa38CG0y8x2i4XI7SIgovf9xbNiVXfoRAFbDtnnF6goteuIQQySFoe6RErvEdtOJi9oMLof5ODCEFvXQl3rwpEpW6l2ZpuqURc8vWoKR+gjWLptLYt3CpVkZTFMvj3neqwRknIgwX6DTF0EK5fgW1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734471563; c=relaxed/simple;
-	bh=Ld7YTXvBxZPDIj+jtmVBVzOpYRHENGO3HL8vAxNnog4=;
+	s=arc-20240116; t=1734471564; c=relaxed/simple;
+	bh=D1s5CPn4OTxbzgjmqYQtqM23Ak8/QMvrTE8jsEcIbgM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HsbHFG/opVR61jkNOA6nOKdzo2EMezHKsjuyCRwZUUIN6nZY2XF3Q7xXHCCjKL2lKWAdce6A1u2iishUguj8b8kRW0O9DHe0aiSW53DkfMp47C8eBWdviVb0hONe6BhoZSCVvOgyjAs789npXXUkXEX7bbozZX6YUsNpBycYCgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+NXYLBt; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=l5JMHHWcbM09ZkjBuAN+NUWiNXb1JwwCAPpWVHJghC9H5CpqLUYcX4qy1SeHbBJ/jZRa0noEe3RPzQ+36UJ8LDdJPqLVefUzQ/j3HAbNMgZit423d0p8M1YJbmGFL2wcTRtn4NOt/fK/ULPtwWMh2s2azkOergfmRX1tvPhkrHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HM2LGOco; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+NXYLBt"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 72265C4CEEA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HM2LGOco"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A96C8C4CEDF;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734471563;
-	bh=Ld7YTXvBxZPDIj+jtmVBVzOpYRHENGO3HL8vAxNnog4=;
+	bh=D1s5CPn4OTxbzgjmqYQtqM23Ak8/QMvrTE8jsEcIbgM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Z+NXYLBtlSRA8DoDB8PM3dM3vXU4Z7MbS+p1SNn9nT7gm+0xmSsH7mRLyuWTJXhOX
-	 V1h4veRUcHqnFkekQ9zZGhw8i80e2SaEpoWqSrVFyjIc+TF2VmNinuj1/jCfA38wvJ
-	 HosHdksJsTPQO+ljGS+V4cgVfHWUADZADnG62EK5TRGk/dyuRdXjU9wqFYREud0QRp
-	 svfpQk7qFUQHzLBC1rgjTy0o0CFFGWVOfvnN4iVvoCfIO5op18ctD/mrgtGG1C2ho0
-	 todJaW7qxGNOh3Rw/q9zyLxlq7j4jZV4FLM8kHQel8KIhZAgT03w9glaC4+biYU3Im
-	 LaLaovsQJQUNQ==
+	b=HM2LGOcoVaeRJOCBr12sglCQu72bDWmL8UAhCE9x2lkR6I0zpPVrAfXbd0zVZyyCY
+	 /BVP6DwJwMHu28TBf3+9LfxM/ZiiPuBIEX+rfVB2mj5Hqt/eKjJo7A+oeDZpyRteeR
+	 C9gImLFG6uMeHyOWONWhZmqXv7z6AYuErn/PusWBpYB8SE7u/Q0wfQHiKWgA1gkez4
+	 Si+GuLfSrwtLe3D98yAwUY2C7DtBQlIMhSkNxEch7cVVgWkEIVoSnwS7jKTATQusUk
+	 q8SNdHUmsihbg110tTAiB/Jofg52zfVRvFK68yQEg07tVRjJ9906eGuo4r4Q85Cmbh
+	 ka2JgsJQl2GoA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 662DAE77184;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A082EE77184;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Tue, 17 Dec 2024 22:39:18 +0100
-Subject: [PATCH v5 06/13] media: i2c: imx214: Check number of lanes from
- device tree
+Date: Tue, 17 Dec 2024 22:39:21 +0100
+Subject: [PATCH v5 09/13] media: i2c: imx214: Add analogue/digital gain
+ control
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241217-imx214-v5-6-387f52adef4d@apitzsch.eu>
+Message-Id: <20241217-imx214-v5-9-387f52adef4d@apitzsch.eu>
 References: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 In-Reply-To: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 To: Ricardo Ribalda <ribalda@kernel.org>, 
@@ -54,11 +54,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=2286;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=4360;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=kGBTGQW3yjp+KF2H7SRL1ipKMVJ3Z0zLTnYkR0YvOEk=;
- b=Qgm7rqRfRVxSEOVY0uH4SAuseMbAkofrQ+QOW0y2XqCu8SyH3pb1Ow5LNG0hseyiXMpKhkNtr
- uL6bo9HwD8cDhILhYgmfWVe7YrffPefPrKGqVn1EY+5YODySIYNHKNb
+ bh=QuAfPQeePKe/5ki79wP+jPczuFwsxXnqOPg6fk5ZuUw=;
+ b=YhaowPfkMHEdkmE3ZnlzGZKuiFLoxhT2IeUms3ehoIbwauCynXClfxZ5Sx8R/Mz8VI1Xn5w5c
+ GzS+vMg4J6nCAL2vakGbDrW0PlTSptvseNhOXnpYjnDnNZYCLv5DCpg
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -68,65 +68,128 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-The imx214 camera is capable of either two-lane or four-lane operation.
-
-Currently only the four-lane mode is supported, as proper pixel rates
-and link frequences for the two-lane mode are unknown.
+The imx214 sensor supports analogue gain up to 8x and digital gain up to
+16x. Implement the corresponding controls in the driver. Default gain
+values are not modified by this patch.
 
 Acked-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx214.c | 53 +++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 38 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 4e9a8e0e2c5f2ac3fd72be06906979dcd3aaa2a4..4f6c4f845a7ab36c7674a4ce8c1664d48e46c4d0 100644
+index 8ff1f00f2ec2a5ba805e052c2c143c8219008248..50dad9e1a90e56d0785c0f5067cc3fe18ebecf97 100644
 --- a/drivers/media/i2c/imx214.c
 +++ b/drivers/media/i2c/imx214.c
-@@ -197,7 +197,6 @@ struct imx214 {
+@@ -52,12 +52,20 @@
+ /* Analog gain control */
+ #define IMX214_REG_ANALOG_GAIN		CCI_REG16(0x0204)
+ #define IMX214_REG_SHORT_ANALOG_GAIN	CCI_REG16(0x0216)
++#define IMX214_ANA_GAIN_MIN		0
++#define IMX214_ANA_GAIN_MAX		448
++#define IMX214_ANA_GAIN_STEP		1
++#define IMX214_ANA_GAIN_DEFAULT		0x0
  
- /*From imx214_mode_tbls.h*/
- static const struct cci_reg_sequence mode_4096x2304[] = {
--	{ IMX214_REG_CSI_LANE_MODE, IMX214_CSI_4_LANE_MODE },
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-@@ -270,7 +269,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
- };
+ /* Digital gain control */
+ #define IMX214_REG_DIG_GAIN_GREENR	CCI_REG16(0x020e)
+ #define IMX214_REG_DIG_GAIN_RED		CCI_REG16(0x0210)
+ #define IMX214_REG_DIG_GAIN_BLUE	CCI_REG16(0x0212)
+ #define IMX214_REG_DIG_GAIN_GREENB	CCI_REG16(0x0214)
++#define IMX214_DGTL_GAIN_MIN		0x0100
++#define IMX214_DGTL_GAIN_MAX		0x0fff
++#define IMX214_DGTL_GAIN_DEFAULT	0x0100
++#define IMX214_DGTL_GAIN_STEP		1
  
- static const struct cci_reg_sequence mode_1920x1080[] = {
--	{ IMX214_REG_CSI_LANE_MODE, IMX214_CSI_4_LANE_MODE },
- 	{ IMX214_REG_HDR_MODE, IMX214_HDR_MODE_OFF },
- 	{ IMX214_REG_HDR_RES_REDUCTION, IMX214_HDR_RES_REDU_THROUGH },
- 	{ IMX214_REG_EXPOSURE_RATIO, 1 },
-@@ -787,6 +785,13 @@ static int imx214_start_streaming(struct imx214 *imx214)
+ #define IMX214_REG_ORIENTATION		CCI_REG8(0x0101)
+ 
+@@ -278,13 +286,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
+ 
+ 	{ IMX214_REG_SHORT_EXPOSURE, 500 },
+ 
+-	{ IMX214_REG_ANALOG_GAIN, 0 },
+-	{ IMX214_REG_DIG_GAIN_GREENR, 256 },
+-	{ IMX214_REG_DIG_GAIN_RED, 256 },
+-	{ IMX214_REG_DIG_GAIN_BLUE, 256 },
+-	{ IMX214_REG_DIG_GAIN_GREENB, 256 },
+-	{ IMX214_REG_SHORT_ANALOG_GAIN, 0 },
+-
+ 	{ CCI_REG8(0x4170), 0x00 },
+ 	{ CCI_REG8(0x4171), 0x10 },
+ 	{ CCI_REG8(0x4176), 0x00 },
+@@ -348,13 +349,6 @@ static const struct cci_reg_sequence mode_1920x1080[] = {
+ 
+ 	{ IMX214_REG_SHORT_EXPOSURE, 500 },
+ 
+-	{ IMX214_REG_ANALOG_GAIN, 0 },
+-	{ IMX214_REG_DIG_GAIN_GREENR, 256 },
+-	{ IMX214_REG_DIG_GAIN_RED, 256 },
+-	{ IMX214_REG_DIG_GAIN_BLUE, 256 },
+-	{ IMX214_REG_DIG_GAIN_GREENB, 256 },
+-	{ IMX214_REG_SHORT_ANALOG_GAIN, 0 },
+-
+ 	{ CCI_REG8(0x4170), 0x00 },
+ 	{ CCI_REG8(0x4171), 0x10 },
+ 	{ CCI_REG8(0x4176), 0x00 },
+@@ -744,6 +738,18 @@ static int imx214_entity_init_state(struct v4l2_subdev *subdev,
+ 	return 0;
+ }
+ 
++static int imx214_update_digital_gain(struct imx214 *imx214, u32 val)
++{
++	int ret = 0;
++
++	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_GREENR, val, &ret);
++	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_RED, val, &ret);
++	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_BLUE, val, &ret);
++	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_GREENB, val, &ret);
++
++	return ret;
++}
++
+ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct imx214 *imx214 = container_of(ctrl->handler,
+@@ -776,6 +782,15 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		return 0;
+ 
+ 	switch (ctrl->id) {
++	case V4L2_CID_ANALOGUE_GAIN:
++		cci_write(imx214->regmap, IMX214_REG_ANALOG_GAIN,
++			  ctrl->val, &ret);
++		cci_write(imx214->regmap, IMX214_REG_SHORT_ANALOG_GAIN,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_DIGITAL_GAIN:
++		ret = imx214_update_digital_gain(imx214, ctrl->val);
++		break;
+ 	case V4L2_CID_EXPOSURE:
+ 		cci_write(imx214->regmap, IMX214_REG_EXPOSURE, ctrl->val, &ret);
+ 		break;
+@@ -822,7 +837,7 @@ static int imx214_ctrls_init(struct imx214 *imx214)
  		return ret;
- 	}
  
-+	ret = cci_write(imx214->regmap, IMX214_REG_CSI_LANE_MODE,
-+			IMX214_CSI_4_LANE_MODE, NULL);
-+	if (ret) {
-+		dev_err(imx214->dev, "failed to configure lanes\n");
-+		return ret;
-+	}
-+
- 	state = v4l2_subdev_get_locked_active_state(&imx214->sd);
- 	fmt = v4l2_subdev_state_get_format(state, 0);
- 	mode = v4l2_find_nearest_size(imx214_modes, ARRAY_SIZE(imx214_modes),
-@@ -951,6 +956,13 @@ static int imx214_parse_fwnode(struct device *dev)
- 		goto done;
- 	}
+ 	ctrl_hdlr = &imx214->ctrls;
+-	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 10);
++	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 12);
+ 	if (ret)
+ 		return ret;
  
-+	/* Check the number of MIPI CSI2 data lanes */
-+	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 4) {
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "only 4 data lanes are currently supported\n");
-+		goto done;
-+	}
+@@ -871,6 +886,14 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 					     IMX214_EXPOSURE_STEP,
+ 					     exposure_def);
+ 
++	v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
++			  IMX214_ANA_GAIN_MIN, IMX214_ANA_GAIN_MAX,
++			  IMX214_ANA_GAIN_STEP, IMX214_ANA_GAIN_DEFAULT);
 +
- 	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
- 		if (bus_cfg.link_frequencies[i] == IMX214_DEFAULT_LINK_FREQ)
- 			break;
++	v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
++			  IMX214_DGTL_GAIN_MIN, IMX214_DGTL_GAIN_MAX,
++			  IMX214_DGTL_GAIN_STEP, IMX214_DGTL_GAIN_DEFAULT);
++
+ 	imx214->hflip = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
+ 					  V4L2_CID_HFLIP, 0, 1, 1, 0);
+ 	if (imx214->hflip)
 
 -- 
 2.47.1
