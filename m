@@ -1,182 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785721E2845;
-	Tue, 17 Dec 2024 10:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5017F13CFB6
+	for <linux-media@vger.kernel.org>; Tue, 17 Dec 2024 11:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734432072; cv=none; b=MOzwbxSEEDw5YTsZdomLdhHTY3IuD2qVgLCkFrCz8lyUzX1/gtkp9u96rPsUnvZ+PlNXgRIacr01+Aa8UPMtbQiaIaqOVpj73lHV7LTH3fgDEnbToC2AaSqgfyCQLvjpU4u3MXQIEJi7GBAuDF/v5AjMFarqhJtYNVV1jaKzkTg=
+	t=1734433277; cv=none; b=KN2500wzodCCXTZ8SpchKR+Je5XRcGqUYgWNWixbKT752Uoaxhh+dF9b8Ps5+muGJYqlPn2qcXDRmC+o4HRX5x56yiexNh2VV5C3NXX2QeAb887c97W9AWvquyc4LNdkYempEX2fajS8UjXlfQCa9gltFqc7rAa/AQEtkW98kE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734432072; c=relaxed/simple;
-	bh=1760CCO3gWZHNeVfY5/f+c2AnK/nJwtzD4p2QC2Rpx4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tWAtGJMl7b/1sEZ9CaIUALuz2nN5tXncmrJXRvVLpOOCffQBjqECtBs/lbFAM151S8NWv2N6kv8vKXs5Eh/CZAzA/pkUin5A5NCMJaH5c6V7zAo8Ar4lmmJnQw99fwcVWYGP/8p/i7MAyXblVHnd4OJ0WcJeRgfPjdpQ5XapxSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uovcrRAB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734433277; c=relaxed/simple;
+	bh=dzPlS4ShwjaasN3bD3BbmPZQWpeBj1znPpLJMJF6C4I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gFYKI1+glZtVog9d4WklcxQmAfaNKDuIsnamnTLM22VkxPLLgZ+2Si76X9hAmxDVDZv9rgbMC41LgHfHXA0fcpBlALkBJLjsIAp5u1YOLqr9aqYeSLE/xJ9NfgOG8ZbORE0tHgPEktYPQzJLw8sNFXEmDFImp3H0ZTVWWXpSJSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XuW87E2X; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uovcrRAB"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B0FEC4CEDD;
-	Tue, 17 Dec 2024 10:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734432072;
-	bh=1760CCO3gWZHNeVfY5/f+c2AnK/nJwtzD4p2QC2Rpx4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=uovcrRABs+VkZ9rv6ljq4Xa7ySSTNETAJ69DOTlHwIJNh+it5X35ezs15GL71loeC
-	 ITHngykkH1N7iLRpXm+pRdtc8IjU3bbWs20P0L/9IAR5stciz2Lsa2VsKRhtdnk2u7
-	 OXgbDqjTjGaC7UUCFX7brv9C6wtAw4aL4/4bqh4ogpi/0vSQnIOSMFNPStgal9jugw
-	 SmK/nfy1D9EK/Ub+yMoETBlQQ4qeXsrdhAHBt2nVui6kCSs0T5ycTNETLc9gaVB+HV
-	 NQmyBhK0TF3fl/x0FK9P42NNOx9ezYZjDnqu50TUWgkq8LNoiaEiYoDgZvmFlyYmvw
-	 HJ3Hvjowzq6TA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2B0E77187;
-	Tue, 17 Dec 2024 10:41:11 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Tue, 17 Dec 2024 18:16:49 +0800
-Subject: [PATCH v11 1/2] dt-bindings: mtd: Add Loongson-1 NAND Controller
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XuW87E2X"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3862b40a6e0so2869411f8f.0
+        for <linux-media@vger.kernel.org>; Tue, 17 Dec 2024 03:01:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734433275; x=1735038075; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w03D1ux3okaczBtpEnBHqfwxiSrA7LCvMwRhSIk4Nrk=;
+        b=XuW87E2XezKEUY+WFNprN5/dC7F2X4qj2ZhuGUDT4kBUVGkz98BDHSLPUkvvIomqzR
+         WK/Xwy+baAnfPIeauIiJA0JpAeK2c9ujS2he3oDf/NzqPUzMk3r88iDEEXJUpufoqolL
+         JXnaSPjUayHRvoqvu8AmW9e5TiBstW49riZyNwlkXbxxGnyg2682croqnndSYBsBsTVa
+         5Cuh+B2m5bWmN2r0nausRanGAbQKfOS+Hr58u6quho0WoVyZ874AQNejY1j3O6pu4FCt
+         dSeU6d3HLjck4HWc7HG3xDBHPkA1IZ83fSMnKgd7Iq5Ih9MDAQl6J7MHri7eYKEsfwWY
+         YhEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734433275; x=1735038075;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w03D1ux3okaczBtpEnBHqfwxiSrA7LCvMwRhSIk4Nrk=;
+        b=O+ldF4D84rG9chwma/NMBUY2iiNcSiWE4lZYz+ci5eLuoVAJXaX+80+XQdUMYpvyLm
+         sKOspl3eg7M4xgD1G8pi5sh96b7ilDTh22z01B0nlEqVXvqyh37nECFEQtVqX0aoq0hz
+         Vzto9k/6lFRqtZXh50AgJ8zFbZfLCO32WMOKU3tR6CZEk3ycB+SqX5fhg/dDdZt74WxA
+         OnNG7YrHIouNSisWG+N1JaGk/eZShya6ANins7LaXuRUdt89h28acujjMgFEqNIwZCIy
+         MLaSRycT+vf0JpZPc3Aig6KKYjxj0P4eXWmjULGyaz574R6zER3VRLmLUWNJKKYWcs4u
+         x99A==
+X-Gm-Message-State: AOJu0Yzu6SzI0e6OHF+rq6+ou5kWn8bjhsej/Z69TH2FTqaZqrgW0gu9
+	VLB6CPGrpdgEXxUXnOUNPo4puHbHYyM0ojbn4n7jrKXlMSTjrL4hHMj3NmEOM88=
+X-Gm-Gg: ASbGncsoNwQQAlFhZqMSe/7lswxfNfA4NNDiMLJ9ISrg/fHpdhdYGtYNQYmPp/c9/ox
+	tteXhu9UYiBBj1QViZIBj7+KGzrP65FnWbROQcXBd+53n+fmhcAZBlelj+x0tKvAu7+9NacwPPg
+	6NqJyUD725Bw+oyj2EF3EIcxpQWzP31H7Ium72xHyZ5VOy+Xxcvcl754tgaOkp1xpBBA2vPbk7X
+	A+X38hDIYW9hqBen8FA+rA3/upDRwJQTSW3pp4zBdhaqt2KaRQoQAkwI0hu7Udb08KZIA==
+X-Google-Smtp-Source: AGHT+IHN8F/bOTxwVgEj+Ryru3sGmbFULrRGiG+LPfJhyOB7pJk2kTCEvnFKgGCazxS5j/XYxa6EKA==
+X-Received: by 2002:a5d:5f88:0:b0:385:f821:e97e with SMTP id ffacd0b85a97d-38880af11e2mr15512297f8f.9.1734433274696;
+        Tue, 17 Dec 2024 03:01:14 -0800 (PST)
+Received: from [192.168.0.27] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c80605d9sm10774311f8f.95.2024.12.17.03.01.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Dec 2024 03:01:14 -0800 (PST)
+Message-ID: <236d41cf-ddc7-46e9-91b2-190c165461b2@linaro.org>
+Date: Tue, 17 Dec 2024 11:01:12 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241217-loongson1-nand-v11-1-b692c58988bb@gmail.com>
-References: <20241217-loongson1-nand-v11-0-b692c58988bb@gmail.com>
-In-Reply-To: <20241217-loongson1-nand-v11-0-b692c58988bb@gmail.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-media@vger.kernel.org, 
- Keguang Zhang <keguang.zhang@gmail.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734432069; l=2999;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=0n3iHa5vTKitylZMSJRQyTKQkBBQcI0nit09XDnkuhg=;
- b=6lL4GjLHOMmCi1U22+Sk2hzYN0ANTJsOeExsV2GdTN/z1pvz9TTEPD8SUurFSYshVscmRp6Xc
- XPi1X2fGT+lC7MkIr0TJ9dx/SZNZiYF/SSa4uB2WEblZBFDo1a+xkTy
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] arm64: dts: qcom: qcs615: add venus node
+To: Renjiang Han <quic_renjiang@quicinc.com>,
+ Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Stanimir Varbanov <stanimir.varbanov@linaro.org>
+References: <20241217-add-venus-for-qcs615-v5-0-747395d9e630@quicinc.com>
+ <20241217-add-venus-for-qcs615-v5-3-747395d9e630@quicinc.com>
+ <83fcb683-d610-4e47-bcce-128453a0afef@linaro.org>
+ <3cb0d715-3756-4cef-bcc0-3bb550811c73@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <3cb0d715-3756-4cef-bcc0-3bb550811c73@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
+On 17/12/2024 09:54, Renjiang Han wrote:
+> 
+>   I think when your change review passes, we only need to remove the
+> 
+>   video-decoder and video-encoder nodes in the device tree.
 
-Add devicetree binding document for Loongson-1 NAND controller.
+Yes but the _point_ is we shouldn't be adding in driver configuration to 
+dts.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+Which means I don't think your patch can be applied until we resolve in 
+impasse in venus.
+
 ---
-Changes in v11:
-- Remove the requirement for 'nand-use-soft-ecc-engine' and 'nand-ecc-algo'.
-- Add 'reg-names' to support DMA address.
-
-Changes in v10:
-- None
-
-Changes in v9:
-- Change the compatible to 'loongson,ls1*-nand-controller'.
-- Rename the file to loongson,ls1b-nand-controller.yaml
-- Some minor adjustments.
-
-Changes in v8:
-- Add a description part.
-- Adjust the compatible because the match data for ls1c-nfc differs from ls1b-nfc.
-- Mark 'nand-use-soft-ecc-engine' and 'nand-ecc-algo' as mandatory.
-- Delete the superfluous blank lines.
-
-Changes in v7:
-- rename the file to loongson,ls1b-nfc.yaml
-
-Changes in v6:
-- A newly added patch
----
- .../mtd/loongson,ls1b-nand-controller.yaml         | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mtd/loongson,ls1b-nand-controller.yaml b/Documentation/devicetree/bindings/mtd/loongson,ls1b-nand-controller.yaml
-new file mode 100644
-index 000000000000..f6530d64dc54
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/loongson,ls1b-nand-controller.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/loongson,ls1b-nand-controller.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-1 NAND Controller
-+
-+maintainers:
-+  - Keguang Zhang <keguang.zhang@gmail.com>
-+
-+description:
-+  The Loongson-1 NAND controller abstracts all supported operations,
-+  meaning it does not support low-level access to raw NAND flash chips.
-+  Moreover, the controller is paired with the DMA engine to perform
-+  READ and PROGRAM functions.
-+
-+allOf:
-+  - $ref: nand-controller.yaml
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - loongson,ls1b-nand-controller
-+          - loongson,ls1c-nand-controller
-+      - items:
-+          - enum:
-+              - loongson,ls1a-nand-controller
-+          - const: loongson,ls1b-nand-controller
-+
-+  reg:
-+    maxItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: nand
-+      - const: nand-dma
-+
-+  dmas:
-+    maxItems: 1
-+
-+  dma-names:
-+    const: rxtx
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - dmas
-+  - dma-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    nand-controller@1fe78000 {
-+        compatible = "loongson,ls1b-nand-controller";
-+        reg = <0x1fe78000 0x24>, <0x1fe78040 0x4>;
-+        reg-names = "nand", "nand-dma";
-+        dmas = <&dma 0>;
-+        dma-names = "rxtx";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        nand@0 {
-+            reg = <0>;
-+            nand-use-soft-ecc-engine;
-+            nand-ecc-algo = "hamming";
-+        };
-+    };
-
--- 
-2.43.0
-
-
+bod
