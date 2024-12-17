@@ -1,255 +1,124 @@
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CA71F706E;
-	Tue, 17 Dec 2024 17:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5321F706E;
+	Tue, 17 Dec 2024 17:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734457589; cv=none; b=JeGLLzBUUZDdavIm67ZqbBnamSQg8OXqE0MzwOYGT0fMKOaH7l9Wwk1rE0yWP8OeKiOK0yV24uSI2Zjc7u5kbEj8+Fd9o5Q9IsE4E7xYu33azPbecKGAgmp4N7fQy0HYEG/GUW1bohkn/wKi1EuDJqgRKjF3OYwxRa05qmzI1nw=
+	t=1734457595; cv=none; b=FjQGHGmyqoeX2iYmflFD6q7jH6CHS8hOzpwSWpnuC/2mZWLLYFrz/M6BT+KfA6dBcdBh/C/qj5pPL2etejrEZM5igPvoSX+ym5QNyHRjiuujp+h2BKzpcFbUgMORt2hQ7bVV/H2oIjaKVmWi5wLsx2h4jeGqcz7BArXnLVFMQRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734457589; c=relaxed/simple;
-	bh=W+chijpnVEp7UHsjvKMeMnGkZo4bfgoAjGNPDvFvKP0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SIowafRzeY+jErJ8A6uBMQyJjgu28+cuFf+JKJgqM4jQMlykoTwoLy+gQc3+VIsjhg/AlP4TX6euJFfIUzBBI4nxv1QSbjO1DMjI0jP/EHS4xlcJyO029otTaVmABwlCpUH3N3wKk68pe+UWwRg8kxr2QBXYyox162RLAPa4COE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=739eMwp8; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1734457595; c=relaxed/simple;
+	bh=OwGheDgt29vkvS8t2F2IuM3VUVlBDeT9j61i23O0ZJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yb71lVlBbtxDKa7w5X2icBCZ2qEdJ2++RZ6Z9ZfG23kibZGbI9a9Qy5VYz7nJBJRorUqcD3Ra4EGHFLJEK3ycoOQsYrjn3DsAI5ed3/1sK9qKeYXcWDvHPTDPjF1Ix44GxFMCAXi94b3OZuXnNrAlt8kaRbpph5my9Z9GlhRITM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3ePxkuP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="739eMwp8"
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHD33jT000978;
-	Tue, 17 Dec 2024 18:45:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=selector1; bh=m06eKb+0LXxL2kWMKmXmynUU
-	1n7kANnjSiqIgxEeFCE=; b=739eMwp8PGdTU/m7CESzZVpZlgISnUYZivGvZ8By
-	bleBOS2Vy9Q6igP0fUEH4yq0yoOZWU2aS9cj5ZiQ3m/Js5Da1e37T8sf4S7QO1wX
-	s9ppyP60om11SWjLrYZxR056RmQYPh/Etd1OjrHFrgG/3Q+oSTZFK6PpJSJtV6kX
-	Aye/fYOxVAgQdpmECEwL+Z5S1pX3r1b/hX7d6dSp/TCSVaaaTfKq3va2kpRnbYAn
-	r2WGO4Zh1AUPVuMZJMaFC8f7WlAvdtPEyA2XslXKXFErAYf1t2DnesZhzfKaUkTp
-	FLcGtIqts97SykceTBx2JU7TJDkniJ3YE+FukDjoIQC9vA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 43k5ngaw6t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Dec 2024 18:45:56 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 6E0D140044;
-	Tue, 17 Dec 2024 18:44:24 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 395FC28AF0E;
-	Tue, 17 Dec 2024 18:41:51 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 17 Dec
- 2024 18:41:50 +0100
-Date: Tue, 17 Dec 2024 18:41:44 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Sakari Ailus <sakari.ailus@iki.fi>
-CC: Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp
- Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 02/15] dt-bindings: media: add description of stm32 csi
-Message-ID: <20241217174144.GA3784949@gnbcxd0016.gnb.st.com>
-References: <20241212-csi_dcmipp_mp25-v4-0-fbeb55a05ed7@foss.st.com>
- <20241212-csi_dcmipp_mp25-v4-2-fbeb55a05ed7@foss.st.com>
- <Z17JItE-98IIrnMv@valkosipuli.retiisi.eu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3ePxkuP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93A0C4CED3;
+	Tue, 17 Dec 2024 17:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734457594;
+	bh=OwGheDgt29vkvS8t2F2IuM3VUVlBDeT9j61i23O0ZJI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T3ePxkuPfo70D9lFnDwMhsaSYEGVGBUJICi+5sqC0oLHaXUqtOBToQbKP6tosj15V
+	 +zzrBj9vWgDNqRIbrA5YW5va/cKmoxDs2olkmaBnQ6gNIHfja8tvtIAHePhUWK2nF6
+	 xWLWSQgE7i3ktUlqFZH5yJ5HITbjgtP2dSfQNQpcY/c7QfSRMvD/fnurDON5vNIv+t
+	 UvO1A3uFDeEXqeBO2oWb5n7ICD/DBbcUvnvt00AK0ekDKkB+YKtr1kcbxm8eztoFql
+	 l+8Z/i0hIOzCN8hNio7y4wzf8+j+L/sEBlQigX2X3mT28CvykL+XpOztCb/VaowHi6
+	 HZ8DJAocaVrbw==
+Date: Tue, 17 Dec 2024 10:46:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sebastian Fricke <sebastian.fricke@collabora.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] media: mediatek: vcodec: mark
+ vdec_vp9_slice_map_counts_eob_coef noinline
+Message-ID: <20241217174628.GA2654633@ax162>
+References: <20241018151448.3694052-1-arnd@kernel.org>
+ <20241118200641.GA768549@thelio-3990X>
+ <20241119110226.dbd54clp46klvjl5@basti-XPS-13-9310>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z17JItE-98IIrnMv@valkosipuli.retiisi.eu>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+In-Reply-To: <20241119110226.dbd54clp46klvjl5@basti-XPS-13-9310>
 
-Hi Sakari,
+Hi Sebastian,
 
-On Sun, Dec 15, 2024 at 12:18:42PM +0000, Sakari Ailus wrote:
-> Hi Alain,
+On Tue, Nov 19, 2024 at 12:02:26PM +0100, Sebastian Fricke wrote:
+> Hey Nathan,
 > 
-> On Thu, Dec 12, 2024 at 10:17:26AM +0100, Alain Volmat wrote:
-> > Add the stm32 csi controller description.
+> On 18.11.2024 13:06, Nathan Chancellor wrote:
+> > On Fri, Oct 18, 2024 at 03:14:42PM +0000, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > With KASAN enabled, clang fails to optimize the inline version of
+> > > vdec_vp9_slice_map_counts_eob_coef() properly, leading to kilobytes
+> > > of temporary values spilled to the stack:
+> > > 
+> > > drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c:1526:12: error: stack frame size (2160) exceeds limit (2048) in 'vdec_vp9_slice_update_prob' [-Werror,-Wframe-larger-than]
+> > > 
+> > > This seems to affect all versions of clang including the latest (clang-20),
+> > > but the degree of stack overhead is different per release.
+> > > 
+> > > Marking the function as noinline_for_stack is harmless here and avoids
+> > > the problem completely.
+> > > 
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> > ---
-> > v2:
-> >   - rename into st,stm32mp25-csi.yaml to match compatible
-> >   - correct port / data-lanes (remove useless lines &
-> >     use data-lanes 1 and 2 instead of 0 and 1)
-> >   - correct commit log
-> > ---
-> >  .../bindings/media/st,stm32mp25-csi.yaml           | 125 +++++++++++++++++++++
-> >  1 file changed, 125 insertions(+)
+> > Unfortunately, I have seen no moment on my upstream report and this
+> > warning is breaking allmodconfig builds because of -Werror. Can this be
+> > applied as a workaround for now (preferrably with a Cc: stable on it)?
 > > 
-> > diff --git a/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml b/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
-> > new file mode 100644
-> > index 000000000000..33bedfe41924
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/st,stm32mp25-csi.yaml
-> > @@ -0,0 +1,125 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/st,stm32mp25-csi.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: STMicroelectronics STM32 CSI controller
-> > +
-> > +description:
-> > +  The STM32 CSI controller allows connecting a CSI based
-> > +  camera to the DCMIPP camera pipeline.
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> CSI-2 I presume?
-> 
-> You should also document it here it has D-PHY...
-> 
-> > +
-> > +maintainers:
-> > +  - Alain Volmat <alain.volmat@foss.st.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - st,stm32mp25-csi
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 3
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: pclk
-> > +      - const: txesc
-> > +      - const: csi2phy
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  vdd-supply:
-> > +    description: Digital core power supply (0.91V)
-> > +
-> > +  vdda18-supply:
-> > +    description: System analog power supply (1.8V)
-> > +
-> > +  access-controllers:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port node
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              data-lanes:
-> > +                minItems: 1
-> > +                items:
-> > +                  - const: 1
-> > +                  - const: 2
-> > +
-> > +            required:
-> > +              - data-lanes
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description:
-> > +          Output port node
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - ports
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/st,stm32mp25-rcc.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/media/video-interfaces.h>
-> > +    #include <dt-bindings/reset/st,stm32mp25-rcc.h>
-> > +    csi@48020000 {
-> > +        compatible = "st,stm32mp25-csi";
-> > +        reg = <0x48020000 0x2000>;
-> > +        interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-> > +        resets = <&rcc CSI_R>;
-> > +        clocks = <&rcc CK_KER_CSI>, <&rcc CK_KER_CSITXESC>, <&rcc CK_KER_CSIPHY>;
-> > +        clock-names = "pclk", "txesc", "csi2phy";
-> > +
-> > +        ports {
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> > +            port@0 {
-> > +                reg = <0>;
-> > +                endpoint {
-> > +                    remote-endpoint = <&imx335_ep>;
-> > +                    data-lanes = <1 2>;
-> > +                    bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
-> 
-> ...and drop bus-type property.
-> 
-> > +                };
-> > +            };
-> > +
-> > +            port@1 {
-> > +                reg = <1>;
-> > +                endpoint {
-> > +                    remote-endpoint = <&dcmipp_0>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +...
+> I'll handle it asap, it will be part of 6.13
+
+Is there any update here? I don't see this patch applied in -next.
+
+Cheers,
+Nathan
+
+> > > ---
+> > > I have not come to a conclusion on how exactly clang fails to do this
+> > > right, but can provide the .config and/or preprocessed source files
+> > > and command line if we think this should be fixed in clang.
+> > > ---
+> > >  .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c         | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> > > index eea709d93820..47c302745c1d 100644
+> > > --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> > > +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> > > @@ -1188,7 +1188,8 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
+> > >  	return ret;
+> > >  }
+> > > 
+> > > -static
+> > > +/* clang stack usage explodes if this is inlined */
+> > > +static noinline_for_stack
+> > >  void vdec_vp9_slice_map_counts_eob_coef(unsigned int i, unsigned int j, unsigned int k,
+> > >  					struct vdec_vp9_slice_frame_counts *counts,
+> > >  					struct v4l2_vp9_frame_symbol_counts *counts_helper)
+> > > --
+> > > 2.39.5
+> > > 
 > > 
-
-all 3 points corrected within the new serie I just pushed on top of this
-one since it has already been merged.
-
-Regards,
-
-Alain
