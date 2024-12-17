@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0361FA251;
-	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2727E1FA25F;
+	Tue, 17 Dec 2024 21:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734471564; cv=none; b=KgZJ4hPBN9/V3XsJuFSQwmeZ9xTmVAHTFhmLo/eNcuWIhE1sLYXVQ8Xi5ZfU7t3af4rR3Zowkvprh4RNQFkKD2Eu6BB3L/BwyWTHezdePcoILOGd2i4uxzgTK6/+UZjJG9R7W8Vn3urfOdHSLpW3ES1yvwInDjZUNU/+XF98J64=
+	t=1734471564; cv=none; b=okwo/sQBWZSffsHDNZSVobeEUUkWTih0+8M5iazqURPdZhrM360bjmyvG/paVMr1NzwoBk8PflSw0tnwF9J8ufwxY5HoSvSrNXAUcG8egY7u1HGURU4WaUHi/c2RGKnk2SMBOfCqOGIaTfNNJxltrE5vrbi3BbQsHzaIv65lyVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734471564; c=relaxed/simple;
-	bh=/R5+PURHVNV+AidcyiHwuNntLSQ9yjMOD3AT1C1w8VA=;
+	bh=YErCTUhQ/G7sCBOzYDhoT3G1Z1y0MkXWxHYYmk+C8lg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hTVMKMCgYortU5oCZjceRpR9L1gZpxaIWflcLoG55z8s+s2haJrs0AuE5tPCU5Lw6qzo3P+BPB0gqCISxLF6qgUQ47EDxmrRzx/bKP/Dh2F8HleZPy4+vjy9p7CI4biX86OQDWqbDHvMFGsoAQINGfehK6hzUUy0R6i3/4b1thQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4ScNTkO; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=afuQ1+8HJEPN/NDwv+mCsxs4Q7MZs1zqCslbtykkT5j9M2gRqrlv2n7hmbG8ulF7DMG7dW7W3X42L7w0xTmsjjd3K4/rRAqqKwpusZlVR0hvKQYYoeEq5C3RQwHoxrt2UeyMfkBX9uR2j2jSAUKwivshAb758JceIErbJ4RxtcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYzuAkxr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4ScNTkO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBDCDC4CEE3;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYzuAkxr"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 02917C4CEFB;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734471563;
-	bh=/R5+PURHVNV+AidcyiHwuNntLSQ9yjMOD3AT1C1w8VA=;
+	s=k20201202; t=1734471564;
+	bh=YErCTUhQ/G7sCBOzYDhoT3G1Z1y0MkXWxHYYmk+C8lg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=F4ScNTkO2de2sp2ZLiKg6F/vUSWqDBW0WqsXggBpgpNJFNtwd0O3sn+CVcufUWD3d
-	 epdkX3NPO7dPjaYjL8Fed4Xdw7C/sQQE5Z7vGCtWv9wdTqEXSTZwQpRfrFDJZbgA5W
-	 5u9jc/C0T6Mp72JsPFEaXId3k5N/6qFXL63gDJ6MabFeH6zxfb93yxCjxfnaAJvVw3
-	 lpjULtqFLBsIwKUTGrdSIio2e92RZTj2a40yL1afwHHrQO90exl1WMTtMlYvYZ6+bi
-	 4I9lw7e8Z804VESv2Jji3p8kuPevbdOJXZ4dUngS1e1IFhhOzpxDfVj2cPtT9KJW4/
-	 4XOKJZLjUcwjQ==
+	b=CYzuAkxruak4SeqaBYzDphn+etOS1xsvcbEp8tTBPidFM8qzsR4Hqwey1nOvAOZcI
+	 ivVTbPrF+sf+LEVBguUsZ1cAXP4pxQSGAwcK5gDu+S0KiO2AoVd7bnh9yZ5GLogwmO
+	 /qkxmgPpr7Q30/UiyxFVL+ohud5EMBsWwnxgMJU9XayAIaxct1izFdzXSHgnOeTdhl
+	 G4ej3Ga+9ODeb+lFqlTKYTBGelOfwTFLAb8FT3DkmupBmeIiZDMBI91tQ676nTbNlU
+	 kDeekjpfMW4PFTziPpeTffg/VyXSYL1O3LevF6wdEo/NF0DeM4t3a2bI21p54OCKgM
+	 AWqdhPQmIvv4A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B15DEE7717F;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4239E7718A;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Tue, 17 Dec 2024 22:39:22 +0100
-Subject: [PATCH v5 10/13] media: i2c: imx214: Verify chip ID
+Date: Tue, 17 Dec 2024 22:39:25 +0100
+Subject: [PATCH v5 13/13] media: i2c: imx214: Fix link frequency validation
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241217-imx214-v5-10-387f52adef4d@apitzsch.eu>
+Message-Id: <20241217-imx214-v5-13-387f52adef4d@apitzsch.eu>
 References: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 In-Reply-To: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 To: Ricardo Ribalda <ribalda@kernel.org>, 
@@ -53,11 +53,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=1922;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=2951;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=SjjQSnd3Z9zd8sIb5Zrn2Vj58ylYHPSyPr5HnJXGY74=;
- b=4Ww1uytXFFxmtW+0gDfF3mXonfVr1JgpU9q4CtY2aCqFmmqlqL2iqRTha0uhYZRnEx94LrRu1
- ZhS+BxPIdj+Bb/rpTqbKhR+rtSqqQ3erKep6lCZeOrDEwQORr0mKAcR
+ bh=IaHeW2kn0+BFS3UpeRipHSvLaInVm6GgixkZfvH8Zn8=;
+ b=iceWVJ/p6O7NHmC2GG6/G00Ue3fCNEOdq+Km0itSPUrZBIifHQiuWcE0/Oj+cpofhaS6rS9Vn
+ LWct7FTWZXDAHSf4LXuhe47H7G4pQFDB2/HyHCDpBd3sHdmwCmtzkMR
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -67,68 +67,80 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-Check the chip ID and stop probing if it is no imx214 sensor.
+The driver defines IMX214_DEFAULT_LINK_FREQ 480000000, and then
+IMX214_DEFAULT_PIXEL_RATE ((IMX214_DEFAULT_LINK_FREQ * 8LL) / 10),
+which works out as 384MPix/s. (The 8 is 4 lanes and DDR.)
+
+Parsing the PLL registers with the defined 24MHz input. We're in single
+PLL mode, so MIPI frequency is directly linked to pixel rate.  VTCK ends
+up being 1200MHz, and VTPXCK and OPPXCK both are 120MHz.  Section 5.3
+"Frame rate calculation formula" says "Pixel rate
+[pixels/s] = VTPXCK [MHz] * 4", so 120 * 4 = 480MPix/s, which basically
+agrees with my number above.
+
+3.1.4. MIPI global timing setting says "Output bitrate = OPPXCK * reg
+0x113[7:0]", so 120MHz * 10, or 1200Mbit/s. That would be a link
+frequency of 600MHz due to DDR.
+That also matches to 480MPix/s * 10bpp / 4 lanes / 2 for DDR.
+
+Keep the previous link frequency for backward compatibility.
 
 Acked-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/media/i2c/imx214.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 50dad9e1a90e56d0785c0f5067cc3fe18ebecf97..6b9584e330ddc17823cbb024e39f9c5fd54442bf 100644
+index e8d35f8b0f8b57d64f03ff6f5ed9eac51a671e8e..6a05094bbd4e94bb1a436a602745c3b5b2fdfbe2 100644
 --- a/drivers/media/i2c/imx214.c
 +++ b/drivers/media/i2c/imx214.c
-@@ -20,6 +20,10 @@
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-subdev.h>
+@@ -31,7 +31,9 @@
+ #define IMX214_REG_FAST_STANDBY_CTRL	CCI_REG8(0x0106)
  
-+/* Chip ID */
-+#define IMX214_REG_CHIP_ID		CCI_REG16(0x0016)
-+#define IMX214_CHIP_ID			0x0214
-+
- #define IMX214_REG_MODE_SELECT		CCI_REG8(0x0100)
- #define IMX214_MODE_STANDBY		0x00
- #define IMX214_MODE_STREAMING		0x01
-@@ -1101,6 +1105,27 @@ static int imx214_get_regulators(struct device *dev, struct imx214 *imx214)
- 				       imx214->supplies);
- }
+ #define IMX214_DEFAULT_CLK_FREQ	24000000
+-#define IMX214_DEFAULT_LINK_FREQ 480000000
++#define IMX214_DEFAULT_LINK_FREQ	600000000
++/* Keep wrong link frequency for backward compatibility */
++#define IMX214_DEFAULT_LINK_FREQ_LEGACY	480000000
+ #define IMX214_DEFAULT_PIXEL_RATE ((IMX214_DEFAULT_LINK_FREQ * 8LL) / 10)
+ #define IMX214_FPS 30
  
-+/* Verify chip ID */
-+static int imx214_identify_module(struct imx214 *imx214)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&imx214->sd);
-+	int ret;
-+	u64 val;
-+
-+	ret = cci_read(imx214->regmap, IMX214_REG_CHIP_ID, &val, NULL);
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "failed to read chip id %x\n",
-+				     IMX214_CHIP_ID);
-+
-+	if (val != IMX214_CHIP_ID)
-+		return dev_err_probe(&client->dev, -EIO,
-+				     "chip id mismatch: %x!=%llx\n",
-+				     IMX214_CHIP_ID, val);
-+
-+	return 0;
-+}
-+
- static int imx214_parse_fwnode(struct device *dev)
- {
- 	struct fwnode_handle *endpoint;
-@@ -1194,6 +1219,10 @@ static int imx214_probe(struct i2c_client *client)
- 	 */
- 	imx214_power_on(imx214->dev);
+@@ -1225,18 +1227,26 @@ static int imx214_parse_fwnode(struct device *dev)
+ 		goto done;
+ 	}
  
-+	ret = imx214_identify_module(imx214);
-+	if (ret)
-+		goto error_power_off;
+-	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++)
++	if (bus_cfg.nr_of_link_frequencies != 1)
++		dev_warn(dev, "Only one link-frequency supported, please review your DT. Continuing anyway\n");
 +
- 	pm_runtime_set_active(imx214->dev);
- 	pm_runtime_enable(imx214->dev);
- 	pm_runtime_idle(imx214->dev);
++	for (i = 0; i < bus_cfg.nr_of_link_frequencies; i++) {
+ 		if (bus_cfg.link_frequencies[i] == IMX214_DEFAULT_LINK_FREQ)
+ 			break;
+-
+-	if (i == bus_cfg.nr_of_link_frequencies) {
+-		dev_err_probe(dev, -EINVAL,
+-			      "link-frequencies %d not supported, Please review your DT\n",
+-			      IMX214_DEFAULT_LINK_FREQ);
+-		ret = -EINVAL;
+-		goto done;
++		if (bus_cfg.link_frequencies[i] ==
++		    IMX214_DEFAULT_LINK_FREQ_LEGACY) {
++			dev_warn(dev,
++				 "link-frequencies %d not supported, please review your DT. Continuing anyway\n",
++				 IMX214_DEFAULT_LINK_FREQ);
++			break;
++		}
+ 	}
+ 
++	if (i == bus_cfg.nr_of_link_frequencies)
++		ret = dev_err_probe(dev, -EINVAL,
++				    "link-frequencies %d not supported, please review your DT\n",
++				    IMX214_DEFAULT_LINK_FREQ);
++
+ done:
+ 	v4l2_fwnode_endpoint_free(&bus_cfg);
+ 	fwnode_handle_put(endpoint);
 
 -- 
 2.47.1
