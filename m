@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF901FA248;
-	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A22C1FA179;
+	Tue, 17 Dec 2024 21:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734471564; cv=none; b=WbzxbnNvAogi0XlNOF8ZWBa38CG0y8x2i4XI7SIgovf9xbNiVXfoRAFbDtnnF6goteuIQQySFoe6RErvEdtOJi9oMLof5ODCEFvXQl3rwpEpW6l2ZpuqURc8vWoKR+gjWLptLYt3CpVkZTFMvj3neqwRknIgwX6DTF0EK5fgW1w=
+	t=1734471564; cv=none; b=NdC+vKIyrZTBtcfkT9orpcVbic49SozT8+L6g3MnUc7IoHIovaS3EswE5zKJT4aq73c250mKYH6/WuufbnIo/rt078eS/dm8KUf7n5YCKtCQQNuhnvmbH7k7fBFv0YSDOD5ShRxkf+CzZpisDykWJmn052oXWaMQKYYS8by0cdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734471564; c=relaxed/simple;
-	bh=D1s5CPn4OTxbzgjmqYQtqM23Ak8/QMvrTE8jsEcIbgM=;
+	bh=xNkgs/PSLEgv69btsPpVw+OyA8uYtuNZhH+yM0DxWMo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l5JMHHWcbM09ZkjBuAN+NUWiNXb1JwwCAPpWVHJghC9H5CpqLUYcX4qy1SeHbBJ/jZRa0noEe3RPzQ+36UJ8LDdJPqLVefUzQ/j3HAbNMgZit423d0p8M1YJbmGFL2wcTRtn4NOt/fK/ULPtwWMh2s2azkOergfmRX1tvPhkrHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HM2LGOco; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=r75ku/jBBCX4djlntEL9979S4SQNPfIuEXVskAz4pMqXE+EhtU3rZrt9DNJka7IRiek1z4aE/d6QBfS/E0CCJRao8bCBn1xdOhTGhV0yRjuK+MY/Vxcw5j+jzVA4m0KnZEY6w9jrrdO5kdpZPLgBd55Vp4N8IEd1LylI1X1RLOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JoRibnWz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HM2LGOco"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A96C8C4CEDF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JoRibnWz"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0E7AC4CEE2;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734471563;
-	bh=D1s5CPn4OTxbzgjmqYQtqM23Ak8/QMvrTE8jsEcIbgM=;
+	bh=xNkgs/PSLEgv69btsPpVw+OyA8uYtuNZhH+yM0DxWMo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=HM2LGOcoVaeRJOCBr12sglCQu72bDWmL8UAhCE9x2lkR6I0zpPVrAfXbd0zVZyyCY
-	 /BVP6DwJwMHu28TBf3+9LfxM/ZiiPuBIEX+rfVB2mj5Hqt/eKjJo7A+oeDZpyRteeR
-	 C9gImLFG6uMeHyOWONWhZmqXv7z6AYuErn/PusWBpYB8SE7u/Q0wfQHiKWgA1gkez4
-	 Si+GuLfSrwtLe3D98yAwUY2C7DtBQlIMhSkNxEch7cVVgWkEIVoSnwS7jKTATQusUk
-	 q8SNdHUmsihbg110tTAiB/Jofg52zfVRvFK68yQEg07tVRjJ9906eGuo4r4Q85Cmbh
-	 ka2JgsJQl2GoA==
+	b=JoRibnWz/6MGZDmoLmK7HeGfYRNcxPLfqL+fYTe7d1LuiOcETGccPJ+hTZTRoSt49
+	 MyCa0XbqzB/U/MGOiVN7bgC+kl3fxDyEq/XJ4H4GZy8qaq2qRWzGCnSdcrQ+z+HTBE
+	 fPpOBuxqNx1IhvUWkC/RFB8GbwmPpH6w8dJSd4Mlx9X1k/RtM5ftpa2lxulbgTOfjw
+	 oNg7R04Phdqedi8codZ4aS0vVAvu8fMOCXoIL6lsTAPkCHtku2acDjq3x4Kn4Yaus6
+	 ANIU9t2mYq2T2xZDXJfSt8RDempK1v1ZP3vH/aIWsXjdfZ5PpsoOukjFf/2ZFxwu1g
+	 b3ESbStzvyEoQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A082EE77184;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2493E77187;
 	Tue, 17 Dec 2024 21:39:23 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Date: Tue, 17 Dec 2024 22:39:21 +0100
-Subject: [PATCH v5 09/13] media: i2c: imx214: Add analogue/digital gain
- control
+Date: Tue, 17 Dec 2024 22:39:23 +0100
+Subject: [PATCH v5 11/13] media: i2c: imx214: Add test pattern control
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241217-imx214-v5-9-387f52adef4d@apitzsch.eu>
+Message-Id: <20241217-imx214-v5-11-387f52adef4d@apitzsch.eu>
 References: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 In-Reply-To: <20241217-imx214-v5-0-387f52adef4d@apitzsch.eu>
 To: Ricardo Ribalda <ribalda@kernel.org>, 
@@ -54,11 +53,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=4360;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734471561; l=4254;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=QuAfPQeePKe/5ki79wP+jPczuFwsxXnqOPg6fk5ZuUw=;
- b=YhaowPfkMHEdkmE3ZnlzGZKuiFLoxhT2IeUms3ehoIbwauCynXClfxZ5Sx8R/Mz8VI1Xn5w5c
- GzS+vMg4J6nCAL2vakGbDrW0PlTSptvseNhOXnpYjnDnNZYCLv5DCpg
+ bh=Zo5rfJ2BLIxpU7a6IT7DWhNyt2I+eK8TbFHd0cNNoPQ=;
+ b=ca2sZOduOxnqYHM/w+3mbie1KijDd/FKvfyX1CPqYi509F/GKUULZ7zjiN2uJzeW1EMsOPhhx
+ TN+EX1W3TCMAQi0IG5nxpT5MokO4aC8yoRsyGQvKJCRtxj2F/HJpAQP
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -68,128 +67,136 @@ Reply-To: git@apitzsch.eu
 
 From: André Apitzsch <git@apitzsch.eu>
 
-The imx214 sensor supports analogue gain up to 8x and digital gain up to
-16x. Implement the corresponding controls in the driver. Default gain
-values are not modified by this patch.
+This adds V4L2_CID_TEST_PATTERN control support.
 
 Acked-by: Ricardo Ribalda <ribalda@chromium.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/media/i2c/imx214.c | 53 +++++++++++++++++++++++++++++++++-------------
- 1 file changed, 38 insertions(+), 15 deletions(-)
+ drivers/media/i2c/imx214.c | 77 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 75 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-index 8ff1f00f2ec2a5ba805e052c2c143c8219008248..50dad9e1a90e56d0785c0f5067cc3fe18ebecf97 100644
+index 6b9584e330ddc17823cbb024e39f9c5fd54442bf..96d05acfeb66480770bb6291027dd023fdccb649 100644
 --- a/drivers/media/i2c/imx214.c
 +++ b/drivers/media/i2c/imx214.c
-@@ -52,12 +52,20 @@
- /* Analog gain control */
- #define IMX214_REG_ANALOG_GAIN		CCI_REG16(0x0204)
- #define IMX214_REG_SHORT_ANALOG_GAIN	CCI_REG16(0x0216)
-+#define IMX214_ANA_GAIN_MIN		0
-+#define IMX214_ANA_GAIN_MAX		448
-+#define IMX214_ANA_GAIN_STEP		1
-+#define IMX214_ANA_GAIN_DEFAULT		0x0
+@@ -177,6 +177,23 @@
  
- /* Digital gain control */
- #define IMX214_REG_DIG_GAIN_GREENR	CCI_REG16(0x020e)
- #define IMX214_REG_DIG_GAIN_RED		CCI_REG16(0x0210)
- #define IMX214_REG_DIG_GAIN_BLUE	CCI_REG16(0x0212)
- #define IMX214_REG_DIG_GAIN_GREENB	CCI_REG16(0x0214)
-+#define IMX214_DGTL_GAIN_MIN		0x0100
-+#define IMX214_DGTL_GAIN_MAX		0x0fff
-+#define IMX214_DGTL_GAIN_DEFAULT	0x0100
-+#define IMX214_DGTL_GAIN_STEP		1
+ #define IMX214_REG_ATR_FAST_MOVE	CCI_REG8(0x9300)
  
- #define IMX214_REG_ORIENTATION		CCI_REG8(0x0101)
- 
-@@ -278,13 +286,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
- 
- 	{ IMX214_REG_SHORT_EXPOSURE, 500 },
- 
--	{ IMX214_REG_ANALOG_GAIN, 0 },
--	{ IMX214_REG_DIG_GAIN_GREENR, 256 },
--	{ IMX214_REG_DIG_GAIN_RED, 256 },
--	{ IMX214_REG_DIG_GAIN_BLUE, 256 },
--	{ IMX214_REG_DIG_GAIN_GREENB, 256 },
--	{ IMX214_REG_SHORT_ANALOG_GAIN, 0 },
--
- 	{ CCI_REG8(0x4170), 0x00 },
- 	{ CCI_REG8(0x4171), 0x10 },
- 	{ CCI_REG8(0x4176), 0x00 },
-@@ -348,13 +349,6 @@ static const struct cci_reg_sequence mode_1920x1080[] = {
- 
- 	{ IMX214_REG_SHORT_EXPOSURE, 500 },
- 
--	{ IMX214_REG_ANALOG_GAIN, 0 },
--	{ IMX214_REG_DIG_GAIN_GREENR, 256 },
--	{ IMX214_REG_DIG_GAIN_RED, 256 },
--	{ IMX214_REG_DIG_GAIN_BLUE, 256 },
--	{ IMX214_REG_DIG_GAIN_GREENB, 256 },
--	{ IMX214_REG_SHORT_ANALOG_GAIN, 0 },
--
- 	{ CCI_REG8(0x4170), 0x00 },
- 	{ CCI_REG8(0x4171), 0x10 },
- 	{ CCI_REG8(0x4176), 0x00 },
-@@ -744,6 +738,18 @@ static int imx214_entity_init_state(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
-+static int imx214_update_digital_gain(struct imx214 *imx214, u32 val)
-+{
-+	int ret = 0;
++/* Test Pattern Control */
++#define IMX214_REG_TEST_PATTERN		CCI_REG16(0x0600)
++#define IMX214_TEST_PATTERN_DISABLE	0
++#define IMX214_TEST_PATTERN_SOLID_COLOR	1
++#define IMX214_TEST_PATTERN_COLOR_BARS	2
++#define IMX214_TEST_PATTERN_GREY_COLOR	3
++#define IMX214_TEST_PATTERN_PN9		4
 +
-+	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_GREENR, val, &ret);
-+	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_RED, val, &ret);
-+	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_BLUE, val, &ret);
-+	cci_write(imx214->regmap, IMX214_REG_DIG_GAIN_GREENB, val, &ret);
++/* Test pattern colour components */
++#define IMX214_REG_TESTP_RED		CCI_REG16(0x0602)
++#define IMX214_REG_TESTP_GREENR		CCI_REG16(0x0604)
++#define IMX214_REG_TESTP_BLUE		CCI_REG16(0x0606)
++#define IMX214_REG_TESTP_GREENB		CCI_REG16(0x0608)
++#define IMX214_TESTP_COLOUR_MIN		0
++#define IMX214_TESTP_COLOUR_MAX		0x03ff
++#define IMX214_TESTP_COLOUR_STEP	1
 +
-+	return ret;
-+}
-+
- static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct imx214 *imx214 = container_of(ctrl->handler,
-@@ -776,6 +782,15 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
- 		return 0;
+ /* IMX214 native and active pixel array size */
+ #define IMX214_NATIVE_WIDTH		4224U
+ #define IMX214_NATIVE_HEIGHT		3136U
+@@ -209,6 +226,22 @@ static const u32 imx214_mbus_formats[] = {
+ 	MEDIA_BUS_FMT_SBGGR10_1X10,
+ };
  
- 	switch (ctrl->id) {
-+	case V4L2_CID_ANALOGUE_GAIN:
-+		cci_write(imx214->regmap, IMX214_REG_ANALOG_GAIN,
-+			  ctrl->val, &ret);
-+		cci_write(imx214->regmap, IMX214_REG_SHORT_ANALOG_GAIN,
-+			  ctrl->val, &ret);
-+		break;
-+	case V4L2_CID_DIGITAL_GAIN:
-+		ret = imx214_update_digital_gain(imx214, ctrl->val);
-+		break;
- 	case V4L2_CID_EXPOSURE:
- 		cci_write(imx214->regmap, IMX214_REG_EXPOSURE, ctrl->val, &ret);
++static const char * const imx214_test_pattern_menu[] = {
++	"Disabled",
++	"Color Bars",
++	"Solid Color",
++	"Grey Color Bars",
++	"PN9"
++};
++
++static const int imx214_test_pattern_val[] = {
++	IMX214_TEST_PATTERN_DISABLE,
++	IMX214_TEST_PATTERN_COLOR_BARS,
++	IMX214_TEST_PATTERN_SOLID_COLOR,
++	IMX214_TEST_PATTERN_GREY_COLOR,
++	IMX214_TEST_PATTERN_PN9,
++};
++
+ struct imx214 {
+ 	struct device *dev;
+ 	struct clk *xclk;
+@@ -807,6 +840,26 @@ static int imx214_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		cci_write(imx214->regmap, IMX214_REG_FRM_LENGTH_LINES,
+ 			  format->height + ctrl->val, &ret);
  		break;
-@@ -822,7 +837,7 @@ static int imx214_ctrls_init(struct imx214 *imx214)
++	case V4L2_CID_TEST_PATTERN:
++		cci_write(imx214->regmap, IMX214_REG_TEST_PATTERN,
++			  imx214_test_pattern_val[ctrl->val], &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_RED:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_RED,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENR:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENR,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_BLUE:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_BLUE,
++			  ctrl->val, &ret);
++		break;
++	case V4L2_CID_TEST_PATTERN_GREENB:
++		cci_write(imx214->regmap, IMX214_REG_TESTP_GREENB,
++			  ctrl->val, &ret);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -834,14 +887,14 @@ static int imx214_ctrls_init(struct imx214 *imx214)
+ 	struct v4l2_ctrl_handler *ctrl_hdlr;
+ 	int exposure_max, exposure_def;
+ 	int hblank;
+-	int ret;
++	int i, ret;
+ 
+ 	ret = v4l2_fwnode_device_parse(imx214->dev, &props);
+ 	if (ret < 0)
  		return ret;
  
  	ctrl_hdlr = &imx214->ctrls;
--	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 10);
-+	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 12);
+-	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 12);
++	ret = v4l2_ctrl_handler_init(&imx214->ctrls, 13);
  	if (ret)
  		return ret;
  
-@@ -871,6 +886,14 @@ static int imx214_ctrls_init(struct imx214 *imx214)
- 					     IMX214_EXPOSURE_STEP,
- 					     exposure_def);
+@@ -910,6 +963,26 @@ static int imx214_ctrls_init(struct imx214 *imx214)
  
-+	v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-+			  IMX214_ANA_GAIN_MIN, IMX214_ANA_GAIN_MAX,
-+			  IMX214_ANA_GAIN_STEP, IMX214_ANA_GAIN_DEFAULT);
+ 	v4l2_ctrl_cluster(2, &imx214->hflip);
+ 
++	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &imx214_ctrl_ops,
++				     V4L2_CID_TEST_PATTERN,
++				     ARRAY_SIZE(imx214_test_pattern_menu) - 1,
++				     0, 0, imx214_test_pattern_menu);
++	for (i = 0; i < 4; i++) {
++		/*
++		 * The assumption is that
++		 * V4L2_CID_TEST_PATTERN_GREENR == V4L2_CID_TEST_PATTERN_RED + 1
++		 * V4L2_CID_TEST_PATTERN_BLUE   == V4L2_CID_TEST_PATTERN_RED + 2
++		 * V4L2_CID_TEST_PATTERN_GREENB == V4L2_CID_TEST_PATTERN_RED + 3
++		 */
++		v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
++				  V4L2_CID_TEST_PATTERN_RED + i,
++				  IMX214_TESTP_COLOUR_MIN,
++				  IMX214_TESTP_COLOUR_MAX,
++				  IMX214_TESTP_COLOUR_STEP,
++				  IMX214_TESTP_COLOUR_MAX);
++		/* The "Solid color" pattern is white by default */
++	}
 +
-+	v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
-+			  IMX214_DGTL_GAIN_MIN, IMX214_DGTL_GAIN_MAX,
-+			  IMX214_DGTL_GAIN_STEP, IMX214_DGTL_GAIN_DEFAULT);
-+
- 	imx214->hflip = v4l2_ctrl_new_std(ctrl_hdlr, &imx214_ctrl_ops,
- 					  V4L2_CID_HFLIP, 0, 1, 1, 0);
- 	if (imx214->hflip)
+ 	imx214->unit_size = v4l2_ctrl_new_std_compound(ctrl_hdlr,
+ 				NULL,
+ 				V4L2_CID_UNIT_CELL_SIZE,
 
 -- 
 2.47.1
