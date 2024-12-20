@@ -1,63 +1,65 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AF1219A90
-	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 16:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B987821B1AB
+	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 16:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734711697; cv=none; b=TGzFbuyXiRQRee8q7OQ0n8aq6dux6mLm1Yv4ARjbT/MTu6r7InVBYh1pVq2cN3l5iGuYyWoLRKcG0StMvQ2zCuNBG8NZ7iwJFY/D/vHAArVnAkq3oMFd8Y4kVbjsXTGV7iT+mQ7ddxm99nNL9whVAaBxr65I/QE41+SmTS1wEmQ=
+	t=1734711699; cv=none; b=QuYebD4aWcKdV1JM7qvlTOP4SEN24zDywL/iznrzFeaiWiGS/0bO6boMKIwkZOsJzh1XQhZZsOzx4QXYt1h+tVSjlw1/7yQzAuZ+GgQFbWQUP9r8/Hu/b1wz3+ZKabH6pZMACT3gb8fF8Y9ydgKqN5umUzpt6V/XF4Yj3jbWPIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734711697; c=relaxed/simple;
-	bh=Nm4fsxGYoQQSVTPfd/GmYVxTY6ghk6mOsm8WTQMjS5o=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K3lr3Xyv5eSZeVdwCDhiq6Y/qGi3cPSw/m4hUFqGMy8WOyTjDcEpZqQFlDfr3eZYdjQHV6jii60JCvQLHf5IH3mGstzyepIsZtdFVH0lnYacgpISphshFey0Zar+dz5fUvA0TAv02M9CHaWpHo+9ip9OoUGpfseVMxnKPBsYJK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=ULKmalyJ; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1734711699; c=relaxed/simple;
+	bh=evUDjlbbbIVWbgnJkzWE2IDXuslB3YSmbdbxGGC+Rsc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VU4is7JZsfA7uIGQ7qsrxtcozj+mhUp7yLS6uN/Qws/FMLaCmMI/p6cZ8kUR4ONzM7SzmRQNdOy/qh3qJkjMcRQAcP9UoGRaGcAgBOeYaJ/nrmquKUan1k9KzLq7pjLWeqZt03hUR2vS1lSzCQP06kBeJ/9XxmqCz6zbjO9RM1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=IvD5h2hd; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="ULKmalyJ"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43622354a3eso14747465e9.1
-        for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 08:21:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="IvD5h2hd"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4361c705434so15636785e9.3
+        for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 08:21:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1734711694; x=1735316494; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wzAYIPQHb0FbSnFpHVNI5uenoiDrwNrze87rYQaiun4=;
-        b=ULKmalyJx3W2F9B5hsx9svT3AOKZKxO2otZnL+LUqEXgRFr30n5LD4Z1D2hjBNrzoD
-         u4HdQMqwOhZQSpQpJ5EJ9WsXVpRbGcHNURGZD8aavSl90UAfpok15zrJc8k7GXJTh3HL
-         o+Cwf620Q9uWy015LLdJju6IvmfiGlRDSIZwelK7On0zXeIUxmV61E+4TnbOV8mQZqsT
-         xNaxdqIfvDeZrHnBD1anVa7hcK6GIYEpFYlsQzRrQ7kMNaG5MZ2s5GVLOu8rNPEsM7HJ
-         8VLn/X/mh0rnNeAQm9s9KpBcrvG7814TG2AUMTlSdzl7pmZrAAJL3qPbIJu2tNsc6Jrj
-         narA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734711694; x=1735316494;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=raspberrypi.com; s=google; t=1734711696; x=1735316496; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wzAYIPQHb0FbSnFpHVNI5uenoiDrwNrze87rYQaiun4=;
-        b=sj8y+muxBs/rhCbWXyQvqogjqisH5uCnMXvJ3pquVMFdxzVya7LdaV5X6mB4SuAMyI
-         C7YjHttzHMeIrbdir8pBRARTMb52wGbEIDTV9lNJMwm80xtxTqtPepoJld7d5rvXo/2c
-         4AODBxiSo0hCiF4kkSVkajnmXteyU/XsDusNA8Fa2vooVjyDX15BovnwnckAwBofeL44
-         pOR1nVWIIw3tZwQAAr8CxL8W9DpaEnxCTRQkN8RCe9Sx5InDxxTuUChycHWSfeGqBYVi
-         RiAzTnkEZUpafEgV7ZaTaPGtE+BvYgxsIRn+g7KVbxVs6lNj7RdGU3mDGuecXqGQzZvk
-         tMow==
-X-Forwarded-Encrypted: i=1; AJvYcCVRpv+bjWlTDObNoGcxaA7Y9BoPDLKDT6DeufVpYlgqoLESFNYCFojeFdcJg9EeAKFAOKwdeJoxfJFNmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbuBqH8k7JG9eefiLiK7PUUznp4c84SM2li1xy9g5VG4uIAyw+
-	rgTSVYNl/xqzufLw/9h44DphGxiUh8goFYOSVOEc6+zA2FUOr48iUgxoaWjD0N8=
-X-Gm-Gg: ASbGnctHv8zbxWir77UCKqYz8bNKeadAQPKnDZFINOTgfEtG721F8rNYsx8wVFvHkxQ
-	VSbo2yYZ/fh4WLTRvGKQ1jkzSh1WDKAWsBiVhWvJJmDEiB6MlL+cqEJ2kLeE3++mq9blHi4HjOI
-	8c04HszctYgxQxQM57koINfRr4ldGXU6fVDxRERs8+bQqRoMKt9glKzCABxt6U8+lIGMwGJRmiD
-	Mf8YfVuZBh64tNS0jbgHTIEjO74CMnJuAeWPRSSMVtY2Law
-X-Google-Smtp-Source: AGHT+IHoMhxzo3nOSCXEz3c5go2jSoHmBpi1T83KWRryGLqx6ewmpsxMhEX24RS3Od99Osv6HAf6mA==
-X-Received: by 2002:a05:600c:154c:b0:434:9f81:76d5 with SMTP id 5b1f17b1804b1-43668b49a47mr28606565e9.22.1734711693962;
-        Fri, 20 Dec 2024 08:21:33 -0800 (PST)
+        bh=x8tvjSHvBnYEUrXXehqqoug7u5Rbl1jMwLkYtbBCoO8=;
+        b=IvD5h2hd3bcHmmdqvDTUSs06Zm6uaLyobfjNviTDHcvyks+JayJCSHKyCygDD2G5yH
+         URQOeAHHKMt5GwLh+fL6Rf+fzkCfCH4Ci69cydJ2hU0aeP0dy3WtwNkBnsnxf1ofW31V
+         /WYOQ4SGXMyI0bOGoN2dzWNXChNuEpli0reIM+t9wttC4Uu+ycTaluUFaXVewTs/+lWO
+         6rUcE+m/HGk5+SQeiPMcI8M3FBU0Cldu9pxhw1ULKlASdQ0bkHANGEmJfdKhJO6a+1hu
+         5v6Zf+AZ/JLmbHsuRqzezd0jKUsrVtaV/f8XYqpaB1eznltGfWevnhu6uhfpxt5AoTij
+         2zYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734711696; x=1735316496;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x8tvjSHvBnYEUrXXehqqoug7u5Rbl1jMwLkYtbBCoO8=;
+        b=lcuX2tfKThquN4RxetD1tqLu0uRlXqJZCPt5/2An8zDUQMYgm1A6d9soX+9SNqQ5NJ
+         GKhEFfU7RJrRHGr62dOXkV4AcgVNPvfiXFZHs5cTUmnCcIYE57uszB70HXNrKJgwIE82
+         i+iI3IQXeUH02DiXzIloSKy5cQJP2EVDWNBypPocE9w0tUat98Ddr2Gq7NoE9HOSAPDa
+         gxz7J8OT8PyshDDoZA+JDmjlxN76ZMWTk9cV08fuNa9iCLuMvxY+mYkLZLC4K0179jic
+         IFYdAgB3oCErnmfqH53q0PoQw0/DnjLLldhcn8GYkgqYvN49Ns5R8rSm+5JC0BrSri0r
+         ViLg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8eInDlieSRRXTgTXO93F5QEcQv4By1H5zUApsTXYBpEYxAed09cfzf6DqW/K8Ov9Jky3BPsDeugf94w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpWOxu2KQghp8hulcJ51DgpkEQN69FW5ZLOf7dl+qmjP+q3aXl
+	QhQ7I5LSkr5f5gLpYQtyT+OwAwOhFAxpvKp4QqIrSYQCDksTWz/CMcr1JQShFh4=
+X-Gm-Gg: ASbGncts4nu5hyTSJ7nKqRcGpgAygSELkqugYwYFVDZOWmfJVxxkbY+0bJVXiTYgIig
+	MeHaSz+AJYeKuJJSXBoFnpQWrJxl1h7KoI8Nz0I1ryL078+jiK6iUkuR5/pIOCrqNrIheyxItdA
+	oqkCMQWPnPY4akqxjfJknMj4LFZPr/q1qGz8aktXTQOTHAv0YHfLziqThomL0kLqsW/gofG+2o9
+	ZXky3IhhShzU75YW7vKGaxf8h9uiy2pYQCa+aMVCv4ZIFsC
+X-Google-Smtp-Source: AGHT+IEVPW76VkTXU2nIJfPsd/7W6ZLfDVF9Rnt4kJTE9CYOpNt7uO369Z3pkgOqLTDRQ8mK233MkA==
+X-Received: by 2002:a05:600c:1ca7:b0:434:fe3c:c67c with SMTP id 5b1f17b1804b1-43668b5e201mr28263535e9.26.1734711696100;
+        Fri, 20 Dec 2024 08:21:36 -0800 (PST)
 Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43656b013e1sm82824045e9.12.2024.12.20.08.21.33
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43656b013e1sm82824045e9.12.2024.12.20.08.21.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 08:21:33 -0800 (PST)
+        Fri, 20 Dec 2024 08:21:35 -0800 (PST)
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: [PATCH 0/7] Raspberry Pi HEVC decoder driver
-Date: Fri, 20 Dec 2024 16:21:11 +0000
-Message-Id: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
+Date: Fri, 20 Dec 2024 16:21:13 +0000
+Subject: [PATCH 2/7] docs: uapi: media: Document Raspberry Pi NV12 column
+ format
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,9 +68,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHiZZWcC/x3MSwqAIBRG4a3EHXchtYjaSjRI/c076IFCBNHek
- 4bf4JyHMpIg01g9lHBJlmMvUHVFLi77ChZfTLrRrdJK8wYvC6dTOOJy7OHY2M6iN0Mw1lMJz4Q
- g9z+d5vf9ACkFL4VkAAAA
+Message-Id: <20241220-media-rpi-hevc-dec-v1-2-0ebcc04ed42e@raspberrypi.com>
+References: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
+In-Reply-To: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -82,92 +84,72 @@ To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 Cc: John Cox <jc@kynesim.co.uk>, linux-media@vger.kernel.org, 
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- John Cox <john.cox@raspberypi.com>
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
 X-Mailer: b4 0.14.1
 
-Hi All
-
-This has been in the pipeline for a while, but I've finally cleaned
-up our HEVC decoder driver to be in a shape to at least get a first
-review.
-John Cox has done almost all of the work under contract to Raspberry
-Pi, and I'm largely just doing the process of patch curation and
-sending.
-
-There are a couple of questions raised in frameworks.
-The main one is that the codec has 2 independent phases to the decode,
-CABAC and reconstruction. To keep the decoder operating optimally
-means that two requests need to be in process at once, whilst the
-current frameworks don't want to allow as there is an implicit
-assumption of only a single job being active at once, and
-completition returns both buffers and releases the media request.
-
-The OUTPUT queue buffer is finished with and can be returned at the
-end of phase 1, but the media request is still required for phase 2.
-The frameworks currently force the driver to be returning both
-together via v4l2_m2m_buf_done_and_job_finish. v4l2_m2m_job_finish
-would complete the job without returning the buffer as we need,
-however if the driver has set VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF
-then we have a WARN in v4l2_m2m_job_finish.
-Dropping the WARN as this series is currently doing isn't going to be
-the right answer, but it isn't obvious what the right answer is.
-Discussion required.
-
-We also have a need to hold on to the media request for phase 2. John
-had discussed this with Ezequiel (and others) a couple of years back,
-and hence suggested a patch that adds media_request_{pin,unpin} to
-grab references on the media request. Discussion required on that
-or a better way of handling it.
-
-I will apologise in advance for sending this V1 just before I head off
-on the Christmas break, but will respond to things as soon as possible.
-
-Thanks
-  Dave
+The Raspberry Pi HEVC decoder uses a tiled format based on
+columns for 8 and 10 bit YUV images, so document them as
+NV12MT_COL128 and NV12MT_10_COL128.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
-Dave Stevenson (4):
-      docs: uapi: media: Document Raspberry Pi NV12 column format
-      media: ioctl: Add pixel formats NV12MT_COL128 and NV12MT_10_COL128
-      media: dt-bindings: media: Add binding for the Raspberry Pi HEVC decoder
-      arm: dts: bcm2711-rpi: Add HEVC decoder node
+ .../userspace-api/media/v4l/pixfmt-yuv-planar.rst  | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-Ezequiel Garcia (1):
-      RFC: media: Add media_request_{pin,unpin} API
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+index b788f6933855..90414491d7b5 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+@@ -827,6 +827,48 @@ Data in the 12 high bits, zeros in the 4 low bits, arranged in little endian ord
+       - Cb\ :sub:`11`
+       - Cr\ :sub:`11`
+ 
++NV12MT_COL128 and NV12MT_10_COL128
++----------------------------------
++
++``V4L2_PIX_FMT_NV12MT_COL128`` is a tiled version of
++``V4L2_PIX_FMT_NV12M`` where the two planes are split into 128 byte wide columns
++of Y or interleaved CbCr.
++
++NV12MT_10_COL128 expands that as a 10 bit format where 3 10 bit values are
++packed into a 32bit word. A 128 byte wide column therefore holds 96 samples
++(either Y or interleaved CrCb). That effectively makes it 6 values in a 64 bit
++word for the CbCr plane, as the values always go in pairs.
++
++Bit-packed representation.
++
++.. tabularcolumns:: |p{1.2cm}||p{1.2cm}||p{1.2cm}||p{1.2cm}|p{3.2cm}|p{3.2cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 8 8 8 8
++
++    * - Y'\ :sub:`00[7:0]`
++      - Y'\ :sub:`01[5:0] (bits 7--2)` Y'\ :sub:`00[9:8]`\ (bits 1--0)
++      - Y'\ :sub:`02[3:0] (bits 7--4)` Y'\ :sub:`01[9:6]`\ (bits 3--0)
++      - unused (bits 7--6)` Y'\ :sub:`02[9:4]`\ (bits 5--0)
++
++.. tabularcolumns:: |p{1.2cm}||p{1.2cm}||p{1.2cm}||p{1.2cm}|p{3.2cm}|p{3.2cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 12 12 12 12 12 12 12
++
++    * - Cb\ :sub:`00[7:0]`
++      - Cr\ :sub:`00[5:0]`\ (bits 7--2) Cb\ :sub:`00[9:8]`\ (bits 1--0)
++      - Cb\ :sub:`01[3:0]`\ (bits 7--4) Cr\ :sub:`00[9:6]`\ (bits 3--0)
++      - unused (bits 7--6) Cb\ :sub:`02[9:4]`\ (bits 5--0)
++      - Cr\ :sub:`01[7:0]`
++      - Cb\ :sub:`02[5:0]`\ (bits 7--2) Cr\ :sub:`01[9:8]`\ (bits 1--0)
++      - Cr\ :sub:`02[3:0]`\ (bits 7--4) Cb\ :sub:`02[9:6]`\ (bits 3--0)
++      - unused (bits 7--6) Cr\ :sub:`02[9:4]`\ (bits 5--0)
++
+ 
+ Fully Planar YUV Formats
+ ========================
 
-John Cox (2):
-      media: platform: Add Raspberry Pi HEVC decoder driver
-      RFC: v4l2-mem2mem: Remove warning from v4l2_m2m_job_finish
-
- .../bindings/media/raspberrypi,hevc-dec.yaml       |   72 +
- .../userspace-api/media/v4l/pixfmt-yuv-planar.rst  |   42 +
- MAINTAINERS                                        |   10 +
- arch/arm/boot/dts/broadcom/bcm2711-rpi.dtsi        |    5 +
- arch/arm/boot/dts/broadcom/bcm2711.dtsi            |    9 +
- drivers/media/mc/mc-request.c                      |   35 +
- drivers/media/platform/raspberrypi/Kconfig         |    1 +
- drivers/media/platform/raspberrypi/Makefile        |    1 +
- .../media/platform/raspberrypi/hevc_dec/Kconfig    |   17 +
- .../media/platform/raspberrypi/hevc_dec/Makefile   |    5 +
- .../media/platform/raspberrypi/hevc_dec/hevc_d.c   |  443 ++++
- .../media/platform/raspberrypi/hevc_dec/hevc_d.h   |  190 ++
- .../platform/raspberrypi/hevc_dec/hevc_d_h265.c    | 2629 ++++++++++++++++++++
- .../platform/raspberrypi/hevc_dec/hevc_d_hw.c      |  376 +++
- .../platform/raspberrypi/hevc_dec/hevc_d_hw.h      |  303 +++
- .../platform/raspberrypi/hevc_dec/hevc_d_video.c   |  685 +++++
- .../platform/raspberrypi/hevc_dec/hevc_d_video.h   |   38 +
- drivers/media/v4l2-core/v4l2-ioctl.c               |    2 +
- drivers/media/v4l2-core/v4l2-mem2mem.c             |    7 -
- include/media/media-request.h                      |   12 +
- include/uapi/linux/videodev2.h                     |    5 +
- 21 files changed, 4880 insertions(+), 7 deletions(-)
----
-base-commit: e90c9612ac3969cb8206029a26bcd2b6f5d4a942
-change-id: 20241212-media-rpi-hevc-dec-3b5be739f3bd
-
-Best regards,
 -- 
-Dave Stevenson <dave.stevenson@raspberrypi.com>
+2.34.1
 
