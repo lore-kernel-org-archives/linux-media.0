@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFE72185A7
-	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 14:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214FF2185AB
+	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 14:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734705716; cv=none; b=E1LYb8vrG3FqiCCn11ONudZkNkOWX9p8FQwrdKrK1tqcg3adKjo8HedfBFN1dAPBqNiUiVphAjMWqRi7gmc6MvqJUhZXiybwAKuZ2R8nu+ge3y/LktwEIqP/i9+kcL2m5O3NKi+wYCBJheY0Bdj6yp43pPiQ+znSLd/msDBWdu8=
+	t=1734705717; cv=none; b=dkocARDim2DKX84BIWGL2uR1H97rkgIr//xYdYFCrXbyql3dUj74gYpj3BbmPdxhLpEFqTjLbMfTZ2GxAaDDf7ze4gIITeHamv2GnlfKNkRaZuO6aSlphHWLT8gW0go6DpZvlW9zqKo1KfwTqNeAkJ4FmZezWgBXMlAz7whCxf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734705716; c=relaxed/simple;
-	bh=cDeYy42VrI+rHEWzR12frA1lswbIArosPc69mRv8mPw=;
+	s=arc-20240116; t=1734705717; c=relaxed/simple;
+	bh=8g09XRDrXuskXVhXYN7OYwMlRP8DlMu2B8V9krpvMes=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J6BVsGKZl2YgsmS4VFUpLiuuxTL9CBIaAfz8CDp3L1CcXR8VGd0iB0jIGKDZ+6JaUGv2eDkDgOPw2JBgWhrEqYaIm6satEluROqxui/5fIDlFJateVOG4ZPxcmnWSRyE2dJfSwZvYyA4bTXYVPRzjqwl5JWf2pM6//5cKBso81I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a6f8gYbA; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=LWE/WqYz08bUbPURhvIS8+hcxVwDIJUr3vHoWDmjWNXxwcrDrn5aQsg1QiPdKUEoFxLrdU7J5EJ9sD85zbYxSEgWtAzJ2427r8zToczGaUgXyy4SXNEYjajW+MsN6dVLlprhp7upF1Ihnkm1UNze7W2c37N8RyYmwMFH2QxGva4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R31kp4gy; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a6f8gYbA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R31kp4gy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734705713;
+	s=mimecast20190719; t=1734705715;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rFRkAECr7mR1qjc5X9Wcb8rdkxBaKEscQj6VLXd18go=;
-	b=a6f8gYbAwg/Y+dGlNG5HDx/40Zn9BfCH8c719l6+bJy5xOrsyCFgxLxUWsJyK8Y1xixqJl
-	ZN6l/R6kxjAFP3Be6Rn33B/9z1Oz2JOHKxW8kHjIC98zhJnj8haeibzHPFARxm5ml47wFq
-	PWmG2Gsa+0EAES4uUqI00QI0lk7UP4c=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=kOAnJ3lAQa1ZvTyqtV59EyW4XdbH3Q44RLq9wAYaU6I=;
+	b=R31kp4gyuT/577NnSQbRszwKACBx8NMB+Vun+cNQrxDYfuWDIqF99irT0AWs2eroJYvfsS
+	WhXqDeljscs6cFi3TbR+mADgD+Hp04qFvc6w7cdKeNG5FRRxn7K4RtPK0Tiys0iegFGAk7
+	tzDahqYv1ZbyUf302Xkj8+i03NdITjI=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-t_VKuZIfNGqRROyo0sDsgw-1; Fri,
- 20 Dec 2024 09:41:49 -0500
-X-MC-Unique: t_VKuZIfNGqRROyo0sDsgw-1
-X-Mimecast-MFC-AGG-ID: t_VKuZIfNGqRROyo0sDsgw
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-102-BgjDsAPaP_SSNywf0ZOMEg-1; Fri,
+ 20 Dec 2024 09:41:53 -0500
+X-MC-Unique: BgjDsAPaP_SSNywf0ZOMEg-1
+X-Mimecast-MFC-AGG-ID: BgjDsAPaP_SSNywf0ZOMEg
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E8E01955F41;
-	Fri, 20 Dec 2024 14:41:48 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5B63A19560B4;
+	Fri, 20 Dec 2024 14:41:52 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.193.74])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 43B1919560AD;
-	Fri, 20 Dec 2024 14:41:45 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9943B19560AD;
+	Fri, 20 Dec 2024 14:41:50 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Jason Chen <jason.z.chen@intel.com>,
@@ -49,9 +49,9 @@ To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: [PATCH v2 03/10] media: ov08x40: Get reset GPIO and regulators on ACPI platforms too
-Date: Fri, 20 Dec 2024 15:41:23 +0100
-Message-ID: <20241220144130.66765-4-hdegoede@redhat.com>
+Subject: [PATCH v2 05/10] media: ov08x40: Move ov08x40_identify_module() function up
+Date: Fri, 20 Dec 2024 15:41:25 +0100
+Message-ID: <20241220144130.66765-6-hdegoede@redhat.com>
 In-Reply-To: <20241220144130.66765-1-hdegoede@redhat.com>
 References: <20241220144130.66765-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -63,93 +63,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-ACPI platforms might also have a reset GPIO and regulators, move the code
-to get these outside of the if (!is_acpi_node(fwnode)) check.
+Move the ov08x40_identify_module() function to above ov08x40_set_stream()
+this is a preparation patch for adding a missing ov08x40_identify_module()
+call to ov08x40_set_stream().
 
-This also removes the is_acpi_node(fwnode) checks from ov08x40_power_on() /
-ov08x40_power_off() both the GPIO hand the clk frameworks functions used
-there will happily accept the NULL pointer returned from the optional get()
-functions when there is no reset GPIO / no clk.
-
-While moving the code around also at error logging to the error exit
-path for getting the reset GPIO.
+No functional changes, just moving code around.
 
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov08x40.c | 38 ++++++++++++++++---------------------
- 1 file changed, 16 insertions(+), 22 deletions(-)
+ drivers/media/i2c/ov08x40.c | 52 ++++++++++++++++++-------------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/media/i2c/ov08x40.c b/drivers/media/i2c/ov08x40.c
-index 908a4752117b..21f36d16ed1e 100644
+index a01c5333ce6e..8d683af54d35 100644
 --- a/drivers/media/i2c/ov08x40.c
 +++ b/drivers/media/i2c/ov08x40.c
-@@ -1322,9 +1322,6 @@ static int ov08x40_power_on(struct device *dev)
- 	struct ov08x40 *ov08x = to_ov08x40(sd);
- 	int ret;
+@@ -1931,6 +1931,32 @@ static int ov08x40_stop_streaming(struct ov08x40 *ov08x)
+ 				 OV08X40_REG_VALUE_08BIT, OV08X40_MODE_STANDBY);
+ }
  
--	if (is_acpi_node(dev_fwnode(dev)))
--		return 0;
--
- 	ret = clk_prepare_enable(ov08x->xvclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable xvclk\n");
-@@ -1360,9 +1357,6 @@ static int ov08x40_power_off(struct device *dev)
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov08x40 *ov08x = to_ov08x40(sd);
- 
--	if (is_acpi_node(dev_fwnode(dev)))
--		return 0;
--
- 	gpiod_set_value_cansleep(ov08x->reset_gpio, 1);
- 	regulator_bulk_disable(ARRAY_SIZE(ov08x40_supply_names),
- 			       ov08x->supplies);
-@@ -2165,6 +2159,22 @@ static int ov08x40_check_hwcfg(struct ov08x40 *ov08x, struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	ov08x->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-+						    GPIOD_OUT_LOW);
-+	if (IS_ERR(ov08x->reset_gpio)) {
-+		ret = dev_err_probe(dev, PTR_ERR(ov08x->reset_gpio),
-+				    "getting reset GPIO\n");
-+		goto out_err;
++/* Verify chip ID */
++static int ov08x40_identify_module(struct ov08x40 *ov08x)
++{
++	struct i2c_client *client = v4l2_get_subdevdata(&ov08x->sd);
++	int ret;
++	u32 val;
++
++	if (ov08x->identified)
++		return 0;
++
++	ret = ov08x40_read_reg(ov08x, OV08X40_REG_CHIP_ID,
++			       OV08X40_REG_VALUE_24BIT, &val);
++	if (ret)
++		return ret;
++
++	if (val != OV08X40_CHIP_ID) {
++		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
++			OV08X40_CHIP_ID, val);
++		return -ENXIO;
 +	}
 +
-+	for (i = 0; i < ARRAY_SIZE(ov08x40_supply_names); i++)
-+		ov08x->supplies[i].supply = ov08x40_supply_names[i];
++	ov08x->identified = true;
 +
-+	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ov08x40_supply_names),
-+				      ov08x->supplies);
-+	if (ret)
-+		goto out_err;
++	return 0;
++}
 +
- 	if (!is_acpi_node(fwnode)) {
- 		ov08x->xvclk = devm_clk_get(dev, NULL);
- 		if (IS_ERR(ov08x->xvclk)) {
-@@ -2175,22 +2185,6 @@ static int ov08x40_check_hwcfg(struct ov08x40 *ov08x, struct device *dev)
- 		}
+ static int ov08x40_set_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	struct ov08x40 *ov08x = to_ov08x40(sd);
+@@ -1968,32 +1994,6 @@ static int ov08x40_set_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
+ }
  
- 		xvclk_rate = clk_get_rate(ov08x->xvclk);
+-/* Verify chip ID */
+-static int ov08x40_identify_module(struct ov08x40 *ov08x)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(&ov08x->sd);
+-	int ret;
+-	u32 val;
 -
--		ov08x->reset_gpio = devm_gpiod_get_optional(dev, "reset",
--							    GPIOD_OUT_LOW);
--		if (IS_ERR(ov08x->reset_gpio)) {
--			ret = PTR_ERR(ov08x->reset_gpio);
--			goto out_err;
--		}
+-	if (ov08x->identified)
+-		return 0;
 -
--		for (i = 0; i < ARRAY_SIZE(ov08x40_supply_names); i++)
--			ov08x->supplies[i].supply = ov08x40_supply_names[i];
+-	ret = ov08x40_read_reg(ov08x, OV08X40_REG_CHIP_ID,
+-			       OV08X40_REG_VALUE_24BIT, &val);
+-	if (ret)
+-		return ret;
 -
--		ret = devm_regulator_bulk_get(dev,
--					      ARRAY_SIZE(ov08x40_supply_names),
--					      ov08x->supplies);
--		if (ret)
--			goto out_err;
- 	} else {
- 		ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
- 					       &xvclk_rate);
+-	if (val != OV08X40_CHIP_ID) {
+-		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
+-			OV08X40_CHIP_ID, val);
+-		return -ENXIO;
+-	}
+-
+-	ov08x->identified = true;
+-
+-	return 0;
+-}
+-
+ static const struct v4l2_subdev_video_ops ov08x40_video_ops = {
+ 	.s_stream = ov08x40_set_stream,
+ };
 -- 
 2.47.1
 
