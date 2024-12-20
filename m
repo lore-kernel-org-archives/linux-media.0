@@ -1,65 +1,66 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69154219EA0
-	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 16:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED5821C9F9
+	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 16:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734711701; cv=none; b=fj68FXPNfHA0wcIM4Hg9EWLvpMhpKJVoXCuAyPAJ5fbzSOtRrc3a2tV0s81LRnx9E9ThXJUNcdlhNs4DIC+1Cf0h7af2lPo6t26l9ckKg2F9lFnLIw2h5WI31WUkUT9wS+2G9GXRKVjOdFy6KM/RyY0OIOo1Cv7fydUSjHl8jSU=
+	t=1734711704; cv=none; b=okvZYu1xNRquCLTKHG4yVkU3WHgHYMcDRWdnJ6ImnKy1wSwArcfYc/rDn7RzgNV5JE3W8oQ2qefFccTIqiZ0+D/Bco+AAEGQ3G711U1hiUl46GX+bNfk1+IHydb9V51mD/6xVMUe9GOU3Q+dqr/j6JolvoZa7Q9Byghh/NLtd7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734711701; c=relaxed/simple;
-	bh=rZNoT9AhjH+pqpQo4eatUoJtht9ocxF7O8AVWhOlfpQ=;
+	s=arc-20240116; t=1734711704; c=relaxed/simple;
+	bh=pXK+2+/QfGO0TyFvojht0JPWl8TlZGLLNkgaH46ud5g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FBidKpJcolLhAj8R+FtGqrDysU38dN64Jg9NPqFZC0CEnCwRiG3M0ipZiC7S7u0NyWgX1zLkedUxeAMpf0d/EmBYW2WKt0m9kS9nfGiE+XpNvsrXO/YJUJOdLbfd8jXbbUjoq73/7bdEzO8kND0lHK8HCURv069dNHDileF6G/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=S3ayqxD5; arc=none smtp.client-ip=209.85.128.41
+	 In-Reply-To:To:Cc; b=BpwGnPqjWjYvpaMUpo/j0e0rxphEqt7zAZE+CWiAKmPa9shj8I6Rw1TZqrh5LdDNsG7234Y4vsHW9RKNGl1B7HuBG02e2zdDhWdPYIi9F9ycxAzlTLVBMS8t4yIdmOmjKSig+rs0CSTix//7x+/1I1+b9KYnVHZqEPXGEnEIuD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=WKG3s9Ca; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="S3ayqxD5"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-434b3e32e9dso22701775e9.2
-        for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 08:21:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="WKG3s9Ca"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso14752985e9.0
+        for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 08:21:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1734711698; x=1735316498; darn=vger.kernel.org;
+        d=raspberrypi.com; s=google; t=1734711700; x=1735316500; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dRQf5pCtS98olBDfm75Y/wTQJYSNQxlX5eEUv/v7GTM=;
-        b=S3ayqxD5DuVtaQl7zBH2hxWxnbVxmaLQCFQK9frmyaD4nWqZEvyy7pnWWDxtx2517d
-         TH4nynqWoMgp8yd+EqXLqKLliu0m7tmaYZflhfM2Q2z6ONNHfxavA9QX3aiXA5+fO/5r
-         690011sif7L6uU3SGjsJ84UOV+dWANWbDAykGhWpTQmYxiYgd+P4PbWY9EmMYE4Gjuk1
-         8BmGKmnZwaBtHHHu/3DR2cWkeh1E4h5cE+cyVW8AnF9B2GQJke08vKZMP940lbg/oFGE
-         SFpVN9Xx+DZ42suOYBCk0TGxapv5GKjkPu4pvoZN0NRIRPqrJCIDItV9A1pnNH4teOj+
-         DTIQ==
+        bh=v2BNxauvgR86wVgxl1iZjGE4qN7o21GTD/GjGRmEaXA=;
+        b=WKG3s9CaGk63UdGjCS9EK+gXlHQMqvqj1f0M1sK5BV0RHMlq6vbmuXpW3Q5n/8CJWt
+         2kd/J9qyd2yg03/1ydt6ZR3hi3Nt/Xfe4IVDq71YPNuOzBUVfXRGDx/0rP/D0ahZm8w1
+         isRMs3cX8JnFL3/fXyQrF6ws4U0gnYPRciIkRcViKCoNHgRDi6GlZBqVhh3iKHkuMX8m
+         Qr98R6PAJIoYfw0vlDK4VQrL8FumfAraMhugzm0dATNvxF4IABPYTnnv6DumM/ADFNP2
+         1WNN3q5bMVTz5dhB3eWLDYA/aOnmZCRy2iUTQEQrpz5PlGRzIUU5NqW/uOIR5L0Cr4Kw
+         E58w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734711698; x=1735316498;
+        d=1e100.net; s=20230601; t=1734711700; x=1735316500;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dRQf5pCtS98olBDfm75Y/wTQJYSNQxlX5eEUv/v7GTM=;
-        b=QWEE9CNPuIyMbS8iRbJjHEAASmSld3QWanhQIN4CKFFzS/t80WnwQSssBwKmIYswuA
-         Nimm0IHw6EwP/ikZ40smsyWEDYbKFieXIZdYZtUNbEFR6Hh46gFnXS9rri5TAPhyT7Me
-         pommQKZkaNvndHadOvQsPFdxA1dTUsrhqankZ9D5Uai7kKAn//edI/vwYf5Ch4akpQMb
-         8OY9DhTukSHPV4bUOQJqTVyi/BGszly8Ep4Qww3DaG3/t7fknMXBp+TANNp4JmK+8xHd
-         trZpKQY1Cv8CX9RCj+5bx7aB+iRMQPjjoH6jdZwqk9GdZxxEJSWPeaibKcd1lyYvG3jm
-         YOkw==
-X-Forwarded-Encrypted: i=1; AJvYcCVAotgidNRHICepF7vZeGVdq/YZ/joeN+nBGHMTN4BjZPyfGbedSe//BK23Z+qWPyYQm8eg9+EiUWSWdg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/Sji4yXtIDUgrY0EFFmNJbou1eSOWVoyRUpJm/ZFTYxULLDBB
-	6R/1sQoinzxV54RZIX4xPbgPSoDMA+ToQzvmDL908OyFvgTrmRjzt+33SY2PLwU=
-X-Gm-Gg: ASbGncvC/jI946CXBmw/X1EQIaMrSOGxj0EPuMZJbGdhKDMWymliMGdor2PpviYuTtW
-	Gs27T9xyqHpMgFkblp4VJu0sws2KmP7SpH6FWOPDeb7PmE45CmheRcDtypMJbGqGdaWjjq+BLKn
-	A6aVpF6UQVGiPw+xigvELCOI5eksx2lrzEQiFP485cnpG4xHZcvU5ALiuDyuA48oN4blzzJkdYT
-	/MWqvQZQ7zHqCeLxGc4QGKSNMoYGRU5smTIiY/75MG/Fwdc
-X-Google-Smtp-Source: AGHT+IFxW+RopysqEF8jPbYWDmorW73wBvGIWAYULKR3uETdewbravBIGqJ2B2OrN6Kmdympczu2lQ==
-X-Received: by 2002:a05:6000:1fab:b0:385:e30a:394e with SMTP id ffacd0b85a97d-38a221e2066mr4017975f8f.3.1734711697793;
-        Fri, 20 Dec 2024 08:21:37 -0800 (PST)
+        bh=v2BNxauvgR86wVgxl1iZjGE4qN7o21GTD/GjGRmEaXA=;
+        b=fiPClHoCtUKiI6TYGaO0DAOsyO+B19mmc+E34RRGAo650Deh782CPZL3oSnNFWSU7K
+         FXHmskPSWhOHcwmYlVMMZ3WSBc8at8mrTMGsiD12+9ZRqQ43l9RtFSdktUOJjG92dovJ
+         LOclt1TTFpttwjJ4r4E9Ws8RYzjyKRdkdTEs25NvTHi3cZIB5wwPpTJogcidmSCM69r5
+         ZN4wEwVm8whTj5hyIJYhWLMfJDNjUkKQFNL9EUHshbjLEoC1BHqXKUIWiylwqrrgt5A2
+         JatOfniYayTh11BEMG9kB00K5N30EknosQQpD6C9PJ65nB8PFRc6cjdNuizLcrKuBggO
+         0CvA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfZUROmPQYlA1ncvtuLf9DTqXi4ZcKq0CRWZW8/in3HiBzP6W5KEuru1dQg/47AKOllwbtqAxx2t3/sQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjnm2mMiXG8Y/w/caWI1+PtFaH3UZM4HIzCcitKF8rYi3/boRQ
+	+hXFyKiK3463DJw2zpmyQ1bj11dZtokaRMhnoosnLN4ZdNUQ8e/QfJFZNYGldoYIz6b8AB6qpXz
+	bRC4=
+X-Gm-Gg: ASbGncs7edRu9GFXcm1FGvf/i2I7fIBgZxC56xUJHG0qlQN2rU9rpLWI9rfd1138arD
+	r9FShje2sPcEj9M7kMotX+MyCUCQGlA4EZ5h29af32+fH7HMSvYXFbtZs6vMzKgVrxXYtZq113D
+	g9JBHXk3eUFIE31FRxfiFYqzmW9qyCnWVtpDU6Fs6qMSsZs3nqevukfKw/yBok9L0xIRoe3HE0d
+	oFq1p7tvfDcuZfBKv+UumhGg73fnnXRkzAcCf59Kfc8I9Kc
+X-Google-Smtp-Source: AGHT+IHZKwXSt3EtkR4/vJsXBDTgJju7+F4kSqL+22sBCcY1J09BA0FGI2cPpS1gnn5GDXEf6EXehw==
+X-Received: by 2002:a05:600c:138d:b0:434:ff08:202b with SMTP id 5b1f17b1804b1-43668643173mr32952625e9.12.1734711699939;
+        Fri, 20 Dec 2024 08:21:39 -0800 (PST)
 Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43656b013e1sm82824045e9.12.2024.12.20.08.21.37
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43656b013e1sm82824045e9.12.2024.12.20.08.21.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 08:21:37 -0800 (PST)
+        Fri, 20 Dec 2024 08:21:39 -0800 (PST)
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Fri, 20 Dec 2024 16:21:15 +0000
-Subject: [PATCH 4/7] media: dt-bindings: media: Add binding for the
- Raspberry Pi HEVC decoder
+Date: Fri, 20 Dec 2024 16:21:17 +0000
+Subject: [PATCH 6/7] RFC: v4l2-mem2mem: Remove warning from
+ v4l2_m2m_job_finish
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,7 +69,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241220-media-rpi-hevc-dec-v1-4-0ebcc04ed42e@raspberrypi.com>
+Message-Id: <20241220-media-rpi-hevc-dec-v1-6-0ebcc04ed42e@raspberrypi.com>
 References: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
 In-Reply-To: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
@@ -87,92 +88,47 @@ Cc: John Cox <jc@kynesim.co.uk>, linux-media@vger.kernel.org,
  Dave Stevenson <dave.stevenson@raspberrypi.com>
 X-Mailer: b4 0.14.1
 
-Adds a binding for the HEVC decoder found on the BCM2711 / Raspberry Pi 4,
-and BCM2712 / Raspberry Pi 5.
+From: John Cox <john.cox@raspberrypi.com>
 
+The Raspberry Pi HEVC decoder has a 2 stage pipeline
+where the OUTPUT buffer is finished with before the
+CAPTURE buffer is ready.
+
+v4l2_m2m_job_finish allows us to do this, however as
+the driver handles VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF,
+this warn fires on every buffer as drivers that hold capture
+buffers are expected to use v4l2_m2m_buf_done_and_job_finish
+(introduced with [1]).
+That doesn't allow us to handle not returning the destination
+buffer.
+
+[1] Commit f8cca8c97a63 ("media: v4l2-mem2mem: support held
+capture buffers")
+
+Signed-off-by: John Cox <john.cox@raspberrypi.com>
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- .../bindings/media/raspberrypi,hevc-dec.yaml       | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec.yaml b/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec.yaml
-new file mode 100644
-index 000000000000..d9e804300297
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/raspberrypi,hevc-dec.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/raspberrypi,hevc-dec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Raspberry Pi HEVC Decoder
-+
-+maintainers:
-+  - John Cox <john.cox@raspberrypi.com>
-+  - Dom Cobley <dom@raspberrypi.com>
-+  - Dave Stevenson <dave.stevenson@raspberrypi.com>
-+  - Raspberry Pi internal review list <kernel-list@raspberrypi.com>
-+
-+description: |-
-+  The Raspberry Pi HEVC decoder is a hardware video decode accelerator block
-+  found in the BCM2711 and BCM2712 processors used on Raspberry Pi 4 and 5
-+  boards respectively.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - raspberrypi,hevc-dec
-+
-+  reg:
-+    items:
-+      - description: The HEVC main register region
-+      - description: The Interrupt control register region
-+
-+  reg-names:
-+    items:
-+      - const: intc
-+      - const: hevc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: The HEVC block clock
-+
-+  clock-names:
-+    items:
-+      - const: hevc
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    video-codec@7eb10000 {
-+        compatible = "raspberrypi,hevc-dec";
-+        reg = <0x7eb10000 0x1000>,	/* INTC */
-+              <0x7eb00000 0x10000>; /* HEVC */
-+        reg-names = "intc",
-+                    "hevc";
-+
-+        interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-+
-+        clocks = <&clk 0>;
-+        clock-names = "hevc";
-+    };
-+
-+...
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index eb22d6172462..325a518beff7 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -490,13 +490,6 @@ void v4l2_m2m_job_finish(struct v4l2_m2m_dev *m2m_dev,
+ 	unsigned long flags;
+ 	bool schedule_next;
+ 
+-	/*
+-	 * This function should not be used for drivers that support
+-	 * holding capture buffers. Those should use
+-	 * v4l2_m2m_buf_done_and_job_finish() instead.
+-	 */
+-	WARN_ON(m2m_ctx->out_q_ctx.q.subsystem_flags &
+-		VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF);
+ 	spin_lock_irqsave(&m2m_dev->job_spinlock, flags);
+ 	schedule_next = _v4l2_m2m_job_finish(m2m_dev, m2m_ctx);
+ 	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
 
 -- 
 2.34.1
