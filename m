@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E9E218828
-	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 14:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132632185A0
+	for <linux-media@vger.kernel.org>; Fri, 20 Dec 2024 14:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734705718; cv=none; b=B2WM5ELb9USfLmzNaWywK6YBBUuK1+f4uMjYWLGLffeFDScjOA4VUIcPKnlMwC1Kx80LlDCXdYKqeKh/2l6lFQ7FhIHkoYROkYjwvBYmUJ8UCYsPNpwwXcVHqDzPmWSKRnAx3C95uCkgW8jqnBLA3MyffB9KtW5a4fi7GIZtJNs=
+	t=1734705722; cv=none; b=A07lZTT/gW6RJ2bvX+aWXJ4oACZvxSvni7O+UZObk8bcjJwYla8XpnyPW37ktaTBRy4KKUMVBMUrsisHQ2lvj37RbQjNA0iLh5KIXIxSiXw3aBwMtbDhyTmNOEDylwUGehQl8oayjYWJyIQBRPWcW28saR3+53fsi9hqk9ZDy8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734705718; c=relaxed/simple;
-	bh=Lqo8npuMKZ6VyG1lnHGsmw7FhIF2X/8NgZQCySVY4bk=;
+	s=arc-20240116; t=1734705722; c=relaxed/simple;
+	bh=J2H9yUj6fiZ47ZdPt/vENlD5aKLNsBd81NxJL8IQcl8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HgyP0jQEWEuH44DmjxsOewVqrFnHSo5Iq0udG9PTyithEsKIsNEmJui3AbKsWCESocEoO2FNFE/o7euA7ilSNH3wTaVFroR32zuWz+UG7fdADygRMXnvjZLcbzL/fTYjPOc6KQG6i/qBUwh268u9NXJxpNiIMd9RxWIXyhS2de8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YYcr1zIO; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=uRYbDPs6O0CX06KAyJWR+jh+pSTp21jbuKLVBcbV1nOK3Qz8Z/OgsJmw8Pesf2e9xNHHwOKQI0maQF5u9noZVN4zfn8JjDPKymdo7dZRAcf9wmDLLeuMYffLIpWPxqAZ9AjGniGFHsR94rd2C5CuVuZRCJ1v6PDXvcMiB0xm7kY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZwrQ87Cn; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YYcr1zIO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZwrQ87Cn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734705715;
+	s=mimecast20190719; t=1734705719;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qwlPUwb4AcwGNEUf/ODdOOrdvyeeiwL0rnMx6NwfYz4=;
-	b=YYcr1zIOkkfCZY0LV8wphno5NGyt94DQp4+Nh4MEsV/LiJQbaLcA8zf8zR66RO7ktuQNwt
-	oi44UYr2VtOKHxAIc3H0BAwZZVbfv38Fn9WVGCzWBdb24gdlLqZVQn5MikUBwfWpiEz71S
-	q/kOiPjkxCFvewwXDvXYDKLU1Qnb93k=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+	bh=OdoBXwAV8TXNuswtRO2tnC8mjZc0e1UCL8sDyEJVxUc=;
+	b=ZwrQ87CnxB277Re8KqsTk8cOW0tPknqHHE07RA6WNvm4mJHVgOOTXpYRqrjLLUxlfPjYFq
+	gCZxiI7iUoghk2mb/s0rij7E6Jp63M1gfA4T2AdW7ZUKeg+q6sPEJl33bYdNWixfNCxROg
+	6A/IUo9OCzQ+CWl8zqfm9jFlmfM0ALo=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-376-aeS2jYIGPbK4glRKwhi9Xw-1; Fri,
- 20 Dec 2024 09:41:51 -0500
-X-MC-Unique: aeS2jYIGPbK4glRKwhi9Xw-1
-X-Mimecast-MFC-AGG-ID: aeS2jYIGPbK4glRKwhi9Xw
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-168-cqnr0t1FOx2oVOjY4kQs2g-1; Fri,
+ 20 Dec 2024 09:41:55 -0500
+X-MC-Unique: cqnr0t1FOx2oVOjY4kQs2g-1
+X-Mimecast-MFC-AGG-ID: cqnr0t1FOx2oVOjY4kQs2g
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3ADF519560B6;
-	Fri, 20 Dec 2024 14:41:50 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 82C941955F42;
+	Fri, 20 Dec 2024 14:41:54 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.193.74])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 733EA19560AD;
-	Fri, 20 Dec 2024 14:41:48 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C029E19560AD;
+	Fri, 20 Dec 2024 14:41:52 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Jason Chen <jason.z.chen@intel.com>,
@@ -49,9 +49,9 @@ To: Sakari Ailus <sakari.ailus@linux.intel.com>,
 Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-media@vger.kernel.org
-Subject: [PATCH v2 04/10] media: ov08x40: Get clock on ACPI platforms too
-Date: Fri, 20 Dec 2024 15:41:24 +0100
-Message-ID: <20241220144130.66765-5-hdegoede@redhat.com>
+Subject: [PATCH v2 06/10] media: ov08x40: Improve ov08x40_identify_module() error logging
+Date: Fri, 20 Dec 2024 15:41:26 +0100
+Message-ID: <20241220144130.66765-7-hdegoede@redhat.com>
 In-Reply-To: <20241220144130.66765-1-hdegoede@redhat.com>
 References: <20241220144130.66765-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -63,43 +63,46 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-ACPI platforms might also have a clk provider which needs to be controlled,
-always try to get a clk using clk_get_optional() and when that fails fall
-back to getting the xvclk frequency from the "clock-frequency" property.
+ov08x40_identify_module() already logs an error if the read ID mismatches,
+so having its caller also log an error results in 2 errors in this case.
+
+Add error logging to the ID register read in ov08x40_identify_module() and
+drop the error logging in the caller.
 
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/ov08x40.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/media/i2c/ov08x40.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/ov08x40.c b/drivers/media/i2c/ov08x40.c
-index 21f36d16ed1e..a01c5333ce6e 100644
+index 8d683af54d35..10ec9896ca61 100644
 --- a/drivers/media/i2c/ov08x40.c
 +++ b/drivers/media/i2c/ov08x40.c
-@@ -2175,15 +2175,13 @@ static int ov08x40_check_hwcfg(struct ov08x40 *ov08x, struct device *dev)
- 	if (ret)
- 		goto out_err;
+@@ -1943,8 +1943,10 @@ static int ov08x40_identify_module(struct ov08x40 *ov08x)
  
--	if (!is_acpi_node(fwnode)) {
--		ov08x->xvclk = devm_clk_get(dev, NULL);
--		if (IS_ERR(ov08x->xvclk)) {
--			dev_err(dev, "could not get xvclk clock (%pe)\n",
--				ov08x->xvclk);
--			ret = PTR_ERR(ov08x->xvclk);
--			goto out_err;
--		}
--
-+	ov08x->xvclk = devm_clk_get_optional(dev, NULL);
-+	if (IS_ERR(ov08x->xvclk)) {
-+		ret = dev_err_probe(dev, PTR_ERR(ov08x->xvclk),
-+				    "getting xvclk\n");
-+		goto out_err;
+ 	ret = ov08x40_read_reg(ov08x, OV08X40_REG_CHIP_ID,
+ 			       OV08X40_REG_VALUE_24BIT, &val);
+-	if (ret)
++	if (ret) {
++		dev_err(&client->dev, "error reading chip-id register: %d\n", ret);
+ 		return ret;
 +	}
-+	if (ov08x->xvclk) {
- 		xvclk_rate = clk_get_rate(ov08x->xvclk);
- 	} else {
- 		ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
+ 
+ 	if (val != OV08X40_CHIP_ID) {
+ 		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
+@@ -2262,10 +2264,8 @@ static int ov08x40_probe(struct i2c_client *client)
+ 
+ 		/* Check module identity */
+ 		ret = ov08x40_identify_module(ov08x);
+-		if (ret) {
+-			dev_err(&client->dev, "failed to find sensor: %d\n", ret);
++		if (ret)
+ 			goto probe_power_off;
+-		}
+ 	}
+ 
+ 	/* Set default mode to max resolution */
 -- 
 2.47.1
 
