@@ -1,46 +1,46 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9D61B4132;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D62D1CCB4A;
 	Wed, 25 Dec 2024 13:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735133784; cv=none; b=YbUrIOArmF0AJrEzdDlimOw3z4G1/pVgMWfi+ixlnGL+aWsiJphDFL9cZyMUsAj3gEgEZjG2TlynVmQBnvY0ohhfUzi1YRJU/63sH4WmmZ9AcwaS/nwvyC7RlJt7PpjvWypwJPK3YkQbu8VuYI6htFtHNg5fXQbTpQ4YmOrdJtE=
+	t=1735133784; cv=none; b=I33UF/ynMnHJzBpVLyeuR198UsrfdiNKaYh7uuNUFPqnH7KPmP/pEPLpcc5/Xetg+9eSFYVsxzohfPws/fefg8kioIzD22tplHdmQs2LT4mMKrWLRsP7jjie41PpERV1qCNSGZIDreLrCyL7vDiUIyU1wOOtJctOHXRSrj9wb8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735133784; c=relaxed/simple;
-	bh=p06MQupNLX7u286Kq/F1mq7ZSo2y+mRDRy/Y8EX4uxM=;
+	bh=62lJfYZwjI+odMSI8a5F9yahcWVshb1l87VGpFV0oeM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZHdZvbwDK3u14ZuOAL6vK50ycMk/gaRpbmYtujlKDVCrTlcSpIiVWFCY6Tj3sAvpgrDMXMORmAcW6mInOFhBgl3Sz3RY4CuxiKh3OjRXOHeWJxGqhMAZmq/QPfvWAyKweIwA+P2dipfKlbi53xtnsYVJ6UKobBIDpEJaTJJ+2c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VwZeTg0C; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version:Content-Type; b=m/MS0jNawEl9UYohm7TjP0kKlaezicViMKBImhxBkqFzWLObKgrNMR7aEa+Gwk4fJk062T4cvKy8ckLGONGnOhiktEopVvVRUoBQFY3r8v3B893xeJbZ4o7czNb2+HKX199om5mepiXK1W7JdhjcjECY84zWmmV88tiijnQlZYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ux+lrfK5; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VwZeTg0C"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BPCR9Jc012585;
-	Wed, 25 Dec 2024 13:36:18 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ux+lrfK5"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BP9Uu7e019311;
+	Wed, 25 Dec 2024 13:36:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lcLvt9Q2ZnGDiCvXQahWWj/IHgQLkolHUBhQ2AZjXs4=; b=VwZeTg0CX3gDTdJ6
-	tMQ3buayFJNWZQ8GSXYlVVZWy1J2Iem8/ZyEzixAmN7tk9wGFPN/YM7H8aYl+LLm
-	rZPwce0q0mJ86coe8COQCUJc/vz2ILIJt1wjgpvnx+yoY10NZVY6SC4kW6oqBkLe
-	sXSjbt3oS2bibtNdEzwXJgqmBzjwjK6SKWCV+2ZN61nFy34En+fpzuufj8DBg+CY
-	l5XZzbjvodnwXFFjO8ML92ZKhnRWMKU7rtrbSFBjNCUwLoDycIG0xwoWFLlKXilr
-	4eJHtQXmsJGjabQID5Yix/6qf5vJ10CGxCqPoFo+oPp2x2cpODhNMpqAV2VtVjAH
-	7yH7KA==
+	vsJQCH/59GXpLRdG3vXXqWO24X6t1yLlKE72hHEmPdY=; b=Ux+lrfK5lCtJ9gAu
+	paa+1Ca0zXKLPOF8PmXjMrYSQOVE+4ezOBwnosLd+nUHMokif/yTlC7SBLUkyAas
+	MMfTFUpAg9ADOjbQCkHCqjC9hlXzSBra0i4JFsdvojg9PNwIId7lkQiciUAdYl2L
+	xpoPEC9OITff9MZUskKknoZ4YKwMKtrFVufvfyFfVYDBjULHqkdpn6R3g28v9WkU
+	IlVtYz2Qtob3mfT8asfpLYM2YkvM0pMpQOPJ/m4KzjU+5Pm7Uo8Rqkxuap/uA9vn
+	l0jPLRe9wG3x8AByVZeYUcxe8JHQZBVqBXkR5qfbpfEKKJhxudWc5CglXCFTHMg0
+	K2zDew==
 Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43r9dda4u5-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43rffxghxm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Dec 2024 13:36:18 +0000 (GMT)
+	Wed, 25 Dec 2024 13:36:19 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BPDa7Us011889
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BPDaIZ3012000
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Dec 2024 13:36:07 GMT
+	Wed, 25 Dec 2024 13:36:18 GMT
 Received: from hu-depengs-sha.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 25 Dec 2024 05:36:00 -0800
+ 15.2.1544.9; Wed, 25 Dec 2024 05:36:12 -0800
 From: Depeng Shao <quic_depengs@quicinc.com>
 To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
         <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC: <quic_eberman@quicinc.com>, <quic_depengs@quicinc.com>,
         <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <kernel@quicinc.com>
-Subject: [PATCH 06/16] media: qcom: camss: csiphy-3ph: Use an offset variable to find common control regs
-Date: Wed, 25 Dec 2024 19:05:13 +0530
-Message-ID: <20241225133523.4034820-7-quic_depengs@quicinc.com>
+Subject: [PATCH 09/16] media: qcom: camss: Add callback API for RUP update and buf done
+Date: Wed, 25 Dec 2024 19:05:16 +0530
+Message-ID: <20241225133523.4034820-10-quic_depengs@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241225133523.4034820-1-quic_depengs@quicinc.com>
 References: <20241225133523.4034820-1-quic_depengs@quicinc.com>
@@ -67,210 +67,103 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: j_WDntKXLq3vOYevMx0HXchOLNfDjTQV
-X-Proofpoint-GUID: j_WDntKXLq3vOYevMx0HXchOLNfDjTQV
+X-Proofpoint-ORIG-GUID: 0YvBCo62oi8lVvqVs_LESo3jaSf2sGsH
+X-Proofpoint-GUID: 0YvBCo62oi8lVvqVs_LESo3jaSf2sGsH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
- adultscore=0 mlxscore=0 clxscore=1015 phishscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 clxscore=1015 phishscore=0
+ mlxscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2411120000 definitions=main-2412250121
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+The RUP registers and buf done irq are moved from the IFE to CSID register
+block on recent CAMSS implementations. Add callbacks structure to wrapper
+the location change with minimum logic disruption.
 
-New versions of the CSIPHY locate the control registers at offset 0x1000
-not offset 0x800.
-
-Provide a variable to base an offset from for the purposes of redirecting
-the base offset for the new PHY regs layout.
-
-The existing setup bases from 0x800, the new from 0x1000 with some of the
-'EXT' registers dropped but the lower-order lane config regs at offset 0x00
-and up the same as before.
-
+Co-developed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 ---
- .../qcom/camss/camss-csiphy-3ph-1-0.c         | 67 ++++++++++++-------
- .../media/platform/qcom/camss/camss-csiphy.h  |  1 +
- 2 files changed, 44 insertions(+), 24 deletions(-)
+ .../media/platform/qcom/camss/camss-csid.h    |  9 ++++++++
+ drivers/media/platform/qcom/camss/camss.c     | 22 +++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss.h     |  3 +++
+ 3 files changed, 34 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-index 39cc7109ccf0..b5a116ced6a7 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
-@@ -42,11 +42,11 @@
- #define CSIPHY_3PH_LNn_CSI_LANE_CTRL15(n)	(0x03c + 0x100 * (n))
- #define CSIPHY_3PH_LNn_CSI_LANE_CTRL15_SWI_SOT_SYMBOL	0xb8
- 
--#define CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(n)	(0x800 + 0x4 * (n))
-+#define CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(offset, n)	((offset) + 0x4 * (n))
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE	BIT(7)
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_COMMON_PWRDN_B	BIT(0)
- #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID	BIT(1)
--#define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(n)	(0x8b0 + 0x4 * (n))
-+#define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(offset, n)	((offset) + 0xb0 + 0x4 * (n))
- 
- #define CSIPHY_DEFAULT_PARAMS		0
- #define CSIPHY_LANE_ENABLE		1
-@@ -321,19 +321,20 @@ csiphy_lane_regs lane_regs_sm8250[] = {
- static void csiphy_hw_version_read(struct csiphy_device *csiphy,
- 				   struct device *dev)
- {
-+	struct csiphy_device_regs *regs = csiphy->regs;
- 	u32 hw_version;
- 
--	writel(CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID,
--	       csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(6));
-+	writel(CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID, csiphy->base +
-+	       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 6));
- 
- 	hw_version = readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(12));
-+				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 12));
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(13)) << 8;
-+				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 13)) << 8;
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(14)) << 16;
-+				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 14)) << 16;
- 	hw_version |= readl_relaxed(csiphy->base +
--				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(15)) << 24;
-+				   CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, 15)) << 24;
- 
- 	dev_dbg(dev, "CSIPHY 3PH HW Version = 0x%08x\n", hw_version);
- }
-@@ -344,31 +345,39 @@ static void csiphy_hw_version_read(struct csiphy_device *csiphy,
-  */
- static void csiphy_reset(struct csiphy_device *csiphy)
- {
--	writel_relaxed(0x1, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(0));
-+	struct csiphy_device_regs *regs = csiphy->regs;
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index f52209b96583..1369e7ea7219 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -152,6 +152,14 @@ struct csid_hw_ops {
+ 	 * @csid: CSID device
+ 	 */
+ 	void (*subdev_init)(struct csid_device *csid);
 +
-+	writel_relaxed(0x1, csiphy->base +
-+		      CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 0));
- 	usleep_range(5000, 8000);
--	writel_relaxed(0x0, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(0));
-+	writel_relaxed(0x0, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 0));
- }
- 
- static irqreturn_t csiphy_isr(int irq, void *dev)
- {
- 	struct csiphy_device *csiphy = dev;
-+	struct csiphy_device_regs *regs = csiphy->regs;
- 	int i;
- 
- 	for (i = 0; i < 11; i++) {
- 		int c = i + 22;
- 		u8 val = readl_relaxed(csiphy->base +
--				       CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(i));
-+				       CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(regs->offset, i));
- 
- 		writel_relaxed(val, csiphy->base +
--				    CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(c));
-+			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, c));
- 	}
- 
--	writel_relaxed(0x1, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(10));
--	writel_relaxed(0x0, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(10));
-+	writel_relaxed(0x1, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 10));
-+	writel_relaxed(0x0, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 10));
- 
--	for (i = 22; i < 33; i++)
-+	for (i = 22; i < 33; i++) {
- 		writel_relaxed(0x0, csiphy->base +
--				    CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(i));
-+			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, i));
-+	}
- 
- 	return IRQ_HANDLED;
- }
-@@ -523,6 +532,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
- 				s64 link_freq, u8 lane_mask)
- {
- 	struct csiphy_lanes_cfg *c = &cfg->csi2->lane_cfg;
-+	struct csiphy_device_regs *regs = csiphy->regs;
- 	u8 settle_cnt;
- 	u8 val;
- 	int i;
-@@ -533,16 +543,20 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
- 	for (i = 0; i < c->num_data; i++)
- 		val |= BIT(c->data[i].pos * 2);
- 
--	writel_relaxed(val, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(5));
-+	writel_relaxed(val, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 5));
- 
- 	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_COMMON_PWRDN_B;
--	writel_relaxed(val, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(6));
-+	writel_relaxed(val, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 6));
- 
- 	val = 0x02;
--	writel_relaxed(val, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(7));
-+	writel_relaxed(val, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 7));
- 
- 	val = 0x00;
--	writel_relaxed(val, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(0));
-+	writel_relaxed(val, csiphy->base +
-+		       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 0));
- 
- 	if (csiphy_is_gen2(csiphy->camss->res->version))
- 		csiphy_gen2_config_lanes(csiphy, settle_cnt);
-@@ -550,18 +564,22 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
- 		csiphy_gen1_config_lanes(csiphy, cfg, settle_cnt);
- 
- 	/* IRQ_MASK registers - disable all interrupts */
--	for (i = 11; i < 22; i++)
--		writel_relaxed(0, csiphy->base + CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(i));
-+	for (i = 11; i < 22; i++) {
-+		writel_relaxed(0, csiphy->base +
-+			       CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, i));
-+	}
- }
- 
- static void csiphy_lanes_disable(struct csiphy_device *csiphy,
- 				 struct csiphy_config *cfg)
- {
-+	struct csiphy_device_regs *regs = csiphy->regs;
-+
- 	writel_relaxed(0, csiphy->base +
--			  CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(5));
-+			  CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 5));
- 
- 	writel_relaxed(0, csiphy->base +
--			  CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(6));
-+			  CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(regs->offset, 6));
- }
- 
- static int csiphy_init(struct csiphy_device *csiphy)
-@@ -574,6 +592,7 @@ static int csiphy_init(struct csiphy_device *csiphy)
- 		return -ENOMEM;
- 
- 	csiphy->regs = regs;
-+	regs->offset = 0x800;
- 
- 	switch (csiphy->camss->res->version) {
- 	case CAMSS_845:
-diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
-index 4d731597fed7..86b98b37838e 100644
---- a/drivers/media/platform/qcom/camss/camss-csiphy.h
-+++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
-@@ -88,6 +88,7 @@ struct csiphy_subdev_resources {
- struct csiphy_device_regs {
- 	const struct csiphy_lane_regs *lane_regs;
- 	int lane_array_size;
-+	u32 offset;
++	/*
++	 * reg_update - receive message from other sub device
++	 * @csid: CSID device
++	 * @port_id: Port id
++	 * @is_clear: Indicate if it is clearing reg update or setting reg update
++	 */
++	void (*reg_update)(struct csid_device *csid, int port_id, bool is_clear);
  };
  
- struct csiphy_device {
+ struct csid_subdev_resources {
+@@ -168,6 +176,7 @@ struct csid_device {
+ 	struct media_pad pads[MSM_CSID_PADS_NUM];
+ 	void __iomem *base;
+ 	u32 irq;
++	u32 reg_update;
+ 	char irq_name[30];
+ 	struct camss_clock *clock;
+ 	int nclocks;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 004a74f6b2f6..f93b520ef038 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -2454,6 +2454,28 @@ static int camss_link_entities(struct camss *camss)
+ 	return ret;
+ }
+ 
++void camss_reg_update(struct camss *camss, int hw_id, int port_id, bool is_clear)
++{
++	struct csid_device *csid;
++
++	if (hw_id < camss->res->csid_num) {
++		csid = &camss->csid[hw_id];
++
++		csid->res->hw_ops->reg_update(csid, port_id, is_clear);
++	}
++}
++
++void camss_buf_done(struct camss *camss, int hw_id, int port_id)
++{
++	struct vfe_device *vfe;
++
++	if (hw_id < camss->res->vfe_num) {
++		vfe = &camss->vfe[hw_id];
++
++		vfe->res->hw_ops->vfe_buf_done(vfe, port_id);
++	}
++}
++
+ /*
+  * camss_register_entities - Register subdev nodes and create links
+  * @camss: CAMSS device
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 9a046eea334f..bd1d1d2b831d 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -162,5 +162,8 @@ void camss_pm_domain_off(struct camss *camss, int id);
+ int camss_vfe_get(struct camss *camss, int id);
+ void camss_vfe_put(struct camss *camss, int id);
+ void camss_delete(struct camss *camss);
++void camss_buf_done(struct camss *camss, int hw_id, int port_id);
++void camss_reg_update(struct camss *camss, int hw_id,
++		      int port_id, bool is_clear);
+ 
+ #endif /* QC_MSM_CAMSS_H */
 -- 
 2.34.1
 
