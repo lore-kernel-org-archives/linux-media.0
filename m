@@ -1,48 +1,48 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC2D158553;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7AD17D355;
 	Wed, 25 Dec 2024 09:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735117294; cv=none; b=TQAVzjoXCqdYBaNmI9nylpLXr28SrqjRczcP5UKsVrkmiFg+M3jCplkqekxmVt/khnpKo+4X2A1hauZPn33D3tNSy3o8dpyYu0iruN4XFga4OY/GnzmAPq9CsnKvY85YTl8C7xurYd1UAqkZJNswXBsIs2tQUj63gvAMD1SlPik=
+	t=1735117294; cv=none; b=bJcG1zDZJBPtbAK2RYhwNWEh17W1MVmzzq8D/xzOLJ97weCp9vuc1Hr8FvSw4EC6S5w4FYSaQHrfKoSEmNRaDL38Usq2+tNqOqA64bjvCVbjM2tqVfvmkKM3108LmhJf14DKrwnw9QMYfe4qc2xxZ4+D46/rJEvEZKu0PcMYDyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735117294; c=relaxed/simple;
-	bh=+9ADHESFhii0WAc3Jt4DUgUy5ZZ6OgZsOxvD3VK7ib8=;
+	bh=x1FeLClNJsCu5qRRbYsVbiIVvszVTmbO88fWW9N4HAo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bD8oYMRyGvzRFl8JxinU5RmOBuQSMXwoBaf/n/Mi0xLHPDmG29pfvqKRsBwetjZB4gkSi5N2FTcBaUZXSoAj1zHTUCmzzOvRdseJJAk0xlnncu6k/C7efu95KhZyOOsSEqjNCsvmiLjeg0sD/NycHlfHk/8aP2brw79IiWf4ZYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Y+E7zPLn; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=e8FQxOvJdg0Wwz2XKO4BfhRF1LOwjUxrSCH3DWbDp8TJgFCceLp2Vkox2tqyxJaEFHPEAuu6X9HKCMlROTZDT/EIIygA7yM9Kwm+Qo/Bt4zDTM2QOKRGmSz0Eb2UZNmkbOmRfvoYY0hv8ecwraB/vWKrT5GKqNX6mjR2rGYN1Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lnFm3U4K; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Y+E7zPLn"
-X-UUID: cd01adf4c29e11ef99858b75a2457dd9-20241225
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lnFm3U4K"
+X-UUID: cd0e54c8c29e11efbd192953cf12861f-20241225
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Iz0XRZ0xLu1hC/eI8JE2iMO+H+JnIO69DMkS8xGu5Pc=;
-	b=Y+E7zPLnlaaeIEC99fVe57gvixmberERkmQ1rOYPme4vEhlKdfJMLNQlwhtqVG9eulH3F/QIy7nofuHTAPY+bt+HrujT03wilOiP8Eoxl+eM3HRzE0g0/cgmAaNVvgBQmkRY5q1ZpR2O0nMm5PLxMnLGMd22r6M3/vi8snggnNw=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=aBWKK6ZjzSvH7LyonCX8Syja9oBgc2RQ52O9697Qzlc=;
+	b=lnFm3U4Knm5GkDtDR518EbfYQaXPlQH3vlzN4C2tKT5akWihbs2DonyX6E2W4HJD0o7KdnNhjxaYK14t0JVSLQAdRezn0U5G/k3RBFFhqoUoJvOsoZQ/SPWP8pmsSsYuIV3Ehcqa6my9C/OjvZRW0+jzFmzelwItMeo6y5jp87w=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:81bd790f-d0da-45d0-af21-c459a8b64c11,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:60aa074,CLOUDID:e50ed818-ec44-4348-86ee-ebcff634972b,B
+X-CID-O-INFO: VERSION:1.1.46,REQID:97304ac2-58cf-496e-bc9f-bb23bcf017c5,IP:0,U
+	RL:25,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:0
+X-CID-META: VersionHash:60aa074,CLOUDID:9417df36-e11c-4c1a-89f7-e7a032832c40,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+	,IP:nil,URL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+	,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: cd01adf4c29e11ef99858b75a2457dd9-20241225
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: cd0e54c8c29e11efbd192953cf12861f-20241225
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
 	(envelope-from <bo.kong@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 42176071; Wed, 25 Dec 2024 17:01:17 +0800
+	with ESMTP id 637652939; Wed, 25 Dec 2024 17:01:17 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 25 Dec 2024 17:01:16 +0800
+ 15.2.1118.26; Wed, 25 Dec 2024 17:01:15 +0800
 Received: from mszsdhlt06.gcn.mediatek.inc (10.16.6.206) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 25 Dec 2024 17:01:16 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 25 Dec 2024 17:01:15 +0800
 From: bo.kong <bo.kong@mediatek.com>
 To: <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>
 CC: <conor+dt@kernel.org>, <matthias.bgg@gmail.com>,
@@ -51,9 +51,9 @@ CC: <conor+dt@kernel.org>, <matthias.bgg@gmail.com>,
 	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3 4/4] uapi: linux: add MT8188 AIE
-Date: Wed, 25 Dec 2024 17:00:23 +0800
-Message-ID: <20241225090113.17027-5-bo.kong@mediatek.com>
+Subject: [PATCH v3 2/4] media: dt-bindings: add MT8188 AIE
+Date: Wed, 25 Dec 2024 17:00:21 +0800
+Message-ID: <20241225090113.17027-3-bo.kong@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241225090113.17027-1-bo.kong@mediatek.com>
 References: <20241225090113.17027-1-bo.kong@mediatek.com>
@@ -68,7 +68,7 @@ Content-Type: text/plain
 
 From: Bo Kong <Bo.Kong@mediatek.com>
 
-Add AIE control related definitions.
+Add YAML device tree bindings for MT8188 AIE.
 
 Signed-off-by: Bo Kong <Bo.Kong@mediatek.com>
 ---
@@ -79,173 +79,113 @@ none
 Changes in v2:
 1. Fix coding style
 ---
- include/uapi/linux/mtk_aie_v4l2_controls.h | 132 +++++++++++++++++++++
- include/uapi/linux/videodev2.h             |   6 +
- 2 files changed, 138 insertions(+)
- create mode 100644 include/uapi/linux/mtk_aie_v4l2_controls.h
+ .../bindings/media/mediatek,mt8188-aie.yaml   | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8188-aie.yaml
 
-diff --git a/include/uapi/linux/mtk_aie_v4l2_controls.h b/include/uapi/linux/mtk_aie_v4l2_controls.h
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8188-aie.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8188-aie.yaml
 new file mode 100644
-index 000000000000..e635548c2cdf
+index 000000000000..63dd720ef6ec
 --- /dev/null
-+++ b/include/uapi/linux/mtk_aie_v4l2_controls.h
-@@ -0,0 +1,132 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * AIE Controls Header
-+ *
-+ * Copyright (c) 2020 MediaTek Inc.
-+ * Author: Fish Wu <fish.wu@mediatek.com>
-+ */
++++ b/Documentation/devicetree/bindings/media/mediatek,mt8188-aie.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/mediatek-aie.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifndef __MTK_AIE_V4L2_CONTROLS_H__
-+#define __MTK_AIE_V4L2_CONTROLS_H__
++title: The AI Engine Unit of MediaTek Camera System
 +
-+#include <linux/types.h>
++maintainers:
++  - Bo Kong <bo.kong@mediatek.com>
 +
-+/*
-+ * The base for the mediatek Face Detection driver controls.
-+ * We reserve 16 controls for this driver.
-+ * Each CID represents different stages of AIE, with different structures and functions
-+ * and cannot be reused
-+ */
-+#define V4L2_CID_USER_MTK_FD_BASE (V4L2_CID_USER_BASE + 0x1fd0)
++description:
++  AIE(AI Engine) is one of the units in mt8188 ISP which
++  provides hardware accelerated face detection function,
++  it can detect different sizes of faces in a raw image.
 +
-+#define V4L2_CID_MTK_AIE_INIT (V4L2_CID_USER_MTK_FD_BASE + 1)
-+#define V4L2_CID_MTK_AIE_PARAM (V4L2_CID_USER_MTK_FD_BASE + 2)
++properties:
++  compatible:
++    items:
++      - const: mediatek,mt8188-aie
 +
-+#define V4L2_FLD_MAX_FRAME 15
++  reg:
++    maxItems: 1
++    description: Physical base address and length of the register space.
 +
-+/**
-+ * struct v4l2_ctrl_aie_init - aie init parameters.
-+ *
-+ * @max_img_width: maximum width of the source image.
-+ * @max_img_height: maximum height of the source image.
-+ * @pyramid_width: maximum width of the base pyramid.
-+ * @pyramid_height: maximum height of the base pyramid.
-+ * @feature_threshold: feature threshold for hareware.
-+ */
-+struct v4l2_ctrl_aie_init {
-+	__u32 max_img_width;
-+	__u32 max_img_height;
-+	__u32 pyramid_width;
-+	__u32 pyramid_height;
-+	__s32 feature_threshold;
-+};
++  interrupts:
++    maxItems: 1
 +
-+/**
-+ * struct v4l2_aie_roi - aie roi parameters.
-+ *
-+ * @x1: x1 of the roi coordinate.
-+ * @y1: y1 of the roi coordinate.
-+ * @x2: x2 of the roi coordinate.
-+ * @y2: y2 of the roi coordinate.
-+ */
-+struct v4l2_aie_roi {
-+	__u32 x1;
-+	__u32 y1;
-+	__u32 x2;
-+	__u32 y2;
-+};
++  mediatek,larb:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Must contain the local arbiters in the current SoCs, see
++      Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
++      for details.
 +
-+/**
-+ * struct v4l2_aie_padding - aie padding parameters.
-+ *
-+ * @left: the size of padding left.
-+ * @right: the size of padding right.
-+ * @down: the size of padding below.
-+ * @up: the size of padding above.
-+ */
-+struct v4l2_aie_padding {
-+	__u32 left;
-+	__u32 right;
-+	__u32 down;
-+	__u32 up;
-+};
++  iommus:
++    maxItems: 4
++    description:
++      Points to the respective IOMMU block with master port as argument, see
++      Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
++      Ports are according to the HW.
 +
-+/**
-+ * struct v4l2_fld_crop_rip_rop - aie fld parameters.
-+ *
-+ * @fld_in_crop_x1: x1 of the crop coordinate.
-+ * @fld_in_crop_y1: y1 of the crop coordinate.
-+ * @fld_in_crop_x2: x2 of the crop coordinate.
-+ * @fld_in_crop_y2: y2 of the crop coordinate.
-+ * @fld_in_rip: fld in rip.
-+ * @fld_in_rop: fld in rop.
-+ */
-+struct v4l2_fld_crop_rip_rop {
-+	__u32 fld_in_crop_x1;
-+	__u32 fld_in_crop_y1;
-+	__u32 fld_in_crop_x2;
-+	__u32 fld_in_crop_y2;
-+	__u32 fld_in_rip;
-+	__u32 fld_in_rop;
-+};
++  power-domains:
++    maxItems: 1
 +
-+/**
-+ * struct v4l2_fld_crop_rip_rop - aie fld parameters.
-+ *
-+ * @fd_mode: select a mode for current fd.
-+ * @src_img_fmt: source image format.
-+ * @src_img_width: the width of the source image.
-+ * @src_img_height: the height of the source image.
-+ * @src_img_stride: the stride of the source image.
-+ * @pyramid_base_width: the width of the base pyramid.
-+ * @pyramid_base_height: the width of the base pyramid.
-+ * @number_of_pyramid: number of pyramid.
-+ * @rotate_degree: the rotate degree of the image.
-+ * @en_roi: enable roi.
-+ * @src_roi: roi params.
-+ * @en_padding: enable padding.
-+ * @src_padding: padding params.
-+ * @freq_level: frequency level.
-+ * @fld_face_num: the number of faces in fld.
-+ * @fld_input: fld input params.
-+ */
-+struct v4l2_ctrl_aie_param {
-+	__u32 fd_mode;
-+	__u32 src_img_fmt;
-+	__u32 src_img_width;
-+	__u32 src_img_height;
-+	__u32 src_img_stride;
-+	__u32 pyramid_base_width;
-+	__u32 pyramid_base_height;
-+	__u32 number_of_pyramid;
-+	__u32 rotate_degree;
-+	__s32 en_roi;
-+	struct v4l2_aie_roi src_roi;
-+	__s32 en_padding;
-+	struct v4l2_aie_padding src_padding;
-+	__u32 freq_level;
-+	__u32 fld_face_num;
-+	struct v4l2_fld_crop_rip_rop fld_input[V4L2_FLD_MAX_FRAME];
-+};
++  clocks:
++    items:
++      - description: clock for imgsys main ipe
++      - description: clock for ipe fdvt
++      - description: clock for ipe smi larb12
++      - description: clock for ipe top
 +
-+#endif /* __MTK_AIE_V4L2_CONTROLS_H__ */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index e7c4dce39007..b23a9e99c835 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -877,6 +877,9 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_GENERIC_CSI2_24	v4l2_fourcc('M', 'C', '1', 'O') /* 24-bit CSI-2 packed 8-bit metadata */
- #endif
- 
-+/* Vendor-specific definition: used for the MediaTek camera subsystem's face detection results */
-+#define V4L2_META_FMT_MTFD_RESULT v4l2_fourcc('M', 'T', 'f', 'd')
++  clock-names:
++    items:
++      - const: img_ipe
++      - const: ipe_fdvt
++      - const: ipe_smi_larb12
++      - const: ipe_top
 +
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
- 
-@@ -1961,6 +1964,9 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_AV1_TILE_GROUP_ENTRY = 0x281,
- 	V4L2_CTRL_TYPE_AV1_FRAME	    = 0x282,
- 	V4L2_CTRL_TYPE_AV1_FILM_GRAIN	    = 0x283,
++required:
++  - compatible
++  - reg
++  - interrupts
++  - iommus
++  - power-domains
++  - clocks
++  - clock-names
 +
-+	V4L2_CTRL_TYPE_AIE_INIT		= 0x0290,
-+	V4L2_CTRL_TYPE_AIE_PARAM	= 0x0291,
- };
- 
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/memory/mediatek,mt8188-memory-port.h>
++    #include <dt-bindings/power/mediatek,mt8188-power.h>
++    #include <dt-bindings/clock/mediatek,mt8188-clk.h>
++    aie@15310000 {
++      #address-cells = <2>;
++      #size-cells = <2>;
++      compatible = "mediatek,mt8188-aie";
++      reg = <0 0x15310000 0 0x1000>;
++      interrupts = <GIC_SPI 787 IRQ_TYPE_LEVEL_HIGH 0>;
++      mediatek,larb = <&larb12>;
++      iommus = <&vpp_iommu M4U_PORT_L12_FDVT_RDA_0>,
++               <&vpp_iommu M4U_PORT_L12_FDVT_RDB_0>,
++               <&vpp_iommu M4U_PORT_L12_FDVT_WRA_0>,
++               <&vpp_iommu M4U_PORT_L12_FDVT_WRB_0>;
++      power-domains = <&spm MT8188_POWER_DOMAIN_IPE>;
++      clocks = <&imgsys CLK_IMGSYS_MAIN_IPE>,
++               <&ipesys CLK_IPE_FDVT>,
++               <&ipesys CLK_IPE_SMI_LARB12>,
++               <&ipesys CLK_IPESYS_TOP>;
++      clock-names = "img_ipe",
++                    "ipe_fdvt",
++                    "ipe_smi_larb12",
++                    "ipe_top";
++    };
 -- 
 2.45.2
 
