@@ -1,97 +1,153 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98311A0728
-	for <linux-media@vger.kernel.org>; Mon, 30 Dec 2024 11:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813ADEAD0;
+	Mon, 30 Dec 2024 13:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735558370; cv=none; b=ob/8ULDhXDKGAXm7aesGbt/ElxT1Ip3CEgMhzJpoBhZXeV1DcIWL/j+IF9YAzTm9U2QIfYhLOWcP53lUGdbTHWBPSdBUu5bZIn8yxDGgZVsPXbe5xw4P/inNgHY6EnLaFOD4LvEqLSN2gK7Xy04eOqJiNZG8oOQJxDyWlnWwyi4=
+	t=1735564948; cv=none; b=d1L6Dj5Nkaz8iVSmKuw58BZDbfpvLRDeT0ok9Vos7LWxKTn7+KbsSFCqmB8ScOcqJRKVdPE3es7jOpiQjlS3jFz+CXawP9cUa3N4E2cSkNmwGp9h9szN/Z94zrcA92hp5zurWKMrceF4PmPNNJGaAhoUvpIM5lHezNPddA2SRMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735558370; c=relaxed/simple;
-	bh=bPApeIOTtR6uiKsu4DkZSlatf3itclaDHuLss/2gK8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jAvUlQ2qExmZkpB1d8RFdIzgRWAX6vfP4QUj5RoOl5LLXPQZLo+6gRzoQejDF42u0k92qC4FJvTXx1eoqGNUHd/lTPnkTa/7WvD6jrrCWp51K7wzsl9bmnvF1tqwL+BMNU2mCTXcjujRD652NRxnaqVu3WOqmj84pfQYSVFzJOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XngVvtF8; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1735564948; c=relaxed/simple;
+	bh=7qjxaDb1n/cfOMOXwRC1Z14jSBnm4PHKXXck7whflZc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=fHEv1koyAy1yano44dP+s+sCr5h4BjOxNXZAQKYNbS0C6tZAxGGgnYb9oBZA+CuJFe9MvWehFZVAWBtZjP/P1ae0NOUXBk9/4OWVX3IuvcQeX/VgNA24F0fL0j3v8cvAxGmAzrMUFzVFaeVZQ7rQKX3A6Er1ekDC7OmDq6fo4dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Fhqg5qnz; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XngVvtF8"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-436341f575fso95359485e9.1
-        for <linux-media@vger.kernel.org>; Mon, 30 Dec 2024 03:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735558367; x=1736163167; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VF/h/Z6dyR04duHdLkQFUqHe71po2e5zlM1m3LqF1Uo=;
-        b=XngVvtF86+11LmSBn3tCjECRP4UAnuKhAfUIIGiSqHHpvXa/5MGMnl0yMxun4Ci8dQ
-         KStyzQrsqAlJMx1/NKFeKfatNVHsn4pfFD/B80jkCKv3SRB5P0zdQuRdJVhioje9kpV7
-         YymmN1Cu1anTt2T+sMQMRDvVaeYGCaUlHrck9gb0zhDGz98d14bVFI3XLbjJb31xIFzr
-         hcshW7ir84zf1qhLZhFH/gKbXiNMIo1hxDYzilGtr1yWYhNAlUFqt0FcZ4kZpDNc/Sb1
-         ut/5x+BPOOm/O3nyLYsXemz/xz2u+h296hyGg+Pzz/Dq0B8flJefoa7lTj2lNO7p/txX
-         GkLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735558367; x=1736163167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VF/h/Z6dyR04duHdLkQFUqHe71po2e5zlM1m3LqF1Uo=;
-        b=logup9xBaLyWB7v4I3YbHzt7PGpE7j/2wmBMZ/NV+P0fOL+2suLXHlVGpuMrW/SV3H
-         JGoYIwcHWDvVhDmhWfHBaYTveavmPR93MRxSyQnNals50z3MecokpCvEK4Wkw9pMnJja
-         +uwKeBS6Top6RTfux8HLjfZi7a13rkI0vIzBGqE8oyvDrF2HU7irtA2nmCvulk74n+aZ
-         nGI+6t+bSnl9a1tWYMuqQjHMueNT/xRDmjtS4yMpakEu4p9hO9+690CDASBQF+JWbDi8
-         is4wNmR89/sR9pIEaYPcvnNllvdgv7jakajJwnk9rGp6ZHbgsXVp3UzxkipKFW+9lX7G
-         DocQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURRB0pODack3mycU4BQJ+S9myV1SeTne8/MIPLn2VMFqwRoQ0hUFS9iHrwVSGkdltaUqwtebC8IdE3ww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCB3wkru8tld5qQIMHvJ8J8lbsFNMvFFghSvfiZ500Ul5UuTIS
-	ugGPMtv+slf1hYTjSnkDzdgehkM08L3T03eKUTPMkUx33uTex9ipylD/dFgzpWs=
-X-Gm-Gg: ASbGncuyXwfCgm3FmNYwFK6Ahk/yh+N378OIc7F1c+kwl3PoZoagvNOJVAcMjq+ZlqV
-	DGLr7JMTCyyWbdG//FPJ2WsD+ccAZbwtY1PbyM+tMgXWWjhW0noJw6v76hKYHoxmjp3wWiLpvV0
-	Tk5KHLJFTcTGSsNc3OzfczhbWr1L8KhlosNdFb8Ju3Drs48F1rVkotKgeDSp57R3BP8cQ5HI2aC
-	KyxXdygZhgo7WeNMYnyJbORKh0FVxsOFoK+TbTtTDVxgRKzR//o57CSNqrJgKmCMxvwRQ==
-X-Google-Smtp-Source: AGHT+IEReock5G/DX/5A7x8d4Y0AJaEOxEv7/nrrNTMyKpaKLnKEnGUnDoZp4D/D5JfxeNROqYz3Ew==
-X-Received: by 2002:adf:b183:0:b0:38a:4184:152a with SMTP id ffacd0b85a97d-38a41841755mr11317869f8f.28.1735558367038;
-        Mon, 30 Dec 2024 03:32:47 -0800 (PST)
-Received: from [192.168.0.43] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b11aecsm385513665e9.23.2024.12.30.03.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Dec 2024 03:32:46 -0800 (PST)
-Message-ID: <cf0f4048-6d6b-43fd-a7c0-27c7b8852279@linaro.org>
-Date: Mon, 30 Dec 2024 11:32:45 +0000
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Fhqg5qnz"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DB5FD40011;
+	Mon, 30 Dec 2024 13:22:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1735564943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7w9qi7FvqEzP4F7I6TnPP8j1jGVlHkoBFUCaIMCoHaM=;
+	b=Fhqg5qnzouWXrUuwi56MI2tkGUV3IxQOHgaa20Xd2zGvB5ZrcovsT4rps6+1YQkJWr/ort
+	qvoNI3gmJNc32+qOvVdzovETW0Q5GtzRSTmFSszVp9jud6uwfTW8LkqSm/0/79sErDK1hq
+	qTHPlISpDH55RI0vnTgMNts0P/JIesQNLa5AT5KoXsUoujhcE7LQ2mJNvUmvUZdXmXW7D3
+	GQzt1SvlyWUaLothrTqD0Droq2xs2vRrnGb8XYF7v2gFnPMPKGPJ6jYkxPfAkCMQ45GVWe
+	82P7lSu8aX8YXR279xN5EAZjrnCHUE+SwS22VOiS/QMi32N175/yzFPNuOaq7g==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Date: Mon, 30 Dec 2024 14:22:08 +0100
+Subject: [PATCH v4 6/9] i2c: rename field 'alias_list' of struct
+ i2c_atr_chan to 'alias_pairs'
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] media: venus: Add support for static video
- encoder/decoder declarations
-To: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: quic_renjiang@quicinc.com, quic_vnagar@quicinc.com,
- quic_dikshita@quicinc.com, konradybcio@kernel.org,
- linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- Stanimir Varbanov <stanimir.varbanov@linaro.org>
-References: <20241209-media-staging-24-11-25-rb3-hw-compat-string-v5-0-ef7e5f85f302@linaro.org>
- <20241209-media-staging-24-11-25-rb3-hw-compat-string-v5-1-ef7e5f85f302@linaro.org>
- <504ff336-3b11-4331-b2b6-86289b17ffd3@gmail.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <504ff336-3b11-4331-b2b6-86289b17ffd3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241230-fpc202-v4-6-761b297dc697@bootlin.com>
+References: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
+In-Reply-To: <20241230-fpc202-v4-0-761b297dc697@bootlin.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, 
+ Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ Romain Gantois <romain.gantois@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: romain.gantois@bootlin.com
 
-On 28/12/2024 13:33, Stanimir Varbanov wrote:
->> +    if (core->res->dec_nodename || core->res->enc_nodename) {
->> +        if (venus_add_dynamic_nodes(core))
-> 
-> It'd be good to pass the error code to the upper layer.
+The "alias_list" field of struct i2c_atr_chan describes translation table
+entries programmed in the ATR channel. This terminology will become more
+confusing when per-channel alias pool support is introduced, as struct
+i2c_atr_chan will gain a new field called "alias_pool", which will describe
+aliases which are available to the ATR channel.
 
-np
+Rename the "alias_list" field to "alias_pairs" to clearly distinguish it
+from the future "alias_pool" field.
 
+No functional change is intended.
+
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
-bod
+ drivers/i2c/i2c-atr.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+index ab759db56c546b2e26cd938dc9e0171df5473a8a..4652e9c2917ebdc817a5a661642e9f535e421c1a 100644
+--- a/drivers/i2c/i2c-atr.c
++++ b/drivers/i2c/i2c-atr.c
+@@ -56,7 +56,7 @@ struct i2c_atr_alias_pool {
+  * @adap:            The &struct i2c_adapter for the channel
+  * @atr:             The parent I2C ATR
+  * @chan_id:         The ID of this channel
+- * @alias_list:      List of @struct i2c_atr_alias_pair containing the
++ * @alias_pairs:     List of @struct i2c_atr_alias_pair containing the
+  *                   assigned aliases
+  * @orig_addrs_lock: Mutex protecting @orig_addrs
+  * @orig_addrs:      Buffer used to store the original addresses during transmit
+@@ -67,7 +67,7 @@ struct i2c_atr_chan {
+ 	struct i2c_atr *atr;
+ 	u32 chan_id;
+ 
+-	struct list_head alias_list;
++	struct list_head alias_pairs;
+ 
+ 	/* Lock orig_addrs during xfer */
+ 	struct mutex orig_addrs_lock;
+@@ -192,7 +192,7 @@ static int i2c_atr_map_msgs(struct i2c_atr_chan *chan, struct i2c_msg *msgs,
+ 	for (i = 0; i < num; i++) {
+ 		chan->orig_addrs[i] = msgs[i].addr;
+ 
+-		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list,
++		c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs,
+ 						   msgs[i].addr);
+ 		if (!c2a) {
+ 			dev_err(atr->dev, "client 0x%02x not mapped!\n",
+@@ -262,7 +262,7 @@ static int i2c_atr_smbus_xfer(struct i2c_adapter *adap, u16 addr,
+ 	struct i2c_adapter *parent = atr->parent;
+ 	struct i2c_atr_alias_pair *c2a;
+ 
+-	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list, addr);
++	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs, addr);
+ 	if (!c2a) {
+ 		dev_err(atr->dev, "client 0x%02x not mapped!\n", addr);
+ 		return -ENXIO;
+@@ -380,7 +380,7 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
+ 
+ 	c2a->addr = addr;
+ 	c2a->alias = alias;
+-	list_add(&c2a->node, &chan->alias_list);
++	list_add(&c2a->node, &chan->alias_pairs);
+ 
+ 	return 0;
+ 
+@@ -401,7 +401,7 @@ static void i2c_atr_detach_addr(struct i2c_adapter *adapter,
+ 
+ 	atr->ops->detach_addr(atr, chan->chan_id, addr);
+ 
+-	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_list, addr);
++	c2a = i2c_atr_find_mapping_by_addr(&chan->alias_pairs, addr);
+ 	if (!c2a) {
+ 		 /* This should never happen */
+ 		dev_warn(atr->dev, "Unable to find address mapping\n");
+@@ -621,7 +621,7 @@ int i2c_atr_add_adapter(struct i2c_atr *atr, u32 chan_id,
+ 
+ 	chan->atr = atr;
+ 	chan->chan_id = chan_id;
+-	INIT_LIST_HEAD(&chan->alias_list);
++	INIT_LIST_HEAD(&chan->alias_pairs);
+ 	mutex_init(&chan->orig_addrs_lock);
+ 
+ 	snprintf(chan->adap.name, sizeof(chan->adap.name), "i2c-%d-atr-%d",
+
+-- 
+2.47.1
+
