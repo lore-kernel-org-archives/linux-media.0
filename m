@@ -1,139 +1,81 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552611F758F;
-	Tue,  7 Jan 2025 16:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB5A1F667C;
+	Tue,  7 Jan 2025 16:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736267386; cv=none; b=OGK1gaQpvQp5beitgTQz1momVGk/Vx4eHGkGI+XuKibB7CAeafCOyRv36gBw4o2VtwKuRiDrBzrsURfHcgKuFVitt7duF5WZVRTbc7opwWtdEKfDPmQSHSBVwMHmE9k8OmkmDwevFnuhcqWMiw+vy5D79dj+G0UG8DUX9i6sMOU=
+	t=1736267951; cv=none; b=B4wd6IDyI4c1mydCRGe0vNe02CbARCsMD5+E8Zd5fwM8iTHfChBTH9fAvpl1kS1sjOT2GDoAk389hMWfHX4AZU8X63l9ScZmoQ31hF8RReexbNYXEZPxPX4DyjI76w/tCC8uWIF4l8w45Gw7ybqCtx8/FfKaeBLztIciAlnvRjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736267386; c=relaxed/simple;
-	bh=sQ3I39FmNltTxKG0blHPWtL5XgvSfGHtwyEcdLD4l7U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c63PLOVyPuAfWapfbqwEdHUX/Qw+PWQbAwr5PFEnjsNjqt41KvOqWzeU9tTby/HWfGnlG3iU8sBw251IapKHL84EG7Y9sk2VSyakfZ4T4pyLzPk+0ur61YlLtHkqQatzJpKtaAqxzG1DSRmR0mg72K6Hu/uo8NxoICpvka1isIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=kz2mDRUx; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	s=arc-20240116; t=1736267951; c=relaxed/simple;
+	bh=+y5VPCQSZ3iOvbjUez9JjjnUBGmWE7u4QVulhWXo08A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DBlw3Lbs9lxQGvJDj7gi+tEN/DFpi6TsyS+7NDAZ6QbAij1DGu9R/4DK0+uaY5yUiy+714OuNVblbVLADt5M8LmJL+dQlFjDkFrN1jG/7WUbSURX0U78ZiwjwC+o2AZEuXylR4XdEzZ8kBBzsR8Z4hqmZn6nLepsi6XBBmbj6bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAGlS6N6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="kz2mDRUx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Pta881QDQYLER5lqhnZcD4uTjqZF5/hzmw5ythV9xCA=; b=kz2mDRUx5aK+0WgU8m7s3salYK
-	2wfW9kzKJa/ISqmjf1eVcWaAQIlAZVVo1MUrpUDz23YfUMNELLNIoLKeO8hT5E6rrhSesjxP0hTf6
-	53s4nznewMKNEimd1b4wLFea08CHWJeqAUrnMj97JNEqiXp9QRql8VDmP6LSQkoGTbP0=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:55823 helo=localhost.localdomain)
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1tVC6x-0056pg-K0; Tue, 07 Jan 2025 17:07:19 +0100
-From: Matthias Fend <matthias.fend@emfend.at>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: m.felsch@pengutronix.de,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAGlS6N6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FED2C4CEE3;
+	Tue,  7 Jan 2025 16:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736267950;
+	bh=+y5VPCQSZ3iOvbjUez9JjjnUBGmWE7u4QVulhWXo08A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MAGlS6N63wTdoEa4UI0+E8DzcXED0f0jAzvpMILZj/ohyOJxISyY9OvtAXTfuRzXz
+	 knT1ewvzmZcmzzAKZ61W0LnBwhyJHfKEivYg9wX/bwnQShwiYyJof4PsfSzshg1qNk
+	 JtMHHb+hc0xDCQp+Wx+Fk6Z/yXG5gAb9rNzEPbqLsp17HltxLQDsgqIXiuk2E9DtFz
+	 /8haXx6PP/Wm/pENFMGjU+LAyBhFssdZ7B1vgKSDnVk0MU3xFt9i4gJUb7Ad/E59NI
+	 BbDiPOl+4L227fJfQIeGAEsupMj5b9zXRKeI0EuUamcbA3mZJjvPgrld3zNkAPf1y9
+	 CqZtiUE6xF/OA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] media: tc358746: improve calculation of the D-PHY timing registers
-Date: Tue,  7 Jan 2025 17:07:01 +0100
-Message-Id: <20250107160702.641703-2-matthias.fend@emfend.at>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250107160702.641703-1-matthias.fend@emfend.at>
-References: <20250107160702.641703-1-matthias.fend@emfend.at>
+	Richard Acayan <mailingradian@gmail.com>
+Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: Re: (subset) [PATCH v9 0/5] Add SDM670 camera subsystem
+Date: Tue,  7 Jan 2025 10:38:41 -0600
+Message-ID: <173626793403.69400.10932700285706894647.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20241218231729.270137-7-mailingradian@gmail.com>
+References: <20241218231729.270137-7-mailingradian@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0
-X-Spam-Bar: -
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  The TC358746 supports RAW formats with 8, 10, 12, and 14-bit
-    depths. Since pixel data is transported transparently without modifying the
-    pixel arrangement, all Bayer patterns (RGGB, BGGR, GRBG, GBRG) [...] 
- 
- Content analysis details:   (-1.0 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment
 
-When calculating D-PHY registers, using data rates that are not multiples
-of 16 can lead to precision loss in division operations. This can result in
-register values that produce timing violations against the MIPI standard.
 
-An example:
-cfg->hs_clk_rate = 294MHz
-hf_clk = 18
+On Wed, 18 Dec 2024 18:17:30 -0500, Richard Acayan wrote:
+> This adds support for the camera subsystem on the Snapdragon 670.
+> 
+> Changes since v8 (20241216223019.70155-8-mailingradian@gmail.com):
+> - revert clocks before interrupts change from v8 (3/5, 5/5)
+> - pre-declare endpoint nodes in dtsi (5/5)
+> - rename camss node to isp@acb3000 (2/5, 5/5)
+> - add Reviewed-by from Krzysztof for camss dt-bindings patch (2/5)
+> - add Reviewed-by from Vladimir for camss dtsi patch (5/5)
+> 
+> [...]
 
-If the desired value in cfg->init is 100us, which is the minimum allowed
-value, then the LINEINITCNT register is calculated as 1799. But since the
-actual clock is 18.375MHz instead of 18MHz, this setting results in a time
-that is shorter than 100us and thus violates the standard. The correct
-value for LINEINITCNT would be 1837.
+Applied, thanks!
 
-Improve the precision of calculations by using Hz instead of MHz as unit.
+[1/5] dt-bindings: clock: qcom,sdm845-camcc: add sdm670 compatible
+      commit: bf6aa2d6935cc86b5eee67cdb8edef53fb6374cd
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
----
- drivers/media/i2c/tc358746.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
-index 5eccd4ffd84d..883ca40709a9 100644
---- a/drivers/media/i2c/tc358746.c
-+++ b/drivers/media/i2c/tc358746.c
-@@ -485,24 +485,20 @@ static int tc358746_apply_misc_config(struct tc358746 *tc358746)
- 	return err;
- }
- 
--/* Use MHz as base so the div needs no u64 */
--static u32 tc358746_cfg_to_cnt(unsigned int cfg_val,
--			       unsigned int clk_mhz,
--			       unsigned int time_base)
-+static u32 tc358746_cfg_to_cnt(unsigned long cfg_val, unsigned long clk_hz,
-+			       unsigned long long time_base)
- {
--	return DIV_ROUND_UP(cfg_val * clk_mhz, time_base);
-+	return div64_u64((u64)cfg_val * clk_hz + time_base - 1, time_base);
- }
- 
--static u32 tc358746_ps_to_cnt(unsigned int cfg_val,
--			      unsigned int clk_mhz)
-+static u32 tc358746_ps_to_cnt(unsigned long cfg_val, unsigned long clk_hz)
- {
--	return tc358746_cfg_to_cnt(cfg_val, clk_mhz, USEC_PER_SEC);
-+	return tc358746_cfg_to_cnt(cfg_val, clk_hz, PSEC_PER_SEC);
- }
- 
--static u32 tc358746_us_to_cnt(unsigned int cfg_val,
--			      unsigned int clk_mhz)
-+static u32 tc358746_us_to_cnt(unsigned long cfg_val, unsigned long clk_hz)
- {
--	return tc358746_cfg_to_cnt(cfg_val, clk_mhz, 1);
-+	return tc358746_cfg_to_cnt(cfg_val, clk_hz, USEC_PER_SEC);
- }
- 
- static int tc358746_apply_dphy_config(struct tc358746 *tc358746)
-@@ -517,7 +513,6 @@ static int tc358746_apply_dphy_config(struct tc358746 *tc358746)
- 
- 	/* The hs_byte_clk is also called SYSCLK in the excel sheet */
- 	hs_byte_clk = cfg->hs_clk_rate / 8;
--	hs_byte_clk /= HZ_PER_MHZ;
- 	hf_clk = hs_byte_clk / 2;
- 
- 	val = tc358746_us_to_cnt(cfg->init, hf_clk) - 1;
+Best regards,
 -- 
-2.34.1
-
+Bjorn Andersson <andersson@kernel.org>
