@@ -1,223 +1,139 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDA91F6695
-	for <linux-media@vger.kernel.org>; Tue,  7 Jan 2025 16:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552611F758F;
+	Tue,  7 Jan 2025 16:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736267363; cv=none; b=pTsKPcGPW3oKhJ8Q1uu2R6+GfhLQ0dlM5HtwJXvpgMADIVlRTpRyv5B9HOZ8aiY6aVIgBZcsHkUMvE6DPQrdsLpAyZ5NxcZ+rprd57KSIM16Zrt2iIw6PHy8z8KnXDQ07vPEp91APKu8KTTn03eAIZcJgFvtRQReUljjyLxZH48=
+	t=1736267386; cv=none; b=OGK1gaQpvQp5beitgTQz1momVGk/Vx4eHGkGI+XuKibB7CAeafCOyRv36gBw4o2VtwKuRiDrBzrsURfHcgKuFVitt7duF5WZVRTbc7opwWtdEKfDPmQSHSBVwMHmE9k8OmkmDwevFnuhcqWMiw+vy5D79dj+G0UG8DUX9i6sMOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736267363; c=relaxed/simple;
-	bh=KCtwF6vbca25t2bwwBZ4ELVCZXYEEAPsnYr6vKLfOqU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HJZ6G00ygFryvLhDgIm7m9Yia+aqu8uIgVCBrWbpj3lb+iH+nQCqDgeBcWVrAxpftmdWbiKYQpGwCD41+zwO80wbmWJOMZObNh5Qrge4xw/T/PmwjQr3RJHJS6Ov2Nute/VIs1DZHOlaGI91QW91Kt/Wx7vVsopaQ+5CabsvEcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=lB9b6nPB; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
+	s=arc-20240116; t=1736267386; c=relaxed/simple;
+	bh=sQ3I39FmNltTxKG0blHPWtL5XgvSfGHtwyEcdLD4l7U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=c63PLOVyPuAfWapfbqwEdHUX/Qw+PWQbAwr5PFEnjsNjqt41KvOqWzeU9tTby/HWfGnlG3iU8sBw251IapKHL84EG7Y9sk2VSyakfZ4T4pyLzPk+0ur61YlLtHkqQatzJpKtaAqxzG1DSRmR0mg72K6Hu/uo8NxoICpvka1isIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=kz2mDRUx; arc=none smtp.client-ip=168.119.41.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="lB9b6nPB"
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e3a26de697fso21074695276.3
-        for <linux-media@vger.kernel.org>; Tue, 07 Jan 2025 08:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1736267357; x=1736872157; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fc9TAWTYLPXygf26AxVFot53JgJe8sMA4p9Ceubb2BA=;
-        b=lB9b6nPBFjqKByMswiiGhp7wUKQXtz+Dj+rmkzK+cyugl0FAoFpQruxEwURtrPKfit
-         5jEIZ4O4zHUr13ZbfKBdzaq4e9gprjjTdFYJMq60bJTt0JkiITxo7NbuIgr/s5qo7MOX
-         F5MbnvpiaKKJ2naFpwoa5FsRiWV7GOvzALGSGo16dTnE5euPr5L98rhrTz0/5P7MOoMg
-         FS56p5Q0EkonPgMeeG4vzJj2a9xQnYw2BSjlXTMSy1xJ4GR38vFBa97icBJNwGdAumCF
-         IEXpQKCRebLfAgMPfpfp+mYpzjmcAHHxkyVjTPtOaPU6xLeE8hCOuhZ3d/AEB7LK/bUZ
-         GZhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736267357; x=1736872157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fc9TAWTYLPXygf26AxVFot53JgJe8sMA4p9Ceubb2BA=;
-        b=JbDRND+8csWGl3ddAuxyLim06SLoES3JBnl0rc5YpRQKLFU9y8+E28moXBaI1qYvEn
-         RZ9H5/BimINdHf99+C0yeCXCbdbBCl4PcYTEaV1KbZRAHNdXwJrxeaiA6GIMRXHDDxBF
-         nHsh+7TqxC8XrsDSdFS6jgiHVrBs3gQJB7oG9nq/JOIMZGBH5Mkr33Uns0AZ+dhU45YD
-         h8J0nEn/DVshb1VfgtfOoivz+GndSgs71Fu19DTTGT3QzVHqDYXM/ON9NawLksF1fXQO
-         H755TgnD1FXVnBOrg52V2iGKnIyxAkfzHNUiXNyO60YjO1K6JvIfcnvn5gG4Gr21aqV4
-         S+jw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUjTvchDaejyK7UWfowUkH2diIYsMY3G2fCPptuLmVRcf7Dvhxi1CdIFFK9DM9hEpV3NrIVeJCUYPAwg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpAHur3IBsEAnY6M4DfQs7RcpfdxSp2HcE6czMwS2/E+pQ30nY
-	v7tYZvPa+UaEahfSrL6AGHkBaXjweURKy1u0nfbIGztYFWMch1ZM9y6bCCmcrjYMy0N8t5J6qMe
-	F9+/yyo5P8aivLag6kbz+7YMhaft6y6bH5P51Eg==
-X-Gm-Gg: ASbGncsmpplvA1lD/Nl9tQ8SYjuvpDicCrvLWuOzT0N19elSRTX1xKCWnuUiIRixtfB
-	Zm8drvrdTUKDTpLdTO3qpM1ttqT7IvSHnzcBYUqYjR7AZeBp0iKTehUIGyXPm7Oymud+pXg==
-X-Google-Smtp-Source: AGHT+IHE9JCAToCSl3COyvQMx5Y1P1UpkdQ9O+c29S+dQDMjILkfPa180zWfWuIGALyqsVOAyrBZX1J+I8N/WVKwvWM=
-X-Received: by 2002:a05:690c:6711:b0:6e3:15ad:a560 with SMTP id
- 00721157ae682-6f3f8110608mr487206047b3.12.1736267354719; Tue, 07 Jan 2025
- 08:29:14 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="kz2mDRUx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
+	 s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Pta881QDQYLER5lqhnZcD4uTjqZF5/hzmw5ythV9xCA=; b=kz2mDRUx5aK+0WgU8m7s3salYK
+	2wfW9kzKJa/ISqmjf1eVcWaAQIlAZVVo1MUrpUDz23YfUMNELLNIoLKeO8hT5E6rrhSesjxP0hTf6
+	53s4nznewMKNEimd1b4wLFea08CHWJeqAUrnMj97JNEqiXp9QRql8VDmP6LSQkoGTbP0=;
+Received: from 194-208-208-245.tele.net ([194.208.208.245]:55823 helo=localhost.localdomain)
+	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <matthias.fend@emfend.at>)
+	id 1tVC6x-0056pg-K0; Tue, 07 Jan 2025 17:07:19 +0100
+From: Matthias Fend <matthias.fend@emfend.at>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: m.felsch@pengutronix.de,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] media: tc358746: improve calculation of the D-PHY timing registers
+Date: Tue,  7 Jan 2025 17:07:01 +0100
+Message-Id: <20250107160702.641703-2-matthias.fend@emfend.at>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250107160702.641703-1-matthias.fend@emfend.at>
+References: <20250107160702.641703-1-matthias.fend@emfend.at>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241220-media-rpi-hevc-dec-v1-0-0ebcc04ed42e@raspberrypi.com>
- <20241220-media-rpi-hevc-dec-v1-3-0ebcc04ed42e@raspberrypi.com>
- <d2f047cd-5c50-454f-95be-601edb79466d@collabora.com> <CAPY8ntBNse4Dq9E49QO3ipDbb+uMipe+MuLxW_Jpszu9gQgpww@mail.gmail.com>
- <cfa4e4ebd9015a291e513fc22ec70821976e56ce.camel@ndufresne.ca>
-In-Reply-To: <cfa4e4ebd9015a291e513fc22ec70821976e56ce.camel@ndufresne.ca>
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Tue, 7 Jan 2025 16:28:54 +0000
-Message-ID: <CAPY8ntAxkdyngsCFfYNGNv6ObJU1PCMPvr_61R14a2H+dbZm2Q@mail.gmail.com>
-Subject: Re: [PATCH 3/7] media: ioctl: Add pixel formats NV12MT_COL128 and NV12MT_10_COL128
-To: Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: Robert Mader <robert.mader@collabora.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, John Cox <john.cox@raspberrypi.com>, 
-	Dom Cobley <dom@raspberrypi.com>, review list <kernel-list@raspberrypi.com>, 
-	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, John Cox <jc@kynesim.co.uk>, 
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0
+X-Spam-Bar: -
+X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ 
+ Content preview:  The TC358746 supports RAW formats with 8, 10, 12, and 14-bit
+    depths. Since pixel data is transported transparently without modifying the
+    pixel arrangement, all Bayer patterns (RGGB, BGGR, GRBG, GBRG) [...] 
+ 
+ Content analysis details:   (-1.0 points, 5.0 required)
+ 
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+  0.0 TVD_RCVD_IP            Message was received from an IP address
+  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
+                             Alignment
 
-On Mon, 6 Jan 2025 at 20:52, Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
->
-> Le jeudi 02 janvier 2025 =C3=A0 12:52 +0000, Dave Stevenson a =C3=A9crit =
-:
-> > Hi Robert
-> >
-> > Resending this reply as replying from my phone before the Christmas
-> > break sent it as HTML :-(
-> >
-> > On Sat, 21 Dec 2024 at 17:38, Robert Mader <robert.mader@collabora.com>=
- wrote:
-> > >
-> > > Hi, thanks for the patch.
-> > >
-> > > On 20.12.24 17:21, Dave Stevenson wrote:
-> > >
-> > > Add V4L2_PIXFMT_NV12MT_COL128 and V4L2_PIXFMT_NV12MT_10_COL128
-> > > to describe the Raspberry Pi HEVC decoder NV12 multiplanar formats.
-> > >
-> > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > > ---
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
-> > >  include/uapi/linux/videodev2.h       | 5 +++++
-> > >  2 files changed, 7 insertions(+)
-> > >
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l=
-2-core/v4l2-ioctl.c
-> > > index 0304daa8471d..e510e375a871 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1377,7 +1377,9 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdes=
-c *fmt)
-> > >   case V4L2_PIX_FMT_NV16M: descr =3D "Y/UV 4:2:2 (N-C)"; break;
-> > >   case V4L2_PIX_FMT_NV61M: descr =3D "Y/VU 4:2:2 (N-C)"; break;
-> > >   case V4L2_PIX_FMT_NV12MT: descr =3D "Y/UV 4:2:0 (64x32 MB, N-C)"; b=
-reak;
-> > > + case V4L2_PIX_FMT_NV12MT_COL128: descr =3D "Y/CbCr 4:2:0 (128b cols=
-)"; break;
-> > >   case V4L2_PIX_FMT_NV12MT_16X16: descr =3D "Y/UV 4:2:0 (16x16 MB, N-=
-C)"; break;
-> > > + case V4L2_PIX_FMT_NV12MT_10_COL128: descr =3D "10-bit Y/CbCr 4:2:0 =
-(128b cols)"; break;
-> > >   case V4L2_PIX_FMT_P012M: descr =3D "12-bit Y/UV 4:2:0 (N-C)"; break=
-;
-> > >   case V4L2_PIX_FMT_YUV420M: descr =3D "Planar YUV 4:2:0 (N-C)"; brea=
-k;
-> > >   case V4L2_PIX_FMT_YVU420M: descr =3D "Planar YVU 4:2:0 (N-C)"; brea=
-k;
-> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/vide=
-odev2.h
-> > > index e7c4dce39007..f8f97aa6a616 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -687,6 +687,11 @@ struct v4l2_pix_format {
-> > >  #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2') /*=
- 12  Y/CbCr 4:2:0 16x16 tiles */
-> > >  #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', '2'=
-) /* Y/CbCr 4:2:0 8x128 tiles */
-> > >  #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1', =
-'2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
-> > > +#define V4L2_PIX_FMT_NV12MT_COL128 v4l2_fourcc('N', 'c', '1', '2') /=
-* 12  Y/CbCr 4:2:0 128 pixel wide column */
-> > > +#define V4L2_PIX_FMT_NV12MT_10_COL128 v4l2_fourcc('N', 'c', '3', '0'=
-)
-> > >
-> > > Should these be upper-case Cs instead? So they compatible with the pr=
-eviously used downstream values?
-> >
-> > No, this is deliberate.
-> >
-> > Downstream was using a single planar format, with extra complexity for
-> > determining the chroma offset per column, and weird handling required
-> > on bytesperline.
-> > Having had discussions, switching to a multiplanar format (hence MT in
-> > the name) removes those complexities and means we don't need to do
-> > anything weird in the v4l2 format definitions.
-> >
-> > Reusing NC12 and NC30 fourccs will give us grief over backwards
-> > compatibility, hence lower case for the new version.
-> >
-> > I have a patch on [1] that adds back in NC12 and NC30 for downstream
-> > just so we don't break existing users, but see no point in upstreaming
-> > that.
->
-> Yes, I think its fair to avoid incompatibility there. Are there matching =
-Mesa
-> patches coming, since without that we are back to square one, where the f=
-ormat
-> remains unusable. NC12 have a matching (mainline) DRM_FORMAT_NV12
-> DRM_FORMAT_MOD_BROADCOM_SAND128 pair. I believe a new modifier is needed =
-and
-> will serve both Nc12/30.
+When calculating D-PHY registers, using data rates that are not multiples
+of 16 can lead to precision loss in division operations. This can result in
+register values that produce timing violations against the MIPI standard.
 
-The current DRM_FORMAT_MOD_BROADCOM_SAND128 taking the column height
-as the parameter is apparently contrary to how DRM modifiers are meant
-to be used. You're not allowed to have a genuine runtime parameter in
-there, and all potential values for parameters have to be listed out
-in the in_formats blob.
+An example:
+cfg->hs_clk_rate = 294MHz
+hf_clk = 18
 
-I have a patch on [1] to add DRM_FORMAT_MOD_BROADCOM_SAND128(0) as a
-modifier which then takes the height passed in to addFB2 to be the
-column height. With luma and chroma now in independent buffers via the
-multi-planar API, that solves the problem, and we don't need a new
-modifier. I will submit that to dri-devel in the next week or so.
+If the desired value in cfg->init is 100us, which is the minimum allowed
+value, then the LINEINITCNT register is calculated as 1799. But since the
+actual clock is 18.375MHz instead of 18MHz, this setting results in a time
+that is shorter than 100us and thus violates the standard. The correct
+value for LINEINITCNT would be 1837.
 
-I've pinged Igalia to sort the equivalent Mesa patch for me.
+Improve the precision of calculations by using Hz instead of MHz as unit.
 
- Dave
+Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+---
+ drivers/media/i2c/tc358746.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-[1] https://github.com/6by9/linux/commits/rpi-6.12.y-hevc_dec patch
-"drm/vc4: Add algorithmic handling for SAND". I can't give a hash as I
-rebase that branch.
+diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
+index 5eccd4ffd84d..883ca40709a9 100644
+--- a/drivers/media/i2c/tc358746.c
++++ b/drivers/media/i2c/tc358746.c
+@@ -485,24 +485,20 @@ static int tc358746_apply_misc_config(struct tc358746 *tc358746)
+ 	return err;
+ }
+ 
+-/* Use MHz as base so the div needs no u64 */
+-static u32 tc358746_cfg_to_cnt(unsigned int cfg_val,
+-			       unsigned int clk_mhz,
+-			       unsigned int time_base)
++static u32 tc358746_cfg_to_cnt(unsigned long cfg_val, unsigned long clk_hz,
++			       unsigned long long time_base)
+ {
+-	return DIV_ROUND_UP(cfg_val * clk_mhz, time_base);
++	return div64_u64((u64)cfg_val * clk_hz + time_base - 1, time_base);
+ }
+ 
+-static u32 tc358746_ps_to_cnt(unsigned int cfg_val,
+-			      unsigned int clk_mhz)
++static u32 tc358746_ps_to_cnt(unsigned long cfg_val, unsigned long clk_hz)
+ {
+-	return tc358746_cfg_to_cnt(cfg_val, clk_mhz, USEC_PER_SEC);
++	return tc358746_cfg_to_cnt(cfg_val, clk_hz, PSEC_PER_SEC);
+ }
+ 
+-static u32 tc358746_us_to_cnt(unsigned int cfg_val,
+-			      unsigned int clk_mhz)
++static u32 tc358746_us_to_cnt(unsigned long cfg_val, unsigned long clk_hz)
+ {
+-	return tc358746_cfg_to_cnt(cfg_val, clk_mhz, 1);
++	return tc358746_cfg_to_cnt(cfg_val, clk_hz, USEC_PER_SEC);
+ }
+ 
+ static int tc358746_apply_dphy_config(struct tc358746 *tc358746)
+@@ -517,7 +513,6 @@ static int tc358746_apply_dphy_config(struct tc358746 *tc358746)
+ 
+ 	/* The hs_byte_clk is also called SYSCLK in the excel sheet */
+ 	hs_byte_clk = cfg->hs_clk_rate / 8;
+-	hs_byte_clk /= HZ_PER_MHZ;
+ 	hf_clk = hs_byte_clk / 2;
+ 
+ 	val = tc358746_us_to_cnt(cfg->init, hf_clk) - 1;
+-- 
+2.34.1
 
-
-> Nicolas
->
-> >
-> > > P.S.: Coincidentally Gstreamer just landed support for NC12 in https:=
-//gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7355 and ther=
-e is also a link to experimental NC30 patches. So happy to see this series =
-appear upstream :)
-> >
-> > Ooh, nice. I'll give it a test when I'm back in the office.
-> >
-> > Dave
-> >
-> > [1] https://github.com/6by9/linux/commits/rpi-6.12.y-hevc_dec/
-> >
-> > > + /* Y/CbCr 4:2:0 10bpc, 3x10 packed as 4 bytes in
-> > > + * a 128 bytes / 96 pixel wide column */
-> > > +
-> > >
-> > >  /* Bayer formats - see http://www.siliconimaging.com/RGB%20Bayer.htm=
- */
-> > >  #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  8  =
-BGBG.. GRGR.. */
-> > >
-> >
->
