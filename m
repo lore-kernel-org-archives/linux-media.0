@@ -1,81 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB5A1F667C;
-	Tue,  7 Jan 2025 16:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBC3197558;
+	Tue,  7 Jan 2025 16:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736267951; cv=none; b=B4wd6IDyI4c1mydCRGe0vNe02CbARCsMD5+E8Zd5fwM8iTHfChBTH9fAvpl1kS1sjOT2GDoAk389hMWfHX4AZU8X63l9ScZmoQ31hF8RReexbNYXEZPxPX4DyjI76w/tCC8uWIF4l8w45Gw7ybqCtx8/FfKaeBLztIciAlnvRjE=
+	t=1736268522; cv=none; b=XEdtKVKFVI+lhjwdlsWS6rIJCLPGxgaw0iJT+/cSjHUXWVei/qBmOImJKTe6lwg5q6637g8z2ELJQufUAStdoyEPCyiHTbxTfNQC4mHuX5o0cjPap39u+y4pXQYe4r0Zxo6mv12lo5nXwVzvxzSGRqgsrryIfDVTyGCUbm6yxaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736267951; c=relaxed/simple;
-	bh=+y5VPCQSZ3iOvbjUez9JjjnUBGmWE7u4QVulhWXo08A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DBlw3Lbs9lxQGvJDj7gi+tEN/DFpi6TsyS+7NDAZ6QbAij1DGu9R/4DK0+uaY5yUiy+714OuNVblbVLADt5M8LmJL+dQlFjDkFrN1jG/7WUbSURX0U78ZiwjwC+o2AZEuXylR4XdEzZ8kBBzsR8Z4hqmZn6nLepsi6XBBmbj6bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAGlS6N6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736268522; c=relaxed/simple;
+	bh=79/3xnhQlFqk+Yma/zbktmzNzj8u8pRjnBD6ncjAVFI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dK9DAftk522riaRExnhLm6ydzhRRg0Ra7u0k6ipoa6rjPT3LE0yg/JFun+cbDIAvNzQURFrO+kd14dUsu+Ox44JEIR7bYJ95awpHQ6xlg1C3ThIl25hkcTT1UyPuRJ0ygiNi9R6/iZzjLEbTiojVBzANBgM+ywl8r7/Wu6sjzx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=YHqeYWAE; arc=none smtp.client-ip=168.119.41.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAGlS6N6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FED2C4CEE3;
-	Tue,  7 Jan 2025 16:39:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736267950;
-	bh=+y5VPCQSZ3iOvbjUez9JjjnUBGmWE7u4QVulhWXo08A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MAGlS6N63wTdoEa4UI0+E8DzcXED0f0jAzvpMILZj/ohyOJxISyY9OvtAXTfuRzXz
-	 knT1ewvzmZcmzzAKZ61W0LnBwhyJHfKEivYg9wX/bwnQShwiYyJof4PsfSzshg1qNk
-	 JtMHHb+hc0xDCQp+Wx+Fk6Z/yXG5gAb9rNzEPbqLsp17HltxLQDsgqIXiuk2E9DtFz
-	 /8haXx6PP/Wm/pENFMGjU+LAyBhFssdZ7B1vgKSDnVk0MU3xFt9i4gJUb7Ad/E59NI
-	 BbDiPOl+4L227fJfQIeGAEsupMj5b9zXRKeI0EuUamcbA3mZJjvPgrld3zNkAPf1y9
-	 CqZtiUE6xF/OA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Todor Tomov <todor.too@gmail.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="YHqeYWAE"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
+	 s=mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
+	To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=AlKbI33AAqrTvqU6EB5bajlXyKa6yxPlR8EiYF/v/z8=; b=YHqeYWAEnSKrQjx/h5uMHmgVp6
+	+H3CQWzsCjijNp+pUqdr4Fnhfon94FMResI3yRkJL/g/MIf9dzYTAkyl3jwYf+vRe/466aHemANL8
+	ZBb1y11Roa1EHpaUo58sgSlOgh26BsavnM06xdhyWKBokR9E+EbMAV46WJ22FeXy/Ofo=;
+Received: from 194-208-208-245.tele.net ([194.208.208.245]:55823 helo=localhost.localdomain)
+	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <matthias.fend@emfend.at>)
+	id 1tVC6v-0056pg-5J; Tue, 07 Jan 2025 17:07:17 +0100
+From: Matthias Fend <matthias.fend@emfend.at>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: m.felsch@pengutronix.de,
 	linux-media@vger.kernel.org,
-	Richard Acayan <mailingradian@gmail.com>
-Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: (subset) [PATCH v9 0/5] Add SDM670 camera subsystem
-Date: Tue,  7 Jan 2025 10:38:41 -0600
-Message-ID: <173626793403.69400.10932700285706894647.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241218231729.270137-7-mailingradian@gmail.com>
-References: <20241218231729.270137-7-mailingradian@gmail.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] media: tc358746: add support for 8/10/12/14-bit RAW Bayer formats
+Date: Tue,  7 Jan 2025 17:07:00 +0100
+Message-Id: <20250107160702.641703-1-matthias.fend@emfend.at>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Spam-Score: 
+X-Spam-Bar: 
+X-Spam-Report: 
 
+The TC358746 supports RAW formats with 8, 10, 12, and 14-bit depths. Since
+pixel data is transported transparently without modifying the pixel
+arrangement, all Bayer patterns (RGGB, BGGR, GRBG, GBRG) are supported.
 
-On Wed, 18 Dec 2024 18:17:30 -0500, Richard Acayan wrote:
-> This adds support for the camera subsystem on the Snapdragon 670.
-> 
-> Changes since v8 (20241216223019.70155-8-mailingradian@gmail.com):
-> - revert clocks before interrupts change from v8 (3/5, 5/5)
-> - pre-declare endpoint nodes in dtsi (5/5)
-> - rename camss node to isp@acb3000 (2/5, 5/5)
-> - add Reviewed-by from Krzysztof for camss dt-bindings patch (2/5)
-> - add Reviewed-by from Vladimir for camss dtsi patch (5/5)
-> 
-> [...]
+Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+---
+ drivers/media/i2c/tc358746.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-Applied, thanks!
-
-[1/5] dt-bindings: clock: qcom,sdm845-camcc: add sdm670 compatible
-      commit: bf6aa2d6935cc86b5eee67cdb8edef53fb6374cd
-
-Best regards,
+diff --git a/drivers/media/i2c/tc358746.c b/drivers/media/i2c/tc358746.c
+index 389582420ba7..5eccd4ffd84d 100644
+--- a/drivers/media/i2c/tc358746.c
++++ b/drivers/media/i2c/tc358746.c
+@@ -202,6 +202,15 @@ enum {
+ 	PDFORMAT_YUV444,
+ };
+ 
++#define TC358746_FORMAT_RAW(_bpp, _code)		\
++{							\
++	.code = _code,					\
++	.bus_width = _bpp,				\
++	.bpp = _bpp,					\
++	.pdformat = PDFORMAT_RAW##_bpp,			\
++	.pdataf = PDATAF_MODE0, /* don't care */	\
++}
++
+ /* Check tc358746_src_mbus_code() if you add new formats */
+ static const struct tc358746_format tc358746_formats[] = {
+ 	{
+@@ -230,7 +239,23 @@ static const struct tc358746_format tc358746_formats[] = {
+ 		.bpp = 20,
+ 		.pdformat = PDFORMAT_YUV422_10BIT,
+ 		.pdataf = PDATAF_MODE0, /* don't care */
+-	}
++	},
++	TC358746_FORMAT_RAW(8, MEDIA_BUS_FMT_SBGGR8_1X8),
++	TC358746_FORMAT_RAW(8, MEDIA_BUS_FMT_SGBRG8_1X8),
++	TC358746_FORMAT_RAW(8, MEDIA_BUS_FMT_SGRBG8_1X8),
++	TC358746_FORMAT_RAW(8, MEDIA_BUS_FMT_SRGGB8_1X8),
++	TC358746_FORMAT_RAW(10, MEDIA_BUS_FMT_SBGGR10_1X10),
++	TC358746_FORMAT_RAW(10, MEDIA_BUS_FMT_SGBRG10_1X10),
++	TC358746_FORMAT_RAW(10, MEDIA_BUS_FMT_SGRBG10_1X10),
++	TC358746_FORMAT_RAW(10, MEDIA_BUS_FMT_SRGGB10_1X10),
++	TC358746_FORMAT_RAW(12, MEDIA_BUS_FMT_SBGGR12_1X12),
++	TC358746_FORMAT_RAW(12, MEDIA_BUS_FMT_SGBRG12_1X12),
++	TC358746_FORMAT_RAW(12, MEDIA_BUS_FMT_SGRBG12_1X12),
++	TC358746_FORMAT_RAW(12, MEDIA_BUS_FMT_SRGGB12_1X12),
++	TC358746_FORMAT_RAW(14, MEDIA_BUS_FMT_SBGGR14_1X14),
++	TC358746_FORMAT_RAW(14, MEDIA_BUS_FMT_SGBRG14_1X14),
++	TC358746_FORMAT_RAW(14, MEDIA_BUS_FMT_SGRBG14_1X14),
++	TC358746_FORMAT_RAW(14, MEDIA_BUS_FMT_SRGGB14_1X14),
+ };
+ 
+ /* Get n-th format for pad */
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.34.1
+
