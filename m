@@ -1,240 +1,160 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6B61F9F7D;
-	Wed,  8 Jan 2025 13:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736343880; cv=fail; b=Fk6yWO9YwIX+KDcZnlK8D2JTLnnZQEGitLSpL1swa22LCGeWnheAmAIaduRvV9ZjwPgNoEpCuMuAGZBQ/4stQAbY8h09T9zsRkRJBKM9+yzfj1UBLmWvic8MLM8yrSdOVcRlr4K65O4HQgzsJFxbHYcd0TENCAX+llc2uuMtH3g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736343880; c=relaxed/simple;
-	bh=Oy8MlT8uS5MX9VsHjIb//mUvcIlWq7lZDTh8A95R7aM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Sm8QHhuMMmSrpEF6uVTCSJ6T+2/Rt/WSE1EW5gd7S0gFCBfAiLc+jTnlKevsvOb/slppv4C6Xt/zvJSrmZhmOWscRJptc5nF04zkTI43iHp6FUbmQ65y9sJ1b+ddbsSU5YcsaxV1hTg1CSnLnApxmXgALf1Ls+EXWaopFV4bpxc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aQe4xpxp; arc=fail smtp.client-ip=40.107.243.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BDD1514F8
+	for <linux-media@vger.kernel.org>; Wed,  8 Jan 2025 13:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736344407; cv=none; b=QL8ekMEhtoZGBxjsdLPcesi9bhYUbShkE2e2YDxkaildWII8qZsxh3rWv95IRr0UMKShI7aSBFQ7ZEIGBovlt7q1lwjzNPbsfb4R3MKVvzpmKI1TUP5AUvrUwbSLrv554hyV5RZpm2X/WhzGLLMSv8MQUnqaoWQToswX+9Edwts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736344407; c=relaxed/simple;
+	bh=ClMM0PHcDShy1gGCy70PnmNY7H+z1O607LxpgWUERFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gsoZbA/q1HcJ5QZ15sz9XvcMDGOwk4z/cV96XKd55lcsy7M4xUbyMV/kgBc65QQ3nW4/igvzUEvFAvpJs309rYoevgsV6QNCuGMPayipqjdumOdCV7iPVQ29fXnldt+7yKblRzwjmdV9JJzxdQluKfMjm4zL3MqEWnADZj2pyDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=leQJ0P4x; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aQe4xpxp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=h2vDPvwXXkS1sYeQxWacMoyFNPuzAz30y3lsZWnY5Sq5HQmhf8kGhZulHzU6gCG65GSSWhcBdHLm71gCuVyPo+lf7UB5amKljq4NIi0VDJm2tL7Dvjj4KWeVeHh6rSxjQcrQ6zwNjHICKNasOKKorn+sb9q75wIwHS/bhr0rbKVsNgkWV0IqE37bBtgaSQsTUCKUTaPrWXtKZzkaM9Q+J3hkW6mfv9n3Q+jLpB7U73uyiZRkRVKUO5kVkC6k3BohyHkT7YS56MzeiAgjTN+E9uhXdrGCC17TSkJakQUwplH3nCIemF0aTgfI+9Zb1+BoySbpd13owfTd1aBAVKm8og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uLuMRiyx5kT9NeVvdHDy+TEeQUAgETX1BZPWKtJNA8Q=;
- b=AHHINPbftYzmZExk09wZ6XLPEIe0TqMnUSoJkeQY1/x2MDrO8n+hTZY6iwtmxWRYzB+/nd2IpUQZNlxOZDTCTpROxiXVOPLfuw1cuo67lLjXOEuphbLO4eFGsKtV1K83TVbDu8HSHVkneX5ITts6XO+UMcSG2rYRQZ8q5AH4JjlT+8kcGx8IH/8lTHzIXoMC9lv41bpZlz60Kxa3NiG165phr6CBaKWfbQorr5oqISsltU85w1yuaHsEvZCTPTUF3SL9HyJpAFRDBA84ueDUorvNezYFxdxP7upktnGB6dIjrNLMF1bzkl7F5WJmpRmGfdtN/XH1rJ2TXhaXG+j50Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uLuMRiyx5kT9NeVvdHDy+TEeQUAgETX1BZPWKtJNA8Q=;
- b=aQe4xpxpkKaWY5kfKx38joh+rDZr46J9cK4DnxC3YCz4QDeHPWEdkHH0FvG+2X5u695cdGuAR0lAAwuIwRZTV4clJNZaNo6C/Iyv7i1vrxPvEIK9UCJOZoBa+QuXD7Jpgz4WUgbv3ZtRut8PF6fuAlFPxhalI+tannCqkObLsuo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by CH3PR12MB7521.namprd12.prod.outlook.com (2603:10b6:610:143::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.10; Wed, 8 Jan
- 2025 13:44:36 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%5]) with mapi id 15.20.8335.010; Wed, 8 Jan 2025
- 13:44:35 +0000
-Message-ID: <f3748173-2bbc-43fa-b62e-72e778999764@amd.com>
-Date: Wed, 8 Jan 2025 14:44:26 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
- kAPI
-To: Jason Gunthorpe <jgg@nvidia.com>, Christoph Hellwig <hch@lst.de>,
- Leon Romanovsky <leonro@nvidia.com>
-Cc: Xu Yilun <yilun.xu@linux.intel.com>, kvm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
- pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
- vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
- yilun.xu@intel.com, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
- daniel.vetter@ffwll.ch, leon@kernel.org, baolu.lu@linux.intel.com,
- zhenzhong.duan@intel.com, tao1.su@intel.com
-References: <20250107142719.179636-1-yilun.xu@linux.intel.com>
- <20250107142719.179636-2-yilun.xu@linux.intel.com>
- <b1f3c179-31a9-4592-a35b-b96d2e8e8261@amd.com>
- <20250108132358.GP5556@nvidia.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20250108132358.GP5556@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0103.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a1::19) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="leQJ0P4x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736344405; x=1767880405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ClMM0PHcDShy1gGCy70PnmNY7H+z1O607LxpgWUERFk=;
+  b=leQJ0P4xQCJWi3hLkbdWo1J+lrKjf0AqwbkOIIZYdVkQMiA21VuMCTT1
+   LaOGBBrskjRisO7fBet/2DBtK59Tdw+IxZQi5k5DOHoymqFwijb4doJEL
+   Ss0hyvYfkiBsf2jyBodq7QJEyTUM/8mRJ7mn3ZEN+Rl88wPG/J9J8VgC6
+   rFgds8As4DTQqIEOD4TCydvAh4Gm7Avgfo8YfSIJxZk1hUmo2k0pDhc5q
+   0BrnDQPcRdjvnHAIWzQQ7g0U2eyTmLLJ8bKNnKd31JFCiI9Am58+WEGaS
+   SciLS6R2Ui//2WYExZr+oRFqDlzsLrcyK6R9+b0f6RyPzY/Gj0mipXTTD
+   g==;
+X-CSE-ConnectionGUID: 1S1+xREjR2qW+vvXf5X/AQ==
+X-CSE-MsgGUID: HtxDsS1RS2O5gS9pGQb1iA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47144218"
+X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
+   d="scan'208";a="47144218"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 05:53:23 -0800
+X-CSE-ConnectionGUID: 0zeI4rASTh6M61YGPmyPUg==
+X-CSE-MsgGUID: wKPCzuKaQzWgu4cK0NUNpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="108148827"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 05:53:21 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id B253411F8DF;
+	Wed,  8 Jan 2025 15:53:17 +0200 (EET)
+Date: Wed, 8 Jan 2025 13:53:17 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: linux-media@vger.kernel.org,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, hverkuil@xs4all.nl,
+	laurent.pinchart@ideasonboard.com, bingbu.cao@intel.com
+Subject: Re: [PATCH v8 2/9] media: v4l: Support obtaining link frequency via
+ get_mbus_config
+Message-ID: <Z36DTYxNxs9-7DYT@kekkonen.localdomain>
+References: <20241217215445.901459-1-sakari.ailus@linux.intel.com>
+ <20241217215445.901459-3-sakari.ailus@linux.intel.com>
+ <079e6b31-ee12-4d83-9dce-61f4d4c1cc99@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB7521:EE_
-X-MS-Office365-Filtering-Correlation-Id: 206a5187-6cc0-46aa-fc20-08dd2fea96cb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RGVTY0plVEM0eXJlaEM0ZDBoaUJOVXphNkZKOElvUkNORG1yYzA0WnhtZm5P?=
- =?utf-8?B?YjNmSkhnbndqNVA1S1VTeWp6cTlrZk9ZOHEyRXJTOXhEeDl3djZwUWVuaHo5?=
- =?utf-8?B?TGtub0NhUW1ybVpaTmpSeWY4UWxFL3REV0UrRWpFMnltTlg4dVRVMk92L1Zs?=
- =?utf-8?B?N3psak5DWWlScXZWL3VoL2RrUlBWeWpHWi9ORFByS1dZWTJseWdOeTJrMEQ2?=
- =?utf-8?B?bHM2Q3M1Wm5ONE9QY0s1SW50TWU5WTRtUzNoREJvUzhRelBXOHNubTIyMjFT?=
- =?utf-8?B?dFhhYlZiSTNoNkhxMDJCZWZRUFdQUE8vcVZDbFZnS3pBVnpGSndrTlpjajlO?=
- =?utf-8?B?NElUZzJEUzZPdnFVSWw4clNOaTB1U2NMMW9HYkhjK0xKaHBVeCtkMmdYV2tD?=
- =?utf-8?B?bXJLeHN6dE9qbE93MUNFRlBmVU4zQWJkaVNKS1I0M01kSjVXbHlnTlJUSHQr?=
- =?utf-8?B?ZlhUMC9wVDRPdmJ5Y3lYbm9xVWV0U3RjdjVyYlo3RitUQThLNWk4SVVFdDNt?=
- =?utf-8?B?MXJ1d3lXbXBMc05iY041UkdHRjIwYW9lMXN4M04wR0p1aHBYQTB3bkFlREs1?=
- =?utf-8?B?UllqVmNFRDhLeHZtTnM3T2h2UkRJdmZDRHA2Rm5NL2R4YWFtbnhRZUVtYS9F?=
- =?utf-8?B?NElVeHVrYXFBZks0RzNjazRxVFFPQ2ZILzRiVGVIcW9aRTFUcjF4MmF1RUpI?=
- =?utf-8?B?dTlPMnA5TmsyUnV3NWxUZ25JaUpUdy9mbGE3OWVjUVBpUHJ0YzhjL3huU2s4?=
- =?utf-8?B?ZlROcVZ0SXBJdm9MVTl2dVNOWHhZMWFGbEJZa0I0QktpTE1MUmczYVA2Qlhh?=
- =?utf-8?B?QkhXOU9jT0hCT0Nkd2I5L0lKcXJQZWxsY1lXNXJORElHVW5YNHZJR29tMHFD?=
- =?utf-8?B?SFRXTUtqLy9veVcraFRVdzhjdUpvYm4xd3llQlRRQW04dERxallxY0tOQW9o?=
- =?utf-8?B?VWEzc0RpNUxvdnZld0RiWWJYR04vVHE5Zk8zVWIzYjBTWUQ0WUZHOUZXaDVw?=
- =?utf-8?B?K0ZuY3RIc1liMEZvbFBTTUQ1VWMrU3dKbmdXTVNaOGRxUlpVUXlHcWhOZENK?=
- =?utf-8?B?SjBTYndjSEJ0OWVuWHhFOFlZbWpMYjNtMTBlUFdrcitidS95K3NOTXA5Nkw4?=
- =?utf-8?B?UTFVZ3FmSVIwV29rRmYyVXN2QURPT2lCQUtkZWpFc01pNFgycU96WlN2VGFO?=
- =?utf-8?B?QjNpSVJ4Q3VQKzBYc1JYOXNZY0J0RmN2OGpZSytLaGd5bVpvN2hRdHNQSjVS?=
- =?utf-8?B?aWFsSi9vbzZ0KzZqUFZFN0VuYVRjYVJRWUtKMHhRbXVmN0U0cEw5REM0T3dP?=
- =?utf-8?B?aUVYTVlSWUNGOHRGczZ1cFdGZW8wMWZjNHk3ZnZjdDZSdVNQOFRIVnVieFoz?=
- =?utf-8?B?dENnVVlxTkxvUmNxb1lIS2FuYVk1VWRSemdubjRNb3pEcGo2NzZhVVYrcCsw?=
- =?utf-8?B?K3lIeG00NDIydGVCWEphUVRlTVhWZ3JoZkZ1TlF4dTJsYkZuYnVPa0p1d2Rl?=
- =?utf-8?B?WUUvTkpJL0ZTT1Jyekc1Tzc1Vy9BU1VGekhzSG5Od0o5WkZKZ3ZSa05WN01x?=
- =?utf-8?B?UmdMOG11My96MUwybFIzZU5SZTYrTXVlY21rczVMd2Q5UkxUNlNNYUt1SjZa?=
- =?utf-8?B?N3NQNENDYmdOTVRaaW0xYUdacjBHd0trclg5ektsYjk1UEZNNDV6dTJRaVNG?=
- =?utf-8?B?R1ArTGtpOCthM09STmFDSmdGdXVDRElUV2I0T1ltNWptZ29QUnNyWTBqT1Z6?=
- =?utf-8?B?Vno2N0RsMXlVaHpWcXZ3MjZzS1VhWEx3NkIwdGhkTFY2SmRyOUVUYnBnOEdQ?=
- =?utf-8?B?ZEJNMENjcXM4cnJFa21DMzVYRUVNa2Fqd0hLNTRhOWhPanZKSVpsT29hSGph?=
- =?utf-8?Q?lDrB9+y5Lpwbl?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S1VzUko4c3gvT3VURWJTVVJybXBOTFdTSWtwblhhOGJyOXJIaFdqbGkraDY1?=
- =?utf-8?B?ckxoTFVtR2pyZkJrQ1ZxZHpaS0VYYTdzb1I2czNYY09wOWczeEJibm5sNWc0?=
- =?utf-8?B?eHhNdlQwVG1CNXg4WGZxeFdzbnJmSEZkbms4T1hmVi9FZ0RVbnIxc0JMUk1B?=
- =?utf-8?B?VVJRU040QmVKN1N1ZnQ5VGdoZzhMYlo2L09EdHlvaHY3Qm80ZWlMM0REY3A1?=
- =?utf-8?B?TjdwL25jWFJWK0dpdjczSmswVjh2MTEwV1o3VnFZY3RPVFBMVXlTdTZFZDMz?=
- =?utf-8?B?ZnV3Wk0wL2cxMzRlTlN1WFhBeEpsMGp3QW9paGhzNjBLTnlCNXFxREtqbzM4?=
- =?utf-8?B?UE56NW9qNkYvRmtGdDdZenJQbWpmd0tCN09ndlBkQlJmN0VXWGkrd3k5OG1R?=
- =?utf-8?B?UUszZDhZY2VoUEZUcmprQ3RZa3FqV1VBTGttNGozM0R6WDZXZ3lUL3duYnIw?=
- =?utf-8?B?SGZhcitoMTdlai9jK0RET2prK1BURVlhL0hMT3pudHB2UlR2eGlxUUJEZmVo?=
- =?utf-8?B?c2xJK1BGcWN3Q2czQk5wZzdVZCtSWFZZS0h4aXVvMXBrWG15QzJlekNHSlhz?=
- =?utf-8?B?MjFRdmRLOHc5TWdJYVo5WThNWEhiK1JPWG55WUZWaGdiNjZkR0pLVzk3TjB1?=
- =?utf-8?B?d1ovejAyQzRWRkZYdW9lUEpOTnBFTnUrSzhiaUpMVzlXQ1QvMFpDQVVWK3B5?=
- =?utf-8?B?VUtpc1FnSFN5ZHIwalJneDNYNkpQS2VncFVwSHJ6di9NdUMvbjdPdTMzTU9W?=
- =?utf-8?B?U3ZSa3NENHdKSW1JSGRNUFlGQ3ZVa0YwOFhxc3lwTmNOWjFud0Z2UUxsSGdI?=
- =?utf-8?B?ekR3V25QK1hzMGpvRXIvSmNVV0h2cFp1aXBxbnBDY3I0VDBSNE1VRzFxZlJq?=
- =?utf-8?B?L2RSdTNPalFzckg4UGJTS2NsMkp3Q2FXTjZKcC9pUlNOVzJjSllnREsyb01T?=
- =?utf-8?B?bEFGclF3Tlg4WHdFZGpjcmx5cS9UNmdaRUplVDB3YWdHdE5ScHpjaFc3RURO?=
- =?utf-8?B?RmlwWGJPaWhhb0RWbk1naStlZk9RYm5XY2lwSjYwZ0hreXlvdjVFSGp0Q09i?=
- =?utf-8?B?RG1NQkQzNGpiWXpyL2NQNlpoYks5QmpEWnBKZjhuSTlMV0ZBRG0vQUdqSmxH?=
- =?utf-8?B?WWcyeVFqUkc1cjczaVhxaTdkYVRLKzJ3TjdVYW1EMzRrelNQeHEzQTVNakRE?=
- =?utf-8?B?cExGcGhvMHU2RUVud3JxUks5dWNRRmhTV3VDSml2ZjFOcmpQWVN3QkNXWVU5?=
- =?utf-8?B?SUN0QUFDb281ckxKSlY4d2dyejZSazh6RkFNUkYvbmZhWWRDR3JXMHViN04x?=
- =?utf-8?B?U3hvaVJlYnhYTlNRTjRFM0QwdThNanZuNVdEVWt6OGlQMXgyVFRvT1Qya0Ux?=
- =?utf-8?B?WmNmM3B0N1hCTzN3MkdwNTJLVm0xcldIeEExR2QzYytPakdreDNoVnVMRGlK?=
- =?utf-8?B?UGwxeEdyODlJL0xmRm8rN1R3OGhjZVFidGRWN1ZXK0QxYzZLMTFZQUFpM1J5?=
- =?utf-8?B?WEtkVms5Z0cyUkdsRVdpRXNCY2c2NVVMZ0xyR1hKV1h2aXJrcks2SThFdGtT?=
- =?utf-8?B?bmR0MS9IV0RrT0YzYjhEQStyVllGcDRJcmVvdnpHK2pocy9OMWUvQ21BWWg2?=
- =?utf-8?B?SFBKNkJHOHB4S0dUOXRVbjhOWWs4cFp4dm1JbzNSV2RmRTFHV2lRRkNmYk1L?=
- =?utf-8?B?U2I0bFFwbGFJdWhLcGN1UTN4L3FXZjEwcFRwWUVIS0JKNWhpdkdsZGVxU0NV?=
- =?utf-8?B?NHBPb2crVWtRdHBoQWh6ODA5ZzRQMzdibm4zNThHaWlOMHIzNjloeTM4QUdy?=
- =?utf-8?B?RnB3bHFKMGJJSkFOaGhRd3lrbmlaMDZYTGRMQm5zNlpva3V2QjY5UTd3MzRu?=
- =?utf-8?B?NWJyV0dpd2JEdmp2N3RaMWR5c0JKMStyUFpTSWc5RURjamtSZk8rOUhJdVBS?=
- =?utf-8?B?TFFTMGhGUmFMUjFpQXBtZVIyTTJYQnM0SVJwWFBQNXNKaG5aTVpnTVRINkxt?=
- =?utf-8?B?NTN5RkswbnFPWE85RmJpMnZDUW94UnB6L2xPT2c5RGFZNTE3ZTJKRHVveEl5?=
- =?utf-8?B?UFQ4eDMySHhWNlFjNTRnb0lkUkxlZnJiS2c5NVB1ejN2aDdpL0RaTUZtSUJr?=
- =?utf-8?Q?RBsKMnmlTyTzVgXYRGlbsDrXZ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 206a5187-6cc0-46aa-fc20-08dd2fea96cb
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2025 13:44:35.6405
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mGpTsvciDsz109PvP329EZger7N9wD/L4I+DZSvPVZfgoIrXE3pQdjngTlBcNPuK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7521
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <079e6b31-ee12-4d83-9dce-61f4d4c1cc99@ideasonboard.com>
 
-Am 08.01.25 um 14:23 schrieb Jason Gunthorpe:
-> On Wed, Jan 08, 2025 at 09:01:46AM +0100, Christian König wrote:
->> Am 07.01.25 um 15:27 schrieb Xu Yilun:
->>> Introduce a new API for dma-buf importer, also add a dma_buf_ops
->>> callback for dma-buf exporter. This API is for subsystem importers who
->>> map the dma-buf to some user defined address space, e.g. for IOMMUFD to
->>> map the dma-buf to userspace IOVA via IOMMU page table, or for KVM to
->>> map the dma-buf to GPA via KVM MMU (e.g. EPT).
->>>
->>> Currently dma-buf is only used to get DMA address for device's default
->>> domain by using kernel DMA APIs. But for these new use-cases, importers
->>> only need the pfn of the dma-buf resource to build their own mapping
->>> tables.
->> As far as I can see I have to fundamentally reject this whole approach.
->>
->> It's intentional DMA-buf design that we don't expose struct pages nor PFNs
->> to the importer. Essentially DMA-buf only transports DMA addresses.
->>
->> In other words the mapping is done by the exporter and *not* the importer.
->>
->> What we certainly can do is to annotate those DMA addresses to a better
->> specify in which domain they are applicable, e.g. if they are PCIe bus
->> addresses or some inter device bus addresses etc...
->>
->> But moving the functionality to map the pages/PFNs to DMA addresses into the
->> importer is an absolutely clear NO-GO.
-> Oh?
->
-> Having the importer do the mapping is the correct way to operate the
-> DMA API and the new API that Leon has built to fix the scatterlist
-> abuse in dmabuf relies on importer mapping as part of it's
-> construction.
+Moi,
 
-Exactly on that I strongly disagree on.
+On Fri, Dec 20, 2024 at 02:59:39PM +0200, Tomi Valkeinen wrote:
+> Hi,
+> 
+> On 17/12/2024 23:54, Sakari Ailus wrote:
+> > Add link_freq field to struct v4l2_mbus_config in order to pass the link
+> > frequency to the receiving sub-device.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >   drivers/media/v4l2-core/v4l2-common.c | 15 +++++++++++++--
+> >   include/media/v4l2-mediabus.h         |  2 ++
+> >   2 files changed, 15 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> > index 9fe74c7e064f..e4b2de3833ee 100644
+> > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > @@ -508,12 +508,23 @@ EXPORT_SYMBOL_GPL(__v4l2_get_link_freq_ctrl);
+> >   s64 __v4l2_get_link_freq_pad(struct media_pad *pad, unsigned int mul,
+> >   			     unsigned int div)
+> >   {
+> > +	struct v4l2_mbus_config mbus_config = {};
+> >   	struct v4l2_subdev *sd;
+> > +	int ret;
+> >   	sd = media_entity_to_v4l2_subdev(pad->entity);
+> > -	if (!sd)
+> > -		return -ENODEV;
+> > +	ret = v4l2_subdev_call(sd, pad, get_mbus_config, pad->index,
+> > +			       &mbus_config);
+> > +	if (ret < 0 && ret != -ENOIOCTLCMD)
+> > +		return ret;
+> > +
+> > +	if (mbus_config.link_freq)
+> > +		return mbus_config.link_freq;
+> > +	/*
+> > +	 * Fall back to using the link frequency control if the media bus config
+> > +	 * doesn't provide a link frequency.
+> > +	 */
+> >   	return __v4l2_get_link_freq_ctrl(sd->ctrl_handler, mul, div);
+> >   }
+> >   EXPORT_SYMBOL_GPL(__v4l2_get_link_freq_pad);
+> > diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
+> > index e7f019f68c8d..24c738cd7894 100644
+> > --- a/include/media/v4l2-mediabus.h
+> > +++ b/include/media/v4l2-mediabus.h
+> > @@ -169,6 +169,7 @@ enum v4l2_mbus_type {
+> >   /**
+> >    * struct v4l2_mbus_config - media bus configuration
+> >    * @type: interface type
+> > + * @link_freq: The link frequency. See also V4L2_CID_LINK_FREQ control.
+> >    * @bus: bus configuration data structure
+> >    * @bus.parallel: embedded &struct v4l2_mbus_config_parallel.
+> >    *		  Used if the bus is parallel or BT.656.
+> > @@ -183,6 +184,7 @@ enum v4l2_mbus_type {
+> >    */
+> >   struct v4l2_mbus_config {
+> >   	enum v4l2_mbus_type type;
+> > +	u64 link_freq;
+> >   	union {
+> >   		struct v4l2_mbus_config_parallel parallel;
+> >   		struct v4l2_mbus_config_mipi_csi1 mipi_csi1;
+> 
+> Maybe the docs (V4L2_CID_LINK_FREQ and/or struct v4l2_mbus_config?) should
+> mention that only if v4l2_mbus_config.link_freq is == 0, V4L2_CID_LINK_FREQ
+> is used. Or, in other words, the driver must only use one of those methods.
 
-DMA-buf works by providing DMA addresses the importer can work with and 
-*NOT* the underlying location of the buffer.
+Such documentation is added by the 3rd patch ("media: Documentation: Update link frequency driver
+documentation"):
 
-> Why on earth do you want the exporter to map?
+diff --git a/Documentation/driver-api/media/tx-rx.rst b/Documentation/driver-api/media/tx-rx.rst
+index c71003f74b1c..6f9eba189a9f 100644
+--- a/Documentation/driver-api/media/tx-rx.rst
++++ b/Documentation/driver-api/media/tx-rx.rst
+@@ -49,6 +49,10 @@ Link frequency
+ The :ref:`V4L2_CID_LINK_FREQ <v4l2-cid-link-freq>` control is used to tell the
+ receiver the frequency of the bus (i.e. it is not the same as the symbol rate).
+ 
++Drivers that do not have user-configurable link frequency should report it
++through the ``.get_mbus_config()`` subdev pad operation, in the ``link_freq``
++field of struct v4l2_mbus_config, instead of through controls.
++
+ ``.enable_streams()`` and ``.disable_streams()`` callbacks
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
 
-Because the exporter owns the exported buffer and only the exporter 
-knows to how correctly access it.
-
-> That is completely backwards and unworkable in many cases. The disfunctional P2P support
-> in dmabuf is like that principally because of this.
-
-No, that is exactly what we need.
-
-Using the scatterlist to transport the DMA addresses was clearly a 
-mistake, but providing the DMA addresses by the exporter has proved many 
-times to be the right approach.
-
-Keep in mind that the exported buffer is not necessary memory, but can 
-also be MMIO or stuff which is only accessible through address space 
-windows where you can't create a PFN nor struct page for.
-
-> That said, I don't think get_pfn() is an especially good interface,
-> but we will need to come with something that passes the physical pfn
-> out.
-
-No, physical pfn is absolutely not a good way of passing the location of 
-data around because it is limited to what the CPU sees as address space.
-
-We have use cases where DMA-buf transports the location of CPU invisible 
-data which only the involved devices can see.
-
-Regards,
-Christian.
-
->
-> Jason
-
+-- 
+Sakari Ailus
