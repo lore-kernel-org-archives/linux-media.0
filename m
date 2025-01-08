@@ -1,403 +1,361 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428961FF601;
-	Wed,  8 Jan 2025 16:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736352865; cv=none; b=nTdEMZhB6EckAUeXHkziE99Q2/oUHmcUNq5OvJx331GzuyXp5d1YDsHM2TQmik7MET3Vmx0Gn2fRzPk7QKXP7fRobEZL1AWrEg+P6TbAtB75/K46QV4VNAutVPSkzkM0s21V+WvjF/JvraKBo6O7txkqnj+0PF9feuwrA1IzmI4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736352865; c=relaxed/simple;
-	bh=pvd3yVsWuxzB/MWQ28RqlB0uRFDeZSWHEk9HqWHkyno=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aUR6doyeB/NLfl/W6qtatfDbWZBlHCRArHTO6cwd55pNe8KPgH75D0wSmudzxY3+NU/E4/WmKgBfDw4geBREiTMYy88MvJKLSs0+xI9G5z84MczTBLCD0oSQE/GUAJSswRoawk2z2GsVZ9h4ATVzSzWkf++ELD7k+DSc0P+76q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DfLYqu9j; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9681A2544;
+	Wed,  8 Jan 2025 16:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736353355; cv=fail; b=J8y/hiphPJlAUmJ4kDbBwxhIp3bDubXK9n8GYnqzSzRE0DSkawy8nCnc9ysf6+YdKloymapkIv3tSDkXJA3IYMO0uSa//aTPPl410HhrwI9XT7C/LTpMHnE9J3Pk6Qx7QMbUFcu1VPy2Z/WXyOYLyvubcmJcnJOBfHbT1BjeZEY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736353355; c=relaxed/simple;
+	bh=Mp0uXXdzNyEXT/tJByq13bi9WNciXs3qPzQ6goy/5Bo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uy7jzsgGKkC2Hf8hePfIbHM5wYPvRJeakwoi/2yWTZfAs7FyKjcpFzVGQv/CeruEdYgTNk5x795JPN6fWpMHU8BBi6Ca/y3WbXC7aNdp9oScz8TD32QGoomjT/MD3Nyw5kqx3k00dLVFTu86nDbHHumsq0yEcDW+k6ceU3NUEHM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=e2Wb1pKN; arc=fail smtp.client-ip=40.107.243.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DfLYqu9j"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8370560012;
-	Wed,  8 Jan 2025 16:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736352855;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O5cVFCY+TsCDTrv9EgLty2YjRj1DRRk5ohtcB0F/zDg=;
-	b=DfLYqu9jligxY2iKU5C8j0VwsU1II7ZzIYYbjhLaZ7PEw2QbQlp3KdYoyU///pN9WhqDWj
-	iO6yt38DwtpT9akaT1pX7QHYpfrPd2EAzPEVZwAppYua9cj3p0Bg4YXaUx4HkeOeZBqQcP
-	ifqOYi+KT+3rrZlok4kTOa8HyCieV6EJeSA2mDjtBNR1ot/dRYPKd+DfB6+V+NHHaBigkc
-	7Xc9sN326yayQp9yofwxRL/52HpmSRBb+FsAkmcXCuUqz5eWxR7NgbfPt/ZmLpZ6jcSdO2
-	Hk5SFTSafyp5XWPETOA0jNVtqZjHeZInHL00/kCB+88ZoTgnqERuOqDpQ8SHyg==
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Wed, 08 Jan 2025 17:14:06 +0100
-Subject: [PATCH v5 5/9] i2c: move ATR alias pool to a separate struct
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="e2Wb1pKN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=q2GUQzfpkwYzU5zW6JlX1Ujfs7eicBiSLFLqRbkccndnOrOMBB+OIXrt1jgQpj5dK0DgED16rKKetCUaovCIlLp2EW8Jb2d48XvwDEI5i92MFjJz+2ki4M+iguHcS86MZU7BP7WiNqz/v7JIqikXJ5ajlgt5Km9zBiZu//lQGLqGFWPIse07swcpPcMojXc7cd0Uv3GeybREjeHgHZBpnBnFRq32I0C7ex+R/fErMmAEoiRk62pxKpvNRk3xxwqRD5SiOxIJBiGXmOw1CmZIMNyumX7FcfrrRwJgEL2ZjQR8WTKmNq2r+A+b1jbKLQqZikFPLztqEQLDK1u9taMFAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5GesDgy0BNBWQ2W8iEqHsc7GO71w5C30Qiby8vVgc8Q=;
+ b=cCBFelm5hwgD9ck1sRhFdIwHUi8Jk/NGK6J3cbXAouYFr2Jx1oUlxgM89msHTjU087Y2oKEJy5MN8a2CjeFpAxDoba9AerFkM73Ky5iefi3Hzse0EYXDW4NSZoaLIv0jNQYuSRItuyPcnSiu3BIyFzkG2iJdeAi1dk4SsoAlmoVfQNbSBxbRrOUUrb0J8rbaiPDPOLjX1wlMI8KSRAYxIdhzVAByXXcdXtk9kW0RkFK82MFZRgTIpZdUyCj9dsOop22MB8OOIxIVa3XpvZn25IjX2pfpRfIXBRCOtPFMimrDXYsQFDkYAXIVXyXEWjm/CH5r42V5HEn5bExeYw08IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5GesDgy0BNBWQ2W8iEqHsc7GO71w5C30Qiby8vVgc8Q=;
+ b=e2Wb1pKNG5ooPa2wli80ohT1VigVzIwQbaht/n/fFWfaSDE40ciW8cDDXa0jqKlH7sD0fUItEyoS23A69yGYXwkq00DH2jfAb5giDlHA3ShBUmJr6r0ZyZpUjNlzcgZwbjptxODOJssqCOAhSULNOwmfZFgDjVWRa+o7gK4QHs5QgAzMh8QeJ0eDsNc1cgVF4+GVO6wJrUpV1nlI03Repb9Q4vWSoXkPLJrmPFGRNZCvYdmLPeCXrtZxRKvjumDef6TO0fumNpeWlHzI7BtGjwRCj2aC6BKRtIKXWgZtgFCnHbtgF6v0dz30m/68YltGyKd++f4YpIF/q6NwitzOsw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by CH3PR12MB8210.namprd12.prod.outlook.com (2603:10b6:610:129::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.10; Wed, 8 Jan
+ 2025 16:22:29 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8314.015; Wed, 8 Jan 2025
+ 16:22:29 +0000
+Date: Wed, 8 Jan 2025 12:22:27 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc: Christoph Hellwig <hch@lst.de>, Leon Romanovsky <leonro@nvidia.com>,
+	Xu Yilun <yilun.xu@linux.intel.com>, kvm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
+	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
+	vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
+	yilun.xu@intel.com, linux-coco@lists.linux.dev,
+	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
+	daniel.vetter@ffwll.ch, leon@kernel.org, baolu.lu@linux.intel.com,
+	zhenzhong.duan@intel.com, tao1.su@intel.com
+Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
+ kAPI
+Message-ID: <20250108162227.GT5556@nvidia.com>
+References: <20250107142719.179636-1-yilun.xu@linux.intel.com>
+ <20250107142719.179636-2-yilun.xu@linux.intel.com>
+ <b1f3c179-31a9-4592-a35b-b96d2e8e8261@amd.com>
+ <20250108132358.GP5556@nvidia.com>
+ <f3748173-2bbc-43fa-b62e-72e778999764@amd.com>
+ <20250108145843.GR5556@nvidia.com>
+ <5a858e00-6fea-4a7a-93be-f23b66e00835@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a858e00-6fea-4a7a-93be-f23b66e00835@amd.com>
+X-ClientProxiedBy: MN2PR14CA0012.namprd14.prod.outlook.com
+ (2603:10b6:208:23e::17) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-fpc202-v5-5-a439ab999d5a@bootlin.com>
-References: <20250108-fpc202-v5-0-a439ab999d5a@bootlin.com>
-In-Reply-To: <20250108-fpc202-v5-0-a439ab999d5a@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Derek Kiernan <derek.kiernan@amd.com>, 
- Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Kory Maincent <kory.maincent@bootlin.com>, linux-i2c@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-gpio@vger.kernel.org, 
- Romain Gantois <romain.gantois@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: romain.gantois@bootlin.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CH3PR12MB8210:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6281252e-5ad8-492f-e7ae-08dd3000a547
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Um1CajQyWmVVYVFGU0srV1VlemFCaEJraWtUdmpvZWQ0Q0cvdzJWNGxlOW1Z?=
+ =?utf-8?B?cHVoaFFXRldpM0tKQnZOVE9XRkI2dEdpVzZhM3NNSHN3d0dkU29kOTJVeHU0?=
+ =?utf-8?B?aWloYXdQYU5vZm1ZUmFaekNsTDZQOFRGM2hWQ3M5Y0plNTRjQW83YkZWcjJG?=
+ =?utf-8?B?SDQ4QkFBNTFRelYvQlEybmZxTmkxUVdla0tTQ2E1dXpvZVk1VytnSTgxUFhC?=
+ =?utf-8?B?WnpqVjJ1ODh4K3pjcmtqTTdwQUxtaWNEZGU4TVN2UDRJTnorc1dvWUpJdnFm?=
+ =?utf-8?B?RzBzdE1hKzYwRWlZWjF2OTluUVVWd1kzMG51cnI2QXBmeXZGNVdjYTI4R3o3?=
+ =?utf-8?B?UEc2ZUMwaXF0SjJTSHJKZzBvY2ZqTUtnV0ZZeUVrL1pJa2lnL3RVR1U3RGNo?=
+ =?utf-8?B?KzQ0NmpkVGwvUGZaMklEL3JmMGcxSWlWQzY1azRBZHZFWU1tVHVaVS9pbXVK?=
+ =?utf-8?B?R3BJdVVIc3g0T2lRbHpVMGt4SDluem5sWU90RnVMRGFRQ1JXaGJzY3dGSnBj?=
+ =?utf-8?B?ZUlWWXludkJuQ2U1L3ZFRGlWbGZqK3JCL21peDJKclFPMDMyRU9tUGUrQlB2?=
+ =?utf-8?B?R1VTTXFwQjhxQUhWc2dKSWk5a01mSm4xV1hjV3RFYjZ0eHk2OTlldGRBYXhw?=
+ =?utf-8?B?djRtMW9RRkhrWUdndCs1NmVzUURSNU5KU0pkWTlJdVlhR3IyRzF5MEVCcGNJ?=
+ =?utf-8?B?ZVVsQzhkNEpJaTdCMGdyN21yZUIvQ0Jxa1ZIL3BmS05CSGN1M2ZsN1l0d252?=
+ =?utf-8?B?VXQ3Zk5nN0ltL1FTVVNTeXdsczFvRFZSQ3pycEVIL2x3WlFSOEZnRVl6a0lN?=
+ =?utf-8?B?SHBSejlLOXFtblRHUnVSS0JWVkwrVnJCTVIxNHdETyszMkRPbFBhY1FyWXh6?=
+ =?utf-8?B?VUxCUnh1bHdCR3NZMnlqRmk2UFpBUHNDN1IzY1RXcjJRbUFwbEc2QVh5SlNW?=
+ =?utf-8?B?R1RqVjRHWVFKMDVyK0F3ZFQwYk1HRGpRTFZZMzlrWTh2VzRtamtaMzRGSFdR?=
+ =?utf-8?B?SHpFcjRpb2pWWTc0NzRKWFFlRk0waVNZYkRCTy90R1dxQW9GaUlxc0l3Vkt1?=
+ =?utf-8?B?Tkc4THovcHFUOW8vTlcxYVpjQnp5OUdWSHpTTEcwR3JBV1d4eEZsS1FqTXZM?=
+ =?utf-8?B?OVBMMVJ0TkgrYVRNMlJGMmpLUHNjR1hQS2I3czZXZnV4aUtHUFBJOERvcnZM?=
+ =?utf-8?B?RWJSQ2RWSXJ1VzgrQWxkdVJCemI5b25xR2xQT1Nka29xd3NBaWM4cmp1S0Nx?=
+ =?utf-8?B?aTVUdTBjc3hGVVQrYUEwa2tzaFRvcnh1eHYvTkpzY21aZU8wdk1NR0pieCtM?=
+ =?utf-8?B?YVJzYWRBUmFOZVBMb2kyN0N5anRvYVhzK29jL3ZuUUpnVHFORytMUFhVeHFR?=
+ =?utf-8?B?NnN4UVN0UEJlUC9QNVFKT0VUdlBjRkxmZElzMzNGQTV2bU9XdmJjVSs3MFdH?=
+ =?utf-8?B?VUNuOEFMbWh2emtjWndhRnNNeFhtTEdqVWN3M0IxeVVWWGxueXh3cS95YjI2?=
+ =?utf-8?B?cEY0TXErVm9IMXlOUjROZDBLSVJFVm45RTAzNXpTdnY5eUNWMFVPV3JOQi80?=
+ =?utf-8?B?NHZSdnpmWk5vdE03Y2p6OGlpaHZ5SjFLUkloajUxTTU0U2hsdlZ3RnozR1JO?=
+ =?utf-8?B?cFIwbDlpM1pqV2FlMWpJTWVWR00rMmQyN0l3N1hBamNudzQrQmpGbmxhTlZW?=
+ =?utf-8?B?djlCSUY2UEwyajF1cWMyL2xLWjZrUVV6bWpsRUxGNHJmUk53NUJiZG9obTBT?=
+ =?utf-8?B?STdBRE0rK3M4SWNhVGlwb0dpWUhUb0xpaGRydWw5dXY4VDRid080QklZNkRC?=
+ =?utf-8?B?bmY2Qzdxc3kzV29TbUQ3WmVJWWw0MEtpNGNlaUwwNitDQU90YjR2K1NTWklI?=
+ =?utf-8?Q?30L18OH6k42u1?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZTREalNDTVl1T3lybHp5bVRwWnhXSk1HTlJ2OHFMMThKMzNiRmYvcXdrMHln?=
+ =?utf-8?B?d1hrNWVKU0ZoUTdwV3phKzNERGpRSi8zR3I3b2FIb2xxTjNxWDYzSFFzQmZ6?=
+ =?utf-8?B?WVd0ZFNIUGxFdDJnMjRzNlZpTkZhNDBtZXU3YkZqKzQ2dGluQ0pWdUFvdXJT?=
+ =?utf-8?B?M0NQa2w0dTVtNDZhTHJiOEliN25mOFhJc1d6dGdZRHJUU0wrTUx3MUgwSHY2?=
+ =?utf-8?B?OHRaUjEva2MyTlIxbGkwR1BJMmRFTjhwdTBseXFQdldnVG5STTdEWDRtU2c0?=
+ =?utf-8?B?Qk9ZdGFybzBSZ3NvRENXZWxhS3hvRmQvOXdOZ1hFdDN3R1Z4Ny93RlI5dFVu?=
+ =?utf-8?B?YWlZMXZpR0hpMndEeXI3VkZwZUtURXhRcmJGckF2VzQzWGplYVY4QmJZS1pP?=
+ =?utf-8?B?OEFoWjdkTG9YUUFjOU4xMHYrdDRtVEZiRHA0TEo5MU4yOEd5VXZNRFRacVc2?=
+ =?utf-8?B?WmZzYUlHbW5zMHNmS1g5MjJKNFVHUHlnR2hjVWZsa0UyVHNmWVRzSE9kQmJx?=
+ =?utf-8?B?QU5PQXlhZHNHZmkwQXV5L1ZyRmJkYnRIZTV1cmFkN2xIVlBhTjlURzBNMDRa?=
+ =?utf-8?B?NTFpRzB6THFvVWJFKzBrZlVVSWVaQ25yQk5oTmZMM1FnbDlpWU03K2E0cW9E?=
+ =?utf-8?B?MkFmKzJESlRRWmpudGpKeEkvWTlhaHRSMXFpZjAwcFkwQlRJVlhYUVJQeW0y?=
+ =?utf-8?B?eEx1ZWxPMkRaMWtDVGlGaFFxaGZ6Sjh5QUFNclpWYUJTSjJlR01BV04rV0gz?=
+ =?utf-8?B?Q3VxRGtHcVR6QUtTZU1rcEdBKzF2a3EzRlRLUkxIRjZ0bkt6dkRVb1gyYks4?=
+ =?utf-8?B?Z0trd3VIampBTzJPNHl1NTk2TVI0Ylc3VWRKR25UTlJCbnEwcVBCZU15MitF?=
+ =?utf-8?B?aUx0MWRuMU5IbmJzaFlMa0VBNVhBUWFSMDJiS2R5S2gyM0tkWWMvRHVFeUh6?=
+ =?utf-8?B?eFgyUFpLOVVISFVBUG5DeGZhbDhtTXVTRWswTERJZGFpeUEyR2pBY0VoVVFP?=
+ =?utf-8?B?cDNlcWN4eFZpcnF2N3ZvWnVQUlMvei9zVzgvVkc5cEdhb0ZxcWJLY0xKdXZv?=
+ =?utf-8?B?OWxTMHRTYzR5U1k3NUF5NTF3cGtnaGt6Q1ptSngyMzJIUnN5ekNDK1E3YVdy?=
+ =?utf-8?B?NmdESWt5V1VaYlB2Q2pQUEdvRG1IazBCVEZNOGppNU9YOFpHWnllZThNSTJr?=
+ =?utf-8?B?MWJrL0gzeWZIRnNBVkdES1BUNDBiN2k3S0hLMWpKRjFkaVRKYVNJZU15bUNL?=
+ =?utf-8?B?RVhSeDRvUXNwS00xV3FBbERiMzBJOStETHRyREN0RkdpYWNhd1QxR045MXVm?=
+ =?utf-8?B?bFU1SzBUbWNraUhtSTVoREJ4YWZYNVpHVzVVeENCQzNjK0hZMngxOWloSHVS?=
+ =?utf-8?B?SUFIUEoxazU2dWVxOWc5ZkdyT1ZFYlFqVnZkZWpzRlZPWXRrWXBJNnVScHhG?=
+ =?utf-8?B?cG1JWnBhazA0bXMvemJFdWNIa1VZNHpoL1NBRllNK2tJRGlYSXUvYVd2dDNw?=
+ =?utf-8?B?b09iU0xvRERYQ3NjMmtvWWVUVG00ZGFDOVk2dzR6QnhRSnVkTzBVdmV1S2tx?=
+ =?utf-8?B?VFQ0MkhWUTJvZ0xveGFLbk1oVU9yUkppVW9QZ3hhcVNhdGF0bDJiUVdpOElW?=
+ =?utf-8?B?RXlmQkdpU1FoTm1QekxGMnZmVmZRR1VBNlU0ak9rY2EvZE5IcStNbHJOcjhy?=
+ =?utf-8?B?ZVNFbjVHdlJIN0J6ZU9yWmt0eXI2U1BLdVdSenpFcVpQK0wzcUo0eml2N0lT?=
+ =?utf-8?B?TGZOTTdxWjRFSFZiUGZpdkxZa2xWTXJLR0tZendleCtiV2VPZ0JwYmloM3RF?=
+ =?utf-8?B?S2Z6Z0VZcnFFaWU4NXpTRmlXNmtST2x0SS9WRHNtbGVZd0dWdm43aVVqNlh2?=
+ =?utf-8?B?eW5XZSt0U3RSQkVuZ0N2ZGsrVnk0TmVqU2tMUHNuSEo5M1htckIraXpBOFlp?=
+ =?utf-8?B?TlFTZTZ6SWMweVdiVXZFVjlSa1dsTmdjcnVzYk5PWjhadzNwRU9rYlRRK2gy?=
+ =?utf-8?B?ZlZZQzZMT1ZYZElGdGhCTUV1V0VSdGRCVmsrSkR3TTdMTG1zMTVGRmMrZWlq?=
+ =?utf-8?B?MDdHOTlVNUJ1UzdOMHBsa1NzUEYzYlNma3BzUUVFMHBvOFVGRTNXUjR3eFJC?=
+ =?utf-8?Q?KvBgU8m8DVum26D7+tnYoq8E4?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6281252e-5ad8-492f-e7ae-08dd3000a547
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2025 16:22:29.0180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YpFogEqzModddpCOR+VwbFCVUvNj/JA9dmKW7VpLzsYeX6uh+wOWwenWRddCNT66
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8210
 
-Each I2C address translator (ATR) has a pool of client aliases which can be
-used as translation targets. Some ATRs have a single alias pool shared by
-all downstream channels, while others have a separate alias pool for each
-channel. Currently, this alias pool is represented by the "aliases",
-"num_aliases", and "use_mask" fields of struct i2c_atr.
+On Wed, Jan 08, 2025 at 04:25:54PM +0100, Christian König wrote:
+> Am 08.01.25 um 15:58 schrieb Jason Gunthorpe:
+> > On Wed, Jan 08, 2025 at 02:44:26PM +0100, Christian König wrote:
+> > 
+> > > > Having the importer do the mapping is the correct way to operate the
+> > > > DMA API and the new API that Leon has built to fix the scatterlist
+> > > > abuse in dmabuf relies on importer mapping as part of it's
+> > > > construction.
+> > > Exactly on that I strongly disagree on.
+> > > 
+> > > DMA-buf works by providing DMA addresses the importer can work with and
+> > > *NOT* the underlying location of the buffer.
+> > The expectation is that the DMA API will be used to DMA map (most)
+> > things, and the DMA API always works with a physaddr_t/pfn
+> > argument. Basically, everything that is not a private address space
+> > should be supported by improving the DMA API. We are on course for
+> > finally getting all the common cases like P2P and MMIO solved
+> > here. That alone will take care of alot.
+> 
+> Well, from experience the DMA API has failed more often than it actually
+> worked in the way required by drivers.
 
-In preparation for adding per-channel alias pool support, move the
-"aliases", "num_aliases", "use_mask" and associated lock to a new struct
-called "struct alias_pool".
+The DMA API has been static and very hard to change in these ways for
+a long time. I think Leon's new API will break through this and we
+will be able finally address these issues.
 
-Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
----
- drivers/i2c/i2c-atr.c | 172 +++++++++++++++++++++++++++++++-------------------
- 1 file changed, 107 insertions(+), 65 deletions(-)
+> > For P2P cases we are going toward (PFN + P2P source information) as
+> > input to the DMA API. The additional "P2P source information" provides
+> > a good way for co-operating drivers to represent private address
+> > spaces as well. Both importer and exporter can have full understanding
+> > what is being mapped and do the correct things, safely.
+> 
+> I can say from experience that this is clearly not going to work for all use
+> cases.
+> 
+> It would mean that we have to pull a massive amount of driver specific
+> functionality into the DMA API.
 
-diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
-index f04bd4f9e3143837c035cd08d23d5dfc37f151cb..019089346ce4622e46a4802c990cdacd24d47734 100644
---- a/drivers/i2c/i2c-atr.c
-+++ b/drivers/i2c/i2c-atr.c
-@@ -34,6 +34,23 @@ struct i2c_atr_alias_pair {
- 	u16 alias;
- };
- 
-+/**
-+ * struct i2c_atr_alias_pool - Pool of client aliases available for an ATR.
-+ * @size:     Total number of aliases
-+ *
-+ * @lock:     Lock protecting @aliases and @use_mask
-+ * @aliases:  Array of aliases, must hold exactly @size elements
-+ * @use_mask: Mask of used aliases
-+ */
-+struct i2c_atr_alias_pool {
-+	size_t size;
-+
-+	/* Protects aliases and use_mask */
-+	spinlock_t lock;
-+	u16 *aliases;
-+	unsigned long *use_mask;
-+};
-+
- /**
-  * struct i2c_atr_chan - Data for a channel.
-  * @adap:            The &struct i2c_adapter for the channel
-@@ -67,10 +84,7 @@ struct i2c_atr_chan {
-  * @algo:      The &struct i2c_algorithm for adapters
-  * @lock:      Lock for the I2C bus segment (see &struct i2c_lock_operations)
-  * @max_adapters: Maximum number of adapters this I2C ATR can have
-- * @num_aliases: Number of aliases in the aliases array
-- * @aliases:   The aliases array
-- * @alias_mask_lock: Lock protecting alias_use_mask
-- * @alias_use_mask: Bitmask for used aliases in aliases array
-+ * @alias_pool: Pool of available client aliases
-  * @i2c_nb:    Notifier for remote client add & del events
-  * @adapter:   Array of adapters
-  */
-@@ -86,17 +100,54 @@ struct i2c_atr {
- 	struct mutex lock;
- 	int max_adapters;
- 
--	size_t num_aliases;
--	const u16 *aliases;
--	/* Protects alias_use_mask */
--	spinlock_t alias_mask_lock;
--	unsigned long *alias_use_mask;
-+	struct i2c_atr_alias_pool *alias_pool;
- 
- 	struct notifier_block i2c_nb;
- 
- 	struct i2c_adapter *adapter[] __counted_by(max_adapters);
- };
- 
-+static struct i2c_atr_alias_pool *i2c_atr_alloc_alias_pool(size_t num_aliases)
-+{
-+	struct i2c_atr_alias_pool *alias_pool;
-+	int ret;
-+
-+	alias_pool = kzalloc(sizeof(*alias_pool), GFP_KERNEL);
-+	if (!alias_pool)
-+		return ERR_PTR(-ENOMEM);
-+
-+	alias_pool->size = num_aliases;
-+
-+	alias_pool->aliases = kcalloc(num_aliases, sizeof(*alias_pool->aliases), GFP_KERNEL);
-+	if (!alias_pool->aliases) {
-+		ret = -ENOMEM;
-+		goto err_free_alias_pool;
-+	}
-+
-+	alias_pool->use_mask = bitmap_zalloc(num_aliases, GFP_KERNEL);
-+	if (!alias_pool->use_mask) {
-+		ret = -ENOMEM;
-+		goto err_free_aliases;
-+	}
-+
-+	spin_lock_init(&alias_pool->lock);
-+
-+	return alias_pool;
-+
-+err_free_aliases:
-+	kfree(alias_pool->aliases);
-+err_free_alias_pool:
-+	kfree(alias_pool);
-+	return ERR_PTR(ret);
-+}
-+
-+static void i2c_atr_free_alias_pool(struct i2c_atr_alias_pool *alias_pool)
-+{
-+	bitmap_free(alias_pool->use_mask);
-+	kfree(alias_pool->aliases);
-+	kfree(alias_pool);
-+}
-+
- static struct i2c_atr_alias_pair *
- i2c_atr_find_mapping_by_addr(const struct list_head *list, u16 phys_addr)
- {
-@@ -259,44 +310,42 @@ static const struct i2c_lock_operations i2c_atr_lock_ops = {
- 	.unlock_bus =  i2c_atr_unlock_bus,
- };
- 
--static int i2c_atr_reserve_alias(struct i2c_atr *atr)
-+static int i2c_atr_reserve_alias(struct i2c_atr_alias_pool *alias_pool)
- {
- 	unsigned long idx;
-+	u16 alias;
- 
--	spin_lock(&atr->alias_mask_lock);
-+	spin_lock(&alias_pool->lock);
- 
--	idx = find_first_zero_bit(atr->alias_use_mask, atr->num_aliases);
--	if (idx >= atr->num_aliases) {
--		spin_unlock(&atr->alias_mask_lock);
--		dev_err(atr->dev, "failed to find a free alias\n");
-+	idx = find_first_zero_bit(alias_pool->use_mask, alias_pool->size);
-+	if (idx >= alias_pool->size) {
-+		spin_unlock(&alias_pool->lock);
- 		return -EBUSY;
- 	}
- 
--	set_bit(idx, atr->alias_use_mask);
-+	set_bit(idx, alias_pool->use_mask);
- 
--	spin_unlock(&atr->alias_mask_lock);
-+	alias = alias_pool->aliases[idx];
- 
--	return atr->aliases[idx];
-+	spin_unlock(&alias_pool->lock);
-+	return alias;
- }
- 
--static void i2c_atr_release_alias(struct i2c_atr *atr, u16 alias)
-+static void i2c_atr_release_alias(struct i2c_atr_alias_pool *alias_pool, u16 alias)
- {
- 	unsigned int idx;
- 
--	spin_lock(&atr->alias_mask_lock);
-+	spin_lock(&alias_pool->lock);
- 
--	for (idx = 0; idx < atr->num_aliases; ++idx) {
--		if (atr->aliases[idx] == alias) {
--			clear_bit(idx, atr->alias_use_mask);
--			spin_unlock(&atr->alias_mask_lock);
-+	for (idx = 0; idx < alias_pool->size; ++idx) {
-+		if (alias_pool->aliases[idx] == alias) {
-+			clear_bit(idx, alias_pool->use_mask);
-+			spin_unlock(&alias_pool->lock);
- 			return;
- 		}
- 	}
- 
--	spin_unlock(&atr->alias_mask_lock);
--
--	 /* This should never happen */
--	dev_warn(atr->dev, "Unable to find mapped alias\n");
-+	spin_unlock(&alias_pool->lock);
- }
- 
- static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
-@@ -308,9 +357,11 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
- 	u16 alias;
- 	int ret;
- 
--	ret = i2c_atr_reserve_alias(atr);
--	if (ret < 0)
-+	ret = i2c_atr_reserve_alias(atr->alias_pool);
-+	if (ret < 0) {
-+		dev_err(atr->dev, "failed to find a free alias\n");
- 		return ret;
-+	}
- 
- 	alias = ret;
- 
-@@ -336,7 +387,7 @@ static int i2c_atr_attach_addr(struct i2c_adapter *adapter,
- err_free:
- 	kfree(c2a);
- err_release_alias:
--	i2c_atr_release_alias(atr, alias);
-+	i2c_atr_release_alias(atr->alias_pool, alias);
- 
- 	return ret;
- }
-@@ -357,7 +408,7 @@ static void i2c_atr_detach_addr(struct i2c_adapter *adapter,
- 		return;
- 	}
- 
--	i2c_atr_release_alias(atr, c2a->alias);
-+	i2c_atr_release_alias(atr->alias_pool, c2a->alias);
- 
- 	dev_dbg(atr->dev,
- 		"chan%u: detached alias 0x%02x from addr 0x%02x\n",
-@@ -411,12 +462,11 @@ static int i2c_atr_bus_notifier_call(struct notifier_block *nb,
- 
- static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
- {
-+	struct i2c_atr_alias_pool *alias_pool;
- 	struct device *dev = atr->dev;
--	unsigned long *alias_use_mask;
- 	size_t num_aliases;
- 	unsigned int i;
- 	u32 *aliases32;
--	u16 *aliases16;
- 	int ret;
- 
- 	ret = fwnode_property_count_u32(dev_fwnode(dev), "i2c-alias-pool");
-@@ -428,12 +478,23 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
- 
- 	num_aliases = ret;
- 
--	if (!num_aliases)
-+	alias_pool = i2c_atr_alloc_alias_pool(num_aliases);
-+	if (IS_ERR(alias_pool)) {
-+		ret = PTR_ERR(alias_pool);
-+		dev_err(dev, "Failed to allocate alias pool, err %d\n", ret);
-+		return ret;
-+	}
-+
-+	atr->alias_pool = alias_pool;
-+
-+	if (!alias_pool->size)
- 		return 0;
- 
- 	aliases32 = kcalloc(num_aliases, sizeof(*aliases32), GFP_KERNEL);
--	if (!aliases32)
--		return -ENOMEM;
-+	if (!aliases32) {
-+		ret = -ENOMEM;
-+		goto err_free_alias_pool;
-+	}
- 
- 	ret = fwnode_property_read_u32_array(dev_fwnode(dev), "i2c-alias-pool",
- 					     aliases32, num_aliases);
-@@ -443,43 +504,27 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
- 		goto err_free_aliases32;
- 	}
- 
--	aliases16 = kcalloc(num_aliases, sizeof(*aliases16), GFP_KERNEL);
--	if (!aliases16) {
--		ret = -ENOMEM;
--		goto err_free_aliases32;
--	}
--
- 	for (i = 0; i < num_aliases; i++) {
- 		if (!(aliases32[i] & 0xffff0000)) {
--			aliases16[i] = aliases32[i];
-+			alias_pool->aliases[i] = aliases32[i];
- 			continue;
- 		}
- 
- 		dev_err(dev, "Failed to parse 'i2c-alias-pool' property: I2C flags are not supported\n");
- 		ret = -EINVAL;
--		goto err_free_aliases16;
--	}
--
--	alias_use_mask = bitmap_zalloc(num_aliases, GFP_KERNEL);
--	if (!alias_use_mask) {
--		ret = -ENOMEM;
--		goto err_free_aliases16;
-+		goto err_free_aliases32;
- 	}
- 
- 	kfree(aliases32);
- 
--	atr->num_aliases = num_aliases;
--	atr->aliases = aliases16;
--	atr->alias_use_mask = alias_use_mask;
--
--	dev_dbg(dev, "i2c-alias-pool has %zu aliases", atr->num_aliases);
-+	dev_dbg(dev, "i2c-alias-pool has %zu aliases\n", alias_pool->size);
- 
- 	return 0;
- 
--err_free_aliases16:
--	kfree(aliases16);
- err_free_aliases32:
- 	kfree(aliases32);
-+err_free_alias_pool:
-+	i2c_atr_free_alias_pool(alias_pool);
- 	return ret;
- }
- 
-@@ -500,7 +545,6 @@ struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
- 		return ERR_PTR(-ENOMEM);
- 
- 	mutex_init(&atr->lock);
--	spin_lock_init(&atr->alias_mask_lock);
- 
- 	atr->parent = parent;
- 	atr->dev = dev;
-@@ -520,13 +564,12 @@ struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
- 	atr->i2c_nb.notifier_call = i2c_atr_bus_notifier_call;
- 	ret = bus_register_notifier(&i2c_bus_type, &atr->i2c_nb);
- 	if (ret)
--		goto err_free_aliases;
-+		goto err_free_alias_pool;
- 
- 	return atr;
- 
--err_free_aliases:
--	bitmap_free(atr->alias_use_mask);
--	kfree(atr->aliases);
-+err_free_alias_pool:
-+	i2c_atr_free_alias_pool(atr->alias_pool);
- err_destroy_mutex:
- 	mutex_destroy(&atr->lock);
- 	kfree(atr);
-@@ -543,8 +586,7 @@ void i2c_atr_delete(struct i2c_atr *atr)
- 		WARN_ON(atr->adapter[i]);
- 
- 	bus_unregister_notifier(&i2c_bus_type, &atr->i2c_nb);
--	bitmap_free(atr->alias_use_mask);
--	kfree(atr->aliases);
-+	i2c_atr_free_alias_pool(atr->alias_pool);
- 	mutex_destroy(&atr->lock);
- 	kfree(atr);
- }
+That isn't what I mean. There are two distinct parts, the means to
+describe the source (PFN + P2P source information) that is compatible
+with the DMA API, and the DMA API itself that works with a few general
+P2P source information types.
 
--- 
-2.47.1
+Private source information would be detected by co-operating drivers
+and go down driver private paths. It would be rejected by other
+drivers. This broadly follows how the new API is working.
 
+So here I mean you can use the same PFN + Source API between importer
+and exporter and the importer can simply detect the special source and
+do the private stuff. It is not shifting things under the DMA API, it
+is building along side it using compatible design approaches. You
+would match the source information, cast it to a driver structure, do
+whatever driver math is needed to compute the local DMA address and
+then write it to the device. Nothing is hard or "not going to work"
+here.
+
+> > So, no, we don't loose private address space support when moving to
+> > importer mapping, in fact it works better because the importer gets
+> > more information about what is going on.
+> 
+> Well, sounds like I wasn't able to voice my concern. Let me try again:
+> 
+> We should not give importers information they don't need. Especially not
+> information about the backing store of buffers.
+> 
+> So that importers get more information about what's going on is a bad thing.
+
+I strongly disagree because we are suffering today in mlx5 because of
+this viewpoint. You cannot predict in advance what importers are going
+to need. I already listed many examples where it does not work today
+as is.
+
+> > I have imagined a staged approach were DMABUF gets a new API that
+> > works with the new DMA API to do importer mapping with "P2P source
+> > information" and a gradual conversion.
+> 
+> To make it clear as maintainer of that subsystem I would reject such a step
+> with all I have.
+
+This is unexpected, so you want to just leave dmabuf broken? Do you
+have any plan to fix it, to fix the misuse of the DMA API, and all
+the problems I listed below? This is a big deal, it is causing real
+problems today.
+
+If it going to be like this I think we will stop trying to use dmabuf
+and do something simpler for vfio/kvm/iommufd :(
+
+> We have already gone down that road and it didn't worked at all and
+> was a really big pain to pull people back from it.
+
+Nobody has really seriously tried to improve the DMA API before, so I
+don't think this is true at all.
+
+> > Exporter mapping falls down in too many cases already:
+> > 
+> > 1) Private addresses spaces don't work fully well because many devices
+> > need some indication what address space is being used and scatter list
+> > can't really properly convey that. If the DMABUF has a mixture of CPU
+> > and private it becomes a PITA
+> 
+> Correct, yes. That's why I said that scatterlist was a bad choice for the
+> interface.
+> 
+> But exposing the backing store to importers and then let them do whatever
+> they want with it sounds like an even worse idea.
+
+You keep saying this without real justification. To me it is a nanny
+style of API design. But also I don't see how you can possibly fix the
+above without telling the importer alot more information.
+
+> > 2) Multi-path PCI can require the importer to make mapping decisions
+> > unique to the device and program device specific information for the
+> > multi-path. We are doing this in mlx5 today and have hacks because
+> > DMABUF is destroying the information the importer needs to choose the
+> > correct PCI path.
+> 
+> That's why the exporter gets the struct device of the importer so that it
+> can plan how those accesses are made. Where exactly is the problem with
+> that?
+
+A single struct device does not convey the multipath options. We have
+multiple struct devices (and multiple PCI endpoints) doing DMA
+concurrently under one driver.
+
+Multipath always needs additional meta information in the importer
+side to tell the device which path to select. A naked dma address is
+not sufficient.
+
+Today we guess that DMABUF will be using P2P and hack to choose a P2P
+struct device to pass the exporter. We need to know what is in the
+dmabuf before we can choose which of the multiple struct devices the
+driver has to use for DMA mapping.
+
+But even simple CPU centric cases we will eventually want to select
+the proper NUMA local PCI channel matching struct device for CPU only
+buffers.
+
+> When you have an use case which is not covered by the existing DMA-buf
+> interfaces then please voice that to me and other maintainers instead of
+> implementing some hack.
+
+Do you have any suggestion for any of this then? We have a good plan
+to fix this stuff and more. Many experts in their fields have agreed
+on the different parts now. We haven't got to dmabuf because I had no
+idea there would be an objection like this.
+
+> > 3) Importing devices need to know if they are working with PCI P2P
+> > addresses during mapping because they need to do things like turn on
+> > ATS on their DMA. As for multi-path we have the same hacks inside mlx5
+> > today that assume DMABUFs are always P2P because we cannot determine
+> > if things are P2P or not after being DMA mapped.
+> 
+> Why would you need ATS on PCI P2P and not for system memory accesses?
+
+ATS has a significant performance cost. It is mandatory for PCI P2P,
+but ideally should be avoided for CPU memory.
+
+> > 4) TPH bits needs to be programmed into the importer device but are
+> > derived based on the NUMA topology of the DMA target. The importer has
+> > no idea what the DMA target actually was because the exporter mapping
+> > destroyed that information.
+> 
+> Yeah, but again that is completely intentional.
+> 
+> I assume you mean TLP processing hints when you say TPH and those should be
+> part of the DMA addresses provided by the exporter.
+
+Yes, but is not part of the DMA addresses.
+
+> That an importer tries to look behind the curtain and determines the NUMA
+> placement and topology themselves is clearly a no-go from the design
+> perspective.
+
+I strongly disagree, this is important. Drivers need this information
+in a future TPH/UIO/multipath PCI world.
+
+> > 5) iommufd and kvm are both using CPU addresses without DMA. No
+> > exporter mapping is possible
+> 
+> We have customers using both KVM and XEN with DMA-buf, so I can clearly
+> confirm that this isn't true.
+
+Today they are mmaping the dma-buf into a VMA and then using KVM's
+follow_pfn() flow to extract the CPU pfn from the PTE. Any mmapable
+dma-buf must have a CPU PFN.
+
+Here Xu implements basically the same path, except without the VMA
+indirection, and it suddenly not OK? Illogical.
+
+Jason
