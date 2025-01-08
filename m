@@ -1,46 +1,46 @@
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23541201016;
-	Wed,  8 Jan 2025 14:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D16E1FCFDA;
+	Wed,  8 Jan 2025 14:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736347163; cv=none; b=GSnYeybI4da2SEz/6nWr5i0vT5BLpcBMCUjRsf0mjVjQxg7PPFTnTtJyN5DZRO1pLwsCw01AX7AXrgdpy3mA0TQPN8r1KXU5z/1sgE1nP0gd+/j7Ss1sO0TUxsc4Pvs5qPGM4DHSSgGnCMupkQHHX+TlQKTHlRgOkcyPuUi+dhY=
+	t=1736347171; cv=none; b=fX4+9PaJnoumdxTtKuuNGeS2a0yNaFHGrnz9zTYljy5ItCLnoDD3Lo7S0kkDMhTrMFGq/tvjE1CDXQdy1Ww4fxBjn7kfubDsL4ZpCINOx5H28eBS4q4bn8WReyqS34D8cxwDXk63L5aUn6djDWm75AmUHymB67IMAga3IWJSbg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736347163; c=relaxed/simple;
-	bh=ueSVVcZVsYUxgSioegpuYn2att8jDl6Oh2OIpyQ4jc4=;
+	s=arc-20240116; t=1736347171; c=relaxed/simple;
+	bh=CiAmnH3lK3beyRKHnnFzBxsbAsTpJTDbj1pCelNn9Vs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CGcvcTRHibfgjqPtwXDUGxAd10WcLHtaZHsNGw0jsNLgSchkDGPpS7GDZ6zwkHQROtY6Xt+FWAgv9XKiRe0VlS46DiazCZ0KVkWtwi+Xe6XQlmePs5hw6XKZK2Ep35vh9Y5rF/ov+erq/Q35iR2wGEgnKECht700vAA7rtTB60o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=J3ZWT6Xl; arc=none smtp.client-ip=205.220.180.131
+	 MIME-Version:Content-Type; b=oU1cqQ5tbac2T6w4ubnrv/2DV+rQ3t24U5R2fh53yqR5bWIyuobQVmQRDyaKJswBb/5A0moQzZmyS8X/8nHgXyV+yw3da7SxWJf1NTynJED6nZ8o8BYzRXoTxrVqxjjkRQxOfndiYU/zIckI/MrDk1AdGsO2ePsta/iGAY8ptMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=e4ioHuPF; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="J3ZWT6Xl"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508BkUYd004914;
-	Wed, 8 Jan 2025 14:39:18 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="e4ioHuPF"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508Bm7UR021569;
+	Wed, 8 Jan 2025 14:39:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	OyiirhuoakkNu9IBMseuni5rZsvXyXoHuIbiK21X+c8=; b=J3ZWT6XlRl9Crl0B
-	kBNpLcs/wWgiIpTadbtYG7jeQyfl2GLEgqLC9gOMjFsCvcRKmRglJtcnmjeusmAB
-	rBRiSs+LYe83Se4Bq+777+R8szkttI3uV1iBBHqdMxC69r9UVjUqXQyklpWonB/e
-	nuBiTAh/oZLL5UDx3L/t6yK1dwJ2Fp3XYPl3WG/xzqTsjeXtNEGJi2B8/H1Pqwvs
-	7N1m1Nef5ZV2vvqpgLwcll9lsVuuaBecMeuuo/awN5yTq9YJFLHPlqvUf/jr8JCR
-	c4ATJOWGZibRJgk/t9EKubx/cIrRxZL6YSevHto03rQjDnxxBleOOaYPb074sIvw
-	vHwb8w==
+	FD7mtvRl6bY3DzyPXF/pJVL1h8LV4CyXnFVKPJ9owDE=; b=e4ioHuPFaGNuV9ku
+	TZbU8c7aKq/XvkuVhv7SgREfYivemv8yU41NSGnX6rsqUM9U9w/LAzUYRAFA3dwR
+	e+eAYLjWiXTTAXb33lBrlUdQjWsjKmJlTY8esHw732aeTNwoNs50HEkOmoCpPr9p
+	xPc31U48Y32Yb2kS5z41Zwl31MtE1fQSzfcPppMFkqZDEO251CBZ4JbtuTouVitP
+	UfR1maPmL1NOlxpGRuEc0M0w+zRiTMWDMurR7O9WM1uCmChTaTe5V2TTuDVjkdZk
+	Vm41IUlTUR5z215e900aT0HvLI0EiuknOvgVtwXCh5o2xgQmi4as+MT4S9a0+uSl
+	Xw4xxA==
 Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 441ms7h3qy-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 441nm18y2y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 14:39:17 +0000 (GMT)
+	Wed, 08 Jan 2025 14:39:25 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 508EdGBE004284
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 508EdOPb004433
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 8 Jan 2025 14:39:16 GMT
+	Wed, 8 Jan 2025 14:39:24 GMT
 Received: from hu-depengs-sha.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 8 Jan 2025 06:39:10 -0800
+ 15.2.1544.9; Wed, 8 Jan 2025 06:39:18 -0800
 From: Depeng Shao <quic_depengs@quicinc.com>
 To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
         <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
@@ -50,9 +50,9 @@ CC: <quic_eberman@quicinc.com>, <quic_depengs@quicinc.com>,
         <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <kernel@quicinc.com>
-Subject: [PATCH v8 11/16] media: qcom: camss: csid: Only add TPG v4l2 ctrl if TPG hardware is available
-Date: Wed, 8 Jan 2025 20:07:28 +0530
-Message-ID: <20250108143733.2761200-12-quic_depengs@quicinc.com>
+Subject: [PATCH v8 13/16] media: qcom: camss: Add sm8550 compatible
+Date: Wed, 8 Jan 2025 20:07:30 +0530
+Message-ID: <20250108143733.2761200-14-quic_depengs@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250108143733.2761200-1-quic_depengs@quicinc.com>
 References: <20250108143733.2761200-1-quic_depengs@quicinc.com>
@@ -68,143 +68,87 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: srhwtXIjATKy0ImE_pgTW_Dba5NJI2_I
-X-Proofpoint-ORIG-GUID: srhwtXIjATKy0ImE_pgTW_Dba5NJI2_I
+X-Proofpoint-ORIG-GUID: 6791enDeSiCkCMZZdRnx8Hp5GAJXn53r
+X-Proofpoint-GUID: 6791enDeSiCkCMZZdRnx8Hp5GAJXn53r
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- spamscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 phishscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501080121
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
+ bulkscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501080122
 
-There is no CSID TPG on some SoCs, so the v4l2 ctrl in CSID driver
-shouldn't be registered. Checking the supported TPG modes to indicate
-if the TPG hardware exists or not and only registering v4l2 ctrl for
-CSID only when the TPG hardware is present.
+Add CAMSS_8550 enum, sm8550 compatible and sm8550 camss drvier private
+data, the private data just include some basic information now, later
+changes will enumerate with csiphy, csid and vfe resources.
 
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
 ---
- .../media/platform/qcom/camss/camss-csid.c    | 60 +++++++++++--------
- 1 file changed, 35 insertions(+), 25 deletions(-)
+ drivers/media/platform/qcom/camss/camss.c | 22 ++++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss.h |  1 +
+ 2 files changed, 23 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 6cf8e434dc05..e26a69a454a7 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -760,11 +760,13 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
- 	int ret;
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index f93b520ef038..2705e0bc046b 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -1938,6 +1938,19 @@ static const struct resources_icc icc_res_sc8280xp[] = {
+ 	},
+ };
  
- 	if (enable) {
--		ret = v4l2_ctrl_handler_setup(&csid->ctrls);
--		if (ret < 0) {
--			dev_err(csid->camss->dev,
--				"could not sync v4l2 controls: %d\n", ret);
--			return ret;
-+		if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED) {
-+			ret = v4l2_ctrl_handler_setup(&csid->ctrls);
-+			if (ret < 0) {
-+				dev_err(csid->camss->dev,
-+					"could not sync v4l2 controls: %d\n", ret);
-+				return ret;
-+			}
- 		}
++static const struct resources_icc icc_res_sm8550[] = {
++	{
++		.name = "ahb",
++		.icc_bw_tbl.avg = 2097152,
++		.icc_bw_tbl.peak = 2097152,
++	},
++	{
++		.name = "hf_0_mnoc",
++		.icc_bw_tbl.avg = 2097152,
++		.icc_bw_tbl.peak = 2097152,
++	},
++};
++
+ /*
+  * camss_add_clock_margin - Add margin to clock frequency rate
+  * @rate: Clock frequency rate
+@@ -3025,6 +3038,14 @@ static const struct camss_resources sc7280_resources = {
+ 	.link_entities = camss_link_entities
+ };
  
- 		if (!csid->testgen.enabled &&
-@@ -838,7 +840,8 @@ static void csid_try_format(struct csid_device *csid,
- 		break;
++static const struct camss_resources sm8550_resources = {
++	.version = CAMSS_8550,
++	.pd_name = "top",
++	.icc_res = icc_res_sm8550,
++	.icc_path_num = ARRAY_SIZE(icc_res_sm8550),
++	.link_entities = camss_link_entities
++};
++
+ static const struct of_device_id camss_dt_match[] = {
+ 	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
+ 	{ .compatible = "qcom,msm8953-camss", .data = &msm8953_resources },
+@@ -3034,6 +3055,7 @@ static const struct of_device_id camss_dt_match[] = {
+ 	{ .compatible = "qcom,sdm660-camss", .data = &sdm660_resources },
+ 	{ .compatible = "qcom,sdm845-camss", .data = &sdm845_resources },
+ 	{ .compatible = "qcom,sm8250-camss", .data = &sm8250_resources },
++	{ .compatible = "qcom,sm8550-camss", .data = &sm8550_resources },
+ 	{ }
+ };
  
- 	case MSM_CSID_PAD_SRC:
--		if (csid->testgen_mode->cur.val == 0) {
-+		if (csid->testgen.nmodes == CSID_PAYLOAD_MODE_DISABLED ||
-+		    csid->testgen_mode->cur.val == 0) {
- 			/* Test generator is disabled, */
- 			/* keep pad formats in sync */
- 			u32 code = fmt->code;
-@@ -888,7 +891,8 @@ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index bd1d1d2b831d..58fc61e7cf7a 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -85,6 +85,7 @@ enum camss_version {
+ 	CAMSS_8250,
+ 	CAMSS_8280XP,
+ 	CAMSS_845,
++	CAMSS_8550,
+ };
  
- 		code->code = csid->res->formats->formats[code->index].code;
- 	} else {
--		if (csid->testgen_mode->cur.val == 0) {
-+		if (csid->testgen.nmodes == CSID_PAYLOAD_MODE_DISABLED ||
-+		    csid->testgen_mode->cur.val == 0) {
- 			struct v4l2_mbus_framefmt *sink_fmt;
- 
- 			sink_fmt = __csid_get_format(csid, sd_state,
-@@ -1267,7 +1271,8 @@ static int csid_link_setup(struct media_entity *entity,
- 
- 		/* If test generator is enabled */
- 		/* do not allow a link from CSIPHY to CSID */
--		if (csid->testgen_mode->cur.val != 0)
-+		if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED &&
-+		    csid->testgen_mode->cur.val != 0)
- 			return -EBUSY;
- 
- 		sd = media_entity_to_v4l2_subdev(remote->entity);
-@@ -1360,24 +1365,27 @@ int msm_csid_register_entity(struct csid_device *csid,
- 		 MSM_CSID_NAME, csid->id);
- 	v4l2_set_subdevdata(sd, csid);
- 
--	ret = v4l2_ctrl_handler_init(&csid->ctrls, 1);
--	if (ret < 0) {
--		dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
--		return ret;
--	}
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED) {
-+		ret = v4l2_ctrl_handler_init(&csid->ctrls, 1);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
-+			return ret;
-+		}
- 
--	csid->testgen_mode = v4l2_ctrl_new_std_menu_items(&csid->ctrls,
--				&csid_ctrl_ops, V4L2_CID_TEST_PATTERN,
--				csid->testgen.nmodes, 0, 0,
--				csid->testgen.modes);
-+		csid->testgen_mode =
-+			v4l2_ctrl_new_std_menu_items(&csid->ctrls,
-+						     &csid_ctrl_ops, V4L2_CID_TEST_PATTERN,
-+						     csid->testgen.nmodes, 0, 0,
-+						     csid->testgen.modes);
- 
--	if (csid->ctrls.error) {
--		dev_err(dev, "Failed to init ctrl: %d\n", csid->ctrls.error);
--		ret = csid->ctrls.error;
--		goto free_ctrl;
--	}
-+		if (csid->ctrls.error) {
-+			dev_err(dev, "Failed to init ctrl: %d\n", csid->ctrls.error);
-+			ret = csid->ctrls.error;
-+			goto free_ctrl;
-+		}
- 
--	csid->subdev.ctrl_handler = &csid->ctrls;
-+		csid->subdev.ctrl_handler = &csid->ctrls;
-+	}
- 
- 	ret = csid_init_formats(sd, NULL);
- 	if (ret < 0) {
-@@ -1408,7 +1416,8 @@ int msm_csid_register_entity(struct csid_device *csid,
- media_cleanup:
- 	media_entity_cleanup(&sd->entity);
- free_ctrl:
--	v4l2_ctrl_handler_free(&csid->ctrls);
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED)
-+		v4l2_ctrl_handler_free(&csid->ctrls);
- 
- 	return ret;
- }
-@@ -1421,7 +1430,8 @@ void msm_csid_unregister_entity(struct csid_device *csid)
- {
- 	v4l2_device_unregister_subdev(&csid->subdev);
- 	media_entity_cleanup(&csid->subdev.entity);
--	v4l2_ctrl_handler_free(&csid->ctrls);
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED)
-+		v4l2_ctrl_handler_free(&csid->ctrls);
- }
- 
- inline bool csid_is_lite(struct csid_device *csid)
+ enum icc_count {
 -- 
 2.34.1
 
