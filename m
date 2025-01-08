@@ -1,66 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58AC1AAC9;
-	Thu,  9 Jan 2025 04:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4143207A0A;
+	Thu,  9 Jan 2025 05:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736398748; cv=none; b=WjEWxa34icINGdxZvJTBBLSpBjSHnmiLKwebwnJDlbzqCf1r+tegRDg32Eo+T8pQ877GAYlZR3DGT/iRvR8cQJ2O4WjiMWBiY5xLcbHk6XfSWgr0wjRhBz+cNACKwSXtddlprDSYn7gPMXpZigD4SOPIQ33pxxgZ1Gua95PTYBw=
+	t=1736402232; cv=none; b=XCvDy2BI4HXdfKXQcj7wbnmhTFkQxe4/tSveZgijv0duYkxpBAPU1WExZKjC0OtZE2PHGMhN9xTNeTWd4T9DrGp6yjrx//T0uzB6tVoFTA5jDfUNSTMeFvu/V5WldreGFUl0wxZIgbz0W+z61IniXzZ+01vYWxwh+NIfckZqiqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736398748; c=relaxed/simple;
-	bh=hTsQuirja3kP5fdTsWRC1+w6gEXwh2kLQxBcBcrjnGc=;
+	s=arc-20240116; t=1736402232; c=relaxed/simple;
+	bh=FqI/VlxAMR/gPma1s74j4/VQzGXLaUyWkAAHdpWMFek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K0+sSN8jprlw1z3HlVBfeLVV21W6nFuMzNI4R6ppl/e7vgxoLhpIpHUsAG9hzTqKpXneVcuyVR77EG7fmGr/SCRA6ud6CvCd9BEpU3u47RJZsIXJYfZ02M5Snu6btsf6MIF9IvZ16Hz9g1VG//l5GsJs4tCNNehOgRlE0DmkUb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gnGKSany; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=PEf9+fp1i9gMd55+0jDH9XYYRkzZf9Y0z7x5z422s5CNIbLfdEC8LtJNjzk9DcV9lyGmE+vrNms9Slqeuj/vBJ5g5fBOcuW2fhrDTTn1RdBzn4gSnNdfZDvE9LjcoLYUa1sGS78BBqwqC2YPN3QO09zteHtHDqrXY23ISbRpKI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEt6tHOf; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gnGKSany"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEt6tHOf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736398747; x=1767934747;
+  t=1736402231; x=1767938231;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hTsQuirja3kP5fdTsWRC1+w6gEXwh2kLQxBcBcrjnGc=;
-  b=gnGKSanyOXKy0U+d+/2347yok0CmmCq+vFRycO7GW7z7BbABx5UECxzY
-   hNq+kSYKoF062Xyc/e8pBRkL9EshhOCsgoEIIX49jIYH8fyzP8vosbcRT
-   m6gQWZ/UdnteZXjEQAMq3irD73ycWbvZFIEcLO4Km1MXHaCmtFjMLXmoS
-   5ZiFFozl7UctnHp08e2K3CNamfiWxgLoZhCx3Hw5SIFh5W9LoDDGfqtIo
-   J5avcItPoh9256IsnBXUalynKAStdwpIvLmuWFxeBZZhzHK/2Agt+bsj3
-   9nhJ22C9NbWV+9r4Fu9excFzekRQ1B85OvagX6kZXDDWeoE0l8ownhucZ
-   A==;
-X-CSE-ConnectionGUID: xjWePMbFQvyHshgMIVoLZw==
-X-CSE-MsgGUID: cvA7iiVjS3qURTlBUy/3VQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36544353"
+  bh=FqI/VlxAMR/gPma1s74j4/VQzGXLaUyWkAAHdpWMFek=;
+  b=iEt6tHOfdsYE4Ucr4ciQ2t4ehld8EcOVieg2oD+/qDdkQyMdpEuFmfAn
+   QMWdx72wXbb4g3EY4xF18ZTH7dUwMMo5qdpNzPcnWsPHVv1NBW6QV26wa
+   ZTZGPT9aFO298d3mstt/SHQNMBTqcQr9OE6/ewCl18eGogjxcFGMiRDxx
+   Unwo6T4YR0e/WEZAYdvVHPgYQZp5KAygQq0mu4NJTEMArLE5xJpx5PukZ
+   bLgly0TfH0FjDlO/COXkmAc+D0Kj2p1rfxNcG4ZhiI2W8hFNTNrLE/x4R
+   9G9cVeUAwWz8VhHjujRa+Q7yUnwBvdXvA1EqIumtE6jlno0944gFUdI6m
+   Q==;
+X-CSE-ConnectionGUID: zdLU/RLATUKaMOHwkjz9tg==
+X-CSE-MsgGUID: hLylUr6BRveDaeNOaf//PA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36807935"
 X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
-   d="scan'208";a="36544353"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 20:59:05 -0800
-X-CSE-ConnectionGUID: Bqdvx8OPQBunJyDfrdjsLg==
-X-CSE-MsgGUID: wzJdr5qoSB2owTRZBfIIug==
+   d="scan'208";a="36807935"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 21:57:10 -0800
+X-CSE-ConnectionGUID: SOoiHxivRYyitr+jKiwhJw==
+X-CSE-MsgGUID: eOFZZnw/SNquEG3O9injsg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="126591019"
+X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
+   d="scan'208";a="134145387"
 Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Jan 2025 20:59:00 -0800
-Date: Thu, 9 Jan 2025 00:57:58 +0800
+  by orviesa002.jf.intel.com with ESMTP; 08 Jan 2025 21:57:04 -0800
+Date: Thu, 9 Jan 2025 01:56:02 +0800
 From: Xu Yilun <yilun.xu@linux.intel.com>
 To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: kvm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+Cc: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Christoph Hellwig <hch@lst.de>, Leon Romanovsky <leonro@nvidia.com>,
+	kvm@vger.kernel.org, dri-devel@lists.freedesktop.org,
 	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-	sumit.semwal@linaro.org, christian.koenig@amd.com,
-	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
-	vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
-	yilun.xu@intel.com, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
-	daniel.vetter@ffwll.ch, leon@kernel.org, baolu.lu@linux.intel.com,
-	zhenzhong.duan@intel.com, tao1.su@intel.com
-Subject: Re: [RFC PATCH 08/12] vfio/pci: Create host unaccessible dma-buf for
- private device
-Message-ID: <Z36ulpCoJAllp4fP@yilunxu-OptiPlex-7050>
+	sumit.semwal@linaro.org, pbonzini@redhat.com, seanjc@google.com,
+	alex.williamson@redhat.com, vivek.kasireddy@intel.com,
+	dan.j.williams@intel.com, aik@amd.com, yilun.xu@intel.com,
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+	lukas@wunner.de, yan.y.zhao@intel.com, daniel.vetter@ffwll.ch,
+	leon@kernel.org, baolu.lu@linux.intel.com, zhenzhong.duan@intel.com,
+	tao1.su@intel.com
+Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
+ kAPI
+Message-ID: <Z368Mmxjqa4U0jHK@yilunxu-OptiPlex-7050>
 References: <20250107142719.179636-1-yilun.xu@linux.intel.com>
- <20250107142719.179636-9-yilun.xu@linux.intel.com>
- <20250108133026.GQ5556@nvidia.com>
+ <20250107142719.179636-2-yilun.xu@linux.intel.com>
+ <b1f3c179-31a9-4592-a35b-b96d2e8e8261@amd.com>
+ <20250108132358.GP5556@nvidia.com>
+ <f3748173-2bbc-43fa-b62e-72e778999764@amd.com>
+ <20250108145843.GR5556@nvidia.com>
+ <5a858e00-6fea-4a7a-93be-f23b66e00835@amd.com>
+ <20250108162227.GT5556@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,27 +76,32 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250108133026.GQ5556@nvidia.com>
+In-Reply-To: <20250108162227.GT5556@nvidia.com>
 
-On Wed, Jan 08, 2025 at 09:30:26AM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 07, 2025 at 10:27:15PM +0800, Xu Yilun wrote:
-> > Add a flag for ioctl(VFIO_DEVICE_BIND_IOMMUFD) to mark a device as
-> > for private assignment. For these private assigned devices, disallow
-> > host accessing their MMIO resources.
+> > > 5) iommufd and kvm are both using CPU addresses without DMA. No
+> > > exporter mapping is possible
+> > 
+> > We have customers using both KVM and XEN with DMA-buf, so I can clearly
+> > confirm that this isn't true.
 > 
-> Why? Shouldn't the VMM simply not call mmap? Why does the kernel have
-> to enforce this?
+> Today they are mmaping the dma-buf into a VMA and then using KVM's
+> follow_pfn() flow to extract the CPU pfn from the PTE. Any mmapable
+> dma-buf must have a CPU PFN.
 
-MM.. maybe I should not say 'host', instead 'userspace'.
+Yes, the final target for KVM is still the CPU PFN, just with the help
+of CPU mapping table.
 
-I think the kernel part VMM (KVM) has the responsibility to enforce the
-correct behavior of the userspace part VMM (QEMU). QEMU has no way to
-touch private memory/MMIO intentionally or accidently. IIUC that's one
-of the initiative guest_memfd is introduced for private memory. Private
-MMIO follows.
+I also found the xen gntdev-dmabuf is calculating pfn from mapped
+sgt.
+
+From Christion's point, I assume only sgl->dma_address should be
+used by importers but in fact not. More importers are 'abusing' sg dma
+helpers.
+
+That said there are existing needs for importers to know more about the
+real buffer resource, for mapping, or even more than mapping,
+e.g. dmabuf_imp_grant_foreign_access()
 
 Thanks,
 Yilun
 
-> 
-> Jason
