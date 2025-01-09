@@ -1,157 +1,225 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9A204C3C;
-	Thu,  9 Jan 2025 11:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9DAC2FB
+	for <linux-media@vger.kernel.org>; Thu,  9 Jan 2025 11:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736420878; cv=none; b=Pb1kYg2E1aybsr1AxjJKXVZZvacoMiOBvWG+tc+L67BxD2O0DOqOhCPSxZ7dm/iMXHUMyQrMW9d03iNjog/MJ43cgJWzS+NovXcEdm95Z+EqJ/LTB61LU8sOzB5EzZB8+3ICX0i+Vkzsg2p7pXSQlKxoVLafKMfPBrndQUxRk7E=
+	t=1736421429; cv=none; b=DSjiEZNdmb/f6z9YVq/mfwnkPQ+XhUFXvm3jy4mwdCFgD7DlCtYDbKMEByZ7V0FZl2lDAFdZd2wgjDC9a9qMoiVWbgvq2U1ltXWjPBkOsBADdODvPhussXCbtHZ2ATLR5B9fG8/yXuP3bseKD6QCh4bBVIDQmIJZ1TQ9KTmjJ1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736420878; c=relaxed/simple;
-	bh=+rokNR1TBRe3TqEAQHJ6WAVWiY++bf7dkHnY6VnhOIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RF+iIrWXS7HHBc7Ax2C05DYifstAsCKNKcXvSC1zoBg3lZSJNOnrFyDPI60nU/QodTpt0XXKT5VrJ5Gp65Q87BRRimdFz8EKTeeqLrxBuWJdNUgux2ZN6J+nP8po3LUAXq0gp76GaEvHCuMsuU6oGWZq70yCJXThxzi1sssB4Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yu8QvwhI; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1736421429; c=relaxed/simple;
+	bh=P5rmfT+DUSR4asm5Gjw6aql5IBSI7KzjoYlfc6YPovA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=cOBr/X99gjHIjC4XGW3wQ8l4aBDlPhK+/8ApBrsuwu9cgeSqNJm667W9Y+bunq44zZfenCds3Hj3bSt81ebau3pDR2s4Led86NsTzTo41BRYThAoWpiXJjkeqWHOfKZ/AECPmZisLTjca8XiJcXADtKewUQfBAyaHfBtBY2it08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=kyGl3OGS; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yu8QvwhI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736420876; x=1767956876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+rokNR1TBRe3TqEAQHJ6WAVWiY++bf7dkHnY6VnhOIw=;
-  b=Yu8QvwhIklD6R96Mo7/pLl+Thr9iUG/xh7+neZft4Dg3puHijwxlPlNN
-   Bed5JeIu0qiiZv8VCsTogUZDgpVots6HFfjl79N5sMt3AJ3z4SPX5xliG
-   Q7nLLoTfA5+N+lh2LnWKZpd64i099vsXdA8lI33iP8uT7h31TLzo85r2H
-   XJ9klZSxB5u5EkMHi8xQhCCYxuZw88wOZkgmqxxtgRv10mgRJk2+ZcG4S
-   b6I4Q2puj+jVLXKExq6S4lQwEkcx2fkjz5nAaZNHq8KanC27TaMSiYsbW
-   bHbPgA+S693JnVqTB/GSXy8Bh9Ls4HMv33tG4FetKmmggp5hP3TKR9Qg1
-   w==;
-X-CSE-ConnectionGUID: QPRw3ZLcQZyEvJpsoJb1+Q==
-X-CSE-MsgGUID: WpvkjXsrTgyXi2cmGU5e0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="48090745"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="48090745"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 03:07:56 -0800
-X-CSE-ConnectionGUID: JZV1fD2DSIei0Kb+5rkS+Q==
-X-CSE-MsgGUID: U75bsEzcRwOUOMGJwatAdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="108432058"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa003.jf.intel.com with ESMTP; 09 Jan 2025 03:07:51 -0800
-Date: Thu, 9 Jan 2025 07:06:48 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Christoph Hellwig <hch@lst.de>,
-	Leon Romanovsky <leonro@nvidia.com>, kvm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
-	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
-	vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
-	yilun.xu@intel.com, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
-	leon@kernel.org, baolu.lu@linux.intel.com, zhenzhong.duan@intel.com,
-	tao1.su@intel.com
-Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
- kAPI
-Message-ID: <Z38FCOPE7WPprYhx@yilunxu-OptiPlex-7050>
-References: <20250107142719.179636-2-yilun.xu@linux.intel.com>
- <b1f3c179-31a9-4592-a35b-b96d2e8e8261@amd.com>
- <20250108132358.GP5556@nvidia.com>
- <f3748173-2bbc-43fa-b62e-72e778999764@amd.com>
- <20250108145843.GR5556@nvidia.com>
- <5a858e00-6fea-4a7a-93be-f23b66e00835@amd.com>
- <20250108162227.GT5556@nvidia.com>
- <Z37HpvHAfB0g9OQ-@phenom.ffwll.local>
- <Z37QaIDUgiygLh74@yilunxu-OptiPlex-7050>
- <58e97916-e6fd-41ef-84b4-bbf53ed0e8e4@amd.com>
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="kyGl3OGS"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-436a03197b2so5938995e9.2
+        for <linux-media@vger.kernel.org>; Thu, 09 Jan 2025 03:17:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1736421426; x=1737026226; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QDdoRqFWp8CVeTiidXm9/TF+voRsLtSMvxR1TwzmO9M=;
+        b=kyGl3OGSTYIQkMnYLN/OtEiMUhQXedLbMN7M60RnxwSmsGvvU9aq6KtqvhHx2mj1LJ
+         4cIpT2NoW3XyFsmO3xYBSZTOAkhsrQCTMO6sddQjMsQ91ZTvXnyHNyPnR6O0it2+CDmo
+         QI223svogXQS2A+VXAOr2dapWuDEsT4IsIlNFITVPh8+FJ/wo3eIkH2oi4BnLQAws3bN
+         2FISrApUtH3lmwEI+HhoMhjskANX6CREqPGeNTb8MxKS2xAz4hq5F4/MTjUY9RrMr87p
+         GHu8h/3OiW61lCtr4TUIipoxeQBdL1Waalh29Xvsjs6LpZao2kav/CtNyiuUqJVP123c
+         KEvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736421426; x=1737026226;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QDdoRqFWp8CVeTiidXm9/TF+voRsLtSMvxR1TwzmO9M=;
+        b=OSSYJULl/9JtZ9qsjmwDKeI2jjBCdXE648OOcGmCoRg0Hb3EToPGL7CGc9lGDahbT6
+         Pv36D25hJvf241TKu3Dekt3Cb19KcFhAZ2aYLVhz7EsYYmmkoHXnCkoQjHNr7Ol+Nkun
+         sk9BG+WW+zMc6zr9HAy8arLwCS/3oIiMyq8F05QUHQRwOcPx6zHT8anNcE41JvXqXGXD
+         02dMYtiWilo/vxzWHi9DOz/BjEt4ceDSTMmULyD7jPRbND36cLJZ6NVs+ONmZrjncLtl
+         uSgRQWzV+KPypfmXuuqifqAVFIfPAvbTh2dzOYF5aD9+wKV3/iLLtuF6tRtdo8tWTouX
+         L6NA==
+X-Gm-Message-State: AOJu0Yy1tQCOh1kJudQgzaP+JMNGrZM2ah1CNZra3nEOiN2lPepGopcM
+	J/dMZ76EZlLd5hK0e3DvIiVRmLWA1tEn0t2ioPE61f8lF6yjvQdRPYgeAuSc+mE8804EzEuVYT4
+	o
+X-Gm-Gg: ASbGncs49c0aOEMeJ2UHkIafNqVzVpwEQMCoQqDmll0DV4sH+d7tiik0Ap7PP7epvBg
+	eqMuOEK7Gsi3aSyDZ7IfRO+oDeMUTktsxtC3WJ19ZganvldGIGfPc2K0oNMsauBf682pgtLKz4g
+	1g+8y+JQsbhPw+2iuPLeefvFUVmQCtb56uHqIaQsqg38o8F6BC1GraAXLcy5tbeFKRuHLldo7VR
+	3EE3j+TuAO2TyaDcEVphCiOVqNdzepVSeZ3lYa1NeX3ItRb
+X-Google-Smtp-Source: AGHT+IGxW9l3fSCerDGzK3rf7x9nD9OspcRLe2JZVa23n7iAsWmXbz7f5JIE0MjVjI6CztxS9Y/A1w==
+X-Received: by 2002:a5d:584d:0:b0:386:4a16:dad7 with SMTP id ffacd0b85a97d-38a872d2a33mr6039436f8f.10.1736421425737;
+        Thu, 09 Jan 2025 03:17:05 -0800 (PST)
+Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-436e2dc0bb7sm51383635e9.16.2025.01.09.03.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 03:17:05 -0800 (PST)
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date: Thu, 09 Jan 2025 11:17:00 +0000
+Subject: [PATCH 1/3] media: i2c: imx415: Add read/write control of VBLANK
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58e97916-e6fd-41ef-84b4-bbf53ed0e8e4@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250109-media-imx415-v1-1-366ba6a234ab@raspberrypi.com>
+References: <20250109-media-imx415-v1-0-366ba6a234ab@raspberrypi.com>
+In-Reply-To: <20250109-media-imx415-v1-0-366ba6a234ab@raspberrypi.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Michael Riesch <michael.riesch@wolfvision.net>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+X-Mailer: b4 0.14.1
 
->  So I guess my first question is, which locking rules do you want here for
->  pfn importers?
-> 
->  follow_pfn() is unwanted for private MMIO, so dma_resv_lock.
-> 
->    As Sima explained you either have follow_pfn() and mmu_notifier or you
->    have DMA addresses and dma_resv lock / dma_fence.
-> 
->    Just giving out PFNs without some lifetime associated with them is one of
->    the major problems we faced before and really not something you can do.
+This also requires that the ranges for the exposure control
+are updated.
 
-I'm trying to make exporter give out PFN with lifetime control via
-move_notify() in this series. May not be conceptually correct but seems
-possible.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+ drivers/media/i2c/imx415.c | 51 ++++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 18 deletions(-)
 
-> 
-> 
->  If mmu notifiers is fine, then I think the current approach of follow_pfn
->  should be ok. But if you instead dma_resv_lock rules (or the cpu mmap
->  somehow is an issue itself), then I think the clean design is create a new
-> 
->  cpu mmap() is an issue, this series is aimed to eliminate userspace
->  mapping for private MMIO resources.
-> 
->    Why?
+diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+index 3f7924aa1bd3..2c8c0905aa99 100644
+--- a/drivers/media/i2c/imx415.c
++++ b/drivers/media/i2c/imx415.c
+@@ -26,6 +26,7 @@
+ #define IMX415_PIXEL_ARRAY_WIDTH  3864
+ #define IMX415_PIXEL_ARRAY_HEIGHT 2192
+ #define IMX415_PIXEL_ARRAY_VBLANK 58
++#define IMX415_EXPOSURE_OFFSET	  8
+ 
+ #define IMX415_NUM_CLK_PARAM_REGS 11
+ 
+@@ -51,6 +52,7 @@
+ #define IMX415_OUTSEL		  CCI_REG8(0x30c0)
+ #define IMX415_DRV		  CCI_REG8(0x30c1)
+ #define IMX415_VMAX		  CCI_REG24_LE(0x3024)
++#define IMX415_VMAX_MAX		  0xfffff
+ #define IMX415_HMAX		  CCI_REG16_LE(0x3028)
+ #define IMX415_SHR0		  CCI_REG24_LE(0x3050)
+ #define IMX415_GAIN_PCG_0	  CCI_REG16_LE(0x3090)
+@@ -447,7 +449,6 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 
+ /* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_2_720[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x07F0 },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+ 	{ IMX415_TCLKPOST, 0x006F },
+@@ -463,7 +464,6 @@ static const struct cci_reg_sequence imx415_mode_2_720[] = {
+ 
+ /* all-pixel 2-lane 1440 Mbps 30.01 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_2_1440[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x042A },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+ 	{ IMX415_TCLKPOST, 0x009F },
+@@ -479,7 +479,6 @@ static const struct cci_reg_sequence imx415_mode_2_1440[] = {
+ 
+ /* all-pixel 4-lane 891 Mbps 30 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_4_891[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x044C },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_4 },
+ 	{ IMX415_TCLKPOST, 0x007F },
+@@ -600,6 +599,7 @@ struct imx415 {
+ 	struct v4l2_ctrl *vblank;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
++	struct v4l2_ctrl *exposure;
+ 
+ 	unsigned int cur_mode;
+ 	unsigned int num_data_lanes;
+@@ -730,17 +730,37 @@ static int imx415_s_ctrl(struct v4l2_ctrl *ctrl)
+ 					     ctrls);
+ 	const struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_subdev_state *state;
++	u32 exposure_max;
+ 	unsigned int vmax;
+ 	unsigned int flip;
+ 	int ret;
+ 
+-	if (!pm_runtime_get_if_in_use(sensor->dev))
+-		return 0;
+-
+ 	state = v4l2_subdev_get_locked_active_state(&sensor->subdev);
+ 	format = v4l2_subdev_state_get_format(state, 0);
+ 
++	if (ctrl->id == V4L2_CID_VBLANK) {
++		exposure_max = format->height + ctrl->val -
++			       IMX415_EXPOSURE_OFFSET;
++		__v4l2_ctrl_modify_range(sensor->exposure,
++					 sensor->exposure->minimum,
++					 exposure_max, sensor->exposure->step,
++					 sensor->exposure->default_value);
++	}
++
++	if (!pm_runtime_get_if_in_use(sensor->dev))
++		return 0;
++
+ 	switch (ctrl->id) {
++	case V4L2_CID_VBLANK:
++		ret = cci_write(sensor->regmap, IMX415_VMAX,
++				format->height + ctrl->val, NULL);
++		if (ret)
++			return ret;
++		/*
++		 * Deliberately fall through as exposure is set based on VMAX
++		 * which has just changed.
++		 */
++		fallthrough;
+ 	case V4L2_CID_EXPOSURE:
+ 		/* clamp the exposure value to VMAX. */
+ 		vmax = format->height + sensor->vblank->cur.val;
+@@ -787,7 +807,8 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	u64 pixel_rate = supported_modes[sensor->cur_mode].pixel_rate;
+ 	u64 lane_rate = supported_modes[sensor->cur_mode].lane_rate;
+ 	u32 exposure_max = IMX415_PIXEL_ARRAY_HEIGHT +
+-			   IMX415_PIXEL_ARRAY_VBLANK - 8;
++			   IMX415_PIXEL_ARRAY_VBLANK -
++			   IMX415_EXPOSURE_OFFSET;
+ 	u32 hblank;
+ 	unsigned int i;
+ 	int ret;
+@@ -816,8 +837,9 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+-	v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops, V4L2_CID_EXPOSURE,
+-			  4, exposure_max, 1, exposure_max);
++	sensor->exposure = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
++					     V4L2_CID_EXPOSURE, 4,
++					     exposure_max, 1, exposure_max);
+ 
+ 	v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+ 			  V4L2_CID_ANALOGUE_GAIN, IMX415_AGAIN_MIN,
+@@ -834,16 +856,9 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	sensor->vblank = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+ 					   V4L2_CID_VBLANK,
+ 					   IMX415_PIXEL_ARRAY_VBLANK,
+-					   IMX415_PIXEL_ARRAY_VBLANK, 1,
+-					   IMX415_PIXEL_ARRAY_VBLANK);
+-	if (sensor->vblank)
+-		sensor->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++					   IMX415_VMAX_MAX - IMX415_PIXEL_ARRAY_HEIGHT,
++					   1, IMX415_PIXEL_ARRAY_VBLANK);
+ 
+-	/*
+-	 * The pixel rate used here is a virtual value and can be used for
+-	 * calculating the frame rate together with hblank. It may not
+-	 * necessarily be the physically correct pixel clock.
+-	 */
+ 	v4l2_ctrl_new_std(&sensor->ctrls, NULL, V4L2_CID_PIXEL_RATE, pixel_rate,
+ 			  pixel_rate, 1, pixel_rate);
+ 
 
-OK, I can start from here.
+-- 
+2.34.1
 
-It is about the Secure guest, or CoCo VM. The memory and MMIOs assigned
-to this kind of guest is unaccessable to host itself, by leveraging HW
-encryption & access control technology (e.g. Intel TDX, AMD SEV-SNP ...).
-This is to protect the tenant data being stolen by CSP itself.
-
-The impact is when host accesses the encrypted region, bad things
-happen to system, e.g. memory corruption, MCE. Kernel is trying to
-mitigate most of the impact by alloc and assign user unmappable memory
-resources (private memory) to guest, which prevents userspace
-accidents. guest_memfd is the private memory provider that only allows
-for KVM to position the page/pfn by fd + offset and create secondary
-page table (EPT, NPT...), no host mapping, no VMA, no mmu_notifier. But
-the lifecycle of the private memory is still controlled by guest_memfd.
-When fallocate(fd, PUNCH_HOLE), the memory resource is revoked and KVM
-is notified to unmap corresponding EPT.
-
-The further thought is guest_memfd is also suitable for normal guest.
-It makes no sense VMM must build host mapping table before guest access.
-
-Now I'm trying to seek a similar way for private MMIO. A MMIO resource
-provider that is exported as an fd. It controls the lifecycle of the
-MMIO resource and notify KVM when revoked. dma-buf seems to be a good
-provider which have done most of the work, only need to extend the
-memory resource seeking by fd + offset.
-
-> 
->  separate access mechanism just for that. It would be the 5th or so (kernel
->  vmap, userspace mmap, dma_buf_attach and driver private stuff like
->  virtio_dma_buf.c where you access your buffer with a uuid), so really not
->  a big deal.
-> 
->  OK, will think more about that.
-> 
->    Please note that we have follow_pfn() + mmu_notifier working for KVM/XEN
-
-Folow_pfn & mmu_notifier won't work here, cause no VMA, no host mapping
-table.
-
-Thanks,
-Yilun
->    with MMIO mappings and P2P. And that required exactly zero DMA-buf changes
->    :)
-> 
->    I don't fully understand your use case, but I think it's quite likely that
->    we already have that working.
-> 
->    Regards,
->    Christian.
