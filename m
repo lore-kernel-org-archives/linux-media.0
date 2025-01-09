@@ -1,172 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9DF21E0A6
-	for <linux-media@vger.kernel.org>; Thu,  9 Jan 2025 15:11:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6B321CA16;
+	Thu,  9 Jan 2025 15:17:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736435508; cv=none; b=nUU6wRRrWdCKq108sVC4+Ik8DLSm+EOrkjeXmHRRuGk/m+6BpfuQlpcdvGDtakNvdNy1WmtyPW1aC+L2KFRvJMzVM1k/Hu97JsqdKoIi52Vsg/iKgwGwg9X3eDVPDSOycK6JRcBhmkl6fTwB4u4fUhYmzpRxlPDTimhk582a8lo=
+	t=1736435842; cv=none; b=q/9p7w+xvq928lcjObn8VmYJbRCdSVfLfv4IshxXpxkNBxGj/XIZfUrVmU1j3m1L+Y/TzdJtbG4qF2pVELgLiRT8GajWTpL5D7cuBGyHeUyNOqUcJQIqHSreJq6gQTOVbrsXJFGe+UrtEk8ftHeRbjnTNilp5amKSRB80r5x36Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736435508; c=relaxed/simple;
-	bh=v878b+swYOuO6QjNRxLYLrqE5VOlZnaGw1VkTBC7V2I=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pKE9QfywYpkH8tixf8AWfzZvttvRBGua9bNv9+wTNOgqr94gR+QdiiUn8Mt4ZW/Ql1rZTb2ysLVDXZYzBNVc3trSsET2L2DiqyckjNBGIn1GzeeODlt8m4mQCZcqWVRljsl4lI1h8ScAUYM/z7hgiqhOKWRhRVtaQm9oNKjLtuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SBo6fdQf; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736435842; c=relaxed/simple;
+	bh=VnMu8CiT6L4+MZC85SqfNz+2pFTDnh4jzZDDuqVNI6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tO16U3GtzOZtrZcZ8idXKPWrzGVRebI+a31XsZoVwCj03BcAGja3nnUfWRI3+AUJFYDGCQHXb8w+V2Xd2Z9OQQ8TcpHTOKokS3hzlfOw0IDhQ9UiGnKgSj2PiCodRMbbvcN+HI7/wTtBBWdGW3UiOrlCXl5Y+9mDuvGjRtFjJUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xd8cH89A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SBo6fdQf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736435507; x=1767971507;
-  h=date:from:to:cc:subject:message-id;
-  bh=v878b+swYOuO6QjNRxLYLrqE5VOlZnaGw1VkTBC7V2I=;
-  b=SBo6fdQf2tBAPUtDoIyJemAuRcq+pKCYiHTJry4dXPG+m669t+c0m7n0
-   kn5wOwqbSukPSciyc38jOp4ocrplS5DWcTylXDmAiWrtvqV834ul+P+XK
-   h8cAjNbBlrx5EiIkBkJOc01sJaaHJjIuD7DDqrZVyrX2+SJCTdlxDVjgn
-   kmQ/X1y/0O7sdCM1IidKQP0vRA7045jagMfuyusINlm4Yh4SLR48rCDqD
-   9G394gvC4Z2KmtHY+RYLxdbE3aUtgrW9DmlZOdV2giAkErK+JSA79nlYZ
-   5Q+OvqeA45iyVjLj8OyvqAcrG6M4IxxeEUvSxJMpMOE3okCjXZmThdgan
-   A==;
-X-CSE-ConnectionGUID: iTESrD1SRq+kbxlib4ySnw==
-X-CSE-MsgGUID: BcBSIzQBRFWuev1cN2xdOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="54245105"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="54245105"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 07:11:13 -0800
-X-CSE-ConnectionGUID: QCyG3B2YQuiDlFv52CXLxw==
-X-CSE-MsgGUID: y+dCHJ60TWStDzB46KKiqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="103306425"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Jan 2025 07:11:10 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVuBf-000HiR-2S;
-	Thu, 09 Jan 2025 15:11:07 +0000
-Date: Thu, 09 Jan 2025 23:10:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Subject: [linuxtv-media-pending:next] BUILD SUCCESS
- 94794b5ce4d90ab134b0b101a02fddf6e74c437d
-Message-ID: <202501092321.DGc3rwVO-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xd8cH89A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FCCC4CEE1;
+	Thu,  9 Jan 2025 15:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736435842;
+	bh=VnMu8CiT6L4+MZC85SqfNz+2pFTDnh4jzZDDuqVNI6o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xd8cH89A78UrJZlOvR3zOGXUhgooHTSUNSLTQhb5HsvwaOaj3ZtBNIJ03ooJ5boUN
+	 OWgKhAxtr+iubFiAweaNpHiG5pLR1e04BoewKzT+6MQdtFpkH2r8OaL+UUQzWxFSmM
+	 Ggx+MXjFBO8DwBLVm3lve7IiHDrzIte7hh0IjZmcwhAvAck/vSo6hCoQIfWGv8/cFn
+	 pqsyqCMp1ZPmAr12c96UQakXNHJxR6IUVktqrEqytQ6vfsYksfQm90QjZD+Qbw4eW5
+	 lFizN2di/Qzr03EPjsyRGd45qbFdFsTHROpCs0TggNnZqKB5YQ4nQ+yVefEaP3voxx
+	 U1v/BlO1sJgeg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tVuHj-000000008UF-1Lnk;
+	Thu, 09 Jan 2025 16:17:23 +0100
+Date: Thu, 9 Jan 2025 16:17:23 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Dikshita Agarwal <quic_dikshita@quicinc.com>
+Cc: Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Stefan Schmidt <stefan.schmidt@linaro.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>, Joel Stanley <joel@jms.id.au>,
+	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	20241212-qcom-video-iris-v9-0-e8c2c6bd4041@quicinc.com,
+	Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH 0/2] media: iris: fix memory leak and improve driver
+Message-ID: <Z3_og9XpRgYvKTcM@hovoldconsulting.com>
+References: <20250109-iris-driver-fixes-v1-0-789a0f5dd7ee@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109-iris-driver-fixes-v1-0-789a0f5dd7ee@quicinc.com>
 
-tree/branch: https://git.linuxtv.org/media-ci/media-pending.git next
-branch HEAD: 94794b5ce4d90ab134b0b101a02fddf6e74c437d  media: platform: rzg2l-cru: rzg2l-video: Fix the comment in rzg2l_cru_start_streaming_vq()
+On Thu, Jan 09, 2025 at 04:56:39PM +0530, Dikshita Agarwal wrote:
+> This series fixes a memory leak and improves the representation of 
+> dma mask to set upper bound of DMA address space.
 
-elapsed time: 1447m
+Both of these issues were pointed out to you during review of v9 of the
+series adding this driver, and as the driver hasn't been merged yet this
+can be fixed in a v10.
 
-configs tested: 95
-configs skipped: 2
+Also looks like something went wrong when you posted this series as it
+is CCed to:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+	20241212-qcom-video-iris-v9-0-e8c2c6bd4041@quicinc.com
 
-tested configs:
-alpha                            allnoconfig    gcc-14.2.0
-alpha                           allyesconfig    gcc-14.2.0
-arc                             allmodconfig    gcc-13.2.0
-arc                              allnoconfig    gcc-13.2.0
-arc                             allyesconfig    gcc-13.2.0
-arc                  randconfig-001-20250109    gcc-13.2.0
-arc                  randconfig-002-20250109    gcc-13.2.0
-arm                             allmodconfig    gcc-14.2.0
-arm                              allnoconfig    clang-17
-arm                             allyesconfig    gcc-14.2.0
-arm                          imxrt_defconfig    clang-19
-arm                      multi_v4t_defconfig    clang-20
-arm                  randconfig-001-20250109    gcc-14.2.0
-arm                  randconfig-002-20250109    clang-17
-arm                  randconfig-003-20250109    clang-20
-arm                  randconfig-004-20250109    gcc-14.2.0
-arm                          sama5_defconfig    gcc-14.2.0
-arm64                           allmodconfig    clang-18
-arm64                            allnoconfig    gcc-14.2.0
-arm64                randconfig-001-20250109    gcc-14.2.0
-arm64                randconfig-002-20250109    clang-20
-arm64                randconfig-003-20250109    gcc-14.2.0
-arm64                randconfig-004-20250109    gcc-14.2.0
-csky                             allnoconfig    gcc-14.2.0
-csky                 randconfig-001-20250109    gcc-14.2.0
-csky                 randconfig-002-20250109    gcc-14.2.0
-hexagon                         allmodconfig    clang-20
-hexagon                          allnoconfig    clang-20
-hexagon              randconfig-001-20250109    clang-14
-hexagon              randconfig-002-20250109    clang-20
-i386                             allnoconfig    gcc-12
-i386       buildonly-randconfig-001-20250109    gcc-12
-i386       buildonly-randconfig-002-20250109    gcc-12
-i386       buildonly-randconfig-003-20250109    clang-19
-i386       buildonly-randconfig-004-20250109    clang-19
-i386       buildonly-randconfig-005-20250109    clang-19
-i386       buildonly-randconfig-006-20250109    gcc-12
-loongarch                       allmodconfig    gcc-14.2.0
-loongarch                        allnoconfig    gcc-14.2.0
-loongarch            randconfig-001-20250109    gcc-14.2.0
-loongarch            randconfig-002-20250109    gcc-14.2.0
-m68k                            allmodconfig    gcc-14.2.0
-m68k                            allyesconfig    gcc-14.2.0
-nios2                randconfig-001-20250109    gcc-14.2.0
-nios2                randconfig-002-20250109    gcc-14.2.0
-openrisc                         allnoconfig    gcc-14.2.0
-openrisc                        allyesconfig    gcc-14.2.0
-parisc                          allmodconfig    gcc-14.2.0
-parisc                           allnoconfig    gcc-14.2.0
-parisc                          allyesconfig    gcc-14.2.0
-parisc               randconfig-001-20250109    gcc-14.2.0
-parisc               randconfig-002-20250109    gcc-14.2.0
-powerpc                         allmodconfig    gcc-14.2.0
-powerpc                          allnoconfig    gcc-14.2.0
-powerpc                         allyesconfig    clang-16
-powerpc              randconfig-001-20250109    clang-15
-powerpc              randconfig-002-20250109    gcc-14.2.0
-powerpc              randconfig-003-20250109    gcc-14.2.0
-powerpc64            randconfig-001-20250109    gcc-14.2.0
-powerpc64            randconfig-002-20250109    clang-20
-powerpc64            randconfig-003-20250109    clang-17
-riscv                           allmodconfig    clang-20
-riscv                            allnoconfig    gcc-14.2.0
-riscv                           allyesconfig    clang-20
-riscv                randconfig-001-20250109    gcc-14.2.0
-riscv                randconfig-002-20250109    clang-15
-s390                            allmodconfig    clang-19
-s390                             allnoconfig    clang-20
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250109    gcc-14.2.0
-s390                 randconfig-002-20250109    clang-16
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250109    gcc-14.2.0
-sh                   randconfig-002-20250109    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250109    gcc-14.2.0
-sparc                randconfig-002-20250109    gcc-14.2.0
-sparc64              randconfig-001-20250109    gcc-14.2.0
-sparc64              randconfig-002-20250109    gcc-14.2.0
-um                              allmodconfig    clang-20
-um                               allnoconfig    clang-18
-um                              allyesconfig    gcc-12
-um                   randconfig-001-20250109    gcc-12
-um                   randconfig-002-20250109    gcc-12
-x86_64                           allnoconfig    clang-19
-x86_64     buildonly-randconfig-001-20250109    clang-19
-x86_64     buildonly-randconfig-002-20250109    gcc-12
-x86_64     buildonly-randconfig-003-20250109    clang-19
-x86_64     buildonly-randconfig-004-20250109    clang-19
-x86_64     buildonly-randconfig-005-20250109    clang-19
-x86_64     buildonly-randconfig-006-20250109    gcc-12
-x86_64                             defconfig    gcc-11
-xtensa               randconfig-001-20250109    gcc-14.2.0
-xtensa               randconfig-002-20250109    gcc-14.2.0
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> ---
+> Dikshita Agarwal (2):
+>       media: iris: represent dma_mask in more readable form
+>       media: iris: fix memory leak while freeing queue memory
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Johan
