@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB6721B1BF;
-	Thu,  9 Jan 2025 14:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D4721D5AF;
+	Thu,  9 Jan 2025 15:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736434733; cv=none; b=R+VMwMKNKpHaf+x27lpnTc4pqH9O9IeYqu8XHnF8IOMhXYAoKXViyqBuLXKJsZ0hiLesKXXYRhuIyReKH/fN1fen0fNWdLmv9NyLcoq/JvroJhAN76Qx/W3De7YgOB+a6j+HAMpI2KT5v/5Xt84V9nWI5x5cTQs2JKe0UGvxLVo=
+	t=1736435465; cv=none; b=M/Zw0UcQ3Z/m+7+NQLUDUfkrrLapD2ktglW4sm7m5UyHjhTV0u/la1uf8ylkn1MDJh8URkW8/fGug/vnNy/b26xc96Fanur6YQE7U5kSg8k3w/c80LBS/9pMOr1Ddw0KVf0TNzS18VdZejNbUAeZe48N/AWzCn9HQRU0rKOasEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736434733; c=relaxed/simple;
-	bh=CDsK2ol5aehDfnV6LhUEdFF8jxR9hEEyAE1pkOvdgKQ=;
+	s=arc-20240116; t=1736435465; c=relaxed/simple;
+	bh=7lEZNV0X+29VoxSEr+AVzaoiYcr7CIhLBP2VNpg3G1M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WJF48pSAl7iLjlUH5ZuWS/rakDwO0sFB9ochLMuSFFr1aTXypf1v/4ZoDr6HqGEJCSg1fBqCQ3t/fQQdKsjiGC9UpGGo0Wr34nsZgoDwwUIZfkyzKYJ4cP/PPnClplK33owSGjdl1CG1nfq0svK2F8LCHfaNmJFOoJjrgMfjhtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ma/QunMp; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=dgLLX+kqaBfYe9pZUeaWm+UvDl47oFes895nzWmWzY8B+djNfixeKnCS/Esy/aa10vGJwCb7mETI1ytdpGZqaspE/Va0TUWWWlqU2i/Lm91NGaY7hljb1OrU2IwUxqI9HR6tUg7cyVMF+KNHee6Sd4NYGH2bpQeXXGj2+/NFmWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ydmt4Add; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ma/QunMp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A653C4CED2;
-	Thu,  9 Jan 2025 14:58:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ydmt4Add"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6975C4CED2;
+	Thu,  9 Jan 2025 15:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736434732;
-	bh=CDsK2ol5aehDfnV6LhUEdFF8jxR9hEEyAE1pkOvdgKQ=;
+	s=k20201202; t=1736435464;
+	bh=7lEZNV0X+29VoxSEr+AVzaoiYcr7CIhLBP2VNpg3G1M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ma/QunMp+TxfyjG7kYIat0v+nwIrJiXDuzHweK/wmV3e35j0Vy8lGffSuz+cyCKxR
-	 lW/kFpkkwVqR/fNWbzbYmkgBJqexTSV/fNci9lWL7fyR+zGcoMJ5msQwM6WuUawEaM
-	 z/ulF/mihe2Ta6ap+yY55zE/dS4jJM67DiBvsSxXLDzVMctB6l7IW0A2dJhNgVdJzL
-	 lnRd783/0J8gddL0e7kiIC5OS1lrE+VLi0EVSEMd5xkbXsxFMQ8bdN5yGpGk+hrRw3
-	 fe4v6T/j/m+0d7S22X8P3tiv0EO/nIQVM9MxPAhfpL0I8palBIZNCT4hAW+336UIX6
-	 VIus/r05CoK2A==
+	b=Ydmt4AddvxmMsy/OZlA//EqGAPtyAbU06w4cxyaV8NaXJvV+wgHWHkYLcbys4e4QP
+	 JOQVEEWz/XovHBzHYXctnczLh0wqRoRQUTIBvX0jiT5fV0XT08KZPiie8/MVCzlAlA
+	 UhCUPzQ9HgRmrR4vzYoOwviIvpJp4soeVQenDkL+laGczi+jHp9kYg/CptN9YuoR+i
+	 dJfy+g+057W/9b0/0/YVaEl0vh9wgFCu7P+1oWSGCrcRkLWgBrZRb26CCRb8+lK3xh
+	 2GvTWW3/RZAV13vdivfV2eupxhL17U5VzJXjhgcqbOOjJwmuXyFOyDY9kKmXAEykja
+	 Zx5ERAWmua7ag==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1tVtzo-000000007tf-2gk4;
-	Thu, 09 Jan 2025 15:58:53 +0100
-Date: Thu, 9 Jan 2025 15:58:52 +0100
+	id 1tVuBc-000000008Hc-3jVi;
+	Thu, 09 Jan 2025 16:11:05 +0100
+Date: Thu, 9 Jan 2025 16:11:04 +0100
 From: Johan Hovold <johan@kernel.org>
 To: Dikshita Agarwal <quic_dikshita@quicinc.com>
 Cc: Vikash Garodia <quic_vgarodia@quicinc.com>,
@@ -51,12 +51,12 @@ Cc: Vikash Garodia <quic_vgarodia@quicinc.com>,
 	Stefan Schmidt <stefan.schmidt@linaro.org>,
 	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Vedang Nagar <quic_vnagar@quicinc.com>,
 	Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v9 00/28] Qualcomm iris video decoder driver
-Message-ID: <Z3_kLJ6Oy6m9D_wU@hovoldconsulting.com>
+Subject: Re: [PATCH v9 27/28] media: iris: enable video driver probe of
+ SM8250 SoC
+Message-ID: <Z3_nCPk_g8znto4A@hovoldconsulting.com>
 References: <20241212-qcom-video-iris-v9-0-e8c2c6bd4041@quicinc.com>
+ <20241212-qcom-video-iris-v9-27-e8c2c6bd4041@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,63 +65,86 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241212-qcom-video-iris-v9-0-e8c2c6bd4041@quicinc.com>
+In-Reply-To: <20241212-qcom-video-iris-v9-27-e8c2c6bd4041@quicinc.com>
 
-[ +CC: Bjorn ]
+On Thu, Dec 12, 2024 at 05:21:49PM +0530, Dikshita Agarwal wrote:
+> Initialize the platform data and enable video driver probe of SM8250
+> SoC. Add a kernel param to select between venus and iris drivers for
+> platforms supported by both drivers, for ex: SM8250.
 
-On Thu, Dec 12, 2024 at 05:21:22PM +0530, Dikshita Agarwal wrote:
-> Introduce support for Qualcomm new video acceleration hardware i.e. 
-> iris, used for video stream decoding.
+Why do you want to use a module parameter for this? What would be the
+default configuration? (Module parameters should generally be avoided.)
 
-> Note: A harmless onetime error log "Lucid PLL latch failed. Output may
-> be unstable!" is seen during bootup.  It doesn't impact any video 
-> usecase and is currently under discussion.
+Why not simply switch to the new driver (and make sure that the new
+driver is selected if the old one was enabled in the kernel config)?
+ 
+> Tested-by: Stefan Schmidt <stefan.schmidt@linaro.org> # x1e80100 (Dell
 
-This could be an indication that some resources are not described
-correctly and could potentially require both binding and driver changes
-to address.
+Looks like something is missing from Stefan's Tested-by tag throughout
+the series ("Dell XPS13"?)
 
-This is also something which could cause trouble later (e.g. during
-suspend) even if you manage to get the clock running after boot.
+> Reviewed-by: Stefan Schmidt <stefan.schmidt@linaro.org>
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+ 
+> +static bool prefer_venus = true;
+> +MODULE_PARM_DESC(prefer_venus, "Select whether venus or iris driver should be preferred");
+> +module_param(prefer_venus, bool, 0444);
+> +
+> +/* list all platforms supported by only iris driver */
+> +static const char *const iris_only_platforms[] = {
+> +	"qcom,sm8550-iris",
+> +	NULL,
+> +};
 
-Generally, you should not be introducing any new warnings; they are
-there to let you know that something is wrong.
+Surely you don't want to have to add every new platform to two tables
+(i.e. the id table and again here).
 
-Where is this issue being discussed?
+> +
+> +/* list all platforms supported by both venus and iris drivers */
+> +static const char *const venus_to_iris_migration[] = {
+> +	"qcom,sm8250-venus",
+> +	NULL,
+> +};
+> +
+> +static bool video_drv_should_bind(struct device *dev, bool is_iris_driver)
+> +{
+> +	if (of_device_compatible_match(dev->of_node, iris_only_platforms))
+> +		return is_iris_driver;
+> +
+> +	/* If it is not in the migration list, use venus */
+> +	if (!of_device_compatible_match(dev->of_node, venus_to_iris_migration))
+> +		return !is_iris_driver;
+> +
+> +	return prefer_venus ? !is_iris_driver : is_iris_driver;
+> +}
+> +
+>  static int iris_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -196,6 +224,9 @@ static int iris_probe(struct platform_device *pdev)
+>  	u64 dma_mask;
+>  	int ret;
+>  
+> +	if (!video_drv_should_bind(&pdev->dev, true))
+> +		return -ENODEV;
 
-I think we at least need a public analysis and understanding of the
-problem before merging this.
+AFAICT nothing is preventing venus from binding even when 'prefer_venus'
+is false.
 
-> Dikshita Agarwal (18):
->       dt-bindings: media: Add video support for QCOM SM8550 SoC
-
-Could you please post the DT changes required for sm8550 so that people
-can test this series more easily? You can do it in a separate series if
-you prefer (with a link to this series in the cover letter) or as part
-of this one (at the end, with a note saying that those changes should go
-through the qcom SoC tree).
-
->       media: iris: add platform driver for iris video device
->       media: iris: implement iris v4l2 file ops
->       media: iris: introduce iris core state management with shared queues
->       media: iris: implement video firmware load/unload
->       media: iris: implement boot sequence of the firmware
->       media: iris: introduce host firmware interface with necessary hooks
->       media: iris: implement power management
->       media: iris: implement reqbuf ioctl with vb2_queue_setup
->       media: iris: implement iris v4l2_ctrl_ops
->       media: iris: implement vb2 streaming ops
->       media: iris: allocate, initialize and queue internal buffers
->       media: iris: implement vb2 ops for buf_queue and firmware response
->       media: iris: add support for dynamic resolution change
->       media: iris: handle streamoff/on from client in dynamic resolution change
->       media: iris: add support for drain sequence
->       media: iris: enable video driver probe of SM8250 SoC
-
-You should also say something in the cover letter about sm8250 now being
-supported by two mainline drivers and how you propose to handle that
-conflict.
-
->       media: MAINTAINERS: add Qualcomm iris video accelerator driver
+> +
+>  	core = devm_kzalloc(&pdev->dev, sizeof(*core), GFP_KERNEL);
+>  	if (!core)
+>  		return -ENOMEM;
+> @@ -324,6 +355,10 @@ static const struct of_device_id iris_dt_match[] = {
+>  		.compatible = "qcom,sm8550-iris",
+>  		.data = &sm8550_data,
+>  	},
+> +	{
+> +		.compatible = "qcom,sm8250-venus",
+> +		.data = &sm8250_data,
+> +	},
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, iris_dt_match);
 
 Johan
