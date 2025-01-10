@@ -1,587 +1,251 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2131.outbound.protection.outlook.com [40.107.20.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DC71ADFE4;
-	Fri, 10 Jan 2025 09:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736500359; cv=fail; b=WfulQy35DkE9wOQZGjZK1nqJE1G+GxLnednuOSPHfV/aM6k6UKa+5HWQc2+gySb9TzdC3YwkRR6PX2M9a3YK9nWH4oFxde77bvKBwNkizrw4BgzGSt7D3qjBe5zDYBHW1ral9H3epM00JaIz8dsB5FOwrXKy8nIV/yIPL7dICpI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736500359; c=relaxed/simple;
-	bh=EEXFkjidPpNZnaM465+SDXPfl9x2NHuz+2TF8RFQ5T4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YAMSI1B6KgBN+IEfzoPAtASxoEbJ+03vk61c8i8E1yUPtdlTbZzLXfPaU2pFKpsvyJB1i4jltsBkIJnZq3Nf/NyuuMbFLFSfJzB8qc9eLNSzAGWyxSwjTh9/62TtpvO0oB6HzMl90M7W8odlFlG3M+kkcYytbJaKwxJ7Ofzg87g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net; spf=pass smtp.mailfrom=wolfvision.net; dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b=RcJ7eaLB; arc=fail smtp.client-ip=40.107.20.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wolfvision.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolfvision.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AB73BBF0
+	for <linux-media@vger.kernel.org>; Fri, 10 Jan 2025 09:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736500496; cv=none; b=GkNGcPzmYWfRXY1IsCiDPDkD9hiI+JK+TT6aIgwzmaPWv1VnBqHGnLwwbLl3WPBNf2YZNDmo3Fz98vmQJlwASP8jlUagJM+imv488yZd9yNcdHt762cwfglY/vdrRb5ZOWWIQhrhRGGkXnFLXp/Os3Vod+NrINefFHkFO9qZJV8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736500496; c=relaxed/simple;
+	bh=KrpQYKwCv1NFZiIePrfS/rkTV6cEnkv7v7NbHOxw+ao=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=S5ZJ814Mo+MLPnlbdP9kTQ1ts1UqU0EuZGdm6j79b5LWSkCpCKnbxCpgE7+FhwLi9+TYjJQg+RXpAF+o9hukGD6PG+Kyuj9szQBykySqH6tPplv7RC86itE7D4uLRLJ7fBGlFP5xKzUJfGQV/L+O+0wHl6yw0GBtsfiwJtW6lVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HzUOtQ6A; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=wolfvision.net header.i=@wolfvision.net header.b="RcJ7eaLB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xPbMep1NR220ybDf93D7HHVAYF22aRmQnISgAe8wuWGSsn6s/w1QLoga1gebTYQoqSy1D+zxwK9yw9jJlPxk9wAcgCQm+7xvGcS1r4+fnPMZWF0eTVRLObT3b6kUs5XeZ1xiBKw4T1ZTqwatuXkc1nnd2syvkWoZwqqHX6rpyETt05Fz9Lmxuzj57Tz3vtd+RcpVQXe0Y3wgey1cDkIiZjEMXwi8tesDqFuUyXMk3JKt0R/oafEFwFalHx8YB8N91SVH6hloXEvooopVcmidjLOiPL7Cx0//s3fA0dwA1+vARMXWwh5qF+2GwWIvkAH2SAXH1ecWUT+GmTzmRf/fBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LFGw58zz3CLLFoh2EmDK14D+Zmdu1ESzOnJxw0VTDEk=;
- b=rKbdioVUeO6nDk1OxtlrMYssroQxnb63w3WFiu9LQgGj+3pEuhJHqKEZmRFvh3UIq92oHcS10KWRdR/AeLmf48sRgDIUvtfIH74mZrXPTBCXJ7oyyyttvfCmi7WGIqRZbleagonpEivZcLmBLW8y6Hncf4fGjwlWnOaPmLwWbIH33H+/cWmkm+UXowZuzqZBzffw94s/zyUuyJYAUiis84h6dst0MFuEa5/zcslIsP56+BMF+VzP4MGGh6dg44Oj4qgdEJbIinfhN2fBHq5RDyEBkPM3m5HN9OmxSFe9NDq1HV/sifUGr6S5P1NZmdDRdFngOBPOq6XjxQcveTr39A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LFGw58zz3CLLFoh2EmDK14D+Zmdu1ESzOnJxw0VTDEk=;
- b=RcJ7eaLB0unXVbxHHeD44q9HMvoYiHvsNy67Yu0W0aNT2yEBSOyKa1UOjnNffTIIjCEZ4TA+Yjx8oFtGrgMEpShmKFRvU7IVj+1Kv9+sAMFYEZvSIurf5HfHKwzbUhnxozoF3xzgzb+AAKYTgG1wt7CuqIDwhKheui68jvBDs2I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by PAXPR08MB6574.eurprd08.prod.outlook.com (2603:10a6:102:12d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.13; Fri, 10 Jan
- 2025 09:12:33 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4e72:c5d4:488e:f16d]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::4e72:c5d4:488e:f16d%5]) with mapi id 15.20.8335.012; Fri, 10 Jan 2025
- 09:12:33 +0000
-Message-ID: <78fa589d-f9b6-41d8-bee5-766d0d1c3b17@wolfvision.net>
-Date: Fri, 10 Jan 2025 10:12:29 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] media: rockchip: add a driver for the rockchip
- camera interface (cif)
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mehdi Djait <mehdi.djait@linux.intel.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Kever Yang <kever.yang@rock-chips.com>,
- Nicolas Dufresne <nicolas@ndufresne.ca>,
- Sebastian Fricke <sebastian.fricke@collabora.com>,
- Alexander Shiyan <eagle.alexander923@gmail.com>,
- Val Packett <val@packett.cool>, Rob Herring <robh@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
- Mehdi Djait <mehdi.djait@bootlin.com>,
- Gerald Loacker <gerald.loacker@wolfvision.net>
-References: <20241217-v6-8-topic-rk3568-vicap-v2-0-b1d488fcc0d3@wolfvision.net>
- <20241217-v6-8-topic-rk3568-vicap-v2-4-b1d488fcc0d3@wolfvision.net>
- <Z3-f1SrrRjMnB-1C@kekkonen.localdomain>
- <561bef3e-2511-4741-9175-5c15239f9b1f@wolfvision.net>
- <Z4ACALOeioLroqmw@kekkonen.localdomain>
-Content-Language: en-US
-From: Michael Riesch <michael.riesch@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <Z4ACALOeioLroqmw@kekkonen.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0217.eurprd06.prod.outlook.com
- (2603:10a6:802:2c::38) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HzUOtQ6A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736500494;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8WE2y7Tnn0z8S9WigHQq+Beyf3tmLnG35Pz4F1jLvso=;
+	b=HzUOtQ6Ac4c1d9fGXzZFDYyDzSkUXoUgRQPRoUwLNscg9RYhShCgmq2I8jrf78j+ynGGw7
+	kr2lcXoV7B+N/2AgGP4dG2z/EGlxZFYPumx/ddKCmOhU4BUhlbS96+Pc3kBTKTINLcDrtz
+	4MZ/Z94G0eDeDujlgnVnNSGRAzHNzOI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-112-AheBc4WWM4O3kRvVWjFLdg-1; Fri, 10 Jan 2025 04:14:52 -0500
+X-MC-Unique: AheBc4WWM4O3kRvVWjFLdg-1
+X-Mimecast-MFC-AGG-ID: AheBc4WWM4O3kRvVWjFLdg
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-38a873178f2so863864f8f.1
+        for <linux-media@vger.kernel.org>; Fri, 10 Jan 2025 01:14:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736500491; x=1737105291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8WE2y7Tnn0z8S9WigHQq+Beyf3tmLnG35Pz4F1jLvso=;
+        b=cLUiY+E0fa44hIXS9mwZGsPWnUXFTdaitY0TOQpNvsinhXf4qewKDrwq6iVTX4Uj8S
+         aOQsw7nR4s9PI6ImEDcKX04eHdwHsqUfbSxRdHlI20Ufnq3EZYAtME2n1Orrc3+iEtpw
+         CjiDakFrkiO0yWis1L1d40Fk8s5yKTHKWalh3oGdRnZGbXuwGchX3X8uaUtRSKQZ0u7/
+         bxhVudBHrdcMjLh+RAhJoHgLLyJ3o+ynuho0nvdX8xNQ5vVYEjuRkjdOC/GQ0g6ORblM
+         YOAyQXBx0P4u/ygqT83ufQbB2IZppM5tNn4W8xSvlJqWIaxPZb2TT9zIn5fCBTib2x1F
+         wj5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVWc0f+RWECnQRbchlJDwUZbu/Z2yBWgrPJgvGsq4h4cO+I7Nc+BUPSurJ0ms3ODRRWnwjbamsbLX1rpg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0krCQv8jIgMgOkegLQmH92zD4oldHDg97j12WfYqP9Bpmdee9
+	GVUpj2+vPn3znNQjhhuWAItPbSuHxuGlnIdbMoLVmRiRbweGn9LZXCrds6pNn69u/UTx4sF1JIz
+	9c5IUWTtBFxd3W3IqLOlJMzSQzzYt5GmPBDU1HCx06qz/CSe5XJDCfm4YCHiq
+X-Gm-Gg: ASbGncu5fVDD3QNm/Thz0CEeEsk3a1cOEEr7mVq/RVSHSoO2JQmkBSU/MpL5oyTc7Bq
+	Yk18/koyukV5yvn3Eo12ip4QJbmIE3TRNZRcywtPJsw5BtCWsyubuGP4+NPKrc80OGZHZ+Qj74d
+	HVSyZFBj5mmAt0FYqmNDp/m9vUtPuDumu+txAGeZ5HCBRbo3mZSa9054zSEtwjr5EdckjEmrm6Q
+	eRJChdEZUcwBETg347LOja7pW+N62AnP147rh1/btHiGtka9lGaPlp6PSwqIIFeUWYFy5zAI0wK
+	yNJK5HIJ3V23OS7WX2FlEBw/sGz9G0Q801X+VL7dNymUrOrlHQ2zkHHnaHnfct43lUKkMB6qjff
+	84cZQ0wBILJ/j
+X-Received: by 2002:a5d:5f52:0:b0:382:4926:98fa with SMTP id ffacd0b85a97d-38a8733691amr9430337f8f.40.1736500491581;
+        Fri, 10 Jan 2025 01:14:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFtXquHIJObzLgOAiA1rB/PNIksOhxW+GDPZKrOCv6KsWQW80GBE0j/RUI1fRpLdmchCqwXWg==
+X-Received: by 2002:a5d:5f52:0:b0:382:4926:98fa with SMTP id ffacd0b85a97d-38a8733691amr9430298f8f.40.1736500491137;
+        Fri, 10 Jan 2025 01:14:51 -0800 (PST)
+Received: from ?IPv6:2001:16b8:2d10:d100:478:f613:cd65:5ca1? (200116b82d10d1000478f613cd655ca1.dip.versatel-1u1.de. [2001:16b8:2d10:d100:478:f613:cd65:5ca1])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e37e375sm3932101f8f.22.2025.01.10.01.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 01:14:50 -0800 (PST)
+Message-ID: <dc31c33626c5f6100c93cb51eaf37070d5a7ba9f.camel@redhat.com>
+Subject: Re: [PATCH 1/3] drm/sched: Document run_job() refcount hazard
+From: Philipp Stanner <pstanner@redhat.com>
+To: Danilo Krummrich <dakr@kernel.org>, Philipp Stanner <phasta@kernel.org>
+Cc: Luben Tuikov <ltuikov89@gmail.com>, Matthew Brost
+ <matthew.brost@intel.com>,  Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>,
+ Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+ dri-devel@lists.freedesktop.org,  linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org,  linaro-mm-sig@lists.linaro.org
+Date: Fri, 10 Jan 2025 10:14:49 +0100
+In-Reply-To: <Z3_dgYGOSfLUcI0J@pollux>
+References: <20250109133710.39404-2-phasta@kernel.org>
+	 <20250109133710.39404-4-phasta@kernel.org> <Z3_dgYGOSfLUcI0J@pollux>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|PAXPR08MB6574:EE_
-X-MS-Office365-Filtering-Correlation-Id: ec572120-c8ba-48c8-c25e-08dd3156ead4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VGx3NFBLbldVNUh4SmFNNFdmSHVOVWRjUm5DSmQvdGNzM0kwV0NRR0pzTXJt?=
- =?utf-8?B?emdJWEUvYUZpOURqZjlncnFZZG9Wc09rTDdqZVl4a2tueUtZcENQMUUyQity?=
- =?utf-8?B?Q1FHWit1dmkxKzlheG5rMlY5REw3ek9OQWJTSER3YUhkV05VWTFOcWhjUXpJ?=
- =?utf-8?B?b05QQzd4aE5IYWxSYTFVYlpPMFhQNEo1VU9pNDZta2J3M1JFMndMTXdBRXl2?=
- =?utf-8?B?Zk9IVENnTUh6bkM1YjUxbjh6b2U1dUYwL0w0elk0WUR5Q3lBN2kxdjVQWlZ4?=
- =?utf-8?B?NmROVGJzZjJEVUFkcHYzelM3RUQ4akRxczJzd2hVd0xQOEl0a29JcXN3V1dl?=
- =?utf-8?B?RVNPNzlVS2tHaXY5WUtvUzNCT1BFSDljZnN0Y1VLLzNiQUVrNERHWTBDejVy?=
- =?utf-8?B?aTNvd1JOSGVIY1kzUGNwVUd3K296OXhLbzdSRXhWQkpReCt0eHNHZ2Z0VHJs?=
- =?utf-8?B?cmxMQUk2SDY1OXY5aDJUNHZ2a1hMb2kxZ1kzdk5WaFdBQ1FXUWU5OVYzRVlj?=
- =?utf-8?B?SHl1N29qQk1RVG9jdUVTY21nZkVod2wrdHN6Z0d4WEl0NlZpNFZTYUxNRnIy?=
- =?utf-8?B?dmRQZTJPbTMwWlY3TFMxRFBrZzNRc29leDFQdU5xUncvUVRyaEJBTmY4aE81?=
- =?utf-8?B?d1hBeE56bWZqZUlZbTlMNmNOOTFjRTZNSWxBbStkalhpM1ptdWpDSmdoYmRM?=
- =?utf-8?B?WGJuR3ZRcXdQWUdHdXNGMDRlZi9mcUt6dWdlMnJUN2NwUTlZa3FvQUI3clly?=
- =?utf-8?B?My9qcXdDTCtkcXl0NFFPeUY2REl2NkVSOWJtdUdyYXBscEZBdEpVYjlQeVRm?=
- =?utf-8?B?VmV3MWhzOXNRVXhjbmhSSmpEN3Rha1dUdFhpR0xQbWNxbFFPSExkR096cjla?=
- =?utf-8?B?VVhqZzU3NlljREtabXk3U2Nac2FQQXg1dE45TTVLSnhIWFRIUDFSM0JaTmZH?=
- =?utf-8?B?ZjEyTDloUVFYM2FHRmtRZCtaa2ppYnRKaHlxb3ppVjhyQXZxRGM2eXhtTEky?=
- =?utf-8?B?TUFqY1Izcm4xMGprSStKQno4UXBWc2ppcmtyUHMvVDcrNmNHNU9ieXIzY2ZY?=
- =?utf-8?B?ZWt3UnFxallWMjVnSURHM21jaXpHRExKTk1xcVVCZnRxWWlXbmQ0RVQraTVG?=
- =?utf-8?B?eHBwRHNzYys1ZkszekU3SG5kSE02NkJ6YWpvcXZ0dHFBYnRZZU00bnZYaXZj?=
- =?utf-8?B?RHVWM1FkNmRsUnhoUk5zcjV4a3RVOUgyZWZqZmZRRm1YUW1QVFJyanV3RXVK?=
- =?utf-8?B?SlZ0UGY5Q3R4R2dZOVRxL1Q3K0RkYi9aQXpFSTZsNjVSeFl2NmZNYjQ2c0ls?=
- =?utf-8?B?a1dSaHcrNDlCaFAvMWhhbndEa3pRMXdJaEVSSGVoc2xBMk0xUWNQTDM3ZmZs?=
- =?utf-8?B?MTlwZnF3N3FMbklxYTJZWS9FUjVsQmxMZGpDNjM4bXIyMTExRk1KM2VMcS9R?=
- =?utf-8?B?V0VwazVCRDNWUXN1UUliL2s2MytaREtUdkJOVjYvTlNzWVdnUGRLUGVscUhq?=
- =?utf-8?B?aUxvRzZMSjlFNFBxM0N2RmNTZXNKVnBMTDVwbVVFYVlCYkdSNnZaOWhQRnJ4?=
- =?utf-8?B?TG5XVWUwRDFBT0Era1RQckRjZDYwVklhaFRuSVNCRXlwU2RLYm9YRTlzUzhr?=
- =?utf-8?B?TExvRkJmMEhuM3VJUk9GdHQ1STBwRjk5TmFVOXJQdHRjZWltSDhnMk1ic212?=
- =?utf-8?B?d2xLYkpWZGVITG4ycUNHd3pvVDBUNEF2cFlHdVJwc1E5KzV4QStCZ0lIemJ2?=
- =?utf-8?B?UnBuMGtFai9SSFkxR3BuT1BjNHo4ZTJFeGVqa2JFZ2JpMmhjTFo5a0taZi82?=
- =?utf-8?B?R1FlNzEySXpsVGs2dGhlb0JiWGpMTk5hbW1XT1pzQUJvVnFiZnBtWStDRG5J?=
- =?utf-8?Q?hay+SdSykBc7P?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZUNnTFhGVGcvUDlPclo3WXlsV3FMbDVwZ1FtYTN6UFpBbEZoa0RiUG5wMG5R?=
- =?utf-8?B?VUp5NHNnOWRtN3N3MWtJeHhLdEpHSkVBUU1Ma251emhRK0Rvblc3a21BOEhE?=
- =?utf-8?B?YXl2a2NFb2F1c0x2YlAyT1BGMVJtUExFR1VreXdlTjlxUXM1RllJMHM4M1NV?=
- =?utf-8?B?UXFKVm1JZXd5cVl0QXczZngxZ1JSdjJ0dDEvZ2ZFUVJXampiUk12aWNRaDFy?=
- =?utf-8?B?NTgzbGtYMlR5Yk5sTFpkYXcvZW5TZHdWWlFiN0JLVW9KQ0hlQXloRHF3OEtN?=
- =?utf-8?B?N1N3QUVWemtOV0NhK1F0ZDNUdFdNN2l4WFpjZmJ2cEZUd01Xb3VsVGJTc05n?=
- =?utf-8?B?cmNpZkd2aG14VTlRMWQyTHJReC9vNXcycExEWFBXeDVpUWVyaDFNOU1oalBZ?=
- =?utf-8?B?RThRL1hndFJpYlAxMXI2azZlSnNISmo3dkRvUzJYaTFCc1pBS2dKWlhEU1hj?=
- =?utf-8?B?YkFqUGdpOHc4d3FBWFVVNkVXeXFBVlhNMTZCYUlqbU9KYXV6Q09Hb2hzNzJ3?=
- =?utf-8?B?b05rL1BjbVhROFdmcGs2RUhVSjVVd01hSDEzNFdPQ1BaOE1VT0lCMnB2MUJR?=
- =?utf-8?B?Qm9pVmZSeWx6K2lVQ3U3ZFptUm9YWCtxQjMvS0NoTW53aU1RWVpaaVlCeHJl?=
- =?utf-8?B?Y1FrY3F5UnBlTlZJZWk3TmxyRzFWcU9CbnZKYUJ0bk5DS2huSXAxOC9mZ3k5?=
- =?utf-8?B?YU95M1d1QytBZXJQZk5hOGRmdHBMOGwxUy9kWVhDTzRkeFMyZlZRZkV0a0VM?=
- =?utf-8?B?d0YvclcrcXFDQWdjVmxKRUZ1WkR6RGF2b1lGdlRTZHllOG1pRHY4MXFucjlZ?=
- =?utf-8?B?SkN4YnRDV25sSk9yKzYvcFZRRzNKMTRvYmQ4KzMvSUxBaXh6VlFoa2FqSVRu?=
- =?utf-8?B?ZlpCbUlpUjhzTVJWS3p6K0pFUXoreXVCNmRFZXVPNE5waDJkVzNiWXhkRFo2?=
- =?utf-8?B?UzRZWWJUNytrK29hRmkzYllzWXNZRFhOQUVsUkV0WXlIVENVV3IrOS9qWmtq?=
- =?utf-8?B?SVRZalNqTHVQdXFOaXkzbDRzOFNIemg2MDU2V0hCUGdUM2tBVUtuRmdnQXcy?=
- =?utf-8?B?STl2SkJoYm9jQ3RQaGJveDh5RmM0SVNBV2E5SVo3ZEJiRHlndHNwaTI5Ymdl?=
- =?utf-8?B?QjNBRXl1RHo4WU9VRDBnd1hEeFJxNzBUM3pPdWdBNURKSWJSdTNtM0VsbTY2?=
- =?utf-8?B?VkYxdkdNZjQrRGxWY2pRT1MxQ3BqT0ZJVEhyYUx1WjZqcnVJSWZjNTNwWkcx?=
- =?utf-8?B?MDYwaXpKOUpFOVI4Q0owZkJESHhIOU50SkJiMHR6ZEx4TUxPTnE0TFZYd0JJ?=
- =?utf-8?B?aHlBMy9ma3VER0dwYTQ3STF0bHhkMFVwQkc4TFVGT0Z5cU0veFdCNXVqeDE3?=
- =?utf-8?B?eDdoTG5PN2p0blZhdE9NUjgwQ3lKRmcxT1o1WnlJWnA5WkN3YW1pcXlZU2Za?=
- =?utf-8?B?eVNXT0tua3JJZW80NStFYUlZRVhKUk5BZlFnSWRhRElXNG01aDJRWVNneURT?=
- =?utf-8?B?WHdrQldRTFpmUDhYRWZDWnk0eTRhRFRiWmp0V1JOVmZNeXNOamI2TVNoc3Zo?=
- =?utf-8?B?YVFWWVJCOEJOWVk5TmxHKzErZ01PcDRGVG5QVnZMR0M1RFZoc2EyM3Y1RkZo?=
- =?utf-8?B?Z0JEQ3Z3OVd4RGx6bHcwbnh0dW9nb096WHpRNWlSbUdZeC9ERTdUa2RiNVBJ?=
- =?utf-8?B?ZW56MktDejMza2J1VktJbTVTWVF1T1luVlRHUElyTWlUWTY5aldVR0dyRFdM?=
- =?utf-8?B?L0p1N1M0RnJxLy9hWVNlNXV2NSs2MDZLUUVFZ08rU0M1bzhTUEY3NXRVSmpH?=
- =?utf-8?B?eTZsSlltWEZhanFZa1d3MXRoaCtSS1NVdDl1QlJsUzgyUnlyZzZiNkM5YUlZ?=
- =?utf-8?B?ckxTZ3FKK0xBSVlFaTNZMEl2Yk1ZK1lDc282REM0TmdRY1RtVSsrV2YvbzRZ?=
- =?utf-8?B?NFUrSnlyVHMyZXdob3BJemNpeHpFZEFjbjB3TFNSdnkyZVlZaFdsaWpJdWQv?=
- =?utf-8?B?WDg3elRNd3BwaGV5MlB5YTFLUEROR1BEQ3B0c3AzVkhuelhMWXhCQWFjQXI5?=
- =?utf-8?B?RXhlS3l4N2M1V1Jqd2FvQmZWc1RNdDlSbXZVdGlyTkhnbWFSOWNkWllaU1lQ?=
- =?utf-8?B?b08xN3h4Z0FNcmJpTVh6QTBzN045Mk5FSXpCTEtveHREYTBZTENnTXlKaTNm?=
- =?utf-8?B?bWc9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec572120-c8ba-48c8-c25e-08dd3156ead4
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2025 09:12:33.4244
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T85+ySnthiEKywOuN3CLQlmrPCJmx2sKwzNoY5FnaBpSqmbv5iqMt7UxCMn8Nyt4Bv01kf5+pVXug82r2HlC/ex4Aq2oIfXouto7yVhlQLU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6574
 
-Hi Sakari,
+On Thu, 2025-01-09 at 15:30 +0100, Danilo Krummrich wrote:
+> On Thu, Jan 09, 2025 at 02:37:10PM +0100, Philipp Stanner wrote:
+> > From: Philipp Stanner <pstanner@redhat.com>
+> >=20
+> > drm_sched_backend_ops.run_job() returns a dma_fence for the
+> > scheduler.
+> > That fence is signalled by the driver once the hardware completed
+> > the
+> > associated job. The scheduler does not increment the reference
+> > count on
+> > that fence, but implicitly expects to inherit this fence from
+> > run_job().
+> >=20
+> > This is relatively subtle and prone to misunderstandings.
+> >=20
+> > This implies that, to keep a reference for itself, a driver needs
+> > to
+> > call dma_fence_get() in addition to dma_fence_init() in that
+> > callback.
+> >=20
+> > It's further complicated by the fact that the scheduler even
+> > decrements
+> > the refcount in drm_sched_run_job_work() since it created a new
+> > reference in drm_sched_fence_scheduled(). It does, however, still
+> > use
+> > its pointer to the fence after calling dma_fence_put() - which is
+> > safe
+> > because of the aforementioned new reference, but actually still
+> > violates
+> > the refcounting rules.
+> >=20
+> > Improve the explanatory comment for that decrement.
+> >=20
+> > Move the call to dma_fence_put() to the position behind the last
+> > usage
+> > of the fence.
+> >=20
+> > Document the necessity to increment the reference count in
+> > drm_sched_backend_ops.run_job().
+> >=20
+> > Signed-off-by: Philipp Stanner <pstanner@redhat.com>
+> > ---
+> > =C2=A0drivers/gpu/drm/scheduler/sched_main.c | 10 +++++++---
+> > =C2=A0include/drm/gpu_scheduler.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 19 +++++++++++++++----
+> > =C2=A02 files changed, 22 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/scheduler/sched_main.c
+> > b/drivers/gpu/drm/scheduler/sched_main.c
+> > index 57da84908752..5f46c01eb01e 100644
+> > --- a/drivers/gpu/drm/scheduler/sched_main.c
+> > +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> > @@ -1218,15 +1218,19 @@ static void drm_sched_run_job_work(struct
+> > work_struct *w)
+> > =C2=A0	drm_sched_fence_scheduled(s_fence, fence);
+> > =C2=A0
+> > =C2=A0	if (!IS_ERR_OR_NULL(fence)) {
+> > -		/* Drop for original kref_init of the fence */
+> > -		dma_fence_put(fence);
+> > -
+> > =C2=A0		r =3D dma_fence_add_callback(fence, &sched_job->cb,
+> > =C2=A0					=C2=A0=C2=A0 drm_sched_job_done_cb);
+> > =C2=A0		if (r =3D=3D -ENOENT)
+> > =C2=A0			drm_sched_job_done(sched_job, fence-
+> > >error);
+> > =C2=A0		else if (r)
+> > =C2=A0			DRM_DEV_ERROR(sched->dev, "fence add
+> > callback failed (%d)\n", r);
+> > +
+> > +		/*
+> > +		 * s_fence took a new reference to fence in the
+> > call to
+> > +		 * drm_sched_fence_scheduled() above. The
+> > reference passed by
+>=20
+> I think mentioning that in this context is a bit misleading. The
+> reason we can
+> put the fence here, is because we stop using the local fence pointer
+> we have a
+> reference for (from run_job()).
+>=20
+> This has nothing to do with the fact that drm_sched_fence_scheduled()
+> took its
+> own reference when it stored a copy of this fence pointer in a
+> separate data
+> structure.
+>=20
+> With that fixed,
 
-On 1/9/25 18:06, Sakari Ailus wrote:
-> Hi Michael,
-> 
-> On Thu, Jan 09, 2025 at 02:05:54PM +0100, Michael Riesch wrote:
->> Hi Sakari,
->>
->> Thanks a lot for your review!
-> 
-> You're welcome!
-> 
->>
->> On 1/9/25 11:07, Sakari Ailus wrote:
->>> Hi Michael,
->>>
->>> Thanks for the update.
->>>
->>> On Tue, Dec 17, 2024 at 04:55:16PM +0100, Michael Riesch wrote:
-> ...
->>>> +static int cif_subdev_notifier_register(struct cif_device *cif_dev, int index)
->>>
->>> This function name is misleading. It does not register a notifier, it
->>> prepares one though.
->>
->> cif_subdev_notifier_add(..) ?
-> 
-> Sounds good.
-> 
->>>> +{
->>>> +	struct v4l2_async_notifier *ntf = &cif_dev->notifier;
->>>> +	struct v4l2_fwnode_endpoint *vep;
->>>> +	struct cif_remote *remote;
->>>> +	struct device *dev = cif_dev->dev;
->>>> +	struct fwnode_handle *ep;
->>>> +	int ret;
->>>> +
->>>> +	ep = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), index, 0,
->>>> +					     FWNODE_GRAPH_ENDPOINT_NEXT);
->>>> +	if (!ep)
->>>> +		return -ENODEV;
->>>> +
->>>> +	if (index == 0) {
->>>
->>> index seems to be always 0.
->>
->> Right now, yes. The soon-to-be-added MIPI paths shall bring different
->> indices into play.
-> 
-> Ack.
-> 
->>
->>>
->>>> +		vep = &cif_dev->dvp.vep;
->>>> +
->>>> +		vep->bus_type = V4L2_MBUS_UNKNOWN;
->>>> +		ret = v4l2_fwnode_endpoint_parse(ep, vep);
->>>> +		if (ret)
->>>> +			goto complete;
->>>> +
->>>> +		if (vep->bus_type != V4L2_MBUS_BT656 &&
->>>> +		    vep->bus_type != V4L2_MBUS_PARALLEL) {
->>>> +			v4l2_err(&cif_dev->v4l2_dev, "unsupported bus type\n");
->>>> +			goto complete;
->>>> +		}
->>>> +
->>>> +		remote = v4l2_async_nf_add_fwnode_remote(ntf, ep,
->>>> +							 struct cif_remote);
->>>> +		if (IS_ERR(remote)) {
->>>> +			ret = PTR_ERR(remote);
->>>> +			goto complete;
->>>> +		}
->>>> +
->>>> +		cif_dev->dvp.stream.remote = remote;
->>>> +		remote->stream = &cif_dev->dvp.stream;
->>>> +	} else {
->>>> +		ret = -ENODEV;
->>>> +		goto complete;
->>>> +	}
->>>> +
->>>> +complete:
->>>> +	fwnode_handle_put(ep);
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>> +static void cif_subdev_notifier_unregister(struct cif_device *cif_dev,
->>>> +					   int index)
->>>
->>> This seems to be redundant.
->>
->> Ack.
->>
->>>
->>>> +{
->>>> +}
->>>> +
->>>> +static int cif_entities_register(struct cif_device *cif_dev)
->>>
->>> This function appears to be misnamed.
->>
->> Hm. The function registers the different entities of this hardware, such
->> as the DVP. However, I am not emotionally attached to this name and any
->> suggestions are welcome :-)
-> 
-> Ok, fair enough: one of the things it does is to register the video device
-> but it does a whole lot of other stuff unrelated to it. How about just
-> cif_register()?
+Then let's remove the comment completely I'd say.
 
-Sounds good!
+>=20
+> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
 
-> 
->>
->>>
->>>> +{
->>>> +	struct v4l2_async_notifier *ntf = &cif_dev->notifier;
->>>> +	struct device *dev = cif_dev->dev;
->>>> +	int ret;
->>>> +
->>>> +	v4l2_async_nf_init(ntf, &cif_dev->v4l2_dev);
->>>> +	ntf->ops = &cif_subdev_notifier_ops;
->>>> +
->>>> +	if (cif_dev->match_data->dvp) {
->>>> +		ret = cif_subdev_notifier_register(cif_dev, 0);
->>>> +		if (ret) {
->>>> +			dev_err(dev,
->>>> +				"failed to register notifier for dvp: %d\n",
->>>> +				ret);
->>>> +			goto err;
->>>> +		}
->>>> +
->>>> +		ret = cif_dvp_register(cif_dev);
->>>> +		if (ret) {
->>>> +			dev_err(dev, "failed to register dvp: %d\n", ret);
->>>> +			goto err_dvp_notifier_unregister;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	ret = v4l2_async_nf_register(ntf);
->>>> +	if (ret)
->>>> +		goto err_notifier_cleanup;
->>>> +
->>>> +	return 0;
->>>> +
->>>> +err_notifier_cleanup:
->>>> +	if (cif_dev->match_data->dvp)
->>>> +		cif_dvp_unregister(cif_dev);
->>>> +err_dvp_notifier_unregister:
->>>> +	if (cif_dev->match_data->dvp)
->>>> +		cif_subdev_notifier_unregister(cif_dev, 0);
->>>> +	v4l2_async_nf_cleanup(ntf);
->>>> +err:
->>>> +	return ret;
->>>> +}
->>>> +
->>>> +static void cif_entities_unregister(struct cif_device *cif_dev)
-> 
-> And similarly here.
+And I forgot your SB. Will add.
 
-Ack.
 
-> 
->>>> +{
->>>> +	v4l2_async_nf_unregister(&cif_dev->notifier);
->>>> +	v4l2_async_nf_cleanup(&cif_dev->notifier);
->>>> +
->>>> +	if (cif_dev->match_data->dvp) {
->>>> +		cif_subdev_notifier_unregister(cif_dev, 0);
->>>> +		cif_dvp_unregister(cif_dev);
->>>> +	}
->>>> +}
->>>> +
->>>> +static irqreturn_t cif_isr(int irq, void *ctx)
->>>> +{
->>>> +	irqreturn_t ret = IRQ_NONE;
->>>> +
->>>> +	if (cif_dvp_isr(irq, ctx) == IRQ_HANDLED)
->>>> +		ret = IRQ_HANDLED;
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>> +static int cif_probe(struct platform_device *pdev)
->>>> +{
->>>> +	struct device *dev = &pdev->dev;
->>>> +	struct cif_device *cif_dev;
->>>> +	u32 cif_clk_delaynum = 0;
->>>> +	int ret, irq, i;
->>>> +
->>>> +	cif_dev = devm_kzalloc(dev, sizeof(*cif_dev), GFP_KERNEL);
->>>> +	if (!cif_dev)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	cif_dev->match_data = of_device_get_match_data(dev);
->>>> +	if (!cif_dev->match_data)
->>>> +		return -ENODEV;
->>>> +
->>>> +	dev_set_drvdata(dev, cif_dev);
->>>> +	cif_dev->dev = dev;
->>>> +
->>>> +	cif_dev->base_addr = devm_platform_ioremap_resource(pdev, 0);
->>>> +	if (IS_ERR(cif_dev->base_addr))
->>>> +		return PTR_ERR(cif_dev->base_addr);
->>>> +
->>>> +	irq = platform_get_irq(pdev, 0);
->>>> +	if (irq < 0)
->>>> +		return irq;
->>>> +
->>>> +	ret = devm_request_irq(dev, irq, cif_isr, IRQF_SHARED,
->>>> +			       dev_driver_string(dev), dev);
->>>> +	if (ret)
->>>> +		return dev_err_probe(dev, ret, "failed to request irq\n");
->>>> +	cif_dev->irq = irq;
->>>
->>> Where do you need the irq field?
->>
->> Hm. Seems to be a leftover. Should we check irq == cif_dev->irq in the
->> ISR or is this unnecessary?
-> 
-> You've got the device context already, I don't think you need to check the
-> irq.
+Danke,
+P.
 
-Ack.
+>=20
+> > +		 * run_job() above is now not needed any longer.
+> > Drop it.
+> > +		 */
+> > +		dma_fence_put(fence);
+> > =C2=A0	} else {
+> > =C2=A0		drm_sched_job_done(sched_job, IS_ERR(fence) ?
+> > =C2=A0				=C2=A0=C2=A0 PTR_ERR(fence) : 0);
+> > diff --git a/include/drm/gpu_scheduler.h
+> > b/include/drm/gpu_scheduler.h
+> > index 95e17504e46a..d5cd2a78f27c 100644
+> > --- a/include/drm/gpu_scheduler.h
+> > +++ b/include/drm/gpu_scheduler.h
+> > @@ -420,10 +420,21 @@ struct drm_sched_backend_ops {
+> > =C2=A0					 struct drm_sched_entity
+> > *s_entity);
+> > =C2=A0
+> > =C2=A0	/**
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * @run_job: Called to=
+ execute the job once all of the
+> > dependencies
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * have been resolved.=
+=C2=A0 This may be called multiple times,
+> > if
+> > -	 * timedout_job() has happened and
+> > drm_sched_job_recovery()
+> > -	 * decides to try it again.
+> > +	 * @run_job: Called to execute the job once all of the
+> > dependencies
+> > +	 * have been resolved. This may be called multiple times,
+> > if
+> > +	 * timedout_job() has happened and
+> > drm_sched_job_recovery() decides to
+> > +	 * try it again.
+> > +	 *
+> > +	 * @sched_job: the job to run
+> > +	 *
+> > +	 * Returns: dma_fence the driver must signal once the
+> > hardware has
+> > +	 *	completed the job ("hardware fence").
+> > +	 *
+> > +	 * Note that the scheduler expects to 'inherit' its own
+> > reference to
+> > +	 * this fence from the callback. It does not invoke an
+> > extra
+> > +	 * dma_fence_get() on it. Consequently, this callback must
+> > take a
+> > +	 * reference for the scheduler, and additional ones for
+> > the driver's
+> > +	 * respective needs.
+> > =C2=A0	 */
+> > =C2=A0	struct dma_fence *(*run_job)(struct drm_sched_job
+> > *sched_job);
+> > =C2=A0
+> > --=20
+> > 2.47.1
+> >=20
 
-> 
->>>> +	cif_dev->media_dev.dev = dev;
->>>> +	strscpy(cif_dev->media_dev.model, CIF_DRIVER_NAME,
->>>> +		sizeof(cif_dev->media_dev.model));
->>>> +	media_device_init(&cif_dev->media_dev);
->>>> +
->>>> +	cif_dev->v4l2_dev.mdev = &cif_dev->media_dev;
->>>> +	cif_dev->v4l2_dev.notify = cif_notify;
->>>> +	strscpy(cif_dev->v4l2_dev.name, CIF_DRIVER_NAME,
->>>> +		sizeof(cif_dev->v4l2_dev.name));
->>>
->>> Do you need to set the name? v4l2_device_register() assigns a default one.
->>
->> I guess we can use the default, then.
->>
->> We do need to set the model of the media device, though, right?
-> 
-> Correct.
-> 
->>>> +static int cif_stream_start_streaming(struct vb2_queue *queue,
->>>> +				      unsigned int count)
->>>> +{
->>>> +	struct cif_stream *stream = queue->drv_priv;
->>>> +	struct cif_device *cif_dev = stream->cif_dev;
->>>> +	struct v4l2_subdev *sd = stream->remote->sd;
->>>> +	int ret;
->>>> +
->>>> +	stream->frame_idx = 0;
->>>> +	stream->frame_phase = 0;
->>>> +
->>>> +	ret = video_device_pipeline_start(&stream->vdev, &stream->pipeline);
->>>> +	if (ret) {
->>>> +		dev_err(cif_dev->dev, "failed to start pipeline %d\n", ret);
->>>> +		goto err_out;
->>>> +	}
->>>> +
->>>> +	ret = pm_runtime_resume_and_get(cif_dev->dev);
->>>> +	if (ret < 0) {
->>>> +		dev_err(cif_dev->dev, "failed to get runtime pm, %d\n", ret);
->>>> +		goto err_pipeline_stop;
->>>> +	}
->>>> +
->>>> +	ret = cif_stream_init_buffers(stream);
->>>> +	if (ret)
->>>> +		goto err_runtime_put;
->>>> +
->>>> +	if (stream->start_streaming) {
->>>> +		ret = stream->start_streaming(stream);
->>>> +		if (ret < 0)
->>>> +			goto err_runtime_put;
->>>> +	}
->>>> +
->>>> +	ret = v4l2_subdev_call(sd, video, s_stream, 1);
->>>
->>> Could you use v4l2_subdev_enable_streams() instead for this?
->>>
->>> See e.g. drivers/media/pci/intel/ipu6 for an example.
->>
->> This should be pretty much a 1:1 replacement I guess? But with support
->> for streams?
-> 
-> Yes, and I'd prefer to get rid of the s_stream() op altogether. That may
-> take a long time though.
-
-Ack.
-
-> 
->>>> +static int cif_stream_enum_framesizes(struct file *file, void *fh,
->>>> +				      struct v4l2_frmsizeenum *fsize)
->>>> +{
->>>> +	struct cif_stream *stream = video_drvdata(file);
->>>> +	struct v4l2_subdev_frame_size_enum fse = {
->>>> +		.index = fsize->index,
->>>> +		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
->>>> +	};
->>>> +	struct v4l2_subdev *sd = stream->remote->sd;
->>>> +	const struct cif_output_fmt *fmt;
->>>> +	int ret;
->>>> +
->>>> +	fmt = cif_stream_find_output_fmt(stream, fsize->pixel_format);
->>>> +	if (!fmt)
->>>> +		return -EINVAL;
->>>> +
->>>> +	fse.code = fmt->mbus_code;
->>>> +
->>>> +	ret = v4l2_subdev_call(sd, pad, enum_frame_size, NULL, &fse);
->>>
->>> You shouldn't get this information from the sensor driver but just convey
->>> what this device supports.
->>
->> OK, but what does this device support? In principle, there is a
->> continuous range of frame sizes up to a certain maximum size. But in
->> practice, it depends on the subdevice as there is no scaler in the DVP
->> path. Thus, every frame size but the one that the subdevice delivers
->> will result in a broken stream?
-> 
-> Could you use CIF_MAX_WIDTH and CIF_MAX_HEIGHT?
-> 
->>
->> If this does not return the only possible frame size, is this callback
->> useful at all?
-> 
-> In order not to configure an output size for the sensor that can't be
-> received by this block?
-
-Right... Forgot about this case. This means user space needs to
-determine the possible frame sizes of each V4L2 device and subdevice in
-the pipeline and find a size that matches, right?
-
-> 
->>>> diff --git a/drivers/media/platform/rockchip/cif/cif-stream.h b/drivers/media/platform/rockchip/cif/cif-stream.h
->>>> new file mode 100644
->>>> index 000000000000..5bfa260eda83
->>>> --- /dev/null
->>>> +++ b/drivers/media/platform/rockchip/cif/cif-stream.h
->>>> @@ -0,0 +1,24 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/*
->>>> + * Rockchip Camera Interface (CIF) Driver
->>>> + *
->>>> + * Copyright (C) 2024 Michael Riesch <michael.riesch@wolfvision.net>
->>>> + */
->>>> +
->>>> +#ifndef _CIF_STREAM_H
->>>> +#define _CIF_STREAM_H
->>>> +
->>>> +#include "cif-common.h"
->>>> +
->>>> +struct cif_stream_config {
->>>> +	const char *name;
->>>> +};
->>>> +
->>>> +void cif_stream_pingpong(struct cif_stream *stream);
->>>> +
->>>> +int cif_stream_register(struct cif_device *cif_dev, struct cif_stream *stream,
->>>> +			const struct cif_stream_config *config);
->>>> +
->>>> +void cif_stream_unregister(struct cif_stream *stream);
->>>
->>> There are other CIFs out there. I think it'd be good to use either some
->>> Rockchip specific prefix (rk maybe?) or a namespace.
->>
->> Are there? In drivers/media or in general?
-> 
-> I may recall something that may be after all related to this.
-> 
-> Either way, "cif" is a non-specific short string and it's entirely
-> conceivable it'll easily conflict with something else.
-
-Fair enough.
-
-> 
->>
->> And would that apply to all the method and struct names in this driver
->> or to the driver as well (location, file names)?
->>
->> The name has been discussed several times during the 13 iterations of
->> the PX30 VIP series and I believe it changed from (cif//rkcif_) in
->> downstream -> (vip//vip_) in Maximes work -> (cif/cif-/cif_) in Mehdis
->> work, where the tuple is (driver directory/filename prefix/function and
->> structs prefix).
->>
->> Hence I am a bit reluctant to change the naming convention yet again.
->> That said, I'll be prepared to change it JUST ONE MORE TIME to any tuple
->> you suggest -- but this really should be the end of the name bikeshedding.
-> 
-> I don't care about the internal naming but the global symbols. Using a
-> namespace is another option.
-> 
-
-I would suggest the tuple (rkcif/rkcif-/rkcif_) then. This is in
-alignment with the Rockchip ISP driver (rkisp1/rkisp1-/rkisp1_).
-Unfortunately, the Rockchip RGA differs here (but with the tuple
-(rga/rga-/rga_) it uses the same prefix for everything at least).
-
-There seems to be even less alignment when looking at other
-drivers/media/platform/ drivers, therefore I can only try to maximize
-the alignment within drivers/media/platform/rockchip/.
-
-What do you think?
-
-Regards,
-Michael
