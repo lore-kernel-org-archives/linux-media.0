@@ -1,303 +1,209 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F39D20E03B;
-	Fri, 10 Jan 2025 09:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5EF209F3F;
+	Fri, 10 Jan 2025 09:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736500547; cv=none; b=VdrFU00nfJSmZ125ZZEf6cTIIpehjvZ6Qm6auuEJzmytShovyvH2XAu7T0q75t83AYeTWlSBVdB5RudICRmGnrWLKvF0Zlhe3yY5SM7ET9GtVQGMj+iTfiugZ3ze+JtOeiob0fllqGNJ16U0XLzsjrPid5oLkpTOFB9jL/nOvE0=
+	t=1736501989; cv=none; b=p9MvhunzewsFmFQ6cz7H6RXfP6LyVtbsJXN9W9ivy5s8MCju3ccAdcSPNNGhD8NyaOsiAf8EFADnb5ymzEO7ti11I091f4At+CMLjjecuBruanDmF9ln3DIltNhMatcryUPNJDzQ5AETO7Vjgpzkzm8Ch9LFGZDH+FwykghdR1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736500547; c=relaxed/simple;
-	bh=xENFn0j7WKkzC+GeAFdGiwux+LBDvFMD326jlfn1Wbo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hFfV31nl5aJo+FQpU614M3xpLp1Bi1+ADAv72g7rY7aY2hdpE6zDiy78H8ZNKPjfqjS0qImA4altjMgBfdKOoDsmZ1CdLKL7GHUWOg0w1rFKJbUvsNtCEk8vfPoTmL+EZ4FP3foATTLk4CgcT3bX4i9au70Ets3EQuGQ0T58xQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=NQ5V5/gD; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1736501989; c=relaxed/simple;
+	bh=mAGSSYgPDghIBQGBzXCxEaknVfzgfmOXuOBboqhcRAw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EyQi4OFzm80UrXQsfn+gmIxECIVlq6uNMtgto13/794uH+H8B/o5MRbu62uBdHibf0qDgqGAKAYqKuksJh19wS1JqjtWFOt+rNFWUbUCSJXYr1uhMYWn+an66NaDc3aDGwSvSMy0q53yHNX2I3o3NpYlNt9HYVDfLnSQLvJ/wuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iNXFVmOI; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NQ5V5/gD"
-Received: from [127.0.1.1] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 06E4326A3;
-	Fri, 10 Jan 2025 10:14:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1736500461;
-	bh=xENFn0j7WKkzC+GeAFdGiwux+LBDvFMD326jlfn1Wbo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NQ5V5/gDEKN402IqBB4sDO9rW1RCHvbF7tZhncJ0mnbNZFBBjS4UmcSpHv0Oy9tQW
-	 jQ1ifOy8DyO9FuK1jsWrv/chkl92BAbhcrZGWMWIhlj36NxQULkgJIne4s8EJPQoDW
-	 N1l9ZYqgy2tGaaxbS3sqV1PVWjPtRHrZg6dARgwY=
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Date: Fri, 10 Jan 2025 11:14:19 +0200
-Subject: [PATCH 19/19] media: i2c: ds90ub9xx: Set serializer temperature
- ramp
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iNXFVmOI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1736501980;
+	bh=mAGSSYgPDghIBQGBzXCxEaknVfzgfmOXuOBboqhcRAw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iNXFVmOI18fsXMXKHE5f5cxJPB6Cker365AsEnhJuV9zXoRL+nQIwpkGiqcjQMF79
+	 PVii5OVXLcXwPmOB0Tl6tp8D8rWQSiOPzITKI0vtiHQWph1MCx/E1gAk0u5GRq6TC1
+	 VAJr2acJYyJdyjIRHojbyp7bKnoLkccMLx9dlFJpF1vCBVnDOc2Rt2jQAFEcVCdjw7
+	 3/OEySXJqDQsjwvKsa80L4tx7fLbIA2zCy8ET0yAVMiIH+ysZ069IyUOxQHPwqrEvY
+	 bqPdKRpZJWhgQEHJms2AqfJLgMqq2JB6Swt/YGkhFjQ7UNx2bAOhxkYiozlsIzoLM8
+	 4PPaBYQaW12+A==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2BD4317E0AE5;
+	Fri, 10 Jan 2025 10:39:39 +0100 (CET)
+Message-ID: <73144187-7f7f-4f68-aa5a-5fc019e646ec@collabora.com>
+Date: Fri, 10 Jan 2025 10:39:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [V1,04/12] media: mediatek: jpeg: add jpeg smmu sid setting
+To: "kyrie.wu" <kyrie.wu@mediatek.com>,
+ Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ Tzung-Bi Shih <tzungbi@chromium.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bin Liu <bin.liu@mediatek.com>,
+ kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20250109133513.20151-1-kyrie.wu@mediatek.com>
+ <20250109133513.20151-5-kyrie.wu@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250109133513.20151-5-kyrie.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250110-ub9xx-improvements-v1-19-e0b9a1f644da@ideasonboard.com>
-References: <20250110-ub9xx-improvements-v1-0-e0b9a1f644da@ideasonboard.com>
-In-Reply-To: <20250110-ub9xx-improvements-v1-0-e0b9a1f644da@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Devarsh Thakkar <devarsht@ti.com>, Jai Luthra <jai.luthra@ideasonboard.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7480;
- i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
- bh=j8VGR+q9mnFLoJmhSBGzWeDaLhfWfz5KiFjXcez6K8o=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBngOUXIjMNcAZG0fOOpyWxCZgqAkESM1i10Te/4
- MKhe6/llsOJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ4DlFwAKCRD6PaqMvJYe
- 9WWvD/9foVh0T4uzHHcItQeYVxUAxOKhnGdHgf2DmB9xeHVTkDsZrXsWGBfwmgJawJCZll+Yefe
- TGhk7wdqT19hWVn0kurlskTt//Y+f7c4Hu482MAC+XYxdFDmfo0LpHNlv7jFcm5bfSjGKJQ5isq
- 7f31BKQsfclEUc56fok9GIOCrVhw26GJhehIpdyppv8xAUr755M3CyINBrc1RPb9x2g+4a3biJx
- +9liO+DDQ+OioYWix2iegfiq2OBCM1no3AEGA435yKjK1tjL+1f5SxcecdIOp41xrD7yrDh+Kx/
- fnr+ehOYXwmPyKBV4s1ovBce5jyyMoOG8e/xl0Sw7+J+ICuAh1r/09yKW5rcIdWNtqbL0XaWBO3
- Hm1dQxckmwvnMU0/uuPPJ2TGMUlsfzIEc75pfVNcleXwvGX4Rj9jgl6apM6qUG9NYx0dSbVfvp3
- 0shla8ewqN29LpxTctP5rEvg0p9IgQAl2UFtbsLQlz/ylDSIpCe0EdDnU6I2Ju2rbzJQN+Kv/0B
- tIjqeEsbBZ9xAQRoLMGPsa2/Fx/2ZGKVVN2RKPyhfPGpxBc4EcfK3R9LWfU4RfQJXK0VHZVpLLB
- dFfXE7Z7PRWMSc1vQIPIg8t2y7SDXk+XHXf9vsoa9KE/St4IoW46/TewJ8i44+6VUwTt9EN7Oq7
- 7QXeuBcf3Pf5fcw==
-X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
- fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-From: Jai Luthra <jai.luthra@ideasonboard.com>
+Il 09/01/25 14:35, kyrie.wu ha scritto:
+> Add a configuration to set jpeg dec & enc smmu sid
+> 
+> Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
+> ---
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.c    |  6 ++++
+>   .../platform/mediatek/jpeg/mtk_jpeg_core.h    | 11 +++++++
+>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 30 +++++++++++++++++--
+>   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |  4 +++
+>   .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 26 ++++++++++++++++
+>   .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.h  |  4 +++
+>   6 files changed, 78 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> index c3ccc525d9fd..77b3bd6c4d3f 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> @@ -1655,6 +1655,9 @@ static void mtk_jpegenc_worker(struct work_struct *work)
+>   	jpeg_dst_buf->frame_num = ctx->total_frame_num;
+>   	ctx->total_frame_num++;
+>   	mtk_jpeg_enc_reset(comp_jpeg[hw_id]->reg_base);
+> +#if IS_ENABLED(CONFIG_ARM_SMMU_V3)
+> +	mtk_jpeg_enc_set_smmu_sid(hw_id);
+> +#endif
+>   	mtk_jpeg_set_enc_dst(ctx,
+>   			     comp_jpeg[hw_id]->reg_base,
+>   			     &dst_buf->vb2_buf);
+> @@ -1771,6 +1774,9 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+>   	spin_lock_irqsave(&comp_jpeg[hw_id]->hw_lock, flags);
+>   	ctx->total_frame_num++;
+>   	mtk_jpeg_dec_reset(comp_jpeg[hw_id]->reg_base);
+> +#if IS_ENABLED(CONFIG_ARM_SMMU_V3)
 
-For continuous PLL lock, it is recommended to extend the temperature
-ramp down range of the DS90UB953-Q1 serializer based on the device's
-initial temperature [1].
+You can avoid using preprocessor conditionals - and then, this doesn't look like an
+ARM SMMUv3 configuration, but rather a JPEG dec/enc HW config, so in that case the
+enclosing of this in the proposed config option would even be wrong.
 
-The serializer's die temperature is reported only to the deserializer
-through the sensor status registers, and for UB9702, it is recommended
-to set the temperature ramp during the link setup sequence, i.e. before
-we even probe the ub953 driver.
+Use platform data for that.
 
-Add support to the deserializer driver to configure ub953's temperature
-ramp.
+> +	mtk_jpeg_dec_set_smmu_sid(hw_id);
+> +#endif
+>   	mtk_jpeg_dec_set_config(comp_jpeg[hw_id]->reg_base,
+>   				jpeg->variant->support_34bit,
+>   				&jpeg_src_buf->dec_param,
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> index 8fddc133c46c..d3aba1e6cae8 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+> @@ -36,6 +36,17 @@
+>   
+>   #define MTK_JPEG_ADDR_MASK GENMASK(1, 0)
+>   
+> +#if IS_ENABLED(CONFIG_ARM_SMMU_V3)
+> +#define JPG_REG_CORE0_GUSER_ID                          0x380d0000
+> +#define JPG_REG_CORE1_GUSER_ID                          0x388d0000
 
-[1]: Section 7.3.1.1 - https://www.ti.com/lit/gpn/ds90ub953-q1
+At least these two definitions shall go in the devicetree reg node.
 
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- drivers/media/i2c/ds90ub953.c |   9 ---
- drivers/media/i2c/ds90ub960.c | 125 ++++++++++++++++++++++++++++++++++++++++++
- include/media/i2c/ds90ub9xx.h |  15 +++++
- 3 files changed, 140 insertions(+), 9 deletions(-)
+> +#define JPG_REG_GUSER_ID_MASK                           0x7
+> +#define JPG_REG_GUSER_ID_DEC_SID                        0x4
+> +#define JPG_REG_GUSER_ID_ENC_SID                        0x5
+> +#define JPG_REG_DEC_GUSER_ID_SHIFT                      8
+> +#define JPG_REG_ENC_GUSER_ID_SHIFT                      4
 
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-index 6c36980e8beb..bba8be031032 100644
---- a/drivers/media/i2c/ds90ub953.c
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -35,10 +35,6 @@
- 
- #define UB953_DEFAULT_CLKOUT_RATE	25000000UL
- 
--#define UB953_REG_RESET_CTL			0x01
--#define UB953_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
--#define UB953_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
--
- #define UB953_REG_GENERAL_CFG			0x02
- #define UB953_REG_GENERAL_CFG_CONT_CLK		BIT(6)
- #define UB953_REG_GENERAL_CFG_CSI_LANE_SEL_SHIFT	4
-@@ -92,16 +88,11 @@
- #define UB953_REG_PKT_HDR_WC_MSB		0x63
- #define UB953_REG_CSI_ECC			0x64
- 
--#define UB953_REG_IND_ACC_CTL			0xb0
--#define UB953_REG_IND_ACC_ADDR			0xb1
--#define UB953_REG_IND_ACC_DATA			0xb2
--
- #define UB953_REG_FPD3_RX_ID(n)			(0xf0 + (n))
- #define UB953_REG_FPD3_RX_ID_LEN		6
- 
- /* Indirect register blocks */
- #define UB953_IND_TARGET_PAT_GEN		0x00
--#define UB953_IND_TARGET_FPD3_TX		0x01
- #define UB953_IND_TARGET_DIE_ID			0x02
- 
- #define UB953_IND_PGEN_CTL			0x01
-diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-index 1ec3c060d4c6..6daf760f394b 100644
---- a/drivers/media/i2c/ds90ub960.c
-+++ b/drivers/media/i2c/ds90ub960.c
-@@ -2036,6 +2036,110 @@ static int ub960_rxport_serializer_write(struct ub960_rxport *rxport, u8 reg,
- 	return ret;
- }
- 
-+static int ub960_rxport_serializer_read(struct ub960_rxport *rxport, u8 reg,
-+					u8 *val, int *err)
-+{
-+	struct ub960_data *priv = rxport->priv;
-+	struct device *dev = &priv->client->dev;
-+	union i2c_smbus_data data = { 0 };
-+	int ret;
-+
-+	if (err && *err)
-+		return *err;
-+
-+	ret = i2c_smbus_xfer(priv->client->adapter, rxport->ser.alias,
-+			     priv->client->flags, I2C_SMBUS_READ, reg,
-+			     I2C_SMBUS_BYTE_DATA, &data);
-+	if (ret)
-+		dev_err(dev,
-+			"rx%u: cannot read serializer register 0x%02x (%d)!\n",
-+			rxport->nport, reg, ret);
-+	else
-+		*val = data.byte;
-+
-+	if (ret && err)
-+		*err = ret;
-+
-+	return ret;
-+}
-+
-+static int ub960_serializer_temp_ramp(struct ub960_rxport *rxport)
-+{
-+	struct ub960_data *priv = rxport->priv;
-+	short temp_dynamic_offset[] = {-1, -1, 0, 0, 1, 1, 1, 3};
-+	u8 temp_dynamic_cfg;
-+	u8 nport = rxport->nport;
-+	u8 ser_temp_code;
-+	int ret;
-+
-+	/* Configure temp ramp only on UB953 */
-+	if (!fwnode_device_is_compatible(rxport->ser.fwnode, "ti,ds90ub953-q1"))
-+		return 0;
-+
-+	/* Read current serializer die temperature */
-+	ub960_rxport_read(priv, nport, UB960_RR_SENSOR_STS_2, &ser_temp_code,
-+			  &ret);
-+
-+	/* Enable I2C passthrough on back channel */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* Select indirect page for analog regs on the serializer */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_CTL,
-+				      UB953_IND_TARGET_ANALOG << 2, &ret);
-+
-+	/* Set temperature ramp dynamic and static config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_DYNAMIC_CFG, &ret);
-+	ub960_rxport_serializer_read(rxport, UB953_REG_IND_ACC_DATA,
-+				     &temp_dynamic_cfg, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	temp_dynamic_cfg |= UB953_IND_ANA_TEMP_DYNAMIC_CFG_OV;
-+	temp_dynamic_cfg += temp_dynamic_offset[ser_temp_code];
-+
-+	/* Update temp static config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_STATIC_CFG, &ret);
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_DATA,
-+				      UB953_IND_ANA_TEMP_STATIC_CFG_MASK, &ret);
-+
-+	/* Update temperature ramp dynamic config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_DYNAMIC_CFG, &ret);
-+
-+	/* Enable I2C auto ack on BC before we set dynamic cfg and reset */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL,
-+				 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL, &ret);
-+
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_DATA,
-+				      temp_dynamic_cfg, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* Soft reset to apply PLL updates */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_RESET_CTL,
-+				      UB953_REG_RESET_CTL_DIGITAL_RESET_0,
-+				      &ret);
-+	msleep(20);
-+
-+	/* Disable I2C passthrough and auto-ack on BC */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH |
-+					 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL,
-+				 0x0, &ret);
-+
-+	return ret;
-+}
-+
- static int ub960_rxport_bc_ser_config(struct ub960_rxport *rxport)
- {
- 	struct ub960_data *priv = rxport->priv;
-@@ -2415,6 +2519,20 @@ static int ub960_init_rx_ports_ub960(struct ub960_data *priv)
- 		return ret;
- 	}
- 
-+	/* Set temperature ramp on serializer */
-+	for_each_active_rxport(priv) {
-+		ret = ub960_serializer_temp_ramp(it.rxport);
-+		if (ret)
-+			return ret;
-+
-+		ub960_rxport_update_bits(priv, it.nport, UB960_RR_BCC_CONFIG,
-+					 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+					 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+					 &ret);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/*
- 	 * Clear any errors caused by switching the RX port settings while
- 	 * probing.
-@@ -3171,6 +3289,13 @@ static int ub960_init_rx_ports_ub9702(struct ub960_data *priv)
- 	/* Wait time for stable lock */
- 	fsleep(15000);
- 
-+	/* Set temperature ramp on serializer */
-+	for_each_active_rxport(priv) {
-+		ret = ub960_serializer_temp_ramp(it.rxport);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	for_each_active_rxport_fpd4(priv) {
- 		ret = ub960_enable_dfe_lms_ub9702(priv, it.nport);
- 		if (ret)
-diff --git a/include/media/i2c/ds90ub9xx.h b/include/media/i2c/ds90ub9xx.h
-index 0245198469ec..d803af07cabc 100644
---- a/include/media/i2c/ds90ub9xx.h
-+++ b/include/media/i2c/ds90ub9xx.h
-@@ -5,6 +5,21 @@
- 
- #include <linux/types.h>
- 
-+#define UB953_REG_RESET_CTL			0x01
-+#define UB953_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
-+#define UB953_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
-+
-+#define UB953_REG_IND_ACC_CTL			0xb0
-+#define UB953_REG_IND_ACC_ADDR			0xb1
-+#define UB953_REG_IND_ACC_DATA			0xb2
-+
-+#define UB953_IND_TARGET_ANALOG			0x01
-+
-+#define UB953_IND_ANA_TEMP_DYNAMIC_CFG		0x4b
-+#define UB953_IND_ANA_TEMP_DYNAMIC_CFG_OV	BIT(5)
-+#define UB953_IND_ANA_TEMP_STATIC_CFG		0x4c
-+#define UB953_IND_ANA_TEMP_STATIC_CFG_MASK	GENMASK(6, 4)
-+
- struct i2c_atr;
- 
- /**
+If this is setting an IOMMU SID, then you can just use the "iommus" property
+to pass a handle to the IOMMU that this device is using plus the streamid,
+which you can retrieve and write to the guser_id_{dec,enc}_sid register.
 
--- 
-2.43.0
+There's no reason to hardcode that in this header, and actually hardcoding
+will give you a number of issues (example: unpowered/unclocked access to the
+IOMMU, and many others).
+
+> +#define GUSER_ID_MAPRANGE                               4
+> +#endif
+> +
+>   /**
+>    * enum mtk_jpeg_ctx_state - states of the context state machine
+>    * @MTK_JPEG_INIT:		current state is initialized
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> index d868e46aaf37..fadfc4b5e366 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+> @@ -274,6 +274,32 @@ void mtk_jpeg_dec_reset(void __iomem *base)
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_jpeg_dec_reset);
+>   
+> +#if IS_ENABLED(CONFIG_ARM_SMMU_V3)
+> +void mtk_jpeg_dec_set_smmu_sid(int hwid)
+> +{
+> +	void __iomem *dec_reg_base;
+> +	u32 val, mask;
+> +
+> +	if (hwid)
+> +		dec_reg_base = ioremap(JPG_REG_CORE1_GUSER_ID, GUSER_ID_MAPRANGE);
+> +	else
+> +		dec_reg_base = ioremap(JPG_REG_CORE0_GUSER_ID, GUSER_ID_MAPRANGE);
+> +	if (!dec_reg_base) {
+> +		dev_err(jpeg->dev, "Failed to map jpgdec JPG_REG_GUSER_ID\n");
+> +		return;
+> +	}
+> +
+> +	val = ioread32(dec_reg_base);
+> +	mask = ~(JPG_REG_GUSER_ID_MASK << JPG_REG_DEC_GUSER_ID_SHIFT);
+> +	val &= mask;
+> +	val |= (JPG_REG_GUSER_ID_DEC_SID << JPG_REG_DEC_GUSER_ID_SHIFT);
+> +
+> +	iowrite32(val, dec_reg_base);
+> +	iounmap(dec_reg_base);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_smmu_sid);
+> +#endif
+> +
+>   static void mtk_jpeg_dec_set_brz_factor(void __iomem *base, u8 yscale_w,
+>   				u8 yscale_h, u8 uvscale_w, u8 uvscale_h)
+>   {
+> @@ -552,7 +578,6 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+>   	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+>   	struct mtk_jpeg_src_buf *jpeg_src_buf;
+>   	enum vb2_buffer_state buf_state;
+> -	struct mtk_jpeg_ctx *ctx;
+>   	u32 dec_irq_ret;
+>   	u32 irq_status;
+>   	int i;
+> @@ -562,7 +587,6 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+>   
+>   	cancel_delayed_work(&jpeg->job_timeout_work);
+>   
+> -	ctx = jpeg->hw_param.curr_ctx;
+>   	src_buf = jpeg->hw_param.src_buffer;
+>   	dst_buf = jpeg->hw_param.dst_buffer;
+>   	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+> @@ -585,7 +609,7 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+>   	buf_state = VB2_BUF_STATE_DONE;
+>   	v4l2_m2m_buf_done(src_buf, buf_state);
+>   	mtk_jpegdec_put_buf(jpeg);
+> -	pm_runtime_put(ctx->jpeg->dev);
+> +	pm_runtime_put(jpeg->dev);
+
+You're doing more than what you're describing in the commit title and description.
+
+If this change was intentional, please move it to a diffrent commit.
+
+Regards,
+Angelo
 
