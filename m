@@ -1,251 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AB73BBF0
-	for <linux-media@vger.kernel.org>; Fri, 10 Jan 2025 09:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBF2209F30;
+	Fri, 10 Jan 2025 09:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736500496; cv=none; b=GkNGcPzmYWfRXY1IsCiDPDkD9hiI+JK+TT6aIgwzmaPWv1VnBqHGnLwwbLl3WPBNf2YZNDmo3Fz98vmQJlwASP8jlUagJM+imv488yZd9yNcdHt762cwfglY/vdrRb5ZOWWIQhrhRGGkXnFLXp/Os3Vod+NrINefFHkFO9qZJV8=
+	t=1736500511; cv=none; b=E7FTn16ep3SWPI3IK9Cf07CogegOTIV4TpOdNfuzyz6lSD5QZb9FYzh1fS6fpUVN9ahl+BTAwqWQq/9X89zMWl+Z0eeHYTcQsvqOt/93w6vnTpa69utxPb1IP6haHWw/gceQfG+xsN2xszr3E14bE8NrYhxZNBeKyXifQLfgmy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736500496; c=relaxed/simple;
-	bh=KrpQYKwCv1NFZiIePrfS/rkTV6cEnkv7v7NbHOxw+ao=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S5ZJ814Mo+MLPnlbdP9kTQ1ts1UqU0EuZGdm6j79b5LWSkCpCKnbxCpgE7+FhwLi9+TYjJQg+RXpAF+o9hukGD6PG+Kyuj9szQBykySqH6tPplv7RC86itE7D4uLRLJ7fBGlFP5xKzUJfGQV/L+O+0wHl6yw0GBtsfiwJtW6lVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HzUOtQ6A; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736500511; c=relaxed/simple;
+	bh=vumpMH+3ZcMqaMA7FHswjjvzbgPFHUllLrCl6sZ3qEc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fhzzu8Au53XznEqEjvLT3JPbyCZY8/OrCjMxhPr57GlebcYVXoKqEy6Kytc2ktx0nKWUf5jnMbtJPXowLD5kuSi2YyJrn4EBy0ZOmDliQ03tvN0i4AJ/I74+X1sxCEIwEdI/JQ9/ZgO/JSMyuxySbKSRKPdk87TVdWp6+zcq06o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=atEai1jX; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HzUOtQ6A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736500494;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8WE2y7Tnn0z8S9WigHQq+Beyf3tmLnG35Pz4F1jLvso=;
-	b=HzUOtQ6Ac4c1d9fGXzZFDYyDzSkUXoUgRQPRoUwLNscg9RYhShCgmq2I8jrf78j+ynGGw7
-	kr2lcXoV7B+N/2AgGP4dG2z/EGlxZFYPumx/ddKCmOhU4BUhlbS96+Pc3kBTKTINLcDrtz
-	4MZ/Z94G0eDeDujlgnVnNSGRAzHNzOI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-112-AheBc4WWM4O3kRvVWjFLdg-1; Fri, 10 Jan 2025 04:14:52 -0500
-X-MC-Unique: AheBc4WWM4O3kRvVWjFLdg-1
-X-Mimecast-MFC-AGG-ID: AheBc4WWM4O3kRvVWjFLdg
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-38a873178f2so863864f8f.1
-        for <linux-media@vger.kernel.org>; Fri, 10 Jan 2025 01:14:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736500491; x=1737105291;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8WE2y7Tnn0z8S9WigHQq+Beyf3tmLnG35Pz4F1jLvso=;
-        b=cLUiY+E0fa44hIXS9mwZGsPWnUXFTdaitY0TOQpNvsinhXf4qewKDrwq6iVTX4Uj8S
-         aOQsw7nR4s9PI6ImEDcKX04eHdwHsqUfbSxRdHlI20Ufnq3EZYAtME2n1Orrc3+iEtpw
-         CjiDakFrkiO0yWis1L1d40Fk8s5yKTHKWalh3oGdRnZGbXuwGchX3X8uaUtRSKQZ0u7/
-         bxhVudBHrdcMjLh+RAhJoHgLLyJ3o+ynuho0nvdX8xNQ5vVYEjuRkjdOC/GQ0g6ORblM
-         YOAyQXBx0P4u/ygqT83ufQbB2IZppM5tNn4W8xSvlJqWIaxPZb2TT9zIn5fCBTib2x1F
-         wj5g==
-X-Forwarded-Encrypted: i=1; AJvYcCVWc0f+RWECnQRbchlJDwUZbu/Z2yBWgrPJgvGsq4h4cO+I7Nc+BUPSurJ0ms3ODRRWnwjbamsbLX1rpg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0krCQv8jIgMgOkegLQmH92zD4oldHDg97j12WfYqP9Bpmdee9
-	GVUpj2+vPn3znNQjhhuWAItPbSuHxuGlnIdbMoLVmRiRbweGn9LZXCrds6pNn69u/UTx4sF1JIz
-	9c5IUWTtBFxd3W3IqLOlJMzSQzzYt5GmPBDU1HCx06qz/CSe5XJDCfm4YCHiq
-X-Gm-Gg: ASbGncu5fVDD3QNm/Thz0CEeEsk3a1cOEEr7mVq/RVSHSoO2JQmkBSU/MpL5oyTc7Bq
-	Yk18/koyukV5yvn3Eo12ip4QJbmIE3TRNZRcywtPJsw5BtCWsyubuGP4+NPKrc80OGZHZ+Qj74d
-	HVSyZFBj5mmAt0FYqmNDp/m9vUtPuDumu+txAGeZ5HCBRbo3mZSa9054zSEtwjr5EdckjEmrm6Q
-	eRJChdEZUcwBETg347LOja7pW+N62AnP147rh1/btHiGtka9lGaPlp6PSwqIIFeUWYFy5zAI0wK
-	yNJK5HIJ3V23OS7WX2FlEBw/sGz9G0Q801X+VL7dNymUrOrlHQ2zkHHnaHnfct43lUKkMB6qjff
-	84cZQ0wBILJ/j
-X-Received: by 2002:a5d:5f52:0:b0:382:4926:98fa with SMTP id ffacd0b85a97d-38a8733691amr9430337f8f.40.1736500491581;
-        Fri, 10 Jan 2025 01:14:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFtXquHIJObzLgOAiA1rB/PNIksOhxW+GDPZKrOCv6KsWQW80GBE0j/RUI1fRpLdmchCqwXWg==
-X-Received: by 2002:a5d:5f52:0:b0:382:4926:98fa with SMTP id ffacd0b85a97d-38a8733691amr9430298f8f.40.1736500491137;
-        Fri, 10 Jan 2025 01:14:51 -0800 (PST)
-Received: from ?IPv6:2001:16b8:2d10:d100:478:f613:cd65:5ca1? (200116b82d10d1000478f613cd655ca1.dip.versatel-1u1.de. [2001:16b8:2d10:d100:478:f613:cd65:5ca1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e37e375sm3932101f8f.22.2025.01.10.01.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2025 01:14:50 -0800 (PST)
-Message-ID: <dc31c33626c5f6100c93cb51eaf37070d5a7ba9f.camel@redhat.com>
-Subject: Re: [PATCH 1/3] drm/sched: Document run_job() refcount hazard
-From: Philipp Stanner <pstanner@redhat.com>
-To: Danilo Krummrich <dakr@kernel.org>, Philipp Stanner <phasta@kernel.org>
-Cc: Luben Tuikov <ltuikov89@gmail.com>, Matthew Brost
- <matthew.brost@intel.com>,  Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
- dri-devel@lists.freedesktop.org,  linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org,  linaro-mm-sig@lists.linaro.org
-Date: Fri, 10 Jan 2025 10:14:49 +0100
-In-Reply-To: <Z3_dgYGOSfLUcI0J@pollux>
-References: <20250109133710.39404-2-phasta@kernel.org>
-	 <20250109133710.39404-4-phasta@kernel.org> <Z3_dgYGOSfLUcI0J@pollux>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="atEai1jX"
+Received: from [127.0.1.1] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 31087CE6;
+	Fri, 10 Jan 2025 10:14:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1736500450;
+	bh=vumpMH+3ZcMqaMA7FHswjjvzbgPFHUllLrCl6sZ3qEc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=atEai1jX8SbWIa32/o8Tv3DhOYifnMj8P+i1w+8aHmYfDyRgSeBTe5OaTlv4yDn+X
+	 AKTmfkV2sMBnAh9qAoKzjtU44N4JmXyRrTkA3Ngc1qRFFNYH6JJU7Eouw6mrj1A+3M
+	 wFK4mntFaiJXH9xwiKvU+HuPuKi7a2j4q+sagKIY=
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 00/19] media: i2c: ds90ub9xx: Error handling, UB9702
+ improvements
+Date: Fri, 10 Jan 2025 11:14:00 +0200
+Message-Id: <20250110-ub9xx-improvements-v1-0-e0b9a1f644da@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANnkgGcC/x3MQQqAIBBA0avErBNUjLCrRIu0qWahhpYI0t2Tl
+ m/xf4WEkTDB1FWImClR8A2i78Ceqz+Q0dYMksuBC8HZY3QpjNwVQ0aH/k5Mi1EapdBwY6GFV8S
+ dyj+dl/f9APskSMdkAAAA
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Devarsh Thakkar <devarsht@ti.com>, Jai Luthra <jai.luthra@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2378;
+ i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
+ bh=vumpMH+3ZcMqaMA7FHswjjvzbgPFHUllLrCl6sZ3qEc=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBngOUMLSUSFwj5+JSZDa6hkAQSXMs0M+T32a9px
+ Ns60XlOKs+JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ4DlDAAKCRD6PaqMvJYe
+ 9YoiD/4lMNb5qWz8gwxciRmKAWmoZJLL5zj+dTPLlfxPm5LJffMR+IDzydr+StZarmSlqRrwfoh
+ uB0jexcMWYC0M1/GL9Juaju6ki4BvgdUpIm0AxsPayOkEpWaz3ROGICAugE75O2Vgd+27KZfLLR
+ y/FVWNuLc2/YikcKmORg0UVPiDF2NipeL+ntt9TFLITOslbRrvXGgx37TF59wYsKrVCdwPLK8L6
+ AoL87+8v6gWzyiTrhHU2OGRn7ugdLhGS7ZdvlipZGoVAG5CrrwdFmiVgT3UbQ4kviFPxNj3Y4I6
+ MASsgyxSR5/sYlwFIlTTeONHYMPjF34R6TDE46/pR+bS51CGCOkfwTb3NObvWoUZk0Pzb+/BoEW
+ FNeNFMlaoyxr9sybvJoDDfulsKQzZlyGoHsMtBiIk/oMVEUIvQyzwF2rNrB5X+fXzB+iJOtKJvj
+ WOWuGb0XZD1kg/r16u9NtuoGRIWtj0gkb5MvZIHxybckbjACx7KDg5fbMcTcW7pyOzj2uJfMFPB
+ 6isJAbw+Mby+u0YdrqfbU1hKNcHGUR8Pgq3rrLkvRG4sGztmiBX52pWRh4B/haoGk8MCwyt4I9O
+ knkFLupieKzCBbSSpU8bGGsghyID9eXg4hWzqnkTMF3XiPb32qRT5IqHX3WP74ToysnLEWL0kLZ
+ j+rbD3gAAjtHJCQ==
+X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
+ fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-On Thu, 2025-01-09 at 15:30 +0100, Danilo Krummrich wrote:
-> On Thu, Jan 09, 2025 at 02:37:10PM +0100, Philipp Stanner wrote:
-> > From: Philipp Stanner <pstanner@redhat.com>
-> >=20
-> > drm_sched_backend_ops.run_job() returns a dma_fence for the
-> > scheduler.
-> > That fence is signalled by the driver once the hardware completed
-> > the
-> > associated job. The scheduler does not increment the reference
-> > count on
-> > that fence, but implicitly expects to inherit this fence from
-> > run_job().
-> >=20
-> > This is relatively subtle and prone to misunderstandings.
-> >=20
-> > This implies that, to keep a reference for itself, a driver needs
-> > to
-> > call dma_fence_get() in addition to dma_fence_init() in that
-> > callback.
-> >=20
-> > It's further complicated by the fact that the scheduler even
-> > decrements
-> > the refcount in drm_sched_run_job_work() since it created a new
-> > reference in drm_sched_fence_scheduled(). It does, however, still
-> > use
-> > its pointer to the fence after calling dma_fence_put() - which is
-> > safe
-> > because of the aforementioned new reference, but actually still
-> > violates
-> > the refcounting rules.
-> >=20
-> > Improve the explanatory comment for that decrement.
-> >=20
-> > Move the call to dma_fence_put() to the position behind the last
-> > usage
-> > of the fence.
-> >=20
-> > Document the necessity to increment the reference count in
-> > drm_sched_backend_ops.run_job().
-> >=20
-> > Signed-off-by: Philipp Stanner <pstanner@redhat.com>
-> > ---
-> > =C2=A0drivers/gpu/drm/scheduler/sched_main.c | 10 +++++++---
-> > =C2=A0include/drm/gpu_scheduler.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 19 +++++++++++++++----
-> > =C2=A02 files changed, 22 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/scheduler/sched_main.c
-> > b/drivers/gpu/drm/scheduler/sched_main.c
-> > index 57da84908752..5f46c01eb01e 100644
-> > --- a/drivers/gpu/drm/scheduler/sched_main.c
-> > +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> > @@ -1218,15 +1218,19 @@ static void drm_sched_run_job_work(struct
-> > work_struct *w)
-> > =C2=A0	drm_sched_fence_scheduled(s_fence, fence);
-> > =C2=A0
-> > =C2=A0	if (!IS_ERR_OR_NULL(fence)) {
-> > -		/* Drop for original kref_init of the fence */
-> > -		dma_fence_put(fence);
-> > -
-> > =C2=A0		r =3D dma_fence_add_callback(fence, &sched_job->cb,
-> > =C2=A0					=C2=A0=C2=A0 drm_sched_job_done_cb);
-> > =C2=A0		if (r =3D=3D -ENOENT)
-> > =C2=A0			drm_sched_job_done(sched_job, fence-
-> > >error);
-> > =C2=A0		else if (r)
-> > =C2=A0			DRM_DEV_ERROR(sched->dev, "fence add
-> > callback failed (%d)\n", r);
-> > +
-> > +		/*
-> > +		 * s_fence took a new reference to fence in the
-> > call to
-> > +		 * drm_sched_fence_scheduled() above. The
-> > reference passed by
->=20
-> I think mentioning that in this context is a bit misleading. The
-> reason we can
-> put the fence here, is because we stop using the local fence pointer
-> we have a
-> reference for (from run_job()).
->=20
-> This has nothing to do with the fact that drm_sched_fence_scheduled()
-> took its
-> own reference when it stored a copy of this fence pointer in a
-> separate data
-> structure.
->=20
-> With that fixed,
+Hi,
 
-Then let's remove the comment completely I'd say.
+This series has two main parts: 1) add error handling all around, and 2)
+update the drivers according to latest (mostly non-public) information
+from TI.
 
->=20
-> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+The "Update UB9702 init sequences" patch basically rewrites the init
+sequence from scratch, and to make that patch easier to read, the
+previous patch first removes the current init sequence. In the final
+version these two patches need to be squashed together.
 
-And I forgot your SB. Will add.
+ Tomi
 
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
+Jai Luthra (5):
+      media: i2c: ds90ub953: Speed-up I2C watchdog timer
+      media: i2c: ds90ub960: Enable SSCG for UB9702
+      media: dt-bindings: ti,ds90ub960: Add "i2c-addr" link property
+      media: i2c: ds90ub960: Configure serializer using back-channel
+      media: i2c: ds90ub9xx: Set serializer temperature ramp
 
-Danke,
-P.
+Tomi Valkeinen (14):
+      media: i2c: ds90ub953: Fix error prints
+      media: i2c: ds90ub913: Align ub913_read() with other similar functions
+      media: i2c: ds90ub9xx: Add err parameter to read/write funcs
+      media: i2c: ds90ub960: Add error handling to multiple places
+      media: i2c: ds90ub953: Add error handling to ub953_log_status()
+      media: i2c: ds90ub913: Add error handling to ub913_log_status()
+      media: i2c: ds90ub960: Move UB9702 registers to a separate section
+      media: i2c: ds90ub960: Add UB9702 specific registers
+      media: i2c: ds90ub960: Split ub960_init_tx_ports()
+      media: i2c: ds90ub960: Refresh ub960_init_tx_ports_ub9702()
+      media: i2c: ds90ub960: Add RX port iteration support
+      media: i2c: ds90ub960: Move all RX port init code into ub960_init_rx_ports()
+      media: i2c: ds90ub960: Remove old ub9702 RX port init code (SQUASH)
+      media: i2c: ds90ub960: Update UB9702 init sequences
 
->=20
-> > +		 * run_job() above is now not needed any longer.
-> > Drop it.
-> > +		 */
-> > +		dma_fence_put(fence);
-> > =C2=A0	} else {
-> > =C2=A0		drm_sched_job_done(sched_job, IS_ERR(fence) ?
-> > =C2=A0				=C2=A0=C2=A0 PTR_ERR(fence) : 0);
-> > diff --git a/include/drm/gpu_scheduler.h
-> > b/include/drm/gpu_scheduler.h
-> > index 95e17504e46a..d5cd2a78f27c 100644
-> > --- a/include/drm/gpu_scheduler.h
-> > +++ b/include/drm/gpu_scheduler.h
-> > @@ -420,10 +420,21 @@ struct drm_sched_backend_ops {
-> > =C2=A0					 struct drm_sched_entity
-> > *s_entity);
-> > =C2=A0
-> > =C2=A0	/**
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * @run_job: Called to=
- execute the job once all of the
-> > dependencies
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * have been resolved.=
-=C2=A0 This may be called multiple times,
-> > if
-> > -	 * timedout_job() has happened and
-> > drm_sched_job_recovery()
-> > -	 * decides to try it again.
-> > +	 * @run_job: Called to execute the job once all of the
-> > dependencies
-> > +	 * have been resolved. This may be called multiple times,
-> > if
-> > +	 * timedout_job() has happened and
-> > drm_sched_job_recovery() decides to
-> > +	 * try it again.
-> > +	 *
-> > +	 * @sched_job: the job to run
-> > +	 *
-> > +	 * Returns: dma_fence the driver must signal once the
-> > hardware has
-> > +	 *	completed the job ("hardware fence").
-> > +	 *
-> > +	 * Note that the scheduler expects to 'inherit' its own
-> > reference to
-> > +	 * this fence from the callback. It does not invoke an
-> > extra
-> > +	 * dma_fence_get() on it. Consequently, this callback must
-> > take a
-> > +	 * reference for the scheduler, and additional ones for
-> > the driver's
-> > +	 * respective needs.
-> > =C2=A0	 */
-> > =C2=A0	struct dma_fence *(*run_job)(struct drm_sched_job
-> > *sched_job);
-> > =C2=A0
-> > --=20
-> > 2.47.1
-> >=20
+ .../bindings/media/i2c/ti,ds90ub960.yaml           |    7 +
+ drivers/media/i2c/ds90ub913.c                      |   78 +-
+ drivers/media/i2c/ds90ub953.c                      |  170 +-
+ drivers/media/i2c/ds90ub960.c                      | 2266 +++++++++++++++-----
+ include/media/i2c/ds90ub9xx.h                      |   15 +
+ 5 files changed, 1927 insertions(+), 609 deletions(-)
+---
+base-commit: 40ed9e9b2808beeb835bd0ed971fb364c285d39c
+change-id: 20250110-ub9xx-improvements-9172b44eb0bc
+
+Best regards,
+-- 
+Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
