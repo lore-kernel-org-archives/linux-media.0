@@ -1,48 +1,48 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493AD2063E7;
-	Fri, 10 Jan 2025 01:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C17C2063C4;
+	Fri, 10 Jan 2025 01:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736472488; cv=none; b=r2W318beN3XRejJ67R2yV0qBAV/BX5VWcJPuoVY05o6brlXoCL+qh/eQ+5cK3sEh0/eEKzqGgDnTR47wyMDB6K5pw0kt+kpiiAKY3JT/Q7ZdHAD16mCeZ34dAYgvXI/X3n+5f2AiohJyWGO5WGxyETSXrbA8w2dQubIlEoZhBsI=
+	t=1736472488; cv=none; b=uGQetBWMifaskl2BslPOxBGBLA8pJCjWUjWODeeYMyEiJPNhHqf9Klgjv2JixRltuwqqt27N/VKupxFhybVl+fNKlFjTdfMBwwNWjSLV7c4JTqzNl8+EfxTNwl8MBvahedMuDf+USsOPUC+Ef+65tWaUDxgqurFTeC9SD3jlniA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736472488; c=relaxed/simple;
-	bh=p5aSzTIoB4UDWbuqgvzL3vygyIi2aFPnl0VwGvM+HjU=;
+	bh=03OUqWMsJtayZgjs87zvWPHZJhjXoO+w2bjtryRQ0iI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aIon44B2LWkz0wBVvhS4syKncDURF+tJQSL9gWF1lUUNmHYlwjXXjXEAaFNwdLyTisyxM1sFC/e784cCL1InwW/kKKS3VA4nJZ/ENOKOFST4w3kltj3s+NyO2AYYd74sy6dDzaPfzQKyAyKU106W6pVzGhI3jTeDyUdAjGqnegg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=GqqD0F/r; arc=none smtp.client-ip=60.244.123.138
+	 MIME-Version:Content-Type; b=LlvXmClbeEjNVWn1mX7UbpGY0mIzHI6oNBGS5OYWJOePlKWtERUx9jZ+hsOr/75LVMGrYOG/IuPjXKGg88ecaOd4SWkf6RCTQvR6iZ92T9fY1rYXh18oagf0ck0IHf9zfOfRaWjV9YiCPEWjCtm4EliLPqqjxWXt0ocLhJIsbtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=rpFMHjlG; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="GqqD0F/r"
-X-UUID: 22aaa102cef211ef99858b75a2457dd9-20250110
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="rpFMHjlG"
+X-UUID: 2206ff66cef211efbd192953cf12861f-20250110
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=7XxeDT1yqk0joCSBlrR1vdvJ1IoLGgbPPLdPXNw3S7Y=;
-	b=GqqD0F/rRt/KcPxEaruCTAnNuvrgZHdhWzMrI81ZlqJULmlbq/97OGWwHFrCyDqpPS30SHtkOV8ABHfpIt+0LAE/KheDQSSFcrifbyvr+WnBAhrtv5DZiD/fxfF3/8qGCF2YZnT47AKZAk293ToHrHFmnYFypfp/1S1Z+J6LQW8=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rr3bR+QFpDFRaSIFWkztgmuNKz/g5Y+bFnPqjCbAQPo=;
+	b=rpFMHjlGjDvVErlh1avCQIY12Jz1n0iEVl/pQOdPd4lcRnfdxLzuJT+AdHPna978pN57PwLfSGLh4tFCVa/O+czsEhVdi8C/KVKKOE02r1GSBb8QBZSBz7+SpAJ37qpjFKPQk+J6IyQmLpJYFg6s+uIFVF0D/GCITWIisxGJn5E=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:e078ebee-3a39-4911-a109-5222c9798ecc,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:60aa074,CLOUDID:fdd3a80e-078a-483b-8929-714244d25c49,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.1.46,REQID:b84a243f-cb45-41b1-b535-2607136ce7d5,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:60aa074,CLOUDID:e4d3a80e-078a-483b-8929-714244d25c49,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:1,
+	IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:
+	0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 22aaa102cef211ef99858b75a2457dd9-20250110
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+X-UUID: 2206ff66cef211efbd192953cf12861f-20250110
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
 	(envelope-from <kyrie.wu@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1379832588; Fri, 10 Jan 2025 09:28:03 +0800
+	with ESMTP id 1380369500; Fri, 10 Jan 2025 09:28:02 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 10 Jan 2025 09:28:02 +0800
+ 15.2.1118.26; Fri, 10 Jan 2025 09:28:00 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 10 Jan 2025 09:28:01 +0800
+ 15.2.1118.26 via Frontend Transport; Fri, 10 Jan 2025 09:27:59 +0800
 From: kyrie.wu <kyrie.wu@mediatek.com>
 To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
 	<mchehab@kernel.org>, Rob Herring <robh+dt@kernel.org>, Matthias Brugger
@@ -54,9 +54,9 @@ CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
 	kyrie.wu <kyrie.wu@mediatek.com>
-Subject: [RESEND,V1,11/12] media: mediatek: jpeg: refactor decoding resolution change operation
-Date: Fri, 10 Jan 2025 09:27:48 +0800
-Message-ID: <20250110012749.30072-12-kyrie.wu@mediatek.com>
+Subject: [RESEND,V1,09/12] media: mediatek: jpeg: refactor multi-core clk suspend and resume setting
+Date: Fri, 10 Jan 2025 09:27:46 +0800
+Message-ID: <20250110012749.30072-10-kyrie.wu@mediatek.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20250110012749.30072-1-kyrie.wu@mediatek.com>
 References: <20250110012749.30072-1-kyrie.wu@mediatek.com>
@@ -70,53 +70,330 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-MTK: N
 
-For multi-core:
-1.if there are only two src buffers, hw0 and hw1 are decoding
-at the same time. When resolution change occurred on one hw,
-the src buffer cannot be got in the stop streaming function,
-which will cause a crash.
-2.When a resolution change occurs, immediately set the new
-resolution parameter to save the new resolution;
-3.After a resolution change occurred, decoding should not continue,
-needs to wait until new buffers are ready and the state machine
-changed.
+refactor jpeg clk suspend and resume setting for multi-core
 
 Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 28 +++----
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 75 +++++++++++++++++--
+ .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 73 +++++++++++++++++-
+ 3 files changed, 147 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 791fc064bc0a..2919fdd92d45 100644
+index 9556accacfa0..48beb97015bf 100644
 --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -886,7 +886,8 @@ static void mtk_jpeg_dec_stop_streaming(struct vb2_queue *q)
+@@ -1121,6 +1121,9 @@ static void mtk_jpeg_clk_on(struct mtk_jpeg_dev *jpeg)
+ {
+ 	int ret;
  
- 		vb = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
- 		src_buf = mtk_jpeg_vb2_to_srcbuf(&vb->vb2_buf);
--		mtk_jpeg_set_queue_data(ctx, &src_buf->dec_param);
-+		if (!IS_ERR_OR_NULL(src_buf))
-+			mtk_jpeg_set_queue_data(ctx, &src_buf->dec_param);
- 		ctx->state = MTK_JPEG_RUNNING;
- 	} else if (V4L2_TYPE_IS_OUTPUT(q->type)) {
- 		ctx->state = MTK_JPEG_INIT;
-@@ -1752,11 +1753,15 @@ static void mtk_jpegdec_worker(struct work_struct *work)
++	if (jpeg->variant->multi_core)
++		return;
++
+ 	ret = clk_bulk_prepare_enable(jpeg->variant->num_clks,
+ 				      jpeg->variant->clks);
+ 	if (ret)
+@@ -1129,6 +1132,9 @@ static void mtk_jpeg_clk_on(struct mtk_jpeg_dev *jpeg)
  
- 	if (mtk_jpeg_check_resolution_change(ctx,
- 					     &jpeg_src_buf->dec_param)) {
--		mtk_jpeg_queue_src_chg_event(ctx);
-+		mtk_jpeg_set_queue_data(ctx, &jpeg_src_buf->dec_param);
- 		ctx->state = MTK_JPEG_SOURCE_CHANGE;
-+		mtk_jpeg_queue_src_chg_event(ctx);
- 		goto getbuf_fail;
+ static void mtk_jpeg_clk_off(struct mtk_jpeg_dev *jpeg)
+ {
++	if (jpeg->variant->multi_core)
++		return;
++
+ 	clk_bulk_disable_unprepare(jpeg->variant->num_clks,
+ 				   jpeg->variant->clks);
+ }
+@@ -1658,13 +1664,6 @@ static void mtk_jpegenc_worker(struct work_struct *work)
+ 		goto enc_end;
  	}
  
-+	if (ctx->state == MTK_JPEG_SOURCE_CHANGE)
-+		goto getbuf_fail;
-+
+-	ret = clk_prepare_enable(comp_jpeg[hw_id]->venc_clk.clks->clk);
+-	if (ret) {
+-		dev_err(jpeg->dev, "%s : %d, jpegenc clk_prepare_enable fail\n",
+-			__func__, __LINE__);
+-		goto enc_end;
+-	}
+-
+ 	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+ 
+@@ -1765,20 +1764,13 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+ 	jpeg_dst_buf->frame_num = ctx->total_frame_num;
+ 
  	mtk_jpegdec_set_hw_param(ctx, hw_id, src_buf, dst_buf);
- 	ret = pm_runtime_resume_and_get(comp_jpeg[hw_id]->dev);
+-	ret = pm_runtime_get_sync(comp_jpeg[hw_id]->dev);
++	ret = pm_runtime_resume_and_get(comp_jpeg[hw_id]->dev);
  	if (ret < 0) {
+ 		dev_err(jpeg->dev, "%s : %d, pm_runtime_get_sync fail !!!\n",
+ 			__func__, __LINE__);
+ 		goto dec_end;
+ 	}
+ 
+-	ret = clk_prepare_enable(comp_jpeg[hw_id]->jdec_clk.clks->clk);
+-	if (ret) {
+-		dev_err(jpeg->dev, "%s : %d, jpegdec clk_prepare_enable fail\n",
+-			__func__, __LINE__);
+-		goto clk_end;
+-	}
+-
+ 	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+ 	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+ 
+@@ -1788,7 +1780,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+ 				 &dst_buf->vb2_buf, &fb)) {
+ 		dev_err(jpeg->dev, "%s : %d, mtk_jpeg_set_dec_dst fail\n",
+ 			__func__, __LINE__);
+-		goto setdst_end;
++		goto set_dst_fail;
+ 	}
+ 
+ 	schedule_delayed_work(&comp_jpeg[hw_id]->job_timeout_work,
+@@ -1813,9 +1805,7 @@ static void mtk_jpegdec_worker(struct work_struct *work)
+ 
+ 	return;
+ 
+-setdst_end:
+-	clk_disable_unprepare(comp_jpeg[hw_id]->jdec_clk.clks->clk);
+-clk_end:
++set_dst_fail:
+ 	pm_runtime_put(comp_jpeg[hw_id]->dev);
+ dec_end:
+ 	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+index f918910bf538..d674ecd33604 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+@@ -571,14 +571,13 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
+ 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+ 
+ 	mtk_jpeg_dec_reset(cjpeg->reg_base);
+-	clk_disable_unprepare(cjpeg->jdec_clk.clks->clk);
+-	pm_runtime_put(cjpeg->dev);
+ 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
+ 	atomic_inc(&master_jpeg->hw_rdy);
+ 	wake_up(&master_jpeg->hw_wq);
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	mtk_jpegdec_put_buf(cjpeg);
+ 	jpeg_buf_queue_dec(ctx);
++	pm_runtime_put(cjpeg->dev);
+ }
+ 
+ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+@@ -620,13 +619,10 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	mtk_jpegdec_put_buf(jpeg);
+ 	jpeg_buf_queue_dec(ctx);
+-
+-	pm_runtime_put(jpeg->dev);
+-	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
+-
+ 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
+ 	wake_up(&master_jpeg->hw_wq);
+ 	atomic_inc(&master_jpeg->hw_rdy);
++	pm_runtime_put(jpeg->dev);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -708,15 +704,82 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, dev);
+ 	pm_runtime_enable(&pdev->dev);
++	ret = devm_clk_bulk_get(dev->dev,
++				jpegdec_clk->clk_num,
++				jpegdec_clk->clks);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to init clk\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static void mtk_jpeg_clk_on(struct mtk_jpegdec_comp_dev *jpeg)
++{
++	int ret;
++
++	ret = clk_bulk_prepare_enable(jpeg->jdec_clk.clk_num, jpeg->jdec_clk.clks);
++	if (ret)
++		dev_err(jpeg->dev, "%s : %d, jpegdec clk_prepare_enable fail\n",
++			__func__, __LINE__);
++}
++
++static void mtk_jpeg_clk_off(struct mtk_jpegdec_comp_dev *jpeg)
++{
++	clk_bulk_disable_unprepare(jpeg->jdec_clk.clk_num, jpeg->jdec_clk.clks);
++}
++
++static __maybe_unused int mtk_jpegdec_pm_suspend(struct device *dev)
++{
++	struct mtk_jpegdec_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	mtk_jpeg_clk_off(jpeg);
+ 
+ 	return 0;
+ }
+ 
++static __maybe_unused int mtk_jpegdec_pm_resume(struct device *dev)
++{
++	struct mtk_jpegdec_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	mtk_jpeg_clk_on(jpeg);
++
++	return 0;
++}
++
++static __maybe_unused int mtk_jpegdec_suspend(struct device *dev)
++{
++	struct mtk_jpegdec_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	v4l2_m2m_suspend(jpeg->master_dev->m2m_dev);
++	return pm_runtime_force_suspend(dev);
++}
++
++static __maybe_unused int mtk_jpegdec_resume(struct device *dev)
++{
++	struct mtk_jpegdec_comp_dev *jpeg = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_resume(dev);
++	if (ret < 0)
++		return ret;
++
++	v4l2_m2m_resume(jpeg->master_dev->m2m_dev);
++	return ret;
++}
++
++static const struct dev_pm_ops mtk_jpegdec_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(mtk_jpegdec_suspend, mtk_jpegdec_resume)
++	SET_RUNTIME_PM_OPS(mtk_jpegdec_pm_suspend, mtk_jpegdec_pm_resume, NULL)
++};
++
+ static struct platform_driver mtk_jpegdec_hw_driver = {
+ 	.probe = mtk_jpegdec_hw_probe,
+ 	.driver = {
+ 		.name = "mtk-jpegdec-hw",
+ 		.of_match_table = mtk_jpegdec_hw_ids,
++		.pm             = &mtk_jpegdec_pm_ops,
+ 	},
+ };
+ 
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
+index 00c6e1a5796e..4b8238b7bee2 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
+@@ -313,14 +313,13 @@ static void mtk_jpegenc_timeout_work(struct work_struct *work)
+ 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
+ 
+ 	mtk_jpeg_enc_reset(cjpeg->reg_base);
+-	clk_disable_unprepare(cjpeg->venc_clk.clks->clk);
+-	pm_runtime_put(cjpeg->dev);
+ 	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
+ 	atomic_inc(&master_jpeg->hw_rdy);
+ 	wake_up(&master_jpeg->hw_wq);
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	mtk_jpegenc_put_buf(cjpeg);
+ 	jpeg_buf_queue_dec(ctx);
++	pm_runtime_put(cjpeg->dev);
+ }
+ 
+ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
+@@ -355,12 +354,11 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	mtk_jpegenc_put_buf(jpeg);
+ 	jpeg_buf_queue_dec(ctx);
+-	pm_runtime_put(jpeg->dev);
+-	clk_disable_unprepare(jpeg->venc_clk.clks->clk);
+ 
+ 	jpeg->hw_state = MTK_JPEG_HW_IDLE;
+ 	wake_up(&master_jpeg->hw_wq);
+ 	atomic_inc(&master_jpeg->hw_rdy);
++	pm_runtime_put(jpeg->dev);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -440,15 +438,82 @@ static int mtk_jpegenc_hw_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, dev);
+ 	pm_runtime_enable(&pdev->dev);
++	ret = devm_clk_bulk_get(dev->dev,
++				jpegenc_clk->clk_num,
++				jpegenc_clk->clks);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to init clk\n");
++		return ret;
++	}
+ 
+ 	return 0;
+ }
+ 
++static void mtk_jpeg_clk_on(struct mtk_jpegenc_comp_dev *jpeg)
++{
++	int ret;
++
++	ret = clk_bulk_prepare_enable(jpeg->venc_clk.clk_num, jpeg->venc_clk.clks);
++	if (ret)
++		dev_err(jpeg->dev, "%s : %d, jpegenc clk_prepare_enable fail\n",
++			__func__, __LINE__);
++}
++
++static void mtk_jpeg_clk_off(struct mtk_jpegenc_comp_dev *jpeg)
++{
++	clk_bulk_disable_unprepare(jpeg->venc_clk.clk_num, jpeg->venc_clk.clks);
++}
++
++static __maybe_unused int mtk_jpegenc_pm_suspend(struct device *dev)
++{
++	struct mtk_jpegenc_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	mtk_jpeg_clk_off(jpeg);
++
++	return 0;
++}
++
++static __maybe_unused int mtk_jpegenc_pm_resume(struct device *dev)
++{
++	struct mtk_jpegenc_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	mtk_jpeg_clk_on(jpeg);
++
++	return 0;
++}
++
++static __maybe_unused int mtk_jpegenc_suspend(struct device *dev)
++{
++	struct mtk_jpegenc_comp_dev *jpeg = dev_get_drvdata(dev);
++
++	v4l2_m2m_suspend(jpeg->master_dev->m2m_dev);
++	return pm_runtime_force_suspend(dev);
++}
++
++static __maybe_unused int mtk_jpegenc_resume(struct device *dev)
++{
++	struct mtk_jpegenc_comp_dev *jpeg = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_resume(dev);
++	if (ret < 0)
++		return ret;
++
++	v4l2_m2m_resume(jpeg->master_dev->m2m_dev);
++	return ret;
++}
++
++static const struct dev_pm_ops mtk_jpegenc_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(mtk_jpegenc_suspend, mtk_jpegenc_resume)
++	SET_RUNTIME_PM_OPS(mtk_jpegenc_pm_suspend, mtk_jpegenc_pm_resume, NULL)
++};
++
+ static struct platform_driver mtk_jpegenc_hw_driver = {
+ 	.probe = mtk_jpegenc_hw_probe,
+ 	.driver = {
+ 		.name = "mtk-jpegenc-hw",
+ 		.of_match_table = mtk_jpegenc_drv_ids,
++		.pm = &mtk_jpegenc_pm_ops,
+ 	},
+ };
+ 
 -- 
 2.46.0
 
