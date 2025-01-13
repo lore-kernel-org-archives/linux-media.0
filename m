@@ -1,92 +1,224 @@
-Received: from ksmg02.maxima.ru (ksmg02.maxima.ru [81.200.124.39])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A275F19259F;
-	Mon, 13 Jan 2025 11:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8891CAA78;
+	Mon, 13 Jan 2025 11:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736766087; cv=none; b=Fg3rQ7T4Hj15T+nki8mRG2+LXbrjaoz5LGd1tC/JXZCNafKcKDEmgoKcjS302uYHMi6M4bl+CrahXt3yryUeoxrJzm4zLjyNbCv3XLbCliFjk5f9lATt1ayTERFNTGa5TZP4Jeix7yrnRsA7L7KsGdIi1UIlVePvwplwuHeISgc=
+	t=1736768792; cv=none; b=rNYp/Ws7wp7EIrHSmt3hIj27UkMlblAtc4tm3T1cH8M9mEL5rW4TuhnD+m8QzPk/mhaGXIttAdE5kKtNHWOeroTTLqiF7aObKyKyG2tUubU4xHDpShp+fubFzOry0MH1WKq9Xr+gUGw5+0lC/kpaYoKLRVx2CkjEylTWtgZS3b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736766087; c=relaxed/simple;
-	bh=7VilPrFIs+zsQsKmu0rs5IxSt3NXBqK7+XsG+bArfH0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Hbq572p8QijBEc7V0N/fFZ1HbiazrMd5V9nh0EkX7/9oKgEE6T/X2vvW551aZ/s58Tr2dGuoSw/88zKCvmKrgzEb4WWMVmiEN49YQfWuX3UWoBpy5QNrkJunUx0j5vfvnczs7DcNDFVG0XaiTkeRAjNHk0P+QzM5OHkdMkR6JE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b=eP4doOYq; arc=none smtp.client-ip=81.200.124.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
+	s=arc-20240116; t=1736768792; c=relaxed/simple;
+	bh=e4v0A94YQr67qclr/vVcz4wCL38MmJkXidTHTViGUzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zq1lHKrVBgu91ijmyg90/febwu5HHGwHI7LsAexlqqgR/MSF8ZJUqdT92RpVp4clIklouR+khi3Z6eduqoA75jVkpnyA6njJ69tVhVFFriuTux/BAHwYpHv4QxFlPpE8Ty73XF9EOWx487pf+A6tcFbKHAQbw+pq5B7c/VLwP3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvrSSJMN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b="eP4doOYq"
-Received: from ksmg02.maxima.ru (localhost [127.0.0.1])
-	by ksmg02.maxima.ru (Postfix) with ESMTP id 111D41E0002;
-	Mon, 13 Jan 2025 13:52:45 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru 111D41E0002
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt-integration.ru;
-	s=sl; t=1736765565; bh=CPd0Ww837jUihZOfd5yLQYFh6UEdksQta0sVWcBKU54=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=eP4doOYq5dD00K/EWPLf7RLZsviLWg2l+T0yDA6+bzdjohQy9XXWgRPvweh19+N0p
-	 p0vIf/xlSeVukAykUQm6syHboMoZ4gz7fDweLphjGOr2rJR91dDnyfJSNDtODzmNTm
-	 I111oI9gI9F8oTGPzWmDDiyvADsE2cLlNsxhtgyx7H7z3rje7gQYRckUVqFkNy4EXz
-	 dg2I0gLiM5iQnU9blpDRj7Oa3Jq9tTLZSfnNv9zum71GgKqGb81gu6qWVcwVtinar/
-	 p2EWK7BiXJErvrYkE/553Y3ugDP2zhagWY89RRysPkvNxxLV8/9oURNFsqdy2WI5IR
-	 jgZuvZt+sLiGA==
-Received: from ksmg02.maxima.ru (autodiscover.maxima.ru [81.200.124.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client CN "*.maxima.ru", Issuer "GlobalSign GCC R3 DV TLS CA 2020" (verified OK))
-	by ksmg02.maxima.ru (Postfix) with ESMTPS;
-	Mon, 13 Jan 2025 13:52:44 +0300 (MSK)
-Received: from GS-NOTE-190.mt.ru (10.0.246.105) by mmail-p-exch02.mt.ru
- (81.200.124.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.4; Mon, 13 Jan
- 2025 13:52:43 +0300
-From: Murad Masimov <m.masimov@mt-integration.ru>
-To: Sean Young <sean@mess.org>
-CC: Mauro Carvalho Chehab <mchehab@kernel.org>, Jarod Wilson
-	<jarod@redhat.com>, <linux-media@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Murad Masimov <m.masimov@mt-integration.ru>
-Subject: [PATCH 0/2] media: streamzap: fix issues with the implementation of usb driver callbacks
-Date: Mon, 13 Jan 2025 13:51:29 +0300
-Message-ID: <20250113105132.275-1-m.masimov@mt-integration.ru>
-X-Mailer: git-send-email 2.46.0.windows.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvrSSJMN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6834C4CEDD;
+	Mon, 13 Jan 2025 11:46:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736768791;
+	bh=e4v0A94YQr67qclr/vVcz4wCL38MmJkXidTHTViGUzM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GvrSSJMNJPVE6vn3kqVwW+Yc37WkSyvT9dVfA6epKneP/tKeJLzfRDYRVO+T+gcCr
+	 0Ccmm7ruHeaqiQnUQuDRbwxU8FnY14UPQQ6nyuiQZJlHLhAss/gyE7X3otUKMKz37x
+	 7PGggB0SwFOnt6m1Vgibs2fukiIt+aDsPeus85KaKlFMKs28iQNfcfsNU1OGqAMWap
+	 QRlF/jfoTq0dM3vuzx4kVeJkWOzrEraexf6o1UyPoe+epPq/eUWbz6PvgcoHWY5Oeh
+	 eSFKTvTiLWniFFPOEvYrrxhT/49M9XpqAwjituH6648qGbtN1HKJ/qgfmEr4ZpBGHv
+	 AycALBU4V/qrA==
+Date: Mon, 13 Jan 2025 12:46:26 +0100
+From: Danilo Krummrich <dakr@kernel.org>
+To: Philipp Stanner <phasta@kernel.org>
+Cc: Luben Tuikov <ltuikov89@gmail.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH 3/3] drm/sched: Update timedout_job()'s documentation
+Message-ID: <Z4T9Eq9lMPlmLUYk@pollux.localdomain>
+References: <20250109133710.39404-2-phasta@kernel.org>
+ <20250109133710.39404-6-phasta@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: mt-exch-01.mt.ru (91.220.120.210) To mmail-p-exch02.mt.ru
- (81.200.124.62)
-X-KSMG-AntiPhishing: NotDetected, bases: 2025/01/13 09:45:00
-X-KSMG-AntiSpam-Auth: dmarc=none header.from=mt-integration.ru;spf=none smtp.mailfrom=mt-integration.ru;dkim=none
-X-KSMG-AntiSpam-Envelope-From: m.masimov@mt-integration.ru
-X-KSMG-AntiSpam-Info: LuaCore: 49 0.3.49 28b3b64a43732373258a371bd1554adb2caa23cb, {rep_avail}, {Tracking_one_url, url3}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, syzkaller.appspot.com:5.0.1,7.1.1;mt-integration.ru:7.1.1;ksmg02.maxima.ru:7.1.1;81.200.124.62:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 81.200.124.62
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 190293 [Jan 13 2025]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.7
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/01/13 07:04:00 #26996016
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected, bases: 2025/01/13 09:45:00
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109133710.39404-6-phasta@kernel.org>
 
-These patches fix two URB-handling related problems in streamzap driver.
-The first one fixes a race condition that leads to a kernel panic as
-reported by Syzkaller [1]. The second patch prevents bugs by ensuring
-that data received by the driver is processed only if URB status is 0.
-It also complies with how other similar usb drivers are written.
+On Thu, Jan 09, 2025 at 02:37:12PM +0100, Philipp Stanner wrote:
+> drm_sched_backend_ops.timedout_job()'s documentation is outdated. It
+> mentions the deprecated function drm_sched_resubmit_job(). Furthermore,
+> it does not point out the important distinction between hardware and
+> firmware schedulers.
+> 
+> Since firmware schedulers tyipically only use one entity per scheduler,
+> timeout handling is significantly more simple because the entity the
+> faulted job came from can just be killed without affecting innocent
+> processes.
+> 
+> Update the documentation with that distinction and other details.
+> 
+> Reformat the docstring to work to a unified style with the other
+> handles.
+> 
+> Signed-off-by: Philipp Stanner <phasta@kernel.org>
+> ---
+>  include/drm/gpu_scheduler.h | 83 +++++++++++++++++++++++--------------
+>  1 file changed, 52 insertions(+), 31 deletions(-)
+> 
+> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+> index c4e65f9f7f22..380b8840c591 100644
+> --- a/include/drm/gpu_scheduler.h
+> +++ b/include/drm/gpu_scheduler.h
+> @@ -445,43 +445,64 @@ struct drm_sched_backend_ops {
+>  	 * @timedout_job: Called when a job has taken too long to execute,
+>  	 * to trigger GPU recovery.
+>  	 *
+> -	 * This method is called in a workqueue context.
+> +	 * @sched_job: The job that has timed out
+>  	 *
+> -	 * Drivers typically issue a reset to recover from GPU hangs, and this
+> -	 * procedure usually follows the following workflow:
+> +	 * Returns:
+> +	 * - DRM_GPU_SCHED_STAT_NOMINAL, on success, i.e., if the underlying
+> +	 *   driver has started or completed recovery.
+> +	 * - DRM_GPU_SCHED_STAT_ENODEV, if the device is no longer
+> +	 *   available, i.e., has been unplugged.
 
-[1]: https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+Maybe it'd be better to document this at the enum level and add a link.
 
-Murad Masimov (2):
-  media: streamzap: fix race between device disconnection and urb callback
-  media: streamzap: prevent processing IR data on URB failure
+>  	 *
+> -	 * 1. Stop the scheduler using drm_sched_stop(). This will park the
+> -	 *    scheduler thread and cancel the timeout work, guaranteeing that
+> -	 *    nothing is queued while we reset the hardware queue
+> -	 * 2. Try to gracefully stop non-faulty jobs (optional)
+> -	 * 3. Issue a GPU reset (driver-specific)
+> -	 * 4. Re-submit jobs using drm_sched_resubmit_jobs()
+> +	 * Drivers typically issue a reset to recover from GPU hangs.
+> +	 * This procedure looks very different depending on whether a firmware
+> +	 * or a hardware scheduler is being used.
+> +	 *
+> +	 * For a FIRMWARE SCHEDULER, each (pseudo-)ring has one scheduler, and
+> +	 * each scheduler (typically) has one entity. Hence, you typically
 
- drivers/media/rc/streamzap.c | 70 ++++++++++++++++++++----------------
- 1 file changed, 39 insertions(+), 31 deletions(-)
+I think you can remove the first "typically" here. I don't think that for a
+firmware scheduler we ever have something else than a 1:1 relation, besides that
+having something else than a 1:1 relation (whatever that would be) would likely
+be a contradiction to the statement above.
 
---
-2.39.2
+> +	 * follow those steps:
+> +	 *
+> +	 * 1. Stop the scheduler using drm_sched_stop(). This will pause the
+> +	 *    scheduler workqueues and cancel the timeout work, guaranteeing
+> +	 *    that nothing is queued while we reset the hardware queue.
 
+Rather reset / remove the software queue / ring.
+
+(Besides: I think we should also define a distinct terminology, sometimes "queue"
+refers to the ring buffer, sometimes it refers to the entity, etc. At least we
+should be consequent within this commit, and then fix the rest.)
+
+> +	 * 2. Try to gracefully stop non-faulty jobs (optional).
+> +	 * TODO: RFC ^ Folks, should we remove this step? What does it even mean
+> +	 * precisely to "stop" those jobs? Is that even helpful to userspace in
+> +	 * any way?
+
+I think this means to prevent unrelated queues / jobs from being impacted by the
+subsequent GPU reset.
+
+So, this is likely not applicable here, see below.
+
+> +	 * 3. Issue a GPU reset (driver-specific).
+
+I'm not entirely sure it really applies to all GPUs that feature a FW scheduler,
+but I'd expect that the FW takes care of resetting the corresponding HW
+(including preventing impact on other FW rings) if the faulty FW ring is removed
+by the driver.
+
+> +	 * 4. Kill the entity the faulted job stems from, and the associated
+> +	 *    scheduler.
+>  	 * 5. Restart the scheduler using drm_sched_start(). At that point, new
+> -	 *    jobs can be queued, and the scheduler thread is unblocked
+> +	 *    jobs can be queued, and the scheduler workqueues awake again.
+
+How can we start the scheduler again after we've killed it? I think the most
+likely scenario is that the FW ring (including the scheduler structures) is
+removed entirely and simply re-created. So, I think we can probably remove 5.
+
+> +	 *
+> +	 * For a HARDWARE SCHEDULER, each ring also has one scheduler, but each
+> +	 * scheduler typically has many attached entities. This implies that you
+
+Maybe better "associated". For the second sentence, I'd rephrase it, e.g. "This
+implies that all entities associated with the affected scheduler can't be torn
+down, because [...]".
+
+> +	 * cannot tear down all entities associated with the affected scheduler,
+> +	 * because this would effectively also kill innocent userspace processes
+> +	 * which did not submit faulty jobs (for example).
+> +	 *
+> +	 * Consequently, the procedure to recover with a hardware scheduler
+> +	 * should look like this:
+> +	 *
+> +	 * 1. Stop all schedulers impacted by the reset using drm_sched_stop().
+> +	 * 2. Figure out to which entity the faulted job belongs.
+
+"belongs to"
+
+> +	 * 3. Try to gracefully stop non-faulty jobs (optional).
+> +	 * TODO: RFC ^ Folks, should we remove this step? What does it even mean
+> +	 * precisely to "stop" those jobs? Is that even helpful to userspace in
+> +	 * any way?
+
+See above.
+
+> +	 * 4. Kill that entity.
+> +	 * 5. Issue a GPU reset on all faulty rings (driver-specific).
+> +	 * 6. Re-submit jobs on all schedulers impacted by re-submitting them to
+> +	 *    the entities which are still alive.
+> +	 * 7. Restart all schedulers that were stopped in step #1 using
+> +	 *    drm_sched_start().
+>  	 *
+>  	 * Note that some GPUs have distinct hardware queues but need to reset
+>  	 * the GPU globally, which requires extra synchronization between the
+> -	 * timeout handler of the different &drm_gpu_scheduler. One way to
+> -	 * achieve this synchronization is to create an ordered workqueue
+> -	 * (using alloc_ordered_workqueue()) at the driver level, and pass this
+> -	 * queue to drm_sched_init(), to guarantee that timeout handlers are
+> -	 * executed sequentially. The above workflow needs to be slightly
+> -	 * adjusted in that case:
+> -	 *
+> -	 * 1. Stop all schedulers impacted by the reset using drm_sched_stop()
+> -	 * 2. Try to gracefully stop non-faulty jobs on all queues impacted by
+> -	 *    the reset (optional)
+> -	 * 3. Issue a GPU reset on all faulty queues (driver-specific)
+> -	 * 4. Re-submit jobs on all schedulers impacted by the reset using
+> -	 *    drm_sched_resubmit_jobs()
+> -	 * 5. Restart all schedulers that were stopped in step #1 using
+> -	 *    drm_sched_start()
+> -	 *
+> -	 * Return DRM_GPU_SCHED_STAT_NOMINAL, when all is normal,
+> -	 * and the underlying driver has started or completed recovery.
+> -	 *
+> -	 * Return DRM_GPU_SCHED_STAT_ENODEV, if the device is no longer
+> -	 * available, i.e. has been unplugged.
+> +	 * timeout handlers of different schedulers. One way to achieve this
+> +	 * synchronization is to create an ordered workqueue (using
+> +	 * alloc_ordered_workqueue()) at the driver level, and pass this queue
+> +	 * as drm_sched_init()'s @timeout_wq parameter. This will guarantee
+> +	 * that timeout handlers are executed sequentially.
+>  	 */
+>  	enum drm_gpu_sched_stat (*timedout_job)(struct drm_sched_job *sched_job);
+>  
+> -- 
+> 2.47.1
+> 
