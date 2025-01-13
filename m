@@ -1,190 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B9B186A;
-	Mon, 13 Jan 2025 10:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E922235C14;
+	Mon, 13 Jan 2025 10:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736763115; cv=none; b=KO/RZWL8Mz3ZQt2xRzJGGALS/JCkbimGdjaYNiCOc0eAbufNVHTKGURXdbnmGwq+8XVcSA8Zn7Ax9nM0KhPopIb7hvMUdDFeZE16NmfpNcduhUGoidvpXGaiQ1qr1oFsWvErnMZYxgL14zQdNmNACFgPyOMhc/uaLEGlTQEHRmA=
+	t=1736763492; cv=none; b=k92RLBbDEPTxNypqfRnIj3pllDopzjjJE91A/eZlBWChsV4ZmDOEeffFw//lROwDUQB8bQelTsDySI1HwuUe0cYA1xjVitosYrwuSuWgmSDCkQNWqezU3rSGF/giB2OfJb0okvG6afaFk7kuJZLxrh6EE/KePbm5MREGY8oEm7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736763115; c=relaxed/simple;
-	bh=1V0smjfm6liFtFPXdzXRpp1hcMphdhXOdaciBJTxc3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SFE3664fUuenGl2NQHzDBNlYqBqANq5/1pRBMx8uMumtfXDKB5oNBA1peS2Qh7B1CysWWsCLnNcwoSoeK6ZzuElxB2Nc36Be6r3WmkFNqZ86y4KlYAV/zC479vg41L7Jf3+L5y/bGzftOHbe9cGoGaGwlbIbTWz0I0lWsBujoak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O0zPJRTN; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1736763492; c=relaxed/simple;
+	bh=iaFHLtgKkr5eLw+guyEk91BCvn615X23qDyv53l9Lj8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gac7RUWjOcbCTfQSqr9nTQpP1yYF9LWJMgPQIccS9lBVbfR9NcmyYd7DwLH2zEJa5Yj6t7IWcTcXwEH8YTcBEDgnsm4+ianezttFV09urjS2LPM5vn65WR4Wmot+NCteu8vQmRt7rM+J68Fk3X62Y08tyX2BaQ0aZD6NaYYE9y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=Q9H2CGzi; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O0zPJRTN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736763113; x=1768299113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1V0smjfm6liFtFPXdzXRpp1hcMphdhXOdaciBJTxc3k=;
-  b=O0zPJRTNxraCEZrGaAHXbs+64PRrD6dgH35gVUTROm5w3OlOQSkXoNvA
-   xo0dRmNrSSCihGPo/SXgplyImFJABvVMnJWQ0NIg7Amyy5yg+6nP+N2w2
-   rOiDqRvH2bche1j9iJ6oKaxwyvtP+WpIDZe2yiWVrXd40+CEnYPKwlO8t
-   3kFBxc3iS/meX3Ln64DQMAsutd5o7NUSbszUPyR9PONZZnoIvc2T3DVG3
-   wvxvIewtz327/WpgHaC/TN+Z5vsvCZQAjCa3MA66c92W0ebnPdbK9m0Yi
-   Ob2zACnMqD1lr3wmai8uGQB5kQxD1Ap3dvIVGjMMDnFQyQ80LJK+50ria
-   g==;
-X-CSE-ConnectionGUID: CQhZjaxITJaFlsw+qpKgGg==
-X-CSE-MsgGUID: Y4maSOBNQLyn5LbjxVDLKA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="47680431"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="47680431"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 02:11:52 -0800
-X-CSE-ConnectionGUID: e1W5JBnaQKeKiTmx3Y+QPg==
-X-CSE-MsgGUID: iL1mS6fgQq2TTbSbHA6WqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="104509323"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa006.jf.intel.com with ESMTP; 13 Jan 2025 02:11:47 -0800
-Date: Mon, 13 Jan 2025 06:10:40 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Christoph Hellwig <hch@lst.de>, Leon Romanovsky <leonro@nvidia.com>,
-	kvm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-	sumit.semwal@linaro.org, pbonzini@redhat.com, seanjc@google.com,
-	alex.williamson@redhat.com, vivek.kasireddy@intel.com,
-	dan.j.williams@intel.com, aik@amd.com, yilun.xu@intel.com,
-	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-	lukas@wunner.de, yan.y.zhao@intel.com, leon@kernel.org,
-	baolu.lu@linux.intel.com, zhenzhong.duan@intel.com,
-	tao1.su@intel.com
-Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
- kAPI
-Message-ID: <Z4Q94E6JvWrhvCyq@yilunxu-OptiPlex-7050>
-References: <f3748173-2bbc-43fa-b62e-72e778999764@amd.com>
- <20250108145843.GR5556@nvidia.com>
- <5a858e00-6fea-4a7a-93be-f23b66e00835@amd.com>
- <20250108162227.GT5556@nvidia.com>
- <Z37HpvHAfB0g9OQ-@phenom.ffwll.local>
- <Z37QaIDUgiygLh74@yilunxu-OptiPlex-7050>
- <58e97916-e6fd-41ef-84b4-bbf53ed0e8e4@amd.com>
- <Z38FCOPE7WPprYhx@yilunxu-OptiPlex-7050>
- <Z4F2X7Fu-5lprLrk@phenom.ffwll.local>
- <20250110203838.GL5556@nvidia.com>
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="Q9H2CGzi"
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id E8ED540769AC;
+	Mon, 13 Jan 2025 10:17:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E8ED540769AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1736763479;
+	bh=U51A4gH9eY3j+Jj5Eqv3cP9otx60XstkbxWOCnsHWQ4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q9H2CGziJz5TECuRr9bdRo6MY5vyXwHbTbspeGZ3z8S2iCSCvRj4uXxGKsvDG50vt
+	 l2xclqR5i61eReXU24sHivwJrgGuOvaDfBqMAWYBZFNZQqYxnKF09l7rP8CLY2VGiv
+	 qLzfLHq5okYp4nLCW3EYgURNXAOVntOwJE9TIeNo=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Benoit Parrot <bparrot@ti.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	stable@vger.kernel.org
+Subject: [PATCH] media: cdns-csi2rx: fix call balance for csi2rx->p_clk handling routines
+Date: Mon, 13 Jan 2025 13:17:49 +0300
+Message-Id: <20250113101749.2440878-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250110203838.GL5556@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 10, 2025 at 04:38:38PM -0400, Jason Gunthorpe wrote:
-> On Fri, Jan 10, 2025 at 08:34:55PM +0100, Simona Vetter wrote:
-> 
-> > So if I'm getting this right, what you need from a functional pov is a
-> > dma_buf_tdx_mmap? Because due to tdx restrictions, the normal dma_buf_mmap
+If the clock csi2rx->p_clk was not enabled in csi2rx_stop(), it should not
+be disabled in any path.
 
-I'm not sure if the word 'mmap' is proper here.
+Conversely, if it was enabled in csi2rx_stop(), it must be disabled in all
+error paths to ensure proper cleanup.
 
-It is kind of like the mapping from (FD+offset) to backend memory,
-which is directly provided by memory provider, rather than via VMA
-and cpu page table.  Basically VMA & cpu page table are for host to
-access the memory, but VMM/host doesn't access most of the guest
-memory, so why must build them.
+Found by Linux Verification Center (linuxtesting.org) with Klever.
 
-> > is not going to work I guess?
-> 
-> Don't want something TDX specific!
-> 
-> There is a general desire, and CC is one, but there are other
-> motivations like performance, to stop using VMAs and mmaps as a way to
-> exchanage memory between two entities. Instead we want to use FDs.
+Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+---
+ drivers/media/platform/cadence/cdns-csi2rx.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Exactly.
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 4d64df829e75..e7e8decf9a02 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -322,11 +322,14 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ 
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ {
++	int ret, ret_clk;
+ 	unsigned int i;
+ 	u32 val;
+-	int ret;
+ 
+-	clk_prepare_enable(csi2rx->p_clk);
++	ret_clk = clk_prepare_enable(csi2rx->p_clk);
++	if (ret_clk)
++		dev_warn(csi2rx->dev,
++			 "Couldn't prepare and enable P clock\n");
+ 	reset_control_assert(csi2rx->sys_rst);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
+ 
+@@ -348,7 +351,8 @@ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
+ 	}
+ 
+ 	reset_control_assert(csi2rx->p_rst);
+-	clk_disable_unprepare(csi2rx->p_clk);
++	if (!ret_clk)
++		clk_disable_unprepare(csi2rx->p_clk);
+ 
+ 	if (v4l2_subdev_call(csi2rx->source_subdev, video, s_stream, false))
+ 		dev_warn(csi2rx->dev, "Couldn't disable our subdev\n");
+-- 
+2.25.1
 
-> 
-> We now have memfd and guestmemfd that are usable with
-> memfd_pin_folios() - this covers pinnable CPU memory.
-> 
-> And for a long time we had DMABUF which is for all the other wild
-> stuff, and it supports movable memory too.
-> 
-> So, the normal DMABUF semantics with reservation locking and move
-> notifiers seem workable to me here. They are broadly similar enough to
-> the mmu notifier locking that they can serve the same job of updating
-> page tables.
-
-Yes. With this new sharing model, the lifecycle of the shared memory/pfn/Page
-is directly controlled by dma-buf exporter, not by CPU mapping. So I also
-think reservation lock & move_notify works well for lifecycle control,
-no conflict (nothing to do) with follow_pfn() & mmu_notifier.
-
-> 
-> > Also another thing that's a bit tricky is that kvm kinda has a 3rd dma-buf
-> > memory model:
-> > - permanently pinned dma-buf, they never move
-> > - dynamic dma-buf, they move through ->move_notify and importers can remap
-> > - revocable dma-buf, which thus far only exist for pci mmio resources
-> 
-> I would like to see the importers be able to discover which one is
-> going to be used, because we have RDMA cases where we can support 1
-> and 3 but not 2.
-> 
-> revocable doesn't require page faulting as it is a terminal condition.
-> 
-> > Since we're leaning even more on that 3rd model I'm wondering whether we
-> > should make it something official. Because the existing dynamic importers
-> > do very much assume that re-acquiring the memory after move_notify will
-> > work. But for the revocable use-case the entire point is that it will
-> > never work.
-> 
-> > I feel like that's a concept we need to make explicit, so that dynamic
-> > importers can reject such memory if necessary.
-> 
-> It strikes me as strange that HW can do page faulting, so it can
-> support #2, but it can't handle a non-present fault?
-> 
-> > So yeah there's a bunch of tricky lifetime questions that need to be
-> > sorted out with proper design I think, and the current "let's just use pfn
-> > directly" proposal hides them all under the rug. 
-> 
-> I don't think these two things are connected. The lifetime model that
-> KVM needs to work with the EPT, and that VFIO needs for it's MMIO,
-> definately should be reviewed and evaluated.
-> 
-> But it is completely orthogonal to allowing iommufd and kvm to access
-> the CPU PFN to use in their mapping flows, instead of the
-> dma_addr_t.
-> 
-> What I want to get to is a replacement for scatter list in DMABUF that
-> is an array of arrays, roughly like:
-> 
->   struct memory_chunks {
->       struct memory_p2p_provider *provider;
->       struct bio_vec addrs[];
->   };
->   int (*dmabuf_get_memory)(struct memory_chunks **chunks, size_t *num_chunks);
-
-Maybe we need to specify which object the API is operating on,
-struct dma_buf, or struct dma_buf_attachment, or a new attachment.
-
-I think:
-
-  int (*dmabuf_get_memory)(struct dma_buf_attachment *attach, struct memory_chunks **chunks, size_t *num_chunks);
-
-works, but maybe a new attachment is conceptually more clear to
-importers and harder to abuse?
-
-Thanks,
-Yilun
-
-> 
-> This can represent all forms of memory: P2P, private, CPU, etc and
-> would be efficient with the new DMA API.
-> 
-> This is similar to the structure BIO has, and it composes nicely with
-> a future pin_user_pages() and memfd_pin_folios().
-> 
-> Jason
