@@ -1,74 +1,56 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ksmg02.maxima.ru (ksmg02.maxima.ru [81.200.124.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FF014373F;
-	Mon, 13 Jan 2025 10:51:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE44242AA5;
+	Mon, 13 Jan 2025 10:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.200.124.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736765476; cv=none; b=jiLd2SwAOUKbnWe7Q3bZSZ6W5WXF8y/6MwGgpFdLLq1L/mLfrOg99NyMPajrazCFm0zInQcIsrle/FcnR1psq9JTeqxhHZpJmaVOzUGdQ90HEJqGt08KxIAhOzrID7zsuSLH659oA0Hyj9KiXzKSaErbliX+JuOzLGT1txrtt70=
+	t=1736765582; cv=none; b=l5Gs+r+2Kp+KuERYbydZJk7xAfqjX49fgw7sAkOdjuQF3V2qCmFICraxHdP93DF4JV+JT0LVUQBZyQh1INm+EBL55KWyzC0RskhS3pkh20xpCHyBxsYJTnQ3EePgEIlx4CGUbZXna8qfiFtCeqwAg+zF8gStkF1mpyv3EttazRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736765476; c=relaxed/simple;
-	bh=l5e8ZG1nuN+ZcvImZWznBRa3XRpHDO5bPAXWUYNdm5g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EQQ85frc61SSmt9hSwarHTZG9Z1qvyXnNikKfa2iFIn2k+6tyD7g5hpGPsty4ecZmtq8nACi8kBpmtviOdI6ec9q/54sZe0F+6oo8+pi5PXIebLX2Cm+f5bBcTTAIUXCBKXbwnwxKuNpc9BIfBPUKO2D14WlPm0AyGnV/YzhSco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HmGUmU4k; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736765582; c=relaxed/simple;
+	bh=OgIa1VE1pLjd2NsDBtMlWGuQgI2Xa6iE2TCjAasRjOs=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Afo4ske9OvwTCIfxtInYMHQsb906hIyyPro+6qUaWafEZcgRe6AkPm2Yo0HKbUrPLxJNK/b2QUQ8q0b2hrgPNaE8WiFxpkaxpOfGlN50hOtAKTuupdVR9slWMgj2T5VpBimdGVMyoq21w7D7eJqSg0vvlNNx+Kuy6jJknI/UBf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru; spf=pass smtp.mailfrom=mt-integration.ru; dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b=qSdc/V+Q; arc=none smtp.client-ip=81.200.124.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mt-integration.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt-integration.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HmGUmU4k"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5f31b3db5ecso1789767eaf.0;
-        Mon, 13 Jan 2025 02:51:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736765474; x=1737370274; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=urUqfOs5ZprO9Xw0z/tnXaTr0uAH0u4Ma4Hh29vNsJQ=;
-        b=HmGUmU4kd1lJ0LadGQ8fenU/P6gl0Ue6ibjXtuAwJIxY2cJJsHe1Rq/bqjqZkWkFjK
-         bY5c2/USjP2fchqaF8elQ6Xk0jrQtgbFnGa+GK/foQoJqwGIA429KC02HCOZOTwE3hrK
-         i3bRyWAcbRYopFIChk+PzQRyCqSH+rSEBZeR/154fTzmTtkBRGk9tQVWExdLZv8y5mtO
-         Z4GOROIzusnvuYowm2oZAjs/BzguDaGvq7/6j2aCcwByOyQ3BgZnyteNSvY8ZgDKT0Gt
-         kcq4kBUD8v7GfILTADE/gXjpscC0V05E7SEtBzJeaZmePR+733lFU90mMolWPG2ohWu7
-         JMBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736765474; x=1737370274;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=urUqfOs5ZprO9Xw0z/tnXaTr0uAH0u4Ma4Hh29vNsJQ=;
-        b=VFIABmsd15sMcpoDPnI/MAKujeR2L+IaZL1JTQKGBo8tJEU0CDOCdXfAcNQUAfo86n
-         BGaVGBeuS5IyYJm5RpQF7TfXHQXO3/vGsS+UchEM9yi0dC4aly3ylTv78TWtMn1YNMS9
-         srtIJ0TR2p/n7MI+zwXGrE+Mj/auE8mhbg072EKqSK5Wn8lxLRlJasbWt407ePADkk8W
-         9+DndUpThlEOojmT3kNZRE+fzmu+zEpX9h/09wqsK6jEclO1PFhFi089OjbR/V7da92N
-         rf3Z6rheW7+g8RgeHf4mGUX7Jl9dMMCvxddvY4uiNlqUAklFG2pVxhR62DkqWp1tHSSP
-         bznQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3oYJvU61t4bITMbL01hlTcaXz4NtyUTrnvAKef/hxaaT7dQH4qtxH6GC+nKEahVKNaCtKq9PabiJNKXs=@vger.kernel.org, AJvYcCVshshVoFvkAR8e2h94Cj40TK5xaGkW9GuwY2/ciIaZnPopc+dB3Nw2Sd3y/dFeVHdqr2UG/K6kpm7T@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6ubICecdYct+v7riiopZO5DIcPMJPL28fDFFpW2DvTZHX4JLS
-	Nnrk1rFKhvYaHbSTGCmCwnNtnhjf5I7W8ICSJpBJMD0/gh2k+j1lLHnKew==
-X-Gm-Gg: ASbGncs/W9vDLTI1jTMecSKccytCHr2HsJ5uxj86xFsAHixk5EwtkZFgxxSTUqf4vH/
-	BSqzIxqv67lkcbL2AJePhdfzFNzABSuX7Gsm0teBsjgDK5t2qVTCqQNIL3XtEyqp4V9DdEkx0/E
-	NO4YPeR0l1pYYrTdzFv9EI2lBKgcflHoZCkhogpBRLTThn8cQlDS68hCfzJuVCnx6oP6TW1ZLYA
-	69qN/ebjuwIgk6Jmfb78uwZS36HXxy61RXqIpdK7aspRzNjHkHr2ioFkzpDIcACR85FJXQ=
-X-Google-Smtp-Source: AGHT+IFPyTIIfjevDpsljLimNeExOHdnw4G1Y3DEL4NU+snMOqFDKBVVpxAmHBjqOBCcW9sXk+u6mw==
-X-Received: by 2002:a05:6870:e2cf:b0:2a3:c59f:577b with SMTP id 586e51a60fabf-2aa0673060bmr3835827fac.24.1736765474154;
-        Mon, 13 Jan 2025 02:51:14 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:17c3:3d19:3f6f:3a38])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2ad80548d04sm3681440fac.17.2025.01.13.02.51.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 02:51:12 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: hverkuil-cisco@xs4all.nl
-Cc: mchehab@kernel.org,
-	lars@metafoo.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] media: dt-bindings: adv7180: Document the 'interrupts' property
-Date: Mon, 13 Jan 2025 07:51:02 -0300
-Message-Id: <20250113105102.1239513-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=mt-integration.ru header.i=@mt-integration.ru header.b="qSdc/V+Q"
+Received: from ksmg02.maxima.ru (localhost [127.0.0.1])
+	by ksmg02.maxima.ru (Postfix) with ESMTP id BC0081E000B;
+	Mon, 13 Jan 2025 13:52:55 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ksmg02.maxima.ru BC0081E000B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt-integration.ru;
+	s=sl; t=1736765575; bh=Z/dfpRdVljts0/41FJaCYWmNtEmsH3/l7xNFT7YOCwI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=qSdc/V+QdvAFmlcSdEkTnoL0rLCXxa6YHnKGkSLO1IJt+YamNKQYV0XsZiDdZjyLX
+	 hLyD40BDVouWrGZL7quN+Uo9LHYisroPVpyxYouwsDzvXJ3kRlDhWgy7vYicbzKBJi
+	 RkIgeBEPYa7S/XRtckSmL7JlN4jJ7yiehxhoi0UepfEr6W4ZmHjMw/FxLT1lNqhIRM
+	 t70PqPoYMYus3ECoqcpRmcy/M7Ngdq9Gp+K2wogco3WxWvIaU1m9usaNuvpt9v6MNQ
+	 uGuwQjvM4rLsgC1lh8e2tS2/eOd3gorP6Eedr7xF5KmruDXoBcgm+UIRsicvlpW3Dm
+	 8s8dXkV5D7SKQ==
+Received: from ksmg02.maxima.ru (autodiscover.maxima.ru [81.200.124.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "*.maxima.ru", Issuer "GlobalSign GCC R3 DV TLS CA 2020" (verified OK))
+	by ksmg02.maxima.ru (Postfix) with ESMTPS;
+	Mon, 13 Jan 2025 13:52:55 +0300 (MSK)
+Received: from GS-NOTE-190.mt.ru (10.0.246.105) by mmail-p-exch02.mt.ru
+ (81.200.124.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.4; Mon, 13 Jan
+ 2025 13:52:54 +0300
+From: Murad Masimov <m.masimov@mt-integration.ru>
+To: Sean Young <sean@mess.org>
+CC: Mauro Carvalho Chehab <mchehab@kernel.org>, Jarod Wilson
+	<jarod@redhat.com>, <linux-media@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Murad Masimov <m.masimov@mt-integration.ru>,
+	<stable@vger.kernel.org>,
+	<syzbot+34008406ee9a31b13c73@syzkaller.appspotmail.com>
+Subject: [PATCH 1/2] media: streamzap: fix race between device disconnection and urb callback
+Date: Mon, 13 Jan 2025 13:51:30 +0300
+Message-ID: <20250113105132.275-2-m.masimov@mt-integration.ru>
+X-Mailer: git-send-email 2.46.0.windows.1
+In-Reply-To: <20250113105132.275-1-m.masimov@mt-integration.ru>
+References: <20250113105132.275-1-m.masimov@mt-integration.ru>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -76,45 +58,63 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: mt-exch-01.mt.ru (91.220.120.210) To mmail-p-exch02.mt.ru
+ (81.200.124.62)
+X-KSMG-AntiPhishing: NotDetected, bases: 2025/01/13 09:45:00
+X-KSMG-AntiSpam-Auth: dmarc=none header.from=mt-integration.ru;spf=none smtp.mailfrom=mt-integration.ru;dkim=none
+X-KSMG-AntiSpam-Envelope-From: m.masimov@mt-integration.ru
+X-KSMG-AntiSpam-Info: LuaCore: 49 0.3.49 28b3b64a43732373258a371bd1554adb2caa23cb, {rep_avail}, {Tracking_one_url, url3}, {Tracking_uf_ne_domains}, {Tracking_from_domain_doesnt_match_to}, syzkaller.appspot.com:5.0.1,7.1.1;mt-integration.ru:7.1.1;ksmg02.maxima.ru:7.1.1;81.200.124.62:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 81.200.124.62
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiSpam-Lua-Profiles: 190293 [Jan 13 2025]
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Version: 6.1.1.7
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/01/13 07:04:00 #26996016
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected, bases: 2025/01/13 09:45:00
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 7
 
-From: Fabio Estevam <festevam@denx.de>
+Syzkaller has reported a general protection fault at function
+ir_raw_event_store_with_filter(). This crash is caused by a NULL pointer
+dereference of dev->raw pointer, even though it is checked for NULL in
+the same function, which means there is a race condition. It occurs due
+to the incorrect order of actions in the streamzap_disconnect() function:
+rc_unregister_device() is called before usb_kill_urb(). The dev->raw
+pointer is freed and set to NULL in rc_unregister_device(), and only
+after that usb_kill_urb() waits for in-progress requests to finish.
 
-The ADV7180 family of chips have an INTRQ pin that can be connected
-to a SoC GPIO.
+If rc_unregister_device() is called while streamzap_callback() handler is
+not finished, this can lead to accessing freed resources. Thus
+rc_unregister_device() should be called after usb_kill_urb().
 
-Allow the 'interrupts' property to be described to fix the following
-dt-schema warning:
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-'interrupt-parent', 'interrupts' do not match any of the regexes: 'pinctrl-[0-9]+'
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 8e9e60640067 ("V4L/DVB: staging/lirc: port lirc_streamzap to ir-core")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+34008406ee9a31b13c73@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+Signed-off-by: Murad Masimov <m.masimov@mt-integration.ru>
 ---
-Changes since v2:
-- Do not wrap the dt-schema warning. (Krzysztof)
-- Remove unneeded description. (Krzysztof)
-- Added Krzysztof's Acked-by tag.
+ drivers/media/rc/streamzap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v1:
-- Detail the interrupt description.
- Documentation/devicetree/bindings/media/i2c/adv7180.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+diff --git a/drivers/media/rc/streamzap.c b/drivers/media/rc/streamzap.c
+index 9b209e687f25..2ce62fe5d60f 100644
+--- a/drivers/media/rc/streamzap.c
++++ b/drivers/media/rc/streamzap.c
+@@ -385,8 +385,8 @@ static void streamzap_disconnect(struct usb_interface *interface)
+ 	if (!sz)
+ 		return;
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/adv7180.yaml b/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-index 4371a0ef2761..9ee1483775f6 100644
---- a/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/adv7180.yaml
-@@ -49,6 +49,10 @@ properties:
-       Indicates that the output is a BT.656-4 compatible stream.
-     type: boolean
- 
-+  interrupts:
-+    items:
-+      - description: The GPIO connected to the INTRQ pin.
-+
-   port:
-     $ref: /schemas/graph.yaml#/$defs/port-base
-     unevaluatedProperties: false
--- 
-2.34.1
+-	rc_unregister_device(sz->rdev);
+ 	usb_kill_urb(sz->urb_in);
++	rc_unregister_device(sz->rdev);
+ 	usb_free_urb(sz->urb_in);
+ 	usb_free_coherent(usbdev, sz->buf_in_len, sz->buf_in, sz->dma_in);
+
+--
+2.39.2
 
