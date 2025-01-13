@@ -1,52 +1,52 @@
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B082B23314E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A9B237A38;
 	Mon, 13 Jan 2025 09:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736758840; cv=none; b=YrVeCekeOIVZuTUqLppScbAzrzAP6j6iEIxqFXgq8sKbk/wQTCHqxi+haemvncThJR6fU0xM0V/TzA6j6PfhYSUj6f5QPYSddmmlhIvia2aWoImJK9vN03nGr/gMf6PifCnslM1jOgfr4gOq2pdpxLuvnvsNu7YVakxCsw7DG1w=
+	t=1736758840; cv=none; b=h1tbr0YrTaGMmGK5gXxjY537CZqvuzXZaJINjYjn+sDnbDynMEiBrM/FuwGtU09NXh+hUGHXasl1s/9XOJSu41hxncEBUFDFlfx/MpnOL5/Q1P1IyvFfKKCxIbhx81gTANmBXbqLY0rbyq4YfYmY9I80GySLLek5+emLsVIlAKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736758840; c=relaxed/simple;
-	bh=r0AJlSN7QqihCiLwaihti1kJ+4heRiIoggwRFK3Zq4w=;
+	bh=zLGrW2MRu2ljW8FD4WwIc6H3nvZcXa78oWt1WnrJXrA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=F8JbfUP9tBmYKVNqThoQwaqppkvh9JpsHu50hhbfsyMkmLoSk+Q/9bC56uYJKAgKSYRwLYx010H8UqQdDxTpmxvffqcEnJO3szaz/AJU7VZa9Gs0Y3Qn8BG4hmJ7vcJt+w5JPZgYWn9haN8mPgrPDsPYISwvcFRrr/PRVtME+Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=A9pi8rD/; arc=none smtp.client-ip=91.207.212.93
+	 In-Reply-To:To:CC; b=oLZooHDzdFq1PTSmBkGY/b4RLOpO8lMm1hu4LTE9GvMiHJQoyzPpSG15kuAjiARVLO1O4sq3v79Ew47qvNE7FtKrPpwfufh6EYZ885+kcXqNyVYA+k07ISyfrVuCaz8JNCIT9ldVaUb1I7adO24vYUsWBWZfdTB7sqVdCNsy8Cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=SnSWLvBm; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="A9pi8rD/"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50D5k9ow011600;
-	Mon, 13 Jan 2025 10:00:23 +0100
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="SnSWLvBm"
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50D4XvuX008255;
+	Mon, 13 Jan 2025 10:00:24 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	KypdGnyKgLl4nhvMId8FZobhUoEfqEaVUPzgI6v5dkk=; b=A9pi8rD/xuS6zIbI
-	8sQi74j/gCgQfE5poZ6YnvUxU0KC8iHddc1lCNn8iPrQ/lUGXk/fudBmhCwwhG/P
-	NbgXomEt1wlok6K7KSTEUBqo4nXssYQM7MZ5O3dOzyLA/fWJrRcdVcsqaYbwv4/3
-	JnFXgcXynmU/4kkrMyiJc4GxncyUUAb+DHCZD31nddfouOiAESuo1ISO53o5kIwt
-	kzn2UIudsSiwSs1eXKyhYHvtFA5YPr2MhRID4eqaoBosT5oon6B+bRwTmlpb5wJB
-	yXG8h4CbCSb8t4UqXNKKX4ELx+0bEvD6DKd6syrs0vgBUf2yh7yf1u7was8WkHs6
-	sf9xqA==
+	mvpHg9TQ6IL1UuT8hLct/OvilUvBkO53Z6F+HaXouII=; b=SnSWLvBm+iMa9qDv
+	9EZh5y70pbxqyVMhH5H8alY6MMIR4CKUH/O3Vh0wbWpo2OUpBj9v6DS3EgU680nW
+	Y9t/AwkljqiJcyYN0Nh1kY4LFPtv6ehTtiu+OmwnInQkm+2cYRbu5AjvgHyLKQRj
+	EbZhSf3hLzKsYq3QA6o/xibQj0Hqq2mqxhCkvHYXOjvMeLqQaSP0tCUUdyRQmc8A
+	iTKBqeNUR9lw27uOKdtzUAB2Qlgn7gEtUDuYz+asmVlBPj5qLshJz53ss93vD36T
+	4d5XZWwrmtNwtWHoGcpg5YiXfQsvzT0C+jBr2E2T8NH8UY8LzBLjiCFFSw//9ElT
+	wnKY1g==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 444vyr0pah-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 443hj5d85m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 13 Jan 2025 10:00:23 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7DAE940049;
-	Mon, 13 Jan 2025 09:59:04 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 5692440054;
+	Mon, 13 Jan 2025 09:59:05 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C4443234C27;
-	Mon, 13 Jan 2025 09:58:14 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E727D234C36;
+	Mon, 13 Jan 2025 09:58:17 +0100 (CET)
 Received: from localhost (10.129.178.39) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 13 Jan
- 2025 09:58:14 +0100
+ 2025 09:58:17 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Mon, 13 Jan 2025 09:57:54 +0100
-Subject: [PATCH v3 4/9] media: stm32: csi: register subdev only at end of
- probe
+Date: Mon, 13 Jan 2025 09:57:59 +0100
+Subject: [PATCH v3 9/9] media: stm32: dcmipp: add has_csi2 & needs_mclk in
+ match data
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250113-csi_dcmipp_mp25_enhancements-v3-4-33b96744df46@foss.st.com>
+Message-ID: <20250113-csi_dcmipp_mp25_enhancements-v3-9-33b96744df46@foss.st.com>
 References: <20250113-csi_dcmipp_mp25_enhancements-v3-0-33b96744df46@foss.st.com>
 In-Reply-To: <20250113-csi_dcmipp_mp25_enhancements-v3-0-33b96744df46@foss.st.com>
 To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -79,64 +79,88 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Call v4l2_async_register_subdev only whenever all initialization
-are completed at the end of the probe function.
-Remove as well useless err_free_priv label by returning directly
-upon error.
+Introduce two variable has_csi and has_mclk within the
+match data of the driver in order to know, depending on
+the compatible if CSI-2 interface is available and if
+the mclk clk should be retrieved.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- drivers/media/platform/st/stm32/stm32-csi.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   | 23 ++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/platform/st/stm32/stm32-csi.c b/drivers/media/platform/st/stm32/stm32-csi.c
-index e2f63bb47d33..89fcd7d07904 100644
---- a/drivers/media/platform/st/stm32/stm32-csi.c
-+++ b/drivers/media/platform/st/stm32/stm32-csi.c
-@@ -991,11 +991,11 @@ static int stm32_csi_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+index 5a04018a6a9d..1b7bae3266c8 100644
+--- a/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
++++ b/drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-core.c
+@@ -89,6 +89,8 @@ struct dcmipp_pipeline_config {
+ 	const struct dcmipp_ent_link *links;
+ 	size_t num_links;
+ 	u32 hw_revision;
++	bool has_csi2;
++	bool needs_mclk;
+ };
  
- 	ret = stm32_csi_get_resources(csidev, pdev);
- 	if (ret)
--		goto err_free_priv;
-+		return ret;
+ /* --------------------------------------------------------------------------
+@@ -164,7 +166,9 @@ static const struct dcmipp_pipeline_config stm32mp25_pipe_cfg = {
+ 	.num_ents	= ARRAY_SIZE(stm32mp25_ent_config),
+ 	.links		= stm32mp25_ent_links,
+ 	.num_links	= ARRAY_SIZE(stm32mp25_ent_links),
+-	.hw_revision    = DCMIPP_STM32MP25_VERR
++	.hw_revision    = DCMIPP_STM32MP25_VERR,
++	.has_csi2	= true,
++	.needs_mclk	= true
+ };
  
- 	ret = stm32_csi_parse_dt(csidev);
- 	if (ret)
--		goto err_free_priv;
-+		return ret;
+ #define LINK_FLAG_TO_STR(f) ((f) == 0 ? "" :\
+@@ -296,7 +300,7 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 				     struct v4l2_async_connection *asd)
+ {
+ 	struct dcmipp_device *dcmipp = notifier_to_dcmipp(notifier);
+-	int ret;
++	int ret = -EINVAL;
+ 	int src_pad, i;
+ 	struct dcmipp_ent_device *sink;
+ 	struct v4l2_fwnode_endpoint vep = { 0 };
+@@ -304,15 +308,9 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 	enum v4l2_mbus_type supported_types[] = {
+ 		V4L2_MBUS_PARALLEL, V4L2_MBUS_BT656, V4L2_MBUS_CSI2_DPHY
+ 	};
+-	int supported_types_nb = ARRAY_SIZE(supported_types);
  
- 	csidev->sd.owner = THIS_MODULE;
- 	csidev->sd.dev = &pdev->dev;
-@@ -1020,10 +1020,6 @@ static int stm32_csi_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_cleanup;
+ 	dev_dbg(dcmipp->dev, "Subdev \"%s\" bound\n", subdev->name);
  
--	ret = v4l2_async_register_subdev(&csidev->sd);
--	if (ret < 0)
--		goto err_cleanup;
+-	/* Only MP25 supports CSI input */
+-	if (!of_device_is_compatible(dcmipp->dev->of_node,
+-				     "st,stm32mp25-dcmipp"))
+-		supported_types_nb--;
 -
- 	/* Reset device */
- 	rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 	if (IS_ERR(rstc)) {
-@@ -1050,6 +1046,10 @@ static int stm32_csi_probe(struct platform_device *pdev)
+ 	/*
+ 	 * Link this sub-device to DCMIPP, it could be
+ 	 * a parallel camera sensor or a CSI-2 to parallel bridge
+@@ -330,7 +328,12 @@ static int dcmipp_graph_notify_bound(struct v4l2_async_notifier *notifier,
+ 	}
  
- 	pm_runtime_enable(&pdev->dev);
- 
-+	ret = v4l2_async_register_subdev(&csidev->sd);
-+	if (ret < 0)
-+		goto err_cleanup;
+ 	/* Check for supported MBUS type */
+-	for (i = 0; i < supported_types_nb; i++) {
++	for (i = 0; i < ARRAY_SIZE(supported_types); i++) {
++		/* Only MP25 supports CSI input */
++		if (supported_types[i] == V4L2_MBUS_CSI2_DPHY &&
++		    !dcmipp->pipe_cfg->has_csi2)
++			continue;
 +
- 	dev_info(&pdev->dev,
- 		 "Probed CSI with %u lanes\n", csidev->num_lanes);
+ 		vep.bus_type = supported_types[i];
+ 		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
+ 		if (!ret)
+@@ -529,7 +532,7 @@ static int dcmipp_probe(struct platform_device *pdev)
+ 				     "Unable to get kclk\n");
+ 	dcmipp->kclk = kclk;
  
-@@ -1057,7 +1057,6 @@ static int stm32_csi_probe(struct platform_device *pdev)
- 
- err_cleanup:
- 	v4l2_async_nf_cleanup(&csidev->notifier);
--err_free_priv:
- 	return ret;
- }
- 
+-	if (!of_device_is_compatible(pdev->dev.of_node, "st,stm32mp13-dcmipp")) {
++	if (dcmipp->pipe_cfg->needs_mclk) {
+ 		mclk = devm_clk_get(&pdev->dev, "mclk");
+ 		if (IS_ERR(mclk))
+ 			return dev_err_probe(&pdev->dev, PTR_ERR(mclk),
 
 -- 
 2.34.1
