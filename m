@@ -1,283 +1,114 @@
-Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C716F155325
-	for <linux-media@vger.kernel.org>; Wed, 15 Jan 2025 15:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.101.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AC4149DFF
+	for <linux-media@vger.kernel.org>; Wed, 15 Jan 2025 15:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736953871; cv=none; b=Hy8bqKid2vl2wEXKv+x8wVENwtxdOuYAjd6ZQlA5iZAilsoPMC1tQ/QoAKBwFGRicbEZYg7mHMZ3m1aQyN+7AyxmzNFKSKYtxHmCXza7aBhjoiOEDDjfJ4Wj6F4PVw9LJAHKwLI6Pt7pTrc3L6heFBqROJcw7KPECPs02gCU15w=
+	t=1736954113; cv=none; b=YGfRGpfKyR4D7NE3FtldgFvX6ZYojlOvK2oDCGw6WOalaSA7XH2LD0kHb2RMkxkLpvzRlFD5epjTiwbDpVOb9zT1gEmETrDXhUCbMNM69cFvIWqBSD9RVx+dNMVpxyuS+BA3jgCjNTIg5BcNNKqP2Oq09Oi/qFZZS5zNaCcZJ0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736953871; c=relaxed/simple;
-	bh=w3iXKpEml9lXLDs+5vLs0CfNg7YDdkXN7EgMTuM4CRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oRR6SmHfC8a32W21UwQgAmSjaZIoUHtqKlgIxWR0eJ8pciBD0ucA3iWJ4hJV7dQRPA3FzqJO48s9uAej/NXfmGV9d8r5nPMDbZaXd2oeXPTre+GbZlQUp87pmWBsPm+pwD21HT5oxsTkRaobipKlirN6mW5Dj3+CBYUjaA9TfVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io; spf=pass smtp.mailfrom=sys-base.io; arc=none smtp.client-ip=185.233.101.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sys-base.io
-Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
-	by leonov.paulk.fr (Postfix) with ESMTPS id 9338B1F0004F
-	for <linux-media@vger.kernel.org>; Wed, 15 Jan 2025 15:03:43 +0000 (UTC)
-Received: by laika.paulk.fr (Postfix, from userid 65534)
-	id DC0FAAA1FC9; Wed, 15 Jan 2025 15:03:41 +0000 (UTC)
-X-Spam-Level: 
-Received: from collins (unknown [192.168.1.1])
-	by laika.paulk.fr (Postfix) with ESMTPSA id EBC49AA1FBF;
-	Wed, 15 Jan 2025 15:03:39 +0000 (UTC)
-Date: Wed, 15 Jan 2025 16:03:37 +0100
-From: Paul Kocialkowski <paulk@sys-base.io>
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc: Daniel Almeida <dwlsalmeida@gmail.com>, Adam Ford <aford173@gmail.com>,
-	Fabio Estevam <festevam@gmail.com>, andrzejtp2010@gmail.com,
-	Frank Li <frank.li@nxp.com>, ming.qian@oss.nxp.com,
-	linux-media <linux-media@vger.kernel.org>, linux-imx@nxmp.com,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Gustavo Padovan <gus@collabora.com>
-Subject: Re: Hantro H1 Encoding Upstreaming
-Message-ID: <Z4fOScVgLqYEU4Hw@collins>
-References: <CAOMZO5D0QvYvr940giHPGwLpunQOpku7e5K_5hHyYYCwZQry2g@mail.gmail.com>
- <CAOMZO5BJt6qzETzMeO47N5Gu8136tppuXKnqv4ypk6HyLR99vA@mail.gmail.com>
- <F5E2D925-668C-4D4D-87C9-8F22126443FD@gmail.com>
- <CAHCN7x+hUJoKRO8U8dgafFip31AKJRqfQw1kOw7YhvZ6xXqNnA@mail.gmail.com>
- <A3476357-8D8D-4B82-8CAB-58370BECF575@gmail.com>
- <a393b3324c60c2c13994d34ca90faf4eb604ae43.camel@collabora.com>
+	s=arc-20240116; t=1736954113; c=relaxed/simple;
+	bh=v+tW/5b7Yz65Cimfgu2a56TKjHf0nLTX2HO5jcRtR8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uoWRgTUqi6IquwcayONJ7PnDgwJHX1VgAddqBj9V8xZO6DyGLJlUoyH19xXpu3IjqzYbzPSS+3lcpJ6pW/7ox9HCQiZZTAe+0LUigz2ys/nBu8be5S2XF3qGj9Cg9jJBlrBbEgwmf7dj7NuxjC6cmKi+nVTTkhkXl61I7zup8m0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BhF10V5a; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BhF10V5a"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4361b6f9faeso6507025e9.1
+        for <linux-media@vger.kernel.org>; Wed, 15 Jan 2025 07:15:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736954109; x=1737558909; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=27BCS3obqDWdKu8wPBVyzX/4QMUicUdiJJjn7SeODGI=;
+        b=BhF10V5aK8aNPtemP3T3N2i+gkBUqs7ZJEtO3Lr81mJLaVaVbPYLOR5LsV4HCDunG+
+         qR/KVqCsvS30iBfnKa6MDt8/Y39GbhmaUhZ0V+i4B8ySfFnD1N27GgNtIxg2NdWBCM3X
+         X2JVISsJMZU+UWYoJV+V0vF3crRoghCETB25JCohemdcxjkTBaEMSDUKUji444FywPXg
+         EVYiLc/76BmaC7SQtmpIrlPfVrfo5goVjTLtHz+2zT4gIwnf5vjgQ+mFXZzmgW4fO32/
+         7nW9qqjWrcibalraedx5sDVt94GgRXZPvkEI1oUhqh6Vie3ziwRlTFuOrdhddF/O3fAO
+         0gWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736954109; x=1737558909;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=27BCS3obqDWdKu8wPBVyzX/4QMUicUdiJJjn7SeODGI=;
+        b=TmGI3fuS306QhhVsdnYC1xO8CjPUNlDyc9/k5mXf08Dd6FJ4KR84TxPciYvWxk9mfC
+         UciNMlT8HZPLCAbkp1kFa7R55Q1MgXKqE75wi5kYz3eEGLIm0dtWykVia8XvDgAkOAW2
+         qvLg/FS70ExoiFGPbn79WOyix4AGegK9T0JFQ+n6giII+8G6HbYpXW9ouwni48OMwvUv
+         j9W+a7IUDroeohZtp8DYdeQEKY+yAxCsSa75hbTkjzOMW0Foj3aekYgXbUnTEms2aAkN
+         g/JI7TGenaZJPyunfDUvWHSXFEOdzTKYaEpNBlijdnp1FLRK5EbQJc0uIP5zDEGkNN7q
+         x/0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUhRtEILgqr2YrRfTK93ds8Bpot1tUIF+mKLmrj6LsbZ9lCP/kmCXRzWKVr3tNtW+rirkkZsILvwy6Tsg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFXxeI+i/zMUzxCmBkrnkWJukPDJFYNqv8ALpOMy64VxjQ1OoH
+	A0dfBuKIKElQnYccrpX4fj9tOwQsku+jeiLty4lXs+OEWwiF0MknNZdXmvEa0y0=
+X-Gm-Gg: ASbGncv/4iALP4oX9bcUCYTf6PsCJxboEyFcxtM9YywRa58hWpiIdWU5RMUTbMzE6Kf
+	7fGEvIv3DJJVjhWcAdNOMUb/Wmc1TrOaB7HqfBo510K1rXt82hZgQs6454knRVBCC9AIrmeh/AL
+	yAH6/2OasnztpABwSZOKRvHqWV7cl3/oGk3cMEVfVsc4RsmntIZC1YZ1CLWK5PY9Ah90Ag4ABd9
+	iIkEI+mgm4ESU5GIkpf5hRXjTubC/jwEBjkdqR/5/MVNk7ewsMU0ibzZls7hsz0H8o2Lw==
+X-Google-Smtp-Source: AGHT+IHcjyEIL1Wamxnymek4xnB4ls055HOXGh964+mQo8ykhNiNVYn3DyPzlDxhYKiSBNi933JvlQ==
+X-Received: by 2002:a7b:cc94:0:b0:434:f2af:6e74 with SMTP id 5b1f17b1804b1-437c6b2ff46mr31074005e9.15.1736954108763;
+        Wed, 15 Jan 2025 07:15:08 -0800 (PST)
+Received: from [192.168.0.35] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c7528076sm27391825e9.25.2025.01.15.07.15.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2025 07:15:08 -0800 (PST)
+Message-ID: <88a0cbea-9462-4ad1-8212-4cb55ffb6a1f@linaro.org>
+Date: Wed, 15 Jan 2025 15:15:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="F48ighn3Nxv23xv1"
-Content-Disposition: inline
-In-Reply-To: <a393b3324c60c2c13994d34ca90faf4eb604ae43.camel@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 27/28] media: iris: enable video driver probe of SM8250
+ SoC
+To: Hans Verkuil <hverkuil@xs4all.nl>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Dikshita Agarwal <quic_dikshita@quicinc.com>, Johan Hovold
+ <johan@kernel.org>, Vikash Garodia <quic_vgarodia@quicinc.com>
+Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Sebastian Fricke <sebastian.fricke@collabora.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Nicolas Dufresne <nicolas@ndufresne.ca>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Jianhua Lu <lujianhua000@gmail.com>,
+ Stefan Schmidt <stefan.schmidt@linaro.org>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
+References: <20241212-qcom-video-iris-v9-0-e8c2c6bd4041@quicinc.com>
+ <20241212-qcom-video-iris-v9-27-e8c2c6bd4041@quicinc.com>
+ <Z3_nCPk_g8znto4A@hovoldconsulting.com>
+ <64f8bebd-35e1-c743-b212-e1a3292bade2@quicinc.com>
+ <Z4EuiPEw8mvDQ2gv@hovoldconsulting.com>
+ <24334fb8-4d83-eb06-aee3-dfe1f8e4937b@quicinc.com>
+ <552972B8-1ACA-4243-A8E3-8F48DAF39C5C@linaro.org>
+ <7e75deb6-6c0e-4bf8-b4c5-d76b1abe2d5b@xs4all.nl>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <7e75deb6-6c0e-4bf8-b4c5-d76b1abe2d5b@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 11/01/2025 10:45, Hans Verkuil wrote:
+> 4) What is the road forward? (I assume that venus is removed once feature parity is reached?)
 
---F48ighn3Nxv23xv1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+sm8250 support is to removed and all HFI_6XX platforms of which sm8250 
+is one, are expected to be supported by Iris once feature parity is 
+upstream.
 
-Hi folks,
+HFI <= HFI_4XX will continue to be venus, including any new upstream 
+submissions for HFI_4XX.
 
-Le Tue 14 Jan 25, 11:16, Nicolas Dufresne a =C3=A9crit :
-> despite Andrzej having left the community, we are not giving up on the en=
-coder
-> work. In 2025, we aim at working more seriously on the V4L2 spec, as just
-> writing driver won't cut it. Each class of codecs needs a general workflo=
-w spec
-> similar to what we have already for stateful encoder/decoder and stateless
-> decoder.
->=20
-> - https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-deco=
-der.html
-> - https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-enco=
-der.html
-> - https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-stat=
-eless-decoder.html
->=20
-> It is on top of this, that for each codec we have to add controls (mostly
-> compound) specifics and details that suites stateless accelerators.
->=20
-> From a community stand point, the most important focus is to write and ag=
-ree on
-> spec and controls. Once we have that, vendors will be able to slowly move=
- away
-> from their custom solution, and compete on actual hardware rather then
-> integration.
+Unless/until Iris gets upstream feature parity, we will continue to add 
+new HFI_6XX SoCs to venus.
 
-Thanks for the continued interest in this topic, I am also still interested=
- in
-pushing it forward and defining a mainline API for stateless encore that fi=
-ts
-the bill.
-
-> It is also time to start looking toward the future, since Hantro H1 is ve=
-ry
-> limited and ancient encoder. On same brand, if someone could work on VC80=
-00E
-> shipped on IMX8M Plus, or Rockchip codecs, that will certainly help progr=
-ess. We
-> can also get inspiration from many other stateless encoding APIs now, not=
-ably
-> VA, DXVA and Vulkan Video.
-
-The VC8000E on the i.MX8MP is definitely my next hardware of interest here.
-I will have time available to work on it in the near future.
-
-> Of course, folks likes to know when this will happen, stateless decoders =
-took 5
-> years from start to the first codec being merged, hopefully we don't beat=
- that
-> record. I personally aim for producing work during the summer, and mostly=
- focus
-> on the spec.
-
-To be fair we are not starting from scratch and seem to have a good momentum
-here so I am hopeful it will not take as long!
-
-> Its obvious for me that testing on H1 with a GStreamer
-> implementation is the most productive, though I have strong interest in h=
-aving
-> an ecosystem of drivers. A second userspace implementation, perhaps ffmpe=
-g ?,
-> could also be useful.
-
-Would be glad to not have to work on the GStreamer side and focus on kernel
-work instead. Sofar we can already aim to support:
-- Hantro H1
-- Hantro H2/VC8000E
-- Allwinner Video Engine
-
-> If you'd like to take a bite, this is a good thread to discuss forward. U=
-ntil
-> the summer, I planned to reach to Paul, who made this great presentation =
-[1] at
-> FOSDEM last year and start moving the RFC into using these ideas. One of =
-the
-> biggest discussion is rate control, it is clear to me that modern HW inte=
-grated
-> RC offloading, though some HW specific knobs or even firmware offloading,=
- and
-> this is what Paul has been putting some thought into.
-
-In terms of RC offloading, what's I've seen in the Hantro H1 is a checkpoint
-mechanism that allows making per-slice QP adjustments around the global pic=
-ture
-QP to bit the bill in terms of size. This can be a desirable thing if the u=
-se
-case is to stick to a given bitrate strictly.
-
-There's also the regions of interest that are supported by many (most?) enc=
-oders
-and allow region-based QP changes (typically as offset). The number of avai=
-lable
-slots is hardware-specific.
-
-In addition the H1 provides some extra statistics such as the "average"
-resulting QP when on of these methods is used.
-
-I guess my initial point about rate control was that it would be easier for
-userspace to be able to choose a rate-control strategy directly and to have
-common implementations kernel-side that would apply to all codecs. It also
-allows leveraging hardware features without userspace knowing about them.
-
-However the main drawback is that there will always be a need for a more
-specific/advanced use-case than what the kernel is doing (e.g. using a npu),
-which would need userspace to have more control over the encoder.
-
-So a more direct interface would be required to let userspace do rate-contr=
-ol.
-At the end of the day, I think it would make more sense to expose these enc=
-oders
-for what they are and deal with the QP and features directly through the uA=
-PI
-and avoid any kernel-side rate-control. Hardware-specific features that nee=
-d to
-be configured and may return stats would just have extra controls for those.
-
-So all in all we'd need a few new controls to configure the encode for code=
-cs
-(starting with h.264) and also some to provide encode stats (e.g. requested=
- qp,
-average qp). It feels like we could benefit from existing stateful encoder
-controls for various bitstream parameters.
-
-Then userspace would be responsible for configuring each encode run with a
-target QP value, picture type and list of references. We'd need to also inf=
-orm
-userspace of how many references are supported.
-
-Another topic of interest is bitstream generation. I believe it would be ea=
-sier
-for the kernel side to generate those (some hardware has specific registers=
- to
-write them) based on the configuration provided by userspace through contro=
-ls.
-It is also useful to be able to regenerate them on demand. I am not sure if
-there would be interest in more precise tracking of bitstream headers (e.g.
-H.264 PPS and SPS that have ids) and be able to bind them to specific encode
-runs.
-
-We could have some common per-codec bitstream generation v4l2 code with eit=
-her
-a cpu buffer access backend or a driver-specific implementation for writing=
- the
-bits. I already have a base for this in my cedrus h264 encoder work:
-https://github.com/bootlin/linux/blob/cedrus/h264-encoding/drivers/staging/=
-media/sunxi/cedrus/cedrus_enc_h264.c#L722
-
-Last words about private driver buffers (such as motion vectors and
-reconstruction buffers), I think they should remain private and unseen from
-userspace. We could add something extra to the uAPI later if there is reall=
-y a
-need to access those.
-
-Cheers,
-
-Paul
-
-> If decoders have progressed so much in quality in the last few years, it =
-is
-> mostly before we have better ways to test them. It is also needed to start
-> thinking how do we want to test our encoders. The stateful scene is not a=
-ll
-> green, with a very organic groth and difficult to unify set of encoders. =
-And we
-> have no metric of how good or bad they are either.
->
-> regards,
-> Nicolas
->=20
-> Le lundi 13 janvier 2025 =C3=A0 18:08 -0300, Daniel Almeida a =C3=A9crit=
-=C2=A0:
-> > +cc Nicolas
-> >=20
-> >=20
-> > Hey Adam,
-> >=20
-> >=20
-> > >=20
-> > > Daniel,
-> > >=20
-> > > Do you know if anyone will be picking up the H1 encoder?
-> > >=20
-> > > adam
-> > > >=20
-> > > > =E2=80=94 Daniel
-> > > >=20
-> > >=20
-> >=20
-> > I think my colleague Nicolas is the best person to answer this.
-> >=20
-> > =E2=80=94 Daniel
->=20
-
---=20
-Paul Kocialkowski,
-
-Independent contractor - sys-base - https://www.sys-base.io/
-Free software developer - https://www.paulk.fr/
-
-Expert in multimedia, graphics and embedded hardware support with Linux.
-
---F48ighn3Nxv23xv1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAEBCAAdFiEEAbcMXZQMtj1fphLChP3B6o/ulQwFAmeHzkkACgkQhP3B6o/u
-lQwVNQ/1FIzK6k1Dqa9nxG4Vt3GRLANsH2j4xUJVttt/viyZbPhGxXyU5OdBmb67
-yzBsolW5LfYwDl1IVZ9FHgwiHHtowPL0Sy4e4MH3X3jFHxX0+/wXAA271HEmLhZ0
-ZOZy7aajtY3dC76ap1uIgQc3aDnyV03SZGpoa6YzuxI+v5v/EuJTKwecl8rUMyAd
-6pzrvzMvL0tiWxnHae088BdQP32qc6APh6e8Y904fF5LJAjj3MQdaMbKdkXSHc2N
-KK9cBadaZPrny8gKdY4lR/IeYrWFX1o+bzp2ltfdf/cGo1zk9KoqoHki+eU5kcCD
-Oz7l0xyRoXWpazgmORObOrtq7RsCPeVtLWQ90X6UW99MzAgd5enwSwNi8LFa27FI
-sBnQLo6ecF18Pfr9G3gg+YfLh5WuTPI2WCE+bAaYfNFTJ7X9t+H9lZiqbbrz3yNb
-mwjwsD+Hf7NAd0SWFRVWrzE1knncrdeAtJJFPyemNim9X1+etqfRgvPBn1YJRow3
-BRyhVoLgI5OfJ+Zj4OxGMSLHzwjfCxZOb4AofyD2NofmH6wWhi1nAFjK9vf4Qm9k
-Zmob5WjPLnDVt9P3yM56cY1IcjthDlD9qzpZnUsEGohVsaTmzFk59uwQm3JlHQai
-tI0o7WUPpKqxz+McZdRnnBGhbegUfX6Fb8Kmhsx3H85qZ2TGuQ==
-=qJ9C
------END PGP SIGNATURE-----
-
---F48ighn3Nxv23xv1--
+---
+bod
