@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE551DE3A5
-	for <linux-media@vger.kernel.org>; Thu, 16 Jan 2025 11:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A393519259A
+	for <linux-media@vger.kernel.org>; Thu, 16 Jan 2025 12:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737028039; cv=none; b=QXWL71+DBHPJtRaPyh/Kfj0k6eHadvoDGgVxaBh/qjya/MXQVyyqCDC3w8nZMfTcGPmjgi3MJSSwju7mx+PPDoj+d8fowb2h4GZmQdQhYk6PufOVVWiBKB1bcKLjAhQLt8K/WztZqGhcBzEwvOFKi3N9wrPRcBLLY4Fnr5lmwbw=
+	t=1737031286; cv=none; b=cWR/yEi6J2QBOYurppKR5RF54SrrmEo6Bz6JnTyVTQ8u3RCS9wHj2IKR0De2bPjAIW5738yRx59W5n28oF3oAyYBYAdGjrEmvHIVWSW+AIyh160HX375qTnbEbHJqKp/VhaFJhzUQ9m3y6CfcAFkrwJCtR4dtFQl8mLlBxl+7Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737028039; c=relaxed/simple;
-	bh=KUaRZoGSBn64BKd33Hm/qARCzpPjyO0qH4YMS2UlGmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=llVKzpIt2b3rIw9zZh/HfXnCjoksGO/HBAC0KeUob41rFa+iFaCG+JYFnS7VsVz6iTTb8suzBqWRnfyMM2R840cGI1ozwy0nSuj6H4SBht2jQionCf30CNhnKIAU4A9ugrGo6Moik4Ka4NrfwerBubv3PW/xS0fQSPaHMQUKSI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T4aOoae4; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1737031286; c=relaxed/simple;
+	bh=SZoOQUKwQqiTLcZ26edgdxKQrZcQrPcVo/EavtdkLM4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AI6SpXrPgcTJwnuDFN25Liwg4FKvtv8UAQ80gO5GGDupY80T46k+Iv+LZjOZc5qKY0iCUb2YYyfZ0EnHeU/wO/xoQ93LXCkQEKuyZjT03DW2MvkFCVcl3txWWlUX3CTdZypMlFSWu57f27pWT3Zqo4ZVFJ5zOfwrhxaLx8CPQh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GlBnsPPz; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T4aOoae4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GlBnsPPz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737028037; x=1768564037;
+  t=1737031284; x=1768567284;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=KUaRZoGSBn64BKd33Hm/qARCzpPjyO0qH4YMS2UlGmE=;
-  b=T4aOoae4uR0xe8Tj5hWWwXzsOkqb+74+WmLSQRAE/7smdImt5sfmyXQj
-   F5xO3mhmAupAvpNl7T1U7dbQKBGNu+NvI/yPaBwVEkXRmw2bH9lfJrZVb
-   9CBs0OehNydG/q0bZsDQy6S1d4Zlz3PCHlzrBCMNhSbs7tTE2AQlF1yM5
-   Dif73MbHDGepGN4BkT1tJAOWqWRBDTBTRSAU/u0eiwNhJA0cNBqudYqvm
-   l8ZNKCo4xdziCRjgSZi8K2CDNyMIO/pa+eRRWZXSKvP2YFvcFwCZisBr6
-   yzRpW3X5AZ47RumEViPTZiSKw7c3oY6LzNMzES+zBncAcaGjLnSTGyZ4g
-   A==;
-X-CSE-ConnectionGUID: +9CWcbAVSmK9aVCHzzKOxA==
-X-CSE-MsgGUID: DRMGbBSSTiW21j2fWPcKfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="36686965"
+  bh=SZoOQUKwQqiTLcZ26edgdxKQrZcQrPcVo/EavtdkLM4=;
+  b=GlBnsPPzQaQwlw3OFeJCYztma9dpkiGZ2GrFa1DjagEYXZpR4AQpu5Tk
+   418OuoYBwdZzboZIKp5TQRTV4uxGjEcoH7vY/PkpEX5zWPTeMMbTjYVVr
+   9QzZzFdF0mSTBps2W+aiJchprfu4D13IMLlAtfzvxAa6qOAvOUsYzqsKD
+   zWupMPJkcqUvCfStPJ3ZWJ2rmrKTz7kPI2F8M33aQM8mJgUKwBt1N1LZ7
+   by+fBvSpcREZNbj2qCQe6by8MrLLNE6LKdZ7mkV+Y9SqIdvIPpky2Gwld
+   divLF+alfFqHELQsur09mQy8bIx5/dWeugIbBlABDLjcpkeNpch7VuaIr
+   Q==;
+X-CSE-ConnectionGUID: evGBRfiBTU+rtchemrJPIg==
+X-CSE-MsgGUID: q7V5/b/BQhW3aK5+XHEs1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="37568953"
 X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="36686965"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 03:47:14 -0800
-X-CSE-ConnectionGUID: 4Jzi2QDAR/q/L4s0u9OuVg==
-X-CSE-MsgGUID: J6ozPDi6QZWIDLDyaa64Cw==
+   d="scan'208";a="37568953"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 04:41:24 -0800
+X-CSE-ConnectionGUID: BFTn8BY3SJqBPLvPp4xbVA==
+X-CSE-MsgGUID: zVpPjYxrTiypwgc2Dythog==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="136313636"
+   d="scan'208";a="106025355"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 03:47:14 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1E75E11F944;
-	Thu, 16 Jan 2025 13:47:10 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1tYOL8-000HYU-09;
-	Thu, 16 Jan 2025 13:47:10 +0200
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 04:41:23 -0800
+Received: from svinhufvud.intel.com (maa-artisokka.localdomain [192.168.240.50])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0EEAF11F944;
+	Thu, 16 Jan 2025 14:41:18 +0200 (EET)
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
-Cc: =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>,
-	Ricardo Ribalda <ribalda@kernel.org>
-Subject: [PATCH 0/2] Fix PM on imx214 error paths
-Date: Thu, 16 Jan 2025 13:46:58 +0200
-Message-Id: <20250116114700.67468-1-sakari.ailus@linux.intel.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>
+Subject: [PATCH 0/4] Camera sensor driver PM fixes
+Date: Thu, 16 Jan 2025 14:41:14 +0200
+Message-Id: <20250116124118.42130-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -64,23 +62,30 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi André,
+Hello everyone,
 
-I'm posting this separately as it seems to be backportable, your set needs
-to go on the top. I've pushed that to my "devel" branch in my
-git.linuxtv.org tree <URL:https://git.linuxtv.org/sailus/media_tree.git/>,
-please let me know if you see problems.
+Here are a few patches to fix (runtime) PM handling in the example sensor
+drivers. These should probably be backported but they don't seem to
+backport very far without conflicts. As these are almost all on error
+paths, I'm not sure how much effort it makes sense to put on this as
+no-one has reported issues in the past either.
 
-Sakari Ailus (2):
-  Revert "media: imx214: Fix the error handling in imx214_probe()"
-  media: i2c: imx214: Rectify probe error handling related to runtime PM
+Sakari Ailus (4):
+  media: i2c: ccs: Set the device's runtime PM status correctly in
+    remove
+  media: i2c: ccs: Set the device's runtime PM status correctly in probe
+  media: i2c: imx219: Rectify runtime PM handling in probe and remove
+  media: i2c: imx319: Rectify runtime PM handling probe and remove
 
- drivers/media/i2c/imx214.c | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c |  6 ++++--
+ drivers/media/i2c/imx219.c       | 13 ++++++++-----
+ drivers/media/i2c/imx319.c       |  9 ++++++---
+ 3 files changed, 18 insertions(+), 10 deletions(-)
 
+
+base-commit: 73ea5f5031499252f43ad046de42a9c6efea81b6
 -- 
 2.39.5
 
