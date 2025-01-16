@@ -1,329 +1,228 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD18522CBC7;
-	Thu, 16 Jan 2025 16:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043675; cv=fail; b=RYukpsAUmRDCEoZe/W3Cuy+VzIXhbhlgk8cgwoqUM4SnN9ZWhtsLeFbZtCXIr4Dbv9vKBnD5M3rvX2Fex8l5Cw9MieaU+6vwtc7EZLvnIqP6y+4MoyWIM+eu7vdoc3ysZDcvFtQxxVsRv4YDhzYnddey6SzZezwaaY1ehN5Y56Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043675; c=relaxed/simple;
-	bh=Mbo7PXPbQc39SXIE8810vjox+XB6ZE7YwL3R4TRxuhc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EHci4WI1v65dGcPCKCjoGPdAw1xb68iOj/y2l7YfbuB7ap5UtWLKdMGtUVO49Oj52ChdqNhqvSGttSZp3mGJYgmdKFfqhrj85xYptDwhkaLMYsGkV65qJrYWE5Wr0a0nwfAM3mg3kAN+mDCU+8P7m/Oy2t1LymcehGC8GrDW6Tc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=osz3GX6z; arc=fail smtp.client-ip=40.107.220.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA07D14884F
+	for <linux-media@vger.kernel.org>; Thu, 16 Jan 2025 17:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737049403; cv=none; b=ggeC8lBUazWEgqDLQHbZiL4u4JHPdahIM7+YFPzKrZRvNsa4RR2CrWx9O2Q8n/mUksnP4JM9TF1yOsXsIwm8Ps8JOKzmX2EkkhPv0iXKWMCVKRm1PnFJH+h08dtwmODR/NY+3P38xPQBYbf0I49cIx9KtD4kBGaCG5BUTRfVA2s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737049403; c=relaxed/simple;
+	bh=6KoalZ0ghIt/CsoIyMX4CFT3D6yl8EI9lw0o7rdluiY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JXFCXghGGoO/7BizFWgXwboa4n3zcygrudKISV8/sW2SX2SYxV6xwGk/P/5er1SKO53WhSSLNKKt59yNK3sR/hK25Vaa0Qa0eBUbkSUXO2LoVji6tOlKN8HLIJeLM2+NkMRp7Y8/Kbh7SE5AOllXWB1jbfcyJvAgbIbJ48jy/Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=YZ8oURHv; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="osz3GX6z"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hX74YJHEqBE7zCF9SKn7j+yTjuzamFqwmtmr7fBrCw53M4MSew8R+bY/STijsNoL+BfP/F2WqbdxD2GG4DLm4n4w7AzhIUWt+99iujis65JEj9eleorb5bjZ9lMhJ9CoFMakR2TivqXoMrhWTbIhJzsG4mQTbYD2IQjO5sDzgxgEagkxqvrU1/lbTK8HW6dPHFDbbd+tgaaE9X9BE45+kwcr6tVq+xebvSKruirClJ0UWs1rrLAKkfsMCAKpL4WO4CR29ZR/+38MnYH6dfzCTkT2iTY2/O2xSm/GgYEdBZqJJ/fxVcCvOxIw640tv6BbgDC2ibCUlS6nhpQJXWG6SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uw5gZebVobFjkxrFoD615J8Bq97IQ5/RaJdKLdAuqTY=;
- b=pAdNLcEDqt41d7MVOFy6im3rsjbI4ywMt2OUAH4Ql7OnU5tNxnJZJ1/mC73VzxPe6P3FTrybt1ziRbIVT7E4cfUfdX4M+79cbGIgUzgmBg7bCMMn0lwnLiXuJperLMfCJ9QKha/KTDOW6k7JTFuhVp/8fC00gjegKN9VfIFOcAPq8ZO0lxyRa63vMBZ0jcZyec2XQm88OC0pZdLOBiXl8UGEeDCU+ThN6+/+edtb4GEfdTVFpgKWffkTuX+8gm2KLvf5uCgSQy+p7HGgLz85U1IXfuBvCtNWuPwM52Iz1pG3NR8Wz32dZMcHq4F2ox2u2A3TehesAsDpg4F4ppjWTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uw5gZebVobFjkxrFoD615J8Bq97IQ5/RaJdKLdAuqTY=;
- b=osz3GX6zmOL4IK1qrmnmAX3RthBmVr3uthaFjS25+tdxMfeS5YG7iOfRFhSJ2xtgEqJXpxOerE06GBH/62ECP/q+mjNI0SI9+byqY1rLS9GBrtFBOzr0X1lIYVRoPO09ifbVL+IrM5BPdY6DL2rZblwMavpmI9eukQGOQ/++SjUgWumIoffC5biBi8zq/SSQe7JdyuOOtqh0AYKbq/nnPUutMVQTdW8ySmS8DIOsTnX9Bsvw794JesK3gRMDyuaOkrNAsjnFBSrFxadwJu1stWDnfcaf0Y1ReJ6ovHQlW9HfrPy1g8TTr9Ej/2KnVS1tymy4AhpR9SHpbP8oLuknEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by PH7PR12MB6633.namprd12.prod.outlook.com (2603:10b6:510:1ff::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.14; Thu, 16 Jan
- 2025 16:07:49 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%5]) with mapi id 15.20.8335.017; Thu, 16 Jan 2025
- 16:07:49 +0000
-Date: Thu, 16 Jan 2025 12:07:47 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Xu Yilun <yilun.xu@linux.intel.com>, Christoph Hellwig <hch@lst.de>,
-	Leon Romanovsky <leonro@nvidia.com>, kvm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
-	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
-	vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
-	yilun.xu@intel.com, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
-	leon@kernel.org, baolu.lu@linux.intel.com, zhenzhong.duan@intel.com,
-	tao1.su@intel.com
-Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
- kAPI
-Message-ID: <20250116160747.GV5556@nvidia.com>
-References: <20250115133821.GO5556@nvidia.com>
- <f6c2524f-5ef5-4c2c-a464-a7b195e0bf6c@amd.com>
- <1afd5049-d1d4-4fd6-8259-e7a5454e6a1d@amd.com>
- <20250115141458.GP5556@nvidia.com>
- <c86cfee1-063a-4972-a343-ea0eff2141c9@amd.com>
- <86afb69a-79bd-4719-898e-c6c2e62103f7@amd.com>
- <20250115151056.GS5556@nvidia.com>
- <6f7a14aa-f607-45f9-9e15-759e26079dec@amd.com>
- <20250115170942.GT5556@nvidia.com>
- <5f588dac-d3e2-445d-9389-067b875412dc@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5f588dac-d3e2-445d-9389-067b875412dc@amd.com>
-X-ClientProxiedBy: BLAP220CA0003.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::8) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="YZ8oURHv"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-436637e8c8dso11568955e9.1
+        for <linux-media@vger.kernel.org>; Thu, 16 Jan 2025 09:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1737049400; x=1737654200; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sFUmY5bxO6t8UNGqtBvm5S37BxnI3MNuaB1bun9ydgk=;
+        b=YZ8oURHvJ0IqQuXfk5VZi5uJFqJC+Zn+ATXbI6rzy2Z6gfk9RGRTRueBgnWWLhXkNZ
+         rhKiNAx3rr/7EgoQ78uODaWzcSR3rzCHT4Ex9RVy0ajBDKGkRGZUzljm2waWFbNjD3tb
+         etYsoHkaBAUendQOw9bKayFK4maZqXXmMV8oIyD87AS/3GJQyizwb2pKK79vRWFD0Yex
+         jIsrV4XKfbeFrno+QcG+7nS6vu6KpgPzHky/KvAKOETHQAiXHpxwGpmO2RylMFVQx4ou
+         hYEypRzh8plIgsFB+SvuNMoTvpzbpYnCknym//G6xGzDPzlEarEsB4qOVP4HmQhs1mCh
+         8b1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737049400; x=1737654200;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sFUmY5bxO6t8UNGqtBvm5S37BxnI3MNuaB1bun9ydgk=;
+        b=qB3YVxSoBq+xiup66z6TA6LJHsjUX48nbpXmW20z5Kk1KmE2ne1503ozgOMfsVjylQ
+         nafCv7UvxcGGeAWFoHzBKqp4L83qnlo+h1fzJdes/3Gbzlqjrzoa0QArqSE2aNP1RCIi
+         e1mtt7b7JwZ6qQM6gKiMivq5Pqv9Pri3w4aiZYbnopVKcNeFfSkkHrWLXdky26Sbl/+q
+         Aeyltb4YqEsGX126cx5ARb0lwBGCSsimN7JlaL2gXjtuHOd9wYW/ikFyd/8rMbIPLvpT
+         19nlWr8B1x/iAgNZV39WwROT+MNYWh35LsfIMKFH+7ueebp8cfznKG+N9+xX0sINuF/S
+         XhsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFpTzKX8DeRn389dezXz844n4c9YCdjT97KvvFUwolvGp5jaIN3BNkHv4Ll4VSoP14ECLlBmo6oPJb+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwilrXjoZgJ7ED7S5NUYnm/zavJV1HxmhL7rcFvhkfSTq2MAiEi
+	EjPr40SGh8Ty9zN/VLA8HXetUnHnZOWP4EJSEeDaW0y43hB91Wk41zJ+9vKipbs=
+X-Gm-Gg: ASbGncu5pIWc3KRrGT6zqNfdqMofqs3pieisccwqNOC8PDZNyWm2uTrL1CzTOkS7fDz
+	Wir64/+t8g9h2LaAjxbFKU6ba8/KJdq8Yp+/Ej5v40+IHdhWQl27ygZrAyrmZcxXWgELksmdqSg
+	rbefSqpIkLUhMRdYxp3+DvrrXRun1ewfJFCmYT6osr1iPXGETw0KNoY15HmE1JzkIC+AOHgZU9k
+	58dgmKT1AHbqZ0iGe2Z/n3P7APTjLcOIJc6GaLc+BMSU5/w
+X-Google-Smtp-Source: AGHT+IFC+OXvCmVsIdw8ejrPDR+0n3pDOimziwX8sqXmNsprU+6Q0BH+anPzv5EQJWOZscqpxZePGw==
+X-Received: by 2002:a05:600c:3149:b0:434:f297:8e78 with SMTP id 5b1f17b1804b1-436e267fbe1mr324889155e9.7.1737049400135;
+        Thu, 16 Jan 2025 09:43:20 -0800 (PST)
+Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43890413053sm6302515e9.10.2025.01.16.09.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jan 2025 09:43:19 -0800 (PST)
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date: Thu, 16 Jan 2025 17:43:09 +0000
+Subject: [PATCH v2 1/3] media: i2c: imx415: Add read/write control of
+ VBLANK
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|PH7PR12MB6633:EE_
-X-MS-Office365-Filtering-Correlation-Id: c607b858-bfac-4822-ccb5-08dd3647ec27
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UDQzRWhXVitOdWNsQitVb2lkTzk2alJVT3o1eFZ3QmJBRGIvaGwzZm16NGFI?=
- =?utf-8?B?aDI3aFYvYjRhMURYSjVLY0V6R2dma1VaaTAwQW9jeEgzUmlzMXgwajFxZGxK?=
- =?utf-8?B?VTdpM2g4dkl2RXkvQ3E1cUFtS2hzV3YxZ0lpZkd6cWVLTFFsOFkvdUI0WHFZ?=
- =?utf-8?B?OTM1am5rNC9wVzJTUDVXZ3dmOUdHR0MyZTUzT2R0UEJvK1d4MlFXeVdUaXVV?=
- =?utf-8?B?VTFwQUJvSkdyWHZnRjFGUmkzNjIwOUsrQzNwZng4cjdMQSt4MnRBVXE1MXdL?=
- =?utf-8?B?S1NwRzdmbWNuNjhGckxocDhNZ1VrMGlROUVhWTBBdWpGOUhTRTFPaGdYSFhK?=
- =?utf-8?B?QW05YVpJRUNpVWgrTjRBWllncGtJTk5NTGQzV0o5M0krOGdLVnpaOGh5dmVD?=
- =?utf-8?B?Nk5xZ3RST1lRMXN4Wk83M3d2Z1pVUytIc1R3L2x1ZHhuQ3Nrc0VIc2xRcEZi?=
- =?utf-8?B?dnpKSlJlczRBYktSM0ZDb1dSNTJCeUEyUWhWYWMxN2p3RGt5c1JCRFlmMjU4?=
- =?utf-8?B?cjUrNFFRT1N5byt3UGlRVjcvZUdCY0h4UXhPdldMVGt5dS8ySkRLZURMMFlW?=
- =?utf-8?B?eWJVU296UHN2Q3hmRHViVVVSUW5veGtBSktUKzBrUzFSb29XaCs4bXNVcmwv?=
- =?utf-8?B?VVZOc3l2bVVTS2FSL2ZqYS9yeFZGTFJxWHh0RmtOWmVxNFJvcTEzMHRveEw3?=
- =?utf-8?B?ZCtZR0RacXR2VXZFc2dNRkZRWS9uazhXZmovODQzTFhZWDZuVjV0ejRUUith?=
- =?utf-8?B?V3VQY3FwK3BNMlMxdjgxaS9CdUI1UFVHbmxLR1F1elJRbnJnQVJCVk96d3J4?=
- =?utf-8?B?cU1qV2Mzc2lQU0p6RkVNVEVsdThMQldkd1VJRDN5UHJiT0MvcFhPdTBrdFpq?=
- =?utf-8?B?bDkyZVBpZ3VMUHMvTzF5dUMwZ2NRWldoMjRiMDdwOTVhUkR4YllSdVFiU2Fw?=
- =?utf-8?B?TFZFR09uZGxDNzhGaG9RNEdZa25ZNm95ZkQ4Nk5KYkJlbUlyZjZtaEwybnR2?=
- =?utf-8?B?a0Q2bDY1WmtXWkFpcVJMV1p6dWJlNUIyc0xzeEJDOE14OE9QNEZUNHBKdmZp?=
- =?utf-8?B?aXViQnpEOXhtTHEwQ09wbmdSdmRBZTJkZ1BqNnZ2VmY3SDJCRWR2endZL04z?=
- =?utf-8?B?T2FOdXBsbVBLczg0RERKNk9iaXJzQS9OVGVteDFqRk5udElYVG9BRVdFU0ky?=
- =?utf-8?B?UzU4R0x0TnV2WWR4VjlPVzBGSldqb0M3Zy9FbENKUlA5VjZVcWhnSXcrVDVh?=
- =?utf-8?B?WFBVMm5SVmY1Q3dBM3hCdzM3UngrUE9FcjlSMHJHMGIrY2NYMFVrTnBJK1Nk?=
- =?utf-8?B?K1BFc2EyQ2pPN2lISlI3RUI5bHZLYThUNjRVTFZHQnRhLzlLVS9WelMvV1p6?=
- =?utf-8?B?SEg1ejc2bVI2TGVZclh2aDE4WGJ6RXhsZWpPR2ZJNkNIRFZ0dklyb3JQWUVJ?=
- =?utf-8?B?VTMzSXBUbUozRWJxZkZtSFV2cGdzbHVaSUpQYUFFZ1kya3FpajNZMVVOM0ZE?=
- =?utf-8?B?WjdOaVg3SDE5a2czNjB2WVExeXNsUG9PanJzbHNHbzBiV3FHZjZwYjJ0TWN4?=
- =?utf-8?B?bzlVbC8wcGZ4bEZPYkE3dE80eENTN25BTXRwSmZFN2k5NDl0bm9jSEc4QUE1?=
- =?utf-8?B?cGFTamUvNzVNMTlocHZZTGtLUnlIbmQ1NENnQ1VMRitEVUJLQXc0R0FoNnFP?=
- =?utf-8?B?ajlWNitDMURSWk5nVEl1K1ZHK0hKVWNjcnhVY0RHa2JpS0g3ZFRSN2VyZXFj?=
- =?utf-8?B?eTRyV0hRVlBhSzk5M0pmMy84TjBPV1hybVIxazdualRJTXBZK0ZKMWc3Vkkz?=
- =?utf-8?B?L2tXR3NRMDlSSW1ONit1cmZoVG9iTXMySUNGUWt2djlMeTFyS29ieTRPZlJz?=
- =?utf-8?Q?6IiRs1ugeNtlM?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RTZtaGVIMWFWZmd1Zm5ZZG5icnFZbDZjN0Z6V2NwNURnNEdVOTJyRmluRVFv?=
- =?utf-8?B?VWt5TXJPV1FSblZIS0h5ekhoTjBoWm5yVEV2c2ZJWUEzVGJaQkQwNVk3WFkx?=
- =?utf-8?B?Qk5MVGk2RExMRFZRbGhqOSticmo0aENHbldEZjVhOWN5WkIyTitDQzB1QW9k?=
- =?utf-8?B?L05zaEpKRks3My9OOC8wS0N1WTBqOGNTbkVwNUJHemthYVZCOS9YbW5rMzhE?=
- =?utf-8?B?bjVBa2lRcjBXVXowUXZucEoyZU81SW9QcDRxbW0rYkRMblpLcDhjWTkwM0NT?=
- =?utf-8?B?LzFNZDJTbDdpOVFLTXBLL05icHl2Tzh5dVd4QlIveDVOMHRQTFNsdlRaYmxS?=
- =?utf-8?B?KzBpS1ZNM0pZWHgxYkhDbTVxQkhwV1dya2pzdElIRUZRN2pnQ0FUcXNhU1hK?=
- =?utf-8?B?VkJzWG9pT0R3YmRvajQyallWTzcvZ1RDa0VBaWMyRjFwNEl0TWhEeXU5TWRh?=
- =?utf-8?B?bG8zVlVKbE1La0xiM3J6R3FJSFcvcVVVMTd3eEV0YkN6NExBM2h5THFYNUg2?=
- =?utf-8?B?SmtEeHJIN2dWWjRyVGpaWHVXWXBzL1ZxQUQrbUVGS1V2N1A2R3pYMUlSMEtE?=
- =?utf-8?B?MVlhNkJpcU12RjlMVVVKM1dJNGFrb2dibVJxM096V2t2Q3loUjRGNUdLT1RD?=
- =?utf-8?B?ZHc4ZWpET1IwY2RQeURrVDdLNUdNK3BLL1R2QWJmSDRRVjlsRjROMnpJVnYr?=
- =?utf-8?B?OFlaZlkva3pGRVVSUEVJaExUZUZMZnFiVEUzM0FtOXlkakdnSGxnWUhRcG1v?=
- =?utf-8?B?LytQUHdOMThKZHRkWEZZZVlScVRMdUdXdWVCY0xKNFBySDMxcTYxZUtSWUJC?=
- =?utf-8?B?a3I4emVrM005eFR4UDBvb2hiVmZnc2ZPK0x6RGlWUGh6b1phL1oydGc0aU9l?=
- =?utf-8?B?emdReUpzWnBNMEJ2eHljM2ZscXRXakhCWU91c044QnJRTkpiWEVlQjhpc0tm?=
- =?utf-8?B?a1JvcTZSVXdORmNsZ1pMSmc5NUQrV003Zk4wQ2JGSVVMVDNtSHgxVWZZdC9r?=
- =?utf-8?B?MCtsODd1c2xycitqR1R6UlJjcjI5elcwZjAyeXY3ZjIzUFhkWHBrNXorOUNS?=
- =?utf-8?B?ZThIUDJPNGNPRm5kdjBqcnJ6bWo1dkU4ZU5GbTlUdHJNVktrSVBFbzVVdmQr?=
- =?utf-8?B?OFdWUU9IdEwzYjlCTnVRb1Z3bStlLy9RbVlXSnk2Nk9SL0wzUGZMcXRDbDJv?=
- =?utf-8?B?bWEyZk5KNEh4MEJIWEpVNzlHM291dUsyNmlpcjI4NFNMT2lwY1pVZExuUVlu?=
- =?utf-8?B?SlZ1Z3htYVlsWnh4N1BWYkJhTVVZWk5ZaXhNVXNLOE1zNFdvdXVZY1htZTkx?=
- =?utf-8?B?MisxSDYxRmVEeHN0ZlBRR0FkQ1RaWXQ0VmJVMU4yQkFKc1dWSXBZY04vTTB6?=
- =?utf-8?B?WGZCcllGM1l3MVkwY094OWp6K0xnWlk4dTNscktRbXVxKzI2UDVHRHh1WjZE?=
- =?utf-8?B?RDVBb0h4ZXEyNVA3Mks2a2NmUXcxVTQwVkNhT3oxYkdoYy8yWThWdGVObTQ5?=
- =?utf-8?B?QWoxcDlubzZTbjdqWVFlM2VVaVUxajFuSFdQWm9WT1RzYmFyOHpEVzNhUnZN?=
- =?utf-8?B?OGs3QkZibDlYY1VKUnFPS1krMVVId2ZuOTdwYlZ4VGxXcmh5bkhaZW8wTmJj?=
- =?utf-8?B?dko5Um1LTkdEYlIwNTNmVWoxRmtTbzEyVnd6aWtYNjVCeTlXS2t2SUFiTExH?=
- =?utf-8?B?YjRnUGNMUHNibDN1VFZjRnJvOGhmMzlMY2I2TDNQMk1kQmF1N2YrWVU1TjN0?=
- =?utf-8?B?ZU4wODR3aXFvSVoyYU5yc2dkUnVTSEVFUmdNaXBjMmJYRndVam41T1NmcVFL?=
- =?utf-8?B?WjN1R1MwQThXaHp6aE81NWhRcnlITUJEWFJrS2NjOC85QTNuOG1ma01NeW5n?=
- =?utf-8?B?TU04TFlDV2xmanZrUVloUjI0UExwamRzaFc4NVZIbTFVbjUwRForcEZVUWgv?=
- =?utf-8?B?R1lCQkRSSm9OZ3dOcEx0SktRSmVjcTF1SEdlb01wSjI5Mis4d3gxclVsRVhX?=
- =?utf-8?B?V0RqMzhiOS9meDB6dDBheWIwbmdwVTh3TDV1TVJiRlBDNE1KakxjMkRqN1N2?=
- =?utf-8?B?VkpOazZNMVdLVHZMYW43dUY0SUxCaStYbG40TitzeVY2eEQxMlh5cU1HN3Mr?=
- =?utf-8?Q?iSMM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c607b858-bfac-4822-ccb5-08dd3647ec27
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2025 16:07:49.1447
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xwgrVsKx2+LEIs5Q4lvFQV1Dnp1wJ3tXIEuZN1HAbh0Ses44+6TQsFXxsJkzJiVd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6633
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250116-media-imx415-v2-1-735263f04652@raspberrypi.com>
+References: <20250116-media-imx415-v2-0-735263f04652@raspberrypi.com>
+In-Reply-To: <20250116-media-imx415-v2-0-735263f04652@raspberrypi.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Michael Riesch <michael.riesch@wolfvision.net>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Gerald Loacker <Gerald.Loacker@wolfvision.net>, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>
+X-Mailer: b4 0.14.1
 
-On Thu, Jan 16, 2025 at 04:13:13PM +0100, Christian König wrote:
->> But this, fundamentally, is importers creating attachments and then
->> *ignoring the lifetime rules of DMABUF*. If you created an attachment,
->> got a move and *ignored the move* because you put the PFN in your own
->> VMA, then you are not following the attachment lifetime rules!
-> 
->    Move notify is solely for informing the importer that they need to
->    re-fresh their DMA mappings and eventually block for ongoing DMA to
->    end.
+This also requires that the ranges for the exposure control
+are updated.
 
-I feel that it is a bit pedantic to say DMA and CPU are somehow
-different. The DMABUF API gives you a scatterlist, it is reasonable to
-say that move invalidates the entire scatterlist, CPU and DMA equally.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+---
+ drivers/media/i2c/imx415.c | 52 ++++++++++++++++++++++++++++++----------------
+ 1 file changed, 34 insertions(+), 18 deletions(-)
 
->    This semantics doesn't work well for CPU mappings because you need to
->    hold the reservation lock to make sure that the information stay valid
->    and you can't hold a lock while returning from a page fault.
-
-Sure, I imagine hooking up a VMA is hard - but that doesn't change my
-point. The semantics can be reasonable and well defined.
-
->    Yeah and exactly that is something we don't want to allow because it
->    means that every importer need to get things right to prevent exporters
->    from running into problems.
-
-You can make the same argument about the DMA address. We should just
-get rid of DMABUF entirely because people are going to mis-use it and
-wrongly implement the invalidation callback.
-
-I have no idea why GPU drivers want to implement mmap of dmabuf, that
-seems to be a uniquely GPU thing. We are not going to be doing stuff
-like that in KVM and other places. And we can implement the
-invalidation callback with correct locking. Why should we all be
-punished because DRM drivers seem to have this weird historical mmap
-problem?
-
-I don't think that is a reasonable way to approach building a general
-purpose linux kernel API.
+diff --git a/drivers/media/i2c/imx415.c b/drivers/media/i2c/imx415.c
+index 3f7924aa1bd3..fa7ffb9220e5 100644
+--- a/drivers/media/i2c/imx415.c
++++ b/drivers/media/i2c/imx415.c
+@@ -26,6 +26,7 @@
+ #define IMX415_PIXEL_ARRAY_WIDTH  3864
+ #define IMX415_PIXEL_ARRAY_HEIGHT 2192
+ #define IMX415_PIXEL_ARRAY_VBLANK 58
++#define IMX415_EXPOSURE_OFFSET	  8
  
->    Well it's not miss-used, it's just a very bad design decision to let
->    every importer implement functionality which actually belong into a
->    single point in the exporter.
+ #define IMX415_NUM_CLK_PARAM_REGS 11
+ 
+@@ -51,6 +52,7 @@
+ #define IMX415_OUTSEL		  CCI_REG8(0x30c0)
+ #define IMX415_DRV		  CCI_REG8(0x30c1)
+ #define IMX415_VMAX		  CCI_REG24_LE(0x3024)
++#define IMX415_VMAX_MAX		  0xfffff
+ #define IMX415_HMAX		  CCI_REG16_LE(0x3028)
+ #define IMX415_SHR0		  CCI_REG24_LE(0x3050)
+ #define IMX415_GAIN_PCG_0	  CCI_REG16_LE(0x3090)
+@@ -447,7 +449,6 @@ static const struct imx415_clk_params imx415_clk_params[] = {
+ 
+ /* all-pixel 2-lane 720 Mbps 15.74 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_2_720[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x07F0 },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+ 	{ IMX415_TCLKPOST, 0x006F },
+@@ -463,7 +464,6 @@ static const struct cci_reg_sequence imx415_mode_2_720[] = {
+ 
+ /* all-pixel 2-lane 1440 Mbps 30.01 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_2_1440[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x042A },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_2 },
+ 	{ IMX415_TCLKPOST, 0x009F },
+@@ -479,7 +479,6 @@ static const struct cci_reg_sequence imx415_mode_2_1440[] = {
+ 
+ /* all-pixel 4-lane 891 Mbps 30 Hz mode */
+ static const struct cci_reg_sequence imx415_mode_4_891[] = {
+-	{ IMX415_VMAX, 0x08CA },
+ 	{ IMX415_HMAX, 0x044C },
+ 	{ IMX415_LANEMODE, IMX415_LANEMODE_4 },
+ 	{ IMX415_TCLKPOST, 0x007F },
+@@ -600,6 +599,7 @@ struct imx415 {
+ 	struct v4l2_ctrl *vblank;
+ 	struct v4l2_ctrl *hflip;
+ 	struct v4l2_ctrl *vflip;
++	struct v4l2_ctrl *exposure;
+ 
+ 	unsigned int cur_mode;
+ 	unsigned int num_data_lanes;
+@@ -730,17 +730,38 @@ static int imx415_s_ctrl(struct v4l2_ctrl *ctrl)
+ 					     ctrls);
+ 	const struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_subdev_state *state;
++	u32 exposure_max;
+ 	unsigned int vmax;
+ 	unsigned int flip;
+ 	int ret;
+ 
+-	if (!pm_runtime_get_if_in_use(sensor->dev))
+-		return 0;
+-
+ 	state = v4l2_subdev_get_locked_active_state(&sensor->subdev);
+ 	format = v4l2_subdev_state_get_format(state, 0);
+ 
++	if (ctrl->id == V4L2_CID_VBLANK) {
++		exposure_max = format->height + ctrl->val -
++			       IMX415_EXPOSURE_OFFSET;
++		__v4l2_ctrl_modify_range(sensor->exposure,
++					 sensor->exposure->minimum,
++					 exposure_max, sensor->exposure->step,
++					 sensor->exposure->default_value);
++	}
++
++	if (!pm_runtime_get_if_in_use(sensor->dev))
++		return 0;
++
+ 	switch (ctrl->id) {
++	case V4L2_CID_VBLANK:
++		ret = cci_write(sensor->regmap, IMX415_VMAX,
++				format->height + ctrl->val, NULL);
++		if (ret)
++			return ret;
++		/*
++		 * Exposure is set based on VMAX which has just changed, so
++		 * program exposure register as well
++		 */
++		ctrl = sensor->exposure;
++		fallthrough;
+ 	case V4L2_CID_EXPOSURE:
+ 		/* clamp the exposure value to VMAX. */
+ 		vmax = format->height + sensor->vblank->cur.val;
+@@ -787,7 +808,8 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	u64 pixel_rate = supported_modes[sensor->cur_mode].pixel_rate;
+ 	u64 lane_rate = supported_modes[sensor->cur_mode].lane_rate;
+ 	u32 exposure_max = IMX415_PIXEL_ARRAY_HEIGHT +
+-			   IMX415_PIXEL_ARRAY_VBLANK - 8;
++			   IMX415_PIXEL_ARRAY_VBLANK -
++			   IMX415_EXPOSURE_OFFSET;
+ 	u32 hblank;
+ 	unsigned int i;
+ 	int ret;
+@@ -816,8 +838,9 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	if (ctrl)
+ 		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+ 
+-	v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops, V4L2_CID_EXPOSURE,
+-			  4, exposure_max, 1, exposure_max);
++	sensor->exposure = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
++					     V4L2_CID_EXPOSURE, 4,
++					     exposure_max, 1, exposure_max);
+ 
+ 	v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+ 			  V4L2_CID_ANALOGUE_GAIN, IMX415_AGAIN_MIN,
+@@ -834,16 +857,9 @@ static int imx415_ctrls_init(struct imx415 *sensor)
+ 	sensor->vblank = v4l2_ctrl_new_std(&sensor->ctrls, &imx415_ctrl_ops,
+ 					   V4L2_CID_VBLANK,
+ 					   IMX415_PIXEL_ARRAY_VBLANK,
+-					   IMX415_PIXEL_ARRAY_VBLANK, 1,
+-					   IMX415_PIXEL_ARRAY_VBLANK);
+-	if (sensor->vblank)
+-		sensor->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++					   IMX415_VMAX_MAX - IMX415_PIXEL_ARRAY_HEIGHT,
++					   1, IMX415_PIXEL_ARRAY_VBLANK);
+ 
+-	/*
+-	 * The pixel rate used here is a virtual value and can be used for
+-	 * calculating the frame rate together with hblank. It may not
+-	 * necessarily be the physically correct pixel clock.
+-	 */
+ 	v4l2_ctrl_new_std(&sensor->ctrls, NULL, V4L2_CID_PIXEL_RATE, pixel_rate,
+ 			  pixel_rate, 1, pixel_rate);
+ 
 
-Well, this is the problem. Sure it may be that importers should not
-implement mmap - but using the PFN side address is needed for more
-than just mmap!
+-- 
+2.34.1
 
-DMA mapping belongs in the importer, and the new DMA API makes this
-even more explicit by allowing the importer alot of options to
-optimize the process of building the HW datastructures. Scatterlist
-and the enforeced represetation of the DMA list is very inefficient
-and we are working to get rid of it. It isn't going to be replaced by
-any sort of list of DMA addresses though.
-
-If you really disagree you can try to convince the NVMe people to give
-up their optimizations the new DMA API allows so DRM can prevent this
-code-review problem.
-
-I also want the same optimizations in RDMA, and I am also not
-convinced giving them up is a worthwhile tradeoff.
-
->    Why would you want to do a dmabuf2 here?
-
-Because I need the same kind of common framework. I need to hook VFIO
-to RDMA as well. I need to fix RDMA to have working P2P in all
-cases. I need to hook KVM virtual device stuff to iommufd. Someone
-else need VFIO to hook into DRM.
-
-How many different times do I need to implement a buffer sharing
-lifetime model? No, we should not make a VFIO specific thing, we need
-a general tool to do this properly and cover all the different use
-cases. That's "dmabuf2" or whatever you want to call it. There are
-more than enough use cases to justify doing this. I think this is a
-bad idea, we do not need two things, we should have dmabuf to handle
-all the use cases people have, not just DRMs.
-
->    I don't mind improving the scatterlist approach in any way possible.
->    I'm just rejecting things which we already tried and turned out to be a
->    bad idea.
->    If you make an interface which gives DMA addresses plus additional
->    information like address space, access hints etc.. to importers that
->    would be really welcomed.
-
-This is not welcomed, having lists of DMA addresses is inefficient and
-does not match the direction of the DMA API. We are trying very hard
-to completely remove the lists of DMA addresses in common fast paths.
-
->    But exposing PFNs and letting the importers created their DMA mappings
->    themselves and making CPU mappings themselves is an absolutely clear
->    no-go.
-
-Again, this is what we must have to support the new DMA API, the KVM
-and IOMMUFD use cases I mentioned.
-
->> In this case Xu is exporting MMIO from VFIO and importing to KVM and
->> iommufd.
-> 
->    So basically a portion of a PCIe BAR is imported into iommufd?
-
-Yeah, and KVM. And RMDA.
-
->    Then create an interface between VFIO and KVM/iommufd which allows to
->    pass data between these two.
->    We already do this between DMA-buf exporters/importers all the time.
->    Just don't make it general DMA-buf API.
-
-I have no idea what this means. We'd need a new API linked to DMABUF
-that would be optional and used by this part of the world. As I said
-above we could protect it with some module namespace so you can keep
-it out of DRM. If you can agree to that then it seems fine..
-
-> > Someone else had some use case where they wanted to put the VFIO MMIO
-> > PCIe BAR into a DMABUF and ship it into a GPU driver for
-> > somethingsomething virtualization but I didn't understand it.
-> 
->    Yeah, that is already perfectly supported.
-
-No, it isn't. Christoph is blocking DMABUF in VFIO because he does not
-want to scatterlist abuses that dmabuf is doing to proliferate.  We
-already have some ARM systems where the naive way typical DMABUF
-implementations are setting up P2P does not work. Those systems have
-PCI offset.
-
-Getting this to be "perfectly supported" is why we are working on all
-these aspects to improve the DMA API and remove the scatterlist
-abuses.
-
->> In a certain sense CC is a TEE that is built using KVM instead of the
->> TEE subsystem. Using KVM and integrating with the MM brings a whole
->> set of unique challenges that TEE got to avoid..
-> 
->    Please go over those challenges in more detail. I need to get a better
->    understanding of what's going on here.
->    E.g. who manages encryption keys, who raises the machine check on
->    violations etc...
-
-TEE broadly has Linux launch a secure world that does some private
-work. The secure worlds tend to be very limited, they are not really
-VMs and they don't run full Linux inside
-
-CC broadly has the secure world exist at boot and launch Linux and
-provide services to Linux. The secure world enforces memory isolation
-on Linux and generates faults on violations. KVM is the gateway to
-launch new secure worlds and the secure worlds are full VMs with all
-the device emulation and more.
-
-It CC is much more like xen with it's hypervisor and DOM0 concepts.
-
-From this perspective, the only thing that matters is that CC secure
-memory is different and special - it is very much like your private
-memory concept. Only special places that understand it and have the
-right HW capability can use it. All the consumers need a CPU address
-to program their HW because of how the secure world security works.
-
-Jason
