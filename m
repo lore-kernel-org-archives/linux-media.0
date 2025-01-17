@@ -1,135 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011035.outbound.protection.outlook.com [52.101.70.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DB81F7564;
-	Fri, 17 Jan 2025 06:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737096939; cv=none; b=b66Wqp8Dt2c5MzosCHqWaK8fp+PYZLIBuqElf6WHX1qkbhAZdDx3/+s9McFZD5l8Eg6Fig5DK7SCEszxBVaBRo9701vwC+JH3SbugSPJoyZJ6AQgA0EUZ0DotPM52Qy7g54j3YAfrCitCwotDSy9IVvgZ0w+p42KXfQ1iTgYpIM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737096939; c=relaxed/simple;
-	bh=a0dUK/jQpDvIM8/nBDBU73ylJDOTGNarHp7F4VWxh2Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HnCHSUbzysG/bEvSX0dG7b3Vl5dqtljVCE3ATwYU0I0zV+HYjyi2fVDA20fhn7hqk3AXSKpumXjlYq+/AqEtMhUbwTRyswuid3VHgAxDtJmFU+4PhSNZM1fFPcOmuSJWxRWVtUxTLOTIZGyUgJ1w/Wwj2unWQgDHVUKpe4nwoOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BAGWZ/7f; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A481F7908;
+	Fri, 17 Jan 2025 07:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737100683; cv=fail; b=X7VTwAFz3F3M8kTitlTvPFj5ZZWGFpDi46i+6HmFiuN1rng0zeziDOd/E9k2tdu0YIjyC9pAsdhmaZk+BZtzX4mdaa1we1F4lcjn/6DCaGRnU/j3Hrh5Ibok70NH3PcuZ8blRg5ynpqf3P/kAaHouGtSU7LxZGMmu6h/cbr9Hws=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737100683; c=relaxed/simple;
+	bh=zloIRkxfzChc5UAY41WeYHKmztAyrCxZj6thXGSGj20=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=QNYDZHPcvcL5bSYqGKf5kuYIFD3Qj8heIrl2snV/E3YEFwW3Px1gIn+5bRqEcFcDSbTdoaECvBJz0HeodAdwa7rhbn6FMvT59bzHTYfTtlCIWg6uLyhdv5HhCgMSBz4geg2SOLjU4CZFGkruSxTIAw+wm807VZIPzIye9JC85Xg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=CGm8YAnd; arc=fail smtp.client-ip=52.101.70.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BAGWZ/7f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737096939; x=1768632939;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=a0dUK/jQpDvIM8/nBDBU73ylJDOTGNarHp7F4VWxh2Y=;
-  b=BAGWZ/7fEaIl3foWPAIo9ZebSnMETgwNPT+d4AS3tZBxpsHVYlSdKtJH
-   iZSGwMb6LEYb9BHRSNM+wFt2bjgAB9P3iRSEhX5oIouwDTwsB1ydCWUEd
-   7vD+dbVLcQTvXU38njr6T0Imn9ILxs1ub0vIQt5/MjeVMH3w2h7LXBeMy
-   sU8Zz/iMikNIv2aTFv2byENAKBF+GauKVt2j71jWBVg1gfYE+faNnwh3q
-   jeQR9C5Nw9y27sysl7SMBR0eUS8Q8+L9fIn6WeaCdOmQ1K+In0Nxmn8NV
-   jpB/n/IZP6ItDdZRluSx9Xr6wZf2dXBpmavCrvqNz8Oay6C458F5i2agh
-   Q==;
-X-CSE-ConnectionGUID: 8rUuzQchQpiCvDL8nrI29g==
-X-CSE-MsgGUID: IsoL10krTd6lmtOAqkhRdw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="41284406"
-X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
-   d="scan'208";a="41284406"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 22:55:38 -0800
-X-CSE-ConnectionGUID: RxiCzTo0ROmjq7QbZX/TYg==
-X-CSE-MsgGUID: jaCx/4CdQQ2PY/ze4H41mQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
-   d="scan'208";a="106312339"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa009.fm.intel.com with ESMTP; 16 Jan 2025 22:55:32 -0800
-Date: Fri, 21 Jun 2024 06:02:17 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Christoph Hellwig <hch@lst.de>,
-	Leon Romanovsky <leonro@nvidia.com>, kvm@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
-	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
-	vivek.kasireddy@intel.com, dan.j.williams@intel.com, aik@amd.com,
-	yilun.xu@intel.com, linux-coco@lists.linux.dev,
-	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
-	leon@kernel.org, baolu.lu@linux.intel.com, zhenzhong.duan@intel.com,
-	tao1.su@intel.com
-Subject: Re: [RFC PATCH 01/12] dma-buf: Introduce dma_buf_get_pfn_unlocked()
- kAPI
-Message-ID: <ZnSm6ULbJbxOU27J@yilunxu-OptiPlex-7050>
-References: <20250115133821.GO5556@nvidia.com>
- <f6c2524f-5ef5-4c2c-a464-a7b195e0bf6c@amd.com>
- <1afd5049-d1d4-4fd6-8259-e7a5454e6a1d@amd.com>
- <20250115141458.GP5556@nvidia.com>
- <c86cfee1-063a-4972-a343-ea0eff2141c9@amd.com>
- <86afb69a-79bd-4719-898e-c6c2e62103f7@amd.com>
- <20250115151056.GS5556@nvidia.com>
- <6f7a14aa-f607-45f9-9e15-759e26079dec@amd.com>
- <20250115170942.GT5556@nvidia.com>
- <5f588dac-d3e2-445d-9389-067b875412dc@amd.com>
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="CGm8YAnd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GoFW46BjG/NIi9Iv18935KLTd2TdDwhlE0XY7oWDWpEeHsoLLkZR+1U3R9R1c1Q9TotFKEGZ3r+0AEzQTZj/KQ4TDEvFEDcZvr8ZbYx2HY7zurlehDEKp+FpXxE7LE/zj5AM115uCg8M63Q2zNZN3ZDWkSeBAYiKEK3xLgCim/HK0OX9FWDoKLMZW3f1vapfFe76MtXoEQ5P0heU/Y5T4WQhCVazAe1TPT89GySKTMi07clvvSRasV2pJVOozAEzTW2OMw1Mz39iakHi9cEM7JGtr2e6+gNm7mvr95vu+jcdEEVcWov/ZfhupYx61U5XYJ8c7pAi9U0sbHISpXd1Kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8supK/9NAMDRwuUddAVjDP6hqlfZ8jq/qFC7+pM/ckU=;
+ b=cyItiwZQLNxm7+upiRzVIbJ4wQCeyYAUn8oFmNiJ2cyWTpkOJxPuviG4cdW1aIHhik1WbGJawgDxJHrhZ+hPypq6O9Qr0aM4SH+XclZaxFJPnIJHmXP2/bWXcu6spdiljlOXjqVrLFxlPpk2kWhRct09LdW/2FSlM18ONXXkzwJb5FTw2X2BzTNMoT9vYycYxJ5+mTzNqrUmNfP1NPIYsD0H5tQm+qaJOaugmzPJ7MSQQEJdzsmDI4HOtpayrMyXvIVf8vWAKO9bS3hZD7i5xiXylDtUth1QlnSV+/Sk7bdItLGV1WMspGvjcY9CWKHJx0Y9HIW4UStTOqtKdT95tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8supK/9NAMDRwuUddAVjDP6hqlfZ8jq/qFC7+pM/ckU=;
+ b=CGm8YAnd3QAoPUfnKEusVSxVOsTjrt6BkCLNBygXMWzZ4nXLlOAMRyr+rDhKzHnL0kOadTtRZ8W5et5e5hwCgQpkknMRH3Ol057qCU6lfuoJFdJXCTltQkaGDZoqZUtzpKYV+roCB0d+1VOL2HJM1ZhJztToph9Sy0wMfk3YOqtEEzgP4cYtvTwjSsAPbWBZ1fXZm7+K3110NN4dIbyWeiXC0oj/+BXfSDjBzF79111ngkRVfAO3+BTIzzB8lRyiGMkHGB1zBlWGCx3TyD7V9/CuMZVUKF3eAMcDW5qSl9RNnzCLJv0HNKyGvNESZvnwJGeP2rpJ79NwjbICO1wNTg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com (2603:10a6:102:1cd::24)
+ by DB8PR04MB7115.eurprd04.prod.outlook.com (2603:10a6:10:128::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.14; Fri, 17 Jan
+ 2025 07:57:56 +0000
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87]) by PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87%6]) with mapi id 15.20.8356.014; Fri, 17 Jan 2025
+ 07:57:56 +0000
+From: Ming Qian <ming.qian@oss.nxp.com>
+To: mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl
+Cc: nicolas@ndufresne.ca,
+	shawnguo@kernel.org,
+	robh+dt@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	xiahong.bao@nxp.com,
+	eagle.zhou@nxp.com,
+	tao.jiang_2@nxp.com,
+	ming.qian@oss.nxp.com,
+	imx@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 1/2] media: amphion: Reduce decoding latency for HEVC decoder
+Date: Fri, 17 Jan 2025 16:57:19 +0900
+Message-ID: <20250117075720.4018076-1-ming.qian@oss.nxp.com>
+X-Mailer: git-send-email 2.43.0-rc1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0016.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::17) To PAXPR04MB8254.eurprd04.prod.outlook.com
+ (2603:10a6:102:1cd::24)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5f588dac-d3e2-445d-9389-067b875412dc@amd.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8254:EE_|DB8PR04MB7115:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4b256aa-020a-43cd-a3f9-08dd36cca723
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|52116014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?HLYdyR+Ha6tZSPDjPkfZMb8tETzWo1kZpIfNqS6f5jBwRgXoQ4fADP3n1D//?=
+ =?us-ascii?Q?EpyaZQ/yUhfwlSTGgStWsimhQbe4tWqA72mhgiDXfLnME75yPcafQDK+ShM0?=
+ =?us-ascii?Q?rlpCFhAfO8ubfMgzNh6A0uXCfUWsKcndZ5jnKCYuSelX2qCN+OtpKLgMczXC?=
+ =?us-ascii?Q?kPBamY9EWy3sX0bMPur947hgtrGm2twRFcmyzLVMuBLmdYZ0/LmR5DOx4qR4?=
+ =?us-ascii?Q?zSXIvNa7c0PcyqrctkNOnY9N6Sr7Rbz/puSdhG3DS5TUrbAaOvTK9IwKf44P?=
+ =?us-ascii?Q?5A7qs/BNw2WaGAVfAHhmteSlEVidcWs/o2q4L2cUq49j3CKuFf8TUCSRwVkW?=
+ =?us-ascii?Q?DtUmJTMfu6L36onsc0VuWPSigqGG6Wh7C2CUL/Kk6anzK4ZpBomcYDpyCmn9?=
+ =?us-ascii?Q?pDTCEtn1lToDH3yNS+dkHBPaHdLwAy+rfgFROoP+GHvBbITqxzNbd2DFGui1?=
+ =?us-ascii?Q?0SrfMvAvtMXXHhCblTNmYUsR/s6Uj8aJEvWqJCV6eJPI6AjPfQYYXUs9VTpY?=
+ =?us-ascii?Q?xZNCWQyyJLksK0wvSWcVEPVoD8o/Ckbq3FDcR9bxIDIqSS3B+ddeyZPZ5DtU?=
+ =?us-ascii?Q?tKddpzX0Wd8MIUvGHCljgGCM//4/B0DlbK5ffZbDLv9fiLOxGs/ud2B5Ff+I?=
+ =?us-ascii?Q?pnBptCbc6d6sXj3EN+Bm1wjfCVgs7y7Wcy97J8rabg2AOd2W/PbkDYZf77V6?=
+ =?us-ascii?Q?u9YdhK7pa1n7Pc5PYGlU0H2ODfT6kW85cDoQK6EGX/ZRW+mUOQ79qlNYwCHx?=
+ =?us-ascii?Q?+bF/2n3V3yTyUPi3XI1MGzfyYB4v4vbuhowJwV2DYGuxaEXGzWg9wAoMhw+q?=
+ =?us-ascii?Q?jWoUfVa5+/nOF/eTzSzr8qsyZtuPlBuAq92mbFcTNWXp9lMqXpiuUwqMhx7T?=
+ =?us-ascii?Q?gH+v2xrid6Rm8ftQbwBbhjb54pQZ3XpixhJesDa1yqudcmG7E/ILYoBZll09?=
+ =?us-ascii?Q?6OB6UoIAzxGvYnRB8eR+c2wkfNdAClUpicl70jPV7EsiTh2uwVFLh6fZev7t?=
+ =?us-ascii?Q?5HRY2Eq6vjQYb6eMmN++IflczXZjw9un1kTlkP0WTNO+Srjb1rRz5F/zWsmw?=
+ =?us-ascii?Q?8NxdkkXQNKiKUp8Xd9rz/jU/FVUSozuxK17ONy4XYgXWjvOr0Zrxi21aByv6?=
+ =?us-ascii?Q?GX67D+dUcySq1m2nAplJTmUsJH0pBTfvuiNdDhg3m89M7yazRce5JSmYrM9P?=
+ =?us-ascii?Q?lMNOBtw3U1HDcynQC0HtQlHB5QqKFSpol2NuIbQcQznbDZ3HKs9y/gB5P+7l?=
+ =?us-ascii?Q?yBycDjjmZnRBLMgcU2rIkEJQfhi9xDEa2E5i6GucqfcDOFYpUc/NZU6d8DOb?=
+ =?us-ascii?Q?UbI2hykRTmhVjN9Gn7nhSlZ2t+WRPRsTPs3hiKMhdshCsVWoOvJ5FiW9iLo1?=
+ =?us-ascii?Q?mZkYXCikW6ZGWDeJikjbJUU0JJgMZoVw8D9y7RqI6f63QlyfDEP1Joc/yyXR?=
+ =?us-ascii?Q?W3bkaCfsERKf951wfeyezMuV9xuvoFgR?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8254.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?AF+2AsuucvPQffiGpF3sxRG4vFnQgJqCHDT5KVW9H+EG8Nwwn6hmVxcvVcDs?=
+ =?us-ascii?Q?DiTrYM53AsKtzAYhNL9jCF/ZTZgpfX41PO/syIpQ2bhJ4FgYIvZI9yKEhkZg?=
+ =?us-ascii?Q?C5BAAMrGGZUWTbTJXvaiN5p6H4RXM9YeqAizwmU4qBzcovAZx0s4F8eeDLGB?=
+ =?us-ascii?Q?J5I9GnXDLXP+HAuHdhrXDrT91dYby3+iZB2L2Sw8hBYZN+/jcpbUzt8Rz51D?=
+ =?us-ascii?Q?WBNNTpe89EakyL8b5NTvpYjg5PU63K6VuZMBtWRJbJQgGFpzh+cqN1Molikj?=
+ =?us-ascii?Q?oDan3JzMr+66K6X3kop6lUQeSX875rz4QZ9vA/cZ+TgsePTx0NMHl15adJn7?=
+ =?us-ascii?Q?WXLdP6d6Cg6RQPpwyykSvxWY+xnO40fwfGlC4YaXPR28K0EnMsRWmgLdXA45?=
+ =?us-ascii?Q?grHsihPGSsuBzqqM5Aqds2UuGgzVHwM2DkR1KVJ727wUnUhbdd80i48D8ktr?=
+ =?us-ascii?Q?F6UvJaITOgF4tBT6Ss/EFHF+PQZr5+/PRTksdNK8wGgM9tB0akPPCliABi9B?=
+ =?us-ascii?Q?cHbm5RDRZuYRmM9kh0C+7LadqXR/CDWzNsi7hM0uQzvhdGnCBhHmqtEPjnax?=
+ =?us-ascii?Q?cJ7TWqENknsZgplW5VGh9fKZMoowaG0NrXB5quwL9myO0lK6ogJkDjaelKTE?=
+ =?us-ascii?Q?HsGgOZCVWSI/oXbEw8QM8phOHakR2+Q8HzkTU3sLJ+fegrsdhmKcjOZ3NbHP?=
+ =?us-ascii?Q?Oy/OZyo0yXSaopShxRdpBmGdBwmkDzVhllUDZ/2y6WjvE5QyLEJNtOmlAzw7?=
+ =?us-ascii?Q?tz/KWYpvG0Jxs6G8ueRPVHONnF9nLOzl/MJRjLv7p2Uou0YK2tTvYoPMbcuh?=
+ =?us-ascii?Q?4BfpyunJQU7xBskPTLemIdPtb46oc6+4CCpGNd1HzszQqy3pQvc1+2LB1P88?=
+ =?us-ascii?Q?9RZ8Uhf1A5uMTyxEtkdewI3RxwDnRoCNBTK43CkvP9agCmYvNpmQafY6TKDL?=
+ =?us-ascii?Q?sWAz0JicXYDvtxd1Yn5T3F14EI+eplULRsvHU075cgMM+0RbTxBWbNCkQlfY?=
+ =?us-ascii?Q?Vm5RY5lxqHKRu4RuK/PDqhxsCbJk3xRXM7K+XtcTjzklYocHd9S5N7JFdRUe?=
+ =?us-ascii?Q?ljcXxMM7/2xRt5LKmN+Kt45njm84IiQxBQkt0nM54sJxeTv0d/0TdfdQvsD1?=
+ =?us-ascii?Q?w2omzNBNsOPnpK+y60641nhKDSjxUfGUQzIyR8CTXthiYeMlNQMwQPeBSAxw?=
+ =?us-ascii?Q?j8ljxQBLUesNQY0oLo2NvXEXGiKxuL5/Z5AiTuNzPxFNA7OiSpxhtbIdY3JF?=
+ =?us-ascii?Q?oG0ggn/ORn9hEy4RRnuZH8mP0wTRoBo9G7uvyr8QMxhh5Wor6DL6dTahjFnJ?=
+ =?us-ascii?Q?Ng66HiI++VgZpIYIvuUYgQgwEvfhqwA85ITHOwwCOTvBppYcp4o2fztoLH0r?=
+ =?us-ascii?Q?3ZjkBT2Q5govOF9qtfuTjfLNzwzi3p6tnDeKYplWl1OiVbZChYSqs6gB6IzQ?=
+ =?us-ascii?Q?TFt8P2c40kjly+OGizEUjeWkWLnq2etpk6jgFGf8lCmTDwubIsRfRZ9fIysP?=
+ =?us-ascii?Q?n7JmlkHUJYwd/Bnk4X24TETO7HStBkGk/jceCGoIFbCxmyZH9Izk5iKRn80u?=
+ =?us-ascii?Q?lgox1GMG0JpHrOGEVsH8uA4In0tOHfqhypOFcr2P?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4b256aa-020a-43cd-a3f9-08dd36cca723
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8254.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2025 07:57:56.3825
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aq4od4BnlaAipV2F+7PR+nyFe2KW5MSaIq9adCXqyANVfMaIMBhPsZF1aZFjdoCaZ0kobMwd8CzkyP+AN+FUdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7115
 
-On Thu, Jan 16, 2025 at 04:13:13PM +0100, Christian König wrote:
->    Am 15.01.25 um 18:09 schrieb Jason Gunthorpe:
-> 
->  On Wed, Jan 15, 2025 at 05:34:23PM +0100, Christian König wrote:
-> 
->     Granted, let me try to improve this.
->     Here is a real world example of one of the issues we ran into and why
->     CPU mappings of importers are redirected to the exporter.
->     We have a good bunch of different exporters who track the CPU mappings
->     of their backing store using address_space objects in one way or
->     another and then uses unmap_mapping_range() to invalidate those CPU
->     mappings.
->     But when importers get the PFNs of the backing store they can look
->     behind the curtain and directly insert this PFN into the CPU page
->     tables.
->     We had literally tons of cases like this where drivers developers cause
->     access after free issues because the importer created a CPU mappings on
->     their own without the exporter knowing about it.
->     This is just one example of what we ran into. Additional to that
->     basically the whole synchronization between drivers was overhauled as
->     well because we found that we can't trust importers to always do the
->     right thing.
-> 
->  But this, fundamentally, is importers creating attachments and then
->  *ignoring the lifetime rules of DMABUF*. If you created an attachment,
->  got a move and *ignored the move* because you put the PFN in your own
->  VMA, then you are not following the attachment lifetime rules!
-> 
->    Move notify is solely for informing the importer that they need to
->    re-fresh their DMA mappings and eventually block for ongoing DMA to end.
-> 
->    This semantics doesn't work well for CPU mappings because you need to hold
->    the reservation lock to make sure that the information stay valid and you
->    can't hold a lock while returning from a page fault.
+The amphion decoder firmware supports low latency flush mode for
+HEVC format since v1.9.0, it can help reduce the decoding latency by
+appending some padding data after every frame, then driver can enable
+this feature when the display delay 0 is enabled.
 
-Dealing with CPU mapping and resource invalidation is a little hard, but is
-resolvable, by using other types of locks. And I guess for now dma-buf
-exporters should always handle this CPU mapping VS. invalidation contention if
-they support mmap().
+Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+---
+v2
+- Improve commit message
+- Add firmware version check
 
-It is resolvable so with some invalidation notify, a decent importers could
-also handle the contention well.
+ drivers/media/platform/amphion/vpu_malone.c | 22 ++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-IIUC now the only concern is importer device drivers are easier to do
-something wrong, so move CPU mapping things to exporter. But most of the
-exporters are also device drivers, why they are smarter?
+diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
+index 5c6b2a841b6f..1d9e10d9bec1 100644
+--- a/drivers/media/platform/amphion/vpu_malone.c
++++ b/drivers/media/platform/amphion/vpu_malone.c
+@@ -68,6 +68,9 @@
+ 
+ #define MALONE_DEC_FMT_RV_MASK			BIT(21)
+ 
++#define MALONE_VERSION_MASK			0xFFFFF
++#define MALONE_MIN_VERSION_HEVC_BUFFLUSH	(((1 << 16) | (9 << 8) | 0) & MALONE_VERSION_MASK)
++
+ enum vpu_malone_stream_input_mode {
+ 	INVALID_MODE = 0,
+ 	FRAME_LVL,
+@@ -332,6 +335,8 @@ struct vpu_dec_ctrl {
+ 	u32 buf_addr[VID_API_NUM_STREAMS];
+ };
+ 
++static const struct malone_padding_scode *get_padding_scode(u32 type, u32 fmt);
++
+ u32 vpu_malone_get_data_size(void)
+ {
+ 	return sizeof(struct vpu_dec_ctrl);
+@@ -654,9 +659,16 @@ static int vpu_malone_set_params(struct vpu_shared_addr *shared,
+ 		hc->jpg[instance].jpg_mjpeg_interlaced = 0;
+ 	}
+ 
+-	hc->codec_param[instance].disp_imm = params->display_delay_enable ? 1 : 0;
+-	if (malone_format != MALONE_FMT_AVC)
++	if (params->display_delay_enable &&
++	    get_padding_scode(SCODE_PADDING_BUFFLUSH, params->codec_format))
++		hc->codec_param[instance].disp_imm = 1;
++	else
+ 		hc->codec_param[instance].disp_imm = 0;
++
++	if (params->codec_format == V4L2_PIX_FMT_HEVC &&
++	    (iface->fw_version & MALONE_VERSION_MASK) < MALONE_MIN_VERSION_HEVC_BUFFLUSH)
++		hc->codec_param[instance].disp_imm = 0;
++
+ 	hc->codec_param[instance].dbglog_enable = 0;
+ 	iface->dbglog_desc.level = 0;
+ 
+@@ -1024,6 +1036,7 @@ static const struct malone_padding_scode padding_scodes[] = {
+ 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0x0, 0x0}},
+ 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264,        {0x15010000, 0x0}},
+ 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264_MVC,    {0x15010000, 0x0}},
++	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_HEVC,        {0x3e010000, 0x20}},
+ };
+ 
+ static const struct malone_padding_scode padding_scode_dft = {0x0, 0x0};
+@@ -1058,8 +1071,11 @@ static int vpu_malone_add_padding_scode(struct vpu_buffer *stream_buffer,
+ 	int ret;
+ 
+ 	ps = get_padding_scode(scode_type, pixelformat);
+-	if (!ps)
++	if (!ps) {
++		if (scode_type == SCODE_PADDING_BUFFLUSH)
++			return 0;
+ 		return -EINVAL;
++	}
+ 
+ 	wptr = readl(&str_buf->wptr);
+ 	if (wptr < stream_buffer->phys || wptr > stream_buffer->phys + stream_buffer->length)
+-- 
+2.43.0-rc1
 
-And there are increasing mapping needs, today exporters help handle CPU primary
-mapping, tomorrow should they also help on all other mappings? Clearly it is
-not feasible. So maybe conditionally give trust to some importers.
-
-Thanks,
-Yilun
