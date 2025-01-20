@@ -1,34 +1,34 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55BB1E2007;
-	Mon, 20 Jan 2025 13:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15A21E2843;
+	Mon, 20 Jan 2025 13:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737378698; cv=none; b=IjwmsJoZH/nhwO0WqYHZQ9vz+DNzjCo30GarLy/1/YiSKPPrX19AdxcKUtWL5u5241ujCKtc37XrLIMsvMWzenKVGmARiOTh4jOMFAGjYFBMyYnujL/KYW1g+RnyAnFIcWDygWIoJ3BU5Grwr0S1yepYSnmPBh/Ma/M1yKomNr4=
+	t=1737378701; cv=none; b=BmNhpiG5ie4ku/fhkUMvR1WRWf7z08YaFi+TCfKWGWsCf65C42wEiid5S2WHtDQPNgXU/v7eN/VaGcY2xENc5CVmM9d+p9++txfl9qEnSnkb4huLq4kKgDn9ctOmBwteWVpDEzDoZJwQf/bTQBL3stdUJ8m8Wxt2AzAoYnqPTMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737378698; c=relaxed/simple;
-	bh=6NA5qbjrGQlNxg6LJ+6qAnM81wKg/Bz2pui0ogtvTu0=;
+	s=arc-20240116; t=1737378701; c=relaxed/simple;
+	bh=HOC0iwOhFBcP5j1MwMPNRotFW8j1Ia86cs/Eq8KP/9A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eMEKebydZsYK1CMrRDM+hoXKnHPL+3CIlQYgVpkJsg+UB9vu4x1SyqZJ8TnSzoLY0akepz33iO+4DLT/eMvPn48wv7CAadMVQjXJTB8lar9YKG9VaudRmZ3hHbeLjefj7GG9zJmTJB9PT2s2i8U5ONc9CknvWL5OHtXhUylVV+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=JmHr6NGG; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=h+bO2X6iqNR0K/zBuY0M9oayjBzEJ8+Wh0hDEyPH7Sr6I3KeVqL24UY/99yAdv9grIc+TIgU9oOq9TDsPGnsUK05A9c6IWiJv5ccUsE6x8jMktEc9xpVgQJbo+rwXGBFSp2v/Rf7MXH3VjSL0FKk7HacL7kQdyURy97gvqZHEp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=SFr/5Buu; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JmHr6NGG"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SFr/5Buu"
 Received: from [127.0.1.1] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A3E2FF0C;
-	Mon, 20 Jan 2025 14:10:23 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9EEBC11A1;
+	Mon, 20 Jan 2025 14:10:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
 	s=mail; t=1737378624;
-	bh=6NA5qbjrGQlNxg6LJ+6qAnM81wKg/Bz2pui0ogtvTu0=;
+	bh=HOC0iwOhFBcP5j1MwMPNRotFW8j1Ia86cs/Eq8KP/9A=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=JmHr6NGGcn9tSgENgkYpob69Gh10cfVJGUsjrzEiG0c00uuAOGxfwy1MPZ5deC+R8
-	 CrVHXByF4FAu7tnB2X7etq8aAdnoFVp95mVIWhPzbCaGYmUdFCkxCbELpbgRgw60kM
-	 0tCkj0CTOD8d/lZD7exllJDYdMHejsRcyeIb5m0A=
+	b=SFr/5BuuVYAeHBLv3RnLVgdsxYr/XmxEn/XNcVHQtGLE5Hh6RdqdB2faCoyAYIdoX
+	 gRegpOTMzlDaFKS7/lO/Od02dFmvS2ujxeoSXGUSj8BN0IP7F6xxNNob9zDN7CSm0X
+	 H+e9IxTTise3PMx8mKzxYSbYoJycC+xgGZCEUJAc=
 From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Date: Mon, 20 Jan 2025 15:10:35 +0200
-Subject: [PATCH 02/10] media: rcar-csi2: Add RAW10 and RAW12 formats
+Date: Mon, 20 Jan 2025 15:10:37 +0200
+Subject: [PATCH 04/10] media: rcar-csi2: Use v4l2_get_link_freq()
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250120-rcar-media-impro-v1-2-043823c3893e@ideasonboard.com>
+Message-Id: <20250120-rcar-media-impro-v1-4-043823c3893e@ideasonboard.com>
 References: <20250120-rcar-media-impro-v1-0-043823c3893e@ideasonboard.com>
 In-Reply-To: <20250120-rcar-media-impro-v1-0-043823c3893e@ideasonboard.com>
 To: =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
@@ -46,75 +46,93 @@ Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1525;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2175;
  i=tomi.valkeinen+renesas@ideasonboard.com; h=from:subject:message-id;
- bh=6NA5qbjrGQlNxg6LJ+6qAnM81wKg/Bz2pui0ogtvTu0=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnjkt43IltdF5yH2qnv4mSX2TERQVOeITuxWQTS
- WZF/K0OEsiJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ45LeAAKCRD6PaqMvJYe
- 9WQbD/9uRZrKIxe/2Lwnkx20eWAi29KELCZ47Bm3NRa7y0MDd21mbO1NFXC1x8DmGItMdBfzSw2
- hKM55zkxzoSKiio4sqx3Zk3JzyPkqCOc7QjjbtNkDkvWbhzBkYNHn6u3AxePH9NHjRfnJVMrnjV
- P+64+gGyW3ywjF3zBgPtXwWMuJzzLVD1GRFZVPE+VJe3izAKZaqcQAcQ0BY+ZzQ+cLt/d8gfXAy
- ClXQjOH+cbt0ZaSIQ0N2/GIQf7LJ6X5BVgQRcSdl3RPgQOfwl29I8XOOQ4ZgCH6L709hgGTF+w9
- 7YjZ+MLG9S9MkJVOMdt0pN6e1bYaHAadGfoGCyzqZ5IG6RiySBERhLqGWWSNsJAK4RKovGxB/0k
- x4x6Ojw4BsBhDItJwqKB0OPVBFTBHenVDM92rSPsPHnba6tolVyKg08mfgFGfoqLugUBCSMsrIp
- 01YdQxqAq2mHok7t2/AwfkVWQcQMKTIZth2AVj6W87Vuy1vRJqt1yRw5XrGZ6uDBboMa492SNRW
- N/d8OC20XyTufy6pba0DAYQoiXabcJxymjdTqFx5SWz0rEbJ9gTiHSw8K4tsPkQVQwTvlShebL4
- U3PU30Cc3f08hu5J/nhBKdhvv4+ulUH2Gx7Lx8JClJxMktDSc0f63EJPZWMYgRVmpvMkz1608ey
- iVfiEnW0ZHq1Oow==
+ bh=HOC0iwOhFBcP5j1MwMPNRotFW8j1Ia86cs/Eq8KP/9A=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnjkt56oCr0WVy8D2Pu1OpmZK4MzT2ojO0Gj0R8
+ hbJP9UD6wiJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ45LeQAKCRD6PaqMvJYe
+ 9Xj6D/9AVEMlaP7qNsVxHEMYI8pGvNz/7oNxkvVznpqYLB5GblBNTBltyH/t6uycQqblzt0FBFE
+ WKndWD0FOFKjO6Re+or6ClpfO13W+PZMqo7DaO/7NQ+9jwvW8rhE2C8uzHqEVPoOLZmTYw0Ut1e
+ SxCL6vltMD5k8dWZDrx7pUCGaPX/G17ofs26xcQ6bCcPcs0KAluywwNo3Z6+vTORvN0hyf5i1x1
+ Rcg+YyvbkPrH6sufvQtspZRHNCgi06YjNa3GQY0u8iyKuVtLy0on8k8kNDgbktvJ3G5S6sD/9RK
+ mrAJ9SkyVMPMOna33bfmgPGAU997nIG5jjBml6yZRy4XQRWFl2+iFFd9mjGeRwZ3WqD8h2lFoFa
+ AjttBducPkBmDe3t9kbR1jdAn6zzShTTTUCmNDLOf7nZ2qndbN+uOqPDME/NM7HeU+u+s2QhJmS
+ w1FxctalwPKVHH8fThbFlhqp/i/oPO6EseHC35nFn4GiM545v95yziZuJsAut7LHp2INHVWIrjs
+ rVf8gwwLv2ndQ3ggvvpjTpx82CrSh7IA6hri9rx3VDXWMqo9bC9ag5g6ZYtkJxGmpE+QpMeRUqW
+ dXuBsAt9SUdMWSLVKRy0UrbVbtOxCRlI7uP09hiVoHf/bgnvoXKlp8LDgiC9q+PmMgus5Lh+Ba0
+ amJD+Tqh98V2NiQ==
 X-Developer-Key: i=tomi.valkeinen+renesas@ideasonboard.com; a=openpgp;
  fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-Add RAW10 and RAW12 formats. We only need to add the entries to the
-rcar_csi2_format list.
+Instead of directly using V4L2_CID_PIXEL_RATE and calculating the mbps
+from that, use v4l2_get_link_freq(), which also supports
+V4L2_CID_LINK_FREQ.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-csi2.c | 32 ++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/media/platform/renesas/rcar-csi2.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/media/platform/renesas/rcar-csi2.c b/drivers/media/platform/renesas/rcar-csi2.c
-index be930ebca3f5..52d4e333c735 100644
+index 52d4e333c735..84e6194fed6c 100644
 --- a/drivers/media/platform/renesas/rcar-csi2.c
 +++ b/drivers/media/platform/renesas/rcar-csi2.c
-@@ -660,6 +660,38 @@ static const struct rcar_csi2_format rcar_csi2_formats[] = {
- 		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
- 		.datatype = MIPI_CSI2_DT_RAW8,
- 		.bpp = 8,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
-+		.datatype = MIPI_CSI2_DT_RAW10,
-+		.bpp = 10,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
-+		.datatype = MIPI_CSI2_DT_RAW10,
-+		.bpp = 10,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.datatype = MIPI_CSI2_DT_RAW10,
-+		.bpp = 10,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
-+		.datatype = MIPI_CSI2_DT_RAW10,
-+		.bpp = 10,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
-+		.datatype = MIPI_CSI2_DT_RAW12,
-+		.bpp = 12,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
-+		.datatype = MIPI_CSI2_DT_RAW12,
-+		.bpp = 12,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-+		.datatype = MIPI_CSI2_DT_RAW12,
-+		.bpp = 12,
-+	}, {
-+		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
-+		.datatype = MIPI_CSI2_DT_RAW12,
-+		.bpp = 12,
- 	},
- };
+@@ -8,6 +8,7 @@
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/math64.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+@@ -15,6 +16,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ #include <linux/sys_soc.h>
++#include <linux/units.h>
  
+ #include <media/mipi-csi2.h>
+ #include <media/v4l2-ctrls.h>
+@@ -953,7 +955,7 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+ 			   unsigned int lanes)
+ {
+ 	struct v4l2_subdev *source;
+-	struct v4l2_ctrl *ctrl;
++	s64 freq;
+ 	u64 mbps;
+ 
+ 	if (!priv->remote)
+@@ -961,21 +963,17 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+ 
+ 	source = priv->remote;
+ 
+-	/* Read the pixel rate control from remote. */
+-	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
+-	if (!ctrl) {
+-		dev_err(priv->dev, "no pixel rate control in subdev %s\n",
+-			source->name);
+-		return -EINVAL;
++	freq = v4l2_get_link_freq(source->ctrl_handler, bpp, 2 * lanes);
++	if (freq < 0) {
++		int ret = (int)freq;
++
++		dev_err(priv->dev, "failed to get link freq for %s: %d\n",
++			source->name, ret);
++
++		return ret;
+ 	}
+ 
+-	/*
+-	 * Calculate the phypll in mbps.
+-	 * link_freq = (pixel_rate * bits_per_sample) / (2 * nr_of_lanes)
+-	 * bps = link_freq * 2
+-	 */
+-	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * bpp;
+-	do_div(mbps, lanes * 1000000);
++	mbps = div_u64(freq * 2, MEGA);
+ 
+ 	/* Adjust for C-PHY, divide by 2.8. */
+ 	if (priv->cphy)
 
 -- 
 2.43.0
