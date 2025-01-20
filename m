@@ -1,141 +1,141 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5507228FF;
-	Mon, 20 Jan 2025 01:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A1F14BFA2;
+	Mon, 20 Jan 2025 04:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737337806; cv=none; b=sJNa3JZwEB4lKxj4CreSzGgLzqHUjvrIyRvIGzJxNQEayinMbRFdfnFCPxoI0h7K32snvzMCsKRy2taSdD2wyL3Tw8fVPmu1kIkkQvAvIT04Sc/pyqkJCBz+JL1RB6BbnH/1u8BaPiL4ej5biF3+34GyW4g/XOSFUvcBKB5tOhc=
+	t=1737348211; cv=none; b=mIvrdnqt+pYPFqUv+4b1OQiN2p/7sWe50NVD8FhdlR+33bcamvwcPXkCIOOD9DKsTP2qcWF8yNKGeoXm7Eb9svi2JaSe4odS9JI+pS5Qdb2pEpnG5HD2P6DY+78Sln3pSeJpYmojxynhrT0AE9yBEfXzUYaleZaiYm9+Bzlbums=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737337806; c=relaxed/simple;
-	bh=tIAQ+WRbfhU71qAT4rI0eOeXoWqyEBTmMuq6XzgTKq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JZ4T5pq5mJmjTULMPVOeocqv4/OFgWYEwXCAgFAN/uaUz8tJYYjstCvhBSYhiPLdVb5T/Lmevng8GIyZkJs2w5pslnczQVSq9U+aec40NEHPmCUO5J2pgW9/cH+JeO674Kmaom8AW1Q55CdlL95wR/YbVuU5k3sEgJ0NVnQeqDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=XurDVzNQ; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1737348211; c=relaxed/simple;
+	bh=k9VTW4s3d7qGGrZ5gSy0LHsgcR6UYlQ4IwsEUwEVNfU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Om5mJ2V72rEJB06cBo087y2GP61WoS4dACNXhtWBgZnhmoziOv7PDOBD5v4BSuiHaEwg3saOPUaMFmQDrtBx++fHZD0NeX3okBOsIXS18I8nqRH5vfvNr/hhDMpVAPfYr+1PAepDjabUyXNbBrQQi8xEnVU6ECkq4V4WwGUGm/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WRmH1Wzr; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="XurDVzNQ"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BCE2D6AF;
-	Mon, 20 Jan 2025 02:49:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1737337740;
-	bh=tIAQ+WRbfhU71qAT4rI0eOeXoWqyEBTmMuq6XzgTKq4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XurDVzNQ6diC1DxM7pYySIUNihycapGqGbCqYjMhHcpIKIZ0jpvXt59E783r6tEJz
-	 sYddA3HHapyXFgBFqfXQoL1n3TMBnuKQpLEIFFEnxuZEjNYCrUiPCnQuwizuUeubOY
-	 H61JaureXxgQMdxDgX/tPEA4b2yzKYX/dZdgpLCw=
-Date: Mon, 20 Jan 2025 03:49:55 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: yuji2.ishikawa@toshiba.co.jp
-Cc: mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, sakari.ailus@linux.intel.com,
-	hverkuil-cisco@xs4all.nl, nobuhiro1.iwamatsu@toshiba.co.jp,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v12 3/8] media: uapi: add visconti viif meta buffer format
-Message-ID: <20250120014955.GC2467@pendragon.ideasonboard.com>
-References: <20241125092146.1561901-1-yuji2.ishikawa@toshiba.co.jp>
- <20241125092146.1561901-4-yuji2.ishikawa@toshiba.co.jp>
- <20250102131021.GG554@pendragon.ideasonboard.com>
- <TYWPR01MB9986F8A0AC34DCE0C1F35F2692E72@TYWPR01MB9986.jpnprd01.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WRmH1Wzr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737348211; x=1768884211;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=k9VTW4s3d7qGGrZ5gSy0LHsgcR6UYlQ4IwsEUwEVNfU=;
+  b=WRmH1Wzrdn19umDn5omEFd8JUriQxC9snlTcZ4MgwpwJjxLemY7jJUX8
+   PEJAeAnjDlUdhTj4PVQgJeQIwAPLRUA/c/2cDs48V4CEKVgZfwSvuRjzL
+   OKEmWoDaxOYAfn8+hb+RNYWFJPOCW2M6gsm6yquDFdB1kMUVlqjlWoXKJ
+   cgjdYRAakWnvKWAz+DK+ufQKSJ/OAUq0HqJ7MCsCPdECDCqTlHHI6WzTa
+   gI8ulWqno0RHmPJ40lbiHQDURNOtRg6WQZga2ffRmCmhSzhrzXm1pKfl7
+   J9UlGWmJHjNji4q/WqrC/Rw6l8mylsqiPLPyGwghohN5GY5MrZ/4CuB+o
+   A==;
+X-CSE-ConnectionGUID: Y0XF0rl+Re2eZozbL+NEtA==
+X-CSE-MsgGUID: Lcaa89r+Rd++5KAhyQOJGw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="41467920"
+X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
+   d="scan'208";a="41467920"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 20:43:30 -0800
+X-CSE-ConnectionGUID: 7xzZrTKBSAigrIZdE0pXfA==
+X-CSE-MsgGUID: Qwq3bW2hQM27SILBbyoG4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="106818894"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 20:43:24 -0800
+Message-ID: <c5aead07-2511-43a1-8f22-1346be34af28@linux.intel.com>
+Date: Mon, 20 Jan 2025 12:41:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <TYWPR01MB9986F8A0AC34DCE0C1F35F2692E72@TYWPR01MB9986.jpnprd01.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 08/12] vfio/pci: Create host unaccessible dma-buf for
+ private device
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexey Kardashevskiy <aik@amd.com>, Xu Yilun <yilun.xu@linux.intel.com>,
+ kvm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+ sumit.semwal@linaro.org, christian.koenig@amd.com, pbonzini@redhat.com,
+ seanjc@google.com, alex.williamson@redhat.com, vivek.kasireddy@intel.com,
+ dan.j.williams@intel.com, yilun.xu@intel.com, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
+ daniel.vetter@ffwll.ch, leon@kernel.org, zhenzhong.duan@intel.com,
+ tao1.su@intel.com
+References: <20250109144051.GX5556@nvidia.com>
+ <Z3/7/PQCLi1GE5Ry@yilunxu-OptiPlex-7050> <20250110133116.GF5556@nvidia.com>
+ <Z4Hp9jvJbhW0cqWY@yilunxu-OptiPlex-7050> <20250113164935.GP5556@nvidia.com>
+ <ZnDGqww5SLbVD6ET@yilunxu-OptiPlex-7050> <20250114133553.GB5556@nvidia.com>
+ <17cd9b77-4620-4883-9a6a-8d1cab822c88@amd.com>
+ <20250115130102.GM5556@nvidia.com>
+ <f1ac048f-64b1-4343-ab86-ad98c24a44f5@linux.intel.com>
+ <20250117132523.GA5556@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20250117132523.GA5556@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 20, 2025 at 12:15:43AM +0000, yuji2.ishikawa@toshiba.co.jp wrote:
-> On Thursday, January 2, 2025 10:10 PM, Laurent Pinchart wrote:
-> > On Mon, Nov 25, 2024 at 06:21:41PM +0900, Yuji Ishikawa wrote:
-> > > Adds the Toshiba Visconti VIIF specific metadata format
-> > 
-> > s/Adds/Add/
-> > s/format/formats./
+On 1/17/25 21:25, Jason Gunthorpe wrote:
+>> If my recollection is correct, the arm
+>> smmu-v3 needs it to obtain the vmid to setup the userspace event queue:
+> Right now it will use a VMID unrelated to KVM. BTM support on ARM will
+> require syncing the VMID with KVM.
 > 
-> I'll fix the commit message.
+> AMD and Intel may require the KVM for some reason as well.
 > 
-> > > - V4L2_META_FMT_VISCONTI_VIIF_PARAMS for ISP parameters
-> > > - V4L2_META_FMT_VISCONTI_VIIF_STATS for ISP statistics
-> > >
-> > > Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-> > 
-> > Assuming the documentation of the formats in subsequent patches is fine,
-> > 
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > 
-> > > ---
-> > > Changelog v10:
-> > > - add entry for V4L2_META_FMT_VISCONTI_VIIF_PARAMS
-> > > - add entry for V4L2_META_FMT_VISCONTI_VIIF_STATS
-> > >
-> > > Changelog v11:
-> > > - no change
-> > >
-> > > Changelog v12:
-> > > - add description for meta formats at v4l2-ioctl.c
-> > >
-> > >  drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
-> > >  include/uapi/linux/videodev2.h       | 4 ++++
-> > >  2 files changed, 6 insertions(+)
-> > >
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > index 0304daa8471d..f7facb63b8ea 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1470,6 +1470,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
-> > >  	case V4L2_META_FMT_RPI_BE_CFG:	descr = "RPi PiSP BE Config format"; break;
-> > >  	case V4L2_META_FMT_RPI_FE_CFG:  descr = "RPi PiSP FE Config format"; break;
-> > >  	case V4L2_META_FMT_RPI_FE_STATS: descr = "RPi PiSP FE Statistics format"; break;
-> > > +	case V4L2_META_FMT_VISCONTI_VIIF_PARAMS: descr = "Visconti ISP Parameters"; break;
-> > > +	case V4L2_META_FMT_VISCONTI_VIIF_STATS: descr = "Visconti ISP Statistics"; break;
+> For CC I'm expecting the KVM fd to be the handle for the cVM, so any
+> RPCs that want to call into the secure world need the KVM FD to get
+> the cVM's identifier. Ie a "bind to cVM" RPC will need the PCI
+> information and the cVM's handle.
 > 
-> The media-ci has reported the following errors.
-> Is it all right to leave these errors unfixed and keep the lines with
-> the same style as other entries?
+>  From that perspective it does make sense that any cVM related APIs,
+> like "bind to cVM" would be against the VDEVICE where we have a link
+> to the VIOMMU which has the KVM. On the iommufd side the VIOMMU is
+> part of the object hierarchy, but does not necessarily have to force a
+> vIOMMU to appear in the cVM.
 
-Yes, you can ignore those issues.
+Yea, from that perspective, treating the vDEVICE object as the primary
+focus for the uAPIs of cVMs is more reasonable. This simplifies the
+iommu drivers by eliminating the need to verify hardware capabilities
+and compatibilities within each callback. Everything could be done in
+one shot when allocating the vDEVICE object.
 
-> # Test checkpatch:./0003-media-uapi-add-visconti-viif-meta-buffer-format.patch
-> ERROR: trailing statements should be on next line
-> #26: FILE: drivers/media/v4l2-core/v4l2-ioctl.c:1473:
-> +case V4L2_META_FMT_VISCONTI_VIIF_PARAMS: descr = "Visconti ISP 
-> +Parameters"; break;
 > 
-> ERROR: trailing statements should be on next line
-> #27: FILE: drivers/media/v4l2-core/v4l2-ioctl.c:1474:
-> +case V4L2_META_FMT_VISCONTI_VIIF_STATS: descr = "Visconti ISP 
-> +Statistics"; break;
-> 
-> total: 2 errors, 0 warnings, 0 checks, 18 lines checked
-> 
-> > >  	case V4L2_META_FMT_GENERIC_8:	descr = "8-bit Generic Metadata"; break;
-> > >  	case V4L2_META_FMT_GENERIC_CSI2_10:	descr = "8-bit Generic Meta, 10b CSI-2"; break;
-> > >  	case V4L2_META_FMT_GENERIC_CSI2_12:	descr = "8-bit Generic Meta, 12b CSI-2"; break;
-> > > diff --git a/include/uapi/linux/videodev2.h
-> > > b/include/uapi/linux/videodev2.h index a5418759e2ba..9e1f66fdf038
-> > > 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -863,6 +863,10 @@ struct v4l2_pix_format {
-> > >  #define V4L2_META_FMT_RPI_FE_CFG	v4l2_fourcc('R', 'P', 'F', 'C') /* PiSP FE configuration */
-> > >  #define V4L2_META_FMT_RPI_FE_STATS	v4l2_fourcc('R', 'P', 'F', 'S') /* PiSP FE stats */
-> > >
-> > > +/* Vendor specific - used for Visconti VIIF sub-system */
-> > > +#define V4L2_META_FMT_VISCONTI_VIIF_PARAMS	v4l2_fourcc('V', 'I', 'F', 'P') /* ISP Params */
-> > > +#define V4L2_META_FMT_VISCONTI_VIIF_STATS	v4l2_fourcc('V', 'I', 'F', 'S') /* ISP Stats */
-> > > +
-> > >  #ifdef __KERNEL__
-> > >  /*
-> > >   * Line-based metadata formats. Remember to update v4l_fill_fmtdesc() when
+> But it also seems to me that VFIO should be able to support putting
+> the device into the RUN state without involving KVM or cVMs.
 
--- 
-Regards,
+Then, it appears that BIND ioctl should be part of VFIO uAPI.
 
-Laurent Pinchart
+>> Intel TDX connect implementation also needs a reference to the kvm
+>> pointer to obtain the secure EPT information. This is crucial because
+>> the CPU's page table must be shared with the iommu.
+> I thought kvm folks were NAKing this sharing entirely? Or is the
+
+Yes, previous idea of *generic* EPT sharing was objected by the kvm
+folks. The primary concern, as I understand it, is that KVM has many
+"page non-present" tricks in EPT, which are not applicable to IOPT.
+Consequently, KVM must now consider IOPT requirements when sharing the
+EPT with the IOMMU, which presents a significant maintenance burden for
+the KVM folks.
+
+> secure EPT in the secure world and not directly managed by Linux?
+But Secure EPT is managed by the TDX module within the secure world.
+Crucially, KVM does not involve any such mechanisms. The firmware
+guarantees that any Secure EPT configuration will be applicable to
+Secure IOPT. This approach may alleviate concerns raised by the KVM
+community.
+
+> AFAIK AMD is going to mirror the iommu page table like today.
+> 
+> ARM, I suspect, will not have an "EPT" under Linux control, so
+> whatever happens will be hidden in their secure world.
+
+Intel also does not have an EPT under Linux control. The KVM has a
+mirrored page table and syncs it with the secure EPT managed by firmware
+every time it is updated through the ABIs defined by the firmware.
+
+Thanks,
+baolu
