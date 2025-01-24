@@ -1,556 +1,470 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-71.smtpout.orange.fr [80.12.242.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E627633998;
-	Fri, 24 Jan 2025 07:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD1B33998;
+	Fri, 24 Jan 2025 07:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737702304; cv=none; b=Q/Igaj5wroG3RURvEEtaqJ+Usm0GvnrseBKl6xkAFqAqxqxpSaRzOcAE0R0rjAmCxNS4ziMQ72JC7F4ya56IxjAyEx/VLoKbqGH4UMCReYmYq5PIK6YGqOQku5KLyD+wgxN1CPlLjufZ57OfF9VLlYBVmMyR4OdUSi63Ycxxy3I=
+	t=1737702341; cv=none; b=KODPSizHHZ7CPMt4w/TsE8Y3VJGtoF0zG6Zpa41TSfVpkAG9h142gse/xULtuHF4c5B6YKiVxqLxr5C46sJiZ2JX0NHXrKkCztRrxenupctN2ZBb2VPDpY+8c6T/faK7FFHJt5ZA6aNLn+suvFQwa5wVkAlgnoeKEeoQ52Is6RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737702304; c=relaxed/simple;
-	bh=thH212u2Xs0bK5Cob64JenqESjj7uS5ZJi9Yg/6Sog4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TarNIU8wQcaMbnj+AmDElHz1MrgKaRS845qmadW7RcTzqEl6wJfdi4MFsHIz8TGe42Jrb2qn6GK3sD4Peh9iCr63+NHlPhlrAxsQr14vW3J80kyUIDZ39Z5jFcXLJtvliKSb2AiVPT53l3sS6BP5CQ5/aZ7JVFhhli0gqyh5iTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WSz/EGB7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737702341; c=relaxed/simple;
+	bh=08uoD3woXjERLG5JzZv6BFt+o7geQ9cqxyIA9Yj/fI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GYQulL2f9pZxH3OnWeGM8LdmCtsnJdLFB+UOwlSAy6/1L0z4zS3ui8MkErAKTQDyOXixfFsUm0JrNrO0LJRwqrNV9gHg+jIznNpLJ9UwcCf3VFBmF328+j3q2s+R26Hl8M6et+U3FrWCrGtFKsXvpOjiBWHsFVJPJVMvgt9cbYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=b1GB69mb; arc=none smtp.client-ip=80.12.242.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WSz/EGB7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12E1DC4CED2;
-	Fri, 24 Jan 2025 07:05:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737702303;
-	bh=thH212u2Xs0bK5Cob64JenqESjj7uS5ZJi9Yg/6Sog4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=WSz/EGB7ZDUYpVdUBxrZT5/fSdUfvHEqY5Tv6UpU+Vmo2Kn4lfEJRyJFd5D/gdAD0
-	 WOIchMhrSioR5BDRD/4+Zpv3bqFnEemS++gg4nnYFczdcubYlgy0ZyTWdqEMbjbhXE
-	 Qrd7VkLUfeFlRdwDdpf2+RvsCGiZCcF0dqcY0iYbcTWNzL1FQktRMqn+zNjh3uzXf4
-	 IXlyCMqESjKg0WdvxkJQ5TpAeSqy/lnHyDDtTSTYCUtVcJDOvFzVee5SMg+ZMJain9
-	 MzuYnSbduxuL3lBlfDq+txgO0zhHP5WKNrrqokRJ6qVh9+/t/d9BRh96Y15GaB+3TF
-	 24DehWEugZN9w==
-Date: Fri, 24 Jan 2025 08:04:53 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton
- <akpm@linux-foundation.org>, Linux Media Mailing List
- <linux-media@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL for v6.14] media updates
-Message-ID: <20250124080453.375976a7@foz.lan>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="b1GB69mb"
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id bDc5toKkkk1FUbDc8tQVJk; Fri, 24 Jan 2025 07:56:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1737701789;
+	bh=+PMaPjaDgkEmBs+qk3oGEtVev1zbxLFsascDcXBSXIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=b1GB69mb3/DSkvBNjCUnEDIbW0woSzabdhRaU2AziXeCBxRwTSwL3/xxIOnAYV6bf
+	 ZFh/TN7q4NYStWjZ5R3Z2E+HFUBmaSZ6xedEFJVWsa3JEEc1fRteVY6KMDQdTT4OVt
+	 4ynHhBO1jWh0tSA4yCKgg09HTG8Ip1Rl22EirbeRwM62Nl5vq/tOWZYDGCtoP1+Dd6
+	 ShPVvGbuR1lcaH8vtUeR+M3063XuHCy3kLfYhLpHPZxGroVxEvs/X1mV2t7Gq6hqAU
+	 ZNsZqWeXFp33oV6tyfcCZa88ZGsENS7O9yvwgZuG9lpkEiaHzz//smv6rCHERu1jua
+	 kkxbd/Dxb2pWg==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 24 Jan 2025 07:56:29 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <3e47eadc-59b7-4730-89bc-b18e9483fca2@wanadoo.fr>
+Date: Fri, 24 Jan 2025 07:56:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Linus,
-
-Please pull from:
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git medi=
-a/v6.14-1
-
-For:
-
-- Sensor driver fixes;
-- remove dead TI wl128x FM radio driver;
-- Add support for the imx462 sensor at the IMX290 binding
-- V4L2 pixel data transmitter and receiver documentation improvements;
-- Add support for MIPI Discovery and Configuration for C-PHY line orders;
-- imx8-isi fixes and improvements;
-- stm32: dcmipp: add core support for the stm32mp25;
-- qcom: camss: Add sc7280 support;
-- Various fixes and enhancements.
-   =20
-Regards,
-Mauro
-
----
-
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git tag=
-s/media/v6.14-1
-
-for you to fetch changes up to c4b7779abc6633677e6edb79e2809f4f61fde157:
-
-  media: nuvoton: Fix an error check in npcm_video_ece_init() (2025-01-08 1=
-4:59:59 +0000)
-
-----------------------------------------------------------------
-[GIT PULL for v6.14] media updates
-
-----------------------------------------------------------------
-Alain Volmat (13):
-      media: stm32: dcmipp: correct dma_set_mask_and_coherent mask value
-      dt-bindings: media: add description of stm32 csi
-      media: stm32: csi: addition of the STM32 CSI driver
-      media: stm32: dcmipp: use v4l2_subdev_is_streaming
-      media: stm32: dcmipp: replace s_stream with enable/disable_streams
-      media: stm32: dcmipp: rename dcmipp_parallel into dcmipp_input
-      media: stm32: dcmipp: add support for csi input into dcmipp-input
-      media: stm32: dcmipp: add bayer 10~14 bits formats
-      media: stm32: dcmipp: add 1X16 RGB / YUV formats support
-      media: stm32: dcmipp: avoid duplicated format on enum in bytecap
-      media: stm32: dcmipp: fill media ctl hw_revision field
-      dt-bindings: media: add the stm32mp25 compatible of DCMIPP
-      media: stm32: dcmipp: add core support for the stm32mp25
-
-Andy Yan (1):
-      media: rockchip: rga: Fix Copyright description
-
-Ariel Otilibili (1):
-      media: saa7164: Remove unused values
-
-Arnd Bergmann (1):
-      media: cxd2841er: fix 64-bit division on gcc-9
-
-Benjamin Gaignard (3):
-      media: verisilicon: Store reference frames pixels format
-      media: verisilicon: Fix IMX8 native pixel-format step values
-      media: verisilicon: av1: Store chroma and mv offsets
-
-Benoit Sevens (1):
-      media: uvcvideo: Refactor frame parsing code into a uvc_parse_frame f=
-unction
-
-Biju Das (1):
-      media: platform: rzg2l-cru: rzg2l-video: Fix the comment in rzg2l_cru=
-_start_streaming_vq()
-
-Bryan O'Donoghue (4):
-      media: venus: Add support for static video encoder/decoder declaratio=
-ns
-      media: venus: Populate video encoder/decoder nodename entries
-      media: dt-bindings: qcom-venus: Deprecate video-decoder and video-enc=
-oder where applicable
-      Revert "media: qcom: camss: Restructure camss_link_entities"
-
-Caleb Connolly (1):
-      media: qcom: camss: document csiphy_lanes_cfg structure
-
-Chen Ni (1):
-      media: lmedm04: Handle errors for lme2510_int_read
-
-Christophe JAILLET (1):
-      media: s5p-mfc: Fix an error handling path s5p_mfc_open()
-
-Chun-Kuang Hu (3):
-      media: platform: mtk-mdp3: Get fine-grain control of cmdq_pkt_finaliz=
-e()
-      media: platform: mtk-mdp3: Use cmdq_pkt_create() and cmdq_pkt_destroy=
-()
-      soc: mediatek: cmdq: Remove cmdq_pkt_finalize() helper function
-
-Colin Ian King (1):
-      media: cx231xx: remove redundant assignment to variable value
-
-Cosmin Tanislav (1):
-      media: mc: fix endpoint iteration
-
-Dan Carpenter (1):
-      media: imx-jpeg: Fix potential error pointer dereference in detach_pm=
-()
-
-Dave Stevenson (5):
-      media: i2c: imx290: Limit analogue gain according to module
-      media: i2c: imx290: Register 0x3011 varies between imx327 and imx290
-      media: dt-bindings: sony,imx290: Add IMX462 to the IMX290 binding
-      media: i2c: imx290: Add configuration for IMX462
-      media: i2c: ov9282: Correct the exposure offset
-
-David Heidelberg (1):
-      media: Documentation: PHY information can be obtained from OF endpoin=
-t too
-
-Desnes Nunes (1):
-      media: dvb-usb-v2: af9035: fix ISO C90 compilation error on af9035_i2=
-c_master_xfer
-
-Dheeraj Reddy Jonnalagadda (1):
-      media: rkisp1: Fix unused value issue
-
-Dr. David Alan Gilbert (6):
-      media: b2c2: Remove unused functions
-      media: platform: exynos4-is: Remove unused fimc_is_param_strerr
-      media: tuners: fc0013 Remove unused functions
-      media: cx18: Remove unused cx18_reset_ir_gpio
-      media: venus: Remove unused hfi_core_ping()
-      media: platform: exynos4-is: Remove unused __is_get_frame_size
-
-Edward Adam Davis (1):
-      media: vidtv: Fix a null-ptr-deref in vidtv_mux_stop_thread
-
-Guoniu.zhou (2):
-      dt-bindings: media: nxp,imx8-isi: Add i.MX8ULP ISI compatible string
-      media: nxp: imx8-isi: Add i.MX8ULP support
-
-Hans de Goede (4):
-      media: ov2740: Debug log chip ID
-      media: ov2740: Add camera orientation and sensor rotation controls
-      media: ov2740: Add powerdown GPIO support
-      media: ov2740: Add regulator support
-
-Isaac Scott (3):
-      media: uvcvideo: Implement dual stream quirk to fix loss of usb packe=
-ts
-      media: uvcvideo: Add new quirk definition for the Sonix Technology Co=
-. 292a camera
-      media: uvcvideo: Add Kurokesu C1 PRO camera
-
-Jacopo Mondi (1):
-      media: rkisp1: Reduce min_queued_buffers to 1
-
-Jani Nikula (1):
-      media: cec: include linux/debugfs.h and linux/seq_file.h where needed
-
-Jiasheng Jiang (3):
-      media: marvell: Add check for clk_enable()
-      media: mipi-csis: Add check for clk_enable()
-      media: camif-core: Add check for clk_enable()
-
-Joe Hattori (1):
-      staging: media: imx: fix OF node leak in imx_media_add_of_subdevs()
-
-Krzysztof Kozlowski (1):
-      media: dt-bindings: trivial white-space and example cleanup
-
-Laurent Pinchart (2):
-      media: uvcvideo: Fix double free in error path
-      MAINTAINERS: Add missing file entries for the USB video class driver
-
-Laurentiu Palcu (2):
-      staging: media: max96712: fix kernel oops when removing module
-      media: nxp: imx8-isi: fix v4l2-compliance test errors
-
-Lubomir Rintel (1):
-      media: mmp: Bring back registration of the device
-
-Luca Weiss (1):
-      media: i2c: imx412: Add missing newline to prints
-
-Lukas Bulwahn (2):
-      media: remove dead TI wl128x FM radio driver
-      MAINTAINERS: repair file entry in MEDIA DRIVERS FOR STM32 - CSI
-
-Martin T=C5=AFma (3):
-      media: mgb4: Unify the outputs padding logic with the inputs
-      media: mgb4: Unify register names in inputs/outputs
-      media: mgb4: Defines cleanup
-
-Mehdi Djait (3):
-      media: ccs: Fix cleanup order in ccs_probe()
-      media: ccs: Print a warning on CCS static data parser failure
-      media: ccs: Fail the probe on CCS static data parser failure
-
-Mohammed Anees (1):
-      media: platform: mtk-mdp3: cmdq: Remove duplicated platforms checks
-
-Naushir Patuck (5):
-      media: imx296: Add standby delay during probe
-      media: bcm2835-unicam: Improve frame sequence count handling
-      media: bcm2835-unicam: Allow setting of unpacked formats
-      media: bcm2835-unicam: Disable trigger mode operation
-      media: bcm2835-unicam: Fix for possible dummy buffer overrun
-
-Nicolas Dufresne (1):
-      media: hantro: Replace maintainers
-
-Niklas S=C3=B6derlund (4):
-      media: dt-bindings: Add property to describe CSI-2 C-PHY line orders
-      media: v4l: fwnode: Parse MiPI DisCo for C-PHY line-orders
-      media: rcar-csi2: Allow specifying C-PHY line order
-      media: rcar-csi2: Update D-PHY startup on V4M
-
-N=C3=ADcolas F. R. A. Prado (4):
-      media: platform: mtk-mdp3: Use cmdq_pkt_write when no mask is needed
-      media: platform: mtk-mdp3: Remove useless variadic arguments from mac=
-ros
-      media: platform: mtk-mdp3: Remove mask parameter from MM_REG_WRITE ma=
-cro
-      media: platform: mtk-mdp3: Remove mask parameter from MM_REG_POLL mac=
-ro
-
-Oliver Neukum (1):
-      media: rc: iguanair: handle timeouts
-
-Paul Kocialkowski (1):
-      MAINTAINERS: Update own email address from Bootlin to sys-base
-
-Ricardo Ribalda (16):
-      media: uvcvideo: Reorder uvc_status_init()
-      media: uvcvideo: Fix crash during unbind if gpio unit is in use
-      media: uvcvideo: Fix deadlock during uvc_probe
-      media: uvcvideo: Fix event flags in uvc_ctrl_send_events
-      media: uvcvideo: Support partial control reads
-      media: uvcvideo: Add more logging to uvc_query_ctrl()
-      media: uvcvideo: Remove duplicated cap/out code
-      media: uvcvideo: Only save async fh if success
-      media: uvcvideo: Remove redundant NULL assignment
-      media: uvcvideo: Remove dangling pointers
-      media: uvcvideo: Annotate lock requirements for uvc_ctrl_set
-      media: uvcvideo: Flush the control cache when we get an event
-      media: uvcvideo: Propagate buf->error to userspace
-      media: uvcvideo: Invert default value for nodrop module param
-      media: uvcvideo: Allow changing noparam on the fly
-      media: uvcvideo: Announce the user our deprecation intentions
-
-Sakari Ailus (4):
-      media: Documentation: ipu3: Remove unused and obsolete references
-      media: ccs: Fix CCS static data parsing for large block sizes
-      media: ccs: Clean up parsed CCS static data on parse failure
-      media: Documentation: tx-rx: Fix formatting
-
-Sam Bobrowicz (1):
-      media: ov5640: fix get_light_freq on auto
-
-Sean Young (2):
-      media: mceusb: don't push static constants on stack for %*ph
-      media: imon: don't push static constants on stack for %*ph
-
-Sergey Senozhatsky (2):
-      media: venus: destroy hfi session after m2m_ctx release
-      media: venus: match instance creation and destruction order
-
-Stanislaw Gruszka (2):
-      media: intel/ipu6: remove cpu latency qos request on error
-      media: intel/ipu6: move some boot messages to debug level
-
-Suresh Vankadara (1):
-      media: qcom: camss: Add support for camss driver on sc7280
-
-Thomas Wei=C3=9Fschuh (2):
-      media: i2c: imx208: Use const 'struct bin_attribute' callback
-      media: solo6x10: Use const 'struct bin_attribute' callback
-
-Tomi Valkeinen (15):
-      media: i2c: ds90ub9x3: Fix extra fwnode_handle_put()
-      media: i2c: ds90ub960: Fix UB9702 refclk register access
-      media: i2c: ds90ub960: Fix use of non-existing registers on UB9702
-      media: i2c: ds90ub960: Fix logging SP & EQ status only for UB9702
-      media: i2c: ds90ub960: Fix UB9702 VC map
-      media: i2c: ds90ub960: Use HZ_PER_MHZ
-      media: i2c: ds90ub960: Add support for I2C_RX_ID
-      media: i2c: ds90ub960: Add RGB24, RAW8 and RAW10 formats
-      media: i2c: ds90ub953: Clear CRC errors in ub953_log_status()
-      media: i2c: ds90ub960: Drop unused indirect block define
-      media: i2c: ds90ub960: Reduce sleep in ub960_rxport_wait_locks()
-      media: i2c: ds90ub960: Handle errors in ub960_log_status_ub960_sp_eq()
-      media: i2c: ds90ub913: Add error handling to ub913_hw_init()
-      media: i2c: ds90ub953: Add error handling for i2c reads/writes
-      media: i2c: ds90ub960: Fix shadowing of local variables
-
-Vikram Sharma (4):
-      media: qcom: camss: reducing the repitious error message string
-      media: qcom: camss: Restructure camss_link_entities
-      media: dt-bindings: Add qcom,sc7280-camss
-      media: qcom: camss: Sort camss version enums and compatible strings
-
-Vladimir Zapolskiy (3):
-      dt-bindings: media: qcom,sc8280xp-camss: Fix interrupt types
-      dt-bindings: media: qcom,sdm845-camss: Fix interrupt types
-      dt-bindings: media: qcom,sm8250-camss: Fix interrupt types
-
-Wolfram Sang (1):
-      media: mceusb: don't include 'pm_wakeup.h' directly
-
-Xiong Nandi (1):
-      media: uvcvideo: Use uvc_query_name in uvc_get_video_ctrl
-
-Zhen Lei (1):
-      media: nuvoton: Fix an error check in npcm_video_ece_init()
-
-jieqing.wang (1):
-      media: fix secfeed undefined when filter alloc fail
-
- Documentation/admin-guide/media/ipu3.rst           |    6 +-
- .../bindings/media/allwinner,sun50i-h6-vpu-g2.yaml |    1 -
- .../bindings/media/amlogic,meson-ir-tx.yaml        |    1 -
- .../devicetree/bindings/media/amphion,vpu.yaml     |    1 -
- .../devicetree/bindings/media/fsl,imx6ull-pxp.yaml |    1 -
- .../devicetree/bindings/media/i2c/sony,imx290.yaml |    2 +
- .../bindings/media/mediatek,vcodec-decoder.yaml    |    1 -
- .../bindings/media/mediatek,vcodec-encoder.yaml    |    1 -
- .../media/mediatek,vcodec-subdev-decoder.yaml      |    1 -
- .../bindings/media/microchip,sama5d4-vdec.yaml     |   19 +-
- .../devicetree/bindings/media/nxp,imx8-isi.yaml    |    2 +
- .../devicetree/bindings/media/nxp,imx8mq-vpu.yaml  |   41 +-
- .../bindings/media/qcom,msm8916-camss.yaml         |    1 -
- .../bindings/media/qcom,msm8916-venus.yaml         |   12 +-
- .../bindings/media/qcom,msm8996-camss.yaml         |    1 -
- .../bindings/media/qcom,sc7180-venus.yaml          |   12 +-
- .../bindings/media/qcom,sc7280-camss.yaml          |  425 +++++
- .../bindings/media/qcom,sc7280-venus.yaml          |   12 +-
- .../bindings/media/qcom,sc8280xp-camss.yaml        |   40 +-
- .../bindings/media/qcom,sdm660-camss.yaml          |    1 -
- .../bindings/media/qcom,sdm845-camss.yaml          |   21 +-
- .../bindings/media/qcom,sdm845-venus-v2.yaml       |   12 +-
- .../bindings/media/qcom,sm8250-camss.yaml          |   29 +-
- .../bindings/media/qcom,sm8250-venus.yaml          |   12 +-
- .../bindings/media/rockchip,rk3568-vepu.yaml       |    1 -
- .../devicetree/bindings/media/rockchip-vpu.yaml    |   31 +-
- .../devicetree/bindings/media/st,stm32-dcmipp.yaml |   53 +-
- .../bindings/media/st,stm32mp25-csi.yaml           |  125 ++
- .../bindings/media/video-interfaces.yaml           |   21 +
- Documentation/driver-api/media/tx-rx.rst           |    9 +-
- MAINTAINERS                                        |   25 +-
- drivers/media/cec/core/cec-adap.c                  |    5 +-
- drivers/media/cec/core/cec-core.c                  |    5 +-
- drivers/media/cec/core/cec-pin-error-inj.c         |    3 +-
- drivers/media/cec/core/cec-pin.c                   |    3 +-
- drivers/media/cec/platform/cec-gpio/cec-gpio.c     |    7 +-
- drivers/media/common/b2c2/flexcop-common.h         |    4 -
- drivers/media/common/b2c2/flexcop-misc.c           |   13 -
- drivers/media/dvb-core/dmxdev.c                    |    2 +-
- drivers/media/dvb-frontends/cxd2841er.c            |    8 +-
- drivers/media/i2c/ccs/ccs-core.c                   |   18 +-
- drivers/media/i2c/ccs/ccs-data.c                   |   15 +-
- drivers/media/i2c/ds90ub913.c                      |   26 +-
- drivers/media/i2c/ds90ub953.c                      |   56 +-
- drivers/media/i2c/ds90ub960.c                      |  188 ++-
- drivers/media/i2c/imx208.c                         |    2 +-
- drivers/media/i2c/imx290.c                         |   81 +-
- drivers/media/i2c/imx296.c                         |    2 +
- drivers/media/i2c/imx412.c                         |   42 +-
- drivers/media/i2c/ov2740.c                         |   58 +-
- drivers/media/i2c/ov5640.c                         |    1 +
- drivers/media/i2c/ov9282.c                         |    2 +-
- drivers/media/pci/b2c2/flexcop-dma.c               |   17 -
- drivers/media/pci/cx18/cx18-gpio.c                 |   15 -
- drivers/media/pci/cx18/cx18-gpio.h                 |    1 -
- drivers/media/pci/intel/ipu6/ipu6-buttress.c       |    8 +-
- drivers/media/pci/intel/ipu6/ipu6-cpd.c            |    2 +-
- drivers/media/pci/intel/ipu6/ipu6-isys.c           |    1 +
- drivers/media/pci/mgb4/mgb4_core.c                 |    4 +-
- drivers/media/pci/mgb4/mgb4_core.h                 |    3 -
- drivers/media/pci/mgb4/mgb4_sysfs_in.c             |   12 +-
- drivers/media/pci/mgb4/mgb4_vin.c                  |   20 +-
- drivers/media/pci/mgb4/mgb4_vin.h                  |    4 +-
- drivers/media/pci/mgb4/mgb4_vout.c                 |   14 +-
- drivers/media/pci/saa7164/saa7164-vbi.c            |    2 -
- drivers/media/pci/solo6x10/solo6x10-core.c         |    4 +-
- drivers/media/platform/broadcom/bcm2835-unicam.c   |   42 +-
- drivers/media/platform/marvell/mcam-core.c         |    7 +-
- drivers/media/platform/marvell/mmp-driver.c        |   21 +-
- .../media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c   |   77 +-
- .../media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h   |    1 +
- .../media/platform/mediatek/mdp3/mtk-mdp3-comp.c   |  537 +++----
- .../media/platform/mediatek/mdp3/mtk-mdp3-comp.h   |   29 +-
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.c   |    2 +
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.h   |    1 +
- drivers/media/platform/nuvoton/npcm-video.c        |    4 +-
- drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c     |    7 +-
- .../media/platform/nxp/imx8-isi/imx8-isi-core.c    |   14 +
- .../media/platform/nxp/imx8-isi/imx8-isi-core.h    |    1 +
- .../media/platform/nxp/imx8-isi/imx8-isi-video.c   |    3 +
- .../platform/qcom/camss/camss-csiphy-3ph-1-0.c     |   13 +-
- drivers/media/platform/qcom/camss/camss-csiphy.c   |    5 +
- drivers/media/platform/qcom/camss/camss-csiphy.h   |    7 +
- drivers/media/platform/qcom/camss/camss-vfe.c      |    8 +-
- drivers/media/platform/qcom/camss/camss.c          |  379 ++++-
- drivers/media/platform/qcom/camss/camss.h          |    5 +-
- drivers/media/platform/qcom/venus/Kconfig          |    1 +
- drivers/media/platform/qcom/venus/core.c           |  113 +-
- drivers/media/platform/qcom/venus/core.h           |    4 +
- drivers/media/platform/qcom/venus/hfi.c            |   23 -
- drivers/media/platform/qcom/venus/hfi.h            |    2 -
- drivers/media/platform/qcom/venus/hfi_venus.c      |   11 -
- drivers/media/platform/qcom/venus/vdec.c           |   18 +-
- drivers/media/platform/qcom/venus/venc.c           |   18 +-
- drivers/media/platform/renesas/rcar-csi2.c         |   91 +-
- .../media/platform/renesas/rzg2l-cru/rzg2l-video.c |    2 +-
- drivers/media/platform/rockchip/rga/rga-buf.c      |    2 +-
- drivers/media/platform/rockchip/rga/rga-hw.c       |    2 +-
- drivers/media/platform/rockchip/rga/rga-hw.h       |    2 +-
- drivers/media/platform/rockchip/rga/rga.c          |    2 +-
- drivers/media/platform/rockchip/rga/rga.h          |    2 +-
- .../platform/rockchip/rkisp1/rkisp1-capture.c      |    4 +-
- .../media/platform/rockchip/rkisp1/rkisp1-dev.c    |    3 +
- .../platform/samsung/exynos4-is/fimc-is-errno.c    |  131 --
- .../platform/samsung/exynos4-is/fimc-is-errno.h    |    1 -
- .../platform/samsung/exynos4-is/fimc-is-param.c    |    9 -
- .../platform/samsung/exynos4-is/fimc-is-param.h    |    1 -
- .../media/platform/samsung/exynos4-is/mipi-csis.c  |   10 +-
- .../media/platform/samsung/s3c-camif/camif-core.c  |   13 +-
- drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c   |    7 +-
- drivers/media/platform/st/stm32/Kconfig            |   14 +
- drivers/media/platform/st/stm32/Makefile           |    1 +
- drivers/media/platform/st/stm32/stm32-csi.c        | 1137 +++++++++++++
- .../media/platform/st/stm32/stm32-dcmipp/Makefile  |    2 +-
- .../st/stm32/stm32-dcmipp/dcmipp-bytecap.c         |  128 +-
- .../st/stm32/stm32-dcmipp/dcmipp-byteproc.c        |  119 +-
- .../platform/st/stm32/stm32-dcmipp/dcmipp-common.h |    4 +-
- .../platform/st/stm32/stm32-dcmipp/dcmipp-core.c   |  122 +-
- .../platform/st/stm32/stm32-dcmipp/dcmipp-input.c  |  540 +++++++
- .../st/stm32/stm32-dcmipp/dcmipp-parallel.c        |  440 -----
- drivers/media/platform/verisilicon/hantro.h        |    9 +
- drivers/media/platform/verisilicon/hantro_g2.c     |    2 +-
- .../media/platform/verisilicon/hantro_postproc.c   |   32 +-
- drivers/media/platform/verisilicon/hantro_v4l2.c   |   21 +
- drivers/media/platform/verisilicon/imx8m_vpu_hw.c  |   10 +-
- .../verisilicon/rockchip_vpu981_hw_av1_dec.c       |    9 +-
- drivers/media/radio/Kconfig                        |    4 -
- drivers/media/radio/Makefile                       |    1 -
- drivers/media/radio/wl128x/Kconfig                 |   15 -
- drivers/media/radio/wl128x/Makefile                |    7 -
- drivers/media/radio/wl128x/fmdrv.h                 |  229 ---
- drivers/media/radio/wl128x/fmdrv_common.c          | 1676 ----------------=
-----
- drivers/media/radio/wl128x/fmdrv_common.h          |  389 -----
- drivers/media/radio/wl128x/fmdrv_rx.c              |  820 ----------
- drivers/media/radio/wl128x/fmdrv_rx.h              |   45 -
- drivers/media/radio/wl128x/fmdrv_tx.c              |  413 -----
- drivers/media/radio/wl128x/fmdrv_tx.h              |   24 -
- drivers/media/radio/wl128x/fmdrv_v4l2.c            |  604 -------
- drivers/media/radio/wl128x/fmdrv_v4l2.h            |   20 -
- drivers/media/rc/iguanair.c                        |    4 +-
- drivers/media/rc/imon_raw.c                        |    2 +-
- drivers/media/rc/mceusb.c                          |    5 +-
- drivers/media/test-drivers/vidtv/vidtv_bridge.c    |    8 +-
- drivers/media/tuners/fc0013.c                      |   64 -
- drivers/media/tuners/fc0013.h                      |   11 -
- drivers/media/usb/cx231xx/cx231xx-avcore.c         |    1 -
- drivers/media/usb/dvb-usb-v2/af9035.c              |   18 +-
- drivers/media/usb/dvb-usb-v2/lmedm04.c             |   12 +-
- drivers/media/usb/uvc/uvc_ctrl.c                   |   88 +-
- drivers/media/usb/uvc/uvc_driver.c                 |  298 ++--
- drivers/media/usb/uvc/uvc_queue.c                  |    9 +-
- drivers/media/usb/uvc/uvc_status.c                 |    8 +-
- drivers/media/usb/uvc/uvc_v4l2.c                   |  164 +-
- drivers/media/usb/uvc/uvc_video.c                  |   59 +-
- drivers/media/usb/uvc/uvcvideo.h                   |   15 +-
- drivers/media/v4l2-core/v4l2-fwnode.c              |   43 +-
- drivers/media/v4l2-core/v4l2-mc.c                  |    2 +-
- drivers/soc/mediatek/mtk-cmdq-helper.c             |   18 -
- drivers/staging/media/imx/imx-media-of.c           |    8 +-
- drivers/staging/media/max96712/max96712.c          |    4 +-
- include/dt-bindings/media/video-interfaces.h       |    7 +
- include/linux/soc/mediatek/mtk-cmdq.h              |   13 -
- include/media/cec.h                                |    1 -
- include/media/v4l2-mediabus.h                      |   21 +
- 164 files changed, 4606 insertions(+), 6317 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,sc7280-cam=
-ss.yaml
- create mode 100644 Documentation/devicetree/bindings/media/st,stm32mp25-cs=
-i.yaml
- create mode 100644 drivers/media/platform/st/stm32/stm32-csi.c
- create mode 100644 drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-inp=
-ut.c
- delete mode 100644 drivers/media/platform/st/stm32/stm32-dcmipp/dcmipp-par=
-allel.c
- delete mode 100644 drivers/media/radio/wl128x/Kconfig
- delete mode 100644 drivers/media/radio/wl128x/Makefile
- delete mode 100644 drivers/media/radio/wl128x/fmdrv.h
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_common.c
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_common.h
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_rx.c
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_rx.h
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_tx.c
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_tx.h
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_v4l2.c
- delete mode 100644 drivers/media/radio/wl128x/fmdrv_v4l2.h
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] media: ox05b1s: Add omnivision OX05B1S raw sensor
+ driver
+To: Mirela Rabulea <mirela.rabulea@nxp.com>, mchehab@kernel.org,
+ sakari.ailus@linux.intel.com, hverkuil-cisco@xs4all.nl,
+ laurent.pinchart+renesas@ideasonboard.com, robh@kernel.org,
+ krzk+dt@kernel.org, bryan.odonoghue@linaro.org, laurentiu.palcu@nxp.com,
+ robert.chiras@nxp.com
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ LnxRevLi@nxp.com, kieran.bingham@ideasonboard.com, hdegoede@redhat.com,
+ dave.stevenson@raspberrypi.com, mike.rudenko@gmail.com,
+ alain.volmat@foss.st.com, devicetree@vger.kernel.org, conor+dt@kernel.org,
+ alexander.stein@ew.tq-group.com, umang.jain@ideasonboard.com,
+ zhi.mao@mediatek.com, festevam@denx.de, julien.vuillaumier@nxp.com,
+ alice.yuan@nxp.com
+References: <20250124001243.446511-1-mirela.rabulea@nxp.com>
+ <20250124001243.446511-3-mirela.rabulea@nxp.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20250124001243.446511-3-mirela.rabulea@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Le 24/01/2025 à 01:12, Mirela Rabulea a écrit :
+> Add a v4l2 subdevice driver for the Omnivision OX05B1S RGB-IR sensor.
+> 
+> The Omnivision OX05B1S is a 1/2.5-Inch CMOS image sensor with an
+> active array size of 2592 x 1944.
+> 
+> The following features are supported for OX05B1S:
+> - Manual exposure an gain control support
+> - vblank/hblank control support
+> - Supported resolution: 2592 x 1944 @ 30fps (SGRBG10)
+> 
+> Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> ---
+
+...
+
+> +static int ox05b1s_power_on(struct ox05b1s *sensor)
+> +{
+> +	struct device *dev = &sensor->i2c_client->dev;
+> +	int ret = 0;
+
+No need to init.
+
+> +
+> +	ret = regulator_bulk_enable(OX05B1S_NUM_SUPPLIES, sensor->supplies);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enable regulators\n");
+> +		return ret;
+> +	}
+> +
+> +	/* get out of powerdown and reset */
+> +	gpiod_set_value_cansleep(sensor->rst_gpio, 0);
+> +
+> +	ret = clk_prepare_enable(sensor->sensor_clk);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Enable sensor clk fail ret=%d\n", ret);
+> +		goto reg_off;
+> +	}
+> +
+> +	/* with XVCLK@24MHz, t2 = 6ms required delay for ox05b1s before first SCCB transaction */
+> +	fsleep(6000);
+> +
+> +	return ret;
+
+return 0;
+
+> +
+> +reg_off:
+> +	regulator_bulk_disable(OX05B1S_NUM_SUPPLIES, sensor->supplies);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +/* needs sensor lock and power on */
+> +static int ox05b1s_apply_current_mode(struct ox05b1s *sensor)
+> +{
+> +	struct device *dev = &sensor->i2c_client->dev;
+> +	struct ox05b1s_reglist *reg_data = sensor->mode->reg_data;
+> +	u32 w = sensor->mode->width;
+> +	u32 h = sensor->mode->height;
+> +	int ret = 0;
+> +
+> +	cci_write(sensor->regmap, OX05B1S_REG_SW_RST, 0x01, NULL);
+> +
+> +	while (reg_data->regs) {
+> +		ret = ox05b1s_write_reg_array(sensor, reg_data->regs);
+> +		if (ret)
+> +			goto out;
+> +		reg_data++;
+> +	}
+> +
+> +	cci_write(sensor->regmap, OX05B1S_REG_X_OUTPUT_SIZE, w, &ret);
+> +	cci_write(sensor->regmap, OX05B1S_REG_Y_OUTPUT_SIZE, h, &ret);
+> +	if (ret)
+> +		goto out;
+> +
+> +	/* setup handler will write actual controls into sensor registers */
+> +	ret =  __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+
+2 spaces after '='
+
+> +
+> +out:
+> +	if (ret < 0)
+> +		dev_err(dev, "Failed to apply mode %dx%d,bpp=%d\n", w, h,
+> +			sensor->mode->bpp);
+> +
+> +	return ret;
+> +}
+
+...
+
+> +static int ox05b1s_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+> +				  struct v4l2_mbus_frame_desc *fd)
+> +{
+> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
+> +	struct ox05b1s *sensor = client_to_ox05b1s(client);
+> +
+> +	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
+> +	fd->num_entries = 1;
+> +
+> +	/* get sensor current code*/
+
+Missing space before */
+
+> +	mutex_lock(&sensor->lock);
+> +	fd->entry[0].pixelcode = sensor->mode->code;
+> +	mutex_unlock(&sensor->lock);
+> +
+> +	fd->entry[0].bus.csi2.vc = 0;
+> +	fd->entry[0].bus.csi2.dt = ox05b1s_code2dt(fd->entry[0].pixelcode);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static void ox05b1s_get_gpios(struct ox05b1s *sensor)
+> +{
+> +	struct device *dev = &sensor->i2c_client->dev;
+> +
+> +	sensor->rst_gpio = devm_gpiod_get_optional(dev, "reset",
+> +						   GPIOD_OUT_HIGH);
+> +	if (IS_ERR(sensor->rst_gpio))
+> +		dev_warn(dev, "No sensor reset pin available");
+
+Missing ending \n
+
+> +}
+> +
+> +static int ox05b1s_get_regulators(struct ox05b1s *sensor)
+> +{
+> +	struct device *dev = &sensor->i2c_client->dev;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < OX05B1S_NUM_SUPPLIES; i++)
+> +		sensor->supplies[i].supply = ox05b1s_supply_name[i];
+> +
+> +	return devm_regulator_bulk_get(dev, OX05B1S_NUM_SUPPLIES, sensor->supplies);
+> +}
+> +
+> +static int ox05b1s_read_chip_id(struct ox05b1s *sensor)
+> +{
+> +	struct device *dev = &sensor->i2c_client->dev;
+> +	u64 chip_id = 0;
+> +	char *camera_name;
+> +	int ret = 0;
+
+No need to init.
+
+> +
+> +	ret = cci_read(sensor->regmap, OX05B1S_REG_CHIP_ID, &chip_id, NULL);
+> +	if (ret) {
+> +		dev_err(dev, "Camera chip_id read error\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	switch (chip_id) {
+> +	case 0x580542:
+> +		camera_name = "ox05b1s";
+> +		break;
+> +	default:
+> +		camera_name = "unknown";
+> +		break;
+> +	}
+> +
+> +	if (chip_id == sensor->model->chip_id) {
+> +		dev_dbg(dev, "Camera %s detected, chip_id=%llx\n", camera_name, chip_id);
+> +	} else {
+> +		dev_err(dev, "Detected %s camera (chip_id=%llx), but expected %s (chip_id=%x)\n",
+> +			camera_name, chip_id, sensor->model->name, sensor->model->chip_id);
+> +		ret = -ENODEV;
+
+Could be return -ENODEV;
+and return 0; below, to ease reading.
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int ox05b1s_probe(struct i2c_client *client)
+> +{
+> +	int retval;
+
+Using just 'ret' would be slighly shorter and more consistent with other 
+functions above.
+
+> +	struct device *dev = &client->dev;
+> +	struct v4l2_subdev *sd;
+> +	struct ox05b1s *sensor;
+> +
+> +	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+> +	if (!sensor)
+> +		return -ENOMEM;
+> +
+> +	sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
+> +	if (IS_ERR(sensor->regmap))
+> +		return PTR_ERR(sensor->regmap);
+> +
+> +	sensor->i2c_client = client;
+> +
+> +	sensor->model = of_device_get_match_data(dev);
+> +
+> +	ox05b1s_get_gpios(sensor);
+> +
+> +	/* Get system clock, xvclk */
+> +	sensor->sensor_clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(sensor->sensor_clk))
+> +		return dev_err_probe(dev, PTR_ERR(sensor->sensor_clk),
+> +				     "Failed to get xvclk\n");
+> +
+> +	retval = ox05b1s_get_regulators(sensor);
+> +	if (retval)
+> +		return dev_err_probe(dev, retval, "Failed to get regulators\n");
+> +
+> +	sd = &sensor->subdev;
+> +	v4l2_i2c_subdev_init(sd, client, &ox05b1s_subdev_ops);
+> +	sd->internal_ops = &ox05b1s_internal_ops;
+> +	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	sd->dev = &client->dev;
+> +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> +	sensor->pads[OX05B1S_SENS_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> +	retval = media_entity_pads_init(&sd->entity, OX05B1S_SENS_PADS_NUM,
+> +					sensor->pads);
+> +	if (retval)
+> +		goto probe_out;
+> +
+> +	mutex_init(&sensor->lock);
+
+This could be devm_mutex_init().
+This would slighlty simplify the remove function.
+Otherwise, a mutex_destroy() is potentialy missing in the error handling 
+of the probe.
+
+> +
+> +	retval = ox05b1s_init_controls(sensor);
+> +	if (retval)
+> +		goto probe_err_entity_cleanup;
+> +
+> +	/* power on manually */
+> +	retval = ox05b1s_power_on(sensor);
+> +	if (retval) {
+> +		dev_err(dev, "Failed to power on\n");
+
+dev_err_probe() can still be used to be consistent with other error path 
+above.
+
+> +		goto probe_err_free_ctrls;
+> +	}
+> +
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_get_noresume(dev);
+> +	pm_runtime_enable(dev);
+> +
+> +	retval = ox05b1s_read_chip_id(sensor);
+> +	if (retval)
+> +		goto probe_err_pm_runtime;
+> +
+> +	v4l2_i2c_subdev_set_name(sd, client, sensor->model->name, NULL);
+> +
+> +	/* Centrally managed subdev active state */
+> +	sd->state_lock = &sensor->lock;
+> +	retval = v4l2_subdev_init_finalize(sd);
+> +	if (retval < 0) {
+> +		dev_err(dev, "Subdev init error: %d\n", retval);
+
+Same
+
+> +		goto probe_err_pm_runtime;
+> +	}
+> +
+> +	retval = v4l2_async_register_subdev_sensor(sd);
+> +	if (retval < 0) {
+> +		dev_err(&client->dev, "Async register failed, ret=%d\n", retval);
+
+Same
+
+> +		goto probe_err_subdev_cleanup;
+> +	}
+> +
+> +	sensor->mode = &sensor->model->supported_modes[0];
+> +	ox05b1s_update_controls(sensor);
+> +
+> +	pm_runtime_set_autosuspend_delay(dev, 1000);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_put_autosuspend(dev);
+> +
+> +	return 0;
+> +
+> +probe_err_subdev_cleanup:
+> +	v4l2_subdev_cleanup(sd);
+> +probe_err_pm_runtime:
+> +	pm_runtime_put_noidle(dev);
+> +	pm_runtime_disable(dev);
+> +	ox05b1s_runtime_suspend(dev);
+> +probe_err_free_ctrls:
+> +	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
+> +probe_err_entity_cleanup:
+> +	media_entity_cleanup(&sd->entity);
+> +probe_out:
+> +	return retval;
+> +}
+
+...
+
+> +static struct i2c_driver ox05b1s_i2c_driver = {
+> +	.driver = {
+> +		.name  = "ox05b1s",
+
+2 spaces after .name.
+
+> +		.pm = pm_ptr(&ox05b1s_pm_ops),
+> +		.of_match_table	= ox05b1s_of_match,
+> +	},
+> +	.probe	= ox05b1s_probe,
+> +	.remove = ox05b1s_remove,
+> +};
+> +
+> +module_i2c_driver(ox05b1s_i2c_driver);
+> +MODULE_DESCRIPTION("Omnivision OX05B1S MIPI Camera Subdev Driver");
+> +MODULE_AUTHOR("Mirela Rabulea <mirela.rabulea@nxp.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/media/i2c/ox05b1s/ox05b1s_modes.c b/drivers/media/i2c/ox05b1s/ox05b1s_modes.c
+> new file mode 100644
+> index 000000000000..1f3b822d4482
+> --- /dev/null
+> +++ b/drivers/media/i2c/ox05b1s/ox05b1s_modes.c
+> @@ -0,0 +1,63 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Register configurations for all sensor supported modes
+> + * Copyright (C) 2024, NXP
+> + * Copyright (C) 2024, Omnivision
+> + * Copyright (C) 2024, Verisilicon
+> + *
+> + */
+> +
+> +#include "ox05b1s.h"
+> +
+> +/*
+> + * Register configuration for Omnivision OX05B1S raw camera
+> + * 2592X1944_30FPS_FULL_RGBIr 2592 1944
+> + */
+> +struct ox05b1s_reg ovx5b_init_setting_2592x1944[] = {
+
+I think this could easily be made a const struct.
+
+> +	{ 0x0107, 0x01 },
+> +	{ 0x0307, 0x02 },
+> +	{ 0x034a, 0x05 },
+> +	{ 0x040b, 0x5c },
+> +	{ 0x040c, 0xcd },
+> +	{ 0x3009, 0x2e },
+> +	{ 0x3219, 0x08 },
+> +	{ 0x3684, 0x6d },
+> +	{ 0x3685, 0x6d },
+> +	{ 0x3686, 0x6d },
+> +	{ 0x3687, 0x6d },
+> +	{ 0x368c, 0x07 },
+> +	{ 0x368d, 0x07 },
+> +	{ 0x368e, 0x07 },
+> +	{ 0x368f, 0x00 },
+> +	{ 0x3690, 0x04 },
+> +	{ 0x3691, 0x04 },
+> +	{ 0x3692, 0x04 },
+> +	{ 0x3693, 0x04 },
+> +	{ 0x3698, 0x00 },
+> +	{ 0x36a0, 0x05 },
+> +	{ 0x36a2, 0x16 },
+> +	{ 0x36a3, 0x03 },
+> +	{ 0x36a4, 0x07 },
+> +	{ 0x36a5, 0x24 },
+> +	{ 0x36e3, 0x09 },
+> +	{ 0x3702, 0x0a },
+> +	{ 0x3821, 0x04 }, /* mirror */
+> +	{ 0x3822, 0x10 },
+> +	{ 0x382b, 0x03 },
+> +	{ 0x3866, 0x10 },
+> +	{ 0x386c, 0x46 },
+> +	{ 0x386d, 0x08 },
+> +	{ 0x386e, 0x7b },
+> +	{ 0x4802, 0x00 },
+> +	{ 0x481b, 0x3c },
+> +	{ 0x4837, 0x19 },
+> +	{ /* sentinel*/ },
+
+Nitpick: no need for ending comma after a terminator.
+
+> +};
+> +
+> +struct ox05b1s_reglist ox05b1s_reglist_2592x1944[] = {
+
+I think this could easily be made a const struct.
+
+> +	{
+> +		.regs = ovx5b_init_setting_2592x1944
+> +	}, {
+> +		/* sentinel */
+> +	}
+> +};
+
