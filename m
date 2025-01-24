@@ -1,117 +1,204 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from smtp.smtpout.orange.fr (smtp-78.smtpout.orange.fr [80.12.242.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A6523B0;
-	Fri, 24 Jan 2025 04:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9856433998;
+	Fri, 24 Jan 2025 07:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737691614; cv=none; b=KphZfhKkg1W5YQF6eZwFS4xm1E8uYofpYvIkDo3juIWeUkbMtZfBMDjqeaaBjsDgludg7tA1B0ynwRv0J8BvZFw2EAAVNVayJUPNYcqC5leT3uJ5Ycz1ylFN4Ximl0U3ViKQNk+TGYOr9gmuKRiDvEcmdtiZczAqVcKWvxtfTHM=
+	t=1737702252; cv=none; b=HLObpwsXQRkYIjPYRtaw/4C0adL6rrlzE0sayM0hTdd11mETpAsD3eyNm7ZOpS6KDo0RCVwL6fn+dN3S+8I92sBICc1wbslB4HsIDAWb1jjgxiY8++qehj1MdAezIZvhG0s41vcXeqqxMe+j3c31ctuc+btzmhX72nAfBnhYlxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737691614; c=relaxed/simple;
-	bh=ea0+XODqA4zgxKtAhQAQx7ZqtBm9OFkMPPtrp7Ln3+A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=njpwXvRWc+SYD6B8vl07r6Ps0HBHfti1GDf6HHAfqVndR2Lpja9GipdB0vVYgO1Yra66g3nsz6jUUIl46PIp9NB5SWBPIZiJGJbpmKTBtY5VKEXvYAXLG8367AnoNxoGkMXmB9/f5OVpsCntgtm8ZPBDETWudYD34PjETdiTQKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=StgJ7NRf; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737702252; c=relaxed/simple;
+	bh=GgW2/D4yaq/fiGHy0bZN9IabtyRumJfW5G71kCpkooA=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
+	 In-Reply-To:Content-Type; b=i3Vph0RI3Yr5O5DEbyHGbHrJz4+9dhkRtbIUpOzlPNkK7rLqm7VTfTBWQAUGEDHnQPMEGdO9TUhc66AOzm6NZQeF/TBQWMMmP8uq6bdhV1X1lXxcT5b0olfmnOv5Z33F+FfSQtOtkMrwGv1o4y/4kpqUGBKjiziKrsK7BWdLuss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=J8sPbWZL; arc=none smtp.client-ip=80.12.242.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="StgJ7NRf"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21619108a6bso27484995ad.3;
-        Thu, 23 Jan 2025 20:06:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737691612; x=1738296412; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vj1NaMTUsVA57ckq/QD9h243Rs/TkZbkHkyDFlhTqVQ=;
-        b=StgJ7NRfU+idm/DPdWTZH+xR5eSxrZ+aPXBjmsDrOmn6UMMpgHlZgNSDU6u1mPFfmk
-         +L84nZT1JgBiITXo/M5xWsYGOr6QldSP+u/WLYGt+WA7Cm+ZRHpEZRXVs6GzBE6zG33S
-         1SYyajChUh5TQwfG8uf+3ntseLIVgImIphnzWBBirSWm56WpiCInDdRMjxU4Au8bVg+t
-         /tufCMUaFu/SFQ4JusQlIPi7ZHv242UA/ulkSUb8x4NOr1AW14jqgLVGVkWDCiKBZC6M
-         nfLvKo03Gdo/tYr7XSLKE1X8oi0j9mzoQ3+rtZ5W2FJO2iBMADMR9L2T4SIvyAtycRJr
-         qThA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737691612; x=1738296412;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vj1NaMTUsVA57ckq/QD9h243Rs/TkZbkHkyDFlhTqVQ=;
-        b=THQNdmBud/xAOE80JiMpgnhhMcS8yYjBtyC9aDUNCIiE0aBBHjT4iQowroa7fH4A6a
-         FDVH4k8YS4auj/qEkhhVuzIf9bO5zeBitr9I9LMiIUhjMsfO4LqAyZ1CGYnZ2Ky7RatO
-         gtsgyoKzodDN1b48KMAX8PlOr/iqaMaocXjNFLqm9UcdaXEAPjnWVDNG36HlCf8P71BM
-         YghPGQtc4+ZGwHrAB0OOWfogaeak2svLUP5DURw20Tdtq7EbjnEuuXYfWhkMxbbhPcNA
-         yRlntqHI5DacFd5M4PCVdsSNoZ6F4huVOa4p7MrfXb6v/MR9ySva/goOcDHy4RIyh7ZS
-         tCDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZFDR4Zbuf37fk4F0nq+B/xDiDYys0E54B79Ln8zubehChv0SDhgddNHcfTjJKvJ6+rFlUGLIf44Pe7H4=@vger.kernel.org, AJvYcCXfV+vhxq+w6bWP4RmHuGp1i1wclHXatj1TCeJLYUJGlBJetvSYFpNY4QTeBa/A5clVVC6sb+5OQd1lUBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt3Vz0iST+BsmhW1tDKS9tSvSULvqsYZHOW64SYuXnIXF39C2B
-	sm+0MT5c8cy4ylfM4aMXPAaFQyRGyluYnCbMHwdlq/gsP3S4rqikwU+ARcNrXgI=
-X-Gm-Gg: ASbGncs89OM2mROtrgZ+TfRszuApZ1cGcE67NxjK2LsDDOH+Jh16fY9VWoJ2Ayuko3/
-	lA5/XTKgQKP9g52QZgBj7zFfE2XYa5Qa5EKV2ygGSiHDWP3iRPLKtDd7HOw2pgSq9Ht26YAfHZZ
-	EShmXtMK+F843dZVR2VPwnMdYTA61pc1NxQlyFP8scJURgQuIveui//AfhdO6bhZrTj/yuYajYu
-	bYEKus2C3zOjRwFB3ck3b19PgCI5BwaB3M9WFjYLlj5izNA+yPcjZbcd4weMtiFYxwNKMWgnRm2
-	Cym7MiFggJdXnHFQSLdSX7RrExMfgA==
-X-Google-Smtp-Source: AGHT+IF3SHS7uGw6j2HUHGRc2o6x9hUUGZICmg9DQKSnpjYz1OzyDi2k9jgSfX5GniU24Huia3n0zA==
-X-Received: by 2002:a05:6a00:a2a:b0:72d:8af9:bc64 with SMTP id d2e1a72fcca58-72daf9ec17dmr31990363b3a.9.1737691611690;
-        Thu, 23 Jan 2025 20:06:51 -0800 (PST)
-Received: from jren-d3.localdomain ([221.222.59.195])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a78f145sm795398b3a.167.2025.01.23.20.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 20:06:51 -0800 (PST)
-From: Imkanmod Khan <imkanmodkhan@gmail.com>
-To: stable@vger.kernel.org
-Cc: patches@lists.linux.dev,
-	mchehab@kernel.org,
-	fullwaywang@outlook.com,
-	gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	tiffany.lin@mediatek.com,
-	andrew-ct.chen@mediatek.com,
-	yunfei.dong@mediatek.com,
-	matthias.bgg@gmail.com,
-	linux-media@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Imkanmod Khan <imkanmodkhan@gmail.com>
-Subject: [PATCH 6.1.y] media: mtk-vcodec: potential null pointer deference in SCP
-Date: Fri, 24 Jan 2025 12:06:41 +0800
-Message-ID: <20250124040641.7431-1-imkanmodkhan@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="J8sPbWZL"
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id bDjStVgOWhA80bDjWtURpi; Fri, 24 Jan 2025 08:04:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1737702247;
+	bh=dP36wT0+ULcEP3ejbuA9WU3UTE7UMDb+CYEKCW22q3k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To;
+	b=J8sPbWZLBAntJBxGTp+pSHiFdBNWrcMBuC6lMHFkld0X3qpFWV6rnfL9GUKZidrO2
+	 8hXVP6SZDrMGFNqEjmWjl9Kec+Ykc0u0Q4VPJCpekJ+GKU3GVSUXLL+HrpXum/2ZfV
+	 Mt0aAtI25sUflNlHJBg0LCoOhliJpGx+lnSoN7Kn5l4iRaEX0O8XR2q9coo5a6YmyR
+	 Vgpcx06JX4rXNOSv5wcZod9bwZ79ZgJ9lUpyGUlBcjmEFqFRnWhXSC+N7bGfz0TcAB
+	 HjuiW09sClZqOiFiAF8rezNOknc4b+pLz8kPf3xWGgXMWHQ9lcRHIukqSBZF6/vEpE
+	 xt1+uFVwgEw8Q==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 24 Jan 2025 08:04:07 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <80e942c1-4814-4bd9-98cc-eeb0f5ee5a6b@wanadoo.fr>
+Date: Fri, 24 Jan 2025 08:03:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] media: ox05b1s: Add support for Omnivision OS08A20
+ raw sensor
+References: <20250124001243.446511-1-mirela.rabulea@nxp.com>
+ <20250124001243.446511-5-mirela.rabulea@nxp.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Mirela Rabulea <mirela.rabulea@nxp.com>
+Cc: LnxRevLi@nxp.com, alain.volmat@foss.st.com,
+ alexander.stein@ew.tq-group.com, alice.yuan@nxp.com,
+ bryan.odonoghue@linaro.org, conor+dt@kernel.org,
+ dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+ festevam@denx.de, hdegoede@redhat.com, hverkuil-cisco@xs4all.nl,
+ julien.vuillaumier@nxp.com, kieran.bingham@ideasonboard.com,
+ krzk+dt@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
+ laurentiu.palcu@nxp.com, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, mchehab@kernel.org, mike.rudenko@gmail.com,
+ robert.chiras@nxp.com, robh@kernel.org, sakari.ailus@linux.intel.com,
+ umang.jain@ideasonboard.com, zhi.mao@mediatek.com
+In-Reply-To: <20250124001243.446511-5-mirela.rabulea@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Fullway Wang <fullwaywang@outlook.com>
+Le 24/01/2025 à 01:12, Mirela Rabulea a écrit :
+> This is an 8 megapixel raw10/raw12 sensor with HDR capabilities.
+> HDR mode control is supported, with one HDR mode: staggered HDR
+> with 2 exposures on separate virtual channels. However, for now,
+> only one exposure (VC 0) is accessible via get_frame_desc.
+> 
+> Supported resolutions:
+>     - 1920 x 1080 @ 60fps (SBGGR10, no HDR)
+>     - 1920 x 1080 @ 30fps (SBGGR10, HDR)
+>     - 3840 x 2160 @ 30fps (SBGGR12, no HDR)
+>     - 3840 x 2160 @ 15fps (SBGGR12, HDR)
+>     - 3840 x 2160 @ 30fps (SBGGR10, no HDR)
+>     - 3840 x 2160 @ 15fps (SBGGR10, HDR)
+> 
+> Signed-off-by: Mirela Rabulea <mirela.rabulea-3arQi8VN3Tc@public.gmane.org>
 
-[ Upstream commit 53dbe08504442dc7ba4865c09b3bbf5fe849681b ]
+...
 
-The return value of devm_kzalloc() needs to be checked to avoid
-NULL pointer deference. This is similar to CVE-2022-3113.
+> +/* Common register configuration for Omnivision OS08A20 raw camera */
+> +struct ox05b1s_reg os08a20_init_setting_common[] = {
+> +	{ 0x3605, 0x50 },
+> +	{ 0x3610, 0x39 },
+> +	{ 0x375e, 0x0b },
+> +	{ 0x5001, 0x42 },
+> +	{ 0x5005, 0x00 },
+> +	{ /* sentinel*/ },
 
-Link: https://lore.kernel.org/linux-media/PH7PR20MB5925094DAE3FD750C7E39E01BF712@PH7PR20MB5925.namprd20.prod.outlook.com
-Signed-off-by: Fullway Wang <fullwaywang@outlook.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-[ To fix CVE: CVE-2024-40973, modified the file path from drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c
- to drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c and minor conflict resolution ]
-Signed-off-by: Imkanmod Khan <imkanmodkhan@gmail.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c | 2 ++
- 1 file changed, 2 insertions(+)
+No need for ending comma.
+The struct could maybe be const.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-index d8e66b645bd8..27f08b1d34d1 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-@@ -65,6 +65,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(struct mtk_vcodec_dev *dev)
- 	}
- 
- 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
-+	if (!fw)
-+		return ERR_PTR(-ENOMEM);
- 	fw->type = SCP;
- 	fw->ops = &mtk_vcodec_rproc_msg;
- 	fw->scp = scp;
--- 
-2.25.1
+> +};
+> +
+> +/* Common register configuration for Omnivision OS08A20 10 bit */
+> +struct ox05b1s_reg os08a20_init_setting_10bit[] = {
+> +	{ 0x031e, 0x09 },
+> +	{ 0x3609, 0xb5 },
+> +	{ 0x3660, 0x43 },
+> +	{ 0x3706, 0x35 },
+> +	{ 0x370a, 0x00 },
+> +	{ 0x370b, 0x98 },
+> +	{ 0x3709, 0x49 },
+> +	{ /* sentinel*/ },
+
+No need for ending comma.
+The struct could maybe be const.
+
+> +};
+> +
+> +/* Common register configuration for Omnivision OS08A20 12 bit */
+> +struct ox05b1s_reg os08a20_init_setting_12bit[] = {
+> +	{ 0x031e, 0x0a },
+> +	{ 0x3609, 0xdb },
+> +	{ 0x3660, 0xd3 },
+> +	{ 0x3706, 0x6a },
+> +	{ 0x370a, 0x01 },
+> +	{ 0x370b, 0x30 },
+> +	{ 0x3709, 0x48 },
+> +	{ /* sentinel*/ },
+
+No need for ending comma.
+The struct could maybe be const.
+
+> +};
+> +
+> +/* Mode specific register configurations for Omnivision OS08A20 raw camera */
+> +
+> +/* OS08A20 3840 x 2160 @30fps BGGR10 no more HDR */
+> +struct ox05b1s_reg os08a20_init_setting_4k_10b[] = {
+> +	{ 0x3821, 0x04 }, /* mirror */
+> +	{ 0x4837, 0x10 }, /* PCLK PERIOD */
+> +	{ /* sentinel*/ },
+
+No need for ending comma.
+The struct could maybe be const.
+
+> +};
+> +
+> +/* OS08A20 3840 x 2160 @30fps BGGR12 */
+> +struct ox05b1s_reg os08a20_init_setting_4k_12b[] = {
+> +	{ 0x3821, 0x04 }, /* mirror */
+> +	{ 0x4837, 0x10 }, /* PCLK PERIOD */
+> +	{ /* sentinel*/ },
+
+No need for ending comma.
+The struct could maybe be const.
+
+> +};
+> +
+> +/* OS08A20 1920 x 1080 @60fps BGGR10 */
+> +struct ox05b1s_reg os08a20_init_setting_1080p_10b[] = {
+> +	{ 0x3814, 0x03 }, /* X INC ODD */
+> +	{ 0x3816, 0x03 }, /* Y INC ODD */
+> +	{ 0x3820, 0x01 }, /* vertical bining */
+> +	{ 0x3821, 0x05 }, /* mirror, horizontal bining */
+> +	{ 0x4837, 0x16 }, /* PCLK PERIOD */
+> +	{ /* sentinel*/ },
+
+No need for ending comma.
+The struct could maybe be const.
+
+> +};
+ > +
+ > +struct ox05b1s_reglist os08a20_reglist_4k_12b[] = {
+
+The struct could maybe be const.
+
+ > +	{
+ > +		.regs = os08a20_init_setting_common
+ > +	}, {
+ > +		.regs = os08a20_init_setting_12bit
+ > +	}, {
+ > +		.regs = os08a20_init_setting_4k_12b
+ > +	}, {
+ > +		/* sentinel */
+ > +	}
+ > +};
+ > +
+ > +struct ox05b1s_reglist os08a20_reglist_1080p_10b[] = {
+
+The struct could maybe be const.
+
+ > +	{
+ > +		.regs = os08a20_init_setting_common
+ > +	}, {
+ > +		.regs = os08a20_init_setting_10bit
+ > +	}, {
+ > +		.regs = os08a20_init_setting_1080p_10b
+ > +	}, {
+ > +		/* sentinel */
+ > +	}
+ > +};
+ > +
+ >   /*
+ >    * Register configuration for Omnivision OX05B1S raw camera
+ >    * 2592X1944_30FPS_FULL_RGBIr 2592 1944
+
+CJ
 
