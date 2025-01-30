@@ -1,29 +1,29 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013071.outbound.protection.outlook.com [52.101.67.71])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013006.outbound.protection.outlook.com [40.107.159.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05C01DDC22;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C9D1DED4B;
 	Thu, 30 Jan 2025 13:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.71
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.6
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738242578; cv=fail; b=W+AfwJjQm4nKG1C4BM+X6PbDpKb4R+lnVEhIplm26Ixl1d8NGIFDfrHkmBp2Bo+tGeYyyPVgiGdgVTmxYBvij4VrU8qXvvDwnCBno/uWPKXgKmmUQblTSB0SAWbA8lLOxjdZJ2cw0F26PYAK3x3kq3nq3xAzsx1KfWiioF0DJOg=
+	t=1738242579; cv=fail; b=ON1uH82bbBVQ/qqniK9bm5iDdoc+9srQAlEsNdVUrbmDUEYf13+uzHWadAGqLgXXLGY6ausAsXvPOzInr3TH87jVKyBG2myo+wSvJswUOpDgR0ChKSVBA6I8WQUmg6idmSGlzF4HLD129wCvpkDVZLVrZgnI9isST7qJ3EAQj5Y=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738242578; c=relaxed/simple;
-	bh=jnnSPvYuLDJkBZ2OYaWAtkzl0NE6YgWQXJBFVsq3GmI=;
+	s=arc-20240116; t=1738242579; c=relaxed/simple;
+	bh=SF1E9KEcPF7orubwQW5xFnHo59cNg4J4xfs+vTktEKI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JuX/MqopRcqjRQN96ct4/rRo8S3LIuDJImXnE/bXQHycil7Rjhkb/sgMquZwR+NJjAIs/I8S0aPavM95YnzkRelDFAZHHM13dw3NcwCpOlrqJF62UnbKxjFYBinnmKdBZwNS/omafVrwk3P+6M5pTuGIEUUcGsUovar4vtL3pzs=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dmC+bpbq; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dmC+bpbq; arc=fail smtp.client-ip=52.101.67.71
+	 MIME-Version:Content-Type; b=UyWEhK3m1neGnYtoa00yYT4/4H+QkKCcpvuFmRb6an2NglpGlEmjUOb6k/3IJo8fbjZ2ys88RgrjtGR+Dhi03yakXmOkQF8q0INTSTJlz70WQpUb6j1upAuqlaYp8QRtSIXFBmpvX03Qzv3sNxGVJ8vK3WYpZFHr3FHfmBU/MO4=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fkNDtMjt; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fkNDtMjt; arc=fail smtp.client-ip=40.107.159.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="dmC+bpbq";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="dmC+bpbq"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fkNDtMjt";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fkNDtMjt"
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=AGgKXpZqch+OyNIf5BUZEzEwSN4tEeiOjhkSj/GxaNFF8ADaI/EfHHEPNenQ58FssqX3iekuOytXU+gwb3O1dAXhesaVMw3NOTFSXw5BwdHpzdx/gif5xgvJD5aCzUtlyhrtSvMvCCrfz2a9ICaY23FcrjxAIt+th09d9BG2MXzOoGkoS8Lj9MLmtK07X/Vu22uei04AZtQsxQ480ihY0UxzBN9kDRANvYMpvoOMe7diygbdoe9HrZWPdLRuhsp1/feeKQ7vrxN4PDJ98H34K4S8lH7opoEwzXvtOpObjWSFVvUAbjDKRL0ZQU9sAjs5jwGRt1fr0r4oPmXmhhWnOw==
+ b=C7jL/De6OPrOoBlkxHVQkTjZlA4vS0GR4QQwqzgytG97P3lyCZQmN4FUX3nCdboX7I+pBtsG4/+aGLx1E9Gqcb/VCKjbSpNMiBFdgvBDSK+s1AkScN1+XnX1Imemiy87oawxWOfjI6zxExbgNTpnbFeBF1U5yagF84X6NaPTgO7adlDrSh00/4QYBu9lpPcK/Jp9CsMXbfqSh3E4b1/4wGFcArnnOyeKXnIzuuP0uodIHZCyoI8pR8h4ifEo+g7/+g0bWjFLzH0QRLmDTOmWWuCIp/vsS5M9U1oMcBc7gPJTtrZ/5UoKWqaU9cMdY2KOkBJgGTVYYZPHwAuBYUFfPg==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FgaCamHnxvPMXaZFSAc1/BOzJH3l89NFFvdMd2pfmO8=;
- b=n/zJXn+yX0zRV7t5hKSJbeLgDSoRJzGSSzc45UELjvw4t9mVv+5T+itpMJTGG1fGKmOMwf1d9U31nK7as5DFiLwvPqK7H8r8M6pe67rVLiq2eFK0m0KrtJEwYg7Tg+DSL4/c2oK1NfiUW52P5170Lba1SWuCrzCJQYqjpKzh3kkdplRkydTpGsEzdFP+A2T+osLfNCL9P0nkL+Y9xnKLZWHH3EtW+0xcWbwbNIhe9YA5ZCA0Oh3Q4R0SU2gaeT3QdyRM2vYcgOwLwSwUYfIDecq21vXR3t6r9R6hEmBua31saTQdG/h2KmYKdbQW1X2JA1okwyv4O5Jvia5tHFsrww==
+ bh=HhS/tbVVv2nG9EXWShqCV2+SDZU9FYl2KF5Aw4J3220=;
+ b=JkpT9R64Lp6Kq82AaE6RDK5jHX6gvD7oOaaxTKLbZIQN9xZN5SEk3XlAa+0yLnIRsZiu4a86h9dFsBUj3pgAJ+Xe62vYwEAgUyeaRZXgnVhwjf91dg0qY5spTUlqFdXxB0vdF03UsvinpqIRcEuKWSl+kcHvnBXS14ifmiLB/VZNzUMeAeXpi34B+BMxgtrwm5e+m9v8AwCmvEcPNPyHvjHuJgUdgcvRR0YcIHPyszp6LS5BTGRZano3DgP4HqmJYV15uq5No4ey47p2es5tmKORwdznI/zbWEsp1PywWZiYH8xLlJcPPGz1kOUAXtzm3p/CSKNtnRZcct1gfmqQtA==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
@@ -31,18 +31,18 @@ ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  ltdi=1)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FgaCamHnxvPMXaZFSAc1/BOzJH3l89NFFvdMd2pfmO8=;
- b=dmC+bpbqsqNQNwGSG8FQ0oaJwBR6z8iZ6lnDuLWWxDwOequSaClXVdbfZXxqBNJNMbXXaSr4R+Te8pFJ8HeXIrQjQBeLnwXybISI5+3hG3mmisqfJ24OOm3YmKQIMPy1HA/95d9nxKuq6jwpQ/GuyV9/VLObdcpxNl3lPrbIl5g=
-Received: from AS4P190CA0011.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:5de::13)
- by AS2PR08MB8901.eurprd08.prod.outlook.com (2603:10a6:20b:5f0::22) with
+ bh=HhS/tbVVv2nG9EXWShqCV2+SDZU9FYl2KF5Aw4J3220=;
+ b=fkNDtMjtfoUjOZMmWF9u6+jJZ3w+VY6r06JMyjGzEOLG7UXt68gukz6GuP3og/XGnwv81E/kfQOZ5CLbxdDGbFqj+rUF/ydxsIBxrMPlM/hMjJf8XqN++vXLrCm3wG5tP1t583T9E1uQw4yu7JE8Im6yLr0/VC58HwwaSq9eqYU=
+Received: from AS9P251CA0004.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:50f::8)
+ by AS8PR08MB9977.eurprd08.prod.outlook.com (2603:10a6:20b:636::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.23; Thu, 30 Jan
- 2025 13:09:33 +0000
-Received: from AMS0EPF000001A2.eurprd05.prod.outlook.com
- (2603:10a6:20b:5de:cafe::b4) by AS4P190CA0011.outlook.office365.com
- (2603:10a6:20b:5de::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.20 via Frontend Transport; Thu,
- 30 Jan 2025 13:09:32 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.18; Thu, 30 Jan
+ 2025 13:09:27 +0000
+Received: from AMS0EPF000001A7.eurprd05.prod.outlook.com
+ (2603:10a6:20b:50f:cafe::8f) by AS9P251CA0004.outlook.office365.com
+ (2603:10a6:20b:50f::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.18 via Frontend Transport; Thu,
+ 30 Jan 2025 13:09:27 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=arm.com;dmarc=pass action=none header.from=arm.com;
@@ -51,45 +51,46 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
  pr=C
 Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AMS0EPF000001A2.mail.protection.outlook.com (10.167.16.235) with Microsoft
+ AMS0EPF000001A7.mail.protection.outlook.com (10.167.16.234) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.14
- via Frontend Transport; Thu, 30 Jan 2025 13:09:32 +0000
-Received: ("Tessian outbound 671aa0ad34c4:v560"); Thu, 30 Jan 2025 13:09:31 +0000
+ via Frontend Transport; Thu, 30 Jan 2025 13:09:27 +0000
+Received: ("Tessian outbound 5438980c8758:v560"); Thu, 30 Jan 2025 13:09:26 +0000
 X-CheckRecipientChecked: true
-X-CR-MTA-CID: 3b96bd91acacdd57
-X-TessianGatewayMetadata: qoVaNJHo09g7Nr7WiHlnEBFdWsRJB86Jj/NwpEIIV1Qq88fWkjIEUWHk+pCw1TL7pUy+TLEebcJOBSpZN7EgS0ol5XZzuTyDaNnuFpQ6xF40pIoQcfXKCTIdNoBADG1ONgGHHMq20bCs8l4tVPN+DvhO2Hy6iQETymIfAALxHbX4frIPiHLUbNYM2hvY+X5J7eSYGku2M8AuZnlReqTqeA==
+X-CR-MTA-CID: 72d6f04d9d32a842
+X-TessianGatewayMetadata: VZ1gol2vpkpx7GI7TujVKeQ7nnUISba/c/lJrVYKRpzmsxF6dWy4YHLLxwnmaN2AOXI1uO/Zl3nWOS0J+Z6Q6xPoMSCDH72CZVsXZ0q7W+z6BRmQ6LKRsQ1qwBZg/kABY/22966ghpokeTYy6FKcdrG9WBURHQRFt0m4ilL18hx+JDjVpiGSc8eC799Oyc+PKoymsQ8wRFYcwWj3Ak896w==
 X-CR-MTA-TID: 64aa7808
-Received: from Le713702a97a6.1
-	by 64aa7808-outbound-1.mta.getcheckrecipient.com id 53CAB092-6D8F-46A4-93F9-AB52E14BE0B5.1;
-	Thu, 30 Jan 2025 13:09:23 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id Le713702a97a6.1
+Received: from L5f77923fb7d2.1
+	by 64aa7808-outbound-1.mta.getcheckrecipient.com id 8905E2D2-A953-457F-93FE-AF38EA3A1E77.1;
+	Thu, 30 Jan 2025 13:09:19 +0000
+Received: from DUZPR83CU001.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id L5f77923fb7d2.1
     (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-    Thu, 30 Jan 2025 13:09:23 +0000
+    Thu, 30 Jan 2025 13:09:19 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NcYGZlKtG/CiW2quSQm53ORx3ZwKWmz5l/J/qsZAdT96OM/1Cly36e1DrVpOrHtRpTcYGc31DLUsuzkpONfyiNpH1ovmGek3BntuXp9NO0VCHvsZRhlUsc4fFnWVdocmEfgHrZFPiUVlzuSUPK+kHQ56Q07ep5u3MLhh/gFBsr0OYm5e8CTYQzeGF7iGGR/z6qZ8e2Uwlco6JGtYOs4pUosIWk1q5vC+7H+iK/C5X61rXyWMJ6km5pFa302DMUgp/3Z5POXykrXWd1efcAC97BKjLNORXuYUJy8VW6kC1+LZGe3Pb+wnZe/k5Nby3KBMO2yF34SxzGuNHn7bOInd1A==
+ b=aVzDpi/QUa2cZuVapLj71QIsIr+z9ZMtsE7xLbXFQu8iAnQ6u1m5cv1GngrbSAvWO2qxhEtUDNT+qd8eDV8HD22Y/ZZBxX1YweKEN8ZU/tFbHZlHdzBHi8zXibMJfaq7a1kN7M8wXVND3XI1KWUBxkQqhGMYY6i2Nx1Z2NbS0vATwzXxVjYX9/mXp51x5hgvdLxX+9M7Tgx+Y35ZRpg3uuNyDCXoe2m4LgG1dduiV14wK/TIJPvwz5r8HX2Z5R2VMMxUS6epTRFORxZVududeXT+WI419C8zVebUl46Esn3hDJruWk6zPizHfzG5ehGudS7YHj74bC36BVTV40UupQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FgaCamHnxvPMXaZFSAc1/BOzJH3l89NFFvdMd2pfmO8=;
- b=D0WhO/Q/XdUsh8ikXb/MvammaXbC/hohJqZdJ60/yhGBjTGaD++zetwSHqRXRDiGA0VQctwhvbGWtI48aLGOLsAPryXS882x83K1X1gBhg6fTZkc9TJV5Weg2bfbGsHHeX3YW4CQXjHxLJjxHkuhw+Uv8ciKEWtCS8ywMewO7jDIhYaR0unFnEW8i3wXzwd61TaxbcKe533CHAsWxRZ86EFefDw2y/8QvSP9JgHYs3THlAPAevqmwfVvw0CkmsHq5FmUEnKIyEs7CR1vqILbiUSz0dcDCwJZpJ5BUrRfqZXfxcdxzY/m9uVg6ToUvb7sM4poFbFX5pBZT8DoSjjROg==
+ bh=HhS/tbVVv2nG9EXWShqCV2+SDZU9FYl2KF5Aw4J3220=;
+ b=iLZ9l4DLYBL2Y8anKVVYheoVs0h8TUFEiVGrURfJCDiWPiAwkyk5OCIVtEbgZPyq1fNsL79C8LNSxcSjFHtvIr+QuuBWk/GBCy7ZpH5NxfwoL77cCtT5/0pqqngbRXjUEXfsNcmFIpxblHGRUFyZVSfUl6YCHMqsDwmTNoBjpMEsSw/5qqwtcaIJr6rCRcRXDOhGx1orX0ncaBrQ1qnHDarUg1o0saeFIHkDPjpIyonAysDH+e36r+dmCob5RbRLCGxqqXcozQxv4wTqGzujF/WHpxHe+oIABbpAZm4rci5CFlgtcgaz7pDAzXzOhV5rm1Qr5wa3dJfYdTlnjJlxpw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
  172.205.89.229) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=arm.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FgaCamHnxvPMXaZFSAc1/BOzJH3l89NFFvdMd2pfmO8=;
- b=dmC+bpbqsqNQNwGSG8FQ0oaJwBR6z8iZ6lnDuLWWxDwOequSaClXVdbfZXxqBNJNMbXXaSr4R+Te8pFJ8HeXIrQjQBeLnwXybISI5+3hG3mmisqfJ24OOm3YmKQIMPy1HA/95d9nxKuq6jwpQ/GuyV9/VLObdcpxNl3lPrbIl5g=
-Received: from DU7P194CA0027.EURP194.PROD.OUTLOOK.COM (2603:10a6:10:553::7) by
- GV2PR08MB9374.eurprd08.prod.outlook.com (2603:10a6:150:d0::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8398.20; Thu, 30 Jan 2025 13:09:13 +0000
-Received: from DU6PEPF00009525.eurprd02.prod.outlook.com
- (2603:10a6:10:553:cafe::e2) by DU7P194CA0027.outlook.office365.com
- (2603:10a6:10:553::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.18 via Frontend Transport; Thu,
- 30 Jan 2025 13:09:13 +0000
+ bh=HhS/tbVVv2nG9EXWShqCV2+SDZU9FYl2KF5Aw4J3220=;
+ b=fkNDtMjtfoUjOZMmWF9u6+jJZ3w+VY6r06JMyjGzEOLG7UXt68gukz6GuP3og/XGnwv81E/kfQOZ5CLbxdDGbFqj+rUF/ydxsIBxrMPlM/hMjJf8XqN++vXLrCm3wG5tP1t583T9E1uQw4yu7JE8Im6yLr0/VC58HwwaSq9eqYU=
+Received: from DB3PR06CA0003.eurprd06.prod.outlook.com (2603:10a6:8:1::16) by
+ AS8PR08MB6053.eurprd08.prod.outlook.com (2603:10a6:20b:292::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.20; Thu, 30 Jan
+ 2025 13:09:17 +0000
+Received: from DB5PEPF00014B88.eurprd02.prod.outlook.com
+ (2603:10a6:8:1:cafe::f6) by DB3PR06CA0003.outlook.office365.com
+ (2603:10a6:8:1::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.21 via Frontend Transport; Thu,
+ 30 Jan 2025 13:09:17 +0000
 X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 172.205.89.229)
  smtp.mailfrom=arm.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=arm.com;
@@ -98,16 +99,20 @@ Received-SPF: Fail (protection.outlook.com: domain of arm.com does not
  receiver=protection.outlook.com; client-ip=172.205.89.229;
  helo=nebula.arm.com;
 Received: from nebula.arm.com (172.205.89.229) by
- DU6PEPF00009525.mail.protection.outlook.com (10.167.8.6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8398.14 via Frontend Transport; Thu, 30 Jan 2025 13:09:13 +0000
-Received: from AZ-NEU-EX06.Arm.com (10.240.25.134) by AZ-NEU-EX06.Arm.com
- (10.240.25.134) with Microsoft SMTP Server (version=TLS1_2,
+ DB5PEPF00014B88.mail.protection.outlook.com (10.167.8.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8398.14 via Frontend Transport; Thu, 30 Jan 2025 13:09:16 +0000
+Received: from AZ-NEU-EXJ01.Arm.com (10.240.25.132) by AZ-NEU-EX05.Arm.com
+ (10.240.25.133) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 30 Jan
- 2025 13:09:06 +0000
+ 2025 13:09:10 +0000
+Received: from AZ-NEU-EX06.Arm.com (10.240.25.134) by AZ-NEU-EXJ01.Arm.com
+ (10.240.25.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 30 Jan
+ 2025 13:09:10 +0000
 Received: from e121164.cambridge.arm.com (10.2.10.32) by mail.arm.com
  (10.240.25.134) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 30 Jan 2025 13:09:05 +0000
+ Transport; Thu, 30 Jan 2025 13:09:09 +0000
 From: Florent Tomasin <florent.tomasin@arm.com>
 To: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
  Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Boris
@@ -128,9 +133,9 @@ CC: <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
 	<nd@arm.com>, Akash Goel <akash.goel@arm.com>, Florent Tomasin
 	<florent.tomasin@arm.com>
-Subject: [RFC PATCH 1/5] dt-bindings: dma: Add CMA Heap bindings
-Date: Thu, 30 Jan 2025 13:08:57 +0000
-Message-ID: <771534be8dfa2a3bdc3876502752f518224b9298.1738228114.git.florent.tomasin@arm.com>
+Subject: [RFC PATCH 4/5] drm/panthor: Add support for protected memory allocation in panthor
+Date: Thu, 30 Jan 2025 13:09:00 +0000
+Message-ID: <821252c96ab2ab3e2d8ef211a09f8b171719baaa.1738228114.git.florent.tomasin@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1738228114.git.florent.tomasin@arm.com>
 References: <cover.1738228114.git.florent.tomasin@arm.com>
@@ -144,158 +149,552 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 1
 X-MS-TrafficTypeDiagnostic:
-	DU6PEPF00009525:EE_|GV2PR08MB9374:EE_|AMS0EPF000001A2:EE_|AS2PR08MB8901:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2636919b-0d11-4a92-6872-08dd412f568e
+	DB5PEPF00014B88:EE_|AS8PR08MB6053:EE_|AMS0EPF000001A7:EE_|AS8PR08MB9977:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9d5d84d-5bd0-4af1-48a5-08dd412f53a5
 X-LD-Processed: f34e5979-57d9-4aaa-ad4d-b122a662184d,ExtAddr
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|376014|7416014|82310400026|36860700013|921020;
+ BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014|921020;
 X-Microsoft-Antispam-Message-Info-Original:
- =?us-ascii?Q?kp7y9OlcNnlxCGnxZwdQsMAB37oeT5uUdoygQ5PD3ph0+XkNzmSYUKIvo1Rw?=
- =?us-ascii?Q?vj7CuGFQF9RsvFkRJvRVhl6moydjlfwp+6lTi8xaBVFPL/fnvV7BC9Lb8HBe?=
- =?us-ascii?Q?bBabXoZ0XKkW705JdLXytHzZCA9bEUA5qAQ9PlJnc2374P8Q5Ovivfu2O5fQ?=
- =?us-ascii?Q?iUUTo3NKkaWAD0B5oT2PDbBGvlu0W1chD+9nmd5umC0fd/yh5eAZc8RacAne?=
- =?us-ascii?Q?05jvopguUjipA5u1HlJSytE0VQCkyqHk6NnUbiU+pRismDuh7Z+JNo/04G6U?=
- =?us-ascii?Q?iP1Dt11x2g9M/w6MHJKQD1+Pfq2J5Nh+ywbrrKh5ONG2TwAny1kM3vbEwcJn?=
- =?us-ascii?Q?CYdwKGte2csmQThyJlmfDF0ktDhDs6TlaZaj2i+7O87IM3HodFzf3BdfFvsR?=
- =?us-ascii?Q?gsFfzvio/OfYQdIYmqb13ZYIKzXcD0DTKF8Mt5zGZNkJA/fZTX2eXH2JxzRi?=
- =?us-ascii?Q?pdz+JmF5yN8gKnphfzNHky2jUW64ydHf9NRFc/YhnNwTA7aTjTjnAf2WCi2C?=
- =?us-ascii?Q?F+FD/8OeLVZomq9s65jFPpUrpqELjJAoQezS8y+TKKzual1ZcQwKOMr5WESC?=
- =?us-ascii?Q?vtzehZQbj4Bd1t0H2DnGP+xGke3ft6WKTSPadthR2PKcXa983DtMN6sHGiAI?=
- =?us-ascii?Q?qC/PT3E3gYnry8gJ39Y6eUzO3T+9UoLf7hJuegXMaljtSJgrBU/zcc2lN/XI?=
- =?us-ascii?Q?JDTzSOGrRrtvNflqmYHD8q+9oNG5f6QOZ9fLW2fFHGQGJ1kQPyTdUHRzn7Di?=
- =?us-ascii?Q?9rWukmDYF2iKBX4BmgZENboTuTFxRZCkmAuVHuwXWp9U32cKBMmeqQZAXd0S?=
- =?us-ascii?Q?XNVms56q5/Rv9u92OJne8U7vEb8izzeA60A1jXCNGk+wAXdeQAx7CAMf8F0T?=
- =?us-ascii?Q?/c3z7X88mzK5NzxeDQqJXKtkLXAfCjhYjLK3TyAeVmAvu5l5iw8Ldyifs8n7?=
- =?us-ascii?Q?PQRzEf/36FkM2wYq0OJsuV4w5Vv3Fkj5uvY3XjBqo+dyokTHl2q6/b+Mm45W?=
- =?us-ascii?Q?477f5qiPIau56UvBAnVPGXQpDeUsM2q/PLTc+UTVCauz9UjEibTW/9Yj62Rz?=
- =?us-ascii?Q?UmiEw6fhkhKGprpFjx0CsXrB26CO4TYkIoyN3rEn6G+Jv4UfTpcTHZGe7ZRy?=
- =?us-ascii?Q?Y2lf6RMYMFC/AvFW+go0r5ezEjsKEDRJtIhiZfjFE0KfiU7y3Ur0ixgKF2Oj?=
- =?us-ascii?Q?XULmlEhPU0i1o0EIJ6Dm0bVHjZuWRoLCayxCdf5ZvxvnH04HydeTtXbphzH1?=
- =?us-ascii?Q?LJ4ZOabhm2et0uAEkZnTFwHPLBnuLKIKtiQl8HtDs1hj0CEt6VVYjJzgGGww?=
- =?us-ascii?Q?YdhdjS645rlwhKFsE4izav4zGBX0r+FP0D2Jgmz/rYs9VXJJjsPN27pfDw5z?=
- =?us-ascii?Q?/cwf6YAVHmL7lN9qzjqB9fhp5CegXNaskjko6SHoQV2av1nJFeMbqsZ0r3R4?=
- =?us-ascii?Q?GgTu3XoYa5ktMxeN6jl3m6tJ7yu0gfP9?=
+ =?us-ascii?Q?C63ia1BLCksXgv6LrgFDBzOG8TTo0jWWrnsy+E+iug61frIHZ7NPCG4drwMX?=
+ =?us-ascii?Q?T5awfStu5UPOzUIGgDoKPioufYA9q+AHXbfYXEwFdfLQKu3KV69+L13saY7e?=
+ =?us-ascii?Q?+jrXzAsryGKGTUgCupNfVOHbioQIT6M2XJG/laKZsgi8CSxgE9oec3mAqFag?=
+ =?us-ascii?Q?bAB2iSajGp7gDnWqwtKETbW87auJWr/L3nBRpJRKrIOUMlWe6ZxphoDYqTvu?=
+ =?us-ascii?Q?smSVP7A2AGiX/68EpaX0+F+rgASklDDZRX86qCn6gjLb6ThhtThBKChPdZpB?=
+ =?us-ascii?Q?V8ZgD7Cdz5nRoKImKKNcAO1CYEXpJMzyDtgy7Ua7fX5dA6XIY28NFmv8mgp9?=
+ =?us-ascii?Q?JhIhIY/RyyLV7oDHDjmwPi3h3ZrwN7f94vaWUpjUoFuooKA/nuU43OqUZ1vQ?=
+ =?us-ascii?Q?WdBQ9tGQQTzHP/F/ZFUCCY4vqT1XUUvw42LNALJkugzBNQbSlOb4uAD1pqDf?=
+ =?us-ascii?Q?bazKOBm/1Uous3ix6H+uVKMZId2GKgOzSuCtNIgi0wBSc+5BW07PoWo/Kwvy?=
+ =?us-ascii?Q?aPUgr6CbvP9pS34TC+PjAQxY1KX+1nVzpTfjVqizKeOHMQOHXtE+pQLyLgkV?=
+ =?us-ascii?Q?y8NUr/RHQFr/GKmFC/v9ZUbasvIaIMTtrrCQuYSpYraM3bPbYH2jd9am+Tmw?=
+ =?us-ascii?Q?ATSkE1HESUK6vwSQ5MfUzUVQ3GID3koioVg+pN8ceguz6dtz/8BjE4XkHsCj?=
+ =?us-ascii?Q?PdFiwiLrA+Ekn5/80jWWp54RCuCRXl3ZPSfV4iLP/RINvONk3+yj8JfoS87/?=
+ =?us-ascii?Q?m3UMtyany/F+tthoUerW8l2FyxhA2kiK4NYQaBgxRp/UDtRKIVFA+hwqSWej?=
+ =?us-ascii?Q?UoddBZeqLkGepdyWofkHvi6NZzYUGdIITP7i9oiHaEDVcAD9f/73dbctfHEy?=
+ =?us-ascii?Q?cIdFc0LaTk4l1FYeuOEkVkCqQwHrTJfG/DCZCL738ym5WNqp/5wt/XXab3c/?=
+ =?us-ascii?Q?xsbsjekLOXPd2kB72pm2ynaxlXMWU5n5LBgEv3IqYT8Hu1ZarrysXVXZik2j?=
+ =?us-ascii?Q?NNa1U46DSdD2DLGFcUX4b4IwV0UzHG0pnxArXdPDhL9idGYnl9pPVrt6oo+F?=
+ =?us-ascii?Q?/Pbc/mtSxrbDEV7Pdb/XfLjd2/TcPfMVQB+d9X9QRSw/iuhnR8tk8BLc9+sI?=
+ =?us-ascii?Q?sQ++VjFN+zl25RrjWAGX4+Nl2a73y0rBPwvAlj4Kz2MqLckxEgUTWiNENj9b?=
+ =?us-ascii?Q?ipuEbBa5Q/ueEPPo//seICWDROhZpUB13MY3w6Bgbt2piTMsqgZCV6elovDz?=
+ =?us-ascii?Q?w6Te8/PvJma3rsmgDaaSRz+0CuHe3xRUXzFCxcQVGFyJyxic/pxlsw28CCOK?=
+ =?us-ascii?Q?C6Zw6lA26aZWgS2liATmiqBGPsYVtZOgQD3OsgKZk/WhpnY3LTDpGsJhZZa7?=
+ =?us-ascii?Q?/OoWUm2Ly67kpyXjQVO+a9bLXlVFQODP0H7voiMi22l1KM8Jj+U4czh1Iy1V?=
+ =?us-ascii?Q?YMU7WMGcD8fuvYpupdu6+13jC8nsxJeT8SR6QRNe65sU1/Y02Z/wo/WXnDUx?=
+ =?us-ascii?Q?3xsGwzb7GDnI413F9e8LaLyoQJcQWpReCX1d?=
 X-Forefront-Antispam-Report-Untrusted:
- CIP:172.205.89.229;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(82310400026)(36860700013)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB9374
+ CIP:172.205.89.229;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6053
 X-MS-Exchange-SkipListedInternetSender:
- ip=[2603:10a6:10:553::7];domain=DU7P194CA0027.EURP194.PROD.OUTLOOK.COM
+ ip=[2603:10a6:8:1::16];domain=DB3PR06CA0003.eurprd06.prod.outlook.com
 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS0EPF000001A2.eurprd05.prod.outlook.com
+ AMS0EPF000001A7.eurprd05.prod.outlook.com
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	250177de-9e0c-40fa-488a-08dd412f4ac8
+	640d1777-448e-4775-ac76-08dd412f4d35
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|14060799003|36860700013|35042699022|82310400026|921020;
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|35042699022|36860700013|14060799003|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jjx/ASw2gAl97Mx5BHsOgtEbrKUWHzUSC3kWsIcjkLiUHOQrrwSHwEesbmEG?=
- =?us-ascii?Q?hmr8FGtOvwYxxakj0TFiAt1Fhm1qGhNhX0NbyA7xqxFbBVPO+GibvVCHFQko?=
- =?us-ascii?Q?6lVuV09YTOSX6cKXuCob7CI03Icu/wBegtIFQa0bwrTF86YhchMAU3/jAMJo?=
- =?us-ascii?Q?YCxt4VpJkft8qXQ+EZNYqm7Slp7S5m8DQgDcvVezHlYRdx5z/aZcEAjSSDvL?=
- =?us-ascii?Q?/7c3DS9OaucEYqZQOsTRIptaEr0SS4jhgb/p12Cs8d++w3XH5In8DYyIVOmO?=
- =?us-ascii?Q?sRt6ENojY3ygekGWJLc3tRvbJohq6TjMsGRFa6g7EoYg7vNEHW0zBhySsw+N?=
- =?us-ascii?Q?0NjMi1SXKI+25niUv2xF/PEqKiyMuqryLzDAOj9DjiCQGNNPIJREc3qkmGto?=
- =?us-ascii?Q?MRA7T1Drca4T1YXHj1gWoCqdfbE3P0Sq7YUEyDlFpvtJ8QquzlB2U652pqph?=
- =?us-ascii?Q?WLQ58Z/UqgtmaYKPQrzQpsgh4SX2Le4PoSg3AVAuf5MzyQONnooifdYC4kkb?=
- =?us-ascii?Q?JEHYQG0kjlgmb2d4GNk+JHe7kRcl3G6VXgtdfj4dvXAOm4s7a4G+uU3xki/o?=
- =?us-ascii?Q?dWgG6KHzrWmQyFKq1ZReDR8ezZNWaFzM+/I1qDBntS17t9ZB/D2xNIaVy3S/?=
- =?us-ascii?Q?uYz87HGEGrBi7Hr7TrjNfZnLfOB0lWfoPzIjq/M8jjaoGyyS4EdNNyx7PLgI?=
- =?us-ascii?Q?PZ8tuaPEjH5/bSFsIk9lMkuIZm+qUZSQgzvE5/UOT4nCwO/H3SLgbXNX6nnN?=
- =?us-ascii?Q?nbzGnVkrYwNB/qG6p7IaTxtpop2AtHVS2qFhXfDvjVz1Gntzp+whWrYNZbSc?=
- =?us-ascii?Q?qD28SU/hCQHtnOu21/7wTnj/jxUHKo23LMDo0JzoeajYKm8nwUrDmVoRKv1X?=
- =?us-ascii?Q?lyyqBMkcsBm/jlkjAiacqPAscIYnbA6HV3psO0Dl/zJsmfRKKZrxXchSQ4gV?=
- =?us-ascii?Q?LNprtO/n9ep0/DZm7xi7qP1cV7aEg+67XjsIYJ02FEwztMa+j5BENIzKqhTW?=
- =?us-ascii?Q?LZBKCZCQ9a0ZXanpjCQr1FFrCJ5136y3S89oCU7vO7tD69ZhAxhoXu34Bkt6?=
- =?us-ascii?Q?omUhz+qA7eTPCYrn0vNLIKqYvsB3QTIk+VGIRlVJzOgpStBzR/WzdiK9dV5F?=
- =?us-ascii?Q?xx3oGUdxwdX1B+OrE43lj09BupBxGHJ4E0OBSRc6/h97ZRiYdYkTkuSLC1sM?=
- =?us-ascii?Q?MJwYdLTa75oLbOZa5XXN0Chdnqaupe8B5bZ+yiqVF7XHpTi3FIQAkfM+KLxH?=
- =?us-ascii?Q?uYn/NtHiFxwf0pCFTOOBkW9cn6d1qeFXOPlRg7nqfZL0eIRUZyG5JHPezqGC?=
- =?us-ascii?Q?dD23ZoFxNMNMKhvTUytAG+hEg/vAWYQv6qUS7xJlaF4XEVfDMKZik3eMf03G?=
- =?us-ascii?Q?yxkw078DE7MrBAu8zCDPNcN/Pp6orJxNWafFqNU87E3N7jLeC5H6O5oEPCdq?=
- =?us-ascii?Q?f4U3sBhbId2+9a69G4Bk0n2DW0ccn4B2?=
+	=?us-ascii?Q?1PYgEdSSDsINqfAJTx5W2JVZl3vqENHIJYcgMzewfDi5FG7dPTE/D+dbSyBB?=
+ =?us-ascii?Q?pGGKInichYKnUi8ywZEjUQUALOVKKcH4+xyWGcYbubdev3JCfwwEQQA6oDt3?=
+ =?us-ascii?Q?0XMc2y8y2iuBGSSU1g9jXFq8G3hx1moOHsb+FLyZeSKKirYpEyeYci/bIHLZ?=
+ =?us-ascii?Q?M0nzHEoZnvUblRfMAmCUAg+5Y5xY7eXSoGq+e1wWeSrfMu1PElEei26pasKf?=
+ =?us-ascii?Q?+GNLcUIRpUdSxRv2SirCtkWA+BPxZf48XTaubvqzon/QxVYyHSaulpnyThLX?=
+ =?us-ascii?Q?VoSEULemMQ3UPqtv9+LRBnpvlk46a5BV5SFgvLpmDFSvbriZk9xmw/qDXPJP?=
+ =?us-ascii?Q?7wsPGlQGfdVT9g2cg5Nlt2VQGu4uvIgPCuhGiN6On4R6Oa9pdEK/iMDxbH4n?=
+ =?us-ascii?Q?p5FCdo05tOq+vFk3Cp6mwXIF5Gu8DlX/4o+wRn9iVDxLuMtIvQOwshV8q04q?=
+ =?us-ascii?Q?O4KV/X0bmf14Mpdethoao3iAmgQzeBhupnLdjcg78Iqkn3us9chx3eDbgwtB?=
+ =?us-ascii?Q?2QjRbWt+1bcuRpNxpSalIGicf9gmhBAPw2VBOV6AXl4GsDt1I6h5c3Duk3Es?=
+ =?us-ascii?Q?1B10iazi/TVZa2Hv3lUIM2eQDrs6F05Y1ENs/E0TJhog5kSiekySC/oxpUcY?=
+ =?us-ascii?Q?t3cnojRUobjccvN5Z95axCv/P0h6XMwhsisAUSiQfjMZqrBtwMCwaD1dcZwN?=
+ =?us-ascii?Q?7znVoJr0hEbSWchM5H+Li1xZrtBB2Lj5K0xaz2y8tn2FKM3tkgHO3cDjltzG?=
+ =?us-ascii?Q?z5Ymvi4A2fPa/YDNzkpnZb4mxxfRfU46esYcguPqB2eaT51s68k5WTYcx27F?=
+ =?us-ascii?Q?SSZ3UvMq9Jsl+AeXRSoh0p4q6mpZB2B1PRcUjhcxixeRU8Dhzfnan11FR4R8?=
+ =?us-ascii?Q?hbt9YzADozlIdRBFSmrtFTl1TCW95Oh/HPK+qgdIJJz7dhn6yCybv+iXY86U?=
+ =?us-ascii?Q?++GuiGAc6Mn3YDDtIsn550J+LCy/8hBvvc/5w8MxIceKufkDeJ84NF8uM0Uq?=
+ =?us-ascii?Q?5pRx6mxY/AUZPtSHDJRuM/Hhuw+go0+E7iaflS6AeNbqz+99pXijfr28l+GQ?=
+ =?us-ascii?Q?UfJ/VGb6blDp4SeSWYtZK+r6xUqNcgF296musRuVk/oEKXk1FYT+JaZCRV26?=
+ =?us-ascii?Q?lV7yW+StPD5kuoneC08ySqI1/HEWjnXTfu235czwnzMVmYsHPFZCHtOXyb21?=
+ =?us-ascii?Q?6T7slPt1nrH2VPSmjTDlbx/ynYhif6wr3QFgfDYjGEoUI6i/18tntSdC8V63?=
+ =?us-ascii?Q?m7wONSoO/nmutR5hTlxhNTNM41F/XtmhriAPgqwxmo7rdYVde9KnFZ/aITSM?=
+ =?us-ascii?Q?ZnkssQOIScFFDstutzDn6ufBIF8FoxQ8G/VbcDhQKsPE6lkyPhxdCFxFYr7E?=
+ =?us-ascii?Q?JjwP4/SAGtiFIcbBDP7JeS9k139ivqsqr59L7ixVqHRywg9HTVHWgI0zSMYV?=
+ =?us-ascii?Q?hXc5W/lJKc3HESu20bqfB75Me6FPT5O69F5rvV/IGke2mpQBU8xcI5wTgiy5?=
+ =?us-ascii?Q?Q/xgW6AujhtKa3MeP1gezqeL8ZR2FCp6iija?=
 X-Forefront-Antispam-Report:
-	CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:64aa7808-outbound-1.mta.getcheckrecipient.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(14060799003)(36860700013)(35042699022)(82310400026)(921020);DIR:OUT;SFP:1101;
+	CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:64aa7808-outbound-1.mta.getcheckrecipient.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(35042699022)(36860700013)(14060799003)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 13:09:32.4795
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 13:09:27.6900
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2636919b-0d11-4a92-6872-08dd412f568e
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9d5d84d-5bd0-4af1-48a5-08dd412f53a5
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF000001A2.eurprd05.prod.outlook.com
+	AMS0EPF000001A7.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8901
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9977
 
-Introduce a CMA Heap dt-binding allowing custom
-CMA heap registrations.
+This patch allows Panthor to allocate buffer objects from a
+protected heap. The Panthor driver should be seen as a consumer
+of the heap and not an exporter.
 
-* Note to the reviewers:
-The patch was used for the development of the protected mode
-feature in Panthor CSF kernel driver and is not initially thought
-to land in the Linux kernel. It is mostly relevant if someone
-wants to reproduce the environment of testing. Please, raise
-interest if you think the patch has value in the Linux kernel.
+To help with the review of this patch, here are important information
+about the Mali GPU protected mode support:
+- On CSF FW load, the Panthor driver must allocate a protected
+  buffer object to hold data to use by the FW when in protected
+  mode. This protected buffer object is owned by the device
+  and does not belong to a process.
+- On CSG creation, the Panthor driver must allocate a protected
+  suspend buffer object for the FW to store data when suspending
+  the CSG while in protected mode. The kernel owns this allocation
+  and does not allow user space mapping. The format of the data
+  in this buffer is only known by the FW and does not need to be
+  shared with other entities.
+
+To summarize, Mali GPUs require allocations of protected buffer
+objects at the kernel level.
+
+* How is the protected heap accessed by the Panthor driver?
+The driver will retrieve the protected heap using the name of the
+heap provided to the driver via the DTB as attribute.
+If the heap is not yet available, the panthor driver will defer
+the probe until created. It is an integration error to provide
+a heap name that does not exist or is never created in the
+DTB node.
+
+* How is the Panthor driver allocating from the heap?
+Panthor is calling the DMA heap allocation function
+and obtains a DMA buffer from it. This buffer is then
+registered to GEM via PRIME by importing the DMA buffer.
 
 Signed-off-by: Florent Tomasin <florent.tomasin@arm.com>
 ---
- .../devicetree/bindings/dma/linux,cma.yml     | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/dma/linux,cma.yml
+ drivers/gpu/drm/panthor/Kconfig          |  1 +
+ drivers/gpu/drm/panthor/panthor_device.c | 22 ++++++++++-
+ drivers/gpu/drm/panthor/panthor_device.h |  7 ++++
+ drivers/gpu/drm/panthor/panthor_fw.c     | 36 +++++++++++++++--
+ drivers/gpu/drm/panthor/panthor_fw.h     |  2 +
+ drivers/gpu/drm/panthor/panthor_gem.c    | 49 ++++++++++++++++++++++--
+ drivers/gpu/drm/panthor/panthor_gem.h    | 16 +++++++-
+ drivers/gpu/drm/panthor/panthor_heap.c   |  2 +
+ drivers/gpu/drm/panthor/panthor_sched.c  |  5 ++-
+ 9 files changed, 130 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/dma/linux,cma.yml b/Documentation/devicetree/bindings/dma/linux,cma.yml
-new file mode 100644
-index 000000000000..c532e016bbe5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dma/linux,cma.yml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dma/linux-cma.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/gpu/drm/panthor/Kconfig b/drivers/gpu/drm/panthor/Kconfig
+index 55b40ad07f3b..c0208b886d9f 100644
+--- a/drivers/gpu/drm/panthor/Kconfig
++++ b/drivers/gpu/drm/panthor/Kconfig
+@@ -7,6 +7,7 @@ config DRM_PANTHOR
+ 	depends on !GENERIC_ATOMIC64  # for IOMMU_IO_PGTABLE_LPAE
+ 	depends on MMU
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
++	select DMABUF_HEAPS
+ 	select DRM_EXEC
+ 	select DRM_GEM_SHMEM_HELPER
+ 	select DRM_GPUVM
+diff --git a/drivers/gpu/drm/panthor/panthor_device.c b/drivers/gpu/drm/panthor/panthor_device.c
+index 00f7b8ce935a..1018e5c90a0e 100644
+--- a/drivers/gpu/drm/panthor/panthor_device.c
++++ b/drivers/gpu/drm/panthor/panthor_device.c
+@@ -4,7 +4,9 @@
+ /* Copyright 2023 Collabora ltd. */
+ 
+ #include <linux/clk.h>
++#include <linux/dma-heap.h>
+ #include <linux/mm.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+@@ -102,6 +104,9 @@ void panthor_device_unplug(struct panthor_device *ptdev)
+ 	panthor_mmu_unplug(ptdev);
+ 	panthor_gpu_unplug(ptdev);
+ 
++	if (ptdev->protm.heap)
++		dma_heap_put(ptdev->protm.heap);
 +
-+title: Custom Linux CMA heap
+ 	pm_runtime_dont_use_autosuspend(ptdev->base.dev);
+ 	pm_runtime_put_sync_suspend(ptdev->base.dev);
+ 
+@@ -172,6 +177,7 @@ int panthor_device_init(struct panthor_device *ptdev)
+ 	u32 *dummy_page_virt;
+ 	struct resource *res;
+ 	struct page *p;
++	const char *protm_heap_name;
+ 	int ret;
+ 
+ 	ret = panthor_gpu_coherency_init(ptdev);
+@@ -246,9 +252,19 @@ int panthor_device_init(struct panthor_device *ptdev)
+ 			return ret;
+ 	}
+ 
++	/* If a protected heap is specified but not found, defer the probe until created */
++	if (!of_property_read_string(ptdev->base.dev->of_node, "protected-heap-name",
++				     &protm_heap_name)) {
++		ptdev->protm.heap = dma_heap_find(protm_heap_name);
++		if (!ptdev->protm.heap) {
++			ret = -EPROBE_DEFER;
++			goto err_rpm_put;
++		}
++	}
 +
-+description:
-+  The custom Linux CMA heap device tree node allows registering
-+  of multiple CMA heaps.
+ 	ret = panthor_gpu_init(ptdev);
+ 	if (ret)
+-		goto err_rpm_put;
++		goto err_dma_heap_put;
+ 
+ 	ret = panthor_mmu_init(ptdev);
+ 	if (ret)
+@@ -286,6 +302,10 @@ int panthor_device_init(struct panthor_device *ptdev)
+ err_unplug_gpu:
+ 	panthor_gpu_unplug(ptdev);
+ 
++err_dma_heap_put:
++	if (ptdev->protm.heap)
++		dma_heap_put(ptdev->protm.heap);
 +
-+  The CMA heap name will match the node name of the "memory-region".
+ err_rpm_put:
+ 	pm_runtime_put_sync_suspend(ptdev->base.dev);
+ 	return ret;
+diff --git a/drivers/gpu/drm/panthor/panthor_device.h b/drivers/gpu/drm/panthor/panthor_device.h
+index 0e68f5a70d20..406de9e888e2 100644
+--- a/drivers/gpu/drm/panthor/panthor_device.h
++++ b/drivers/gpu/drm/panthor/panthor_device.h
+@@ -7,6 +7,7 @@
+ #define __PANTHOR_DEVICE_H__
+ 
+ #include <linux/atomic.h>
++#include <linux/dma-heap.h>
+ #include <linux/io-pgtable.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/sched.h>
+@@ -190,6 +191,12 @@ struct panthor_device {
+ 
+ 	/** @fast_rate: Maximum device clock frequency. Set by DVFS */
+ 	unsigned long fast_rate;
 +
-+properties:
-+  compatible:
-+    enum:
-+      - linux,cma
++	/** @protm: Protected mode related data. */
++	struct {
++		/** @heap: Pointer to the protected heap */
++		struct dma_heap *heap;
++	} protm;
+ };
+ 
+ struct panthor_gpu_usage {
+diff --git a/drivers/gpu/drm/panthor/panthor_fw.c b/drivers/gpu/drm/panthor/panthor_fw.c
+index 4a2e36504fea..7822af1533b4 100644
+--- a/drivers/gpu/drm/panthor/panthor_fw.c
++++ b/drivers/gpu/drm/panthor/panthor_fw.c
+@@ -458,6 +458,7 @@ panthor_fw_alloc_queue_iface_mem(struct panthor_device *ptdev,
+ 
+ 	mem = panthor_kernel_bo_create(ptdev, ptdev->fw->vm, SZ_8K,
+ 				       DRM_PANTHOR_BO_NO_MMAP,
++				       0,
+ 				       DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC |
+ 				       DRM_PANTHOR_VM_BIND_OP_MAP_UNCACHED,
+ 				       PANTHOR_VM_KERNEL_AUTO_VA);
+@@ -491,6 +492,28 @@ panthor_fw_alloc_suspend_buf_mem(struct panthor_device *ptdev, size_t size)
+ {
+ 	return panthor_kernel_bo_create(ptdev, panthor_fw_vm(ptdev), size,
+ 					DRM_PANTHOR_BO_NO_MMAP,
++					0,
++					DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC,
++					PANTHOR_VM_KERNEL_AUTO_VA);
++}
 +
-+  memory-region:
-+    maxItems: 1
-+    description: |
-+      Phandle to the reserved memory node associated with the CMA Heap.
-+      The reserved memory node must follow this binding convention:
-+       - Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
++/**
++ * panthor_fw_alloc_protm_suspend_buf_mem() - Allocate a protm suspend buffer
++ * for a command stream group.
++ * @ptdev: Device.
++ * @size: Size of the protm suspend buffer.
++ *
++ * Return: A valid pointer in case of success, NULL if no protected heap, an ERR_PTR() otherwise.
++ */
++struct panthor_kernel_bo *
++panthor_fw_alloc_protm_suspend_buf_mem(struct panthor_device *ptdev, size_t size)
++{
++	if (!ptdev->protm.heap)
++		return NULL;
 +
-+examples:
-+  - |
-+    reserved-memory {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
++	return panthor_kernel_bo_create(ptdev, panthor_fw_vm(ptdev), size,
++					DRM_PANTHOR_BO_NO_MMAP,
++					DRM_PANTHOR_KBO_PROTECTED_HEAP,
+ 					DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC,
+ 					PANTHOR_VM_KERNEL_AUTO_VA);
+ }
+@@ -503,6 +526,7 @@ static int panthor_fw_load_section_entry(struct panthor_device *ptdev,
+ 	ssize_t vm_pgsz = panthor_vm_page_size(ptdev->fw->vm);
+ 	struct panthor_fw_binary_section_entry_hdr hdr;
+ 	struct panthor_fw_section *section;
++	bool is_protm_section = false;
+ 	u32 section_size;
+ 	u32 name_len;
+ 	int ret;
+@@ -541,10 +565,13 @@ static int panthor_fw_load_section_entry(struct panthor_device *ptdev,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (hdr.flags & CSF_FW_BINARY_IFACE_ENTRY_PROT) {
++	if ((hdr.flags & CSF_FW_BINARY_IFACE_ENTRY_PROT) && !ptdev->protm.heap) {
+ 		drm_warn(&ptdev->base,
+ 			 "Firmware protected mode entry not be supported, ignoring");
+ 		return 0;
++	} else if ((hdr.flags & CSF_FW_BINARY_IFACE_ENTRY_PROT) && ptdev->protm.heap) {
++		drm_info(&ptdev->base, "Firmware protected mode entry supported");
++		is_protm_section = true;
+ 	}
+ 
+ 	if (hdr.va.start == CSF_MCU_SHARED_REGION_START &&
+@@ -610,9 +637,10 @@ static int panthor_fw_load_section_entry(struct panthor_device *ptdev,
+ 			vm_map_flags |= DRM_PANTHOR_VM_BIND_OP_MAP_UNCACHED;
+ 
+ 		section->mem = panthor_kernel_bo_create(ptdev, panthor_fw_vm(ptdev),
+-							section_size,
+-							DRM_PANTHOR_BO_NO_MMAP,
+-							vm_map_flags, va);
++					section_size,
++					DRM_PANTHOR_BO_NO_MMAP,
++					(is_protm_section ? DRM_PANTHOR_KBO_PROTECTED_HEAP : 0),
++					vm_map_flags, va);
+ 		if (IS_ERR(section->mem))
+ 			return PTR_ERR(section->mem);
+ 
+diff --git a/drivers/gpu/drm/panthor/panthor_fw.h b/drivers/gpu/drm/panthor/panthor_fw.h
+index 22448abde992..29042d0dc60c 100644
+--- a/drivers/gpu/drm/panthor/panthor_fw.h
++++ b/drivers/gpu/drm/panthor/panthor_fw.h
+@@ -481,6 +481,8 @@ panthor_fw_alloc_queue_iface_mem(struct panthor_device *ptdev,
+ 				 u32 *input_fw_va, u32 *output_fw_va);
+ struct panthor_kernel_bo *
+ panthor_fw_alloc_suspend_buf_mem(struct panthor_device *ptdev, size_t size);
++struct panthor_kernel_bo *
++panthor_fw_alloc_protm_suspend_buf_mem(struct panthor_device *ptdev, size_t size);
+ 
+ struct panthor_vm *panthor_fw_vm(struct panthor_device *ptdev);
+ 
+diff --git a/drivers/gpu/drm/panthor/panthor_gem.c b/drivers/gpu/drm/panthor/panthor_gem.c
+index 8244a4e6c2a2..88caf928acd0 100644
+--- a/drivers/gpu/drm/panthor/panthor_gem.c
++++ b/drivers/gpu/drm/panthor/panthor_gem.c
+@@ -9,10 +9,14 @@
+ 
+ #include <drm/panthor_drm.h>
+ 
++#include <uapi/linux/dma-heap.h>
 +
-+      custom_cma_heap: custom-cma-heap {
-+        compatible = "shared-dma-pool";
-+        reg = <0x0 0x90600000 0x0 0x1000000>;
-+        reusable;
-+      };
-+    };
+ #include "panthor_device.h"
+ #include "panthor_gem.h"
+ #include "panthor_mmu.h"
+ 
++MODULE_IMPORT_NS(DMA_BUF);
 +
-+    device_cma_heap: device-cma-heap {
-+      compatible = "linux,cma";
-+      memory-region = <&custom_cma_heap>;
-+    };
+ static void panthor_gem_free_object(struct drm_gem_object *obj)
+ {
+ 	struct panthor_gem_object *bo = to_panthor_bo(obj);
+@@ -31,6 +35,7 @@ static void panthor_gem_free_object(struct drm_gem_object *obj)
+  */
+ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo)
+ {
++	struct dma_buf *dma_bo = NULL;
+ 	struct panthor_vm *vm;
+ 	int ret;
+ 
+@@ -38,6 +43,10 @@ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo)
+ 		return;
+ 
+ 	vm = bo->vm;
++
++	if (bo->flags & DRM_PANTHOR_KBO_PROTECTED_HEAP)
++		dma_bo = bo->obj->import_attach->dmabuf;
++
+ 	panthor_kernel_bo_vunmap(bo);
+ 
+ 	if (drm_WARN_ON(bo->obj->dev,
+@@ -51,6 +60,9 @@ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo)
+ 	panthor_vm_free_va(vm, &bo->va_node);
+ 	drm_gem_object_put(bo->obj);
+ 
++	if (dma_bo)
++		dma_buf_put(dma_bo);
++
+ out_free_bo:
+ 	panthor_vm_put(vm);
+ 	kfree(bo);
+@@ -62,6 +74,7 @@ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo)
+  * @vm: VM to map the GEM to. If NULL, the kernel object is not GPU mapped.
+  * @size: Size of the buffer object.
+  * @bo_flags: Combination of drm_panthor_bo_flags flags.
++ * @kbo_flags: Combination of drm_panthor_kbo_flags flags.
+  * @vm_map_flags: Combination of drm_panthor_vm_bind_op_flags (only those
+  * that are related to map operations).
+  * @gpu_va: GPU address assigned when mapping to the VM.
+@@ -72,9 +85,11 @@ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo)
+  */
+ struct panthor_kernel_bo *
+ panthor_kernel_bo_create(struct panthor_device *ptdev, struct panthor_vm *vm,
+-			 size_t size, u32 bo_flags, u32 vm_map_flags,
++			 size_t size, u32 bo_flags, u32 kbo_flags, u32 vm_map_flags,
+ 			 u64 gpu_va)
+ {
++	struct dma_buf *dma_bo = NULL;
++	struct drm_gem_object *gem_obj = NULL;
+ 	struct drm_gem_shmem_object *obj;
+ 	struct panthor_kernel_bo *kbo;
+ 	struct panthor_gem_object *bo;
+@@ -87,14 +102,38 @@ panthor_kernel_bo_create(struct panthor_device *ptdev, struct panthor_vm *vm,
+ 	if (!kbo)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	obj = drm_gem_shmem_create(&ptdev->base, size);
++	if (kbo_flags & DRM_PANTHOR_KBO_PROTECTED_HEAP) {
++		if (!ptdev->protm.heap) {
++			ret = -EINVAL;
++			goto err_free_bo;
++		}
++
++		dma_bo = dma_heap_buffer_alloc(ptdev->protm.heap, size,
++					       DMA_HEAP_VALID_FD_FLAGS, DMA_HEAP_VALID_HEAP_FLAGS);
++		if (!dma_bo) {
++			ret = -ENOMEM;
++			goto err_free_bo;
++		}
++
++		gem_obj = drm_gem_prime_import(&ptdev->base, dma_bo);
++		if (IS_ERR(gem_obj)) {
++			ret = PTR_ERR(gem_obj);
++			goto err_free_dma_bo;
++		}
++
++		obj = to_drm_gem_shmem_obj(gem_obj);
++	} else {
++		obj = drm_gem_shmem_create(&ptdev->base, size);
++	}
++
+ 	if (IS_ERR(obj)) {
+ 		ret = PTR_ERR(obj);
+-		goto err_free_bo;
++		goto err_free_dma_bo;
+ 	}
+ 
+ 	bo = to_panthor_bo(&obj->base);
+ 	kbo->obj = &obj->base;
++	kbo->flags = kbo_flags;
+ 	bo->flags = bo_flags;
+ 
+ 	/* The system and GPU MMU page size might differ, which becomes a
+@@ -124,6 +163,10 @@ panthor_kernel_bo_create(struct panthor_device *ptdev, struct panthor_vm *vm,
+ err_put_obj:
+ 	drm_gem_object_put(&obj->base);
+ 
++err_free_dma_bo:
++	if (dma_bo)
++		dma_buf_put(dma_bo);
++
+ err_free_bo:
+ 	kfree(kbo);
+ 	return ERR_PTR(ret);
+diff --git a/drivers/gpu/drm/panthor/panthor_gem.h b/drivers/gpu/drm/panthor/panthor_gem.h
+index e43021cf6d45..d4fe8ae9f0a8 100644
+--- a/drivers/gpu/drm/panthor/panthor_gem.h
++++ b/drivers/gpu/drm/panthor/panthor_gem.h
+@@ -13,6 +13,17 @@
+ 
+ struct panthor_vm;
+ 
++/**
++ * enum drm_panthor_kbo_flags -  Kernel buffer object flags, passed at creation time
++ */
++enum drm_panthor_kbo_flags {
++	/**
++	 * @DRM_PANTHOR_KBO_PROTECTED_HEAP: The buffer object will be allocated
++	 * from a DMA-Buf protected heap.
++	 */
++	DRM_PANTHOR_KBO_PROTECTED_HEAP = (1 << 0),
++};
++
+ /**
+  * struct panthor_gem_object - Driver specific GEM object.
+  */
+@@ -75,6 +86,9 @@ struct panthor_kernel_bo {
+ 	 * @kmap: Kernel CPU mapping of @gem.
+ 	 */
+ 	void *kmap;
++
++	/** @flags: Combination of drm_panthor_kbo_flags flags. */
++	u32 flags;
+ };
+ 
+ static inline
+@@ -138,7 +152,7 @@ panthor_kernel_bo_vunmap(struct panthor_kernel_bo *bo)
+ 
+ struct panthor_kernel_bo *
+ panthor_kernel_bo_create(struct panthor_device *ptdev, struct panthor_vm *vm,
+-			 size_t size, u32 bo_flags, u32 vm_map_flags,
++			 size_t size, u32 bo_flags, u32 kbo_flags, u32 vm_map_flags,
+ 			 u64 gpu_va);
+ 
+ void panthor_kernel_bo_destroy(struct panthor_kernel_bo *bo);
+diff --git a/drivers/gpu/drm/panthor/panthor_heap.c b/drivers/gpu/drm/panthor/panthor_heap.c
+index 3796a9eb22af..5395f0d90360 100644
+--- a/drivers/gpu/drm/panthor/panthor_heap.c
++++ b/drivers/gpu/drm/panthor/panthor_heap.c
+@@ -146,6 +146,7 @@ static int panthor_alloc_heap_chunk(struct panthor_device *ptdev,
+ 
+ 	chunk->bo = panthor_kernel_bo_create(ptdev, vm, heap->chunk_size,
+ 					     DRM_PANTHOR_BO_NO_MMAP,
++					     0,
+ 					     DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC,
+ 					     PANTHOR_VM_KERNEL_AUTO_VA);
+ 	if (IS_ERR(chunk->bo)) {
+@@ -549,6 +550,7 @@ panthor_heap_pool_create(struct panthor_device *ptdev, struct panthor_vm *vm)
+ 
+ 	pool->gpu_contexts = panthor_kernel_bo_create(ptdev, vm, bosize,
+ 						      DRM_PANTHOR_BO_NO_MMAP,
++						      0,
+ 						      DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC,
+ 						      PANTHOR_VM_KERNEL_AUTO_VA);
+ 	if (IS_ERR(pool->gpu_contexts)) {
+diff --git a/drivers/gpu/drm/panthor/panthor_sched.c b/drivers/gpu/drm/panthor/panthor_sched.c
+index ef4bec7ff9c7..e260ed8aef5b 100644
+--- a/drivers/gpu/drm/panthor/panthor_sched.c
++++ b/drivers/gpu/drm/panthor/panthor_sched.c
+@@ -3298,6 +3298,7 @@ group_create_queue(struct panthor_group *group,
+ 	queue->ringbuf = panthor_kernel_bo_create(group->ptdev, group->vm,
+ 						  args->ringbuf_size,
+ 						  DRM_PANTHOR_BO_NO_MMAP,
++						  0,
+ 						  DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC |
+ 						  DRM_PANTHOR_VM_BIND_OP_MAP_UNCACHED,
+ 						  PANTHOR_VM_KERNEL_AUTO_VA);
+@@ -3328,6 +3329,7 @@ group_create_queue(struct panthor_group *group,
+ 					 queue->profiling.slot_count *
+ 					 sizeof(struct panthor_job_profiling_data),
+ 					 DRM_PANTHOR_BO_NO_MMAP,
++					 0,
+ 					 DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC |
+ 					 DRM_PANTHOR_VM_BIND_OP_MAP_UNCACHED,
+ 					 PANTHOR_VM_KERNEL_AUTO_VA);
+@@ -3435,7 +3437,7 @@ int panthor_group_create(struct panthor_file *pfile,
+ 	}
+ 
+ 	suspend_size = csg_iface->control->protm_suspend_size;
+-	group->protm_suspend_buf = panthor_fw_alloc_suspend_buf_mem(ptdev, suspend_size);
++	group->protm_suspend_buf = panthor_fw_alloc_protm_suspend_buf_mem(ptdev, suspend_size);
+ 	if (IS_ERR(group->protm_suspend_buf)) {
+ 		ret = PTR_ERR(group->protm_suspend_buf);
+ 		group->protm_suspend_buf = NULL;
+@@ -3446,6 +3448,7 @@ int panthor_group_create(struct panthor_file *pfile,
+ 						   group_args->queues.count *
+ 						   sizeof(struct panthor_syncobj_64b),
+ 						   DRM_PANTHOR_BO_NO_MMAP,
++						   0,
+ 						   DRM_PANTHOR_VM_BIND_OP_MAP_NOEXEC |
+ 						   DRM_PANTHOR_VM_BIND_OP_MAP_UNCACHED,
+ 						   PANTHOR_VM_KERNEL_AUTO_VA);
 -- 
 2.34.1
 
