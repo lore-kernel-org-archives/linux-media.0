@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5710207DEA
-	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 09:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD697207DED
+	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 08:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738573203; cv=none; b=RwqGZm/gmDtOy1BfHmJVVjiDsBS2i7+zm78W73beRkJdWWHhMotUOA6S3OHor9Vcl+GYNCXZyXh6YV3yWR6lSVhdtOnt2yKBqMgCcSFzFu2hv/LDPMVUIZW1sSF1A1OBvbVYqbUGeWt7WC5rOufNDglT4brdZlBkyS7mfKg8+Aw=
+	t=1738573205; cv=none; b=eRa6oWgID7dAGGl68anP4UPDdQzGcIFJKnC0scXx9akrmyUhwyl1m/xLFX2qGIgUHYI8SYdDVphb0OQSmEY4cPX4ufVskyk3Ub2gvGsklnces05miDjVXPEWy7U6bdqpbkOrcu7OKDrlJrirGTRloC7xCiNvPDZqrvyaG03MKy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738573203; c=relaxed/simple;
-	bh=0bVoD49YZ1dwUgxndQAJNi/mPiubgmOqoCmQhkpeLZM=;
+	s=arc-20240116; t=1738573205; c=relaxed/simple;
+	bh=DCDd4l42t5wgUgKJbmC/nWT/Ei31a0a25pOSaKlzovQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j15Gpa9R7tOBvtkZK6MLEM0tuJ3BLTKa/fgaFxLb9EMVk5wcZL51mlw8zCHJFDnbs2Kbz93j+XuVOc7oloj9kgSwrQriPKu3qSxlcjVqlSURnmy6TA0hjNc0GY3vtzmyUUCb9+sOlGZ0sdeI7lTC0+HvoPrEFuDZemnOom0DLZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmBpBEKa; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=Jk7tRLrFv8TmI5DjT1nc6DgNGfq0xAi0TbMFYGkSB4wDe+MM2d2hAC/IDxhUY2nYVwadkqah0S80H5caOsrvp3UJme5r7kN1AxNTtCuxDtUnOxill+QbrZ7F33VUZEKDYaNNDyVEFqccCUaYmSFpLoS3qu6uDNkmb+9QQxi0G5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ORC5CbZg; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmBpBEKa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ORC5CbZg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738573202; x=1770109202;
+  t=1738573194; x=1770109194;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0bVoD49YZ1dwUgxndQAJNi/mPiubgmOqoCmQhkpeLZM=;
-  b=PmBpBEKaZrt1s9gK9CaZ25HB4eTbVLo/KYgcCBLI7jfGaIpVmyywYkYg
-   ZVZ9oZbLm+hzkaRM34dZZLd5myb5sGDqeD2K4nbftr8+jyvWctH9pAfZw
-   cy0EJB0mOOJUGRf7W01M5X5qhpYBCPuhQS6MJNSVbai3x9jqyZrDebVVJ
-   CZB0xDzjPk7ERO0Ju4KYZqY42Qb1ukoZOTysf/Dv59g/IIna8MKVvUsaI
-   f1tvKUWVp+u77k4EjCBPTVOB7hlBwKV+UmrpXQdwaT6SqdfqGroTSV/mB
-   K49bW/TtH+39avYMN8aIU5uGVXAWVvAMap29KpnDJ6eotmt+4MoEYXv3u
+  bh=DCDd4l42t5wgUgKJbmC/nWT/Ei31a0a25pOSaKlzovQ=;
+  b=ORC5CbZgV3ACFVQ5rSr2/HcrUUil39vJw8iUaiOKc7gckPv+BBBb1Hc0
+   Bvzkwkhj8AWsF5b9SxetCNTkMuu24Ii50TfoYV/Kb/QcYTB58Y3jo9cCp
+   tbwq7nXM5zTVLJVhsNvkpLMR/5Hsekdnr3Bftv46QkH0NALSa0AQqW42D
+   6Ea3HbXwkyMfnQ04+I9s4av5zyZW+qWTHyv9Hdgq6nf92r5nTzH/ZPylG
+   9w2QFcZqf9G+i6hTxmVRi5RqqYeQrluZbV9PCSjMWllPXfdW7V6j/Go8R
+   VkeR73Rw23URRhG9rIalr9Adit7uD0iFYbtKUPr6j69w1Rj+mZ6+pzKfp
    g==;
-X-CSE-ConnectionGUID: jmuppUu4RLaECA6an0Phmg==
-X-CSE-MsgGUID: Kt4rzdUdTmeV4+QsTMZXHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211614"
+X-CSE-ConnectionGUID: EZXTTIcqTK6avZxF1y4zCw==
+X-CSE-MsgGUID: 9J4abgY4TeK+4SXxB3mluw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211589"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="39211614"
+   d="scan'208";a="39211589"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 01:00:01 -0800
-X-CSE-ConnectionGUID: 6APj+ASAReO6aqIgToeTBQ==
-X-CSE-MsgGUID: QVHL27wISnS3YCSF6dqNKw==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:53 -0800
+X-CSE-ConnectionGUID: iwtt06VURDazftMYP18KVQ==
+X-CSE-MsgGUID: UgjrJaK2Q6+eTkbsbgIg1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="109988813"
+   d="scan'208";a="109988802"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:55 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:47 -0800
 Received: from svinhufvud.intel.com (maa-artisokka.localdomain [192.168.240.50])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id B4E7A11FC22;
-	Mon,  3 Feb 2025 10:59:49 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id E5FD911FAB1;
+	Mon,  3 Feb 2025 10:59:41 +0200 (EET)
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc: hverkuil@xs4all.nl,
 	Mehdi Djait <mehdi.djait@linux.intel.com>,
 	Ricardo Ribalda Delgado <ribalda@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC v5 14/15] media: uapi: Add controls for sub-sampling configuration
-Date: Mon,  3 Feb 2025 10:58:52 +0200
-Message-Id: <20250203085853.1361401-15-sakari.ailus@linux.intel.com>
+Subject: [RFC v5 12/15] media: uapi: Documentation: Use luma formats with CFA pattern control
+Date: Mon,  3 Feb 2025 10:58:50 +0200
+Message-Id: <20250203085853.1361401-13-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
 References: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
@@ -90,97 +90,36 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sub-sampling is a way to decrease the data rates after the pixel array by
-systematically discarding some samples, either vertically or horizontally
-or both. Add two controls for the purpose and document them. The
-sub-sampling configuration is taken into account in the compose rectangle.
+Document that the luma-only, greyscale formats (Y10 etc.) are used also
+for non-greyscale images with the CFA pattern specified by the
+V4L2_CID_COLOUR_PATTERN control.
+
+The advantage of this approach is that there is little (or none at all)
+work needed to be able to capture such images with existing CSI-2 receiver
+drivers as many already support greyscale formats when compared to new
+CFA-agnostic pixelformats.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- .../userspace-api/media/drivers/camera-sensor.rst  | 14 ++++++++++++--
- .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 11 +++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  2 ++
- include/uapi/linux/v4l2-controls.h                 |  2 ++
- 4 files changed, 27 insertions(+), 2 deletions(-)
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-index 59431ab0b923..9e74eb02e02a 100644
---- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
-+++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-@@ -120,8 +120,8 @@ values programmed by the register sequences. The default values of these
- controls shall be 0 (disabled). Especially these controls shall not be inverted,
- independently of the sensor's mounting rotation.
+diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+index 74df19be91f6..ae4e431b5fd9 100644
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+@@ -9,6 +9,11 @@ Luma-Only Formats
+ This family of formats only store the luma component of a Y'CbCr image. They
+ are often referred to as greyscale formats.
  
--Binning
---------
-+Binning and sub-sampling
-+------------------------
- 
- Binning has traditionally been configured using :ref:`the compose selection
- rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
-@@ -130,6 +130,16 @@ users should use it when it's available. Drivers supporting the control shall
- also support the compose rectangle, albeit the rectangle may be read-only when
- the control is present.
- 
-+Sub-sampling is often supported as part of a camera sensor's binning
-+functionality and performed after the binning operation. Sub-sampling typically
-+produces quality-wise worse results than binning. Sub-sampling factors are
-+independent horizontally and vertically and they are controlled using two
-+controls, :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
-+V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`. In
-+sub-sampling, the image size before sub-sampling is horizontally and vertically
-+divided by the respective sub-sampling factors. Drivers supporting the control shall
-+also reflect the sub-sampling configuration in the compose rectangle.
++These pixel formats are also used on :term:`MC-centric` devices when the CFA
++pattern is specified by the :ref:`V4L2_CID_COLOUR_PATTERN
++<image-source-control-colour-pattern>` control in the image source, typically a
++camera sensor.
 +
- .. _media_using_camera_sensor_drivers_embedded_data:
+ .. note::
  
- Embedded data
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-index 18b484ff5d75..577b73045bee 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-@@ -701,3 +701,14 @@ enum v4l2_scene_mode -
- 
- For instance, a value of ``0x0001000300020003`` indicates binning by 3
- (horizontally) * 3/2 (vertically).
-+
-+.. _v4l2-cid-camera-sensor-subsampling:
-+
-+``V4L2_CID_SUBSAMPLING_HORIZONTAL`` and ``V4L2_CID_SUBSAMPLING_VERTICAL``
-+(integer)
-+
-+    Horizontal and vertical subsampling factors.
-+
-+    Sub-sampling is used to downscale an image, horizontally and vertically, by
-+    discarding a part of the image data. Typically sub-sampling produces lower
-+    quality images than binning.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 6be3d4a37127..5f4a8cc9f53b 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1088,6 +1088,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
- 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
- 	case V4L2_CID_BINNING_FACTORS:		return "Binning Factors";
-+	case V4L2_CID_SUBSAMPLING_HORIZONTAL:	return "Sub-Sampling Factor, Horizontal";
-+	case V4L2_CID_SUBSAMPLING_VERTICAL:	return "Sub-Sampling Factor, Vertical";
- 
- 	/* FM Radio Modulator controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index ac0e38e98a38..4eade177d40f 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1089,6 +1089,8 @@ enum v4l2_auto_focus_range {
- 
- #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
- #define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
-+#define V4L2_CID_SUBSAMPLING_HORIZONTAL		(V4L2_CID_CAMERA_CLASS_BASE+38)
-+#define V4L2_CID_SUBSAMPLING_VERTICAL		(V4L2_CID_CAMERA_CLASS_BASE+39)
- 
- /* FM Modulator class control IDs */
- 
+    - In all the tables that follow, bit 7 is the most significant bit in a byte.
 -- 
 2.39.5
 
