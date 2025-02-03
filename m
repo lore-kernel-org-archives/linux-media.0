@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD697207DED
-	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 08:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989241FF60F
+	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 09:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738573205; cv=none; b=eRa6oWgID7dAGGl68anP4UPDdQzGcIFJKnC0scXx9akrmyUhwyl1m/xLFX2qGIgUHYI8SYdDVphb0OQSmEY4cPX4ufVskyk3Ub2gvGsklnces05miDjVXPEWy7U6bdqpbkOrcu7OKDrlJrirGTRloC7xCiNvPDZqrvyaG03MKy0=
+	t=1738573207; cv=none; b=Es1pCHaccpxh3B/cDqB0Q91LC+KQ71qOJ/pWA6z0yazWDm4qkbXIlCSZ5I9qYKYdcHjaMnkzLBgKZ0RwrU/VZxHWIKC9JDrhIdpTlyYU4XjTCWdetxEbCUqjc6MbiVMH1zKvt99ur/uysbre0kxgvw1UXJy3O5UpXQeXv4OgTcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738573205; c=relaxed/simple;
-	bh=DCDd4l42t5wgUgKJbmC/nWT/Ei31a0a25pOSaKlzovQ=;
+	s=arc-20240116; t=1738573207; c=relaxed/simple;
+	bh=j6Wf++t4tR9d3+JpRD4UsIZfaGMbstR49RtMy0C9GPw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Jk7tRLrFv8TmI5DjT1nc6DgNGfq0xAi0TbMFYGkSB4wDe+MM2d2hAC/IDxhUY2nYVwadkqah0S80H5caOsrvp3UJme5r7kN1AxNTtCuxDtUnOxill+QbrZ7F33VUZEKDYaNNDyVEFqccCUaYmSFpLoS3qu6uDNkmb+9QQxi0G5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ORC5CbZg; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=kBD/3jWFns+R+PbLx7x+rCu8scmGrgkU3lR+1unrtcKErYiSvAaI44pHhGUeEr5ZtnIprn5iCabRUsn+QkaVUrpMKpkE8iGtnX0vPv/EEdY2H0FSAo2xn5IKbIwB+Dy3cKlefdjeVhgAnUuM7bOv6/0dt/z58UAdqqtpfJG5nKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dyj/nVV+; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ORC5CbZg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dyj/nVV+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738573194; x=1770109194;
+  t=1738573206; x=1770109206;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DCDd4l42t5wgUgKJbmC/nWT/Ei31a0a25pOSaKlzovQ=;
-  b=ORC5CbZgV3ACFVQ5rSr2/HcrUUil39vJw8iUaiOKc7gckPv+BBBb1Hc0
-   Bvzkwkhj8AWsF5b9SxetCNTkMuu24Ii50TfoYV/Kb/QcYTB58Y3jo9cCp
-   tbwq7nXM5zTVLJVhsNvkpLMR/5Hsekdnr3Bftv46QkH0NALSa0AQqW42D
-   6Ea3HbXwkyMfnQ04+I9s4av5zyZW+qWTHyv9Hdgq6nf92r5nTzH/ZPylG
-   9w2QFcZqf9G+i6hTxmVRi5RqqYeQrluZbV9PCSjMWllPXfdW7V6j/Go8R
-   VkeR73Rw23URRhG9rIalr9Adit7uD0iFYbtKUPr6j69w1Rj+mZ6+pzKfp
-   g==;
-X-CSE-ConnectionGUID: EZXTTIcqTK6avZxF1y4zCw==
-X-CSE-MsgGUID: 9J4abgY4TeK+4SXxB3mluw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211589"
+  bh=j6Wf++t4tR9d3+JpRD4UsIZfaGMbstR49RtMy0C9GPw=;
+  b=Dyj/nVV+7N0MRSt29nxGptFCS4XJSlRIuhCuAkYyEN31TdgT+9Bp4t0/
+   mJoOzcIki31b2mfsQ/EW91tILIOtZg/2WwSJMCyrMWNpj6ZNRNQj3NSUU
+   mW7SphRRwwc7g9R7b/nxtk90wDAt2HE6HtgP12hOZV7jbe7P76887ojZP
+   +IoI6aYtDtuWiMBlp+jrazMVeaqMSbRWugJIkqCBQiX9Ytf08SLC7nNth
+   2lycXDZmaSwtm/z+u1lzqr68TlSswwdZMeLi+LbiRSxT8Cia4KMCd5EyH
+   Ul1CYg/Uu1xDWFStFHJMmRq2t+WH5i0M0JRk7vb/xwH/dTPJep/et448T
+   A==;
+X-CSE-ConnectionGUID: bJS9R87XQACHAYEnox6AOw==
+X-CSE-MsgGUID: hYJHzSPES72FeShw+uvtyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211627"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="39211589"
+   d="scan'208";a="39211627"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:53 -0800
-X-CSE-ConnectionGUID: iwtt06VURDazftMYP18KVQ==
-X-CSE-MsgGUID: UgjrJaK2Q6+eTkbsbgIg1Q==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 01:00:05 -0800
+X-CSE-ConnectionGUID: mzyjA0KNRF+rxtdeAW0C0g==
+X-CSE-MsgGUID: SHQOKeO9QBuoOYaxvcn57Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="109988802"
+   d="scan'208";a="109988854"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:47 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:58 -0800
 Received: from svinhufvud.intel.com (maa-artisokka.localdomain [192.168.240.50])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id E5FD911FAB1;
-	Mon,  3 Feb 2025 10:59:41 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 3B6121204F2;
+	Mon,  3 Feb 2025 10:59:53 +0200 (EET)
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc: hverkuil@xs4all.nl,
 	Mehdi Djait <mehdi.djait@linux.intel.com>,
 	Ricardo Ribalda Delgado <ribalda@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC v5 12/15] media: uapi: Documentation: Use luma formats with CFA pattern control
-Date: Mon,  3 Feb 2025 10:58:50 +0200
-Message-Id: <20250203085853.1361401-13-sakari.ailus@linux.intel.com>
+Subject: [RFC v5 15/15] media: Documentation: Add binning and sub-sampling controls
+Date: Mon,  3 Feb 2025 10:58:53 +0200
+Message-Id: <20250203085853.1361401-16-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
 References: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
@@ -90,36 +90,54 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document that the luma-only, greyscale formats (Y10 etc.) are used also
-for non-greyscale images with the CFA pattern specified by the
-V4L2_CID_COLOUR_PATTERN control.
-
-The advantage of this approach is that there is little (or none at all)
-work needed to be able to capture such images with existing CSI-2 receiver
-drivers as many already support greyscale formats when compared to new
-CFA-agnostic pixelformats.
+Document the binning and scaling controls (V4L2_CID_BINNING and
+V4L2_CID_SUBSAMPLING_{HORIZONTAL,VERTICAL}) in the common raw sensor
+model.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../media/v4l/subdev-config-model.rst         | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index 74df19be91f6..ae4e431b5fd9 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -9,6 +9,11 @@ Luma-Only Formats
- This family of formats only store the luma component of a Y'CbCr image. They
- are often referred to as greyscale formats.
+diff --git a/Documentation/userspace-api/media/v4l/subdev-config-model.rst b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+index f15e5495cc34..84957dc62800 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-config-model.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+@@ -113,8 +113,12 @@ separately horizontally and vertically.
  
-+These pixel formats are also used on :term:`MC-centric` devices when the CFA
-+pattern is specified by the :ref:`V4L2_CID_COLOUR_PATTERN
-+<image-source-control-colour-pattern>` control in the image source, typically a
-+camera sensor.
-+
- .. note::
+ Binning and sub-sampling are configured using the ``V4L2_SEL_TGT_COMPOSE``
+ rectangle, relative to the analogue crop rectangle, on (pad, stream) pair
+-1/0. The driver implementation determines how to configure binning and
+-sub-sampling to achieve the desired size.
++1/0. It depends on the driver which of these operations are being used to
++achieve the resulting size. Binning and sub-sampling are also directly
++configured using :ref:`V4L2_CID_BINNING_FACTORS
++<v4l2-cid-camera-sensor-binning>` and :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
++V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>` controls on
++drivers that support them.
  
-    - In all the tables that follow, bit 7 is the most significant bit in a byte.
+ The digital crop operation takes place after binning and sub-sampling. It is
+ configured by setting the ``V4L2_SEL_TGT_CROP`` rectangle on (pad, stream) pair
+@@ -173,9 +177,15 @@ Also refer to :ref:`Selection targets <v4l2-selection-targets-table>`.
+       - \-
+       - X
+       - Binning and sub-sampling. This rectangle is relative to the
+-        ``V4L2_SEL_TGT_CROP`` rectangle on the same (pad, stream). The
+-        combination of binning and sub-sampling is configured using this
+-        selection target.
++        ``V4L2_SEL_TGT_CROP`` rectangle on the same (pad, stream). Binning is
++        configured using the :ref:`V4L2_CID_BINNING_FACTORS
++        <v4l2-cid-camera-sensor-binning>` control and sub-sampling is configured
++        using the :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
++        V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`
++        controls on drivers that support these controls. To configure binning
++        and sub-sampling on drivers that do not support these controls, the
++        selection rectangle may be changed directly to configure the combined
++        effect on the image size.
+     * - 2/0
+       - Format
+       - X
 -- 
 2.39.5
 
