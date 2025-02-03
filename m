@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872EE1FCCFB
-	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 08:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6CB207A2F
+	for <linux-media@vger.kernel.org>; Mon,  3 Feb 2025 08:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738573193; cv=none; b=PGFndHN3I0TW1xe4s51fTRtYVXdKlll9yxRYPOck7D/R+fqVYU2vyle5cEV+nvMzNsWjAAlfCoV5pO8kpiAzOV2iAp2TFC7DdcOojmDICkOVT6sCWTjYyRg84hbbuY5TubTGLh8znC83Vj7c0k96ZuofIPW4qpFIbFyg9cuMOf4=
+	t=1738573200; cv=none; b=jfcKiA0v/vbNHhABof7kTE42Ql81bBCstZTR5QdtYDmMHU27x9MR91Brqjyx6EVDz5bvseC5tZq17MN4JUFgAS5gVM8WpGnAdbsn8Erj3JIe4GpyXC4R5plmY14QyDI9o2x6yHqNvXp86MKXDWaGwi0P3ax4f5hMFmzZVDJ5vas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738573193; c=relaxed/simple;
-	bh=KCrj/XECXXQT6k1H85UI83DYiKvw++6bblnG4i6p5e8=;
+	s=arc-20240116; t=1738573200; c=relaxed/simple;
+	bh=tolS8nUilg8AHdDSlI8azmr//P956Z52ZBmE63VjJ8w=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cLsY9+3AxZo1VE0thOVzavNqjrVSRFo1w1HNn47Q3Li9noaIYSrpxztZRZoL0iLHnbaG46vLhABC7FqKEOEJ19UeZ1GxY+Z+NPOuVd/iWZT/rctah47eaH8CrrPe0XKRK7F0jQYMSPt31lWGza0Jd+7oCJFDKEBS3daiyjfV+d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bShQlJ9+; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=VFLV1KnU/M3Jpe2aBalMn28J5xaGIxHKqPrUd/xGL7yH342GTZCvHp2HHoy0FglPEPV/39ss0uRDoGddFhbxv1q2MPI6l1jo4JY9izzLqVvJTpCRLji3Z13Fus9ZLAQ/mhq64TplOxT1qYTAW+nxQ1/CcvjsBmlcbV34qD7ascM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmXvz71g; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bShQlJ9+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmXvz71g"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738573192; x=1770109192;
+  t=1738573199; x=1770109199;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KCrj/XECXXQT6k1H85UI83DYiKvw++6bblnG4i6p5e8=;
-  b=bShQlJ9+H98Qa98F+ApT7AKi6nq0Y4ceEtZTitgE0wLU8wJq9SknuUun
-   hL9ufiOHoJFvjJTgpedDurHrvQOfiv/zPkML46ZdPOsCNcnHddGgptEyp
-   ZdpNcHQZOIdEtnxV/xExxReQlzYFirn/p2m3gc03GY0Qrtu23cFeGv3+M
-   yVnQZNDoT9fU4W0KAvQaWr2Y9JNQQJulm3+O5GAjBCwVkaeAglOKNcjPW
-   jSjB+pgGrMmu8OIxmo3yCJpViepoGL7UCDR7oIyMBKBT9AmCnlUkj4YCu
-   O5iD5rpxsHDHB+NrodWPVlmeqbyCmrw09Jio3zoJpTQoSBJccmiGh+0ju
-   A==;
-X-CSE-ConnectionGUID: olnGke0xSKaPB2anNxODMQ==
-X-CSE-MsgGUID: lvvF9dW6SC+6VIb43N8eLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211581"
+  bh=tolS8nUilg8AHdDSlI8azmr//P956Z52ZBmE63VjJ8w=;
+  b=YmXvz71gpcbAQpGnA99+caZ73Xco1W44h+ACm0nBz3Ey9dgylGB7Dbfb
+   NitFSiQh0i8udI8M15hXUouPIytmUEPN+AsSYTuoR2SfFY5r13NxciyVa
+   +TMYeR7S1BAEh6fpCBGTds6wgmNpi+loXkrBdHB6fkqo4F2qmb+v4ThI0
+   qtC76mxR6H3RD9nUIRjCVlx7P7CZ5Bs43pg5hVaZ473i2kx853hkLZkQ9
+   Y2y8q5i5OBGHyE4w4UHIdQVGxySsRHf1euHxkds98OJgk9rM3oZOeWBkn
+   XD0W5virH3XUS3Po63ejVn9kJp6AXIehiQpGPsdGmZ/XQnB7/KUROvSy/
+   w==;
+X-CSE-ConnectionGUID: D//era8qQlOHh5t1TnHUUA==
+X-CSE-MsgGUID: JgpVz1pIRuKYqXe98NrbZg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39211602"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="39211581"
+   d="scan'208";a="39211602"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:51 -0800
-X-CSE-ConnectionGUID: iaCnPqAVQvCgjRU1Ggfbxw==
-X-CSE-MsgGUID: yTtW/sJoSFuUdrCT9v4qLA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:58 -0800
+X-CSE-ConnectionGUID: mFAVE9uGQlGiUhlYsYFx9Q==
+X-CSE-MsgGUID: i8lc/GyhQHiUEl0Ieopf0Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="109988798"
+   d="scan'208";a="109988806"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:44 -0800
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:59:51 -0800
 Received: from svinhufvud.intel.com (maa-artisokka.localdomain [192.168.240.50])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D21A71204F2;
-	Mon,  3 Feb 2025 10:59:37 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9173711F9C3;
+	Mon,  3 Feb 2025 10:59:45 +0200 (EET)
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
@@ -76,9 +76,9 @@ Cc: hverkuil@xs4all.nl,
 	Mehdi Djait <mehdi.djait@linux.intel.com>,
 	Ricardo Ribalda Delgado <ribalda@kernel.org>,
 	Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC v5 11/15] media: Documentation: Document luma-only mbus codes and CFA for cameras
-Date: Mon,  3 Feb 2025 10:58:49 +0200
-Message-Id: <20250203085853.1361401-12-sakari.ailus@linux.intel.com>
+Subject: [RFC v5 13/15] media: uapi: Add V4L2_CID_BINNING control for binning configuration
+Date: Mon,  3 Feb 2025 10:58:51 +0200
+Message-Id: <20250203085853.1361401-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
 References: <20250203085853.1361401-1-sakari.ailus@linux.intel.com>
@@ -90,62 +90,111 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document the use of luma-only mbus codes for camera sensors and how the
-V4L2_CID_COLOUR_PATTERN and V4L2_CID_COLOUR_PATTERN_FLIP controls are used
-to convey the colour filter array pattern on UAPI.
+Add V4L2_CID_BINNING control for configuring binning and enumerating a
+camera sensor's binning capabilities. The control combines horizontal and
+vertical binning into a single control as the two are generally related.
+
+New drivers should use this control to configure binning.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- .../userspace-api/media/drivers/camera-sensor.rst   | 13 +++++++++++++
- .../media/v4l/ext-ctrls-image-source.rst            |  4 ++++
- 2 files changed, 17 insertions(+)
+ .../media/drivers/camera-sensor.rst           | 10 +++++++
+ .../media/v4l/ext-ctrls-camera.rst            | 29 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  2 ++
+ include/uapi/linux/v4l2-controls.h            |  1 +
+ 4 files changed, 42 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-index 5bc4c79d230c..91e5305458b9 100644
+index 91e5305458b9..59431ab0b923 100644
 --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
 +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-@@ -41,6 +41,19 @@ format set on a source pad at the end of the device's internal pipeline.
+@@ -120,6 +120,16 @@ values programmed by the register sequences. The default values of these
+ controls shall be 0 (disabled). Especially these controls shall not be inverted,
+ independently of the sensor's mounting rotation.
  
- Most sensor drivers are implemented this way.
- 
-+V4L2_CID_COLOUR_PATTERN, luma-only mbus formats, flipping and cropping
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++Binning
++-------
 +
-+For raw image data originating from camera sensors, :ref:`luma-only mbus codes
-+MEDIA_BUS_FMT_Yx_1Xx (where 'x' is the bit depth) <v4l2-mbus-pixelcode-yuv8>`
-+are used as Colour Filter Array (CFA) agnostic raw formats. The
-+``V4L2_CID_COLOUR_PATTERN <image-source-control-colour-pattern>`` control in the
-+same sub-device defines the native colour pattern of the device. Flipping may
-+further affect the readout pattern as indicated by the
-+``V4L2_CID_COLOUR_PATTERN_FLIP <image-source-control-colour-pattern-flip>``
-+control. Further on, cropping also has an effect on the pattern if cropped
-+amount is not divisible by the size of the pattern, horizontally and vertically.
++Binning has traditionally been configured using :ref:`the compose selection
++rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
++<v4l2-cid-camera-sensor-binning>` is also available for binning configuration and
++users should use it when it's available. Drivers supporting the control shall
++also support the compose rectangle, albeit the rectangle may be read-only when
++the control is present.
 +
- Frame interval configuration
- ----------------------------
+ .. _media_using_camera_sensor_drivers_embedded_data:
  
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-index ecfa38c118e3..4b98a740236a 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-@@ -93,6 +93,8 @@ Image Source Control IDs
-     is reported as being (say) 128, then a value of 192 would represent
-     a gain of exactly 1.5.
+ Embedded data
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+index cdc515c60468..18b484ff5d75 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+@@ -672,3 +672,32 @@ enum v4l2_scene_mode -
  
-+.. _image-source-control-colour-pattern:
+     As modes differ for each sensor, menu items are not standardized by this
+     control and are left to the programmer.
 +
- ``V4L2_CID_COLOUR_PATTERN (integer)``
-     This control determines the colour components and pixel order in the
-     sensor's CFA (Colour Filter Array) when used in conjunction with
-@@ -103,6 +105,8 @@ Image Source Control IDs
- 
-     This is a read-only control.
- 
-+.. _image-source-control-colour-pattern-flip:
++.. _v4l2-cid-camera-sensor-binning:
 +
- ``V4L2_CID_COLOUR_PATTERN_FLIP (bitmask)``
-     Whether the horizontal or vertical flipping controls (V4L2_CID_HFLIP and
-     V4L2_CID_VFLIP) have an effect on the pixel order of the output colour
++``V4L2_CID_BINNING_FACTORS (integer menu)``
++
++    Horizontal and vertical binning factors. Binning combines several
++    horizontal, vertical or both pixel values into a single pixel. It is a way
++    to scale an image. Binning typically produces fairly good quality output.
++
++    Determines both horizontal and vertical binning factors for a camera
++    sensor. The values are encoded in the following way:
++
++.. flat-table::
++    :header-rows:  1
++    :stub-columns: 0
++
++    * - Bits
++      - Synopsis
++    * - 48--63
++      - Horizontal binning numerator.
++    * - 32--47
++      - Horizontal binning denominator.
++    * - 16--31
++      - Vertical binning numerator.
++    * - 0--15
++      - Vertical binning denominator.
++
++For instance, a value of ``0x0001000300020003`` indicates binning by 3
++(horizontally) * 3/2 (vertically).
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 3f0704a982b8..6be3d4a37127 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1087,6 +1087,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_CAMERA_ORIENTATION:	return "Camera Orientation";
+ 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
+ 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
++	case V4L2_CID_BINNING_FACTORS:		return "Binning Factors";
+ 
+ 	/* FM Radio Modulator controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+@@ -1426,6 +1427,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_HDR_SENSOR_MODE:
+ 		*type = V4L2_CTRL_TYPE_MENU;
+ 		break;
++	case V4L2_CID_BINNING_FACTORS:
+ 	case V4L2_CID_LINK_FREQ:
+ 		*type = V4L2_CTRL_TYPE_INTEGER_MENU;
+ 		break;
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index fd6465e9a743..ac0e38e98a38 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1088,6 +1088,7 @@ enum v4l2_auto_focus_range {
+ #define V4L2_CID_CAMERA_SENSOR_ROTATION		(V4L2_CID_CAMERA_CLASS_BASE+35)
+ 
+ #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
++#define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
+ 
+ /* FM Modulator class control IDs */
+ 
 -- 
 2.39.5
 
