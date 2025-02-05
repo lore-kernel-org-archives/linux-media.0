@@ -1,112 +1,102 @@
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F53120D51F;
-	Wed,  5 Feb 2025 02:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA48025A65D;
+	Wed,  5 Feb 2025 02:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738721926; cv=none; b=Uuei1kU5NAykcJPjJT5Gqfdae+LMrXe5vUFUS8tsQKN1XaxRNa3i++63HWtyyGm/S3NxJPwL1PbBVe+I2mEoYM1WvXnOzxkwdxvEOGCHxHzJrkfmJY7oECiuWp49XtdxXvdmwgMv4365r8fhAcWFKOJsnYOKxdNhmRqNDo8e9rc=
+	t=1738722236; cv=none; b=RftUyUwtUapNk637ouaIxgKEXTZhzKIT3VNHiGXFHte4MW3GiHNKw3tois15kOPUBhsr0v1l2byTUfWMGf/EqpRTNAfQIgNe0elhE0mWTshsT1BDLiF2uDRmHMb3uraOhpzJz3JSF2IPFqQGFE4O1Z6ZQ+POj5F1nwr6j0GB2Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738721926; c=relaxed/simple;
-	bh=qUuT77iTdaXvCS87a5KrQ3Pbb0JYPN+p43d3YwVVnZM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwl316RuT3SOLk6U5JsfZSWWWtahNxQGvDn4u0TDOotzSmB4sAmrpcQJDrrekbaNyvJ58XrNPflGrSeKOJ+VSyudcgSE3B2dpRTPLElaZQgBHFgQyIGTHRz3qgg4Lm0Q2NmeYp9pps8G4pK1npEKpupJ63mo4k05lTz9dF8mojA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hxBgZqX2; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hxBgZqX2"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=+Yfw3YYmQ42RTILNlusHnxgsov7m4pIrTmZuZQJm8vg=; b=hxBgZqX2iUarOki1
-	7a8QWu65p+dX7+GDq0vp/w+ZILVpp2qBdA4nku4KqP6VOUBSh25RpghyzVjLwthCB6wnX0IfLOaZZ
-	Tb7v46rnlaxD3Zkj06Tl36F9Z4m7cGRWkHlYLPMH9wCcc5H46+A30QxA9MGrb4ACZcL3/2b5hPKT1
-	CQ5Lbt12GaQAnS8zifoKCZabue0jwxQ1CGhT882CaG7MMhlJuur1tYXiaCNl0VrOW828L4F1BpRr1
-	1nW4O+bfn4qJiZZpSNkUA1jv2YvvqGR+mldSsH7DlFWMKkIeJNqVu9i+ixJdbsIqVeWhT0EMEQ/Qp
-	MP9g3vWWbjQYHSaeRw==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1tfUzr-00De3m-20;
-	Wed, 05 Feb 2025 02:18:35 +0000
-From: linux@treblig.org
-To: mchehab@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com
-Cc: linux-media@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] media: platform: mtk-mdp3: Remove unused mdp_get_plat_device
-Date: Wed,  5 Feb 2025 02:18:34 +0000
-Message-ID: <20250205021834.497105-1-linux@treblig.org>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1738722236; c=relaxed/simple;
+	bh=p8vQGlVfdVKj9VZZn4Wj5rhVsvLVygb3V8gJ24z44vU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=XNdBhoUaVp01jZd2wr/hUYZyvLnYR7C4TTi87d18jXPKdAqzpq7IgvOAU/kxyDHY/3YYrRcaFUVJGN6yJ8kLZlb2tZcpnkFmKPr2tYp2yi4hBvJBQAD9awylbSApFIphXbfDW3zaoR7yDnIQ32ah0LwVWh36ttyZZsWWZJev0LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Ynk875fYQz1V64K;
+	Wed,  5 Feb 2025 10:04:55 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id DF14518001B;
+	Wed,  5 Feb 2025 10:08:32 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 5 Feb 2025 10:08:32 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 5 Feb
+ 2025 10:08:31 +0800
+Message-ID: <c447e37b-57b5-f4c5-d34b-86b8430d36da@huawei.com>
+Date: Wed, 5 Feb 2025 10:08:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 0/9] Use HWMON_CHANNEL_INFO macro to simplify code
+To: Guenter Roeck <linux@roeck-us.net>, Andrew Lunn <andrew@lunn.ch>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-rtc@vger.kernel.org>, <oss-drivers@corigine.com>, <matt@ranostay.sg>,
+	<mchehab@kernel.org>, <irusskikh@marvell.com>, <andrew+netdev@lunn.ch>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <louis.peens@corigine.com>, <hkallweit1@gmail.com>,
+	<linux@armlinux.org.uk>, <kabel@kernel.org>, <alexandre.belloni@bootlin.com>,
+	<krzk@kernel.org>, <zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>,
+	<liuyonglong@huawei.com>
+References: <20250124022635.16647-1-lihuisong@huawei.com>
+ <fca9ca93-16e4-44db-8fbb-90bc6af952e7@lunn.ch>
+ <ca9e3821-b793-499c-8ae8-abc677adf375@roeck-us.net>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <ca9e3821-b793-499c-8ae8-abc677adf375@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-mdp_get_plat_device() was added in 2022 as part of
-commit 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3
-driver")
-but has remained unused.
-
-Remove it.
-
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |  2 --
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    | 19 -------------------
- 2 files changed, 21 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
-index 935ae9825728..222611e03a06 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.h
-@@ -12,8 +12,6 @@
- #include <linux/soc/mediatek/mtk-cmdq.h>
- #include "mtk-img-ipi.h"
- 
--struct platform_device *mdp_get_plat_device(struct platform_device *pdev);
--
- struct mdp_cmdq_param {
- 	struct img_config *config;
- 	struct img_ipi_frameparam *param;
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index f571f561f070..8de2c8e4d333 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -79,25 +79,6 @@ static struct platform_device *__get_pdev_by_id(struct platform_device *pdev,
- 	return mdp_pdev;
- }
- 
--struct platform_device *mdp_get_plat_device(struct platform_device *pdev)
--{
--	struct device *dev = &pdev->dev;
--	struct device_node *mdp_node;
--	struct platform_device *mdp_pdev;
--
--	mdp_node = of_parse_phandle(dev->of_node, MDP_PHANDLE_NAME, 0);
--	if (!mdp_node) {
--		dev_err(dev, "can't get node %s\n", MDP_PHANDLE_NAME);
--		return NULL;
--	}
--
--	mdp_pdev = of_find_device_by_node(mdp_node);
--	of_node_put(mdp_node);
--
--	return mdp_pdev;
--}
--EXPORT_SYMBOL_GPL(mdp_get_plat_device);
--
- int mdp_vpu_get_locked(struct mdp_dev *mdp)
- {
- 	int ret = 0;
--- 
-2.48.1
-
+在 2025/1/24 23:41, Guenter Roeck 写道:
+> On 1/24/25 07:08, Andrew Lunn wrote:
+>> On Fri, Jan 24, 2025 at 10:26:26AM +0800, Huisong Li wrote:
+>>> The HWMON_CHANNEL_INFO macro is provided by hwmon.h and used widely 
+>>> by many
+>>> other drivers. This series use HWMON_CHANNEL_INFO macro to simplify 
+>>> code.
+>>>
+>>> Huisong Li (9):
+>>>    media: video-i2c: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    net: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    net: nfp: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    net: phy: marvell: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    net: phy: marvell10g: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    rtc: ab-eoz9: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    rtc: ds3232: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    w1: w1_therm: w1: Use HWMON_CHANNEL_INFO macro to simplify code
+>>>    net: phy: aquantia: Use HWMON_CHANNEL_INFO macro to simplify code
+>>
+>> Please split these patches per subsystem. Maintainers generally have
+>> scripts to accept patches, and those scripts don't work when there are
+>> patches for other Maintainers mixed in. So you need 4 patchsets,
+>> media, net, rtc and w1.
+>>
+>> I would also like to see the HWMON Maintainers opinion on these. A
+>> patchset containing these have already been NACKed once. These patches
+>> do however look like valid cleanups. But are they just so you can do
+>> something bad in your vendor tree, which will never make it to
+>> mainline?
+>>
+>
+> I no longer comment on hwmon related changes outside drivers/hwmon/
+> unless there are blatant problems such as someone trying to use an 
+> obsolete
+> API or abusing the current API.
+>
+>
+All right. Let subsystem maintainer to decide if need to pick it up.
+>
+> .
