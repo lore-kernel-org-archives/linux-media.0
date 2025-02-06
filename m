@@ -1,128 +1,189 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3CC19F13B
-	for <linux-media@vger.kernel.org>; Thu,  6 Feb 2025 18:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CCB1ADFE3
+	for <linux-media@vger.kernel.org>; Thu,  6 Feb 2025 19:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738867252; cv=none; b=NeZoCtBWgE3Y21Xfz+CVkCQOAhxgI2oSfH934eY9hWQtU5iiMr4pp0iF2CoxgaIkPtR1N9wAhn+KGmHpCQztF+BUlh2+pGWedLsVJNEe3cQkU1weaG0PqDeCzYmbewLtySGDjNNhnDBfqfczafZpPVZQcwK8QuMc4NCLb7OpVwg=
+	t=1738871226; cv=none; b=dmrpkIDiTmQ/Q0nK04Xyg4+sxUF6DMuB1GV8u3qXUziGO/V4ouJ0jV19VSOLd8TTWBckoki1GRXNJKJ6wakGeOAWW+3Bub3hujs2LLePjF/LbSv+LnKqXe/9tO9onIjH+kEZOumOkEcqVPUJ2N6aNrjF7HhlMyz0SN5t/jFXlUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738867252; c=relaxed/simple;
-	bh=Lf6xAoUU7NXYgLYtGsalOIOw/EEkhs0Vm3ezNCm6rGY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o5kULp5IpqJR1TFQFVbT/B41ggf46GjTK1lbgKFv5POj7m8GJzoKX7/YIPVk6TyvsKmvSYvHU/3p7M1ws3f8L9reVAso+OQeoRd+Jd1stMLDzMn9WI4cAD7SVQ5UuyWfol7QsGXNlIDZjtn61UNTaE8ekupn1hH5FIYgAPZ2AYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a94DQrux; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1738871226; c=relaxed/simple;
+	bh=mMNoow2UZDhENW+B9WaXhVHze9zEaW5TMByarH1pFXs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=RMtzzlw1Whx+mIdkHjrj9VPkx8TZEG8E5SMNbDE/ce5MuFRSIOTBxeIePMoY+eGhM6L4Ao3xpp4wvbam7qLtjie/B9YJe1YuQTJJLTsnykZPKD4Ym0ApnzVPRjXwF4S23z1hBqJ3F8G2bK3AUe5YVjcqtl6D5uP+xAAIwr0VgSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Yl6iU8qZ; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a94DQrux"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30615661f98so13649931fa.2
-        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2025 10:40:48 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Yl6iU8qZ"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6dd43b08674so11656936d6.3
+        for <linux-media@vger.kernel.org>; Thu, 06 Feb 2025 11:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738867247; x=1739472047; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/1KLNT4FmOlGoDXvAF/z9DFY3XvpbckXqXugGtWIbQ=;
-        b=a94DQruxT7agE1iI+jz5k711GH1Zt4b/y2JJsktdmNJl7WbFdm6QLTYYEUMK+sVzCR
-         CAokLQaiB+G5a84ZlH570s4hQxAbrdvHpeavR1ywQrJPl1pRV3Q2D4nxNa/8OXOnHf/6
-         KdY3MjspdQmYzx7gY0aN+sO4auX78zYm71TbWyqbCqUna5mHb3I10GUP9AQpX2EQ6TEL
-         p64pBZrWC0nyAc6+sqUw/nPDDQOZRHZ7s6rZlYEidrKXr746QH1364cJmGtl+TXBeGFq
-         9ugkeEn08pbgCHOYxCYyLDUL1MHqzJjq3c17Z7iQR2beh26uOGMYROWj7UZsmC7Jl6n9
-         60Zw==
+        d=chromium.org; s=google; t=1738871223; x=1739476023; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hyffxiv8kaCor5UQiEFydJ9JjxN4h7wLUxKN/7HED+8=;
+        b=Yl6iU8qZjzQXRN0OaKPDn8fKTWN9nJLheQlLvQzK4uEdv/mi7W9KWCH/L/mOI6+Br7
+         EiTK2t83mzyVfcbZhu8AqxHG66WnNV4desxBY1oXNx2rZ2qf+wOVKEFx5fX4yhfPrzko
+         x8WpWO53+lYNhjC1aW0GI81hkBtHeuBmHxOzA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738867247; x=1739472047;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1738871223; x=1739476023;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B/1KLNT4FmOlGoDXvAF/z9DFY3XvpbckXqXugGtWIbQ=;
-        b=t0bYmd6seQ6rpC26Z/CWh1TPPO3jdRNkUiUFPNgAQPqPEtpv+gWfHmpLPodCV/xGwe
-         SpRdQXweGiSqR3ELuGscvB9EoQIHAI2QEo5m09gf6Pg5Fy4wmvq4G5HuyQU1l4zHdUB9
-         DJKCWW8RrRiqLR1gT+4apgPwrFtUraJiO7gWUDwc7OTA3h9PIPFuZKoGOxEjb1VluUPf
-         0VHcvIFXOlJOb6DHnZ6E5uENoJ3pRtwxYzt4afbfUb/tnzfqoqiwP7GI7fxWqn4u7sAt
-         p2fne9ODR8Qa86+y5nV3RQ5AnAmFmxAotY4jWvUKR2CwOY0PHzl58G4vBlBUCpLiX0LN
-         0JpA==
-X-Forwarded-Encrypted: i=1; AJvYcCUaIVR8JLA5hKk24HklTF0BR0AT4Fj0UmwsBUE5ROnRvTGVCLbIQd92SUr+ojUpHapYtkSc6j1VqlNhbw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK99oiET1SVzQv4aucWMRRPvYWrr1+vhoH/h8KBzy1HXAQiu58
-	gEI5ae0yVZg3wc4DMSinV4l/Rzj20yY6+Zfyj/j0BMYkXXfaSUAEmK652OkEYtU4qJ5xAHVCStD
-	37mke9PyX9E6Hn5yUF86LKGW9cfZcLgsZXyqrPw==
-X-Gm-Gg: ASbGncu9uEo9JprlEUO2dN8zqiqBMsMuyc2uTm64mSOMSqTzYaQG9sKBAwnDU8adw5B
-	nKtr8Mhe5pdGEE6hpIfnSyvCVtj9h3YpO0NJYiRLU6H2z3oGKWBj5hsPzqLOsukekmZL7rW8=
-X-Google-Smtp-Source: AGHT+IHspHnGQVYfpoYQGi9ctVZueJrpds613XgEY1o23R9cbS1fqYkeI3XWSr+wkrN1AUux/D6h/Xqji3ktxx+ndmY=
-X-Received: by 2002:a2e:bd8b:0:b0:300:38ff:f8de with SMTP id
- 38308e7fff4ca-307e57fd2f3mr198711fa.16.1738867247273; Thu, 06 Feb 2025
- 10:40:47 -0800 (PST)
+        bh=Hyffxiv8kaCor5UQiEFydJ9JjxN4h7wLUxKN/7HED+8=;
+        b=OXKh7y+vp/U+MgbpfcLdyV9X5/i0swUZowVfsKMw6CWMVrA6pY/jjNZwGEq0tMcNSm
+         Olh/AFUG///vjs6bGePWm0c2dsgAriRTvfgg9BT3zgucmWA+eO/OnRvYLcSzwNlKl062
+         5Jo3hDsOj+ZBK/x5HKOcPEGHpvDzOMvfcu3Da6apXeJHJt5mWZwCuFhFjmfPR9XCqIDu
+         XgeIXrhwJ8vFonDgLkrU5623+hCnZLLRmrIQBwRG5/9cNlpckx6UiK/jtcHsLjSouCVM
+         9oGUJTHuNLL9w47Ud4ZQ+peWtc3okrWPR1cOJlR5WimGCINsFugcr7nRlGOq4ucKTeW7
+         9Z5g==
+X-Gm-Message-State: AOJu0Yx0sCFWcYsg+hidxQyExJ9lb9ixuXYnbKvHAf1f8HD+vzKaEZpo
+	oUv1c1pqvBx95rxDdP6i21eS8qkd5+D3JUSOfpxWiuR7PKzdjPqOMHx2NErfCw==
+X-Gm-Gg: ASbGncvh6cCwVLVMzifgJzKZC65m4qp9BXxVhBY/CasOPeXms1llDnMp/h79tcT5q9u
+	TXL9i5+urFt5rbKv0H5DLw2Zy/K9A2ORCHSbygetLMXtCy+LG3OxVitS0SUVBLPYDpmEUlw3UzI
+	HgXPfRxMK4i7lca9LFih8TTZdi+yXrKqN9+f72Jo1CARQvRBMbF3zjYpyUTidFcHCNrBbMZLY0q
+	M0G2vj4rXo78pEpstG6Oxn32zoM2mZhVliyy+OQ70XilQuswxMGujwTCraFYCx6imGDXVTyHOUo
+	lIhAoiWl6Bfc/r3iKGv/8CRI7dCcrVg1igt69fHvDe9A3/vXOtUZKWKF8D7/JcTYJA==
+X-Google-Smtp-Source: AGHT+IEgE+n5v/MPwAYZl4Ef7ywjZ3quxd0ziOMmp4+4iq3xO+MT6vadnlGqhIKHStXrrBpnsY9zPQ==
+X-Received: by 2002:ad4:5fca:0:b0:6d8:8fdd:9797 with SMTP id 6a1803df08f44-6e445720e48mr4110326d6.36.1738871223447;
+        Thu, 06 Feb 2025 11:47:03 -0800 (PST)
+Received: from denia.c.googlers.com (5.236.236.35.bc.googleusercontent.com. [35.236.236.5])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e43bacb6c5sm8756386d6.102.2025.02.06.11.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 11:47:03 -0800 (PST)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Thu, 06 Feb 2025 19:47:01 +0000
+Subject: [PATCH v3 2/6] media: uvcvideo: Move
+ usb_autopm_(get|put)_interface to status_get
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250131163408.2019144-1-laurentiu.palcu@oss.nxp.com> <20250131163408.2019144-11-laurentiu.palcu@oss.nxp.com>
-In-Reply-To: <20250131163408.2019144-11-laurentiu.palcu@oss.nxp.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 6 Feb 2025 19:40:36 +0100
-X-Gm-Features: AWEUYZmtqR_uDonJm17O7Egr0R6Qg4Q94CdBZrZSOSqXSwlcXN7zzDhUzAF6Dck
-Message-ID: <CACRpkdYo9690n57FYAM1heSU+zGTKuze8B3d+Q4Py=HJr34-Eg@mail.gmail.com>
-Subject: Re: [RFC 10/12] staging: media: max96712: add gpiochip functionality
-To: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Cc: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250206-uvc-granpower-ng-v3-2-32d0d7b0c5d8@chromium.org>
+References: <20250206-uvc-granpower-ng-v3-0-32d0d7b0c5d8@chromium.org>
+In-Reply-To: <20250206-uvc-granpower-ng-v3-0-32d0d7b0c5d8@chromium.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mauro Carvalho Chehab <mchehab+samsung@kernel.org>, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.13.0
 
-Hi Laurentiu,
+Right now PM operations are always called at the same locations as
+uvc_status_(get|put).
 
-thanks for your patch!
+Combine them into uvc_status_(get|put). This simplifies the current
+code and future PM changes in the driver.
 
-On Fri, Jan 31, 2025 at 5:35=E2=80=AFPM Laurentiu Palcu
-<laurentiu.palcu@oss.nxp.com> wrote:
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_status.c | 38 +++++++++++++++++++++++++++++++++-----
+ drivers/media/usb/uvc/uvc_v4l2.c   | 11 +----------
+ 2 files changed, 34 insertions(+), 15 deletions(-)
 
-> The deserializer has GPIOs that can be used for various purposes. Add
-> support for gpiochip.
->
-> Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index ee01dce4b783..caa673b0279d 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -382,7 +382,7 @@ void uvc_status_suspend(struct uvc_device *dev)
+ 		uvc_status_stop(dev);
+ }
+ 
+-int uvc_status_get(struct uvc_device *dev)
++static int _uvc_status_get(struct uvc_device *dev)
+ {
+ 	int ret;
+ 
+@@ -399,13 +399,41 @@ int uvc_status_get(struct uvc_device *dev)
+ 	return 0;
+ }
+ 
+-void uvc_status_put(struct uvc_device *dev)
++int uvc_status_get(struct uvc_device *dev)
++{
++	int ret;
++
++	ret = usb_autopm_get_interface(dev->intf);
++	if (ret)
++		return ret;
++
++	ret = _uvc_status_get(dev);
++
++	if (ret)
++		usb_autopm_put_interface(dev->intf);
++
++	return ret;
++}
++
++static int _uvc_status_put(struct uvc_device *dev)
+ {
+ 	guard(mutex)(&dev->status_lock);
+ 
+ 	if (dev->status_users == 1)
+ 		uvc_status_stop(dev);
+-	WARN_ON(!dev->status_users);
+-	if (dev->status_users)
+-		dev->status_users--;
++
++	if (WARN_ON(!dev->status_users))
++		return -EIO;
++
++	dev->status_users--;
++	return 0;
++}
++
++void uvc_status_put(struct uvc_device *dev)
++{
++	int ret;
++
++	ret = _uvc_status_put(dev);
++	if (!ret)
++		usb_autopm_put_interface(dev->intf);
+ }
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 856eaa23e703..5d4e967938af 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -636,20 +636,13 @@ static int uvc_v4l2_open(struct file *file)
+ 	stream = video_drvdata(file);
+ 	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
+ 
+-	ret = usb_autopm_get_interface(stream->dev->intf);
+-	if (ret < 0)
+-		return ret;
+-
+ 	/* Create the device handle. */
+ 	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
+-	if (handle == NULL) {
+-		usb_autopm_put_interface(stream->dev->intf);
++	if (!handle)
+ 		return -ENOMEM;
+-	}
+ 
+ 	ret = uvc_status_get(stream->dev);
+ 	if (ret) {
+-		usb_autopm_put_interface(stream->dev->intf);
+ 		kfree(handle);
+ 		return ret;
+ 	}
+@@ -685,8 +678,6 @@ static int uvc_v4l2_release(struct file *file)
+ 	file->private_data = NULL;
+ 
+ 	uvc_status_put(stream->dev);
+-
+-	usb_autopm_put_interface(stream->dev->intf);
+ 	return 0;
+ }
+ 
 
-Since you are using CONFIG_GPIOLIB unconditionally you need
-to add
+-- 
+2.48.1.502.g6dc24dfdaf-goog
 
-select GPIOLIB
-
-in the Kconfig for this driver, or the autobuilder will soon start to
-spam you with compilation errors.
-
-> +static int max96712_gpiochip_probe(struct max96712_priv *priv)
-> +{
-> +       struct device *dev =3D &priv->client->dev;
-> +       struct gpio_chip *gc =3D &priv->gpio_chip;
-> +       int i, ret =3D 0;
-> +
-> +       gc->label =3D dev_name(dev);
-> +       gc->parent =3D dev;
-
-I don't think you need to assign parent. (Default)
-
-> +       gc->owner =3D THIS_MODULE;
-
-Or this. (Default)
-
-> +       gc->ngpio =3D MAX96712_NUM_GPIO;
-> +       gc->base =3D -1;
-> +       gc->can_sleep =3D true;
-> +       gc->get_direction =3D max96712_gpio_get_direction;
-> +       gc->direction_input =3D max96712_gpio_direction_in;
-> +       gc->direction_output =3D max96712_gpio_direction_out;
-> +       gc->request =3D gpiochip_generic_request;
-> +       gc->set =3D max96712_gpiochip_set;
-> +       gc->get =3D max96712_gpiochip_get;
-> +       gc->of_gpio_n_cells =3D 2;
-
-Isn't that the default? Do you need to assign this?
-
-Other than that this looks good, so with the small fix above:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
