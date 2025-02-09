@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD571474B8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCC779CF;
 	Sun,  9 Feb 2025 21:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739137938; cv=none; b=j4vTSiYYc+hjA1NziYjryAHtsmzPTC2IX25V5Xk1SoXbsYQZJuxbIit1RLgG77ZchiWLI3dhtcKJN5SCJlKKcUcGwYVnTEbQfv3rlUm0FlwyzURhASlTfP/fvzcIpXVQ03aWA9K/PABn0awUWIs1JKGktwhNf51rzKSWYgm1f/c=
+	t=1739137938; cv=none; b=OjrDGwNeo3KovEHl25TklT4ijqBp7fclGLq3O2nYFarNjaJWJdJyBYd4OUIitMFX8XtaJx8I7v3XZHp28LAKarMgI5p4tdi9qrsMblupyyKBhmeu6SiUtZRd3bpvnohI6/mA4mVwrOMsmtHn/Jj8hXVhl75BPhkMaTKnXEYXupM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1739137938; c=relaxed/simple;
-	bh=uLOKFkONbrwKQL0GVTL+RBqZQj2F5LXwTUf/BvmTzYQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FjU4e8iTWwsizzY2b9IkOZOiu4ZFtdouKu8WUz0Ez63rWfS8iE9ocygBQXWwK7CxXS7pp0TS/ZCYvSRe+wpsh5Ro8Auhl2CucdrCUki4xP8IK1BXC0cjlYgWqbLYfoVwY52qWh4HOSq1a2QcTOZ7wzvsqVyZfocWbCLQcBNpRfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OjTZN1VC; arc=none smtp.client-ip=10.30.226.201
+	bh=iSJ5jtMLBZnq74EPv4uYBA24MtpHvrIdYdyloL79HmQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=u71sYrrFWQknAU/R0NHhM+VLtLmd8zwZHcBJ6rEjrDt0Z/yP49BtDdx/y9LMxcEdgEzc0bBx4zt2gNskEZo6JbZiMzldubXclrABqpTXv1c2H2xxO0sA2a9Klt6uVXJ04CXmKyIccaZbBgVR5mcDj9awqzMdpJEBxSnYJKcohbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9kWHUXo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OjTZN1VC"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCB07C4CEDD;
-	Sun,  9 Feb 2025 21:52:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9kWHUXo"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 10978C4CEE8;
+	Sun,  9 Feb 2025 21:52:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739137937;
-	bh=uLOKFkONbrwKQL0GVTL+RBqZQj2F5LXwTUf/BvmTzYQ=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=OjTZN1VCtSWYw8Ihc1ht1u/VWLVtPL+qCcfWCMv4IYJT+MSO6kY5SD59DzC7OS7cT
-	 fJf+b6yKbehPHS81fQp5CwdpAPxWE45RzG+pK6WkBCcbHUXOsHQiazOg+hf2Bdiu1Z
-	 gOsW4xnGIfYqDw00qv8Ps94lfOTre5/s14y9ClNbd0AD0QR6oeCQv1wZiFD3rf4H5g
-	 OwI4IwLmlSx3KbqmNnmd9udILQNlPJQlh4KMeS4oZzLpaRODRWjentZFOtPE+yAHQi
-	 TUuXi8+m4CcLzC6r3ecb8bCzfr3xNL3sJk4EjPYFbFGqdSPnqat5EXJFHupvloA/+a
-	 qrMDBbrQYOjUg==
+	s=k20201202; t=1739137938;
+	bh=iSJ5jtMLBZnq74EPv4uYBA24MtpHvrIdYdyloL79HmQ=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=G9kWHUXoYQjCFzivzfaWKClkbHpfpWhtKxAkxvfg2N6smufoztLbC2yKlEuC1y7bc
+	 SdF2RqPLQIRPteh0pdj3m3N9iPpjC98wqfwK3FaKEad8Uu/MfDTcjpm3bpr5C2KK4R
+	 TsGnv91SmFZT5fV5E774UPUuTJgJNhbmiZYGoAGJWZU+dTbwsQWMzLA4JqbeDRG75a
+	 D3SKwr1m+wjMUDGsO9MYlhCtnI6Ip2rnAsxUDs0GlXwJnhCsQ+LuSYmaNW+rRD+Zne
+	 zoQIkeIZZQRiTQ5XQ20qQ5fJMHChos5dSyZ8u2DoagDpoi63U3a9bzWbasU9M720SS
+	 ttzJEtwb325XA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9095C0219B;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC9DCC021A2;
 	Sun,  9 Feb 2025 21:52:17 +0000 (UTC)
 From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
-Subject: [PATCH v3 0/2] media: i2c: dw9719: Add device tree bindings for
- the VCM
-Date: Sun, 09 Feb 2025 22:51:56 +0100
-Message-Id: <20250209-dw9761dts-v3-0-14d3f00f0585@apitzsch.eu>
+Date: Sun, 09 Feb 2025 22:51:58 +0100
+Subject: [PATCH v3 2/2] media: i2c: dw9719: Add of_match table
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,12 +40,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAHwjqWcC/42QzW7DIBAGX8XiXCxYbH58yntUOWBYBw6OUyBO2
- sjvXuKmUo89joRmh+9BMqaImQzNgyRcY47LuYJ4a4gL9nxCGn1lAgx6BkxSfzNKcl8ydd455hT
- vRm5JfX9JOMX77no/Vp7SMtMSEtpfQ8c564EJ2esWjBKKcho8nhb0eEjogy2tW+aXLOHHtfaUH
- yOZMWe79wzN/13Dyp+60WakFedYhkZPUoJxjNVyIzwIyUF23AnJFCrda27QKDuS5y9CzGVJn/t
- AK+wlry30ny1WqOcdE3rSFqbRdAd7ieUru9DilRy3bfsG+6/qdmoBAAA=
-X-Change-ID: 20250206-dw9761dts-cdcc0c714b1a
+Message-Id: <20250209-dw9761dts-v3-2-14d3f00f0585@apitzsch.eu>
+References: <20250209-dw9761dts-v3-0-14d3f00f0585@apitzsch.eu>
+In-Reply-To: <20250209-dw9761dts-v3-0-14d3f00f0585@apitzsch.eu>
 To: Daniel Scally <djrscally@gmail.com>, 
  Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -56,11 +52,11 @@ Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
  linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739137936; l=1009;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739137936; l=1275;
  i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
- bh=uLOKFkONbrwKQL0GVTL+RBqZQj2F5LXwTUf/BvmTzYQ=;
- b=IiP+hQdUKjqTHKOqSuxW1WjW+yGfW8hmUydgX6oR5AURPoKBy3XBShxsYFyalzKIFzRVTHQDS
- TolWnwqv4ZYB5rNwKTkTe4pScljy2iThcbsn3Uoipz2JDLP5bH9RXHg
+ bh=mGgvurDestv373N8gVyPxAuJTKfXOnE3tkcTk8bJG1E=;
+ b=XzW00rKO2isZu4IP2pkHVJ3PcZy+noiay7NCF3yEykQ/JGT+96Fxt4+ep/3N5XW4x+9Ld5y4j
+ MnH//KJxEvJD02Wk69bbm3tEn8zaqJJ2w4fRRLw4q9qkbewDCKSktzS
 X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
  pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
 X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
@@ -68,34 +64,45 @@ X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
 X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
 Reply-To: git@apitzsch.eu
 
-Document the Dongwoon DW9719 and DW9761 dt-bindings and add the related
-of_match table.
+From: André Apitzsch <git@apitzsch.eu>
+
+Add of_match table for "dongwoon,dw9719" and "dongwoon,dw9761"
+compatible string. This fixes automatic driver loading when using a
+device-tree, and if built as a module like major linux distributions do.
 
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
-Changes in v3:
-- Add patch to document devicetree bindings
-- Add "i2c:" to the subject of the 'Add of_match table' commit message
-- Link to v2: https://lore.kernel.org/r/20250208-dw9761dts-v2-1-c038f8a2fb94@apitzsch.eu
+ drivers/media/i2c/dw9719.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Note, there was no v1.
+diff --git a/drivers/media/i2c/dw9719.c b/drivers/media/i2c/dw9719.c
+index 032fbcb981f20f4e93202415e62f67379897a048..6c76212d4c698462a9128d26ef95f0eccb243c7c 100644
+--- a/drivers/media/i2c/dw9719.c
++++ b/drivers/media/i2c/dw9719.c
+@@ -360,6 +360,13 @@ static const struct i2c_device_id dw9719_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, dw9719_id_table);
+ 
++static const struct of_device_id dw9719_of_table[] = {
++	{ .compatible = "dongwoon,dw9719" },
++	{ .compatible = "dongwoon,dw9761" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, dw9719_of_table);
++
+ static DEFINE_RUNTIME_DEV_PM_OPS(dw9719_pm_ops, dw9719_suspend, dw9719_resume,
+ 				 NULL);
+ 
+@@ -367,6 +374,7 @@ static struct i2c_driver dw9719_i2c_driver = {
+ 	.driver = {
+ 		.name = "dw9719",
+ 		.pm = pm_sleep_ptr(&dw9719_pm_ops),
++		.of_match_table = of_match_ptr(dw9719_of_table),
+ 	},
+ 	.probe = dw9719_probe,
+ 	.remove = dw9719_remove,
 
----
-André Apitzsch (2):
-      dt-bindings: media: i2c: Add DW9719 and DW9761 VCM
-      media: i2c: dw9719: Add of_match table
-
- .../bindings/media/i2c/dongwoon,dw9719.yaml        | 45 ++++++++++++++++++++++
- drivers/media/i2c/dw9719.c                         |  8 ++++
- 2 files changed, 53 insertions(+)
----
-base-commit: 8f6629c004b193d23612641c3607e785819e97ab
-change-id: 20250206-dw9761dts-cdcc0c714b1a
-prerequisite-message-id: 20241105203658.29737-1-hdegoede@redhat.com:v1
-prerequisite-patch-id: b0a57666bd20b97291583c3052065dc314a37e79
-
-Best regards,
 -- 
-André Apitzsch <git@apitzsch.eu>
+2.48.1
 
 
