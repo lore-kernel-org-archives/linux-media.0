@@ -1,145 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501D01C5D7A;
-	Mon, 10 Feb 2025 10:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6EB15624D;
+	Mon, 10 Feb 2025 10:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739183811; cv=none; b=mocxqjThRTWeXNFyGUzxV55BVOMJ4fDMoLDh5fCVL6dQPgdZ4977jnRISfYUns1mMmxARxnQdir26QfqQJ+XWIHbknwvDQeM3KVywkhpFklpy/CHT4TveE96r2qHPyzPxgtS8P18XfQlE562Z85Bi0NhfP9EOnT5j26cD/epfuA=
+	t=1739184068; cv=none; b=JTzwPM4XguSpOEHvw0PR+EIz/S6YErFX2MyI1PFLBw3FgtCsUXVrutTWBRCj4Z8GlgGtrFY81oqNKgL5nak7USn3Ke06gHJfp+ZFixxW4C6wsH/pZSOD/WN0mG4nsTofy2mlkd/vQ0WUin/ATTVaVRbD7Tz+tW/XYL3JS34gN2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739183811; c=relaxed/simple;
-	bh=3ZxFbYVwhWKY4oRGzC/bFeJgAsBMSSNDEedS0duoSi4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UO/hZXPjzCo3AGDDxOkVfppzoAl1/EwTzznRr54Cg5E6Gn/2Lr+ovPuK6A/9jFDP6UOtcLi7sKv3xsufG2qLZJu7eHpi+zaiAFzOf6NCxh70YwN3ACdVXiUZki2a5yOAYgWq2DrXpDVhW4IOGiNcjdQjfuiupa8CQv41634wE18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XGR00zEK; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1739184068; c=relaxed/simple;
+	bh=14wXU91BgLiV3VpIcmWzwyO6W4OiWYnjYTvyVXydxrk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=UJowPKaheEMc/ZbUMdlBkLKZXsXwDa4kA23ysnqydbO7Zmop4VuzK0YPkwaxLe188EIxifRIo5yDEmsV+NFf8gKUAUBf5z9qhFJPAP6Ej9SfdYaJhXBxAmzxWKfUDEvJ0dvSI86R3Jo3hXS9x2q0AtDmTzRcEjAE4sYQQDbuMdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Jm4x1wCv; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XGR00zEK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739183809; x=1770719809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3ZxFbYVwhWKY4oRGzC/bFeJgAsBMSSNDEedS0duoSi4=;
-  b=XGR00zEKkCO3H+mKwPsgQlh5bDhJt2inCK98TnFMTy30KhOo/agKESLS
-   jLgcrYVENj7T4Hec+1BmzEE4TmV0QKbQ9fkMytHkoBBcqhjBfQQ7DYFAN
-   xMcMvtuSj+WNrAPW90w+PhOTUZIkpfBljRnrlMCJUQwE3n3gpCRMStwfx
-   BMarux++QpRFAFTc8/1MER0vDW832S0iKGIjFuAHvv5Sz1XjhQjP/hpFU
-   +xBch1gu/EGKkM7SQm87FA9vvWYJRMkCFFxwQwSo6IXA6I7g0Uq3HyYlQ
-   OYphSHo9NGQIXcCf029B2N5eq9hFMLo8ZDhVmut+mj7bdZwxwKQWfpFDo
-   Q==;
-X-CSE-ConnectionGUID: jknd9ziJT7qERCKcEEcUjw==
-X-CSE-MsgGUID: fhGJ4nxLRy+6e7nWbbqeTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="40027310"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="40027310"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 02:36:28 -0800
-X-CSE-ConnectionGUID: YOigyrWBT4CkDdWeIBkvHw==
-X-CSE-MsgGUID: Tx7nrAnxR0CbrSj7XY8Qnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="112090994"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 02:36:26 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 6E481120433;
-	Mon, 10 Feb 2025 12:36:23 +0200 (EET)
-Date: Mon, 10 Feb 2025 10:36:23 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Val Packett <val@packett.cool>, Daniel Scally <djrscally@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] media: dt-bindings: i2c: add DW9719/DW9718S VCM
- binding
-Message-ID: <Z6nWp3bpoiqpvpS-@kekkonen.localdomain>
-References: <20250210082035.8670-1-val@packett.cool>
- <20250210082035.8670-2-val@packett.cool>
- <c2ff273a-bac5-4fa3-8339-ab722c9e63bf@kernel.org>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Jm4x1wCv"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51A9emOV003742;
+	Mon, 10 Feb 2025 11:07:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	rZ3rqymKTcOrRHYBOJFcKi61/VkXrUXwCyZUwPho0Fk=; b=Jm4x1wCvVl0BJIfw
+	WdaZ/oFSJeAgQwdPD8TmJ7Bl+F1CWSrqpdw7yzrIuq1XEVlnJzzrQDxaJJqPOdKY
+	uwBzA1ROdhsVymQz/6U6z6j7XWZYP3li4Mp87AJni2gzut5kkR3Q5v8qabeHFrhm
+	lhSUbtdu9OndZAU/X7V4ttt935HZ/QkpENx2WnnhTcHTnyYWM/UuSt+oFzJy8gEk
+	dUk0h8Agk/TP0MJ/vEjVXIOsFtUPhcHwvCHFhrqIbJZX4cCzPEbDk5aBGtv43U2V
+	RexB7um6WJW1tAHutQJPAtCOlS6vNjaq3pBZ78aqVm8mX1u4nnQzugZuvRkQl3c9
+	lt/YCg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44phq3kvx5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Feb 2025 11:07:13 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B2B9A4004B;
+	Mon, 10 Feb 2025 11:06:13 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AD9E82BEF84;
+	Mon, 10 Feb 2025 11:05:01 +0100 (CET)
+Received: from localhost (10.252.6.236) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 10 Feb
+ 2025 11:05:01 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+Date: Mon, 10 Feb 2025 11:04:30 +0100
+Subject: [PATCH 1/2] ARM: dts: stm32: add missing dcmipp kclk clock-names
+ in stm32mp135.dtsi
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2ff273a-bac5-4fa3-8339-ab722c9e63bf@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20250210-6-14-stm32-media-fixes-v1-1-c64ebe9af8bb@foss.st.com>
+References: <20250210-6-14-stm32-media-fixes-v1-0-c64ebe9af8bb@foss.st.com>
+In-Reply-To: <20250210-6-14-stm32-media-fixes-v1-0-c64ebe9af8bb@foss.st.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin
+	<mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot
+	<sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marex@denx.de>
+CC: <devicetree@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>
+X-Mailer: b4 0.14.2
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-10_05,2025-02-10_01,2024-11-22_01
 
-Hi Krzysztof,
+The dcmipp driver requires the first clock to be named as kclk hence
+add a missing kclk clock-names within the dcmipp node in stm32mp135.dtsi.
 
-On Mon, Feb 10, 2025 at 09:29:25AM +0100, Krzysztof Kozlowski wrote:
-> > +  dongwoon,vcm-freq:
-> > +    description:
-> > +      The switching frequency for the voice coil motor.
-> 
-> Frequency is in Hertz, so use proper property unit suffix. BTW, you
-> cannot add incorrect properties post-factum based on already accepted
-> ACPI driver. This would be nice bypass of review, right?
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ arch/arm/boot/dts/st/stm32mp135.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-What's actually configured here is the divisor (10 MHz clock, divisor seems
-to be value + 2). It's similar to existing
-Documentation/devicetree/bindings/media/i2c/dongwoon,dw9768.yaml . I prefer
-this as it's much easier to use that in a driver (think of having values
-like 1428571 in DT, too).
-
-> 
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Drop.
-> 
-> minimum/maximum constraints
-> 
-> > +
-> 
-> No reset/powerdown gpios in the hardware?
-> 
-> Missing required block.
-> 
-> > +allOf:
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: dongwoon,dw9718s
-> > +    then:
-> > +      properties:
-> > +        dongwoon,vcm-freq:
-> > +          default: 0
-> > +          enum:
-> > +            - 0    # 5.00 MHz
-> > +            - 1    # 3.33 MHz
-> > +            - 2    # 2.50 MHz
-> > +            - 3    # 2.00 MHz
-> > +            - 4    # 1.67 MHz
-> > +            - 5    # 1.43 MHz
-> > +            - 6    # 1.25 MHz
-> > +            - 7    # 1.11 MHz
-> > +            - 8    # 1.00 MHz
-> > +            - 9    # 0.91 MHz
-> > +            - 10   # 0.83 MHz
-> > +            - 11   # 0.77 MHz
-> > +            - 12   # 0.71 MHz
-> > +            - 13   # 0.67 MHz
-> > +            - 14   # 0.63 MHz
-> > +            - 15   # 0.59 MHz
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: dongwoon,dw9719
-> > +    then:
-> > +      properties:
-> > +        dongwoon,vcm-freq:
-> > +          default: 0x60
+diff --git a/arch/arm/boot/dts/st/stm32mp135.dtsi b/arch/arm/boot/dts/st/stm32mp135.dtsi
+index 834a4d545fe448c15feea3a3acd169da1da73e91..f9a49e7ab1f697ba8b76604cbb3e584d32a937df 100644
+--- a/arch/arm/boot/dts/st/stm32mp135.dtsi
++++ b/arch/arm/boot/dts/st/stm32mp135.dtsi
+@@ -14,6 +14,7 @@ dcmipp: dcmipp@5a000000 {
+ 			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+ 			resets = <&rcc DCMIPP_R>;
+ 			clocks = <&rcc DCMIPP_K>;
++			clock-names = "kclk";
+ 			status = "disabled";
+ 
+ 			port {
 
 -- 
-Regards,
+2.34.1
 
-Sakari Ailus
