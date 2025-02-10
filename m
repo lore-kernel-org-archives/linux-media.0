@@ -1,186 +1,116 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A111C4A0A;
-	Mon, 10 Feb 2025 10:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1C21C54AF;
+	Mon, 10 Feb 2025 10:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181802; cv=none; b=cNlSlXZbQg6FHLPWgwrvNKIR23yprqntOg9uYSrOozADiwY9fAnOxIcbFnwDieX6CwjJqAyzI4Fi/ZOxKlKUrN88o2KNjJtcCozOAtC37amkk0XMs1/qALWPWFxKrWD/wwYzjgXgdVtxMHB0ElnnuSh3jvaJ9ORsO19zs4fmxdY=
+	t=1739182021; cv=none; b=hNcLXTCep0qNZUlliWPQSZLys+v/E/EO7Zl2zPGOnT3IQx6nXkDBEctJAoW5pq89e4xsT5K4cnkt3S686WM2YOlAuMoCg2TY/D0bZdXmLYMU4Bq+OFdAy6Wo2B/DwBpnTuLXuB5fvttmOYeDpSVximpqodaHJpxXxDOo/KLh1Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181802; c=relaxed/simple;
-	bh=DYI8FPWv2nrFA0bms9nZRqfoHZqOqiWHzVO7WBrXD7c=;
+	s=arc-20240116; t=1739182021; c=relaxed/simple;
+	bh=5uoVeSj0QN4EeZcCrlskyNvROXSluRl4IF+26szp08I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ht47ZUb1sd7wRmzBeFXmgumD5a4lsN8wCmS/e4MrLlwuE3+J+46rBtgFxx71if4bMazGrDj5cOcGmKDewY9U9r8qiRP6e2BpULVDC3ymEr2Xd4+Qz4CpvedaKkrLs5GvbWJ1sRaD7roGSU72rp+XRwFa4y8I5/1vGRZC3A0lNAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=e9JIjGIb; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=NtVEttD/OsX2Af/yh5fOHPfEyoR2y0DF4dH4gtY+Z4nyXbs7/HQPVcsV55lXCSQxSYdoj/8IEq+FvoP1MsFeqYIX6+Kw+GeaDZB04nNoaAQODGtsiIGh2aLdXWbkEviP4JDi1BT6IIh5nkl59uE30sPhYaSmM0Q4l3WycDS24ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kcs5z9wH; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e9JIjGIb"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BE35322E;
-	Mon, 10 Feb 2025 11:02:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1739181720;
-	bh=DYI8FPWv2nrFA0bms9nZRqfoHZqOqiWHzVO7WBrXD7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e9JIjGIbxAbHFBZNoHhzMtWVU3aQ9YxlVTuCOKgJi2aq03Ua4rQA6/NKopcvO1WuG
-	 cHjfxeUHiqkeHdDEuwFrBPi5JqWzg2Kq/4BvNV1sd9vHfM8lVjcq46bd0u3vXU42pb
-	 vq62ObCJEh+arMeDvr5kTxRVUI5tnOOcDdKA4qGI=
-Date: Mon, 10 Feb 2025 12:03:07 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: "zhangzekun (A)" <zhangzekun11@huawei.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, robh@kernel.org,
-	saravanak@google.com, justin.chen@broadcom.com,
-	florian.fainelli@broadcom.com, andrew+netdev@lunn.ch,
-	kuba@kernel.org, kory.maincent@bootlin.com,
-	jacopo+renesas@jmondi.org, kieran.bingham+renesas@ideasonboard.com,
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-	olteanv@gmail.com, davem@davemloft.net, taras.chornyi@plvision.eu,
-	edumazet@google.com, pabeni@redhat.com, sudeep.holla@arm.com,
-	cristian.marussi@arm.com, arm-scmi@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-media@vger.kernel.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	chenjun102@huawei.com
-Subject: Re: [PATCH 1/9] of: Add warpper function
- of_find_node_by_name_balanced()
-Message-ID: <20250210100307.GA2966@pendragon.ideasonboard.com>
-References: <20250207013117.104205-1-zhangzekun11@huawei.com>
- <20250207013117.104205-2-zhangzekun11@huawei.com>
- <Z6XDKi_V0BZSdCeL@pengutronix.de>
- <80b1c21c-096b-4a11-b9d7-069c972b146a@huawei.com>
- <20250207153722.GA24886@pendragon.ideasonboard.com>
- <c48952c7-716c-4302-949c-2c66ea102a3e@huawei.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcs5z9wH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739182020; x=1770718020;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=5uoVeSj0QN4EeZcCrlskyNvROXSluRl4IF+26szp08I=;
+  b=kcs5z9wHLHeh+oVGEtJrqvRYRRLDCb4vbj/upCCm8jyNEL8njo1TlLIP
+   rAZ2NumUDroMEQu9f9gYHYsmYcD+vy9/HIT4TdLQC7X7Kvtj9W/audGBH
+   rsds0lK5Fs7Sqj4NGsOG0uoSIIFRYrKT4gvVZzqzfJiorxBVoLEY37PQL
+   VKWysPLdCOmk50jk41IxZoECd/zfIULTuuOAgaKJTi63kkN80wkqyCB9T
+   d+yTLAe4F10Ng2oshXGza+QwNWy7uXep2Gmm+zy064+314vglGFLGGYF6
+   T+bI/NkndkbBWULNp2Qzf67yHIzxJh1HxNEUBhddDLuafrDsJUXSakWmn
+   Q==;
+X-CSE-ConnectionGUID: gTZZ8kYRRByoLnHb4lfNKg==
+X-CSE-MsgGUID: k3aytTCqT0ymGwYD4edwtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="39441232"
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="39441232"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 02:06:59 -0800
+X-CSE-ConnectionGUID: 7wCeTMN+S+WsBMFPG+3Jsg==
+X-CSE-MsgGUID: Ag8YuZa0Q8K+IdhuN1X07A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116214442"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 10 Feb 2025 02:06:55 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1thQgn-0012Yd-1S;
+	Mon, 10 Feb 2025 10:06:53 +0000
+Date: Mon, 10 Feb 2025 18:06:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Apitzsch via B4 Relay <devnull+git.apitzsch.eu@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+Subject: Re: [PATCH v3 2/2] media: i2c: dw9719: Add of_match table
+Message-ID: <202502101730.OtKFel6n-lkp@intel.com>
+References: <20250209-dw9761dts-v3-2-14d3f00f0585@apitzsch.eu>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c48952c7-716c-4302-949c-2c66ea102a3e@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250209-dw9761dts-v3-2-14d3f00f0585@apitzsch.eu>
 
-Hi Zekun,
+Hi André,
 
-On Mon, Feb 10, 2025 at 02:47:28PM +0800, zhangzekun (A) wrote:
-> > I think we all agree that of_find_node_by_name() is miused, and that it
-> > shows the API isn't optimal. What we have different opinions on is how
-> > to make the API less error-prone. I think adding a new
-> > of_find_node_by_name_balanced() function works around the issue and
-> > doesn't improve the situation much, I would argue it makes things even
-> > more confusing.
-> > 
-> > We have only 20 calls to of_find_node_by_name() with a non-NULL first
-> > argument in v6.14-rc1:
-> > 
-> > arch/powerpc/platforms/chrp/pci.c:      rtas = of_find_node_by_name (root, "rtas");
-> > 
-> > The 'root' variable here is the result of a call to
-> > 'of_find_node_by_path("/")', so I think we could pass a null pointer
-> > instead to simplify things.
-> > 
-> > arch/powerpc/platforms/powermac/pic.c:          slave = of_find_node_by_name(master, "mac-io");
-> > 
-> > Here I believe of_find_node_by_name() is called to find a *child* node
-> > of 'master'. of_find_node_by_name() is the wrong function for that.
-> > 
-> > arch/sparc/kernel/leon_kernel.c:        np = of_find_node_by_name(rootnp, "GAISLER_IRQMP");
-> > arch/sparc/kernel/leon_kernel.c:                np = of_find_node_by_name(rootnp, "01_00d");
-> > arch/sparc/kernel/leon_kernel.c:        np = of_find_node_by_name(nnp, "GAISLER_GPTIMER");
-> > arch/sparc/kernel/leon_kernel.c:                np = of_find_node_by_name(nnp, "01_011");
-> > 
-> > Here too the code seems to be looking for child nodes only (but I
-> > couldn't find a DT example or binding in-tree, so I'm not entirely
-> > sure).
-> > 
-> > drivers/clk/ti/clk.c:   return of_find_node_by_name(from, tmp);
-> > 
-> > Usage here seems correct, the reference-count decrement is intended.
-> > 
-> > drivers/media/i2c/max9286.c:    i2c_mux = of_find_node_by_name(dev->of_node, "i2c-mux");
-> > drivers/media/platform/qcom/venus/core.c:       enp = of_find_node_by_name(dev->of_node, node_name);
-> > drivers/net/dsa/bcm_sf2.c:      ports = of_find_node_by_name(dn, "ports");
-> > drivers/net/dsa/hirschmann/hellcreek_ptp.c:     leds = of_find_node_by_name(hellcreek->dev->of_node, "leds");
-> > drivers/net/ethernet/broadcom/asp2/bcmasp.c:    ports_node = of_find_node_by_name(dev->of_node, "ethernet-ports");
-> > drivers/net/ethernet/marvell/prestera/prestera_main.c:  ports = of_find_node_by_name(sw->np, "ports");
-> > drivers/net/pse-pd/tps23881.c:  channels_node = of_find_node_by_name(priv->np, "channels");
-> > drivers/regulator/scmi-regulator.c:     np = of_find_node_by_name(handle->dev->of_node, "regulators");
-> > drivers/regulator/tps6594-regulator.c:          np = of_find_node_by_name(tps->dev->of_node, multi_regs[multi].supply_name);
-> > 
-> > Incorrect usage, as far as I understand all those drivers are looking
-> > for child nodes only.
-> > 
-> > drivers/of/unittest.c:          found = of_find_node_by_name(nd->overlay, "test-unittest16");
-> > drivers/of/unittest.c:          found = of_find_node_by_name(nd->overlay, "test-unittest17");
-> > drivers/of/unittest.c:          found = of_find_node_by_name(nd->overlay, "test-unittest18");
-> > drivers/of/unittest.c:          found = of_find_node_by_name(nd->overlay, "test-unittest19");
-> > 
-> > Here too I think only child nodes are meant to be considered.
-> > 
-> > of_find_node_by_name() is very much misused as most callers want to find
-> > child nodes, while of_find_node_by_name() will walk the whole DT from a
-> > given starting point.
-> > 
-> > I think the right fix here is to
-> > 
-> > - Replace of_find_node_by_name(root, ...) with
-> >    of_find_node_by_name(NULL, ...) in arch/powerpc/platforms/chrp/pci.c
-> >    (if my understanding of the code is correct).
-> 
-> For arch/powerpc/platforms/chrp/pci.c, noticing that there is a comment 
-> in setup_peg2():
->   /* keep the reference to the root node */
-> 
-> It might can not be convert to of_find_node_by_name(NULL, ...), and the 
-> origin use of of_find_node_by_name() put the ref count which want to be 
-> kept.
+kernel test robot noticed the following build warnings:
 
-But the reference is dropped by of_find_node_by_name(). Unless I'm
-missing something, dropping the lien
+[auto build test WARNING on 8f6629c004b193d23612641c3607e785819e97ab]
 
-	struct device_node *root = of_find_node_by_path("/");
+url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Apitzsch-via-B4-Relay/dt-bindings-media-i2c-Add-DW9719-and-DW9761-VCM/20250210-055506
+base:   8f6629c004b193d23612641c3607e785819e97ab
+patch link:    https://lore.kernel.org/r/20250209-dw9761dts-v3-2-14d3f00f0585%40apitzsch.eu
+patch subject: [PATCH v3 2/2] media: i2c: dw9719: Add of_match table
+config: x86_64-randconfig-161-20250210 (https://download.01.org/0day-ci/archive/20250210/202502101730.OtKFel6n-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250210/202502101730.OtKFel6n-lkp@intel.com/reproduce)
 
-and changing
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502101730.OtKFel6n-lkp@intel.com/
 
-	rtas = of_find_node_by_name (root, "rtas");
+All warnings (new ones prefixed by >>):
 
-to
+>> drivers/media/i2c/dw9719.c:363:34: warning: 'dw9719_of_table' defined but not used [-Wunused-const-variable=]
+     363 | static const struct of_device_id dw9719_of_table[] = {
+         |                                  ^~~~~~~~~~~~~~~
 
-	rtas = of_find_node_by_name (NULL, "rtas");
 
-will not change the behaviour of the code.
+vim +/dw9719_of_table +363 drivers/media/i2c/dw9719.c
 
-> > 
-> > - Replace of_find_node_by_name() with of_get_child_by_name() in callers
-> >    that need to search immediate children only (I expected that to be the
-> >    majority of the above call sites)
->
-> Since there is no enough information about these DT nodes, it would take 
-> time to prove if it is OK to make such convert.
-
-It will take a bit of time, yes. I'm afraid time is needed to improve
-things :-) In most cases, as DT bindings are available, it shouldn't be
-very difficult.
-
-> > 
-> > - If there are other callers that need to find indirect children,
-> >    introduce a new of_get_child_by_name_recursive() function.
-> > 
-> > At that point, the only remaining caller of of_find_node_by_name()
-> > (beside its usage in the for_each_node_by_name() macro) will be
-> > drivers/clk/ti/clk.c, which uses the function correctly.
-> > 
-> > I'm tempted to then rename of_find_node_by_name() to
-> > __of_find_node_by_name() to indicate it's an internal function not meant
-> > to be called except in special cases. It could all be renamed to
-> > __of_find_next_node_by_name() to make its behaviour clearer.
-> >
-> 
-> The actual code logic of of_find_node_by_name() is more suitable to be 
-> used in a loop.So,rename of_find_node_by_name() to 
-> __of_find_next_node_by_name() seems to be a good idea.
+   362	
+ > 363	static const struct of_device_id dw9719_of_table[] = {
+   364		{ .compatible = "dongwoon,dw9719" },
+   365		{ .compatible = "dongwoon,dw9761" },
+   366		{ }
+   367	};
+   368	MODULE_DEVICE_TABLE(of, dw9719_of_table);
+   369	
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
