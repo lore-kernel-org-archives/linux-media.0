@@ -1,171 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30B2199E80;
-	Mon, 10 Feb 2025 07:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDD51C07C4
+	for <linux-media@vger.kernel.org>; Mon, 10 Feb 2025 08:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739170822; cv=none; b=sYFAx0fO7Zblp73RpWuUda5/hoCtJRzBf27TrbkepRBxUIFu2Qqs79P7m+dNUcS7dBSAzFPfzZrKcayGygjaUdvnfSSPycAEd5/wYC5OJs8ye6PkaipcUXWr7db9tIkY3T2qfsxa94H0N/s02ogRNQCR2EyIDhSuO8MOxAk6cLM=
+	t=1739175682; cv=none; b=pKzSKs4GYmdBmUMGoU/hnARLns8Z7oX2tUwNctVGQyZ+kyZ5O77yE5RTvd3n/mlOArxTU1uR92VzLWydfYLz9cfeQe3GieQlanBVepBNGy5OFfpkNIuZX1453cTW0XwwtKa9JjHE7qBleD+ZHc8d3y/GD/N+U2DGnMHYT4aOTK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739170822; c=relaxed/simple;
-	bh=Xl3BMLyDGUAanmjjk+KC91tfVRhpWXzxatEBHOqYqgA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kniqJgilZ6NOHHSC9MKNe1mq4QPCrXmeno7oQu+p+XRE2h0ndY2kZLkddlTfuvQvp4WxdgWddFlj99pVi+K6nYCnrCSAuaEc0SRmCjseMqbCde2xmI1CHZtl3sCdNOQPFyLjdWBEyFunwHBPT7Pf0nqnxln2NdjH5L+IZJb7+FQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAmCdaXC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739175682; c=relaxed/simple;
+	bh=KhGb/9SxbyxpeT8+zSuAk9qCVcXcY7x2UfLZVXGxtc4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LGFvhqvtJJkQOmDNDXm49qylMO/QbGDgQd9yZzzVjOXMEUY4T5Hp8o0SodP0g1p6tWh4yZeC9xzN2BsYwCoKO5MBGMHvtHcfruOljMbsWtzCj3QE85frVLjJwFGKOkMAYMmiHLwYFkpQDRzYoMCy6y7ICSW/vsLvBrljV31TZwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=ULPsU6ld; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAmCdaXC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B145BC4CED1;
-	Mon, 10 Feb 2025 07:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739170821;
-	bh=Xl3BMLyDGUAanmjjk+KC91tfVRhpWXzxatEBHOqYqgA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DAmCdaXCUmboIE/ETNDWXRKXYYb2emgJl4jZrrjAdnnsaxk3GDjfjnQSPd6pdfgap
-	 XPspRb+hQYHhTJ4gfIgyN7ISYeaT2QRV4T4/35u6lKby5Xxckepk6P7gw6Ong0A7vx
-	 cVJ6PMDa/jy9vnx9+nPtKsk9a4Mw0aRCqLLJfC4oQ48Iuf7sZNGcWGFW+2xfAxlgYn
-	 CF9tubWhDbk2SciRn/t+n8ek+NrfuIPE/N33FbLAwA+wW2ZT3Lx1dUGDxKZMhWVnEQ
-	 emm1DeWpMiTDbWOMP4eGHma66v4wTKuMIohJdMDkSxvuJP3+IKpZc7x+hScctiSZMb
-	 cXyqpkzv+bHag==
-Date: Mon, 10 Feb 2025 08:00:16 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- workflows@vger.kernel.org
-Subject: Re: Media committers model postponed to 6.14 - Was: Re: [PATCH v3
- 0/3] Document the new media-committer's model
-Message-ID: <20250210080016.475d0518@foz.lan>
-In-Reply-To: <d22d2f35-bf04-4d0c-a94c-70dcc08a945e@xs4all.nl>
-References: <cover.1733131405.git.mchehab+huawei@kernel.org>
-	<b0843e80-c46c-4344-b9f1-1d3b57dd2bbe@xs4all.nl>
-	<20241203081958.6c186835@foz.lan>
-	<20241203112209.GR10736@pendragon.ideasonboard.com>
-	<20241203140712.57daa65f@foz.lan>
-	<20241209091548.165e5152@foz.lan>
-	<d22d2f35-bf04-4d0c-a94c-70dcc08a945e@xs4all.nl>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="ULPsU6ld"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1739175678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OB9aSO2g4DlrBMgHzU59SnbKaWT6bVOPaBsyKw9AqEM=;
+	b=ULPsU6ldY03eiFXO+Vhcu8eecoZ22b3N6wLAKHvhTBDnQmdWsOBz1usZUUWGdbi4o0Z2BH
+	5x7xRCvMaA+LjMcDpLOneSxZK2GjkIKEd3B5Lok51KBRWhcNvGLm+zom4OAQMTDPB5GFyM
+	pQ1eD7t9MqcshEVOjhNmSORfyvLyQFyYqDwdmoSguH/HON7bt5REj2Hze26KVz9xbFmTxQ
+	N0jS5TYwhSbRigM60eYkKMOzeKs3v6bM4hvY3VSxNs1HmYBt4ps54nDOUJ0nNvRfy6ktX/
+	H88mPaKjhDRYECinL7PlM6yJcPDNKAnr1JcvupUxaEeePecWwveSTeSq11jjjw==
+From: Val Packett <val@packett.cool>
+To: 
+Cc: Val Packett <val@packett.cool>,
+	Daniel Scally <djrscally@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] media: dt-bindings: i2c: add DW9719/DW9718S VCM binding
+Date: Mon, 10 Feb 2025 05:19:16 -0300
+Message-ID: <20250210082035.8670-2-val@packett.cool>
+In-Reply-To: <20250210082035.8670-1-val@packett.cool>
+References: <20250210082035.8670-1-val@packett.cool>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Em Fri, 7 Feb 2025 12:54:52 +0100
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+Add DT bindings for the dw9719 voice coil motor driver, which is getting
+devicetree compatibles added along with DW9718S support.
 
-> On 09/12/2024 09:15, Mauro Carvalho Chehab wrote:
-> > Em Tue, 3 Dec 2024 14:07:12 +0100
-> > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
-> >   
-> >>
-> >> The idea is to gradually open media-committers to more people, as each
-> >> phase succeeds, addressing infra, procedures, etc.
-> >>
-> >> My rough idea is to do:
-> >>
-> >> - Phase 0.99: beta testers;
-> >> - Phase 1 is to invite people that regularly submit PRs;
-> >> - Phase 2 is to invite other active maintainers;
-> >> - Phase 3 (or 2?, TBD) to open for non-maintainers.
-> >>
-> >> We shouldn't rush it, as there are a lot to be done before opening it
-> >> broadly. So, I would say that:
-> >> - phase 0.99 would start in -rc2 (if things go well during this week); 
-> >> - phase 1 may still happen on this merge window, but as there will be
-> >>   only a few weeks between -rc2 and -rc6, and people usually get
-> >>   holidays in Dec/Jan, it is more likely that it will start for
-> >>   6.14-rc1, again if we didn't notice big issues on phase 0.99.
-> >>
-> >>   We should wait at least for a couple of releases on phase 1,
-> >>   again to cleanup process and fine-tune infra. If things go well, 
-> >>   we can move to phase 2.  
-> > 
-> > After some discussions with Hans, we decided to postpone the
-> > beta testers phase to the next kernel cycle. There are a couple of
-> > reasons for that:
-> > 
-> > - This should give us more time to come up with a final version of 
-> >   the media-committers documentation and agreement;  
-> 
-> Where are we with this? I haven't seen any updates since this post.
-> 
-> Personally, I think the CI is ready for more committers, so it would be
-> nice if we can get some experience with that.
+Also mention the binding file in the corresponding MAINTAINERS entry.
 
-IMO, there are still some pending issues.
+Signed-off-by: Val Packett <val@packett.cool>
+---
+ .../bindings/media/i2c/dongwoon,dw9719.yaml   | 110 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 111 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
 
-We still need to reach a consensus about what media maintainers will do.
-I have to confess that discussing last time was painful due to some
-arguments going too personal to my taste. Anyway, discussing it during
-the end of the year was not a good idea as people (including myself) were
-busy completing their yearly tasks. Also, people were taking vacations.
+diff --git a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+new file mode 100644
+index 000000000000..88161038223f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+@@ -0,0 +1,110 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/dongwoon,dw9719.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dongwoon Anatech DW9719 Voice Coil Motor (VCM) DAC
++
++maintainers:
++  - Daniel Scally <djrscally@gmail.com>
++
++description: |-
++  The Dongwoon DW9719/DW9718S is a single 10-bit digital-to-analog converter
++  with 100 mA output current sink capability, designed for linear control of
++  voice coil motors (VCM) in camera lenses. This chip provides a Smart Actuator
++  Control (SAC) mode intended for driving voice coil lenses in camera modules.
++
++properties:
++  compatible:
++    enum:
++      - dongwoon,dw9719
++      - dongwoon,dw9718s
++
++  reg:
++    maxItems: 1
++
++  vdd-supply:
++    description: VDD power supply
++
++  dongwoon,sac-mode:
++    description: |
++      Slew Rate Control mode to use: direct, LSC (Linear Slope Control) or
++      SAC1-SAC6 (Smart Actuator Control).
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum:
++      - 0    # Direct mode
++      - 1    # LSC mode
++      - 2    # SAC1 mode (operation time# 0.32 x Tvib)
++      - 3    # SAC2 mode (operation time# 0.48 x Tvib)
++      - 4    # SAC3 mode (operation time# 0.72 x Tvib)
++      - 5    # SAC4 mode (operation time# 1.20 x Tvib)
++      - 6    # SAC5 mode (operation time# 1.64 x Tvib)
++      - 7    # SAC6 mode (operation time# 1.88 x Tvib)
++    default: 4
++
++  dongwoon,vcm-freq:
++    description:
++      The switching frequency for the voice coil motor.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: dongwoon,dw9718s
++    then:
++      properties:
++        dongwoon,vcm-freq:
++          default: 0
++          enum:
++            - 0    # 5.00 MHz
++            - 1    # 3.33 MHz
++            - 2    # 2.50 MHz
++            - 3    # 2.00 MHz
++            - 4    # 1.67 MHz
++            - 5    # 1.43 MHz
++            - 6    # 1.25 MHz
++            - 7    # 1.11 MHz
++            - 8    # 1.00 MHz
++            - 9    # 0.91 MHz
++            - 10   # 0.83 MHz
++            - 11   # 0.77 MHz
++            - 12   # 0.71 MHz
++            - 13   # 0.67 MHz
++            - 14   # 0.63 MHz
++            - 15   # 0.59 MHz
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: dongwoon,dw9719
++    then:
++      properties:
++        dongwoon,vcm-freq:
++          default: 0x60
++
++required:
++  - compatible
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        vcm_rear: camera-lens@c {
++            compatible = "dongwoon,dw9718s";
++            reg = <0x0c>;
++
++            vdd-supply = <&pm8937_l17>;
++        };
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 603b11222d67..42dd86f5d5c8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6932,6 +6932,7 @@ M:	Daniel Scally <djrscally@gmail.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media.git
++F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
+ F:	drivers/media/i2c/dw9719.c
+ 
+ DONGWOON DW9768 LENS VOICE COIL DRIVER
+-- 
+2.48.1
 
-At the end of the last year, I finally rewrote the scripts I use on my
-workflow. I'd like to test them during this cycle and see how it
-behaves. 
-
-While doing that, I noticed that we really need to have something like
-margebot to help our workflow. From my side, I'd like to have one separate
-MR per each separate patch series, as this makes easier to document the
-main changes that the media subsystem is merging. I hope to test them more
-during this Kernel cycle to be sure that everything is in place.
-
-While using my scripts, I ended having 4 or 5 pending MRs at
-media-committers. As we want a clean history without being bloated with
-merges from temp trees/branches, we need to have some automation to help
-basing the commits on the top of the branches.
-
-The idea is to have margebot enabled there, meaning that committers
-may delegate patches to margebot and let it automatically place patches
-on the top of the branches. However, margebot has currently a problem:
-it mangles with committer's metadata. Ricardo have been working upstream
-and they are reaching a consensus about how to support preserving
-committer data with margebot. IMO, we need that before having more
-committers.
-
-Finally, we need to have useful data to prepare changelog summary
-upstream. In the past, as we were reviewing everything, it was easier
-to identify the core changes (besides fixes/cleanups). With a
-multicommitter's model, we need to rely on what committers will be
-providing us. The idea I've been playing with, and that's what I
-ended implementing on last submission(*), is to generate it based on
-what each merge metadata contains.
-
-(*) Yet, the level of information there were very inconsistent.
-We need to do better during this cycle.
-
-> Regards,
-> 
-> 	Hans
-> 
-> > 
-> > - This would also work better with regards to end of year's vacations,
-> >   as they'll be affecting at least 2/3 -rc versions. Plus, we all have
-> >   things to finish before such vacations. So, better to start fresh next
-> >   year;
-> > 
-> > - Media CI still had issues with a patch series I submitted, as it picked
-> >   the wrong baseline, causing CI to not test two patches that were
-> >   applied on the top of media-committers/next branch. This was fixed
-> >   by Ricardo, but it means that we may still need to polish CI before
-> >   granting more people righs there.
-> > 
-> > With that, if we want to start the media committers for 6.14, we should
-> > aim to close review this document by -rc6, or, at most, -rc7, getting 
-> > the patches merged during the next merge window.
-> > 
-> > Regard
-> > 
-> > Thanks,
-> > Mauro
-> >   
-> 
-
-
-
-Thanks,
-Mauro
