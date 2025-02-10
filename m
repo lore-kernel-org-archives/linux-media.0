@@ -1,116 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1C21C54AF;
-	Mon, 10 Feb 2025 10:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB351C5F12;
+	Mon, 10 Feb 2025 10:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739182021; cv=none; b=hNcLXTCep0qNZUlliWPQSZLys+v/E/EO7Zl2zPGOnT3IQx6nXkDBEctJAoW5pq89e4xsT5K4cnkt3S686WM2YOlAuMoCg2TY/D0bZdXmLYMU4Bq+OFdAy6Wo2B/DwBpnTuLXuB5fvttmOYeDpSVximpqodaHJpxXxDOo/KLh1Yc=
+	t=1739182069; cv=none; b=D1lLvJB0ZDe1KoJN+citeHO8W/VzUEeunsh9kSHQXfd+fbKkaX8Q4PeSO2ym71PrRobQFlES8xwSjvR1LDF0Asjr15uPMDpDc0YJ/ckWhVQFG7aEr7RVR/t6G+Puu3OqmGx75OjIWT3b0C1+yfbaIlZYEbALw/YNOuY9N7wCkuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739182021; c=relaxed/simple;
-	bh=5uoVeSj0QN4EeZcCrlskyNvROXSluRl4IF+26szp08I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NtVEttD/OsX2Af/yh5fOHPfEyoR2y0DF4dH4gtY+Z4nyXbs7/HQPVcsV55lXCSQxSYdoj/8IEq+FvoP1MsFeqYIX6+Kw+GeaDZB04nNoaAQODGtsiIGh2aLdXWbkEviP4JDi1BT6IIh5nkl59uE30sPhYaSmM0Q4l3WycDS24ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kcs5z9wH; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739182069; c=relaxed/simple;
+	bh=qQ68sf6xTmfS+0HraBhqE6LqqgYEwQblx/dTeVABmZ0=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=drcQNbGE2ulmizYOpHgU+6+8JavgSZ06KQvtDwzIDkTKVaIMAqMUXVCgPSDJuM/6uoP24TLPwkRo158LcurO/hYsKCKa59f6iRp9F5xYX5+DLQ3LgUJYkQjWsd6psiWafIMwQSb1fN7e2ZM2QWxkc2y6iSoTjADFPlpoamV+bxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=4xWJWD3A; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcs5z9wH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739182020; x=1770718020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=5uoVeSj0QN4EeZcCrlskyNvROXSluRl4IF+26szp08I=;
-  b=kcs5z9wHLHeh+oVGEtJrqvRYRRLDCb4vbj/upCCm8jyNEL8njo1TlLIP
-   rAZ2NumUDroMEQu9f9gYHYsmYcD+vy9/HIT4TdLQC7X7Kvtj9W/audGBH
-   rsds0lK5Fs7Sqj4NGsOG0uoSIIFRYrKT4gvVZzqzfJiorxBVoLEY37PQL
-   VKWysPLdCOmk50jk41IxZoECd/zfIULTuuOAgaKJTi63kkN80wkqyCB9T
-   d+yTLAe4F10Ng2oshXGza+QwNWy7uXep2Gmm+zy064+314vglGFLGGYF6
-   T+bI/NkndkbBWULNp2Qzf67yHIzxJh1HxNEUBhddDLuafrDsJUXSakWmn
-   Q==;
-X-CSE-ConnectionGUID: gTZZ8kYRRByoLnHb4lfNKg==
-X-CSE-MsgGUID: k3aytTCqT0ymGwYD4edwtA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="39441232"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="39441232"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 02:06:59 -0800
-X-CSE-ConnectionGUID: 7wCeTMN+S+WsBMFPG+3Jsg==
-X-CSE-MsgGUID: Ag8YuZa0Q8K+IdhuN1X07A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116214442"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 10 Feb 2025 02:06:55 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1thQgn-0012Yd-1S;
-	Mon, 10 Feb 2025 10:06:53 +0000
-Date: Mon, 10 Feb 2025 18:06:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Apitzsch via B4 Relay <devnull+git.apitzsch.eu@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-Subject: Re: [PATCH v3 2/2] media: i2c: dw9719: Add of_match table
-Message-ID: <202502101730.OtKFel6n-lkp@intel.com>
-References: <20250209-dw9761dts-v3-2-14d3f00f0585@apitzsch.eu>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="4xWJWD3A"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51A9epr5012596;
+	Mon, 10 Feb 2025 11:07:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=/H+us+EpN5gsIUBiB28735
+	vhfURAgKzhJf8uRl0O2pI=; b=4xWJWD3AB2S4EH6i28/FicuBfQaDy5KGsqp9Yy
+	xQ3UBm+EpK9IRp4LP1dIXUoCjDHyicQORR+48DCdMMmhBbmktc28Zsfnj5QvEnwH
+	0e+JPa6a9TGy5l3D/wk7wrHYxTaH/XyA/9mkPDzDKKRk0Kz4xSS+L3i+avQUfNfJ
+	VbdxPRlKddOdD7xVAs+pyKXyoqOF0j4bPj3zVbPEDdWYZJPvXPSRLKKFxkCY2Uin
+	81krOXng//YV27/HSDLEkfTQFv/IFj5wFPnT3QPkgLpon+SONoaMhEzhqU8MzRIY
+	QPfTEBYkS8msORr6G3foOogx3CbFw1PxxllHUJjFYlhjYpdw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44p0wswptp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Feb 2025 11:07:13 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B2C4E4004C;
+	Mon, 10 Feb 2025 11:06:14 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9629D2BE929;
+	Mon, 10 Feb 2025 11:05:00 +0100 (CET)
+Received: from localhost (10.252.6.236) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 10 Feb
+ 2025 11:05:00 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+Subject: [PATCH 0/2] ARM: dts: stm32: correct dtsi and yaml related to
+ dcmipp & mipid02
+Date: Mon, 10 Feb 2025 11:04:29 +0100
+Message-ID: <20250210-6-14-stm32-media-fixes-v1-0-c64ebe9af8bb@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250209-dw9761dts-v3-2-14d3f00f0585@apitzsch.eu>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC3PqWcC/x3LSQqAMAxA0atI1gaa2jpdRVw4RM3CgUZEEO9uc
+ fn4/AeUg7BCnTwQ+BKVfYugNIFh6baZUcZosMZ6Y8lgjuRQzzWzuPIoHU5ys6IvyfRu4r6iAuJ
+ 8BP5DfJv2fT/o7CZcaAAAAA==
+X-Change-ID: 20250210-6-14-stm32-media-fixes-5810b4feb917
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin
+	<mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Sylvain Petinot
+	<sylvain.petinot@foss.st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marex@denx.de>
+CC: <devicetree@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, Alain Volmat <alain.volmat@foss.st.com>,
+        <stable@vger.kernel.org>
+X-Mailer: b4 0.14.2
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-10_05,2025-02-10_01,2024-11-22_01
 
-Hi André,
+This series corrects two issues found on the stm32mp135f-dk related
+to a missing clock-names property within the stm32mp135.dtsi and a
+st-mipid02 device-tree bindings issue.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+Alain Volmat (2):
+      ARM: dts: stm32: add missing dcmipp kclk clock-names in stm32mp135.dtsi
+      dt-bindings: media: st,stmipid02: correct lane-polarities maxItems
 
-[auto build test WARNING on 8f6629c004b193d23612641c3607e785819e97ab]
+ Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml | 2 +-
+ arch/arm/boot/dts/st/stm32mp135.dtsi                           | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+---
+base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+change-id: 20250210-6-14-stm32-media-fixes-5810b4feb917
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Apitzsch-via-B4-Relay/dt-bindings-media-i2c-Add-DW9719-and-DW9761-VCM/20250210-055506
-base:   8f6629c004b193d23612641c3607e785819e97ab
-patch link:    https://lore.kernel.org/r/20250209-dw9761dts-v3-2-14d3f00f0585%40apitzsch.eu
-patch subject: [PATCH v3 2/2] media: i2c: dw9719: Add of_match table
-config: x86_64-randconfig-161-20250210 (https://download.01.org/0day-ci/archive/20250210/202502101730.OtKFel6n-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250210/202502101730.OtKFel6n-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502101730.OtKFel6n-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/i2c/dw9719.c:363:34: warning: 'dw9719_of_table' defined but not used [-Wunused-const-variable=]
-     363 | static const struct of_device_id dw9719_of_table[] = {
-         |                                  ^~~~~~~~~~~~~~~
-
-
-vim +/dw9719_of_table +363 drivers/media/i2c/dw9719.c
-
-   362	
- > 363	static const struct of_device_id dw9719_of_table[] = {
-   364		{ .compatible = "dongwoon,dw9719" },
-   365		{ .compatible = "dongwoon,dw9761" },
-   366		{ }
-   367	};
-   368	MODULE_DEVICE_TABLE(of, dw9719_of_table);
-   369	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alain Volmat <alain.volmat@foss.st.com>
+
