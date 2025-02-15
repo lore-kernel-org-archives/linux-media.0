@@ -1,117 +1,107 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE2C1DF988;
-	Sat, 15 Feb 2025 17:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B09178F4B;
+	Sat, 15 Feb 2025 19:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739640004; cv=none; b=Iv7SJf/dyaU5LzvnBctBxbU1jzRLEzLAiiSmi/qB55UY29UWxOoeqqQcN3WXoMdHIM/SSURbAM8PKI4Ixhm2njjAhSyDc8A/q5rvtN1EpoBX2AfnHhVIaQjZKFaFi1RPcy8g7LcuP6/nE6guUNBCJ6AJcEhZ1vdJik5kTlzzk3I=
+	t=1739648630; cv=none; b=RY7vpTXneXlR26wOt15Eu9BTTXeVs4j2zvT2a4fjP5tkJm+kifTErhnM3pEB0NKXEURVICwP6aa+TLp4HQZpyfiKTEdMlsbcq42L6DpbNLax2819rrONNQ2Odd1HIjWHIskLDvMf3T0R5y541NZ57DFwvwMDtovz4rVw0+2wiqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739640004; c=relaxed/simple;
-	bh=4nL2yU5OQ9u/veQyteOUiLzrTY2mgfat8NMPtV3lUW0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=gkl/XgigklQEkblhyTSlPc+xN8MkBpCmUbXkssgXmnzONsihrux84y9DNuIf9Wo9TYJ05PeiY2YkshUh6NIdzqH5Cu0MeZHcsX5h781vB42WTD1LXRvc7DQDIJoYEOZdmB5V5Mt732GwKB2C3frONDcAexSjo/10csH5PPnqDd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c8GyV/7W; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1739648630; c=relaxed/simple;
+	bh=aqlKCwiWQwaADZiGJGLwvMY4WxGCqqgsu+/fFmoalpg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ePdADfXzD5AI3HtheL7fvA46J6WYQCDO+Yx/5VskD61OMYqSzYeHWVBXZdOWWdpmlFO79yfgDBPNzg8cGVClOwJyG9JAS0uEOOg8Zg06Zh+3870/NlJ1Z/xmxXWHlt0sBVYD9882GfjdcL5ykbb4k0Q8DR8QrP18D1ZlBJBXkkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ciXV6QQK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c8GyV/7W"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51FFhkcU024742;
-	Sat, 15 Feb 2025 17:19:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	O+EHMKuQvFtrl4KDLo6nawUa0FRWBpLee8ssqH8cjCs=; b=c8GyV/7WnHOl1lUY
-	kynWEfL8VDSJoreyzXg3UDuSkIb0Ary2vvetuhpm4L+XTBlo5GUtTijkuY1vmLfq
-	K2OnZG9t7D4TyNcrcdsoMwmjXJ/uubdXYaVW2tCRk4trmRuHiaClYxEpQVL/2kgG
-	XuBm86m9Vjrxuq6L0bQWI4eKnuuhBaUh7mTTygRvPdQi3Bx4MFjzuBTMSvWasTyb
-	bazgScneUqmMRgVvNkzIj/7MaMoFeDFAjcIEJnbWOq0GRsAGckGFUKrnKG3YRTeH
-	tJXdhT6fa485kNuRVzAKw7F58Dp++aXEjCPpoAg+v6zxOoX5DLKdDDS8nQ02JtSd
-	UXBUVg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44tkqj8u1h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 15 Feb 2025 17:19:46 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51FHJjYw031642
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 15 Feb 2025 17:19:45 GMT
-Received: from [10.213.96.105] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sat, 15 Feb
- 2025 09:19:42 -0800
-From: Vedang Nagar <quic_vnagar@quicinc.com>
-Date: Sat, 15 Feb 2025 22:49:32 +0530
-Subject: [PATCH v2 1/2] media: venus: fix OOB read issue due to double read
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ciXV6QQK"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8268578E;
+	Sat, 15 Feb 2025 20:42:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1739648540;
+	bh=aqlKCwiWQwaADZiGJGLwvMY4WxGCqqgsu+/fFmoalpg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ciXV6QQKMNabAtWB71rKDXbANKJy2yaHJYmQjmMfOW/mo7VsdeM/SZ/3d1dZryChw
+	 8BHpgt6jUkPX/KKqqAxmgFrGHJD9ATWgivTFS68lFAREsNfcSAI2chxrmL/tvhFWfz
+	 k9YWROuZQxMg5m1R16mm9aeJ7fRWKHXVGSdIUrUY=
+Date: Sat, 15 Feb 2025 21:43:28 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sicelo <absicsz@gmail.com>
+Cc: Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org, will@kernel.org,
+	mchehab@kernel.org, andersson@kernel.org,
+	mathieu.poirier@linaro.org, hns@goldelico.com, b-padhi@ti.com,
+	andreas@kemnade.info, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	Sakari Ailus <sakari.ailus@iki.fi>
+Subject: Re: [PATCH 2/4] media: omap3isp: Handle ARM dma_iommu_mapping
+Message-ID: <20250215194328.GF12632@pendragon.ideasonboard.com>
+References: <cover.1730136799.git.robin.murphy@arm.com>
+ <34542c9552ce8cd12a5c292e79589acd964075d5.1730136799.git.robin.murphy@arm.com>
+ <Z7A61N13dZpu53xI@tp440p.steeds.sam>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250215-venus-security-fixes-v2-1-cfc7e4b87168@quicinc.com>
-References: <20250215-venus-security-fixes-v2-0-cfc7e4b87168@quicinc.com>
-In-Reply-To: <20250215-venus-security-fixes-v2-0-cfc7e4b87168@quicinc.com>
-To: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia
-	<quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Vedang Nagar <quic_vnagar@quicinc.com>
-X-Mailer: b4 0.15-dev-dedf8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739639980; l=1198;
- i=quic_vnagar@quicinc.com; s=20240917; h=from:subject:message-id;
- bh=4nL2yU5OQ9u/veQyteOUiLzrTY2mgfat8NMPtV3lUW0=;
- b=qVV6Mpk1MqTVSgUSQkcvl2/UvI7pnLGkHuYYu7eEdZvTDYXouNCVnmv29pLhhsY1STDYTZzBu
- s75/BMS79lbBz8lOMzx5mHoRNoTW+AIE9dpTeCjb1GFvoHZ3MEnbcJt
-X-Developer-Key: i=quic_vnagar@quicinc.com; a=ed25519;
- pk=GHqLT8NPue4v+CDHbZork8Ps39CBHq345GQKvCZ1glE=
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jduhREhtvSJFGL4URUkXjb9122cJwWQx
-X-Proofpoint-ORIG-GUID: jduhREhtvSJFGL4URUkXjb9122cJwWQx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-15_07,2025-02-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- bulkscore=0 mlxlogscore=692 suspectscore=0 phishscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502150153
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Z7A61N13dZpu53xI@tp440p.steeds.sam>
 
-During message queue read, the address is being read twice
-from the shared memory. The first read is validated against
-the size of the packet, however the second read is not
-being validated. Therefore, it's possible for firmware to
-modify the value to a bigger invalid value which can lead
-to OOB read access issue while reading the packet.
-Added fix to reupdate the size of the packet which was
-read for the first time.
+CC'ing Sakari.
 
-Signed-off-by: Vedang Nagar <quic_vnagar@quicinc.com>
----
- drivers/media/platform/qcom/venus/hfi_venus.c | 1 +
- 1 file changed, 1 insertion(+)
+Sakari, would you pick this patch ?
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index f9437b6412b91c2483670a2b11f4fd43f3206404..c124db8ac79d18f32289a690ee82145dc93daee6 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -298,6 +298,7 @@ static int venus_read_queue(struct venus_hfi_device *hdev,
- 			memcpy(pkt, rd_ptr, len);
- 			memcpy(pkt + len, queue->qmem.kva, new_rd_idx << 2);
- 		}
-+		*(u32 *)pkt = dwords << 2;
- 	} else {
- 		/* bad packet received, dropping */
- 		new_rd_idx = qhdr->write_idx;
+On Sat, Feb 15, 2025 at 08:57:24AM +0200, Sicelo wrote:
+> On Mon, Oct 28, 2024 at 05:58:36PM +0000, Robin Murphy wrote:
+> > It's no longer practical for the OMAP IOMMU driver to trick
+> > arm_setup_iommu_dma_ops() into ignoring its presence, so let's use the
+> > same tactic as other IOMMU API users on 32-bit ARM and explicitly kick
+> > the arch code's dma_iommu_mapping out of the way to avoid problems.
+> > 
+> > Fixes: 4720287c7bf7 ("iommu: Remove struct iommu_ops *iommu from arch_setup_dma_ops()")
+> > Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> > ---
+> >  drivers/media/platform/ti/omap3isp/isp.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
+> > index 91101ba88ef0..b2210841a320 100644
+> > --- a/drivers/media/platform/ti/omap3isp/isp.c
+> > +++ b/drivers/media/platform/ti/omap3isp/isp.c
+> > @@ -1961,6 +1961,13 @@ static int isp_attach_iommu(struct isp_device *isp)
+> >  	struct dma_iommu_mapping *mapping;
+> >  	int ret;
+> >  
+> > +	/* We always want to replace any default mapping from the arch code */
+> > +	mapping = to_dma_iommu_mapping(isp->dev);
+> > +	if (mapping) {
+> > +		arm_iommu_detach_device(isp->dev);
+> > +		arm_iommu_release_mapping(mapping);
+> > +	}
+> > +
+> >  	/*
+> >  	 * Create the ARM mapping, used by the ARM DMA mapping core to allocate
+> >  	 * VAs. This will allocate a corresponding IOMMU domain.
+> > -- 
+> > 2.39.2.101.g768bb238c484.dirty
+> > 
+> 
+> I have finally found time to test this patch on the Nokia N900 and can
+> confirm it is working fine.
+> 
+> I was wondering - is there a reason that it is not merged yet? I tested
+> on 6.14-rc2, which did not have it, and notice it is also not in
+> linux-next.
+> 
+> If it helps:
+> 
+> Tested-by: Sicelo A. Mhlongo <absicsz@gmail.com>
 
 -- 
-2.34.1
+Regards,
 
+Laurent Pinchart
