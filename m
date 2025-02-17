@@ -1,143 +1,118 @@
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045D519CC02;
-	Mon, 17 Feb 2025 08:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F9418F2EA;
+	Mon, 17 Feb 2025 08:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739779690; cv=none; b=SUYUIYig7oR1uIPIBGfuAXgFFQciby0S18LfBfLxk4GOH+PUT/P/V269rjrJYkOaFrua7AOezY2XY0K1koEkbUDK7ACQcY24zuKr/zxtG1UUTvXmheU+173vNcafEWQtQfSI92BYExX31q/noltWFwVSbv7zd3anI0hnplGNBY4=
+	t=1739779976; cv=none; b=lQakALDAff4QqYu+AbLs4SNvSJKTzjZ6rQyfqrsXBtBpfAstIZ0U6JONj4zOh9oryosgJD70+EfJT9cgU2SWO3S01j8XkuJZu7+/X58g+6FLoccMRdhqwLbyBoAZdWXde5fhFo3oGEcbyo1ZYzPE6udSy+Ndov2U8otOUyTz3PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739779690; c=relaxed/simple;
-	bh=8tZy2Iu7sEGvPFLhtx8V7z6Qhr9QGnK/JAwPC0LKJe0=;
+	s=arc-20240116; t=1739779976; c=relaxed/simple;
+	bh=9vBf6PHSw2DclbWEGznCOiYAGAY/r4Uos7XN/FYSSNc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MUA/SGQ5vfD3is5ZYHRFCSlogIvgQ66IMxAQVZ+iAkYvjLI0Pl0h7KsEkHxZ8ebPYCOaJ/tqPaelYhewShvZMSlrk6xP5sWaJrFmjyDJQlgDiZmLPfd6GPVc73RRnB9Ct+/gRyxkGe7gQhykCxM7UGf4BJd6YkYqlgToaGMTJuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=gdQct6sm; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	 In-Reply-To:Content-Type; b=HSuplLEnUBtcTVeLHmhI3Ps3ljv9xOJW0WR2S2mbu4hZDxrKTeoa73x1IAEs1dGhLspj19XzBWlQsnRk5sgcy1J7zXCbbiSHKdAPJAd/lTk6FvzBK4ksjXWRu0gmyJOI57Wa+1D6L5qyIYRDGsMYRPNRVLhSbO7buhJ3CsuZjT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mGBbQZe9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="gdQct6sm"
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51H87oak1437430
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 17 Feb 2025 02:07:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1739779670;
-	bh=ht4HxGI5YrlOa/0b3MdILMdlQhV+uNgSi3wHLhbLMCE=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=gdQct6smd0wGwtXj3x52Qnl41sHKBJ0OjVIFRTE6Fqoe/nzHVMBrqVuH7I80e5G0F
-	 dJQCmMx/NfAEHTP4MffziIjt+EAiHS+tFsw+ecVacqH+9CPUK/fmWsVUwrE/s7M0ji
-	 aEKv3+zm6f8wP1/7446j8EPpTMly8bLiEO4emixk=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51H87oTP010372;
-	Mon, 17 Feb 2025 02:07:50 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 17
- Feb 2025 02:07:50 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 17 Feb 2025 02:07:50 -0600
-Received: from [172.24.227.115] (abhilash-hp.dhcp.ti.com [172.24.227.115])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51H87jGm115755;
-	Mon, 17 Feb 2025 02:07:46 -0600
-Message-ID: <e9ccecd2-6148-44fc-a4da-217219da9d3d@ti.com>
-Date: Mon, 17 Feb 2025 13:37:45 +0530
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mGBbQZe9"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51H043m2019710;
+	Mon, 17 Feb 2025 08:12:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5xRVJ1YevyiW1l2CaOUFUwAyZv+xv67AGIg/GfedxXw=; b=mGBbQZe9QZSZInp9
+	pt87237NtDM6mqOnObyJlU+XUC5M8mWohb0mkgcx/oEvSEMfP6IJo9d6IfTB0aht
+	LRCVBl92t7boJFnGzrsNGtISG4phQrXm+gR/pxXKA/9kRTjSgAH51t0tAeOh9ovM
+	ixG1j6DOzRcBMNtSv0ro7dXbXC1iKa5b7cVIt/g1UCYupdQxJvv5dVLoSoLYwAwt
+	w0RbAXhhSUiUYe2kCnJrd3iEGqkTCCc4QrFiDhyV7W9fQ4R5kEGuNfLsSWaG3SQB
+	JVefYj+il43Zpur6JBFi+YeZO2NffalcZcUABvzUwe4SQRS7faPDIOXKlprnNMjF
+	VDVF/w==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ut7urxu7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Feb 2025 08:12:50 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51H8Cnvf011978
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 17 Feb 2025 08:12:49 GMT
+Received: from [10.204.101.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Feb
+ 2025 00:12:45 -0800
+Message-ID: <4206de50-2970-a93b-867a-03ae6cdcedd3@quicinc.com>
+Date: Mon, 17 Feb 2025 13:42:42 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/3] media: ti: j721e-csi2rx: Add support for
- VIDIOC_LOG_STATUS
-To: Jai Luthra <jai.luthra@linux.dev>
-CC: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <mripard@kernel.org>,
-        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <devarsht@ti.com>, <vaishnav.a@ti.com>,
-        <r-donadkar@ti.com>, <u-kumar1@ti.com>
-References: <20250212131244.1397722-1-y-abhilashchandra@ti.com>
- <20250212131244.1397722-4-y-abhilashchandra@ti.com>
- <nvyplkcl74rpe7zl2vprfztaivlmwvrsrwyrqw7lbvbeij5ubt@4dehnb7j6ona>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH next] media: iris: fix error code in
+ iris_load_fw_to_memory()
 Content-Language: en-US
-From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
-In-Reply-To: <nvyplkcl74rpe7zl2vprfztaivlmwvrsrwyrqw7lbvbeij5ubt@4dehnb7j6ona>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Dan Carpenter <dan.carpenter@linaro.org>
+CC: Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Abhinav Kumar
+	<quic_abhinavk@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stefan Schmidt <stefan.schmidt@linaro.org>,
+        Hans Verkuil
+	<hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+References: <a1d9e082-a4d5-4440-996f-7ee7e850de60@stanley.mountain>
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <a1d9e082-a4d5-4440-996f-7ee7e850de60@stanley.mountain>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VgubdHpLUZe94Q8YIvhITZ4x8kCuY0bO
+X-Proofpoint-ORIG-GUID: VgubdHpLUZe94Q8YIvhITZ4x8kCuY0bO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-17_04,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 malwarescore=0 bulkscore=0
+ mlxscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502170071
 
-Hi Jai,
 
-Thank you for the review.
 
-On 13/02/25 18:56, Jai Luthra wrote:
-> Hi Abhilash,
+On 2/17/2025 1:38 PM, Dan Carpenter wrote:
+> Return -ENOMEM if memremap() fails.  Don't return success.
 > 
-> On Wed, Feb 12, 2025 at 06:42:44PM +0530, Yemike Abhilash Chandra wrote:
->> The VIDIOC_LOG_STATUS ioctl outputs the current status of a device to the
->> kernel log. When this ioctl is called on a video device, the current
->> implementation queries the log status for all connected subdevices in the
->> media pipeline.
->>
+> Fixes: d19b163356b8 ("media: iris: implement video firmware load/unload")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/media/platform/qcom/iris/iris_firmware.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> What is the benefit of doing this for a video node? The user can directly
-> check the status on the cdns-csi2rx subdev for CSI errors.
-> 
-> As far as I understand, the video node corresponds to a particular stream, but
-> the cdns-csi2rx source pad is shared for all video nodes, so it will report
-> the total errors seen for all video nodes in multi-camera scenarios.
-> 
-> This approach will also give you v4l2 control handler status from a few
-> sensors (like OV5640) that implement the ioctl using
-> v4l2_ctrl_subdev_log_status(), which is probably just noise for the case where
-> a user wants to check for stream errors.
+> diff --git a/drivers/media/platform/qcom/iris/iris_firmware.c b/drivers/media/platform/qcom/iris/iris_firmware.c
+> index 7c493b4a75db..f1b5cd56db32 100644
+> --- a/drivers/media/platform/qcom/iris/iris_firmware.c
+> +++ b/drivers/media/platform/qcom/iris/iris_firmware.c
+> @@ -53,8 +53,10 @@ static int iris_load_fw_to_memory(struct iris_core *core, const char *fw_name)
+>  	}
+>  
+>  	mem_virt = memremap(mem_phys, res_size, MEMREMAP_WC);
+> -	if (!mem_virt)
+> +	if (!mem_virt) {
+> +		ret = -ENOMEM;
+>  		goto err_release_fw;
+> +	}>
+>  	ret = qcom_mdt_load(dev, firmware, fw_name,
+>  			    pas_id, mem_virt, mem_phys, res_size, NULL);
 
-I understand that this change does not add any value and may introduce
-unnecessary noise. Given that the user can directly check the status on the
-cdns-csi2rx subdevice for stream errors, I will remove this change in v2.
+Thanks for the fix.
+Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
 
-Thanks and Regards,
-Yemike Abhilash Chandra
-
-> 
->> Signed-off-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
->> ---
->>   drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
->> index 6412a00be8ea..946704458fee 100644
->> --- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
->> +++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
->> @@ -377,6 +377,15 @@ static int ti_csi2rx_enum_framesizes(struct file *file, void *fh,
->>   	return 0;
->>   }
->>   
->> +static int ti_csi2rx_log_status(struct file *file, void *fh)
->> +{
->> +	struct ti_csi2rx_dev *csi = video_drvdata(file);
->> +
->> +	v4l2_device_call_all(&csi->v4l2_dev, 0, core, log_status);
->> +
->> +	return 0;
->> +}
->> +
->>   static const struct v4l2_ioctl_ops csi_ioctl_ops = {
->>   	.vidioc_querycap      = ti_csi2rx_querycap,
->>   	.vidioc_enum_fmt_vid_cap = ti_csi2rx_enum_fmt_vid_cap,
->> @@ -393,6 +402,7 @@ static const struct v4l2_ioctl_ops csi_ioctl_ops = {
->>   	.vidioc_expbuf        = vb2_ioctl_expbuf,
->>   	.vidioc_streamon      = vb2_ioctl_streamon,
->>   	.vidioc_streamoff     = vb2_ioctl_streamoff,
->> +	.vidioc_log_status	= ti_csi2rx_log_status,
->>   };
->>   
->>   static const struct v4l2_file_operations csi_fops = {
->> -- 
->> 2.34.1
->>
-> 
-> Thanks,
-> Jai
+Thanks,
+Dikshita
