@@ -1,66 +1,112 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCF718E20;
-	Tue, 18 Feb 2025 01:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA13817333F;
+	Tue, 18 Feb 2025 05:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739840993; cv=none; b=LndwPYE4LyrohfEnm2Bd9KYgJr5V49AA5jY1ytY29oT9nJjgIU4rHdnhKyaYh8ERW/kRBQN4eIX+6V2R2fh9QIc7CWbuACLw/N6O+0RsnU9fJpIJKjTC8shZBEQLhMy59VN8ISMA5tfYHNhiedxmOGxDuHBf2Uiwh84nlfjtlEY=
+	t=1739857456; cv=none; b=CmcZl6IeF/PpFo0xKtTRjZyOpfrotPoSoi2Z/vKxkizyiMTzjSfKHr/feHJpABDregcVGv1oGLQqkjktE5UPavnA60TA+up/fY/9SjgUX7cJDBBG2FzzPDy9LsoSRcAHGqUURBpSoFPm5Vog0aK95aqIiNWEQVllZTClYA0Pphs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739840993; c=relaxed/simple;
-	bh=42hWqZkaDlwsbOuKcR363GQ3gUU+QNYqERbd6QgQwlc=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hhcpmCAePMgSd9ylZk78zaUub5ZKapxDJnjkENUeRM4O3+LlQFrgY6gUedMW0r6qUC4+IALQ79Zy4Cu9yjEo9oKXhk/FoFrhSQctwb037mWOIVbxPoDQIPEMeJ62r+QykBwF7YgS+4MG02DjuwpYvEUtJeKCuJBgq1pVbPK8mU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=MR++2k7U; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1739857456; c=relaxed/simple;
+	bh=uynmvG9CXjjg+dxZSDVnngeac2FMsHyeou92Hd8/z0k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Eh603EAI0+G4MFJ3/yYH7pU0iHvdzls6tsw8WO/V1nEe/JDedTHQtIb/bhWak8gRAoZtfeqTx2IQ2qEChKQJ8XBpMYdnJSmyLcjhrogJiQE8ekyfewURSq5GIAOhTWgxPF8qbazKpOKNIgWVljOrpBlCGmqmNoSFcQ55PWTClG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=eVr+kFx7; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="MR++2k7U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1739840990;
-	bh=42hWqZkaDlwsbOuKcR363GQ3gUU+QNYqERbd6QgQwlc=;
-	h=Subject:From:To:Date:In-Reply-To:References;
-	b=MR++2k7U+SQKF98nYBZwOBmOb2ncRe5qVWZZqcgx53Sxw3D5moRDfFaVkaHQo5NQ4
-	 LbioIN1E+rcU4Wp1Hu0I4t8thOoIhVZbPzjXj93GiVOal9l27Ela+cMaKBpmCu7kJn
-	 XwTfFf2rQDw6bw/3mh2fjTHBnkkNRx2UVhb/c+dhq9l6ez8P07OmspidVXdrYefeG3
-	 Y+g5frhVzF8OswBMD88vkDH54VcxI7BDmHRh7iroxNDAcLKcpqMTdUkK+83LSo9H64
-	 6NO4s475K8i/MJC9vvAQw0dmtxeDxdFCo+I+orlHbkbg9svQ5Orna6hLHx+edN52nm
-	 Ra+qldThpmp1g==
-Received: from [192.168.68.112] (ppp118-210-165-49.adl-adc-lon-bras34.tpg.internode.on.net [118.210.165.49])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1E5A876234;
-	Tue, 18 Feb 2025 09:09:49 +0800 (AWST)
-Message-ID: <560da647d1fd12c53f6403db4207fec48899648e.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6] media: dt-bindings: aspeed,video-engine: Convert to
- json schema
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Jammy Huang <jammy_huang@aspeedtech.com>, eajames@linux.ibm.com, 
- mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org,  joel@jms.id.au, andrew@aj.id.au,
- linux-media@vger.kernel.org,  openbmc@lists.ozlabs.org,
- devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org,  linux-kernel@vger.kernel.org
-Date: Tue, 18 Feb 2025 11:39:48 +1030
-In-Reply-To: <20250213015338.3243171-1-jammy_huang@aspeedtech.com>
-References: <20250213015338.3243171-1-jammy_huang@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="eVr+kFx7"
+X-UUID: 5ed8c4aaedbb11ef8eb9c36241bbb6fb-20250218
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zhMJX61CaOCAtuI1Ka5Qhja7xE4S5i78jAdQ710Xd6g=;
+	b=eVr+kFx7hZ12GZ+qt3KerLZIOGRI51vwB27X9sxNlf1KkVyeBiB2zG7Qsjmeq4RShXy3wkeCoCRJP75L062SyhGDLOUzUgeQydSI3s8Odya468JnbiOhWfz2qLvg/5jOLw4ZKvFSLJXIFB+T6NYCF3MrMeZaFzAlzKC4Aovd5Vc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.46,REQID:3fa920d2-6730-47d8-a60a-7320cc453853,IP:0,U
+	RL:0,TC:0,Content:47,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:47
+X-CID-META: VersionHash:60aa074,CLOUDID:7b82770b-46a1-4805-887b-d6afca075802,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:3|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 5ed8c4aaedbb11ef8eb9c36241bbb6fb-20250218
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw02.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 487458292; Tue, 18 Feb 2025 13:44:07 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 18 Feb 2025 13:44:06 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.28 via Frontend Transport; Tue, 18 Feb 2025 13:44:06 +0800
+From: Jason-JH Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Jason-JH Lin
+	<jason-jh.lin@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>, Singo Chang
+	<singo.chang@mediatek.com>, Moudy Ho <moudy.ho@mediatek.com>, Xavier Chang
+	<xavier.chang@mediatek.com>, Xiandong Wang <xiandong.wang@mediatek.com>,
+	Sirius Wang <sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>,
+	Pin-yen Lin <treapking@chromium.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH v4 1/8] dt-bindings: mailbox: mediatek: Add support for MT8196 GCE mailbox
+Date: Tue, 18 Feb 2025 13:41:46 +0800
+Message-ID: <20250218054405.2017918-2-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250218054405.2017918-1-jason-jh.lin@mediatek.com>
+References: <20250218054405.2017918-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-On Thu, 2025-02-13 at 09:53 +0800, Jammy Huang wrote:
-> Convert aspeed-video.txt to yaml format.
-> Update aspeed-video.txt to aspeed,video-engine.yaml in MAINTAINER
-> file.
->=20
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Add the compatible name and iommus property for MT8196.
 
-Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+In MT8196, all command buffers allocated and used by the GCE device
+work with IOMMU.
 
-Thanks Jammy.
+Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
+---
+ .../devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml     | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Andrew
+diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+index cef9d7601398..73d6db34d64a 100644
+--- a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
++++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml
+@@ -25,6 +25,7 @@ properties:
+           - mediatek,mt8188-gce
+           - mediatek,mt8192-gce
+           - mediatek,mt8195-gce
++          - mediatek,mt8196-gce
+       - items:
+           - const: mediatek,mt6795-gce
+           - const: mediatek,mt8173-gce
+@@ -49,6 +50,9 @@ properties:
+     items:
+       - const: gce
+ 
++  iommus:
++    maxItems: 1
++
+ required:
+   - compatible
+   - "#mbox-cells"
+-- 
+2.43.0
+
