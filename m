@@ -1,124 +1,292 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492A21E51EA;
-	Tue, 18 Feb 2025 18:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A0B17A30C;
+	Tue, 18 Feb 2025 19:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739905094; cv=none; b=go7ECjetQHUfIc1Bwn/tMTAEEJ0iL3W/uguOl+RbtxAIg8VDIupzPWFbqXkfpF9VffLzfkI6Z74BXYSykdr7W19CBaR6tktr7xDsnvVuAwS+KgYoR+nTbm9kAvZ83DKOXv+h85Q2iPI0UYo0QBFCOA/lPyCrHFr42hO7U+YhKCo=
+	t=1739905729; cv=none; b=nIEeSRj51gl5oUFMgH+vI3phcGxj01qDJNpzlOfZ8w3bRbTEpqpCy7vpKE5cC3cv74mxgho3IoSKpbwcWYOLOyKE0UjGcJgSF5Ee+wh6fUbNYjs7EO2xoH3NPUikZUMZUG/BDx0f53ZUY0qMpV9kJomjJvogTCml5YZNY0PxtBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739905094; c=relaxed/simple;
-	bh=53njmH+c2yf4GLXICveIAjXd49TtISyQqP0xl16YiDs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EKbOJd7UhRpVPgL5IYB67lsNhFbGZKULDQG0wlvI1dA6+oFxHzAAoXZP0eOeJSJCNcqYy980FRjJUBmaUBK6kfzoX0LOKhBdaXdIpaCLjmzpOHXOjGTyWDnBHogBWLVArYixz7ZpjvZSgfRpyZ0JjWolWpKTSfqbYz/E4LmT4ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LJ/yIepp; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739905729; c=relaxed/simple;
+	bh=MVgm1pbDd++KWvHhJeM8PPkZ/kguBWYm8oGMkmiK2I4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=KjuIv5brUvmK+C5cqrFlvnxA3nLb+j+tD0KAkgF9b6JRA6376eF6tO3Ct8dFltoLzZ/qLxJwsjAboo9CzufnkgZmR6tN5LUy0l2bkRAYVIvP8bn3KiRWgl7uoOQHNaVnrzOH2rMXOQydlHQAt5eq4dBmUTMuR6RTTKGywbmPXpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=IsA/eJ/g; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LJ/yIepp"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6dd420f82e2so81248796d6.1;
-        Tue, 18 Feb 2025 10:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739905092; x=1740509892; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ae5CUAqvFWLqCxBuF5XhzMM5neQb6Ke5yTuZdxcdHBI=;
-        b=LJ/yIeppW9hkcgL/kAQwAFKKd3TT8aNyEdS3XMFjHKnZRM8VJGXlruUH4xsHtKn44r
-         zqWpw2Ehk+jtKTn2JFukl/VrgE7uBnl6VRWDFr8cmd3ibHcZ+gfrvzlJGwmebhfWxPqk
-         OSAclwduFyDs30XG5VxmTr6Brd+0ShmufBhmgq1tOGlXV8KuwG+qaBUqj/4PaeBCiOCn
-         4hHOtpUXkc4yFkvmV8O5sM4fPLb+sbuzNc5iHko5bd3gtEURsDRf1i7tXeLW6aByrldD
-         MxdzBuiI4l2/hX/bOwjt08sO5KGbjy/6YNnTM3G3hU7vPN7xHhhHGjZlzRmoihw061wy
-         v+wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739905092; x=1740509892;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ae5CUAqvFWLqCxBuF5XhzMM5neQb6Ke5yTuZdxcdHBI=;
-        b=rIQ2pPZsqhQD0vPAIvsTH2tobuy2hm3YgFnZ0RQ/bwuZQMcuZrDlObz0WJ8VNWGTe3
-         kDgEW0Rk0BA2Km95tGLry7LcBmQZivs8mslbEBrodLeD72i5XiBigGsM5tDDf+M8WKAd
-         0tVY0H2ZEuSesCkFaWK4Cjz4ahOosN3kcIrwOnOAwI4dSns3ZnlBQIfQkMll5Fi5ERJI
-         DfGqAeQLpzUehFdekJasyBpbMrKDjNXUOrEB1iKESZcpAoPgaAVSPxcyEVXakrU6UQCB
-         LolB+tFffZme9DvLqo3LwzhhXLplKzSlssqS8OIV/IxDEPAskpvUFgat7NvBHv+AIJxp
-         ASjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJrTJJmjfii+IBTWVoTP2urDIMPWewlqwmdEcLrIDP5DvxB94yae7kFEZ1g1yoagmo6k0zNrRc16axpXA=@vger.kernel.org, AJvYcCVhDjPi/rU0urw4yEr/vCoUqmGuQr7lX9XKU/C/k3B5s8czRiFnwVFmJonxppgmS72CXq9wgk2qYyeaqSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqEuYbfbklq3WUGYH99usSxCj0ecvnxWDeYLmi4fcSRH5Gyb0o
-	dmQAXokRH0XJ9k2d9dbGBX4vFzwfRFwYR75ZpURWUwtOzoDdBHg8
-X-Gm-Gg: ASbGncuQrBFie47NYarudVboCXDMnlf3aJLIVY0rOmRCp3UdRAgPiRfqQK6OrcCKv4l
-	lgAhM8vZUHXNsYLbRwiVKj9UgF9Chr3jX9UXBJHxdFMnG8FbjftE6HOpHXqnfwZlsggNkOWv0k1
-	xzpUwc1lW2m9qDcq9R5nB6580T2j6DqQAxGfLpZAKUQWUUVG6+gaWrQ7bO6iy4Bj+w83Y6HwfTs
-	p8+LMMkUHhpTs05G2ZRaX40ufCSjoUS5ELAHUonW/rOuHxq8s+OkmdB+LflVDkGbqKIzdjryuyT
-	BHwljjAtouLlvgm993GVDvJk8EOVuY8Z7oiZuA==
-X-Google-Smtp-Source: AGHT+IEBUpcPJIeS91rT5iM8/z85eHzjoA42gXRp32LDonh/AwlEudjIz2MzjR25aealFM9CLGUITw==
-X-Received: by 2002:ad4:4eed:0:b0:6d4:e0a:230e with SMTP id 6a1803df08f44-6e66ccc114cmr224422306d6.16.1739905092130;
-        Tue, 18 Feb 2025 10:58:12 -0800 (PST)
-Received: from newman.cs.purdue.edu ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d7a40bdsm66803016d6.59.2025.02.18.10.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 10:58:11 -0800 (PST)
-From: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-To: sebastian.fricke@collabora.com
-Cc: andrew-ct.chen@mediatek.com,
-	angelogioacchino.delregno@collabora.com,
-	fullwaywang@outlook.com,
-	jiashengjiangcool@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	matthias.bgg@gmail.com,
-	mchehab@kernel.org,
-	tiffany.lin@mediatek.com,
-	yunfei.dong@mediatek.com
-Subject: [PATCH v2] media: mediatek: vcodec: Fix a resource leak related to the scp device in FW initialization
-Date: Tue, 18 Feb 2025 18:58:09 +0000
-Message-Id: <20250218185809.37130-1-jiashengjiangcool@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <195061eaa10.dcfe0edc1589793.425795569509706466@collabora.com>
-References: <195061eaa10.dcfe0edc1589793.425795569509706466@collabora.com>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="IsA/eJ/g"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51IJ83hA062175
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 13:08:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1739905684;
+	bh=fe9G2MZAHcd6fZNYH50IhEjcWk7Zck1M5VKNFAJhbe0=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=IsA/eJ/gKw7Ot15bGtKazVgprX8P7jUClfkkzImaYlfEicqHFZAPZTk5nJDuIFKhf
+	 YeuIiZ9igzbgiz/V+aKBO7ZxolJxTUlQ1XLvCYxYUZllHjMuwVsKHGps2FpjY1ylKW
+	 /XOjMn1L2V0eKD8pAa1xTFoh3hbXc9IHWkoQHb4k=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51IJ83oA010965
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 18 Feb 2025 13:08:03 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 18
+ Feb 2025 13:08:02 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 18 Feb 2025 13:08:02 -0600
+Received: from [10.24.69.142] ([10.24.69.142])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51IJ7o1V046671;
+	Tue, 18 Feb 2025 13:07:50 -0600
+Message-ID: <bbf4f6db-cac1-4558-b345-8b4d6b36a8fa@ti.com>
+Date: Wed, 19 Feb 2025 00:37:49 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] arm64: dts: ti: k3-am62a7-sk: Add overlay for fusion
+ 2 board
+To: Sebastian LaVine <slavine@d3embedded.com>, <devicetree@vger.kernel.org>,
+        <imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+CC: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Biju Das
+	<biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Elinor
+ Montmasson <elinor.montmasson@savoirfairelinux.com>,
+        Fabio Estevam
+	<festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hans
+ Verkuil <hverkuil@xs4all.nl>,
+        Javier Carrasco
+	<javier.carrasco@wolfvision.net>,
+        Jianzhong Xu <xuj@ti.com>,
+        Julien Massot
+	<julien.massot@collabora.com>,
+        Kieran Bingham
+	<kieran.bingham@ideasonboard.com>,
+        Kory Maincent <kory.maincent@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>, Nishanth
+ Menon <nm@ti.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob
+ Herring <robh@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        Stuart Burtner <sburtner@d3embedded.com>,
+        Tero Kristo <kristo@kernel.org>, Thakkar Devarsh <devarsht@ti.com>,
+        Tomi Valkeinen
+	<tomi.valkeinen@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>, Will Deacon <will@kernel.org>,
+        Zhi Mao
+	<zhi.mao@mediatek.com>
+References: <20250212195656.69528-1-slavine@d3embedded.com>
+ <20250212195656.69528-4-slavine@d3embedded.com>
+Content-Language: en-US
+From: Vaishnav Achath <vaishnav.a@ti.com>
+In-Reply-To: <20250212195656.69528-4-slavine@d3embedded.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Mediatek devices with a system companion processor (SCP) the mtk_scp
-structure has to be removed explicitly to avoid a resource leak.
-Free the structure in case the allocation of the firmware structure fails
-during the firmware initialization.
+Hi Sebastian,
 
-Fixes: 53dbe0850444 ("media: mtk-vcodec: potential null pointer deference in SCP")
-Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
----
-Changelog:
+On 13/02/25 01:26, Sebastian LaVine wrote:
+> Adds an overlay for the Fusion 2 (FPD-Link IV) board on SK-AM62A.
+> 
 
-v1 -> v2:
+Were you able to test and get this working without additional patches on 
+linux-next?
 
-1. Reword the commit message to give more context.
----
- .../platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c      | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+The multi-steam support for J721E-CSI2RX and CDNS-CSI2RX drivers are 
+still WIP [1] and as per my understanding you will need those to get 
+this overlay functional.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c
-index ff23b225db70..1b0bc47355c0 100644
---- a/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c
-+++ b/drivers/media/platform/mediatek/vcodec/common/mtk_vcodec_fw_scp.c
-@@ -79,8 +79,11 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_scp_init(void *priv, enum mtk_vcodec_fw_use
- 	}
- 
- 	fw = devm_kzalloc(&plat_dev->dev, sizeof(*fw), GFP_KERNEL);
--	if (!fw)
-+	if (!fw) {
-+		scp_put(scp);
- 		return ERR_PTR(-ENOMEM);
-+	}
-+
- 	fw->type = SCP;
- 	fw->ops = &mtk_vcodec_rproc_msg;
- 	fw->scp = scp;
--- 
-2.25.1
+1 - 
+https://lore.kernel.org/all/20240627-multistream-v2-0-6ae96c54c1c3@ti.com/
 
+Thanks and Regards,
+Vaishnav
+
+> Signed-off-by: Sebastian LaVine <slavine@d3embedded.com>
+> Mentored-by: Stuart Burtner <sburtner@d3embedded.com>
+> ---
+>   MAINTAINERS                                   |   1 +
+>   arch/arm64/boot/dts/ti/Makefile               |   1 +
+>   .../boot/dts/ti/k3-am62a7-sk-fusion-2.dtso    | 115 ++++++++++++++++++
+>   3 files changed, 117 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-am62a7-sk-fusion-2.dtso
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 27fb3c1be732..bf6a48da0887 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21890,6 +21890,7 @@ M:      Stuart Burtner <sburtner@d3embedded.com>
+>   L:     linux-media@vger.kernel.org
+>   S:     Odd Fixes
+>   F:     Documentation/devicetree/bindings/media/i2c/sony,imx728.yaml
+> +F:     arch/arm64/boot/dts/ti/k3-am62a7-sk-fusion-2.dtso
+>   F:     drivers/media/i2c/imx728.c
+> 
+>   SONY MEMORYSTICK SUBSYSTEM
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index f71360f14f23..fcd8d11e5678 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -31,6 +31,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-am62-lp-sk-nand.dtbo
+>   # Boards with AM62Ax SoC
+>   dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am62a7-phyboard-lyra-rdk.dtb
+> +dtb-$(CONFIG_ARCH_K3) += k3-am62a7-sk-fusion-2.dtbo
+> 
+>   # Boards with AM62Px SoC
+>   dtb-$(CONFIG_ARCH_K3) += k3-am62p5-sk.dtb
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk-fusion-2.dtso b/arch/arm64/boot/dts/ti/k3-am62a7-sk-fusion-2.dtso
+> new file mode 100644
+> index 000000000000..68e06d643bfd
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk-fusion-2.dtso
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * DT Overlay for Fusion 2 (FPD-Link IV) board on SK-AM62A
+> + * https://www.ti.com/tool/J7EXPAXEVM/
+> + *
+> + * Copyright (C) 2024 D3 Embedded - https://www.d3embedded.com
+> + */
+> +
+> + /dts-v1/;
+> + /plugin/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +&{/} {
+> +       clk_fusion2_25M_fixed: fixed-clock-25M {
+> +               compatible = "fixed-clock";
+> +               #clock-cells = <0>;
+> +               clock-frequency = <25000000>;
+> +       };
+> +};
+> +
+> +&exp2 {
+> +       p9-hog {
+> +               /* P9 - CSI_RSTz */
+> +               gpio-hog;
+> +               gpios = <9 GPIO_ACTIVE_HIGH>;
+> +               output-high;
+> +               line-name = "CSI_RSTz";
+> +       };
+> +
+> +       p19-hog {
+> +               /* P19 -CSI_SEL2 */
+> +               gpio-hog;
+> +               gpios = <19 GPIO_ACTIVE_HIGH>;
+> +               output-low;
+> +               line-name = "CSI_SEL2";
+> +       };
+> +};
+> +
+> +&main_i2c2 {
+> +       #address-cells = <1>;
+> +       #size-cells = <0>;
+> +       status = "okay";
+> +
+> +       i2c-switch@71 {
+> +               compatible = "nxp,pca9543";
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               reg = <0x71>;
+> +
+> +               i2c@1 {
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +                       reg = <1>;
+> +
+> +                       deser@3d {
+> +                               compatible = "ti,ds90ub9702-q1";
+> +                               reg = <0x3d>;
+> +
+> +                               clock-names = "refclk";
+> +                               clocks = <&clk_fusion2_25M_fixed>;
+> +
+> +                               i2c-alias-pool = <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
+> +
+> +                               ds90ub9702_0_ports: ports {
+> +                                       #address-cells = <1>;
+> +                                       #size-cells = <0>;
+> +
+> +                                       /* CSI-2 TX */
+> +                                       port@4 {
+> +                                               reg = <4>;
+> +                                               ds90ub9702_0_csi_out: endpoint {
+> +                                                       data-lanes = <1 2 3 4>;
+> +                                                       clock-lanes = <0>;
+> +                                                       link-frequencies = /bits/ 64 <800000000>;
+> +                                                       remote-endpoint = <&csi2_phy0>;
+> +                                               };
+> +                                       };
+> +                               };
+> +
+> +                               ds90ub9702_0_links: links {
+> +                                       #address-cells = <1>;
+> +                                       #size-cells = <0>;
+> +                               };
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&cdns_csi2rx0 {
+> +       ports {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               csi0_port0: port@0 {
+> +                       reg = <0>;
+> +                       status = "okay";
+> +
+> +                       csi2_phy0: endpoint {
+> +                               remote-endpoint = <&ds90ub9702_0_csi_out>;
+> +                               data-lanes = <1 2 3 4>;
+> +                               clock-lanes = <0>;
+> +                               link-frequencies = /bits/ 64 <800000000>;
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&ti_csi2rx0 {
+> +       status = "okay";
+> +};
+> +
+> +&dphy0 {
+> +       status = "okay";
+> +};
+> --
+> 2.34.1
+> 
+> Please be aware that this email includes email addresses outside of the organization.
