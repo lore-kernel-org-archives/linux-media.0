@@ -1,173 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79787199E80;
-	Wed, 19 Feb 2025 13:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2B31C4A16;
+	Wed, 19 Feb 2025 13:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739972948; cv=none; b=EEACPgdIHNP3uR9uNz4iZhRGvZNfA4T6gtT3UygoQ29da0k/niRg3DmRCwd+dfLVyPweRICHa7emX/OnbTfB2FVOjb19LUgGyAun7Lwt79GNnwW+OJCWkNvQOEVxnCR3+roqQ4bOvNcfN9pAe2FLzDawp1sbc6PZqR4VxrJpFF0=
+	t=1739972987; cv=none; b=W0roSWGMiuHnffPPt5EP7E1owsFxtsibJsMA80EsL881qI58fWt2U04LygkpLwEfbKAg7sfrJ8MobqpFAzekJOp3MDj3NPFyFBmgcQC3xUs0L/O/OCFrulde2lq5LGhxrVR+/8UkzUKNWlXTa2J6w+tiITg0G8ANsVnev8S3hZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739972948; c=relaxed/simple;
-	bh=A1jQdtZvRbIjirpi/QpXD1jZ8tpStZUExtEIfK1U5Cc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kOz05UaDVhreidWKpp5xvpHkyb5yKJ0yQqfzqXXcITRDolJEm1a4Ypay8sqbVPCZYEIpX59ZhYrn1LV0R74Zo0aS3u+xZmxLHkWpZf3spFUQIzP6sJ2rWchx4h/2mTbojYWBez1rncSrTvVnNGwjSVxA7HuZT5brJKLS4235iy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFIwFIYx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739972987; c=relaxed/simple;
+	bh=rSI6cx/RPfMQe4oAO+y9gJg7CLsr656IO2NxzyrCboE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XBb2vwCRd2n+irfSGvIVg2JObgkntkLx5J9Cfifw+6JM8lW2etDtCfJXrqlt6Q9DurxJJnk1TZEfmOhb1qNFPo5fYd2o9tXDHOeiskyT1q36u8mBhqZAB1BG5z7cSxH5wdV1gLYyNOrDsnSwGGPuzqxyuUTaalVHIeHHNZeGatA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=R+9lbiSc; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFIwFIYx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAAEDC4CEEE;
-	Wed, 19 Feb 2025 13:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739972947;
-	bh=A1jQdtZvRbIjirpi/QpXD1jZ8tpStZUExtEIfK1U5Cc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IFIwFIYx0ARMx+0zY1HAfpnbVgkm//Wuvx46GSLkxcqt8pyR8cUWXdqQX9Ej8EiXY
-	 lOcuGfIVJCls3eng4yKpq6pAOUAIFyjgJeOMXv/uc14jU0fNAWka+TYNrkG31Zby4A
-	 q5VS+9iwtZOHE40aGcTDcdLU23EEaiFCpiIqVrn1HUceDqzWSED6ATPKac07FqWy18
-	 xGWm3cfbewXnj16OJw5uP5S/dxWwk8fUQBiuNCzCP4YyUOTi2SA4nzyCv46RrN8pxN
-	 geAc5o/X9/8YtXZmLfPdQPqnu0SC7k0Hm5aYQkVlcEXfFH68vkhwsmQAihN3TDx49u
-	 +73uOfTOqinSg==
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2fc0026eb79so12733448a91.0;
-        Wed, 19 Feb 2025 05:49:07 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU3r+TkUvZe7ly/BbfAlwfhwz+zv7VeLiehuaralBs0JAVvpNFH/iGh/DkXOVq6/NuIuOsE9LrnD+ebDuQL@vger.kernel.org, AJvYcCUPOBp0c1Qt+4uHGJVLydFjKz9e0UbfraHyRalDhE+s5EGFdrZ+7NUD/SEFECX3EHu5RB4bH1QhAJLSYo8=@vger.kernel.org, AJvYcCWKykq2d1qY438QesGINQ1aFCsiLRbDHfWz4HbBKeObdPrRE8J2Zfe4N4Y6NlGe/iOhrPR91SPmJSF7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs3bxzOjpWPIPzWqNj4tja5dBGWjRR2JIHobwlAW7D6PRWTwE/
-	f3sC1JZ73qlE17dVtshf9UyIvpexDJrLBjfi8HPVr4zZyaLa4V2KXZ3mcg4UiKNuR0eLUmu2NdR
-	cmojdLMyYWunp8t7cAgMphvUR2g==
-X-Google-Smtp-Source: AGHT+IHzQqtYsvHwADMmf9VWFRyvbp1G6Xfgzoq4kaeRwD/sC1OC2iDXSHRlVSxq3fcQCkZrXfrGdEMDnJjaCDjhs5g=
-X-Received: by 2002:a17:90b:17c4:b0:2ef:2f49:7d7f with SMTP id
- 98e67ed59e1d1-2fcb5a39f93mr6272302a91.18.1739972947332; Wed, 19 Feb 2025
- 05:49:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="R+9lbiSc"
+Received: from [127.0.1.1] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 47A6A169;
+	Wed, 19 Feb 2025 14:48:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1739972900;
+	bh=rSI6cx/RPfMQe4oAO+y9gJg7CLsr656IO2NxzyrCboE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=R+9lbiScC/nHVPWs9+SGMll4rlZQvE99G0dNxHodkmScLMqc6qRbBCIQ1GBw2Wl/u
+	 zg0C0hKOpfzXmfzaGXcLpESzUjwDu5QxTAtDC7IcEJx7rsIqM2qzKwqnWEbCIVg6Rx
+	 gysF0+UACX+aXx6/LEPdnO9JaSOlhjPrRUr/LacM=
+From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: [PATCH 00/18] media: rcar: Streams support
+Date: Wed, 19 Feb 2025 15:48:54 +0200
+Message-Id: <20250219-rcar-streams-v1-0-f1b93e370aab@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218105320.38980-1-angelogioacchino.delregno@collabora.com> <20241218105320.38980-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20241218105320.38980-2-angelogioacchino.delregno@collabora.com>
-From: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date: Wed, 19 Feb 2025 21:49:51 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9J4TE=qo+00N7T6-daMET+eTt8psp+eV1DXdgrz+avEQ@mail.gmail.com>
-X-Gm-Features: AWEUYZkyNYkPz9DDQbj1WmcsisPQynG6ha2xkIpk0KuCjDPQnw0UB2_LYJk3Qtw
-Message-ID: <CAAOTY_9J4TE=qo+00N7T6-daMET+eTt8psp+eV1DXdgrz+avEQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] dt-bindings: display: mediatek: Add compatibles
- for MT8188 MDP3
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com, 
-	simona@ffwll.ch, maarten.lankhorst@linux.intel.com, mripard@kernel.org, 
-	tzimmermann@suse.de, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	mchehab@kernel.org, matthias.bgg@gmail.com, moudy.ho@mediatek.com, 
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kernel@collabora.com, sebastian.fricke@collabora.com, 
-	macpaul.lin@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEnhtWcC/6WQwWrDMBBEf8Xo2spoZUu2TCn9j5LDWt7EIpGda
+ h1TCPn3Kg70lEvpaZmFeTuzV8GUArHoiqtItAYO85QFvBbCjzgdSIYha6GVNkqDk8ljkrwkwsg
+ S9gNh21pFhkS2nBPtw/eG+9w9dKKvS6Yuj6WIxIwbtSveMrRWoF2e2tQlgLZZSpBTOJ6QS54HS
+ qfLNLwkmoiRPxIeJlzIjyXT+/3iUx444zYeKFtXf+L9lu6KrTJo9agcaQgoQzynWWpfNR5UZQl
+ ct8KzHPdnKWiMBVOCba3R7l85NLRynzCSHIi9PCPzMqb5chilta0yVEPlmrpb9d3dI5P0c4xh6
+ Qpf903TOOy9tWJ3u/0A3n0s4/QBAAA=
+X-Change-ID: 20250219-rcar-streams-1fdea8860e5e
+To: =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>, 
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+X-Mailer: b4 0.15-dev-42535
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4516;
+ i=tomi.valkeinen+renesas@ideasonboard.com; h=from:subject:message-id;
+ bh=rSI6cx/RPfMQe4oAO+y9gJg7CLsr656IO2NxzyrCboE=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnteFvxiG4uHuUogZ/dy0udlygvfz2o08EGqUlt
+ VDbNW3puX2JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ7XhbwAKCRD6PaqMvJYe
+ 9XkwD/sGzrtr9Fr9Y6BM5C2NgVKGxEG12mdpbbcDP3SvC+/z6sUd+s42yrr4V8N+AnYBs14BBOu
+ kQYPYL20rmIkvAjAHeC1mORYiKfYz1o6V8bwlt6NB/xYPaSokFtXR4FFpJE5Y++OQ+OdSgCTFqt
+ wRymxVuPALYJcxUdg21Zl/dWdDCrEyQqmwBG0V/NtisqXyCBQ7UbgPiDaQkwDGA9TVwM6O8xOOy
+ m3WzzDjI4NDEDhySVuxtuA27AwLfrNMGsvPczRIDEPQDgzTC/sm2sHIE47n6577dxp4ytXODQ4Z
+ Mi4a5wkn+IQLq6oevcNIPaHO9jg4ob4N4dDXqPEVl8KXJQSkoKX2EdxaE65vhM35hhf7mqox1vz
+ CBjQ0bjhCg54Qdewv4gZ/BTXw4MnIWfqYhD4FAG2GgG3MMff3C5MiZ7S5AwF6L5lGjuEiD980m/
+ lVMCpOInLn1T8NesMLESPkkgjg2ckDoNb0KG92zwrDi7V5PaiGLqhgWPwhzanPG33vTKHpFlM7v
+ LlYP68xur7ss4e443T30SJhSE1tH2Ndm7evwZ/spkoDd4mWCLvKft0cmthUn6WFtOgVQffNRh06
+ S7sOvxibfooXMev0I1zmomIrP9v6IfrC2otHI8RXaTkzGWvVtdKkRgDp8fsE2McNcdlIFp/481Y
+ pJuOL48vynqnvag==
+X-Developer-Key: i=tomi.valkeinen+renesas@ideasonboard.com; a=openpgp;
+ fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
-=BC
-2024=E5=B9=B412=E6=9C=8818=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:=
-53=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Add compatible strings for the AAL, COLOR, MERGE and PADDING
-> hardware components found in MediaTek's MT8188 SoC.
->
-> This hardware is compatible with MT8195.
+Add streams support to Renesas rcar platform driver.
 
-Acked-by: Chun-Kuang Hu <chunkuang.hu@mediatek.com>
+The series attempts to keep compatibility with the current upstream.
+However, in upstream there's some kind of custom multi-stream support
+implemented to the rcar driver, which breaks at patch "media: rcar-csi2:
+Simplify rcsi2_calc_mbps()".
 
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  .../bindings/display/mediatek/mediatek,aal.yaml        |  4 ++++
->  .../bindings/display/mediatek/mediatek,color.yaml      |  4 ++++
->  .../bindings/display/mediatek/mediatek,merge.yaml      |  4 ++++
->  .../bindings/display/mediatek/mediatek,padding.yaml    | 10 +++++++---
->  4 files changed, 19 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-aal.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.=
-yaml
-> index cf24434854ff..1479035da409 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam=
-l
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yam=
-l
-> @@ -25,6 +25,10 @@ properties:
->            - mediatek,mt8173-disp-aal
->            - mediatek,mt8183-disp-aal
->            - mediatek,mt8195-mdp3-aal
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-mdp3-aal
-> +          - const: mediatek,mt8195-mdp3-aal
->        - items:
->            - enum:
->                - mediatek,mt2712-disp-aal
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-color.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,co=
-lor.yaml
-> index 7df786bbad20..799c0b8fc1f9 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,color.y=
-aml
-> @@ -27,6 +27,10 @@ properties:
->            - mediatek,mt8167-disp-color
->            - mediatek,mt8173-disp-color
->            - mediatek,mt8195-mdp3-color
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-mdp3-color
-> +          - const: mediatek,mt8195-mdp3-color
->        - items:
->            - enum:
->                - mediatek,mt7623-disp-color
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-merge.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,me=
-rge.yaml
-> index dae839279950..415a25bc18fa 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,merge.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,merge.y=
-aml
-> @@ -25,6 +25,10 @@ properties:
->            - mediatek,mt8173-disp-merge
->            - mediatek,mt8195-disp-merge
->            - mediatek,mt8195-mdp3-merge
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt8188-mdp3-merge
-> +          - const: mediatek,mt8195-mdp3-merge
->        - items:
->            - const: mediatek,mt6795-disp-merge
->            - const: mediatek,mt8173-disp-merge
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-padding.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-padding.yaml
-> index be07bbdc54e3..86787866ced0 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,padding=
-.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding=
-.yaml
-> @@ -20,9 +20,13 @@ description:
->
->  properties:
->    compatible:
-> -    enum:
-> -      - mediatek,mt8188-disp-padding
-> -      - mediatek,mt8195-mdp3-padding
-> +    oneOf:
-> +      - enum:
-> +          - mediatek,mt8188-disp-padding
-> +          - mediatek,mt8195-mdp3-padding
-> +      - items:
-> +          - const: mediatek,mt8188-mdp3-padding
-> +          - const: mediatek,mt8195-mdp3-padding
->
->    reg:
->      maxItems: 1
-> --
-> 2.46.1
->
+The behavior should not change when using a single stream.
+
+A problem with the series currently is that it has a lot of
+dependencies that are not in upstream yet.
+
+Testing is even more problematic, as the only way currently for me to
+get multiple streams is by using the GMSL2 deserializer add-on board
+with GMSL2 serializers. These are not supported in upstream. If someone
+has the hardware and wants to test, I can share the very-WIP branch that
+contains the missing pieces.
+
+ Tomi
+
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+---
+Tomi Valkeinen (18):
+      media: rcar-vin: Add RCAR_GEN4 model value
+      media: rcar-vin: Fix RAW8
+      media: rcar-vin: Fix RAW10
+      media: rcar-isp: Improve ISPPROCMODE_DT_PROC_MODE_VC
+      media: rcar-isp: Move {enable|disable}_streams() calls
+      media: rcar-csi2: Move {enable|disable}_streams() calls
+      media: rcar-csi2: Fix typo
+      media: rcar-csi2: Move rcar2_calc_mbps()
+      media: rcar-csi2: Simplify rcsi2_calc_mbps()
+      media: rcar-csi2: Optimize rcsi2_calc_mbps()
+      media: rcar-csi2: Switch to Streams API
+      media: rcar-isp: Switch to Streams API
+      media: rcar-csi2: Add .get_frame_desc op
+      media: rcar-isp: Call get_frame_desc to find out VC & DT
+      media: rcar-csi2: Add more stream support to rcsi2_calc_mbps()
+      media: rcar-csi2: Call get_frame_desc to find out VC & DT (Gen3)
+      media: rcar-csi2: Add full streams support
+      media: rcar-isp: Add full streams support
+
+ drivers/media/platform/renesas/rcar-csi2.c         | 430 ++++++++++++++-------
+ drivers/media/platform/renesas/rcar-isp.c          | 228 ++++++++---
+ .../media/platform/renesas/rcar-vin/rcar-core.c    |   2 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-dma.c |  20 +-
+ .../media/platform/renesas/rcar-vin/rcar-v4l2.c    |   8 +-
+ drivers/media/platform/renesas/rcar-vin/rcar-vin.h |   1 +
+ 6 files changed, 499 insertions(+), 190 deletions(-)
+---
+base-commit: c4b7779abc6633677e6edb79e2809f4f61fde157
+change-id: 20250219-rcar-streams-1fdea8860e5e
+prerequisite-message-id: <20240129202254.1126012-1-niklas.soderlund+renesas@ragnatech.se>
+prerequisite-patch-id: 23c9dfd64dd6176312d50191e60b0a92937c0051
+prerequisite-patch-id: c49831184e0a6ff063cadbc79381c0f68d5b0f63
+prerequisite-patch-id: 47104e797dfef692022a72cb62d7fad2fc44f0f5
+prerequisite-patch-id: c89cf1fd9e528e6685ba8ce1e93e94f019f43913
+prerequisite-patch-id: e096565500ed748974824328adf14905ae40bcaa
+prerequisite-patch-id: 87a61e2c15f59928a96e9213c338cc2a65344c58
+prerequisite-message-id: <20240129195954.1110643-1-niklas.soderlund+renesas@ragnatech.se>
+prerequisite-patch-id: 748963119debbf990374b9eb06659381a3924824
+prerequisite-change-id: 20250120-rcar-media-impro-2c37c1036e19:v1
+prerequisite-patch-id: 3741e9cc665b78b56d18eee0041626d3c739dad5
+prerequisite-patch-id: 99a13857e0de3c1cadc7a971f6c3fb4449599313
+prerequisite-patch-id: a034cd446e21ba28273607f1d928c13739fb83f9
+prerequisite-patch-id: cdf480b4562e749c4190ceec50e78a8dac155bd5
+prerequisite-patch-id: 94c99ecd291d3d3f86b148406bbc383405016f2a
+prerequisite-patch-id: 690790ff01515aa452e73581c3ee4312246bfbc2
+prerequisite-patch-id: 74c5bed5396ef54ded950b9c449ea23b8f67636b
+prerequisite-patch-id: 3a6b197715760886ab383fefe1d5f95f40d8b063
+prerequisite-patch-id: e9f04f626ae08c981faa66de72663e8940a4f92e
+prerequisite-patch-id: 58b5dc8fd9026dcfede60b005294692964def2a1
+prerequisite-message-id: <20250210175615.1686529-1-niklas.soderlund+renesas@ragnatech.se>
+prerequisite-patch-id: a4aa6a184c6a21fc4536c11e14d9b5cc61f13346
+prerequisite-patch-id: 1b0091875529d392b142814005baa38b2ef77f98
+prerequisite-patch-id: 4c960ae93b1e663b11194903ed1810e0ed1e4f59
+prerequisite-patch-id: a5641e1dcad0f39baef8996b6731a471046f18f9
+prerequisite-patch-id: 481317ba4b987cbb069c31f3372686a59c0fcb67
+prerequisite-change-id: 20250218-frame-desc-passthrough-66805e413974:v2
+prerequisite-patch-id: da0097f1a6c5b58f87210acd974d7eba0b721dc3
+prerequisite-patch-id: 7cc5997549353a7e300f4778fd883e900d2251b2
+prerequisite-patch-id: 57d4622505842a9c9b8cbedb49745a155826c464
+
+Best regards,
+-- 
+Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+
