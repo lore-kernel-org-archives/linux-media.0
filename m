@@ -1,97 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56D8192B66;
-	Wed, 19 Feb 2025 08:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D09E1C7019;
+	Wed, 19 Feb 2025 08:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739952126; cv=none; b=k51ilbLnZqvmlkqlfhOtklMwmFLK9KYQ9WFSDgJ7lZfiRJzU08esOanjesfKEy/t9kJ3qOA+vpTCthpamFFWe4+tWJLZNI9IXx6GsuXlh/oR5uXRTHYslEfbq+AQSG0Jhcydh88J6awZBdW6p1odohisIKqzJwh9GrKhrfq4sqY=
+	t=1739953972; cv=none; b=Q8+9FQOde+v5UYF60DD8iJZlapiulsy5Y+c7Nlv71ZrznmJHhLPR40vsmPlT/h+VVJHbMe9QVuhMNEm6yZ/VViY+E4efzTaGm4p8aCPAlfp1LoC2ENP2ZywZ74zhjk/b9DxHK78N5C9TX7VSeuBmPWOmNxUC9w7gQJyV0dajyjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739952126; c=relaxed/simple;
-	bh=nYxmSRhkvwVZZe9/cXfI6tUDCgG7Di0u0OEksrdR7FM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hRktgZvMc3AUbVv8j6Y9I7f425Xojhp2ihHUz+/Ujkd0OYt9/NJygc6aU9D7EUrxTG+9sM2Cn4M9EOD5Zj0i8AJqVlbzdirN3atZPUv8xzYIHTD28HYbztOOcl5yVsisUUKNT8iL1Qz7xX3KgfKOSzN9XR7usR5GWjHkNB+KLwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCuVn+1Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739953972; c=relaxed/simple;
+	bh=dpp4qyIMyF9Zjj8hBit/kiPWhv8Tsh4yLBwdy/oLV7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=s+Fa5Pomj16sFvCt/y+mibAHL8uNhhW6MZhzoP+rj5sTrmMh1JXMF/ouxhNPHoPvc4kGRZfki/tKjsu2iLbzTlMz35MTZzXw5VwD7LJ+nWJoWpyx9H0eD0kzRIq4vtHdINHGF8S4Kv0LyvVO81UggSzfBIIiFhInI5nlnvspqqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mNYbvHPH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCuVn+1Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973A9C4CED1;
-	Wed, 19 Feb 2025 08:02:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mNYbvHPH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8BAC4CEE7;
+	Wed, 19 Feb 2025 08:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739952126;
-	bh=nYxmSRhkvwVZZe9/cXfI6tUDCgG7Di0u0OEksrdR7FM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PCuVn+1YtU9Ywr2EqsbGGAM7EsfwPCKJyyeDv31BUyYmj/xvmrTJyontLVFjsaOdE
-	 ne0CbNrDFEJFi87YuedR7XfAT0Gk/3ECjkeFkLhysya3IVduxSHhSpDVvn7VINzpvY
-	 Dk/yp4+y1qn5NqxBVdDv0WB3cThdNOswGifY0oS3AV2bCRV0pHpXUebCSBD1EQTn5G
-	 YN4wV+V5U84ksKaZZiFdDBP5aIfGpkTavxqNs434Ireo4s2Yf7G0wf4xNc/WC9ty7Y
-	 mZYRn1AKLWdSajiFYBSgfGHWF9Mpbfx4A1Q6gXTJfw5WJqo2LjAw3UgCIkEIXz7xa5
-	 g43hKOXoj84uQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-	Stefan Schmidt <stefan.schmidt@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	=?UTF-8?q?Sh=C3=A9rab?= <Sebastien.Hinderer@ens-lyon.org>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Vedang Nagar <quic_vnagar@quicinc.com>,
+	s=k20201202; t=1739953971;
+	bh=dpp4qyIMyF9Zjj8hBit/kiPWhv8Tsh4yLBwdy/oLV7M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mNYbvHPHc/9E7jcpK6rMPaBalq+I85teunOusdpmMnnMZBjd3XTE3MLxXbwGn+Khs
+	 vifc8SvjP9uNGUSUIZ+/ZHOW9ilPYd5JPnJMLijP9GLQ2o6b7j5VnJaWx89ijc/45R
+	 Tf+3heHqLze0H88SxDeIyF/lKCct7/dDsN7FwwqFJLwD/hU9cWTlv5OH4I+vO7UT0G
+	 hTtGz6ifQM9/+pVtYFOwRjghkdEhPSa2aUmLa+PymNJtpFaURwMQ/qEBE2IZQXHXLM
+	 zsVmT4ReagerAFr6JRgWBZb3LsmICXuEnvFNKwyvUb2WOd+8Ie3ToFAzMtyxoxkf4A
+	 19GctKkeKkqJQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1tkfVh-0000000Gv4P-48Az;
+	Wed, 19 Feb 2025 09:32:49 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] media: iris: rename module file
-Date: Wed, 19 Feb 2025 09:01:53 +0100
-Message-Id: <20250219080200.3907925-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	linux-staging@lists.linux.dev
+Subject: [PATCH 02/27] drivers: media: intel-ipu3.h: fix identation on a kernel-doc markup
+Date: Wed, 19 Feb 2025 09:32:18 +0100
+Message-ID: <8cad70e8f536c1a963c6b827347df1f7052fc5e5.1739952783.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <cover.1739952783.git.mchehab+huawei@kernel.org>
+References: <cover.1739952783.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+The "Rule" description is part of y_calc parameter. Having a line
+starting at the beginning makes it part of the function description
+instead, which is not the original intent.
 
-Build-testing on x86 showed two modules with conflicting "iris.ko"
-names after the addition of the qualcomm driver:
-
-   error: the following would cause module name conflict:
-     arch/x86/platform/iris/iris.ko
-     drivers/media/platform/qcom/iris/iris.ko
-
-Since this a new module, nothing should rely on the name yet, so
-rename this one to a more specific "qcom-iris.ko".
-
-Fixes: 38506cb7e8d2 ("media: iris: add platform driver for iris video device")
-Cc: Shérab <Sebastien.Hinderer@ens-lyon.org> # for x86 iris
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/media/platform/qcom/iris/Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/staging/media/ipu3/include/uapi/intel-ipu3.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/iris/Makefile b/drivers/media/platform/qcom/iris/Makefile
-index f6d22b88f6db..35390534534e 100644
---- a/drivers/media/platform/qcom/iris/Makefile
-+++ b/drivers/media/platform/qcom/iris/Makefile
-@@ -1,4 +1,5 @@
--iris-objs += iris_buffer.o \
-+qcom-iris-objs += \
-+	     iris_buffer.o \
-              iris_core.o \
-              iris_ctrls.o \
-              iris_firmware.o \
-@@ -24,7 +25,7 @@ iris-objs += iris_buffer.o \
-              iris_vpu_common.o \
- 
- ifeq ($(CONFIG_VIDEO_QCOM_VENUS),)
--iris-objs += iris_platform_sm8250.o
-+qcom-iris-objs += iris_platform_sm8250.o
- endif
- 
--obj-$(CONFIG_VIDEO_QCOM_IRIS) += iris.o
-+obj-$(CONFIG_VIDEO_QCOM_IRIS) += qcom-iris.o
+diff --git a/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h b/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
+index 4aa2797f5e3c..8b85524beb59 100644
+--- a/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
++++ b/drivers/staging/media/ipu3/include/uapi/intel-ipu3.h
+@@ -322,7 +322,8 @@ struct ipu3_uapi_ae_config {
+  *			0: positive, 1: negative, default 0.
+  * @y_calc:	Pre-processing that converts Bayer quad to RGB+Y values to be
+  *		used for building histogram. Range [0, 32], default 8.
+- * Rule:
++ *
++ *		Rule:
+  *		y_gen_rate_gr + y_gen_rate_r + y_gen_rate_b + y_gen_rate_gb = 32
+  *		A single Y is calculated based on sum of Gr/R/B/Gb based on
+  *		their contribution ratio.
 -- 
-2.39.5
+2.48.1
 
