@@ -1,35 +1,34 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C711B1F3B96;
-	Wed, 19 Feb 2025 13:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53C11EB184;
+	Wed, 19 Feb 2025 13:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739972994; cv=none; b=JVJwszgNrI8+RI1dsonefHzJtwc0QBNiYuHMi8QV9N4P1Jylxk2vGP0MBXKBaZpg8bmwAtlGWIEqgI+xT1kD9FVFA/SP5XEfHwHSe8JtCSNFB3pM/73f0QxGDJB/P7RxFwes/MRM++b13ekKjm8ZLU3YmXlCSWB3s+pKC3CsB10=
+	t=1739972997; cv=none; b=V/dDV8Tv2dvmgwwoNgNPqLSsv/EO7eaVxlHgqsuH0s7aTxr9L9ezn+D3di38xNDxTowFdZeleJx17EGTLKwyAt+RQKJYoxt8JVzHeCRzsngFBIIrYW7/7O40go/YjoVkvBjy7ENCdaRJl222P0OPGqsu4g//KGhowslNKKO4Wrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739972994; c=relaxed/simple;
-	bh=bAh1et3ubU3RR5o1IhFws7s0RctF///TjTdS3EPINR8=;
+	s=arc-20240116; t=1739972997; c=relaxed/simple;
+	bh=ePInWZswxQnSaLKmHVVpKwsATVLBmrczu3ZBpYlw44Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oLwJ+W22DDclWZotiBMiCwaoz1+ZSEH/xr1BfjwUPO9ZSKqaROFXZo4nPpnsBPuoCBqHZv8tswGMNWo9viJa9IHjoWbW1K5gSo7Y8OQ0pirtf8uKf+HPThu2hqnSng4n/wN+niLx8iCaQqhWd2PzRedCxinjv5NLG4/4+uUCEOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=BabW0SCV; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=YgBcO6NOwoOXY2FDfGhVJmFrzYQYaRbdTi1mHM5ffbG9Rj0tH2y/uOozAkubVXSYzRVPXmNW+H9iG7O42ctrd0yIbpBmbGlsvkcoITWJd0PYWRq8Ak2/hbXeQWupyaej9/BcXCPcnPaWZM68nDMip9uq+6s9DuDhjwKwp7q+mRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FL2RRBUk; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BabW0SCV"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FL2RRBUk"
 Received: from [127.0.1.1] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id F23FCD21;
-	Wed, 19 Feb 2025 14:48:23 +0100 (CET)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6D3D713E2;
+	Wed, 19 Feb 2025 14:48:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1739972904;
-	bh=bAh1et3ubU3RR5o1IhFws7s0RctF///TjTdS3EPINR8=;
+	s=mail; t=1739972906;
+	bh=ePInWZswxQnSaLKmHVVpKwsATVLBmrczu3ZBpYlw44Q=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BabW0SCVyQOFe4TQwfYsMFxOfkFFa2w8Ts2Fkt/wDMzAKQ5wzU7DhbE3LXjx7hw2M
-	 mivonXIQOKVWv7JObJJvjWBxOnV/yRZGIjL+KY25Dbeh7o4BvgF1GHotQtvHWagLs1
-	 u18BHUK2eMRrqQw6IfAvjhGZdh8fVnN+Ot6gM468=
+	b=FL2RRBUk1GLAl+iT0MRGO+WXCOulsi/6qzbO2YD2vEaoDru72b+SA15gCKJM6OMVt
+	 X1s1RP3pyrSJirXZ4Ch5/DFz7bADOBLvZuuNMKJQz6+sqKCsKi9VfdCip/bcfLbeJz
+	 08GmtdbOcfgfqfO6Cb65kgXHPquRlEwrhzNI7oGU=
 From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Date: Wed, 19 Feb 2025 15:48:59 +0200
-Subject: [PATCH 05/18] media: rcar-isp: Move {enable|disable}_streams()
- calls
+Date: Wed, 19 Feb 2025 15:49:01 +0200
+Subject: [PATCH 07/18] media: rcar-csi2: Fix typo
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250219-rcar-streams-v1-5-f1b93e370aab@ideasonboard.com>
+Message-Id: <20250219-rcar-streams-v1-7-f1b93e370aab@ideasonboard.com>
 References: <20250219-rcar-streams-v1-0-f1b93e370aab@ideasonboard.com>
 In-Reply-To: <20250219-rcar-streams-v1-0-f1b93e370aab@ideasonboard.com>
 To: =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
@@ -52,82 +51,65 @@ Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
  Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 X-Mailer: b4 0.15-dev-42535
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1795;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1446;
  i=tomi.valkeinen+renesas@ideasonboard.com; h=from:subject:message-id;
- bh=bAh1et3ubU3RR5o1IhFws7s0RctF///TjTdS3EPINR8=;
- b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnteFx4eXYetGbYwLQyFQy/GbZOOCC92+Js0WUL
- tB2dgK7Td6JAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ7XhcQAKCRD6PaqMvJYe
- 9UQKD/0VuzwdREumypkCBpxCGGsk960IvdU3uEEB9G/Uq8pGiyZOpKuGFairOvZP95PfMpa+qV8
- CA1AFb36LUzYnEG/ecxok6G5qIv3nP7G2Qjmbs7TVULV9xvsyF9UDpTjdJN0AfbIcgX5W1/rG+s
- 3RND8PFIttALGGo7kLdcjI1ndN6rbPTH7d7/xF+opvzud52A+xHtNcGuYjkLsWJCIgqQgvZlQaK
- TL7gX3l/SXqB+Bw3m1wAMleqcyRQjE/RuMT5Jpc1GUSLz62voKC0io4ypFzTKlxszPtymAUA6yc
- vHeope2SCFW5pwvqkyRCRocG/XUATNXDzSp1DJ+H8FcoZpumG/RncY7fAG04+Nh1kK+W2qV2+Ut
- auWXrAAd/zi1BhjGhWf/EDDg0msi3qU256dayKGdGjUhlhBbt6d5FmkgtLe2T2k1e6QZ2j3jdBD
- 6dRIDTyvyChB+pZtaqb6g+N53ewNa+dc/UzT+61tGJzi8bmJN3MFzi+N9nByol63WGToVgtZ3P6
- GM8mh2nmz7Au5J/oZWcPOOySrKmuNkcyQ1HeKCEwefi/N/5GErumKStIQwoqjGZBdthaAIlgBNb
- dCrkLKhUKv24cs0hi6qfVM14xjmurPA/21+zhxosZJxC2tHnTgtIasz7FGTO+d0ML3MbwLk2IIw
- E6nHdA19hV1utYw==
+ bh=ePInWZswxQnSaLKmHVVpKwsATVLBmrczu3ZBpYlw44Q=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnteFyQImVhcQz/A/9tqJdqiSEq3t8qnXOubnLO
+ cYH6VCLieiJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ7XhcgAKCRD6PaqMvJYe
+ 9QwgEACUoQ/DNCqQm8DsHidCyPTo5JTNRM+YWkBDShJyjLJIIHQm9KAbQzkMDG8c2G5OOWLx5Jh
+ pCw/iTnxWaP2UTeBYAId0TY9twAEZF4r3nYlardAQ85pQtcurd+Vhk8/TxzbiN+xcQqK5+yb8Z/
+ 3lWpgWiQQFonYDdaY+TZWvMLLzLzcRm8Qi1EuSOpcldM6R+4cl0CmmplAJlE9h+aLczWfrgNVgU
+ HdpTm59yL+QsPbkTr0/JC+e1boAtMEWBkMEZRWkgg7LnKCeWPVEeggAc95Hxk6u0ZYPxjmw+iJW
+ e0xeTO+0OziP6FwQBjV92XZy8hbGuEll+Xvn1m0a8xwD7RTpDeJDVisrQheb5+6EX9qSHK7pxne
+ 9otpohLUhQN/CQ2+rsgNwoMpcSykvHEQgj9SMsXkp3bDjN3cpLRvGwKdn77RCuJPVl+4aMdclmo
+ tXGFKHYVh/m4KD2gNfOydxk7NCHyQYr+AO+t5QYb/du7dcGZRU+gtgxq5K9URU9NTu7Wk9HTSJ5
+ KMT87LUkZ0jCYWJ+LcRlUJsQBi1PtkVdhCjOp/jPp2ZEfN5cJ/xosFFW1Od+AtXQjQvrmt2RHrE
+ yFTbdlD7/1GnV+Tv+dFhI/ZU9g4DcFwMSr9uiA1/YKI+za0aaJqqrK3cjwBNAmvardI/TpZNOeH
+ IoQBSP3E2oM5d9A==
 X-Developer-Key: i=tomi.valkeinen+renesas@ideasonboard.com; a=openpgp;
  fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-With multiple streams the operation to enable the ISP hardware and to
-call {enable|disable}_streams() on upstream subdev will need to be
-handled separately.
-
-Prepare for that by moving {enable|disable}_streams() calls out from
-risp_start() and risp_stop().
+Fix typo with variable name 'msps'.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 ---
- drivers/media/platform/renesas/rcar-isp.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/media/platform/renesas/rcar-csi2.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/renesas/rcar-isp.c b/drivers/media/platform/renesas/rcar-isp.c
-index 46534a479201..8e222c9ec604 100644
---- a/drivers/media/platform/renesas/rcar-isp.c
-+++ b/drivers/media/platform/renesas/rcar-isp.c
-@@ -268,18 +268,11 @@ static int risp_start(struct rcar_isp *isp, struct v4l2_subdev_state *state)
- 	/* Start ISP. */
- 	risp_write(isp, ISPSTART_REG, ISPSTART_START);
+diff --git a/drivers/media/platform/renesas/rcar-csi2.c b/drivers/media/platform/renesas/rcar-csi2.c
+index 845fb3e155f1..92697ea3df01 100644
+--- a/drivers/media/platform/renesas/rcar-csi2.c
++++ b/drivers/media/platform/renesas/rcar-csi2.c
+@@ -1301,7 +1301,7 @@ static int rcsi2_start_receiver_v4h(struct rcar_csi2 *priv,
+ 	const struct rcar_csi2_format *format;
+ 	const struct v4l2_mbus_framefmt *fmt;
+ 	unsigned int lanes;
+-	int msps;
++	int mbps;
+ 	int ret;
  
--	ret = v4l2_subdev_enable_streams(isp->remote, isp->remote_pad,
--					 BIT_ULL(0));
--	if (ret)
--		risp_power_off(isp);
--
--	return ret;
-+	return 0;
- }
+ 	/* Use the format on the sink pad to compute the receiver config. */
+@@ -1314,9 +1314,9 @@ static int rcsi2_start_receiver_v4h(struct rcar_csi2 *priv,
+ 	if (ret)
+ 		return ret;
  
- static void risp_stop(struct rcar_isp *isp)
- {
--	v4l2_subdev_disable_streams(isp->remote, isp->remote_pad, BIT_ULL(0));
--
- 	/* Stop ISP. */
- 	risp_write(isp, ISPSTART_REG, ISPSTART_STOP);
+-	msps = rcsi2_calc_mbps(priv, format->bpp, lanes);
+-	if (msps < 0)
+-		return msps;
++	mbps = rcsi2_calc_mbps(priv, format->bpp, lanes);
++	if (mbps < 0)
++		return mbps;
  
-@@ -305,6 +298,13 @@ static int risp_enable_streams(struct v4l2_subdev *sd,
- 			return ret;
- 	}
+ 	/* Reset LINK and PHY*/
+ 	rcsi2_write(priv, V4H_CSI2_RESETN_REG, 0);
+@@ -1352,7 +1352,7 @@ static int rcsi2_start_receiver_v4h(struct rcar_csi2 *priv,
+ 	rcsi2_write16(priv, V4H_PPI_RW_COMMON_CFG_REG, 0x0003);
  
-+	ret = v4l2_subdev_enable_streams(isp->remote, isp->remote_pad,
-+					 BIT_ULL(0));
-+	if (ret) {
-+		risp_stop(isp);
-+		return ret;
-+	}
-+
- 	isp->stream_count += 1;
- 
- 	return ret;
-@@ -322,6 +322,8 @@ static int risp_disable_streams(struct v4l2_subdev *sd,
- 	if (!isp->remote)
- 		return -ENODEV;
- 
-+	v4l2_subdev_disable_streams(isp->remote, isp->remote_pad, BIT_ULL(0));
-+
- 	if (isp->stream_count == 1)
- 		risp_stop(isp);
+ 	/* C-PHY settings */
+-	ret = rcsi2_c_phy_setting_v4h(priv, msps);
++	ret = rcsi2_c_phy_setting_v4h(priv, mbps);
+ 	if (ret)
+ 		return ret;
  
 
 -- 
