@@ -1,136 +1,152 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD9B35979;
-	Fri, 21 Feb 2025 07:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA231F94D
+	for <linux-media@vger.kernel.org>; Fri, 21 Feb 2025 07:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740121399; cv=none; b=bKCg35Sf9tMeA65AxdyZTA42MWAeE16Ozj6G1YEYGedrcTt4VEIZLFzPllV5hKCk+V6kpQ/6IX2wRO8W88ZzvqOUD/5qXFuSkzG0pPmW37Zle394A6sAwNYhFqv5rtk9eexcNOCNa6BcDk4z4g0YRII19xRUbUAj+jkSlwsQrco=
+	t=1740124385; cv=none; b=Rxccx/GxDL9z1h2MT+VRDWXpiO5eLGthzc2ZPqb+RPHMYCyI0DI2gSz1dYcocYfTxWyDaz/ai1Zl4NT+99a0DNrh0mhUAW7iPngUah9QZXydQWZpFuzo4qAMjH/JNLWBFBbq00DkrgQDJh4ZMhduer7YzbjnoHyMWOrNqpFjuLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740121399; c=relaxed/simple;
-	bh=fL3VFHc8Iw4UEcrhx6AYcJSOc4ybHtXWyyLl28Js0K0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GUtd7v0Ktsw49Te4BOmeje49/SYOL1zaUdblDvelFLeu6w/NS/EpKOdI1jNEWcJDcbbmj5eU9EHBrVgG/foIIJxN5x+uLNql5dv1S5XEmlmVgEiH0+4Swk+tgB682QTnJ2ObTJ79HAqZkQwLmkbR2ujbpPXLBcfvENzxPKy4IWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Sb3fOUjc; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1740124385; c=relaxed/simple;
+	bh=TkzLw+UNXMs8pOV0+WiNJnAt7Ht0meCkhO7ng2+Lpog=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NKYwDVnDPMJ5YblXxmcp6Rk5LXsBDLSva1Oz8wNKFt+WlrLhgNSuPcuT9xGCERctxctiv2EZ/LMA0HhURd90H5HwScbxxFhv1+7afKDippLMhusbgTCfu5rnRNxBw+5zK1YgsbRJACl+md1/34v8JjzThhaUnyY6gZv2LIJiByw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAKWmwih; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Sb3fOUjc"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c30:4abb:6de5:9248:813e:8db3])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id EC9EC7E0;
-	Fri, 21 Feb 2025 08:01:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1740121311;
-	bh=fL3VFHc8Iw4UEcrhx6AYcJSOc4ybHtXWyyLl28Js0K0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sb3fOUjc8Ww6ftO3DRierlIUIhRnugYs1k00i1XGt0yZ+HoWYADlDijVeegrVJlcn
-	 jwynw9W5+nZyU4C6VON2EQjEIxsdLJUPpzgBfFQL7zUSx7bFi4iS71qDov0AxWXBr+
-	 vxACfRy0BTvvxst9YPFGSgXqw6Gf9J4NbhRAX6y4=
-Date: Fri, 21 Feb 2025 12:33:09 +0530
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] media: i2c: imx219: pass format's code to
- imx219_get_format_bpp()
-Message-ID: <73rzq5ja6gsjd3oatbnqvmqminiolgz4meelvxqnbieategxsf@zb23f36gm4nd>
-References: <20250220230818.275262-1-demonsingur@gmail.com>
- <20250220230818.275262-5-demonsingur@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAKWmwih"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740124384; x=1771660384;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TkzLw+UNXMs8pOV0+WiNJnAt7Ht0meCkhO7ng2+Lpog=;
+  b=DAKWmwihewYwPkYhK88ET61W2AZBv9GxAtpkPWFi5tePEdywMOjSQ7WQ
+   FLc1lvCFNnHvsdg6OSu/JPWroqzKUdjrJiTQC7RGx9GOXD8YbeHXwt3p6
+   6RMBH1NvhydBL5RIQ0/zRXi7rlxKdauR/YkQIAtxf5ThDHMGkQl7IVons
+   51F6Z4nTt6NGzahIXpwcE9E9xlK0uv0YacAcx7GcnHuPI12Agw28onYsW
+   yZYHNx99bDy7U6Dq+udlqF3Rqfgt17PJ2w3QIpIiZcLL/eiKdWCohhH4A
+   lNmJqClXK2zZgMsLC50ki7X3PW+itsi9v1Y2cmgKV1y77dnVwNHcfqX+c
+   g==;
+X-CSE-ConnectionGUID: xVsnMXA8TW+Frn32SAXu1A==
+X-CSE-MsgGUID: Kw7v0EQ5Qai60ZaSlaDAVA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="51552511"
+X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
+   d="scan'208";a="51552511"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 23:52:59 -0800
+X-CSE-ConnectionGUID: RkgLaTygTV6EHqieUpGO4A==
+X-CSE-MsgGUID: s9RBlYNrRtKYMfT9jzWzgg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
+   d="scan'208";a="115829627"
+Received: from vtg-chrome.bj.intel.com ([172.16.127.120])
+  by fmviesa010.fm.intel.com with ESMTP; 20 Feb 2025 23:52:56 -0800
+From: bingbu.cao@intel.com
+To: linux-media@vger.kernel.org,
+	sakari.ailus@linux.intel.com,
+	hdegoede@redhat.com
+Cc: hans@hansg.org,
+	stanislaw.gruszka@linux.intel.com,
+	jerry.w.hu@intel.com,
+	tian.shu.qiu@intel.com,
+	daxing.li@intel.com,
+	hao.yao@intel.com,
+	bingbu.cao@linux.intel.com,
+	bingbu.cao@intel.com
+Subject: [RFC PATCH 1/7] media: Rename the IPU PCI device table header and add IPU7 PCI IDs
+Date: Fri, 21 Feb 2025 15:52:46 +0800
+Message-Id: <20250221075252.3347582-2-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250221075252.3347582-1-bingbu.cao@intel.com>
+References: <20250221075252.3347582-1-bingbu.cao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qu3uozr2fidqrsfy"
-Content-Disposition: inline
-In-Reply-To: <20250220230818.275262-5-demonsingur@gmail.com>
+Content-Transfer-Encoding: 8bit
 
+From: Bingbu Cao <bingbu.cao@intel.com>
 
---qu3uozr2fidqrsfy
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 4/6] media: i2c: imx219: pass format's code to
- imx219_get_format_bpp()
-MIME-Version: 1.0
+Rename the IPU PCI device table header file and add the IPU7 PCI device
+IDs.
 
-Hi Cosmin,
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ drivers/media/pci/intel/ipu6/ipu6.c                |  2 +-
+ drivers/media/pci/intel/ivsc/mei_csi.c             |  2 +-
+ .../media/{ipu6-pci-table.h => ipu-pci-table.h}    | 14 +++++++++++---
+ 3 files changed, 13 insertions(+), 5 deletions(-)
+ rename include/media/{ipu6-pci-table.h => ipu-pci-table.h} (68%)
 
-Thanks for the patch.
+diff --git a/drivers/media/pci/intel/ipu6/ipu6.c b/drivers/media/pci/intel/ipu6/ipu6.c
+index 277af7cda8ee..aa859220ba94 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6.c
++++ b/drivers/media/pci/intel/ipu6/ipu6.c
+@@ -21,7 +21,7 @@
+ #include <linux/types.h>
+ 
+ #include <media/ipu-bridge.h>
+-#include <media/ipu6-pci-table.h>
++#include <media/ipu-pci-table.h>
+ 
+ #include "ipu6.h"
+ #include "ipu6-bus.h"
+diff --git a/drivers/media/pci/intel/ivsc/mei_csi.c b/drivers/media/pci/intel/ivsc/mei_csi.c
+index 6a893c4547b2..b21b02e2d93c 100644
+--- a/drivers/media/pci/intel/ivsc/mei_csi.c
++++ b/drivers/media/pci/intel/ivsc/mei_csi.c
+@@ -27,7 +27,7 @@
+ #include <linux/workqueue.h>
+ 
+ #include <media/ipu-bridge.h>
+-#include <media/ipu6-pci-table.h>
++#include <media/ipu-pci-table.h>
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-fwnode.h>
+diff --git a/include/media/ipu6-pci-table.h b/include/media/ipu-pci-table.h
+similarity index 68%
+rename from include/media/ipu6-pci-table.h
+rename to include/media/ipu-pci-table.h
+index 0899d9d2f978..528080c6f742 100644
+--- a/include/media/ipu6-pci-table.h
++++ b/include/media/ipu-pci-table.h
+@@ -3,8 +3,8 @@
+  * Copyright (C) 2024 Intel Corporation
+  */
+ 
+-#ifndef __IPU6_PCI_TBL_H__
+-#define __IPU6_PCI_TBL_H__
++#ifndef __IPU_PCI_TBL_H__
++#define __IPU_PCI_TBL_H__
+ 
+ #include <linux/pci.h>
+ 
+@@ -15,6 +15,9 @@
+ #define PCI_DEVICE_ID_INTEL_IPU6EP_RPLP		0xa75d
+ #define PCI_DEVICE_ID_INTEL_IPU6EP_MTL		0x7d19
+ 
++#define PCI_DEVICE_ID_INTEL_IPU7_PCI_ID		0x645d
++#define PCI_DEVICE_ID_INTEL_IPU7P5_PCI_ID	0xb05d
++
+ static const struct pci_device_id ipu6_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IPU6) },
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IPU6SE) },
+@@ -25,4 +28,9 @@ static const struct pci_device_id ipu6_pci_tbl[] = {
+ 	{ }
+ };
+ 
+-#endif /* __IPU6_PCI_TBL_H__ */
++static const struct pci_device_id ipu7_pci_tbl[] = {
++	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IPU7_PCI_ID)},
++	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_IPU7P5_PCI_ID)},
++	{ }
++};
++#endif /* __IPU_PCI_TBL_H__ */
+-- 
+2.34.1
 
-On Feb 21, 2025 at 01:08:12 +0200, Cosmin Tanislav wrote:
-> imx219_get_format_bpp() only uses the code of the format, pass it
-> instead of the whole format to allow usage when the whole format is not
-> available.
->=20
-> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-
-Reviewed-by: Jai Luthra <jai.luthra@ideasonboard.com>
-
-> ---
->  drivers/media/i2c/imx219.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index fcd98ee54768e..ad1965a91ae3c 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -387,9 +387,9 @@ static u32 imx219_get_format_code(struct imx219 *imx2=
-19, u32 code)
->  	return imx219_mbus_formats[i];
->  }
-> =20
-> -static u32 imx219_get_format_bpp(const struct v4l2_mbus_framefmt *format)
-> +static u32 imx219_get_format_bpp(u32 code)
->  {
-> -	switch (format->code) {
-> +	switch (code) {
->  	case MEDIA_BUS_FMT_SRGGB8_1X8:
->  	case MEDIA_BUS_FMT_SGRBG8_1X8:
->  	case MEDIA_BUS_FMT_SGBRG8_1X8:
-> @@ -680,7 +680,7 @@ static int imx219_set_framefmt(struct imx219 *imx219,
-> =20
->  	format =3D v4l2_subdev_state_get_format(state, 0);
->  	crop =3D v4l2_subdev_state_get_crop(state, 0);
-> -	bpp =3D imx219_get_format_bpp(format);
-> +	bpp =3D imx219_get_format_bpp(format->code);
-> =20
->  	cci_write(imx219->regmap, IMX219_REG_X_ADD_STA_A,
->  		  crop->left - IMX219_PIXEL_ARRAY_LEFT, &ret);
-> --=20
-> 2.48.1
->=20
-
---=20
-Thanks,
-Jai
-
---qu3uozr2fidqrsfy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEETeDYGOXVdejUWq/FQ96R+SSacUUFAme4JS0ACgkQQ96R+SSa
-cUUyoQ//XZ0w48A1jFQeb14U2B2VcdX6fhhBL2Dw7kfgnqm9mVIOrt3BxXZDo4yk
-dgi+CLC0RIDhrVtEnLN+m3L3f+Q+f5H6LV7QePfE2ZEYCAhXLgR8gRBx1NTIs9Ym
-RmH+tCQw1tPto+5X6U6nP13vbHGPaxM3403m7U7Xe/qu7KNcPcpznm5dGzClWlmD
-I0Foq0e2f5iRsjaIkvZf0cJ+XTX0G6i2BESibGX7Zrlk65bj0cr995UFYp3+IBEQ
-Cn86gTDm4eL67hVppoy45eUbowOxJ+zVER7P73zbxc/s70M8qlc+t+mmJ3EEXuVU
-j2mm451bRreIR9QoEo0D0y8P1a6QPGboTy2Gy7GDevQ+N3NsZlPEqtmGp/Mqlq4b
-vl0Mj4pX5Y49VHFXCZjyrPFIxwobW2u+1dC5iy31+b5xWIm4c//If8Je1Bg9LBlo
-vvvKcyP8pPy1rDFGn5014rgHlDIFrneiNln6/UQzG7bboI0kp0U0NbTFjkq2kdFi
-lpjGyNX19zBlRnWhRIpOcXYKFF+++Zme9uVEG1DG1KZJRG+0aiLkc3PgQwcURknE
-+AiBNpaW06e2mof17gRaftQwOR9P/vcNnjt4yXAQoKSxKIEzXdJcHNseXcE4JMhm
-sztXjWNiv31ooynp3ARdYAZzbGpcybCbtfVhGsJyHCSPAuYL23E=
-=qZw6
------END PGP SIGNATURE-----
-
---qu3uozr2fidqrsfy--
