@@ -1,113 +1,106 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96196202C5D
-	for <linux-media@vger.kernel.org>; Fri, 21 Feb 2025 11:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842521DFD95;
+	Fri, 21 Feb 2025 12:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740138913; cv=none; b=bz1Kd9l/g3r+UMAiZf9ynlmX56RU/x10jd6eWj/XnGEZtc868n8sJup52Ht39TuORG0C+7rgQB/9yUYgDFFPSXBPdpliwWKg36tEwf+4FC4SfpshlvhhUrAitHy8y/apDiIzAH3vIfhA4mw8idRERtbPVgd3/HRuUfvnRlYmRPc=
+	t=1740139438; cv=none; b=klbUeZmTggYm09OXFKxVj1fUM9jG/SLSrQifMiUVG/a+F5If4WkneE6LvI3mwFTFACT5XB5In2k6TsxljwktbXYaKJL3Ws1fh04VT3PNMAh3Yi4WlTMXNxWN0pRTRch5CXJ7XjLIsM0oZZyBNgeaaQcZ4kqksCsxm/8EONpY2vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740138913; c=relaxed/simple;
-	bh=o9hQaggU3Tdo3Rs75yT1Fva2Gn/BPjhpQH2KzuyJ2gg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X1tmn3T+lqzg2Zlh6Z9FQ8fWdXQ/dGPw3TMXaoFRzlQp9ov/tjyFJeGV1PXfRiXsCJ5AZNVMQkRTykWxeWp/3BZ1SGglaVWNbO6UewuR3nDjOZS5waWWVMX/BnoJbhrSibCsQEytjx3sbOjFFgAU1+E/9ri3/IP2Y06xu/XzC2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk; spf=pass smtp.mailfrom=rasmusvillemoes.dk; dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b=PEwTXyFW; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rasmusvillemoes.dk
+	s=arc-20240116; t=1740139438; c=relaxed/simple;
+	bh=7dkiKEEUYl9FtO9U60RvGRLswkwOp70C/7gcZ6tNJd4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FQD/8SDtyGi+/x/1ifUGZ1s0OxQr3ogZ1Xwl8a56T9naSH10fa7fgTXwHqpb3SGunYM3ddvbjDz9jVsbsoYv8/EzcSolnu4i98JqBS4rzCltd9xb5JeGV1AFV+IBzslSJAoCHTQTUntL7eBgvWOuMv2iL/iXC/MMpryqJtWzAoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=i1Oqvbrw; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="PEwTXyFW"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30797730cbdso19816181fa.3
-        for <linux-media@vger.kernel.org>; Fri, 21 Feb 2025 03:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1740138909; x=1740743709; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/iRbyF06sKBSuXAXawsdJPOX5Xxar4Ru2tRuKb6D2o=;
-        b=PEwTXyFWcoHXeYuZSt6B89z7njQlQ9r6soBg6Axpyt8IaMsdAiV4tja9DltEeEcY9N
-         6bCcWqagByNttbz+14oOH6YO4YRQgrCU+6/mtn6Ggk0nJeM0i/sj6zJaZEZQAd8PUTKP
-         OG6xYHq0atNlMJ8NfDdAWaDl9VVAkMXcF8MZ8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740138909; x=1740743709;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3/iRbyF06sKBSuXAXawsdJPOX5Xxar4Ru2tRuKb6D2o=;
-        b=OffVzQLbyFGufd8GqZwe3lKYymQ/gIoz3nqoQRuyF+aKCGYWnKfLndxsi3gWeK2eY0
-         ipbprkstC/WBtoDxBUlsl7Pbp0oKs1qwVs5P2/plHRXttU/aDWEycq5J8YqRqmVSwEbc
-         thxrz05Ud13oCrjkIHR22h9FNDKwY8ZVkeNJuT7vDzcIR/SUNOvysp7ju8dzY/CcKpWM
-         roSAo/RGDbnUh1EHp4UvEVSgu0fyRUZZcCnacGpRM8EQSx5082/CYq4avcnKlxVZJWcb
-         V8AuR/CffKF5uobzdcjCaGyfZHxJ5XmVrWsuH7tWKhLGNrPDTXnu4sMeqXJvSsHaCZn4
-         DSSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWuzVNywZaQMwjp26M3G6rK2K5ROhz55tGB2gnD7ZDQrQtMN4G5Qv3YZ3Lhv40taV2glf3S+7txWsVw6A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx95IQEVKea/LjtDPf8RV4AURFnsJi59aHFmF53Og8IXm6UdBbL
-	N52UxcNAf8JpmyMCeTw+mkvGbJRelbfgdo1upTLrrk3wJ20510oyYShorApOf+jvySHP1p+12u7
-	I2ekJHeTivLRrvbHLO1yP/4DTfCF9JNeOs4voug==
-X-Gm-Gg: ASbGncvnT/JNjq/P6Cq8klAGIpNH4BPYOOuox+wbKWwlUAunFZD8ATj9oYriJXJjsv/
-	YH/gJ11t1EbTn6oPzRwo6CEtE8YOy/nJ3iBuZGnlpHfxMc/KwtFbjQ2TMhOULNkV3nDwa6kCCTY
-	saKvgv4d4=
-X-Google-Smtp-Source: AGHT+IGq/dIo+A2JknCfxBPtCWEXSb1e8s5WLFM0DZHAgz+xRkivavGxrBcVWQ1kfkiIjnKC8wn9G/O8JUziZ5NiZwc=
-X-Received: by 2002:a2e:9b97:0:b0:308:db61:34cf with SMTP id
- 38308e7fff4ca-30a59899cafmr8679651fa.14.1740138908700; Fri, 21 Feb 2025
- 03:55:08 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="i1Oqvbrw"
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51LC3n1r292125
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 21 Feb 2025 06:03:49 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1740139429;
+	bh=21ZvnLRbs2APYHgBPJWVI/FiPq/+d7GLTwYqYddCXGQ=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=i1OqvbrwfujkqKbhLKodSXOhD65v4hPMo/Ywfio4iuyzud2naBxd1GSo/liviyl+d
+	 UvPdm9gU5nco9V1mFTfFST2CoRjKb2Iq2RQri1bpTCl/cQwRG6pAvhD4B/1FdK5HBK
+	 1dfWrSYG7yFEJRjQOrEK2xcql9vdYca/8JTYORM4=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51LC3nep000477;
+	Fri, 21 Feb 2025 06:03:49 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
+ Feb 2025 06:03:49 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 21 Feb 2025 06:03:49 -0600
+Received: from abhilash-HP.dhcp.ti.com (abhilash-hp.dhcp.ti.com [172.24.227.115])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51LC3d4o046967;
+	Fri, 21 Feb 2025 06:03:45 -0600
+From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+To: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <mripard@kernel.org>, <mchehab@kernel.org>, <jai.luthra@linux.dev>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <devarsht@ti.com>, <vaishnav.a@ti.com>, <r-donadkar@ti.com>,
+        <u-kumar1@ti.com>, <y-abhilashchandra@ti.com>
+Subject: [PATCH v3 1/2] dt-bindings: media: cdns,csi2rx.yaml: Add optional interrupts for cdns-csi2rx
+Date: Fri, 21 Feb 2025 17:33:36 +0530
+Message-ID: <20250221120337.3920874-2-y-abhilashchandra@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250221120337.3920874-1-y-abhilashchandra@ti.com>
+References: <20250221120337.3920874-1-y-abhilashchandra@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <DC5079B2-9D3D-4917-A50D-20D633071808@live.com> <98289BC4-D5E1-41B8-AC89-632DBD2C2789@live.com>
-In-Reply-To: <98289BC4-D5E1-41B8-AC89-632DBD2C2789@live.com>
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Date: Fri, 21 Feb 2025 12:54:57 +0100
-X-Gm-Features: AWEUYZkag0YCbmK4501eSholWPOVfmEf5FjMGyae-nYt_GMpw1QMs3yS9iwYbxw
-Message-ID: <CAKwiHFi_nngthth0wZkaPviVeS+8SWDtTw6gJcDAHCqiwXAG2A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] lib/vsprintf: Add support for generic FOURCCs by
- extending %p4cc
-To: Aditya Garg <gargaditya08@live.com>
-Cc: "pmladek@suse.com" <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>, 
-	"senozhatsky@chromium.org" <senozhatsky@chromium.org>, Jonathan Corbet <corbet@lwn.net>, 
-	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>, 
-	"mripard@kernel.org" <mripard@kernel.org>, "tzimmermann@suse.de" <tzimmermann@suse.de>, 
-	"airlied@gmail.com" <airlied@gmail.com>, "simona@ffwll.ch" <simona@ffwll.ch>, 
-	Andrew Morton <akpm@linux-foundation.org>, "apw@canonical.com" <apw@canonical.com>, 
-	"joe@perches.com" <joe@perches.com>, "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>, 
-	"lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>, 
-	"sumit.semwal@linaro.org" <sumit.semwal@linaro.org>, 
-	"christian.koenig@amd.com" <christian.koenig@amd.com>, Kerem Karabay <kekrby@gmail.com>, 
-	Aun-Ali Zaidi <admin@kodeit.net>, Orlando Chamberlain <orlandoch.dev@gmail.com>, 
-	Atharva Tiwari <evepolonium@gmail.com>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>, 
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>, Hector Martin <marcan@marcan.st>, 
-	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, Asahi Linux Mailing List <asahi@lists.linux.dev>, 
-	Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Fri, 21 Feb 2025 at 12:37, Aditya Garg <gargaditya08@live.com> wrote:
->
-> From: Hector Martin <marcan@marcan.st>
->
-> %p4cc is designed for DRM/V4L2 FOURCCs with their specific quirks, but
-> it's useful to be able to print generic 4-character codes formatted as
-> an integer. Extend it to add format specifiers for printing generic
-> 32-bit FOURCCs with various endian semantics:
->
-> %p4ch   Host-endian
-> %p4cl   Little-endian
-> %p4cb   Big-endian
-> %p4cr   Reverse-endian
->
-> The endianness determines how bytes are interpreted as a u32, and the
-> FOURCC is then always printed MSByte-first (this is the opposite of
-> V4L/DRM FOURCCs). This covers most practical cases, e.g. %p4cr would
-> allow printing LSByte-first FOURCCs stored in host endian order
-> (other than the hex form being in character order, not the integer
-> value).
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+The Cadence CSI2RX IP exposes 2 interrupts [0] 12.7 camera subsystem.
+Enabling these interrupts will provide additional information about a CSI
+packet or an individual frame. So, add support for optional interrupts
+and interrupt-names properties.
 
-Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+[0]: http://www.ti.com/lit/pdf/spruil1
+
+Signed-off-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+
+Changes in v3:
+- Address Krzysztof's review comment to drop minItems from the bindings.
+- Collect Acked-by from Krzysztof.
+
+ Documentation/devicetree/bindings/media/cdns,csi2rx.yaml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+index 2008a47c0580..e8d7eaf443d1 100644
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -24,6 +24,14 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  interrupts:
++    maxItems: 2
++
++  interrupt-names:
++    items:
++      - const: irq
++      - const: error_irq
++
+   clocks:
+     items:
+       - description: CSI2Rx system clock
+-- 
+2.34.1
+
