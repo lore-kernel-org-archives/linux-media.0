@@ -1,63 +1,63 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377C120F094
-	for <linux-media@vger.kernel.org>; Sun, 23 Feb 2025 18:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFBB20FAB6
+	for <linux-media@vger.kernel.org>; Sun, 23 Feb 2025 18:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740337186; cv=none; b=aw3/WxCmj/2TIXoekgRfs+rWlBKfos36oduj63ebc/za10TncIk9U6Q3ELc2AMB/QPSadM0j7m6816LuLxnMh6ORvVjDYk3g8qTjIAdVDh8MJNk6JVki573+8KJnZidZX2YedNPql66JMrBM86rbS8HOgpvn586yHQc6tHGJoUs=
+	t=1740337187; cv=none; b=YTlBjy/GANKsCcrBfIcXKvZnTJUDiYHOjU1DqmXQjXfYCrteWm51lPKJov1N431YWn97Ha0pFFl5edshXRq7uv3+yRrtriYciBfd9XJomOY8maZSuatpTIvxitlHFwLNXk3aPJmPcsg6K5pX6tThWcGyfsa0p/RAz9rna434uNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740337186; c=relaxed/simple;
-	bh=bGURjosegTH+P+Gw5HjXH9uRa5Uc4pPh6VYCjWY0HAo=;
+	s=arc-20240116; t=1740337187; c=relaxed/simple;
+	bh=dnwNReE1hPulb+Tc8iZo/fcErBj/zFU9VbifxtAwbsg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KuAxo/fThJ8jJ0O7tCMoS0UGPbGLL4xq2VyopxdJZSjyGF8hm0GFEbL+9kBudNTgGNvrmEvyI12DvmG0vccbqC9pVXpVZpVFlybXO/AIrcIo9fH51Hh5bT9rVNpZN4NPR5/5TcQo3/7r6PCHjnJUmBbiLGuuTUp49//aAeL8HWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AoF3Ah7B; arc=none smtp.client-ip=209.85.222.178
+	 In-Reply-To:To:Cc; b=PIkCI3O8/d52iJQAPgQjvpCLyvI9GbjIrtiie4ZAiVcNbtBRMfq/S9RsyntKSoSxCdwHYZdU7W2o57mWUfoEjpSSGl4ItM4FzVXdqz4mVMbNsPqPbrjB+g4itoTziVyoXNslN0hd5tB8hBE3AJeX7vGacta62IPaQkSEPNLeSxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZvtngmJB; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AoF3Ah7B"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7c09a30e14dso656314585a.0
-        for <linux-media@vger.kernel.org>; Sun, 23 Feb 2025 10:59:43 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZvtngmJB"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c0a3d6a6e4so357980985a.1
+        for <linux-media@vger.kernel.org>; Sun, 23 Feb 2025 10:59:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1740337183; x=1740941983; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1740337185; x=1740941985; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KXG9+uuGWmSBcxIUkNXdZws6nfJZHCT+9+MDo1/1sYc=;
-        b=AoF3Ah7Bd0avw5HDqt/QWWl5DVcCbjnrANUvtWsmleOc11P2RE2/hmqujGDL97LzeA
-         WOJoZpIZeX04ArP9AiSPt+PzImZdJfl7fhX5Ubn+AylnmaiofnUvPsybXl1JYr6lX86H
-         4nM5t9ox2Zvp7eZCNTqZtnPooYrqdVV7Qg8+Y=
+        bh=P1ZNr+zAsbdRe6SnCCPjc7UJkoW/yg5cRHdJ7D9R9Hg=;
+        b=ZvtngmJBQl9C27rYRt+X+FHVcXHm8b8taPsOH+hMlheQD3nFZ9LlBFPHq4HB5HmXBn
+         WbV2LzrkvRZjsSyZ9vmugp8hchSiTko3xNu033TdYjkySkoKZh1KHVRFh+aoe+36kDRU
+         AKS6ez8J+fL5jHzNts8/KNMyWzGgKl7zPvBos=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740337183; x=1740941983;
+        d=1e100.net; s=20230601; t=1740337185; x=1740941985;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KXG9+uuGWmSBcxIUkNXdZws6nfJZHCT+9+MDo1/1sYc=;
-        b=rY0u8Kx88vfde0oDcvRMSioCCYgerIY3CELxHLCT8H1cZBSB8qjhQCu4j1LtmgOYwt
-         UCwqgWnc5kK/8qHqRCyxvnYTk61oyvMn6Xya9SQunGBVgDvWWkojbi5bvkV6UwfZ1fSF
-         6LutZWQObqdaTg4jNFWrvhOdHoPz5jiKPISMSM9KZy3fO8avp2HDYBpyKHwxxk4slYWu
-         kempPwX5IgfdGhmQUvkecmsEUksZiLJymvy1fRh583BSkwuqZsrEwLjs8ELaY60phJQR
-         4OGEbY0LFTcI9fiiQKyoGTRBTVORjdmUBlBXet5aMOqLLicQvKmr/O+2ORYbfSe3dd+z
-         4fzQ==
-X-Gm-Message-State: AOJu0YycVVXiQlCxicBF7KgKVtO1ZPxfIwMllxftHwJGsTfsV4hEwhU5
-	BHVhdDdrDTJt0Cfhk0KSxlzVweYUDmqyT2xNC1K4kVfwWdRG1rsVe4/lGeHacQ==
-X-Gm-Gg: ASbGncv569hqqQB61O0z8Ro4UMc1jOkzndgXCwr1Ya9psSC01u9jLJ2nBfjBTKdItuO
-	v8C8YU4QD+eDxhqioTdt1tQuoTfOo2hOr+zqCFOkBjZLajMwANgkv/d2WkUnqDhG2+Tp5us19ci
-	d3wZitpqLZHcLAyaLpvVS+LrFYlnt8/M1e7bK2I3GRXTW8lCpK6pGn8zPje0QmtBuh0zWknr/bx
-	tJiu8trLgzQNACjk5bPEvx1fwn7FwAPhaIIl3tXW6KZSB1PAo9Q80YtbORp41HHj2d/ww12yqBV
-	1lOmrNhazEQBmbfFVMN7soCoe0bQpjYRE2ds/qm3xo4H7KDgOoF26SZQ4Dof0G4IhG7+qp/XmrL
-	g01g=
-X-Google-Smtp-Source: AGHT+IGjHh9bP3Z1R0+XLoulszUD7WhUuuTZdPXT1kOhHNmPI8BbzEJMwqu44jAaJET9UyJKRwaG6w==
-X-Received: by 2002:a05:620a:450c:b0:7c0:b5bc:a122 with SMTP id af79cd13be357-7c0cef55f43mr1666469185a.35.1740337183095;
-        Sun, 23 Feb 2025 10:59:43 -0800 (PST)
+        bh=P1ZNr+zAsbdRe6SnCCPjc7UJkoW/yg5cRHdJ7D9R9Hg=;
+        b=VBdzP0nT5+20z0g+1kZpHVT2O9ej4p6gj2AOQeT9zjTvDH6MW7oqyIJtC7q8coBdfF
+         59B2a7JvtNNL5lj7nHScTpt4/gRt8yYnQdrktTpaN4+Zb/f78fsAfkyLpqE2ouYk12Lm
+         mEn5I2FUewBp+ezIwRJywDoPzfH5NA40ccph9vxg6oXkTT57uumQx2GRh2zs6+Kr8H4k
+         XkI004yIumF5R1sjEtwx9CA9ys8/UIuc8NvvqCRIC0EKvsxQiOgpH7kxDYyTIh4N3GMM
+         2lfNTy3CYIAaMaWnbw87SXLHXnr/micn3SBEbwtvyFCwexf+hvPX3dTC2moif5J7fz/h
+         DElg==
+X-Gm-Message-State: AOJu0YxOTwmFjxP3Xw4dULM0x48PU8HjZ3WqyoLHmbEYgCl+r7Wj7C5r
+	ORvG4mM2DwnehUaqyTf6Nr9s6I0dyFRUShHEQLL+h8aMPjMDQ4NkTu8WLufIIA==
+X-Gm-Gg: ASbGncu9mokCd+LJHh9BXPGCkD9dcNqLpm6sJsG5cgwhRnwiBWXzI/G1r+lwfAdl4rf
+	UBdLNdnN4O0g3FAgAZ4yebAsANt6QR67yaE9iXSoM2h4GDiMDotkXKn8LHEZPGwY63wCvHaF6PN
+	NRAnIA1InYlGA1sJt+Dh8CPuQ6A7cBnYecqTtJbVhOUnOvbVY2Cu9rt46zSvvxyuyZbSFh67eRQ
+	4pgwbzbPvW7Gy2/GTYnNuOTU59Dc05qMSc/1fgM9lMq3kwxBFhlmNdEI4Xpj4yXZxwzSYrieReZ
+	3hTRfAbJ4hJlg1EMFie1ZuhliuGSGsxYFnd5OUYXUDFJKGvJ612yVOc9HhL1M1Ud22WAGUrPBAl
+	PGK4=
+X-Google-Smtp-Source: AGHT+IERdPcmnp8DFkM7FzQDBmkbwLEcVj462XFjOmf0I55eocLBJbotx9VABzofXN7Sh0Nf0lYF2A==
+X-Received: by 2002:a05:620a:470d:b0:7c0:be0f:2dad with SMTP id af79cd13be357-7c0ceef9875mr1290641485a.21.1740337184802;
+        Sun, 23 Feb 2025 10:59:44 -0800 (PST)
 Received: from denia.c.googlers.com (15.237.245.35.bc.googleusercontent.com. [35.245.237.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c09bf81253sm894052885a.47.2025.02.23.10.59.42
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c09bf81253sm894052885a.47.2025.02.23.10.59.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Feb 2025 10:59:42 -0800 (PST)
+        Sun, 23 Feb 2025 10:59:44 -0800 (PST)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Sun, 23 Feb 2025 18:58:14 +0000
-Subject: [PATCH v3 11/12] media: v4l2-core: Introduce
- v4l2_query_ext_ctrl_to_v4l2_queryctrl
+Date: Sun, 23 Feb 2025 18:58:15 +0000
+Subject: [PATCH v3 12/12] media: radio-wl1273: Rename
+ wl1273_fm_vidioc_s_ctrl
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250223-queryctrl-v3-11-4292911cab6b@chromium.org>
+Message-Id: <20250223-queryctrl-v3-12-4292911cab6b@chromium.org>
 References: <20250223-queryctrl-v3-0-4292911cab6b@chromium.org>
 In-Reply-To: <20250223-queryctrl-v3-0-4292911cab6b@chromium.org>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -81,152 +81,40 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-staging@lists.linux.dev, Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.13.0
 
-We use this logic in a couple of places. Refactor into a function.
-No functional change expected from this patch.
+Now that vidioc_s_ctrl is gone we want to remove that string from all
+the codebase.
 
+Besides, it isn't the correct name of this function anyway. It's clearly a
+left-over from the past.
+
+Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-api.c | 51 +++++++++++++++++++-------------
- drivers/media/v4l2-core/v4l2-ioctl.c     | 28 ++----------------
- include/media/v4l2-ctrls.h               | 12 ++++++++
- 3 files changed, 44 insertions(+), 47 deletions(-)
+ drivers/media/radio/radio-wl1273.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-api.c b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-index 95a2202879d8..9dd2bc5893dd 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-api.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-api.c
-@@ -1123,39 +1123,48 @@ int v4l2_query_ext_ctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_query_ext_ctr
+diff --git a/drivers/media/radio/radio-wl1273.c b/drivers/media/radio/radio-wl1273.c
+index 511a8ede05ec..f55217ccf2b8 100644
+--- a/drivers/media/radio/radio-wl1273.c
++++ b/drivers/media/radio/radio-wl1273.c
+@@ -1407,7 +1407,7 @@ static inline struct wl1273_device *to_radio(struct v4l2_ctrl *ctrl)
+ 	return container_of(ctrl->handler, struct wl1273_device, ctrl_handler);
  }
- EXPORT_SYMBOL(v4l2_query_ext_ctrl);
  
--/* Implement VIDIOC_QUERYCTRL */
--int v4l2_queryctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_queryctrl *qc)
-+void v4l2_query_ext_ctrl_to_v4l2_queryctrl(struct v4l2_queryctrl *to,
-+					   const struct v4l2_query_ext_ctrl *from)
+-static int wl1273_fm_vidioc_s_ctrl(struct v4l2_ctrl *ctrl)
++static int wl1273_fm_s_ctrl(struct v4l2_ctrl *ctrl)
  {
--	struct v4l2_query_ext_ctrl qec = { qc->id };
--	int rc;
-+	to->id = from->id;
-+	to->type = from->type;
-+	to->flags = from->flags;
-+	strscpy(to->name, from->name, sizeof(to->name));
- 
--	rc = v4l2_query_ext_ctrl(hdl, &qec);
--	if (rc)
--		return rc;
--
--	qc->id = qec.id;
--	qc->type = qec.type;
--	qc->flags = qec.flags;
--	strscpy(qc->name, qec.name, sizeof(qc->name));
--	switch (qc->type) {
-+	switch (from->type) {
- 	case V4L2_CTRL_TYPE_INTEGER:
- 	case V4L2_CTRL_TYPE_BOOLEAN:
- 	case V4L2_CTRL_TYPE_MENU:
- 	case V4L2_CTRL_TYPE_INTEGER_MENU:
- 	case V4L2_CTRL_TYPE_STRING:
- 	case V4L2_CTRL_TYPE_BITMASK:
--		qc->minimum = qec.minimum;
--		qc->maximum = qec.maximum;
--		qc->step = qec.step;
--		qc->default_value = qec.default_value;
-+		to->minimum = from->minimum;
-+		to->maximum = from->maximum;
-+		to->step = from->step;
-+		to->default_value = from->default_value;
- 		break;
- 	default:
--		qc->minimum = 0;
--		qc->maximum = 0;
--		qc->step = 0;
--		qc->default_value = 0;
-+		to->minimum = 0;
-+		to->maximum = 0;
-+		to->step = 0;
-+		to->default_value = 0;
- 		break;
- 	}
-+}
-+EXPORT_SYMBOL(v4l2_query_ext_ctrl_to_v4l2_queryctrl);
-+
-+/* Implement VIDIOC_QUERYCTRL */
-+int v4l2_queryctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_queryctrl *qc)
-+{
-+	struct v4l2_query_ext_ctrl qec = { qc->id };
-+	int rc;
-+
-+	rc = v4l2_query_ext_ctrl(hdl, &qec);
-+	if (rc)
-+		return rc;
-+
-+	v4l2_query_ext_ctrl_to_v4l2_queryctrl(qc, &qec);
-+
- 	return 0;
- }
- EXPORT_SYMBOL(v4l2_queryctrl);
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index fea53b419351..4e15ef4840b0 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -2302,32 +2302,8 @@ static int v4l_queryctrl(const struct v4l2_ioctl_ops *ops,
- 	ret = ops->vidioc_query_ext_ctrl(file, fh, &qec);
- 	if (ret)
- 		return ret;
--
--	p->id = qec.id;
--	p->type = qec.type;
--	p->flags = qec.flags;
--	strscpy(p->name, qec.name, sizeof(p->name));
--	switch (p->type) {
--	case V4L2_CTRL_TYPE_INTEGER:
--	case V4L2_CTRL_TYPE_BOOLEAN:
--	case V4L2_CTRL_TYPE_MENU:
--	case V4L2_CTRL_TYPE_INTEGER_MENU:
--	case V4L2_CTRL_TYPE_STRING:
--	case V4L2_CTRL_TYPE_BITMASK:
--		p->minimum = qec.minimum;
--		p->maximum = qec.maximum;
--		p->step = qec.step;
--		p->default_value = qec.default_value;
--		break;
--	default:
--		p->minimum = 0;
--		p->maximum = 0;
--		p->step = 0;
--		p->default_value = 0;
--		break;
--	}
--
--	return 0;
-+	v4l2_query_ext_ctrl_to_v4l2_queryctrl(p, &qec);
-+	return ret;
+ 	struct wl1273_device *radio = to_radio(ctrl);
+ 	struct wl1273_core *core = radio->core;
+@@ -1945,7 +1945,7 @@ static void wl1273_vdev_release(struct video_device *dev)
  }
  
- static int v4l_query_ext_ctrl(const struct v4l2_ioctl_ops *ops,
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 59679a42b3e7..83b84cb5cf06 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -1404,6 +1404,18 @@ v4l2_ctrl_request_hdl_ctrl_find(struct v4l2_ctrl_handler *hdl, u32 id);
-  */
- int v4l2_queryctrl(struct v4l2_ctrl_handler *hdl, struct v4l2_queryctrl *qc);
+ static const struct v4l2_ctrl_ops wl1273_ctrl_ops = {
+-	.s_ctrl = wl1273_fm_vidioc_s_ctrl,
++	.s_ctrl = wl1273_fm_s_ctrl,
+ 	.g_volatile_ctrl = wl1273_fm_g_volatile_ctrl,
+ };
  
-+/**
-+ * v4l2_query_ext_ctrl_to_v4l2_queryctrl - Convert a qec to qe.
-+ *
-+ * @to: The v4l2_queryctrl to write to.
-+ * @from: The v4l2_query_ext_ctrl to read from.
-+ *
-+ * This function is a helper to convert a v4l2_query_ext_ctrl into a
-+ * v4l2_queryctrl.
-+ */
-+void v4l2_query_ext_ctrl_to_v4l2_queryctrl(struct v4l2_queryctrl *to,
-+					   const struct v4l2_query_ext_ctrl *from);
-+
- /**
-  * v4l2_query_ext_ctrl - Helper function to implement
-  *	 :ref:`VIDIOC_QUERY_EXT_CTRL <vidioc_queryctrl>` ioctl
 
 -- 
 2.48.1.601.g30ceb7b040-goog
