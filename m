@@ -1,204 +1,165 @@
-Received: from MA0PR01CU012.outbound.protection.outlook.com (mail-southindiaazolkn19011036.outbound.protection.outlook.com [52.103.67.36])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00841A0BCD;
-	Mon, 24 Feb 2025 10:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.67.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740392343; cv=fail; b=YhoNsS5codfI0/3jeoD9pK8Ov3M0ZxqzSvOV4FICUDh3zFrPK648t/+GP9rF3kK2bjhJHQJe/r6XFxaOcfaiDcgIjJQslVh4Sqoqj3TE8CScAf2QLFTt5Yi6ULq59vlQW6oIMlxIhD39TVftOkP2d4wbSObP1JJ9dSsxoRidlz0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740392343; c=relaxed/simple;
-	bh=kjPViEA/IeVQHsGJpTFnny8x+tuqBIf65SJpMtvvBps=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=h35u3QLC3FvtlhxM2jKEt7C0fn/5BHKiJu7MyIQ27gXz8Syff2gUqZFixORdIYvN5qZ1BJ22t3TwOPVCw3bskF7mo45vkQktxjfdTzc2Y6DLE7X/ySn1msIbtDebgY4FJpsOQF+dXuNG2xgV9xDgDM2Bp45rbJZmrlFTMPLbN6k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com; spf=pass smtp.mailfrom=live.com; dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b=KU6IiZrO; arc=fail smtp.client-ip=52.103.67.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=live.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=live.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3A224A04A
+	for <linux-media@vger.kernel.org>; Mon, 24 Feb 2025 10:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740392354; cv=none; b=WOtUp1qRG7n8eUpX2qd1+zu6omoNQkUmU6/mQghqV2Dy2tjux+qePoArM8JpLkE6c8aHzGsyZO58KLZ2a+ScFWU3JyMubIlbySq3sB5rLQR/CKUSBemDYMuew6k+3iCSTEJxCkihU+f/Zwb31TrSBac9GTIOf6PdmWB/9TxJ0lg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740392354; c=relaxed/simple;
+	bh=2jOh4pJYdbTzoNRPiNIvr3w4ehDXkE58fmaK9/W94tQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=uOeM0mS7V3R6TsYFi3SqUCZMVCbVheCPY+7eBPD5+/pB4hmDnk8TNLVZQ1WFpqKCgn3hPDcg+bw2NRHl7O2jJjiSisuGRr+RR4yf9s+CdWeocpYuZ97mx1DVDGN3aZ7dYsKY4D9B4uykNzBH3zeCO5KYCDCRrHoTDLtgNrCHpFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=4oomikQy; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=live.com header.i=@live.com header.b="KU6IiZrO"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Vl2YaEI9stO4iqQ0C1E2eniwX0QMPB+Y3W1nGvWEyoV83dFgKWQPk4TDyi1M0xL8cZantxWN09RN4qjMIA2iyUL+2WactwyGbu+O4kgGlwkts0sjn4XxGrM8aRBOrQiYe9wBRidli51S6FIVyl161nRXRbNhaW59RvuQru6ProRPboPxZgew0ER1EwQDppLe2RBIrti64WTz8+1YZ8FUox6UU5OYk9sxi9nETI55uz59vjPZAd3e2+wB3NxA0ZsO8E2HX7irTRuknSyPHApfy9iv6hbkSV/wDSEU0tdHyWstFmG5UcUKKgE42G/JNQx8eSw1SBDitAyiRoWhPffoCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kjPViEA/IeVQHsGJpTFnny8x+tuqBIf65SJpMtvvBps=;
- b=a+9kAqKLY5wpHX+Kltnzatx7gVFKXKwFmLMzGiaueXsOYueXqRmih1maqV8/Rg4g2PlA5+tdi+LCnHSJ+EcKvhYScq8kVmrqkORkgy6XHy7qZqRFVa84kLl9i1bxOeR6+yNm0zRrWNle4EoLFNjk4p1ud9obYiMiLUzQ5J4xQF3AagIl7S7SGNpy7a0zGKvqC1TUkq9/M+wgCN2liN4OaGumsiG59c5tbBD7kgvC7jycbeYD7H3L5QLFMAdQnPkC3EU5IraTY9q3uxqhnF6j07Gpr1ZxW724oyEOXyAgTjK7GDhIF4R4VkBiazRVfheETHr9dxU+4cvJGIWgbCdUfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kjPViEA/IeVQHsGJpTFnny8x+tuqBIf65SJpMtvvBps=;
- b=KU6IiZrOvtVJYFKnecEuGazb45KBYdFFa0xP3Ttm1tVrcGgqyDk0aAi7JXV6ZFo01b07BlLvGgaEWuDpv6QvsKatzjiskOPVC7FOKBRaQzJbNcwMYSeZV+YpKXLBtni9RZkIdazfky/GLmoqCiBgFhd9pRUBBK7owOIl2mW5IRmTRxG5jRiA9TV57Flr0n7WXXkSwCBET2JqeirpdHn55T5sFFt6OIAiXssRtApqGIxW4KMg8Uyo8+R1qcjqqmW0XsoIUvEP2cXRqZJTLr0KFiQXEiIKUHudX09MXQkJnzLy4GDmUkOB4lFjQFwn+iF4wS/gIPQ82MtVZ3FbVWliTg==
-Received: from PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:f7::14)
- by MAZPR01MB7697.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:3c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.20; Mon, 24 Feb
- 2025 10:18:49 +0000
-Received: from PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::324:c085:10c8:4e77]) by PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::324:c085:10c8:4e77%7]) with mapi id 15.20.8466.016; Mon, 24 Feb 2025
- 10:18:48 +0000
-From: Aditya Garg <gargaditya08@live.com>
-To: "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>
-CC: "pmladek@suse.com" <pmladek@suse.com>, "rostedt@goodmis.org"
-	<rostedt@goodmis.org>, "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-	"senozhatsky@chromium.org" <senozhatsky@chromium.org>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maarten.lankhorst@linux.intel.com"
-	<maarten.lankhorst@linux.intel.com>, "mripard@kernel.org"
-	<mripard@kernel.org>, "tzimmermann@suse.de" <tzimmermann@suse.de>,
-	"airlied@gmail.com" <airlied@gmail.com>, "simona@ffwll.ch" <simona@ffwll.ch>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "apw@canonical.com"
-	<apw@canonical.com>, "joe@perches.com" <joe@perches.com>,
-	"dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
-	"lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
-	"sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-	"christian.koenig@amd.com" <christian.koenig@amd.com>, "kekrby@gmail.com"
-	<kekrby@gmail.com>, "admin@kodeit.net" <admin@kodeit.net>, Orlando
- Chamberlain <orlandoch.dev@gmail.com>, "evepolonium@gmail.com"
-	<evepolonium@gmail.com>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "linaro-mm-sig@lists.linaro.org"
-	<linaro-mm-sig@lists.linaro.org>, Hector Martin <marcan@marcan.st>,
-	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, "asahi@lists.linux.dev"
-	<asahi@lists.linux.dev>, Sven Peter <sven@svenpeter.dev>, Janne Grunau
-	<j@jannau.net>
-Subject: Re: [PATCH v2 2/3] lib/vsprintf: Add support for generic FOURCCs by
- extending %p4cc
-Thread-Topic: [PATCH v2 2/3] lib/vsprintf: Add support for generic FOURCCs by
- extending %p4cc
-Thread-Index: AQHbg7X/VQv9Od0O+UavMLVdMg72b7NTekUAgALDg4CAAAXIWg==
-Date: Mon, 24 Feb 2025 10:18:48 +0000
-Message-ID:
- <PN3PR01MB9597CF2907CBBD6ED43D5E62B8C02@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
-References: <716BCB0A-785B-463A-86C2-94BD66D5D22E@live.com>
- <C66F35BB-2ECC-4DB8-8154-DEC5177967ED@live.com>
- <6CB20172-906F-4D13-B5E4-100A9CF74F02@live.com>
- <Z7xCr4iPmIkPoWGC@smile.fi.intel.com>
-In-Reply-To: <Z7xCr4iPmIkPoWGC@smile.fi.intel.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-IN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN3PR01MB9597:EE_|MAZPR01MB7697:EE_
-x-ms-office365-filtering-correlation-id: 462b6411-1767-4005-4453-08dd54bca113
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8062599003|8060799006|19110799003|15080799006|7092599003|6072599003|461199028|440099028|4302099013|3412199025|10035399004|102099032|1602099012;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TU5HcFpYMmg5VXkrOEV4NHJFVG9NbHF3MU00TXUzTXk3dUN5U0RxRy94T29H?=
- =?utf-8?B?Tm1QczNoQWY5RVFaR2I0dmlWSTdBRHV3UmxMQjJiOFBQUjlkbGZqUXJZSzd3?=
- =?utf-8?B?K3VQOG9ZUWpWTldLUkFJeWpKZzdrWmpWT0VCMjlIbzRMdGE5MWl6SzlXM0JU?=
- =?utf-8?B?Zlh3WFRlc1o5YUxEd2lwZlJrbm1DOUQ1WGFLMHYyRUhpQTkwQmVHdll4ZHZp?=
- =?utf-8?B?TWgwRDZyMmo2T3h0dmozcnZzRjIxQUwrUFZ2M2tseUtwc1M2c0lzdndSMERR?=
- =?utf-8?B?UFg2S3hwZkcwT0lRNXhpSnhEN1lTR1pXWnFPSHA5T2hrbTZReWZ0NUh1aDB5?=
- =?utf-8?B?QmZpVXp0MVZkb1Vjc25jWG1kYkliN3JVSjR3MlNrR3pHNTgwbTFmc0VHTll1?=
- =?utf-8?B?Ui9naVh1YWxxaFNkNmE2WGdkN1dkckhVdkRibHFRazRPbnFoVnhRQzlxd1J3?=
- =?utf-8?B?UzRLQmpqaGUvdjdKMWI1eWpyaGI2WThRdmVtdnFDbGVHZ1BUQmV4Ymw2a3Vu?=
- =?utf-8?B?M0xUZCtBeHR5N2NpVEt6RU12aWh1Z2JlZUt1YndST3VhM0JYVTZqb1ZYLzQ4?=
- =?utf-8?B?L0JycDJ1dHovRGxIamJ1R2ZhUzhmTnl0cGpmR1ZkTnVYTXhzQzNLbG1xZjho?=
- =?utf-8?B?WWQzTVRVZll3OU5NTGFoUkRLTjg0ZVNJUXIvUUhBWm5HRnpjM2tYWFZUSktz?=
- =?utf-8?B?NXcyYmo5Vlg1VnJCM2c0KzczQVlmbXU0QkYvUWpCNDF6ZUsrYW41YWRzNlkx?=
- =?utf-8?B?Mnh3bW9oN1pvNkQ5ZldORFZ2aXY3K1BXdkFJT2l4aGppdTlXTlA2MENsbTlV?=
- =?utf-8?B?OEN6VGR1V0o3b1BaVEdUN0hnM1JFc3lPN1FtY2lBYnNZRFRpWTQ4TGpSVDJX?=
- =?utf-8?B?YzBqejVMZlVyekxyNFVrT3FjZlVPYlJpOUYySkFpUWJmU294RHNrZHlNRWZT?=
- =?utf-8?B?YmVya1kzU1JtNEM4YWN0bmpYVUhuYVdXbVkwYU95d2h0RkVoTjBPRnBjazlJ?=
- =?utf-8?B?d3BTUmRHUERtVU1BYkxtMFZ6Qkw4ZW5Va201YVdYUkJnOWcyeWVqSUNEOVVp?=
- =?utf-8?B?TkRhSXdiVThiTzZhNCtnZi92Z1hUb1JFS0Q5U1VTbzZ3dGhpaTJoV2pFL2l0?=
- =?utf-8?B?b3RFbVhGUEd4dWZRU1RFTDUramZMdEpJNGQvVTExTDNnc084VzZPY1oyeUtZ?=
- =?utf-8?B?OUZ4eVFSYVhRYVVOMmlud1ZXY201RFdmbm1DcWVMVmo5dm1VdlBpY2dabWV4?=
- =?utf-8?B?UjRBRmdIQ0loQmpFQm11aW1FRytjM1FubUZFcDFCdkZnQU1hdURhbkFmcHEw?=
- =?utf-8?B?REhGRnBqS3ZRWWdGUWNycTZtUnJlOXdNWnkyL3UvRjIyQSsrTVBTUWsvblpC?=
- =?utf-8?B?d2hHODYyUHg2MGdmakViTUQ0TlBNZm5iTlo5ZCsxVGpmN08xK0Y1NDZmeE9z?=
- =?utf-8?B?QnZkWjFub0h4K3RUZ0FBbnZQV2lTbUdQZFhSTzBZOTVkU2xzQnBlbEMzLzdk?=
- =?utf-8?B?WW9BYzZyNzJiZGMzUkhUQm1uZHJOMUk1UTlYVkowa25ueUFCYWYxbmJuRktp?=
- =?utf-8?B?WVJFc1VmNHd5eng1cXhsbVZtY1BvR3A5RHAySGo0QWlYUGJGNkt2OUVyQmlj?=
- =?utf-8?B?bEZGZVBCRWV2aDlmWmdVVEFMZmV4YldNRGF3WERLOVgwNVpxVitlYmFSMGpU?=
- =?utf-8?B?a1hKQlI3aWhFaC9UcWJRdXBhaFpsOTBwMXc2NWhLa1dLcy9hN2h2R0tnPT0=?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?SDdQejQ5RjhidG84ejhaemtSeFJPWXpkMjhyVkdPYnlpS3RKNDNJeXBTc0lG?=
- =?utf-8?B?YmM0VGVVR2U3bExGOXBDTEV4UHdEaVhpSm9nR2FyK0dWS1JUMGZLcysrcEVP?=
- =?utf-8?B?OHJUcHcrT0p2cUhhdFpFZkxJdWdTMHNoKzBlemlSZzl4cDRqbURPNGN3Szd0?=
- =?utf-8?B?dXlzdzJRSmZoMGRUMXFCaFlSbFdFMWJMZmlaWmJpZlhEbXFOblo1V1dMNHFY?=
- =?utf-8?B?ZXpMU0FRQVMwUlczMkhyanBEVzYyNG1VdFRpcWNFcitCY3ZQQ0JRUTh6R2lh?=
- =?utf-8?B?QXBCdHlLa2tkWEEzdDhycjFHS1AxUDgxTWtoNnlYRHlQSGMzeW83M2NsVVIx?=
- =?utf-8?B?UTY1TnJ1dTN4SnRoWGViS1lIWlpvanhJUkR3TjBrbHhBdVhIY216U1A0K0F3?=
- =?utf-8?B?bE56VTZXbEhvRGhDN2FEK0lVMGNuQjhzUmxxYXRoS1ZmY0MzeGVNU2J6QkRD?=
- =?utf-8?B?dDlOK2g2Z2tkZ09KalovemFYQk5FSS9vcjNVOTdHUGVQUjRIRTV6d0hjZUQ0?=
- =?utf-8?B?dVR0QlUrVEFUbWlrSlVueUMwTjg1cUJ4K1orOFJvdWEvUTllL3NXVFQ4OTJZ?=
- =?utf-8?B?c2VsQ2c0ck5vZEpYdVVPSHptT0tEV0tCWE8yamtFZ2NXdWRLYitpblBZUGFj?=
- =?utf-8?B?MkRYM1IzRzcxSFpFMW80bUFkQ3FlVnZqYVRVQ3JGRTdSVkRZMGEyM24vc3pI?=
- =?utf-8?B?aWRZK3NKNW9ZWFJBVWtWQ2tPUXRtWkJrNEFFSWIrMkhLZTNWeHg0bUdpTndM?=
- =?utf-8?B?WGhrSFJHU2lkbkJHbk9SVkpidUhmMytmcjQrV05aSkhaSkh5Z0lBNTV6TmpJ?=
- =?utf-8?B?a1UzbmxsYzNZZ0N0di8wYU9VeDNNQ2dPdmFWVmY5dFRNeGpFbEhZNXAyazdD?=
- =?utf-8?B?aFZQY1VodnB5NXM3ajF0Rk5vUm96MWZWWUhJeXFaNy8vb1ZsYStBeENuM1Vs?=
- =?utf-8?B?YnNTL3d0M2FGMlREVE5uN1hOeXVDeXQrTWxEWkpqaTVpV2FrMTNkUTRJUUJr?=
- =?utf-8?B?OEhLOVdaeFFEQmdmdUZQOGplelBRS01Rb0NvRmZsV3JlYWlwNDEzeWVhODJZ?=
- =?utf-8?B?UkpqZC9kZnFCU2x6NFNhRlVTcm85c2RMZjVjUHhqV2NmeTFEMmdVaHloRkFi?=
- =?utf-8?B?dUVwNURVRHducE1ZSlEyZkFUOFQ1K1orREtDVk9lQXpPMHQ1M0F1MkZPSlhz?=
- =?utf-8?B?alZ5alNyTGxwSHRwWFdvbEhkSWYvclN0Y2F1NlB5RUhtMnJYM2FEOEFGWUZh?=
- =?utf-8?B?WUp5Vk0ra1VJUmJRZ2ZHUlNMQ2h0WkdyRVkzQUgzZ0FRVnhiSThWUndYMWU0?=
- =?utf-8?B?bXk1OUFOa2FUWWo5K01GVno5QmVuREpYNEJydU5TY2RQRnlPanBJVFVhOXdE?=
- =?utf-8?B?cFp0WkR1Q080NGU2cm9mbGJ2Z2luT25TdE13Qk8yczlEV28yUXJCb1pGVFpP?=
- =?utf-8?B?TTBCNjJxOW53QmRVTS8zWFdrbXN1YWlOYVk1TDVPTkRyeFcvYVBYbld4QUxP?=
- =?utf-8?B?cjRSaThUWjYyZ2d6dmhqeTlGS04xejY5cnhkdVU4ejRqUTBtYk5mNk9lcThi?=
- =?utf-8?B?RnZtSUtVVTU3SFBibjRVTENrMWNIbndJNnZnaGJ0SVdiWnFuSnFtR2JveUFY?=
- =?utf-8?B?VXMxbkNvOVdhRC82SG9kUTFJZlZqMUFDemgzVWpPWEhUS2srMlJSSlpNbjY4?=
- =?utf-8?B?MG4yK1JCbmd2NFVvL0o4bDEwMWVjelpRaVZnRnQzTjhRRGpZc01hSDVQdjha?=
- =?utf-8?Q?gLvDAhjiKe+pePYe5A=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="4oomikQy"
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51O9JSgH026635;
+	Mon, 24 Feb 2025 11:18:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	+cOdB66XHjoSBhPkW1k9P2Sz47UfnWVCejVc4JRM38Q=; b=4oomikQyZJn8xt2R
+	tz9DM4jhVfEGTOZUaBPudol1QM9vqdc7n5pmCWhQPa9rThHgUyQEsUOvksl9a6ux
+	fDiR2oirdAcVuSu3JgHlr4/u4kjJ9FzbNGAmhoVfRWFfQCu8cP9hSeLhZm1mZ1FF
+	qZqJzMO9F6ipBEa2j2ySep5bXuM0OaHzxG2/KnpP8IjBD7v2TLLRVrp5s1Ocvm+g
+	sN9BKL8jRwqjcJGg7If3/5jPstoINQbMYZ2mTs82X5iXuYqRHTDcFiaDb/xPq3co
+	I9nk8gk2jw1T8ZhVldpkTm3WhdGsSOIW6VBckHICCptH3ayXVwgpisg3Z9pnaryb
+	HoZ6WA==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44ys144gfh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Feb 2025 11:18:35 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7A5B24002D;
+	Mon, 24 Feb 2025 11:16:33 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1922A4A53B7;
+	Mon, 24 Feb 2025 11:15:57 +0100 (CET)
+Received: from [10.130.73.167] (10.130.73.167) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 24 Feb
+ 2025 11:15:56 +0100
+Message-ID: <fa780238-6222-41e5-af86-a1001fafe1cc@foss.st.com>
+Date: Mon, 24 Feb 2025 11:15:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-ae5c4.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 462b6411-1767-4005-4453-08dd54bca113
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2025 10:18:48.9408
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB7697
+User-Agent: Mozilla Thunderbird
+Subject: Re: [ANN v2] Media Summit 2025: Nice in May or Amsterdam in August?
+To: Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List
+	<linux-media@vger.kernel.org>
+CC: Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Sean Young <sean@mess.org>,
+        Mauro
+ Carvalho Chehab <mchehab@kernel.org>,
+        Sebastian Fricke
+	<sebastian.fricke@collabora.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Ricardo Ribalda
+	<ribalda@chromium.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?=
+	<niklas.soderlund@ragnatech.se>,
+        Tomi Valkeinen
+	<tomi.valkeinen@ideasonboard.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
+        Bryan
+ O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dave Stevenson
+	<dave.stevenson@raspberrypi.com>,
+        Daniel Almeida
+	<daniel.almeida@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Tomasz Figa <tfiga@chromium.org>, "Hu, Jerry W" <jerry.w.hu@intel.com>,
+        Steve
+ Cho <stevecho@chromium.org>,
+        Kieran Bingham
+	<kieran.bingham@ideasonboard.com>,
+        Kevin Hilman <khilman@baylibre.com>
+References: <ab1fef54-d83f-46e2-a6c8-42b0761368fc@xs4all.nl>
+Content-Language: en-US
+From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+In-Reply-To: <ab1fef54-d83f-46e2-a6c8-42b0761368fc@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-24_04,2025-02-24_01,2024-11-22_01
 
-DQoNCj4gT24gMjQgRmViIDIwMjUsIGF0IDM6MjjigK9QTSwgYW5kcml5LnNoZXZjaGVua29AbGlu
-dXguaW50ZWwuY29tIHdyb3RlOg0KPiANCj4g77u/T24gU2F0LCBGZWIgMjIsIDIwMjUgYXQgMDM6
-NDY6MDNQTSArMDAwMCwgQWRpdHlhIEdhcmcgd3JvdGU6DQo+Pj4+IE9uIDIwIEZlYiAyMDI1LCBh
-dCAxMDowOeKAr1BNLCBBZGl0eWEgR2FyZyA8Z2FyZ2FkaXR5YTA4QGxpdmUuY29tPiB3cm90ZToN
-Cj4+PiANCj4+PiAlcDRjYyBpcyBkZXNpZ25lZCBmb3IgRFJNL1Y0TDIgRk9VUkNDcyB3aXRoIHRo
-ZWlyIHNwZWNpZmljIHF1aXJrcywgYnV0DQo+Pj4gaXQncyB1c2VmdWwgdG8gYmUgYWJsZSB0byBw
-cmludCBnZW5lcmljIDQtY2hhcmFjdGVyIGNvZGVzIGZvcm1hdHRlZCBhcw0KPj4+IGFuIGludGVn
-ZXIuIEV4dGVuZCBpdCB0byBhZGQgZm9ybWF0IHNwZWNpZmllcnMgZm9yIHByaW50aW5nIGdlbmVy
-aWMNCj4+PiAzMi1iaXQgRk9VUkNDcyB3aXRoIHZhcmlvdXMgZW5kaWFuIHNlbWFudGljczoNCj4+
-PiANCj4+PiAlcDRjaCAgIEhvc3QtZW5kaWFuDQo+Pj4gJXA0Y2wgTGl0dGxlLWVuZGlhbg0KPj4+
-ICVwNGNiIEJpZy1lbmRpYW4NCj4+PiAlcDRjciBSZXZlcnNlLWVuZGlhbg0KPj4+IA0KPj4+IFRo
-ZSBlbmRpYW5uZXNzIGRldGVybWluZXMgaG93IGJ5dGVzIGFyZSBpbnRlcnByZXRlZCBhcyBhIHUz
-MiwgYW5kIHRoZQ0KPj4+IEZPVVJDQyBpcyB0aGVuIGFsd2F5cyBwcmludGVkIE1TQnl0ZS1maXJz
-dCAodGhpcyBpcyB0aGUgb3Bwb3NpdGUgb2YNCj4+PiBWNEwvRFJNIEZPVVJDQ3MpLiBUaGlzIGNv
-dmVycyBtb3N0IHByYWN0aWNhbCBjYXNlcywgZS5nLiAlcDRjciB3b3VsZA0KPj4+IGFsbG93IHBy
-aW50aW5nIExTQnl0ZS1maXJzdCBGT1VSQ0NzIHN0b3JlZCBpbiBob3N0IGVuZGlhbiBvcmRlcg0K
-Pj4+IChvdGhlciB0aGFuIHRoZSBoZXggZm9ybSBiZWluZyBpbiBjaGFyYWN0ZXIgb3JkZXIsIG5v
-dCB0aGUgaW50ZWdlcg0KPj4+IHZhbHVlKS4NCj4gDQo+IC4uLg0KPiANCj4+IEJUVywgYWZ0ZXIg
-bG9va2luZyBhdCB0aGUgY29tbWVudHMgYnkgTWFydGluIFsxXSwgaXRzIGFjdHVhbGx5IGJldHRl
-ciB0byB1c2UNCj4+IGV4aXN0aW5nIHNwZWNpZmllcnMgZm9yIHRoZSBhcHBsZXRiZHJtIGRyaXZl
-ci4gIFRoZSBkcml2ZXIgbmVlZHMgdGhlIGhvc3QNCj4+IGVuZGlhbiBhcyBwcm9wb3NlZCBieSB0
-aGlzIHBhdGNoLCBzbyBpbnN0ZWFkIG9mIHRoYXQsIHdlIGNhbiB1c2UgJS40cw0KPiANCj4gRG8g
-eW91IG1lYW4gdGhpcyBwYXRjaCB3aWxsIG5vdCBiZSBuZWVkZWQ/IElmIHRoaXMgYSBjYXNlLCB0
-aGF0IHdvdWxkIGJlIHRoZQ0KPiBiZXN0IHNvbHV0aW9uLg0KDQpJIHRlc3RlZCB3aXRoICU0cEUs
-IGFuZCB0aGUgcmVzdWx0cyBhcmUgZGlmZmVyZW50IGZyb20gZXhwZWN0ZWQuIFNvIHRoaXMgd291
-bGQgYmUgcHJlZmVycmVkLiBLaW5kbHkgc2VlIG15IGxhdGVzdCBlbWFpbCB3aXRoIGEgcHJvcG9z
-ZWQgd29ya2Fyb3VuZCBmb3IgdGhlIHNwYXJzZSB3YXJuaW5ncy4NCj4gDQo+PiBbMV06IGh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL2FzYWhpL0U3NTNCMzkxLUQyQ0ItNDIxMy1BRjgyLTY3OEFERDVB
-NzY0NEBjdXRlYml0Lm9yZy8NCj4+IA0KPj4gQWx0ZXJuYXRpdmVseSB3ZSBjb3VsZCBhZGQgYSBo
-b3N0IGVuZGlhbiBvbmx5LiBPdGhlciBlbmRpYW5zIGFyZSBub3QgcmVhbGx5DQo+PiB1c2VkIGJ5
-IGFueSBkcml2ZXIgQUZBSUsuIFRoZSBob3N0IGVuZGlhbiBpcyBiZWluZyB1c2VkIGJ5IGFwcGxl
-dGJkcm0gYW5kDQo+PiBBc2FoaSBMaW51eOKAmSBTTUMgZHJpdmVyIG9ubHkuDQo+IA0KPiAtLQ0K
-PiBXaXRoIEJlc3QgUmVnYXJkcywNCj4gQW5keSBTaGV2Y2hlbmtvDQo+IA0KPiANCg==
+Hi Hans,
+
+Thanks a lot for organizing this once again.
+
+On 2/20/25 11:24, Hans Verkuil wrote:
+> [Repost because I mixed up a Lyon and Nice, and to provide more info on the other
+>  events that take place in Nice. Also added Kevin Hilman to the CC list.]
+> 
+> Hi all,
+> 
+> We want to organize a Media Summit this year as well to meet each other face-to-face.
+> We try to co-locate with an existing conference, and this year there are two options:
+> 
+> 1) Co-locate with the Embedded Recipes conference in Nice in France which is held on May 14-16:
+> 
+>    https://embedded-recipes.org/2025/
+> 
+>    So a media summit would probably take place on May 11 or 12.
+> 
+>    This conference is a one room, one track format. But the room holds up to 200
+>    people and the expectation is that it is not a problem to get tickets for it.
+>    And we might be able to reserve some tickets for us as well.
+> 
+>    There is a libcamera workshop on Friday, and AFAIK a pipewire workshop on the same day.
+>    GStreamer plans an event during the weekend after ER.
+> 
+> 2) Co-locate with the Open Source Summit Europe in Amsterdam which is held on August 25-27.
+> 
+>    https://events.linuxfoundation.org/open-source-summit-europe/
+> 
+>    The Embedded Linux Conference Europe is part of that event. The summit would
+>    probably be on August 24 or 28.
+> 
+
+I just asked for my company approval to join these events. Nice would
+undoubtedly be easier for me to arrange.
+I'll keep you posted.
+
+> I know that getting permission to travel is still a problem for many, which is why we
+> try to co-locate with a larger event.
+> 
+> So: if you are a core media maintainer or an active media developer, and want to join
+> the Media Summit, which of these two options would work for you?
+> 
+> If possible, I would like to get an idea of what I can expect in about two weeks time.
+> I'll send out a reminder in about a week as well.
+> 
+> Feel free to forward this if you know other people who might be interested.
+> 
+> If you haven't been to one of these Media Summits before, then you can find the report
+> on last year's summit here:
+> 
+> https://lore.kernel.org/linux-media/45e4f5d4-f6c4-4f0b-96b5-f5e1125b0845@xs4all.nl/
+> 
+> That should give you an idea of what to expect.
+> 
+> Regards,
+> 
+> 	Hans
+
+-- 
+Regards,
+
+Benjamin
