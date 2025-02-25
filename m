@@ -1,65 +1,45 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E73266597
-	for <linux-media@vger.kernel.org>; Tue, 25 Feb 2025 09:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740474326; cv=none; b=cvODNcmKKvepfqMiteWg1a75ceJjE03jF07ygb8m73DvVSQ0/EeyEVwOTlCkxE7cbB3RIy+kpAmbEiGRaIfMNycMGICNulUx+9mizRqaIl1EiqLL+alGKXRlErQAu2cCPiYZpUgXg7TN42RToVg5yU52YoGDexfsDSulVAsY9mQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740474326; c=relaxed/simple;
-	bh=v00FvgOpYb+n3FGLO6d0TWMNJxGJTCgKGQ6XpRBKpZQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UXtJMO+gbL1zkKFzs97xy3UDE0shePPs+PedevxedY36KQEO1JDRV2p/YHJ193qj2xBTXrg8jZYlGx0aQyQ3UZM5PIFh3DLl6OJueFXLd/quou/D4PbraDHBsNuHo+MUOJUSQ+NtscQBg7j6hV5/uPAYRoYPF6DiirMhZnULKXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dNoRXEcN; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E68F262D25;
+	Tue, 25 Feb 2025 09:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740476464; cv=pass; b=MhUUZZp7bQ0iGQzaM2bObYT29SRloW/4abUDeme/8iMFaz/eLAcBre2sY7kTY1wtM0HsjyLHVGjwPT0XpX/G2U1q3Mu7RRQhEhQYzPyTxXbSgDv2WDCn8bJmzvhhNEqY0ytqqxQGPa4HrSpempdFWx16xlLjnnx2QeiUj/tLfQw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740476464; c=relaxed/simple;
+	bh=Ums4+YJ6/mdB6OJJs/VVAlfEGxXlqH5U5JaUczjzwVo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=R9QXckVeS+kK5D5KdCyMp6k7L7T8J17rc2PAIJkqMd1nHnZyi3jTTffHjXkTKTceKRRuAiKljEoRJIvI9KPQiZYVXpMwcV1I3eWUd8DaG+ysx3Koh9pfrl44zV7Du/9QfF/acWn838xHKuVV7Ft12gT+PhQephmrNckgez43OUY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b=HkPBfRBn; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dNoRXEcN"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38f70170005so3152886f8f.3
-        for <linux-media@vger.kernel.org>; Tue, 25 Feb 2025 01:05:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740474321; x=1741079121; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MYmR6wYxHn+OrnAqeln0/aM1+4hC+I2kO2nIYcMMvmw=;
-        b=dNoRXEcNpKTgyENRt2YKRnxuc7ju/CM3DuA82uiDarjV+d0xiIYrd9z+N8rV7GlB5O
-         sJa3NJWhHJAMWX/S6ulxy00O0GbsTiSoCjNLUm2RUQI+WfuEtli+36acp+qidtPGA0tx
-         d5W1pXZbuIjgVzEiKVoVAYUJHf0ShBs8cPISsQoZ8ssJGNtp6pAfkjGF4KjJ2U1lnfzA
-         VF+SGucMWavbnJTPE4SF9a0cjF2SKrjLxf2l0FEzJmtvHnKvimNyUQ44YTae6xRhHaoX
-         6JfXpj6MB5J+6xfuL4VnLX7j1fW106wwqmiPTsaV/619A7PgIPJTEiFOi3JQaiGh9Jke
-         zuMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740474321; x=1741079121;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MYmR6wYxHn+OrnAqeln0/aM1+4hC+I2kO2nIYcMMvmw=;
-        b=Kgze4LwdQAfiGMfSP5cyd6AEtPMCyaVUztdtvAOjTzgYSOmgk7x1g+Iee4miR6LarI
-         87Ki2y8Yr1GaDVkFbpGZYUMVzSPm8eyu0i3AT0S8pwa+fLIMBG4rOcQgEXLBNNJlHgs/
-         D/aQ9jnYr1k+WgL1fLGHJxpEDjysA8Ntg7GL+g6YRyS9Ko1W9vXTVp87zLAbn8HZAPNp
-         xkc3jQwipxOYgkwA19APR/r1PiIEyNLwxg54i/aeZ/VNYexa3zgS5lVVKg36hE5pimQ0
-         eMjZzlLITt7t5a9AZCnZkYELwxPVyzawMIvjDAVfKJ0Bfroc1cmsvhKzEI/NNlpcw4xV
-         cxUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDmh5sfzq3ubx56M26cLRzWC1+M1zZaqen4q83Par4Qpp0lJAdqQzFEnpufqjQhDtnjtqXiWFsINHTGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx21IDtZgMRUwmfcWP1BQtMCgXW9Eh5q28iP/Q6iB/v1sgVh3lf
-	Ja6sdHk8wjDtQPyq8nAz4qJwiyCfvNMCZZG/OJHzw4601SP1uvpNEePfOBFFrkY=
-X-Gm-Gg: ASbGnctMFdEj1cYGyQTNkbCck4Ad0GhJTidbybAIBKZVIbJpNuDPLvtPSVCCuhl711e
-	fPQyCxf8WYR4dgTL4FzpchkE2y35NAilVYtUVgJ9+xyJjymB14qh5FqMQjmMpNZoFI1jDHDw9sC
-	kHg4khEwXlFfqw7BLzTUPuZaK0R6dhWic+NBXg0ORW4ZlrO1PGUVPLteYDkgQ0qlJOvS0W6LVbK
-	16Bc0sBXqBJJvfSlkhYQmxZeEmnX/ZS+AlVhafXmu4BSRJwPbBV2J3gam8haa3NGci259S7khEO
-	2fFgsscVcEZSFoniyMRxOX56jJW4AypGQde2HxFzk5pJS94=
-X-Google-Smtp-Source: AGHT+IGXsU7hwX2gAxEY6VM940MGo0A6mKVnjChXhYTPaOpxxIOzGvKpEQd12j49B57MKG7ir3Lmxw==
-X-Received: by 2002:a5d:588c:0:b0:38d:e584:81ea with SMTP id ffacd0b85a97d-38f6f0d1c8bmr14397863f8f.45.1740474320749;
-        Tue, 25 Feb 2025 01:05:20 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390cd86c93bsm1573540f8f.26.2025.02.25.01.05.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 01:05:20 -0800 (PST)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Tue, 25 Feb 2025 10:05:12 +0100
-Subject: [PATCH 4/4] media: platform: qcom/iris: add sm8650 support
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b="HkPBfRBn"
+ARC-Seal: i=1; a=rsa-sha256; t=1740476438; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nhN3Rt+pUbXhrV5nTGDXRMtP2Ar3cg1wHU3cPNr1J4ofqZZXDo9z2s/WvKBjqzwJVvW3u12Zno2mh9bXoh19QFXjnneu9h3divVcwLOEc5lchxdikJKkAmoDPjhqVTYN6DN5fqI1u/OuvAp1F3S2uq8syRRdd+MCCuKu4CCgmwA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740476438; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=6KHN1scQcppw8pT0cPhUgdCDwEZk4zFF85SfonaTG9o=; 
+	b=Ko7lqHOuIqf7mRVBVVTH+NDyMfZVwbPrU64AUBvQqJY2WAroSPAE2UIfngczqtdQs0H26kr5TUKbxbFJ+NsFYTCL9zPtm3WyVifywDUrspexgHXZ9v7xxNE9DdgV+iQSExRetvPQMTWC7irVjsJ9ij+RX5KDg8YwvzueFjNti/I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.fricke@collabora.com;
+	dmarc=pass header.from=<sebastian.fricke@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740476438;
+	s=zohomail; d=collabora.com; i=sebastian.fricke@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=6KHN1scQcppw8pT0cPhUgdCDwEZk4zFF85SfonaTG9o=;
+	b=HkPBfRBnlt3LKckhrQ11wmHPMx03H0Ew+5pfzKOQHU2MKRyktJj0SvAB2PwDvl4f
+	lNAxwLUMxzydQlNK6Uqy8E5prEX5Kc7wXDvrsCXSaaNRenDv1GH4Wv8CE+UH5LSVsQU
+	2ziF2HXMfDmM+6ivvyLIe07nzajc0GspRVEv1eNU=
+Received: by mx.zohomail.com with SMTPS id 174047643563359.41477366289905;
+	Tue, 25 Feb 2025 01:40:35 -0800 (PST)
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+Subject: [PATCH v7 00/12] media: rkvdec: Add H.264 High 10 and 4:2:2
+ profile support
+Date: Tue, 25 Feb 2025 10:40:21 +0100
+Message-Id: <20250225-rkvdec_h264_high10_and_422_support-v7-0-7992a68a4910@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -68,362 +48,176 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250225-topic-sm8x50-iris-v10-v1-4-128ef05d9665@linaro.org>
-References: <20250225-topic-sm8x50-iris-v10-v1-0-128ef05d9665@linaro.org>
-In-Reply-To: <20250225-topic-sm8x50-iris-v10-v1-0-128ef05d9665@linaro.org>
-To: Vikash Garodia <quic_vgarodia@quicinc.com>, 
- Dikshita Agarwal <quic_dikshita@quicinc.com>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Neil Armstrong <neil.armstrong@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAAWQvWcC/zXNTQrDIBBA4asE1zWMg/mxq96jFLFxEm2oBk3TQ
+ sjdK4Uuv817O8uUPGV2rnaWaPPZx1DQnSo2OBMm4t4WMwRsQIiWp3mzNGiHrdTOT06ANsFqiaj
+ za1liWrnpR7SmN6CoZSW0JBr95ze53orHFJ98dYnMPy1BgRIKG8RaQNd2IDnyRwwmX+a3v8dYZ
+ 2LH8QVHx3ZArwAAAA==
+X-Change-ID: 20250116-rkvdec_h264_high10_and_422_support-a8f2da8a09e6
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, 
+ Boris Brezillon <boris.brezillon@collabora.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev, 
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, 
+ Alex Bee <knaerzche@gmail.com>, 
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+ Detlev Casanova <detlev.casanova@collabora.com>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, Jonas Karlman <jonas@kwiboo.se>, 
+ Sebastian Fricke <sebastian.fricke@collabora.com>, 
+ Christopher Obbard <christopher.obbard@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10895;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=v00FvgOpYb+n3FGLO6d0TWMNJxGJTCgKGQ6XpRBKpZQ=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBnvYfM2Pkodfx6ekVFlWwGC6OZlaJQwd1Zg59AtaMQ
- ll0ke2GJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ72HzAAKCRB33NvayMhJ0fBPD/
- 0ex0MrvnJ4VSu61N+p3fbe5XoMW7FsUtGQlHerBoFYV8dyvkXHnCZ2+ZaVec//9iZVqr9MpWFWxm1v
- jVGnzgby4nvCV4+oyMkt7P7lkRq9twRscWd9yk2OBrmGSsE7XXjpElGq1xUx9GJFuetiO5wfrn6e6z
- yhT9daI5GNFgV5Tgl8mwgDDqeH54iGELuw4VjEzJQwFsDW9MXVUUSdBeLhp77kCHOA+Ms1Pm8p8mQn
- AVf9v531WrAX2RuwVVd/IUOWRrE+g4OkGYdj9GzR39agzDkub9NnUbPV6vQLfgXyTDmJJJ8NuRie6i
- fMeGkFccjwbdrxwbHVU3kLQcmcYHgSfGd3Tn3ouAkNvUiws+S932ncBGB93O4nitGwN7JwLy/FM4Yv
- hBGx/S4W/qKccEm4YznMmOMochU57GmpWTlSGDVS5KKDTsjH9BHsFCovNCa/aaumrGKBYhUgPbWlTv
- hx7WoNhSxrbg/LTFTZBWCKOJJsYcDeq4XRtUcBeCEt1I3pbiI05spvY78B8on2PUPAmo0ml5XOfc5k
- 0rHcuWDcZoqNS6Gon7K0pa202zm6ThDhJ1Ql8MFOSviFH31j7UhhLjKbCIhfeDOKy3IyD3OOSqMBxD
- QaASEjQBc9otjwMmnuayINzAqi6vNWQBC+EshgWVc/YLsPz0wMyh55Qz7SCQ==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740476425; l=6209;
+ i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
+ bh=Ums4+YJ6/mdB6OJJs/VVAlfEGxXlqH5U5JaUczjzwVo=;
+ b=vHLchJj5VFzCe3N1yVf2hTKmia00n+p0wa99spFFYTcCB83QjeVgz6KVy4LcQatYwa4YdY9IlKrO
+ 9SOEYGMvB+tQ5oNpE+8h+aHSldt930GVc1n3iPKgxlH7ZJ2es86j
+X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
+ pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
+X-ZohoMailClient: External
 
-Add support for the SM8650 platform by re-using the SM8550
-definitions and using the vpu33 ops.
+This series add H.264 High 10 and 4:2:2 profile support to the Rockchip
+Video Decoder driver.
 
-The SM8650/vpu33 requires more reset lines, but the H.284
-decoder capabilities are identical.
+Patch 1 add helpers for calculating plane bytesperline and sizeimage.
+Patch 2 add two new pixelformats for semi-planer 10-bit 4:2:0/4:2:2 YUV.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Patch 3 change to use bytesperline and buffer height to configure strides.
+Patch 4 change to use values from SPS/PPS control to configure the HW.
+
+Patch 5-9 refactor code to support filtering of CAPUTRE formats based
+on the image format returned from a get_image_fmt ops.
+
+Patch 10 add final bits to support H.264 High 10 and 4:2:2 profiles.
+
+Patch 11 Limit minimum profile to constrained baseline due to
+unsupported features in the full baseline profile
+
+Patch 12 add a fix for enumerated frame sizes returned to userspace.
+
+Tested with Fluster on a ROCK Pi 4 (RK3399)
+
+129/135 on JVT-AVC_V1
+44/69 on JVT-FR-EXT
+
+Changes in v7:
+- Split out the change with the minimum profile
+- s/v4l2_format_plane_width/v4l2_format_plane_stride/
+- Move V4L2_PIX_FMT_NV15/V4L2_PIX_FMT_NV20 documentation as suggested
+- Change return value from int to bool on rkvdec_image_fmt_match
+- Add reviewed-by tags
+Link to v6: https://lore.kernel.org/linux-media/20240909192522.1076704-1-jonas@kwiboo.se/
+
+Changes in v6:
+- Change to use fmt_idx instead of j++ tucked inside a condition (Dan)
+- Add patch to fix enumerated frame sizes returned to userspace (Alex)
+- Fluster test score is same as v4 and v5, see [4] and [5]
+Link to v5: https://lore.kernel.org/linux-media/20240618194647.742037-1-jonas@kwiboo.se/
+
+Changes in v5:
+- Drop Remove SPS validation at streaming start patch
+- Move buffer align from rkvdec_fill_decoded_pixfmt to min/step_width
+- Use correct profiles for V4L2_CID_MPEG_VIDEO_H264_PROFILE
+- Collect r-b and t-b tags
+- Fluster test score is same as v4, see [4] and [5]
+Link to v4: https://lore.kernel.org/linux-media/20231105165521.3592037-1-jonas@kwiboo.se/
+
+Changes in v4:
+- Fix failed v4l2-compliance tests related to CAPTURE queue
+- Rework CAPTURE format filter anv validate to use an image format
+- Run fluster test suite JVT-FR-EXT [4] and JVT-AVC_V1 [5]
+Link to v3: https://lore.kernel.org/linux-media/20231029183427.1781554-1-jonas@kwiboo.se/
+
+Changes in v3:
+- Drop merged patches
+- Use bpp and bpp_div instead of prior misuse of block_w/block_h
+- New patch to use values from SPS/PPS control to configure the HW
+- New patch to remove an unnecessary call to validate sps at streaming start
+- Reworked pixel format validation
+Link to v2: https://lore.kernel.org/linux-media/20200706215430.22859-1-jonas@kwiboo.se/
+
+Changes in v2:
+- Collect r-b tags
+- SPS pic width and height in mbs validation moved to rkvdec_try_ctrl
+- New patch to not override output buffer sizeimage
+- Reworked pixel format validation
+- Only align decoded buffer instead of changing frmsize step_width
+Link to v1: https://lore.kernel.org/linux-media/20200701215616.30874-1-jonas@kwiboo.se/
+
+To fully runtime test this series you may need FFmpeg patches from [1]
+and fluster patches from [2], this series is also available at [3].
+
+[1] https://github.com/Kwiboo/FFmpeg/commits/v4l2request-2024-v2-rkvdec/
+[2] https://github.com/Kwiboo/fluster/commits/ffmpeg-v4l2request-rkvdec/
+[3] https://github.com/Kwiboo/linux-rockchip/commits/linuxtv-rkvdec-high-10-v6/
+[4] https://gist.github.com/Kwiboo/f4ac15576b2c72887ae2bc5d58b5c865
+[5] https://gist.github.com/Kwiboo/459a1c8f1dcb56e45dc7a7a29cc28adf
+
+Regards,
+Jonas
+
+Alex Bee (1):
+  media: rkvdec: h264: Don't hardcode SPS/PPS parameters
+
+Jonas Karlman (10):
+  media: v4l2-common: Add helpers to calculate bytesperline and
+    sizeimage
+  media: v4l2: Add NV15 and NV20 pixel formats
+  media: rkvdec: h264: Use bytesperline and buffer height as virstride
+  media: rkvdec: Extract rkvdec_fill_decoded_pixfmt into helper
+  media: rkvdec: Move rkvdec_reset_decoded_fmt helper
+  media: rkvdec: Extract decoded format enumeration into helper
+  media: rkvdec: Add image format concept
+  media: rkvdec: Add get_image_fmt ops
+  media: rkvdec: h264: Support High 10 and 4:2:2 profiles
+  media: rkvdec: Fix enumerate frame sizes
+
+ .../media/v4l/pixfmt-yuv-planar.rst           | 128 ++++++++++
+ drivers/media/v4l2-core/v4l2-common.c         |  80 +++---
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   2 +
+ drivers/staging/media/rkvdec/rkvdec-h264.c    |  64 +++--
+ drivers/staging/media/rkvdec/rkvdec.c         | 239 +++++++++++++-----
+ drivers/staging/media/rkvdec/rkvdec.h         |  18 +-
+ include/uapi/linux/videodev2.h                |   2 +
+ 7 files changed, 410 insertions(+), 123 deletions(-)
+
+--
+2.46.0
+
 ---
- drivers/media/platform/qcom/iris/Makefile          |   1 +
- .../platform/qcom/iris/iris_platform_common.h      |   1 +
- .../platform/qcom/iris/iris_platform_sm8650.c      | 266 +++++++++++++++++++++
- drivers/media/platform/qcom/iris/iris_probe.c      |   4 +
- 4 files changed, 272 insertions(+)
+Alex Bee (1):
+      media: rkvdec: h264: Don't hardcode SPS/PPS parameters
 
-diff --git a/drivers/media/platform/qcom/iris/Makefile b/drivers/media/platform/qcom/iris/Makefile
-index 6b64c9988505afd9707c704449d60bb53209229f..4caba81a95b806b9fa4937d9c7973031dea43d0e 100644
---- a/drivers/media/platform/qcom/iris/Makefile
-+++ b/drivers/media/platform/qcom/iris/Makefile
-@@ -11,6 +11,7 @@ qcom-iris-objs += \
-              iris_hfi_gen2_response.o \
-              iris_hfi_queue.o \
-              iris_platform_sm8550.o \
-+             iris_platform_sm8650.o \
-              iris_power.o \
-              iris_probe.o \
-              iris_resources.o \
-diff --git a/drivers/media/platform/qcom/iris/iris_platform_common.h b/drivers/media/platform/qcom/iris/iris_platform_common.h
-index f6b15d2805fb2004699709bb12cd7ce9b052180c..75e266a6b718acb8518079c2125dfb30435cbf2b 100644
---- a/drivers/media/platform/qcom/iris/iris_platform_common.h
-+++ b/drivers/media/platform/qcom/iris/iris_platform_common.h
-@@ -35,6 +35,7 @@ enum pipe_type {
- 
- extern struct iris_platform_data sm8250_data;
- extern struct iris_platform_data sm8550_data;
-+extern struct iris_platform_data sm8650_data;
- 
- enum platform_clk_type {
- 	IRIS_AXI_CLK,
-diff --git a/drivers/media/platform/qcom/iris/iris_platform_sm8650.c b/drivers/media/platform/qcom/iris/iris_platform_sm8650.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..823e349dead2606129e52d6d2d674cb2550eaf17
---- /dev/null
-+++ b/drivers/media/platform/qcom/iris/iris_platform_sm8650.c
-@@ -0,0 +1,266 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include "iris_core.h"
-+#include "iris_ctrls.h"
-+#include "iris_hfi_gen2.h"
-+#include "iris_hfi_gen2_defines.h"
-+#include "iris_platform_common.h"
-+#include "iris_vpu_common.h"
-+
-+#define VIDEO_ARCH_LX 1
-+
-+static struct platform_inst_fw_cap inst_fw_cap_sm8650[] = {
-+	{
-+		.cap_id = PROFILE,
-+		.min = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-+		.max = V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH,
-+		.step_or_mask = BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH) |
-+				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH),
-+		.value = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-+		.hfi_id = HFI_PROP_PROFILE,
-+		.flags = CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		.set = iris_set_u32_enum,
-+	},
-+	{
-+		.cap_id = LEVEL,
-+		.min = V4L2_MPEG_VIDEO_H264_LEVEL_1_0,
-+		.max = V4L2_MPEG_VIDEO_H264_LEVEL_6_2,
-+		.step_or_mask = BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_2) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_5_2) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_0) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_1) |
-+				BIT(V4L2_MPEG_VIDEO_H264_LEVEL_6_2),
-+		.value = V4L2_MPEG_VIDEO_H264_LEVEL_6_1,
-+		.hfi_id = HFI_PROP_LEVEL,
-+		.flags = CAP_FLAG_OUTPUT_PORT | CAP_FLAG_MENU,
-+		.set = iris_set_u32_enum,
-+	},
-+	{
-+		.cap_id = INPUT_BUF_HOST_MAX_COUNT,
-+		.min = DEFAULT_MAX_HOST_BUF_COUNT,
-+		.max = DEFAULT_MAX_HOST_BURST_BUF_COUNT,
-+		.step_or_mask = 1,
-+		.value = DEFAULT_MAX_HOST_BUF_COUNT,
-+		.hfi_id = HFI_PROP_BUFFER_HOST_MAX_COUNT,
-+		.flags = CAP_FLAG_INPUT_PORT,
-+		.set = iris_set_u32,
-+	},
-+	{
-+		.cap_id = STAGE,
-+		.min = STAGE_1,
-+		.max = STAGE_2,
-+		.step_or_mask = 1,
-+		.value = STAGE_2,
-+		.hfi_id = HFI_PROP_STAGE,
-+		.set = iris_set_stage,
-+	},
-+	{
-+		.cap_id = PIPE,
-+		.min = PIPE_1,
-+		.max = PIPE_4,
-+		.step_or_mask = 1,
-+		.value = PIPE_4,
-+		.hfi_id = HFI_PROP_PIPE,
-+		.set = iris_set_pipe,
-+	},
-+	{
-+		.cap_id = POC,
-+		.min = 0,
-+		.max = 2,
-+		.step_or_mask = 1,
-+		.value = 1,
-+		.hfi_id = HFI_PROP_PIC_ORDER_CNT_TYPE,
-+	},
-+	{
-+		.cap_id = CODED_FRAMES,
-+		.min = CODED_FRAMES_PROGRESSIVE,
-+		.max = CODED_FRAMES_PROGRESSIVE,
-+		.step_or_mask = 0,
-+		.value = CODED_FRAMES_PROGRESSIVE,
-+		.hfi_id = HFI_PROP_CODED_FRAMES,
-+	},
-+	{
-+		.cap_id = BIT_DEPTH,
-+		.min = BIT_DEPTH_8,
-+		.max = BIT_DEPTH_8,
-+		.step_or_mask = 1,
-+		.value = BIT_DEPTH_8,
-+		.hfi_id = HFI_PROP_LUMA_CHROMA_BIT_DEPTH,
-+	},
-+	{
-+		.cap_id = RAP_FRAME,
-+		.min = 0,
-+		.max = 1,
-+		.step_or_mask = 1,
-+		.value = 1,
-+		.hfi_id = HFI_PROP_DEC_START_FROM_RAP_FRAME,
-+		.flags = CAP_FLAG_INPUT_PORT,
-+		.set = iris_set_u32,
-+	},
-+};
-+
-+static struct platform_inst_caps platform_inst_cap_sm8650 = {
-+	.min_frame_width = 96,
-+	.max_frame_width = 8192,
-+	.min_frame_height = 96,
-+	.max_frame_height = 8192,
-+	.max_mbpf = (8192 * 4352) / 256,
-+	.mb_cycles_vpp = 200,
-+	.mb_cycles_fw = 489583,
-+	.mb_cycles_fw_vpp = 66234,
-+	.num_comv = 0,
-+};
-+
-+static void iris_set_sm8650_preset_registers(struct iris_core *core)
-+{
-+	writel(0x0, core->reg_base + 0xB0088);
-+}
-+
-+static const struct icc_info sm8650_icc_table[] = {
-+	{ "cpu-cfg",    1000, 1000     },
-+	{ "video-mem",  1000, 15000000 },
-+};
-+
-+static const char * const sm8650_clk_reset_table[] = { "bus", "xo", "core" };
-+
-+static const struct bw_info sm8650_bw_table_dec[] = {
-+	{ ((4096 * 2160) / 256) * 60, 1608000 },
-+	{ ((4096 * 2160) / 256) * 30,  826000 },
-+	{ ((1920 * 1080) / 256) * 60,  567000 },
-+	{ ((1920 * 1080) / 256) * 30,  294000 },
-+};
-+
-+static const char * const sm8650_pmdomain_table[] = { "venus", "vcodec0" };
-+
-+static const char * const sm8650_opp_pd_table[] = { "mxc", "mmcx" };
-+
-+static const struct platform_clk_data sm8650_clk_table[] = {
-+	{IRIS_AXI_CLK,  "iface"        },
-+	{IRIS_CTRL_CLK, "core"         },
-+	{IRIS_HW_CLK,   "vcodec0_core" },
-+};
-+
-+static struct ubwc_config_data ubwc_config_sm8650 = {
-+	.max_channels = 8,
-+	.mal_length = 32,
-+	.highest_bank_bit = 16,
-+	.bank_swzl_level = 0,
-+	.bank_swz2_level = 1,
-+	.bank_swz3_level = 1,
-+	.bank_spreading = 1,
-+};
-+
-+static struct tz_cp_config tz_cp_config_sm8650 = {
-+	.cp_start = 0,
-+	.cp_size = 0x25800000,
-+	.cp_nonpixel_start = 0x01000000,
-+	.cp_nonpixel_size = 0x24800000,
-+};
-+
-+static const u32 sm8650_vdec_input_config_params[] = {
-+	HFI_PROP_BITSTREAM_RESOLUTION,
-+	HFI_PROP_CROP_OFFSETS,
-+	HFI_PROP_CODED_FRAMES,
-+	HFI_PROP_BUFFER_FW_MIN_OUTPUT_COUNT,
-+	HFI_PROP_PIC_ORDER_CNT_TYPE,
-+	HFI_PROP_PROFILE,
-+	HFI_PROP_LEVEL,
-+	HFI_PROP_SIGNAL_COLOR_INFO,
-+};
-+
-+static const u32 sm8650_vdec_output_config_params[] = {
-+	HFI_PROP_COLOR_FORMAT,
-+	HFI_PROP_LINEAR_STRIDE_SCANLINE,
-+};
-+
-+static const u32 sm8650_vdec_subscribe_input_properties[] = {
-+	HFI_PROP_NO_OUTPUT,
-+};
-+
-+static const u32 sm8650_vdec_subscribe_output_properties[] = {
-+	HFI_PROP_PICTURE_TYPE,
-+	HFI_PROP_CABAC_SESSION,
-+};
-+
-+static const u32 sm8650_dec_ip_int_buf_tbl[] = {
-+	BUF_BIN,
-+	BUF_COMV,
-+	BUF_NON_COMV,
-+	BUF_LINE,
-+};
-+
-+static const u32 sm8650_dec_op_int_buf_tbl[] = {
-+	BUF_DPB,
-+};
-+
-+struct iris_platform_data sm8650_data = {
-+	.get_instance = iris_hfi_gen2_get_instance,
-+	.init_hfi_command_ops = iris_hfi_gen2_command_ops_init,
-+	.init_hfi_response_ops = iris_hfi_gen2_response_ops_init,
-+	.vpu_ops = &iris_vpu33_ops,
-+	.set_preset_registers = iris_set_sm8650_preset_registers,
-+	.icc_tbl = sm8650_icc_table,
-+	.icc_tbl_size = ARRAY_SIZE(sm8650_icc_table),
-+	.clk_rst_tbl = sm8650_clk_reset_table,
-+	.clk_rst_tbl_size = ARRAY_SIZE(sm8650_clk_reset_table),
-+	.bw_tbl_dec = sm8650_bw_table_dec,
-+	.bw_tbl_dec_size = ARRAY_SIZE(sm8650_bw_table_dec),
-+	.pmdomain_tbl = sm8650_pmdomain_table,
-+	.pmdomain_tbl_size = ARRAY_SIZE(sm8650_pmdomain_table),
-+	.opp_pd_tbl = sm8650_opp_pd_table,
-+	.opp_pd_tbl_size = ARRAY_SIZE(sm8650_opp_pd_table),
-+	.clk_tbl = sm8650_clk_table,
-+	.clk_tbl_size = ARRAY_SIZE(sm8650_clk_table),
-+	/* Upper bound of DMA address range */
-+	.dma_mask = 0xe0000000 - 1,
-+	.fwname = "qcom/vpu/vpu33_p4.mbn",
-+	.pas_id = IRIS_PAS_ID,
-+	.inst_caps = &platform_inst_cap_sm8650,
-+	.inst_fw_caps = inst_fw_cap_sm8650,
-+	.inst_fw_caps_size = ARRAY_SIZE(inst_fw_cap_sm8650),
-+	.tz_cp_config_data = &tz_cp_config_sm8650,
-+	.core_arch = VIDEO_ARCH_LX,
-+	.hw_response_timeout = HW_RESPONSE_TIMEOUT_VALUE,
-+	.ubwc_config = &ubwc_config_sm8650,
-+	.num_vpp_pipe = 4,
-+	.max_session_count = 16,
-+	.max_core_mbpf = ((8192 * 4352) / 256) * 2,
-+	.input_config_params =
-+		sm8650_vdec_input_config_params,
-+	.input_config_params_size =
-+		ARRAY_SIZE(sm8650_vdec_input_config_params),
-+	.output_config_params =
-+		sm8650_vdec_output_config_params,
-+	.output_config_params_size =
-+		ARRAY_SIZE(sm8650_vdec_output_config_params),
-+	.dec_input_prop = sm8650_vdec_subscribe_input_properties,
-+	.dec_input_prop_size = ARRAY_SIZE(sm8650_vdec_subscribe_input_properties),
-+	.dec_output_prop = sm8650_vdec_subscribe_output_properties,
-+	.dec_output_prop_size = ARRAY_SIZE(sm8650_vdec_subscribe_output_properties),
-+
-+	.dec_ip_int_buf_tbl = sm8650_dec_ip_int_buf_tbl,
-+	.dec_ip_int_buf_tbl_size = ARRAY_SIZE(sm8650_dec_ip_int_buf_tbl),
-+	.dec_op_int_buf_tbl = sm8650_dec_op_int_buf_tbl,
-+	.dec_op_int_buf_tbl_size = ARRAY_SIZE(sm8650_dec_op_int_buf_tbl),
-+};
-diff --git a/drivers/media/platform/qcom/iris/iris_probe.c b/drivers/media/platform/qcom/iris/iris_probe.c
-index aca442dcc153830e6252d1dca87afb38c0b9eb8f..8e6cc1dc529608696e81f2764e90ea3864030125 100644
---- a/drivers/media/platform/qcom/iris/iris_probe.c
-+++ b/drivers/media/platform/qcom/iris/iris_probe.c
-@@ -330,6 +330,10 @@ static const struct of_device_id iris_dt_match[] = {
- 			.data = &sm8250_data,
- 		},
- #endif
-+	{
-+		.compatible = "qcom,sm8650-iris",
-+		.data = &sm8650_data,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, iris_dt_match);
+Jonas Karlman (10):
+      media: v4l2-common: Add helpers to calculate bytesperline and sizeimage
+      media: v4l2: Add NV15 and NV20 pixel formats
+      media: rkvdec: h264: Use bytesperline and buffer height as virstride
+      media: rkvdec: Extract rkvdec_fill_decoded_pixfmt into helper
+      media: rkvdec: Move rkvdec_reset_decoded_fmt helper
+      media: rkvdec: Extract decoded format enumeration into helper
+      media: rkvdec: Add image format concept
+      media: rkvdec: Add get_image_fmt ops
+      media: rkvdec: h264: Support High 10 and 4:2:2 profiles
+      media: rkvdec: Fix frame size enumeration
 
+Sebastian Fricke (1):
+      media: rkvdec: h264: Limit minimum profile to constrained baseline
+
+ .../userspace-api/media/v4l/pixfmt-yuv-planar.rst  | 128 +++++++++++
+ drivers/media/v4l2-core/v4l2-common.c              |  80 +++----
+ drivers/media/v4l2-core/v4l2-ioctl.c               |   2 +
+ drivers/staging/media/rkvdec/rkvdec-h264.c         |  64 ++++--
+ drivers/staging/media/rkvdec/rkvdec.c              | 239 +++++++++++++++------
+ drivers/staging/media/rkvdec/rkvdec.h              |  18 +-
+ include/uapi/linux/videodev2.h                     |   2 +
+ 7 files changed, 410 insertions(+), 123 deletions(-)
+---
+base-commit: c2b96a6818159fba8a3bcc38262da9e77f9b3ec7
+change-id: 20250116-rkvdec_h264_high10_and_422_support-a8f2da8a09e6
+
+Best regards,
 -- 
-2.34.1
+Sebastian Fricke <sebastian.fricke@collabora.com>
 
