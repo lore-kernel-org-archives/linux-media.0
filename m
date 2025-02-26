@@ -1,162 +1,173 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA0E238160;
-	Wed, 26 Feb 2025 09:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740563186; cv=pass; b=tsN3qyGzi2qTtxZJMZlkirxRxqFeP+Ga3alIavyUA0wbna7lX0bdxJFll2w/mUzHDTMEFiVqO4YLzPDaxrmsWtv0M4dbzh7XXs0r5X0s5VB+p52xK8WHnln7t9xRc6/yG18VwZ5cukSCi/B8y8aZccAv7H2F0YfOgkDgtRUk9Ew=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740563186; c=relaxed/simple;
-	bh=jMhCi2lGoBNhfWScI0gNVaijzNEe6KlHiTA4K78enB4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E441F176FB0
+	for <linux-media@vger.kernel.org>; Wed, 26 Feb 2025 09:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740563406; cv=none; b=PSgx+nJV5Osgyw6G2ZFJDW6qN+nM9UcS2GpOiBJ1nNARgBWImuZ0UXqCfJZwFP+7y+otCwwCedxRpuZGLIx1BLa1kJU1JJXw15hpD/0uUhhSWH+Tw2irE+JuIr2oCJ0wMom4KSU2ETywhI4dsE1I4NsJGYIg6CHIq0mwjWuPyC4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740563406; c=relaxed/simple;
+	bh=L2mjstJ6O1BzaJmpDPJ5k17JgCPrCrnBDG+95/8lnCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+bB789Ift3WMoxxTfkZkeilC0F9QLUkAfe4vyB7jndUoQmKdri4hFyIORvNgmsXb80Zpk0ECmKlwtWEJiC+AOXGz1w9cC4Toltpx75Y808Ionj9SHvaiT1qsTsAskn66OaNI3HzDMQ61BpNLnlTYGqpOZRJyJWbxstJ1xsiPaI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b=I8IyydGQ; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=aPKLQlemtNj2LQ6Kn5ldQJFn6qCF/DeClu/lJgyQurgDZ8leVBWv7Zvia+C6NA36jI6Lgxbc3KnQZG0IixNtcnfXCEHOYSfP/Uz6LLHdScdulJxncgOPEw7ByfTVDpR4XdUNlnZ+7vKzECWCZX7EnV/z/HQy5wzRqDuJbNMGuhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8EruRab; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b="I8IyydGQ"
-ARC-Seal: i=1; a=rsa-sha256; t=1740563155; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=m31gMZ7PHeDL/F4qCXEU4O3yLVCHcOVX/5y1QMYRaSweufzdT1jXwNp1dMeRmvKshBycs8FeSuzrYIv2uUQ9MVw2ubaAWczoK7ZhMBFrsgtUgkXYAKFAVsYeRXFXt69HgzrdADDKyBG/sd+18VK+VvWaVAuFap3SVHjb3koAp+c=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1740563155; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=r/92kSJvY1+rN7R1Wa41yTcFlIjE+7u8+6SYiP5XVx4=; 
-	b=POFs53U5pyE0qysaazZesJqL2f+JCSyzetbBgz3V4E/Q27aLKJvW+vZqCco8CNCW1ImJt2ns0PEO5IFdLrftN0IdQR3mIAsTdtB9Mpf3NMcAzj7iy6Dl4RK14ZRrtatTtATXl6WvI3lzqKsM6rM1F1JbNiDCTvaSJqUkJgivTRU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.fricke@collabora.com;
-	dmarc=pass header.from=<sebastian.fricke@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740563155;
-	s=zohomail; d=collabora.com; i=sebastian.fricke@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=r/92kSJvY1+rN7R1Wa41yTcFlIjE+7u8+6SYiP5XVx4=;
-	b=I8IyydGQEZwn7/WYgA/DfF4oMMeiC2EYo5lrBwXlRSS0/MlQq8IhONdNXcGKl+fQ
-	pl53yxiw7eWzMe4n25/m5E+ic5ghVSAylF3uFIKq4Rj9ATlGXx62JZI6jKeu0B/B8B8
-	pYCvZ1e+WdVC5PvHkjdsIImyy5EsPHAc2wIN2ang=
-Received: by mx.zohomail.com with SMTPS id 1740563153661642.0756053378082;
-	Wed, 26 Feb 2025 01:45:53 -0800 (PST)
-Date: Wed, 26 Feb 2025 10:45:45 +0100
-From: Sebastian Fricke <sebastian.fricke@collabora.com>
-To: Ming Qian <ming.qian@oss.nxp.com>
-Cc: mchehab@kernel.org, hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
-	shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	xiahong.bao@nxp.com, eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
-	imx@lists.linux.dev, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] media: amphion: Reduce decoding latency for HEVC
- decoder
-Message-ID: <20250226094545.byr2b3p26w5vit63@basti-XPS-13-9310>
-References: <20250117075720.4018076-1-ming.qian@oss.nxp.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8EruRab"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740563405; x=1772099405;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=L2mjstJ6O1BzaJmpDPJ5k17JgCPrCrnBDG+95/8lnCo=;
+  b=I8EruRabgQfjN0d0CrQSPnQAUMdxdIgM0eSfpt8XSLJ2Cnm1RElRmwPe
+   CaAutH5xaz0X5DjiBNuZlV1R/oSbU3q85kuw+me3VnMAeeMmMq2AH5C7H
+   FG0E4mPuWBOXtMrQZy/zuHy3FeeXhAXZo3niix5I6x0I4wI1ZjIWqSXqy
+   tPyp3GfwNJUIDqtH6gyZixW/n7X/rtitBt0J9moPJJB/Kkv1nw9uuBlE4
+   mgHfs08KTS7n/+of8mg5u1VMkrPajm5FgXbj0ZULcAT0s9tEyICzy6BK5
+   nzEkR89Ep94J4nrwl5PTegRNJKADsgQ9mnCfMHlkACVTJRkKuXWxcPvtV
+   A==;
+X-CSE-ConnectionGUID: rzYA1G86SFS0VNse2nY4VA==
+X-CSE-MsgGUID: pE2Tgyk/S82Lin80n/LTlg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52818473"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="52818473"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 01:50:04 -0800
+X-CSE-ConnectionGUID: 78iydxhqST+7V0YA87fIIA==
+X-CSE-MsgGUID: tjebb93mQcmlCqVnrjBrxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="117144197"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 01:50:00 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id F309211F944;
+	Wed, 26 Feb 2025 11:49:57 +0200 (EET)
+Date: Wed, 26 Feb 2025 09:49:57 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Mirela Rabulea <mirela.rabulea@nxp.com>
+Cc: linux-media@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Julien Vuillaumier <julien.vuillaumier@nxp.com>,
+	tomi.valkeinen@ideasonboard.com, bingbu.cao@intel.com,
+	hongju.wang@intel.com, hverkuil@xs4all.nl,
+	Andrey Konovalov <andrey.konovalov@linaro.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Dmitry Perchanov <dmitry.perchanov@intel.com>,
+	"Ng, Khai Wen" <khai.wen.ng@intel.com>,
+	Alain Volmat <alain.volmat@foss.st.com>
+Subject: Re: [PATCH v9 10/46] media: Documentation: v4l: Document internal
+ sink pads
+Message-ID: <Z77jxSkZSyi4rD1S@kekkonen.localdomain>
+References: <20240416193319.778192-1-sakari.ailus@linux.intel.com>
+ <20240416193319.778192-11-sakari.ailus@linux.intel.com>
+ <5934b1f7-b880-40f9-b457-e6729ae4f8e4@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250117075720.4018076-1-ming.qian@oss.nxp.com>
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5934b1f7-b880-40f9-b457-e6729ae4f8e4@nxp.com>
 
-Hey Ming,
+Hi Mirela,
 
-thank you for the patch!
+On Wed, Feb 26, 2025 at 11:16:36AM +0200, Mirela Rabulea wrote:
+> Hi Sakari and Laurent,
+> 
+> On 16.04.2024 22:32, Sakari Ailus wrote:
+> > Document internal sink pads, pads that have both SINK and INTERNAL flags
+> > set. Use the IMX219 camera sensor as an example.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by Julien Massot <julien.massot@collabora.com>
+> > ---
+> >   .../userspace-api/media/v4l/dev-subdev.rst    | 145 ++++++++++++++++++
+> >   1 file changed, 145 insertions(+)
+> > 
+> > diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > index b76e02e54512..d30dcb9e2537 100644
+> > --- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > +++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
+> > @@ -553,6 +553,27 @@ A stream at a specific point in the media pipeline is identified by the
+> >   sub-device and a (pad, stream) pair. For sub-devices that do not support
+> >   multiplexed streams the 'stream' field is always 0.
+> > +.. _v4l2-subdev-internal-source-pads:
+> > +
+> > +Internal sink pads and routing
+> > +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > +
+> > +Cases where a single sub-device source pad is traversed by multiple streams, one
+> > +or more of which originate from within the sub-device itself, are special as
+> > +there is no external sink pad for such routes. In those cases, the sources of
+> > +the internally generated streams are represented by internal sink pads, which
+> > +are sink pads that have the :ref:`MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>`
+> > +pad flag set.
+> > +
+> > +Internal pads have all the properties of an external pad, including formats and
+> > +selections. The format in this case is the source format of the stream. An
+> > +internal pad always has a single stream only (0).
+> 
+> For me, it is not clear what is allowed/expected regarding the formats on
+> the internal sink pads.
+> 
+> What "The format in this case is the source format of the stream" means?
+> 
+> I suppose the format on the internal pads will never be set by the user, but
+> be static or propagated?
 
-On 17.01.2025 16:57, Ming Qian wrote:
->The amphion decoder firmware supports low latency flush mode for
->HEVC format since v1.9.0, it can help reduce the decoding latency by
->appending some padding data after every frame, then driver can enable
->this feature when the display delay 0 is enabled.
+It depends on the device, in fact. On sensors I'd use the highest supported
+bit depth on the internal pad whereas on the external pad this could be
+configurable. I'll add this to the common raw sensor model.
 
-I see that you already changed the commit message for this version, but
-I still have a few recommendations for the description:
+> 
+> A glimpse into the future shows that libcamera makes some assumptions in
+> src/libcamera/sensor/camera_sensor_raw.cpp:
+> 
+> https://lists.libcamera.org/pipermail/libcamera-devel/2024-March/041006.html 
+> 
+>  /*
+>    * Get the native sensor CFA pattern. It is simpler to retrieve it from
+>    * the internal image sink pad as it is guaranteed to expose a single
+>    * format, and is not affected by flips.
+>    */
+> 
+> I think it would be good to have a more clear documentation in the kernel,
+> for both the driver developers and user applications to know what behavior
+> to expect. If a "native" format is always expected on the internal sink
+> pads, let it be documented, or if the internal sink pads format should be
+> propagated from the source pad format (presumably set by the user, and
+> contrary to the general recommendation to propagate the format from sink to
+> source).
 
-     The amphion decoder firmware supports a low latency flush mode for
-     the HEVC format since v1.9.0. This feature, which is enabled when
-     the display delay is set to 0, can help to reduce the decoding
-     latency by appending some padding data to every frame.
+The intention originally was to use existing raw formats on internal sink
+pads to express the native format of the sensor. I later on switched to
+generic (greyscale) formats and the colour pattern control after discussing
+the matter with Laurent.
 
-The rest looks good to me.
+> 
+> Also, if there is a guarantee to have a single format exposed, as stated in
+> libcamera, it would be good to have that also documented in the kernel.
+> 
+> I assume some things will change in libcamera after the common raw sensor
+> model addition in the kernel, I don't fully envision how.
+> 
+> I am working on adding internal pads and streams for os08a20 hdr sensor, and
+> also looked at the changes made to imx219, to give some context to my
+> questions.
 
-Regards,
-Sebastian
+Regarding the GRBIR sensor -- I'm suggesting to use greyscale mbus codes
+and then the colour pattern control. We could merge those patches before
+the common raw sensor model.
 
->
->Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
->---
->v2
->- Improve commit message
->- Add firmware version check
->
-> drivers/media/platform/amphion/vpu_malone.c | 22 ++++++++++++++++++---
-> 1 file changed, 19 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/media/platform/amphion/vpu_malone.c b/drivers/media/platform/amphion/vpu_malone.c
->index 5c6b2a841b6f..1d9e10d9bec1 100644
->--- a/drivers/media/platform/amphion/vpu_malone.c
->+++ b/drivers/media/platform/amphion/vpu_malone.c
->@@ -68,6 +68,9 @@
->
-> #define MALONE_DEC_FMT_RV_MASK			BIT(21)
->
->+#define MALONE_VERSION_MASK			0xFFFFF
->+#define MALONE_MIN_VERSION_HEVC_BUFFLUSH	(((1 << 16) | (9 << 8) | 0) & MALONE_VERSION_MASK)
->+
-> enum vpu_malone_stream_input_mode {
-> 	INVALID_MODE = 0,
-> 	FRAME_LVL,
->@@ -332,6 +335,8 @@ struct vpu_dec_ctrl {
-> 	u32 buf_addr[VID_API_NUM_STREAMS];
-> };
->
->+static const struct malone_padding_scode *get_padding_scode(u32 type, u32 fmt);
->+
-> u32 vpu_malone_get_data_size(void)
-> {
-> 	return sizeof(struct vpu_dec_ctrl);
->@@ -654,9 +659,16 @@ static int vpu_malone_set_params(struct vpu_shared_addr *shared,
-> 		hc->jpg[instance].jpg_mjpeg_interlaced = 0;
-> 	}
->
->-	hc->codec_param[instance].disp_imm = params->display_delay_enable ? 1 : 0;
->-	if (malone_format != MALONE_FMT_AVC)
->+	if (params->display_delay_enable &&
->+	    get_padding_scode(SCODE_PADDING_BUFFLUSH, params->codec_format))
->+		hc->codec_param[instance].disp_imm = 1;
->+	else
-> 		hc->codec_param[instance].disp_imm = 0;
->+
->+	if (params->codec_format == V4L2_PIX_FMT_HEVC &&
->+	    (iface->fw_version & MALONE_VERSION_MASK) < MALONE_MIN_VERSION_HEVC_BUFFLUSH)
->+		hc->codec_param[instance].disp_imm = 0;
->+
-> 	hc->codec_param[instance].dbglog_enable = 0;
-> 	iface->dbglog_desc.level = 0;
->
->@@ -1024,6 +1036,7 @@ static const struct malone_padding_scode padding_scodes[] = {
-> 	{SCODE_PADDING_EOS,      V4L2_PIX_FMT_JPEG,        {0x0, 0x0}},
-> 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264,        {0x15010000, 0x0}},
-> 	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_H264_MVC,    {0x15010000, 0x0}},
->+	{SCODE_PADDING_BUFFLUSH, V4L2_PIX_FMT_HEVC,        {0x3e010000, 0x20}},
-> };
->
-> static const struct malone_padding_scode padding_scode_dft = {0x0, 0x0};
->@@ -1058,8 +1071,11 @@ static int vpu_malone_add_padding_scode(struct vpu_buffer *stream_buffer,
-> 	int ret;
->
-> 	ps = get_padding_scode(scode_type, pixelformat);
->-	if (!ps)
->+	if (!ps) {
->+		if (scode_type == SCODE_PADDING_BUFFLUSH)
->+			return 0;
-> 		return -EINVAL;
->+	}
->
-> 	wptr = readl(&str_buf->wptr);
-> 	if (wptr < stream_buffer->phys || wptr > stream_buffer->phys + stream_buffer->length)
->-- 
->2.43.0-rc1
->
->
+-- 
+Kind regards,
+
+Sakari Ailus
