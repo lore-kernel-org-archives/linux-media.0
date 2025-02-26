@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700D921D5A9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAD12236E8
 	for <linux-media@vger.kernel.org>; Wed, 26 Feb 2025 13:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740576218; cv=none; b=GUEdH5GzblI/AneOeMuSOutr7eKE3miESRQsL3gnYegkiehHUg8OqT4uEzv6jazndo0uxAm3BukNKakZ9k2ALC5RJSHWalsaGhq4RhezlVcGuPHFZc43xZs+vozaAmW/oZ730GFG+5KQTBWdxwfLgyjKEqE9HT9keZv68CesRNk=
+	t=1740576219; cv=none; b=UQ9gUdBYQZbV7EcpfaxPzmxe39W34JdmrfROgBxjr3jKdgziXHRHbM9pZnP2cdPsMGwwsQflPrQg1jZkF2vAAtZfUyVYPlhx8nV2q+umoQVpCnTuDYmuFMrnUezPwvFJATSv1uQuwNMF4qDVyUhMSy5D0841tFXSbRr5pHMaCEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740576218; c=relaxed/simple;
-	bh=awEl+aT1ZWUaFkTkmy8XLmueUXXqs2xiQMrMb5ubq5E=;
+	s=arc-20240116; t=1740576219; c=relaxed/simple;
+	bh=ylyl/LYXYbK7Bid0HkXt2z4r0bO318hhaMRx740aMjA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sKcchcs7YhTXyco6UYtDhMx6qbqC81GQ9i8jpdSYiesegr5XD0qmSYFBtYyDS6mmxJsQsw7jU3DBUib41gznp6TEfm9FBDxYDtmJwqlA+VCBBA3nrZ/YsEU6hwyoAWq/ZluA18TZL94bSgM225xlMnK2zOgdSeccI+nuVyKmXGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hlRqcyfg; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=or7KbW4iIb+jJsG0J3gnT90BNVpKz7kKTJu768bCBrf0m4BcrlvEQvD1BqeDxzNhnnwa+iotxQ9pDMg39KtRL/UCNwuOK3q9oGpf6rG0gAxeapd95NUb/VPLetIjIL0dwcPA+iJcehniYOSh/6Cvdt1jdaWziEF4/hA+h4JsCY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VyjRr6GJ; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hlRqcyfg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VyjRr6GJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1740576217; x=1772112217;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=awEl+aT1ZWUaFkTkmy8XLmueUXXqs2xiQMrMb5ubq5E=;
-  b=hlRqcyfg3iEw8gdgefeWCc/2HAT3nCt8zwknkyGZ7y7a0QkX7bOM3nVw
-   O050n1TNV83n+mFFLX50j6Q5O79wdhZc7WgIr3lgr8bt/Oo8yqm9lNj3I
-   6lRWyOXv5XqvTqWDOWBrN//MvDWgeaomz0kudoXjrO8Ti/PMV7wdgpAVu
-   /VVi9nVS4/KlQhfVQhZbO7fvluRGmIE+6dsp191Ii8KgIbCq3qoPE6PKk
-   7fE/5gF2YK4yVTSe4lnGdLgSkY86IGTSDNXCjOwfKeg61phMz2+Wk+H60
-   Y/lBkcUvf0nP/k3Dg5fZgco5Pc3shmRpB5Oa0OouWQuRckAYYw2X7P/8X
+  bh=ylyl/LYXYbK7Bid0HkXt2z4r0bO318hhaMRx740aMjA=;
+  b=VyjRr6GJBymbq/jKSZUTjz34vKdmByoIrsXVOP/664Lt3MLYbXRi6sYS
+   7BoRLC6LWHwOEOMSTO32+7GVhJV88zir6HGVpyzFb5yh5LiYF+T5DYwmq
+   u5NyreAhhOj2owFIrD5d8R4eB31rbL+h1T2vOVaLlR02ASFf1UAbMxnTI
+   zvdVlEGGIsY4Thbl7fHVxv12BoRfvvanGDavwwvYh9NepzHlYu+4E2Rpa
+   HFRLnOlK3JWQX2opQ32HZhOmbftmNp4zxt+JwoR79q55Up4ScZiGvu9Cm
+   6PFPi86eKS70z82ls53+9Izt7OckoC4ZkPyTT/gNa1+gGd3jL5WzDu3HP
    g==;
-X-CSE-ConnectionGUID: b02CFzKoR12BdlomU6SO4Q==
-X-CSE-MsgGUID: G9ufjP69SU2zeoWIwTiFdA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="45331991"
+X-CSE-ConnectionGUID: c1woKxgOR4amSZR68EomjA==
+X-CSE-MsgGUID: BjXBWjSeS/qp4tQmgELOFQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41548664"
 X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="45331991"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:33 -0800
-X-CSE-ConnectionGUID: eVNanJnnQjSLN7CuAzpiYQ==
-X-CSE-MsgGUID: 0mXQ51JhQ4eyHgmwtD/BEw==
+   d="scan'208";a="41548664"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:36 -0800
+X-CSE-ConnectionGUID: +EVrVS7MQFqGIBR29TN6VQ==
+X-CSE-MsgGUID: EMnBCIdcRuOdPxHX6jlUrA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117622420"
+X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
+   d="scan'208";a="116724120"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:33 -0800
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:36 -0800
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id E7FE311F99F;
-	Wed, 26 Feb 2025 15:23:29 +0200 (EET)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0A065120ADE;
+	Wed, 26 Feb 2025 15:23:30 +0200 (EET)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1tnHNp-00AYxp-2y;
-	Wed, 26 Feb 2025 15:23:29 +0200
+	id 1tnHNq-00AYyF-05;
+	Wed, 26 Feb 2025 15:23:30 +0200
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: dongcheng.yan@linux.intel.com
-Subject: [PATCH 1/7] media: ccs-pll: Start OP pre-PLL multiplier search from correct value
-Date: Wed, 26 Feb 2025 15:23:13 +0200
-Message-Id: <20250226132319.2517656-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 6/7] media: ccs-pll: Add a flag for even PLL multipliers
+Date: Wed, 26 Feb 2025 15:23:18 +0200
+Message-Id: <20250226132319.2517656-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250226132319.2517656-1-sakari.ailus@linux.intel.com>
 References: <20250226132319.2517656-1-sakari.ailus@linux.intel.com>
@@ -68,32 +68,72 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ccs_pll_calculate() function does a search over possible PLL
-configurations to find the "best" one. If the sensor did not support odd
-pre-PLL divisors and the minimum value (with constraints) wasn't 1, other even
-values could have errorneously searched (and selected) for the pre-PLL
-divisor. Fix this.
+Some devices (not entirely CCS compliant) only support even PLL
+multipliers. Add support for this through a PLL flag.
 
-Fixes: 415ddd993978 ("media: ccs-pll: Split limits and PLL configuration into front and back parts")
-Cc: stable@vger.kernel.org
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/i2c/ccs-pll.c | 13 +++++++++++--
+ drivers/media/i2c/ccs-pll.h |  1 +
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index cf8858cb13d4..6f99cb8be02a 100644
+index 66281f676707..fa3c577fbc0c 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -815,6 +815,8 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 			      one_or_more(
- 				      DIV_ROUND_UP(op_lim_fr->max_pll_op_clk_freq_hz,
- 						   pll->ext_clk_freq_hz))));
-+	if (!(pll->flags & CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER))
-+		min_op_pre_pll_clk_div = clk_div_even(min_op_pre_pll_clk_div);
- 	dev_dbg(dev, "pll_op check: min / max op_pre_pll_clk_div: %u / %u\n",
- 		min_op_pre_pll_clk_div, max_op_pre_pll_clk_div);
+@@ -124,7 +124,7 @@ static void print_pll(struct device *dev, struct ccs_pll *pll)
+ 	dev_dbg(dev, "pixel rate on CSI-2 bus:\t%u\n",
+ 		pll->pixel_rate_csi);
  
+-	dev_dbg(dev, "flags%s%s%s%s%s%s%s%s%s\n",
++	dev_dbg(dev, "flags%s%s%s%s%s%s%s%s%s%s\n",
+ 		pll->flags & PLL_FL(LANE_SPEED_MODEL) ? " lane-speed" : "",
+ 		pll->flags & PLL_FL(LINK_DECOUPLED) ? " link-decoupled" : "",
+ 		pll->flags & PLL_FL(EXT_IP_PLL_DIVIDER) ?
+@@ -135,7 +135,8 @@ static void print_pll(struct device *dev, struct ccs_pll *pll)
+ 		pll->flags & PLL_FL(FIFO_OVERRATING) ? " fifo-overrating" : "",
+ 		pll->flags & PLL_FL(DUAL_PLL) ? " dual-pll" : "",
+ 		pll->flags & PLL_FL(OP_SYS_DDR) ? " op-sys-ddr" : "",
+-		pll->flags & PLL_FL(OP_PIX_DDR) ? " op-pix-ddr" : "");
++		pll->flags & PLL_FL(OP_PIX_DDR) ? " op-pix-ddr" : "",
++		pll->flags & PLL_FL(EVEN_PLL_MULTIPLIER) ? " even-pll-multiplier" : "");
+ }
+ 
+ static u32 op_sys_ddr(u32 flags)
+@@ -311,6 +312,10 @@ __ccs_pll_calculate_vt_tree(struct device *dev,
+ 	more_mul *= DIV_ROUND_UP(lim_fr->min_pll_multiplier, mul * more_mul);
+ 	dev_dbg(dev, "more_mul2: %u\n", more_mul);
+ 
++	if (pll->flags & CCS_PLL_FLAG_EVEN_PLL_MULTIPLIER &&
++	    mul & 1 && more_mul & 1)
++		more_mul <<= 1;
++
+ 	pll_fr->pll_multiplier = mul * more_mul;
+ 	if (pll_fr->pll_multiplier > lim_fr->max_pll_multiplier) {
+ 		dev_dbg(dev, "pll multiplier %u too high\n",
+@@ -667,6 +672,10 @@ ccs_pll_calculate_op(struct device *dev, const struct ccs_pll_limits *lim,
+ 	if (!is_one_or_even(i))
+ 		i <<= 1;
+ 
++	if (pll->flags & CCS_PLL_FLAG_EVEN_PLL_MULTIPLIER &&
++	    mul & 1 && i & 1)
++		i <<= 1;
++
+ 	dev_dbg(dev, "final more_mul: %u\n", i);
+ 	if (i > more_mul_max) {
+ 		dev_dbg(dev, "final more_mul is bad, max %u\n", more_mul_max);
+diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
+index 6eb1b1c68e1e..fce2bbf84c99 100644
+--- a/drivers/media/i2c/ccs-pll.h
++++ b/drivers/media/i2c/ccs-pll.h
+@@ -32,6 +32,7 @@
+ #define CCS_PLL_FLAG_DUAL_PLL					BIT(8)
+ #define CCS_PLL_FLAG_OP_SYS_DDR					BIT(9)
+ #define CCS_PLL_FLAG_OP_PIX_DDR					BIT(10)
++#define CCS_PLL_FLAG_EVEN_PLL_MULTIPLIER			BIT(11)
+ 
+ /**
+  * struct ccs_pll_branch_fr - CCS PLL configuration (front)
 -- 
 2.39.5
 
