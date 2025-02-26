@@ -1,46 +1,46 @@
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2089.outbound.protection.outlook.com [40.107.21.89])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011001.outbound.protection.outlook.com [52.101.70.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01303209;
-	Wed, 26 Feb 2025 15:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E302248AF;
+	Wed, 26 Feb 2025 15:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.1
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740584411; cv=fail; b=fB0qecOBE6JgOrDrvwLJ5MWazU+5XQxcltAsGBQGmCwK+O5HE002vnbZqdV7PHe45+JFJlYSoKi50/qWgTp04KE/osgodkzR+XqUHN6fed/V9qQRu46n7BUtxWK/dRQq29yd/GO7CKdBy1SAXjNIvqOZ4D8Ra+lNYTLTEm5c+R8=
+	t=1740584411; cv=fail; b=cxA1ZhLQbToYalqlfvYbO/oOaSEG9cUXsBaCmi6oYdETbUl3iE7JgoySGcU6PTrJT+4GiJuRKWZCjmLonC2uPKuTudD7J+cmXcaXlOHbgOm0MR5UXHpoDCSCCT0TegI/CXIdNqHwTUKRzgdVrrbsDZ6AzzQ6uQNRVf3FadYq+3s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740584411; c=relaxed/simple;
-	bh=+AuiWZBHdI6gQjcYQlUWYJStVL6sKuzSEVZ86ENVR1U=;
+	bh=YXKKPKL6EdlPD2MRZ39l4+/l42t4TGmMjbUCmEYVxMU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AOzfd43TzwbdbVZrmxYk/VB/uDdEjNXVODDW2XT0nFELZdfIOiY++Hbvz8OQSZhwnGbTYGXxwUSDyzDE5wZMRwweNqS449Oo26c1d/l+jnYK1Jq5Tw78HCJnhtMjL1I9X9KANQntAmwp7wS3MB38CV2TpyHDwz21SWBS9bK8v58=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=hygyxhFA; arc=fail smtp.client-ip=40.107.21.89
+	 Content-Type:MIME-Version; b=hf6yskbZV+ycOO1+03/fJ2VaJ0yQKdRnQljoEsMeH4bplennx/1W+G+jVjgRseIXnmbj2yZWPFf84ykqJ44N3nUxkKkTPajK3QtV8qfgpnPKhQaJRlhe1DIGjPQIdwGRYHXrFocfR0fn7w5BltPANTFZDaiRXflGz4IUixJ5kZk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=ElzQwZiO; arc=fail smtp.client-ip=52.101.70.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="hygyxhFA"
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="ElzQwZiO"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QOLW6uPt+/VXJqmmOsw8YKSJmrtVTXctyjMXtGNmkWMdrdCuzygfyzuSu3bqS7ee9bkpdRhd1iz3QuXIDgpY1mfydMgRMvz8bpq1qsMDoQMpBG4WENnfwDviFuvQuypQjQngW5jzjq4md8FnukZPC9Dh0tWDMtjgPIcaD/O4nkPX0i5jD3+h55HPpHj6e4Ceb+ed9Jf3cUhn6VsP5vDm85UxDOw5JihM0sTMO5IwBJgyJ8E0mHCF3fjEb3f3ykEVcrOOEw3SQoMUmdXDtIKI5obg9LAC9a8LR75mdieubeJ9GBZ8cpikjoiV9zf1V4r6v0tL/PorSbQ04ttlMYmfJg==
+ b=MRH6E7WicvpZ4019/wn8MD+I8AZGtXTq/SAHZzswEUilEqrlUIyYhekxfpkFbLwbfVZviRWXxoscD6Q7AoMOySz6LdFijPuPYl1FiomPLPm8z0j2ej266cNfHN6EtBdUEJ7Z4BUCjXxp+UzV26NzOiOxJU794ZjSp/49WyxFaURcqByD2zhAnlB+SwI+FXPNHNrWcdE45vM5mzEWfbfu0iD6poheG6V/KxEpzMiWFPw5DzpUDJ/ra28zl3PbJLKeWniXSipimjKl/Ie6V+RXDJeWTv3esw1zZRYp8wswxAig4FRy+jkj5jQM1nGLhuN0CxVv41FCA3P52xpO88xPBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yc0f5rTXwBAs7/o7qyPsXP1fZ7bs10GaJgGqKOErqQA=;
- b=FgsrWbGe+CAI/lUpZUpAtMFDo744AKJx8wZXiLoITQ/5YlPCMd5L7ZX7bc9sWJbjuvTBs/RE0vv1sGQxfTubra0+Q/7f+GY2CrnWZJv+pBPVeoZD7EmJIaO02d78lPAKJduSoMTjVoC6ckuGJppo2/xvyXieKSHLpVAL2xxfquTjXObxsY6g6vLKXbDO60fxA6599vjrXpQSnffNAVD7ekMZiLaA3cixc+meDnwl1sYj0racSev7jDLiUWT2jslnwC7bXk7MisNFs3cuP3+RQIh/Vg/61PT5un94KnAUa7ATiMumDss9wrqIe/6421Os2dfi/7TdPO11amieogogYQ==
+ bh=ZzjYH+UjgmSVlqAzmJMPXm0njuyzYupkSb0KzMWImcg=;
+ b=WxU/dC6fNtXkeYh4u6/OUlgonFrku/zSSfAEUwolw040BHQ0XVhDMOX64z8VheJdVUHlD4OAUAGIk5jvZg+Ng+GZaX/we1BUPtY27qiiy8rTmJATBoGdCUFXDL9WvbxBDgSkU7qnKY8auvvgKH/H27GYAkdbtFa2PMnkLRQ6V7ihlbxC7BS1juh0MRW/6rPPfmNsLcN42qLE3JRXx3VxRrNc8d4mPtXXZ45KaiaGuHoF7DrI4R55fFx9ZuxvRgYBCNuvLxAevKQMbNfceRL2BIm3wgcUvSQinjVZSszF+WkmHVtCCfPQb1lXh6wzaD/1NYARkNKpkw7DpMTDU53KCw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
  header.d=mt.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yc0f5rTXwBAs7/o7qyPsXP1fZ7bs10GaJgGqKOErqQA=;
- b=hygyxhFAJw6uC25JL4IopYxPtseElKlf+XaDRYZXtTkkESVm79v0ym3aEkWhj8rz9Twv73ANRtgm+rjPFRN+nuj6opg2MvinUw77QUlrg5cca3pvr2BCREAZ4I0JGereXto7YBFIzaBRH57TsY3lXukgZH0+hpMFzyGltd3uY0MxqC8Usao+779FgM3XlnU7gjTKdAk2Df/arsgfjHQYFmKIBXtGOlDzKoIYUdSl0lmHkRnPG1sWQyB4Jr6QeZHtv9ny6TapmiMgfC5Kd78h/Q7YHQzrBmNFsDPnwmWJcioY7afMwyk3ah1iB+xKfNKwao73KipOURRhsRAsJpDHHg==
+ bh=ZzjYH+UjgmSVlqAzmJMPXm0njuyzYupkSb0KzMWImcg=;
+ b=ElzQwZiOPaSMm/dzHAF40BTRPwjZAWzqMzzSRIwtAbC/mcvwKmen/X7ivb4KZBNhjzkjYFP5u81yNiVDEr+M5e3imGVoZihOaaqbZqw99q6ejHZTh+vCRB4Lk3ibUmz1Rcajah40lkI7NEwsXgwbaaQBlDIMyt3elssDGAmZEVbN/ESKxqXxyvBeECA+Jefg00kgcsQxbhAXyhW2S24EzIRcTLqSZQ6aEFGwTuOmy1rAgbR9BNcDEXicVbkpb5hf47HdEg6XlSFLHAn+lPsQNzFS/dABmdvPCN1czhC45DkOUoynlN+g1AaagN7dvpvV5eVwlzyc13qkhrpnMMQnsA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=mt.com;
 Received: from DBBPR03MB10396.eurprd03.prod.outlook.com (2603:10a6:10:53a::11)
- by GV2PR03MB8559.eurprd03.prod.outlook.com (2603:10a6:150:af::13) with
+ by GVXPR03MB10289.eurprd03.prod.outlook.com (2603:10a6:150:151::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.19; Wed, 26 Feb
- 2025 15:40:02 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.19; Wed, 26 Feb
+ 2025 15:40:05 +0000
 Received: from DBBPR03MB10396.eurprd03.prod.outlook.com
  ([fe80::ee3c:c9be:681:c0bf]) by DBBPR03MB10396.eurprd03.prod.outlook.com
  ([fe80::ee3c:c9be:681:c0bf%7]) with mapi id 15.20.8466.016; Wed, 26 Feb 2025
- 15:40:01 +0000
+ 15:40:05 +0000
 From: Mathis Foerst <mathis.foerst@mt.com>
 To: linux-kernel@vger.kernel.org
 Cc: Mathis Foerst <mathis.foerst@mt.com>,
@@ -53,16 +53,16 @@ Cc: Mathis Foerst <mathis.foerst@mt.com>,
 	linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	manuel.traut@mt.com
-Subject: [PATCH v1 5/8] MT9M114: Factor out mt9m114_configure_pa
-Date: Wed, 26 Feb 2025 16:39:26 +0100
-Message-Id: <20250226153929.274562-6-mathis.foerst@mt.com>
+Subject: [PATCH v1 8/8] MT9M114: Set pad-slew-rate
+Date: Wed, 26 Feb 2025 16:39:29 +0100
+Message-Id: <20250226153929.274562-9-mathis.foerst@mt.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250226153929.274562-1-mathis.foerst@mt.com>
 References: <20250226153929.274562-1-mathis.foerst@mt.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: ZR0P278CA0046.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:1d::15) To DBBPR03MB10396.eurprd03.prod.outlook.com
+X-ClientProxiedBy: ZR0P278CA0104.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:23::19) To DBBPR03MB10396.eurprd03.prod.outlook.com
  (2603:10a6:10:53a::11)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -71,175 +71,161 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBBPR03MB10396:EE_|GV2PR03MB8559:EE_
-X-MS-Office365-Filtering-Correlation-Id: 72887143-9a39-40a4-7126-08dd567bd564
+X-MS-TrafficTypeDiagnostic: DBBPR03MB10396:EE_|GVXPR03MB10289:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5aa050a-c584-4b21-f662-08dd567bd755
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|38350700014;
+	BCL:0;ARA:13230040|1800799024|376014|52116014|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1wL5aMSfvnWDaV/2od2G6SIIZ2ks2UJ8TKR4pqk9Zm245Tk19oId5/vi1VNs?=
- =?us-ascii?Q?R0t/xD5JSW5iNlmn8yuY2ozxLo5L9QKdIZuFd0Q5c0utgR/ptQOjQa1pci39?=
- =?us-ascii?Q?AE6qQEON6qzwZ5CJ3OLj15HIK46Gyl1umE0W7ujpEuDLXfgjQOcC5m77fuVy?=
- =?us-ascii?Q?EmcG5FYDFIQ80udox8AsTMaTb2jvjBG6KWCcKBF/KuwmbnEMnZrBWfgXdTqh?=
- =?us-ascii?Q?at3z0W+VFbDwWhy/C3cJr7PCZaz9bWEfNjXl9vI1nQNDvgt+rZhEk6ngpHu6?=
- =?us-ascii?Q?Ps4/cDoCnCExFFg3Jly1x8ZKpM0En3YISwnsK9OHocqvwe7rjdOdsv96e7W+?=
- =?us-ascii?Q?q2j4sfxpcOUw8vNqaZtapm6Xg+z+yYHnGm7DWfi+ifDrhqVfM4ahc2EtsCR2?=
- =?us-ascii?Q?3qhKUiIBIjAyqqmKFJs5oj7ITM2gHW70oPd2c7rWmhyum2cm5ffOOSAQxs4A?=
- =?us-ascii?Q?XUDq9zzlU+ctb76rhf9U3GsrH+sedRE/38mDk1nYX/44LsawsVED48FrXOSA?=
- =?us-ascii?Q?xuRsyN8/QtRxcckdBUgG2LgdXBaBX92tPLSBZ6ofueECMS9iWE2feyPJBfvm?=
- =?us-ascii?Q?qT9fmhDSCaGNmcsDKDVN3RxsFBdNrgxyGISsIVdyPXEj3qPz1ZMsq0roDjbs?=
- =?us-ascii?Q?5lJnMdzeJyjwDU14xi/TpTI4Xzp94+uA30UnmwXYO+/VskFanLJysxPkzZyW?=
- =?us-ascii?Q?YGL6+yCAcFGMAw1JGFxfDpbRxCU0GVh5/rMDA9U4oAZt3zruJDpI2Ys+eZta?=
- =?us-ascii?Q?xQtkyupJNSe9/zjrwrP9sPrZJ8EhbWo6Xa+8I/WbMjEZanqLk3DD4ZAzCjtb?=
- =?us-ascii?Q?MNH50EHLUW+ZYi082nHfR1r6Fhx89SmbNMuD91cEUcDLkblppKLUXDht9kcJ?=
- =?us-ascii?Q?xwCTUfOHp6seOxoDBWyEXYXWYGKN5eViDI4nlaYQ1kdXQw7hBY1JQxnnX+gk?=
- =?us-ascii?Q?C+FzH/wWeegfTdyFET4VOa0SiACaSW6E/i9N0M8E5vZ1Z3dL4McPD9K2PKM3?=
- =?us-ascii?Q?ayuRykiwViGPJ/QYuPtj307wYjwFLBiNYQjIycCmk0wws9DtwQkVN8i62zxc?=
- =?us-ascii?Q?i+oM7Qqk7INj6LAT/6y8Ap57DQyrEp2Z4ZloqEhcIuOCdDODTlDuCU1gbse6?=
- =?us-ascii?Q?EW6vyHtXFQ4qiupVwicPi74y1XZzeXKxL5IFJ96OV/7x4LUhgMCdwKgMT4a9?=
- =?us-ascii?Q?GVGXQM56bLJfGjW+MgsE7W2ZuNhUO+swvhGuWLLZ2BulO15WWSTQ2JFl3vZ0?=
- =?us-ascii?Q?Zucfr+/tbaBKu7xf4Duyzhu4tJJw3R7SJ4o+9bZwDNyEP3QOAuiNBZLmyIVB?=
- =?us-ascii?Q?+HdKYw4foSWejRzRnt/XZ1L9eHErWpj4hBZW8qj3Iug9R62iD1BRnLCk6A+B?=
- =?us-ascii?Q?P5wz8X/Q/pY1X3dQeVMqjX1zHm1FI88+G4F2HbsFbHrZ4HcK8vnyWP1ObOtj?=
- =?us-ascii?Q?2W9J4jO1JBd9Lsvt/ublWxQSqRV+QIuZ?=
+	=?us-ascii?Q?bLEfSsi1k9pHEes0n5fvltEJ6QV3lK3Y7CQEA2T0SLBwVLz1e/Cy+FHxSAg9?=
+ =?us-ascii?Q?isTf2KNMq3CWNpiJEF9TNsZWKx2Nf1B/GYJGKYtzvRda8WMETuWbPhq7oUb1?=
+ =?us-ascii?Q?kNt0RwJGWwRTEwPXrC31jqL6Upk2D1zx6DesN1j2z+U1shADzGbFLKE5ulXG?=
+ =?us-ascii?Q?Imr3muvGMnAhIXvcN0GLPWKULPh4mW46J9p8p3qiKmCYaAIG8SWFxF5cHbgO?=
+ =?us-ascii?Q?W7ESYMGGMiOHn78c1ZRiXHaPjRC7xJLO1yi8z3IsoJVHijexeU96LTwXfL7P?=
+ =?us-ascii?Q?FGERpHu/la6ZCNZumnXkvbgYPMMCJXAGpdTPws5jp7lo3tQnANF6VMxhlITJ?=
+ =?us-ascii?Q?9pKHFba4LF9ImPpXwS08G/PXP0uhhILrqY5ScAbybkD9UHUizZ0A+kSR4Lzr?=
+ =?us-ascii?Q?QULUMalWTmaFCLj7KOIW59kJjaN0JVZtYoq3QqAgZj1dLiCrWzgPO/KR+bcj?=
+ =?us-ascii?Q?mIXZjCR6b4MzV/x7XQkdwTKmhE9RXmuomrrTPRHjtJNHW/zSv50D6zHC8ca4?=
+ =?us-ascii?Q?IfF0PcWJdftcPuWnlPi4FvDrVF0gM50QMeowKiYTfSrS0QttA6jC3FCh7oEH?=
+ =?us-ascii?Q?mpACv4CEqOKUGAPKYWNXhlVQTS/P+PvYT+lUBW1L5jZX0R64oyKhnEnvtLES?=
+ =?us-ascii?Q?Ot5pvI/pfeyIName8jYMjL/Qi5vxLdJhyH9y/zBsoVMSwTv+0zrA393Qw2IP?=
+ =?us-ascii?Q?38Ju7Q9Qjim8QT/e5M45udXuF9xzNsUugqIrefw7QnipLoiovuIawC/Hes3x?=
+ =?us-ascii?Q?kBTIJGtUNnRbkhVV+it3CWngvp2tb2TrRuNodIlQLJLha6DRomib5JdVbDDU?=
+ =?us-ascii?Q?fTQ2A3oHzo7MSKpZM3/e2sbimDuQ+GvweuCmt1sECEAD2JwByz/SeXMOfZoR?=
+ =?us-ascii?Q?lmVxRxc3wrigJX4X2c5crNskhInddqIHM8U6r5dg43Q7A8G6XyFvJ+sJnX/c?=
+ =?us-ascii?Q?0KhJilz5YI92/3pl/4FfHWLLdhOfw7F95diXcyw9g1oXVHXdCgU5lLlEQRts?=
+ =?us-ascii?Q?h1cr12cQLPECakEZPAmbU0f/bmHP46ShKCM/z0LYdpXsJnNwBnXgK5u4YAmA?=
+ =?us-ascii?Q?GkrbIQ7gksgzh61aj9bazMA4PbHLTRO9h31iVECC5MX3ywKGcVZS0yR2YSdZ?=
+ =?us-ascii?Q?L1XxdGxDYyyGLKOg/+l1tl7ehSCOJW+UldCdF0xzyZJzG6ylf1pfhr6sE9pS?=
+ =?us-ascii?Q?FeXQwFgcb4+/U6oLuJzhmIa0I9NwDEh7/F5bf3TQ/IOlrC59AVRyabzkWLdm?=
+ =?us-ascii?Q?apVXW5nZnYPdm0M2/T9S34J4z43O7zVFeV+JdS4BASfF1BP5Msa0lr+hNI8v?=
+ =?us-ascii?Q?sjUxg1yqhhB3YWrh4QwFsr8Pb2W4bQaDJtyFobb5x5Eh+7bWFDD4CQilRsXg?=
+ =?us-ascii?Q?yKOc1Y02faNOpi2lyK3oor6CT/klM+Nwd5GKYf+cCcGfvQytpTstBmdDtYvA?=
+ =?us-ascii?Q?s/33VZAj04BkarIOWZWh6xrHzbpHvT1D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR03MB10396.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR03MB10396.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3zZHfqTUcf7pNBkgukQSLJdP5pO+2GpmP0L/fSI7mWKPqXxTrYCgO1+QCntB?=
- =?us-ascii?Q?C4GlkEryO5Ik2wDILC26M6v8h/oNgp2GsDnJ3dkDAaKuvsctpFJhZUfDjjHh?=
- =?us-ascii?Q?C37D41eMLsmm7paRBdjOGo5HwQWM8scytBu1mW3w41zNVzjblHF2febemAzx?=
- =?us-ascii?Q?kI35CVqTTxZdWX1TIqpwEw1BL0wjyfF4DK8+sEaEcLcJmTRdsMNcaNtXQd2i?=
- =?us-ascii?Q?PLEUuccO9VIocluDS47E8svNN3mtKfwbKK9QQmTrHSj9Iv5B528g474qs1s7?=
- =?us-ascii?Q?m9GJpk2cB4+NhJ1WNflULwpJkn7Raxui3muV/6a99cBLTSkDYKfOPl7Y5GLn?=
- =?us-ascii?Q?OChXxXYcFJzrRtYBl1YEsWvZdEUSjva1XCvY3bWVyjHxRzyFdzak0km/b3qy?=
- =?us-ascii?Q?XZTqsysnK2gm633hXCozrWmGPJ45FL1s1jRhaCfIYMPy0NUbj5faxDXHqPq3?=
- =?us-ascii?Q?zm5BjaQ1++yVxKpdNI+AEeT+46Vdbnudaf8Y+OlMNFHuOSFFnfozbsNUXhXv?=
- =?us-ascii?Q?AA88T4GPZkFaFRblzyjizw0LcEEXWzQOQEn9BXaxhd9KkMyZ6dMCYQuJk+6I?=
- =?us-ascii?Q?B+45Li6G0rIAQm6arZeq0gMYhhyhLhkOOv3BKS38cJY2NNPBY9x06SCvjaZF?=
- =?us-ascii?Q?gNahPKuvgoEynaInqlgF5Y9S4gGccB4VTxhQJ5eapl8UqeN57Xd8wdt1TV84?=
- =?us-ascii?Q?1pYbasG72zp3eYL8Qw5Qb6CEREKpuOwCaO5HRnmf7nnilpN8XdW4+L1kEgAc?=
- =?us-ascii?Q?DEqmL6zHDsKCSV/xAPelLsr/qtbSp8LkfXXHhm3ocxTg8SSA12gS3kYcC9GT?=
- =?us-ascii?Q?EcI2Tg5MMddTFsu1zwgRbgKAQ//nRSirHRns0x8wTXqHMTz8N81ICMdr7tmY?=
- =?us-ascii?Q?uYUeVxMKkQndl8n7ovGJJY0JlvkHjbESLw/auEnoMjb9i4GFwj3B51bPpvua?=
- =?us-ascii?Q?DV87A2dhx0Vo6JtkR5AvXw1ke4skBLZhnqnU7vZV15Vwi44TYDqTBCkbqjCD?=
- =?us-ascii?Q?8BDUqOScnHMR8pVxnYrLOQJVKl3f/53Ylx/xWap6XPjQp2GAgeXk7cJ4dJxK?=
- =?us-ascii?Q?IWHyM7hM5QIAW/fF/r8LsYZR8Rxm4Jr2AS4GexpTxOGbw+1d/bZ5Mb2TyPsI?=
- =?us-ascii?Q?ZH0rLausz3X5yuo8Gfmo9cTc0kZuQyOf21KdSyAhefwRtmKCcWlQl4FQnusB?=
- =?us-ascii?Q?1g2zA/yuHtIGNeD6EoJTEH9enj1GbaM/3bx8WqEf8GtahMUqd1yLcgMY5rqA?=
- =?us-ascii?Q?NrpJbMIyAqmYPserIUvrssWABd7rYUO+sdfBv9VUnTX7aEQZAIHbSdiEqOil?=
- =?us-ascii?Q?N45N34U/orbdzb8m0WtBg4h25CQA3KXJlpVcTRim5+G2OqmT7oWB+YeAAarb?=
- =?us-ascii?Q?ZM+pheX0FOHVntXM1tB7Ldnt3W2R0socr8NCl7CZkcgFOkpc3x8gbF1RN+Kl?=
- =?us-ascii?Q?JL4Kzn+n3AMDsiFdDB1mwW+jUA8JKTiAKb7qCZwcEx03vM2BSs9ndbM15Amb?=
- =?us-ascii?Q?ENbapsmIJ8uQSu/NF+XUcCS0AG0gW2+FsTZRpXv6b3ku6P2cH9uw2+wg0N/R?=
- =?us-ascii?Q?LH9r97ddb3SHOfhguXe6nmHGXv5Gl7wxhF0++WBr?=
+	=?us-ascii?Q?mw7QliL2OLeSei/FY7FT6dUh6MCYoZ0gnJrEx6SEUXytM2n9JqQTDw3TRNHc?=
+ =?us-ascii?Q?CY+Wo9kbCZ9d+V+NqF4stzUvjoWNRDjraTrHm/+AOSWLi3mnwgoiRUoD5x+j?=
+ =?us-ascii?Q?NauFe5dZVcPX7RXLCdro8y1ebDMOL7i1WdX/CuWEAnftl5D8ffVmS8LKcu33?=
+ =?us-ascii?Q?9ghKO+Md6S77Fge/fciNjfIUCPWApq/mf5tpfN31QMnpCfKIdTzg0/ud16iI?=
+ =?us-ascii?Q?QC40HY0zXN3WG6X8icuTk0Y927J3GXMIgGdp4Juw/DYGa+dBWekVf3qrb3J7?=
+ =?us-ascii?Q?hwm0HO07XuzuParFTPJw1pGomCG3OkhYPmj1sd2Iv7Pf2S3OeVGWfMjYr9Yt?=
+ =?us-ascii?Q?kQMHNDJggaaLLYYNrAY3zDRGm4CWGVWAwV0o+o+hOf+d3It7cJthpyVPwpCT?=
+ =?us-ascii?Q?OyBKs0zCmVPSdxl4h0vzJyYbxm7LKI3cTj7uL3dczfSV2fxUuEl/AQpnbOYm?=
+ =?us-ascii?Q?bZXeeWydZXW068o5Xfler8ehexHPSVPgbe+dIIhNOMX+E96jE5SaTksCsGaR?=
+ =?us-ascii?Q?+XwQfyje9AB3DievAI15zZoMGnRwb8/fVBNnlsnrqVdoJp6m07tUY3W3/KQw?=
+ =?us-ascii?Q?ZprFySqQXHd6Hq4/hwTd3x8dCqXF9ispjIXay46y3VAWlWzlyKTBT++Jvoyi?=
+ =?us-ascii?Q?Pw+jQV5bCoRPtdIWJPM+4tl1MHGXzJlE/lJcF9EOPOSsQjT1V3FXybW89Wwf?=
+ =?us-ascii?Q?z/+e7+mv0y4dhQMCTdWqZHUFrlaV4OFYtK+m0axS1ynPR7v59G39ftsoMfSa?=
+ =?us-ascii?Q?603U2qmaPxIcgq3AO7q2IX7wmvi6s59V3Sbbep4A2G6EbMF1lRAqw8PMHDmr?=
+ =?us-ascii?Q?A3asXlXQunOO8cMbGlnY0C4DwZkoiTlLqrKIGkv0UY1/fjleKittlA+Rk9p9?=
+ =?us-ascii?Q?n2hGj0G1bf43lUzwV09jOcX1ceOLIScoNp4QJUVOA8UB4z1Q8s0xwohEvMn4?=
+ =?us-ascii?Q?yoE8R7oIO2mC+dwoj6tz5FcWvPMIGMUgOJTfpEkteRwH4ezhKTEtr+WyXlLs?=
+ =?us-ascii?Q?CaJHWFWMCjn6iMfRKBkSDJO40fzaHWkEpx8jI8qo5+ldJ6ijehrwgEXzWYmb?=
+ =?us-ascii?Q?WU0DNAx/7g+OxFu4wgB6gVIPLvsCuZ7v8nzefoJUclm3wM2vx2Yw/oSofSZv?=
+ =?us-ascii?Q?oFkBqXBB0WVxRs0Dk4qNnjvds8NBEbhoQ1iVquYTcrCUBF2ydnM8qG06SSKT?=
+ =?us-ascii?Q?Gx//U/XV1AQc5l1TgXHzkYl4HDpmX3HQpiB+yUwy3OfhTmQdeSZr0Dbrf9KU?=
+ =?us-ascii?Q?9muD4n1DRZD91DuCqNl0xP9Zz+wGE44rYampm4jPOEWprGL7snB3hS6KP29f?=
+ =?us-ascii?Q?U5u2gqecyqvli6Y581tNjgyY7YA9n0n6akyTXsQy82To+Xb6jBtTPOJj+LNH?=
+ =?us-ascii?Q?ht6/IfjzzfTujIVlNd/K0KlA6oqXXuz4fP2I9K0h+fy4qQxTS+U/zOk1HKOh?=
+ =?us-ascii?Q?cUCvJ4miksUp20kmpnvRKF9ZZJcLgutuvVgqhE8KODlYhUszgKuadG8RnmZx?=
+ =?us-ascii?Q?+gjRintwHUw3aE3p8CpQBMeYVJbFzUP4v54HaG0qX0Lu9kNvTfXvxGkoF4Fi?=
+ =?us-ascii?Q?THOW312Zbx6Q9fuNtHp7xMxE8J8zntw6UqoqjtCE83jIGvhEcKwYgDXYLtZM?=
+ =?us-ascii?Q?RQ=3D=3D?=
 X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72887143-9a39-40a4-7126-08dd567bd564
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5aa050a-c584-4b21-f662-08dd567bd755
 X-MS-Exchange-CrossTenant-AuthSource: DBBPR03MB10396.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 15:40:01.9070
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 15:40:05.1523
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TzrwzynP0AJ2tFXYILTvVjKaic+RtPsBpaPQEh1ZPT6TaNks5roOdkroZdfmuRTeJy+/5oGZsslyjoH3OiTVag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR03MB8559
+X-MS-Exchange-CrossTenant-UserPrincipalName: rb7LUSfaLdmv7n4GcWhlRzZ52q3mjMjL+ez2MJMvfPRXV5sCmONY0IWpY7KvBxg2+Ua5DGS+dL+HVy7OB/Pz6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR03MB10289
 
-The function mt9m114_configure writes the configuration registers of both,
-the pixel array (pa) and the image flow processor (ifp).
-This is undesirable if only the config of the pa should be changed without
-affecting the ifp.
+The MT9M114 supports the different slew rates (0 to 7) on the output pads.
+At the moment, this is hardcoded to 7 (the fastest rate).
+The user might want to change this values due to EMC requirements.
 
-Factor out the function mt9m114_configure_pa() that just writes the
-pa-configuration.
+Read the 'pad-slew-rate' from the DT and configure the pad slew rates of
+the output pads accordingly in mt9m114_initialize().
+Remove the hardcoded slew rate setting from the mt9m114_init table.
 
 Signed-off-by: Mathis Foerst <mathis.foerst@mt.com>
 ---
- drivers/media/i2c/mt9m114.c | 49 +++++++++++++++++++++++--------------
- 1 file changed, 30 insertions(+), 19 deletions(-)
+ drivers/media/i2c/mt9m114.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
-index edbc0447141d..a1976da74c08 100644
+index f96f6c010e1b..327384e8427d 100644
 --- a/drivers/media/i2c/mt9m114.c
 +++ b/drivers/media/i2c/mt9m114.c
-@@ -789,39 +789,22 @@ static int mt9m114_initialize(struct mt9m114 *sensor)
- 	return 0;
- }
+@@ -42,6 +42,9 @@
+ #define MT9M114_RESET_AND_MISC_CONTROL			CCI_REG16(0x001a)
+ #define MT9M114_RESET_SOC					BIT(0)
+ #define MT9M114_PAD_SLEW				CCI_REG16(0x001e)
++#define MT9M114_PAD_SLEW_MIN					0x00
++#define MT9M114_PAD_SLEW_MAX					0x07
++#define MT9M114_PAD_SLEW_DEFAULT				0x07
+ #define MT9M114_PAD_CONTROL				CCI_REG16(0x0032)
  
--static int mt9m114_configure(struct mt9m114 *sensor,
--			     struct v4l2_subdev_state *pa_state,
--			     struct v4l2_subdev_state *ifp_state)
-+static int mt9m114_configure_pa(struct mt9m114 *sensor, struct v4l2_subdev_state *pa_state)
- {
- 	const struct v4l2_mbus_framefmt *pa_format;
- 	const struct v4l2_rect *pa_crop;
--	const struct mt9m114_format_info *ifp_info;
--	const struct v4l2_mbus_framefmt *ifp_format;
--	const struct v4l2_rect *ifp_crop;
--	const struct v4l2_rect *ifp_compose;
--	unsigned int hratio, vratio;
--	u64 output_format;
- 	u64 read_mode;
-+	unsigned int hratio, vratio;
- 	int ret = 0;
+ /* XDMA registers */
+@@ -388,6 +391,7 @@ struct mt9m114 {
  
- 	pa_format = v4l2_subdev_state_get_format(pa_state, 0);
- 	pa_crop = v4l2_subdev_state_get_crop(pa_state, 0);
+ 	unsigned int pixrate;
+ 	bool streaming;
++	u8 pad_slew_rate;
  
--	ifp_format = v4l2_subdev_state_get_format(ifp_state, 1);
--	ifp_info = mt9m114_format_info(sensor, 1, ifp_format->code);
--	ifp_crop = v4l2_subdev_state_get_crop(ifp_state, 0);
--	ifp_compose = v4l2_subdev_state_get_compose(ifp_state, 0);
+ 	/* Pixel Array */
+ 	struct {
+@@ -645,9 +649,6 @@ static const struct cci_reg_sequence mt9m114_init[] = {
+ 	{ MT9M114_CAM_SENSOR_CFG_FINE_INTEG_TIME_MAX,	1459 },
+ 	{ MT9M114_CAM_SENSOR_CFG_FINE_CORRECTION,	96 },
+ 	{ MT9M114_CAM_SENSOR_CFG_REG_0_DATA,		32 },
 -
- 	ret = cci_read(sensor->regmap, MT9M114_CAM_SENSOR_CONTROL_READ_MODE,
- 		       &read_mode, NULL);
+-	/* Miscellaneous settings */
+-	{ MT9M114_PAD_SLEW,				0x0777 },
+ };
+ 
+ /* -----------------------------------------------------------------------------
+@@ -778,6 +779,13 @@ static int mt9m114_initialize(struct mt9m114 *sensor)
  	if (ret < 0)
  		return ret;
  
--	ret = cci_read(sensor->regmap, MT9M114_CAM_OUTPUT_FORMAT,
--		       &output_format, NULL);
--	if (ret < 0)
--		return ret;
--
- 	hratio = pa_crop->width / pa_format->width;
- 	vratio = pa_crop->height / pa_format->height;
- 
-@@ -853,6 +836,34 @@ static int mt9m114_configure(struct mt9m114 *sensor,
- 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CONTROL_READ_MODE,
- 		  read_mode, &ret);
- 
-+	return ret;
-+}
-+
-+static int mt9m114_configure(struct mt9m114 *sensor,
-+			     struct v4l2_subdev_state *pa_state,
-+			     struct v4l2_subdev_state *ifp_state)
-+{
-+	const struct mt9m114_format_info *ifp_info;
-+	const struct v4l2_mbus_framefmt *ifp_format;
-+	const struct v4l2_rect *ifp_crop;
-+	const struct v4l2_rect *ifp_compose;
-+	u64 output_format;
-+	int ret = 0;
-+
-+	ifp_format = v4l2_subdev_state_get_format(ifp_state, 1);
-+	ifp_info = mt9m114_format_info(sensor, 1, ifp_format->code);
-+	ifp_crop = v4l2_subdev_state_get_crop(ifp_state, 0);
-+	ifp_compose = v4l2_subdev_state_get_compose(ifp_state, 0);
-+
-+	ret = cci_read(sensor->regmap, MT9M114_CAM_OUTPUT_FORMAT,
-+		       &output_format, NULL);
++	value = sensor->pad_slew_rate |
++		sensor->pad_slew_rate << 4 |
++		sensor->pad_slew_rate << 8;
++	cci_write(sensor->regmap, MT9M114_PAD_SLEW, value, &ret);
 +	if (ret < 0)
 +		return ret;
 +
-+	ret = mt9m114_configure_pa(sensor, pa_state);
-+	if (ret < 0)
-+		return ret;
+ 	ret = mt9m114_set_state(sensor, MT9M114_SYS_STATE_ENTER_CONFIG_CHANGE);
+ 	if (ret < 0)
+ 		return ret;
+@@ -2363,6 +2371,7 @@ static int mt9m114_parse_dt(struct mt9m114 *sensor)
+ 	struct fwnode_handle *fwnode = dev_fwnode(&sensor->client->dev);
+ 	struct fwnode_handle *ep;
+ 	struct device_node *dev_node = sensor->client->dev.of_node;
++	u8 slew_rate;
+ 	int ret;
+ 
+ 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+@@ -2393,6 +2402,11 @@ static int mt9m114_parse_dt(struct mt9m114 *sensor)
+ 
+ 	sensor->bypass_pll = of_property_read_bool(dev_node, "bypass-pll");
+ 
++	ret = of_property_read_u8(dev_node, "pad-slew-rate", &slew_rate);
++	if (ret || slew_rate < MT9M114_PAD_SLEW_MIN || slew_rate > MT9M114_PAD_SLEW_MAX)
++		slew_rate = MT9M114_PAD_SLEW_DEFAULT;
++	sensor->pad_slew_rate = slew_rate;
 +
- 	/*
- 	 * Color pipeline (IFP) cropping and scaling. Subtract 4 from the left
- 	 * and top coordinates to compensate for the lines and columns removed
+ 	return 0;
+ 
+ error:
 -- 
 2.34.1
 
