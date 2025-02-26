@@ -1,125 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0360F220688
-	for <linux-media@vger.kernel.org>; Wed, 26 Feb 2025 13:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973CC22171D
+	for <linux-media@vger.kernel.org>; Wed, 26 Feb 2025 14:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740576221; cv=none; b=Ftexd8EupxTPDQfEHvYDBUgKTuh7lxZe+rOc4zMB4etsGEXtfVzWsfZLREj2SV0ZlPOY79MxC7qorImFpIm2jWucILn4O7gxkDJ1v00NEV4VdPrpog3geO71wZeOBWBe5PnW4zApH1mdcSNv6CtPQv+z3hLRWLdFqUVerdlc5X0=
+	t=1740579217; cv=none; b=RPyATdAHrh46ZT+09InbfI6e4vBga8mciLBgiZKEzKf5otQjFcikFqckOYBGUl//KMDup/1qyEWlpa0c/5AgMot4n4d+K17czJ8qCetwAOHHOqi+OpvkWBaHk47kDp/AGQ9hg0+0KgdJoJRCXrJVwT3KL5ki6jMmAK9ETI7HkyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740576221; c=relaxed/simple;
-	bh=Ufj67YEDAo4iOHGgR/6Q+aCdh5Ntmo/Q4dag2go2WXI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z7JRwTE/whDTGvcW0gsM98zgU4lEyrxCuOiw1uEnrX/qAkMgtPMx9aZzKz8eUm+b+4wUThxoANH7MAIS1D5WG5dHKZrkE5zePP1ebRENCoXq/z143/PYM5vzhG2mL5IlK6XQlTajopnLn00FNVyHUlai4f4kTK1ozc4x50JIopQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bk7o/Mua; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1740579217; c=relaxed/simple;
+	bh=NakPrcYHABUnkE9/40aDSNT5XIpd9QvW3ezgcg7EAk8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=JRaOFOHzRPvtd9ZvWpQN2mnXmP8MCq9WZwx7AHvnLU3PrnXH1JOdHk1M5xYz59NnvBPvflNWAyS1TjcLPpsr/otL99+nTjPbPmXsXyuRco/kzjDZeTCI+cViplHENEtiPgE0eg+hOdaK50glFucb7KNg7KT2+9zkMnH55VPsp00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=oeQkAmaw; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bk7o/Mua"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740576220; x=1772112220;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ufj67YEDAo4iOHGgR/6Q+aCdh5Ntmo/Q4dag2go2WXI=;
-  b=bk7o/MuaKJ2AnfJCdwR8MyEiFGDJi6LQAPdtVkclYqJoUypxw5g2QTta
-   quOMlBl8VQiC/oa4PtIw+Q28MfQ8sFFMdJWKC1xIhL5bi1LCpUqeq1ZGd
-   DGIEDKSpZTH3yuQW8b5rgV3Rdm5RV+4mQGRnoKYybvoc9JYsQHd1om6+p
-   r5GBMlakhGA6jA6Z3DUVQYjosWOiWbBKqRuoLAnbjEo/M4l6XX5VkQ04I
-   qdN3MeIotJ9TwjJaVPTnEgodFCFEzM6UD93gNbD8GpWkpeLMYcosX6OPO
-   wBPsaqsGK6+rP+ZnGeB3SBeaXpeNjH2DOmVhPZjcvJqZ9gUHx9fz/aVDl
-   w==;
-X-CSE-ConnectionGUID: 1i+oambGQBK8DoYMA9OYng==
-X-CSE-MsgGUID: gsLOKdRiTOCyEgMIo+pefg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41548667"
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="41548667"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:36 -0800
-X-CSE-ConnectionGUID: dAeVA9MISGmOmQ+uhza/8A==
-X-CSE-MsgGUID: LXQN9du8S8KqJo/7fbqGHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="116724122"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 05:23:36 -0800
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0CD3A120BCA;
-	Wed, 26 Feb 2025 15:23:30 +0200 (EET)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1tnHNq-00AYyK-08;
-	Wed, 26 Feb 2025 15:23:30 +0200
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: dongcheng.yan@linux.intel.com
-Subject: [PATCH 7/7] media: ccs-pll: Better validate VT PLL branch
-Date: Wed, 26 Feb 2025 15:23:19 +0200
-Message-Id: <20250226132319.2517656-8-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250226132319.2517656-1-sakari.ailus@linux.intel.com>
-References: <20250226132319.2517656-1-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="oeQkAmaw"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4394a823036so65838235e9.0
+        for <linux-media@vger.kernel.org>; Wed, 26 Feb 2025 06:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1740579214; x=1741184014; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vgbpb+wQs1fiWsUu+quFf7N3iJTinXogOjcbntSJGqg=;
+        b=oeQkAmawKdFkOYIh1KZFQXcbri2BxNd4USu1sfqxG1oG4BhpFo600nhh6wWLLDlXTB
+         OsPrUz8eNDTFeQBsPtAtxKDMv6m4fPhcI9ityR7RSBOOwzURU+LdzDsNuSkEDx0supIs
+         NhVQlvcEABsAw6jwUGO8u03wAnafGXqMHwNP4JvciSUkJkAYDKjjIDeLJeH3Bg/qTPZu
+         PnxTxFwG6HYXTKpjxWr3tzWt07PPUn8ZjvsYjKi2zvOFf2Z0EX5iOLztv3ae8RHq3x+7
+         f3KB0hRtFHCYXs6QkVNrebs7WOrVhkh7DYxGDGx3iyRgrnnAalh/D8Q7XUNyQn9QSNLq
+         QhuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740579214; x=1741184014;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vgbpb+wQs1fiWsUu+quFf7N3iJTinXogOjcbntSJGqg=;
+        b=kiuKwbqDGdNBrVQSCt8YL7je6nKAZtvVAb+ob9230USuwgRLvGg1Hd7H+QwrmSX0E4
+         TdWjLGi3BJQflAMCtiFxKmd+GrorNg9BQrH2goF+ZyZB9gSaDf293JbrY/0rOF2pZdBM
+         j5Pw0IS3+Vi30AafTqYxiW9cBDSXVoMRHhYCEJY35aVM6VwSJxP92hgWXNpqLmtdJusn
+         92lNx7XcbzPXAIW8Bfa7nFP/R+3jtvkLs5TxS3Huu4eCkzVjEXR4epdreasIu+7sP/lJ
+         sYrkw1RcXIDziyrSOTBEZkIH+fDcgkbmE+5Xsvsd4mnW2Ag4wrgJRJIT9vx76lomxguL
+         qtmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQVecBs0FUZhwFJH+4MKzpdWLNQxr5J4DafuacqibRUXqRU4o9L7veJanLSnq1vuTNZK7bu8HkjiMpgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0xUADS/a6m0jVRi1W/D4gctTXzawLbGsWeb7v4K4AVyniJLrJ
+	RS9Ft/xYLcEOZDbwLfqwabZAo73LlwW57CkYS9p53ZSnGysuC2Wor+qtrgPw2BI=
+X-Gm-Gg: ASbGncsR5wpGlh7F1OqP6feepfWP9MJ/fzjy+8GNHRBHnyn68d5t+tBPhfQDEKZXWH7
+	n9OiLnfO4ZWtX3+o9lT5ETKGsgH2gKWbwMUOo5kgjdgYo4pvagFc2QbdYlhmaP9vdAP5I5gQiDV
+	Qcz251ClXatE/Z4fomohn7ZuNGiTJg47dFU+X6a8HvVHTQUMP89xdHQOacgoueFyWW7jTgbj1GD
+	Y8vU8XelJpmEm1Rs8N/KNKkNRCprLrjKLYgIiDnKsVTB6aDhxI2xu2YDbHWWbLfE3lHrnWhK4Gu
+	iyKZkAhwifExlmY4h2qYGRgTDICii2hCAflLm6XFgdoxeyUfVFY+9cSDTx7kxl4OikU+tUs=
+X-Google-Smtp-Source: AGHT+IGjMBREYHM3Ps9vQIMuqM9jKVtM80DfGnNOYnRFojf/OC403IkVNKEcMty4GV6fP9tsA8PHBQ==
+X-Received: by 2002:a05:600c:19ce:b0:439:92ca:f01b with SMTP id 5b1f17b1804b1-439aeb34975mr170790095e9.13.1740579213904;
+        Wed, 26 Feb 2025 06:13:33 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390cd8e7121sm5791619f8f.61.2025.02.26.06.13.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2025 06:13:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 26 Feb 2025 15:13:33 +0100
+Message-Id: <D82FU3SIX5RZ.1Y525GJO0UOAA@fairphone.com>
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Luca Weiss" <luca.weiss@fairphone.com>, "Robert Foss"
+ <rfoss@kernel.org>, "Todor Tomov" <todor.too@gmail.com>, "Bryan O'Donoghue"
+ <bryan.odonoghue@linaro.org>, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Barnabas
+ Czeman" <barnabas.czeman@mainlining.org>, "AngeloGioacchino Del Regno"
+ <angelogioacchino.delregno@somainline.org>, "Caleb Connolly"
+ <caleb.connolly@linaro.org>, "David Heidelberg" <david@ixit.cz>
+Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] Some small preparations around CAMSS D-PHY / C-PHY
+ support
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20241209-camss-dphy-v1-0-5f1b6f25ed92@fairphone.com>
+In-Reply-To: <20241209-camss-dphy-v1-0-5f1b6f25ed92@fairphone.com>
 
-Check that the VT PLL dividers are actually found, don't trust they always
-are even though they should be.
+Hi all,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ccs-pll.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+On Mon Dec 9, 2024 at 1:01 PM CET, Luca Weiss wrote:
+> Since the hardware blocks on the SoCs generally support both D-PHY and
+> C-PHY standards for camera, but the camss driver currently is only
+> supporting D-PHY, do some preparations in order to add C-PHY support at
+> some point.
+>
+> Make the dt bindings explicit that the hardware supports both (except
+> for MSM8916) but also add a check to the driver that errors out in case
+> a dt tries to use C-PHY since that's not supported yet.
+>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> Luca Weiss (2):
+>       media: dt-bindings: media: camss: Restrict bus-type property
+>       media: qcom: camss: Restrict endpoint bus-type to D-PHY
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index fa3c577fbc0c..49cc4491ebdd 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -448,7 +448,7 @@ static int ccs_pll_calculate_vt_tree(struct device *dev,
- 	return -EINVAL;
- }
- 
--static void
-+static int
- ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
- 		     struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
-@@ -571,6 +571,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 		if (best_pix_div < SHRT_MAX >> 1)
- 			break;
- 	}
-+	if (best_pix_div == SHRT_MAX >> 1)
-+		return -EINVAL;
- 
- 	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(vt_div, best_pix_div);
- 	pll->vt_bk.pix_clk_div = best_pix_div;
-@@ -583,6 +585,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- out_calc_pixel_rate:
- 	pll->pixel_rate_pixel_array =
- 		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
-+
-+	return 0;
- }
- 
- /*
-@@ -862,8 +866,10 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 		if (pll->flags & CCS_PLL_FLAG_DUAL_PLL)
- 			break;
- 
--		ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
--				     op_pll_bk, cphy, phy_const);
-+		rval = ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
-+					    op_pll_bk, cphy, phy_const);
-+		if (rval)
-+			continue;
- 
- 		rval = check_bk_bounds(dev, lim, pll, PLL_VT);
- 		if (rval)
--- 
-2.39.5
+This series is still pending, both patches got reviews and no pending
+comments from what I can see.
+
+Would be nice to get it in for 6.15.
+
+Regards
+Luca
+
+>
+>  .../bindings/media/qcom,msm8916-camss.yaml         |  8 ++++++
+>  .../bindings/media/qcom,msm8953-camss.yaml         | 15 +++++++++++
+>  .../bindings/media/qcom,msm8996-camss.yaml         | 20 +++++++++++++++
+>  .../bindings/media/qcom,sc8280xp-camss.yaml        | 20 +++++++++++++++
+>  .../bindings/media/qcom,sdm660-camss.yaml          | 20 +++++++++++++++
+>  .../bindings/media/qcom,sdm845-camss.yaml          | 20 +++++++++++++++
+>  .../bindings/media/qcom,sm8250-camss.yaml          | 30 ++++++++++++++++=
+++++++
+>  drivers/media/platform/qcom/camss/camss.c          |  9 +++++++
+>  8 files changed, 142 insertions(+)
+> ---
+> base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
+> change-id: 20241209-camss-dphy-8bf46e251291
+>
+> Best regards,
 
