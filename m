@@ -1,113 +1,108 @@
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE131F5857;
-	Thu, 27 Feb 2025 05:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580451C5D6E;
+	Thu, 27 Feb 2025 05:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740634162; cv=pass; b=UPNOyuAEYMv0Kp6q0VRVmJX55rMfhHBSj2RIQvMnoV2iY2Ys09j/ng0NqIR8VGK1C7hIX5qSbNFHmqPWsudLKJe1A5D31Nq5/WLBzqLqABB0o7qUlu9wUfTWMG/KgHu/nfTkjQuuR+VsidlEWbHi6RoSKwdAwmQv6Uxty7pHgr8=
+	t=1740635535; cv=pass; b=JmSyqkGR9GHzXXIK4rum9M7dHFsjoAdgHWVOS8ZBfz+YvpltVaqq56ho3hBTagNFhr42oeUTh1xCeIvmMAVAWJHSZEGP/Iq+0EfoLUblRqeY8vlwRAqoZJH2pTCvuOUGBuFJ4M5/RL3YOXotPhq3fOmQI9rfpanCjxsoiD8t8AQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740634162; c=relaxed/simple;
-	bh=u6WUzNVe+oGI9QR6zph5HdrXz/+gNvJJi3KrmDx0j4c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SMaSHd1Qxva6Usk6XFp2ziIyK8YJ/mIWuIIHhiTVKuf21iHtEXqTgMcff8exT5EGkY9icpAhGXTuux2NvLJLzP+26tgyrnYAeNiGm8EeesRtqEAjosHxym6SOKqBTK6gKFZcA4kkahZUMnrWXLhapg+XUED+4lOv1QUEHlb4Sgs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=OoBSQrhW; arc=pass smtp.client-ip=136.143.188.112
+	s=arc-20240116; t=1740635535; c=relaxed/simple;
+	bh=7YBv4TV4OSCYMGU9/JN624saPQbxk1vUOER1vqH+wYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IGsV396ygWxrT45yUnI7Ih6km/Bf9RY3tsxjNm8UD9YlUNWyw+v8/RegMTnBmLFGEd+6rYl5TEIHE7kyv/WwXhn/WJOPqECrdJhM+OPqua74xxHVB/dvgMBOAKDuo/vm56ybTNBAaoBXh0n1JZNbhbeJa7V4suM8egenfZ+Suhc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=WsJcQ4kx; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="OoBSQrhW"
-ARC-Seal: i=1; a=rsa-sha256; t=1740634121; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="WsJcQ4kx"
+ARC-Seal: i=1; a=rsa-sha256; t=1740635488; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=kGB5TYdGQHvNLua0/kmWtDME+WQqoe1SIhhD1BLc+g7QJGnfq6oxCqXKbzkZSB9u7unEbKEBp5TjEwQdwuvufo2F6vlyZ+2NNgvd37+L/V539zVaD8qwDC8VX8iqx/HYOfB8YiYLOOFb7p7WqjL2U3XENktPH+9l//vEtYnqCOQ=
+	b=iP4LSM6UHY1mmPn+kphJLPYD176zW+HgoNvunszvYPOTC0nCGbs0s0rzQw8GikXGO+33vtiyfu5ObWpJxJ88MjeQ0xKzUaqliMYdGwTVO9/ym0RXBV+L/Ic9/Yz2LI6FivMSvkbG4xw6ZXJQDEwlPdsCliyFXxY/CS8dzz+sxE8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1740634121; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Sv5NOsfY30eBqvAAr70WQss2GxI0o1NVlCRr5lXEPb0=; 
-	b=aA+xuVGDj1Pc5f4LEyN7NXsxtU4iPurKYzK79L0uKcXYaBXETcmfg43UDqzAIuATAXQyZifmjl+Ebh/lCzgne7PDUoydsD6vKjEE6B2yFekL5mcPklKow3zk8pJuQYVSxvNDszIYXZj593P7iikr0ho80OEjJ/0CHoUUEOohQ28=
+	t=1740635488; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ksDagsXbRnqXqY/SM85Of5WqOjgwoOYDeKarCY0Qk/4=; 
+	b=NsgqYasembrdqtBBWtjXt1JCeLbaMCTIIu9H2QM3anyrhp2T7NKnpVenDopDKX+H0Rdukl4/aET3ZF/PEHSeZSo8U+MtNpJsj+sMUVQkTsasK35KFmKiZIzX0A67oHrM7um94Y5jv4S/k3EKl19EjUar+Pja0COBzt5UUv2R5jI=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
 	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740634121;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740635488;
 	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=Sv5NOsfY30eBqvAAr70WQss2GxI0o1NVlCRr5lXEPb0=;
-	b=OoBSQrhWdMjD4flBgsQDpGxHoyTxzyO1EP1O06t6ewmNWyNnYI9aJw0/6oS8ufb3
-	0jOjy93lOfHvPeSUdL7+VPbRd/I1ET8TGmAim19BKDomEOfoR2eeqwEdjiR4ikkY9oY
-	4T137HZffA7B6YgGMFhkMkXwNMThHX/p4FgG/KAY=
-Received: by mx.zohomail.com with SMTPS id 1740634119692458.0582223925678;
-	Wed, 26 Feb 2025 21:28:39 -0800 (PST)
-Message-ID: <f0c3a16e-c4a2-4cd9-9afa-a21a975a45c9@collabora.com>
-Date: Thu, 27 Feb 2025 08:28:31 +0300
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=ksDagsXbRnqXqY/SM85Of5WqOjgwoOYDeKarCY0Qk/4=;
+	b=WsJcQ4kx45KQiNLNpvs0TxlefS6cOWfHOVKhBQ6vTnG/7lRKcHNU+DvniethqJ+B
+	GVQ0qhK5WvTdb7393rr3IXqBOPI/JCE/ft4KVVLlbAv0jjZI21Xcy4Fe4jKZxQT0Ho9
+	AHKvzm8oowSJgAuuM+YIa/taePmS1yH4vuz8ThqA=
+Received: by mx.zohomail.com with SMTPS id 1740635486224912.3395281829445;
+	Wed, 26 Feb 2025 21:51:26 -0800 (PST)
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To: Shreeya Patel <shreeya.patel@collabora.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	jose.abreu@synopsys.com,
+	nelson.costa@synopsys.com,
+	shawn.wen@rock-chips.com,
+	nicolas.dufresne@collabora.com,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: kernel@collabora.com,
+	linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Tim Surber <me@timsurber.de>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Diederik de Haas <didi.debian@cknow.org>
+Subject: [PATCH v12 1/6] MAINTAINERS: Add entry for Synopsys DesignWare HDMI RX Driver
+Date: Thu, 27 Feb 2025 08:50:20 +0300
+Message-ID: <20250227055025.766018-2-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250227055025.766018-1-dmitry.osipenko@collabora.com>
+References: <20250227055025.766018-1-dmitry.osipenko@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 3/6] media: platform: synopsys: Add support for HDMI
- input driver
-To: Diederik de Haas <didi.debian@cknow.org>,
- Shreeya Patel <shreeya.patel@collabora.com>, Heiko Stuebner
- <heiko@sntech.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil@xs4all.nl>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, jose.abreu@synopsys.com, nelson.costa@synopsys.com,
- shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: kernel@collabora.com, linux-media@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rockchip@lists.infradead.org, Tim Surber <me@timsurber.de>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-References: <20250225183058.607047-1-dmitry.osipenko@collabora.com>
- <20250225183058.607047-4-dmitry.osipenko@collabora.com>
- <D82H4F6J4V4V.2BLHVUVD3BVX9@cknow.org>
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Content-Language: en-US
-In-Reply-To: <D82H4F6J4V4V.2BLHVUVD3BVX9@cknow.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-On 2/26/25 18:14, Diederik de Haas wrote:
->> +config VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID
->> +	bool "Load default EDID"
->> +	depends on VIDEO_SYNOPSYS_HDMIRX
->> +	help
->> +	  Preload default EDID (Extended Display Identification Data).
-> I see some value in making explicit what you mean by EDID ...
-> 
->> +	  EDID contains information about the capabilities of the display,
->> +	  such as supported resolutions, refresh rates, and audio formats.
-> ... I do not think a/this Kconfig needs to explain it.
-> 
->> +
->> +	  Enabling this option is recommended for a non-production use-cases.
-> My guess is that it could be useful for development/debugging/CI work
-> which possibly do not have an actual device (monitor) which provides
-> actual EDID data? Is CI work the reason why you (initially) enabled it
-> in the defconfig?
-> But when you have an actual monitor (=production use-case?), you
-> (really) do not want it? Would it be harmless if 'still' enabled?
+From: Shreeya Patel <shreeya.patel@collabora.com>
 
-Disabling this option is only relevant if you're making a commercial
-product using this driver. It's a quite widespread issue that HDMI
-projectors utilize default EDID that comes from BSP driver they use,
-while a rebrand EDID should be used. Keeping this option enabled is
-harmless, but you don't want to do it in a product.
+Add an entry for Synopsys DesignWare HDMI Receiver Controller
+Driver.
 
-For all other use-cases you would want to enable this option, otherwise
-driver won't be usable until you will load EDID from userspace.
+Reviewed-by: Christopher Obbard <chris.obbard@collabora.com>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Hans has strong opinion RE this option and wants to have it disabled by
-default.
-
-> Thus a more extensive description what this Kconfig item does and why
-> and when I want to enable it or not, seems more useful to me.
-
-Will update and expand the description with more clarification. Thanks
-for suggestion.
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2286200b355b..1bb6a54e41c6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22952,6 +22952,14 @@ F:	drivers/net/pcs/pcs-xpcs.c
+ F:	drivers/net/pcs/pcs-xpcs.h
+ F:	include/linux/pcs/pcs-xpcs.h
+ 
++SYNOPSYS DESIGNWARE HDMI RX CONTROLLER DRIVER
++M:	Shreeya Patel <shreeya.patel@collabora.com>
++L:	linux-media@vger.kernel.org
++L:	kernel@collabora.com
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
++F:	drivers/media/platform/synopsys/hdmirx/*
++
+ SYNOPSYS DESIGNWARE I2C DRIVER
+ M:	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 -- 
-Best regards,
-Dmitry
+2.48.1
+
