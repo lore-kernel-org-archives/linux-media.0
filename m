@@ -1,48 +1,60 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D636438DF9;
-	Thu, 27 Feb 2025 07:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC722223711;
+	Thu, 27 Feb 2025 08:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740642384; cv=none; b=oBOeHgJxAQvmFkRj1m0cdcisw5Kadrq334YeAOafODqEydZ0nXX1rIPoMs+1TnPg0G1eyMSGCCDte6KyUUPQPEFUwL2EVkbhYmUosgw94gBhb1Nw31Gm1EK8LZ/lbzO62m5vPRpFcQHN4RP28W9exA3IJ1aV0ELmayzjLi8ct8s=
+	t=1740644985; cv=none; b=pkdSn8kN8fFDpMUq0c2WO2PF7VaQJKDiEtKkZpkWtLo7q5LnmOZj6ypgJ2PaGf/ZGEwN1uOrEwHcRPWfCXncwgnzHDSBiR3TWLFBQaJbBMAXgayKZ758EGsxtQK6ljnOc0GR/UXuA1yozP7rGcrYcJEktYS7D/0nRuuQiYh6Ch8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740642384; c=relaxed/simple;
-	bh=jJwqgKWR5JOY+McBAKuUmoyfRIE0w/3F/QEWmYkYatA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VqQl2Yi29HME8PQP9ReLYgVvelQFvkDACRksMpGEF8uqqlH/a9RcCEeW/C5xNLeM+8NpnCavmvkYeEOhORrrkQ0f1POXtLFfJmZoE5uoqW9m1mcebFlEX16KFtDK0EwPvJ1I2OwjYtXdL5ZVwmFXgSiavGU+KolO3PDx1cm0dFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Pdw9TsGx; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1740644985; c=relaxed/simple;
+	bh=zW0E8AcoXAZvyu8fI1UtUuZAzU6CpWw9TRKZgNnALk4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NlaOJRYHn8MJFB37vqO6Ny+potU8zUcFv0ckztASrd6Kot6yo7CKzezWemlh4696Z+kJuTmjD8hTQkp3Cdq1OQXVqZNaBVmt7RW010V3Lt5S8VzRmuxrvL9P8XiTMCG4y3l15as/HKQk+9OSQdSbLvB8Arfv96HGeFDnT3nFlXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=huPKehyV; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Pdw9TsGx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1r95T
-	CcHEiHpvMqFCEcTBmSykQv+FZGWvggAUclAA/A=; b=Pdw9TsGxqEIb8P1Njcyt2
-	65sRf1XYHRd/Y87FZJJVFM9B4S1n7jBzIVrgtfyMiwaao9AucI5GaqA2BCTeXhDb
-	Yd2ifvgOtUDxN86mHg4aNwTGJc/2Xgvj2+/YzKg8T8f5oy6tsbENpHM4/8BWwLsa
-	oHjEHQsO9B5l7chEHKG388=
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wBnKk_0F8Bnz+IEPA--.57589S4;
-	Thu, 27 Feb 2025 15:44:54 +0800 (CST)
-From: Haoxiang Li <haoxiang_li2024@163.com>
-To: slongerbeam@gmail.com,
-	p.zabel@pengutronix.de,
-	mchehab@kernel.org,
-	gregkh@linuxfoundation.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	hverkuil@xs4all.nl
-Cc: linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Haoxiang Li <haoxiang_li2024@163.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] media: imx: fix a potential memory leak in imx_media_csc_scaler_device_init()
-Date: Thu, 27 Feb 2025 15:44:51 +0800
-Message-Id: <20250227074451.3698971-1-haoxiang_li2024@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="huPKehyV"
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51R8TWTT1795967
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 27 Feb 2025 02:29:32 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1740644972;
+	bh=VdpIYHpFxJx7E3IK1fTiNq9eW/altzv0I3q3e08BHow=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=huPKehyVCARKNq5w1XbAdw22PZRdB3XPoyMeAfyacAeEHFu1v4CyL+UPkHh8DGbW8
+	 pQ2U5IS6Yi2+VzCsbY8JeZst51UJBvcdkIxRjKlxKTC2VK/qUTyGDY5j3m9X4J5jY5
+	 p6EWwhERG276KDTvOZSIDZ37slApO3tEZcyKNbVQ=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51R8TWmc025593
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 27 Feb 2025 02:29:32 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
+ Feb 2025 02:29:32 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 27 Feb 2025 02:29:32 -0600
+Received: from abhilash-HP.dhcp.ti.com (abhilash-hp.dhcp.ti.com [172.24.227.115])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51R8TMOd057599;
+	Thu, 27 Feb 2025 02:29:28 -0600
+From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+To: <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <mripard@kernel.org>, <mchehab@kernel.org>, <jai.luthra@linux.dev>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <devarsht@ti.com>, <vaishnav.a@ti.com>, <r-donadkar@ti.com>,
+        <u-kumar1@ti.com>, <y-abhilashchandra@ti.com>
+Subject: [PATCH v4 1/2] dt-bindings: media: cdns,csi2rx.yaml: Add optional interrupts for cdns-csi2rx
+Date: Thu, 27 Feb 2025 13:59:19 +0530
+Message-ID: <20250227082920.744908-2-y-abhilashchandra@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250227082920.744908-1-y-abhilashchandra@ti.com>
+References: <20250227082920.744908-1-y-abhilashchandra@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -50,40 +62,48 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBnKk_0F8Bnz+IEPA--.57589S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XFyxtFWfKr15GFy5JFyxKrg_yoWDtwc_CF
-	4FgryxZrWUC3ySy3W5tF10v34Sqrs7urWFq3Z0va95XFWjy3WYvr4qvws3X34jgryF9F9I
-	yr1rJr1akry2kjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtnYw7UUUUU==
-X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbB0g0BbmfAEbmqBQAAsQ
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Add video_device_release() in label 'err_m2m' to release the memory
-allocated by video_device_alloc() and prevent potential memory leaks.
-Remove the reduntant code in label 'err_m2m'.
+The Cadence CSI2RX IP exposes 2 interrupts [0] 12.7 camera subsystem.
+So, add support for optional interrupts and interrupt-names properties.
+Keep the second interrupt optional, as it may be unconnected across
+different vendors.
 
-Fixes: a8ef0488cc59 ("media: imx: add csc/scaler mem2mem device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+[0]: http://www.ti.com/lit/pdf/spruil1
+
+Signed-off-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
 ---
-Changes in v2:
-- Remove the reduntant code. Thanks, Dan!
----
- drivers/staging/media/imx/imx-media-csc-scaler.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx-media-csc-scaler.c b/drivers/staging/media/imx/imx-media-csc-scaler.c
-index e5e08c6f79f2..19fd31cb9bb0 100644
---- a/drivers/staging/media/imx/imx-media-csc-scaler.c
-+++ b/drivers/staging/media/imx/imx-media-csc-scaler.c
-@@ -912,7 +912,7 @@ imx_media_csc_scaler_device_init(struct imx_media_dev *md)
- 	return &priv->vdev;
+Changes in v4:
+- Add flexibility in DT bindings
+- Drop the ACK from Krzysztof, since there is change in bindings
+- Make some minor changes in the commit messages.
+
+ .../devicetree/bindings/media/cdns,csi2rx.yaml         | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+index 2008a47c0580..054ed4b94312 100644
+--- a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
++++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+@@ -24,6 +24,16 @@ properties:
+   reg:
+     maxItems: 1
  
- err_m2m:
--	video_set_drvdata(vfd, NULL);
-+	video_device_release(vfd);
- err_vfd:
- 	kfree(priv);
- 	return ERR_PTR(ret);
++  interrupts:
++    minItems: 1
++    maxItems: 2
++
++  interrupt-names:
++    minItems: 1
++    items:
++      - const: error_irq
++      - const: irq
++
+   clocks:
+     items:
+       - description: CSI2Rx system clock
 -- 
-2.25.1
+2.34.1
 
