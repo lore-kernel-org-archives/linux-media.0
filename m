@@ -1,146 +1,230 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A6117A2FB;
-	Thu, 27 Feb 2025 06:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4088813777E;
+	Thu, 27 Feb 2025 07:27:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740638351; cv=none; b=O7xEsrw7u0fxZDSjJLpouZ3T96gBQoBrgIqb4HO1WKj5BAXMnjJKrKlAK9fqNJncpEY93XAvVgNY49gTSqzKyVAvnq1ZNXMNNfQldoWEleb9ZH2cjlT13e0hhT33UCiaJiC7XrjetprJ9SPobmE/3kxG5mXXcGFOqJ5L+O2aJzI=
+	t=1740641238; cv=none; b=S07ckwOby0Abkzf5jSrAKFn6wTv0O74VFVTNMXneIbrCzpyK2RKa3RqvGVkkVlwVfSb6T/PmWrPdNBfCuP3qR6bUBdE1eloXAZKpDmz60Dw2JyG/l0Kzt7WkHPC8J+zoiyxXDN7EMwpB6wHV8yF7Nk9aabbbAUtFFRJtYTa8nLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740638351; c=relaxed/simple;
-	bh=2VpGmHtpvddjKHb3CzB9R1qKMNlVQ7QPUa53zp9viUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VVkznrKH22bcF5M6Mnea4iG9uv+w1OtItcA/QOx+eB+z4xni3fgHkhC5HbxgjkB8RmE3NYsLUlvkiqbkMFUxHWJGlQrLRQQdRVLsWZcB5J9VSjIBh3asS5itwVX7XxK4Dj/zRnAQv8ebsfIsBLyqt15tvsaDqNSKxkOleWN9FDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ttZ2TVNB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740641238; c=relaxed/simple;
+	bh=mUEnnIBt0E4X0McB7uSdLl/EHQ1pwdGxfllLmAMjVY8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y2tM3UADcEK8GmHvnXhe6kLuKZ06L0nAdBChNW6ZIXhkRAvGpvjDvnVQc3nVVeI2v9w6RevwK1EHdrmusQ4Cjwbaxplj8tAk5XsfONZC/HdlS6iUAaMQ4Q8Qr0Pw0yrb9DKLgDkXrBGyR/z58jRP6b8bF9hoe94KQjoFhd4M71I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jpnq962c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ttZ2TVNB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067D1C4CEDD;
-	Thu, 27 Feb 2025 06:38:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jpnq962c"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C2430C4CEE7;
+	Thu, 27 Feb 2025 07:27:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740638350;
-	bh=2VpGmHtpvddjKHb3CzB9R1qKMNlVQ7QPUa53zp9viUI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ttZ2TVNBJZYxZ+s5GNHb10pG79Z9pg35Hdd7j1MxYovJup4of3OlLXb5fn0ZRRwvO
-	 qkngDZV6QH0DB1oGCeC69PjXudGdVZPnxilq3VbBx8Ea46vpHwTVFLglnRGaLrWOI8
-	 Hv44ss5oa5uF9n7VdfssWKsjkgrsavMRbuG6Fextdtwzfsn9CxhZOpwigNBYTDJEz7
-	 jmlYqRLIPpkClEhVg16s6NWuvVyF+IV8txsvtpW/JbX4SiBtzeluBOvoOq00TnIuqi
-	 ef90a72XayOByLY3mBcKOB/yw/RFDiEo/WpWtPKtvQ6/iGpyGLrB90+ZiF2vev0TC8
-	 ODi1vvSIejB4A==
-Message-ID: <a8c29dec-6178-4f8f-80f5-aece636c410b@kernel.org>
-Date: Thu, 27 Feb 2025 07:38:58 +0100
+	s=k20201202; t=1740641237;
+	bh=mUEnnIBt0E4X0McB7uSdLl/EHQ1pwdGxfllLmAMjVY8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Jpnq962cNzdx5hRcYYBQB/NR80P87j7p7LtkyMZU/svdij+4TWCnYmg6fz2LMAFmM
+	 NHFELxa7LA+KpFEJRTAcn9cFNlB2heablks36DMEC9A/QvPr48JFpeaJZ4a+BgBrPW
+	 Rgg+apC9qoTxsngqlsNjaZa10sjaxzjW4G9pTo4m2AWfsVg0GYb4i0za5dNMhIPloe
+	 Nqx595lPK9+pW7BbvEHQ8PoK+ZiHw0pBBVrjv8UWcKk98jjzfSL5UP8RzcKM/PXOQN
+	 jIKus2yXn2kKuhh2OiROGSon7/jzk2u0MQakjKdknFyKqruQwHlgqOYupmitbdcwXY
+	 SnIBUGf5aLMzw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DBD5C1B0D9;
+	Thu, 27 Feb 2025 07:27:17 +0000 (UTC)
+From: Keke Li via B4 Relay <devnull+keke.li.amlogic.com@kernel.org>
+Date: Thu, 27 Feb 2025 15:27:12 +0800
+Subject: [PATCH v6 01/10] dt-bindings: media: Add amlogic,c3-mipi-csi2.yaml
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/17] bitops: Add generic parity calculation for u64
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
- andrzej.hajda@intel.com, neil.armstrong@linaro.org, rfoss@kernel.org,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- airlied@gmail.com, simona@ffwll.ch, dmitry.torokhov@gmail.com,
- mchehab@kernel.org, awalls@md.metrocast.net, hverkuil@xs4all.nl,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- louis.peens@corigine.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, parthiban.veerasooran@microchip.com,
- arend.vanspriel@broadcom.com, johannes@sipsolutions.net,
- gregkh@linuxfoundation.org, akpm@linux-foundation.org, hpa@zytor.com,
- alistair@popple.id.au, linux@rasmusvillemoes.dk,
- Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
- jernej.skrabec@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
- linux-input@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mtd@lists.infradead.org, oss-drivers@corigine.com,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-serial@vger.kernel.org, bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
- Yu-Chun Lin <eleanor15x@gmail.com>
-References: <20250223164217.2139331-1-visitorckw@gmail.com>
- <20250223164217.2139331-3-visitorckw@gmail.com> <Z7zIBwH4aUA7G9MY@thinkpad>
- <Z73FxIv353lbXO3A@visitorckw-System-Product-Name>
- <b5236ae4-7ebe-4a88-bbc9-3b9b3374de53@kernel.org> <Z79ebv630yuNOJKV@thinkpad>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <Z79ebv630yuNOJKV@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250227-c3isp-v6-1-f72e19084d0d@amlogic.com>
+References: <20250227-c3isp-v6-0-f72e19084d0d@amlogic.com>
+In-Reply-To: <20250227-c3isp-v6-0-f72e19084d0d@amlogic.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com, 
+ laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
+ jacopo.mondi@ideasonboard.com, Keke Li <keke.li@amlogic.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740641234; l=4416;
+ i=keke.li@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=qlW2s7Pbdw+YMgHyq38D0qj4KtoDydNxuyBolXZJNVQ=;
+ b=5ScUV5SPcfUazhwr5Dz1PXpiOeElB0e1Ig4ipSC+2O4fb9uFu8K3iH2QHSlumOtQbQqJtgU9K
+ rMrTUr1eaMVBz3i+tzhMfOrqhr0O+Zu5f/QAXE2uFRhq2e1IP58DDtT
+X-Developer-Key: i=keke.li@amlogic.com; a=ed25519;
+ pk=XxNPTsQ0YqMJLLekV456eoKV5gbSlxnViB1k1DhfRmU=
+X-Endpoint-Received: by B4 Relay for keke.li@amlogic.com/20240902 with
+ auth_id=204
+X-Original-From: Keke Li <keke.li@amlogic.com>
+Reply-To: keke.li@amlogic.com
 
-On 26. 02. 25, 19:33, Yury Norov wrote:
->> Not in cases where macros are inevitable. I mean, do we need parityXX() for
->> XX in (8, 16, 32, 64) at all? Isn't the parity() above enough for everybody?
-> 
-> The existing codebase has something like:
-> 
->          int ret;
-> 
->          ret = i3c_master_get_free_addr(m, last_addr + 1);
->          ret |= parity8(ret) ? 0 : BIT(7)
-> 
-> So if we'll switch it to a macro like one above, it will become a
-> 32-bit parity. It wouldn't be an error because i3c_master_get_free_addr()
-> returns an u8 or -ENOMEM, and the error code is checked explicitly.
-> 
-> But if we decide to go with parity() only, some users will have to
-> call it like parity((u8)val) explicitly. Which is not bad actually.
+From: Keke Li <keke.li@amlogic.com>
 
-That cast looks ugly -- we apparently need parityXX(). (In this 
-particular case we could do parity8(last_addr), but I assume there are 
-more cases like this.) Thanks for looking up the case for this.
+c3-mipi-csi2 is used to receive mipi data from image sensor.
 
->> And if not, you can have all those parityXX() as inlines as you suggest, but
->> also provide a macro such as the above to call (optimized) parityXX() as per
->> datatype len.
-> 
-> Yes, if we need fixed-type parity's, they should all be one-liners
-> calling the same macro. Macros or inline functions - no preference for
-> me.
+Signed-off-by: Keke Li <keke.li@amlogic.com>
+---
+ .../bindings/media/amlogic,c3-mipi-csi2.yaml       | 127 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 133 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml
+new file mode 100644
+index 000000000000..b0129beab0c3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml
+@@ -0,0 +1,127 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/amlogic,c3-mipi-csi2.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic C3 MIPI CSI-2 receiver
++
++maintainers:
++  - Keke Li <keke.li@amlogic.com>
++
++description:
++  MIPI CSI-2 receiver contains CSI-2 RX PHY and host controller.
++  It receives the MIPI data from the image sensor and sends MIPI data
++  to MIPI adapter.
++
++properties:
++  compatible:
++    enum:
++      - amlogic,c3-mipi-csi2
++
++  reg:
++    maxItems: 3
++
++  reg-names:
++    items:
++      - const: aphy
++      - const: dphy
++      - const: host
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: vapb
++      - const: phy0
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: input port node, connected to sensor.
++
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
++
++            properties:
++              data-lanes:
++                minItems: 1
++                maxItems: 4
++
++            required:
++              - data-lanes
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: output port node
++
++    required:
++      - port@0
++      - port@1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - power-domains
++  - clocks
++  - clock-names
++  - ports
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/amlogic,c3-peripherals-clkc.h>
++    #include <dt-bindings/power/amlogic,c3-pwrc.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        csi: csi@ff018000 {
++            compatible = "amlogic,c3-mipi-csi2";
++            reg = <0x0 0xff018000 0x0 0x400>,
++                  <0x0 0xff019000 0x0 0x300>,
++                  <0x0 0xff01a000 0x0 0x100>;
++            reg-names = "aphy", "dphy", "host";
++            power-domains = <&pwrc PWRC_C3_MIPI_ISP_WRAP_ID>;
++            clocks =  <&clkc_periphs CLKID_VAPB>,
++                      <&clkc_periphs CLKID_CSI_PHY0>;
++            clock-names = "vapb", "phy0";
++            assigned-clocks = <&clkc_periphs CLKID_VAPB>,
++                              <&clkc_periphs CLKID_CSI_PHY0>;
++            assigned-clock-rates = <0>, <200000000>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    c3_mipi_csi_in: endpoint {
++                        remote-endpoint = <&imx290_out>;
++                        data-lanes = <1 2 3 4>;
++                    };
++                };
++
++                port@1 {
++                    reg = <1>;
++                    c3_mipi_csi_out: endpoint {
++                        remote-endpoint = <&c3_adap_in>;
++                    };
++                };
++            };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bd15d86a3ad7..d11a15ad5f62 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1252,6 +1252,12 @@ F:	Documentation/devicetree/bindings/perf/amlogic,g12-ddr-pmu.yaml
+ F:	drivers/perf/amlogic/
+ F:	include/soc/amlogic/
+ 
++AMLOGIC MIPI CSI2 DRIVER
++M:	Keke Li <keke.li@amlogic.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/amlogic,c3-mipi-csi2.yaml
++
+ AMLOGIC RTC DRIVER
+ M:	Yiting Deng <yiting.deng@amlogic.com>
+ M:	Xianwei Zhao <xianwei.zhao@amlogic.com>
 
 -- 
-js
-suse labs
+2.48.1
+
+
