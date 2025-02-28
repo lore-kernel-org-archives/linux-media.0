@@ -1,98 +1,188 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE88725F7B1;
-	Fri, 28 Feb 2025 10:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C651B4250;
+	Fri, 28 Feb 2025 10:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740738951; cv=none; b=QrodKNmW5x05BOTYPKqca/gCS1ufzhEIzN8y/NB0qKpqRjObh4soeYDIJVMUuC7Y057FbhRO3vWhS0oTXcsYOLh9UTgX9V4WHrQTLrK6RdC6NI0OIzbhPWe9touxZLLZIX3VdGnJUGbknDcScmZs8nAdlBj0OGyVpHC8tQLf86M=
+	t=1740739734; cv=none; b=hgo0vLwZYjPBXeJ27x3shLzs4nRO5xjRPI4u7+evNmVX/BLdXdBRD9cB1hwPafcGQ99t4efr/vdaqq3/y7adEzXMnG1MPk6nS5ic9zmsrlAUjgbfFCnxrvEtyaBHYdfE7BaNIrYebfQzu1xWdtE61hi+8Rd28z97jUuiOcztaMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740738951; c=relaxed/simple;
-	bh=/TumYJ27asLfRd0rL1BGVsrzFLAGEEw+uglJkmEtiLM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e6cXJ6WQGYLHVrpsa2ohwQ/9xOi8LrD8LNoLqQB27E4Nc7tyvCAxv+d8c/rtMFPbTGI0kUZafbg8/Qu5PhiCiPr82aqH5yghqLKK/UwRnytl8SFWSpObZdDT/l0XJUAuMjhumZ+1mFFAstD4/tOp3u/k840XHNCZ9LrxpzJRYtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=co9KAQNj; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1740739734; c=relaxed/simple;
+	bh=2nu/Y6+cz0NMSSixySPG8CnuznbZo4tBIamdzIavqDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TjM2pgc2DfEzf0DxGr0Z+lY4VDqolOxirBHE3H4SfOD9uCrs64rdk4RNw6iy47Qtkbh4ROouGE+826JOe5PbFpVw96/L2uAx5pE8ZoHOyQ81rRG2h2wD+lz1iDnu5JdILqBJm7RJXU9XUB5K02eQcXcnPIf3jyMMBAWOGH6aGFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=cwbqZ2Lk; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="co9KAQNj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1740738950; x=1772274950;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/TumYJ27asLfRd0rL1BGVsrzFLAGEEw+uglJkmEtiLM=;
-  b=co9KAQNjQzz/QhA0CFaYHQlKdIefmaAEY0PZAuaBvhOAXS5soet016HA
-   /xXnp4gxZfpDBvUQnNf9KV1y7u/fNIolcoFDcDdvF2kQiVWo5lNkhhIKq
-   jQS5vjrb4kwuqnWGMDFugR8zaisrb9MCfR/6n+SLzyI58Cy+l/RB5U0JQ
-   nO9mTPDkN+RkhYMnZFkxAGVuG9TfQ0B0S8lUaUUfz0rrXhHe4VEGtkfVS
-   c1brbR0Ydi7ydN79GJsiLgGRcGFehVn3XgEwQXpZMQeaO7b0JuN7ItyiU
-   44Txs+5e8gwL2+SMmhvJzeFgWl1qZgvMngE9QzrySHd6Dg53v3/K0YDJS
-   Q==;
-X-CSE-ConnectionGUID: EGT8tc8wQVmSwiJ/XsSdqg==
-X-CSE-MsgGUID: K36VVCg3QmabpI5NCU1q5g==
-X-IronPort-AV: E=Sophos;i="6.13,322,1732604400"; 
-   d="scan'208";a="38683421"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2025 03:35:46 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 28 Feb 2025 03:35:23 -0700
-Received: from microchip1-OptiPlex-9020.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 28 Feb 2025 03:35:20 -0700
-From: shravan kumar <shravan.chippa@microchip.com>
-To: <sakari.ailus@linux.intel.com>, <mchehab@kernel.org>
-CC: <kieran.bingham@ideasonboard.com>, <linux-media@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <conor.dooley@microchip.com>,
-	<valentina.fernandezalanis@microchip.com>, <praveen.kumar@microchip.com>,
-	<shravan.chippa@microchip.com>
-Subject: [PATCH V6 2/3] media: i2c: imx334: update mode_3840x2160_regs array
-Date: Fri, 28 Feb 2025 16:03:31 +0530
-Message-ID: <20250228103332.3647098-3-shravan.chippa@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250228103332.3647098-1-shravan.chippa@microchip.com>
-References: <20250228103332.3647098-1-shravan.chippa@microchip.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="cwbqZ2Lk"
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5B036A2;
+	Fri, 28 Feb 2025 11:47:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1740739641;
+	bh=2nu/Y6+cz0NMSSixySPG8CnuznbZo4tBIamdzIavqDQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cwbqZ2LkeytLOt2OeEt1HSLjyELIcA+L1HAVjtkn/caZVs7ulBfwHffeI4q7P9piZ
+	 zZx0gVUgQzgzC8kptFXRvvOrj9EjzMYxC1ajQF6xHc+NRI+9ViMA+X3lqsiY+L1qqX
+	 feNJ1RE8DDiyHYPWRM7ytbaYQlFJREwRP/mywSAQ=
+Date: Fri, 28 Feb 2025 11:48:47 +0100
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To: Tomasz Figa <tfiga@chromium.org>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Mikhail Rudenko <mike.rudenko@gmail.com>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Dafna Hirschfeld <dafna@fastmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: rkisp1: allow non-coherent video capture buffers
+Message-ID: <aw6hhc5x7lycbmckbc57ke5whksem5lasfkufcxrcuou5vhoyo@ylggg6tdzcnq>
+References: <20250102-b4-rkisp-noncoherent-v1-1-bba164f7132c@gmail.com>
+ <20250103152326.GP554@pendragon.ideasonboard.com>
+ <87bjw9s4s3.fsf@gmail.com>
+ <dtfv2slbtj3ar2wvlcnd74p3xtlvggebkk3fj5ocm3eil7kyqw@al3brwf4y5dw>
+ <CAAFQd5DS2x3sX59EdkTEMuO=eXc=Q0jD44EUwMisP6ocWz11qg@mail.gmail.com>
+ <bgnkzjpegpmif7gohoijt42rku6jruovjsxscg75dprdz5ek2i@ntfh2yyjyiry>
+ <CAAFQd5BihpFYgqvKta7ULMAVSMTy3kd6iR6Mo4ea9Ci935EFMA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <CAAFQd5BihpFYgqvKta7ULMAVSMTy3kd6iR6Mo4ea9Ci935EFMA@mail.gmail.com>
 
-From: Shravan Chippa <shravan.chippa@microchip.com>
+Hi Tomasz
 
-The 3840x2160 mode operates with the imx334 reset values.
-If we switch to other modes and then return to the 3840x2160 mode,
-it should function correctly. so updated the mode_3840x2160_regs
-array with the imx334 reset values.
+On Fri, Feb 28, 2025 at 07:28:43PM +0900, Tomasz Figa wrote:
+> On Fri, Feb 28, 2025 at 7:18 PM Jacopo Mondi
+> <jacopo.mondi@ideasonboard.com> wrote:
+> >
+> > Hi Tomasz
+> >
+> > On Fri, Feb 28, 2025 at 07:00:57PM +0900, Tomasz Figa wrote:
+> > > Hi Jacopo,
+> > >
+> > > On Fri, Feb 28, 2025 at 2:11 AM Jacopo Mondi
+> > > <jacopo.mondi@ideasonboard.com> wrote:
+> > > >
+> > > > Hi Mikhail
+> > > >
+> > > > On Tue, Jan 14, 2025 at 07:00:39PM +0300, Mikhail Rudenko wrote:
+> > > > >
+> > > > > Hi Laurent,
+> > > > >
+> > > > > On 2025-01-03 at 17:23 +02, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+> > > > >
+> > > > > > On Thu, Jan 02, 2025 at 06:35:00PM +0300, Mikhail Rudenko wrote:
+> > > > > >> Currently, the rkisp1 driver always uses coherent DMA allocations for
+> > > > > >> video capture buffers. However, on some platforms, using non-coherent
+> > > > > >> buffers can improve performance, especially when CPU processing of
+> > > > > >> MMAP'ed video buffers is required.
+> > > > > >>
+> > > > > >> For example, on the Rockchip RK3399 running at maximum CPU frequency,
+> > > > > >> the time to memcpy a frame from a 1280x720 XRGB32 MMAP'ed buffer to a
+> > > > > >> malloc'ed userspace buffer decreases from 7.7 ms to 1.1 ms when using
+> > > > > >> non-coherent DMA allocation. CPU usage also decreases accordingly.
+> > > > > >
+> > > > > > What's the time taken by the cache management operations ?
+> > > > >
+> > > > > Sorry for the late reply, your question turned out a little more
+> > > > > interesting than I expected initially. :)
+> > > > >
+> > > > > When capturing using Yavta with MMAP buffers under the conditions mentioned
+> > > > > in the commit message, ftrace gives 437.6 +- 1.1 us for
+> > > > > dma_sync_sgtable_for_cpu and 409 +- 14 us for
+> > > > > dma_sync_sgtable_for_device. Thus, it looks like using non-coherent
+> > > > > buffers in this case is more CPU-efficient even when considering cache
+> > > > > management overhead.
+> > > > >
+> > > > > When trying to do the same measurements with libcamera, I failed. In a
+> > > > > typical libcamera use case when MMAP buffers are allocated from a
+> > > > > device, exported as dmabufs and then used for capture on the same device
+> > > > > with DMABUF memory type, cache management in kernel is skipped [1]
+> > > > > [2]. Also, vb2_dc_dmabuf_ops_{begin,end}_cpu_access are no-ops [3], so
+> > > > > DMA_BUF_IOCTL_SYNC from userspace does not work either.
+> > > > >
+> > > > > So it looks like to make this change really useful, the above issue of
+> > > > > cache management for libcamera/DMABUF/videobuf2-dma-contig has to be
+> > > > > solved. I'm not an expert in this area, so any advice is kindly welcome. :)
+> > > >
+> > > > It would be shame if we let this discussion drop dead.. cache
+> > > > management policies are relevant for performances, specifically for
+> > > > cpu access, and your above 7.7ms vs 1.1 ms test clearly shows that.
+> > > >
+> > > > >
+> > > > > [1] https://git.linuxtv.org/media.git/tree/drivers/media/common/videobuf2/videobuf2-core.c?id=94794b5ce4d90ab134b0b101a02fddf6e74c437d#n411
+> > > >
+> > > > I would like to know from Hans if the decision to disallow cache-hints
+> > > > for dmabuf importers is a design choice or is deeply rooted in other
+> > > > reasons I might be missing.
+> > >
+> > > When DMA-buf is used, the responsibility for cache management is
+> > > solely on the CPU users' side, so cache-hints don't really apply. It's
+> > > the exporter (=allocator) who determines the mapping policy of the
+> > > buffer and provides necessary DMA_BUF_SYNC operations (can be no-op if
+> > > the buffer is coherent).
+> >
+> > This all makes sense.
+> >
+> > I take it as, for libcamera, users of the FrameBufferAllocator helper
+> > (which first exports MMAP buffers from the video device and the
+> > imports them back as DMABUF) won't be able to control the cache
+> > policies.
+> >
+> > Now, in the long term, we want FrameBufferAllocator to go away and
+> > have either buffers exported by the consumer (likely DRM) or by a
+> > system wide buffer allocator (when we'll have one) and have the video
+> > devices operate as pure importers. But for the time being the
+> > "first export then import" use case is possibile and valid so I wonder
+> > if we should consider measures to allow controlling caching policies
+> > for this use case too.
+>
+> Hmm, I may be missing something, but if FrameBufferAllocator does the
+> allocation internally in libcamera, why couldn't it use the
+> V4L2_MEMORY_FLAG_NON_COHERENT REQBUFS/CREATE_BUFS flag?
 
-Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
----
- drivers/media/i2c/imx334.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+-I- might be missing something, but reading the below links that
+Mikhail reported in a previous email
+[1] https://git.linuxtv.org/media.git/tree/drivers/media/common/videobuf2/videobuf2-core.c?id=94794b5ce4d90ab134b0b101a02fddf6e74c437d#n411
+[2] https://git.linuxtv.org/media.git/tree/drivers/media/common/videobuf2/videobuf2-core.c?id=94794b5ce4d90ab134b0b101a02fddf6e74c437d#n829
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index a800f2203592..f80a8ce8f9c5 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -344,6 +344,12 @@ static const struct imx334_reg mode_3840x2160_regs[] = {
- 	{0x302d, 0x00},
- 	{0x302e, 0x00},
- 	{0x302f, 0x0f},
-+	{0x3074, 0xb0},
-+	{0x3075, 0x00},
-+	{0x308e, 0xb1},
-+	{0x308f, 0x00},
-+	{0x30d8, 0x20},
-+	{0x30d9, 0x12},
- 	{0x3076, 0x70},
- 	{0x3077, 0x08},
- 	{0x3090, 0x70},
--- 
-2.34.1
+it seems to me that yes, when first exporting you can hint to tell
+vb2 to allocate from non-coherent/non-contiguous memory, but then when
+switching the device to importer mode (and import the same buffers it
+previously exported) the cache sync point would then
+be skipped, leading to possible synchronization issues between the cpu
+consumer and the device.
 
+>
+> Note that however, once the buffer is allocated and mapped once, on
+> many architectures it must keep the same mapping attributes across the
+> different mappings, due to how the memory hierarchy works. (Not sure
+> if this is what you are asking for here, though.)
+>
+> >
+> > >
+> > > Best regards,
+> > > Tomasz
+> > >
+> > > >
+> > > > I'm asking because the idea is for libcamera to act solely as dma-buf
+> > > > importer, the current alloc-export-then-import trick is an helper for
+> > > > applications to work around the absence of a system allocator.
+> > > >
+> > > > If the requirement to disable cache-hints for importers cannot be
+> > > > lifted, for libcamera it means we would not be able to use it.
+> > > >
+> > > >
+> > > > > [2] https://git.linuxtv.org/media.git/tree/drivers/media/common/videobuf2/videobuf2-core.c?id=94794b5ce4d90ab134b0b101a02fddf6e74c437d#n829
+> > > > > [3] https://git.linuxtv.org/media.git/tree/drivers/media/common/videobuf2/videobuf2-dma-contig.c?id=94794b5ce4d90ab134b0b101a02fddf6e74c437d#n426
+> > > > >
+> > > > > --
+> > > > > Best regards,
+> > > > > Mikhail Rudenko
+> > > > >
+> > > >
