@@ -1,267 +1,265 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0549F21B9E9;
-	Mon,  3 Mar 2025 16:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DDE21578D
+	for <linux-media@vger.kernel.org>; Mon,  3 Mar 2025 16:05:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741017841; cv=none; b=QgjBKzWvCum/GZpNDBMP/O5tcIz3S/hM8xX1AUJSDGopMTk5YC15V9Pd96gF0YvnN55sv1zC/gLyDOEEM7HauellKOO6gco4vMJbkuWckXynN0BygFF0Uq40kqu/ftQFjjfKTAkxoV2kRiuw86vydfbPVFRUo5j5a9wYmMAlvu4=
+	t=1741017925; cv=none; b=S7C5/XYZifREV93l5bOOXPbnOf0YR/BzDaVR0tHVZoHZD21jk5CHY1qk9gKr6WO79YjbOBxDAwuMx+YNTgu2Z7s+ZjPngIcMaZHv9H96tsvc85wfg5HkZO+6N5yNXAc0piiLl598VtY8FeFIsKNP6wYWct5dT1+HbqOlPkbm/4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741017841; c=relaxed/simple;
-	bh=g+H/ekm4a1tNd9/uuqmtmBcE1liUdfh8+ZrY8uuygvc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Px8Y5AWcCrpvKEloNjEjAFgY7o1oR4Bji4n4612iZYmU/D70vsJC4ZIC5qjBt87zco4AtIfq10NerXPTd+TJ8OWMY8nFmJbtve8Um/a+ZQyyR4dWMNG8AFa/dTe0KLZuTtLrLPNegV5X+7CLwTKbP70USnwleyLtdK1oy/Okd/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=e0hPPRS+; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1741017925; c=relaxed/simple;
+	bh=MCSgs5xxxCulYRnvfdyGYNbtARDHIyZ/TyhT0KMm5+I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DVmiMeN3ddeu+cNXpojB3p0ruC6duGqLP91E2qAotxSQAi6RGAEPLnIfz+5fRmfrxY3cjuVI0tsOnX9tmZOh1tsYs6VykghGhhVQKfOrKFHk5zsGyF+ZB9uSu/htGwb7ILienLyuljGArhOVgVOtPjY4F0iAsaA+Wi6+ox68buk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=aujA5M7S; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="e0hPPRS+"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c69:8872:6fe4:6987:313:70cc])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 016A822A;
-	Mon,  3 Mar 2025 17:02:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1741017747;
-	bh=g+H/ekm4a1tNd9/uuqmtmBcE1liUdfh8+ZrY8uuygvc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=e0hPPRS+27gKnKXtQUHFEwz0AB2UQ/QtoE5PXCtdmaTaNqcB7jmRNpBCrRGHxdMim
-	 K8XokO9qyEVVZAXkF0osidbf9Ns7oJbpI9xThZiTydW/9NFar1s3X7vZfPcvzWXbq3
-	 HOu3cJoklc5T+wE6G2KPrwLjX1J8WczjQbMzjVBY=
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Date: Mon, 03 Mar 2025 21:32:22 +0530
-Subject: [PATCH v3 19/19] media: i2c: ds90ub9xx: Set serializer temperature
- ramp
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aujA5M7S"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30bbdc29334so9370591fa.0
+        for <linux-media@vger.kernel.org>; Mon, 03 Mar 2025 08:05:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1741017921; x=1741622721; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZdWLGQeqT4YHMMCFuHzXq23B1R2g7aEmE8i8MWclk2s=;
+        b=aujA5M7SMz5ojq35jwUdMWfpbXMzLyDhc5pKNrZAZkcyyLPeF8mqYhM3+ptLtA96to
+         /8F1isgKTNROzUqDNJJT2llRL6dps5mo6GxowAMRyc60yNShOw6SzDpcVPF/wzW+tXCW
+         lozUIPHhUF6qlAQwgxHFGmH5VqWEBYN7m3Kys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741017921; x=1741622721;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZdWLGQeqT4YHMMCFuHzXq23B1R2g7aEmE8i8MWclk2s=;
+        b=qgq5NSZaH+gt66P9I+IErFs9KiuoDhoEN72pJ178+kiTGVfeqiisDxFEvuQYTvrTCh
+         75fl08/TaP7oTsp2BgsIeypTFMZbLTX/kyfgwpfDn0delClu1l6biW/rQR3HASeYxpOA
+         A0K+vVYXRGByzJwhXp+jDBqalHBbWDLH+xLYiSEfSyJ8QbSo141I8FpFuNg8onEC+w/B
+         nl2yrZY9Jb7RjFkvHU1rO8GhD+B4rj+c3bFEW0zE80iWZ1pyCCbk3Et6/3BBNgUfuaMI
+         ay+M2Q7H3G9aBBSTA+Ua7PsU5NsIsF6wXyIShVGThlzK5h5FJ/C86Gmr5/yrrtRpuqfI
+         Xj9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXqOyMiUoWNFrrtPIbrvs5jmurTN9E45iYe15rglPTjp8x+M3VzrpDLW7u09GSPl+iNv0Y4+XCxByTRxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxtkgoes6TyaKlo6PsFAe/CYgpJvpOf6h3iPsefnI4eyV5oHWA7
+	HYBc1/RbBUGQCSVQm6caL6zKVTxTf6rmKWJpYcLrq/8GsvRDBOSwTk8w+VvfzXM+9WsnP/N1XEc
+	=
+X-Gm-Gg: ASbGncs1IS171G4hX2dNQpMTq/pUBnffNpIFcINp/H8g8yjkUuQ3VzCli3nY6zAnG0o
+	dsuFedYhalqYb7DXBfj/S3NUpHteINYClp+vZ1mxQWcAhSOBAccV9VzCslhQu0KSIn3WNrTZL25
+	Yj9L7GYXNicn9S4oZfqPIOJUq+QmlH92MZjEO0By+82Tvbfw5uHerODNqkotxA6r4dzM+PfaAu1
+	VW3qCLa1lH+eqaSVZ20GBn1GhV0PeOZ2yBS9qPfQzcZCxvdAgHsyAYjK1f592u1Jf0jPluUUWYF
+	HzGguAC59IvzKqWIWIkq3Hlx8Y82pjrBfqlKJpGYFzEGaIqo1yZQc3RIOzDtVRM+GHSPxgn1eEM
+	kAaf2OnQx9UM=
+X-Google-Smtp-Source: AGHT+IFtxapCAwEmAIvQrO0sWQseFi63kOkG46Kw1x02NKzbPJusu68sphQsPita6ru2kapccAJWGQ==
+X-Received: by 2002:a2e:be10:0:b0:30b:8e06:86a3 with SMTP id 38308e7fff4ca-30b932243cemr41702421fa.16.1741017921328;
+        Mon, 03 Mar 2025 08:05:21 -0800 (PST)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30b8685b2fbsm14195961fa.86.2025.03.03.08.05.20
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 08:05:20 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30ba92c846eso19731521fa.3
+        for <linux-media@vger.kernel.org>; Mon, 03 Mar 2025 08:05:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXkM9KutFtcPZ/3MhbMyciHyNGjzLs8BIfv3f5Q6EC0+4qhIqSb7EX7smvxmdOxsQYMwHsCms78a3/UWQ==@vger.kernel.org
+X-Received: by 2002:a2e:bc1d:0:b0:30b:c83e:720a with SMTP id
+ 38308e7fff4ca-30bc83e77demr4968111fa.1.1741017919544; Mon, 03 Mar 2025
+ 08:05:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-b4-ub9xx-err-handling-v3-19-7d178796a2b9@ideasonboard.com>
-References: <20250303-b4-ub9xx-err-handling-v3-0-7d178796a2b9@ideasonboard.com>
-In-Reply-To: <20250303-b4-ub9xx-err-handling-v3-0-7d178796a2b9@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Devarsh Thakkar <devarsht@ti.com>, linux-media@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- Jai Luthra <jai.luthra@ideasonboard.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6487;
- i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
- bh=g+H/ekm4a1tNd9/uuqmtmBcE1liUdfh8+ZrY8uuygvc=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBnxdKBHjjvy8tJ6tgEh+AwC3Jkd3H0+XFY0/gXW
- t4ScrjR/0CJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZ8XSgQAKCRBD3pH5JJpx
- RTkED/9yHuHpKSVb3fqOOKfB4WRC+qMYWAWVCK3TOiNvZocH5pByQ5r89T4HuwxvujIchsbIIaQ
- z/+DNTg9IdlVOxivcqjcOWjlhFf0G03yfDdbH73GtRQAA8NGYLV0SNyp92HxmxeUyhXvTozx5HI
- eOzUr47O4iNG8cGsfiglLbHdwptQ42qYQ/UDV0Cf3Df6V7hqxMoUFfdPZDY2RufjcaMB4R+bda5
- Knz2eFe5cxZY/3ogfsAUBNb7kKW10ZNotN4J9pthPHYkw/l/LDoIDP7HVCFJCYEfKLvLmJ5oTsP
- pSTky242R/AdL2Fuw3ieSl3XpcSygUHPd0cIKOFuOLYSH9Cp+XTAe944ZtJdMCbN5bSvccxMwU1
- 7b16xcZ6slwTMfSaWE6rzN/pjcS8GgpfsYhCgfOKpZi0/zCLkqzue2Twoq0IUGaipZBXHxteBNO
- +3hPs/7yclikcTg4BcFYsP9ap+Uouzy/R4vXSsTSC4fCHh5SVI0JScvxR8/G45kkqb4OlmoxgWh
- tT2tuBtMFFVBGSvch+GGZ2T4Xnvg/RTywYgu/gQKTlwLdss5NeRFkU7pzXpqq9o32sPsCVG3bWq
- QIWml8SEzrFgjbfxUsBqRRUuJuM0EPpS7bdNWJtVYnvcTvW7sy+UAWIK3Mbg2gTVut7GdQ6OkjA
- v2g5C3RfHHsqAfw==
-X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+References: <20250111-uvc-eaccess-v4-1-c7759bfd1bd4@chromium.org>
+ <20250223170319.GA2821@pendragon.ideasonboard.com> <CANiDSCv1HVu82D=PoJFu=XCQ97k_MM1dmYpufkUCiKpSgGRT9w@mail.gmail.com>
+ <20250303151603.GD32048@pendragon.ideasonboard.com>
+In-Reply-To: <20250303151603.GD32048@pendragon.ideasonboard.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 3 Mar 2025 17:05:07 +0100
+X-Gmail-Original-Message-ID: <CANiDSCvQ2evpdfg5FYKBRB9ZNQ5Lfa8Sk-EJ4yNiQwB4OfFnKg@mail.gmail.com>
+X-Gm-Features: AQ5f1JovEf4lTEvpCMXxm8mI2dt3ScgsdnXXPBeAg94ewbVqW4zQUL8EN1Bhg_Y
+Message-ID: <CANiDSCvQ2evpdfg5FYKBRB9ZNQ5Lfa8Sk-EJ4yNiQwB4OfFnKg@mail.gmail.com>
+Subject: Re: [PATCH v4] media: uvcvideo: Set V4L2_CTRL_FLAG_DISABLED during
+ queryctrl errors
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Hans de Goede <hdegoede@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-For continuous PLL lock, it is recommended to extend the temperature
-ramp down range of the DS90UB953-Q1 serializer based on the device's
-initial temperature [1].
+On Mon, 3 Mar 2025 at 16:16, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> On Mon, Feb 24, 2025 at 10:26:34AM +0100, Ricardo Ribalda wrote:
+> > On Sun, 23 Feb 2025 at 18:03, Laurent Pinchart wrote:
+> > > On Sat, Jan 11, 2025 at 09:57:21AM +0000, Ricardo Ribalda wrote:
+> > > > To implement VIDIOC_QUERYCTRL, we need to know the minimum, maximum,
+> > > > step and flags of the control. For some of the controls, this involves
+> > > > querying the actual hardware.
+> > > >
+> > > > Some non-compliant cameras produce errors when we query them. Right now,
+> > > > we populate that error to userspace. When an error happens, the v4l2
+> > > > framework does not copy the v4l2_queryctrl struct to userspace. Also,
+> > > > userspace apps are not ready to handle any other error than -EINVAL.
+> > > >
+> > > > One of the main usecases of VIDIOC_QUERYCTRL is enumerating the controls
+> > > > of a device. This is done using the V4L2_CTRL_FLAG_NEXT_CTRL flag. In
+> > > > that usecase, a non-compliant control will make it almost impossible to
+> > > > enumerate all controls of the device.
+> > > >
+> > > > A control with an invalid max/min/step/flags is better than non being
+> > > > able to enumerate the rest of the controls.
+> > > >
+> > > > This patch makes VIDIOC_QUERYCTRL return 0 in all the error cases
+> > > > different than -EINVAL, introduces a warning in dmesg so we can
+> > > > have a trace of what has happened and sets the V4L2_CTRL_FLAG_DISABLED.
+> > > >
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > ---
+> > > > Hi 2*Hans and Laurent!
+> > > >
+> > > > I came around a device that was listing just a couple of controls when
+> > > > it should be listing much more.
+> > > >
+> > > > Some debugging latter I found that the device was returning -EIO when
+> > > > all the focal controls were read.
+> > > >
+> > > > Lots of good arguments in favor/against this patch in the v1. Please
+> > > > check!
+> > > >
+> > > > Without this patch:
+> > > > $ v4l2-ctl --list-ctrls
+> > > >                   auto_exposure 0x009a0901 (menu)   : min=0 max=3 default=3 value=3 (Aperture Priority Mode)
+> > > >          exposure_time_absolute 0x009a0902 (int)    : min=50 max=10000 step=1 default=166 value=166 flags=inactive
+> > > >      exposure_dynamic_framerate 0x009a0903 (bool)   : default=0 value=0
+> > > > region_of_interest_auto_control 0x009a1902 (bitmask): max=0x00000001 default=0x00000001 value=1
+> > > >
+> > > > With this patch:
+> > > > $ v4l2-ctl --list-ctrls
+> > > >                   auto_exposure 0x009a0901 (menu)   : min=0 max=3 default=3 value=3 (Aperture Priority Mode)
+> > > >          exposure_time_absolute 0x009a0902 (int)    : min=50 max=10000 step=1 default=166 value=166 flags=inactive
+> > > >      exposure_dynamic_framerate 0x009a0903 (bool)   : default=0 value=0
+> > > > error 5 getting ext_ctrl Focus, Absolute
+> > > > error 5 getting ext_ctrl Focus, Automatic Continuous
+> > > >    region_of_interest_rectangle 0x009a1901 (unknown): type=107 value=unsupported payload type flags=has-payload
+> > > > region_of_interest_auto_control 0x009a1902 (bitmask): max=0x00000001 default=0x00000001 value=1
+> > > > --
+> > > > ---
+> > > > Changes in v4:
+> > > > - Display control name (Thanks Hans)
+> > > > - Link to v3: https://lore.kernel.org/r/20250107-uvc-eaccess-v3-1-99f3335d5133@chromium.org
+> > > >
+> > > > Changes in v3:
+> > > > - Add a retry mechanism during error.
+> > >
+> > > This needs to be explained in the commit message, including when/why it
+> > > helps, and why the retry count is 2.
+> > >
+> > > > - Set V4L2_CTRL_FLAG_DISABLED flag.
+> > > > - Link to v2: https://lore.kernel.org/r/20241219-uvc-eaccess-v2-1-bf6520c8b86d@chromium.org
+> > > >
+> > > > Changes in v2:
+> > > > - Never return error, even if we are not enumerating the controls
+> > > > - Improve commit message.
+> > > > - Link to v1: https://lore.kernel.org/r/20241213-uvc-eaccess-v1-1-62e0b4fcc634@chromium.org
+> > > > ---
+> > > >  drivers/media/usb/uvc/uvc_ctrl.c | 43 ++++++++++++++++++++++++++++++++--------
+> > > >  1 file changed, 35 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > index 4e58476d305e..9d7812e8572d 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > @@ -1280,6 +1280,8 @@ static u32 uvc_get_ctrl_bitmap(struct uvc_control *ctrl,
+> > > >       return ~0;
+> > > >  }
+> > > >
+> > > > +#define MAX_QUERY_RETRIES 2
+> > > > +
+> > > >  static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+> > > >       struct uvc_control *ctrl,
+> > > >       struct uvc_control_mapping *mapping,
+> > > > @@ -1305,19 +1307,44 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
+> > > >               __uvc_find_control(ctrl->entity, mapping->master_id,
+> > > >                                  &master_map, &master_ctrl, 0);
+> > > >       if (master_ctrl && (master_ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR)) {
+> > > > +             unsigned int retries;
+> > > >               s32 val;
+> > > > -             int ret = __uvc_ctrl_get(chain, master_ctrl, master_map, &val);
+> > > > -             if (ret < 0)
+> > > > -                     return ret;
+> > > > +             int ret;
+> > > >
+> > > > -             if (val != mapping->master_manual)
+> > > > -                             v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
+> > > > +             for (retries = 0; retries < MAX_QUERY_RETRIES; retries++) {
+> > > > +                     ret = __uvc_ctrl_get(chain, master_ctrl, master_map,
+> > > > +                                          &val);
+> > > > +                     if (ret >= 0)
+> > > > +                             break;
+> > > > +             }
+> > > > +
+> > > > +             if (ret < 0) {
+> > > > +                     dev_warn_ratelimited(&chain->dev->udev->dev,
+> > > > +                                          "UVC non compliance: Error %d querying master control %x (%s)\n",
+> > > > +                                           ret, master_map->id,
+> > > > +                                           uvc_map_get_name(master_map));
+> > > > +             } else if (val != mapping->master_manual) {
+> > > > +                     v4l2_ctrl->flags |= V4L2_CTRL_FLAG_INACTIVE;
+> > > > +             }
+> > > >       }
+> > > >
+> > > >       if (!ctrl->cached) {
+> > > > -             int ret = uvc_ctrl_populate_cache(chain, ctrl);
+> > > > -             if (ret < 0)
+> > > > -                     return ret;
+> > > > +             unsigned int retries;
+> > > > +             int ret;
+> > > > +
+> > > > +             for (retries = 0; retries < MAX_QUERY_RETRIES; retries++) {
+> > > > +                     ret = uvc_ctrl_populate_cache(chain, ctrl);
+> > > > +                     if (ret >= 0)
+> > > > +                             break;
+> > > > +             }
+> > > > +
+> > > > +             if (ret < 0) {
+> > > > +                     dev_warn_ratelimited(&chain->dev->udev->dev,
+> > > > +                                          "UVC non compliance: Error %d populating cache of control %x (%s)\n",
+> > > > +                                          ret, mapping->id,
+> > > > +                                          uvc_map_get_name(mapping));
+> > > > +                     v4l2_ctrl->flags |= V4L2_CTRL_FLAG_DISABLED;
+> > >
+> > > Can we make the control permanently disabled ?
+> >
+> > I'd rather not. In funky hardware the control might work with the
+> > right combination of other controls.
+>
+> That makes the behaviour random and therefore very confusing for
+> userspace. All of a sudden a control will start being available, even if
+> it was marked as disabled during enumeration.
 
-The serializer's die temperature is reported only to the deserializer
-through the sensor status registers, and for UB9702, it is recommended
-to set the temperature ramp during the link setup sequence, i.e. before
-we even probe the ub953 driver.
+Random weird hardware will have random behaviour. I think this is kind
+of expected.
 
-Add support to the deserializer driver to configure ub953's temperature
-ramp.
+Also there are probably lots of cameras in the field that cannot
+enumerate properly but are used by custom apps. We are going to break
+userspace if we enforce this.
 
-[1]: Section 7.3.1.1 - https://www.ti.com/lit/gpn/ds90ub953-q1
+Hans V. What do you think?
 
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
----
- drivers/media/i2c/ds90ub953.h |   7 ++-
- drivers/media/i2c/ds90ub960.c | 125 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 131 insertions(+), 1 deletion(-)
+>
+> > > > +             }
+> > > >       }
+> > > >
+> > > >       if (ctrl->info.flags & UVC_CTRL_FLAG_GET_DEF) {
+> > > >
+> > > > ---
+> > > > base-commit: c5aa327e10b194884a9c9001a751f6e4703bc3e3
+> > > > change-id: 20241213-uvc-eaccess-755cc061a360
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
 
-diff --git a/drivers/media/i2c/ds90ub953.h b/drivers/media/i2c/ds90ub953.h
-index de606474493f8d95a412e5564b0fac21885e581d..97a6b3af326eb96af20653ed13b89798e18646bd 100644
---- a/drivers/media/i2c/ds90ub953.h
-+++ b/drivers/media/i2c/ds90ub953.h
-@@ -71,7 +71,7 @@
- 
- /* Indirect register blocks */
- #define UB953_IND_TARGET_PAT_GEN		0x00
--#define UB953_IND_TARGET_FPD3_TX		0x01
-+#define UB953_IND_TARGET_ANALOG			0x01
- #define UB953_IND_TARGET_DIE_ID			0x02
- 
- #define UB953_IND_PGEN_CTL			0x01
-@@ -92,6 +92,11 @@
- #define UB953_IND_PGEN_VFP			0x0f
- #define UB953_IND_PGEN_COLOR(n)			(0x10 + (n)) /* n <= 15 */
- 
-+#define UB953_IND_ANA_TEMP_DYNAMIC_CFG		0x4b
-+#define UB953_IND_ANA_TEMP_DYNAMIC_CFG_OV	BIT(5)
-+#define UB953_IND_ANA_TEMP_STATIC_CFG		0x4c
-+#define UB953_IND_ANA_TEMP_STATIC_CFG_MASK	GENMASK(6, 4)
-+
- /* UB971 Registers */
- 
- #define UB971_ENH_BC_CHK			0x4b
-diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
-index cad25dcbca11bf6597d00eede6dfa9110f445886..1877eb735cc7d865a68e315446a24b536b387d2a 100644
---- a/drivers/media/i2c/ds90ub960.c
-+++ b/drivers/media/i2c/ds90ub960.c
-@@ -2017,6 +2017,110 @@ static int ub960_rxport_serializer_write(struct ub960_rxport *rxport, u8 reg,
- 	return ret;
- }
- 
-+static int ub960_rxport_serializer_read(struct ub960_rxport *rxport, u8 reg,
-+					u8 *val, int *err)
-+{
-+	struct ub960_data *priv = rxport->priv;
-+	struct device *dev = &priv->client->dev;
-+	union i2c_smbus_data data = { 0 };
-+	int ret;
-+
-+	if (err && *err)
-+		return *err;
-+
-+	ret = i2c_smbus_xfer(priv->client->adapter, rxport->ser.alias,
-+			     priv->client->flags, I2C_SMBUS_READ, reg,
-+			     I2C_SMBUS_BYTE_DATA, &data);
-+	if (ret)
-+		dev_err(dev,
-+			"rx%u: cannot read serializer register 0x%02x (%d)!\n",
-+			rxport->nport, reg, ret);
-+	else
-+		*val = data.byte;
-+
-+	if (ret && err)
-+		*err = ret;
-+
-+	return ret;
-+}
-+
-+static int ub960_serializer_temp_ramp(struct ub960_rxport *rxport)
-+{
-+	struct ub960_data *priv = rxport->priv;
-+	short temp_dynamic_offset[] = {-1, -1, 0, 0, 1, 1, 1, 3};
-+	u8 temp_dynamic_cfg;
-+	u8 nport = rxport->nport;
-+	u8 ser_temp_code;
-+	int ret;
-+
-+	/* Configure temp ramp only on UB953 */
-+	if (!fwnode_device_is_compatible(rxport->ser.fwnode, "ti,ds90ub953-q1"))
-+		return 0;
-+
-+	/* Read current serializer die temperature */
-+	ub960_rxport_read(priv, nport, UB960_RR_SENSOR_STS_2, &ser_temp_code,
-+			  &ret);
-+
-+	/* Enable I2C passthrough on back channel */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* Select indirect page for analog regs on the serializer */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_CTL,
-+				      UB953_IND_TARGET_ANALOG << 2, &ret);
-+
-+	/* Set temperature ramp dynamic and static config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_DYNAMIC_CFG, &ret);
-+	ub960_rxport_serializer_read(rxport, UB953_REG_IND_ACC_DATA,
-+				     &temp_dynamic_cfg, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	temp_dynamic_cfg |= UB953_IND_ANA_TEMP_DYNAMIC_CFG_OV;
-+	temp_dynamic_cfg += temp_dynamic_offset[ser_temp_code];
-+
-+	/* Update temp static config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_STATIC_CFG, &ret);
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_DATA,
-+				      UB953_IND_ANA_TEMP_STATIC_CFG_MASK, &ret);
-+
-+	/* Update temperature ramp dynamic config */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_ADDR,
-+				      UB953_IND_ANA_TEMP_DYNAMIC_CFG, &ret);
-+
-+	/* Enable I2C auto ack on BC before we set dynamic cfg and reset */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL,
-+				 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL, &ret);
-+
-+	ub960_rxport_serializer_write(rxport, UB953_REG_IND_ACC_DATA,
-+				      temp_dynamic_cfg, &ret);
-+
-+	if (ret)
-+		return ret;
-+
-+	/* Soft reset to apply PLL updates */
-+	ub960_rxport_serializer_write(rxport, UB953_REG_RESET_CTL,
-+				      UB953_REG_RESET_CTL_DIGITAL_RESET_0,
-+				      &ret);
-+	msleep(20);
-+
-+	/* Disable I2C passthrough and auto-ack on BC */
-+	ub960_rxport_update_bits(priv, nport, UB960_RR_BCC_CONFIG,
-+				 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH |
-+					 UB960_RR_BCC_CONFIG_AUTO_ACK_ALL,
-+				 0x0, &ret);
-+
-+	return ret;
-+}
-+
- static int ub960_rxport_bc_ser_config(struct ub960_rxport *rxport)
- {
- 	struct ub960_data *priv = rxport->priv;
-@@ -2396,6 +2500,20 @@ static int ub960_init_rx_ports_ub960(struct ub960_data *priv)
- 		return ret;
- 	}
- 
-+	/* Set temperature ramp on serializer */
-+	for_each_active_rxport(priv, it) {
-+		ret = ub960_serializer_temp_ramp(it.rxport);
-+		if (ret)
-+			return ret;
-+
-+		ub960_rxport_update_bits(priv, it.nport, UB960_RR_BCC_CONFIG,
-+					 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+					 UB960_RR_BCC_CONFIG_I2C_PASS_THROUGH,
-+					 &ret);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	/*
- 	 * Clear any errors caused by switching the RX port settings while
- 	 * probing.
-@@ -3071,6 +3189,13 @@ static int ub960_init_rx_ports_ub9702(struct ub960_data *priv)
- 	/* Wait time for stable lock */
- 	fsleep(15000);
- 
-+	/* Set temperature ramp on serializer */
-+	for_each_active_rxport(priv, it) {
-+		ret = ub960_serializer_temp_ramp(it.rxport);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	for_each_active_rxport_fpd4(priv, it) {
- 		ret = ub960_enable_dfe_lms_ub9702(priv, it.nport);
- 		if (ret)
+
 
 -- 
-2.48.1
-
+Ricardo Ribalda
