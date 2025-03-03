@@ -1,203 +1,144 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2101521D00D;
-	Mon,  3 Mar 2025 16:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FE922331E;
+	Mon,  3 Mar 2025 16:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741017771; cv=none; b=F1lCBxcx6IWYtvINon+IIy0kCmfcyVdmLS9faGBgY8wVjY4LN17eb/3tL2GZGAxcSMePaLJmAPT2SGoXF+wzPlUqzwYPHpFCHbJCtESxkwU0AgK+mijoWwHAfiOcsjKn01rVYiBP8J6cxt7dtBWZ/CcSWyq9si26K8UTFJHC7H0=
+	t=1741017773; cv=none; b=HzVlmDZ6pHWB/6CqNMMJ00GHKLi0k7QrdPCCc5v+hEa8McrikqIZaQqUiqC/nCHuDOUZQnm4saC2F56L5HRBQzq6EBOV70RNnLmmYWWpiWhqXCaUkQqUtK7DhpIm+bkYokkQPDoQIY8YD9F6TgDZHE9slUfanE6UH0+Bh+30els=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741017771; c=relaxed/simple;
-	bh=lwQcPFmb2dq2hmAi8n62qWMLz3ktzs7x1sphfUEvTdk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hUT8UES4oSCJDYJQswaCsNNJR+c05ncZ6MyLkl2LCIk141Az6vAFpw5uK1Dl5Ll6ecy7oNOTpP5BbiDceFFitvQ+QOzSty0XRf0KgGg9XUMvuS108L7cwm6iClW1mw4T5cOXvt/hNMXjavxh4i1rhmigXfSR/6Msa2XYkPgCdb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dR+6F9li; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1741017773; c=relaxed/simple;
+	bh=VloWLNuJy+a+QMiYC5t2AH/V4T4fUJVth/jJq4Qzt9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UEcLUyISfR6jEDQql3lRAKdnBTwvo5pqiBv//ujG45RUzRME/q5JDDKmMhw3eztk9YaFoM6Od5+U7pTzr/T4HvkXxy9HhIm6q8xKiK+D827QTSNlOyIspvq2mdbJLQBJ0CnQLk8IWqHnZLlq//c1pIOE/sZa4Yzh6zibU2sqEiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1C9o2ia; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dR+6F9li"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c69:8872:6fe4:6987:313:70cc])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E7CB11189;
-	Mon,  3 Mar 2025 17:01:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1741017677;
-	bh=lwQcPFmb2dq2hmAi8n62qWMLz3ktzs7x1sphfUEvTdk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dR+6F9li+KkeMK+n//eyMWIpUsNVM2SCwe+w+vak7KsS4SVBUPCDql4rSNsQln6/P
-	 1KaHtx0CE41s2PsI9YfZLc9k/ajor/uSHk6JrtPBqkwDL6/SV85bn8T+GitTOMPKQw
-	 wQnUYeNn9obHTfN1rZYN8XvcizN8rdEkGS6ZITgY=
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Date: Mon, 03 Mar 2025 21:32:09 +0530
-Subject: [PATCH v3 06/19] media: i2c: ds90ub953: Add error handling to
- ub953_log_status()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1C9o2ia"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E5EC4CED6;
+	Mon,  3 Mar 2025 16:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741017772;
+	bh=VloWLNuJy+a+QMiYC5t2AH/V4T4fUJVth/jJq4Qzt9o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=P1C9o2iawqT4rduu7fga8AP5SQKrG7Dm8sgPxPMbfCjQJK20NYWGKFD1Pk3wFPZSr
+	 cAGlI2HmWKxlMF+JLUnRHsO3agzJXu9cAHGRdlJPGCeL4J6le57XcnQdOyoFj2d8Cv
+	 Dk9sj78CCyTpBNcpSue988dENnggywPMpBacGvu9OjBkngYovq2QL9XbZkA70S6Sxe
+	 CohGyL8n8jY4C+NaNr/O4yR9XWJJfzQPPMGqIhHo78wFqPJtasolzBOlFd+CdxGql1
+	 dsOp0mRYny4LVhTFGr9a4sE3HWMT7Yt0ByodRxhp6FjaTa8zR6fqlPYv+f9buKHMWW
+	 t+eyBjgi2wxFg==
+From: Maxime Ripard <mripard@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Brian Starkey <Brian.Starkey@arm.com>,
+	John Stultz <jstultz@google.com>,
+	"T . J . Mercier" <tjmercier@google.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-media@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v3] Documentation: dma-buf: heaps: Add heap name definitions
+Date: Mon,  3 Mar 2025 17:02:49 +0100
+Message-ID: <20250303160249.118549-1-mripard@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-b4-ub9xx-err-handling-v3-6-7d178796a2b9@ideasonboard.com>
-References: <20250303-b4-ub9xx-err-handling-v3-0-7d178796a2b9@ideasonboard.com>
-In-Reply-To: <20250303-b4-ub9xx-err-handling-v3-0-7d178796a2b9@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Devarsh Thakkar <devarsht@ti.com>, linux-media@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- Jai Luthra <jai.luthra@ideasonboard.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4286;
- i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
- bh=t0xF7Xgcnsn89th/lDheR6Oc6gbB12SJ1Pi/G226hAo=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBnxdJ/T4oI8qyGXVOYqozHKPpzm5jaU2o9fdfGe
- yfB/ROSMeqJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZ8XSfwAKCRBD3pH5JJpx
- RfN1EAC/uReYJluFgc/6PKJxVDYmrYuZoGhD4RsuP3B9UtxsDphRLqB8rSn3SuirrkYORasoqD8
- NloK+6OIGLXXZpRKmXiOXK71BLbdkaeJsC0v8iZR49eOYkBVXmxgEzagnxLIWdioM+kQVUEUp77
- 4wZ8A7Xb7RhJr3NC6Jj6Ue5lhEOeBgeH4PngO1HKZy+qWH1FcR8dprDvRB2wSMqUpLhMdn9HSmB
- IgJM75T5pPaXN2Yj5ghiHKdIEO3J+CLiWhE+BeJhr+qvGLFytUzPvAqF/elR00xI4srBW8VUgeG
- yIEIpJucsVs37ewVC/XATnAl7AGeRca9wCc5h/X3IXVh7CvVWyZFxgJEP3LswCECE4KSp5SMnbq
- PqhXKGtGnAP/01puou3mhhzHClHqPRU/IyGg8ZO3b/oWDUVGh/0On5oDs48Lm39mNhHgOzE4shC
- h4vWTiHPwth4wMRHnTD5S1ICBs7r0M8P1RfxlINPvA9Msa3jgB+tTD8B5O8QUNNOkAJmRSdvGGX
- 8TagZrm10+cY/K9Mh4I7hhU0SuqRdPwJ+1OHcj82282X0oAEqE+fX3ADzlsZyGtYjgkZuuHG+OL
- wr80cmjtH7tV/s4po0j4EqMQY26g/bnNqJhCQs55KGDDRDsClSOU6y9GN7YrWXgLK03/NNdx/Vw
- n5ddIzcPhbhq+tQ==
-X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
+Content-Transfer-Encoding: 8bit
 
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Following a recent discussion at last Plumbers, John Stultz, Sumit
+Sewal, TJ Mercier and I came to an agreement that we should document
+what the dma-buf heaps names are expected to be, and what the buffers
+attributes you'll get should be documented.
 
-Add error handling to ub953_log_status().
+Let's create that doc to make sure those attributes and names are
+guaranteed going forward.
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+
 ---
- drivers/media/i2c/ds90ub953.c | 80 +++++++++++++++++++++++++++++++------------
- 1 file changed, 58 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-index fbd977760c6b1ccdec90b90bced4dc29932f3893..a08aad3f7fe09f7b396da9c720ed9993d392410c 100644
---- a/drivers/media/i2c/ds90ub953.c
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -633,23 +633,33 @@ static int ub953_log_status(struct v4l2_subdev *sd)
- {
- 	struct ub953_data *priv = sd_to_ub953(sd);
- 	struct device *dev = &priv->client->dev;
--	u8 v = 0, v1 = 0, v2 = 0;
--	unsigned int i;
- 	char id[UB953_REG_FPD3_RX_ID_LEN];
--	u8 gpio_local_data = 0;
--	u8 gpio_input_ctrl = 0;
--	u8 gpio_pin_sts = 0;
-+	u8 gpio_local_data;
-+	u8 gpio_input_ctrl;
-+	u8 gpio_pin_sts;
-+	unsigned int i;
-+	u8 v, v1, v2;
-+	int ret;
- 
--	for (i = 0; i < sizeof(id); i++)
--		ub953_read(priv, UB953_REG_FPD3_RX_ID(i), &id[i], NULL);
-+	for (i = 0; i < sizeof(id); i++) {
-+		ret = ub953_read(priv, UB953_REG_FPD3_RX_ID(i), &id[i], NULL);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	dev_info(dev, "ID '%.*s'\n", (int)sizeof(id), id);
- 
--	ub953_read(priv, UB953_REG_GENERAL_STATUS, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_GENERAL_STATUS, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "GENERAL_STATUS %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_CRC_ERR_CNT1, &v1, NULL);
--	ub953_read(priv, UB953_REG_CRC_ERR_CNT2, &v2, NULL);
-+	ub953_read(priv, UB953_REG_CRC_ERR_CNT1, &v1, &ret);
-+	ub953_read(priv, UB953_REG_CRC_ERR_CNT2, &v2, &ret);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CRC error count %u\n", v1 | (v2 << 8));
- 
- 	/* Clear CRC error counter */
-@@ -658,34 +668,60 @@ static int ub953_log_status(struct v4l2_subdev *sd)
- 				   UB953_REG_BC_CTRL_CRC_ERR_CLR,
- 				   UB953_REG_BC_CTRL_CRC_ERR_CLR);
- 
--	ub953_read(priv, UB953_REG_CSI_ERR_CNT, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ERR_CNT, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI error count %u\n", v);
- 
--	ub953_read(priv, UB953_REG_CSI_ERR_STATUS, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ERR_STATUS, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI_ERR_STATUS %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_CSI_ERR_DLANE01, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ERR_DLANE01, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI_ERR_DLANE01 %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_CSI_ERR_DLANE23, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ERR_DLANE23, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI_ERR_DLANE23 %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_CSI_ERR_CLK_LANE, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ERR_CLK_LANE, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI_ERR_CLK_LANE %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_CSI_PKT_HDR_VC_ID, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_PKT_HDR_VC_ID, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI packet header VC %u ID %u\n", v >> 6, v & 0x3f);
- 
--	ub953_read(priv, UB953_REG_PKT_HDR_WC_LSB, &v1, NULL);
--	ub953_read(priv, UB953_REG_PKT_HDR_WC_MSB, &v2, NULL);
-+	ub953_read(priv, UB953_REG_PKT_HDR_WC_LSB, &v1, &ret);
-+	ub953_read(priv, UB953_REG_PKT_HDR_WC_MSB, &v2, &ret);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI packet header WC %u\n", (v2 << 8) | v1);
- 
--	ub953_read(priv, UB953_REG_CSI_ECC, &v, NULL);
-+	ret = ub953_read(priv, UB953_REG_CSI_ECC, &v, NULL);
-+	if (ret)
-+		return ret;
-+
- 	dev_info(dev, "CSI ECC %#02x\n", v);
- 
--	ub953_read(priv, UB953_REG_LOCAL_GPIO_DATA, &gpio_local_data, NULL);
--	ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &gpio_input_ctrl, NULL);
--	ub953_read(priv, UB953_REG_GPIO_PIN_STS, &gpio_pin_sts, NULL);
-+	ub953_read(priv, UB953_REG_LOCAL_GPIO_DATA, &gpio_local_data, &ret);
-+	ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &gpio_input_ctrl, &ret);
-+	ub953_read(priv, UB953_REG_GPIO_PIN_STS, &gpio_pin_sts, &ret);
-+	if (ret)
-+		return ret;
- 
- 	for (i = 0; i < UB953_NUM_GPIOS; i++) {
- 		dev_info(dev,
+Changes from v2:
+  - Remove exhaustive list of names for platforms, and just mention the
+    alternatives.
+  - Add MAINTAINERS entry
 
+Changes from v1:
+  - Add the mention that the cma / reserved heap is optional.
+---
+ Documentation/userspace-api/dma-buf-heaps.rst | 25 +++++++++++++++++++
+ Documentation/userspace-api/index.rst         |  1 +
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 27 insertions(+)
+ create mode 100644 Documentation/userspace-api/dma-buf-heaps.rst
+
+diff --git a/Documentation/userspace-api/dma-buf-heaps.rst b/Documentation/userspace-api/dma-buf-heaps.rst
+new file mode 100644
+index 000000000000..5b92d69646f6
+--- /dev/null
++++ b/Documentation/userspace-api/dma-buf-heaps.rst
+@@ -0,0 +1,25 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++==============================
++Allocating dma-buf using heaps
++==============================
++
++Dma-buf Heaps are a way for userspace to allocate dma-buf objects. They are
++typically used to allocate buffers from a specific allocation pool, or to share
++buffers across frameworks.
++
++Heaps
++=====
++
++A heap represent a specific allocator. The Linux kernel currently supports the
++following heaps:
++
++ - The ``system`` heap allocates virtually contiguous, cacheable, buffers
++
++ - The ``cma`` heap allocates physically contiguous, cacheable,
++   buffers. Only present if a CMA region is present. Such a region is
++   usually created either through the kernel commandline through the
++   `cma` parameter, a memory region Device-Tree node with the
++   `linux,cma-default` property set, or through the `CMA_SIZE_MBYTES` or
++   `CMA_SIZE_PERCENTAGE` Kconfig options. Depending on the platform, it
++   might be called ``reserved``, ``linux,cma``, or ``default-pool``.
+diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+index b1395d94b3fd..9cbe4390c872 100644
+--- a/Documentation/userspace-api/index.rst
++++ b/Documentation/userspace-api/index.rst
+@@ -42,10 +42,11 @@ Devices and I/O
+ 
+ .. toctree::
+    :maxdepth: 1
+ 
+    accelerators/ocxl
++   dma-buf-heaps
+    dma-buf-alloc-exchange
+    gpio/index
+    iommufd
+    media/index
+    dcdbas
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8e0736dc2ee0..ef0364e65aef 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6911,10 +6911,11 @@ R:	T.J. Mercier <tjmercier@google.com>
+ L:	linux-media@vger.kernel.org
+ L:	dri-devel@lists.freedesktop.org
+ L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+ S:	Maintained
+ T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
++F:	Documentation/userspace-api/dma-buf-heaps.rst
+ F:	drivers/dma-buf/dma-heap.c
+ F:	drivers/dma-buf/heaps/*
+ F:	include/linux/dma-heap.h
+ F:	include/uapi/linux/dma-heap.h
+ F:	tools/testing/selftests/dmabuf-heaps/
 -- 
 2.48.1
 
