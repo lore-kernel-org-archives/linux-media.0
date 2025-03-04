@@ -1,21 +1,21 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DBD1FFC70;
-	Tue,  4 Mar 2025 15:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62221205511;
+	Tue,  4 Mar 2025 16:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741103691; cv=none; b=hjgfxjiNT1ojeXy+oMqwGMpcNbn65DXkYgH8iwIMTS9uamvfOjrK0AyrvltvFsbN++1qQ3RnCHSIjLHCDvRnNBuONkkV2noYZBClvpCBCbE1GX0hwqy2rGg00blqoFllhpKcyTSoRGYTkqcWaGaaaBgNcJztQSqQ2nov/GVnTGI=
+	t=1741105053; cv=none; b=sKVE8GX3w3O4/CQMute/o4y2Fk5ZvGs8hV+Fs54r0iAqyb+P4cXUsYqQp5CQRv9iD96yDMRIRoFhFXfPAUMi+W1zDhLiqmlQp8w7KdEpKrR+ZriH1494Xp48WSLCiW5VE9pbumMWcR6vimRuaCc/20AHeBx+5QMjb4SEepUj9nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741103691; c=relaxed/simple;
-	bh=M3e3CWugMIrN5o5RiqSuYopGwLjOTNaoGsTcoWwEFbU=;
+	s=arc-20240116; t=1741105053; c=relaxed/simple;
+	bh=AFgR0mNR/8SlLvdj/O+UVxnsCaumYfIisXWz4wTDJ0Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=klYDZUFAmqzJ8ZGql5YB22s3HUHDprtR5fLqey+FGGcDpDekuRSj7WT+35p1bd6iwfk5L792QG8C+KuJxvvK3V6K5E42y0tnFUTLSGhCgQrp8LOzgp21dbP0Icyi6zgJHIMdSzDm6KeO+G+lHA9uDmGiVm/zxL0+UYl1R2J842g=
+	 In-Reply-To:Content-Type; b=H4m6voI2zFL7QGVUKbqpFNpu7kJFNwhrp7oDT/kY4rT538Is/PW7XAinxSV/FCcAalETRM/C6dM9zMs3ep7q8TztjwRGX/Y41gjF9njwO99WSBIKY5WRigTR6hXN2euOdOmv7wOZtc5owonRiYZIM7Ij6beLNb0j2imGtjCz9hU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C091C4CEE5;
-	Tue,  4 Mar 2025 15:54:49 +0000 (UTC)
-Message-ID: <248a3e62-bc34-4be0-b121-e74f1fb11b9c@xs4all.nl>
-Date: Tue, 4 Mar 2025 16:54:48 +0100
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D231C4CEE5;
+	Tue,  4 Mar 2025 16:17:29 +0000 (UTC)
+Message-ID: <cade5c73-e25f-4f56-be10-7d5a06f92917@xs4all.nl>
+Date: Tue, 4 Mar 2025 17:17:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -23,11 +23,23 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: gspca: Add error logging for sq905c_command() to
- prevent silent failure
-To: Wentao Liang <vulab@iscas.ac.cn>, mchehab@kernel.org
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250303152355.1897-1-vulab@iscas.ac.cn>
+Subject: Re: [PATCH v10 6/6] arm64: defconfig: Enable Synopsys HDMI receiver
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+ Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ Shreeya Patel <shreeya.patel@collabora.com>, Heiko Stuebner
+ <heiko@sntech.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, jose.abreu@synopsys.com,
+ nelson.costa@synopsys.com, shawn.wen@rock-chips.com,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: kernel@collabora.com, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, Tim Surber <me@timsurber.de>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+References: <20250225183058.607047-1-dmitry.osipenko@collabora.com>
+ <20250225183058.607047-7-dmitry.osipenko@collabora.com>
+ <a8a6c8c8-ee3b-422a-8573-a2cbb61fc3aa@xs4all.nl>
+ <863f9c1beb7a912f94f8740b3e5095e09e49cee5.camel@collabora.com>
 Content-Language: en-US, nl
 From: Hans Verkuil <hverkuil@xs4all.nl>
 Autocrypt: addr=hverkuil@xs4all.nl; keydata=
@@ -73,44 +85,98 @@ Autocrypt: addr=hverkuil@xs4all.nl; keydata=
  e8tSeEXX8BZIen6y/y+U2CedzEsMKGjy5WNmufiPOzB3q2JwFQCw8AoNic7soPN9CVCEgd2r
  XS+OUZb8VvEDVRSK5Yf79RveqHvmhAdNOVh70f5CvwR/bfX/Ei2Szxz47KhZXpn1lxmcds6b
  LYjTAZF0anym44vsvOEuQg3rqxj/7Hiz4A3HIkrpTWclV6ru1tuGp/ZJ7aY8bdvztP2KTw==
-In-Reply-To: <20250303152355.1897-1-vulab@iscas.ac.cn>
+In-Reply-To: <863f9c1beb7a912f94f8740b3e5095e09e49cee5.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Wentao Liang,
-
-On 03/03/2025 16:23, Wentao Liang wrote:
-> Add error handling for sq905c_command() failure in sq905c_dostream().
-> Log debug message with gspca_dbg() to prevent silent failure.
+On 28/02/2025 04:51, Nicolas Dufresne wrote:
+> Hi Hans,
 > 
-> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
-> ---
->  drivers/media/usb/gspca/sq905c.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Le mercredi 26 février 2025 à 09:31 +0100, Hans Verkuil a écrit :
+>> On 25/02/2025 19:30, Dmitry Osipenko wrote:
+>>> From: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>>
+>>> The Rockchip RK3588 has a built-in HDMI receiver block from
+>>> Synopsys. Let's enable the driver for it.
+>>>
+>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> ---
+>>>  arch/arm64/configs/defconfig | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/configs/defconfig
+>>> b/arch/arm64/configs/defconfig
+>>> index cb7da4415599..3dccc9e1c4aa 100644
+>>> --- a/arch/arm64/configs/defconfig
+>>> +++ b/arch/arm64/configs/defconfig
+>>> @@ -859,6 +859,8 @@ CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
+>>>  CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
+>>>  CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
+>>>  CONFIG_VIDEO_SUN6I_CSI=m
+>>> +CONFIG_VIDEO_SYNOPSYS_HDMIRX=m
+>>> +CONFIG_VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID=y
+>>
+>> I do not believe it is a good idea to default to y for this option.
+>>
+>> The EDID depends on the specific device you make, and you should
+>> think carefully about whether the default EDID fits the needs of the
+>> device.
+>>
+>> So if you want the default EDID, then you should manually select it
+>> and not have it autoselected.
 > 
-> diff --git a/drivers/media/usb/gspca/sq905c.c b/drivers/media/usb/gspca/sq905c.c
-> index 6ca947aef298..7bb6b24c3ed1 100644
-> --- a/drivers/media/usb/gspca/sq905c.c
-> +++ b/drivers/media/usb/gspca/sq905c.c
-> @@ -183,7 +183,9 @@ static void sq905c_dostream(struct work_struct *work)
->  quit_stream:
->  	if (gspca_dev->present) {
->  		mutex_lock(&gspca_dev->usb_lock);
-> -		sq905c_command(gspca_dev, SQ905C_CLEAR, 0);
-> +		ret = sq905c_command(gspca_dev, SQ905C_CLEAR, 0);
-> +		if (ret)
-> +			gspca_dbg(gspca_dev, D_STREAM, "Clear command failed\n");
+> Following up here, from the device maker perspective sure, but I'm not
+> sure this is the best choice for generic Linux distribution. As of
+> today, pretty much no userspace capture software knows about this,
+> meaning the device will not work out of the box in OBS, GStreamer,
+> Ffmpeg, Web Browsers. In comparison, if you pick any UVC HDMI capture,
+> it just work, with a default EDID that covers the range of
+> capabilities, which in this case are defined by the SoC.
 
-Thank you for this patch, but I'm not taking it, it just adds a debug message
-for no good reason that I can see. It's a really old driver as well.
+A UVC HDMI capture device is not a good comparison: that has it's own
+EDID that is configured for the specific hardware and USB bandwidth
+limitations. EDID handling is all internal to that device, nothing to
+do with the UVC driver.
 
-If you really want it, then post the patch again and explain why you want this in.
+That said, this device is a bit different compared to most other
+HDMI receivers in that it also has a DMA engine. Usually HDMI receivers
+are i2c devices that connect to an SoC. In this case the hardware is
+inside the SoC. So I am OK with making LOAD_DEFAULT_EDID=y in the defconfig.
+
+So:
+
+Acked-by: Hans Verkuil <hverkuil@xs4all.nl>
+
+Note that I will merge the v13 driver (patches 1-3), since it looks good.
+
+But v11-v13 of this defconfig patch dropped the "CONFIG_VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID=y"
+line, so you might want to post a v14 of just patches 4-6, restoring that
+line, once I merged patches 1-3.
 
 Regards,
 
 	Hans
 
->  		mutex_unlock(&gspca_dev->usb_lock);
->  	}
->  	kfree(buffer);
+> 
+> Whatever we make as a choice, will always be the wrong choice for
+> someone, though I expect this to be a lot easier to change for
+> "specialized" implementation. Now, since there is no reason you can't
+> do a specilized implementation on generic Linux distro, and because you
+> might disagree with me, perhaps a compromise is to also add a module
+> parameter, so that there is a run-time override to this.
+> 
+> Nicolas
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>>  CONFIG_VIDEO_TI_J721E_CSI2RX=m
+>>>  CONFIG_VIDEO_HANTRO=m
+>>>  CONFIG_VIDEO_IMX219=m
+>>
+>>
+> 
 
