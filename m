@@ -1,144 +1,169 @@
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B293F259CB6
-	for <linux-media@vger.kernel.org>; Tue,  4 Mar 2025 17:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741108702; cv=fail; b=IIN1aDTkZxsN9dZhtwBd5m1ASB5rdRasyt2ahord4ZBPqIqClzvW+Qh7zxauHFwkCxhuK1NHJ7b7fsYZzKAM/AdisEbdTvCWQ3FJ9IguQc/TNHzeIpZutSfsjis3EVo8hG1uJTpifOsnzrRv39JAskUF6A2RbwNK/mMmxBrO8wU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741108702; c=relaxed/simple;
-	bh=Nz0QSW8xpqBQu9NgpTPdq1gpJYGAwudPcn+IwIuP8mA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WjnzicIn4TZs/fQD/B13SG1dEiq/2YyMMMzbngbXZdi4qh0Ae0c7BtVJbxvg7mKlX65CRRcJT3b1+f40bhzMKdpGRwVhGaptcJO7RsTCg9gWjVCcY4HmIAWZAmeaIpYj2/yRfDu2BjA3r7impTekcNFyedbFqoSYujC/614m2X0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=redhat.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=flAqJQ5P reason="signature verification failed"; arc=none smtp.client-ip=170.10.133.124; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; arc=fail smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="flAqJQ5P"
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id E34ED408B65C
-	for <linux-media@vger.kernel.org>; Tue,  4 Mar 2025 20:18:18 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=flAqJQ5P
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gnd55KKzG2rM
-	for <linux-media@vger.kernel.org>; Tue,  4 Mar 2025 19:17:41 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 4CD7342746; Tue,  4 Mar 2025 19:17:27 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=flAqJQ5P
-X-Envelope-From: <linux-kernel+bounces-541380-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=flAqJQ5P
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id C4462436AC
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:32:30 +0300 (+03)
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 41F182DCE1
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:32:30 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03E0F169222
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:32:21 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA951F2BA1;
-	Mon,  3 Mar 2025 10:30:44 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A41F1905
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683472836BC
+	for <linux-media@vger.kernel.org>; Tue,  4 Mar 2025 17:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740997834; cv=none; b=I5uLvLqFdptlSz+B1FwMiQEW6tkYDmo3BJWuHq6eCxLsr8edTuqXzZTyeaGVg5D+3BUFV4SrmmKQ5DSI9B0Ze94PHzAIVmW4nn37qjgvr98Fex6jEdHRtTOCL+6+WljM+8jnhhu5NT84FqOhIqldNUY0br69WN22zNM9kKs4dpY=
+	t=1741109278; cv=none; b=dxrd8OhRefFBmFsgxFmaWFKOiz3iCwow9d0AtLkWQyk4CLWB++t6xGkZ4/uK+u4prNDllOLm/3z1z83BVkP/BRnlm25kXifoSXgwl6oVhq/NAXeNlD8+SGcKU8enIEAJLcGNlKnGzWsDwK4tvHNo/Mm3I+P3Szzfsu/exc/AqMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740997834; c=relaxed/simple;
-	bh=Xd6jeKSTgIZFdafSVXZ/PdjL+vCFnUo1AZ/RbpdFGNw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ka07ZgNjog9B2G12Dk48BC397zemyzti4c3PKIXzGBnF1v/PcM91Zy6fJSymKF6QvPnzgOW5G4cLgnReMLR61t/3Xa9793i5JV0wUdxiNni99tHKNTPQ9X0D8NqQcMXW8URHz6WAEQnyKs077i/hm5x3TVBT03vQCWrxeRR5Amw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=flAqJQ5P; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740997830;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gR6zLqRG9S1za/uF+nzi2msUOEjaoJGIhx4NU2xJ4k0=;
-	b=flAqJQ5P7bHVRs4k4HIxmVb7ZmmqFL8kFQoUA+kvIrVzsmoDKpolSOwvima/A/sZ8bGO84
-	iURXi4TpwXJesUAzOFH+PQrH4/365xPrDTbYTtMNqBSGYBaWQ+Dh76G1mgTSbIlJq+EL2n
-	TAERKDp157VjIp73e8BSy8KzhK4r3dg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-194-dbu1oVJVONOrbeNN23fqFQ-1; Mon, 03 Mar 2025 05:30:29 -0500
-X-MC-Unique: dbu1oVJVONOrbeNN23fqFQ-1
-X-Mimecast-MFC-AGG-ID: dbu1oVJVONOrbeNN23fqFQ_1740997828
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5e4987b2107so4363108a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 02:30:29 -0800 (PST)
+	s=arc-20240116; t=1741109278; c=relaxed/simple;
+	bh=C+bBi1F8wyKjwRGAGxl1KKgwS6bfayqNblzlF2k9bno=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LZpa2BJNZwTzxtfXpwtu8tRVGSkC9SIjQlVJmcnT3j87pAiE052lpcgP21GWGqwdkHiymNfdSycfl+55aYkjM7kqhl1GyhT3IPrexZzGO6a3SZKcJ75mIjtht+k4F+hUq5xJv8vM4+QXf5Qd0Me1GtWwnkk7LHhRHNc4faDmTK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=GgAHljGj; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="GgAHljGj"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6fd6f7f8df9so73897b3.1
+        for <linux-media@vger.kernel.org>; Tue, 04 Mar 2025 09:27:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1741109275; x=1741714075; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pngwxWfatCIaGOPaCop7AUGkDzTeoWBcZRo0gHnL7tc=;
+        b=GgAHljGjEgNI2dr07VpAxkYCpphJNweeEq/dQtRYeiW4OHUY5hU+qJ0qocEndRvYSq
+         wAlHjvWnGBW0f328KK1hqLv0Fy8vGLNQdJ9mFK3Bd1LCiUiVp+Aqz8Wb/8NSnhxLkMyx
+         goC0MHmjYt/j4hpKHi+r4LrLCoX5Dv+bkujouaJDk/pXMX+sdOqNXo0PgzVZjNKAms8I
+         7kMtYVRRQZa84WiRoK+uiqtY8cupuJAeseLBqhBRkTSJHicNm6i94fixQNGpPOHzEwIX
+         ZMQBZsL094Wrstnxi5spLAJeZ2O/8bliSr7UIeIB2BRkjgwFgUnN8lxb53aw/yqdkfBT
+         VLNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740997828; x=1741602628;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1741109275; x=1741714075;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gR6zLqRG9S1za/uF+nzi2msUOEjaoJGIhx4NU2xJ4k0=;
-        b=MM7CeR36KGirDi87ET2gdDE9nRTdx1maqYtfKboCqd9myRULfihBG4sLrtZ7Bbsb2s
-         1xUSAnERzNSLnBo/1EFJKdqEuujUU2JL6jkneF5Ly+BUv95MFerZ4WL7H5MT9Irjg9pQ
-         7rimjeFoLSo2cimjo6teavZDZ8Qm/CYVkLoLD0jOra/fEkPshYaHE+SGTn/SHB5vjjwg
-         txtaa9FEg1qGqAmWSewOxCqtyDwQ6dYKmO1B1llucBFUFUG/wqffyaoKuYa93SyIsip6
-         BJ8SdQiHSqmuXDRDRg4Rf8v//GuhuzEJajIWLFfJ/BmCNZya6Wa8D25T9f1tqTJ+TRO7
-         TlIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZxX5cxkG8387zlBRcwaixvdurnIUsEUgYDaXlg0pGWNKw5ntq8O2LRbFgp/7vmleUS2oJ1iLseht6GL8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyuJkNhqnho5Pr1lLWVw+DemRyRqzBjYdxyuWzq2tYinPCbD5w
-	H6as+C2i1kutvlXk4CJ40VI7Z21TT7mJabcrlMqgGOx30aefIvLwYl41bfi5Cvlze4fsn/+aBQi
-	HfzsBiHpqqtpu36tJclfyG24d2+/azi871mQODcnhqYlIrZQ2Bop/xhkBmKuAJQ==
-X-Gm-Gg: ASbGncuIVKtj8uEZSm/t0GXmCdbsEY0xrNTzBv1lXdw9zvLMmRblraeL1MHgyFuzetT
-	nWH0q+LW29nyW+desA+7X/f1elGRtLrxmm2sZgT50Eh3/xspODVdAIW6efe6Ycf18uu9DZ01KXB
-	OrCH/5quHOqsKMCaRlIVBSFqGiDRZThhVI/mQ0dh6Ll0ja31fS4lnkg+l6LSm0aVKS9t6s6xBW8
-	VDXBpAKO8o2SOkETEASs9mbXm2WAc/j7k4JUJo43y/yG24eIzTPjXjgzobLD2W6oVdV3SKUXiN6
-	o+yfVb+bK8BKfT20AUWLZjxOGkbU+UvcI5EqfJw7ez4WWichjT3O/n0JOHOJd9Q=
-X-Received: by 2002:a05:6402:528a:b0:5e5:437c:1daf with SMTP id 4fb4d7f45d1cf-5e5437c22a7mr5160410a12.16.1740997827216;
-        Mon, 03 Mar 2025 02:30:27 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFWOtveprrubC5jzCtCbdOt9xXXQloZV5gJJWnE6GooHlcrYwBVrf5NDmW5ksFomjWCc6RdKg==
-X-Received: by 2002:a05:6402:528a:b0:5e5:437c:1daf with SMTP id 4fb4d7f45d1cf-5e5437c22a7mr5160377a12.16.1740997826443;
-        Mon, 03 Mar 2025 02:30:26 -0800 (PST)
-Received: from lbulwahn-thinkpadx1carbongen9.rmtde.csb ([2a02:810d:7e40:14b0:4ce1:e394:7ac0:6905])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c3bb4bd9sm6630165a12.33.2025.03.03.02.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 02:30:25 -0800 (PST)
-From: Lukas Bulwahn <lbulwahn@redhat.com>
-X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@redhat.com>
-Subject: [PATCH] media: remove STA2x11 media pci driver
-Date: Mon,  3 Mar 2025 11:30:22 +0100
-Message-ID: <20250303103022.374705-1-lukas.bulwahn@redhat.com>
-X-Mailer: git-send-email 2.48.1
-Precedence: bulk
+        bh=pngwxWfatCIaGOPaCop7AUGkDzTeoWBcZRo0gHnL7tc=;
+        b=N5TCWr0dMFzReYosz9Qvb3bYAy/jjBd6zaG28Kj3K5njr9TaTRxarWI68iw3h7dAiz
+         Mhe3Y/woTvnxDhOizEUScbjzf8Z5xMJW4VQa+CdSoJs+3R9uCzgaR1svqwYORHBaoK24
+         pFRIFqkbHC/nChggEk+0FbvTbd8TRf70c1wtDSCbzYHgmeinEeiK+rW8aa/iu7u2bL+D
+         5SIllgkKaziBr9Naj9FlK/PKGrlCKbGO0B74ZGyf6ANWKBVUJY61gtswAk31+LII3cP9
+         Bn8cgtbyfnph3s7REprduBk36JELihVl7X5aU3P4Ej1HLl0oxD8WjvVgb3t1AxUpIgda
+         UgcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUB7b6bpc3xkO2E98i+9d3qH9/4NnpPHIddCVOGsSgnURshnx+gFCrbdgP8fsdYEmGPA6VkL/l1XRhx3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAif09kA+oGPC85yxJKzVATsuCUehZti6oyAjlXg2/EzhViQTy
+	mguGYyelB0vz8mBDL+NaQRKIv82stj8XWwergXV/emQbx3lxlT9ihf+MwqOKoLmXDCulTpmmpnX
+	GFgCNxUoQKUZ4i5XVKhR7h80iZ/zcnr71QUKVNJ1uBE+Eq+nORtA=
+X-Gm-Gg: ASbGncsQrxfXPT71sLeA5dDSupFKSsTAwxSexSqAdXjYJ8yz5uEo9VdyHE7wyIpPxP8
+	N0cDV3UQ3500pfZ9bcG5EuvTdRCgFFY1/E1coPvfR+bosLNNUrEsFFKWBKjv4prvHDwpOxkLrUO
+	qzDve10vnUNk76ZZUrbWdkkpJS8YwZtEaMNviTw+l0ywUTGxf/gDAi4B6fbA==
+X-Google-Smtp-Source: AGHT+IG8rLJKP6QjcPJKBs6HHA5CSFh2OOfYDm0eu1lQ1W/CYWNV7actn7v/IuxMTC+ofswxxNQvZvTBOc2XcAmsQ0g=
+X-Received: by 2002:a05:690c:688a:b0:6fb:a222:6bff with SMTP id
+ 00721157ae682-6fd9413c257mr52561027b3.4.1741109275343; Tue, 04 Mar 2025
+ 09:27:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6gnd55KKzG2rM
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741713399.07966@/G5D458c9PlM8dsqNDEdxw
-X-ITU-MailScanner-SpamCheck: not spam
-Message-ID: <20250303103022.9KccXBPQf5q-0ljIDw__xvX1RtvRcYFVulSy8CsXNLQ@z>
+References: <20250303-ov9282-flash-strobe-v1-0-0fd57a1564ba@linux.dev> <20250303-ov9282-flash-strobe-v1-2-0fd57a1564ba@linux.dev>
+In-Reply-To: <20250303-ov9282-flash-strobe-v1-2-0fd57a1564ba@linux.dev>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date: Tue, 4 Mar 2025 17:27:34 +0000
+X-Gm-Features: AQ5f1JqnbgG6UGzwinCOtaxggx0TCkVpbxuND_5KOBtFKC8Gj8lxhcgdz2N9p2E
+Message-ID: <CAPY8ntAQnN+Ea4oMKK5RkCa+EZMwbCjX4uJx2ex5E=peuz0vAA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] media: i2c: ov9282: add led_mode v4l2 control
+To: Richard Leitner <richard.leitner@linux.dev>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Hi Richard
 
-With commit dcbb01fbb7ae ("x86/pci: Remove old STA2x11 support"), the
-STA2X11 Video Input Port driver is not needed and cannot be built anymore=
+On Mon, 3 Mar 2025 at 22:59, Richard Leitner <richard.leitner@linux.dev> wrote:
+>
+> Add V4L2_CID_FLASH_LED_MODE support using the "strobe output enable"
+> feature of the sensor. This implements following modes:
+>
+>  - V4L2_FLASH_LED_MODE_NONE, which disables the strobe output
+>  - V4L2_FLASH_LED_MODE_FLASH, which enables the strobe output
+>
+> All values are based on the OV9281 datasheet v1.53 (january 2019) and
+> tested using an ov9281 VisionComponents module.
+>
+> Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> ---
+>  drivers/media/i2c/ov9282.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov9282.c b/drivers/media/i2c/ov9282.c
+> index f42e0d439753e74d14e3a3592029e48f49234927..c98ba466e9aea29baff0b13578d760bf69c958c5 100644
+> --- a/drivers/media/i2c/ov9282.c
+> +++ b/drivers/media/i2c/ov9282.c
+> @@ -192,6 +192,7 @@ struct ov9282_mode {
+>   * @exp_ctrl: Pointer to exposure control
+>   * @again_ctrl: Pointer to analog gain control
+>   * @pixel_rate: Pointer to pixel rate control
+> + * @flash_led_mode: Pointer to flash led mode control
+>   * @vblank: Vertical blanking in lines
+>   * @noncontinuous_clock: Selection of CSI2 noncontinuous clock mode
+>   * @cur_mode: Pointer to current selected sensor mode
+> @@ -214,6 +215,7 @@ struct ov9282 {
+>                 struct v4l2_ctrl *again_ctrl;
+>         };
+>         struct v4l2_ctrl *pixel_rate;
+> +       struct v4l2_ctrl *flash_led_mode;
+
+As with 3/3, you only use this control from within ov9282_set_ctrl
+where you are given the struct v4l2_ctrl, so there is no need to store
+it in the device state structure.
+
+>         u32 vblank;
+>         bool noncontinuous_clock;
+>         const struct ov9282_mode *cur_mode;
+> @@ -670,6 +672,23 @@ static int ov9282_set_ctrl_vflip(struct ov9282 *ov9282, int value)
+>                                 current_val);
+>  }
+>
+> +static int ov9282_set_ctrl_flash_led_mode(struct ov9282 *ov9282, int mode)
+> +{
+> +       u32 current_val;
+> +       int ret = ov9282_read_reg(ov9282, OV9282_REG_OUTPUT_ENABLE6, 1,
+> +                                 &current_val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (mode == V4L2_FLASH_LED_MODE_FLASH)
+> +               current_val |= OV9282_OUTPUT_ENABLE6_STROBE;
+> +       else
+> +               current_val &= ~OV9282_OUTPUT_ENABLE6_STROBE;
+> +
+> +       return ov9282_write_reg(ov9282, OV9282_REG_OUTPUT_ENABLE6, 1,
+> +                               current_val);
+> +}
+> +
+>  /**
+>   * ov9282_set_ctrl() - Set subdevice control
+>   * @ctrl: pointer to v4l2_ctrl structure
+> @@ -736,6 +755,9 @@ static int ov9282_set_ctrl(struct v4l2_ctrl *ctrl)
+>                 ret = ov9282_write_reg(ov9282, OV9282_REG_TIMING_HTS, 2,
+>                                        (ctrl->val + ov9282->cur_mode->width) >> 1);
+>                 break;
+> +       case V4L2_CID_FLASH_LED_MODE:
+> +               ret = ov9282_set_ctrl_flash_led_mode(ov9282, ctrl->val);
+> +               break;
+>         default:
+>                 dev_err(ov9282->dev, "Invalid control %d", ctrl->id);
+>                 ret = -EINVAL;
+> @@ -1391,6 +1413,13 @@ static int ov9282_init_controls(struct ov9282 *ov9282)
+>                                                 OV9282_TIMING_HTS_MAX - mode->width,
+>                                                 1, hblank_min);
+>
+> +       /* Flash/Strobe controls */
+> +       ov9282->flash_led_mode = v4l2_ctrl_new_std_menu(ctrl_hdlr, &ov9282_ctrl_ops,
+> +                                                       V4L2_CID_FLASH_LED_MODE,
+> +                                                       V4L2_FLASH_LED_MODE_TORCH,
+> +                                                       (1 << V4L2_FLASH_LED_MODE_TORCH),
+> +                                                       V4L2_FLASH_LED_MODE_NONE);
+> +
+>         ret = v4l2_fwnode_device_parse(ov9282->dev, &props);
+>         if (!ret) {
+>                 /* Failure sets ctrl_hdlr->error, which we check afterwards anyway */
+>
+> --
+> 2.47.2
+>
+>
