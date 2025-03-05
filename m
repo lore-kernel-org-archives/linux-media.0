@@ -1,43 +1,43 @@
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371A8219310;
-	Wed,  5 Mar 2025 10:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D9A23314A;
+	Wed,  5 Mar 2025 11:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741172120; cv=pass; b=BYR8T2tkjoDi6/Q4yCEYe1oLN7lqS/vOENT6y6/WP/BPakBfebKhp2lkHk8oOg6UsgD4/9RSDQt9U6pAX0aF0lTiRiSbW+B//+43P8tZ/XkIjjKc12oSoHo2WrW8unEtXbv5F3B/YTdDDADTypoFkX/omt1z/zE8toZQkXFAB9s=
+	t=1741172995; cv=pass; b=BPnQDdK/IKIwa6ZT0QzcYEA2wHmFdtPHhCgkKiVnsCRyahrdviZsQ5ELAkTz0rYRJYTFq/RzPIvdEkbzyiSNjNyQNabbFPK9SY6gssKuBZGRvcwA7yjKeznxC7wAnE0/GLM7MH9e1Vh7i32/ydJIOObryLovNr4Gla4LpAhz9Xg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741172120; c=relaxed/simple;
-	bh=GYN5w2MzWMmFwGQEgpnu8NbUznqwQSMrIGSbADvQp/0=;
+	s=arc-20240116; t=1741172995; c=relaxed/simple;
+	bh=jRhn9QLmpYRvSUIKgnwkpPtTnchm9qPvZJvpvPUlDNE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aYrLhPGNBGLRuv7zkJMkeog2uynFqnnla+bLswhQN74veGtC5SW2q0g+nk+nub/3gZvUbcOnrTXbdurEuWVZIG6MR5CgyMyD5jde/T8oL4uVYBy9cCKOY8zLydTe3QTj8jA9Jf2a8VWkQWg2r6PPNb7rWplh0LvtJy/MsEmDit0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=NER7FOob; arc=pass smtp.client-ip=136.143.188.112
+	 In-Reply-To:Content-Type; b=Vp8ULcqTx9IIBiHAC0++9qLY3laLPYNVh7D+PxQtal2c1kP1ExZGDm6pz450me7rLIrBuPPtiUDb9fPcHwhYt2FLZKoMw4PLLvAk/I86MljVS584HiBvQ13w09NLJiWilTxFbOgHvmZGXh1UTWmrAApOc/qbvvtKHt/nPdccILA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=MEhKF3Ax; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="NER7FOob"
-ARC-Seal: i=1; a=rsa-sha256; t=1741172021; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="MEhKF3Ax"
+ARC-Seal: i=1; a=rsa-sha256; t=1741172946; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=BiJghRD32/9FYVLs2P+J6fdCaN/zWK2c6LsW9GDhkmnrTrn1F8t+JSlVmTEu5YcwX+0dg5OkcD8GstwF2BLIHiCLWE90e6j2x8ntlKYRPLd6iHeY+EIvfdTBwlkRkM2LbFa1oHEBhZQNlVrvEuknvYR27ChTUxB+c2iJRA6s1qM=
+	b=ZTUYJn29glC9vvUfcOfxW13mevM1V8V0v7dxFnI4YHIdMNrt5mm5q84KSOo33+VW4JQm9tOiFmmr9j+x7cgqxCDo1sy/jmipmV4wqDLhqYZ+pLm8TBZrXqHnWOPi5OmHxoX7Vwhtc12lsvDMwM1DecqU3sgnh+Uc9V4Lgx6CO6Q=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741172021; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=dRMz26do/txZBi10Mcoz5fXmESW0PSVQ9DKG49HFVjY=; 
-	b=dC4JJlkhKTXyRwbwtv3Gvyx0h1v3ETJftoZo6tjE2HwirDOxjj2U6uInf1BfNELhHaTpgYaw4ME+GSG3mg3GYASzUFJuk2SNH3WN/hWlfXhhq+joPk2QFVP9+Qr7Evcf9xh3JD5TFWlr6tzuHk1YaxJAEX52zqcCUEkz5fNpQY0=
+	t=1741172946; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=1QzXkuu/q5GiJN30wSGE0+yL0Yhr9XMU57s5jrdhvAA=; 
+	b=nPCFfxJMonpZzXyhib2hgPGPXvNu76+XP24uIpaUaE3+kdB/0OsqrBvSTFycDNh43DMeRmPKgSwZ+/8yKC8gHieelMuK0bUsu//T0Xv+ONo1EOJCV4YhgcqhFXZ3cMfCbvsZL9XHkHBxUZt13C8HouwnmSG2cfHF/1YHywAA4q4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
 	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741172021;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741172946;
 	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
 	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=dRMz26do/txZBi10Mcoz5fXmESW0PSVQ9DKG49HFVjY=;
-	b=NER7FOobCE625v+5FstETaN/ynlDtm8YWSnCb1UekBY6fC6tzgxYHiZE4muEc6xC
-	KAar5OSGfLCjt1BOtWqzI9ENXU2A1Y5/n54JIsxY4RjWhkWwagN0jDzC7z0ecxgvEmm
-	nzuYnJZMkz4j2YRWFcFab0lOoGOg6eXYz9MLZzL8=
-Received: by mx.zohomail.com with SMTPS id 1741172020269320.1572108278864;
-	Wed, 5 Mar 2025 02:53:40 -0800 (PST)
-Message-ID: <077b7bbb-8ef9-4dcd-9b91-90af4653851b@collabora.com>
-Date: Wed, 5 Mar 2025 13:53:34 +0300
+	bh=1QzXkuu/q5GiJN30wSGE0+yL0Yhr9XMU57s5jrdhvAA=;
+	b=MEhKF3Axe1O7AWq4XpWTTgOY+tP4S7KJQfblgQ2/+qxWDooPsnQo36bpHcslg596
+	NfOqumBStSvnxYHdUnh3Li766LL0nLhj/rsoqNuQw9SJrs+4iuNqdyu/8o7Ce1Vn92U
+	xsL6hyQHEjYjhY6za4pfuyCBIpgC75tGaYy29y/M=
+Received: by mx.zohomail.com with SMTPS id 1741172944911622.394610948164;
+	Wed, 5 Mar 2025 03:09:04 -0800 (PST)
+Message-ID: <d41bfc24-2787-4bae-aa8e-352899be097b@collabora.com>
+Date: Wed, 5 Mar 2025 14:08:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -45,48 +45,98 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 0/6] Add Synopsys DesignWare HDMI RX Controller
-To: Tim Surber <me@timsurber.de>, Hans Verkuil <hverkuil@xs4all.nl>,
+Subject: Re: [PATCH v10 6/6] arm64: defconfig: Enable Synopsys HDMI receiver
+To: Hans Verkuil <hverkuil@xs4all.nl>,
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>,
  Shreeya Patel <shreeya.patel@collabora.com>, Heiko Stuebner
  <heiko@sntech.de>, Mauro Carvalho Chehab <mchehab@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, jose.abreu@synopsys.com,
  nelson.costa@synopsys.com, shawn.wen@rock-chips.com,
- nicolas.dufresne@collabora.com,
  Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc: kernel@collabora.com, linux-media@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rockchip@lists.infradead.org,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Diederik de Haas <didi.debian@cknow.org>
-References: <20250304085819.108067-1-dmitry.osipenko@collabora.com>
- <78ff36f6-01a7-4df4-b653-c4509fb93af4@timsurber.de>
- <1039aca7-89b9-44ef-9775-e7852e956362@timsurber.de>
- <9b4b1e65-127d-422b-a359-a1d8e25652f9@xs4all.nl>
- <88054acf-3051-414c-aef7-4c0f085d5182@collabora.com>
- <47e022f4-1c1b-43c4-8f6c-bc1ff23ad39f@collabora.com>
- <e0e144be-5cf9-4a79-a602-2ab2b7cd9aa1@timsurber.de>
+ linux-rockchip@lists.infradead.org, Tim Surber <me@timsurber.de>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+References: <20250225183058.607047-1-dmitry.osipenko@collabora.com>
+ <20250225183058.607047-7-dmitry.osipenko@collabora.com>
+ <a8a6c8c8-ee3b-422a-8573-a2cbb61fc3aa@xs4all.nl>
+ <863f9c1beb7a912f94f8740b3e5095e09e49cee5.camel@collabora.com>
+ <cade5c73-e25f-4f56-be10-7d5a06f92917@xs4all.nl>
 From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 Content-Language: en-US
-In-Reply-To: <e0e144be-5cf9-4a79-a602-2ab2b7cd9aa1@timsurber.de>
+In-Reply-To: <cade5c73-e25f-4f56-be10-7d5a06f92917@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-On 3/5/25 13:41, Tim Surber wrote:
-> Hi,
+On 3/4/25 19:17, Hans Verkuil wrote:
+> On 28/02/2025 04:51, Nicolas Dufresne wrote:
+>> Hi Hans,
+>>
+>> Le mercredi 26 février 2025 à 09:31 +0100, Hans Verkuil a écrit :
+>>> On 25/02/2025 19:30, Dmitry Osipenko wrote:
+>>>> From: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>>>
+>>>> The Rockchip RK3588 has a built-in HDMI receiver block from
+>>>> Synopsys. Let's enable the driver for it.
+>>>>
+>>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>> ---
+>>>>  arch/arm64/configs/defconfig | 2 ++
+>>>>  1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/configs/defconfig
+>>>> b/arch/arm64/configs/defconfig
+>>>> index cb7da4415599..3dccc9e1c4aa 100644
+>>>> --- a/arch/arm64/configs/defconfig
+>>>> +++ b/arch/arm64/configs/defconfig
+>>>> @@ -859,6 +859,8 @@ CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
+>>>>  CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
+>>>>  CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
+>>>>  CONFIG_VIDEO_SUN6I_CSI=m
+>>>> +CONFIG_VIDEO_SYNOPSYS_HDMIRX=m
+>>>> +CONFIG_VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID=y
+>>>
+>>> I do not believe it is a good idea to default to y for this option.
+>>>
+>>> The EDID depends on the specific device you make, and you should
+>>> think carefully about whether the default EDID fits the needs of the
+>>> device.
+>>>
+>>> So if you want the default EDID, then you should manually select it
+>>> and not have it autoselected.
+>>
+>> Following up here, from the device maker perspective sure, but I'm not
+>> sure this is the best choice for generic Linux distribution. As of
+>> today, pretty much no userspace capture software knows about this,
+>> meaning the device will not work out of the box in OBS, GStreamer,
+>> Ffmpeg, Web Browsers. In comparison, if you pick any UVC HDMI capture,
+>> it just work, with a default EDID that covers the range of
+>> capabilities, which in this case are defined by the SoC.
 > 
-> so the 4:4:4 issue was just a gstreamer bug and it worked when I applied
-> an experimental fix [1].
+> A UVC HDMI capture device is not a good comparison: that has it's own
+> EDID that is configured for the specific hardware and USB bandwidth
+> limitations. EDID handling is all internal to that device, nothing to
+> do with the UVC driver.
 > 
-> So everything works for me using the default EDID now.
+> That said, this device is a bit different compared to most other
+> HDMI receivers in that it also has a DMA engine. Usually HDMI receivers
+> are i2c devices that connect to an SoC. In this case the hardware is
+> inside the SoC. So I am OK with making LOAD_DEFAULT_EDID=y in the defconfig.
 > 
-> Tested-by: Tim Surber <me@timsurber.de>
+> So:
 > 
-> [1]: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/
-> merge_requests/8534
+> Acked-by: Hans Verkuil <hverkuil@xs4all.nl>
+> 
+> Note that I will merge the v13 driver (patches 1-3), since it looks good.
+> 
+> But v11-v13 of this defconfig patch dropped the "CONFIG_VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID=y"
+> line, so you might want to post a v14 of just patches 4-6, restoring that
+> line, once I merged patches 1-3.
 
-Awesome! Glad this has been resolved, thanks for the testing.
+Will post v14, thanks!
 
 -- 
 Best regards,
