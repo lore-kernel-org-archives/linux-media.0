@@ -1,41 +1,41 @@
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4E21DF97E;
-	Thu,  6 Mar 2025 07:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F711DC9B1;
+	Thu,  6 Mar 2025 08:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741246202; cv=pass; b=COvHTWMrMJSBzS5jInUNLN2N+WS0tOGYwZ7Gaex8CuCVGNxODS7QwuDlWahPF59k+PDyTxWlIzb4iMELyhVyLsYfkLlbLvPYgCoH3ysAerTM5/jDvRU+zoQoQdf7lbXuYmgrjZj0mro+4elrezae40qT08XXrYZbgwNdGe36VZw=
+	t=1741248432; cv=pass; b=KFSbN5Gnt/wQYkyt73C6JnXcbt7yonLZIa1no/n+CPMIQhG+gGLjCGVJ44aOxUeNOMjmeI3T1kRv9e5Z98tLywz1fo1SQf3bbg/KlLTDvZ206m8qtKQbMtssydJSQt61XDxJ0NDC4qqVhctJpiEJ9c/YkeNyiWWLTFF8QZ96C5M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741246202; c=relaxed/simple;
-	bh=7LPbExDWyowlZ0Qkzu0B8AZ6SrMtlvAg1HWrlw1qvDk=;
+	s=arc-20240116; t=1741248432; c=relaxed/simple;
+	bh=dWKsAci39FlsH6tQCq0upEs19/Xio6S+NFIyyEsNm24=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iGiRwXyQD2XOrnYzbRSXx9NFGfYk54fDr/7BprPCxOEmArejh5f5pUCHHhFOzeJwuR6wWnPn1TqyyklYDcRQsMXOmdmtnzIKEEll+EzY2ygAQjiHsBQrBJSh7+SvY4b3L3nHXnN/sHNXXZhswMWnoNNeZ2mmN6Zyxbw7VJHeTUo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=GnP20AHn; arc=pass smtp.client-ip=136.143.188.112
+	 MIME-Version; b=bVZga7e8wRt38ryMLmUUa+i/ICkkxQnjCsLzVrEIFxeCEwEfTjtGf5A2kpc8HG16WMeAlgnMXIb3cGJvNBejiLXNr2Dv5m5zqQca+ua8b2AFUrupqBhnPxlF49m7YqrIYFLcigc+En3rxPE6Mbl4G99bpFzlFx7TPX5HFcOAKEU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=XXeYrDPn; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="GnP20AHn"
-ARC-Seal: i=1; a=rsa-sha256; t=1741246158; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="XXeYrDPn"
+ARC-Seal: i=1; a=rsa-sha256; t=1741248395; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=S6RPMVYmy/Qw9F6UGyDXSs/VMOOB/K+eF2TOecjgEf0Qk7Ups7EeAjSZ4JbCgBnUEob4vkz4rIyz+uiIdinO4pEIg7R1yNlRmyXtXuG1VSEFlJ2OjhkSwjdfWbpaP4A0APJXu0AkCwKHgnsvcYX5AF+PEsXN75h1rSf6BFR/eB8=
+	b=dcuS1vvnFY8KcKNp3B1qWH6z5ABilI5v5mzOFsWTGqDDIMEMhiH69DLJg/93jVZfLvGYNQAQEtu7PAHBwvTZSBgSG0T+FfuWlNoDS6z7IYqjvOQfV9mV3VUcAIclCgtt4X3mYNOj0vtHoU+6pm7nHHVbjAzRa0wm2ohHXG+Xykc=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741246158; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=iI9QyKLTcC52KVJngweEmRM9LcClnJU3duGST99I7gM=; 
-	b=TosL55wKSQxg4oAlbVSh46gsp/BnEqQbC8REx9BQDsze7hu/vmrU4/iXccTsRr9B6rSLfgBPaj7ZRueaxowTifvMH3bzUPe27pe7fmD4XPNGATdo81I0zM3CAOtMWsN/RJLp+6SluNFz7F1MntrAf64ADD0PjuQ+hyju8BZQAKc=
+	t=1741248395; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=uCOliLTc8FCNZdZQCcLkuTnopU2o/wGilsZ2OAGkH7Q=; 
+	b=XX8zeFLWDdSw5pKnyqisWzxlInY4vWSB5482xn7bqWYCNDoTwF/M5qco07KSqd0AcMZ6v1YY0JEJUS6w0otWupEtFqln2+/p7vn0kbBVoFSmODjHrmQGLRwWgVqEXX7hLeEIp/ajAfpJV8TO4Ju+RsI/9B9Oa+C2fBugdfQvWMU=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
 	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741246158;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741248395;
 	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=iI9QyKLTcC52KVJngweEmRM9LcClnJU3duGST99I7gM=;
-	b=GnP20AHnYP+YMkKJdagDWx1uwzLhRmiXWWkFVk8xIZPoUxCH9hOIUHxvn0SJEO1G
-	2Kt8J0pjrhBYYkNOdZ6NKtt2M4ihv7R/g1MgjWi5BKwmPI99D1Sd+AMRT0fRU4rvnAv
-	HquINqF/6L7ygDwKkPIN1uW3S6g0uGZzUsnelBmw=
-Received: by mx.zohomail.com with SMTPS id 1741246156773280.09310322361534;
-	Wed, 5 Mar 2025 23:29:16 -0800 (PST)
+	bh=uCOliLTc8FCNZdZQCcLkuTnopU2o/wGilsZ2OAGkH7Q=;
+	b=XXeYrDPnvMwong0AxeA19sYfopUW8O/CPCEdhZPU4CgtXNniVnkkYQNeWtfl9cve
+	MpcjD3wQ8SbTqQ87BpX6KsyOan1IGWI929lA5Z5OUQHsH9ZYjYVuD8Fgvpg+DJtMkMR
+	NcKe4gdhb8vu/EIcJg8nihpUv1UWtRhnRJwYBLy4=
+Received: by mx.zohomail.com with SMTPS id 174124839394569.84592736885759;
+	Thu, 6 Mar 2025 00:06:33 -0800 (PST)
 From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To: Shreeya Patel <shreeya.patel@collabora.com>,
 	Heiko Stuebner <heiko@sntech.de>,
@@ -53,16 +53,13 @@ Cc: kernel@collabora.com,
 	linux-media@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	Tim Surber <me@timsurber.de>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Diederik de Haas <didi.debian@cknow.org>
-Subject: [PATCH v14 3/3] arm64: defconfig: Enable Synopsys HDMI receiver
-Date: Thu,  6 Mar 2025 10:28:42 +0300
-Message-ID: <20250306072842.287142-4-dmitry.osipenko@collabora.com>
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH v1 1/3] media: platform: synopsys: hdmirx: Remove duplicated header inclusion
+Date: Thu,  6 Mar 2025 11:05:31 +0300
+Message-ID: <20250306080533.294964-2-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250306072842.287142-1-dmitry.osipenko@collabora.com>
-References: <20250306072842.287142-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20250306080533.294964-1-dmitry.osipenko@collabora.com>
+References: <20250306080533.294964-1-dmitry.osipenko@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -72,31 +69,27 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Remove second v4l2-common.h header inclusion.
 
-The Rockchip RK3588 has a built-in HDMI receiver block from
-Synopsys. Let's enable the driver for it.
-
-Acked-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202503061231.PHF6hEL2-lkp@intel.com/
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index cb7da4415599..3dccc9e1c4aa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -859,6 +859,8 @@ CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
- CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
- CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
- CONFIG_VIDEO_SUN6I_CSI=m
-+CONFIG_VIDEO_SYNOPSYS_HDMIRX=m
-+CONFIG_VIDEO_SYNOPSYS_HDMIRX_LOAD_DEFAULT_EDID=y
- CONFIG_VIDEO_TI_J721E_CSI2RX=m
- CONFIG_VIDEO_HANTRO=m
- CONFIG_VIDEO_IMX219=m
+diff --git a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
+index 4ffc86ad6c35..f161fd6712b6 100644
+--- a/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
++++ b/drivers/media/platform/synopsys/hdmirx/snps_hdmirx.c
+@@ -39,7 +39,6 @@
+ #include <media/v4l2-ioctl.h>
+ #include <media/videobuf2-dma-contig.h>
+ #include <media/videobuf2-v4l2.h>
+-#include <media/v4l2-common.h>
+ 
+ #include <sound/hdmi-codec.h>
+ 
 -- 
 2.48.1
 
