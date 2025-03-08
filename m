@@ -1,117 +1,191 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BEA20F07F;
-	Sat,  8 Mar 2025 20:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473781EEE6;
+	Sat,  8 Mar 2025 21:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741466702; cv=none; b=e/juhXs11IIPryM61VTZMh138WbNCz3h9hDXHLMXuAMHC4ppr2j6xK4h7rxCG7McAxxan5VCm6cQX4HWx6HYhcoyKpx71gu1SBLKm5gfVFiflT32ktvDN2Q6wwFEVOAU43mJB+KqU9bfmXTFUVqNxNR12h2fkSXHAE7FW9VX+Vk=
+	t=1741470491; cv=none; b=f7gMzS+CeX/5jq9mLtAIfAjY/YHrHiV0hBvsZ1gbk98RjJfrDv1NfSyyGfZISLcagMmEtBhAhxjMtY3Nk5b3TcO4QdI8vBDfyfTcMLydjbGROKtU6fZh1ETtpmjz0bOdX6DdSQV4nXunq9dulK2pBQMsWBGDX3PL/L0/UiyZrPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741466702; c=relaxed/simple;
-	bh=10nSWWi5MGce0BH+GQkLNo0/x4b1dtShGmGc6K9YmIY=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=FNvim2VRqGGPkjrKT1cWMSGl3P1og5h574f/liHOvBaqdWS0x5c5vpRaJOik0Alt+fKJEDSCzBh4UnjptZTM60YEUwZJHMYq4uQG0K27ZDV3RfuP9Hivjr06klF7NifeeqD4JWiOeEm4kB6TYoKkAkfQZbfWzVTkMIi0q7NHLJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kz1LBSgr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741470491; c=relaxed/simple;
+	bh=47xG7Y+lb+4ABdnenz4kurDLlo2rPsaUAq/8f0C92aA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OuZQ12H3y6g75n0y3bq9LswSbPCHpAzQXpd+stzlsRWdnYh7fLi7c8RVWVsB1RwuxLGvZmc/TiLY6ubQRocJPE62FpxYl8+3fjR76VrSNNI78gEIhuKxQURVKKShatrtfBNESnCBhieIOamEBj66RVjI960jbJ4IWJQga20jYZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lz79k2FX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kz1LBSgr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2458CC4CEE0;
-	Sat,  8 Mar 2025 20:45:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lz79k2FX"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CEF93C4CEE7;
+	Sat,  8 Mar 2025 21:48:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741466701;
-	bh=10nSWWi5MGce0BH+GQkLNo0/x4b1dtShGmGc6K9YmIY=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Kz1LBSgrogv+lhsn7L7DdYBf6ZHwHChsXvgRU+mU6ABQDwN9mDk8O0mvvImrQfxA3
-	 +6cJoz5rO/+wVrrqWjG+CMsxuxz7PIKH+Habq2cisTL/QpOcjfCJmolFfR62CGiIUf
-	 Jcvd9uykI4kWXvDLSgcD4uSC9YlpPCBPq0wtPBt93UIxRBCqbxGRn18MahlajdRYz2
-	 JtIts04s1WUZ7r3BxY1lnOV9mlm3OD29pY7V4AaPgIiO/2c+IoOchKcXVvc3pP8SVx
-	 GZ9HsT6YFxXfc1f481f1IXCoEPi2G+pq4FoiOAxg91rko91KYb6ayRgXSws+ijHsIk
-	 HgvPceEkU+wXA==
-Date: Sat, 08 Mar 2025 14:44:59 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1741470490;
+	bh=47xG7Y+lb+4ABdnenz4kurDLlo2rPsaUAq/8f0C92aA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Lz79k2FX9SJFP8kg0+Za3SDmYyxprj62mERSTylut7LKnjoKP6b0PgS6SfG5m4SOT
+	 4cba7yM0pEczrLq2WNwwHnylMXbtSTJHisMiS8i4Wz6lkDIL+tqjgp5za6pfLdpnui
+	 N94TZrhX+uT30r3ZQE5+trLD/GJRCEjt65+aK3EE8H4FAYANtZsS+HKILndZZGJiB5
+	 zSvd4Ri65JqGzvw7MqmMuPH2XJ5YNqAgt2wUFVs3eGBFJmttEQngEQVv379lBPzQiu
+	 X/zCLiSVpg326hF00BzVEWEMA+rMWXgfu+JNoVz8dVanifh7fiSIc4nrj2m3htCRM/
+	 S7aG6YotmT/wQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B30EAC28B28;
+	Sat,  8 Mar 2025 21:48:10 +0000 (UTC)
+From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
+Date: Sat, 08 Mar 2025 22:47:56 +0100
+Subject: [PATCH RESEND 2/4] media: i2c: imx214: Prepare for variable clock
+ frequency
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Heiko Stuebner <heiko@sntech.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
- Cosmin Tanislav <cosmin.tanislav@analog.com>, linux-kernel@vger.kernel.org, 
- Ross Burton <ross.burton@arm.com>, Ricardo Ribalda <ribalda@chromium.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Will Deacon <will@kernel.org>, 
- Bjorn Andersson <quic_bjorande@quicinc.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, 
- Javier Carrasco <javier.carrasco@wolfvision.net>, 
- =?utf-8?q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Julien Massot <julien.massot@collabora.com>, linux-gpio@vger.kernel.org, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Eric Biggers <ebiggers@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250308-imx214_clk_freq-v1-2-467a4c083c35@apitzsch.eu>
+References: <20250308-imx214_clk_freq-v1-0-467a4c083c35@apitzsch.eu>
+In-Reply-To: <20250308-imx214_clk_freq-v1-0-467a4c083c35@apitzsch.eu>
+To: Ricardo Ribalda <ribalda@kernel.org>, 
  Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Ihor Matushchak <ihor.matushchak@foobox.net>, 
- Taniya Das <quic_tdas@quicinc.com>, Mark Brown <broonie@kernel.org>, 
- devicetree@vger.kernel.org, 
- Kieran Bingham <kieran.bingham@ideasonboard.com>, 
- =?utf-8?q?N=C3=ADcolas_F_=2E_R_=2E_A_=2E_Prado?= <nfraprado@collabora.com>, 
- linux-staging@lists.linux.dev, Biju Das <biju.das.jz@bp.renesas.com>, 
- linux-media@vger.kernel.org, Tommaso Merciai <tomm.merciai@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
- Umang Jain <umang.jain@ideasonboard.com>, 
- Dongcheng Yan <dongcheng.yan@intel.com>, 
- Benjamin Mugnier <benjamin.mugnier@foss.st.com>, 
- Zhi Mao <zhi.mao@mediatek.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Hans Verkuil <hverkuil@xs4all.nl>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-In-Reply-To: <20250308183410.3013996-10-demonsingur@gmail.com>
-References: <20250308183410.3013996-1-demonsingur@gmail.com>
- <20250308183410.3013996-10-demonsingur@gmail.com>
-Message-Id: <174146669769.3550313.9537741171612632999.robh@kernel.org>
-Subject: Re: [RFC PATCH 09/24] dt-bindings: media: i2c: max96714: make
- i2c-gate conditional on compatible
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741470489; l=4555;
+ i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
+ bh=0VLQFdt57U21JoCzJC3hL0IqNVqlpzlXR87qVLWi7UY=;
+ b=Zd6V9IqzO2plOVCP0uh8raceoMAGeaYy856tXE4cuEafaSrogmy+UJMucLDPlUktF140pDAOk
+ 1AI98XXmFV2AQmrwI7vnSCxurM21z5eKNUfHK6qcoIbvKJBspTq3MFk
+X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
+ pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
+X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
+ auth_id=142
+X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Reply-To: git@apitzsch.eu
 
+From: André Apitzsch <git@apitzsch.eu>
 
-On Sat, 08 Mar 2025 20:33:38 +0200, Cosmin Tanislav wrote:
-> Devices to be added in following patches don't use I2C gate.
-> 
-> Make this property conditional on the compatible strings.
-> 
-> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-> ---
->  .../bindings/media/i2c/maxim,max96714.yaml    | 21 ++++++++++++-------
->  1 file changed, 13 insertions(+), 8 deletions(-)
-> 
+Move clock frequency related parameters out of the constant register
+sequences, such that the hard coded external clock frequency can be
+replaced by a variable in the next commit.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
+---
+ drivers/media/i2c/imx214.c | 64 ++++++++++++++++++++++++++++------------------
+ 1 file changed, 39 insertions(+), 25 deletions(-)
 
-yamllint warnings/errors:
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 14a4c5094799014da38ab1beec401f0d923c2152..53b6b427f263a8ad7e3a0d1f711ece234601100e 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -320,17 +320,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
+ 	{ IMX214_REG_DIG_CROP_WIDTH, 4096 },
+ 	{ IMX214_REG_DIG_CROP_HEIGHT, 2304 },
+ 
+-	{ IMX214_REG_VTPXCK_DIV, IMX214_DEFAULT_VTPXCK_DIV },
+-	{ IMX214_REG_VTSYCK_DIV, IMX214_DEFAULT_VTSYCK_DIV },
+-	{ IMX214_REG_PREPLLCK_VT_DIV, IMX214_DEFAULT_PREPLLCK_VT_DIV },
+-	{ IMX214_REG_PLL_VT_MPY, IMX214_DEFAULT_PLL_VT_MPY },
+-	{ IMX214_REG_OPPXCK_DIV, IMX214_DEFAULT_OPPXCK_DIV },
+-	{ IMX214_REG_OPSYCK_DIV, IMX214_DEFAULT_OPSYCK_DIV },
+-	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
+-
+-	{ IMX214_REG_REQ_LINK_BIT_RATE,
+-		IMX214_LINK_BIT_RATE_MBPS(IMX214_LINK_BIT_RATE(IMX214_DEFAULT_CLK_FREQ)) },
+-
+ 	{ CCI_REG8(0x3A03), 0x09 },
+ 	{ CCI_REG8(0x3A04), 0x50 },
+ 	{ CCI_REG8(0x3A05), 0x01 },
+@@ -384,17 +373,6 @@ static const struct cci_reg_sequence mode_1920x1080[] = {
+ 	{ IMX214_REG_DIG_CROP_WIDTH, 1920 },
+ 	{ IMX214_REG_DIG_CROP_HEIGHT, 1080 },
+ 
+-	{ IMX214_REG_VTPXCK_DIV, IMX214_DEFAULT_VTPXCK_DIV },
+-	{ IMX214_REG_VTSYCK_DIV, IMX214_DEFAULT_VTSYCK_DIV },
+-	{ IMX214_REG_PREPLLCK_VT_DIV, IMX214_DEFAULT_PREPLLCK_VT_DIV },
+-	{ IMX214_REG_PLL_VT_MPY, IMX214_DEFAULT_PLL_VT_MPY },
+-	{ IMX214_REG_OPPXCK_DIV, IMX214_DEFAULT_OPPXCK_DIV },
+-	{ IMX214_REG_OPSYCK_DIV, IMX214_DEFAULT_OPSYCK_DIV },
+-	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
+-
+-	{ IMX214_REG_REQ_LINK_BIT_RATE,
+-		IMX214_LINK_BIT_RATE_MBPS(IMX214_LINK_BIT_RATE(IMX214_DEFAULT_CLK_FREQ)) },
+-
+ 	{ CCI_REG8(0x3A03), 0x04 },
+ 	{ CCI_REG8(0x3A04), 0xF8 },
+ 	{ CCI_REG8(0x3A05), 0x02 },
+@@ -428,9 +406,6 @@ static const struct cci_reg_sequence mode_table_common[] = {
+ 	/* ATR setting */
+ 	{ IMX214_REG_ATR_FAST_MOVE, 2 },
+ 
+-	/* external clock setting */
+-	{ IMX214_REG_EXCK_FREQ, IMX214_EXCK_FREQ(IMX214_DEFAULT_CLK_FREQ / 1000000) },
+-
+ 	/* global setting */
+ 	/* basic config */
+ 	{ IMX214_REG_MASK_CORR_FRAMES, IMX214_CORR_FRAMES_MASK },
+@@ -800,6 +775,30 @@ static int imx214_entity_init_state(struct v4l2_subdev *subdev,
+ 	return 0;
+ }
+ 
++static int imx214_set_clock(struct imx214 *imx214)
++{
++	int ret = 0;
++
++	cci_write(imx214->regmap, IMX214_REG_VTPXCK_DIV,
++		  IMX214_DEFAULT_VTPXCK_DIV, &ret);
++	cci_write(imx214->regmap, IMX214_REG_VTSYCK_DIV,
++		  IMX214_DEFAULT_VTSYCK_DIV, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PREPLLCK_VT_DIV,
++		  IMX214_DEFAULT_PREPLLCK_VT_DIV, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PLL_VT_MPY,
++		  IMX214_DEFAULT_PLL_VT_MPY, &ret);
++	cci_write(imx214->regmap, IMX214_REG_OPPXCK_DIV,
++		  IMX214_DEFAULT_OPPXCK_DIV, &ret);
++	cci_write(imx214->regmap, IMX214_REG_OPSYCK_DIV,
++		  IMX214_DEFAULT_OPSYCK_DIV, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PLL_MULT_DRIV,
++		  IMX214_PLL_SINGLE, &ret);
++	cci_write(imx214->regmap, IMX214_REG_EXCK_FREQ,
++		  IMX214_EXCK_FREQ(IMX214_DEFAULT_CLK_FREQ / 1000000), &ret);
++
++	return ret;
++}
++
+ static int imx214_update_digital_gain(struct imx214 *imx214, u32 val)
+ {
+ 	int ret = 0;
+@@ -1032,6 +1031,7 @@ static int imx214_start_streaming(struct imx214 *imx214)
+ 	const struct v4l2_mbus_framefmt *fmt;
+ 	struct v4l2_subdev_state *state;
+ 	const struct imx214_mode *mode;
++	int link_bit_rate;
+ 	int ret;
+ 
+ 	ret = cci_multi_reg_write(imx214->regmap, mode_table_common,
+@@ -1041,6 +1041,20 @@ static int imx214_start_streaming(struct imx214 *imx214)
+ 		return ret;
+ 	}
+ 
++	ret = imx214_set_clock(imx214);
++	if (ret) {
++		dev_err(imx214->dev, "failed to configure clock %d\n", ret);
++		return ret;
++	}
++
++	link_bit_rate = IMX214_LINK_BIT_RATE(IMX214_DEFAULT_CLK_FREQ);
++	ret = cci_write(imx214->regmap, IMX214_REG_REQ_LINK_BIT_RATE,
++			IMX214_LINK_BIT_RATE_MBPS(link_bit_rate), NULL);
++	if (ret) {
++		dev_err(imx214->dev, "failed to configure link bit rate\n");
++		return ret;
++	}
++
+ 	ret = cci_write(imx214->regmap, IMX214_REG_CSI_LANE_MODE,
+ 			IMX214_CSI_4_LANE_MODE, NULL);
+ 	if (ret) {
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/i2c/maxim,max96714.example.dtb: deserializer@28: 'i2c-gate' does not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/media/i2c/maxim,max96714.yaml#
+-- 
+2.48.1
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250308183410.3013996-10-demonsingur@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
