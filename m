@@ -1,138 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA83B216392
-	for <linux-media@vger.kernel.org>; Mon, 10 Mar 2025 16:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BE6231A24
+	for <linux-media@vger.kernel.org>; Mon, 10 Mar 2025 17:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741624753; cv=none; b=ay5Mzq3uxGRMG61BtCfk84xzKfHgIJ4hWBpjBg6s8eAuDbp8jTZzrokICnziSB+xpS9rssoe8GkLZoSt5kgz7vU46nKiw1PTt6EI+8MrrN5lQVfplEfQr9NRIatP51Y+oICX0HSkAR2qEMpDyPHDxa0azDhEEl0o3I3RVbiROvo=
+	t=1741627645; cv=none; b=hAFpipb353evq0Cn4i6kvL/jdyu6AzE4BPg5VsQbbjg+0I50sDAjBLTkGlo1CS//M+r1biWiiogTpBibO7ouJv5HN/BCOdIbr2riVUMVPvRwqx1KUBOUZqSHZBkVCPeNJDBzWTWzGawJ9uOK+yjKIN/gqzn+yBaXDcX/PmBKA+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741624753; c=relaxed/simple;
-	bh=GExsIkkqVDXmOXPMiwRTt6YMXBtO7N7bXDqeWCHr8LI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ANUseVjOQrRaD9rZcyx7Vg+F9rIw8bACGUHt6thnW+y1cY/ypEfUlJ5HhlozJT9E4L7YqCgtNQXyFfZ2Hay8VzMHggKwQ4i+iN3NuJxSO8AyG4IX+RYzXJ3waNoAgdoUFbGc9D5h4/XwOjBJGPQUJjj46V+VeMJP2UuY/fwYN24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=isevvDNd; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="isevvDNd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741624752; x=1773160752;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GExsIkkqVDXmOXPMiwRTt6YMXBtO7N7bXDqeWCHr8LI=;
-  b=isevvDNd4mdwCQ+37GGbkSm4pc6T3+XZN140OiSYnrrLDHEvwrK1z169
-   sjPMeqwMGc11k07/YssnN7d4ynwrtF6ISQoluqG5+H6fJc4L606He6jN0
-   YxOKoRMI3es7h0RZCMzXdsUZah3H1Mo61E8kgtyRKwCIwsH15ZREpQaQM
-   sGWD3UEddXbsyEoUkE1M1t2dPWDaIsEy0S+soiVzPrdNzsFygG0HMvGt2
-   qi5FCDffVvJBRMGMkjn6xOYJI5HEQEWX8XUzARcOaNgrUilAabdFHrAOw
-   327C0EWu7H5gmYtZNhl78UfxiGathxSs1egPWBlSOxn5KbNfPczS++ue+
-   g==;
-X-CSE-ConnectionGUID: Pb6TAIN7SxWzPYCaZ92Zpg==
-X-CSE-MsgGUID: qLNayfy5TXuggfq2u7gXdw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="41798580"
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="41798580"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 09:39:10 -0700
-X-CSE-ConnectionGUID: 9ieiZkrLQBeYxfVZx7OSUw==
-X-CSE-MsgGUID: U+zdeB3vSM29ryleoBEChw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="143244021"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Mar 2025 09:39:09 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trg9e-0004TU-2Z;
-	Mon, 10 Mar 2025 16:39:03 +0000
-Date: Tue, 11 Mar 2025 00:38:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [sailus-media-tree:devel 22/23]
- drivers/media/platform/atmel/atmel-isi.c:1075:29: error: implicit
- declaration of function 'devm_kmemdup_array'; did you mean
- 'devm_kmalloc_array'?
-Message-ID: <202503110007.KgiJLedM-lkp@intel.com>
+	s=arc-20240116; t=1741627645; c=relaxed/simple;
+	bh=BgAIoLHSgV6hJl4mENRqqI5rSw/C9g8bghsvzc2iY5I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Oc5MGVGAnAbpsXa1wKejRFBOOqVVPOLutoKn/V6bntuMcL4criMCPuKYYAIBGPBmOlIa4R8vsV6LJS+OIEM1th9g1Yd51tvoJiPbO7VCRgO/qjlKaxzH5OEnt6B02r3euwcs6OY+NgPm3hYHK+6FP060pr4F/Aof3bmvuglbVys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4D8C4CEE5;
+	Mon, 10 Mar 2025 17:27:20 +0000 (UTC)
+Message-ID: <3ea9c657-1324-44f0-8820-02817020cf0d@xs4all.nl>
+Date: Mon, 10 Mar 2025 18:27:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [ANN v2] Media Summit 2025: Nice in May or Amsterdam in August?
+To: Paul Kocialkowski <paulk@sys-base.io>
+Cc: Linux Media Mailing List <linux-media@vger.kernel.org>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Sean Young <sean@mess.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Sebastian Fricke <sebastian.fricke@collabora.com>,
+ Nicolas Dufresne <nicolas@ndufresne.ca>,
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+ Ricardo Ribalda <ribalda@chromium.org>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+ Alain Volmat <alain.volmat@foss.st.com>,
+ "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Michael Tretter <m.tretter@pengutronix.de>, Tomasz Figa
+ <tfiga@chromium.org>, "Hu, Jerry W" <jerry.w.hu@intel.com>,
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+ Steve Cho <stevecho@chromium.org>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Kevin Hilman <khilman@baylibre.com>
+References: <ab1fef54-d83f-46e2-a6c8-42b0761368fc@xs4all.nl>
+ <d29353c7-7ae2-411b-9c13-3fbd7bd63da2@xs4all.nl> <Z88gGktbzEsmuehK@collins>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <Z88gGktbzEsmuehK@collins>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   git://linuxtv.org/sailus/media_tree.git devel
-head:   07e07f2cd3ebb7e8b62ccb8f22a16032b599c9e2
-commit: 93c8dabd1d1ed94f03eb9a63c0bc291b62595bda [22/23] media: atmel-isi: use devm_kmemdup_array()
-config: xtensa-randconfig-002-20250310 (https://download.01.org/0day-ci/archive/20250311/202503110007.KgiJLedM-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503110007.KgiJLedM-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503110007.KgiJLedM-lkp@intel.com/
+I can confirm that the Media Summit will be held in Nice. I hope to be able to
+post more details by the end of this week.
 
-All errors (new ones prefixed by >>):
+Regards,
 
-   drivers/media/platform/atmel/atmel-isi.c: In function 'isi_formats_init':
->> drivers/media/platform/atmel/atmel-isi.c:1075:29: error: implicit declaration of function 'devm_kmemdup_array'; did you mean 'devm_kmalloc_array'? [-Wimplicit-function-declaration]
-    1075 |         isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-         |                             ^~~~~~~~~~~~~~~~~~
-         |                             devm_kmalloc_array
->> drivers/media/platform/atmel/atmel-isi.c:1075:27: error: assignment to 'const struct isi_format **' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    1075 |         isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-         |                           ^
+	Hans
 
 
-vim +1075 drivers/media/platform/atmel/atmel-isi.c
+On 10/03/2025 18:23, Paul Kocialkowski wrote:
+> Hi,
+> 
+> Le Thu 27 Feb 25, 11:05, Hans Verkuil a écrit :
+>> Just a friendly reminder to reply if you want to attend the Media Summit, and
+>> if so, which place works for you.
+>>
+>> Currently the preference seems to be Nice.
+> 
+> I will also attend Embedded Recipes in Nice and really unsure about ELCE in
+> Amsterdam. Like Nicolas pointed out, it's an expensive trip with less and less
+> technical value. I feel like it's mostly interesting to get business
+> visibility and see people from the community.
+> 
+> I'd be interested to talk about stateless video encoding uAPI topics there.
+> 
+> Cheers,
+> 
+> Paul
+> 
+>> On 20/02/2025 11:24, Hans Verkuil wrote:
+>>> [Repost because I mixed up a Lyon and Nice, and to provide more info on the other
+>>>  events that take place in Nice. Also added Kevin Hilman to the CC list.]
+>>>
+>>> Hi all,
+>>>
+>>> We want to organize a Media Summit this year as well to meet each other face-to-face.
+>>> We try to co-locate with an existing conference, and this year there are two options:
+>>>
+>>> 1) Co-locate with the Embedded Recipes conference in Nice in France which is held on May 14-16:
+>>>
+>>>    https://embedded-recipes.org/2025/
+>>>
+>>>    So a media summit would probably take place on May 11 or 12.
+>>>
+>>>    This conference is a one room, one track format. But the room holds up to 200
+>>>    people and the expectation is that it is not a problem to get tickets for it.
+>>>    And we might be able to reserve some tickets for us as well.
+>>>
+>>>    There is a libcamera workshop on Friday, and AFAIK a pipewire workshop on the same day.
+>>>    GStreamer plans an event during the weekend after ER.
+>>>
+>>> 2) Co-locate with the Open Source Summit Europe in Amsterdam which is held on August 25-27.
+>>>
+>>>    https://events.linuxfoundation.org/open-source-summit-europe/
+>>>
+>>>    The Embedded Linux Conference Europe is part of that event. The summit would
+>>>    probably be on August 24 or 28.
+>>>
+>>> I know that getting permission to travel is still a problem for many, which is why we
+>>> try to co-locate with a larger event.
+>>>
+>>> So: if you are a core media maintainer or an active media developer, and want to join
+>>> the Media Summit, which of these two options would work for you?
+>>>
+>>> If possible, I would like to get an idea of what I can expect in about two weeks time.
+>>> I'll send out a reminder in about a week as well.
+>>>
+>>> Feel free to forward this if you know other people who might be interested.
+>>>
+>>> If you haven't been to one of these Media Summits before, then you can find the report
+>>> on last year's summit here:
+>>>
+>>> https://lore.kernel.org/linux-media/45e4f5d4-f6c4-4f0b-96b5-f5e1125b0845@xs4all.nl/
+>>>
+>>> That should give you an idea of what to expect.
+>>>
+>>> Regards,
+>>>
+>>> 	Hans
+>>>
+>>
+>>
+> 
 
-  1043	
-  1044	static int isi_formats_init(struct atmel_isi *isi)
-  1045	{
-  1046		const struct isi_format *isi_fmts[ARRAY_SIZE(isi_formats)];
-  1047		unsigned int num_fmts = 0, i, j;
-  1048		struct v4l2_subdev *subdev = isi->entity.subdev;
-  1049		struct v4l2_subdev_mbus_code_enum mbus_code = {
-  1050			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-  1051		};
-  1052	
-  1053		while (!v4l2_subdev_call(subdev, pad, enum_mbus_code,
-  1054					 NULL, &mbus_code)) {
-  1055			for (i = 0; i < ARRAY_SIZE(isi_formats); i++) {
-  1056				if (isi_formats[i].mbus_code != mbus_code.code)
-  1057					continue;
-  1058	
-  1059				/* Code supported, have we got this fourcc yet? */
-  1060				for (j = 0; j < num_fmts; j++)
-  1061					if (isi_fmts[j]->fourcc == isi_formats[i].fourcc)
-  1062						/* Already available */
-  1063						break;
-  1064				if (j == num_fmts)
-  1065					/* new */
-  1066					isi_fmts[num_fmts++] = isi_formats + i;
-  1067			}
-  1068			mbus_code.index++;
-  1069		}
-  1070	
-  1071		if (!num_fmts)
-  1072			return -ENXIO;
-  1073	
-  1074		isi->num_user_formats = num_fmts;
-> 1075		isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-  1076						       sizeof(isi_fmts[0]), GFP_KERNEL);
-  1077		if (!isi->user_formats)
-  1078			return -ENOMEM;
-  1079	
-  1080		isi->current_fmt = isi->user_formats[0];
-  1081		return 0;
-  1082	}
-  1083	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
