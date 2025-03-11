@@ -1,91 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805CC1DF749;
-	Tue, 11 Mar 2025 15:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC3725B69D;
+	Tue, 11 Mar 2025 15:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741706602; cv=none; b=feITh1Ww/XeD4XoKrNBtZSkZ5+kjfMTsVQrjwy3yLSK3MkKACrp7017L2ga9W+gVXg/QRAfFSOVTENS7XTi26BDSTheZOggL0arLcG+YWA2UmjAOGNvsY6p2C3jclmIaVAlG4UU0j7xJuj8SVnZZkhDTNoNkQ5jPivbyafsu1KI=
+	t=1741707123; cv=none; b=p6k2uOo386zXTWVmPPPycgpZBAWlZY7Lae5C/rRkq5EfMuTmcAoq5IVku1OEwC5NFYwEQ6beHxwoahSCjYCgKKCqssaU8JlPUIfztqdp/c+Z0M2/ngF4ydH84L2UD+tH+GQ5XriqUtwb9xR1EQ6eUiLpdDOzdfRDh7zlftHc7b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741706602; c=relaxed/simple;
-	bh=gX33swGfNFibkFOxuy2e1d7FqpOjvVBceBdEVbkMVgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bYbBqBhLtZObx8SxmAXsJ5o56+7GVsRCiIxByFDHMR/BJQaMhYfBb2OjWK8ZhkiPpP//Ji8b3WnzVdVoNLcK8ym+jMsGV0jLdNmzr2PBhaEqBw25cYvjCh2MFYv2uIGTvr2VzhffexfBOK5eC7rDwMefhD7LhxMig/Ag17O2w54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HcKiI1hn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741707123; c=relaxed/simple;
+	bh=VtkaJ7L6XEIE9QnAL1+dX4kibxBnJwlPy8zVdc2LrHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V/p8E6nDey7AfC1eNGkYO9G5DRrT4q33vAWrPVm4sX4F6cj4vO0vex39tm9G2xtjSEzy/xnBz2CLKrXqfkixJDIBGZ+TXgnvjvWxbrPb79YvKTH1NBdVeb8Rau0m4Ep/VFuWTPFnYrwgnSMdQy9EDe/piFaQwLSFvRPJ8gnIP5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nkiqKK4U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HcKiI1hn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0570DC4CEE9;
-	Tue, 11 Mar 2025 15:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741706602;
-	bh=gX33swGfNFibkFOxuy2e1d7FqpOjvVBceBdEVbkMVgQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HcKiI1hn53v2zEq8DnRx/fy3gowFnAL0U8L91ODYafDVbSIR5olRSlDyzAmZrTp8Q
-	 JOtKuFHxJydHj1uJtaCXmcdpuxV0UeFvb73NF9kP7h9gqGg4qnhy/LixjaDp8KbQ09
-	 rYiCIYHbvgrzQHMUtWRwhvMVdI+D7l38X/941QU0=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 077/462] ARM: dts: mediatek: mt7623: fix IR nodename
-Date: Tue, 11 Mar 2025 15:55:43 +0100
-Message-ID: <20250311145801.390789844@linuxfoundation.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250311145758.343076290@linuxfoundation.org>
-References: <20250311145758.343076290@linuxfoundation.org>
-User-Agent: quilt/0.68
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nkiqKK4U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2036AC4CEF3;
+	Tue, 11 Mar 2025 15:31:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741707123;
+	bh=VtkaJ7L6XEIE9QnAL1+dX4kibxBnJwlPy8zVdc2LrHM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nkiqKK4UlgQ3bHIj+Fa2H3znDor0YOQfCHGZi4BE+Oy4tLZIQ5G21b63zkyyJT5v2
+	 LR3rdQKJ5nfiK3qFXAmVgYZ2PYDrJgp0fXL9hZXH7EWRf2jbhX7Tw52DiJ58vUg79V
+	 umwYYl+FJAeSJocInIfr2sAR/85pHgdSsJ9i1g82EaYjlbpqeZF89RMsk8nlNRpgna
+	 nIaTjGeBj4RcwafWQ1nIabLujNUz7oB7GxNqf1Cjl+dgll4SCKGrgSq/ePeF9eeMVl
+	 6Sk+x8fFpz01tRLt7bRnZkp3/0WYa/jNg+qWCgW7oD+7Sz+K6Hv9RQbzW1/ryIeHBz
+	 q/MDAV1qBbYYg==
+Date: Tue, 11 Mar 2025 17:31:57 +0200
+From: Dmitry Baryshkov <lumag@kernel.org>
+To: Vikash Garodia <quic_vgarodia@quicinc.com>
+Cc: Dikshita Agarwal <quic_dikshita@quicinc.com>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: media: qcom,sm8550-iris: document
+ SA8775p IRIS accelerator
+Message-ID: <ngzl7q3fli3bpuo5gjvppfrsnmlw6viy26ieqwhpfokgue2uxm@whomn2h6h3a7>
+References: <20250311-dtbinding-v1-0-5c807d33f7ae@quicinc.com>
+ <20250311-dtbinding-v1-2-5c807d33f7ae@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311-dtbinding-v1-2-5c807d33f7ae@quicinc.com>
 
-5.10-stable review patch.  If anyone has any objections, please let me know.
+On Tue, Mar 11, 2025 at 05:33:54PM +0530, Vikash Garodia wrote:
+> Document the IRIS video decoder and encoder accelerator found in the
+> SA8775P platform. SA8775P has collapsible MX compared to SM8550.
 
-------------------
+How compatible is SA8775P to SM8550? Should it be using a fallback
+compatible?
 
-From: Rafał Miłecki <rafal@milecki.pl>
+This kind of comes as a more generic question: is there anything like
+'IP version' or 'core version'? It would be really nice to determine the
+'baseline' SoCs and make other instances compatible with the baseline.
 
-[ Upstream commit 90234cf9b37c57201a24b78c217a91a8af774109 ]
+> 
+> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> index 440a0d7cdfe19a1ccedefc207d96b26eed5d6630..20ac596638ba33f49cce9e42d70d31a8aaa7c36e 100644
+> --- a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> +++ b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> @@ -19,7 +19,9 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    const: qcom,sm8550-iris
+> +    enum:
+> +      - qcom,sm8550-iris
+> +      - qcom,sa8775p-iris
+>  
+>    power-domains:
+>      maxItems: 4
+> 
+> -- 
+> 2.34.1
+> 
 
-Fix following validation error:
-arch/arm/boot/dts/mediatek/mt7623a-rfb-emmc.dtb: cir@10013000: $nodename:0: 'cir@10013000' does not match '^ir(-receiver)?(@[a-f0-9]+)?$'
-        from schema $id: http://devicetree.org/schemas/media/mediatek,mt7622-cir.yaml#
-
-Fixes: 91044f38dae7 ("arm: dts: mt7623: add ir nodes to the mt7623.dtsi file")
-Cc: linux-media@vger.kernel.org
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Link: https://lore.kernel.org/r/20240617094634.23173-1-zajec5@gmail.com
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/boot/dts/mt7623.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-index aea6809500d74..c267fc1f83579 100644
---- a/arch/arm/boot/dts/mt7623.dtsi
-+++ b/arch/arm/boot/dts/mt7623.dtsi
-@@ -309,7 +309,7 @@
- 		clock-names = "spi", "wrap";
- 	};
- 
--	cir: cir@10013000 {
-+	cir: ir-receiver@10013000 {
- 		compatible = "mediatek,mt7623-cir";
- 		reg = <0 0x10013000 0 0x1000>;
- 		interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_LOW>;
 -- 
-2.39.5
-
-
-
+With best wishes
+Dmitry
