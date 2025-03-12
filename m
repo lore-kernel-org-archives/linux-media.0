@@ -1,192 +1,106 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C9C26560E;
-	Tue, 11 Mar 2025 22:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1133D76
+	for <linux-media@vger.kernel.org>; Wed, 12 Mar 2025 00:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741732133; cv=none; b=lVLq9HWqcv8SXjoHP50X6hqabz9X8JBo+MWwTDQEL2SzexkfO4zXK4AfS/JPo+ECvtInPh+RZc0PHVCgFpNBqqOGsfT2mvuxdzD6XaXqscyc85d9XpJ9/mn4Ck+r9arluMnjQ2u8uS8b3n/TVsB1+FMz+1CyPygAIf4TSk9sqtE=
+	t=1741738306; cv=none; b=oiqQc2I++s5ZKwjsdLyTHM5JypbchJ53pNnocIBKL5ZT+OPSVX+xwL0YC4TqF1i/VXHBdopDok3DgWa3QSZ/PqP64Vx/A+1aQ2f6CuGeHs+fVHYsHFzLX4UVAuXkWTXSuBAhBmY8Jssq9Z6cjaK8lj34YI8Mj8eTQ3XRGOgYEEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741732133; c=relaxed/simple;
-	bh=c1EJT745wp+iQYTsgV/aSwRcGMBCnAjhwzzcywlBgcs=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Oe7GI+FuqovgygwKtFZXYGePcym7xyvh7uz8eZdQhEuSYAOoSiPFNQcLkKRzgQIWpDzGlEGxXx36NkE6Czs9OwsMI64i5wraysP83MtJU8TwaTqYQKe2hpwwE2g+9sn4m4PR7NnbCqjCyueZ7493dGDpXZkPy/eCKQNW+ZEbjwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=QWEZWp44; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1741738306; c=relaxed/simple;
+	bh=r4uMDAv8ZLSzUVvmQWSjnGSf+Wa5/Jy45T2NBY/rZWU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OPo42ufpM9GWRUQSN1slFOFEBCF0iH6YUefNtdcWTfIHCybM7+7FZSbFYlNznRApz7GXKJ5qZafQAZrSs+SWBx3F5MrOVUp7MOCtMGKzaZBynjkI1en7k9p3M/4TeTOaSHZMKVx6ULfetJR06RA9YZIwhULoSA6DqG2RHk4/rYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IUJxAp1/; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="QWEZWp44"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52BMOF3B2275039
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 11 Mar 2025 15:24:15 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52BMOF3B2275039
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1741731862;
-	bh=GFDhiFKvtRD+W2XGLJDNjRiea0qe1W3j0iK0xY8JZL8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=QWEZWp44Cu/zN1UIDmdWXY6QcwrSH2LoTB7gxC/oODFA2E5hnyx87scqetv/EJqaq
-	 W3NGSD2lutyv9Jcq8m20s075mr19ouosvjSfuoByKOZE3mQ3jwMuLYAfFD7NHXFjMu
-	 PSNQMtgdMv8Ylzz6iTK9sKEdCddWc+fBTUdrnEKWu4ZtGPAVnloe7NrgEcViX9/54l
-	 wN7/sR5ozYXyi5j6Ocpn7dIVIj/aVN6iIt0U8c7AYlRPFAXzs4Zww/v+elJgd/PqhB
-	 MqAlIlffCnFmITyc2l4ZgqDCwWd5yt6Lw5IBPI6hlmBqX3gG06MBm8zXyyFfILZebk
-	 u/gMoXml+mBPw==
-Date: Tue, 11 Mar 2025 15:24:14 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>
-CC: David Laight <david.laight.linux@gmail.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
-        akpm@linux-foundation.org, alistair@popple.id.au,
-        andrew+netdev@lunn.ch, andrzej.hajda@intel.com,
-        arend.vanspriel@broadcom.com, awalls@md.metrocast.net, bp@alien8.de,
-        bpf@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        brcm80211@lists.linux.dev, dave.hansen@linux.intel.com,
-        davem@davemloft.net, dmitry.torokhov@gmail.com,
-        dri-devel@lists.freedesktop.org, eajames@linux.ibm.com,
-        edumazet@google.com, eleanor15x@gmail.com, gregkh@linuxfoundation.org,
-        hverkuil@xs4all.nl, jernej.skrabec@gmail.com, jirislaby@kernel.org,
-        jk@ozlabs.org, joel@jms.id.au, johannes@sipsolutions.net,
-        jonas@kwiboo.se, jserv@ccns.ncku.edu.tw, kuba@kernel.org,
-        linux-fsi@lists.ozlabs.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux@rasmusvillemoes.dk,
-        louis.peens@corigine.com, maarten.lankhorst@linux.intel.com,
-        mchehab@kernel.org, mingo@redhat.com, miquel.raynal@bootlin.com,
-        mripard@kernel.org, neil.armstrong@linaro.org, netdev@vger.kernel.org,
-        oss-drivers@corigine.com, pabeni@redhat.com,
-        parthiban.veerasooran@microchip.com, rfoss@kernel.org, richard@nod.at,
-        simona@ffwll.ch, tglx@linutronix.de, tzimmermann@suse.de,
-        vigneshr@ti.com, x86@kernel.org
-Subject: Re: [PATCH v3 00/16] Introduce and use generic parity16/32/64 helper
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Z9CyuowYsZyez36c@thinkpad>
-References: <4732F6F6-1D41-4E3F-BE24-E54489BC699C@zytor.com> <efc2ee9d-5382-457f-b471-f3c44b81a190@citrix.com> <5A790652-1B22-4D13-AAC5-5D9931E90903@zytor.com> <20250307195310.58abff8c@pumpkin> <EB85C3C1-8A0D-4CB9-B501-BFEABDF3E977@zytor.com> <Z824SgB9Dt5zdWYc@visitorckw-System-Product-Name> <Z9CyuowYsZyez36c@thinkpad>
-Message-ID: <80771542-476C-493E-858A-D2AF6A355CC1@zytor.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IUJxAp1/"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5498cd09cbfso739426e87.2
+        for <linux-media@vger.kernel.org>; Tue, 11 Mar 2025 17:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741738303; x=1742343103; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x71rDFrG69wZWQuxGcSWuM7VOTt0MMfh9Nt7EV6dQ7g=;
+        b=IUJxAp1/7H0GgbmfiWUMLoaK6coxlwKeGs+WcqTl6HVbbMtKQsE0toWP4YweW4s2M5
+         EtY72MyME6dAgkzkW63Zkn2J63WIojHO/jP4MHUXvba967ubUWJ5/9zHF93C/FVfSlDv
+         026x0C4Wf16zixi0bU/A93lSaBXbOnRBj4LYOYFqoZRm4z/xfnh7seNYFnGxr8NW+cXj
+         LVFxC57BRkvbQiNI70SxWYZkeFAxfQg/dBcu0fM7IndXQuUyZfedsJafnlecEpvynx3R
+         I709r7BkzOS4B/m/G816vL1aycmxj3BgcfS2diWm+oIkA6wVEh02dum1kdlCzjVjLWL4
+         lwsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741738303; x=1742343103;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x71rDFrG69wZWQuxGcSWuM7VOTt0MMfh9Nt7EV6dQ7g=;
+        b=wIliGYZYTtmkdwj71bVl7f9CWkv4qmE1lhEK90TOZEQCB2WvAUgxYKMhBUftKCJc9T
+         AYWIAh2OE0jGTEzsEbeoCYyKvbiPN2+f6dwCGTzXN57l+3FrPEt9whlNlmJgTGSPIrlI
+         AKXXB0xef2/USoWPjPOn5ZgqJMIx3hzHE8EUO6yosm3LRr693o+5usKScL0Oewlg15AA
+         YdJf+xz/MKj2S5mUBDsrSPDrt7SG6XZwAV5q1kpR+mgCgpAehv3hUkNwntmZX4Is9vXu
+         NDMVdKfk/pI5BWt4ikHekCrVZn7tmJUwCIUmrBsi/5ExaAQWJTMZicQGLf1riKuG4aFO
+         h0kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/edZdcAvs+wXj+jWtAF/KKRDgAPCE7Wao1EWv6pNwtPy4Ks2GS7w9wIuvxbOSn3C21Egv5zMMD6Sk+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn39Sib4aPam1gHJ/yp7Udo0cxrurN3fumaQELDPR2XxXeXvJm
+	hyisnAEJ62OuUSDUkZl7qUQZIoNpTbXJGfZgMZ3ZX/7ddN6PC+dM1fUgAMFhwDg=
+X-Gm-Gg: ASbGnctwl/XsMwmX8Tv3jgsIoT7dv3FHcEw2u4jgDP2ttE6PIUDLQs8oQPX+EWDiozo
+	HAXyimypcWW1jWvOoN4Sb5dVDxk1wWGVKccXzEaWtvO5JaD2IeQEnsiyuMjiGvV0yoIAbuWR+xl
+	XuKbV/o9u+qCt4p/AN5Pp9JuMeqTcUFlzuPzX+4L6VgzWkmq17dVimM1lYUDqcO6bRcE8BFoYk7
+	joSapt/+2Xcd9pQjvcf8rPgRh0rQBYEjg/++NG2pwqKh3D1nDj06rdPUbhty6zdA4/ZF1DfIUtM
+	V1zxfRVdh5LGaQy8zYBaTR21Clz7n+vNibexraNv8MrIbmJNEwG99ToRPqYusjnCM8nZTPZHKjk
+	2Zu5+9CbcGX7XdQuCPyCIYgegfM/eQGOrLizQFRGGilND
+X-Google-Smtp-Source: AGHT+IGueK5QoMNin55y1U+ReeRji5g+uoV6EuXb1xgUOJA1idypd0Lwh+bCzoqSFe0fWJeU2bJx6Q==
+X-Received: by 2002:a2e:a9a4:0:b0:308:ed4d:6291 with SMTP id 38308e7fff4ca-30c206a5124mr8288491fa.3.1741738302256;
+        Tue, 11 Mar 2025 17:11:42 -0700 (PDT)
+Received: from localhost.localdomain (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30bfe741fadsm15984251fa.10.2025.03.11.17.11.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 17:11:40 -0700 (PDT)
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To: Robert Foss <rfoss@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH 0/3] arm64: dts: qcom: sm8650: Add CAMSS device tree node
+Date: Wed, 12 Mar 2025 02:11:29 +0200
+Message-ID: <20250312001132.1832655-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On March 11, 2025 3:01:30 PM PDT, Yury Norov <yury=2Enorov@gmail=2Ecom> wro=
-te:
->On Sun, Mar 09, 2025 at 11:48:26PM +0800, Kuan-Wei Chiu wrote:
->> On Fri, Mar 07, 2025 at 12:07:02PM -0800, H=2E Peter Anvin wrote:
->> > On March 7, 2025 11:53:10 AM PST, David Laight <david=2Elaight=2Elinu=
-x@gmail=2Ecom> wrote:
->> > >On Fri, 07 Mar 2025 11:30:35 -0800
->> > >"H=2E Peter Anvin" <hpa@zytor=2Ecom> wrote:
->> > >
->> > >> On March 7, 2025 10:49:56 AM PST, Andrew Cooper <andrew=2Ecooper3@=
-citrix=2Ecom> wrote:
->> > >> >> (int)true most definitely is guaranteed to be 1=2E =20
->> > >> >
->> > >> >That's not technically correct any more=2E
->> > >> >
->> > >> >GCC has introduced hardened bools that intentionally have bit pat=
-terns
->> > >> >other than 0 and 1=2E
->> > >> >
->> > >> >https://gcc=2Egnu=2Eorg/gcc-14/changes=2Ehtml
->> > >> >
->> > >> >~Andrew =20
->> > >>=20
->> > >> Bit patterns in memory maybe (not that I can see the Linux kernel =
-using them) but
->> > >> for compiler-generated conversations that's still a given, or the =
-manager isn't C
->> > >> or anything even remotely like it=2E
->> > >>=20
->> > >
->> > >The whole idea of 'bool' is pretty much broken by design=2E
->> > >The underlying problem is that values other than 'true' and 'false' =
-can
->> > >always get into 'bool' variables=2E
->> > >
->> > >Once that has happened it is all fubar=2E
->> > >
->> > >Trying to sanitise a value with (say):
->> > >int f(bool v)
->> > >{
->> > >	return (int)v & 1;
->> > >}   =20
->> > >just doesn't work (see https://www=2Egodbolt=2Eorg/z/MEndP3q9j)
->> > >
->> > >I really don't see how using (say) 0xaa and 0x55 helps=2E
->> > >What happens if the value is wrong? a trap or exception?, good luck =
-recovering
->> > >from that=2E
->> > >
->> > >	David
->> >=20
->> > Did you just discover GIGO?
->>=20
->> Thanks for all the suggestions=2E
->>=20
->> I don't have a strong opinion on the naming or return type=2E I'm still=
- a
->> bit confused about whether I can assume that casting bool to int always
->> results in 0 or 1=2E
->>=20
->> If that's the case, since most people prefer bool over int as the
->> return type and some are against introducing u1, my current plan is to
->> use the following in the next version:
->>=20
->> bool parity_odd(u64 val);
->>=20
->> This keeps the bool return type, renames the function for better
->> clarity, and avoids extra maintenance burden by having just one
->> function=2E
->>=20
->> If I can't assume that casting bool to int always results in 0 or 1,
->> would it be acceptable to keep the return type as int?
->>=20
->> Would this work for everyone?
->
->Alright, it's clearly a split opinion=2E So what I would do myself in
->such case is to look at existing code and see what people who really
->need parity invent in their drivers:
->
->                                     bool      parity_odd
->static inline int parity8(u8 val)       -               -
->static u8 calc_parity(u8 val)           -               -
->static int odd_parity(u8 c)             -               +
->static int saa711x_odd_parity           -               +
->static int max3100_do_parity            -               -
->static inline int parity(unsigned x)    -               -
->static int bit_parity(u32 pkt)          -               -
->static int oa_tc6_get_parity(u32 p)     -               -
->static u32 parity32(__le32 data)        -               -
->static u32 parity(u32 sample)           -               -
->static int get_parity(int number,       -               -
->                      int size)
->static bool i2cr_check_parity32(u32 v,  +               -
->                        bool parity)
->static bool i2cr_check_parity64(u64 v)  +               -
->static int sw_parity(__u64 t)           -               -
->static bool parity(u64 value)           +               -
->
->Now you can refer to that table say that int parity(uXX) is what
->people want to see in their drivers=2E
->
->Whichever interface you choose, please discuss it's pros and cons=2E
->What bloat-o-meter says for each option? What's maintenance burden?
->Perf test? Look at generated code?
->
->I personally for a macro returning boolean, something like I
->proposed at the very beginning=2E
->
->Thanks,
->Yury
+The Qualcomm SM8650 SoC contains a camera subsystem IP, which is
+got supported in the platform device tree by this change series.
 
-Also, please at least provide a way for an arch to opt in to using the bui=
-ltins, which seem to produce as good results or better at least on some arc=
-hitectures like x86 and probably with CPU options that imply fast popcnt is=
- available=2E
+Qualcomm SM8650 CAMSS IP contains of
+* 6 x CSIPHY,
+* 3 x CSID,
+* 2 x CSID Lite,
+* 3 x IFE,
+* 2 x IFE Lite.
+
+Vladimir Zapolskiy (3):
+  dt-bindings: media: Describe Qualcomm SM8650 CAMSS IP
+  arm64: dts: qcom: sm8650: Add CAMSS block definition
+  arm64: dts: qcom: sm8650: Add description of MCLK pins
+
+ .../bindings/media/qcom,sm8650-camss.yaml     | 389 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8650.dtsi          | 328 +++++++++++++++
+ 2 files changed, 717 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/qcom,sm8650-camss.yaml
+
+-- 
+2.45.2
+
