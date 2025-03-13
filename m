@@ -1,112 +1,176 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C97326A0E3;
-	Thu, 13 Mar 2025 16:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379B5185E7F;
+	Thu, 13 Mar 2025 18:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741884007; cv=none; b=Ho5ccutEvWUvgehKhax/lAM1zDIUjz9c3dLl67HOMwbhsXUsxRVle+DnSU4xqdoPd7Qyu+Cpq0q8xz+dP+E7YT655C1rHAKsFbe/gImTP8Xecs8o31E7EPnZB+lE2m92//Uqoi71JBcTb4LfGWSBgzVcXliIbFO/BA0HKSQMhy8=
+	t=1741889822; cv=none; b=LVNg8QsoxZaao6ueKC5kW7AvnLb9Mmdwpw2ju6pvMBglButCT+0fZCxu4FCFi+HFrc07hWKx3Jz9z3hWmjcG+wzEYxVmNxPI/emCU480oun+abd/6cQJacIHxaLrO8K31a0edeP/tNUIGfFuut9mriswCiLZGb0ps01djivYZEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741884007; c=relaxed/simple;
-	bh=SaFIw7UgTgo6VXgT9++j90cTZypncDuuppnQ2OyQAgc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=XwrVdY4yIgQLzHK/yci8I062cMN8L9HWzu3DZOXND7271pUjNd1O7agzs70OJWiMj/zpgKq58vOo+xFhQrKA6PdkUpUDKOrGGvWcxhYuFVf/nfdg8SSgDCGEAGYx7BCyrAN3hiv0+T5s4dq/SGu1JgAFQuQzRd+bpBo6sRndv9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=TAd1C3YU; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1741889822; c=relaxed/simple;
+	bh=DXglPiNNV84Je9bZlfd3wkaek0EXUcsHteRC16eVmM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bCp1tnzwnRd0Npxh8VBKsooMiOJ0PJ3JilG4eP/KT/L/6eueX2wp9jHpIvlsTJEtCmn/hu3flcc/bzo53YoDBwz9ZjFMl3Idc0JkgLYeSRlskhTBaPBqx+LfG+3vjwk1ZhWKrqY21rnX5hveW+FJhXZ39YN9JGbs4Qiy30Z2dIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckrwnbay; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="TAd1C3YU"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52DGaDdt3043136
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 13 Mar 2025 09:36:13 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52DGaDdt3043136
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1741883777;
-	bh=SaFIw7UgTgo6VXgT9++j90cTZypncDuuppnQ2OyQAgc=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=TAd1C3YUnz1/m04KvWprrt25c59hDoEqP/HObNA2f0Bp4rp+Nb9PEJCNVXCw14Iiu
-	 q9Abs6+zDLtcCpZhdLC2JCZczf1qLTKYIQIMECs16cttjTwMK/9bSrYGHwOie5HClz
-	 /jcP+3xeKGlwUu0aUrtIeDMZT1ZuV3Y4f2fDZOzvoKjLs6qNj/nOaMpj13f7/0wDQR
-	 FTgUDEoLrytWaP9YL4WrPdL93XJwGvTwIwSUgo+vtkpLhxBsY0ibsq0svVoyhEkaAa
-	 CHnCGjith9nzaUr6Ath+5dakagWjzMXxHAYsyl+rXq8ZXPjgmXLSW6QTYUQphTnOMM
-	 hLTpcEZzd0lKw==
-Date: Thu, 13 Mar 2025 09:36:11 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Yury Norov <yury.norov@gmail.com>
-CC: Jacob Keller <jacob.e.keller@intel.com>,
-        David Laight <david.laight.linux@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Kuan-Wei Chiu <visitorckw@gmail.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
-        andrzej.hajda@intel.com, neil.armstrong@linaro.org, rfoss@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
-        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, alistair@popple.id.au,
-        linux@rasmusvillemoes.dk, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
-        Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: Re: [PATCH v3 01/16] bitops: Change parity8() return type to bool
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Z9MGxknjluvbX19w@thinkpad>
-References: <20250306162541.2633025-1-visitorckw@gmail.com> <20250306162541.2633025-2-visitorckw@gmail.com> <9d4b77da-18c5-4551-ae94-a2b9fe78489a@kernel.org> <Z8ra0s9uRoS35brb@gmail.com> <a4040c78-8765-425e-a44e-c374dfc02a9c@kernel.org> <20250307193643.28065d2d@pumpkin> <cbb26a91-807b-4227-be81-8114e9ea72cb@intel.com> <0F794C6F-32A9-4F34-9516-CEE24EA4BC49@zytor.com> <Z9MGxknjluvbX19w@thinkpad>
-Message-ID: <795281B1-9B8A-477F-8012-DECD14CB53E5@zytor.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckrwnbay"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22BEAC4CEDD;
+	Thu, 13 Mar 2025 18:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741889821;
+	bh=DXglPiNNV84Je9bZlfd3wkaek0EXUcsHteRC16eVmM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ckrwnbayb5nxjjekbrpH+Bfn1tGnTSe5VjfyI3zlwSEo4IVMokY85CipHU+Xenac/
+	 eOS2KApmgXHCoF8qJuZ7DPP3XdCjCOOTdllG7Y004ZUtI0Gm5LoF3dRYjujXvuq/tA
+	 NJyestEaQryHvfOXiLJlY7vwfgOveJVdA0A6a8X67ekYjhsL72rXfLzm79jy0uq26D
+	 0sr7oBrzKzBKVQ6/cRjYD6QIvQtdAll4UZSYLVMtrIhT3gcXmIgx4ODBgs8qQ9wozq
+	 Cla7oizVWP8n3nihzMelgNDqxW/BDc1bINOQvhRzDjIIyZju4FuHWoiJmH3wRcxU1q
+	 LVJIahEP6jzsg==
+Date: Thu, 13 Mar 2025 19:16:58 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, 
+	Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, 
+	"T.J. Mercier" <tjmercier@google.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Tomasz Figa <tfiga@chromium.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH RFC 06/12] dma: direct: Provide accessor to dmem region
+Message-ID: <20250313-wooden-violet-quokka-001ef5@houat>
+References: <20250310-dmem-cgroups-v1-0-2984c1bc9312@kernel.org>
+ <20250310-dmem-cgroups-v1-6-2984c1bc9312@kernel.org>
+ <2af9ea85-b31d-49c9-b574-38c33cc89cef@arm.com>
+ <20250310-expert-piculet-of-fascination-3813cd@houat>
+ <0b057c55-fe02-4c83-af69-37770dc83eb8@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ffb7rrvpjvoby4z6"
+Content-Disposition: inline
+In-Reply-To: <0b057c55-fe02-4c83-af69-37770dc83eb8@arm.com>
+
+
+--ffb7rrvpjvoby4z6
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC 06/12] dma: direct: Provide accessor to dmem region
+MIME-Version: 1.0
 
-On March 13, 2025 9:24:38 AM PDT, Yury Norov <yury=2Enorov@gmail=2Ecom> wro=
-te:
->On Wed, Mar 12, 2025 at 05:09:16PM -0700, H=2E Peter Anvin wrote:
->> On March 12, 2025 4:56:31 PM PDT, Jacob Keller <jacob=2Ee=2Ekeller@inte=
-l=2Ecom> wrote:
->
->[=2E=2E=2E]
->
->> >This is really a question of whether you expect odd or even parity as
->> >the "true" value=2E I think that would depend on context, and we may n=
-ot
->> >reach a good consensus=2E
->> >
->> >I do agree that my brain would jump to "true is even, false is odd"=2E
->> >However, I also agree returning the value as 0 for even and 1 for odd
->> >kind of made sense before, and updating this to be a bool and then
->> >requiring to switch all the callers is a bit obnoxious=2E=2E=2E
->>=20
->> Odd =3D 1 =3D true is the only same definition=2E It is a bitwise XOR, =
-or sum mod 1=2E
->
->The x86 implementation will be "popcnt(val) & 1", right? So if we
->choose to go with odd =3D=3D false, we'll have to add an extra negation=
-=2E
->So because it's a purely conventional thing, let's just pick a simpler
->one?
->
->Compiler's builtin parity() returns 1 for odd=2E
->
->Thanks,
->Yury
+On Mon, Mar 10, 2025 at 06:44:51PM +0000, Robin Murphy wrote:
+> On 2025-03-10 4:28 pm, Maxime Ripard wrote:
+> > On Mon, Mar 10, 2025 at 02:56:37PM +0000, Robin Murphy wrote:
+> > > On 2025-03-10 12:06 pm, Maxime Ripard wrote:
+> > > > Consumers of the direct DMA API will have to know which region their
+> > > > device allocate from in order for them to charge the memory allocat=
+ion
+> > > > in the right one.
+> > >=20
+> > > This doesn't seem to make much sense - dma-direct is not an allocator
+> > > itself, it just provides the high-level dma_alloc_attrs/dma_alloc_pag=
+es/etc.
+> > > interfaces wherein the underlying allocations _could_ come from CMA, =
+but
+> > > also a per-device coherent/restricted pool, or a global coherent/atom=
+ic
+> > > pool, or the regular page allocator, or in one weird corner case the =
+SWIOTLB
+> > > buffer, or...
+> >=20
+> > I guess it wasn't super clear, but what I meant is that it's an
+> > allocator to the consumer: it gets called, and returns a buffer. How it
+> > does so is transparent to the device, and on the other side of the
+> > abstraction.
+> >=20
+> > I do agree that the logic is complicated to follow, and that's what I
+> > was getting at in the cover letter.
+>=20
+> Right, but ultimately my point is that when we later end up with:
+>=20
+> struct dmem_cgroup_region *
+> dma_get_dmem_cgroup_region(struct device *dev)
+> {
+> 	if (dma_alloc_direct(dev, get_dma_ops(dev)))
+> 		return dma_direct_get_dmem_cgroup_region(dev);
+>=20
+> 		=3D dma_contiguous_get_dmem_cgroup_region(dev);
+>=20
+> it's objectively wrong given what dma_alloc_direct() means in context:
+>=20
+> void *dma_alloc_attrs(...)
+> {
+> 	if (dma_alloc_direct(dev, ops))
+> 		cpu_addr =3D dma_direct_alloc(...);
+>=20
+> where dma_direct_alloc() may then use at least 5 different allocation
+> methods, only one of which is CMA. Accounting things which are not CMA to
+> CMA seems to thoroughly defeat the purpose of having such fine-grained
+> accounting at all.
+>=20
+> This is why the very notion of "consumers of dma-direct" should
+> fundamentally not be a thing IMO. Drivers consume the DMA API interfaces,
+> and the DMA API ultimately consumes various memory allocators, but what
+> happens in between is nobody else's business; dma-direct happens to
+> represent *some* paths between the two, but there are plenty more paths to
+> the same (and different) allocators through other DMA API implementations=
+ as
+> well. Which route a particular call takes to end up at a particular
+> allocator is not meaningful unless you are the DMA ops dispatch code.
+>=20
+> Or to put it another way, to even go for the "dumbest possible correct
+> solution", the plumbing of dma_get_dmem_cgroup_region() would need to be
+> about as complex and widespread as the plumbing of dma_alloc_attrs() itse=
+lf
+> ;)
 
-The x86 implementation, no, but there will be plenty of others having that=
- exact definition=2E
+I largely agree with the sentiment, and I think the very idea of
+dma_get_dmem_cgroup_region() is a bad one for that reason. But since I
+wasn't too sure what a good one might look like, I figured it would be a
+good way to start the discussion still :)
+
+> I think I see why a simple DMA attribute couldn't be made to work, as
+> dmem_cgroup_uncharge() can't simply look up the pool the same way
+> dmem_cgroup_try_charge() found it, since we still need a cg for that and
+> get_current_dmemcs() can't be assumed to be stable over time, right?
+> At the point I'm probably starting to lean towards a whole new DMA op wit=
+h a
+> properly encapsulated return type (and maybe a long-term goal of
+> consolidating the 3 or 4 different allocation type we already have)
+
+It felt like a good solution to me too, and what I alluded to with
+struct page or folio. My feeling was that the best way to do it would be
+to encapsulate it into the structure returned by the dma_alloc_* API.
+That's a pretty large rework though, so I wanted to make sure I was on
+the right path before doing so.
+
+> or just have a single dmem region for "DMA API memory" and don't care
+> where it came from (although I do see the issues with that too - you
+> probably wouldn't want to ration a device-private pool the same way as
+> global system memory, for example)
+
+Yeah, the CMA pool is probably something you want to limit differently
+as well.
+
+Maxime
+
+--ffb7rrvpjvoby4z6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZ9MhGQAKCRDj7w1vZxhR
+xd9pAQCHcGvhv8bNn26UvuNcyqdmxp8TBRjnsTOXt3Y6nu+UiwD/c+NEwXwAONYX
+R/jM767xucC1ylTWThh2/9kyYuWCpwM=
+=byXD
+-----END PGP SIGNATURE-----
+
+--ffb7rrvpjvoby4z6--
