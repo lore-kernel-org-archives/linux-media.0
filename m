@@ -1,67 +1,44 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC9200B96
-	for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 13:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741958059; cv=none; b=WcapcMMeqFg2abseHrRRwKUCn7hGIWTx0GvC7rIrjJfbRMnz1Lj9qJzYn3NYOGu1/eRMnmLic9a8qP3k2giU+5Whh1bEb9EzU+HtPN73mXavXOOVV67oM3L3bE3IYcWTFV96wZeVDlXpu2QkpLvW/WY/6/GbFRlgeB4bJcOwHjo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741958059; c=relaxed/simple;
-	bh=3qEj3bbV+h7bw70W9Qu2rgKmNJSTX2xHpgR9W8Jm1k8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAFA2E3398;
+	Fri, 14 Mar 2025 13:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741958833; cv=pass; b=SdsDq24Pf91xw2lwysbZMN0bencK5NPW56ahz8jnqLrlUOvi5xTNO6i91pQ8LY7+KsNuJzMmyUbtuJRxF5JL04Dd6CK/5nbQ53vUl1Va7tnVyeqCelBYKEUBwTIb6k4vblk2NovV0JBTkEdbXFqj2ALS7ffT619LC60y43PjeDs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741958833; c=relaxed/simple;
+	bh=sxx9sMpD06poRom5zVC4YKJwk1lBZQxtCTPM3pbmkzQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VFidwmpIu9D60Vm35xnzotUGPI/Nivyx6tO14ca7TEWaTSDLc352KAtWERGLoJs8TEcC+3TLfiHJXkCT1jHwZb35c4I32rZA5ypQ0bQ7VZVfROeuk+mNWuQn/U7QjaIeIyTng1XJ5zRSsl+7wvNxgyAzV74maj2yGsXpnAjJKcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=td9yKDRE; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 In-Reply-To:To:Cc; b=aw5ExEI/bBMVCAjMRaHOLrF7/tMSpUMTDc3lDc/mnNR5qU0pQBv1aW79WMGl9oSp0oAcaeoY62J6kzDyzLQf+CtC3K5ykzGGFfukKLLbpGQhm6YjZBjEGWZVd4W8wEHgpQM3HuuHUgImpgTm8Vk/Xb2UeSduwPltqdko84839ik=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b=Qv8oUF2x; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="td9yKDRE"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ac2a81e41e3so454436266b.1
-        for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 06:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741958055; x=1742562855; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RP6R7UedA0jjAiOICwsvyjhC9KhOLijiSoq6VNfxblc=;
-        b=td9yKDREf3HjMyOdGu5Uhh+ulSqxvfsFGhuijG2zu3b1VSYNtNAL1AgaoR5NCLjH5C
-         +ghQUj3EFcU2PnZ3uXAEZbg2p8Uk3jEfegtYxKqe8zKveG9oqLNGvtmyzhoAxPT+tUBo
-         06fR9D0U9o90M/up83Jw3zVA/3SzJHmChfaEJHQbzox0V6OoCDJrYt68KEP2sHBpHsBc
-         xoCP/NzchrenJ6CTs+zgGtG4hZellaFdabcPiOos+yuGO3AMi47uRAC7SIGZ0gHk+V67
-         lSGeJQB31nyJ2Js3I0vMUrNMmT2dhz8pM5Vxl9NmWj9PsAybqqxt+hVKbw2M38a8antr
-         NNlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741958055; x=1742562855;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RP6R7UedA0jjAiOICwsvyjhC9KhOLijiSoq6VNfxblc=;
-        b=gvVrMSZ2U3bq8RidzBwKDpAVYgFeZfMYilzCqGT1WTb+fxaHyF8IeTOyS8SLDA1ofp
-         LrvnfY+mF5avAIT1aIQ9DFn4CLu2OOh1HNyH8YxHmk7eG6iUMHcD+0hhWMDqSoLvG1AC
-         bMgH6cd5Q+15QxRZTRhH2CGfyC03RM6vgGUaYRBHDvE9h71NNekEQtKpsvA0aJCMysVC
-         0eCZXOAdRUpkrBFATkuZAaZJpNes5ME3DieLpu/tO4/xIdfa1tgGxYen6eGjrPpQF4xI
-         BvobWOzfihq/az8tuV93cbGsEr5WXB8sucR656Mob0n0VqMmeSTGzHZH/WxCV022Pjhk
-         y1bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWClAowHn1FxfZzavH2HHGWo5x4+gKP/DRk2iXCBfw8dXB+GSTZnnyPlpJnhS9yn/+bG7B9L7qaREVxrw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt2SmBroIpYTp2WMYKB/8QRgBECiRkmXKycsHLFCt3Tzdx6enq
-	+76/8yv7h/IVdBFBzhsgtTlv04iE7JkKHSro1c6cFk2AC5itIkat7WVBqdq8fTw=
-X-Gm-Gg: ASbGnctJga/AXZZQ06F4fg1abFBD7f4/S/ZdcXLhr55xmoxkiCjYLeTXw+cS8Dmn3Bj
-	A4FkCbHKdDFJLlveyLOlU6Spz1wBTmrTTXDJCJuFoVBQduPSCLfgGxjga/0n5xRdyETcvUpVOQn
-	hmfAWkQBbOJWdaAw0vi4Yfpvpcr7/Us/9pZ4M3f73yx0Qe6SmtEDtneJsZx7bWcwC1A5lXMhJVu
-	0rCTFRoWmBtv30DI9HVJ5aKDFbMsrS8bkrg3F9kihQauM2wp53l318cZ7Mt+eAukcOOESFQMEL2
-	NMseLJ9Ovl9e77KVDPGuqmtIPnSbyKH/s1//eHXpY4Eou6My+k3LpDjh18BfMZ5S5crSjyOhNsv
-	FXnk7fU5l8Q9u0ZMahY6K6tdIeGRA/MHqWYXYW0oKc0e3Ln8nwGXGPD+qMcUfiMkZD7JT
-X-Google-Smtp-Source: AGHT+IH6lz7+L7jSWCp/dupY+i3E2c1bi9sBCsicl1Tdt+QjUj8+2p5pZTHaCBVg2QBhL+EH+3ixqQ==
-X-Received: by 2002:a17:906:ef0b:b0:ac2:7a97:87fb with SMTP id a640c23a62f3a-ac3302f0a5fmr234668166b.33.1741958055309;
-        Fri, 14 Mar 2025 06:14:15 -0700 (PDT)
-Received: from [192.168.178.107] (2001-1c06-2302-5600-7555-cca3-bbc4-648b.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:7555:cca3:bbc4:648b])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac314a3fc0esm226008566b.137.2025.03.14.06.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 06:14:14 -0700 (PDT)
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date: Fri, 14 Mar 2025 13:14:03 +0000
-Subject: [PATCH v6 5/5] arm64: dts: qcom: x1e80100: Add CAMSS block
- definition
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.fricke@collabora.com header.b="Qv8oUF2x"
+ARC-Seal: i=1; a=rsa-sha256; t=1741958806; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Z4W+LsH/yJVY8B2N8xt6Is2fJE82So2XzSPtn7d1dWbqu4KuqlKZPvCJ7kAh5Y0sSRkpbTvljesD5Kw9AVLRWAhGoaDrXRHsyjhGzW0hAc2YgaqajgYYb2ZEoCXbSU89HF1ZB82muum0unsKRvH/5wAqtiqyP1PHJNgWeL1sD84=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1741958806; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=r5PKoNAd5zdxZnMwzm0dBWgFUNSzx8BJjkS0WWVbCIU=; 
+	b=AIinGbWMGyIBE8aBnER/snIY71HEWQQI4rocF/uQhMHT9lXY6UUjTtDCfEx9ipVP5gfgUwHXB0qHzKIxgKX1+8EkLp9SVbHAyIPZeahTwXhHhBH7oWrCXxj2dCLu+eNSMhhKkxXS2t/YvOHhwW7wrZdq6pjdxUIlC4l9M9T/tyQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.fricke@collabora.com;
+	dmarc=pass header.from=<sebastian.fricke@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741958806;
+	s=zohomail; d=collabora.com; i=sebastian.fricke@collabora.com;
+	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
+	bh=r5PKoNAd5zdxZnMwzm0dBWgFUNSzx8BJjkS0WWVbCIU=;
+	b=Qv8oUF2xoV7SRGHb8WOn1havaIyZS9juaRsefyEHe2dbt1msKRDccagbfNOKPW87
+	zTiFnyzdYiHi3wNHHfIuIXKtduni4uLVngjGleHDg05twcBc7y/GTP2+V2hvTdWXAPh
+	EjBTzg5QqH8QaO4CUgzNw3Fkl0hWey8tNuOtra6M=
+Received: by mx.zohomail.com with SMTPS id 1741958804809871.0776006949541;
+	Fri, 14 Mar 2025 06:26:44 -0700 (PDT)
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
+Date: Fri, 14 Mar 2025 14:26:26 +0100
+Subject: [PATCH 1/5] media: mc: add manual request completion
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -70,237 +47,193 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250314-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v6-5-edcb2cfc3122@linaro.org>
-References: <20250314-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v6-0-edcb2cfc3122@linaro.org>
-In-Reply-To: <20250314-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v6-0-edcb2cfc3122@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>, 
- Todor Tomov <todor.too@gmail.com>, 
+Message-Id: <20250314-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v1-1-5e277a3d695b@collabora.com>
+References: <20250314-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v1-0-5e277a3d695b@collabora.com>
+In-Reply-To: <20250314-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v1-0-5e277a3d695b@collabora.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+ Hans Verkuil <hverkuil@xs4all.nl>, Tiffany Lin <tiffany.lin@mediatek.com>, 
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>, 
+ Yunfei Dong <yunfei.dong@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ kernel@collabora.com, Sebastian Fricke <sebastian.fricke@collabora.com>, 
+ Hans Verkuil <hverkuil@xs4all.nl>
 X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741958789; l=5988;
+ i=sebastian.fricke@collabora.com; s=linux-media; h=from:subject:message-id;
+ bh=lUKighMYgVNAExQB5VpogYNcL74ZwJPIAc0FRqQAaq0=;
+ b=7wlGUTVZ371dfKFxqOPYsO1RtwsP+gLegIco+T4VVi5ZIkPmx+P08yrYtk3qysCozDkqEurtV
+ e2waPI9m/NRCYSojyDp2r85Rx0RLLkTEwFd/KjNugkMM4z2v399MP2y
+X-Developer-Key: i=sebastian.fricke@collabora.com; a=ed25519;
+ pk=pYXedPwrTtErcj7ERYeo/IpTrpe4QbJuEzSB52fslBg=
+X-ZohoMailClient: External
 
-Add dtsi to describe the xe180100 CAMSS block
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-4 x CSIPHY
-2 x CSID
-2 x CSID Lite
-2 x IFE
-2 x IFE Lite
+By default when the last request object is completed, the whole
+request completes as well.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+But sometimes you want to manually complete a request in a driver,
+so add a manual complete mode for this.
+
+In req_queue the driver marks the request for manual completion by
+calling media_request_mark_manual_completion, and when the driver
+wants to manually complete the request it calls
+media_request_manual_complete().
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- arch/arm64/boot/dts/qcom/x1e80100.dtsi | 185 +++++++++++++++++++++++++++++++++
- 1 file changed, 185 insertions(+)
+ drivers/media/mc/mc-request.c | 38 ++++++++++++++++++++++++++++++++++++--
+ include/media/media-request.h | 36 +++++++++++++++++++++++++++++++++++-
+ 2 files changed, 71 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-index 4ae0f67a634a982143df7aa933ec4de697f357a5..ee78c630e2a1c38643c9222a6d6fff4cc1216a47 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-+++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
-@@ -5195,6 +5195,191 @@ cci1_i2c1: i2c-bus@1 {
- 			};
- 		};
+diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
+index 5edfc2791ce7c7485def5db675bbf53ee223d837..398d0806d1d274eb8c454fc5c37b77476abe1e74 100644
+--- a/drivers/media/mc/mc-request.c
++++ b/drivers/media/mc/mc-request.c
+@@ -54,6 +54,7 @@ static void media_request_clean(struct media_request *req)
+ 	req->access_count = 0;
+ 	WARN_ON(req->num_incomplete_objects);
+ 	req->num_incomplete_objects = 0;
++	req->manual_completion = false;
+ 	wake_up_interruptible_all(&req->poll_wait);
+ }
  
-+		camss: isp@acb6000 {
-+			compatible = "qcom,x1e80100-camss";
+@@ -313,6 +314,7 @@ int media_request_alloc(struct media_device *mdev, int *alloc_fd)
+ 	req->mdev = mdev;
+ 	req->state = MEDIA_REQUEST_STATE_IDLE;
+ 	req->num_incomplete_objects = 0;
++	req->manual_completion = false;
+ 	kref_init(&req->kref);
+ 	INIT_LIST_HEAD(&req->objects);
+ 	spin_lock_init(&req->lock);
+@@ -459,7 +461,7 @@ void media_request_object_unbind(struct media_request_object *obj)
+ 
+ 	req->num_incomplete_objects--;
+ 	if (req->state == MEDIA_REQUEST_STATE_QUEUED &&
+-	    !req->num_incomplete_objects) {
++	    !req->num_incomplete_objects && !req->manual_completion) {
+ 		req->state = MEDIA_REQUEST_STATE_COMPLETE;
+ 		completed = true;
+ 		wake_up_interruptible_all(&req->poll_wait);
+@@ -488,7 +490,7 @@ void media_request_object_complete(struct media_request_object *obj)
+ 	    WARN_ON(req->state != MEDIA_REQUEST_STATE_QUEUED))
+ 		goto unlock;
+ 
+-	if (!--req->num_incomplete_objects) {
++	if (!--req->num_incomplete_objects && !req->manual_completion) {
+ 		req->state = MEDIA_REQUEST_STATE_COMPLETE;
+ 		wake_up_interruptible_all(&req->poll_wait);
+ 		completed = true;
+@@ -499,3 +501,35 @@ void media_request_object_complete(struct media_request_object *obj)
+ 		media_request_put(req);
+ }
+ EXPORT_SYMBOL_GPL(media_request_object_complete);
 +
-+			reg = <0 0x0acb7000 0 0x2000>,
-+			      <0 0x0acb9000 0 0x2000>,
-+			      <0 0x0acbb000 0 0x2000>,
-+			      <0 0x0acc6000 0 0x1000>,
-+			      <0 0x0acca000 0 0x1000>,
-+			      <0 0x0acb6000 0 0x1000>,
-+			      <0 0x0ace4000 0 0x2000>,
-+			      <0 0x0ace6000 0 0x2000>,
-+			      <0 0x0ace8000 0 0x2000>,
-+			      <0 0x0acec000 0 0x2000>,
-+			      <0 0x0acf6000 0 0x1000>,
-+			      <0 0x0acf7000 0 0x1000>,
-+			      <0 0x0acf8000 0 0x1000>,
-+			      <0 0x0ac62000 0 0x4000>,
-+			      <0 0x0ac71000 0 0x4000>,
-+			      <0 0x0acc7000 0 0x2000>,
-+			      <0 0x0accb000 0 0x2000>;
-+			reg-names = "csid0",
-+				    "csid1",
-+				    "csid2",
-+				    "csid_lite0",
-+				    "csid_lite1",
-+				    "csid_wrapper",
-+				    "csiphy0",
-+				    "csiphy1",
-+				    "csiphy2",
-+				    "csiphy4",
-+				    "csitpg0",
-+				    "csitpg1",
-+				    "csitpg2",
-+				    "vfe0",
-+				    "vfe1",
-+				    "vfe_lite0",
-+				    "vfe_lite1";
++void media_request_manual_complete(struct media_request *req)
++{
++	unsigned long flags;
++	bool completed = false;
 +
-+			clocks = <&camcc CAM_CC_CAMNOC_AXI_NRT_CLK>,
-+				 <&camcc CAM_CC_CAMNOC_AXI_RT_CLK>,
-+				 <&camcc CAM_CC_CORE_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_0_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_1_CLK>,
-+				 <&camcc CAM_CC_CPAS_IFE_LITE_CLK>,
-+				 <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
-+				 <&camcc CAM_CC_CSID_CLK>,
-+				 <&camcc CAM_CC_CSID_CSIPHY_RX_CLK>,
-+				 <&camcc CAM_CC_CSIPHY0_CLK>,
-+				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSIPHY1_CLK>,
-+				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSIPHY2_CLK>,
-+				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-+				 <&camcc CAM_CC_CSIPHY4_CLK>,
-+				 <&camcc CAM_CC_CSI4PHYTIMER_CLK>,
-+				 <&gcc GCC_CAMERA_HF_AXI_CLK>,
-+				 <&gcc GCC_CAMERA_SF_AXI_CLK>,
-+				 <&camcc CAM_CC_IFE_0_CLK>,
-+				 <&camcc CAM_CC_IFE_0_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_1_CLK>,
-+				 <&camcc CAM_CC_IFE_1_FAST_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_AHB_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>,
-+				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>;
-+			clock-names = "camnoc_nrt_axi",
-+				      "camnoc_rt_axi",
-+				      "core_ahb",
-+				      "cpas_ahb",
-+				      "cpas_fast_ahb",
-+				      "cpas_vfe0",
-+				      "cpas_vfe1",
-+				      "cpas_vfe_lite",
-+				      "cphy_rx_clk_src",
-+				      "csid",
-+				      "csid_csiphy_rx",
-+				      "csiphy0",
-+				      "csiphy0_timer",
-+				      "csiphy1",
-+				      "csiphy1_timer",
-+				      "csiphy2",
-+				      "csiphy2_timer",
-+				      "csiphy4",
-+				      "csiphy4_timer",
-+				      "gcc_axi_hf",
-+				      "gcc_axi_sf",
-+				      "vfe0",
-+				      "vfe0_fast_ahb",
-+				      "vfe1",
-+				      "vfe1_fast_ahb",
-+				      "vfe_lite",
-+				      "vfe_lite_ahb",
-+				      "vfe_lite_cphy_rx",
-+				      "vfe_lite_csid";
++	if (WARN_ON(!req))
++		return;
++	if (WARN_ON(!req->manual_completion))
++		return;
 +
-+			interrupts = <GIC_SPI 464 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 466 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 431 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 468 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 359 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 477 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 478 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 479 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 122 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 465 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 467 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 360 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "csid0",
-+					  "csid1",
-+					  "csid2",
-+					  "csid_lite0",
-+					  "csid_lite1",
-+					  "csiphy0",
-+					  "csiphy1",
-+					  "csiphy2",
-+					  "csiphy4",
-+					  "vfe0",
-+					  "vfe1",
-+					  "vfe_lite0",
-+					  "vfe_lite1";
++	spin_lock_irqsave(&req->lock, flags);
++	if (WARN_ON(req->state != MEDIA_REQUEST_STATE_QUEUED))
++		goto unlock;
 +
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &config_noc SLAVE_CAMERA_CFG QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mmss_noc MASTER_CAMNOC_HF QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
-+					<&mmss_noc MASTER_CAMNOC_SF QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
-+					<&mmss_noc MASTER_CAMNOC_ICP QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
-+			interconnect-names = "ahb",
-+					     "hf_mnoc",
-+					     "sf_mnoc",
-+					     "sf_icp_mnoc";
++	req->manual_completion = false;
++	/*
++	 * It is expected that all other objects in this request are
++	 * completed when this function is called. WARN if that is
++	 * not the case.
++	 */
++	if (!WARN_ON(req->num_incomplete_objects)) {
++		req->state = MEDIA_REQUEST_STATE_COMPLETE;
++		wake_up_interruptible_all(&req->poll_wait);
++		completed = true;
++	}
++unlock:
++	spin_unlock_irqrestore(&req->lock, flags);
++	if (completed)
++		media_request_put(req);
++}
++EXPORT_SYMBOL_GPL(media_request_manual_complete);
+diff --git a/include/media/media-request.h b/include/media/media-request.h
+index d4ac557678a78372222704400c8c96cf3150b9d9..645d18907be7148ca50dcc9248ff06bd8ccdf953 100644
+--- a/include/media/media-request.h
++++ b/include/media/media-request.h
+@@ -56,6 +56,10 @@ struct media_request_object;
+  * @access_count: count the number of request accesses that are in progress
+  * @objects: List of @struct media_request_object request objects
+  * @num_incomplete_objects: The number of incomplete objects in the request
++ * @manual_completion: if true, then the request won't be marked as completed
++ * when @num_incomplete_objects reaches 0. Call media_request_manual_complete()
++ * to set this field to false and complete the request
++ * if @num_incomplete_objects == 0.
+  * @poll_wait: Wait queue for poll
+  * @lock: Serializes access to this struct
+  */
+@@ -68,6 +72,7 @@ struct media_request {
+ 	unsigned int access_count;
+ 	struct list_head objects;
+ 	unsigned int num_incomplete_objects;
++	bool manual_completion;
+ 	wait_queue_head_t poll_wait;
+ 	spinlock_t lock;
+ };
+@@ -218,6 +223,35 @@ media_request_get_by_fd(struct media_device *mdev, int request_fd);
+ int media_request_alloc(struct media_device *mdev,
+ 			int *alloc_fd);
+ 
++/**
++ * media_request_mark_manual_completion - Set manual_completion to true
++ *
++ * @req: The request
++ *
++ * Mark that the request has to be manually completed by calling
++ * media_request_manual_complete().
++ *
++ * This function should be called in the req_queue callback.
++ */
++static inline void
++media_request_mark_manual_completion(struct media_request *req)
++{
++	req->manual_completion = true;
++}
 +
-+			iommus = <&apps_smmu 0x800 0x60>,
-+				 <&apps_smmu 0x860 0x60>,
-+				 <&apps_smmu 0x1800 0x60>,
-+				 <&apps_smmu 0x1860 0x60>,
-+				 <&apps_smmu 0x18e0 0x00>,
-+				 <&apps_smmu 0x1900 0x00>,
-+				 <&apps_smmu 0x1980 0x20>,
-+				 <&apps_smmu 0x19a0 0x20>;
++/**
++ * media_request_manual_complete - Set manual_completion to false
++ *
++ * @req: The request
++ *
++ * Set @manual_completion to false, and if @num_incomplete_objects
++ * is 0, then mark the request as completed.
++ *
++ * If there are still incomplete objects in the request, then
++ * WARN for that since that suggests a driver error.
++ */
++void media_request_manual_complete(struct media_request *req);
 +
-+			power-domains = <&camcc CAM_CC_IFE_0_GDSC>,
-+					<&camcc CAM_CC_IFE_1_GDSC>,
-+					<&camcc CAM_CC_TITAN_TOP_GDSC>;
-+			power-domain-names = "ife0",
-+					     "ife1",
-+					     "top";
-+
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+				};
-+
-+				port@3 {
-+					reg = <3>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+				};
-+			};
-+		};
-+
- 		camcc: clock-controller@ade0000 {
- 			compatible = "qcom,x1e80100-camcc";
- 			reg = <0 0x0ade0000 0 0x20000>;
+ #else
+ 
+ static inline void media_request_get(struct media_request *req)
+@@ -336,7 +370,7 @@ void media_request_object_init(struct media_request_object *obj);
+  * @req: The media request
+  * @ops: The object ops for this object
+  * @priv: A driver-specific priv pointer associated with this object
+- * @is_buffer: Set to true if the object a buffer object.
++ * @is_buffer: Set to true if the object is a buffer object.
+  * @obj: The object
+  *
+  * Bind this object to the request and set the ops and priv values of
 
 -- 
-2.48.1
+2.34.1
 
