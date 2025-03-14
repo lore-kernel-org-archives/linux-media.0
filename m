@@ -1,250 +1,137 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C04B1F4190
-	for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 10:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DD31F3FE8
+	for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 10:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741947458; cv=none; b=Pu2MWBHaBce7vrMec56YH7j4Pvyz7CXghkdL7Xfz2bD0o93ivksra3HtkrGEmeJxWw8U5+NB956stXzoReQcZmabRah3aaTTuXqWwmn6v9gSgL6ChrUniliiFmOLkMOoxM21o1a2rtMSHtiphXCA3GYnhmARitQw3v2rXIPJPHM=
+	t=1741947931; cv=none; b=i7ODWI/hu3fZXA/RMBpuuB4hq573DNB1xoDDxTyT8NDR2WwxDA61dWicywGAMJyTBdYguTPyenD6Tuua64UHfslNGe5WIXcrltBKKr5gkIKk/dGec2IEkQbDrS62Kjvh2CUxSyqrhHXpISRFIQwlVPzFzmQaOD/KByBIcltT20k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741947458; c=relaxed/simple;
-	bh=SHvxG4U/t4MAKWu3QBRXuQRdvpbSKp4HtfYs/YjTz54=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NXf0Zkn+IsYvy30kNvMde1MUUCgGc8DTwwRt1wUA+oF74gnNEvVLk1Q0njKIyEZt1eiQ8yXfcFmfH9zMDz9TGDHReW6iJyqDo3i1qIC9DZa4fl1svj84kg+vTGm0Nqev09I4yE/PtpmuZPy8qGBlCoP1JSG0bAW9e6oGYQq9VWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QoWRGuZy; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1741947931; c=relaxed/simple;
+	bh=5u1ZkrdqkYX+wTwH8HmCGZQpoR5zbk8KhmDs/eMDIno=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+GDOhkh6jqv2Kil0I5URIeDUkbpLpXRKZy3L8gGEolrqhKzog4U3zTeVpDlLXOvxgm78cXBQ8ZeBqcvqx0lnr52x9pbyodb88+LOKfJu9xA7+oT9Q17wE050nl8zMIX6O3bzBa6pqC0ZfX0LMeiT7DMbFemRMEbL87JxmEeelU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OjtptIuu; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QoWRGuZy"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-54996d30bfbso1672209e87.2
-        for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 03:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1741947454; x=1742552254; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPOkp6EW8yihrul0VeKT4eelAXrH0oyo+XW5bxSEhIQ=;
-        b=QoWRGuZy7M3tgMQnUu/qr3vF/1p3yf2YH1NgKe+KIe9RGNgCrD33uluK9XUvlK9m5Y
-         f2ez9k89ORPfxOCCHhuHqzTJLuPsCMoLuksTpwICrK4kl+sKaONKwDG8FG0AusXrDvyO
-         0Sy62SvF8SOjg8VWaKxhM/sgF0t3MamhgpsKo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741947454; x=1742552254;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BPOkp6EW8yihrul0VeKT4eelAXrH0oyo+XW5bxSEhIQ=;
-        b=Fkfw16gw6rqw1Q8lXxTnd5nMI2Q4gJggzOdQlxgv8xFxmOecMyZ6LmE+qHI+IIiVAN
-         OxhXiFv+JR/Tef7hDrHeQ6EWlPzINExMF+u6Gll4eZT7Hhus9bzbIxOPxbbNbq328sN9
-         AstW2z/FVL7d8feJIiFSoSdfQpriJrbeaPiPD0itZOysrFA/DO0wjUM4Z0mK6B4Uac1Z
-         xnf5amZ2klZXnJZVISEDrW7b38hiQlFPIIsEE9A69atQLtrzniQSHimWzXfbp6FEK28H
-         R+rbKp7tFQ2ZBfwJ9vgF06Jhx4mUUmvqGGBbLywezauO3rEESgXB3YxQ80AAAYX0gOBI
-         oqEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOERLSkIqEQO3UvOclErdPfQrprk123zX/VdqKBE0kKjm7kfw/TkhDkPS/6/3wzqabL6vJk7zEen1N+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwizmHZfUveK0OZP+x5lYoynFnJcNDcCDEugt3Z82yxyHka7An
-	KWI50ocESgmaO0V35uK/WEBfvLLEESe47oHwTOgeLkwadFd7VNWfknk4LvuNNdbJ1Ap49ym4zeb
-	YlQ==
-X-Gm-Gg: ASbGncvs+sPWoYEjtkQCVQjp9X1FDD0/r5Wn8DH+Sj/LjmmlZ6KXCnW6Wqu3E/eIgBM
-	PDInUPmQPYuvWhjcm6MMeaAiEH/lYoUBrx2iGxzXgp0czUCiHDJBhxJOfTBRoin2n+0kpXGJcT9
-	wuFsOuu4vljijjfHiXxoqIx1AIsZ5CP/R8gvHWAW+2ZpqYcRv+cVSU2CkEt6ee+6XFA2fUJkIZO
-	+rkJugfeh23aK3m0kXUVw+Ab9/KrpbAu94cSKESfadFvyxkHgGclu0EBPaGl1uqRGITtiiMj3cz
-	bwhl/smEoJVIKhR8RU9ibztHX31fHWe8+rHDvkSu4SfpbCfFJMUEdVzKCdeqdc8SLJSOYWsOQ5D
-	HlZ07RQDNPy/OG2nwsA==
-X-Google-Smtp-Source: AGHT+IHi53WeleOH02Eh3jrRJeFedgkLdgXwsVP+96YJCl/HrMG0h9qMZme8q8hJWVBJkdp1QKl+uw==
-X-Received: by 2002:a05:6512:2250:b0:545:2fa9:8cf5 with SMTP id 2adb3069b0e04-549c39aebb7mr722881e87.49.1741947454421;
-        Fri, 14 Mar 2025 03:17:34 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549ba864febsm476123e87.134.2025.03.14.03.17.33
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Mar 2025 03:17:33 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-54996d30bfbso1672187e87.2
-        for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 03:17:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWZKSMJUq5hHFrnnw2xiUX9VxQk+p+9u+RCPQroBhMgbKNCp3D8IRc6oy/MkLcBHCDkrOM99k7ela+8Iw==@vger.kernel.org
-X-Received: by 2002:a05:6512:2250:b0:545:2fa9:8cf5 with SMTP id
- 2adb3069b0e04-549c39aebb7mr722856e87.49.1741947452607; Fri, 14 Mar 2025
- 03:17:32 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OjtptIuu"
+Date: Fri, 14 Mar 2025 11:25:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741947914;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pvHzbCuCDD8ylI8fTMIt04hPeYHC4OaA5IgyIuhTOI0=;
+	b=OjtptIuuWp6g9EEZrDzT1PUFkLtcofVKGG75OTV2rlmf25VKP60kSapqVcHKeIhv6tOxDk
+	qpLpm3JpuzkhfI4dF//REJRN2wvtHTPaVaLPJubh9+Y9sc67AKQUvWy7OpdMhFPmYaA6aC
+	eQFLUued3qJzBM+AwWAK0ymfW3bD1Lg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Richard Leitner <richard.leitner@linux.dev>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-leds@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] media: v4l: ctrls: add a control for flash/strobe
+ duration
+Message-ID: <bx4p2hycva2rqywgglqluus6o7jbmfa2jjbc4k5d6aw6wsfkxd@zrtckmwtphuq>
+References: <20250314-ov9282-flash-strobe-v2-0-14d7a281342d@linux.dev>
+ <20250314-ov9282-flash-strobe-v2-1-14d7a281342d@linux.dev>
+ <Z9P01zU_Kg0U62wa@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313-uvc-metadata-v3-0-c467af869c60@chromium.org>
- <20250313-uvc-metadata-v3-3-c467af869c60@chromium.org> <20250314073456.25817a3d@foz.lan>
- <CANiDSCuNzwqhYOORqY+PGUbK8=tqxm6stpzQC3BFYF7pxgRG6w@mail.gmail.com> <20250314090919.GE19612@pendragon.ideasonboard.com>
-In-Reply-To: <20250314090919.GE19612@pendragon.ideasonboard.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Fri, 14 Mar 2025 11:17:19 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtxNwTrQrx6naDUYJOg3S4Osr7CbN6pbJ53HO_3AdpN3g@mail.gmail.com>
-X-Gm-Features: AQ5f1Jowa8v-a-YSWeZV9kM_kjV-xZvNmmBT51ULGBfXtvwUWk2GiqsWtYFwj5E
-Message-ID: <CANiDSCtxNwTrQrx6naDUYJOg3S4Osr7CbN6pbJ53HO_3AdpN3g@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] media: uvcvideo: Introduce V4L2_META_FMT_UVC_CUSTOM
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, 
-	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9P01zU_Kg0U62wa@kekkonen.localdomain>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 14 Mar 2025 at 10:09, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ricardo,
->
-> On Fri, Mar 14, 2025 at 09:28:34AM +0100, Ricardo Ribalda wrote:
-> > On Fri, 14 Mar 2025 at 07:35, Mauro Carvalho Chehab wrote:
-> > > Em Thu, 13 Mar 2025 12:06:27 +0000 Ricardo Ribalda escreveu:
-> > >
-> > > > The UVC driver provides two metadata types V4L2_META_FMT_UVC, and
-> > > > V4L2_META_FMT_D4XX. The only difference between the two of them is that
-> > > > V4L2_META_FMT_UVC only copies PTS, SCR, size and flags, and
-> > > > V4L2_META_FMT_D4XX copies the whole metadata section.
-> > > >
-> > > > Now we only enable V4L2_META_FMT_D4XX for the Intel D4xx family of
-> > > > devices, but it is useful to have the whole metadata section for any
-> > > > device where vendors include other metadata, such as the one described by
-> > > > Microsoft:
-> > > > https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/mf-capture-metadata
-> > > >
-> > > > This patch introduces a new format V4L2_META_FMT_UVC_CUSTOM, that is
-> > > > identical to V4L2_META_FMT_D4XX but it is available to all the UVC
-> > > > devices.
-> > > >
-> > > > Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > ---
-> > > >  .../userspace-api/media/v4l/meta-formats.rst       |  1 +
-> > > >  .../userspace-api/media/v4l/metafmt-uvc-custom.rst | 31 +++++++++++++++++
-> > > >  MAINTAINERS                                        |  1 +
-> > > >  drivers/media/usb/uvc/uvc_metadata.c               | 40 ++++++++++++++++++----
-> > > >  drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
-> > > >  include/uapi/linux/videodev2.h                     |  1 +
-> > > >  6 files changed, 69 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > index 86ffb3bc8ade2e0c563dd84441572ecea1a571a6..9fd83f4a3cc8509702a2a9f032fdc04bf6c6d1bc 100644
-> > > > --- a/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > +++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
-> > > > @@ -19,6 +19,7 @@ These formats are used for the :ref:`metadata` interface only.
-> > > >      metafmt-pisp-fe
-> > > >      metafmt-rkisp1
-> > > >      metafmt-uvc
-> > > > +    metafmt-uvc-custom
-> > > >      metafmt-vivid
-> > > >      metafmt-vsp1-hgo
-> > > >      metafmt-vsp1-hgt
-> > > > diff --git a/Documentation/userspace-api/media/v4l/metafmt-uvc-custom.rst b/Documentation/userspace-api/media/v4l/metafmt-uvc-custom.rst
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..9f150fc2b6f379cc4707ff45041dd014956ae11a
-> > > > --- /dev/null
-> > > > +++ b/Documentation/userspace-api/media/v4l/metafmt-uvc-custom.rst
-> > > > @@ -0,0 +1,31 @@
-> > > > +.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
-> > > > +
-> > > > +.. _v4l2-meta-fmt-uvc-custom:
-> > > > +
-> > > > +*********************************
-> > > > +V4L2_META_FMT_UVC_CUSTOM ('UVCC')
-> > > > +*********************************
-> > > > +
-> > > > +UVC Custom Payload Metadata.
-> > > > +
-> > > > +
-> > > > +Description
-> > > > +===========
-> > > > +
-> > > > +V4L2_META_FMT_UVC_CUSTOM buffers follow the metadata buffer layout of
-> > > > +V4L2_META_FMT_UVC with the only difference that it includes all the UVC
-> > > > +metadata, not just the first 2-12 bytes.
-> > > > +
-> > > > +The most common metadata format is the one proposed by Microsoft(R)'s UVC
-> > > > +extension [1_], but other vendors might have different formats.
-> > > > +
-> > > > +Applications might use information from the Hardware Database (hwdb)[2_] to
-> > > > +process the camera's metadata accordingly.
-> > >
-> > > Having something like that at the userspace API shouldn't be handled
-> > > lightly. This sounds to me that passing a blank check for vendors to stream
-> > > whatever they want without any requirements to provide and sort of
-> > > documentation for the usersace to decode it.
-> >
-> > As HdG previously mentioned, all the processing is done in the camera
-> > so the metadata is not going to hide highly secret required for
-> > processing:
-> > https://lore.kernel.org/linux-media/67c1a857-7656-421f-994c-751709b6ae01@redhat.com/
->
-> Without judging whether or not such an undocumented format should be
-> supported by the driver, a correction is needed here: the issue is not
-> "secrets required for processing", but giving closed-source application
-> an unfair advantage.
+On Fri, Mar 14, 2025 at 09:20:23AM +0000, Sakari Ailus wrote:
+> Hi Richard,
+> 
+> Thanks for the set.
 
-We could argue that vendors already have the possibility to pass
-secrets to userspace:
-- A camera could add proprietary information inside the frame, only
-parseable by a closed-source application
-- They can use undocumented UVC controls
-- They can exploit documented controls to do something else that they
-are designed for.
-Given these existing possibilities, I question whether "evil metadata"
- offers any fundamentally new capabilities that cannot be achieved
-through these established methods.
+Hi Sakari,
+thanks for the quick response!
 
-If we have to talk about unfair advantage, Linux is at an unfair
-advantage right now: there is no way to use the *documented*
-information provided by the metadata. Other OSs can use it.
-The way I see it, with this artificial limitation we are not blocking
-evil vendors but punishing good users.
+> 
+> On Fri, Mar 14, 2025 at 09:49:55AM +0100, Richard Leitner wrote:
+> > Add a control V4L2_CID_FLASH_DURATION to set the duration of a
+> > flash/strobe pulse. This is different to the V4L2_CID_FLASH_TIMEOUT
+> > control, as the timeout defines a limit after which the flash is
+> > "forcefully" turned off again.
+> > 
+> > On the other hand the new V4L2_CID_FLASH_DURATION is the desired length
+> > of the flash/strobe pulse
+> 
+> What's the actual difference between the two? To me they appear the same,
+> just expressed in a different way.
 
-if it makes you feel more comfortable we can start enabling only
-V4L2_META_FMT_UVC_CUSTOM (or V4L2_META_FMT_MSXU_UVC_1_5 as proposed by
-Mauro) to devices that support MSXU_CONTROL_METADATA, the future
-ChromeOS XU, or quirks. But that artificial limitation will hurt a lot
-of current cameras for no real reason.
+According to FLASH_TIMEOUT documentation:
 
->
-> > > Also, it would be hard for userspace to distinguish what metatata
-> > > is contained for a random UVC camera. Please let's not do that.
-> >
-> > Userspace will use hwdb info to properly parse the metadata.
->
-> I don't have experience with that, so I would like to see the effort
-> being started on hwdb support to see how it will look like before we
-> merge this patch. A few cameras should be added as examples, and a
-> stategy to ensure the hwdb will be properly populated should be
-> proposed.
+	Hardware timeout for flash. The flash strobe is stopped after this
+	period of time has passed from the start of the strobe. [1]
 
-We can start by mapping the D4XX cameras. D4XX format follows
-Microsoft standard.
+This is a little bit unspecific, but as also discussed with Dave [2]
+according to the documentation of V4L2_FLASH_FAULT_TIMEOUT it seems to
+be targeted at providing a "real timeout" control, not settings the
+desired duration:
 
-Would that work for you?
+	The flash strobe was still on when the timeout set by the user
+	--- V4L2_CID_FLASH_TIMEOUT control --- has expired. Not all flash
+	controllers may set this in all such conditions. [1]
 
->
-> > > As the specific issue here is to support an already known extension,
-> > > which is already documented, Just add an specific format for it, e.g.
-> > > you could add something like that at the documentation:
-> >
-> > The problem here is how do we know from the driver if a device
-> > supports V4L2_META_FMT_MSXU_UVC_1_5 or not.
-> >
-> > In Windows it seems that vendors add that information to the device
-> > .inf file. That is equivalent to the hwdb proposal.
-> > In ChromeOS we are trying to push vendors to use an extension saying
-> > if there is metadata or not. But that will take some time to land and
-> > there are thousands of modules out there not ChromeOS compliant.
-> >
-> > >
-> > >         V4L2_META_FMT_MSXU_UVC_1_5
-> > >            Microsoft extensions to USB Video Class 1.5 specification.
-> > >
-> > >            For more details, see: https://learn.microsoft.com/en-us/windows-hardware/drivers/stream/uvc-extensions-1-5
-> > >
-> > > And then add the corresponding format to V4L2 API.
->
-> --
+If I understood that wrong, I'm also happy to use FLASH_TIMEOUT for this
+use-case. But tbh I think FLASH_DURATION would be more specific.
+
+As this still seems unclear: Should the documentation be
+changed/rewritten if we stick with the FLASH_DURATION approach?
+
+[1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/ext-ctrls-flash.html
+[2] https://lore.kernel.org/lkml/CAPY8ntB8i4OyUWAL8k899yUd5QsRifJXiOfWXKceGQ7TNZ4OUw@mail.gmail.com/
+
+> 
+> > 
+> > Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> > ---
+> >  drivers/media/v4l2-core/v4l2-ctrls-defs.c | 1 +
+> >  include/uapi/linux/v4l2-controls.h        | 1 +
+> >  2 files changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > index 1ea52011247accc51d0261f56eab1cf13c0624a0..f9ed7273a9f3eafe01c31b638e1c8d9fcf5424af 100644
+> > --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> > @@ -1135,6 +1135,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> >  	case V4L2_CID_FLASH_FAULT:		return "Faults";
+> >  	case V4L2_CID_FLASH_CHARGE:		return "Charge";
+> >  	case V4L2_CID_FLASH_READY:		return "Ready to Strobe";
+> > +	case V4L2_CID_FLASH_DURATION:		return "Strobe Duration";
+> >  
+> >  	/* JPEG encoder controls */
+> >  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+> > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> > index 974fd254e57309e6def95b4a4f8e4de13a3972a7..80050cadb8377e3070ebbadc493fcd08b2c12c0b 100644
+> > --- a/include/uapi/linux/v4l2-controls.h
+> > +++ b/include/uapi/linux/v4l2-controls.h
+> > @@ -1173,6 +1173,7 @@ enum v4l2_flash_strobe_source {
+> >  
+> >  #define V4L2_CID_FLASH_CHARGE			(V4L2_CID_FLASH_CLASS_BASE + 11)
+> >  #define V4L2_CID_FLASH_READY			(V4L2_CID_FLASH_CLASS_BASE + 12)
+> > +#define V4L2_CID_FLASH_DURATION			(V4L2_CID_FLASH_CLASS_BASE + 13)
+> >  
+> >  
+> >  /* JPEG-class control IDs */
+> > 
+> 
+> -- 
 > Regards,
->
-> Laurent Pinchart
+> 
+> Sakari Ailus
 
-
-
--- 
-Ricardo Ribalda
+Thanks!
+Richard
