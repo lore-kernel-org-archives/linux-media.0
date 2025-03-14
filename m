@@ -1,190 +1,256 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013060.outbound.protection.outlook.com [40.107.162.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFA61FFC55
-	for <linux-media@vger.kernel.org>; Fri, 14 Mar 2025 14:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741962006; cv=none; b=HGuBabMTnJGE3YjcLfYnX3uFaTKLOx7QtgZFjuZz8UFjO+NciGvrByuxKqj2MBZBmY4aXfVL9pPgbdqsPwFq5p+pMX4wQeY/dPtRrrvB2+iI4JwgyP/28MupePT0IjMyleEOcuzw+0KRidFZ0ED+A/hr+SCmnvknvXhkv+1Dp3E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741962006; c=relaxed/simple;
-	bh=yq9an8CfyMxDE55qCJievO88pgLMzre+8hBcHFI0Tvk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=W/FZiTc2z1J9TyaklJJQbIY5DXZIr85n1MulHx7GdSt23EVGhm41wV4vmZvLUcd4eftyLlbWhTnf84jS/fy9gtvI+SJCy8zXMbty4Z8NbOCVe9qz9iQu0Fzs2wOtHnfqRziQmuIGwrm7W2bk7qiRV6f4SggTH3XKDWrxyBXhLSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DEBC4CEE3;
-	Fri, 14 Mar 2025 14:20:05 +0000 (UTC)
-Message-ID: <bf119c2e-34a4-441d-b55a-f5105e8df8d3@xs4all.nl>
-Date: Fri, 14 Mar 2025 15:20:03 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E731E1990BA;
+	Fri, 14 Mar 2025 14:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741963583; cv=fail; b=VTKxK6hhEjp2VhqxupHs9TwaQ6/sTLXbq8AdlfG4BtbNRxhS25yjS0k4rhhq8tuAjl2hHl5QklOfUEzmZ7TL/4xF9iaOFqHB5X/ppbXUcg+4CMoVH8VH00SOAlaWt5BMUMlnn29vlyntWA3I/o0BBWr5IE3dL3EdZjjLyYkSbgE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741963583; c=relaxed/simple;
+	bh=zrZJE1SQwUV8YIDym7vMruuUPOPAdciS04ObPbl7GKQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mhwbLyXsx1X+vyoRbRs8pYQAIQktmDFaw+2txmM1FyTHO4/2DiaKr2IMsF7yfWko6tbc5KUhNGbwOYvyQXBrHsLnMEUANvO/wkU+V9eddsrDLHSKtvbdeZtlDD8J2VOankCTbmbx2Pk9YTyrPZh2y5HtmaJivYWZtm1rq7vbSCg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=pass smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=N7EZXaig; arc=fail smtp.client-ip=40.107.162.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mt.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="N7EZXaig"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a5U1cXBj7XGZudtEBDhtqL+SAoYSKjF4Yc/woA4iYp9k/kaBT0I8i4rRkjdya72O9E7n0ApcovqS5aGE+ofYRKRy2WrAx2Rsa0rqbTvVkAuhx1Ske0b8iQY13XfzPlHizQeMBqYwanjkBWbWX8sfPaEMAc1RHWcestn/bAKVzfwa5+vqo1c4hxsMSqjr3WgbUNOuLieHcrhoJQ6cLxwlS6PJyImQzAixeWkiMYPPbLN0LyiFSxHTmptUx40Zyetifh+l7BUEKLe8rAUzrEYmTZaffVMXajqwLDBnATktx/rWxGdZa74NbTG5qQ062J84pMHNXaXDHV8GB9ROKQXdsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ON3V7YtH/qR1tqarWspQ7zeUE8pqKgUK7jAGyBfOzfo=;
+ b=cvOm2hZCFnBRbKuk8HT2jfy62Dn5ACaNSwjLUK+95e0/Wa5QIlT+1fGYWKYjj028pFPHPIhg/R09qh5t1qrTASSzQpOc7NFtRKaat3LBcgocHK6gm6WKdDE1REFgU0KsaXoHy7MSbVIUqACqQGqktsiMh9E71N/Z4KyYsmQFBAlyEX1/RQDxVbnOEkB6tZebrrsuN1UG5JP6/feZyl8dR7BZgVO+5P+V2ufN+wMaKaocYjj9j2bqyj4Ytsks9ukuVoVEUlwCJV0lxW/zT6OkgflgXE6wqb/c7lJ6bWD/Mhf/0q7n8SDCQLMTb7SJ3QjC/ykntxXipcZlclCaSHQ4fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ON3V7YtH/qR1tqarWspQ7zeUE8pqKgUK7jAGyBfOzfo=;
+ b=N7EZXaig2IKXRPM6VY8XbPgnICPR5AjGZDRMs2WEd/bWXBumNMHbduFgOVCzPVxyQucf8OTzJncFBXwPCLOq9V4mSBnae6Wtnjv08G62paAxelfL3Sbc0LA8pkn1RlEo9uUY+zMiZP8xqLI7QPyXgvD0df6O7w+v99d48MeFjTikkcUVw56TUKLq103ni8WNRq//INkPvLr4ycff1hAHW/jUUoBORSuN+J00jwdsKb9zPM5vzeTQWkSdfZY3CNOU8AYmB3ND4b1jsWO3WDDL8IrbuWQYNzHaZj7CDALSn2duRXmCpXjmANTd1V2vTY13bHbmSRXv01GbPV6GJOLtLw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from DBBPR03MB10396.eurprd03.prod.outlook.com (2603:10a6:10:53a::11)
+ by DBBPR03MB7097.eurprd03.prod.outlook.com (2603:10a6:10:1f5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.25; Fri, 14 Mar
+ 2025 14:46:18 +0000
+Received: from DBBPR03MB10396.eurprd03.prod.outlook.com
+ ([fe80::ee3c:c9be:681:c0bf]) by DBBPR03MB10396.eurprd03.prod.outlook.com
+ ([fe80::ee3c:c9be:681:c0bf%4]) with mapi id 15.20.8511.026; Fri, 14 Mar 2025
+ 14:46:18 +0000
+From: Mathis Foerst <mathis.foerst@mt.com>
+To: linux-kernel@vger.kernel.org
+Cc: Mathis Foerst <mathis.foerst@mt.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	manuel.traut@mt.com,
+	mathis.foerst@zuehlke.com
+Subject: [PATCH v2 1/1] media: imx: csi: Parse link configuration from fw_node
+Date: Fri, 14 Mar 2025 15:46:09 +0100
+Message-Id: <20250314144609.219486-2-mathis.foerst@mt.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250314144609.219486-1-mathis.foerst@mt.com>
+References: <20250314144609.219486-1-mathis.foerst@mt.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZRAP278CA0011.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:10::21) To DBBPR03MB10396.eurprd03.prod.outlook.com
+ (2603:10a6:10:53a::11)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: omap3isp: drop wait_prepare/finish callbacks
-From: Hans Verkuil <hverkuil@xs4all.nl>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <218877d9-5f95-42ab-8bbf-2325cb31ed73@xs4all.nl>
- <20250128154040.GF12673@pendragon.ideasonboard.com>
- <f11dab4a-0288-42ae-b6c1-a548206a1249@xs4all.nl>
- <7e2bf95e-5cbd-4792-a8b6-d38a1532f3dd@xs4all.nl>
- <Z7bgqrfTovdssWTc@kekkonen.localdomain>
- <61241a2a-1b87-4711-af2c-26a97a1ef6a7@xs4all.nl>
-Content-Language: en-US, nl
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <61241a2a-1b87-4711-af2c-26a97a1ef6a7@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBBPR03MB10396:EE_|DBBPR03MB7097:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70aa4691-b5f8-47d6-033a-08dd6306f9bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?RmTSfGtpn1WjeUUwqRSpFMnNTvuDOBJW0IUwT7fvw9lCb//Vgi4vqDLkNMBk?=
+ =?us-ascii?Q?fSgSto0jX00U6AJoJ1qCyGHTCmN04GvD3WnJR8wh4FSvU+oajzbuSKJs+Kfz?=
+ =?us-ascii?Q?Yug11MPyKiHwwB+DIH+OiDE01jOxG7UIHMJp/f3y6aWvi8Yn7KxPGtBOyMFN?=
+ =?us-ascii?Q?zJdho+7g0kbwL4RH0Srg/QyMDN59sJ2Lu/w3h/HeLweMn3oueLVfwVYO/LKL?=
+ =?us-ascii?Q?FIp0JoGtO2bNl9GeD+q5KY0+g4NojPolB9l/tn/JfXoqLKcyYgznFR7MQBgU?=
+ =?us-ascii?Q?3U7ODsfGoWnyQai97/k1qOJYD+dG+HSWrjGG8kR4uVKY1q8ePTt3u1Qei9Pw?=
+ =?us-ascii?Q?BqkHitrvy8Hp3R3EJ2gCIDitf2ytxf0qvcoyGMF6FgkaILzzGy1YtK3Ya7CP?=
+ =?us-ascii?Q?bcq3EVyaOnytNh77Mvuld+KG744W7S2/OzY4ZLynYSyQKzSfdbcxaP07MY3t?=
+ =?us-ascii?Q?pyz7Wy1COsdtd/A2nMC1u5n8YBABEZ+4JuL0dRpJgMQT6e//4cKvpinEBqen?=
+ =?us-ascii?Q?hlwgZBW2QRBkQsqEdADHdBX4fCMbbpcCAQKlL+tMQLpgugxLZNEMBc03dqr3?=
+ =?us-ascii?Q?ptpmZBs0EWiAqLd8dbQgJW9DIx++Qbx7rtcW+tPOYTgUR9YMPdfcVgBvqZF0?=
+ =?us-ascii?Q?M8SNEavBhGx5va7mpKtNymK4P93jca3hiWsoENLEs8EzIhAMzAa3uXQ+65LO?=
+ =?us-ascii?Q?I09TAhjB+matacgoqMqijL7IP6xZkaVCYVaImJPEwaugqfkENq72TkCZmbNU?=
+ =?us-ascii?Q?2k2o4wk5GnC9sYS7eoolTEeovUh5vS9TMu+cNEIVLPlJ+caz2cWqtT/vyeQ2?=
+ =?us-ascii?Q?8Tyz61PAybP5+wf/fyWG+5p0/+7fJLg+AjkWxoNsQoH+ZFsumc34KTusHi60?=
+ =?us-ascii?Q?SiYCJpdimL2hBkM6X2/11oUIDZrKFdwREiVZ80pRC9dju4w/0vAfKadWf1XQ?=
+ =?us-ascii?Q?KAuPFBvd81p7zh7z1cgYVrS0Wfqhq1oNrCGWUck1ikw51EpIvTot58Yq7ymh?=
+ =?us-ascii?Q?Sa8aLDyY/okqF/HMqGKMzyDhlYGyu4+BWxOoI1uygP7W7wmwmuF85gQsaBdV?=
+ =?us-ascii?Q?SYfFn6MUJvvj21LXGOQjAXr25wpUDFPS/0MPNNmaYUnFY8mwWxs7n6D4uVVU?=
+ =?us-ascii?Q?MO2eG6y6lkD1EzJTMSEalJQuGRcdBLULbFUQh6lk54IF5cnHD8wr4wy8zLZ2?=
+ =?us-ascii?Q?lmSFRIKAeBsJ06OHjHR+oMpxwtNgPVFK5+EGr9D/DfkSI7QDuceZ+qwGtW48?=
+ =?us-ascii?Q?18jSdquTnoRPvtxtiYANUg6n1uACeQ70k3B1DqAN8uL2o7iFKt6yCfQ8uEEF?=
+ =?us-ascii?Q?bW4LGKHapl3KLA0hmusJzJuEq5ia4s4UTy8t4OykHmxOuAm6eY+2q+Zcupxo?=
+ =?us-ascii?Q?pGyC3yM5X3QHwcuMuLKUM/CIq+rDjS6B2yaXfo9B/wDJcGy2Ya24N1vApUEt?=
+ =?us-ascii?Q?r1SVHH8vG4YUJDdpZlr041JC84SDUU3R?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR03MB10396.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?zoHdNVaEBYpX83fFHp1szniplrdtlK5DjKKtmYNXKJG/lYx13eLQlGtvCd7E?=
+ =?us-ascii?Q?C1mVMPiXf4r21NAlUVFd4aS8MBf9jR65OSvqYgngpe5OprozCjF13HLHBrVo?=
+ =?us-ascii?Q?v6P9R8Rto58fDadwnCWkPtOU2kTacYWKd0q2xULwQRfEbd7TRBoWl3c6Jy//?=
+ =?us-ascii?Q?oQ1Mtxh9LgryrcH6UtjXCvOQSXeM+HZ+Amd6f5bbxJ2WRTh2dsIjEFbaToG6?=
+ =?us-ascii?Q?cojHTLLImI6RrLuNIo+lysTBN2lilSPYyjXP9A8kLgbyGPXxc0jSCu2fubLe?=
+ =?us-ascii?Q?nf/lMjmrGsugev0Ny7YAs3BV3m4GJW9ssFiFudw69VZ4Icm7GMw6dAMpzM0K?=
+ =?us-ascii?Q?vvhDm8YozlhTAKiwx4LPT4uauKoj3Fyyi1E+TnVThlasomE57bABsieM1sKo?=
+ =?us-ascii?Q?XTGaElBMvbZwj8LkX3YAF8siNJo3jKqS9Gi6OpGnmI2bufE3cHZpGjig5NYe?=
+ =?us-ascii?Q?QuuvaIhTZfGHBuXAHdTtT5bZq5BJZ87BJHcMfKfRsN8pgKG6B8/dLu20wXq5?=
+ =?us-ascii?Q?adGBllvErl6NNUjOA3ToAo8urhe6WTvJ3TVJce8P5Pnnn7w4jHJBXdjqJrGA?=
+ =?us-ascii?Q?ZoUNdxhayBaR5OWzTDLiF4oIK9CFxn/oBJixCXR5UyX7yusIPl4c1jNheRTJ?=
+ =?us-ascii?Q?YLij1i4Jn+yqqXmCB0s7X80D4qjZiKG2uoXyqrGhsJM+YkRHo6WSEN5KPD6D?=
+ =?us-ascii?Q?/ktsh2MDbC9z5omyxiETZzSBBj35Ame1nigUC8LabdIyDq2l6HnKa9C178uI?=
+ =?us-ascii?Q?NleYfN8/Sl+jfyZD9jOJ78gdIRPZXqde8V3IXK6AB/FNZw1moGk4zPROceV7?=
+ =?us-ascii?Q?Rolv71+GgKByEQRbgnKLsfdb06wiqEKVIM19JHoOm9t02P718vRm2NnNrEAg?=
+ =?us-ascii?Q?pvVtlHDx/z4gyJ9T8MF3SpI63KHPVfRAOXNDlSxxjxolJu2q/+yuWE1N7p0j?=
+ =?us-ascii?Q?G00i6qCEvx5KUwCzkCYVR4ngo09sMwi/tp9eR2WbNGDMGCvOSKZLSuQywKgQ?=
+ =?us-ascii?Q?xdqACpcHgu99uO8rnBA7R8+pvqd9uO116drismRiswMe+/M0ENrwarIKUOpf?=
+ =?us-ascii?Q?xmqIbpgWeiilSipDafLsL9pf1L40tB3a1ZNcuHxdlk7r7DAJfLS/H45I4BrO?=
+ =?us-ascii?Q?yofGDf9ugOfgkK0JK3EIlKDfai1qkTjzQBEEKq2Xz6FIGBxLAMV8OXthndKb?=
+ =?us-ascii?Q?NfhAvI2ua6AaepKrZZOGwUZsY/Aku3c4LZII+RKmtdvlOQsq1DygzkDEcdTk?=
+ =?us-ascii?Q?Jp14RxaiR3K5wVdPmojeenX130PStMHK1zvcby1UHFMpxyiixFjtlDc6GWw1?=
+ =?us-ascii?Q?D2UVHcAm7DshSp1WEk3qGjX0wEbzjsomAHm35XpE1mNGvT1exJ6I0zqZXo3V?=
+ =?us-ascii?Q?YuoaFnzmmdkd5pXth2fqGnucYjAzRznbnnJ2fbaBurdEiIrSvslluSDkHw7m?=
+ =?us-ascii?Q?FVQkgaiWBbpKyH8F+td8TvIETtJfGWxkVV5P+PBaZx3322z843fNocVDbKA2?=
+ =?us-ascii?Q?/aiuV6v7DMyosDyQBurnFNGhkLDknDaoXwThY8zcUd6Kn4c7rArCe/qgR2VS?=
+ =?us-ascii?Q?zBi90pbGL0+wToWGJrh4nKvrE+BSwtvQSquR/Sq1?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70aa4691-b5f8-47d6-033a-08dd6306f9bc
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR03MB10396.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2025 14:46:16.8907
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kKPtlBq+L5M13GKErjqQHbnwe2Gp4+UEs6ekxKZDH3qmN4Yfr2kTfQxbXPpAhFT7Ag9P5k1yYVm8HS6FZAZ0YA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR03MB7097
 
-On 20/02/2025 09:10, Hans Verkuil wrote:
-> On 20/02/2025 08:58, Sakari Ailus wrote:
->> Hi Hans,
->>
->> On Thu, Feb 20, 2025 at 08:48:32AM +0100, Hans Verkuil wrote:
->>> On 29/01/2025 15:21, Hans Verkuil wrote:
->>>> On 28/01/2025 16:40, Laurent Pinchart wrote:
->>>>> Hi Hans,
->>>>>
->>>>> Thank you for the patch.
->>>>>
->>>>> On Tue, Jan 28, 2025 at 04:08:18PM +0100, Hans Verkuil wrote:
->>>>>> Since commit 88785982a19d ("media: vb2: use lock if wait_prepare/finish
->>>>>> are NULL") it is no longer needed to set the wait_prepare/finish
->>>>>> vb2_ops callbacks as long as the lock field in vb2_queue is set.
->>>>>>
->>>>>> Set the queue lock to &video->queue_lock, which makes it possible to drop
->>>>>> the wait_prepare/finish callbacks.
->>>>>>
->>>>>> This simplifies the code and this is a step towards the goal of deleting
->>>>>> these callbacks.
->>>>>>
->>>>>> Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
->>>>>> ---
->>>>>>  drivers/media/platform/ti/omap3isp/ispvideo.c | 19 +------------------
->>>>>>  1 file changed, 1 insertion(+), 18 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/media/platform/ti/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
->>>>>> index 5c9aa80023fd..78e30298c7ad 100644
->>>>>> --- a/drivers/media/platform/ti/omap3isp/ispvideo.c
->>>>>> +++ b/drivers/media/platform/ti/omap3isp/ispvideo.c
->>>>>> @@ -480,29 +480,11 @@ static int isp_video_start_streaming(struct vb2_queue *queue,
->>>>>>  	return 0;
->>>>>>  }
->>>>>>
->>>>>> -static void omap3isp_wait_prepare(struct vb2_queue *vq)
->>>>>> -{
->>>>>> -	struct isp_video_fh *vfh = vb2_get_drv_priv(vq);
->>>>>> -	struct isp_video *video = vfh->video;
->>>>>> -
->>>>>> -	mutex_unlock(&video->queue_lock);
->>>>>> -}
->>>>>> -
->>>>>> -static void omap3isp_wait_finish(struct vb2_queue *vq)
->>>>>> -{
->>>>>> -	struct isp_video_fh *vfh = vb2_get_drv_priv(vq);
->>>>>> -	struct isp_video *video = vfh->video;
->>>>>> -
->>>>>> -	mutex_lock(&video->queue_lock);
->>>>>> -}
->>>>>> -
->>>>>>  static const struct vb2_ops isp_video_queue_ops = {
->>>>>>  	.queue_setup = isp_video_queue_setup,
->>>>>>  	.buf_prepare = isp_video_buffer_prepare,
->>>>>>  	.buf_queue = isp_video_buffer_queue,
->>>>>>  	.start_streaming = isp_video_start_streaming,
->>>>>> -	.wait_prepare = omap3isp_wait_prepare,
->>>>>> -	.wait_finish = omap3isp_wait_finish,
->>>>>>  };
->>>>>>
->>>>>>  /*
->>>>>> @@ -1338,6 +1320,7 @@ static int isp_video_open(struct file *file)
->>>>>>  	queue->buf_struct_size = sizeof(struct isp_buffer);
->>>>>>  	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
->>>>>>  	queue->dev = video->isp->dev;
->>>>>> +	queue->lock = &video->queue_lock;
->>>>>
->>>>> This is goind to deadlock at least when calling VIDIOC_DQBUF in blocking
->>>>> mode.
->>>>
->>>> Yeah, you are right. I think I will need to test this on real hardware.
->>>
->>> I still haven't found my Beagle Board. I found the box for the Beagle Board,
->>> but not the board itself :-(
->>>
->>> When I'm back in the Netherlands I'll dig around some more to see if it is
->>> there, but if I can't find it, are you or someone else from Ideas on Board
->>> willing to test patches from me?
->>>
->>> This driver is the last remaining user of these wait_prepare/finish helpers,
->>> so I'd really like to get this fixed.
->>
->> If you have a patch, I can test it, presuming omap3isp will work on N900.
->> :-) I haven't tested it for a while.
->>
->> omap3isp is a bit special as the video buffer queues are specific to file
->> handles but I'm not sure it matters here.
->>
-> 
-> That shouldn't matter. Thank you for the offer, I'll keep you in reserve if
-> I really can't find my Beagle Board.
-> 
-> I've got the freakin' box, so the board must be somewhere, right?
+The imx-media-csi driver requires upstream camera drivers to implement
+the subdev-pad-op "get_mbus_config" [0]. Camera drivers that don't
+implement this function are not usable on the i.MX6.
 
-I did find my BeagleBoard, but didn't have time yet to work on this.
+The docs for get_mbus_config [1] say:
+@get_mbus_config: get the media bus configuration of a remote sub-device.
+            The media bus configuration is usually retrieved from the
+            firmware interface at sub-device probe time, immediately
+            applied to the hardware and eventually adjusted by the
+            driver.
 
-Regards,
+Currently, the imx-media-csi driver is not incorporating the information
+from the firmware interface and therefore relies on the implementation of
+get_mbus_config by the camera driver.
 
-	Hans
+To be compatible with camera drivers not implementing get_mbus_config
+(which is the usual case), use the bus information from the fw interface:
 
-> 
-> Regards,
-> 
-> 	Hans
-> 
+The camera does not necessarily has a direct media bus link to the CSI as
+the video-mux and/or the MIPI CSI-2 receiver of the i.MX6 might be in
+between them on the media pipeline.
+The CSI driver already implements the functionality to find the connected
+camera sub-device to call get_mbus_config on it.
+
+At this point the driver is modified as follows:
+In the case that get_mbus_config is not implemented by the upstream
+camera, try to get its endpoint configuration from the firmware interface
+usign v4l2_fwnode_endpoint_parse.
+For the supported mbus_types (V4L2_MBUS_PARALLEL, V4L2_MBUS_BT656 and
+V4L2_MBUS_CSI2_DPHY), extract the mbus_config from the endpoint
+configuration.
+For all other mbus_types, return an error.
+
+Note that parsing the mbus_config from the fw interface is not done during
+probing because the camera that's connected to the CSI can change based on
+the selected input of the video-mux at runtime.
+
+[0] drivers/staging/media/imx/imx-media-csi.c - line 211..216
+[1] include/media/v4l2-subdev.h - line 814
+
+Signed-off-by: Mathis Foerst <mathis.foerst@mt.com>
+---
+ drivers/staging/media/imx/imx-media-csi.c | 36 ++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+index 3edbc57be2ca..394a9321a10b 100644
+--- a/drivers/staging/media/imx/imx-media-csi.c
++++ b/drivers/staging/media/imx/imx-media-csi.c
+@@ -169,6 +169,8 @@ static int csi_get_upstream_mbus_config(struct csi_priv *priv,
+ {
+ 	struct v4l2_subdev *sd, *remote_sd;
+ 	struct media_pad *remote_pad;
++	struct fwnode_handle *ep_node;
++	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
+ 	int ret;
+ 
+ 	if (!priv->src_sd)
+@@ -210,11 +212,37 @@ static int csi_get_upstream_mbus_config(struct csi_priv *priv,
+ 
+ 	ret = v4l2_subdev_call(remote_sd, pad, get_mbus_config,
+ 			       remote_pad->index, mbus_cfg);
+-	if (ret == -ENOIOCTLCMD)
+-		v4l2_err(&priv->sd,
+-			 "entity %s does not implement get_mbus_config()\n",
+-			 remote_pad->entity->name);
++	if (ret == -ENOIOCTLCMD) {
++		/*
++		 * If the upstream sd does not implement get_mbus_config,
++		 * try to parse the link configuration from its fw_node
++		 */
++		ep_node = fwnode_graph_get_endpoint_by_id(dev_fwnode(remote_sd->dev),
++							  0, 0,
++							  FWNODE_GRAPH_ENDPOINT_NEXT);
++		if (!ep_node)
++			return -ENOTCONN;
++
++		ret = v4l2_fwnode_endpoint_parse(ep_node, &ep);
++		fwnode_handle_put(ep_node);
++		if (ret)
++			return ret;
+ 
++		mbus_cfg->type = ep.bus_type;
++		switch (ep.bus_type) {
++		case V4L2_MBUS_PARALLEL:
++		case V4L2_MBUS_BT656:
++			mbus_cfg->bus.parallel = ep.bus.parallel;
++			break;
++		case V4L2_MBUS_CSI2_DPHY:
++			mbus_cfg->bus.mipi_csi2 = ep.bus.mipi_csi2;
++			break;
++		default:
++			v4l2_err(&priv->sd, "Unsupported mbus_type: %i\n",
++				 ep.bus_type);
++			return -EINVAL;
++		}
++	}
+ 	return ret;
+ }
+ 
+-- 
+2.34.1
 
