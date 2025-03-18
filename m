@@ -1,38 +1,59 @@
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD94205E18;
-	Tue, 18 Mar 2025 09:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FE0207670
+	for <linux-media@vger.kernel.org>; Tue, 18 Mar 2025 10:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742289015; cv=none; b=GU5Ss0dCMvp3SbPNMcFvBAJiuFRo8ZsM9x1DEuPoU8dMp5a8o3C8xf1Eu6VN3kncDhg4H6EY2jP5lPZIo4CjDfyga/6D6Q8+Ue4ZSQpQrIYi1Xb3DAXFgVygrlYaJsA5WA33f0+y1kYaOXSmikmp33s0wDDRJMU8EIC5lo/9vpw=
+	t=1742292648; cv=none; b=JaavDqHiKIQzS4mfZnhqPyOqJ3oLlmBalZCKdlhKHvBSuLm+N+9xFZLiiMoBh4R39YFw8C3+yH+Bx0hoYLGVUFG2CAwU2yZSs3kFQy3m9a2kY8s7VB/46UgtUWt1Df6OZbnjQfm2FdrwpQx9lFPNfVdGESuhealnMhaW3fXJ1DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742289015; c=relaxed/simple;
-	bh=wXKSn5z+fOTqObdSeXytZO8KFromJCGRNt8ZdQg/sqQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tg/mruS5hOJNZ0KnTScwr2p9jOC1fRCrJ9i4nM/fNaenPa2ypCcIpb7Sa34FTrEQ3w3tqBXUkyJDu+oUsdvyqrISFku0DqWMO1nGVwlSa0pUsxG4JICBLk0I072tknsEav80eVHQHGhqAHrSyt1VuWnqPJeGaSOImYGFNsBbMUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by APP-05 (Coremail) with SMTP id zQCowADHzKBgONln2Q3vFQ--.5938S2;
-	Tue, 18 Mar 2025 17:09:56 +0800 (CST)
-From: Ma Ke <make24@iscas.ac.cn>
-To: mchehab@kernel.org,
-	hverkuil@xs4all.nl,
-	make24@iscas.ac.cn,
-	sebastian.fricke@collabora.com,
-	ribalda@chromium.org,
-	benjamin.gaignard@collabora.com,
-	viro@zeniv.linux.org.uk,
-	bartosz.golaszewski@linaro.org,
-	hljunggr@cisco.com,
-	sakari.ailus@linux.intel.com
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2] media: v4l2-dev: fix error handling in __video_register_device()
-Date: Tue, 18 Mar 2025 17:09:45 +0800
-Message-Id: <20250318090945.1655458-1-make24@iscas.ac.cn>
+	s=arc-20240116; t=1742292648; c=relaxed/simple;
+	bh=NdOXlQY6LSxWk1LYo10E/kXzqa2q06qeotqWrI9rn+I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oh9Jx5rSZyznM08+BNcS80PzlgeaomCWLl6U9dqMvOnjg5LJWpEIc9pPeF7+MfvFd0ZzEEZUppe/bZShbR1Wy0AIIikgbCVXv58dmOCt2OJO9OnFfD12CLNdC56l1cYzrSntYzeT2RqVIb5offrAihQ2+veoteH/YbXYGsxmvlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mecIlYJU; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mecIlYJU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742292646; x=1773828646;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NdOXlQY6LSxWk1LYo10E/kXzqa2q06qeotqWrI9rn+I=;
+  b=mecIlYJU0YftVApeqOIE39s2YOftwsJLKlSJyCla6jQN7Qj5SV9QKgV/
+   WZlm/rpmKthX/t7H7xlcNiPd6m2JghNI+UW0oOJGLx/E/a21Davhwpp7f
+   44FNvIR6UypE34MrSL2vDSV2/8cykeqxRW31AdDmiyuT0wpVE7JYXR1HW
+   Bd0GrlppNyDFNjEOrbKdqD84bly1PDB6lCxBTlI8sJoIIObCfVJ8yOEFB
+   5j9aF5y025f4A52j51BSjgFUUqNEmNcsvghm1rpYsR4WnhEosd+F35s7s
+   lxotjudqFxuqn+6W4V9ZbLcH+gZv24aBXw4oAZwpmSRz/85DyXojClRDN
+   w==;
+X-CSE-ConnectionGUID: kd1gU6wwRCeYy4VUvg08Jg==
+X-CSE-MsgGUID: 1ZTuPWX4TYaglP3I2p8X2w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="60817149"
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="60817149"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 03:10:45 -0700
+X-CSE-ConnectionGUID: YIfUjykRS0G6i1+39LA79Q==
+X-CSE-MsgGUID: O2B6gmp6TGePTSuPEgsE+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="122713412"
+Received: from unknown (HELO nitin-Super-Server.iind.intel.com) ([10.190.238.72])
+  by fmviesa010.fm.intel.com with ESMTP; 18 Mar 2025 03:10:43 -0700
+From: Nitin Gote <nitin.r.gote@intel.com>
+To: christian.koenig@amd.com
+Cc: intel-gfx@lists.freedesktop.org,
+	sumit.semwal@linaro.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	chris.p.wilson@intel.com,
+	andi.shyti@intel.com,
+	nitin.r.gote@intel.com
+Subject: [PATCH] dma-buf: Take a breath during dma-fence-chain subtests
+Date: Tue, 18 Mar 2025 16:04:08 +0530
+Message-Id: <20250318103408.3566010-1-nitin.r.gote@intel.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
@@ -41,71 +62,89 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowADHzKBgONln2Q3vFQ--.5938S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WryrKw1xJF47CrWxtFW7CFg_yoW8CrWUp3
-	4xuayayrWUKw4IkwnxXFs8Z3Wruw4Sy3WrArWfAw40kwn3XrZ3tryvyryUX3y8trZ7AF4j
-	qry2q3yrXF1Uu3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
-	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
-X-CM-SenderInfo: ppdnvj2u6l2u1dvotugofq/
 
-Once device_register() failed, we should call put_device() to
-decrement reference count for cleanup. Or it could cause memory leak.
-And move callback function before put_device().
+Give the scheduler a chance to breathe by calling cond_resched()
+as some of the loops may take some time on old machines (apl/bsw/pnv), and
+so catch the attention of the watchdogs.
 
-As comment of device_register() says, 'NOTE: _Never_ directly free
-@dev after calling this function, even if it returned an error! Always
-use put_device() to give up the reference initialized in this function
-instead.'
-
-Found by code review.
-
-Cc: stable@vger.kernel.org
-Fixes: baa057e29b58 ("media: v4l2-dev: use pr_foo() for printing messages")
-Signed-off-by: Ma Ke <make24@iscas.ac.cn>
+Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/12904
+Signed-off-by: Nitin Gote <nitin.r.gote@intel.com>
 ---
-Changes in v2:
-- modified the patch as no callback function before put_device().
----
- drivers/media/v4l2-core/v4l2-dev.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Cc: Christian Konig <christian.koenig@amd.com>
 
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 5bcaeeba4d09..4a8fdf8115c0 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -1054,17 +1054,16 @@ int __video_register_device(struct video_device *vdev,
- 	vdev->dev.class = &video_class;
- 	vdev->dev.devt = MKDEV(VIDEO_MAJOR, vdev->minor);
- 	vdev->dev.parent = vdev->dev_parent;
-+	vdev->dev.release = v4l2_device_release;
- 	dev_set_name(&vdev->dev, "%s%d", name_base, vdev->num);
- 	mutex_lock(&videodev_lock);
- 	ret = device_register(&vdev->dev);
- 	if (ret < 0) {
- 		mutex_unlock(&videodev_lock);
- 		pr_err("%s: device_register failed\n", __func__);
--		goto cleanup;
-+		put_device(&vdev->dev);
-+		return ret;
- 	}
--	/* Register the release callback that will be called when the last
--	   reference to the device goes away. */
--	vdev->dev.release = v4l2_device_release;
+Hi Konig,
+
+This is not a functional issue in test. We wish to prevent softlock and allow the
+dma-fence-chain test run to completion to verify it's functional correctness.
+
+The performance issue takes about 5ms for the dma-fence-chain to be signalled on
+older hardware which is an orthogonal issue and to be debugged separately for
+which the test has to run to completion.
+
+So, reverting to cond_resched() which fixes the issue instead of
+delay functions.
+
+- Nitin
+
+ drivers/dma-buf/st-dma-fence-chain.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/dma-buf/st-dma-fence-chain.c b/drivers/dma-buf/st-dma-fence-chain.c
+index ed4b323886e4..328a66ed59e5 100644
+--- a/drivers/dma-buf/st-dma-fence-chain.c
++++ b/drivers/dma-buf/st-dma-fence-chain.c
+@@ -505,6 +505,7 @@ static int signal_forward(void *arg)
  
- 	if (nr != -1 && nr != vdev->num && warn_if_nr_in_use)
- 		pr_warn("%s: requested %s%d, got %s\n", __func__,
+ 	for (i = 0; i < fc.chain_length; i++) {
+ 		dma_fence_signal(fc.fences[i]);
++		cond_resched();
+ 
+ 		if (!dma_fence_is_signaled(fc.chains[i])) {
+ 			pr_err("chain[%d] not signaled!\n", i);
+@@ -537,6 +538,7 @@ static int signal_backward(void *arg)
+ 
+ 	for (i = fc.chain_length; i--; ) {
+ 		dma_fence_signal(fc.fences[i]);
++		cond_resched();
+ 
+ 		if (i > 0 && dma_fence_is_signaled(fc.chains[i])) {
+ 			pr_err("chain[%d] is signaled!\n", i);
+@@ -587,8 +589,10 @@ static int wait_forward(void *arg)
+ 	get_task_struct(tsk);
+ 	yield_to(tsk, true);
+ 
+-	for (i = 0; i < fc.chain_length; i++)
++	for (i = 0; i < fc.chain_length; i++) {
+ 		dma_fence_signal(fc.fences[i]);
++		cond_resched();
++	}
+ 
+ 	err = kthread_stop_put(tsk);
+ 
+@@ -616,8 +620,10 @@ static int wait_backward(void *arg)
+ 	get_task_struct(tsk);
+ 	yield_to(tsk, true);
+ 
+-	for (i = fc.chain_length; i--; )
++	for (i = fc.chain_length; i--; ) {
+ 		dma_fence_signal(fc.fences[i]);
++		cond_resched();
++	}
+ 
+ 	err = kthread_stop_put(tsk);
+ 
+@@ -663,8 +669,10 @@ static int wait_random(void *arg)
+ 	get_task_struct(tsk);
+ 	yield_to(tsk, true);
+ 
+-	for (i = 0; i < fc.chain_length; i++)
++	for (i = 0; i < fc.chain_length; i++) {
+ 		dma_fence_signal(fc.fences[i]);
++		cond_resched();
++	}
+ 
+ 	err = kthread_stop_put(tsk);
+ 
 -- 
 2.25.1
 
