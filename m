@@ -1,139 +1,128 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DA41A264A;
-	Tue, 18 Mar 2025 19:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742325849; cv=pass; b=fOLLSLbhoMuTJfRGMV43VgUG5+cgbAn/wrJb7zB17ECWlpaIoIGp9DCrn8bEF8IqIBujcTrK7LterxrNzSi+j6aBZVxMRF4vwnxa59p/AN/sTR33RWsP2LRh+bespx7IjGYSXt4R2oKvtdq+s4/gC7DdgXQmmqqIz+4ayHZUD3g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742325849; c=relaxed/simple;
-	bh=FQEeIYlXqXUu0AIkMdzQBBWAMtn9hMMGYmCC3qrTfko=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ILn5d8QJ/szJdiAJrngIBzCRuPhesUnXofPjid/3S/bVqtE121W44XFDdagZQuAFYuJv8J/WYCsn+aiSpMTTCV9uuCDVEZbFILKh3EXwMqIcgyGmWOFZhMe9ss2uPuVQX5J9u326xWKylc4zvMNW6jZS+pfxniNJv8ruL7sVuwc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=WmQWxGoW; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11971EB5DB
+	for <linux-media@vger.kernel.org>; Tue, 18 Mar 2025 21:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742334526; cv=none; b=Cptp7EKMd4gSeU9RvQlxAzsUrlogQnWBQZO4TflzbLqRh68lwEstsNdLpbhLQZy3zK5cVzs9iYVfIX6U3N92jJ4uoRdgDTVbyGBtp0Q5pIdzHvBxMMCH0/x0okCLKqwwNUeSxG8jevgtBi0hkQq48fIbQzci3CqgI7+XUV5dbFk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742334526; c=relaxed/simple;
+	bh=9QWi9Jbu2T/CyKwbiyJQWuyZbY48B9JmNpyjsuhsu70=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MhwHtqMbIb6tdPLSVzqY/ZqQ1Bt5SO90yrn3fVzf+hZoAmt9ua+WgvX94nKhEdStjvcZVLlxmWkeP3nEMNT+d1faUjXQiPlf/dkNzGcqpLf8qxlPcaszX4YMNBsC92qaRtuUl83U4qE1hSL1WV3gzf9+/FiM8HQTk/Rr3eDq+6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cfhtXEwu; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="WmQWxGoW"
-ARC-Seal: i=1; a=rsa-sha256; t=1742325811; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Vx5MJl4hUvJH91lbjym/2lADGGJD2jYtwKDZ465CsMw4d9Bxta67gNDnAweZ8s4j8CA8ZBDc4/uTYKfSXl8BazdZhC0nNHufnloDsIKzlexo9VeJAIuPVxHgqYDmw4lxqJRQyD5EoNyAFgo4EnRCp56QzyI6wS1b/LS9w8OCuis=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1742325811; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=HfYRoG5Q5EHI6+e63eFq0AZL9BjmOXOU/I+lIAD4KZI=; 
-	b=nq9N0vAqTtfkDrzV+6WGQaaHsBrl4g3L66VfEnT+PAK+FvuZTASNVfOnrc3OTh88zsD+d+Jg5nPetTdbktHJVjY8GTHfZK9fb7mXxCDVqXN6Q4Rg7SGsvdfVYMUVAUtLwc4QEkO7t/Cwf/RgA9iDh/mgkrWWcWuGMW65uSN80iY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1742325811;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=HfYRoG5Q5EHI6+e63eFq0AZL9BjmOXOU/I+lIAD4KZI=;
-	b=WmQWxGoWdDH2xYTAw/hy191MJRCZTKLTqESfnsjq1GDTHjBy9A8eVICg5pqw4qTZ
-	NA3e5R3AyJXgz/0yOPaWsdrJeHUi0i3UR3tOLj5Q1v2rfyNVQbfXwizUdp3YM+8eqeS
-	PBT6Vy/O2ss0FNSAJTMBNqvogl+22h0q581cxjhs=
-Received: by mx.zohomail.com with SMTPS id 1742325808686508.48664192225283;
-	Tue, 18 Mar 2025 12:23:28 -0700 (PDT)
-From: Daniel Almeida <daniel.almeida@collabora.com>
-Date: Tue, 18 Mar 2025 16:22:40 -0300
-Subject: [PATCH 6/7] rust: drm: gem: Add set_exportable() method
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cfhtXEwu"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ab771575040so19023166b.1
+        for <linux-media@vger.kernel.org>; Tue, 18 Mar 2025 14:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742334523; x=1742939323; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=duoNyUPDpZ35AJzrwQXSbOfWB68wwqzf/wrWJgrnJcc=;
+        b=cfhtXEwu2LdGKmKztXYwu9hsns9j6UgYEwbAQuhomB08WLLs8Rk1jQQ75ymRgIpUev
+         Ec2lHjJu42hoRduOq0sKg2ZO4kD3lh8FVIqC6qQ74Ca286iZGsg/cgo3cE/Vj/onLc3T
+         8iV2an/UN00eyCtRs0JTlY1yvXcbd/Z6MRVlrg1cWlqPCYbnxhU0yy2OjE/QIj1xNvab
+         dibQljxjX95KFclCUeSfR3wyNHVEHqiuW7WW8LBOjs4g3UK8rcQri3XxnyjozkuUmX5e
+         4g9mwveFRzoYatgZQV6ewoS3+kjulVr7/gTGIH4d6xB03geaVyhoMhf/xAXxDlblzwWL
+         5yqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742334523; x=1742939323;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=duoNyUPDpZ35AJzrwQXSbOfWB68wwqzf/wrWJgrnJcc=;
+        b=eBOruFFY3DdhdPsb8LW/Bifo4GUWcQjbtQKnCI2Wj7qoCl7O9B0dkyWKTN+6AxF9uO
+         4qLDR96NwUdAZtUNfMgto2IOFsXax5sIXUQP/s1PV3ofdFEXjmdjIyWuP3+2cyKVEL0d
+         MR2KSf+IJprmf9jdRb4v0V3gEaBWl1xv9aRDB5cO7QK3rTvy1S/n8dW4k2/u29xVXvTT
+         3nlxKXvPelVuw/AkvYQ5CqtohtyWaWIWmb+RNjeZJ9BY/Rlrw3JtDCpiom4OnC5grLUA
+         kZ7sg5ZB+Tre8NN773M77giPFiDmzxGf41rdCcMuWE0UPGpuupGJY6j1RSVQdTdhilWl
+         72PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6BQbp5XHp5zu/gMy9mGT7avc/zXXqOu52hj9SzB0DH3dwIBGolpnGdhAHZgCCe/mMQ4IqAlJvypD6JQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKwa2J0KaOKe91C9YNaBUxYcZX3Dbl1KyB6eD3LSQRCVOQT9vE
+	/OOM6AlLogjvKOo/U4rxTYdRm8I7vZeCjj0Aajq9CtbEyY9GLF1CPWJjZbxds4w=
+X-Gm-Gg: ASbGncslWq/CRyoHyTXLhpArYfZTWoKFDCC37fWvQZVFUm/6CvSj+rt0EgVm5f3zett
+	5yDjmDgoloPbnu544nOwleS80qwgqKdFEEvaLwqtnY6me5zikS7h+Jn3O6Xe1U62qO+rx9GyDCt
+	egpIxg8wmFPmoX9Xhf5XTjTu4/3geEXKB367oSRwaOTmbCqKr+cMKTL6JDSKaPtWcti5R6pf7KD
+	wizcChZlOkGjWoHyEUzmnLFLKvF/puF/PXegnRpUctutAltzGjYIj3S+DALMlhNBm1WFPE2jN24
+	bhSNV3fZnMlryFwAzNsdDVfoIvlBJOW8rbTqihDWA0PmO6gt3E+KWkfO/3W6T/JY7jvu3bR/8B1
+	1NMrqbC4ni6au3dgs2Jy5KHTWxTvCENjJHbXOA7PYom8VGUvks79IiKG9znN6XO31vmuFYt75Rm
+	mCZoLHaS+3w/Kt/TpBjqtoZkoJaSerjdQ=
+X-Google-Smtp-Source: AGHT+IF06W/HXbWDQcnvIov2Jj/jxhVUXmUlc3LWIaSEPfb9UpbLNwCGC29SRRaa+u05btkXLemWAA==
+X-Received: by 2002:a17:907:f50a:b0:ac3:3e43:f451 with SMTP id a640c23a62f3a-ac3b6abe286mr34843266b.5.1742334522980;
+        Tue, 18 Mar 2025 14:48:42 -0700 (PDT)
+Received: from ?IPV6:2001:1c06:2302:5600:7555:cca3:bbc4:648b? (2001-1c06-2302-5600-7555-cca3-bbc4-648b.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:7555:cca3:bbc4:648b])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3147ef34asm921171966b.68.2025.03.18.14.48.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Mar 2025 14:48:42 -0700 (PDT)
+Message-ID: <b1ea0500-595f-48d6-9358-649c25fd4ee9@linaro.org>
+Date: Tue, 18 Mar 2025 21:48:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] media: dt-bindings: Add qcom,qcs8300-camss
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+ Vikram Sharma <quic_vikramsa@quicinc.com>
+Cc: rfoss@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ andersson@kernel.org, konradybcio@kernel.org, hverkuil-cisco@xs4all.nl,
+ cros-qcom-dts-watchers@chromium.org, catalin.marinas@arm.com,
+ will@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250214094747.2483058-1-quic_vikramsa@quicinc.com>
+ <20250214094747.2483058-2-quic_vikramsa@quicinc.com>
+ <20250223-observant-auspicious-basilisk-d78ba9@krzk-bin>
+ <66c35bce-c657-4c12-ad02-58c995ae385a@quicinc.com>
+ <f2899540-f9ac-4013-a703-25800429f97d@kernel.org>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <f2899540-f9ac-4013-a703-25800429f97d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250318-drm-gem-shmem-v1-6-64b96511a84f@collabora.com>
-References: <20250318-drm-gem-shmem-v1-0-64b96511a84f@collabora.com>
-In-Reply-To: <20250318-drm-gem-shmem-v1-0-64b96511a84f@collabora.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org, 
- linaro-mm-sig@lists.linaro.org, Danilo Krummrich <dakr@kernel.org>, 
- Asahi Lina <lina@asahilina.net>, 
- Daniel Almeida <daniel.almeida@collabora.com>
-X-Mailer: b4 0.14.2
-X-ZohoMailClient: External
 
-From: Asahi Lina <lina@asahilina.net>
+On 18/03/2025 07:16, Krzysztof Kozlowski wrote:
+> On 18/03/2025 06:52, Vikram Sharma wrote:
+>>
+>> On 2/23/2025 5:03 PM, Krzysztof Kozlowski wrote:
+>>> On Fri, Feb 14, 2025 at 03:17:46PM +0530, Vikram Sharma wrote:
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: qcom,qcs8300-camss
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 21
+>>>> +
+>>>> +  reg-names:
+>>>> +    items:
+>>>> +      - const: csid_wrapper
+>>> Why different order of entries than sm8550?
+>>
+>> Hi Krzysztof,
+>>
+>> Thanks for your review.
+>> I did this change to address a comment from Bryan on another series.
+>> https://lore.kernel.org/linux-arm-msm/e152ff78-caa5-493a-88da-96a6670eb2a2@linaro.org/
+>>
+>> Please suggest if I should keep the order same as sm8550?
+> If you chosen the same order as x1e80100 then it is fine, but that file
+> is not merged so it is your responsibility to track any differences and
+> be sure whatever you send is always in sync with x1e.
+> 
+> Best regards,
+> Krzysztof
 
-This allows drivers to control whether a given GEM object is allowed to
-be exported via PRIME to other drivers.
+My mistake, I hadn't realised/remembered what we merged for 8550.
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
-Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+Vikram, please follow latest committed example @ 8550.
+
 ---
- rust/kernel/drm/gem/mod.rs   | 13 +++++++++++++
- rust/kernel/drm/gem/shmem.rs |  4 ++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/rust/kernel/drm/gem/mod.rs b/rust/kernel/drm/gem/mod.rs
-index 083faac8602885aee5ef213bb3302b79dfac4a95..3a7e9f80b414bf39301e342938ba33877bfac2cb 100644
---- a/rust/kernel/drm/gem/mod.rs
-+++ b/rust/kernel/drm/gem/mod.rs
-@@ -45,6 +45,10 @@ pub trait IntoGEMObject: Sized + crate::private::Sealed {
-     /// this owning object is valid.
-     fn gem_obj(&self) -> &bindings::drm_gem_object;
- 
-+    /// Returns a reference to the raw `drm_gem_object` structure, which must be valid as long as
-+    /// this owning object is valid.
-+    fn mut_gem_obj(&mut self) -> &mut bindings::drm_gem_object;
-+
-     /// Converts a pointer to a `drm_gem_object` into a pointer to this type.
-     fn from_gem_obj(obj: *mut bindings::drm_gem_object) -> *mut Self;
- }
-@@ -119,6 +123,10 @@ fn gem_obj(&self) -> &bindings::drm_gem_object {
-         &self.obj
-     }
- 
-+    fn mut_gem_obj(&mut self) -> &mut bindings::drm_gem_object {
-+        &mut self.obj
-+    }
-+
-     fn from_gem_obj(obj: *mut bindings::drm_gem_object) -> *mut Object<T> {
-         // SAFETY: All of our objects are Object<T>.
-         unsafe { crate::container_of!(obj, Object<T>, obj) as *mut Object<T> }
-@@ -132,6 +140,11 @@ fn size(&self) -> usize {
-         self.gem_obj().size
-     }
- 
-+    /// Sets the exportable flag, which controls whether the object can be exported via PRIME.
-+    fn set_exportable(&mut self, exportable: bool) {
-+        self.mut_gem_obj().exportable = exportable;
-+    }
-+
-     /// Creates a new reference to the object.
-     fn reference(&self) -> ObjectRef<Self> {
-         // SAFETY: Having a reference to an Object implies holding a GEM reference
-diff --git a/rust/kernel/drm/gem/shmem.rs b/rust/kernel/drm/gem/shmem.rs
-index cd080d820727fb39cb91cb0617df39310b5b68c8..fdf7dd7f2408bd2857f5b72027ef48e29c9dd9e3 100644
---- a/rust/kernel/drm/gem/shmem.rs
-+++ b/rust/kernel/drm/gem/shmem.rs
-@@ -261,6 +261,10 @@ fn gem_obj(&self) -> &bindings::drm_gem_object {
-         &self.obj.base
-     }
- 
-+    fn mut_gem_obj(&mut self) -> &mut bindings::drm_gem_object {
-+        &mut self.obj.base
-+    }
-+
-     fn from_gem_obj(obj: *mut bindings::drm_gem_object) -> *mut Object<T> {
-         // SAFETY: The invariant guarantees this is correct.
-         unsafe {
-
--- 
-2.48.1
-
+bod
