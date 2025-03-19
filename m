@@ -1,252 +1,720 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994AD1DED6B;
-	Wed, 19 Mar 2025 14:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297171BD9C9
+	for <linux-media@vger.kernel.org>; Wed, 19 Mar 2025 14:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742396146; cv=none; b=RBYI0q3eiThUeFWsFqOcljobhqQa3gc2aercpM+9/RCIboUV7hID8ZYCDAeJARfH6UUHVwwKm7aMnxf85MQFHxYhpxbAXqafuNjCxrB4zo2WCYXU8L9tkarf2b8Jo4KXZC6ZjQ5w18mUsN2WvgYLvgK8jZWz7BrKSjSSK2xA5xc=
+	t=1742396379; cv=none; b=URy0XeBUj6TtaIHVLhox6OWbXXZyHQ8EOV56Q/6n+Tzk5grqh1KRlr0y2v5UKOgKWX56Ibh6fdHrujk1d2zywsp6iBAfLPsq2/0lMfrcuMJdwkSO3IX9cBey6InNLfolEN9TUKH/y71CeXz5qxOj1d5SQd6ribNyhz6emcwzAeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742396146; c=relaxed/simple;
-	bh=Wf8zd+5GgvnEbx72cIC0QKnNJVwGLKIpsyfv36Azr5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vC5q2hLDrd6nn56ES6LV3mohhaeTVMw9kUBcdJastBbOXjSOvA30p1QPdSfis6C50PPTFtT0x/EivTyUCQnB8I4vCST+dub0s2Uvui7SOFrwRaQvuHUwOaUVmk7nx6HeS65/1iDGJFPWKJcln57Z9rAHt0Rr4NpnevefxaiV/HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCsiCuT8; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742396379; c=relaxed/simple;
+	bh=o0r34JYdkQHirwKUjCJGJQp3CMt9KfARq+du8usxv14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kItR/UCW/LILUxLAY4VpsREORQEljI+Q+n5suUrBsNPJKOOnf9tPg8giqN90klKFYsF7fXrwiUXgukEYRqPHxTDtorcwi2SZDyp8N05JyKK0ratjxQLLts33lYm2AVEfGR3+eeWENE6ayLg87zdKLEOJJf23lh2YgxwiyiN304o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZKAJYoth; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCsiCuT8"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ff85fec403so1814206a91.1;
-        Wed, 19 Mar 2025 07:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742396144; x=1743000944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AwhScULefMfboLX0liFkQPUFffcIJe/d8pWVK3z+O00=;
-        b=jCsiCuT8y/tqssH6KM8GdOGJyn6CnacElejkLiewckQ9bSJIrnV1tXI+2f6Yjkc56+
-         n2SyUCASg+tF/RfY/CebNTTvUs2dj3z4hqM3d57V0XonIvJJkFW5zWIXmmHecg/yHvNj
-         qJzfiNgXBV0aIUHRDviudoTcNz5cuMgRRkr8asO6xoumvWQZKBxP0DtcTi2o3MqYwGk0
-         o948dIDy9UdwGfpF1D2uy9oBymuCfkIrCJ57fCcSqIrlzo0/E5YJ3QaCxSP+EDE/r1A6
-         njtKT29ReyhTIVSnW6MAsfpmqdRaIDE8HpoQrud3oD9K+mG8S0vQq4ZwzlDH5kP9SQC2
-         dwuA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZKAJYoth"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742396376;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+wPoNDAfO0Cmp+8U1jcyLsho4cKi/6IUswe3DktWbQ0=;
+	b=ZKAJYothRi4DRU3cPKUxRiKRrVaQq6ubh01zhQm3MUfQ/7EXpok+o2Ja3DivHOjbwEkNXg
+	CeksqlmwUR2JwlkzuVmKIaP60QcEqvh8nbYVyCdr1N1MkUuR/OKB+xDdmJ0ZfSf63YWwwh
+	8V7nedzDZkInlx8JX12mlonpB0V1pbE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-217-G6-TTaCNOIeivut3KM_L-A-1; Wed, 19 Mar 2025 10:59:34 -0400
+X-MC-Unique: G6-TTaCNOIeivut3KM_L-A-1
+X-Mimecast-MFC-AGG-ID: G6-TTaCNOIeivut3KM_L-A_1742396373
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ac297c7a0c2so540105366b.3
+        for <linux-media@vger.kernel.org>; Wed, 19 Mar 2025 07:59:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742396144; x=1743000944;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AwhScULefMfboLX0liFkQPUFffcIJe/d8pWVK3z+O00=;
-        b=o9QFqe1/56cwIrZppxaNWsFnfMtabozxqb3d4ghSmoluKk9m6bkXie9X6o1N+VZnZ6
-         2t39BwpMlvRIRv4E4yDHJ7dsiysCI7iT19cxrtO7RRHlq3awfBkdgp/bf2Mq2qDM897U
-         SRgjr4DMh5wuCtoQg6feWs87Z1+rO6liYG0ve2LxIpSh8TYLLGbriBHp6TfTa2fN40I0
-         y7X8eJXws6rR/GebsulwsRPUNK70ptty4/ocSXMiX49co9bBu95Wp3olubkqTgiyvnnD
-         aDfKoYHnre4f6NPLwpGm097n8mkyE4sJW8/vy+J1lB9edDG4uKR6b3hdqT+WwTP9mNY/
-         7aHA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJE1KPXIMNa8xTL+GvMhAc1GEaKwqcOr2+P0/25L/UwUX9TqC79VJyLhvbR+O2LTeKcOj2SMVRCRantfc=@vger.kernel.org, AJvYcCW/1ymqLHt7g15fMEV3JGL63bpkGkOlOu9M7d90foKENHb955RHIJtNgwokyhehdVDnAKVmq3tkxpxvdFyc@vger.kernel.org, AJvYcCWAq5m1FtT9K9K+ynITDxYX1vNWI2oV0+PROy+PswKInbwcfziFd0ecXjwQgzg/yPM1DSl7OHkxnszqVXrS@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+SVYr0xxZRD/CldYuV6iOM8oPBSLL77TRUhWdxhFXvcmTTbr6
-	ffxWMsFm1clUgDibpXX2skbxMQ8jBGR+Lu88bG+FjasPTFglJHyU
-X-Gm-Gg: ASbGncvpAaSVnlAgCO3WIvNYRipi8mAfVmrNVfXgPtP9CHMkgAqCxEj7XqJB3zwhJTT
-	oe8VniAdimq9+iydKWYg9xVgQOUoFPgkafwrLQA50Q8qT/alBrhtHnhbU/43/1mFW0aMu9ZVwXT
-	8ZWB0PhrvbLRH23HYVM7cDCjbV1xFpSQcexXXq3kr32M+nh6uwcmd6WOWiBdW4vjL/0mRi+4sKm
-	9l5MzXkYFe9BrMEI+YNh0ooVqv2TjT7GDVZJnCEa14Dxx7PVNtTEk0gsWZYHReO/RmdAebK0tET
-	tBrlERJFUcQMyZZy7BcT6POSDD1fUf2iapwcVv/TbvLGVV3BUWNDrOIa1ftaIBRLbegGuZYUFcG
-	SaZCD0juCrX0+4PpqxQ5wnzAdMSSTlA==
-X-Google-Smtp-Source: AGHT+IHCA/GqCE/f2P5dI0HamwPMEXDfsvX/N0jLiLWDfWHv3zNa6XPbkeXex6uF1RGR2mrPoY2f+w==
-X-Received: by 2002:a05:6a00:8c4:b0:728:f21b:ce4c with SMTP id d2e1a72fcca58-7376d55d06emr5667798b3a.5.1742396143748;
-        Wed, 19 Mar 2025 07:55:43 -0700 (PDT)
-Received: from localhost ([2a00:79e0:3e00:2601:3afc:446b:f0df:eadc])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73711695abbsm11691211b3a.150.2025.03.19.07.55.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 07:55:42 -0700 (PDT)
-From: Rob Clark <robdclark@gmail.com>
-To: dri-devel@lists.freedesktop.org
-Cc: freedreno@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	Rob Clark <robdclark@chromium.org>,
-	Rob Clark <robdclark@gmail.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
-	linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b)
-Subject: [PATCH v2 19/34] drm/msm: Add _NO_SHARE flag
-Date: Wed, 19 Mar 2025 07:52:31 -0700
-Message-ID: <20250319145425.51935-20-robdclark@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250319145425.51935-1-robdclark@gmail.com>
-References: <20250319145425.51935-1-robdclark@gmail.com>
+        d=1e100.net; s=20230601; t=1742396373; x=1743001173;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wPoNDAfO0Cmp+8U1jcyLsho4cKi/6IUswe3DktWbQ0=;
+        b=ljy5iFe4HawH1Vy7W91+vP/k3HeHCDIHHtTDiY4oMheMKNpdP2tqDfbbbyzzaHJ1nG
+         CiiOv0eaEkLpRWufwX63Z6Q7Zb+/dEXLypL7nh/8GlAWOF0ujXCfG/DaUvbgpuK7YHpa
+         OsEOdkLMcfYfgrYxc9Rsib3NBvo3sjxUpAqGFy43Z4ClN1AAST6uPkSnh93Ndwu3znA6
+         bPuSpbFKIiRB5Pq1THPvxRKAiUOSzf/W3KqAHdc5yjqiXKnO0Mvd05mcwcUhvFzizVgA
+         fkvM57w+LXKfpDuecWB43gLb6Zc4458uKRizZxcllCd3/+WITkkjyS1axdA5LRPB8vMM
+         nbmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWs45qcYJctCrBbgtJa2BXBnZ3ndeHZnleRrleeVCCWU7RNY3sHGflVssnY3ou058RHWxZ9PdNXU/IhEA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyrql1Kv3Z/0XMB+ZWOcFSS0mHnxf9zch5mLo4PSqQ45/ZD7HVF
+	SNGV4L9f2hj8LeOIDdF11eFGvyl0Xzm4kUbq4PSHQJptg7vbmrhODq4YKR7Q+R951luL4w8xpNY
+	BnAiG6mc5QF9HQFyrvyot1e2mdwaaZpeXIZ/Kt3ftYqmBD6O75Wj7KQozG0MT
+X-Gm-Gg: ASbGncvxYARg/aRpjzvZpwB67LIXKY9eRu8UI61ptx0yx6qT5gCgDHa4L9iFDD4Frd0
+	8sbg9sKV8JmF9uIxizC8pqB3yg4lr6yzxBDi+wWu86N2bQnTEMKP/U04F1BIw+Y7eNq6Ui2sQVR
+	NOOiXMReE6WaA3qSerNnrvHhJd30egzjd+NHmCpbDMo+UVgATT93k9qyQ1XqaBvyeoCZMAcuZRD
+	1tO0A66SqEO3A0M6dBVp4/ayuU9wuBrO6T5bs/IS/AeTyyn5/SpXzWBQLhCavvwWTAlZxhUHDy1
+	YAsx2fxBCqkv9mPA0Tkhrcf0pw9dvq8EisY756tHZv5Xl3teCR4s9oB4O0C60550wXp0JGCoTGM
+	OpfJUL+B/20/yt392Ez6pNgwWT4LQB0eEs2VnosfgJB44QajTmQQeBI7pCcYECusIMQ==
+X-Received: by 2002:a17:907:2d14:b0:ac1:fb60:2269 with SMTP id a640c23a62f3a-ac3b7c67512mr331467166b.27.1742396373185;
+        Wed, 19 Mar 2025 07:59:33 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHqREbNMkDcG8nF1+7LEQ0MUftR3JYUTijz3tpnauyqe4Tk7Bo1aUGapgAd6pOgabXPXIofvg==
+X-Received: by 2002:a17:907:2d14:b0:ac1:fb60:2269 with SMTP id a640c23a62f3a-ac3b7c67512mr331462366b.27.1742396372559;
+        Wed, 19 Mar 2025 07:59:32 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146aefa2sm1015794366b.5.2025.03.19.07.59.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Mar 2025 07:59:31 -0700 (PDT)
+Message-ID: <20d55eba-d802-46c1-a08e-d836eea2717f@redhat.com>
+Date: Wed, 19 Mar 2025 15:59:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/1] media: i2c: Add Omnivision OV02C10 sensor driver
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Ingvar Hagelund <ingvar@redpill-linpro.com>,
+ Joachim Reichel <joachim.reichel@posteo.de>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Hao Yao <hao.yao@intel.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
+References: <20250314101125.9853-1-hdegoede@redhat.com>
+ <20250314101125.9853-2-hdegoede@redhat.com>
+ <Z9QlNEP8aL1XdlAv@kekkonen.localdomain>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Z9QlNEP8aL1XdlAv@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Rob Clark <robdclark@chromium.org>
+Hi Sakari,
 
-Buffers that are not shared between contexts can share a single resv
-object.  This way drm_gpuvm will not track them as external objects, and
-submit-time validating overhead will be O(1) for all N non-shared BOs,
-instead of O(n).
+On 14-Mar-25 1:46 PM, Sakari Ailus wrote:
+> Hi Hans,
+> 
+> Thanks for the update.
+> 
+> On Fri, Mar 14, 2025 at 11:11:25AM +0100, Hans de Goede wrote:
+>> From: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
+>>
+>> Add a new driver for the Omnivision OV02C10 camera sensor. This is based
+>> on the out of tree driver by Hao Yao <hao.yao@intel.com> from:
+>> https://github.com/intel/ipu6-drivers/blob/master/drivers/media/i2c/ov02c10.c
+>>
+>> This has been tested on a Dell XPS 9440 together with the IPU6 isys CSI
+>> driver and the libcamera software ISP code.
+>>
+>> Tested-by: Ingvar Hagelund <ingvar@redpill-linpro.com>
+>> Signed-off-by: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
+>> Co-developed-by: Hans de Goede <hdegoede@redhat.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_drv.h       |  1 +
- drivers/gpu/drm/msm/msm_gem.c       | 23 +++++++++++++++++++++++
- drivers/gpu/drm/msm/msm_gem_prime.c | 15 +++++++++++++++
- include/uapi/drm/msm_drm.h          | 14 ++++++++++++++
- 4 files changed, 53 insertions(+)
+<snip>
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-index b77fd2c531c3..b0add236cbb3 100644
---- a/drivers/gpu/drm/msm/msm_drv.h
-+++ b/drivers/gpu/drm/msm/msm_drv.h
-@@ -246,6 +246,7 @@ int msm_gem_prime_vmap(struct drm_gem_object *obj, struct iosys_map *map);
- void msm_gem_prime_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
- struct drm_gem_object *msm_gem_prime_import_sg_table(struct drm_device *dev,
- 		struct dma_buf_attachment *attach, struct sg_table *sg);
-+struct dma_buf *msm_gem_prime_export(struct drm_gem_object *obj, int flags);
- int msm_gem_prime_pin(struct drm_gem_object *obj);
- void msm_gem_prime_unpin(struct drm_gem_object *obj);
- 
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 4c68a3dd3fed..9d4f7b76471f 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -522,6 +522,9 @@ static int get_and_pin_iova_range_locked(struct drm_gem_object *obj,
- 
- 	msm_gem_assert_locked(obj);
- 
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return -EINVAL;
-+
- 	vma = get_vma_locked(obj, vm, range_start, range_end);
- 	if (IS_ERR(vma))
- 		return PTR_ERR(vma);
-@@ -1032,6 +1035,16 @@ static void msm_gem_free_object(struct drm_gem_object *obj)
- 		put_pages(obj);
- 	}
- 
-+	if (msm_obj->flags & MSM_BO_NO_SHARE) {
-+		struct drm_gem_object *r_obj =
-+			container_of(obj->resv, struct drm_gem_object, _resv);
-+
-+		BUG_ON(obj->resv == &obj->_resv);
-+
-+		/* Drop reference we hold to shared resv obj: */
-+		drm_gem_object_put(r_obj);
-+	}
-+
- 	drm_gem_object_release(obj);
- 
- 	kfree(msm_obj->metadata);
-@@ -1064,6 +1077,15 @@ int msm_gem_new_handle(struct drm_device *dev, struct drm_file *file,
- 	if (name)
- 		msm_gem_object_set_name(obj, "%s", name);
- 
-+	if (flags & MSM_BO_NO_SHARE) {
-+		struct msm_context *ctx = file->driver_priv;
-+		struct drm_gem_object *r_obj = drm_gpuvm_resv_obj(ctx->vm);
-+
-+		drm_gem_object_get(r_obj);
-+
-+		obj->resv = r_obj->resv;
-+	}
-+
- 	ret = drm_gem_handle_create(file, obj, handle);
- 
- 	/* drop reference from allocate - handle holds it now */
-@@ -1096,6 +1118,7 @@ static const struct drm_gem_object_funcs msm_gem_object_funcs = {
- 	.free = msm_gem_free_object,
- 	.open = msm_gem_open,
- 	.close = msm_gem_close,
-+	.export = msm_gem_prime_export,
- 	.pin = msm_gem_prime_pin,
- 	.unpin = msm_gem_prime_unpin,
- 	.get_sg_table = msm_gem_prime_get_sg_table,
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index ee267490c935..1a6d8099196a 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -16,6 +16,9 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
- 	int npages = obj->size >> PAGE_SHIFT;
- 
-+	if (msm_obj->flags & MSM_BO_NO_SHARE)
-+		return ERR_PTR(-EINVAL);
-+
- 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -45,6 +48,15 @@ struct drm_gem_object *msm_gem_prime_import_sg_table(struct drm_device *dev,
- 	return msm_gem_import(dev, attach->dmabuf, sg);
- }
- 
-+
-+struct dma_buf *msm_gem_prime_export(struct drm_gem_object *obj, int flags)
-+{
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return ERR_PTR(-EPERM);
-+
-+	return drm_gem_prime_export(obj, flags);
-+}
-+
- int msm_gem_prime_pin(struct drm_gem_object *obj)
- {
- 	struct page **pages;
-@@ -53,6 +65,9 @@ int msm_gem_prime_pin(struct drm_gem_object *obj)
- 	if (obj->import_attach)
- 		return 0;
- 
-+	if (to_msm_bo(obj)->flags & MSM_BO_NO_SHARE)
-+		return -EINVAL;
-+
- 	pages = msm_gem_pin_pages_locked(obj);
- 	if (IS_ERR(pages))
- 		ret = PTR_ERR(pages);
-diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-index 39b55c8d7413..a7e48ee1dd95 100644
---- a/include/uapi/drm/msm_drm.h
-+++ b/include/uapi/drm/msm_drm.h
-@@ -138,6 +138,19 @@ struct drm_msm_param {
- 
- #define MSM_BO_SCANOUT       0x00000001     /* scanout capable */
- #define MSM_BO_GPU_READONLY  0x00000002
-+/* Private buffers do not need to be explicitly listed in the SUBMIT
-+ * ioctl, unless referenced by a drm_msm_gem_submit_cmd.  Private
-+ * buffers may NOT be imported/exported or used for scanout (or any
-+ * other situation where buffers can be indefinitely pinned, but
-+ * cases other than scanout are all kernel owned BOs which are not
-+ * visible to userspace).
-+ *
-+ * In exchange for those constraints, all private BOs associated with
-+ * a single context (drm_file) share a single dma_resv, and if there
-+ * has been no eviction since the last submit, there are no per-BO
-+ * bookeeping to do, significantly cutting the SUBMIT overhead.
-+ */
-+#define MSM_BO_NO_SHARE      0x00000004
- #define MSM_BO_CACHE_MASK    0x000f0000
- /* cache modes */
- #define MSM_BO_CACHED        0x00010000
-@@ -147,6 +160,7 @@ struct drm_msm_param {
- 
- #define MSM_BO_FLAGS         (MSM_BO_SCANOUT | \
-                               MSM_BO_GPU_READONLY | \
-+                              MSM_BO_NO_SHARE | \
-                               MSM_BO_CACHE_MASK)
- 
- struct drm_msm_gem_new {
--- 
-2.48.1
+>> diff --git a/drivers/media/i2c/ov02c10.c b/drivers/media/i2c/ov02c10.c
+>> new file mode 100644
+>> index 000000000000..5626aa2fe62c
+>> --- /dev/null
+>> +++ b/drivers/media/i2c/ov02c10.c
+>> @@ -0,0 +1,1012 @@
+
+<snip>
+
+>> +static const struct reg_sequence sensor_1928x1092_30fps_setting[] = {
+> 
+> Could you use struct cci_reg_sequence for this?
+> 
+>> +	{0x0301, 0x08},
+> 
+> { CCI_REG8(0x0301), 0x08 },
+> 
+> etc.
+> 
+> That would also enable using human-readable names in this list.
+
+TBH I would rather not, adding the CCI_REGx everywhere will make
+it harder to keep the out of tree code in sync with this, using
+raw struct reg_sequence combined with regmap_multi_reg_write()
+is sort of the norm for drivers converted to the CCI helpers.
+
+Also while using symbolic register names (defines) greatly
+improves the readability of other code accessing the registers,
+I find it unhelpful for these large just send a bunch of
+register values to the sensor cases, especially since for many
+of the addresses we've no clue what we're sending / what 
+the register does.
+
+> 
+>> +	{0x0303, 0x06},
+>> +	{0x0304, 0x01},
+>> +	{0x0305, 0xe0},
+
+<snip>
+
+>> +};
+>> +
+>> +static const struct reg_sequence sensor_1928x1092_30fps_1lane_setting[] = {
+>> +	{0x301b, 0xd2},
+>> +	{0x3027, 0xe1},
+>> +	{0x380c, 0x08},
+>> +	{0x380d, 0xe8},
+>> +	{0x380e, 0x04},
+>> +	{0x380f, 0x8c},
+>> +	{0x394e, 0x0b},
+>> +	{0x4800, 0x24},
+>> +	{0x5000, 0xf5},
+>> +	/* plls */
+>> +	{0x0303, 0x05},
+>> +	{0x0305, 0x90},
+>> +	{0x0316, 0x90},
+>> +	{0x3016, 0x12},
+>> +};
+>> +
+>> +static const struct reg_sequence sensor_1928x1092_30fps_2lane_setting[] = {
+>> +	{0x301b, 0xf0},
+>> +	{0x3027, 0xf1},
+>> +	{0x380c, 0x04},
+>> +	{0x380d, 0x74},
+>> +	{0x380e, 0x09},
+>> +	{0x380f, 0x18},
+>> +	{0x394e, 0x0a},
+>> +	{0x4041, 0x20},
+>> +	{0x4884, 0x04},
+>> +	{0x4800, 0x64},
+>> +	{0x4d00, 0x03},
+>> +	{0x4d01, 0xd8},
+>> +	{0x4d02, 0xba},
+>> +	{0x4d03, 0xa0},
+>> +	{0x4d04, 0xb7},
+>> +	{0x4d05, 0x34},
+>> +	{0x4d0d, 0x00},
+>> +	{0x5000, 0xfd},
+>> +	{0x481f, 0x30},
+> 
+> It's surprising to have more registers when the number of lanes is 2. I
+> guess for 1 lane case it's using defaults?
+
+I guess so. At your request I split the registers which were
+different for the 1 / 2 lane cases into 2 separate registerlists
+and some register writes where only in the long 2 lane register list
+of the previous version.
+
+> 
+>> +	/* plls */
+>> +	{0x0303, 0x05},
+>> +	{0x0305, 0x90},
+>> +	{0x0316, 0x90},
+>> +	{0x3016, 0x32},
+>> +};
+>> +
+
+<snip>
+
+>> +static int ov02c10_test_pattern(struct ov02c10 *ov02c10, int pattern)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	if (!pattern)
+>> +		return cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+>> +				       BIT(7), 0, NULL);
+>> +
+>> +	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+>> +			0x03, pattern - 1, &ret);
+>> +	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+>> +			BIT(7), OV02C10_TEST_PATTERN_ENABLE, &ret);
+> 
+> I'd do here:
+> 
+> 	return cci_update_bits(...);
+
+Since we are relying on the error preserving / propagating
+behavior of the CCI helpers here that feels weird / inconsistent,
+I would expect either:
+
+	ret = cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+			      0x03, pattern - 1, NULL);
+	if (ret)
+		return ret;
+
+	return cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+			       BIT(7), OV02C10_TEST_PATTERN_ENABLE, NULL);
+}
+
+or:
+
+	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+			0x03, pattern - 1, &ret);
+	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
+			BIT(7), OV02C10_TEST_PATTERN_ENABLE, &ret);
+	return ret;
+}
+
+not a mix of the 2, with my preference going to the latter.
+
+<snip>
+
+>> +static int ov02c10_init_controls(struct ov02c10 *ov02c10)
+>> +{
+>> +	struct v4l2_ctrl_handler *ctrl_hdlr;
+>> +	const struct ov02c10_mode *cur_mode;
+>> +	s64 exposure_max, h_blank, pixel_rate;
+>> +	u32 vblank_min, vblank_max, vblank_default, vts_def;
+>> +	int ret = 0;
+>> +
+>> +	ctrl_hdlr = &ov02c10->ctrl_handler;
+>> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
+>> +	if (ret)
+>> +		return ret;
+> 
+> v4l2_ctrl_handler_init() sets the handler's error state so you can omit
+> this check.
+
+Ok, that is good to know, will fix.
+
+<snip>
+
+
+>> +static int ov02c10_start_streaming(struct ov02c10 *ov02c10)
+>> +{
+>> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
+>> +	const struct reg_sequence *reg_sequence;
+>> +	int sequence_length;
+>> +	int ret = 0;
+>> +
+>> +	reg_sequence = ov02c10->cur_mode->reg_sequence;
+>> +	sequence_length = ov02c10->cur_mode->sequence_length;
+>> +	ret = regmap_multi_reg_write(ov02c10->regmap,
+>> +				     reg_sequence, sequence_length);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to set mode\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	reg_sequence = ov02c10->cur_mode->lane_settings[ov02c10->mipi_lanes - 1];
+>> +	sequence_length = ov02c10->cur_mode->lane_settings_length[ov02c10->mipi_lanes - 1];
+>> +	ret = regmap_multi_reg_write(ov02c10->regmap,
+>> +				     reg_sequence, sequence_length);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to write lane settings\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = __v4l2_ctrl_handler_setup(ov02c10->sd.ctrl_handler);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return cci_write(ov02c10->regmap, OV02C10_REG_STREAM_CONTROL, 1, NULL);
+>> +}
+>> +
+>> +static void ov02c10_stop_streaming(struct ov02c10 *ov02c10)
+>> +{
+>> +	cci_write(ov02c10->regmap, OV02C10_REG_STREAM_CONTROL, 0, NULL);
+>> +}
+>> +
+>> +static int ov02c10_enable_streams(struct v4l2_subdev *sd,
+>> +				  struct v4l2_subdev_state *state,
+>> +				  u32 pad, u64 streams_mask)
+>> +{
+>> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +	int ret;
+>> +
+>> +	ret = pm_runtime_resume_and_get(&client->dev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = ov02c10_start_streaming(ov02c10);
+> 
+> I'd move the code from ov02c10_start_streaming() here. Up to you.
+
+done for v10.
+
+>> +	if (ret)
+>> +		pm_runtime_put(&client->dev);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int ov02c10_disable_streams(struct v4l2_subdev *sd,
+>> +				   struct v4l2_subdev_state *state,
+>> +				   u32 pad, u64 streams_mask)
+>> +{
+>> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +
+>> +	ov02c10_stop_streaming(ov02c10);
+> 
+> I'd just do the register write here.
+
+done for v10.
+
+>> +	pm_runtime_put(&client->dev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/* This function tries to get power control resources */
+>> +static int ov02c10_get_pm_resources(struct device *dev)
+>> +{
+>> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +
+>> +	ov02c10->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
+>> +	if (IS_ERR(ov02c10->reset))
+>> +		return dev_err_probe(dev, PTR_ERR(ov02c10->reset),
+>> +				     "failed to get reset gpio\n");
+>> +	if (ov02c10->reset)
+>> +		fsleep(1000);
+> 
+> Is there a need to sleep here?
+
+The idea was to ensure reset is asserted for at least 1 ms
+(actually needs to be 2) when called from probe() immediately
+after requesting the GPIO.
+
+As discussed in wrt Bryan's reset handling patches, we also
+need to ensure reset is asserted for 2ms on back to back power-off
+power-on calls, so for v10 this has moved to power_on().
+
+>> +
+>> +	ov02c10->img_clk = devm_clk_get_optional(dev, NULL);
+>> +	if (IS_ERR(ov02c10->img_clk))
+>> +		return dev_err_probe(dev, PTR_ERR(ov02c10->img_clk),
+>> +				     "failed to get imaging clock\n");
+>> +
+>> +	ov02c10->avdd = devm_regulator_get(dev, "avdd");
+>> +	if (IS_ERR(ov02c10->avdd))
+>> +		return dev_err_probe(dev, PTR_ERR(ov02c10->avdd),
+>> +				     "failed to get avdd regulator\n");
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int ov02c10_power_off(struct device *dev)
+>> +{
+>> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +	int ret = 0;
+>> +
+>> +	gpiod_set_value_cansleep(ov02c10->reset, 1);
+>> +
+>> +	if (ov02c10->avdd)
+>> +		ret = regulator_disable(ov02c10->avdd);
+>> +
+>> +	clk_disable_unprepare(ov02c10->img_clk);
+>> +
+>> +	return ret;
+> 
+> I'd return 0 always but complain if disabling the regulator fails.
+
+Bryan's bulk regulator API changes already have made
+this change for v10.
+
+>> +}
+>> +
+>> +static int ov02c10_power_on(struct device *dev)
+>> +{
+>> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +	int ret;
+>> +
+>> +	ret = clk_prepare_enable(ov02c10->img_clk);
+>> +	if (ret < 0) {
+>> +		dev_err(dev, "failed to enable imaging clock: %d", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	if (ov02c10->avdd) {
+>> +		ret = regulator_enable(ov02c10->avdd);
+>> +		if (ret < 0) {
+>> +			dev_err(dev, "failed to enable avdd: %d", ret);
+>> +			clk_disable_unprepare(ov02c10->img_clk);
+>> +			return ret;
+>> +		}
+>> +	}
+>> +
+>> +	gpiod_set_value_cansleep(ov02c10->reset, 0);
+>> +	usleep_range(1500, 1800);
+> 
+> Accoding to the datasheet the minimum time from lifting reset is 5 ms +
+> 8192 xclk cycles before the first SCCB transaction may proceed.
+
+Ack, also fixed by Bryan.
+
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int ov02c10_set_format(struct v4l2_subdev *sd,
+>> +			      struct v4l2_subdev_state *sd_state,
+>> +			      struct v4l2_subdev_format *fmt)
+>> +{
+>> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
+>> +	const struct ov02c10_mode *mode;
+>> +	s32 vblank_def, h_blank;
+>> +
+>> +	mode = v4l2_find_nearest_size(supported_modes,
+>> +				      ARRAY_SIZE(supported_modes), width,
+>> +				      height, fmt->format.width,
+>> +				      fmt->format.height);
+>> +
+>> +	ov02c10_update_pad_format(mode, &fmt->format);
+>> +	*v4l2_subdev_state_get_format(sd_state, fmt->pad) = fmt->format;
+>> +
+>> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+>> +		return 0;
+>> +
+>> +	ov02c10->cur_mode = mode;
+> 
+> You don't really need cur_mode, do you? The driver supports a single mode
+> and selecting the mode would ideally be based on sub-device state so I
+> think it'd be better to just remove cur_mode.
+
+Ok, I've removed this for the upcoming v10.
+
+>> +	/* Update limits and set FPS to default */
+>> +	vblank_def = mode->vts_min * ov02c10->mipi_lanes - mode->height;
+>> +	__v4l2_ctrl_modify_range(ov02c10->vblank, mode->vts_min - mode->height,
+>> +				 OV02C10_VTS_MAX - mode->height, 1, vblank_def);
+>> +	__v4l2_ctrl_s_ctrl(ov02c10->vblank, vblank_def);
+>> +	h_blank = mode->hts - mode->width;
+>> +	__v4l2_ctrl_modify_range(ov02c10->hblank, h_blank, h_blank, 1, h_blank);
+>> +
+>> +	return 0;
+>> +}
+>> +
+
+<snip>
+
+>> +static int ov02c10_check_hwcfg(struct device *dev, struct ov02c10 *ov02c10)
+>> +{
+>> +	struct v4l2_fwnode_endpoint bus_cfg = {
+>> +		.bus_type = V4L2_MBUS_CSI2_DPHY
+>> +	};
+>> +	struct fwnode_handle *ep, *fwnode = dev_fwnode(dev);
+>> +	unsigned long link_freq_bitmap;
+>> +	u32 mclk;
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Sometimes the fwnode graph is initialized by the bridge driver,
+>> +	 * wait for this.
+>> +	 */
+>> +	ep = fwnode_graph_get_endpoint_by_id(fwnode, 0, 0, 0);
+>> +	if (!ep)
+>> +		return dev_err_probe(dev, -EPROBE_DEFER,
+>> +				     "waiting for fwnode graph endpoint\n");
+>> +
+>> +	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+> 
+> The driver accesses a clock besides this, too. The frequency should be
+> obtained from the clock if one exists. Meanwhile Mehdi has been working on
+> <URL:https://lore.kernel.org/linux-media/20250310122305.209534-1-mehdi.djait@linux.intel.com/T/#u>.
+
+Ack fixed for v10 (by a squashed patch from Bryan)
+
+>> +	if (ret) {
+>> +		fwnode_handle_put(ep);
+>> +		return dev_err_probe(dev, ret,
+>> +				     "reading clock-frequency property\n");
+>> +	}
+>> +
+>> +	if (mclk != OV02C10_MCLK) {
+>> +		fwnode_handle_put(ep);
+>> +		return dev_err_probe(dev, -EINVAL,
+>> +				     "external clock %u is not supported\n",
+>> +				     mclk);
+>> +	}
+>> +
+>> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
+>> +	fwnode_handle_put(ep);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "parsing endpoint failed\n");
+>> +
+>> +	ret = v4l2_link_freq_to_bitmap(dev, bus_cfg.link_frequencies,
+>> +				       bus_cfg.nr_of_link_frequencies,
+>> +				       link_freq_menu_items,
+>> +				       ARRAY_SIZE(link_freq_menu_items),
+>> +				       &link_freq_bitmap);
+>> +	if (ret)
+>> +		goto check_hwcfg_error;
+>> +
+>> +	/* v4l2_link_freq_to_bitmap() guarantees at least 1 bit is set */
+>> +	ov02c10->link_freq_index = ffs(link_freq_bitmap) - 1;
+>> +
+>> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 1 &&
+>> +	    bus_cfg.bus.mipi_csi2.num_data_lanes != 2) {
+>> +		ret = dev_err_probe(dev, -EINVAL,
+>> +				    "number of CSI2 data lanes %u is not supported\n",
+>> +				    bus_cfg.bus.mipi_csi2.num_data_lanes);
+>> +		goto check_hwcfg_error;
+>> +	}
+>> +
+>> +	ov02c10->mipi_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
+>> +
+>> +check_hwcfg_error:
+>> +	v4l2_fwnode_endpoint_free(&bus_cfg);
+>> +	return ret;
+>> +}
+>> +
+>> +static void ov02c10_remove(struct i2c_client *client)
+>> +{
+>> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+>> +
+>> +	v4l2_async_unregister_subdev(sd);
+>> +	v4l2_subdev_cleanup(sd);
+>> +	media_entity_cleanup(&sd->entity);
+>> +	v4l2_ctrl_handler_free(sd->ctrl_handler);
+>> +	pm_runtime_disable(&client->dev);
+>> +	if (!pm_runtime_status_suspended(&client->dev)) {
+>> +		ov02c10_power_off(&client->dev);
+>> +		pm_runtime_set_suspended(&client->dev);
+>> +	}
+>> +}
+>> +
+>> +static int ov02c10_probe(struct i2c_client *client)
+>> +{
+>> +	struct ov02c10 *ov02c10;
+>> +	int ret = 0;
+> 
+> The initialisation is redundant.
+
+ack, fixed for v10.
+
+>> +
+>> +	ov02c10 = devm_kzalloc(&client->dev, sizeof(*ov02c10), GFP_KERNEL);
+>> +	if (!ov02c10)
+>> +		return -ENOMEM;
+>> +
+>> +	v4l2_i2c_subdev_init(&ov02c10->sd, client, &ov02c10_subdev_ops);
+>> +
+>> +	/* Check HW config */
+>> +	ret = ov02c10_check_hwcfg(&client->dev, ov02c10);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = ov02c10_get_pm_resources(&client->dev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ov02c10->regmap = devm_cci_regmap_init_i2c(client, 16);
+>> +	if (IS_ERR(ov02c10->regmap))
+>> +		return PTR_ERR(ov02c10->regmap);
+>> +
+>> +	ret = ov02c10_power_on(&client->dev);
+>> +	if (ret) {
+>> +		dev_err_probe(&client->dev, ret, "failed to power on\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = ov02c10_identify_module(ov02c10);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to find sensor: %d", ret);
+>> +		goto probe_error_power_off;
+>> +	}
+>> +
+>> +	ov02c10->cur_mode = &supported_modes[0];
+>> +
+>> +	ret = ov02c10_init_controls(ov02c10);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to init controls: %d", ret);
+>> +		goto probe_error_v4l2_ctrl_handler_free;
+>> +	}
+>> +
+>> +	ov02c10->sd.internal_ops = &ov02c10_internal_ops;
+>> +	ov02c10->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+>> +	ov02c10->sd.entity.ops = &ov02c10_subdev_entity_ops;
+>> +	ov02c10->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+>> +	ov02c10->pad.flags = MEDIA_PAD_FL_SOURCE;
+>> +	ret = media_entity_pads_init(&ov02c10->sd.entity, 1, &ov02c10->pad);
+>> +	if (ret) {
+>> +		dev_err(&client->dev, "failed to init entity pads: %d", ret);
+>> +		goto probe_error_v4l2_ctrl_handler_free;
+>> +	}
+>> +
+>> +	ov02c10->sd.state_lock = ov02c10->ctrl_handler.lock;
+>> +	ret = v4l2_subdev_init_finalize(&ov02c10->sd);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to init subdev: %d", ret);
+>> +		goto probe_error_media_entity_cleanup;
+>> +	}
+>> +
+>> +	pm_runtime_set_active(&client->dev);
+>> +	pm_runtime_enable(&client->dev);
+>> +
+>> +	ret = v4l2_async_register_subdev_sensor(&ov02c10->sd);
+>> +	if (ret < 0) {
+>> +		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+>> +			ret);
+>> +		goto probe_error_v4l2_subdev_cleanup;
+>> +	}
+>> +
+>> +	pm_runtime_idle(&client->dev);
+>> +	return 0;
+>> +
+>> +probe_error_v4l2_subdev_cleanup:
+>> +	pm_runtime_disable(&client->dev);
+>> +	pm_runtime_set_suspended(&client->dev);
+>> +	v4l2_subdev_cleanup(&ov02c10->sd);
+>> +
+>> +probe_error_media_entity_cleanup:
+>> +	media_entity_cleanup(&ov02c10->sd.entity);
+>> +
+>> +probe_error_v4l2_ctrl_handler_free:
+>> +	v4l2_ctrl_handler_free(ov02c10->sd.ctrl_handler);
+>> +
+>> +probe_error_power_off:
+>> +	ov02c10_power_off(&client->dev);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static DEFINE_RUNTIME_DEV_PM_OPS(ov02c10_pm_ops, ov02c10_power_off,
+>> +				 ov02c10_power_on, NULL);
+>> +
+>> +#ifdef CONFIG_ACPI
+>> +static const struct acpi_device_id ov02c10_acpi_ids[] = {
+>> +	{"OVTI02C1"},
+> 
+> Spaces inside braces, please.
+
+Ack, fixed for v10.
+
+> 
+>> +	{}
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(acpi, ov02c10_acpi_ids);
+>> +#endif
+>> +
+>> +static struct i2c_driver ov02c10_i2c_driver = {
+>> +	.driver = {
+>> +		.name = "ov02c10",
+>> +		.pm = pm_sleep_ptr(&ov02c10_pm_ops),
+>> +		.acpi_match_table = ACPI_PTR(ov02c10_acpi_ids),
+>> +	},
+>> +	.probe = ov02c10_probe,
+>> +	.remove = ov02c10_remove,
+>> +};
+>> +
+>> +module_i2c_driver(ov02c10_i2c_driver);
+>> +
+>> +MODULE_AUTHOR("Hao Yao <hao.yao@intel.com>");
+> 
+> Shouldn't this include you / Heimir as well?
+
+Ack, added MODULE_AUTHOR() lines for both Heimir and myself.
+
+>> +MODULE_DESCRIPTION("OmniVision OV02C10 sensor driver");
+>> +MODULE_LICENSE("GPL");
+
+Regards,
+
+Hans
+
+
 
