@@ -1,1193 +1,263 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AFA35971
-	for <linux-media@vger.kernel.org>; Wed, 19 Mar 2025 15:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2681A4F0A;
+	Wed, 19 Mar 2025 15:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742396468; cv=none; b=EtJrOT62TGO/2TtcECUEQNkPv6Ss2aIiWYhFMIM29ig232Gf152pO9vYFmL6xYWArdNgDGiomPpqUeN6ScPhYJlXrJ8DFtY45HrS1Q20sfZIiBLP4V/jCcW2avJxIE5MLGVeq+bFKnYwl6/9qpAmoHNEa6K7gVBAPqLbpMLTFO8=
+	t=1742396873; cv=none; b=NPIydzgnGdhxeWA59NoYY2ATHA3QDmU1Fgx8Qv5dS0u5J49mgRh/TobdIVidpvnGuegI/bMNu9Su//ypGVV3jKQ/ElKpRn2kCwstcIC12hQV4xXa+M16nZ16EFEEZvx24MeeY9ilX/MO0iC15RP8UbC1x9PE70uyzcHkWoAiRL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742396468; c=relaxed/simple;
-	bh=LSh3DHu3TaJPeOxRAgirhyf+nCm6a+YDoxMabWvTcXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NT4Av/z/dH5O99ICwn3O/r+eGgaoGFz3ugSY01Fv3SpMEx7mR5VW/cRqOTrXXEQVSDOUO3P+GQzIYJjXR5rB8EnvH7HqOq1csth1ax0FAOSuHIJ0NNQ7yB9qHSLN9oSzNGqqINXv/lt8TGArsOrlohHq2loqfdVt9aIAB94W0Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fj4IFIFk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742396873; c=relaxed/simple;
+	bh=sejEb1ymOKn3UQElCjIArq21+MBAEBSD579oJKzYKho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwaZ3aRDY8DN+fEpqQGuOM53uSI/QrilSzFHXag7pm997Y0tgSX/4obuXsIyd1PR9PLWZSennQImn0tB9p9BSCj5qNtVuO8szf9EKbnycBSZ7VEacvaFrR9k024BCNi1Um+5VMDQ3ZHJ6b0h/IpApLmCBltnAalhGkP4qHZMGlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=zD6wC2KV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=62ykFpYV; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fj4IFIFk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742396464;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AxMMMNg9esE3gAyfJ1sgAYkw9vXNywyMjbrPQq9Ef/M=;
-	b=Fj4IFIFk6bgHf9VXd5xGthu6bfFNxTGSvDbYKN0q9I/oon6kBLdgzxq6Hsm4SqkV7+mMrF
-	1wrt0OnGVXsMLWoamca+y1FmEZJpLZoGur/mJ7cV8T4+F2QZ4sLTC6g0qfH3stpFtIxQs7
-	Wf+miuj221h4pla+gcr6y0cGKDsvdho=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-290-yY9qMLPINnuIw7-owO3GeQ-1; Wed, 19 Mar 2025 11:01:03 -0400
-X-MC-Unique: yY9qMLPINnuIw7-owO3GeQ-1
-X-Mimecast-MFC-AGG-ID: yY9qMLPINnuIw7-owO3GeQ_1742396462
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5e5c808e777so7021822a12.0
-        for <linux-media@vger.kernel.org>; Wed, 19 Mar 2025 08:01:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742396462; x=1743001262;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxMMMNg9esE3gAyfJ1sgAYkw9vXNywyMjbrPQq9Ef/M=;
-        b=u5kvl7QkOwkFhzVWmb8JE9qsqsjobi5XCX51RP7Mdl5SICpFdIo0Pz5HL9QgJFKPzu
-         Ftd1xDMlI63//+JvwQ3kl7ZoucIl2dWOh3u63a8jNR9gaLAg1gEqwST/RKJ0aDssS0tC
-         Vc4F2z1X9C4HBOv5O8XrFzazVvvEDLFgVIkYnUUscPm/KeR4q8XuL5VUllHr2pI+867W
-         IXjr7TPxrOGuWNZpLU5Iy8AIpIXswvKd2lWXkmzf1RfdoZkaain3TSrymCKHfKuSsGfu
-         bmcN9Xo+LC4s3Ok4pN+/T3PdQwzj+iDPJo6kkvhDZ/57Fm27lfFBJ9b7PxHxXb59ST5w
-         9krg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9Nx3hiV0W0J7MUbwdHhkwANH3fLDK9K8lh7DRM4BhNJBn1k9gU4FLjl3KhBpXn/u5wV6szKe7dv5SdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YylgZnyr7siuVhR1x9bco7WKw+icXTSIB0vLOx9LJCBOB8v7HJQ
-	vsUcoGsNNuuYuXkY90gWLF8Bz1WgJVOV/8v0kkG/UMg5nqfk4eNocZyEgJz4Lj+9mPcOOrASUHt
-	wP3TwrCK1ywL9KZy90CDY4OHk0pDZklrXKukj766/9p6dVqCSWJrkAi7RPMUw
-X-Gm-Gg: ASbGncsOKDDPjVKunsCwzoDiI8fI5hK7uSwqrjVDrf6r8YeEiONuMe6yW63eNywmhtE
-	bBcWrZcCo3BEGtMvZFMi4z5dyRFm4cuuh0Biss41QSbI4cTBr5dG0IhssYTRctHRQyYCnsLD0RG
-	2qRijl4wsxLz3bC9w8ktLN5ISbWUZ5MxBoVrYSIRwxgFcOhh7k6xnXBLiL9WX5WfYvLxbmBNw40
-	HaXpYrY+ntmYFN+KLoE94IXFi0/85U3Lj/Ihzq7NJCTKNaOh0U8e+02MGP+x1LBKTga4qFyvcaN
-	TJjW8Lpw6HsjeqUHC9TsSsn/WnRzDIljVYwXXn0ihW1l14Maalf+pHSORgOnUUEyL/0TRiQpNbb
-	dJFObwRHFUXbZNlpaReCHNCEN5IdMiNP5gPTumIe6FkEZBqsdY6FT5czfhibjP7tYgg==
-X-Received: by 2002:a05:6402:2789:b0:5e4:d2c9:455c with SMTP id 4fb4d7f45d1cf-5eb80d16e56mr2682324a12.10.1742396459702;
-        Wed, 19 Mar 2025 08:00:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG0BB5yWxWgRVI2VB0q1y3xmaIdkw/4w9ORB9BqRpea6U2dfE5n6fWMYcbzZ/nwRlbvBzFMcw==
-X-Received: by 2002:a05:6402:2789:b0:5e4:d2c9:455c with SMTP id 4fb4d7f45d1cf-5eb80d16e56mr2682192a12.10.1742396458375;
-        Wed, 19 Mar 2025 08:00:58 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e816ad392csm9134298a12.53.2025.03.19.08.00.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Mar 2025 08:00:57 -0700 (PDT)
-Message-ID: <d0686826-ed48-4193-94ad-8458d7a64e95@redhat.com>
-Date: Wed, 19 Mar 2025 16:00:57 +0100
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="zD6wC2KV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="62ykFpYV"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 21D282540223;
+	Wed, 19 Mar 2025 11:07:49 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-07.internal (MEProxy); Wed, 19 Mar 2025 11:07:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1742396868;
+	 x=1742483268; bh=OFem1S2fafkmevswHgaSAN0Iz2pEzjs7TuHY9LHZw5Q=; b=
+	zD6wC2KV8TSFpqbT44GVB9ElGOLEfTTsJgshQqDZiMNJO4QWTyz2QS/bfvYHvYKS
+	pjNxOi0YEbfruG5wtFD7einhZUEecnCpUmjwD44a+m7Ta/SJugqZg4IWQ6MvjgfZ
+	mOB3bUhx2cV/djddb+mDf4m9UIyCG6qvD6zwYCsOAKxCimY2EeW/yTCgzUMaGm6z
+	ueiLNkq/cf3li/99NRY8eRKtQ52bzqWBGe8OXlLcfWkXasNkzbWurYk6kVTPdDEl
+	5RrO4eByXyf2H2i6S3qqSdkDfPBwNGVRfpoS2LzfkfByYUHJWVaRg3EBIXOrd1QN
+	/kZnRBUlT/xIdKnWVDKfuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742396868; x=
+	1742483268; bh=OFem1S2fafkmevswHgaSAN0Iz2pEzjs7TuHY9LHZw5Q=; b=6
+	2ykFpYVcX8ZFqW4oIfGr7ssj/inEV0EhQnXYIxdR0xVn+nV1aktstIMO5O6tlfs8
+	eu2z+l2LFLg/HRz3BO5/+daNTy0sGOUfD2GGqdwQe7JCsyuSzqqRlcXKUoQH5W4+
+	7PkvdEcxXoeimOKC6+vnnIsvEjGxvkxRCZrrVLuti3iNs9ZcYA+UhLQz4dF99X/Q
+	iDhsit1L89YKEhTPeWWDonxZNgZlE7sgW6XDHb79/k6Pi2AT4foVkv3heDgXaC6C
+	YHl/7TpZGZilIfNliZQ4djQWPolIkJe/mmTB9QC+7C7AL3xyUbNVdMxmr1jcR1tw
+	55fCwtWmSgrg7li1v9Fhw==
+X-ME-Sender: <xms:xN3aZ__-a14j6IN40xJ7fVRkv83HnHsPBn9mk2yw_X4O2xqLbL4pMA>
+    <xme:xN3aZ7vIHrhJzNIMip842O6B_BjrpVjA1JMjHhF2Egr67Kh7E6RE0MF4J1KDIuKkY
+    h-fPyYx1dsHbSt31Rg>
+X-ME-Received: <xmr:xN3aZ9DRNzsKwGAan7NFWeuX2fSit_gaWx8lAFW3H18YEowoK0TWCDOgPc3czgj3UIy2AIw0JkEnoo3WJzpxIJ_fm5vptXwehA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeehieehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddt
+    tdejnecuhfhrohhmpefpihhklhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrsh
+    houggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvqeenucggtffr
+    rghtthgvrhhnpeefhfellefhffejgfefudfggeejlefhveehieekhfeulefgtdefueehff
+    dtvdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pehnihhklhgrshdrshhouggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthh
+    drshgvpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
+    ohepjhgrtghophhordhmohhnughisehiuggvrghsohhnsghorghrugdrtghomhdprhgtph
+    htthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pehgvggvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtohephhhvvg
+    hrkhhuihhlseigshegrghllhdrnhhlpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhs
+    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhgruhhrvghnthdrphhinh
+    gthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomh
+X-ME-Proxy: <xmx:xN3aZ7eh6G1yQDeGzNlSiIIhvF9U8MDb1oPQ93FrNnukgM5jJblygw>
+    <xmx:xN3aZ0MJT9BwEoF3qdxM6sSfzZF_CPN4bYDhzA-yIeB-m2JuWqU5Yw>
+    <xmx:xN3aZ9m_o9g8BAEiGGL8iLhUVlR78Mkc5szdQH5aHojb48C9H-GsBQ>
+    <xmx:xN3aZ-s2v9iVSfdtUX4NlNAcMBlU6kigYBiDWZzNzPksqhRYk4zEJg>
+    <xmx:xN3aZwnIIjAR3sUUPKNnvhEzzDamgpf91ZXP-sRK4APztvG386Wm9czg>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Mar 2025 11:07:47 -0400 (EDT)
+Date: Wed, 19 Mar 2025 16:07:45 +0100
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 2/7] arm64: dts: renesas: r8a779a0: Add ISP core function
+ block
+Message-ID: <20250319150745.GE949127@ragnatech.se>
+References: <20250315152708.328036-1-niklas.soderlund+renesas@ragnatech.se>
+ <20250315152708.328036-3-niklas.soderlund+renesas@ragnatech.se>
+ <hwj6d3ll75magopi5oak4zmboy5dol3ztv3isd6wvrxmvbkx4b@ayjumbqmuk3l>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10] media: i2c: Add Omnivision OV02C10 sensor driver
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
- Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Ingvar Hagelund <ingvar@redpill-linpro.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
-References: <20250319145927.70534-1-hdegoede@redhat.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20250319145927.70534-1-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <hwj6d3ll75magopi5oak4zmboy5dol3ztv3isd6wvrxmvbkx4b@ayjumbqmuk3l>
 
-Hi All,
+Hi Jacopo,
 
-oops this is v10, but I forgot to mark it as such when sending, sorry.
+Thanks for your feedback.
 
-Regards,
-
-Hans
-
-
-On 19-Mar-25 3:59 PM, Hans de Goede wrote:
-> From: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
+On 2025-03-19 15:50:00 +0100, Jacopo Mondi wrote:
+> Hi Niklas
 > 
-> Add a new driver for the Omnivision OV02C10 camera sensor. This is based
-> on the out of tree driver by Hao Yao <hao.yao@intel.com> from:
-> https://github.com/intel/ipu6-drivers/blob/master/drivers/media/i2c/ov02c10.c
+> On Sat, Mar 15, 2025 at 04:27:03PM +0100, Niklas Söderlund wrote:
+> > All ISP instances on V3U have both a channel select and core function
+> > block, describe the core region in addition to the existing cs region.
+> >
+> > The interrupt number already described intended to reflect the cs
+> > function but did incorrectly describe the core block. This was not
 > 
-> This has been tested on a Dell XPS 9440 together with the IPU6 isys CSI
-> driver and the libcamera software ISP code.
-> 
-> Tested-by: Ingvar Hagelund <ingvar@redpill-linpro.com> # Dell XPS 9340
-> Tested-by: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com> # Dell XPS 9440
-> Signed-off-by: Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>
-> Co-developed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Co-developed-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Changes in v10:
-> - Squash in changes from Bryan to add DT / aarch64 devices support
-> - Add camera orientation and sensor rotation controls using
->   v4l2_ctrl_new_fwnode_properties()
-> - Drop cur_mode since there is only 1 mode
-> - Add MODULE_AUTHOR() macros for Heimir and Hans
-> - Some small code cleanups from Sakari's v9 review
-> 
-> Changes in v9 (Hans de Goede):
-> - Squashed everything back into a single patch again
-> - Dropped Stanislaw's Tested-by tags since much has changed since v7
-> 
-> Changes in v8 (Hans de Goede):
-> - Many changes, so many that this has been posted as an incremental
->   series on top of v7. See individual commits for change details:
->   https://lore.kernel.org/linux-media/20250313184314.91410-1-hdegoede@redhat.com/
-> ---
->  drivers/media/i2c/Kconfig   |   10 +
->  drivers/media/i2c/Makefile  |    1 +
->  drivers/media/i2c/ov02c10.c | 1013 +++++++++++++++++++++++++++++++++++
->  3 files changed, 1024 insertions(+)
->  create mode 100644 drivers/media/i2c/ov02c10.c
-> 
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index bb9ab2330d24..99a72b8ee45c 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -365,6 +365,16 @@ config VIDEO_OV02A10
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called ov02a10.
->  
-> +config VIDEO_OV02C10
-> +	tristate "OmniVision OV02C10 sensor support"
-> +	select V4L2_CCI_I2C
-> +	help
-> +	  This is a Video4Linux2 sensor driver for the OmniVision
-> +	  OV02C10 camera.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called ov02c10.
-> +
->  config VIDEO_OV08D10
->          tristate "OmniVision OV08D10 sensor support"
->          help
-> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> index a17151bb3d49..191c1f7c3f50 100644
-> --- a/drivers/media/i2c/Makefile
-> +++ b/drivers/media/i2c/Makefile
-> @@ -85,6 +85,7 @@ obj-$(CONFIG_VIDEO_OG01A1B) += og01a1b.o
->  obj-$(CONFIG_VIDEO_OV01A10) += ov01a10.o
->  obj-$(CONFIG_VIDEO_OV01A1S) += ov01a1s.o
->  obj-$(CONFIG_VIDEO_OV02A10) += ov02a10.o
-> +obj-$(CONFIG_VIDEO_OV02C10) += ov02c10.o
->  obj-$(CONFIG_VIDEO_OV08D10) += ov08d10.o
->  obj-$(CONFIG_VIDEO_OV08X40) += ov08x40.o
->  obj-$(CONFIG_VIDEO_OV13858) += ov13858.o
-> diff --git a/drivers/media/i2c/ov02c10.c b/drivers/media/i2c/ov02c10.c
-> new file mode 100644
-> index 000000000000..9e3d4a4e12ce
-> --- /dev/null
-> +++ b/drivers/media/i2c/ov02c10.c
-> @@ -0,0 +1,1013 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2022 Intel Corporation.
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +#include <linux/version.h>
-> +#include <media/v4l2-cci.h>
-> +#include <media/v4l2-ctrls.h>
-> +#include <media/v4l2-device.h>
-> +#include <media/v4l2-fwnode.h>
-> +
-> +#define OV02C10_LINK_FREQ_400MHZ	400000000ULL
-> +#define OV02C10_MCLK			19200000
-> +#define OV02C10_RGB_DEPTH		10
-> +
-> +#define OV02C10_REG_CHIP_ID		CCI_REG16(0x300a)
-> +#define OV02C10_CHIP_ID			0x5602
-> +
-> +#define OV02C10_REG_STREAM_CONTROL	CCI_REG8(0x0100)
-> +
-> +#define OV02C10_REG_HTS			CCI_REG16(0x380c)
-> +
-> +/* vertical-timings from sensor */
-> +#define OV02C10_REG_VTS			CCI_REG16(0x380e)
-> +#define OV02C10_VTS_MAX			0xffff
-> +
-> +/* Exposure controls from sensor */
-> +#define OV02C10_REG_EXPOSURE		CCI_REG16(0x3501)
-> +#define OV02C10_EXPOSURE_MIN		4
-> +#define OV02C10_EXPOSURE_MAX_MARGIN	8
-> +#define OV02C10_EXPOSURE_STEP		1
-> +
-> +/* Analog gain controls from sensor */
-> +#define OV02C10_REG_ANALOG_GAIN		CCI_REG16(0x3508)
-> +#define OV02C10_ANAL_GAIN_MIN		0x10
-> +#define OV02C10_ANAL_GAIN_MAX		0xf8
-> +#define OV02C10_ANAL_GAIN_STEP		1
-> +#define OV02C10_ANAL_GAIN_DEFAULT	0x10
-> +
-> +/* Digital gain controls from sensor */
-> +#define OV02C10_REG_DIGITAL_GAIN	CCI_REG24(0x350a)
-> +#define OV02C10_DGTL_GAIN_MIN		0x0400
-> +#define OV02C10_DGTL_GAIN_MAX		0x3fff
-> +#define OV02C10_DGTL_GAIN_STEP		1
-> +#define OV02C10_DGTL_GAIN_DEFAULT	0x0400
-> +
-> +/* Rotate */
-> +#define OV02C10_ROTATE_CONTROL		CCI_REG8(0x3820)
-> +#define OV02C10_ISP_X_WIN_CONTROL	CCI_REG16(0x3810)
-> +#define OV02C10_ISP_Y_WIN_CONTROL	CCI_REG16(0x3812)
-> +#define OV02C10_CONFIG_ROTATE		0x18
-> +
-> +/* Test Pattern Control */
-> +#define OV02C10_REG_TEST_PATTERN		CCI_REG8(0x4503)
-> +#define OV02C10_TEST_PATTERN_ENABLE		BIT(7)
-> +
-> +struct ov02c10_mode {
-> +	/* Frame width in pixels */
-> +	u32 width;
-> +
-> +	/* Frame height in pixels */
-> +	u32 height;
-> +
-> +	/* Horizontal timining size */
-> +	u32 hts;
-> +
-> +	/* Min vertical timining size */
-> +	u32 vts_min;
-> +
-> +	/* Sensor register settings for this resolution */
-> +	const struct reg_sequence *reg_sequence;
-> +	const int sequence_length;
-> +	/* Sensor register settings for 1 or 2 lane config */
-> +	const struct reg_sequence *lane_settings[2];
-> +	const int lane_settings_length[2];
-> +};
-> +
-> +static const struct reg_sequence sensor_1928x1092_30fps_setting[] = {
-> +	{0x0301, 0x08},
-> +	{0x0303, 0x06},
-> +	{0x0304, 0x01},
-> +	{0x0305, 0xe0},
-> +	{0x0313, 0x40},
-> +	{0x031c, 0x4f},
-> +	{0x3020, 0x97},
-> +	{0x3022, 0x01},
-> +	{0x3026, 0xb4},
-> +	{0x303b, 0x00},
-> +	{0x303c, 0x4f},
-> +	{0x303d, 0xe6},
-> +	{0x303e, 0x00},
-> +	{0x303f, 0x03},
-> +	{0x3021, 0x23},
-> +	{0x3501, 0x04},
-> +	{0x3502, 0x6c},
-> +	{0x3504, 0x0c},
-> +	{0x3507, 0x00},
-> +	{0x3508, 0x08},
-> +	{0x3509, 0x00},
-> +	{0x350a, 0x01},
-> +	{0x350b, 0x00},
-> +	{0x350c, 0x41},
-> +	{0x3600, 0x84},
-> +	{0x3603, 0x08},
-> +	{0x3610, 0x57},
-> +	{0x3611, 0x1b},
-> +	{0x3613, 0x78},
-> +	{0x3623, 0x00},
-> +	{0x3632, 0xa0},
-> +	{0x3642, 0xe8},
-> +	{0x364c, 0x70},
-> +	{0x365f, 0x0f},
-> +	{0x3708, 0x30},
-> +	{0x3714, 0x24},
-> +	{0x3725, 0x02},
-> +	{0x3737, 0x08},
-> +	{0x3739, 0x28},
-> +	{0x3749, 0x32},
-> +	{0x374a, 0x32},
-> +	{0x374b, 0x32},
-> +	{0x374c, 0x32},
-> +	{0x374d, 0x81},
-> +	{0x374e, 0x81},
-> +	{0x374f, 0x81},
-> +	{0x3752, 0x36},
-> +	{0x3753, 0x36},
-> +	{0x3754, 0x36},
-> +	{0x3761, 0x00},
-> +	{0x376c, 0x81},
-> +	{0x3774, 0x18},
-> +	{0x3776, 0x08},
-> +	{0x377c, 0x81},
-> +	{0x377d, 0x81},
-> +	{0x377e, 0x81},
-> +	{0x37a0, 0x44},
-> +	{0x37a6, 0x44},
-> +	{0x37aa, 0x0d},
-> +	{0x37ae, 0x00},
-> +	{0x37cb, 0x03},
-> +	{0x37cc, 0x01},
-> +	{0x37d8, 0x02},
-> +	{0x37d9, 0x10},
-> +	{0x37e1, 0x10},
-> +	{0x37e2, 0x18},
-> +	{0x37e3, 0x08},
-> +	{0x37e4, 0x08},
-> +	{0x37e5, 0x02},
-> +	{0x37e6, 0x08},
-> +
-> +	/* 1928x1092 */
-> +	{0x3800, 0x00},
-> +	{0x3801, 0x00},
-> +	{0x3802, 0x00},
-> +	{0x3803, 0x00},
-> +	{0x3804, 0x07},
-> +	{0x3805, 0x8f},
-> +	{0x3806, 0x04},
-> +	{0x3807, 0x47},
-> +	{0x3808, 0x07},
-> +	{0x3809, 0x88},
-> +	{0x380a, 0x04},
-> +	{0x380b, 0x44},
-> +	{0x3810, 0x00},
-> +	{0x3811, 0x02},
-> +	{0x3812, 0x00},
-> +	{0x3813, 0x02},
-> +	{0x3814, 0x01},
-> +	{0x3815, 0x01},
-> +	{0x3816, 0x01},
-> +	{0x3817, 0x01},
-> +
-> +	{0x3820, 0xb0},
-> +	{0x3821, 0x00},
-> +	{0x3822, 0x80},
-> +	{0x3823, 0x08},
-> +	{0x3824, 0x00},
-> +	{0x3825, 0x20},
-> +	{0x3826, 0x00},
-> +	{0x3827, 0x08},
-> +	{0x382a, 0x00},
-> +	{0x382b, 0x08},
-> +	{0x382d, 0x00},
-> +	{0x382e, 0x00},
-> +	{0x382f, 0x23},
-> +	{0x3834, 0x00},
-> +	{0x3839, 0x00},
-> +	{0x383a, 0xd1},
-> +	{0x383e, 0x03},
-> +	{0x393d, 0x29},
-> +	{0x393f, 0x6e},
-> +	{0x394b, 0x06},
-> +	{0x394c, 0x06},
-> +	{0x394d, 0x08},
-> +	{0x394f, 0x01},
-> +	{0x3950, 0x01},
-> +	{0x3951, 0x01},
-> +	{0x3952, 0x01},
-> +	{0x3953, 0x01},
-> +	{0x3954, 0x01},
-> +	{0x3955, 0x01},
-> +	{0x3956, 0x01},
-> +	{0x3957, 0x0e},
-> +	{0x3958, 0x08},
-> +	{0x3959, 0x08},
-> +	{0x395a, 0x08},
-> +	{0x395b, 0x13},
-> +	{0x395c, 0x09},
-> +	{0x395d, 0x05},
-> +	{0x395e, 0x02},
-> +	{0x395f, 0x00},
-> +	{0x395f, 0x00},
-> +	{0x3960, 0x00},
-> +	{0x3961, 0x00},
-> +	{0x3962, 0x00},
-> +	{0x3963, 0x00},
-> +	{0x3964, 0x00},
-> +	{0x3965, 0x00},
-> +	{0x3966, 0x00},
-> +	{0x3967, 0x00},
-> +	{0x3968, 0x01},
-> +	{0x3969, 0x01},
-> +	{0x396a, 0x01},
-> +	{0x396b, 0x01},
-> +	{0x396c, 0x10},
-> +	{0x396d, 0xf0},
-> +	{0x396e, 0x11},
-> +	{0x396f, 0x00},
-> +	{0x3970, 0x37},
-> +	{0x3971, 0x37},
-> +	{0x3972, 0x37},
-> +	{0x3973, 0x37},
-> +	{0x3974, 0x00},
-> +	{0x3975, 0x3c},
-> +	{0x3976, 0x3c},
-> +	{0x3977, 0x3c},
-> +	{0x3978, 0x3c},
-> +	{0x3c00, 0x0f},
-> +	{0x3c20, 0x01},
-> +	{0x3c21, 0x08},
-> +	{0x3f00, 0x8b},
-> +	{0x3f02, 0x0f},
-> +	{0x4000, 0xc3},
-> +	{0x4001, 0xe0},
-> +	{0x4002, 0x00},
-> +	{0x4003, 0x40},
-> +	{0x4008, 0x04},
-> +	{0x4009, 0x23},
-> +	{0x400a, 0x04},
-> +	{0x400b, 0x01},
-> +	{0x4077, 0x06},
-> +	{0x4078, 0x00},
-> +	{0x4079, 0x1a},
-> +	{0x407a, 0x7f},
-> +	{0x407b, 0x01},
-> +	{0x4080, 0x03},
-> +	{0x4081, 0x84},
-> +	{0x4308, 0x03},
-> +	{0x4309, 0xff},
-> +	{0x430d, 0x00},
-> +	{0x4806, 0x00},
-> +	{0x4813, 0x00},
-> +	{0x4837, 0x10},
-> +	{0x4857, 0x05},
-> +	{0x4500, 0x07},
-> +	{0x4501, 0x00},
-> +	{0x4503, 0x00},
-> +	{0x450a, 0x04},
-> +	{0x450e, 0x00},
-> +	{0x450f, 0x00},
-> +	{0x4900, 0x00},
-> +	{0x4901, 0x00},
-> +	{0x4902, 0x01},
-> +	{0x5001, 0x50},
-> +	{0x5006, 0x00},
-> +	{0x5080, 0x40},
-> +	{0x5181, 0x2b},
-> +	{0x5202, 0xa3},
-> +	{0x5206, 0x01},
-> +	{0x5207, 0x00},
-> +	{0x520a, 0x01},
-> +	{0x520b, 0x00},
-> +	{0x365d, 0x00},
-> +	{0x4815, 0x40},
-> +	{0x4816, 0x12},
-> +	{0x4f00, 0x01},
-> +};
-> +
-> +static const struct reg_sequence sensor_1928x1092_30fps_1lane_setting[] = {
-> +	{0x301b, 0xd2},
-> +	{0x3027, 0xe1},
-> +	{0x380c, 0x08},
-> +	{0x380d, 0xe8},
-> +	{0x380e, 0x04},
-> +	{0x380f, 0x8c},
-> +	{0x394e, 0x0b},
-> +	{0x4800, 0x24},
-> +	{0x5000, 0xf5},
-> +	/* plls */
-> +	{0x0303, 0x05},
-> +	{0x0305, 0x90},
-> +	{0x0316, 0x90},
-> +	{0x3016, 0x12},
-> +};
-> +
-> +static const struct reg_sequence sensor_1928x1092_30fps_2lane_setting[] = {
-> +	{0x301b, 0xf0},
-> +	{0x3027, 0xf1},
-> +	{0x380c, 0x04},
-> +	{0x380d, 0x74},
-> +	{0x380e, 0x09},
-> +	{0x380f, 0x18},
-> +	{0x394e, 0x0a},
-> +	{0x4041, 0x20},
-> +	{0x4884, 0x04},
-> +	{0x4800, 0x64},
-> +	{0x4d00, 0x03},
-> +	{0x4d01, 0xd8},
-> +	{0x4d02, 0xba},
-> +	{0x4d03, 0xa0},
-> +	{0x4d04, 0xb7},
-> +	{0x4d05, 0x34},
-> +	{0x4d0d, 0x00},
-> +	{0x5000, 0xfd},
-> +	{0x481f, 0x30},
-> +	/* plls */
-> +	{0x0303, 0x05},
-> +	{0x0305, 0x90},
-> +	{0x0316, 0x90},
-> +	{0x3016, 0x32},
-> +};
-> +
-> +static const char * const ov02c10_test_pattern_menu[] = {
-> +	"Disabled",
-> +	"Color Bar",
-> +	"Top-Bottom Darker Color Bar",
-> +	"Right-Left Darker Color Bar",
-> +	"Color Bar type 4",
-> +};
-> +
-> +static const s64 link_freq_menu_items[] = {
-> +	OV02C10_LINK_FREQ_400MHZ,
-> +};
-> +
-> +static const struct ov02c10_mode supported_modes[] = {
-> +	{
-> +		.width = 1928,
-> +		.height = 1092,
-> +		.hts = 2280,
-> +		.vts_min = 1164,
-> +		.reg_sequence = sensor_1928x1092_30fps_setting,
-> +		.sequence_length = ARRAY_SIZE(sensor_1928x1092_30fps_setting),
-> +		.lane_settings = {
-> +			sensor_1928x1092_30fps_1lane_setting,
-> +			sensor_1928x1092_30fps_2lane_setting
-> +		},
-> +		.lane_settings_length = {
-> +			ARRAY_SIZE(sensor_1928x1092_30fps_1lane_setting),
-> +			ARRAY_SIZE(sensor_1928x1092_30fps_2lane_setting),
-> +		},
-> +	},
-> +};
-> +
-> +static const char * const ov02c10_supply_names[] = {
-> +	"dovdd",	/* Digital I/O power */
-> +	"avdd",		/* Analog power */
-> +	"dvdd",		/* Digital core power */
-> +};
-> +
-> +struct ov02c10 {
-> +	struct v4l2_subdev sd;
-> +	struct media_pad pad;
-> +	struct v4l2_ctrl_handler ctrl_handler;
-> +	struct regmap *regmap;
-> +
-> +	/* V4L2 Controls */
-> +	struct v4l2_ctrl *link_freq;
-> +	struct v4l2_ctrl *pixel_rate;
-> +	struct v4l2_ctrl *vblank;
-> +	struct v4l2_ctrl *hblank;
-> +	struct v4l2_ctrl *exposure;
-> +
-> +	struct clk *img_clk;
-> +	struct gpio_desc *reset;
-> +	struct regulator_bulk_data supplies[ARRAY_SIZE(ov02c10_supply_names)];
-> +
-> +	/* MIPI lane info */
-> +	u32 link_freq_index;
-> +	u8 mipi_lanes;
-> +};
-> +
-> +static inline struct ov02c10 *to_ov02c10(struct v4l2_subdev *subdev)
-> +{
-> +	return container_of(subdev, struct ov02c10, sd);
-> +}
-> +
-> +static int ov02c10_test_pattern(struct ov02c10 *ov02c10, int pattern)
-> +{
-> +	int ret = 0;
-> +
-> +	if (!pattern)
-> +		return cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
-> +				       BIT(7), 0, NULL);
-> +
-> +	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
-> +			0x03, pattern - 1, &ret);
-> +	cci_update_bits(ov02c10->regmap, OV02C10_REG_TEST_PATTERN,
-> +			BIT(7), OV02C10_TEST_PATTERN_ENABLE, &ret);
-> +	return ret;
-> +}
-> +
-> +static int ov02c10_set_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct ov02c10 *ov02c10 = container_of(ctrl->handler,
-> +					     struct ov02c10, ctrl_handler);
-> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
-> +	const u32 height = supported_modes[0].height;
-> +	s64 exposure_max;
-> +	int ret = 0;
-> +
-> +	/* Propagate change of current control to all related controls */
-> +	if (ctrl->id == V4L2_CID_VBLANK) {
-> +		/* Update max exposure while meeting expected vblanking */
-> +		exposure_max = height + ctrl->val - OV02C10_EXPOSURE_MAX_MARGIN;
-> +		__v4l2_ctrl_modify_range(ov02c10->exposure,
-> +					 ov02c10->exposure->minimum,
-> +					 exposure_max, ov02c10->exposure->step,
-> +					 exposure_max);
-> +	}
-> +
-> +	/* V4L2 controls values will be applied only when power is already up */
-> +	if (!pm_runtime_get_if_in_use(&client->dev))
-> +		return 0;
-> +
-> +	switch (ctrl->id) {
-> +	case V4L2_CID_ANALOGUE_GAIN:
-> +		cci_write(ov02c10->regmap, OV02C10_REG_ANALOG_GAIN,
-> +			  ctrl->val << 4, &ret);
-> +		break;
-> +
-> +	case V4L2_CID_DIGITAL_GAIN:
-> +		cci_write(ov02c10->regmap, OV02C10_REG_DIGITAL_GAIN,
-> +			  ctrl->val << 6, &ret);
-> +		break;
-> +
-> +	case V4L2_CID_EXPOSURE:
-> +		cci_write(ov02c10->regmap, OV02C10_REG_EXPOSURE,
-> +			  ctrl->val, &ret);
-> +		break;
-> +
-> +	case V4L2_CID_VBLANK:
-> +		cci_write(ov02c10->regmap, OV02C10_REG_VTS, height + ctrl->val,
-> +			  &ret);
-> +		break;
-> +
-> +	case V4L2_CID_TEST_PATTERN:
-> +		ret = ov02c10_test_pattern(ov02c10, ctrl->val);
-> +		break;
-> +
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-> +
-> +	pm_runtime_put(&client->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct v4l2_ctrl_ops ov02c10_ctrl_ops = {
-> +	.s_ctrl = ov02c10_set_ctrl,
-> +};
-> +
-> +static int ov02c10_init_controls(struct ov02c10 *ov02c10)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
-> +	struct v4l2_ctrl_handler *ctrl_hdlr = &ov02c10->ctrl_handler;
-> +	const struct ov02c10_mode *mode = &supported_modes[0];
-> +	u32 vblank_min, vblank_max, vblank_default, vts_def;
-> +	struct v4l2_fwnode_device_properties props;
-> +	s64 exposure_max, h_blank, pixel_rate;
-> +	int ret;
-> +
-> +	v4l2_ctrl_handler_init(ctrl_hdlr, 10);
-> +
-> +	ov02c10->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr,
-> +						    &ov02c10_ctrl_ops,
-> +						    V4L2_CID_LINK_FREQ,
-> +						    ov02c10->link_freq_index, 0,
-> +						    link_freq_menu_items);
-> +	if (ov02c10->link_freq)
-> +		ov02c10->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	/* MIPI lanes are DDR -> use link-freq * 2 */
-> +	pixel_rate = link_freq_menu_items[ov02c10->link_freq_index] * 2 *
-> +		     ov02c10->mipi_lanes / OV02C10_RGB_DEPTH;
-> +
-> +	ov02c10->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops,
-> +						V4L2_CID_PIXEL_RATE, 0,
-> +						pixel_rate, 1, pixel_rate);
-> +
-> +	/*
-> +	 * For default multiple min by number of lanes to keep the default
-> +	 * FPS the same indepenedent of the lane count.
-> +	 */
-> +	vts_def = mode->vts_min * ov02c10->mipi_lanes;
-> +
-> +	vblank_min = mode->vts_min - mode->height;
-> +	vblank_max = OV02C10_VTS_MAX - mode->height;
-> +	vblank_default = vts_def - mode->height;
-> +	ov02c10->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops,
-> +					    V4L2_CID_VBLANK, vblank_min,
-> +					    vblank_max, 1, vblank_default);
-> +
-> +	h_blank = mode->hts - mode->width;
-> +	ov02c10->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops,
-> +					    V4L2_CID_HBLANK, h_blank, h_blank,
-> +					    1, h_blank);
-> +	if (ov02c10->hblank)
-> +		ov02c10->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-> +			  OV02C10_ANAL_GAIN_MIN, OV02C10_ANAL_GAIN_MAX,
-> +			  OV02C10_ANAL_GAIN_STEP, OV02C10_ANAL_GAIN_DEFAULT);
-> +	v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
-> +			  OV02C10_DGTL_GAIN_MIN, OV02C10_DGTL_GAIN_MAX,
-> +			  OV02C10_DGTL_GAIN_STEP, OV02C10_DGTL_GAIN_DEFAULT);
-> +	exposure_max = vts_def - OV02C10_EXPOSURE_MAX_MARGIN;
-> +	ov02c10->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &ov02c10_ctrl_ops,
-> +					      V4L2_CID_EXPOSURE,
-> +					      OV02C10_EXPOSURE_MIN,
-> +					      exposure_max,
-> +					      OV02C10_EXPOSURE_STEP,
-> +					      exposure_max);
-> +	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &ov02c10_ctrl_ops,
-> +				     V4L2_CID_TEST_PATTERN,
-> +				     ARRAY_SIZE(ov02c10_test_pattern_menu) - 1,
-> +				     0, 0, ov02c10_test_pattern_menu);
-> +
-> +	ret = v4l2_fwnode_device_parse(&client->dev, &props);
-> +	if (ret)
-> +		return ret;
-> +
-> +	v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov02c10_ctrl_ops, &props);
-> +
-> +	if (ctrl_hdlr->error)
-> +		return ctrl_hdlr->error;
-> +
-> +	ov02c10->sd.ctrl_handler = ctrl_hdlr;
-> +
-> +	return 0;
-> +}
-> +
-> +static void ov02c10_update_pad_format(const struct ov02c10_mode *mode,
-> +				      struct v4l2_mbus_framefmt *fmt)
-> +{
-> +	fmt->width = mode->width;
-> +	fmt->height = mode->height;
-> +	fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-> +	fmt->field = V4L2_FIELD_NONE;
-> +}
-> +
-> +static int ov02c10_enable_streams(struct v4l2_subdev *sd,
-> +				  struct v4l2_subdev_state *state,
-> +				  u32 pad, u64 streams_mask)
-> +{
-> +	const struct ov02c10_mode *mode = &supported_modes[0];
-> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +	const struct reg_sequence *reg_sequence;
-> +	int ret, sequence_length;
-> +
-> +	ret = pm_runtime_resume_and_get(&client->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	reg_sequence = mode->reg_sequence;
-> +	sequence_length = mode->sequence_length;
-> +	ret = regmap_multi_reg_write(ov02c10->regmap,
-> +				     reg_sequence, sequence_length);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to set mode\n");
-> +		goto out;
-> +	}
-> +
-> +	reg_sequence = mode->lane_settings[ov02c10->mipi_lanes - 1];
-> +	sequence_length = mode->lane_settings_length[ov02c10->mipi_lanes - 1];
-> +	ret = regmap_multi_reg_write(ov02c10->regmap,
-> +				     reg_sequence, sequence_length);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to write lane settings\n");
-> +		goto out;
-> +	}
-> +
-> +	ret = __v4l2_ctrl_handler_setup(ov02c10->sd.ctrl_handler);
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = cci_write(ov02c10->regmap, OV02C10_REG_STREAM_CONTROL, 1, NULL);
-> +out:
-> +	if (ret)
-> +		pm_runtime_put(&client->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ov02c10_disable_streams(struct v4l2_subdev *sd,
-> +				   struct v4l2_subdev_state *state,
-> +				   u32 pad, u64 streams_mask)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +
-> +	cci_write(ov02c10->regmap, OV02C10_REG_STREAM_CONTROL, 0, NULL);
-> +	pm_runtime_put(&client->dev);
-> +
-> +	return 0;
-> +}
-> +
-> +/* This function tries to get power control resources */
-> +static int ov02c10_get_pm_resources(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +	int i;
-> +
-> +	ov02c10->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(ov02c10->reset))
-> +		return dev_err_probe(dev, PTR_ERR(ov02c10->reset),
-> +				     "failed to get reset gpio\n");
-> +
-> +	for (i = 0; i < ARRAY_SIZE(ov02c10_supply_names); i++)
-> +		ov02c10->supplies[i].supply = ov02c10_supply_names[i];
-> +
-> +	return devm_regulator_bulk_get(dev, ARRAY_SIZE(ov02c10_supply_names),
-> +				       ov02c10->supplies);
-> +}
-> +
-> +static int ov02c10_power_off(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +
-> +	gpiod_set_value_cansleep(ov02c10->reset, 1);
-> +
-> +	regulator_bulk_disable(ARRAY_SIZE(ov02c10_supply_names),
-> +			       ov02c10->supplies);
-> +
-> +	clk_disable_unprepare(ov02c10->img_clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_power_on(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(ov02c10->img_clk);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to enable imaging clock: %d", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(ov02c10_supply_names),
-> +				    ov02c10->supplies);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to enable regulators: %d", ret);
-> +		clk_disable_unprepare(ov02c10->img_clk);
-> +		return ret;
-> +	}
-> +
-> +	if (ov02c10->reset) {
-> +		/* Assert reset for at least 2ms on back to back off-on */
-> +		usleep_range(2000, 2200);
-> +		gpiod_set_value_cansleep(ov02c10->reset, 0);
-> +		usleep_range(5000, 5100);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_set_format(struct v4l2_subdev *sd,
-> +			      struct v4l2_subdev_state *sd_state,
-> +			      struct v4l2_subdev_format *fmt)
-> +{
-> +	const struct ov02c10_mode *mode = &supported_modes[0];
-> +	struct ov02c10 *ov02c10 = to_ov02c10(sd);
-> +	s32 vblank_def, h_blank;
-> +
-> +	ov02c10_update_pad_format(mode, &fmt->format);
-> +	*v4l2_subdev_state_get_format(sd_state, fmt->pad) = fmt->format;
-> +
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> +		return 0;
-> +
-> +	/* Update limits and set FPS to default */
-> +	vblank_def = mode->vts_min * ov02c10->mipi_lanes - mode->height;
-> +	__v4l2_ctrl_modify_range(ov02c10->vblank, mode->vts_min - mode->height,
-> +				 OV02C10_VTS_MAX - mode->height, 1, vblank_def);
-> +	__v4l2_ctrl_s_ctrl(ov02c10->vblank, vblank_def);
-> +	h_blank = mode->hts - mode->width;
-> +	__v4l2_ctrl_modify_range(ov02c10->hblank, h_blank, h_blank, 1, h_blank);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_enum_mbus_code(struct v4l2_subdev *sd,
-> +				  struct v4l2_subdev_state *sd_state,
-> +				  struct v4l2_subdev_mbus_code_enum *code)
-> +{
-> +	if (code->index > 0)
-> +		return -EINVAL;
-> +
-> +	code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_enum_frame_size(struct v4l2_subdev *sd,
-> +				   struct v4l2_subdev_state *sd_state,
-> +				   struct v4l2_subdev_frame_size_enum *fse)
-> +{
-> +	if (fse->index >= ARRAY_SIZE(supported_modes))
-> +		return -EINVAL;
-> +
-> +	if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-> +		return -EINVAL;
-> +
-> +	fse->min_width = supported_modes[fse->index].width;
-> +	fse->max_width = fse->min_width;
-> +	fse->min_height = supported_modes[fse->index].height;
-> +	fse->max_height = fse->min_height;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_init_state(struct v4l2_subdev *sd,
-> +			      struct v4l2_subdev_state *sd_state)
-> +{
-> +	ov02c10_update_pad_format(&supported_modes[0],
-> +				  v4l2_subdev_state_get_format(sd_state, 0));
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_subdev_video_ops ov02c10_video_ops = {
-> +	.s_stream = v4l2_subdev_s_stream_helper,
-> +};
-> +
-> +static const struct v4l2_subdev_pad_ops ov02c10_pad_ops = {
-> +	.set_fmt = ov02c10_set_format,
-> +	.get_fmt = v4l2_subdev_get_fmt,
-> +	.enum_mbus_code = ov02c10_enum_mbus_code,
-> +	.enum_frame_size = ov02c10_enum_frame_size,
-> +	.enable_streams = ov02c10_enable_streams,
-> +	.disable_streams = ov02c10_disable_streams,
-> +};
-> +
-> +static const struct v4l2_subdev_ops ov02c10_subdev_ops = {
-> +	.video = &ov02c10_video_ops,
-> +	.pad = &ov02c10_pad_ops,
-> +};
-> +
-> +static const struct media_entity_operations ov02c10_subdev_entity_ops = {
-> +	.link_validate = v4l2_subdev_link_validate,
-> +};
-> +
-> +static const struct v4l2_subdev_internal_ops ov02c10_internal_ops = {
-> +	.init_state = ov02c10_init_state,
-> +};
-> +
-> +static int ov02c10_identify_module(struct ov02c10 *ov02c10)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&ov02c10->sd);
-> +	u64 chip_id;
-> +	int ret;
-> +
-> +	ret = cci_read(ov02c10->regmap, OV02C10_REG_CHIP_ID, &chip_id, NULL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (chip_id != OV02C10_CHIP_ID) {
-> +		dev_err(&client->dev, "chip id mismatch: %x!=%llx",
-> +			OV02C10_CHIP_ID, chip_id);
-> +		return -ENXIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ov02c10_check_hwcfg(struct device *dev, struct ov02c10 *ov02c10)
-> +{
-> +	struct v4l2_fwnode_endpoint bus_cfg = {
-> +		.bus_type = V4L2_MBUS_CSI2_DPHY
-> +	};
-> +	struct fwnode_handle *ep, *fwnode = dev_fwnode(dev);
-> +	unsigned long link_freq_bitmap;
-> +	u32 mclk;
-> +	int ret;
-> +
-> +	/*
-> +	 * Sometimes the fwnode graph is initialized by the bridge driver,
-> +	 * wait for this.
-> +	 */
-> +	ep = fwnode_graph_get_endpoint_by_id(fwnode, 0, 0, 0);
-> +	if (!ep)
-> +		return dev_err_probe(dev, -EPROBE_DEFER,
-> +				     "waiting for fwnode graph endpoint\n");
-> +
-> +	ov02c10->img_clk = devm_clk_get_optional(dev, NULL);
-> +	if (IS_ERR(ov02c10->img_clk)) {
-> +		fwnode_handle_put(ep);
-> +		return dev_err_probe(dev, PTR_ERR(ov02c10->img_clk),
-> +				     "failed to get imaging clock\n");
-> +	}
-> +
-> +	if (ov02c10->img_clk) {
-> +		mclk = clk_get_rate(ov02c10->img_clk);
-> +	} else {
-> +		ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-> +		if (ret) {
-> +			fwnode_handle_put(ep);
-> +			return dev_err_probe(dev, ret,
-> +					     "reading clock-frequency property\n");
-> +		}
-> +	}
-> +
-> +	if (mclk != OV02C10_MCLK) {
-> +		fwnode_handle_put(ep);
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "external clock %u is not supported\n",
-> +				     mclk);
-> +	}
-> +
-> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-> +	fwnode_handle_put(ep);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "parsing endpoint failed\n");
-> +
-> +	ret = v4l2_link_freq_to_bitmap(dev, bus_cfg.link_frequencies,
-> +				       bus_cfg.nr_of_link_frequencies,
-> +				       link_freq_menu_items,
-> +				       ARRAY_SIZE(link_freq_menu_items),
-> +				       &link_freq_bitmap);
-> +	if (ret)
-> +		goto check_hwcfg_error;
-> +
-> +	/* v4l2_link_freq_to_bitmap() guarantees at least 1 bit is set */
-> +	ov02c10->link_freq_index = ffs(link_freq_bitmap) - 1;
-> +
-> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 1 &&
-> +	    bus_cfg.bus.mipi_csi2.num_data_lanes != 2) {
-> +		ret = dev_err_probe(dev, -EINVAL,
-> +				    "number of CSI2 data lanes %u is not supported\n",
-> +				    bus_cfg.bus.mipi_csi2.num_data_lanes);
-> +		goto check_hwcfg_error;
-> +	}
-> +
-> +	ov02c10->mipi_lanes = bus_cfg.bus.mipi_csi2.num_data_lanes;
-> +
-> +check_hwcfg_error:
-> +	v4l2_fwnode_endpoint_free(&bus_cfg);
-> +	return ret;
-> +}
-> +
-> +static void ov02c10_remove(struct i2c_client *client)
-> +{
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +
-> +	v4l2_async_unregister_subdev(sd);
-> +	v4l2_subdev_cleanup(sd);
-> +	media_entity_cleanup(&sd->entity);
-> +	v4l2_ctrl_handler_free(sd->ctrl_handler);
-> +	pm_runtime_disable(&client->dev);
-> +	if (!pm_runtime_status_suspended(&client->dev)) {
-> +		ov02c10_power_off(&client->dev);
-> +		pm_runtime_set_suspended(&client->dev);
-> +	}
-> +}
-> +
-> +static int ov02c10_probe(struct i2c_client *client)
-> +{
-> +	struct ov02c10 *ov02c10;
-> +	int ret;
-> +
-> +	ov02c10 = devm_kzalloc(&client->dev, sizeof(*ov02c10), GFP_KERNEL);
-> +	if (!ov02c10)
-> +		return -ENOMEM;
-> +
-> +	v4l2_i2c_subdev_init(&ov02c10->sd, client, &ov02c10_subdev_ops);
-> +
-> +	/* Check HW config */
-> +	ret = ov02c10_check_hwcfg(&client->dev, ov02c10);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ov02c10_get_pm_resources(&client->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ov02c10->regmap = devm_cci_regmap_init_i2c(client, 16);
-> +	if (IS_ERR(ov02c10->regmap))
-> +		return PTR_ERR(ov02c10->regmap);
-> +
-> +	ret = ov02c10_power_on(&client->dev);
-> +	if (ret) {
-> +		dev_err_probe(&client->dev, ret, "failed to power on\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = ov02c10_identify_module(ov02c10);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to find sensor: %d", ret);
-> +		goto probe_error_power_off;
-> +	}
-> +
-> +	ret = ov02c10_init_controls(ov02c10);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to init controls: %d", ret);
-> +		goto probe_error_v4l2_ctrl_handler_free;
-> +	}
-> +
-> +	ov02c10->sd.internal_ops = &ov02c10_internal_ops;
-> +	ov02c10->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	ov02c10->sd.entity.ops = &ov02c10_subdev_entity_ops;
-> +	ov02c10->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> +	ov02c10->pad.flags = MEDIA_PAD_FL_SOURCE;
-> +	ret = media_entity_pads_init(&ov02c10->sd.entity, 1, &ov02c10->pad);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to init entity pads: %d", ret);
-> +		goto probe_error_v4l2_ctrl_handler_free;
-> +	}
-> +
-> +	ov02c10->sd.state_lock = ov02c10->ctrl_handler.lock;
-> +	ret = v4l2_subdev_init_finalize(&ov02c10->sd);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to init subdev: %d", ret);
-> +		goto probe_error_media_entity_cleanup;
-> +	}
-> +
-> +	pm_runtime_set_active(&client->dev);
-> +	pm_runtime_enable(&client->dev);
-> +
-> +	ret = v4l2_async_register_subdev_sensor(&ov02c10->sd);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
-> +			ret);
-> +		goto probe_error_v4l2_subdev_cleanup;
-> +	}
-> +
-> +	pm_runtime_idle(&client->dev);
-> +	return 0;
-> +
-> +probe_error_v4l2_subdev_cleanup:
-> +	pm_runtime_disable(&client->dev);
-> +	pm_runtime_set_suspended(&client->dev);
-> +	v4l2_subdev_cleanup(&ov02c10->sd);
-> +
-> +probe_error_media_entity_cleanup:
-> +	media_entity_cleanup(&ov02c10->sd.entity);
-> +
-> +probe_error_v4l2_ctrl_handler_free:
-> +	v4l2_ctrl_handler_free(ov02c10->sd.ctrl_handler);
-> +
-> +probe_error_power_off:
-> +	ov02c10_power_off(&client->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static DEFINE_RUNTIME_DEV_PM_OPS(ov02c10_pm_ops, ov02c10_power_off,
-> +				 ov02c10_power_on, NULL);
-> +
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id ov02c10_acpi_ids[] = {
-> +	{ "OVTI02C1" },
-> +	{ /* sentinel */ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(acpi, ov02c10_acpi_ids);
-> +#endif
-> +
-> +static const struct of_device_id ov02c10_of_match[] = {
-> +	{ .compatible = "ovti,ov02c10" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ov02c10_of_match);
-> +
-> +static struct i2c_driver ov02c10_i2c_driver = {
-> +	.driver = {
-> +		.name = "ov02c10",
-> +		.pm = pm_sleep_ptr(&ov02c10_pm_ops),
-> +		.acpi_match_table = ACPI_PTR(ov02c10_acpi_ids),
-> +		.of_match_table = ov02c10_of_match,
-> +	},
-> +	.probe = ov02c10_probe,
-> +	.remove = ov02c10_remove,
-> +};
-> +
-> +module_i2c_driver(ov02c10_i2c_driver);
-> +
-> +MODULE_AUTHOR("Hao Yao <hao.yao@intel.com>");
-> +MODULE_AUTHOR("Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>");
-> +MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
-> +MODULE_DESCRIPTION("OmniVision OV02C10 sensor driver");
-> +MODULE_LICENSE("GPL");
+> I can't find the interrupt mapping table for V3U, so this is the only
+> thing I can't check
 
+Page number 820, or search for "SPI 152" (fist one).
+
+> 
+> > noticed until now as the driver do not make use of the interrupt for the
+> > cs block.
+> >
+> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> 
+> The rest looks good
+> 
+> > ---
+> >  arch/arm64/boot/dts/renesas/r8a779a0.dtsi | 60 +++++++++++++++++------
+> >  1 file changed, 44 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> > index f1613bfd1632..95ff69339991 100644
+> > --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> > +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+> > @@ -2588,13 +2588,20 @@ du_out_dsi1: endpoint {
+> >  		isp0: isp@fed00000 {
+> >  			compatible = "renesas,r8a779a0-isp",
+> >  				     "renesas,rcar-gen4-isp";
+> > -			reg = <0 0xfed00000 0 0x10000>;
+> > -			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
+> > -			clocks = <&cpg CPG_MOD 612>;
+> > +			reg = <0 0xfed00000 0 0x10000>, <0 0xfec00000 0 0x100000>;
+> > +			reg-names = "cs", "core";
+> 
+> However, won't the presence of a "core" part trigger the probing of
+> the forthcoming RPP core support, which should not support V3U as far
+> I understood ?
+
+
+Correct the RPPX1 library will be given the change to probe on V3U, it 
+will detect it's not an RPPX1 gracefully not create an ISPCORE on V3U.  
+This describes the hardware, and there is an ISP core mapped at this 
+address, not just the same as on the others ;-) The driver is prepared 
+for this.
+
+> 
+> > +			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "cs", "core";
+> > +			clocks = <&cpg CPG_MOD 612>, <&cpg CPG_MOD 16>;
+> > +			clock-names = "cs", "core";
+> >  			power-domains = <&sysc R8A779A0_PD_A3ISP01>;
+> > -			resets = <&cpg 612>;
+> > +			resets = <&cpg 612>, <&cpg 16>;
+> > +			reset-names = "cs", "core";
+> >  			status = "disabled";
+> >
+> > +			renesas,vspx = <&vspx0>;
+> > +
+> >  			ports {
+> >  				#address-cells = <1>;
+> >  				#size-cells = <0>;
+> > @@ -2672,13 +2679,20 @@ isp0vin07: endpoint {
+> >  		isp1: isp@fed20000 {
+> >  			compatible = "renesas,r8a779a0-isp",
+> >  				     "renesas,rcar-gen4-isp";
+> > -			reg = <0 0xfed20000 0 0x10000>;
+> > -			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+> > -			clocks = <&cpg CPG_MOD 613>;
+> > +			reg = <0 0xfed20000 0 0x10000>, <0 0xfee00000 0 0x100000>;
+> > +			reg-names = "cs", "core";
+> > +			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "cs", "core";
+> > +			clocks = <&cpg CPG_MOD 613>, <&cpg CPG_MOD 17>;
+> > +			clock-names = "cs", "core";
+> >  			power-domains = <&sysc R8A779A0_PD_A3ISP01>;
+> > -			resets = <&cpg 613>;
+> > +			resets = <&cpg 613>, <&cpg 17>;
+> > +			reset-names = "cs", "core";
+> >  			status = "disabled";
+> >
+> > +			renesas,vspx = <&vspx1>;
+> > +
+> >  			ports {
+> >  				#address-cells = <1>;
+> >  				#size-cells = <0>;
+> > @@ -2756,13 +2770,20 @@ isp1vin15: endpoint {
+> >  		isp2: isp@fed30000 {
+> >  			compatible = "renesas,r8a779a0-isp",
+> >  				     "renesas,rcar-gen4-isp";
+> > -			reg = <0 0xfed30000 0 0x10000>;
+> > -			interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
+> > -			clocks = <&cpg CPG_MOD 614>;
+> > +			reg = <0 0xfed30000 0 0x10000>, <0 0xfef00000 0 0x100000>;
+> > +			reg-names = "cs", "core";
+> > +			interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "cs", "core";
+> > +			clocks = <&cpg CPG_MOD 614>, <&cpg CPG_MOD 18>;
+> > +			clock-names = "cs", "core";
+> >  			power-domains = <&sysc R8A779A0_PD_A3ISP23>;
+> > -			resets = <&cpg 614>;
+> > +			resets = <&cpg 614>, <&cpg 18>;
+> > +			reset-names = "cs", "core";
+> >  			status = "disabled";
+> >
+> > +			renesas,vspx = <&vspx2>;
+> > +
+> >  			ports {
+> >  				#address-cells = <1>;
+> >  				#size-cells = <0>;
+> > @@ -2840,13 +2861,20 @@ isp2vin23: endpoint {
+> >  		isp3: isp@fed40000 {
+> >  			compatible = "renesas,r8a779a0-isp",
+> >  				     "renesas,rcar-gen4-isp";
+> > -			reg = <0 0xfed40000 0 0x10000>;
+> > -			interrupts = <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>;
+> > -			clocks = <&cpg CPG_MOD 615>;
+> > +			reg = <0 0xfed40000 0 0x10000>, <0 0xfe400000 0 0x100000>;
+> > +			reg-names = "cs", "core";
+> > +			interrupts = <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "cs", "core";
+> > +			clocks = <&cpg CPG_MOD 615>, <&cpg CPG_MOD 19>;
+> > +			clock-names = "cs", "core";
+> >  			power-domains = <&sysc R8A779A0_PD_A3ISP23>;
+> > -			resets = <&cpg 615>;
+> > +			resets = <&cpg 615>, <&cpg 19>;
+> > +			reset-names = "cs", "core";
+> >  			status = "disabled";
+> >
+> > +			renesas,vspx = <&vspx3>;
+> > +
+> >  			ports {
+> >  				#address-cells = <1>;
+> >  				#size-cells = <0>;
+> > --
+> > 2.48.1
+> >
+
+-- 
+Kind Regards,
+Niklas Söderlund
