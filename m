@@ -1,201 +1,131 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42B8229B16;
-	Thu, 20 Mar 2025 18:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148F81EC01E
+	for <linux-media@vger.kernel.org>; Thu, 20 Mar 2025 21:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742494084; cv=none; b=AovK3Ojn7RreOxcm5DlA+JjoNqrATaM2HGGgHBAyGqn9jXzsJ+nw7R6wEqi1lqpIw85X4wccbunOThK/5CqkYbLPj6jJ90h4VhxcrMNTMSGASg9Zr4p9nsqMbxmruJQmpTrI+/D7YHh/B6S3H+vMmIGmmlIhkuYA3bivNlfIIXA=
+	t=1742506461; cv=none; b=jPS+R0hcUkDrB/K5SiRdflZqlWN1YK5QxLwGCwJO+cyiwmKQMHehvYb6uhFPjQMYe5NhlmmcN7CBby0HgUQiwyK/t7qGzKwY5HDW6mMa+9cmqNVVnEB2q3vVPky/8E2hcrbmSPzt8Q9xVOgq/BVzpihBs+xr+yo4oXDieuOwYoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742494084; c=relaxed/simple;
-	bh=ty4fgJhINE0VOrCGQ2FUHlLm8d0U2+5oKp2ZZPIXZHA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=LqkWn7iY7je7ABqAoT0hWF1K4YEUTWbPLEuMXY7zdu/2g59zmbHOjBVaJjJaIsr3gAZsfaVGwtjtcQMbVvvg+FhavcExFQx5oER3VzKF0YidGyiybygqr+cND8X1EA6xqXalL+cwhqQ8qx6NAII0aL4z29uGe0LziEIVFDP0rtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RQFvOAqS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1742506461; c=relaxed/simple;
+	bh=mOnDqgj0BSZmK+Rt4jod6O1D9Yk05JHk1R77dSq+p8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KX3z0rq7RKRqkP4XYqp+6u8E6W3lnhU0hl8GS2PeKTCYLFQmHT1CH8m7jCD54fqxujfwTdGSrrX1smOkJ30nHGtun3n2r1Uqm0yqif69o6Pqfopt4wy8bueE2toUFwA3x0kQvOBh7HLqgPiwLFRRQpoN1tfIvJ89zyi/HH6GpX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cGT31qBd; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RQFvOAqS"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52KEVobl004887;
-	Thu, 20 Mar 2025 18:07:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	SrWMrYZl1eAcvzjk0TSZ49dIdQvTnGkvDhHE6IJoGxw=; b=RQFvOAqSJVNCLo95
-	Z2BNwTELdEmsd2NQG1lYMuPzfHZ40X+yGD1fCSY7QHJUqSVSVQCCMU6mTx+ccZan
-	S7FTaht0xMa1E7KXheIMSuSGwlSu9ozecus2es9EQWdaRjOQb+jhAjqvybZz+CvY
-	8tEl11Gytpt7jhwxWcMvsivi5LVfXxHp4GVq3Xxbk0BWvY8wf1gniHdFHgca4CFK
-	FXtrImMdS4vRa577FQpWdH4QrTgLZShFLuMulD4vOFxN2dYrsT5hXIygxowBNZLe
-	pLDQi62Z2qOPNWGWqu43SeFShhGxUg1Ktt5i/CgzPbd6gGdKKN1qMnf1AjyKN59R
-	RZe8EQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45gcd1aank-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Mar 2025 18:07:47 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52KI7klj017504
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Mar 2025 18:07:46 GMT
-Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 20 Mar 2025 11:07:42 -0700
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
-Date: Thu, 20 Mar 2025 23:36:51 +0530
-Subject: [PATCH v3 2/3] arm64: dts: qcom: sa8775p: add support for video
- node
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cGT31qBd"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43d07ca6a80so6584645e9.1
+        for <linux-media@vger.kernel.org>; Thu, 20 Mar 2025 14:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742506458; x=1743111258; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HOP7UU/BixFyu9/NC0nZ1KUzXLkUEuMKRRqPCxM5rYI=;
+        b=cGT31qBdK2VlXckzYhgSbUwqq6j4Q4utLzzwfhz+8PtriJH2ViChHswg+UFsVF5Yjr
+         SHLrFkjei4URpXCT9LcD9zXov2fLgLONAHLBioclh0axjjSz8F03V6Ju/uKCShFO4qjC
+         E0/euujhohMkqsFbK5kREZMTc1WYIrIO7HfueeNTguSceBAIYTbp8MYKp9N72HeUFC/h
+         TAUr2huD1MTE/ylGFPlvhoYgCRTmEys9xOaz+2t3hf44mhzpL2zPKhFM0NteW1l1edGI
+         14rNwfX5b0T4rCEx7jyI9noi1nm7nkdEclZQWakxsdl2y9cGWjAKvqUMZPSECg5dT+/K
+         hQjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742506458; x=1743111258;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HOP7UU/BixFyu9/NC0nZ1KUzXLkUEuMKRRqPCxM5rYI=;
+        b=WfoAncBTXku/6cx9XmJYuBKZXShKDfar/UtS6chfKnyqPC52GAH+ZEXQmfbboh67h+
+         1TXEycOTrZVvHLSyRnfSXxT6pTYnR1DkRavptNMl9UwIEG8GseZAhlaRiOzMwMXCUklq
+         BmHfU479EfUVnnM3hg1/woaF7VuI1aX8pU11FXVSthe0e36of3P0bc0OmHdNMGjkTUr4
+         Qo8ijRYAQKbXv1QQGiQlYj+kc829mwhW14aj/4HCgEi/2E07BF7P5xiQwjWabQeR95Lb
+         XA6kLh4d+TLAwlK1colciHji5CeXrfVq8uui5+D8hFJYRjzKYWcLbhoyxBPH2TFY/wTm
+         kPpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdZDourV1U+HL83X2kQaRciM6rlPnosygDXgI3RXURgjMeGiEJM9GIoh/sdC6WMCq+EnHaD0WCjZ77PA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmA7GS0EAW36NfTxZfvgh6LGLchmSG/rmTgSyYo/DV2T6WLHlG
+	RqI219Gv2rfeYRaujoI8Rpj2coeYbsJGnRG83sz0CSVgsYIIUaFyVn7eam9lddc=
+X-Gm-Gg: ASbGnctCwwkfv2gh2JMaodI5NIiQbTFOD7FQgYaO5xMjSv4ljDmiAvQ7BFCCkSp/wIU
+	sadKhg8FPLUD4H9renRJn/gUgFbq1DuUe3g6OjesVEJMjfU2gYmZJ/4jmnOGjzl/cP/WYEryuqP
+	/eorcJR5nlw4jBKn4TasL0t8QA85J0RS06qeebiPCWaoNJ90HNdaCfdZj/MMAznAocwLZkR/gfx
+	NngB1YCeLUy7zZsOu8au1eszY2M6kyEVifEAqDrTtf9SmVdeO0Z+lZc01dvKd0vZv/+OHcfzQOD
+	pbv6o8rUOkM+yf93+80eCeocQaKUkua9C6QABzUeI8SWQbZ0DciZWNvVQGWYpu7CqHKDcSAnU4w
+	Sy8fYpfCseg==
+X-Google-Smtp-Source: AGHT+IHQR7pkacXemvapFQy9AD+rGlE3cMkaNllM4VM3ccQmOQ8FA68ceqVMTtWLDwQnmI2/UxzSmg==
+X-Received: by 2002:a05:600c:3c9b:b0:43d:d06:3798 with SMTP id 5b1f17b1804b1-43d50a31ffamr5334675e9.20.1742506458138;
+        Thu, 20 Mar 2025 14:34:18 -0700 (PDT)
+Received: from [192.168.0.34] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f995766sm625994f8f.1.2025.03.20.14.34.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 14:34:17 -0700 (PDT)
+Message-ID: <49512bee-906c-4587-853a-b36da7a4407d@linaro.org>
+Date: Thu, 20 Mar 2025 21:34:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: media: qcom,sm8550-iris: document
+ SA8775p IRIS accelerator
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Dikshita Agarwal <quic_dikshita@quicinc.com>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ sumit.garg@oss.qualcomm.com
+References: <20250320-dtbinding-v2-0-8d8eaa4e76cc@quicinc.com>
+ <uD9su4uJAo1PBanhrBSliY8k1KZvid_UHJJu8OYLgugkOMHBgQaYSpv93UpTrJoAzgsUMH-HomFg78fes-aqQA==@protonmail.internalid>
+ <20250320-dtbinding-v2-1-8d8eaa4e76cc@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20250320-dtbinding-v2-1-8d8eaa4e76cc@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250320-dtbinding-v3-2-2a16fced51d5@quicinc.com>
-References: <20250320-dtbinding-v3-0-2a16fced51d5@quicinc.com>
-In-Reply-To: <20250320-dtbinding-v3-0-2a16fced51d5@quicinc.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Abhinav Kumar
-	<quic_abhinavk@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rob
- Herring" <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konradybcio@kernel.org>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@oss.qualcomm.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sumit.garg@oss.qualcomm.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1742494052; l=3075;
- i=quic_vgarodia@quicinc.com; s=20241104; h=from:subject:message-id;
- bh=ty4fgJhINE0VOrCGQ2FUHlLm8d0U2+5oKp2ZZPIXZHA=;
- b=zSFYNvtGA7VTEqKA53XYjcGcFGJZ2aLSTvB4wCLDX1NhVuSPvqe9HBdSLpMJh5vq7cY3yHkuk
- sTlqqtXKrrcCU3ICQruFlk6o+uVEKbil6qWGWZZ6CCfBvLNyBXfkmbr
-X-Developer-Key: i=quic_vgarodia@quicinc.com; a=ed25519;
- pk=LY9Eqp4KiHWxzGNKGHbwRFEJOfRCSzG/rxQNmvZvaKE=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=bfFrUPPB c=1 sm=1 tr=0 ts=67dc5973 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=gsePXWo3U9w2I85xqPwA:9 a=q4wdmsZh22oxWPhc:21
- a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: bmX-UqvPpAHWr04uXPikxDGOhBO1Wi8c
-X-Proofpoint-ORIG-GUID: bmX-UqvPpAHWr04uXPikxDGOhBO1Wi8c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-20_05,2025-03-20_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- clxscore=1015 suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=987
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 adultscore=0 phishscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503200117
 
-Video node enables video on Qualcomm SA8775P platform.
+On 20/03/2025 02:54, Vikash Garodia wrote:
+> Document the IRIS video decoder and encoder accelerator found in the
+> SA8775p platform. SA8775p and SM8550 are irisv3 with same core and
+> bindings, hence SA8775p is made fallback to SM8550.
+> QCS8300 is a downscaled version of irisv3 and have different hardware
+> capabilities. SM8650 is an irisv3 with different (higher) number of
+> reset lines compared to SM8550. QCS8300 is yet to come in future
+> posting, while SM8650 is posted as
+> https://lore.kernel.org/all/20250305-topic-sm8x50-iris-v10-v2-1-bd65a3fc099e@linaro.org/
+> 
+> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+> ---
+>   Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> index e424ea84c211f473a799481fd5463a16580187ed..6a89e9e3808758cfdbf6a51dfb9fc6559864253a 100644
+> --- a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> +++ b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
+> @@ -19,7 +19,12 @@ allOf:
+> 
+>   properties:
+>     compatible:
+> -    const: qcom,sm8550-iris
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - qcom,sa8775p-iris
+> +          - const: qcom,sm8550-iris
+> +      - const: qcom,sm8550-iris
+> 
+>     power-domains:
+>       maxItems: 4
+> 
+> --
+> 2.34.1
+> 
+> 
 
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 71 +++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index 3394ae2d13003417a15e64c9e47833725ec779e6..6e4644b95fb678fd201310463709d7482d72d6e2 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -10,6 +10,7 @@
- #include <dt-bindings/clock/qcom,sa8775p-dispcc.h>
- #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
- #include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
-+#include <dt-bindings/clock/qcom,sa8775p-videocc.h>
- #include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
- #include <dt-bindings/mailbox/qcom-ipcc.h>
-@@ -3783,6 +3784,76 @@ llcc: system-cache-controller@9200000 {
- 			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		iris: video-codec@aa00000 {
-+			compatible = "qcom,sa8775p-iris", "qcom,sm8550-iris";
-+
-+			reg = <0x0 0x0aa00000 0x0 0xf0000>;
-+			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			power-domains = <&videocc VIDEO_CC_MVS0C_GDSC>,
-+					<&videocc VIDEO_CC_MVS0_GDSC>,
-+					<&rpmhpd SA8775P_MXC>,
-+					<&rpmhpd SA8775P_MMCX>;
-+			power-domain-names = "venus",
-+					     "vcodec0",
-+					     "mxc",
-+					     "mmcx";
-+			operating-points-v2 = <&iris_opp_table>;
-+
-+			clocks = <&gcc GCC_VIDEO_AXI0_CLK>,
-+				 <&videocc VIDEO_CC_MVS0C_CLK>,
-+				 <&videocc VIDEO_CC_MVS0_CLK>;
-+			clock-names = "iface",
-+				      "core",
-+				      "vcodec0_core";
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &config_noc SLAVE_VENUS_CFG QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mmss_noc MASTER_VIDEO_P0 QCOM_ICC_TAG_ALWAYS
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
-+			interconnect-names = "cpu-cfg",
-+					     "video-mem";
-+
-+			memory-region = <&pil_video_mem>;
-+
-+			resets = <&gcc GCC_VIDEO_AXI0_CLK_ARES>;
-+			reset-names = "bus";
-+
-+			iommus = <&apps_smmu 0x0880 0x0400>,
-+				 <&apps_smmu 0x0887 0x0400>;
-+			dma-coherent;
-+
-+			status = "disabled";
-+
-+			iris_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-366000000 {
-+					opp-hz = /bits/ 64 <366000000>;
-+					required-opps = <&rpmhpd_opp_svs_l1>,
-+							<&rpmhpd_opp_svs_l1>;
-+				};
-+
-+				opp-444000000 {
-+					opp-hz = /bits/ 64 <444000000>;
-+					required-opps = <&rpmhpd_opp_nom>,
-+							<&rpmhpd_opp_nom>;
-+				};
-+
-+				opp-533333334 {
-+					opp-hz = /bits/ 64 <533333334>;
-+					required-opps = <&rpmhpd_opp_turbo>,
-+							<&rpmhpd_opp_turbo>;
-+				};
-+
-+				opp-560000000 {
-+					opp-hz = /bits/ 64 <560000000>;
-+					required-opps = <&rpmhpd_opp_turbo_l1>,
-+							<&rpmhpd_opp_turbo_l1>;
-+				};
-+			};
-+		};
-+
- 		videocc: clock-controller@abf0000 {
- 			compatible = "qcom,sa8775p-videocc";
- 			reg = <0x0 0x0abf0000 0x0 0x10000>;
-
--- 
-2.34.1
-
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
