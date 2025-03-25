@@ -1,166 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A5D26656F;
-	Tue, 25 Mar 2025 12:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCE525D540
+	for <linux-media@vger.kernel.org>; Tue, 25 Mar 2025 12:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742905630; cv=none; b=lSA3gxwGMP/D51a9ShRV/Oui4UEy61exe2Mv+BKBak0UgB7m4jJIHGjj0+7TLuFR2KNhEFA/mczgbvnRp03mEMupxoD1KJHWdo+Eujo1UCBc+T2KCqPNJp3JJWS/nBdfOfzxjPuPTxGe3gYu5R7Ep3kT/Q4o1XEk6hLYrPSeR0c=
+	t=1742906284; cv=none; b=rhwSVpVifrBlzN7T1qtYt+1Z7YcXSHF48WmtgdQ0D2tW7Ic+CjxtgRxenIyFX7xBMUaMfQ5J7pLJh5WgAcUnDws6vlKpNZSXujDzH0cn+nadbPeosTmzcT1E9nG06BOLQ72dh8GmkqTs81JLl3yLL2E0EBClWcdGwjGYAp7Z3lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742905630; c=relaxed/simple;
-	bh=AWjl4tBrnhRkcRiex/88q6k6fRAmxNwISnnYEf7182Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=m7H9qapBaAXxp+Tk/PZCNHDJ6C4mD/pSePwrd1a/6/Tpx1ArkIgEI3BWkrsbOuqwD6m/wzfajLNCAzXD44K6TbUyVOB/5XfCwq9++a2oUEsNuZanagW71We/UNy58cXcTT44MAPbwL1lWHgx6/qYWxj98cbkeF7XQEDU70gebQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BOK/wPKS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742906284; c=relaxed/simple;
+	bh=YR7GTafJMCJb/k5yC/vTfF16ftxl0lD5RKsxjMp3WLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AUCSt6t37p6KGZS480WWTGzVlEjln/HZV90sh/t03nufdfqLCpK8L2fKPI3prUh8ceaN3/UK2gw4Eh7sd4axLe4v1ORdRQGlG3Iu9PdUfjlarHdlTwH8CAMvS8/Gg8NHXINY+qmFecDyU2vKJrBxi3x4Izne/ZoO6xEXjZCBnN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tKolmvsf; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BOK/wPKS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF18C4CEE4;
-	Tue, 25 Mar 2025 12:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742905629;
-	bh=AWjl4tBrnhRkcRiex/88q6k6fRAmxNwISnnYEf7182Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BOK/wPKSymoONoK8d8zXPGGMy5MG+aYpHf3TkadCLwDPTOQJGUAW9et07ZG7zCZWv
-	 ef4pdsDxtkJTHjY+SAKtAcW26il80oDtB38MozaTEhXlGd4IkrTlN3tIWkXmAwnoLn
-	 BzHu8ImCylu3Yb81WL68Buni1g0ODfLOGd7OBrnKV/M2af0y77JoFV43LSNATjnN4G
-	 9CzIE3AozXUaiD7HuaDWAl0wAkWF1HUbFGm1CJxGQ45QPczxfx9HKr6TYKmSS9kPAD
-	 gZpFZHUBEZFz8k7KsyAguseekaOJzmeEib25mONLZRMhFlnpUorLwGTrqPnI6I56MM
-	 2bv1z0/9P4X3A==
-From: guoren@kernel.org
-To: arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	torvalds@linux-foundation.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	anup@brainfault.org,
-	atishp@atishpatra.org,
-	oleg@redhat.com,
-	kees@kernel.org,
-	tglx@linutronix.de,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	brauner@kernel.org,
-	akpm@linux-foundation.org,
-	rostedt@goodmis.org,
-	edumazet@google.com,
-	unicorn_wang@outlook.com,
-	inochiama@outlook.com,
-	gaohan@iscas.ac.cn,
-	shihua@iscas.ac.cn,
-	jiawei@iscas.ac.cn,
-	wuwei2016@iscas.ac.cn,
-	drew@pdp7.com,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	ctsai390@andestech.com,
-	wefu@redhat.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	josef@toxicpanda.com,
-	dsterba@suse.com,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	boqun.feng@gmail.com,
-	guoren@kernel.org,
-	xiao.w.wang@intel.com,
-	qingfang.deng@siflower.com.cn,
-	leobras@redhat.com,
-	jszhang@kernel.org,
-	conor.dooley@microchip.com,
-	samuel.holland@sifive.com,
-	yongxuan.wang@sifive.com,
-	luxu.kernel@bytedance.com,
-	david@redhat.com,
-	ruanjinjie@huawei.com,
-	cuiyunhui@bytedance.com,
-	wangkefeng.wang@huawei.com,
-	qiaozhe@iscas.ac.cn
-Cc: ardb@kernel.org,
-	ast@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-crypto@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	maple-tree@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-atm-general@lists.sourceforge.net,
-	linux-btrfs@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	linux-nfs@vger.kernel.org,
-	linux-sctp@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-media@vger.kernel.org
-Subject: [RFC PATCH V3 43/43] riscv: Fixup address space overlay of print_mlk
-Date: Tue, 25 Mar 2025 08:16:24 -0400
-Message-Id: <20250325121624.523258-44-guoren@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20250325121624.523258-1-guoren@kernel.org>
-References: <20250325121624.523258-1-guoren@kernel.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tKolmvsf"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0FF60594;
+	Tue, 25 Mar 2025 13:36:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1742906173;
+	bh=YR7GTafJMCJb/k5yC/vTfF16ftxl0lD5RKsxjMp3WLk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tKolmvsfm4ZVZb0BAv3Tw9ljE1lw29OJFi6rzcqa11N1MzlzH1Zu/yfDCmS6l6jgT
+	 OpqikDcmsc31cikZmWgbdioUEl/byJdPEoJahkD/afBDRJXGsDaMJS1uynhFG3srZt
+	 HZFSN3WtfA2wc7S74fNCscwc3T3Zct3KQBJhtzoc=
+Date: Tue, 25 Mar 2025 14:37:38 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: "Hu, Jerry W" <jerry.w.hu@intel.com>
+Cc: "libcamera-devel@lists.libcamera.org" <libcamera-devel@lists.libcamera.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>
+Subject: Re: [ANNOUNCEMENT] libcamera workshop 2025 - Nice, May 16th
+Message-ID: <20250325123738.GA1320@pendragon.ideasonboard.com>
+References: <20250325102750.GE20035@pendragon.ideasonboard.com>
+ <SA2PR11MB5131A5274209B90423488089D3A72@SA2PR11MB5131.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SA2PR11MB5131A5274209B90423488089D3A72@SA2PR11MB5131.namprd11.prod.outlook.com>
 
-From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+Hi Jerry,
 
-If phyical memory is 1GiB for ilp32 linux, then print_mlk would be:
-lowmem : 0xc0000000 - 0x00000000   ( 1024 MB)
+On Tue, Mar 25, 2025 at 12:20:16PM +0000, Hu, Jerry W wrote:
+> Hi Laurent & Hans,
+> 
+> I will join the summit remotely. Will video conference set up for this
+> conference? 
 
-After fixup:
-lowmem : 0xc0000000 - 0xffffffff   ( 1024 MB)
+That's a very good question, which I haven't thought about. I will
+inquire with the venue about remote access options, and will let you
+know.
 
-Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
----
- arch/riscv/mm/init.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> Would you please reserve a Topic Session for me? I will update the
+> topic later on.  
+> 
+> Thanks,
+> -Jerry
+> 
+> -----Original Message-----
+> From: libcamera-devel <libcamera-devel-bounces@lists.libcamera.org> On Behalf Of Laurent Pinchart
+> Sent: Tuesday, March 25, 2025 6:28 PM
+> To: libcamera-devel@lists.libcamera.org
+> Cc: linux-media@vger.kernel.org; Kieran Bingham <kieran.bingham@ideasonboard.com>
+> Subject: [ANNOUNCEMENT] libcamera workshop 2025 - Nice, May 16th
+> 
+> Hello everybody,
+> 
+> Another year, another libcamera workshop. After the previous editions
+> in Paris, Brussels and Vienna, we will organize the next workshop in
+> Nice on Friday the 16th of May. The event will be hosted by Embedded
+> Recipes ([1]) as part of their workshops day ([2]).
+> 
+> This year, our workshop will be colocated with the Pipewire workshop
+> on the same day and at the same venue (but a different room), to
+> facilitate discussions about topics that span libcamera and Pipewire.
+> The Linux Media Summit will also be organized in a nearby location on
+> Tuesday the 13th ([3]).
+> 
+> If you would like to attend, please register your interest by replying
+> to this e-mail, and indicate if you have any discussion topics you
+> would like to include in the schedule. We will draft and circulate an
+> agenda in the next few weeks after receiving topic proposals. If
+> registrations exceed our capacity, priority will be given based on
+> topic submissions.
+> 
+> The event will be free of charge for attendees.
+> 
+> [1] https://embedded-recipes.org/2025/
+> [2] https://embedded-recipes.org/2025/workshops/
+> [3] https://lore.kernel.org/r/044f2fa6-a245-4ae5-b9de-7a2e8831ccd6@xs4all.nl
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 3cdbb033860e..e09286d4916a 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -105,26 +105,26 @@ static void __init zone_sizes_init(void)
- 
- static inline void print_mlk(char *name, unsigned long b, unsigned long t)
- {
--	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld kB)\n", name, b, t,
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld kB)\n", name, b, t - 1,
- 		  (((t) - (b)) >> LOG2_SZ_1K));
- }
- 
- static inline void print_mlm(char *name, unsigned long b, unsigned long t)
- {
--	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld MB)\n", name, b, t,
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld MB)\n", name, b, t - 1,
- 		  (((t) - (b)) >> LOG2_SZ_1M));
- }
- 
- static inline void print_mlg(char *name, unsigned long b, unsigned long t)
- {
--	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld GB)\n", name, b, t,
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld GB)\n", name, b, t - 1,
- 		   (((t) - (b)) >> LOG2_SZ_1G));
- }
- 
- #if BITS_PER_LONG == 64
- static inline void print_mlt(char *name, unsigned long b, unsigned long t)
- {
--	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld TB)\n", name, b, t,
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld TB)\n", name, b, t - 1,
- 		   (((t) - (b)) >> LOG2_SZ_1T));
- }
- #else
 -- 
-2.40.1
+Regards,
 
+Laurent Pinchart
