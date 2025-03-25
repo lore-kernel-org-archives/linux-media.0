@@ -1,47 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4B825D1FA
-	for <linux-media@vger.kernel.org>; Tue, 25 Mar 2025 16:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CED025A351
+	for <linux-media@vger.kernel.org>; Tue, 25 Mar 2025 16:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742919252; cv=none; b=cDCmrrrKj5ToMyEXxl+H3GbS8X9+qRdYN5eUj55QOA1o90fh5Vgv4C1rMUwYTPxOU8jGx2Rf/+Putn1oXIE3hhzjcf8uIHhSfsuWAMSfNAWwLnbj5Bb5JymhIOb90e2JaPpV/CSJjBmH7qXt4PX/dSy7nedfexSQdCYyCFmy6l0=
+	t=1742919252; cv=none; b=bvmT8Ec0Zpm47Q0EscN4AarifK4jRfEBQ4lnxH3zv84RMmMyrRfOXwVBXM51w8LzldL1lYXxXqj52jVg7YA3VTRRganDfHdDSE1MIPdCKM25cRfjIGf1iIwAFe+quOtDgHhKQmRwzaV/0VT/w4B9ykTbfgGgl19429lqF0ykd1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742919252; c=relaxed/simple;
-	bh=yLj4z+jqDXv/XbwjnmtZJj42RpgP/iMihdjydmeZqjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MvgIZ38Ny0gMcFJUiC1ddsBXT6JGBRI28hTjbUaH1uT9Yz8mSQy0f3037XEyQV9jnIvxhVewzWCzMLpDQ4UOIWa84pnDsPtufLMI+EKV3t1Iul1SUHA6ZqzSuDgAu6W2LHxAdumw0D/7DcSdJDYFxNWSii7/1F+IxbOsPjVDkUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i+X+vT1O; arc=none smtp.client-ip=170.10.129.124
+	bh=X4fLaiEfQCIm2PSn/YWEi92HKYjJ2iM17SBkJ8IpL/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QNaNzgd3SOJe4gkNfra3SFrBCS8QD3xDdh2W8FCPmOhhAy+vjLN4UEjMj/QWPkQxw3VfqwbBAbDdQeDv2YbgR2B2BN4XL0qI/+40n7A/uIXHLYrTuYmu0vRw4axMeDlQK9B4oU0f69fj/KkOcRYiQqcljjKFz/l/ytZbhfzCaaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y5U72Cnp; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i+X+vT1O"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y5U72Cnp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1742919250;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XgP8EzgSaGGRGVenkO80yzIIdLrjN4fqfxhFtuQOr48=;
-	b=i+X+vT1O3vBY6wNJKD71qAYX4nECV4pPQBnWEGB2rUId+w8IaLqAsLbmajF1ovVOMqErVr
-	yeAYv5Uir6ILpFsdLifUNwAX1KcHeMC6ER49QwZ/MeGSEDWPC79k4dViZkWl083I8+xn1m
-	Egv8PVGoh8yWoynoVb7AcLGJ2/P3w0I=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H/EsX8uTQNO6K3/yNjPPo3yfThFUcxiCC8Iu923/z80=;
+	b=Y5U72CnpMPn/i2WBtznmDNvOfV3z26Ke3dE2V1EW8b9P707RB/nWTwQLz8zIjF/O52namc
+	kzQU0fEwBcAWcOdhSWAL6n4isyPSx74ZbVJziUxx+XeP84b1z94vh+i8GduIvW6ShXDvOF
+	cw7TRaaCkbubbuCtkfeAkWm+G/XfNv8=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-669-4YoMZcLXNn2fd-GwOJZ7Qg-1; Tue,
- 25 Mar 2025 12:14:03 -0400
-X-MC-Unique: 4YoMZcLXNn2fd-GwOJZ7Qg-1
-X-Mimecast-MFC-AGG-ID: 4YoMZcLXNn2fd-GwOJZ7Qg_1742919242
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-178-Wu0QKsuKORSWeL6a-sQvrw-1; Tue,
+ 25 Mar 2025 12:14:04 -0400
+X-MC-Unique: Wu0QKsuKORSWeL6a-sQvrw-1
+X-Mimecast-MFC-AGG-ID: Wu0QKsuKORSWeL6a-sQvrw_1742919243
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0555D196E08E;
-	Tue, 25 Mar 2025 16:14:02 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E4B6187DB94;
+	Tue, 25 Mar 2025 16:13:50 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.44.32.136])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9B95E1828A80;
-	Tue, 25 Mar 2025 16:13:58 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2DA9A180A802;
+	Tue, 25 Mar 2025 16:13:46 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Andy Shevchenko <andy@kernel.org>
@@ -53,11 +51,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Bingbu Cao <bingbu.cao@intel.com>,
 	platform-driver-x86@vger.kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH 3/8] platform/x86: int3472: Drop unused gpio field from struct int3472_gpio_regulator
-Date: Tue, 25 Mar 2025 17:13:35 +0100
-Message-ID: <20250325161340.342192-4-hdegoede@redhat.com>
-In-Reply-To: <20250325161340.342192-1-hdegoede@redhat.com>
-References: <20250325161340.342192-1-hdegoede@redhat.com>
+Subject: [PATCH 0/8] platform/x86: int3472: Add handshake pin support
+Date: Tue, 25 Mar 2025 17:13:32 +0100
+Message-ID: <20250325161340.342192-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -67,45 +63,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The gpio field in struct int3472_gpio_regulator is only briefly used to
-store the gpio in skl_int3472_register_regulator() instead just store
-the gpio directly into cfg.ena_gpiod an drop the gpio field.
+New Intel Meteor Lake based laptops with IPU6 cameras have a new type 0x12
+pin defined in the INT3472 sensor companion device which describes
+the sensor's GPIOs.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/platform/x86/intel/int3472/clk_and_regulator.c | 4 +---
- drivers/platform/x86/intel/int3472/common.h            | 1 -
- 2 files changed, 1 insertion(+), 4 deletions(-)
+This pin is primarily used on designs with a Lattice FPGA chip which is
+capable of running the sensor independently of the main CPU for features
+like presence detection. This pin needs to be driven high to make the FPGA
+run the power-on sequence of the sensor. After driving the pin high
+the FPGA "firmware" needs 25ms to comlpete the power-on sequence.
 
-diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-index 40434591dd0b..5f6c66215f63 100644
---- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-+++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-@@ -261,11 +261,9 @@ int skl_int3472_register_regulator(struct int3472_discrete_device *int3472,
- 						int3472->regulator.regulator_name,
- 						&int3472_gpio_regulator_ops);
- 
--	int3472->regulator.gpio = gpio;
--
- 	cfg.dev = &int3472->adev->dev;
- 	cfg.init_data = &init_data;
--	cfg.ena_gpiod = int3472->regulator.gpio;
-+	cfg.ena_gpiod = gpio;
- 
- 	int3472->regulator.rdev = regulator_register(int3472->dev,
- 						     &int3472->regulator.rdesc,
-diff --git a/drivers/platform/x86/intel/int3472/common.h b/drivers/platform/x86/intel/int3472/common.h
-index 72ef222629b6..e0fa34be8a07 100644
---- a/drivers/platform/x86/intel/int3472/common.h
-+++ b/drivers/platform/x86/intel/int3472/common.h
-@@ -80,7 +80,6 @@ struct int3472_discrete_device {
- 		/* SUPPLY_MAP_COUNT * 2 to make room for second sensor mappings */
- 		struct regulator_consumer_supply supply_map[GPIO_REGULATOR_SUPPLY_MAP_COUNT * 2];
- 		char regulator_name[GPIO_REGULATOR_NAME_LENGTH];
--		struct gpio_desc *gpio;
- 		struct regulator_dev *rdev;
- 		struct regulator_desc rdesc;
- 	} regulator;
+This series implements support for this by modelling the handshake GPIO
+as a GPIO driven 'dvdd' regulator with an enable-time of 25 ms, also see:
+
+https://lore.kernel.org/platform-driver-x86/59f672c3-6d87-4ec7-9b7f-f44fe2cce934@redhat.com/
+
+Patch   1   Is an unrelated cleanup which I had lying around
+Patches 2-7 Prepare + Implement the handshake GPIO
+Patch   8   Is a small patch adding some extra debugging to GPIO remapping
+
+This series applies on top of pdx86/for-next, for testing with 6.14 this
+patch needs to be cherry-picked first:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=81b251c66bdfe263fb5e7a16838512ddaeed77df
+
+Regards,
+
+Hans
+
+
+Hans de Goede (8):
+  platform/x86: int3472: Add skl_int3472_register_clock() helper
+  platform/x86: int3472: Stop setting a supply-name for GPIO regulators
+  platform/x86: int3472: Drop unused gpio field from struct
+    int3472_gpio_regulator
+  platform/x86: int3472: Rework AVDD second sensor quirk handling
+  platform/x86: int3472: Make regulator supply name configurable
+  platform/x86: int3472: Prepare for registering more then 1 GPIO
+    regulator
+  platform/x86: int3472: Add handshake pin support
+  platform/x86: int3472: Debug log when remapping pins
+
+ drivers/platform/x86/intel/int3472/Makefile   |   3 +-
+ .../x86/intel/int3472/clk_and_regulator.c     | 163 ++++++------------
+ drivers/platform/x86/intel/int3472/common.h   |  45 +++--
+ drivers/platform/x86/intel/int3472/discrete.c |  37 +++-
+ .../x86/intel/int3472/discrete_quirks.c       |  22 +++
+ 5 files changed, 139 insertions(+), 131 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/int3472/discrete_quirks.c
+
 -- 
 2.49.0
 
