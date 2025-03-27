@@ -1,62 +1,63 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2645F1D88DB
-	for <linux-media@vger.kernel.org>; Thu, 27 Mar 2025 21:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A1D1D9A41
+	for <linux-media@vger.kernel.org>; Thu, 27 Mar 2025 21:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743109534; cv=none; b=W+umwdKms0kUGs4/t4HCXUxe42hvLJl+DzCwlpnjwejaf1pGfSyDdYySdw20h9W7vld3P0nIwMGEvFu2wOyif5ojmjhs83DOthd6QiExKEPWCdauHicpTLFnR+T+27umzyPjVe/Ja3Z/FEIXGU0eil/5hvY4rSRZmk/nyQmbl60=
+	t=1743109535; cv=none; b=WZVvaujwjzV3lYGOEr7PoP0eS4ZxC1TCZgSbKDZRS2SOjXGcAOJ5jUr0OLwbeHE+DDt9PDlgdhv+dJQZpLy88MAOf21yLolWkP72C+kB6r2/6HCNfANOKwQUIq4oPec3ioFG5oOH4OplSg9QRfvmfArKKayNDNAalox2UIZjtR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743109534; c=relaxed/simple;
-	bh=Ban9ucLuyCpweFGuFMiE9HdQVNFofbA4U8+4eDa+l6c=;
+	s=arc-20240116; t=1743109535; c=relaxed/simple;
+	bh=UNUEZP3w8YZerWod8kYMkdwNDmb95xdLkSVLnYJi2iY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JXLEzJOSDnLjmg56PmltaWx0s+nXC1TOopJpJMJ9euVGnn57jUa8PUU2l2Sz5wOWQPSzO/vCcbKNYVDi1fmHXVNdAiF2Hyf9Iy/9kNn78pZnijaC72mx1NDS5Unw7R1KuNLao63eFYSnAjGIzpW7xFsjy6Xc0CW99Hfw2MiYpU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nIC0hVxD; arc=none smtp.client-ip=209.85.160.171
+	 In-Reply-To:To:Cc; b=WAZVK6fMNicrcDkSSX+rSB/NdVBZkifLgcDODEsmdL4aH9AYEDzAcqnPbGWXOkCGuoGDCrcvs+h0PaIvira4eMHoNKc/lUd/7kudwF6FaxA6TjDeHaqTVkANArU8x1UCDPFaHmXO/8vtwIMYzol3B2a26lfozarm9yB0r4QbsnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AKI4ftBC; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nIC0hVxD"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-47690a4ec97so15202991cf.2
-        for <linux-media@vger.kernel.org>; Thu, 27 Mar 2025 14:05:32 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AKI4ftBC"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-476ac73c76fso17831281cf.0
+        for <linux-media@vger.kernel.org>; Thu, 27 Mar 2025 14:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1743109532; x=1743714332; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1743109533; x=1743714333; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=93OnqkciQ2LvdVqMgeQPBfq7/a3PEpY4NcvhZpMQ4n0=;
-        b=nIC0hVxD3u+Dw5UNozgRsAUgngBZmq+DFkMHeAcbHEgc+AvYBI4QesrS9KdKBVzfvr
-         aZeX17P87Lq3QBogxoLAM4ZT5enp9dVOuBO8WVEwwY+Bk3XFWJMuhNgBQ6qHXyG2Yb4n
-         IVpzeh+yl+8FP+GTBVmgcGXp/K8wO58C4NUjU=
+        bh=UyF9yV+q7HdGxjYeapc60IDH/reeh91Du4rxUglSpiU=;
+        b=AKI4ftBCMAhinHCJz6k1VCHo+xhVqgjGYOOEhiwsHpxgVCfdsIoSNXNCL44yEi/XOE
+         dsqEO5I4Ut513E6cQWKxDz6Faf3Eix3lhRYayWq/1XLTFZ+u8VZNPdwubqixvhdCJuLj
+         o0P9bOA3gF9MOzk5Z8FAFL+8wF5oNZyYjHLss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743109532; x=1743714332;
+        d=1e100.net; s=20230601; t=1743109533; x=1743714333;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=93OnqkciQ2LvdVqMgeQPBfq7/a3PEpY4NcvhZpMQ4n0=;
-        b=AKjVvDX02SUO3ukCk6KhL83WnFu7DsgKGBVHMYnJiCQ59ap6cEV8e05wutN1Rbaf8M
-         SmAVRMxOCzLFdeJcBU5spC3bL0GwFQgPqOVqhNY6ztt4wPsCElCjbAcxou7+JyKdJPZv
-         DnfnZ94UUpTp3oEug7R6Ihybk62f80TCvPqq1fjbX8a6ARul4DohMG7CNJ1GWF0+dL8s
-         n2OtU4IBkzgGBQfV/Z9qgi2kyLSpyXcxvmfYzc8FHum3kWwrHdzVIQpKjE6MzVxLxdu4
-         8QZ4Jhllel0FFQJbAswY1tw5kdRk+w16D1ViR88m57e/gGLeAQ5aAaKP1aw+cxFHKi0t
-         UiyA==
-X-Gm-Message-State: AOJu0Yze3NnekwuI5NueAXD9AHXamYt6mqq2FGtbHPgyJobBzvQefHxx
-	uxfvaMYQEH5Vh1A/Gbh1iYV8nSBJs3mv08DffEqwkuaGIpY4Nwk34HiLZTGtpw==
-X-Gm-Gg: ASbGncvQCHN4x5WSJ5KGg3Xs1RldLwi2q45KFxftRXg1CooQ/UUfZR5MJILqNzI/QDn
-	RClLX1az126jXkTkchaWSbJvIqSieCyU2OB1Km1oPqXmQM3mK9EWLON1Ehulxdne3dcnd5kBox2
-	b1zqxKaH81N6gZUT816gGnfbhvdOL47fWjdqlUmtb68ZCNPiOyIku2tPKHX/xpMRI5IN5nWJWfM
-	BKgRnvtz4QqlSIan1Nf6BXuaSqub62kZjpFtyGJGLxUe8LhY3gdEVkpoqKgbth6L8JKawrKiX4s
-	RyidNPlYIRunYdPY075+v640hG7v2u0zmVNV1/VpLlwK5hnQQ5WjFtJbHuSWOX2L5XxBPb4PVFC
-	1VkH5PHCmFT6oqrmVFuN+oA==
-X-Google-Smtp-Source: AGHT+IFLl4a4+W+aZHMW6dq0F6sR8OwWQrPiaIYCVSTx17LDuLrqPR9p4njsirc2w/NtJeAt7tcWBA==
-X-Received: by 2002:a05:622a:4a17:b0:472:1225:bd98 with SMTP id d75a77b69052e-4776e1e746amr114724211cf.50.1743109531874;
-        Thu, 27 Mar 2025 14:05:31 -0700 (PDT)
+        bh=UyF9yV+q7HdGxjYeapc60IDH/reeh91Du4rxUglSpiU=;
+        b=W3EFppd/l1eHnV6SQTzRiCV/WZMclP5joXm0xAW5nIpOmCSwzRWWGeUEMAmFSATCBw
+         RupeyQQdKRggGumt3kUoKbB9qGuSH0leaZXhMc7LaHJ3faDYd29yz/zyACOGZiAiBjH5
+         5RutV9NJxZo4FhdLWVltfUElfonL6165cwOaMMpe+GM6uEcS7e3VsGMuE+gXx6NUaXO5
+         5MaOl+sO0RSOEWuZmqcv/Ab8IdqOF2sr5Mr/MbeCqFOT8o7iCLtgEvQGPOY0TpAJCzJ+
+         ILj3wZrAciY0SUIFVgMKUOw6WR/8A/Jn4zepuoZoH0XMkLMdl6W3s/8AnZJjjMm4XgTN
+         4vDA==
+X-Gm-Message-State: AOJu0YxMxyY0/a/HNEYtQ8gAqiX7FxjgDPO142VRFyUt+43tKRjca/HR
+	FA7ayy+X+8YsJZucR9EAl4A57TXwCfbo2+WqTfTd+0nSyMMDAXYcnyAFl7wdAQ==
+X-Gm-Gg: ASbGncu2WHJU95PpFVGhuot1FHmc7uau3mwh1be7x6lzDSIC8d0JM2IiA6tlBD6gete
+	r0p3hj9WzyDYBO8OPXMnryqbRpyP7gX52L76yOYnsbq2nrKrHhZxmO7epmwr0TW+ycYQ+748XPv
+	F6xl31C4WyDWULEXxlB1fl2iRk+vnN53N+pFvTRE03poRt6faedEWO3CVx+xrKckImq88NUvYvQ
+	/rn29Tt1dXKsp7WcpxHEZZGeMxF+UYHYh0K4osPbxXXpuRpbzyEuXlOGvTEIruAvws8IGFEsfNf
+	w19z5yXXyOilkl4BxBt0FSnLRAgBycJi2P0eJLm1CtHXHQPFcEf3k7CJEN0hkR/2uVnGaT8bgd2
+	wZQUSNzNOnwmDRF89nGuZow==
+X-Google-Smtp-Source: AGHT+IFuMMc1va0NxXgRq16C7VpNCV4wcIWIZAEQC7Wykd+RvFsh2EJN4046LsbERIAF/4anKeaZJQ==
+X-Received: by 2002:a05:622a:244f:b0:476:77ba:f7 with SMTP id d75a77b69052e-4776e1eeb22mr83967141cf.34.1743109532717;
+        Thu, 27 Mar 2025 14:05:32 -0700 (PDT)
 Received: from denia.c.googlers.com (249.240.85.34.bc.googleusercontent.com. [34.85.240.249])
         by smtp.gmail.com with ESMTPSA id d75a77b69052e-47782a1070csm2275421cf.9.2025.03.27.14.05.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 14:05:31 -0700 (PDT)
+        Thu, 27 Mar 2025 14:05:32 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 27 Mar 2025 21:05:28 +0000
-Subject: [PATCH v6 2/5] media: uvcvideo: Create uvc_pm_(get|put) functions
+Date: Thu, 27 Mar 2025 21:05:29 +0000
+Subject: [PATCH v6 3/5] media: uvcvideo: Increase/decrease the PM counter
+ per IOCTL
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,7 +66,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250327-uvc-granpower-ng-v6-2-35a2357ff348@chromium.org>
+Message-Id: <20250327-uvc-granpower-ng-v6-3-35a2357ff348@chromium.org>
 References: <20250327-uvc-granpower-ng-v6-0-35a2357ff348@chromium.org>
 In-Reply-To: <20250327-uvc-granpower-ng-v6-0-35a2357ff348@chromium.org>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
@@ -77,100 +78,220 @@ Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
  Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
 
-Most of the times that we have to call uvc_status_(get|put) we need to
-call the usb_autopm_ functions.
+Now we call uvc_pm_get/put from the device open/close. This low
+level of granularity might leave the camera powered on in situations
+where it is not needed.
 
-Create a new pair of functions that automate this for us. This
-simplifies the current code and future PM changes in the driver.
+Increase the granularity by increasing and decreasing the Power
+Management counter per ioctl. There are two special cases where the
+power management outlives the ioctl: async controls and streamon. Handle
+those cases as well.
+
+In a future patch, we will remove the uvc_pm_get/put from open/close.
 
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/media/usb/uvc/uvc_v4l2.c | 36 ++++++++++++++++++++++++------------
- drivers/media/usb/uvc/uvcvideo.h |  4 ++++
- 2 files changed, 28 insertions(+), 12 deletions(-)
+ drivers/media/usb/uvc/uvc_ctrl.c | 37 +++++++++++++++++++++++++++----------
+ drivers/media/usb/uvc/uvc_v4l2.c | 39 +++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 64 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index cbf19aa1d82374a08cf79b6a6787fa348b83523a..3fad289e41fd5a757f8dcf30a6238c694fc4250c 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1812,38 +1812,49 @@ static void uvc_ctrl_send_slave_event(struct uvc_video_chain *chain,
+ 	uvc_ctrl_send_event(chain, handle, ctrl, mapping, val, changes);
+ }
+ 
+-static void uvc_ctrl_set_handle(struct uvc_fh *handle, struct uvc_control *ctrl,
+-				struct uvc_fh *new_handle)
++static int uvc_ctrl_set_handle(struct uvc_fh *handle, struct uvc_control *ctrl,
++			       struct uvc_fh *new_handle)
+ {
+ 	lockdep_assert_held(&handle->chain->ctrl_mutex);
+ 
+ 	if (new_handle) {
++		int ret;
++
+ 		if (ctrl->handle)
+ 			dev_warn_ratelimited(&handle->stream->dev->udev->dev,
+ 					     "UVC non compliance: Setting an async control with a pending operation.");
+ 
+ 		if (new_handle == ctrl->handle)
+-			return;
++			return 0;
+ 
+ 		if (ctrl->handle) {
+ 			WARN_ON(!ctrl->handle->pending_async_ctrls);
+ 			if (ctrl->handle->pending_async_ctrls)
+ 				ctrl->handle->pending_async_ctrls--;
++			ctrl->handle = new_handle;
++			handle->pending_async_ctrls++;
++			return 0;
+ 		}
+ 
++		ret = uvc_pm_get(handle->chain->dev);
++		if (ret)
++			return ret;
++
+ 		ctrl->handle = new_handle;
+ 		handle->pending_async_ctrls++;
+-		return;
++		return 0;
+ 	}
+ 
+ 	/* Cannot clear the handle for a control not owned by us.*/
+ 	if (WARN_ON(ctrl->handle != handle))
+-		return;
++		return -EINVAL;
+ 
+ 	ctrl->handle = NULL;
+ 	if (WARN_ON(!handle->pending_async_ctrls))
+-		return;
++		return -EINVAL;
+ 	handle->pending_async_ctrls--;
++	uvc_pm_put(handle->chain->dev);
++	return 0;
+ }
+ 
+ void uvc_ctrl_status_event(struct uvc_video_chain *chain,
+@@ -2137,15 +2148,16 @@ static int uvc_ctrl_commit_entity(struct uvc_device *dev,
+ 
+ 		ctrl->dirty = 0;
+ 
++		if (!rollback && handle && !ret &&
++		    ctrl->info.flags & UVC_CTRL_FLAG_ASYNCHRONOUS)
++			ret = uvc_ctrl_set_handle(handle, ctrl, handle);
++
+ 		if (ret < 0) {
+ 			if (err_ctrl)
+ 				*err_ctrl = ctrl;
+ 			return ret;
+ 		}
+ 
+-		if (!rollback && handle &&
+-		    ctrl->info.flags & UVC_CTRL_FLAG_ASYNCHRONOUS)
+-			uvc_ctrl_set_handle(handle, ctrl, handle);
+ 	}
+ 
+ 	return 0;
+@@ -3222,6 +3234,7 @@ int uvc_ctrl_init_device(struct uvc_device *dev)
+ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle)
+ {
+ 	struct uvc_entity *entity;
++	int i;
+ 
+ 	guard(mutex)(&handle->chain->ctrl_mutex);
+ 
+@@ -3236,7 +3249,11 @@ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle)
+ 		}
+ 	}
+ 
+-	WARN_ON(handle->pending_async_ctrls);
++	if (!WARN_ON(handle->pending_async_ctrls))
++		return;
++
++	for (i = 0; i < handle->pending_async_ctrls; i++)
++		uvc_pm_put(handle->stream->dev);
+ }
+ 
+ /*
 diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 22886b47d81c2cfd0a744f34a50d296d606e54e8..1d5be045d04ecbf17e65e14b390e494a294b735f 100644
+index 1d5be045d04ecbf17e65e14b390e494a294b735f..8bccf7e17528b62f2594c0dad99405034532973d 100644
 --- a/drivers/media/usb/uvc/uvc_v4l2.c
 +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -26,6 +26,27 @@
+@@ -697,6 +697,9 @@ static int uvc_v4l2_release(struct file *file)
+ 	if (uvc_has_privileges(handle))
+ 		uvc_queue_release(&stream->queue);
  
- #include "uvcvideo.h"
- 
-+int uvc_pm_get(struct uvc_device *dev)
-+{
-+	int ret;
++	if (handle->is_streaming)
++		uvc_pm_put(stream->dev);
 +
-+	ret = usb_autopm_get_interface(dev->intf);
+ 	/* Release the file handle. */
+ 	uvc_dismiss_privileges(handle);
+ 	v4l2_fh_del(&handle->vfh);
+@@ -862,6 +865,11 @@ static int uvc_ioctl_streamon(struct file *file, void *fh,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = uvc_pm_get(stream->dev);
++	if (ret) {
++		uvc_queue_streamoff(&stream->queue, type);
++		return ret;
++	}
+ 	handle->is_streaming = true;
+ 
+ 	return 0;
+@@ -879,7 +887,10 @@ static int uvc_ioctl_streamoff(struct file *file, void *fh,
+ 	guard(mutex)(&stream->mutex);
+ 
+ 	uvc_queue_streamoff(&stream->queue, type);
+-	handle->is_streaming = false;
++	if (handle->is_streaming) {
++		handle->is_streaming = false;
++		uvc_pm_put(stream->dev);
++	}
+ 
+ 	return 0;
+ }
+@@ -1378,9 +1389,11 @@ static int uvc_v4l2_put_xu_query(const struct uvc_xu_control_query *kp,
+ #define UVCIOC_CTRL_MAP32	_IOWR('u', 0x20, struct uvc_xu_control_mapping32)
+ #define UVCIOC_CTRL_QUERY32	_IOWR('u', 0x21, struct uvc_xu_control_query32)
+ 
++DEFINE_FREE(uvc_pm_put, struct uvc_device *, if (_T) uvc_pm_put(_T))
+ static long uvc_v4l2_compat_ioctl32(struct file *file,
+ 		     unsigned int cmd, unsigned long arg)
+ {
++	struct uvc_device *uvc_device __free(uvc_pm_put) = NULL;
+ 	struct uvc_fh *handle = file->private_data;
+ 	union {
+ 		struct uvc_xu_control_mapping xmap;
+@@ -1389,6 +1402,12 @@ static long uvc_v4l2_compat_ioctl32(struct file *file,
+ 	void __user *up = compat_ptr(arg);
+ 	long ret;
+ 
++	ret = uvc_pm_get(handle->stream->dev);
 +	if (ret)
 +		return ret;
 +
-+	ret = uvc_status_get(dev);
-+	if (ret)
-+		usb_autopm_put_interface(dev->intf);
++	uvc_device = handle->stream->dev;
 +
+ 	switch (cmd) {
+ 	case UVCIOC_CTRL_MAP32:
+ 		ret = uvc_v4l2_get_xu_mapping(&karg.xmap, up);
+@@ -1423,6 +1442,22 @@ static long uvc_v4l2_compat_ioctl32(struct file *file,
+ }
+ #endif
+ 
++static long uvc_v4l2_unlocked_ioctl(struct file *file,
++				    unsigned int cmd, unsigned long arg)
++{
++	struct uvc_fh *handle = file->private_data;
++	int ret;
++
++	ret = uvc_pm_get(handle->stream->dev);
++	if (ret)
++		return ret;
++
++	ret = video_ioctl2(file, cmd, arg);
++
++	uvc_pm_put(handle->stream->dev);
 +	return ret;
 +}
 +
-+void uvc_pm_put(struct uvc_device *dev)
-+{
-+	uvc_status_put(dev);
-+	usb_autopm_put_interface(dev->intf);
-+}
-+
- static int uvc_acquire_privileges(struct uvc_fh *handle);
- 
- static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
-@@ -642,20 +663,13 @@ static int uvc_v4l2_open(struct file *file)
- 	stream = video_drvdata(file);
- 	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
- 
--	ret = usb_autopm_get_interface(stream->dev->intf);
--	if (ret < 0)
--		return ret;
--
- 	/* Create the device handle. */
- 	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
--	if (handle == NULL) {
--		usb_autopm_put_interface(stream->dev->intf);
-+	if (!handle)
- 		return -ENOMEM;
--	}
- 
--	ret = uvc_status_get(stream->dev);
-+	ret = uvc_pm_get(stream->dev);
- 	if (ret) {
--		usb_autopm_put_interface(stream->dev->intf);
- 		kfree(handle);
- 		return ret;
- 	}
-@@ -690,9 +704,7 @@ static int uvc_v4l2_release(struct file *file)
- 	kfree(handle);
- 	file->private_data = NULL;
- 
--	uvc_status_put(stream->dev);
--
--	usb_autopm_put_interface(stream->dev->intf);
-+	uvc_pm_put(stream->dev);
- 	return 0;
- }
- 
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 5ceb01e7831a83507550e1d3313e63da7494b2e4..b9f8eb62ba1d82ea7788cf6c10cc838a429dbc9e 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -768,6 +768,10 @@ void uvc_status_suspend(struct uvc_device *dev);
- int uvc_status_get(struct uvc_device *dev);
- void uvc_status_put(struct uvc_device *dev);
- 
-+/* PM */
-+int uvc_pm_get(struct uvc_device *dev);
-+void uvc_pm_put(struct uvc_device *dev);
-+
- /* Controls */
- extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
- 
+ static ssize_t uvc_v4l2_read(struct file *file, char __user *data,
+ 		    size_t count, loff_t *ppos)
+ {
+@@ -1507,7 +1542,7 @@ const struct v4l2_file_operations uvc_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= uvc_v4l2_open,
+ 	.release	= uvc_v4l2_release,
+-	.unlocked_ioctl	= video_ioctl2,
++	.unlocked_ioctl	= uvc_v4l2_unlocked_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl32	= uvc_v4l2_compat_ioctl32,
+ #endif
 
 -- 
 2.49.0.472.ge94155a9ec-goog
