@@ -1,50 +1,50 @@
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FF42356BE;
-	Wed,  2 Apr 2025 09:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81F7235BF0;
+	Wed,  2 Apr 2025 09:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743586827; cv=none; b=FFKB/ZTIGoGVvUCNgx4AtgbHb/chT8i/j/bR+xJ107kBfj0lta01g1vBeGcjfjswE7hSakWvzdu1qi3/mlZJk2ShKoGZ7AG753FWnP0K3yIQsukBk907qn2ISKHgbsA2vSfF/VWEO7y5aMDBBjlK3E5G+9yWunV6lyCXGjmYbc8=
+	t=1743586983; cv=none; b=Duw3LpzIozV1u6uljuVKJXGNFEvHXI8x1EgfcQjGS7GRWMnYMFyPiH6G0upo27VbsbA57CX7TdPzZRLzdPxgjF08jyVH9pqEQZi5T8iUnpdLV9BVyEbGSrfs1pAkckykzOCSXZdvzB7Mqt+jqcMuODasMKeG5MbXV2fNLbM3CdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743586827; c=relaxed/simple;
-	bh=DjrMlEk0NWBojiuwg0BSTZ8eio5kC51l3XiOG/v3D38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LfT3JEe0coXJgwRe9IfHq4ZsdStusypg71tYuaDbbzPWX/Ji28mlHlqE6fdJ8vJTK0xK68d+oo9noBx+4eAYNmEQlJwjRIL02Y4HD7pjGkuyo/qyslXWtrbOTDObU7C+kdk/PChDLCU+rpoPMB4qSV4EphRyDSYeYTWB8y4NCtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=QuBfI1hB; arc=none smtp.client-ip=91.207.212.93
+	s=arc-20240116; t=1743586983; c=relaxed/simple;
+	bh=aNG+jrxFlonmhDgmPxRzvRwJIMZz5s0z+WZcxhuZUwI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=BGAGYprnJwH9xUOpva5Hjwa2T0IeQqF05iEiGBwrTFqR5rp4bn9SpR6A8UpW7NksiJ16UuKQ880k3yynSkqkBwDnOUDIvuIPF39c07faXajT855JkGI4JDr+4qlHIjicEZSSY+z/o8mNsDg+K/lVU7/HS4+vSDn1Wafbb0UUZEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=oPD1odEV; arc=none smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="QuBfI1hB"
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53299wvc024169;
-	Wed, 2 Apr 2025 11:40:12 +0200
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="oPD1odEV"
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5328CrcH010752;
+	Wed, 2 Apr 2025 11:42:53 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	L5755YSGx4fXv+HeBYR+jRn7wQr+9kPgl7qTQ6N5t1Q=; b=QuBfI1hBQ5aCplZA
-	n9KBNaSTrmIg05Sm1OSbvvqMUknizo1E8hmMLwgcN5uZh8OitLhEoF3DPYA+AAnm
-	EDSOiuLK0hphKV6l+ie2r8r6bRey9y0zhOGSpWATRNqr1Pdk5r/OjOznkaVkadso
-	qt+hl7x+aGqOQF9kvFQqZzl/5GBTWscC2AMGT2PZgieol1EsojmNjsu4rPHbiVpJ
-	pK6GGP3Vh3zHttbWl5ed+z3yJSs1/guvGyBHa1vrgzvLLIkrgNVgA3wYx5OpnvqR
-	OSGBF4B+fj5nxLKJWygzl8r2BX5Ti8dzF7DQzRVA/ta68+DXeBRyfiunFOWXQe+z
-	KyBvzg==
+	3rNfCsM7ceeWvKyul5GHwiFF6qapfQZjGVJxNuVdVbU=; b=oPD1odEVldP1owBg
+	cMUQui198Zm+92F5iaH64PgvtuPXe+AGG5tP9HNHjWt1K4PQq3W4wC7g5FdnxyQp
+	3nU69ijGGDYMTBArUa4v+kyknZxqgpvvUZFWIZOIWX+fiJqh4xbqDZK1l2jsdUK2
+	TdJ+G2iF1n5s36vCw8Hbcw6bKbmbWT7F7df0wv6iXQCJQjR+guuallMPX/Vfuulm
+	lK8yGd/kj0URjM22qPo2waPRQRwV1xBQAlqN0dXlRBYt0GMddcRVP/9MaP4Sb1fM
+	+ID+Il4EFD7glnViz4KnDgBwRR8r7608vh78zLwRORHRClkxeGIucJccFvaSTGmu
+	Wd2dZQ==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45s2c785ba-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45p75qadm7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 02 Apr 2025 11:40:12 +0200 (MEST)
+	Wed, 02 Apr 2025 11:42:53 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 4A14340045;
-	Wed,  2 Apr 2025 11:39:26 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 79EAF4004C;
+	Wed,  2 Apr 2025 11:42:02 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 23F908903D6;
-	Wed,  2 Apr 2025 11:38:28 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2612D8A1420;
+	Wed,  2 Apr 2025 11:41:27 +0200 (CEST)
 Received: from [10.252.30.87] (10.252.30.87) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 2 Apr
- 2025 11:38:27 +0200
-Message-ID: <a0c62797-3c4c-453c-938b-d43666f3b264@foss.st.com>
-Date: Wed, 2 Apr 2025 11:38:26 +0200
+ 2025 11:41:26 +0200
+Message-ID: <7d501bf2-a017-4c02-a96f-184a7d648b6a@foss.st.com>
+Date: Wed, 2 Apr 2025 11:41:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -54,6 +54,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] media: dt-bindings: Add ST VD55G1 camera sensor
  binding
+From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>
 CC: Sylvain Petinot <sylvain.petinot@foss.st.com>,
         Mauro Carvalho Chehab
@@ -71,9 +72,9 @@ References: <20250401-b4-vd55g1-v2-0-0c8ab8a48c55@foss.st.com>
  <20250402-curvy-seriema-of-blizzard-b1c4d9@krzk-bin>
  <228ddf41-e1d0-4d06-9e0e-9e0dad841688@foss.st.com>
  <fd874f4d-d68c-4443-8bb6-115246f4407b@kernel.org>
+ <a0c62797-3c4c-453c-938b-d43666f3b264@foss.st.com>
 Content-Language: en-US
-From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-In-Reply-To: <fd874f4d-d68c-4443-8bb6-115246f4407b@kernel.org>
+In-Reply-To: <a0c62797-3c4c-453c-938b-d43666f3b264@foss.st.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
@@ -82,37 +83,44 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-04-02_03,2025-04-01_01,2024-11-22_01
 
-On 4/2/25 11:11, Krzysztof Kozlowski wrote:
-> On 02/04/2025 10:34, Benjamin Mugnier wrote:
->> Hi Krzysztof,
->>
->> On 4/2/25 09:08, Krzysztof Kozlowski wrote:
->>> On Tue, Apr 01, 2025 at 01:05:58PM +0200, Benjamin Mugnier wrote:
->>>> +    properties:
->>>> +      endpoint:
->>>> +        $ref: /schemas/media/video-interfaces.yaml#
->>>> +        unevaluatedProperties: false
->>>> +
->>>> +        properties:
->>>> +          data-lanes:
->>>> +            items:
->>>> +              const: 1
+
+
+On 4/2/25 11:38, Benjamin Mugnier wrote:
+> On 4/2/25 11:11, Krzysztof Kozlowski wrote:
+>> On 02/04/2025 10:34, Benjamin Mugnier wrote:
+>>> Hi Krzysztof,
 >>>
->>> Not what I asked. Now you miss number of items. Just use the syntax I
->>> proposed. Or was there any issue with it?
+>>> On 4/2/25 09:08, Krzysztof Kozlowski wrote:
+>>>> On Tue, Apr 01, 2025 at 01:05:58PM +0200, Benjamin Mugnier wrote:
+>>>>> +    properties:
+>>>>> +      endpoint:
+>>>>> +        $ref: /schemas/media/video-interfaces.yaml#
+>>>>> +        unevaluatedProperties: false
+>>>>> +
+>>>>> +        properties:
+>>>>> +          data-lanes:
+>>>>> +            items:
+>>>>> +              const: 1
+>>>>
+>>>> Not what I asked. Now you miss number of items. Just use the syntax I
+>>>> proposed. Or was there any issue with it?
+>>>
+>>> No issue I just misunderstood and thought const: 1 was impliying
+>>> maxItems: 1. I'll add maxItems back.
 >>
->> No issue I just misunderstood and thought const: 1 was impliying
->> maxItems: 1. I'll add maxItems back.
+>> That's just longer way to express what I asked for. So I repeat the
+>> question: why not using the syntax I asked for?
 > 
-> That's just longer way to express what I asked for. So I repeat the
-> question: why not using the syntax I asked for?
+> I guess I didn't understand what you asked for.
+> May I ask you to write it ? That will help me a lot.
 
-I guess I didn't understand what you asked for.
-May I ask you to write it ? That will help me a lot.
+By 'it' I mean the binding.
 
 > 
-> Best regards,
-> Krzysztof
+>>
+>> Best regards,
+>> Krzysztof
+> 
 
 -- 
 Regards,
