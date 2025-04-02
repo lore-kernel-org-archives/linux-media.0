@@ -1,40 +1,41 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554B4235BFB;
-	Wed,  2 Apr 2025 11:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E409235BFB;
+	Wed,  2 Apr 2025 11:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743594944; cv=pass; b=gUufNaH3Cbatrkmeox09Bn7ijVKvLLQsCnBDCJwKFRNLHuW5ZrjrTyRNkANsK9KWKOXFXckbH5ENbTcvAUqLlU/c0c9jFxbe+luyJbNr1ymjcsphuVbYht2mkSwHKd20duzNMAJQkk2GwQgjXvaNwjftZGG9SSq28nqAvySK53M=
+	t=1743594951; cv=pass; b=rXeoZvQ1UzJVuGvzR3+JZrzjfMdFMCT0ZW5jae/6svA/Jt4PSM0BJjjtCWvYlMQA9iyQG2xbKxIgwaTcKnfEdS/Kh2r11GuoP8PmWTutYpCT+lUvBhzd0JF/91+ZPbmYkcUFg4bAYlkTl/woVIObyArXASYBVLnB2AX2gb7wrVg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743594944; c=relaxed/simple;
-	bh=dyJeFJYs7KZgd0hGuPcwev7dmphLf6d468l2zUbdeHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Gbo62dtcBmld9Lq1ANTk4WQrT0dZ+wttpikqq5cRncBfjC8/XAUWxpeVFaJ0ZsEY6vS/CnoBkOncDnpUdJohbzfq0dliidvwSTDL0rGQm6HXd599IcHGWUSEXqLsoacjLp6yC5PhHf2oUubCFN/zetRb19827aweg1JLM65Y42o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=ING4b2v2; arc=pass smtp.client-ip=136.143.188.112
+	s=arc-20240116; t=1743594951; c=relaxed/simple;
+	bh=qs81naNaRzLP6Q+1JFRMrs7eUzZyQ/99hs3cWYDZo04=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h7z1bNgRFlB2RRIf3QY9w8Qya8MOy4kV34/kQQX7tVb1Y21UWXOEP/F/YxoonSgUzBr6Io0Zoikwl5FQhUXuABMILrRLlON8BheDhqmQj7C+h0VNpV3N2PWX66gTNT4FoPcWfQftMLYLLyicmuAPTaZ7sYvuf7ZmrbzLFrPdXRQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=T2WwwgGB; arc=pass smtp.client-ip=136.143.184.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="ING4b2v2"
-ARC-Seal: i=1; a=rsa-sha256; t=1743594916; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="T2WwwgGB"
+ARC-Seal: i=1; a=rsa-sha256; t=1743594922; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=TWbAZ0GuL4bb0ioqgLS5EFNyQXLo5Q+g4oLtUX4jkpSORY43djSHcBUuGsEqRJFpzKeKAklVByyALPvxWW8dOfPZBeKdy4iyJ2tb82HWDGTHl1WBOPlblAvAZDPhxZM7Ol9L6yfESF+xVmCITRGz7OCzKVOkquYf2Zm9apxjeCw=
+	b=DiJ6MDYe7zzZtGh4wwrZI8Q+uJ5vkJWotSD9PNbqYv8YHOt1qXJrnRIBCB/8MeuOejaSu5XW6ZOIA2woRR/0RgGuGlQc/ZW7LRSmHUhQqlnGHM4AMcchbId/jwFU/fG5nBR3KqryH7f2i/8lvYpCYcfw/+x2RdsUa1FKQcCO/ME=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1743594916; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=fdb2gePj9volh90yF+EA/VsRgGfn41mWCZbj8hlhP5E=; 
-	b=W5hEdy4LmbsdLqfB2mUKv0wqyfEKaAvfjY+aLBNpHO5TIgH5Qu4NhcwR18Gu8QF3SIruU21oyzjYODl1LKS8IJgO1au8r2Zk4aHSLV6nG1WGwiaEtnXhF5AYs09jLsGpDLOiensiYlXR+TGTaYzNc0Y2tUpUCNyQMg772kb9OhU=
+	t=1743594922; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ZfIL757wzT3AriyUwfgq1gYwdR6dvXTgyX4RnPItMl4=; 
+	b=COnTJBQozXCvuvok/446sBsBD4CNoxp9Fx/Y187RMGPbnYo10NlrCufTFZ4iRezVEJMpPG8KSmp7C6Mje746IYsF7gvCeK8xz4f8SEfIozH8XXJhKwLi5a2D0NMRs7UgZkf9X6AMXhoMCLhQBydMY0OJ6mq/dvNcEVHfMOabAF4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
 	dmarc=pass header.from=<adrian.larumbe@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1743594916;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1743594922;
 	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=fdb2gePj9volh90yF+EA/VsRgGfn41mWCZbj8hlhP5E=;
-	b=ING4b2v2STBn5dJpZGDXGXDRo25gy1KhbHCb262ZqZngYibiM9QQPtlYqJDcFAc9
-	jNqc+qF5PrHIVx5SqDIVYF1a/L3RZWydtl3joXTdCPPkCILXqR9fRN8MUPnyBc6LXRs
-	ZiuVW5G2cFhyPNiE9mc2ee0ge5ZwL7Ih8yjuGqh8=
-Received: by mx.zohomail.com with SMTPS id 1743594914170334.5265743347172;
-	Wed, 2 Apr 2025 04:55:14 -0700 (PDT)
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=ZfIL757wzT3AriyUwfgq1gYwdR6dvXTgyX4RnPItMl4=;
+	b=T2WwwgGBmuUPfgNwVmKieunxBcpGkbHQVWVxSINvIVVtnKA8fs/a1+TiYqMWdxku
+	d36D7ZACNfxGY6VlV7gyyHkp4gQIHl1/cC3I9/llXrYSmsyGMXwZ0I652Iv90NUpAa3
+	trAI2r3e6bP+RJy/Dg9P7ZBJvkp7aJj7WALGkX2o=
+Received: by mx.zohomail.com with SMTPS id 1743594920867215.66543802292108;
+	Wed, 2 Apr 2025 04:55:20 -0700 (PDT)
 From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
 To: Boris Brezillon <boris.brezillon@collabora.com>,
 	Steven Price <steven.price@arm.com>,
@@ -52,10 +53,12 @@ Cc: kernel@collabora.com,
 	linux-kernel@vger.kernel.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v4 0/4] Panthor BO tagging and GEMS debug display
-Date: Wed,  2 Apr 2025 12:54:25 +0100
-Message-ID: <20250402115432.1469703-1-adrian.larumbe@collabora.com>
+Subject: [PATCH v4 2/4] drm/panthor: Add driver IOCTL for setting BO labels
+Date: Wed,  2 Apr 2025 12:54:27 +0100
+Message-ID: <20250402115432.1469703-3-adrian.larumbe@collabora.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250402115432.1469703-1-adrian.larumbe@collabora.com>
+References: <20250402115432.1469703-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,42 +68,137 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch series is aimed at providing UM with detailed memory profiling
-information in debug builds. It is achieved through a device-wide list of
-DRM GEM objects, and also implementing the ability to label BO's from UM
-through a new IOCTL.
+Allow UM to label a BO for which it possesses a DRM handle.
 
-The new debugfs file shows a list of driver DRM GEM objects in tabular mode.
-To visualise it, cat sudo cat /sys/kernel/debug/dri/*.gpu/gems.
-To test this functionality from UM, please refer to this Mesa patch series:
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/34224
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+---
+ drivers/gpu/drm/panthor/panthor_drv.c | 40 +++++++++++++++++++++++++++
+ drivers/gpu/drm/panthor/panthor_gem.h |  2 ++
+ include/uapi/drm/panthor_drm.h        | 19 +++++++++++++
+ 3 files changed, 61 insertions(+)
 
-Discussion of previous revision of this patch series can be found at:
-https://lore.kernel.org/dri-devel/20250327140845.105962-1-adrian.larumbe@collabora.com/
-
-Changelog:
-
-v4:
- - Labelled all kernel BO's, not just heap chunks.
- - Refactored DebugGFs GEMs list handling functions
- - Added debugfs GEMS node mask to tell different kinds of BO's
-
-Adrián Larumbe (4):
-  drm/panthor: Introduce BO labeling
-  drm/panthor: Add driver IOCTL for setting BO labels
-  drm/panthor: Label all kernel BO's
-  drm/panthor: show device-wide list of DRM GEM objects over DebugFS
-
- drivers/gpu/drm/panthor/panthor_device.c |   5 +
- drivers/gpu/drm/panthor/panthor_device.h |  11 ++
- drivers/gpu/drm/panthor/panthor_drv.c    |  66 ++++++++
- drivers/gpu/drm/panthor/panthor_fw.c     |   8 +-
- drivers/gpu/drm/panthor/panthor_gem.c    | 190 ++++++++++++++++++++++-
- drivers/gpu/drm/panthor/panthor_gem.h    |  56 ++++++-
- drivers/gpu/drm/panthor/panthor_heap.c   |   6 +-
- drivers/gpu/drm/panthor/panthor_sched.c  |   9 +-
- include/uapi/drm/panthor_drm.h           |  19 +++
- 9 files changed, 360 insertions(+), 10 deletions(-)
-
---
+diff --git a/drivers/gpu/drm/panthor/panthor_drv.c b/drivers/gpu/drm/panthor/panthor_drv.c
+index 310bb44abe1a..d5277284fe27 100644
+--- a/drivers/gpu/drm/panthor/panthor_drv.c
++++ b/drivers/gpu/drm/panthor/panthor_drv.c
+@@ -1330,6 +1330,44 @@ static int panthor_ioctl_vm_get_state(struct drm_device *ddev, void *data,
+ 	return 0;
+ }
+ 
++static int panthor_ioctl_bo_set_label(struct drm_device *ddev, void *data,
++				  struct drm_file *file)
++{
++	struct drm_panthor_bo_set_label *args = data;
++	struct drm_gem_object *obj;
++	const char *label;
++	int ret = 0;
++
++	obj = drm_gem_object_lookup(file, args->handle);
++	if (!obj)
++		return -ENOENT;
++
++	if (args->size && args->label) {
++		if (args->size > PANTHOR_BO_LABEL_MAXLEN) {
++			ret = -E2BIG;
++			goto err_label;
++		}
++
++		label = strndup_user(u64_to_user_ptr(args->label), args->size);
++		if (IS_ERR(label)) {
++			ret = PTR_ERR(label);
++			goto err_label;
++		}
++	} else if (args->size && !args->label) {
++		ret = -EINVAL;
++		goto err_label;
++	} else {
++		label = NULL;
++	}
++
++	panthor_gem_bo_set_label(obj, label);
++
++err_label:
++	drm_gem_object_put(obj);
++
++	return ret;
++}
++
+ static int
+ panthor_open(struct drm_device *ddev, struct drm_file *file)
+ {
+@@ -1399,6 +1437,7 @@ static const struct drm_ioctl_desc panthor_drm_driver_ioctls[] = {
+ 	PANTHOR_IOCTL(TILER_HEAP_CREATE, tiler_heap_create, DRM_RENDER_ALLOW),
+ 	PANTHOR_IOCTL(TILER_HEAP_DESTROY, tiler_heap_destroy, DRM_RENDER_ALLOW),
+ 	PANTHOR_IOCTL(GROUP_SUBMIT, group_submit, DRM_RENDER_ALLOW),
++	PANTHOR_IOCTL(BO_SET_LABEL, bo_set_label, DRM_RENDER_ALLOW),
+ };
+ 
+ static int panthor_mmap(struct file *filp, struct vm_area_struct *vma)
+@@ -1508,6 +1547,7 @@ static void panthor_debugfs_init(struct drm_minor *minor)
+  * - 1.2 - adds DEV_QUERY_GROUP_PRIORITIES_INFO query
+  *       - adds PANTHOR_GROUP_PRIORITY_REALTIME priority
+  * - 1.3 - adds DRM_PANTHOR_GROUP_STATE_INNOCENT flag
++ * - 1.4 - adds DRM_IOCTL_PANTHOR_BO_SET_LABEL ioctl
+  */
+ static const struct drm_driver panthor_drm_driver = {
+ 	.driver_features = DRIVER_RENDER | DRIVER_GEM | DRIVER_SYNCOBJ |
+diff --git a/drivers/gpu/drm/panthor/panthor_gem.h b/drivers/gpu/drm/panthor/panthor_gem.h
+index 0582826b341a..e18fbc093abd 100644
+--- a/drivers/gpu/drm/panthor/panthor_gem.h
++++ b/drivers/gpu/drm/panthor/panthor_gem.h
+@@ -13,6 +13,8 @@
+ 
+ struct panthor_vm;
+ 
++#define PANTHOR_BO_LABEL_MAXLEN	PAGE_SIZE
++
+ /**
+  * struct panthor_gem_object - Driver specific GEM object.
+  */
+diff --git a/include/uapi/drm/panthor_drm.h b/include/uapi/drm/panthor_drm.h
+index 97e2c4510e69..26b52f147360 100644
+--- a/include/uapi/drm/panthor_drm.h
++++ b/include/uapi/drm/panthor_drm.h
+@@ -127,6 +127,9 @@ enum drm_panthor_ioctl_id {
+ 
+ 	/** @DRM_PANTHOR_TILER_HEAP_DESTROY: Destroy a tiler heap. */
+ 	DRM_PANTHOR_TILER_HEAP_DESTROY,
++
++	/** @DRM_PANTHOR_BO_SET_LABEL: Label a BO. */
++	DRM_PANTHOR_BO_SET_LABEL,
+ };
+ 
+ /**
+@@ -977,6 +980,20 @@ struct drm_panthor_tiler_heap_destroy {
+ 	__u32 pad;
+ };
+ 
++/**
++ * struct drm_panthor_bo_set_label - Arguments passed to DRM_IOCTL_PANTHOR_BO_SET_LABEL
++ */
++struct drm_panthor_bo_set_label {
++	/** @handle: Handle of the buffer object to label. */
++	__u32 handle;
++
++	/** @size: Length of the label, including the NULL terminator. */
++	__u32 size;
++
++	/** @label: User pointer to a NULL-terminated string */
++	__u64 label;
++};
++
+ /**
+  * DRM_IOCTL_PANTHOR() - Build a Panthor IOCTL number
+  * @__access: Access type. Must be R, W or RW.
+@@ -1019,6 +1036,8 @@ enum {
+ 		DRM_IOCTL_PANTHOR(WR, TILER_HEAP_CREATE, tiler_heap_create),
+ 	DRM_IOCTL_PANTHOR_TILER_HEAP_DESTROY =
+ 		DRM_IOCTL_PANTHOR(WR, TILER_HEAP_DESTROY, tiler_heap_destroy),
++	DRM_IOCTL_PANTHOR_BO_SET_LABEL =
++		DRM_IOCTL_PANTHOR(WR, BO_SET_LABEL, bo_set_label),
+ };
+ 
+ #if defined(__cplusplus)
+-- 
 2.48.1
+
