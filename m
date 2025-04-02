@@ -1,133 +1,151 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E41238D25;
-	Wed,  2 Apr 2025 12:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E331023A9A2;
+	Wed,  2 Apr 2025 12:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743598420; cv=none; b=RUa35taEkiFaLCSSsAxbGWa63Ksd+Ru2mYDq+S7CIR/mX2XSS9IqRTjggw+rMG2XC4XXpvcQBpJXtNUfhsGuOK/UHS/6rJ+vySIcZ5b7LhmrZMvKKmeeD0zZ54IZw0VpEVPS51wRs3TU1ez7ksLd4JxPLwyXK/cq11YHLtXbU0Q=
+	t=1743598547; cv=none; b=P14i3rB+f0HRBgoY1vpmOsL2Y3sI0p8ROC5aHKKQ54V0O6TzSaLrU9amkImRpRa7qFKKNhJsrYbi4EYu9L3kBv13X1YIRVXM1F39811pdie/BaV0a3KMe8FUmGIsrsF2VyhBxMjaDH/4KvYEP9MRp1aVYw/FZZM3KuausdEBU5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743598420; c=relaxed/simple;
-	bh=QWAHrdoHZQWrK4dNu2Qq9in6lH220oPuPQXNfKYeiJU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=deqUaxpcVOiNfoe+DNcpZFNrgmBNaC2QRY9jXFB4GVdKN+8SYl1yaG2wMM8rcHUBpT8jPpfm6zD9KNdI70cYetxtlu4k8tcPuA057mJ7LkbCSOl3zrB/zTXcLAB3p+ECJ4x+1pIHP+2LsNhxGVBj+hWumEVI9kwuk4X4LDkWjaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EgpS6NSX; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1743598547; c=relaxed/simple;
+	bh=7Oa7dZIB+yqiTzbdqm9vU96Ae/PK/xcRM4BPNdPHiLo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D0homFUVlZUYOksLPed/o7i5YDZD/bftUb3RaVQAwn9ouXccxNRTZCzJ8PAQYH27sODExMKR/4bvMGsZ83+EZHR72vfyck1WvsfTTtVnerD3tvkAuRjMSYPPapPQYEBdK52OU0gz09o64ZnoBC9BCLuKkVob226wRp29wp8RQKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGXJ1GC7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EgpS6NSX"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5efe8d9ebdfso6051460a12.3;
-        Wed, 02 Apr 2025 05:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743598417; x=1744203217; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QWAHrdoHZQWrK4dNu2Qq9in6lH220oPuPQXNfKYeiJU=;
-        b=EgpS6NSXnqOTQAIJU98K8tAar5bA0gF42DZu5boRp9Pd070HYbxTEAnzOcrC9FvOJJ
-         0Fe8Yu4qdb6R++x2duj9yMPo9hBOXMZu4WdrMwp4H+XLpU00sok0Jn6pBMIeuM5u8LJU
-         Xzr+iEIeEyGUtcXlI8Fndac2127tcI2deqmSut4FSTOJ8zadWJOE/0npr37748bFmf9R
-         gjeMdQS9wDGyi051SORP+tL092SIwrFAWHaEStbwf0QEawe4zdc1MLVM5FH/W/mGP4NZ
-         42Q1jzoAixzdvSstJ9yZGFziTGNqsL4OCujBHuhwN/s9ZknsWvoila4RNBBWAXQnReNG
-         7Ylg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743598417; x=1744203217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QWAHrdoHZQWrK4dNu2Qq9in6lH220oPuPQXNfKYeiJU=;
-        b=Z0JO4Dg9QcGUCx8nZ3D+41/EyN5OIcCLGqXMLx0OYAuZJ+8AUC8wZ+Escj7ZTt5vTZ
-         lS1ydUeHRI4Y4+JMpwJyF95Ajgshfrl92oimH4b7uVCRq1k2kwcOAgvweCU/9ji2XBMs
-         QNHPboqFzCjiIAZbyJA+/JoqHuj7YpKcYP8Ztpl8Cxl9R5QKyngcW2OsdwAwN679yuSb
-         KtvDExK6unTpxFuG7RbPSll7eauvpJ/T3aZGKeQt2RgJ8Nmfn8mA9Q3RUjR7uSl7dqbq
-         FWfYRUw/g8mToBWbkcslOqHdHgki91iI59+6/GHtfEzTL8iuzqdPGWrZAQ1cBAenXrjb
-         3kAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUccaZyYkirq9bTsMj0N5DZIeFeorRpD/CGSnX32kVXsqqTiCLmwKiT8YdBFBmxKcP0St8j0kEExnIBfMs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztbdbXI3dACorNjaiAuu2GBumkSET1Sa/Em5kmb7NQaKxI3sEe
-	riROsZIzuXhVNYAtfgVKzyfaQFJfRwxZNsIjxmEdN0ox3m228IoM8nEmJXVzte1qtfYeQdjKhSA
-	IfxKQIwhuSsDLf0d7Y66XXnV2kIo=
-X-Gm-Gg: ASbGnctCeM5445x/402F94JfMVKB+8OOo/H9X4/sac9PsvCvK6YoIO5bJsB2bEsp9p6
-	NQbP1/mpu+HU6vIhG9KNwHZyOZGssymRLODL60WltB9pJ3aJKWG9/sf0aDsk9ytFxeOh92AQLCa
-	3BOkyFFEeVDuyGmhVCvt4Q+dnFCjfkBDPgwy61oSQ=
-X-Google-Smtp-Source: AGHT+IGxDgr+/GaLpKlsw9St3w6GJvEPpvjphaV5hDOM2BUJ91HNibOwkf5Ij8wA/sKQqWEOmB+VBIEys451X/p7yBI=
-X-Received: by 2002:a17:906:6a0b:b0:ac7:9937:e259 with SMTP id
- a640c23a62f3a-ac79937e35bmr225555866b.0.1743598417114; Wed, 02 Apr 2025
- 05:53:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGXJ1GC7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE952C4CEDD;
+	Wed,  2 Apr 2025 12:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743598546;
+	bh=7Oa7dZIB+yqiTzbdqm9vU96Ae/PK/xcRM4BPNdPHiLo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pGXJ1GC7cuTAJXyvjroGnk7PdyHQ+41FN7uUttyErsCtJb7+RT9qTHPxpFuqkXUlI
+	 Toyf8iMFdiJYYNsKy6fvnFvvc1QsaFdpFYI0/KbBcPqi9k4icNqmnni7k2BDS9N8O4
+	 lbvgJkogySMEC7elETEyjt+zTMThSj+1XtE7A5qTV7oNQFrohiB23GxLQ6eWo4t97l
+	 M8+nqL2yT+SRuDnWdy8ScjRQr6wUogHG3TXs5V/VOMna91Bq2Aep/roOjcaK/oPqny
+	 lSLhkOeVEy/CmvN8biNXd2w1BvgpPyTLeXvQPBn8M1rsY5Y5kzY3D9VWAMvzmSQp22
+	 Nr7sGeMQCrTRA==
+Message-ID: <6f832ce4-03d3-46bc-afcc-86983b2ec47a@kernel.org>
+Date: Wed, 2 Apr 2025 14:55:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67eca38a.d40a0220.22c3d5.88f3@mx.google.com> <CAHp75Vf4abzcNFwo2W-=-fOr1_j51RAUPxDbGNVX9F-Soxbs3A@mail.gmail.com>
- <CAKUZ0z+mqGwyEt8oem7gLMXbNp6D3MPPMXEH5GCdA4_768d=5g@mail.gmail.com>
-In-Reply-To: <CAKUZ0z+mqGwyEt8oem7gLMXbNp6D3MPPMXEH5GCdA4_768d=5g@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 2 Apr 2025 15:53:00 +0300
-X-Gm-Features: AQ5f1JpDktiw_Kd3xROZdIkDbnI11lgI5EHYRPHPVopQZ4eLDQiCWlbTGKfxrq0
-Message-ID: <CAHp75Vdr9YO6GJmomumP=tksZfVj4BtDHx=Rb9Cr4gSQPnt+eg@mail.gmail.com>
-Subject: Re: [PATCH] staging: media: Fix indentation to use tabs instead of spaces
-To: Gabriel <gshahrouzi@gmail.com>
-Cc: linux-media@vger.kernel.org, andy@kernel.org, hdegoede@redhat.com, 
-	mchehab@kernel.org, sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: Add ST VD55G1 camera sensor
+ binding
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+ Sylvain Petinot <sylvain.petinot@foss.st.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+ linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250401-b4-vd55g1-v2-0-0c8ab8a48c55@foss.st.com>
+ <20250401-b4-vd55g1-v2-1-0c8ab8a48c55@foss.st.com>
+ <20250402-curvy-seriema-of-blizzard-b1c4d9@krzk-bin>
+ <228ddf41-e1d0-4d06-9e0e-9e0dad841688@foss.st.com>
+ <fd874f4d-d68c-4443-8bb6-115246f4407b@kernel.org>
+ <a0c62797-3c4c-453c-938b-d43666f3b264@foss.st.com>
+ <7d501bf2-a017-4c02-a96f-184a7d648b6a@foss.st.com>
+ <9f128ce9-6a26-435c-b133-0da80120de2d@kernel.org>
+ <20250402124605.GB13181@pendragon.ideasonboard.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250402124605.GB13181@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 2, 2025 at 3:28=E2=80=AFPM Gabriel <gshahrouzi@gmail.com> wrote=
-:
-> On Wed, Apr 2, 2025 at 3:12=E2=80=AFAM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Apr 2, 2025 at 5:40=E2=80=AFAM <gshahrouzi@gmail.com> wrote:
-> >
-> > Is it your first patch to the Linux kernel? See my comments below.
-> It's among the first patches I've submitted.
+On 02/04/2025 14:46, Laurent Pinchart wrote:
+> On Wed, Apr 02, 2025 at 12:27:08PM +0200, Krzysztof Kozlowski wrote:
+>> On 02/04/2025 11:41, Benjamin Mugnier wrote:
+>>> On 4/2/25 11:38, Benjamin Mugnier wrote:
+>>>> On 4/2/25 11:11, Krzysztof Kozlowski wrote:
+>>>>> On 02/04/2025 10:34, Benjamin Mugnier wrote:
+>>>>>> Hi Krzysztof,
+>>>>>>
+>>>>>> On 4/2/25 09:08, Krzysztof Kozlowski wrote:
+>>>>>>> On Tue, Apr 01, 2025 at 01:05:58PM +0200, Benjamin Mugnier wrote:
+>>>>>>>> +    properties:
+>>>>>>>> +      endpoint:
+>>>>>>>> +        $ref: /schemas/media/video-interfaces.yaml#
+>>>>>>>> +        unevaluatedProperties: false
+>>>>>>>> +
+>>>>>>>> +        properties:
+>>>>>>>> +          data-lanes:
+>>>>>>>> +            items:
+>>>>>>>> +              const: 1
+>>>>>>>
+>>>>>>> Not what I asked. Now you miss number of items. Just use the syntax I
+>>>>>>> proposed. Or was there any issue with it?
+>>>>>>
+>>>>>> No issue I just misunderstood and thought const: 1 was impliying
+>>>>>> maxItems: 1. I'll add maxItems back.
+>>>>>
+>>>>> That's just longer way to express what I asked for. So I repeat the
+>>>>> question: why not using the syntax I asked for?
+>>>>
+>>>> I guess I didn't understand what you asked for.
+>>>> May I ask you to write it ? That will help me a lot.
+>>>
+>>> By 'it' I mean the binding.
+>>
+>> I wrote it last time. I don't think that copying the same here would
+>> change anything. If I can look at v1, you can do as well.
+> 
+> Reading your comment on v1, I would have come up with the exact same
+> result as Benjamin's v2. I can't figure out what alternative description
+> you meant.
+What do you mean by description? I pasted code. The *exact* code to use.
+Benjamin used different code. Two times I asked why you cannot use the
+code I pasted. Still no answer.
 
-Good start!
-
-...
-
-> > > >From d6a08153171ac52b438b6ddc1da50ebdd3550951 Mon Sep 17 00:00:00 20=
-01
-> > > From: Gabriel Shahrouzi <gshahrouzi@gmail.com>
-> > > Date: Tue, 1 Apr 2025 22:04:25 -0400
-> > > Subject: [PATCH] staging: media: Fix indentation to use tabs instead =
-of spaces
-> >
-> > First of all, your patch is mangled. You want to use proper tools,
-> > perhaps. One of which is `git format-patch ...` and another one is
-> > `git send-email ...`
-> I was using git format-patch but not git send-email which seems to
-> have been the issue. The meta-data from the patch was getting appended to
-> the top.
-
-These are just normal headers for an email. They may be used by tools
-such as `git send-email ...` or `mutt -H ...`.
-
-...
-
-> > Change itself is okay, but is this the only one case in the entire
-> > driver (which is something like 100k LoCs long)? Even though, and
-> > while for the training purposes this is fine, you can also think about
-> > checking the common style of other functions, which may be shifted
-> > with TABs, but still having not enough spaces or so.
-
-> Good point. Regarding formatting, it probably makes the most sense to
-> address these issues comprehensively in a single cleanup pass (similar
-> to https://lore.kernel.org/linux-staging/cover.1743524096.git.karanja99er=
-ick@gmail.com/T/#t).
-> This particular instance caught my attention because I initially
-> thought the author might have accidentally used spaces instead of
-> tabs. The line in question used 2 tabs + 8 spaces, while subsequent
-> similarly-aligned lines used 3 tabs. However, after examining
-> different files in the driver, I noticed that while the formatting
-> appears inconsistent, it likely exists for specific reasons. It's
-> probably better to avoid changing a single detail without considering
-> the broader formatting approach, and to treat checkpatch.pl more as a
-> guide than the final authority.
-
-Okay! In any case this patch is fine to me in case you want to send a v2.
-
---=20
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof
