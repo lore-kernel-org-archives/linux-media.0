@@ -1,219 +1,233 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692B024418E;
-	Thu,  3 Apr 2025 08:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5753F19E7D1;
+	Thu,  3 Apr 2025 08:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743670131; cv=none; b=PS6rILZAy4moNcWzlJNvflCkmE9vZ8tDv1aSjo8oKl8G0JlbE54oR+dDZQJRpdLipnZB8hrk9uxQGtSx/s0dpskcZZBtcZJqJL8GkgTjdGG25M1RbHdnsPLqD2NMbXs7eipzhjYExHZGRJwwnOtgKTDhDwLB8ijdqY68UwrdKx8=
+	t=1743670627; cv=none; b=gyADjRsVOQMcfIdCK3zlCO4aytDhgDBrms60TxM/6gANGDmuXS1HDTzWztQCoHS3yPLoY85rpSEYn+tbUQY02ONpbSHb7mKvSwAEg9HNXHmOWn06eid2JWySzn8yy4/H/MeoIvM9EwfgG3G85NJ7YWc35pb05CW8I3R5gbkxdPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743670131; c=relaxed/simple;
-	bh=6UeImrUjl37SdxyeuQAJYtZXHbr2tkKpxiL+FtEBn8M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ThiH/CmijvOCxpmtRrMtmd/QYiO1QVijWo74ogkk4EkC+b0gqrGeClzsfphReLA7ipH6VEtlKxZGFfgJYa08msARkVVAnAfSSRBTKVdIo25FIg6+bALYLN0HFLrCWCj5iSqEr8gLJBdZFBq0WlWoS8H4dJENcLLRrfczwDDWfTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=pHOV/i/v; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	s=arc-20240116; t=1743670627; c=relaxed/simple;
+	bh=SB+xoFy1nJ7KOk1RdNXdI32g9OjbKrxD8GHgrpmRtgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qr7Wkr03q2knaaODs3gYk9kv8SxG4W2HSHLQikqGe+0l/IEQ4UTdASLC1ftVf2ltF05zHIrIVM31ZmzcfbXNiEbzIMBPiEHxRPGDXzzTfne0Y5P+/5jEH0egmwNleZoTbu2egeLg6dc1uaTbeXGA6qmEbLd1Sru7rDhu87btJrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=WfNsuAjB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z+j+9MRo; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="pHOV/i/v"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=s+mVNH2Jzd5MpfRtJUFYaiaXymEwxkO8BqeNglQXZ1Q=; b=pHOV/i/vLrKquhdOPpRXyP5gmY
-	Uf4v95z2aHElcgJyYkax/Ckyvjnm4Olbit7bclKUFJo3VH7c/EU2mLguwHG1NLrsZwIa9zjiEduBn
-	IDCwZfDzmwlXlctFAqIAL5eMAX50ONhDbBNGcYSdi7mRAd5pLYEkh0W5M12RRHM0+Tq4=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:60368 helo=[127.0.1.1])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1u0Fbw-008Iud-9R; Thu, 03 Apr 2025 10:07:40 +0200
-From: Matthias Fend <matthias.fend@emfend.at>
-Date: Thu, 03 Apr 2025 10:07:35 +0200
-Subject: [PATCH 1/2] media: dt-bindings: i2c: add Himax HM1246 image sensor
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="WfNsuAjB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z+j+9MRo"
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfout.phl.internal (Postfix) with ESMTP id 24BD5138022F;
+	Thu,  3 Apr 2025 04:57:03 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 03 Apr 2025 04:57:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743670623;
+	 x=1743757023; bh=XttqXwIkB+SbzoxwV4Vg8HDBQrhlSsokjdPFrPgy+8c=; b=
+	WfNsuAjBYotrx3tXFL9rV1WOQK4EfRCDOwvRopI/IO0VAB1zb8oh6d/ep1bggyFb
+	saZKk0zZX/ob1S+ELX9/AacRIMOTNDG3L/2LrasUgNqQFUQUkrt4IctRAahkzLD5
+	lRy3y/qhc1J10lh1mHHTzJkR+Al4tFWuQMkEUkJ+Ruc0qFiB/l77zalvnJW70qBy
+	VndLzyohNQrwagBI1D4WCN0zJBFFs2ZP32gwlmRr6zjILPcje9GEn0sfT71MEEd9
+	nR+/Fqm6/ZQKEZYvLZepDATwIiqkxIrpPFQDoFZIxhPz8Uu2yTaNrXgKeKwe6tDt
+	mbYwSfR9MGV9639FPh9azQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743670623; x=
+	1743757023; bh=XttqXwIkB+SbzoxwV4Vg8HDBQrhlSsokjdPFrPgy+8c=; b=Z
+	+j+9MRoE6veA54UqoSSmDpngcoXSBWmnC3BkoMtgWTeea1RGY+YXusIKjLj/fq6e
+	rzEuN+3+WQaqZQut1kblliEj0V5BR3b/S8E2cOL5aLjjY+ZZpDbRmi+/Hpjh+d+h
+	cPUU4nr/rtzAJ70XNCMUMS6aDiIoaexqrIh1VzURLI4uvuJxx7dmHI2lw0KwJXyj
+	X9LP1nWytVhr31784v+y5qke7mSWW1/1IAJW2SdoJp9lhhWJuq1ZSFsN9TeYwtLf
+	fIW6jZ08Dy3C2SSwq/cqdQWHOT6dR+mpfbN1ohZqx0Yh52se7Hhopm+bxzv2bQfC
+	SbVBC4AxigtCZ9GR1rq+Q==
+X-ME-Sender: <xms:Xk3uZxe0QHljVpGF1xYuE9XsyN6evaH0Wm4gfPnmDCdNi-p00-vDNg>
+    <xme:Xk3uZ_NzgwH3nZ4QSyRTfEeIMBl0Us9nOoqmSvsRATlUv8ilzQxwOfAEc8jvurSIY
+    A5sZ2ucu-1gHiu37Zc>
+X-ME-Received: <xmr:Xk3uZ6gIiVSIqpuVX4xs1EmBIgJWnQrFnB-4M0shkc785kLWaxEDMI5rgkbD4NE7nwyxB63Z10r322kH0YloNNB8QKAqYhlutQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeekudefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddt
+    tdejnecuhfhrohhmpefpihhklhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrsh
+    houggvrhhluhhnugesrhgrghhnrghtvggthhdrshgvqeenucggtffrrghtthgvrhhnpeev
+    teegtddvvdfhtdekgefhfeefheetheekkeegfeejudeiudeuleegtdehkeekteenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehnihhklhgrshdr
+    shhouggvrhhluhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtphhtthhopeejpd
+    hmohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhmihdrvhgrlhhkvghinhgvnhdo
+    rhgvnhgvshgrshesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepmhgthh
+    gvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhs
+    sehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhgvughirg
+    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrvghnvghs
+    rghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugi
+    dqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgthhgv
+    hhgrsgdohhhurgifvghisehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Xk3uZ68L4wt9JIjMWuYB6FAfepT7zqO-pWoc4B8v6AeY2va9lczWuA>
+    <xmx:Xk3uZ9v3ws-9qPELCtnNtB7qbAms4Tp3QX1qxqkGUgdHFWC-qDYxeA>
+    <xmx:Xk3uZ5HmfIkndz9Df0vgam26B2DvhBJfeeU8FoKxt6p1Ld0Xhd0zrA>
+    <xmx:Xk3uZ0MDnn-bSTfllqsykn6XYvifb-uUwdvXEEgnk8WfyQ8_BtXUAw>
+    <xmx:X03uZ3bD2aakvAjFPaQrxnRVqAi4XTawBfpSrscRD0dE7zdvV_FG_Kga>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Apr 2025 04:57:02 -0400 (EDT)
+Date: Thu, 3 Apr 2025 10:57:00 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: Re: [PATCH 3/3] media: rcar-vin: Fix RAW10
+Message-ID: <20250403085700.GU1240431@ragnatech.se>
+References: <20250324-rcar-fix-raw-v1-0-ae56c1c7a2f6@ideasonboard.com>
+ <20250324-rcar-fix-raw-v1-3-ae56c1c7a2f6@ideasonboard.com>
+ <20250331211122.GA1240431@ragnatech.se>
+ <5ebccf6a-3860-4643-9f92-735163552b7e@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250403-hm1246-v1-1-30990d71bc42@emfend.at>
-References: <20250403-hm1246-v1-0-30990d71bc42@emfend.at>
-In-Reply-To: <20250403-hm1246-v1-0-30990d71bc42@emfend.at>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Matthias Fend <matthias.fend@emfend.at>, 
- bsp-development.geo@leica-geosystems.com
-X-Mailer: b4 0.14.2
-X-Spam-Score: -1.0
-X-Spam-Bar: -
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  Hello, this series adds support for the Himax HM1246 image
-    sensor. The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an
-    active array size of 1296 x 976. The datasheet can b Currently, only the
-   [...] 
- 
- Content analysis details:   (-1.0 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
-  0.0 URIBL_BLOCKED          ADMINISTRATOR NOTICE: The query to URIBL was
-                             blocked.  See
-                             http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-                              for more information.
-                             [URIs: himax.com.tw]
-  0.0 URIBL_DBL_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             dbl.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: himax.com.tw]
-  0.0 URIBL_ZEN_BLOCKED_OPENDNS ADMINISTRATOR NOTICE: The query to
-                             zen.spamhaus.org was blocked due to usage
-                             of an open resolver. See
-                             https://www.spamhaus.org/returnc/pub/
-                             [URIs: himax.com.tw]
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.0 Local_hs1_NotHoststar  Sender is not from hoststar.ch|de|com
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ebccf6a-3860-4643-9f92-735163552b7e@ideasonboard.com>
 
-Add YAML device tree binding for Himax HM1246 image sensor.
+Hi Tomi,
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
----
- .../bindings/media/i2c/himax,hm1246.yaml           | 111 +++++++++++++++++++++
- 1 file changed, 111 insertions(+)
+On 2025-04-03 11:15:04 +0300, Tomi Valkeinen wrote:
+> Hi,
+> 
+> On 01/04/2025 00:11, Niklas Söderlund wrote:
+> > Hi Tomi,
+> > 
+> > Thanks for your work.
+> > 
+> > On 2025-03-24 13:48:54 +0200, Tomi Valkeinen wrote:
+> > > Fix the following to get RAW10 formats working:
+> > > 
+> > > In rvin_formats, the bpp is set to 4 for RAW10. As VIN unpacks RAW10 to
+> > > 16-bit containers, the bpp should be 2.
+> > > 
+> > > Don't set VNDMR_YC_THR to the VNDMR register. The YC_THR is "YC Data
+> > > Through Mode", used for YUV formats and should not be set for RAW10.
+> > > 
+> > > Fix the check related to the RGB666 format and CSI-2 mode. The
+> > > VNMC_INF_RGB666 define is the same as used for RAW10 on Gen4, and RAW10
+> > > is allowed on CSI-2 (whereas RGB666 is not allowed on Gen3 on CSI-2).
+> > > This feels a bit hacky, though, and the formats should really have been
+> > > verified already earlier.
+> > 
+> > I agree, it feels hacky. I would rather just remove the while switch
+> > then try to "fix" it by extending it more. When testing this series I
+> > needed a similar fix for VNMC_INF_RAW8 check below to get it to work on
+> > Gen4.
+> 
+> Why is that? What is VNMC_INF_RAW8 overlapping with?
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..8a67de7e3ffcaa9f1acfe443b1e36fffb79dbacf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/himax,hm1246.yaml
-@@ -0,0 +1,111 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright 2025 Matthias Fend <matthias.fend@emfend.at>
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/himax,hm1246.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Himax HM1246-AWD 1/3.7-Inch megapixel SoC image sensor
-+
-+maintainers:
-+  - Matthias Fend <matthias.fend@emfend.at>
-+
-+description:
-+  The Himax HM1246-AWD is a 1/3.7-Inch CMOS image sensor SoC with an active
-+  array size of 1296 x 976. It is programmable through an I2C interface and
-+  connected via parallel bus.
-+
-+allOf:
-+  - $ref: /schemas/media/video-interface-devices.yaml#
-+
-+properties:
-+  compatible:
-+    const: himax,hm1246
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    description: Input reference clock (6 - 27 MHz)
-+    maxItems: 1
-+
-+  reset-gpios:
-+    description: Active low XSHUTDOWN pin
-+    maxItems: 1
-+
-+  avdd-supply:
-+    description: Power for analog circuit (3.0 - 3.6 V)
-+
-+  iovdd-supply:
-+    description: Power for I/O circuit (1.7 - 3.6 V)
-+
-+  dvdd-supply:
-+    description: Power for digital circuit (1.5 / 1.8 V)
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    additionalProperties: false
-+    description: Parallel video output port
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          bus-type:
-+            const: 5
-+
-+        required:
-+          - bus-type
-+
-+    required:
-+      - endpoint
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - avdd-supply
-+  - iovdd-supply
-+  - dvdd-supply
-+  - port
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/media/video-interfaces.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@24 {
-+            compatible =  "himax,hm1246";
-+            reg = <0x24>;
-+
-+            clocks = <&hm1246_clk>;
-+
-+            reset-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
-+
-+            avdd-supply = <&hm1246_avdd>;
-+            iovdd-supply = <&hm1246_iovdd>;
-+            dvdd-supply = <&hm1246_dvdd>;
-+
-+            orientation = <2>;
-+            rotation = <0>;
-+
-+            port {
-+                endpoint {
-+                    remote-endpoint = <&isp_par_in>;
-+                    bus-type = <MEDIA_BUS_TYPE_PARALLEL>;
-+                    bus-width = <10>;
-+                    hsync-active = <1>; /* active high */
-+                    vsync-active = <1>; /* active high */
-+                    pclk-sample = <1>; /* sample on rising edge */
-+                };
-+            };
-+        };
-+    };
+VNMC_INF_RAW8 is not overlapping the issue is the "if (!vin->is_csi)" 
+check. On Gen3 RAW8 was supposedly only supported on the CSI-2 input, 
+and not on the parallel bus available on some VIN instances.
+
+On Gen4 the checks around vin->is_csi becomes skewed and as you point 
+out should be cloned up. The effect at the moment however is that o Gen4 
+when trying to capture RAW8 is_csi is not set (as this is a gen3 thing) 
+and the "Invalid setting in Digital Pins" error path is hit.
+
+Locally I have now removed this whole swtich, as you point out the 
+formats should already be checked, and as far as I can tell they are.  
+This check is a relic from early Gen3 support. And really proves after 
+the Gen2 media graph clenups are done we should split rcar-dma.c -> 
+rcar-dma-gen{2,3,4}.c to get rid of this mess ;-)
+
+I would change this patch to just remove the whole switch. If you want 
+to keep this fix as is I'm ok with that. I can submit a patch removing 
+the switch if you like on top.
+
+> 
+>  Tomi
+> 
+> > > 
+> > > Fixes: 1b7e7240eaf3 ("media: rcar-vin: Add support for RAW10")
+> > > Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> > > ---
+> > >   drivers/media/platform/renesas/rcar-vin/rcar-dma.c  | 9 +++++++--
+> > >   drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c | 8 ++++----
+> > >   2 files changed, 11 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> > > index 53046614f7a1..f8394be8a922 100644
+> > > --- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> > > +++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+> > > @@ -811,12 +811,17 @@ static int rvin_setup(struct rvin_dev *vin)
+> > >   		case VNMC_INF_YUV8_BT656:
+> > >   		case VNMC_INF_YUV10_BT656:
+> > >   		case VNMC_INF_YUV16:
+> > > -		case VNMC_INF_RGB666:
+> > >   			if (vin->is_csi) {
+> > >   				vin_err(vin, "Invalid setting in MIPI CSI2\n");
+> > >   				return -EINVAL;
+> > >   			}
+> > >   			break;
+> > > +		case VNMC_INF_RGB666:
+> > > +			if (vin->info->model == RCAR_GEN3 && vin->is_csi) {
+> > > +				vin_err(vin, "Invalid setting in MIPI CSI2\n");
+> > > +				return -EINVAL;
+> > > +			}
+> > > +			break;
+> > >   		case VNMC_INF_RAW8:
+> > >   			if (!vin->is_csi) {
+> > >   				vin_err(vin, "Invalid setting in Digital Pins\n");
+> > > @@ -913,7 +918,7 @@ static int rvin_setup(struct rvin_dev *vin)
+> > >   	case V4L2_PIX_FMT_SGBRG10:
+> > >   	case V4L2_PIX_FMT_SGRBG10:
+> > >   	case V4L2_PIX_FMT_SRGGB10:
+> > > -		dmr = VNDMR_RMODE_RAW10 | VNDMR_YC_THR;
+> > > +		dmr = VNDMR_RMODE_RAW10;
+> > >   		break;
+> > >   	default:
+> > >   		vin_err(vin, "Invalid pixelformat (0x%x)\n",
+> > > diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > > index 756fdfdbce61..65da8d513b52 100644
+> > > --- a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > > +++ b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > > @@ -88,19 +88,19 @@ static const struct rvin_video_format rvin_formats[] = {
+> > >   	},
+> > >   	{
+> > >   		.fourcc			= V4L2_PIX_FMT_SBGGR10,
+> > > -		.bpp			= 4,
+> > > +		.bpp			= 2,
+> > >   	},
+> > >   	{
+> > >   		.fourcc			= V4L2_PIX_FMT_SGBRG10,
+> > > -		.bpp			= 4,
+> > > +		.bpp			= 2,
+> > >   	},
+> > >   	{
+> > >   		.fourcc			= V4L2_PIX_FMT_SGRBG10,
+> > > -		.bpp			= 4,
+> > > +		.bpp			= 2,
+> > >   	},
+> > >   	{
+> > >   		.fourcc			= V4L2_PIX_FMT_SRGGB10,
+> > > -		.bpp			= 4,
+> > > +		.bpp			= 2,
+> > >   	},
+> > >   };
+> > > 
+> > > -- 
+> > > 2.43.0
+> > > 
+> > 
+> 
 
 -- 
-2.34.1
-
+Kind Regards,
+Niklas Söderlund
