@@ -1,110 +1,87 @@
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7622D1A3031;
-	Fri,  4 Apr 2025 09:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18B81A265E;
+	Fri,  4 Apr 2025 09:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743757286; cv=none; b=CQ67sDc3A3WqOgRaf78tRRu3S46FzpV63kLfoNtcKbI56Mi3AYPJ+XLmyJZNN1ZX+bPZgmb0RoGcxW1Xna9H98tLfPu16uThvWgqsXQ9Gra+zNchFuHyMJUT/Y7fb8Cgm5QaP0b54YTBO18G+PG/cg+gVqTcfB0l5i7vAfelvAs=
+	t=1743757372; cv=none; b=HpOoV40v0BCY7vcPuuJTaaVP5YzxNzehw1vlzPvOZ2ck4FebGFOrxAZF/170M/L1S+KxKEwvUj2yPjcyrCXn6K/NN4pXr4ONu1gypy+KGSt1NA0JxdeJ3mlCqnzGmzEElh2dy9epV3Kwp3NPW0xbDmautkNIRqFi0SyCXqxPNZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743757286; c=relaxed/simple;
-	bh=rh/0DiLc06njMesCXvy0xrm4fBBepKP0I72Ww69sE8A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=c7zj8Tzv6W3kT64PB41oQEmYA0BhTFjpGBorE6NQsuP8Y6HBqsejVw90dg9gE+Z83AU1x780CEebl91iMP0ofz7lU0LeQJ36+FFChuPxpKD4GlMi3mWtNI9LDNomtl/PGaE09Hi8sQAr5WWPWMNg6esv8F+bY4DQrVf62i3k1wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ozlabs.org; spf=pass smtp.mailfrom=ozlabs.org; dkim=pass (2048-bit key) header.d=ozlabs.org header.i=@ozlabs.org header.b=POc5E/b+; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ozlabs.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ozlabs.org
+	s=arc-20240116; t=1743757372; c=relaxed/simple;
+	bh=wm44pMRxSMtVrJZ9//WbNLyZvf+/VMaxa9Bl2u1h3DU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gETNNL1zuDMHRkrgn8hWucuQRql3bUsQMPpqZYJZOy8PduWZfvpaML0vyfKxwl/kR+NUIMhgV0UsucSuGeu44vDJFq66isX3PT7USG4wVuLm/fe7EcSozuHldSZtAgDEJORNt/vfIpc3R2Z22dbgZz5nKMJ5L5t3h3eWK8Y6EB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RqqiIGmV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ozlabs.org header.i=@ozlabs.org header.b="POc5E/b+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ozlabs.org;
-	s=201707; t=1743757280;
-	bh=rh/0DiLc06njMesCXvy0xrm4fBBepKP0I72Ww69sE8A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=POc5E/b+AglzAkY37sDRa/BDBtwIOb5JtEf38ItfllacsvyAoJ6qEG+ptCBMH85cU
-	 exN1qESJmMuVAaqeYVEx0Zx+5FSea+pTuEuHFAAVrNYXpzibQhqLh1DsPBGvSciGjA
-	 RyKNNchWJOxVOiut7+Pkir7mGi+N2faVLqorOR0+4ELgC3jA8tGF2M2MziFNRNXmyN
-	 7p3NKStjr+0nrOSMqn2yWu7rZpEK4jSVxfwhLron6DRu5V5j+4YTYwoVWzQOSqBL9D
-	 MmV81L2OARI4NP/P9sMvY1YvHear7fw9ve2Cg4VgwbPsXHfQlRY1dULsVO5Igk2Q+p
-	 Pbd3oPliPLCzw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZTXdf2VVvz4x8w;
-	Fri,  4 Apr 2025 20:01:10 +1100 (AEDT)
-Message-ID: <811962e9c4964dd06eddb2fffab284946878df4e.camel@ozlabs.org>
-Subject: Re: [PATCH v3 00/16] Introduce and use generic parity16/32/64 helper
-From: Jeremy Kerr <jk@ozlabs.org>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>, "H. Peter Anvin" <hpa@zytor.com>, 
- David Laight <david.laight.linux@gmail.com>, Andrew Cooper
- <andrew.cooper3@citrix.com>,  Laurent.pinchart@ideasonboard.com,
- airlied@gmail.com, akpm@linux-foundation.org,  alistair@popple.id.au,
- andrew+netdev@lunn.ch, andrzej.hajda@intel.com, 
- arend.vanspriel@broadcom.com, awalls@md.metrocast.net, bp@alien8.de, 
- bpf@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com, 
- brcm80211@lists.linux.dev, dave.hansen@linux.intel.com,
- davem@davemloft.net,  dmitry.torokhov@gmail.com,
- dri-devel@lists.freedesktop.org,  eajames@linux.ibm.com,
- edumazet@google.com, eleanor15x@gmail.com,  gregkh@linuxfoundation.org,
- hverkuil@xs4all.nl, jernej.skrabec@gmail.com,  jirislaby@kernel.org,
- joel@jms.id.au, johannes@sipsolutions.net, jonas@kwiboo.se, 
- jserv@ccns.ncku.edu.tw, kuba@kernel.org, linux-fsi@lists.ozlabs.org, 
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-serial@vger.kernel.org, linux-wireless@vger.kernel.org, 
- linux@rasmusvillemoes.dk, louis.peens@corigine.com, 
- maarten.lankhorst@linux.intel.com, mchehab@kernel.org, mingo@redhat.com, 
- miquel.raynal@bootlin.com, mripard@kernel.org, neil.armstrong@linaro.org, 
- netdev@vger.kernel.org, oss-drivers@corigine.com, pabeni@redhat.com, 
- parthiban.veerasooran@microchip.com, rfoss@kernel.org, richard@nod.at, 
- simona@ffwll.ch, tglx@linutronix.de, tzimmermann@suse.de, vigneshr@ti.com, 
- x86@kernel.org
-Date: Fri, 04 Apr 2025 17:01:09 +0800
-In-Reply-To: <Z++cbTTp8leOJ5O+@visitorckw-System-Product-Name>
-References: <Z9CyuowYsZyez36c@thinkpad>
-	 <80771542-476C-493E-858A-D2AF6A355CC1@zytor.com>
-	 <Z9GtcNJie8TRKywZ@thinkpad>
-	 <Z9G2Tyypb3iLoBjn@visitorckw-System-Product-Name>
-	 <Z9KMKwnZXA2mkD2s@visitorckw-System-Product-Name>
-	 <Z+AlyB461xwMxMtG@visitorckw-System-Product-Name>
-	 <eec0dfd7-5e4f-4a08-928c-b7714dbc4a17@zytor.com>
-	 <Z+6dh1ZVIKWWOKaP@visitorckw-System-Product-Name>
-	 <Z-6zzP2O-Q7zvTLt@thinkpad>
-	 <3ebd280e6697790da55f88a5e9e87b4cab407253.camel@ozlabs.org>
-	 <Z++cbTTp8leOJ5O+@visitorckw-System-Product-Name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RqqiIGmV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C705C4CEDD;
+	Fri,  4 Apr 2025 09:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743757372;
+	bh=wm44pMRxSMtVrJZ9//WbNLyZvf+/VMaxa9Bl2u1h3DU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RqqiIGmVdSKS3ZhKoSM/x0QlgQ23XAWfSOYUsnl1O0R+0B8JuyU2o4hdmFBG+mxUK
+	 /QZmusJroU1fGCg6PjHm6r3xE/Xsl7b4IWFHWrz6AOSisgMB7DuPITh/7g5En3TSw6
+	 yXObcPqrcDXbZ43RKEcSUOWkPIfns6PuMUkYuExLz8kJIwNUQF2Cv4cZW4sW5Oqpm2
+	 b8XgdgJQDgkWuW/IjQGAaXjMgDts9OrxnQhONT99hlIiaU7cvEKchOJ7wRKOJ/aAFf
+	 mqU4ea+FIXpaeG3kQe0OBq/Dj4N7hn7mOn8/FO5FpoveryTtk4OU1ziaE8RULWhZcw
+	 l0/oESDsSHIxg==
+Message-ID: <70891a99-d2ca-4fd3-a88d-2f66a9a78f66@kernel.org>
+Date: Fri, 4 Apr 2025 10:02:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/8] Reup: SM8350 and SC8280XP venus support
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
+References: <20250304-b4-linux-media-comitters-sc8280xp-venus-v1-0-279c7ea55493@linaro.org>
+ <8cfaeb25-2657-9df4-5cea-018aad62f579@quicinc.com>
+ <it3njgklhnedjzojafuxpjy3o5zfulgdclweyobv7kjgtpjmzx@6opje7yms4yg>
+ <1dd6e03d-09be-4853-741a-4fb47b7619a0@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bod@kernel.org>
+In-Reply-To: <1dd6e03d-09be-4853-741a-4fb47b7619a0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Kuan-Wei,
+On 04/04/2025 06:24, Vikash Garodia wrote:
+>>> How different is this from sm8250 which is already enabled on iris driver ?
+>> As far as I remember, SM8250 support in Iris did not reach
+>> feature-parity yet. So in my opinion it is fine to add new platforms to
+>> the Venus driver, that will later migrate to the Iris driver.
+> I would say, from decoder side all codecs are there now on Iris. H264 merged,
+> while h265 and VP9 dec are posted as RFC, there is one compliance failure which
+> is under debug to post them as regular patches.
+> If we are mainly looking for decode usecases, then we should be on Iris.
+> Preference would be to stay on Iris, otherwise we would have that extra ask to
+> port it later from venus to iris.
 
-> Thanks for your feedback.
+Right now venus represents 9/20 - 45% of the patches being churned for 
+sc8280xp.
 
-No problem!
+https://github.com/jhovold/linux/tree/wip/sc8280xp-6.14-rc7
 
-> IIUC, from the fsi-i2c perspective, parity efficiency isn't a major
-> concern,
+This is a good debate to have, however my memory of what we collectively 
+agreed both in public and private was to continue to merge new silicon 
+<= HFI6XX into venus unless and until iris hit feature parity for HFI6XX 
+and to continue with venus at that point for < HFI6XX.
 
-Yes
+So merging sc8280xp - HFI6XX is consistent with our agreement, the right 
+thing to do for our users and a big win in terms of technical debt 
+reduction.
 
-> but you still prefer optimizing with methods like __builtin_parity().
+I will post an update to this series ASAP.
 
-No, it's not really about optimisation. In the case of this driver, my
-preference would be more directed to using common code (either in the
-form of these changes, or __builtin_parity) rather than any performance
-considerations.
-
-The implementation details I gave was more a note about the platforms
-that are applicable for the driver.
-
-Cheers,
-
-
-Jeremy
+---
+bod
