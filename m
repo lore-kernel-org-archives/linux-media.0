@@ -1,115 +1,57 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC6D611E;
-	Fri,  4 Apr 2025 09:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C0C611E;
+	Fri,  4 Apr 2025 09:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743757238; cv=none; b=LcYL3+0RO0QevQFcu/VU1AnRYiZW1EencyKavAMlsu8eng7r4j1JOk0eInGC5z+9gO/UT+8Y5mXfNIXsNYBHx807FEe7HbSYnnuHFVc4P9mPq2FDMRQ5aVpmf0VTcsByDY9AxCQSKaSZbjdhEzVsU3UtR6n4HH02Jvh6O93f0Pg=
+	t=1743757283; cv=none; b=tEXUSb9A1luoFgLZhR5sHIZ8UlFnB3eZjbGwCzT/NBn8saZqghCDJroqdYZHevqfJtzeN2eMgzR/DWGE7ZJQDitB5U6vJoaVGaYaegnV+mTHHfuz8OYZfCDd/+RpGkI6UKgMFFaVmeBywHyq4c5AA+GV0xNdwjyznZ7V/u66/WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743757238; c=relaxed/simple;
-	bh=dDw9nB3R5CrigY7byXXpDEVqVujq14h4RJcGIbk8Eyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cVh7l0uvM2NIduAaWIE4dIhAr3ZNoBDTPelQUTlCBsoB4S12dUntuOI4hoMEYw0lJtGfNRRGMaRAfbckrz0k7INGbLupvxeqqdFKD7YVS5lYXiLXIl+3RAiqZAjPMA0h9MCgTCPwMYzAbDasjgsNZyye8CZUTD1MN4iTL9Nsqlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cx7pXNXy; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cx7pXNXy"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac298c8fa50so300849466b.1;
-        Fri, 04 Apr 2025 02:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743757235; x=1744362035; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZZIhlXmSEM4mLMGt9PJm09NKzZfuiEVonPYgb5H/yw=;
-        b=Cx7pXNXyD+fJyZgOa66cHFUHggvW1Zfs2fGsTIhchCFR/UNsZ/KQaG+48ezEpbWfMz
-         5OICLHAexn0Lcf/LSax24K5rCqTPo6ambPj05IcNuyHJdEK/JQXp03P3HgrugaWDht4+
-         cdos7lzPQ0PBfwzoQwTujqm3PaGanLT5hD+QkWtMIsMSWorZQtIOAGH5eOKTpYiQdHey
-         9Z2ZOSBLk1yO+rw3AHzutPrr0i0DV0RPUDEMXFzxTim1o9RSe9PqW81VG/G/CsbaQD+i
-         xB1UzgsCWcwfd6Sd1QSp/NAoOvll16X5JLfXTvfDL7rQbi0nOekeSUR5Kkwppro9VgdE
-         H8rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743757235; x=1744362035;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HZZIhlXmSEM4mLMGt9PJm09NKzZfuiEVonPYgb5H/yw=;
-        b=EPvQ+I7tb0vgt3hiBv4c/nMs8PEhnnowucAvLHkVJdhq/ajlQTuF6sXYgE7XjoEmEM
-         TqA8og3J5UT82zKVCuT6xTvJr2FMrvPosht/KZsWpuWCFpHxMDIF1jcxSoA07+pz6Yfk
-         7ooafa+jU9QyBXhxIkBVJN5comoL/jLQ6bYSEOuNkxmX8WHN4/AN0sQFuR1/hwNW2Tz7
-         hKnewj4kS2P/3DH6a2ceVm/vjcRZntPsIDKUUHFIXzxFxfKjeCC34jX25ixL182qJyv3
-         ApGDO3ZtAqBC2UnVQ7ManEHYaLWseoy2BdIPGsFpCghxgVyemo0gaDu/p/Yl8xpv0ygy
-         f2aw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8fg4h1zKD3EMYM8j4y4mCRE7OMtXieN0GjZYGNM88wdMTQVIG0LLDEzZNb/7VE/ReBsOnJfedW8BsrJc=@vger.kernel.org, AJvYcCUQjK2UoU/2dDC+N3OVKuC/Gj8AIaex+OEZDoJX+35wTDWV4wtzkLP4XBDCHkyBmmOV/MxQi7noO6gExCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx18wXNu+HNpKCl8/8a8FON3iYqPUNE6Br8U2FNuAihk8YSqvQY
-	IBxH836dki/UeOfnrBtIUsm0K0IAx0fZM+OUbeSfnJB63UAoLZHm
-X-Gm-Gg: ASbGncuFWe8EGwu2IgdNUrD91SU7tZMCy54w1saugYVGs/ORl/4wCUrvPAh4XzittIA
-	jMgai3cqnL51lLg4KJLWBuhhoe6gGO9uGdio9mYktU2IlFcWiMf2i+9U23XOP5KTPBrx/38lugZ
-	W0gaFsfFH/LfzB7OZlaimIKm3/PI9apoZE37jRFnNYmm9bl5Hulk3dgoztd95M0IXP2R2jmRlGf
-	92hmFvyR8mk58Qvbgjxn4kQd+W61vuICngd58s4XineRnBQ0TPSOUUVTvOAs0nYnI0Pn2m4zSvN
-	R7bHgaDUrPImHGBILcRKn77RHYHFnInzrCL/wIJApCn2c3u9vkCIFiYCStNzWIk0LKnAHg==
-X-Google-Smtp-Source: AGHT+IFKaYCa9Ekb9gEfEN5MRzSJWHbOs1q70b7ER2jDUNXjdVPmL24jFWpqdnQ80yp71nL0KKYsSg==
-X-Received: by 2002:a17:907:988:b0:ac7:31a4:d4e9 with SMTP id a640c23a62f3a-ac7d16bc089mr299516766b.4.1743757234491;
-        Fri, 04 Apr 2025 02:00:34 -0700 (PDT)
-Received: from demon-pc.localdomain ([188.27.129.206])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7bfe9adc6sm222086166b.59.2025.04.04.02.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Apr 2025 02:00:33 -0700 (PDT)
-From: Cosmin Tanislav <demonsingur@gmail.com>
-To: 
-Cc: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Naushir Patuck <naush@raspberrypi.com>,
-	linux-media@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Cosmin Tanislav <demonsingur@gmail.com>
-Subject: [PATCH v2] media: platform: rpi1-cfe: fix pad in call to get_mbus_config()
-Date: Fri,  4 Apr 2025 12:00:25 +0300
-Message-ID: <20250404090026.2986810-1-demonsingur@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1743757283; c=relaxed/simple;
+	bh=FUkQE59vOl2KrCQ+b2YhVodynXOMSSv8eih8WYtzQlM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HFvkJLvY3FQacUkc9wwC9kARp52fm8QfIRoFdJ9FUh7OZwM7tGzqNiO9u3IhA9eXTbWJByyf0uATEfsPB8QwgnGt61kDV5IVpC7IRivQfdw8WMX5FdslZ+FoGvRXIcQsvBURnOiUD5DGDvgPYxdyowB8v99GgIJvF/804t06O78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 04C5168B05; Fri,  4 Apr 2025 11:01:12 +0200 (CEST)
+Date: Fri, 4 Apr 2025 11:01:11 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Huan Yang <link@vivo.com>
+Cc: bingbu.cao@linux.intel.com, Matthew Wilcox <willy@infradead.org>,
+	Christoph Hellwig <hch@lst.de>, Gerd Hoffmann <kraxel@redhat.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uladzislau Rezki <urezki@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	opensource.kernel@vivo.com, Muchun Song <muchun.song@linux.dev>
+Subject: CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP is broken, was Re: [RFC PATCH
+ 0/6] Deep talk about folio vmap
+Message-ID: <20250404090111.GB11105@lst.de>
+References: <20250327092922.536-1-link@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250327092922.536-1-link@vivo.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-The source subdevice might be using a source pad not equal to 0.
+After the btrfs compressed bio discussion I think the hugetlb changes that
+skip the tail pages are fundamentally unsafe in the current kernel.
 
-Use the already existing source_pad field of cfe.
-
-Fixes: 6edb685abb2a ("media: raspberrypi: Add support for RP1-CFE")
-Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
----
-
-V2:
- * correct Fixes tag
-
- drivers/media/platform/raspberrypi/rp1-cfe/cfe.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c b/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
-index 69a5f23e7954..7db4fe5e0fd4 100644
---- a/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
-+++ b/drivers/media/platform/raspberrypi/rp1-cfe/cfe.c
-@@ -1206,8 +1206,8 @@ static int cfe_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	cfg_reg_write(cfe, MIPICFG_INTE,
- 		      MIPICFG_INT_CSI_DMA | MIPICFG_INT_PISP_FE);
- 
--	ret = v4l2_subdev_call(cfe->source_sd, pad, get_mbus_config, 0,
--			       &mbus_config);
-+	ret = v4l2_subdev_call(cfe->source_sd, pad, get_mbus_config,
-+			       cfe->source_pad, &mbus_config);
- 	if (ret < 0 && ret != -ENOIOCTLCMD) {
- 		cfe_err(cfe, "g_mbus_config failed\n");
- 		goto err_clear_inte;
--- 
-2.49.0
+That is because the bio_vec representation assumes tail pages do exist, so
+as soon as you are doing direct I/O that generates a bvec starting beyond
+the present head page things will blow up.  Other users of bio_vecs might
+do the same, but the way the block bio_vecs are generated are very suspect
+to that.  So we'll first need to sort that out and a few other things
+before we can even think of enabling such a feature.
 
