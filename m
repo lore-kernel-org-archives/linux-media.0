@@ -1,139 +1,439 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A7A2063FC
-	for <linux-media@vger.kernel.org>; Mon,  7 Apr 2025 15:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40448205AB3
+	for <linux-media@vger.kernel.org>; Mon,  7 Apr 2025 15:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744041139; cv=none; b=uJt8gO8Pp4fxFRuM22fTHsC36W2hwZQeUnRnGrbSvdHhj3Q+w5xltlLpfWlc/EgnUR19INg7JEfooqLiKnsNvXIJ/DUMM1GykRNVTbRzYMkYEwrGvIDPlgq0mdpO2KE4cTBghd3yz21GpuMcUT61S/GW1ZEpFEPMAGSamFRNE8A=
+	t=1744041275; cv=none; b=WUqXNKz2Gpde7bJzQN94GffswawXjAxXmIIhmwhHngAO4mma3aiokfyhjQqBTmGHLuSvdzjqrhb6DUatB7akIDocL6R1fk31rcQHX3ht0W5w3fpdaKzPWEWqCDfDKyCLvJuTvTZwf3GDDc8hhZ6Uoxqu/xyI+p6w/EkpA0yzJjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744041139; c=relaxed/simple;
-	bh=5Y1kkD63GffpokSvoVSgAXKIhsTTpE6ldnuA2Z/5/+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Js6F0EHBgbNgncXHFRsbq1UIeDn6GMX5KxDCvwGxY6q0Vp5vKylIHsvcJUqZpztEKtchT0+aRBW3yMvwcH3dLXi4M864cpUOV09UPgZuYnx1ePwQxAgFMcHDIyrY94YHBmokAQefLo6IDP2C5F+2GkveLoT1ilIS0qwmpZYvuoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IzM0GHCg; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1744041275; c=relaxed/simple;
+	bh=OhZ61zq/qAjqGLauXEolhorzbFURESUr9alCnlCjyMA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zq/909No54KxIeS6KcGRWj5oqgOp7WruMevDQqtg+Cb+ei2GmrymehDEI9f2O6WcZJKrxsstHOoPV/OkMad83nKIx005LP9zR+hAVDhaHANpvOiE4Us9ZcYcg/O1Ns+IIaf9g8foBbbCkiCWMSfBz5TwnlLPlpQJfgVLhsi5ED4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=f3z+C+xs; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IzM0GHCg"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43edb40f357so21710605e9.0
-        for <linux-media@vger.kernel.org>; Mon, 07 Apr 2025 08:52:17 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="f3z+C+xs"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac3eb3fdd2eso515690666b.0
+        for <linux-media@vger.kernel.org>; Mon, 07 Apr 2025 08:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744041136; x=1744645936; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JKXVpHnQ9UfB3mcq/Ytnee0VY/Oh+/K5y49jt5/yJQg=;
-        b=IzM0GHCgX+u095Jd6i7+yevvOfA93QfXrYiF2RWJIuW7ZHX6t3HTYZx/WxYLHbOJgg
-         +P1g+QRWkD5CGvuT04VaK5ZjwjUj0FwicAuKcqz9XfN80dzhSGnSGzwNpaSZHQuaDzau
-         6tXbD0KibM4XmL9WTM3NbJtWhJe0hE0S0KC5NLZOrQDUqY25s/sye61ZsMmO/TlJ/KmJ
-         V1oGkwpyOu2bc94hPAi1zziHTap/bR+MLgQpHT1ubMczNDnkEen271jf2p6OStz9rgHA
-         GN7ZyWFgUCLdNoOfvt1P86IMeT2x7RpgkZmAhOvP2wd2Sk23D0/A7IWlGU48o0flETcA
-         RtSQ==
+        d=chromium.org; s=google; t=1744041271; x=1744646071; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KeMO2MoK/gmaMqqfz//pMM3Aa5UXDizNqUpcKkRXTeQ=;
+        b=f3z+C+xs7jjIepzL6JG5unKlxVI5gTifXXt1+wB5TtKLA4qn6MMAF2zKc+iiribCF7
+         2PuL0uYdHT9DGmHMO4uItJmg4YKzwsZbew+ck8RSA0bjMQr10RKzDe/ROXiHQiWLrt6f
+         fMUkGkJXdF1+KRJHvP8RJRO22B0CM97aZOz6U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744041136; x=1744645936;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JKXVpHnQ9UfB3mcq/Ytnee0VY/Oh+/K5y49jt5/yJQg=;
-        b=mMadhKBKdtYEJkjjbDFLdpGYX8+p/+su2mpulk5bN6d1k0JCoQ4AMTV84AgMG6oIb0
-         ux8B6HYsMKYCdWvi1JdN9gQOZQOL7x2FgZSnDJAevYocF9e9W3wL17ZspT3qZdP+Dg9Q
-         isY79faFl4sQLAtjk2Pckh01Lu3LAeP6S7mjsJZsBoWQBtActGkmhih6hL5iM0H7mska
-         OhMJa/9QbqEiBFqQcBJ/QAyyidcBmKm4A/89fsf661210e2c+6g4cbGoakIOPsQ2FW5z
-         F9WpbvKNn0y+/tNpvtV0xc8Yzj02lATl6L38pcu91X3soSvBNz6U+Jk7AR3msalIP98c
-         KtJg==
-X-Gm-Message-State: AOJu0YzswXtxSJPTYA1rvjrQ4saYw68O78pRaRkCWQosBQvs80wtYQ6c
-	Bbui20+/JJxFe9J0bMxE2/iPESZ7hrQnB1iOAnqznGW/M7Sdm+rn3IfNTp/kveT1Vgyztf6q9iP
-	OIBI=
-X-Gm-Gg: ASbGncuavuVxo9kbnOp2hQVVXTwDrJnOnIfnaWq9vufZYTexnMBoKQK2bTVJwVQyycV
-	ZuNfOf9X1mr4fBQNAi3W+pTiPOIQW8QpojCKfz03EZdIEc8X/jgMeQZkAD6ZJitbrSOEqKp/bC9
-	15DJkIB3xNuyWaYo8DSSRmDh/OOQlA9lnch25h2zqTxBT2MNRR8iNGjtN35uL+q8rwYGtHH3GXN
-	oluwaDVHkkMF/zwj4OlZxjjGLCUc3z04Hm0fQe/YNetISHb8/kkfVyJbmNR6pVJem5zS9l197Ad
-	xQfDhStMwUW/YIf+F8rs3u6RmnIR2EzkWtxb36UH5yWii4iMhgL6HzLj5dNY8GsflaKavfWDn8N
-	T+6cMpWZ07A==
-X-Google-Smtp-Source: AGHT+IFbrdnI0bm3X3wXVKLHpcb20gRsAzFE7lNyp40eyc5wEc6nf7w8wnTgwtpWKtCfdc480jt9mA==
-X-Received: by 2002:a05:600c:4fd6:b0:43b:c5a3:2e1a with SMTP id 5b1f17b1804b1-43ee0616f6fmr94548555e9.2.1744041136210;
-        Mon, 07 Apr 2025 08:52:16 -0700 (PDT)
-Received: from [192.168.0.34] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec34be2e6sm133750525e9.18.2025.04.07.08.52.14
+        d=1e100.net; s=20230601; t=1744041271; x=1744646071;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KeMO2MoK/gmaMqqfz//pMM3Aa5UXDizNqUpcKkRXTeQ=;
+        b=roH/jzIq35mJ6hmefuk7yxH5h2XacjHhWhexx5qqhUtexsSYex+gP38jG1djchUvOg
+         e5bIL7iSs0yrC0a55wTtp7XfGduYqLYTD1muUk/CjQWaYUmqyhJ7QHwRuXbt5dlY7j/1
+         mzNyjHj9l6pPjRbhl+yJ5RcEuSFr+t8xcJ/qXxM2uc/OlY/v+7FcPnHgrg4+jc0mqqfv
+         bfLnUnrcETgUZ2timr8F9IghQ8Gh+Ef1sAHxiGoTLEERM2VIVPUO1SCztXNDxgEczy9c
+         5UmtIdsaVQNTzLjGD8Hh+wBEmSzvPERMBgywu8UvH2/b7N3aUocpoJkSTXpFvHLYaa6N
+         dO3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWtyDBG42w9WgOXrpmIiOzRMIy5ygvN6qQTHIGbjg2iYLZmsI89boi0b5PLFecsZPpnN75MWSZ3WVjMtw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZ5zRDr+JulS1wpE8nOLywpsEIZ1NZ05PFtkaWmK9MMrXh2Ngz
+	k9ZHTHIIXfNm9Tvom+GpDr/HvZ6nGl/NLsZVuqOOEl+BFj33LWIzZ3ZLbdavuK4b/9N1izyvB6r
+	IjQ==
+X-Gm-Gg: ASbGncspvh4ZoZnr2GQcCctkCps/a0XFg9oP0SoKCMMS0GPKKIzQVRNFdMxxplTr7qA
+	hwrZY29UPp0AhKHZfobdJKsFzioUw58zCUCER7jVIUHMQHVtycAM3IBkCHLx7kmDJhFsa1rVS9U
+	0InvUNtobyIRlYWk2WF3Pe2Fl348WmjBKCkY8ty1G32KCoBANvjeHgK+ZtoySJxxonv0lY+Wztc
+	xMGxTUpNzcYDCc8OnwI/JxnPsm2UIpCalN3mBNOX/Rd3Y23mxSRxfPgovsrXpvtiFpbN5+4PKBR
+	IICa5BNbPPofEXkF2w/8ukmIeAaL+VtNfm/YN2LaQpFJfvhNiaFiHlmbq2MUXSiS2BiJWa5FiiM
+	6Rkk+mMI=
+X-Google-Smtp-Source: AGHT+IEm6QIS8CsomvFkrFbz+n5Jt1F870f5TA35O8z7f/ChsPNNB9ogezkWeY+7w7A38B0ZAWVRhg==
+X-Received: by 2002:a17:906:c9cc:b0:ac7:e36e:545a with SMTP id a640c23a62f3a-ac7e36e577bmr723982166b.37.1744041271402;
+        Mon, 07 Apr 2025 08:54:31 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac7c018ac1bsm757670866b.157.2025.04.07.08.54.31
+        for <linux-media@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Apr 2025 08:52:15 -0700 (PDT)
-Message-ID: <ecb193d1-2bf1-4d99-b9c6-9b5cde1e936e@linaro.org>
-Date: Mon, 7 Apr 2025 16:52:14 +0100
+        Mon, 07 Apr 2025 08:54:31 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac3eb3fdd2eso515688366b.0
+        for <linux-media@vger.kernel.org>; Mon, 07 Apr 2025 08:54:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW6yP9UdwAkFdixxeOLskT1Mpx8LZ5BUk2z7DWyRjofnOR/kNv07KrA1B/pJHURhWCAuTqYoQAM+rAWdA==@vger.kernel.org
+X-Received: by 2002:a05:6512:6c7:b0:548:794f:f9dd with SMTP id
+ 2adb3069b0e04-54c227708e1mr3603624e87.10.1744040911431; Mon, 07 Apr 2025
+ 08:48:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] media: platform: qcom/iris: add sm8650 support
-To: Neil Armstrong <neil.armstrong@linaro.org>,
- Vikash Garodia <quic_vgarodia@quicinc.com>,
- Dikshita Agarwal <quic_dikshita@quicinc.com>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250407-topic-sm8x50-iris-v10-v3-0-63569f6d04aa@linaro.org>
- <6zCwYEsWlyaz8z8Elw573sfjWDZBB46nc0IA4Eu_-pKdy3O1WzYh2sr0jdSPRr0uBHqfgMaK3WC5d9sN6-O6cA==@protonmail.internalid>
- <20250407-topic-sm8x50-iris-v10-v3-5-63569f6d04aa@linaro.org>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20250407-topic-sm8x50-iris-v10-v3-5-63569f6d04aa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250324022120.216923-1-ccc194101@163.com> <3d85d4eb-15b6-431f-9244-23583a26166f@redhat.com>
+In-Reply-To: <3d85d4eb-15b6-431f-9244-23583a26166f@redhat.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 7 Apr 2025 17:48:18 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsDrDQty1T6DM6Au-bptOrJT9x49a=pGOawph1v6iisJw@mail.gmail.com>
+X-Gm-Features: ATxdqUGYOA3uZ-NBLaU7O8bkH19C64j25clGNy-r5EYRAODKZipVQEIO6M61QrE
+Message-ID: <CANiDSCsDrDQty1T6DM6Au-bptOrJT9x49a=pGOawph1v6iisJw@mail.gmail.com>
+Subject: Re: [PATCH v6] media: uvcvideo: Fix bandwidth issue for Alcor camera
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: chenchangcheng <ccc194101@163.com>, laurent.pinchart@ideasonboard.com, 
+	mchehab@kernel.org, linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	chenchangcheng <chenchangcheng@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
 
-On 07/04/2025 16:24, Neil Armstrong wrote:
-> Add support for the SM8650 platform by re-using the SM8550
-> definitions and using the vpu33 ops.
-> 
-> The SM8650/vpu33 requires more reset lines, but the H.284
+Hi
 
-h264.
+On Mon, 7 Apr 2025 at 15:39, Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 24-Mar-25 03:21, chenchangcheng wrote:
+> > From: chenchangcheng <chenchangcheng@kylinos.cn>
+> >
+> > Some broken device return wrong dwMaxPayloadTransferSize fields,
+> > as follows:
+> > [  218.632537] [pid:20427,cpu6,guvcview,8]uvcvideo: Device requested 2752512 B/frame bandwidth.
+> > [  218.632598] [pid:20427,cpu6,guvcview,9]uvcvideo: No fast enough alt setting for requested bandwidth.
+> >
+> > The maximum packet size of the device is 3 * 1024, according to the
+> > logs above, the device needs to apply for a bandwidth of 0x2a0000.
+> >
+> > Bus 001 Device 008: ID 1b17:6684 Alcor Corp. Slave camera
+> > Device Descriptor:
+> >   bLength                18
+> >   bDescriptorType         1
+> >   bcdUSB               2.00
+> >   bDeviceClass          239 Miscellaneous Device
+> >   bDeviceSubClass         2
+> >   bDeviceProtocol         1 Interface Association
+> >   bMaxPacketSize0        64
+> >   idVendor           0x1b17
+> >   idProduct          0x6684
+> >   bcdDevice            1.05
+> >   iManufacturer           1 Alcor Corp.
+> >   iProduct                2 Slave camera
+> >   iSerial                 0
+> >   bNumConfigurations      1
+> >   Configuration Descriptor:
+> >     bLength                 9
+> >     bDescriptorType         2
+> >     wTotalLength       0x02ad
+> >     bNumInterfaces          2
+> >     bConfigurationValue     1
+> >     iConfiguration          0
+> >     bmAttributes         0x80
+> >       (Bus Powered)
+> >     MaxPower              200mA
+> >     Interface Association:
+> >       bLength                 8
+> >       bDescriptorType        11
+> >       bFirstInterface         0
+> >       bInterfaceCount         2
+> >       bFunctionClass         14 Video
+> >       bFunctionSubClass       3 Video Interface Collection
+> >       bFunctionProtocol       0
+> >       iFunction               4 Slave camera
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        0
+> >       bAlternateSetting       0
+> >       bNumEndpoints           1
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      1 Video Control
+> >       bInterfaceProtocol      0
+> >       iInterface              4 Slave camera
+> >       VideoControl Interface Descriptor:
+> >
+> >       ....
+> >
+> >       Endpoint Descriptor:
+> >         bLength                 7
+> >         bDescriptorType         5
+> >         bEndpointAddress     0x81  EP 1 IN
+> >         bmAttributes            3
+> >           Transfer Type            Interrupt
+> >           Synch Type               None
+> >           Usage Type               Data
+> >         wMaxPacketSize     0x0010  1x 16 bytes
+> >         bInterval               7
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        1
+> >       bAlternateSetting       0
+> >       bNumEndpoints           0
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      2 Video Streaming
+> >       bInterfaceProtocol      0
+> >       iInterface              0
+> >       VideoStreaming Interface Descriptor:
+> >         bLength                            14
+> >         bDescriptorType                    36
+> >         bDescriptorSubtype                  1 (INPUT_HEADER)
+> >         bNumFormats                         1
+> >         wTotalLength                   0x01ef
+> >         bEndPointAddress                  130
+> >         bmInfo                              0
+> >         bTerminalLink                       3
+> >         bStillCaptureMethod                 2
+> >         bTriggerSupport                     1
+> >         bTriggerUsage                       0
+> >         bControlSize                        1
+> >         bmaControls( 0)                     0
+> >       VideoStreaming Interface Descriptor:
+> >         bLength                            11
+> >         bDescriptorType                    36
+> >         bDescriptorSubtype                  6 (FORMAT_MJPEG)
+> >         bFormatIndex                        1
+> >         bNumFrameDescriptors                9
+> >         bFlags                              1
+> >           Fixed-size samples: Yes
+> >         bDefaultFrameIndex                  1
+> >         bAspectRatioX                       0
+> >         bAspectRatioY                       0
+> >         bmInterlaceFlags                 0x00
+> >           Interlaced stream or variable: No
+> >           Fields per frame: 1 fields
+> >           Field 1 first: No
+> >           Field pattern: Field 1 only
+> >         bCopyProtect                        0
+> >       VideoStreaming Interface Descriptor:
+> >         bLength                            50
+> >         bDescriptorType                    36
+> >         bDescriptorSubtype                  7 (FRAME_MJPEG)
+> >         bFrameIndex                         1
+> >         bmCapabilities                   0x00
+> >           Still image unsupported
+> >         wWidth                           1920
+> >         wHeight                          1080
+> >         dwMinBitRate                248832000
+> >         dwMaxBitRate                1492992000
+> >         dwMaxVideoFrameBufferSize     6220800
+> >         dwDefaultFrameInterval         333333
+> >         bFrameIntervalType                  6
+> >         dwFrameInterval( 0)            333333
+> >         dwFrameInterval( 1)            400000
+> >         dwFrameInterval( 2)            500000
+> >         dwFrameInterval( 3)            666666
+> >         dwFrameInterval( 4)           1000000
+> >         dwFrameInterval( 5)           2000000
+> >
+> >       ......
+> >
+> >       VideoStreaming Interface Descriptor:
+> >         bLength                            42
+> >         bDescriptorType                    36
+> >         bDescriptorSubtype                  3 (STILL_IMAGE_FRAME)
+> >         bEndpointAddress                    0
+> >         bNumImageSizePatterns               9
+> >         wWidth( 0)                       1920
+> >         wHeight( 0)                      1080
+> >         wWidth( 1)                       2048
+> >         wHeight( 1)                      1536
+> >         wWidth( 2)                       1280
+> >         wHeight( 2)                       720
+> >         wWidth( 3)                       2592
+> >         wHeight( 3)                      1944
+> >         wWidth( 4)                       1280
+> >         wHeight( 4)                      1024
+> >         wWidth( 5)                       1280
+> >         wHeight( 5)                       960
+> >         wWidth( 6)                       1600
+> >         wHeight( 6)                      1200
+> >         wWidth( 7)                        800
+> >         wHeight( 7)                       600
+> >         wWidth( 8)                        640
+> >         wHeight( 8)                       480
+> >         bNumCompressionPatterns             0
+> >       VideoStreaming Interface Descriptor:
+> >         bLength                             6
+> >         bDescriptorType                    36
+> >         bDescriptorSubtype                 13 (COLORFORMAT)
+> >         bColorPrimaries                     1 (BT.709,sRGB)
+> >         bTransferCharacteristics            1 (BT.709)
+> >         bMatrixCoefficients                 4 (SMPTE 170M (BT.601))
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        1
+> >       bAlternateSetting       1
+> >       bNumEndpoints           1
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      2 Video Streaming
+> >       bInterfaceProtocol      0
+> >       iInterface              0
+> >       Endpoint Descriptor:
+> >         bLength                 7
+> >         bDescriptorType         5
+> >         bEndpointAddress     0x82  EP 2 IN
+> >         bmAttributes            5
+> >           Transfer Type            Isochronous
+> >           Synch Type               Asynchronous
+> >           Usage Type               Data
+> >         wMaxPacketSize     0x1400  3x 1024 bytes
+> >         bInterval               1
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        1
+> >       bAlternateSetting       2
+> >       bNumEndpoints           1
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      2 Video Streaming
+> >       bInterfaceProtocol      0
+> >       iInterface              0
+> >       Endpoint Descriptor:
+> >         bLength                 7
+> >         bDescriptorType         5
+> >         bEndpointAddress     0x82  EP 2 IN
+> >         bmAttributes            5
+> >           Transfer Type            Isochronous
+> >           Synch Type               Asynchronous
+> >           Usage Type               Data
+> >         wMaxPacketSize     0x0b84  2x 900 bytes
+> >         bInterval               1
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        1
+> >       bAlternateSetting       3
+> >       bNumEndpoints           1
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      2 Video Streaming
+> >       bInterfaceProtocol      0
+> >       iInterface              0
+> >       Endpoint Descriptor:
+> >         bLength                 7
+> >         bDescriptorType         5
+> >         bEndpointAddress     0x82  EP 2 IN
+> >         bmAttributes            5
+> >           Transfer Type            Isochronous
+> >           Synch Type               Asynchronous
+> >           Usage Type               Data
+> >         wMaxPacketSize     0x0c00  2x 1024 bytes
+> >         bInterval               1
+> >     Interface Descriptor:
+> >       bLength                 9
+> >       bDescriptorType         4
+> >       bInterfaceNumber        1
+> >       bAlternateSetting       4
+> >       bNumEndpoints           1
+> >       bInterfaceClass        14 Video
+> >       bInterfaceSubClass      2 Video Streaming
+> >       bInterfaceProtocol      0
+> >       iInterface              0
+> >       Endpoint Descriptor:
+> >         bLength                 7
+> >         bDescriptorType         5
+> >         bEndpointAddress     0x82  EP 2 IN
+> >         bmAttributes            5
+> >           Transfer Type            Isochronous
+> >           Synch Type               Asynchronous
+> >           Usage Type               Data
+> >         wMaxPacketSize     0x0c00  2x 1024 bytes
+> >         bInterval               1
+> > Device Qualifier (for other device speed):
+> >   bLength                10
+> >   bDescriptorType         6
+> >   bcdUSB               2.00
+> >   bDeviceClass          239 Miscellaneous Device
+> >   bDeviceSubClass         2
+> >   bDeviceProtocol         1 Interface Association
+> >   bMaxPacketSize0        64
+> >   bNumConfigurations      1
+> > Device Status:     0x0000
+> >   (Bus Powered)
+> >
+> > Signed-off-by: chenchangcheng <chenchangcheng@kylinos.cn>
+>
+> Thanks, patch looks good to me:
+>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>
+> Ricardo, do you have any more remarks about this patch ?
 
-> decoder capabilities are identical.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   .../platform/qcom/iris/iris_platform_common.h      |  1 +
->   .../platform/qcom/iris/iris_platform_sm8550.c      | 64 ++++++++++++++++++++++
->   drivers/media/platform/qcom/iris/iris_probe.c      |  4 ++
->   3 files changed, 69 insertions(+)
-> 
-> diff --git a/drivers/media/platform/qcom/iris/iris_platform_common.h b/drivers/media/platform/qcom/iris/iris_platform_common.h
-> index fdd40fd80178c4c66b37e392d07a0a62f492f108..6bc3a7975b04d612f6c89206eae95dac678695fc 100644
-> --- a/drivers/media/platform/qcom/iris/iris_platform_common.h
-> +++ b/drivers/media/platform/qcom/iris/iris_platform_common.h
-> @@ -35,6 +35,7 @@ enum pipe_type {
-> 
->   extern struct iris_platform_data sm8250_data;
->   extern struct iris_platform_data sm8550_data;
-> +extern struct iris_platform_data sm8650_data;
-> 
->   enum platform_clk_type {
->   	IRIS_AXI_CLK,
-> diff --git a/drivers/media/platform/qcom/iris/iris_platform_sm8550.c b/drivers/media/platform/qcom/iris/iris_platform_sm8550.c
-> index 35d278996c430f2856d0fe59586930061a271c3e..d0f8fa960d53367023e41bc5807ba3f8beae2efc 100644
-> --- a/drivers/media/platform/qcom/iris/iris_platform_sm8550.c
-> +++ b/drivers/media/platform/qcom/iris/iris_platform_sm8550.c
-> @@ -144,6 +144,10 @@ static const struct icc_info sm8550_icc_table[] = {
-> 
->   static const char * const sm8550_clk_reset_table[] = { "bus" };
-> 
-> +static const char * const sm8650_clk_reset_table[] = { "bus", "core" };
-> +
-> +static const char * const sm8650_controller_reset_table[] = { "xo" };
+LGTM, I forgot to send the trailer sorry
+
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Not sure if Laurent wants the whole lsusb -v as the commit message os
+as a cover letter.
+
+Both work for me.
+
+>
+>
+> Regards,
+>
+> Hans
+>
+>
+> > ---
+> >  drivers/media/usb/uvc/uvc_driver.c |  9 +++++++++
+> >  drivers/media/usb/uvc/uvc_video.c  | 10 ++++++++++
+> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> >  3 files changed, 20 insertions(+)
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index deadbcea5e22..9b1dedf9773b 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -3023,6 +3023,15 @@ static const struct usb_device_id uvc_ids[] = {
+> >         .bInterfaceSubClass   = 1,
+> >         .bInterfaceProtocol   = 0,
+> >         .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_STATUS_INTERVAL) },
+> > +     /* Alcor Corp. Slave camera */
+> > +     { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
+> > +                             | USB_DEVICE_ID_MATCH_INT_INFO,
+> > +       .idVendor             = 0x1b17,
+> > +       .idProduct            = 0x6684,
+> > +       .bInterfaceClass      = USB_CLASS_VIDEO,
+> > +       .bInterfaceSubClass   = 1,
+> > +       .bInterfaceProtocol   = 0,
+> > +       .driver_info          = UVC_INFO_QUIRK(UVC_QUIRK_OVERFLOW_BANDWIDTH) },
+> >       /* MSI StarCam 370i */
+> >       { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
+> >                               | USB_DEVICE_ID_MATCH_INT_INFO,
+> > diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> > index e3567aeb0007..56f23c363870 100644
+> > --- a/drivers/media/usb/uvc/uvc_video.c
+> > +++ b/drivers/media/usb/uvc/uvc_video.c
+> > @@ -262,6 +262,16 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+> >
+> >               ctrl->dwMaxPayloadTransferSize = bandwidth;
+> >       }
+> > +
+> > +     if (stream->intf->num_altsetting > 1 &&
+> > +         ctrl->dwMaxPayloadTransferSize > stream->maxpsize &&
+> > +         stream->dev->quirks & UVC_QUIRK_OVERFLOW_BANDWIDTH) {
+> > +             dev_warn(&stream->intf->dev,
+> > +                      "the max payload transmission size (%d) exceededs the size of the ep max packet (%d). Using the max size.\n",
+> > +                      ctrl->dwMaxPayloadTransferSize,
+> > +                      stream->maxpsize);
+> > +             ctrl->dwMaxPayloadTransferSize = stream->maxpsize;
+> > +     }
+> >  }
+> >
+> >  static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index 5e388f05f3fc..8b43d725c259 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -77,6 +77,7 @@
+> >  #define UVC_QUIRK_DISABLE_AUTOSUSPEND        0x00008000
+> >  #define UVC_QUIRK_INVALID_DEVICE_SOF 0x00010000
+> >  #define UVC_QUIRK_MJPEG_NO_EOF               0x00020000
+> > +#define UVC_QUIRK_OVERFLOW_BANDWIDTH 0x00040000
+> >
+> >  /* Format flags */
+> >  #define UVC_FMT_FLAG_COMPRESSED              0x00000001
+> >
+> > base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+>
+>
 
 
-At the risk of asking a stupid question, where are these resets in your 
-dts ?
-
-You're missing core here ?
-
-20250407-topic-sm8x50-upstream-iris-8550-dt-v1-1-1f7ab3083f49@linaro.org
-
----
-bod
+-- 
+Ricardo Ribalda
