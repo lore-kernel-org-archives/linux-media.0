@@ -1,111 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206AD205E36;
-	Mon,  7 Apr 2025 15:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957F9205517;
+	Mon,  7 Apr 2025 15:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744040988; cv=none; b=jCgaT9vwCUbm5Qsoq4jGKx61pwr+L1Ldai30Lf0uIbwc3Uav+2MoENwrFBCrcZ5BOnstJSCdEIczV3yrn/1QYCPxLKUcOAnJ+OTd1/lJPdM3cX0YhpJOARaKgA1FneS4QAJfq6qWlIOHVnuky3Pc4FEfdG1iNau19U7Atzy0kck=
+	t=1744041068; cv=none; b=gvP9sEZw2NI9OEypJxwCnauR571IKRwoTmvLoiw/3aOk7ESYWhisitKOE3z2XSG/8FvZnHqVpAzJOQG0MMCmDHAsTdP8ih7wD+yp6KYMX5n0zV8VA6OYv7sIY0WJLFPTDJ3QyFkx4Rf6vdtKOCtFTbcYBSF/o/2k64NPvDQSTNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744040988; c=relaxed/simple;
-	bh=13O5W3bCuiHDF3L9eBsuHmrbVsCq2QcoZklOEK2ib0Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rdXU2qToU2+7r9BVSKQGd5qm6YZqBkmsH44JWyh+sZ1JdtA7iJdQQ8KX8Y1X80TH4zcHM4oHEqUy4ajlD/a7vA2c1QCUEVfM96/dqnoDA5k0PrC9FH9eTwkecaFyqTU3hCgdh+32TyQUTdhqvjFNa6zTyez2suBdfG88Eoilve0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=euEzV6oW; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1744041068; c=relaxed/simple;
+	bh=KP5jHm1Ej+tX78X1xuPvPBlzJ//zKR98WZkJQHfIuM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W01g7yeHYJmaatCaOdsjGGvVJ4pMZCwBaUsXo7VDIdgLX7O02tvAyw0kImGuB7rrum6uuXLaAVFTVNZWkO3RfoPQnDd1HLraRHel3WW2Vjo/j7pPjyoMGvXS6H/73CewbiLAtOfTOYhb4+MKWN5rDZ5NHgnN2P3N+f2HboZQodI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OIOc6svM; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="euEzV6oW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OIOc6svM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744040987; x=1775576987;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=13O5W3bCuiHDF3L9eBsuHmrbVsCq2QcoZklOEK2ib0Y=;
-  b=euEzV6oWG1obRFuYvuaIngZQafeUekHpe8Mk4fqj7mIoNY5Qn2mY6/o7
-   Hco72sIwFQdAB6+1orAQhVfF2OmRQmGRCeA1PxN3OXiNwej1795UsbpND
-   NMQcSII4P6uyaTSB8kcghF+PZ+qmqmKwQ+r6u+BJ2C+mKg8nc1iqWE2Z6
-   Gi4YmlSUtJzo/PWUmJ8WxM8N9LU+1ZdQUQ+Eygn02sIzItAzJth41W+Om
-   0b3rDgeo7g75XQyUPYhj9006unSy22MPTS9JGQwqLwiC8OJ6gx3yCtwV7
-   vWsHZkEDQGLdeqsPZNKw3rfaB5kXZGS5IcLVJT1zaeN5TxLvXjVqQVC2i
+  t=1744041067; x=1775577067;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KP5jHm1Ej+tX78X1xuPvPBlzJ//zKR98WZkJQHfIuM0=;
+  b=OIOc6svMa4qn5gFN+n6MY7X5hn9qEcddZ64riaBiEDGDOsxdmWP24mV7
+   7wIkCV51ttJXJ09/jmyp02WmnYVu8Mfgg9ehDRIG1Gmm+aADtyxxZXWYM
+   46CUgzcKHDTfQeJCKhuxyvJnNOxL8li8azYp9TOzTLZU6pd930hUGbPj0
+   HSqXzolOzBzfCJbRxHcGJuPDDNfCui/N7e3il8gQto1Kn+p2ghgchWq4P
+   MQq14Q6bj1hutIDkbutk/Gw/6ZTlicGt71CY+gOIIopZVpTsmU5qMeRhu
+   lkxBX6yuezHl/xfWmhLHyGGgGG3nr7L5qW96kXTqDnJ/NJW93f2C87D5d
    g==;
-X-CSE-ConnectionGUID: T6sT9/r2RGq6mta7RLgrUA==
-X-CSE-MsgGUID: 5jYivJjbQEyW2rvaxS7Big==
-X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="45324202"
+X-CSE-ConnectionGUID: evTomqbMRwiFPn2JEuwzSA==
+X-CSE-MsgGUID: hgaNt8CkTbaGhQAPQFhMdA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11397"; a="56097985"
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="45324202"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:49:43 -0700
-X-CSE-ConnectionGUID: qngkipzXRAaeQC0M+xbcog==
-X-CSE-MsgGUID: YxflcNHNTU2os4L0/+YyAg==
+   d="scan'208";a="56097985"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:51:05 -0700
+X-CSE-ConnectionGUID: lyoBYq26QeiS0dR+okMEng==
+X-CSE-MsgGUID: V7RA+QusSsiIBnkNl88L/w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,194,1739865600"; 
-   d="scan'208";a="128930033"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 07 Apr 2025 08:49:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B2C6D26D; Mon, 07 Apr 2025 18:49:38 +0300 (EEST)
+   d="scan'208";a="128523640"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2025 08:51:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u1okW-0000000A7EV-21op;
+	Mon, 07 Apr 2025 18:51:00 +0300
+Date: Mon, 7 Apr 2025 18:51:00 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
 	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
 	Jai Luthra <jai.luthra@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH v3 4/7] i2c: core: Reuse fwnode variable where it makes sense
-Date: Mon,  7 Apr 2025 18:45:00 +0300
-Message-ID: <20250407154937.744466-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250407154937.744466-1-andriy.shevchenko@linux.intel.com>
-References: <20250407154937.744466-1-andriy.shevchenko@linux.intel.com>
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v1 1/1] media: i2c: ds90ub960: Remove of_node assignment
+Message-ID: <Z_P0ZPclhVHick0l@smile.fi.intel.com>
+References: <20250312174123.4111661-1-andriy.shevchenko@linux.intel.com>
+ <2e6599fd-0b79-430b-9e94-f731b60e1705@ideasonboard.com>
+ <Z-5tI_WVF2YQQ837@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z-5tI_WVF2YQQ837@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Reuse fwnode variable where it makes sense. This avoids unneeded
-duplication hidden in some macros and unifies the code for different
-types of fwnode.
+On Thu, Apr 03, 2025 at 02:12:36PM +0300, Andy Shevchenko wrote:
+> On Thu, Apr 03, 2025 at 02:01:40PM +0300, Tomi Valkeinen wrote:
+> > On 12/03/2025 19:41, Andy Shevchenko wrote:
+> > > Remove of_node assignment which duplicates fwnode in struct i2c_board_info.
+> > > In general drivers must not set both, it's quite confusing. The I²C core
+> > > will consider fwnode with a priority and of_node is subject to remove from
+> > > above mentioned data structure.
 
-Tested-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/i2c/i2c-core-base.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+FWIW, this patch had been send as part of the i2c conversion series.
+Please, do not apply it standalone (at least without that i2c stuff
+being accepted and applied first).
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index e2fdfbdb1bd7..c92badadd47a 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -571,7 +571,7 @@ static int i2c_device_probe(struct device *dev)
- 
- 	dev_dbg(dev, "probe\n");
- 
--	status = of_clk_set_defaults(dev->of_node, false);
-+	status = of_clk_set_defaults(to_of_node(fwnode), false);
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
- 
-@@ -1065,10 +1065,10 @@ void i2c_unregister_device(struct i2c_client *client)
- 
- 	fwnode = dev_fwnode(&client->dev);
- 	if (is_of_node(fwnode)) {
--		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
-+		of_node_clear_flag(to_of_node(fwnode), OF_POPULATED);
- 		of_node_put(client->dev.of_node);
- 	} else if (is_acpi_device_node(fwnode))
--		acpi_device_clear_enumerated(ACPI_COMPANION(&client->dev));
-+		acpi_device_clear_enumerated(to_acpi_device_node(fwnode));
- 
- 	device_remove_software_node(&client->dev);
- 	device_unregister(&client->dev);
 -- 
-2.47.2
+With Best Regards,
+Andy Shevchenko
+
 
