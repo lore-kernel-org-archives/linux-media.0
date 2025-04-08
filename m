@@ -1,122 +1,111 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D53B245020;
-	Tue,  8 Apr 2025 19:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938CE245024;
+	Tue,  8 Apr 2025 20:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744140738; cv=none; b=lSs1rW8c6wq3xRmYuQmQyoZXaVaaA+LotZUAQH4AuNi1PcosPDEF5UdmWpHmb9/ghXsMvRwk/GvxxbMi+FYELQYlz44vz+HrSPC5Qle8DPGz8WvkyOBsXVT6mgluLSB2JCt1ze0O3z5OPkKdbogadXEIOmiRjOomIIoOOgCAoYk=
+	t=1744144222; cv=none; b=aoDltkvdwB5ZoVqpbywBxYwAkSxKvzIZsbx8t7mhws3SuP9SELT6GrNqOzQZNHXXC39+rogU+JKkjDct1K5cPlNplFkFdmdYBU8QdG9ZSp/m90MRq7EAayZZVIQRiwp5nJRnoexz6AYCSeOrxHbztJCe4GBwV3ynp4lWqNj5ubY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744140738; c=relaxed/simple;
-	bh=Rs8LZunHQ5AaFIrsoGF4LgS8gYKerotreDmsic+cXBo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pbrt/AIx3UOQQkFE4rSLARJWUHRN9bXF0MEaIIivWybJsJeqXIs63ZnZ2QVe0+YW9BjOzXBKkkXUMMz6DNJjrlqR9WXTu4yYJOBzYNRWCG+fP1eY8EMsWnVeK8ucCYLUUW4sNzp0DFDNhvkTUcu1uSt2eQniQJFkoZlbuEDMG4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j4uu0cMk; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1744144222; c=relaxed/simple;
+	bh=SG6l0Nsbs2RYf2lRqMLwcpR1R7LfZrlP/z3CoVkStGI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WaeEHiaDLe13YV1BYGtb2g/z7RcHwtchyrJ3xAnMwGsSYsGi1toAur7y36YiITsu60smuQZfmPCi5vMyjxFB5tlRv0KHKNEffHtrgKO/uKE9q5Tayei2VlnzlB558x0xJGwqlwCmqxAuo9KOBcTPn/nR7E6E9i0J/0AwBB1cJWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jIkn9fV3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j4uu0cMk"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso55619595e9.2;
-        Tue, 08 Apr 2025 12:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744140733; x=1744745533; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tmz7JgbiHGhDiZihWU8anv8Vm5wyRJYoszGCa44U2q8=;
-        b=j4uu0cMktLU70QumydVjpukMVaDRRyrd7dUd+nb2hZ3rO+2ZJabWNbWe/ciL9zxVD1
-         tqafMOKl6E/BhF1rLDzd0UxghH0HwLjFdi5Ke0CKhARemKk7a9X+tvShhy0MXNbzXJje
-         LA3uI8WkjedOH51+21lpyURv6c7RtS+VQvgNo5o9eyDMI57/Ygu1+CcPoMBdEwmcuARy
-         L99+ApQsbyUROgFedLPHzgN3xnkuIgrKEKznBRMX3mzik9hxlVbYzaCgRaCwKDoOc42r
-         Socmlqty/1Sra/457Xu3fhOhQpvROxQTfXVHG0PVnrdsGMfo//znKMv7cwNOu7QpUIr2
-         bgTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744140733; x=1744745533;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tmz7JgbiHGhDiZihWU8anv8Vm5wyRJYoszGCa44U2q8=;
-        b=a9mDhjgIhYnQf+ex/d8718ey3eSbAC7C1QF89AeyquhFPZ/ZJh4s5LEAF986u+bqKC
-         1rLZmUKozX8DUq8VLOpFKgSUr2PoZkV1/LrEHkun0jrk9qBLZIHNoHIJIDs5hsUykJFh
-         MyNVgCi9T1R5WxUOsgE3vvmE6wU4uJFZneaSAdRVXRD9T4aKsPBBs6hDOZetocq8LoNB
-         iQPyUidCH6q9Oqdb2Cy+I9DggDQkm6wC2JCisMR1jR8WcD2fY5UQnpVc3eBqoklwe3rX
-         nfkengNbBnk96+SsYRS9+1fFleOBAERxpCqMo6WvlrxVIUcYyuflkVp1SU2xJLPSx2VX
-         wxiw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0iuht5GjMl5OqJzrZXikajxskwDfsKIuroAoA6zvqKdCAKldaEEOudJkUaMC1uTLEx7X026mNaLxZ@vger.kernel.org, AJvYcCWm4cmLrBZAt0esIAnO/PrV16W0BOe/t0okmHOhwbwPyNcM3JXmmoR0asMXb3yEpBtbjpwO+VaH0O/13/w=@vger.kernel.org, AJvYcCXJYT4I3S7bCbKyeIRXQd2WPuoTmU83RJFeczyFEURHan1RsLyouz0QX0VczmbOoPd+RPjM3WxChAPJHM93@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmXob1TdsAFMT6ekO8HPVBEevwnmfbawVu9xUDdMTmWTeOyaAJ
-	lBjTHY/aRUX+k+llt7UtoX9A+mF0zehP2w/AqzpacmKFlDUESYAT
-X-Gm-Gg: ASbGnctAgwvgF2ucCMCeYxXfSIgm5fsj60UkSkxFN9hiLM21mst3JxhyEZZE2l3m4bC
-	1zrRkCpnhh21u5Sy8G8VX6Db4Qr7Nj+klDZutQ5/s6YKg8f8VdS5qkrk9+s4atjAZqBQOmd56Gf
-	Z7a3t1fADCKTZ+/q70NX8PlMi0UqBm+dRLeig1ZkEzED54AjQIdM127OXKF1fWtiEDZhMLufgKY
-	Aw+hFtbj1eqtqpJOknPH4CCnsElWs9aUeHgmN7vtGA3m4NiIBURx7e2ZSkLAQsQHltNWTQ1QORB
-	OSKiSHzYQwzVn6KMo8ZJSX9BOCasnTYUlBnB9DIg+NVp/vwkA5p9xUpiRxbhJD4ZOUYGSsNFUNc
-	4Ksk=
-X-Google-Smtp-Source: AGHT+IEcUIxkbYfvhYpWZWjRO71sBTa9EhPzleD95pRDpEif3mgfRqZMhgt/4XjAuKlfUhBd3uUaNQ==
-X-Received: by 2002:a05:600c:1d26:b0:43c:e481:3353 with SMTP id 5b1f17b1804b1-43f1ecac7bamr2944715e9.17.1744140733318;
-        Tue, 08 Apr 2025 12:32:13 -0700 (PDT)
-Received: from iku.Home ([2a06:5906:61b:2d00:469:6216:b7f8:fc55])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec364ec90sm170209395e9.27.2025.04.08.12.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 12:32:12 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	linux-media@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/2] media: dt-bindings: media: renesas,vsp1: Document RZ/V2H(P)
-Date: Tue,  8 Apr 2025 20:31:57 +0100
-Message-ID: <20250408193158.80936-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250408193158.80936-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20250408193158.80936-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIkn9fV3"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 315F8C4CEED;
+	Tue,  8 Apr 2025 20:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744144222;
+	bh=SG6l0Nsbs2RYf2lRqMLwcpR1R7LfZrlP/z3CoVkStGI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=jIkn9fV30w2ZKdjBgwvNTRWvn0mG353RHBPct8+K0fgG6HhCzgGOCDNFNHXUWtbvS
+	 kCDw2++owrXqVLfHkFBc7aqcvTQxyTLH/jUhOdk/wEQf2awivWXg54ycK5CSD15mUW
+	 JgyNSOX9VpAMl8gbf8CPHKDnFz3gRk0PlhHIO4IRUBn7kSuzMnZ4eWUKbFdW8aZTLi
+	 GpGH4UHbKjd4TNWBqZGjOwI4MMU5BJ8J+uF4BfFFeHtanfBkW4kRpufFaatPBClnkZ
+	 PkaFJw+4VhtPQH2ljFHVVZl6UMnnOpjKv9x9EqQlvXkUZLkEKbTePpY7g/P0anOJBS
+	 INqZh9aqvVBPQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26780C369A5;
+	Tue,  8 Apr 2025 20:30:22 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Date: Tue, 08 Apr 2025 15:29:59 -0500
+Subject: [PATCH v2 2/4] arm64: tegra: Add fallback cec compatibles
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250408-tegra-cec-v2-2-2f004fdf84e8@gmail.com>
+References: <20250408-tegra-cec-v2-0-2f004fdf84e8@gmail.com>
+In-Reply-To: <20250408-tegra-cec-v2-0-2f004fdf84e8@gmail.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-tegra@vger.kernel.org, linux-media@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744144221; l=1680;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=WEs9nof5IjWx7LvH6m7ix7zLOBiBSogzTwy1MrVztiY=;
+ b=V7gl3QUk3L3iRi5LK+UwJzwTHB6hrs0UHRpplr7TZVLl5e16rA9SyMgpSQuWWOKO8kmijnSFa
+ ZWApXiqEzOiDH3iXl81sCWXuGsUsK1W/3wfAQ/ZtH3769ZVmOF+zP2i
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Aaron Kling <webgeek1234@gmail.com>
 
-The VSPD block on the RZ/V2H(P) SoC is identical to the one found on the
-RZ/G2L SoC.
+The tegra_cec driver only declares support up to Tegra210 and will not
+declare support for Tegra186 or Tegra194. Thus list a fallback
+compatible for these archs to tegra210-cec as they work as-is with the
+existing driver.
 
-No driver changes are required, as `renesas,r9a07g044-vsp2` will be used
-as a fallback compatible string on the RZ/V2H(P) SoC.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- Documentation/devicetree/bindings/media/renesas,vsp1.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi | 2 +-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-index 1a03e67462a4..9d03b972f522 100644
---- a/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-+++ b/Documentation/devicetree/bindings/media/renesas,vsp1.yaml
-@@ -25,6 +25,7 @@ properties:
-           - enum:
-               - renesas,r9a07g043u-vsp2   # RZ/G2UL
-               - renesas,r9a07g054-vsp2    # RZ/V2L
-+              - renesas,r9a09g057-vsp2    # RZ/V2H(P)
-           - const: renesas,r9a07g044-vsp2 # RZ/G2L fallback
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+index 2b3bb5d0af17bd521f87db0484fcbe943dd1a797..7f76c81d744ac72fd117b82f4b799322d2a11b82 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+@@ -1183,7 +1183,7 @@ gic: interrupt-controller@3881000 {
+ 	};
  
-   reg:
+ 	cec@3960000 {
+-		compatible = "nvidia,tegra186-cec";
++		compatible = "nvidia,tegra186-cec", "nvidia,tegra210-cec";
+ 		reg = <0x0 0x03960000 0x0 0x10000>;
+ 		interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&bpmp TEGRA186_CLK_CEC>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+index 33f92b77cd9d9e530eae87a4bb8ba61993ceffeb..9b39bc126381b78efe067df790614d74b24897ce 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+@@ -1339,7 +1339,7 @@ gic: interrupt-controller@3881000 {
+ 		};
+ 
+ 		cec@3960000 {
+-			compatible = "nvidia,tegra194-cec";
++			compatible = "nvidia,tegra194-cec", "nvidia,tegra210-cec";
+ 			reg = <0x0 0x03960000 0x0 0x10000>;
+ 			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&bpmp TEGRA194_CLK_CEC>;
+
 -- 
-2.49.0
+2.48.1
+
 
