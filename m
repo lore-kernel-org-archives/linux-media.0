@@ -1,128 +1,190 @@
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76AFD202C40;
-	Wed,  9 Apr 2025 21:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744233468; cv=none; b=YYYiSS2qAHeyrGXry8bzYbOuVTpKIXYJa0kSarWSt4LGIwzZFKK5IdkEN/fikGXamYJ+SB09cneAkY5m+PF/USw9j6eeHdmKUBPDjkIQP4TJEDAarr3B8DRmBeifZnGjLWWTEZYicCy/7OnDLFCUgub6ga9IqFqqAu7obbXFdY8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744233468; c=relaxed/simple;
-	bh=JVLsErMm1lbZgGTUGBXuZBa0TVE6alCzPguq9pnhM9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hkL1cuQcvYHyzqgP52ImBc/6kFpcujTi18jGydeqMqdZ9vrduIuTV6gYzJva5XQsAyCHbGtVnepiLVTyLCpqnZ5z5Jo1ovrwkepWZaXVZBqtAiqC5DxXfh/JLGM7sjdk0FNxXckKcJHWX+bgPGHMwl5sTXX12guoPRy8OnyW5VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6kAg0M2; arc=none smtp.client-ip=209.85.210.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259CF213E81;
+	Wed,  9 Apr 2025 21:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744233809; cv=pass; b=nThq/yOjIkPXUdZxF/7f984GEsJFs91D4beSEXpbQsdExFKji8AdAZh9kjnaNINMhOIwkG9SuGxG9dIcLB1TEUyxoiVvNo10dtYOCFkwJLRWI7hoojsQD7tFZLhqoebNcM+QGicF/ydaP5jUsRz+qS/2GEXy1XfpoIldMvnR86o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744233809; c=relaxed/simple;
+	bh=68YC4WwgvizWG2K1gCGGlXfkw7uoRq2kKmdLPAA7HXE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mHVUjQt5APx9i/ZErtF61OSLdxtUbt6H1sJwDODKwgoIfFzcd64o0QHkta931VNSe2vZlANWQqd3swcHyyWMpvBVdoDGLzXE7qHD0BRk+mLRnbN22gjgkjbv+mf4UNvVz/7gna+K9CM0rHwYQe4EBV+5BDkWj+oe1549A/AKEic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=QORvX7Mk; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6kAg0M2"
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-736c1138ae5so61107b3a.3;
-        Wed, 09 Apr 2025 14:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744233466; x=1744838266; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pVlwzrEmx32p/oFLtQxJLU3h+GY6t/2EgH6uv7p6PI=;
-        b=U6kAg0M2Ip5KpP5w2LtDKD05MfmghlG4Zt878OtU9/mKiQIO9d0VXs2pJmGyQHTDt3
-         BsNYPPL2uLBLkOg2HVkaFJJk2mNvRrYREK9Fa1RyOEYHdmGWPXH4GP3xDFfNXCEluUpq
-         bj0kfZplfoosvkOAV7xCfm2JT1Q/dKdEvxStxAqVRKZe2DGYsv0G03LV6j+whL6kYaqt
-         cJDnJcdfd+gRbgknGKvcnGMERv3/KaYNov3F+RzzxYnoli481fkUZfMFXBz3WSBWyfm2
-         0M2AUlSXjhzy5yT+NxETqUYo/Qy3fm4Bc4YHq4U6dtq4+qNVEwD2yWA/oQr4s0ANrUam
-         gdJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744233466; x=1744838266;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6pVlwzrEmx32p/oFLtQxJLU3h+GY6t/2EgH6uv7p6PI=;
-        b=Fo+DE46RHIbqbne4mmMko41RkHjhPph9Ccn/q7AcPH40uGit5OujwSa4kNfmlbNJRf
-         uaJ5zTlDN+AaB6Isr4UQ2rk+bloxu4OVDjqEXf53MLVpfqrrgQ9TTq8A6ILyBc0lGHBd
-         owrfjscaVDpX1rFkZUV55KT0aT+43cSDgnnSjtH8lKGwjun+VrxMyQfuITiwhUoU2uwh
-         FJnTmNbw8NEA6f4kEjxWsSfv4SDrYPw/E/OiMVEzwiqeFsknQouBvISQPBjFlMmu2kqb
-         y2qtDnvjCL4IOFP9FluVueCk0rw9h5VWYxNxEkOeh3DbgWPlYiWj6PCVdchFOQVgmsHC
-         pLlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWIjZGmwxjZy78bbJed2rDLYqtdBY4sOIi/EmZxH7wa3X6Z9Bx1ozcwwG5d4mkWQvNZ8tzMIv4TLladknU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yynmrn5kAwUmqXLqA4FpM5UN635Ky8pAWuBmT6gqCzevFGjlRED
-	zhuI5DBZH5vhoTUf87cjQkCIUCjod7lbw6BaFdlIVqX0pK7jqomM
-X-Gm-Gg: ASbGncvkIdLndgOw3jKmPh80goULWAPSi3wwYAxa578L5+qQAPVPJbc9A7LsUeQxhcU
-	E/NpI6Pxnyj0uDaLbEyllAB66Q8J5m9SRkrCZHMoJgAEniciSEamvJS6uxVogLlebeS/E6yidyD
-	oHkeDswdiVmfYTY3R4VnMppDPDvOjcHyn8Uz9hGyHS5dbpLjBkADFssDbIN5a2JdYN47rFskdwf
-	OsTCau43FyqLHKWtHGXnPHf7jv/0BGi5IPO2uvPpapGjdKumdm9AVjpxK+PiH1CPxMXYFWer4fk
-	p30JlhpX4FFb9qXroS76cpLi3IhhaS+oHkZu0Jj12hT5Anx1FgKy2NCYtfc=
-X-Google-Smtp-Source: AGHT+IGmPmWoSu8tga2SfVkZJNouE0+nOCKOrGe4roKu39WWRmF9KPusYmzx3vw22zaprVmqFp/tNw==
-X-Received: by 2002:a05:6a20:94c7:b0:1f3:3c5d:cd86 with SMTP id adf61e73a8af0-20169480cf3mr905809637.11.1744233466357;
-        Wed, 09 Apr 2025 14:17:46 -0700 (PDT)
-Received: from sid-Inspiron-15-3525.. ([106.222.229.33])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b02a2d3abffsm1475046a12.48.2025.04.09.14.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 14:17:45 -0700 (PDT)
-From: Siddarth G <siddarthsgml@gmail.com>
-To: slongerbeam@gmail.com,
-	p.zabel@pengutronix.de,
-	mchehab@kernel.org,
-	gregkh@linuxfoundation.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="QORvX7Mk"
+ARC-Seal: i=1; a=rsa-sha256; t=1744233778; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=fe4FKrwF0023X6XW72ffHDVFVv2E/rMtoJJYSCGXiHQaMRbIL1zoTycWH9m3CDsbhFu49PvwIp5bicrgAFXuDOlWG3ciSwQBxKp96qM4epTBrDwdCW1PXIdl94OiOxL0jGEJEV7HOFdViZl2GPgmKji7jgjB+akyEMFF+BYT0m4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1744233778; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=yPq5rlMfqv4prhYPYbwDMgzWWSIG2EEC0VgIJ0vg69U=; 
+	b=FaVvXvwgFxyi4I3FY61j0dF2DKlE2HKIItUWmVyPfpi4bfB/41bZJrjyudfSoi0FlbcFKfqAOAW/TnttoOkEoUIVdCQOnQs6kS3Od72J1/GUbSddIFlXLdWm6ce8hi4HjH+MtOwJen1urp31c+ruFXHoJPIo6iguswl6FqpNEHI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1744233778;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=yPq5rlMfqv4prhYPYbwDMgzWWSIG2EEC0VgIJ0vg69U=;
+	b=QORvX7MkvXAfzgXazEi3bTdOkJ5hiXuDG0iAznlvzCY6dPcMykc6qHxysocWWKPt
+	t4eRyBsjQqMd9Ae4q+sy/bT3sIF4GuK1k/StriOYeH3pO4wPEO6i4Fktb6DSZZDOfCo
+	5hgKT9R2OCRC8tHCr/I9Uuy0zJmduaRvbAWR6pfo=
+Received: by mx.zohomail.com with SMTPS id 1744233775886613.8791965126373;
+	Wed, 9 Apr 2025 14:22:55 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: Boris Brezillon <boris.brezillon@collabora.com>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	Siddarth G <siddarthsgml@gmail.com>
-Subject: [PATCH] staging/media/imx: fix null pointer dereference
-Date: Thu, 10 Apr 2025 02:47:27 +0530
-Message-ID: <20250409211727.62710-1-siddarthsgml@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [PATCH v6 1/4] drm/panthor: Introduce BO labeling
+Date: Wed,  9 Apr 2025 22:22:19 +0100
+Message-ID: <20250409212233.2036154-2-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250409212233.2036154-1-adrian.larumbe@collabora.com>
+References: <20250409212233.2036154-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Cppcheck warnings:
+Add a new character string Panthor BO field, and a function that allows
+setting it from within the driver.
 
-drivers/staging/media/imx/imx-media-fim.c:79:6:
-error: Null pointer dereference: fi [ctunullpointer]
-  if (fi->denominator == 0) {
+Driver takes care of freeing the string when it's replaced or no longer
+needed at object destruction time, but allocating it is the responsibility
+of callers.
 
-drivers/staging/media/imx/imx-media-csi.c:795:27:
-note: Calling function imx_media_fim_set_stream, 2nd argument is null
-  imx_media_fim_set_stream(priv->fim, NULL, false);
-
-drivers/staging/media/imx/imx-media-fim.c:388:3:
-note: Calling function update_fim_nominal, 2nd argument is null
-  update_fim_nominal(fim, fi);
-
-drivers/staging/media/imx/imx-media-fim.c:79:6:
-note: Dereferencing argument fi that is null
-  if (fi->denominator == 0) {
-
-To fix the issue, add a check to validate that the 'fi' is not
-null before accessing its members.
-
-Signed-off-by: Siddarth G <siddarthsgml@gmail.com>
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
- drivers/staging/media/imx/imx-media-fim.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/panthor/panthor_gem.c | 39 +++++++++++++++++++++++++++
+ drivers/gpu/drm/panthor/panthor_gem.h | 17 ++++++++++++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
-index ccbc0371fba2..25f79d0f87b9 100644
---- a/drivers/staging/media/imx/imx-media-fim.c
-+++ b/drivers/staging/media/imx/imx-media-fim.c
-@@ -76,6 +76,9 @@ static bool icap_enabled(struct imx_media_fim *fim)
- static void update_fim_nominal(struct imx_media_fim *fim,
- 			       const struct v4l2_fract *fi)
- {
-+	if (!fi)
-+		return;
+diff --git a/drivers/gpu/drm/panthor/panthor_gem.c b/drivers/gpu/drm/panthor/panthor_gem.c
+index 8244a4e6c2a2..af0ac17f357f 100644
+--- a/drivers/gpu/drm/panthor/panthor_gem.c
++++ b/drivers/gpu/drm/panthor/panthor_gem.c
+@@ -2,6 +2,7 @@
+ /* Copyright 2019 Linaro, Ltd, Rob Herring <robh@kernel.org> */
+ /* Copyright 2023 Collabora ltd. */
+ 
++#include <linux/cleanup.h>
+ #include <linux/dma-buf.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/err.h>
+@@ -18,6 +19,14 @@ static void panthor_gem_free_object(struct drm_gem_object *obj)
+ 	struct panthor_gem_object *bo = to_panthor_bo(obj);
+ 	struct drm_gem_object *vm_root_gem = bo->exclusive_vm_root_gem;
+ 
++	/*
++	 * Label might have been allocated with kstrdup_const(),
++	 * we need to take that into account when freeing the memory
++	 */
++	kfree_const(bo->label.str);
 +
- 	if (fi->denominator == 0) {
- 		dev_dbg(fim->sd->dev, "no frame interval, FIM disabled\n");
- 		fim->enabled = false;
++	mutex_destroy(&bo->label.lock);
++
+ 	drm_gem_free_mmap_offset(&bo->base.base);
+ 	mutex_destroy(&bo->gpuva_list_lock);
+ 	drm_gem_shmem_free(&bo->base);
+@@ -196,6 +205,7 @@ struct drm_gem_object *panthor_gem_create_object(struct drm_device *ddev, size_t
+ 	obj->base.map_wc = !ptdev->coherent;
+ 	mutex_init(&obj->gpuva_list_lock);
+ 	drm_gem_gpuva_set_lock(&obj->base.base, &obj->gpuva_list_lock);
++	mutex_init(&obj->label.lock);
+ 
+ 	return &obj->base.base;
+ }
+@@ -247,3 +257,32 @@ panthor_gem_create_with_handle(struct drm_file *file,
+ 
+ 	return ret;
+ }
++
++void
++panthor_gem_bo_set_label(struct drm_gem_object *obj, const char *label)
++{
++	struct panthor_gem_object *bo = to_panthor_bo(obj);
++	const char *old_label;
++
++	scoped_guard(mutex, &bo->label.lock) {
++		old_label = bo->label.str;
++		bo->label.str = label;
++	}
++
++	kfree(old_label);
++}
++
++void
++panthor_gem_kernel_bo_set_label(struct panthor_kernel_bo *bo, const char *label)
++{
++	const char *str;
++
++	str = kstrdup_const(label, GFP_KERNEL);
++	if (!str) {
++		/* Failing to allocate memory for a label isn't a fatal condition */
++		drm_warn(bo->obj->dev, "Not enough memory to allocate BO label");
++		return;
++	}
++
++	panthor_gem_bo_set_label(bo->obj, str);
++}
+diff --git a/drivers/gpu/drm/panthor/panthor_gem.h b/drivers/gpu/drm/panthor/panthor_gem.h
+index 1a363bb814f4..af0d77338860 100644
+--- a/drivers/gpu/drm/panthor/panthor_gem.h
++++ b/drivers/gpu/drm/panthor/panthor_gem.h
+@@ -46,6 +46,20 @@ struct panthor_gem_object {
+ 
+ 	/** @flags: Combination of drm_panthor_bo_flags flags. */
+ 	u32 flags;
++
++	/**
++	 * @label: BO tagging fields. The label can be assigned within the
++	 * driver itself or through a specific IOCTL.
++	 */
++	struct {
++		/**
++		 * @label.str: Pointer to NULL-terminated string,
++		 */
++		const char *str;
++
++		/** @lock.str: Protects access to the @label.str field. */
++		struct mutex lock;
++	} label;
+ };
+ 
+ /**
+@@ -91,6 +105,9 @@ panthor_gem_create_with_handle(struct drm_file *file,
+ 			       struct panthor_vm *exclusive_vm,
+ 			       u64 *size, u32 flags, uint32_t *handle);
+ 
++void panthor_gem_bo_set_label(struct drm_gem_object *obj, const char *label);
++void panthor_gem_kernel_bo_set_label(struct panthor_kernel_bo *bo, const char *label);
++
+ static inline u64
+ panthor_kernel_bo_gpuva(struct panthor_kernel_bo *bo)
+ {
 -- 
-2.43.0
+2.48.1
 
