@@ -1,107 +1,89 @@
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7952857C0;
-	Thu, 10 Apr 2025 14:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744296807; cv=none; b=pu6FBdwjvMJPeUx5VvLUQiBIT5VoLZw2efwUuHAVUxkna9kw58N8cg9xadpPf6X3RGkAqUCuetcvwOJBN54LVLiN0GTnZI/qca53Wzvt+K7X1pFc5xTL4IMnNti+vkcEdiUDbL0i1l+pwcVVvTBiUJpA59tq/zHqe4oY9nFpV0M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744296807; c=relaxed/simple;
-	bh=4Vji/GfcxFWxhSbyxw7eJusyE4bs1XmFVkDlbNLqi70=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nxM/FEU9zvRFv7zrmhFg51x5Hzt3zCwmtsd0jy7VE1CNvuihUBGqGN1PQJBGuMp6CZpnf2GEFBmkOaFt6hM81ItDrXqaJaXxGR+qWyvl3SF8ouOFwpsbBlaHZp48i3WAtJD1dVy/Di09yLtZHcjoEXzEsKxXjAN6eM18g6VVx0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NF6ykLkL; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC731D88A6
+	for <linux-media@vger.kernel.org>; Thu, 10 Apr 2025 15:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744297347; cv=pass; b=pU25SrsHxZEkeCj7gxyALUO6PzNa9XFZrtPJrGn4Xj2G0kHVP/Qw9PL73NA1qOW8DkHvtpCFjl4nc5bvpxMi5B/IAT7Dl60YRQtk6jTfL19Gj47nP8p/1T8UMj52EPToOcQ3UOi9EWklAEtjQmaBQcDknzArIDuRuuVD7LQdAaA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744297347; c=relaxed/simple;
+	bh=/1FbbmJsFBLMxX7PccvowVztdrgy5tXdoyx0LNW5dUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ELRyQspkDoYNYrb4ugg+rItvK/ZAN0UOGY9gqjLBynaMuv99H1aEX8e6Pua7SGG1VQDN+0JWohowrUi9aYCL2fw0b0Q2Uj8t/8Q7YGRYFRGwacq9a7Rmk/7AumXyZBc2VYd9U2Aeo1/ODlpo9iB/iVEwDNrVlB5nZtP683Ucq4s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=iDZB2ITN; arc=pass smtp.client-ip=195.140.195.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NF6ykLkL"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 61F6E44332;
-	Thu, 10 Apr 2025 14:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744296801;
+	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="iDZB2ITN"
+Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-127c-61ff-fee2-b97e.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:127c:61ff:fee2:b97e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sailus)
+	by meesny.iki.fi (Postfix) with ESMTPSA id 4ZYNMV3Y3WzyV3;
+	Thu, 10 Apr 2025 18:02:14 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+	t=1744297334;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XACrmFtTTu8N1uzmt+oqhVkqMDjPP2HTNmYVXTmY2dU=;
-	b=NF6ykLkLs1mpP3vFcinXnQ4UgHn6oyDIvl+/g3UPJhGU3vw6NaAOXzzzKd0oG7WymyiYBP
-	dwCxqXoZKYRlHPLzPkvVODFRETsrQXJC8TWb9PLZPA//LNW9VA++zsi4HB4HOvyQRVTq3o
-	iPSxkKU5hDbDVzY7MoyqxMzjowP++qoK0Z1d0YwB8liPGKKS/2NWLoa72n046kXNjuHrEq
-	DFoG8kWwH3GMEUp9VBoWx/fcrefgFMkXlB+uCc6Sl2rJnQEdpKcG8dNMg2BFbKQfnzfgmz
-	9xOGv9UNDARU2O7BzJULt44+8Peyvq53zQGzI3z0C4LOnTpQOc12503/yCd53g==
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Subject: [PATCH 0/3] uio/dma-buf: Give UIO users access to DMA addresses.
-Date: Thu, 10 Apr 2025 16:53:17 +0200
-Message-Id: <20250410-uio-dma-v1-0-6468ace2c786@bootlin.com>
+	 in-reply-to:in-reply-to:references:references;
+	bh=qFdlvNU3M823Kq3x1w8z9Y81Lts2WhRQCiSq0u0SMUE=;
+	b=iDZB2ITNqZ15mPhAClmbQd7HUXhFlvyIxFZPS2+qzWAl3wzxb1TSuUrixMtBNt/Ug7hj16
+	YksNtf9sQTOKvJbJ05WgpxOS4+Cp4mTa93vMaUnxQWg0J8Ot8PBVbSMslTVX+6BEdR7Eiw
+	zU7Zbczunl3T1SAECNARKH8X5gLOTYs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=meesny; t=1744297334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qFdlvNU3M823Kq3x1w8z9Y81Lts2WhRQCiSq0u0SMUE=;
+	b=Imw3K+II5Xv8HqrXHXzkypPOStIUw4+FS+MhwvV1RH18DvrFIEMkcXO5pa2GVgnYTNRlHo
+	xzeiRSgP+JjjiXYsVIHyvWcy2unVrDzMDTD3oNOUL9F2OzP1m7PjXA9PtuKom5bIRLuxzM
+	33OHHiuEUEYXXwTH1PrX18pu551aCNk=
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1744297334; a=rsa-sha256; cv=none;
+	b=fxV8YdDeKnWCJ5Lp3CPFalzF3ZF1H7V/bX+H0loMGC1HIaIQXraEXI1kCRCCxM0utdjaUt
+	8/6dH6QI31mE/NNklywmpRK0Fs7i4QX2XGx3inXxUF8SGenkaSmKIPQlhnZu0ddNtyDl1n
+	VySezJt5BWhhthNZkAOHOqe4+qKH5UQ=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 70E58634C93;
+	Thu, 10 Apr 2025 18:02:12 +0300 (EEST)
+Date: Thu, 10 Apr 2025 15:02:12 +0000
+From: Sakari Ailus <sakari.ailus@iki.fi>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: Re: [PATCH] utils: media-ctl: Set V4L2_MBUS_FRAMEFMT_SET_CSC flag to
+ set colorspace
+Message-ID: <Z_fddMD_9GanGDjg@valkosipuli.retiisi.eu>
+References: <20250408161051.10472-1-laurent.pinchart@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAF3b92cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDEwML3dLMfN2U3ERdyyQDQ8NUy1TzNIMkJaDqgqLUtMwKsEnRsbW1AFK
- fJGlZAAAA
-X-Change-ID: 20250408-uio-dma-9b011e9e7f0b
-To: Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdelvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhepuegrshhtihgvnhcuvehurhhuthgthhgvthcuoegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfegudetkeffheffleehhfejvefhvdetfeefheettdfgkeegueekleeuvdejfeenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrdegvddrheegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepshhumhhithdrshgvmhifrghlsehlihhnrghrohdrohhrghdprhgtphhtthhopegthhhrihhsthhirghnrdhkohgvnhhighesrghmugdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrg
- hdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnrghrohdqmhhmqdhsihhgsehlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhmvgguihgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomh
-X-GND-Sasl: bastien.curutchet@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250408161051.10472-1-laurent.pinchart@ideasonboard.com>
 
-Hi all,
+On Tue, Apr 08, 2025 at 07:10:51PM +0300, Laurent Pinchart wrote:
+> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> 
+> When setting colorspace fields on a source pad, the V4L2 subdev API
+> requires setting the V4L2_MBUS_FRAMEFMT_SET_CSC flag. This is missing
+> in libv4l2subdev, resulting in colorspace fields being ignored for
+> source pad. Fix it by setting the flag.
+> 
+> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-Many UIO users performing DMA from their UIO device need to access the
-DMA addresses of the allocated buffers. There are out-of-tree drivers
-that allow to do it but nothing in the mainline.
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-I know DMA shouldn't be handled by userspace but, IMHO, since UIO
-drivers exist, it would be better if they offered a way of doing this.
-
-This patch series use the dma-heap framework which already allows
-userspace to allocate DMA buffers. I tried to avoid 'polluting' the
-existing heaps to prevent inappropriate uses of this new feature by
-introducing a new UIO heap, which is the only one implementing this
-behavior.
-
-PATCH 1 allows the creation of heaps that don't implement map/unmap_buf
-operations as UIO heap doesn't use them.
-PATCH 2 adds the DMA_BUF_IOCTL_GET_DMA_ADDR which transmits the DMA
-addresses to userspace.
-PATCH 3 implements the UIO heap.
-
-It has been tested with the uio_pci_generic driver on a PowerPC.
-
-Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
----
-Bastien Curutchet (3):
-      dma-buf: Allow heap that doesn't provide map_buf/unmap_buf
-      dma-buf: Add DMA_BUF_IOCTL_GET_DMA_ADDR
-      uio: Add UIO_DMABUF_HEAP
-
- drivers/dma-buf/dma-buf.c    |  29 +++++++++--
- drivers/uio/Kconfig          |   9 ++++
- drivers/uio/Makefile         |   1 +
- drivers/uio/uio.c            |   4 ++
- drivers/uio/uio_heap.c       | 120 +++++++++++++++++++++++++++++++++++++++++++
- include/linux/dma-buf.h      |   1 +
- include/linux/uio_driver.h   |   2 +
- include/uapi/linux/dma-buf.h |   1 +
- 8 files changed, 164 insertions(+), 3 deletions(-)
----
-base-commit: 5f13fa25acaa4f586aaed12efcf7436e004eeaf2
-change-id: 20250408-uio-dma-9b011e9e7f0b
-
-Best regards,
 -- 
-Bastien Curutchet <bastien.curutchet@bootlin.com>
-
+Sakari Ailus
