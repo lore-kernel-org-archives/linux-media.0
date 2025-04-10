@@ -1,85 +1,107 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE26201033
-	for <linux-media@vger.kernel.org>; Thu, 10 Apr 2025 06:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB09203705;
+	Thu, 10 Apr 2025 06:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744265987; cv=none; b=pqBuiptgFPTP+WiCPtl/TlkAAvFNsCiG6q4XpL35MtsMF4asQi84vOEvs8f2y0UPVbYaqdfV3OOi9Mfa7WAgGVackfC5+h2w08FRRK0tPaW/FKdAeViimTfrYfoc80bCY0VyLGhTIHcy6naUnalDCzn62E+Qwt6UW5ZdKwM6HB8=
+	t=1744266622; cv=none; b=nYw+u3s+rIsb30I3q93YE5YgljHqgsPcB9EW60BS4Jdh0kiNxisEJlJ5L9mx6y89Ce9KcC236MHXwjqvNbageFgMKmf650ekEzQR3L6SlWsvurmsb0CMF4UULLZmZvYqArmJDX0zVU2S9hNtS6mM5GJdL5QOKhbO4IiTfA1kiow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744265987; c=relaxed/simple;
-	bh=fNKcWfeOv5X1UZBWJNkpzhwgnAdoDWDmVg5nRct5t9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5FoHkyROZsEWLbAavFMVetXuc9l25sR7mwf2aHTy7unwE+ELiZAiBhRuPaW8r1NUBXW+qF0AvwPblTwAZ1NF0B80rsQvytoLNgjYNSHTSmGvelxrBFeE59BATiL07cgXJpKb3cI75PQPx9i3xYWleepz6oNaMOHrToxWs+7Q5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=htEwGSK2; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1744266622; c=relaxed/simple;
+	bh=67jrV5WUx9kE3+pt0WVw3SkGEpMEIVK7S0J1Wsf4Luk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SvihJll05q1gwXPCJXwh3+Q49sCoBYRVCApQlyNInjSkwxmgh9wQj8RfqZrr4Mtge4BAKzi3XJZHDwuEx86P0m9hfU89Iqtmvql/IhNE0GywjwpFGyW2rU6ZK4JTyOdCdME0oFzUi7z94iUrOfIlKlXpLwbfnRmtNQahJhzGnnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Dj/9aJT4; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="htEwGSK2"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cf848528aso3287875e9.2
-        for <linux-media@vger.kernel.org>; Wed, 09 Apr 2025 23:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744265984; x=1744870784; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNKcWfeOv5X1UZBWJNkpzhwgnAdoDWDmVg5nRct5t9Y=;
-        b=htEwGSK2vTaIz8z9lllONirib9yEqiD5v/DZnd4q4o9BpuIaC3KgzNXckydokW0lEe
-         NAR392W9t4STF0jnCmN52u2421PR1SMbkM15nET3h1l2TJj1nUTvuRSX7gxOW3h5/qP3
-         62BgvUgneCIaJpWKDGSNed47+ML9q0wobqdVuZraRw1uChE8LKanoEvMGCBTHmKu9l9H
-         xxie6qDQptIb2l1Ad3idobgkwu9niKbRnwLk5QE/W7wpvbhuE9KmsSHnDMoTTUyZ3/39
-         iusfvqJk1r4Y06GTcB7C8bR6KWQaVArohb2f9XCLTuErSYPhIs8dTsUncCzfNK4jzHsW
-         PMBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744265984; x=1744870784;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fNKcWfeOv5X1UZBWJNkpzhwgnAdoDWDmVg5nRct5t9Y=;
-        b=DG29q5bjuJPXwNih2qL6IgwR2wlXtY01Q/TqmVPlf5HDruQcCA9srdTT1pG6hiGqE4
-         oTbBAPSR+JXIWEhsUqEHFLCSGrxIuUJGNVyRZUrSfAweXojh2yiHn9wKnP05HFe0/YYy
-         6Sq3baX/kDw4EaD4Xz6RZdCaXL6kuBsAgHsX30YYveWYwMJiPSvMYygKjqX+7lfIEh0v
-         BXY1yuQdn4IZmz0Pg9CIB/7fqqrbRThY8RnUsxZnilig7lv2xi3I0zDtTvGMC6cVocOZ
-         V45skR85xqjCpTwL4rwIQn7/KYkRPgYcT9yvYZGWWIJ5/55UR4RgwWDxbXlDqTZEuKY3
-         4cPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXY/fqvZya+SDyhEChImiU4F4nrMeLbz73MGK3aoKosOo9xMpMHhWMtY0yZvSeNOYxwhgmAJ9X8Uf7hxA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEGg6kQvY4tPJcR9HNdOjPLrNmbLy4kxJghQvNvAekTI8Y9Xhq
-	oi38Iq7NTplv7m8525nBS5mVI9Hi4JQoAodEq4w/wl0+q388056R4Zg2eCXmAwA=
-X-Gm-Gg: ASbGncun9ZWDcPaHqkcUrPIudUD6qJsCthIbGZKzyNpfCGALOSMzVMk4paZv+9blX+d
-	LT32qymAcoum6Z3mGA+mq1gwN1S4wuehJv43GJhUcPWbYLf5QDxfr/5yHgg64IJR9zyq5Z1BqBO
-	mn4TU6PSK2ESYLAjn5cxFpXUdrCrPJeYVJTFzARiDRUTfSmp7AFdMjkSRGK+28zSJZJO5+hUhbc
-	bZP6bi65eFvoXDeXh8bVbLfZQBQoQqdSsgDpv05o4oBGoGHZR4nNw630y6twzCAWYGKXKQG24jt
-	VeFlnLtd/XKyqH7gYLbLFYYcacQdGSOmpK0xm4Q7eSwVV7FRdT++e1Ui
-X-Google-Smtp-Source: AGHT+IETxKgteFp+KK8rObwmu67CyaszSv6hN7I3pcGlN+mzeZYmJ4TDp+koJRpZX2WmH9ySINK8Og==
-X-Received: by 2002:a05:600c:b8b:b0:43d:4686:5cfb with SMTP id 5b1f17b1804b1-43f2d9604f3mr15862495e9.27.1744265983907;
-        Wed, 09 Apr 2025 23:19:43 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43f23572bb2sm39720035e9.29.2025.04.09.23.19.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 23:19:43 -0700 (PDT)
-Date: Thu, 10 Apr 2025 09:19:40 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Siddarth G <siddarthsgml@gmail.com>
-Cc: slongerbeam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-	gregkh@linuxfoundation.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] media: imx: Fix NULL pointer dereference
-Message-ID: <e4252054-69e0-4f65-bb75-54ba4a24e5d3@stanley.mountain>
-References: <20250410050543.6963-1-siddarthsgml@gmail.com>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Dj/9aJT4"
+X-UUID: 42fd35b215d511f0aae1fd9735fae912-20250410
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Wb38Lrsbjihsded5puREHzLVno5a5AXyiSOJ4Mw+QZs=;
+	b=Dj/9aJT4ZyrtyWljC75adJOC6gPuSTyOsazhlHimd+S7mb8FOqE5uypggyQ549H+tfOYuLKeMgKIUWTQZu5WVNMvBaHNTSsR9WCA+6FWUnt4ChbwMDnmu5q7TfK3zp8GYcyr54QCocI37hEdG/csnGkwtUGSZ+eO4eE9uNy7g/4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.2.1,REQID:0efc0ab8-da7b-496a-9705-16838f97687b,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:0ef645f,CLOUDID:4dc86f8d-f5b8-47d5-8cf3-b68fe7530c9a,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 5,DFT|NGT
+X-CID-BAS: 5,DFT|NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 42fd35b215d511f0aae1fd9735fae912-20250410
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <kyrie.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 962740098; Thu, 10 Apr 2025 14:30:14 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Thu, 10 Apr 2025 14:30:13 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Thu, 10 Apr 2025 14:30:12 +0800
+From: kyrie.wu <kyrie.wu@mediatek.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, kyrie wu
+	<kyrie.wu@mediatek.corp-partner.google.com>, <linux-media@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
+CC: kyrie.wu <kyrie.wu@mediatek.com>
+Subject: [PATCH v2 02/12] dt-bindings: mediatek: Add mediatek, mt8196-jpgenc compatible
+Date: Thu, 10 Apr 2025 14:29:55 +0800
+Message-ID: <20250410063006.5313-3-kyrie.wu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250410063006.5313-1-kyrie.wu@mediatek.com>
+References: <20250410063006.5313-1-kyrie.wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250410050543.6963-1-siddarthsgml@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-The same comments apply.
+Add mediatek,mt8196-jpgenc compatible to binding document.
 
-regards,
-dan carpenter
+Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
+---
+ .../bindings/media/mediatek,mt8195-jpegenc.yaml           | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+index 596186497b68..e2d772ea0fb0 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
+@@ -14,7 +14,9 @@ description:
+ 
+ properties:
+   compatible:
+-    const: mediatek,mt8195-jpgenc
++    enum:
++      - mediatek,mt8195-jpgenc
++      - mediatek,mt8196-jpgenc
+ 
+   power-domains:
+     maxItems: 1
+@@ -44,7 +46,9 @@ patternProperties:
+ 
+     properties:
+       compatible:
+-        const: mediatek,mt8195-jpgenc-hw
++        enum:
++          - mediatek,mt8195-jpgenc-hw
++          - mediatek,mt8196-jpgenc-hw
+ 
+       reg:
+         maxItems: 1
+-- 
+2.46.0
 
