@@ -1,120 +1,204 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A08520409F;
-	Thu, 10 Apr 2025 06:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BFB2040A8
+	for <linux-media@vger.kernel.org>; Thu, 10 Apr 2025 06:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744268229; cv=none; b=Yb1kJt/eHRO3X6CNDj3Aty9f9MEIsXAuPk5ANaPrWBLQnG5GMwK0unalS1uQ0GIYK50Ca+DnKv8DEAKRljVxGkodgJRk1x7LLsle5JfPodVGc+6MpKNBS2WcBfyg5A3TAviGkFxlqBrufPwSCaauqXAT+2Tt2MR9El/07KZ1PlM=
+	t=1744268301; cv=none; b=VTdi22yePTK6+NWM1V+HQKAcPXXPcnuYoIrftWn6FQ7H3E8bdA+FAyGkNp/rWQqu+HUBVwodg/mjtYs8Hlf9zU9ekE98Dg/05xbZWM1DJm+jYmr469WH+BPKIILXYyllwJA/8Np8k+QxcHcSLCJ7qP4xk8qWylGexNOthesPnk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744268229; c=relaxed/simple;
-	bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=G3FtJk+92ElaV2WqM2kIayN/PjcCQkPVZD4IQj7XWIVeesz21U0xJFcbr4xq4yRX20bz1e7SzwHFT6pnU77B2xh3J1/VSJyq10Rf4Jkfegda6oPdAemCHW8pKpMDuRTP2viapvPBOVxvm1wDdetwzryrYbroebrRvTi8kRUZtio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=B7WavQWr; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1744268301; c=relaxed/simple;
+	bh=2KoSXSkuK9MMuaiJdsmJ2eYgrVzk0/HXIBFogpd5olY=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=pmm4ARZyyOMtA6JIiUhgwvELqEZZyzOws9w8XJNd9WbDKwsdfxsZVUumZjbq5Dtm9yVytukMRh5ywJFegFaComJbJaJKdUFSjRVzPIREzecsNontWn7GHjXbYOSb6dHwBUDCKiGleHw7OWLWc9yU6rM9rwOntaoTzcVlaprGpVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DJY3isjF; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="B7WavQWr"
-Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c68:389d:1fcb:c0f8:ff7c:208d])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D3BF352;
-	Thu, 10 Apr 2025 08:47:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1744267654;
-	bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
-	h=From:Subject:Date:To:Cc:From;
-	b=B7WavQWry6UOc91+kOpcy0Jex2kmF8oQYe4gwHn1e50RhqLKl6lMyj1k7nemN5aTL
-	 G2Ey4Gc4w8lrSbDXip3e6RcG02tD9XxHfDlhIjkrot+a+0DQm73OBrIqZd1CX6lbLV
-	 Nto8GO06wcVoEH2ZxFs4XSuR8J22IAw+0ZKui160=
-From: Jai Luthra <jai.luthra@ideasonboard.com>
-Subject: [PATCH v2 0/6] media: ti, cdns: Multiple pixel support and misc
- fixes
-Date: Thu, 10 Apr 2025 12:18:58 +0530
-Message-Id: <20250410-probe_fixes-v2-0-801bc6eebdea@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJY3isjF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744268299; x=1775804299;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=2KoSXSkuK9MMuaiJdsmJ2eYgrVzk0/HXIBFogpd5olY=;
+  b=DJY3isjF5WwsLu3H+8pN4LHpfKSYP8aJ0a65KplE1q2zQXpgUZZ7w726
+   5/JbrvqmOhAQzXDvJcfXSADi56a6XpzDym74zgA5KcUGG+LBDY+CINsZy
+   4A9Pj6ETApRCQqcq/nz79bi1QKR9TlXfgvzKVuovWj2DKm6LLU36BDojd
+   nbPRR3TBaYDG3Iq32W2pgP8WvlUqdVu0STmbXTODTK7Sdbby36ptCsoRg
+   AxNGy7rSPb8kWBshqPx/lPYXmTtFq3PkzcznK2NP8/Fgvj9UpXvUvTWZ9
+   uCphPrcZMA4WnKWxlQDdKlWnlt6D5DNrZ0LczIzmEccAFmS6Ljk0q4+or
+   A==;
+X-CSE-ConnectionGUID: NZqsiLG9Q9GrlsWVszFL6Q==
+X-CSE-MsgGUID: Ms00tiN8RSmZwa2Cb1x4MA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11399"; a="44909633"
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="44909633"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 23:58:18 -0700
+X-CSE-ConnectionGUID: ue4uxoMTTiik+zFz2Qk/vg==
+X-CSE-MsgGUID: iwufJATPREOAvzo29LGdxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,202,1739865600"; 
+   d="scan'208";a="166024980"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.136]) ([10.238.232.136])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2025 23:58:17 -0700
+Subject: Re: [PATCH] media: intel/ipu6: Fix dma mask for non-secure mode
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ linux-media@vger.kernel.org
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Bingbu Cao <bingbu.cao@intel.com>
+References: <20250409095825.1014521-1-stanislaw.gruszka@linux.intel.com>
+From: Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <57590fee-9f62-8776-1597-6e125daafe58@linux.intel.com>
+Date: Thu, 10 Apr 2025 14:53:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20250409095825.1014521-1-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANpp92cC/1WMQQ6CMBREr0L+2pq2SIiuvAchpvwO8hdS0hqiI
- b27lbhx+Wby3kYJUZDoUm0UsUqSMBewh4p4cvMdSnxhsto2ujYntcQw4DbKC0m10OC65nYEqBh
- LxH4UoesLT5KeIb73+Gq+669j/zurUVo17JvhDMOj46t4uBTmIbjojxwe1OecP+BadtatAAAA
-X-Change-ID: 20250314-probe_fixes-7e0ec33c7fee
-To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Hans Verkuil <hverkuil@xs4all.nl>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>
-Cc: Devarsh Thakkar <devarsht@ti.com>, 
- Rishikesh Donadkar <r-donadkar@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>, 
- Changhuang Liang <changhuang.liang@starfivetech.com>, 
- linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jai Luthra <jai.luthra@ideasonboard.com>, stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1935;
- i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
- bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBn92n3h1WpxYc5U+5o8ZhWdDvQsy/67YALCVx+Q
- LKcf5r7SrOJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZ/dp9wAKCRBD3pH5JJpx
- RedBEADMoVa6NazGysA+dKxVB4RPurD9DkKRcUp7xqEWs3YyTp1DtvP3blvpD7rdZz+YAQQeyOL
- 4BFroN+n9O8Y5pDEnheys4FxlGz9ct21Z5Kc0Tq7eDGSnGGyihkxW96qZP6K5XcBjVyc8JvPb5u
- pYHJyEDGefZsoCoTjZahgO74VFf1XzqvxM888C0Rv3pnv2RkHNXdksxaw9/0LLMpC9tVEj8iE/N
- r+X4IpUufMkIkzxzcDxaMdRUO+f0ntj07LLmj3jkWcl8ejq+A7kOhg3/d8pE0bvvtjBv/Key/M3
- GYJU5Vzgq6TjzvFkGqSAHcrqIETdpytMAUBNUgkFBGE3jaSXO8TT2n2TqK10doWZB0PLyltMGh8
- CkRJvKXDne8j//bgajYiFDltgoeTq9Z2kp4/SzIsCK6lgt4gbahHpS0i8yLvWLop9zokV7QoJwZ
- 4IbZGfCv94oaD7boTem5yImIvK6DuGUxHlXX6NAThzvJXbHboXFKWbl8hkwXfY/WAMZT/75yqQP
- yAdBjMSBMCdyPbb/K/zSELcsxpLoyE22mgKgG1dB24ymebd04TfyD0QT3Q4dkneKAZoQayiRNYD
- 4xul3H9s/E6xHbtvgBtkWbFCXg5VM0vhNalziO1EcouRsbpKWvjcgO1+Zr9qVnzvXDGjOgcXLO0
- NE3DJdQRpY7cm4A==
-X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 
-Hi,
+Stanislaw,
 
-The first four patches in this series are miscellaneous fixes and
-improvements in the Cadence and TI CSI-RX drivers around probing, fwnode
-and link creation.
+Thanks for the patch.
 
-The last two patches add support for transmitting multiple pixels per
-clock on the internal bus between Cadence CSI-RX bridge and TI CSI-RX
-wrapper. As this internal bus is 32-bit wide, the maximum number of
-pixels that can be transmitted per cycle depend upon the format's bit
-width. Secondly, the downstream element must support unpacking of
-multiple pixels.
+On 4/9/25 5:58 PM, Stanislaw Gruszka wrote:
+> We use dma_get_mask() of auxdev device for calculate iova pfn limit.
+> This is always 32 bit mask as we do not initialize the mask (and we can
+> not do so, since dev->dev_mask is NULL anyways for auxdev).
 
-Thus we export a module function that can be used by the downstream
-driver to negotiate the pixels per cycle on the output pixel stream of
-the Cadence bridge.
+Indeed.
 
-Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
----
-Changes in v2:
-- Rebase on v6.15-rc1
-- Fix lkp warnings in PATCH 5/6 missing header for FIELD_PREP
-- Add R-By tags from Devarsh and Changhuang
-- Link to v1: https://lore.kernel.org/r/20250324-probe_fixes-v1-0-5cd5b9e1cfac@ideasonboard.com
+> 
+> Since we need 31 bit mask for non-secure mode create wrapper of
+> alloc_iova() which use mmu_info->aperture_end. This give us always
+> the correct mask.
+> 
+> Fixes: daabc5c64703 ("media: ipu6: not override the dma_ops of device in driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> ---
+>  drivers/media/pci/intel/ipu6/ipu6-dma.c |  6 ++----
+>  drivers/media/pci/intel/ipu6/ipu6-dma.h |  7 -------
+>  drivers/media/pci/intel/ipu6/ipu6-mmu.c |  3 +--
+>  drivers/media/pci/intel/ipu6/ipu6-mmu.h | 13 +++++++++++++
+>  4 files changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-dma.c b/drivers/media/pci/intel/ipu6/ipu6-dma.c
+> index b34022bad83b..a1d4ec35f802 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-dma.c
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-dma.c
+> @@ -171,8 +171,7 @@ void *ipu6_dma_alloc(struct ipu6_bus_device *sys, size_t size,
+>  	size = PAGE_ALIGN(size);
+>  	count = PHYS_PFN(size);
+>  
+> -	iova = alloc_iova(&mmu->dmap->iovad, count,
+> -			  PHYS_PFN(dma_get_mask(dev)), 0);
 
----
-Jai Luthra (6):
-      media: ti: j721e-csi2rx: Use devm_of_platform_populate
-      media: ti: j721e-csi2rx: Use fwnode_get_named_child_node
-      media: ti: j721e-csi2rx: Fix source subdev link creation
-      media: cadence: csi2rx: Implement get_fwnode_pad op
-      media: cadence: cdns-csi2rx: Support multiple pixels per clock cycle
-      media: ti: j721e-csi2rx: Support multiple pixels per clock
+How about directly call?
+	iova = alloc_iova(&mmu->dmap->iovad, count,
+			  PHYS_PFN(mmu->dmap->mmu_info->aperture_end), 0);
 
- drivers/media/platform/cadence/cdns-csi2rx.c       | 76 +++++++++++++++++-----
- drivers/media/platform/cadence/cdns-csi2rx.h       | 19 ++++++
- drivers/media/platform/ti/Kconfig                  |  3 +-
- .../media/platform/ti/j721e-csi2rx/j721e-csi2rx.c  | 66 ++++++++++++++-----
- 4 files changed, 129 insertions(+), 35 deletions(-)
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250314-probe_fixes-7e0ec33c7fee
+Less change, better.
 
-Best regards,
+> +	iova = ipu6_alloc_iova(mmu, count);
+>  	if (!iova)
+>  		goto out_kfree;
+>  
+> @@ -397,8 +396,7 @@ int ipu6_dma_map_sg(struct ipu6_bus_device *sys, struct scatterlist *sglist,
+>  	dev_dbg(dev, "dmamap trying to map %d ents %zu pages\n",
+>  		nents, npages);
+>  
+> -	iova = alloc_iova(&mmu->dmap->iovad, npages,
+> -			  PHYS_PFN(dma_get_mask(dev)), 0);
+> +	iova = ipu6_alloc_iova(mmu, npages);
+>  	if (!iova)
+>  		return 0;
+>  
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-dma.h b/drivers/media/pci/intel/ipu6/ipu6-dma.h
+> index b51244add9e6..0dd7c0556bd2 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-dma.h
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-dma.h
+> @@ -6,8 +6,6 @@
+>  
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/dma-mapping.h>
+> -#include <linux/iova.h>
+> -#include <linux/iova.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/types.h>
+>  
+> @@ -15,11 +13,6 @@
+>  
+>  struct ipu6_mmu_info;
+>  
+> -struct ipu6_dma_mapping {
+> -	struct ipu6_mmu_info *mmu_info;
+> -	struct iova_domain iovad;
+> -};
+> -
+>  void ipu6_dma_sync_single(struct ipu6_bus_device *sys, dma_addr_t dma_handle,
+>  			  size_t size);
+>  void ipu6_dma_sync_sg(struct ipu6_bus_device *sys, struct scatterlist *sglist,
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-mmu.c b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+> index 6d1c0b90169d..95eb17855847 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-mmu.c
+> @@ -421,8 +421,7 @@ static int allocate_trash_buffer(struct ipu6_mmu *mmu)
+>  	int ret;
+>  
+>  	/* Allocate 8MB in iova range */
+> -	iova = alloc_iova(&mmu->dmap->iovad, n_pages,
+> -			  PHYS_PFN(mmu->dmap->mmu_info->aperture_end), 0);
+> +	iova = ipu6_alloc_iova(mmu, n_pages);
+>  	if (!iova) {
+>  		dev_err(mmu->dev, "cannot allocate iova range for trash\n");
+>  		return -ENOMEM;
+> diff --git a/drivers/media/pci/intel/ipu6/ipu6-mmu.h b/drivers/media/pci/intel/ipu6/ipu6-mmu.h
+> index 8e40b4a66d7d..7f3860796762 100644
+> --- a/drivers/media/pci/intel/ipu6/ipu6-mmu.h
+> +++ b/drivers/media/pci/intel/ipu6/ipu6-mmu.h
+> @@ -7,6 +7,7 @@
+>  #define ISYS_MMID 1
+>  #define PSYS_MMID 0
+>  
+> +#include <linux/iova.h>
+>  #include <linux/list.h>
+>  #include <linux/spinlock_types.h>
+>  #include <linux/types.h>
+> @@ -58,6 +59,11 @@ struct ipu6_mmu {
+>  	void (*tlb_invalidate)(struct ipu6_mmu *mmu);
+>  };
+>  
+> +struct ipu6_dma_mapping {
+> +	struct ipu6_mmu_info *mmu_info;
+> +	struct iova_domain iovad;
+> +};
+> +
+>  struct ipu6_mmu *ipu6_mmu_init(struct device *dev,
+>  			       void __iomem *base, int mmid,
+>  			       const struct ipu6_hw_variants *hw);
+> @@ -70,4 +76,11 @@ void ipu6_mmu_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
+>  		    size_t size);
+>  phys_addr_t ipu6_mmu_iova_to_phys(struct ipu6_mmu_info *mmu_info,
+>  				  dma_addr_t iova);
+> +
+> +static inline struct iova *ipu_alloc_iova(struct ipu6_mmu *mmu,
+> +					  unsigned long n_pages)
+> +{
+> +	return alloc_iova(&mmu->dmap->iovad, n_pages,
+> +			  PHYS_PFN(mmu->dmap->mmu_info->aperture_end), 0);
+> +}
+>  #endif
+> 
+
 -- 
-Jai Luthra <jai.luthra@ideasonboard.com>
-
+Best regards,
+Bingbu Cao
