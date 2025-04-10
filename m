@@ -1,84 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3251CA84;
-	Thu, 10 Apr 2025 06:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A08520409F;
+	Thu, 10 Apr 2025 06:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744267857; cv=none; b=QfTFml2tv7/Jtgy373DJVBdF1GS+kNRQuIW9sgX3IqAY5qKw97CUnAC3D4N6VsriEmKjco/2MuyPjGGNGgt0DYRSkp1DmT9DDQitoO13eqjjQ/OfgJOfisdNODbPzmjuEaLHVHRXNFU+YhntlvzlhYvHZKVBtLXN6V4mWdC35Sk=
+	t=1744268229; cv=none; b=Yb1kJt/eHRO3X6CNDj3Aty9f9MEIsXAuPk5ANaPrWBLQnG5GMwK0unalS1uQ0GIYK50Ca+DnKv8DEAKRljVxGkodgJRk1x7LLsle5JfPodVGc+6MpKNBS2WcBfyg5A3TAviGkFxlqBrufPwSCaauqXAT+2Tt2MR9El/07KZ1PlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744267857; c=relaxed/simple;
-	bh=oVVypfIZykbJEQUFj6tpG/UltoN/4XMwbZYbd2kQ7kI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mj6yagRU5mUPSRVfUuec8z2+xq9GZkuEL1gzP909xPQ9k8/qtelOOg0s+gtt3EpqhcFgmk6IMUEubSZ06NTc8Caw9cooViFcx2N0Pc9TP0K24y64yGV3+qbpUezFOTjooGgtINZIv1cC7dYHJHl7r0PjuPxyp1nWLxXmKGB6k5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqEnuwia; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744268229; c=relaxed/simple;
+	bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=G3FtJk+92ElaV2WqM2kIayN/PjcCQkPVZD4IQj7XWIVeesz21U0xJFcbr4xq4yRX20bz1e7SzwHFT6pnU77B2xh3J1/VSJyq10Rf4Jkfegda6oPdAemCHW8pKpMDuRTP2viapvPBOVxvm1wDdetwzryrYbroebrRvTi8kRUZtio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=B7WavQWr; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqEnuwia"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140FBC4CEDD;
-	Thu, 10 Apr 2025 06:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744267857;
-	bh=oVVypfIZykbJEQUFj6tpG/UltoN/4XMwbZYbd2kQ7kI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gqEnuwiaej19DrqZe+DtruKMOvFDBPrz1QRZkGnfR90J82xJFUK/V19L5osLCbaP+
-	 8J8881p+fwLJIpI6i7PeJ0ICDTnWhsaikSxkITW+wgsCG1vLtfEFCBSks8iIXcOVGj
-	 SvSqJvpID3Fh8JNzSgvKzFeBfgXVpA3qeZ/aAnnQ1PPtZVyYd8XmrNH/79BHrGM24l
-	 QaCUtSkXya7xNbjO+/Yh7dmQSjzoRAsqb3VEKiMExDrMEI1rxKJBCI8BKtzrsFgKvi
-	 MqT2Og637tuyWSzGO1UAaTWJMydMFn42WSciFXVtXS3iiWRXWWs4tt+XlJF0dl/TaQ
-	 6pkfMcPXOZClA==
-Date: Thu, 10 Apr 2025 08:50:52 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Aaron Kling <webgeek1234@gmail.com>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	linux-tegra@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] media: dt-bindings: Document Tegra186 and
- Tegra194 cec
-Message-ID: <20250410-hallowed-poised-copperhead-eedc4d@shite>
-References: <20250409-tegra-cec-v3-0-91640131dfa2@gmail.com>
- <20250409-tegra-cec-v3-1-91640131dfa2@gmail.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="B7WavQWr"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c68:389d:1fcb:c0f8:ff7c:208d])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D3BF352;
+	Thu, 10 Apr 2025 08:47:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1744267654;
+	bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=B7WavQWry6UOc91+kOpcy0Jex2kmF8oQYe4gwHn1e50RhqLKl6lMyj1k7nemN5aTL
+	 G2Ey4Gc4w8lrSbDXip3e6RcG02tD9XxHfDlhIjkrot+a+0DQm73OBrIqZd1CX6lbLV
+	 Nto8GO06wcVoEH2ZxFs4XSuR8J22IAw+0ZKui160=
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Subject: [PATCH v2 0/6] media: ti, cdns: Multiple pixel support and misc
+ fixes
+Date: Thu, 10 Apr 2025 12:18:58 +0530
+Message-Id: <20250410-probe_fixes-v2-0-801bc6eebdea@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250409-tegra-cec-v3-1-91640131dfa2@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANpp92cC/1WMQQ6CMBREr0L+2pq2SIiuvAchpvwO8hdS0hqiI
+ b27lbhx+Wby3kYJUZDoUm0UsUqSMBewh4p4cvMdSnxhsto2ujYntcQw4DbKC0m10OC65nYEqBh
+ LxH4UoesLT5KeIb73+Gq+669j/zurUVo17JvhDMOj46t4uBTmIbjojxwe1OecP+BadtatAAAA
+X-Change-ID: 20250314-probe_fixes-7e0ec33c7fee
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>
+Cc: Devarsh Thakkar <devarsht@ti.com>, 
+ Rishikesh Donadkar <r-donadkar@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Changhuang Liang <changhuang.liang@starfivetech.com>, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jai Luthra <jai.luthra@ideasonboard.com>, stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1935;
+ i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
+ bh=nfZ/qaCPBRBC+1jXUho0dbH11syiIaVwTmwsgMbqKN4=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBn92n3h1WpxYc5U+5o8ZhWdDvQsy/67YALCVx+Q
+ LKcf5r7SrOJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZ/dp9wAKCRBD3pH5JJpx
+ RedBEADMoVa6NazGysA+dKxVB4RPurD9DkKRcUp7xqEWs3YyTp1DtvP3blvpD7rdZz+YAQQeyOL
+ 4BFroN+n9O8Y5pDEnheys4FxlGz9ct21Z5Kc0Tq7eDGSnGGyihkxW96qZP6K5XcBjVyc8JvPb5u
+ pYHJyEDGefZsoCoTjZahgO74VFf1XzqvxM888C0Rv3pnv2RkHNXdksxaw9/0LLMpC9tVEj8iE/N
+ r+X4IpUufMkIkzxzcDxaMdRUO+f0ntj07LLmj3jkWcl8ejq+A7kOhg3/d8pE0bvvtjBv/Key/M3
+ GYJU5Vzgq6TjzvFkGqSAHcrqIETdpytMAUBNUgkFBGE3jaSXO8TT2n2TqK10doWZB0PLyltMGh8
+ CkRJvKXDne8j//bgajYiFDltgoeTq9Z2kp4/SzIsCK6lgt4gbahHpS0i8yLvWLop9zokV7QoJwZ
+ 4IbZGfCv94oaD7boTem5yImIvK6DuGUxHlXX6NAThzvJXbHboXFKWbl8hkwXfY/WAMZT/75yqQP
+ yAdBjMSBMCdyPbb/K/zSELcsxpLoyE22mgKgG1dB24ymebd04TfyD0QT3Q4dkneKAZoQayiRNYD
+ 4xul3H9s/E6xHbtvgBtkWbFCXg5VM0vhNalziO1EcouRsbpKWvjcgO1+Zr9qVnzvXDGjOgcXLO0
+ NE3DJdQRpY7cm4A==
+X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
+ fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 
-On Wed, Apr 09, 2025 at 05:57:22PM GMT, Aaron Kling wrote:
-> These are already used in device trees, so describe them here. As the
-> driver only declares up through Tegra210, these must use a fallback
-> compatible of tegra210-cec.
-> 
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> ---
->  .../bindings/media/cec/nvidia,tegra114-cec.yaml           | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml b/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-> index a6b73498bc217a2e884e31af91e9d8845c9b1d76..3637fe2dfbd0dbb1baf265d7c128954df8faf740 100644
-> --- a/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-> +++ b/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-> @@ -14,10 +14,17 @@ allOf:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - nvidia,tegra114-cec
-> -      - nvidia,tegra124-cec
-> -      - nvidia,tegra210-cec
-> +    oneOf:
-> +      - items:
+Hi,
 
-That's just enum. Drop items and de-indent by two.
+The first four patches in this series are miscellaneous fixes and
+improvements in the Cadence and TI CSI-RX drivers around probing, fwnode
+and link creation.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The last two patches add support for transmitting multiple pixels per
+clock on the internal bus between Cadence CSI-RX bridge and TI CSI-RX
+wrapper. As this internal bus is 32-bit wide, the maximum number of
+pixels that can be transmitted per cycle depend upon the format's bit
+width. Secondly, the downstream element must support unpacking of
+multiple pixels.
+
+Thus we export a module function that can be used by the downstream
+driver to negotiate the pixels per cycle on the output pixel stream of
+the Cadence bridge.
+
+Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+---
+Changes in v2:
+- Rebase on v6.15-rc1
+- Fix lkp warnings in PATCH 5/6 missing header for FIELD_PREP
+- Add R-By tags from Devarsh and Changhuang
+- Link to v1: https://lore.kernel.org/r/20250324-probe_fixes-v1-0-5cd5b9e1cfac@ideasonboard.com
+
+---
+Jai Luthra (6):
+      media: ti: j721e-csi2rx: Use devm_of_platform_populate
+      media: ti: j721e-csi2rx: Use fwnode_get_named_child_node
+      media: ti: j721e-csi2rx: Fix source subdev link creation
+      media: cadence: csi2rx: Implement get_fwnode_pad op
+      media: cadence: cdns-csi2rx: Support multiple pixels per clock cycle
+      media: ti: j721e-csi2rx: Support multiple pixels per clock
+
+ drivers/media/platform/cadence/cdns-csi2rx.c       | 76 +++++++++++++++++-----
+ drivers/media/platform/cadence/cdns-csi2rx.h       | 19 ++++++
+ drivers/media/platform/ti/Kconfig                  |  3 +-
+ .../media/platform/ti/j721e-csi2rx/j721e-csi2rx.c  | 66 ++++++++++++++-----
+ 4 files changed, 129 insertions(+), 35 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250314-probe_fixes-7e0ec33c7fee
 
 Best regards,
-Krzysztof
+-- 
+Jai Luthra <jai.luthra@ideasonboard.com>
 
