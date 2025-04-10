@@ -1,71 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB85204086;
-	Thu, 10 Apr 2025 06:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4275220409D;
+	Thu, 10 Apr 2025 06:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744267231; cv=none; b=oHNbFegFakdv5ptz2hjNQpZb3IeUm4BlvTv/cRZBEoPrTWYtoSpjH3WBZ4gi9H8yqwXzhfyjmCSdo2ZlykSx4sbE1uIO4ZUfY4Hhzjcwfr5hHCzrtduaCNy7L2U+3JTUoo3CRO8y7Qu8RirBEzX3McPVPMQpY0SQHm2M0rd8yn8=
+	t=1744267784; cv=none; b=uPSvAbltfRbD7QKdyI26x21z5PH4pfB21ks+AXImeE//r30QZYjBXvd3PjMOKaFlqvf4Jitpyrpa1EjJT2nZROzi4P7ypb0NbC63WaVARvtjxbtA3k4i3E+CuCzbdg+WBslHekraJ2RTgA1Nyl2jgRZRlBLSp5yGvLjNHM/hEtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744267231; c=relaxed/simple;
-	bh=hIrIzISFokOzyuHO5ayNIza6AlGr5DkwM1e92dAAE2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ld6nYBA1yBM/ruCxxJb6npDbup3AwP72yJytW5Lww5CqwFfMf4MDmYgqJiUWTUFkEfztAvWsF7fXT16AcCJWh/K1aHqkINJy+/KOEEOorcyd6hHpWj1/ZmyTsLckTQQ+QyIAAF75RqeFIPBn7VMTAo3+Lw/JMs4TbO2vw2ImtgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ej1Zai1Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744267784; c=relaxed/simple;
+	bh=8yoaM0B8HudLZSm5REmErvky9Qnf6koLsVNTwqxtdAU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=I6WlHaDPZlyc7EPDPZ6sXWzIJwM4b0wycGfx5rveMrPVWKHZRfZZon1PdGcVkooT5XzjgveAefsDZ7jZkSrlKHgAd2MQxsalN6Wu2lbr/Jj0DcNnhtqaJPeQrTnm8TXnLIEgyjWj5OkWmclBAWN49icZBRpj2VyzChsrisSDRX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FJA3QV5c; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ej1Zai1Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F84BC4CEDD;
-	Thu, 10 Apr 2025 06:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744267230;
-	bh=hIrIzISFokOzyuHO5ayNIza6AlGr5DkwM1e92dAAE2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ej1Zai1YttQ06yOc6v3zdnUZYvEFWXJrVClrHT1ZQummIb2GUBXGA1wB9ELRMN6Lz
-	 mGRfCbth9VDTacPbP4RDiTG1wZQGu/gSVxdxS8mIgWLrGW08OF5yz3LHdUZcPzx+BE
-	 6ye/x9HxOplyiqeQLEOY7Vml2MSxYqiJGJmCcDBrCHqaOo25kVuH7vrZAdobNwAQIl
-	 oemdhfF5sN8erOUFTxwOvzMtPLz8GWy6/IwmclwIwftQUQieFj9P51c3crthoRV3nj
-	 2nUwxZ5pFrhWA50A/bGumIiQ6Cg2DO75nC5agKObJGIOUAw0Su3poPac9pY12BHSgY
-	 Gi4HfPwL/DsUA==
-Date: Thu, 10 Apr 2025 08:40:28 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: "kyrie.wu" <kyrie.wu@mediatek.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 02/12] dt-bindings: mediatek: Add mediatek,
- mt8196-jpgenc compatible
-Message-ID: <20250410-new-zippy-elephant-54bbcb@shite>
-References: <20250410063006.5313-1-kyrie.wu@mediatek.com>
- <20250410063006.5313-3-kyrie.wu@mediatek.com>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FJA3QV5c"
+Received: from mail.ideasonboard.com (unknown [IPv6:2401:4900:1c68:389d:1fcb:c0f8:ff7c:208d])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2D42EE4;
+	Thu, 10 Apr 2025 08:47:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1744267663;
+	bh=8yoaM0B8HudLZSm5REmErvky9Qnf6koLsVNTwqxtdAU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=FJA3QV5cx6YwyEnPYiyeMks19B74sSXjCpURwLWzSTOQZbPcQNbK5fnzQNDym+Ws1
+	 xe3n4+WMp1BpPdF1575qXz/aIK7C0pvvlxQdBMRZ4rAdW0eAKgqx48XkzfXgWbQ2hm
+	 TXL22QMYjBoMSbReW9AHMPL3DPZSerT9nFtx1lg8=
+From: Jai Luthra <jai.luthra@ideasonboard.com>
+Date: Thu, 10 Apr 2025 12:18:59 +0530
+Subject: [PATCH v2 1/6] media: ti: j721e-csi2rx: Use
+ devm_of_platform_populate
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250410063006.5313-3-kyrie.wu@mediatek.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250410-probe_fixes-v2-1-801bc6eebdea@ideasonboard.com>
+References: <20250410-probe_fixes-v2-0-801bc6eebdea@ideasonboard.com>
+In-Reply-To: <20250410-probe_fixes-v2-0-801bc6eebdea@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Hans Verkuil <hverkuil@xs4all.nl>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>
+Cc: Devarsh Thakkar <devarsht@ti.com>, 
+ Rishikesh Donadkar <r-donadkar@ti.com>, Vaishnav Achath <vaishnav.a@ti.com>, 
+ Changhuang Liang <changhuang.liang@starfivetech.com>, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jai Luthra <jai.luthra@ideasonboard.com>, stable@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1185;
+ i=jai.luthra@ideasonboard.com; h=from:subject:message-id;
+ bh=8yoaM0B8HudLZSm5REmErvky9Qnf6koLsVNTwqxtdAU=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBn92n3jv68vljTAj1EhTrtlmn3r7QTgOANT87QT
+ gGqrR59Su+JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZ/dp9wAKCRBD3pH5JJpx
+ RZ1zD/9fk1tfKH+RW1s1FBMIoybn6usRjSo2LUdbM0hraZUxeremvfZiGF4mMa0KCwcz5bssNtK
+ 8JggxNfrds9yH12+/rSJVW49iAPpJCMx/NJJyFEVBrNP784JJKk3HmjF3DiY9WMZVpS1yH8HwzC
+ e814Zah7RRkYaIDvnfRbma1/pMCCVvfFOvm1iSEuQgaK4HMEzvMd7BQghuRFefYtYMmsnnEwSas
+ Wco4Fm3T9z8UJmtrP4Eh2yK7g6zPekp1kTNKXs43qkZUdZg+KRe9wL5KbeHk926b/84yixc54IE
+ Mw3QgnOtltkothxHykMJ76kS1sHuqe6bOwrWXRSDbjYLW1gpLTZ0ZfTsobRjsqqkKPhl8XdTtTY
+ Qz/MHCQQ05/81NkKhC5IEAA5iQTxQFWIqonT/Rpz1kGW8LIi3WcE3JyAcHccC8Sk5QrDEnBiyHP
+ EHoov/xHj6pcEQWjTp5piKBMgVFqhe+zAw6OsQ4IopRLcA85bYpc7d1OLwB0DsS6FqoehlR7atL
+ 69O/ntsS1/8PESqVqPs9xkn0YntcSyC11uZl7AeaKSmvLaHvy1MQ116a9jbuUZHy4U99603QLVG
+ +j8aJAmu8JZDyHv2hRjSG4RbnIpOER7fbBFr4xUdPpqDHtbLXVXAMc/M4yi7aH/r8fKceOvmvBS
+ 15ge6Wq2eBY89Sg==
+X-Developer-Key: i=jai.luthra@ideasonboard.com; a=openpgp;
+ fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 
-On Thu, Apr 10, 2025 at 02:29:55PM GMT, kyrie.wu wrote:
-> Add mediatek,mt8196-jpgenc compatible to binding document.
-> 
-> Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
+Ensure that we clean up the platform bus when we remove this driver.
 
-Same comments.
+This fixes a crash seen when reloading the module for the child device
+with the parent not yet reloaded.
 
-Also: missing media prefix in subject.
+Fixes: b4a3d877dc92 ("media: ti: Add CSI2RX support for J721E")
+Cc: stable@vger.kernel.org
+Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
+Signed-off-by: Jai Luthra <jai.luthra@ideasonboard.com>
+---
+ drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+index 6412a00be8eab89548950dd21b3b3ec02dafa5b4..a066024bf745450e2ba01d06c0fec4e6bdbfa97e 100644
+--- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
++++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+@@ -1118,7 +1118,7 @@ static int ti_csi2rx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_vb2q;
+ 
+-	ret = of_platform_populate(csi->dev->of_node, NULL, NULL, csi->dev);
++	ret = devm_of_platform_populate(csi->dev);
+ 	if (ret) {
+ 		dev_err(csi->dev, "Failed to create children: %d\n", ret);
+ 		goto err_subdev;
 
-Best regards,
-Krzysztof
+-- 
+2.49.0
 
