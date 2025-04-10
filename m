@@ -1,110 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAC721B8F5;
-	Wed,  9 Apr 2025 22:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBD03596F;
+	Thu, 10 Apr 2025 00:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744239448; cv=none; b=IZSp6vmTjOErd/3hULgfBAl+uiRiNTpRGuLTGwFqETE6McXMUHXeZ4r+pPHOJ/n1nLpXT7h0Y4Qf0NGpcz+KGJf9sFTFva2nx9OWQCg8ICoM35jFhg4Oh8cjcKf89dfRrj1FUg/dhDafBeXAm78Yw8ypZFVKR79wOplU+HKMZnE=
+	t=1744244908; cv=none; b=D5y0J0boBk3q72kESk2HEMd4MFgDz/m04uQUxemDJmD6k3LRl8l+r28UoVd0D7hjNuM1yFhSv3Ef2kmwyCOTaPbrerY6VnXltf1fPv3q7c+q51oZ0U+IzNrHQ4DN4Uqv+uiqtmgzshXnZ/opCxFsUCL/03+hcKAVOp17U9VWRvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744239448; c=relaxed/simple;
-	bh=UNT1pMAsqJn0pGCkN1SyqdE1kYgNn4CxvqI1ODiDn60=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bXq1udVuKX8SS0yCxmyhQMirlhYOyfKuchfN3C85vWzJ5yKkSqYa7ZOdOCSo5MEFd+iof95NUkbeJ0Kcu4+JFf+piIscTNzX9ibwkZGDAoajkhPc6K/lNjUmoY+edOYFhcUidEvRySgaWSkhd8aCzhd4KFD+/prAsqcaz/d7m3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5+hGrp5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744244908; c=relaxed/simple;
+	bh=urdk/C6cNo2xp8sTslRc5Ph6KdmwcBk1p7LFugSPaFI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=r9BaxbgD0jY3WeM/uDAuxDylYWGOrQI2dTLJ3NwuGy5b2b7jXHXJDxgTf9on/gQniQaIXhTowMAaPjwZLnrUKqEXdRGX1XeDmHIe5W75lAnIStistZPrLU9BgjwA1Oz1r073nUyd5Xzydxn/IuL+wvu2HXnqMn7JnYtZFUBh4NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=JMHP1iYr reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5+hGrp5"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FC84C4CEE9;
-	Wed,  9 Apr 2025 22:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744239447;
-	bh=UNT1pMAsqJn0pGCkN1SyqdE1kYgNn4CxvqI1ODiDn60=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=U5+hGrp55PSYEOQHWQwoaWUcSEkJG/Hg4gE+wWP7k7NNzAZpsFU4VMjaBAei4uBgN
-	 elRcujP4SDQR1Gop7Wpg5MWHirkfxXOuVHdltex+Kv/yb7JD2O0febylowWDgonMRg
-	 R+fLYqMSf+ZGYBzjpNi+28HPhIinIcisk7BzxQb7RlDOhlc6XRas3Kg3S2gCfS3nYg
-	 3+qHJ1LS71QalvfIhueqbUZhRIaqUTp1cTDdNx/WH+kfsvcJK1eZ55MOTo+wN/EOdv
-	 dXEZMgoovUt1yscGvifOU6T8imKpRS9jGMeJWmV8V3ngQgeiFhfaaBijPivIClqdCo
-	 HeqH3vB/FLp8A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5789BC369A5;
-	Wed,  9 Apr 2025 22:57:27 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Wed, 09 Apr 2025 17:57:22 -0500
-Subject: [PATCH v3 1/4] media: dt-bindings: Document Tegra186 and Tegra194
- cec
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="JMHP1iYr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=FU89nmJGK3MmjRRDkrqt7x0SrwcewmRIp34YsV8rY2I=; b=J
+	MHP1iYrpD0s/uF5ggxfuUkGoVU9GPlmMFACuKSEnJP4OEXl3kzWhCAJ3OcjU+Rl6
+	cQsdzCuDmiR2E21CY5nYOZ2v6ukQVTvwMVylRbtCSqqSblSTLoEvaayxLC7NxNgg
+	NMvO+LrrCZy/Zs5frNwUgrcG42olsWYYWUJl1jRGeg=
+Received: from andyshrk$163.com ( [58.22.7.114] ) by
+ ajax-webmail-wmsvr-40-131 (Coremail) ; Thu, 10 Apr 2025 08:27:16 +0800
+ (CST)
+Date: Thu, 10 Apr 2025 08:27:16 +0800 (CST)
+From: "Andy Yan" <andyshrk@163.com>
+To: "Nicolas Dufresne" <nicolas.dufresne@collabora.com>
+Cc: "Benjamin Gaignard" <benjamin.gaignard@collabora.com>,
+	"Philipp Zabel" <p.zabel@pengutronix.de>,
+	"Mauro Carvalho Chehab" <mchehab@kernel.org>,
+	"Heiko Stuebner" <heiko@sntech.de>, linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re:[PATCH] media: verisilicono: Enable NV15 support for Rockchip
+ VDPU981
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
+ Copyright (c) 2002-2025 www.mailtech.cn 163com
+In-Reply-To: <20250409-b4-hantro-nv15-support-v1-1-7e11e47fd0c9@collabora.com>
+References: <20250409-b4-hantro-nv15-support-v1-1-7e11e47fd0c9@collabora.com>
+X-NTES-SC: AL_Qu2fBv6fu0Ao4CWfYelSzDJG5Lh7O6vv+JRShMQdW/AxqTHp1CMpUFZ4O3zE3sliJbM7Es2CSj5lxTzXEBWW
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250409-tegra-cec-v3-1-91640131dfa2@gmail.com>
-References: <20250409-tegra-cec-v3-0-91640131dfa2@gmail.com>
-In-Reply-To: <20250409-tegra-cec-v3-0-91640131dfa2@gmail.com>
-To: Hans Verkuil <hverkuil@xs4all.nl>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>
-Cc: linux-tegra@vger.kernel.org, linux-media@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744239446; l=1294;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=OKxF0kfZG4y0m8GxH7XJEPDEjS3nCDGshb6+1TkJSyA=;
- b=3Aq4MzVSdrZgI2CPGWCtMlp1Ksyfq5iPuzURj732chI+PPU/YpKFFSPq0frjZGKnNqs3nocfa
- m8hCRLQ1e+EBcHCi8lhVWD4xENPYiAJcspTq/dTIYX561AaTdMA2j8b
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+Message-ID: <7b70a71a.448.1961d1808e5.Coremail.andyshrk@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:gygvCgDnT3lkEPdne_CRAA--.25738W
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiqAkqXmf3AWfu2wABsX
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-From: Aaron Kling <webgeek1234@gmail.com>
-
-These are already used in device trees, so describe them here. As the
-driver only declares up through Tegra210, these must use a fallback
-compatible of tegra210-cec.
-
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- .../bindings/media/cec/nvidia,tegra114-cec.yaml           | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml b/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-index a6b73498bc217a2e884e31af91e9d8845c9b1d76..3637fe2dfbd0dbb1baf265d7c128954df8faf740 100644
---- a/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-+++ b/Documentation/devicetree/bindings/media/cec/nvidia,tegra114-cec.yaml
-@@ -14,10 +14,17 @@ allOf:
- 
- properties:
-   compatible:
--    enum:
--      - nvidia,tegra114-cec
--      - nvidia,tegra124-cec
--      - nvidia,tegra210-cec
-+    oneOf:
-+      - items:
-+          - enum:
-+              - nvidia,tegra114-cec
-+              - nvidia,tegra124-cec
-+              - nvidia,tegra210-cec
-+      - items:
-+          - enum:
-+              - nvidia,tegra186-cec
-+              - nvidia,tegra194-cec
-+          - const: nvidia,tegra210-cec
- 
-   clocks:
-     maxItems: 1
-
--- 
-2.48.1
-
-
+CkhpIE5pY29sYXPvvIwKICAgICAgVHlwbyBpbiBzdWJqZWN077yfIHMvdmVyaXNpbGljb25vL3Zl
+cmlzaWxpY29uLyAgICAgIAoKQXQgMjAyNS0wNC0xMCAwMzozMDowOSwgIk5pY29sYXMgRHVmcmVz
+bmUiIDxuaWNvbGFzLmR1ZnJlc25lQGNvbGxhYm9yYS5jb20+IHdyb3RlOgo+VGhpcyBpcyBhICJj
+dXN0b21lciIgZm9ybWF0LCB0aG91Z2ggb24gUm9ja2NoaXAgUkszNTg4IGl0IGhhcyBiZWVuCj52
+ZXJpZmllZCB0byBiZSBOVjE1IGZvcm1hdCwgd2hpY2ggbWF0Y2hlcyB3aGF0IHRoZSBHUFUgYW5k
+IGRpc3BsYXkKPmhhbmRsZXMgaGFzIDEwYml0IHBpeGVsIGZvcm1hdHMuCj4KPlNpZ25lZC1vZmYt
+Ynk6IE5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAY29sbGFib3JhLmNvbT4KPi0t
+LQo+IGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNpbGljb24vaGFudHJvX3Y0bDIuYyAgICAg
+ICAgICAgfCAgMSArCj4gLi4uL3BsYXRmb3JtL3ZlcmlzaWxpY29uL3JvY2tjaGlwX3ZwdTk4MV9o
+d19hdjFfZGVjLmMgICAgICB8ICA0ICsrKysKPiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL3Zlcmlz
+aWxpY29uL3JvY2tjaGlwX3ZwdV9ody5jICAgICAgIHwgMTQgKysrKysrKysrKysrKysKPiAzIGZp
+bGVzIGNoYW5nZWQsIDE5IGluc2VydGlvbnMoKykKPgo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVk
+aWEvcGxhdGZvcm0vdmVyaXNpbGljb24vaGFudHJvX3Y0bDIuYyBiL2RyaXZlcnMvbWVkaWEvcGxh
+dGZvcm0vdmVyaXNpbGljb24vaGFudHJvX3Y0bDIuYwo+aW5kZXggMmJjZTk0MGE1ODIyN2MyYmZl
+ZjJiYzMzNDM5OTJlNDU4OGFiMzZhNC4uN2MzNTE1Y2Y3ZDY0YTA5MGFkZmI4ZDhhZmYzNjhmOWE2
+MTdmOGM4YSAxMDA2NDQKPi0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNpbGljb24v
+aGFudHJvX3Y0bDIuYwo+KysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS92ZXJpc2lsaWNvbi9o
+YW50cm9fdjRsMi5jCj5AQCAtNzcsNiArNzcsNyBAQCBpbnQgaGFudHJvX2dldF9mb3JtYXRfZGVw
+dGgodTMyIGZvdXJjYykKPiAJc3dpdGNoIChmb3VyY2MpIHsKPiAJY2FzZSBWNEwyX1BJWF9GTVRf
+UDAxMDoKPiAJY2FzZSBWNEwyX1BJWF9GTVRfUDAxMF80TDQ6Cj4rCWNhc2UgVjRMMl9QSVhfRk1U
+X05WMTU6Cj4gCWNhc2UgVjRMMl9QSVhfRk1UX05WMTVfNEw0Ogo+IAkJcmV0dXJuIDEwOwo+IAlk
+ZWZhdWx0Ogo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNpbGljb24v
+cm9ja2NoaXBfdnB1OTgxX2h3X2F2MV9kZWMuYyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVy
+aXNpbGljb24vcm9ja2NoaXBfdnB1OTgxX2h3X2F2MV9kZWMuYwo+aW5kZXggNjliNWQ5ZTEyOTI2
+ZmI0MDhjMDhmOGJhMjEzOWQwNWJhNDQzODliNy4uZTQ3MDNiYjZiZTdjMTc1YTg5YzBiODg2OGNm
+MmVhZmI4NGE4NzJlZCAxMDA2NDQKPi0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNp
+bGljb24vcm9ja2NoaXBfdnB1OTgxX2h3X2F2MV9kZWMuYwo+KysrIGIvZHJpdmVycy9tZWRpYS9w
+bGF0Zm9ybS92ZXJpc2lsaWNvbi9yb2NrY2hpcF92cHU5ODFfaHdfYXYxX2RlYy5jCj5AQCAtMjIw
+Miw2ICsyMjAyLDEwIEBAIHN0YXRpYyB2b2lkIHJvY2tjaGlwX3ZwdTk4MV9wb3N0cHJvY19lbmFi
+bGUoc3RydWN0IGhhbnRyb19jdHggKmN0eCkKPiAJY2FzZSBWNEwyX1BJWF9GTVRfTlYxMjoKPiAJ
+CWhhbnRyb19yZWdfd3JpdGUodnB1LCAmYXYxX3BwX291dF9mb3JtYXQsIDMpOwo+IAkJYnJlYWs7
+Cj4rCWNhc2UgVjRMMl9QSVhfRk1UX05WMTU6Cj4rCQkvKiB0aGlzIG1hcHBpbmcgaXMgUksgc3Bl
+Y2lmaWMgKi8KPisJCWhhbnRyb19yZWdfd3JpdGUodnB1LCAmYXYxX3BwX291dF9mb3JtYXQsIDEw
+KTsKPisJCWJyZWFrOwo+IAlkZWZhdWx0Ogo+IAkJaGFudHJvX3JlZ193cml0ZSh2cHUsICZhdjFf
+cHBfb3V0X2Zvcm1hdCwgMCk7Cj4gCX0KPmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3BsYXRm
+b3JtL3ZlcmlzaWxpY29uL3JvY2tjaGlwX3ZwdV9ody5jIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS92ZXJpc2lsaWNvbi9yb2NrY2hpcF92cHVfaHcuYwo+aW5kZXggOTY0MTIyZTdjMzU1OTM0Y2Q4
+MGViNDQyMjE5ZjZiYTUxYmJhOGI3MS4uZjdjNGExNzYxNjdiNDBmZTc5ZWM1YTY3NTlkZmY4YTc3
+ZTg0OWFlMyAxMDA2NDQKPi0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNpbGljb24v
+cm9ja2NoaXBfdnB1X2h3LmMKPisrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vdmVyaXNpbGlj
+b24vcm9ja2NoaXBfdnB1X2h3LmMKPkBAIC05Miw2ICs5MiwyMCBAQCBzdGF0aWMgY29uc3Qgc3Ry
+dWN0IGhhbnRyb19mbXQgcm9ja2NoaXBfdnB1OTgxX3Bvc3Rwcm9jX2ZtdHNbXSA9IHsKPiAJCQku
+c3RlcF9oZWlnaHQgPSBNQl9ESU0sCj4gCQl9LAo+IAl9LAo+Kwl7Cj4rCQkuZm91cmNjID0gVjRM
+Ml9QSVhfRk1UX05WMTUsCj4rCQkuY29kZWNfbW9kZSA9IEhBTlRST19NT0RFX05PTkUsCj4rCQku
+bWF0Y2hfZGVwdGggPSB0cnVlLAo+KwkJLnBvc3Rwcm9jZXNzZWQgPSB0cnVlLAo+KwkJLmZybXNp
+emUgPSB7Cj4rCQkJLm1pbl93aWR0aCA9IFJPQ0tDSElQX1ZQVTk4MV9NSU5fU0laRSwKPisJCQku
+bWF4X3dpZHRoID0gRk1UXzRLX1dJRFRILAo+KwkJCS5zdGVwX3dpZHRoID0gTUJfRElNLAo+KwkJ
+CS5taW5faGVpZ2h0ID0gUk9DS0NISVBfVlBVOTgxX01JTl9TSVpFLAo+KwkJCS5tYXhfaGVpZ2h0
+ID0gRk1UXzRLX0hFSUdIVCwKPisJCQkuc3RlcF9oZWlnaHQgPSBNQl9ESU0sCj4rCQl9LAo+Kwl9
+LAo+IAl7Cj4gCQkuZm91cmNjID0gVjRMMl9QSVhfRk1UX1AwMTAsCj4gCQkuY29kZWNfbW9kZSA9
+IEhBTlRST19NT0RFX05PTkUsCj4KPi0tLQo+YmFzZS1jb21taXQ6IDlkZGMzZDZjMTZlYTI1ODc4
+OThhMzE1ZjIwZjdiOGZiZDc5MWRjMWIKPmNoYW5nZS1pZDogMjAyNTA0MDMtYjQtaGFudHJvLW52
+MTUtc3VwcG9ydC0wN2RlZjRlN2E1MzcKPgo+QmVzdCByZWdhcmRzLAo+LS0gCj5OaWNvbGFzIER1
+ZnJlc25lIDxuaWNvbGFzLmR1ZnJlc25lQGNvbGxhYm9yYS5jb20+Cj4K
