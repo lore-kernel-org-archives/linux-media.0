@@ -1,108 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8151A2632;
-	Mon, 14 Apr 2025 09:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500FF25DD0A;
+	Mon, 14 Apr 2025 09:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744622143; cv=none; b=pc7CI2WJjOyHEzNY6JmAJl1ptvPnV91gJKo/Zgs1Lx5V3vosDrl5pWhWfsNUc0vcxHtHS2iUzR2od3Aa0wiB1Fick/w4ggytOLbJpBzGdgGscKW5h+mxtMFjSTuhGPjUEvNlzcGbazIDl5xysqgJRcwYfKV0eCgt4XEjpnLe950=
+	t=1744622262; cv=none; b=buc9iMtoScfAAo+ccBEtIaxL3fJre2MtHPm40kIvc9dkKDRD0ptIeXcHxkA1x4pCEH89QeEU0J2oausKodwH2hqBybTtFQFUwX6DCP3wWtjyZNncSU2zfpNQo1N9n4wg7fRtct70y6M9W9fg5oYFZ+eOiy91NCxhSMjpP4nlL8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744622143; c=relaxed/simple;
-	bh=yhNoOiFhKMqhM55XCGcnS3Kn7NPth90G1vtMJxHWXno=;
+	s=arc-20240116; t=1744622262; c=relaxed/simple;
+	bh=FbKOtCMqZgcAKMzOa3aCVbOG2huZ2szHO6TumeZFplk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ouMtZDYIt0V5AA5hD6UAKK/bF1p+jvmTkKe4KKzo973kucW0UZZhgXdQmgZrCL35mfl8o4TijO1lAixwiorK+LmqdP39tAWqMsLbBrc8pbLZxixKIrGCB4Wg7F2ZzU4oQuw6lbso1Epb7xUgHlCdNpwRak+j4GREGGSlVFgMI9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S8yrmAww; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=aPGxj9RICO6wxCXT3p+7vLUpoW12ehMPP1b5N5B22ziBe2WVptJbsck7IRIW+JnRn7zmEBonfYJB1+xBAUWi0u4s2NkPlaj6VUxrpv6Y1YmNBJIu2Mjs0NfpWlq7uXaVbv96fkOZfw3JWzfMHOr4NQHzB7kpXUsVvDmoxJqL2EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R3oSydk7; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S8yrmAww"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R3oSydk7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744622143; x=1776158143;
+  t=1744622261; x=1776158261;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=yhNoOiFhKMqhM55XCGcnS3Kn7NPth90G1vtMJxHWXno=;
-  b=S8yrmAwwOrp9T+zQ6WEdoK5+sj0IsjapgfyMfbbypajPQszZBjVNlruI
-   XVt1XRGlM0hhFWELwZj/I6n5Y6GrAzPJSe+PXz8zye0JWmjIeZp3AcsSz
-   uuXLOtCe4y+pkJszq8eNJfP/OqpMN5+moLMGp3x8+PHEWfieeu7mPljk0
-   e47GnFHgtF5blKTQBRQG2eFHSJQUfIS8uJnYtIuSaWeb2FelpFHGIDd7O
-   Kg2NjU6JpN96l3t1tYdzOra4ZXyf2Zt6NdAW9hzGs5I5KjEj23yGpq7/F
-   hUschkESbgWJ+vFeWKBHaGrbbKmjxFdW5XHLGVspo+y9n1cCW0EYw0aKW
-   w==;
-X-CSE-ConnectionGUID: 3yPUzMBwTkWJ01j5zExmOQ==
-X-CSE-MsgGUID: uPbBzMxMQTKRtPfjT2QRfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="56263406"
+   mime-version:in-reply-to;
+  bh=FbKOtCMqZgcAKMzOa3aCVbOG2huZ2szHO6TumeZFplk=;
+  b=R3oSydk7bP4JCf2gM+njAqQcbZVoMrZ0HjIX88nR5oLEfuJfw8Z65woy
+   isYdnY+M9undMkHYvhXf27GEcq1LKXdAs0K0oYMg3ZmYQAmqq4qtCXJAl
+   WYcqM5P9r9/Ro+RFqoG07Z5dHjy7eqvQuOHCoQ49ZmkCd5TB5Uy1JQfP/
+   /ZieEgoYBKRs02tlolGpu0/g9dg7FCEMEV2GkPJZgr3mbSlbPMf5yT5wM
+   0xF0mhfe5zSa2qfGsF/CrGDPcrf/laz6wTk8B/o+VVlib9uLcjZaCWQKK
+   Y/OyEvHU8RheX/N2cgNyHXpALpVIejDicqBdELI4bfwP/dqTHLgr0iT/P
+   g==;
+X-CSE-ConnectionGUID: K0ePyiCtRQWpPZ/WdirOuw==
+X-CSE-MsgGUID: CEqixe8qSKu/LZQ0l39X4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11402"; a="46216234"
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="56263406"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:15:41 -0700
-X-CSE-ConnectionGUID: ZZyy/ybuQY2r81ih0hCPhQ==
-X-CSE-MsgGUID: or6s5L7/RIq6BeoHSXOC1Q==
+   d="scan'208";a="46216234"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:17:38 -0700
+X-CSE-ConnectionGUID: ZpzJNJ+pSmuuXsIrJKj1NA==
+X-CSE-MsgGUID: o3xVxsGWSF+AnWyAWEwlkg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,211,1739865600"; 
-   d="scan'208";a="129522705"
+   d="scan'208";a="130744733"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:15:37 -0700
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2025 02:17:35 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 5B7FC11F871;
-	Mon, 14 Apr 2025 12:15:34 +0300 (EEST)
-Date: Mon, 14 Apr 2025 09:15:34 +0000
+	by kekkonen.fi.intel.com (Postfix) with SMTP id CA0F111F871;
+	Mon, 14 Apr 2025 12:17:31 +0300 (EEST)
+Date: Mon, 14 Apr 2025 09:17:31 +0000
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: phasta@kernel.org
-Cc: Yong Zhi <yong.zhi@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-	Dan Scally <djrscally@gmail.com>,
-	Tianshu Qiu <tian.shu.qiu@intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Akihiro Tsukada <tskd08@gmail.com>,
-	Bluecherry Maintainers <maintainers@bluecherrydvr.com>,
-	Andrey Utkin <andrey_utkin@fastmail.com>,
-	Ismael Luceno <ismael@iodev.co.uk>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] media: Replace deprecated PCI functions
-Message-ID: <Z_zSNuLl_dTSsQOw@kekkonen.localdomain>
-References: <20250404135344.93241-2-phasta@kernel.org>
- <edf236654c39fbd3afb6db20e3ef42501a8628b0.camel@mailbox.org>
+To: michael.riesch@collabora.com
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>, Fabio Estevam <festevam@gmail.com>,
+	Collabora Kernel Team <kernel@collabora.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH 1/3] MAINTAINERS: add exclude for dt-bindings to imx entry
+Message-ID: <Z_zSqzwJS4gkneMy@kekkonen.localdomain>
+References: <20250410-maintainer-mriesch-v1-0-cdc5c6c68238@collabora.com>
+ <20250410-maintainer-mriesch-v1-1-cdc5c6c68238@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <edf236654c39fbd3afb6db20e3ef42501a8628b0.camel@mailbox.org>
+In-Reply-To: <20250410-maintainer-mriesch-v1-1-cdc5c6c68238@collabora.com>
 
-Hi Philipp,
+Hi Michael,
 
-On Mon, Apr 14, 2025 at 11:06:54AM +0200, Philipp Stanner wrote:
-> On Fri, 2025-04-04 at 15:53 +0200, Philipp Stanner wrote:
-> > Replaces pcim_iomap_regions() and pcim_iomap_table(), which have been
-> > deprecated.
-> > 
-> > The successor pcim_iomap_region() is already used in many places and
-> > shouldn't cause trouble.
-> > 
-> > I test-built it, but have no hardware for testing.
-> > 
-> > P.
-> > 
-> > Philipp Stanner (5):
-> >   media: ipu3-cio2: Replace deprecated PCI functions
-> >   media: pt3: Replace deprecated PCI functions
-> >   media: intel/ipu6: Replace deprecated PCI functions
-> >   media: solo6x10: Replace deprecated PCI functions
-> >   media: tw5864: Replace deprecated PCI functions
+Thanks for the patch.
+
+On Thu, Apr 10, 2025 at 09:41:30PM +0200, Michael Riesch via B4 Relay wrote:
+> From: Michael Riesch <michael.riesch@collabora.com>
 > 
-> Hello,
+> Since the IMX (as in i.MX, the NXP SoCs) MAINTAINERS entry claims
+> everything that contains the name "imx", hanges to device tree
+> bindings for any Sony IMX image sensor are likely to be sent to the
+> maintainers listed therein. Add the missing exclude to fix that.
 > 
-> is there someone who's in charge of all of media: who could take this,
-> or would it be more feasible to aim for the subcomponents?
+> Fixes: da8b7f0fb02b ("MAINTAINERS: add all files matching "imx" and "mxs" to the IMX entry")
+> Suggested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 
-I'll check the ipu patches soonish.
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 96b827049501..c87b26eada7b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2519,6 +2519,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git
+>  F:	arch/arm/boot/dts/nxp/imx/
+>  F:	arch/arm/boot/dts/nxp/mxs/
+>  F:	arch/arm64/boot/dts/freescale/
+> +X:	Documentation/devicetree/bindings/media/i2c/
+>  X:	arch/arm64/boot/dts/freescale/fsl-*
+>  X:	arch/arm64/boot/dts/freescale/qoriq-*
+>  X:	drivers/media/i2c/
+> 
 
 -- 
-Kind regards,
+Regards,
 
 Sakari Ailus
