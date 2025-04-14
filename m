@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74453265CBC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77097265CBF;
 	Mon, 14 Apr 2025 07:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744616125; cv=none; b=i4l4496xQrhtrSSIbBqUhQzCoH50ZFIjaMvIKQ6UtkBdbY4P0+xCqHqq7osBfJ5rIhiJ8/elEPk80aA34hWvT4fCxa5T6ecwBp15NhZuoF7wkGt+lSD3v4OvWkmfrsq6lMKbz6fGGQCk4cpXnhuqd2NYqscV0AmTqQ7XddDGxGk=
+	t=1744616125; cv=none; b=JfZ/+fS6FlJwm0lCGzI0PDyLguTmXJtxRiCavO7Jcd+n3GWhxOglYernaoe6CyYr7etYBZprdAd2/P1x8b3pC9u6QYUv8boaUrcA3Gx1ycW+lNL3Q5gymixm21l7+Ig1O0w7+XM+9HvJf39yk9MBSYkdFsGK7evx1pR/dsi5l0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744616125; c=relaxed/simple;
-	bh=1H9xdKdPYrTWHl/nViO0dKq2xMib1nEAUSbtB+gWe4o=;
+	bh=ApfNcZNc3V+uEBCWCUGUKsFhCwsqPdMdPFrioGZnex8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GZdItC0KuNoP9at2sdOagQP4cyuYJaMlk3BSQba6uzNHT9f2boi77sNnJP+cPQ75wO8QhF7AH4UImiyhRGe36YkA8NgFVZf3Za/9jl4vtSm2wF2AyunmcDrxc2Q14pck2qLZd11aicZzA86XxQlRCkaf3pzaWVBCSy6AwvERx2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/G212fu; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=DMQvaN3x+Qkkl+wbs52gxgoMLEV2W5Ge7k3vlNjkz/JrO8yBXMI8nhLxaG1rWHpVqEhv6tgFnGqNP0d6dM/YBNlt0QksrDhHTiQqH/diSrHZs1e+mjWFThzj2mvE8VxBkGc6idUpkDaV3jlkFiCJSPtzZR5d3wNVVVZoIesOeOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KTTDq64Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/G212fu"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D606DC4CEFA;
-	Mon, 14 Apr 2025 07:35:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KTTDq64Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45E67C4CEF5;
+	Mon, 14 Apr 2025 07:35:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744616124;
-	bh=1H9xdKdPYrTWHl/nViO0dKq2xMib1nEAUSbtB+gWe4o=;
+	s=k20201202; t=1744616125;
+	bh=ApfNcZNc3V+uEBCWCUGUKsFhCwsqPdMdPFrioGZnex8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=S/G212fuiaN/hA0DKuQ26yUJbSIz2J0o5a/59D8La1Z8IXd/52oF7h6lLrh10XJQG
-	 wINb5dRi7Zw/8fRCpfYKZ9U3A5sM2atN6WatoSVHAW6C85dQQxeHlltwkiRuPTgd0e
-	 kI4YBaxBaDDES7fVibRWf6SRhyM6DTG5yln/WW7VtS7fMBS/1BiiyxTY+bLsxZUqbe
-	 6wfuLKVx5YRZssA4bD/baUaMw2uzIiplhw8T/IrEbAx60s3EYl9s+/pnJyWUHIXDTa
-	 TruKw1F/vK/VEkcRSQLDRSF25zGXEXIr1+9zO3I1uKDBUsG445yv5EB5fWc21yskbQ
-	 ObHoXnbAwlTuw==
+	b=KTTDq64YzrwxfLXgLzu4esD9X1LLhjSrcZfBe8qD4wJAXw0IwUgn8PljdRGK8F+Yx
+	 kbJuwhWxZzIdunTyv4p7bk7nR5WqinqU3xo8bvbzL6fdqXjOnSHKpFNWpG3lkcI3Ir
+	 1oUWaybWcqWHrEEkBovtI/WmeSpyU//td91CD8nUBkbrjCzfL9xVQDr/fijAbsDcDn
+	 7kDDAx+N8Z4PJibcUrCJUe5ZggDvSYAuZ0VZKRfF8PDn1JKhJ5TtxV+H34h0iVeHIh
+	 DG7GHsRV4Hu7ZCMKJuj/5s06H3FjFfipSRAoRU2zvSf28m/QjaDYK3X+Ca8fZFo7+J
+	 R4FkA5zTOLzJA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA94EC369B2;
-	Mon, 14 Apr 2025 07:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B222C369B5;
+	Mon, 14 Apr 2025 07:35:25 +0000 (UTC)
 From: Keke Li via B4 Relay <devnull+keke.li.amlogic.com@kernel.org>
-Date: Mon, 14 Apr 2025 15:35:20 +0800
-Subject: [PATCH v8 07/10] media: uapi: Add stats info and parameters buffer
- for C3 ISP
+Date: Mon, 14 Apr 2025 15:35:23 +0800
+Subject: [PATCH v8 10/10] Documentation: media: add documentation file
+ c3-isp.rst
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250414-c3isp-v8-7-9f89e537494e@amlogic.com>
+Message-Id: <20250414-c3isp-v8-10-9f89e537494e@amlogic.com>
 References: <20250414-c3isp-v8-0-9f89e537494e@amlogic.com>
 In-Reply-To: <20250414-c3isp-v8-0-9f89e537494e@amlogic.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
@@ -52,11 +52,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
  jacopo.mondi@ideasonboard.com, Keke Li <keke.li@amlogic.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744616122; l=22782;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744616122; l=8134;
  i=keke.li@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=FkpzNQXQZ7cNZz7MwCaKTN337Id1CyD2YVyKw9SHY+k=;
- b=B3pt6rm13jICixAK9S5sLRBgi+L6w5uBSnyJKNMMZKVp6v3rtIzTCOuHcFImomo4qNmZRueOU
- 7SfX1pfmFQlBYjSzjH2e88o5fSN94fFVQvy6V/+1hQKKC8jCft/41im
+ bh=UxoAJSWWfek9y/D6SgG92IAyywe1fpst/ujPPpDofIw=;
+ b=VNPYvOOEDTrYwlrB3KrsbDiQ624Mt0B0V1s5WrhgRoY7jkrDYTU7QAhPkTfjYU00QEphLZV8p
+ cvPr4Gg/gHvCbZ8GHjIaSHxYeRrip+X/fLz+FL9hX34IMCxhsOJb6Uz
 X-Developer-Key: i=keke.li@amlogic.com; a=ed25519;
  pk=XxNPTsQ0YqMJLLekV456eoKV5gbSlxnViB1k1DhfRmU=
 X-Endpoint-Received: by B4 Relay for keke.li@amlogic.com/20240902 with
@@ -66,598 +66,188 @@ Reply-To: keke.li@amlogic.com
 
 From: Keke Li <keke.li@amlogic.com>
 
-Add a header that describes the 3A statistics buffer and the
-parameters buffer for C3 ISP
+Add the file 'c3-isp.rst' that documents the c3-isp driver.
 
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Signed-off-by: Keke Li <keke.li@amlogic.com>
 ---
- MAINTAINERS                                      |   1 +
- include/uapi/linux/media/amlogic/c3-isp-config.h | 564 +++++++++++++++++++++++
- 2 files changed, 565 insertions(+)
+ Documentation/admin-guide/media/c3-isp.dot      |  26 ++++++
+ Documentation/admin-guide/media/c3-isp.rst      | 109 ++++++++++++++++++++++++
+ Documentation/admin-guide/media/v4l-drivers.rst |   1 +
+ MAINTAINERS                                     |   2 +
+ 4 files changed, 138 insertions(+)
 
+diff --git a/Documentation/admin-guide/media/c3-isp.dot b/Documentation/admin-guide/media/c3-isp.dot
+new file mode 100644
+index 000000000000..42dc931ee84a
+--- /dev/null
++++ b/Documentation/admin-guide/media/c3-isp.dot
+@@ -0,0 +1,26 @@
++digraph board {
++	rankdir=TB
++	n00000001 [label="{{<port0> 0 | <port1> 1} | c3-isp-core\n/dev/v4l-subdev0 | {<port2> 2 | <port3> 3 | <port4> 4 | <port5> 5}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000001:port3 -> n00000008:port0
++	n00000001:port4 -> n0000000b:port0
++	n00000001:port5 -> n0000000e:port0
++	n00000001:port2 -> n00000027
++	n00000008 [label="{{<port0> 0} | c3-isp-resizer0\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000008:port1 -> n00000016 [style=bold]
++	n0000000b [label="{{<port0> 0} | c3-isp-resizer1\n/dev/v4l-subdev2 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000000b:port1 -> n0000001a [style=bold]
++	n0000000e [label="{{<port0> 0} | c3-isp-resizer2\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000000e:port1 -> n00000023 [style=bold]
++	n00000011 [label="{{<port0> 0} | c3-mipi-adapter\n/dev/v4l-subdev4 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n00000011:port1 -> n00000001:port0 [style=bold]
++	n00000016 [label="c3-isp-cap0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
++	n0000001a [label="c3-isp-cap1\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
++	n0000001e [label="{{<port0> 0} | c3-mipi-csi2\n/dev/v4l-subdev5 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000001e:port1 -> n00000011:port0 [style=bold]
++	n00000023 [label="c3-isp-cap2\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
++	n00000027 [label="c3-isp-stats\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
++	n0000002b [label="c3-isp-params\n/dev/video4", shape=box, style=filled, fillcolor=yellow]
++	n0000002b -> n00000001:port1
++	n0000003f [label="{{} | imx290 2-001a\n/dev/v4l-subdev6 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
++	n0000003f:port0 -> n0000001e:port0 [style=bold]
++}
+diff --git a/Documentation/admin-guide/media/c3-isp.rst b/Documentation/admin-guide/media/c3-isp.rst
+new file mode 100644
+index 000000000000..8adac4605a6a
+--- /dev/null
++++ b/Documentation/admin-guide/media/c3-isp.rst
+@@ -0,0 +1,109 @@
++.. SPDX-License-Identifier: (GPL-2.0-only OR MIT)
++
++.. include:: <isonum.txt>
++
++=================================================
++Amlogic C3 Image Signal Processing (C3ISP) driver
++=================================================
++
++Introduction
++============
++
++This file documents the Amlogic C3ISP driver located under
++drivers/media/platform/amlogic/c3/isp.
++
++The current version of the driver supports the C3ISP found on
++Amlogic C308L processor.
++
++The driver implements V4L2, Media controller and V4L2 subdev interfaces.
++Camera sensor using V4L2 subdev interface in the kernel is supported.
++
++The driver has been tested on AW419-C308L-Socket platform.
++
++Anlogic Camera hardware
++=======================
++
++The Camera hardware found on C308L processors and supported by
++the driver consists of:
++
++- 1 MIPI-CSI2 module. It handle the Physical layer of the CSI2 receivers and
++  receive MIPI data.
++  A separate camera sensor can be connected to MIPI-CSi2 module.
++- 1 MIPI-ADAPTER module. Organize MIPI data to meet ISP input requirements and
++  send MIPI data to ISP
++- 1 ISP (Image Signal Processing) module. Contain a pipeline of image processing
++  hardware blocks.
++  The ISP pipeline contains three scalers at the end.
++  The ISP also contains the DMA interface which writes the output data to memory.
++
++A high level functional view of the C3 ISP is presented below. The ISP
++takes input from the sensor.::
++
++                                                                   +---------+    +-------+
++                                                                   | Scaler  |--->| WRMIF |
++  +---------+    +------------+    +--------------+    +-------+   |---------+    +-------+
++  | Sensor  |--->| MIPI CSI-2 |--->| MIPI ADAPTER |--->|  ISP  |---|---------+    +-------+
++  +---------+    +------------+    +--------------+    +-------+   | Scaler  |--->| WRMIF |
++                                                                   +---------+    +-------+
++                                                                   |---------+    +-------+
++                                                                   | Scaler  |--->| WRMIF |
++                                                                   +---------+    +-------+
++
++Supported functionality
++=======================
++
++The current version of the driver supports:
++
++- Input from camera sensor via MIPI-CSI2;
++
++- Pixel output interface of ISP
++
++  - Scaling support. Configuration of the scaler module
++    for downscalling with ratio up to 8x.
++
++Driver Architecture and Design
++==============================
++
++The driver implements the V4L2 subdev interface. With the goal to model the
++hardware links between the modules and to expose a clean, logical and usable
++interface, the driver is split into V4L2 sub-devices as follows:
++
++- 1 c3-mipi-csi2 sub-device - mipi-csi2 is represented by a single sub-device.
++- 1 c3-mipi-adapter sub-device - mipi-adapter is represented by a single sub-devices.
++- 1 c3-isp-core sub-device - isp-core is represented by a single sub-devices.
++- 3 c3-isp-resizer sub-devices - isp-resizer is represented by a number of sub-devices
++  equal to the number of capture device.
++
++c3-isp-core sub-device is linked to 2 separate video device nodes and
++3 c3-isp-resizer sub-devices nodes.
++
++- 1 capture statistics video device node.
++- 1 output parameters video device node.
++- 3 c3-isp-resizer sub-device nodes.
++
++c3-isp-resizer sub-device is linked to capture video device node.
++
++- c3-isp-resizer0 is linked to c3-isp-cap0
++- c3-isp-resizer1 is linked to c3-isp-cap1
++- c3-isp-resizer2 is linked to c3-isp-cap2
++
++The media controller pipeline graph is as follows (with connected a
++IMX290 camera sensor):
++
++.. _isp_topology_graph:
++
++.. kernel-figure:: c3-isp.dot
++    :alt:   c3-isp.dot
++    :align: center
++
++    Media pipeline topology
++
++Implementation
++==============
++
++Runtime configuration of the hardware via 'c3-isp-params' video device node.
++Acquiring statistics of ISP hardware via 'c3-isp-stats' video device node.
++Acquiring output image of ISP hardware via 'c3-isp-cap[0, 2]' video device node.
++
++The output size of the scaler module in the ISP is configured with
++the pixel format of 'c3-isp-cap[0, 2]' video device node.
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index e8761561b2fe..3bac5165b134 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -10,6 +10,7 @@ Video4Linux (V4L) driver-specific documentation
+ 	:maxdepth: 2
+ 
+ 	bttv
++	c3-isp
+ 	cafe_ccic
+ 	cx88
+ 	fimc
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a0d93c00b949..8fbe1b253af9 100644
+index b2bf9c6cd194..4b06a798d30c 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -1260,6 +1260,7 @@ M:	Keke Li <keke.li@amlogic.com>
+@@ -1259,6 +1259,8 @@ AMLOGIC ISP DRIVER
+ M:	Keke Li <keke.li@amlogic.com>
  L:	linux-media@vger.kernel.org
  S:	Maintained
++F:	Documentation/admin-guide/media/c3-isp.dot
++F:	Documentation/admin-guide/media/c3-isp.rst
  F:	Documentation/devicetree/bindings/media/amlogic,c3-isp.yaml
-+F:	include/uapi/linux/media/amlogic/
- 
- AMLOGIC MIPI ADAPTER DRIVER
- M:	Keke Li <keke.li@amlogic.com>
-diff --git a/include/uapi/linux/media/amlogic/c3-isp-config.h b/include/uapi/linux/media/amlogic/c3-isp-config.h
-new file mode 100644
-index 000000000000..ed085ea62a57
---- /dev/null
-+++ b/include/uapi/linux/media/amlogic/c3-isp-config.h
-@@ -0,0 +1,564 @@
-+/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2024 Amlogic, Inc. All rights reserved
-+ */
-+
-+#ifndef _UAPI_C3_ISP_CONFIG_H_
-+#define _UAPI_C3_ISP_CONFIG_H_
-+
-+#include <linux/types.h>
-+
-+/*
-+ * Frames are split into zones of almost equal width and height - a zone is a
-+ * rectangular tile of a frame. The metering blocks within the ISP collect
-+ * aggregated statistics per zone.
-+ */
-+#define C3_ISP_AE_MAX_ZONES (17 * 15)
-+#define C3_ISP_AF_MAX_ZONES (17 * 15)
-+#define C3_ISP_AWB_MAX_ZONES (32 * 24)
-+
-+/* The maximum number of point on the diagonal of the frame for statistics */
-+#define C3_ISP_AE_MAX_PT_NUM 18
-+#define C3_ISP_AF_MAX_PT_NUM 18
-+#define C3_ISP_AWB_MAX_PT_NUM 33
-+
-+/**
-+ * struct c3_isp_awb_zone_stats - AWB statistics of a zone
-+ *
-+ * AWB zone stats is aligned with 8 bytes
-+ *
-+ * @rg: the ratio of R / G in a zone
-+ * @bg: the ratio of B / G in a zone
-+ * @pixel_sum: the total number of pixels used in a zone
-+ */
-+struct c3_isp_awb_zone_stats {
-+	__u16 rg;
-+	__u16 bg;
-+	__u32 pixel_sum;
-+};
-+
-+/**
-+ * struct c3_isp_awb_stats - Auto white balance statistics information.
-+ *
-+ * AWB statistical information of all zones.
-+ *
-+ * @stats: array of auto white balance statistics
-+ */
-+struct c3_isp_awb_stats {
-+	struct c3_isp_awb_zone_stats stats[C3_ISP_AWB_MAX_ZONES];
-+} __attribute__((aligned(16)));
-+
-+/**
-+ * struct c3_isp_ae_zone_stats - AE statistics of a zone
-+ *
-+ * AE zone stats is aligned with 8 bytes.
-+ * This is a 5-bin histogram and the total sum is normalized to 0xffff.
-+ * So hist2 = 0xffff - (hist0 + hist1 + hist3 + hist4)
-+ *
-+ * @hist0: the global normalized pixel count for bin 0
-+ * @hist1: the global normalized pixel count for bin 1
-+ * @hist3: the global normalized pixel count for bin 3
-+ * @hist4: the global normalized pixel count for bin 4
-+ */
-+struct c3_isp_ae_zone_stats {
-+	__u16 hist0;
-+	__u16 hist1;
-+	__u16 hist3;
-+	__u16 hist4;
-+};
-+
-+/**
-+ * struct c3_isp_ae_stats - Exposure statistics information
-+ *
-+ * AE statistical information consists of all blocks information and a 1024-bin
-+ * histogram.
-+ *
-+ * @stats: array of auto exposure block statistics
-+ * @reserved: undefined buffer space
-+ * @hist: a 1024-bin histogram for the entire image
-+ */
-+struct c3_isp_ae_stats {
-+	struct c3_isp_ae_zone_stats stats[C3_ISP_AE_MAX_ZONES];
-+	__u32 reserved[2];
-+	__u32 hist[1024];
-+} __attribute__((aligned(16)));
-+
-+/**
-+ * struct c3_isp_af_zone_stats - AF statistics of a zone
-+ *
-+ * AF zone stats is aligned with 8 bytes.
-+ * The zonal accumulated contrast metrics are stored in floating point format
-+ * with 16 bits mantissa and 5 or 6 bits exponent. Apart from contrast metrics
-+ * we accumulate squared image and quartic image data over the zone.
-+ *
-+ * @i2_mat: the mantissa of zonal squared image pixel sum
-+ * @i4_mat: the mantissa of zonal quartic image pixel sum
-+ * @e4_mat: the mantissa of zonal multi-directional quartic edge sum
-+ * @e4_exp: the exponent of zonal multi-directional quartic edge sum
-+ * @i2_exp: the exponent of zonal squared image pixel sum
-+ * @i4_exp: the exponent of zonal quartic image pixel sum
-+ */
-+struct c3_isp_af_zone_stats {
-+	__u16 i2_mat;
-+	__u16 i4_mat;
-+	__u16 e4_mat;
-+	__u16 e4_exp : 5;
-+	__u16 i2_exp : 5;
-+	__u16 i4_exp : 6;
-+};
-+
-+/**
-+ * struct c3_isp_af_stats - Auto Focus statistics information
-+ *
-+ * AF statistical information of each zone
-+ *
-+ * @stats: array of auto focus block statistics
-+ * @reserved: undefined buffer space
-+ */
-+struct c3_isp_af_stats {
-+	struct c3_isp_af_zone_stats stats[C3_ISP_AF_MAX_ZONES];
-+	__u32 reserved[2];
-+} __attribute__((aligned(16)));
-+
-+/**
-+ * struct c3_isp_stats_info - V4L2_META_FMT_C3ISP_STATS
-+ *
-+ * Contains ISP statistics
-+ *
-+ * @awb: auto white balance stats
-+ * @ae: auto exposure stats
-+ * @af: auto focus stats
-+ */
-+struct c3_isp_stats_info {
-+	struct c3_isp_awb_stats awb;
-+	struct c3_isp_ae_stats ae;
-+	struct c3_isp_af_stats af;
-+};
-+
-+/**
-+ * enum c3_isp_params_buffer_version -  C3 ISP parameters block versioning
-+ *
-+ * @C3_ISP_PARAMS_BUFFER_V0: First version of C3 ISP parameters block
-+ */
-+enum c3_isp_params_buffer_version {
-+	C3_ISP_PARAMS_BUFFER_V0,
-+};
-+
-+/**
-+ * enum c3_isp_params_block_type - Enumeration of C3 ISP parameter blocks
-+ *
-+ * Each block configures a specific processing block of the C3 ISP.
-+ * The block type allows the driver to correctly interpret the parameters block
-+ * data.
-+ *
-+ * @C3_ISP_PARAMS_BLOCK_AWB_GAINS: White balance gains
-+ * @C3_ISP_PARAMS_BLOCK_AWB_CONFIG: AWB statistic format configuration for all
-+ *                                  blocks that control how stats are generated
-+ * @C3_ISP_PARAMS_BLOCK_AE_CONFIG: AE statistic format configuration for all
-+ *                                 blocks that control how stats are generated
-+ * @C3_ISP_PARAMS_BLOCK_AF_CONFIG: AF statistic format configuration for all
-+ *                                 blocks that control how stats are generated
-+ * @C3_ISP_PARAMS_BLOCK_PST_GAMMA: post gamma parameters
-+ * @C3_ISP_PARAMS_BLOCK_CCM: Color correction matrix parameters
-+ * @C3_ISP_PARAMS_BLOCK_CSC: Color space conversion parameters
-+ * @C3_ISP_PARAMS_BLOCK_BLC: Black level correction parameters
-+ * @C3_ISP_PARAMS_BLOCK_SENTINEL: First non-valid block index
-+ */
-+enum c3_isp_params_block_type {
-+	C3_ISP_PARAMS_BLOCK_AWB_GAINS,
-+	C3_ISP_PARAMS_BLOCK_AWB_CONFIG,
-+	C3_ISP_PARAMS_BLOCK_AE_CONFIG,
-+	C3_ISP_PARAMS_BLOCK_AF_CONFIG,
-+	C3_ISP_PARAMS_BLOCK_PST_GAMMA,
-+	C3_ISP_PARAMS_BLOCK_CCM,
-+	C3_ISP_PARAMS_BLOCK_CSC,
-+	C3_ISP_PARAMS_BLOCK_BLC,
-+	C3_ISP_PARAMS_BLOCK_SENTINEL
-+};
-+
-+#define C3_ISP_PARAMS_BLOCK_FL_DISABLE (1U << 0)
-+#define C3_ISP_PARAMS_BLOCK_FL_ENABLE (1U << 1)
-+
-+/**
-+ * struct c3_isp_params_block_header - C3 ISP parameter block header
-+ *
-+ * This structure represents the common part of all the ISP configuration
-+ * blocks. Each parameters block shall embed an instance of this structure type
-+ * as its first member, followed by the block-specific configuration data. The
-+ * driver inspects this common header to discern the block type and its size and
-+ * properly handle the block content by casting it to the correct block-specific
-+ * type.
-+ *
-+ * The @type field is one of the values enumerated by
-+ * :c:type:`c3_isp_params_block_type` and specifies how the data should be
-+ * interpreted by the driver. The @size field specifies the size of the
-+ * parameters block and is used by the driver for validation purposes. The
-+ * @flags field is a bitmask of per-block flags C3_ISP_PARAMS_FL*.
-+ *
-+ * When userspace wants to disable an ISP block the
-+ * C3_ISP_PARAMS_BLOCK_FL_DISABLED bit should be set in the @flags field. In
-+ * this case userspace may optionally omit the remainder of the configuration
-+ * block, which will be ignored by the driver.
-+ *
-+ * When a new configuration of an ISP block needs to be applied userspace
-+ * shall fully populate the ISP block and omit setting the
-+ * C3_ISP_PARAMS_BLOCK_FL_DISABLED bit in the @flags field.
-+ *
-+ * Userspace is responsible for correctly populating the parameters block header
-+ * fields (@type, @flags and @size) and the block-specific parameters.
-+ *
-+ * For example:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	void populate_pst_gamma(struct c3_isp_params_block_header *block) {
-+ *		struct c3_isp_params_pst_gamma *gamma =
-+ *			(struct c3_isp_params_pst_gamma *)block;
-+ *
-+ *		gamma->header.type = C3_ISP_PARAMS_BLOCK_PST_GAMMA;
-+ *		gamma->header.flags = C3_ISP_PARAMS_BLOCK_FL_ENABLE;
-+ *		gamma->header.size = sizeof(*gamma);
-+ *
-+ *		for (unsigned int i = 0; i < 129; i++)
-+ *			gamma->pst_gamma_lut[i] = i;
-+ *	}
-+ *
-+ * @type: The parameters block type from :c:type:`c3_isp_params_block_type`
-+ * @flags: A bitmask of block flags
-+ * @size: Size (in bytes) of the parameters block, including this header
-+ */
-+struct c3_isp_params_block_header {
-+	__u16 type;
-+	__u16 flags;
-+	__u32 size;
-+};
-+
-+/**
-+ * struct c3_isp_params_awb_gains - Gains for auto-white balance
-+ *
-+ * This struct allows users to configure the gains for white balance.
-+ * There are four gain settings corresponding to each colour channel in
-+ * the bayer domain. All of the gains are stored in Q4.8 format.
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_AWB_GAINS
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: The C3 ISP parameters block header
-+ * @gr_gain: Multiplier for Gr channel (Q4.8 format)
-+ * @r_gain: Multiplier for R channel (Q4.8 format)
-+ * @b_gain: Multiplier for B channel (Q4.8 format)
-+ * @gb_gain: Multiplier for Gb channel (Q4.8 format)
-+ */
-+struct c3_isp_params_awb_gains {
-+	struct c3_isp_params_block_header header;
-+	__u16 gr_gain;
-+	__u16 r_gain;
-+	__u16 b_gain;
-+	__u16 gb_gain;
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * enum c3_isp_params_awb_tap_points - Tap points for the AWB statistics
-+ * @C3_ISP_AWB_STATS_TAP_OFE: immediately after the optical frontend block
-+ * @C3_ISP_AWB_STATS_TAP_GE: immediately after the green equal block
-+ * @C3_ISP_AWB_STATS_TAP_BEFORE_WB: immediately before the white balance block
-+ * @C3_ISP_AWB_STATS_TAP_AFTER_WB: immediately after the white balance block
-+ */
-+enum c3_isp_params_awb_tap_points {
-+	C3_ISP_AWB_STATS_TAP_OFE = 0,
-+	C3_ISP_AWB_STATS_TAP_GE,
-+	C3_ISP_AWB_STATS_TAP_BEFORE_WB,
-+	C3_ISP_AWB_STATS_TAP_AFTER_WB,
-+};
-+
-+/**
-+ * struct c3_isp_params_awb_config - Stats settings for auto-white balance
-+ *
-+ * This struct allows the configuration of the statistics generated for auto
-+ * white balance.
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_AWB_CONFIG
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @tap_point: the tap point from enum c3_isp_params_awb_tap_point
-+ * @satur_vald: AWB statistic over saturation control
-+ *		value: 0: disable, 1: enable
-+ * @horiz_zones_num: active number of hotizontal zones [0..32]
-+ * @vert_zones_num: active number of vertical zones [0..24]
-+ * @rg_min: minimum R/G ratio (Q4.8 format)
-+ * @rg_max: maximum R/G ratio (Q4.8 format)
-+ * @bg_min: minimum B/G ratio (Q4.8 format)
-+ * @bg_max: maximum B/G ratio (Q4.8 format)
-+ * @rg_low: R/G ratio trim low (Q4.8 format)
-+ * @rg_high: R/G ratio trim hight (Q4.8 format)
-+ * @bg_low: B/G ratio trim low (Q4.8 format)
-+ * @bg_high: B/G ratio trim high (Q4.8 format)
-+ * @zone_weight: array of weights for AWB statistics zones [0..15]
-+ * @horiz_coord: the horizontal coordinate of points on the diagonal [0..2888]
-+ * @vert_coord: the vertical coordinate of points on the diagonal [0..2240]
-+ */
-+struct c3_isp_params_awb_config {
-+	struct c3_isp_params_block_header header;
-+	__u8 tap_point;
-+	__u8 satur_vald;
-+	__u8 horiz_zones_num;
-+	__u8 vert_zones_num;
-+	__u16 rg_min;
-+	__u16 rg_max;
-+	__u16 bg_min;
-+	__u16 bg_max;
-+	__u16 rg_low;
-+	__u16 rg_high;
-+	__u16 bg_low;
-+	__u16 bg_high;
-+	__u8 zone_weight[C3_ISP_AWB_MAX_ZONES];
-+	__u16 horiz_coord[C3_ISP_AWB_MAX_PT_NUM];
-+	__u16 vert_coord[C3_ISP_AWB_MAX_PT_NUM];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * enum c3_isp_params_ae_tap_points - Tap points for the AE statistics
-+ * @C3_ISP_AE_STATS_TAP_GE: immediately after the green equal block
-+ * @C3_ISP_AE_STATS_TAP_MLS: immediately after the mesh lens shading block
-+ */
-+enum c3_isp_params_ae_tap_points {
-+	C3_ISP_AE_STATS_TAP_GE = 0,
-+	C3_ISP_AE_STATS_TAP_MLS,
-+};
-+
-+/**
-+ * struct c3_isp_params_ae_config - Stats settings for auto-exposure
-+ *
-+ * This struct allows the configuration of the statistics generated for
-+ * auto exposure.
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_AE_CONFIG
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @horiz_zones_num: active number of horizontal zones [0..17]
-+ * @vert_zones_num: active number of vertical zones [0..15]
-+ * @tap_point: the tap point from enum c3_isp_params_ae_tap_point
-+ * @zone_weight: array of weights for AE statistics zones [0..15]
-+ * @horiz_coord: the horizontal coordinate of points on the diagonal [0..2888]
-+ * @vert_coord: the vertical coordinate of points on the diagonal [0..2240]
-+ * @reserved: applications must zero this array
-+ */
-+struct c3_isp_params_ae_config {
-+	struct c3_isp_params_block_header header;
-+	__u8 tap_point;
-+	__u8 horiz_zones_num;
-+	__u8 vert_zones_num;
-+	__u8 zone_weight[C3_ISP_AE_MAX_ZONES];
-+	__u16 horiz_coord[C3_ISP_AE_MAX_PT_NUM];
-+	__u16 vert_coord[C3_ISP_AE_MAX_PT_NUM];
-+	__u16 reserved[3];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * enum c3_isp_params_af_tap_points - Tap points for the AF statistics
-+ * @C3_ISP_AF_STATS_TAP_SNR: immediately after the spatial noise reduce block
-+ * @C3_ISP_AF_STATS_TAP_DMS: immediately after the demosaic block
-+ */
-+enum c3_isp_params_af_tap_points {
-+	C3_ISP_AF_STATS_TAP_SNR = 0,
-+	C3_ISP_AF_STATS_TAP_DMS,
-+};
-+
-+/**
-+ * struct c3_isp_params_af_config - Stats settings for auto-focus
-+ *
-+ * This struct allows the configuration of the statistics generated for
-+ * auto focus.
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_AF_CONFIG
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @tap_point: the tap point from enum c3_isp_params_af_tap_point
-+ * @horiz_zones_num: active number of hotizontal zones [0..17]
-+ * @vert_zones_num: active number of vertical zones [0..15]
-+ * @reserved: applications must zero this array
-+ * @horiz_coord: the horizontal coordinate of points on the diagonal [0..2888]
-+ * @vert_coord: the vertical coordinate of points on the diagonal [0..2240]
-+ */
-+struct c3_isp_params_af_config {
-+	struct c3_isp_params_block_header header;
-+	__u8 tap_point;
-+	__u8 horiz_zones_num;
-+	__u8 vert_zones_num;
-+	__u8 reserved[5];
-+	__u16 horiz_coord[C3_ISP_AF_MAX_PT_NUM];
-+	__u16 vert_coord[C3_ISP_AF_MAX_PT_NUM];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * struct c3_isp_params_pst_gamma - Post gamma configuration
-+ *
-+ * This struct allows the configuration of the look up table for
-+ * post gamma. The gamma curve consists of 129 points, so need to
-+ * set lut[129].
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_PST_GAMMA
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @lut: lookup table for P-Stitch gamma [0..1023]
-+ * @reserved: applications must zero this array
-+ */
-+struct c3_isp_params_pst_gamma {
-+	struct c3_isp_params_block_header header;
-+	__u16 lut[129];
-+	__u16 reserved[3];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * struct c3_isp_params_ccm - ISP CCM configuration
-+ *
-+ * This struct allows the configuration of the matrix for
-+ * color correction. The matrix consists of 3 x 3 points,
-+ * so need to set matrix[3][3].
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_CCM
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @matrix: a 3 x 3 matrix used for color correction,
-+ *          the value of matrix[x][y] is orig_value x 256. [-4096..4095]
-+ * @reserved: applications must zero this array
-+ */
-+struct c3_isp_params_ccm {
-+	struct c3_isp_params_block_header header;
-+	__s16 matrix[3][3];
-+	__u16 reserved[3];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * struct c3_isp_params_csc - ISP Color Space Conversion configuration
-+ *
-+ * This struct allows the configuration of the matrix for color space
-+ * conversion. The matrix consists of 3 x 3 points, so need to set matrix[3][3].
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_CSC
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @matrix: a 3x3 matrix used for the color space conversion,
-+ *          the value of matrix[x][y] is orig_value x 256. [-4096..4095]
-+ * @reserved: applications must zero this array
-+ */
-+struct c3_isp_params_csc {
-+	struct c3_isp_params_block_header header;
-+	__s16 matrix[3][3];
-+	__u16 reserved[3];
-+} __attribute__((aligned(8)));
-+
-+/**
-+ * struct c3_isp_params_blc - ISP Black Level Correction configuration
-+ *
-+ * This struct allows the configuration of the block level offset for each
-+ * color channel.
-+ *
-+ * header.type should be set to C3_ISP_PARAMS_BLOCK_BLC
-+ * from :c:type:`c3_isp_params_block_type`
-+ *
-+ * @header: the C3 ISP parameters block header
-+ * @gr_ofst: Gr blc offset (Q4.12 format)
-+ * @r_ofst: R blc offset (Q4.12 format)
-+ * @b_ofst: B blc offset (Q4.12 format)
-+ * @gb_ofst: Gb blc offset(Q4.12 format)
-+ */
-+struct c3_isp_params_blc {
-+	struct c3_isp_params_block_header header;
-+	__u16 gr_ofst;
-+	__u16 r_ofst;
-+	__u16 b_ofst;
-+	__u16 gb_ofst;
-+};
-+
-+/**
-+ * define C3_ISP_PARAMS_MAX_SIZE - Maximum size of all C3 ISP Parameters
-+ *
-+ * Though the parameters for the C3 ISP are passed as optional blocks, the
-+ * driver still needs to know the absolute maximum size so that it can allocate
-+ * a buffer sized appropriately to accommodate userspace attempting to set all
-+ * possible parameters in a single frame.
-+ */
-+#define C3_ISP_PARAMS_MAX_SIZE                     \
-+	(sizeof(struct c3_isp_params_awb_gains) +  \
-+	 sizeof(struct c3_isp_params_awb_config) + \
-+	 sizeof(struct c3_isp_params_ae_config) +  \
-+	 sizeof(struct c3_isp_params_af_config) +  \
-+	 sizeof(struct c3_isp_params_pst_gamma) +  \
-+	 sizeof(struct c3_isp_params_ccm) +        \
-+	 sizeof(struct c3_isp_params_csc) +        \
-+	 sizeof(struct c3_isp_params_blc))
-+
-+/**
-+ * struct c3_isp_params_cfg - C3 ISP configuration parameters
-+ *
-+ * This struct contains the configuration parameters of the C3 ISP
-+ * algorithms, serialized by userspace into an opaque data buffer. Each
-+ * configuration parameter block is represented by a block-specific structure
-+ * which contains a :c:type:`c3_isp_param_block_header` entry as first
-+ * member. Userspace populates the @data buffer with configuration parameters
-+ * for the blocks that it intends to configure. As a consequence, the data
-+ * buffer effective size changes according to the number of ISP blocks that
-+ * userspace intends to configure.
-+ *
-+ * The parameters buffer is versioned by the @version field to allow modifying
-+ * and extending its definition. Userspace should populate the @version field to
-+ * inform the driver about the version it intends to use. The driver will parse
-+ * and handle the @data buffer according to the data layout specific to the
-+ * indicated revision and return an error if the desired revision is not
-+ * supported.
-+ *
-+ * For each ISP block that userspace wants to configure, a block-specific
-+ * structure is appended to the @data buffer, one after the other without gaps
-+ * in between nor overlaps. Userspace shall populate the @total_size field with
-+ * the effective size, in bytes, of the @data buffer.
-+ *
-+ * The expected memory layout of the parameters buffer is::
-+ *
-+ *	+-------------------- struct c3_isp_params_cfg ---- ------------------+
-+ *	| version = C3_ISP_PARAM_BUFFER_V0;                                   |
-+ *	| data_size = sizeof(struct c3_isp_params_awb_gains) +                |
-+ *	|              sizeof(struct c3_isp_params_awb_config);       |
-+ *	| +------------------------- data  ---------------------------------+ |
-+ *	| | +------------ struct c3_isp_params_awb_gains) ------------------+ |
-+ *	| | | +---------  struct c3_isp_params_block_header header -----+ | | |
-+ *	| | | | type = C3_ISP_PARAMS_BLOCK_AWB_GAINS;                   | | | |
-+ *	| | | | flags = C3_ISP_PARAMS_BLOCK_FL_NONE;                    | | | |
-+ *	| | | | size = sizeof(struct c3_isp_params_awb_gains);          | | | |
-+ *	| | | +---------------------------------------------------------+ | | |
-+ *	| | | gr_gain = ...;                                              | | |
-+ *	| | | r_gain = ...;                                               | | |
-+ *	| | | b_gain = ...;                                               | | |
-+ *	| | | gb_gain = ...;                                              | | |
-+ *	| | +------------------ struct c3_isp_params_awb_config ----------+ | |
-+ *	| | | +---------- struct c3_isp_param_block_header header ------+ | | |
-+ *	| | | | type = C3_ISP_PARAMS_BLOCK_AWB_CONFIG;                  | | | |
-+ *	| | | | flags = C3_ISP_PARAMS_BLOCK_FL_NONE;                    | | | |
-+ *	| | | | size = sizeof(struct c3_isp_params_awb_config)          | | | |
-+ *	| | | +---------------------------------------------------------+ | | |
-+ *	| | | tap_point = ...;                                            | | |
-+ *	| | | satur_vald = ...;                                           | | |
-+ *	| | | horiz_zones_num = ...;                                      | | |
-+ *	| | | vert_zones_num = ...;                                       | | |
-+ *	| | +-------------------------------------------------------------+ | |
-+ *	| +-----------------------------------------------------------------+ |
-+ *	+---------------------------------------------------------------------+
-+ *
-+ * @version: The C3 ISP parameters buffer version
-+ * @data_size: The C3 ISP configuration data effective size, excluding this
-+ *             header
-+ * @data: The C3 ISP configuration blocks data
-+ */
-+struct c3_isp_params_cfg {
-+	__u32 version;
-+	__u32 data_size;
-+	__u8 data[C3_ISP_PARAMS_MAX_SIZE];
-+};
-+
-+#endif
+ F:	Documentation/userspace-api/media/v4l/metafmt-c3-isp.rst
+ F:	drivers/media/platform/amlogic/c3/isp/
 
 -- 
 2.49.0
