@@ -1,63 +1,63 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809AE2192F1
-	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 06:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3D421931E
+	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 06:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744872858; cv=none; b=SHkwoPKmqZ5LVGrSnIGAT1kE6Rzb6OnoDrPu3nKLCtbvlfhLv2QG6kaLlhNRz+rCtimsDzGNknK6lljeW4wcMwy+VIy9nUWknAbUDjvnJYv2Z6CiRzvPMTDs3u2n5wGh0SoTYGpHhD+yYde8TWC90tMY3JzhUqHsfhg9N5QoFy0=
+	t=1744872858; cv=none; b=Y1u+rbh/gG1mjMXP4bSPVnJlSWuciy7YjsGrZ5d0SULPd/Mdq1rZraEydJ8y0tqrEhFenlt0lWuO422ehw0Uo0VesCbZk0fwHKSYtoW+9Bfwkp4YYIzGrkiQ+eoj68VcJCDZsOBB5OrwSzdrU1XgmVcGiuRdwuw7vPdxXu8gs1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744872858; c=relaxed/simple;
-	bh=tJrfZIBfIIHeUGHAJVsvi4AvNbQNY7JCbUw5PkWBQkA=;
+	bh=KKz92r4EwdbnvYK8zmCI+douLrObwePZYzFs3P5Nv9g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ndz4TWNZLqfdtZTFC++mb95JwJNQy1hksX+VgEISc8n+svE5xX/1XQ4MqoVMkclDdZwSwrnpNhHvlxwnzCsdA0NkVwft9JulOgeubLVsNnGUVsPPUv5JwCHvOoQ85Sx2A3ccOeP/k+Xgvpio2+9rSLrTaErVDcHX6fgOM/w/oR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+B+tDwL; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=RcBkqewugXwfqkWHubOg/Yxr9izW4KscJDwdBzbNiFbI2SVxDEys+aqJwdXhu8miKwJLzc3e6OgZYq2QbcXmaI2xN0dz82F11g42CvBkkK/yPPEQFh+8lmyAPwzwcxSUQ2qGaTgXIdRLUEh7P2rA83HdO/jGFR/MVTFyfxP0rCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GJzeSvGT; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+B+tDwL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GJzeSvGT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744872856; x=1776408856;
+  t=1744872857; x=1776408857;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tJrfZIBfIIHeUGHAJVsvi4AvNbQNY7JCbUw5PkWBQkA=;
-  b=m+B+tDwLVctAAP8XeQ6+QMbcmjz5vE55PbRut5kDJ3MDase09EwugHDW
-   fxNiW3yShQSURr6E9YqH9N7WJ1si22+ZLPmOvUvzIc8VP77eryQccjydi
-   o8WwQgASBc9D88resp6MRa/A+E+BGWCtxEN53i3QTPkCkbJzert08TiWU
-   RFd4djtznpWRf3iiilKxwVkQiG4/Y/TmusaKr/o89mUZnWHiTZ6LRbpdn
-   BGnX+ZSZkmqV71THkDv1fckjCdiNKlMfqmenOHZECA9/Go5nbnMsRdhQI
-   92EVpKC9EKThtWHqdLBa3onWFACdGUTEWVBnQ+bOsYoktRXxBB2zosA22
+  bh=KKz92r4EwdbnvYK8zmCI+douLrObwePZYzFs3P5Nv9g=;
+  b=GJzeSvGT7To1B4rFR7Mtj+39WDiovd5NrTco304RZoQkI/NpCnadmpB5
+   /3B8U4hXOQmN9lXhqgjxY3yq9bgFvR9D4FFemdkolOi0rXVbV+F5J4291
+   jQNVF4EwKBaaqNV9Zb9oFcM6ULv4eM5VWAtbovjBGdipD2cCQsozZN8Fc
+   tOn0zPvF5UpvWrzdb1hto8v0CxC+0bmoP/S26iRgKKwPA5gseIpfHu/jz
+   3sg5LySkTuO+tCms6Cf/ZyRKq7vejU349CFTEYtGWZWRVCWOyuy6/CNnm
+   HRThDeCdOjN/v/wRtIOSQXdHMfQfQvjmmPmwgM5oAeVr4lj9nlEzPyU15
    w==;
-X-CSE-ConnectionGUID: itgud0dJTm2zTJE4ddKPEQ==
-X-CSE-MsgGUID: Lvp4ryJrSTSXAsO6bi6dUA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="71831290"
+X-CSE-ConnectionGUID: QALM4NOySfuxMf4idXyVSQ==
+X-CSE-MsgGUID: nTS3NsYAR7inQYB2yTuRPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="71831293"
 X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="71831290"
+   d="scan'208";a="71831293"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 23:54:12 -0700
-X-CSE-ConnectionGUID: At2TKzNPQ3C6Lcnz2bwWwQ==
-X-CSE-MsgGUID: Sn0swTlwSa+St7KClJYxgA==
+X-CSE-ConnectionGUID: C8Jqt3tsRCyiJvxyaIw6kA==
+X-CSE-MsgGUID: sUBCxwZ7TO6wFWVYD/cDGw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="131262202"
+   d="scan'208";a="131262204"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
   by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 23:54:11 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2E19D120806;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 257A3120704;
 	Thu, 17 Apr 2025 09:54:05 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1u5J8P-001J5K-0Y;
+	id 1u5J8P-001J5A-0R;
 	Thu, 17 Apr 2025 09:54:05 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
 Cc: laurent.pinchart@ideasonboard.com,
 	dongcheng.yan@intel.com
-Subject: [PATCH v2 09/11] media: ccs-pll: Better validate VT PLL branch
-Date: Thu, 17 Apr 2025 09:53:52 +0300
-Message-Id: <20250417065354.311617-10-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 07/11] media: ccs-pll: Print missing PLL flags
+Date: Thu, 17 Apr 2025 09:53:50 +0300
+Message-Id: <20250417065354.311617-8-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250417065354.311617-1-sakari.ailus@linux.intel.com>
 References: <20250417065354.311617-1-sakari.ailus@linux.intel.com>
@@ -69,58 +69,29 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that the VT PLL dividers are actually found, don't trust they always
-are even though they should be.
+Printing the OP_PIX_CLOCK_PER_LANE and NO_OP_CLOCKS CCS PLL flags were
+missing, add them now.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs-pll.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ccs-pll.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 3f8153fb4af0..fc6f8aff5fd8 100644
+index 16eb09462c8b..ebbc5e323244 100644
 --- a/drivers/media/i2c/ccs-pll.c
 +++ b/drivers/media/i2c/ccs-pll.c
-@@ -449,7 +449,7 @@ static int ccs_pll_calculate_vt_tree(struct device *dev,
- 	return -EINVAL;
- }
+@@ -124,7 +124,9 @@ static void print_pll(struct device *dev, const struct ccs_pll *pll)
+ 	dev_dbg(dev, "pixel rate on CSI-2 bus:\t%u\n",
+ 		pll->pixel_rate_csi);
  
--static void
-+static int
- ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 		     const struct ccs_pll_branch_limits_bk *op_lim_bk,
- 		     struct ccs_pll *pll, struct ccs_pll_branch_fr *pll_fr,
-@@ -572,6 +572,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- 		if (best_pix_div < SHRT_MAX >> 1)
- 			break;
- 	}
-+	if (best_pix_div == SHRT_MAX >> 1)
-+		return -EINVAL;
- 
- 	pll->vt_bk.sys_clk_div = DIV_ROUND_UP(vt_div, best_pix_div);
- 	pll->vt_bk.pix_clk_div = best_pix_div;
-@@ -584,6 +586,8 @@ ccs_pll_calculate_vt(struct device *dev, const struct ccs_pll_limits *lim,
- out_calc_pixel_rate:
- 	pll->pixel_rate_pixel_array =
- 		pll->vt_bk.pix_clk_freq_hz * pll->vt_lanes;
-+
-+	return 0;
- }
- 
- /*
-@@ -863,8 +867,10 @@ int ccs_pll_calculate(struct device *dev, const struct ccs_pll_limits *lim,
- 		if (pll->flags & CCS_PLL_FLAG_DUAL_PLL)
- 			break;
- 
--		ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
--				     op_pll_bk, cphy, phy_const);
-+		rval = ccs_pll_calculate_vt(dev, lim, op_lim_bk, pll, op_pll_fr,
-+					    op_pll_bk, cphy, phy_const);
-+		if (rval)
-+			continue;
- 
- 		rval = check_bk_bounds(dev, lim, pll, PLL_VT);
- 		if (rval)
+-	dev_dbg(dev, "flags%s%s%s%s%s%s%s%s\n",
++	dev_dbg(dev, "flags%s%s%s%s%s%s%s%s%s%s\n",
++		pll->flags & PLL_FL(OP_PIX_CLOCK_PER_LANE) ? " op-pix-clock-per-lane" : "",
++		pll->flags & PLL_FL(NO_OP_CLOCKS) ? " no-op-clocks" : "",
+ 		pll->flags & PLL_FL(LANE_SPEED_MODEL) ? " lane-speed" : "",
+ 		pll->flags & PLL_FL(EXT_IP_PLL_DIVIDER) ?
+ 		" ext-ip-pll-divider" : "",
 -- 
 2.39.5
 
