@@ -1,57 +1,57 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349F92153DA
-	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 07:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6412185BE
+	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 07:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744873312; cv=none; b=QjmyVKSqcUuDu0YOtqG+3fDJXV9s2eTWQsU2yX9Qs3yQYdqHq9Yn0V+Vljxo2xQoUGbLzBxkNsQbpxVoq97H3StCB87NrVN3SHGd88DRtapDj9M6NpeHW3kOORyQgw0gM7p7mzEQPTTiDxNWXLVaQ1z6U9xatDuIZicum+Y4060=
+	t=1744873313; cv=none; b=pIjRfLxkm/i+nEbE3CGIot5HoT23RomnXUrrJ/fzfiDoRp06IQOQoF9SO/NZSTqO8wRGDZ1bIuIpYVURE8cvtKLWvjYyw7kD9qGIl/ROoy0+ETziEZrz+h3XDmJZTtpqo16rK9GYuLDFRGAy2GQ7M/ItQCnUj1XIEwlsejERvg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744873312; c=relaxed/simple;
-	bh=cmgUhxWvsEmZMKyVkXWYbOw23A81V6zybyGzeaoH1Pg=;
+	s=arc-20240116; t=1744873313; c=relaxed/simple;
+	bh=uV9xtJ5sBM40CU/YXcWZBk7jQdhenEQ4GHd3+QbypWA=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pI+IJonW/Pc618008Ro/9xOnXSG4d2ZDeh70wkiwhDpE+CDwEUtIIIAQmKXsaktY4TwOYhL8k4nET7xsyUVPnX4j7kKYyjTFZfygcLUmQ4DNPxZ9MKSMGQ1LTMAiU/sMiwPZ45WsIgmyOSO6xHb9Ovcx1ic1jKsswPf+N5B+lfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EtmVsBwQ; arc=none smtp.client-ip=192.198.163.19
+	 MIME-Version:Content-Type; b=lRmx9/UYlgwzUhFpFFjhfSV6UkoqQyenfb7YNg/uLqwEL3YgSGvMiqRuqkGDUsszsGAkfa49aQrwAI7EcSs/jUq2h57KfnjTsqa3hE827qvZjl7ofZ0FmQerDd3KEaliXoQMqFKLGB+fktKENMFajtDbWpchWhtE5sjhZyBPNV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j3tExCs4; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EtmVsBwQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j3tExCs4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744873311; x=1776409311;
+  t=1744873312; x=1776409312;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=cmgUhxWvsEmZMKyVkXWYbOw23A81V6zybyGzeaoH1Pg=;
-  b=EtmVsBwQdCY+VF3ZTh8F3uawQXA9VH4sk+qZAq1K7u/Qk7v6IGtB1S/o
-   6HaUiEbjN+vtyQWuKrkvUeJQTFNA/IAYy495mFBf5cu8GYI/56oau2zEB
-   Hdscrn09LA7sDkPHNPz0/YnOiO0w7uubwiQ6hshoIRuCvL9CEYG2Q1hUG
-   5rMYVWEd86zr3cjYueyntlKImG8dnrSjUN8XFFRSAOd16xgj5beDlJkfl
-   ED3tF0siFmUgG9+ynF57+p4FO395HSFt8N4VCTuCSM01473cjVOgmDlR5
-   YA1aEL7lUsUGH7qHZ3jCjmC4uPPfH6J3bfuxaZu4f+s5JoywGIIZmXf9t
-   A==;
-X-CSE-ConnectionGUID: hSIb4JvORSCa/yijUkiQnQ==
-X-CSE-MsgGUID: fKL3cd4fTZq24CEXP1lRgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="45580982"
+  bh=uV9xtJ5sBM40CU/YXcWZBk7jQdhenEQ4GHd3+QbypWA=;
+  b=j3tExCs4lIGvbLpp1Y8ZecmZ0B3IzNUAzT/s5arjY03onfNscBQfPLFG
+   93v6J27wuihO0Ca+VhBCjrGUI8Atvx125XcyEXV1LgUDV4twQxbW7T8lf
+   g9irc9CnA2hb7T68szKRKbpIMWgZqeTU2hot2gZETbkI4lxD3E9+bqAus
+   5ZYda/uDMvOzmBSnXMQ6FD3n4v0GDPup28wQPK/EcR4d+gY4qteNFY0hx
+   NnpeSVoarHrDEnzyH99U9k6Zul3ClqzWX7Y1V7r+rO3yWBsDojr6XNUER
+   ILrbM0FAxI7kF15q9bTN/cWLkQJHArDW08SIztqhvK+N2wvewAT+cqj7D
+   Q==;
+X-CSE-ConnectionGUID: HDiBFJ+eTD6A3AbbE863ew==
+X-CSE-MsgGUID: M4OF7I5IRC+fQGN8H1+BTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="45580985"
 X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="45580982"
+   d="scan'208";a="45580985"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 00:01:50 -0700
-X-CSE-ConnectionGUID: SXogawnPQZ2yOJkZn2dV4A==
-X-CSE-MsgGUID: 0HFFgWAVQ0eZ9rFBeur/Dw==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 00:01:51 -0700
+X-CSE-ConnectionGUID: 8uJXmOKjRc27tuZBulYxwA==
+X-CSE-MsgGUID: vvr1FnYaRL2DlZfZ/y7ZKg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,218,1739865600"; 
-   d="scan'208";a="135883746"
+   d="scan'208";a="135883749"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 00:01:49 -0700
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 00:01:50 -0700
 Received: from svinhufvud.lan (maa-artisokka.localdomain [192.168.240.50])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 83D9A1202AB
-	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 10:01:46 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9862C1203F8
+	for <linux-media@vger.kernel.org>; Thu, 17 Apr 2025 10:01:47 +0300 (EEST)
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: linux-media@vger.kernel.org
-Subject: [PATCH 2/5] media: ccs: Try a little longer to access the sensor before giving up
-Date: Thu, 17 Apr 2025 10:01:41 +0300
-Message-Id: <20250417070144.130199-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 4/5] =?UTF-8?q?media:=20ccs:=20Remove=20I=C2=B2C=20write?= =?UTF-8?q?=20retry=20hack?=
+Date: Thu, 17 Apr 2025 10:01:43 +0300
+Message-Id: <20250417070144.130199-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250417070144.130199-1-sakari.ailus@linux.intel.com>
 References: <20250417070144.130199-1-sakari.ailus@linux.intel.com>
@@ -61,84 +61,50 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Some sensors take longer to respond after reset than the spec-required
-time. Try up to 1 s for the sensor to become accessible.
+The I²C retry hack has been there in order to address transient I²C
+register write access issues on a few very old sensors and possibly it has
+addressed also first I²C access problems (device not responding until a
+certain amount of time has passed) but that is now separately handled. The
+retry hack has a good potential for introducing hard to debug problems in
+updating sensor settings while streaming. Remove it and instead pass those
+rare errors to the user space -- which is also what virtually all other
+drivers do.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 26 +++++++++++++-------------
- drivers/media/i2c/ccs/ccs.h      |  2 ++
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/media/i2c/ccs/ccs-reg-access.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 32ebc4477fc7..aeda286a7607 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1354,8 +1354,10 @@ static int ccs_change_cci_addr(struct ccs_sensor *sensor)
+diff --git a/drivers/media/i2c/ccs/ccs-reg-access.c b/drivers/media/i2c/ccs/ccs-reg-access.c
+index a696a0ec8ff5..fd36889ccc1d 100644
+--- a/drivers/media/i2c/ccs/ccs-reg-access.c
++++ b/drivers/media/i2c/ccs/ccs-reg-access.c
+@@ -210,7 +210,6 @@ int ccs_read_addr_noconv(struct ccs_sensor *sensor, u32 reg, u32 *val)
+  */
+ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
+ {
+-	unsigned int retries = 10;
+ 	int rval;
  
- 	client->addr = sensor->hwcfg.i2c_addr_dfl;
- 
--	rval = ccs_write(sensor, CCI_ADDRESS_CTRL,
--			 sensor->hwcfg.i2c_addr_alt << 1);
-+	rval = read_poll_timeout(ccs_write, rval, !rval, CCS_RESET_DELAY_US,
-+				 CCS_RESET_TIMEOUT_US, false, sensor,
-+				 CCI_ADDRESS_CTRL,
-+				 sensor->hwcfg.i2c_addr_alt << 1);
- 	if (rval)
+ 	rval = ccs_call_quirk(sensor, reg_access, true, &reg, &val);
+@@ -219,13 +218,7 @@ int ccs_write_addr(struct ccs_sensor *sensor, u32 reg, u32 val)
+ 	if (rval < 0)
  		return rval;
  
-@@ -1575,27 +1577,25 @@ static int ccs_power_on(struct device *dev)
- 		if (ccsdev->flags & CCS_DEVICE_FLAG_IS_SMIA)
- 			sleep = SMIAPP_RESET_DELAY(sensor->hwcfg.ext_clk);
- 		else
--			sleep = 5000;
-+			sleep = CCS_RESET_DELAY_US;
- 
- 		usleep_range(sleep, sleep);
- 	}
- 
- 	/*
--	 * Failures to respond to the address change command have been noticed.
--	 * Those failures seem to be caused by the sensor requiring a longer
--	 * boot time than advertised. An additional 10ms delay seems to work
--	 * around the issue, but the SMIA++ I2C write retry hack makes the delay
--	 * unnecessary. The failures need to be investigated to find a proper
--	 * fix, and a delay will likely need to be added here if the I2C write
--	 * retry hack is reverted before the root cause of the boot time issue
--	 * is found.
-+	 * Some devices take longer than the spec-defined time to respond
-+	 * after reset. Try until some time has passed before flagging it
-+	 * an error.
- 	 */
+-	rval = 0;
+-	do {
+-		if (cci_write(sensor->regmap, reg, val, &rval))
+-			fsleep(1000);
+-	} while (rval && --retries);
 -
- 	if (!sensor->reset && !sensor->xshutdown) {
- 		u8 retry = 100;
- 		u32 reset;
+-	return rval;
++	return cci_write(sensor->regmap, reg, val, NULL);
+ }
  
--		rval = ccs_write(sensor, SOFTWARE_RESET, CCS_SOFTWARE_RESET_ON);
-+		rval = read_poll_timeout(ccs_write, rval, !rval,
-+					 CCS_RESET_DELAY_US,
-+					 CCS_RESET_TIMEOUT_US,
-+					 false, sensor, SOFTWARE_RESET,
-+					 CCS_SOFTWARE_RESET_ON);
- 		if (rval < 0) {
- 			dev_err(dev, "software reset failed\n");
- 			goto out_cci_addr_fail;
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 096573845a10..0726c4687f0f 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -43,6 +43,8 @@
- #define SMIAPP_RESET_DELAY(clk)				\
- 	(1000 +	(SMIAPP_RESET_DELAY_CLOCKS * 1000	\
- 		 + (clk) / 1000 - 1) / ((clk) / 1000))
-+#define CCS_RESET_DELAY_US		5000
-+#define CCS_RESET_TIMEOUT_US		1000000
- 
- #define CCS_COLOUR_COMPONENTS		4
- 
+ #define MAX_WRITE_LEN	32U
 -- 
 2.39.5
 
