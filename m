@@ -1,41 +1,65 @@
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0546626A090
-	for <linux-media@vger.kernel.org>; Fri, 18 Apr 2025 06:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.127.44.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C214B269AEE
+	for <linux-media@vger.kernel.org>; Fri, 18 Apr 2025 07:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744958001; cv=none; b=uXbeb9Ik8N7qDHxthIyPg+hnvnoUW5wcH0AUSyYlhUkG8YX1v/zlPbbLOz8xzJzX+UfH4UZcTGaXS8VJx9VsonUGcE1J67TNa9eYpyqtAVJyRIhi/u0NZfPR1v+w7poXDRyRWdgTwe45LuGxb9gN0arTJqlKg42M2QJJ9YD/vds=
+	t=1744960087; cv=none; b=XJ8lDlFAbhGbXn9+a1sQwqltqu0Dx4YAIofxdQmyUlkTngtcIyF2Ey1sfhRBBY4INjlKu2KuYwNmDTRqeuiySCupnOLaFBJ8EbyaA3T/alUr7h53YAnNNxxNAVK8TYSn3rmlFFnA+zrneEXoi/LnLwjDVndZWHGH36lwGjs77PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744958001; c=relaxed/simple;
-	bh=ZlP6EPK4+fZnrQcl5kjy+YB9vBk4s18QuHHhKRtoZmg=;
+	s=arc-20240116; t=1744960087; c=relaxed/simple;
+	bh=MjTcnivbppFuWDxiJMyMXQle7rxti96tn0uQEqxDf6I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g0KbYO0cqUDyEu8NIXy7LP5oK6LnJeoo+ktbctxU3KtowXqAYb8k4cBm60W27jc4YuAPSB40kW1n/TT5uL3P4yf+9jIbBzU1bpf8gc0o8DbuvBLxTS2fbSq6pXn/yKCRcTAoVTsqzo9RtAaEhu5BXd2/MgxD8e0yjw8dbHip+g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=rhvzCAfX; arc=none smtp.client-ip=121.127.44.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
+	 In-Reply-To:Content-Type; b=p+Rsqt1xtWoYMetJPECmWpo4emgHTP/cdkOncNtEZdG5DmEtJcvYNsBsTZytmtX3+7pUjS2urVpymedNfrWAEh4pJVmxyzQi+HDRw6/rDA+XD2crQyKJJ7qRLpRx5fOGmiSxvuWIfNphRj7InM1Q+/33iEeZ2N1KoEjtWD19YDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lkOUrKN6; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="rhvzCAfX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1744957991;
- bh=LWB/lzW41QdtP1PkM2f6gfH2fV5BGNGd/A9YQFiDNfw=;
- b=rhvzCAfXV839+8f9YwCX+XOQEkNgiszueHyowH/X0ELG+3AEodFwtgXGfh7Pm5vylfS7Z+MkF
- kKID1V/rIlnLgNg1/DnI8wVJB9igXpsk2Vp6j209dLOW7GwivVxGxvT7+HTjIGwpNQTSyycfqHI
- f9VODWhbcjvedZWBatzW8gzMSc1gVyEJSMlm4wdTia9GZKjeyfNyFzq8uGRYwwEssmPO312qGn/
- tiTgR579zzRFtJuVka6MpWqQrmOcrsxHlQrkkPryuONG/aHWBQKj8uvhFpKWhAsSevE+SAOyXV7
- rtX+67JM70SYM0/CC3SC3GvJjT6nuJrNYPIJeCIHmnJg==
-X-Forward-Email-ID: 6801efb8c6b251c2d5bebe82
-X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 121.127.44.73
-X-Forward-Email-Version: 1.0.2
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-Message-ID: <8d1c3c82-dbdc-4064-8188-bab586996302@kwiboo.se>
-Date: Fri, 18 Apr 2025 08:22:42 +0200
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lkOUrKN6"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39efc1365e4so113048f8f.1
+        for <linux-media@vger.kernel.org>; Fri, 18 Apr 2025 00:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1744960084; x=1745564884; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HWjp8y8vFcOu+OSEBcB4uctMZzi0CJU4vWPxTMamQ/Q=;
+        b=lkOUrKN6oVbIv4nKYBD0yYQiDqytiez2cv5X5pNkwD+jLIdkNe5VWDJSEj5Bbo/hzR
+         RMAIVwIkNLCWs9f9HRkBKJn7Y6GreRx+gVhi/ETP+NYDCiv7mr1Um9nAix9RxFncAWaM
+         cZv18m6IIQK2Vd5Gex+iMHJoJhC5O1nN42TE8zeq+4grNQzCmhBM96eQSWa7P/fR4BsA
+         MG7Ojemy8dSeAf2ZaJc+lxPN8roJ7/4jIkdggytmn0+j34Ll45zYMwWUIBkUwbJHCymD
+         5UZ6Ef7qoJw0Me2MW7QjonJZdE6CC54f5bjsvjBVfl5mJerGd51RYDQRZePHZgehklsa
+         pjVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744960084; x=1745564884;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HWjp8y8vFcOu+OSEBcB4uctMZzi0CJU4vWPxTMamQ/Q=;
+        b=FMX7sTcxS+r4n04xjDD03+vsJYUFNrBfJhCoT5Sop/X1QZ3Uoiz0LCIdNdOjeA+ibo
+         m7azE6heMdUSrLIT2ICbwr0m7w13m9/Pc0EPtmo3F9ouwd3m9hLp+SHaNicAUDb3kxQj
+         Mweb4UbTTOl9ra+Fiy/2sAbzGNGUEK6qBZXaGpQeZGCOAoAUqjfx2nin9ZbCl/6Xdk1b
+         kjLwAPfK0EHIOaoWree9JContyVxS5+YIMufeuUJznfL4xz0Eh5c7w8dQ/9G4A1rjevw
+         WRzlQ4/3BN9kLhGC+32mSQQnWH6GBtSKyKJQDpHKkAto1LCIMUA7lGSP/zF5zadB1M46
+         G3MA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXgBxFhYRNsJYho+h2UuXoT/62TByLWomuqRGQztXdOYmp6Rc46/Zwupj+Pz+q9a4joTF1AeeOJhZoQw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoFanDKBStm3jbynnCR10PB/lRsJZuVpC+9BiA4FfE634wvI4t
+	GBxrWEpmzcuAR7rWnLBzLoKsXfETyjSi0zTdlHMYy9HgKFW9jAcCiVLoAQXIoxI=
+X-Gm-Gg: ASbGncuOC1LrtrDIfgTxU7pjQJsIP+XcZknVh4RXGW8zFqiTJ0k3nwJGiU1hOLzegw5
+	8oY6IbwH6EDlCJmsKY9hQdKiZgwhHRfjjLIb5cxqhvYprx+p+yvpxDwLDr0rrLD6OUeFlxa2BTa
+	u2ulSikH0OJVnk2F3BZqe51908sE1vJdUNfbQBPHJd7SXUyrriIspcDRcOIQKr3AfTQMwyPHrWo
+	rDOCTC56U7ucxzMHbKcwIlJhTVQ3LU4wuWR+ncQFjtgbbC8o0RTQN8WWwmBGpWwk/JAoUhAcNNn
+	gIysZU9EbKMlXjmALHVlhbHFKOeix2Prc7Qfbh7nOT83fudecNV1B7ga5CJx6Gx2x0ZDX5EA8YR
+	E3/Uk3g==
+X-Google-Smtp-Source: AGHT+IGnTH5vOZF2u4It+TIDbYVDJ9lOX/4CXNAQQY4+Sw+Dr3UKWjzq+JbcKdHZOf/M/NXavbawLA==
+X-Received: by 2002:a05:6000:40df:b0:39c:1401:679c with SMTP id ffacd0b85a97d-39efba4e291mr1224722f8f.21.1744960083940;
+        Fri, 18 Apr 2025 00:08:03 -0700 (PDT)
+Received: from [192.168.0.34] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39efa43315esm1856612f8f.26.2025.04.18.00.08.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Apr 2025 00:08:03 -0700 (PDT)
+Message-ID: <ae4492fe-1b1b-444e-a4f3-4b99258a1ee0@linaro.org>
+Date: Fri, 18 Apr 2025 08:08:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,118 +67,285 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/4] media: rkvdec: Add get_image_fmt ops
-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20250417-b4-rkvdec_h264_high10_and_422_support-v9-0-0e8738ccb46b@collabora.com>
- <20250417-b4-rkvdec_h264_high10_and_422_support-v9-3-0e8738ccb46b@collabora.com>
+Subject: Re: [PATCH v2 5/6] media: dt-bindings: media: camss: Add
+ qcom,qcm2290-camss binding
+To: Loic Poulain <loic.poulain@oss.qualcomm.com>, rfoss@kernel.org,
+ konradybcio@kernel.org, andersson@kernel.org, krzk+dt@kernel.org,
+ robh@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, dmitry.baryshkov@oss.qualcomm.com
+References: <20250417145819.626733-1-loic.poulain@oss.qualcomm.com>
+ <20250417145819.626733-6-loic.poulain@oss.qualcomm.com>
 Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <20250417-b4-rkvdec_h264_high10_and_422_support-v9-3-0e8738ccb46b@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20250417145819.626733-6-loic.poulain@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Nicolas,
-
-On 2025-04-17 23:58, Nicolas Dufresne wrote:
-> From: Jonas Karlman <jonas@kwiboo.se>
+On 17/04/2025 15:58, Loic Poulain wrote:
+> Add bindings for qcom,qcm2290-camss in order to support the camera
+> subsystem found in the Qualcomm Robotics RB1 Platform (QRB2210).
 > 
-> Add support for a get_image_fmt() ops that returns the required image
-> format.
-> 
-> The CAPTURE format is reset when the required image format changes and
-> the buffer queue is not busy.
-> 
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Co-developed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
 > ---
->  drivers/staging/media/rkvdec/rkvdec.c | 35 +++++++++++++++++++++++++++++++++++
->  drivers/staging/media/rkvdec/rkvdec.h |  2 ++
->  2 files changed, 37 insertions(+)
+>   .../bindings/media/qcom,qcm2290-camss.yaml    | 261 ++++++++++++++++++
+>   1 file changed, 261 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/media/qcom,qcm2290-camss.yaml
 > 
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-> index 7b780392bb6a63cc954655ef940e87146d2b852f..6c6fe411f48772419e1810d869ab40d168848e65 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.c
-> +++ b/drivers/staging/media/rkvdec/rkvdec.c
-> @@ -72,6 +72,15 @@ static bool rkvdec_is_valid_fmt(struct rkvdec_ctx *ctx, u32 fourcc,
->  	return false;
->  }
->  
-> +static bool rkvdec_fmt_changed(struct rkvdec_ctx *ctx,
-> +			       enum rkvdec_image_fmt image_fmt)
+> diff --git a/Documentation/devicetree/bindings/media/qcom,qcm2290-camss.yaml b/Documentation/devicetree/bindings/media/qcom,qcm2290-camss.yaml
+> new file mode 100644
+> index 000000000000..1af6ed298c66
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/qcom,qcm2290-camss.yaml
+> @@ -0,0 +1,261 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/qcom,qcm2290-camss.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm QCM2290 Camera Subsystem (CAMSS)
+> +
+> +maintainers:
+> +  - Loic Poulain <loic.poulain@oss.qualcomm.com>
+> +
+> +description:
+> +  The CAMSS IP is a CSI decoder and ISP present on Qualcomm platforms.
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,qcm2290-camss
+> +
+> +  reg:
+> +    maxItems: 9
+> +
+> +  reg-names:
+> +    items:
+> +      - const: csid0
+> +      - const: csid1
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: tpg0
+> +      - const: tpg1
+> +      - const: top
+> +
+> +  clocks:
+> +    maxItems: 15
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ahb
+> +      - const: axi
+> +      - const: top_ahb
+> +      - const: csi0
+> +      - const: csi1
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: csiphy0_timer
+> +      - const: csiphy1_timer
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: vfe0_cphy_rx
+> +      - const: vfe1_cphy_rx
+> +      - const: camnoc_nrt_axi
+> +      - const: camnoc_rt_axi
+> +
+> +  interrupts:
+> +    maxItems: 8
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: csid0
+> +      - const: csid1
+> +      - const: csiphy0
+> +      - const: csiphy1
+> +      - const: vfe0
+> +      - const: vfe1
+> +      - const: tpg0
+> +      - const: tpg1
+> +
+> +  interconnects:
+> +    maxItems: 3
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: ahb
+> +      - const: hf_mnoc
+> +      - const: sf_mnoc
+> +
+> +  iommus:
+> +    maxItems: 4
+> +
+> +  power-domains:
+> +    items:
+> +      - description: GDSC CAMSS Block, Global Distributed Switch Controller.
+> +
+> +  vdda-phy-supply:
+> +    description:
+> +      Phandle to a 1.2V regulator supply to CSI PHYs.
+> +
+> +  vdda-pll-supply:
+> +    description:
+> +      Phandle to 1.8V regulator supply to CAMSS refclk pll block.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    description:
+> +      CSI input ports.
 
-Just a small nitpick:
+patternProperties would be nicer here
 
-Maybe this function should be called rkvdec_image_fmt_changed() and
-could be moved closer to rkvdec_image_fmt_match() as those two are
-related to image_fmt and not the pixfmt/fourcc.
+https://gitlab.freedesktop.org/linux-media/media-committers/-/blob/next/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml?ref_type=heads#L129
 
-Regards,
-Jonas
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - interconnects
+> +  - interconnect-names
+> +  - iommus
+> +  - power-domains
+> +  - vdda-phy-supply
+> +  - vdda-pll-supply
 
-> +{
-> +	if (image_fmt == RKVDEC_IMG_FMT_ANY)
-> +		return false;
-> +
-> +	return ctx->image_fmt != image_fmt;
-> +}
-> +
->  static void rkvdec_fill_decoded_pixfmt(struct rkvdec_ctx *ctx,
->  				       struct v4l2_pix_format_mplane *pix_mp)
->  {
-> @@ -118,8 +127,34 @@ static int rkvdec_try_ctrl(struct v4l2_ctrl *ctrl)
->  	return 0;
->  }
->  
-> +static int rkvdec_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct rkvdec_ctx *ctx = container_of(ctrl->handler, struct rkvdec_ctx, ctrl_hdl);
-> +	const struct rkvdec_coded_fmt_desc *desc = ctx->coded_fmt_desc;
-> +	enum rkvdec_image_fmt image_fmt;
-> +	struct vb2_queue *vq;
-> +
-> +	/* Check if this change requires a capture format reset */
-> +	if (!desc->ops->get_image_fmt)
-> +		return 0;
-> +
-> +	image_fmt = desc->ops->get_image_fmt(ctx, ctrl);
-> +	if (rkvdec_fmt_changed(ctx, image_fmt)) {
-> +		vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-> +				     V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-> +		if (vb2_is_busy(vq))
-> +			return -EBUSY;
-> +
-> +		ctx->image_fmt = image_fmt;
-> +		rkvdec_reset_decoded_fmt(ctx);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct v4l2_ctrl_ops rkvdec_ctrl_ops = {
->  	.try_ctrl = rkvdec_try_ctrl,
-> +	.s_ctrl = rkvdec_s_ctrl,
->  };
->  
->  static const struct rkvdec_ctrl_desc rkvdec_h264_ctrl_descs[] = {
-> diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
-> index 6f8cf50c5d99aad2f52e321f54f3ca17166ddf98..e466a2753ccfc13738e0a672bc578e521af2c3f2 100644
-> --- a/drivers/staging/media/rkvdec/rkvdec.h
-> +++ b/drivers/staging/media/rkvdec/rkvdec.h
-> @@ -73,6 +73,8 @@ struct rkvdec_coded_fmt_ops {
->  		     struct vb2_v4l2_buffer *dst_buf,
->  		     enum vb2_buffer_state result);
->  	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
-> +	enum rkvdec_image_fmt (*get_image_fmt)(struct rkvdec_ctx *ctx,
-> +					       struct v4l2_ctrl *ctrl);
->  };
->  
->  enum rkvdec_image_fmt {
-> 
+Similarly we are looking for the voltage level on these rails as part of 
+the name.
 
+https://gitlab.freedesktop.org/linux-media/media-committers/-/blob/next/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml?ref_type=heads#L173
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-qcm2290.h>
+> +    #include <dt-bindings/interconnect/qcom,rpm-icc.h>
+> +    #include <dt-bindings/interconnect/qcom,qcm2290.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        camss: camss@5c6e000 {
+> +            compatible = "qcom,qcm2290-camss";
+> +
+> +            reg = <0 0x5c6e000 0 0x1000>,
+> +                  <0 0x5c75000 0 0x1000>,
+> +                  <0 0x5c52000 0 0x1000>,
+> +                  <0 0x5c53000 0 0x1000>,
+> +                  <0 0x5c6f000 0 0x4000>,
+> +                  <0 0x5c76000 0 0x4000>,
+> +                  <0 0x5c66000 0 0x400>,
+> +                  <0 0x5c68000 0 0x400>,
+> +                  <0 0x5c11000 0 0x1000>;
+
+Recent guidance is for <0x0 0x5c11000 0x0 0x1000> i.e. using hex for 
+both values instead of mixing base 10 and base 16.
+
+> +            reg-names = "csid0",
+> +                        "csid1",
+> +                        "csiphy0",
+> +                        "csiphy1",
+> +                        "vfe0",
+> +                        "vfe1",
+> +                        "tpg0",
+> +                        "tpg1",
+
+csitpg0,
+csitpg1
+
+alphabetise the regs by name too please
+
+https://gitlab.freedesktop.org/linux-media/media-committers/-/blob/next/Documentation/devicetree/bindings/media/qcom,x1e80100-camss.yaml?ref_type=heads#L213
+
+https://gitlab.freedesktop.org/linux-media/media-committers/-/blob/next/Documentation/devicetree/bindings/media/qcom,sm8550-camss.yaml?ref_type=heads
+
+> +                        "top";
+> +
+> +            clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+> +                     <&gcc GCC_CAMSS_AXI_CLK>,
+> +                     <&gcc GCC_CAMSS_TOP_AHB_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_0_CSID_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_1_CSID_CLK>,
+> +                     <&gcc GCC_CAMSS_CPHY_0_CLK>,
+> +                     <&gcc GCC_CAMSS_CPHY_1_CLK>,
+> +                     <&gcc GCC_CAMSS_CSI0PHYTIMER_CLK>,
+> +                     <&gcc GCC_CAMSS_CSI1PHYTIMER_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_0_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_1_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_0_CPHY_RX_CLK>,
+> +                     <&gcc GCC_CAMSS_TFE_1_CPHY_RX_CLK>,
+> +                     <&gcc GCC_CAMSS_NRT_AXI_CLK>,
+> +                     <&gcc GCC_CAMSS_RT_AXI_CLK>;
+> +            clock-names = "ahb",
+> +                          "axi",
+> +                          "top_ahb",
+> +                          "csi0",
+> +                          "csi1",
+> +                          "csiphy0",
+> +                          "csiphy1",
+> +                          "csiphy0_timer",
+> +                          "csiphy1_timer",
+> +                          "vfe0",
+> +                          "vfe1",
+> +                          "vfe0_cphy_rx",
+> +                          "vfe1_cphy_rx",
+> +                          "camnoc_nrt_axi",
+> +                          "camnoc_rt_axi";
+
+here too
+
+> +
+> +            interrupts = <GIC_SPI 210 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 212 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 72 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 73 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 211 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 213 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 309 IRQ_TYPE_EDGE_RISING>,
+> +                         <GIC_SPI 310 IRQ_TYPE_EDGE_RISING>;
+> +            interrupt-names = "csid0",
+> +                              "csid1",
+> +                              "csiphy0",
+> +                              "csiphy1",
+> +                              "vfe0",
+> +                              "vfe1",
+> +                              "tpg0",
+> +                              "tpg1";
+> +
+> +            interconnects = <&bimc MASTER_APPSS_PROC RPM_ACTIVE_TAG
+> +                             &config_noc SLAVE_CAMERA_CFG RPM_ACTIVE_TAG>,
+> +                            <&mmrt_virt MASTER_CAMNOC_HF RPM_ALWAYS_TAG
+> +                             &bimc SLAVE_EBI1 RPM_ALWAYS_TAG>,
+> +                            <&mmnrt_virt MASTER_CAMNOC_SF RPM_ALWAYS_TAG
+> +                             &bimc SLAVE_EBI1 RPM_ALWAYS_TAG>;
+> +            interconnect-names = "ahb",
+> +                                 "hf_mnoc",
+> +                                 "sf_mnoc";
+> +
+> +            iommus = <&apps_smmu 0x400 0x0>,
+> +                     <&apps_smmu 0x800 0x0>,
+> +                     <&apps_smmu 0x820 0x0>,
+> +                     <&apps_smmu 0x840 0x0>;
+> +
+> +            power-domains = <&gcc GCC_CAMSS_TOP_GDSC>;
+> +
+> +            vdda-phy-supply = <&pm4125_l5>;
+> +            vdda-pll-supply = <&pm4125_l13>;
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +            };
+> +        };
+> +    };
+---bod
