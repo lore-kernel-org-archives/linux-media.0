@@ -1,106 +1,88 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAE11FECD4;
-	Tue, 22 Apr 2025 22:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986982C10A4
+	for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 22:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745359597; cv=none; b=kty3rIbeYqSKUpVgbUgljbAj6eim3Lft2zOMeDPKFuRIBFdDbw/bLv/HYET5zc+oAXZxlaUgU8hH9SaCRYDLaehexQSH+Ggfnf6wxlb7L1GJWYD6AYmZF9YriaeDAGC0Jx4jVCYR6s5NVra7LDPBUQB3jbpngVcYbi5rF4kkhsM=
+	t=1745360586; cv=none; b=qlSyrZP3iWQYiybT0hOtudQfeYEk2uQqls7L4Hl98Gpar2NSMlsNRbt1X6lnaPFbIYhnZjjo6a0d3hPEVXCCAca0/5iC96acidj5uK4CGdWnY9O0jR8Jzz/CHBtg2X8tvOxeFkw0R/RgZm30rQS/M+BieCkAhBFR05L7jY0TOak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745359597; c=relaxed/simple;
-	bh=tuZFH+YPbz0RM6eaajURU9+Pku8ZR4mHrVLcvtwZPFE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cHWeeW0emSNN+bytNqmdg0n0oXSVW3R7CqpJn0eOYUbBO3UzkwKnFFZvsss4Jr/EW2ceqAiCqiwksGCXBicFJRzITs91frtHAzYK+jJ9T8MrbOiMxWUn3atxuVubdP68FhNEAnwVqQ2gAId6qrozaaN+IqMDwbm24CcoSQlWsC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PM/Eidah; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1745360586; c=relaxed/simple;
+	bh=e2uRwWrb8ebhkycf61ed5XHbka2o5yaZh1hlxBkjDhc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m3+/ZU6C0ZPP7Nkd4Ft8mbCZiCFoou897zQlJQFkEQecCTiJBtJey7wGWXG6j4Ooi/z1PGFmxz5GAzZ7+QjSaFEJjNj4iOjchSSl1ecRZ7brcovQ34Dxvdq8kzVijozmjtKawnnKT5opBKmnd9uKIzFdoLSvJK5dVceeqG5LN5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jEO23b0W; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PM/Eidah"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3914aba1ce4so3819498f8f.2;
-        Tue, 22 Apr 2025 15:06:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jEO23b0W"
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30bef9b04adso52807091fa.1
+        for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 15:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745359594; x=1745964394; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YB1xGX6pFG9S33G4DkDnszbCcY9UyskbeFRbPxNa7a8=;
-        b=PM/Eidahx44lS+gRr/0Eenv/3sUG4UN28FXEMdqM4iT14AgFHTJyBEqbqf1ixGiSgD
-         3VarNT6XZcrJJQNWEVrSS9i1TLaEULHMvHcbTjyfh1CsTz3P1+VaRSZhij3XDgfdD/Gn
-         ec1NDygz+1iM9k9v4zsy6aJSsxZXBOE+dVrqq3iWV4f9Kc6xujDVEvFjCCSQW3jztOel
-         o2lw36hkoM+97eCW7uQa8jF9QPY2KJ9tCkNed40zTk49fE5fLS+idYbY+Zo5/9etECtv
-         1hA+nsTne+0iJpdS8MJTcjFYJSQQIoEFO2E/+BgyFrGIHWa0SddPr0tzsFJ58Zle+JVg
-         zZ8w==
+        d=google.com; s=20230601; t=1745360583; x=1745965383; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e2uRwWrb8ebhkycf61ed5XHbka2o5yaZh1hlxBkjDhc=;
+        b=jEO23b0WVqe76hU2A4ZzLru2kUgZ4k45WEDovoqlJUD5tIrmxp3QiCpwCamYoVMlEq
+         H9nTEB54qEtTaGx7KmAPCTRBeVNhTq6ANRPZ6W2v7wKK06A9fe4+oZGzEzgK/JcjrXS+
+         T3tkPEnsuVbq7CcrM0dZM6bU/jTM8xY258VC+8wLuGZMSuJqGYuHBN09MSYdGj2P+WMM
+         svvUe+I99pYmKxXLRDDTCkxf+eIN2k2mfSo1zVZneoMwXIQYuezHR+ZkCsefxOMhK7FR
+         TzwNZf5oBDO2Kt4bDf7ydjqkfLJP8vK60exG/EnSYsLY2J7pAWIvWIqGpByUOgb/CuD9
+         7Yuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745359594; x=1745964394;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YB1xGX6pFG9S33G4DkDnszbCcY9UyskbeFRbPxNa7a8=;
-        b=r5BLPJ4RcxPIu220H3g2bYocyOWJJQ7FsSc9Mnzl3J8yLDPniOZo/p94ii2SwTna+Y
-         U6uV/68Gf+gug8U9YQo7NjUUzVf+72ip+sVwXW4jbo4d5goenBehZEhnXKXSbUMJ1GeF
-         ga3cQWrFP7di7szrlX/OclAS1wVsAoW5dcnx7mV9RCni0SumYLxF+8gCmx5Xvl27elbF
-         DyQ8YxXfLA1Jn8NiM9FqOWKvjfrZRhxXsivtqaNbqNRCwoFC1j0Up5vY7NFuIklKuF6v
-         BMTkw5OGR7qWERwaGRLU8W5dBX+bbDSLl5GZ50SB1Ti6jLgy9kEW77cvI5NZzEArU1RM
-         1aug==
-X-Forwarded-Encrypted: i=1; AJvYcCXKGNdSoJZqaa3Cr5I0M37KgWbFE7eks2wJrOFSJ1q1doEMwONVLcirsw+EEkbHpjpHjHcI7RZZqdg3g6o=@vger.kernel.org, AJvYcCXb9LOI9Z4UQHNkn2d6kdmXdhMvMyJ2ZVnm8OjzNSvg5GwZYI9yKCZ9wOK/XNTVK5gQeRfhR7m4ueWWXJY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIPr7thwoqptWaHxvU9MYRqBzW3yOjdd4Rm2GTHabgYM3b8IM9
-	SnsF6GkHwpUM8zgrwKJ083NCAVNa+ChqpBAR8XKE5czKaXDnBa6b
-X-Gm-Gg: ASbGncsCfscWYwolrmYe+HmSAlu3ndnxlZI7xjE2VTVu28l4bXwAJRpWvDNVULTm/D+
-	SRhH/RzPdUsq3ni4NdzPizFTs0lw0F9YNa3K23TVLE5LP3ESnpYObAL7zmhLNiH44biIJE573mA
-	C9GIMpoal8c3jMtZBdFsvBUWMcSXA/TyJpvV273hzcryRi6n99/3DlAGCNBefBqMIjgZIB2tBLl
-	6dJCKcymRms/te/pwFt5KoLAF/8vwlOd98eey6/QHAzg/mXEj2+tfqsjf3fbbaNd1toxClphsE7
-	axoh91UsqsmyJWsNCH9iHegUxWw91WPi/zqiM5x/vw==
-X-Google-Smtp-Source: AGHT+IH2d7yNdQ11WUghNAhzaCdxOoKDBGRwo65j4Mt/Dnv6ia1u3FQoAdvO8VkKfmMezO5hiFWzuw==
-X-Received: by 2002:a05:6000:2509:b0:39e:e75b:5cd with SMTP id ffacd0b85a97d-39efba2c98emr14484631f8f.3.1745359594331;
-        Tue, 22 Apr 2025 15:06:34 -0700 (PDT)
-Received: from localhost ([194.120.133.58])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-39efa4207afsm16716557f8f.12.2025.04.22.15.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 15:06:34 -0700 (PDT)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Sumit Semwal <sumit.semwal@linaro.org>,
-	Gustavo Padovan <gustavo@padovan.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] dma-buf/sw_sync: remove redundant error check on variable err
-Date: Tue, 22 Apr 2025 23:06:27 +0100
-Message-ID: <20250422220627.89077-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.49.0
+        d=1e100.net; s=20230601; t=1745360583; x=1745965383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e2uRwWrb8ebhkycf61ed5XHbka2o5yaZh1hlxBkjDhc=;
+        b=DDwxug+lTByVbVXQEORbYItBgRFhF+uhgcRgsZTqH936XM2T5zo1rst+jrgcYBtjUL
+         +oyVjKXbipEXSFzE9+I6d1cQ94VnjFqXn2+d0L10ElL/eDLqiK4SCEcrVFNF6l8hPzVf
+         SZL5yr6+5qu7IUl3HhnlVNRa0UtWd3n4EThcY+Oj6GZIsSzinS1dq71TX4XOZjo5EhDh
+         X19wo5h0RFDNrd27tTQ4MLcM+lYQbOlEXgcyeERaowrXPeOKaIivIeZDO0vlql/FJFAJ
+         8OdohMPSyRC4i3iGU5WSAIvNsHlvvwcwJfXukUSWT8q7CqHWrLlByrGkjP2Z3Dyk9lBr
+         lXyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYl1Bqb35NNkERR/6kbDT65lB453jSHfX8BVWqh/TdmwzZfdQeUh+7YVVcEUJyCdbOnfk4UqEoKnI4WA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCW6pAQk/7rJwRTFnNMAAp51vYn4OizWTmI/YNEjqmK4p5nkez
+	qQQ3BB7YOcTtDHuQwtB61S5gqpCaU0bTtqi5bLDsGHxyQjsdSnczbSLD7KXRulAwUoqPb2dGWSk
+	Bp3J+BZuwLilnK3nLR3HyrKJ53JsrgYnxs6E=
+X-Gm-Gg: ASbGncuft7d6He9r9QK3HNhHe9o0AZPFwkS26fvvbI49OjzyGV/hV81PnBnesvCzTwi
+	ANnGpU2E83BtalIpt4Rg7ZIE5riHt6EWtQdVPNMEh7d2IG0c1U1+USjpAJOqWML/cG+K9qC1RlU
+	1363scRethaShdTkHdwDAQMId2xVIvpBXu43+ewiOHSEQ3snU3Ldg6m+R9TX30
+X-Google-Smtp-Source: AGHT+IGrB/MiyfMTsIh+vYbWS/FNQhnUERjXD1nH9PAly6Ako+aVzVIOOf/PQlHpqWj+hJ7n2hzR9xaSmnbnValKnS0=
+X-Received: by 2002:a2e:bea1:0:b0:30b:f24a:651a with SMTP id
+ 38308e7fff4ca-310904c626dmr45311251fa.5.1745360582583; Tue, 22 Apr 2025
+ 15:23:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250422191939.555963-1-jkangas@redhat.com> <20250422191939.555963-2-jkangas@redhat.com>
+In-Reply-To: <20250422191939.555963-2-jkangas@redhat.com>
+From: John Stultz <jstultz@google.com>
+Date: Tue, 22 Apr 2025 15:22:50 -0700
+X-Gm-Features: ATxdqUFD0eE26rdQ7w42uNdNNlbQHNUlvuTnoRS4o--E4bvf8dH1hzjOR3S0oaE
+Message-ID: <CANDhNCpqSeSUkV2QvgLW3JY+Tsf_UOBjBrn4vBkYf+dvbtq2wQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dma-buf: heaps: Parameterize heap name in __add_cma_heap()
+To: Jared Kangas <jkangas@redhat.com>
+Cc: sumit.semwal@linaro.org, benjamin.gaignard@collabora.com, 
+	Brian.Starkey@arm.com, tjmercier@google.com, christian.koenig@amd.com, 
+	mripard@kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The variable err is always zero at the point where it is being
-non-zero checked for an error. The check and error return path
-are redundant and can be removed. Issue detected by Coverity Scan
-static analysis.
+On Tue, Apr 22, 2025 at 12:19=E2=80=AFPM Jared Kangas <jkangas@redhat.com> =
+wrote:
+>
+> Prepare for the introduction of a fixed-name CMA heap by replacing the
+> unused void pointer parameter in __add_cma_heap() with the heap name.
+>
+> Signed-off-by: Jared Kangas <jkangas@redhat.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/dma-buf/sw_sync.c | 3 ---
- 1 file changed, 3 deletions(-)
+Thanks so much for taking this effort on. Looks good to me!
 
-diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
-index 4f27ee93a00c..ef3fda792749 100644
---- a/drivers/dma-buf/sw_sync.c
-+++ b/drivers/dma-buf/sw_sync.c
-@@ -437,9 +437,6 @@ static int sw_sync_ioctl_get_deadline(struct sync_timeline *obj, unsigned long a
- 
- 	dma_fence_put(fence);
- 
--	if (ret)
--		return ret;
--
- 	if (copy_to_user((void __user *)arg, &data, sizeof(data)))
- 		return -EFAULT;
- 
--- 
-2.49.0
-
+Acked-by: John Stultz <jstultz@google.com>
