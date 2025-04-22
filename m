@@ -1,127 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CDE9B666
-	for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 19:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0FF1096F
+	for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 19:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745349715; cv=none; b=P9Idjn76BONEiDEt7i98hZsbvdhVIZ5iGxH1KqP1A6lMzPQzmXi5rQYdguYBiEfu5DFqVgWhOKs+HEvSHMmqItnpvJOXHMSqisyOn3uUDQ9tYj6i+O0eUuk2Leh3UFch+ry3mNt6FtKV8io98NK2VbNVgXRDioIQp4ts1QPEwMw=
+	t=1745351223; cv=none; b=SphAIKQmletFvXucYLxRI7/3fMgAjLYnOW18tJJwDiUAlhUJaILvGqeq5fZRWwOoFcLAdgVyVurh86V6g8Ve/8MpPJKDKNnmr4f0zfLFN1tG2Am68VjloUXqyYD6jzHsSlzSDs4IC42unXbQaYfooE/LGnNuwVMFY09S7AVYhpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745349715; c=relaxed/simple;
-	bh=kw5xSLwjdxLb5UzO93JefRlAfAqBFORrjIP38P6h/8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g8fAbL+izNRrZdy9TYcV1yn/WgOrdtBbSe3sp/zr2YpEfLliedlKgUt9zT9ijbCuhCX/GfDaZ3NPXghXRYqBlnknGN+m8WxRWvYGE3ZupQRDGx7gr9eIOhjcfZkl48MQwsVI4KyVnEEeq0wnug126h1Fb+VvEVI+9CF7tKgyb+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UTdmpNqx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1745351223; c=relaxed/simple;
+	bh=t2fNCKroL9F7ZVN7zRq8ikEIYNQqgqm5OYQ+KBoNpnE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LCGZ+LbAarqtMwJ6wNy4ljKFTFVqffzmxlFMUphKI5fMYp+ck/c18dlDXmI+cG0SVmAElnGQ3fVUuN9aWNS3lYs7sop2edD14mGwN7KRs51q6yBdLgaYka8x9+xbQRGGp8m82LIEgZVQJ4qKEpHn/OC2pdFDUkEVv7etAtdLC4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=WpHErqe1; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UTdmpNqx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745349713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=y+KK05zMW7c3LQIz7d14BdD80ooDf/JC+jFj6UdPYvQ=;
-	b=UTdmpNqx6fy3A+yOSRa12NPYHZFLy23mRom2bAIpzRVfQMEvS5caEiU/svho8ASfrxJaJS
-	a2030YOTOBypt9ZzJigDp2/fu5KNNLpZUvOS64XiUitrB15rpK3qfrLFYwgV8bXVwVdwFd
-	dt+nGTgakUPa5lFWJeCUD8JKAf8WRKQ=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-134-gGjp8F_DO26Jnb0tpg2FFQ-1; Tue, 22 Apr 2025 15:19:45 -0400
-X-MC-Unique: gGjp8F_DO26Jnb0tpg2FFQ-1
-X-Mimecast-MFC-AGG-ID: gGjp8F_DO26Jnb0tpg2FFQ_1745349585
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4767816a48cso144254041cf.3
-        for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 12:19:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="WpHErqe1"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c559b3eb0bso323959585a.1
+        for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 12:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1745351220; x=1745956020; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AZRNUBKg8hwCgXEyYs/1skOhVgOq5no2ClQkvRkjKGA=;
+        b=WpHErqe1jgOUWQLxbTmFlO5Q1Ic4DVTdW3nY9SBGuGF3mkBUGpYdF/NemLcm0PNtsN
+         xqud7RFnwpVH3/T5eHFxGYd6qoZQMOeeQhOct1XXSIUTlutrQiCwScwP1a5IjZnHeA/S
+         nxGnc8inSXDgzBJRex3SIXjbjdHvMz9bKks4CIJhCSonvKkXCYS1m7PUtwZAQnah9fsT
+         ncNhoQa6Gr3+el9SlU97//e6MO0OVEIHAg7qSMO0hzH3fFv3MymO2tlqBn5vN6QdZ0N+
+         bzg2YBUSpBueZPyedBpTHQLmyehYKB9g6v6pdWgoSqyv3xmJJfPhKjZiAg6A4RJ8sQ5G
+         R88g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745349585; x=1745954385;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y+KK05zMW7c3LQIz7d14BdD80ooDf/JC+jFj6UdPYvQ=;
-        b=AiyqYjrHvwG9leo+73u2KU9DQbKueJDD7qsL065kqvHQGEV3C9sUYxpgoq1Uu80xbW
-         q8R6ypKIQgd6PF+rrubk9j+TmpFCO3aSZeb8L8r8o4TBR8SRjzHGYLv/dIcr6jaBU8Eb
-         IzLbmAENIPx6p7FZ48/kjHNozE2ojcUxQUl/rD+ApexMfbz682G7aF4ediTINSnE0orh
-         VevV7K2/ex+Md2CpkX09VHs+E21QJhwa3K3YtWBS3vKkrHG8dNsspNi+yz7FTE5eOsGj
-         tKAc3NJVnDi711afxM+YRe6ff1h6wNJY5VPrm80YMOLaATvwPDDpZ1oF+9KVRqs8XaSW
-         7/bA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPei8uzA9hBuRNL9afXa+g4LgHDfrDKhjxc9LLF7gWSlha1Fvzw8dqtWnA08JbD2Z95vbNwAlcVDIYbQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3/hHjFZDX2M0Oh/xOAKer+Qp4z+qgSc4eGirAdVBwyh3v/Uum
-	iKuTZMwrQsVFnZCfTHsGG8qsKeH7ZOxzR4SqX8bB3z/zJ7WiDr4NPskPYf8pEm0LdRtbc9WGcuM
-	NKTrRAOsD7CYS3GpQ9tbMIZk2J7XiG1CyXcDuMTwdPpPtVqsauCwLYQuRvP2k
-X-Gm-Gg: ASbGncvkzWovR0P+Ok7EkQxXrxQU4ecmx5g6HI7yZgxpqivnSSrPbW7/DbBBX7vYPKD
-	H/mKspIGEt6jkAph/mvT0XdRPuQX2KU2UTfnjn2Q5+ST5IxkVQ5BHBw0A55NNZ1iE5LsE+fLgkz
-	MXyzuBpvCtdQ6D6jrR2A9zDUYo6uctPwa+lCScwxctRAYHBFFuC870r10o6VkYhnDHtI6gwnTYV
-	v6gJbDUnVmRHTwA4K06rUMiCmGkGk6mlbBINnqkhl/Qhih0cxYejRNyzduct7/ovvxCvDnE+7C2
-	TiJkDR2uvKdsyGjhu9xv39YKLL3sDy94CqrRsPVGBDk=
-X-Received: by 2002:a05:622a:10a:b0:476:60a1:3115 with SMTP id d75a77b69052e-47aec49fe50mr306107531cf.33.1745349585340;
-        Tue, 22 Apr 2025 12:19:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFpIAsSnkkHHksne2RzJemve8iXpTk1ZF86CXiy9hxjUVtuSkEj08Rwo52JAcVf57qaA/nAwg==
-X-Received: by 2002:a05:622a:10a:b0:476:60a1:3115 with SMTP id d75a77b69052e-47aec49fe50mr306107231cf.33.1745349585034;
-        Tue, 22 Apr 2025 12:19:45 -0700 (PDT)
-Received: from jkangas-thinkpadp1gen3.rmtuswa.csb ([2601:1c2:4301:5e20:98fe:4ecb:4f14:576b])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47b01bef3ecsm40842141cf.55.2025.04.22.12.19.43
+        d=1e100.net; s=20230601; t=1745351220; x=1745956020;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AZRNUBKg8hwCgXEyYs/1skOhVgOq5no2ClQkvRkjKGA=;
+        b=h7cUqmri0JsNabVg5tCWPNna2N00BToR/SGowaDLG5XJx9Qo/SGLwBnxr15QVHkNhc
+         dtHdsN97vy0mz+SGaVrcBpOOMTUlIPlN5e0GPN+jvoYTfMZa7m6xhG5Z8LiszZthnTUC
+         LWz6hkrEV5elZXKLwOofd0wv5kU0qmEid+tB7iWwHfO/2fu9e8ewe65g9CY9SKTRpyDg
+         swWZzB6Wrv9pX7zAyYlWk5EmF4rwyaAE8v27SxJkjYs1wjTyiJR++DFVrOuGE6NWeXg6
+         y6OtfYpV75dTs8DjEhpQxbpfkcmO/saunA+gbXCb7+LSNpirvT++AU3y+18PQ6FD+nkP
+         4ZpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhS9+rdAa/a2T/gCsViNYu8bIBGw17so6r+qZoSwqePWP2FeAXLG4sLA2VomN5qQJypX8YKaQhgNTSAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1fuU9TNWFZGIDtmtkoLd6Os1JaHsQzHo9q2jcCVy098LJJZvn
+	9pZBRTtSv0EC3+4QP58cnCvqikKM7n8Vx4LtZ1ZRX8FUWLeY2gl6MygJMY+kFUQ=
+X-Gm-Gg: ASbGncsOMgj0pbmtVl2gM9jfsU1+XV15UCzOsX4qYAXx3/zx5SB/fVwiqQOL2nsV+id
+	xgSUedCOkRYReuRkeFJFWvPXewNKiLMswScmvj/kPW87sRo0hF3bvcoqlXqdl417rpZZmzRXC9J
+	7jFqvW4DAdIShB3GICyQwPR07Dl7z0Xtczqg/McYqYhJKXLK432EldEzd0zdMcjzVWzXjNCOEtC
+	OjA9kg25xO25iR0TvTaFQ3rnT+YQLHcmIRzs9KXyy/PHMci9OfsyiE+C8y9RaHW1gClC6dfsISu
+	1OM8dSE+UG2z80CpVP4x9eSD/x2E/xoYlKOOy+0XcFW0k/tiNCho777P
+X-Google-Smtp-Source: AGHT+IFgS/Q0V6U15helS9ADvq78s/nB3ALXSasniZ8+SnkCEwwfFJHhc6L1EiB4G7ySAUTvyb76hA==
+X-Received: by 2002:a05:620a:4510:b0:7c5:54d8:3d43 with SMTP id af79cd13be357-7c928053ba5mr2594224685a.58.1745351219854;
+        Tue, 22 Apr 2025 12:46:59 -0700 (PDT)
+Received: from ?IPv6:2606:6d00:15:9913::5ac? ([2606:6d00:15:9913::5ac])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c925a6e6absm593612885a.19.2025.04.22.12.46.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 12:19:44 -0700 (PDT)
-From: Jared Kangas <jkangas@redhat.com>
-To: sumit.semwal@linaro.org,
-	benjamin.gaignard@collabora.com,
-	Brian.Starkey@arm.com,
-	jstultz@google.com,
-	tjmercier@google.com,
-	christian.koenig@amd.com
-Cc: mripard@kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org,
-	Jared Kangas <jkangas@redhat.com>
-Subject: [PATCH v2 0/2] dma-buf: heaps: Use constant name for CMA heap
-Date: Tue, 22 Apr 2025 12:19:37 -0700
-Message-ID: <20250422191939.555963-1-jkangas@redhat.com>
-X-Mailer: git-send-email 2.49.0
+        Tue, 22 Apr 2025 12:46:59 -0700 (PDT)
+Message-ID: <39053a9e0767289cf822beb350819d366994dd0a.camel@ndufresne.ca>
+Subject: Re: [PATCH] media: amphion: Start decoding job when both queue are
+ on
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+ hverkuil-cisco@xs4all.nl
+Cc: shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de, 
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ xiahong.bao@nxp.com, 	eagle.zhou@nxp.com, tao.jiang_2@nxp.com,
+ ming.qian@oss.nxp.com, 	imx@lists.linux.dev, linux-media@vger.kernel.org,
+ linux-kernel@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org
+Date: Tue, 22 Apr 2025 15:46:57 -0400
+In-Reply-To: <20240719075007.384342-1-ming.qian@nxp.com>
+References: <20240719075007.384342-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.0 (3.56.0-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hi all,
+Hi,
 
-This patch series is based on a previous discussion around CMA heap
-naming. [1] The heap's name depends on the device name, which is
-generally "reserved", "linux,cma", or "default-pool", but could be any
-arbitrary name given to the default CMA area in the devicetree. For a
-consistent userspace interface, the series introduces a constant name
-for the CMA heap, and for backwards compatibility, an additional Kconfig
-that controls the creation of a legacy-named heap with the same CMA
-backing.
+Le vendredi 19 juillet 2024 =C3=A0 16:50 +0900, Ming Qian a =C3=A9crit=C2=
+=A0:
+> Start the decoding job when both queue are on, except the for the
+> initialization sequence.
+>=20
+> Especially when seeking, the capture streamon may be called after output
+> streamon, driver will start to decode job immediately after output
+> streamo, if seek to a new resolution, then the source change flow may be
+> mixed with the seek, it will cause confusion, then may led to pipeline
+> hang.
+>=20
+> When both output and capture queue are on, it's ready to start the
+> decoding job, and it can avoid the above potential problem.
 
-The ideas to handle backwards compatibility in [1] are to either use a
-symlink or add a heap node with a duplicate minor. However, I assume
-that we don't want to create symlinks in /dev from module initcalls, and
-attempting to duplicate minors would cause device_create() to fail.
-Because of these drawbacks, after brainstorming with Maxime Ripard, I
-went with creating a new node in devtmpfs with its own minor. This
-admittedly makes it a little unclear that the old and new nodes are
-backed by the same heap when both are present. The only approach that I
-think would provide total clarity on this in userspace is symlinking,
-which seemed like a fairly involved solution for devtmpfs, but if I'm
-wrong on this, please let me know.
+This commit message needs some work and I'm unsure I understand its
+meaning. After reading the change, I am under the impression that you
+simply say that once the seq_hdr is found, the driver should keep
+delaying the processing of output buffer until the capture queue is
+ready ?
 
-Changelog:
-    v2: Use tabs instead of spaces for large vertical alignment.
+>=20
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+> =C2=A0drivers/media/platform/amphion/vdec.c | 18 +++++++++++++++++-
+> =C2=A01 file changed, 17 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platfo=
+rm/amphion/vdec.c
+> index 6a38a0fa0e2d..ca8f7319503a 100644
+> --- a/drivers/media/platform/amphion/vdec.c
+> +++ b/drivers/media/platform/amphion/vdec.c
+> @@ -1363,6 +1363,12 @@ static int vdec_process_output(struct vpu_inst *in=
+st, struct vb2_buffer *vb)
+> =C2=A0	if (inst->state =3D=3D VPU_CODEC_STATE_STARTED)
+> =C2=A0		vdec_update_state(inst, VPU_CODEC_STATE_ACTIVE, 0);
+> =C2=A0
+> +	if (vdec->seq_hdr_found &&
+> +	=C2=A0=C2=A0=C2=A0 !vb2_start_streaming_called((v4l2_m2m_get_dst_vq(ins=
+t->fh.m2m_ctx)))) {
+> +		vpu_trace(inst->dev, "[%d] capture is not ready, pend input frame\n", =
+inst->id);
+> +		return -EINVAL;
 
-Jared Kangas (2):
-  dma-buf: heaps: Parameterize heap name in __add_cma_heap()
-  dma-buf: heaps: Give default CMA heap a fixed name
+I got really confused by this error return value. Its clearly not an
+error, but just a delay. I think before we add more on top, you should
+turn all these function for which the return value is unused to void.
+And use a plain "return;" here. That applies to all similar ops.
 
- Documentation/userspace-api/dma-buf-heaps.rst | 11 ++++---
- drivers/dma-buf/heaps/Kconfig                 | 10 +++++++
- drivers/dma-buf/heaps/cma_heap.c              | 30 ++++++++++++++-----
- 3 files changed, 40 insertions(+), 11 deletions(-)
+> +	}
+> +
+> =C2=A0	ret =3D vpu_iface_get_stream_buffer_desc(inst, &desc);
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> @@ -1555,6 +1561,16 @@ static int vdec_start(struct vpu_inst *inst)
+> =C2=A0	return ret;
+> =C2=A0}
+> =C2=A0
+> +static void vdec_enqueue_pending_frames(struct vpu_inst *inst)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < v4l2_m2m_num_src_bufs_ready(inst->fh.m2m_ctx); i++) {
+> +		if (vpu_process_output_buffer(inst))
+> +			break;
 
--- 
-2.49.0
+How well does this work ? Previous you made good care of interleaving
+the processing output and capture, which I could imaging prevents the
+hardware from starving ?
+
+> +	}
+> +}
+> +
+> =C2=A0static int vdec_start_session(struct vpu_inst *inst, u32 type)
+> =C2=A0{
+> =C2=A0	struct vdec_t *vdec =3D inst->priv;
+> @@ -1573,10 +1589,10 @@ static int vdec_start_session(struct vpu_inst *in=
+st, u32 type)
+> =C2=A0	if (V4L2_TYPE_IS_OUTPUT(type)) {
+> =C2=A0		vdec_update_state(inst, vdec->state, 1);
+> =C2=A0		vdec->eos_received =3D 0;
+> -		vpu_process_output_buffer(inst);
+> =C2=A0	} else {
+> =C2=A0		vdec_cmd_start(inst);
+> =C2=A0	}
+> +	vdec_enqueue_pending_frames(inst);
+
+Was this intentional to reverse the STREAMON(CAPTURE) call flow to:
+
+  - process_capture() (inside vdec_cmd_start())
+  - proces_output() x n
+
+Nicolas
+
+> =C2=A0	if (inst->state =3D=3D VPU_CODEC_STATE_ACTIVE)
+> =C2=A0		vdec_response_fs_request(inst, false);
+> =C2=A0
 
