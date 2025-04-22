@@ -1,157 +1,150 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EE5A59;
-	Tue, 22 Apr 2025 18:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA861AE875
+	for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 19:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745345854; cv=none; b=Bq3XWcTwzHQgF1Ji0mriQyTNad/Ngd/MFA5+symmR3dR2D7Zl4JD7O/GL5ZGD1IgSURE9vJ4IUqn01gIIihZZR+1/KK6bwmfGxbmO6egyG4N63gLXNV29mHuAS7cko6uS58fYL3RscuADlIkELHIp/YMz6Vvh1KEFBzot7VjKaw=
+	t=1745349591; cv=none; b=idTD1lhxb7Babp83ZcWTfaZ1V82A1ovDDwdhJxWqRslCkdgXJefMmNNjYNkqmUUhjejoVtprBtPuGwcMfz1CdQZXbAKaETww3nJgr10Ot/VngADOR6ySNo+VYkCNl047VihPQhP/ogw9SXj06vUgTHacg4sFaVR6ki/ObnBGwjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745345854; c=relaxed/simple;
-	bh=kyBwC65MDGKGT24Y46o1tixxQySi43knJiBHQyEzgm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c5y/tuJE8ktqZS3n/vJf29c1jpIhqcF7ZChBYjzJ2Gmhx45C0Re29UB+4eAHJY6F3uk72X5aFq+Wb1Km/EqFoZVIlU0/cGYa+kD6cLpFE+0enzsEtpIJ5nupG0TlNnzgyRbj5sWKdJUnYv70jDcdIrh9gAdsgB1dZ5Vo0N9FElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Q/PbcjOJ; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1745349591; c=relaxed/simple;
+	bh=sfBmd1OBbJI2abcZpauJWCnwwx49LFyiSAV6mfejFhE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OWfbou8WH0F9WSvyVKlo9sHx0a54nlVRHV0ODwr3IjRjIAQHwDTqAmGEUibrLExj3juUV0eY4SP27T8iMLYq2nHa4rE8xYxOnE6nxoRCS+/PbjCw+T6jGftHkHlbmk5LBCqlJPLFHRQmqQWczqY7tLX4MYR0gsOe9VdgKe2Jg3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AiZgtHuX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Q/PbcjOJ"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3DE8210D;
-	Tue, 22 Apr 2025 20:17:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1745345849;
-	bh=kyBwC65MDGKGT24Y46o1tixxQySi43knJiBHQyEzgm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q/PbcjOJGoOGa0cKxyEUObgr5hlY/4YoRg9JWTrPedaBZC8M5DpyxqOVA+F4KELKZ
-	 EDSXuXWJSCoUUuItj+Qxo2GTwKSRFweLqQLaFLl7x6LCk1KweIeJ1hmuX4RKBWTYbE
-	 vz6R1LhFyezg/jX077kikClUuuR37anHYv1qF4ug=
-Date: Tue, 22 Apr 2025 21:17:27 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Subject: Re: [PATCH v6 2/5] media: uvcvideo: Create uvc_pm_(get|put) functions
-Message-ID: <20250422181727.GL17813@pendragon.ideasonboard.com>
-References: <20250327-uvc-granpower-ng-v6-0-35a2357ff348@chromium.org>
- <20250327-uvc-granpower-ng-v6-2-35a2357ff348@chromium.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AiZgtHuX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745349589;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DslNlnyYeBMO8E0a4QEwSeg6EwzYfoV0u5u9NaRMXyQ=;
+	b=AiZgtHuXKmhHPdg+IxHBFxA9eL3pjXeRFJS98xrxLxTD96GXR3IkYqJqkza+fWr3xhc/+U
+	lbKe159Ku1LirNmG2LDnNe35jUALPElhCrCo1WgH4VgXzldkUzd5cAfryWtMcZc/6hy6LX
+	am0kjC5/x7ty++fW7Shes/0ObUhMSQs=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-421-chbgsJQRM8irb8ncgyrgDA-1; Tue, 22 Apr 2025 15:19:47 -0400
+X-MC-Unique: chbgsJQRM8irb8ncgyrgDA-1
+X-Mimecast-MFC-AGG-ID: chbgsJQRM8irb8ncgyrgDA_1745349587
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4766e03b92bso110064941cf.2
+        for <linux-media@vger.kernel.org>; Tue, 22 Apr 2025 12:19:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745349587; x=1745954387;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DslNlnyYeBMO8E0a4QEwSeg6EwzYfoV0u5u9NaRMXyQ=;
+        b=ZFwvRK0egsDPQMQpZ/ODD54IKEGdOHEpdS/rD/iE1BcdFr1MlY/SYzGUcsWAS3SV1b
+         vejIknwbFcxWu2oZ3uxFLjViFW2htoZXd1Ggxv6RWKPjuOxSPu/N0Yy07OI3TJ1okOzE
+         PWboZMWJUgLQNsmXCN/gOsX5SM9Fgt+f7KMrYLhPcNBNatoqm+AOJbsHsn63TpeKYBKa
+         aZiLdQCtP1jmr3H/gT6sscUiIcI4OwNX64E+su9mR+xGcXyqzjxqW8uRfhuxXrTjO7G6
+         2YENApHca7ENFzVaS1O2x/4fjmoLY3kwuu22Nh0wTwHoSreCKMRgOUx8quSc7upCxS2I
+         +uIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjZm8jx85qJDJeDGTmBU0eqLBGj2lqES/impsVt/+67VJY+KLdwTrPWgBip0juUKXw9KDxz9blwxwH8w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJg7tz4D14SvOOl54QlvPZQd0AxPjIzc9XsVaY04DOHjUyNUdf
+	PFGja0TVTSbF5hIJRNOtNZzg4EUzQ0u7/+qW/7rD7xxHqmrFA0Hb+4xKFWcdXrQQ/681eSBuprs
+	ww2u5O+115hNkR4dzZS5vfIp9M3yzV4jhwsiieE8rAFfnbUJnuRdCZXQqKOHq
+X-Gm-Gg: ASbGncvzsSX3uqo8xWKzuX3xaw7ATNsNDeA+8HpGhlomTvaXRY7ItNHRcri/FpYSm//
+	lgvoZGznLJht2jztCgv4ByVsjBZP5r6u5ptN0+Rv1LKX4cdRTcmA3X+UyOhw8/ZKKviWOsDsQhM
+	QQYHnstWT6vlJdb1W9t82QhneLsOSpEYl8s/loV+FzTJ4TIgtDz8+g0Y3xueu+uP+TRCqeggm1k
+	NKHQEDzL2szN7duVIH2K/em6WoFTV3MqpJ2nynBHvo4xgY5EGof8GPdam+wf8rI7MO7V+J9mtr5
+	2zKUtjWK3vbLGXKOYi8KyuTW4OrNF77t/D+NFwnXHE8=
+X-Received: by 2002:ac8:7f93:0:b0:476:7112:4add with SMTP id d75a77b69052e-47aec3ac014mr303867621cf.18.1745349587301;
+        Tue, 22 Apr 2025 12:19:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFyYuKD1qhPJ8ch5NTGQwzuHZqeIg/SkaansDtfBqNfdQ+I0LBmtC0h/nphRC3WEITMYo7yrA==
+X-Received: by 2002:ac8:7f93:0:b0:476:7112:4add with SMTP id d75a77b69052e-47aec3ac014mr303867281cf.18.1745349586902;
+        Tue, 22 Apr 2025 12:19:46 -0700 (PDT)
+Received: from jkangas-thinkpadp1gen3.rmtuswa.csb ([2601:1c2:4301:5e20:98fe:4ecb:4f14:576b])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47b01bef3ecsm40842141cf.55.2025.04.22.12.19.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Apr 2025 12:19:46 -0700 (PDT)
+From: Jared Kangas <jkangas@redhat.com>
+To: sumit.semwal@linaro.org,
+	benjamin.gaignard@collabora.com,
+	Brian.Starkey@arm.com,
+	jstultz@google.com,
+	tjmercier@google.com,
+	christian.koenig@amd.com
+Cc: mripard@kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-kernel@vger.kernel.org,
+	Jared Kangas <jkangas@redhat.com>
+Subject: [PATCH v2 1/2] dma-buf: heaps: Parameterize heap name in __add_cma_heap()
+Date: Tue, 22 Apr 2025 12:19:38 -0700
+Message-ID: <20250422191939.555963-2-jkangas@redhat.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250422191939.555963-1-jkangas@redhat.com>
+References: <20250422191939.555963-1-jkangas@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250327-uvc-granpower-ng-v6-2-35a2357ff348@chromium.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Ricardo,
+Prepare for the introduction of a fixed-name CMA heap by replacing the
+unused void pointer parameter in __add_cma_heap() with the heap name.
 
-Thank you for the patch.
+Signed-off-by: Jared Kangas <jkangas@redhat.com>
+---
+ drivers/dma-buf/heaps/cma_heap.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-On Thu, Mar 27, 2025 at 09:05:28PM +0000, Ricardo Ribalda wrote:
-> Most of the times that we have to call uvc_status_(get|put) we need to
-> call the usb_autopm_ functions.
-> 
-> Create a new pair of functions that automate this for us. This
-> simplifies the current code and future PM changes in the driver.
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/usb/uvc/uvc_v4l2.c | 36 ++++++++++++++++++++++++------------
->  drivers/media/usb/uvc/uvcvideo.h |  4 ++++
->  2 files changed, 28 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index 22886b47d81c2cfd0a744f34a50d296d606e54e8..1d5be045d04ecbf17e65e14b390e494a294b735f 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -26,6 +26,27 @@
->  
->  #include "uvcvideo.h"
->  
-> +int uvc_pm_get(struct uvc_device *dev)
-> +{
-> +	int ret;
-> +
-> +	ret = usb_autopm_get_interface(dev->intf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = uvc_status_get(dev);
-> +	if (ret)
-> +		usb_autopm_put_interface(dev->intf);
-> +
-> +	return ret;
-> +}
-> +
-> +void uvc_pm_put(struct uvc_device *dev)
-> +{
-> +	uvc_status_put(dev);
-> +	usb_autopm_put_interface(dev->intf);
-> +}
-> +
->  static int uvc_acquire_privileges(struct uvc_fh *handle);
->  
->  static int uvc_control_add_xu_mapping(struct uvc_video_chain *chain,
-> @@ -642,20 +663,13 @@ static int uvc_v4l2_open(struct file *file)
->  	stream = video_drvdata(file);
->  	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
->  
-> -	ret = usb_autopm_get_interface(stream->dev->intf);
-> -	if (ret < 0)
-> -		return ret;
-> -
->  	/* Create the device handle. */
->  	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
-> -	if (handle == NULL) {
-> -		usb_autopm_put_interface(stream->dev->intf);
-> +	if (!handle)
->  		return -ENOMEM;
-> -	}
->  
-> -	ret = uvc_status_get(stream->dev);
-> +	ret = uvc_pm_get(stream->dev);
->  	if (ret) {
-> -		usb_autopm_put_interface(stream->dev->intf);
->  		kfree(handle);
->  		return ret;
->  	}
-> @@ -690,9 +704,7 @@ static int uvc_v4l2_release(struct file *file)
->  	kfree(handle);
->  	file->private_data = NULL;
->  
-> -	uvc_status_put(stream->dev);
-> -
-> -	usb_autopm_put_interface(stream->dev->intf);
-> +	uvc_pm_put(stream->dev);
->  	return 0;
->  }
->  
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 5ceb01e7831a83507550e1d3313e63da7494b2e4..b9f8eb62ba1d82ea7788cf6c10cc838a429dbc9e 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -768,6 +768,10 @@ void uvc_status_suspend(struct uvc_device *dev);
->  int uvc_status_get(struct uvc_device *dev);
->  void uvc_status_put(struct uvc_device *dev);
->  
-> +/* PM */
-> +int uvc_pm_get(struct uvc_device *dev);
-> +void uvc_pm_put(struct uvc_device *dev);
-> +
->  /* Controls */
->  extern const struct v4l2_subscribed_event_ops uvc_ctrl_sub_ev_ops;
->  
-
+diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
+index 9512d050563a9..e998d8ccd1dc6 100644
+--- a/drivers/dma-buf/heaps/cma_heap.c
++++ b/drivers/dma-buf/heaps/cma_heap.c
+@@ -366,17 +366,17 @@ static const struct dma_heap_ops cma_heap_ops = {
+ 	.allocate = cma_heap_allocate,
+ };
+ 
+-static int __init __add_cma_heap(struct cma *cma, void *data)
++static int __init __add_cma_heap(struct cma *cma, const char *name)
+ {
+-	struct cma_heap *cma_heap;
+ 	struct dma_heap_export_info exp_info;
++	struct cma_heap *cma_heap;
+ 
+ 	cma_heap = kzalloc(sizeof(*cma_heap), GFP_KERNEL);
+ 	if (!cma_heap)
+ 		return -ENOMEM;
+ 	cma_heap->cma = cma;
+ 
+-	exp_info.name = cma_get_name(cma);
++	exp_info.name = name;
+ 	exp_info.ops = &cma_heap_ops;
+ 	exp_info.priv = cma_heap;
+ 
+@@ -394,12 +394,16 @@ static int __init __add_cma_heap(struct cma *cma, void *data)
+ static int __init add_default_cma_heap(void)
+ {
+ 	struct cma *default_cma = dev_get_cma_area(NULL);
+-	int ret = 0;
++	int ret;
+ 
+-	if (default_cma)
+-		ret = __add_cma_heap(default_cma, NULL);
++	if (!default_cma)
++		return 0;
+ 
+-	return ret;
++	ret = __add_cma_heap(default_cma, cma_get_name(default_cma));
++	if (ret)
++		return ret;
++
++	return 0;
+ }
+ module_init(add_default_cma_heap);
+ MODULE_DESCRIPTION("DMA-BUF CMA Heap");
 -- 
-Regards,
+2.49.0
 
-Laurent Pinchart
