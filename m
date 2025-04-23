@@ -1,67 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA012989AA;
-	Wed, 23 Apr 2025 15:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C63329C33B;
+	Wed, 23 Apr 2025 15:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745423303; cv=none; b=DjJn998uFCdakGx5TUDRGRLegHI7y03+BuqAQgNCVotMIicOAf94voA5VxE6rrraT8UhgKW79xnFnbADkuoClpzuXckM0prvy8JxvmbmzCAOOxijBwA3yviRVy7865lofArfU4Xzogy58d28lPJ3M7E1AngDB73OS6cCSq2yfiQ=
+	t=1745423684; cv=none; b=o30nILoarbxlDKRiemCBKbQs5w5w9UhHY8zQ0j7hQUxVL8NO2hTetvQK0CjksctTG5z2mHLsMt5lEoWSX976F6PlZgZTZgMUz4W0cqgVbCNfFu3HrpequsTsdlGQfbc2j/J3XMAjCzY7nF0gk0O6uTV1QyQdry7Q0gGoQCHP2SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745423303; c=relaxed/simple;
-	bh=4WyWXiBZlLAYmPUiyPkMd/zqqMYaA8iQvgehTct4eVI=;
+	s=arc-20240116; t=1745423684; c=relaxed/simple;
+	bh=2/x8SZbOSlA6YH843iLZG84F9KDG8XKQ6w0l2NKZKkk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q7gbViDo727oy5FJjG+Kd5IaX//B4Wwbm3+3eWuqILo3nILHmtfArbS6DI26sZCT4Z+WJRRNoJdMG25hWkaKYkLstTtq0D2EL9fOlDWIu436q8j9+9cApzZbxPdcWV9X0SVFKrZpgzcE6Y0NFWC/Qvg/1Cpe7+hZKDK5nzY+68Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B9YnfKIn; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=r9Z2KrgISoa1MqdOwMflixId5TkxYN2bzAqaoUYbxwiel99HD16JPF5zzPnd/anbrvYvmd+mVCLYS/cegfatmieEtAf1UTJQQSI5YJlujNc96oriF6udJFr7l/kz3my1XoGY2X7WPHIjdfP6pWXV4D5GhTJDt9HWAjlH6iqQYfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCcjues8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B9YnfKIn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745423302; x=1776959302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4WyWXiBZlLAYmPUiyPkMd/zqqMYaA8iQvgehTct4eVI=;
-  b=B9YnfKIn4nmHR8kfQbvejmCwBbbzS3ZM5uBfL3CLYjpHq5CJuJSKHB3b
-   dfa2QRzbPgkRO+x6YggZaI80oKl4w7f0IMiCytCkRJuzJ3ElQvaPcq/De
-   idfYraYizuOVyYrCgsuOp078mhgv4uMOb5thuRkZ5rZxBLBk89PvAI8vV
-   170VeolI3Im6/7+Tn/ogpPI8V48yyIrWxu23BJI37lQbFthXsvE6HHyI+
-   CwcvCHdG4SUt2M2/5YWPneeX36KwFxZ1etmwNr3eYjFubCQUCMXYtfy29
-   5W5cmFgFKTmjCeoFRTQu9IMS9/iSPMoLHFqvoHzVBbaLOIkObRxOsNTGX
-   w==;
-X-CSE-ConnectionGUID: aVTBtnZHQC+HJR1ETrZiqw==
-X-CSE-MsgGUID: 1gvgl+CCTi+tMfa1WEq1eg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="46258024"
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="46258024"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 08:48:21 -0700
-X-CSE-ConnectionGUID: ypmLoP8WSymIQf+IK0oKGg==
-X-CSE-MsgGUID: UUyQ1S+FR/KyGISpmBtYhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="169560586"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 08:48:19 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id C4DF511F9FE;
-	Wed, 23 Apr 2025 18:48:12 +0300 (EEST)
-Date: Wed, 23 Apr 2025 15:48:12 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] media: i2c: Add driver for ST VD55G1 camera sensor
-Message-ID: <aAkLvCqsJ9Tf-O2d@kekkonen.localdomain>
-References: <20250404-b4-vd55g1-v5-0-98f2f02eec59@foss.st.com>
- <20250404-b4-vd55g1-v5-2-98f2f02eec59@foss.st.com>
- <20250422150746.GA23173@pendragon.ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCcjues8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15318C4CEE8;
+	Wed, 23 Apr 2025 15:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745423684;
+	bh=2/x8SZbOSlA6YH843iLZG84F9KDG8XKQ6w0l2NKZKkk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oCcjues89Dcz6KrbPcPOSWWQ1ff5Qdl4u251vVlbGP17nmm6n9ajxNKpxrXUKFrgL
+	 9eQLhUZcKiiZL4PcU+PXKwW1rLSts9YQDVpbo6iMuiKMJv8vzrmMyznENXrPQo6F3Y
+	 bSAR6WsqINZFni94ESvVRlEVKMjLzOg4ieFoZRNFsJ/t++owpcrjcnhGpsmjjQwwBG
+	 cSVBpEVcAHYX6hLb+vasv1mCUYhiuyZP791MqOy408IbkM1z1mhEmURomTJKT6zZrm
+	 DA60O74lkXu8qCLPID43bxPadn149jmpgwMaHWnjpHOPE5AfH/0MSW0l6o6DWUjS8I
+	 LMR1ZD72Iz7SQ==
+Date: Wed, 23 Apr 2025 17:54:38 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Philipp Stanner <phasta@kernel.org>
+Cc: Lyude Paul <lyude@redhat.com>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] drm/nouveau: Fix WARN_ON in
+ nouveau_fence_context_kill()
+Message-ID: <aAkNPttp4xfkHJp4@pollux>
+References: <20250415121900.55719-2-phasta@kernel.org>
+ <20250415121900.55719-3-phasta@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -71,74 +52,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250422150746.GA23173@pendragon.ideasonboard.com>
+In-Reply-To: <20250415121900.55719-3-phasta@kernel.org>
 
-Hi Laurent,
-
-On Tue, Apr 22, 2025 at 06:07:46PM +0300, Laurent Pinchart wrote:
-> Hi Benjamin,
+On Tue, Apr 15, 2025 at 02:19:00PM +0200, Philipp Stanner wrote:
+> Nouveau is mostly designed in a way that it's expected that fences only
+> ever get signaled through nouveau_fence_signal(). However, in at least
+> one other place, nouveau_fence_done(), can signal fences, too. If that
+> happens (race) a signaled fence remains in the pending list for a while,
+> until it gets removed by nouveau_fence_update().
 > 
-> Thank you for the patch.
+> Should nouveau_fence_context_kill() run in the meantime, this would be
+> a bug because the function would attempt to set an error code on an
+> already signaled fence.
 > 
-> On Fri, Apr 04, 2025 at 04:50:52PM +0200, Benjamin Mugnier wrote:
-> > The VD55G1 is a monochrome global shutter camera with a 804x704 maximum
-> > resolution with RAW8 and RAW10 bytes per pixel.
-> > The driver supports :
-> > - Auto exposure from the sensor, or manual exposure mode
-> > - HDR subtraction mode, allowing edge detection and background removal
-> > - Auto exposure cold start, using configuration values from last stream
-> > to start the next one
-> > - LED GPIOs for illumination
-> > - Most standard camera sensor features (hblank, vblank, test patterns,
-> > again, dgain, hflip, vflip, auto exposure bias, etc.)
-> > Add driver source code to MAINTAINERS file.
-> > 
-> > Signed-off-by: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-> > ---
-> >  MAINTAINERS                |    2 +
-> >  drivers/media/i2c/Kconfig  |   11 +
-> >  drivers/media/i2c/Makefile |    1 +
-> >  drivers/media/i2c/vd55g1.c | 2005 ++++++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 2019 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 4f5e9005063a157de69e81b10f8def9da9e6c04c..9991c5f63e3d49a4e7a6ef0071f3b81825e84eee 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -22416,6 +22416,7 @@ M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
-> >  L:	linux-media@vger.kernel.org
-> >  S:	Maintained
-> >  F:	Documentation/devicetree/bindings/media/i2c/st,vd55g1.yaml
-> > +F:	drivers/media/i2c/vd55g1.c
-> >  
-> >  ST VGXY61 DRIVER
-> >  M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-> > @@ -24801,6 +24802,7 @@ F:	drivers/media/i2c/mt*
-> >  F:	drivers/media/i2c/og*
-> >  F:	drivers/media/i2c/ov*
-> >  F:	drivers/media/i2c/s5*
-> > +F:	drivers/media/i2c/vd55g1.c
-> >  F:	drivers/media/i2c/vgxy61.c
+> Have nouveau_fence_context_kill() check for a fence being signaled.
 > 
-> I suppose that
-> 
-> F:	drivers/media/i2c/v*
-> 
-> would be too broad. Sakari, is it time to create a sensors subdirectory
-> (not as a prerequisite for this series of course) ?
+> Cc: <stable@vger.kernel.org> # v5.10+
+> Fixes: ea13e5abf807 ("drm/nouveau: signal pending fences when channel has been killed")
+> Suggested-by: Christian König <christian.koenig@amd.com>
+> Signed-off-by: Philipp Stanner <phasta@kernel.org>
 
-Good question. Right now everything is arranged according to the bus the
-device attaches to, and camera sensors are practically all I²C devices. I
-do anticipate to get some I3C devices in the future, but it's been slow.
-
-Would you create a new directory for cameras under i2c? Should the same be
-done to various bridge chips, TV tuners and the few flash controller
-drivers we have left?
-
-I don't have much of an opinion on this right now. While the current
-arrangement requires some care when changing MAINTAINERS, it works for me.
-
--- 
-Regards,
-
-Sakari Ailus
+Applied to drm-misc-fixes, thanks!
