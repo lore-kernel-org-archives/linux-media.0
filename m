@@ -1,150 +1,213 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55709266B4B
-	for <linux-media@vger.kernel.org>; Wed, 23 Apr 2025 15:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001FF28DEFF
+	for <linux-media@vger.kernel.org>; Wed, 23 Apr 2025 15:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745422657; cv=none; b=eXXxk1wB9aRKTNMkKQwuT/NuYhc2MDfS5itgu91PksEXopYM262X+DLIaeE0f7EWfPX85EpaL3JrfIcXXX8tO7lclcsQewr3jnmvjZUBkUfM+U7TLFOPUY13PDYNh5DtUPAEXn1sxucyJ87sWUiv7bG3QB/saYjW//mQF+MPYVw=
+	t=1745422727; cv=none; b=cTRY8a/+ydl0IEeBAsyugdRRUO3xQaxvND6Egtsxq3BDzPxJZgRBgqTRgQRLNwH15qe6gKjk2j9LobHvRJPx8BFQonozYquh0x1Y4uU/732KKtQbX1TH+LLE6NeIzPgvF06jE8/5oVM4Ek5n53RvpZLx69Wd8E4YulYNzsr3d3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745422657; c=relaxed/simple;
-	bh=Svosz4NnOiIhFI7TIYQZwkh6byl+aQPvoge4oeKzX4I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MtBdC4bpmrbB73e0PApAUzKEVyT0xks5bnxMdQwjM6LwkUDN3c8FEU+oAkQ8MVVB5zEQh41MAPDKvaE1KcwnQAh0yAAqR+jJwCJNG9LEQOf084mvLQQuBo2mX7omMvjkK2MGg+Xr5TuZjSPcZZ2XxOvYoPIu0jRzqmly/4ZNURg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MBcTru/4; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MBcTru/4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745422655; x=1776958655;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Svosz4NnOiIhFI7TIYQZwkh6byl+aQPvoge4oeKzX4I=;
-  b=MBcTru/4tjOrs+f7hj1151sxchTIM0xHi3N2AqrmCedyToZIpuI17eKp
-   HdpG7tWkXfkw4kPVtWzH6uwMd878UlqnJHQ6JWTbo96eMZpWWceEIzjPR
-   2AYpHlMXB5iwgMAejuvHuzLRDBZUMYAlUVhfH9dCts3+um3I4ZQsGfX88
-   5juh9uUFTMZriniaOjLnXgsbRrLcNFFLRL3anm7QjbGGfySIBuGD157RF
-   pjbfjqvqCjbiaiwyAcpLF/1sZiiUrT4HvXqiI/PPQsZX3FDahNpXK32AZ
-   5lml5JWyxsz7+AklD/VWQZBnREUeEAmyxU1KheAI5/Ny/fOtw6+Gk4gtm
-   Q==;
-X-CSE-ConnectionGUID: kEn01bCtSyu8i1Gs0VA9/Q==
-X-CSE-MsgGUID: 5mvDuJ9dShW54O7JlzNLng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11412"; a="72408743"
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="72408743"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 08:37:34 -0700
-X-CSE-ConnectionGUID: eNbzLIKJSK+kRLpoboAGEQ==
-X-CSE-MsgGUID: vVBjaDcrThOI9YVemfLxEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
-   d="scan'208";a="132266685"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 08:37:33 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0270A11F9FE;
-	Wed, 23 Apr 2025 18:37:29 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1u7cAD-007Ym0-2y;
-	Wed, 23 Apr 2025 18:37:29 +0300
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: dongcheng.yan@intel.com
-Subject: [PATCH v4 11/11] media: ccs-pll: Document the CCS PLL flags
-Date: Wed, 23 Apr 2025 18:37:19 +0300
-Message-Id: <20250423153719.1801956-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250423124322.GG17813@pendragon.ideasonboard.com>
-References: <20250423124322.GG17813@pendragon.ideasonboard.com>
+	s=arc-20240116; t=1745422727; c=relaxed/simple;
+	bh=03OW2H2Z22kEYnqXxMH3ldR0VudigmB8zsMxoHNDD+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EDv9QyYWPx09ZnwehZb9s+MoCjmaxi6zKb5lyZQyUGIRwvnDS+pRYsrC22sZ1SrIGCX8HjH77xHEyme4hZikhEE8kUXGGSUXTPCqCM2Nh+fd6rIIXZFqqJiEY9Z7v2xJkjQU6p0ziAnZZ+VFxLkuQOddQwQ3zRjD3bG9NsbGFn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC13C4CEE2;
+	Wed, 23 Apr 2025 15:38:45 +0000 (UTC)
+Message-ID: <958bbf8b-3f56-4d01-b703-23f23a5f7bb7@xs4all.nl>
+Date: Wed, 23 Apr 2025 17:38:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] media: omap3isp: drop wait_prepare/finish callbacks
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Linux Media Mailing List <linux-media@vger.kernel.org>
+References: <218877d9-5f95-42ab-8bbf-2325cb31ed73@xs4all.nl>
+ <20250128154040.GF12673@pendragon.ideasonboard.com>
+ <f11dab4a-0288-42ae-b6c1-a548206a1249@xs4all.nl>
+ <4b2aa849-c72b-4ace-8121-d8d490186809@xs4all.nl>
+ <aAkFIKUwIgWzHDzy@kekkonen.localdomain>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <aAkFIKUwIgWzHDzy@kekkonen.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Document the CCS PLL flags with short comments. The CCS spec has more
-information on them while the added documentation helps finding the
-relevant information in the CCS spec.
+On 23/04/2025 17:20, Sakari Ailus wrote:
+> On Wed, Apr 23, 2025 at 04:53:45PM +0200, Hans Verkuil wrote:
+>> Hi Laurent,
+>>
+>> On 29/01/2025 15:21, Hans Verkuil wrote:
+>>> On 28/01/2025 16:40, Laurent Pinchart wrote:
+>>>> Hi Hans,
+>>>>
+>>>> Thank you for the patch.
+>>>>
+>>>> On Tue, Jan 28, 2025 at 04:08:18PM +0100, Hans Verkuil wrote:
+>>>>> Since commit 88785982a19d ("media: vb2: use lock if wait_prepare/finish
+>>>>> are NULL") it is no longer needed to set the wait_prepare/finish
+>>>>> vb2_ops callbacks as long as the lock field in vb2_queue is set.
+>>>>>
+>>>>> Set the queue lock to &video->queue_lock, which makes it possible to drop
+>>>>> the wait_prepare/finish callbacks.
+>>>>>
+>>>>> This simplifies the code and this is a step towards the goal of deleting
+>>>>> these callbacks.
+>>>>>
+>>>>> Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+>>>>> ---
+>>>>>  drivers/media/platform/ti/omap3isp/ispvideo.c | 19 +------------------
+>>>>>  1 file changed, 1 insertion(+), 18 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/media/platform/ti/omap3isp/ispvideo.c b/drivers/media/platform/ti/omap3isp/ispvideo.c
+>>>>> index 5c9aa80023fd..78e30298c7ad 100644
+>>>>> --- a/drivers/media/platform/ti/omap3isp/ispvideo.c
+>>>>> +++ b/drivers/media/platform/ti/omap3isp/ispvideo.c
+>>>>> @@ -480,29 +480,11 @@ static int isp_video_start_streaming(struct vb2_queue *queue,
+>>>>>  	return 0;
+>>>>>  }
+>>>>>
+>>>>> -static void omap3isp_wait_prepare(struct vb2_queue *vq)
+>>>>> -{
+>>>>> -	struct isp_video_fh *vfh = vb2_get_drv_priv(vq);
+>>>>> -	struct isp_video *video = vfh->video;
+>>>>> -
+>>>>> -	mutex_unlock(&video->queue_lock);
+>>>>> -}
+>>>>> -
+>>>>> -static void omap3isp_wait_finish(struct vb2_queue *vq)
+>>>>> -{
+>>>>> -	struct isp_video_fh *vfh = vb2_get_drv_priv(vq);
+>>>>> -	struct isp_video *video = vfh->video;
+>>>>> -
+>>>>> -	mutex_lock(&video->queue_lock);
+>>>>> -}
+>>>>> -
+>>>>>  static const struct vb2_ops isp_video_queue_ops = {
+>>>>>  	.queue_setup = isp_video_queue_setup,
+>>>>>  	.buf_prepare = isp_video_buffer_prepare,
+>>>>>  	.buf_queue = isp_video_buffer_queue,
+>>>>>  	.start_streaming = isp_video_start_streaming,
+>>>>> -	.wait_prepare = omap3isp_wait_prepare,
+>>>>> -	.wait_finish = omap3isp_wait_finish,
+>>>>>  };
+>>>>>
+>>>>>  /*
+>>>>> @@ -1338,6 +1320,7 @@ static int isp_video_open(struct file *file)
+>>>>>  	queue->buf_struct_size = sizeof(struct isp_buffer);
+>>>>>  	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+>>>>>  	queue->dev = video->isp->dev;
+>>>>> +	queue->lock = &video->queue_lock;
+>>>>
+>>>> This is goind to deadlock at least when calling VIDIOC_DQBUF in blocking
+>>>> mode.
+>>>
+>>> Yeah, you are right. I think I will need to test this on real hardware.
+>>>
+>>> That will take some time.
+>>
+>> So I finally managed to test this patch on my BeagleBoard Xm, and it
+>> works fine.
+>>
+>> The reason it works is that the queue pointer in struct video_device
+>> is never set.
+>>
+>> Normally v4l2_ioctl_get_lock() in v4l2-ioctl.c tries to return the
+>> vdev->queue->lock, and that would indeed cause a deadlock (the core
+>> takes that lock, then isp_video_dqbuf() takes it again). But omap3isp
+>> never sets vdev->queue nor does it set vdev->lock. So v4l2_ioctl_get_lock()
+>> returns a NULL pointer instead, meaning that the core won't do any
+>> locking.
+>>
+>> So I think this patch is good.
+> 
+> Feel free to add:
+> 
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> 
+>>
+>> That said, I had to fix a lot of other issues and even with that all I
+>> capture is only 0 values. It has a severe case of bitrot :-(
+>>
+>> I plan to post my fixes when I have some more time.
+> 
+> Which sensor did you have?
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
-since v3:
+mt9p031 (also suffered from bitrot, I'll post a patch fixing that as well).
 
-- Refer to pixels in CCS_PLL_FLAG_OP_PIX_DDR comment.
+> 
+> I can also test with the N9, I'm not sure it'll be different though. This
+> still used to work before the IOMMU changes.
 
- drivers/media/i2c/ccs-pll.c |  2 +-
- drivers/media/i2c/ccs-pll.h | 27 ++++++++++++++++++++++++---
- 2 files changed, 25 insertions(+), 4 deletions(-)
+I suspect it might be related to the iommu, but that's not my area of expertise.
 
-diff --git a/drivers/media/i2c/ccs-pll.c b/drivers/media/i2c/ccs-pll.c
-index 87798616b76d..8f9a695bd9e5 100644
---- a/drivers/media/i2c/ccs-pll.c
-+++ b/drivers/media/i2c/ccs-pll.c
-@@ -129,8 +129,8 @@ static void print_pll_flags(struct device *dev, struct ccs_pll *pll)
- {
- 	dev_dbg(dev, "PLL flags%s%s%s%s%s%s%s%s%s%s%s\n",
- 		pll->flags & PLL_FL(OP_PIX_CLOCK_PER_LANE) ? " op-pix-clock-per-lane" : "",
--		pll->flags & PLL_FL(NO_OP_CLOCKS) ? " no-op-clocks" : "",
- 		pll->flags & PLL_FL(EVEN_PLL_MULTIPLIER) ? " even-pll-multiplier" : "",
-+		pll->flags & PLL_FL(NO_OP_CLOCKS) ? " no-op-clocks" : "",
- 		pll->flags & PLL_FL(LANE_SPEED_MODEL) ? " lane-speed" : "",
- 		pll->flags & PLL_FL(EXT_IP_PLL_DIVIDER) ?
- 		" ext-ip-pll-divider" : "",
-diff --git a/drivers/media/i2c/ccs-pll.h b/drivers/media/i2c/ccs-pll.h
-index 754eb5f52cc4..e22903931e72 100644
---- a/drivers/media/i2c/ccs-pll.h
-+++ b/drivers/media/i2c/ccs-pll.h
-@@ -18,19 +18,40 @@
- #define CCS_PLL_BUS_TYPE_CSI2_DPHY				0x00
- #define CCS_PLL_BUS_TYPE_CSI2_CPHY				0x01
- 
--/* Old SMIA and implementation specific flags */
--/* op pix clock is for all lanes in total normally */
-+/* Old SMIA and implementation specific flags. */
-+/* OP PIX clock is for all lanes in total normally. */
- #define CCS_PLL_FLAG_OP_PIX_CLOCK_PER_LANE			BIT(0)
--#define CCS_PLL_FLAG_NO_OP_CLOCKS				BIT(1)
-+/* If set, the PLL multipliers are required to be even. */
- #define CCS_PLL_FLAG_EVEN_PLL_MULTIPLIER			BIT(3)
-+
- /* CCS PLL flags */
-+
-+/* The sensor doesn't have OP clocks at all. */
-+#define CCS_PLL_FLAG_NO_OP_CLOCKS				BIT(1)
-+/* System speed model if this flag is unset. */
- #define CCS_PLL_FLAG_LANE_SPEED_MODEL				BIT(2)
-+/* If set, the pre-PLL divider may have odd values, too. */
- #define CCS_PLL_FLAG_EXT_IP_PLL_DIVIDER				BIT(4)
-+/*
-+ * If set, the OP PIX clock doesn't have to exactly match with data rate, it may
-+ * be higher. See "OP Domain Formulas" in MIPI CCS 1.1 spec.
-+ */
- #define CCS_PLL_FLAG_FLEXIBLE_OP_PIX_CLK_DIV			BIT(5)
-+/* If set, the VT domain may run faster than the OP domain. */
- #define CCS_PLL_FLAG_FIFO_DERATING				BIT(6)
-+/* If set, the VT domain may run slower than the OP domain. */
- #define CCS_PLL_FLAG_FIFO_OVERRATING				BIT(7)
-+/* If set, the PLL tree has two PLLs instead of one. */
- #define CCS_PLL_FLAG_DUAL_PLL					BIT(8)
-+/*
-+ * If set, the OP SYS clock is a dual data rate clock, transferring two bits per
-+ * cycle instead of one.
-+ */
- #define CCS_PLL_FLAG_OP_SYS_DDR					BIT(9)
-+/*
-+ * If set, the OP PIX clock is a dual data rate clock, transferring two pixels
-+ * per cycle instead of one.
-+ */
- #define CCS_PLL_FLAG_OP_PIX_DDR					BIT(10)
- 
- /**
--- 
-2.39.5
+I had to make a change to drivers/iommu/iommu.c just to get the omap3isp
+driver to load:
 
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 60aed01e54f2..c818baab964b 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2153,7 +2153,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+ 	struct device *dev;
+
+ 	if (group->domain && group->domain != group->default_domain &&
+-	    group->domain != group->blocking_domain)
++	    group->blocking_domain && group->domain != group->blocking_domain)
+ 		return -EBUSY;
+
+ 	dev = iommu_group_first_dev(group);
+
+I think it makes sense, but it's a bit of a guess.
+
+Regards,
+
+	Hans
