@@ -1,100 +1,102 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F5E156236;
-	Thu, 24 Apr 2025 13:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10A313B5AE;
+	Thu, 24 Apr 2025 13:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745501628; cv=none; b=bqN/fQSXBNTbrvsX/s/vxDOkGmTjDUMs+AFYv02ajTHexzvGVer/SnWE6v//hajFxc4Rxe/RywH0ioW+rNPCKT8ftLUp132SAfnLShdIGTz37VqqaQK6EDC/KVEObC7VFW9Pbp+5ldCMV3CSVL2f+hI0OeXd46YhSs7AGfSrFyY=
+	t=1745501679; cv=none; b=JDQnPKWtLNKHpjf0mbc4DcN5oG6LuBkRzxl8zgLRPjwD11xt8elXbR+/PP5sYG1zHe8HOqZ0/1/4l92eViSIDp6ydN9ik08Vm/RsC+A7yEx1EWkb+64G5Q4etgDOnndLhX4UKQKiZnYN4c2ZsMgZBcnA+HHEQmSAgPyk+0SGAaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745501628; c=relaxed/simple;
-	bh=yiIi9m5Qq5eztVzi9plxeanIGlyzwuqNDdUA4h3ehcw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EheCRPuxGJAaqJ0+YEAxA1vkZ30btm1XkKexLTVkakFBb5gLwNis5oEEl8PLeO+Glwmg6wvej6UZopbveKXrobefDvsgLJclgiTqnrF3C/vlb5uXOZ+/4IGBwm3KY62KbmtfF1H/n3BX1VsRQKgTMwffnpEUeQyFpCUrhjsmU6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=UKBU989q; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1745501679; c=relaxed/simple;
+	bh=Ep8K/g6VuToes51lb5CKD1nUivYncvjh5+GzmIyT6y8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDg6l0UqJa9YJLXfYfI+HFokPGqLDtpNwVNdCuntQpAXAO4g0WTC2B4WupmjINnDVoNW8T7MuYLAd9gargsitNY/smzHP5hU/XxOJTuS6K2RJD1r9n4Ru7FAAz3BScfsIvdDiHKgQbllu52cos000wocdKClXbZzvJQtuqvcVGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+WMpM67; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="UKBU989q"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4ZjxYz24PCz9spL;
-	Thu, 24 Apr 2025 15:25:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1745501159; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fKyBAXY4h0YZsHpQmmZLPNawFEm0LQITaKXAZVu5Xr0=;
-	b=UKBU989qA9gUKlvGOsr9ynylYvx1uO/wprmjoclW9BEwCSjjnVmmzjDZUhQBCVaT4QnCnC
-	ORbl7bU/cf7Sbv3DdAEusQ/Ji5TVyFKQbR+TgqmM/xb1qzLwCn8wLafBuXtO8L/XSkc1g7
-	PYX5tJXmg20m7l40mM7lBqlYnujts51Kit0lxgkYjH34Nx7wiEo2E0RFvF5yfQ7rkH2Iym
-	r8LTboTaanJ2Gj816s2yLjyn/1AUgiptWr+FtjdfO6LoxkOfUkTvkh+y2VsBXQrYUayJ0a
-	NdKC0HKKnrJFuy9+Q4wMRZwklxvHET0IOGPRE0lxHXItxnVcKVwL6iB3MpwUlQ==
-Message-ID: <a27a0a01fa2bf5f328ee762b7dd84dffd18fa664.camel@mailbox.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+WMpM67"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6456C4CEE3;
+	Thu, 24 Apr 2025 13:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745501678;
+	bh=Ep8K/g6VuToes51lb5CKD1nUivYncvjh5+GzmIyT6y8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h+WMpM67Dqp9i75rxlhOqiat5HBC9sFwdDi/1tMbT4VhguTa2TbBUg28+Jquf+TR0
+	 bn8qtyrpQd1aGqQzS+GzTBPrPQK9SIB1lB7W8rh3qg2yJjm8yJ8C2pwc/MJQtwoSPn
+	 fjx8BRI2jG3/2lc+obPmotjw3J2exELJMAAkO1akSoRON0ODYwOEVjYVLV002/iIsP
+	 4uTvMzkw8Fwp0pJZfF0n4bEVSJC0C3u8t2z4poerunI9ymPM5iFxG41Xv+3D1RAR6m
+	 2J43ZPPsD9nmnQhAv7ueg+BQdrHV4W+AYEwopdzweZqj0223eWk5z1iPzOpHinnR8x
+	 8+4mI0e9DeoWA==
+Date: Thu, 24 Apr 2025 15:34:33 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: phasta@kernel.org, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de
+Cc: Lyude Paul <lyude@redhat.com>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
 Subject: Re: [PATCH 4/4] drm/nouveau: Check dma_fence in canonical way
-From: Philipp Stanner <phasta@mailbox.org>
-Reply-To: phasta@kernel.org
-To: Danilo Krummrich <dakr@kernel.org>, Philipp Stanner <phasta@kernel.org>
-Cc: Lyude Paul <lyude@redhat.com>, David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- =?ISO-8859-1?Q?K=F6nig?=
-	 <christian.koenig@amd.com>, dri-devel@lists.freedesktop.org, 
-	nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Date: Thu, 24 Apr 2025 15:25:55 +0200
-In-Reply-To: <609c8b1a-d7a9-4667-bd6c-1455c639fcd0@kernel.org>
+Message-ID: <aAo96dnXwFBxx8as@cassiopeiae>
 References: <20250424130254.42046-2-phasta@kernel.org>
-	 <20250424130254.42046-6-phasta@kernel.org>
-	 <609c8b1a-d7a9-4667-bd6c-1455c639fcd0@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20250424130254.42046-6-phasta@kernel.org>
+ <609c8b1a-d7a9-4667-bd6c-1455c639fcd0@kernel.org>
+ <a27a0a01fa2bf5f328ee762b7dd84dffd18fa664.camel@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MBO-RS-META: 4sjhmd8518k1j7h9y85ob19dku96umzr
-X-MBO-RS-ID: 26ac357924729e237f5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a27a0a01fa2bf5f328ee762b7dd84dffd18fa664.camel@mailbox.org>
 
-On Thu, 2025-04-24 at 15:24 +0200, Danilo Krummrich wrote:
-> On 4/24/25 3:02 PM, Philipp Stanner wrote:
-> > In nouveau_fence_done(), a fence is checked for being signaled by
-> > manually evaluating the base fence's bits. This can be done in a
-> > canonical manner through dma_fence_is_signaled().
-> >=20
-> > Replace the bit-check with dma_fence_is_signaled().
-> >=20
-> > Signed-off-by: Philipp Stanner <phasta@kernel.org>
-> > ---
-> > =C2=A0 drivers/gpu/drm/nouveau/nouveau_fence.c | 2 +-
-> > =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/nouveau/nouveau_fence.c
-> > b/drivers/gpu/drm/nouveau/nouveau_fence.c
-> > index fb9811938c82..d5654e26d5bc 100644
-> > --- a/drivers/gpu/drm/nouveau/nouveau_fence.c
-> > +++ b/drivers/gpu/drm/nouveau/nouveau_fence.c
-> > @@ -253,7 +253,7 @@ nouveau_fence_done(struct nouveau_fence *fence)
-> > =C2=A0=C2=A0	struct nouveau_channel *chan;
-> > =C2=A0=C2=A0	unsigned long flags;
-> > =C2=A0=20
-> > -	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence-
-> > >base.flags))
-> > +	if (dma_fence_is_signaled(&fence->base))
->=20
-> This is only correct with commit bbe5679f30d7 ("drm/nouveau: Fix
-> WARN_ON in
-> nouveau_fence_context_kill()") from drm-misc-fixes, correct?
+(+ drm-misc maintainers)
 
-Yup. Otherwise, this series can't be merged anyways, because patch 1
-depends on it.
+On Thu, Apr 24, 2025 at 03:25:55PM +0200, Philipp Stanner wrote:
+> On Thu, 2025-04-24 at 15:24 +0200, Danilo Krummrich wrote:
+> > On 4/24/25 3:02 PM, Philipp Stanner wrote:
+> > > In nouveau_fence_done(), a fence is checked for being signaled by
+> > > manually evaluating the base fence's bits. This can be done in a
+> > > canonical manner through dma_fence_is_signaled().
+> > > 
+> > > Replace the bit-check with dma_fence_is_signaled().
+> > > 
+> > > Signed-off-by: Philipp Stanner <phasta@kernel.org>
+> > > ---
+> > >   drivers/gpu/drm/nouveau/nouveau_fence.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/nouveau/nouveau_fence.c
+> > > b/drivers/gpu/drm/nouveau/nouveau_fence.c
+> > > index fb9811938c82..d5654e26d5bc 100644
+> > > --- a/drivers/gpu/drm/nouveau/nouveau_fence.c
+> > > +++ b/drivers/gpu/drm/nouveau/nouveau_fence.c
+> > > @@ -253,7 +253,7 @@ nouveau_fence_done(struct nouveau_fence *fence)
+> > >   	struct nouveau_channel *chan;
+> > >   	unsigned long flags;
+> > >   
+> > > -	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence-
+> > > >base.flags))
+> > > +	if (dma_fence_is_signaled(&fence->base))
+> > 
+> > This is only correct with commit bbe5679f30d7 ("drm/nouveau: Fix
+> > WARN_ON in
+> > nouveau_fence_context_kill()") from drm-misc-fixes, correct?
+> 
+> Yup. Otherwise, this series can't be merged anyways, because patch 1
+> depends on it.
+> 
+> The cover letter says so: "This series is based on this partially
+> merged series: [1]"
 
-The cover letter says so: "This series is based on this partially
-merged series: [1]"
+Well, the series may be based on commit bbe5679f30d7, but all patches from the
+series can still be applied independently.
 
-P.
+Only patch 4 depends on this commit in terms of correctness.
+
+But that's fine, I think we can get drm-misc-fixes (or the next -rc) backmerged
+into drm-misc-next.
