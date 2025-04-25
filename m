@@ -1,132 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166D42701AE;
-	Fri, 25 Apr 2025 03:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305302701AE;
+	Fri, 25 Apr 2025 03:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745550228; cv=none; b=oLUd/VLRCycxozkZAbSyi7ZMTTgERKzuhxOS+mY24uGvCat0nQ/rL3uLO6lNfQoNSPmXoeM4F7fChBdO6KjASiKH43aRsRkQ8KbKkT+Zh3URMalDrw00LlU5OhcXSl+Jm/VcEJRbErkfwVgePFY3NY6apN2+zdq54EmxNltXBPs=
+	t=1745550477; cv=none; b=frzcE/2yEd5yuYmznL2RG6bmcsIMUi19ecvexnu8T1H+GZhhijeBFTg4XXPD7RcySDV92GCau3xG6mVRXScTPzcTs6zNOvYcI8u3VDNTUXM0qBEkuO+olrl6auoP1J3iW5MYb+AC1hYyz1bzTYr9zjLmWPvkItQ8K2C+WtinCHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745550228; c=relaxed/simple;
-	bh=PbrTW9Nb3NrHcVwh2uM1HWLU9tSO0MnJRZBwUbnBVL0=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=cAZDsZ5FSwfNaClyUBC6IHl8f65aB5QzlmRIyXZ90OXCufdKZPF8AKbrcbaGlrNg2Uf6gzg6Pt5MGw8i/8dShyLpL0SVS7sBeekP1t0QXeWgMotZAQ7cq1Hp/r4h1/LhCnP2bolIe8VJV+qeuDJ6TPslc8Lb3vziiSEk9ZBHdoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NY3Q2Aod; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1745550477; c=relaxed/simple;
+	bh=osAwogrtr06X60DTlApbAWL7QentYdhlQifM5SVV7xg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NYx6EmYjqXE7RbjMer7HpcmIspCf2T+uoq8VugcqBJMNlIBzLI4RuBePyFxhonN/951VTdY4z+SuVqv2AwmLfXtO11OlXiq65Arq7uzUKNlRYr9SEViC9N+mShTORFtX98inxpouViM9mAuEsXh220wRNQ3iNXoK5mWivyPDLSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VUj+kWlM; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NY3Q2Aod"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745550227; x=1777086227;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=PbrTW9Nb3NrHcVwh2uM1HWLU9tSO0MnJRZBwUbnBVL0=;
-  b=NY3Q2Aodw/+ExeUtZhELwWKZmiXIMAuZ2+xlMa3sdpfzw0VDL0OYxX6g
-   ciY0SlETOdAY4x/9jizOtS+XdTR58zU5Jgcw//HFUNmPCozApZqHiXKek
-   4HH2gGBaevOki7Pd7PT6UYHbJ4TQBg1p+rDfYZsc0uC3QExJhqfZJvWbG
-   tEEmGB23rj6CxZsMb8h4A2W0kCKDYA1wxlaspwFTVHIsGMlPtiS+rCX0E
-   MTiHOWIWG8IZSLVA4bUYpuz3Cj34WXwTRLjB9jgUaIYIzLyB3E16770vS
-   hcZnT25Zn7x13CA6tEyXFi8UVFKCWc1UTSlvNzu8bTA7sY+iqcmpaanYu
-   g==;
-X-CSE-ConnectionGUID: ChGvJbipRnOoLizS4jH7pQ==
-X-CSE-MsgGUID: fRRXzPL+TNa4qLaFoyNWbg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="57404506"
-X-IronPort-AV: E=Sophos;i="6.15,237,1739865600"; 
-   d="scan'208";a="57404506"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 20:03:46 -0700
-X-CSE-ConnectionGUID: AdA3GsKPSe+gUpEo+rXnjA==
-X-CSE-MsgGUID: 2wUPDRRrROKdrn9fLmgO4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,237,1739865600"; 
-   d="scan'208";a="136858169"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.136]) ([10.238.232.136])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 20:03:43 -0700
-Subject: Re: [PATCH 2/2] udmabuf: fix vmap missed offset page
-To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>, Huan Yang
- <link@vivo.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Gerd Hoffmann <kraxel@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Dave Airlie <airlied@redhat.com>,
- "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
-References: <20250415031548.2007942-1-link@vivo.com>
- <20250415031548.2007942-3-link@vivo.com>
- <IA0PR11MB7185796FAA2A065CBE4EAB37F8BB2@IA0PR11MB7185.namprd11.prod.outlook.com>
-From: Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <70a4ae40-dbfe-a8ff-c4d7-a11c35490b3a@linux.intel.com>
-Date: Fri, 25 Apr 2025 10:59:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VUj+kWlM"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-301cda78d48so2129982a91.0;
+        Thu, 24 Apr 2025 20:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745550474; x=1746155274; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ta4nCPpvWFM1ePJJeTQkgOJ6CbAh0GB+fI2VCmWT/+Q=;
+        b=VUj+kWlMJijoWgO9pxKOyxkIZtVJ8y0KgW3O+bjdWmgqbnnSVsXeoEfAZeyGhAhfEG
+         +P8qOwEnxKu7OHQBjKaEehjLaVadBYe0mKbxvfl/zLVMrJnWCTa3DvxbHMxa4ejZMr9s
+         4NHHa8rg+/c+3dj7HxWYziYc23h4SjklbJhIiU4B9JpZGtGSK+msHu/z39cDX4cK/1k6
+         66Gl4OhknpU4GH+Z1e/C/Oqpz3QKhi2q2mFO0FvYVszIv1LS38fA3xB//emV3rITTWbR
+         7JmsemMhJTEWyTwP82FpIB7nYS5td29nXjhC05daDXzzc2YMQGDFMnvrvqmk6Dnzln/t
+         xx/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745550474; x=1746155274;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ta4nCPpvWFM1ePJJeTQkgOJ6CbAh0GB+fI2VCmWT/+Q=;
+        b=fhuHTHil/F/kGMfUmupcuP1XBGpaiBqNmh65A/FjUbJidyQWrJMANYbwlDu0UOPxLm
+         +hdPysRWPOVPnI+nr5keHBZ8agVYRVO67rZUJc40rA+RV9mUUziJwaf7Pk7zDC5oTVwZ
+         Du++1u08bgqMZsLVCncJYL5GGNcnPUbI3CnOtTE0HwEnUq4u1Zs9UnItNhTdobS6WBvR
+         ud0AZ2+9wZYd879oI/lyaTwmfOhaSedL/NOdWNoTCQ3XsStknS/BJ6omJZWFFit6kZ6h
+         1bWf75iS2RLl3j44nWtefj9ug7mKcgtpdKQE2IGuY//FtubPWjDB88Ywbp0cKJaxVyKJ
+         h7uw==
+X-Forwarded-Encrypted: i=1; AJvYcCX4vsAPBus8DxCGxq5837Mf2dD3+L8WD6iSvT0QnZitLBzlJ52PtzVkGv4sPcxlcpD7NMrC4r2DHLIFnVo=@vger.kernel.org, AJvYcCXXRlUb6PmHZ8tuTkGXPqymKOJuwvaDfQOkbYnwfiLYu7WQHthP+1pTW3IYH9t3kxktKnwNhtmEUl0Nh2M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywi0JSnrxz4sa3L49EvrHAFDpcEw1tINYuj5W+720DwhRUFJ8is
+	rJQBh71CAR5cgfQNbstU3XbALr6PjdwAKNUpdmiJ9+HxWioKGXyG
+X-Gm-Gg: ASbGncsAC+KaiGPcurGsZaN9VajyUkv96/Bgz8bWnJP37F9RPfs+2qp8+b9rZUS3hbO
+	qmaueyyfqvpGpt3nJ8Kk/LnzCeM4mxOPlUpyPBzPoAuccnlf52BBFSCoko3ty5AHU11ndwrAb4c
+	60dw1Dtx8Fmyn6YyHIWlWNLtLR/dk/Oczp6Nr2IBHd9L9vRad6KV9MUZ5U2YNRSsczak6Hb+JgB
+	ltyeoZfYPqYoi1x+ktS2OANl1qajSqnpnohophZKfk2Uk5RUo6XhzFkllTxhfkj+jMehMLaWQu4
+	1eNMvxjVaKXzfyOHSGCesEy/8cHoQ+Ql5/bcQbsIEKsvYEz12lx9s3Jx1Sb2UI/JFJ5W8AhzIA=
+	=
+X-Google-Smtp-Source: AGHT+IEifdjAiAzfngzEiV7YyS9Y7MiK3e5I+cEbEH1gO1XVnoigbM2rorDzv6SajhWMcmhTeOscOg==
+X-Received: by 2002:a17:90b:2e4f:b0:2f2:a664:df1a with SMTP id 98e67ed59e1d1-309f7d99265mr1496670a91.2.1745550474140;
+        Thu, 24 Apr 2025 20:07:54 -0700 (PDT)
+Received: from tech-Alienware-m15-R6.. ([223.185.130.1])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef063c4csm2258790a91.20.2025.04.24.20.07.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 20:07:53 -0700 (PDT)
+From: Sunny Patel <nueralspacetech@gmail.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sunny Patel <nueralspacetech@gmail.com>
+Subject: [PATCH] media: i2c: ov13858: Enable clock frequency macro
+Date: Fri, 25 Apr 2025 08:37:10 +0530
+Message-ID: <20250425030747.6368-1-nueralspacetech@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <Z_5K9Kz2i8TouhC4@kekkonen.localdomain>
+References: <Z_5K9Kz2i8TouhC4@kekkonen.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <IA0PR11MB7185796FAA2A065CBE4EAB37F8BB2@IA0PR11MB7185.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Define a macro `OV13858_EXTCLK` for the clock frequency (19.2 MHz)
+and use it instead of the hardcoded value in the probe function.
 
-On 4/22/25 1:22 PM, Kasireddy, Vivek wrote:
-> Hi Huan,
-> 
->> Subject: [PATCH 2/2] udmabuf: fix vmap missed offset page
->>
->> Before invoke vmap, we need offer a pages pointer array which each page
->> need to map in vmalloc area.
->>
->> But currently vmap_udmabuf only set each folio's head page into pages,
->> missed each offset pages when iter.
->>
->> This patch set the correctly offset page in each folio into array.
->>
->> Signed-off-by: Huan Yang <link@vivo.com>
->> Fixes: 5e72b2b41a21 ("udmabuf: convert udmabuf driver to use folios")
->> ---
->>  drivers/dma-buf/udmabuf.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
->> index 79845565089d..af5200e360a6 100644
->> --- a/drivers/dma-buf/udmabuf.c
->> +++ b/drivers/dma-buf/udmabuf.c
->> @@ -120,7 +120,8 @@ static int vmap_udmabuf(struct dma_buf *buf, struct
->> iosys_map *map)
->>  		return -ENOMEM;
->>
->>  	for (pg = 0; pg < ubuf->pagecount; pg++)
->> -		pages[pg] = &ubuf->folios[pg]->page;
->> +		pages[pg] = folio_page(ubuf->folios[pg],
->> +				       ubuf->offsets[pg] >> PAGE_SHIFT);
-> IIUC, it does not look like vm_map_ram() or the other functions it calls would
-> write to these tail page pointers (struct page*), which should be safe even
-> when HVO is enabled (based on your conversations with Muchun). However,
-> I am wondering whether Bingbu can test this out with HVO enabled?
+Signed-off-by: Sunny Patel <nueralspacetech@gmail.com>
 
-Sorry, I cannot test HVO enabled case. I was running my case with local
-revert patch. :)
+---
+ drivers/media/i2c/ov13858.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> 
-> Regardless,
-> Acked-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
-> 
-> Thanks,
-> Vivek
-> 
->>
->>  	vaddr = vm_map_ram(pages, ubuf->pagecount, -1);
->>  	kvfree(pages);
->> --
->> 2.48.1
-> 
-
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index 7a3fc1d28514..a1242a90cdc9 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -21,6 +21,8 @@
+ #define OV13858_REG_SOFTWARE_RST	0x0103
+ #define OV13858_SOFTWARE_RST		0x01
+ 
++#define OV13858_MCLK				19200000
++
+ /* PLL1 generates PCLK and MIPI_PHY_CLK */
+ #define OV13858_REG_PLL1_CTRL_0		0x0300
+ #define OV13858_REG_PLL1_CTRL_1		0x0301
+@@ -1664,7 +1666,7 @@ static int ov13858_probe(struct i2c_client *client)
+ 	u32 val = 0;
+ 
+ 	device_property_read_u32(&client->dev, "clock-frequency", &val);
+-	if (val != 19200000)
++	if (val != OV13858_MCLK)
+ 		return -EINVAL;
+ 
+ 	ov13858 = devm_kzalloc(&client->dev, sizeof(*ov13858), GFP_KERNEL);
 -- 
-Best regards,
-Bingbu Cao
+2.43.0
+
