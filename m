@@ -1,56 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C720236426
-	for <linux-media@vger.kernel.org>; Fri, 25 Apr 2025 09:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49474220689;
+	Fri, 25 Apr 2025 09:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745573112; cv=none; b=W+KZXQW9aAfkpLS1FWFQN7HpaO76L6Y3hojn3R8S23EGvxH2KNMr9RA79NbkT9GETJW0d+xZTDcUx9H+fq62fqTSLV4lKup9icb1Ur7UzH22/deMM3NNWidQAdyiIK+VcCt+pgtg+XFrT7C3QpbLLlH+jXlHFeEWcsQomm/L3Po=
+	t=1745573565; cv=none; b=CQ8dicW9RufwyqiNEIvuCCNJ8+St6itt8MILTFdKhfNem0ecS+hOl5EpAY6TjyvfXDPrmWVQc4RB5uLZmscvYK9P4th39zoUX380WK1F6Y0zXBsb71M91YuWm31Yb5sIBp+gNDHTw0sd5NVd/OeHZ1hEgCMLOcfiLsm9VKzNaew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745573112; c=relaxed/simple;
-	bh=Y6nWTZH4sasMUeIKwIZkUErmH2pv0nGSat/U3tgCZCk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hC6ZH+Kn+7s5b8G2suEjipdIDsTHyzv/KQSyCKzzrKlPNepVrkOE5EdJJY3z4rZnNtRk3m9Ffmqzy4YpKAFrQTWIJSgTBHKQ5ql6ij7BDN8yfRGE+y+ySdE0ovOveIHWodYa1XBYAXDb0ypGM5qqP/of2ILJb5soskj9j8ewsFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZdrIOqS3; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1745573565; c=relaxed/simple;
+	bh=QnqXI6E8oWla77iLCWtnfxkuAOtKRxBqoaWYgXRSgGg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=T+dOfrV2CtFL65IXR0WKq8qTBG4vOSejxwmzqbHa/Nca9USDlstBLiLThETZ2I+XSJigtVKutwVGmnv6dKbO90DbhRyfKqZcm5DXtsyS0nOLIkJmHkLeA9UYinLSwUfV5zEQ2iXIgOy+ukDLD15Nkt04mtRm9Jbo6DjCyQBW+0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FyJiYuLV; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZdrIOqS3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745573111; x=1777109111;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Y6nWTZH4sasMUeIKwIZkUErmH2pv0nGSat/U3tgCZCk=;
-  b=ZdrIOqS33wP3YegcVij1mh1JrYqqlIsrUADWAJiukHgGG8O3pdUjSJjv
-   aVIK9lk5zWxiU4tDzGy53vAsPWeB3DBcNW+3BEiJ8UZI8sGfiHwf5CHxt
-   hhpqyjb0v2ednhS/mjZl6NIgNZEo0VN2y8NDVK1CfPFOi505w7Kz2rhCn
-   OlAbeD11aXSUBx/p4Y8q00kOUPhSDIhtvRpgiQi5XxI/0T6cVGdLX4W7H
-   YjIEqUzSlFCJ9efbRFed1PvUTb3nAcubCgNeLxt5zy34ze3ri4UYsZRFA
-   8H+kFzM+7HcsM/Iemb1OE8siAVPD35PyuPrfmrGpmZ+XnHbV8bahIopCo
-   Q==;
-X-CSE-ConnectionGUID: s/qw5x6AS8+qslwJgYbpsw==
-X-CSE-MsgGUID: RW9fUgUtTISrcmRjSWuGOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="47365419"
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="47365419"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 02:25:10 -0700
-X-CSE-ConnectionGUID: QL0AZ1m6Q8GRymumllD5fw==
-X-CSE-MsgGUID: 5pBmYIscSIC72/xq4U7HCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="133839688"
-Received: from vtg-chrome.bj.intel.com ([172.16.127.120])
-  by orviesa008.jf.intel.com with ESMTP; 25 Apr 2025 02:25:08 -0700
-From: bingbu.cao@intel.com
-To: linux-media@vger.kernel.org,
-	sakari.ailus@linux.intel.com,
-	dongcheng.yan@intel.com
-Cc: bingbu.cao@linux.intel.com
-Subject: [PATCH] media: lt6911uxe: select V4L2_CCI_I2C in Kconfig
-Date: Fri, 25 Apr 2025 17:25:07 +0800
-Message-Id: <20250425092507.15607-1-bingbu.cao@intel.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FyJiYuLV"
+X-UUID: 3ace472021b811f0980a8d1746092496-20250425
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=1isuPnnh+n7BvdRO35OseXymAaGWQ+x7QDQT/vTVVrk=;
+	b=FyJiYuLV+vAxSJRzmePdrw/mnnuoAWOgQtLTowG+p/B4SquCgw/oM3cjwam+/kk4LmK5k3aS0ppVGvkUNGOYrvDHYbsxa0k9CjuBzvt2qPcUzNwqtSRXif18orYEjawu03yIklA6jUUh4DYxmOR2Q//O62745kck3Vlwfw/nGvo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.2.1,REQID:9291bca6-52c2-4ce2-a8b8-f2efa643b83c,IP:0,UR
+	L:0,TC:0,Content:29,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:29
+X-CID-META: VersionHash:0ef645f,CLOUDID:c3990a07-829c-41bc-b3dd-83387f72f90e,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:3|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 3ace472021b811f0980a8d1746092496-20250425
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1200385806; Fri, 25 Apr 2025 17:32:39 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Fri, 25 Apr 2025 17:32:38 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Fri, 25 Apr 2025 17:32:38 +0800
+From: Jason-JH Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Jason-JH Lin
+	<jason-jh.lin@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>, Singo Chang
+	<singo.chang@mediatek.com>, Paul-PL Chen <pual-pl.chen@mediatek.com>, Moudy
+ Ho <moudy.ho@mediatek.com>, Xavier Chang <xavier.chang@mediatek.com>,
+	Xiandong Wang <xiandong.wang@mediatek.com>, Sirius Wang
+	<sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>, Chen-yu Tsai
+	<wenst@chromium.org>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH v5 03/19] mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating instruction
+Date: Fri, 25 Apr 2025 17:28:35 +0800
+Message-ID: <20250425093237.1543918-4-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250425093237.1543918-1-jason-jh.lin@mediatek.com>
+References: <20250425093237.1543918-1-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -58,33 +72,89 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-From: Bingbu Cao <bingbu.cao@intel.com>
+Add the cmdq_mbox_priv structure to store the private data of GCE,
+such as the shift bits of the physical address. Then, include the
+cmdq_mbox_priv structure within the cmdq_pkt structure.
 
-lt6911uxe driver has dependency on V4L2_CCI_I2C, need select it in
-Kconfig to fix the build errors:
+This allows CMDQ users to utilize the private data in cmdq_pkt to
+generate GCE instructions when needed. Additionally, having
+cmdq_mbox_priv makes it easier to expand and reference other GCE
+private data in the future.
 
-ERROR: modpost: "cci_write" [drivers/media/i2c/lt6911uxe.ko] undefined!                                                                                                                                                                    ERROR: modpost: "cci_read" [drivers/media/i2c/lt6911uxe.ko] undefined!
+Add cmdq_get_mbox_priv() for CMDQ users to get all the private data
+into the cmdq_mbox_priv of the cmdq_pkt.
 
-Fixes: e49563c3be09 ("media: i2c: add lt6911uxe hdmi bridge driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+Fixes: 0858fde496f8 ("mailbox: cmdq: variablize address shift in platform")
+Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
 ---
- drivers/media/i2c/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mailbox/mtk-cmdq-mailbox.c       |  6 +++---
+ include/linux/mailbox/mtk-cmdq-mailbox.h | 18 ++++++++++++------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index e576b213084d..24f3936d0da8 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1151,6 +1151,7 @@ config VIDEO_LT6911UXE
- 	tristate "Lontium LT6911UXE decoder"
- 	depends on ACPI && VIDEO_DEV
- 	select V4L2_FWNODE
-+	select V4L2_CCI_I2C
- 	help
- 	  This is a Video4Linux2 sensor-level driver for the Lontium
- 	  LT6911UXE HDMI to MIPI CSI-2 bridge.
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index a3d94f1eb1a3..b18808855680 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -102,13 +102,13 @@ static inline dma_addr_t cmdq_reg_revert_addr(u32 addr, const struct gce_plat *p
+ 	return ((dma_addr_t)addr << pdata->shift);
+ }
+ 
+-u8 cmdq_get_shift_pa(struct mbox_chan *chan)
++void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+ 
+-	return cmdq->pdata->shift;
++	priv->shift_pa = cmdq->pdata->shift;
+ }
+-EXPORT_SYMBOL(cmdq_get_shift_pa);
++EXPORT_SYMBOL(cmdq_get_mbox_priv);
+ 
+ static void cmdq_gctl_value_toggle(struct cmdq *cmdq, bool ddr_enable)
+ {
+diff --git a/include/linux/mailbox/mtk-cmdq-mailbox.h b/include/linux/mailbox/mtk-cmdq-mailbox.h
+index e1555e06e7e5..822958f92135 100644
+--- a/include/linux/mailbox/mtk-cmdq-mailbox.h
++++ b/include/linux/mailbox/mtk-cmdq-mailbox.h
+@@ -70,23 +70,29 @@ struct cmdq_cb_data {
+ 	struct cmdq_pkt		*pkt;
+ };
+ 
++struct cmdq_mbox_priv {
++	u8 shift_pa;
++};
++
+ struct cmdq_pkt {
+ 	void			*va_base;
+ 	dma_addr_t		pa_base;
+ 	size_t			cmd_buf_size; /* command occupied size */
+ 	size_t			buf_size; /* real buffer size */
++	struct cmdq_mbox_priv	priv; /* for generating instruction */
+ };
+ 
+ /**
+- * cmdq_get_shift_pa() - get the shift bits of physical address
++ * cmdq_get_mbox_priv() - get the private data of mailbox channel
+  * @chan: mailbox channel
++ * @priv: pointer to store the private data of mailbox channel
+  *
+- * GCE can only fetch the command buffer address from a 32-bit register.
+- * Some SOCs support more than 32-bit command buffer address for GCE, which
+- * requires some shift bits to make the address fit into the 32-bit register.
++ * While generating the GCE instruction to command buffer, the private data
++ * of GCE hardware may need to be referenced, such as the shift bits of
++ * physical address.
+  *
+- * Return: the shift bits of physical address
++ * This function should be called before generating the GCE instruction.
+  */
+-u8 cmdq_get_shift_pa(struct mbox_chan *chan);
++void cmdq_get_mbox_priv(struct mbox_chan *chan, struct cmdq_mbox_priv *priv);
+ 
+ #endif /* __MTK_CMDQ_MAILBOX_H__ */
 -- 
-2.34.1
+2.43.0
 
