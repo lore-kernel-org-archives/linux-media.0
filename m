@@ -1,44 +1,40 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37DE2DCB4E;
-	Tue, 29 Apr 2025 23:29:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DFC2D8195;
+	Tue, 29 Apr 2025 23:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745969370; cv=none; b=cHhNd9cCt5jHHa2F+epslbe8NEjcT9hnY/BqMiL9cAV+566i0PR/C9NUW1xL82VJnPJz8aPUW2i0JI9zHiFUkxgqsjzRRT/SIr5/wfuBGQACoPCeIw1g4I+mE72mYcnS5V/zOexVY03vxfTCM+bhXmgUFsZulnjmeO8VMf1yzY8=
+	t=1745970819; cv=none; b=WnR46jBMErvuRF6u4zeVHgh5T1KW7Pd0iET5vSdFp19VxqQUzXrUZ2Svrklr1HjefbLar7g4P1viGyfJ6Q6H3LU44q9sXYfI+vo48k4BaLcUmGEy8+j7ou5PByr5Tb/ik6TscziUFsJKoVi0KG+5N2J7N4JJw5NLamOVdVw0euQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745969370; c=relaxed/simple;
-	bh=JW8R+ouKfZDbf21xsY26yAdEIf0xJhExWbz+oLvI4WA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rri+AaRJxO0E707eO+8JVYyQQ5R0618b1nOi3eIMZy89xuolywpJ1jRYrir1KT/UljP0+WLfhmU/P4mQlhwk+3FlZxXdAQuj1C3AQBbz1XvkyGF2qqcyy+FntsGDQIdS+IqDoXmeMzNRvROIhc218hhmL6aeYcCu0rA57+jOA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=T47wRBAb; arc=none smtp.client-ip=213.167.242.64
+	s=arc-20240116; t=1745970819; c=relaxed/simple;
+	bh=nUHEpcVOMFTl03dFb+HgklHSeDXNFpL6MGznPjJA0Gg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=twCljYvK75ChTwkauFk6yRvr7PSy+YizdCaCTSlxgnc2wYkujyl3K0vB79VjeUKSN5Z96Qz4YIT4u5sX0mminN1IoF48oBY/uWXGz4QXpWjLXmrWg4xhRSpcXZPUbPZfyEqpAucR7yv0ox+HGiUbBarJq177bEfAiqWrT2+7fpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=lHJzx+JG; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="T47wRBAb"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lHJzx+JG"
 Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2E68B1838;
-	Wed, 30 Apr 2025 01:29:17 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BCC25667;
+	Wed, 30 Apr 2025 01:53:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1745969357;
-	bh=JW8R+ouKfZDbf21xsY26yAdEIf0xJhExWbz+oLvI4WA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T47wRBAbP7Ypwcizz/Vg/rKo/wPTA7G3Fv0aMQx1eGQeO7ubzgNxjXLYj5pEUenGE
-	 Qxeh+yjwxoz3KoeCto5RhjHNN1gBTLyUdUY9X+T9egZ6uz2nTGk3UbO9Cev7BOOd5e
-	 itMt+IM+/MNqcQXapAF4bBFFmZso4jY6Tj6IedP8=
+	s=mail; t=1745970803;
+	bh=nUHEpcVOMFTl03dFb+HgklHSeDXNFpL6MGznPjJA0Gg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lHJzx+JGEvZW5yv7KcTxwijcULgiA3ttNyD0F+LyTUJ+MK3hRIm9FE+ThofTzP3Kf
+	 OZU7Ya176QQStxUXL8+pt9ZFlV+JLXb4AAAp2OAeRWWqSI6rVcBvpsa8IYb58LdJXZ
+	 cjvIslnf0MfQ7k6LvUeMgjODShy/W69hykKyd7FY=
 From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To: linux-media@vger.kernel.org
 Cc: linux-renesas-soc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
 	Kieran Bingham <kieran.bingham@ideasonboard.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v2 8/9] media: renesas: vsp1: Expose color space through the DRM API
-Date: Wed, 30 Apr 2025 02:29:03 +0300
-Message-ID: <20250429232904.26413-9-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH 0/7] media: renesas: vsp1: Fix v4l2-compliance failures
+Date: Wed, 30 Apr 2025 02:53:15 +0300
+Message-ID: <20250429235322.29826-1-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250429232904.26413-1-laurent.pinchart+renesas@ideasonboard.com>
-References: <20250429232904.26413-1-laurent.pinchart+renesas@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -47,85 +43,88 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that the VSP1 driver supports color spaces, expose them through the
-API used by the DU driver. This allows configuring the YCbCr encoding
-and quantization used by each plane, ensuring correct color rendering.
+Hello,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- drivers/media/platform/renesas/vsp1/vsp1_drm.c | 4 ++++
- drivers/media/platform/renesas/vsp1/vsp1_drm.h | 6 ++++--
- include/media/vsp1.h                           | 4 ++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
+This series fixes all v4l2-compliance failures in the VSP1 driver. It
+builds on top of the recently posted "[PATCH v2 0/9] media: renesas:
+vsp1: Add colorspace support" series ([1]).
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.c b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-index e5339fda5941..fe55e8747b05 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
-@@ -136,6 +136,8 @@ static int vsp1_du_pipeline_setup_rpf(struct vsp1_device *vsp1,
- 	format.format.height = input->crop.height + input->crop.top;
- 	format.format.code = rpf->fmtinfo->mbus;
- 	format.format.field = V4L2_FIELD_NONE;
-+	format.format.ycbcr_enc = input->ycbcr_enc;
-+	format.format.quantization = input->quantization;
- 
- 	ret = v4l2_subdev_call(&rpf->entity.subdev, pad, set_fmt, NULL,
- 			       &format);
-@@ -876,6 +878,8 @@ int vsp1_du_atomic_update(struct device *dev, unsigned int pipe_index,
- 	input->crop = cfg->src;
- 	input->compose = cfg->dst;
- 	input->zpos = cfg->zpos;
-+	input->ycbcr_enc = cfg->color_encoding;
-+	input->quantization = cfg->color_range;
- 
- 	drm_pipe->pipe.inputs[rpf_index] = rpf;
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.h b/drivers/media/platform/renesas/vsp1/vsp1_drm.h
-index 7234737cc464..07a5d0adbd08 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_drm.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.h
-@@ -52,8 +52,8 @@ struct vsp1_drm_pipeline {
-  * struct vsp1_drm - State for the API exposed to the DRM driver
-  * @pipe: the VSP1 DRM pipeline used for display
-  * @lock: protects the BRU and BRS allocation
-- * @inputs: source crop rectangle, destination compose rectangle and z-order
-- *	position for every input (indexed by RPF index)
-+ * @inputs: source crop rectangle, destination compose rectangle, z-order
-+ *	position and colorspace for every input (indexed by RPF index)
-  */
- struct vsp1_drm {
- 	struct vsp1_drm_pipeline pipe[VSP1_MAX_LIF];
-@@ -63,6 +63,8 @@ struct vsp1_drm {
- 		struct v4l2_rect crop;
- 		struct v4l2_rect compose;
- 		unsigned int zpos;
-+		enum v4l2_ycbcr_encoding ycbcr_enc;
-+		enum v4l2_quantization quantization;
- 	} inputs[VSP1_MAX_RPF];
- };
- 
-diff --git a/include/media/vsp1.h b/include/media/vsp1.h
-index 48f4a5023d81..4ea6352fd63f 100644
---- a/include/media/vsp1.h
-+++ b/include/media/vsp1.h
-@@ -52,6 +52,8 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
-  * @alpha: alpha value (0: fully transparent, 255: fully opaque)
-  * @zpos: Z position of the plane (from 0 to number of planes minus 1)
-  * @premult: true for premultiplied alpha
-+ * @color_encoding: color encoding (valid for YUV formats only)
-+ * @color_range: color range (valid for YUV formats only)
-  */
- struct vsp1_du_atomic_config {
- 	u32 pixelformat;
-@@ -62,6 +64,8 @@ struct vsp1_du_atomic_config {
- 	unsigned int alpha;
- 	unsigned int zpos;
- 	bool premult;
-+	enum v4l2_ycbcr_encoding color_encoding;
-+	enum v4l2_quantization color_range;
- };
- 
- /**
+The v4l2-compliance log is long, and not that interesting as there's no
+failure. Here's the executive summary, if anyone wants the full log,
+please let me know.
+
+----------------------------------------
+root@buildroot ~ # v4l2-compliance -m /dev/media1
+v4l2-compliance 1.29.0-5370, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 81ccbfe204c7 2025-04-29 15:36:05
+
+Compliance test for vsp1 device /dev/media1:
+
+Media Driver Info:
+        Driver name      : vsp1
+        Model            : VSP2-BD
+        Serial           :
+        Bus info         : platform:fe960000.vsp
+        Media version    : 6.15.0
+        Hardware revision: 0x01011504 (16848132)
+        Driver version   : 6.15.0
+
+[...]
+
+Grand Total for vsp1 device /dev/media1: 757, Succeeded: 757, Failed: 0, Warnings: 0
+----------------------------------------
+
+To achieve zero failures, I had to disable a streaming test that can't
+succeed on the VSP, as it is an MC-based device. The patch ("[v4l-utils]
+[PATCH] v4l2-compliance: Don't perform blocking DQBUF test on MC_IO
+devices") has been posted in [2].
+
+The series has also been tested with the vsp-tests suite, which reported
+no regression.
+
+[1] https://lore.kernel.org/linux-media/20250429232904.26413-1-laurent.pinchart+renesas@ideasonboard.com
+[2] https://lore.kernel.org/linux-media/20250429203922.23078-1-laurent.pinchart@ideasonboard.com
+
+Laurent Pinchart (7):
+  media: renesas: vsp1: Store supported media bus codes in vsp1_entity
+  media: renesas: vsp1: Store size limits in vsp1_entity
+  media: renesas: vsp1: Fix code checks in frame size enumeration
+  media: renesas: vsp1: Fix RPF sink alignment for YUV formats
+  media: renesas: vsp1: Fix RWPF media bus code and frame size
+    enumeration
+  media: renesas: vsp1: Fix format propagation on the BRX
+  media: renesas: vsp1: Implement control events
+
+ .../media/platform/renesas/vsp1/vsp1_brx.c    |  37 ++---
+ .../media/platform/renesas/vsp1/vsp1_clu.c    |  47 ++----
+ .../media/platform/renesas/vsp1/vsp1_entity.c | 108 +++++++-------
+ .../media/platform/renesas/vsp1/vsp1_entity.h |  21 +--
+ .../media/platform/renesas/vsp1/vsp1_histo.c  |  27 ++--
+ .../media/platform/renesas/vsp1/vsp1_histo.h  |   2 -
+ .../media/platform/renesas/vsp1/vsp1_hsit.c   |  24 ++--
+ .../media/platform/renesas/vsp1/vsp1_lif.c    |  40 ++----
+ .../media/platform/renesas/vsp1/vsp1_lut.c    |  47 ++----
+ .../media/platform/renesas/vsp1/vsp1_rpf.c    |   5 +-
+ .../media/platform/renesas/vsp1/vsp1_rwpf.c   | 135 ++++++++++++++----
+ .../media/platform/renesas/vsp1/vsp1_rwpf.h   |   3 -
+ .../media/platform/renesas/vsp1/vsp1_sru.c    |  61 ++++----
+ .../media/platform/renesas/vsp1/vsp1_uds.c    |  60 ++++----
+ .../media/platform/renesas/vsp1/vsp1_uif.c    |  40 ++----
+ .../media/platform/renesas/vsp1/vsp1_wpf.c    |  10 +-
+ 16 files changed, 314 insertions(+), 353 deletions(-)
+
+
+base-commit: 398a1b33f1479af35ca915c5efc9b00d6204f8fa
+prerequisite-patch-id: e3d9847d1da4398f1bf0b57f5ef4a612392c7255
+prerequisite-patch-id: 54ade6c92a08292f509ad0c42cc578e2b355e699
+prerequisite-patch-id: c2f29968199990b573d655ca9ea9ac0883842a9c
+prerequisite-patch-id: 96e1d3ee682a91153ecd32207a641274cdd88b7a
+prerequisite-patch-id: 221744f7a7fc757b67c32a1eb2160fb46cd59111
+prerequisite-patch-id: 8c3ebcd92a4297b0f28949e6dba038c042f7dfa1
+prerequisite-patch-id: 439fe909a37bc235622e8feacc2fc01429dcb4bb
+prerequisite-patch-id: 5940443948cee464fb7448778ed180d50736d771
+prerequisite-patch-id: eabcbd4bedb2617adf11740c67014de31f99a182
+prerequisite-patch-id: 048286f07c4a5cb2bf695cc9876640759aec970c
 -- 
 Regards,
 
