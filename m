@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FFB277010;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DA32C2ACB;
 	Tue, 29 Apr 2025 12:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745931557; cv=none; b=okBK2LgUjl1LHR+nAaT/7pnlLMyXlZSVMNMtH+U12iiB1uUg0d0geBjaZL5kzUKaXwWyfl9A5AO9V78iNFlvvV6yDYFEIeGVGOJ6G1Pi/gvoDxxKJw7xfKbUMkGJJ6Z7ZDkxtiH6nGzA4F4clKEQSCD76m3EsXlCf11eZkwDDxI=
+	t=1745931557; cv=none; b=jNK00nGcxG/DwO9N1oxedV3Nxa7OQAhWD+GSBqBW/jA8C/zjzT+RhCw5jCULlBO7m2yWvowAdI59ufLoeDNqKMrz7oQC6d6wmTOOHUyKR4qlX/fqSn/II94zHIrrQXQ6Wb8+HqbOBh6wyhlyZ3DAnhxPY7KkxZbT8q2hcbDx+6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745931557; c=relaxed/simple;
-	bh=2z1C8aiGut4OFg6hwle9DwiM2L+/ljeLGm2qQZiDTEo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=C0Na6/1KgSreLI2pD9xev6wUJpz2PBTv4YLdaFsjKQyVi9NjBEOcDdXbapKpZDhZPM3opO4EJ7wERn/4IeW1waFDiSH8v+R/vo8a7C2f3b5H4kFA/Hgq3hbBHMYCYwhhahvcrmzZHdzWRL5t44QFgW5KV00e4GAdrFQC/VsbaR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vNkKi2/n; arc=none smtp.client-ip=10.30.226.201
+	bh=bHa9DyU5pY4KwqBVVlo7OhSDU5Z0nzs/MOBy8JAQCk8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=boNxrzcWmcbSrKGiRNN5VRc+fK4cc2OvRz9tn3cnq394emldX2PPelbJaEhSQlaf/dncb4Z0JV2acsqchjbszpQkhwQyjEhFfa376XAF3iJvLkodMEDN5BCHBiteTeyCGMcdY/k5H3IoUmgr+JKnONBGNuS3HF/WdC744XcassU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I8Zlxolk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vNkKi2/n"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 39E1AC4CEFC;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I8Zlxolk"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 64F5FC4CEE3;
 	Tue, 29 Apr 2025 12:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1745931556; bh=2z1C8aiGut4OFg6hwle9DwiM2L+/ljeLGm2qQZiDTEo=;
-	h=From:Subject:Date:To:Cc:From;
-	b=vNkKi2/nKWqurF8AWKtXNjWaOAFaPdgu5oYHdZ3iNXuVGZtQlAB74pDLH6s9CkXIz
-	 YRpBDBTPhE0sOKzwKa+NWraLHWZqy01GoR1K7PIL3R8QvlFPs1gPLrdRei134064WC
-	 cyeKlkwt8gum9cBgIshmF9kFw5S5QFzN6Hw7/p/w=
+	t=1745931556; bh=bHa9DyU5pY4KwqBVVlo7OhSDU5Z0nzs/MOBy8JAQCk8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=I8ZlxolkPmnlRxzBImS4gkvuuZmnKUH3pwE+WkEhyPd77vJKJ4p5ugmwxZRnItG5U
+	 qsnXgP8KZQZtRZa4PaSa6YrjLzSj0xVl5QgD8t3wp3GAQ3YCzkYVVxxFDhv/9hIauo
+	 NWb8NEuCJmcPZX9RMGgCbWzX9ECU97snYSq720ro=
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27021C3ABAD;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56723C3ABAF;
 	Tue, 29 Apr 2025 12:59:16 +0000 (UTC)
 From: Richard Leitner <richard.leitner@linux.dev>
-Subject: [PATCH v3 0/9] Add strobe/flash duration v4l2 ctrl & use it for
- ov9282
-Date: Tue, 29 Apr 2025 14:59:05 +0200
-Message-Id: <20250429-ov9282-flash-strobe-v3-0-2105ce179952@linux.dev>
+Date: Tue, 29 Apr 2025 14:59:08 +0200
+Subject: [PATCH v3 3/9] media: v4l2-flash: add support for flash/strobe
+ duration
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -36,13 +36,10 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIABnNEGgC/33OwWrDMBAE0F8xOneLtJacxKf+R+lh5V3FgmCnk
- iNSgv+9ikNpDqXHGZjH3FSWFCWrvrmpJCXmOE81tC+NGkaajgKRa1ao0elWtzCXA+4RwonyCHl
- JsxegofOs9XBg6VRdnpOEeN3U949HTvJ5qfjyKH/tvtlkRAfe/uBHihNIMAOTJ+cD98WoOzTGv
- Mzpa3tbq7v077FiQIMO7HZkXGc9vZ3idLm+spTNK/hkGPu3gdUwlneEe9Na5GdjXddvNBXpoUM
- BAAA=
-X-Change-ID: 20250303-ov9282-flash-strobe-ac6bd00c9de6
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250429-ov9282-flash-strobe-v3-3-2105ce179952@linux.dev>
+References: <20250429-ov9282-flash-strobe-v3-0-2105ce179952@linux.dev>
+In-Reply-To: <20250429-ov9282-flash-strobe-v3-0-2105ce179952@linux.dev>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
  Dave Stevenson <dave.stevenson@raspberrypi.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -52,76 +49,57 @@ Cc: Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
  Richard Leitner <richard.leitner@linux.dev>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931554; l=2903;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931554; l=1581;
  i=richard.leitner@linux.dev; s=20250225; h=from:subject:message-id;
- bh=2z1C8aiGut4OFg6hwle9DwiM2L+/ljeLGm2qQZiDTEo=;
- b=tOpPmX2FLIW1sYHJ4M1PLeJXlOEXr65fEreCHoAuuLeNdhFf0LdHzwa3d8KlnVGM1HosYgAS+
- mCf8s6WAKNBBwzBfpgMvfACg+NUTlUxSw41nRvA68NwCg5i38pFfvqq
+ bh=bHa9DyU5pY4KwqBVVlo7OhSDU5Z0nzs/MOBy8JAQCk8=;
+ b=hVLXrCC7H/khQgUUmgEY6fKTLCw2sfgTBSOK7fv5eNAhyCFTkDCcubJY6AF75MdxFRtdzZy2o
+ yzE9BVZM+BTDwY3RokFPA6JAstT7f+XTi0dkNf5jgv//PoSkhrv764I
 X-Developer-Key: i=richard.leitner@linux.dev; a=ed25519;
  pk=8hZNyyyQFqZ5ruVJsSGBSPIrmJpfDm5HwHU4QVOP1Pk=
 X-Endpoint-Received: by B4 Relay for richard.leitner@linux.dev/20250225
  with auth_id=350
 
-This series adds a new v4l2 controls named "strobe duration" with id
-V4L2_CID_FLASH_DURATION. This control enables setting a desired
-flash/strobe length/duration in µs.
-
-As a first user of this new control add basic flash/strobe support for
-ov9282 sensors using their "hardware strobe output". The duration
-calculation is only interpolated from various measurements, as no
-documentation was found.
-
-Further flash/strobe-related controls as well as a migration to v4l2-cci
-helpers for ov9282 will likely be implemented in future series.
-
-All register addresses/values are based on the OV9281 datasheet v1.53
-(january 2019). This series was tested using an ov9281 VisionComponents
-camera module.
+Add support for the new V4L2_CID_FLASH_DURATION control to the v4l2
+flash led class.
 
 Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
 ---
-Changes in v3:
-- create separate patch for leds driver changes (thanks Lee)
-- Link to v2: https://lore.kernel.org/r/20250314-ov9282-flash-strobe-v2-0-14d7a281342d@linux.dev
+ drivers/media/v4l2-core/v4l2-flash-led-class.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Changes in v2:
-- remove not needed controls in struct ov9282 (thanks Dave)
-- Fix commit message of 3/3 regarding framerate get/set (thanks Dave)
-- Add V4L2_CID_FLASH_STROBE_SOURCE impementation to ov9282
-- Add new V4L2_CID_FLASH_DURATION control (as suggested by Laurent)
-- Use FLASH_DURATION instead of FLASH_TIMEOUT for ov9282
-- Link to v1: https://lore.kernel.org/r/20250303-ov9282-flash-strobe-v1-0-0fd57a1564ba@linux.dev
+diff --git a/drivers/media/v4l2-core/v4l2-flash-led-class.c b/drivers/media/v4l2-core/v4l2-flash-led-class.c
+index 355595a0fefac72c2f6941a30fa430d37dbdccfe..963b549480f6eb3b9eb0d80696a764de7ffcc1a2 100644
+--- a/drivers/media/v4l2-core/v4l2-flash-led-class.c
++++ b/drivers/media/v4l2-core/v4l2-flash-led-class.c
+@@ -298,6 +298,12 @@ static int v4l2_flash_s_ctrl(struct v4l2_ctrl *c)
+ 		 * microamperes for flash intensity units.
+ 		 */
+ 		return led_set_flash_brightness(fled_cdev, c->val);
++	case V4L2_CID_FLASH_DURATION:
++		/*
++		 * No conversion is needed as LED Flash class also uses
++		 * microseconds for flash duration units.
++		 */
++		return led_set_flash_duration(fled_cdev, c->val);
+ 	}
+ 
+ 	return -EINVAL;
+@@ -424,6 +430,13 @@ static void __fill_ctrl_init_data(struct v4l2_flash *v4l2_flash,
+ 		ctrl_cfg->flags = V4L2_CTRL_FLAG_VOLATILE |
+ 				  V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
+ 	}
++
++	/* Init FLASH_DURATION ctrl data */
++	if (has_flash_op(fled_cdev, timeout_set)) {
++		ctrl_init_data[FLASH_DURATION].cid = V4L2_CID_FLASH_DURATION;
++		ctrl_cfg = &ctrl_init_data[FLASH_DURATION].config;
++		__lfs_to_v4l2_ctrl_config(&fled_cdev->duration, ctrl_cfg);
++		ctrl_cfg->id = V4L2_CID_FLASH_DURATION;
+ }
+ 
+ static int v4l2_flash_init_controls(struct v4l2_flash *v4l2_flash,
 
----
-Richard Leitner (9):
-      media: v4l: ctrls: add a control for flash/strobe duration
-      leds: flash: add support for flash/stobe duration
-      media: v4l2-flash: add support for flash/strobe duration
-      media: v4l2-flash: fix flash_timeout comment
-      Documentation: uAPI: media: add V4L2_CID_FLASH_DURATION
-      media: i2c: ov9282: add output enable register definitions
-      media: i2c: ov9282: add led_mode v4l2 control
-      media: i2c: ov9282: add strobe_duration v4l2 control
-      media: i2c: ov9282: add strobe_source v4l2 control
-
- .../userspace-api/media/v4l/ext-ctrls-flash.rst    |  5 ++
- drivers/leds/led-class-flash.c                     | 15 ++++
- drivers/media/i2c/ov9282.c                         | 92 +++++++++++++++++++++-
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  1 +
- drivers/media/v4l2-core/v4l2-flash-led-class.c     | 13 +++
- include/linux/led-class-flash.h                    | 18 ++++-
- include/uapi/linux/v4l2-controls.h                 |  1 +
- 7 files changed, 141 insertions(+), 4 deletions(-)
----
-base-commit: ca91b9500108d4cf083a635c2e11c884d5dd20ea
-change-id: 20250303-ov9282-flash-strobe-ac6bd00c9de6
-prerequisite-change-id: 20250225-b4-ov9282-gain-ef1cdaba5bfd:v1
-prerequisite-patch-id: 86f2582378ff7095ab65ce4bb25a143eb639e840
-prerequisite-patch-id: b06eb6ec697aaf0b3155b4b2370f171d0d304ae2
-prerequisite-patch-id: b123047d71bfb9b93f743bbdd6893d5a98495801
-
-Best regards,
 -- 
-Richard Leitner <richard.leitner@linux.dev>
+2.47.2
 
 
