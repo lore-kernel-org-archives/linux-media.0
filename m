@@ -1,50 +1,50 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB421E766F;
-	Tue, 29 Apr 2025 11:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78951253F1E;
+	Tue, 29 Apr 2025 11:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745924958; cv=none; b=Wvcbdtiq2kcgcZi7c7jlmv8u/xpZIDC3fT9BkWXHI2UxBh8AMNw1Pq/HtwhyRIXnAfYPJQbzfz+iXyPPh2PgND3E6TMcI9ZbYBsXViQ8XAvtEfYfSz0Kj+oHDC9loBI4ID7AHp2gGcEMwYUhORCer5zVHctFIneJOZUXTl4LdjE=
+	t=1745926395; cv=none; b=Ot1KeBgWLo8fEIUcV++OJLY0SskohY8rpPtOoTE3IiwoClny/F2T6kwdKsPvW8m2JFgqlqd/fh1WfDl99GTPZvMA3BYVDSN/+UaGGsiMFfcq6lzxaUDzpOYnUgMIR8pn7gCxokgdZ7AYnnoYlRvDtXSpZuPjI5gJZBI0YfZJVq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745924958; c=relaxed/simple;
-	bh=+nSfvMAUyBWEWq7ZYyx6+9vfRCGgmw7e8dCVvWMWVW8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
-	 In-Reply-To:Content-Type; b=fOh0SmTO+0y/2sx+09hkxJLrQIVyCWK2O5jZCJG8+n7T8RlwMyNfc9LHVt9LJfem8nvVi5Vu7Og45eIVprXFHcGb/lZjbHDyy7BqnzZKERcTrL1n8sQN8NFQl6D1KhNTqZAC45a1UF7GgARt36XNYjMtheacKR7VlydhAyQfyis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=n2afi/nJ; arc=none smtp.client-ip=185.132.182.106
+	s=arc-20240116; t=1745926395; c=relaxed/simple;
+	bh=OvhelyXE4LnW7WMRNSktSz/MJJftSi4X6Pf027AEJrI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ljVtqTSf7X7Rq4kUyeeb6cTTqKmj/Pz1eKEYK65dTNuNrMyXBTHRXsmJMUcgZtFF7evwfK/DJ3SUfRzlwyBw95emcoAhA04MLbrTnZSjuiOwvHC89JUbsfZ4mWIsTUYzCkAoK29yrz+an601K4SvrLKAHvWLDiYJact6+prp8Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Q3CPc+Td; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="n2afi/nJ"
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53T6eNFP006373;
-	Tue, 29 Apr 2025 13:08:45 +0200
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Q3CPc+Td"
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53T6Vo0I021436;
+	Tue, 29 Apr 2025 13:32:46 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	K/R4P0gP3EDPBGFbzs7VngKX4qJsWuX5uVUSNgPta9k=; b=n2afi/nJDs2wPZLo
-	meRMsxGPxqbPUP2WzE/2hJXFANF25/2nSFYlQiz2KXq0pSd6qdT21G7hg+sjroOC
-	1aCBrz7K9kFDLhC7Q3p0tI2rGnUNZvamKGx88qctT+j6xVNT+vdVROHwdnBfSd8c
-	/XGoMpkFU0wIGbmjWZQWomJLE97gw02+8cHbh4O2DcU92Sa6/N/PJNKIifr8wrNL
-	a3lmsGOl2obp8/l3CvCETJXIr3HvLfYg9SvD3I725uPGbIdO0k1jnvPo+ppjhTm0
-	lHkh9EWeWN29AdJO2Bp0Vv5CY7Z/bJFwKSoob6DQkql2Isl2FuI15k3oeJazmD/6
-	muWhzQ==
+	lVkOsRriw8VgI1K0iKgRP+8QU7vUWArWg+1cF7aLKn4=; b=Q3CPc+TdFGBGBICY
+	W1HKlsLx4QWwzWa4paPUf2s3gnJRXs2adUIvBEqZWu6bxQpV1G83FWqTaz9UFjUs
+	9KS66L3JQf7M+7zVeaWfK3nuciF76D9f1k4hykyTRgeuINqO7pkdJAOwGgQQ3k5V
+	5SFS08QcdiuUH6xfQj+IkUVPeKpOZmzKNzxeXtloAbF5tbE51RPqnX/gHFNF/u1r
+	t48KvSDmt82fNgQnE/EeqOYPS1FyuaC1NBYYg6hdofJf4ubstqvGY4C2uoueCzzy
+	GLDrDs1BO3Mi28t62MrqwgJe/ZvYIlFDVHlRokwOihNDH1w/4ZILS0l3OQeZ7/1d
+	E/1OhQ==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 468pu7jxv4-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 468mm9jxec-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Apr 2025 13:08:43 +0200 (MEST)
+	Tue, 29 Apr 2025 13:32:45 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id D3C7040051;
-	Tue, 29 Apr 2025 13:07:14 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 123F94002D;
+	Tue, 29 Apr 2025 13:31:39 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DF4EDAA1A51;
-	Tue, 29 Apr 2025 13:06:38 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 84514A7AD3E;
+	Tue, 29 Apr 2025 13:29:40 +0200 (CEST)
 Received: from [10.130.73.167] (10.130.73.167) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 29 Apr
- 2025 13:06:38 +0200
-Message-ID: <634993cc-8322-4995-a70c-e8fef26ae9c3@foss.st.com>
-Date: Tue, 29 Apr 2025 13:06:37 +0200
+ 2025 13:29:39 +0200
+Message-ID: <70f7bc9b-4533-4c8e-a792-aad9a0b7a6d4@foss.st.com>
+Date: Tue, 29 Apr 2025 13:29:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -52,25 +52,22 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Subject: Re: [PATCH v5 2/2] media: i2c: Add driver for ST VD55G1 camera sensor
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v6 2/2] media: i2c: Add driver for ST VD55G1 camera sensor
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
 CC: Sylvain Petinot <sylvain.petinot@foss.st.com>,
         Mauro Carvalho Chehab
 	<mchehab@kernel.org>,
         Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski
 	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20250404-b4-vd55g1-v5-0-98f2f02eec59@foss.st.com>
- <20250404-b4-vd55g1-v5-2-98f2f02eec59@foss.st.com>
- <20250422150746.GA23173@pendragon.ideasonboard.com>
+        Conor Dooley <conor+dt@kernel.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250407-b4-vd55g1-v6-0-1850f18b1f24@foss.st.com>
+ <20250407-b4-vd55g1-v6-2-1850f18b1f24@foss.st.com>
+ <aBCxpuppB6L-Ft2c@kekkonen.localdomain>
 Content-Language: en-US
-In-Reply-To: <20250422150746.GA23173@pendragon.ideasonboard.com>
+From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+In-Reply-To: <aBCxpuppB6L-Ft2c@kekkonen.localdomain>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
@@ -79,17 +76,19 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-04-29_04,2025-04-24_02,2025-02-21_01
 
-Hi Laurent,
+Hi Sakari,
 
 Thank you for your review.
-Please consider everything not commented as queued for v7.
+Please find my comments below. I think I'm almost ready to send you a v7.
 
-On 4/22/25 17:07, Laurent Pinchart wrote:
+On 4/29/25 13:01, Sakari Ailus wrote:
 > Hi Benjamin,
 > 
-> Thank you for the patch.
+> Thanks for the update.
 > 
-> On Fri, Apr 04, 2025 at 04:50:52PM +0200, Benjamin Mugnier wrote:
+> A few more comments below...
+> 
+> On Mon, Apr 07, 2025 at 11:17:30AM +0200, Benjamin Mugnier wrote:
 >> The VD55G1 is a monochrome global shutter camera with a 804x704 maximum
 >> resolution with RAW8 and RAW10 bytes per pixel.
 >> The driver supports :
@@ -107,8 +106,8 @@ On 4/22/25 17:07, Laurent Pinchart wrote:
 >>  MAINTAINERS                |    2 +
 >>  drivers/media/i2c/Kconfig  |   11 +
 >>  drivers/media/i2c/Makefile |    1 +
->>  drivers/media/i2c/vd55g1.c | 2005 ++++++++++++++++++++++++++++++++++++++++++++
->>  4 files changed, 2019 insertions(+)
+>>  drivers/media/i2c/vd55g1.c | 2006 ++++++++++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 2020 insertions(+)
 >>
 >> diff --git a/MAINTAINERS b/MAINTAINERS
 >> index 4f5e9005063a157de69e81b10f8def9da9e6c04c..9991c5f63e3d49a4e7a6ef0071f3b81825e84eee 100644
@@ -128,14 +127,6 @@ On 4/22/25 17:07, Laurent Pinchart wrote:
 >>  F:	drivers/media/i2c/s5*
 >> +F:	drivers/media/i2c/vd55g1.c
 >>  F:	drivers/media/i2c/vgxy61.c
-> 
-> I suppose that
-> 
-> F:	drivers/media/i2c/v*
-> 
-> would be too broad. Sakari, is it time to create a sensors subdirectory
-> (not as a prerequisite for this series of course) ?
-> 
 >>  
 >>  VF610 NAND DRIVER
 >> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
@@ -174,10 +165,10 @@ On 4/22/25 17:07, Laurent Pinchart wrote:
 >>  obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
 >> diff --git a/drivers/media/i2c/vd55g1.c b/drivers/media/i2c/vd55g1.c
 >> new file mode 100644
->> index 0000000000000000000000000000000000000000..0ec7b0948c9697789332f8856a92c3dab05a9eaf
+>> index 0000000000000000000000000000000000000000..3ad8cec00496273599478bc0403b7c0c6845a300
 >> --- /dev/null
 >> +++ b/drivers/media/i2c/vd55g1.c
->> @@ -0,0 +1,2005 @@
+>> @@ -0,0 +1,2006 @@
 >> +// SPDX-License-Identifier: GPL-2.0
 >> +/*
 >> + * Driver for VD55G1 global shutter sensor family driver
@@ -603,24 +594,13 @@ On 4/22/25 17:07, Laurent Pinchart wrote:
 >> +	"Disabled",
 >> +	"Dgrey",
 > 
-> I had to look up what this was. "Diagonal Grey Scale" would be more
-> explicit.
+> I believe Laurent had a comment on this.
 > 
 
-Indeed.
+Yes, Laurent did a review on v5 right after this v6 was submitted.
+This is queued for the next version ;)
 
 >> +	"PN28",
-> 
-> Could you document while polynomial is used ? A quick search for PN28
-> didn't turn up much.
-> 
-
-It stands for Pseudorandom Noise [1], 28 being the seed. I'll change its
-name to be more explicit.
-This is useful to stress test digital IPs.
-
-[1] https://en.wikipedia.org/wiki/Pseudorandom_noise
-
 >> +};
 >> +
 >> +static const s64 vd55g1_ev_bias_menu[] = {
@@ -637,21 +617,6 @@ This is useful to stress test digital IPs.
 >> +	 * the host
 >> +	 */
 >> +	"Internal subtraction",
-> 
-> Maybe I'm missing something, but how is this HDR ?
-> 
-
-This mode outputs a frame with only movement highlighted, since it
-subtract the the short exposed frame from the long exposed one.
-This mode already exists in the vgxy61 [2].
-
-This is not 'High Dynamic Range' per se although it uses the same
-technique as classical HDR inside the sensor (i.e. acquiring 2 frames
-and outputing only one) but for another use case, therefore I think this
-can safely be called HDR. What about you ?
-
-[2] https://docs.kernel.org/userspace-api/media/drivers/vgxy61.html
-
 >> +};
 >> +
 >> +static const char * const vd55g1_supply_name[] = {
@@ -669,18 +634,11 @@ can safely be called HDR. What about you ?
 >> +	VD55G1_BIN_MODE_NORMAL,
 >> +	VD55G1_BIN_MODE_DIGITAL_X2,
 >> +	VD55G1_BIN_MODE_DIGITAL_X4,
-> 
-> These seem to be register values, please define them as macros just
-> after the register definition.
-> 
 >> +};
 >> +
 >> +enum vd55g1_gpio_mode {
 >> +	VD55G1_GPIO_MODE_IN = 0x01,
 >> +	VD55G1_GPIO_MODE_STROBE = 0x02,
-> 
-> Same here.
-> 
 >> +};
 >> +
 >> +struct vd55g1_mode {
@@ -729,15 +687,6 @@ can safely be called HDR. What about you ?
 >> +		.height = 240,
 >> +	},
 >> +};
-> 
-> The sensor seems to support a freely configurable crop rectangle. Can we
-> avoid hardcoding modes ?
-> 
-
-I had issues trying to do so. This is something I'll need to come back
-later on.
-Is it acceptable to keep it as is for a first intention ?
-
 >> +
 >> +enum vd55g1_expo_state {
 >> +	VD55G1_EXP_AUTO,
@@ -755,19 +704,6 @@ Is it acceptable to keep it as is for a first intention ?
 >> +
 >> +struct vd55g1 {
 >> +	struct i2c_client *i2c_client;
-> 
-> All the places that use this field do so only to access i2c_client->dev.
-> Replace it with a struct device *dev, and use it through the code in
-> every location where you use client->dev. You can then also get rid of
-> most of the
-> 
-> 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
-> 
-> variables.
-> 
-
-This cleans a lot of boilerplate code, thank you for pointing this.
-
 >> +	struct v4l2_subdev sd;
 >> +	struct media_pad pad;
 >> +	struct regulator_bulk_data supplies[ARRAY_SIZE(vd55g1_supply_name)];
@@ -808,10 +744,7 @@ This cleans a lot of boilerplate code, thank you for pointing this.
 >> +}
 >> +
 >> +static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
-> 
-> In the few places where this is called, you immediately call to_vd55g1()
-> afterwards. I'd replace this function with ctrl_to_vd55g1().
->>> +{
+>> +{
 >> +	return &container_of_const(ctrl->handler, struct vd55g1,
 >> +				   ctrl_handler)->sd;
 >> +}
@@ -826,7 +759,7 @@ This cleans a lot of boilerplate code, thank you for pointing this.
 >> +			return vd55g1_mbus_codes[i].bpp;
 >> +	}
 >> +	/* Should never happen */
->> +	dev_warn(&client->dev, "Unsupported code %d. default to 8 bpp", code);
+>> +	dev_warn(&client->dev, "Unsupported code %d. default to 8 bpp\n", code);
 >> +	return 8;
 >> +}
 >> +
@@ -840,41 +773,27 @@ This cleans a lot of boilerplate code, thank you for pointing this.
 >> +			return vd55g1_mbus_codes[i].data_type;
 >> +	}
 >> +	/* Should never happen */
->> +	dev_warn(&client->dev, "Unsupported code %d. default to MIPI_CSI2_DT_RAW8 data type",
+>> +	dev_warn(&client->dev, "Unsupported code %d. default to MIPI_CSI2_DT_RAW8 data type\n",
 >> +		 code);
 >> +	return MIPI_CSI2_DT_RAW8;
 >> +}
-> 
-> Replace these two functions with a
-> 
-> const struct vd55g1_fmt_desc *vd55g1_get_format_desc(u32 code)
-> 
-> (or similar) and access the fields of the structure in the callers. That
-> will avoid double lookups.
-> 
 >> +
 >> +static s32 get_pixel_rate(struct vd55g1 *sensor)
-> 
-> Please prefix all functions with vd55g1_ to avoid namespace clashes.
-> 
 >> +{
 >> +	struct v4l2_subdev_state *state =
 >> +		v4l2_subdev_get_locked_active_state(&sensor->sd);
-> 
-> This function is called from vd55g1_init_ctrls() which, as far as I can
-> tell, does not lock the active state.
-> 
 >> +	const struct v4l2_mbus_framefmt *format =
 >> +		v4l2_subdev_state_get_format(state, 0);
 >> +
 >> +	return div64_u64((u64)sensor->data_rate_in_mbps,
-> 
-> data_rate_in_mbps is a 32-bit value, why do you need 64-bit division ?
-> 
-
-I don't ;)
-
 >> +			 get_bpp_by_code(sensor, format->code));
+> 
+> div_u64() perhaps?
+> 
+
+Yes, something similar has been pointed by Laurent, data_rate can be
+hold in a u32 so I will just use a '/' instead.
+
 >> +}
 >> +
 >> +static s32 get_min_line_length(struct vd55g1 *sensor)
@@ -884,16 +803,6 @@ I don't ;)
 >> +	u32 min_line_length;
 >> +	struct v4l2_subdev_state *state =
 >> +		v4l2_subdev_get_locked_active_state(&sensor->sd);
-> 
-> Same issue as above, and same problem below too.
->> I think it would make the code clearer if you passedthe active state to
-> this and other similar functions.
->
-
-Thank you, I misunderstood what v4l2_subdev_get_locked_active_state do.
-I will rework the active state part for the next version. I would really
-appreciate a double check once done.
-
 >> +	const struct v4l2_rect *crop =
 >> +		v4l2_subdev_state_get_crop(state, 0);
 >> +	const struct v4l2_mbus_framefmt *format =
@@ -923,9 +832,7 @@ appreciate a double check once done.
 >> +	const struct v4l2_rect *crop = v4l2_subdev_state_get_crop(state, 0);
 >> +
 >> +	return get_min_line_length(sensor) - crop->width;
-> 
-> get_min_line_length() is called here only, I'd merge the two functions.
->>> +}
+>> +}
 >> +
 >> +static void get_vblank_limits(struct vd55g1 *sensor,
 >> +			      struct vblank_limits *limits)
@@ -958,13 +865,6 @@ appreciate a double check once done.
 >> +	/*
 >> +	 * This loop isn't necessary but in certains conditions (platforms, cpu
 >> +	 * load, etc.) it has been observed that the bulk write could timeout.
-> 
-> Any idea why ? And if it's a timeout, does regmap_bulk_write() return a
-> shorter byte count ? That seems strange.
-> 
-
-To be fair I have no idea :'(
-
 >> +	 */
 >> +	while (len) {
 >> +		sz = min(len, chunk_sz);
@@ -1018,9 +918,6 @@ To be fair I have no idea :'(
 >> +				       ARRAY_SIZE(vd55g1_supply_name),
 >> +				       sensor->supplies);
 >> +}
-> 
-> I'd move this just above probe().
-> 
 >> +
 >> +static int vd55g1_prepare_clock_tree(struct vd55g1 *sensor)
 >> +{
@@ -1028,14 +925,10 @@ To be fair I have no idea :'(
 >> +	/* Double data rate */
 >> +	u32 mipi_freq = sensor->link_freq * 2;
 >> +	u32 sys_clk, mipi_div, pixel_div;
->> +	int ret = 0;
 >> +
 >> +	if (sensor->xclk_freq < 6 * HZ_PER_MHZ ||
 >> +	    sensor->xclk_freq > 27 * HZ_PER_MHZ) {
-> 
-> I would define macros at the top of the file, named VD55G1_XCLK_FREQ_MIN
-> and VD55G1_XCLK_FREQ_MAX (or something similar).
->>> +		dev_err(&client->dev,
+>> +		dev_err(&client->dev,
 >> +			"Only 6Mhz-27Mhz clock range supported. Provided %lu MHz\n",
 >> +			sensor->xclk_freq / HZ_PER_MHZ);
 >> +		return -EINVAL;
@@ -1043,9 +936,7 @@ To be fair I have no idea :'(
 >> +
 >> +	if (mipi_freq < 250 * HZ_PER_MHZ ||
 >> +	    mipi_freq > 1200 * HZ_PER_MHZ) {
-> 
-> Same here.
->>> +		dev_err(&client->dev,
+>> +		dev_err(&client->dev,
 >> +			"Only 250Mhz-1200Mhz link frequency range supported. Provided %lu MHz\n",
 >> +			mipi_freq / HZ_PER_MHZ);
 >> +		return -EINVAL;
@@ -1069,32 +960,9 @@ To be fair I have no idea :'(
 >> +
 >> +	sensor->pixel_clock = sys_clk / pixel_div;
 >> +	/* Frequency to data rate is 1:1 ratio for MIPI */
-> 
-> D-PHY uses DDR. The mipi_freq variable is correctly assigned to
-> link_freq * 2, but calling it mipi_freq is a bit confusing. You could
-> rename mipi_freq to mipi_rate, but maybe performing the above
-> calculations on the link frequency and dropping the variable would be
-> cleaner.
-> 
-
-It is indeed a bitrate and not a frequency, I'll rename it to mipi_rate,
-store it directly to the vd55g1 struct :
-	/* MIPI bus is double data rate */
-	sensor->mipi_rate = sensor->link_freq * 2;
-and use it in calculations after.
-I changed HZ_PER_MHZ to MEGA in relevant sections too.
-Much clearer this way.
-
 >> +	sensor->data_rate_in_mbps = mipi_freq;
-> 
-> Unless I'm missing something, mipi_freq is expressed in Hz, so
-> data_rate_in_mbps is not expressed in Mbps.
-> 
-
-Correct, it's in bps. I will remove the _in_mbps suffix.
-
 >> +
->> +	return ret;
+>> +	return 0;
 >> +}
 >> +
 >> +static int vd55g1_update_patgen(struct vd55g1 *sensor, u32 patgen_index)
@@ -1109,12 +977,6 @@ Correct, it's in bps. I will remove the _in_mbps suffix.
 >> +	int ret = 0;
 >> +
 >> +	BUILD_BUG_ON(ARRAY_SIZE(index2val) != ARRAY_SIZE(vd55g1_tp_menu));
-> 
-> I like this :-)
-> 
-
-Props to Sakari !
-
 >> +
 >> +	if (pattern != 0) {
 >> +		reg |= VD55G1_PATGEN_ENABLE;
@@ -1157,9 +1019,6 @@ Props to Sakari !
 >> +		vd55g1_write(sensor, VD55G1_REG_MANUAL_DIGITAL_GAIN,
 >> +			     sensor->dgain_ctrl->val, &ret);
 >> +	}
-> 
-> No need for curly brackets.
-> 
 >> +
 >> +	return ret;
 >> +}
@@ -1392,9 +1251,6 @@ Props to Sakari !
 >> +}
 >> +
 >> +static void vd55g1_lock_ctrls(struct vd55g1 *sensor, bool enable)
-> 
-> Maybe vd55g1_grab_ctrls() to better reflect what the function does.
-> 
 >> +{
 >> +	/* These settings cannot change during stream */
 >> +	v4l2_ctrl_grab(sensor->hflip_ctrl, enable);
@@ -1402,12 +1258,6 @@ Props to Sakari !
 >> +	v4l2_ctrl_grab(sensor->patgen_ctrl, enable);
 >> +	v4l2_ctrl_grab(sensor->hdr_ctrl, enable);
 >> +	v4l2_ctrl_grab(sensor->hblank_ctrl, enable);
-> 
-> The last one doesn't need to be grabbed as it's read-only.
-> 
-
-Ah thanks, leftover from the configurable hblank.
-
 >> +}
 >> +
 >> +static int vd55g1_enable_streams(struct v4l2_subdev *sd,
@@ -1416,7 +1266,7 @@ Ah thanks, leftover from the configurable hblank.
 >> +{
 >> +	struct vd55g1 *sensor = to_vd55g1(sd);
 >> +	struct i2c_client *client = v4l2_get_subdevdata(&sensor->sd);
->> +	int ret = 0;
+>> +	int ret;
 >> +
 >> +	ret = pm_runtime_resume_and_get(&client->dev);
 >> +	if (ret < 0)
@@ -1425,9 +1275,6 @@ Ah thanks, leftover from the configurable hblank.
 >> +	vd55g1_write(sensor, VD55G1_REG_EXT_CLOCK, sensor->xclk_freq, &ret);
 >> +
 >> +	/* configure output */
-> 
-> s/configure/Configure/
-> 
 >> +	vd55g1_write(sensor, VD55G1_REG_MIPI_DATA_RATE,
 >> +		     sensor->data_rate_in_mbps, &ret);
 >> +	vd55g1_write(sensor, VD55G1_REG_OIF_CTRL, sensor->oif_ctrl, &ret);
@@ -1467,14 +1314,11 @@ Ah thanks, leftover from the configurable hblank.
 >> +
 >> +	vd55g1_lock_ctrls(sensor, true);
 >> +
->> +	return ret;
-> 
-> 	return 0;
-> 
+>> +	return 0;
 >> +
 >> +err_rpm_put:
 >> +	pm_runtime_put(&client->dev);
->> +	return ret;
+>> +	return 0;
 >> +}
 >> +
 >> +static int vd55g1_disable_streams(struct v4l2_subdev *sd,
@@ -1494,7 +1338,7 @@ Ah thanks, leftover from the configurable hblank.
 >> +	vd55g1_wait_state(sensor, VD55G1_SYSTEM_FSM_SW_STBY, &ret);
 >> +
 >> +	if (ret)
->> +		dev_warn(&client->dev, "Can't disable stream");
+>> +		dev_warn(&client->dev, "Can't disable stream\n");
 >> +
 >> +	vd55g1_lock_ctrls(sensor, false);
 >> +
@@ -1515,20 +1359,20 @@ Ah thanks, leftover from the configurable hblank.
 >> +	vd55g1_write(sensor, VD55G1_REG_BOOT, VD55G1_BOOT_PATCH_SETUP, &ret);
 >> +	vd55g1_poll_reg(sensor, VD55G1_REG_BOOT, 0, &ret);
 >> +	if (ret) {
->> +		dev_err(&client->dev, "Failed to apply patch");
+>> +		dev_err(&client->dev, "Failed to apply patch\n");
 >> +		return ret;
 >> +	}
 >> +
 >> +	vd55g1_read(sensor, VD55G1_REG_FWPATCH_REVISION, &patch, &ret);
 >> +	if (patch != (VD55G1_FWPATCH_REVISION_MAJOR << 8) +
 >> +	    VD55G1_FWPATCH_REVISION_MINOR) {
->> +		dev_err(&client->dev, "Bad patch version expected %d.%d got %d.%d",
+>> +		dev_err(&client->dev, "Bad patch version expected %d.%d got %d.%d\n",
 >> +			VD55G1_FWPATCH_REVISION_MAJOR,
 >> +			VD55G1_FWPATCH_REVISION_MINOR,
 >> +			(u8)(patch >> 8), (u8)(patch & 0xff));
 >> +		return -ENODEV;
 >> +	}
->> +	dev_dbg(&client->dev, "patch %d.%d applied",
+>> +	dev_dbg(&client->dev, "patch %d.%d applied\n",
 >> +		(u8)(patch >> 8), (u8)(patch & 0xff));
 >> +
 >> +	return 0;
@@ -1769,13 +1613,6 @@ Ah thanks, leftover from the configurable hblank.
 >> +		is_auto = (ctrl->val == V4L2_EXPOSURE_AUTO);
 >> +		__v4l2_ctrl_grab(sensor->ae_lock_ctrl, !is_auto);
 >> +		__v4l2_ctrl_grab(sensor->ae_bias_ctrl, !is_auto);
-> 
-> Doesn't the control framework have an auto-cluster feature that handles
-> this automatically ?
-> 
-
-I just re-tested it to make sure and it doesn't.
-
 >> +		break;
 >> +	case V4L2_CID_HDR_SENSOR_MODE:
 >> +		/* Discriminate if the userspace changed the control value */
@@ -1800,15 +1637,6 @@ I just re-tested it to make sure and it doesn't.
 >> +
 >> +	switch (ctrl->id) {
 >> +	case V4L2_CID_HFLIP:
-> 
-> Don't you need to also list VFLIP here ? Or does the control framework
-> translate the control ID to the first constrol of the cluster ? Same
-> comment where applicable below, and for .g_volatile_ctrl().
-> 
-
-Yes, the control framework grabs the HFLIP alonside the VFLIP since they
-are in the same cluster. Quite handy !
-
 >> +		ret = vd55g1_write(sensor, VD55G1_REG_ORIENTATION,
 >> +				   sensor->hflip_ctrl->val |
 >> +					   (sensor->vflip_ctrl->val << 1),
@@ -1981,14 +1809,11 @@ are in the same cluster. Quite handy !
 >> +		return ret;
 >> +
 >> +	if (id != VD55G1_MODEL_ID) {
->> +		dev_warn(&client->dev, "Unsupported sensor id %x", (u32)id);
+>> +		dev_warn(&client->dev, "Unsupported sensor id %x\n", (u32)id);
 >> +		return -ENODEV;
 >> +	}
 >> +
 >> +	return vd55g1_check_sensor_revision(sensor);
-> 
-> You can merge those two functions into a single one.
-> 
 >> +}
 >> +
 >> +static int vd55g1_power_on(struct device *dev)
@@ -2000,13 +1825,13 @@ are in the same cluster. Quite handy !
 >> +	ret = regulator_bulk_enable(ARRAY_SIZE(vd55g1_supply_name),
 >> +				    sensor->supplies);
 >> +	if (ret) {
->> +		dev_err(dev, "Failed to enable regulators %d", ret);
+>> +		dev_err(dev, "Failed to enable regulators %d\n", ret);
 >> +		return ret;
 >> +	}
 >> +
 >> +	ret = clk_prepare_enable(sensor->xclk);
 >> +	if (ret) {
->> +		dev_err(dev, "Failed to enable clock %d", ret);
+>> +		dev_err(dev, "Failed to enable clock %d\n", ret);
 >> +		goto disable_bulk;
 >> +	}
 >> +
@@ -2019,29 +1844,20 @@ are in the same cluster. Quite handy !
 >> +	}
 >> +
 >> +	ret = vd55g1_detect(sensor);
-> 
-> Is this needed every time the sensor is powered up ?
-> 
-
-No, but I like the fact that there is only one power up sequence instead
-of spliting it in two with one doing the detection and one not. I think
-it's less error prone this way, plus it doesn't hurt to check it again
-right ?
-
 >> +	if (ret) {
->> +		dev_err(dev, "Sensor detect failed %d", ret);
+>> +		dev_err(dev, "Sensor detect failed %d\n", ret);
 >> +		goto disable_clock;
 >> +	}
 >> +
 >> +	ret = vd55g1_patch(sensor);
 >> +	if (ret) {
->> +		dev_err(dev, "Sensor patch failed %d", ret);
+>> +		dev_err(dev, "Sensor patch failed %d\n", ret);
 >> +		goto disable_clock;
 >> +	}
 >> +
 >> +	ret = vd55g1_wait_state(sensor, VD55G1_SYSTEM_FSM_SW_STBY, NULL);
 >> +	if (ret) {
->> +		dev_err(dev, "Sensor waiting after patch failed %d",
+>> +		dev_err(dev, "Sensor waiting after patch failed %d\n",
 >> +			ret);
 >> +		goto disable_clock;
 >> +	}
@@ -2065,12 +1881,6 @@ right ?
 >> +
 >> +	clk_disable_unprepare(sensor->xclk);
 >> +	gpiod_set_value_cansleep(sensor->reset_gpio, 1);
-> 
-> The order is not the exact opposite of power_on(). Is that on purpose ?
-> 
-
-Oops.
-
 >> +	regulator_bulk_disable(ARRAY_SIZE(sensor->supplies), sensor->supplies);
 >> +	return 0;
 >> +}
@@ -2081,7 +1891,7 @@ Oops.
 >> +	struct i2c_client *client = sensor->i2c_client;
 >> +	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
 >> +	u8 n_lanes;
->> +	int ret = 0;
+>> +	int ret;
 >> +
 >> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &ep);
 >> +	if (ret)
@@ -2117,6 +1927,16 @@ Oops.
 >> +		dev_err(&client->dev, "Multiple link frequencies not supported\n");
 >> +		ret = -EINVAL;
 >> +		goto done;
+> 
+> Please check the link frequency matches with what the driver supports,
+> using e.g. v4l2_link_freq_to_bitmap().
+> 
+
+Are you referring to checks performed in in vd55g1_prepare_clock_tree()
+? Keep in mind it will change a bit with Laurent's comments though.
+The sensor supports a range of frequencies therefore I chose to check it
+manually instead of v4l2_link_freq_to_bitmap().
+
 >> +	}
 >> +	sensor->link_freq = ep.link_frequencies[0];
 >> +
@@ -2218,28 +2038,30 @@ Oops.
 >> +	sensor->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
 >> +	ret = media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
 >> +	if (ret) {
->> +		dev_err(&client->dev, "Failed to init media entity : %d", ret);
+>> +		dev_err(&client->dev, "Failed to init media entity: %d\n",
+>> +			ret);
 >> +		return ret;
 >> +	}
 >> +
 >> +	sensor->sd.state_lock = sensor->ctrl_handler.lock;
 >> +	ret = v4l2_subdev_init_finalize(&sensor->sd);
 >> +	if (ret) {
->> +		dev_err(&client->dev, "Subdev init error: %d", ret);
+>> +		dev_err(&client->dev, "Subdev init error: %d\n", ret);
 >> +		goto err_ctrls;
 >> +	}
 >> +
 >> +	/*
->> +	 * Initiliaze controls after v4l2_subdev_init_finalize() to make sure
+>> +	 * Initialize controls after v4l2_subdev_init_finalize() to make sure
 >> +	 * default values are set.
 >> +	 */
 >> +	ret = vd55g1_init_ctrls(sensor);
 >> +	if (ret) {
->> +		dev_err(&client->dev, "Controls initialization failed %d", ret);
+>> +		dev_err(&client->dev, "Controls initialization failed %d\n",
+>> +			ret);
 >> +		goto err_media;
 >> +	}
 >> +
->> +	return ret;
+>> +	return 0;
 >> +
 >> +err_ctrls:
 >> +	v4l2_ctrl_handler_free(sensor->sd.ctrl_handler);
@@ -2272,17 +2094,17 @@ Oops.
 >> +
 >> +	ret = vd55g1_parse_dt(sensor);
 >> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to parse Device Tree.");
+>> +		return dev_err_probe(dev, ret, "Failed to parse Device Tree\n");
 >> +
 >> +	/* Get (and check) resources : power regs, ext clock, reset gpio */
 >> +	ret = vd55g1_get_regulators(sensor);
 >> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to get regulators.");
+>> +		return dev_err_probe(dev, ret, "Failed to get regulators\n");
 >> +
 >> +	sensor->xclk = devm_clk_get(dev, NULL);
 >> +	if (IS_ERR(sensor->xclk))
 >> +		return dev_err_probe(dev, PTR_ERR(sensor->xclk),
->> +				     "Failed to get xclk.");
+>> +				     "Failed to get xclk\n");
 >> +
 >> +	sensor->xclk_freq = clk_get_rate(sensor->xclk);
 >> +	ret = vd55g1_prepare_clock_tree(sensor);
@@ -2293,12 +2115,12 @@ Oops.
 >> +						     GPIOD_OUT_HIGH);
 >> +	if (IS_ERR(sensor->reset_gpio))
 >> +		return dev_err_probe(dev, PTR_ERR(sensor->reset_gpio),
->> +				     "Failed to get reset gpio.");
+>> +				     "Failed to get reset gpio\n");
 >> +
 >> +	sensor->regmap = devm_cci_regmap_init_i2c(client, 16);
 >> +	if (IS_ERR(sensor->regmap))
 >> +		return dev_err_probe(dev, PTR_ERR(sensor->regmap),
->> +				     "Failed to init regmap.");
+>> +				     "Failed to init regmap\n");
 >> +
 >> +	/* Detect if sensor is present and if its revision is supported */
 >> +	ret = vd55g1_power_on(dev);
@@ -2315,15 +2137,27 @@ Oops.
 >> +
 >> +	ret = vd55g1_subdev_init(sensor);
 >> +	if (ret) {
->> +		dev_err(dev, "V4l2 init failed : %d", ret);
+>> +		dev_err(dev, "V4l2 init failed: %d\n", ret);
 >> +		goto err_power_off;
 >> +	}
 >> +
 >> +	ret = v4l2_async_register_subdev(&sensor->sd);
 >> +	if (ret) {
->> +		dev_err(dev, "async subdev register failed %d", ret);
+>> +		dev_err(dev, "async subdev register failed %d\n", ret);
 >> +		goto err_subdev;
 >> +	}
+> 
+> Aren't you missing:
+> 
+> 	pm_runtime_put_autosuspend(dev);
+> 
+> here?
+> 
+
+Thank you. I'll add it to the pm_runtime block above.
+I also noticed I miss the pm_runtime_dont_use_autosuspend() call in
+err_power_off. I'll add that too.
+
 >> +
 >> +	return 0;
 >> +
@@ -2377,6 +2211,7 @@ Oops.
 >> +MODULE_AUTHOR("Sylvain Petinot <sylvain.petinot@foss.st.com>");
 >> +MODULE_DESCRIPTION("VD55G1 camera subdev driver");
 >> +MODULE_LICENSE("GPL");
+>>
 > 
 
 -- 
