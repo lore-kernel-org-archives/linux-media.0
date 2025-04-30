@@ -1,189 +1,292 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDF42D81B4;
-	Tue, 29 Apr 2025 23:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818AE801;
+	Wed, 30 Apr 2025 05:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970831; cv=none; b=fM0wp9cCcEcr3SGOFT7hFcK2k7sebTtKbFFCz/TthfjFmDf2enaaB/M88gnYU8feeq39eWtWePoxSrSRE6Y8mcxslKTIiuzAvLXZSi+ZSmuN2+TGzAlTkjFcwHXBieccnDzxUbqjMkAE69mxkQxD24tKSF78T0XAx1ongKWgdmw=
+	t=1745991507; cv=none; b=hnHYPpIVrnoqC/21yxIsxn3ndDsMAuesGn3JPUrsdGL0JHpV/DohO67tsxNgc1MZwgUoBYf4Mne1r8Otbe6jT2WJH2Yb+8GZee8FRrM/DvGRPilha6r/lvRIlFBA0sEjkVA2N6x+lQoMaWncmvHoodopTqCNyc5GjWaCeqD7oJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970831; c=relaxed/simple;
-	bh=sLqtEne9eurWr8oSinTn0V2+KBfKYwojlJKu9hT6sFE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uuP7jD2xZztbeO3r9kfJW3GpR8gmVv6Yl7LzQGI3M4kJjmHCrrruKLMl0wPbT0HAlhqgPvWp4sNzT26z9zES1PP8SjhfU4XCxSsWDbPtuFe5HfC6MfHBM53mLBnnz2Rzu1gneH7h74xM67bk+JqE3ljKwHslw5m3BpRkJN/ZNS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=A/0fzA4/; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1745991507; c=relaxed/simple;
+	bh=B2NidxMu4iRLcef9BLgK8PV62E/VhYEy7e5YDJIc8EA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tMjkXvah4UHWYpHWzbo44GYj6lSywT/ONfwPSf4Hl+QNMTKyLuf1GAnsCL6g+fLww3cXtQmLwJyeg8iFamAbO23VgCOexnLvUmRrsWVsJKl4NmHqKHh43Ysi78YnYNWkuVuJOUEWElc+j4yixGDYYKvJ49B/ydUYEvwbBvy+hJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=m0S6Ujh8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="A/0fzA4/"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 698361961;
-	Wed, 30 Apr 2025 01:53:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1745970813;
-	bh=sLqtEne9eurWr8oSinTn0V2+KBfKYwojlJKu9hT6sFE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A/0fzA4/y3+UQlVb7KFOekopTZYFJJcfuwyM0kKSzYK5jgLuh9bkItScITcb7NZiF
-	 d7WBSaPT317QqwXzTiduGfpNyFtZs18MmsoCmgTJxCKbBsZ3y4FXqIkqhMDnOfCQF+
-	 XjROy8ve4QKN25O3R/jSYTx+5wEbe586OEY6y2O4=
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-To: linux-media@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 7/7] media: renesas: vsp1: Implement control events
-Date: Wed, 30 Apr 2025 02:53:22 +0300
-Message-ID: <20250429235322.29826-8-laurent.pinchart+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250429235322.29826-1-laurent.pinchart+renesas@ideasonboard.com>
-References: <20250429235322.29826-1-laurent.pinchart+renesas@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="m0S6Ujh8"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53TLb32e011095;
+	Wed, 30 Apr 2025 05:38:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	KESzOejqPulb1TPwlFso+th0l+OLtBke9zOk/N/k4to=; b=m0S6Ujh8QffSOfj2
+	W588g10xawwW3TxE0KAnVuavnFN+Xm+VSQ1W5vbmgUYKEyr4ARXYlt4iOMDGkjFp
+	uukREeUbSyoIPEaleJh2W96KVHBKbpnRYiZXAlYMkjUHASQcPWTa7+k3BciEcMHd
+	HtYMuRxKIVzptmdoKJmQ+SMJXeVUv6YbbLDL0qmUcRR5jblVuO2iPQekSfWsI/Ar
+	HAFONZG0jHK+EVw1s441B5e+rKq29rmO0LyxwHKU3CCe3Q2NPlpiGU5lCkIZTuDU
+	LUaslJxGOY7xy5db57I6GSCn+KIizW+R3PKO++TpZOdgda8qLUHiroNC/6y1Yf6c
+	/x4SAg==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46b6uarweb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Apr 2025 05:38:11 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53U5cA89026083
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Apr 2025 05:38:10 GMT
+Received: from [10.50.5.200] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 29 Apr
+ 2025 22:38:03 -0700
+Message-ID: <32379a29-ab58-95b3-77f9-d1ada61e5359@quicinc.com>
+Date: Wed, 30 Apr 2025 11:08:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 01/23] media: iris: Skip destroying internal buffer if
+ not dequeued
+Content-Language: en-US
+To: Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Vikash Garodia
+	<quic_vgarodia@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Stefan Schmidt
+	<stefan.schmidt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        "Rob Herring" <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>
+CC: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@oss.qualcomm.com>,
+        Neil Armstrong
+	<neil.armstrong@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <20250428-qcom-iris-hevc-vp9-v2-0-3a6013ecb8a5@quicinc.com>
+ <20250428-qcom-iris-hevc-vp9-v2-1-3a6013ecb8a5@quicinc.com>
+ <dc9b20aecc8740896b2b3e7352b8e0d73d43fed2.camel@collabora.com>
+From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <dc9b20aecc8740896b2b3e7352b8e0d73d43fed2.camel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gziX25vrn4uEgWo7AxBvtamTrqNjscOC
+X-Authority-Analysis: v=2.4 cv=KtlN2XWN c=1 sm=1 tr=0 ts=6811b743 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=e6OCQq0veDw7Aj3gnXcA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: gziX25vrn4uEgWo7AxBvtamTrqNjscOC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDAzNiBTYWx0ZWRfX3fuVyDZ9vfVi anL3EQ41BDYNk4lQq6xNvM3HiCWFG43S0KFQ8Ktk5hsdnAvB8rXnMFO/444+LLxRIUdY7kuU5cH 0fZTJX1ew+RcKG1gQET4eoiXloCbFmBSo+mRlZqgsjS452JIT33ol4FfSFdSkA0gyMx2tCC9XVN
+ KudJ5bqpNbKPDVsBllnOgRVtJ5QPMFwawpnWANCBk1SnsXRidG4+fXhkfsICMzd8umyTSd73wUr OPzOAEXE2vqkHN1pGWqX/mlRsBh1yo52EgSOt62A0ov4cScGNiOYVGJs9CRrfB47OYFZWqyGPiT 5wQB3g8mlzBSgRI0BnBcoWP5kTm+L1JLuOdqlmvUoc5Vx1mHMcZiE0PdLXKRaaYjvg0qc1k89u+
+ 8zDSkGdtgE3O5g0qgng1B5YSI6nVxE3fq9Ig/Uwh68SqwxqTsKm10Pf3SfnpqUdcOqokBuG3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-30_01,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504300036
 
-The V4L2 API requires drivers that expose controls to implement control
-notification events. This is enforced by v4l2-compliance. Add event
-handling to the VSP1 entities that create controls to fix the compliance
-failures.
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
----
- drivers/media/platform/renesas/vsp1/vsp1_brx.c    | 1 +
- drivers/media/platform/renesas/vsp1/vsp1_clu.c    | 1 +
- drivers/media/platform/renesas/vsp1/vsp1_entity.c | 9 +++++++++
- drivers/media/platform/renesas/vsp1/vsp1_entity.h | 2 ++
- drivers/media/platform/renesas/vsp1/vsp1_histo.c  | 1 +
- drivers/media/platform/renesas/vsp1/vsp1_lut.c    | 1 +
- drivers/media/platform/renesas/vsp1/vsp1_rwpf.c   | 1 +
- drivers/media/platform/renesas/vsp1/vsp1_sru.c    | 1 +
- 8 files changed, 17 insertions(+)
 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_brx.c b/drivers/media/platform/renesas/vsp1/vsp1_brx.c
-index 911359faa600..b1a2c68e9944 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_brx.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_brx.c
-@@ -269,6 +269,7 @@ static const struct v4l2_subdev_pad_ops brx_pad_ops = {
- };
- 
- static const struct v4l2_subdev_ops brx_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &brx_pad_ops,
- };
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_clu.c b/drivers/media/platform/renesas/vsp1/vsp1_clu.c
-index a56c038a2c71..04c466c4da81 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_clu.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_clu.c
-@@ -130,6 +130,7 @@ static const struct v4l2_subdev_pad_ops clu_pad_ops = {
- };
- 
- static const struct v4l2_subdev_ops clu_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &clu_pad_ops,
- };
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_entity.c b/drivers/media/platform/renesas/vsp1/vsp1_entity.c
-index a3d4bf2887ec..27c172788621 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_entity.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_entity.c
-@@ -12,6 +12,7 @@
- 
- #include <media/media-entity.h>
- #include <media/v4l2-ctrls.h>
-+#include <media/v4l2-event.h>
- #include <media/v4l2-subdev.h>
- 
- #include "vsp1.h"
-@@ -389,6 +390,11 @@ static const struct v4l2_subdev_internal_ops vsp1_entity_internal_ops = {
- 	.init_state = vsp1_entity_init_state,
- };
- 
-+const struct v4l2_subdev_core_ops vsp1_entity_core_ops = {
-+	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-+	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-+};
-+
- /* -----------------------------------------------------------------------------
-  * Media Operations
-  */
-@@ -629,6 +635,9 @@ int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
- 	subdev->entity.ops = &vsp1->media_ops;
- 	subdev->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
-+	if (ops->core == &vsp1_entity_core_ops)
-+		subdev->flags |= V4L2_SUBDEV_FL_HAS_EVENTS;
-+
- 	snprintf(subdev->name, sizeof(subdev->name), "%s %s",
- 		 dev_name(vsp1->dev), name);
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_entity.h b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-index 5542f6446b16..626fb1d5d470 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_entity.h
-@@ -142,6 +142,8 @@ static inline struct vsp1_entity *to_vsp1_entity(struct v4l2_subdev *subdev)
- 	return container_of(subdev, struct vsp1_entity, subdev);
- }
- 
-+extern const struct v4l2_subdev_core_ops vsp1_entity_core_ops;
-+
- int vsp1_entity_init(struct vsp1_device *vsp1, struct vsp1_entity *entity,
- 		     const char *name, unsigned int num_pads,
- 		     const struct v4l2_subdev_ops *ops, u32 function);
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_histo.c b/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-index a1b3671a0873..158d01aa5e81 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_histo.c
-@@ -370,6 +370,7 @@ static const struct v4l2_subdev_pad_ops histo_pad_ops = {
- };
- 
- static const struct v4l2_subdev_ops histo_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &histo_pad_ops,
- };
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_lut.c b/drivers/media/platform/renesas/vsp1/vsp1_lut.c
-index 2ec4d596465d..94bdedcc5c92 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_lut.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_lut.c
-@@ -106,6 +106,7 @@ static const struct v4l2_subdev_pad_ops lut_pad_ops = {
- };
- 
- static const struct v4l2_subdev_ops lut_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &lut_pad_ops,
- };
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_rwpf.c b/drivers/media/platform/renesas/vsp1/vsp1_rwpf.c
-index bd97fc75eb5b..32b018e21f57 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_rwpf.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_rwpf.c
-@@ -351,6 +351,7 @@ static const struct v4l2_subdev_pad_ops vsp1_rwpf_pad_ops = {
- };
- 
- const struct v4l2_subdev_ops vsp1_rwpf_subdev_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &vsp1_rwpf_pad_ops,
- };
- 
-diff --git a/drivers/media/platform/renesas/vsp1/vsp1_sru.c b/drivers/media/platform/renesas/vsp1/vsp1_sru.c
-index e821eac1cbc2..30b482a160c2 100644
---- a/drivers/media/platform/renesas/vsp1/vsp1_sru.c
-+++ b/drivers/media/platform/renesas/vsp1/vsp1_sru.c
-@@ -250,6 +250,7 @@ static const struct v4l2_subdev_pad_ops sru_pad_ops = {
- };
- 
- static const struct v4l2_subdev_ops sru_ops = {
-+	.core	= &vsp1_entity_core_ops,
- 	.pad    = &sru_pad_ops,
- };
- 
--- 
-Regards,
+On 4/29/2025 6:17 PM, Nicolas Dufresne wrote:
+> Not mine to review, but wanted to highlight some best practices,
+> 
+> comment below...
+> 
+> Le lundi 28 avril 2025 à 14:58 +0530, Dikshita Agarwal a écrit :
+>> Firmware might hold the DPB buffers for reference in case of sequence
+>> change, so skip destroying buffers for which QUEUED flag is not removed.
+>> Also, make sure that all buffers are released during streamoff.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 73702f45db81 ("media: iris: allocate, initialize and queue internal buffers")
+>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>> ---
+>>  drivers/media/platform/qcom/iris/iris_buffer.c | 37 +++++++++++++++++++++++++-
+>>  drivers/media/platform/qcom/iris/iris_buffer.h |  3 ++-
+>>  drivers/media/platform/qcom/iris/iris_vdec.c   |  4 +--
+>>  drivers/media/platform/qcom/iris/iris_vidc.c   |  6 +++--
+>>  4 files changed, 44 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/iris/iris_buffer.c b/drivers/media/platform/qcom/iris/iris_buffer.c
+>> index e5c5a564fcb8..606d76b10be2 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_buffer.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_buffer.c
+>> @@ -376,7 +376,7 @@ int iris_destroy_internal_buffer(struct iris_inst *inst, struct iris_buffer *buf
+>>  	return 0;
+>>  }
+>>  
+>> -int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane)
+>> +int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane, bool force)
+> 
+> Its always tempting to just glue a boolean at the end of a parameter
+> list. But this has huge downside in code readability, see below...
+> 
+>>  {
+>>  	const struct iris_platform_data *platform_data = inst->core->iris_platform_data;
+>>  	struct iris_buffer *buf, *next;
+>> @@ -396,6 +396,14 @@ int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane)
+>>  	for (i = 0; i < len; i++) {
+>>  		buffers = &inst->buffers[internal_buf_type[i]];
+>>  		list_for_each_entry_safe(buf, next, &buffers->list, list) {
+>> +			/*
+>> +			 * during stream on, skip destroying internal(DPB) buffer
+>> +			 * if firmware did not return it.
+>> +			 * during close, destroy all buffers irrespectively.
+>> +			 */
+>> +			if (!force && buf->attr & BUF_ATTR_QUEUED)
+>> +				continue;
+>> +
+>>  			ret = iris_destroy_internal_buffer(inst, buf);
+>>  			if (ret)
+>>  				return ret;
+>> @@ -446,6 +454,33 @@ static int iris_release_input_internal_buffers(struct iris_inst *inst)
+>>  	return 0;
+>>  }
+>>  
+>> +void iris_get_num_queued_internal_buffers(struct iris_inst *inst, u32 plane)
+>> +{
+>> +	const struct iris_platform_data *platform_data = inst->core->iris_platform_data;
+>> +	struct iris_buffer *buf, *next;
+>> +	struct iris_buffers *buffers;
+>> +	const u32 *internal_buf_type;
+>> +	u32 internal_buffer_count, i;
+>> +	u32 count = 0;
+>> +
+>> +	if (V4L2_TYPE_IS_OUTPUT(plane)) {
+>> +		internal_buf_type = platform_data->dec_ip_int_buf_tbl;
+>> +		internal_buffer_count = platform_data->dec_ip_int_buf_tbl_size;
+>> +	} else {
+>> +		internal_buf_type = platform_data->dec_op_int_buf_tbl;
+>> +		internal_buffer_count = platform_data->dec_op_int_buf_tbl_size;
+>> +	}
+>> +
+>> +	for (i = 0; i < internal_buffer_count; i++) {
+>> +		buffers = &inst->buffers[internal_buf_type[i]];
+>> +		list_for_each_entry_safe(buf, next, &buffers->list, list)
+>> +			count++;
+>> +		if (count)
+>> +			dev_err(inst->core->dev, "%d buffer of type %d not released",
+>> +				count, internal_buf_type[i]);
+>> +	}
+>> +}
+>> +
+>>  int iris_alloc_and_queue_persist_bufs(struct iris_inst *inst)
+>>  {
+>>  	struct iris_buffers *buffers = &inst->buffers[BUF_PERSIST];
+>> diff --git a/drivers/media/platform/qcom/iris/iris_buffer.h b/drivers/media/platform/qcom/iris/iris_buffer.h
+>> index c36b6347b077..03a32b91cf21 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_buffer.h
+>> +++ b/drivers/media/platform/qcom/iris/iris_buffer.h
+>> @@ -106,7 +106,8 @@ void iris_get_internal_buffers(struct iris_inst *inst, u32 plane);
+>>  int iris_create_internal_buffers(struct iris_inst *inst, u32 plane);
+>>  int iris_queue_internal_buffers(struct iris_inst *inst, u32 plane);
+>>  int iris_destroy_internal_buffer(struct iris_inst *inst, struct iris_buffer *buffer);
+>> -int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane);
+>> +int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane, bool force);
+>> +void iris_get_num_queued_internal_buffers(struct iris_inst *inst, u32 plane);
+>>  int iris_alloc_and_queue_persist_bufs(struct iris_inst *inst);
+>>  int iris_alloc_and_queue_input_int_bufs(struct iris_inst *inst);
+>>  int iris_queue_buffer(struct iris_inst *inst, struct iris_buffer *buf);
+>> diff --git a/drivers/media/platform/qcom/iris/iris_vdec.c b/drivers/media/platform/qcom/iris/iris_vdec.c
+>> index 4143acedfc57..2c1a7162d2da 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_vdec.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_vdec.c
+>> @@ -408,7 +408,7 @@ int iris_vdec_streamon_input(struct iris_inst *inst)
+>>  
+>>  	iris_get_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+>>  
+>> -	ret = iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+>> +	ret = iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, false);
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> @@ -496,7 +496,7 @@ int iris_vdec_streamon_output(struct iris_inst *inst)
+>>  
+>>  	iris_get_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+>>  
+>> -	ret = iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+>> +	ret = iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, false);
+> 
+> If I was reviewing some changes (or even debugging) this specific C
+> file, I would not be able to understanding what this "false" means. I
+> would have to spend extra time, opening the declaration, going back and
+> forth, and breaking the flow.
+> 
+> An alternative approach is to keep the boolean parameter in a static
+> function (c local), and then add two function wrappers that have
+> explicit names.
+> 
+Sure, I can implement the alternative approach, if recommended.
 
-Laurent Pinchart
+If I understand correctly, you are suggesting to have one static helper and
+two wrappers around this. like:
 
+static int iris_destroy_internal_buffers(struct iris_inst *inst, u32 plane,
+bool force)
+{
+	...
+	list_for_each_entry_safe(buf, next, &buffers->list, list) {
+       		if (!force && buf->attr & BUF_ATTR_QUEUED)
+			continue;
+		...
+	}
+	...
+}
+
+//called during stream on
+int iris_destroy_dequeued_internal_buffers(struct iris_inst *inst, u32 plane)
+{
+	return iris_destroy_internal_buffers(inst, plane, false)
+}
+
+//called during close
+int iris_destroy_all_internal_buffers(struct iris_inst *inst, u32 plane)
+{
+	return iris_destroy_internal_buffers(inst, plane, true)
+}
+
+Thanks,
+Dikshita
+> regards,
+> Nicolas
+> 
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> diff --git a/drivers/media/platform/qcom/iris/iris_vidc.c b/drivers/media/platform/qcom/iris/iris_vidc.c
+>> index ca0f4e310f77..56531a7f0dfe 100644
+>> --- a/drivers/media/platform/qcom/iris/iris_vidc.c
+>> +++ b/drivers/media/platform/qcom/iris/iris_vidc.c
+>> @@ -233,8 +233,10 @@ int iris_close(struct file *filp)
+>>  	iris_session_close(inst);
+>>  	iris_inst_change_state(inst, IRIS_INST_DEINIT);
+>>  	iris_v4l2_fh_deinit(inst);
+>> -	iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+>> -	iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+>> +	iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, true);
+>> +	iris_destroy_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, true);
+>> +	iris_get_num_queued_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+>> +	iris_get_num_queued_internal_buffers(inst, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+>>  	iris_remove_session(inst);
+>>  	mutex_unlock(&inst->lock);
+>>  	mutex_destroy(&inst->ctx_q_lock);
+> 
