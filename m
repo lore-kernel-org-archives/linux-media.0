@@ -1,168 +1,94 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AFB2FB2;
-	Wed, 30 Apr 2025 08:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686DA216E23
+	for <linux-media@vger.kernel.org>; Wed, 30 Apr 2025 08:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746001523; cv=none; b=Q7gQE+IZpR+vI4Fk01aHZB6L+pI8rnn7zXmEaMR1cvJYKINJ32JmZULh4Dcs4tKuIMNgF+Xi0OoiOq4YBuM7pi8JWB2WIjZLRBW39g1vBYHUsGj8Rk6B519AfMw7iwlTYaqoVSyj4+h4Ugunf21dVGBSMkp7TiyEDUb09rs0yfo=
+	t=1746001650; cv=none; b=U2dE1Q0owp5LujmYLb4DL+QDkmib/nq3aEgyZb/87RNw4IG2bt3kkMRkObo3Oddj4rkE9ccomQX9UptXY5EcMPxM8fWKWVhocYeHa/4yE8vpS+VES6VQneYyyJR60caBR5fXHjH0cgLloRukgSMGgC9bUpK5Ilv8q7ROYFWq2S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746001523; c=relaxed/simple;
-	bh=xl2PC/u/acKBiCM9v6IH+o5HldOBBnBmnBHN3O2JYik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=C3/gZCHUYjBCTLnyzheeSad/S7TwuSeD1xfnmq6JFpqwR6T4K+Vc4qOI1Ktu3/3OMecYYlkZCjq0D7GjTF1TKtynk6NG+a2U2u7KzHMLttJeEee+J7jtFBAUA5xj/mx1v5PpPClPfHKrCFUtRDsvBBx51T7hBaaDJ38hCQRrEeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=L1UTAJqh; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1746001650; c=relaxed/simple;
+	bh=xPP7d3J9Mbr2HWLZwvqRyujPuKr6mcqoJc9CxFzickE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BydmKjOMcgEo3neC0fPRY+7NrnRa3xe3AEbP7V/SFWM6v9vBFg4VRDmAvLfUbgsxSGR9FOekOI52Bb3op41u5VZHe9FEvYYybgIrYrFoGyIaPxAs8hwM0ryFCxN2QZjdkroCBgyF3Syv+q3JAC/x2VkUqA3BLtzA7jSJPUy1MEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yGUnTNVx; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="L1UTAJqh"
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53U7CCF5005514;
-	Wed, 30 Apr 2025 10:25:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	g96VULOJgTP+rXSvs0fblxCYj+Zob3SZLDsy/ja+mSo=; b=L1UTAJqhDQjAXriu
-	QIYM35A9Zsx4nRUU8b8up4/5WDEt/s5wEG+dLtFTOix1mK11mcRWLNFMoOMhFOLp
-	Kb+gYm8+e1gURB6NA79a+wtPKOlq679CMutcPZeqhO1xEq84Elc69C/0a0A8yvMc
-	LgMpPDYwAxM1nMHaDvHNRj2eqZFhIXtx406/0wOhQvWw/5eWtt6Pc2n6RYetK/DJ
-	IDb2E3GhSBSOhxl6atvQbF0I0DxyVR94rni9bkmUlw1FAmrFnOKHuF9/39a3mp1L
-	903vzHPo6dk4n7aUjm6dugoSWptW6hFN3f3/ORPjkfhnMfSbiz6ygqqfRTpuYGJ5
-	SJ3+BQ==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 46b6tphy93-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 10:25:10 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 02D7940048;
-	Wed, 30 Apr 2025 10:23:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5267B922644;
-	Wed, 30 Apr 2025 10:23:24 +0200 (CEST)
-Received: from [10.252.1.18] (10.252.1.18) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 30 Apr
- 2025 10:23:23 +0200
-Message-ID: <622301ae-0973-4cdb-936c-3152afdbfb46@foss.st.com>
-Date: Wed, 30 Apr 2025 10:23:22 +0200
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yGUnTNVx"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso43992345e9.0
+        for <linux-media@vger.kernel.org>; Wed, 30 Apr 2025 01:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746001647; x=1746606447; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wRxUK2FUEvHutdWtSofNv9/gWau2hfAWBjlb4ZMxnvk=;
+        b=yGUnTNVxneNswlEqap/AcAMeh4io1lZHSWnOlMOeHH+0k2r5aofIDLinlnNAWudJ8Y
+         I006Tqebt6qMuZ7kXnU5POsNb9qDoyBHpmcGjfnRLVIkeCLC4vxFUL0EeTXmSpN0S5nw
+         qxXKj3l3sjVLOEQLZ7qyQlrQ7Buyaax2M3KPkNHrEGDHcZr/u2Gv7m+c7ZxaOyu09dY2
+         2zasulIkA79FNcCI5/hO7buR4Lrfns1eobdNPNenBZq/8WF5LpcCJr/y+FQk8idjJuEf
+         yEB6M6tRTCij5iCM8sc3PeGx2Qa8CjO2BL20erjdv0d3kM2hnkIHP631E8FmHr+E5se+
+         74MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746001647; x=1746606447;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wRxUK2FUEvHutdWtSofNv9/gWau2hfAWBjlb4ZMxnvk=;
+        b=DIbcoyQWx0ufEjntEDrjmhWq1R3PhUETflZog6ax3qrDSwj/Z3v47JfXcY2YFmkqvm
+         4w4UwNl0EuqvACAL/2fwT2AY8JdGxa5NI+TqAHYRT2gtxbNgkanqEFFFNnc5JIPBzdE2
+         WVrrAA7S1KDzpsMSlT9xG4Q6QdZXkkJz257WRDeCfVvcU9NKEqcOvqO2drfn/NhXxSLt
+         +ADXXJjHK6AoHCrfonb268J7JzeZ/BcSNHa6IjQeLOXLY5zfrnyYpPqG4kady+vLAGeO
+         hrinkBhioh38PrlvA6xPv/lE4PP+xXKObXujNGYDf52mxgvXVFbCKWyQqR4BsYkzC4PR
+         F4qA==
+X-Forwarded-Encrypted: i=1; AJvYcCXU8fBF6fNe5PXmCaDl+LDvthyXEUox827kyGorXZGxDuIQPWg2Rai3KWBTwijuoBht23McVG4RoMF/Lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxeqhx6VASJP1LA22h2LIu4naZAhcOeyVQ5siPn1HRbsdpIi40
+	cBkZEij0qBCIjRZJ4OjOjFa/815qhfr9CsoZwDKrWO9OkJh/VoajrCjrKKZwAXg=
+X-Gm-Gg: ASbGnct59C/WRKVG4+nXbro4hP09pTImUWi2iNi3VliAHJJxHCYBAoaut6M0C2N/hhM
+	LFaHwGuObRxGBNpKr5Hr+94VKGSiieTAFhWfFIxY/dQoIJNJr4A+d2C/5GBo03E5r6Q3aSOH0fX
+	kEwvlZy7s/aUT53VV5wlVWJGsjJ5o4mH4weszsX7R60kMpArBZeisE0HwIyA3cX4ABKpQDa9Y9n
+	CIdplMY/wmpfuiiK5PIyH6qgKCrapNi8wrlgZO2RMgq+jdlw+e2R0BNJqrIUFQnNgWG+lYgaZ6X
+	dRtrBz17a9xiU+jl3glMxLNYQR0dbnztN+9vwYMIG6NvUQ==
+X-Google-Smtp-Source: AGHT+IGLgSE82V30QGFI2YTNb5zjWgrYnQeumoN54mXutxmesQkpkc+itpXoS/eNr3nk+ofe2Yujeg==
+X-Received: by 2002:a05:600c:348e:b0:434:fa55:eb56 with SMTP id 5b1f17b1804b1-441b1f3060dmr18338955e9.7.1746001646622;
+        Wed, 30 Apr 2025 01:27:26 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-441b2aecedcsm16461545e9.15.2025.04.30.01.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 01:27:26 -0700 (PDT)
+Date: Wed, 30 Apr 2025 11:27:22 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Tarang Raval <tarang.raval@siliconsignals.io>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>,
+	Jai Luthra <jai.luthra@ideasonboard.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Shravan Chippa <Shravan.Chippa@microchip.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH 0/3] media: i2c: Fix some uninitialized return values
+Message-ID: <cover.1746001540.git.dan.carpenter@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] media: i2c: Add driver for ST VD55G1 camera sensor
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-CC: Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250407-b4-vd55g1-v6-0-1850f18b1f24@foss.st.com>
- <20250407-b4-vd55g1-v6-2-1850f18b1f24@foss.st.com>
- <aBCxpuppB6L-Ft2c@kekkonen.localdomain>
- <70f7bc9b-4533-4c8e-a792-aad9a0b7a6d4@foss.st.com>
- <aBC_gx8vFNWLacgB@kekkonen.localdomain>
-Content-Language: en-US
-From: Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-In-Reply-To: <aBC_gx8vFNWLacgB@kekkonen.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-30_02,2025-04-24_02,2025-02-21_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Sakari,
+These were a couple uninitialized variable bugs detected by Smatch.
 
-On 4/29/25 14:01, Sakari Ailus wrote:
-> Hi Benjamin,
-> 
-> On Tue, Apr 29, 2025 at 01:29:39PM +0200, Benjamin Mugnier wrote:
->>>> +static int vd55g1_check_csi_conf(struct vd55g1 *sensor,
->>>> +				 struct fwnode_handle *endpoint)
->>>> +{
->>>> +	struct i2c_client *client = sensor->i2c_client;
->>>> +	struct v4l2_fwnode_endpoint ep = { .bus_type = V4L2_MBUS_CSI2_DPHY };
->>>> +	u8 n_lanes;
->>>> +	int ret;
->>>> +
->>>> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &ep);
->>>> +	if (ret)
->>>> +		return -EINVAL;
->>>> +
->>>> +	/* Check lanes number */
->>>> +	n_lanes = ep.bus.mipi_csi2.num_data_lanes;
->>>> +	if (n_lanes != 1) {
->>>> +		dev_err(&client->dev, "Sensor only supports 1 lane, found %d\n",
->>>> +			n_lanes);
->>>> +		ret = -EINVAL;
->>>> +		goto done;
->>>> +	}
->>>> +
->>>> +	/* Clock lane must be first */
->>>> +	if (ep.bus.mipi_csi2.clock_lane != 0) {
->>>> +		dev_err(&client->dev, "Clock lane must be mapped to lane 0\n");
->>>> +		ret = -EINVAL;
->>>> +		goto done;
->>>> +	}
->>>> +
->>>> +	/* Handle polarities in sensor configuration */
->>>> +	sensor->oif_ctrl = (ep.bus.mipi_csi2.lane_polarities[0] << 3) |
->>>> +			   (ep.bus.mipi_csi2.lane_polarities[1] << 6);
->>>> +
->>>> +	/* Check the link frequency set in device tree */
->>>> +	if (!ep.nr_of_link_frequencies) {
->>>> +		dev_err(&client->dev, "link-frequency property not found in DT\n");
->>>> +		ret = -EINVAL;
->>>> +		goto done;
->>>> +	}
->>>> +	if (ep.nr_of_link_frequencies != 1) {
->>>> +		dev_err(&client->dev, "Multiple link frequencies not supported\n");
->>>> +		ret = -EINVAL;
->>>> +		goto done;
->>>
->>> Please check the link frequency matches with what the driver supports,
->>> using e.g. v4l2_link_freq_to_bitmap().
->>>
->>
->> Are you referring to checks performed in in vd55g1_prepare_clock_tree()
->> ? Keep in mind it will change a bit with Laurent's comments though.
->> The sensor supports a range of frequencies therefore I chose to check it
->> manually instead of v4l2_link_freq_to_bitmap().
-> 
-> Ok, that's fine then. But please check this results to the frequency that
-> was requested, currently it may be off AFAIR.
-> 
+Dan Carpenter (3):
+  media: i2c: imx334: uninitialized variable in imx334_update_exp_gain()
+  media: i2c: ds90ub960: Fix uninitialized variable in
+    ub960_serializer_temp_ramp()
+  media: i2c: ds90ub960: Fix uninitialized variable in
+    ub960_rxport_bc_ser_config()
 
-As far as I understand it should be fine in v7, could you have a look
-once sent ?
-
->>>> +	ret = v4l2_async_register_subdev(&sensor->sd);
->>>> +	if (ret) {
->>>> +		dev_err(dev, "async subdev register failed %d\n", ret);
->>>> +		goto err_subdev;
->>>> +	}
->>>
->>> Aren't you missing:
->>>
->>> 	pm_runtime_put_autosuspend(dev);
->>>
->>> here?
->>>
->>
->> Thank you. I'll add it to the pm_runtime block above.
->> I also noticed I miss the pm_runtime_dont_use_autosuspend() call in
->> err_power_off. I'll add that too.
-> 
-> Ack, sounds good.
-> 
+ drivers/media/i2c/ds90ub960.c | 4 ++--
+ drivers/media/i2c/imx334.c    | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
 -- 
-Regards,
-Benjamin
+2.47.2
+
