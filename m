@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44100208AD
-	for <linux-media@vger.kernel.org>; Wed, 30 Apr 2025 08:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779B71E9B09;
+	Wed, 30 Apr 2025 08:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746001376; cv=none; b=H+/7nuMRjGSyfpv9sNdjo7e9XbkODxJ+rqeaW5HgyIT8a84jrBiB7H7UaZRCV6CO52YOInv56Yzcygia060xOYSKuYEUHhYX1S5J3Fe7kIhcK846o2skEac6C6XnzWIk56WuSgeJqLzGqb9nkC4CO+G/Or9KLwkT66GSH29UXJE=
+	t=1746001449; cv=none; b=AVDZOTo0rWVMGzmQH3TsLPXPDMjerTxN8fWFwIIZx2SDaVl84/BZbsx6B3m33l2AAM3p7xzYd7Bj895LYKJbf0n2YrEGb1rmSa8oUUertyfaUGDvXWrfxMvrp/3Ytyq9nMAKL+Xb8d5fXjV6u3Zhzlh48fE8g0L7pFl/z7OCBjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746001376; c=relaxed/simple;
-	bh=zKTo5dhr5mNm39/nZARzw8hP43X4hdC/SUFXb8i5TPg=;
+	s=arc-20240116; t=1746001449; c=relaxed/simple;
+	bh=XkzCV+HlYtWZq8CFLqb3j+QfX63WPGpBO5U9P6v5HbQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hq1ae/lHlUydpdhswwasF0n9LOaTQ5pVNbNEbmr9PXkaF3BgjeeSRH9PLq4YkcrxjzBiOgsBRG84W/Tiu9ZYVoFGfdEhEHpeu+q6trzc2juUaSdUKNrAP8sESq9K0++9z2XPGPuMBHYaiqc504u/PgVV0vmaQvsyPtAlkArwR3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N3TS09Ic; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=rfOlg0ZYg0yKPF53OcaBA/VogFjJknbU6PrBlUDJfs+Xy9QvyYlFoUMY/xc5OvZ46eWnKo58veUYkGeC+BJITdmbi9FIsal10SgA6mgFckYp/uhvvSYznB53/F8YzRvGHBHx9yvlayf6W9pEr+isqJqmIkajs9HAe0Nb6To72AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ImCt9vrS; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N3TS09Ic"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ImCt9vrS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746001374; x=1777537374;
+  t=1746001448; x=1777537448;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zKTo5dhr5mNm39/nZARzw8hP43X4hdC/SUFXb8i5TPg=;
-  b=N3TS09IclQNr9myh0F1CIdmiLIvZObzFsfYMa2U8UdSHmOWUERQCv8Tr
-   nCQ8XYo8E01anlzPgRAjX4HVul+ylA/HhfCNZG2ST3+3ImcsmHfg7ldyI
-   Wgx2kb+bd6sg1n9cU5eRem6SRAYTeT9IZpLvls005qaEfUGDURUqI4ELn
-   uKshRm3SQsbmSTXTAPpj6Ag1kcUOiaDlftKEwpls6KZW4ucWlQ6zIj4OU
-   9Xx/KiUbS7lBTYqWzKIQUnC1UleG4AjuoqH4cwuAm8lqPPuSLP7lufJbD
-   b5TWk5Fk3w8VC7hlscx4Q/dMijZhRzck7PCXnGHX9oTO955idXtmfexsi
+  bh=XkzCV+HlYtWZq8CFLqb3j+QfX63WPGpBO5U9P6v5HbQ=;
+  b=ImCt9vrSz3IgmxJL3lyq08BskNYRYfz+GOblvcQ4AofFzEM61aT4upid
+   /cJh/7q9VfFVJOoE/XihmTQAD+sHGGfZhpWOJGHJm2LDhkGXG17xLRpVu
+   yt3DAij9/Yx5aTqiJSdocKe4DKq91uaJHQM7bQX6Wh2iYFMLmvCtAkmU9
+   FQ75clh052wAs7VmK1pJcq41wQtkfXrMOoEZl9o9/5IT81+mADkjB2LMR
+   x69Cy2XjHbzb2e82LcAHbewhwKpAVv8VclUCkwySB0r/5Uwok4f0Tz0ih
+   HPqYx4I1DvOJdkIqec61vunJFt2w3iIgZIbTD88D3s1jiR7orf1e+D6uZ
    w==;
-X-CSE-ConnectionGUID: TpGx4UDVQE2BSfakAsr0lQ==
-X-CSE-MsgGUID: cbiS1jwCSpaDbhlAfOLJAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="46897388"
+X-CSE-ConnectionGUID: fmei6GrlQoa3NgTjUEOwmA==
+X-CSE-MsgGUID: jdrwsVQSRt+J/vrN/7MAeg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="73036895"
 X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="46897388"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 01:22:53 -0700
-X-CSE-ConnectionGUID: xNCnrd3JS+G5C4Kf6g0Myw==
-X-CSE-MsgGUID: 70tn77ygQ5eabcx8ybVDIg==
+   d="scan'208";a="73036895"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 01:24:06 -0700
+X-CSE-ConnectionGUID: mRXpYfzTS/eLd4rgTlskdA==
+X-CSE-MsgGUID: am3Q4LEeQ/yfmJ0T5s0Hkg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,251,1739865600"; 
-   d="scan'208";a="134998702"
+   d="scan'208";a="134570196"
 Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 01:22:52 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2025 01:24:03 -0700
 Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id D969711F7E7;
-	Wed, 30 Apr 2025 11:22:48 +0300 (EEST)
-Date: Wed, 30 Apr 2025 08:22:48 +0000
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 090B711F7E7;
+	Wed, 30 Apr 2025 11:24:00 +0300 (EEST)
+Date: Wed, 30 Apr 2025 08:24:00 +0000
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: linux-media@vger.kernel.org, Hans Verkuil <hans@jjverkuil.nl>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: Re: [v4l-utils] [PATCH] v4l2-compliance: Don't perform blocking
- DQBUF test on MC_IO devices
-Message-ID: <aBHd2FUeOCjLlnl-@kekkonen.localdomain>
-References: <20250429203922.23078-1-laurent.pinchart@ideasonboard.com>
+To: Richard Leitner <richard.leitner@linux.dev>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v3 3/9] media: v4l2-flash: add support for flash/strobe
+ duration
+Message-ID: <aBHeIBbFRkZ4P82E@kekkonen.localdomain>
+References: <20250429-ov9282-flash-strobe-v3-0-2105ce179952@linux.dev>
+ <20250429-ov9282-flash-strobe-v3-3-2105ce179952@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -64,22 +69,56 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250429203922.23078-1-laurent.pinchart@ideasonboard.com>
+In-Reply-To: <20250429-ov9282-flash-strobe-v3-3-2105ce179952@linux.dev>
 
-Hi Laurent,
+Hi Richard,
 
-On Tue, Apr 29, 2025 at 11:39:22PM +0300, Laurent Pinchart wrote:
-> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+On Tue, Apr 29, 2025 at 02:59:08PM +0200, Richard Leitner wrote:
+> Add support for the new V4L2_CID_FLASH_DURATION control to the v4l2
+> flash led class.
 > 
-> Streaming on MC_IO devices can't be tested by v4l2-compliance as it
-> requires setting up a valid pipeline first. The blocking DQBUF test
-> therefore fails to start streaming on those devices. Disable it.
+> Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+> ---
+>  drivers/media/v4l2-core/v4l2-flash-led-class.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> diff --git a/drivers/media/v4l2-core/v4l2-flash-led-class.c b/drivers/media/v4l2-core/v4l2-flash-led-class.c
+> index 355595a0fefac72c2f6941a30fa430d37dbdccfe..963b549480f6eb3b9eb0d80696a764de7ffcc1a2 100644
+> --- a/drivers/media/v4l2-core/v4l2-flash-led-class.c
+> +++ b/drivers/media/v4l2-core/v4l2-flash-led-class.c
+> @@ -298,6 +298,12 @@ static int v4l2_flash_s_ctrl(struct v4l2_ctrl *c)
+>  		 * microamperes for flash intensity units.
+>  		 */
+>  		return led_set_flash_brightness(fled_cdev, c->val);
+> +	case V4L2_CID_FLASH_DURATION:
+> +		/*
+> +		 * No conversion is needed as LED Flash class also uses
+> +		 * microseconds for flash duration units.
+> +		 */
+> +		return led_set_flash_duration(fled_cdev, c->val);
+>  	}
+>  
+>  	return -EINVAL;
+> @@ -424,6 +430,13 @@ static void __fill_ctrl_init_data(struct v4l2_flash *v4l2_flash,
+>  		ctrl_cfg->flags = V4L2_CTRL_FLAG_VOLATILE |
+>  				  V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
+>  	}
+> +
+> +	/* Init FLASH_DURATION ctrl data */
+> +	if (has_flash_op(fled_cdev, timeout_set)) {
+> +		ctrl_init_data[FLASH_DURATION].cid = V4L2_CID_FLASH_DURATION;
+> +		ctrl_cfg = &ctrl_init_data[FLASH_DURATION].config;
+> +		__lfs_to_v4l2_ctrl_config(&fled_cdev->duration, ctrl_cfg);
+> +		ctrl_cfg->id = V4L2_CID_FLASH_DURATION;
 
-Thanks for the patch.
+Has this been compile tested? :-)
 
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>  }
+>  
+>  static int v4l2_flash_init_controls(struct v4l2_flash *v4l2_flash,
+> 
 
 -- 
+Regards,
+
 Sakari Ailus
