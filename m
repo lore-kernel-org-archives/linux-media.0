@@ -1,115 +1,113 @@
-Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00A12561B9;
-	Fri,  2 May 2025 14:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69331241696
+	for <linux-media@vger.kernel.org>; Fri,  2 May 2025 15:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746197629; cv=none; b=MKMiJ4dStGxmwXaOcbiMsUi0fpLadU8elFKMXxqu3TomDmCspT+OsaQwbkwDz4dOR0TcynPBI2eGyA862ZoaqrSEmpq+Uu91Vv5e7zdqseu2+L4YS02WMSBVJxUBZrew1eE3/53Ks5agYGpEDEAXEDLvoCH2gFjEmZCnwAa8Ehg=
+	t=1746198118; cv=none; b=KRy0X0uT9O3K2Kw2nbMk/Yd5y5DI6bdMU4ObgeTgLmuahIVOIZsnpqckfSW6GfqDNq0ZFBBt9drbQ1zPz6GRV7FLXFn7TtXc5EcPBgX0bmmSB01xLB2Cg71K2Q9VHynAZSg8SYwzKh2ClqdYVJWHUwP6yvICjgyoDCvXZcJ/E34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746197629; c=relaxed/simple;
-	bh=j7pcQFJL7OUxmz0B8y6Bt9940twOZpQzdCtFeh/VAoo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n9jhJViY0u/Yg5mVyqOCRKQPjnMjFsTXYzrXX/2dFedPv63C6K25TYKIwSX3d0VkM++sktYcd+KkjqCrZ9USuyXlCyT/M03fYLP9PsqjUDtPRuL6tH4R/cR3zBWI+s9mdNuIYN++VHDC7aGLY4WLVmzSRYr8H++uErTaX9Qds78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=ZchOEboc; arc=none smtp.client-ip=168.119.26.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="ZchOEboc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
-	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=j7pcQFJL7OUxmz0B8y6Bt9940twOZpQzdCtFeh/VAoo=; b=ZchOEbocSQvTr75lkoncKvSA5N
-	5bVOp6uB3zaqsgYicgUyZn3sGgxz7SzV+4Luye0Y8DuazoXGX/N27NzseBsCV19FIdwk6GXIacOQ5
-	lrN4CnvxrKymbAUXUfzFLaYzR8wNATe+Phs53PYkAelSgh2TiKo/Vr1p78B8/WRhBkT2UtCCZj+Iz
-	lsl7qWfsZf1PzGLrtmkOkx39VLhXzIfESMVpZrcln1+eV8AeB4sVh/vWmOu1rhSme1bXbN5aV/Gdm
-	nXollf85kadF1H2E8QWhYvPmiW1MTbqzpceVv7YVvp6wATUeB+iSniluNSJUkcywqjUcwnur9huwV
-	+gZe2L+w==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uArLG-000LDQ-0l;
-	Fri, 02 May 2025 16:26:18 +0200
-Received: from [92.206.190.59] (helo=[192.168.1.141])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uArLG-000Mtf-04;
-	Fri, 02 May 2025 16:26:18 +0200
-Message-ID: <cb3f684beec0dfd3c06e68fe57ffee9e7efc81dd.camel@apitzsch.eu>
-Subject: Re: [PATCH 0/4] media: i2c: imx214: Add support for more clock
- frequencies
-From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Ricardo Ribalda Delgado <ribalda@kernel.org>, Mauro Carvalho Chehab
-	 <mchehab@kernel.org>, ~postmarketos/upstreaming@lists.sr.ht, 
-	phone-devel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Fri, 02 May 2025 16:26:16 +0200
-In-Reply-To: <CAPybu_0VwOTNOgLg3967fzBArg6tPTdWvHFMo6xBjjdnmx_+dQ@mail.gmail.com>
-References: <20250415-imx214_ccs_pll-v1-0-d3d7748e5fbd@apitzsch.eu>
-	 <CAPybu_0VwOTNOgLg3967fzBArg6tPTdWvHFMo6xBjjdnmx_+dQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 
+	s=arc-20240116; t=1746198118; c=relaxed/simple;
+	bh=B1p0307AbGuUVy0xQNjE2egVjJKppcbO+fozf3RhI5E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KxjTUswM6eMh262fxlyzONw7X2dmBQbEiIpgTd/pRdIYCLAp7fsybyXUzGJJ0ednBdZDqk74wXwQEOuiDXzQ/b2pdhHbuXhRMuqxaE4OTyEIP6wU2cc2MtxG1tMDL1BisVucGSGlkpNJ/1zrlh3apE9sZqQEzb/ZNoPfrP90ab8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <m.felsch@pengutronix.de>)
+	id 1uArtR-0002iK-Ov; Fri, 02 May 2025 17:01:37 +0200
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: nicolas.dufresne@collabora.com,
+	benjamin.gaignard@collabora.com,
+	p.zabel@pengutronix.de,
+	mchehab@kernel.org,
+	shawnguo@kernel.org,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	paul.kocialkowski@bootlin.com,
+	hverkuil@xs4all.nl,
+	laurent.pinchart@ideasonboard.com,
+	sebastian.fricke@collabora.com,
+	ming.qian@nxp.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org
+Subject: [RFC PATCH 00/11] VC8000E H.264 V4L2 Stateless Encoder
+Date: Fri,  2 May 2025 17:00:53 +0200
+Message-Id: <20250502150105.4167289-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Authenticated-Sender: andre@apitzsch.eu
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27626/Fri May  2 10:32:14 2025)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
+X-SA-Exim-Mail-From: m.felsch@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 
-Hi Sakari,
+Hi all,
 
-Am Donnerstag, dem 24.04.2025 um 08:28 +0800 schrieb Ricardo Ribalda
-Delgado:
-> On Wed, Apr 16, 2025 at 5:22=E2=80=AFAM Andr=C3=A9 Apitzsch via B4 Relay
-> <devnull+git.apitzsch.eu@kernel.org> wrote:
-> >=20
-> > The imx214 driver currently supports only a 24 MHz external clock.
-> > But
-> > there are devices, like Qualcomm-MSM8916-based phones, which cannot
-> > provide this frequency. To make the sensor usable by those devices,
-> > add
-> > support for additional clock frequencies.
-> >=20
-> > This series supersedes
-> > https://lore.kernel.org/linux-media/20250308-imx214_clk_freq-v1-0-467a4=
-c083c35@apitzsch.eu/
-> >=20
-> > Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
-> Acked-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> > Andr=C3=A9 Apitzsch (4):
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: imx214: Reorder imx214_parse=
-_fwnode call
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: imx214: Prepare for variable=
- clock frequency
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: imx214: Make use of CCS PLL =
-calculator
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media: i2c: imx214: Read clock frequency=
- from device tree
-> >=20
-> > =C2=A0drivers/media/i2c/Kconfig=C2=A0 |=C2=A0=C2=A0 1 +
-> > =C2=A0drivers/media/i2c/imx214.c | 262
-> > +++++++++++++++++++++++++++++++++++----------
-> > =C2=A02 files changed, 205 insertions(+), 58 deletions(-)
-> > ---
-> > base-commit: 5b37f7bfff3b1582c34be8fb23968b226db71ebd
-> > change-id: 20250406-imx214_ccs_pll-e4aed0e9e532
-> >=20
-> > Best regards,
-> > --
-> > Andr=C3=A9 Apitzsch <git@apitzsch.eu>
-> >=20
-> >=20
+this RFC implements the kernel V4L2 stateless encoding counter part for
+the Verisilicon VC8000E encoder. The encoder is capable of H.264 and
+H.265 encoding and can be found on several SoCs e.g. NXP i.MX8MP.
 
-Any chance, this can be applied for the next merge window?
+The RFC is based on Pauls initial attempts [1].
 
-Best regards,
-Andr=C3=A9
+This patchset is still in a *very very* early state since the uAPI handling
+still needs to be figured out. It's clearly not for productive use yet!
+The only reason of publishing the driver in this early state is to align
+with other developers also working on V4L2 stateless H.264 encoding.
+
+That said, paired with the GStreamer userspace [2] the driver is capable
+of:
+ * H.264 encoding
+ * I/P frame handling
+ * Arbitrary frame sizes
+ * YUV420M input
+
+Note: Be aware that the GStreamer element [2] is in a *very* early state
+too, so don't expect to much. There are limitations like: the element
+requires to work on its own buffers, so there is no fast-path and
+always a copy involved.
+
+@DT folks
+The dt-bindings are missing yet.
+
+[1] https://github.com/bootlin/linux/tree/hantro/h264-encoding-v5.11
+[2] https://gitlab.freedesktop.org/dude/gstreamer/-/tree/h264-stateless-encoder
+
+Regards,
+  Marco
+
+Marco Felsch (7):
+  arm64: dts: imx8mp: drop gpcv2 vpu power-domains and clocks
+  arm64: dts: imx8mp: add VC8000E encoder node
+  arm64: dts: imx8mp: fix VPU_BUS clock setting
+  media: hantro: use hantro_decoded_buffer only for dst_vq
+  media: verisilicon: add H264 encoder support
+  media: verisilicon: split read/write debug
+  media: hantro: add support for i.MX8MP VC8000E
+
+Michael Tretter (3):
+  media: uapi: add documentation for the V4L2 H.264 stateless encoding
+    API
+  media: uapi: add nal unit header fields to encode_params
+  media: uapi: add more V4L2_H264_ENCODE_FLAGs
+
+Paul Kocialkowski (1):
+  media: Introduce Hantro V4L2 H.264 stateless encoding API
+
+-- 
+2.39.5
+
