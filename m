@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852BE1A0B0E
-	for <linux-media@vger.kernel.org>; Sun,  4 May 2025 10:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC90193436
+	for <linux-media@vger.kernel.org>; Sun,  4 May 2025 10:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746353663; cv=none; b=rErTCM99OnoiFVs8KqK3mUepd57CJeDtGbm72U9/BQcJ7UjIBblfxsqzCHcDAAfd+IKqxSIl0GRahTTvZTd8/ixPo+fPwcbP80YzvtvYPv0//26yihhgF2n5yzIYCSA7G3a2RiJ2miiaOQ//4FM6vmaCxbpRrkAV429/kYqrVrA=
+	t=1746353665; cv=none; b=AQHg+eeAVRuyHwQMmOJtRKog967IHPKFLECztAplUWWSq4GY6vmB7ztAz+xBM/PWLAv9zVZHL4uG8ZbWJrgHXMy0bQ1T6fzWjVfRgFKOaMNneD/Qby0QC1DtQlqLQih3ABLzhKuUfJPxzqkE+PNq64pJa5eTMZwo3j96Y0ZOYA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746353663; c=relaxed/simple;
-	bh=qd5/g/AJYIODv9irBFsMwq0+F/SINibZrn8bfBcLZXo=;
+	s=arc-20240116; t=1746353665; c=relaxed/simple;
+	bh=AslFh7oBQH6L6NOIkuD+MJZMrXDkBKdVRAIgvvVqgbU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y/QZZVxF1KUetTlaOZ96aEeNQJWrkN8Du+CjSmYgHDsMGh5+P3AgsKVeYeFydxxLkPJrLLaQOQxRIWf+WZN1AX92ZHeJ1dh+hj6vMOoZ9MdPLU6LEHaIvA8KHfxqE6qDLA7kU8hLW0J5fKmh4yuDTROZIwUiMPx7IHEVOJ2Wz4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h9qHH7V1; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=FdfFfPmM/JxKVhVGN84hI4Cit0FbQXv6cXy9NHz5xJ/5ZOBLoRv24duQwHOXC95IKUFRNThOsR9QyytR2bsDGGivJoSLSORP1ar/ie4Ed2bDXYdFpRe/DCx2Wrigoq0hEl2Kk07nAFw7uKHspueoKgH25svlaC/CkhVcKbtK4P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dzs6322K; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h9qHH7V1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dzs6322K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746353658;
+	s=mimecast20190719; t=1746353662;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wLCdMVtARY4bPj489vmIhB6NUFFAUV6TVgaq2tIKtxM=;
-	b=h9qHH7V1XazjuVJUl4KwmIK96nxscctYdnIAwLubbULI1yTVsrsY3qjyZGHfzMsorz10tA
-	h3OsZ7iUYI5driVZ7zeyhzBgF0SoKqBzs24gNNagtHwef+WCw7bcz5Ex0dfBSW8dSfmWfa
-	APGKHLCS1yw01v9WW54JniOGmyehO3c=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=SKXoU3eKpEQv7PyUJyy2GNLjdX3TIA2izx8WJ2vN35o=;
+	b=Dzs6322KmZduUO2vv033O5DqEAa+yoP7FbOSBuhWzIiU17YLSb0OXGJLtEPMktSnPZSYc4
+	nSxVCYDqy6orIr47XY4+83jbOSSAWn7dmJgTOOl3hEeBAbOatZCF2riPPe/1pWRrr9w5ZB
+	/Ebz9oALO6pRAaFYWwyReDlX5J0E4sI=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-151-r8hW-Jz8NkiUquhHwAA8NQ-1; Sun,
- 04 May 2025 06:14:12 -0400
-X-MC-Unique: r8hW-Jz8NkiUquhHwAA8NQ-1
-X-Mimecast-MFC-AGG-ID: r8hW-Jz8NkiUquhHwAA8NQ_1746353651
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-322-br96YjJDOpaqIVtwXtHzRw-1; Sun,
+ 04 May 2025 06:14:17 -0400
+X-MC-Unique: br96YjJDOpaqIVtwXtHzRw-1
+X-Mimecast-MFC-AGG-ID: br96YjJDOpaqIVtwXtHzRw_1746353656
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1256E1956089;
-	Sun,  4 May 2025 10:14:11 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B33A1956048;
+	Sun,  4 May 2025 10:14:16 +0000 (UTC)
 Received: from shalem.redhat.com (unknown [10.45.224.28])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D13261800352;
-	Sun,  4 May 2025 10:14:08 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 256111800352;
+	Sun,  4 May 2025 10:14:13 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -49,9 +49,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Mathis Foerst <mathis.foerst@mt.com>,
 	linux-media@vger.kernel.org
-Subject: [PATCH 11/13] media: mt9m114: Drop start-, stop-streaming sequence from initialize
-Date: Sun,  4 May 2025 12:13:32 +0200
-Message-ID: <20250504101336.18748-12-hdegoede@redhat.com>
+Subject: [PATCH 13/13] media: mt9m114: Add ACPI enumeration support
+Date: Sun,  4 May 2025 12:13:34 +0200
+Message-ID: <20250504101336.18748-14-hdegoede@redhat.com>
 In-Reply-To: <20250504101336.18748-1-hdegoede@redhat.com>
 References: <20250504101336.18748-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -63,88 +63,37 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Drop the start-, stop-streaming sequence from initialize.
-
-When streaming is started with a runtime-suspended sensor,
-mt9m114_start_streaming() will runtime-resume the sensor which calls
-mt9m114_initialize() immediately followed by calling
-mt9m114_set_state(ENTER_CONFIG_CHANGE).
-
-This results in the following state changes in quick succession:
-
-mt9m114_set_state(ENTER_CONFIG_CHANGE) -> transitions to STREAMING
-mt9m114_set_state(ENTER_SUSPEND)       -> transitions to SUSPENDED
-mt9m114_set_state(ENTER_CONFIG_CHANGE) -> transitions to STREAMING
-
-these quick state changes confuses the CSI receiver on atomisp devices
-causing streaming to not work.
-
-Drop the state changes from mt9m114_initialize() so that only
-a single mt9m114_set_state(ENTER_CONFIG_CHANGE) call is made
-when streaming is started with a runtime-suspend sensor.
-
-This means that the sensor may have config changes pending when
-mt9m114_runtime_suspend() gets called the first time after mt9m114_probe(),
-when streaming was not started within the 1 second runtime-pm timeout.
-Keep track of this and do the ENTER_CONFIG_CHANGE + ENTER suspend from
-mt9m114_runtime_suspend() if necessary.
+Add support for the mt9m114 sensor being enumerated through ACPI
+using the INT33F0 HID as found on the Asus T100TA.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/media/i2c/mt9m114.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/media/i2c/mt9m114.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
-index 2ebd115b2ddf..28c5a5752621 100644
+index eba8232444c9..08e4d7ebcbd1 100644
 --- a/drivers/media/i2c/mt9m114.c
 +++ b/drivers/media/i2c/mt9m114.c
-@@ -391,6 +391,7 @@ struct mt9m114 {
+@@ -2556,11 +2556,18 @@ static const struct of_device_id mt9m114_of_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mt9m114_of_ids);
  
- 	unsigned int pixrate;
- 	bool streaming;
-+	bool config_change_pending;
- 
- 	/* Pixel Array */
- 	struct {
-@@ -776,14 +777,7 @@ static int mt9m114_initialize(struct mt9m114 *sensor)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = mt9m114_set_state(sensor, MT9M114_SYS_STATE_ENTER_CONFIG_CHANGE);
--	if (ret < 0)
--		return ret;
--
--	ret = mt9m114_set_state(sensor, MT9M114_SYS_STATE_ENTER_SUSPEND);
--	if (ret < 0)
--		return ret;
--
-+	sensor->config_change_pending = true;
- 	return 0;
- }
- 
-@@ -958,6 +952,7 @@ static int mt9m114_start_streaming(struct mt9m114 *sensor,
- 	if (ret)
- 		goto error;
- 
-+	sensor->config_change_pending = false;
- 	sensor->streaming = true;
- 
- 	return 0;
-@@ -2251,6 +2246,14 @@ static int __maybe_unused mt9m114_runtime_suspend(struct device *dev)
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct mt9m114 *sensor = ifp_to_mt9m114(sd);
- 
-+	if (sensor->config_change_pending) {
-+		/* mt9m114_set_state() prints errors itself, no need to check */
-+		mt9m114_set_state(sensor,
-+				  MT9M114_SYS_STATE_ENTER_CONFIG_CHANGE);
-+		mt9m114_set_state(sensor,
-+				  MT9M114_SYS_STATE_ENTER_SUSPEND);
-+	}
++static const struct acpi_device_id mt9m114_acpi_ids[] = {
++	{ "INT33F0" },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(acpi, mt9m114_acpi_ids);
 +
- 	mt9m114_power_off(sensor);
- 
- 	return 0;
+ static struct i2c_driver mt9m114_driver = {
+ 	.driver = {
+ 		.name	= "mt9m114",
+ 		.pm	= &mt9m114_pm_ops,
+ 		.of_match_table = mt9m114_of_ids,
++		.acpi_match_table = mt9m114_acpi_ids,
+ 	},
+ 	.probe		= mt9m114_probe,
+ 	.remove		= mt9m114_remove,
 -- 
 2.49.0
 
