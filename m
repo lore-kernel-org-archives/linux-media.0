@@ -1,63 +1,60 @@
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B341D1B0F0A
-	for <linux-media@vger.kernel.org>; Mon,  5 May 2025 08:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746434876; cv=pass; b=bjcfKsL7BUSFkAZd8/LzLZohYa+sGbptSA5a+POun1iz2HGJynuz3trLfsfk8YOcIeWEnHNC/S0asFaqhI8rMu6xUF8g5FhHOb68gYT5Js91wvzHoAp2dpN8AXY3MSZFEW7HzBfLBsIUa29sRn5I2QJE+toiP/7F6BxwF33WXvw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746434876; c=relaxed/simple;
-	bh=DzBfhdOufowdOKDJUcPSoTLI7BkVlhofGQ61NRQE3YQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tkKB7DP8oaZxf+iSW7AxTCV2aQGydF511rZi6I6mgVAfhKy6U1KNR6vEgI18zEQQqzSYhgfQeBnahHNTflgjk8VTgYXtDUp0x18j7zrPqGxK7EaFju3XefqQHZmARJiAD43gkBhMhqLCPvqm9KE9P8jyYXE2JOZwnx1nNGLd+j4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=v8bqE/jo; arc=pass smtp.client-ip=195.140.195.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AB11F3BBB
+	for <linux-media@vger.kernel.org>; Mon,  5 May 2025 08:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746435129; cv=none; b=ZCc1U/U0oTwcsw513+Jtk+2TA0tvWQxqKjyBPQO0f1RDbH97gGHrT49QLSR8u8iUv22SL1jxwMpuQigoBlRP3y7evOFaOAm/9wC4g/RzUcodn8L+3Scf+98IH1YrHU+RCWFQl5MIgKk0fdJ84D3r7NS+nLd2RPsh3WsEfIDgMe4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746435129; c=relaxed/simple;
+	bh=3fmaZRn+ufPmBNNZOimLphI2w5x+FvUIdMpTDo+LtBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQaxwq2IxHOgUsl4y0XKWA1HspGFBXduIH+4V1OAHJllbU02T38Qlrnv8HUSXmu/AfxOHk2wbG3OoiQ7FE/0OISx2+0FmzZH6EQ1qyq8VpnzcEFy00/At/myXxHh5Wuhnzt5vKMvFuDgchAlVa7nFSsaELH3um74hm5TcpsIRHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UjK397Cj; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="v8bqE/jo"
-Received: from hillosipuli.retiisi.eu (2a00-1190-d1dd-0-127c-61ff-fee2-b97e.v6.cust.suomicom.net [IPv6:2a00:1190:d1dd:0:127c:61ff:fee2:b97e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sailus)
-	by meesny.iki.fi (Postfix) with ESMTPSA id 4ZrZt00jGTzyTQ;
-	Mon,  5 May 2025 11:47:51 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-	t=1746434872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=RgR3DrN0hQXJMSA5Wd0nWtzlQb53hKxzB3VcIhSTmZw=;
-	b=v8bqE/joXCbebKKypFsNmVTeR5qGUk4m7OdcfRA18DrknaoBG5rlDennipMZRSPAwKDDKi
-	BnXtKrIHO6UnT1/YrKRSUEDUrfkChNJT8uZx23eMH+yW0VlxEMXbznkTQbAz+nWGLX0I+P
-	+zmlkt92tUU+FXZPaZVOjW4uN+Wowjg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=meesny; t=1746434872;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=RgR3DrN0hQXJMSA5Wd0nWtzlQb53hKxzB3VcIhSTmZw=;
-	b=L/bBZrlI9kU52Q8WMCHqDaJhBNcPZkvvbwhTT6e+mQa4rAg87Vst2Qan2oSktDb5njnPPo
-	H6IsL1sb4ksafumlnAUB6vS5caXA45LgWzxPTxlZshRSEB4DCdBeR4117rYv+Efy0acv+5
-	VlDyOcjmeRYi+gOY9NrjV/h83D2zx+k=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1746434872; a=rsa-sha256; cv=none;
-	b=LcPeCgKWV7NnPNKg+kNK6pUO3I/c8DSLEZPU854Ra/GZRvYvSWlqaW/SyzCuenKMV8t/Be
-	hLpUA5UXhzh4BjnjGlSBEBa2Gj1XuHd2nr90lD3R2JbAyx8VVmM/iFjcnO9lKqTXYOOPZT
-	EoKcVBgzcPx+hsSrrsXrhIjTCYuiOd8=
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-Received: from valkosipuli.retiisi.eu (valkosipuli.local [192.168.4.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 6CD46634C93;
-	Mon,  5 May 2025 11:47:51 +0300 (EEST)
-Date: Mon, 5 May 2025 08:47:51 +0000
-From: Sakari Ailus <sakari.ailus@iki.fi>
-To: linux-media@vger.kernel.org
-Cc: hans@jjverkuil.nl
-Subject: [GIT PULL FOR 6.16] New camera sensor drivers
-Message-ID: <aBh7NzWRlLmqOIsa@valkosipuli.retiisi.eu>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UjK397Cj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746435129; x=1777971129;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3fmaZRn+ufPmBNNZOimLphI2w5x+FvUIdMpTDo+LtBo=;
+  b=UjK397CjDh0kQnsesnEceY1RmapZIrKabdReGo5U8Hv38I7NihKlMwL0
+   BDyo5qit2VpeQj5EcHncD75wjZClzV7qqgQyOpXppXYcO6pEweorwX5RH
+   pw4CHx7l9LBNTRxt5vNqbcV6sNFBm6xdvxuk8NmE6YClzXdKpCmLSHda5
+   RFvspf4BMZZ7s+k/Glx3XWz6aDIFMxsVJcM8JNLsCb4FKU7niZu+AwFSj
+   gRsOJSHBcCP3jnC+6MoWoMF99VznEQZjorPDltf8Z/VVMANRapHoF96oC
+   bqc8UDbyQQ0E/yyR3fmhUEU8j/deUzrzqjfldJqY00PJSCgkTEN4nkVKp
+   A==;
+X-CSE-ConnectionGUID: +d3qC3QdQ0Ox1UkRja8SGQ==
+X-CSE-MsgGUID: vbcyeoFrTOSJ58dhkqe33g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11423"; a="65438674"
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="65438674"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 01:52:08 -0700
+X-CSE-ConnectionGUID: kSv8GRsjTqKkw3D2aolJ/Q==
+X-CSE-MsgGUID: W7iqc9wuSJaCoZJm0kbqTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,262,1739865600"; 
+   d="scan'208";a="139983917"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.252])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2025 01:52:06 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id F3566120D43;
+	Mon,  5 May 2025 11:13:02 +0300 (EEST)
+Date: Mon, 5 May 2025 08:13:02 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: linux-media@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>
+Subject: Re: [PATCH v3 0/5] media: intel/ipu6: continue on ipu7 code sharing
+ preparation
+Message-ID: <aBhzDoUZSb40MzBv@kekkonen.localdomain>
+References: <20250502154446.88965-1-stanislaw.gruszka@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,60 +63,27 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250502154446.88965-1-stanislaw.gruszka@linux.intel.com>
 
-Hi Hans, Mauro,
+Hi Stanislaw,
 
-Here are new drivers for SD VD55G1, ST VD56G3 and Omnivision OV02C10 camera
-sensors.
+On Fri, May 02, 2025 at 05:44:41PM +0200, Stanislaw Gruszka wrote:
+> Cleanups and code sharing preparation with ipu7 driver.
+> 
+> This is on top of:
+> https://git.linuxtv.org/sailus/media_tree.git/log/?h=devel
+> Plus:
+> https://lore.kernel.org/linux-media/20250317073856.162147-1-stanislaw.gruszka@linux.intel.com/
+> https://lore.kernel.org/linux-media/20250428161643.321617-1-stanislaw.gruszka@linux.intel.com/#t
 
+Thanks for these. I've applied patches from 1 to 3 for now.
 
-The following changes since commit b64b134942c8cf4801ea288b3fd38b509aedec21:
+Going forward, could you post cleanups and reorganising the code into
+common bits in separate sets? It'll be easier to see where this is going
+when all related patches are in the same set. Cleanups and fixes we can
+merge earlier on anyway.
 
-  media: renesas: vsp1: Expose color space through the DRM API (2025-05-02 10:16:44 +0200)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-6.16-3.1-signed
-
-for you to fetch changes up to 545fbfc6a30f41eba9881b3e8c127301b3ebf684:
-
-  media: i2c: Add driver for ST VD55G1 camera sensor (2025-05-05 11:41:22 +0300)
-
-----------------------------------------------------------------
-V4L2 patches for 6.16
-
-----------------------------------------------------------------
-Benjamin Mugnier (2):
-      media: dt-bindings: Add ST VD55G1 camera sensor
-      media: i2c: Add driver for ST VD55G1 camera sensor
-
-Bryan O'Donoghue (1):
-      media: dt-bindings: Add OminiVision 0V02C10
-
-Heimir Thor Sverrisson (1):
-      media: i2c: Add Omnivision OV02C10 sensor driver
-
-Sylvain Petinot (2):
-      media: dt-bindings: Add ST VD56G3 camera sensor
-      media: i2c: Add driver for ST VD56G3 camera sensor
-
- .../bindings/media/i2c/ovti,ov02e10.yaml           |   47 +-
- .../devicetree/bindings/media/i2c/st,vd55g1.yaml   |  133 ++
- .../devicetree/bindings/media/i2c/st,vd56g3.yaml   |  139 ++
- MAINTAINERS                                        |   26 +
- drivers/media/i2c/Kconfig                          |   32 +
- drivers/media/i2c/Makefile                         |    3 +
- drivers/media/i2c/ov02c10.c                        | 1013 ++++++++++
- drivers/media/i2c/vd55g1.c                         | 1965 ++++++++++++++++++++
- drivers/media/i2c/vd56g3.c                         | 1586 ++++++++++++++++
- 9 files changed, 4940 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/st,vd55g1.yaml
- create mode 100644 Documentation/devicetree/bindings/media/i2c/st,vd56g3.yaml
- create mode 100644 drivers/media/i2c/ov02c10.c
- create mode 100644 drivers/media/i2c/vd55g1.c
- create mode 100644 drivers/media/i2c/vd56g3.c
-
-Please pull.
+Thanks.
 
 -- 
 Kind regards,
