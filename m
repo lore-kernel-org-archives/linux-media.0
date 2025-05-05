@@ -1,190 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C1328853E;
-	Mon,  5 May 2025 23:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C88279340;
+	Mon,  5 May 2025 23:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486312; cv=none; b=tp9hcMP03oz7d7gJQCtvxGvOvbmD4+LimKMfWV0/gvawb77yswkzt44OWzl+tzoNzjs19786L60da5rka43biAIdwodC0ZtbovFhYHuNihT84KXzrh4xfJ5XKEWtV07zcd+oSX6AdUSsARlTnK/AsEpntxAgNdlQ5G35RpFg+xc=
+	t=1746486635; cv=none; b=IrmZnwX6x6/bAZ3r4G0uiRP8b5sbmQ9Nj18KKhIGclSpy5yvDfWq1C+4qPvTfwSJYhTwAb+IeWuGsWA8KJ46UeCZSscUz6zHloEfKin1ZYNlUQLH5OU0auWHWS92lvByyn0l8p5yTtleGOPM+fY72R48R6mThUCAbXcwF+uNZdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486312; c=relaxed/simple;
-	bh=fnPv1ivXF5Wy4niLq+LVRNLF7KRwPeRJVCaZmA7WfCw=;
+	s=arc-20240116; t=1746486635; c=relaxed/simple;
+	bh=iiDhzHdQ/QqScp0AKppkDMN90q3HYcqsMN4wZ5m8cv4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=l8XegGYLuG1rvUeoQOwlrKmT6/1OcVhzt7z4Nhi+hUHHr0Rdw4XPizhNpVuYqos1Rn6nGu4SrJCfrfxesG6NWejkdOI9aXvtguu1L2V0ce71cUXLyVnZYcvcoHjqhkIkRkb9Ar+aKsSuzuNMPsWN3yA8diCwLZN4FJznWiI1C7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vd7EM44v; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=XWMiJGQdvWwuHSRWrYBfYu+c/j3XrsmidY98seu+OKgi1mXDmbrnWISFBzFem9Fj4VdDVp8YDwcWK87KDfNFJlujP34dL+TOwpZhrVU+Zk8mkqxqODHKW9O6mP+hNMgHz9zjZFBm3MFW927tkLHN5+zV4B0kLT0Cke7V3Tiu8H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnlrGXw7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vd7EM44v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F149C4CEF1;
-	Mon,  5 May 2025 23:05:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnlrGXw7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDF2C4CEEF;
+	Mon,  5 May 2025 23:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486312;
-	bh=fnPv1ivXF5Wy4niLq+LVRNLF7KRwPeRJVCaZmA7WfCw=;
+	s=k20201202; t=1746486634;
+	bh=iiDhzHdQ/QqScp0AKppkDMN90q3HYcqsMN4wZ5m8cv4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Vd7EM44vHxisd6tpwlBC4DX2UbyX/NrKHGB2DlmTS4JNlK1Ue/LKdh6VMZNCPAUax
-	 aapoUMpSNtPP+VmdmkjBUMeRwfGQKmvYRZDqrte+pePo1+D7DOYQhGW/RjM68yDHEI
-	 MCBqyexofmR29Bw6mfllU2JNhzt/CvSZ1nSjN0CNDILW+WrwDCVBaxoIB5QZLeBsY2
-	 mpVsnA+cORZj/jDGdvl28hwSnA+SURDrho1//rOu/Ah+maqDmCMoSj/zC2CuqpE7oS
-	 dWViHvccIL6ktPkDsS7gwoXsRWNCacXcYRd1CJ29IpTruWdBihni55g+WmT9q0HhaX
-	 xV5HgAUr7+cbA==
+	b=lnlrGXw7IHw8lORrnXGW5YU01MgwYPERpgJ1jaZG1TMvQSHH149PGy+McnSbLqlMv
+	 MBSZc3+vyaAvFDS3sbeABl1WN26kDrsdnfR33cltFo/175OczDFjkW9SdmlKULifwW
+	 ez7iHgpd+uGSrzRHRV0tYvBAl8ABjJlBEpGgsoYFZPzHj9Kr1MbKP/9HZ2dy3K5bb/
+	 57glHjFM0QCPyA/jtFYmmataLrOMm5Hm8EGI+gO0nZfFMcZGR1J4CqmKu5nUnq23Bo
+	 jeCvSKTjWwhXTFYn8soXFFHb9pErC6MKyDjaU5xrYkvko0XQBcMcYPFnWclME02zNa
+	 EeUSMTOpMYVtw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Depeng Shao <quic_depengs@quicinc.com>,
+Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
 	Hans Verkuil <hverkuil@xs4all.nl>,
 	Sasha Levin <sashal@kernel.org>,
-	rfoss@kernel.org,
-	todor.too@gmail.com,
-	bryan.odonoghue@linaro.org,
+	lars@metafoo.de,
 	mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 254/294] media: qcom: camss: csid: Only add TPG v4l2 ctrl if TPG hardware is available
-Date: Mon,  5 May 2025 18:55:54 -0400
-Message-Id: <20250505225634.2688578-254-sashal@kernel.org>
+	linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 127/212] media: adv7180: Disable test-pattern control on adv7180
+Date: Mon,  5 May 2025 19:04:59 -0400
+Message-Id: <20250505230624.2692522-127-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
-References: <20250505225634.2688578-1-sashal@kernel.org>
+In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
+References: <20250505230624.2692522-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.89
+X-stable-base: Linux 6.1.136
 Content-Transfer-Encoding: 8bit
 
-From: Depeng Shao <quic_depengs@quicinc.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 2f1361f862a68063f37362f1beb400e78e289581 ]
+[ Upstream commit a980bc5f56b0292336e408f657f79e574e8067c0 ]
 
-There is no CSID TPG on some SoCs, so the v4l2 ctrl in CSID driver
-shouldn't be registered. Checking the supported TPG modes to indicate
-if the TPG hardware exists or not and only registering v4l2 ctrl for
-CSID only when the TPG hardware is present.
+The register that enables selecting a test-pattern to be outputted in
+free-run mode (FREE_RUN_PAT_SEL[2:0]) is only available on adv7280 based
+devices, not the adv7180 based ones.
 
-Signed-off-by: Depeng Shao <quic_depengs@quicinc.com>
+Add a flag to mark devices that are capable of generating test-patterns,
+and those that are not. And only register the control on supported
+devices.
+
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/platform/qcom/camss/camss-csid.c    | 60 +++++++++++--------
- 1 file changed, 35 insertions(+), 25 deletions(-)
+ drivers/media/i2c/adv7180.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid.c b/drivers/media/platform/qcom/camss/camss-csid.c
-index 6360314f04a63..b90e2e690f3aa 100644
---- a/drivers/media/platform/qcom/camss/camss-csid.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid.c
-@@ -239,11 +239,13 @@ static int csid_set_stream(struct v4l2_subdev *sd, int enable)
- 	int ret;
+diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
+index 216fe396973f2..46912a7b671a8 100644
+--- a/drivers/media/i2c/adv7180.c
++++ b/drivers/media/i2c/adv7180.c
+@@ -194,6 +194,7 @@ struct adv7180_state;
+ #define ADV7180_FLAG_V2			BIT(1)
+ #define ADV7180_FLAG_MIPI_CSI2		BIT(2)
+ #define ADV7180_FLAG_I2P		BIT(3)
++#define ADV7180_FLAG_TEST_PATTERN	BIT(4)
  
- 	if (enable) {
--		ret = v4l2_ctrl_handler_setup(&csid->ctrls);
--		if (ret < 0) {
--			dev_err(csid->camss->dev,
--				"could not sync v4l2 controls: %d\n", ret);
--			return ret;
-+		if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED) {
-+			ret = v4l2_ctrl_handler_setup(&csid->ctrls);
-+			if (ret < 0) {
-+				dev_err(csid->camss->dev,
-+					"could not sync v4l2 controls: %d\n", ret);
-+				return ret;
-+			}
- 		}
+ struct adv7180_chip_info {
+ 	unsigned int flags;
+@@ -673,11 +674,15 @@ static int adv7180_init_controls(struct adv7180_state *state)
+ 			  ADV7180_HUE_MAX, 1, ADV7180_HUE_DEF);
+ 	v4l2_ctrl_new_custom(&state->ctrl_hdl, &adv7180_ctrl_fast_switch, NULL);
  
- 		if (!csid->testgen.enabled &&
-@@ -318,7 +320,8 @@ static void csid_try_format(struct csid_device *csid,
- 		break;
- 
- 	case MSM_CSID_PAD_SRC:
--		if (csid->testgen_mode->cur.val == 0) {
-+		if (csid->testgen.nmodes == CSID_PAYLOAD_MODE_DISABLED ||
-+		    csid->testgen_mode->cur.val == 0) {
- 			/* Test generator is disabled, */
- 			/* keep pad formats in sync */
- 			u32 code = fmt->code;
-@@ -368,7 +371,8 @@ static int csid_enum_mbus_code(struct v4l2_subdev *sd,
- 
- 		code->code = csid->formats[code->index].code;
- 	} else {
--		if (csid->testgen_mode->cur.val == 0) {
-+		if (csid->testgen.nmodes == CSID_PAYLOAD_MODE_DISABLED ||
-+		    csid->testgen_mode->cur.val == 0) {
- 			struct v4l2_mbus_framefmt *sink_fmt;
- 
- 			sink_fmt = __csid_get_format(csid, sd_state,
-@@ -750,7 +754,8 @@ static int csid_link_setup(struct media_entity *entity,
- 
- 		/* If test generator is enabled */
- 		/* do not allow a link from CSIPHY to CSID */
--		if (csid->testgen_mode->cur.val != 0)
-+		if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED &&
-+		    csid->testgen_mode->cur.val != 0)
- 			return -EBUSY;
- 
- 		sd = media_entity_to_v4l2_subdev(remote->entity);
-@@ -843,24 +848,27 @@ int msm_csid_register_entity(struct csid_device *csid,
- 		 MSM_CSID_NAME, csid->id);
- 	v4l2_set_subdevdata(sd, csid);
- 
--	ret = v4l2_ctrl_handler_init(&csid->ctrls, 1);
--	if (ret < 0) {
--		dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
--		return ret;
--	}
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED) {
-+		ret = v4l2_ctrl_handler_init(&csid->ctrls, 1);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
-+			return ret;
-+		}
- 
--	csid->testgen_mode = v4l2_ctrl_new_std_menu_items(&csid->ctrls,
--				&csid_ctrl_ops, V4L2_CID_TEST_PATTERN,
--				csid->testgen.nmodes, 0, 0,
--				csid->testgen.modes);
-+		csid->testgen_mode =
-+			v4l2_ctrl_new_std_menu_items(&csid->ctrls,
-+						     &csid_ctrl_ops, V4L2_CID_TEST_PATTERN,
-+						     csid->testgen.nmodes, 0, 0,
-+						     csid->testgen.modes);
- 
--	if (csid->ctrls.error) {
--		dev_err(dev, "Failed to init ctrl: %d\n", csid->ctrls.error);
--		ret = csid->ctrls.error;
--		goto free_ctrl;
--	}
-+		if (csid->ctrls.error) {
-+			dev_err(dev, "Failed to init ctrl: %d\n", csid->ctrls.error);
-+			ret = csid->ctrls.error;
-+			goto free_ctrl;
-+		}
- 
--	csid->subdev.ctrl_handler = &csid->ctrls;
-+		csid->subdev.ctrl_handler = &csid->ctrls;
+-	v4l2_ctrl_new_std_menu_items(&state->ctrl_hdl, &adv7180_ctrl_ops,
+-				      V4L2_CID_TEST_PATTERN,
+-				      ARRAY_SIZE(test_pattern_menu) - 1,
+-				      0, ARRAY_SIZE(test_pattern_menu) - 1,
+-				      test_pattern_menu);
++	if (state->chip_info->flags & ADV7180_FLAG_TEST_PATTERN) {
++		v4l2_ctrl_new_std_menu_items(&state->ctrl_hdl,
++					     &adv7180_ctrl_ops,
++					     V4L2_CID_TEST_PATTERN,
++					     ARRAY_SIZE(test_pattern_menu) - 1,
++					     0,
++					     ARRAY_SIZE(test_pattern_menu) - 1,
++					     test_pattern_menu);
 +	}
  
- 	ret = csid_init_formats(sd, NULL);
- 	if (ret < 0) {
-@@ -891,7 +899,8 @@ int msm_csid_register_entity(struct csid_device *csid,
- media_cleanup:
- 	media_entity_cleanup(&sd->entity);
- free_ctrl:
--	v4l2_ctrl_handler_free(&csid->ctrls);
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED)
-+		v4l2_ctrl_handler_free(&csid->ctrls);
+ 	state->sd.ctrl_handler = &state->ctrl_hdl;
+ 	if (state->ctrl_hdl.error) {
+@@ -1209,7 +1214,7 @@ static const struct adv7180_chip_info adv7182_info = {
+ };
  
- 	return ret;
- }
-@@ -904,5 +913,6 @@ void msm_csid_unregister_entity(struct csid_device *csid)
- {
- 	v4l2_device_unregister_subdev(&csid->subdev);
- 	media_entity_cleanup(&csid->subdev.entity);
--	v4l2_ctrl_handler_free(&csid->ctrls);
-+	if (csid->testgen.nmodes != CSID_PAYLOAD_MODE_DISABLED)
-+		v4l2_ctrl_handler_free(&csid->ctrls);
- }
+ static const struct adv7180_chip_info adv7280_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P | ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN3) |
+@@ -1223,7 +1228,8 @@ static const struct adv7180_chip_info adv7280_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7280_m_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P |
++		ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN3) |
+@@ -1244,7 +1250,8 @@ static const struct adv7180_chip_info adv7280_m_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7281_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
++		ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN7) |
+@@ -1259,7 +1266,8 @@ static const struct adv7180_chip_info adv7281_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7281_m_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
++		ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN3) |
+@@ -1279,7 +1287,8 @@ static const struct adv7180_chip_info adv7281_m_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7281_ma_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
++		ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN3) |
+@@ -1304,7 +1313,7 @@ static const struct adv7180_chip_info adv7281_ma_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7282_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P | ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN7) |
+@@ -1319,7 +1328,8 @@ static const struct adv7180_chip_info adv7282_info = {
+ };
+ 
+ static const struct adv7180_chip_info adv7282_m_info = {
+-	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P,
++	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P |
++		ADV7180_FLAG_TEST_PATTERN,
+ 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN2) |
+ 		BIT(ADV7182_INPUT_CVBS_AIN3) |
 -- 
 2.39.5
 
