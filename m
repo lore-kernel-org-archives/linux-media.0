@@ -1,256 +1,245 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CA21C861D
-	for <linux-media@vger.kernel.org>; Mon,  5 May 2025 20:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2487D1CEAD6
+	for <linux-media@vger.kernel.org>; Mon,  5 May 2025 21:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746477275; cv=none; b=bnmHaao6pV8e3jcQvWMCy+GbfMLxrwtPqevTtNH0tkLy9eu33L4qIPGSGuWNzIIeS/b/M4XEPFAsjJSpB2mrYkDWa7IJqYYL+ZG9gY7y05U5Bbqtjt1vWqD0eD6CTMM348D6E1yWYNX0i96sU+zP/qouCtVUmO7ZEnGHbwJjq0Y=
+	t=1746478826; cv=none; b=tJMi5Uk6FHkdG1zsaKvFhB/J/0DHGt8xfz2K718Z6aunCTPYyOcDLDA3XeuGUM1S3ueBFQcr43YvAzaZ/byaiRdE2gXYmgPqJ7U7AgyDtZ3iZQTbZ5HHAgT6yX7O1tHN2sGjwV4D8ptKUooF4hzlVJp7mfg7mg9eO824Ul6uSgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746477275; c=relaxed/simple;
-	bh=eXsbeYaStEdVkB/9iiuPPvCcb0GJ33j+Y7Lm4GpCn+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ifRKKrsPU4sBtCB9PQjlJNYnRy0YVOzZDoLP+xjU+5uwD7KSagHL/szhe/Zkuss9jVnYh0mI72RW2DeeZHUc6Tdgi2D67Eq4ezLhGjUl7z+zWtTfKOtFKbYYl3ZojArV5IzLtTT7B2tdJ3BiN6xK+d4LOabbJOjCxloTF/jHXLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=I/Lbi1CV; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1746478826; c=relaxed/simple;
+	bh=gMfDJ9EUSSh7PuvIBQHwiFk4jsJgHEV+C2kxUuSAnA4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pulrLhStch6XtGlrHaHuj9IUzuHm+Zxg8o4oqPmCz+btRFT/KhLYixZQCZ2dLYdwfMLSp/OjmPEvuXivFGhKXzS0EA8pDqsZTwiUm5PoLaSLx/5uCxDY8Uj/mnx1d5RUiEB5xP5JG0KRQ0Hppxs9l/P/aImVviXFW2q50uyiLp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ih7BOBMa; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="I/Lbi1CV"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54998f865b8so5306356e87.3
-        for <linux-media@vger.kernel.org>; Mon, 05 May 2025 13:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1746477271; x=1747082071; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aad+O7LlnePo9Jud5k6L+0x2zxiP/d5GA/t21nuBedc=;
-        b=I/Lbi1CVZDl1obG0Fb/2EMGdznGkHEAP980LT0oBlKAb39k9aPyq8cCLUWC7GZtrR/
-         rJZfD4xgng58xottKDQH5b7Y40adyt9beewyCkNl3QyGgsLqUFV2uDC2jNQOHy+JoNjS
-         9kxQy5p1eLTrg1ioVr0GLrR5s/tj5cc88xCx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746477271; x=1747082071;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aad+O7LlnePo9Jud5k6L+0x2zxiP/d5GA/t21nuBedc=;
-        b=qf/lpAoVbJg9B3/TbxjMEVJhgUk1ICCx7k5KhVUGcR4Bp4uQHV0GhGtEmCtHSwp8E+
-         tBrJOF7cayD/jJJq/QZITtyH0X/v5J8xAXjRUM8xNiY/DtZMHkzq9U9GLYVObUq7mJm4
-         FHhoAb8InPqv7cc1TrefKBeqQZKU4GeMomSNv/MSPFNAPE/kKg+NB+o63e8JfESWYbwh
-         Kg3uyQV+0U2g/FVrUisT2zF8OvDgCZlVitT22Ks3O5GSwGxvFv4rr7RE7NuT7cyrOuXr
-         PjlQ7YyPw8R1BJRTOnG9xmoHrIGZgyxBIW/w74HHsEKUFCq6Kj84/pmh2jcSzcSZrD3M
-         PkBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzg71knrYBkc1Jh4N/EUkbyI5cQa7f4PyxfJ2uwUAXZRB2obdUBTY6rjmjEBQBopSLBm9a8fE//npC0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2hRtAJHMiNGcfDtryO8ZVMPIQk6UhP1aKHloKemp0gToeuztZ
-	RIYpJeT0bwlOyFduWpebl8xP+t0lzMyzXtVfNr1knhwi7jJcrDxxV2MK/jIx3MDnkODC9djcLOA
-	=
-X-Gm-Gg: ASbGncuR5Shknpg6+j2l3Y+YAG3wZGw9BLSiKP3GLx+ltBEhxGW9FVAAFL2kekw2GqG
-	EWTBEd5THtdg88RSiY+TAZ58hJLsGuE4GfdwwhIzPDM0rEm4nqiLuqkOxa6w1hefoarQsni0Ckr
-	dDfKIkSUffGgT4VkhTNzDnEO3Hk/NYgpH57y9z65aLvJXEgJTqZnzyo1f0M8+tUFyz9a9P5HJpa
-	T4XfTY4HF+FXmrCjwlBXDFm6R6VGaVY9WL78NLnvZYDSr23e/JBUqJ90b4Ttr9AS/vbJvvT1veW
-	JmGM/JNVHO9clD9u+dVXmLQtgm3kU7F8LnszkxWuZkgIoX34kZ9vC60MLWE3U7ZZqouhW8ExgP0
-	mYN6znC4=
-X-Google-Smtp-Source: AGHT+IGPYP2JS3h6iOfckJUsuVQYaPrKXzbhxeyfZTZC5UIYBI8wHfBItz4oWyIWvP3FPv/9w4Eamw==
-X-Received: by 2002:a05:6512:3b24:b0:54b:f04:59e8 with SMTP id 2adb3069b0e04-54fb4a5df10mr126380e87.23.1746477271458;
-        Mon, 05 May 2025 13:34:31 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54ea94b1d4dsm1850620e87.18.2025.05.05.13.34.28
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 13:34:30 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-30bfca745c7so44914981fa.0
-        for <linux-media@vger.kernel.org>; Mon, 05 May 2025 13:34:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWqZNLHLbOgZG+LN5VTVwVt2H1rMvw+nNnofywNHRgr0tmMIRZ114YWAgrvpRdg/9rqpDKuv9v3qcf7kA==@vger.kernel.org
-X-Received: by 2002:a05:651c:b2a:b0:319:d856:c2f3 with SMTP id
- 38308e7fff4ca-3266b59789emr751721fa.10.1746477268328; Mon, 05 May 2025
- 13:34:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ih7BOBMa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746478824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SNtPg4HtryDo5keLoNjStqUXmVwXlHPUGns+vjRaTAU=;
+	b=Ih7BOBMaOy3ZTbXvCqgoG5hPA1CoRP7Cs1VBv2oB58jkFlAPPFYGXRwZhhXJ8v/FLCSPOs
+	K2bVSdugUbLz7CyLXPkfwiT3W3dqr35vo2R7XEiELbE8+YQlSZfo89tZK2xV36RCwxOagP
+	iEbizrqLeG5hCrlPN5YsX48zzW7DbhE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-459-h55qMMa8OOiquPLyjBzuwg-1; Mon,
+ 05 May 2025 17:00:20 -0400
+X-MC-Unique: h55qMMa8OOiquPLyjBzuwg-1
+X-Mimecast-MFC-AGG-ID: h55qMMa8OOiquPLyjBzuwg_1746478819
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A00FF1800987;
+	Mon,  5 May 2025 21:00:19 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.45.224.24])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9B22E195608D;
+	Mon,  5 May 2025 21:00:17 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Subject: [PATCH 1/5] media: atomisp: Move atomisp_stop_streaming() above atomisp_start_streaming()
+Date: Mon,  5 May 2025 23:00:04 +0200
+Message-ID: <20250505210008.152659-2-hdegoede@redhat.com>
+In-Reply-To: <20250505210008.152659-1-hdegoede@redhat.com>
+References: <20250505210008.152659-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-uvc-orientation-v1-0-1a0cc595a62d@chromium.org>
- <20250403-uvc-orientation-v1-3-1a0cc595a62d@chromium.org> <Z_uIyEe4uU_BC5aY@valkosipuli.retiisi.eu>
- <CANiDSCvQC25ZrSZgUuFt6deCogFL6=GPsYYrsegK1NOK=uzRJA@mail.gmail.com>
- <dd471b51-333b-4537-ac58-29ad2a10f1e2@redhat.com> <aAdkU65ruBfyRjss@valkosipuli.retiisi.eu>
-In-Reply-To: <aAdkU65ruBfyRjss@valkosipuli.retiisi.eu>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 5 May 2025 22:34:16 +0200
-X-Gmail-Original-Message-ID: <CANiDSCt5_HwfwXDWNGWvzkSAW2ZB4PJwS00=i0EizY_3A-OSgw@mail.gmail.com>
-X-Gm-Features: ATxdqUEg2rUAsN7TYo98ElSvRXDzyBQACXaWg80nr6xGofF6c5WfqBKJm9vPYRM
-Message-ID: <CANiDSCt5_HwfwXDWNGWvzkSAW2ZB4PJwS00=i0EizY_3A-OSgw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] media: v4l: fwnode: Support acpi devices for v4l2_fwnode_device_parse
-To: Sakari Ailus <sakari.ailus@iki.fi>
-Cc: Hans de Goede <hdegoede@redhat.com>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi Sakari
+Move atomisp_stop_streaming() above atomisp_start_streaming(), this is
+a preparation patch for making atomisp_start_streaming() properly cleanup
+if starting the sensor stream fails.
 
-On Tue, 22 Apr 2025 at 11:41, Sakari Ailus <sakari.ailus@iki.fi> wrote:
->
-> Hi Hans, Ricardo,
->
-> On Tue, Apr 22, 2025 at 10:44:41AM +0200, Hans de Goede wrote:
-> > Hi Ricardo,
-> >
-> > On 22-Apr-25 2:23 AM, Ricardo Ribalda wrote:
-> > > Hi Sakari
-> > >
-> > > On Sun, 13 Apr 2025 at 17:50, Sakari Ailus <sakari.ailus@iki.fi> wrot=
-e:
-> > >>
-> > >> Hi Ricardo,
-> > >>
-> > >> Thanks for the patch.
-> > >>
-> > >> On Thu, Apr 03, 2025 at 07:16:14PM +0000, Ricardo Ribalda wrote:
-> > >>> This patch modifies v4l2_fwnode_device_parse() to support ACPI devi=
-ces.
-> > >>>
-> > >>> We initially add support only for orientation via the ACPI _PLD met=
-hod.
-> > >>>
-> > >>> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > >>> ---
-> > >>>  drivers/media/v4l2-core/v4l2-fwnode.c | 58 +++++++++++++++++++++++=
-++++++++----
-> > >>>  1 file changed, 52 insertions(+), 6 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/=
-v4l2-core/v4l2-fwnode.c
-> > >>> index cb153ce42c45d69600a3ec4e59a5584d7e791a2a..81563c36b6436bb61e1=
-c96f2a5ede3fa9d64dab3 100644
-> > >>> --- a/drivers/media/v4l2-core/v4l2-fwnode.c
-> > >>> +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-> > >>> @@ -15,6 +15,7 @@
-> > >>>   * Author: Guennadi Liakhovetski <g.liakhovetski@gmx.de>
-> > >>>   */
-> > >>>  #include <linux/acpi.h>
-> > >>> +#include <acpi/acpi_bus.h>
-> > >>>  #include <linux/kernel.h>
-> > >>>  #include <linux/mm.h>
-> > >>>  #include <linux/module.h>
-> > >>> @@ -807,16 +808,47 @@ int v4l2_fwnode_connector_add_link(struct fwn=
-ode_handle *fwnode,
-> > >>>  }
-> > >>>  EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_add_link);
-> > >>>
-> > >>> -int v4l2_fwnode_device_parse(struct device *dev,
-> > >>> -                          struct v4l2_fwnode_device_properties *pr=
-ops)
-> > >>> +static int v4l2_fwnode_device_parse_acpi(struct device *dev,
-> > >>> +                                      struct v4l2_fwnode_device_pr=
-operties *props)
-> > >>> +{
-> > >>> +     struct acpi_pld_info *pld;
-> > >>> +     int ret =3D 0;
-> > >>> +
-> > >>> +     if (!acpi_get_physical_device_location(ACPI_HANDLE(dev), &pld=
-)) {
-> > >>> +             dev_dbg(dev, "acpi _PLD call failed\n");
-> > >>> +             return 0;
-> > >>> +     }
-> > >>
-> > >> You could have software nodes in an ACPI system as well as DT-aligne=
-d
-> > >> properties. They're not the primary means to convey this information=
- still.
-> > >>
-> > >> How about returning e.g. -ENODATA here if _PLD doesn't exist for the=
- device
-> > >> and then proceeding to parse properties as in DT?
-> > >
-> > > Do you mean that there can be devices with ACPI handles that can also
-> > > have DT properties?
-> >
-> > Yes it is possible to embed DT properties in ACPI, but I don't
-> > think that is really applicable here.
->
-> This is determined by
-> Documentation/firmware-guide/acpi/DSD-properties-rules.rst . So rotation
-> and orientation shouldn't come from _DSD properties on ACPI systems.
+No functional change, only moving a block of code up.
 
-Doesn't this contradict what DisCo does?
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ .../staging/media/atomisp/pci/atomisp_ioctl.c | 148 +++++++++---------
+ 1 file changed, 74 insertions(+), 74 deletions(-)
 
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+index 97d99bed1560..705f104a2147 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+@@ -856,6 +856,80 @@ static void atomisp_dma_burst_len_cfg(struct atomisp_sub_device *asd)
+ 		atomisp_css2_hw_store_32(DMA_BURST_SIZE_REG, 0x00);
+ }
+ 
++void atomisp_stop_streaming(struct vb2_queue *vq)
++{
++	struct atomisp_video_pipe *pipe = vq_to_pipe(vq);
++	struct atomisp_sub_device *asd = pipe->asd;
++	struct atomisp_device *isp = asd->isp;
++	struct pci_dev *pdev = to_pci_dev(isp->dev);
++	unsigned long flags;
++	int ret;
++
++	dev_dbg(isp->dev, "Stop stream\n");
++
++	mutex_lock(&isp->mutex);
++	/*
++	 * There is no guarantee that the buffers queued to / owned by the ISP
++	 * will properly be returned to the queue when stopping. Set a flag to
++	 * avoid new buffers getting queued and then wait for all the current
++	 * buffers to finish.
++	 */
++	pipe->stopping = true;
++	mutex_unlock(&isp->mutex);
++	/* wait max 1 second */
++	ret = wait_event_timeout(pipe->vb_queue.done_wq,
++				 atomisp_buffers_in_css(pipe) == 0, HZ);
++	mutex_lock(&isp->mutex);
++	pipe->stopping = false;
++	if (ret == 0)
++		dev_warn(isp->dev, "Warning timeout waiting for CSS to return buffers\n");
++
++	spin_lock_irqsave(&isp->lock, flags);
++	asd->streaming = false;
++	spin_unlock_irqrestore(&isp->lock, flags);
++
++	atomisp_clear_css_buffer_counters(asd);
++	atomisp_css_irq_enable(isp, IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF, false);
++
++	atomisp_css_stop(asd, false);
++
++	atomisp_flush_video_pipe(pipe, VB2_BUF_STATE_ERROR, true);
++
++	atomisp_subdev_cleanup_pending_events(asd);
++
++	ret = v4l2_subdev_call(isp->inputs[asd->input_curr].csi_remote_source,
++			       video, s_stream, 0);
++	if (ret)
++		dev_warn(isp->dev, "Stopping sensor stream failed: %d\n", ret);
++
++	/* Disable the CSI interface on ANN B0/K0 */
++	if (isp->media_dev.hw_revision >= ((ATOMISP_HW_REVISION_ISP2401 <<
++					    ATOMISP_HW_REVISION_SHIFT) | ATOMISP_HW_STEPPING_B0)) {
++		pci_write_config_word(pdev, MRFLD_PCI_CSI_CONTROL,
++				      isp->saved_regs.csi_control & ~MRFLD_PCI_CSI_CONTROL_CSI_READY);
++	}
++
++	if (atomisp_freq_scaling(isp, ATOMISP_DFS_MODE_LOW, false))
++		dev_warn(isp->dev, "DFS failed.\n");
++
++	/*
++	 * ISP work around, need to reset ISP to allow next stream on to work.
++	 * Streams have already been destroyed by atomisp_css_stop().
++	 * Disable PUNIT/ISP acknowledge/handshake - SRSE=3 and then reset.
++	 */
++	pci_write_config_dword(pdev, PCI_I_CONTROL,
++			       isp->saved_regs.i_control | MRFLD_PCI_I_CONTROL_SRSE_RESET_MASK);
++	atomisp_reset(isp);
++
++	/* Streams were destroyed by atomisp_css_stop(), recreate them. */
++	ret = atomisp_create_pipes_stream(&isp->asd);
++	if (ret)
++		dev_warn(isp->dev, "Recreating streams failed: %d\n", ret);
++
++	media_pipeline_stop(&asd->video_out.vdev.entity.pads[0]);
++	mutex_unlock(&isp->mutex);
++}
++
+ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
+ {
+ 	struct atomisp_video_pipe *pipe = vq_to_pipe(vq);
+@@ -961,80 +1035,6 @@ int atomisp_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	return ret;
+ }
+ 
+-void atomisp_stop_streaming(struct vb2_queue *vq)
+-{
+-	struct atomisp_video_pipe *pipe = vq_to_pipe(vq);
+-	struct atomisp_sub_device *asd = pipe->asd;
+-	struct atomisp_device *isp = asd->isp;
+-	struct pci_dev *pdev = to_pci_dev(isp->dev);
+-	unsigned long flags;
+-	int ret;
+-
+-	dev_dbg(isp->dev, "Stop stream\n");
+-
+-	mutex_lock(&isp->mutex);
+-	/*
+-	 * There is no guarantee that the buffers queued to / owned by the ISP
+-	 * will properly be returned to the queue when stopping. Set a flag to
+-	 * avoid new buffers getting queued and then wait for all the current
+-	 * buffers to finish.
+-	 */
+-	pipe->stopping = true;
+-	mutex_unlock(&isp->mutex);
+-	/* wait max 1 second */
+-	ret = wait_event_timeout(pipe->vb_queue.done_wq,
+-				 atomisp_buffers_in_css(pipe) == 0, HZ);
+-	mutex_lock(&isp->mutex);
+-	pipe->stopping = false;
+-	if (ret == 0)
+-		dev_warn(isp->dev, "Warning timeout waiting for CSS to return buffers\n");
+-
+-	spin_lock_irqsave(&isp->lock, flags);
+-	asd->streaming = false;
+-	spin_unlock_irqrestore(&isp->lock, flags);
+-
+-	atomisp_clear_css_buffer_counters(asd);
+-	atomisp_css_irq_enable(isp, IA_CSS_IRQ_INFO_CSS_RECEIVER_SOF, false);
+-
+-	atomisp_css_stop(asd, false);
+-
+-	atomisp_flush_video_pipe(pipe, VB2_BUF_STATE_ERROR, true);
+-
+-	atomisp_subdev_cleanup_pending_events(asd);
+-
+-	ret = v4l2_subdev_call(isp->inputs[asd->input_curr].csi_remote_source,
+-			       video, s_stream, 0);
+-	if (ret)
+-		dev_warn(isp->dev, "Stopping sensor stream failed: %d\n", ret);
+-
+-	/* Disable the CSI interface on ANN B0/K0 */
+-	if (isp->media_dev.hw_revision >= ((ATOMISP_HW_REVISION_ISP2401 <<
+-					    ATOMISP_HW_REVISION_SHIFT) | ATOMISP_HW_STEPPING_B0)) {
+-		pci_write_config_word(pdev, MRFLD_PCI_CSI_CONTROL,
+-				      isp->saved_regs.csi_control & ~MRFLD_PCI_CSI_CONTROL_CSI_READY);
+-	}
+-
+-	if (atomisp_freq_scaling(isp, ATOMISP_DFS_MODE_LOW, false))
+-		dev_warn(isp->dev, "DFS failed.\n");
+-
+-	/*
+-	 * ISP work around, need to reset ISP to allow next stream on to work.
+-	 * Streams have already been destroyed by atomisp_css_stop().
+-	 * Disable PUNIT/ISP acknowledge/handshake - SRSE=3 and then reset.
+-	 */
+-	pci_write_config_dword(pdev, PCI_I_CONTROL,
+-			       isp->saved_regs.i_control | MRFLD_PCI_I_CONTROL_SRSE_RESET_MASK);
+-	atomisp_reset(isp);
+-
+-	/* Streams were destroyed by atomisp_css_stop(), recreate them. */
+-	ret = atomisp_create_pipes_stream(&isp->asd);
+-	if (ret)
+-		dev_warn(isp->dev, "Recreating streams failed: %d\n", ret);
+-
+-	media_pipeline_stop(&asd->video_out.vdev.entity.pads[0]);
+-	mutex_unlock(&isp->mutex);
+-}
+-
+ /*
+  * To get the current value of a control.
+  * applications initialize the id field of a struct v4l2_control and
+-- 
+2.49.0
 
-if (!fwnode_property_present(adev_fwnode, "rotation")) {
-struct acpi_pld_info *pld;
-
-if (acpi_get_physical_device_location(handle, &pld)) {
-swnodes->dev_props[NEXT_PROPERTY(prop_index, DEV_ROTATION)] =3D
-PROPERTY_ENTRY_U32("rotation",
-   pld->rotation * 45U);
-kfree(pld);
-}
-}
-
-It seems to first check for the rotation property, and then check _DSD.
-
-If I send a v2, shall I also replace DisCo even if that means
-reverting its logic?
-
-
->
-> >
-> > But we also have secondary software-fwnodes which are used
-> > extensively on x86 to set device-properties on devices by
-> > platform code to deal with ACPI tables sometimes having
-> > incomplete information.
-> >
-> > For example atm _PLD is already being parsed in:
-> >
-> > drivers/media/pci/intel/ipu-bridge.c and that is then used to add
-> > a standard "orientation" device-property on the sensor device.
-> >
-> > This is actually something which I guess we can drop once your
-> > patches are in, since those should then do the same in a more
-> > generic manner.
->
-> DisCo for Imaging support currently also digs this information from _PDL
-> (see init_crs_csi2_swnodes() in drivers/acpi/mipi-disco-img.c), but this
-> is only done if a _CRS CSI-2 descriptor is present. It could also be done
-> for devices with the IPU Windows specific ACPI objects and it would be a
-> natural location for handing quirks -- there are some
-> unrelated Dell DSDT quirks already.
->
-> >
-> > > What shall we do if _PLD contradicts the DT property? What takes prec=
-edence?
-> >
-> > As for priorities, at east for rotation it seems that we are going
-> > to need some quirks, I already have a few Dell laptops where it seems
-> > that the sensor is upside down and parsing the rotation field in
-> > the IPU6 specific SSDB ACPI package does not yield a 180=C2=B0 rotation=
-,
-> > so we are going to need some quirks.
-> >
-> > I expect these quirks to live in the bridge code, while your helper
-> > will be called from sensor drivers, so in order to allow quirks to
-> > override things, I think that first the "orientation" device-property
-> > should be checked (which the ACPI glue code we have can set before
-> > the sensor driver binds) and only then should _PLD be checked.
-> >
-> > IOW _PLD should be seen as the fallback, because ACPI tables are
-> > often a copy and paste job so it can very well contain wrong info
-> > copy-pasted from some example ACPI code or from another hw model.
->
-> Unfortunately that does happen. :-(
->
-> --
-> Regards,
->
-> Sakari Ailus
-
-
-
---=20
-Ricardo Ribalda
