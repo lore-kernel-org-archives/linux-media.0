@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C88279340;
-	Mon,  5 May 2025 23:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E602F0B89;
+	Mon,  5 May 2025 23:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486635; cv=none; b=IrmZnwX6x6/bAZ3r4G0uiRP8b5sbmQ9Nj18KKhIGclSpy5yvDfWq1C+4qPvTfwSJYhTwAb+IeWuGsWA8KJ46UeCZSscUz6zHloEfKin1ZYNlUQLH5OU0auWHWS92lvByyn0l8p5yTtleGOPM+fY72R48R6mThUCAbXcwF+uNZdU=
+	t=1746486690; cv=none; b=kiXDE3yocsPL7qg560idZjmHxMuA0O5+/zz/mdwnD6D1zxGYB97jLBXc4CNKXHUUdIeAYr/4BuFk3oEUXpw0wGqE9Sz4t5BKHkss5s0PE2oA8qknP0eTdUqkoZTNUUg0CAHFFEu7GuJRGCSBEohW+GTtoDadbnn3G9H/DUn4VoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486635; c=relaxed/simple;
-	bh=iiDhzHdQ/QqScp0AKppkDMN90q3HYcqsMN4wZ5m8cv4=;
+	s=arc-20240116; t=1746486690; c=relaxed/simple;
+	bh=F7wlOSoyZJPNbhzzfvtwOOj3HiP7SzYrJM37PZhVR5E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XWMiJGQdvWwuHSRWrYBfYu+c/j3XrsmidY98seu+OKgi1mXDmbrnWISFBzFem9Fj4VdDVp8YDwcWK87KDfNFJlujP34dL+TOwpZhrVU+Zk8mkqxqODHKW9O6mP+hNMgHz9zjZFBm3MFW927tkLHN5+zV4B0kLT0Cke7V3Tiu8H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnlrGXw7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=GHlGQFB/yQqUDqe1ISOz1QXz7qxu7Sdzxg+DB2pw2+99Vggm1Tgc5QJeF/ofLElsMLDgbNiQ+78/8GdxUPdCkrOgDGTq2S/+AdJvfaFyrpNNQ9LonuQPAAStUxU8ck1UB6ZkQi3XTj4e8vbMcnCFaHOCmbLvrEMtzISLwVGva4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyUuOUnz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnlrGXw7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDF2C4CEEF;
-	Mon,  5 May 2025 23:10:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyUuOUnz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0943EC4CEE4;
+	Mon,  5 May 2025 23:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486634;
-	bh=iiDhzHdQ/QqScp0AKppkDMN90q3HYcqsMN4wZ5m8cv4=;
+	s=k20201202; t=1746486689;
+	bh=F7wlOSoyZJPNbhzzfvtwOOj3HiP7SzYrJM37PZhVR5E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lnlrGXw7IHw8lORrnXGW5YU01MgwYPERpgJ1jaZG1TMvQSHH149PGy+McnSbLqlMv
-	 MBSZc3+vyaAvFDS3sbeABl1WN26kDrsdnfR33cltFo/175OczDFjkW9SdmlKULifwW
-	 ez7iHgpd+uGSrzRHRV0tYvBAl8ABjJlBEpGgsoYFZPzHj9Kr1MbKP/9HZ2dy3K5bb/
-	 57glHjFM0QCPyA/jtFYmmataLrOMm5Hm8EGI+gO0nZfFMcZGR1J4CqmKu5nUnq23Bo
-	 jeCvSKTjWwhXTFYn8soXFFHb9pErC6MKyDjaU5xrYkvko0XQBcMcYPFnWclME02zNa
-	 EeUSMTOpMYVtw==
+	b=IyUuOUnzrVRdFpzyaqMvNjfQVgqe2AD4tqvvuHaAlZeOzABt4bES5X7bwpzXoUxhK
+	 tm514Qz25kriJy1cWjboZGqLTCzABXLAxgJoIE8aR7juno0vi7sGr5KhtCW/p7s/Ea
+	 wwoerLF4cHdOKuGQacCgxcXPu7HcAynAlCSiN2ovBoOWHPYAFLL5fUF+ptS5BN/3j0
+	 5jsc0klj0e1TQgjBZtXQz4R16EPWOMAF0GeMCb6HmobSoodpIIwZdcdhMJmT7HGMEN
+	 GTaVRZfjuDR7nGrnSj13sg3hMBHZ8X0ugCeapfkMi+AyyaiiJFX7UIRldUDiCmoBE6
+	 wggzWkTfYVOyw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
+Cc: Hans Verkuil <hverkuil@xs4all.nl>,
+	"Artem S . Tashkinov" <aros@gmx.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	lars@metafoo.de,
 	mchehab@kernel.org,
 	linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 127/212] media: adv7180: Disable test-pattern control on adv7180
-Date: Mon,  5 May 2025 19:04:59 -0400
-Message-Id: <20250505230624.2692522-127-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 152/212] media: test-drivers: vivid: don't call schedule in loop
+Date: Mon,  5 May 2025 19:05:24 -0400
+Message-Id: <20250505230624.2692522-152-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
 References: <20250505230624.2692522-1-sashal@kernel.org>
@@ -47,132 +48,131 @@ List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.136
 Content-Transfer-Encoding: 8bit
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-[ Upstream commit a980bc5f56b0292336e408f657f79e574e8067c0 ]
+[ Upstream commit e4740118b752005cbed339aec9a1d1c43620e0b9 ]
 
-The register that enables selecting a test-pattern to be outputted in
-free-run mode (FREE_RUN_PAT_SEL[2:0]) is only available on adv7280 based
-devices, not the adv7180 based ones.
+Artem reported that the CPU load was 100% when capturing from
+vivid at low resolution with ffmpeg.
 
-Add a flag to mark devices that are capable of generating test-patterns,
-and those that are not. And only register the control on supported
-devices.
+This was caused by:
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+while (time_is_after_jiffies(cur_jiffies + wait_jiffies) &&
+       !kthread_should_stop())
+        schedule();
+
+If there are no other processes running that can be scheduled,
+then this is basically a busy-loop.
+
+Change it to wait_event_interruptible_timeout() which doesn't
+have that problem.
+
 Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+Reported-by: Artem S. Tashkinov <aros@gmx.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219570
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/adv7180.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ drivers/media/test-drivers/vivid/vivid-kthread-cap.c  | 11 ++++++++---
+ drivers/media/test-drivers/vivid/vivid-kthread-out.c  | 11 ++++++++---
+ .../media/test-drivers/vivid/vivid-kthread-touch.c    | 11 ++++++++---
+ drivers/media/test-drivers/vivid/vivid-sdr-cap.c      | 11 ++++++++---
+ 4 files changed, 32 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 216fe396973f2..46912a7b671a8 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -194,6 +194,7 @@ struct adv7180_state;
- #define ADV7180_FLAG_V2			BIT(1)
- #define ADV7180_FLAG_MIPI_CSI2		BIT(2)
- #define ADV7180_FLAG_I2P		BIT(3)
-+#define ADV7180_FLAG_TEST_PATTERN	BIT(4)
+diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+index 690daada7db4f..54e6a6772035f 100644
+--- a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
+@@ -894,9 +894,14 @@ static int vivid_thread_vid_cap(void *data)
+ 			next_jiffies_since_start = jiffies_since_start;
  
- struct adv7180_chip_info {
- 	unsigned int flags;
-@@ -673,11 +674,15 @@ static int adv7180_init_controls(struct adv7180_state *state)
- 			  ADV7180_HUE_MAX, 1, ADV7180_HUE_DEF);
- 	v4l2_ctrl_new_custom(&state->ctrl_hdl, &adv7180_ctrl_fast_switch, NULL);
+ 		wait_jiffies = next_jiffies_since_start - jiffies_since_start;
+-		while (time_is_after_jiffies(cur_jiffies + wait_jiffies) &&
+-		       !kthread_should_stop())
+-			schedule();
++		if (!time_is_after_jiffies(cur_jiffies + wait_jiffies))
++			continue;
++
++		wait_queue_head_t wait;
++
++		init_waitqueue_head(&wait);
++		wait_event_interruptible_timeout(wait, kthread_should_stop(),
++					cur_jiffies + wait_jiffies - jiffies);
+ 	}
+ 	dprintk(dev, 1, "Video Capture Thread End\n");
+ 	return 0;
+diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-out.c b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
+index 0833e021bb11d..8a17a01e6e426 100644
+--- a/drivers/media/test-drivers/vivid/vivid-kthread-out.c
++++ b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
+@@ -235,9 +235,14 @@ static int vivid_thread_vid_out(void *data)
+ 			next_jiffies_since_start = jiffies_since_start;
  
--	v4l2_ctrl_new_std_menu_items(&state->ctrl_hdl, &adv7180_ctrl_ops,
--				      V4L2_CID_TEST_PATTERN,
--				      ARRAY_SIZE(test_pattern_menu) - 1,
--				      0, ARRAY_SIZE(test_pattern_menu) - 1,
--				      test_pattern_menu);
-+	if (state->chip_info->flags & ADV7180_FLAG_TEST_PATTERN) {
-+		v4l2_ctrl_new_std_menu_items(&state->ctrl_hdl,
-+					     &adv7180_ctrl_ops,
-+					     V4L2_CID_TEST_PATTERN,
-+					     ARRAY_SIZE(test_pattern_menu) - 1,
-+					     0,
-+					     ARRAY_SIZE(test_pattern_menu) - 1,
-+					     test_pattern_menu);
-+	}
+ 		wait_jiffies = next_jiffies_since_start - jiffies_since_start;
+-		while (time_is_after_jiffies(cur_jiffies + wait_jiffies) &&
+-		       !kthread_should_stop())
+-			schedule();
++		if (!time_is_after_jiffies(cur_jiffies + wait_jiffies))
++			continue;
++
++		wait_queue_head_t wait;
++
++		init_waitqueue_head(&wait);
++		wait_event_interruptible_timeout(wait, kthread_should_stop(),
++					cur_jiffies + wait_jiffies - jiffies);
+ 	}
+ 	dprintk(dev, 1, "Video Output Thread End\n");
+ 	return 0;
+diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-touch.c b/drivers/media/test-drivers/vivid/vivid-kthread-touch.c
+index fa711ee36a3fb..c862689786b69 100644
+--- a/drivers/media/test-drivers/vivid/vivid-kthread-touch.c
++++ b/drivers/media/test-drivers/vivid/vivid-kthread-touch.c
+@@ -135,9 +135,14 @@ static int vivid_thread_touch_cap(void *data)
+ 			next_jiffies_since_start = jiffies_since_start;
  
- 	state->sd.ctrl_handler = &state->ctrl_hdl;
- 	if (state->ctrl_hdl.error) {
-@@ -1209,7 +1214,7 @@ static const struct adv7180_chip_info adv7182_info = {
- };
+ 		wait_jiffies = next_jiffies_since_start - jiffies_since_start;
+-		while (time_is_after_jiffies(cur_jiffies + wait_jiffies) &&
+-		       !kthread_should_stop())
+-			schedule();
++		if (!time_is_after_jiffies(cur_jiffies + wait_jiffies))
++			continue;
++
++		wait_queue_head_t wait;
++
++		init_waitqueue_head(&wait);
++		wait_event_interruptible_timeout(wait, kthread_should_stop(),
++					cur_jiffies + wait_jiffies - jiffies);
+ 	}
+ 	dprintk(dev, 1, "Touch Capture Thread End\n");
+ 	return 0;
+diff --git a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+index 0ae5628b86c95..abccd1d0109ec 100644
+--- a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
+@@ -206,9 +206,14 @@ static int vivid_thread_sdr_cap(void *data)
+ 			next_jiffies_since_start = jiffies_since_start;
  
- static const struct adv7180_chip_info adv7280_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P | ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN3) |
-@@ -1223,7 +1228,8 @@ static const struct adv7180_chip_info adv7280_info = {
- };
- 
- static const struct adv7180_chip_info adv7280_m_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P |
-+		ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN3) |
-@@ -1244,7 +1250,8 @@ static const struct adv7180_chip_info adv7280_m_info = {
- };
- 
- static const struct adv7180_chip_info adv7281_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
-+		ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN7) |
-@@ -1259,7 +1266,8 @@ static const struct adv7180_chip_info adv7281_info = {
- };
- 
- static const struct adv7180_chip_info adv7281_m_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
-+		ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN3) |
-@@ -1279,7 +1287,8 @@ static const struct adv7180_chip_info adv7281_m_info = {
- };
- 
- static const struct adv7180_chip_info adv7281_ma_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 |
-+		ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN3) |
-@@ -1304,7 +1313,7 @@ static const struct adv7180_chip_info adv7281_ma_info = {
- };
- 
- static const struct adv7180_chip_info adv7282_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_I2P | ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN7) |
-@@ -1319,7 +1328,8 @@ static const struct adv7180_chip_info adv7282_info = {
- };
- 
- static const struct adv7180_chip_info adv7282_m_info = {
--	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P,
-+	.flags = ADV7180_FLAG_V2 | ADV7180_FLAG_MIPI_CSI2 | ADV7180_FLAG_I2P |
-+		ADV7180_FLAG_TEST_PATTERN,
- 	.valid_input_mask = BIT(ADV7182_INPUT_CVBS_AIN1) |
- 		BIT(ADV7182_INPUT_CVBS_AIN2) |
- 		BIT(ADV7182_INPUT_CVBS_AIN3) |
+ 		wait_jiffies = next_jiffies_since_start - jiffies_since_start;
+-		while (time_is_after_jiffies(cur_jiffies + wait_jiffies) &&
+-		       !kthread_should_stop())
+-			schedule();
++		if (!time_is_after_jiffies(cur_jiffies + wait_jiffies))
++			continue;
++
++		wait_queue_head_t wait;
++
++		init_waitqueue_head(&wait);
++		wait_event_interruptible_timeout(wait, kthread_should_stop(),
++					cur_jiffies + wait_jiffies - jiffies);
+ 	}
+ 	dprintk(dev, 1, "SDR Capture Thread End\n");
+ 	return 0;
 -- 
 2.39.5
 
