@@ -1,217 +1,197 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1D8221F24;
-	Sat, 10 May 2025 07:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032711E991A
+	for <linux-media@vger.kernel.org>; Sat, 10 May 2025 07:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746863922; cv=none; b=QRRx4N4pUfMNTWP3M6HjD7T4f5w/SaIylvKl2sW1YmydQd1xX3QXWLnr13vuY8GyYKRSLUWPX5HdEhOK/TE2oeEONWKkvJq456Dvv7ho2hSOk5n+5RFgQJrlwBjlN8tty4AuVP6RW9dMntxxgzRRgmQv7Fdh6YsPyrxikUfDmkM=
+	t=1746863942; cv=none; b=M4oNAQYk42evLtQO+1pHspEakHg63Nl2yevO12OrwbtlXqaEcjfaNKGvbpYlQh43hUB1qRlOBRot8GS5A8LJ0NnW64kM5dfNikj3rK65Z/Wqr09CSkFePsMhuBx2ZtDx+aqprhcHUf4wkgNV842zEYP3b2G449ZyIN3iqlIRAeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746863922; c=relaxed/simple;
-	bh=mI3iewsuJuKo4PZ8m0kiHtdODfzA7n4MnVvFLvXaZ3o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gNatTmFE+AT3IkMFN7D7EY5AfahKUVB6lB419Ljpr4D3G1xWGAJHaQYiNbFU0Az/wnaX6DqUnDD1tn9ZZ6enSkW1RD17LxN/xwqoYKDPv5Ksv5d8uy9xG6tAW2KYJaUg1OzziXr7oFRgmC3/HTeyBNi5RbOIdD44IPYZ4gI914I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=CT31vcog; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1746863942; c=relaxed/simple;
+	bh=DhZAlpZZfySq9jgd/MNvY48t2EhLzLEPM7E7t0Jx+ec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NFvvcqnA2gDAmjCcvsaOlLHU78rZXYRvv6ByJEhzVRTlzmPzoSRgTdKjIS6EKVDLchNtXJI7gMNrnMAjxNP1xRZOu/PXjnjFs6Mxt1eNShkypwXKKS73JdfuCV7gQ9/Mx8OsdJ3Lf0ApmpoZsYEQhS0+tq9WujnLrPln9sWIwqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=Y8BrEOej; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gHHHOHWO; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="CT31vcog"
-X-UUID: 916bc0042d7411f082f7f7ac98dee637-20250510
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=BAIkgZN1tALx+5TYHI1VWwihIl2+mQhkPkkhE3bXgMA=;
-	b=CT31vcogJBI8qia2wLXYDH7nOgAAWepZp15yDdbdhQ1jaYkarFZbzCmzwmelZBNOrfbKB7pdP0NEnBPTlK/45VMuU5EcX6+CEiz/c0ux4bPwNTUAEJfZ75I8Zf+nSpxzd7iJ2HFCznQuX7dmLp5CVwytzJK5paZtlnLGjlgmETY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:6bc19390-9b50-4609-a069-bf24a27641f0,IP:0,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-5
-X-CID-META: VersionHash:0ef645f,CLOUDID:43cd5e51-76c0-4e62-bb75-246dfb0889c6,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 916bc0042d7411f082f7f7ac98dee637-20250510
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw02.mediatek.com
-	(envelope-from <yunfei.dong@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1546077641; Sat, 10 May 2025 15:58:32 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Sat, 10 May 2025 15:58:29 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Sat, 10 May 2025 15:58:29 +0800
-From: Yunfei Dong <yunfei.dong@mediatek.com>
-To: =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
-	<nfraprado@collabora.com>, Sebastian Fricke <sebastian.fricke@collabora.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>, Hans Verkuil
-	<hverkuil-cisco@xs4all.nl>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Benjamin Gaignard
-	<benjamin.gaignard@collabora.com>, Nathan Hebert <nhebert@chromium.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-CC: Hsin-Yi Wang <hsinyi@chromium.org>, Fritz Koenig <frkoenig@chromium.org>,
-	Daniel Vetter <daniel@ffwll.ch>, Steve Cho <stevecho@chromium.org>, Yunfei
- Dong <yunfei.dong@mediatek.com>, <linux-media@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 14/14] media: mediatek: decoder: support av1 extend vsi
-Date: Sat, 10 May 2025 15:53:44 +0800
-Message-ID: <20250510075357.11761-15-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250510075357.11761-1-yunfei.dong@mediatek.com>
-References: <20250510075357.11761-1-yunfei.dong@mediatek.com>
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="Y8BrEOej";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gHHHOHWO"
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 92E9D114013F;
+	Sat, 10 May 2025 03:58:57 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Sat, 10 May 2025 03:58:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1746863937;
+	 x=1746950337; bh=g1V29Bf+SJmrjO7SHblCDnuqZu/LkA7jBvlYNTMQyoE=; b=
+	Y8BrEOejwThJcglj2Xif5Uk9+po6Swrrjx2uqpCmNCigwxP7MhS8YReEs6XxHky1
+	5l2uGGO911P7VLeTuIAIqIcJE8wlZZKtSk88gJxgHcl7vFwA62P176vMtB9pIBip
+	eGRcFcsjWZttZQsKoU5WcOWNYi6QqeSGs2AO2H0Dm10DjEEWPDH62ZBsOdQwv15v
+	CWpPqAEaURKW4IKdTcm4LcAP4EpaNyUW5OrepCi9GeKe/EUF6YPkDtR+MC7/kZu0
+	imOw41YnyNJ1zR1ZGSWz6NmGa+QYb7km3meSm+YZ/h0uKueKDqVEfRAPkkVsmU8c
+	ciIQQjvs26+GJjiGn+ZcPw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746863937; x=
+	1746950337; bh=g1V29Bf+SJmrjO7SHblCDnuqZu/LkA7jBvlYNTMQyoE=; b=g
+	HHHOHWOEg2ksJzz+aliTtioxW4faKaM9M0NF88NN4ZnJXKvWLJRmtgUkvI38yIiJ
+	1xOgut5Sf5cfUu/uiH8baAeHxmR5iZnfEFvWKA8QzpVSYddwP52WLsmcbykpwNeT
+	DqLEBO8LcHG8zJMqdpry/Cuk0+8OgbEUyjeiALfRBkyPdLTp201HYhLx/uaSyP+z
+	qAQply90EiOuWbX6pg0J1H4pO6AwixHaQ0YlQW5LKhM1dd9SoAPn43qjM1oK/soq
+	4kvttlR+YnIkB/dL824/XIH7El3MRPr7S0rOH5e5yWU9EoBSsF4PGQKihSQYXLP5
+	5XICSMeiWWx4o7wI5V86Q==
+X-ME-Sender: <xms:QQcfaO33A5_FG7nXznvbr2azbHay6-0Vr50oFSpHUrNIrvGO_JWi9Q>
+    <xme:QQcfaBGa4aErGIyMbtVtZNX-B_H1PJLEmlsF37mxFeq0oJw5gbBF9DC2MS2uczNjk
+    CwMIanXBOF-xkLylnk>
+X-ME-Received: <xmr:QQcfaG43hlpxe0FHwpjvirKfedjCQtzblBGg2vQxpH7kwvUbBIb1KdGPmu4_o1TZjm7vZYdLaTBiPkdJNQ1_BTtfqtL90DL9SQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleegleeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddt
+    tdejnecuhfhrohhmpefpihhklhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrsh
+    houggvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvqeenucggtffr
+    rghtthgvrhhnpeehhedvteehudelkeejudfhvdfgkefhveffffelfeetjeehieelveeuhf
+    euvddvieenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghdpkhgvrhhnvghl
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epnhhikhhlrghsrdhsohguvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghh
+    rdhsvgdpnhgspghrtghpthhtohepvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    eprhhisggrlhgurgestghhrhhomhhiuhhmrdhorhhgpdhrtghpthhtoheplhhinhhugidq
+    mhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:QQcfaP3ZPeOu4hxdt6xFFOwIY2Nu_E3bckDxntyYNgheVmFCFTqN3w>
+    <xmx:QQcfaBHjruqu05kxH9LOL2fpQjjQZl-mJWd-sU2H8a5nsxmbUU7AhA>
+    <xmx:QQcfaI-QCp_W_flInzSnQG6whDZRAak9dYJoKS6JnEEWbVM2xDgCOA>
+    <xmx:QQcfaGmY0e3YJbuXL0oin3a0OsSU4ociMU3dzQZVcOsYrFSBS7edxA>
+    <xmx:QQcfaGOYWv4rA7fM8U1yI52UDP6yeNvzyBKY5ebn0uB4G2GGJQMmHn8G>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 10 May 2025 03:58:56 -0400 (EDT)
+Date: Sat, 10 May 2025 09:58:55 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: linux-media@vger.kernel.org
+Subject: Re: media: v4l2-common: Reduce warnings about missing
+ V4L2_CID_LINK_FREQ control
+Message-ID: <20250510075855.GB1730172@ragnatech.se>
+References: <20250508083745.1697364-1-niklas.soderlund+renesas@ragnatech.se>
+ <681e71eb.050a0220.3a7ab3.60bf@mx.google.com>
+ <20250509221131.GA1722387@ragnatech.se>
+ <CANiDSCv-NFw1jbo-gyxPT=P+=mM1Mkdx71kMcTWYPKFjAD75GQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+In-Reply-To: <CANiDSCv-NFw1jbo-gyxPT=P+=mM1Mkdx71kMcTWYPKFjAD75GQ@mail.gmail.com>
 
-The driver can't access tile buffer address for extend architecture,
-set tile group information in vcp and share it with kernel.
+Hi Ricardo,
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../vcodec/decoder/vdec/vdec_av1_req_lat_if.c | 46 ++++++++++++++++---
- 1 file changed, 39 insertions(+), 7 deletions(-)
+On 2025-05-10 00:26:12 +0200, Ricardo Ribalda wrote:
+> Hi Niklas
+> 
+> 
+> On Sat, 10 May 2025 at 00:11, Niklas Söderlund
+> <niklas.soderlund+renesas@ragnatech.se> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > Thanks for all the effort you and others put into the media CI!
+> >
+> > I just got this error report from the CI telling me a patched failed the
+> > style check and I don't fully understand the error message, maybe it
+> > could be improved?
+> 
+> Today I have to recreate the repository where  patchwork-ci fetches
+> the patches and for some minutes the user.email and user.name was
+> misconfigured and took the system default.
+> 
+> You were the lucky one :P. Sorry about that
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-index 6070485e26c4..43541faeea87 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_av1_req_lat_if.c
-@@ -25,6 +25,8 @@
- 
- #define AV1_INVALID_IDX			-1
- 
-+#define AV1_NON_EXT_VSI_SIZE		0xD50
-+
- #define AV1_DIV_ROUND_UP_POW2(value, n)			\
- ({							\
- 	typeof(n) _n  = n;				\
-@@ -641,6 +643,8 @@ struct vdec_av1_slice_fb {
-  * @frame:		current frame info
-  * @state:		status after decode done
-  * @cur_lst_tile_id:	tile id for large scale
-+ * @tile_group:	tile group info
-+ * @reserved:		reserved
-  */
- struct vdec_av1_slice_vsi {
- 	/* lat */
-@@ -665,6 +669,8 @@ struct vdec_av1_slice_vsi {
- 	struct vdec_av1_slice_frame frame;
- 	struct vdec_av1_slice_state state;
- 	u32 cur_lst_tile_id;
-+	struct vdec_av1_slice_tile_group tile_group;
-+	unsigned int reserved[4];
- };
- 
- /**
-@@ -1394,13 +1400,18 @@ static int vdec_av1_slice_setup_tile_group(struct vdec_av1_slice_instance *insta
- 					   struct vdec_av1_slice_vsi *vsi)
- {
- 	struct v4l2_ctrl_av1_tile_group_entry *ctrl_tge;
--	struct vdec_av1_slice_tile_group *tile_group = &instance->tile_group;
-+	struct vdec_av1_slice_tile_group *tile_group;
- 	struct vdec_av1_slice_uncompressed_header *uh = &vsi->frame.uh;
- 	struct vdec_av1_slice_tile *tile = &uh->tile;
- 	struct v4l2_ctrl *ctrl;
- 	u32 tge_size;
- 	int i;
- 
-+	if (IS_VDEC_SUPPORT_EXT(instance->ctx->dev->dec_capability))
-+		tile_group = &vsi->tile_group;
-+	else
-+		tile_group = &instance->tile_group;
-+
- 	ctrl = v4l2_ctrl_find(&instance->ctx->ctrl_hdl, V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY);
- 	if (!ctrl)
- 		return -EINVAL;
-@@ -1601,6 +1612,7 @@ static void vdec_av1_slice_setup_lat_buffer(struct vdec_av1_slice_instance *inst
- 					    struct vdec_lat_buf *lat_buf)
- {
- 	struct vdec_av1_slice_work_buffer *work_buffer;
-+	u32 num_tiles;
- 	int i;
- 
- 	vsi->bs.dma_addr = bs->dma_addr;
-@@ -1635,12 +1647,18 @@ static void vdec_av1_slice_setup_lat_buffer(struct vdec_av1_slice_instance *inst
- 
- 	vsi->tile.buf = instance->tile.dma_addr;
- 	vsi->tile.size = instance->tile.size;
--	memcpy(lat_buf->tile_addr.va, instance->tile.va, 64 * instance->tile_group.num_tiles);
- 
- 	vsi->cdf_table.buf = instance->cdf_table.dma_addr;
- 	vsi->cdf_table.size = instance->cdf_table.size;
- 	vsi->iq_table.buf = instance->iq_table.dma_addr;
- 	vsi->iq_table.size = instance->iq_table.size;
-+
-+	if (IS_VDEC_SUPPORT_EXT(instance->ctx->dev->dec_capability))
-+		num_tiles = vsi->tile_group.num_tiles;
-+	else
-+		num_tiles = instance->tile_group.num_tiles;
-+
-+	memcpy(lat_buf->tile_addr.va, instance->tile.va, 64 * num_tiles);
- }
- 
- static void vdec_av1_slice_setup_seg_buffer(struct vdec_av1_slice_instance *instance,
-@@ -1663,7 +1681,7 @@ static void vdec_av1_slice_setup_tile_buffer(struct vdec_av1_slice_instance *ins
- 					     struct vdec_av1_slice_vsi *vsi,
- 					     struct mtk_vcodec_mem *bs)
- {
--	struct vdec_av1_slice_tile_group *tile_group = &instance->tile_group;
-+	struct vdec_av1_slice_tile_group *tile_group;
- 	struct vdec_av1_slice_uncompressed_header *uh = &vsi->frame.uh;
- 	struct vdec_av1_slice_tile *tile = &uh->tile;
- 	u32 tile_num, tile_row, tile_col;
-@@ -1674,6 +1692,11 @@ static void vdec_av1_slice_setup_tile_buffer(struct vdec_av1_slice_instance *ins
- 	u32 *tile_info_buf = instance->tile.va;
- 	u64 pa = (u64)bs->dma_addr;
- 
-+	if (IS_VDEC_SUPPORT_EXT(instance->ctx->dev->dec_capability))
-+		tile_group = &vsi->tile_group;
-+	else
-+		tile_group = &instance->tile_group;
-+
- 	if (uh->disable_cdf_update == 0)
- 		allow_update_cdf = 1;
- 
-@@ -1887,7 +1910,7 @@ static int vdec_av1_slice_init(struct mtk_vcodec_dec_ctx *ctx)
- {
- 	struct vdec_av1_slice_instance *instance;
- 	struct vdec_av1_slice_init_vsi *vsi;
--	int ret;
-+	int ret, vsi_size = AV1_NON_EXT_VSI_SIZE;
- 
- 	instance = kzalloc(sizeof(*instance), GFP_KERNEL);
- 	if (!instance)
-@@ -1926,9 +1949,18 @@ static int vdec_av1_slice_init(struct mtk_vcodec_dec_ctx *ctx)
- 		goto error_vsi;
- 	}
- 
--	if (vsi->vsi_size != sizeof(struct vdec_av1_slice_vsi))
--		mtk_vdec_err(ctx, "remote vsi size 0x%x mismatch! expected: 0x%zx\n",
--			     vsi->vsi_size, sizeof(struct vdec_av1_slice_vsi));
-+	if (IS_VDEC_SUPPORT_EXT(ctx->dev->dec_capability)) {
-+		vsi_size = sizeof(struct vdec_av1_slice_vsi);
-+		vsi->iq_table_size = AV1_IQ_TABLE_SIZE;
-+		vsi->cdf_table_size = AV1_CDF_SIZE;
-+	}
-+
-+	if (vsi->vsi_size != vsi_size) {
-+		mtk_vdec_err(ctx, "remote vsi size 0x%x mismatch! expected: 0x%x\n",
-+			     vsi->vsi_size, vsi_size);
-+		ret = -EINVAL;
-+		goto error_vsi;
-+	}
- 
- 	instance->irq_enabled = 1;
- 	instance->inneracing_mode = IS_VDEC_INNER_RACING(instance->ctx->dev->dec_capability);
+No problem, I just wanted to understand the issue and if I needed to 
+change my workflow somehow. Keep up the good work!
+
+> 
+> >
+> > I read you where working on the CI and as far as I can tell you where
+> > the one who committed the patch in question. I hope I my report go to
+> > the right person, if not sorry for the noise.
+> >
+> > On 2025-05-09 14:21:47 -0700, Patchwork Integration wrote:
+> > > Dear Niklas Söderlund:
+> > >
+> > > Thanks for your patches! Unfortunately the Media CI robot detected some
+> > > issues:
+> > >
+> > > # Test media-patchstyle:./0001-media-v4l2-common-Reduce-warnings-about-missing-V4L2.patch media style
+> > > ERROR: ./0001-media-v4l2-common-Reduce-warnings-about-missing-V4L2.patch: Committer Ricardo Ribalda <ribalda@chromium.org> is not the last SoB: Niklas SÃ¶derlund <niklas.soderlund@ragnatech.se>
+> >
+> > Do this mean you should have added your SoB when committing the patch?
+> > Or is the CI confused about me using a +renesas both in From: header and
+> > in my SoB? I don't understand where the error message got my mail
+> > without +renesas from.
+> 
+> The checker removes everything between the + and @. That is expected.
+> 
+> >
+> > Minor sidebar, the mail charset was set to utf-8 but somewhere it seems
+> > to have mangled my döts :-)
+> 
+> The döts looks like a bug. We have two options, you can start the
+> legal process to change your name, or I can look into fixing the
+> encoding.
+> 
+> I will try the second option first  :P
+> https://gitlab.freedesktop.org/linux-media/media-ci/-/issues/106
+
+Awesome thanks! Seems you already have a proposed fix published, I will 
+put the legal paperwork back in my drawer ;-)
+
+> 
+> 
+> Regards!
+> 
+> >
+> > >
+> > >
+> > >
+> > > Please fix your series, and upload a new version. If you have a patchwork
+> > > account, do not forget to mark the current series as Superseded.
+> > >
+> > > For more details, check the full report at:
+> > > https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/76068776/artifacts/report.htm .
+> > >
+> > >
+> > >
+> > > Best regards, and Happy Hacking!
+> > > Media CI robot on behalf of the linux-media community.
+> > >
+> > > ---
+> > > Check the latest rules for contributing your patches at:
+> > > https://docs.kernel.org/driver-api/media/maintainer-entry-profile.html
+> > >
+> > > If you believe that the CI is wrong, kindly open an issue at
+> > > https://gitlab.freedesktop.org/linux-media/media-ci/-/issues or reply-all
+> > > to this message.
+> > >
+> >
+> > --
+> > Kind Regards,
+> > Niklas Söderlund
+> 
+> 
+> 
+> -- 
+> Ricardo Ribalda
+
 -- 
-2.46.0
-
+Kind Regards,
+Niklas Söderlund
