@@ -1,125 +1,155 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB5F299932
-	for <linux-media@vger.kernel.org>; Mon, 12 May 2025 21:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98274299955;
+	Mon, 12 May 2025 21:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747083892; cv=none; b=Qpih5woVGiT/a/j29n36paGapPxsbjaWYJlGtIVT/VYd1aAp38+kPoHFqof6fWTqM77iQ9wYz8BNNFU3V3GXbA5eunWGa3fsw/M6RShs7qUG3zrdiu2Qckh0mLN3AQ7rRMv7ejBx8U1mZs1VoGC34yixJr82+UlJr6USQlnZ8Mo=
+	t=1747085332; cv=none; b=JaLCx4yBYoDdooOY5tAHjKgH0qnq02e0LQ9bJwW0YUZ36IDPd72aQUJaENDPJcAr6D5LBk0ZTcr0B4UylaWeIV2Vlz/xXZRIOdVflImVJ0Vreo6UPVb1g+4CvcYXSiUjuxwCn5ovFdcLKWM9Tkfu8l1T82b9LAElpl9pTwn4hUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747083892; c=relaxed/simple;
-	bh=Fa5oXFBgKaZ6VyL327hvSH4F43ImIjpa6dE33ADenfo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MubMvBY9HFo7/tQ9l5EzNlfubWHyf2HJkuyRKgSbxIUkizuhmlxqwU8MWWfeaEa4rrto2kyqFW7EePUMTIlHBb8W2CpUwOAgCRyNHysD24zjwczti7I99s4JJIz+f27yCZyzmI+Bo14tyzKUhs62YQzrR5b+uMjN1z0BYZ5EAgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=07V5YZ6y; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1747085332; c=relaxed/simple;
+	bh=BbfNlYyIq6bfD8iWwyjMF+VezLL/5HH50K5s2pADmws=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XopIa4Yen6Rp3mXEtGW/t0uqvZZ1OUlTvvF28cSYjSWM2oNH52IkGqlkrtPRsrKo9z8CfLDxRwQNjf62hfYbM8zbCG78e/ip4l+0Sy/vnMfcaX8HciRHKm5ssehYsPuDGQjGKs7oHuUvS5gP6eKyRQpoATrkzoo+dk7dOBUz0j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2Qt1VOc; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="07V5YZ6y"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43d5f10e1aaso18835e9.0
-        for <linux-media@vger.kernel.org>; Mon, 12 May 2025 14:04:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2Qt1VOc"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ad1d1f57a01so935523766b.2;
+        Mon, 12 May 2025 14:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747083889; x=1747688689; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1747085329; x=1747690129; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ocHMf+lpxFiUglMvQ3QmzmSqN/TDDldlcwv8ib7D0M4=;
-        b=07V5YZ6yB1EFOAkq9FTUQGeOSW8giYiLbHWAitYHwJ0W0M5K3RH0RwhZJ83AGtSlEq
-         38VkEfKhPfH/7AKmp13wbApNJiJQNAr6xlcX2zRPKGHOv553n9wgroiqm6T5f92NCQLL
-         kSepEQ91Ft8oy9ZqwSLNlDQcn+4hK9TKrKHs2fJj/r1gL4sqXCoRKAKOEFhh03ld9v4W
-         t5iwbxxD0xBH80xP9iWsNJyLXU9zvAz9Qs5L0KKRTt3koulxVg+0h5me20JLldjNmXkW
-         KXZCXHCDLrph9jqUXNZH6B5xDpvq9Gz8+W7xtTsH+Fy/SLz/U9OTVB1xzCZWU52Oyb+c
-         NHEg==
+        bh=EKrPGYo6r8jTfHw6fTsyOidOITDoSW91H73atx2WSvo=;
+        b=f2Qt1VOcxsY2xew31S6M5OSUnxSoyHTBZYoGIZz/4lbqo5JdUebUSOphZV0wwvuHoW
+         pNZMZ53btz1CbmUjfbgFsGVqztac/qgZ9ksJIrsI0DDTRkUuznq9NZjVmrwD7cc3NYOh
+         hPYxTnbfuRyEwHPpr33OkvKltEBe3zsAE84VJHLgXrd7sR/mjr3U1HzfZkOISQZrGKdD
+         DFJzyKIUaLnUHFi5nDYxaoRc6n1+9G/C8OM5RiqT502FbU8a1D4UNONHvXspv+87kVyx
+         24/xlQBBhbWZQMG+ztJ72VdSRQeh8eZmTvt2ivPaFytw04t88UKWnm4qmP1sAMtDkwo+
+         5EvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747083889; x=1747688689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1747085329; x=1747690129;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ocHMf+lpxFiUglMvQ3QmzmSqN/TDDldlcwv8ib7D0M4=;
-        b=beP6bLxO5zYm2IXAdwpQskbGwqD37ZM4ySfbD2U+01LmIwbA6i7mGeX4rHsFz7ZCj8
-         qBY7Fud8ojE0lv9bQVAhsGaqmI65Qjy9aZ3rrJ52FB51A9LYEFFIh5LGn+FaeWxFTw9k
-         IljPMct0trsXt8GjV7jOFh+Y1Ff2rKXboyW45pfzo8zVU0oZsvMKHB2WLOgCDajf2qib
-         BJK5XfwRC4PE81suj/J4ZiR0KAH/VzN69g8aaSgm+a+ZbTTmIVu1etZkcqoeIUQkba8y
-         JpBKs0FA3eobLBKIe5wLzBaRhS+au1eQLlKtznk5hKUKVLcDc7AiCEFj435dsJxaGZDI
-         B9Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5eL2wtmZwucSq8rUT8FOEq/SJf8qdQ+gu42uyEprD/E1asJxUfORyCVBz9U80jFpOUfeTN6wR/On/AQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy14IabfjDp8IXVThigu4LxdRYWbx/E420HrZQaDVVMnNB1Cx3u
-	r5g/CD0kb5X+tq4b78HNGUybDfrt/r1nnQFzHwEmm+EpdrHX22wHQT2IeUJkj8yi4sRBQfiOH7Y
-	Jgqt84hWNpkfWpaPhHzNZoO09oKIi0+HV3ilnH/Eb
-X-Gm-Gg: ASbGncswflD5Gy9kHC11nv4bpTKlxd+jcpwhiDLYkpIZI8JDFdBkSdM9+KveEgjFAlY
-	m99/dzP6cC1KnMpjrbX0XiJ9VZP/11ptQWFc90bOo/BMxZhzyET3kLII3CbvXtFkShIKGChZXrA
-	yA4C0e3JX95sc3YtxHhILM8R7gN0iy91c=
-X-Google-Smtp-Source: AGHT+IEr0EA2T8//ChQD2cQVB7Yv0cif1v2Nya6VTYqVvclVsxQ7gPAjPiVgt+BRhoXxGJfdm3L5Wdls6puG9ko+yOc=
-X-Received: by 2002:a05:600c:1da4:b0:439:9434:1b66 with SMTP id
- 5b1f17b1804b1-442ebbe7e80mr37045e9.1.1747083888729; Mon, 12 May 2025 14:04:48
- -0700 (PDT)
+        bh=EKrPGYo6r8jTfHw6fTsyOidOITDoSW91H73atx2WSvo=;
+        b=xUtEInpz1007xpC/YQ5MbN1vQbRmcVmyRZLU5CMMYp17REVeu4It+t4tsPSkM9j5jh
+         uvNzuO0Ju1pk0JZJvKjyXnNy79wyefS1IXH2qsIG2NIygojEoDsRCQlP4x6QQ+RhzDKW
+         seBSKNhShN0g9EUv7f19Xw8jwuwpPf7WHNxFVuYu3YjLDLYBSOib18sUuJOBVz59TkYF
+         UsAQPBi3HTQL9JX1zqe8maHXplbQCi3AJJfWjEZJhJWEnfPlo8Ht7+s81yz+V/LmSekv
+         OWA69cjQ72ysLrnGZf/fTpfaI6VzQ0uQ4u/YaJK5dGRhz+pQxJfJOpyEaIdtcmdqAUu2
+         V6Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCVR0KZd71R4EPAMSQH/8mIBbWChqxzLo8cl72l5RhgaS2e8rLLxz0ReKMyDMFkQL93o5JFmY+uED2QN@vger.kernel.org, AJvYcCWyr6HoQ10NUrG+KEFSNtBW45WupEuAn1ZTul+Kb/9AcsONz/Ce9/yDpfmjfwsw9TIzmg99FTGFDlA+Cw==@vger.kernel.org, AJvYcCXF4fU+KLzKJDNbm+UQPc9C5hWbOgiKVfcjsnaIvbdQtZsiQKOuVNhNnFLnzaxNP4gM2BINcrEo/tsPC54=@vger.kernel.org, AJvYcCXQWDIOYVXkeW4IcvbDVwk4wUOxoGlD+ESSizolnwd6D9HKm+U7YReJTb2e3xeGUSArFSVCRgGsLfX6dekw@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKPH8s83WmXIqm/5FC7q00vgNVrtfxLXZcak1GBQivS/hhJqzA
+	5PfKfKmtw61yafoWy5qB+vqfPHmbUd0PqSVqW0IPkxGPZaXkmZH2
+X-Gm-Gg: ASbGnctu/vVYyG6ZI/lOcg37XZ6JT7fu+kb7uH21RGkB/3hyzjn1uAAjcfaKd3uVquR
+	wd+IOxVQ4JHAx6gWjQAeeTr2RUxuCqj8tvKwoRoadk/SCPOhIKB93VuxfWMv3gErmzQQ9aeiMSE
+	PqeK2MUS1t6sqOX7qVOcdmkqV0kRZxL1bXPMix4/ch9qGrQ5JMZ1lXR23xcc9qSLnRVdzeQce9q
+	ie0j4CkrTWConVVdl2uWz/xAdhtUMwdEEvV8sEPmYKjh2F5CNwVGDYVSP9nBO4JnwB30HN9/Nmi
+	G8XbimQf7bRYcbGBTwJm3QwwTrJDOjMrqQLtyl5rkytBXYEdEqzovGC3Bnuqmq/5z+nG97M0aw=
+	=
+X-Google-Smtp-Source: AGHT+IFpt22qZHel8pg/VMN2FxBOpRn/l+5KBVuDEFumIWkq54C5p/vidB0Hx0vw1cOpJ8lTlDD8Pg==
+X-Received: by 2002:a17:907:7f05:b0:ad4:d069:324b with SMTP id a640c23a62f3a-ad4d06934ebmr188335466b.10.1747085328447;
+        Mon, 12 May 2025 14:28:48 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.27.128.5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad23a5552a6sm472861466b.30.2025.05.12.14.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 May 2025 14:28:48 -0700 (PDT)
+From: Cosmin Tanislav <demonsingur@gmail.com>
+To: 
+Cc: Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Julien Massot <julien.massot@collabora.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
+	Taniya Das <quic_tdas@quicinc.com>,
+	Liu Ying <victor.liu@nxp.com>,
+	Ross Burton <ross.burton@arm.com>,
+	Elinor Montmasson <elinor.montmasson@savoirfairelinux.com>,
+	Eric Biggers <ebiggers@google.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Zhi Mao <zhi.mao@mediatek.com>,
+	Dongcheng Yan <dongcheng.yan@intel.com>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Tommaso Merciai <tomm.merciai@gmail.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+	linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-staging@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	Cosmin Tanislav <demonsingur@gmail.com>
+Subject: [PATCH v3 01/19] dt-bindings: media: i2c: max96717: add myself as maintainer
+Date: Tue, 13 May 2025 00:28:10 +0300
+Message-ID: <20250512212832.3674722-2-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250512212832.3674722-1-demonsingur@gmail.com>
+References: <20250512212832.3674722-1-demonsingur@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250512174036.266796-1-tjmercier@google.com> <20250512174036.266796-6-tjmercier@google.com>
- <CAPhsuW6KEtKu5C+Y_X3EFkUFSg8=LnQ9nJFUD81rYgwvBvqzHg@mail.gmail.com>
-In-Reply-To: <CAPhsuW6KEtKu5C+Y_X3EFkUFSg8=LnQ9nJFUD81rYgwvBvqzHg@mail.gmail.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 12 May 2025 14:04:36 -0700
-X-Gm-Features: AX0GCFvIOd-tF5p6eczt7ynOfdOnjScDBhB5U-GpV17T4Ix1WysDKZAupTNpB3E
-Message-ID: <CABdmKX20zo5FhUGf2ZJXvcSetbK25HV9Z=AG8MhLU+dnT_kP6w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 5/5] selftests/bpf: Add test for open coded dmabuf_iter
-To: Song Liu <song@kernel.org>
-Cc: sumit.semwal@linaro.org, christian.koenig@amd.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	skhan@linuxfoundation.org, alexei.starovoitov@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, android-mm@google.com, 
-	simona@ffwll.ch, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 12, 2025 at 1:30=E2=80=AFPM Song Liu <song@kernel.org> wrote:
->
-> On Mon, May 12, 2025 at 10:41=E2=80=AFAM T.J. Mercier <tjmercier@google.c=
-om> wrote:
-> >
-> > Use the same test buffers as the traditional iterator and a new BPF map
-> > to verify the test buffers can be found with the open coded dmabuf
-> > iterator.
-> >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
->
-> Acked-by: Song Liu <song@kernel.org>
+Analog Devices is taking responsability for the maintenance of the Maxim
+GMSL2/3 devices.
+Add myself to the maintainers list and to the device tree bindings.
 
-Thanks, I'll send v6 this afternoon or tomorrow morning with all changes.
+Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
+---
+ Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml | 1 +
+ MAINTAINERS                                                     | 1 +
+ 2 files changed, 2 insertions(+)
 
-> With a nitpick below.
->
-> [...]
->
-> >
-> > -static int create_test_buffers(void)
-> > +static int create_test_buffers(int map_fd)
-> >  {
-> > +       bool f =3D false;
-> > +
-> >         udmabuf =3D create_udmabuf();
-> >         sysheap_dmabuf =3D create_sys_heap_dmabuf();
-> >
-> >         if (udmabuf < 0 || sysheap_dmabuf < 0)
-> >                 return -1;
-> >
-> > -       return 0;
-> > +       return bpf_map_update_elem(map_fd, udmabuf_test_buffer_name, &f=
-, BPF_ANY) ||
-> > +              bpf_map_update_elem(map_fd, sysheap_test_buffer_name, &f=
-, BPF_ANY);
->
-> nit: Instead of passing map_fd in here, we can just call
-> bpf_map_update_elem() in test_dmabuf_iter()
->
-> [...]
->
+diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
+index d1e8ba6e368e..15ab37702a92 100644
+--- a/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
+@@ -9,6 +9,7 @@ title: MAX96717 CSI-2 to GMSL2 Serializer
+ 
+ maintainers:
+   - Julien Massot <julien.massot@collabora.com>
++  - Cosmin Tanislav <cosmin.tanislav@analog.com>
+ 
+ description:
+   The MAX96717 serializer converts MIPI CSI-2 D-PHY formatted input
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1916d0636408..8f463ebca056 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14198,6 +14198,7 @@ F:	drivers/media/i2c/max96714.c
+ 
+ MAX96717 GMSL2 SERIALIZER DRIVER
+ M:	Julien Massot <julien.massot@collabora.com>
++M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
+-- 
+2.49.0
+
