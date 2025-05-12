@@ -1,196 +1,172 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CFF25B68E
-	for <linux-media@vger.kernel.org>; Mon, 12 May 2025 09:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693E425A32C;
+	Mon, 12 May 2025 09:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747041623; cv=none; b=qLuheXpWGJ+h/x+Arg0/ZXery7J+QhEphI+YA8Sgyos2v330jBXzHiPeRpNEhEPJ9i60OgVJFA8PucKSDsKnFtqFxHaHR3fq44sagJh2PBZ1XIVcllzgcDbQWpZhy8gXlwZTBfSgul23TUjAHJQrFywaNJjViDtG3UjIXOwREVg=
+	t=1747041781; cv=none; b=bszxPQ7RJG0rV1AhoNYXtjE3y6OyMh0YhMgiLLbztwTJXPS5rfBmYrSUW8gdNWdmd8eewxlZ2ex/J+OrmU0d2qKxWx3aPTRN3kXxGIwD4Do8Yr5lp07qIrxYrnF1gH+4jGB83SxPwCV3TGYeG8Hv1kvd+2+tgLtt0x+tGeXsc10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747041623; c=relaxed/simple;
-	bh=beO76/abepkO2U/BlJHUKBw8oYd4/CcEl1iFtpai6gU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QNW2mOgIOw6ne5N5u2RrtbzBPP+FCkFVzjabw1g4r1f3378+4MEiIIVB4c91FHVYvAvUqJAxhrOiWiCl1DHcfL4dvAt/95Tb/VxPPcwPKODE8L9pNuMh431Lb1wHwiseOHBtuVl4Se6BBGcm5YeHklMkI1QVmCZejadv5rrPwAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Cfq7HrsX; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1747041781; c=relaxed/simple;
+	bh=cMRDD9njltGQZU4m56ixjyBL0oBdxzE2Vnm1RAr6Bcw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rD7a7NDwkpxwP5jpv/l1KTNMfr1HBiQ3L+r6SrB+dE5lOHCM6B1w2XYc6Q9lsnHE8g26u9Z0XsltNjDXJMJqNunZ6qlm99OjKDg1mi0wgL67CvaxY3AgErX+8YsmwHs+QIf8CtHAnoa6ZmfyaZrv3lRPWjOIitqWXxkWnRZXOms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=DKOdR/Sv; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Cfq7HrsX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=hj59TOBb21Ws8RgUIds2AGjqvk25AJJ0X33YQR+g87E=; b=Cfq7HrsXcR1m73+T0EZJRtz/jv
-	Tstv6f+X1qVwa8HkP3zazgzJfv0uMdBxHG3CsElrnDNsTcAJV/rzuBqkhnpV4ve3jwW3XLjUPoD+y
-	uCLa78S2GSFW9dkqaoxJMJic1UmiUb68+4XkdJFPuNT7NQVjlfccMRZQNUl5IARMTVUCUmwgesbEG
-	uGb+Irkfi2n4kZALBt8fk4gThYat3oyyc6PUI2+oBtTBPH6F9xCWV5Z+QcBCJsHHUw0fEhpt8qpoI
-	0DQhuSU39BGNeVRc+voKLHJAkYBt60izqVFZY3sdLXlSqBQTKXD5GsiQb9+f4hG1faYSVn70HmAdb
-	KWl0S0RQ==;
-Received: from [81.79.92.254] (helo=[192.168.0.101])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1uEPFL-006zkP-80; Mon, 12 May 2025 11:20:09 +0200
-Message-ID: <24fd309e-fb2e-433b-ad9b-f846f296cd2f@igalia.com>
-Date: Mon, 12 May 2025 10:20:08 +0100
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="DKOdR/Sv"
+X-UUID: af6d6efa2f1211f0813e4fe1310efc19-20250512
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=NTzy79ofiVc6TDcVhdbfFFnTmmvqRTAhzr03Xm9I0jU=;
+	b=DKOdR/Svxh2FP1Elym9SdmOTY1QjJ0e88YwTon460HoiLNuYkyVwSAAnYno9DaMxYGVUKhqttMr3zIXYFM51VPK7snBh1iWb0zFnZwTWIektbrnXnfjCVzWmJcUdWjjIm1sq1bmeK6xrObPL4B/qVE4ZsVUoFv0RtEp2K0nuGOE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.2.1,REQID:b555ae60-88ea-45c6-9a57-6e26510d126d,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:0ef645f,CLOUDID:bab5dce0-512b-41ef-ab70-9303a9a81417,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
+	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-UUID: af6d6efa2f1211f0813e4fe1310efc19-20250512
+Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
+	(envelope-from <jason-jh.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 518506628; Mon, 12 May 2025 17:22:54 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Mon, 12 May 2025 17:22:51 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Mon, 12 May 2025 17:22:51 +0800
+From: Jason-JH Lin <jason-jh.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>
+CC: Matthias Brugger <matthias.bgg@gmail.com>, Jason-JH Lin
+	<jason-jh.lin@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>, Singo Chang
+	<singo.chang@mediatek.com>, Paul-PL Chen <paul-pl.chen@mediatek.com>, Moudy
+ Ho <moudy.ho@mediatek.com>, Xavier Chang <xavier.chang@mediatek.com>,
+	Xiandong Wang <xiandong.wang@mediatek.com>, Sirius Wang
+	<sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>, Chen-yu Tsai
+	<wenst@chromium.org>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
+Subject: [PATCH RESEND v5 00/20] Add GCE support for MT8196
+Date: Mon, 12 May 2025 17:19:22 +0800
+Message-ID: <20250512092252.905629-1-jason-jh.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v2 03/13] dma-fence: Use a flag for 64-bit seqnos
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- dri-devel@lists.freedesktop.org
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
- Gustavo Padovan <gustavo@padovan.org>,
- Matthew Brost <matthew.brost@intel.com>,
- Lucas De Marchi <lucas.demarchi@intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, amd-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- kernel-dev@igalia.com
-References: <20250509153352.7187-1-tvrtko.ursulin@igalia.com>
- <20250509153352.7187-4-tvrtko.ursulin@igalia.com>
- <48ca64e8-09a8-4321-a84a-e33f2d32e552@amd.com>
-Content-Language: en-GB
-From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-In-Reply-To: <48ca64e8-09a8-4321-a84a-e33f2d32e552@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
+This patch series adds support for the MediaTek MT8196 SoC in the CMDQ
+driver and related subsystems. The changes include adding compatible
+names and iommus property, updating driver data to accommodate hardware
+changes, and modifying the usage of CMDQ APIs to support non-subsys ID
+hardware.
 
-On 12/05/2025 09:17, Christian König wrote:
-> On 5/9/25 17:33, Tvrtko Ursulin wrote:
->> With the goal of reducing the need for drivers to touch (and dereference)
->> fence->ops, we move the 64-bit seqnos flag from struct dma_fence_ops to
->> the fence->flags.
->>
->> Drivers which were setting this flag are changed to use new
->> dma_fence_init64() instead of dma_fence_init().
->>
->> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-> 
-> My idea was to copy the flag from the ops during init, but that should work as well.
-> 
-> Reviewed-by: Christian König <christian.koenig@amd.com>
+---
+Change in RESEND v5:
+1. Separate the removal of cmdq_get_shift_pa() from [PATCH v5 03/19] to a
+   single patch [PATCH RESEND v5 10/20].
 
-Thanks!
+Change in v5:
+1. Rebase on tag: next-20250424 + patch [1].
+2. Split adding driver data for MT8196 patch to 3 independent patch
+   and add more detail commit message to each patch.
+3. Refine passing shift_pa as the parameter in API to storing it into
+   the cmdq_pkt.
+4. Refine DMA address potential issue in cmdq mailbox driver.
+5. Change the mminfra_offset related mbox API to passing it by cmdq_pkt.
+6. Add new cmdq_pkt_write_pa() and cmdq_pkt_write_subsys() APIs to
+   replace the cmdq_pkt_write().
 
-One alternative to dma_fence_init64() I was thinking about is to perhaps 
-have add dma_fence_init_flags(). Especially in the context of patch 4/13 
-where it would then look cleaner for callers such as 
-dma_fence_chain_init(). 4/13 aside, how would dma_fence_init_flags look 
-to you? It is a little bit more verbose is one thing. And if we are not 
-doing 4/13, verbosity coupled with a single benefit perhaps it is best 
-to leave dma_fence_init64() as is?
+[1] mailbox: mtk-cmdq: Refine GCE_GCTL_VALUE setting
+- https://patchwork.kernel.org/project/linux-mediatek/patch/20250421035650.441383-1-jason-jh.lin@mediatek.com/
 
-Regards,
+Change in v4:
+1. Remove dt-binding header and add a gce header in dts folder.
+2. Remove dot in sign-off name.
+3. Change addr type from u32 to dma_addr_t for cmdq_reg_shift_addr() and
+   cmdq_reg_revert_addr().
 
-Tvrtko
+Change in v3:
+1. Merge 2 dt-bindings pathes together and add more detail commit message.
+2. Change type u32 to phys_addr_t for pa_base of struct cmdq_client_reg.
+3. Remove cmdq_subsys_is_valid() and subsys_num in CMDQ driver.
+4. Add CMDQ_SUBSYS_INVALID to check subsys instead of using
+   cmdq_subsys_is_invalid().
+5. Make use of CMDQ_THR_SPR0 define to the parameter of CMDQ APIs.
+6. Rebase on the new MACRO in mtk-mdp3-comp.h.
 
->> ---
->>   drivers/dma-buf/dma-fence-chain.c                | 5 ++---
->>   drivers/dma-buf/dma-fence.c                      | 9 +++++++++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c | 5 ++---
->>   include/linux/dma-fence.h                        | 6 +++++-
->>   4 files changed, 18 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/dma-buf/dma-fence-chain.c b/drivers/dma-buf/dma-fence-chain.c
->> index 90424f23fd73..a8a90acf4f34 100644
->> --- a/drivers/dma-buf/dma-fence-chain.c
->> +++ b/drivers/dma-buf/dma-fence-chain.c
->> @@ -218,7 +218,6 @@ static void dma_fence_chain_set_deadline(struct dma_fence *fence,
->>   }
->>   
->>   const struct dma_fence_ops dma_fence_chain_ops = {
->> -	.use_64bit_seqno = true,
->>   	.get_driver_name = dma_fence_chain_get_driver_name,
->>   	.get_timeline_name = dma_fence_chain_get_timeline_name,
->>   	.enable_signaling = dma_fence_chain_enable_signaling,
->> @@ -262,8 +261,8 @@ void dma_fence_chain_init(struct dma_fence_chain *chain,
->>   			seqno = max(prev->seqno, seqno);
->>   	}
->>   
->> -	dma_fence_init(&chain->base, &dma_fence_chain_ops,
->> -		       &chain->lock, context, seqno);
->> +	dma_fence_init64(&chain->base, &dma_fence_chain_ops, &chain->lock,
->> +			 context, seqno);
->>   
->>   	/*
->>   	 * Chaining dma_fence_chain container together is only allowed through
->> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
->> index f0cdd3e99d36..33661658f684 100644
->> --- a/drivers/dma-buf/dma-fence.c
->> +++ b/drivers/dma-buf/dma-fence.c
->> @@ -1023,3 +1023,12 @@ dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
->>   	trace_dma_fence_init(fence);
->>   }
->>   EXPORT_SYMBOL(dma_fence_init);
->> +
->> +void
->> +dma_fence_init64(struct dma_fence *fence, const struct dma_fence_ops *ops,
->> +		 spinlock_t *lock, u64 context, u64 seqno)
->> +{
->> +	dma_fence_init(fence, ops, lock, context, seqno);
->> +	__set_bit(DMA_FENCE_FLAG_SEQNO64_BIT, &fence->flags);
->> +}
->> +EXPORT_SYMBOL(dma_fence_init64);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
->> index 51cddfa3f1e8..5d26797356a3 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
->> @@ -71,7 +71,6 @@ static void amdgpu_tlb_fence_work(struct work_struct *work)
->>   }
->>   
->>   static const struct dma_fence_ops amdgpu_tlb_fence_ops = {
->> -	.use_64bit_seqno = true,
->>   	.get_driver_name = amdgpu_tlb_fence_get_driver_name,
->>   	.get_timeline_name = amdgpu_tlb_fence_get_timeline_name
->>   };
->> @@ -101,8 +100,8 @@ void amdgpu_vm_tlb_fence_create(struct amdgpu_device *adev, struct amdgpu_vm *vm
->>   	INIT_WORK(&f->work, amdgpu_tlb_fence_work);
->>   	spin_lock_init(&f->lock);
->>   
->> -	dma_fence_init(&f->base, &amdgpu_tlb_fence_ops, &f->lock,
->> -		       vm->tlb_fence_context, atomic64_read(&vm->tlb_seq));
->> +	dma_fence_init64(&f->base, &amdgpu_tlb_fence_ops, &f->lock,
->> +			 vm->tlb_fence_context, atomic64_read(&vm->tlb_seq));
->>   
->>   	/* TODO: We probably need a separate wq here */
->>   	dma_fence_get(&f->base);
->> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
->> index 48b5202c531d..ac6535716dbe 100644
->> --- a/include/linux/dma-fence.h
->> +++ b/include/linux/dma-fence.h
->> @@ -97,6 +97,7 @@ struct dma_fence {
->>   };
->>   
->>   enum dma_fence_flag_bits {
->> +	DMA_FENCE_FLAG_SEQNO64_BIT,
->>   	DMA_FENCE_FLAG_SIGNALED_BIT,
->>   	DMA_FENCE_FLAG_TIMESTAMP_BIT,
->>   	DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
->> @@ -262,6 +263,9 @@ struct dma_fence_ops {
->>   void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
->>   		    spinlock_t *lock, u64 context, u64 seqno);
->>   
->> +void dma_fence_init64(struct dma_fence *fence, const struct dma_fence_ops *ops,
->> +		      spinlock_t *lock, u64 context, u64 seqno);
->> +
->>   void dma_fence_release(struct kref *kref);
->>   void dma_fence_free(struct dma_fence *fence);
->>   void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq);
->> @@ -454,7 +458,7 @@ static inline bool __dma_fence_is_later(struct dma_fence *fence, u64 f1, u64 f2)
->>   	 * 32bit sequence numbers. Use a 64bit compare when the driver says to
->>   	 * do so.
->>   	 */
->> -	if (fence->ops->use_64bit_seqno)
->> +	if (test_bit(DMA_FENCE_FLAG_SEQNO64_BIT, &fence->flags))
->>   		return f1 > f2;
->>   
->>   	return (int)(lower_32_bits(f1) - lower_32_bits(f2)) > 0;
-> 
+Change in v2:
+1. Remove the constant and fix warning in dt-bindings.
+2. Remove the pa_base parameter of CMDQ APIs and related modification.
+3. Move subsys checking to client drivers and use 2 alternative
+   CMDQ APIs to achieve the same functionality.
+---
+
+Jason-JH Lin (20):
+  arm64: dts: mediatek: Add GCE header for MT8196
+  mailbox: mtk-cmdq: Refine DMA address handling for the command buffer
+  mailbox: mtk-cmdq: Add cmdq private data to cmdq_pkt for generating
+    instruction
+  soc: mediatek: mtk-cmdq: Add cmdq_get_mbox_priv() in cmdq_pkt_create()
+  soc: mediatek: mtk-cmdq: Add cmdq_pkt_jump_rel_temp() for removing
+    shift_pa
+  media: platform: mtk-mdp3: Change cmdq_pkt_jump_rel() to
+    cmdq_pkt_jump_rel_temp()
+  soc: mediatek: mtk-cmdq: Remove shift_pa parameter from
+    cmdq_pkt_jump()
+  media: platform: mtk-mdp3: Use cmdq_pkt_jump_rel() without shift_pa
+  soc: mediatek: mtk-cmdq: Remove cmdq_pkt_jump() and
+    cmdq_pkt_jump_rel_temp()
+  mailbox: mtk-cmdq: Remove unsued cmdq_get_shift_pa()
+  mailbox: mtk-cmdq: Add GCE hardware virtualization configuration
+  mailbox: mtk-cmdq: Add mminfra_offset configuration for DRAM
+    transaction
+  mailbox: mtk-cmdq: Add driver data to support for MT8196
+  soc: mediatek: mtk-cmdq: Add pa_base parsing for hardware without
+    subsys ID support
+  soc: mediatek: mtk-cmdq: Add new APIs to replace cmdq_pkt_write() and
+    cmdq_pkt_write_mask()
+  soc: mediatek: mtk-cmdq: Add mminfra_offset adjustment for DRAM
+    addresses
+  soc: mediatek: Add programming flow for unsupported subsys ID hardware
+  drm/mediatek: Add programming flow for unsupported subsys ID hardware
+  media: mediatek: mdp3: Add programming flow for unsupported subsys ID
+    hardware
+  soc: mediatek: mtk-cmdq: Remove cmdq_pkt_write() and
+    cmdq_pkt_write_mask()
+
+ arch/arm64/boot/dts/mediatek/mt8196-gce.h     | 612 ++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_ddp_comp.c       |  24 +-
+ drivers/mailbox/mtk-cmdq-mailbox.c            | 115 +++-
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  16 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  70 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |   2 -
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   1 -
+ drivers/soc/mediatek/mtk-cmdq-helper.c        |  68 +-
+ drivers/soc/mediatek/mtk-mmsys.c              |  12 +-
+ drivers/soc/mediatek/mtk-mutex.c              |   8 +-
+ include/linux/mailbox/mtk-cmdq-mailbox.h      |  19 +-
+ include/linux/soc/mediatek/mtk-cmdq.h         |  83 ++-
+ 12 files changed, 941 insertions(+), 89 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8196-gce.h
+
+-- 
+2.43.0
 
