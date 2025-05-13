@@ -1,37 +1,37 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE291F151D
-	for <linux-media@vger.kernel.org>; Tue, 13 May 2025 07:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD8D1F1518
+	for <linux-media@vger.kernel.org>; Tue, 13 May 2025 07:45:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747122342; cv=none; b=Oc580y16hWyElFWNkLe8/4tcZODUg9zG+ruitLpbs/qCazdj4aqOW2LL1weSF6X2OaV7rw1kXZB6ye86S7oNau9EWeKSsqYvUza8jpk5yMR1ndCGa7Asv9Qx/z09qPJLBh/x7Z8ULKT+cveDB0I7wPFLk2Y0B7WhlX0O1k0Pu+c=
+	t=1747122342; cv=none; b=DSoh2fYSc2L6sCKMU1VX2oDylChINqijcHb9EvtRsFUVU1Aei8ow1xDsNZ86RwlyNIg+lXA2YrYPJeXmq3XczJlPWvU0kXOdSwW8YPt3BykzBT3JxeIahM3pItE5BASCAhsuGVkSfs69O/auSbFVMsHlLHzKlCy9BTvF9TGfy2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747122342; c=relaxed/simple;
-	bh=o7Y7oxzfjUt2JvqbcXZfaoPya3wigB+XD2dgTBnmgO4=;
+	bh=mm3T95yPNJCJKm7ul0ljcoGrse7c08BGKxdbCOxTRWI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uhjIrzLXN42OGI2Euswm6KysgrirMMPvF2q+eN1SKiRzYqdnKDwZ49YvcL+so9epQA8ZfcNKSoOopZcvphL9R12UQBrGqzCs8NCQhDzX26+Jib6Kcw6L55vlJOYxblbTs1I9KVCeIOsRZGqYhloKrf4CPLf1+6QAraBMg2mP7EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=iO297zAx; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=YWQRKxxFuv1i5EHzWFmmI2zyIuUNnTfOG95HUoLY5J986whYSwhgyakM4xZGHVf/Bc9ePOtR1zpfGpu3aEvyQigzYTHVhyGwbCRH1Y/5UUUR/mYXEPOsxIB7Wh5YWcGLqoERal4DXevIRugrS5zk6aC2nTd3nZkN2fWadiM0tOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Doi9B0lp; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="iO297zAx"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Doi9B0lp"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=ho3rz1YCBup49UXIrD6pA9C2v3Zz4Fvtf4G3Zu60qMA=; b=iO297zAxbHE+8lLFv6fLSQw3//
-	p5STzJDtuOBaz3moN8Z5HQ0dvf3gcDD++omh+R/3fcczRG3AbyC8jMwMATypt+hQsWhqABplI34bu
-	1vm/YroQImaemjOQLlv5v5DoDbESWINdy65PI0w6rYDryEHp9ctgBUoiUlHF9yBVjRt/CupgLO1pE
-	ENeYD7+MmlkBFW7kFheltwuSfb1G4IhUyM1KjM902pFSxP5eKnz8z3nAcPnYlfsueEAA4e5FhND6m
-	9ClDamiqB37FuBHVE/nXLiAR4B7JU9/nVx2Hq3atjmikj5waR0Npd94Q08aDPRfy6uMeroehTT4S0
-	npfwqRKA==;
+	bh=uJmrj7E/JEd6hvrOvkRFlGZ+sDXBpTCTR2Oodnvtztg=; b=Doi9B0lpb6IqaW0H1ZwYuLgNYj
+	1EZl68sruqlBx1eM6uDjBddzJ/GRjdS937WzNcHzSOSXxNjsKn5oVqLc8R26OopYki8ny05nfCjuL
+	VMNnEOfotnnJfRh9qD/uakYjAZhKR+6HW+wsBtaQEQE8oRo+z+bjXZE8loPxqB5HcisXpLfeXAf0c
+	zHwH6S3ZdGU+L/+aVA3lDSgs9Tc8XvcVR4tvUb712hk3Yxcrc4Gk4cnoLpuEqkSqdRbvTje0FpH/O
+	UoSfYSq7AppICE3BGP58TRGMeNmE5CkIkWRQG/YPMt5jiNTCJBP0ZZcEClqlNnsizCySHndF+zz4H
+	48ou6++Q==;
 Received: from [81.79.92.254] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uEkF3-007TvD-BI; Tue, 13 May 2025 09:45:27 +0200
+	id 1uEkF7-007Tw1-6q; Tue, 13 May 2025 09:45:31 +0200
 From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
 To: dri-devel@lists.freedesktop.org
 Cc: Rob Clark <robdclark@gmail.com>,
@@ -48,9 +48,9 @@ Cc: Rob Clark <robdclark@gmail.com>,
 	linaro-mm-sig@lists.linaro.org,
 	kernel-dev@igalia.com,
 	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-Subject: [RFC v3 05/10] drm/amdgpu: Use dma-fence driver and timeline name helpers
-Date: Tue, 13 May 2025 08:45:08 +0100
-Message-ID: <20250513074513.81727-6-tvrtko.ursulin@igalia.com>
+Subject: [RFC v3 10/10] drm/xe: Make dma-fences compliant with the safe access rules
+Date: Tue, 13 May 2025 08:45:13 +0100
+Message-ID: <20250513074513.81727-11-tvrtko.ursulin@igalia.com>
 X-Mailer: git-send-email 2.48.0
 In-Reply-To: <20250513074513.81727-1-tvrtko.ursulin@igalia.com>
 References: <20250513074513.81727-1-tvrtko.ursulin@igalia.com>
@@ -62,56 +62,80 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Access the dma-fence internals via the previously added helpers.
+Xe can free some of the data pointed to by the dma-fences it exports. Most
+notably the timeline name can get freed if userspace closes the associated
+submit queue. At the same time the fence could have been exported to a
+third party (for example a sync_fence fd) which will then cause an use-
+after-free on subsequent access.
 
-Drop the macro while at it, since the length is now more manageable.
+To make this safe we need to make the driver compliant with the newly
+documented dma-fence rules. Driver has to ensure a RCU grace period
+between signalling a fence and freeing any data pointed to by said fence.
+
+For the timeline name we simply make the queue be freed via kfree_rcu and
+for the shared lock associated with multiple queues we add a RCU grace
+period before freeing the per GT structure holding the lock.
 
 Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+Reviewed-by: Matthew Brost <matthew.brost@intel.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/xe/xe_guc_exec_queue_types.h | 2 ++
+ drivers/gpu/drm/xe/xe_guc_submit.c           | 7 ++++++-
+ drivers/gpu/drm/xe/xe_hw_fence.c             | 3 +++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-index 11dd2e0f7979..4c61e4168f23 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-@@ -32,9 +32,6 @@
- #define TRACE_SYSTEM amdgpu
- #define TRACE_INCLUDE_FILE amdgpu_trace
+diff --git a/drivers/gpu/drm/xe/xe_guc_exec_queue_types.h b/drivers/gpu/drm/xe/xe_guc_exec_queue_types.h
+index 4c39f01e4f52..a3f421e2adc0 100644
+--- a/drivers/gpu/drm/xe/xe_guc_exec_queue_types.h
++++ b/drivers/gpu/drm/xe/xe_guc_exec_queue_types.h
+@@ -20,6 +20,8 @@ struct xe_exec_queue;
+ struct xe_guc_exec_queue {
+ 	/** @q: Backpointer to parent xe_exec_queue */
+ 	struct xe_exec_queue *q;
++	/** @rcu: For safe freeing of exported dma fences */
++	struct rcu_head rcu;
+ 	/** @sched: GPU scheduler for this xe_exec_queue */
+ 	struct xe_gpu_scheduler sched;
+ 	/** @entity: Scheduler entity for this xe_exec_queue */
+diff --git a/drivers/gpu/drm/xe/xe_guc_submit.c b/drivers/gpu/drm/xe/xe_guc_submit.c
+index fb125f940de8..879a4474bf51 100644
+--- a/drivers/gpu/drm/xe/xe_guc_submit.c
++++ b/drivers/gpu/drm/xe/xe_guc_submit.c
+@@ -1291,7 +1291,11 @@ static void __guc_exec_queue_fini_async(struct work_struct *w)
+ 	xe_sched_entity_fini(&ge->entity);
+ 	xe_sched_fini(&ge->sched);
  
--#define AMDGPU_JOB_GET_TIMELINE_NAME(job) \
--	 job->base.s_fence->finished.ops->get_timeline_name(&job->base.s_fence->finished)
--
- TRACE_EVENT(amdgpu_device_rreg,
- 	    TP_PROTO(unsigned did, uint32_t reg, uint32_t value),
- 	    TP_ARGS(did, reg, value),
-@@ -168,7 +165,7 @@ TRACE_EVENT(amdgpu_cs_ioctl,
- 	    TP_ARGS(job),
- 	    TP_STRUCT__entry(
- 			     __field(uint64_t, sched_job_id)
--			     __string(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
-+			     __string(timeline, dma_fence_timeline_name(&job->base.s_fence->finished))
- 			     __field(unsigned int, context)
- 			     __field(unsigned int, seqno)
- 			     __field(struct dma_fence *, fence)
-@@ -194,7 +191,7 @@ TRACE_EVENT(amdgpu_sched_run_job,
- 	    TP_ARGS(job),
- 	    TP_STRUCT__entry(
- 			     __field(uint64_t, sched_job_id)
--			     __string(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
-+			     __string(timeline, dma_fence_timeline_name(&job->base.s_fence->finished))
- 			     __field(unsigned int, context)
- 			     __field(unsigned int, seqno)
- 			     __string(ring, to_amdgpu_ring(job->base.sched)->name)
-@@ -585,8 +582,6 @@ TRACE_EVENT(amdgpu_reset_reg_dumps,
- 		      __entry->address,
- 		      __entry->value)
- );
--
--#undef AMDGPU_JOB_GET_TIMELINE_NAME
- #endif
+-	kfree(ge);
++	/*
++	 * RCU free due sched being exported via DRM scheduler fences
++	 * (timeline name).
++	 */
++	kfree_rcu(ge, rcu);
+ 	xe_exec_queue_fini(q);
+ 	xe_pm_runtime_put(guc_to_xe(guc));
+ }
+@@ -1474,6 +1478,7 @@ static int guc_exec_queue_init(struct xe_exec_queue *q)
  
- /* This part must be outside protection */
+ 	q->guc = ge;
+ 	ge->q = q;
++	init_rcu_head(&ge->rcu);
+ 	init_waitqueue_head(&ge->suspend_wait);
+ 
+ 	for (i = 0; i < MAX_STATIC_MSG_TYPE; ++i)
+diff --git a/drivers/gpu/drm/xe/xe_hw_fence.c b/drivers/gpu/drm/xe/xe_hw_fence.c
+index 03eb8c6d1616..b2a0c46dfcd4 100644
+--- a/drivers/gpu/drm/xe/xe_hw_fence.c
++++ b/drivers/gpu/drm/xe/xe_hw_fence.c
+@@ -100,6 +100,9 @@ void xe_hw_fence_irq_finish(struct xe_hw_fence_irq *irq)
+ 		spin_unlock_irqrestore(&irq->lock, flags);
+ 		dma_fence_end_signalling(tmp);
+ 	}
++
++	/* Safe release of the irq->lock used in dma_fence_init. */
++	synchronize_rcu();
+ }
+ 
+ void xe_hw_fence_irq_run(struct xe_hw_fence_irq *irq)
 -- 
 2.48.0
 
