@@ -1,357 +1,193 @@
-Received: from SEVP216CU002.outbound.protection.outlook.com (mail-koreacentralazon11022086.outbound.protection.outlook.com [40.107.43.86])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCF926AFB;
-	Tue, 13 May 2025 07:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.43.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747121951; cv=fail; b=OAtahXfreHRWHhUTor8M0Q6JVixcJtkuFDVS7wEa/cXPVJlkGGAIZG9IOg2dQBm+KqG76FR9Hk8Q+0rncqgeUlL6rqijQoAfT8uaHgFNG8jy2bMu453v7FYBWG/9ZOEQSaRJ0xjOC+glzSi8pb97Xbd8wHnDpaRDk9+kq+FrRJU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747121951; c=relaxed/simple;
-	bh=JPDe9o7Haxyxy86ei8371Fyswgexu8aM8c63KUqQ3TI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=AlUd0ugby48puqbjAj5AVpLJMNiLxkzT6sHSQ2Rrv0ENAnVv6XZIVHrRmcre/yPuQWUKBTGW820iaJR7+qgnBr6enRXOCGlfgym84ppWEYe1FCijNyM170U/xQlImgZUmKI0Dlbaw6T8OMs9G0v2PX9gfcBz5ubL2LJYADW6oMs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chipsnmedia.com; spf=fail smtp.mailfrom=chipsnmedia.com; dkim=pass (1024-bit key) header.d=chipsnmedia.com header.i=@chipsnmedia.com header.b=dRPhnE0H; arc=fail smtp.client-ip=40.107.43.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chipsnmedia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=chipsnmedia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618CA1BC4E
+	for <linux-media@vger.kernel.org>; Tue, 13 May 2025 07:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747122337; cv=none; b=U/t3GTG6Wh5YTRIeGF9D3IO1E1AZ/hwPWGctaJdgj71O0HCACYd63T4EbMcqQ5t/4xNQoxucOjv58LKMXBSHTq/ZOPat5VjzolWrlwfsF6bs2PV/myzfFoeEoDAVIFG6DCMucLyyFj+nMPc4cZv877XMQLaJcGcVZMO5YcO9IBk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747122337; c=relaxed/simple;
+	bh=PXOjBC1zcpHu3MBNW0360uz2LAFqMOEV96e6x/7EfJs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PJ4CME2FL0oK8UX4Q/UHNhzX/r03eh/FB6Z4ck5Iv+G4pEzWiw8S0eQ5hcJDAaO14ha0yNvUCSKiZv0Kj/WVP+HGIt+euTV0nzcfRpom57O103qgrekeMlnoqocikHzLnTp5NUFdtViq6HmTDIc6fdgK4pausAQSMk0O9ughS/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=mi8ofs/0; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chipsnmedia.com header.i=@chipsnmedia.com header.b="dRPhnE0H"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=y+IzQlNEI87ba2B4sekGebwPA+synsJozSIVB38/eWa3r/hjSHozorl7bLMmU7kJOea0FRAhZMgGsUMQy8ZX6pG28w8BNRH8fG6PEssj7l1CiAeyw7bZQvJvnmfakI0D75kI7hb6y0CnihJtba9BlK6fcqQO7GVwcywpe6Muw3v4y+aWVuWS/B2m/hSrsYjbSWQZkWtkC9DEE/csT15BmGNqeP1u0ng5j67G+E66yWegIkHF+5xmTyNMaFL9CNz1T8nQpAoAAodJkQhK0Jb1z46QR3u+qlVqp25QfuX4sl525CagsvJWKCTGij8zI805JXtixn8clwvdh8Pwu1xOcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D0sqUwYV6Ax45LkJSrSZwsJblntq7BObz/uvuKNdBp0=;
- b=PEzFKmXI87FB/ilwBMhx2zm/ZqE3h6suSgRLaEiTiovOBdVmZWDpB3Wb3w++cVY+Oq4R5GHW1nZcjCIXPUKyCqyO0n0YZk3AeY6pyVI4BMwuXRBcNts6h10lsRhhl5Djn8fT+jBPXsEnG1nmGMr7dy0UzoXJM87AtB3AlU+a+lCGlKtKwZsTVG6vcdysI27njg1n2rLJhDTWu8BBtHKor657OQ/dvVov2BGwm3l0MIp0DCefOprTJW7Nx0G5O6bMffwwxvlFws8gxiyXieucHnKHn5SGQBFaecYXe0S5gwpgdgFgIdl1n9Pl2x/+Gd3R5eNwWy5DZXxnwgh6+j6n7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=chipsnmedia.com; dmarc=pass action=none
- header.from=chipsnmedia.com; dkim=pass header.d=chipsnmedia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chipsnmedia.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D0sqUwYV6Ax45LkJSrSZwsJblntq7BObz/uvuKNdBp0=;
- b=dRPhnE0H0gpRlVSHhcguv7x70xwEd/tNzih6bk6uAdL+d+mRu9Q+ZNVuvpnKvTZJSR2DdOhr847hJNZl+ecmLj2lH5yX2BVDQhcLxglXHAWR1T0J/X8Dw7w28FTa3nVU1XPFECUwUGpF5rr92Fe2SKPRv3UFq1CiiiaQjQAPbVI=
-Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM (2603:1096:101:a::9) by
- SE1P216MB1975.KORP216.PROD.OUTLOOK.COM (2603:1096:101:63::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8722.30; Tue, 13 May 2025 07:39:04 +0000
-Received: from SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
- ([fe80::9e3d:ee20:8cc7:3c07]) by SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
- ([fe80::9e3d:ee20:8cc7:3c07%3]) with mapi id 15.20.8722.027; Tue, 13 May 2025
- 07:39:04 +0000
-From: Nas Chung <nas.chung@chipsnmedia.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: "mchehab@kernel.org" <mchehab@kernel.org>, "hverkuil@xs4all.nl"
-	<hverkuil@xs4all.nl>, "sebastian.fricke@collabora.com"
-	<sebastian.fricke@collabora.com>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-imx@nxp.com" <linux-imx@nxp.com>,
-	"marex@denx.de" <marex@denx.de>, jackson.lee <jackson.lee@chipsnmedia.com>,
-	lafley.kim <lafley.kim@chipsnmedia.com>
-Subject: RE: [PATCH v2 2/8] dt-bindings: media: nxp: Add Wave6 video codec
- device
-Thread-Topic: [PATCH v2 2/8] dt-bindings: media: nxp: Add Wave6 video codec
- device
-Thread-Index: AQHbs2lXzy1gLrNeZ0ijKXj6PUT3srO0NFSAgBWF9JCAAHRxAIAFp7/w
-Date: Tue, 13 May 2025 07:39:04 +0000
-Message-ID:
- <SL2P216MB1246002B8EFD5CBE69E447ACFB96A@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
-References: <20250422093119.595-1-nas.chung@chipsnmedia.com>
- <20250422093119.595-3-nas.chung@chipsnmedia.com>
- <20250425-romantic-truthful-dove-3ef949@kuoka>
- <SL2P216MB124656A87931B153F815820BFB8AA@SL2P216MB1246.KORP216.PROD.OUTLOOK.COM>
- <f1073f21-0885-486f-80c8-00f91dfd7448@kernel.org>
-In-Reply-To: <f1073f21-0885-486f-80c8-00f91dfd7448@kernel.org>
-Accept-Language: en-US, ko-KR
-Content-Language: ko-KR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=chipsnmedia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SL2P216MB1246:EE_|SE1P216MB1975:EE_
-x-ms-office365-filtering-correlation-id: 67743e97-f5b6-4bda-5bad-08dd91f13c59
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?zGbZxjz7lwA6RkcovnGNmGIk+pN7lmAPI8WHtJJxQrfGD8+qMdK2SjPS3lXA?=
- =?us-ascii?Q?/+zbBz9auO+zBbo2GGQ6ErQo0fISVtvVR9lCVEqsdrSdWBc/jmKhRHWcbTFb?=
- =?us-ascii?Q?EFlJjkVv4TpQ54JeT4tqQcgvgy+l248XRYk902CEsTSAl0NYQnIE1J+EpGsW?=
- =?us-ascii?Q?dFEKV62mCQHVzK6DXIyjyPPOjbhXcMu7/fDu0T6A9gYNkPbDO5nSh4gqH9Dd?=
- =?us-ascii?Q?yLwmMF5CPiiyc1RkG6WijSsAGs5t9FO6JL87W6Svu7DUaS4w65Vu3ScrMsN5?=
- =?us-ascii?Q?8C4h1cIbi9zdnt+aPiQMDtaDyWZyyH8cEAAtlyIuDU7mMifqnjHQMeqvQ0rO?=
- =?us-ascii?Q?L+5iuqTttxGP2LrZbxrhP/35MnAwj5exnyafe5kuehXoQm+duzCugy7x4f/V?=
- =?us-ascii?Q?sfw35refjJVpErnvF8OZIsKiWAT6hVldDp0Xhom/cCtURhAAxRn85hIj+uw8?=
- =?us-ascii?Q?e5XdpaTaWD1zemGWH0PbYt1J3VTC7sJfelo1kbt1/aRJmhJ/7TwLeKL0x7bZ?=
- =?us-ascii?Q?YuQRzLRDeqYcnLaD1H0q2Agk3LFAp4zxBxbrQk6hMgx2kKtDXlpSk22fGvMi?=
- =?us-ascii?Q?oYdeBT70D38GC5HGsBXi0wxCSVWgo9WbTjfTjibDg7eh/jMiTypzuojhO3Ki?=
- =?us-ascii?Q?/ynkUVoALsd17YLUBgsteTh8R71nRZQ2t+hryG4Z+p92NG5y/8GrINGkBXaK?=
- =?us-ascii?Q?S2XyGQgCYgHMvhmUI1xotUc5rGmhqNz9LXYJ9eczS5q22R414vlqCFFrt1fC?=
- =?us-ascii?Q?k8IhW6xf8L5YjbsxqnQ1d47cgg4S4gB3wlZ6UoFZigvWdluGJry8kJ2t5rDz?=
- =?us-ascii?Q?q2GXSkBmLE7jiJ0blm1OGO/Sl1IiuzSdl3XAl+HcOeFErUm6C0nUOtCjyFB1?=
- =?us-ascii?Q?dFiT1db1MNUmSVhz95VghPZCx5TDr3CF0TcI/DSH84tULj1dN74Xgt7WkLi3?=
- =?us-ascii?Q?iZLl7WhYkKD4Fl8+ooQlGmBypPEEm6Q80M09S2ZoTU43fs8EhvTgyx6Z9JsO?=
- =?us-ascii?Q?qoI8qhtpss+hrl1s19RCmOwH8SUgpz75zvt6aX7YyoFPV+51zDvWyu55hzAq?=
- =?us-ascii?Q?e1KcSsXlNCmfJOKPZyB02UW0ddenfL9TLbUQz4cBk6kWicH1srKnYJ7P27hB?=
- =?us-ascii?Q?pBHdhONd2mmmYNVCzYiNGfYm0SW/gB3oFIRLyyrvxiWIBSlHT7dQfKydS9KA?=
- =?us-ascii?Q?sqJDfTXvsZzLTlPmMhVZuzu5ZjKZrvp9UgawV5y4sBvjLrcjEj2lM0JBZNIO?=
- =?us-ascii?Q?f1MBeSGEkTEF2BZGc1pCO+KkElwGtooBFIj8mcpmsxhCkp5pu/EDtE16OQiz?=
- =?us-ascii?Q?kETdR5E71wezlImJ1vwP4A85q9j3ExJ3QnIoxBhynETW/AEvDw51mHg2ZlE6?=
- =?us-ascii?Q?NJyzZpWvOGHqRPHCt2rcpeV/OpUXAkJgTPwq427xu26SzbwykW4drgs5uv+z?=
- =?us-ascii?Q?NM1ZhreaSF7cCpMYwO3+Ep9FBDgsfA6BFW4nxD/PK/uYK8+7wdUjQA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2P216MB1246.KORP216.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?BKTDoZvbLuhbk85pnxgUxntdJPyntqQwuTuJpWYgvrKjdMPRDYnW5uT6mLj2?=
- =?us-ascii?Q?4Nb4O07QTkXwpvYNSkbSHg+cxY8cUyTgn3YNxyXJfhFeM9CVpkwQKweIYZ7r?=
- =?us-ascii?Q?OdUlCvgxn0sDZfHhVBjGwTiXTe8C8tG4SsndE7OSNcQ9wrKk/sj0+NoSt8GW?=
- =?us-ascii?Q?95i3MScCaSZxCUHEy1keHONSoOyibNFrk9WlKg+r/ZYKdmXTpdadz6BlgyzZ?=
- =?us-ascii?Q?A+0FQWoc9Mdhasq5GtA2yfuH6J/HoelGg00HLwzXJOu4cfoPJBAb4jT9h6gH?=
- =?us-ascii?Q?v3LE5B5VeHLxaGq6L7PpVInkCfr7A6AGWqaYrK0+qItnXISeg7jLw7E502qV?=
- =?us-ascii?Q?+ZeVlSIy9hIOU2YmCAeLHSk5/I0DYEuecE/HE5ialDU9mhAIwC2yRNdL4xxz?=
- =?us-ascii?Q?zq3SGvEpyZuIyWdEtV/c6wIoLs1/ZZTWb7KkN2FsWtQlirrSKQD+cqdPfZyp?=
- =?us-ascii?Q?hnBrjrt1InYDHJqKZNR24ZmTZS6CdYkVSLNjS9p/4O4hYyQD8d0nlesKHuj2?=
- =?us-ascii?Q?nWpFDzFNV+xwvRmuPLYdJGJig42ZzJGF61AYxmyOH25reucNrVeFNiWBe2Hg?=
- =?us-ascii?Q?hv3V/VUnGBy2VasGu/z45DrmWAR3+edmu096a89cxp2gdVST9Q/XWXYQBx9i?=
- =?us-ascii?Q?0Fe8ELchKmEehAW8Yg8iPk1m6Nz/VqyJJr4F6Pzzuluk/5PV9Echr7F7cN5l?=
- =?us-ascii?Q?hcrJPCjvPgVK0av/QiviLIOJL1EPz2D6LArA6tqI2kMtcgkqllULJJES63Xn?=
- =?us-ascii?Q?Az0g4y6oc/+8zec+2TmFKNqo225OCppDx2tmzy+8Mo6OsU0zRuRmdZ4mUvQq?=
- =?us-ascii?Q?ZqMfISJ2/q4+sbBGr+6AfqHOb9SdxLrWqrcAj74SUOMLo9YSaLca7oZiJL74?=
- =?us-ascii?Q?dBFEKQAayNzFrmYdQwVPbqq2I07B9tthBtrUbKfk+tPdciRpqWNeazUtq/lH?=
- =?us-ascii?Q?RTJ0OGS/vNfQupP3aRhFkFKyXNFSKIgD7y/gIAWxeMCOe7Om6lqhx73zKXgp?=
- =?us-ascii?Q?jada3Q7h9NariNx9FHX6Pc1lDnwY6RSwCpWAvBfgB+dMQh0pYTzjfzB2G/gH?=
- =?us-ascii?Q?B+m5KiGTYMwWs/80agy7NlHW049UHrtaY3G/chl0xsfyjeg8GutUpYCuD6KA?=
- =?us-ascii?Q?0aKDT6lu17PEHZL2HC3F/vRcrxFkDsb+4saAePXhDPOTpZXV6rWteR8H+A1M?=
- =?us-ascii?Q?Tcyq7w4oVOwUOvy9H1G7th36hP2o8L48VZ3ifGewNIOTc7JgJvhD+sLsyh+p?=
- =?us-ascii?Q?K9JDzx3tKvXHCQnrwsDR+z1F8jdAiJvj6ye3F7zSK67ytlFKGH9NHl4bPkfE?=
- =?us-ascii?Q?wZKkBr5HIlHLbRJRqBLIauP8hxHVKQ98zrQJXnSahknFGJ43/fvGhDAg1YdX?=
- =?us-ascii?Q?TIXm4lbqd1px5DVznfl2NKJubbrBukC9yujZgh7mRCUnL6C40Tgcrt+uH7gw?=
- =?us-ascii?Q?9jrAiNzzxbH/uQRD3KCKxtWZiZGWBfuees9yFrXrgR2US2RPAw+3i5NDYUL4?=
- =?us-ascii?Q?wNNewwxgHQNwfwlRvRVBwcbuCHqFwcPFFr9P4tlGLcatxaekqSRGHq5IVYXK?=
- =?us-ascii?Q?UfYWX9X4zIs5vulCFGjf6yAtZxDnDPzV97G5uegp?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="mi8ofs/0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
+	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=YqG3F1nwnJqHSQab4xMnAquojdAEH0nS8rKHczAwQco=; b=mi8ofs/0oA6a/2IDKfOGeIgfOE
+	AXNEOp05GsCNpnbznaQCu4MncCLqTAqa+kWYl4S4DzOzdMTMoq7BzEQEu414gK/oooD0sF7DcDEeN
+	ZZ22O7p06wbd10Bl1NZ6Cc0uiWmYs2P91eCLewUUc9KWiQlYykPUvyhAhEzbnWqNiO5DhyKzJwWJQ
+	fxTYRBdbtTajDtATx5fbH2WpNoZvmQTxsmZjPzq8A4IJolbt6CUFVu3P7DF1czLJNIA38Ax3ZgWlW
+	ztMjP5O9BDJ8EmD7dmZzoSy0BMORojlB7V+OvnKni92BeJjlBzvzWxKPNmSOqF8595tNOA6tkzTfd
+	ql7oBy4g==;
+Received: from [81.79.92.254] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uEkF1-007Tuo-1p; Tue, 13 May 2025 09:45:25 +0200
+From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+To: dri-devel@lists.freedesktop.org
+Cc: Rob Clark <robdclark@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Gustavo Padovan <gustavo@padovan.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	amd-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	kernel-dev@igalia.com,
+	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+Subject: [RFC v3 02/10] dma-fence: Use a flag for 64-bit seqnos
+Date: Tue, 13 May 2025 08:45:05 +0100
+Message-ID: <20250513074513.81727-3-tvrtko.ursulin@igalia.com>
+X-Mailer: git-send-email 2.48.0
+In-Reply-To: <20250513074513.81727-1-tvrtko.ursulin@igalia.com>
+References: <20250513074513.81727-1-tvrtko.ursulin@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: chipsnmedia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SL2P216MB1246.KORP216.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67743e97-f5b6-4bda-5bad-08dd91f13c59
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2025 07:39:04.1785
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4d70c8e9-142b-4389-b7f2-fa8a3c68c467
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1Y2IjImmzP/WRdVJD8c6jA8Bpsy4I5TRs0cXyCZhUP4cr+2MhIe/6I7OJdVTwgwjG00DIizkNpuM6gxa1QxCVLCdDhqCDkREfUYOxkGuplU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1P216MB1975
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, Krzysztof.
+With the goal of reducing the need for drivers to touch (and dereference)
+fence->ops, we move the 64-bit seqnos flag from struct dma_fence_ops to
+the fence->flags.
 
->-----Original Message-----
->From: Krzysztof Kozlowski <krzk@kernel.org>
->Sent: Friday, May 9, 2025 7:12 PM
->To: Nas Chung <nas.chung@chipsnmedia.com>
->Cc: mchehab@kernel.org; hverkuil@xs4all.nl; sebastian.fricke@collabora.com=
-;
->robh@kernel.org; krzk+dt@kernel.org; conor+dt@kernel.org; linux-
->media@vger.kernel.org; devicetree@vger.kernel.org; linux-
->kernel@vger.kernel.org; linux-imx@nxp.com; marex@denx.de; jackson.lee
-><jackson.lee@chipsnmedia.com>; lafley.kim <lafley.kim@chipsnmedia.com>
->Subject: Re: [PATCH v2 2/8] dt-bindings: media: nxp: Add Wave6 video codec
->device
->
->On 09/05/2025 11:59, Nas Chung wrote:
->>>> +examples:
->>>> +  - |
->>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>> +    #include <dt-bindings/clock/nxp,imx95-clock.h>
->>>> +
->>>> +    soc {
->>>> +      #address-cells =3D <2>;
->>>> +      #size-cells =3D <2>;
->>>> +
->>>> +      vpu: video-codec {
->>>
->>> Why this device does not have MMIO? Sorry, but makes little sense and i=
-f
->>> you posted and tested your entire DTS you would see why.
->>
->> I initially thought that if the reg property is declared in the child,
->> it would not need to be declared in the parent node.
->> I based this approach on the mediatek,mt8195-jpegenc.yaml binding,
->> where the parent node does not include MMIO.
->
->Do you have access to mt8195 datasheet? What is the memory/register
->layout there?
->
->If you do not have access, why do you think these are similar devices?
+Drivers which were setting this flag are changed to use new
+dma_fence_init64() instead of dma_fence_init().
 
-I'm sorry, I made an incorrect reference without fully understanding
-the mt8195 architecture.
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/dma-buf/dma-fence-chain.c                |  5 ++---
+ drivers/dma-buf/dma-fence.c                      |  9 +++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c |  5 ++---
+ include/linux/dma-fence.h                        | 14 +++++---------
+ 4 files changed, 18 insertions(+), 15 deletions(-)
 
->
->>
->> But, if this structure is problematic, I will address it in patch v3.
->>
->>>
->>> Can we see the entire DTS?
->>
->> Sure !
->> Below is the cnm.wave633c.example.dts file created from dt_binding_check=
-.
->
->This is not the entire DTS.
+diff --git a/drivers/dma-buf/dma-fence-chain.c b/drivers/dma-buf/dma-fence-chain.c
+index 90424f23fd73..a8a90acf4f34 100644
+--- a/drivers/dma-buf/dma-fence-chain.c
++++ b/drivers/dma-buf/dma-fence-chain.c
+@@ -218,7 +218,6 @@ static void dma_fence_chain_set_deadline(struct dma_fence *fence,
+ }
+ 
+ const struct dma_fence_ops dma_fence_chain_ops = {
+-	.use_64bit_seqno = true,
+ 	.get_driver_name = dma_fence_chain_get_driver_name,
+ 	.get_timeline_name = dma_fence_chain_get_timeline_name,
+ 	.enable_signaling = dma_fence_chain_enable_signaling,
+@@ -262,8 +261,8 @@ void dma_fence_chain_init(struct dma_fence_chain *chain,
+ 			seqno = max(prev->seqno, seqno);
+ 	}
+ 
+-	dma_fence_init(&chain->base, &dma_fence_chain_ops,
+-		       &chain->lock, context, seqno);
++	dma_fence_init64(&chain->base, &dma_fence_chain_ops, &chain->lock,
++			 context, seqno);
+ 
+ 	/*
+ 	 * Chaining dma_fence_chain container together is only allowed through
+diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+index f0cdd3e99d36..33661658f684 100644
+--- a/drivers/dma-buf/dma-fence.c
++++ b/drivers/dma-buf/dma-fence.c
+@@ -1023,3 +1023,12 @@ dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+ 	trace_dma_fence_init(fence);
+ }
+ EXPORT_SYMBOL(dma_fence_init);
++
++void
++dma_fence_init64(struct dma_fence *fence, const struct dma_fence_ops *ops,
++		 spinlock_t *lock, u64 context, u64 seqno)
++{
++	dma_fence_init(fence, ops, lock, context, seqno);
++	__set_bit(DMA_FENCE_FLAG_SEQNO64_BIT, &fence->flags);
++}
++EXPORT_SYMBOL(dma_fence_init64);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
+index 51cddfa3f1e8..5d26797356a3 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_tlb_fence.c
+@@ -71,7 +71,6 @@ static void amdgpu_tlb_fence_work(struct work_struct *work)
+ }
+ 
+ static const struct dma_fence_ops amdgpu_tlb_fence_ops = {
+-	.use_64bit_seqno = true,
+ 	.get_driver_name = amdgpu_tlb_fence_get_driver_name,
+ 	.get_timeline_name = amdgpu_tlb_fence_get_timeline_name
+ };
+@@ -101,8 +100,8 @@ void amdgpu_vm_tlb_fence_create(struct amdgpu_device *adev, struct amdgpu_vm *vm
+ 	INIT_WORK(&f->work, amdgpu_tlb_fence_work);
+ 	spin_lock_init(&f->lock);
+ 
+-	dma_fence_init(&f->base, &amdgpu_tlb_fence_ops, &f->lock,
+-		       vm->tlb_fence_context, atomic64_read(&vm->tlb_seq));
++	dma_fence_init64(&f->base, &amdgpu_tlb_fence_ops, &f->lock,
++			 vm->tlb_fence_context, atomic64_read(&vm->tlb_seq));
+ 
+ 	/* TODO: We probably need a separate wq here */
+ 	dma_fence_get(&f->base);
+diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+index 48b5202c531d..a34a0dcdc446 100644
+--- a/include/linux/dma-fence.h
++++ b/include/linux/dma-fence.h
+@@ -97,6 +97,7 @@ struct dma_fence {
+ };
+ 
+ enum dma_fence_flag_bits {
++	DMA_FENCE_FLAG_SEQNO64_BIT,
+ 	DMA_FENCE_FLAG_SIGNALED_BIT,
+ 	DMA_FENCE_FLAG_TIMESTAMP_BIT,
+ 	DMA_FENCE_FLAG_ENABLE_SIGNAL_BIT,
+@@ -124,14 +125,6 @@ struct dma_fence_cb {
+  *
+  */
+ struct dma_fence_ops {
+-	/**
+-	 * @use_64bit_seqno:
+-	 *
+-	 * True if this dma_fence implementation uses 64bit seqno, false
+-	 * otherwise.
+-	 */
+-	bool use_64bit_seqno;
+-
+ 	/**
+ 	 * @get_driver_name:
+ 	 *
+@@ -262,6 +255,9 @@ struct dma_fence_ops {
+ void dma_fence_init(struct dma_fence *fence, const struct dma_fence_ops *ops,
+ 		    spinlock_t *lock, u64 context, u64 seqno);
+ 
++void dma_fence_init64(struct dma_fence *fence, const struct dma_fence_ops *ops,
++		      spinlock_t *lock, u64 context, u64 seqno);
++
+ void dma_fence_release(struct kref *kref);
+ void dma_fence_free(struct dma_fence *fence);
+ void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq);
+@@ -454,7 +450,7 @@ static inline bool __dma_fence_is_later(struct dma_fence *fence, u64 f1, u64 f2)
+ 	 * 32bit sequence numbers. Use a 64bit compare when the driver says to
+ 	 * do so.
+ 	 */
+-	if (fence->ops->use_64bit_seqno)
++	if (test_bit(DMA_FENCE_FLAG_SEQNO64_BIT, &fence->flags))
+ 		return f1 > f2;
+ 
+ 	return (int)(lower_32_bits(f1) - lower_32_bits(f2)) > 0;
+-- 
+2.48.0
 
-I have found errors in dtbs_check.
-I will make the necessary corrections and add the DTS patch to the patch se=
-ries
-
->
->>
->> /dts-v1/;
->> /plugin/; // silence any missing phandle references
->
->This is bindings example. I want to see entire DTS or DTSI of the SoC.
->Once you see entire DTS, you will notice that your current split is just
->not correct - it should be pretty obvious.
->
->And that's why we should keep rejecting such works which do not bring
->any DTS user, because the no one - neither we nor the contributors - see
->big picture and if someone saw the big picture then immediately would
->notice - it's just bollocks.
-
-I understand the meaning. I will test the entire DTS file
-to properly use the VPU and check for errors in dtbs_check.
-
->
->What you claim is:
->
->soc@0 {
->  // MMIO bus
->
->  video-codec {
->    // which is a non-MMIO device and clearly a no-go.
->
->Just look how DTS is organized and learn from it.
->
-
-Thank you for pointing this out.
-I now understand that placing a non-MMIO device on the MMIO bus is
-fundamentally incorrect.
-To address this, I will update the video-codec device to define
-the reg properties covering the entire reg region.
-
->>
->> /{
->>     compatible =3D "foo";
->>     model =3D "foo";
->>     #address-cells =3D <1>;
->>     #size-cells =3D <1>;
->>
->>
->>     example-0 {
->>         #address-cells =3D <1>;
->>         #size-cells =3D <1>;
->>
->>
->>         interrupt-parent =3D <&fake_intc0>;
->>         fake_intc0: fake-interrupt-controller {
->>             interrupt-controller;
->>             #interrupt-cells =3D < 3 >;
->>         };
->>
->
->All of above are wrong for the SoC...
->
->>
->>         #include <dt-bindings/interrupt-controller/arm-gic.h>
->>         #include <dt-bindings/clock/nxp,imx95-clock.h>
->>
->>         soc {
->>           #address-cells =3D <2>;
->>           #size-cells =3D <2>;
->>
->>           vpu: video-codec {
->>             compatible =3D "nxp,imx95-vpu", "cnm,wave633c";
->
->What does this device represent? It is not "ctrl", because you made ctrl
->separate device node. Your binding description suggests that is the VPU
->control region.
-
-My intention was to represent the MMIO VPU device, which includes
-both the core and control nodes.
-
->
->>             clocks =3D <&scmi_clk 115>,
->>                      <&vpu_blk_ctrl IMX95_CLK_VPUBLK_WAVE>;
->
->For which sub devices these clocks are valid? For all of them?
-
-Yes, these clocks are valid for all of sub devices.
-
-Thanks.
-Nas.
-
->
->>             clock-names =3D "vpu", "vpublk_wave";
->>             power-domains =3D <&scmi_devpd 21>;
->>             #address-cells =3D <2>;
->>             #size-cells =3D <2>;
->>             ranges;
->>
->>             vpucore0: video-core@4c480000 {
->>               compatible =3D "nxp,imx95-vpu-core";
->>               reg =3D <0x0 0x4c480000 0x0 0x10000>;
->>               interrupts =3D <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>;
->>             };
->>
->>             vpucore1: video-core@4c490000 {
->>               compatible =3D "nxp,imx95-vpu-core";
->>               reg =3D <0x0 0x4c490000 0x0 0x10000>;
->>               interrupts =3D <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
->>             };
->>
->>             vpucore2: video-core@4c4a0000 {
->>               compatible =3D "nxp,imx95-vpu-core";
->>               reg =3D <0x0 0x4c4a0000 0x0 0x10000>;
->>               interrupts =3D <GIC_SPI 301 IRQ_TYPE_LEVEL_HIGH>;
->>             };
->>
->>             vpucore3: video-core@4c4b0000 {
->>               compatible =3D "nxp,imx95-vpu-core";
->>               reg =3D <0x0 0x4c4b0000 0x0 0x10000>;
->>               interrupts =3D <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>;
->>             };
->>
->>             vpuctrl: video-controller@4c4c0000 {
->>               compatible =3D "nxp,imx95-vpu-ctrl";
->>               reg =3D <0x0 0x4c4c0000 0x0 0x10000>;
->>               memory-region =3D <&vpu_boot>;
->>               power-domains =3D <&scmi_perf 10>;
->>               #cooling-cells =3D <2>;
->>               sram =3D <&sram1>;
->>             };
->>           };
->>         };
->>
->>     };
->> };
->>
->>>
->>> Best regards,
->>> Krzysztof
->>
->
->
->Best regards,
->Krzysztof
