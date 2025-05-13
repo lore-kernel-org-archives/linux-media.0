@@ -1,60 +1,87 @@
-Received: from mta22.hihonor.com (mta22.honor.com [81.70.192.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E017F347C7;
-	Tue, 13 May 2025 12:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.192.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA2217597
+	for <linux-media@vger.kernel.org>; Tue, 13 May 2025 12:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747140217; cv=none; b=QlGzpq71VhVCS5BhSyslIiYuSLkN4kqDuAq7n2N/xT5GMeGcUZ7itm84eS0dMfp5UQTcTolRJ7rV3sB2sutvQascfZvgA4KzzTkwYFPlEkAjRX2azo4Zqka0AwQW/DzyuhbuNP1l3SPl0StPbzROQeE84Uj9Z5XfadWvXAnkd4I=
+	t=1747140370; cv=none; b=hCl0V2Ne8JWWCB4QF8IfjKBTeHnQjjlzgqrKh4GWTNiB3NfxeclVLkSFT+0EJrgETfwxOja4ipw1Y3RXPKhdPRrtNP9rcZ4ftdgtvlWNt7O7k/jQlh8E+XLqoIaTBB0VptnTb17kf1Y40RB/fm+AM6h27W5/ewi3S4NBwSK01oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747140217; c=relaxed/simple;
-	bh=lc978VcXO7EICFcV9M7P//PtycWoCG7Wn0XEgdeThuk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=LOQQe8auopmmV7AwjMHaOUNX7Q+z5Vf6KZ21xM27NSSMOYdI7FXPGdbzQB4ilt5o9gfIY/pFRtt/I+mhsEVyA556CsNjcTvYgvjXqKkeRESKAx+KOrB5/brR86yhsjSY36XofQFxsH3UMAVfKRZRVYwZfq/NjW115dp+z/Jtx2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; arc=none smtp.client-ip=81.70.192.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-Received: from w001.hihonor.com (unknown [10.68.25.235])
-	by mta22.hihonor.com (SkyGuard) with ESMTPS id 4ZxbKg450kzYlqTV;
-	Tue, 13 May 2025 20:25:43 +0800 (CST)
-Received: from a003.hihonor.com (10.68.18.8) by w001.hihonor.com
- (10.68.25.235) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 13 May
- 2025 20:27:31 +0800
-Received: from a010.hihonor.com (10.68.16.52) by a003.hihonor.com (10.68.18.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 13 May
- 2025 20:27:31 +0800
-Received: from a010.hihonor.com ([fe80::7127:3946:32c7:6e]) by
- a010.hihonor.com ([fe80::7127:3946:32c7:6e%14]) with mapi id 15.02.1544.011;
- Tue, 13 May 2025 20:27:31 +0800
-From: wangtao <tao.wangtao@honor.com>
-To: =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
-	"sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-	"benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
-	"Brian.Starkey@arm.com" <Brian.Starkey@arm.com>, "jstultz@google.com"
-	<jstultz@google.com>, "tjmercier@google.com" <tjmercier@google.com>
-CC: "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"wangbintian(BintianWang)" <bintian.wang@honor.com>, yipengxiang
-	<yipengxiang@honor.com>, liulu 00013167 <liulu.liu@honor.com>, "hanfeng
- 00012985" <feng.han@honor.com>
-Subject: RE: [PATCH 1/2] dmabuf: add DMA_BUF_IOCTL_RW_FILE
-Thread-Topic: [PATCH 1/2] dmabuf: add DMA_BUF_IOCTL_RW_FILE
-Thread-Index: AQHbw+qAM8Fnhu6qq06hsP+5NR7CSrPP5xYAgACTT/A=
-Date: Tue, 13 May 2025 12:27:31 +0000
-Message-ID: <5ca2b6f4912946e7a7415dd35679704c@honor.com>
-References: <20250513092735.1931-1-tao.wangtao@honor.com>
- <d77ed1c0-3f66-447a-956f-37e1dd543ca3@amd.com>
-In-Reply-To: <d77ed1c0-3f66-447a-956f-37e1dd543ca3@amd.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1747140370; c=relaxed/simple;
+	bh=9XGUZtHjZZO59uocEEiPLnwaOkVr02GWBIQgyo1V/2A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Zkr9crZ60ke79IcQm9Mi+8L7Mzw9uUn7DFkSnMwzlvCrpwhHkhvAbFcy1fuI7cez3UxAsoYC7dEJWokNEUbd0IJ1vuZpbA2GpQsxPgJbgx4Yc4yMVfP7rZJ6lAN4GoOhtkzVR8IyOSsV267sYbCtffIvrjckoVjOO2+bP1irMCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca; spf=none smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=Rp4wW456; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="Rp4wW456"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf3192f3bso59564595e9.1
+        for <linux-media@vger.kernel.org>; Tue, 13 May 2025 05:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1747140366; x=1747745166; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9XGUZtHjZZO59uocEEiPLnwaOkVr02GWBIQgyo1V/2A=;
+        b=Rp4wW456jQJAz9XYoWgkbF1wdJlTCyqnBC9geet7P2rfQDHAjlA8IPDfYY7H1rmeUw
+         UGoqWu+Z9TDiXWVO9azNZYB/fNTMGPMNAfxODC73hj6WLe+/xda3lPrqj8VIIMsScFep
+         zg3VYHH3oeDrNNk0FpJdrztOG2vWiS2Xs75BPxS5cRx4V7d/av2vaNnUKYoL9gzGUe21
+         DtdsWRE0pHbIwCGECdIBE3QJ/dWtNWB0ienzA1aK6wKuDM9tZaEEDcPJliEc2OQRhxeg
+         NOHQuwV3PvgXewSva+12o/4m2x25jXC4JowgMwDgtbtMertTCC4NfzTN2SQ7yKU/u2uY
+         B9Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747140366; x=1747745166;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9XGUZtHjZZO59uocEEiPLnwaOkVr02GWBIQgyo1V/2A=;
+        b=NE6Y/53mK0l00B/BiE63dwZzGq43OsLWw7ZlAbRCLy5aVaj3CUT/yi0WrZ2Um23Vu8
+         IuiU7HE2iHvpzw2m3LPxaRmoM5fMfMil8y0ACVzmq5SnzmliW3ARaH2ukYa7XK9JPDGO
+         NzgD/5V/Ql9m+8YtNyBH7Ykqh2bCpC+r6v7zSH3m9UtV6Q9gbS7NSGaE0m0yeMhxK74z
+         tZpBrTMpyMybrwTd9Gg4++c9aNgFmEUj34Jy03nVtkCD10b15XwEJ/vxIDATTfkJsYYa
+         Iiq3H5Yzzp7Id4Mp+H/I388AExb63TvRoLjUmxvh2am629FVe59DOrpJYN1Rz4NcNR1o
+         jLWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVk3P7ush8uy1Oq9S86VEAzrueh7GH/9HxV4XDxt8X4zB5oC0531NtxOY4ImX2KGurfmZjGPWklStmnsA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yytp+e3jTpo1WUdDLsX3Irv6hhiMpjtjknUiw6OQ8+UQFfy0JN+
+	fBfp5fQ/XE6ah9ZbQXCnDMKMujnZtJ655acKQEIPJswql46hpD6HXv88b20VVSepgdBCSeDSVAl
+	7b7B05A==
+X-Gm-Gg: ASbGncvxjKWvnRkTxzu9DSDelCjvaqiuSmdYiwRtNwDHTP8ueJBpuNha8zrwQfg88s8
+	EKR1opKTfOb4mLZed4ELRuEpGSM41dZ++/Zba5kribtxzuxfdPBH7qGBhpevarRua/tEfaXO+B2
+	0l91osEjnceNBaVllt3rt09x+njw4p1lu6JVLxhfldBxPEWtIgtGZw3DzrHyEO+DwwWINsXwAXq
+	xpRQxE0uMOChHq81EcJ36I5JrnqfYXW/YDmclP67LCdD1f/FW/KRJPudwsnAqppPLaHnA4c8gS5
+	HMddHyc41X1ijPEIGTuhVJBUUTCDqbvSXQLZnTdT8JHZ+0qI3FU64nY=
+X-Google-Smtp-Source: AGHT+IHdeFcoL7yjVkt2d1xpcFPkpISKn/6aiPUUhhy9V/cZhqP7DcMpUN9FCuq9N993UhvpUJFq7Q==
+X-Received: by 2002:a05:600c:46c3:b0:43c:f44c:72a6 with SMTP id 5b1f17b1804b1-442d6d18bdcmr159295855e9.2.1747140366159;
+        Tue, 13 May 2025 05:46:06 -0700 (PDT)
+Received: from [10.68.117.232] ([146.0.28.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd32f331sm211754605e9.13.2025.05.13.05.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 May 2025 05:46:05 -0700 (PDT)
+Message-ID: <1c4602cbc29b02e36e96e271178e764e42fe48ad.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 0/4] usb: gadget: uvc: parse configfs entries and
+ implement v4l2 enum api calls
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: Krzysztof Opasiak <krzysztof.opasiak@neat.no>, Greg KH
+	 <gregkh@linuxfoundation.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Michael Grzeschik	
+ <m.grzeschik@pengutronix.de>, linux-usb@vger.kernel.org, 
+	linux-media@vger.kernel.org, balbi@kernel.org, paul.elder@ideasonboard.com,
+ 	kernel@pengutronix.de, kieran.bingham@ideasonboard.com
+Date: Tue, 13 May 2025 14:46:05 +0200
+In-Reply-To: <2efb125c-d8ef-468a-a7ea-afcb5b5bee44@neat.no>
+References: <20220909221335.15033-1-m.grzeschik@pengutronix.de>
+	 <Y4u+9g/gIneGZrlZ@pendragon.ideasonboard.com> <Y4xaXHLoiPupWM6V@kroah.com>
+	 <b2e943a1-fc0e-4dd2-b38e-a1d77ed00109@neat.no>
+	 <2025051253-trimmer-displease-1dde@gregkh>
+	 <f07db888-8342-491b-86b1-43309a1d2456@neat.no>
+	 <696f471b-c2d9-4733-9795-0fc31a48e6f8@neat.no>
+	 <2025051317-deflation-discuss-1201@gregkh>
+	 <e5cd5e9d64123b319bae1a73c96cd33a3ad9e805.camel@ndufresne.ca>
+	 <2efb125c-d8ef-468a-a7ea-afcb5b5bee44@neat.no>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -62,90 +89,141 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQ2hyaXN0aWFuIEvDtm5p
-ZyA8Y2hyaXN0aWFuLmtvZW5pZ0BhbWQuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBNYXkgMTMsIDIw
-MjUgNzozMSBQTQ0KPiBUbzogd2FuZ3RhbyA8dGFvLndhbmd0YW9AaG9ub3IuY29tPjsgc3VtaXQu
-c2Vtd2FsQGxpbmFyby5vcmc7DQo+IGJlbmphbWluLmdhaWduYXJkQGNvbGxhYm9yYS5jb207IEJy
-aWFuLlN0YXJrZXlAYXJtLmNvbTsNCj4ganN0dWx0ekBnb29nbGUuY29tOyB0am1lcmNpZXJAZ29v
-Z2xlLmNvbQ0KPiBDYzogbGludXgtbWVkaWFAdmdlci5rZXJuZWwub3JnOyBkcmktZGV2ZWxAbGlz
-dHMuZnJlZWRlc2t0b3Aub3JnOyBsaW5hcm8tDQo+IG1tLXNpZ0BsaXN0cy5saW5hcm8ub3JnOyBs
-aW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiB3YW5nYmludGlhbihCaW50aWFuV2FuZykg
-PGJpbnRpYW4ud2FuZ0Bob25vci5jb20+OyB5aXBlbmd4aWFuZw0KPiA8eWlwZW5neGlhbmdAaG9u
-b3IuY29tPjsgbGl1bHUgMDAwMTMxNjcgPGxpdWx1LmxpdUBob25vci5jb20+OyBoYW5mZW5nDQo+
-IDAwMDEyOTg1IDxmZW5nLmhhbkBob25vci5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS8y
-XSBkbWFidWY6IGFkZCBETUFfQlVGX0lPQ1RMX1JXX0ZJTEUNCj4gDQo+IE9uIDUvMTMvMjUgMTE6
-MjcsIHdhbmd0YW8gd3JvdGU6DQo+ID4gQWRkIERNQV9CVUZfSU9DVExfUldfRklMRSB0byBzYXZl
-L3Jlc3RvcmUgZGF0YSBmcm9tL3RvIGEgZG1hLWJ1Zi4NCj4gDQo+IFNpbWlsYXIgYXBwcm9hY2gg
-d2hlcmUgcmVqZWN0ZWQgYmVmb3JlIGluIGZhdm9yIG9mIHVzaW5nIHVkbWFidWYuDQo+IA0KPiBJ
-cyB0aGVyZSBhbnkgcmVhc29uIHlvdSBjYW4ndCB1c2UgdGhhdCBhcHByb2FjaCBhcyB3ZWxsPw0K
-W3dhbmd0YW9dIEZvciBwZXJmb3JtYW5jZSBvcHRpbWl6YXRpb24sIHdlIGNhbiBhY2hpZXZlcyAz
-Nzc2IE1CL3MgKFVGUyA0LjAgZGV2aWNlIEAgNEdCL3MpLg0KQXBvbG9naWVzLCBteSB0aHJlZSBw
-cmV2aW91cyBlbWFpbHMgd2VyZSBub3QgY29uc29saWRhdGVkIGludG8gdGhlIHNhbWUgdGhyZWFk
-Lg0KPiANCj4gUmVnYXJkcywNCj4gQ2hyaXN0aWFuLg0KPiANCj4gPg0KPiA+IFNpZ25lZC1vZmYt
-Ynk6IHdhbmd0YW8gPHRhby53YW5ndGFvQGhvbm9yLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVy
-cy9kbWEtYnVmL2RtYS1idWYuYyAgICB8ICA4ICsrKysrKysrDQo+ID4gIGluY2x1ZGUvbGludXgv
-ZG1hLWJ1Zi5oICAgICAgfCAgMyArKysNCj4gPiAgaW5jbHVkZS91YXBpL2xpbnV4L2RtYS1idWYu
-aCB8IDI5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gIDMgZmlsZXMgY2hhbmdl
-ZCwgNDAgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZG1hLWJ1
-Zi9kbWEtYnVmLmMgYi9kcml2ZXJzL2RtYS1idWYvZG1hLWJ1Zi5jDQo+ID4gaW5kZXggNWJhYTgz
-Yjg1NTE1Li45NWQ4YjAxNThmZmQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9kbWEtYnVmL2Rt
-YS1idWYuYw0KPiA+ICsrKyBiL2RyaXZlcnMvZG1hLWJ1Zi9kbWEtYnVmLmMNCj4gPiBAQCAtNDYw
-LDYgKzQ2MCw3IEBAIHN0YXRpYyBsb25nIGRtYV9idWZfaW9jdGwoc3RydWN0IGZpbGUgKmZpbGUs
-DQo+ID4gIAlzdHJ1Y3QgZG1hX2J1ZiAqZG1hYnVmOw0KPiA+ICAJc3RydWN0IGRtYV9idWZfc3lu
-YyBzeW5jOw0KPiA+ICAJZW51bSBkbWFfZGF0YV9kaXJlY3Rpb24gZGlyZWN0aW9uOw0KPiA+ICsJ
-c3RydWN0IGRtYV9idWZfcndfZmlsZSBrZmlsZTsNCj4gPiAgCWludCByZXQ7DQo+ID4NCj4gPiAg
-CWRtYWJ1ZiA9IGZpbGUtPnByaXZhdGVfZGF0YTsNCj4gPiBAQCAtNTA0LDYgKzUwNSwxMyBAQCBz
-dGF0aWMgbG9uZyBkbWFfYnVmX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxlLA0KPiA+ICAJCXJldHVy
-biBkbWFfYnVmX2ltcG9ydF9zeW5jX2ZpbGUoZG1hYnVmLCAoY29uc3Qgdm9pZA0KPiBfX3VzZXIg
-KilhcmcpOw0KPiA+ICNlbmRpZg0KPiA+DQo+ID4gKwljYXNlIERNQV9CVUZfSU9DVExfUldfRklM
-RToNCj4gPiArCQlpZiAoY29weV9mcm9tX3VzZXIoJmtmaWxlLCAodm9pZCBfX3VzZXIgKikgYXJn
-LCBzaXplb2Yoa2ZpbGUpKSkNCj4gPiArCQkJcmV0dXJuIC1FRkFVTFQ7DQo+ID4gKwkJaWYgKCFk
-bWFidWYtPm9wcy0+cndfZmlsZSkNCj4gPiArCQkJcmV0dXJuIC1FSU5WQUw7DQo+ID4gKwkJcmV0
-dXJuIGRtYWJ1Zi0+b3BzLT5yd19maWxlKGRtYWJ1ZiwgJmtmaWxlKTsNCj4gPiArDQo+ID4gIAlk
-ZWZhdWx0Og0KPiA+ICAJCXJldHVybiAtRU5PVFRZOw0KPiA+ICAJfQ0KPiA+IGRpZmYgLS1naXQg
-YS9pbmNsdWRlL2xpbnV4L2RtYS1idWYuaCBiL2luY2x1ZGUvbGludXgvZG1hLWJ1Zi5oIGluZGV4
-DQo+ID4gMzYyMTZkMjhkOGJkLi5kZTIzNmJhMjA5NGIgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVk
-ZS9saW51eC9kbWEtYnVmLmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2RtYS1idWYuaA0KPiA+
-IEBAIC0yMiw2ICsyMiw3IEBADQo+ID4gICNpbmNsdWRlIDxsaW51eC9mcy5oPg0KPiA+ICAjaW5j
-bHVkZSA8bGludXgvZG1hLWZlbmNlLmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC93YWl0Lmg+DQo+
-ID4gKyNpbmNsdWRlIDx1YXBpL2xpbnV4L2RtYS1idWYuaD4NCj4gPg0KPiA+ICBzdHJ1Y3QgZGV2
-aWNlOw0KPiA+ICBzdHJ1Y3QgZG1hX2J1ZjsNCj4gPiBAQCAtMjg1LDYgKzI4Niw4IEBAIHN0cnVj
-dCBkbWFfYnVmX29wcyB7DQo+ID4NCj4gPiAgCWludCAoKnZtYXApKHN0cnVjdCBkbWFfYnVmICpk
-bWFidWYsIHN0cnVjdCBpb3N5c19tYXAgKm1hcCk7DQo+ID4gIAl2b2lkICgqdnVubWFwKShzdHJ1
-Y3QgZG1hX2J1ZiAqZG1hYnVmLCBzdHJ1Y3QgaW9zeXNfbWFwICptYXApOw0KPiA+ICsNCj4gPiAr
-CWludCAoKnJ3X2ZpbGUpKHN0cnVjdCBkbWFfYnVmICpkbWFidWYsIHN0cnVjdCBkbWFfYnVmX3J3
-X2ZpbGUNCj4gPiArKmZpbGUpOw0KPiA+ICB9Ow0KPiA+DQo+ID4gIC8qKg0KPiA+IGRpZmYgLS1n
-aXQgYS9pbmNsdWRlL3VhcGkvbGludXgvZG1hLWJ1Zi5oDQo+ID4gYi9pbmNsdWRlL3VhcGkvbGlu
-dXgvZG1hLWJ1Zi5oIGluZGV4IDVhNmZkYTY2ZDlhZC4uZWM5MTY0YjdiNzUzDQo+IDEwMDY0NA0K
-PiA+IC0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC9kbWEtYnVmLmgNCj4gPiArKysgYi9pbmNsdWRl
-L3VhcGkvbGludXgvZG1hLWJ1Zi5oDQo+ID4gQEAgLTE2Nyw2ICsxNjcsMjkgQEAgc3RydWN0IGRt
-YV9idWZfaW1wb3J0X3N5bmNfZmlsZSB7DQo+ID4gIAlfX3MzMiBmZDsNCj4gPiAgfTsNCj4gPg0K
-PiA+ICsvKioNCj4gPiArICogc3RydWN0IGRtYV9idWZfcndfZmlsZSAtIHJlYWQvd3JpdGUgZmls
-ZSBhc3NvY2lhdGVkIHdpdGggYSBkbWEtYnVmDQo+ID4gKyAqDQo+ID4gKyAqIFVzZXJzcGFjZSBj
-YW4gcGVyZm9ybXMgYSBETUFfQlVGX0lPQ1RMX0JBQ0sgdG8gc2F2ZSBkYXRhIGZyb20gYQ0KPiA+
-ICtkbWEtYnVmIG9yDQo+ID4gKyAqIHJlc3RvcmUgZGF0YSB0byBhIGRtYS1idWYuDQo+ID4gKyAq
-Lw0KPiA+ICtzdHJ1Y3QgZG1hX2J1Zl9yd19maWxlIHsNCj4gPiArDQo+ID4gKwkvKiogQGZsYWdz
-OiBGbGFncyBpbmRpY2F0aW5nIHJlYWQvd3JpdGUgZm9yIHRoaXMgZG1hLWJ1Zi4gKi8NCj4gPiAr
-CV9fdTMyIGZsYWdzOw0KPiA+ICsJLyoqIEBmZDogRmlsZSBkZXNjcmlwdG9yIG9mIHRoZSBmaWxl
-IGFzc29jaWF0ZWQgd2l0aCB0aGlzIGRtYS1idWYuICovDQo+ID4gKwlfX3MzMiBmZDsNCj4gPiAr
-CS8qKiBAZmlsZV9vZmZzZXQ6IE9mZnNldCB3aXRoaW4gdGhlIGZpbGUgd2hlcmUgdGhpcyBkbWEt
-YnVmIHN0YXJ0cy4NCj4gPiArCSAqDQo+ID4gKwkgKiAgT2Zmc2V0IGFuZCBMZW5ndGggbXVzdCBi
-ZSBwYWdlLWFsaWduZWQgZm9yIGRpcmVjdCBJL08uDQo+ID4gKwkgKi8NCj4gPiArCV9fdTY0IGZp
-bGVfb2Zmc2V0Ow0KPiA+ICsJLyoqIEBidWZfb2Zmc2V0OiBPZmZzZXQgd2l0aGluIHRoaXMgZG1h
-LWJ1ZiB3aGVyZSB0aGUgcmVhZC93cml0ZQ0KPiBzdGFydHMuICovDQo+ID4gKwlfX3U2NCBidWZf
-b2Zmc2V0Ow0KPiA+ICsJLyoqIEBidWZfbGVuOiBMZW5ndGggb2YgdGhpcyBkbWEtYnVmIHJlYWQv
-d3JpdGUuICovDQo+ID4gKwlfX3U2NCBidWZfbGVuOw0KPiA+ICt9Ow0KPiA+ICsNCj4gPiAgI2Rl
-ZmluZSBETUFfQlVGX0JBU0UJCSdiJw0KPiA+ICAjZGVmaW5lIERNQV9CVUZfSU9DVExfU1lOQwlf
-SU9XKERNQV9CVUZfQkFTRSwgMCwgc3RydWN0DQo+IGRtYV9idWZfc3luYykNCj4gPg0KPiA+IEBA
-IC0xNzksNCArMjAyLDEwIEBAIHN0cnVjdCBkbWFfYnVmX2ltcG9ydF9zeW5jX2ZpbGUgew0KPiA+
-ICAjZGVmaW5lIERNQV9CVUZfSU9DVExfRVhQT1JUX1NZTkNfRklMRQ0KPiAJX0lPV1IoRE1BX0JV
-Rl9CQVNFLCAyLCBzdHJ1Y3QgZG1hX2J1Zl9leHBvcnRfc3luY19maWxlKQ0KPiA+ICAjZGVmaW5l
-IERNQV9CVUZfSU9DVExfSU1QT1JUX1NZTkNfRklMRQ0KPiAJX0lPVyhETUFfQlVGX0JBU0UsIDMs
-IHN0cnVjdCBkbWFfYnVmX2ltcG9ydF9zeW5jX2ZpbGUpDQo+ID4NCj4gPiArI2RlZmluZSBETUFf
-QlVGX1JXX0ZMQUdTX09QX01BU0sgKDB4RkYgPDwgMCkgI2RlZmluZQ0KPiA+ICtETUFfQlVGX1JX
-X0ZMQUdTX1JFQUQgKDEgPDwgMCkgLyogUmVzdG9yZSBkbWEtYnVmIGRhdGEgKi8NCj4gI2RlZmlu
-ZQ0KPiA+ICtETUFfQlVGX1JXX0ZMQUdTX1dSSVRFICgyIDw8IDApIC8qIFNhdmUgZG1hLWJ1ZiBk
-YXRhICovICNkZWZpbmUNCj4gPiArRE1BX0JVRl9SV19GTEFHU19ESVJFQ1QgKDF1IDw8IDMxKSAv
-KiBEaXJlY3QgcmVhZC93cml0ZSBmaWxlICovDQo+ID4gKyNkZWZpbmUgRE1BX0JVRl9JT0NUTF9S
-V19GSUxFCV9JT1coRE1BX0JVRl9CQVNFLCA0LCBzdHJ1Y3QNCj4gZG1hX2J1Zl9yd19maWxlKQ0K
-PiA+ICsNCj4gPiAgI2VuZGlmDQoNCg==
+Hi Krzysztof,
+
+Le mardi 13 mai 2025 =C3=A0 12:31 +0200, Krzysztof Opasiak a =C3=A9crit=C2=
+=A0:
+> On 13.05.2025 12:04, Nicolas Dufresne wrote:
+> > Hi Greg, Krzysztof,
+> >=20
+> > Le mardi 13 mai 2025 =C3=A0 07:04 +0200, Greg KH a =C3=A9crit=C2=A0:
+> > > On Mon, May 12, 2025 at 11:03:41PM +0200, Krzysztof Opasiak wrote:
+> > > > On 12.05.2025 12:43, Krzysztof Opasiak wrote:
+> > > > > On 12.05.2025 12:38, Greg KH wrote:
+> > > > > > On Mon, May 12, 2025 at 12:19:07PM +0200, Krzysztof Opasiak wro=
+te:
+> > > > > > > Hi Greg,
+> > > > > > >=20
+> > > > > > > On 4.12.2022 09:29, Greg KH wrote:
+> > > > > > > > On Sat, Dec 03, 2022 at 11:26:14PM +0200, Laurent Pinchart =
+wrote:
+> > > > > > > > > Hi Michael,
+> > > > > > > > >=20
+> > > > > > > > > On Sat, Sep 10, 2022 at 12:13:31AM +0200, Michael Grzesch=
+ik wrote:
+> > > > [...]
+> > > > > > >=20
+> > > > > > > Given that I'd like to suggest that it seems to actually make=
+ sense to
+> > > > > > > revert this unless there are some ideas how to fix it.
+> > > > > >=20
+> > > > > > Sorry about this, can you submit a patch series that reverts th=
+e
+> > > > > > offending commits?=C2=A0 As it was years ago, I don't exactly k=
+now what you
+> > > > > > are referring to anymore.
+> > > > > >=20
+> > > > >=20
+> > > > > Sure! Will do.
+> > > > >=20
+> > > >=20
+> > > > Would you prefer to have a set of actual reverts related to this:
+> > > >=20
+> > > > da692963df4e Revert "usb: gadget: uvc: add v4l2 enumeration api cal=
+ls"
+> > > > bca75df69aaf Revert "usb: gadget: uvc: add v4l2 try_format api call=
+"
+> > > > e56c767a6d3c Revert "usb: gadget: uvc: also use try_format in set_f=
+ormat"
+> > > > 20f275b86960 Revert "usb: gadget: uvc: fix try format returns on
+> > > > uncompressed formats"
+> > > > 059d98f60c21 Revert "usb: gadget: uvc: Fix ERR_PTR dereference in
+> > > > uvc_v4l2.c"
+> > > > e6fd9b67414c Revert "usb: gadget: webcam: Make g_webcam loadable ag=
+ain"
+> > > >=20
+> > > > but have a negative consequence that the series isn't really bisect=
+able from
+> > > > functional perspective. For example commit e6fd9b67414c breaks g_uv=
+c until
+> > > > we apply da692963df4e so the series would have to go in as a whole.
+> > > >=20
+> > > > Or you would prefer a single commit that technically isn't a revert=
+ but it
+> > > > just "undoes" the negative consequences of "usb: gadget: uvc: add v=
+4l2
+> > > > enumeration api calls" (kind of a squash of all commits above)?
+> > >=20
+> > > Ideally we can bisect at all places in the tree, so it's odd that
+> > > reverting patches would cause problems as when adding them all should
+> > > have been ok for every commit, right?
+> > >=20
+> > > But if there are merge issues, or other problems, then yes, maybe jus=
+t
+> > > one big one is needed, your choice.
+> >=20
+> > Won't a plain revert break userspace like GStreamer that have depended =
+on
+> > that patch for years ? In such a delicate case, wouldn't it be less
+> > damageable to introduce workaround, like alias ? This is one personal
+> > script against numerous users of a generic framework implementation.
+>=20
+> Shouldn't GStreamer be robust enough to handle cases of old-kernel which=
+=20
+> haven't had this feature at all?
+
+This only valid if the userspace code was written before this change made
+in 2022. The uvcsink code in GStreamer is based on kernel at the time it
+was written, and will effectively maintain backward compatibility from
+there.
+
+That being said, would be nice for someone with a working setup
+to first verify it if breaks, how it breaks, and share.
+
+>=20
+> The main reason why I reported this is not really the name limitation=20
+> but the fact that this patch is just incorrect for cases where you would=
+=20
+> like to expose different formats at different speeds. This feature was=
+=20
+> there for years and we do have products that depend on it and this=20
+> change along with the further commits that depend on it broke that=20
+> support for us.
+>=20
+> You are absolutely right that those commits added a feature that now=20
+> someone else may depend thus it would be perfect to fix it in a way that=
+=20
+> doesn't break anyone's userspace but the problem is that due to the way=
+=20
+> v4l2 API is designed I really don't see a way how we could make it=20
+> "speed-aware" without breaking all the users. That's why we are kind of=
+=20
+> stuck between:
+>=20
+> 1. Leave those commits in and then you cannot different streaming=20
+> headers for different speeds but users of those API will keep working.
+>=20
+> 2. Revert and bring back the feature of UVC ConfigFS interface that was=
+=20
+> there since its inception but break the users of "New API".
+>=20
+> >=20
+> > I believe due to the delay, you are facing an unusual ABI breakage, whi=
+ch
+> > requires a more delicate handling.
+>=20
+> Agree. The situation isn't simple as whatever we do would break some=20
+> userspace... I'm not an expert on v4l2, so if anyone with a better=20
+> knowledge of v4l2 internals has a suggestion how we could make this work=
+=20
+> with the existing API I'd be more than happy to try to follow that path.
+
+It is a situation for sure, and I'm not denying either way, am not deeply
+into the details either. I was just reviewing that work in GStreamer with
+little view on the kernel activity.
+
+regards,
+Nicolas
+
+>=20
+> Best regards,
