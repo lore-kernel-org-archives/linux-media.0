@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFD627CCC7;
-	Wed, 14 May 2025 15:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9DD27C844;
+	Wed, 14 May 2025 15:53:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747237984; cv=none; b=YLlgZNz+I6VA/L/qq6ER49fJZlPzlBEm/UFwjDPk1aqq+yO0JEkzhgw+QXxPCpeLB+MoOwjagyiHj6gTzE+i1RCHgs1ReX2GQWT4xNGjh6XJl/kWYnH+3m2b5gho1ryuZz+wd5Z9hxrZtDx5eRuGVm9yb8vcsLaFrsE41axxes0=
+	t=1747237984; cv=none; b=VJuRePt0UdQ0rK+5WVXavlqpKARUxxLVI+OEevRMXq/w9SzHptwww40ItK4izvugWJVI702S5UeTPfsLNmkDnwdidaPFvRJrepepizWfRzztQ2RmqJV79odZ6m/uyRibV7hkK9Zb7uezGJ5No7ldyC11mJwD1vhYP/qv1WSkfMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1747237984; c=relaxed/simple;
-	bh=N6fkCiwtMq7cQFfPuTVHOCQOjaRR0eDS9lPzo9y3LvA=;
+	bh=mMVNXp+mq/+JBFSLAWEcPv/J6p5kURcJD8P/BmJmQE4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aEq/l5h1n6srf6sTsEBqrV2flD2C0p3IXEnSU4ELgqnptrP1N8Bi9K3MlszGRSMgMyxeo+P5V9oVx1XNJL/Lycx3pmF4xY2iwrERed7j0HbPxS/MdEB+3wU6rBMEM9jwy5B8tVHEjClsiheBS+7JGUT36RbqnCD69MTEqaZ8nGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NDYxrNeQ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=FKNGKkq8Dfuf5RLx1SLjxf4UdoxmY5QrCDZibaXe6oKF9ZWzle46kifICURnazWlyUUOmn62uJZ/U4YDJH7uwrXih0r7V4CQzN7YtVnBbtnG3WM0sAJUA7bo3Q3tBOgcfIzz041MWgPPB43cZjrNfaB5B7BE/P4kWumAF77ytu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eTJQCjc6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NDYxrNeQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B4C0C2BCF4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eTJQCjc6"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F4A1C19421;
 	Wed, 14 May 2025 15:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1747237983;
-	bh=N6fkCiwtMq7cQFfPuTVHOCQOjaRR0eDS9lPzo9y3LvA=;
+	bh=mMVNXp+mq/+JBFSLAWEcPv/J6p5kURcJD8P/BmJmQE4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=NDYxrNeQd+PQJJ10SCmzIJW3TVZqfkEWJxxWjuUkzZuzWq3qy/ixbll1SbHZLJpq5
-	 APYrEh1ZyU8OzExZWK9prEG49wV2+/rO2N9e/AGJYobUyEPaBjwCAvV163bonvk2O0
-	 DufTZ5j0jgJPSi0ZrsSm6SUiC10kqD2EFM6gkNaAJkOliKuwfeYCFOjBdkiCl2ZE5D
-	 5J2jsGeyIsv+PJ/V+WMVQLDhQFD21n3JPWh86fWZZKQlfeZU2S/mXfy/IJTxkqV9eo
-	 tqmez9aNHF4eKKqaVvK4xBCOsRPf/k4QEZcQbvsBcCx3meGXhR4EXU5WJe/4zaaSsZ
-	 /ZU57RtKBTpqg==
+	b=eTJQCjc68ym//B26JtBuuBxHt+aBN4bFmjfHNVRKFdm3kNOsxCRqFEsndRr3j/QGN
+	 H9lHYorpb5dyhC4cKNQhFiXQU1KYO7IJI3XAhpLVQDXH+309IT0sgzj+OZ3WJjHAnu
+	 l62sDCZAHXspoDPtwGhaBAnAA+lscNAf0v28SdIcLgS7wd3TDTxLDC6Fz0GgQoORSS
+	 oLuqOevrINg5bRVdEriGtYckf5x/9S7I4p8syZP+CCU42CsZO2HP2Q+sHz7eKRbtCc
+	 ttTpY42AMhXQ7Y6rKdW6R1YjUn5iqsGKAGC3wZvkhL5lDSng69/r46RCPOOT+STTyp
+	 sRtDU8fds8vlg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E0ACC54755;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 446AEC3DA4A;
 	Wed, 14 May 2025 15:53:03 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Wed, 14 May 2025 17:41:15 +0200
-Subject: [PATCH v7 14/14] arm64: dts: rockchip: enable vicap dvp on
- wolfvision pf5 io expander
+Date: Wed, 14 May 2025 17:41:10 +0200
+Subject: [PATCH v7 09/14] arm64: defconfig: enable rockchip camera
+ interface
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v7-14-7581fd96a33a@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v7-9-7581fd96a33a@collabora.com>
 References: <20240220-rk3568-vicap-v7-0-7581fd96a33a@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v7-0-7581fd96a33a@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -70,11 +70,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  Michael Riesch <michael.riesch@wolfvision.net>, 
  Michael Riesch <michael.riesch@collabora.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747237265; l=1541;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747237265; l=824;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=A46w67oMbroxqAcXCMQ9mjlreHO/teIN06ITNLENh64=;
- b=rHlRlv7WVUb+EsRcrImyjmJ8M57AwpV3gcaGXLTszDDggm0UGb8f63kbLyvTPDoUoj0Hm3BTl
- 7B46p2AwCsmDTuEgFU/rN2z5z+d3BqfyxnmPc49B4hG2jMyG7r2b5e+
+ bh=n3CId8qA1gc+LyCUe4pJdG8S1W2SAM8vXhX4LLRdgiM=;
+ b=PNc012cCEuBkBIV9CArGWSyzpOjtM28dbeTF3MQocvKy0QMubUO8YtYquY6CVUuKFhK8eP8dW
+ uDT8YuoLajcDP/tDU0JHtwIPfojmU5PL5KNmDgUEWLz+IDwhm0nhqhS
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -82,54 +82,30 @@ X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
 X-Original-From: Michael Riesch <michael.riesch@collabora.com>
 Reply-To: michael.riesch@collabora.com
 
-From: Michael Riesch <michael.riesch@wolfvision.net>
+From: Michael Riesch <michael.riesch@collabora.com>
 
-The Digital Video Port (DVP, the 16-bit variant) of the RK3568 VICAP
-is broken out to the PF5 mainboard expansion header.
-Enable it in the device tree overlay for the WolfVision PF5 IO
-Expander board.
+The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs
+in different variations. Enable the driver for it in the default
+configuration.
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- .../rockchip/rk3568-wolfvision-pf5-io-expander.dtso  | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-index 048933de2943..8cfce71dd318 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
-@@ -11,6 +11,7 @@
- #include <dt-bindings/clock/rk3568-cru.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/media/video-interfaces.h>
- #include <dt-bindings/pinctrl/rockchip.h>
- 
- &{/} {
-@@ -134,3 +135,22 @@ &usb2phy0_host {
- 	phy-supply = <&usb_host_vbus>;
- 	status = "okay";
- };
-+
-+&vicap {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cif_clk &cif_dvp_clk &cif_dvp_bus16>;
-+	status = "okay";
-+};
-+
-+&vicap_dvp {
-+	vicap_dvp_input: endpoint {
-+		bus-type = <MEDIA_BUS_TYPE_BT656>;
-+		bus-width = <16>;
-+		pclk-sample = <MEDIA_PCLK_SAMPLE_DUAL_EDGE>;
-+		rockchip,dvp-clk-delay = <10>;
-+	};
-+};
-+
-+&vicap_mmu {
-+	status = "okay";
-+};
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5bb8f09422a2..110ff52195a6 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -858,6 +858,7 @@ CONFIG_VIDEO_RENESAS_FCP=m
+ CONFIG_VIDEO_RENESAS_FDP1=m
+ CONFIG_VIDEO_RENESAS_VSP1=m
+ CONFIG_VIDEO_RCAR_DRIF=m
++CONFIG_VIDEO_ROCKCHIP_CIF=m
+ CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
+ CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
+ CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
 
 -- 
 2.39.5
