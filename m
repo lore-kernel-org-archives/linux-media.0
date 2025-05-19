@@ -1,143 +1,127 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9C12673BF;
-	Mon, 19 May 2025 07:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821EF266581;
+	Mon, 19 May 2025 07:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747638810; cv=none; b=V3e/2z0BBOogZviZfrZTZxwG9MZWJXnoqFmPDxLI+gelETsJnQKxDUaByXIUzQSrpp5szVPUI5kGpwfnlcupHFo9ZRQuOaAAgdpW5i+5H2EdPg1RbIDM74cisn1pAYoYnRCVKQQ0yubGdkhuCJqdhtr3tPz8zzkswDb7iao1TZI=
+	t=1747639093; cv=none; b=GIacchmcwptzpGh4hE2+MdiLlO4CIj2p/9vY5TKvXGNdsk/54JTddcRP+XI2RHZMbPdb8CfhRSdIJcsQh5l9WaJeWYYJUNW29Xan0F2Rk46obkTIMar4CADyPNud3e/TLBCp36ulPHCTnQbi18rH8jTDFm+55PtssDNG2a67u4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747638810; c=relaxed/simple;
-	bh=taaJ6DZBxavlk8sW98fnyAC/zF0N1R0WU9X1b1lZUgw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=CZjQ9DhNACJSSKRn194t9z3xmYGPHat0B2Je44amxL8vluOXV/PoLdblhiGx9O4tsiluVHHja+y2MqDgm3/aWmR1qoDScqa0xKtic1JaKDffu/Kfqxwon4KgMR7q1nl5ADx86hz8qeZRqr73M30LBgAXNtOtZ4KGVVFIZAD17EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fx9orPLA; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1747639093; c=relaxed/simple;
+	bh=AWPQKMivdFQ6QmrVDoYacp12BqW2VCLe3IzFWlx64xM=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=OcyV32eukvXsHlw7J9SriniLhgdRcZAGX1HjrnPumhvJydBttKlhKu3z15ZznMHEtRuC36bQa1KefmooDA3t/AmNSSK99ZcadurlNpG6a+Nw/IbboNqihdDA1ih/ElJwADNVImPJ+63g3cBjBT1WufUthiEjx+g8kDPwLJTN/eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTELbrBI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fx9orPLA"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54INFXma020271;
-	Mon, 19 May 2025 07:13:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	rcbUyRGvjcWhXGrMFrPlkh66cJTyG24s6VXDEa1do4k=; b=fx9orPLADY/FUl+N
-	Cg0W7ksagrhyUaSD+6Ph7uYbFf4vk/287UOiYvOWwuEUT9n7GdwqZulO76lt19sD
-	eqj0aLdX0FTF3dr521EFDYpT6t/R84ANt/JUs5plBdRfX7S3DR/UkdnVgY3D5DwZ
-	7GJcs74L9XZ8IIrZE0RY8q+XXc4RGERz+B+6TPPQU92wtJY3q/cZxCxjUoL/7FpP
-	M+jd/V+3tJBOFcEvE6SXY5AMtjBSysPyHp8P02dIEWi1Hl2shwVnBC88bbPYIRTc
-	XMzf0HSjWm82aKkS2W+YnKVk+J4V/EhmwRQ2Q0RtSbsxAgcShKNXNtqevMs9INwA
-	yyKNlg==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46pkr9udka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 May 2025 07:13:22 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54J7ChvI012064
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 May 2025 07:12:43 GMT
-Received: from hu-dikshita-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 19 May 2025 00:12:40 -0700
-From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Date: Mon, 19 May 2025 12:42:21 +0530
-Subject: [PATCH v4 1/2] media: venus: Add a check for packet size after
- reading from shared memory
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTELbrBI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C78C4CEE4;
+	Mon, 19 May 2025 07:18:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747639092;
+	bh=AWPQKMivdFQ6QmrVDoYacp12BqW2VCLe3IzFWlx64xM=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=VTELbrBISofftmki5GL5K5nGm+lxjdgs5GkfKNFZ1DAL4fqNFwwJw0MioLwU5rfp9
+	 jA4zz2b+jc/kOXPU0fsIJSOpw+7Wc1oST5tlUCfG/CttzNA0AAp/1yi6IElOjtRWQB
+	 +vhtQhkCWpr8ak7UayLarOZHSfQcOgC4h7XoqvRDhVfVoxGtHUmQxXklmq/uP1MUv6
+	 Xd2PRMxocR0bYmpVo3j9QuAvctorvp4ItO4+m5qmiMHs7Exoedc+kgGAjuyF4/5l/r
+	 gcSS7pO8DmFlMmRsBiZQaag6LaONO6UszngnZtBA3XwzYY7f5qZv8yfoXvMFcVVvwK
+	 qUB0be5VuahNw==
+Date: Mon, 19 May 2025 02:18:10 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250519-venus-fixes-v4-1-3ae91d81443d@quicinc.com>
-References: <20250519-venus-fixes-v4-0-3ae91d81443d@quicinc.com>
-In-Reply-To: <20250519-venus-fixes-v4-0-3ae91d81443d@quicinc.com>
-To: Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue
-	<bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Vedang Nagar <quic_vnagar@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747638757; l=1651;
- i=quic_dikshita@quicinc.com; s=20240917; h=from:subject:message-id;
- bh=BOFS5fY2FGoFdLOiqBeMjeN6ITuFXL8XEFIhc+6g0Qw=;
- b=zVVAxViKFk+cXoTkxgfe7CQxZXVkDKD5LSOdWzjrAqTVAnbpPfy6UFfPdKGq1WD2j8FtOBQWA
- hWNBXIaT/iDCdayRmKofY9p7Qf1yHL+KsHRcYujDpYBxY9fpUhquwDO
-X-Developer-Key: i=quic_dikshita@quicinc.com; a=ed25519;
- pk=EEvKY6Ar1OI5SWf44FJ1Ebo1KuQEVbbf5UNPO+UHVhM=
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kCq0ba9QWIbKsnsD5Fv3MRAqHs0Xoz7b
-X-Proofpoint-ORIG-GUID: kCq0ba9QWIbKsnsD5Fv3MRAqHs0Xoz7b
-X-Authority-Analysis: v=2.4 cv=DdAXqutW c=1 sm=1 tr=0 ts=682ada12 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8
- a=D245qAF2djvHqEjldSYA:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE5MDA2NiBTYWx0ZWRfXygNqLORhll23
- pAqwXDhRcWjzMQWRL+LesWftyB7Tst5azaS/+pHmIdWny4Tc1cxjtmNk5P18o1dfFtSVvOV7UwG
- v00ayCI9ym/KvuPwd8kBXC7rU16XaFmSqYG+v9qUpbfkhEVWZ/4uLSjlg/i663aJ0jWiUhaEl44
- +ppNEvp2G6VgcG+L9h0Y27Rorqz/Mj+H9k/ieRcU+aDw67CG/GxS+t9CHnvviPRdq+KrySq7l49
- nxKRTK39UJM/QgLzm1tu0gW9OYOxCSoQaQudTtWmv0PbaKNXEVHhtAQ4+9Z8CyUJ3xUsZludwEP
- dEg0BmxRiCwKThZrwLAbUGFip0pq3pprguTn6mepPp962ZGlyU20243DEb9CBqAoYcEQ50g6AGW
- 8ID+hhS09MLBqbTSlNxxB16m1P3gtTYM5s4amXNmLbmcmgaOR6SzmpU7EFT2kATBkU7f2h6O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-19_02,2025-05-16_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxlogscore=788 clxscore=1015 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 malwarescore=0 suspectscore=0 priorityscore=1501 bulkscore=0
- impostorscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505070000 definitions=main-2505190066
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org, 
+ Thomas Zimmermann <tzimmermann@suse.de>, Maxime Ripard <mripard@kernel.org>, 
+ linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+ Oded Gabbay <ogabbay@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+ linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Jeff Hugo <jeff.hugo@oss.qualcomm.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+ Simona Vetter <simona@ffwll.ch>, linux-rockchip@lists.infradead.org, 
+ linux-doc@vger.kernel.org
+To: Tomeu Vizoso <tomeu@tomeuvizoso.net>
+In-Reply-To: <20250516-6-10-rocket-v3-1-7051ac9225db@tomeuvizoso.net>
+References: <20250516-6-10-rocket-v3-0-7051ac9225db@tomeuvizoso.net>
+ <20250516-6-10-rocket-v3-1-7051ac9225db@tomeuvizoso.net>
+Message-ID: <174742024812.3649303.12389396177218408388.robh@kernel.org>
+Subject: Re: [PATCH v3 01/10] dt-bindings: npu: rockchip,rknn: Add bindings
+Message-ID: <20250519071810.uLOHtUKGzjUUh5nQJu2DN-KOenxHxftuRMZGShr2vbU@z>
 
-From: Vedang Nagar <quic_vnagar@quicinc.com>
 
-Add a check to ensure that the packet size does not exceed the number of
-available words after reading the packet header from shared memory. This
-ensures that the size provided by the firmware is safe to process and
-prevent potential out-of-bounds memory access.
+On Fri, 16 May 2025 18:53:15 +0200, Tomeu Vizoso wrote:
+> Add the bindings for the Neural Processing Unit IP from Rockchip.
+> 
+> v2:
+> - Adapt to new node structure (one node per core, each with its own
+>   IOMMU)
+> - Several misc. fixes from Sebastian Reichel
+> 
+> v3:
+> - Split register block in its constituent subblocks, and only require
+>   the ones that the kernel would ever use (Nicolas Frattaroli)
+> - Group supplies (Rob Herring)
+> - Explain the way in which the top core is special (Rob Herring)
+> 
+> Signed-off-by: Tomeu Vizoso <tomeu@tomeuvizoso.net>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/npu/rockchip,rknn-core.yaml           | 162 +++++++++++++++++++++
+>  1 file changed, 162 insertions(+)
+> 
 
-Fixes: d96d3f30c0f2 ("[media] media: venus: hfi: add Venus HFI files")
-Signed-off-by: Vedang Nagar <quic_vnagar@quicinc.com>
-Co-developed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- drivers/media/platform/qcom/venus/hfi_venus.c | 4 ++++
- 1 file changed, 4 insertions(+)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index b5f2ea8799507f9b83f1529e70061ea89a9cc5c8..c982f4527bb0b9f9ef9715c6c1dc26729f0fc079 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -239,6 +239,7 @@ static int venus_write_queue(struct venus_hfi_device *hdev,
- static int venus_read_queue(struct venus_hfi_device *hdev,
- 			    struct iface_queue *queue, void *pkt, u32 *tx_req)
- {
-+	struct hfi_pkt_hdr *pkt_hdr = NULL;
- 	struct hfi_queue_header *qhdr;
- 	u32 dwords, new_rd_idx;
- 	u32 rd_idx, wr_idx, type, qsize;
-@@ -304,6 +305,9 @@ static int venus_read_queue(struct venus_hfi_device *hdev,
- 			memcpy(pkt, rd_ptr, len);
- 			memcpy(pkt + len, queue->qmem.kva, new_rd_idx << 2);
- 		}
-+		pkt_hdr = (struct hfi_pkt_hdr *)(pkt);
-+		if ((pkt_hdr->size >> 2) != dwords)
-+			return -EINVAL;
- 	} else {
- 		/* bad packet received, dropping */
- 		new_rd_idx = qhdr->write_idx;
+yamllint warnings/errors:
 
--- 
-2.34.1
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/npu/rockchip,rknn-core.yaml: properties:reg-names: 'oneOf' conditional failed, one must be fixed:
+	[{'const': 'pc'}, {'const': 'cna'}, {'const': 'core'}] is too long
+	[{'const': 'pc'}, {'const': 'cna'}, {'const': 'core'}] is too short
+	False schema does not allow 3
+	1 was expected
+	3 is greater than the maximum of 2
+	hint: "minItems" is only needed if less than the "items" list length
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/npu/rockchip,rknn-core.example.dtb: npu-core@fdab0000 (rockchip,rk3588-rknn-core-top): compatible: 'oneOf' conditional failed, one must be fixed:
+	['rockchip,rk3588-rknn-core-top', 'rockchip,rknn-core-top'] is too long
+	'rockchip,rk3588-rknn-core-top' is not one of ['rockchip,rk3588-rknn-core']
+	from schema $id: http://devicetree.org/schemas/npu/rockchip,rknn-core.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/npu/rockchip,rknn-core.example.dtb: npu-core@fdab0000 (rockchip,rk3588-rknn-core-top): reg: [[0, 4255842304, 0, 36864]] is too short
+	from schema $id: http://devicetree.org/schemas/npu/rockchip,rknn-core.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/npu/rockchip,rknn-core.example.dtb: npu-core@fdac0000 (rockchip,rk3588-rknn-core): compatible: 'oneOf' conditional failed, one must be fixed:
+	['rockchip,rk3588-rknn-core', 'rockchip,rknn-core'] is too long
+	'rockchip,rk3588-rknn-core' is not one of ['rockchip,rk3588-rknn-core-top']
+	from schema $id: http://devicetree.org/schemas/npu/rockchip,rknn-core.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/npu/rockchip,rknn-core.example.dtb: npu-core@fdac0000 (rockchip,rk3588-rknn-core): reg: [[0, 4255907840, 0, 36864]] is too short
+	from schema $id: http://devicetree.org/schemas/npu/rockchip,rknn-core.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250516-6-10-rocket-v3-1-7051ac9225db@tomeuvizoso.net
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
