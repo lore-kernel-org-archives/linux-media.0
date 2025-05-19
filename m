@@ -1,274 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58D928751A;
-	Mon, 19 May 2025 15:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61D0286433
+	for <linux-media@vger.kernel.org>; Mon, 19 May 2025 15:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747669839; cv=none; b=d6IruCn5dR7ZVkpYqIdaf5eWrAfga6H2lZ2xZBhvrVVHNkrCTFt35XUEq0oq+jA60XkEnClfoHRwCQ/fNPbP9IcDRgzGQ/ijYBG8JAgiDGKqIes9wrTcJ/XVeGaBbK5lXJuElVR/P29aoTYxuufk3kafwmZ5M7IOMhBohTCi3HI=
+	t=1747669894; cv=none; b=Ote8PUtJaHrIyQUVOgQ1V2WiARJNpNT+ZPpQs7/p4395ts99Y0qV6dvQD5pkor/MzTYTAmHlnzYeM1Dg91L8xl9qxfyiBjWpGgfzGHd61NQjvIIq5IxIatItVCQ9N/J1lo5xP3efSFKAt/RTOWfKImNqJnL4oIJQ6iPJjKCMLig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747669839; c=relaxed/simple;
-	bh=5V0TqHIiCLQb8ZvP2k7riv+kcSYbLR2nDRn3e8pt4IA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HwSLbmFpZqRODHYiR+vOAR1QGmgL7ePQnPwyWJKVdnNJJg7SSVWI2F4UwdH6VWQVSUky5cg4Ry5mjsVNDL87qKaST6jPVlB9pbYC0YKLBPT07VRAeNPhNlzwOCuF/NpUfeMS4107lXRZgTSufW51awGdE+zWUGontAwPtHZmuVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QPUfa+dF; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1747669894; c=relaxed/simple;
+	bh=hfqmQ1M3B0ShmSPKeNDauAakiROiIIk8sIkb9fwtHwE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rDiRFH/gPATPHzOlAx+Ty9Qsj6b/2bE0VdgY4MRKZ9Zy8WDPo74LZslIp1Ja8L6ZqBJRlnxNZke36eMjfn+CjvAEu4YWQrMEo2Hw/T4sdCSKo9b5Q/L5cq9sTu6glQ1du2Dchx+0z9+uzDgJAyTa3sbXUBEju1rpShGZMqTy4n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jJPNaTkp; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QPUfa+dF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJPNaTkp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747669838; x=1779205838;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5V0TqHIiCLQb8ZvP2k7riv+kcSYbLR2nDRn3e8pt4IA=;
-  b=QPUfa+dFYsWRSnNrYyxso/blQrbb70qKpWOOSXD3dN1X5pcDqDueLxaN
-   QXzSZsqpDCkRH/y8nGNW66bcKtfXFz/31VDXFvfhqrXCOY+RL6+DwDPZg
-   Nc34iEoWptoPlsx+2RImZF8MgpjU0j/MzeMDS6i9QvF9rKKpicKlSB7wP
-   O3KwY/TEuacjkpTm6MmL3uPOP05q7uHSNI9QyFIWSnsjLzV86toQg38RJ
-   i0vBi8U+2xXuFLcZjZh9zunTPdk6DQGpYja9mZMAF6vPlkg079wxffSO9
-   7BRt94D7s9nrTXaiGesYEo6Iv3VMsv+2W2FOXjBMWv+hOaUsC1O5hIoHg
-   w==;
-X-CSE-ConnectionGUID: rsdgtrqFTxWPRgu5SjRxHA==
-X-CSE-MsgGUID: VOZsXgh2QmiWt+NH0Q3pxA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="72082161"
+  t=1747669893; x=1779205893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hfqmQ1M3B0ShmSPKeNDauAakiROiIIk8sIkb9fwtHwE=;
+  b=jJPNaTkpO6Rs3d1iQ+GrjM5kZBBK/ItRu0o+8GL7opXZYiZM8/A99XSL
+   TRCOmIrylF07p7GaM8tRPi0xu8o5pIN58mmrSbU5tCWeh6XeXs3+jwWGF
+   4tgVz3SHx1sOo6042xPadNvyngS8ty5zYpYHgh3jRacEbX3vtdm/bEhD6
+   fzdGjzz6cboiY7WOrzeNhL/U51maP8C5Su1DrDvsOaeFj02bPi4MAcmAi
+   mpmsqPqVZ0XDZVkIFG2+WvycnYJiRqeiA5zHQREiEIVheh9auuHgVm5Dm
+   Vi/r3xzOBpbbmjPbsesPb0raTD6mXRnqI0WMjY+Zy7xQWQABanN6E32qL
+   g==;
+X-CSE-ConnectionGUID: ms8dSvMxTkycX/8WfIM9jA==
+X-CSE-MsgGUID: l3n5/PDjQhiPI7ivyoSLFQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="49450609"
 X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="72082161"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 08:50:34 -0700
-X-CSE-ConnectionGUID: PlMFt2xPTVu3T4r+y+nkQQ==
-X-CSE-MsgGUID: 8uG5doxmQq2LTKpJjfPvsA==
+   d="scan'208";a="49450609"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 08:51:32 -0700
+X-CSE-ConnectionGUID: FH3Vvv1LT8KaTjoYSa+f9w==
+X-CSE-MsgGUID: yLzL4uenTUOAJRpA5iwxsQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="140302022"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 19 May 2025 08:50:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 666EE117; Mon, 19 May 2025 18:50:30 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Hans de Goede <hdegoede@redhat.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 1/3] media: atomisp: Remove unused header
-Date: Mon, 19 May 2025 18:46:47 +0300
-Message-ID: <20250519155028.526453-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250519155028.526453-1-andriy.shevchenko@linux.intel.com>
-References: <20250519155028.526453-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="144661963"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.190])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 08:51:29 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 2438711F759;
+	Mon, 19 May 2025 18:51:27 +0300 (EEST)
+Date: Mon, 19 May 2025 15:51:27 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Daniel Scally <dan.scally@ideasonboard.com>
+Cc: linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+	laurent.pinchart@ideasonboard.com,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	jacopo.mondi@ideasonboard.com,
+	Daniel Scally <dan.scally+renesas@ideasonboard.com>,
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Subject: Re: [PATCH v4 3/6] media: platform: rzg2l-cru: Use
+ v4l2_get_link_freq()
+Message-ID: <aCtTfwX44vTWuf1F@kekkonen.localdomain>
+References: <20250506125015.567746-1-dan.scally@ideasonboard.com>
+ <20250506125015.567746-4-dan.scally@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506125015.567746-4-dan.scally@ideasonboard.com>
 
-There are some unused definitions that are using macros from math_support.h.
-In order to have a cleaner future changes, remove them first.
+Hi Daniel,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- .../pci/isp/modes/interface/input_buf.isp.h   |   1 -
- .../pci/isp/modes/interface/isp_const.h       | 157 ------------------
- .../media/atomisp/pci/sh_css_param_dvs.h      |   3 -
- 3 files changed, 161 deletions(-)
- delete mode 100644 drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
+On Tue, May 06, 2025 at 01:50:12PM +0100, Daniel Scally wrote:
+> From: Daniel Scally <dan.scally+renesas@ideasonboard.com>
+> 
+> The rzg2l_csi2_calc_mbps() function currently tries to calculate the
+> link frequency for a CSI2 bus using the V4L2_CID_PIXEL_RATE control
+> of the remote subdevice. Switch the function to v4l2_get_link_freq()
+> which correctly targets V4L2_CID_LINK_FREQ before falling back on
+> V4L2_CID_PIXEL_RATE if the former is unavailable.
+> 
+> Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Daniel Scally <dan.scally+renesas@ideasonboard.com>
+> ---
+> Changes in v4:
+> 
+> 	- Used separate s64 variable as return value for v4l2_get_link_freq()
+> 	  and as the mbps variable for do_div() to avoid compilation warnings.
+> 
+> Changes in v3:
+> 
+> 	- Fixed mbps sign
+> 
+> Changes in v2:
+> 
+> 	- None
+> 
+>  .../platform/renesas/rzg2l-cru/rzg2l-csi2.c   | 27 +++++++++----------
+>  1 file changed, 12 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> index 9243306e2aa9..8870c2cb8104 100644
+> --- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> +++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+> @@ -282,28 +282,25 @@ static int rzg2l_csi2_calc_mbps(struct rzg2l_csi2 *csi2)
+>  	const struct rzg2l_csi2_format *format;
+>  	const struct v4l2_mbus_framefmt *fmt;
+>  	struct v4l2_subdev_state *state;
+> -	struct v4l2_ctrl *ctrl;
+>  	u64 mbps;
+> -
+> -	/* Read the pixel rate control from remote. */
+> -	ctrl = v4l2_ctrl_find(source->ctrl_handler, V4L2_CID_PIXEL_RATE);
+> -	if (!ctrl) {
+> -		dev_err(csi2->dev, "no pixel rate control in subdev %s\n",
+> -			source->name);
+> -		return -EINVAL;
+> -	}
+> +	s64 ret;
+>  
+>  	state = v4l2_subdev_lock_and_get_active_state(&csi2->subdev);
+>  	fmt = v4l2_subdev_state_get_format(state, RZG2L_CSI2_SINK);
+>  	format = rzg2l_csi2_code_to_fmt(fmt->code);
+>  	v4l2_subdev_unlock_state(state);
+>  
+> -	/*
+> -	 * Calculate hsfreq in Mbps
+> -	 * hsfreq = (pixel_rate * bits_per_sample) / number_of_lanes
+> -	 */
+> -	mbps = v4l2_ctrl_g_ctrl_int64(ctrl) * format->bpp;
+> -	do_div(mbps, csi2->lanes * 1000000);
+> +	/* Read the link frequency from remote subdevice. */
+> +	ret = v4l2_get_link_freq(source->ctrl_handler, format->bpp,
+> +				 csi2->lanes);
 
-diff --git a/drivers/staging/media/atomisp/pci/isp/modes/interface/input_buf.isp.h b/drivers/staging/media/atomisp/pci/isp/modes/interface/input_buf.isp.h
-index c7ade6ce6c68..55de6cb02833 100644
---- a/drivers/staging/media/atomisp/pci/isp/modes/interface/input_buf.isp.h
-+++ b/drivers/staging/media/atomisp/pci/isp/modes/interface/input_buf.isp.h
-@@ -10,7 +10,6 @@ Copyright (c) 2010 - 2015, Intel Corporation.
- 
- /* Temporary include, since IA_CSS_BINARY_MODE_COPY is still needed */
- #include "sh_css_defs.h"
--#include "isp_const.h" /* MAX_VECTORS_PER_INPUT_LINE */
- 
- #define INPUT_BUF_HEIGHT	2 /* double buffer */
- #define INPUT_BUF_LINES		2
-diff --git a/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h b/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
-deleted file mode 100644
-index b767b0d35bb4..000000000000
---- a/drivers/staging/media/atomisp/pci/isp/modes/interface/isp_const.h
-+++ /dev/null
-@@ -1,157 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/**
--Support for Intel Camera Imaging ISP subsystem.
--Copyright (c) 2010 - 2015, Intel Corporation.
--
--*/
--
--#ifndef _COMMON_ISP_CONST_H_
--#define _COMMON_ISP_CONST_H_
--
--/*#include "isp.h"*/	/* ISP_VEC_NELEMS */
--
--/* Binary independent constants */
--
--#ifndef NO_HOIST
--#  define		NO_HOIST	HIVE_ATTRIBUTE((no_hoist))
--#endif
--
--#define NO_HOIST_CSE HIVE_ATTRIBUTE((no_hoist, no_cse))
--
--#define UNION struct /* Union constructors not allowed in C++ */
--
--#define XMEM_WIDTH_BITS              HIVE_ISP_DDR_WORD_BITS
--#define XMEM_SHORTS_PER_WORD         (HIVE_ISP_DDR_WORD_BITS / 16)
--#define XMEM_INTS_PER_WORD           (HIVE_ISP_DDR_WORD_BITS / 32)
--#define XMEM_POW2_BYTES_PER_WORD      HIVE_ISP_DDR_WORD_BYTES
--
--#define BITS8_ELEMENTS_PER_XMEM_ADDR    CEIL_DIV(XMEM_WIDTH_BITS, 8)
--#define BITS16_ELEMENTS_PER_XMEM_ADDR    CEIL_DIV(XMEM_WIDTH_BITS, 16)
--
--#define ISP_NWAY_LOG2  6
--
--/* *****************************
-- * ISP input/output buffer sizes
-- * ****************************/
--/* input image */
--#define INPUT_BUF_DMA_HEIGHT          2
--#define INPUT_BUF_HEIGHT              2 /* double buffer */
--#define OUTPUT_BUF_DMA_HEIGHT         2
--#define OUTPUT_BUF_HEIGHT             2 /* double buffer */
--#define OUTPUT_NUM_TRANSFERS	      4
--
--/* GDC accelerator: Up/Down Scaling */
--/* These should be moved to the gdc_defs.h in the device */
--#define UDS_SCALING_N                 HRT_GDC_N
--/* AB: This should cover the zooming up to 16MP */
--#define UDS_MAX_OXDIM                 5000
--/* We support maximally 2 planes with different parameters
--       - luma and chroma (YUV420) */
--#define UDS_MAX_PLANES                2
--#define UDS_BLI_BLOCK_HEIGHT          2
--#define UDS_BCI_BLOCK_HEIGHT          4
--#define UDS_BLI_INTERP_ENVELOPE       1
--#define UDS_BCI_INTERP_ENVELOPE       3
--#define UDS_MAX_ZOOM_FAC              64
--/* Make it always one FPGA vector.
--   Four FPGA vectors are required and
--   four of them fit in one ASIC vector.*/
--#define UDS_MAX_CHUNKS                16
--
--#define ISP_LEFT_PADDING	_ISP_LEFT_CROP_EXTRA(ISP_LEFT_CROPPING)
--#define ISP_LEFT_PADDING_VECS	CEIL_DIV(ISP_LEFT_PADDING, ISP_VEC_NELEMS)
--/* in case of continuous the croppong of the current binary doesn't matter for the buffer calculation, but the cropping of the sp copy should be used */
--#define ISP_LEFT_PADDING_CONT	_ISP_LEFT_CROP_EXTRA(SH_CSS_MAX_LEFT_CROPPING)
--#define ISP_LEFT_PADDING_VECS_CONT	CEIL_DIV(ISP_LEFT_PADDING_CONT, ISP_VEC_NELEMS)
--
--#define CEIL_ROUND_DIV_STRIPE(width, stripe, padding) \
--	CEIL_MUL(padding + CEIL_DIV(width - padding, stripe), ((ENABLE_RAW_BINNING || ENABLE_FIXED_BAYER_DS) ? 4 : 2))
--
--/* output (Y,U,V) image, 4:2:0 */
--#define MAX_VECTORS_PER_LINE \
--	CEIL_ROUND_DIV_STRIPE(CEIL_DIV(ISP_MAX_INTERNAL_WIDTH, ISP_VEC_NELEMS), \
--			      ISP_NUM_STRIPES, \
--			      ISP_LEFT_PADDING_VECS)
--
--/*
-- * ITERATOR_VECTOR_INCREMENT' explanation:
-- * when striping an even number of iterations, one of the stripes is
-- * one iteration wider than the other to account for overlap
-- * so the calc for the output buffer vmem size is:
-- * ((width[vectors]/num_of_stripes) + 2[vectors])
-- */
--#define MAX_VECTORS_PER_OUTPUT_LINE \
--	CEIL_DIV(CEIL_DIV(ISP_MAX_OUTPUT_WIDTH, ISP_NUM_STRIPES) + ISP_LEFT_PADDING, ISP_VEC_NELEMS)
--
--/* Must be even due to interlaced bayer input */
--#define MAX_VECTORS_PER_INPUT_LINE	CEIL_MUL((CEIL_DIV(ISP_MAX_INPUT_WIDTH, ISP_VEC_NELEMS) + ISP_LEFT_PADDING_VECS), 2)
--#define MAX_VECTORS_PER_INPUT_STRIPE	CEIL_ROUND_DIV_STRIPE(MAX_VECTORS_PER_INPUT_LINE, \
--							      ISP_NUM_STRIPES, \
--							      ISP_LEFT_PADDING_VECS)
--
--/* Add 2 for left croppping */
--#define MAX_SP_RAW_COPY_VECTORS_PER_INPUT_LINE	(CEIL_DIV(ISP_MAX_INPUT_WIDTH, ISP_VEC_NELEMS) + 2)
--
--#define MAX_VECTORS_PER_BUF_LINE \
--	(MAX_VECTORS_PER_LINE + DUMMY_BUF_VECTORS)
--#define MAX_VECTORS_PER_BUF_INPUT_LINE \
--	(MAX_VECTORS_PER_INPUT_STRIPE + DUMMY_BUF_VECTORS)
--#define MAX_OUTPUT_Y_FRAME_WIDTH \
--	(MAX_VECTORS_PER_LINE * ISP_VEC_NELEMS)
--#define MAX_OUTPUT_Y_FRAME_SIMDWIDTH \
--	MAX_VECTORS_PER_LINE
--#define MAX_OUTPUT_C_FRAME_WIDTH \
--	(MAX_OUTPUT_Y_FRAME_WIDTH / 2)
--#define MAX_OUTPUT_C_FRAME_SIMDWIDTH \
--	CEIL_DIV(MAX_OUTPUT_C_FRAME_WIDTH, ISP_VEC_NELEMS)
--
--/* should be even */
--#define NO_CHUNKING (OUTPUT_NUM_CHUNKS == 1)
--
--#define MAX_VECTORS_PER_CHUNK \
--	(NO_CHUNKING ? MAX_VECTORS_PER_LINE \
--				: 2 * CEIL_DIV(MAX_VECTORS_PER_LINE, \
--					     2 * OUTPUT_NUM_CHUNKS))
--
--#define MAX_C_VECTORS_PER_CHUNK \
--	(MAX_VECTORS_PER_CHUNK / 2)
--
--/* should be even */
--#define MAX_VECTORS_PER_OUTPUT_CHUNK \
--	(NO_CHUNKING ? MAX_VECTORS_PER_OUTPUT_LINE \
--				: 2 * CEIL_DIV(MAX_VECTORS_PER_OUTPUT_LINE, \
--					     2 * OUTPUT_NUM_CHUNKS))
--
--#define MAX_C_VECTORS_PER_OUTPUT_CHUNK \
--	(MAX_VECTORS_PER_OUTPUT_CHUNK / 2)
--
--/* should be even */
--#define MAX_VECTORS_PER_INPUT_CHUNK \
--	(INPUT_NUM_CHUNKS == 1 ? MAX_VECTORS_PER_INPUT_STRIPE \
--			       : 2 * CEIL_DIV(MAX_VECTORS_PER_INPUT_STRIPE, \
--					    2 * OUTPUT_NUM_CHUNKS))
--
--#define DEFAULT_C_SUBSAMPLING      2
--
--/****** DMA buffer properties */
--
--#define RAW_BUF_LINES ((ENABLE_RAW_BINNING || ENABLE_FIXED_BAYER_DS) ? 4 : 2)
--
--/* [isp vmem] table size[vectors] per line per color (GR,R,B,GB),
--   multiples of NWAY */
--#define ISP2400_SCTBL_VECTORS_PER_LINE_PER_COLOR \
--	CEIL_DIV(SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
--#define ISP2401_SCTBL_VECTORS_PER_LINE_PER_COLOR \
--	CEIL_DIV(SH_CSS_MAX_SCTBL_WIDTH_PER_COLOR, ISP_VEC_NELEMS)
--/* [isp vmem] table size[vectors] per line for 4colors (GR,R,B,GB),
--   multiples of NWAY */
--#define SCTBL_VECTORS_PER_LINE \
--	(SCTBL_VECTORS_PER_LINE_PER_COLOR * IA_CSS_SC_NUM_COLORS)
--
--/*************/
--
--/* Format for fixed primaries */
--
--#define ISP_FIXED_PRIMARY_FORMAT IA_CSS_FRAME_FORMAT_NV12
--
--#endif /* _COMMON_ISP_CONST_H_ */
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_param_dvs.h b/drivers/staging/media/atomisp/pci/sh_css_param_dvs.h
-index b7057887adea..fd5cf6038829 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_param_dvs.h
-+++ b/drivers/staging/media/atomisp/pci/sh_css_param_dvs.h
-@@ -33,9 +33,6 @@
- #define DVS_TABLE_IN_BLOCKDIM_Y_LUMA(X)		(DVS_NUM_BLOCKS_Y(X) + 1)
- #define DVS_TABLE_IN_BLOCKDIM_Y_CHROMA(X)	(DVS_NUM_BLOCKS_Y_CHROMA(X) + 1)
- 
--#define DVS_ENVELOPE_X(X) (((X) == 0) ? (DVS_ENV_MIN_X) : (X))
--#define DVS_ENVELOPE_Y(X) (((X) == 0) ? (DVS_ENV_MIN_Y) : (X))
--
- #define DVS_COORD_FRAC_BITS (10)
- 
- /* ISP2400 */
+Please call v4l2_get_link_freq() on the pad, not the control handler.
+
+> +	if (ret < 0) {
+> +		dev_err(csi2->dev, "can't retrieve link freq from subdev %s\n",
+> +			source->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mbps = ret;
+> +	do_div(mbps, 1000000);
+>  
+>  	return mbps;
+>  }
+
 -- 
-2.47.2
+Regards,
 
+Sakari Ailus
