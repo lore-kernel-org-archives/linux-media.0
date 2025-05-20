@@ -1,261 +1,178 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DAF27F73A
-	for <linux-media@vger.kernel.org>; Tue, 20 May 2025 15:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F061FFC54
+	for <linux-media@vger.kernel.org>; Tue, 20 May 2025 15:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747754701; cv=none; b=RCLWNOP8S9UklMBMteNuvSUU5o2NZY5embjBuGBpFWWef4cxwPq8GxTVjsAQbSXtGs1z0/qNWnr4DpTkinBZgKG7HGixsJFVjg3pJZVQ9oxGNc1iK0sLziaKgwubXoBFgrXwUqriYHwYiCxAIzDObbP78v1D1NcQrMMzly5/i+Q=
+	t=1747755588; cv=none; b=ftlGdEY+3Xs6KnZmj71oWYXAc7u8VtD16jdwJ0XVNLgCOdv33feGKJN10/w+HA2zPDJ9mi0mquwD9+ynUlcoU+B9Sdw+uERcKMlV+ec79bQehiF1b5u0oAi0yT8vMwRyu1iTd+mOvTCkM/jc/EKKXfmODR/VFy9M72IjnBwUyVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747754701; c=relaxed/simple;
-	bh=HrWAkjXzo1cwOQkzp5D5PLjihxqiuqVqgMCi74TCylM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=As7E2OrjS0Fr+cq/lah5/1b7gprkfT1SUvxqNp8NsOJFVgN5dx6ZHpUYzq8XvuB+oBv5Tt2AKeDXJ/SQMWFBHNcSJdBmT+whXje6rgUY7NwuEn1xG+ZVirtk1wZBLYiALapSl3sV+ntP1RpXS12uZMCiw6dRTIgJoKrqnEFftUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gfXFU4PG; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1747755588; c=relaxed/simple;
+	bh=s0LZ88Jtpzw+p4OyLOBjqCyG6m9rqkNIcq7ugHYKE+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KbH4zXqYG2rE7+QJ/7uPLrD5EjkryqBjNbVw7wxNEDn3KZYj3p9ejhdgxiR/1gjpKKDFmq2qqKrWzc/ZQmaHeQ26SDMXx0X1CZvwowOvY4Mo6o23zc91Ovg6aTzbXLiEACcWqmaHRchP/qJQrNvG1FMeWaac6EWWfbDKnpM0nNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ggqk1DuP; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gfXFU4PG"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad216a5a59cso808143566b.3
-        for <linux-media@vger.kernel.org>; Tue, 20 May 2025 08:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747754697; x=1748359497; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sws8LggPb3Nr4WEIwk49/i4GQcd2qsiJjDBUK0g1c0s=;
-        b=gfXFU4PGCj+JV99lZR6A1oIf0EDlGCRXtA28zlGjNR0sRtrTG91gmKlcoGC6+Z2voy
-         PPtx+UOtskL9zX8R2Ldr8ih+VS1ErUFk61EqHorpTAihOc6YUmXgRpVZfZqjcpv9MRQd
-         sAfRvtCjDMYBKV/jpFAKpo7/f4p7nNgJFkWnegmZBfTEH+VIw0nAqtq29AxuoWVGBTN3
-         Qstpz25KOrjBjX6fSyeARTzQAIXN9yrdgrKUfnCQgnKbCslsxya8H0hrLZXOGUAUwClX
-         4YO/GhKegTdO6JDUOHgHFMPGY6mAgX0uiz3cExqCIUYrtbDZLF7PzRXsuAh22cs6TUFD
-         mi6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747754697; x=1748359497;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sws8LggPb3Nr4WEIwk49/i4GQcd2qsiJjDBUK0g1c0s=;
-        b=OUJkmhVFdELRrVInxdJ2JfVx11uotE7Yew7AUrIAfK0R73IEEUsag/vgoY3i2OveHu
-         6X4p1ZkFaIBs0dhc0peR/DqxberU8YMbQlFDY2O4pDZaV0cTJjK+697t44sIz0IgDG4l
-         Wr8e6ZiLdZIxalcY3Gbi7zkwqbZOfoRXeQadLacdADqv4CR4RULKyvioN+c8vaWoO4oH
-         ceo5IYeIQK0PxHH7vK/mMCgvXW+wEBJN8cYG67mFzvD8IcIDR+aXoL7wTI2oZ5PrZyma
-         rOYTPvIm9Mehgq3ddlUavwV5IoV7dTirBQpD3cCDVY44cxFtbilmPg0INadFHu1GNh6j
-         KNnA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRO8p4+XLJiU9y4x9cWE5dtL2Sk0UQXv/18KxANht6Ms6OfQUnzbbl07McpVrib3bQRukioc+i5YpnaA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3bti+qYjI8e3eLlqMdHont9Qhn7CCcQrIflSBa+yjZe93pL1l
-	FPkGZTVIDrS9OmXeLw9qakG0YwaKMD7j08tNh6kF175m1gdyGGCIVkV6lDOnd3iB/QA=
-X-Gm-Gg: ASbGncvKxfXHTVvWhMHPygYYUr9oJZLS98pcB3HHD/BQPQ8Y7A0wvTiEtKx40iFw70h
-	hm60i+/AnVsxbNNquUQCKmKvAzDLJJdFaKWu6DHfDXMSIUiU4cLelSbY7mPna/CgyJlxL3mSnBh
-	KsJAYI9D2/bOboE/aOJoTxGe7CH/3b4UeN+oGXWXaVXK2nWq0oPP2NCZZEZbeJWQCT57/flnhZN
-	+fiS4qVFQYj7BohSug1Kda0Wf6zUSm6h/pXJqN/zK/PQ0v6/uMyDyMXSuJtZg1SxkOScqIJWKUl
-	5W2oc3mc10TVqNgfap5m2cI0waSnas1WFMIK7PwG2r1CWIff5JmCETEMLctZPhb+cjNny8iDwXx
-	Eolc1N838BpIAzxxmfNKzR/gEZOefUzBSs8xK2lo=
-X-Google-Smtp-Source: AGHT+IFajjrVIsC7kJISaAObbiybAYfu3AaUSsn1KJ4AT03AxVtsB+czB4nAf85bGG6wnrUQQg0qnQ==
-X-Received: by 2002:a17:907:7f08:b0:ac7:3817:d8da with SMTP id a640c23a62f3a-ad52d609170mr1346626366b.52.1747754697525;
-        Tue, 20 May 2025 08:24:57 -0700 (PDT)
-Received: from rayden.urgonet (h-98-128-140-123.A175.priv.bahnhof.se. [98.128.140.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d278257sm742608766b.82.2025.05.20.08.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 08:24:56 -0700 (PDT)
-From: Jens Wiklander <jens.wiklander@linaro.org>
-To: linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	op-tee@lists.trustedfirmware.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Olivier Masse <olivier.masse@nxp.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Yong Wu <yong.wu@mediatek.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Brian Starkey <Brian.Starkey@arm.com>,
-	John Stultz <jstultz@google.com>,
-	"T . J . Mercier" <tjmercier@google.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	azarrabi@qti.qualcomm.com,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Daniel Stone <daniel@fooishbar.org>,
-	Rouven Czerwinski <rouven.czerwinski@linaro.org>,
-	Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v9 9/9] optee: smc abi: dynamic protected memory allocation
-Date: Tue, 20 May 2025 17:16:52 +0200
-Message-ID: <20250520152436.474778-10-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250520152436.474778-1-jens.wiklander@linaro.org>
-References: <20250520152436.474778-1-jens.wiklander@linaro.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ggqk1DuP"
+Received: from pendragon.ideasonboard.com (179.218-130-109.adsl-dyn.isp.belgacom.be [109.130.218.179])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C6C7B74C;
+	Tue, 20 May 2025 17:39:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1747755563;
+	bh=s0LZ88Jtpzw+p4OyLOBjqCyG6m9rqkNIcq7ugHYKE+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ggqk1DuPZ73lzSe1XqNM7wvqBhYp986GCKj9COQObYgP53KV/Kpp4luustBKI3gey
+	 IqMsSqPMBJjqmgPJ2xKBJM5/eLqJI/895EkGKnD1ieNTcQiC6ihLqI2kysmuLtpshZ
+	 DMWvvImyDI5n6GLjDdQmhc9vTzIfR7g/nZDvQT8s=
+Date: Tue, 20 May 2025 17:39:38 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-media@vger.kernel.org, hans@jjverkuil.nl
+Subject: Re: [RFC 1/1] media: mc: Add "kaboom" module parameter
+Message-ID: <20250520153938.GE8070@pendragon.ideasonboard.com>
+References: <20250519113809.296083-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250519113809.296083-1-sakari.ailus@linux.intel.com>
 
-Add support in the OP-TEE backend driver for dynamic protected memory
-allocation using the SMC ABI.
+Hi Sakari,
 
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
- drivers/tee/optee/smc_abi.c | 102 ++++++++++++++++++++++++++++++------
- 1 file changed, 85 insertions(+), 17 deletions(-)
+Thank you for the patch.
 
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index f3cae8243785..6b3fbe7f0909 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -965,6 +965,70 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
- 	return rc;
- }
- 
-+static int optee_smc_lend_protmem(struct optee *optee, struct tee_shm *protmem,
-+				  u16 *end_points, unsigned int ep_count,
-+				  u32 use_case)
-+{
-+	struct optee_shm_arg_entry *entry;
-+	struct optee_msg_arg *msg_arg;
-+	struct tee_shm *shm;
-+	u_int offs;
-+	int rc;
-+
-+	msg_arg = optee_get_msg_arg(optee->ctx, 2, &entry, &shm, &offs);
-+	if (IS_ERR(msg_arg))
-+		return PTR_ERR(msg_arg);
-+
-+	msg_arg->cmd = OPTEE_MSG_CMD_LEND_PROTMEM;
-+	msg_arg->params[0].attr = OPTEE_MSG_ATTR_TYPE_VALUE_INPUT;
-+	msg_arg->params[0].u.value.a = use_case;
-+	msg_arg->params[1].attr = OPTEE_MSG_ATTR_TYPE_TMEM_INPUT;
-+	msg_arg->params[1].u.tmem.buf_ptr = protmem->paddr;
-+	msg_arg->params[1].u.tmem.size = protmem->size;
-+	msg_arg->params[1].u.tmem.shm_ref = (u_long)protmem;
-+
-+	rc = optee->ops->do_call_with_arg(optee->ctx, shm, offs, false);
-+	if (rc)
-+		goto out;
-+	if (msg_arg->ret != TEEC_SUCCESS) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+	protmem->sec_world_id = (u_long)protmem;
-+
-+out:
-+	optee_free_msg_arg(optee->ctx, entry, offs);
-+	return rc;
-+}
-+
-+static int optee_smc_reclaim_protmem(struct optee *optee,
-+				     struct tee_shm *protmem)
-+{
-+	struct optee_shm_arg_entry *entry;
-+	struct optee_msg_arg *msg_arg;
-+	struct tee_shm *shm;
-+	u_int offs;
-+	int rc;
-+
-+	msg_arg = optee_get_msg_arg(optee->ctx, 1, &entry, &shm, &offs);
-+	if (IS_ERR(msg_arg))
-+		return PTR_ERR(msg_arg);
-+
-+	msg_arg->cmd = OPTEE_MSG_CMD_RECLAIM_PROTMEM;
-+	msg_arg->params[0].attr = OPTEE_MSG_ATTR_TYPE_RMEM_INPUT;
-+	msg_arg->params[0].u.rmem.shm_ref = (u_long)protmem;
-+
-+	rc = optee->ops->do_call_with_arg(optee->ctx, shm, offs, false);
-+	if (rc)
-+		goto out;
-+	if (msg_arg->ret != TEEC_SUCCESS)
-+		rc = -EINVAL;
-+
-+out:
-+	optee_free_msg_arg(optee->ctx, entry, offs);
-+	return rc;
-+}
-+
- /*
-  * 5. Asynchronous notification
-  */
-@@ -1216,6 +1280,8 @@ static const struct optee_ops optee_ops = {
- 	.do_call_with_arg = optee_smc_do_call_with_arg,
- 	.to_msg_param = optee_to_msg_param,
- 	.from_msg_param = optee_from_msg_param,
-+	.lend_protmem = optee_smc_lend_protmem,
-+	.reclaim_protmem = optee_smc_reclaim_protmem,
- };
- 
- static int enable_async_notif(optee_invoke_fn *invoke_fn)
-@@ -1586,11 +1652,14 @@ static inline int optee_load_fw(struct platform_device *pdev,
- 
- static int optee_protmem_pool_init(struct optee *optee)
- {
-+	bool protm = optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_PROTMEM;
-+	bool dyn_protm = optee->smc.sec_caps &
-+			 OPTEE_SMC_SEC_CAP_DYNAMIC_PROTMEM;
- 	enum tee_dma_heap_id heap_id = TEE_DMA_HEAP_SECURE_VIDEO_PLAY;
--	struct tee_protmem_pool *pool;
--	int rc;
-+	struct tee_protmem_pool *pool = ERR_PTR(-EINVAL);
-+	int rc = -EINVAL;
- 
--	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_PROTMEM) {
-+	if (protm) {
- 		union {
- 			struct arm_smccc_res smccc;
- 			struct optee_smc_get_protmem_config_result result;
-@@ -1598,26 +1667,26 @@ static int optee_protmem_pool_init(struct optee *optee)
- 
- 		optee->smc.invoke_fn(OPTEE_SMC_GET_PROTMEM_CONFIG, 0, 0, 0, 0,
- 				     0, 0, 0, &res.smccc);
--		if (res.result.status != OPTEE_SMC_RETURN_OK) {
--			pr_err("Secure Data Path service not available\n");
--			return 0;
--		}
--		rc = optee_set_dma_mask(optee, res.result.pa_width);
-+		if (res.result.status == OPTEE_SMC_RETURN_OK)
-+			rc = optee_set_dma_mask(optee, res.result.pa_width);
- 		if (!rc)
- 			pool = tee_protmem_static_pool_alloc(res.result.start,
- 							     res.result.size);
--		if (IS_ERR(pool))
--			return PTR_ERR(pool);
-+	}
- 
-+	if (dyn_protm && IS_ERR(pool))
-+		pool = optee_protmem_alloc_dyn_pool(optee, heap_id);
-+
-+	if (!IS_ERR(pool)) {
- 		rc = tee_device_register_dma_heap(optee->teedev, heap_id, pool);
- 		if (rc)
--			goto err;
-+			pool->ops->destroy_pool(pool);
- 	}
- 
-+	if (protm || dyn_protm)
-+		return rc;
-+
- 	return 0;
--err:
--	pool->ops->destroy_pool(pool);
--	return rc;
- }
- 
- static int optee_probe(struct platform_device *pdev)
-@@ -1788,9 +1857,8 @@ static int optee_probe(struct platform_device *pdev)
- 		pr_info("Asynchronous notifications enabled\n");
- 	}
- 
--	rc = optee_protmem_pool_init(optee);
--	if (rc)
--		goto err_notif_uninit;
-+	if (optee_protmem_pool_init(optee))
-+		pr_info("Protected memory service not available\n");
- 
- 	/*
- 	 * Ensure that there are no pre-existing shm objects before enabling
+On Mon, May 19, 2025 at 02:38:09PM +0300, Sakari Ailus wrote:
+> Add "kaboom" module parameter for the "mc" module. Setting "kaboom" to a
+> non-zero value will delay calling media device IOCTLs by 5 s and if the
+> media device is unregistered and released during this time, NULL pointer
+> is dereferenced and at least a kernel oops will happen:
+
+This is useful for debugging, but do we really want to merge it in
+mainline ? Can't this patch be carried out-of-tree ?
+
+> 
+> [   63.754666] vim2m vim2m.0: Removing vim2m
+> [   63.754681] vim2m vim2m.0: media_gobj_destroy id 13: interface link id 12 ==> id 1
+> [   63.755611] vim2m vim2m.0: media_gobj_destroy id 9: data link id 2 ==> id 4
+> [   63.755618] vim2m vim2m.0: media_gobj_destroy id 8: data link id 2 ==> id 4
+> [   63.755622] vim2m vim2m.0: media_gobj_destroy id 2: source pad 'vim2m-source':0
+> [   63.755628] vim2m vim2m.0: media_gobj_destroy id 1: entity 'vim2m-source'
+> [   63.755633] vim2m vim2m.0: media_gobj_destroy id 11: data link id 5 ==> id 7
+> [   63.755637] vim2m vim2m.0: media_gobj_destroy id 10: data link id 5 ==> id 7
+> [   63.755641] vim2m vim2m.0: media_gobj_destroy id 4: sink pad 'vim2m-proc':0
+> [   63.755646] vim2m vim2m.0: media_gobj_destroy id 5: source pad 'vim2m-proc':1
+> [   63.755650] vim2m vim2m.0: media_gobj_destroy id 3: entity 'vim2m-proc'
+> [   63.755654] vim2m vim2m.0: media_gobj_destroy id 14: interface link id 12 ==> id 6
+> [   63.755659] vim2m vim2m.0: media_gobj_destroy id 7: sink pad 'vim2m-sink':0
+> [   63.755663] vim2m vim2m.0: media_gobj_destroy id 6: entity 'vim2m-sink'
+> [   63.755666] vim2m vim2m.0: media_gobj_destroy id 12: intf_devnode v4l-video - major: 81, minor: 0
+> [   63.755672] vim2m vim2m.0: Media device unregistered
+> [   68.105679] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [   68.107196] #PF: supervisor read access in kernel mode
+> [   68.108317] #PF: error_code(0x0000) - not-present page
+> [   68.109396] PGD 0 P4D 0
+> [   68.109596] Oops: Oops: 0000 [#1] SMP PTI
+> [   68.109596] CPU: 0 UID: 1000 PID: 957 Comm: media-ctl Tainted: G            E       6.15.0-rc1+ #20 PREEMPT(voluntary)
+> [   68.109596] Tainted: [E]=UNSIGNED_MODULE
+> [   68.109596] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+> [   68.109596] RIP: 0010:media_device_cleanup+0x20f/0xc00 [mc]
+> [   68.109596] Code: 00 00 00 89 43 7c 31 c0 5b 41 5c 41 5d 41 5e 5d 31 d2 31 c9 31 f6 31 ff c3 cc cc cc cc 49 8b 04 24 be 10 00 00 00 48 8b 40 68 <4c> 8b 28 4c 89 ef e8 f6 29 ca c3 48 89 c2 48 83 f8 ff 0f 85 e8 fe
+> [   68.109596] RSP: 0018:ffffb4efc0a6bd58 EFLAGS: 00010246
+> [   68.109596] RAX: 0000000000000000 RBX: ffffb4efc0a6bda0 RCX: 0000000000000000
+> [   68.109596] RDX: ffffffffc08244e0 RSI: 0000000000000010 RDI: ffffb4efc0a6bea0
+> [   68.109596] RBP: ffffb4efc0a6bd78 R08: ffff99a84a7f7e10 R09: 0000000000000000
+> [   68.109596] R10: 0000000000000000 R11: 0000000000000000 R12: ffff99a84a7f7cf8
+> [   68.109596] R13: 0000000000000000 R14: ffffb4efc0a6bda0 R15: ffff99a84a7f7cf8
+> [   68.109596] FS:  00007f5ceb8a4bc0(0000) GS:ffff99a9f24f3000(0000) knlGS:0000000000000000
+> [   68.109596] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   68.109596] CR2: 0000000000000000 CR3: 00000001108d2000 CR4: 00000000000006f0
+> [   68.109596] Call Trace:
+> [   68.109596]  <TASK>
+> [   68.109596]  media_device_cleanup+0x536/0xc00 [mc]
+> [   68.109596]  __media_device_usb_init+0x8ff/0xc00 [mc]
+> [   68.109596]  __x64_sys_ioctl+0xa7/0xe0
+> [   68.109596]  x64_sys_call+0xb40/0x2550
+> [   68.109596]  do_syscall_64+0x70/0x140
+> [   68.109596]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> [   68.109596] RIP: 0033:0x7f5ceb9be8db
+> [   68.109596] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+> [   68.109596] RSP: 002b:00007ffdacd35bd0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> [   68.109596] RAX: ffffffffffffffda RBX: 000056536edc42a0 RCX: 00007f5ceb9be8db
+> [   68.109596] RDX: 000056536edc42b0 RSI: 00000000c1007c00 RDI: 0000000000000003
+> [   68.109596] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+> [   68.109596] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> [   68.109596] R13: 00007ffdacd35f10 R14: 00007f5cebb3d000 R15: 0000565362627d78
+> [   68.109596]  </TASK>
+> [   68.109596] Modules linked in: snd_seq_dummy(E) snd_hrtimer(E) snd_seq(E) snd_seq_device(E) sunrpc(E) vim2m(E) v4l2_mem2mem(E) videobuf2_vmalloc(E) videobuf2_memops(E) videobuf2_v4l2(E) videobuf2_common(E) videodev(E) mc(E) qrtr(E) binfmt_misc(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) pcspkr(E) e1000(E) i2c_piix4(E) pata_acpi(E) i2c_smbus(E) joydev(E) sch_fq_codel(E) efi_pstore(E) drm(E) nfnetlink(E) vsock_loopback(E) vmw_vsock_virtio_transport_common(E) vmw_vsock_vmci_transport(E) vsock(E) vmw_vmci(E) dmi_sysfs(E) qemu_fw_cfg(E) ip_tables(E) x_tables(E) autofs4(E) input_leds(E) psmouse(E) serio_raw(E) virtio_blk(E) mac_hid(E)
+> [   68.109596] CR2: 0000000000000000
+> [   68.121045] ---[ end trace 0000000000000000 ]---
+> [   68.121203] RIP: 0010:media_device_cleanup+0x20f/0xc00 [mc]
+> [   68.121391] Code: 00 00 00 89 43 7c 31 c0 5b 41 5c 41 5d 41 5e 5d 31 d2 31 c9 31 f6 31 ff c3 cc cc cc cc 49 8b 04 24 be 10 00 00 00 48 8b 40 68 <4c> 8b 28 4c 89 ef e8 f6 29 ca c3 48 89 c2 48 83 f8 ff 0f 85 e8 fe
+> [   68.123005] RSP: 0018:ffffb4efc0a6bd58 EFLAGS: 00010246
+> [   68.123191] RAX: 0000000000000000 RBX: ffffb4efc0a6bda0 RCX: 0000000000000000
+> [   68.123433] RDX: ffffffffc08244e0 RSI: 0000000000000010 RDI: ffffb4efc0a6bea0
+> [   68.123679] RBP: ffffb4efc0a6bd78 R08: ffff99a84a7f7e10 R09: 0000000000000000
+> [   68.123925] R10: 0000000000000000 R11: 0000000000000000 R12: ffff99a84a7f7cf8
+> [   68.124307] R13: 0000000000000000 R14: ffffb4efc0a6bda0 R15: ffff99a84a7f7cf8
+> [   68.124563] FS:  00007f5ceb8a4bc0(0000) GS:ffff99a9f24f3000(0000) knlGS:0000000000000000
+> [   68.124849] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   68.125055] CR2: 0000000000000000 CR3: 00000001108d2000 CR4: 00000000000006f0
+> [   68.125618] platform vim2m.0: Media device released
+> [   68.125997] mc: media_devnode_release: Media Devnode Deallocated
+> 
+> Without this patch the time window typically remains small but it is still
+> always there.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  drivers/media/mc/mc-device.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
+> index c0dd4ae57227..116065b0038a 100644
+> --- a/drivers/media/mc/mc-device.c
+> +++ b/drivers/media/mc/mc-device.c
+> @@ -9,10 +9,12 @@
+>   */
+>  
+>  #include <linux/compat.h>
+> +#include <linux/delay.h>
+>  #include <linux/export.h>
+>  #include <linux/idr.h>
+>  #include <linux/ioctl.h>
+>  #include <linux/media.h>
+> +#include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+>  #include <linux/pci.h>
+> @@ -26,6 +28,9 @@
+>  
+>  #ifdef CONFIG_MEDIA_CONTROLLER
+>  
+> +static unsigned int kaboom;
+> +module_param(kaboom, int, 0600);
+> +
+>  /*
+>   * Legacy defines from linux/media.h. This is the only place we need this
+>   * so we just define it here. The media.h header doesn't expose it to the
+> @@ -441,6 +446,9 @@ static long media_device_ioctl(struct file *filp, unsigned int cmd,
+>  	char __karg[256], *karg = __karg;
+>  	long ret;
+>  
+> +	if (kaboom)
+> +		msleep(5000);
+> +
+>  	if (_IOC_NR(cmd) >= ARRAY_SIZE(ioctl_info)
+>  	    || ioctl_info[_IOC_NR(cmd)].cmd != cmd)
+>  		return -ENOIOCTLCMD;
+
 -- 
-2.43.0
+Regards,
 
+Laurent Pinchart
