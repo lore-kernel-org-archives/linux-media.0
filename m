@@ -1,437 +1,202 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D75280CE6;
-	Tue, 20 May 2025 17:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747763268; cv=pass; b=NsTFJiExYdzsVF/j8Z2vtqDczW9FWXk/q/TOa7/cWgc9OWeAJpTqn0KKFfBCIAhYql4daTFPiOKkhYo8edEPxtjHhV0nBSkaoGEDlgjJcN2U6/BvyYs8JZyowSZnjSpBuoHOIWZLZeuo7WJ+LdeKgQj7X3asFxCTNmMRLzwONjM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747763268; c=relaxed/simple;
-	bh=QNR0Ytc3UA6Yw6ijoDixnL5L+Nqq2THlU0s+WEZ/3uQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YDPoYNY9S/EqLIlLFGRerGXQRf5AsSFnNyiSj3vPb9BSatTKdfYBmFc7JBciG9LgTCErJsjW+JTA4fMGQSLxyFnCeEOJkTQbRgGQ+YFMqHnsVpSNOgiG6u8nVmFMw5hapYdnWgdnM0BF1ujPuUd2oCdbHCxGjoJi3mxAjGW5Kkc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=QgudCXn8; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C177E2580F7;
+	Tue, 20 May 2025 18:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747766353; cv=none; b=mLhkrE+DL8lp7ElzfRKl5vptrWzWXOBz77U2Cu+cAPH6kHUSKTaqMDz1IgdtL12paEL5gV4rrRhKjqHPwQFw9PALc50/Vj1mOIuErtJfrjGXz+r/mTWO6ogrD4Zhn3CjXS+Fqpdfii+8Or911xyZJN13IQdOY077qN91UaooWsI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747766353; c=relaxed/simple;
+	bh=gihAEqqOg2x0szq1ctVNtfE9rWGbR0/W38JOi8FrNz8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=O/TRVwbhu814Nz9WlQ6YkGE9GW9mC6IPKeXPgimdalu+Bj/SkieAFuIWtBu7b0NN6W8SEgEcEWvEB6a7v7rYctydw0HsJZovTlU4ApT5r4ocbMRf1gnlvYEdlaDecLFyb4rp+jSQUQbcJPhokARrR4W0mvh6xDfKMAS09NZ7sLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wt8h1Ltt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="QgudCXn8"
-ARC-Seal: i=1; a=rsa-sha256; t=1747763245; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=PNby+Fn/PN8FbtbkErnAULAmwguA7QgoIBBeytjrkb6yTBKLbiPno9pPJSSKh1iQ9MRUiZFzPcm5Y7EoFKyDSu0wSJyHhXQBLDQg2oxrEAlYeAUQb7AlSjgPhdzjCCcRI8ep+JdIKrvmD6l1JuFwvHE7gaX+YhlEclVaGwUNWVc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1747763245; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=mydp4WXWm8v2AvjmiN4IP1EIzWL+impTjBkeFe0HlNE=; 
-	b=LJD3xEd6lSkNQabWiaIq6UgaHQcjt6Or5wpgZl1bAkh6H4na4rmz5S0Qc+vHvLG/FFcFuLbnZet9SaASe7qTdRIP/Ej41PjmqXA6/48xaIl6rjuIh57vetujlBnrtxlzkoG0v0xKib49ppI3X1jnfQV9xWPxA6IgS9SV6RdzSjY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
-	dmarc=pass header.from=<adrian.larumbe@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1747763245;
-	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=mydp4WXWm8v2AvjmiN4IP1EIzWL+impTjBkeFe0HlNE=;
-	b=QgudCXn8ZJlMRSQWqiEL14/7En9h4p+1WvViRQTkxyi4wPHwLxjFZ0Rm2Ao3EkVM
-	VfF3jfeSODkBt706uTOD10O5I+dKOLFZljNOwX+SHu2BCoTuWRVc5ua8ul4ERJydYDE
-	m+abDI6IUCtNdsfs6BAqZpi+lcOcnNj8PkrU+PcU=
-Received: by mx.zohomail.com with SMTPS id 174776324441715.954490716572764;
-	Tue, 20 May 2025 10:47:24 -0700 (PDT)
-From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
-To: linux-kernel@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	kernel@collabora.com,
-	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
-	Rob Herring <robh@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: [PATCH v3 4/5] drm/panfrost: show device-wide list of DRM GEM objects over DebugFS
-Date: Tue, 20 May 2025 18:44:01 +0100
-Message-ID: <20250520174634.353267-5-adrian.larumbe@collabora.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250520174634.353267-1-adrian.larumbe@collabora.com>
-References: <20250520174634.353267-1-adrian.larumbe@collabora.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wt8h1Ltt"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E380C4CEE9;
+	Tue, 20 May 2025 18:39:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747766353;
+	bh=gihAEqqOg2x0szq1ctVNtfE9rWGbR0/W38JOi8FrNz8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Wt8h1LttGpQgLvxcZjzaLWH/4byr/RTIMnEGx4H5DmllyMo58cINLBWx2saO8T72O
+	 lNUL2NoDMSNRTAR8/QKNgftMDzsNsrV9UIogdeHaCbseDKXmyyr8kxAPJNjBTi2K0c
+	 Qbxxn19OiJmvbL35R1YRlBceoG4NbDwasm4t4hh7hUgrNIE7o/qANfoeqnZPixZD9N
+	 AGYYvGME2T1DJVysFH5zmX3uiHzR4cFYwLN/4rMColVwN60ViOueQieQBrQRl812Hz
+	 IAGJnp+cU08dxWuvS2DEzKWdCjwcEA6dLocHvGaSIVUomz2mW1+mjWUwe9m1BR/2H6
+	 gidDK/VgrfIWQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D75C3DA6D;
+	Tue, 20 May 2025 18:39:13 +0000 (UTC)
+From: Vincent Knecht via B4 Relay <devnull+vincent.knecht.mailoo.org@kernel.org>
+Date: Tue, 20 May 2025 20:39:06 +0200
+Subject: [PATCH 1/4] media: qcom: camss: vfe: Add VBIF setting support
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250520-camss-8x39-vbif-v1-1-a12cd6006af9@mailoo.org>
+References: <20250520-camss-8x39-vbif-v1-0-a12cd6006af9@mailoo.org>
+In-Reply-To: <20250520-camss-8x39-vbif-v1-0-a12cd6006af9@mailoo.org>
+To: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ Vincent Knecht <vincent.knecht@mailoo.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747766350; l=4303;
+ i=vincent.knecht@mailoo.org; s=20250414; h=from:subject:message-id;
+ bh=9Nb3VF37eXCFYKdQCHie8lh3OHJrCjmQFflXGTOPvKg=;
+ b=60vDGdXoxvluQPV6pAoe58EXTjcYQBqY3rgrvWPzukKFyeMlfAo5EMAXwu6NjZGmXQCrLfs7A
+ hNiGIedXOOPA/M12nE5j+X8BMbb4e4VU+UbWEktGBfMa8OvD6S6rn40
+X-Developer-Key: i=vincent.knecht@mailoo.org; a=ed25519;
+ pk=MFCVQkhL3+d3NHDzNPWpyZ4isxJvT+QTqValj5gSkm4=
+X-Endpoint-Received: by B4 Relay for vincent.knecht@mailoo.org/20250414
+ with auth_id=377
+X-Original-From: Vincent Knecht <vincent.knecht@mailoo.org>
+Reply-To: vincent.knecht@mailoo.org
 
-This change is essentially a Panfrost port of commit a3707f53eb3f
-("drm/panthor: show device-wide list of DRM GEM objects over DebugFS").
+From: Vincent Knecht <vincent.knecht@mailoo.org>
 
-The DebugFS file is almost the same as in Panthor, minus the GEM object
-usage flags, since Panfrost has no kernel-only BO's.
+Some devices need writing values to VFE VBIF registers.
+Add helper functions to do this.
 
-Two additional GEM state flags which are displayed but aren't relevant
-to Panthor are 'Purged' and 'Purgeable', since Panfrost implements an
-explicit shrinker and a madvise ioctl to flag objects as reclaimable.
-
-Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_device.c |   5 +
- drivers/gpu/drm/panfrost/panfrost_device.h |  15 +++
- drivers/gpu/drm/panfrost/panfrost_drv.c    |  35 ++++++
- drivers/gpu/drm/panfrost/panfrost_gem.c    | 134 +++++++++++++++++++++
- drivers/gpu/drm/panfrost/panfrost_gem.h    |  47 ++++++++
- 5 files changed, 236 insertions(+)
+ drivers/media/platform/qcom/camss/Makefile         |  1 +
+ drivers/media/platform/qcom/camss/camss-vfe-vbif.c | 30 ++++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss-vfe-vbif.h | 19 ++++++++++++++
+ drivers/media/platform/qcom/camss/camss-vfe.c      |  9 +++++++
+ drivers/media/platform/qcom/camss/camss-vfe.h      |  3 +++
+ 5 files changed, 62 insertions(+)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_device.c b/drivers/gpu/drm/panfrost/panfrost_device.c
-index 5d35076b2e6d..04bec27449cb 100644
---- a/drivers/gpu/drm/panfrost/panfrost_device.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_device.c
-@@ -209,6 +209,11 @@ int panfrost_device_init(struct panfrost_device *pfdev)
- 
- 	spin_lock_init(&pfdev->cycle_counter.lock);
- 
-+#ifdef CONFIG_DEBUG_FS
-+	mutex_init(&pfdev->debugfs.gems_lock);
-+	INIT_LIST_HEAD(&pfdev->debugfs.gems_list);
-+#endif
-+
- 	err = panfrost_pm_domain_init(pfdev);
- 	if (err)
- 		return err;
-diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
-index dcff70f905cd..077525a3ad68 100644
---- a/drivers/gpu/drm/panfrost/panfrost_device.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_device.h
-@@ -111,6 +111,17 @@ struct panfrost_compatible {
- 	u8 gpu_quirks;
- };
- 
-+/**
-+ * struct panfrost_device_debugfs - Device-wide DebugFS tracking structures
+diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+index d26a9c24a430a831e0d865db4d96142da5276653..4c66d29ae505ae5adc717ae98f77fb736a6e15b9 100644
+--- a/drivers/media/platform/qcom/camss/Makefile
++++ b/drivers/media/platform/qcom/camss/Makefile
+@@ -21,6 +21,7 @@ qcom-camss-objs += \
+ 		camss-vfe-680.o \
+ 		camss-vfe-780.o \
+ 		camss-vfe-gen1.o \
++		camss-vfe-vbif.o \
+ 		camss-vfe.o \
+ 		camss-video.o \
+ 		camss-format.o \
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-vbif.c b/drivers/media/platform/qcom/camss/camss-vfe-vbif.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..2ae61b7baa148f0ad63fe3b8751aeb7b8fc12d81
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-vfe-vbif.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * camss-vfe-vbif.c
++ *
++ * Qualcomm MSM Camera Subsystem - VFE VBIF Module
++ *
++ * Copyright (c) 2025, The Linux Foundation. All rights reserved.
++ *
 + */
-+struct panfrost_device_debugfs {
-+	/** @gems_list: Device-wide list of GEM objects owned by at least one file. */
-+	struct list_head gems_list;
 +
-+	/** @gems_lock: Serializes access to the device-wide list of GEM objects. */
-+	struct mutex gems_lock;
-+};
++#include <linux/io.h>
 +
- struct panfrost_device {
- 	struct device *dev;
- 	struct drm_device *ddev;
-@@ -164,6 +175,10 @@ struct panfrost_device {
- 		atomic_t use_count;
- 		spinlock_t lock;
- 	} cycle_counter;
++#include "camss.h"
++#include "camss-vfe.h"
++#include "camss-vfe-vbif.h"
 +
-+#ifdef CONFIG_DEBUG_FS
-+	struct panfrost_device_debugfs debugfs;
-+#endif
- };
- 
- struct panfrost_mmu {
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index 179fbaa1cd0c..f576cb215898 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -13,6 +13,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <drm/panfrost_drm.h>
-+#include <drm/drm_debugfs.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_ioctl.h>
- #include <drm/drm_syncobj.h>
-@@ -659,6 +660,37 @@ static const struct file_operations panfrost_drm_driver_fops = {
- 	.show_fdinfo = drm_show_fdinfo,
- };
- 
-+#ifdef CONFIG_DEBUG_FS
-+static int panthor_gems_show(struct seq_file *m, void *data)
++void vfe_vbif_reg_write(struct vfe_device *vfe, u32 reg, u32 val)
 +{
-+	struct drm_info_node *node = m->private;
-+	struct drm_device *dev = node->minor->dev;
-+	struct panfrost_device *pfdev = dev->dev_private;
++	writel_relaxed(val, vfe->vbif_base + reg);
++}
 +
-+	panfrost_gem_debugfs_print_bos(pfdev, m);
++int vfe_vbif_apply_settings(struct vfe_device *vfe)
++{
++	switch (vfe->camss->res->version) {
++	default:
++		break;
++	}
 +
 +	return 0;
 +}
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-vbif.h b/drivers/media/platform/qcom/camss/camss-vfe-vbif.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..cef1e17dba1f2335a2c8de070bcb6afde98eef87
+--- /dev/null
++++ b/drivers/media/platform/qcom/camss/camss-vfe-vbif.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * camss-vfe-vbif.h
++ *
++ * Qualcomm MSM Camera Subsystem - VFE VBIF Module
++ *
++ * Copyright (c) 2025, The Linux Foundation. All rights reserved.
++ *
++ */
++#ifndef QC_MSM_CAMSS_VFE_VBIF_H
++#define QC_MSM_CAMSS_VFE_VBIF_H
 +
-+static struct drm_info_list panthor_debugfs_list[] = {
-+	{"gems", panthor_gems_show, 0, NULL},
-+};
++#include "camss-vfe.h"
 +
-+static int panthor_gems_debugfs_init(struct drm_minor *minor)
-+{
-+	drm_debugfs_create_files(panthor_debugfs_list,
-+				 ARRAY_SIZE(panthor_debugfs_list),
-+				 minor->debugfs_root, minor);
++void vfe_vbif_reg_write(struct vfe_device *vfe, u32 reg, u32 val);
 +
-+	return 0;
-+}
++int vfe_vbif_apply_settings(struct vfe_device *vfe);
 +
-+static void panfrost_debugfs_init(struct drm_minor *minor)
-+{
-+	panthor_gems_debugfs_init(minor);
-+}
-+#endif
-+
- /*
-  * Panfrost driver version:
-  * - 1.0 - initial interface
-@@ -683,6 +715,9 @@ static const struct drm_driver panfrost_drm_driver = {
++#endif /* QC_MSM_CAMSS_VFE_VBIF_H */
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
+index 4bca6c3abaff9b898ea879674a3ff8f3592d3139..ffd0bd3be6dd831e0b5257ca6152d13301f80b35 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe.c
+@@ -1807,6 +1807,15 @@ int msm_vfe_subdev_init(struct camss *camss, struct vfe_device *vfe,
+ 		return PTR_ERR(vfe->base);
+ 	}
  
- 	.gem_create_object	= panfrost_gem_create_object,
- 	.gem_prime_import_sg_table = panfrost_gem_prime_import_sg_table,
-+#ifdef CONFIG_DEBUG_FS
-+	.debugfs_init = panfrost_debugfs_init,
-+#endif
- };
- 
- static int panfrost_probe(struct platform_device *pdev)
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
-index 04483d5fb45d..bb73f2a68a12 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gem.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
-@@ -12,6 +12,36 @@
- #include "panfrost_gem.h"
- #include "panfrost_mmu.h"
- 
-+#ifdef CONFIG_DEBUG_FS
-+static void panfrost_gem_debugfs_bo_add(struct panfrost_device *pfdev,
-+					struct panfrost_gem_object *bo)
-+{
-+	bo->debugfs.creator.tgid = current->group_leader->pid;
-+	get_task_comm(bo->debugfs.creator.process_name, current->group_leader);
-+
-+	mutex_lock(&pfdev->debugfs.gems_lock);
-+	list_add_tail(&bo->debugfs.node, &pfdev->debugfs.gems_list);
-+	mutex_unlock(&pfdev->debugfs.gems_lock);
-+}
-+
-+static void panfrost_gem_debugfs_bo_rm(struct panfrost_gem_object *bo)
-+{
-+	struct panfrost_device *pfdev = bo->base.base.dev->dev_private;
-+
-+	if (list_empty(&bo->debugfs.node))
-+		return;
-+
-+	mutex_lock(&pfdev->debugfs.gems_lock);
-+	list_del_init(&bo->debugfs.node);
-+	mutex_unlock(&pfdev->debugfs.gems_lock);
-+}
-+#else
-+static void panfrost_gem_debugfs_bo_add(struct panfrost_device *pfdev,
-+					struct panfrost_gem_object *bo)
-+{}
-+static void panfrost_gem_debugfs_bo_rm(struct panfrost_gem_object *bo) {}
-+#endif
-+
- /* Called DRM core on the last userspace/kernel unreference of the
-  * BO.
-  */
-@@ -37,6 +67,7 @@ static void panfrost_gem_free_object(struct drm_gem_object *obj)
- 	WARN_ON_ONCE(!list_empty(&bo->mappings.list));
- 
- 	kfree_const(bo->label.str);
-+	panfrost_gem_debugfs_bo_rm(bo);
- 	mutex_destroy(&bo->label.lock);
- 
- 	if (bo->sgts) {
-@@ -266,6 +297,8 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
- 	obj->base.map_wc = !pfdev->coherent;
- 	mutex_init(&obj->label.lock);
- 
-+	panfrost_gem_debugfs_bo_add(pfdev, obj);
-+
- 	return &obj->base.base;
- }
- 
-@@ -354,3 +387,104 @@ panfrost_gem_internal_set_label(struct drm_gem_object *obj, const char *label)
- 
- 	panfrost_gem_set_label(obj, str);
- }
-+
-+#ifdef CONFIG_DEBUG_FS
-+struct gem_size_totals {
-+	size_t size;
-+	size_t resident;
-+	size_t reclaimable;
-+};
-+
-+struct flag_def {
-+	u32 flag;
-+	const char *name;
-+};
-+
-+static void panfrost_gem_debugfs_print_flag_names(struct seq_file *m)
-+{
-+	int len;
-+	int i;
-+
-+	static const struct flag_def gem_state_flags_names[] = {
-+		{PANFROST_DEBUGFS_GEM_STATE_FLAG_IMPORTED, "imported"},
-+		{PANFROST_DEBUGFS_GEM_STATE_FLAG_EXPORTED, "exported"},
-+		{PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGED, "purged"},
-+		{PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGEABLE, "purgeable"},
-+	};
-+
-+	seq_puts(m, "GEM state flags: ");
-+	for (i = 0, len = ARRAY_SIZE(gem_state_flags_names); i < len; i++) {
-+		seq_printf(m, "%s (0x%x)%s", gem_state_flags_names[i].name,
-+			   gem_state_flags_names[i].flag, (i < len - 1) ? ", " : "\n\n");
-+	}
-+}
-+
-+static void panfrost_gem_debugfs_bo_print(struct panfrost_gem_object *bo,
-+					  struct seq_file *m,
-+					  struct gem_size_totals *totals)
-+{
-+	unsigned int refcount = kref_read(&bo->base.base.refcount);
-+	char creator_info[32] = {};
-+	size_t resident_size;
-+	u32 gem_state_flags = 0;
-+
-+	/* Skip BOs being destroyed. */
-+	if (!refcount)
-+		return;
-+
-+	resident_size = bo->base.pages ? bo->base.base.size : 0;
-+
-+	snprintf(creator_info, sizeof(creator_info),
-+		 "%s/%d", bo->debugfs.creator.process_name, bo->debugfs.creator.tgid);
-+	seq_printf(m, "%-32s%-16d%-16d%-16zd%-16zd0x%-16lx",
-+		   creator_info,
-+		   bo->base.base.name,
-+		   refcount,
-+		   bo->base.base.size,
-+		   resident_size,
-+		   drm_vma_node_start(&bo->base.base.vma_node));
-+
-+	if (bo->base.base.import_attach)
-+		gem_state_flags |= PANFROST_DEBUGFS_GEM_STATE_FLAG_IMPORTED;
-+	if (bo->base.base.dma_buf)
-+		gem_state_flags |= PANFROST_DEBUGFS_GEM_STATE_FLAG_EXPORTED;
-+
-+	if (bo->base.madv < 0)
-+		gem_state_flags |= PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGED;
-+	else if (bo->base.madv > 0)
-+		gem_state_flags |= PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGEABLE;
-+
-+	seq_printf(m, "0x%-10x", gem_state_flags);
-+
-+	scoped_guard(mutex, &bo->label.lock) {
-+		seq_printf(m, "%s\n", bo->label.str ? : "");
-+	}
-+
-+	totals->size += bo->base.base.size;
-+	totals->resident += resident_size;
-+	if (bo->base.madv > 0)
-+		totals->reclaimable += resident_size;
-+}
-+
-+void panfrost_gem_debugfs_print_bos(struct panfrost_device *pfdev,
-+				    struct seq_file *m)
-+{
-+	struct gem_size_totals totals = {0};
-+	struct panfrost_gem_object *bo;
-+
-+	panfrost_gem_debugfs_print_flag_names(m);
-+
-+	seq_puts(m, "created-by                      global-name     refcount        size            resident-size   file-offset       state       label\n");
-+	seq_puts(m, "-----------------------------------------------------------------------------------------------------------------------------------\n");
-+
-+	scoped_guard(mutex, &pfdev->debugfs.gems_lock) {
-+		list_for_each_entry(bo, &pfdev->debugfs.gems_list, debugfs.node) {
-+			panfrost_gem_debugfs_bo_print(bo, m, &totals);
++	if (vfe->res->has_vbif) {
++		vfe->vbif_base = devm_platform_ioremap_resource_byname(
++					pdev, vfe->res->vbif_name);
++		if (IS_ERR(vfe->vbif_base)) {
++			dev_err(dev, "could not map vbif memory\n");
++			return PTR_ERR(vfe->vbif_base);
 +		}
 +	}
 +
-+	seq_puts(m, "===================================================================================================================================\n");
-+	seq_printf(m, "Total size: %zd, Total resident: %zd, Total reclaimable: %zd\n",
-+		   totals.size, totals.resident, totals.reclaimable);
-+}
-+#endif
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
-index 3d87c41ad09d..8de3e76f2717 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gem.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
-@@ -8,9 +8,47 @@
- #include <drm/drm_mm.h>
+ 	/* Interrupt */
  
- struct panfrost_mmu;
-+struct panfrost_device;
- 
- #define PANFROST_BO_LABEL_MAXLEN	4096
- 
-+enum panfrost_debugfs_gem_state_flags {
-+	/** @PANFROST_DEBUGFS_GEM_STATE_FLAG_IMPORTED: GEM BO is PRIME imported. */
-+	PANFROST_DEBUGFS_GEM_STATE_FLAG_IMPORTED = BIT(0),
-+
-+	/** @PANFROST_DEBUGFS_GEM_STATE_FLAG_EXPORTED: GEM BO is PRIME exported. */
-+	PANFROST_DEBUGFS_GEM_STATE_FLAG_EXPORTED = BIT(1),
-+
-+	/** @PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGED: GEM BO was reclaimed by the shrinker. */
-+	PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGED = BIT(2),
-+
-+	/**
-+	 * @PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGEABLE: GEM BO pages were marked as no longer
-+	 * needed by UM and can be reclaimed by the shrinker.
-+	 */
-+	PANFROST_DEBUGFS_GEM_STATE_FLAG_PURGEABLE = BIT(3),
-+};
-+
-+/**
-+ * struct panfrost_gem_debugfs - GEM object's DebugFS list information
-+ */
-+struct panfrost_gem_debugfs {
-+	/**
-+	 * @node: Node used to insert the object in the device-wide list of
-+	 * GEM objects, to display information about it through a DebugFS file.
-+	 */
-+	struct list_head node;
-+
-+	/** @creator: Information about the UM process which created the GEM. */
-+	struct {
-+		/** @creator.process_name: Group leader name in owning thread's process */
-+		char process_name[TASK_COMM_LEN];
-+
-+		/** @creator.tgid: PID of the thread's group leader within its process */
-+		pid_t tgid;
-+	} creator;
-+};
-+
- struct panfrost_gem_object {
- 	struct drm_gem_shmem_object base;
- 	struct sg_table *sgts;
-@@ -59,6 +97,10 @@ struct panfrost_gem_object {
- 
- 	bool noexec		:1;
- 	bool is_heap		:1;
-+
-+#ifdef CONFIG_DEBUG_FS
-+	struct panfrost_gem_debugfs debugfs;
-+#endif
- };
- 
- struct panfrost_gem_mapping {
-@@ -108,4 +150,9 @@ void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
- void panfrost_gem_set_label(struct drm_gem_object *obj, const char *label);
- void panfrost_gem_internal_set_label(struct drm_gem_object *obj, const char *label);
- 
-+#ifdef CONFIG_DEBUG_FS
-+void panfrost_gem_debugfs_print_bos(struct panfrost_device *pfdev,
-+				    struct seq_file *m);
-+#endif
-+
- #endif /* __PANFROST_GEM_H__ */
+ 	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe.h b/drivers/media/platform/qcom/camss/camss-vfe.h
+index a23f666be7531e0366c73faea44ed245e7a8e30f..614e932c33da78e02e0800ce6534af7b14822f83 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe.h
++++ b/drivers/media/platform/qcom/camss/camss-vfe.h
+@@ -136,6 +136,8 @@ struct vfe_subdev_resources {
+ 	u8 line_num;
+ 	bool has_pd;
+ 	char *pd_name;
++	bool has_vbif;
++	char *vbif_name;
+ 	const struct vfe_hw_ops *hw_ops;
+ 	const struct camss_formats *formats_rdi;
+ 	const struct camss_formats *formats_pix;
+@@ -145,6 +147,7 @@ struct vfe_device {
+ 	struct camss *camss;
+ 	u8 id;
+ 	void __iomem *base;
++	void __iomem *vbif_base;
+ 	u32 irq;
+ 	char irq_name[30];
+ 	struct camss_clock *clock;
+
 -- 
-2.48.1
+2.49.0
+
 
