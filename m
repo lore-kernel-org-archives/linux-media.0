@@ -1,163 +1,142 @@
-Received: from www637.your-server.de (www637.your-server.de [168.119.26.117])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA07621E082;
-	Wed, 21 May 2025 20:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.26.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C6928F955
+	for <linux-media@vger.kernel.org>; Wed, 21 May 2025 20:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747860445; cv=none; b=mbFbp9uZCJ5W5Uv/tqEQB78wLgD4nubt4+TOwRvWUxmI7VoGwQpm7Nqe4zr8KiU9dUF8J1yXbeuLKbaoDgYZ0WQDAey7741gA9auayEqz6wSqE0+sbMX1ok4Wq+qfiRrnAACjJfk0khNIrriLrO5OkZZYsB8KzSpEe1MY2QmkOY=
+	t=1747860452; cv=none; b=uIT4vrwwvQWHBU/Wc8eEDS8RPBdhHy3WctBu/lwdUsi/LofmPiLs/mZPgbi4nev9+/FW7asZU+Vd5GRyqvs4Lcgxcr4U2T7i99FqfEEIuG/jMs998BfLT/tyv/gwBuacVt+F6AheYf6WU4xeCslhY+sBsVU1nRNBHKn3zvJY0ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747860445; c=relaxed/simple;
-	bh=R5UrvnJSbJbZMQwpQnUujUXpVO4b+CbB3tii1mKba+Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KN3YbrzLLIf9CZIRTo2VmEBx0JBqiOdEDptyBkI+/PNis0FbEkUSlgwn1sEykc71OO15rMK7+6ypzLu2sS+QviJG3mEUj6BFetd+86Uz9YwUxfRsDT1QOHSAfKhF0C5iGHnIIPamYSG+GAJ7T1HCgyQ+sQ8Ae/kuO4ISA6+oh9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu; spf=pass smtp.mailfrom=apitzsch.eu; dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b=EzuXmvb+; arc=none smtp.client-ip=168.119.26.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apitzsch.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apitzsch.eu
+	s=arc-20240116; t=1747860452; c=relaxed/simple;
+	bh=1wSa76uvekgQE01+MQeWukvMp4xVzsb72HGt4+9lMdA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lkD94Do4x0Jnx5lKPQof5QEcMJoCVjTSD0erXSEB3HCVfjeULYn6DGCmosfTJo5VYNqSm4hXXUlPwxHAvF27aTmxHQMzamkQNUtJEF1G24Dv4gGAGyCi4AwR1hLckZy2uqnaspRj6Bhm5ptcXphsFosOoMRIWgK2+MhgacnMLwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LYD44Y1B; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=apitzsch.eu header.i=@apitzsch.eu header.b="EzuXmvb+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=apitzsch.eu
-	; s=default2410; h=MIME-Version:Content-Transfer-Encoding:Content-Type:
-	References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=R5UrvnJSbJbZMQwpQnUujUXpVO4b+CbB3tii1mKba+Q=; b=EzuXmvb+oCLBNU2dzGpKU3FikY
-	bUgCN1gXpYtI2o5euipuEqyAdvJ1RTzF4K8HB6eXZKMpTm9ZF+ul69S9xYxFmm3bQW6wxZGp7COQi
-	aTVC2dlGRZ0qHmBjMXC5rtiLmF22MtK4Xpeuk7XRG6aFf7Ul1rdC2e5oyyO9yt6RCaYRK/uoCQKJb
-	CCYy9V/Z0nxjoRADi7zKTixzy+JvzYZxGVhTWRM1D2kSyfDkCv6pOYXElN/KPVOh8WMQmPV0Tajtt
-	q9BHHmFHKNX44hxIFLVbE0GANkoD7uQF7aLrQxR3n+WsD1XcLOgnJYP3TeIlS7yDYSrCl+ec64lRG
-	hML1XtJA==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www637.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uHqLG-0004fB-26;
-	Wed, 21 May 2025 22:47:10 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <git@apitzsch.eu>)
-	id 1uHqLG-0000Jl-0v;
-	Wed, 21 May 2025 22:47:10 +0200
-Message-ID: <3eb4769eac757428d6ff2bd82f16834c46344ac6.camel@apitzsch.eu>
-Subject: Re: [PATCH v3 1/2] dt-bindings: media: i2c: Add DW9719 and DW9761
- VCM
-From: =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Daniel Scally <djrscally@gmail.com>, Mauro Carvalho Chehab
-	 <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
-	phone-devel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LYD44Y1B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747860450;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PmeIsR+A9CWCGJ6MrpGMC5fCHJO5oO+SAH4nW/MP2Dw=;
+	b=LYD44Y1BFtKFkVBI7m8Q5Gj744zyiu/Km97eZogWDeUcYlZX9dLCj2Gr+4pX7YKXu1gqxI
+	Y4n9ODtl+7kA+NiJKlc64/mki45WX29Agv4D9uTT1GNmox8vDmTEthoxllcYMvv3FSIia2
+	yLpVB/bljg5wxPgXv2+Lr4ERfpkCr84=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-132-woAIiBBtP0-c_UXCoodg9Q-1; Wed,
+ 21 May 2025 16:47:26 -0400
+X-MC-Unique: woAIiBBtP0-c_UXCoodg9Q-1
+X-Mimecast-MFC-AGG-ID: woAIiBBtP0-c_UXCoodg9Q_1747860443
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2D828195608E;
+	Wed, 21 May 2025 20:47:23 +0000 (UTC)
+Received: from chopper.redhat.com (unknown [10.22.80.100])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3040019560B7;
+	Wed, 21 May 2025 20:47:18 +0000 (UTC)
+From: Lyude Paul <lyude@redhat.com>
+To: dri-devel@lists.freedesktop.org,
+	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Date: Wed, 21 May 2025 22:47:08 +0200
-In-Reply-To: <Z6nMl7vXPkICysSJ@kekkonen.localdomain>
-References: <20250209-dw9761dts-v3-0-14d3f00f0585@apitzsch.eu>
-	 <20250209-dw9761dts-v3-1-14d3f00f0585@apitzsch.eu>
-	 <Z6nMl7vXPkICysSJ@kekkonen.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1 
+Cc: Asahi Lina <lina@asahilina.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
+	linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b)
+Subject: [PATCH v2 01/12] rust: helpers: Add bindings/wrappers for dma_resv_lock
+Date: Wed, 21 May 2025 16:29:08 -0400
+Message-ID: <20250521204654.1610607-2-lyude@redhat.com>
+In-Reply-To: <20250521204654.1610607-1-lyude@redhat.com>
+References: <20250521204654.1610607-1-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Authenticated-Sender: andre@apitzsch.eu
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27644/Wed May 21 10:56:21 2025)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Hi Sakari,
+From: Asahi Lina <lina@asahilina.net>
 
-Am Montag, dem 10.02.2025 um 09:53 +0000 schrieb Sakari Ailus:
-> Hi Andr=C3=A9,
->=20
-> Thanks for the update.
->=20
-> On Sun, Feb 09, 2025 at 10:51:57PM +0100, Andr=C3=A9 Apitzsch via B4 Rela=
-y
-> wrote:
-> > From: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
-> >=20
-> > Document Dongwoon DW9719 and DW9761 VCM devicetree bindings.
-> >=20
-> > Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
-> > ---
-> > =C2=A0.../bindings/media/i2c/dongwoon,dw9719.yaml=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 45
-> > ++++++++++++++++++++++
-> > =C2=A01 file changed, 45 insertions(+)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
-> > b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
-> > new file mode 100644
-> > index
-> > 0000000000000000000000000000000000000000..b38d22bf09713a7999e1f9ce6
-> > 553de7587dbe5d2
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/media/i2c/dongwoon,dw9719.yaml
-> > @@ -0,0 +1,45 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/dongwoon,dw9719.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Dongwoon Anatech DW9719 Voice Coil Motor (VCM) Controller
-> > +
-> > +maintainers:
-> > +=C2=A0 - devicetree@vger.kernel.org
-> > +
-> > +description:
-> > +=C2=A0 The Dongwoon DW9719 is a 10-bit digital-to-analog (DAC)
-> > converter. The DAC
-> > +=C2=A0 is controlled via a 2-wire (I2C-compatible) serial interface.
-> > +
-> > +properties:
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - dongwoon,dw9719
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - dongwoon,dw9761
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 vdd-supply:
-> > +=C2=A0=C2=A0=C2=A0 description: Regulator providing power to the "VDD"=
- pin.
->=20
-> The driver uses dongwoon,sac-mode and dongwoon,vcm-freq properties.
-> Could you document them as well, please, including the defaults? Are
-> the values the same for both chips?
->=20
-It is difficult to say, because I couldn't find the datasheet for any
-of the chips. Maybe someone could provide them.
+This is just for basic usage in the DRM shmem abstractions for implied
+locking, not intended as a full DMA Reservation abstraction yet.
 
-Best regards,
-Andr=C3=A9
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+---
+ rust/bindings/bindings_helper.h |  1 +
+ rust/helpers/dma-resv.c         | 13 +++++++++++++
+ rust/helpers/helpers.c          |  1 +
+ 3 files changed, 15 insertions(+)
+ create mode 100644 rust/helpers/dma-resv.c
 
-> > +
-> > +required:
-> > +=C2=A0 - compatible
-> > +=C2=A0 - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +=C2=A0 - |
-> > +=C2=A0=C2=A0=C2=A0 i2c {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 camera-lens@c {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 com=
-patible =3D "dongwoon,dw9761";
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg=
- =3D <0x0c>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vdd=
--supply =3D <&pm8916_l10>;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> > +=C2=A0=C2=A0=C2=A0 };
-> >=20
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 31369b7b23884..409e9a595e051 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -18,6 +18,7 @@
+ #include <linux/blkdev.h>
+ #include <linux/cpumask.h>
+ #include <linux/cred.h>
++#include <linux/dma-resv.h>
+ #include <linux/device/faux.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/dma-direction.h>
+diff --git a/rust/helpers/dma-resv.c b/rust/helpers/dma-resv.c
+new file mode 100644
+index 0000000000000..05501cb814513
+--- /dev/null
++++ b/rust/helpers/dma-resv.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/dma-resv.h>
++
++int rust_helper_dma_resv_lock(struct dma_resv *obj, struct ww_acquire_ctx *ctx)
++{
++	return dma_resv_lock(obj, ctx);
++}
++
++void rust_helper_dma_resv_unlock(struct dma_resv *obj)
++{
++	dma_resv_unlock(obj);
++}
+diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
+index 20a4ee59acd89..3ba1652899c2b 100644
+--- a/rust/helpers/helpers.c
++++ b/rust/helpers/helpers.c
+@@ -15,6 +15,7 @@
+ #include "cpumask.c"
+ #include "cred.c"
+ #include "device.c"
++#include "dma-resv.c"
+ #include "drm.c"
+ #include "err.c"
+ #include "fs.c"
+-- 
+2.49.0
+
