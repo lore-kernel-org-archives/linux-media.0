@@ -1,52 +1,53 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496771FBC8D
-	for <linux-media@vger.kernel.org>; Wed, 21 May 2025 20:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10412BEC58
+	for <linux-media@vger.kernel.org>; Wed, 21 May 2025 20:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747860462; cv=none; b=RR9Dzuo85Uu9xCkNpYcyZr+uj67lkjaqT7YUoIOPhYtLmUbeOivvxOKHAt2QOukWE04t+cDOZKokiW2HlN0Vc3MKzCg2UyPSUMBKgrQjFhRnyHa+x3AsV/JPHSGUvAQhek1CB9oYlfciOWBcT1SRflvGVsZ1GZmyX2D5oExtewA=
+	t=1747860531; cv=none; b=o3JGbVvl+FNPM1Gf3M9XDm+d7fWpT0/kr//pEo9vY2iHTHOWJv/rPzn+HIE60V22JND5/NN2TCKFI1lKqyONiLB/CZ3pBs439Fm2apOQiM0CUEyVv9wQmHu64CGPX8tBMKtVO22oYPV/v5/ZcEkHZl6i0WMw1zk4zjUxU2s5mb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747860462; c=relaxed/simple;
-	bh=0c2oplzE7ye6DqYq04TMP1x07rAa307O9OXTTRZnud4=;
+	s=arc-20240116; t=1747860531; c=relaxed/simple;
+	bh=Dw0lhtTBS6OW9ZQ2YGyoktsM6mdieP2QrcPR4fqFA6I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L0YQk5XYyB8YxATmLEhtRrpjxKQajvZN+RSspaXpMa+ay/ucWfLs6CbATIL/4uCeGuYAaXadIYhvxGYiEEwuATHIGNC1/mOZSxfUvifhrTtEsxBKp6Rbb4CVjbFJgXANTxF3ToFwzwIGA3NJ0qGP4peUtsQVL6ycVduQs0LOwIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ac+wvX6U; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=tIVL5lYLv0BN4SkU41eCkhIMubxM1loH/uS7Kc/GIXUR5dLXIsn8D+sCPxciT73gjDzN1ILK2qhudDAOkt2BsIlyF2HzLG73aTectYe6gH650dUlx/4BaINro+USaZMdOVgghCvV6XXeoKqvxakIM87UoQva7dKT82gyPk38t+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PLjUeNoZ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ac+wvX6U"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PLjUeNoZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747860460;
+	s=mimecast20190719; t=1747860529;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pDc7UrnplZlvIH+UwUNJeqjQtwIG9fWAmJ0c6OZ2V0k=;
-	b=ac+wvX6U/Qe+SeHoWZibHGMlk3cIZdDJBf3wR8SNyuQ6B/Lg/ysPlNEoiENPqqwtMq+3ap
-	QgAU7Wo5BooNz7qGwcRjWhnaYP82Um0StjYnowpQsYTXwaJugFALC/kpBCVP4HWlULqWS1
-	opnffEyyIZf18+clO2UXr5syzLE0fmY=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=0Xzufaa4aZgtFIYzj8zYYCFRxQVb/zwFe5HxzSZJWxY=;
+	b=PLjUeNoZ+p2BvYEiMaeUiPmOM2xa7Zq7QPZG6/Pel4pOqKRfiyVWxdKSv8Ns35lYYB3Xvi
+	/Kk1S29uF/Ym5Ry0Vigbozb5vitOsMzlmO4Sbdq6LHrLDBXzd6vox7mpYkhZYFXFnGsjOE
+	Lmlq/JlhLDG/7snbVJopQHG9CmRA29k=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-457-80NufYDvOvmNHzpndZQ9SQ-1; Wed,
- 21 May 2025 16:47:35 -0400
-X-MC-Unique: 80NufYDvOvmNHzpndZQ9SQ-1
-X-Mimecast-MFC-AGG-ID: 80NufYDvOvmNHzpndZQ9SQ_1747860453
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-641-cHEFoZDJMu2ztuwO7P5b-Q-1; Wed,
+ 21 May 2025 16:48:45 -0400
+X-MC-Unique: cHEFoZDJMu2ztuwO7P5b-Q-1
+X-Mimecast-MFC-AGG-ID: cHEFoZDJMu2ztuwO7P5b-Q_1747860520
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B6B74180035C;
-	Wed, 21 May 2025 20:47:31 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A474D180036E;
+	Wed, 21 May 2025 20:48:40 +0000 (UTC)
 Received: from chopper.redhat.com (unknown [10.22.80.100])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 34EC119560B7;
-	Wed, 21 May 2025 20:47:26 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AED9F19560B7;
+	Wed, 21 May 2025 20:48:35 +0000 (UTC)
 From: Lyude Paul <lyude@redhat.com>
 To: dri-devel@lists.freedesktop.org,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+Cc: Danilo Krummrich <dakr@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
 	David Airlie <airlied@gmail.com>,
@@ -60,17 +61,17 @@ Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Andreas Hindborg <a.hindborg@kernel.org>,
 	Alice Ryhl <aliceryhl@google.com>,
 	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
 	Sumit Semwal <sumit.semwal@linaro.org>,
 	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
 	Daniel Almeida <daniel.almeida@collabora.com>,
 	Asahi Lina <lina@asahilina.net>,
 	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GPUS [RUST]),
 	linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b),
 	linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING FRAMEWORK:Keyword:\bdma_(?:buf|fence|resv)\b)
-Subject: [PATCH v2 02/12] rust: drm: gem: Add raw_dma_resv() function
-Date: Wed, 21 May 2025 16:29:09 -0400
-Message-ID: <20250521204654.1610607-3-lyude@redhat.com>
+Subject: [PATCH v2 11/12] rust: drm: gem: Add export() callback
+Date: Wed, 21 May 2025 16:29:18 -0400
+Message-ID: <20250521204654.1610607-12-lyude@redhat.com>
 In-Reply-To: <20250521204654.1610607-1-lyude@redhat.com>
 References: <20250521204654.1610607-1-lyude@redhat.com>
 Precedence: bulk
@@ -82,38 +83,164 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-For retrieving a pointer to the struct dma_resv for a given GEM object. We
-also introduce it in a new trait, BaseObjectPrivate, which we automatically
-implement for all gem objects and don't expose to users outside of the
-crate.
+This introduces an optional export() callback for GEM objects, which is
+used to implement the drm_gem_object_funcs->export function.
 
 Signed-off-by: Lyude Paul <lyude@redhat.com>
 ---
- rust/kernel/drm/gem/mod.rs | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/gpu/drm/nova/gem.rs  |  1 +
+ rust/kernel/drm/gem/mod.rs   | 73 +++++++++++++++++++++++++++++++++++-
+ rust/kernel/drm/gem/shmem.rs |  6 ++-
+ 3 files changed, 77 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/nova/gem.rs b/drivers/gpu/drm/nova/gem.rs
+index f2f23320110dd..6cc7a65a50fae 100644
+--- a/drivers/gpu/drm/nova/gem.rs
++++ b/drivers/gpu/drm/nova/gem.rs
+@@ -16,6 +16,7 @@
+ #[pin_data]
+ pub(crate) struct NovaObject {}
+ 
++#[vtable]
+ impl gem::BaseDriverObject for NovaObject {
+     type Driver = NovaDriver;
+     type Object = gem::Object<Self>;
 diff --git a/rust/kernel/drm/gem/mod.rs b/rust/kernel/drm/gem/mod.rs
-index 992e098d0a3e2..1165417b22df6 100644
+index 6d87e75690d2f..ef697f323e52c 100644
 --- a/rust/kernel/drm/gem/mod.rs
 +++ b/rust/kernel/drm/gem/mod.rs
-@@ -186,6 +186,17 @@ fn create_mmap_offset(&self) -> Result<u64> {
+@@ -10,7 +10,8 @@
+     alloc::flags::*,
+     bindings, drm::{self, private::Sealed},
+     drm::driver::{AllocImpl, AllocOps},
+-    error::{to_result, Result},
++    dma_buf,
++    error::{to_result, from_err_ptr, Result},
+     prelude::*,
+     types::{ARef, AlwaysRefCounted, Opaque},
+ };
+@@ -44,6 +45,7 @@ fn as_ref(&self) -> &kernel::drm::gem::OpaqueObject<D> {
+ pub(crate) use impl_as_opaque;
  
- impl<T: IntoGEMObject> BaseObject for T {}
+ /// GEM object functions, which must be implemented by drivers.
++#[vtable]
+ pub trait BaseDriverObject: Sync + Send + Sized {
+     /// Parent `Driver` for this object.
+     type Driver: drm::Driver;
+@@ -68,6 +70,11 @@ fn open(_obj: &Self::Object, _file: &DriverFile<Self>) -> Result {
  
-+/// Crate-private base operations shared by all GEM object classes.
-+pub(crate) trait BaseObjectPrivate: IntoGEMObject {
-+    /// Return a pointer to this object's dma_resv.
-+    fn raw_dma_resv(&self) -> *mut bindings::dma_resv {
-+        // SAFETY: `as_gem_obj()` always returns a valid pointer to the base DRM gem object
-+        unsafe { (*self.as_raw()).resv }
+     /// Close a handle to an existing object, associated with a File.
+     fn close(_obj: &Self::Object, _file: &DriverFile<Self>) {}
++
++    /// Optional handle for exporting a gem object.
++    fn export(_obj: &Self::Object, _flags: u32) -> Result<DmaBuf<Self::Object>> {
++        unimplemented!()
++    }
+ }
+ 
+ /// Trait that represents a GEM object subtype
+@@ -137,6 +144,21 @@ extern "C" fn close_callback<T: BaseDriverObject>(
+     T::close(obj, file);
+ }
+ 
++extern "C" fn export_callback<T: BaseDriverObject>(
++    raw_obj: *mut bindings::drm_gem_object,
++    flags: i32,
++) -> *mut bindings::dma_buf {
++    // SAFETY: `export_callback` is specified in the AllocOps structure for `Object<T>`, ensuring
++    // that `raw_obj` is contained within a `Object<T>`.
++    let obj = unsafe { T::Object::as_ref(raw_obj) };
++
++    match T::export(obj, flags as _) {
++        // DRM takes a hold of the reference
++        Ok(buf) => buf.into_raw(),
++        Err(e) => e.to_ptr(),
 +    }
 +}
 +
-+impl<T: IntoGEMObject> BaseObjectPrivate for T {}
+ impl<T: BaseDriverObject> IntoGEMObject for Object<T> {
+     fn as_raw(&self) -> *mut bindings::drm_gem_object {
+         self.obj.get()
+@@ -247,7 +269,11 @@ impl<T: BaseDriverObject> Object<T> {
+         open: Some(open_callback::<T>),
+         close: Some(close_callback::<T>),
+         print_info: None,
+-        export: None,
++        export: if T::HAS_EXPORT {
++            Some(export_callback::<T>)
++        } else {
++            None
++        },
+         pin: None,
+         unpin: None,
+         get_sg_table: None,
+@@ -376,6 +402,49 @@ fn as_raw(&self) -> *mut bindings::drm_gem_object {
+ 
+ impl<D: drm::Driver> Sealed for OpaqueObject<D> {}
+ 
++/// A [`dma_buf::DmaBuf`] which has been exported from a GEM object.
++///
++/// The [`dma_buf::DmaBuf`] will be released when this type is dropped.
++///
++/// # Invariants
++///
++/// - `self.0` points to a valid initialized [`dma_buf::DmaBuf`] for the lifetime of this object.
++/// - The GEM object from which this [`dma_buf::DmaBuf`] was exported from is guaranteed to be of
++///   type `T`.
++pub struct DmaBuf<T: IntoGEMObject>(NonNull<dma_buf::DmaBuf>, PhantomData<T>);
 +
- /// A base GEM object.
- ///
- /// Invariants
++impl<T: IntoGEMObject> Deref for DmaBuf<T> {
++    type Target = dma_buf::DmaBuf;
++
++    #[inline]
++    fn deref(&self) -> &Self::Target {
++        // SAFETY: This pointer is guaranteed to be valid by our type invariants.
++        unsafe { self.0.as_ref() }
++    }
++}
++
++impl<T: IntoGEMObject> Drop for DmaBuf<T> {
++    #[inline]
++    fn drop(&mut self) {
++        // SAFETY:
++        // - `dma_buf::DmaBuf` is guaranteed to have an identical layout to `struct dma_buf`
++        //   by its type invariants.
++        // - We hold the last reference to this `DmaBuf`, making it safe to destroy.
++        unsafe { bindings::drm_gem_dmabuf_release(self.0.cast().as_ptr()) }
++    }
++}
++
++impl<T: IntoGEMObject> DmaBuf<T> {
++    /// Leak the reference for this [`DmaBuf`] and return a raw pointer to it.
++    #[inline]
++    pub(crate) fn into_raw(self) -> *mut bindings::dma_buf {
++        let dma_ptr = self.as_raw();
++
++        core::mem::forget(self);
++        dma_ptr
++    }
++}
++
+ pub(super) const fn create_fops() -> bindings::file_operations {
+     // SAFETY: As by the type invariant, it is safe to initialize `bindings::file_operations`
+     // zeroed.
+diff --git a/rust/kernel/drm/gem/shmem.rs b/rust/kernel/drm/gem/shmem.rs
+index bff038df93334..799f15c38cc36 100644
+--- a/rust/kernel/drm/gem/shmem.rs
++++ b/rust/kernel/drm/gem/shmem.rs
+@@ -77,7 +77,11 @@ impl<T: BaseDriverObject> Object<T> {
+         open: Some(super::open_callback::<T>),
+         close: Some(super::close_callback::<T>),
+         print_info: Some(bindings::drm_gem_shmem_object_print_info),
+-        export: None,
++        export: if T::HAS_EXPORT {
++            Some(super::export_callback::<T>)
++        } else {
++            None
++        },
+         pin: Some(bindings::drm_gem_shmem_object_pin),
+         unpin: Some(bindings::drm_gem_shmem_object_unpin),
+         get_sg_table: Some(bindings::drm_gem_shmem_object_get_sg_table),
 -- 
 2.49.0
 
