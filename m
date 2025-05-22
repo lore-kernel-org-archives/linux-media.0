@@ -1,73 +1,80 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2067.outbound.protection.outlook.com [40.107.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A38928C87C;
-	Thu, 22 May 2025 14:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0FD28D8D0;
+	Thu, 22 May 2025 14:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.67
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747924554; cv=fail; b=dxaoQmDjJonj9+tCBsT677jEFV6rIovAuOPRNLjAT0fpKOihXosTLo5Bu3KH+Ea5pORNPy75Wj0c+8MfEs8MoJwbCI4WaS5f/+agtli9Ald7C7M6Y5R/iqPqUTHbs/on4wsodHEZjZXX/zwJNQVNdsxt2Y858IsH6rj0VGYT24k=
+	t=1747924559; cv=fail; b=ZI20CLNBXvEZSpR78ZaqSBUPUDjHmQiDBV5tMRET+C1K+dr6ZYZjvuHUf39Nqra+W3VGhhi8DKxSiCm7rLNnmNsrmQR3+Tu35XKqO5f22fd0/zpdy21GCE3bP/hojVt1IHlqiF7ksqz7chD/FcDaoWf8XHFfg03WDysip7GSxds=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747924554; c=relaxed/simple;
-	bh=MAwl1pBLNbrU1A2lgMdTo5DAg3gzoNZnMnAm9rL3LMM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=jd3uEvFjp6DVsNg1/9ZPU6SWJp9lLCecbIXvVGtE2JdSS15MtwLWhqGxj3ku1nKGzlS8mHwVRRnsxAtJ5QLdnBxFgvSgyvqwBuWb+nr8OngelnjbEEupXPwUe86Opn7QMPG636z21WDIgSq6TYj8rU2sj2ENCYM/D8fmW3sHxQI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BySLE2MI; arc=fail smtp.client-ip=40.107.237.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1747924559; c=relaxed/simple;
+	bh=fYeuyI1ZZ2VuHRq7KBDERTpIAdqdhoiwNh6qGczsMH8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tbYsd9TJSKd9+lM4ppYyqW7mGHtQMY+grAKDoWWMS1+2FGwH4XgGaR2CnUB8V6f4rBmAfoLTPtkNjNpSTQCW2bC0Vpc/Zdyx9spDGksctwmki4oUFEvszpyDNPbJvwpCVKKbjMjiBQibNkiRUK9eU1AX0u6xi4N6vyjI6iD/+fs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=fail smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=IJ7maBlR; arc=fail smtp.client-ip=40.107.20.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=mt.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BySLE2MI"
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="IJ7maBlR"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nSfFDyBIjQq4XMFulMUau+QcK/4aZFRyM/usdCnRdfcbt5mriZPmbvgVf65i7y6Y0ScCplN0bjeaAK7OeuDnGwLc34la7whACUdR7tEtIZoHCBp5fvp/01dKyMr7cTvHuU2T5Po2lBVpylaCL0099cQG0YtkW99TMuroe5gInpXZFwc8nM5j0mAFfml/SUORaBmRjNxM2XGU3vlbzs/kpQmGS3kmifdRpSU6S6S6oXsUtA82JJ7hC1DFkZm/nYYBFg83fQ2DAhizK3wUkSxxxet6KNAs26fhepVqTkzAiS5ka+eJbycpgTMcC+f5+hjAQa50Ks50PzJkRP8DWhBCng==
+ b=jbA5bJWb9v68vTiKamtsT7fWKC7+dVumWjgqVXswx+UILsN+HxTDnPiv0AAuJJycWg1jSX58kBklVHXpoSBG4UnWIGoGBxWF6aGlGMud0NZvJhdEzCaEeoKV4e+juYU56fLGmJV6le5MALHgh+FcUSINrBIsMMvCp1BNH8/JPQ0O1cScqBZ1jteAiphl2GZ49wsUmzKx7ZnLYhiebEiMvimCBOff853Hzd+vz5eWBdjGePYDtfm3fiv3cSgpEj1LGP635LDEVGrNxMKm1Ybnn5LOMA9SicEPA8QHaTIKEeRAkvh7Z/0WAId69Xe14FfQKz0rzZEUDj+RYxcQhu/mJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Up4n+APw3P1oQczNOE0Ov9s3sXAXpFSORJzwdslgB9k=;
- b=Rqad16gPnSQEg3gsBkKoy7ch9v/xG5J0X4jOWA71qdKtX3bbQqxac1Z0SH6QFIL88gfYQ4hxMotJgbBeAJxO5YR0flv+//wiQusQZcJvNnPuszaOKLiatKiDaMZ1gv8c7FLkSvydAf/+53ut1xKpmZt/HEabNlADHkl8F9d6eQ8wbPgICr5CFqMoLtSZ4eWciTEyi2E6/8AncBZC638ZRaMM0fXDmhHza8Lg+Af9bjqYsd9+ovgVL69SEWX4GN3s6lCd6h/EJzWrIhJFo791g1Qewg00e3h9i6ondMYRxFxHOvYavigyd2sexItDlZLr7pUmJ0PQmr0vr2gGbFfkSQ==
+ bh=8At0HOS+8LIG7VMd/Ljiv11OaY2B/NFB927QxvPiCBg=;
+ b=kZb6bPknkQEQ83dLBM+UmNLMeFyu7BKJ1DdUlLI4Hry/lucJyD471EqdSP2fTB4YFB8lWGePH2Wo6zSNjte9+tql8t4KOqewubTtUxn86x6ONHcroz4WMlfznDncfDudzZfltXYT5LTB6SqWxk5Ry/1SpbCuoyJ9hGti7dQMDgqnlFt/QZ/fekHjivv1dWjW2M3+IV+LlZ8KakNBGKvjtJN4OX7czFvkhxD1LkCLxoDY0+/d0nol28uV0LWzZY+qCWMAiXVXdW8nbCszxTLfWwGzvcQAEqYL0ZsaLr/1DPaZVSARO+6+puL//9IRhRMpPmlrVnUvOrgi0pDpi9cJTw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Up4n+APw3P1oQczNOE0Ov9s3sXAXpFSORJzwdslgB9k=;
- b=BySLE2MIA43brT8fjcnQSFdJ3dTejY8cRFZ6mrZDZSeu6DY7HuazBAyyQd0IImRQhhy2ooZD3aDtxVL77T9Vewz2bDXzDfOwxQeVkO1yNaigFlgj4JFYtjxOPAH3TAN/dZLua3QJNHuQJwhdrn2ykJ+6vSdY4IJ0Ero8tvSlmNo=
+ bh=8At0HOS+8LIG7VMd/Ljiv11OaY2B/NFB927QxvPiCBg=;
+ b=IJ7maBlRS1eK8q8x5xnPBF5sQrZF1NP6fjeYmqnG/Pt6EIk19rfCl+5rp9dwQ/4Ojoj0XO0SpIOZeR6ci8JWnNuiTkGSxU7B6YXN6D4UsA/o286vBmQXm0rxTQIAb0NMstcP5wHMDMSRSYDdlJN+gvYcRLqkmq5RK7sXftmX2MzbWH12DM2qAb3vUco3nDaek9p7fsxGSsV6OCoK54WhBMYHQFOfkzxGDIY9h3NGYBPkZOZiJ2Pu9fi1S3GVCWHH1bdz7UgIuwjLM1xNUXbi+ys5/7e3hvvO9ro6Ax8MZ6Y2rhIAGC63scolGYo2QI5AnwPTiELHkgKIp0KjEOJysQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SJ2PR12MB9209.namprd12.prod.outlook.com (2603:10b6:a03:558::22) with
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from DBBPR03MB10396.eurprd03.prod.outlook.com (2603:10a6:10:53a::11)
+ by AS8PR03MB9912.eurprd03.prod.outlook.com (2603:10a6:20b:636::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.21; Thu, 22 May
- 2025 14:35:48 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%7]) with mapi id 15.20.8722.031; Thu, 22 May 2025
- 14:35:47 +0000
-Message-ID: <f912b8c4-c37b-4c7c-ab9f-e1b44f6fcc13@amd.com>
-Date: Thu, 22 May 2025 16:35:42 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] drm/nouveau: Don't signal when killing the fence
- context
-To: phasta@kernel.org, Danilo Krummrich <dakr@kernel.org>
-Cc: Lyude Paul <lyude@redhat.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>,
- dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-References: <20250522112540.161411-2-phasta@kernel.org>
- <20250522112540.161411-3-phasta@kernel.org>
- <af03b541-0b69-4b3d-b498-b68e0beb3dcb@amd.com>
- <06210b9dc5e5ea8365295b77942c3ca030f02729.camel@mailbox.org>
- <eae0ff0f-31a6-433a-b255-9bdb4727a940@amd.com> <aC8fpEXYWZ9Oy41J@pollux>
- <ebedece4-9758-47e9-b621-37b40e3f0fc3@amd.com>
- <282de2b9251e3a1b793e02ef23675dace248725b.camel@mailbox.org>
- <dcc9f52a-4f46-4f24-bb33-b3af583a1956@amd.com>
- <3dda25c3108747bf1c7ab2974b2429a26f0762d0.camel@mailbox.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <3dda25c3108747bf1c7ab2974b2429a26f0762d0.camel@mailbox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0094.namprd03.prod.outlook.com
- (2603:10b6:208:32a::9) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.20; Thu, 22 May
+ 2025 14:35:55 +0000
+Received: from DBBPR03MB10396.eurprd03.prod.outlook.com
+ ([fe80::ee3c:c9be:681:c0bf]) by DBBPR03MB10396.eurprd03.prod.outlook.com
+ ([fe80::ee3c:c9be:681:c0bf%2]) with mapi id 15.20.8746.030; Thu, 22 May 2025
+ 14:35:55 +0000
+From: Mathis Foerst <mathis.foerst@mt.com>
+To: linux-kernel@vger.kernel.org
+Cc: Mathis Foerst <mathis.foerst@mt.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	manuel.traut@mt.com,
+	mathis.foerst@zuehlke.com
+Subject: [PATCH v6 3/7] media: mt9m114: Factor out mt9m114_configure_pa
+Date: Thu, 22 May 2025 16:35:07 +0200
+Message-Id: <20250522143512.112043-4-mathis.foerst@mt.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250522143512.112043-1-mathis.foerst@mt.com>
+References: <20250522143512.112043-1-mathis.foerst@mt.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZR0P278CA0192.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::16) To DBBPR03MB10396.eurprd03.prod.outlook.com
+ (2603:10a6:10:53a::11)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -75,156 +82,271 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SJ2PR12MB9209:EE_
-X-MS-Office365-Filtering-Correlation-Id: c39754ff-a034-4596-4ad7-08dd993df138
+X-MS-TrafficTypeDiagnostic: DBBPR03MB10396:EE_|AS8PR03MB9912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39ffdaa3-1621-4a2c-c63b-08dd993df58f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|52116014|7416014|376014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aW51R0N2L0RpakRVS2R0OWxqVWpULy9IUDJQbGN3TFBCSzdZaDVUblhaSEFV?=
- =?utf-8?B?NW5pTlNoajhBYmNIVXY4dkVraWE5ZUJIa2w0b0VPc0t0b2gxVWJiL045eTJS?=
- =?utf-8?B?MjJjRkpESjZXYTI2ZDl6cTVnanRjanFuUk4vSGY4b2xSa1ozUjEyMTExVlFt?=
- =?utf-8?B?YkMvWk9tQWZuSFE3NDJiRHExZUUrbklFMU5FMHZVL2JuaUc1RG1kbktQdnVy?=
- =?utf-8?B?WC9FQVZOY244WHRIbkJUWEV5YWdUU3VWdlg2WXFBbi9KYW9leWZ4d1dQMjhW?=
- =?utf-8?B?UFZ4bzNUUUp3Sk8yYTF2dWVCZ21rZ3psQWd5dzBWaVg1QXd3b3QwVUZJM2Fu?=
- =?utf-8?B?dDJ2eXA3c3I0M0JZYklEcnd5Y3Z0WjdLZDd5ZWxsTnJKMzJvL05YblJMaDVv?=
- =?utf-8?B?VnpsbmIzNXlVRklGdU0vcWllWVM4RExxTFl1QjFPeDlaWUNtT3NXN2xITGpy?=
- =?utf-8?B?enBneE0wZkJ3dmc2UGFoUkg2SXhOVEp4bWx2NVl4ZFAvNkw4TnN5WE40aFdP?=
- =?utf-8?B?bXR0K0dWMWxvYkJ3MXA0eUpuUWxqV2t6YnVOU3BOKzVQckpQc3FDZElaQzZX?=
- =?utf-8?B?c0hUcVhsN05sblNzUG5xYVM1bVkxblpBbFRwTEU0cUc3bVRiVUJLMlVCSFIr?=
- =?utf-8?B?NCs4R3BucDN3ODRrcUNHQVUwK0xxajJqWTJhbyt5OFF6eXdNYkJrLzBSNVl3?=
- =?utf-8?B?S3FraytTMEdYM2ZVVklOQmQ3U1ltajQ5V2lUTFBEMXc1QmZrU01hNUdGQnVm?=
- =?utf-8?B?MU00ejBWcUtTb2c2eTlSV28xSTRDK3ZIVWphOWFQN05acm14MTlmUkxlaUxT?=
- =?utf-8?B?K0ZvUUFKbEdEVzIvNGRXQ2FhT1N1Z2R6ZkQ4SjhIVVV4cVVHZndZaFErblU5?=
- =?utf-8?B?a1ZpSjJCZUp0SHNUcVVGRy90RTUxeWV5UmdGcWhtYkliamtVVzJYaGRBQ0s1?=
- =?utf-8?B?Y1BsM2FHYVh3TG55MGRBdmgwT3FrRUhvRlFwQnpHRWdxT3BQUnpEREZsV0s0?=
- =?utf-8?B?S28yUzBMR3lnT2tsdUdSckk0enl5R3gvenA4aTR5ekMyYjZUcDRDdjhsVm1D?=
- =?utf-8?B?bS9Sbmh3d0FIZlJ0TE1BTnE2cXF3dmorQzJ1V1FuNHBpNEd4Rmh1bTZRZjl3?=
- =?utf-8?B?a0Q3NHBlUGd6allVQm4xbGx5TEpXM2llVm9QQ1VFNHFUL3ZnMU1QTExpNmFH?=
- =?utf-8?B?ZW1tdy90KzUyZ1dZRSt2ZWRFTDhtb2Y5aStFVk05aUR3SW5jSzZWOWMyNVZ4?=
- =?utf-8?B?RDJlOWdVN0dEWDlPVncwRjBuQWk4VHZ5WnYwRnNzVlg2bVVsR2h4NElVVFlH?=
- =?utf-8?B?VDZMaWVsSGFxWWpUa2hHUEtrVStMWmJxRXJxSDJrWlBpWUxzS3BpOUgyNW4z?=
- =?utf-8?B?VXYwRmJmaWNCcUdLT01KK2VSa2cwYnc1U1B3S0FkdE4wYUZqSVJGYkh1czNE?=
- =?utf-8?B?UFhFUUhDUzdHSWkxdmdxWmcrb0RvNjBPU0syaml2Wm9vaWQwNmxsaTNjU1pl?=
- =?utf-8?B?MUdBelNEZTBGRmRhZFJFeGdFbWlTT3FDaWpHQlI5SXBzOWR5RDArSjd2RGlz?=
- =?utf-8?B?M3dRRWI4Qy93OWdmU0ZqL2pMb0VlcHM3K3Y3RUtST1RRQ3BHUzZxQllEdjFr?=
- =?utf-8?B?ODNDZUZZMnNqUmlkdUdvSkhYN2hiaXR2Ni9ERHBaUG1sdDRmck4vb2lLdURu?=
- =?utf-8?B?dzJLQ1JiSjhyNGlMcVZDemN5WlFicG45QlVCOEhwamhiSUlSTVhhanNscnVM?=
- =?utf-8?B?YWUvM1l0Vk42a2I2SlYwSWFDREQzRjB3c2h3Vldpczc3cytNSW55Ny9sUWVl?=
- =?utf-8?B?bm9jQlkrSzROUEplbUxHWE9uUzNrYW0xUk5LVUk5Z285ZjVSY0lQUTBIb2tQ?=
- =?utf-8?B?bjZRR0dhT0tBRW9WK2F5dkRDQ2FRa3pzV05YNXRQNm1OTjZZQ0RUZHNrdTRq?=
- =?utf-8?Q?mtty/BG9Kak=3D?=
+	=?us-ascii?Q?dE15DvznkN5XelCCfn/42ZLSzQMWP/O5mUPipoDE2LnNw4rPz2A6GtVg72cJ?=
+ =?us-ascii?Q?zoqCpS8StjkQ/XH586Kot6N5U899vT6LKvTzkZr0hg3jMf2ZzyPyc5dbYUuq?=
+ =?us-ascii?Q?v56qNalUgt+vxA9DwePo0AyzQR97m/xedOMfzykym7HMoSmU9EBH3MDUuNfm?=
+ =?us-ascii?Q?HEhSHQIkFq6Z0TCguDcSqIMjYE9qaXqKBu2h1BGu1SknZ9QrhGVQJvAsqPEp?=
+ =?us-ascii?Q?FnX8j7hFvBxOE9UORVSzl3OCQN7m7BdMo1WAVvWTINSnWx9B/GPQh58QQuwP?=
+ =?us-ascii?Q?GX/m/GeqiLSLSeQdATVwgwg3EQwgiJtVuXaSmtXlVDmXJ27n2F/ZGx0EcQ/+?=
+ =?us-ascii?Q?q3H3cv6L8Bve6eGdz/7CbNKHPH7Q4a7KLRvsX4181beWVIB2uuV7GQvRbz3r?=
+ =?us-ascii?Q?n5b5ny6yfUkfEKgBqiip6Tnpad8AU8VyvFbCxJTnhVhJjVXC/CYzrUYF7rzu?=
+ =?us-ascii?Q?niVWMu7g1+vB1n2/bw1hMUdHeD/Il2UEZcJMYo16aEHmkxBRrsrsAVTweYHr?=
+ =?us-ascii?Q?wlhq2BqCzDfWbfjmlWEgGR6gdLLqLVT3lRoA2wUWpYNl109uzDCKAseM/z8p?=
+ =?us-ascii?Q?q1T3MDPaL9v04tNHfINmsYDT5Py1Eu9a3n9Px5P4GxxrE/aiB1mOfw+O0OkZ?=
+ =?us-ascii?Q?Os90KEmkfWQFMw6LQFdEjHaeAyvFDzE0i8+504GQNH0DD4xXVlweNaEwQavy?=
+ =?us-ascii?Q?MXDEi2oyeiNUhqBxdS7bRuoQCElGKORBN6B1MqfRQXvS1ehQs8eNyIl99LYc?=
+ =?us-ascii?Q?Cx/ilPfiuUk0Z6tNqqVU8gGo75ubWirnzsOxxDEeji4AgZzM0bChNe3eD6R5?=
+ =?us-ascii?Q?2nUE20q6trXiLX6D09u+rlYGHLm4hxTeSCMoVKoVPaqDDmgm1H3YW0cNZGNg?=
+ =?us-ascii?Q?m/owGu3b/oRSCmPhJDZGhIGjl8dqbJMzVjzxd9M+95VE/yEtXcW491HDxLOP?=
+ =?us-ascii?Q?S65c5/lWvnHsCQsIjpGw1+l2Hyn77dGvpy36fVJQMUvLPKBDl7wilvls6JFc?=
+ =?us-ascii?Q?m8kwUL9qxts66jfCPvNkC+9WH/ku4R1ue/T5JaxJDQmG+HEEeO9zhVlF5rzv?=
+ =?us-ascii?Q?bCaanZ/peJkyhfjhhytaPOJzg1v7foVDQqnyRyTcPh2i/nrJ4vYNe3SVITN7?=
+ =?us-ascii?Q?vo+kcgMWaNBr8Po/OZQgPa1d6oYMfPo2D+MzhyS5//ipfLwyD4e3msBC3Xkx?=
+ =?us-ascii?Q?vWBWezrtNHrDrR/LLrIUYUOnYQIiX6MYINanYzSlDbtWwh2oDTfcfwBd4j2Q?=
+ =?us-ascii?Q?uMXuYu/FZAfBvuuxD2/uzxSdjppCIjLH+GxXGh/unU8g9gMp+NorSMfKQSUf?=
+ =?us-ascii?Q?qKEySqS6WThfN89lRjLOVMgLiSy+ugHLnHXyH+2Q97+L1SWR1SnnG2igRqxp?=
+ =?us-ascii?Q?/kzk/WCbVVbcOD+Sfh13hVJFnbpwOxWHlNxvwitgOB0Il8KiZ5fUq9kUSjBk?=
+ =?us-ascii?Q?+voQiotZoRclaA/mTAuBQpaz6/FCcsM/GIUnNss39UKlvVziHLFpJA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR03MB10396.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(7416014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RzlDYnlHWnl2RWhEVnl3MURhdzZ4SDgyaXU4eEhHcG55MzhacEdzTWlMcUMy?=
- =?utf-8?B?elVYODlHTTRNNlVFOWozNC9UdEpKTndBdGdmcEJiUEJ4czNVTVJmdWFhMUQ2?=
- =?utf-8?B?ak1jWmxZdHNodHpob2ZlL3V1RXRnQ25hTy9zWlZZM0RnYXVSSGloK3RvMTJi?=
- =?utf-8?B?Yll3Z3RzK2Voa2xsN2k5bjMrT0lxR2E2dmk3YVJBNzVnWnMxL1lzZXFhYXVX?=
- =?utf-8?B?MXlCTTQraGt3OEgySGtPQVB0Tk1jMzFVaHhrUTJqSUhaTXRhMzJBWEo5U2lT?=
- =?utf-8?B?K0UvVFVrOU1QYU1od3pIRnlsaUNQdjNYMFhjUlQ5aDNWRUFZeTVWaFEvUGJ0?=
- =?utf-8?B?Um9GTzlOaGV3M1IvbEhpRDRjWGF2VWlYQkNwRG9BemdaMUh4N01OTnJXZ0hV?=
- =?utf-8?B?Ykg3dzNSN3Q5QlpoUEk3cFUzay80Z0s3eEt3ak41SHRsYi9DTmhOV0xwQXF5?=
- =?utf-8?B?Y1J3SUp6a1F3M2xrcTVsOUhtNUdJOEo1T2liNmlhNXVQclJaWGZsNUU2QTAv?=
- =?utf-8?B?dHhDVzRmSDl1eUgzb2ZTSnNITG94eUYwbE9oTUZYRVAwWlhUL3FodHVtR243?=
- =?utf-8?B?WHZGTFlkanVaYTNtQ05oQUFybXF6R3BWVXVzLzlJWml3YTZrOVJiUlNRQkNk?=
- =?utf-8?B?RDd0QWV0ckVPb0JmT2lKSDdRalJWblZXRVVLSVZaS3JkOWcwY2NNbmRYRDJC?=
- =?utf-8?B?MDVyL0x2a1VOMTdGTm9DMm9jSkRmTUdkQUdYZHlSZ1MvMlJZUGFRYThZVFg1?=
- =?utf-8?B?UTBTNENwVFUxQzBMYkd3cktRTDBnMkJ4QkFjMUJ2S3V3cnVxUTBVcXI2aUFQ?=
- =?utf-8?B?c3A0bkdVQ1FFSFpUbnl4OWJ0VUt0UnlNVDl6bWxEMmNINnFZWTZDaEc4RlNq?=
- =?utf-8?B?MFpsY0tTSjArQm9FOWpRV3JPK1dGY2t2TkhaakRzdGh5UERXYWd6MXBTd2ZD?=
- =?utf-8?B?NzZ4bnFaY3BTb2h0RldybVpRMEJyYUs4VUZFVytra1VKd3RLSFRISmd3S00w?=
- =?utf-8?B?d3Y2TWEraDhEZURkcE1lRG1nOC9GWFUvb09IRVNIeXV3QnhEc3Q3bXVSbjN5?=
- =?utf-8?B?aE4xSHh4akZudzlsK2crOUh0TkU0VXIrS0JsMS9maHBVTTJSSDFtRVhJWmdL?=
- =?utf-8?B?MnhveGNPam90K0E1K3dmb3BjZ0hnWUdoQ053cVIvNUxRWGlZMkgwZVZjZXJa?=
- =?utf-8?B?NTVIcG1oTXcra0haYUM3N3pPNDBhTm94SDdoRTBVUFYxMXJxNllYTVU4VENO?=
- =?utf-8?B?a1ZtMmNOK3plYnZoNUl5b2ZHNWxjNDM2d01PRjVCSVJENzBYbUVEMEh3N0Rr?=
- =?utf-8?B?Ym5mTXRYb3dTbjhwQUVjVENiRXlUNHJyWTc1VXljT3JMUGhwMWxvZk40V0pR?=
- =?utf-8?B?QzNNTHhLeVlNS3Mvc2FGODRXOUNraUdENWU3WGJkV3Y0aTgrbVZRVlhqRkdz?=
- =?utf-8?B?ejhDaGlOZDc3WVB2cUpSODVxVE9JbzhhOHhodE5Tc2ZETGtxMzg1OENzVDgv?=
- =?utf-8?B?dmU3bFhGamFLbmFDeVNnSlkzOExyWkhGaEcwTEU4a1ZzbForSzN5WGxtSXNw?=
- =?utf-8?B?dHNqbzBPVkd2dTZpalN4bjNvKzhMNzZsQWJiTmdoUzhZNkwxbUVHQWs4aDBY?=
- =?utf-8?B?THJRaGVpTTEwakx6cTRpYlNoTXY0MTdvbjFlaXFaT0p0YVJLRmZBMSt0czlX?=
- =?utf-8?B?UUJwZlpzLzRtT1QzZlZwRXhIRHRjVTVkSXF5TXJHREdZeW1VQUQxNytlRDY2?=
- =?utf-8?B?aXh0aHgramh1eEVEZkRlWlN0Y2pqY2xhdzBKd20wUElkR2tDdGR6RzVDRWZs?=
- =?utf-8?B?SjBPS1l6WEhuTmdpU01Mcldnc3hHbUFjNElvOUJkV2F4ckhWbERvcUtJbGtX?=
- =?utf-8?B?dDZhbkd0ZWNraFY5LzZHcDcrWTZVbmVPNkMrWm1DdGtvei96UURqQlpCRjBM?=
- =?utf-8?B?cTg5SDVBVllIanNvRGx5bFNJNUtxSjhNVUdUaTVlTlRXL2JXU2N4MHFaMlpr?=
- =?utf-8?B?czlCRXk4cW12TmZrMEppMFZudzZaQXM2dmFjMWtSeEQvRUJmMjVnVW5XTld5?=
- =?utf-8?B?UFRQakpiQXYzUjFVUGNyQjlmYkZMbEZHWjZQd1ljSXFCVmpLWnFUaFVvQUxY?=
- =?utf-8?Q?ZknlCl28/hTTY0Y6/fBeXLaaB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c39754ff-a034-4596-4ad7-08dd993df138
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+	=?us-ascii?Q?3hVcN1lGyKEDFICe0KA/m8YGXZp1zDaYZu66oKTXos/+bwSi9BQQf2gRdYar?=
+ =?us-ascii?Q?4p6codJacdrf/L5KSE76HBhGMHoHLunF9NjUqHJAzmuoBTGDHI2tleAlqTj0?=
+ =?us-ascii?Q?mGaMmJkN0zpPFluSHRTAoyqkzoGsh3/IIOB2jCvushb3ZkaONBKufp2Gs9Mf?=
+ =?us-ascii?Q?H0ksKkaz/BNeuppv1twK9uDnjhqbdX2KzZGNam4GBwUAd0PqZzH6+y+LKzLp?=
+ =?us-ascii?Q?U7MVOLAVWGMK7rpSWIjnn4BRvZINzaXlUjSuJyyyT3QIvVMbYu9VtQPoVKAs?=
+ =?us-ascii?Q?XU2H7RnNLyreKGiTQrWWEs9Qo/eMuKAwGgZ8fd1uV12ISqzllVJLv3bFPp+V?=
+ =?us-ascii?Q?K3eYaMi9y9/VdC0Xx99gkyF6njqRJguGBZup8dLJUfoWPCFQFxVKdzY+Aop7?=
+ =?us-ascii?Q?s/FNmIg/fVOLaIX2DYjnlqEi50TsqFzbUK1v+ZJkaWH7ki5GLfHPUlj1S12d?=
+ =?us-ascii?Q?0YA+lPFeD4ZclIxGE6MD9P6FJNzaHoVUKZ5lpvGthnkDVPBykE9qkztQus37?=
+ =?us-ascii?Q?B5uc0tBWx1cRA3t2G5EdkzEOICYDDuzEojxTA2hBtuQAbiT9T0RohnTh9ztA?=
+ =?us-ascii?Q?VKLC6of6L+X7B09/t/YPWSanWnznx+J7oZFmRxVikDIH4kBEkz/3bsipzgp6?=
+ =?us-ascii?Q?JP5XZYYGD+giKfOYPc3xphy/2zxNzYubA2y9+0ocDD347qL+PXB82hxsO4yz?=
+ =?us-ascii?Q?pKN962rHgt0dJc1RqgMQFdS8m8gLFhFVOZwUE/SBAeFJLpAOCp0vVGIvqQKH?=
+ =?us-ascii?Q?op22LVz3FBySJZEn6Pk6MzxmDd66TYaxS67nZpVBSFuWgLyTjHgRTAfU9hQc?=
+ =?us-ascii?Q?Evmuk3MVrUq1wgrz0iDXAmu/tzlYp/sLsOLm0bpBajNYZWODURC3qVVVw4K7?=
+ =?us-ascii?Q?HZsytfRLcjkRF3YWsGBZS+/WqjxijnOzjFCpDnsv2MOg/49M5kN7h9vWfE89?=
+ =?us-ascii?Q?qpNSCcx6GJjTB5Kmz5gSM89HBXEG9Lfiz/NlDqtWYUPFGUD6j4iJRoQ8Gib7?=
+ =?us-ascii?Q?bmQ1ADGSsnwyG1a1f/czGHgYSE40gMUWr0FhGNYobYzWyukZPqb3U8vqNf6k?=
+ =?us-ascii?Q?lO8B9RxLHVEM4fToE54LtBxthNInhzAyjQU4gPWZe9I8fpT1SMeHgTcgvk23?=
+ =?us-ascii?Q?2OwBmnbL04v/YmQ3vT7tZfBqrKxC1k8ZkSlS9vtblNL504F2QHqGOp1GSB13?=
+ =?us-ascii?Q?a7q3OfamdHVE6T+DfQnoCbw1L1YiM5lII0iK5cVjP5jySBGOMYnf6N90keVQ?=
+ =?us-ascii?Q?uGB2k9Ha11LIiAnXk1UExM78/CoNT9ZfVqxDyAOEe/cbjUpDltyfKhAOtQPQ?=
+ =?us-ascii?Q?elrPWmmW6LxERQfrYtXE69tMAWKe8gLvTK1DDcHkzE5QFd5JMZhohgDaZGm0?=
+ =?us-ascii?Q?TCWBXVNQFKj78SuG3xRntXtBp2mHIspvr+dvWAEFpvSoNGvfU2TCeIyJakAR?=
+ =?us-ascii?Q?x42+05lgXl8VFbmb7Wda7S+zFJPFQYxMLaB0FhfeNw3ECI4UEJwUVOw7g01Q?=
+ =?us-ascii?Q?a6+5+0KZUb4eU9AEwKNM7Q/svXQIkxq7YYrdj/ZdjDAl2CYNnPb+gPqo5LBi?=
+ =?us-ascii?Q?C0VTMITzDT9LmjFCiArfracLN7AyueL72F8afH7u?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39ffdaa3-1621-4a2c-c63b-08dd993df58f
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR03MB10396.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2025 14:35:47.8375
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2025 14:35:54.9987
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W6NDcsXb7c3OEZ81QGHgM5ksJ4TECJSoIWhoDJ63ddZwLF6IJjSisSO1u4MexFp9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9209
+X-MS-Exchange-CrossTenant-UserPrincipalName: UCs6xjexG8HsRn/p6vNMHAGCl1dc9qianVU6uSwAwyWGpypcAV+rnsKSMxP8jPsYo4yFEQfZviRX+6PpFj6A7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB9912
 
-On 5/22/25 15:43, Philipp Stanner wrote:
->>
->> Well there is no need to implement it, but when it is implemented the
->> caller *must* call it when polling.
-> 
-> I don't understand. Please elaborate on that a bit more. If there's no
-> need to implement it, then why can't one have a
-> __dma_fence_is_signaled(), which is then identical?
+The function mt9m114_configure writes the configuration registers of both,
+the pixel array (pa) and the image flow processor (ifp).
+This is undesirable if only the config of the pa should be changed without
+affecting the ifp.
 
-Because the caller then doesn't call it when it is implemented.
+Factor out the function mt9m114_configure_pa() that just writes the
+pa-configuration.
 
-E.g. you give people a function which ignores the callback.
+Signed-off-by: Mathis Foerst <mathis.foerst@mt.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/mt9m114.c | 95 +++++++++++++++++++++----------------
+ 1 file changed, 53 insertions(+), 42 deletions(-)
 
->>
->> IIRC the background that we didn't allowed this was that we already
->> had the case that users only looked at the signaling bit and then
->> where surprised that it never changed.
-> 
-> Why would anyone expect that a fence gets signaled by calling a
-> function with the name "dma_fence_is_signaled()"? :-)
-
-Because when that function returns true the fence is considered signaled.
-
-> That was my original point, the name is not intuitive at all.
-> 
-> For example, if a driver doesn't implement that callback but signals
-> fences in interrupt handlers, and then forgets to (re-)activate the
-> interrupt, fences will never get signaled and callers to
-> dma_fence_is_signaled() will never read 'true', which isn't surprising.
-> 
-> Again, the point remains the same: the driver must guarantee that
-> fences will get signaled. Independently from how consumers of the fence
-> check it. Consumers could just stop calling dma_fence_is_signaled()
-> after the point in time T alltogether and then the driver would still
-> have to signal everything.
-
-No it doesn't. You need to call dma_fence_enable_signaling for that.
-
-Regards,
-Christian.
-
-> 
-> 
-> P.
-> 
-> 
-> 
->>
->> Regards,
->> Christian.
->>
->>>
->>>
->>> P.
->>>
->>>>
->>>> Regards,
->>>> Christian.
->>>
->>
-> 
+diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
+index c3ec2eb0b134..6c80c6926aef 100644
+--- a/drivers/media/i2c/mt9m114.c
++++ b/drivers/media/i2c/mt9m114.c
+@@ -790,41 +790,25 @@ static int mt9m114_initialize(struct mt9m114 *sensor)
+ 	return 0;
+ }
+ 
+-static int mt9m114_configure(struct mt9m114 *sensor,
+-			     struct v4l2_subdev_state *pa_state,
+-			     struct v4l2_subdev_state *ifp_state)
++static int mt9m114_configure_pa(struct mt9m114 *sensor,
++				struct v4l2_subdev_state *state)
+ {
+-	const struct v4l2_mbus_framefmt *pa_format;
+-	const struct v4l2_rect *pa_crop;
+-	const struct mt9m114_format_info *ifp_info;
+-	const struct v4l2_mbus_framefmt *ifp_format;
+-	const struct v4l2_rect *ifp_crop;
+-	const struct v4l2_rect *ifp_compose;
++	const struct v4l2_mbus_framefmt *format;
++	const struct v4l2_rect *crop;
+ 	unsigned int hratio, vratio;
+-	u64 output_format;
+ 	u64 read_mode;
+-	int ret = 0;
+-
+-	pa_format = v4l2_subdev_state_get_format(pa_state, 0);
+-	pa_crop = v4l2_subdev_state_get_crop(pa_state, 0);
++	int ret;
+ 
+-	ifp_format = v4l2_subdev_state_get_format(ifp_state, 1);
+-	ifp_info = mt9m114_format_info(sensor, 1, ifp_format->code);
+-	ifp_crop = v4l2_subdev_state_get_crop(ifp_state, 0);
+-	ifp_compose = v4l2_subdev_state_get_compose(ifp_state, 0);
++	format = v4l2_subdev_state_get_format(state, 0);
++	crop = v4l2_subdev_state_get_crop(state, 0);
+ 
+ 	ret = cci_read(sensor->regmap, MT9M114_CAM_SENSOR_CONTROL_READ_MODE,
+ 		       &read_mode, NULL);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = cci_read(sensor->regmap, MT9M114_CAM_OUTPUT_FORMAT,
+-		       &output_format, NULL);
+-	if (ret < 0)
+-		return ret;
+-
+-	hratio = pa_crop->width / pa_format->width;
+-	vratio = pa_crop->height / pa_format->height;
++	hratio = crop->width / format->width;
++	vratio = crop->height / format->height;
+ 
+ 	/*
+ 	 * Pixel array crop and binning. The CAM_SENSOR_CFG_CPIPE_LAST_ROW
+@@ -833,15 +817,15 @@ static int mt9m114_configure(struct mt9m114 *sensor,
+ 	 * example sensor modes.
+ 	 */
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CFG_X_ADDR_START,
+-		  pa_crop->left, &ret);
++		  crop->left, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CFG_Y_ADDR_START,
+-		  pa_crop->top, &ret);
++		  crop->top, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CFG_X_ADDR_END,
+-		  pa_crop->width + pa_crop->left - 1, &ret);
++		  crop->width + crop->left - 1, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CFG_Y_ADDR_END,
+-		  pa_crop->height + pa_crop->top - 1, &ret);
++		  crop->height + crop->top - 1, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CFG_CPIPE_LAST_ROW,
+-		  (pa_crop->height - 4) / vratio - 1, &ret);
++		  (crop->height - 4) / vratio - 1, &ret);
+ 
+ 	read_mode &= ~(MT9M114_CAM_SENSOR_CONTROL_X_READ_OUT_MASK |
+ 		       MT9M114_CAM_SENSOR_CONTROL_Y_READ_OUT_MASK);
+@@ -854,6 +838,29 @@ static int mt9m114_configure(struct mt9m114 *sensor,
+ 	cci_write(sensor->regmap, MT9M114_CAM_SENSOR_CONTROL_READ_MODE,
+ 		  read_mode, &ret);
+ 
++	return ret;
++}
++
++static int mt9m114_configure_ifp(struct mt9m114 *sensor,
++				 struct v4l2_subdev_state *state)
++{
++	const struct mt9m114_format_info *info;
++	const struct v4l2_mbus_framefmt *format;
++	const struct v4l2_rect *crop;
++	const struct v4l2_rect *compose;
++	u64 output_format;
++	int ret = 0;
++
++	format = v4l2_subdev_state_get_format(state, 1);
++	info = mt9m114_format_info(sensor, 1, format->code);
++	crop = v4l2_subdev_state_get_crop(state, 0);
++	compose = v4l2_subdev_state_get_compose(state, 0);
++
++	ret = cci_read(sensor->regmap, MT9M114_CAM_OUTPUT_FORMAT,
++		       &output_format, NULL);
++	if (ret < 0)
++		return ret;
++
+ 	/*
+ 	 * Color pipeline (IFP) cropping and scaling. Subtract 4 from the left
+ 	 * and top coordinates to compensate for the lines and columns removed
+@@ -861,18 +868,18 @@ static int mt9m114_configure(struct mt9m114 *sensor,
+ 	 * not in the hardware.
+ 	 */
+ 	cci_write(sensor->regmap, MT9M114_CAM_CROP_WINDOW_XOFFSET,
+-		  ifp_crop->left - 4, &ret);
++		  crop->left - 4, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_CROP_WINDOW_YOFFSET,
+-		  ifp_crop->top - 4, &ret);
++		  crop->top - 4, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_CROP_WINDOW_WIDTH,
+-		  ifp_crop->width, &ret);
++		  crop->width, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_CROP_WINDOW_HEIGHT,
+-		  ifp_crop->height, &ret);
++		  crop->height, &ret);
+ 
+ 	cci_write(sensor->regmap, MT9M114_CAM_OUTPUT_WIDTH,
+-		  ifp_compose->width, &ret);
++		  compose->width, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_OUTPUT_HEIGHT,
+-		  ifp_compose->height, &ret);
++		  compose->height, &ret);
+ 
+ 	/* AWB and AE windows, use the full frame. */
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AWB_CLIP_WINDOW_XSTART,
+@@ -880,18 +887,18 @@ static int mt9m114_configure(struct mt9m114 *sensor,
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AWB_CLIP_WINDOW_YSTART,
+ 		  0, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AWB_CLIP_WINDOW_XEND,
+-		  ifp_compose->width - 1, &ret);
++		  compose->width - 1, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AWB_CLIP_WINDOW_YEND,
+-		  ifp_compose->height - 1, &ret);
++		  compose->height - 1, &ret);
+ 
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AE_INITIAL_WINDOW_XSTART,
+ 		  0, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AE_INITIAL_WINDOW_YSTART,
+ 		  0, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AE_INITIAL_WINDOW_XEND,
+-		  ifp_compose->width / 5 - 1, &ret);
++		  compose->width / 5 - 1, &ret);
+ 	cci_write(sensor->regmap, MT9M114_CAM_STAT_AE_INITIAL_WINDOW_YEND,
+-		  ifp_compose->height / 5 - 1, &ret);
++		  compose->height / 5 - 1, &ret);
+ 
+ 	cci_write(sensor->regmap, MT9M114_CAM_CROP_CROPMODE,
+ 		  MT9M114_CAM_CROP_MODE_AWB_AUTO_CROP_EN |
+@@ -903,7 +910,7 @@ static int mt9m114_configure(struct mt9m114 *sensor,
+ 			   MT9M114_CAM_OUTPUT_FORMAT_FORMAT_MASK |
+ 			   MT9M114_CAM_OUTPUT_FORMAT_SWAP_BYTES |
+ 			   MT9M114_CAM_OUTPUT_FORMAT_SWAP_RED_BLUE);
+-	output_format |= ifp_info->output_format;
++	output_format |= info->output_format;
+ 
+ 	cci_write(sensor->regmap, MT9M114_CAM_OUTPUT_FORMAT,
+ 		  output_format, &ret);
+@@ -934,7 +941,11 @@ static int mt9m114_start_streaming(struct mt9m114 *sensor,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = mt9m114_configure(sensor, pa_state, ifp_state);
++	ret = mt9m114_configure_ifp(sensor, ifp_state);
++	if (ret)
++		goto error;
++
++	ret = mt9m114_configure_pa(sensor, pa_state);
+ 	if (ret)
+ 		goto error;
+ 
+-- 
+2.34.1
 
