@@ -1,170 +1,94 @@
-Received: from euk33.eukhosting.net (euk33.eukhosting.net [213.175.196.64])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664E2228CA3
-	for <linux-media@vger.kernel.org>; Fri, 23 May 2025 09:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.175.196.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84421DD889;
+	Fri, 23 May 2025 10:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747994386; cv=none; b=K7EqoOgg66bDEr/v0inlRNuh1EmYaY+PqAy+SezvDZJu6/eD7lJ4VO/hCC3MLA0axqWrMOM9/mndc4nEk1QDm0GzpnwXpREqW6Fcn++alXzGRhiqLd0FOqvAPp9PYziURPMWDkfS/cYz4B87k7cY4bhebFI1Ie/z5sGV4Zex1Tg=
+	t=1747994877; cv=none; b=CGe9iYgzMXbs/uF1e0nXyfpGFUXYldt9ZGLw4SZ6b05HhjaXQYCNuL6/mF08rx5gocyz5WQe9G7aXc1STFDMg2U3JrhRKln5LNQwv9jFP3VBd5oejUS3ZZtr0kCvZTy1CdYMMLl2JYrhEgZEm1Nni4qRQwiGoFGidxsC7KqScqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747994386; c=relaxed/simple;
-	bh=CtTdU3mdhgphWtQI95b25v5M4/TOxNoVp/C/BAaTGyk=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=uvwkOsz5wbtxLPNGeb9zIHE0EsS3gE21dK4qS1kuipvqgRg60JoMWAu9HpwcgqDzghVNMSyHV9qq4Dz3wuOYjhEn74B8Q/kFyXopJIKtpQZ0j0xyPbnS46jeLfopKmmkmNs2zEbxIFduSzBk0oDTeqWzcu+PWFLZo1rRCRCTGb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cairnwater.com; spf=pass smtp.mailfrom=cairnwater.com; dkim=pass (2048-bit key) header.d=cairnwater.com header.i=@cairnwater.com header.b=WXC023Yi; arc=none smtp.client-ip=213.175.196.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cairnwater.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cairnwater.com
+	s=arc-20240116; t=1747994877; c=relaxed/simple;
+	bh=bElBq/KjMYNxvtZnPGAHpUkChi7qdQIIEQkH2F10hAI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eoIqli3/CNBtrL01D6bhLM9b8UTTLKaU/Mb8pW0bTiNISwe3vLZMEs1w6iHcXORzNcSI8NZVIsPCif99rocHpZZrGoeOCYGJg7eIUeiWfHLQeaUH4x/3itF8PNDagNb7w8nMu/5L/9nCfvfE8R7gWwyD9yVeb96rCf7GMdlSen0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=pHvfurta; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cairnwater.com header.i=@cairnwater.com header.b="WXC023Yi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=cairnwater.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=VisDispum4PmX8Z0hmErUoCE/VW/CMOuctQqhpQq6rw=; b=WXC023Yi9P7aGFNKdGEhD5i870
-	QV74oC8OzPFCkWtbWyipjKpljRxsEYyqlbeSCtIMMsmNPK9N1nA6/1oW/sKcUV0BnjV2Co1RoXM21
-	vTXO7Mzg5I2FqOieIl+8F7c4wxSOxdDUpc1HVlWY7WotcOT+51JdER9Hj8X6Pe7TIZWpaYJ0x4YbF
-	/ezJaK74t5YeSoExYot3IaQBa/cT+eks5FrAp5WAd0VgTCME51r62jz2Yn0hM3uDGOwwJ4Ke1Mw1Q
-	dtqBovJ4UIM1vQY32TiuYvdHMMecO5I+GNPTrHpjQql4CggvnRp95sDYuKx5OqWtrJy937wn25dRG
-	rrFU2k1A==;
-Received: from [::1] (port=52376 helo=euk33.eukhosting.net)
-	by euk33.eukhosting.net with esmtpa (Exim 4.98.1)
-	(envelope-from <w.robertson@cairnwater.com>)
-	id 1uIOqr-00000002uAF-0uKQ;
-	Fri, 23 May 2025 10:38:05 +0100
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="pHvfurta"
+Received: from ideasonboard.com (unknown [IPv6:2a00:6020:448c:6c00:a882:21a2:2327:ac4f])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7D13346;
+	Fri, 23 May 2025 12:07:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1747994850;
+	bh=bElBq/KjMYNxvtZnPGAHpUkChi7qdQIIEQkH2F10hAI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=pHvfurta0vUf2KuUuyqPiI4DAiUvLRH7wZgq++AMbeLxVQjCZZMN0KBR5Vnf3U85Y
+	 pEg7XvHPSU5k3VsODWQfbGD1+ADy1WxDs+n+plUvpF9CnTOE7EVX8IHFzgnN6Dx9N4
+	 TFllHP+yMFBr/paVfvNLfUXfMCRbxEpEM61JTsP4=
+From: Stefan Klug <stefan.klug@ideasonboard.com>
+Subject: [PATCH v2 0/2] media: rkisp1: Add
+ RKISP1_CID_SUPPORTED_PARAMS_BLOCKS ctrl and WDR support
+Date: Fri, 23 May 2025 12:07:30 +0200
+Message-Id: <20250523-supported-params-and-wdr-v2-0-5a88dca5f420@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 23 May 2025 10:38:03 +0100
-From: w.robertson@cairnwater.com
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Alain Volmat <alain.volmat@foss.st.com>, Andrej Gardijan
- <andrej.gardijan@tuta.com>, Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
- David Plowman <david.plowman@raspberrypi.com>, Devarsh Thakkar
- <devarsht@ti.com>, Hans de Goede <hdegoede@redhat.com>, Jacopo Mondi
- <jacopo.mondi@ideasonboard.com>, Jerry Wu <jerry.w.hu@intel.com>,
- =?UTF-8?Q?Jesper_Taxb=C3=B8l?= <jesper@taxboel.dk>, Josuah Demangeon
- <me@josuah.net>, Kieran Bingham <kieran.bingham@ideasonboard.com>, Mattijs
- Korpershoek <mkorpershoek@kernel.org>, Mauro Carvalho Chehab
- <mchehab+huawei@kernel.org>, Naush Patuck <naush@raspberrypi.com>, Nicolas
- Dufresne <nicolas@ndufresne.ca>, =?UTF-8?Q?Niklas_S=C3=B6derlund?=
- <niklas.soderlund@ragnatech.se>, Ricardo Ribalda
- <ricardo.ribalda@gmail.com>, Sakari Ailus <sakari.ailus@iki.fi>, Stefan Klug
- <stefan.klug@ideasonboard.com>, libcamera-devel@lists.libcamera.org,
- linux-media@vger.kernel.org, Urs Fassler <urs.fassler@iqilio.ch>
-Subject: libcamera workshop 2025 - WildCamera
-In-Reply-To: <20250516070137.GA20271@pendragon.ideasonboard.com>
-References: <20250512154445.GA4523@pendragon.ideasonboard.com>
- <20250516070137.GA20271@pendragon.ideasonboard.com>
-User-Agent: Roundcube Webmail/1.6.9
-Message-ID: <4b162dd50b40acdfd2c26bb7b9ff2d75@cairnwater.com>
-X-Sender: w.robertson@cairnwater.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - euk33.eukhosting.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - cairnwater.com
-X-Get-Message-Sender-Via: euk33.eukhosting.net: authenticated_id: w.robertson@cairnwater.com
-X-Authenticated-Sender: euk33.eukhosting.net: w.robertson@cairnwater.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOJIMGgC/03MQQ6CMBBA0auQrh1Sh5YEV97DuBjoAI3SNlNQE
+ 8LdbVy5fIv/d5VZPGd1qXYl/PLZx1CAp0oNM4WJwbtihRqttthA3lKKsrKDREJLBgoO3k7g3Ni
+ mMz1j64wqeRIe/ee3vt2LR4kLrLMw/Q/xbHVnTG201qYFhLzySKF+PLfp6h1TjqGPJK4e4qKO4
+ wtmDdKzsQAAAA==
+To: Dafna Hirschfeld <dafna@fastmail.com>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Heiko Stuebner <heiko@sntech.de>
+Cc: linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Stefan Klug <stefan.klug@ideasonboard.com>, 
+ Paul Elder <paul.elder@ideasonboard.com>, 
+ Jai Luthra <jai.luthra@ideasonboard.com>
+X-Mailer: b4 0.13.0
 
-Hello everyone,
+Hi all,
 
-It was great to join you all at the libcamera workshop and to learn more 
-about the internal architecture of libcamera!
+This series adds RKISP1_CID_SUPPORTED_PARAMS_BLOCKS control to query the
+parameters blocks that are supported by the current kernel on the
+current hardware. This is required to be able to enable/disable the
+corresponding algorithms in user space without relying solely on the
+kernel version.
 
-If folk have any questions or suggestions about WildCamera please let me 
-know - I'd be very happy to hear comments, ideas and suggestions for 
-improvements by email or voice or video call.
+In addition to that it includes the WDR patch by Jai which is already in v5 and
+was reviewed here:
+https://lore.kernel.org/linux-media/20250521231355.GN12514@pendragon.ideasonboard.com/
 
-I'm often in the tree crowns chainsaw carving nest holes and setting up 
-field studies but the mobile signal is fairly good and I'm always happy 
-to hear people's ideas and suggestions.
+Version 2 of this series drops the unnecessary initial cleanup patch.
+Patch 1 was updated and has a local changelog. Patch 2 is unmodified.
 
-Thank you all again for everything!
+Laurent I didn't collect your tag on the first patch, as it was a bit
+more than touch ups.
 
-Have a great weekend!
+---
+Jai Luthra (1):
+      media: rockchip: rkisp1: Add support for Wide Dynamic Range
 
-Will
+Stefan Klug (1):
+      media: rkisp1: Add RKISP1_CID_SUPPORTED_PARAMS_BLOCKS control
 
-On 2025-05-16 08:01, Laurent Pinchart wrote:
-> Hello everybody,
-> 
-> Here's a link to the etherpad we will use to take notes today.
-> 
-> https://pad.systemli.org/p/libcamera-workshop-nice-2025
-> 
-> On Mon, May 12, 2025 at 05:44:45PM +0200, Laurent Pinchart wrote:
->> Hello everybody,
->> 
->> I'm looking forward to seeing you all on Friday the 16th of May for 
->> the
->> libcamera workshop. Here is the first agenda draft, along with 
->> logistic
->> information for on-site and remote attendees.
->> 
->> As all workshop agendas, this is tentative and we will adjust the 
->> exact
->> timing depending on how the discussions progress.
->> 
->> 09:00 - 09:10  Welcome and agenda bashing
->> 09:10 - 09:40  Software ISP status and future plans (Hans de Goede)
->> 09:40 - 10:00  Slowing down the soft ISP CPU implementation (Laurent 
->> Pinchart)
->> 10:00 - 10:30  Using a single IPA with multiple pipeline handlers 
->> (Hans de Goede)
->> 10:30 - 11:00  Break
->> 11:00 - 11:45  Bayer reprocessing (David Plowman)
->> 11:45 - 12:30  Startup frames (David Plowman)
->> 12:30 - 13:30  Lunch
->> 13:30 - 14:00  State of gstreamer support (Nicolas Dufresne)
->> 14:00 - 14:30  Multi-context support (Nicolas Dufresne)
->> 14:30 - 15:30  Per frame control (David Plowman)
->> 15:30 - 16:00  Break
->> 16:00 - 16:45  libcamera on Zephyr (Josuah Demangeon)
->> 16:45 - 17:15  The importance of libcamera to WildCamera
->> 17:15 - 17:45  TBD
->> 
->> Each agenda item is listed with the name of the person who proposed 
->> it.
->> We expect those persons to introduce the topic (orally or with slides,
->> at your discretion) and drive the discussion.
->> 
->> We will use Jitsi Meet for remote access. The event will be accessible
->> at https://meet.jit.si/libcamera-workshop-nice-2025. We can however
->> not guarantee the quality of the network connection on site.
->> 
->> All times are in the CEST (UTC+2) time zone. If you plan to attend
->> remotely and are located in a time zone that makes the agenda items 
->> you
->> are most interested in occur at an inconvenient time, please let me 
->> know
->> and we will try to reorder the discussion topics.
->> 
->> Discussions will not be recorded, but the minutes of the workshop will
->> be posted to the mailing list after the event.
->> 
->> The workshop will be hosted by Embedded Recipes as part of their
->> workshop day (https://embedded-recipes.org/2025/workshops/) and will 
->> be
->> located at the Sheraton Nice Airport 
->> (https://www.openstreetmap.org/way/1084319591)
->> a few minutes away from the Embedded Recipes location. For more
->> information refer to 
->> https://embedded-recipes.org/2025/attend/#getting-there-block.
->> 
->> Lunch is included and complimentary for attendees. We will go off-site
->> to Fragrance Culinaire - Arénas 
->> (https://maps.app.goo.gl/cKuspzV8PSKeWuqD9).
->> The restaurant offers salads and sandwiches and can cater for 
->> vegetarian
->> diets. If you have a more restrictive diet, please let me know.
+ .../media/platform/rockchip/rkisp1/rkisp1-common.h |   2 +
+ .../media/platform/rockchip/rkisp1/rkisp1-params.c | 150 ++++++++++++++++++++-
+ .../media/platform/rockchip/rkisp1/rkisp1-regs.h   |  99 ++++----------
+ include/uapi/linux/rkisp1-config.h                 | 101 ++++++++++++++
+ include/uapi/linux/v4l2-controls.h                 |   6 +
+ 5 files changed, 280 insertions(+), 78 deletions(-)
+---
+base-commit: a5806cd506af5a7c19bcd596e4708b5c464bfd21
+change-id: 20250523-supported-params-and-wdr-135394be26d4
+
+Best regards,
+-- 
+Stefan Klug <stefan.klug@ideasonboard.com>
+
