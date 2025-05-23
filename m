@@ -1,107 +1,207 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B8920C47A;
-	Fri, 23 May 2025 08:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A5A158535;
+	Fri, 23 May 2025 08:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747988257; cv=none; b=H8RzMR5zYo5qzSOmLzfbt7vxNQ50mgZ+EwmpO+n7xYB7VMDFlFSA9H74nY9SNO6Hto9udvvUaKrE4GuExRt4FgIJrNswbWLsRFJCG51B/j6qnyuG9sLwwWJfVcJDEH7LKMA4smemx7qpiMISeq1yHPrCS9NB5iI97tfM6UWrONQ=
+	t=1747989486; cv=none; b=XBtp4+v9lu15pjXwV49YmM2ehgVoUXIha72awOIc5r2T3ZFGonn1iEl2vVoq91PANT0AYFDoeCzRT/7lEXLo7T4BCAbcH4iWo16s5oUomM7wJRB4ThppzVCsJprrk467WVPyCFVM72fD60IdSxFWg440P2KClUicCYfc/F/aY+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747988257; c=relaxed/simple;
-	bh=BFCItceWfyuAXXe806yu+VbLQ/lI0BL9H850ON0oNA0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XS4Fii2oXmmxv7Gzxbj7p5UiRX69lcaaGwyMsqEvrhhKrdRot8NAGaGAcdlRPpjtq5bdD8cFT1L/WvbiAQPup1cX42VkAYdhLP9xIsGstOKyhFqhtNhZB106JPvuPTOdaYvJr4s9eibpo1kteAAl5PVPE19282Og5EyjtPpYvYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=uXt5eSu8; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1747989486; c=relaxed/simple;
+	bh=4DVwylDOjk01tCJesuWxu1jMsOqNbSd+Z1Cv26MHz+A=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AVVTSt9LwYAMReYdqarNgmyzeaeCzmONW2u4MWKuA2yThI7fn6ZB+DcnN33N7F9vbeNHhPAV9IiEk3KpQF/by6ZHD6rSUMV4qbKxf9/fWAvLwOojXCt0f/chOIQEHJBwQCKgGJYa6NuIWSx5k6tYkvuy9VmG8aATiJQQIeow1so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=LIYS1KZN; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="uXt5eSu8"
-Received: from pendragon.ideasonboard.com (179.218-130-109.adsl-dyn.isp.belgacom.be [109.130.218.179])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 144384A4;
-	Fri, 23 May 2025 10:17:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1747988230;
-	bh=BFCItceWfyuAXXe806yu+VbLQ/lI0BL9H850ON0oNA0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uXt5eSu8sVYfZL82LXbn4zyArt8iv+pp4jy+FOET4Yq/rZz0f6QDRCf70KFG7/fiw
-	 so0KRl3BEWQ97BQaMpkQ/advHhkbceM8SoU6pzKgNgbfxFc4IlOsvq9wA1tXAVECzH
-	 rOuhxR4vR5AWAlSc6Lxm4E7D82VWkJUc+fJ15UDg=
-Date: Fri, 23 May 2025 10:17:25 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: git@apitzsch.eu
-Cc: Ricardo Ribalda <ribalda@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 5/5] media: i2c: imx214: Remove hard-coded external
- clock frequency
-Message-ID: <20250523081725.GB12514@pendragon.ideasonboard.com>
-References: <20250521-imx214_ccs_pll-v3-0-bfb4a2b53d14@apitzsch.eu>
- <20250521-imx214_ccs_pll-v3-5-bfb4a2b53d14@apitzsch.eu>
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LIYS1KZN"
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 54N8bsqo2049441;
+	Fri, 23 May 2025 03:37:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1747989474;
+	bh=KmrZFgidPGZwccwufbPui6GCFr+1LgztHP2M67THRFQ=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References;
+	b=LIYS1KZN44UPBOKW0zVW7SRnqM0QUEEwU30LhnJeSQRefIC6KkZrkohU2gujnHJw3
+	 XeMLEoHm3XHCwfRiWqa9JisXT6AZbg0OXuon5nbXUbU+CwNoW05HAldmRF3cCMB4ww
+	 eojYrCig6plQTt1QBFBB9gyIu/x5fWN3WuoiopOg=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 54N8bsaM2094874
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 23 May 2025 03:37:54 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 23
+ May 2025 03:37:53 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 23 May 2025 03:37:53 -0500
+Received: from abhilash-HP.dhcp.ti.com (abhilash-hp.dhcp.ti.com [172.24.227.115])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 54N8bbs51130054;
+	Fri, 23 May 2025 03:37:49 -0500
+From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+To: <tomi.valkeinen@ideasonboard.com>, <mchehab@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>
+CC: <hverkuil@xs4all.nl>, <sakari.ailus@linux.intel.com>,
+        <laurent.pinchart@ideasonboard.com>, <vaishnav.a@ti.com>,
+        <u-kumar1@ti.com>, <jai.luthra@linux.dev>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <y-abhilashchandra@ti.com>
+Subject: [PATCH 2/2] media: i2c: ds90ub960: Add support for DS90UB954-Q1
+Date: Fri, 23 May 2025 14:06:55 +0530
+Message-ID: <20250523083655.3876005-3-y-abhilashchandra@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250523083655.3876005-1-y-abhilashchandra@ti.com>
+References: <20250523083655.3876005-1-y-abhilashchandra@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250521-imx214_ccs_pll-v3-5-bfb4a2b53d14@apitzsch.eu>
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi André,
+DS90UB954-Q1 is an FPDLink-III deserializer that is mostly register
+compatible with DS90UB960-Q1. The main difference is that it supports
+half of the RX and TX ports, i.e. 2x FPDLink RX ports and 1x CSI TX
+port.
 
-Thank you for the patch.
+Some other registers are marked as reserved in the datasheet as well,
+notably around CSI-TX frame and line-count monitoring and some other
+status registers. The datasheet also does not mention anything about
+setting strobe position, and fails to lock the RX ports if we forcefully
+set it, so disable it through the hw_data.
 
-On Wed, May 21, 2025 at 09:34:28PM +0200, André Apitzsch via B4 Relay wrote:
-> From: André Apitzsch <git@apitzsch.eu>
-> 
-> Instead rely on the rate set on the clock (using assigned-clock-rates
-> etc.)
-> 
-> Signed-off-by: André Apitzsch <git@apitzsch.eu>
+Link: https://www.ti.com/lit/gpn/ds90ub954-q1
+Signed-off-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
+---
+ drivers/media/i2c/Kconfig     |  2 +-
+ drivers/media/i2c/ds90ub960.c | 46 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+), 1 deletion(-)
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/i2c/imx214.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
-> index 19b494c08ece9894de67a4ee34c6f8e6e2708e41..264e897ec6e8e3d2fcd9d58db82090c7dd85d526 100644
-> --- a/drivers/media/i2c/imx214.c
-> +++ b/drivers/media/i2c/imx214.c
-> @@ -32,7 +32,6 @@
->  
->  #define IMX214_REG_FAST_STANDBY_CTRL	CCI_REG8(0x0106)
->  
-> -#define IMX214_DEFAULT_CLK_FREQ	24000000
->  #define IMX214_DEFAULT_LINK_FREQ	600000000
->  /* Keep wrong link frequency for backward compatibility */
->  #define IMX214_DEFAULT_LINK_FREQ_LEGACY	480000000
-> @@ -1402,11 +1401,6 @@ static int imx214_probe(struct i2c_client *client)
->  		return dev_err_probe(dev, PTR_ERR(imx214->xclk),
->  				     "failed to get xclk\n");
->  
-> -	ret = clk_set_rate(imx214->xclk, IMX214_DEFAULT_CLK_FREQ);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret,
-> -				     "failed to set xclk frequency\n");
-> -
->  	ret = imx214_get_regulators(dev, imx214);
->  	if (ret < 0)
->  		return dev_err_probe(dev, ret, "failed to get regulators\n");
-
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index e68202954a8f..6e265e1cec20 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -1662,7 +1662,7 @@ config VIDEO_DS90UB960
+ 	select V4L2_FWNODE
+ 	select VIDEO_V4L2_SUBDEV_API
+ 	help
+-	  Device driver for the Texas Instruments DS90UB960
++	  Device driver for the Texas Instruments DS90UB954/DS90UB960
+ 	  FPD-Link III Deserializer and DS90UB9702 FPD-Link IV Deserializer.
+ 
+ config VIDEO_MAX96714
+diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
+index ed2cf9d247d1..38e4f006d098 100644
+--- a/drivers/media/i2c/ds90ub960.c
++++ b/drivers/media/i2c/ds90ub960.c
+@@ -460,6 +460,7 @@ struct ub960_hw_data {
+ 	u8 num_txports;
+ 	bool is_ub9702;
+ 	bool is_fpdlink4;
++	bool is_ub954;
+ };
+ 
+ enum ub960_rxport_mode {
+@@ -982,6 +983,10 @@ static int ub960_txport_select(struct ub960_data *priv, u8 nport)
+ 
+ 	lockdep_assert_held(&priv->reg_lock);
+ 
++	/* TX port registers are shared for UB954*/
++	if (priv->hw_data->is_ub954)
++		return 0;
++
+ 	if (priv->reg_current.txport == nport)
+ 		return 0;
+ 
+@@ -1415,6 +1420,13 @@ static int ub960_parse_dt_txport(struct ub960_data *priv,
+ 		goto err_free_vep;
+ 	}
+ 
++	/* UB954 does not support 1.2 Gbps */
++	if (priv->tx_data_rate == MHZ(1200) && priv->hw_data->is_ub954) {
++		dev_err(dev, "tx%u: invalid 'link-frequencies' value\n", nport);
++		ret = -EINVAL;
++		goto err_free_vep;
++	}
++
+ 	v4l2_fwnode_endpoint_free(&vep);
+ 
+ 	priv->txports[nport] = txport;
+@@ -1572,6 +1584,10 @@ static int ub960_rxport_set_strobe_pos(struct ub960_data *priv,
+ 	u8 clk_delay, data_delay;
+ 	int ret = 0;
+ 
++	/* FIXME: After writing to this area the UB954 chip no longer responds */
++	if (priv->hw_data->is_ub954)
++		return 0;
++
+ 	clk_delay = UB960_IR_RX_ANA_STROBE_SET_CLK_NO_EXTRA_DELAY;
+ 	data_delay = UB960_IR_RX_ANA_STROBE_SET_DATA_NO_EXTRA_DELAY;
+ 
+@@ -5021,6 +5037,27 @@ static int ub960_enable_core_hw(struct ub960_data *priv)
+ 	if (priv->hw_data->is_ub9702)
+ 		ret = ub960_read(priv, UB9702_SR_REFCLK_FREQ, &refclk_freq,
+ 				 NULL);
++	else if (priv->hw_data->is_ub954) {
++		/* From DS90UB954-Q1 datasheet:
++		 * "REFCLK_FREQ measurement is not synchronized. Value in this
++		 * register should read twice and only considered valid if
++		 * REFCLK_FREQ is unchanged between reads."
++		 */
++		unsigned long timeout = jiffies + msecs_to_jiffies(100);
++
++		do {
++			u8 refclk_new;
++
++			ret = ub960_read(priv, UB960_XR_REFCLK_FREQ, &refclk_new,
++					 NULL);
++			if (ret)
++				goto err_pd_gpio;
++
++			if (refclk_new == refclk_freq)
++				break;
++			refclk_freq = refclk_new;
++		} while (time_before(jiffies, timeout));
++	}
+ 	else
+ 		ret = ub960_read(priv, UB960_XR_REFCLK_FREQ, &refclk_freq,
+ 				 NULL);
+@@ -5177,6 +5214,13 @@ static void ub960_remove(struct i2c_client *client)
+ 	mutex_destroy(&priv->reg_lock);
+ }
+ 
++static const struct ub960_hw_data ds90ub954_hw = {
++	.model = "ub954",
++	.num_rxports = 2,
++	.num_txports = 1,
++	.is_ub954 = true,
++};
++
+ static const struct ub960_hw_data ds90ub960_hw = {
+ 	.model = "ub960",
+ 	.num_rxports = 4,
+@@ -5192,6 +5236,7 @@ static const struct ub960_hw_data ds90ub9702_hw = {
+ };
+ 
+ static const struct i2c_device_id ub960_id[] = {
++	{ "ds90ub954-q1", (kernel_ulong_t)&ds90ub954_hw },
+ 	{ "ds90ub960-q1", (kernel_ulong_t)&ds90ub960_hw },
+ 	{ "ds90ub9702-q1", (kernel_ulong_t)&ds90ub9702_hw },
+ 	{}
+@@ -5199,6 +5244,7 @@ static const struct i2c_device_id ub960_id[] = {
+ MODULE_DEVICE_TABLE(i2c, ub960_id);
+ 
+ static const struct of_device_id ub960_dt_ids[] = {
++	{ .compatible = "ti,ds90ub954-q1", .data = &ds90ub954_hw },
+ 	{ .compatible = "ti,ds90ub960-q1", .data = &ds90ub960_hw },
+ 	{ .compatible = "ti,ds90ub9702-q1", .data = &ds90ub9702_hw },
+ 	{}
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
