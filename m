@@ -1,34 +1,44 @@
 Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF403224242;
-	Fri, 23 May 2025 09:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B26238179;
+	Fri, 23 May 2025 09:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747991454; cv=none; b=Y4XHnCq1r/gXGikeCAeKchd/wGkCDfpCXI9cZxfsYKLG9KKs4HUj3pAssKq0EIEH1LBFMmsya4pyyDX7VGoRvMbNZmv0Tvgx9Ou5IGRaRuo/iBGvMMCXOnGwExhJC3C0dzKnTyVZ+zgr9N4DFbvOJJrnnnQOV3mMsmBVQD9lsck=
+	t=1747994308; cv=none; b=Y180Nsx5vBWY+Zvpmo6f20aFUskP4s7KHvTt1C2SVNYn3qssdEUCgSFdLwD56h69LTQfrcvtWIJ89XEzhx0UMtuRHkKUJE05IVVBHuyUzRdb+z6K5esAKIMmNsFB/tqhAIPhDboWcXa1JfLZKjsGdxm8WGWay7/B0lOrQKAmI9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747991454; c=relaxed/simple;
-	bh=7EMy9CozNMZjwnvh+yUTBUwNvs02YPIpl/LQdFKhMxs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bP/O7yMhxE5a9ZnPyxrsKzCFeqoj58+oUKXTlUTEpEoZvJ8OUv6hiXW2rjBan4N3REI+z1tWwbMLG005kUygXi+PJIJiOtMFB7xXK5sI9MEbihYifZAP1Baf7KoxPWdKNIeLBXMB2zk09Z25seZOvJ8gaViE2Kumcr+/tCR0zjo=
+	s=arc-20240116; t=1747994308; c=relaxed/simple;
+	bh=08fg3jpSPJOEN6w8dbd543RIPo/ty5tra/UHgFDBq9g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jvILEnWifyAcoRu0TyJP3NRQwedSTYzDjG0P2jVCY6LS1KJREjE97pJ3NRAgksd1BydX/SGHbtZne/wkxOKiexclqi13yEFeALdMDdUYXswlgxaeUVjcfeiIDsC8B7rFhx8L9HnCWb5yJiUkUZ69KEAsg/NPXv/clQqXNEWjW4M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
 Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id 0CE57C405A4B;
-	Fri, 23 May 2025 11:10:47 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 0CE57C405A4B
-From: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-To: Dafna Hirschfeld <dafna@fastmail.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Mauro Carvalho
- Chehab <mchehab@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Jacopo
- Mondi <jacopo.mondi@ideasonboard.com>, Paul Elder
- <paul.elder@ideasonboard.com>, Ondrej Jirman <megi@xff.cz>, Tomi Valkeinen
- <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH] media: rkisp1: correct histogram window size
-Date: Fri, 23 May 2025 11:10:47 +0200
-Message-ID: <m3tt5b7kvc.fsf@t19.piap.pl>
+	by ni.piap.pl (Postfix) with ESMTPS id 9A651C405A4C;
+	Fri, 23 May 2025 11:58:23 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 9A651C405A4C
+From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,  Rui Miguel Silva
+ <rmfrfs@gmail.com>,  Martin Kepplinger <martink@posteo.de>,  Purism Kernel
+ Team <kernel@puri.sm>,  Mauro Carvalho Chehab <mchehab@kernel.org>,  Shawn
+ Guo <shawnguo@kernel.org>,  Sascha Hauer <s.hauer@pengutronix.de>,
+  Pengutronix Kernel Team <kernel@pengutronix.de>,  Fabio Estevam
+ <festevam@gmail.com>,  linux-media@vger.kernel.org,  imx@lists.linux.dev,
+  linux-arm-kernel@lists.infradead.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Enable MIPI filtering by DT on i.MX8M*
+In-Reply-To: <m31psg97dy.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
+ =?utf-8?Q?a=22's?= message of
+	"Thu, 22 May 2025 14:06:49 +0200")
+References: <m3h61u9jy2.fsf@t19.piap.pl>
+	<20250509103733.GE28896@pendragon.ideasonboard.com>
+	<m3o6vn8np5.fsf@t19.piap.pl>
+	<iegnn5xoosqpk52hvipcr73aliwhqtsq6r6ctvt5756bhy6yen@rqcdongb7fdf>
+	<m31psg97dy.fsf@t19.piap.pl>
+Sender: khalasa@piap.pl
+Date: Fri, 23 May 2025 11:58:23 +0200
+Message-ID: <m3plfz7io0.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -38,51 +48,75 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Without the patch (i.MX8MP, all-white RGGB-12 full HD input from
-the sensor, YUV NV12 output from ISP, full range, histogram Y mode).
-HIST_STEPSIZE =3D 3 (lowest permitted), all weights are set to 1:
+I wrote:
 
-isp_hist_h_size: 383 (=3D 1920 / 5 - 1)
-isp_hist_v_size: 215 (=3D 1080 / 5 - 1)
-histogram_measurement_result[16]: 0 0 0 0  0 0 0 0  0 0 0 0  0 0 0 229401
+> This produces (test_pattern=3D5 which starts with black, using ISP):
+> Y =3D  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00...
+> UV =3D 80 80 80 80  80 80 80 80  80 80 80 80  80 80 80 80...
+>
+> Now I do (perhaps I should revert the patch instead):
+> ./devmem write32 0x32E50004 0x14305
+>
+> and this does (=3D without DT filtering):
+> Y =3D  E6 FF 36 1B  00 00 00 00  00 00 00 00  00 00 00 00...
+> UV =3D 85 6A 74 B4  7D 8C 80 80  80 80 80 80  80 80 80 80...
 
-Apparently the histogram is missing the last column (3-pixel wide,
-though only single pixels count) and the last (same idea) row
-of the input image: 1917 * 1077 / 3 / 3 =3D 229401.
+The corruption is visible in ISP RAW-12 mode as well: CSI2 + ISP2 without
+DT filtering: IMX462 test patterns, Linux v6.14, 1280x720p25.
 
-E.g. without the patch, the pixels counted in lines are:
-0, 3, ... 1914 (which makes 1917/3), and patched:
-0, 3, ... 1914, 1917 (which makes 1920/3).
-The same is true for rows.
+Only 3 first 16-bit (12-bit on MIPI) RGGB values in each frame are
+changed (bits 3-0 of the third pixel aren't changed).
 
-With the patch applied:
-isp_hist_h_size: 384 (=3D 1920 / 5)
-isp_hist_v_size: 216 (=3D 1080 / 5)
-histogram_measurement_result[16]: 0 0 0 0  0 0 0 0  0 0 0 0  0 0 0 230400
+32EC0060h          0 Gasket 0 output disabled
+32EC0090h          0 Gasket 1 output disabled
+32EC0138h    2D8000h ISP Dewarp Control Register (ISP_DEWARP_CONTROL)
+      ISP ID mode 0, ISP1: DT 0, ISP2: DT 2Ch (RAW12) left-just mode
 
-1920 * 1080 / 3 / 3 =3D 230400
+32E50040h        B0h ISP Configuration Register (MIPI_CSIS_ISPCONFIG_CH0)
+      DT 2Ch (RAW12)
 
-Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+pattern 1:   0 800   0 2AB changed into 2AA B02 B00 2AB
+pattern 2 and 3: FFF FFF FFF FFF... not altered at all
+pattern 4: 501 501 4C2 4C2 changed into FFF 7FF 7F2 4C2
+pattern 5:   0   0   0   0 changed into 7EF FF7 FF0   0
+pattern 6:   0   1   0 101 changed into FFF FFF FF0 101
+pattern 7:   0 2AB   0 2AB changed into BAA BAB BA0 2AB
 
-diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c b/drive=
-rs/media/platform/rockchip/rkisp1/rkisp1-params.c
-index b28f4140c8a3..ca9b3e711e5f 100644
---- a/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-+++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-params.c
-@@ -819,8 +819,8 @@ static void rkisp1_hst_config_v10(struct rkisp1_params =
-*params,
- 		     arg->meas_window.v_offs);
-=20
- 	block_hsize =3D arg->meas_window.h_size /
--		      RKISP1_CIF_ISP_HIST_COLUMN_NUM_V10 - 1;
--	block_vsize =3D arg->meas_window.v_size / RKISP1_CIF_ISP_HIST_ROW_NUM_V10=
- - 1;
-+		      RKISP1_CIF_ISP_HIST_COLUMN_NUM_V10;
-+	block_vsize =3D arg->meas_window.v_size / RKISP1_CIF_ISP_HIST_ROW_NUM_V10;
-=20
- 	rkisp1_write(params->rkisp1, RKISP1_CIF_ISP_HIST_H_SIZE_V10,
- 		     block_hsize);
+RAW-12 on MIPI goes like this:
+ lane0    lane1   lane2 7:4   lane2 3:0   lane3
+----------- MIPI Header (all 4 lanes) ----------
+P1-11:4  P2-11:4    P1-3:0      P2-3:0   P3-11:4
+P4-11:4  ...
 
+This means all the changed values are located in the first 4 bytes after
+the packet header (i.e., in the first byte after the header for each
+lane). Which IMHO smells like a hardware bug - especially given the
+problem manifests itself only on CSI2 (+ISP2, I haven't tried using
+ISI).
+
+Fortunately enabling DT filtering fixes it.
+
+I remember I was getting a bit different results on, I believe, the
+NXP's 5.15 kernels (with their =3D Verisilicon VVCam driver). Instead of
+simply changing the first 32 bits of the MIPI payload, the rest of the
+RGGB data was shifted a couple of pixels or so.
+
+
+Now, what do we do with it?
+Is anybody able to verify the CSIC version register value on i.MX8MM?
+Something like devmem read32 0x32E50000 (or 0x32E40000 for CSI1) WHILE
+RUNNING CAPTURE on that very CSI would do the trick (using your
+favorite instance of devmem/devmem2/etc). Alternatively one could add
+a debug printk to the csic module.
+
+And: is anybody able to check if the DT filtering works on i.MX8MM
+(=3D if my patch doesn't break it on 8MM)?
+
+Alternatively I guess we can add MIPI_CSIS_V3_6_3_1 for 8MP only.
+
+Anybody using i.MX8MM with ISP2 + CSI2 BTW? Is the corruption there as
+well? I understand it may be hard to spot, it's (usually a bright) dot
+in the left top corner.
 --=20
 Krzysztof "Chris" Ha=C5=82asa
 
