@@ -1,48 +1,48 @@
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B1B1E32D5;
-	Sat, 24 May 2025 11:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6F81E492D;
+	Sat, 24 May 2025 11:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748087531; cv=none; b=mbKBWHDY5PSXTc2jjgiOB1CYAypIEwLMT4ko+AIps98Hn+8dvC8+vlGdivMiBhp88uEh45OdnaJsXKf9RsiEAA22CuKrmvkSgWGSSxyaHATElahSiR2VNliNqo/2OQ1xPkUxvGruKrAHzIrONNlshzO8iFbcAx4gYAC8ehRwJbo=
+	t=1748087532; cv=none; b=ni6wjXQh9YOOpaqFDrpSQI8uGWY2f3OPHS0JF+Ft9tSjzB4Mq7QH7MEBBDs/R9iIBfydnHEYqpRQYSESUzjz41EIOYOaXfjDevbMeFmHV5ZZNWHlpnw3AYjZNPpgABiWv8Xh2VdOjcSc4hS7rb3YRtmGiIeTMVf4fl5nmEJu5UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748087531; c=relaxed/simple;
-	bh=bBVF3AX3F/EtL/TQW15QqAs7u1eQHGMczmknxy128SE=;
+	s=arc-20240116; t=1748087532; c=relaxed/simple;
+	bh=PZz9yJZAtNqsvo24fcm8RlWB0NCSzRoZfGdd3VJGndI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UoWpYV4WoDY9kIf0XMIzBIoOCaYbfMmmYMeBd3ppXM6v6fKmAETjl1vB3zSdE1kChY8jK4YDczgoIYKmYBvqvWn6vBJ8XLRGwFuP23k307SRsO4zF3OUx6csGTi91dwLKMPU6Nm7k1lakHTm7kVnEh5LxVXxkjHf7xvm07d+MrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=EHHg1wme; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=aUVIeYxxkP+LMW+aUdWlCD2qTFrdD6U2IFbPDZpz0SZew9u6nBBqMwIrAt4rO5tUk1xhocZvb5QtBnlylGmL9jQmOBUwlkyZ1+KT+LC2PfQ0hin+IBjzWQbhSTIatfm2Xy/EP3CflZyhmCqmXQl4rE5gfaeE+JNgUou6DIuhwAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ldwSNUZm; arc=none smtp.client-ip=210.61.82.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="EHHg1wme"
-X-UUID: 7b563e94389511f082f7f7ac98dee637-20250524
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ldwSNUZm"
+X-UUID: 7af00a98389511f082f7f7ac98dee637-20250524
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=14yQiIcnv/dUGYobnu5eQZ1xrrBLbmThmkAwrJmjWXU=;
-	b=EHHg1wmem8nXjUiMXAdXbBkLoTZOWNbJccYpWHzxOIoavt67b0yVhRp5sK7a+70GWNvhZMkXPZUGFdPogpsMXUAFnQBGrY6sZOaIue9j3VHy0LNt/gsUXemUiFiuSX+8oErsIoa/SQnMZtugcDqZcW2PmRfbi6Od7sCNk6roxAY=;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CqekI3T4vQaqvZMK31hDFZQdEJvFlZRiVAD4u8JmKVI=;
+	b=ldwSNUZmf7YrI3sCS6zbyb8lvzR9ADCpDyP1yAE9XU903iWLipKXW1XyZHaziFqUG0v+p+D08dcVvjy+TsvY7u6qqNx5fJybrDnw/CBzn+m4jpnmhpT2BDzCPLtArnG5mRRE3F2LRMKNZ4FHu94q0n+xUWQkUcLOcXyyMzKF4rA=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:8730b21b-a51d-4479-82e5-f476f3a47bf6,IP:0,UR
+X-CID-O-INFO: VERSION:1.2.1,REQID:d37ce0b4-a2b1-4f7d-858a-97188a67faf2,IP:0,UR
 	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
 	elease,TS:0
-X-CID-META: VersionHash:0ef645f,CLOUDID:708ded57-abad-4ac2-9923-3af0a8a9a079,B
+X-CID-META: VersionHash:0ef645f,CLOUDID:5dbb3bf1-2ded-45ed-94e2-b3e9fa87100d,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
 	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 7b563e94389511f082f7f7ac98dee637-20250524
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-UUID: 7af00a98389511f082f7f7ac98dee637-20250524
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
 	(envelope-from <olivia.wen@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 13456349; Sat, 24 May 2025 19:51:51 +0800
+	with ESMTP id 305957609; Sat, 24 May 2025 19:51:51 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Sat, 24 May 2025 19:51:49 +0800
+ 15.2.1258.39; Sat, 24 May 2025 19:51:48 +0800
 Received: from mtksitap99.mediatek.inc (10.233.130.16) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Sat, 24 May 2025 19:51:49 +0800
+ 15.2.1258.39 via Frontend Transport; Sat, 24 May 2025 19:51:48 +0800
 From: Olivia Wen <olivia.wen@mediatek.com>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
@@ -54,9 +54,9 @@ CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
 	<linux-mediatek@lists.infradead.org>,
 	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
 	<teddy.chen@mediatek.com>, <yunkec@chromium.org>
-Subject: [PATCH v1 10/10] media: mediatek: isp: Add normal data dump flow
-Date: Sat, 24 May 2025 19:50:02 +0800
-Message-ID: <20250524115144.3832748-11-olivia.wen@mediatek.com>
+Subject: [PATCH v1 06/10] media: mediatek: isp: Add module operations structure for ImgSys
+Date: Sat, 24 May 2025 19:49:58 +0800
+Message-ID: <20250524115144.3832748-7-olivia.wen@mediatek.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250524115144.3832748-1-olivia.wen@mediatek.com>
 References: <20250524115144.3832748-1-olivia.wen@mediatek.com>
@@ -71,152 +71,74 @@ Content-Type: text/plain
 X-MTK: N
 
 The ImgSys driver is implemented as a series of patches, with this patch
-focusing on the  normal data dump flow. It is for debugging purposes
-within the MediaTek Image System (ImgSys) driver. The data dump
-functionality is essential for diagnosing issues, tracking the flow of
-data, and ensuring the proper operation of image processing tasks.
+focusing on a set of operations for specific modules.
+The ImgSys architecture includes various modules such as WPE (Warping
+Engine), TRAW (Tile-Raw), DIP (Digital Image Processing), PQDIP (Picture
+Quality Digital Image Processing), and ME (Motion Estimation).
+Each module requires specific operations for initialization and
+deinitialization to ensure proper setup and cleanup.
 
 Signed-off-by: Olivia Wen <olivia.wen@mediatek.com>
 ---
- .../mediatek/isp/isp_7x/imgsys/Makefile       |   2 +
- .../isp_7x/imgsys/modules/mtk_imgsys-dip.c    |  47 +++
- .../isp_7x/imgsys/modules/mtk_imgsys-dip.h    |   3 +
- .../isp/isp_7x/imgsys/modules/mtk_imgsys-me.c |  65 ++++
- .../isp/isp_7x/imgsys/modules/mtk_imgsys-me.h |  30 ++
- .../isp_7x/imgsys/modules/mtk_imgsys-pqdip.c  |  52 +++
- .../isp_7x/imgsys/modules/mtk_imgsys-pqdip.h  |   3 +
- .../isp_7x/imgsys/modules/mtk_imgsys-traw.c   |  55 +++
- .../isp_7x/imgsys/modules/mtk_imgsys-traw.h   |   3 +
- .../isp_7x/imgsys/modules/mtk_imgsys-wpe.c    |  60 +++
- .../isp_7x/imgsys/modules/mtk_imgsys-wpe.h    |   3 +
- .../mediatek/isp/isp_7x/imgsys/mtk-img-ipi.h  |   8 +
- .../isp/isp_7x/imgsys/mtk_imgsys-gce_work.c   |   4 +
- .../isp_7x/imgsys/mtk_imgsys-module_main.c    |   4 +
- .../isp/isp_7x/imgsys/mtk_imgsys-module_ops.h |  11 +
- .../isp_7x/imgsys/mtk_imgsys-ndd_debugfs.c    | 342 ++++++++++++++++++
- .../isp_7x/imgsys/mtk_imgsys-ndd_debugfs.h    |  64 ++++
- .../isp/isp_7x/imgsys/mtk_imgsys-sys.c        |  11 +
- .../isp/isp_7x/imgsys/mtk_imgsys-v4l2.c       |   7 +
- 19 files changed, 774 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.h
+ .../mediatek/isp/isp_7x/imgsys/Makefile       |   8 +
+ .../isp_7x/imgsys/modules/mtk_imgsys-dip.c    | 115 +++++++++++
+ .../isp_7x/imgsys/modules/mtk_imgsys-dip.h    |  18 ++
+ .../isp_7x/imgsys/modules/mtk_imgsys-pqdip.c  | 113 +++++++++++
+ .../isp_7x/imgsys/modules/mtk_imgsys-pqdip.h  |  17 ++
+ .../isp_7x/imgsys/modules/mtk_imgsys-traw.c   |  65 +++++++
+ .../isp_7x/imgsys/modules/mtk_imgsys-traw.h   |  17 ++
+ .../isp_7x/imgsys/modules/mtk_imgsys-wpe.c    | 116 +++++++++++
+ .../isp_7x/imgsys/modules/mtk_imgsys-wpe.h    |  17 ++
+ .../isp/isp_7x/imgsys/mtk_imgsys-dev.h        |  12 +-
+ .../isp_7x/imgsys/mtk_imgsys-module_common.h  |  82 ++++++++
+ .../isp_7x/imgsys/mtk_imgsys-module_main.c    | 183 ++++++++++++++++++
+ .../isp_7x/imgsys/mtk_imgsys-module_main.h    |  17 ++
+ .../isp/isp_7x/imgsys/mtk_imgsys-module_ops.h |  26 +++
+ .../isp/isp_7x/imgsys/mtk_imgsys-of.h         |   3 +
+ .../isp/isp_7x/imgsys/mtk_imgsys-sys.c        |  73 ++++++-
+ .../isp/isp_7x/imgsys/mtk_imgsys-v4l2.c       |  45 ++++-
+ 17 files changed, 923 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_common.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.h
 
 diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/Makefile b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/Makefile
-index 3aa53e8bfc6d..16044a280d5c 100644
+index 571d0ae000eb..26c8c1d39750 100644
 --- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/Makefile
 +++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/Makefile
-@@ -2,6 +2,7 @@
+@@ -2,10 +2,18 @@
  #
  
  mtk_imgsys_util-objs := \
-+mtk_imgsys-ndd_debugfs.o \
- mtk_imgsys-work_buf.o \
- mtk_imgsys-gce_work.o \
- mtk_imgsys-cmdq.o \
-@@ -14,6 +15,7 @@ mtk_imgsys-sys.o \
++mtk_imgsys-module_main.o \
+ mtk_imgsys-of.o \
+ mtk_imgsys-formats.o \
+ mtk_imgsys-dev.o \
+ mtk_imgsys-sys.o \
  mtk_imgsys-v4l2.o
  
- mtk_imgsys_hw_isp-objs := \
-+modules/mtk_imgsys-me.o \
- modules/mtk_imgsys-dip.o \
- modules/mtk_imgsys-traw.o \
- modules/mtk_imgsys-pqdip.o \
++mtk_imgsys_hw_isp-objs := \
++modules/mtk_imgsys-dip.o \
++modules/mtk_imgsys-traw.o \
++modules/mtk_imgsys-pqdip.o \
++modules/mtk_imgsys-wpe.o
++
+ obj-$(CONFIG_VIDEO_MTK_ISP_71_IMGSYS) += mtk_imgsys_util.o
++obj-$(CONFIG_VIDEO_MTK_ISP_71_IMGSYS) += mtk_imgsys_hw_isp.o
 diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c
-index 1cc1f3e87e8b..d9563d5a177a 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c
-@@ -10,6 +10,7 @@
- #include <linux/device.h>
- #include <linux/of_address.h>
- #include "../mtk_imgsys-module_common.h"
-+#include "../mtk_imgsys-scp.h"
- #include "mtk_imgsys-dip.h"
- 
- /********************************************************************
-@@ -42,6 +43,8 @@
- #define DIPCQ_D1A_DIPCQ_CQ_THR17_CTL 0x318
- #define DIPCQ_D1A_DIPCQ_CQ_THR18_CTL 0x328
- 
-+#define DIP_REG_RANGE  0x17000
-+
- #define DIP_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_dip_init_ary)
- 
- /********************************************************************
-@@ -103,6 +106,50 @@ void imgsys_dip_init(struct mtk_imgsys_dev *imgsys_dev)
- }
- EXPORT_SYMBOL_GPL(imgsys_dip_init);
- 
-+void imgsys_dip_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			 struct imgsys_ndd_frm_dump_info *frm_dump_info)
-+{
-+	char *dip_name;
-+	char file_name[NDD_FP_SIZE] = "\0";
-+	ssize_t ret;
-+	void *cq_va;
-+
-+	if (frm_dump_info->eng_e != IMGSYS_NDD_ENG_DIP)
-+		return;
-+
-+	cq_va = imgsys_scp_get_reserve_mem_virt(DIP_MEM_C_ID);
-+	if (!cq_va)
-+		return;
-+
-+	cq_va += frm_dump_info->cq_ofst[frm_dump_info->eng_e];
-+
-+	dip_name = "REG_DIP_dip.reg";
-+	ret = snprintf(file_name, sizeof(file_name), "%s%s", frm_dump_info->fp, dip_name);
-+	if (ret < 0 || ret >= sizeof(file_name)) {
-+		dev_err(imgsys_dev->dev, "wrong dip ndd file name %s\n", file_name);
-+		return;
-+	}
-+
-+	if (frm_dump_info->user_buffer) {
-+		ret = copy_to_user(frm_dump_info->user_buffer, file_name, sizeof(file_name));
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += sizeof(file_name);
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer, cq_va, 0x9000);
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += 0x48000 + 0x9000;
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer,
-+				   cq_va + 0x9000, DIP_REG_RANGE - 0x9000);
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += DIP_REG_RANGE - 0x9000;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(imgsys_dip_ndd_dump);
-+
- void imgsys_dip_uninit(struct mtk_imgsys_dev *imgsys_dev)
- {
- 	unsigned int hw_idx;
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
-index 22b4a7c3616d..1f0b85f1faba 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
-@@ -10,8 +10,11 @@
- #define _MTK_DIP_DIP_H_
- 
- #include "../mtk_imgsys-dev.h"
-+#include "../mtk_imgsys-ndd_debugfs.h"
- 
- void imgsys_dip_init(struct mtk_imgsys_dev *imgsys_dev);
-+void imgsys_dip_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			 struct imgsys_ndd_frm_dump_info *frm_dump_info);
- void imgsys_dip_uninit(struct mtk_imgsys_dev *imgsys_dev);
- 
- #endif /* _MTK_DIP_DIP_H_ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.c
 new file mode 100644
-index 000000000000..dacb3d591a71
+index 000000000000..1cc1f3e87e8b
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.c
-@@ -0,0 +1,65 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.c
+@@ -0,0 +1,115 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2018 MediaTek Inc.
@@ -225,69 +147,119 @@ index 000000000000..dacb3d591a71
 + *         Holmes Chiou <holmes.chiou@mediatek.com>
 + *
 + */
++
++#include <linux/device.h>
 +#include <linux/of_address.h>
-+#include <linux/uaccess.h>
-+#include "mtk_imgsys-me.h"
++#include "../mtk_imgsys-module_common.h"
++#include "mtk_imgsys-dip.h"
 +
-+#define ME_REG_RANGE 0xA20
++/********************************************************************
++ * Global Define
++ ********************************************************************/
++#define DIPCTL_D1A_DIPCTL_INT1_EN    0x094
++#define DIPCTL_D1A_DIPCTL_INT2_EN    0x0A0
++#define DIPCTL_D1A_DIPCTL_INT3_EN    0x0AC
++#define DIPCTL_D1A_DIPCTL_CQ_INT1_EN 0x0C4
++#define DIPCTL_D1A_DIPCTL_CQ_INT2_EN 0x0D0
++#define DIPCTL_D1A_DIPCTL_CQ_INT3_EN 0x0DC
 +
-+void imgsys_me_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			struct imgsys_ndd_frm_dump_info *frm_dump_info)
++#define DIPCQ_D1A_DIPCQ_CQ_THR0_CTL  0x208
++#define DIPCQ_D1A_DIPCQ_CQ_THR1_CTL  0x218
++#define DIPCQ_D1A_DIPCQ_CQ_THR2_CTL  0x228
++#define DIPCQ_D1A_DIPCQ_CQ_THR3_CTL  0x238
++#define DIPCQ_D1A_DIPCQ_CQ_THR4_CTL  0x248
++#define DIPCQ_D1A_DIPCQ_CQ_THR5_CTL  0x258
++#define DIPCQ_D1A_DIPCQ_CQ_THR6_CTL  0x268
++#define DIPCQ_D1A_DIPCQ_CQ_THR7_CTL  0x278
++#define DIPCQ_D1A_DIPCQ_CQ_THR8_CTL  0x288
++#define DIPCQ_D1A_DIPCQ_CQ_THR9_CTL  0x298
++#define DIPCQ_D1A_DIPCQ_CQ_THR10_CTL 0x2A8
++#define DIPCQ_D1A_DIPCQ_CQ_THR11_CTL 0x2B8
++#define DIPCQ_D1A_DIPCQ_CQ_THR12_CTL 0x2C8
++#define DIPCQ_D1A_DIPCQ_CQ_THR13_CTL 0x2D8
++#define DIPCQ_D1A_DIPCQ_CQ_THR14_CTL 0x2E8
++#define DIPCQ_D1A_DIPCQ_CQ_THR15_CTL 0x2F8
++#define DIPCQ_D1A_DIPCQ_CQ_THR16_CTL 0x308
++#define DIPCQ_D1A_DIPCQ_CQ_THR17_CTL 0x318
++#define DIPCQ_D1A_DIPCQ_CQ_THR18_CTL 0x328
++
++#define DIP_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_dip_init_ary)
++
++/********************************************************************
++ * Global Variable
++ ********************************************************************/
++static const struct mtk_imgsys_init_array mtk_imgsys_dip_init_ary[] = {
++	{ DIPCTL_D1A_DIPCTL_INT1_EN, 0x80000000 },
++	{ DIPCTL_D1A_DIPCTL_INT2_EN, 0x0 },
++	{ DIPCTL_D1A_DIPCTL_INT3_EN, 0x0 },
++	{ DIPCTL_D1A_DIPCTL_CQ_INT1_EN, 0x0 },
++	{ DIPCTL_D1A_DIPCTL_CQ_INT2_EN, 0x0 },
++	{ DIPCTL_D1A_DIPCTL_CQ_INT3_EN, 0x0 },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR0_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR1_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR2_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR3_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR4_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR5_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR6_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR7_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR8_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR9_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR10_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR11_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR12_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR13_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR14_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR15_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR16_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR17_CTL, CQ_THRX_CTL },
++	{ DIPCQ_D1A_DIPCQ_CQ_THR18_CTL, CQ_THRX_CTL },
++};
++
++static void __iomem *dip_reg_base[MTK_IMGSYS_DIP_HW_SET];
++
++/********************************************************************
++ * Functions
++ ********************************************************************/
++void imgsys_dip_init(struct mtk_imgsys_dev *imgsys_dev)
 +{
-+	char *me_name;
-+	char file_name[NDD_FP_SIZE] = "\0";
-+	void __iomem *reg_va;
-+	ssize_t ret;
++	unsigned int i, hw_id, hw_idx;
++	void __iomem *offset = NULL;
 +
-+	if (frm_dump_info->eng_e != IMGSYS_NDD_ENG_ME)
-+		return;
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_DIP_HW_SET; hw_idx++) {
++		hw_id = IMGSYS_REG_DIP1 + hw_idx;
++		dip_reg_base[hw_idx] = of_iomap(imgsys_dev->dev->of_node, hw_id);
++		if (!dip_reg_base[hw_idx]) {
++			dev_info(imgsys_dev->dev,
++				 "%s: error: unable to iomap dip_%d registers, devnode(%s).\n",
++				 __func__, hw_id, imgsys_dev->dev->of_node->name);
++			continue;
++		}
 +
-+	reg_va = ioremap(frm_dump_info->cq_ofst[frm_dump_info->eng_e], ME_REG_RANGE);
-+	if (!reg_va)
-+		return;
-+
-+	me_name = "REG_ME_me.reg";
-+
-+	ret = snprintf(file_name, sizeof(file_name), "%s%s", frm_dump_info->fp, me_name);
-+	if (ret < 0 || ret >= sizeof(file_name)) {
-+		iounmap(reg_va);
-+		return;
++		for (i = 0 ; i < DIP_INIT_ARRAY_COUNT; i++) {
++			offset = dip_reg_base[hw_idx] + mtk_imgsys_dip_init_ary[i].offset;
++			writel(mtk_imgsys_dip_init_ary[i].value, offset);
++		}
 +	}
-+
-+	if (frm_dump_info->user_buffer) {
-+		ret = copy_to_user(frm_dump_info->user_buffer, file_name, sizeof(file_name));
-+		if (ret) {
-+			iounmap(reg_va);
-+			return;
-+		}
-+		frm_dump_info->user_buffer += sizeof(file_name);
-+
-+		void *kernel_buffer = kmalloc(ME_REG_RANGE, GFP_KERNEL);
-+
-+		if (!kernel_buffer) {
-+			iounmap(reg_va);
-+			return;
-+		}
-+
-+		memcpy_fromio(kernel_buffer, reg_va, ME_REG_RANGE);
-+		ret = copy_to_user(frm_dump_info->user_buffer, kernel_buffer, ME_REG_RANGE);
-+		kfree(kernel_buffer);
-+		if (ret != 0) {
-+			iounmap(reg_va);
-+			return;
-+		}
-+		frm_dump_info->user_buffer += ME_REG_RANGE;
-+	}
-+
-+	iounmap(reg_va);
 +}
-+EXPORT_SYMBOL(imgsys_me_ndd_dump);
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.h
++EXPORT_SYMBOL_GPL(imgsys_dip_init);
++
++void imgsys_dip_uninit(struct mtk_imgsys_dev *imgsys_dev)
++{
++	unsigned int hw_idx;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_DIP_HW_SET; hw_idx++) {
++		iounmap(dip_reg_base[hw_idx]);
++		dip_reg_base[hw_idx] = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(imgsys_dip_uninit);
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
 new file mode 100644
-index 000000000000..10ed0153b740
+index 000000000000..22b4a7c3616d
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-me.h
-@@ -0,0 +1,30 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-dip.h
+@@ -0,0 +1,18 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2018 MediaTek Inc.
@@ -296,784 +268,454 @@ index 000000000000..10ed0153b740
 + *
 + */
 +
-+#ifndef _MTK_IMGSYS_ME_H_
-+#define _MTK_IMGSYS_ME_H_
++#ifndef _MTK_DIP_DIP_H_
++#define _MTK_DIP_DIP_H_
 +
 +#include "../mtk_imgsys-dev.h"
-+#include "../mtk_imgsys-ndd_debugfs.h"
 +
-+/**
-+ * imgsys_me_ndd_dump - Dump the frame information for debugging.
-+ * @imgsys_dev: Pointer to the mtk_imgsys_dev structure representing the ISP image
-+ * processing device.
-+ * @frm_dump_info: Pointer to the imgsys_ndd_frm_dump_info structure containing
-+ * frame dump information.
-+ *
-+ * This function dumps the NDD (Normal Data Dump) frame information for debugging
-+ * purposes. It provides insights into the frame data processed by the ISP image
-+ * processing device, which can help in identifying issues related to frame
-+ * handling.
-+ */
-+void imgsys_me_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			struct imgsys_ndd_frm_dump_info *frm_dump_info);
++void imgsys_dip_init(struct mtk_imgsys_dev *imgsys_dev);
++void imgsys_dip_uninit(struct mtk_imgsys_dev *imgsys_dev);
 +
-+#endif /* _MTK_IMGSYS_ME_H_ */
++#endif /* _MTK_DIP_DIP_H_ */
++
 diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c
-index d1d3507555d9..f1f688b13ba5 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c
-@@ -9,6 +9,7 @@
- #include <linux/device.h>
- #include <linux/of_address.h>
- #include "../mtk_imgsys-module_common.h"
-+#include "../mtk_imgsys-scp.h"
- #include "mtk_imgsys-pqdip.h"
- 
- /********************************************************************
-@@ -40,6 +41,8 @@
- #define DIPCQ_P1A_REG_DIPCQ_CQ_THR17_CTL		0x0318
- #define DIPCQ_P1A_REG_DIPCQ_CQ_THR18_CTL		0x0328
- 
-+#define PQDIP_REG_RANGE	0x6000
-+
- #define PQDIP_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_pqdip_init_ary)
- 
- /********************************************************************
-@@ -100,6 +103,55 @@ void imgsys_pqdip_init(struct mtk_imgsys_dev *imgsys_dev)
- }
- EXPORT_SYMBOL_GPL(imgsys_pqdip_init);
- 
-+void imgsys_pqdip_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			   struct imgsys_ndd_frm_dump_info *frm_dump_info)
-+{
-+	char *pqdip_name;
-+	char file_name[NDD_FP_SIZE] = "\0";
-+	ssize_t ret;
-+	void *cq_va;
-+
-+	if (frm_dump_info->eng_e != IMGSYS_NDD_ENG_PQDIP_A &&
-+	    frm_dump_info->eng_e != IMGSYS_NDD_ENG_PQDIP_B)
-+		return;
-+
-+	cq_va = imgsys_scp_get_reserve_mem_virt(PQDIP_MEM_C_ID);
-+	if (!cq_va)
-+		return;
-+
-+	cq_va += frm_dump_info->cq_ofst[frm_dump_info->eng_e];
-+
-+	switch (frm_dump_info->eng_e) {
-+	case IMGSYS_NDD_ENG_PQDIP_A:
-+		pqdip_name = "REG_PQDIP_A_pqdipa.reg";
-+		break;
-+	case IMGSYS_NDD_ENG_PQDIP_B:
-+		pqdip_name = "REG_PQDIP_B_pqdipb.reg";
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	ret = snprintf(file_name, sizeof(file_name), "%s%s", frm_dump_info->fp, pqdip_name);
-+	if (ret < 0 || ret >= sizeof(file_name)) {
-+		dev_err(imgsys_dev->dev, "wrong dip ndd file name %s\n", file_name);
-+		return;
-+	}
-+
-+	if (frm_dump_info->user_buffer) {
-+		ret = copy_to_user(frm_dump_info->user_buffer, file_name, sizeof(file_name));
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += sizeof(file_name);
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer, cq_va, PQDIP_REG_RANGE);
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += PQDIP_REG_RANGE;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(imgsys_pqdip_ndd_dump);
-+
- void imgsys_pqdip_uninit(struct mtk_imgsys_dev *imgsys_dev)
- {
- 	unsigned int hw_idx;
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
-index 00f93d536181..09bc51a1c15d 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
-@@ -10,8 +10,11 @@
- #define _MTK_IMGSYS_PQDIP_H_
- 
- #include "../mtk_imgsys-dev.h"
-+#include "../mtk_imgsys-ndd_debugfs.h"
- 
- void imgsys_pqdip_init(struct mtk_imgsys_dev *imgsys_dev);
-+void imgsys_pqdip_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			   struct imgsys_ndd_frm_dump_info *frm_dump_info);
- void imgsys_pqdip_uninit(struct mtk_imgsys_dev *imgsys_dev);
- 
- #endif /* _MTK_IMGSYS_PQDIP_H_ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
-index 292f0ad09c46..90597f3a776a 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
-@@ -9,6 +9,7 @@
- #include <linux/device.h>
- #include <linux/of_address.h>
- #include "../mtk_imgsys-module_common.h"
-+#include "../mtk_imgsys-scp.h"
- #include "mtk_imgsys-traw.h"
- 
- /********************************************************************
-@@ -16,6 +17,8 @@
-  ********************************************************************/
- #define TRAWCTL_INT1_EN 0x00A0
- 
-+#define TRAW_REG_RANGE 0xC000
-+
- #define TRAW_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_traw_init_ary)
- 
- /********************************************************************
-@@ -53,6 +56,58 @@ void imgsys_traw_init(struct mtk_imgsys_dev *imgsys_dev)
- }
- EXPORT_SYMBOL_GPL(imgsys_traw_init);
- 
-+void imgsys_traw_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			  struct imgsys_ndd_frm_dump_info *frm_dump_info)
-+{
-+	const char *traw_name;
-+	char file_name[NDD_FP_SIZE] = "\0";
-+	ssize_t ret;
-+	void *cq_va;
-+
-+	if (frm_dump_info->eng_e > IMGSYS_NDD_ENG_XTR ||
-+	    frm_dump_info->eng_e < IMGSYS_NDD_ENG_TRAW)
-+		return;
-+
-+	switch (frm_dump_info->eng_e) {
-+	case IMGSYS_NDD_ENG_TRAW:
-+		traw_name = "REG_TRAW_traw.reg";
-+		break;
-+	case IMGSYS_NDD_ENG_LTR:
-+		traw_name = "REG_LTRAW_ltraw.reg";
-+		break;
-+	case IMGSYS_NDD_ENG_XTR:
-+		traw_name = "REG_XTRAW_xtraw.reg";
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	cq_va = imgsys_scp_get_reserve_mem_virt(TRAW_MEM_C_ID);
-+	if (!cq_va)
-+		return;
-+
-+	cq_va += frm_dump_info->cq_ofst[frm_dump_info->eng_e];
-+
-+	ret = snprintf(file_name, sizeof(file_name), "%s%s", frm_dump_info->fp, traw_name);
-+	if (ret < 0 || ret >= sizeof(file_name)) {
-+		dev_err(imgsys_dev->dev, "wrong traw ndd file name %s\n", file_name);
-+		return;
-+	}
-+
-+	if (frm_dump_info->user_buffer) {
-+		ret = copy_to_user(frm_dump_info->user_buffer, file_name, sizeof(file_name));
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += sizeof(file_name);
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer, cq_va, TRAW_REG_RANGE);
-+		if (ret)
-+			return;
-+		frm_dump_info->user_buffer += TRAW_REG_RANGE;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(imgsys_traw_ndd_dump);
-+
- void imgsys_traw_uninit(struct mtk_imgsys_dev *imgsys_dev)
- {
- 	unsigned int hw_idx;
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
-index f3727216b58c..57881bc2e191 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
-@@ -10,8 +10,11 @@
- #define _MTK_IMGSYS_TRAW_H_
- 
- #include "../mtk_imgsys-dev.h"
-+#include "../mtk_imgsys-ndd_debugfs.h"
- 
- void imgsys_traw_init(struct mtk_imgsys_dev *imgsys_dev);
-+void imgsys_traw_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			  struct imgsys_ndd_frm_dump_info *frm_dump_info);
- void imgsys_traw_uninit(struct mtk_imgsys_dev *imgsys_dev);
- 
- #endif /* _MTK_IMGSYS_TRAW_H_ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
-index b19d61529b80..276af83a9ec2 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
-@@ -9,6 +9,7 @@
- #include <linux/device.h>
- #include <linux/of_address.h>
- #include "../mtk_imgsys-module_common.h"
-+#include "../mtk_imgsys-scp.h"
- #include "mtk_imgsys-wpe.h"
- 
- /********************************************************************
-@@ -41,6 +42,10 @@
- #define DIPCQ_W1A_DIPCQ_CQ_THR13_CTL_OFFSET 0x0BD8
- #define DIPCQ_W1A_DIPCQ_CQ_THR14_CTL_OFFSET 0x0BE8
- 
-+#define WPE_REG_RANGE	0x1000
-+#define WPE_PSP_END_OFST	0x554
-+#define WPE_COEF_END_OFST	0x5D8
-+
- #define WPE_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_wpe_init_ary)
- /********************************************************************
-  * Global Variable
-@@ -101,6 +106,61 @@ void imgsys_wpe_init(struct mtk_imgsys_dev *imgsys_dev)
- }
- EXPORT_SYMBOL_GPL(imgsys_wpe_init);
- 
-+void imgsys_wpe_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			 struct imgsys_ndd_frm_dump_info *frm_dump_info)
-+{
-+	char file_name[NDD_FP_SIZE] = "\0";
-+	void *cq_va, *psp_va;
-+	u64 psp_ofst;
-+	ssize_t ret;
-+
-+	if (frm_dump_info->eng_e > IMGSYS_NDD_ENG_WPE_LITE)
-+		return;
-+
-+	if (!frm_dump_info->user_buffer)
-+		return;
-+
-+	cq_va = imgsys_scp_get_reserve_mem_virt(WPE_MEM_C_ID);
-+	if (!cq_va)
-+		return;
-+
-+	cq_va += frm_dump_info->cq_ofst[frm_dump_info->eng_e];
-+
-+	psp_va = imgsys_scp_get_reserve_mem_virt(WPE_MEM_C_ID);
-+	if (!psp_va)
-+		return;
-+
-+	psp_ofst = frm_dump_info->wpe_psp_ofst[frm_dump_info->eng_e];
-+	psp_va += psp_ofst;
-+
-+	ret = snprintf(file_name, sizeof(file_name),
-+		       "%s%s", frm_dump_info->fp, frm_dump_info->wpe_fp);
-+	if (ret < 0 || ret >= sizeof(file_name))
-+		return;
-+
-+	ret = copy_to_user(frm_dump_info->user_buffer, file_name, sizeof(file_name));
-+	frm_dump_info->user_buffer += sizeof(file_name);
-+
-+	if (psp_ofst != 0) {
-+		ret = copy_to_user(frm_dump_info->user_buffer,
-+				   cq_va, WPE_PSP_END_OFST);
-+		frm_dump_info->user_buffer += WPE_PSP_END_OFST;
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer,
-+				   psp_va, WPE_COEF_END_OFST - WPE_PSP_END_OFST);
-+		frm_dump_info->user_buffer += (WPE_COEF_END_OFST - WPE_PSP_END_OFST);
-+
-+		ret = copy_to_user(frm_dump_info->user_buffer,
-+				   cq_va + WPE_COEF_END_OFST, WPE_REG_RANGE - WPE_COEF_END_OFST);
-+		frm_dump_info->user_buffer += (WPE_REG_RANGE - WPE_COEF_END_OFST);
-+	} else {
-+		ret = copy_to_user(frm_dump_info->user_buffer,
-+				   cq_va, WPE_REG_RANGE);
-+		frm_dump_info->user_buffer += WPE_REG_RANGE;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(imgsys_wpe_ndd_dump);
-+
- void imgsys_wpe_uninit(struct mtk_imgsys_dev *imgsys_dev)
- {
- 	unsigned int hw_idx;
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
-index 6001575265e6..77b713bbe499 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
-@@ -10,8 +10,11 @@
- #define _MTK_IMGSYS_WPE_H_
- 
- #include "../mtk_imgsys-dev.h"
-+#include "../mtk_imgsys-ndd_debugfs.h"
- 
- void imgsys_wpe_init(struct mtk_imgsys_dev *imgsys_dev);
-+void imgsys_wpe_ndd_dump(struct mtk_imgsys_dev *imgsys_dev,
-+			 struct imgsys_ndd_frm_dump_info *frm_dump_info);
- void imgsys_wpe_uninit(struct mtk_imgsys_dev *imgsys_dev);
- 
- #endif /* _MTK_IMGSYS_WPE_H_ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk-img-ipi.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk-img-ipi.h
-index 850f6ec99a96..705d8c35ff55 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk-img-ipi.h
-@@ -81,6 +81,10 @@ struct img_init_info {
-  * @is_earlycb: Indicates if early callback is enabled
-  * @sw_goft: offset of GCE buffer
-  * @g_swbuf: virtual address of GCE buffer
-+ * @ndd_cq_ofst: NDD CQ offset
-+ * @ndd_wpe_psp_ofst: NDD WPE PSP offset
-+ * @ndd_wpe_fp: NDD WPE file path
-+ * @ndd_fp: NDD file path
-  *
-  * These fields are primarily set by SCP (System Control Processor) and used by
-  * the kernel for processing and verifing data.
-@@ -92,6 +96,10 @@ struct img_swfrm_info {
- 	u8 is_earlycb;
- 	u64 sw_goft;
- 	void *g_swbuf;
-+	u64 ndd_cq_ofst[IMG_MAX_HW];
-+	u64 ndd_wpe_psp_ofst[WPE_ENG_NUM];
-+	char ndd_wpe_fp[64];
-+	char ndd_fp[256];
- } __packed;
- 
- /**
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-gce_work.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-gce_work.c
-index ef86410e3d23..7e5b7cd383f9 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-gce_work.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-gce_work.c
-@@ -2,6 +2,7 @@
- 
- #include "mtk_imgsys-scp.h"
- #include "mtk_imgsys-gce_work.h"
-+#include "mtk_imgsys-ndd_debugfs.h"
- 
- static void cmdq_cb_done_worker(struct work_struct *work)
- {
-@@ -17,6 +18,9 @@ static void cmdq_cb_done_worker(struct work_struct *work)
- 	if (!pipe->streaming)
- 		return;
- 
-+	if (gwfrm_info->user_info[0].ndd_fp[0] != '\0')
-+		wait_event(gwork->wait_queue, atomic_read(&gwork->state) == WORK_COMPLETED);
-+
- 	/* send to SCP after frame done & del node from list */
- 	swbuf_data.offset = gwfrm_info->req_sbuf_goft;
- 	imgsys_scp_send(pipe->imgsys_dev, IPI_IMGSYS_DEQUE_DONE_ID,
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
-index 5daa8f863bd2..c31ada82afcd 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
-@@ -10,6 +10,7 @@
- #include <linux/of_address.h>
- #include "mtk_imgsys-module_common.h"
- #include "mtk_imgsys-module_main.h"
-+#include "mtk_imgsys-ndd_debugfs.h"
- 
- /********************************************************************
-  * Global Define
-@@ -147,6 +148,7 @@ void imgsys_main_init(struct mtk_imgsys_dev *imgsys_dev)
- 	}
- 
- 	imgsys_main_hw_init(imgsys_dev);
-+	imgsys_ndd_debugfs_init(imgsys_dev);
- }
- 
- void imgsys_main_uninit(struct mtk_imgsys_dev *imgsys_dev)
-@@ -180,4 +182,6 @@ void imgsys_main_uninit(struct mtk_imgsys_dev *imgsys_dev)
- 		iounmap(dip2_reg_base);
- 		dip2_reg_base = NULL;
- 	}
-+
-+	imgsys_ndd_debugfs_uninit(imgsys_dev);
- }
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
-index a2eea8f4fb3c..1dc28993bc09 100644
---- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
-@@ -25,14 +25,23 @@ enum mtk_imgsys_module {
- };
- 
- struct mtk_imgsys_dev;
-+struct imgsys_ndd_frm_dump_info;
- 
- /**
-  * struct module_ops - Operations for a specific module in the MediaTek Image System
-+ *
-  * @module_id: Identifier for the module.
-  * @init: Function pointer to initialize the module.
-  *        This function sets the default values for various software-related
-  *        parameters and ensures that the module is ready for operation.
-  *        Example function: imgsys_dip_init
-+ * @ndddump: Function pointer to perform a dump of the module's frame information.
-+ *           This function is responsible for dumping frame-related information.
-+ *           It is typically used for debugging and diagnostic purposes to analyze
-+ *           the state of the system and the frames being processed.
-+ *           The dumped information can be used to trace issues or verify the
-+ *           correctness of the frame processing pipeline.
-+ *           Example function: imgsys_dip_ndd_dump
-  * @uninit: Function pointer to uninitialize the module.
-  *          This function resets various software-related parameters to ensure
-  *          the module is properly cleaned up and ready for shutdown.
-@@ -48,6 +57,8 @@ struct mtk_imgsys_dev;
- struct module_ops {
- 	int module_id;
- 	void (*init)(struct mtk_imgsys_dev *imgsys_dev);
-+	void (*ndddump)(struct mtk_imgsys_dev *imgsys_dev,
-+			struct imgsys_ndd_frm_dump_info *frm_dump_info);
- 	void (*uninit)(struct mtk_imgsys_dev *imgsys_dev);
- };
- #endif /* _MTK_IMGSYS_MODULES_H_ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.c
 new file mode 100644
-index 000000000000..d0c1168fbd06
+index 000000000000..d1d3507555d9
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.c
-@@ -0,0 +1,342 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.c
+@@ -0,0 +1,113 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (c) 2018 MediaTek Inc.
++ * Copyright (c) 2020 MediaTek Inc.
 + *
-+ * Author: Christopher Chen <christopher.chen@mediatek.com>
++ * Author: Daniel Huang <daniel.huang@mediatek.com>
 + *
 + */
 +
-+#include <linux/debugfs.h>
 +#include <linux/device.h>
-+#include <linux/list.h>
-+#include <linux/mutex.h>
 +#include <linux/of_address.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/remoteproc.h>
-+#include <linux/uaccess.h>
-+#include <soc/mediatek/smi.h>
-+#include "mtk_imgsys-ndd_debugfs.h"
-+#include "mtk_imgsys-module_common.h"
-+#include "mtk_imgsys-gce_work.h"
++#include "../mtk_imgsys-module_common.h"
++#include "mtk_imgsys-pqdip.h"
 +
-+#define WPE_ENG_NUM		3
-+#define TRAW_ENG_NUM	3
-+#define DIP_ENG_NUM		1
-+#define PQDIP_ENG_NUM	2
-+#define ME_ENG_NUM		1
++/********************************************************************
++ * Global Define
++ ********************************************************************/
++#define PQDIPCTL_P1A_REG_PQDIPCTL_INT1_EN		0x0050
++#define PQDIPCTL_P1A_REG_PQDIPCTL_INT2_EN		0x0060
++#define PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT1_EN	0x0070
++#define PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT2_EN	0x0080
++#define PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT3_EN	0x0090
 +
-+#define WPE_NDD_SIZE	0x1000
-+#define TRAW_NDD_SIZE	0xC000
-+#define DIP_NDD_SIZE	0x5F000
-+#define PQDIP_NDD_SIZE	0x6000
-+#define ME_NDD_SIZE		0xA20
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR0_CTL			0x0208
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR1_CTL			0x0218
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR2_CTL			0x0228
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR3_CTL			0x0238
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR4_CTL			0x0248
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR5_CTL			0x0258
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR6_CTL			0x0268
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR7_CTL			0x0278
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR8_CTL			0x0288
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR9_CTL			0x0298
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR10_CTL		0x02A8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR11_CTL		0x02B8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR12_CTL		0x02C8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR13_CTL		0x02D8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR14_CTL		0x02E8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR15_CTL		0x02F8
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR16_CTL		0x0308
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR17_CTL		0x0318
++#define DIPCQ_P1A_REG_DIPCQ_CQ_THR18_CTL		0x0328
 +
-+struct ndd_request_t {
-+	int fd;
-+	struct list_head list;
-+} __packed;
++#define PQDIP_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_pqdip_init_ary)
 +
-+struct user_ndd_requests_t {
-+	struct list_head ndd_req_list; /* ndd_request_t list */
-+	struct mutex lock; /* protect the ndd_req_list list*/
++/********************************************************************
++ * Global Variable
++ ********************************************************************/
++static const struct mtk_imgsys_init_array mtk_imgsys_pqdip_init_ary[] = {
++	{ PQDIPCTL_P1A_REG_PQDIPCTL_INT1_EN, 0x80000000 },
++	{ PQDIPCTL_P1A_REG_PQDIPCTL_INT2_EN, 0x0 },
++	{ PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT1_EN, 0x0 },
++	{ PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT2_EN, 0x0 },
++	{ PQDIPCTL_P1A_REG_PQDIPCTL_CQ_INT3_EN, 0x0 },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR0_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR1_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR2_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR3_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR4_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR5_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR6_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR7_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR8_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR9_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR10_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR11_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR12_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR13_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR14_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR15_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR16_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR17_CTL, CQ_THRX_CTL },
++	{ DIPCQ_P1A_REG_DIPCQ_CQ_THR18_CTL, CQ_THRX_CTL },
 +};
 +
-+struct ndd_frame_info_t {
-+	struct list_head ndd_swfrm_list; /* ndd_swfrm_info_t list */
-+	struct mutex lock; /* protect the ndd_swfrm_list list*/
-+};
++static void __iomem *pqdip_reg_base[MTK_IMGSYS_PQDIP_HW_SET];
 +
-+struct ndd_wpe_info_t {
-+	char fp[NDD_FP_SIZE];
-+	u8 data[WPE_NDD_SIZE];
-+};
-+
-+struct ndd_traw_info_t {
-+	char fp[NDD_FP_SIZE];
-+	u8 data[TRAW_NDD_SIZE];
-+};
-+
-+struct ndd_dip_info_t {
-+	char fp[NDD_FP_SIZE];
-+	u8 data[DIP_NDD_SIZE];
-+};
-+
-+struct ndd_pqdip_info_t {
-+	char fp[NDD_FP_SIZE];
-+	u8 data[PQDIP_NDD_SIZE];
-+};
-+
-+struct ndd_me_info_t {
-+	char fp[NDD_FP_SIZE];
-+	u8 data[ME_NDD_SIZE];
-+};
-+
-+struct ndd_frm_info_t {
-+	struct ndd_wpe_info_t	wpe[WPE_ENG_NUM];
-+	struct ndd_traw_info_t	traw[TRAW_ENG_NUM];
-+	struct ndd_dip_info_t	dip[DIP_ENG_NUM];
-+	struct ndd_pqdip_info_t	pqdip[PQDIP_ENG_NUM];
-+	struct ndd_me_info_t	me[ME_ENG_NUM];
-+} __packed;
-+
-+static struct ndd_frame_info_t *ndd_frames;
-+
-+#if defined(CONFIG_DEBUG_FS)
-+#define DEBUGFS_DIR "mtk_imgsys_debug"
-+#define DEBUGFS_FILE "mtk_imgsys_ndd"
-+#define FILE_PERMISSIONS 0644
-+
-+static struct dentry *debugfs_dir, *debugfs_file;
-+static struct user_ndd_requests_t *ndd_reqs;
-+
-+static ssize_t debugfs_write(struct file *file, const char __user *user_buffer,
-+			     size_t count, loff_t *ppos)
++/********************************************************************
++ * Functions
++ ********************************************************************/
++void imgsys_pqdip_init(struct mtk_imgsys_dev *imgsys_dev)
 +{
-+	char buffer[64];
-+	int ret;
-+	struct ndd_request_t *current_request;
++	unsigned int i, hw_id, hw_idx;
++	void __iomem *offset = NULL;
 +
-+	if (count >= sizeof(buffer))
-+		return -EINVAL;
-+
-+	if (copy_from_user(buffer, user_buffer, count))
-+		return -EFAULT;
-+
-+	buffer[count] = '\0';
-+
-+	current_request = kmalloc(sizeof(*current_request), GFP_KERNEL);
-+	if (!current_request)
-+		return -ENOMEM;
-+
-+	ret = sscanf(buffer, "fd=%d", &current_request->fd);
-+	if (ret != 1)
-+		return -EINVAL;
-+
-+	mutex_lock(&ndd_reqs->lock);
-+	list_add_tail(&current_request->list, &ndd_reqs->ndd_req_list);
-+	mutex_unlock(&ndd_reqs->lock);
-+
-+	*ppos += count;
-+
-+	return count;
-+}
-+
-+static void imgsys_ndd_dump_routine(struct mtk_imgsys_dev *imgsys_dev,
-+				    struct imgsys_ndd_frm_dump_info *frm_dump_info)
-+{
-+	int i = 0;
-+	int mid = 0;
-+	unsigned int hw_num = 0x1;
-+	unsigned int module_copy_ofst = 0;
-+	const struct module_ops *imgsys_modules = imgsys_dev->modules;
-+
-+	dev_dbg(imgsys_dev->dev,
-+		"%s: hw comb set: 0x%x\n", __func__, frm_dump_info->hw_comb);
-+
-+	for (i = 0; hw_num < IMGSYS_ENG_MAX_NUM; i++, hw_num = (0x1 << i)) {
-+		switch (hw_num) {
-+		case IMGSYS_ENG_WPE_EIS:
-+		case IMGSYS_ENG_WPE_TNR:
-+		case IMGSYS_ENG_WPE_LITE:
-+			module_copy_ofst = (NDD_FP_SIZE + WPE_NDD_SIZE);
-+			mid = IMGSYS_MOD_WPE;
-+			break;
-+		case IMGSYS_ENG_TRAW:
-+		case IMGSYS_ENG_LTR:
-+		case IMGSYS_ENG_XTR:
-+			module_copy_ofst = (NDD_FP_SIZE + TRAW_NDD_SIZE);
-+			mid = IMGSYS_MOD_TRAW;
-+			break;
-+		case IMGSYS_ENG_DIP:
-+			module_copy_ofst = (NDD_FP_SIZE + DIP_NDD_SIZE);
-+			mid = IMGSYS_MOD_DIP;
-+			break;
-+		case IMGSYS_ENG_PQDIP_A:
-+		case IMGSYS_ENG_PQDIP_B:
-+			module_copy_ofst = (NDD_FP_SIZE + PQDIP_NDD_SIZE);
-+			mid = IMGSYS_MOD_PQDIP;
-+			break;
-+		case IMGSYS_ENG_ME:
-+			module_copy_ofst = (NDD_FP_SIZE + ME_NDD_SIZE);
-+			mid = IMGSYS_MOD_ME;
-+			break;
-+		default:
-+			dev_err(imgsys_dev->dev, "%s get wrong hw id %d\n", __func__, hw_num);
-+			break;
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_PQDIP_HW_SET; hw_idx++) {
++		hw_id = IMGSYS_REG_PQDIP1 + hw_idx;
++		pqdip_reg_base[hw_idx] = of_iomap(imgsys_dev->dev->of_node, hw_id);
++		if (!pqdip_reg_base[hw_idx]) {
++			dev_info(imgsys_dev->dev,
++				 "%s: error: unable to iomap pqdip_%d registers, devnode(%s).\n",
++				 __func__, hw_id, imgsys_dev->dev->of_node->name);
++			continue;
 +		}
 +
-+		if (frm_dump_info->hw_comb & hw_num) {
-+			frm_dump_info->eng_e = i;
-+			if (imgsys_modules[mid].ndddump &&
-+			    frm_dump_info->eng_e <= IMGSYS_NDD_ENG_ME)
-+				imgsys_modules[mid].ndddump(imgsys_dev, frm_dump_info);
-+		} else {
-+			if (frm_dump_info->user_buffer)
-+				frm_dump_info->user_buffer += module_copy_ofst;
-+			else
-+				frm_dump_info->user_buffer = NULL;
-+		}
-+
-+		if ((frm_dump_info->hw_comb >> i) == 0)
-+			return;
-+	}
-+}
-+
-+static ssize_t debugfs_read(struct file *file, char __user *user_buffer,
-+			    size_t count, loff_t *ppos)
-+{
-+	struct ndd_swfrm_info_t *cur_ndd_swfrm = NULL, *swfrm_temp = NULL;
-+	struct ndd_request_t *cur_user_req = NULL, *req_temp = NULL;
-+	struct img_swfrm_info *subfrm_info = NULL;
-+	struct imgsys_ndd_frm_dump_info frm_dump_info = { 0 };
-+	struct gce_cb_work_pool *work_pool = NULL;
-+	ssize_t read_count = 0;
-+	size_t buffer_size = count;
-+	bool found = false;
-+	int frm, ret = 0;
-+	u32 gce_cb_work_idx = MTK_IMGSYS_GCE_CB_MAX_WORK_ITEMS;
-+
-+	mutex_lock(&ndd_frames->lock);
-+
-+	list_for_each_entry_safe(cur_ndd_swfrm, swfrm_temp, &ndd_frames->ndd_swfrm_list, list) {
-+		mutex_lock(&ndd_reqs->lock);
-+		list_for_each_entry_safe(cur_user_req, req_temp, &ndd_reqs->ndd_req_list, list) {
-+			if (cur_ndd_swfrm->gwfrm_info &&
-+			    cur_ndd_swfrm->gwfrm_info->request_fd == cur_user_req->fd) {
-+				found = true;
-+				break;
-+			}
-+		}
-+		mutex_unlock(&ndd_reqs->lock);
-+
-+		if (found) {
-+			for (frm = 0; frm < cur_ndd_swfrm->gwfrm_info->total_frmnum; frm++) {
-+				subfrm_info = &cur_ndd_swfrm->gwfrm_info->user_info[frm];
-+				memset(&frm_dump_info, 0, sizeof(frm_dump_info));
-+
-+				if (buffer_size < sizeof(struct ndd_frm_info_t)) {
-+					ret = -ENOMEM;
-+					goto out;
-+				}
-+
-+				if (subfrm_info->ndd_fp[0] == '\0')
-+					continue;
-+
-+				frm_dump_info.user_buffer = user_buffer +
-+					sizeof(struct ndd_frm_info_t) * frm;
-+				frm_dump_info.hw_comb = subfrm_info->hw_comb;
-+				frm_dump_info.cq_ofst = subfrm_info->ndd_cq_ofst;
-+				frm_dump_info.wpe_psp_ofst = subfrm_info->ndd_wpe_psp_ofst;
-+				frm_dump_info.wpe_fp = subfrm_info->ndd_wpe_fp;
-+				frm_dump_info.fp = subfrm_info->ndd_fp;
-+
-+				imgsys_ndd_dump_routine(cur_ndd_swfrm->imgsys_dev, &frm_dump_info);
-+				read_count += sizeof(struct ndd_frm_info_t);
-+				buffer_size -= sizeof(struct ndd_frm_info_t);
-+			}
-+
-+			work_pool = cur_ndd_swfrm->imgsys_dev->work_pool;
-+			do {
-+				gce_cb_work_idx = atomic_read(&cur_ndd_swfrm->gce_cb_work_idx);
-+			} while (gce_cb_work_idx == MTK_IMGSYS_GCE_CB_MAX_WORK_ITEMS);
-+			atomic_set(&work_pool->work_items[gce_cb_work_idx].state, WORK_COMPLETED);
-+			wake_up(&work_pool->work_items[gce_cb_work_idx].wait_queue);
-+
-+			list_del(&cur_ndd_swfrm->list);
-+			kfree(cur_ndd_swfrm);
-+			cur_ndd_swfrm = NULL;
-+			list_del(&cur_user_req->list);
-+			kfree(cur_user_req);
-+			cur_user_req = NULL;
-+			break;
++		for (i = 0 ; i < PQDIP_INIT_ARRAY_COUNT; i++) {
++			offset = pqdip_reg_base[hw_idx] + mtk_imgsys_pqdip_init_ary[i].offset;
++			writel(mtk_imgsys_pqdip_init_ary[i].value, offset);
 +		}
 +	}
-+
-+	if (!found)
-+		ret = -ENOENT;
-+out:
-+	mutex_unlock(&ndd_frames->lock);
-+
-+	return ret == 0 ? read_count : ret;
 +}
++EXPORT_SYMBOL_GPL(imgsys_pqdip_init);
 +
-+static const struct file_operations debugfs_fops = {
-+	.write = debugfs_write,
-+	.read = debugfs_read,
-+};
-+
-+void imgsys_ndd_debugfs_init(struct mtk_imgsys_dev *imgsys_dev)
++void imgsys_pqdip_uninit(struct mtk_imgsys_dev *imgsys_dev)
 +{
-+	debugfs_dir = debugfs_create_dir(DEBUGFS_DIR, NULL);
-+	if (!debugfs_dir) {
-+		dev_err(imgsys_dev->dev, "%s Failed to create debugfs dir\n", __func__);
-+		return;
++	unsigned int hw_idx;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_PQDIP_HW_SET; hw_idx++) {
++		iounmap(pqdip_reg_base[hw_idx]);
++		pqdip_reg_base[hw_idx] = NULL;
 +	}
-+
-+	debugfs_file = debugfs_create_file(DEBUGFS_FILE, FILE_PERMISSIONS,
-+					   debugfs_dir, NULL, &debugfs_fops);
-+	if (!debugfs_file) {
-+		dev_err(imgsys_dev->dev, "%s Failed to create debugfs file\n", __func__);
-+		return;
-+	}
-+
-+	ndd_frames = kmalloc(sizeof(*ndd_frames), GFP_KERNEL);
-+	if (!ndd_frames)
-+		return;
-+	INIT_LIST_HEAD(&ndd_frames->ndd_swfrm_list);
-+	mutex_init(&ndd_frames->lock);
-+
-+	ndd_reqs = kmalloc(sizeof(*ndd_reqs), GFP_KERNEL);
-+	if (!ndd_reqs)
-+		return;
-+	INIT_LIST_HEAD(&ndd_reqs->ndd_req_list);
-+	mutex_init(&ndd_reqs->lock);
 +}
-+EXPORT_SYMBOL_GPL(imgsys_ndd_debugfs_init);
++EXPORT_SYMBOL_GPL(imgsys_pqdip_uninit);
 +
-+void imgsys_ndd_debugfs_uninit(struct mtk_imgsys_dev *imgsys_dev)
-+{
-+	struct ndd_request_t *req, *tmp;
-+
-+	debugfs_remove(debugfs_file);
-+	debugfs_remove(debugfs_dir);
-+
-+	mutex_lock(&ndd_reqs->lock);
-+	list_for_each_entry_safe(req, tmp, &ndd_reqs->ndd_req_list, list) {
-+		list_del(&req->list);
-+		kfree(req);
-+	}
-+	mutex_unlock(&ndd_reqs->lock);
-+	kfree(ndd_reqs);
-+
-+	mutex_lock(&ndd_frames->lock);
-+	list_for_each_entry_safe(req, tmp, &ndd_frames->ndd_swfrm_list, list) {
-+		list_del(&req->list);
-+		kfree(req);
-+	}
-+	mutex_unlock(&ndd_frames->lock);
-+	kfree(ndd_frames);
-+}
-+EXPORT_SYMBOL_GPL(imgsys_ndd_debugfs_uninit);
-+#endif
-+
-+void imgsys_ndd_swfrm_list_add(struct mtk_imgsys_dev *imgsys_dev,
-+			       struct swfrm_info *gwfrm_info)
-+{
-+	struct ndd_swfrm_info_t *new_ndd_swfrm;
-+
-+	new_ndd_swfrm = kzalloc(sizeof(*new_ndd_swfrm), GFP_KERNEL);
-+	if (!new_ndd_swfrm)
-+		return;
-+
-+	new_ndd_swfrm->imgsys_dev = imgsys_dev;
-+	new_ndd_swfrm->gwfrm_info = gwfrm_info;
-+	atomic_set(&new_ndd_swfrm->gce_cb_work_idx, MTK_IMGSYS_GCE_CB_MAX_WORK_ITEMS);
-+
-+	gwfrm_info->ndd_swfrm_info = (void *)new_ndd_swfrm;
-+
-+	mutex_lock(&ndd_frames->lock);
-+	list_add_tail(&new_ndd_swfrm->list, &ndd_frames->ndd_swfrm_list);
-+	mutex_unlock(&ndd_frames->lock);
-+}
-+EXPORT_SYMBOL_GPL(imgsys_ndd_swfrm_list_add);
-diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.h
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
 new file mode 100644
-index 000000000000..f45cacc7bfff
+index 000000000000..00f93d536181
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-ndd_debugfs.h
-@@ -0,0 +1,64 @@
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-pqdip.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ *
++ * Author: Daniel Huang <daniel.huang@mediatek.com>
++ *
++ */
++
++#ifndef _MTK_IMGSYS_PQDIP_H_
++#define _MTK_IMGSYS_PQDIP_H_
++
++#include "../mtk_imgsys-dev.h"
++
++void imgsys_pqdip_init(struct mtk_imgsys_dev *imgsys_dev);
++void imgsys_pqdip_uninit(struct mtk_imgsys_dev *imgsys_dev);
++
++#endif /* _MTK_IMGSYS_PQDIP_H_ */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
+new file mode 100644
+index 000000000000..292f0ad09c46
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ *
++ * Author: Shih-Fang Chuang <shih-fang.chuang@mediatek.com>
++ *
++ */
++
++#include <linux/device.h>
++#include <linux/of_address.h>
++#include "../mtk_imgsys-module_common.h"
++#include "mtk_imgsys-traw.h"
++
++/********************************************************************
++ * Global Define
++ ********************************************************************/
++#define TRAWCTL_INT1_EN 0x00A0
++
++#define TRAW_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_traw_init_ary)
++
++/********************************************************************
++ * Global Variable
++ ********************************************************************/
++static const struct mtk_imgsys_init_array mtk_imgsys_traw_init_ary[] = {
++	{ TRAWCTL_INT1_EN, 0x80000000 },
++};
++
++static void __iomem *traw_reg_base[MTK_IMGSYS_TRAW_HW_SET];
++
++/********************************************************************
++ * Functions
++ ********************************************************************/
++void imgsys_traw_init(struct mtk_imgsys_dev *imgsys_dev)
++{
++	unsigned int i, hw_id, hw_idx;
++	void __iomem *offset = NULL;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_TRAW_HW_SET; hw_idx++) {
++		hw_id = IMGSYS_REG_TRAW1 + hw_idx;
++		traw_reg_base[hw_idx] = of_iomap(imgsys_dev->dev->of_node, hw_id);
++		if (!traw_reg_base[hw_idx]) {
++			dev_info(imgsys_dev->dev,
++				 "%s: error: unable to iomap traw_%d registers, devnode(%s).\n",
++				 __func__, hw_id, imgsys_dev->dev->of_node->name);
++			continue;
++		}
++
++		for (i = 0 ; i < TRAW_INIT_ARRAY_COUNT; i++) {
++			offset = traw_reg_base[hw_idx] + mtk_imgsys_traw_init_ary[i].offset;
++			writel(mtk_imgsys_traw_init_ary[i].value, offset);
++		}
++	}
++}
++EXPORT_SYMBOL_GPL(imgsys_traw_init);
++
++void imgsys_traw_uninit(struct mtk_imgsys_dev *imgsys_dev)
++{
++	unsigned int hw_idx;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_TRAW_HW_SET; hw_idx++) {
++		iounmap(traw_reg_base[hw_idx]);
++		traw_reg_base[hw_idx] = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(imgsys_traw_uninit);
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
+new file mode 100644
+index 000000000000..f3727216b58c
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-traw.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ *
++ * Author: Shih-fang Chuang <shih-fang.chuang@mediatek.com>
++ *
++ */
++
++#ifndef _MTK_IMGSYS_TRAW_H_
++#define _MTK_IMGSYS_TRAW_H_
++
++#include "../mtk_imgsys-dev.h"
++
++void imgsys_traw_init(struct mtk_imgsys_dev *imgsys_dev);
++void imgsys_traw_uninit(struct mtk_imgsys_dev *imgsys_dev);
++
++#endif /* _MTK_IMGSYS_TRAW_H_ */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
+new file mode 100644
+index 000000000000..b19d61529b80
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.c
+@@ -0,0 +1,116 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ *
++ * Author: Floria Huang <floria.huang@mediatek.com>
++ *
++ */
++
++#include <linux/device.h>
++#include <linux/of_address.h>
++#include "../mtk_imgsys-module_common.h"
++#include "mtk_imgsys-wpe.h"
++
++/********************************************************************
++ * Global Define
++ ********************************************************************/
++/* Define register offsets */
++#define WPE_TOP_CTL_INT_EN_OFFSET       0x0018
++#define WPE_TOP_CTL_INT_STATUSX_OFFSET  0x0024
++#define WPE_TOP_CQ_IRQ_EN_OFFSET        0x00D4
++#define WPE_TOP_CQ_IRQ_STX_OFFSET       0x00DC
++#define WPE_TOP_CQ_IRQ_EN2_OFFSET       0x00E0
++#define WPE_TOP_CQ_IRQ_STX2_OFFSET      0x00E8
++#define WPE_TOP_CQ_IRQ_EN3_OFFSET       0x00EC
++#define WPE_TOP_CQ_IRQ_STX3_OFFSET      0x00F4
++#define WPE_CACHE_RWCTL_CTL_OFFSET      0x0204
++#define WPE_DMA_DMA_ERR_CTRL_OFFSET     0x03D4
++#define DIPCQ_W1A_DIPCQ_CQ_THR0_CTL_OFFSET 0x0B08
++#define DIPCQ_W1A_DIPCQ_CQ_THR1_CTL_OFFSET 0x0B18
++#define DIPCQ_W1A_DIPCQ_CQ_THR2_CTL_OFFSET 0x0B28
++#define DIPCQ_W1A_DIPCQ_CQ_THR3_CTL_OFFSET 0x0B38
++#define DIPCQ_W1A_DIPCQ_CQ_THR4_CTL_OFFSET 0x0B48
++#define DIPCQ_W1A_DIPCQ_CQ_THR5_CTL_OFFSET 0x0B58
++#define DIPCQ_W1A_DIPCQ_CQ_THR6_CTL_OFFSET 0x0B68
++#define DIPCQ_W1A_DIPCQ_CQ_THR7_CTL_OFFSET 0x0B78
++#define DIPCQ_W1A_DIPCQ_CQ_THR8_CTL_OFFSET 0x0B88
++#define DIPCQ_W1A_DIPCQ_CQ_THR9_CTL_OFFSET 0x0B98
++#define DIPCQ_W1A_DIPCQ_CQ_THR10_CTL_OFFSET 0x0BA8
++#define DIPCQ_W1A_DIPCQ_CQ_THR11_CTL_OFFSET 0x0BB8
++#define DIPCQ_W1A_DIPCQ_CQ_THR12_CTL_OFFSET 0x0BC8
++#define DIPCQ_W1A_DIPCQ_CQ_THR13_CTL_OFFSET 0x0BD8
++#define DIPCQ_W1A_DIPCQ_CQ_THR14_CTL_OFFSET 0x0BE8
++
++#define WPE_INIT_ARRAY_COUNT	ARRAY_SIZE(mtk_imgsys_wpe_init_ary)
++/********************************************************************
++ * Global Variable
++ ********************************************************************/
++static const struct mtk_imgsys_init_array mtk_imgsys_wpe_init_ary[] = {
++	{ WPE_TOP_CTL_INT_EN_OFFSET, 0x80000000 },
++	{ WPE_TOP_CTL_INT_STATUSX_OFFSET, 0xFFFFFFFF },
++	{ WPE_TOP_CQ_IRQ_EN_OFFSET, 0x80000000 },
++	{ WPE_TOP_CQ_IRQ_STX_OFFSET, 0xFFFFFFFF },
++	{ WPE_TOP_CQ_IRQ_EN2_OFFSET, 0x80000000 },
++	{ WPE_TOP_CQ_IRQ_STX2_OFFSET, 0xFFFFFFFF },
++	{ WPE_TOP_CQ_IRQ_EN3_OFFSET, 0x80000000 },
++	{ WPE_TOP_CQ_IRQ_STX3_OFFSET, 0xFFFFFFFF },
++	{ WPE_CACHE_RWCTL_CTL_OFFSET, 0x00000002 },
++	{ WPE_DMA_DMA_ERR_CTRL_OFFSET, 0x80000000 },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR0_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR1_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR2_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR3_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR4_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR5_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR6_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR7_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR8_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR9_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR10_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR11_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR12_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR13_CTL_OFFSET, CQ_THRX_CTL },
++	{ DIPCQ_W1A_DIPCQ_CQ_THR14_CTL_OFFSET, CQ_THRX_CTL },
++};
++
++static void __iomem *wpe_reg_base[MTK_IMGSYS_WPE_HW_SET];
++
++/********************************************************************
++ * Functions
++ ********************************************************************/
++void imgsys_wpe_init(struct mtk_imgsys_dev *imgsys_dev)
++{
++	unsigned int i, hw_id, hw_idx;
++	void __iomem *offset = NULL;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_WPE_HW_SET; hw_idx++) {
++		hw_id = IMGSYS_REG_WPE1 + hw_idx;
++		wpe_reg_base[hw_idx] = of_iomap(imgsys_dev->dev->of_node, hw_id);
++		if (!wpe_reg_base[hw_idx]) {
++			dev_info(imgsys_dev->dev,
++				 "%s: error: unable to iomap wpe_%d registers, devnode(%s).\n",
++				 __func__, hw_id, imgsys_dev->dev->of_node->name);
++			continue;
++		}
++
++		for (i = 0 ; i < WPE_INIT_ARRAY_COUNT; i++) {
++			offset = wpe_reg_base[hw_idx] + mtk_imgsys_wpe_init_ary[i].offset;
++			writel(mtk_imgsys_wpe_init_ary[i].value, offset);
++		}
++	}
++}
++EXPORT_SYMBOL_GPL(imgsys_wpe_init);
++
++void imgsys_wpe_uninit(struct mtk_imgsys_dev *imgsys_dev)
++{
++	unsigned int hw_idx;
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_WPE_HW_SET; hw_idx++) {
++		iounmap(wpe_reg_base[hw_idx]);
++		wpe_reg_base[hw_idx] = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(imgsys_wpe_uninit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MediaTek IMGSYS Modules");
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
+new file mode 100644
+index 000000000000..6001575265e6
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/modules/mtk_imgsys-wpe.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ *
++ * Author: Floria Huang <floria.huang@mediatek.com>
++ *
++ */
++
++#ifndef _MTK_IMGSYS_WPE_H_
++#define _MTK_IMGSYS_WPE_H_
++
++#include "../mtk_imgsys-dev.h"
++
++void imgsys_wpe_init(struct mtk_imgsys_dev *imgsys_dev);
++void imgsys_wpe_uninit(struct mtk_imgsys_dev *imgsys_dev);
++
++#endif /* _MTK_IMGSYS_WPE_H_ */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-dev.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-dev.h
+index b69cfd0043d3..b8c30cb32b97 100644
+--- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-dev.h
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-dev.h
+@@ -23,7 +23,7 @@
+ #include <linux/videodev2.h>
+ #include <media/videobuf2-core.h>
+ #include <media/videobuf2-v4l2.h>
+-
++#include "mtk_imgsys-module_ops.h"
+ #include "mtk_header_desc.h"
+ 
+ #define MTK_IMGSYS_MEDIA_MODEL_NAME	"MTK-ISP-DIP-V4L2"
+@@ -273,6 +273,7 @@ struct mtk_imgsys_pipe {
+  * @v4l2_dev: V4L2 device structure for video device operations.
+  * @imgsys_pipe: Image system pipeline configuration structure.
+  * @cust_pipes: Pointer to custom pipeline descriptors.
++ * @modules: Pointer to image system module operations.
+  * @clks: Array of clock bulk data for managing multiple clocks.
+  * @num_clks: Number of clocks in the clock array.
+  * @larbs: Array of device pointers for managing LARB (local arbiter).
+@@ -281,6 +282,9 @@ struct mtk_imgsys_pipe {
+  * @rproc_handle: Handle for remote processor interface.
+  * @smem_dev: Device structure for shared memory operations.
+  * @num_mods: Number of modules in the image system.
++ * @init_kref: Reference counter for initialization tracking.
++ * @hw_op_lock: Mutex for serializing hardware operations.
++ * @stream_cnt: Counter for active streams, increased on stream on.
+  */
+ struct mtk_imgsys_dev {
+ 	/* Device and Resource Information */
+@@ -292,6 +296,8 @@ struct mtk_imgsys_dev {
+ 	struct mtk_imgsys_pipe imgsys_pipe;
+ 	/* Imgsys Pipeline Information */
+ 	const struct mtk_imgsys_pipe_desc *cust_pipes;
++	/* Imgsys Moudles Information */
++	const struct module_ops *modules;
+ 	/* Clock Information */
+ 	struct clk_bulk_data *clks;
+ 	int num_clks;
+@@ -304,6 +310,10 @@ struct mtk_imgsys_dev {
+ 	struct device *smem_dev;
+ 	/* Number of modules */
+ 	int num_mods;
++	/* Synchronization and Flow Control */
++	struct kref init_kref;
++	struct mutex hw_op_lock; /* Protect HW operations */
++	int stream_cnt;
+ };
+ 
+ /**
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_common.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_common.h
+new file mode 100644
+index 000000000000..dd02a8fa28d4
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_common.h
+@@ -0,0 +1,82 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2018 MediaTek Inc.
@@ -1082,155 +724,543 @@ index 000000000000..f45cacc7bfff
 + *
 + */
 +
-+#ifndef _MTK_IMGSYS_NDD_DEBUGFS_H_
-+#define _MTK_IMGSYS_NDD_DEBUGFS_H_
++#ifndef _MTK_IMGSYS_CORE_REG_H_
++#define _MTK_IMGSYS_CORE_REG_H_
++
++/**
++ * Define the minimum and maximum hardware IDs
++ * for different MediaTek Image System components
++ */
++#define WPE_HW_MIN_ID	IMGSYS_REG_WPE1
++#define WPE_HW_MAX_ID	IMGSYS_REG_WPE3
++#define TRAW_HW_MIN_ID	IMGSYS_REG_TRAW1
++#define TRAW_HW_MAX_ID	IMGSYS_REG_TRAW3
++#define DIP_HW_MIN_ID	IMGSYS_REG_DIP1
++#define DIP_HW_MAX_ID	IMGSYS_REG_DIP2
++#define PQDIP_HW_MIN_ID	IMGSYS_REG_PQDIP1
++#define PQDIP_HW_MAX_ID	IMGSYS_REG_PQDIP2
++#define ME_HW_MIN_ID	IMGSYS_REG_ME
++#define ME_HW_MAX_ID	IMGSYS_REG_ME
++
++/* Macro to calculate the size of a hardware set */
++#define HW_SET_SIZE(min_id, max_id) ((max_id) - (min_id) + 1)
++
++/* Define the hardware set sizes */
++#define MTK_IMGSYS_WPE_HW_SET	HW_SET_SIZE(WPE_HW_MIN_ID, WPE_HW_MAX_ID)
++#define MTK_IMGSYS_TRAW_HW_SET	HW_SET_SIZE(TRAW_HW_MIN_ID, TRAW_HW_MAX_ID)
++#define MTK_IMGSYS_DIP_HW_SET	HW_SET_SIZE(DIP_HW_MIN_ID, DIP_HW_MAX_ID)
++#define MTK_IMGSYS_PQDIP_HW_SET	HW_SET_SIZE(PQDIP_HW_MIN_ID, PQDIP_HW_MAX_ID)
++#define MTK_IMGSYS_ME_HW_SET	HW_SET_SIZE(ME_HW_MIN_ID, ME_HW_MAX_ID)
++
++/* Define the CQ's control register bits */
++#define CQ_THRX_CTL_EN		BIT(0)
++#define CQ_THRX_CTL_MODE	BIT(4)
++#define CQ_THRX_CTL			(CQ_THRX_CTL_EN | CQ_THRX_CTL_MODE)
++
++/**
++ * enum mtk_imgsys_reg_id
++ *
++ * Definition about hw register map id
++ * The engine order should be the same as register order in dts
++ */
++enum mtk_imgsys_reg_id {
++	IMGSYS_REG_TOP = 0,
++	IMGSYS_REG_TRAW1,
++	IMGSYS_REG_TRAW2,
++	IMGSYS_REG_TRAW3,
++	IMGSYS_REG_DIP1,
++	IMGSYS_REG_DIP2,
++	IMGSYS_REG_PQDIP1,
++	IMGSYS_REG_PQDIP2,
++	IMGSYS_REG_WPE1,
++	IMGSYS_REG_WPE2,
++	IMGSYS_REG_WPE3,
++	IMGSYS_REG_WPE1_DIP1,
++	IMGSYS_REG_ME,
++	IMGSYS_REG_WPE2_DIP1,
++	IMGSYS_REG_WPE3_DIP1,
++	IMGSYS_REG_DIP1_TOP,
++	IMGSYS_REG_DIP2_TOP
++};
++
++/**
++ * struct mtk_imgsys_init_array - Array structure for initializing registers
++ * @offset: Offset of the register
++ * @val: Value to be written to the register
++ *
++ * This structure represents an array element used for initializing registers
++ * in the MediaTek Image System. Each element contains the offset of the register
++ * and the value to be written to that register.
++ */
++struct mtk_imgsys_init_array {
++	unsigned int    offset;
++	unsigned int    value;
++};
++#endif /* _MTK_IMGSYS_CORE_REG_H_ */
++
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
+new file mode 100644
+index 000000000000..5daa8f863bd2
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2018 MediaTek Inc.
++ *
++ * Author: Christopher Chen <christopher.chen@mediatek.com>
++ *
++ */
++
++#include <linux/device.h>
++#include <linux/of_address.h>
++#include "mtk_imgsys-module_common.h"
++#include "mtk_imgsys-module_main.h"
++
++/********************************************************************
++ * Global Define
++ ********************************************************************/
++/* Define the reset register bits */
++#define SW_RST				(0x000C)
++
++/********************************************************************
++ * Global Variable
++ ********************************************************************/
++static void __iomem *imgsys_main_reg_base;
++static void __iomem *wpe_dip1_reg_base;
++static void __iomem *wpe_dip2_reg_base;
++static void __iomem *wpe_dip3_reg_base;
++static void __iomem *dip1_reg_base;
++static void __iomem *dip2_reg_base;
++
++/********************************************************************
++ * Functions
++ ********************************************************************/
++static void imgsys_main_hw_init(struct mtk_imgsys_dev *imgsys_dev)
++{
++	void __iomem *wpe_reg_base = NULL;
++	void __iomem *wpe_ctrl = NULL;
++	unsigned int hw_idx = 0;
++
++	/* Enable all LARBs of ImgSys */
++	/**
++	 * The flow will be updated based on the patch series 958467 from
++	 * the Linux MediaTek project. For more details, refer to the following link:
++	 * https://patchwork.kernel.org/project/linux-mediatek/list/?series=958467
++	 */
++
++	/* Reset ImgSys hardware */
++	iowrite32(0xFFFFFFFF, dip1_reg_base + SW_RST);
++	iowrite32(0xFFFFFFFF, dip2_reg_base + SW_RST);
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_WPE_HW_SET; hw_idx++) {
++		if (hw_idx == 0)
++			wpe_reg_base = wpe_dip1_reg_base;
++		else if (hw_idx == 1)
++			wpe_reg_base = wpe_dip2_reg_base;
++		else
++			wpe_reg_base = wpe_dip3_reg_base;
++
++		wpe_ctrl = wpe_reg_base + SW_RST;
++		iowrite32(0xFFFFFFFF, wpe_ctrl);
++		iowrite32(0x0, wpe_ctrl);
++	}
++
++	iowrite32(0x00CF00FF, imgsys_main_reg_base + SW_RST);
++	iowrite32(0x0, imgsys_main_reg_base + SW_RST);
++
++	iowrite32(0x0, dip1_reg_base + SW_RST);
++	iowrite32(0x0, dip2_reg_base + SW_RST);
++
++	for (hw_idx = 0; hw_idx < MTK_IMGSYS_WPE_HW_SET; hw_idx++) {
++		if (hw_idx == 0)
++			wpe_reg_base = wpe_dip1_reg_base;
++		else if (hw_idx == 1)
++			wpe_reg_base = wpe_dip2_reg_base;
++		else
++			wpe_reg_base = wpe_dip3_reg_base;
++
++		wpe_ctrl = wpe_reg_base + SW_RST;
++		iowrite32(0xFFFFFFFF, wpe_ctrl);
++		iowrite32(0x0, wpe_ctrl);
++	}
++
++	iowrite32(0x00CF00FF, imgsys_main_reg_base + SW_RST);
++	iowrite32(0x0, imgsys_main_reg_base + SW_RST);
++
++	/* Disable all LARBs of ImgSys*/
++	/**
++	 * The flow will be updated based on the patch series 958467 from
++	 * the Linux MediaTek project. For more details, refer to the following link:
++	 * https://patchwork.kernel.org/project/linux-mediatek/list/?series=958467
++	 */
++}
++
++void imgsys_main_init(struct mtk_imgsys_dev *imgsys_dev)
++{
++	imgsys_main_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_TOP);
++	if (!imgsys_main_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap imgsys_top registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	wpe_dip1_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_WPE1_DIP1);
++	if (!wpe_dip1_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap wpe_dip1 registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	wpe_dip2_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_WPE2_DIP1);
++	if (!wpe_dip2_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap wpe_dip2 registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	wpe_dip3_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_WPE3_DIP1);
++	if (!wpe_dip3_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap wpe_dip3 registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	dip1_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_DIP1_TOP);
++	if (!dip1_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap dip_top registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	dip2_reg_base = of_iomap(imgsys_dev->dev->of_node, IMGSYS_REG_DIP2_TOP);
++	if (!dip2_reg_base) {
++		dev_info(imgsys_dev->dev, "%s Unable to ioremap dip_top_nr registers\n",
++			 __func__);
++		dev_info(imgsys_dev->dev, "%s of_iomap fail, devnode(%s).\n",
++			 __func__, imgsys_dev->dev->of_node->name);
++		return;
++	}
++
++	imgsys_main_hw_init(imgsys_dev);
++}
++
++void imgsys_main_uninit(struct mtk_imgsys_dev *imgsys_dev)
++{
++	if (imgsys_main_reg_base) {
++		iounmap(imgsys_main_reg_base);
++		imgsys_main_reg_base = NULL;
++	}
++
++	if (wpe_dip1_reg_base) {
++		iounmap(wpe_dip1_reg_base);
++		wpe_dip1_reg_base = NULL;
++	}
++
++	if (wpe_dip2_reg_base) {
++		iounmap(wpe_dip2_reg_base);
++		wpe_dip2_reg_base = NULL;
++	}
++
++	if (wpe_dip3_reg_base) {
++		iounmap(wpe_dip3_reg_base);
++		wpe_dip3_reg_base = NULL;
++	}
++
++	if (dip1_reg_base) {
++		iounmap(dip1_reg_base);
++		dip1_reg_base = NULL;
++	}
++
++	if (dip2_reg_base) {
++		iounmap(dip2_reg_base);
++		dip2_reg_base = NULL;
++	}
++}
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.h
+new file mode 100644
+index 000000000000..2a3fbd08d128
+--- /dev/null
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_main.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2018 MediaTek Inc.
++ *
++ * Author: Christopher Chen <christopher.chen@mediatek.com>
++ *
++ */
++
++#ifndef _MTK_IMGSYS_DEBUG_H_
++#define _MTK_IMGSYS_DEBUG_H_
 +
 +#include "mtk_imgsys-dev.h"
 +
-+#define NDD_FP_SIZE 256 /* NDD file path size */
++void imgsys_main_init(struct mtk_imgsys_dev *imgsys_dev);
++void imgsys_main_uninit(struct mtk_imgsys_dev *imgsys_dev);
 +
-+enum mtk_imgsys_ndd_eng {
-+	IMGSYS_NDD_ENG_WPE_EIS	= 0,
-+	IMGSYS_NDD_ENG_WPE_TNR	= 1,
-+	IMGSYS_NDD_ENG_WPE_LITE	= 2,
-+	IMGSYS_NDD_ENG_ADL_A	= 3,
-+	IMGSYS_NDD_ENG_ADL_B	= 4,
-+	IMGSYS_NDD_ENG_TRAW	= 5,
-+	IMGSYS_NDD_ENG_LTR	= 6,
-+	IMGSYS_NDD_ENG_XTR	= 7,
-+	IMGSYS_NDD_ENG_DIP	= 8,
-+	IMGSYS_NDD_ENG_PQDIP_A	= 9,
-+	IMGSYS_NDD_ENG_PQDIP_B	= 10,
-+	IMGSYS_NDD_ENG_ME	= 11,
-+	IMGSYS_NDD_ENG_MAX_NUM	= 12
-+};
-+
-+struct imgsys_ndd_frm_dump_info {
-+	char __user *user_buffer;
-+	unsigned int hw_comb;
-+	enum mtk_imgsys_ndd_eng eng_e;
-+	u64 *cq_ofst;
-+	u64 *wpe_psp_ofst;
-+	char *wpe_fp;
-+	char *fp;
-+};
-+
-+struct ndd_swfrm_info_t {
-+	struct mtk_imgsys_dev *imgsys_dev;
-+	struct swfrm_info *gwfrm_info;
-+	struct list_head list;
-+	atomic_t gce_cb_work_idx;
-+} __packed;
-+
-+#if defined(CONFIG_DEBUG_FS)
-+void imgsys_ndd_debugfs_init(struct mtk_imgsys_dev *imgsys_dev);
-+void imgsys_ndd_debugfs_uninit(struct mtk_imgsys_dev *imgsys_dev);
-+#else
-+static inline void imgsys_ndd_debugfs_init(struct mtk_imgsys_dev *imgsys_dev)
-+{
-+}
-+
-+static inline void imgsys_ndd_debugfs_uninit(struct mtk_imgsys_dev *imgsys_dev)
-+{
-+}
-+#endif
-+void imgsys_ndd_swfrm_list_add(struct mtk_imgsys_dev *imgsys_dev,
-+			       struct swfrm_info *gwfrm_info);
 +#endif /* _MTK_IMGSYS_DEBUG_H_ */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
+index 6dc4b7b60832..a2eea8f4fb3c 100644
+--- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-module_ops.h
+@@ -24,4 +24,30 @@ enum mtk_imgsys_module {
+ 	IMGSYS_MOD_MAX,
+ };
+ 
++struct mtk_imgsys_dev;
 +
++/**
++ * struct module_ops - Operations for a specific module in the MediaTek Image System
++ * @module_id: Identifier for the module.
++ * @init: Function pointer to initialize the module.
++ *        This function sets the default values for various software-related
++ *        parameters and ensures that the module is ready for operation.
++ *        Example function: imgsys_dip_init
++ * @uninit: Function pointer to uninitialize the module.
++ *          This function resets various software-related parameters to ensure
++ *          the module is properly cleaned up and ready for shutdown.
++ *          Example function: imgsys_dip_uninit
++ *
++ * This structure defines a set of operations for specific modules within the
++ * MediaTek Image System, such as WPE (Warping Engine), TRAW (Tile-Raw),
++ * DIP (Digital Image Processing), PQDIP (Picture Quality Digital Image
++ * Processing), and ME (Motion Estimation). Each module is identified by
++ * a unique identifier and includes function pointers for operations like
++ * initialization and deinitialization.
++ */
++struct module_ops {
++	int module_id;
++	void (*init)(struct mtk_imgsys_dev *imgsys_dev);
++	void (*uninit)(struct mtk_imgsys_dev *imgsys_dev);
++};
+ #endif /* _MTK_IMGSYS_MODULES_H_ */
+diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-of.h b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-of.h
+index 5088c9df704c..f34ea9465745 100644
+--- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-of.h
++++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-of.h
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/clk.h>
+ #include "mtk_imgsys-dev.h"
++#include "mtk_imgsys-module_ops.h"
+ 
+ /**
+  * struct mtk_imgsys_mod_pipe_desc - Description of a module's pipeline
+@@ -31,6 +32,7 @@ struct mtk_imgsys_mod_pipe_desc {
+  * @mod_num: Number of modules in the pipeline.
+  * @pipe_settings: Pointer to pipeline settings for the module.
+  * @pipe_num: Number of pipeline settings.
++ * @imgsys_modules: Pointer to module operations for image system modules.
+  */
+ struct cust_data {
+ 	struct clk_bulk_data *clks;
+@@ -39,6 +41,7 @@ struct cust_data {
+ 	unsigned int mod_num;
+ 	const struct mtk_imgsys_pipe_desc *pipe_settings;
+ 	unsigned int pipe_num;
++	const struct module_ops *imgsys_modules;
+ };
+ 
+ /**
 diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-sys.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-sys.c
-index 36088a5bda8e..a87b254cd114 100644
+index 9cdcdb0a0200..9f118491b37d 100644
 --- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-sys.c
 +++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-sys.c
-@@ -16,6 +16,7 @@
- #include "mtk_imgsys-gce_work.h"
- #include "mtk_header_desc.h"
- #include "mtk_imgsys_v4l2_vnode.h"
-+#include "mtk_imgsys-ndd_debugfs.h"
+@@ -6,7 +6,45 @@
+  *
+  */
  
- #define FRAME_STATE_INIT		0
- #define FRAME_STATE_HW_TIMEOUT		1
-@@ -60,6 +61,7 @@ static void imgsys_cmdq_cb_func(struct imgsys_cmdq_cb_data data)
- 	struct mtk_imgsys_dev *imgsys_dev;
- 	struct swfrm_info *swfrminfo_cb;
- 	struct gce_cb_work *gwork;
-+	struct ndd_swfrm_info_t *ndd_swfrm;
++#include <linux/pm_runtime.h>
+ #include "mtk_imgsys-sys.h"
++#include "mtk_imgsys-dev.h"
++
++static int mtk_imgsys_hw_connect(struct mtk_imgsys_dev *imgsys_dev)
++{
++	int ret, i;
++
++	ret = pm_runtime_get_sync(imgsys_dev->dev);
++	if (ret < 0) {
++		dev_err(imgsys_dev->dev, "Failed to sync runtime PM: %d\n", ret);
++		return ret;
++	}
++
++	/* Set default value for hardware modules */
++	for (i = 0; i < (imgsys_dev->num_mods); i++)
++		imgsys_dev->modules[i].init(imgsys_dev);
++
++	kref_init(&imgsys_dev->init_kref);
++
++	return 0;
++}
++
++static void module_uninit(struct kref *kref)
++{
++	struct mtk_imgsys_dev *imgsys_dev;
++	int i;
++
++	imgsys_dev = container_of(kref, struct mtk_imgsys_dev, init_kref);
++
++	for (i = 0; i < (imgsys_dev->num_mods); i++)
++		if (imgsys_dev->modules[i].uninit)
++			imgsys_dev->modules[i].uninit(imgsys_dev);
++}
++
++static void mtk_imgsys_hw_disconnect(struct mtk_imgsys_dev *imgsys_dev)
++{
++	kref_put(&imgsys_dev->init_kref, module_uninit);
++}
  
- 	swfrminfo_cb = data.data;
- 	pipe = (struct mtk_imgsys_pipe *)swfrminfo_cb->pipe;
-@@ -94,6 +96,12 @@ static void imgsys_cmdq_cb_func(struct imgsys_cmdq_cb_data data)
- 		gwork->pipe = swfrminfo_cb->pipe;
- 		init_waitqueue_head(&gwork->wait_queue);
+ void mtk_imgsys_hw_enqueue(struct mtk_imgsys_dev *imgsys_dev,
+ 			   struct mtk_imgsys_request *req)
+@@ -16,12 +54,43 @@ void mtk_imgsys_hw_enqueue(struct mtk_imgsys_dev *imgsys_dev,
  
-+		if (swfrminfo_cb->user_info[0].ndd_fp[0] != '\0') {
-+			ndd_swfrm = (struct ndd_swfrm_info_t *)swfrminfo_cb->ndd_swfrm_info;
-+			if (ndd_swfrm)
-+				atomic_set(&ndd_swfrm->gce_cb_work_idx, gwork->work_idx);
+ int mtk_imgsys_hw_streamon(struct mtk_imgsys_pipe *pipe)
+ {
+-	/* Function implementation will be provided in subsequent patches */
++	struct mtk_imgsys_dev *imgsys_dev = pipe->imgsys_dev;
++	int ret;
++
++	mutex_lock(&imgsys_dev->hw_op_lock);
++	if (!imgsys_dev->stream_cnt) {
++		ret = mtk_imgsys_hw_connect(pipe->imgsys_dev);
++		if (ret) {
++			dev_info(pipe->imgsys_dev->dev,
++				 "%s:%s: pipe(%d) connect to dip_hw failed\n",
++				 __func__, pipe->desc->name, pipe->desc->id);
++			mutex_unlock(&imgsys_dev->hw_op_lock);
++			return ret;
 +		}
++	}
++	imgsys_dev->stream_cnt++;
++	mutex_unlock(&imgsys_dev->hw_op_lock);
 +
- 		queue_work(req->imgsys_pipe->imgsys_dev->gcecb_wq, &gwork->work);
- 	}
++	dev_dbg(pipe->imgsys_dev->dev,
++		"%s:%s: stream on, id(%d), stream cnt(%d)\n",
++		__func__, pipe->desc->name, pipe->desc->id, imgsys_dev->stream_cnt);
++
+ 	return 0;
  }
-@@ -207,6 +215,9 @@ static void imgsys_scp_handler(void *data, unsigned int len, void *priv)
  
- 	up(&imgsys_dev->sem);
- 
-+	if (swfrm_info->user_info[0].ndd_fp[0] != '\0')
-+		imgsys_ndd_swfrm_list_add(imgsys_dev, swfrm_info);
+ int mtk_imgsys_hw_streamoff(struct mtk_imgsys_pipe *pipe)
+ {
+-	/* Function implementation will be provided in subsequent patches */
++	struct mtk_imgsys_dev *imgsys_dev = pipe->imgsys_dev;
 +
- 	INIT_WORK(&req->runner_work, imgsys_runner_func);
- 	queue_work(req->imgsys_pipe->imgsys_dev->runner_wq,
- 		   &req->runner_work);
++	dev_dbg(pipe->imgsys_dev->dev,
++		"%s:%s: stream off, id(%d), stream cnt(%d)\n",
++		__func__, pipe->desc->name, pipe->desc->id, imgsys_dev->stream_cnt);
++
++	mutex_lock(&imgsys_dev->hw_op_lock);
++	imgsys_dev->stream_cnt--;
++	if (!imgsys_dev->stream_cnt)
++		mtk_imgsys_hw_disconnect(imgsys_dev);
++	mutex_unlock(&imgsys_dev->hw_op_lock);
++
+ 	return 0;
+ }
 diff --git a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-v4l2.c b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-v4l2.c
-index ea2ce03c2619..b0088d4de69c 100644
+index 919c69493bbc..e25f17b98649 100644
 --- a/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-v4l2.c
 +++ b/drivers/media/platform/mediatek/isp/isp_7x/imgsys/mtk_imgsys-v4l2.c
-@@ -26,6 +26,7 @@
- #include "modules/mtk_imgsys-traw.h"
- #include "modules/mtk_imgsys-pqdip.h"
- #include "modules/mtk_imgsys-wpe.h"
-+#include "modules/mtk_imgsys-me.h"
- #include "mtk_imgsys-of.h"
+@@ -18,8 +18,13 @@
+ #include <media/v4l2-subdev.h>
+ #include <media/v4l2-event.h>
+ #include "linux/mtkisp_imgsys.h"
+-#include "mtk_imgsys-of.h"
+ #include "mtk_imgsys-module_ops.h"
++#include "mtk_imgsys-module_main.h"
++#include "modules/mtk_imgsys-dip.h"
++#include "modules/mtk_imgsys-traw.h"
++#include "modules/mtk_imgsys-pqdip.h"
++#include "modules/mtk_imgsys-wpe.h"
++#include "mtk_imgsys-of.h"
  #include "mtk_imgsys-vnode_id.h"
  #include "mtk_imgsys_v4l2_vnode.h"
-@@ -1846,31 +1847,37 @@ static const struct module_ops imgsys_isp7_modules[] = {
- 	[IMGSYS_MOD_IMGMAIN] = {
- 		.module_id = IMGSYS_MOD_IMGMAIN,
- 		.init = imgsys_main_init,
-+		.ndddump = NULL,
- 		.uninit = imgsys_main_uninit,
- 	},
- 	[IMGSYS_MOD_WPE] = {
- 		.module_id = IMGSYS_MOD_WPE,
- 		.init = imgsys_wpe_init,
-+		.ndddump = imgsys_wpe_ndd_dump,
- 		.uninit = imgsys_wpe_uninit,
- 	},
- 	[IMGSYS_MOD_TRAW] = {
- 		.module_id = IMGSYS_MOD_TRAW,
- 		.init = imgsys_traw_init,
-+		.ndddump = imgsys_traw_ndd_dump,
- 		.uninit = imgsys_traw_uninit,
- 	},
- 	[IMGSYS_MOD_DIP] = {
- 		.module_id = IMGSYS_MOD_DIP,
- 		.init = imgsys_dip_init,
-+		.ndddump = imgsys_dip_ndd_dump,
- 		.uninit = imgsys_dip_uninit,
- 	},
- 	[IMGSYS_MOD_PQDIP] = {
- 		.module_id = IMGSYS_MOD_PQDIP,
- 		.init = imgsys_pqdip_init,
-+		.ndddump = imgsys_pqdip_ndd_dump,
- 		.uninit = imgsys_pqdip_uninit,
- 	},
- 	[IMGSYS_MOD_ME] = {
- 		.module_id = IMGSYS_MOD_ME,
- 		.init = NULL,
-+		.ndddump = imgsys_me_ndd_dump,
- 		.uninit = NULL,
+ #include "mtk_imgsys-dev.h"
+@@ -1499,6 +1504,7 @@ static int mtk_imgsys_probe(struct platform_device *pdev)
+ 	init_imgsys_pipeline(data);
+ 
+ 	imgsys_dev->cust_pipes = data->pipe_settings;
++	imgsys_dev->modules = data->imgsys_modules;
+ 	imgsys_dev->dev = &pdev->dev;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+@@ -1511,6 +1517,8 @@ static int mtk_imgsys_probe(struct platform_device *pdev)
+ 	dev_set_drvdata(&pdev->dev, imgsys_dev);
+ 
+ 	imgsys_dev->num_mods = data->mod_num;
++	imgsys_dev->stream_cnt = 0;
++	mutex_init(&imgsys_dev->hw_op_lock);
+ 
+ 	/* Get Clocks */
+ 	imgsys_dev->clks = data->clks;
+@@ -1613,6 +1621,7 @@ static void mtk_imgsys_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	platform_driver_unregister(&mtk_imgsys_larb_driver);
+ 	mtk_imgsys_dev_v4l2_release(imgsys_dev);
++	mutex_destroy(&imgsys_dev->hw_op_lock);
+ 	devm_kfree(&pdev->dev, imgsys_dev->larbs);
+ 	devm_kfree(&pdev->dev, imgsys_dev);
+ }
+@@ -1709,6 +1718,39 @@ static struct clk_bulk_data imgsys_isp7_clks[] = {
+ 	{ .id = "ME_CG_LARB12" },
+ };
+ 
++static const struct module_ops imgsys_isp7_modules[] = {
++	[IMGSYS_MOD_IMGMAIN] = {
++		.module_id = IMGSYS_MOD_IMGMAIN,
++		.init = imgsys_main_init,
++		.uninit = imgsys_main_uninit,
++	},
++	[IMGSYS_MOD_WPE] = {
++		.module_id = IMGSYS_MOD_WPE,
++		.init = imgsys_wpe_init,
++		.uninit = imgsys_wpe_uninit,
++	},
++	[IMGSYS_MOD_TRAW] = {
++		.module_id = IMGSYS_MOD_TRAW,
++		.init = imgsys_traw_init,
++		.uninit = imgsys_traw_uninit,
++	},
++	[IMGSYS_MOD_DIP] = {
++		.module_id = IMGSYS_MOD_DIP,
++		.init = imgsys_dip_init,
++		.uninit = imgsys_dip_uninit,
++	},
++	[IMGSYS_MOD_PQDIP] = {
++		.module_id = IMGSYS_MOD_PQDIP,
++		.init = imgsys_pqdip_init,
++		.uninit = imgsys_pqdip_uninit,
++	},
++	[IMGSYS_MOD_ME] = {
++		.module_id = IMGSYS_MOD_ME,
++		.init = NULL,
++		.uninit = NULL,
++	},
++};
++
+ static const struct cust_data imgsys_data[] = {
+ 	[0] = {
+ 		.clks = imgsys_isp7_clks,
+@@ -1717,6 +1759,7 @@ static const struct cust_data imgsys_data[] = {
+ 		.mod_num = ARRAY_SIZE(module_pipe_isp7),
+ 		.pipe_settings = pipe_settings_isp7,
+ 		.pipe_num = ARRAY_SIZE(pipe_settings_isp7),
++		.imgsys_modules = imgsys_isp7_modules,
  	},
  };
+ 
 -- 
 2.45.2
 
