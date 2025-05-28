@@ -1,65 +1,61 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277C824501B;
-	Wed, 28 May 2025 06:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3C81FF5F9
+	for <linux-media@vger.kernel.org>; Wed, 28 May 2025 07:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748414217; cv=none; b=q7meci2dkCJXxZDP46VaQLnxyDCiYYvyfRhnfZ0Et0XTXWXyBSm6Yldyd5SYERKYB0yNM2MzY2kdLGh8wumFsP0+gsiD4//ImU38SZV4THb9oLWv+6UOQoCBQNhAS4LJsl8p/E1335MywXzIdVVacsOo3iOynjsSweUnNS9n2rQ=
+	t=1748418712; cv=none; b=k5g0K8CosM4gdtvp3+9KoyJ5jRMs9m4CsN5GgbAIHGt/1Ggh37fQ7EApJ7dhPnI8ghM6FREtK0JjPpAVXLqhYYgYe+otX/r5cYjSPPYpjgmTkA916bmfTJOJ495VrNjwzYhVCl1ZCGXyaS/AisyVpxPcG46Kk/mSsYSbq1k+VPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748414217; c=relaxed/simple;
-	bh=BvNKnEhufd+F6GRiYQaXbKD2MBUFxJFVwSyElw50TkU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DJlTUobmwWT/OKISvInlD7twimpiUDxUHQvyuuO+Ch6ZGjUFbm8H0cRw3b7T8iXXJP2fqnjg14F25s9VSMPZ0xFCOkVQdP56SDWyOxk25tS0w6u9leQFjPkGR+HaDSM8rT+Amu3NAA8WWdEUnTRzoFi85TItTR6N7J6nqslRPo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=VmiCj6Vt; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1748418712; c=relaxed/simple;
+	bh=t24ImhckggcVWspBx1c0sQVBVvfyIpVhRGFre7kEHew=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Or/MbgAVAs3t1LDK0QWxnYPZ7hNbbIzGCJ4s+m5EadGtcRAzvhfxLk/+PIzCVGl9mU8KGlkjJYB8UsTcNmOIJwS+B0c1sECfl4jvnfTbKuiG9DNHLOTxTM77c2NEwR/i/dYdwvmhNLVjfbBsbjaOQI1LB2QYuggZcjklRscwD9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmT4v2Qc; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="VmiCj6Vt"
-X-UUID: 2036c2b23b8e11f082f7f7ac98dee637-20250528
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UyydQE6YDeAByew+ptZ/+RplCdDZOgzzk65SMk9HPXE=;
-	b=VmiCj6VtUYb0khZ5J5BZi/TkAXw5aEYKXZbpjWTu71LRXxQD4hj9AqoBMkl82bYGZS1EAF20ajd4GIvlJai6n7922gBiNHoYSdiGSp/Sn7srmZ8x3Q22O9bcgfGLy696oWCXP2lZNez0TjCRRrNNbnN8zb2P8JZRaK9A8vIVjD8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:98236805-061b-4582-82c8-88799363fb76,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:0ef645f,CLOUDID:3d02d047-ee4f-4716-aedb-66601021a588,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2036c2b23b8e11f082f7f7ac98dee637-20250528
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-	(envelope-from <irui.wang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 976073134; Wed, 28 May 2025 14:36:46 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Wed, 28 May 2025 14:36:43 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Wed, 28 May 2025 14:36:43 +0800
-From: Irui Wang <irui.wang@mediatek.com>
-To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>, Rob Herring <robh+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	<angelogioacchino.delregno@collabora.com>, <nicolas.dufresne@collabora.com>,
-	<wenst@chromium.org>
-CC: <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Yunfei Dong <yunfei.dong@mediatek.com>,
-	Longfei Wang <longfei.wang@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
-Subject: [PATCH v2 4/6] media: mediatek: encoder: Add a new platform data member
-Date: Wed, 28 May 2025 14:36:30 +0800
-Message-ID: <20250528063633.14054-5-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250528063633.14054-1-irui.wang@mediatek.com>
-References: <20250528063633.14054-1-irui.wang@mediatek.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmT4v2Qc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748418711; x=1779954711;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=t24ImhckggcVWspBx1c0sQVBVvfyIpVhRGFre7kEHew=;
+  b=PmT4v2Qc5MLyvikeYQHkiiv3NepdK0GIKsbZcHICJo90+skxaniegZHK
+   2KWND4yNL4FzfBwp8zIegXj98ziLlwhaRNsLkt+JFxoUtyyMMcHopk/RW
+   ub50GxUxTsBhu+IzAfJhftz2SanjztrdoAznI/gsz89lcPqYUKc2BmTeR
+   Y1Eagu8WfvGKoKnTwhoJlddgr/DXplq9mb1pgXk5NXB/ATRX38bub7beH
+   48cTXcvxmp//WqBqO8gZJ1OeDBerIozWbNzJGUbvIZAhTI5z4M4xGNaLc
+   3UB7C6ei37te4mh7dZcxmfZTr+M+jA756MVKuM7b+sBiONP+W1L1rcoi1
+   A==;
+X-CSE-ConnectionGUID: atMKqzLoTpCHbct3zJJGFw==
+X-CSE-MsgGUID: kMCOIQHgQ7S2yh/G33wcUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11446"; a="61092581"
+X-IronPort-AV: E=Sophos;i="6.15,320,1739865600"; 
+   d="scan'208";a="61092581"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2025 00:51:50 -0700
+X-CSE-ConnectionGUID: staxwvbwSs68D4+IFabl5A==
+X-CSE-MsgGUID: u/8JYeshSGyOr8pna871Ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,320,1739865600"; 
+   d="scan'208";a="144132655"
+Received: from vtg-chrome.bj.intel.com ([172.16.127.120])
+  by fmviesa009.fm.intel.com with ESMTP; 28 May 2025 00:51:47 -0700
+From: bingbu.cao@intel.com
+To: linux-media@vger.kernel.org,
+	sakari.ailus@linux.intel.com,
+	stanislaw.gruszka@linux.intel.com
+Cc: laurent.pinchart@ideasonboard.com,
+	jerry.w.hu@intel.com,
+	hao.yao@intel.com,
+	tian.shu.qiu@intel.com,
+	bingbu.cao@intel.com,
+	bingbu.cao@linux.intel.com
+Subject: [PATCH v2 0/8] Intel IPU7 PCI and input system device drivers
+Date: Wed, 28 May 2025 15:51:38 +0800
+Message-Id: <20250528075146.1763079-1-bingbu.cao@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -67,132 +63,134 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-Add a new platform data member to indicate each encoder IC, so that the
-get chip name function by 'of_device_is_compatible' can be removed.
+From: Bingbu Cao <bingbu.cao@intel.com>
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
----
- .../mediatek/vcodec/encoder/mtk_vcodec_enc.c  | 23 ++-----------------
- .../vcodec/encoder/mtk_vcodec_enc_drv.c       |  6 +++++
- .../vcodec/encoder/mtk_vcodec_enc_drv.h       |  2 ++
- 3 files changed, 10 insertions(+), 21 deletions(-)
+This patch series adds a driver for Intel IPU7 input system.
+IPU7 is the seventh generation of Imaging Processing Unit, it is a
+PCI device which can be found in some Intel Client Platforms such as
+Intel Lunar Lake and Panther Lake, etc.
+User can use IPU7 to capture images from MIPI camera sensors, support
+both MIPI CSI DPHY and CPHY.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-index 03512bf7a072..1a7be3e57eef 100644
---- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc.c
-@@ -198,34 +198,15 @@ static int vidioc_enum_fmt_vid_out(struct file *file, void *priv,
- 			       pdata->num_output_formats);
- }
- 
--static int mtk_vcodec_enc_get_chip_name(void *priv)
--{
--	struct mtk_vcodec_enc_ctx *ctx = fh_to_enc_ctx(priv);
--	struct device *dev = &ctx->dev->plat_dev->dev;
--
--	if (of_device_is_compatible(dev->of_node, "mediatek,mt8173-vcodec-enc"))
--		return 8173;
--	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8183-vcodec-enc"))
--		return 8183;
--	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-enc"))
--		return 8192;
--	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-enc"))
--		return 8195;
--	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8188-vcodec-enc"))
--		return 8188;
--	else
--		return 8173;
--}
--
- static int vidioc_venc_querycap(struct file *file, void *priv,
- 				struct v4l2_capability *cap)
- {
- 	struct mtk_vcodec_enc_ctx *ctx = fh_to_enc_ctx(priv);
-+	const struct mtk_vcodec_enc_pdata *pdata = ctx->dev->venc_pdata;
- 	struct device *dev = &ctx->dev->plat_dev->dev;
--	int platform_name = mtk_vcodec_enc_get_chip_name(priv);
- 
- 	strscpy(cap->driver, dev->driver->name, sizeof(cap->driver));
--	snprintf(cap->card, sizeof(cap->card), "MT%d video encoder", platform_name);
-+	snprintf(cap->card, sizeof(cap->card), "MT%d video encoder", pdata->venc_model_num);
- 
- 	return 0;
- }
-diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
-index bb913dfe5f04..50936949d527 100644
---- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.c
-@@ -380,6 +380,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- }
- 
- static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
-+	.venc_model_num = 8173,
- 	.capture_formats = mtk_video_formats_capture_h264,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
- 	.output_formats = mtk_video_formats_output,
-@@ -390,6 +391,7 @@ static const struct mtk_vcodec_enc_pdata mt8173_avc_pdata = {
- };
- 
- static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
-+	.venc_model_num = 8173,
- 	.capture_formats = mtk_video_formats_capture_vp8,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_vp8),
- 	.output_formats = mtk_video_formats_output,
-@@ -400,6 +402,7 @@ static const struct mtk_vcodec_enc_pdata mt8173_vp8_pdata = {
- };
- 
- static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
-+	.venc_model_num = 8183,
- 	.uses_ext = true,
- 	.capture_formats = mtk_video_formats_capture_h264,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
-@@ -411,6 +414,7 @@ static const struct mtk_vcodec_enc_pdata mt8183_pdata = {
- };
- 
- static const struct mtk_vcodec_enc_pdata mt8188_pdata = {
-+	.venc_model_num = 8188,
- 	.uses_ext = true,
- 	.capture_formats = mtk_video_formats_capture_h264,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
-@@ -423,6 +427,7 @@ static const struct mtk_vcodec_enc_pdata mt8188_pdata = {
- };
- 
- static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
-+	.venc_model_num = 8192,
- 	.uses_ext = true,
- 	.capture_formats = mtk_video_formats_capture_h264,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
-@@ -434,6 +439,7 @@ static const struct mtk_vcodec_enc_pdata mt8192_pdata = {
- };
- 
- static const struct mtk_vcodec_enc_pdata mt8195_pdata = {
-+	.venc_model_num = 8195,
- 	.uses_ext = true,
- 	.capture_formats = mtk_video_formats_capture_h264,
- 	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
-diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
-index 426b1398f815..b3206a7b592d 100644
---- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
-@@ -21,6 +21,7 @@
- /**
-  * struct mtk_vcodec_enc_pdata - compatible data for each IC
-  *
-+ * @venc_model_num: encoder model number
-  * @uses_ext: whether the encoder uses the extended firmware messaging format
-  * @min_bitrate: minimum supported encoding bitrate
-  * @max_bitrate: maximum supported encoding bitrate
-@@ -33,6 +34,7 @@
-  * @uses_common_fw_iface: whether the encoder uses common driver interface
-  */
- struct mtk_vcodec_enc_pdata {
-+	u16 venc_model_num;
- 	bool uses_ext;
- 	u64 min_bitrate;
- 	u64 max_bitrate;
+Sakari suggest during RFC patch review it is better to separate
+the common code between IPU6 and IPU7 into a standalone module.
+So it is expected to move this driver out of staging tree in future
+once the common code separation complete for IPU6.
+
+Changes since v1:
+- Some coding style fix
+- Update firmware ABI header and remove some unused code
+- Remove unnecessary need_reset logic
+- Remove some 'U' suffixes
+
+Bingbu Cao (8):
+  media: Rename the IPU PCI device table header and add IPU7 PCI IDs
+  media: staging/ipu7: add Intel IPU7 PCI device driver
+  media: staging/ipu7: add IPU7 DMA APIs and MMU mapping
+  media: staging/ipu7: add firmware parse, syscom interface and boot
+  media: staging/ipu7: add IPU7 firmware ABI headers
+  media: staging/ipu7: add IPU7 input system device driver
+  MAINTAINERS: add maintainers for Intel IPU7 input system driver
+  media: staging/ipu7: add Makefile, Kconfig and to-do file for IPU7
+
+ MAINTAINERS                                   |    9 +
+ drivers/media/pci/intel/ipu6/ipu6.c           |    2 +-
+ drivers/media/pci/intel/ivsc/mei_csi.c        |    2 +-
+ drivers/staging/media/Kconfig                 |    2 +
+ drivers/staging/media/Makefile                |    1 +
+ drivers/staging/media/ipu7/Kconfig            |   18 +
+ drivers/staging/media/ipu7/Makefile           |   23 +
+ drivers/staging/media/ipu7/TODO               |   19 +
+ .../staging/media/ipu7/abi/ipu7_fw_boot_abi.h |  163 +
+ .../media/ipu7/abi/ipu7_fw_common_abi.h       |  175 ++
+ .../media/ipu7/abi/ipu7_fw_config_abi.h       |   19 +
+ .../media/ipu7/abi/ipu7_fw_insys_config_abi.h |   19 +
+ .../staging/media/ipu7/abi/ipu7_fw_isys_abi.h |  412 +++
+ .../staging/media/ipu7/abi/ipu7_fw_msg_abi.h  |  465 +++
+ .../media/ipu7/abi/ipu7_fw_psys_config_abi.h  |   24 +
+ .../media/ipu7/abi/ipu7_fw_syscom_abi.h       |   49 +
+ drivers/staging/media/ipu7/ipu7-boot.c        |  431 +++
+ drivers/staging/media/ipu7/ipu7-boot.h        |   25 +
+ drivers/staging/media/ipu7/ipu7-bus.c         |  158 +
+ drivers/staging/media/ipu7/ipu7-bus.h         |   69 +
+ .../staging/media/ipu7/ipu7-buttress-regs.h   |  461 +++
+ drivers/staging/media/ipu7/ipu7-buttress.c    | 1192 +++++++
+ drivers/staging/media/ipu7/ipu7-buttress.h    |   77 +
+ drivers/staging/media/ipu7/ipu7-cpd.c         |  276 ++
+ drivers/staging/media/ipu7/ipu7-cpd.h         |   16 +
+ drivers/staging/media/ipu7/ipu7-dma.c         |  477 +++
+ drivers/staging/media/ipu7/ipu7-dma.h         |   46 +
+ drivers/staging/media/ipu7/ipu7-fw-isys.c     |  301 ++
+ drivers/staging/media/ipu7/ipu7-fw-isys.h     |   39 +
+ .../staging/media/ipu7/ipu7-isys-csi-phy.c    | 1034 ++++++
+ .../staging/media/ipu7/ipu7-isys-csi-phy.h    |   16 +
+ .../staging/media/ipu7/ipu7-isys-csi2-regs.h  | 1197 +++++++
+ drivers/staging/media/ipu7/ipu7-isys-csi2.c   |  543 ++++
+ drivers/staging/media/ipu7/ipu7-isys-csi2.h   |   64 +
+ drivers/staging/media/ipu7/ipu7-isys-queue.c  |  829 +++++
+ drivers/staging/media/ipu7/ipu7-isys-queue.h  |   72 +
+ drivers/staging/media/ipu7/ipu7-isys-subdev.c |  348 ++
+ drivers/staging/media/ipu7/ipu7-isys-subdev.h |   53 +
+ drivers/staging/media/ipu7/ipu7-isys-video.c  | 1112 +++++++
+ drivers/staging/media/ipu7/ipu7-isys-video.h  |  117 +
+ drivers/staging/media/ipu7/ipu7-isys.c        | 1166 +++++++
+ drivers/staging/media/ipu7/ipu7-isys.h        |  140 +
+ drivers/staging/media/ipu7/ipu7-mmu.c         |  853 +++++
+ drivers/staging/media/ipu7/ipu7-mmu.h         |  414 +++
+ .../staging/media/ipu7/ipu7-platform-regs.h   |   82 +
+ drivers/staging/media/ipu7/ipu7-syscom.c      |   78 +
+ drivers/staging/media/ipu7/ipu7-syscom.h      |   35 +
+ drivers/staging/media/ipu7/ipu7.c             | 2786 +++++++++++++++++
+ drivers/staging/media/ipu7/ipu7.h             |  242 ++
+ .../{ipu6-pci-table.h => ipu-pci-table.h}     |   14 +-
+ 50 files changed, 16160 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/staging/media/ipu7/Kconfig
+ create mode 100644 drivers/staging/media/ipu7/Makefile
+ create mode 100644 drivers/staging/media/ipu7/TODO
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_boot_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_common_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_config_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_insys_config_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_isys_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_msg_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_psys_config_abi.h
+ create mode 100644 drivers/staging/media/ipu7/abi/ipu7_fw_syscom_abi.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-boot.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-boot.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-bus.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-bus.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-buttress-regs.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-buttress.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-buttress.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-cpd.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-cpd.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-dma.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-dma.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-fw-isys.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-fw-isys.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-csi-phy.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-csi-phy.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-csi2-regs.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-csi2.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-csi2.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-queue.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-queue.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-subdev.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-subdev.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-video.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys-video.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-isys.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-mmu.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-mmu.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-platform-regs.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7-syscom.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7-syscom.h
+ create mode 100644 drivers/staging/media/ipu7/ipu7.c
+ create mode 100644 drivers/staging/media/ipu7/ipu7.h
+ rename include/media/{ipu6-pci-table.h => ipu-pci-table.h} (68%)
+
 -- 
-2.45.2
+2.34.1
 
