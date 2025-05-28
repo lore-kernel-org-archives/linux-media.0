@@ -1,303 +1,271 @@
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417E03595D;
-	Wed, 28 May 2025 06:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668F61C8616;
+	Wed, 28 May 2025 06:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748413564; cv=none; b=fNJd++tr0E822jZc03RqVM9v1HdGsvqYCZcEoCfpY0WdOzP9Gu3Kh5H1KsWGLGkN4doRsFhrw8W42fsAQH5ZdOGay4BS8fkIKiotseMl8eY7XNN8okwcEqjFvCQtqZ4VIMtM2M/bWmmU0puDK1GTqveD5gaZIBZYsm5STwPJdsM=
+	t=1748414213; cv=none; b=AfNtHvHEEquuFzUYwfZYr3sBU9//hhyCRS9mq+aiioSS9q3VtpRl7Ax1g3s8YVk0Yqh35SygTLPieikO/54+WC/KVRzAY9KTqu5s8gzZ7KADjI1VCdex8Dncj687D04vDuSOLTbeUGxNbcEicpzR7CkJLHtz6M0+A7ZLSVa51so=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748413564; c=relaxed/simple;
-	bh=WeWjH41mrEkbusF98EtwUqch+IFJWFOJGcgswpCUM+o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=p8xuyvwFsXImBtxMTRaAYdlnjlwZep66E6Z5uwXD8Z/DOI6ZnQAmfTwGt2nsDQb7JYL1uXZ5aNcARQlC8xWke5mTXqgERKMqM8Mcr5HktfJscIMjd5qLWVXU/JNC9J7EVRGq1w2e+w7Pdws8ATeNqW3IuCyvQ2uvFi6Mj54U3Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Kn0NTP+a; arc=none smtp.client-ip=198.47.23.235
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1748414213; c=relaxed/simple;
+	bh=wGvf+lczpdF4tC5ZslexWPBTCpGNjWb5B5/tw7s3zw0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=taTz9Rmbjn+r9MbmnugoIfK5zNKMSir9Ke4vRsAQ4qGcGCSFQHCZBmbmswqCj2uY8Ydb3E1nCwqCyI8NGQJIfnBN5gtajSlEjrdYiGcHaJOr/bNWzHv2J3cpj+WQctwlq6ZAnE2L9XdQ6nEI2w2hwKJjRumOUwMZ+UlmFEQtKsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=GWZli/gH; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Kn0NTP+a"
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 54S6POS42015803;
-	Wed, 28 May 2025 01:25:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1748413524;
-	bh=RfhQ8nQXc3egTrJ7CgUcsgqkADz9ucH+UQPWVxJcGIU=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=Kn0NTP+aWlYtJFGUAUm7yGdlc8BjtI8dHiWAB1UC+bhDnpe+bZ0D7BqLJNFOqIZ/2
-	 hp187UrCLVplnNg9oKPNqFcPHxOi+cHGA2nQS5YmtyvvrvkSReo44HEzvqiYA9YTJ8
-	 2RTfoaifyhJJe861NXaDImOmc9BMze1b5fYLuPME=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 54S6PNZx3226098
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Wed, 28 May 2025 01:25:24 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
- May 2025 01:25:23 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 28 May 2025 01:25:23 -0500
-Received: from [172.24.227.115] (abhilash-hp.dhcp.ti.com [172.24.227.115])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 54S6PJEI4019676;
-	Wed, 28 May 2025 01:25:19 -0500
-Message-ID: <85243712-e09f-43c3-bdcc-4a7e7be4dc52@ti.com>
-Date: Wed, 28 May 2025 11:55:18 +0530
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="GWZli/gH"
+X-UUID: 1ef564803b8e11f0813e4fe1310efc19-20250528
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=jY1dT6+giYhl1MgZwu+voEOCqO9fC3mI+6aTsCooKTQ=;
+	b=GWZli/gH1vdTmC6lrxoidH7fLErYUSKNpip724MFFmjrZzAdzPz48v0vdAIYBKjCLLlAkG5ovv3Anip/TIQ91p8nrmKIL18MxlyxmwCr+wp1Jdbdzr8XhIbJ5Sse3GJRJmWokyp7gAxShUhtuOFYz1dxZzWCf0uWlQtwVYc8Hjc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.2.1,REQID:d6f861b9-694b-4b37-bb04-98b358389abf,IP:0,UR
+	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-25
+X-CID-META: VersionHash:0ef645f,CLOUDID:40675df1-2ded-45ed-94e2-b3e9fa87100d,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 1ef564803b8e11f0813e4fe1310efc19-20250528
+Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw01.mediatek.com
+	(envelope-from <irui.wang@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 166520434; Wed, 28 May 2025 14:36:43 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Wed, 28 May 2025 14:36:41 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Wed, 28 May 2025 14:36:41 +0800
+From: Irui Wang <irui.wang@mediatek.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Rob Herring <robh+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	<angelogioacchino.delregno@collabora.com>, <nicolas.dufresne@collabora.com>,
+	<wenst@chromium.org>
+CC: <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, Yunfei Dong <yunfei.dong@mediatek.com>,
+	Longfei Wang <longfei.wang@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
+Subject: [PATCH v2 2/6] media: mediatek: encoder: Add support for common firmware interface
+Date: Wed, 28 May 2025 14:36:28 +0800
+Message-ID: <20250528063633.14054-3-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250528063633.14054-1-irui.wang@mediatek.com>
+References: <20250528063633.14054-1-irui.wang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] media: i2c: ds90ub960: Add support for DS90UB954-Q1
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC: <hverkuil@xs4all.nl>, <sakari.ailus@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>, <vaishnav.a@ti.com>,
-        <u-kumar1@ti.com>, <jai.luthra@linux.dev>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mchehab@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-References: <20250523083655.3876005-1-y-abhilashchandra@ti.com>
- <20250523083655.3876005-3-y-abhilashchandra@ti.com>
- <07e4d87f-0893-40d6-8704-f37c743ff979@ideasonboard.com>
-Content-Language: en-US
-From: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
-In-Reply-To: <07e4d87f-0893-40d6-8704-f37c743ff979@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Tomi,
+The existing encoder firmware interface implied just one type of codec:
+H.264. Future encoders may support additional codecs; however adding
+entire sets of interfaces for them is not scalable.
 
-Thanks for the review.
+Instead, a new "common" firmware interface is defined for non codec
+specific messages. The new messages encapsulate the old ones for
+backward compatibility.
 
-On 27/05/25 11:10, Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 23/05/2025 11:36, Yemike Abhilash Chandra wrote:
->> DS90UB954-Q1 is an FPDLink-III deserializer that is mostly register
->> compatible with DS90UB960-Q1. The main difference is that it supports
->> half of the RX and TX ports, i.e. 2x FPDLink RX ports and 1x CSI TX
->> port.
->>
->> Some other registers are marked as reserved in the datasheet as well,
->> notably around CSI-TX frame and line-count monitoring and some other
-> 
-> Hmm what does that mean? That in log_status we show random data (or
-> maybe always 0) for these?
-> 
+This patch adds support for these new messages.
 
-It seems like it is showing 0's for these. I streamed around 100 frames.
-But the frame counter and line counter returned is 0. Please find the
-logs at [1].
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+ .../vcodec/encoder/mtk_vcodec_enc_drv.h       |  3 ++
+ .../mediatek/vcodec/encoder/venc_drv_if.c     |  3 +-
+ .../mediatek/vcodec/encoder/venc_ipi_msg.h    | 26 +++++++++++++
+ .../mediatek/vcodec/encoder/venc_vpu_if.c     | 37 ++++++++++++-------
+ 4 files changed, 54 insertions(+), 15 deletions(-)
 
->> status registers. The datasheet also does not mention anything about
->> setting strobe position, and fails to lock the RX ports if we forcefully
->> set it, so disable it through the hw_data.
-> 
-> This app-note has some details:
-> 
-> https://www.ti.com/lit/an/snla301/snla301.pdf
-> 
->> Link: https://www.ti.com/lit/gpn/ds90ub954-q1
->> Signed-off-by: Yemike Abhilash Chandra <y-abhilashchandra@ti.com>
->> ---
->>   drivers/media/i2c/Kconfig     |  2 +-
->>   drivers/media/i2c/ds90ub960.c | 46 +++++++++++++++++++++++++++++++++++
->>   2 files changed, 47 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
->> index e68202954a8f..6e265e1cec20 100644
->> --- a/drivers/media/i2c/Kconfig
->> +++ b/drivers/media/i2c/Kconfig
->> @@ -1662,7 +1662,7 @@ config VIDEO_DS90UB960
->>   	select V4L2_FWNODE
->>   	select VIDEO_V4L2_SUBDEV_API
->>   	help
->> -	  Device driver for the Texas Instruments DS90UB960
->> +	  Device driver for the Texas Instruments DS90UB954/DS90UB960
->>   	  FPD-Link III Deserializer and DS90UB9702 FPD-Link IV Deserializer.
->>   
->>   config VIDEO_MAX96714
->> diff --git a/drivers/media/i2c/ds90ub960.c b/drivers/media/i2c/ds90ub960.c
->> index ed2cf9d247d1..38e4f006d098 100644
->> --- a/drivers/media/i2c/ds90ub960.c
->> +++ b/drivers/media/i2c/ds90ub960.c
->> @@ -460,6 +460,7 @@ struct ub960_hw_data {
->>   	u8 num_txports;
->>   	bool is_ub9702;
->>   	bool is_fpdlink4;
->> +	bool is_ub954;
-> 
-> No, let's not add any more of these. We should have enums for the device
-> model and the "family" (ub954/ub960 are clearly of the same family,
-> whereas ub9702 is of a newer one).
-> 
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+index b1277bcfcf53..426b1398f815 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_drv.h
+@@ -16,6 +16,7 @@
+ 
+ #define MTK_ENC_CTX_IS_EXT(ctx) ((ctx)->dev->venc_pdata->uses_ext)
+ #define MTK_ENC_IOVA_IS_34BIT(ctx) ((ctx)->dev->venc_pdata->uses_34bit)
++#define MTK_ENC_DRV_IS_COMM(ctx) (((ctx)->dev->venc_pdata->uses_common_fw_iface))
+ 
+ /**
+  * struct mtk_vcodec_enc_pdata - compatible data for each IC
+@@ -29,6 +30,7 @@
+  * @num_output_formats: number of entries in output_formats
+  * @core_id: stand for h264 or vp8 encode index
+  * @uses_34bit: whether the encoder uses 34-bit iova
++ * @uses_common_fw_iface: whether the encoder uses common driver interface
+  */
+ struct mtk_vcodec_enc_pdata {
+ 	bool uses_ext;
+@@ -40,6 +42,7 @@ struct mtk_vcodec_enc_pdata {
+ 	size_t num_output_formats;
+ 	u8 core_id;
+ 	bool uses_34bit;
++	bool uses_common_fw_iface;
+ };
+ 
+ /*
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_drv_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_drv_if.c
+index e83747b8d69a..f8c9349c18c0 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc_drv_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_drv_if.c
+@@ -19,13 +19,14 @@
+ int venc_if_init(struct mtk_vcodec_enc_ctx *ctx, unsigned int fourcc)
+ {
+ 	int ret = 0;
++	const bool uses_common_fw_iface = MTK_ENC_DRV_IS_COMM(ctx);
+ 
+ 	switch (fourcc) {
+ 	case V4L2_PIX_FMT_VP8:
+ 		ctx->enc_if = &venc_vp8_if;
+ 		break;
+ 	case V4L2_PIX_FMT_H264:
+-		ctx->enc_if = &venc_h264_if;
++		ctx->enc_if = uses_common_fw_iface ? &venc_if : &venc_h264_if;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_ipi_msg.h b/drivers/media/platform/mediatek/vcodec/encoder/venc_ipi_msg.h
+index bb16d96a7f57..ce3c2c8059fb 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc_ipi_msg.h
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_ipi_msg.h
+@@ -45,6 +45,20 @@ struct venc_ap_ipi_msg_init {
+ 	uint64_t venc_inst;
+ };
+ 
++/**
++ * struct venc_ap_ipi_msg_init_comm - AP to VPU init cmd structure
++ * @base: AP to VPU init cmd structure
++ * @codec_type: encoder type
++ * @reserved: reserved field
++ * @shared_iova: shared iova
++ */
++struct venc_ap_ipi_msg_init_comm {
++	struct venc_ap_ipi_msg_init base;
++	u32 codec_type;
++	u32 reserved;
++	u64 shared_iova;
++};
++
+ /**
+  * struct venc_ap_ipi_msg_set_param - AP to VPU set_param cmd structure
+  * @msg_id:	message id (AP_IPIMSG_XXX_ENC_SET_PARAM)
+@@ -175,6 +189,18 @@ struct venc_vpu_ipi_msg_init {
+ 	uint32_t venc_abi_version;
+ };
+ 
++/**
++ * struct venc_vpu_ipi_msg_init_comm - VPU ack AP init cmd structure
++ * @init_ack: AP init cmd structure
++ * @vpu_vsi_addr: VSI address from VPU
++ * @reserved: reserved field
++ */
++struct venc_vpu_ipi_msg_init_comm {
++	struct venc_vpu_ipi_msg_init init_ack;
++	u32 vpu_vsi_addr;
++	u32 reserved;
++};
++
+ /**
+  * struct venc_vpu_ipi_msg_set_param - VPU ack AP set_param cmd structure
+  * @msg_id:	message id (VPU_IPIMSG_XXX_ENC_SET_PARAM_DONE)
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+index 51bb7ee141b9..537b9955932e 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc_vpu_if.c
+@@ -10,24 +10,25 @@
+ 
+ static void handle_enc_init_msg(struct venc_vpu_inst *vpu, const void *data)
+ {
+-	const struct venc_vpu_ipi_msg_init *msg = data;
++	const struct venc_vpu_ipi_msg_init_comm *msg = data;
++	struct mtk_vcodec_fw *fw = vpu->ctx->dev->fw_handler;
+ 
+-	vpu->inst_addr = msg->vpu_inst_addr;
+-	vpu->vsi = mtk_vcodec_fw_map_dm_addr(vpu->ctx->dev->fw_handler,
+-					     msg->vpu_inst_addr);
++	vpu->inst_addr = msg->init_ack.vpu_inst_addr;
++	vpu->vsi = mtk_vcodec_fw_map_dm_addr(fw, vpu->inst_addr);
+ 
+ 	/* Firmware version field value is unspecified on MT8173. */
+-	if (mtk_vcodec_fw_get_type(vpu->ctx->dev->fw_handler) == VPU)
++	if (mtk_vcodec_fw_get_type(fw) == VPU)
+ 		return;
+ 
+ 	/* Check firmware version. */
+-	mtk_venc_debug(vpu->ctx, "firmware version: 0x%x\n", msg->venc_abi_version);
+-	switch (msg->venc_abi_version) {
++	mtk_venc_debug(vpu->ctx, "firmware version: 0x%x\n",
++		       msg->init_ack.venc_abi_version);
++	switch (msg->init_ack.venc_abi_version) {
+ 	case 1:
+ 		break;
+ 	default:
+ 		mtk_venc_err(vpu->ctx, "unhandled firmware version 0x%x\n",
+-			     msg->venc_abi_version);
++			     msg->init_ack.venc_abi_version);
+ 		vpu->failure = 1;
+ 		break;
+ 	}
+@@ -132,7 +133,8 @@ static int vpu_enc_send_msg(struct venc_vpu_inst *vpu, void *msg,
+ int vpu_enc_init(struct venc_vpu_inst *vpu)
+ {
+ 	int status;
+-	struct venc_ap_ipi_msg_init out;
++	size_t msg_size;
++	struct venc_ap_ipi_msg_init_comm out;
+ 
+ 	init_waitqueue_head(&vpu->wq_hd);
+ 	vpu->signaled = 0;
+@@ -149,9 +151,16 @@ int vpu_enc_init(struct venc_vpu_inst *vpu)
+ 	}
+ 
+ 	memset(&out, 0, sizeof(out));
+-	out.msg_id = AP_IPIMSG_ENC_INIT;
+-	out.venc_inst = (unsigned long)vpu;
+-	if (vpu_enc_send_msg(vpu, &out, sizeof(out))) {
++	out.base.msg_id = AP_IPIMSG_ENC_INIT;
++	out.base.venc_inst = (unsigned long)vpu;
++	if (MTK_ENC_DRV_IS_COMM(vpu->ctx)) {
++		out.codec_type = vpu->ctx->q_data[MTK_Q_DATA_DST].fmt->fourcc;
++		msg_size = sizeof(struct venc_ap_ipi_msg_init_comm);
++	} else {
++		msg_size = sizeof(struct venc_ap_ipi_msg_init);
++	}
++
++	if (vpu_enc_send_msg(vpu, &out, msg_size)) {
+ 		mtk_venc_err(vpu->ctx, "AP_IPIMSG_ENC_INIT fail");
+ 		return -EINVAL;
+ 	}
+@@ -260,7 +269,7 @@ static int vpu_enc_encode_32bits(struct venc_vpu_inst *vpu,
+ 		sizeof(struct venc_ap_ipi_msg_enc);
+ 	struct venc_ap_ipi_msg_enc_ext out;
+ 
+-	mtk_venc_debug(vpu->ctx, "bs_mode %d ->", bs_mode);
++	mtk_venc_debug(vpu->ctx, "%s, bs_mode %d ->", __func__, bs_mode);
+ 
+ 	memset(&out, 0, sizeof(out));
+ 	out.base.msg_id = AP_IPIMSG_ENC_ENCODE;
+@@ -305,7 +314,7 @@ static int vpu_enc_encode_34bits(struct venc_vpu_inst *vpu,
+ 	struct venc_ap_ipi_msg_enc_ext_34 out;
+ 	size_t msg_size = sizeof(struct venc_ap_ipi_msg_enc_ext_34);
+ 
+-	mtk_venc_debug(vpu->ctx, "bs_mode %d ->", bs_mode);
++	mtk_venc_debug(vpu->ctx, "%s, bs_mode %d ->", __func__, bs_mode);
+ 
+ 	memset(&out, 0, sizeof(out));
+ 	out.msg_id = AP_IPIMSG_ENC_ENCODE;
+-- 
+2.45.2
 
-Got it. I will add enums in the next revision.
-
->>   };
->>   
->>   enum ub960_rxport_mode {
->> @@ -982,6 +983,10 @@ static int ub960_txport_select(struct ub960_data *priv, u8 nport)
->>   
->>   	lockdep_assert_held(&priv->reg_lock);
->>   
->> +	/* TX port registers are shared for UB954*/
-> 
-> Space missing at the end. What does the comment mean? "registers are
-> shared"?
-> 
-
-Apologies for the inaccurate comment description, My intention to
-comment that the tx_port_select function does not make sense for
-UB954, since we have only 1 CSI TX. May be I can have something
-like below.
-
-/** UB954 has only 1 CSI TX. Hence, no need to select **/
-
-> I think it's good to have this after the lockdep assert. The lock rules
-> are in place, even if on ub954 we don't do anything here.
-> 
->> +	if (priv->hw_data->is_ub954)
->> +		return 0;
->> +
->>   	if (priv->reg_current.txport == nport)
->>   		return 0;
->>   
->> @@ -1415,6 +1420,13 @@ static int ub960_parse_dt_txport(struct ub960_data *priv,
->>   		goto err_free_vep;
->>   	}
->>   
->> +	/* UB954 does not support 1.2 Gbps */
->> +	if (priv->tx_data_rate == MHZ(1200) && priv->hw_data->is_ub954) {
-> 
-> Test for ub954 first, 1200 MHz second. It's more logical for the reader
-> that way.
-> 
-
-Noted, will do that in the next revision.
-
->> +		dev_err(dev, "tx%u: invalid 'link-frequencies' value\n", nport);
->> +		ret = -EINVAL;
->> +		goto err_free_vep;
->> +	}
->> +
->>   	v4l2_fwnode_endpoint_free(&vep);
->>   
->>   	priv->txports[nport] = txport;
->> @@ -1572,6 +1584,10 @@ static int ub960_rxport_set_strobe_pos(struct ub960_data *priv,
->>   	u8 clk_delay, data_delay;
->>   	int ret = 0;
->>   
->> +	/* FIXME: After writing to this area the UB954 chip no longer responds */
->> +	if (priv->hw_data->is_ub954)
->> +		return 0;
->> +
-> 
-> Check the app note. It would be nice to have this working, as, afaik,
-> the HW functionality should be the same on ub954 and ub960.
-> 
-
-I tried referring the app note and changed the strobe position values
-accordingly, but it did not help.
-
-Since the app note also specifies the below at Table 2 Strobe Adaption Modes
-
-"
-AEQ Adaption Mode--> Strobe position is selected as part of AEQ. This is 
-the default mode.
-
-Manual Adaption Mode --> The strobe position is selected manually and 
-will remain at
-the specified position until a new one is chosen. This mode is 
-recommended as an
-evaluation and debugging mode "
-
-Since, under the default settings, the strobe position is selected as 
-part of the AEQ process.
-Can we limit the ub960_rxport_set_strobe_pos function to only UB960 and 
-UB9702.
-
->>   	clk_delay = UB960_IR_RX_ANA_STROBE_SET_CLK_NO_EXTRA_DELAY;
->>   	data_delay = UB960_IR_RX_ANA_STROBE_SET_DATA_NO_EXTRA_DELAY;
->>   
->> @@ -5021,6 +5037,27 @@ static int ub960_enable_core_hw(struct ub960_data *priv)
->>   	if (priv->hw_data->is_ub9702)
->>   		ret = ub960_read(priv, UB9702_SR_REFCLK_FREQ, &refclk_freq,
->>   				 NULL);
->> +	else if (priv->hw_data->is_ub954) {
->> +		/* From DS90UB954-Q1 datasheet:
->> +		 * "REFCLK_FREQ measurement is not synchronized. Value in this
->> +		 * register should read twice and only considered valid if
->> +		 * REFCLK_FREQ is unchanged between reads."
->> +		 */
->> +		unsigned long timeout = jiffies + msecs_to_jiffies(100);
->> +
->> +		do {
->> +			u8 refclk_new;
->> +
->> +			ret = ub960_read(priv, UB960_XR_REFCLK_FREQ, &refclk_new,
->> +					 NULL);
->> +			if (ret)
->> +				goto err_pd_gpio;
->> +
->> +			if (refclk_new == refclk_freq)
->> +				break;
->> +			refclk_freq = refclk_new;
->> +		} while (time_before(jiffies, timeout));
->> +	}
-> 
-> This feels a bit too much for a not-that-important debug print... As the
-> tests show that a single read is (practically always?) enough, I think
-> we can just use the same code as for ub960. Maybe add a comment about
-> it, though.
-> 
-
-okay, I will use the same code that is being used for UB960 and will add 
-a comment
-about that.
-
-Thanks and Regards,
-Abhilash Chandra
-
-[1]: 
-https://gist.github.com/Yemike-Abhilash-Chandra/c6b3da2a10586567a3a4179a2b20d21b
-
->   Tomi
-> 
->>   	else
->>   		ret = ub960_read(priv, UB960_XR_REFCLK_FREQ, &refclk_freq,
->>   				 NULL);
->> @@ -5177,6 +5214,13 @@ static void ub960_remove(struct i2c_client *client)
->>   	mutex_destroy(&priv->reg_lock);
->>   }
->>   
->> +static const struct ub960_hw_data ds90ub954_hw = {
->> +	.model = "ub954",
->> +	.num_rxports = 2,
->> +	.num_txports = 1,
->> +	.is_ub954 = true,
->> +};
->> +
->>   static const struct ub960_hw_data ds90ub960_hw = {
->>   	.model = "ub960",
->>   	.num_rxports = 4,
->> @@ -5192,6 +5236,7 @@ static const struct ub960_hw_data ds90ub9702_hw = {
->>   };
->>   
->>   static const struct i2c_device_id ub960_id[] = {
->> +	{ "ds90ub954-q1", (kernel_ulong_t)&ds90ub954_hw },
->>   	{ "ds90ub960-q1", (kernel_ulong_t)&ds90ub960_hw },
->>   	{ "ds90ub9702-q1", (kernel_ulong_t)&ds90ub9702_hw },
->>   	{}
->> @@ -5199,6 +5244,7 @@ static const struct i2c_device_id ub960_id[] = {
->>   MODULE_DEVICE_TABLE(i2c, ub960_id);
->>   
->>   static const struct of_device_id ub960_dt_ids[] = {
->> +	{ .compatible = "ti,ds90ub954-q1", .data = &ds90ub954_hw },
->>   	{ .compatible = "ti,ds90ub960-q1", .data = &ds90ub960_hw },
->>   	{ .compatible = "ti,ds90ub9702-q1", .data = &ds90ub9702_hw },
->>   	{}
-> 
