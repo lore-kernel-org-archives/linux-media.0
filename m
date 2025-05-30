@@ -1,181 +1,110 @@
-Received: from mta21.hihonor.com (mta21.honor.com [81.70.160.142])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D7E21C9F8;
-	Fri, 30 May 2025 10:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.160.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF3F1D47B4
+	for <linux-media@vger.kernel.org>; Fri, 30 May 2025 11:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748602643; cv=none; b=qumVJABGqlGetS2UBoOrCWyrnNZfOiA9qvnvbmrLyP0wehq0t5SaTbM9t4jk6RhmCkb7k3LhONwDpgKTEhy2WLt+qmEidPCf5SNHiHh/vgBBixomsQb3A5Vl9v7vmp75vENZoFjZTADKTUYvSSffVE6zCAPQC3OS5AiNIwk2vEk=
+	t=1748603354; cv=none; b=KaGlfGPN/8O31eWidZAiapwbS8kVjnxAT3nddpH2SazQn6OzhLRoOefWwnFCUnip9WX+OKS4u0/XgsXq18+fU6qzW+ckaIXn6OcBXui8jYBu6fY9adllSEQ1DQs+HgS4xM7CDaF0Qc2HOeJBQ4ZddzGzIaUpoJ4f2eWUMHk296A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748602643; c=relaxed/simple;
-	bh=Kn2+KeM5+tbI7Gdz/WkW+X9jyaEGB44QCGr1f17zrbY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pmV0+7Joy85FUA3QK38L5HO5nGB7lxwzJPOFp3g+2WNqNd319w1cSyXjW/bq9OLBbUK3t228P7dDZ0b+08HvrY52KD2gyI51OS0NzJu/S/XW9x0IflOEUXC3CEMlKQyI7/N4FKQcIc08KtLYcomPPBXU7hMcXiK0oBSVtNhBcpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; arc=none smtp.client-ip=81.70.160.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-Received: from w003.hihonor.com (unknown [10.68.17.88])
-	by mta21.hihonor.com (SkyGuard) with ESMTPS id 4b808J0DcCzYkxr7;
-	Fri, 30 May 2025 18:38:40 +0800 (CST)
-Received: from a010.hihonor.com (10.68.16.52) by w003.hihonor.com
- (10.68.17.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 30 May
- 2025 18:40:39 +0800
-Received: from localhost.localdomain (10.144.18.117) by a010.hihonor.com
- (10.68.16.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 30 May
- 2025 18:40:39 +0800
-From: wangtao <tao.wangtao@honor.com>
-To: <sumit.semwal@linaro.org>, <christian.koenig@amd.com>,
-	<kraxel@redhat.com>, <vivek.kasireddy@intel.com>, <viro@zeniv.linux.org.uk>,
-	<brauner@kernel.org>, <hughd@google.com>, <akpm@linux-foundation.org>,
-	<amir73il@gmail.com>
-CC: <benjamin.gaignard@collabora.com>, <Brian.Starkey@arm.com>,
-	<jstultz@google.com>, <tjmercier@google.com>, <jack@suse.cz>,
-	<baolin.wang@linux.alibaba.com>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>,
-	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <bintian.wang@honor.com>, <yipengxiang@honor.com>,
-	<liulu.liu@honor.com>, <feng.han@honor.com>, wangtao <tao.wangtao@honor.com>
-Subject: [PATCH v3 0/4] Optimizing disk file & dmabuf copies via copy_file_range.
-Date: Fri, 30 May 2025 18:39:37 +0800
-Message-ID: <20250530103941.11092-1-tao.wangtao@honor.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1748603354; c=relaxed/simple;
+	bh=35l9XPVSJXhj5GMtwiWCEqAEdQ/AGTsTrs3qVF3Ck2c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jobDE7jW1748QdNbH9uDlVywrBBqC1d+nmYbaKmzY+sMg0Djh8NRvfgbsikLxs3QBeOhRNiytpoGID1qKA+Ab1aqtXsItyk0C2DEhRMoVyJ8MGGSQkMQL8j48gQBMBSO5MT1+sXtKA5z0P5i5VxHnEVaQ2TF5ArmWnt9tOiE6wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aKEQMIAe; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aKEQMIAe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1748603353; x=1780139353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=35l9XPVSJXhj5GMtwiWCEqAEdQ/AGTsTrs3qVF3Ck2c=;
+  b=aKEQMIAeCM+laUBtFkxmGGW/ZVZEoQyvU/aY3mqj/cDgNyn6hq8yQSAr
+   yVFUMPhakYi++bHN9iU+LpWOQ9zpgX8k3uFN4ELIutB8SvPrNsArurJrq
+   hCv1upZq1lsu+Hbj6PvE/evcWpI/0Ei+1WvXHTe97cFAjIaa0ZLWHkEiZ
+   wXdhpAG/uwVSQ0D6rg4jKXyN4ASMuuXHNxB3Des1BLnUFEHaFueVAEYCh
+   WQusC4juiXhqFTzrHZZ7/u+eDPmD7xJH3RbqhSJrRfPfIXmlrMCAnffZD
+   QjHT5TyHw9SB0zvnVNX4NqInWP6Aj6RwOU7QeO955jqeF4XF2CZ5EFUHb
+   g==;
+X-CSE-ConnectionGUID: tupDcdtUQkeNpDW1hqfImQ==
+X-CSE-MsgGUID: A4IKnv9cTZOy67TLZK7QAw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11448"; a="49934099"
+X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
+   d="scan'208";a="49934099"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2025 04:09:12 -0700
+X-CSE-ConnectionGUID: GD1dpHR0SXqMYDsPU/rMTQ==
+X-CSE-MsgGUID: IOiDXgHkSim4IIzbXaYVrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,195,1744095600"; 
+   d="scan'208";a="148990344"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2025 04:09:10 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id A3DC811FBA7;
+	Fri, 30 May 2025 14:09:07 +0300 (EEST)
+Date: Fri, 30 May 2025 11:09:07 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: bingbu.cao@intel.com
+Cc: linux-media@vger.kernel.org, stanislaw.gruszka@linux.intel.com,
+	laurent.pinchart@ideasonboard.com, jerry.w.hu@intel.com,
+	hao.yao@intel.com, tian.shu.qiu@intel.com,
+	bingbu.cao@linux.intel.com
+Subject: Re: [PATCH v3 0/7] Intel IPU7 PCI and input system device drivers
+Message-ID: <aDmR04fbmHTdOa1_@kekkonen.localdomain>
+References: <20250529041323.3026998-1-bingbu.cao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: w011.hihonor.com (10.68.20.122) To a010.hihonor.com
- (10.68.16.52)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250529041323.3026998-1-bingbu.cao@intel.com>
 
-Typical dmabuf file reading steps:
-1. dmabuf_fd = dmabuf_alloc(len, heap_fd)
-2. vaddr = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd, 0)
-3. file_fd = open(file_path, O_RDONLY)
-4. read(file_fd, vaddr, len)
+Hi Bingbu,
 
-dmabuf's attachment/map/fence model uses remap_pfn_range for mmap, which
-lacks Direct I/O support[1]. Buffer IO causes latency when loading large AI
-model files.
+On Thu, May 29, 2025 at 12:13:16PM +0800, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
+> 
+> This patch series adds a driver for Intel IPU7 input system.
+> IPU7 is the seventh generation of Imaging Processing Unit, it is a
+> PCI device which can be found in some Intel Client Platforms such as
+> Intel Lunar Lake and Panther Lake, etc.
+> User can use IPU7 to capture images from MIPI camera sensors, support
+> both MIPI CSI DPHY and CPHY.
+> 
+> Sakari suggest during RFC patch review it is better to separate
+> the common code between IPU6 and IPU7 into a standalone module.
+> So it is expected to move this driver out of staging tree in future
+> once the common code separation complete for IPU6.
+> 
+> Changes since v2:
+> - Remove IPU7 PCI table from UAPI header
+> 
+> Changes since v1:
+> - Some coding style fix
+> - Update firmware ABI header and remove some unused code
+> - Remove unnecessary need_reset logic
+> - Remove some 'U' suffixes
 
-My previous patch added dmabuf ioctl for Direct IO file operations, showing
-good performance on low-power CPUs[2][3]. Christian suggested using existing
-uAPIs (read/sendfile/splice/c_f_r) instead of new ioctls.
+I did a bit more research on this topic and I actully think it's fine to
+use the U (plus the rest) suffixes albeit they seem to be uncommon in the
+kernel. Up to you.
 
-sendfile/splice/c_f_r enable zero-copy via Direct IO for disk-disk/network:
-sendfile(skt_fd, disk_fd): [DISK]-DMA->[pipe(buf)]-DMA->[NIC]
-sendfile(dst_disk, src_disk): [DISK] -DMA-> [pipe(buf)] -DMA-> [DISK]
+For decimal numbers that are unsigned, U suffix should be used.
 
-Analysis shows existing uAPIs can't achieve zero-copy disk-to-dmabuf.
-Since dmabuf lacks file ops, using tmpfs for disk-to-tmpfs CPU analysis:
-| Method            | CPU Copies | Key Overhead               |
-|-------------------|------------|----------------------------|
-| 1. Buffer R+W     | 2          | Alloc(cache) & 2 CPU copies|
-| 2. Direct R+W     | 1          | GUP(usr_buf) & 1 CPU copy  |
-| 3. Mmap+Buffer R  | 1          | Alloc(cache) & 1 CPU copy  |
-| 4. Mmap+Direct R  | 0          | GUP(mem_buf) ~50% CPU      |
-| 5. Buffer Sendfile| 1          | Alloc(cache) & 1 CPU copy  |
-| 6. Direct Sendfile| 1          | Small pipe, high IRQ       |
-| 7. Buffer Splice  | 1          | Alloc(cache) & 1 CPU copy  |
-| 8. Direct Splice  | 1          | Larger pipe buffer         |
-| 9. c_f_r          | N/A        | Cross-FS blocked           |
-
-GUP: get_user_page
-Alloc(cache): allocate page cache
-
-Data flows:
-1. [DISK] -DMA-> [Alloc(cache)] -COPY-> [usr_buf] -COPY-> [MEM]
-2. [DISK] -DMA-> [GUP(usr_buf)] -COPY-> [MEM]
-3. [DISK] -DMA-> [Alloc(cache)] -COPY-> [mem_buf]
-4. [DISK] -DMA-> [GUP(mem_buf)]
-5. [DISK] -DMA-> [pipe(Alloc(cache))] -COPY-> [tmpfs page]
-6. [DISK] -DMA-> [pipe(buf)] -COPY-> [tmpfs page]
-7. [DISK] -DMA-> [big_pipe(Alloc(cache))] -COPY-> [tmpfs page]
-8. [DISK] -DMA-> [big_pipe(buf)] -COPY-> [tmpfs page]
-9. [DISK] -DMA-> [tmpfs page] (blocked)
-
-Key findings:
-- Buffer I/O requires page cache allocation and at least one CPU copy
-- Read+Write incurs excessive CPU copies and will no longer be analyzed.
-  Future approaches will use Read instead of mmap+Read.
-- Mmap+Direct has zero copies but 50% GUP overhead, and dmabuf doesn't support
-- sendfile/splice require intermediate pipes, needing 1 CPU copy
-- c_f_r limitations: Cross-FS blocks + missing memory FS support
-
-Modifications:
-1. Enable cross-FS c_f_r for memory file types
-2. Add dmabuf c_f_r callbacks for [DISK]-DMA->[dmabuf]
-3. Test tmpfs c_f_r locally only (no upstream) due to lock_page deadlock risks
-
-Performance (1GHz CPU, UFS4@4GB):
-1. tmpfs(memfd) direct c_f_r(1197 MB/s): +15% vs mmap&read(1014)
-2. udmabuf+memfd(2318 MB/s): +50% vs mmap&read(1457 MB/s)
-3. dmabuf direct c_f_r(3405 MB/s): 260% faster than buffer IO(918 MB/s)
-   40% faster than udmabuf(2318 MB/s)
-
-|    32x32MB Read 1024MB  |Creat-ms|Close-ms|  I/O-ms|I/O-MB/s| I/O%
-|-------------------------|--------|--------|--------|--------|-----
-| 1)Beg  dmabuf buffer R/W|     52 |      5 |   1170 |    918 | 100%
-| 2)    udmabuf buffer R/W|    591 |    326 |   1281 |    838 |  91%
-| 3)      memfd buffer R/W|      1 |    323 |   2370 |    453 |  49%
-| 4)      memfd direct R/W|      1 |    321 |   1058 |   1014 | 110%
-| 5) memfd buffer sendfile|      1 |    329 |   1577 |    681 |  74%
-| 6) memfd direct sendfile|      1 |    327 |   2672 |    401 |  43%
-| 7)   memfd buffer splice|      2 |    321 |   1729 |    621 |  67%
-| 8)   memfd direct splice|      2 |    324 |   1528 |    702 |  76%
-| 9)    memfd buffer c_f_r|      1 |    325 |   1586 |    677 |  73%
-|10)    memfd direct c_f_r|      1 |    323 |    897 |   1197 | 130%
-|11)      u+mfd buffer R/W|    609 |    344 |   2207 |    486 |  52%
-|12)      u+mfd direct R/W|    580 |    342 |    737 |   1457 | 158%
-|13) u+mfd buffer sendfile|    582 |    343 |   1270 |    845 |  92%
-|14) u+mfd direct sendfile|    573 |    344 |   2254 |    476 |  51%
-|15)   u+mfd buffer splice|    584 |    341 |   1202 |    893 |  97%
-|16)   u+mfd direct splice|    564 |    340 |    851 |   1263 | 137%
-|17)    u+mfd buffer c_f_r|    585 |    344 |   1244 |    863 |  94%
-|18)    u+mfd direct c_f_r|    578 |    341 |    581 |   1848 | 201%
-|19)  udmabuf buffer c_f_r|    585 |    328 |   1163 |    923 | 100%
-|20)  udmabuf direct c_f_r|    579 |    328 |    464 |   2318 | 252%
-|21)   dmabuf buffer c_f_r|     48 |      5 |   1058 |   1015 | 110%
-|22)   dmabuf direct c_f_r|     48 |      5 |    316 |   3405 | 370%
-|23)End  dmabuf buffer R/W|     48 |      5 |   1173 |    915 |  99%
-
-u+mfd = udma+memfd = udmabuf + pre-allocated memfd combo.
-Cache cleared during tests to simulate real-world large file loading.
-
-dmabuf file Use Cases:
-- Loading large AI models using dmabuf
-- Real-time data capture and storage with dmabuf
-- Persisting task snapshots in Android
-
-v1: [2]
-v1 -> v2: [3]
- Dma-buf exporter verify exclusive access to the dmabuf's sgtable.
-v2 -> v3:
- copy_file_range supports copying from disk files to memory files.
- Implement the copy_file_range callback functions for dmabuf/udmabuf.
-
-Reference:
-[1] https://lore.kernel.org/all/0393cf47-3fa2-4e32-8b3d-d5d5bdece298@amd.com
-[2] https://lore.kernel.org/all/20250513092803.2096-1-tao.wangtao@honor.com
-[3] https://lore.kernel.org/all/20250516092148.12778-1-tao.wangtao@honor.com
-
-
-wangtao (4):
-  fs: allow cross-FS copy_file_range for memory-backed files
-  dmabuf: Implement copy_file_range for dmabuf
-  udmabuf: Implement udmabuf rw_file callback
-  dmabuf:system_heap Implement system_heap exporter's rw_file callback.
-
- drivers/dma-buf/dma-buf.c           | 32 ++++++++++++
- drivers/dma-buf/heaps/system_heap.c | 79 +++++++++++++++++++++++++++++
- drivers/dma-buf/udmabuf.c           | 59 +++++++++++++++++++++
- fs/read_write.c                     | 71 +++++++++++++++++++-------
- include/linux/dma-buf.h             | 16 ++++++
- include/linux/fs.h                  |  2 +
- 6 files changed, 240 insertions(+), 19 deletions(-)
+I also think the register definitions are indeed in need for a cleanup.
+This should go to the TODO file as well. Could you post a patch on top of
+this set, touching just the TODO file, instead of reposting the entire set,
+if there are no other changes?
 
 -- 
-2.17.1
+Regards,
 
+Sakari Ailus
