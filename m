@@ -1,232 +1,234 @@
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BD21D554;
-	Fri, 30 May 2025 02:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748572184; cv=fail; b=PvkQ6HkxC9H0e8G/nJN4qBZi4AZoc/IP0eDepZa9exHY9RwXmrMEfKX6fzSDJTcUUOfqZTxPV0BoAwWwZ4xN1XBRsH/g8L0HCCPOTq146hVY5XHh+UYA/wR6H8MuJYZDbFSL58C0g8q5xVjfU4UvHqigGQnkM4xcOD5ufOhCWGw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748572184; c=relaxed/simple;
-	bh=GZGaIBeS7MsDk5Ot9uvzn/KYSoOg3/nljaK0z+894Sk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=RA+MxFp+lqYen4Lqi4E5E4DVyTcd16i6hYpBSfjORIEf9na0+hgkdWdM0NQNOlwjEA6wtLnPIvplby1VgM7IsPupCd2lGgKcl9SIJNcBd+gpRmfZD1x71rXKbl4YrQmxZpY/ecRLFVXepIcp8TNnSPKlORYC7u6Sq5O/MT4n3Sg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YFq6AEYk; arc=fail smtp.client-ip=40.107.220.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBF22AF1E;
+	Fri, 30 May 2025 04:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748577793; cv=none; b=pI3NhPUiUqUrAo+T0xsMT9kWE+5ca8AD/UCEGS58FjwH9AhiWBaY0c4fQM+u3b5HSQq3r90FMeW11wwpjqabfh1cjw90zi0/Q3gnqqOktAuX51l3xPF+KtoiJ+0NcU2XnuUtJSx2bzOOjH1uBGl5Nwjr8kv7X2sDoGFM458ZZeA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748577793; c=relaxed/simple;
+	bh=ueslHsS3cZs6fgJZNQCkbVB3I9Yw+FBTMe0of5SzuK0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=DVfaAA8VT018QpuSkL8hpnwabLWJcFwOwKvOBHHzkLcn42wfSywv9/BsvrGciYdvwv2sCXYxv0BaLfPgaMgEcElIT0oEuyqynwOSxTP4hWrwElM5r7AAnJdl+toN4dLtkhcckiFBoxvKtCo5OJ5uM60VLV89uceZHHoB3SsMx18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CmXEfj4P; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YFq6AEYk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cm26RWX2enZ/P3sd3jOLbz0rhGlzB53mX097ogBlNUshqiflOCkgiq9m71hUIiNMsGezq7w5lO2CIda6Wk2VC3yrHhDk1EyjS5Io04GqZgvK07ugtWqdo3bcg3Ef+rGCT2+H8npJvCwQBAcNqF99Q6jex29v5idh/pZQLL1PSGBdBz80Hb0n6aHpjyn8fqBy728E9nzfmwvwoHOdiey+fb+Zp1BPY/NLwYgKOvK6kAKn1zd74tKRiOsT36O6St4uWXeGUmwhKG+SUopJY+eHCin83iTVvGWA0dvz1JX7TGFwR8Qraci607HcpuCV1HwBCdL5zzKwZoH5wSjMrgvYtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yd/W109WMcrTL+X1vodXjlMQ5r8F8h5ajDn5RsAhdw4=;
- b=msnqo5vr3sQNK8rr6XyYoJXXenJTJjxyuEGbqxoyVmGe2iFGvtjh05kT3da0CLMWLIzwv5lkydaY1UIJC1LOOEqfHGEJUnqB/A5t2c3kf2i7PrJbBxXCJmYpV7U+qkHPu2EXeD9SIZP62PK/SEf/t2qxFrqyx6zyr2GWhrD/5UHXKEk+Ypar1JtXftMEMtzCmHBqoIg83zu6DtQ3co/0kztE79j4fTisaXjCKATJE9cilzlrcjE34BoBV3KsXorCV4XkxLsyPmLO3ds+M4FA64VvjcvqtrpcdDuXVdbjaw4kUilFDR9vljnlNBiJagKqM/9y+SdS5GbzJTzqw1sz1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yd/W109WMcrTL+X1vodXjlMQ5r8F8h5ajDn5RsAhdw4=;
- b=YFq6AEYkW4h3Hinm+DsXCUayZMdSwe3vy5eT0SQphP54ib0fJUji7sSuDTzpOFrMimaWLdYe5LFMLustzOvge69imMHxDwB1cttsQsgoSiTqV4ifKLnF4ep6QfVycP5IRxsgi+vIr4JcDS6KoOXwSqonu2XtTj816ELvD9YOEKs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
- by MW4PR12MB6997.namprd12.prod.outlook.com (2603:10b6:303:20a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.26; Fri, 30 May
- 2025 02:29:39 +0000
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::53fb:bf76:727f:d00f]) by CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::53fb:bf76:727f:d00f%5]) with mapi id 15.20.8769.022; Fri, 30 May 2025
- 02:29:39 +0000
-Message-ID: <79872224-4e81-446b-a451-28260f449ea9@amd.com>
-Date: Fri, 30 May 2025 12:29:30 +1000
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [RFC PATCH 00/12] Private MMIO support for private assigned dev
-To: Xu Yilun <yilun.xu@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, kvm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, sumit.semwal@linaro.org,
- christian.koenig@amd.com, pbonzini@redhat.com, seanjc@google.com,
- alex.williamson@redhat.com, vivek.kasireddy@intel.com,
- dan.j.williams@intel.com, yilun.xu@intel.com, linux-coco@lists.linux.dev,
- linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
- daniel.vetter@ffwll.ch, leon@kernel.org, baolu.lu@linux.intel.com,
- zhenzhong.duan@intel.com, tao1.su@intel.com
-References: <20250509184318.GD5657@nvidia.com>
- <aB7Ma84WXATiu5O1@yilunxu-OptiPlex-7050>
- <2c4713b0-3d6c-4705-841b-1cb58cd9a0f5@amd.com>
- <20250512140617.GA285583@nvidia.com> <aCRAHRCKP1s0Oi0c@yilunxu-OptiPlex-7050>
- <20250514163339.GD382960@nvidia.com> <aCYQdDrYYZRAgsen@yilunxu-OptiPlex-7050>
- <9dea400f-a57b-43be-a2e4-24a9f51e6ba0@amd.com>
- <aDE5SPzOAU0sNIt+@yilunxu-OptiPlex-7050>
- <ae16db07-5fca-4369-aa67-cbe2e0fd60fd@amd.com>
- <aDhyC73r149syMpc@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From: Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <aDhyC73r149syMpc@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SYCPR01CA0001.ausprd01.prod.outlook.com
- (2603:10c6:10:31::13) To CH3PR12MB9194.namprd12.prod.outlook.com
- (2603:10b6:610:19f::7)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CmXEfj4P"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54U0Ht2E011636;
+	Fri, 30 May 2025 04:03:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/0TVmCqgtdu4BzS3uwceYdO0gyk4w3MjOVOxBx+t0xI=; b=CmXEfj4PveUM2phW
+	ViVFzCbdh2b9/BsFb7U26oI+qRA1dQZssMq7YReP3QFBMyKqmYn0Y5eWkiDiCYlg
+	XT7IjbPpo1BlDENqqIH3Qkmi/2qPCQGK7q4HWlJuX4HbkRju1JCyXyOP59CHrYNP
+	1je2EdBE6n7zGecwj3y3u0I6n/bixu9djL3ViJ7yAa+0nGCQUYu9dpKOIJkAkpE7
+	HW4tZ/T0mo8ZXnM4Q+Yme4XGlT83LDFcOzSKKZivksiDdWojVA0fmwl+M9cCGNUH
+	6xKFXLVddLLPQwPHPQG/g4xMBZlKvFxbk8NFlm7ngskCsuk3fnqeqEZIGWgsQb7o
+	dfeVng==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46u6g97s95-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 May 2025 04:03:07 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54U436di002828
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 May 2025 04:03:06 GMT
+Received: from hu-renjiang-sha.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 29 May 2025 21:03:03 -0700
+From: Renjiang Han <quic_renjiang@quicinc.com>
+Date: Fri, 30 May 2025 09:32:13 +0530
+Subject: [PATCH v8 1/3] media: venus: pm_helpers: use opp-table for the
+ frequency
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|MW4PR12MB6997:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f086cb7-80f9-4aea-df88-08dd9f21d3b3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?d3ZxUU5aVmdtaEFlWXdBVTB3eWdRbWdyQmZnWEEzaitHVVllY2lRY1NndUlD?=
- =?utf-8?B?bEhXajBQdCtvK2UwaE5kZDZtUlg5b242Mkg5Z2VxUWt2SWFhV2ZGSi96Q3Nn?=
- =?utf-8?B?R0Y0dVZZK2YwN1Y5cUNWZDZSdVR3QnBrTlNxV0J2TkNHNzNFR05xZUlOMk9s?=
- =?utf-8?B?aXlkMFRHYkZTaHM4dmJsTXBIRlBmRC8wdnBEWngvWXFyRkNXaGI1S2o2bkd0?=
- =?utf-8?B?cHdxZUxPTmd0TnJ0WW9zc1dJbUZRbXEvVVRhcnFtTm5xbGFnWmNPbzFsakM2?=
- =?utf-8?B?TUpwRWJTN3hqTHdwM0JMK2kreWVFenZCWjVBQm1pWHdXK3gvY0xIVnp4NXBI?=
- =?utf-8?B?Yk03MzNYT0RYMWJWZmkzbGpra3JmN3c2T1ZwenhNQlVMUFFLaDBDK1BEWXph?=
- =?utf-8?B?eEpuenJnZ0ZzUnd1WHYza3lTMHhFVFNURXlMKzlIVEcvKzI2SHlaNUNVK3ZE?=
- =?utf-8?B?TytmcU41SUlBVlI0ejV1L1N4SkkzM0sycWVMOXpBMDloNWJ1YVVWakpyVjBR?=
- =?utf-8?B?SkcxQ1hPbHMycHMxTk1GbjFwYURrV2FKNzdzSTdOZTlOcWZWaHFQYXpSMHVN?=
- =?utf-8?B?LzBBZ2tUOGpSUGtBSFhkR2crRU5PN2J4dlYxSE8rNUJYVUFaTmhXZEVzT3ZT?=
- =?utf-8?B?NklyaUt2azNBZjBFWko2dHJPVGpVU2xiVENRWWVocEQxUjAzaWF4RFo4K2lt?=
- =?utf-8?B?ME0yQk1WMHdWS1NMU1BtNVB5N2ZweldMSmYyL3o1K0tPOG1DNTRjNnJsMjBi?=
- =?utf-8?B?NEtQSHpuRmFrZ2FGdG85YjF1V3pNNjhmc1N3Vmx4MEtpMkhYcGdVNmhXUUpw?=
- =?utf-8?B?WmlTVlVvZDNxczY5WDhEZTltdnBQU3A5K0ltRytleUp0MUwySlNlbFpIK0JD?=
- =?utf-8?B?ZkphaEIrMDBNUjJJQVc1WlVhWkxWS0c5UkQwMjJTWlY3MW1WTWlNOXFmVXZr?=
- =?utf-8?B?akM0UTBWNGx3dXlPdGh0RjJhcTRkZTBFQ0VKTGY2Mm56YjZiOWZwWm1PZFll?=
- =?utf-8?B?ODZvcGlWbCtCeG1wK0pKZCtFMkpYYlpPaW9OWjBSNTRqQmY5VjZsVDdLZFNt?=
- =?utf-8?B?WVRrVTFsMlN6eWR3WTkrZFpacWFtMXdTbzVuZDhkd3VaakFDNTMvdHNrMGdP?=
- =?utf-8?B?cHBBaE5YY2lTR0Q5M2t6NEVwNlJrWVc3Y3JDcDBTWldGeXFIc3RaeXZrS3RS?=
- =?utf-8?B?anE5MERvY3laN2FCNktwZ25ZTzNRLzdYNk03MGs4cnBXMFRRZHhtbTByeHBM?=
- =?utf-8?B?OWpQU2RMVnJEMmdWZDBZQnBRYzQraUJHWTVQVHNWWkxzVUlBV3VldmZ5V0hR?=
- =?utf-8?B?T1hnRldhQzk1bXhlTmVSUkg2YW1wR2JqY2J6ckpMd3JtT1U1UHQwZDZmaDha?=
- =?utf-8?B?OUE4dTZBbWdsaUhLMGdDQzJNS0x2MlJuZGNrQURpWVVlYUo5bjd1K0FVbURr?=
- =?utf-8?B?TVZRZXA1Y1gwTmRGS3Z1anlONGpaOURIbXRqam9peHIxaUFUZU1jcXhuWElO?=
- =?utf-8?B?TEw5ZGk3dTJqNllDckJESnQxUDdhdFk1Mk16dG9kUXpTamIycWlsck1wTHov?=
- =?utf-8?B?WjlCU3orQ09pTjRoUWlSNnBLUUVYMWExVEh5ZGZ0MFhPemJ2K1FRdG9CUWdE?=
- =?utf-8?B?UDZTajdxemcvTTEvL2NZSkNYTXBYSGxlRkd4ZXQxNXlHS3F6TEw2SXcvbExa?=
- =?utf-8?B?Z2JNelhzcGpCTVhBYjlLaTdHZmZNQzRPenI3RTJKYU5GMGVvMGJ0OGkxa2Vk?=
- =?utf-8?B?c21aWVljMXo2KzZLQkRTYjBibUlQQWloS3VNcVpkRmJZRjZha1FiOWdFVGQw?=
- =?utf-8?B?ZGtMelJxTTRTYnRlWXkzTlRTTXF3UTVUS0YzWWxjY2FGNXp6cjhYcWoyWmZN?=
- =?utf-8?B?aDJ6cVFHdmx1VmhnbDVwNDNOaURDdmN4anIzVGtjNXU1eFgxckRiOU12Y283?=
- =?utf-8?Q?r4tjz/6tpQg=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZG9HSlFwWEJadHBFQWQ2aCt0Z0hGbVZrNE40dDFjdlBKbUN1YzVhdHVFb0pi?=
- =?utf-8?B?NWFRYWN5RFJGWkNHWUpudHcyalRXZUFZUTMzaWF0UlY4VDkwN3JTS0NHUmU5?=
- =?utf-8?B?eDVyWTYvNTZsaHQwQ0xrZ3F4aVRhMGQzMFZSS01xYnZIOEdCK3pyZXUyN04x?=
- =?utf-8?B?RS9NMUVSWDRnaTg4VmlBbTVsSU8rb2hWdmM1TlRZK3IyTVpKNWpDK3dEajdi?=
- =?utf-8?B?N2VhSUdIN3BXMmdha0JCNzd6QjF0M2g1V1VDMUlCSTBZTUR2VUx5ZHZCT0xn?=
- =?utf-8?B?c0s1eUVkVGdqbHByYkl6bnNCam1lWkZmQWRvOW1WMWk2SFlDMVhvZUFka2xU?=
- =?utf-8?B?aWVybUdhdGdLdEV3NEdzZUppYTRNVjJORWZiK2NRRHo2Yjh2OXhIRnk0Y1U2?=
- =?utf-8?B?eHB3NE5tYUE3RUo2enlzbTBzYkVJallKb3ZLWk5FQ3BvSTNQVUkvbzRpc2sy?=
- =?utf-8?B?TDVtN2NUQ1NNNWNHd0FESmIyaHpVaHZ5MWlrOUJ3RDNVSkVnSC9YeCtwZ1Zt?=
- =?utf-8?B?cCt5UjNwRVM5c0ZxaXhrdUg3TWtLQ25nbHlKK1FVTGJ4ZHl3Umk2VThDNFU1?=
- =?utf-8?B?NXRSaFIyZUpQeFRlN0tZWm5oMHFRQjFsVzIxT2NVRVNIcHc1UzFMd3ZmeUpY?=
- =?utf-8?B?akt6amlBakxQcnhpSGVlK1hxU1g2aUNZRWV4ZzJxZUJINGFsSTZwZ1ZwVy95?=
- =?utf-8?B?WmNUWnU3OElVRTQ0NGlBMmpJaVFxN2JmVHp6VUozMk5MVjlUYUtQeEVpa3NK?=
- =?utf-8?B?OGwyTXN3eDRhNlBiaFBnTjZvNjRTanRNLzhJTTZzN2lCaWh5Qnp2QkVrOTV1?=
- =?utf-8?B?dG1KdFUrK0xqYUY5K0NuYWN3NmhlVUE2cldnRHM0Z250MUt0MFl2aHpYSlZi?=
- =?utf-8?B?UkNEdXdLR256ekZpU25yRkZyeVdEQXJQOUE1NlBHU3pDbmswTVlxM0ZBUmxq?=
- =?utf-8?B?aGpkaTk5czFpeEhFMkdYa1pKMEhjSjQwOTh3dXNYdExEcUtMODZnaTAyb2I3?=
- =?utf-8?B?R2JOK3RsUXhOa0U1YnhZS3dzRnVLTDhtemNTb0FSRlorODFJR2pkcWtBdzZh?=
- =?utf-8?B?N01UUU40WnorOWcxY01NOXJUK0N6MDVINC9qOXVqeDIyWlg1b1VObnBBbjBl?=
- =?utf-8?B?VXRLcW1aRm11UlV4SmpFRUoyTXZUYitCdU9hRUlRdmVOKzJ1bDdUT3o4WEVR?=
- =?utf-8?B?dnFjWFFUSUFBeWh6MmkxODhxNXpIcktFelFzUnhmZHJuNXBjbGpGUTVEQmxz?=
- =?utf-8?B?UWpYZE8ydWk4a2RlSHJMM01jUEE3elcvSlY3ck9hMDZ6aUtkdnNOZUF1NTRi?=
- =?utf-8?B?Mis4NXJzdGxDYk1rdUVVU3NJZHVyZzNMUldFNENvUFVKWXFaTklmVjVidisz?=
- =?utf-8?B?TEExTkNwa2lvM092ZCs4YUtyanRPTGZYQU1XdzMzK0tPQWltaFFSbHVaUnpH?=
- =?utf-8?B?SVUzZXpWcmNJVkQ2M25jbklWYUc3SzZISmsxd2tOL1JzMFpTMDU4Ylh3czdI?=
- =?utf-8?B?N1VLRGRRbFBYRURwWjZmNzlOL2ZjZzdNUDdhRmoxdFJiMU9ocnk0alVkS0dn?=
- =?utf-8?B?azJWQWprUUVWejdEa3lNbk5lcDZNVmdXNEFJOFc5VGpuTmxXcXh3VHBmVHRs?=
- =?utf-8?B?bmw4Y29YNVdsYU9lTUdMTlJYTHV3T3QwN3M3SG5MSUgreml3cmVIZHJhTUhp?=
- =?utf-8?B?RU9ZUS81WDZEemlSY0tscjRxZVJQWndIK3JKejFhTVF3Y1p2ZE9TUFozVGpC?=
- =?utf-8?B?WmhnSXZNcTFrMUtiL2Z4NFBwNHVQdTRnOGlRdm1zQitBcG9XVEc2bElpVHZK?=
- =?utf-8?B?R0tXakZLS28rNWdtWVJ0ZU5vUnNQa3BDS2EvZEtnVzcrQjhsVzdGa3M1Q0FU?=
- =?utf-8?B?V1o1bzJmdG5BNmg1L0w1OFVjcDNzSTB0VkE4VTRhcE52Z2loVWMwUlo4Nm9j?=
- =?utf-8?B?Vmp3YklmS2pQUDhCUHRzRXk4dCtneXJwT292cHBXYnNkK3VJc0VaelFhZjB1?=
- =?utf-8?B?V0JEbDg5UmZua0twN2VLbWdPYU1uL3ZjODhPd2E0cjFrTEdPclBsaWt2b3dB?=
- =?utf-8?B?YnNKMk12cVRURlE3NnZXbjQ4Tzd6eXRyS296RUliaTNkelBNUlRWZzd5ZGFt?=
- =?utf-8?Q?91jeLs8oQqnoHwSR9MHBB9RO1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f086cb7-80f9-4aea-df88-08dd9f21d3b3
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2025 02:29:39.4340
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zpFYMl69TXSTmEJXlp5fIgvvC7Owu48r8ez5LzWzypUZFz4Mq+igkDIR9xVRa+kf20+k9brbSq5OQrMLuOrAfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6997
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20250530-add-venus-for-qcs615-v8-1-c0092ac616d0@quicinc.com>
+References: <20250530-add-venus-for-qcs615-v8-0-c0092ac616d0@quicinc.com>
+In-Reply-To: <20250530-add-venus-for-qcs615-v8-0-c0092ac616d0@quicinc.com>
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Dikshita Agarwal
+	<quic_dikshita@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Renjiang Han
+	<quic_renjiang@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1748577780; l=4048;
+ i=quic_renjiang@quicinc.com; s=20241001; h=from:subject:message-id;
+ bh=ueslHsS3cZs6fgJZNQCkbVB3I9Yw+FBTMe0of5SzuK0=;
+ b=gwWPDRJ8jjIIPg32P3Hw4RyyXVYP+vsIg6aT3l+r8uPkRYKmiY6f8UEhm63gkP/hTxZxRyOQf
+ Gruk4vNVTU5Ahg7yJXsJj/4vnW8rjPUh2BmInwrYlNTnV5Ag/1wmiex
+X-Developer-Key: i=quic_renjiang@quicinc.com; a=ed25519;
+ pk=8N59kMJUiVH++5QxJzTyHB/wh/kG5LxQ44j9zhUvZmw=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=d4b1yQjE c=1 sm=1 tr=0 ts=68392dfb cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=COk6AnOGAAAA:8
+ a=kOWA-MxIg7aVjduX2O8A:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: FeCgZlbxoaLUg1CBy4XhGnlTKkGZzovf
+X-Proofpoint-GUID: FeCgZlbxoaLUg1CBy4XhGnlTKkGZzovf
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDAzMSBTYWx0ZWRfX0LCDgSBrQex4
+ dUHjudIEGd9TEVjjo/53JSYtutymwPnGQ7eKesp2U0mJi1mmNy4Mbny5nsCY7wNrEcBjYnLrc94
+ iHm6qRrYvvR616cDw4Z2BOS2IE2tcL8yGTrOSFflqI74rIHWi3iRoaC/gWOquCeBjJwinkJMK/F
+ QSwgmivNGsamouyb7vXkytkdLltmOsSNDQmJVpRlj/KnlApixxs7AlUpZsPaCjBmubD+5gpRoFV
+ 2EXya7i4ko93of1LHR5lTXQ/F8HeLBqb2nrrcRYxKp7njx+rY6JDgwlts++x/CncYJxH/aNEW63
+ JtyuyNi9vaH0koH4t6XuhRPH4+T6Uwn2pVSnwiNA08cc/G+YeuJDJSkXdDw+rzeulVe/MNc29+B
+ QkVAjzQ+9xW2c+B2mGqodUPgwa2VKZ+Fr/msnSv4AHpznOb3CK9bF6MDjyflBf1ax+46ln+Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-30_01,2025-05-29_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 suspectscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505300031
 
+The frequency value in the opp-table in the device tree and the freq_tbl
+in the driver are the same.
 
+Therefore, update pm_helpers.c to use the opp-table for frequency values
+for the v4 core.
+If getting data from the opp table fails, fall back to using the frequency
+table.
 
-On 30/5/25 00:41, Xu Yilun wrote:
->>>>>
->>>>> FLR to a bound device is absolutely fine, just break the CC state.
->>>>> Sometimes it is exactly what host need to stop CC immediately.
->>>>> The problem is in VFIO's pre-FLR handling so we need to patch VFIO, not
->>>>> PCI core.
->>>>
->>>> What is a problem here exactly?
->>>> FLR by the host which equals to any other PCI error? The guest may or may not be able to handle it, afaik it does not handle any errors now, QEMU just stops the guest.
->>>
->>> It is about TDX Connect.
->>>
->>> According to the dmabuf patchset, the dmabuf needs to be revoked before
->>> FLR. That means KVM unmaps MMIOs when the device is in LOCKED/RUN state.
->>> That is forbidden by TDX Module and will crash KVM.
->>
->>
->> FLR is something you tell the device to do, how/why would TDX know about it?
-> 
-> I'm talking about FLR in VFIO driver. The VFIO driver would zap bar
-> before FLR. The zapping would trigger KVM unmap MMIOs. See
-> vfio_pci_zap_bars() for legacy case, and see [1] for dmabuf case.
+Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+Signed-off-by: Renjiang Han <quic_renjiang@quicinc.com>
+---
+ drivers/media/platform/qcom/venus/pm_helpers.c | 53 +++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 14 deletions(-)
 
-oh I did not know that we do this zapping, thanks for the pointer. 
-> [1] https://lore.kernel.org/kvm/20250307052248.405803-4-vivek.kasireddy@intel.com/
-> 
-> A pure FLR without zapping bar is absolutely OK.
-> 
->> Or it check the TDI state on every map/unmap (unlikely)?
-> 
-> Yeah, TDX Module would check TDI state on every unmapping.
-
-_every_? Reading the state from DOE mailbox is not cheap enough (imho) to do on every unmap.
-
->>
->>> So the safer way is
->>> to unbind the TDI first, then revoke MMIOs, then do FLR.
->>>
->>> I'm not sure when p2p dma is involved AMD will have the same issue.
->>
->> On AMD, the host can "revoke" at any time, at worst it'll see RMP events from IOMMU. Thanks,
-> 
-> Is the RMP event firstly detected by host or guest? If by host,
-
-Host.
-
-> host could fool guest by just suppress the event. Guest thought the
-> DMA writting is successful but it is not and may cause security issue.
-
-An RMP event on the host is an indication that RMP check has failed and DMA to the guest did not complete so the guest won't see new data. Same as other PCI errors really. RMP acts like a firewall, things behind it do not need to know if something was dropped. Thanks,
-
-> 
-> Thanks,
-> Yilun
+diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+index 409aa9bd0b5d099c993eedb03177ec5ed918b4a0..434dd66076e8faf7f3feac6c29152789f8d2f81b 100644
+--- a/drivers/media/platform/qcom/venus/pm_helpers.c
++++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+@@ -43,14 +43,20 @@ static int core_clks_enable(struct venus_core *core)
+ 	const struct venus_resources *res = core->res;
+ 	const struct freq_tbl *freq_tbl = core->res->freq_tbl;
+ 	unsigned int freq_tbl_size = core->res->freq_tbl_size;
++	struct device *dev = core->dev;
++	struct dev_pm_opp *opp;
+ 	unsigned long freq;
+ 	unsigned int i;
+ 	int ret;
+ 
+-	if (!freq_tbl)
+-		return -EINVAL;
+-
+-	freq = freq_tbl[freq_tbl_size - 1].freq;
++	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
++	if (IS_ERR(opp)) {
++		if (!freq_tbl)
++			return -EINVAL;
++		freq = freq_tbl[freq_tbl_size - 1].freq;
++	} else {
++		dev_pm_opp_put(opp);
++	}
+ 
+ 	for (i = 0; i < res->clks_num; i++) {
+ 		if (IS_V6(core)) {
+@@ -631,12 +637,15 @@ min_loaded_core(struct venus_inst *inst, u32 *min_coreid, u32 *min_load, bool lo
+ 
+ static int decide_core(struct venus_inst *inst)
+ {
++	const struct freq_tbl *freq_tbl = inst->core->res->freq_tbl;
+ 	const u32 ptype = HFI_PROPERTY_CONFIG_VIDEOCORES_USAGE;
+ 	struct venus_core *core = inst->core;
+ 	u32 min_coreid, min_load, cur_inst_load;
+ 	u32 min_lp_coreid, min_lp_load, cur_inst_lp_load;
+ 	struct hfi_videocores_usage_type cu;
+-	unsigned long max_freq;
++	unsigned long max_freq = ULONG_MAX;
++	struct device *dev = core->dev;
++	struct dev_pm_opp *opp;
+ 	int ret = 0;
+ 
+ 	if (legacy_binding) {
+@@ -659,7 +668,11 @@ static int decide_core(struct venus_inst *inst)
+ 	cur_inst_lp_load *= inst->clk_data.low_power_freq;
+ 	/*TODO : divide this inst->load by work_route */
+ 
+-	max_freq = core->res->freq_tbl[0].freq;
++	opp = dev_pm_opp_find_freq_floor(dev, &max_freq);
++	if (IS_ERR(opp))
++		max_freq = freq_tbl[0].freq;
++	else
++		dev_pm_opp_put(opp);
+ 
+ 	min_loaded_core(inst, &min_coreid, &min_load, false);
+ 	min_loaded_core(inst, &min_lp_coreid, &min_lp_load, true);
+@@ -1082,7 +1095,9 @@ static int load_scale_v4(struct venus_inst *inst)
+ 	unsigned int num_rows = core->res->freq_tbl_size;
+ 	struct device *dev = core->dev;
+ 	unsigned long freq = 0, freq_core1 = 0, freq_core2 = 0;
++	unsigned long max_freq = ULONG_MAX;
+ 	unsigned long filled_len = 0;
++	struct dev_pm_opp *opp;
+ 	int i, ret = 0;
+ 
+ 	for (i = 0; i < inst->num_input_bufs; i++)
+@@ -1108,19 +1123,29 @@ static int load_scale_v4(struct venus_inst *inst)
+ 
+ 	freq = max(freq_core1, freq_core2);
+ 
+-	if (freq > table[0].freq) {
+-		dev_dbg(dev, VDBGL "requested clock rate: %lu scaling clock rate : %lu\n",
+-			freq, table[0].freq);
++	opp = dev_pm_opp_find_freq_floor(dev, &max_freq);
++	if (IS_ERR(opp))
++		max_freq = table[0].freq;
++	else
++		dev_pm_opp_put(opp);
+ 
+-		freq = table[0].freq;
++	if (freq > max_freq) {
++		dev_dbg(dev, VDBGL "requested clock rate: %lu scaling clock rate : %lu\n",
++			freq, max_freq);
++		freq = max_freq;
+ 		goto set_freq;
+ 	}
+ 
+-	for (i = num_rows - 1 ; i >= 0; i--) {
+-		if (freq <= table[i].freq) {
+-			freq = table[i].freq;
+-			break;
++	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
++	if (IS_ERR(opp)) {
++		for (i = num_rows - 1 ; i >= 0; i--) {
++			if (freq <= table[i].freq) {
++				freq = table[i].freq;
++				break;
++			}
+ 		}
++	} else {
++		dev_pm_opp_put(opp);
+ 	}
+ 
+ set_freq:
 
 -- 
-Alexey
+2.34.1
 
