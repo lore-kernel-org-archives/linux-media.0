@@ -1,237 +1,198 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6192036FA;
-	Sun,  1 Jun 2025 17:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48BD2571B9;
+	Sun,  1 Jun 2025 23:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748799266; cv=none; b=teLwG/fRW+hjbmxQVVVV67tNI2gA1Jepi5dCyWhxWxwug07HVYEpNYJ9/4fFU0HC0kOwlQreOwsJNGR6XIiurLggGvEV4X4ZNo9N1efD1lZadeWoUY59+6itxLUDMB0A6pTP9vF0KpxbtmAlt4E06wCum6cGoUcTf+ZQKDmvX5s=
+	t=1748820286; cv=none; b=XvVV9W54yxF1N6QD5FJLKrvZO5YdN3sib60PT1iRR+iObMZ6PAENanK1Hjz11ni8qDbXS952wfCfEoGaxVe5sw2bscdGsFqv78GTs2CFgKsjMKtc5GnteR0trOu/Un56Wonq95fciRhVGgu0s8CBuinOnt2ntmGAputlL18ncK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748799266; c=relaxed/simple;
-	bh=cXmqpQ2zVMpAk5TOXk5ulNe5nKFWFV8jUE90oXY/TUk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T0t/mJ+43lXdpGo2j2fpEom9iiqsacsMIWai0OV4yWcbIDChsd0eKLPgZn7/BjEvai9odwCEjk57L4jyXM4HIRG7XS5fwJTfnDQ4h1f6bQcKssfgnJBPXImp1VRtSaHypFZphRvGuSdF6bjgsoQP5Z5PMk1jc+aBxASINCeljTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=EzUk6z+z; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1748820286; c=relaxed/simple;
+	bh=8QyiD0yzzTebBNaJACP7Wql11ENjw3aK7ZZo8jT71W8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=aqnQBL2/B/RmV22ha8BGMt/b9G8GnggQLzMWSAiPxgm2Ixy3HZtmCl6vrX3JVrxg/TYpxPmbeZTl6ErvQT+qe952/VxXe8C2jdfPsxlANDox28fWln6sPgFkMPtmK89Jjyx5U2UyA4rvwmHzYCvp+ZB47ctGhN/lUSc5ixglJHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KyIFjNbp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="EzUk6z+z"
-X-UUID: 9f9ad0ec3f0e11f0813e4fe1310efc19-20250602
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=6VbUAEeV39eL80nnS9lHM6fAPeFr3119Wt/l0LVAUKA=;
-	b=EzUk6z+zV8bUHzbS1OiUvNkYtivxdIY+WEKrcP9Lqza+RbKL3yHc+frgxy0AARNs0du+5a80O9IhmMQL4G55Z1nW1iw84OIdqrB6jaLXubf+CwAz7VPycCYGqZwvm3s7vjgfU007xMVMcdFbConsn9M+MtjQi4JREOCaehs0RKM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.2.1,REQID:21a5fa26-0551-43c9-bf60-ec9c4c5a7bd3,IP:0,UR
-	L:0,TC:0,Content:40,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:40
-X-CID-META: VersionHash:0ef645f,CLOUDID:033481f1-2ded-45ed-94e2-b3e9fa87100d,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:4|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 9f9ad0ec3f0e11f0813e4fe1310efc19-20250602
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-	(envelope-from <jason-jh.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 938427427; Mon, 02 Jun 2025 01:34:08 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.39; Mon, 2 Jun 2025 01:34:06 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.39 via Frontend Transport; Mon, 2 Jun 2025 01:34:06 +0800
-From: Jason-JH Lin <jason-jh.lin@mediatek.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Mauro Carvalho Chehab
-	<mchehab@kernel.org>
-CC: Matthias Brugger <matthias.bgg@gmail.com>, Jason-JH Lin
-	<jason-jh.lin@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>, Singo Chang
-	<singo.chang@mediatek.com>, Paul-PL Chen <paul-pl.chen@mediatek.com>, Moudy
- Ho <moudy.ho@mediatek.com>, Xavier Chang <xavier.chang@mediatek.com>,
-	Xiandong Wang <xiandong.wang@mediatek.com>, Sirius Wang
-	<sirius.wang@mediatek.com>, Fei Shao <fshao@chromium.org>, Chen-yu Tsai
-	<wenst@chromium.org>, <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-media@vger.kernel.org>
-Subject: [PATCH v6 19/20] soc: mediatek: mtk-cmdq: Remove cmdq_pkt_write() and cmdq_pkt_write_mask()
-Date: Mon, 2 Jun 2025 01:31:51 +0800
-Message-ID: <20250601173355.1731140-20-jason-jh.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250601173355.1731140-1-jason-jh.lin@mediatek.com>
-References: <20250601173355.1731140-1-jason-jh.lin@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KyIFjNbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB959C4CEE7;
+	Sun,  1 Jun 2025 23:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748820286;
+	bh=8QyiD0yzzTebBNaJACP7Wql11ENjw3aK7ZZo8jT71W8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KyIFjNbptkIBrDxDeun/5vwm6KAV02JWJD/mZP2PEUnnm7Ejiq1abwBi2x4OhnGLJ
+	 kfAf6m+gL5zbBZbfAtynEj6QiNPLsxVl3gnCJLsvZQkqYv0mQoVj4JJIF4MdG1LXJl
+	 juSHeG6owYiLH1Enf2fCs8dRPCqp/9XTHUcd0vcuxAouKJwb9Us25dUQlAun/Uxm8O
+	 PHCtyapPd5jBpBtTNtOrsYcXrWjQhYvO3Wj9OW7UYzesjDIB6IpqGdhYKWj5PCvaAV
+	 ei3QbtLbE8P1ps/KBGcSbspSzVOYR/15IIO+WuTipe6mogzTAMCeKzFUvipaqCQ9qG
+	 0g3eKxlXrckXA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Ming Qian <ming.qian@oss.nxp.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sasha Levin <sashal@kernel.org>,
+	mirela.rabulea@nxp.com,
+	mchehab@kernel.org,
+	shawnguo@kernel.org,
+	imx@lists.linux.dev,
+	linux-media@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 004/110] media: imx-jpeg: Check decoding is ongoing for motion-jpeg
+Date: Sun,  1 Jun 2025 19:22:46 -0400
+Message-Id: <20250601232435.3507697-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250601232435.3507697-1-sashal@kernel.org>
+References: <20250601232435.3507697-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-The original cmdq_pkt_write() and cmdq_pkt_write_mask() only supported
-generating GCE instructions with subsys ID. They have been replaced by
-cmdq_pkt_write_pa(), cmdq_pkt_write_subsys(), cmdq_pkt_write_mask_pa()
-and cmdq_pkt_write_mask_subsys().
+From: Ming Qian <ming.qian@oss.nxp.com>
 
-These 2 functions can now be removed as they are no longer in use.
+[ Upstream commit fd5b6cd730676940df63b0970bb1ba30bca1aac3 ]
 
-Signed-off-by: Jason-JH Lin <jason-jh.lin@mediatek.com>
+As the first frame in "repeat-mode" is the pattern, the pattern done
+interrupt is ignored by the driver. With small resolution bitstreams,
+the interrupts might fire too quickly and hardware combine two irqs to
+once because irq handle have latency. Thus the driver might miss the
+frame decode done interrupt from the first actual frame.
+
+In order to avoid the driver wait for the frame done interrupt that has
+been combined to the pattern done interrupt and been ignored, driver
+will check the curr_desc and slot_status registers to figure out if the
+decoding of actual frame is finished or not.
+
+Firstly we check the curr_desc register,
+- if it is still pointing to the pattern descriptor, the second actual
+frame is not started, we can wait for its frame-done interrupt.
+- if the curr_desc has pointed to the frame descriptor, then we check the
+ongoing bit of slot_status register.
+- if the ongoing bit is set to 1, the decoding of the actual frame is not
+finished, we can wait for its frame-done interrupt.
+- if the ongoing bit is set to 0, the decoding of the actual frame is
+finished, we can't wait for the second interrupt, but mark it as done.
+
+But there is still a small problem, that the curr_desc and slot_status
+registers are not synchronous. curr_desc is updated when the
+next_descpt_ptr is loaded, but the ongoing bit of slot_status is set
+after the 32 bytes descriptor is loaded, there will be a short time
+interval in between, which may cause fake false. Consider read register
+is quite slow compared with IP read 32byte from memory, read twice
+slot_status can avoid this situation.
+
+Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/mediatek/mtk-cmdq-helper.c | 49 ++++++++++----------------
- include/linux/soc/mediatek/mtk-cmdq.h  | 35 ------------------
- 2 files changed, 18 insertions(+), 66 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index 0a718ffa5f3b..5822a3d13bda 100644
---- a/drivers/soc/mediatek/mtk-cmdq-helper.c
-+++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -201,18 +201,6 @@ static int cmdq_pkt_mask(struct cmdq_pkt *pkt, u32 mask)
- 	return cmdq_pkt_append_command(pkt, inst);
+Based on my analysis of both the commit message and code changes, here
+is my determination: **YES** This commit should be backported to stable
+kernel trees for the following reasons: 1. **Fixes a real bug causing
+driver hangs**: The commit addresses a specific issue where the driver
+can wait indefinitely for an interrupt that has already been combined
+with a previous ignored interrupt. This causes the driver to hang,
+making the hardware unusable for motion-JPEG decoding with small
+resolution bitstreams. 2. **Clear bug fix with minimal changes**: The
+fix is targeted and minimal - it adds one new function
+(`mxc_dec_is_ongoing()`) and modifies one condition in the IRQ handler.
+The changes are well-contained within the imx-jpeg driver with no impact
+on other subsystems. 3. **Hardware-specific race condition**: The commit
+addresses a hardware behavior where interrupts can be combined when they
+fire too quickly. This is a real issue that affects users of the i.MX8
+JPEG hardware decoder, particularly when processing small resolution
+motion-JPEG streams. 4. **No architectural changes**: The fix doesn't
+introduce any new features or change the driver's architecture. It
+simply adds additional state checking to handle a specific hardware race
+condition. 5. **Low regression risk**: The changes are defensive - they
+add additional checks before proceeding rather than changing existing
+behavior. The worst case would be that the new checks might not catch
+all edge cases, but they won't break existing working scenarios. 6.
+**Similar to other backported commits**: Looking at the similar commits
+marked as "YES" for backporting (like "media: imx-jpeg: Disable slot
+interrupt when frame done"), this follows the same pattern of fixing
+specific hardware issues that cause system problems. The commit
+specifically fixes a condition where the driver becomes stuck waiting
+for an interrupt that will never come, which is exactly the kind of bug
+that stable kernels should fix to ensure reliable operation of hardware.
+
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |  1 +
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 31 ++++++++++++++++++-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+index d579c804b0479..adb93e977be91 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+@@ -89,6 +89,7 @@
+ /* SLOT_STATUS fields for slots 0..3 */
+ #define SLOT_STATUS_FRMDONE			(0x1 << 3)
+ #define SLOT_STATUS_ENC_CONFIG_ERR		(0x1 << 8)
++#define SLOT_STATUS_ONGOING			(0x1 << 31)
+ 
+ /* SLOT_IRQ_EN fields TBD */
+ 
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index 1221b309a9163..72b43abfaf903 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -877,6 +877,34 @@ static u32 mxc_jpeg_get_plane_size(struct mxc_jpeg_q_data *q_data, u32 plane_no)
+ 	return size;
  }
  
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
--{
--	struct cmdq_instruction inst = {
--		.op = CMDQ_CODE_WRITE,
--		.value = value,
--		.offset = offset,
--		.subsys = subsys
--	};
--	return cmdq_pkt_append_command(pkt, inst);
--}
--EXPORT_SYMBOL(cmdq_pkt_write);
--
- int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/, u32 pa_base,
- 		      u16 offset, u32 value)
- {
-@@ -229,27 +217,16 @@ EXPORT_SYMBOL(cmdq_pkt_write_pa);
- int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base /*unused*/,
- 			  u16 offset, u32 value)
- {
--	return cmdq_pkt_write(pkt, subsys, offset, value);
-+	struct cmdq_instruction inst = {
-+		.op = CMDQ_CODE_WRITE,
-+		.value = value,
-+		.offset = offset,
-+		.subsys = subsys
-+	};
-+	return cmdq_pkt_append_command(pkt, inst);
- }
- EXPORT_SYMBOL(cmdq_pkt_write_subsys);
- 
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--			u16 offset, u32 value, u32 mask)
--{
--	u16 offset_mask = offset;
--	int err;
--
--	if (mask != GENMASK(31, 0)) {
--		err = cmdq_pkt_mask(pkt, mask);
--		if (err < 0)
--			return err;
--
--		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
--	}
--	return cmdq_pkt_write(pkt, subsys, offset_mask, value);
--}
--EXPORT_SYMBOL(cmdq_pkt_write_mask);
--
- int cmdq_pkt_write_mask_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/, u32 pa_base,
- 			   u16 offset, u32 value, u32 mask)
- {
-@@ -267,7 +244,17 @@ EXPORT_SYMBOL(cmdq_pkt_write_mask_pa);
- int cmdq_pkt_write_mask_subsys(struct cmdq_pkt *pkt, u8 subsys, u32 pa_base /*unused*/,
- 			       u16 offset, u32 value, u32 mask)
- {
--	return cmdq_pkt_write_mask(pkt, subsys, offset, value, mask);
-+	u16 offset_mask = offset;
-+	int err;
++static bool mxc_dec_is_ongoing(struct mxc_jpeg_ctx *ctx)
++{
++	struct mxc_jpeg_dev *jpeg = ctx->mxc_jpeg;
++	u32 curr_desc;
++	u32 slot_status;
 +
-+	if (mask != GENMASK(31, 0)) {
-+		err = cmdq_pkt_mask(pkt, mask);
-+		if (err < 0)
-+			return err;
++	curr_desc = readl(jpeg->base_reg + MXC_SLOT_OFFSET(ctx->slot, SLOT_CUR_DESCPT_PTR));
++	if (curr_desc == jpeg->slot_data.cfg_desc_handle)
++		return true;
 +
-+		offset_mask |= CMDQ_WRITE_ENABLE_MASK;
-+	}
-+	return cmdq_pkt_write_subsys(pkt, subsys, pa_base, offset_mask, value);
- }
- EXPORT_SYMBOL(cmdq_pkt_write_mask_subsys);
- 
-diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index 4a2acceb8581..f4663fbfb5a0 100644
---- a/include/linux/soc/mediatek/mtk-cmdq.h
-+++ b/include/linux/soc/mediatek/mtk-cmdq.h
-@@ -113,17 +113,6 @@ int cmdq_pkt_create(struct cmdq_client *client, struct cmdq_pkt *pkt, size_t siz
-  */
- void cmdq_pkt_destroy(struct cmdq_client *client, struct cmdq_pkt *pkt);
- 
--/**
-- * cmdq_pkt_write() - append write command to the CMDQ packet
-- * @pkt:	the CMDQ packet
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
-- * @value:	the specified target register value
-- *
-- * Return: 0 for success; else the error code is returned
-- */
--int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value);
--
- /**
-  * cmdq_pkt_write_pa() - append write command to the CMDQ packet with pa_base
-  * @pkt:	the CMDQ packet
-@@ -150,19 +139,6 @@ int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys,
- 			  u32 pa_base /*unused*/, u16 offset, u32 value);
- 
--/**
-- * cmdq_pkt_write_mask() - append write command with mask to the CMDQ packet
-- * @pkt:	the CMDQ packet
-- * @subsys:	the CMDQ sub system code
-- * @offset:	register offset from CMDQ sub system
-- * @value:	the specified target register value
-- * @mask:	the specified target register mask
-- *
-- * Return: 0 for success; else the error code is returned
-- */
--int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--			u16 offset, u32 value, u32 mask);
--
- /**
-  * cmdq_pkt_write_mask_pa() - append write command with mask to the CMDQ packet with pa
-  * @pkt:	the CMDQ packet
-@@ -460,11 +436,6 @@ static inline int cmdq_pkt_create(struct cmdq_client *client, struct cmdq_pkt *p
- 
- static inline void cmdq_pkt_destroy(struct cmdq_client *client, struct cmdq_pkt *pkt) { }
- 
--static inline int cmdq_pkt_write(struct cmdq_pkt *pkt, u8 subsys, u16 offset, u32 value)
--{
--	return -ENOENT;
--}
--
- static inline int cmdq_pkt_write_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- 				    u32 pa_base, u16 offset, u32 value)
++	slot_status = readl(jpeg->base_reg + MXC_SLOT_OFFSET(ctx->slot, SLOT_STATUS));
++	if (slot_status & SLOT_STATUS_ONGOING)
++		return true;
++
++	/*
++	 * The curr_desc register is updated when next_descpt_ptr is loaded,
++	 * the ongoing bit of slot_status is set when the 32 bytes descriptor is loaded.
++	 * So there will be a short time interval in between, which may cause fake false.
++	 * Consider read register is quite slow compared with IP read 32byte from memory,
++	 * read twice slot_status can avoid this situation.
++	 */
++	slot_status = readl(jpeg->base_reg + MXC_SLOT_OFFSET(ctx->slot, SLOT_STATUS));
++	if (slot_status & SLOT_STATUS_ONGOING)
++		return true;
++
++	return false;
++}
++
+ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
  {
-@@ -477,12 +448,6 @@ static inline int cmdq_pkt_write_subsys(struct cmdq_pkt *pkt, u8 subsys,
- 	return -ENOENT;
- }
- 
--static inline int cmdq_pkt_write_mask(struct cmdq_pkt *pkt, u8 subsys,
--				      u16 offset, u32 value, u32 mask)
--{
--	return -ENOENT;
--}
--
- static inline int cmdq_pkt_write_mask_pa(struct cmdq_pkt *pkt, u8 subsys /*unused*/,
- 					 u32 pa_base, u16 offset, u32 value, u32 mask)
- {
+ 	struct mxc_jpeg_dev *jpeg = priv;
+@@ -946,7 +974,8 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ 		mxc_jpeg_enc_mode_go(dev, reg, mxc_jpeg_is_extended_sequential(q_data->fmt));
+ 		goto job_unlock;
+ 	}
+-	if (jpeg->mode == MXC_JPEG_DECODE && jpeg_src_buf->dht_needed) {
++	if (jpeg->mode == MXC_JPEG_DECODE && jpeg_src_buf->dht_needed &&
++	    mxc_dec_is_ongoing(ctx)) {
+ 		jpeg_src_buf->dht_needed = false;
+ 		dev_dbg(dev, "Decoder DHT cfg finished. Start decoding...\n");
+ 		goto job_unlock;
 -- 
-2.43.0
+2.39.5
 
