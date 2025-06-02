@@ -1,224 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B3C2343D4;
-	Mon,  2 Jun 2025 14:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A3E2C324D;
+	Mon,  2 Jun 2025 14:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748872984; cv=none; b=Vdq0H/xcWe/Q1EQthZtLAkYpnEXqPLl7lsAToGQ/B74JpEZhgOWKo9Hp2GdIDotru8RwQL6KbyEioOKReenEoxjMlK6opGmb6EpwmeNxGnzDiw2zb1JJTjNhaithc3MsD1/F4uPPe8Elzo8dZGlqpUrcMFYrPb1gBKYfOS4Z3PE=
+	t=1748873026; cv=none; b=Sm8ReNzmddVMAb8g7lXdFdw0L3XzaLlCqTCqaLHhLiaotwGS18Fxi1KyH6GorwVIJV9n3GS6izqjHlR0+9De3k9uq4sUvcRPwWzRQ29JJnS1/cRNGd3//h1dGVtrmAEXGFhpbeAU9h3VjzfDzWLRIEktUUFgnJ3cQrcR1ZS0ZDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748872984; c=relaxed/simple;
-	bh=FLY8rXV/wMLxhZlXAViF34cDRZWKhFotP2CxFgwxkmk=;
+	s=arc-20240116; t=1748873026; c=relaxed/simple;
+	bh=b9nNn1ev6SAyx3B5wbNrYPZbZwaMytwqSzGjwZ2HvqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GSaVzKHApfwF0RbDyhkx70xoz2KSItYjaazTdeQD9N86t7M9WI0clnvOxlrlISZxVOiODPds5yCIkrk7yv4kRoIBP4MZvYFf64O+9mXoW9WlsJ626mQ4zgC/XnXFBG6jozgUxtiA2lR/rDUhU/M9H3JVrs5lV8GQNKGbGfoNyBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hDvYfMZ7; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rG+odd3CDAXEtGgIb5lDVhZcYns7KlbvzbzHa8GCGatecNMzkxO5Xr5Cx+9EotP2Y+tt5/VsZb663XVr4TyGAoJdvMLaKHu3KKlVu6zkU2xvPj6KJgEnXfhXlVVoBrq6mLPdtgaRlsC7zOJJWz4pic+8OCr9LcAgicJfIy4PP04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fFumch0n; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hDvYfMZ7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1748872982; x=1780408982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FLY8rXV/wMLxhZlXAViF34cDRZWKhFotP2CxFgwxkmk=;
-  b=hDvYfMZ73RVsVrdVGGJ2f9bHYeSalJ4m9EYcuaC0K7jWIVtY0E8xurkx
-   goQiZsXtpReds5cZ7KwXW+fPEHWmjOhx5lBfOVCgcMycmN2FB2CrIsx5O
-   eMspGYKXUbRrM+JZpcJoiisEyr/GCiXCYIJMHjG7rmI1El59Xjl6KurOK
-   Af3lvxfCqHno0SienmucwXrM56iTp66/XIJ3fsWRcfJOR1WFn5Ul6UgAT
-   YOjzv6dtYnFHUuNdFZlrgf+3I4Rm1OO5dn2Jv51RhkwgW9Ypav9jTDUfr
-   tq4xe4fmSscuh2gVzElWkbr7UMDyW77maWcqlSh8wWoAnTFoh51OyW4Hd
-   g==;
-X-CSE-ConnectionGUID: vRih7ekhQy6Jm/rScjjT/A==
-X-CSE-MsgGUID: uWPB6l0FTzCpr4xm9I28jg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11451"; a="50937096"
-X-IronPort-AV: E=Sophos;i="6.16,203,1744095600"; 
-   d="scan'208";a="50937096"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2025 07:03:01 -0700
-X-CSE-ConnectionGUID: 4aYjc9MNSNmAc1o1IuJCGw==
-X-CSE-MsgGUID: VUHNjsVZRI+VLiCrPqDFCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,203,1744095600"; 
-   d="scan'208";a="181716728"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa001.jf.intel.com with ESMTP; 02 Jun 2025 07:02:55 -0700
-Date: Mon, 2 Jun 2025 21:56:25 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: kvm@vger.kernel.org, sumit.semwal@linaro.org, christian.koenig@amd.com,
-	pbonzini@redhat.com, seanjc@google.com, alex.williamson@redhat.com,
-	jgg@nvidia.com, dan.j.williams@intel.com, aik@amd.com,
-	linux-coco@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-	vivek.kasireddy@intel.com, yilun.xu@intel.com,
-	linux-kernel@vger.kernel.org, lukas@wunner.de, yan.y.zhao@intel.com,
-	daniel.vetter@ffwll.ch, leon@kernel.org, baolu.lu@linux.intel.com,
-	zhenzhong.duan@intel.com, tao1.su@intel.com,
-	linux-pci@vger.kernel.org, zhiw@nvidia.com, simona.vetter@ffwll.ch,
-	shameerali.kolothum.thodi@huawei.com, iommu@lists.linux.dev,
-	kevin.tian@intel.com
-Subject: Re: [RFC PATCH 20/30] vfio/pci: Do TSM Unbind before zapping bars
-Message-ID: <aD2ticKyMxxMXzZ+@yilunxu-OptiPlex-7050>
-References: <20250529053513.1592088-1-yilun.xu@linux.intel.com>
- <20250529053513.1592088-21-yilun.xu@linux.intel.com>
- <yq5a34cilnxw.fsf@kernel.org>
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fFumch0n"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60B32379;
+	Mon,  2 Jun 2025 16:03:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1748873021;
+	bh=b9nNn1ev6SAyx3B5wbNrYPZbZwaMytwqSzGjwZ2HvqE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fFumch0nweuTJnUb+hETViXzaiV1f273dnizHkNDKJyNmfWU4u4V3l8Mb0vPssbBI
+	 ZDCeRHLXjEdkn0BaBQhKb8FH4v9CNFEXzPqnnvhyhLt7xWTekHc3ON6dAVg1PR1+mT
+	 GK0BDR8rCFeLrE8LgcJf8GLkBiCVuoxgWl7PBQn0=
+Date: Mon, 2 Jun 2025 17:03:34 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Cc: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Subject: Re: [PATCH v3 05/15] media: rcar-csi2: Move rcar2_calc_mbps()
+Message-ID: <20250602140334.GF11750@pendragon.ideasonboard.com>
+References: <20250530-rcar-streams-v3-0-026655df7138@ideasonboard.com>
+ <20250530-rcar-streams-v3-5-026655df7138@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <yq5a34cilnxw.fsf@kernel.org>
+In-Reply-To: <20250530-rcar-streams-v3-5-026655df7138@ideasonboard.com>
 
-On Mon, Jun 02, 2025 at 10:50:11AM +0530, Aneesh Kumar K.V wrote:
-> Xu Yilun <yilun.xu@linux.intel.com> writes:
+Hi Tomi,
+
+Thank you for the patch.
+
+On Fri, May 30, 2025 at 04:50:34PM +0300, Tomi Valkeinen wrote:
+> Move the function so that it can call rcsi2_get_active_lanes() in the
+> following patch.
+
+I would add "No functional change intended." or something similar.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> ---
+>  drivers/media/platform/renesas/rcar-csi2.c | 66 +++++++++++++++---------------
+>  1 file changed, 33 insertions(+), 33 deletions(-)
 > 
-> > When device is TSM Bound, some of its MMIO regions are controlled by
-> > secure firmware. E.g. TDX Connect would require these MMIO regions
-> > mappeed in S-EPT and never unmapped until device Unbound. Zapping bars
-> > irrespective of TSM Bound state may cause unexpected secure firmware
-> > errors. It is always safe to do TSM Unbind first, transiting the device
-> > to shared, then do whatever needed as before.
-> >
-> > Signed-off-by: Xu Yilun <yilun.xu@linux.intel.com>
-> > ---
-> >  drivers/vfio/pci/vfio_pci_config.c |  4 +++
-> >  drivers/vfio/pci/vfio_pci_core.c   | 41 +++++++++++++++++++-----------
-> >  drivers/vfio/pci/vfio_pci_priv.h   |  3 +++
-> >  3 files changed, 33 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-> > index 7ac062bd5044..4ffe661c9e59 100644
-> > --- a/drivers/vfio/pci/vfio_pci_config.c
-> > +++ b/drivers/vfio/pci/vfio_pci_config.c
-> > @@ -590,6 +590,7 @@ static int vfio_basic_config_write(struct vfio_pci_core_device *vdev, int pos,
-> >  		new_mem = !!(new_cmd & PCI_COMMAND_MEMORY);
-> >  
-> >  		if (!new_mem) {
-> > +			vfio_pci_tsm_unbind(vdev);
-> >  			vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  			vfio_pci_dma_buf_move(vdev, true);
-> >
-> 
-> Don't we need to re-bind the vdev with tsm_bind for the continued use of TDI?
+> diff --git a/drivers/media/platform/renesas/rcar-csi2.c b/drivers/media/platform/renesas/rcar-csi2.c
+> index 698eb0e60f32..8aca35096408 100644
+> --- a/drivers/media/platform/renesas/rcar-csi2.c
+> +++ b/drivers/media/platform/renesas/rcar-csi2.c
+> @@ -951,39 +951,6 @@ static int rcsi2_set_phypll(struct rcar_csi2 *priv, unsigned int mbps)
+>  	return 0;
+>  }
+>  
+> -static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+> -			   unsigned int lanes)
+> -{
+> -	struct media_pad *remote_pad;
+> -	struct v4l2_subdev *source;
+> -	s64 freq;
+> -	u64 mbps;
+> -
+> -	if (!priv->remote)
+> -		return -ENODEV;
+> -
+> -	source = priv->remote;
+> -	remote_pad = &source->entity.pads[priv->remote_pad];
+> -
+> -	freq = v4l2_get_link_freq(remote_pad, bpp, 2 * lanes);
+> -	if (freq < 0) {
+> -		int ret = (int)freq;
+> -
+> -		dev_err(priv->dev, "failed to get link freq for %s: %d\n",
+> -			source->name, ret);
+> -
+> -		return ret;
+> -	}
+> -
+> -	mbps = div_u64(freq * 2, MEGA);
+> -
+> -	/* Adjust for C-PHY, divide by 2.8. */
+> -	if (priv->cphy)
+> -		mbps = div_u64(mbps * 5, 14);
+> -
+> -	return mbps;
+> -}
+> -
+>  static int rcsi2_get_active_lanes(struct rcar_csi2 *priv,
+>  				  unsigned int *lanes)
+>  {
+> @@ -1031,6 +998,39 @@ static int rcsi2_get_active_lanes(struct rcar_csi2 *priv,
+>  	return 0;
+>  }
+>  
+> +static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp,
+> +			   unsigned int lanes)
+> +{
+> +	struct media_pad *remote_pad;
+> +	struct v4l2_subdev *source;
+> +	s64 freq;
+> +	u64 mbps;
+> +
+> +	if (!priv->remote)
+> +		return -ENODEV;
+> +
+> +	source = priv->remote;
+> +	remote_pad = &source->entity.pads[priv->remote_pad];
+> +
+> +	freq = v4l2_get_link_freq(remote_pad, bpp, 2 * lanes);
+> +	if (freq < 0) {
+> +		int ret = (int)freq;
+> +
+> +		dev_err(priv->dev, "failed to get link freq for %s: %d\n",
+> +			source->name, ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	mbps = div_u64(freq * 2, MEGA);
+> +
+> +	/* Adjust for C-PHY, divide by 2.8. */
+> +	if (priv->cphy)
+> +		mbps = div_u64(mbps * 5, 14);
+> +
+> +	return mbps;
+> +}
+> +
+>  static int rcsi2_start_receiver_gen3(struct rcar_csi2 *priv,
+>  				     struct v4l2_subdev_state *state)
+>  {
 
-I choose not to re-bind because host basically cannot recover
-everything. The guest does 'bind', 'attest', 'accept' to make a trusted
-device, but for this series VFIO is only aware of 'bind' and can only
-recover 'bind', which doesn't make much sense.  So I think just make
-guest fully aware of TDISP rules, guest should expect writing MSE breaks
-private state, and should do 'bind', 'attest', 'accept' again for
-recovery if it wants to.
+-- 
+Regards,
 
-> 
-> >  		} else {
-> > @@ -712,6 +713,7 @@ static void vfio_lock_and_set_power_state(struct vfio_pci_core_device *vdev,
-> >  					  pci_power_t state)
-> >  {
-> >  	if (state >= PCI_D3hot) {
-> > +		vfio_pci_tsm_unbind(vdev);
-> >  		vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  		vfio_pci_dma_buf_move(vdev, true);
-> >  	} else {
-> > @@ -907,6 +909,7 @@ static int vfio_exp_config_write(struct vfio_pci_core_device *vdev, int pos,
-> >  						 &cap);
-> >  
-> >  		if (!ret && (cap & PCI_EXP_DEVCAP_FLR)) {
-> > +			vfio_pci_tsm_unbind(vdev);
-> >  			vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  			vfio_pci_dma_buf_move(vdev, true);
-> >  			pci_try_reset_function(vdev->pdev);
-> > @@ -992,6 +995,7 @@ static int vfio_af_config_write(struct vfio_pci_core_device *vdev, int pos,
-> >  						&cap);
-> >  
-> >  		if (!ret && (cap & PCI_AF_CAP_FLR) && (cap & PCI_AF_CAP_TP)) {
-> > +			vfio_pci_tsm_unbind(vdev);
-> >  			vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  			vfio_pci_dma_buf_move(vdev, true);
-> >  			pci_try_reset_function(vdev->pdev);
-> > diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> > index 92544e54c9c3..a8437fcecca1 100644
-> > --- a/drivers/vfio/pci/vfio_pci_core.c
-> > +++ b/drivers/vfio/pci/vfio_pci_core.c
-> > @@ -286,6 +286,7 @@ static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev,
-> >  	 * The vdev power related flags are protected with 'memory_lock'
-> >  	 * semaphore.
-> >  	 */
-> > +	vfio_pci_tsm_unbind(vdev);
-> >  	vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  	vfio_pci_dma_buf_move(vdev, true);
-> >  
-> > @@ -693,11 +694,7 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
-> >  	eeh_dev_release(vdev->pdev);
-> >  #endif
-> >  
-> > -	if (vdev->is_tsm_bound) {
-> > -		vfio_iommufd_tsm_unbind(&vdev->vdev);
-> > -		pci_release_regions(vdev->pdev);
-> > -		vdev->is_tsm_bound = false;
-> > -	}
-> > +	__vfio_pci_tsm_unbind(vdev);
-> >  
-> >  	vfio_pci_core_disable(vdev);
-> >  
-> > @@ -1222,6 +1219,7 @@ static int vfio_pci_ioctl_reset(struct vfio_pci_core_device *vdev,
-> >  	if (!vdev->reset_works)
-> >  		return -EINVAL;
-> >  
-> > +	vfio_pci_tsm_unbind(vdev);
-> >  	vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >  
-> >  	/*
-> > @@ -1491,12 +1489,32 @@ static int vfio_pci_ioctl_tsm_bind(struct vfio_pci_core_device *vdev,
-> >  	return ret;
-> >  }
-> >  
-> > +void __vfio_pci_tsm_unbind(struct vfio_pci_core_device *vdev)
-> > +{
-> > +	struct pci_dev *pdev = vdev->pdev;
-> > +
-> > +	lockdep_assert_held(&vdev->vdev.dev_set->lock);
-> > +
-> > +	if (!vdev->is_tsm_bound)
-> > +		return;
-> > +
-> > +	vfio_iommufd_tsm_unbind(&vdev->vdev);
-> > +	pci_release_regions(pdev);
-> > +	vdev->is_tsm_bound = false;
-> >
-> 
-> Do we really need to check vdev->is_tsm_bound? The tsm_ops lock already
-> ensures that concurrent TSM operations can't happen, and repeated calls
-> to bind()/unbind() seem to be handled safely by pci_tsm_bind and pci_tsm_unbind.
-
-It is mainly for pci_release_regions(). I remember there is a concern
-about whether pci_request/release_region() should be in VFIO driver,
-maybe lets solve that concern first in that thread.
-
-> 
-> > +}
-> > +
-> > +void vfio_pci_tsm_unbind(struct vfio_pci_core_device *vdev)
-> > +{
-> > +	mutex_lock(&vdev->vdev.dev_set->lock);
-> > +	__vfio_pci_tsm_unbind(vdev);
-> > +	mutex_unlock(&vdev->vdev.dev_set->lock);
-> > +}
-> >
-> 
-> If is_tsm_bound is no longer needed, and pci_release_regions /
-> request_region_exclusive are now handled within pci_tsm_unbind / bind,
-> do we still need mutex_lock() to guard this path?
-
-We may still need the dev_set->lock. The vfio_pci/iommufd_device_tsm_bind()
-not only does pci_tsm_bind(), but also secure IOMMU setup which affects
-all devices in the dev_set.
-
-Maybe I worried too much, I doesn't know there exists a real secure device
-set.
-
-Thanks,
-Yilun
+Laurent Pinchart
