@@ -1,192 +1,120 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9301622FE19;
-	Mon,  2 Jun 2025 14:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFAB2C327E;
+	Mon,  2 Jun 2025 14:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748873872; cv=none; b=sQSG17aAWwYBvuYoL5UlPNtr2iEZ/v6MR5Mw6SsUudH9RV3n6EjiK95F0Kr2WO9iIiOThpnjl/Y7kimhgq1jmETIsB4epJK0MYdxLVcq5JrzpZRfz+5wYEsl3NZXv+9Ehy9PTxihIdMjSQt3zPQM3UpAF9zgw2t5MjgjemXxmcg=
+	t=1748874202; cv=none; b=m7B+sqQi7EY4AI8CF1dlwmgjp0OoX6qo0eDIs/8ix/zudrWDr0eGOzeaQsEpQx11VqUIMzPL1ZKeY2qukbrkBnpbjBcZnoHWEUB+AKyHqD09fxwIQnZ6m5Eg4vmHMMm5d0eNE2Y433dfH6JKxR5WO7ub7U9s91GPLpP2C86BeV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748873872; c=relaxed/simple;
-	bh=sxfJ7yRL05XnzpkXaeOvWrTMK/PR8lRTFDF1Q8C5rzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noiNKCBjuKb4AYn1kWGYenBC6jbnC3fH7P4efIb5WrEkIRYWEYePAb04nu1Th5fCxHwcujrVzzS7I81X2e2153Wq5E9035oYiUbXtyf9Vm53zsLQdZuc5n50TNi6itHX7mAzrTIi3DLJki0YhpUALVfKkm+07E3q1OrMYREKYCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=q0efLb9c; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1748874202; c=relaxed/simple;
+	bh=iUzlmyuE3KzGN6EwcgbeLBTuduXBTYp2vKPAEfXyhYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dky2ehreBilNrXgieMDtHjhyI8ww+zgg6idXmGXBbWBQ4zHnq2JyeOyYCsE1nGR5DnzHH1qnMSQZutRmYyLhqwmgzkL2ui4la7YNVCCWqduhKC3eNQMvhRIIvO5wX1fA0ThVKa7SdEf3Ifm4ilX0aO8Ewt2VDvheH5CAl6jyO1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nb9MNeYX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="q0efLb9c"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4E171379;
-	Mon,  2 Jun 2025 16:17:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1748873867;
-	bh=sxfJ7yRL05XnzpkXaeOvWrTMK/PR8lRTFDF1Q8C5rzc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q0efLb9ctHtZEy4B5IVcHytKG3GcrK5Nd6B3Oz1xQYtAdTGTM7E1rYj7qJuRItNEL
-	 6fiUOPJt+U7NHQXLmVKOSCjnni3wmH+EtsKMab0+Gl/TqeJ3Zm28N2gX7FLlRxjePx
-	 Dc+2AzqHZtkclDjHQwcncNP7bvzpubILnTk9ex/g=
-Date: Mon, 2 Jun 2025 17:17:40 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Cc: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Subject: Re: [PATCH v3 09/15] media: rcar-isp: Switch to Streams API
-Message-ID: <20250602141740.GG23515@pendragon.ideasonboard.com>
-References: <20250530-rcar-streams-v3-0-026655df7138@ideasonboard.com>
- <20250530-rcar-streams-v3-9-026655df7138@ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nb9MNeYX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4782AC4CEEB;
+	Mon,  2 Jun 2025 14:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1748874202;
+	bh=iUzlmyuE3KzGN6EwcgbeLBTuduXBTYp2vKPAEfXyhYs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nb9MNeYXH3litdvJnm8HXo7tl6aQBXO6/iQiTbcxGmDKnkaAU0GQOeDL6OPuDD8yt
+	 kZXkY2/XWMX2MkUj53VwQCBs5QMbr9H+OFTRr39zOMOtMV9Ae42Cp4R9VFrsxkP0mk
+	 gXC+jJMoT5kcbDOv5o2PtI0Fx61caSVhLs3t0UOs=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andy Yan <andyshrk@163.com>,
+	Anusha Srivatsa <asrivats@redhat.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>
+Subject: [PATCH 6.6 391/444] drm/gem: Internally test import_attach for imported objects
+Date: Mon,  2 Jun 2025 15:47:35 +0200
+Message-ID: <20250602134356.780212081@linuxfoundation.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250602134340.906731340@linuxfoundation.org>
+References: <20250602134340.906731340@linuxfoundation.org>
+User-Agent: quilt/0.68
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250530-rcar-streams-v3-9-026655df7138@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Tomi,
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
-Thank you for the patch.
+------------------
 
-On Fri, May 30, 2025 at 04:50:38PM +0300, Tomi Valkeinen wrote:
-> Switch to Streams API with a single hardcoded route. This breaks any
-> existing userspace which depended on the custom rcar streams
-> implementation, but a single camera use case should continue to work.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> ---
->  drivers/media/platform/renesas/rcar-isp/csisp.c | 62 ++++++++++++++++++++++---
->  1 file changed, 55 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/media/platform/renesas/rcar-isp/csisp.c b/drivers/media/platform/renesas/rcar-isp/csisp.c
-> index 2337c5d44c40..a04cbf96b809 100644
-> --- a/drivers/media/platform/renesas/rcar-isp/csisp.c
-> +++ b/drivers/media/platform/renesas/rcar-isp/csisp.c
-> @@ -124,6 +124,17 @@ static const struct rcar_isp_format rcar_isp_formats[] = {
->  	},
->  };
->  
-> +static const struct v4l2_mbus_framefmt risp_default_fmt = {
-> +	.width = 1920,
-> +	.height = 1080,
-> +	.code = MEDIA_BUS_FMT_RGB888_1X24,
-> +	.colorspace = V4L2_COLORSPACE_SRGB,
-> +	.field = V4L2_FIELD_NONE,
-> +	.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT,
-> +	.quantization = V4L2_QUANTIZATION_DEFAULT,
-> +	.xfer_func = V4L2_XFER_FUNC_DEFAULT,
-> +};
-> +
->  static const struct rcar_isp_format *risp_code_to_fmt(unsigned int code)
->  {
->  	unsigned int i;
-> @@ -222,7 +233,7 @@ static int risp_start(struct rcar_isp *isp, struct v4l2_subdev_state *state)
->  	u32 sel_csi = 0;
->  	int ret;
->  
-> -	fmt = v4l2_subdev_state_get_format(state, RCAR_ISP_SINK);
-> +	fmt = v4l2_subdev_state_get_format(state, RCAR_ISP_SINK, 0);
->  	if (!fmt)
->  		return -EINVAL;
->  
-> @@ -336,7 +347,7 @@ static int risp_set_pad_format(struct v4l2_subdev *sd,
->  			       struct v4l2_subdev_state *state,
->  			       struct v4l2_subdev_format *format)
->  {
-> -	struct v4l2_mbus_framefmt *framefmt;
-> +	struct v4l2_mbus_framefmt *fmt;
->  
->  	if (format->pad > RCAR_ISP_SINK)
->  		return v4l2_subdev_get_fmt(sd, state, format);
-> @@ -344,10 +355,20 @@ static int risp_set_pad_format(struct v4l2_subdev *sd,
->  	if (!risp_code_to_fmt(format->format.code))
->  		format->format.code = rcar_isp_formats[0].code;
->  
-> -	for (unsigned int i = 0; i < RCAR_ISP_NUM_PADS; i++) {
-> -		framefmt = v4l2_subdev_state_get_format(state, i);
-> -		*framefmt = format->format;
-> -	}
-> +	/* Set sink format */
+From: Thomas Zimmermann <tzimmermann@suse.de>
 
-s/format/format./
+commit 8260731ccad0451207b45844bb66eb161a209218 upstream.
 
-> +	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
-> +	if (!fmt)
-> +		return -EINVAL;
-> +
-> +	*fmt = format->format;
-> +
-> +	/* Propagate to source format */
+Test struct drm_gem_object.import_attach to detect imported objects.
 
-	/* Propagate the format to the source pad. */
+During object clenanup, the dma_buf field might be NULL. Testing it in
+an object's free callback then incorrectly does a cleanup as for native
+objects. Happens for calls to drm_mode_destroy_dumb_ioctl() that
+clears the dma_buf field in drm_gem_object_exported_dma_buf_free().
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+v3:
+- only test for import_attach (Boris)
+v2:
+- use import_attach.dmabuf instead of dma_buf (Christian)
 
-> +	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
-> +							   format->stream);
-> +	if (!fmt)
-> +		return -EINVAL;
-> +
-> +	*fmt = format->format;
->  
->  	return 0;
->  }
-> @@ -364,6 +385,32 @@ static const struct v4l2_subdev_ops rcar_isp_subdev_ops = {
->  	.pad	= &risp_pad_ops,
->  };
->  
-> +static int risp_init_state(struct v4l2_subdev *sd,
-> +			   struct v4l2_subdev_state *state)
-> +{
-> +	static struct v4l2_subdev_route routes[] = {
-> +		{
-> +			.sink_pad = RCAR_ISP_SINK,
-> +			.sink_stream = 0,
-> +			.source_pad = RCAR_ISP_PORT0,
-> +			.source_stream = 0,
-> +			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-> +		},
-> +	};
-> +
-> +	static const struct v4l2_subdev_krouting routing = {
-> +		.num_routes = ARRAY_SIZE(routes),
-> +		.routes = routes,
-> +	};
-> +
-> +	return v4l2_subdev_set_routing_with_fmt(sd, state, &routing,
-> +						&risp_default_fmt);
-> +}
-> +
-> +static const struct v4l2_subdev_internal_ops risp_internal_ops = {
-> +	.init_state = risp_init_state,
-> +};
-> +
->  /* -----------------------------------------------------------------------------
->   * Async handling and registration of subdevices and links
->   */
-> @@ -521,11 +568,12 @@ static int risp_probe(struct platform_device *pdev)
->  
->  	isp->subdev.owner = THIS_MODULE;
->  	isp->subdev.dev = &pdev->dev;
-> +	isp->subdev.internal_ops = &risp_internal_ops;
->  	v4l2_subdev_init(&isp->subdev, &rcar_isp_subdev_ops);
->  	v4l2_set_subdevdata(&isp->subdev, &pdev->dev);
->  	snprintf(isp->subdev.name, sizeof(isp->subdev.name), "%s %s",
->  		 KBUILD_MODNAME, dev_name(&pdev->dev));
-> -	isp->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	isp->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_STREAMS;
->  
->  	isp->subdev.entity.function = MEDIA_ENT_F_VID_MUX;
->  	isp->subdev.entity.ops = &risp_entity_ops;
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: b57aa47d39e9 ("drm/gem: Test for imported GEM buffers with helper")
+Reported-by: Andy Yan <andyshrk@163.com>
+Closes: https://lore.kernel.org/dri-devel/38d09d34.4354.196379aa560.Coremail.andyshrk@163.com/
+Tested-by: Andy Yan <andyshrk@163.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Anusha Srivatsa <asrivats@redhat.com>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Simona Vetter <simona@ffwll.ch>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linaro-mm-sig@lists.linaro.org
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Reviewed-by: Simona Vetter <simona.vetter@ffwll.ch>
+Link: https://lore.kernel.org/r/20250416065820.26076-1-tzimmermann@suse.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/drm/drm_gem.h |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
--- 
-Regards,
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -567,8 +567,7 @@ static inline bool drm_gem_object_is_sha
+  */
+ static inline bool drm_gem_is_imported(const struct drm_gem_object *obj)
+ {
+-	/* The dma-buf's priv field points to the original GEM object. */
+-	return obj->dma_buf && (obj->dma_buf->priv != obj);
++	return !!obj->import_attach;
+ }
+ 
+ #ifdef CONFIG_LOCKDEP
 
-Laurent Pinchart
+
