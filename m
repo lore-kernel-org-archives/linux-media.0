@@ -1,39 +1,33 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43623230BD4;
-	Tue,  3 Jun 2025 13:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBFA230D35
+	for <linux-media@vger.kernel.org>; Tue,  3 Jun 2025 13:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748956981; cv=none; b=Jql+3PZTvZZx/6EH1p9yhbTbK6qIpImbfgjcbeS8PwLwmBkJ+I+ZeI1CHIgg4Jd5deUQK4o+seU6MIqbLJoaRkAgSU3ZPLqDfEUbWCarvTvE4X/EcbyDiYnqvx4xLyfUkGldN517g//grtuonmJjSCAhRvYfTHfttm5mjpMeLQM=
+	t=1748957240; cv=none; b=X5gffPEg6Ve+t7cvR6mAdWKF7iKLr8uhkL6gnEPPmM6mMh2Ok7OyUgnCSrMh4EowkBB+dwo2fNgY2tKCXa1YuzJCV/unFjFle3J2q8wXiiLcj78BmTCr7NzpCqYd+X9/jEWTd1v+4N/aP0Tx/IqCMNrp64U+M/jr59wgNf0QD+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748956981; c=relaxed/simple;
-	bh=fnkZG4fUiYH27YYi3be0ESBZWsoCI9tzkPb/0NiZcAI=;
+	s=arc-20240116; t=1748957240; c=relaxed/simple;
+	bh=Xos6q4EQnJmnvdD0nDLtljLQ3UWhBbPLJJp5abPpAP0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uaiAAX5pSrG8hIwqNvcZ77ekOrTADE2rZ0HVs68kK1q7irXUpVae3jKeSrVItpj0ySzUR7gctD+2A6Tw7wnShRLMqliCj2Vl3TV+vzIerrKQhyt+lQC5kgKxzDpsXu5I9+VX8lsaTE9DtNTuTzFuuKMLi+9IM9n09XFn6MSrbGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=C2El2JD9; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	 In-Reply-To:Content-Type; b=dY+p1f3N3WHMtOw3sXHdk/E2N+Hjoa4mYEupU5xPZLq+aevbYlzJ53FouRbjZFiUZcX7jrDPh67vJ+3ty6Wy5hMIzX0wfQR1/0/DJuhcimhRaMAnadwucdG20jdfQHfntIWQh9Yc/tZ6kmmoZinHycT6WqmjnSBbf492aq6r9M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfE5uFXm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="C2El2JD9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=xNyEHGRWVx5wQoM6WyQwXxbRi5u/oo3Fp4uebsLvVr8=; b=C2El2JD95SXo0DjUQ7L0MjuYsZ
-	7Nz5V1iSmhvrKwxeiajVqXxDSpU3mizBRhAyhDU9GOWonsXqlMBXAS8JZObbI9n4Ck4lK6wMVD6PQ
-	2ArpJVxTGZ9YCC0WIIADiwCfzLwN2TuRGkWSDbOk52LSlmKnkJCTcMho10kovOQ1RBD0+pwn0c4/X
-	BawfQN7ZNNnhUqisXaJKmzwKuDAHbOYCDKjM54VUqtO4y5cYxy8K5gilleeETdS7fExv8WjTBLjDn
-	Z9rj11Gk/J3t/i2Fy2m0Loz+y20CqYu8vjFE1p1XRx0RXtYaEVT0jVWfwEdDOY8GBuQfWHnYT+0EK
-	KVcUhMPA==;
-Received: from [81.79.92.254] (helo=[192.168.0.101])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1uMRbB-00GgkT-V3; Tue, 03 Jun 2025 15:22:38 +0200
-Message-ID: <f65d9f96-68f8-4883-b6bd-20bf5b145cb9@igalia.com>
-Date: Tue, 3 Jun 2025 14:22:36 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfE5uFXm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6B4C4CEED;
+	Tue,  3 Jun 2025 13:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748957240;
+	bh=Xos6q4EQnJmnvdD0nDLtljLQ3UWhBbPLJJp5abPpAP0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lfE5uFXmaF7uvTkbXpLZsQ9xQ+obqHCtZxLZUc2a1tWVqEfvxULhXTytktnFwQbm8
+	 tuLQXMgi52et7Z6hFJAdjD+p5AURanssZCYSN0gbVkmwY63TWQyi1DDKza3Mosb65+
+	 /MHlTgpMphuF8L+R00VvavUjPjOyofV41ht29s4vsYrrwmVXbVZ1gyNymvCqNK3F7s
+	 19qzdOLdKBwddbFaaMJGwEwa6vIy3Yx9ARaeRWh9za4EQn++Hl+uCjsZ/UEECL8abK
+	 WqZcJiaIqJyM39ee12233yOHRrWH+uI6QAG5wmb+AWN1OCjzLX6+/5noWh2jSqmKSs
+	 3wlS0mjqsggpw==
+Message-ID: <bd0f6da2-d358-47c9-b2d8-4f5352b7e28f@kernel.org>
+Date: Tue, 3 Jun 2025 15:27:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,137 +35,98 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/6] drm/sched: Avoid memory leaks with cancel_job()
- callback
-To: Philipp Stanner <phasta@kernel.org>, Lyude Paul <lyude@redhat.com>,
- Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Matthew Brost <matthew.brost@intel.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Cc: dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-References: <20250603093130.100159-2-phasta@kernel.org>
- <20250603093130.100159-3-phasta@kernel.org>
-Content-Language: en-GB
-From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-In-Reply-To: <20250603093130.100159-3-phasta@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 11/12] media: mt9m114: Return -EPROBE_DEFER if no
+ endpoint is found
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mathis Foerst <mathis.foerst@mt.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
+References: <20250531163148.83497-1-hansg@kernel.org>
+ <20250531163148.83497-12-hansg@kernel.org>
+ <20250603110359.GC27361@pendragon.ideasonboard.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <20250603110359.GC27361@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+Hi Laurent,
 
-On 03/06/2025 10:31, Philipp Stanner wrote:
-> Since its inception, the GPU scheduler can leak memory if the driver
-> calls drm_sched_fini() while there are still jobs in flight.
-> 
-> The simplest way to solve this in a backwards compatible manner is by
-> adding a new callback, drm_sched_backend_ops.cancel_job(), which
-> instructs the driver to signal the hardware fence associated with the
-> job. Afterwards, the scheduler can savely use the established free_job()
-> callback for freeing the job.
-> 
-> Implement the new backend_ops callback cancel_job().
-> 
-> Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-> Signed-off-by: Philipp Stanner <phasta@kernel.org>
-> ---
->   drivers/gpu/drm/scheduler/sched_main.c | 34 ++++++++++++++++----------
->   include/drm/gpu_scheduler.h            |  9 +++++++
->   2 files changed, 30 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index d20726d7adf0..3f14f1e151fa 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -1352,6 +1352,18 @@ int drm_sched_init(struct drm_gpu_scheduler *sched, const struct drm_sched_init_
->   }
->   EXPORT_SYMBOL(drm_sched_init);
->   
-> +static void drm_sched_kill_remaining_jobs(struct drm_gpu_scheduler *sched)
+Thank you for your reviews. I agree with most of your
+comments and I'll address them when I can make some time.
 
-Only some bikeshedding comments, no need to act on them.
+On 3-Jun-25 1:03 PM, Laurent Pinchart wrote:
+> Hi Hans,
+> 
+> Thank you for the patch.
+> 
+> On Sat, May 31, 2025 at 06:31:46PM +0200, Hans de Goede wrote:
+>> With IPU# bridges, endpoints may only be created when the IPU bridge is
+>> initialized. This may happen after the sensor driver's first probe().
+>>
+>> Signed-off-by: Hans de Goede <hansg@kernel.org>
+>> ---
+>>  drivers/media/i2c/mt9m114.c | 11 +++++++----
+>>  1 file changed, 7 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/mt9m114.c b/drivers/media/i2c/mt9m114.c
+>> index c4d3122d698e..72914c47ec9a 100644
+>> --- a/drivers/media/i2c/mt9m114.c
+>> +++ b/drivers/media/i2c/mt9m114.c
+>> @@ -2399,11 +2399,14 @@ static int mt9m114_parse_dt(struct mt9m114 *sensor)
+>>  	struct fwnode_handle *ep;
+>>  	int ret;
+>>  
+>> +	/*
+>> +	 * Sometimes the fwnode graph is initialized by the bridge driver,
+>> +	 * wait for this.
+>> +	 */
+>>  	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
+>> -	if (!ep) {
+>> -		dev_err(&sensor->client->dev, "No endpoint found\n");
+>> -		return -EINVAL;
+>> -	}
+>> +	if (!ep)
+>> +		return dev_err_probe(&sensor->client->dev, -EPROBE_DEFER,
+>> +				     "waiting for fwnode graph endpoint\n");
+> 
+> That's a bit annoying, as in non-ACPI systems we'll then get probe
+> deferral, making the issue more difficult to debug.
 
-1)
-I would maybe s/kill/cancel/ to align with the ->cancel_job naming.
+With "then" I assume you mean when the fwnode graph endpoint is missing
+on DT systems ?
 
-2)
-Would the callback presence check look better inside this helper so it 
-is all consolidated and streamlined?
+> Is there a way, on IPU-based systems, to delay probing the sensor until
+> the bridge has been initialized ?
+
+Waiting for the fwnode graph endpoint to show up is the way to wait for
+bridge init we (Sakari and me) have agreed upon, this is done on all
+drivers used on x86/ACPI platforms.
+
+Note that by using dev_err_probe() here and not just
+"return -EPROBE_DEFER" the kernel will log a message
+during boot some time (1 minute?) after the last probe
+has succeeded about devices with a deferred probe pending
+logging the reason passed to dev_err_probe(), so debugging
+this is should not be that much of an issue. There will still
+be a log message, it is just that it will be logged a bit later
+rather then directly at probe time.
 
 Regards,
 
-Tvrtko
+Hans
 
-> +{
-> +	struct drm_sched_job *job, *tmp;
-> +
-> +	/* All other accessors are stopped. No locking necessary. */
-> +	list_for_each_entry_safe_reverse(job, tmp, &sched->pending_list, list) {
-> +		sched->ops->cancel_job(job);
-> +		list_del(&job->list);
-> +		sched->ops->free_job(job);
-> +	}
-> +}
-> +
->   /**
->    * drm_sched_fini - Destroy a gpu scheduler
->    *
-> @@ -1359,19 +1371,11 @@ EXPORT_SYMBOL(drm_sched_init);
->    *
->    * Tears down and cleans up the scheduler.
->    *
-> - * This stops submission of new jobs to the hardware through
-> - * drm_sched_backend_ops.run_job(). Consequently, drm_sched_backend_ops.free_job()
-> - * will not be called for all jobs still in drm_gpu_scheduler.pending_list.
-> - * There is no solution for this currently. Thus, it is up to the driver to make
-> - * sure that:
-> - *
-> - *  a) drm_sched_fini() is only called after for all submitted jobs
-> - *     drm_sched_backend_ops.free_job() has been called or that
-> - *  b) the jobs for which drm_sched_backend_ops.free_job() has not been called
-> - *     after drm_sched_fini() ran are freed manually.
-> - *
-> - * FIXME: Take care of the above problem and prevent this function from leaking
-> - * the jobs in drm_gpu_scheduler.pending_list under any circumstances.
-> + * This stops submission of new jobs to the hardware through &struct
-> + * drm_sched_backend_ops.run_job. If &struct drm_sched_backend_ops.cancel_job
-> + * is implemented, all jobs will be canceled through it and afterwards cleaned
-> + * up through &struct drm_sched_backend_ops.free_job. If cancel_job is not
-> + * implemented, memory could leak.
->    */
->   void drm_sched_fini(struct drm_gpu_scheduler *sched)
->   {
-> @@ -1401,6 +1405,10 @@ void drm_sched_fini(struct drm_gpu_scheduler *sched)
->   	/* Confirm no work left behind accessing device structures */
->   	cancel_delayed_work_sync(&sched->work_tdr);
->   
-> +	/* Avoid memory leaks if supported by the driver. */
-> +	if (sched->ops->cancel_job)
-> +		drm_sched_kill_remaining_jobs(sched);
-> +
->   	if (sched->own_submit_wq)
->   		destroy_workqueue(sched->submit_wq);
->   	sched->ready = false;
-> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> index e62a7214e052..81dcbfc8c223 100644
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@ -512,6 +512,15 @@ struct drm_sched_backend_ops {
->            * and it's time to clean it up.
->   	 */
->   	void (*free_job)(struct drm_sched_job *sched_job);
-> +
-> +	/**
-> +	 * @cancel_job: Used by the scheduler to guarantee remaining jobs' fences
-> +	 * get signaled in drm_sched_fini().
-> +	 *
-> +	 * Drivers need to signal the passed job's hardware fence with
-> +	 * -ECANCELED in this callback. They must not free the job.
-> +	 */
-> +	void (*cancel_job)(struct drm_sched_job *sched_job);
->   };
->   
->   /**
+
+
+
+
+
+
+ I suppose this is a question for
+> Sakari too.
+> 
+>>  
+>>  	sensor->bus_cfg.bus_type = V4L2_MBUS_UNKNOWN;
+>>  	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &sensor->bus_cfg);
+> 
 
