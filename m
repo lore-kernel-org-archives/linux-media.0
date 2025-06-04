@@ -1,41 +1,41 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E7C20C488;
-	Wed,  4 Jun 2025 20:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D82221DBD;
+	Wed,  4 Jun 2025 20:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749067809; cv=none; b=lGEC3/fKGz1IlTfhHHH91CdnD0nO9UEfQTJu6sjFvUuiqz2i4tFS+Yj7szbpYWj2erDYqEut0H4fIBGbLFTppumDdM39Gi0xayVarRp8geRw4P+kV1hUx/wd0ju4hsshRTRbe/DBCUdxe3+sv4WfUSSP9oWEGtxn6AixicDG68Y=
+	t=1749067810; cv=none; b=lAkXfvRHy/itZa9Xrc/6l6Jwh7/UPA4J2ms7Ks6FS01S9foqMQZMoH2kRpSmI0u5ysAf5fhT9ULaPH3jqTfxWrNQLLV2tp2AzW2McTq53ixnXQ4b3eZNAX98IP6C/l+HbznwCEMxNZH9WqAoiGYIymgy3Mq8InaG5yMBzdnSkEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749067809; c=relaxed/simple;
-	bh=2v06sXu3RhyrlzfSqsOq6sdxfW6AkWnae7dI01vja4w=;
+	s=arc-20240116; t=1749067810; c=relaxed/simple;
+	bh=4sGxas2P+my+BbRd+bOFWMBu0iKNppblQO7l3Z/Y3+8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C8E4AHZ+tnlrFqBIuNYzRNvQc1zL+NgT2f5nVUkBeEUEHJKLLiZSO/6Q9TUYvuH9OThuqENdMs7M9eONxmQvmbiR78sIwroBLuNV7qMImoyJwzhXZW2ge77hrW4WqG4RemzaEjazj16MsdvorfHaL1kGBv7hboIK03tRoyajzGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PAvZ1U9j; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=PmFUWv2TtAsh7nV7dAQnOgPZCkFTWYid8EnBfrXTbjtqi78hLHiL1gVBvdwGubZnUVb5P/JZ4QQLWYIAhwtDq7zctnTdDaTyJCpDa4C5Ziy7b/MFRT1fz4r5WryB48BqbrqFRY5PDDaOSrpAwg0CoREw1PRv4ic9cUB/tN/PAjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Jr8JvoE4; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PAvZ1U9j"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Jr8JvoE4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1749067799;
-	bh=2v06sXu3RhyrlzfSqsOq6sdxfW6AkWnae7dI01vja4w=;
+	s=mail; t=1749067806;
+	bh=4sGxas2P+my+BbRd+bOFWMBu0iKNppblQO7l3Z/Y3+8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=PAvZ1U9j1EJaOCUQar/GpHDuqejxu2r1D4Wr70g7u1eU7DUBhJZxAt+4/HNAJ77to
-	 7iGpwAhpZb+ZNSRlmWEVqSsTc/QUxuwq8SBweph7FJqaUYwfkX0VZRawsUne593tPy
-	 vb5A703tkV5aBb/ZQ2iAtPdV6c3VAzHU2pU3XPGt22QmMgtm7ZOq+A2Q3JAxXxZxCI
-	 DXRIVHjlVKYbJPdxRoskBBJOufChA7CBjyutgMfO73qVSuNiiW3eDedMpxutRWJPIj
-	 gaWiGOG7alIII115yLeNuPVUwDmti3pGEyLG9PaBwB28AlwqOUC1yC4f48OzhCC4XY
-	 MBietkJnLd4CA==
+	b=Jr8JvoE4wZCTdgW81NBJnkbsM9smtAdTBRKS9IbhHHGJ8Iu9JFKkGT/SdBmakIVcJ
+	 7Hl4lVSa9wrcW66hgV1tmCAY++DLVoFfCWCfZBeUar+7KBSJrwO3yxkiFJOcwWf22Y
+	 UXL7tCdDeW2NEfMz2RNhr75Cp6FgqhXnPJxNtiWI7Sjf+R64S+8kMMHN29COe/Djc4
+	 lSRCIqRd4rvm2LfkbugaEjXOttNclykvBP6dHykmoYUu0U16BusJKuGJ7238TCj1iD
+	 nLypdN4i3bXouzxZ4jTkCA4lFRePzSQg9Do3v6087uqI/i1F69vtrB04cd6kr34Ksz
+	 vCRn5BeqtSVwQ==
 Received: from [192.168.13.145] (unknown [IPv6:2606:6d00:10:5285::5ac])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nicolas)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0720917E0C37;
-	Wed,  4 Jun 2025 22:09:57 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2690117E3730;
+	Wed,  4 Jun 2025 22:10:04 +0200 (CEST)
 From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Date: Wed, 04 Jun 2025 16:09:35 -0400
-Subject: [PATCH v3 1/5] media: mc: add manual request completion
+Date: Wed, 04 Jun 2025 16:09:38 -0400
+Subject: [PATCH v3 4/5] media: vcodec: Implement manual request completion
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250604-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v3-1-603db4749d90@collabora.com>
+Message-Id: <20250604-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v3-4-603db4749d90@collabora.com>
 References: <20250604-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v3-0-603db4749d90@collabora.com>
 In-Reply-To: <20250604-sebastianfricke-vcodec_manual_request_completion_with_state_machine-v3-0-603db4749d90@collabora.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
@@ -59,174 +59,309 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org, kernel@collabora.com, 
  linux-media@vger.kernel.org, 
  Sebastian Fricke <sebastian.fricke@collabora.com>, 
- Nicolas Dufresne <nicolas.dufresne@collabora.com>, 
- Hans Verkuil <hverkuil@xs4all.nl>
+ Nicolas Dufresne <nicolas.dufresne@collabora.com>
 X-Mailer: b4 0.14.2
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
 
-By default when the last request object is completed, the whole
-request completes as well.
+Rework how requests are completed in the MediaTek VCodec driver, by
+implementing the new manual request completion feature, which allows to
+keep a request open while allowing to add new bitstream data.
+This is useful in this case, because the hardware has a LAT and a core
+decode work, after the LAT decode the bitstream isn't required anymore
+so the source buffer can be set done and the request stays open until
+the core decode work finishes.
 
-But sometimes you want to delay this completion to an arbitrary point in
-time so add a manual complete mode for this.
-
-In req_queue the driver marks the request for manual completion by
-calling media_request_mark_manual_completion, and when the driver
-wants to manually complete the request it calls
-media_request_manual_complete().
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+Co-developed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- drivers/media/mc/mc-request.c | 38 ++++++++++++++++++++++++++++++++++++--
- include/media/media-request.h | 38 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 73 insertions(+), 3 deletions(-)
+ .../mediatek/vcodec/decoder/mtk_vcodec_dec.c       |   4 +-
+ .../mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   |  29 +++++
+ .../vcodec/decoder/mtk_vcodec_dec_stateless.c      | 140 ++++++++++++++++-----
+ 3 files changed, 140 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/media/mc/mc-request.c b/drivers/media/mc/mc-request.c
-index 5edfc2791ce7c7485def5db675bbf53ee223d837..398d0806d1d274eb8c454fc5c37b77476abe1e74 100644
---- a/drivers/media/mc/mc-request.c
-+++ b/drivers/media/mc/mc-request.c
-@@ -54,6 +54,7 @@ static void media_request_clean(struct media_request *req)
- 	req->access_count = 0;
- 	WARN_ON(req->num_incomplete_objects);
- 	req->num_incomplete_objects = 0;
-+	req->manual_completion = false;
- 	wake_up_interruptible_all(&req->poll_wait);
- }
- 
-@@ -313,6 +314,7 @@ int media_request_alloc(struct media_device *mdev, int *alloc_fd)
- 	req->mdev = mdev;
- 	req->state = MEDIA_REQUEST_STATE_IDLE;
- 	req->num_incomplete_objects = 0;
-+	req->manual_completion = false;
- 	kref_init(&req->kref);
- 	INIT_LIST_HEAD(&req->objects);
- 	spin_lock_init(&req->lock);
-@@ -459,7 +461,7 @@ void media_request_object_unbind(struct media_request_object *obj)
- 
- 	req->num_incomplete_objects--;
- 	if (req->state == MEDIA_REQUEST_STATE_QUEUED &&
--	    !req->num_incomplete_objects) {
-+	    !req->num_incomplete_objects && !req->manual_completion) {
- 		req->state = MEDIA_REQUEST_STATE_COMPLETE;
- 		completed = true;
- 		wake_up_interruptible_all(&req->poll_wait);
-@@ -488,7 +490,7 @@ void media_request_object_complete(struct media_request_object *obj)
- 	    WARN_ON(req->state != MEDIA_REQUEST_STATE_QUEUED))
- 		goto unlock;
- 
--	if (!--req->num_incomplete_objects) {
-+	if (!--req->num_incomplete_objects && !req->manual_completion) {
- 		req->state = MEDIA_REQUEST_STATE_COMPLETE;
- 		wake_up_interruptible_all(&req->poll_wait);
- 		completed = true;
-@@ -499,3 +501,35 @@ void media_request_object_complete(struct media_request_object *obj)
- 		media_request_put(req);
- }
- EXPORT_SYMBOL_GPL(media_request_object_complete);
-+
-+void media_request_manual_complete(struct media_request *req)
-+{
-+	unsigned long flags;
-+	bool completed = false;
-+
-+	if (WARN_ON(!req))
-+		return;
-+	if (WARN_ON(!req->manual_completion))
-+		return;
-+
-+	spin_lock_irqsave(&req->lock, flags);
-+	if (WARN_ON(req->state != MEDIA_REQUEST_STATE_QUEUED))
-+		goto unlock;
-+
-+	req->manual_completion = false;
-+	/*
-+	 * It is expected that all other objects in this request are
-+	 * completed when this function is called. WARN if that is
-+	 * not the case.
-+	 */
-+	if (!WARN_ON(req->num_incomplete_objects)) {
-+		req->state = MEDIA_REQUEST_STATE_COMPLETE;
-+		wake_up_interruptible_all(&req->poll_wait);
-+		completed = true;
-+	}
-+unlock:
-+	spin_unlock_irqrestore(&req->lock, flags);
-+	if (completed)
-+		media_request_put(req);
-+}
-+EXPORT_SYMBOL_GPL(media_request_manual_complete);
-diff --git a/include/media/media-request.h b/include/media/media-request.h
-index d4ac557678a78372222704400c8c96cf3150b9d9..7f9af68ef19ac6de0184bbb0c0827dc59777c6dc 100644
---- a/include/media/media-request.h
-+++ b/include/media/media-request.h
-@@ -56,6 +56,9 @@ struct media_request_object;
-  * @access_count: count the number of request accesses that are in progress
-  * @objects: List of @struct media_request_object request objects
-  * @num_incomplete_objects: The number of incomplete objects in the request
-+ * @manual_completion: if true, then the request won't be marked as completed
-+ * when @num_incomplete_objects reaches 0. Call media_request_manual_complete()
-+ * to complete the request after @num_incomplete_objects == 0.
-  * @poll_wait: Wait queue for poll
-  * @lock: Serializes access to this struct
-  */
-@@ -68,6 +71,7 @@ struct media_request {
- 	unsigned int access_count;
- 	struct list_head objects;
- 	unsigned int num_incomplete_objects;
-+	bool manual_completion;
- 	wait_queue_head_t poll_wait;
- 	spinlock_t lock;
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
+index 98838217b97d45ed2b5431fdf87c94e0ff79fc57..036ad191a9c3e644fe99b4ce25d6a089292f1e57 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec.c
+@@ -889,8 +889,10 @@ void vb2ops_vdec_stop_streaming(struct vb2_queue *q)
+ 					src_buf->vb2_buf.req_obj.req;
+ 				v4l2_m2m_buf_done(src_buf,
+ 						VB2_BUF_STATE_ERROR);
+-				if (req)
++				if (req) {
+ 					v4l2_ctrl_request_complete(req, &ctx->ctrl_hdl);
++					media_request_manual_complete(req);
++				}
+ 			}
+ 		}
+ 		return;
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+index aececca7ecf8936bb2b3b55c99354af983746b30..6f9728a95720a257dee9201463c5e275d0586a94 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+@@ -64,6 +64,19 @@ enum mtk_vdec_hw_arch {
+ 	MTK_VDEC_LAT_SINGLE_CORE,
  };
-@@ -218,6 +222,38 @@ media_request_get_by_fd(struct media_device *mdev, int request_fd);
- int media_request_alloc(struct media_device *mdev,
- 			int *alloc_fd);
  
 +/**
-+ * media_request_mark_manual_completion - Enable manual completion
-+ *
-+ * @req: The request
-+ *
-+ * Mark that the request has to be manually completed by calling
-+ * media_request_manual_complete().
-+ *
-+ * This function shall be called in the req_queue callback.
++ * enum mtk_vdec_request_state - Stages of processing a request
++ * @MTK_VDEC_REQUEST_RECEIVED: Hardware prepared for the LAT decode
++ * @MTK_VDEC_REQUEST_LAT_DONE: LAT decode finished, the bitstream is not
++ *		      needed anymore
++ * @MTK_VDEC_REQUEST_CORE_DONE: CORE decode finished
 + */
-+static inline void
-+media_request_mark_manual_completion(struct media_request *req)
++enum mtk_vdec_request_state {
++	MTK_VDEC_REQUEST_RECEIVED = 0,
++	MTK_VDEC_REQUEST_LAT_DONE = 1,
++	MTK_VDEC_REQUEST_CORE_DONE = 2,
++};
++
+ /**
+  * struct vdec_pic_info  - picture size information
+  * @pic_w: picture width
+@@ -128,6 +141,17 @@ struct mtk_vcodec_dec_pdata {
+ 	bool uses_stateless_api;
+ };
+ 
++/**
++ * struct mtk_vcodec_dec_request - Media request private data.
++ *
++ * @req_state: Request completion state
++ * @req: Media Request structure
++ */
++struct mtk_vcodec_dec_request {
++	enum mtk_vdec_request_state req_state;
++	struct media_request req;
++};
++
+ /**
+  * struct mtk_vcodec_dec_ctx - Context (instance) private data.
+  *
+@@ -319,6 +343,11 @@ static inline struct mtk_vcodec_dec_ctx *ctrl_to_dec_ctx(struct v4l2_ctrl *ctrl)
+ 	return container_of(ctrl->handler, struct mtk_vcodec_dec_ctx, ctrl_hdl);
+ }
+ 
++static inline struct mtk_vcodec_dec_request *req_to_dec_req(struct media_request *req)
 +{
-+	req->manual_completion = true;
++	return container_of(req, struct mtk_vcodec_dec_request, req);
 +}
 +
-+/**
-+ * media_request_manual_complete - Mark the request as completed
-+ *
-+ * @req: The request
-+ *
-+ * This function completes a request that was marked for manual completion by an
-+ * earlier call to media_request_mark_manual_completion(). The request's
-+ * @manual_completion flag is reset to false.
-+ *
-+ * All objects contained in the request must have been completed previously. It
-+ * is an error to call this function otherwise. If such an error occurred, the
-+ * function will WARN and the object completion will be delayed until
-+ * @num_incomplete_objects is 0.
-+ */
-+void media_request_manual_complete(struct media_request *req);
-+
- #else
+ /* Wake up context wait_queue */
+ static inline void
+ wake_up_dec_ctx(struct mtk_vcodec_dec_ctx *ctx, unsigned int reason, unsigned int hw_id)
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
+index d873159b9b3069fe3460502c2751f2e8b2714f44..eea0050eacc1c41abd8e0a1cd546c1ecce90a311 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_stateless.c
+@@ -242,10 +242,61 @@ static const struct v4l2_frmsize_stepwise stepwise_fhd = {
+ 	.step_height = 16
+ };
  
- static inline void media_request_get(struct media_request *req)
-@@ -336,7 +372,7 @@ void media_request_object_init(struct media_request_object *obj);
-  * @req: The media request
-  * @ops: The object ops for this object
-  * @priv: A driver-specific priv pointer associated with this object
-- * @is_buffer: Set to true if the object a buffer object.
-+ * @is_buffer: Set to true if the object is a buffer object.
-  * @obj: The object
-  *
-  * Bind this object to the request and set the ops and priv values of
++static const char *state_to_str(enum mtk_vdec_request_state state)
++{
++	switch (state) {
++	case MTK_VDEC_REQUEST_RECEIVED:
++		return "RECEIVED";
++	case MTK_VDEC_REQUEST_LAT_DONE:
++		return "LAT_DONE";
++	case MTK_VDEC_REQUEST_CORE_DONE:
++		return "CORE_DONE";
++	default:
++		return "UNKNOWN";
++	}
++}
++
++static void mtk_vcodec_dec_request_complete(struct mtk_vcodec_dec_ctx *ctx,
++					    enum mtk_vdec_request_state state,
++					    enum vb2_buffer_state buffer_state,
++					    struct media_request *src_buf_req)
++{
++	struct mtk_vcodec_dec_request *req = req_to_dec_req(src_buf_req);
++	struct vb2_v4l2_buffer *src_buf, *dst_buf;
++
++	mutex_lock(&ctx->lock);
++
++	if (req->req_state >= state) {
++		mutex_unlock(&ctx->lock);
++		return;
++	}
++
++	switch (req->req_state) {
++	case MTK_VDEC_REQUEST_RECEIVED:
++		v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++		src_buf = v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
++		v4l2_m2m_buf_done(src_buf, buffer_state);
++		if (state == MTK_VDEC_REQUEST_LAT_DONE)
++			break;
++		fallthrough;
++	case MTK_VDEC_REQUEST_LAT_DONE:
++		dst_buf = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
++		v4l2_m2m_buf_done(dst_buf, buffer_state);
++		media_request_manual_complete(src_buf_req);
++		break;
++	default:
++		break;
++	}
++
++	mtk_v4l2_vdec_dbg(3, ctx, "Switch state from %s to %s.\n",
++			  state_to_str(req->req_state), state_to_str(state));
++	req->req_state = state;
++	mutex_unlock(&ctx->lock);
++}
++
+ static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_dec_ctx *ctx, int error,
+ 					   struct media_request *src_buf_req)
+ {
+-	struct vb2_v4l2_buffer *vb2_dst;
+ 	enum vb2_buffer_state state;
+ 
+ 	if (error)
+@@ -253,17 +304,7 @@ static void mtk_vdec_stateless_cap_to_disp(struct mtk_vcodec_dec_ctx *ctx, int e
+ 	else
+ 		state = VB2_BUF_STATE_DONE;
+ 
+-	vb2_dst = v4l2_m2m_dst_buf_remove(ctx->m2m_ctx);
+-	if (vb2_dst) {
+-		v4l2_m2m_buf_done(vb2_dst, state);
+-		mtk_v4l2_vdec_dbg(2, ctx, "free frame buffer id:%d to done list",
+-				  vb2_dst->vb2_buf.index);
+-	} else {
+-		mtk_v4l2_vdec_err(ctx, "dst buffer is NULL");
+-	}
+-
+-	if (src_buf_req)
+-		v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++	mtk_vcodec_dec_request_complete(ctx, MTK_VDEC_REQUEST_CORE_DONE, state, src_buf_req);
+ }
+ 
+ static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_dec_ctx *ctx)
+@@ -306,6 +347,7 @@ static void vb2ops_vdec_buf_request_complete(struct vb2_buffer *vb)
+ 	struct mtk_vcodec_dec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+ 
+ 	v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_hdl);
++	media_request_manual_complete(vb->req_obj.req);
+ }
+ 
+ static void mtk_vdec_worker(struct work_struct *work)
+@@ -318,7 +360,8 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 	struct mtk_vcodec_mem *bs_src;
+ 	struct mtk_video_dec_buf *dec_buf_src;
+ 	struct media_request *src_buf_req;
+-	enum vb2_buffer_state state;
++	enum mtk_vdec_request_state req_state;
++	enum vb2_buffer_state buf_state;
+ 	bool res_chg = false;
+ 	int ret;
+ 
+@@ -351,37 +394,43 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 			  ctx->id, bs_src->va, &bs_src->dma_addr, bs_src->size, vb2_src);
+ 	/* Apply request controls. */
+ 	src_buf_req = vb2_src->req_obj.req;
+-	if (src_buf_req)
+-		v4l2_ctrl_request_setup(src_buf_req, &ctx->ctrl_hdl);
+-	else
++	if (WARN_ON(!src_buf_req)) {
++		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+ 		mtk_v4l2_vdec_err(ctx, "vb2 buffer media request is NULL");
++		return;
++	}
++	v4l2_ctrl_request_setup(src_buf_req, &ctx->ctrl_hdl);
+ 
+ 	ret = vdec_if_decode(ctx, bs_src, NULL, &res_chg);
+-	if (ret && ret != -EAGAIN) {
++
++	if (ret == -EAGAIN) {
++		buf_state = VB2_BUF_STATE_DONE;
++		req_state = MTK_VDEC_REQUEST_RECEIVED;
++	} else if (ret) {
+ 		mtk_v4l2_vdec_err(ctx,
+-				  "[%d] decode src_buf[%d] sz=0x%zx pts=%llu ret=%d res_chg=%d",
++				  "[%d] decode src_buf[%d] sz=0x%zx pts=%llu res_chg=%d ret=%d",
+ 				  ctx->id, vb2_src->index, bs_src->size,
+-				  vb2_src->timestamp, ret, res_chg);
++				  vb2_src->timestamp, res_chg, ret);
+ 		if (ret == -EIO) {
+ 			mutex_lock(&ctx->lock);
+ 			dec_buf_src->error = true;
+ 			mutex_unlock(&ctx->lock);
+ 		}
+-	}
+ 
+-	state = ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE;
+-	if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
+-	    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME) {
+-		v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx, state);
+-		if (src_buf_req)
+-			v4l2_ctrl_request_complete(src_buf_req, &ctx->ctrl_hdl);
++		buf_state = VB2_BUF_STATE_ERROR;
++		req_state = MTK_VDEC_REQUEST_CORE_DONE;
+ 	} else {
+-		if (ret != -EAGAIN) {
+-			v4l2_m2m_src_buf_remove(ctx->m2m_ctx);
+-			v4l2_m2m_buf_done(vb2_v4l2_src, state);
+-		}
+-		v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
++		buf_state = VB2_BUF_STATE_DONE;
++
++		if (!IS_VDEC_LAT_ARCH(dev->vdec_pdata->hw_arch) ||
++		    ctx->current_codec == V4L2_PIX_FMT_VP8_FRAME)
++			req_state = MTK_VDEC_REQUEST_CORE_DONE;
++		else
++			req_state = MTK_VDEC_REQUEST_LAT_DONE;
+ 	}
++
++	mtk_vcodec_dec_request_complete(ctx, req_state, buf_state, src_buf_req);
++	v4l2_m2m_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx);
+ }
+ 
+ static void vb2ops_vdec_stateless_buf_queue(struct vb2_buffer *vb)
+@@ -709,6 +758,22 @@ static int mtk_vcodec_dec_ctrls_setup(struct mtk_vcodec_dec_ctx *ctx)
+ 	return 0;
+ }
+ 
++static struct media_request *fops_media_request_alloc(struct media_device *mdev)
++{
++	struct mtk_vcodec_dec_request *req;
++
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++
++	return &req->req;
++}
++
++static void fops_media_request_free(struct media_request *mreq)
++{
++	struct mtk_vcodec_dec_request *req = req_to_dec_req(mreq);
++
++	kfree(req);
++}
++
+ static int fops_media_request_validate(struct media_request *mreq)
+ {
+ 	const unsigned int buffer_cnt = vb2_request_buffer_cnt(mreq);
+@@ -729,9 +794,20 @@ static int fops_media_request_validate(struct media_request *mreq)
+ 	return vb2_request_validate(mreq);
+ }
+ 
++static void fops_media_request_queue(struct media_request *mreq)
++{
++	struct mtk_vcodec_dec_request *req = req_to_dec_req(mreq);
++
++	media_request_mark_manual_completion(mreq);
++	req->req_state = MTK_VDEC_REQUEST_RECEIVED;
++	v4l2_m2m_request_queue(mreq);
++}
++
+ const struct media_device_ops mtk_vcodec_media_ops = {
++	.req_alloc      = fops_media_request_alloc,
++	.req_free      = fops_media_request_free,
+ 	.req_validate	= fops_media_request_validate,
+-	.req_queue	= v4l2_m2m_request_queue,
++	.req_queue	= fops_media_request_queue,
+ };
+ 
+ static void mtk_vcodec_add_formats(unsigned int fourcc,
 
 -- 
 2.49.0
