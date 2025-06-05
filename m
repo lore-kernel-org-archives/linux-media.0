@@ -1,21 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DE2202F83
-	for <linux-media@vger.kernel.org>; Thu,  5 Jun 2025 12:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D21202F83;
+	Thu,  5 Jun 2025 12:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749128115; cv=none; b=CoUYKmYMqK/zesIm7PkrM09veTzUohk81ZgPL5amCtXGUvv7RcwM6EY6uF4U+IAt83IBKjsqaoN7n/ylrkIU0MIPCYlRe9zC2bMfvj3ohcWEpFJCKm3FPqdQNzFH20jy1GdxH3RqDRgY/EPaQ3SmeHD37CVkLOhDE9O4GPHIu0E=
+	t=1749128232; cv=none; b=fme6rClLx9PnzxrWjv5xnkO9iQmxxWd7eFR5B4BjDMAJe2qHC5e+r4h3CwAsvmSWnV6I+QYzHEGNxnboWjWzdeyTtvIsMb0g5iTkMwGjrdQmk49XT6tFpcuhSuj1fGLODH7b96vO53VPVDlRP8fxmZUs5J/6YvyMYCEI+rvEBa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749128115; c=relaxed/simple;
-	bh=LOb9r/Jj9riUcwpqeBrXN2Nq4ofbZLwsYRp+ofhGEes=;
+	s=arc-20240116; t=1749128232; c=relaxed/simple;
+	bh=Byr/oEoXo9QKBDnSzkZLZeIjz9Ei0CO0nz0HapLAasA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eVCQvx9tbOlvWeO/J0CqYoDF+bVWdEkmCk/pbR+n+JNI1wiVIKX1qDbczeNexF8O2vJCd4tZ8buW9pcQGfohElMslHdGb5OgyNrM+GgP2ItZsKiPRTtYeYjpmVuQxepB3vpFqDS6yK6N7PoJ4dBU3MbkqafXLYEC/SC4KmLxm8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073D8C4CEE7;
-	Thu,  5 Jun 2025 12:55:13 +0000 (UTC)
-Message-ID: <72f7c5e2-32b2-4c62-8274-cff50336043b@xs4all.nl>
-Date: Thu, 5 Jun 2025 14:55:12 +0200
+	 In-Reply-To:Content-Type; b=oNoUjaJIDc9GxXSxJW5eFf7Q7g0LEhB4p9ynjoWd3p9xfiAud8iFXJPd4+c7UYHbJcI2eVJ7pnzH6llHgVnd+0mCE8PT1aH10kbe6ktjpzO6MZ1FtHiOmvYmeeeR2i9CKJTwYq1iB8QP0bRJ3Ui8rBCfI+gKyMEhfMS7k6UEfuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9OS9HRe; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9OS9HRe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A28A7C4CEE7;
+	Thu,  5 Jun 2025 12:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749128230;
+	bh=Byr/oEoXo9QKBDnSzkZLZeIjz9Ei0CO0nz0HapLAasA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=R9OS9HRefttAMjUUukDbCjUUxkF6L3e6PQtquhTwt+9rcPHTkQd+Smke+02RP9JJt
+	 LMQ+TcTYeE9NJNoktZgPHvEikLaA2/dUdiRc1i1t6ZsiqHsVi/CBBZO1Nc9CnutplL
+	 +ocvvQtY4t+q4AkY082rwuZMhnPNI4PdsoAUObS+jExBONZ5F5S7RYcmE2nO/mTcIC
+	 hXdO9CELjXl4i88/FlE7bYmKj6TqFrHCYb4dNwESQcjMouUf6IPTdlg9EjOsXdZN0k
+	 7cOCYVWMQQg4uO89bEBqaBPdOIq2KFp2koMMNwVUXFSqDAthhqAwDbEqsvqXnbfXSr
+	 Q5qA48/s4vIZA==
+Message-ID: <be92ce49-7eaa-49b8-bba8-53a0b0012113@kernel.org>
+Date: Thu, 5 Jun 2025 14:57:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -23,173 +35,73 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/9] libdvbv5/dvb-v5-std.c: add DTV_BANDWIDTH_HZ where
- possible
+Subject: Re: [PATCH v2 0/4] media: Add Gen 3 IP stateful decoder driver
+To: yassine.ouaissa@allegrodvt.com, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Michael Tretter <m.tretter@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20250605-allegro_dvt_al300_dec_driver-v2-0-1ef4839f5f06@allegrodvt.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linux-media@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <cover.1749121112.git.hverkuil@xs4all.nl>
- <f3226f83c3e8cf9f71dc53d435abc381f88e08b0.1749121112.git.hverkuil@xs4all.nl>
- <20250605141853.1f2a6616@foz.lan>
-From: Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20250605141853.1f2a6616@foz.lan>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250605-allegro_dvt_al300_dec_driver-v2-0-1ef4839f5f06@allegrodvt.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/5/25 14:18, Mauro Carvalho Chehab wrote:
-> Em Thu,  5 Jun 2025 12:58:29 +0200
-> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+On 05/06/2025 14:26, Yassine Ouaissa via B4 Relay wrote:
+> This patch series introduces a new stateful decoder driver for the
+> allegrodvt GEN 3 IPs.
 > 
->> Several systems support DTV_BANDWIDTH_HZ, add it.
->>
->> This fixes a dvbv5-scan error message about missing support for
->> DTV_BANDWIDTH_HZ.
->>
->> Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
->> ---
->>  lib/libdvbv5/dvb-v5-std.c | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/lib/libdvbv5/dvb-v5-std.c b/lib/libdvbv5/dvb-v5-std.c
->> index c0a14175..74e2e4fe 100644
->> --- a/lib/libdvbv5/dvb-v5-std.c
->> +++ b/lib/libdvbv5/dvb-v5-std.c
->> @@ -81,6 +81,7 @@ const unsigned int sys_isdbt_props[] = {
->>  const unsigned int sys_atsc_props[] = {
->>  	DTV_FREQUENCY,
->>  	DTV_MODULATION,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
-> 
-> Indeed, ISDB-T could have a bandwidth. In the beginning, only
-> Japan and Brazil were using it, with a 6MHz bandwidth. As far as
-> I remember, all drivers we currently have are for devices with
-> such limit. Yet, the spec allows other bandwidths as well. Not sure
-> if any Country is using a different bandwidth in practice, though.
-> 
->> @@ -111,12 +112,14 @@ const unsigned int sys_dvbc_annex_ac_props[] = {
->>  	DTV_INVERSION,
->>  	DTV_SYMBOL_RATE,
->>  	DTV_INNER_FEC,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
->>  
->>  const unsigned int sys_dvbc_annex_b_props[] = {
->>  	DTV_FREQUENCY,
->>  	DTV_MODULATION,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
->>  
->> @@ -126,6 +129,7 @@ const unsigned int sys_dvbs_props[] = {
->>  	DTV_SYMBOL_RATE,
->>  	DTV_INNER_FEC,
->>  	DTV_POLARIZATION,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
->>  
->> @@ -139,6 +143,7 @@ const unsigned int sys_dvbs2_props[] = {
->>  	DTV_ROLLOFF,
->>  	DTV_POLARIZATION,
->>  	DTV_STREAM_ID,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
->>  
->> @@ -149,12 +154,14 @@ const unsigned int sys_turbo_props[] = {
->>  	DTV_INNER_FEC,
->>  	DTV_MODULATION,
->>  	DTV_POLARIZATION,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
->>  
->>  const unsigned int sys_isdbs_props[] = {
->>  	DTV_FREQUENCY,
->>  	DTV_STREAM_ID,
->> +	DTV_BANDWIDTH_HZ,
->>  	0
->>  };
-> 
-> The above are not right: Satellite and Cable don't use bandwidth.
-> Instead, the bandwidth is indirectly calculated from the symbol
-> rate and rolloff, using something like this:
-> 
-> 	float rolloff = 1.35;	/* DVB-S rolloff */
-> 
-> 	int bandwidth_hz = int(symbol_rate * rolloff);
-> 
-> 
-> 
-> For DVB-C Annex A and B, and for DVB-S (and, afaikt, for DVB-TURBO), the
-> rolloff is fixed. DVB-S2 is the only one that supports different
-> rolloff factors.
-> 
-> In any case, DVB core calculates it. See this code snippet:
-> 
->         switch (c->delivery_system) {
->         case SYS_ATSC:
->         case SYS_DVBC_ANNEX_B:
->                 c->bandwidth_hz = 6000000;
->                 break;
->         case SYS_DVBC_ANNEX_A:
->                 rolloff = 115;
->                 break;
->         case SYS_DVBC_ANNEX_C:
->                 rolloff = 113;
->                 break;
->         case SYS_DSS:
->                 rolloff = 120;
->                 break;
->         case SYS_DVBS:
->         case SYS_TURBO:
->         case SYS_ISDBS:
->                 rolloff = 135;
->                 break;
->         case SYS_DVBS2:
->                 switch (c->rolloff) {
->                 case ROLLOFF_20:
->                         rolloff = 120;
->                         break;
->                 case ROLLOFF_25:
->                         rolloff = 125;
->                         break;
->                 default:
->                 case ROLLOFF_35:
->                         rolloff = 135;
->                 }
->                 break;
->         default:
->                 break;
->         }
->         if (rolloff)
->                 c->bandwidth_hz = mult_frac(c->symbol_rate, rolloff, 100);
-> 
-> The Kernel calculates the bandwidth and may return it, but the opposite
-> is not true: any set operation for a TV standard that has DTV_SYMBOL_RATE
-> will simply discard/ignore what is there at DTV_BANDWIDTH_HZ.
-> 
-> Currently, the logic inside libdvbv5 assumes that all parameters are
-> read/write.
+> Changes in v2:
+> - patch 2: Fix dt-bindings reviews (Krzysztof Kozlowski) (Conor Dooley)
 
-The issue I tried to fix is that dvbv5-scan complains about BANDWIDTH_HZ
-being missing for DVB-C Annex A:
+That's just way too vague. What change specifically?
 
-ERROR    command BANDWIDTH_HZ (5) not found during retrieve
-
-Should this message just be suppressed in dvbv5-scan?
-
-I'm not really sure what the best approach is, this isn't my area of
-expertise...
-
-Regards,
-
-	Hans
-
-> 
-> Thanks,
-> Mauro
-
+Best regards,
+Krzysztof
