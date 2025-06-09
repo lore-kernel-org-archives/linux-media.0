@@ -1,37 +1,36 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4DA2512C8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5A4253346
 	for <linux-media@vger.kernel.org>; Mon,  9 Jun 2025 11:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749467052; cv=none; b=UMJHyUY+3GUYtlTu8qkYdYeWRGY2zlmrjKYXRct35o5jY5oFivMXTNXke7TNv5vsgjGQ3SPNXHBQwizlc1k0e2Q1Bj8pkovqUVfKIJe/JKItgKyicGCogLd9Qqb90Jk9d828RIj7uUaRGVPj3XYNDLFFIQHVSG277zgcP2ENYxg=
+	t=1749467053; cv=none; b=FjLmg9k1iFG2LL5xf41lYNur3UCf+Hzk/hZOzi56+rNqH1v2gpV3T2E45r7j7nae3L4Y7DvrKC6yCwZ7qq/r8/DGKsrCEaWtNLVZGMlJbwpt2CfgAhix5vU9KtSsNQVmK3fUVsNvjB8eAkOoo5gBDgr6MMGGjuab6s33KxA/elw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749467052; c=relaxed/simple;
-	bh=5zuCqXAvujCyVWOBNrl/Uiwozsn/7qG7c5SXhVsdE7c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jBQuVC/FE2MYIQc5Zec1FO31WqhbST3NytnVDNnL/bgbcBw5fD9/Isggm/FpT8FV9I2lsLLw/BQJSmUknJCA3b10dtDOCmrozc7Wvru041X6Nx5QJc1DWAz21r9Dtsfc7TfCHe1IJo7qKqFP7q2GTaaRjwOcDTkvsUO5S+BNFuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ASaynKsd; arc=none smtp.client-ip=213.97.179.56
+	s=arc-20240116; t=1749467053; c=relaxed/simple;
+	bh=ssfFxPK3MoxO7a4/tvqAnhNGJw4iMdhBz3j6DrxYMrU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aSWt9rcQcqbLXuLqvdv9Vd/2DJgR4cj3Tv7KL7ULJw3evmpp39knC6ltEQJbx772fvyZ9Xu+TeyJx7bFURhZNVn7eC6wiQ4i3CzUl7CDoxuAWoASmCPGih98BhUOv9lr3yWwUBNNfAm4NcmeQFABYBqFPjHhzy46jBkb/LLNwPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Bk7VBXBw; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ASaynKsd"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Bk7VBXBw"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=NkRaIaVztUTmzbJTyyUdXGyMdtGxpCFyiDJM76cTkMs=; b=ASaynKsd9rGGXUVPw7d5JjXyZm
-	HUf1ewkKgcM1f+p1LfqKB6hGQq35XWtiLpuaLoS+B5EsHsGks3VAQvhnBVz5tO+7xS+pGqCgR7lgA
-	8tQq2UMnOwZIl9GXXCDHuIAzLGyj9R4hoa/6iGPgvjTd0E0AIl0EA9Eq11E2eQaPuZHC3YytHc8M7
-	rKcrQwA9+eFfZPKAnzuFM/0v5ohmCrUBbpymIga3Nhq9hgarhPOuM55PS4dQdvqC8ihLEaqriJvgC
-	8YpRI2z7/Pps/ny0aSoQPcrzGBTcmkDcv0r2Cvb0Jowk70HneOkMAZuSGVaJ+BuqYf1+2iL1855Di
-	xKzK5hPA==;
+	bh=2S32/aBsrv+xOKKgjTQUppa3LBI/6fgL0iqXdkdY86k=; b=Bk7VBXBwvitgVxHE1LsLFvGhB0
+	ADnhuHhSDwW6HDrqTa4b+llSPjjklF6gAOffRLiEul2L7C2O/Ei8alyYoQh8aMeOpSuOHIefjKhTh
+	jXEex3VdX7EEMsoTfLJf9y+B/pVWIqEJPNJ1eF14bKg9TihU2UQVXiKcwE9m24wH5bDfBqJ8LploR
+	I5ha+b+LkQpSul/EwlMiEq+NTHWxJavJkoIVwNmxuWS+tPaTu6FNFK9GYzd8kocP9M7Mc5rys/Fxk
+	qN2wgaPomV2EkvGiN/MdpTr5LJFD8DjLYy+GIN68eWRQgpNbrp3orJQxYxwWDezkD6hsJ44zzHDRZ
+	HFPGYpQQ==;
 Received: from [81.79.92.254] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1uOaI7-001NxJ-6x; Mon, 09 Jun 2025 13:03:47 +0200
+	id 1uOaI4-001NxD-Tk; Mon, 09 Jun 2025 13:03:45 +0200
 From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
 To: dri-devel@lists.freedesktop.org
 Cc: kernel-dev@igalia.com,
@@ -47,14 +46,11 @@ Cc: kernel-dev@igalia.com,
 	intel-gfx@lists.freedesktop.org,
 	linux-media@vger.kernel.org,
 	linaro-mm-sig@lists.linaro.org,
-	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>
-Subject: [PATCH v5 3/4] drm/i915: Protect access to driver and timeline name
-Date: Mon,  9 Jun 2025 12:03:29 +0100
-Message-ID: <20250609110330.74705-4-tvrtko.ursulin@igalia.com>
+	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+Subject: [PATCH v5 0/4] Fixing some dma-fence use-after-free
+Date: Mon,  9 Jun 2025 12:03:26 +0100
+Message-ID: <20250609110330.74705-1-tvrtko.ursulin@igalia.com>
 X-Mailer: git-send-email 2.48.0
-In-Reply-To: <20250609110330.74705-1-tvrtko.ursulin@igalia.com>
-References: <20250609110330.74705-1-tvrtko.ursulin@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -63,105 +59,93 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Protect the access to driver and timeline name which otherwise could be
-freed as dma-fence exported is signalling fences.
+Hi all,
 
-Now that the safe access is handled in the dma-fence API, the external
-callers such as sync_file, and our internal code paths, we can drop the
-similar protection from i915_fence_get_timeline_name().
+tl;dr;
+Xe and probably some other drivers can tear down the internal state referenced
+by an exported sync_file fence which then causes a null pointer derefences on
+accessing said fence.
 
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
----
- drivers/gpu/drm/i915/gt/intel_gt_requests.c |  2 ++
- drivers/gpu/drm/i915/i915_request.c         | 17 +++--------------
- drivers/gpu/drm/i915/i915_sw_fence.c        |  2 ++
- 3 files changed, 7 insertions(+), 14 deletions(-)
+IGT that exploits the problem:
+https://patchwork.freedesktop.org/patch/642709/?series=146211&rev=2
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_requests.c b/drivers/gpu/drm/i915/gt/intel_gt_requests.c
-index ae3557ed6c1e..11fca24c8b5b 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_requests.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_requests.c
-@@ -251,10 +251,12 @@ void intel_gt_watchdog_work(struct work_struct *work)
- 		if (!i915_request_completed(rq)) {
- 			struct dma_fence *f = &rq->fence;
- 
-+			dma_fence_access_begin();
- 			pr_notice("Fence expiration time out i915-%s:%s:%llx!\n",
- 				  dma_fence_driver_name(f),
- 				  dma_fence_timeline_name(f),
- 				  f->seqno);
-+			dma_fence_access_end();
- 			i915_request_cancel(rq, -EINTR);
- 		}
- 		i915_request_put(rq);
-diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-index 4874c4f1e4ab..a8de736ff556 100644
---- a/drivers/gpu/drm/i915/i915_request.c
-+++ b/drivers/gpu/drm/i915/i915_request.c
-@@ -66,18 +66,6 @@ static const char *i915_fence_get_timeline_name(struct dma_fence *fence)
- {
- 	const struct i915_gem_context *ctx;
- 
--	/*
--	 * The timeline struct (as part of the ppgtt underneath a context)
--	 * may be freed when the request is no longer in use by the GPU.
--	 * We could extend the life of a context to beyond that of all
--	 * fences, possibly keeping the hw resource around indefinitely,
--	 * or we just give them a false name. Since
--	 * dma_fence_ops.get_timeline_name is a debug feature, the occasional
--	 * lie seems justifiable.
--	 */
--	if (test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
--		return "signaled";
--
- 	ctx = i915_request_gem_context(to_request(fence));
- 	if (!ctx)
- 		return "[" DRIVER_NAME "]";
-@@ -2184,7 +2172,6 @@ void i915_request_show(struct drm_printer *m,
- 		       const char *prefix,
- 		       int indent)
- {
--	const char *name = dma_fence_timeline_name((struct dma_fence *)&rq->fence);
- 	char buf[80] = "";
- 	int x = 0;
- 
-@@ -2220,6 +2207,7 @@ void i915_request_show(struct drm_printer *m,
- 
- 	x = print_sched_attr(&rq->sched.attr, buf, x, sizeof(buf));
- 
-+	dma_fence_access_begin();
- 	drm_printf(m, "%s%.*s%c %llx:%lld%s%s %s @ %dms: %s\n",
- 		   prefix, indent, "                ",
- 		   queue_status(rq),
-@@ -2228,7 +2216,8 @@ void i915_request_show(struct drm_printer *m,
- 		   fence_status(rq),
- 		   buf,
- 		   jiffies_to_msecs(jiffies - rq->emitted_jiffies),
--		   name);
-+		   dma_fence_timeline_name((struct dma_fence *)&rq->fence));
-+	dma_fence_access_end();
- }
- 
- static bool engine_match_ring(struct intel_engine_cs *engine, struct i915_request *rq)
-diff --git a/drivers/gpu/drm/i915/i915_sw_fence.c b/drivers/gpu/drm/i915/i915_sw_fence.c
-index 9edf659d18db..4cdb8dd524f3 100644
---- a/drivers/gpu/drm/i915/i915_sw_fence.c
-+++ b/drivers/gpu/drm/i915/i915_sw_fence.c
-@@ -435,11 +435,13 @@ static void timer_i915_sw_fence_wake(struct timer_list *t)
- 	if (!fence)
- 		return;
- 
-+	dma_fence_access_begin();
- 	pr_notice("Asynchronous wait on fence %s:%s:%llx timed out (hint:%ps)\n",
- 		  dma_fence_driver_name(cb->dma),
- 		  dma_fence_timeline_name(cb->dma),
- 		  cb->dma->seqno,
- 		  i915_sw_fence_debug_hint(fence));
-+	dma_fence_access_end();
- 
- 	i915_sw_fence_set_error_once(fence, -ETIMEDOUT);
- 	i915_sw_fence_complete(fence);
+It seems there is a consensus this is a known problem with the dma-fence design,
+where internal state shouldn't really be accessed after the fence has been
+signaled. However currently the code is mostly unaware of that hence the use-
+after-free potential.
+
+To fix it, between the option of adding more reference counting and trying to
+"revoke" the fence, suggestion is to focus on the later.
+
+Reference to the recent discussion:
+https://lore.kernel.org/dri-devel/20250418164246.72426-1-tvrtko.ursulin@igalia.com/
+
+This series therefore attempts to implement a solution along those lines.
+
+Most of the description what and how can be found in:
+ "dma-fence: Add safe access helpers and document the rules"
+
+The series only addreses the runtime use-after-free scenarios,
+such as the above explained situation with the xe driver. For now the module
+unload problem is deliberately left for later. (Although again, some of the
+patches merged earlier do make it safer, and will make future improvements
+easier due fewer accesses to fence->ops.)
+
+Final patch in the series is the one which makes xe compliant with the rules
+and API proposed earlier in the series. It does so by ensuring there is at least
+one RCU grace period between fences being signaled and driver allocated memory
+accessible from xe fences getting freed. Which couples with the earlier (from
+the series) refactors which added dma_fence_access_begin/end() protection to
+the relevant call sites.
+
+If this approach is acceptable the next steps will be to see if any other
+drivers will need similar changes. And also to discuss whether we want to go a
+step futher and later move to SRCU, so code would be protected against module
+unload as well.
+
+v2:
+ * Dropped module unload handling.
+ * Proposing real API instead of hacks.
+
+v3:
+ * Dropped the dma_fence_is_array|chain ops to flags conversion.
+ * Dropped the i915 cleanup patch which is now independent.
+ * Squashed dma-fence helpers with internal usage patches.
+ * Restored missing hunk in "dma-fence: Use a flag for 64-bit seqnos".
+ * Removed the AMDGPU_JOB_GET_TIMELINE_NAME macro.
+ * Applied some r-b tags.
+
+v4:
+ * Tidied 64-bit seqno flags patch and fixed for amdgpu user queues which landed
+   since.
+ * Adjusted some dma-fence tracepoints to avoid asserts.
+ * Protected tracepoints in dma_fence_wait_timeout() with the safe access
+   annotations.
+ * Dropped driver/timeline helper usage from amdgpu_trace.h.
+ * Dropped signaled fence protection from i915 timeline name vfunc.
+
+v5:
+ * Rebased after prep patches merged.
+ * Move dma_fence_access_end() earlier in dma_fence_release(). (Christian)
+
+Tvrtko Ursulin (4):
+  dma-fence: Add safe access helpers and document the rules
+  sync_file: Protect access to driver and timeline name
+  drm/i915: Protect access to driver and timeline name
+  drm/xe: Make dma-fences compliant with the safe access rules
+
+ drivers/dma-buf/dma-fence.c                  | 82 +++++++++++++++++++-
+ drivers/dma-buf/sync_file.c                  |  6 ++
+ drivers/gpu/drm/i915/gt/intel_gt_requests.c  |  2 +
+ drivers/gpu/drm/i915/i915_request.c          | 17 +---
+ drivers/gpu/drm/i915/i915_sw_fence.c         |  2 +
+ drivers/gpu/drm/xe/xe_guc_exec_queue_types.h |  2 +
+ drivers/gpu/drm/xe/xe_guc_submit.c           |  7 +-
+ drivers/gpu/drm/xe/xe_hw_fence.c             |  3 +
+ include/linux/dma-fence.h                    | 32 ++++++--
+ include/trace/events/dma_fence.h             | 38 ++++++++-
+ 10 files changed, 162 insertions(+), 29 deletions(-)
+
 -- 
 2.48.0
 
