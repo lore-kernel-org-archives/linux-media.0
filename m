@@ -1,153 +1,129 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E0F1F0984;
-	Tue, 10 Jun 2025 09:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E5D27FD56;
+	Tue, 10 Jun 2025 09:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749547871; cv=none; b=o2fIx8UDR2KSQB/PcRp0iKKRpDjNTrTDkCn1nb/hp12cv1K5y2P9/N/NmMblivf3MKsM7ecZTpXpgHvHOTto5LXDATxPJawSalImGnsvMYMH7ZlHrPvKVnDszkvwOVibs4osCoTZ4m2DuklpMLUZIc1EqMykDymTmPrU35aLQiY=
+	t=1749547926; cv=none; b=e/UNGl0JbiKuizNPzeqtDvjpWLOm26lFnBZK8WgRLRSy6ALjXpr5Ptf6yg159CnRzZbgPMM5hcSQHcZTEYnbRlI9qlICKdcMsaAZIYVbEkB0b+fhyI349Hq/ay02IYahodN9wNyG8mfTF800KmiEHqyjWiW2cJFt6lsLsVAiu74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749547871; c=relaxed/simple;
-	bh=RJnqcxMbNIxlr5WHFTB3DtfDPYl9c+Ani7yndG3QX+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VUh/L7KChYIa7QeoGdoet1iBB6csx+HwlcufJkZiqbYj/C+zQiaIlksEEP9q/dshjWGHQCYCdGLSJkpEadd3AZmn+sN1Bi6P+ROHhd9j0iemAt70V6s3ucLijvEIzvkcTw2hG0aMgYq2Fcj0Ev3rXvgedvJAqnjbbzuUPLlvjRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=unCEQU8P; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1749547926; c=relaxed/simple;
+	bh=UIVDYVCfkXYdQKg+JzIWbx5aKZWOpeiPIbE1ZtnzTh0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=haqe/7ANCY/4hH7y+O9+2SqL4VCMdnJDwwyPqqrvarCo/XlP2TeChfchoi+/ksUz3v6cavheO3Ze1IqWYbNlCC4xVMzKT1pwMOZn4t7H1uCIhNF0krR6k6b0/FyoavlIRCAtHOWMR4GDJM20dPsydF8fBX7Rmgtj2pQDdXl+rag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODPsLHWn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="unCEQU8P"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D56DD2EC;
-	Tue, 10 Jun 2025 11:30:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1749547860;
-	bh=RJnqcxMbNIxlr5WHFTB3DtfDPYl9c+Ani7yndG3QX+I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=unCEQU8PyvSu0fK2raePwS5YJoY3Ob2A/0SliXK2qoRY8mSjX6XNLukOVwdfarZOf
-	 IdbuEhFp6bms0SqvLkOxz2cooHIGTC5JGEku5p1hNZw6awHYnDVZwwyDmlH4UDIjbo
-	 KAN2uTRLL7tmm+BN0ieAzWovP5Qr6PirfR155trk=
-Date: Tue, 10 Jun 2025 12:30:54 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-media@vger.kernel.org, Isaac Scott <isaac.scott@ideasonboard.com>,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODPsLHWn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A2DC4CEEF;
+	Tue, 10 Jun 2025 09:32:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749547925;
+	bh=UIVDYVCfkXYdQKg+JzIWbx5aKZWOpeiPIbE1ZtnzTh0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ODPsLHWnEGPj51M8X+WShetoHBGztO9IuHayMjIiqnA2/05Y8GZJrHm0J5htsVVgC
+	 rZ6kBVNz7NqYeHiZog9F5RZ2G56mKvM1Ey49nDO8+/x1Zq1PjeiXR6MSL6YzoYCRRF
+	 gqTs6W14flVOWO2prg69erRMmNajgMvxAL4W1vmNk0fm+0uN+BsNS+RowBG+4KGA7P
+	 aVYIsgIIgkZUCJr5dvK+afWgAnO8cBsiZkSDKHEMksAYCKaxuRQRxoDkQ4okrqewnk
+	 yhBEqy8WTy7C4nhpUHGNunRYxaqITPhl6kwYFsOACInMuRGYGdK/gr+SAeTl7bOZcI
+	 0PSrHLmoRTluw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Hugues Fruchet <hugues.fruchet@foss.st.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 8/8] media: imx-mipi-csis: Initial support for multiple
- output channels
-Message-ID: <20250610093054.GN27510@pendragon.ideasonboard.com>
-References: <20250608235840.23871-1-laurent.pinchart@ideasonboard.com>
- <20250608235840.23871-9-laurent.pinchart@ideasonboard.com>
- <2230307.irdbgypaU6@steina-w>
+	Peter Griffin <peter.griffin@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] st-delta: avoid excessive stack usage
+Date: Tue, 10 Jun 2025 11:31:56 +0200
+Message-Id: <20250610093201.2645325-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2230307.irdbgypaU6@steina-w>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 10, 2025 at 11:01:20AM +0200, Alexander Stein wrote:
-> Am Montag, 9. Juni 2025, 01:58:40 CEST schrieb Laurent Pinchart:
-> > Some CSIS instances feature more than one output channel. Parse the
-> > number of channels from the device tree, and update register dumps and
-> > event counters accordingly. Support for routing virtual channels and
-> > data types to output channels through the subdev internal routing API
-> > will come later.
-> > 
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/nxp/imx-mipi-csis.c | 224 ++++++++++++++-------
-> >  1 file changed, 146 insertions(+), 78 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > index 080e40837463..4cc358d93187 100644
-> > --- a/drivers/media/platform/nxp/imx-mipi-csis.c
-> > +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > @@ -98,12 +98,12 @@
-> >  #define MIPI_CSIS_INT_SRC_ODD_AFTER		BIT(28)
-> >  #define MIPI_CSIS_INT_SRC_ODD			(0x3 << 28)
-> >  #define MIPI_CSIS_INT_SRC_NON_IMAGE_DATA	(0xf << 28)
-> 
-> As a side note: I just noticed Bits 28-31 are only defined on i.MX7. They
-> are reserved on i.MX8M (Mini, Nano, Plus).
+From: Arnd Bergmann <arnd@arndb.de>
 
-They are many bit marked as reserved that are actually implemented. The
-CSIS is a big pain point :-(
+Building with a reduced stack warning limit shows that delta_mjpeg_decode()
+copies a giant structure to the stack each time but only uses three of
+its members:
 
-> > -#define MIPI_CSIS_INT_SRC_FRAME_START		BIT(24)
-> > -#define MIPI_CSIS_INT_SRC_FRAME_END		BIT(20)
-> > +#define MIPI_CSIS_INT_SRC_FRAME_START(n)	BIT((n) + 24)
-> > +#define MIPI_CSIS_INT_SRC_FRAME_END(n)		BIT((n) + 20)
-> >  #define MIPI_CSIS_INT_SRC_ERR_SOT_HS(n)		BIT((n) + 16)
-> > -#define MIPI_CSIS_INT_SRC_ERR_LOST_FS		BIT(12)
-> > -#define MIPI_CSIS_INT_SRC_ERR_LOST_FE		BIT(8)
-> > -#define MIPI_CSIS_INT_SRC_ERR_OVER		BIT(4)
-> > +#define MIPI_CSIS_INT_SRC_ERR_LOST_FS(n)	BIT((n) + 12)
-> > +#define MIPI_CSIS_INT_SRC_ERR_LOST_FE(n)	BIT((n) + 8)
-> > +#define MIPI_CSIS_INT_SRC_ERR_OVER(n)		BIT((n) + 4)
-> 
-> Similar here. Only i.MX7 has the bits for CH1, CH2 and CH3 defined.
-> 
-> >  #define MIPI_CSIS_INT_SRC_ERR_WRONG_CFG		BIT(3)
-> >  #define MIPI_CSIS_INT_SRC_ERR_ECC		BIT(2)
-> >  #define MIPI_CSIS_INT_SRC_ERR_CRC		BIT(1)
-> > @@ -205,23 +205,23 @@
-> >  /* Debug control register */
-> >  #define MIPI_CSIS_DBG_CTRL			0xc0
-> >  #define MIPI_CSIS_DBG_INTR_MSK			0xc4
-> > -#define MIPI_CSIS_DBG_INTR_MSK_DT_NOT_SUPPORT	BIT(25)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_DT_IGNORE	BIT(24)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_ERR_FRAME_SIZE	BIT(20)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_TRUNCATED_FRAME	BIT(16)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FE		BIT(12)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FS		BIT(8)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_FALL	BIT(4)
-> > -#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_RISE	BIT(0)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_DT_NOT_SUPPORT		BIT(25)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_DT_IGNORE		BIT(24)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_ERR_FRAME_SIZE(n)	BIT((n) + 20)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_TRUNCATED_FRAME(n)	BIT((n) + 16)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FE(n)		BIT((n) + 12)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_EARLY_FS(n)		BIT((n) + 8)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_FALL(n)	BIT((n) + 4)
-> > +#define MIPI_CSIS_DBG_INTR_MSK_CAM_VSYNC_RISE(n)	BIT((n) + 0)
-> >  #define MIPI_CSIS_DBG_INTR_SRC			0xc8
-> > -#define MIPI_CSIS_DBG_INTR_SRC_DT_NOT_SUPPORT	BIT(25)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_DT_IGNORE	BIT(24)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_ERR_FRAME_SIZE	BIT(20)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_TRUNCATED_FRAME	BIT(16)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FE		BIT(12)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FS		BIT(8)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_FALL	BIT(4)
-> > -#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_RISE	BIT(0)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_DT_NOT_SUPPORT		BIT(25)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_DT_IGNORE		BIT(24)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_ERR_FRAME_SIZE(n)	BIT((n) + 20)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_TRUNCATED_FRAME(n)	BIT((n) + 16)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FE(n)		BIT((n) + 12)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_EARLY_FS(n)		BIT((n) + 8)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_FALL(n)	BIT((n) + 4)
-> > +#define MIPI_CSIS_DBG_INTR_SRC_CAM_VSYNC_RISE(n)	BIT((n) + 0)
-> 
-> Out of curiosity: Where do these bits come from? I can't find them in RM.
+drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c: In function 'delta_mjpeg_decode':
+drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c:427:1: error: the frame size of 1296 bytes is larger than 1280 bytes [-Werror=frame-larger-than=]
 
-They are documented in the i.MX7D RM, and they appear to be implemented
-on the i.MX8MP as the interrupts fire in the expected way.
+Open-code the passing of the structure members that are actually used here.
 
-> > [snip]
+Fixes: 433ff5b4a29b ("[media] st-delta: add mjpeg support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ .../platform/st/sti/delta/delta-mjpeg-dec.c   | 20 ++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c b/drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c
+index 0533d4a083d2..a078f1107300 100644
+--- a/drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c
++++ b/drivers/media/platform/st/sti/delta/delta-mjpeg-dec.c
+@@ -239,7 +239,7 @@ static int delta_mjpeg_ipc_open(struct delta_ctx *pctx)
+ 	return 0;
+ }
+ 
+-static int delta_mjpeg_ipc_decode(struct delta_ctx *pctx, struct delta_au *au)
++static int delta_mjpeg_ipc_decode(struct delta_ctx *pctx, dma_addr_t pstart, dma_addr_t pend)
+ {
+ 	struct delta_dev *delta = pctx->dev;
+ 	struct delta_mjpeg_ctx *ctx = to_ctx(pctx);
+@@ -256,8 +256,8 @@ static int delta_mjpeg_ipc_decode(struct delta_ctx *pctx, struct delta_au *au)
+ 
+ 	memset(params, 0, sizeof(*params));
+ 
+-	params->picture_start_addr_p = (u32)(au->paddr);
+-	params->picture_end_addr_p = (u32)(au->paddr + au->size - 1);
++	params->picture_start_addr_p = pstart;
++	params->picture_end_addr_p = pend;
+ 
+ 	/*
+ 	 * !WARNING!
+@@ -374,12 +374,14 @@ static int delta_mjpeg_decode(struct delta_ctx *pctx, struct delta_au *pau)
+ 	struct delta_dev *delta = pctx->dev;
+ 	struct delta_mjpeg_ctx *ctx = to_ctx(pctx);
+ 	int ret;
+-	struct delta_au au = *pau;
++	void *au_vaddr = pau->vaddr;
++	dma_addr_t au_dma = pau->paddr;
++	size_t au_size = pau->size;
+ 	unsigned int data_offset = 0;
+ 	struct mjpeg_header *header = &ctx->header_struct;
+ 
+ 	if (!ctx->header) {
+-		ret = delta_mjpeg_read_header(pctx, au.vaddr, au.size,
++		ret = delta_mjpeg_read_header(pctx, au_vaddr, au_size,
+ 					      header, &data_offset);
+ 		if (ret) {
+ 			pctx->stream_errors++;
+@@ -405,17 +407,17 @@ static int delta_mjpeg_decode(struct delta_ctx *pctx, struct delta_au *pau)
+ 			goto err;
+ 	}
+ 
+-	ret = delta_mjpeg_read_header(pctx, au.vaddr, au.size,
++	ret = delta_mjpeg_read_header(pctx, au_vaddr, au_size,
+ 				      ctx->header, &data_offset);
+ 	if (ret) {
+ 		pctx->stream_errors++;
+ 		goto err;
+ 	}
+ 
+-	au.paddr += data_offset;
+-	au.vaddr += data_offset;
++	au_dma += data_offset;
++	au_vaddr += data_offset;
+ 
+-	ret = delta_mjpeg_ipc_decode(pctx, &au);
++	ret = delta_mjpeg_ipc_decode(pctx, au_dma, au_dma + au_size - 1);
+ 	if (ret)
+ 		goto err;
+ 
 -- 
-Regards,
+2.39.5
 
-Laurent Pinchart
