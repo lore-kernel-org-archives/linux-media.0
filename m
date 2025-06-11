@@ -1,269 +1,396 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28191E487;
-	Wed, 11 Jun 2025 13:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EDD29ACD7
+	for <linux-media@vger.kernel.org>; Wed, 11 Jun 2025 14:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749650390; cv=none; b=JmdGoAELYVEXmKuVOQNSHgjlkkdoRASJ5oUv0FCmYcZG8QXaUvIdmXMxL5rXt7llox9N7pEtDL+uDLazqTR9pn3SViyRIwpm3tFQeYAJH2NVWsihH+oDcomDV8/d7KpiV2k5DnuxuyNYSMonJA0V9uwy/YhITrgpk0kwkxKdiFs=
+	t=1749650954; cv=none; b=f5S5fdsMjn3ZKatwFmyk5JgV1lU9End4DV+r3M68i9ZkrxdKOUclI2jphgzXekWQMz1Op32gIShrXNo/4nuIZItrMXyaGkexWmrWnheqPx7tHf7lXRZne8rjEJE5+8S2LM0jmpK2HeERmpcCKWq+stFbCczU1EQ+K52DJKvI+ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749650390; c=relaxed/simple;
-	bh=0i5yliSpywnP7qeW8wwyDtkfQFrmoBglkXRj5RDbSho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dkUsbxmuSAnlVip9rrx0G1M/6ngrowg1v+dG1cvmyb40i7oFH6saJh8rgqKeiXDuwxCqIBsfYawYIQHS1O8rxImYGqTdI1XdpKdkroVqr+hY2j6SJ2EdokNE2sqgQ2uQ4oH3+b/Ft3KYR+cphO+wCtzcqTr5W/5F0RaMv9gvkZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=h3pda/Ef; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1749650954; c=relaxed/simple;
+	bh=EkLz/JmAbUHgHDZrLFLzYZVUkviZieWooa2HVVvaeEU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ewYd5Z8dpSoUMrPv7Wd6Sm54ENRZwMOtick++HNhmH6BMOgnqI+v9yMMz6rJgwQfDQ5HdjNtKIAN45nnQSAY2qn4sCLyjV9yCAmF9YDkP12aLM4ZuqQ4oqAqc+BdabEQk7Ae1B4hATMr9dChZ7agRptk8MVrM2Vd1BZGGzBTHTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=CwMTla00; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="h3pda/Ef"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D622D352;
-	Wed, 11 Jun 2025 15:59:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1749650372;
-	bh=0i5yliSpywnP7qeW8wwyDtkfQFrmoBglkXRj5RDbSho=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h3pda/EfxTVllFr2WgzCnGF705yjaAOn/j2rx8QlzkyDcbmJaMDB6UTfqguQ9aHUS
-	 sJJ//nes8o44Q97HRiNbv+/UkLmjUmsdGi3fI10yoZBArSBi7iD4TzfUsXY7KZaT+O
-	 ThodcWKMLjf2qHzVGMEDhOZSHFVdHUKkM4Q1U5RI=
-Date: Wed, 11 Jun 2025 16:59:27 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-media@vger.kernel.org, Isaac Scott <isaac.scott@ideasonboard.com>,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/8] media: imx-mipi-csis: Rename register macros to
- match reference manual
-Message-ID: <20250611135927.GA20418@pendragon.ideasonboard.com>
-References: <20250608235840.23871-1-laurent.pinchart@ideasonboard.com>
- <20250608235840.23871-2-laurent.pinchart@ideasonboard.com>
- <3358871.aeNJFYEL58@steina-w>
- <20250610091632.GM27510@pendragon.ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="CwMTla00"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=oeIaObaRwA0rV8/Y63Yf41V/JNhDgjNWBT7LI4V4kls=; b=CwMTla00N1G3CI3OHnrreQSkNc
+	hKT0trD9NDKuDmloRLpbTz7Ysga0TOtgc9D+0waf0znlCeAw1FrTGafSgGXcIShpj5OVpb/e8sZ8l
+	Ol/6Rx0In4+EpseT9kZ9P9PbE4EYzzLYHuKmqlko4ItZNjPiRrLlXTkPcPE7db1SnzaZuRiNdu0FV
+	PcrmUuiY5XI+yneSNurQYNBL0azz7yNPuIymlSoVg9eBWT89g5ttnlFp5k4PZ7ONacQzQWoIoSUax
+	JCFO4T9HZXdW91b1uKq9Dho4jFrCLRvLWQCqDqt0JZo7YiH+ZqiKT7t900njWUxFhQkpg7u95NbdD
+	7Et6F06Q==;
+Received: from [81.79.92.254] (helo=[192.168.0.101])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1uPM8O-002E4m-KH; Wed, 11 Jun 2025 16:08:56 +0200
+Message-ID: <055b0531-a090-446b-b249-07f534faf84f@igalia.com>
+Date: Wed, 11 Jun 2025 15:08:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250610091632.GM27510@pendragon.ideasonboard.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/4] dma-fence: Add safe access helpers and document
+ the rules
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ dri-devel@lists.freedesktop.org
+Cc: kernel-dev@igalia.com, Rob Clark <robdclark@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Gustavo Padovan
+ <gustavo@padovan.org>, Matthew Brost <matthew.brost@intel.com>,
+ Lucas De Marchi <lucas.demarchi@intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, amd-gfx@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20250610164226.10817-1-tvrtko.ursulin@igalia.com>
+ <20250610164226.10817-4-tvrtko.ursulin@igalia.com>
+ <0c89db67-50f0-46e0-ac0e-bf050f543cb4@amd.com>
+Content-Language: en-GB
+From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+In-Reply-To: <0c89db67-50f0-46e0-ac0e-bf050f543cb4@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 10, 2025 at 12:16:34PM +0300, Laurent Pinchart wrote:
-> On Tue, Jun 10, 2025 at 11:10:54AM +0200, Alexander Stein wrote:
-> > Am Montag, 9. Juni 2025, 01:58:33 CEST schrieb Laurent Pinchart:
-> > > The CSIS driver uses register macro names that do not match the
-> > > reference manual of the i.MX7[DS] and i.MX8M[MNP] SoCs in which the CSIS
-> > > is integrated. Rename them to match the documentation, making the code
-> > > easier to read alongside the reference manuals.
-> > > 
-> > > One of the misnamed register fields is MIPI_CSIS_INT_SRC_ERR_UNKNOWN,
-> > > which led to the corresponding event being logged as "Unknown Error".
-> > > The correct register field name is MIPI_CSIS_INT_SRC_ERR_ID, documented
-> > > as "Unknown ID error". Update the event description accordingly.
-> > > 
-> > > While at it, also replace a few *_OFFSET macros with parametric macros
-> > > for consistency, and add the missing MIPI_CSIS_ISP_RESOL_VRESOL and
-> > > MIPI_CSIS_ISP_RESOL_HRESOL register field macros.
-> > > 
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > ---
-> > >  drivers/media/platform/nxp/imx-mipi-csis.c | 69 +++++++++++-----------
-> > >  1 file changed, 36 insertions(+), 33 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > > index 2beb5f43c2c0..d59666ef7545 100644
-> > > --- a/drivers/media/platform/nxp/imx-mipi-csis.c
-> > > +++ b/drivers/media/platform/nxp/imx-mipi-csis.c
-> > > @@ -55,13 +55,13 @@
-> > >  /* CSIS common control */
-> > >  #define MIPI_CSIS_CMN_CTRL			0x04
-> > >  #define MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW	BIT(16)
-> > > -#define MIPI_CSIS_CMN_CTRL_INTER_MODE		BIT(10)
-> > > +#define MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_NONE	(0 << 10)
-> > > +#define MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_DT	(1 << 10)
-> > > +#define MIPI_CSIS_CMN_CTRL_LANE_NUMBER(n)	((n) << 8)
-> > > +#define MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK	(3 << 8)
-> > >  #define MIPI_CSIS_CMN_CTRL_UPDATE_SHADOW_CTRL	BIT(2)
-> > > -#define MIPI_CSIS_CMN_CTRL_RESET		BIT(1)
-> > > -#define MIPI_CSIS_CMN_CTRL_ENABLE		BIT(0)
-> > > -
-> > > -#define MIPI_CSIS_CMN_CTRL_LANE_NR_OFFSET	8
-> > > -#define MIPI_CSIS_CMN_CTRL_LANE_NR_MASK		(3 << 8)
-> > > +#define MIPI_CSIS_CMN_CTRL_SW_RESET		BIT(1)
-> > > +#define MIPI_CSIS_CMN_CTRL_CSI_EN		BIT(0)
-> > >  
-> > >  /* CSIS clock control */
-> > >  #define MIPI_CSIS_CLK_CTRL			0x08
-> > > @@ -87,7 +87,7 @@
-> > >  #define MIPI_CSIS_INT_MSK_ERR_WRONG_CFG		BIT(3)
-> > >  #define MIPI_CSIS_INT_MSK_ERR_ECC		BIT(2)
-> > >  #define MIPI_CSIS_INT_MSK_ERR_CRC		BIT(1)
-> > > -#define MIPI_CSIS_INT_MSK_ERR_UNKNOWN		BIT(0)
-> > > +#define MIPI_CSIS_INT_MSK_ERR_ID		BIT(0)
-> > >  
-> > >  /* CSIS Interrupt source */
-> > >  #define MIPI_CSIS_INT_SRC			0x14
-> > > @@ -107,7 +107,7 @@
-> > >  #define MIPI_CSIS_INT_SRC_ERR_WRONG_CFG		BIT(3)
-> > >  #define MIPI_CSIS_INT_SRC_ERR_ECC		BIT(2)
-> > >  #define MIPI_CSIS_INT_SRC_ERR_CRC		BIT(1)
-> > > -#define MIPI_CSIS_INT_SRC_ERR_UNKNOWN		BIT(0)
-> > > +#define MIPI_CSIS_INT_SRC_ERR_ID		BIT(0)
-> > >  #define MIPI_CSIS_INT_SRC_ERRORS		0xfffff
-> > >  
-> > >  /* D-PHY status control */
-> > > @@ -123,8 +123,8 @@
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE_MASK	GENMASK(31, 24)
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE(n)	((n) << 22)
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE_MASK	GENMASK(23, 22)
-> > > -#define MIPI_CSIS_DPHY_CMN_CTRL_DPDN_SWAP_CLK	BIT(6)
-> > > -#define MIPI_CSIS_DPHY_CMN_CTRL_DPDN_SWAP_DAT	BIT(5)
-> > > +#define MIPI_CSIS_DPHY_CMN_CTRL_S_DPDN_SWAP_CLK	BIT(6)
-> > > +#define MIPI_CSIS_DPHY_CMN_CTRL_S_DPDN_SWAP_DAT	BIT(5)
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE_DAT	BIT(1)
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE_CLK	BIT(0)
-> > >  #define MIPI_CSIS_DPHY_CMN_CTRL_ENABLE		(0x1f << 0)
-> > > @@ -179,21 +179,23 @@
-> > >  #define MIPI_CSIS_ISPCFG_PIXEL_MODE_SINGLE	(0 << 12)
-> > >  #define MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL	(1 << 12)
-> > >  #define MIPI_CSIS_ISPCFG_PIXEL_MODE_QUAD	(2 << 12)	/* i.MX8M[MNP] only */
-> > > -#define MIPI_CSIS_ISPCFG_PIXEL_MASK		(3 << 12)
-> > > -#define MIPI_CSIS_ISPCFG_ALIGN_32BIT		BIT(11)
-> > > -#define MIPI_CSIS_ISPCFG_FMT(fmt)		((fmt) << 2)
-> > > -#define MIPI_CSIS_ISPCFG_FMT_MASK		(0x3f << 2)
-> > > +#define MIPI_CSIS_ISPCFG_PIXEL_MODE_MASK	(3 << 12)
-> > > +#define MIPI_CSIS_ISPCFG_PARALLEL		BIT(11)
-> > > +#define MIPI_CSIS_ISPCFG_DATAFORMAT(fmt)	((fmt) << 2)
-> > > +#define MIPI_CSIS_ISPCFG_DATAFORMAT_MASK	(0x3f << 2)
-> > >  
-> > >  /* ISP Image Resolution register */
-> > >  #define MIPI_CSIS_ISP_RESOL_CH(n)		(0x44 + (n) * 0x10)
-> > > +#define MIPI_CSIS_ISP_RESOL_VRESOL(n)		((n) << 16)
-> > > +#define MIPI_CSIS_ISP_RESOL_HRESOL(n)		((n) << 0)
-> > >  #define CSIS_MAX_PIX_WIDTH			0xffff
-> > >  #define CSIS_MAX_PIX_HEIGHT			0xffff
-> > >  
-> > >  /* ISP SYNC register */
-> > >  #define MIPI_CSIS_ISP_SYNC_CH(n)		(0x48 + (n) * 0x10)
-> > > -#define MIPI_CSIS_ISP_SYNC_HSYNC_LINTV_OFFSET	18
-> > > -#define MIPI_CSIS_ISP_SYNC_VSYNC_SINTV_OFFSET	12
-> > > -#define MIPI_CSIS_ISP_SYNC_VSYNC_EINTV_OFFSET	0
-> > > +#define MIPI_CSIS_ISP_SYNC_HSYNC_LINTV(n)	((n) << 18)
-> > > +#define MIPI_CSIS_ISP_SYNC_VSYNC_SINTV(n)	((n) << 12)
-> > > +#define MIPI_CSIS_ISP_SYNC_VSYNC_EINTV(n)	((n) << 0)
-> > >  
-> > >  /* ISP shadow registers */
-> > >  #define MIPI_CSIS_SDW_CONFIG_CH(n)		(0x80 + (n) * 0x10)
-> > > @@ -246,7 +248,7 @@ static const struct mipi_csis_event mipi_csis_events[] = {
-> > >  	{ false, MIPI_CSIS_INT_SRC_ERR_WRONG_CFG,	"Wrong Configuration Error" },
-> > >  	{ false, MIPI_CSIS_INT_SRC_ERR_ECC,		"ECC Error" },
-> > >  	{ false, MIPI_CSIS_INT_SRC_ERR_CRC,		"CRC Error" },
-> > > -	{ false, MIPI_CSIS_INT_SRC_ERR_UNKNOWN,		"Unknown Error" },
-> > > +	{ false, MIPI_CSIS_INT_SRC_ERR_ID,		"Unknown ID Error" },
-> > >  	{ true, MIPI_CSIS_DBG_INTR_SRC_DT_NOT_SUPPORT,	"Data Type Not Supported" },
-> > >  	{ true, MIPI_CSIS_DBG_INTR_SRC_DT_IGNORE,	"Data Type Ignored" },
-> > >  	{ true, MIPI_CSIS_DBG_INTR_SRC_ERR_FRAME_SIZE,	"Frame Size Error" },
-> > > @@ -517,7 +519,7 @@ static void mipi_csis_sw_reset(struct mipi_csis_device *csis)
-> > >  	u32 val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > >  
-> > >  	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL,
-> > > -			val | MIPI_CSIS_CMN_CTRL_RESET);
-> > > +			val | MIPI_CSIS_CMN_CTRL_SW_RESET);
-> > >  	usleep_range(10, 20);
-> > >  }
-> > >  
-> > > @@ -527,9 +529,9 @@ static void mipi_csis_system_enable(struct mipi_csis_device *csis, int on)
-> > >  
-> > >  	val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > >  	if (on)
-> > > -		val |= MIPI_CSIS_CMN_CTRL_ENABLE;
-> > > +		val |= MIPI_CSIS_CMN_CTRL_CSI_EN;
-> > >  	else
-> > > -		val &= ~MIPI_CSIS_CMN_CTRL_ENABLE;
-> > > +		val &= ~MIPI_CSIS_CMN_CTRL_CSI_EN;
-> > >  	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL, val);
-> > >  
-> > >  	val = mipi_csis_read(csis, MIPI_CSIS_DPHY_CMN_CTRL);
-> > > @@ -549,8 +551,8 @@ static void __mipi_csis_set_format(struct mipi_csis_device *csis,
-> > >  
-> > >  	/* Color format */
-> > >  	val = mipi_csis_read(csis, MIPI_CSIS_ISP_CONFIG_CH(0));
-> > > -	val &= ~(MIPI_CSIS_ISPCFG_ALIGN_32BIT | MIPI_CSIS_ISPCFG_FMT_MASK
-> > > -		| MIPI_CSIS_ISPCFG_PIXEL_MASK);
-> > > +	val &= ~(MIPI_CSIS_ISPCFG_PARALLEL | MIPI_CSIS_ISPCFG_PIXEL_MODE_MASK |
-> > > +		 MIPI_CSIS_ISPCFG_DATAFORMAT_MASK);
-> > >  
-> > >  	/*
-> > >  	 * YUV 4:2:2 can be transferred with 8 or 16 bits per clock sample
-> > > @@ -568,12 +570,13 @@ static void __mipi_csis_set_format(struct mipi_csis_device *csis,
-> > >  	if (csis_fmt->data_type == MIPI_CSI2_DT_YUV422_8B)
-> > >  		val |= MIPI_CSIS_ISPCFG_PIXEL_MODE_DUAL;
-> > >  
-> > > -	val |= MIPI_CSIS_ISPCFG_FMT(csis_fmt->data_type);
-> > > +	val |= MIPI_CSIS_ISPCFG_DATAFORMAT(csis_fmt->data_type);
-> > >  	mipi_csis_write(csis, MIPI_CSIS_ISP_CONFIG_CH(0), val);
-> > >  
-> > >  	/* Pixel resolution */
-> > > -	val = format->width | (format->height << 16);
-> > > -	mipi_csis_write(csis, MIPI_CSIS_ISP_RESOL_CH(0), val);
-> > > +	mipi_csis_write(csis, MIPI_CSIS_ISP_RESOL_CH(0),
-> > > +			MIPI_CSIS_ISP_RESOL_VRESOL(format->height) |
-> > > +			MIPI_CSIS_ISP_RESOL_HRESOL(format->width));
-> > >  }
-> > >  
-> > >  static int mipi_csis_calculate_params(struct mipi_csis_device *csis,
-> > > @@ -635,10 +638,10 @@ static void mipi_csis_set_params(struct mipi_csis_device *csis,
-> > >  	u32 val;
-> > >  
-> > >  	val = mipi_csis_read(csis, MIPI_CSIS_CMN_CTRL);
-> > > -	val &= ~MIPI_CSIS_CMN_CTRL_LANE_NR_MASK;
-> > > -	val |= (lanes - 1) << MIPI_CSIS_CMN_CTRL_LANE_NR_OFFSET;
-> > > +	val &= ~MIPI_CSIS_CMN_CTRL_LANE_NUMBER_MASK;
-> > > +	val |= MIPI_CSIS_CMN_CTRL_LANE_NUMBER(lanes - 1);
-> > >  	if (csis->info->version == MIPI_CSIS_V3_3)
-> > > -		val |= MIPI_CSIS_CMN_CTRL_INTER_MODE;
-> > > +		val |= MIPI_CSIS_CMN_CTRL_INTERLEAVE_MODE_DT;
-> > 
-> > Mh, what about i.MX8MP which also has these bitfield defined, but is
-> > not a MIPI_CSIS_V3_3 core?
+
+On 11/06/2025 12:43, Christian König wrote:
+> On 6/10/25 18:42, Tvrtko Ursulin wrote:
+>> Dma-fence objects currently suffer from a potential use after free problem
+>> where fences exported to userspace and other drivers can outlive the
+>> exporting driver, or the associated data structures.
+>>
+>> The discussion on how to address this concluded that adding reference
+>> counting to all the involved objects is not desirable, since it would need
+>> to be very wide reaching and could cause unloadable drivers if another
+>> entity would be holding onto a signaled fence reference potentially
+>> indefinitely.
+>>
+>> This patch enables the safe access by introducing and documenting a
+>> contract between fence exporters and users. It documents a set of
+>> contraints and adds helpers which a) drivers with potential to suffer from
+>> the use after free must use and b) users of the dma-fence API must use as
+>> well.
+>>
+>> Premise of the design has multiple sides:
+>>
+>> 1. Drivers (fence exporters) MUST ensure a RCU grace period between
+>> signalling a fence and freeing the driver private data associated with it.
+>>
+>> The grace period does not have to follow the signalling immediately but
+>> HAS to happen before data is freed.
+>>
+>> 2. Users of the dma-fence API marked with such requirement MUST contain
+>> the complete access to the data within a single code block guarded by
+>> rcu_read_lock() and rcu_read_unlock().
+>>
+>> The combination of the two ensures that whoever sees the
+>> DMA_FENCE_FLAG_SIGNALED_BIT not set is guaranteed to have access to a
+>> valid fence->lock and valid data potentially accessed by the fence->ops
+>> virtual functions, until the call to rcu_read_unlock().
+>>
+>> 3. Module unload (fence->ops) disappearing is for now explicitly not
+>> handled. That would required a more complex protection, possibly needing
+>> SRCU instead of RCU to handle callers such as dma_fence_release() and
+>> dma_fence_wait_timeout(), where race between
+>> dma_fence_enable_sw_signaling, signalling, and dereference of
+>> fence->ops->wait() would need a sleeping SRCU context.
+>>
+>> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
 > 
-> Short answer: no idea yet. Has anyone been able to capture embedded data
-> through the ISI on the i.MX8MP ?
+> Reviewed-by: Christian König <christian.koenig@amd.com>
 
-My current understanding is that the i.MX8MP hardware integration
-doesn't allow capturing DT=EMBEDDED_8B when sent through the same VC as
-image data. I would love to be proven wrong.
+Thanks Christian!
 
-> > >  	mipi_csis_write(csis, MIPI_CSIS_CMN_CTRL, val);
-> > >  
-> > >  	__mipi_csis_set_format(csis, format, csis_fmt);
-> > > @@ -647,10 +650,10 @@ static void mipi_csis_set_params(struct mipi_csis_device *csis,
-> > >  			MIPI_CSIS_DPHY_CMN_CTRL_HSSETTLE(csis->hs_settle) |
-> > >  			MIPI_CSIS_DPHY_CMN_CTRL_CLKSETTLE(csis->clk_settle));
-> > >  
-> > > -	val = (0 << MIPI_CSIS_ISP_SYNC_HSYNC_LINTV_OFFSET)
-> > > -	    | (0 << MIPI_CSIS_ISP_SYNC_VSYNC_SINTV_OFFSET)
-> > > -	    | (0 << MIPI_CSIS_ISP_SYNC_VSYNC_EINTV_OFFSET);
-> > > -	mipi_csis_write(csis, MIPI_CSIS_ISP_SYNC_CH(0), val);
-> > > +	mipi_csis_write(csis, MIPI_CSIS_ISP_SYNC_CH(0),
-> > > +			MIPI_CSIS_ISP_SYNC_HSYNC_LINTV(0) |
-> > > +			MIPI_CSIS_ISP_SYNC_VSYNC_SINTV(0) |
-> > > +			MIPI_CSIS_ISP_SYNC_VSYNC_EINTV(0));
-> > >  
-> > >  	val = mipi_csis_read(csis, MIPI_CSIS_CLK_CTRL);
-> > >  	val |= MIPI_CSIS_CLK_CTRL_WCLK_SRC;
+I have pinged xe maintainers for acks to merge the whole series via 
+drm-misc-next and pending positive reply I can push it all.
 
--- 
 Regards,
 
-Laurent Pinchart
+Tvrtko
+
+> 
+>> ---
+>>   drivers/dma-buf/dma-fence.c      | 111 ++++++++++++++++++++++++++++---
+>>   include/linux/dma-fence.h        |  31 ++++++---
+>>   include/trace/events/dma_fence.h |  38 +++++++++--
+>>   3 files changed, 157 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+>> index 74f9e4b665e3..3f78c56b58dc 100644
+>> --- a/drivers/dma-buf/dma-fence.c
+>> +++ b/drivers/dma-buf/dma-fence.c
+>> @@ -511,12 +511,20 @@ dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
+>>   
+>>   	dma_fence_enable_sw_signaling(fence);
+>>   
+>> -	trace_dma_fence_wait_start(fence);
+>> +	if (trace_dma_fence_wait_start_enabled()) {
+>> +		rcu_read_lock();
+>> +		trace_dma_fence_wait_start(fence);
+>> +		rcu_read_unlock();
+>> +	}
+>>   	if (fence->ops->wait)
+>>   		ret = fence->ops->wait(fence, intr, timeout);
+>>   	else
+>>   		ret = dma_fence_default_wait(fence, intr, timeout);
+>> -	trace_dma_fence_wait_end(fence);
+>> +	if (trace_dma_fence_wait_end_enabled()) {
+>> +		rcu_read_lock();
+>> +		trace_dma_fence_wait_end(fence);
+>> +		rcu_read_unlock();
+>> +	}
+>>   	return ret;
+>>   }
+>>   EXPORT_SYMBOL(dma_fence_wait_timeout);
+>> @@ -533,16 +541,23 @@ void dma_fence_release(struct kref *kref)
+>>   	struct dma_fence *fence =
+>>   		container_of(kref, struct dma_fence, refcount);
+>>   
+>> +	rcu_read_lock();
+>>   	trace_dma_fence_destroy(fence);
+>>   
+>> -	if (WARN(!list_empty(&fence->cb_list) &&
+>> -		 !test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags),
+>> -		 "Fence %s:%s:%llx:%llx released with pending signals!\n",
+>> -		 dma_fence_driver_name(fence),
+>> -		 dma_fence_timeline_name(fence),
+>> -		 fence->context, fence->seqno)) {
+>> +	if (!list_empty(&fence->cb_list) &&
+>> +	    !test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags)) {
+>> +		const char __rcu *timeline;
+>> +		const char __rcu *driver;
+>>   		unsigned long flags;
+>>   
+>> +		driver = dma_fence_driver_name(fence);
+>> +		timeline = dma_fence_timeline_name(fence);
+>> +
+>> +		WARN(1,
+>> +		     "Fence %s:%s:%llx:%llx released with pending signals!\n",
+>> +		     rcu_dereference(driver), rcu_dereference(timeline),
+>> +		     fence->context, fence->seqno);
+>> +
+>>   		/*
+>>   		 * Failed to signal before release, likely a refcounting issue.
+>>   		 *
+>> @@ -556,6 +571,8 @@ void dma_fence_release(struct kref *kref)
+>>   		spin_unlock_irqrestore(fence->lock, flags);
+>>   	}
+>>   
+>> +	rcu_read_unlock();
+>> +
+>>   	if (fence->ops->release)
+>>   		fence->ops->release(fence);
+>>   	else
+>> @@ -982,11 +999,21 @@ EXPORT_SYMBOL(dma_fence_set_deadline);
+>>    */
+>>   void dma_fence_describe(struct dma_fence *fence, struct seq_file *seq)
+>>   {
+>> +	const char __rcu *timeline;
+>> +	const char __rcu *driver;
+>> +
+>> +	rcu_read_lock();
+>> +
+>> +	timeline = dma_fence_timeline_name(fence);
+>> +	driver = dma_fence_driver_name(fence);
+>> +
+>>   	seq_printf(seq, "%s %s seq %llu %ssignalled\n",
+>> -		   dma_fence_driver_name(fence),
+>> -		   dma_fence_timeline_name(fence),
+>> +		   rcu_dereference(driver),
+>> +		   rcu_dereference(timeline),
+>>   		   fence->seqno,
+>>   		   dma_fence_is_signaled(fence) ? "" : "un");
+>> +
+>> +	rcu_read_unlock();
+>>   }
+>>   EXPORT_SYMBOL(dma_fence_describe);
+>>   
+>> @@ -1055,3 +1082,67 @@ dma_fence_init64(struct dma_fence *fence, const struct dma_fence_ops *ops,
+>>   			 BIT(DMA_FENCE_FLAG_SEQNO64_BIT));
+>>   }
+>>   EXPORT_SYMBOL(dma_fence_init64);
+>> +
+>> +/**
+>> + * dma_fence_driver_name - Access the driver name
+>> + * @fence: the fence to query
+>> + *
+>> + * Returns a driver name backing the dma-fence implementation.
+>> + *
+>> + * IMPORTANT CONSIDERATION:
+>> + * Dma-fence contract stipulates that access to driver provided data (data not
+>> + * directly embedded into the object itself), such as the &dma_fence.lock and
+>> + * memory potentially accessed by the &dma_fence.ops functions, is forbidden
+>> + * after the fence has been signalled. Drivers are allowed to free that data,
+>> + * and some do.
+>> + *
+>> + * To allow safe access drivers are mandated to guarantee a RCU grace period
+>> + * between signalling the fence and freeing said data.
+>> + *
+>> + * As such access to the driver name is only valid inside a RCU locked section.
+>> + * The pointer MUST be both queried and USED ONLY WITHIN a SINGLE block guarded
+>> + * by the &rcu_read_lock and &rcu_read_unlock pair.
+>> + */
+>> +const char __rcu *dma_fence_driver_name(struct dma_fence *fence)
+>> +{
+>> +	RCU_LOCKDEP_WARN(!rcu_read_lock_held(),
+>> +			 "RCU protection is required for safe access to returned string");
+>> +
+>> +	if (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>> +		return fence->ops->get_driver_name(fence);
+>> +	else
+>> +		return "detached-driver";
+>> +}
+>> +EXPORT_SYMBOL(dma_fence_driver_name);
+>> +
+>> +/**
+>> + * dma_fence_timeline_name - Access the timeline name
+>> + * @fence: the fence to query
+>> + *
+>> + * Returns a timeline name provided by the dma-fence implementation.
+>> + *
+>> + * IMPORTANT CONSIDERATION:
+>> + * Dma-fence contract stipulates that access to driver provided data (data not
+>> + * directly embedded into the object itself), such as the &dma_fence.lock and
+>> + * memory potentially accessed by the &dma_fence.ops functions, is forbidden
+>> + * after the fence has been signalled. Drivers are allowed to free that data,
+>> + * and some do.
+>> + *
+>> + * To allow safe access drivers are mandated to guarantee a RCU grace period
+>> + * between signalling the fence and freeing said data.
+>> + *
+>> + * As such access to the driver name is only valid inside a RCU locked section.
+>> + * The pointer MUST be both queried and USED ONLY WITHIN a SINGLE block guarded
+>> + * by the &rcu_read_lock and &rcu_read_unlock pair.
+>> + */
+>> +const char __rcu *dma_fence_timeline_name(struct dma_fence *fence)
+>> +{
+>> +	RCU_LOCKDEP_WARN(!rcu_read_lock_held(),
+>> +			 "RCU protection is required for safe access to returned string");
+>> +
+>> +	if (!test_bit(DMA_FENCE_FLAG_SIGNALED_BIT, &fence->flags))
+>> +		return fence->ops->get_driver_name(fence);
+>> +	else
+>> +		return "signaled-timeline";
+>> +}
+>> +EXPORT_SYMBOL(dma_fence_timeline_name);
+>> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+>> index 10a849cb2d3f..64639e104110 100644
+>> --- a/include/linux/dma-fence.h
+>> +++ b/include/linux/dma-fence.h
+>> @@ -378,15 +378,28 @@ bool dma_fence_remove_callback(struct dma_fence *fence,
+>>   			       struct dma_fence_cb *cb);
+>>   void dma_fence_enable_sw_signaling(struct dma_fence *fence);
+>>   
+>> -static inline const char *dma_fence_driver_name(struct dma_fence *fence)
+>> -{
+>> -	return fence->ops->get_driver_name(fence);
+>> -}
+>> -
+>> -static inline const char *dma_fence_timeline_name(struct dma_fence *fence)
+>> -{
+>> -	return fence->ops->get_timeline_name(fence);
+>> -}
+>> +/**
+>> + * DOC: Safe external access to driver provided object members
+>> + *
+>> + * All data not stored directly in the dma-fence object, such as the
+>> + * &dma_fence.lock and memory potentially accessed by functions in the
+>> + * &dma_fence.ops table, MUST NOT be accessed after the fence has been signalled
+>> + * because after that point drivers are allowed to free it.
+>> + *
+>> + * All code accessing that data via the dma-fence API (or directly, which is
+>> + * discouraged), MUST make sure to contain the complete access within a
+>> + * &rcu_read_lock and &rcu_read_unlock pair.
+>> + *
+>> + * Some dma-fence API handles this automatically, while other, as for example
+>> + * &dma_fence_driver_name and &dma_fence_timeline_name, leave that
+>> + * responsibility to the caller.
+>> + *
+>> + * To enable this scheme to work drivers MUST ensure a RCU grace period elapses
+>> + * between signalling the fence and freeing the said data.
+>> + *
+>> + */
+>> +const char __rcu *dma_fence_driver_name(struct dma_fence *fence);
+>> +const char __rcu *dma_fence_timeline_name(struct dma_fence *fence);
+>>   
+>>   /**
+>>    * dma_fence_is_signaled_locked - Return an indication if the fence
+>> diff --git a/include/trace/events/dma_fence.h b/include/trace/events/dma_fence.h
+>> index 84c83074ee81..4814a65b68dc 100644
+>> --- a/include/trace/events/dma_fence.h
+>> +++ b/include/trace/events/dma_fence.h
+>> @@ -34,14 +34,44 @@ DECLARE_EVENT_CLASS(dma_fence,
+>>   		  __entry->seqno)
+>>   );
+>>   
+>> -DEFINE_EVENT(dma_fence, dma_fence_emit,
+>> +/*
+>> + * Safe only for call sites which are guaranteed to not race with fence
+>> + * signaling,holding the fence->lock and having checked for not signaled, or the
+>> + * signaling path itself.
+>> + */
+>> +DECLARE_EVENT_CLASS(dma_fence_unsignaled,
+>> +
+>> +	TP_PROTO(struct dma_fence *fence),
+>> +
+>> +	TP_ARGS(fence),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__string(driver, fence->ops->get_driver_name(fence))
+>> +		__string(timeline, fence->ops->get_timeline_name(fence))
+>> +		__field(unsigned int, context)
+>> +		__field(unsigned int, seqno)
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__assign_str(driver);
+>> +		__assign_str(timeline);
+>> +		__entry->context = fence->context;
+>> +		__entry->seqno = fence->seqno;
+>> +	),
+>> +
+>> +	TP_printk("driver=%s timeline=%s context=%u seqno=%u",
+>> +		  __get_str(driver), __get_str(timeline), __entry->context,
+>> +		  __entry->seqno)
+>> +);
+>> +
+>> +DEFINE_EVENT(dma_fence_unsignaled, dma_fence_emit,
+>>   
+>>   	TP_PROTO(struct dma_fence *fence),
+>>   
+>>   	TP_ARGS(fence)
+>>   );
+>>   
+>> -DEFINE_EVENT(dma_fence, dma_fence_init,
+>> +DEFINE_EVENT(dma_fence_unsignaled, dma_fence_init,
+>>   
+>>   	TP_PROTO(struct dma_fence *fence),
+>>   
+>> @@ -55,14 +85,14 @@ DEFINE_EVENT(dma_fence, dma_fence_destroy,
+>>   	TP_ARGS(fence)
+>>   );
+>>   
+>> -DEFINE_EVENT(dma_fence, dma_fence_enable_signal,
+>> +DEFINE_EVENT(dma_fence_unsignaled, dma_fence_enable_signal,
+>>   
+>>   	TP_PROTO(struct dma_fence *fence),
+>>   
+>>   	TP_ARGS(fence)
+>>   );
+>>   
+>> -DEFINE_EVENT(dma_fence, dma_fence_signaled,
+>> +DEFINE_EVENT(dma_fence_unsignaled, dma_fence_signaled,
+>>   
+>>   	TP_PROTO(struct dma_fence *fence),
+>>   
+> 
+
