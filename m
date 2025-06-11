@@ -1,66 +1,66 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4617A31F
-	for <linux-media@vger.kernel.org>; Wed, 11 Jun 2025 18:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CE126A0AB
+	for <linux-media@vger.kernel.org>; Wed, 11 Jun 2025 18:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749667047; cv=none; b=rqTKMlGC2gCfHL487rvnmDdvUJNVxX2G13uhJfsfwr2WdIJPe/LAnMLGGXDakAfVYtHLzvEkXrWpsNgiDbqQPzzjJg2wAqb1G80D3mJnnrVNbMlsBN4M2glFhuedeZy5ra/LYX4Wq1sUJDc7C68XaxvgUUEKnL7ISiP0zg4f+TM=
+	t=1749667054; cv=none; b=TlF42/Wn505uqy5msCdT/xYJiLsQrkWKMckIoFJtWKkcvHrJo6AehDctK+B3csOIQgTXUmNQq2JgZHEwFyvJuxXViBjBNXgDKZTzhOgFShrIeEor5ZcUsSQxJCzvmBWE+RaqepKL4vTy0U6J8K0B6FpOWHcRmdFbXr/YSf5IN1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749667047; c=relaxed/simple;
-	bh=As5A0OqeYX31BcT5f8MqqEWBy/dKh075/j28h5b08z0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dquRfXt/16HqPQSBMSOMi5cgZMU+L3wUk8TLfjKy6tTNzzVkdETYQYLEZkqZFgTmSRhmVf7u80gtTgysdxWurILjdMbLtyx8OnFmbK4RlLN+NmJx4C861DQ6OSUqrc0kWZkEyzATDf0qWna6jXVCA8DEZATu4HpRDbvaDm644qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=BTrCvNfK; arc=none smtp.client-ip=209.85.128.41
+	s=arc-20240116; t=1749667054; c=relaxed/simple;
+	bh=PtjcRg7r9dDYoDn4dMsR5Www73D4wiUbSHxe0flzOIw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VhkKbRazslomvQjwGNwVXhiSrK1eYT2VneEXuHEykM5aTVj7fMN4GCzxgcvuLl+TsoZHLo1Bi0WNLmQgEiD76nZyN28U2QTH5TANPh2K95q/KwvA6rHUJvGYjVwfdRSotZ8IB5kHfGZCMktNl9KinRW4/0S/Wb14tbB6Z6n5+gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=JyrhT81c; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="BTrCvNfK"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-450dd065828so713505e9.2
-        for <linux-media@vger.kernel.org>; Wed, 11 Jun 2025 11:37:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="JyrhT81c"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-32ac42bb4e4so1516321fa.0
+        for <linux-media@vger.kernel.org>; Wed, 11 Jun 2025 11:37:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1749667044; x=1750271844; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+P+Xcul569I8IEtQZA+nCLqa8EijcGyUC3HbPjalOas=;
-        b=BTrCvNfKl8vNM9rWO9YOjOUn3mOL1wOccHTE5guaZBDMrL/7FNe1ydH2fjASKkzWoO
-         PnXWoly0Ek6nNsnz7cc96FYYwP/l72245jr2HuWvreuV7yjdy8cfCkRQpzBvuOnXwOPt
-         vWS75pyffHucmbjqRqVlNtX36rgNydXzvL3oR11Pdjq/eLsUzYDFZefpRiDgvHAjP4Ar
-         0XutGc3pMh5ERCeiMS64vPXXbfGSHqPLAurPbWQe7KdnldeCPn0R4Num7TkOb14WDPgS
-         jnM27OwDL/8viC+ai75vyAwePy35of3en6NLObyEn7/7buM025XlA84RcdicOJRtANZP
-         NQXQ==
+        d=raspberrypi.com; s=google; t=1749667051; x=1750271851; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxFfYw7Bh3J5bDd9GOMRnGuEy6auNfpZtx05LVWHCwg=;
+        b=JyrhT81cTnFOKmsweB1atlrtSkWMWPpfA4DCNVAW0WWYpm6Inmdvat010+LO2rZzip
+         96EHzG43UioLoIVwKzlUuQOwqS4cWzfaG16FVJUmCI5yZ2VP/AyZp8YwUQgpU0n7gx/F
+         km4B6hU8PbnKm/WIMzp4hb0yAuzx3OHtk1zc3ei/mtaXL8Jh+HwJWJAco14kCznaNQ72
+         gjnC5Edv4oK4yvnTZVUq0yQegYmxWJhgpmfVWLR0N/OPLjHquSEK0uHiQMEHu7Sudror
+         hvRj95TCnL+6uR4xsg4pJ4K+nu7lDOjA6tIAzsBoHKj1rg4gG4JHhQQHWc1GTs0nquvQ
+         lNIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749667044; x=1750271844;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+P+Xcul569I8IEtQZA+nCLqa8EijcGyUC3HbPjalOas=;
-        b=MFUpsJSZrK64WBcFQ3Dy8zx3mCLq5peaQOGmUdasyBPtgKdJr7s5pWd0hpMoZo5g0M
-         8KBN+NEyYfaeP93LbFFij1wpINvIt99Xtk1Z/YpsIHTcpF/gbB12A+R9vMfbeHDO2cAz
-         zJaZu/bR8py4Mcbc0ZIWdXTlJ2ga262z+smWyISzvupaK8Ya3bl42RmBeHVoq5JG0TaE
-         gpv2sAPxkC7k5jWYEwBBcnQho9PNY/6xmzEtsT9eRTXx/V5muscjzmFokiL0JAaJIJ+n
-         RitdLI7qyWqQShFcnhOOge7h1xclmXG8A0vCLgtmkXf1nWbk/TEgig8gvXr8A7aPbYPF
-         JTxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtyvkcoZK50aG9rHZ9eCdZZLXk0Qoe9uxO0zQWe6U3ecIrLUAFUxcotfkTKeAic86J/UsTO5bObN+EJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3BHBsEzbOmOByC6wG/4zC2xWmVMppMV2EPuv5GANuD7QbG4kj
-	vaBhA5vg3dJhbnhA7PdgsW/V+bgH/Z64OjdEA4UMb1mck8d38v0EC2J4f8iTZyyguZA=
-X-Gm-Gg: ASbGncvhWH8neg4GY3+XAZR6iD8VtlGsQxZNYSvJ5fwp3FLFWlTTL/MmGxses4gfmJs
-	yqueANGh66mJftkqridyC9l3J6M7mmM3iVmi8sxY+f03f8dhiemly0r9PL5M1pOvba2EMRzQ+bJ
-	PUXsOzS2ChP8xvEUq7D9e3K/KyNMd1ol5nVE3GrgNwSsiKKRsvx/SD0avF299f1PPzvmY/Rgys6
-	Wq6yTb/ebm2D+8SGHpUaVWKI9ZLjLQ0dVtCafKp5/bxuD+0Boy5q0sqERFU8AIByCI0Fust502r
-	KOED3owbh8ti6GklG2j0XeLQYDushncTMzplTXuByZxKfVD8QYKrXUC0FQj5CKi3
-X-Google-Smtp-Source: AGHT+IFoP50tmhgFnoHamwtAePqFHuyZl0kIlu1pe1rTBJjxaOHhQLNNJiWGEyddK2iuPOKOY76sBw==
-X-Received: by 2002:a05:6000:26c7:b0:3a4:f70d:dec3 with SMTP id ffacd0b85a97d-3a5606c7a11mr367720f8f.16.1749667044189;
-        Wed, 11 Jun 2025 11:37:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749667051; x=1750271851;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nxFfYw7Bh3J5bDd9GOMRnGuEy6auNfpZtx05LVWHCwg=;
+        b=gTZD170UAI2zVe0GnXVGsk38trH5RU1UcVDw+v9TWbpBqa4FVGxbnGliYdlhWi0nTo
+         /bQWy/hi2wDr3DieO3ddKUdt1jY6IaaujpRweGQLn0tVsqgXJrn4DPC3zV19Apc746f1
+         iUsYso+5bayNiBKli0bCyfH0HCBhw8TX6GkCiXwDJw3sqDYANdl5PduQagq7Ye/rUwMJ
+         9i1olu4f15oVAFn1R3l4RQwLDuF5ZePOb0iJ20VvnigkIirLezmUVU3uB7OIoWVvU4Pr
+         8Lcd0NtGikgfCLE6Yxun9v753uE0z5CDt9hUqfM/whHup/d+wOYTTCA1rQSRyeGzX6n3
+         V+2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXYd0be2ujA4/ovGAXLCsGwcbm3eHpTc+VDKuGlkcwXE2qK3y6FOBco8hOLpd+tbV7jjRTxBEP1iiK1qQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZy9zDMK+L8Dnb5ePesK3M2XRs211dcmNUq4jYi8R41Vktxumy
+	q5d2oyVPHy9ZEHnaBhB6uefFvdoPwlrCP2Ky6BHvbmgP1jIDdqazsJ1pj+HQVI9E5JoI9Bt72vk
+	ftEeB
+X-Gm-Gg: ASbGncs2Euuf0Oqr5nbfL1ccjmgr0CfVwbnBdHhPuW3z3CoOOJENjbleG4m9mOTzXq5
+	vqo0ygztdUtFT+Fw8O32Ilf1Y3STC07pb2LmSEP48sFmSKkfdOD11YYpiZY4nfuKE/TJ88noN/1
+	2/5snNL8eyUkhvtKB25WCXwg+IjULCRY8lUEOGs+dJehyqGWcsIjz+zFRIDJcIw7E/zupdY2Ls5
+	ARgMxPPT9UnsuyeVEuIS6q6tO7OGky8qDTsLPGZh3o0RDKvscsPzDRBiTrw74ggaxID7jC8Qs0Z
+	yb2Z4B4UApPidpVH1wI2xXZ1Kzc8boL/BQ0+POrtZpYpqL6/aHdLBQ==
+X-Google-Smtp-Source: AGHT+IFzYupa7d+ONAjulOpVhh56Bqw1ABa6/j/qgq2ciZf4MuyCJ8C6ogS1IFGo/jjRE88dc+izmg==
+X-Received: by 2002:a05:6000:2c0f:b0:3a5:5149:ed1a with SMTP id ffacd0b85a97d-3a558a43b48mr3492897f8f.59.1749667040479;
+        Wed, 11 Jun 2025 11:37:20 -0700 (PDT)
 Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a5324364d4sm16119390f8f.55.2025.06.11.11.37.22
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a5324364d4sm16119390f8f.55.2025.06.11.11.37.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 11:37:23 -0700 (PDT)
+        Wed, 11 Jun 2025 11:37:20 -0700 (PDT)
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Wed, 11 Jun 2025 19:37:16 +0100
-Subject: [PATCH 4/4] media: tc358743: Return an appropriate colorspace from
- tc358743_set_fmt
+Subject: [PATCH 0/4] media: tc358743: Additional link freq, and better
+ validation
+Date: Wed, 11 Jun 2025 19:37:12 +0100
+Message-Id: <20250611-media-tc358743-v1-0-708556026f9d@raspberrypi.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -69,9 +69,9 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250611-media-tc358743-v1-4-708556026f9d@raspberrypi.com>
-References: <20250611-media-tc358743-v1-0-708556026f9d@raspberrypi.com>
-In-Reply-To: <20250611-media-tc358743-v1-0-708556026f9d@raspberrypi.com>
+X-B4-Tracking: v=1; b=H4sIANjMSWgC/x3MQQqAIBBA0avIrBO0NKWrRAvTqWaRhUYE4d2Tl
+ m/x/wsZE2GGgb2Q8KZMR6yQDQO/ubgip1ANrWi16KXkOwZy/PKdtkZ1XJiASjgr1eyhRmfChZ5
+ /OE6lfLup0v1gAAAA
 To: Hans Verkuil <hverkuil@xs4all.nl>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: Maxime Ripard <mripard@redhat.com>, 
@@ -80,105 +80,51 @@ Cc: Maxime Ripard <mripard@redhat.com>,
  Dave Stevenson <dave.stevenson@raspberrypi.com>
 X-Mailer: b4 0.14.1
 
-When calling tc358743_set_fmt, the code was calling tc358743_get_fmt
-to choose a valid format. However that sets the colorspace
-based on information read back from the chip, not the colour
-format requested.
+I've had these patches on our Raspberry Pi downstream kernel since
+I tried upstreaming them back in 2017 [1].
+Maxime's asked me to repost them as he's trying to use tc358743 with
+mainline in RGB mode[2], and is hitting exactly the problems I had
+written them to solve.
 
-The result was that if you called try or set format for UYVY
-when the current format was RGB3 then you would get told SRGB,
-and try RGB3 when current was UYVY and you would get told
-SMPTE170M.
+The issue from that series of get_mbus_config passing the number of
+active data lanes has been resolved.
 
-The value programmed in the VI_REP register for the colorspace
-is always set by this driver, therefore there is no need to read
-back the value, and never set to REC709.
-Return the colorspace based on the format set/tried instead.
+With regard updating the FIFO trigger level, from the previous
+discussions[3]:
+- Cisco's use doesn't use OF and therefore is unaffected.
+- Philipp's original use case was only 720p60 and 1080p60 UYVY at
+  594Mbps.
+Both those modes still work with the updated trigger level, but
+I'm happy to revise and only use the new trigger level with the
+972Mbps data rate if that is deemed necessary.
+
+The final two patches are new but relatively trivial.
+The first makes probe fails if the hardware isn't present, and the
+second reports the right colorspace for the format.
+
+Hopefully that all makes sense.
+
+  Dave
+
+[1] https://lore.kernel.org/linux-media/cover.1505826082.git.dave.stevenson@raspberrypi.org/
+[2] https://lore.kernel.org/linux-media/20250606-roaring-blue-bat-a8b2aa@houat/
+[3] https://www.spinics.net/lists/linux-media/msg116360.html
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/media/i2c/tc358743.c | 44 +++++++++++++++++---------------------------
- 1 file changed, 17 insertions(+), 27 deletions(-)
+Dave Stevenson (4):
+      media: tc358743: Add support for 972Mbit/s link freq
+      media: tc358743: Increase FIFO trigger level to 374
+      media: tc358743: Check I2C succeeded during probe
+      media: tc358743: Return an appropriate colorspace from tc358743_set_fmt
 
-diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
-index 4d3dc61a9b8b..37ebc760f73b 100644
---- a/drivers/media/i2c/tc358743.c
-+++ b/drivers/media/i2c/tc358743.c
-@@ -1708,12 +1708,23 @@ static int tc358743_enum_mbus_code(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static u32 tc358743_g_colorspace(u32 code)
-+{
-+	switch (code) {
-+	case MEDIA_BUS_FMT_RGB888_1X24:
-+		return V4L2_COLORSPACE_SRGB;
-+	case MEDIA_BUS_FMT_UYVY8_1X16:
-+		return V4L2_COLORSPACE_SMPTE170M;
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int tc358743_get_fmt(struct v4l2_subdev *sd,
- 		struct v4l2_subdev_state *sd_state,
- 		struct v4l2_subdev_format *format)
- {
- 	struct tc358743_state *state = to_state(sd);
--	u8 vi_rep = i2c_rd8(sd, VI_REP);
- 
- 	if (format->pad != 0)
- 		return -EINVAL;
-@@ -1723,23 +1734,7 @@ static int tc358743_get_fmt(struct v4l2_subdev *sd,
- 	format->format.height = state->timings.bt.height;
- 	format->format.field = V4L2_FIELD_NONE;
- 
--	switch (vi_rep & MASK_VOUT_COLOR_SEL) {
--	case MASK_VOUT_COLOR_RGB_FULL:
--	case MASK_VOUT_COLOR_RGB_LIMITED:
--		format->format.colorspace = V4L2_COLORSPACE_SRGB;
--		break;
--	case MASK_VOUT_COLOR_601_YCBCR_LIMITED:
--	case MASK_VOUT_COLOR_601_YCBCR_FULL:
--		format->format.colorspace = V4L2_COLORSPACE_SMPTE170M;
--		break;
--	case MASK_VOUT_COLOR_709_YCBCR_FULL:
--	case MASK_VOUT_COLOR_709_YCBCR_LIMITED:
--		format->format.colorspace = V4L2_COLORSPACE_REC709;
--		break;
--	default:
--		format->format.colorspace = 0;
--		break;
--	}
-+	format->format.colorspace = tc358743_g_colorspace(format->format.code);
- 
- 	return 0;
- }
-@@ -1753,19 +1748,14 @@ static int tc358743_set_fmt(struct v4l2_subdev *sd,
- 	u32 code = format->format.code; /* is overwritten by get_fmt */
- 	int ret = tc358743_get_fmt(sd, sd_state, format);
- 
--	format->format.code = code;
-+	if (code == MEDIA_BUS_FMT_RGB888_1X24 ||
-+	    code == MEDIA_BUS_FMT_UYVY8_1X16)
-+		format->format.code = code;
-+	format->format.colorspace = tc358743_g_colorspace(format->format.code);
- 
- 	if (ret)
- 		return ret;
- 
--	switch (code) {
--	case MEDIA_BUS_FMT_RGB888_1X24:
--	case MEDIA_BUS_FMT_UYVY8_1X16:
--		break;
--	default:
--		return -EINVAL;
--	}
--
- 	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
- 		return 0;
- 
+ drivers/media/i2c/tc358743.c | 134 ++++++++++++++++++++++++++++---------------
+ 1 file changed, 87 insertions(+), 47 deletions(-)
+---
+base-commit: 8d441742cb6a1f1cf1d8f2c73339af27dddb7cf0
+change-id: 20250611-media-tc358743-07de40a814bc
 
+Best regards,
 -- 
-2.34.1
+Dave Stevenson <dave.stevenson@raspberrypi.com>
 
