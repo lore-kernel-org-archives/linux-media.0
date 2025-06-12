@@ -1,117 +1,188 @@
-Received: from lx20.hoststar.hosting (lx20.hoststar.hosting [168.119.41.54])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8586A2F4325;
-	Thu, 12 Jun 2025 06:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.41.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163A31EB1BF;
+	Thu, 12 Jun 2025 07:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749711259; cv=none; b=OLdAqEAXSig0U7aK8qYXEe0pw7d2vDkRcdEaNnjh1iuDfw96DtsidOz/3Zx3UWipuskRNXNk+tjC3S90ElZvCp5lDTqlIRG4yKgcNykOUqMfo2FQMyqCQCFYld9DfBuG0Ge9MMAeU4MqpC3lzeHZlm6s0kfoaJ8TZg9mZfgMqYs=
+	t=1749712966; cv=none; b=Ome4/Qxsv+B9aaE1now4ObHUcXBapz6cao18Zrcs0iqhmySKEiBsM78akAad4S+8fIvJE7PVqmUPWriAQHwip+h3YgXtD0NkHkl7snach/0KsARJ3q+BSFYKUJjJJtesVgA7ICB14TRy0iOhm9o87wJT62scAHyizFe+p2wIYJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749711259; c=relaxed/simple;
-	bh=abOkBWJGlLGt8B6Uxene1xzpp8AN59b8XJc9hJfjlf4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eP4DtUyxPRz5FfQIYpcWLvLsoW4mgEAkQrkTTyl5jlQ3h8LlhyljU470fEPBejLB/56V0upC0PVvL7X6OR2hc3QG5h7ct/Z2RS8/jnfyLGc1vvHBkeJfz6l2JuelpkHVkU5u8Kh1b1E5dPxMoigVPJnctGVUX24RVd7QTsNbcXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at; spf=pass smtp.mailfrom=emfend.at; dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b=BVqcTbb7; arc=none smtp.client-ip=168.119.41.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=emfend.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=emfend.at
+	s=arc-20240116; t=1749712966; c=relaxed/simple;
+	bh=tudZmes0tzS0L6N+Moup6myILR3aF7F6LV4KkXIKHms=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CipQeG0Kg4/VI8IxpRpy3Y+edjbQVOZd6X4l1L1L69HwKzEZtU3+j4PyqhPmjxnsn9w5hW7x8LA+tMcYdfbJ+/yqczxe+DEpQhsAwM7TpCVwCnv1B2PnWYpUzNlV6tN8dyfnFvuGI15nK0vxjTDaFpRiZBgzmC9EdQApKSXpjx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=BkOSufU4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KsQ8g7ME; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=emfend.at header.i=@emfend.at header.b="BVqcTbb7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=emfend.at;
-	 s=mail; h=Cc:To:In-Reply-To:References:Message-Id:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=vRObdDN3QzY2W/qwTV0fHN32ShwflGcphDsUHMARNFo=; b=BVqcTbb7B2uLKpsYnNbLx7pq1z
-	rqztQy5g7dG6p3Tu0AzRtWe3qLwv6QY1CmonYuk9fwWDBg5xo1rJSz3QFMYNpDCiiMfDi9mIkin4x
-	NNAXxd/jdvGciJXpB2VniLBPVS3suy16iFmDsJARWNBBtprPw3zJEEEQBKwY6+nbx7S8=;
-Received: from 194-208-208-245.tele.net ([194.208.208.245]:59918 helo=[127.0.1.1])
-	by lx20.hoststar.hosting with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <matthias.fend@emfend.at>)
-	id 1uPbpF-003wuh-LP; Thu, 12 Jun 2025 08:54:13 +0200
-From: Matthias Fend <matthias.fend@emfend.at>
-Date: Thu, 12 Jun 2025 08:54:10 +0200
-Subject: [PATCH 1/3] media: dw9714: coding style fixes
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="BkOSufU4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KsQ8g7ME"
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2F79511401B1;
+	Thu, 12 Jun 2025 03:22:43 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Thu, 12 Jun 2025 03:22:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1749712963;
+	 x=1749799363; bh=m3QInsRv6rSgD8UgJsyiuSNJFvPdPwOZW8NEO9LmxCg=; b=
+	BkOSufU4DYPJ8vE/1PlLDWNgWOYEhuyAkJeBqTXl070f+HHytQtktlfgF4TZYW87
+	FTst568UemA1C4Pm9TR+lBEOFELyGy3jHYPndzYgFMG5yz7uPFAJnG1McRH87+9w
+	DSpAE3WmaEKvqPDrxHpFYis+NbbWa8uqZPJMUOi5Yt20EIG6pW4QmaSB9+34FFKI
+	MVZLDntpbxurtAmr7k7z0gYvazOCMXNa103r3oUJvWmdpgr1YPLqiTbR1QaQtT+0
+	uFHi8u85KeiiJ73WToxrwqn85tKDAnFU/p10LqEHEqIAeHp5IWw+8IZ5GYkIMsRW
+	Arqtg6S1X7GF1Po61UahOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749712963; x=
+	1749799363; bh=m3QInsRv6rSgD8UgJsyiuSNJFvPdPwOZW8NEO9LmxCg=; b=K
+	sQ8g7MEx4l4t8V2XJOdEnWhyNR6SfkccAzHXy5Rzr8IvTXuYXtXFQccZuBEXeI28
+	zagpv5fsl6aX1fS9cfFLWrMuAYDkbnPrT84TB4bTcHDl1HctqT2R+TNSl4GIPOJ/
+	r4Efp0ymjTyK0Z7gXxU6NZch+uGPh1Y7LkhctxwFeK78WIik6+i4m7L7tLBISFM9
+	0NbwkkEAZ7EY5WEmhHilljgoD0eSi/wkql7t2wlYivatHxd3G5hOiJz2EAB1VWJW
+	ZajtdH5SlOowauUEndNGzjx40WPoA47Dy8KXWWIBuWrfhiY2tHtk9XIrjNjP1Rk7
+	oj2t43ype9BQ6gatcoJIA==
+X-ME-Sender: <xms:QoBKaN-nVyvJFURa8IwjCri6ct1mDok-f80md_bcfKGYE0n0M57jVw>
+    <xme:QoBKaBvwrqCVAneWy8q9FOpGyb2Rod_TSNh8SrgeQoAT1cdoQyq8lsuN-uz4MuBWa
+    iF3XtVVFArfVyxwMkg>
+X-ME-Received: <xmr:QoBKaLDVeFBUPKWAoUKhagwq-d7i8LYrGdBMQaCT8ej28KeZYTnFBVwnnzXXcdtj0GGTgrmXIVq-FQrdEzjinswkBYbuQU-SNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddugeeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddt
+    jeenucfhrhhomheppfhikhhlrghsucfunpguvghrlhhunhguuceonhhikhhlrghsrdhsoh
+    guvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvgeqnecuggftrfgr
+    thhtvghrnhepfefhleelhfffjefgfedugfegjeelhfevheeikefhueelgfdtfeeuhefftd
+    dvleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    nhhikhhlrghsrdhsohguvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrd
+    hsvgdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohep
+    lhgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprh
+    gtphhtthhopehsrghkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtghomhdp
+    rhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtoh
+    hmihdrvhgrlhhkvghinhgvnhdorhgvnhgvshgrshesihguvggrshhonhgsohgrrhgurdgt
+    ohhmpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:QoBKaBeIkrbqMYgLJvM_PglvFzwPP7p8VQ6KhtDJqIae4Mhl3dZa8Q>
+    <xmx:QoBKaCNgIAarFBv3lZ7q5YXhC38hTtZOmQCrSDi4YKvb_YpK9_BJFw>
+    <xmx:QoBKaDn9Ui1ItrEQDhaEcS_UR7i7gMcr7DMHWKHpETxaGfkRyMksQw>
+    <xmx:QoBKaMuYAC1wegIv9xPJW8aUENbR2Wn31upqa8O5d3zzbEGoO2iTkw>
+    <xmx:Q4BKaLKEbRI1jf1NZlul5lsEP1vx6Nt22oC9u58CkYSezGyOGhjwr3ER>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 12 Jun 2025 03:22:42 -0400 (EDT)
+Date: Thu, 12 Jun 2025 09:22:40 +0200
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+	linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v5 12/12] media: rcar-vin: Fold event notifier into only
+ user
+Message-ID: <20250612072240.GF330732@ragnatech.se>
+References: <20250606182606.3984508-1-niklas.soderlund+renesas@ragnatech.se>
+ <20250606182606.3984508-13-niklas.soderlund+renesas@ragnatech.se>
+ <20250612002816.GD22977@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250612-dw9714-v1-1-1a2d6d682829@emfend.at>
-References: <20250612-dw9714-v1-0-1a2d6d682829@emfend.at>
-In-Reply-To: <20250612-dw9714-v1-0-1a2d6d682829@emfend.at>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Matthias Fend <matthias.fend@emfend.at>, 
- bsp-development.geo@leica-geosystems.com
-X-Mailer: b4 0.14.2
-X-Spam-Score: -1.0
-X-Spam-Bar: -
-X-Spam-Report: Spam detection software, running on the system "lx20.hoststar.hosting",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- 
- Content preview:  Besides minor fixes, this series mainly adds support for the
-    powerdown pin. Note: I already sent a single patch for power down pin support,
-    but since more things have changed and this has become a series, I've decided
-    to start it with V1. 
- 
- Content analysis details:   (-1.0 points, 5.0 required)
- 
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
-  0.0 Local_hs1_NotHoststar  Sender is not from hoststar.ch|de|com
-  0.0 TVD_RCVD_IP            Message was received from an IP address
-  0.0 KAM_DMARC_STATUS       Test Rule for DKIM or SPF Failure with Strict
-                             Alignment
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250612002816.GD22977@pendragon.ideasonboard.com>
 
-Just some minor coding style fixes reported by checkpatch.
+Hi Laurent,
 
-Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
----
- drivers/media/i2c/dw9714.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks for your review.
 
-diff --git a/drivers/media/i2c/dw9714.c b/drivers/media/i2c/dw9714.c
-index 2ddd7daa79e28a2cde915b4173fa27e60d5a2b57..1392cddab738ce38efa18b2b9bd7821bddaa0626 100644
---- a/drivers/media/i2c/dw9714.c
-+++ b/drivers/media/i2c/dw9714.c
-@@ -144,7 +144,7 @@ static int dw9714_probe(struct i2c_client *client)
- 
- 	dw9714_dev = devm_kzalloc(&client->dev, sizeof(*dw9714_dev),
- 				  GFP_KERNEL);
--	if (dw9714_dev == NULL)
-+	if (!dw9714_dev)
- 		return -ENOMEM;
- 
- 	dw9714_dev->vcc = devm_regulator_get(&client->dev, "vcc");
-@@ -247,7 +247,7 @@ static int __maybe_unused dw9714_vcm_suspend(struct device *dev)
-  * The lens position is gradually moved in units of DW9714_CTRL_STEPS,
-  * to make the movements smoothly.
-  */
--static int  __maybe_unused dw9714_vcm_resume(struct device *dev)
-+static int __maybe_unused dw9714_vcm_resume(struct device *dev)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-@@ -271,7 +271,7 @@ static int  __maybe_unused dw9714_vcm_resume(struct device *dev)
- 				       DW9714_VAL(val, DW9714_DEFAULT_S));
- 		if (ret)
- 			dev_err_ratelimited(dev, "%s I2C failure: %d",
--						__func__, ret);
-+					    __func__, ret);
- 		usleep_range(DW9714_CTRL_DELAY_US, DW9714_CTRL_DELAY_US + 10);
- 	}
- 
+On 2025-06-12 03:28:16 +0300, Laurent Pinchart wrote:
+> Hi Niklas,
+> 
+> Thank you for the patch.
+> 
+> On Fri, Jun 06, 2025 at 08:26:06PM +0200, Niklas Söderlund wrote:
+> > With Gen2 converted to use the common media device there is only one
+> > caller left for the helper to notify a video device of an event, fold it
+> > in.
+> > 
+> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > ---
+> > * Changes since v4
+> > - Broken out from larger patch.
+> > ---
+> >  .../platform/renesas/rcar-vin/rcar-v4l2.c     | 20 +++++++------------
+> >  1 file changed, 7 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > index 2bf94bd77c24..59b01cb0628a 100644
+> > --- a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > +++ b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+> > @@ -656,18 +656,6 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
+> >  	video_unregister_device(&vin->vdev);
+> >  }
+> >  
+> > -static void rvin_notify_video_device(struct rvin_dev *vin,
+> > -				     unsigned int notification, void *arg)
+> > -{
+> > -	switch (notification) {
+> > -	case V4L2_DEVICE_NOTIFY_EVENT:
+> > -		v4l2_event_queue(&vin->vdev, arg);
+> > -		break;
+> > -	default:
+> > -		break;
+> > -	}
+> > -}
+> > -
+> >  static void rvin_notify(struct v4l2_subdev *sd,
+> >  			unsigned int notification, void *arg)
+> >  {
+> > @@ -693,7 +681,13 @@ static void rvin_notify(struct v4l2_subdev *sd,
+> >  		if (remote != sd)
+> >  			continue;
+> >  
+> > -		rvin_notify_video_device(vin, notification, arg);
+> > +		switch (notification) {
+> > +		case V4L2_DEVICE_NOTIFY_EVENT:
+> > +			v4l2_event_queue(&vin->vdev, arg);
+> > +			break;
+> > +		default:
+> > +			break;
+> > +		}
+> 
+> How about
+> 
+> 		if (notification == V4L2_DEVICE_NOTIFY_EVENT)
+> 			v4l2_event_queue(&vin->vdev, arg);
+> 
+> Unless you expect more notifications to be handled later ?
+
+I do, I have a different series that tries to notify CSI-2 errors to 
+user-space with events. The series was posted in 2021 and I need to get 
+back to it at some point ;-)
+
+As this just moves the existing structure around I would prefere to keep 
+it as-is for now.
+
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> 
+> >  	}
+> >  }
+> >  
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
 
 -- 
-2.34.1
-
+Kind Regards,
+Niklas Söderlund
