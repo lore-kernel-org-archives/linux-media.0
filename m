@@ -1,71 +1,71 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D2C27F747
-	for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 23:11:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03DF2641CC
+	for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 23:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750029109; cv=none; b=iFrjOMjlu2apmLXKXeNWcjtonJJqSeVmuIurZq0v272mTV9IijN6aVcOSDRShpnkGlImgKVOsgVOsBnFWvzuVz9lUm1/zJs5AVgD3lirAsWkJbgmPoyMoO6m9g1OoKek/2C0TfOsGj2svNSb4IcI8Ukb/2xVJ/3OJOd2evAWR5g=
+	t=1750029109; cv=none; b=kNq66Axs9lqjpinQyCMHJieyPT/SYzNUqDBwtS5urYHvU1/r7ciKc7EpBSpd/qZoubmZjdqzVUofojGPo3jzmmq6fPkUg/IPsDe3ada5JLCPH7qOONti9318r6GqaLMYvDc2JBJQsiOl2LO0nvA8IQaLOb1CRq32H/p++NZiPP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750029109; c=relaxed/simple;
-	bh=LYBDuXGYSa+VQ0bxsoN/3xpxcgAzHB3e43Ofpm5DSzc=;
+	bh=B0iVseJ6KZ3tp3xudimOormlRAJxc/UuS4tDDKg0X/4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XVhAVY+tuqLk29u5wv3S4TMuusK/v9WJJeONCCARDkV2++Icx/JOmK/hiI26oBfRQ6ohniOdctSc5MpyXg73XEK4hGc7zlmKUq/CNlz91OjAP/cF+r10PWkPOnt+4kS5c9FCYyC1pDf+YESe9+fphYiYHvwSF9nKcn23Sp+4JxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8Qmbi37; arc=none smtp.client-ip=209.85.208.50
+	 MIME-Version; b=fWdk2lfcOTmyWk8+FpVkpzmyAA6ZDLXCptLGE3f6LhLcu0+DVkUamXxaZWTFjlwoEGM87TvwArKPpQe5VxNIPL/gwND+CsRVOAN5lPck43UAGd+/CQqZQUsarRozY3V4Sz7EDehxd9Yme+eGpvodLjGIKPfTlrkIr43vXftzp00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NsdGIj/n; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8Qmbi37"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6077d0b9bbeso7044705a12.3
-        for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 16:11:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NsdGIj/n"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-adb2bd27c7bso581848666b.2
+        for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 16:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750029106; x=1750633906; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750029105; x=1750633905; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ISZu+sAha8VYmQFhk8BBVM0M8O1KkyUnkHBc0tGOjKo=;
-        b=M8Qmbi37LQxooYbXfBg66nu2xHhQcAzjz/ePHa3Jpa55KvDa0BDAR+yNyQX/5cpBrC
-         asoF/BoY4ZC8MlFYvMHUYo+IdJIFQjOsxopvlutGgZe1eEZads11Y188R1ndCff5pOM1
-         rer1W63a1XlKjsUjL2JXt/O2H1zaneUcUF5VQKxUg7Qdmxyb00mhnA3odyhTlpyGNc/G
-         HQdmZj58Hs6AAB6BrqQ0j+JnhSF0iEedm9MBjHa2zq58GsGI4Cdx2wM7QLF+c2VnKZty
-         +gXmrDtzw6C45sSDzBxx5OTeww+mdyN6LYoVkc04//EdIAo/0o2Zq2X743CDQDjjNn7K
-         i+aw==
+        bh=o3MfXo6iTt/rSpgf0lOwf22UCNwL2LWT3y/KcFVDzVA=;
+        b=NsdGIj/nYL/Y7EpFKemzMCeUtUJTG2fajRG68LtRgjtPhy1Hytlk52IFR0167mWTMQ
+         cCYCphpPj1FBi9yulcd/GdapXt7GW1k3Kp2yKQro+xDpMbp1FaoOMjI41TFQEtSc5KsK
+         u5vw0lyCzAfH5EYb70No72KCEmvlk7A7JNRMZEWIkcS3MGsydo9RFcYFgLqU7sooSvC6
+         fhKAjHPH/Hrfyms7C3k2Cwz1jXGG8w2MzBVCa3Y2GQGLY/pfhqj8u31nyqjLxlTYWyV5
+         cZxZgWNw0kH35SXMV681vitaFUicPUf6+7uRZzyDaezniBHnXwp/0U9g6sdTUWXWgBZR
+         YEOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750029106; x=1750633906;
+        d=1e100.net; s=20230601; t=1750029105; x=1750633905;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ISZu+sAha8VYmQFhk8BBVM0M8O1KkyUnkHBc0tGOjKo=;
-        b=McSt/myyrvDkKHzYocOBXaWTzzER0/EDCy88Hs4VEN7s4ZCwWMFavd3gDm0B+LWjou
-         u6pb4FGZ/P28ijDLibASAv/wXAYaDLJq4dHJMGz3Kc1aRLbU3oMT1LOAx2XaOPKD6wgn
-         9mXt65nd6zCtb+RgsRd+mY/to6Au1eKdpcx1GRnXEWif+KlwgDRIpfr7SA0N5C+5JIAc
-         z3wSuQYHMeuvSYk5RHIbtQLAQuiBOY8G8BnkfAXONUH0yaGEkLy15xvLG3b4cefu8SoX
-         uTEYjH47wIa/TN23OxweTq7SoAbu+gXChFrwjNGwEtveWQ6Zd7okIXwHUuED0g64fb6p
-         DrJg==
-X-Gm-Message-State: AOJu0YwqcAGYGcz25XHGlhnXqwj/df7fxl14vssRPlkC8srLvrcVlblz
-	YduCwKYEjxOHYrIrdKZRqgK4kf83IxJK0pc5crQjZblJX1ZIE0rYkSHD
-X-Gm-Gg: ASbGncu/hShC6U+M7iVueh0WmXeVhWF4+kU87qL0SVxvmv+2Gx3/gN8oBYiHQ5ijb/x
-	/C1EoiyqeYRVwSnwlFgm8MIAPq4tY7Z6Wxo561AnhBrDhSWZJQE1wEMtNSTvBUUyM33Z7shc2k5
-	M5zBK4dXX8IRzuu2jW0Yxqv6rgDIU+JgS9fGP8hL0GIALwbF42bD/vZNaO8iHSzkicnVo1Rx0gr
-	hW9mk6VEzRLpyhkEHOKzvu/Iv9u6oP36qq4al2r5tkK6THsF1QPwYBxnWvDHfAJ2t1AzyUyBr8J
-	g4uzOS448SfuZIGHvWOn+ZFajHRoh3BfDLMWcvKRvtJyqLQzbx3HtkuB+7CbVn0b+irr1b2P9nc
-	sUiuU/+w1X5QHs3LGo9Qd66NpWLda58AkbGVIlUjCV8FPc61qlpNZLQLTsfW+nzJtZTh0EPxU8t
-	CK88YbzBdpgx00qDxpdpRW4JE=
-X-Google-Smtp-Source: AGHT+IG0Kz6Q1Ob6gvgrM7NRnGKrRc8RVD8msF5hGZhFBlofu3I6Yap+x6X4qw0u6niyEWHqt7g0MA==
-X-Received: by 2002:a17:906:c145:b0:ad9:6350:c1e2 with SMTP id a640c23a62f3a-adfad46a356mr638917766b.49.1750029105825;
-        Sun, 15 Jun 2025 16:11:45 -0700 (PDT)
+        bh=o3MfXo6iTt/rSpgf0lOwf22UCNwL2LWT3y/KcFVDzVA=;
+        b=UyMl/0xfRmG9L0Vti3cXc+VWH36oBKhKu9Fq3qdasJEmJWd1nBdBqrJni+S1JvnKdo
+         xw30+ReXZ8hWUapnVpvTLRuAsgXqKbC5MAoZf1RfBjEAXQSWpcS61hFJhqDc1Uu82wWd
+         EkmKKug0/pftj83a8PYox3rQb6V28przV9MdvY3F7ArUGEHdbE8ykZXwC/ol+2qpPXxZ
+         dmRdrVywhvN4vbbkZm4WHmrYO+26UFEkAjSkgZBLhBmrAsoVozXTbL+Ka7X6Bjn0W0Hu
+         UuU3uMlFTqKKwzQKbyd2FRgl/SYmUVKYOhz17ZkfkSqFlqYrXrofLWEKLiKAXdF6b4RF
+         xvYQ==
+X-Gm-Message-State: AOJu0YxCEyQKD6u/1FK9eiRBUrkxud2DLjEYNh1Js9qthPFcJ6kkLbAB
+	x2NcrPABX6R4XfKG/DQZPseXbBLIVHMgMJwIwd6AMIMQ3ATzcEHwNKSSd0rsL0173HI0NcxI
+X-Gm-Gg: ASbGncvZYR5Pu+ulxr6RkejQbQ/1vyrcTmpO/9DhUguyXXGjzVo05qT66k1dI5SsdaJ
+	jyTjxdQXFXdAr3Rlnn0IqPtfm6+DJPQg7R9lqeyg+SlVf3HrEZ53sWEZLwJnpTk+aRa+7JKJG8W
+	ypkTjJF3y3tSy8NnIxvQKvzZw1At/yx7cBYvpqgW6Iyd4VNfm4PIRPlCRIdbPA7236s2rh1Lf51
+	tS6myKoIaqHdTVZRbrugJR+qOC04kXyHobdXNzgskKPfHV6/snzWokwAdZeKiaB1Hb+RPHvk1F8
+	Xj1KeTX/kcpQ303hb1b9OyuL0PaOvUE8FrTFOEMm/uS8GPv8HXF3DQjypB05SkDu4Z1t0beKU/9
+	wBns5Wv8Vg3tqIWqWQ4ftsGGA7vKghGAaXjiPavJ2aVyc9j4KJ2lFhmoA5bB5TDs79nkHQPbMwZ
+	qeMwEA+1N7SEMa9Czp3BTeKlM=
+X-Google-Smtp-Source: AGHT+IFdrxWCL1P0Gvj/YWLyU2wCRVVWjPVxbubsgx7NVKtIKNZYJdLu2b5cXrsCRQnkNkJ+R/KaDw==
+X-Received: by 2002:a17:907:94cb:b0:ad5:4440:23 with SMTP id a640c23a62f3a-adfad46a000mr686609466b.50.1750029104907;
+        Sun, 15 Jun 2025 16:11:44 -0700 (PDT)
 Received: from chimera.arnhem.chello.nl (2001-1c08-0704-3500-b0b7-97b6-556d-11c4.cable.dynamic.v6.ziggo.nl. [2001:1c08:704:3500:b0b7:97b6:556d:11c4])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81baf3esm546347666b.40.2025.06.15.16.11.45
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81baf3esm546347666b.40.2025.06.15.16.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jun 2025 16:11:45 -0700 (PDT)
+        Sun, 15 Jun 2025 16:11:44 -0700 (PDT)
 From: Thomas Andreatta <thomasandreatta2000@gmail.com>
 X-Google-Original-From: Thomas Andreatta <thomas.andreatta2000@gmail.com>
 To: hansg@kernel.org
 Cc: linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: [PATCH 4/5] Staging: media: atomisp: i2c: struct definition style
-Date: Mon, 16 Jun 2025 01:11:42 +0200
-Message-Id: <20250615231143.1558392-4-thomas.andreatta2000@gmail.com>
+Subject: [PATCH 2/5] Staging: media: atomisp: i2c: hardcoded function name
+Date: Mon, 16 Jun 2025 01:11:40 +0200
+Message-Id: <20250615231143.1558392-2-thomas.andreatta2000@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250615231143.1558392-1-thomas.andreatta2000@gmail.com>
 References: <20250615231143.1558392-1-thomas.andreatta2000@gmail.com>
@@ -77,86 +77,25 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From `static struct gc2235_reg const` to `static const struct gc2235_reg`
+Checkpatch fix: use func instead of hardcoded function name
 
 Signed-off-by: Thomas Andreatta <thomas.andreatta2000@gmail.com>
 ---
- drivers/staging/media/atomisp/i2c/gc2235.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/staging/media/atomisp/i2c/atomisp-gc2235.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/i2c/gc2235.h b/drivers/staging/media/atomisp/i2c/gc2235.h
-index 6c743a17f198..7dd9a676fb98 100644
---- a/drivers/staging/media/atomisp/i2c/gc2235.h
-+++ b/drivers/staging/media/atomisp/i2c/gc2235.h
-@@ -179,21 +179,21 @@ struct gc2235_write_ctrl {
- 	struct gc2235_write_buffer buffer;
- };
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+index 857d7175942c..f35d1a16f627 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+@@ -779,7 +779,7 @@ static void gc2235_remove(struct i2c_client *client)
+ 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+ 	struct gc2235_device *dev = to_gc2235_sensor(sd);
  
--static struct gc2235_reg const gc2235_stream_on[] = {
-+static const struct gc2235_reg gc2235_stream_on[] = {
- 	{ GC2235_8BIT, 0xfe, 0x03}, /* switch to P3 */
- 	{ GC2235_8BIT, 0x10, 0x91}, /* start mipi */
- 	{ GC2235_8BIT, 0xfe, 0x00}, /* switch to P0 */
- 	{ GC2235_TOK_TERM, 0, 0 }
- };
+-	dev_dbg(&client->dev, "gc2235_remove...\n");
++	dev_dbg(&client->dev, "%s...\n", __func__);
  
--static struct gc2235_reg const gc2235_stream_off[] = {
-+static const struct gc2235_reg gc2235_stream_off[] = {
- 	{ GC2235_8BIT, 0xfe, 0x03}, /* switch to P3 */
- 	{ GC2235_8BIT, 0x10, 0x01}, /* stop mipi */
- 	{ GC2235_8BIT, 0xfe, 0x00}, /* switch to P0 */
- 	{ GC2235_TOK_TERM, 0, 0 }
- };
- 
--static struct gc2235_reg const gc2235_init_settings[] = {
-+static const struct gc2235_reg gc2235_init_settings[] = {
- 	/* System */
- 	{ GC2235_8BIT, 0xfe, 0x80 },
- 	{ GC2235_8BIT, 0xfe, 0x80 },
-@@ -268,7 +268,7 @@ static struct gc2235_reg const gc2235_init_settings[] = {
-  * Register settings for various resolution
-  */
- #if ENABLE_NON_PREVIEW
--static struct gc2235_reg const gc2235_1296_736_30fps[] = {
-+static const struct gc2235_reg gc2235_1296_736_30fps[] = {
- 	{ GC2235_8BIT, 0x8b, 0xa0 },
- 	{ GC2235_8BIT, 0x8c, 0x02 },
- 
-@@ -321,7 +321,7 @@ static struct gc2235_reg const gc2235_1296_736_30fps[] = {
- 	{ GC2235_TOK_TERM, 0, 0 }
- };
- 
--static struct gc2235_reg const gc2235_960_640_30fps[] = {
-+static const struct gc2235_reg gc2235_960_640_30fps[] = {
- 	{ GC2235_8BIT, 0x8b, 0xa0 },
- 	{ GC2235_8BIT, 0x8c, 0x02 },
- 
-@@ -373,7 +373,7 @@ static struct gc2235_reg const gc2235_960_640_30fps[] = {
- };
- #endif
- 
--static struct gc2235_reg const gc2235_1600_900_30fps[] = {
-+static const struct gc2235_reg gc2235_1600_900_30fps[] = {
- 	{ GC2235_8BIT, 0x8b, 0xa0 },
- 	{ GC2235_8BIT, 0x8c, 0x02 },
- 
-@@ -418,7 +418,7 @@ static struct gc2235_reg const gc2235_1600_900_30fps[] = {
- 	{ GC2235_TOK_TERM, 0, 0 }
- };
- 
--static struct gc2235_reg const gc2235_1616_1082_30fps[] = {
-+static const struct gc2235_reg gc2235_1616_1082_30fps[] = {
- 	{ GC2235_8BIT, 0x8b, 0xa0 },
- 	{ GC2235_8BIT, 0x8c, 0x02 },
- 
-@@ -463,7 +463,7 @@ static struct gc2235_reg const gc2235_1616_1082_30fps[] = {
- 	{ GC2235_TOK_TERM, 0, 0 }
- };
- 
--static struct gc2235_reg const gc2235_1616_1216_30fps[] = {
-+static const struct gc2235_reg gc2235_1616_1216_30fps[] = {
- 	{ GC2235_8BIT, 0x8b, 0xa0 },
- 	{ GC2235_8BIT, 0x8c, 0x02 },
+ 	dev->platform_data->csi_cfg(sd, 0);
  
 -- 
 2.34.1
