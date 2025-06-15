@@ -1,70 +1,74 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE852E11A3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0840527E7F2
 	for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 23:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750029107; cv=none; b=TwCE50PBZX9jPATPhefV59Cs8VToqwYZ5YAq6eqYKeMYYE/nWY8RrT6vT2iHkciTrvBM/gEDUvtBvcAOMePTamdla0L4ua9IyNH0Kz1rauzUGZFbnFqx894w7+vOeAox9hVpFybpOO8oNQeiszgOyJj4M77+tdAQUqT2hLFAu0E=
+	t=1750029108; cv=none; b=RFEkUiVuQyWss7J49ktEMpwzAXi8bvbCvrJWZ757jrjAVl6MAjXJ+BBurHFyzU40CWCokdr4OS5UiZB2AGXHDwJ44KJ8pGBGDPsnrEwZdf4nWZtV6h3QkOcoh9tlvHUXX7uWm2sfClBKD0q1+RUaML+7dCy49LlDIgo9RN379gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750029107; c=relaxed/simple;
-	bh=o2M8aTJnLUPL1zk8er/JNPhZFreP63h9ZtSwu0XeWgA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=skrq+eN2d+L6mpiBAkMMa0xOuAfS8Ey9/QS3eU/PIkDWAvq6Zb1QSkDcMzC+YsK814SiY/2eGJ6l7pINyLDUon05uJXoj4g2GqHmgBSQ7qUxuKhyMv3ch+6U97GtY7IaDbrVIoUNPDUiRVpJVYylxE2PNDMcyZO09+Le3AL5+yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uarof2PP; arc=none smtp.client-ip=209.85.218.48
+	s=arc-20240116; t=1750029108; c=relaxed/simple;
+	bh=4HDa+kZfszLMUgYNYONQFzq5OXdyA7J5cTxvAeHxi78=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=cXVR6ZJwNEYyqWehpbsv+YTzq7RucfxQPcHmmeWLbqGnkeH3rDtO0R4yzk8EgC1zDTaKC1w4NBVH+6hdPLcXx6Mmu84Ck9jERotVzNlxF/hz3vB5YkrugR3ogpRiRtOI4WUxfwedORoXyvb4xECO9obswuta0hJ4qmqR6OYNA2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fln6JjFB; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uarof2PP"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-adeaa4f3d07so757900766b.0
-        for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 16:11:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fln6JjFB"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-605b9488c28so7626361a12.2
+        for <linux-media@vger.kernel.org>; Sun, 15 Jun 2025 16:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750029104; x=1750633904; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IuRC0Xv8GuCK7/0M2ogm1jbfujpFFyPz5eHg0qrJ1d0=;
-        b=Uarof2PPigFdrCQ5cQZBLtniVpYV/LhNMvgTznzir7nkiosvEAuIdB0Tlbfa/wTPK0
-         DR3kuJOuSkwZItP38epmI26JTk4ewF3nuz06IOs1SUDnx6j6ji8sv5WfV7wDu83GF0Bc
-         TlCPZuTno5hLXEWOQS/3PMIU41KVlHFeLNxmKhoj+GMQmdCqpTYeFFpXkpHIYolt0CWM
-         8AmsxTFllbLijhbAQAvlBoz5kZopueCwvDkghDK2GitEsYMfGcua2Eal3QC5ZaMyL7Ft
-         VyGwoVk/BB9MmzJ/gJ2HwKcRVMSVe4rIGVU6sj5jJjl9GdXWs7Eq3sO55qZeBwOGXI3U
-         kiCw==
+        d=gmail.com; s=20230601; t=1750029105; x=1750633905; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HcvIE+9LcHgBj6QzseTYwWoeEVndXUkqFgV+umJPgZ0=;
+        b=Fln6JjFBJsJPKnOtA6hBkLlS/qY01x67klKUv7bbZAUkgoZ7US4rEgiY4WCyp19x0C
+         9PmYob8qlZRkJRI/81X8JLoO93K8ZWjJwAuHvczjfyrSxu9d+qxQEepiICrB7ZSD0H87
+         6Waa26uoEYDZNkdYUs2ce1Rs5I511lfdzDFBwl6ckwk/ntC+37wj0WjJJRsgAkInsIjr
+         uQgJGc5IhTTMWlRP+ckg1gmWkRhUZXcRrDyOerI8f9fYv+3O7bVsjXUW6DStTSRDgSud
+         +rOWhQGFlRhB05SOrkvM6d4rTprHdOMsXTtBevceC3oSnX3I35HFsMZLeaU+bw0G/gk+
+         jEEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750029104; x=1750633904;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IuRC0Xv8GuCK7/0M2ogm1jbfujpFFyPz5eHg0qrJ1d0=;
-        b=Aw4Gou/YM1n07GDozfaa1/wo1jAatYa2VbzKj1haftwJrtbTBSz/bM7iepYQpyAhVs
-         YzNDEPmHCBM7ZDVsEcYBjRsTArUWU5UqA5cAJwg3F5iYes/zAjQ71TL9F7dg132OKYTD
-         0YdXdArRr5r8Ec7odACrA4bReMK2rAlcjD7+xyx1HYDoIjLIb37O5czhAT5gMt6gTcDP
-         ZJYu68NWxeDA4eub33phdyA8kmApp2MibZAO+uaZlfbPN2IeDuyi02wb0QapAZ7WROv2
-         aNXkkcirHWHwJpFksEdNFnepcXKt6KM5RPNFuA0/HolWySbIJxY956dswt8w5hG+7col
-         aIFQ==
-X-Gm-Message-State: AOJu0YyQ3wgrs4a3zs0ChcznxmnHpAwr7bSB43YRXiqmstaj5vyWWwM9
-	p9ef6Cmkdx654doL841bBOXg2hW/3MUJ1jBb5FiiRiLz80ddur7/f9sK
-X-Gm-Gg: ASbGncvVJetTJ9QQ2467b5Udmt9eJq1INRfcNMktvmb3ZyYMDZsoayanIcSaibDnl+n
-	eT1P5tbtU5W//BOV/gi0S1ApolVcW79qaw4nQf/u3i+m1WllttDPTIUrHOlfbpiyKlwWAd26+nX
-	7gKOjuM4cJy/lvp9+uBxZk+fYgSKcwR5As6IUpvcWOAebrfgoGX+CLeA6L1ntj3a4+dJgkTnw6P
-	CnxxKUJ2sdYi/vPAES5ovyySyY7MJFeSMbVBBfUETpebb6p3WxBa93GIqzJtws87pD9vghI8i0Y
-	pZ8B0m7JZPyZXSc8uWoI72PM1hKnrhCJR8Lnd8dms8/iSLCu78Fix1bly75es90uYoDluoXz1D8
-	ymzeMksObNn8sgKvOdIYt9XO1l9vdFchonhIVO3zWyZ22nv6B5nDilRHH/IoP20NuPb3YE2rZb7
-	mXfIcYGHGW1z2XmSLdXU0jgfw=
-X-Google-Smtp-Source: AGHT+IFyGA6EW7LECZpZrvsKlkrWn3k+KNaMnoQqSqnxGmyZY0vgQDtyxj8I6kVAvREM6+v/SIhKvw==
-X-Received: by 2002:a17:907:ea5:b0:ad8:a935:b905 with SMTP id a640c23a62f3a-adfad437a98mr606897966b.22.1750029104414;
-        Sun, 15 Jun 2025 16:11:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750029105; x=1750633905;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcvIE+9LcHgBj6QzseTYwWoeEVndXUkqFgV+umJPgZ0=;
+        b=NyixCYT6DgeVW3an6/VA/rRGGGI+AToyuuW2jrXbjXJTR0aV4CSlbmTnI6BwIBAA2L
+         sfKWNOid1QB26Xn7eDT4Po0EAwDFPiHSPCtJJc6xXb9S0yNui2pkI5h1J1k3W5UzrJ1m
+         80a4xhIcwl6YC9m5Uymp2ACLaK+IqkntzGx1tVLrpPoChNhDwZQrocVfJcAdzw5HzZ1v
+         MtGY0ZH6s/YYc6i8LNWjFXFZtgSQZEZRZjtqVSTK7zTUs6MRIIwcVOKfZqSD2zBSWVH8
+         8iw4X63I6gcI3I/6rZ9RR1VvezX9y9xZupqZXwh/BoFvG+Ox5HIMBfP+hcgN1fwTJ3OX
+         FBNQ==
+X-Gm-Message-State: AOJu0Ywt1CaK+a1ANwXPoQ2cfmeTUv7+VamIrjl+2OlRQdL3lNDM0VvL
+	/dwiGFBAZHvDB1/zqdhMp9pDO3XI+lENONqm/ja/QhE6P7BWvVyfDCX7
+X-Gm-Gg: ASbGnct75bnGneUcrktcbL+h2pJ9K1XqYL+ohsxPbJ8+eAxNvoiHj44nkoXXDDC5IoL
+	lFnHSi8R3sGYY7hsPCfGY+Uo3pFuzBDR/Jgue+FBA2upR9MllVMAGpRJMdliGbQiDDjeTYNj36W
+	vzySt5PqGqLLIkbBbPmJAoEvtA8UraTWztJWwUtKrWWeVsOWqte5b8PqgdEQR/m6FmbVVoQDrgj
+	SSaIwV301PmBs50o0oAhqxAgKpE2xHGPXY4mTWwZ4cTC51PgTISi1zdFP6cNnzdM1fKLn4V0EtQ
+	tmJLINgl3bATqn049zTxSA42AaHHiVGBQp2uwmHxFX78zOXYH7FpnKgEZdcdHOLY+tbn9XYlp9N
+	No6auBaad++CWYFCxQc828uN/ipSAdpRn8agiD0XjGTBf+GIOxXxuAnT3cG6Bh3u3KfHszlN/aw
+	q2MZwSvM+KJCVlw8C6OQhwziI=
+X-Google-Smtp-Source: AGHT+IF7JhUsm0FGPzBzpz4BiVYQgWKUlm55RLUwDD8GmQAi8WR3r224UP/NzLqu8111/AuQiZs2pg==
+X-Received: by 2002:a17:906:6a1b:b0:adb:4203:cc9c with SMTP id a640c23a62f3a-adfad46a361mr659102766b.50.1750029105340;
+        Sun, 15 Jun 2025 16:11:45 -0700 (PDT)
 Received: from chimera.arnhem.chello.nl (2001-1c08-0704-3500-b0b7-97b6-556d-11c4.cable.dynamic.v6.ziggo.nl. [2001:1c08:704:3500:b0b7:97b6:556d:11c4])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81baf3esm546347666b.40.2025.06.15.16.11.44
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec81baf3esm546347666b.40.2025.06.15.16.11.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Jun 2025 16:11:44 -0700 (PDT)
+        Sun, 15 Jun 2025 16:11:45 -0700 (PDT)
 From: Thomas Andreatta <thomasandreatta2000@gmail.com>
 X-Google-Original-From: Thomas Andreatta <thomas.andreatta2000@gmail.com>
 To: hansg@kernel.org
 Cc: linux-media@vger.kernel.org,
 	linux-staging@lists.linux.dev
-Subject: [PATCH 1/5] Staging: media: atomisp: i2c: hardcoded function name
-Date: Mon, 16 Jun 2025 01:11:39 +0200
-Message-Id: <20250615231143.1558392-1-thomas.andreatta2000@gmail.com>
+Subject: [PATCH 3/5] Staging: media: atomisp: i2c: sleep time
+Date: Mon, 16 Jun 2025 01:11:41 +0200
+Message-Id: <20250615231143.1558392-3-thomas.andreatta2000@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250615231143.1558392-1-thomas.andreatta2000@gmail.com>
+References: <20250615231143.1558392-1-thomas.andreatta2000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -73,26 +77,26 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Checkpatch fix: use func instead of hardcoded function name
+moved to usleep_range instead of using msleep which could sleep up to 20ms
 
 Signed-off-by: Thomas Andreatta <thomas.andreatta2000@gmail.com>
 ---
- drivers/staging/media/atomisp/i2c/atomisp-gc0310.c | 2 +-
+ drivers/staging/media/atomisp/i2c/atomisp-gc2235.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-index d35394f1ddbb..f57f2b70909a 100644
---- a/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-+++ b/drivers/staging/media/atomisp/i2c/atomisp-gc0310.c
-@@ -584,7 +584,7 @@ static void gc0310_remove(struct i2c_client *client)
- 	struct v4l2_subdev *sd = i2c_get_clientdata(client);
- 	struct gc0310_device *dev = to_gc0310_sensor(sd);
+diff --git a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+index f35d1a16f627..48ec2cb03806 100644
+--- a/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
++++ b/drivers/staging/media/atomisp/i2c/atomisp-gc2235.c
+@@ -433,7 +433,7 @@ static int power_up(struct v4l2_subdev *sd)
+ 			goto fail_power;
+ 	}
  
--	dev_dbg(&client->dev, "gc0310_remove...\n");
-+	dev_dbg(&client->dev, "%s...\n", __func__);
+-	msleep(5);
++	usleep_range(5000, 6000);
+ 	return 0;
  
- 	v4l2_async_unregister_subdev(sd);
- 	media_entity_cleanup(&dev->sd.entity);
+ fail_clk:
 -- 
 2.34.1
 
