@@ -1,176 +1,108 @@
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0EB273817;
-	Mon, 16 Jun 2025 08:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF211DB92A;
+	Mon, 16 Jun 2025 09:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750064281; cv=none; b=DyloVkrAWfsH63xlp8R+d5VNNBf9MS/3l5XETrs4G1SbvGTzuAVP1v6VI88yKOmK2UGqgML6Awbi/H2/HyapEXLw7dpW+tsg40AJ+K/yNqv2WCsbxZN9gljujJgGHUriHqwJzcfOPa+YGKItS/DrQkCUgTZI1efiLuJ5eRgC9X4=
+	t=1750065560; cv=none; b=p6d/mFC1O/GLUQEC1Unf82mlmyMi2oT74apJMd3zYZzdHYDRx2Kt+S3Y8LShdm68l0o4VOTVuSfQ+5CbUTQXPIzppfIl2xXs+gbU7qZNbY9YD37b7p0RhXXSS/Zi5k2LujaVpUiqIZYJZNcs88hPXLf7dn2dM1t7s/FQB5MAJGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750064281; c=relaxed/simple;
-	bh=ynUHX1BrqMOkhzGuHDQWwsxM2S3eEo8ZU459LAH3FHA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=PdIDBZSeMJJ+vuaf0TSBlj0gG1qgKskS0dCLXsBSZVC4BZhJL0y7YBh0Su5hSei4+dVv3G40nKbsL0H/KbajbhNJCXrAuEoIeX2dhKohhziX2tcIIz0DzwgFzTAuqb9tZOQw9mcjVayisz29WjriB2ad8eLM9Yezwd4tTHsOKbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=hBM20cEq; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1750065560; c=relaxed/simple;
+	bh=cIWgCue/aqvpSg/kLDSZwh6pFlaG1xIal/HdrKsv3tA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cOvmAWPn8YqSCLoJ9pOUIZmc8m9au6iSsuydMWmFmOGQfSlYN4GMOeU0nqjblaCfcOq5hgSw4c/ZzawrZoO0xwDkDyFjsuA6lcMdshnFfjQVIt9ei1msBewkrxwusPL+N0oUNDHIWyvPlPJYVcLyIps3+RaTqjss97K/TcA/5dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csja2bDf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="hBM20cEq"
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G8NuR8020887;
-	Mon, 16 Jun 2025 10:57:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	WquxTis/znwfTHWWzXSC1Y3Hxb2pPZAd4b+1AgQhyFg=; b=hBM20cEqlhrTlxG0
-	L6S6rqEhEZHrrLAjaPefqAoFWLvm3p8G56eapnyb6j14poXUkSMi+AUXKe3tQLzJ
-	nzgECmwiebWkeL18MqoktVNsUg8b/vSD6J9yHR1FjegmiViYnzpZQYVvGt35TV9/
-	zb+FdASVsOTA9V/G01JykyECrEU+9LOyaZVvoTrNH35UpwRDSgKg5DtGKrGxnHc4
-	jMm86FA9aeqZU4jDkms3XEEaLF8p7Di5KhzGN6ZybgGtEwFQFPzXpwFfdroVeX2l
-	w60dr+MnF3XRwW4Bh+P6/uL+BLU70P+ZnvujnQdVONBnqQJBIToyuSbR/QKbs8mo
-	rKypDA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 478x79qk3c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Jun 2025 10:57:25 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 5C19540075;
-	Mon, 16 Jun 2025 10:56:07 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F16FD6CB27A;
-	Mon, 16 Jun 2025 10:54:44 +0200 (CEST)
-Received: from localhost (10.252.14.42) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
- 2025 10:54:44 +0200
-From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Date: Mon, 16 Jun 2025 10:53:56 +0200
-Subject: [PATCH 3/3] i2c: stm32f7: support i2c_*_dma_safe_msg_buf APIs
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csja2bDf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7A5C4CEEE;
+	Mon, 16 Jun 2025 09:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750065560;
+	bh=cIWgCue/aqvpSg/kLDSZwh6pFlaG1xIal/HdrKsv3tA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=csja2bDfFVXwJHWt9Mv+cG/BZxIObuzgt1mBo5mgh8rbGQnTZx8gvAxRHHyOhFy0a
+	 G0scb5aTnlGOrkoLj/IIqrQGA0N8ZaYJX9swYbqcetVA1INH/BO9MUSky41vA2KPGK
+	 cKo+uLHW6PutUn58QN2K4C7n5nk69ibXq63hVOUr3jvP2KwxtVlfdKVtmiKG9IoKGL
+	 jLBItFuxKDmT2/lFbLFNKef/lPKlPn3lH2Rbe3HAXNZEyGdGy8EwIIk/PiBup1CzU5
+	 jwiHY3QOSItn6IStk4J0QihcCSTJm8VZI0T5Voic2AMx0PwPoBa6+CLR8vT8DddXsz
+	 PRLn3slXKLQgw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uR5zo-000000005ZR-2jKu;
+	Mon, 16 Jun 2025 11:19:17 +0200
+Date: Mon, 16 Jun 2025 11:19:16 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Depeng Shao <quic_depengs@quicinc.com>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Hans Verkuil <hans.verkuil@cisco.com>, linux-media@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH 2/2] media: qcom: camss: vfe: Fix registration sequencing
+ bug
+Message-ID: <aE_hlGHkRZqFFacR@hovoldconsulting.com>
+References: <20250612-linux-next-25-05-30-daily-reviews-v1-0-88ba033a9a03@linaro.org>
+ <20250612-linux-next-25-05-30-daily-reviews-v1-2-88ba033a9a03@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20250616-i2c-upstream-v1-3-42d3d5374e65@foss.st.com>
-References: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
-In-Reply-To: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
-To: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat
-	<alain.volmat@foss.st.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        "Maxime
- Coquelin" <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "M'boumba Cedric
- Madianga" <cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-CC: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?=
-	<clement.legoffic@foss.st.com>
-X-Mailer: b4 0.15-dev-c25d1
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-16_03,2025-06-13_01,2025-03-28_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250612-linux-next-25-05-30-daily-reviews-v1-2-88ba033a9a03@linaro.org>
 
-Use the i2c-core-base APIs to allocate a DMA safe buffer when needed.
+On Thu, Jun 12, 2025 at 09:07:16AM +0100, Bryan O'Donoghue wrote:
+> msm_vfe_register_entities loops through each Raw Data Interface input line.
+> For each loop we add video device with its associated pads.
+> 
+> Once a single /dev/video0 node has been populated it is possible for
+> camss_find_sensor_pad to run. This routine scans through a list of media
+> entities taking a pointer pad = media_entity->pad[0] and assuming that
+> pointer is always valid.
+> 
+> It is possible for both the enumeration loop in msm_vfe_register_entities()
+> and a call from user-space to run concurrently.
+> 
+> Adding some deliberate sleep code into the loop in
+> msm_vfe_register_entities() and constructing a user-space program to open
+> every /dev/videoX node in a tight continuous loop, quickly shows the
+> following error.
+> 
+> [  691.074558] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
+> [  691.074933] Call trace:
+> [  691.074935]  camss_find_sensor_pad+0x74/0x114 [qcom_camss] (P)
+> [  691.074946]  camss_get_pixel_clock+0x18/0x64 [qcom_camss]
+> [  691.074956]  vfe_get+0xc0/0x54c [qcom_camss]
+> [  691.074968]  vfe_set_power+0x58/0xf4c [qcom_camss]
+> [  691.074978]  pipeline_pm_power_one+0x124/0x140 [videodev]
+> [  691.074986]  pipeline_pm_power+0x70/0x100 [videodev]
+> [  691.074992]  v4l2_pipeline_pm_use+0x54/0x90 [videodev]
+> [  691.074998]  v4l2_pipeline_pm_get+0x14/0x20 [videodev]
+> [  691.075005]  video_open+0x74/0xe0 [qcom_camss]
+> [  691.075014]  v4l2_open+0xa8/0x124 [videodev]
+> [  691.075021]  chrdev_open+0xb0/0x21c
+> [  691.075031]  do_dentry_open+0x138/0x4c4
+> [  691.075040]  vfs_open+0x2c/0xe8
 
-Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+> Taking the vfe->power_lock is not possible since
+> v4l2_device_register_subdev takes the mdev->graph_lock. Later on fops->open
+> takes the mdev->graph_lock followed by vfe_get() -> taking vfe->power_lock.
+> 
+> Introduce a simple enumeration_complete bool which is false initially and
+> only set true once in our init routine after we complete enumeration.
+> 
+> If user-space tries to interact with the VFE before complete enumeration it
+> will receive -EAGAIN.
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index a05cac5ee9db..5be14c8a2af4 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -742,9 +742,12 @@ static void stm32f7_i2c_dma_callback(void *arg)
- 	struct stm32f7_i2c_dev *i2c_dev = (struct stm32f7_i2c_dev *)arg;
- 	struct stm32_i2c_dma *dma = i2c_dev->dma;
- 	struct device *dev = dma->chan_using->device->dev;
-+	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
- 
- 	stm32f7_i2c_disable_dma_req(i2c_dev);
- 	dma_unmap_single(dev, dma->dma_buf, dma->dma_len, dma->dma_data_dir);
-+	if (!f7_msg->smbus)
-+		i2c_put_dma_safe_msg_buf(f7_msg->buf, i2c_dev->msg, true);
- 	complete(&dma->dma_complete);
- }
- 
-@@ -880,6 +883,7 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
- {
- 	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
- 	void __iomem *base = i2c_dev->base;
-+	u8 *dma_buf;
- 	u32 cr1, cr2;
- 	int ret;
- 
-@@ -929,17 +933,23 @@ static void stm32f7_i2c_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
- 
- 	/* Configure DMA or enable RX/TX interrupt */
- 	i2c_dev->use_dma = false;
--	if (i2c_dev->dma && f7_msg->count >= STM32F7_I2C_DMA_LEN_MIN
--	    && !i2c_dev->atomic) {
--		ret = stm32_i2c_prep_dma_xfer(i2c_dev->dev, i2c_dev->dma,
--					      msg->flags & I2C_M_RD,
--					      f7_msg->count, f7_msg->buf,
--					      stm32f7_i2c_dma_callback,
--					      i2c_dev);
--		if (!ret)
--			i2c_dev->use_dma = true;
--		else
--			dev_warn(i2c_dev->dev, "can't use DMA\n");
-+	if (i2c_dev->dma && !i2c_dev->atomic) {
-+		dma_buf = i2c_get_dma_safe_msg_buf(msg, STM32F7_I2C_DMA_LEN_MIN);
-+		if (dma_buf) {
-+			f7_msg->buf = dma_buf;
-+			ret = stm32_i2c_prep_dma_xfer(i2c_dev->dev, i2c_dev->dma,
-+						      msg->flags & I2C_M_RD,
-+						      f7_msg->count, f7_msg->buf,
-+						      stm32f7_i2c_dma_callback,
-+						      i2c_dev);
-+			if (ret) {
-+				dev_warn(i2c_dev->dev, "can't use DMA\n");
-+				i2c_put_dma_safe_msg_buf(f7_msg->buf, msg, false);
-+				f7_msg->buf = msg->buf;
-+			} else {
-+				i2c_dev->use_dma = true;
-+			}
-+		}
- 	}
- 
- 	if (!i2c_dev->use_dma) {
-@@ -1624,6 +1634,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 			dmaengine_terminate_async(dma->chan_using);
- 			dma_unmap_single(i2c_dev->dev, dma->dma_buf, dma->dma_len,
- 					 dma->dma_data_dir);
-+			if (!f7_msg->smbus)
-+				i2c_put_dma_safe_msg_buf(f7_msg->buf, i2c_dev->msg, false);
- 		}
- 		f7_msg->result = -ENXIO;
- 	}
-@@ -1646,6 +1658,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 				dmaengine_terminate_async(dma->chan_using);
- 				dma_unmap_single(i2c_dev->dev, dma->dma_buf, dma->dma_len,
- 						 dma->dma_data_dir);
-+				if (!f7_msg->smbus)
-+					i2c_put_dma_safe_msg_buf(f7_msg->buf, i2c_dev->msg, false);
- 				f7_msg->result = -ETIMEDOUT;
- 			}
- 		}
+As Vladimir also pointed out, this is at best just papering over the
+issue.
 
--- 
-2.43.0
+You need to make sure the video device is not registered until it's
+ready to be used. That is the bug that needs fixing.
 
+Johan
