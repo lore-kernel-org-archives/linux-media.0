@@ -1,55 +1,55 @@
 Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34304289E38;
-	Mon, 16 Jun 2025 18:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8032728A1EA;
+	Mon, 16 Jun 2025 18:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750100317; cv=none; b=fK/dUFmuH+k1FDlyRbUj3ba6nPusjtWSUdGjejf1XDfMB2LNtgOMFscwStnleJL3yb8Bwl/KAlWc4HSVOb9n8llgMiTqvjhzY6gDUkz/C9t2e2l1cYiS261AXmzt3CUZLZKQcwPXGZlNRsIDO0kKGhF8UKnva9xDCZtVodox55U=
+	t=1750100320; cv=none; b=LOY24F32blCkbGxsXtOWVbu6TEIkxNGGjKYAKxmmTmkv1vtCzNXEPuNwLCFfLcu1C/1vpBoZjk8OvF1KhoxmxVLLYwLwjcnAW1kSriKB5yd3wxhKZa6GVgDbljquvexcR/r0mkRaY0aI+e17qHXjE+vZGVFGTb4UbHxfiiP1Q2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750100317; c=relaxed/simple;
-	bh=fp7k0Eu4zr5HIsAn2D7maSlX3jOFNWn4nN+HaopU02k=;
+	s=arc-20240116; t=1750100320; c=relaxed/simple;
+	bh=8/3kpwgl1nPXMO09fd/PTQcu/r04UTaiOnNHiwPTx6w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rvmvdu5LqGC3oJVT4C19ihJwLMuvW60K51+Vlea+0EZcSRLWirWp7neNvFbPdOn7c99CsYgBYqIk3/8R6GjxFzWFUqIE+kSUwPV9qKwqjanP+44Ibw5SZjrIgbja+Yjwkj92oikbcd/iT+tv9UcUQscMz8jcMFskRV2jzZu5Vhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=faDYVJOI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=U/CBU7IW; arc=none smtp.client-ip=103.168.172.151
+	 MIME-Version:Content-Type; b=KIrOQyENmDP2iQHOLwQ6KFBql6UDl0x/V23HZeMRPV8KZO3d/oyaJkCzk7o4NIeHg9DM/yzDezHVL14m/4KBsNVmricytRT9tsJ3+uGMzdoJVUuTmkfpdF6IOu6cZ4LgvSXNaPQCidTm8h4NvNM6H+wcwG23XbQm8/rJuwqnZDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=ISlyWYTH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OynJDX+q; arc=none smtp.client-ip=103.168.172.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="faDYVJOI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="U/CBU7IW"
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id 4F9861380109;
-	Mon, 16 Jun 2025 14:58:33 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="ISlyWYTH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OynJDX+q"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id A1DFC1380397;
+	Mon, 16 Jun 2025 14:58:37 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Mon, 16 Jun 2025 14:58:33 -0400
+  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 14:58:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1750100313;
-	 x=1750186713; bh=xNoR0XdSng3gARyJWZQvehUw6CyacJ/aimazB5nzGzQ=; b=
-	faDYVJOI6LZbdWJSE5IW71Co+SpTZ6iP6MbAhxmWkI//Yfk3l8QeE5QsPgk8rwaC
-	/7AKTn/1Cea1PM344iJ62Js2krHVJ/YJxwJKSkUpGpq0MRVFl58GN6EsKjiN8SBM
-	eer/4fGoFxbxWsPYSvIOkehGq3X6o+dq5MPhScMfo7rmWar1wZH/ay+jYkXaOztQ
-	9cqZG2fdWxcG+hBW/8bj7o5NIglj6pA7EG73tR+4F+M+WWcPScVBaQsTl0jCyq7a
-	VNDDkYJYi6pOpfgNCw8J3Try97aH2OaK55dpA9+G7XF/JKDuB/45q0SCG3xEEFg+
-	LOnwHAOisG2Wd8xSHQLNwg==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1750100317;
+	 x=1750186717; bh=CBlTK1NcwXwVEcjMtr0ZJRAk5aP5Rj0Kevz6K7/iAgg=; b=
+	ISlyWYTHLSbGoEItgZTIUA0814TsuGX4UBngSG4yDzbg+ziUvV1pBTa137/94Qoh
+	kBe0un47VLCiaOpaCLYFJ2mRqw2gxT6RMuTNEvMLFUjeEh1fyo+Ai+TN4F3RwOfz
+	b6c6hF0bin+xwocTLfL9KVOv7JEkVSG/WS6mTJ9mFAwHQnBNMzNLq//YLV8etqQ0
+	Jc5wO4886LkzcMdnC58PNjfim5TeYmAI9WfopvE2jooFHpqlqhy07qWCL65TEI64
+	tQ+BgZagMKcCFoPtOj8L7K+WPxbFiyHqm51QlSyYkaR0fYnSETCmUlvYstw0+3vK
+	e4SpWB9F0J0Qt5SDm6wK2w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750100313; x=
-	1750186713; bh=xNoR0XdSng3gARyJWZQvehUw6CyacJ/aimazB5nzGzQ=; b=U
-	/CBU7IW/tlmUP+EfowmCclSfZEtiO1vkc9KDu4ZAZgogNW1RfLa9AmYcm8/+hDTp
-	B9OnaA0X1RRhWXik39vjI72/hwXNq1b4ZRh1BId/Lo2xbpjStjvH2NJMgv100QbM
-	+3aqjHxYdqx5gyeJyxh3QUzJw20CRmgTvEiX7j3rQplgq0WaH/lTsnkS15SBhyDo
-	j8RjsGFJe7JUE4BvzvCm+nZ+CVro1y0ORbI+DHyRl4hloia8l8wT/H4Q1/Nv42w+
-	JyCIyVN6sN9llPSFK4VM3+44hE1D1vpQG/Es/+6anLmoZbmrnlXTN0xUs9A5SA7k
-	vAdTZkS5sWxH0qKBwNULQ==
-X-ME-Sender: <xms:WGlQaIo9D-MDhPREeHhgmwk8LDN17tOLaiM_JmLzh2egZgRZBkvdhw>
-    <xme:WGlQaOpL9Q0gcRgNUUhUKrLYF6Vmcww_L2BmkESlLWS7ydksfdcWAlGKJX__E4ehV
-    W8XS1MuhVrsvhp44ns>
-X-ME-Received: <xmr:WGlQaNPmvTJiWTf_oZBIfeZauhnChIRUHR0WLFoxexSxO-4g9UlXSfEP8XQ0kr_pVWXoaMlasdb-t5fAbLW29Mk3JQ>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750100317; x=
+	1750186717; bh=CBlTK1NcwXwVEcjMtr0ZJRAk5aP5Rj0Kevz6K7/iAgg=; b=O
+	ynJDX+qnyMNd2fQq/jerwqs+skqBuFiTXGn8D4dMs7k+WUxTXFVO3PaBxmO1T7R5
+	6OXGEbtp23GFP8NKmIk30Do3FADfaFcglDQjm4cprN/2yi0Nzcihtwv3NGIa3zxC
+	whJxy8x17MihLhwlWHKgqCoz5pXH1lowz9h1CuHq007oCvvJvaAfEB+dJlGJ1lcI
+	fGDmC53IrjEckR/6VHxBqvnwfdaQzHBKbIohP2DbcSUgBjmIT/bXtbIUJiW8nDCI
+	g06NXuyv0HAhomPpSdmGk/WVeuuhJI6cdVr3HmuMwqMlnG3I4e0rRtbNvotFeFhx
+	Tg1446qRE+U5XZCQdTFbA==
+X-ME-Sender: <xms:XGlQaHHPTm-8jzdlWLCe8X_zbrpP1GWt6Im4ODtr22qbMsN8iwgwJA>
+    <xme:XGlQaEX1D7UPd6VxmPryg9eaBaITLfqcVaCjkt41fyICAquv1ZfLiTcsHK3BACsRR
+    UQixQF7FHzaKQDJY0g>
+X-ME-Received: <xmr:XGlQaJLEI1cSXqFzeul1JbyKnbNxTnQW_auP4k8v4gpZas-2rOMaFxNfhzqwyIcFq0s_gQtQISRpiZcWdpUTtaNNaA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvjeefiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
@@ -70,14 +70,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvjeefiecutefuodetgg
     hsohguvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvgdprhgtphht
     thhopehlrghurhgvnhhtrdhpihhntghhrghrthdorhgvnhgvshgrshesihguvggrshhonh
     gsohgrrhgurdgtohhm
-X-ME-Proxy: <xmx:WGlQaP5FpEFIBqAurM25089grZib22ijSFewPe66edd2hWJkoOdOOw>
-    <xmx:WGlQaH7FP5AezOLiVcg2zA9BOmJ5Qgh8v5gHBxt915iKl03XJyTFUg>
-    <xmx:WGlQaPjmpIv6Ivv3Hkfd46uepOtCmsMm-aq5X_G9D917c33NsOKsHQ>
-    <xmx:WGlQaB659guI9E_bplmBpCalqBo1ddlBWn259-qRgxTsgdyWg-pBLw>
-    <xmx:WWlQaC2gNWqmY9Fb8bHpKTwC8tFeym_vNC8jDWQ8UAeqIlDLj9gXzBwR>
+X-ME-Proxy: <xmx:XGlQaFFKUVRFxjpBgi2KDLYymv5ePD282m8GirJl0ZisSv-3qGEDUg>
+    <xmx:XGlQaNUuUex9uBUeeuvgglGCly7RDlswVt7XRv2MkROH7AkakYUPmg>
+    <xmx:XGlQaAPr5vGNcqtTy07uPJi36hzWMF5ri8id3Brny-X6JYlTo8VshQ>
+    <xmx:XGlQaM1T2ClH4ABFgK6pZHtMQhhlLs447e8WYIA5ryXGb_MFpPHWdQ>
+    <xmx:XWlQaPj_tbRTzUfKUE-8w_Y2992ArYimlZKaW8qmnhlpI79Cezkvh9lN>
 Feedback-ID: i80c9496c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 Jun 2025 14:58:32 -0400 (EDT)
+ 16 Jun 2025 14:58:36 -0400 (EDT)
 From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -88,9 +88,9 @@ To: Mauro Carvalho Chehab <mchehab@kernel.org>,
 	linux-kernel@vger.kernel.org
 Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
 	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v2 1/3] media: rcar-vin: Fold interrupt helpers into only callers
-Date: Mon, 16 Jun 2025 20:57:20 +0200
-Message-ID: <20250616185722.980722-2-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v2 3/3] media: rcar-vin: Generate FRAME_SYNC events
+Date: Mon, 16 Jun 2025 20:57:22 +0200
+Message-ID: <20250616185722.980722-4-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250616185722.980722-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20250616185722.980722-1-niklas.soderlund+renesas@ragnatech.se>
@@ -103,91 +103,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The call sites using the interrupt helper functions have all been
-reworked to only one for each. Fold each of them into the only call
-sites left.
-
-This fixes a possible interrupt loss in case an interrupt occurs between
-reading VNINTS_REG in rvin_get_interrupt_status() and reading it again
-in rvin_ack_interrupt().
-
-While at it rename the variable holding the current interrupt status to
-make the code easier to read.
+Enable the VSYNC Rising Edge Detection interrupt and generate a
+FRAME_SYNC event form it. The interrupt is available on all supported
+models of the VIN (Gen2, Gen3 and Gen4).
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-* Changes since v1
-- Extend commit message per Laurent's suggestion to indicate the
-  possible fix of interrupt loss.
-- Fix spelling of each.
----
- .../platform/renesas/rcar-vin/rcar-dma.c      | 27 +++++--------------
- 1 file changed, 6 insertions(+), 21 deletions(-)
+ .../media/platform/renesas/rcar-vin/rcar-dma.c  | 17 +++++++++++++++++
+ .../media/platform/renesas/rcar-vin/rcar-v4l2.c |  2 ++
+ 2 files changed, 19 insertions(+)
 
 diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-index d4faa5a4e757..e1dae46b06d4 100644
+index 19ff190f0fb2..b619d1436a41 100644
 --- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
 +++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-@@ -903,21 +903,6 @@ static int rvin_setup(struct rvin_dev *vin)
- 	return 0;
- }
+@@ -13,6 +13,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/pm_runtime.h>
  
--static void rvin_disable_interrupts(struct rvin_dev *vin)
--{
--	rvin_write(vin, 0, VNIE_REG);
--}
--
--static u32 rvin_get_interrupt_status(struct rvin_dev *vin)
--{
--	return rvin_read(vin, VNINTS_REG);
--}
--
--static void rvin_ack_interrupt(struct rvin_dev *vin)
--{
--	rvin_write(vin, rvin_read(vin, VNINTS_REG), VNINTS_REG);
--}
--
- static bool rvin_capture_active(struct rvin_dev *vin)
- {
- 	return rvin_read(vin, VNMS_REG) & VNMS_CA;
-@@ -1040,22 +1025,22 @@ static void rvin_capture_stop(struct rvin_dev *vin)
- static irqreturn_t rvin_irq(int irq, void *data)
- {
- 	struct rvin_dev *vin = data;
--	u32 int_status, vnms;
-+	u32 status, vnms;
- 	int slot;
- 	unsigned int handled = 0;
- 	unsigned long flags;
++#include <media/v4l2-event.h>
+ #include <media/videobuf2-dma-contig.h>
  
- 	spin_lock_irqsave(&vin->qlock, flags);
+ #include "rcar-vin.h"
+@@ -114,10 +115,14 @@
+ #define VNFC_S_FRAME		(1 << 0)
  
--	int_status = rvin_get_interrupt_status(vin);
--	if (!int_status)
-+	status = rvin_read(vin, VNINTS_REG);
-+	if (!status)
- 		goto done;
+ /* Video n Interrupt Enable Register bits */
++#define VNIE_VFE		BIT(17)
++#define VNIE_VRE		BIT(16)
+ #define VNIE_FIE		BIT(4)
+ #define VNIE_EFE		BIT(1)
  
--	rvin_ack_interrupt(vin);
-+	rvin_write(vin, status, VNINTS_REG);
+ /* Video n Interrupt Status Register bits */
++#define VNINTS_VFS		BIT(17)
++#define VNINTS_VRS		BIT(16)
+ #define VNINTS_FIS		BIT(4)
+ #define VNINTS_EFS		BIT(1)
+ 
+@@ -889,6 +894,8 @@ static int rvin_setup(struct rvin_dev *vin)
+ 
+ 	/* Progressive or interlaced mode */
+ 	interrupts = progressive ? VNIE_FIE : VNIE_EFE;
++	/* Enable VSYNC Rising Edge Detection. */
++	interrupts |= VNIE_VRE;
+ 
+ 	/* Ack interrupts */
+ 	rvin_write(vin, interrupts, VNINTS_REG);
+@@ -1040,6 +1047,16 @@ static irqreturn_t rvin_irq(int irq, void *data)
+ 	rvin_write(vin, status, VNINTS_REG);
  	handled = 1;
  
++	/* Signal Start of Frame. */
++	if (status & VNINTS_VRS) {
++		struct v4l2_event event = {
++			.type = V4L2_EVENT_FRAME_SYNC,
++			.u.frame_sync.frame_sequence = vin->sequence,
++		};
++
++		v4l2_event_queue(&vin->vdev, &event);
++	}
++
  	/* Nothing to do if nothing was captured. */
--	if (!(int_status & VNINTS_FIS))
-+	if (!(status & VNINTS_FIS))
- 		goto done;
- 
- 	/* Nothing to do if not running. */
-@@ -1400,7 +1385,7 @@ void rvin_stop_streaming(struct rvin_dev *vin)
- 	rvin_set_stream(vin, 0);
- 
- 	/* disable interrupts */
--	rvin_disable_interrupts(vin);
-+	rvin_write(vin, 0, VNIE_REG);
- 
- 	/* Return unprocessed buffers from hardware. */
- 	for (unsigned int i = 0; i < HW_BUFFER_NUM; i++) {
+ 	capture = vin->format.field == V4L2_FIELD_NONE ||
+ 		vin->format.field == V4L2_FIELD_ALTERNATE ?
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+index 9b1e3a9d3249..62eddf3a35fc 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
+@@ -489,6 +489,8 @@ static int rvin_subscribe_event(struct v4l2_fh *fh,
+ 				const struct v4l2_event_subscription *sub)
+ {
+ 	switch (sub->type) {
++	case V4L2_EVENT_FRAME_SYNC:
++		return v4l2_event_subscribe(fh, sub, 2, NULL);
+ 	case V4L2_EVENT_SOURCE_CHANGE:
+ 		return v4l2_event_subscribe(fh, sub, 4, NULL);
+ 	}
 -- 
 2.49.0
 
