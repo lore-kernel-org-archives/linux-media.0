@@ -1,186 +1,238 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE750273804;
-	Mon, 16 Jun 2025 09:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDC5522F;
+	Mon, 16 Jun 2025 09:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750065841; cv=none; b=PIYMbIq3VNxobrufE96yUOuebYrlK3ItIMjpzFBWU4O6Js5phYRZGiy8B1MJrWswjsN1/uch8fr6RwWBjQlD8GBUKT35A6Uirks0+Pnf74el4AaWT+fJ4xzvv7uoxX6kHh2e6vvp1GY7POncwCpkm3fKQ3S0jT1K6zNjhTS3CR8=
+	t=1750066066; cv=none; b=RT7/8xXwDh13suXSo0+ODh3oCxbcsG2GdG2Q0PWHva5DHUQpCAH7QyRXGxWMVkftza2g8vk/sIU8Q4/sjyhUV4GLZfgi8UxUz3I2Tm882xO7KxFFdLIVb+vP4u5KUJ7cpdmLkuyGrXMO3x7den70x7BygGENKcagbW0XACEtuZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750065841; c=relaxed/simple;
-	bh=A3jYVFOj1AeRkdskbnQ+KgmsePxGvMw1Qau4pL/Dbds=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=KPN1qGJsWm09SKp6lUKFI3LCueBQTQ8Zy6CCcZIPPSpPkmvgZKK1rDGxO8ejqiIEUVidcvjuB+AVdZw1kBwsDniSdS0/5ueGZDn/eOeoF0+mJcbgAXUTAd33ZvbF+ZWv2wGDnugOHOvae3tJfF6b0fs/1pD+1ISMIG1+UTiwC8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=bSznlfWz; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1750066066; c=relaxed/simple;
+	bh=mTNRD5ooq4LdhCufl97ylrATo7DmWUf14XLvw4awSQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OJd3Boyu7XrnbnhrebVTcn+5iFPhzfBNnFrFVlPhJa03nfNex0lZSCdbGF5q0ye3MLD5kNM/4OYgWfFwINB06ZI/AZv5bdPKCDzdXwSSvYz2ihAAMLd5a6RuoTEVL9Ocu/QuYGhU6dcW3A58zHSP6+rjhrhAeE90QU9H03bBNGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=S1jHGuKg; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="bSznlfWz"
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G8tIwf030344;
-	Mon, 16 Jun 2025 11:23:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	GwJR4L4C5BNi8BSL4VDf9yl7ztEEHcvn8VOyGlQkwDc=; b=bSznlfWzf8JS1yut
-	xodDKNY6JZ0mK216iHwfRMnfrTXP+RL6V9Qsn6T2dY1wQEIrptU2ngmaUFoEpzkW
-	xs12kvgu3T9d64fmqoOWbzluYzFb3IM7p44C3ZniALjxhLOHThYlVo1JBBa1w4RJ
-	L+8XQbTIiwEghZ6GyRfe6G2dRTWwXmz9V9HW0uRtMkxPjUOOGJS6IghQj/BARp7x
-	zVTTwN1xjZa608Jtmhyq5Wsxmg+CGwdEQCheSXt87mwl4mgbN//g0bPF+6sXGMwn
-	cdaDRMx5PXgmSMS+Sm1aMcmHo0y64JFVFzF9thJtFcv/Vw3/uNMRfwvSugZZMd2I
-	ffX3uA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4790e1ywha-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Jun 2025 11:23:42 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 0DB8440047;
-	Mon, 16 Jun 2025 11:22:24 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 83E60A7D80E;
-	Mon, 16 Jun 2025 11:21:07 +0200 (CEST)
-Received: from localhost (10.252.14.42) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
- 2025 11:21:07 +0200
-From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Date: Mon, 16 Jun 2025 11:21:02 +0200
-Subject: [PATCH 1/6] spi: stm32: Add SPI_READY mode to spi controller
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="S1jHGuKg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WRwp9aXxZSnCtM+EfIL8dTN51HB7qZk8VAN25kzBSE0=; b=S1jHGuKgueZ7rC9f3pExYaMny9
+	jTQTJ2TBjuXeTQ0nW5zuuGeaJ1BhH8ms+KO4Ge0CcOPci5f9Ar2sntYbA+7KIIo5RWei/hoXQp8TY
+	O9SnI9bPz7O72zZaeFlBPYvXjHIe6yhyvZuafY3a+G/n5E3JqwQgRuyuqfktZw5nlQH0qr2MyiH7u
+	GNrLgW+ug8UJxJ/fGMgU0cdCYGzSOcpYydrslDgVTiP4Gq6FnfuNmdcjlu7VKVfWzUEK7MxDBPT58
+	Bs0CtBiDSjRpOJHjcCp2ZRSvnc4kpuIoQbZw//7hlg/o0P6931W/1xJt9JWkh7N7fq0l+RyxsRbWu
+	LfD2EZ+w==;
+Received: from [81.79.92.254] (helo=[192.168.0.101])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1uR67Z-0042xJ-Oz; Mon, 16 Jun 2025 11:27:17 +0200
+Message-ID: <18cd6b1f-8872-4a16-9ceb-50fd1ecfea39@igalia.com>
+Date: Mon, 16 Jun 2025 10:27:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/6] drm/sched: Avoid memory leaks with cancel_job()
+ callback
+To: phasta@kernel.org, Lyude Paul <lyude@redhat.com>,
+ Danilo Krummrich <dakr@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Matthew Brost <matthew.brost@intel.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+Cc: dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+References: <20250603093130.100159-2-phasta@kernel.org>
+ <20250603093130.100159-3-phasta@kernel.org>
+ <62ff8ddb-b2f1-4e52-a026-290561ab5337@igalia.com>
+ <f4f326a0ecb98a9996919c3f827b3247b8207feb.camel@mailbox.org>
+Content-Language: en-GB
+From: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+In-Reply-To: <f4f326a0ecb98a9996919c3f827b3247b8207feb.camel@mailbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-ID: <20250616-spi-upstream-v1-1-7e8593f3f75d@foss.st.com>
-References: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
-In-Reply-To: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
-To: Alain Volmat <alain.volmat@foss.st.com>, Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Erwan Leray <erwan.leray@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        =?utf-8?q?Christian_K=C3=B6nig?=
-	<christian.koenig@amd.com>
-CC: <linux-spi@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>,
-        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-X-Mailer: b4 0.15-dev-c25d1
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-16_04,2025-06-13_01,2025-03-28_01
 
-The spi ready functionality is supported by our peripheral in host and
-target modes on STM32MP2x SoCs.
-Update our spi controller driver to allow devices to use this
-functionality.
 
-Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
----
- drivers/spi/spi-stm32.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+On 12/06/2025 15:20, Philipp Stanner wrote:
+> On Thu, 2025-06-12 at 15:17 +0100, Tvrtko Ursulin wrote:
+>>
+>> On 03/06/2025 10:31, Philipp Stanner wrote:
+>>> Since its inception, the GPU scheduler can leak memory if the
+>>> driver
+>>> calls drm_sched_fini() while there are still jobs in flight.
+>>>
+>>> The simplest way to solve this in a backwards compatible manner is
+>>> by
+>>> adding a new callback, drm_sched_backend_ops.cancel_job(), which
+>>> instructs the driver to signal the hardware fence associated with
+>>> the
+>>> job. Afterwards, the scheduler can savely use the established
+>>> free_job()
+>>> callback for freeing the job.
+>>>
+>>> Implement the new backend_ops callback cancel_job().
+>>>
+>>> Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+>>
+>> Please just add the link to the patch here (it is only in the cover
+>> letter):
+>>
+>> Link:
+>> https://lore.kernel.org/dri-devel/20250418113211.69956-1-tvrtko.ursulin@igalia.com/
+> 
+> That I can do, sure
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index da3517d7102d..2bcd4a43676d 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -154,6 +154,9 @@
- /* STM32H7_SPI_I2SCFGR bit fields */
- #define STM32H7_SPI_I2SCFGR_I2SMOD	BIT(0)
- 
-+/* STM32MP25_SPICFG2 bit fields */
-+#define STM32MP25_SPI_CFG2_RDIOM	BIT(13)
-+
- /* STM32MP25 SPI registers bit fields */
- #define STM32MP25_SPI_HWCFGR1			0x3F0
- 
-@@ -222,6 +225,7 @@ struct stm32_spi_reg {
-  * @rx: SPI RX data register
-  * @tx: SPI TX data register
-  * @fullcfg: SPI full or limited feature set register
-+ * @rdy_en: SPI ready feature register
-  */
- struct stm32_spi_regspec {
- 	const struct stm32_spi_reg en;
-@@ -235,6 +239,7 @@ struct stm32_spi_regspec {
- 	const struct stm32_spi_reg rx;
- 	const struct stm32_spi_reg tx;
- 	const struct stm32_spi_reg fullcfg;
-+	const struct stm32_spi_reg rdy_en;
- };
- 
- struct stm32_spi;
-@@ -415,6 +420,8 @@ static const struct stm32_spi_regspec stm32mp25_spi_regspec = {
- 	.tx = { STM32H7_SPI_TXDR },
- 
- 	.fullcfg = { STM32MP25_SPI_HWCFGR1, STM32MP25_SPI_HWCFGR1_FULLCFG },
-+
-+	.rdy_en = { STM32H7_SPI_CFG2, STM32MP25_SPI_CFG2_RDIOM },
- };
- 
- static inline void stm32_spi_set_bits(struct stm32_spi *spi,
-@@ -1172,15 +1179,21 @@ static int stm32_spi_prepare_msg(struct spi_controller *ctrl,
- 	else
- 		clrb |= spi->cfg->regs->cs_high.mask;
- 
--	dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d\n",
-+	if (spi_dev->mode & SPI_READY)
-+		setb |= spi->cfg->regs->rdy_en.mask;
-+	else
-+		clrb |= spi->cfg->regs->rdy_en.mask;
-+
-+	dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d rdy=%d\n",
- 		!!(spi_dev->mode & SPI_CPOL),
- 		!!(spi_dev->mode & SPI_CPHA),
- 		!!(spi_dev->mode & SPI_LSB_FIRST),
--		!!(spi_dev->mode & SPI_CS_HIGH));
-+		!!(spi_dev->mode & SPI_CS_HIGH),
-+		!!(spi_dev->mode & SPI_READY));
- 
- 	spin_lock_irqsave(&spi->lock, flags);
- 
--	/* CPOL, CPHA and LSB FIRST bits have common register */
-+	/* CPOL, CPHA, LSB FIRST, CS_HIGH and RDY_EN bits have common register */
- 	if (clrb || setb)
- 		writel_relaxed(
- 			(readl_relaxed(spi->base + spi->cfg->regs->cpol.reg) &
-@@ -1768,6 +1781,13 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	spi->cur_bpw = transfer->bits_per_word;
- 	spi->cfg->set_bpw(spi);
- 
-+	if (spi_dev->mode & SPI_READY && spi->cur_bpw < 8) {
-+		writel_relaxed(readl_relaxed(spi->base + spi->cfg->regs->rdy_en.reg) &
-+				~spi->cfg->regs->rdy_en.mask,
-+					spi->base + spi->cfg->regs->rdy_en.reg);
-+		dev_dbg(spi->dev, "RDY logic disabled as bits per word < 8\n");
-+	}
-+
- 	/* Update spi->cur_speed with real clock speed */
- 	if (STM32_SPI_HOST_MODE(spi)) {
- 		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-@@ -2179,7 +2199,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	ctrl->auto_runtime_pm = true;
- 	ctrl->bus_num = pdev->id;
- 	ctrl->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH | SPI_LSB_FIRST |
--			  SPI_3WIRE;
-+			  SPI_3WIRE | SPI_READY;
- 	ctrl->bits_per_word_mask = spi->cfg->get_bpw_mask(spi);
- 	ctrl->max_speed_hz = spi->clk_rate / spi->cfg->baud_rate_div_min;
- 	ctrl->min_speed_hz = spi->clk_rate / spi->cfg->baud_rate_div_max;
+Cool, with that, for this patch:
 
--- 
-2.43.0
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
+
+>> And you probably want to take the unit test modifications from the
+>> same
+>> patch too. You could put them in the same patch or separate.
+> 
+> Necessary adjustments for the unit tests are already implemented and
+> are waiting for review separately, since this can be done independently
+> from this entire series:
+> 
+> https://lore.kernel.org/dri-devel/20250605134154.191764-2-phasta@kernel.org/
+
+For me it would make most sense to fold that into 2/6 from this series. 
+I don't see it making sense as standalone. So if you could repost the 
+series with it integrated I will give it a spin and can review that 
+patch at least.
+
+Regards,
+
+Tvrtko
+
+> 
+> Thx
+> P.
+> 
+>>
+>> Regards,
+>>
+>> Tvrtko
+>>
+>>> Signed-off-by: Philipp Stanner <phasta@kernel.org>
+>>> ---
+>>>    drivers/gpu/drm/scheduler/sched_main.c | 34 ++++++++++++++++-----
+>>> -----
+>>>    include/drm/gpu_scheduler.h            |  9 +++++++
+>>>    2 files changed, 30 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c
+>>> b/drivers/gpu/drm/scheduler/sched_main.c
+>>> index d20726d7adf0..3f14f1e151fa 100644
+>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
+>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+>>> @@ -1352,6 +1352,18 @@ int drm_sched_init(struct drm_gpu_scheduler
+>>> *sched, const struct drm_sched_init_
+>>>    }
+>>>    EXPORT_SYMBOL(drm_sched_init);
+>>>    
+>>> +static void drm_sched_kill_remaining_jobs(struct drm_gpu_scheduler
+>>> *sched)
+>>> +{
+>>> +	struct drm_sched_job *job, *tmp;
+>>> +
+>>> +	/* All other accessors are stopped. No locking necessary.
+>>> */
+>>> +	list_for_each_entry_safe_reverse(job, tmp, &sched-
+>>>> pending_list, list) {
+>>> +		sched->ops->cancel_job(job);
+>>> +		list_del(&job->list);
+>>> +		sched->ops->free_job(job);
+>>> +	}
+>>> +}
+>>> +
+>>>    /**
+>>>     * drm_sched_fini - Destroy a gpu scheduler
+>>>     *
+>>> @@ -1359,19 +1371,11 @@ EXPORT_SYMBOL(drm_sched_init);
+>>>     *
+>>>     * Tears down and cleans up the scheduler.
+>>>     *
+>>> - * This stops submission of new jobs to the hardware through
+>>> - * drm_sched_backend_ops.run_job(). Consequently,
+>>> drm_sched_backend_ops.free_job()
+>>> - * will not be called for all jobs still in
+>>> drm_gpu_scheduler.pending_list.
+>>> - * There is no solution for this currently. Thus, it is up to the
+>>> driver to make
+>>> - * sure that:
+>>> - *
+>>> - *  a) drm_sched_fini() is only called after for all submitted
+>>> jobs
+>>> - *     drm_sched_backend_ops.free_job() has been called or that
+>>> - *  b) the jobs for which drm_sched_backend_ops.free_job() has not
+>>> been called
+>>> - *     after drm_sched_fini() ran are freed manually.
+>>> - *
+>>> - * FIXME: Take care of the above problem and prevent this function
+>>> from leaking
+>>> - * the jobs in drm_gpu_scheduler.pending_list under any
+>>> circumstances.
+>>> + * This stops submission of new jobs to the hardware through
+>>> &struct
+>>> + * drm_sched_backend_ops.run_job. If &struct
+>>> drm_sched_backend_ops.cancel_job
+>>> + * is implemented, all jobs will be canceled through it and
+>>> afterwards cleaned
+>>> + * up through &struct drm_sched_backend_ops.free_job. If
+>>> cancel_job is not
+>>> + * implemented, memory could leak.
+>>>     */
+>>>    void drm_sched_fini(struct drm_gpu_scheduler *sched)
+>>>    {
+>>> @@ -1401,6 +1405,10 @@ void drm_sched_fini(struct drm_gpu_scheduler
+>>> *sched)
+>>>    	/* Confirm no work left behind accessing device structures
+>>> */
+>>>    	cancel_delayed_work_sync(&sched->work_tdr);
+>>>    
+>>> +	/* Avoid memory leaks if supported by the driver. */
+>>> +	if (sched->ops->cancel_job)
+>>> +		drm_sched_kill_remaining_jobs(sched);
+>>> +
+>>>    	if (sched->own_submit_wq)
+>>>    		destroy_workqueue(sched->submit_wq);
+>>>    	sched->ready = false;
+>>> diff --git a/include/drm/gpu_scheduler.h
+>>> b/include/drm/gpu_scheduler.h
+>>> index e62a7214e052..81dcbfc8c223 100644
+>>> --- a/include/drm/gpu_scheduler.h
+>>> +++ b/include/drm/gpu_scheduler.h
+>>> @@ -512,6 +512,15 @@ struct drm_sched_backend_ops {
+>>>             * and it's time to clean it up.
+>>>    	 */
+>>>    	void (*free_job)(struct drm_sched_job *sched_job);
+>>> +
+>>> +	/**
+>>> +	 * @cancel_job: Used by the scheduler to guarantee
+>>> remaining jobs' fences
+>>> +	 * get signaled in drm_sched_fini().
+>>> +	 *
+>>> +	 * Drivers need to signal the passed job's hardware fence
+>>> with
+>>> +	 * -ECANCELED in this callback. They must not free the
+>>> job.
+>>> +	 */
+>>> +	void (*cancel_job)(struct drm_sched_job *sched_job);
+>>>    };
+>>>    
+>>>    /**
+>>
+> 
 
