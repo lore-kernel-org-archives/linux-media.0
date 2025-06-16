@@ -1,108 +1,497 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF211DB92A;
-	Mon, 16 Jun 2025 09:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D512E11CF;
+	Mon, 16 Jun 2025 09:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750065560; cv=none; b=p6d/mFC1O/GLUQEC1Unf82mlmyMi2oT74apJMd3zYZzdHYDRx2Kt+S3Y8LShdm68l0o4VOTVuSfQ+5CbUTQXPIzppfIl2xXs+gbU7qZNbY9YD37b7p0RhXXSS/Zi5k2LujaVpUiqIZYJZNcs88hPXLf7dn2dM1t7s/FQB5MAJGI=
+	t=1750065792; cv=none; b=ES1ps32NoFkTe2TQiBKpSmcdJWZddUJs42SB2ehCllZHvO4kKp4JwnuE6hzqcAbD1FUypOkY9RM70h/I+BjgTiM27ZF2MH3llBp6guelztxOcHTfJfib2f2xM/u+uEILLZ18ovMMl6hmZp7zHQqIv6pkOfg82d6Z3q0oMtMXthc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750065560; c=relaxed/simple;
-	bh=cIWgCue/aqvpSg/kLDSZwh6pFlaG1xIal/HdrKsv3tA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cOvmAWPn8YqSCLoJ9pOUIZmc8m9au6iSsuydMWmFmOGQfSlYN4GMOeU0nqjblaCfcOq5hgSw4c/ZzawrZoO0xwDkDyFjsuA6lcMdshnFfjQVIt9ei1msBewkrxwusPL+N0oUNDHIWyvPlPJYVcLyIps3+RaTqjss97K/TcA/5dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csja2bDf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750065792; c=relaxed/simple;
+	bh=3wffeIYInx6TCdrvP0lnHMRb0SfvXbBgOLV7FCjlqbw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=o6BN4ghv72MzlUg/NUAKXPlAZshTQh+OmmuC+ucOX1DItpUCwIaDKW5DCNNxbzrZslgotU9LEEo9CSFsumTvsN/apgWRYPhD97CBT+myI5HgR3teSegxcj7KlKFfos6cXwysG6wC/D61ySCgl9wfF/3sEUkuzqARnEgZWdXbFKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=7X66uCXH; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csja2bDf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7A5C4CEEE;
-	Mon, 16 Jun 2025 09:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750065560;
-	bh=cIWgCue/aqvpSg/kLDSZwh6pFlaG1xIal/HdrKsv3tA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=csja2bDfFVXwJHWt9Mv+cG/BZxIObuzgt1mBo5mgh8rbGQnTZx8gvAxRHHyOhFy0a
-	 G0scb5aTnlGOrkoLj/IIqrQGA0N8ZaYJX9swYbqcetVA1INH/BO9MUSky41vA2KPGK
-	 cKo+uLHW6PutUn58QN2K4C7n5nk69ibXq63hVOUr3jvP2KwxtVlfdKVtmiKG9IoKGL
-	 jLBItFuxKDmT2/lFbLFNKef/lPKlPn3lH2Rbe3HAXNZEyGdGy8EwIIk/PiBup1CzU5
-	 jwiHY3QOSItn6IStk4J0QihcCSTJm8VZI0T5Voic2AMx0PwPoBa6+CLR8vT8DddXsz
-	 PRLn3slXKLQgw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uR5zo-000000005ZR-2jKu;
-	Mon, 16 Jun 2025 11:19:17 +0200
-Date: Mon, 16 Jun 2025 11:19:16 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Depeng Shao <quic_depengs@quicinc.com>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-	Hans Verkuil <hans.verkuil@cisco.com>, linux-media@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH 2/2] media: qcom: camss: vfe: Fix registration sequencing
- bug
-Message-ID: <aE_hlGHkRZqFFacR@hovoldconsulting.com>
-References: <20250612-linux-next-25-05-30-daily-reviews-v1-0-88ba033a9a03@linaro.org>
- <20250612-linux-next-25-05-30-daily-reviews-v1-2-88ba033a9a03@linaro.org>
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="7X66uCXH"
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G9J2ua011700;
+	Mon, 16 Jun 2025 11:22:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	A8c3iT0KfddidMrwAbOAq013mcyEvxOJGy/NzlCDttM=; b=7X66uCXHb0M4QGLu
+	wltqQjf+JVMDnOUS8ilmUsafq/Tdf3F78ouR6785034W9SZ96zdVSmmqwpWcl4L2
+	YPZ9C5Bx+RUVvJtwuH5Q9AIIXF0rSRKnhkSs/7TMQaczAYvQ8gZ/Am2Lm5cK/f/x
+	2B2QXf3tucWPQH3L4fs7Bsj3aKY3RFAh0gtjQ2gwAUnsyGKxgapIinkAfdothPFz
+	KudjAy+wWA7cYgexZpsx4sR1GeZFUKcFocMs0apzw049607b9VXJXq3wUJGPOctP
+	Sf16eSUJj3p/fuJa+32gX9U6MX2SVqjrYjHlTUhxWXWFcUS8uZ8paEqa+Yu1JM7D
+	lN9Frw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 479m1nvay3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 11:22:52 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id F0BEC40049;
+	Mon, 16 Jun 2025 11:21:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8A98A6CEC9E;
+	Mon, 16 Jun 2025 11:21:10 +0200 (CEST)
+Received: from localhost (10.252.14.42) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
+ 2025 11:21:09 +0200
+From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 16 Jun 2025 11:21:05 +0200
+Subject: [PATCH 4/6] spi: stm32: use STM32 DMA with STM32 MDMA to enhance
+ DDR use
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250612-linux-next-25-05-30-daily-reviews-v1-2-88ba033a9a03@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-ID: <20250616-spi-upstream-v1-4-7e8593f3f75d@foss.st.com>
+References: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
+In-Reply-To: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
+To: Alain Volmat <alain.volmat@foss.st.com>, Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Erwan Leray <erwan.leray@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Sumit Semwal
+	<sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?=
+	<christian.koenig@amd.com>
+CC: <linux-spi@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>,
+        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+X-Mailer: b4 0.15-dev-c25d1
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-16_04,2025-06-13_01,2025-03-28_01
 
-On Thu, Jun 12, 2025 at 09:07:16AM +0100, Bryan O'Donoghue wrote:
-> msm_vfe_register_entities loops through each Raw Data Interface input line.
-> For each loop we add video device with its associated pads.
-> 
-> Once a single /dev/video0 node has been populated it is possible for
-> camss_find_sensor_pad to run. This routine scans through a list of media
-> entities taking a pointer pad = media_entity->pad[0] and assuming that
-> pointer is always valid.
-> 
-> It is possible for both the enumeration loop in msm_vfe_register_entities()
-> and a call from user-space to run concurrently.
-> 
-> Adding some deliberate sleep code into the loop in
-> msm_vfe_register_entities() and constructing a user-space program to open
-> every /dev/videoX node in a tight continuous loop, quickly shows the
-> following error.
-> 
-> [  691.074558] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
-> [  691.074933] Call trace:
-> [  691.074935]  camss_find_sensor_pad+0x74/0x114 [qcom_camss] (P)
-> [  691.074946]  camss_get_pixel_clock+0x18/0x64 [qcom_camss]
-> [  691.074956]  vfe_get+0xc0/0x54c [qcom_camss]
-> [  691.074968]  vfe_set_power+0x58/0xf4c [qcom_camss]
-> [  691.074978]  pipeline_pm_power_one+0x124/0x140 [videodev]
-> [  691.074986]  pipeline_pm_power+0x70/0x100 [videodev]
-> [  691.074992]  v4l2_pipeline_pm_use+0x54/0x90 [videodev]
-> [  691.074998]  v4l2_pipeline_pm_get+0x14/0x20 [videodev]
-> [  691.075005]  video_open+0x74/0xe0 [qcom_camss]
-> [  691.075014]  v4l2_open+0xa8/0x124 [videodev]
-> [  691.075021]  chrdev_open+0xb0/0x21c
-> [  691.075031]  do_dentry_open+0x138/0x4c4
-> [  691.075040]  vfs_open+0x2c/0xe8
+The STM32 DMA doesn't have the ability to generate convenient burst
+transfer on the DDR, ensuring the best load of the AXI & DDR.
+To avoid this bad load of the AXI & DDR, STM32 MDMA can be used to transfer
+data to the DDR, being triggered by STM32 DMA channel transfer
+completion.
+An SRAM buffer is used between DMA and MDMA. So the MDMA always does
+MEM_TO_MEM transfers (from/to SRAM to/from DDR), and the DMA uses SRAM
+instead of DDR with DEV_TO_MEM transfers.
+SPI RX DMA (DEV_TO_MEM) becomes:
+SPI RX FIFO ==DMA==> SRAM ==MDMA==> DDR
 
-> Taking the vfe->power_lock is not possible since
-> v4l2_device_register_subdev takes the mdev->graph_lock. Later on fops->open
-> takes the mdev->graph_lock followed by vfe_get() -> taking vfe->power_lock.
-> 
-> Introduce a simple enumeration_complete bool which is false initially and
-> only set true once in our init routine after we complete enumeration.
-> 
-> If user-space tries to interact with the VFE before complete enumeration it
-> will receive -EAGAIN.
+In RX (DEV_TO_MEM), EOT interrupt is used to pause the DMA channel (which
+will raise a transfer complete) to trigger the MDMA to flush the SRAM (when
+transfer length is not aligned on SRAM period).
+TX remains on the former implementation.
 
-As Vladimir also pointed out, this is at best just papering over the
-issue.
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+---
+ drivers/spi/spi-stm32.c | 251 +++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 228 insertions(+), 23 deletions(-)
 
-You need to make sure the video device is not registered until it's
-ready to be used. That is the bug that needs fixing.
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 8b61caf770a2..8581f24c111f 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -9,7 +9,9 @@
+ #include <linux/debugfs.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
++#include <linux/genalloc.h>
+ #include <linux/interrupt.h>
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+@@ -328,6 +330,11 @@ struct stm32_spi_cfg {
+  * @dma_rx: dma channel for RX transfer
+  * @phys_addr: SPI registers physical base address
+  * @device_mode: the controller is configured as SPI device
++ * @sram_pool: SRAM pool for DMA transfers
++ * @sram_rx_buf_size: size of SRAM buffer for RX transfer
++ * @sram_rx_buf: SRAM buffer for RX transfer
++ * @sram_dma_rx_buf: SRAM buffer physical address for RX transfer
++ * @mdma_rx: MDMA channel for RX transfer
+  */
+ struct stm32_spi {
+ 	struct device *dev;
+@@ -362,6 +369,12 @@ struct stm32_spi {
+ 	dma_addr_t phys_addr;
+ 
+ 	bool device_mode;
++
++	struct gen_pool *sram_pool;
++	size_t sram_rx_buf_size;
++	void *sram_rx_buf;
++	dma_addr_t sram_dma_rx_buf;
++	struct dma_chan *mdma_rx;
+ };
+ 
+ static const struct stm32_spi_regspec stm32fx_spi_regspec = {
+@@ -885,8 +898,11 @@ static void stm32h7_spi_disable(struct stm32_spi *spi)
+ 
+ 	if (spi->cur_usedma && spi->dma_tx)
+ 		dmaengine_terminate_async(spi->dma_tx);
+-	if (spi->cur_usedma && spi->dma_rx)
++	if (spi->cur_usedma && spi->dma_rx) {
+ 		dmaengine_terminate_async(spi->dma_rx);
++		if (spi->mdma_rx)
++			dmaengine_terminate_async(spi->mdma_rx);
++	}
+ 
+ 	stm32_spi_clr_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_SPE);
+ 
+@@ -1098,10 +1114,13 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+ 	}
+ 
+ 	if (sr & STM32H7_SPI_SR_EOT) {
++		dev_dbg(spi->dev, "End of transfer\n");
+ 		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
+ 			stm32h7_spi_read_rxfifo(spi);
+ 		if (!spi->cur_usedma ||
+-		    (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX))
++		    (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX) ||
++		    (spi->mdma_rx && (spi->cur_comm == SPI_SIMPLEX_RX ||
++		     spi->cur_comm == SPI_FULL_DUPLEX)))
+ 			end = true;
+ 	}
+ 
+@@ -1118,6 +1137,11 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+ 	spin_unlock_irqrestore(&spi->lock, flags);
+ 
+ 	if (end) {
++		if (spi->cur_usedma && spi->mdma_rx) {
++			dmaengine_pause(spi->dma_rx);
++			/* Wait for callback */
++			return IRQ_HANDLED;
++		}
+ 		stm32h7_spi_disable(spi);
+ 		spi_finalize_current_transfer(ctrl);
+ 	}
+@@ -1423,6 +1447,8 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+ 	/* Enable the interrupts */
+ 	if (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX)
+ 		ier |= STM32H7_SPI_IER_EOTIE | STM32H7_SPI_IER_TXTFIE;
++	if (spi->mdma_rx && (spi->cur_comm == SPI_SIMPLEX_RX || spi->cur_comm == SPI_FULL_DUPLEX))
++		ier |= STM32H7_SPI_IER_EOTIE;
+ 
+ 	stm32_spi_set_bits(spi, STM32H7_SPI_IER, ier);
+ 
+@@ -1432,6 +1458,119 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+ 		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
+ }
+ 
++/**
++ * stm32_spi_prepare_rx_dma_mdma_chaining - Prepare RX DMA and MDMA chaining
++ * @spi: pointer to the spi controller data structure
++ * @xfer: pointer to the spi transfer
++ * @rx_dma_conf: pointer to the DMA configuration for RX channel
++ * @rx_dma_desc: pointer to the RX DMA descriptor
++ * @rx_mdma_desc: pointer to the RX MDMA descriptor
++ *
++ * It must return 0 if the chaining is possible or an error code if not.
++ */
++static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
++						  struct spi_transfer *xfer,
++						  struct dma_slave_config *rx_dma_conf,
++						  struct dma_async_tx_descriptor **rx_dma_desc,
++						  struct dma_async_tx_descriptor **rx_mdma_desc)
++{
++	struct dma_slave_config rx_mdma_conf = {0};
++	u32 sram_period, nents = 0, spi_s_len;
++	struct sg_table dma_sgt, mdma_sgt;
++	struct scatterlist *spi_s, *s;
++	dma_addr_t dma_buf;
++	int i, ret;
++
++	sram_period = spi->sram_rx_buf_size / 2;
++
++	/* Configure MDMA RX channel */
++	rx_mdma_conf.direction = rx_dma_conf->direction;
++	rx_mdma_conf.src_addr = spi->sram_dma_rx_buf;
++	rx_mdma_conf.peripheral_config = rx_dma_conf->peripheral_config;
++	rx_mdma_conf.peripheral_size = rx_dma_conf->peripheral_size;
++	dmaengine_slave_config(spi->mdma_rx, &rx_mdma_conf);
++
++	/* Count the number of entries needed */
++	for_each_sg(xfer->rx_sg.sgl, spi_s, xfer->rx_sg.nents, i)
++		if (sg_dma_len(spi_s) > sram_period)
++			nents += DIV_ROUND_UP(sg_dma_len(spi_s), sram_period);
++		else
++			nents++;
++
++	/* Prepare DMA slave_sg DBM transfer DEV_TO_MEM (RX>MEM=SRAM) */
++	ret = sg_alloc_table(&dma_sgt, nents, GFP_ATOMIC);
++	if (ret)
++		return ret;
++
++	spi_s = xfer->rx_sg.sgl;
++	spi_s_len = sg_dma_len(spi_s);
++	dma_buf = spi->sram_dma_rx_buf;
++	for_each_sg(dma_sgt.sgl, s, dma_sgt.nents, i) {
++		size_t bytes = min_t(size_t, spi_s_len, sram_period);
++
++		sg_dma_len(s) = bytes;
++		sg_dma_address(s) = dma_buf;
++		spi_s_len -= bytes;
++
++		if (!spi_s_len && sg_next(spi_s)) {
++			spi_s = sg_next(spi_s);
++			spi_s_len = sg_dma_len(spi_s);
++			dma_buf = spi->sram_dma_rx_buf;
++		} else { /* DMA configured in DBM: it will swap between the SRAM periods */
++			if (i & 1)
++				dma_buf += sram_period;
++			else
++				dma_buf = spi->sram_dma_rx_buf;
++		}
++	}
++
++	*rx_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, dma_sgt.sgl,
++					       dma_sgt.nents, rx_dma_conf->direction,
++					       DMA_PREP_INTERRUPT);
++	sg_free_table(&dma_sgt);
++
++	if (!rx_dma_desc)
++		return -EINVAL;
++
++	/* Prepare MDMA slave_sg transfer MEM_TO_MEM (SRAM>DDR) */
++	ret = sg_alloc_table(&mdma_sgt, nents, GFP_ATOMIC);
++	if (ret) {
++		rx_dma_desc = NULL;
++		return ret;
++	}
++
++	spi_s = xfer->rx_sg.sgl;
++	spi_s_len = sg_dma_len(spi_s);
++	dma_buf = sg_dma_address(spi_s);
++	for_each_sg(mdma_sgt.sgl, s, mdma_sgt.nents, i) {
++		size_t bytes = min_t(size_t, spi_s_len, sram_period);
++
++		sg_dma_len(s) = bytes;
++		sg_dma_address(s) = dma_buf;
++		spi_s_len -= bytes;
++
++		if (!spi_s_len && sg_next(spi_s)) {
++			spi_s = sg_next(spi_s);
++			spi_s_len = sg_dma_len(spi_s);
++			dma_buf = sg_dma_address(spi_s);
++		} else {
++			dma_buf += bytes;
++		}
++	}
++
++	*rx_mdma_desc = dmaengine_prep_slave_sg(spi->mdma_rx, mdma_sgt.sgl,
++						mdma_sgt.nents, rx_mdma_conf.direction,
++						DMA_PREP_INTERRUPT);
++	sg_free_table(&mdma_sgt);
++
++	if (!rx_mdma_desc) {
++		rx_dma_desc = NULL;
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ /**
+  * stm32_spi_transfer_one_dma - transfer a single spi_transfer using DMA
+  * @spi: pointer to the spi controller data structure
+@@ -1443,38 +1582,43 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
+ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+ 				      struct spi_transfer *xfer)
+ {
++	struct dma_async_tx_descriptor *rx_mdma_desc = NULL, *rx_dma_desc = NULL;
++	struct dma_async_tx_descriptor *tx_dma_desc = NULL;
+ 	struct dma_slave_config tx_dma_conf, rx_dma_conf;
+-	struct dma_async_tx_descriptor *tx_dma_desc, *rx_dma_desc;
+ 	unsigned long flags;
++	int ret = 0;
+ 
+ 	spin_lock_irqsave(&spi->lock, flags);
+ 
+-	rx_dma_desc = NULL;
+ 	if (spi->rx_buf && spi->dma_rx) {
+ 		stm32_spi_dma_config(spi, spi->dma_rx, &rx_dma_conf, DMA_DEV_TO_MEM);
+-		dmaengine_slave_config(spi->dma_rx, &rx_dma_conf);
++		if (spi->mdma_rx) {
++			rx_dma_conf.peripheral_size = 1;
++			dmaengine_slave_config(spi->dma_rx, &rx_dma_conf);
+ 
+-		/* Enable Rx DMA request */
+-		stm32_spi_set_bits(spi, spi->cfg->regs->dma_rx_en.reg,
+-				   spi->cfg->regs->dma_rx_en.mask);
+-
+-		rx_dma_desc = dmaengine_prep_slave_sg(
+-					spi->dma_rx, xfer->rx_sg.sgl,
+-					xfer->rx_sg.nents,
+-					rx_dma_conf.direction,
+-					DMA_PREP_INTERRUPT);
++			ret = stm32_spi_prepare_rx_dma_mdma_chaining(spi, xfer, &rx_dma_conf,
++								     &rx_dma_desc, &rx_mdma_desc);
++			if (ret) { /* RX DMA MDMA chaining not possible, fallback to DMA only */
++				rx_dma_conf.peripheral_config = 0;
++				rx_dma_desc = NULL;
++			}
++		}
++		if (!rx_dma_desc) {
++			dmaengine_slave_config(spi->dma_rx, &rx_dma_conf);
++			rx_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, xfer->rx_sg.sgl,
++							      xfer->rx_sg.nents,
++							      rx_dma_conf.direction,
++							      DMA_PREP_INTERRUPT);
++		}
+ 	}
+ 
+-	tx_dma_desc = NULL;
+ 	if (spi->tx_buf && spi->dma_tx) {
+ 		stm32_spi_dma_config(spi, spi->dma_tx, &tx_dma_conf, DMA_MEM_TO_DEV);
+ 		dmaengine_slave_config(spi->dma_tx, &tx_dma_conf);
+-
+-		tx_dma_desc = dmaengine_prep_slave_sg(
+-					spi->dma_tx, xfer->tx_sg.sgl,
+-					xfer->tx_sg.nents,
+-					tx_dma_conf.direction,
+-					DMA_PREP_INTERRUPT);
++		tx_dma_desc = dmaengine_prep_slave_sg(spi->dma_tx, xfer->tx_sg.sgl,
++						      xfer->tx_sg.nents,
++						      tx_dma_conf.direction,
++						      DMA_PREP_INTERRUPT);
+ 	}
+ 
+ 	if ((spi->tx_buf && spi->dma_tx && !tx_dma_desc) ||
+@@ -1485,9 +1629,25 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+ 		goto dma_desc_error;
+ 
+ 	if (rx_dma_desc) {
+-		rx_dma_desc->callback = spi->cfg->dma_rx_cb;
+-		rx_dma_desc->callback_param = spi;
++		if (rx_mdma_desc) {
++			rx_mdma_desc->callback = spi->cfg->dma_rx_cb;
++			rx_mdma_desc->callback_param = spi;
++		} else {
++			rx_dma_desc->callback = spi->cfg->dma_rx_cb;
++			rx_dma_desc->callback_param = spi;
++		}
+ 
++		/* Enable Rx DMA request */
++		stm32_spi_set_bits(spi, spi->cfg->regs->dma_rx_en.reg,
++				   spi->cfg->regs->dma_rx_en.mask);
++		if (rx_mdma_desc) {
++			if (dma_submit_error(dmaengine_submit(rx_mdma_desc))) {
++				dev_err(spi->dev, "Rx MDMA submit failed\n");
++				goto dma_desc_error;
++			}
++			/* Enable Rx MDMA channel */
++			dma_async_issue_pending(spi->mdma_rx);
++		}
+ 		if (dma_submit_error(dmaengine_submit(rx_dma_desc))) {
+ 			dev_err(spi->dev, "Rx DMA submit failed\n");
+ 			goto dma_desc_error;
+@@ -1522,6 +1682,8 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+ 	return 1;
+ 
+ dma_submit_error:
++	if (spi->mdma_rx)
++		dmaengine_terminate_sync(spi->mdma_rx);
+ 	if (spi->dma_rx)
+ 		dmaengine_terminate_sync(spi->dma_rx);
+ 
+@@ -1533,6 +1695,9 @@ static int stm32_spi_transfer_one_dma(struct stm32_spi *spi,
+ 
+ 	dev_info(spi->dev, "DMA issue: fall back to irq transfer\n");
+ 
++	if (spi->sram_rx_buf)
++		memset(spi->sram_rx_buf, 0, spi->sram_rx_buf_size);
++
+ 	spi->cur_usedma = false;
+ 	return spi->cfg->transfer_one_irq(spi);
+ }
+@@ -1891,6 +2056,9 @@ static int stm32_spi_unprepare_msg(struct spi_controller *ctrl,
+ 
+ 	spi->cfg->disable(spi);
+ 
++	if (spi->sram_rx_buf)
++		memset(spi->sram_rx_buf, 0, spi->sram_rx_buf_size);
++
+ 	return 0;
+ }
+ 
+@@ -2245,6 +2413,33 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	if (spi->dma_tx || spi->dma_rx)
+ 		ctrl->can_dma = stm32_spi_can_dma;
+ 
++	spi->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
++	if (spi->sram_pool) {
++		spi->sram_rx_buf_size = gen_pool_size(spi->sram_pool);
++		dev_info(&pdev->dev, "SRAM pool: %zu KiB for RX DMA/MDMA chaining\n",
++			 spi->sram_rx_buf_size / 1024);
++		spi->sram_rx_buf = gen_pool_dma_zalloc(spi->sram_pool, spi->sram_rx_buf_size,
++						       &spi->sram_dma_rx_buf);
++		if (!spi->sram_rx_buf) {
++			dev_err(&pdev->dev, "failed to allocate SRAM buffer\n");
++		} else {
++			spi->mdma_rx = dma_request_chan(spi->dev, "rxm2m");
++			if (IS_ERR(spi->mdma_rx)) {
++				ret = PTR_ERR(spi->mdma_rx);
++				spi->mdma_rx = NULL;
++				if (ret == -EPROBE_DEFER) {
++					goto err_pool_free;
++				} else {
++					gen_pool_free(spi->sram_pool,
++						      (unsigned long)spi->sram_rx_buf,
++						      spi->sram_rx_buf_size);
++					dev_warn(&pdev->dev,
++						 "failed to request rx mdma channel, DMA only\n");
++				}
++			}
++		}
++	}
++
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev,
+ 					 STM32_SPI_AUTOSUSPEND_DELAY);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+@@ -2272,6 +2467,11 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
++
++	if (spi->mdma_rx)
++		dma_release_channel(spi->mdma_rx);
++err_pool_free:
++	gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf, spi->sram_rx_buf_size);
+ err_dma_release:
+ 	if (spi->dma_tx)
+ 		dma_release_channel(spi->dma_tx);
+@@ -2302,6 +2502,11 @@ static void stm32_spi_remove(struct platform_device *pdev)
+ 		dma_release_channel(ctrl->dma_tx);
+ 	if (ctrl->dma_rx)
+ 		dma_release_channel(ctrl->dma_rx);
++	if (spi->mdma_rx)
++		dma_release_channel(spi->mdma_rx);
++	if (spi->sram_rx_buf)
++		gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf,
++			      spi->sram_rx_buf_size);
+ 
+ 	clk_disable_unprepare(spi->clk);
+ 
 
-Johan
+-- 
+2.43.0
+
