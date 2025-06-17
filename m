@@ -1,153 +1,410 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A452E8881;
-	Tue, 17 Jun 2025 13:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F9E2E7626;
+	Tue, 17 Jun 2025 14:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750168464; cv=none; b=Jjx6tdpnWLnnn7Uvbnsg9YNRJ/v7a+u0Uv5JkAlWvPL/THvGfR03nxsydJMY0+pvxeJuEaF1AZiFCuvBNZWlS6CKpj5JrlVbo7zAqY+J6oJBGZTcqmGvXxMp3wN1lvp/Gxj37r62NHgX/xnRY4ToWUk0MXzyulM46fGZ4IPNt5A=
+	t=1750169181; cv=none; b=GBsKlp5fBlP2G6lczzRjPNdbEh8at8u5p/q7c3Ey8lynvaGLMBkVnskIaV9PswbWyl5FXRuXzDvb2UKIU41dwxEAT4YNC5AR2a+5gCrY9o/3cH/VCAzmDFDNvztFbq/zxppwvi2Z+rJjEXUNY5A35nMf9LN0YMQMnCip6ErdpwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750168464; c=relaxed/simple;
-	bh=+zqqmKIUftUfrElMykNoEhWSaAdLvXt5iznvaoygcTU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MUu4ZOjCbrud3m6PH5QPI5V9Epe2t0Sh0xEqpbS7hbw7YX0bQl57VUl5xchY6jzeIEBYmhcTJwvnATi+dQPwYSQuhpAKeACOMdMQwH+79zBr2Chabu8QwdpA6La0wjNmbwZeDeTvtWThFofGP++wng+LF2erwPEWOEf5dpgfAvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=HZx1zX53; arc=none smtp.client-ip=213.167.242.64
+	s=arc-20240116; t=1750169181; c=relaxed/simple;
+	bh=TE1LoohfbSvo4In/rsIE8KKMkdSqgAyF0a8491Yfw9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YQqjS+ycCr4k4U1jK1hz/bBLP0UdCdUZVHXU2oq/NKFAazc5hxWRCCFxJ9foxYi/hJ93IIscHfYDs0caUsmyZH4vPiig7w+ANVxZWbbSBU9VGU+ycK/C72cYYOagMtKss5LgoOTUHIH53w28GJKSZI3F2BwMLQDM6iBQN5DxaPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=bFy8fQEv; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="HZx1zX53"
-Received: from [192.168.1.102] (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id BE7BA4371;
-	Tue, 17 Jun 2025 15:54:04 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bFy8fQEv"
+Received: from ideasonboard.com (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3665A496;
+	Tue, 17 Jun 2025 16:06:05 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1750168445;
-	bh=+zqqmKIUftUfrElMykNoEhWSaAdLvXt5iznvaoygcTU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=HZx1zX53qc58axyY+buCnKjSNgBYyNb281iQ+d8JoeKYrFZZWX3+Uq7/tc9kqNKlx
-	 a1/Qcm2aoy5sOg+iSbY+pNP1HmmG87SmilEjPDO3A0IytziFsH+5ccIqEEf/s2TiPZ
-	 22rJvmVLKMOIunr402Td3u51fw2mZjU5VIXmY+WI=
+	s=mail; t=1750169165;
+	bh=TE1LoohfbSvo4In/rsIE8KKMkdSqgAyF0a8491Yfw9o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bFy8fQEvT7PVOXg8T5VRA9LwM98zJY5Sux16dc+pjTIjqlxAP2/JLyySZAfzc/ILt
+	 rX1qXEjEK1rVbQ1bVbdIvA5dHVAXrh5SIBJJctWlkGFgsre284uzUQciw6y034NETu
+	 FFJkjF8d9euiUvjytZQOXzOlY/jrXKi3er/caCmM=
+Date: Tue, 17 Jun 2025 16:06:14 +0200
 From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Tue, 17 Jun 2025 15:54:02 +0200
-Subject: [PATCH v8 4/4] media: pisp_be: Fix pm_runtime underrun in probe
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Jacopo Mondi <jacopo.mondi@ideasonboard.com>, 
+	Naushir Patuck <naush@raspberrypi.com>, Nick Hollinghurst <nick.hollinghurst@raspberrypi.com>, 
+	David Plowman <david.plowman@raspberrypi.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org, 
+	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/4] media: pisp_be: Split jobs creation and scheduling
+Message-ID: <dqswo6rosuqz6bfljcqn4lcaxekeffncfb6chekuitrpi2kejw@hysfnu2s75rw>
+References: <20250606-pispbe-mainline-split-jobs-handling-v6-v7-0-46169f0622b7@ideasonboard.com>
+ <20250606-pispbe-mainline-split-jobs-handling-v6-v7-3-46169f0622b7@ideasonboard.com>
+ <20250616144009.GD32454@pendragon.ideasonboard.com>
+ <bhvhvjr7ks3yokkaoexuhduxqtxpx6voow6govxtvvs5o4sbwi@crrbxkit3vli>
+ <20250617135304.GC10006@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250617-pispbe-mainline-split-jobs-handling-v6-v8-4-e58ae199c17d@ideasonboard.com>
-References: <20250617-pispbe-mainline-split-jobs-handling-v6-v8-0-e58ae199c17d@ideasonboard.com>
-In-Reply-To: <20250617-pispbe-mainline-split-jobs-handling-v6-v8-0-e58ae199c17d@ideasonboard.com>
-To: Naushir Patuck <naush@raspberrypi.com>, 
- Nick Hollinghurst <nick.hollinghurst@raspberrypi.com>, 
- David Plowman <david.plowman@raspberrypi.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>, 
- Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>, stable@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3265;
- i=jacopo.mondi@ideasonboard.com; h=from:subject:message-id;
- bh=+zqqmKIUftUfrElMykNoEhWSaAdLvXt5iznvaoygcTU=;
- b=owEBbQKS/ZANAwAKAXI0Bo8WoVY8AcsmYgBoUXOEbA+dXnVyiD4fxG8s5bJd//kD7Vj5ntMJc
- MB1aGNB5uSJAjMEAAEKAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaFFzhAAKCRByNAaPFqFW
- PO2QD/9FWbjUfguHOEg9Va0TjkdMBLIiy4tT32D8DssRg/qq2p4rWJPSjE1Hjabozj8wAgpJ8Br
- puM+Lgw2lxhq1t5DSJvKQkkEirD3uedtCHet2vwU95CswdHsnqljKsytl67N623aNIgE9cVBEYF
- APlOPUuY81umvgcQeYmTVdvOHGXphD5IRSuJPDiXb+FcxZWozgMIkkM3Mc5muYq6RImez9DGOKT
- iT9C/A1isjiYMu3nYac3kMWods8nBeibf/nsrblNt3dvEo0mRqwUf/S+YunHLZMH1+8GZasW1SB
- H5Uh4zeUlPKLBChdkjBJDZBMCUAlPPcfMxb46pYfmw/iZvZ3yU16Q5o9r9uwVBztwBGkdOK2yGQ
- K2vmzZMSPFPzaxKPfXkb77G2QVOBxFId3FwBaXQwcviPRoEyPvonGhpb/Zs3BzsDr0RH0eo407D
- CjRtH6tQo/KXPI14oFJGBY4JczLbJjK6zxtTtVM4baqlfZxakT6zXDS7qsE6+iQJM3JqYTDR2sr
- PNY2qS9g8jZ5AkyURyU7s5FeHytuA8Qd/pJhqXaCFGQWiel6O2DR33bBjXww6HGkQ+WxWTo4ucL
- Fw0sAxJZyaETE+CFXpcjIrtDpwelnpBxtr2B90KZs4joHTNuCJcFaUgPDdrEZFBP8jr6XjzubjE
- 1rp2/O83LtcxvZw==
-X-Developer-Key: i=jacopo.mondi@ideasonboard.com; a=openpgp;
- fpr=72392EDC88144A65C701EA9BA5826A2587AD026B
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250617135304.GC10006@pendragon.ideasonboard.com>
 
-During the probe() routine, the PiSP BE driver needs to power up the
-interface in order to identify and initialize the hardware.
+On Tue, Jun 17, 2025 at 04:53:04PM +0300, Laurent Pinchart wrote:
+> > > > -static int pispbe_prepare_job(struct pispbe_dev *pispbe,
+> > > > -			      struct pispbe_job_descriptor *job)
+> > > > +static int pispbe_prepare_job(struct pispbe_dev *pispbe)
+> > > >  {
+> > > >  	struct pispbe_buffer *buf[PISPBE_NUM_NODES] = {};
+> > > > +	struct pispbe_job_descriptor *job;
+> > >
+> > > You could use
+> > >
+> > > 	struct pispbe_job_descriptor __free(kfree) *job = NULL;
+> > >
+> > > and drop the kfree() in the error paths to simplify error handling and
+> > > make it more robust. Don't forget to set job to NULL just after adding
+> > > it to the job_queue.
+> > >
+> >
+> > Only if I
+> >
+> > 	no_free_ptr(job);
+>
+> That's setting it to NULL, yes.
+>
 
-The driver resumes the interface by calling the
-pispbe_runtime_resume() function directly, without going
-through the pm_runtime helpers, but later suspends it by calling
-pm_runtime_put_autosuspend().
+I realized my comment was unparsable, sorry. I meant I wanted to use
+no_free_ptr(job) which is equivalent to job = NULL; but more explicit,
+but media-ci reported that I'm not meant to ignore its return value so
+I went for job = NULL in the end.
 
-This causes a PM usage count imbalance at probe time, notified by the
-runtime_pm framework with the below message in the system log:
+> > before returning as job as to stay valid until it gets consumed.
+> >
+> > I'm not sure it's worth it just to save two "kfree(job);" in error
+> > paths
+>
+> Up to you.
+>
 
- pispbe 1000880000.pisp_be: Runtime PM usage count underflow!
+I'm in two minds here. It makes cleanup paths easier but requires an
+ad-hoc handling before returning. Oh well, let's use this new fancy
+features and be done with that. That's what I've done in v8
 
-Fix this by resuming the interface using the pm runtime helpers instead
-of calling the resume function directly and use the pm_runtime framework
-in the probe() error path. While at it, remove manual suspend of the
-interface in the remove() function. The driver cannot be unloaded if in
-use, so simply disable runtime pm.
+Thanks
+  j
 
-To simplify the implementation, make the driver depend on PM as the
-RPI5 platform where the ISP is integrated in uses the PM framework by
-default.
-
-Fixes: 12187bd5d4f8 ("media: raspberrypi: Add support for PiSP BE")
-Cc: stable@vger.kernel.org
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
----
- drivers/media/platform/raspberrypi/pisp_be/Kconfig   | 1 +
- drivers/media/platform/raspberrypi/pisp_be/pisp_be.c | 5 ++---
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/platform/raspberrypi/pisp_be/Kconfig b/drivers/media/platform/raspberrypi/pisp_be/Kconfig
-index 46765a2e4c4d1573757ff842f208834216e582cb..a9e51fd94aadc6add70f883bfcea0c9fa91f0c4b 100644
---- a/drivers/media/platform/raspberrypi/pisp_be/Kconfig
-+++ b/drivers/media/platform/raspberrypi/pisp_be/Kconfig
-@@ -3,6 +3,7 @@ config VIDEO_RASPBERRYPI_PISP_BE
- 	depends on V4L_PLATFORM_DRIVERS
- 	depends on VIDEO_DEV
- 	depends on ARCH_BCM2835 || COMPILE_TEST
-+	depends on PM
- 	select VIDEO_V4L2_SUBDEV_API
- 	select MEDIA_CONTROLLER
- 	select VIDEOBUF2_DMA_CONTIG
-diff --git a/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c b/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-index ccc6cb99868b842ac0d295f9ec28470303e60788..be794a12362020f42b3cf5bd291b4a1625543b5f 100644
---- a/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-+++ b/drivers/media/platform/raspberrypi/pisp_be/pisp_be.c
-@@ -1725,7 +1725,7 @@ static int pispbe_probe(struct platform_device *pdev)
- 	pm_runtime_use_autosuspend(pispbe->dev);
- 	pm_runtime_enable(pispbe->dev);
- 
--	ret = pispbe_runtime_resume(pispbe->dev);
-+	ret = pm_runtime_resume_and_get(pispbe->dev);
- 	if (ret)
- 		goto pm_runtime_disable_err;
- 
-@@ -1747,7 +1747,7 @@ static int pispbe_probe(struct platform_device *pdev)
- disable_devs_err:
- 	pispbe_destroy_devices(pispbe);
- pm_runtime_suspend_err:
--	pispbe_runtime_suspend(pispbe->dev);
-+	pm_runtime_put(pispbe->dev);
- pm_runtime_disable_err:
- 	pm_runtime_dont_use_autosuspend(pispbe->dev);
- 	pm_runtime_disable(pispbe->dev);
-@@ -1761,7 +1761,6 @@ static void pispbe_remove(struct platform_device *pdev)
- 
- 	pispbe_destroy_devices(pispbe);
- 
--	pispbe_runtime_suspend(pispbe->dev);
- 	pm_runtime_dont_use_autosuspend(pispbe->dev);
- 	pm_runtime_disable(pispbe->dev);
- }
-
--- 
-2.49.0
-
+> > > > +	unsigned int streaming_map;
+> > > >  	unsigned int config_index;
+> > > >  	struct pispbe_node *node;
+> > > > -	unsigned long flags;
+> > > >
+> > > > -	lockdep_assert_held(&pispbe->hw_lock);
+> > >
+> > > You could replace this with
+> > >
+> > > 	lockdep_assert_irqs_enabled();
+> > >
+> > > Up to you.
+> > >
+> > > > +	scoped_guard(spinlock_irq, &pispbe->hw_lock) {
+> > > > +		static const u32 mask = BIT(CONFIG_NODE) | BIT(MAIN_INPUT_NODE);
+> > > >
+> > > > -	memset(job, 0, sizeof(struct pispbe_job_descriptor));
+> > > > +		if ((pispbe->streaming_map & mask) != mask)
+> > > > +			return -ENODEV;
+> > > >
+> > > > -	if (((BIT(CONFIG_NODE) | BIT(MAIN_INPUT_NODE)) &
+> > > > -		pispbe->streaming_map) !=
+> > > > -			(BIT(CONFIG_NODE) | BIT(MAIN_INPUT_NODE)))
+> > > > -		return -ENODEV;
+> > > > +		/*
+> > > > +		 * Take a copy of streaming_map: nodes activated after this
+> > > > +		 * point are ignored when preparing this job.
+> > > > +		 */
+> > > > +		streaming_map = pispbe->streaming_map;
+> > > > +	}
+> > > > +
+> > > > +	job = kzalloc(sizeof(*job), GFP_KERNEL);
+> > > > +	if (!job)
+> > > > +		return -ENOMEM;
+> > > >
+> > > >  	node = &pispbe->node[CONFIG_NODE];
+> > > > -	spin_lock_irqsave(&node->ready_lock, flags);
+> > > >  	buf[CONFIG_NODE] = list_first_entry_or_null(&node->ready_queue,
+> > > >  						    struct pispbe_buffer,
+> > > >  						    ready_list);
+> > > > -	if (buf[CONFIG_NODE]) {
+> > > > -		list_del(&buf[CONFIG_NODE]->ready_list);
+> > > > -		pispbe->queued_job.buf[CONFIG_NODE] = buf[CONFIG_NODE];
+> > > > +	if (!buf[CONFIG_NODE]) {
+> > > > +		kfree(job);
+> > > > +		return -ENODEV;
+> > > >  	}
+> > > > -	spin_unlock_irqrestore(&node->ready_lock, flags);
+> > > >
+> > > > -	/* Exit early if no config buffer has been queued. */
+> > > > -	if (!buf[CONFIG_NODE])
+> > > > -		return -ENODEV;
+> > > > +	list_del(&buf[CONFIG_NODE]->ready_list);
+> > > > +	job->buffers[CONFIG_NODE] = buf[CONFIG_NODE];
+> > > >
+> > > >  	config_index = buf[CONFIG_NODE]->vb.vb2_buf.index;
+> > > >  	job->config = &pispbe->config[config_index];
+> > > > @@ -495,7 +503,7 @@ static int pispbe_prepare_job(struct pispbe_dev *pispbe,
+> > > >  			continue;
+> > > >
+> > > >  		buf[i] = NULL;
+> > > > -		if (!(pispbe->streaming_map & BIT(i)))
+> > > > +		if (!(streaming_map & BIT(i)))
+> > > >  			continue;
+> > > >
+> > > >  		if ((!(rgb_en & PISP_BE_RGB_ENABLE_OUTPUT0) &&
+> > > > @@ -522,25 +530,25 @@ static int pispbe_prepare_job(struct pispbe_dev *pispbe,
+> > > >  		node = &pispbe->node[i];
+> > > >
+> > > >  		/* Pull a buffer from each V4L2 queue to form the queued job */
+> > > > -		spin_lock_irqsave(&node->ready_lock, flags);
+> > > >  		buf[i] = list_first_entry_or_null(&node->ready_queue,
+> > > >  						  struct pispbe_buffer,
+> > > >  						  ready_list);
+> > > >  		if (buf[i]) {
+> > > >  			list_del(&buf[i]->ready_list);
+> > > > -			pispbe->queued_job.buf[i] = buf[i];
+> > > > +			job->buffers[i] = buf[i];
+> > > >  		}
+> > > > -		spin_unlock_irqrestore(&node->ready_lock, flags);
+> > > >
+> > > >  		if (!buf[i] && !ignore_buffers)
+> > > >  			goto err_return_buffers;
+> > > >  	}
+> > > >
+> > > > -	pispbe->queued_job.valid = true;
+> > > > -
+> > > >  	/* Convert buffers to DMA addresses for the hardware */
+> > > >  	pispbe_xlate_addrs(pispbe, job, buf);
+> > > >
+> > > > +	scoped_guard(spinlock_irq, &pispbe->hw_lock) {
+> > > > +		list_add_tail(&job->queue, &pispbe->job_queue);
+> > > > +	}
+> > > > +
+> > > >  	return 0;
+> > > >
+> > > >  err_return_buffers:
+> > > > @@ -551,33 +559,39 @@ static int pispbe_prepare_job(struct pispbe_dev *pispbe,
+> > > >  			continue;
+> > > >
+> > > >  		/* Return the buffer to the ready_list queue */
+> > > > -		spin_lock_irqsave(&n->ready_lock, flags);
+> > > >  		list_add(&buf[i]->ready_list, &n->ready_queue);
+> > > > -		spin_unlock_irqrestore(&n->ready_lock, flags);
+> > > >  	}
+> > > >
+> > > > -	memset(&pispbe->queued_job, 0, sizeof(pispbe->queued_job));
+> > > > +	kfree(job);
+> > > >
+> > > >  	return -ENODEV;
+> > > >  }
+> > > >
+> > > >  static void pispbe_schedule(struct pispbe_dev *pispbe, bool clear_hw_busy)
+> > > >  {
+> > > > -	struct pispbe_job_descriptor job;
+> > > > -	unsigned long flags;
+> > > > -	int ret;
+> > > > +	struct pispbe_job_descriptor *job;
+> > > > +
+> > > > +	scoped_guard(spinlock_irqsave, &pispbe->hw_lock) {
+> > > > +		if (clear_hw_busy)
+> > > > +			pispbe->hw_busy = false;
+> > > > +
+> > > > +		if (pispbe->hw_busy)
+> > > > +			return;
+> > > >
+> > > > -	spin_lock_irqsave(&pispbe->hw_lock, flags);
+> > > > +		job = list_first_entry_or_null(&pispbe->job_queue,
+> > > > +					       struct pispbe_job_descriptor,
+> > > > +					       queue);
+> > > > +		if (!job)
+> > > > +			return;
+> > > >
+> > > > -	if (clear_hw_busy)
+> > > > -		pispbe->hw_busy = false;
+> > > > +		list_del(&job->queue);
+> > > >
+> > > > -	if (pispbe->hw_busy)
+> > > > -		goto unlock_and_return;
+> > > > +		for (unsigned int i = 0; i < PISPBE_NUM_NODES; i++)
+> > > > +			pispbe->queued_job.buf[i] = job->buffers[i];
+> > > > +		pispbe->queued_job.valid = true;
+> > > >
+> > > > -	ret = pispbe_prepare_job(pispbe, &job);
+> > > > -	if (ret)
+> > > > -		goto unlock_and_return;
+> > > > +		pispbe->hw_busy = true;
+> > > > +	}
+> > > >
+> > > >  	/*
+> > > >  	 * We can kick the job off without the hw_lock, as this can
+> > > > @@ -585,16 +599,8 @@ static void pispbe_schedule(struct pispbe_dev *pispbe, bool clear_hw_busy)
+> > > >  	 * only when the following job has been queued and an interrupt
+> > > >  	 * is rised.
+> > > >  	 */
+> > > > -	pispbe->hw_busy = true;
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > > -
+> > > > -	pispbe_queue_job(pispbe, &job);
+> > > > -
+> > > > -	return;
+> > > > -
+> > > > -unlock_and_return:
+> > > > -	/* No job has been queued, just release the lock and return. */
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > > +	pispbe_queue_job(pispbe, job);
+> > > > +	kfree(job);
+> > > >  }
+> > > >
+> > > >  static void pispbe_isr_jobdone(struct pispbe_dev *pispbe,
+> > > > @@ -846,18 +852,16 @@ static void pispbe_node_buffer_queue(struct vb2_buffer *buf)
+> > > >  		container_of(vbuf, struct pispbe_buffer, vb);
+> > > >  	struct pispbe_node *node = vb2_get_drv_priv(buf->vb2_queue);
+> > > >  	struct pispbe_dev *pispbe = node->pispbe;
+> > > > -	unsigned long flags;
+> > > >
+> > > >  	dev_dbg(pispbe->dev, "%s: for node %s\n", __func__, NODE_NAME(node));
+> > > > -	spin_lock_irqsave(&node->ready_lock, flags);
+> > > >  	list_add_tail(&buffer->ready_list, &node->ready_queue);
+> > > > -	spin_unlock_irqrestore(&node->ready_lock, flags);
+> > > >
+> > > >  	/*
+> > > >  	 * Every time we add a buffer, check if there's now some work for the hw
+> > > >  	 * to do.
+> > > >  	 */
+> > > > -	pispbe_schedule(pispbe, false);
+> > > > +	if (!pispbe_prepare_job(pispbe))
+> > > > +		pispbe_schedule(pispbe, false);
+> > > >  }
+> > > >
+> > > >  static int pispbe_node_start_streaming(struct vb2_queue *q, unsigned int count)
+> > > > @@ -865,17 +869,16 @@ static int pispbe_node_start_streaming(struct vb2_queue *q, unsigned int count)
+> > > >  	struct pispbe_node *node = vb2_get_drv_priv(q);
+> > > >  	struct pispbe_dev *pispbe = node->pispbe;
+> > > >  	struct pispbe_buffer *buf, *tmp;
+> > > > -	unsigned long flags;
+> > > >  	int ret;
+> > > >
+> > > >  	ret = pm_runtime_resume_and_get(pispbe->dev);
+> > > >  	if (ret < 0)
+> > > >  		goto err_return_buffers;
+> > > >
+> > > > -	spin_lock_irqsave(&pispbe->hw_lock, flags);
+> > > > -	node->pispbe->streaming_map |=  BIT(node->id);
+> > > > -	node->pispbe->sequence = 0;
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > > +	scoped_guard(spinlock_irq, &pispbe->hw_lock) {
+> > > > +		node->pispbe->streaming_map |=  BIT(node->id);
+> > > > +		node->pispbe->sequence = 0;
+> > > > +	}
+> > > >
+> > > >  	dev_dbg(pispbe->dev, "%s: for node %s (count %u)\n",
+> > > >  		__func__, NODE_NAME(node), count);
+> > > > @@ -883,17 +886,16 @@ static int pispbe_node_start_streaming(struct vb2_queue *q, unsigned int count)
+> > > >  		node->pispbe->streaming_map);
+> > > >
+> > > >  	/* Maybe we're ready to run. */
+> > > > -	pispbe_schedule(pispbe, false);
+> > > > +	if (!pispbe_prepare_job(pispbe))
+> > > > +		pispbe_schedule(pispbe, false);
+> > > >
+> > > >  	return 0;
+> > > >
+> > > >  err_return_buffers:
+> > > > -	spin_lock_irqsave(&pispbe->hw_lock, flags);
+> > > >  	list_for_each_entry_safe(buf, tmp, &node->ready_queue, ready_list) {
+> > > >  		list_del(&buf->ready_list);
+> > > >  		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+> > > >  	}
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > >
+> > > >  	return ret;
+> > > >  }
+> > > > @@ -903,7 +905,6 @@ static void pispbe_node_stop_streaming(struct vb2_queue *q)
+> > > >  	struct pispbe_node *node = vb2_get_drv_priv(q);
+> > > >  	struct pispbe_dev *pispbe = node->pispbe;
+> > > >  	struct pispbe_buffer *buf;
+> > > > -	unsigned long flags;
+> > > >
+> > > >  	/*
+> > > >  	 * Now this is a bit awkward. In a simple M2M device we could just wait
+> > > > @@ -915,11 +916,7 @@ static void pispbe_node_stop_streaming(struct vb2_queue *q)
+> > > >  	 * This may return buffers out of order.
+> > > >  	 */
+> > > >  	dev_dbg(pispbe->dev, "%s: for node %s\n", __func__, NODE_NAME(node));
+> > > > -	spin_lock_irqsave(&pispbe->hw_lock, flags);
+> > > >  	do {
+> > > > -		unsigned long flags1;
+> > > > -
+> > > > -		spin_lock_irqsave(&node->ready_lock, flags1);
+> > > >  		buf = list_first_entry_or_null(&node->ready_queue,
+> > > >  					       struct pispbe_buffer,
+> > > >  					       ready_list);
+> > > > @@ -927,15 +924,23 @@ static void pispbe_node_stop_streaming(struct vb2_queue *q)
+> > > >  			list_del(&buf->ready_list);
+> > > >  			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+> > > >  		}
+> > > > -		spin_unlock_irqrestore(&node->ready_lock, flags1);
+> > > >  	} while (buf);
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > >
+> > > >  	vb2_wait_for_all_buffers(&node->queue);
+> > > >
+> > > > -	spin_lock_irqsave(&pispbe->hw_lock, flags);
+> > > > +	spin_lock_irq(&pispbe->hw_lock);
+> > > >  	pispbe->streaming_map &= ~BIT(node->id);
+> > > > -	spin_unlock_irqrestore(&pispbe->hw_lock, flags);
+> > > > +
+> > > > +	/* Release all jobs once all nodes have stopped streaming. */
+> > > > +	if (pispbe->streaming_map == 0) {
+> > > > +		struct pispbe_job_descriptor *job, *temp;
+> > > > +
+> > > > +		list_for_each_entry_safe(job, temp, &pispbe->job_queue, queue) {
+> > > > +			list_del(&job->queue);
+> > > > +			kfree(job);
+> > > > +		}
+> > > > +	}
+> > >
+> > > Please splice pispbe->job_queue to a local list with the lock held, and
+> > > then iterate over the local list without the lock held to free the jobs.
+> > >
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > >
+> > > > +	spin_unlock_irq(&pispbe->hw_lock);
+> > > >
+> > > >  	pm_runtime_mark_last_busy(pispbe->dev);
+> > > >  	pm_runtime_put_autosuspend(pispbe->dev);
+> > > > @@ -1393,7 +1398,6 @@ static int pispbe_init_node(struct pispbe_dev *pispbe, unsigned int id)
+> > > >  	mutex_init(&node->node_lock);
+> > > >  	mutex_init(&node->queue_lock);
+> > > >  	INIT_LIST_HEAD(&node->ready_queue);
+> > > > -	spin_lock_init(&node->ready_lock);
+> > > >
+> > > >  	node->format.type = node->buf_type;
+> > > >  	pispbe_node_def_fmt(node);
+> > > > @@ -1677,6 +1681,8 @@ static int pispbe_probe(struct platform_device *pdev)
+> > > >  	if (!pispbe)
+> > > >  		return -ENOMEM;
+> > > >
+> > > > +	INIT_LIST_HEAD(&pispbe->job_queue);
+> > > > +
+> > > >  	dev_set_drvdata(&pdev->dev, pispbe);
+> > > >  	pispbe->dev = &pdev->dev;
+> > > >  	platform_set_drvdata(pdev, pispbe);
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
