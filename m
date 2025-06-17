@@ -1,218 +1,132 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3851F4CAE;
-	Tue, 17 Jun 2025 14:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484492C032B
+	for <linux-media@vger.kernel.org>; Tue, 17 Jun 2025 14:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750170875; cv=none; b=NaeUjS/3609QUp7K88huK3nszLQhytam+5OYhC1xT/oCIZKtHIE2AHaISPxKAyW5f5G1SiMd4+exH/hGj1KVzy1HPdGPJo6nIVs7orafspk422vwiQ6NZ6D5I509B5QWJuGgqro/YhWfUL6BtJaxD0u3s1g18jp9vBTPWJ4Wquc=
+	t=1750171357; cv=none; b=gNQldLxhoZlTxY8nCA0ErA71c6xBxIPt80NMhn5y4wXi63xqbzdo0UzyQ6GyWS2W2OEsvnuzNprpPTNFWAaaq5sdLUQNddZbzThzjkJLUDFr/1bfvfwLph3h9i22sySXbi8Skt9zQosIpKq3L7y0A7Ehz0P40FX3+/O/MQ4+etk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750170875; c=relaxed/simple;
-	bh=7eVSwYhRrsGw308e1gWXBm5X3J3BsCedcVcfc7DyDMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VJcm2I2oXdB/bjRHadD7/eHuxVNDBNUxyjgj71bHyLBFjxomnKNJ+YUaXE3pPTqdA3maM9W/HrJjnqQopjpRcoAbIzZJGesLReXiHb/SYbxIE3un+pTV6/Iy7afSlHBjeSlNyek+GTPujyCUa05QH9uVoAtz0J4oKkQcAQ8+VJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=eRFjA2m2; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1750171357; c=relaxed/simple;
+	bh=aktg2opJq0+dY4a+/MNIzTnrkdP0Ocg7NaKfj2bHfhw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=g5J9QFDhrDCF8ylbNASRyWYT1Vvo7xE10bqqOyslrMA2MdOARH/6PCMdJM38FKuxxTAx8/QUJ4/OAIIXCjRvhA9P/hAC1jNCbL4sbptnj2XSGz9X+to+4MEKjrkO181RWZb+swIwmJUZZtlKxBmeo+I5tNsHZDbEc/6GAqreWnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lkqYUoYC; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="eRFjA2m2"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2EEB57E1;
-	Tue, 17 Jun 2025 16:34:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1750170859;
-	bh=7eVSwYhRrsGw308e1gWXBm5X3J3BsCedcVcfc7DyDMo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eRFjA2m2TzJPaNadVlp/g6nZhQtjBw8DzZMp2uaxV4XCS8ILolO/l48V2PRSJkYG7
-	 615Ja/S+EC/SeBscdF5aji3VzhpJUeZz9rvH316vYgyFJ7rrCXG3BHCzHm8kDFKSkv
-	 bpv0l1rrXPZER84ZeLYfbQ/1c6YQqdHsDId+UYeg=
-Date: Tue, 17 Jun 2025 17:34:16 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Rui Miguel Silva <rmfrfs@gmail.com>,
-	Martin Kepplinger <martink@posteo.de>,
-	Purism Kernel Team <kernel@puri.sm>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Robert Chiras <robert.chiras@nxp.com>,
-	"Guoniu.zhou" <guoniu.zhou@nxp.com>
-Subject: Re: [PATCH v5 04/13] media: nxp: imx8-isi: Use
- devm_clk_bulk_get_all() to fetch clocks
-Message-ID: <20250617143416.GA21052@pendragon.ideasonboard.com>
-References: <20250522-8qxp_camera-v5-0-d4be869fdb7e@nxp.com>
- <20250522-8qxp_camera-v5-4-d4be869fdb7e@nxp.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lkqYUoYC"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5534edc646dso6165352e87.1
+        for <linux-media@vger.kernel.org>; Tue, 17 Jun 2025 07:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1750171353; x=1750776153; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OzIXP1ycrxCwpqJ0rvCcPdawBbbWpEqHaCxqb+yy90M=;
+        b=lkqYUoYCEgGbtLQssHjEDMlNVUOkMZSLMhZcW54QsjOKP37nb3j3DILDimDNfCDFun
+         VUCplA7lZ30DdaR39W+RC5ZpHqTDa32JKP1ca1bT6ktwDAPh5fDfhtYgv5E/kMoPvdkJ
+         XfwN36BoSQCuHpYI/bxxrFYo3HzcdSA3XZ6Sc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750171353; x=1750776153;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OzIXP1ycrxCwpqJ0rvCcPdawBbbWpEqHaCxqb+yy90M=;
+        b=WfFjQ3IXCXm2v+7csRGV5UBezYESe7Mbmv0IGn1p0sZMSM7JD6SC6wr8DOhgQyHsOl
+         DtPq2uxuHGoop+yNaFUurPRhPWE4bWWlPiPS8WAY+SVmZMrzs73Xc76aaJQ4lbqudQu6
+         YJN4csIVadQb7WwhclVBOOFYX9GNzCSDsldcwxGziRCRgLdDnSIUtVlcy0Iktf+qu47T
+         QNnnp4XZyd4c3b7eVKpOtzw4rz2GZkbMCi2x9AflenwSGJAz+6w8ZNn524fZVIHazWw/
+         zvp86gooKPoHDzD8bWDFf3SXSRRGNY/3alwckaAogpEpPWaJ0wx4m0la5g3xV+vFIyqa
+         EqJw==
+X-Gm-Message-State: AOJu0YwEWNnYKUOFuSptCQh026KWOqeiSECAgWqO01UDx/hLvqtmzDfS
+	kLWLThQ8E6QispD3oGQT8ZPa+iqJVmtbN7bsv3uBNAQ3sYBtCmb1EvBxwZ/j8KFUDw==
+X-Gm-Gg: ASbGncs1RW/QEVzuPY/RLDxZush/s0loLi52ag99t6KqQPtTpKnfE4+n9jnRWeio6El
+	jX4MLGbP+UoWde+BkhKJaRRaRGVH5E3e5pNChErmQfPrpL7Q6QrOF7fkZ6F0kjKUArFrD+4jWpY
+	nbsrQ/9lj9CMiO01p5jXxexK3Wn0bPjBUeWw26cpprVUPqJaU/REUjp1bSgb7UihTeZDkwcclca
+	CVwKdkVwvCWOiEX1T5v/3ROpse4m3SPpVvDme4K3uzXqYQf07Uh0zRYOw8/QkvLnuX9Zei8chhQ
+	Sk1p2W2MClbgMxhp5xtm2nC8sm/eOqK2WKqNI3sM+L7McI4+iuJmYCKa2tM7CyIvs2ZraSiYovf
+	NG2Sfjie6VEPJRSfoh1oRZPWM8biAm6FKalSlAsCs2A==
+X-Google-Smtp-Source: AGHT+IGDdZamuUtegaqRzq6f6YTXv/XwbBpEBszibH6S83g9q8LYSRxOGewlvA2AvUElv4QXpy7yqQ==
+X-Received: by 2002:a05:6512:159d:b0:553:3665:366d with SMTP id 2adb3069b0e04-553b6ee2b81mr3316711e87.21.1750171353230;
+        Tue, 17 Jun 2025 07:42:33 -0700 (PDT)
+Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553ae234437sm1814992e87.53.2025.06.17.07.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 07:42:32 -0700 (PDT)
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Tue, 17 Jun 2025 14:42:22 +0000
+Subject: [PATCH v7 1/5] media: uvcvideo: Do not mark valid metadata as
+ invalid
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250522-8qxp_camera-v5-4-d4be869fdb7e@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250617-uvc-meta-v7-1-9c50623e2286@chromium.org>
+References: <20250617-uvc-meta-v7-0-9c50623e2286@chromium.org>
+In-Reply-To: <20250617-uvc-meta-v7-0-9c50623e2286@chromium.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Guennadi Liakhovetski <guennadi.liakhovetski@intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Hans de Goede <hansg@kernel.org>, Hans de Goede <hansg@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
 
-Hi Frank,
+Currently, the driver performs a length check of the metadata buffer
+before the actual metadata size is known and before the metadata is
+decided to be copied. This results in valid metadata buffers being
+incorrectly marked as invalid.
 
-On Thu, May 22, 2025 at 01:56:42PM -0400, Frank Li wrote:
-> Use devm_clk_bulk_get_all() helper to simplify clock handle code.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Move the length check to occur after the metadata size is determined and
+is decided to be copied.
 
+Cc: stable@vger.kernel.org
+Fixes: 088ead255245 ("media: uvcvideo: Add a metadata device node")
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Hans de Goede <hansg@kernel.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ drivers/media/usb/uvc/uvc_video.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-> ---
-> change in v5
-> - none
-> ---
->  .../media/platform/nxp/imx8-isi/imx8-isi-core.c    | 46 +++-------------------
->  .../media/platform/nxp/imx8-isi/imx8-isi-core.h    |  3 +-
->  2 files changed, 6 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> index ecfc95882f903..015350c6f2784 100644
-> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c
-> @@ -275,11 +275,6 @@ static const struct mxc_isi_set_thd mxc_imx8_isi_thd_v1 = {
->  	.panic_set_thd_v = { .mask = 0xf0000, .offset = 16, .threshold = 0x7 },
->  };
->  
-> -static const struct clk_bulk_data mxc_imx8mn_clks[] = {
-> -	{ .id = "axi" },
-> -	{ .id = "apb" },
-> -};
-> -
->  static const struct mxc_isi_plat_data mxc_imx8mn_data = {
->  	.model			= MXC_ISI_IMX8MN,
->  	.num_ports		= 1,
-> @@ -287,8 +282,6 @@ static const struct mxc_isi_plat_data mxc_imx8mn_data = {
->  	.reg_offset		= 0,
->  	.ier_reg		= &mxc_imx8_isi_ier_v1,
->  	.set_thd		= &mxc_imx8_isi_thd_v1,
-> -	.clks			= mxc_imx8mn_clks,
-> -	.num_clks		= ARRAY_SIZE(mxc_imx8mn_clks),
->  	.buf_active_reverse	= false,
->  	.gasket_ops		= &mxc_imx8_gasket_ops,
->  	.has_36bit_dma		= false,
-> @@ -301,8 +294,6 @@ static const struct mxc_isi_plat_data mxc_imx8mp_data = {
->  	.reg_offset		= 0x2000,
->  	.ier_reg		= &mxc_imx8_isi_ier_v2,
->  	.set_thd		= &mxc_imx8_isi_thd_v1,
-> -	.clks			= mxc_imx8mn_clks,
-> -	.num_clks		= ARRAY_SIZE(mxc_imx8mn_clks),
->  	.buf_active_reverse	= true,
->  	.gasket_ops		= &mxc_imx8_gasket_ops,
->  	.has_36bit_dma		= true,
-> @@ -315,8 +306,6 @@ static const struct mxc_isi_plat_data mxc_imx8ulp_data = {
->  	.reg_offset		= 0x0,
->  	.ier_reg		= &mxc_imx8_isi_ier_v2,
->  	.set_thd		= &mxc_imx8_isi_thd_v1,
-> -	.clks			= mxc_imx8mn_clks,
-> -	.num_clks		= ARRAY_SIZE(mxc_imx8mn_clks),
->  	.buf_active_reverse	= true,
->  	.has_36bit_dma		= false,
->  };
-> @@ -328,8 +317,6 @@ static const struct mxc_isi_plat_data mxc_imx93_data = {
->  	.reg_offset		= 0,
->  	.ier_reg		= &mxc_imx8_isi_ier_v2,
->  	.set_thd		= &mxc_imx8_isi_thd_v1,
-> -	.clks			= mxc_imx8mn_clks,
-> -	.num_clks		= ARRAY_SIZE(mxc_imx8mn_clks),
->  	.buf_active_reverse	= true,
->  	.gasket_ops		= &mxc_imx93_gasket_ops,
->  	.has_36bit_dma		= false,
-> @@ -386,7 +373,7 @@ static int mxc_isi_runtime_suspend(struct device *dev)
->  {
->  	struct mxc_isi_dev *isi = dev_get_drvdata(dev);
->  
-> -	clk_bulk_disable_unprepare(isi->pdata->num_clks, isi->clks);
-> +	clk_bulk_disable_unprepare(isi->num_clks, isi->clks);
->  
->  	return 0;
->  }
-> @@ -396,7 +383,7 @@ static int mxc_isi_runtime_resume(struct device *dev)
->  	struct mxc_isi_dev *isi = dev_get_drvdata(dev);
->  	int ret;
->  
-> -	ret = clk_bulk_prepare_enable(isi->pdata->num_clks, isi->clks);
-> +	ret = clk_bulk_prepare_enable(isi->num_clks, isi->clks);
->  	if (ret) {
->  		dev_err(dev, "Failed to enable clocks (%d)\n", ret);
->  		return ret;
-> @@ -414,27 +401,6 @@ static const struct dev_pm_ops mxc_isi_pm_ops = {
->   * Probe, remove & driver
->   */
->  
-> -static int mxc_isi_clk_get(struct mxc_isi_dev *isi)
-> -{
-> -	unsigned int size = isi->pdata->num_clks
-> -			  * sizeof(*isi->clks);
-> -	int ret;
-> -
-> -	isi->clks = devm_kmemdup(isi->dev, isi->pdata->clks, size, GFP_KERNEL);
-> -	if (!isi->clks)
-> -		return -ENOMEM;
-> -
-> -	ret = devm_clk_bulk_get(isi->dev, isi->pdata->num_clks,
-> -				isi->clks);
-> -	if (ret < 0) {
-> -		dev_err(isi->dev, "Failed to acquire clocks: %d\n",
-> -			ret);
-> -		return ret;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static int mxc_isi_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -457,11 +423,9 @@ static int mxc_isi_probe(struct platform_device *pdev)
->  	if (!isi->pipes)
->  		return -ENOMEM;
->  
-> -	ret = mxc_isi_clk_get(isi);
-> -	if (ret < 0) {
-> -		dev_err(dev, "Failed to get clocks\n");
-> -		return ret;
-> -	}
-> +	isi->num_clks = devm_clk_bulk_get_all(dev, &isi->clks);
-> +	if (isi->num_clks < 0)
-> +		return dev_err_probe(dev, isi->num_clks, "Failed to get clocks\n");
->  
->  	isi->regs = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(isi->regs)) {
-> diff --git a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> index e7534a80af7b4..bd3cfe5fbe063 100644
-> --- a/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> +++ b/drivers/media/platform/nxp/imx8-isi/imx8-isi-core.h
-> @@ -169,8 +169,6 @@ struct mxc_isi_plat_data {
->  	const struct mxc_isi_ier_reg  *ier_reg;
->  	const struct mxc_isi_set_thd *set_thd;
->  	const struct mxc_gasket_ops *gasket_ops;
-> -	const struct clk_bulk_data *clks;
-> -	unsigned int num_clks;
->  	bool buf_active_reverse;
->  	bool has_36bit_dma;
->  };
-> @@ -282,6 +280,7 @@ struct mxc_isi_dev {
->  
->  	void __iomem			*regs;
->  	struct clk_bulk_data		*clks;
-> +	int				num_clks;
->  	struct regmap			*gasket;
->  
->  	struct mxc_isi_crossbar		crossbar;
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 11769a1832d2ba9b3f9a50bcb10b0c4cdff71f09..2e377e7b9e81599aca19b800a171cc16a09c1e8a 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1442,12 +1442,6 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+ 	if (!meta_buf || length == 2)
+ 		return;
+ 
+-	if (meta_buf->length - meta_buf->bytesused <
+-	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
+-		meta_buf->error = 1;
+-		return;
+-	}
+-
+ 	has_pts = mem[1] & UVC_STREAM_PTS;
+ 	has_scr = mem[1] & UVC_STREAM_SCR;
+ 
+@@ -1468,6 +1462,12 @@ static void uvc_video_decode_meta(struct uvc_streaming *stream,
+ 				  !memcmp(scr, stream->clock.last_scr, 6)))
+ 		return;
+ 
++	if (meta_buf->length - meta_buf->bytesused <
++	    length + sizeof(meta->ns) + sizeof(meta->sof)) {
++		meta_buf->error = 1;
++		return;
++	}
++
+ 	meta = (struct uvc_meta_buf *)((u8 *)meta_buf->mem + meta_buf->bytesused);
+ 	local_irq_save(flags);
+ 	time = uvc_video_get_time();
 
 -- 
-Regards,
+2.50.0.rc2.692.g299adb8693-goog
 
-Laurent Pinchart
