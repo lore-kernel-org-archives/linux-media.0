@@ -1,274 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549F9191F91;
-	Wed, 18 Jun 2025 15:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDCE2EF650;
+	Wed, 18 Jun 2025 15:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750259108; cv=none; b=kt7+2c+G0zZPH1bvXaRrNG7jXrr1l3Qu+dQ5rwoNe0rvT6CRFwt4FKMhQIh6XPXxtBbpG+ckLQV1eX9/whGOMldZHAzuO8V2vuuhLeNVoEP/TWVhFQCTiAwOPt6lyawa2zDEOJZP4PMuEesQVnzUXaHYrxVSFNJX99dMSupFngo=
+	t=1750261379; cv=none; b=C1fhVw37XfuE/ddltBlwDGGS77AV1m6aTRpCQeotbGs8aCLKR57Vg4YbMVzPdPjZKM22t882N36Zlj3aztxTPUxrtNIO7soYchI2RmEtAWBaidw+ETMcvgZMz0W7J7ATKmMGfeVMLce0YyCu36syOPCWTvr2hYTZhqxHAoyJdfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750259108; c=relaxed/simple;
-	bh=VtnJIaye9QWf6eeuqfTnhsu07/8qvnT9KCncjjEmYjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WuBsYl6HKX7WeLJVxufvP7W1oALU27ByJqEYyAWtNrkYhKJStaydEq3OwtrwNJ08RIdTAAhYq4yTLDLu1kFLKo+GtnB0kpsS4UlsEKWetEn0ZKRF59TFCNSTXSefnJaTv+qkp61i1cb740MYyaUnh241qWjxgicJqTByaJv3320=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=giiLXpEG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750261379; c=relaxed/simple;
+	bh=53DlZlEjAMjLFC6m7EwUfHPP/jGL50LGvoZPwQn5Jmg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=H+21ODh0+IDXw4Xe5F0b41ESeUWeYEl0UGhy/60MhthJlHpthUsHq0L4M7RScEWNZNiKRnX/5QsEmXm9d9ZoluTqcfk+XcbuUSo3HnoqdwGefjMA4gvN4bHGqaZGnAVJYY22Ju6SSK7wX9ybCfalx9RkBwVTXO2vKc0iAdfA6Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=PEnjB6we; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="giiLXpEG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CB0C4CEE7;
-	Wed, 18 Jun 2025 15:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750259107;
-	bh=VtnJIaye9QWf6eeuqfTnhsu07/8qvnT9KCncjjEmYjA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=giiLXpEGziW0Txa2s8skcjTpwLMgLTP22ItcbaGtflq+let6aaoXQ/KmS2kuoEMRQ
-	 Tc//v6IJ3cwK2zqh9yK8NWUSsJ6pfYguqhR31SBVDHepwBIFBPYao53JZ6JwXI2bl4
-	 64632URanrjYlyAvceyJikaBaOItbh4nCNUkxRdmtCr7T8bp2b7hprBNYU5F9linKx
-	 wxdJS3CjBCDzNKwo1GVxBfw6ClK1LeyvqgdNS9wMBr2abZMeE8Y+v0Ak+qk6T361QR
-	 FwGk3hE4GMzc7QbI392hO2kOogNrWjpqTRQpTpw1gzPyHwgfxg4el4AHPtwM64gX1W
-	 ioE1C1tTliGdQ==
-Date: Wed, 18 Jun 2025 17:05:00 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: "Alexandre Courbot" <gnurou@gmail.com>
-Cc: "Albert Esteve" <aesteve@redhat.com>, "Michael S. Tsirkin"
- <mst@redhat.com>, "Mauro Carvalho Chehab" <mchehab@kernel.org>, "Hans
- Verkuil" <hverkuil@xs4all.nl>, "Jason Wang" <jasowang@redhat.com>, "Xuan
- Zhuo" <xuanzhuo@linux.alibaba.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
- <eperezma@redhat.com>, <gurchetansingh@google.com>,
- <daniel.almeida@collabora.com>, <adelva@google.com>,
- <changyeon@google.com>, <nicolas.dufresne@collabora.com>,
- <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
- <virtualization@lists.linux.dev>
-Subject: Re: [PATCH v3] media: add virtio-media driver
-Message-ID: <20250618170500.1e60aacf@sal.lan>
-In-Reply-To: <DAPQ9L3FCLIF.24FIDLQST2S1O@gmail.com>
-References: <20250412-virtio-media-v3-1-97dc94c18398@gmail.com>
-	<20250526141316.7e907032@foz.lan>
-	<DA6Q0LZPGS2D.2QCV889PQL2A7@gmail.com>
-	<20250527111311.105246f2@sal.lan>
-	<CAAVeFu+=RpEfu3i_Fh9_eq_g=cmDFF0gcurT0gU9AX1UX+UNVA@mail.gmail.com>
-	<20250527153547.6603eaf4@sal.lan>
-	<CAAVeFuJtp=UEEULeMSVpmYDmH81Y6OQgj6NCeuPUhabSRHw4dA@mail.gmail.com>
-	<20250617104938.09d21b7c@foz.lan>
-	<20250617110318.7c89d999@foz.lan>
-	<20250617122034.3e570b4e@foz.lan>
-	<DAPQ9L3FCLIF.24FIDLQST2S1O@gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="PEnjB6we"
+Received: from [192.168.1.102] (93-61-96-190.ip145.fastwebnet.it [93.61.96.190])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id C9C33107;
+	Wed, 18 Jun 2025 17:42:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1750261361;
+	bh=53DlZlEjAMjLFC6m7EwUfHPP/jGL50LGvoZPwQn5Jmg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=PEnjB6weIuk2ewlOWkpzF1h20tN+4Gz7HEOGa4Sf1u9Wf/aNxf4jBUxcMicpzFESb
+	 ALmwAztczcilweqSSagSFZMyYmI9IRRNsYH2TZcqPkDoF+x/VZiBnJon1rW7lU5oJF
+	 +In621Zaq5pdlZUosxUFH3VaZYWxJ9AtaLGFSWKk=
+From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Date: Wed, 18 Jun 2025 17:42:47 +0200
+Subject: [PATCH] media: vsp1: Add missing export.h
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250618-vspx-include-export-v1-1-95a2da4ec465@ideasonboard.com>
+X-B4-Tracking: v=1; b=H4sIAHbeUmgC/x3MTQqAIBBA4avErBuwf+0q0aJsrIEw0QohunvS8
+ lu890AgzxSgzx7wdHPgwyYUeQZ6m+xKyEsylKJsRFtIvIOLyFbv10JI0R3+RFlXnZqUmk2jIJX
+ Ok+H4X4fxfT92ICOGZQAAAA==
+X-Change-ID: 20250618-vspx-include-export-84379a99bf59
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>, 
+ Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1958;
+ i=jacopo.mondi@ideasonboard.com; h=from:subject:message-id;
+ bh=53DlZlEjAMjLFC6m7EwUfHPP/jGL50LGvoZPwQn5Jmg=;
+ b=owEBbQKS/ZANAwAKAXI0Bo8WoVY8AcsmYgBoUt59rYSi0GmeoF/IP1xDfvABUUqhhVe00ZPZn
+ LG/7+NCg7GJAjMEAAEKAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaFLefQAKCRByNAaPFqFW
+ PJ3MEACdHDouY541qUZ5c1bFmlogf771gv1sdxLYuv6M/rHvh9x60Kz0M9tfxaWhSLs1qyxy+Mx
+ f0ogu7RI7hERHu0aXUEOyC4x7Oc615P2YIqeiTuRi4CC28LwuvZBqRz3ix+57NvH275yADF0sR8
+ iiStTDTEdXoTaFs38aB5DGhGi6/8ByJ1IRaWWk590juJoGpi5D9jsYDUB8BwnyipJ7jG3RkYy2D
+ 0rAKjqcDc6Zzm2LLUSGCDlSiqb7KRjRtqTcgGHaZWCnFHTiC3NEXhz+BL3k84KXlSKoYa0RvRUN
+ 2pXv8sZECQvZA99bVhgvNujV79I30d2sniUg1W8j4mIFHpzLI0AlOnNf2dM4ncO/IbSTW51lFGB
+ gnn2puaItaQGwXjvjsIK9gIx92q2Y00PrloWT+UheYkdPO15IBoWc0/+1mQpwlxq2E2s5+lO2Na
+ sVMY8IzuIPyGd53tc/NDc5nA/3IOCdsfUEMhwsQswXka4QgFKfskr17SacxRXes4tAlhJ0aGbii
+ +Sp8mBv/h9A+4jj25fyycTya1FICAowUg0L7xL9Uqew2mAVFu69sVQslMWKFjj0OgAdPq/3MZHL
+ d4KscB+TDZ18cmVUkz3mwm+owtZkDMSmce+7DBGIXiiEwnZVB3rqLVeYruRZf5BGoJObAOAA5rE
+ 2mvVtJxsMueHR+A==
+X-Developer-Key: i=jacopo.mondi@ideasonboard.com; a=openpgp;
+ fpr=72392EDC88144A65C701EA9BA5826A2587AD026B
 
-Em Wed, 18 Jun 2025 23:27:13 +0900
-"Alexandre Courbot" <gnurou@gmail.com> escreveu:
+As reported by the Kernel Test Robot, the newly merged vspx driver
+exports a few symbols but doesn't include the export.h header.
 
-> On Tue Jun 17, 2025 at 7:20 PM JST, Mauro Carvalho Chehab wrote:
-> > Em Tue, 17 Jun 2025 11:03:18 +0200
-> > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
-> >  
-> >> Em Tue, 17 Jun 2025 10:49:38 +0200
-> >> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
-> >>   
-> >> > Hi Alex,
-> >> > 
-> >> > Em Tue, 27 May 2025 23:03:39 +0900
-> >> > Alexandre Courbot <gnurou@gmail.com> escreveu:
-> >> >     
-> >> > > > > > Btw, I was looking at:
-> >> > > > > >
-> >> > > > > >         https://github.com/chromeos/virtio-media
-> >> > > > > >
-> >> > > > > > (I'm assuming that this is the QEMU counterpart, right?)        
-> >> > > > >
-> >> > > > > crosvm actually, but QEMU support is also being worked on.        
-> >> > > >
-> >> > > > Do you have already QEMU patches? The best is to have the Kernel driver
-> >> > > > submitted altogether with QEMU, as Kernel developers need it to do the
-> >> > > > tests. In my case, I never use crosvm, and I don't have any Chromebook
-> >> > > > anymore.        
-> >> > > 
-> >> > > IIRC Albert Esteve was working on this, maybe he can share the current status.      
-> >> > 
-> >> > Any news regards to it?
-> >> >     
-> >> > > Note that crosvm does not require a Chromebook, you can build and run
-> >> > > it pretty easily on a regular PC. I have put together a document to
-> >> > > help with that:
-> >> > > 
-> >> > > https://github.com/chromeos/virtio-media/blob/main/TRY_IT_OUT.md      
-> >> > 
-> >> > I started looking on it today. Already installed crossvm (I had to
-> >> > install libcap-devel to build it). Still, I'm not familiar with
-> >> > crossvm, which is a little be painful. In particular, how can I
-> >> > enable network on it and speedup it? With suggested parameters,
-> >> > it picked only one CPU, and very few memory on it:
-> >> > 
-> >> > 	# cat /proc/cpuinfo|grep processor
-> >> > 	processor       : 0
-> >> > 
-> >> > 	# free
-> >> >                total        used        free      shared  buff/cache   available
-> >> > 	Mem:          221876       34780      139712         272       56096      187096
-> >> > 	Swap:              0           0           0
-> >> > 
-> >> > I'd like to be able to compile things on it and use ssh/scp. So,
-> >> > the VM needs more CPUs, more memory, more network and GPU.  
-> >
-> > Found how to setup cpus and memory, but didn't find a way to setup
-> > network without running it as root. The gpu parameter has several
-> > options. Not sure what backend works well for media apps like qv4l2,
-> > camorama, X11, ...  
-> 
-> I'm afraid getting GPU and graphics in general to work is more involved
-> and tricky on a regular Linux setup (crosvm was primarily designed for
-> ChromeOS). If you really need it I can do some more research; most of my
-> tests have been done using v4l2-ctl or ffmpeg and saving the output on
-> disk for later inspection.
+While at it, include the header file in vsp1_drm.c which exports
+symbols as well.
 
-It was actually easier than what I expected, but it had to run
-as root. Due to that, I had to move it to a test machine that I
-use just for such kind of tests. I updated it to the Ubuntu 
-version 24.10, but crossvm refused to build even. I end needing
-to install rust via rustup, as only version 1.81.0 had what it is
-required to run with the needed features (network, media and gpu).
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202506181950.r9PRdV59-lkp@intel.com/
+Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+---
+Add missing export.h header as reported by kernel test robot <lkp@intel.com>
 
-> >> > Btw, on a quick test with v4l2-compliance, something looks weird:
-> >> > I started a camera application at the host. Still, v4l2-compliance
-> >> > said successfully excecuted mmap:
-> >> > 
-> >> > Streaming ioctls:
-> >> >         test read/write: OK (Not Supported)
-> >> >         test blocking wait: OK
-> >> >         test MMAP (no poll): OK                           
-> >> >         test MMAP (select): OK                            
-> >> >         Vide[2025-06-17T08:44:49.177972817+00:00 ERROR virtio_media::ioctl] VIDIOC_REQBUFS: memory type DmaBuf is currently unsupported
-> >> > [2025-06-17T08:44:49.178164554+00:00 ERROR virtio_media::ioctl] VIDIOC_REQBUFS: memory type DmaBuf is currently unsupported
-> >> > o Capturtest MMAP (epoll): OK                             
-> >> >         test USERPTR (no poll): OK (Not Supported)
-> >> >         test USERPTR (select): OK (Not Supported)
-> >> >         test DMABUF (no poll): OK (Not Supported)
-> >> >         test DMABUF (select): OK (Not Supported)
-> >> > 
-> >> > Which doesn't make any sense, as the host OS should not allow access
-> >> > to mmap while streaming.    
-> >> 
-> >> Ah, this was with the "simple" device, not with the proxy one.
-> >> With the proxy one, I'm getting:
-> >> 
-> >> # v4l2-ctl --all
-> >> Driver Info:
-> >>         Driver name      : virtio-media
-> >>         Card type        : usb video: usb video
-> >>         Bus info         : platform:virtio-media
-> >>         Driver version   : 6.15.0
-> >>         Capabilities     : 0x84200001
-> >>                 Video Capture
-> >>                 Streaming
-> >>                 Extended Pix Format
-> >>                 Device Capabilities
-> >>         Device Caps      : 0x04200001
-> >>                 Video Capture
-> >>                 Streaming
-> >>                 Extended Pix Format
-> >> Priority: 2
-> >> Video input : 0 (Camera 1: ok)
-> >> Format Video Capture:
-> >>         Width/Height      : 1280/720
-> >>         Pixel Format      : 'MJPG' (Motion-JPEG)
-> >>         Field             : None
-> >>         Bytes per Line    : 0
-> >>         Size Image        : 1843200
-> >>         Colorspace        : sRGB
-> >>         Transfer Function : Rec. 709
-> >>         YCbCr/HSV Encoding: ITU-R 601
-> >>         Quantization      : Default (maps to Full Range)
-> >>         Flags             : 
-> >> Crop Capability Video Capture:
-> >>         Bounds      : Left 0, Top 0, Width 1280, Height 720
-> >>         Default     : Left 0, Top 0, Width 1280, Height 720
-> >>         Pixel Aspect: 1/1
-> >> Selection Video Capture: crop_default, Left 0, Top 0, Width 1280, Height 720, Flags: 
-> >> Selection Video Capture: crop_bounds, Left 0, Top 0, Width 1280, Height 720, Flags: 
-> >> Streaming Parameters Video Capture:
-> >>         Capabilities     : timeperframe
-> >>         Frames per second: 30.000 (30/1)
-> >>         Read buffers     : 0
-> >> 
-> >> User Controls
-> >> 
-> >>                      brightness 0x00980900 (int)    : min=-128 max=127 step=1 default=-11 value=-11
-> >>                        contrast 0x00980901 (int)    : min=0 max=255 step=1 default=148 value=148
-> >>                      saturation 0x00980902 (int)    : min=0 max=255 step=1 default=180 value=180
-> >>                             hue 0x00980903 (int)    : min=-128 max=127 step=1 default=0 value=0
-> >> 
-> >> # v4l2-compliance -d0 -s
-> >> 
-> >> Streaming ioctls:
-> >>         test read/write: OK (Not Supported)
-> >>         test blocking wait: OK
-> >>                 fail: v4l2-test-buffers.cpp(1345): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (no poll): FAIL
-> >>                 fail: v4l2-test-buffers.cpp(1345): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (select): FAIL
-> >>                 fail: v4l2-test-buffers.cpp(1345): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (epoll): FAIL
-> >>         test USERPTR (no poll): OK (Not Supported)
-> >>         test USERPTR (select): OK (Not Supported)
-> >> [2025-06-17T08:55:20.768760714+00:00 ERROR virtio_media::ioctl] VIDIOC_REQBUFS: memory type DmaBuf is currently unsupported
-> >>         test DMABUF (no poll): OK (Not Supported)
-> >> [2025-06-17T08:55:20.769745707+00:00 ERROR virtio_media::ioctl] VIDIOC_REQBUFS: memory type DmaBuf is currently unsupported
-> >>         test DMABUF (select): OK (Not Supported)
-> >> 
-> >> At the host, I'm getting:
-> >> 
-> >> Streaming ioctls:
-> >>         test read/write: OK (Not Supported)
-> >>         test blocking wait: OK
-> >>                 fail: ../utils/v4l2-compliance/v4l2-test-buffers.cpp(1346): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (no poll): FAIL
-> >>                 fail: ../utils/v4l2-compliance/v4l2-test-buffers.cpp(1346): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (select): FAIL
-> >>                 fail: ../utils/v4l2-compliance/v4l2-test-buffers.cpp(1346): node->streamon(q.g_type()) != EINVAL
-> >>         test MMAP (epoll): FAIL
-> >>         test USERPTR (no poll): OK                        
-> >>         test USERPTR (select): OK                         
-> >>         test DMABUF: Cannot test, specify --expbuf-device  
-> 
-> These logs look ok to me: the MMAP tests are failing on the host, so
-> they are also expected to fail on the guest (still I expect regular
-> streaming to work on both). USERPTR is not supported on the guest, as
-> per your request to not support this memory type in new drivers. DMABUF
-> is not supported at all at the moment.
+Can this patch be fast-tracked to ensure it lands with the one that
+introduces the vspx driver ?
+---
+ drivers/media/platform/renesas/vsp1/vsp1_drm.c  | 1 +
+ drivers/media/platform/renesas/vsp1/vsp1_vspx.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-In the specific case of a virtio driver, while it is OK for the first
-versions to support MMAP only, USERPTR support could make sense, as 
-this is not a real driver for a certain hardware, but instead it is
-replicating at the guest whatever the host driver has, which may or
-may not have MMAP.
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_drm.c b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+index fe55e8747b05aa351c1547469f9cbbe2b6d25408..15d266439564e2317dbc380ef04d2b15ae899852 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_drm.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_drm.c
+@@ -9,6 +9,7 @@
+ 
+ #include <linux/device.h>
+ #include <linux/dma-mapping.h>
++#include <linux/export.h>
+ #include <linux/slab.h>
+ 
+ #include <media/media-entity.h>
+diff --git a/drivers/media/platform/renesas/vsp1/vsp1_vspx.c b/drivers/media/platform/renesas/vsp1/vsp1_vspx.c
+index 6551d63ba387a05c932d2e557bd0ae5f8810acc7..a754b92232bd57f1b4cd3f9e7903f0b5da5c5c57 100644
+--- a/drivers/media/platform/renesas/vsp1/vsp1_vspx.c
++++ b/drivers/media/platform/renesas/vsp1/vsp1_vspx.c
+@@ -13,6 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/dma-mapping.h>
++#include <linux/export.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
 
-That's said, I don't recall any driver with USERPTR and without MMAP
-those days. I did a quick check: VB2 devices always seem to have MMAP.
+---
+base-commit: 642b70d526ab8daa8f256dfc1eb6bf27c3290cc6
+change-id: 20250618-vspx-include-export-84379a99bf59
 
--
+Best regards,
+-- 
+Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 
-There is one case where only read ioctl is supported: pvrusb2, which
-is probably not interesting enough those days, but IMHO, for the few
-cases where a device can't be used at the guest due to the lack of a 
-compatible streaming API, virtio-media should not expose it to the
-guest and/or issue an error or warning.
-
-> If the host cannot pass compliance, the guest will inevitably suffer
-> from the same shortcomings. :) But at least on the devices I tested I
-> was still able to stream something onto the disk and the result was
-> correct.
-
-Makes sense.
-
-I'll do some tests later and check how it works with
-a GUI app and some real devices.
-
-Regards,
-Mauro
