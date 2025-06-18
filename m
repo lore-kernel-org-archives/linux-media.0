@@ -1,63 +1,63 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA94F285076;
-	Wed, 18 Jun 2025 09:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B11286428;
+	Wed, 18 Jun 2025 09:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750240776; cv=none; b=Dq3DZAI+lCreR9ayTgFojtJge5VsPbbggvtD8/8/Afe9hlLrT9mnhgf1975Cf98P39MeTapUbbj7dGlG10iWzRBGwQmHbPj4H5zhq0MJwwldhuz9/7SZX3/HLuoSWELUoA7amobAqFUmkr6CgDDRZwQvLecSLtvEp1qhT7IMElI=
+	t=1750240779; cv=none; b=c2FlNQ7GV9Brcwd5rPZ7FiUpPd6bQQvIQaUH3srhodZmy1mTvcFl1PhUOCMA1Ri5WDXaNafMN7Z5t0N3qXXHYbUMS/hm230tkZYoPAtBvjP9/gKmGLWJi9KENYaY0pWlg3nf3qLbEMns6dr8Vf6iANmFo/CWw5aEoWAfAv9VZ1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750240776; c=relaxed/simple;
-	bh=OOn+Wgmm12j8z65b2aVXjeWeYVRaBZ4GDMPMP9p092Y=;
+	s=arc-20240116; t=1750240779; c=relaxed/simple;
+	bh=MgUWD9YQsxn5/C/R+JCffVZSwSVCSnac14bnAmk2/hs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kC7EsItj8nVcFp4+97BunlEYR6vPzK80L8slZDIcOfWQ5kOoFGKdz8/5PO6F2SyiHMveR4ZvWBl95qlkWWydoJvXkgVO3iiWSfTYGXQaFMj2rSfRSgSq/UnrzSH1E5Aekh79iAce6NkD2BF1hnhXxynBY2MyerlwCzuygUi51Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XgpmoAbF; arc=none smtp.client-ip=209.85.218.42
+	 MIME-Version; b=qHThG3Z/kM09MHHx7LR12nqHXbEbI+n+b7LzI1S1gjH4yLjOoxTwwfCevNehK+6/UjsW+xuoZ0PDSqxPNH3ytwGrSUy9jzZNDovl32S8kuy2j+473AhVpwLzjC7JYKq4dj+yZ0ykHvJ46CDcRUT7HuZpne2/Tl4Wl314+aolIlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XfMFhhbw; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XgpmoAbF"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-acbb85ce788so1154648366b.3;
-        Wed, 18 Jun 2025 02:59:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XfMFhhbw"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-60789b450ceso13052466a12.2;
+        Wed, 18 Jun 2025 02:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750240773; x=1750845573; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750240776; x=1750845576; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZM7v4p+xV5gPJJpmqTWsdUNvs9q2qx35L0HvHBeAlV4=;
-        b=XgpmoAbFLKIwlgLM5XfPZoig6G+9C00AivNEEHvmQEaAHvpfSWXUHP4DjyJtkaV89j
-         vdde6QcrWocwNnQ5w8Y8Y8MVjQ+RcBh3sAtlQQr6erEV5A++b75BhfH/7qsbVgQPfzt7
-         DogbgX/nsXWhVVBsOvXucDSQ7WguGEXA0ukKke7c8huC0mBU5b0ll2VGKlRGMB5PwJcV
-         uSZNfQmTGVaNvjccS49nz9jT+IwN4fzcnKa7RUAoU2CtD2dJ07J0fnHH82lsqgQyPhw2
-         F841e5tTpH0174xDDniWVEEV0mPTbBtaaGnnq3oRwSe6GR3WkVTxPte00iz+81WryCbC
-         OVkA==
+        bh=twt3VukJmsfIxQG6dHkPe+c3TLZqJ4r3UnWmT1EUVdc=;
+        b=XfMFhhbwGteF/iCtZGX+rKG5DrACClsJz998eK/ZQhgBoIWHAkrFoUWrkpumhBZ2os
+         Sp7FLiFwE5YlArWNswYxDRZbZ6KEPAEI7tCoGRenA4WsdOyeVViFo3rcGV4YbufbSCey
+         ZUdLDpZBHFXlWFLwkAU3m3fPLgCmZCkYj2QXHukrJbeYvSApWSyTtSY1DX0MrehpWSHA
+         c9AKHtcTQ0uClWzvqMPXi9f+MWGVvHj67IyxdOG6fdNPVkavrOSPkFq9NiiC+XcnO/L/
+         aQNSBefrJvbdOHETkfX5tH0huV/SPt+V6Yg6zUTVp+3S2UuKbuprKieJXz9bspbBF6nq
+         VbkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750240773; x=1750845573;
+        d=1e100.net; s=20230601; t=1750240776; x=1750845576;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZM7v4p+xV5gPJJpmqTWsdUNvs9q2qx35L0HvHBeAlV4=;
-        b=rDWgDgXvioZ8WM8QYGZrFILjdpVOlzyciZwMxwF0CGRZiLQwhVDSdjqRH+6E5IKZns
-         7jMnyYGt/YiFbwg2skabWb2+pjvmtB1ZbnTgjpYSq5ni/PSmR3JvauEB5Yl5dDVihny7
-         Gh6DoRSV4a4z5LlWXFbYr9n4glaAJIiIKOtDtYhmm3OioLRHsUfjkQ+XX08mUB+65Rw0
-         PVAPbYRkIQiPtOMEmYupQNWbgilT2ucmmeenj31pygmm0Y1SRnDSQ5jmpkP7O8XSFBAB
-         qsiIzJcy1lERIcqeFJQdSFF79JqyJRgmEuQE+ZllnegDgIYp6pOw3kk2PilTQUXBNapj
-         r1jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUErROJZFpN5rbmWVyW8X/OwCWvxHveq0aRaVXxCspIkJ3sz3dsgGbNHIqOEElSnx8LznqA+L2rwIty@vger.kernel.org, AJvYcCXjBk/J7WuoC9mqQwd6Dt+xf6EknXFjtLICK/U9yXBlcPgjZzNgX9XTIZ7OyTpula724J+ukvO1XSOzsQ==@vger.kernel.org, AJvYcCXlt7Ha5k/MhIUWFPQQ/UYgCa3s0ubgLlqZy4Puqjoznx59DxmInXwbRNWwxsaZ4QPtC1f8x0U+M9ezsUyw@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa5aHXb7tnI2QwYbZIArjUOc4mxKyrw/8PmHholyCHGQBtxl9S
-	FrQgN/fPPKbXkuQr3hf9vvyZwywc2TxckzURx4mJC7SV5398AlnPHhpv
-X-Gm-Gg: ASbGnculQYu/GmPJ63xpV2JWIu6D8+/1G/FtD8duTDoNhDn0Sy9cAe+XU5zxLE4bkOf
-	pOcSQnXWyLHqLyOqyQrIrczfux4exjRLVeZk4Lz6dDy/xsp9QhfrCbscGT4Z0dCLnOueA2W86AY
-	y+0dnZ78xgZjrGq1wjZ8OmbyCZFeHuHpv8YnE7QDqHeau+SbIcw7cteHsLqamjgg8L1xI5/O2T8
-	GqeB55LEXo2tzzmFffn4cjVJm8I63g9HGSJrAKL1NPquinjGx+3LyM+8vnsfUWbYeGDHc+a6CcG
-	ndQCOmyDJXx3Iy53LoeE/T9RxytocCT1OQffhxaIGW/+FysMi5noIn85wGoc4iru3iSU315/D4A
+        bh=twt3VukJmsfIxQG6dHkPe+c3TLZqJ4r3UnWmT1EUVdc=;
+        b=snp1olQTpEOk6Oe/9hLlECFZcae1X/vnbyISqVxGdrbQJLvPmJqEmXwaJIn51lJc9R
+         DHY/8BDV4qUT0/gSihMfYPx+SSb+PXSzz9wY8LwN7zhx5dy/qzW3j19IyllftyVGZKId
+         KA6YBoG7LCuMAr5IRCppPnxyDGLTdVTnwp0sflIlF/OJ4zCamXAeD8wJrUl9HQZpJ10o
+         BV6bTqqlqWClHL4In44+/LWBtXpJKgSC9x2bHgSoIdJF3vMS6V1IG+GXIa3OYBDH0zl2
+         7PB8RDUGxfymhx1rstqoo7gXQUuY+75Qg9xPu06FwugQFLLrovdRInniPBC1+yQwc0L7
+         WktA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDDBu4m6wzZDvwmd+w9Hl93xZ+Rlk4eygKShZKiaJeKjyM8MIXttUR6GMnElt4IB6Z91KMPbnvNgjmjw==@vger.kernel.org, AJvYcCVUYiLz2WMnTKdKHFFaGxr9CAMEkx2VxubMLbgMX+zcxy+7ME9khpN0K8t4OQu5aHQsppF7bU9z+K9E@vger.kernel.org, AJvYcCX8VPfg5hHpGaU2Dh3ydx8T60SoLNS81118BUVJ5BEyMvMslgUxQT2syNhcvrWDhtVlYcbUzxvYjz1O0EHP@vger.kernel.org
+X-Gm-Message-State: AOJu0YytyvJC4sphHUr7QHOul5X7O52R5FJ0E7/aBYgqVHDXO2UfonXM
+	kkijVjTM+v2jq5mAcTF2mgcsd0pK+L817yW/4cWTVkX3I4e2GhnQoy7Q
+X-Gm-Gg: ASbGncvVIHQd+flnckeT80qKpqZbOwj6+EcjLa1mkWZYjnAVPTcevGKjVuem7tpf5OT
+	5jeu82rWKE9i2i2woBoGRQfkJfMFMXsRghZLG3Ztv/qLFcWKQD8ejQ608RM7dqJf0oMUEFJbvrn
+	mjjmgzB4dzgGfDsxY3gkVZDy7ZPH1COAVzrOUWJkYgYIDjcwnry5YhmQfKrQTgeP+RB6QTXijY6
+	xhNzuEI3lJeh864NcrgOgtoguuePXKn4xJkkOa6W/qVWQ9WoEGLVSHgIZjnoOLQNj8Cy2l1Rbg6
+	bl/LMuYGgCq8NUVoO47MS7AHFaqCGzR+OO+AAQDbhRzlzLPZTSBIyTSjysdrGjDwcJGhuxtHsYQ
 	=
-X-Google-Smtp-Source: AGHT+IF1vGugdRmxmc+EGSuEOAkqel6fu0udIatnhRPXHDXTkY8odVb+a9IZeK6Zi6Cg/i8OjJgchg==
-X-Received: by 2002:a17:906:ee87:b0:ade:9fb:b07d with SMTP id a640c23a62f3a-adfad367b40mr1540072866b.4.1750240772740;
-        Wed, 18 Jun 2025 02:59:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFklX81xslJPt+iowLT+1k9njV2LQ7x0hO+cU7atbAXLMnFNCP53dDd5nC929uAPOjrypa8Yg==
+X-Received: by 2002:a05:6402:2803:b0:608:1670:efe6 with SMTP id 4fb4d7f45d1cf-608d09c137emr16021790a12.22.1750240776014;
+        Wed, 18 Jun 2025 02:59:36 -0700 (PDT)
 Received: from demon-pc.localdomain ([188.27.131.45])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b4a93b03sm9384691a12.54.2025.06.18.02.59.31
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b4a93b03sm9384691a12.54.2025.06.18.02.59.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 02:59:32 -0700 (PDT)
+        Wed, 18 Jun 2025 02:59:35 -0700 (PDT)
 From: Cosmin Tanislav <demonsingur@gmail.com>
 To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -76,9 +76,9 @@ Cc: linux-media@vger.kernel.org (open list:MAXIM GMSL2 SERIALIZERS AND DESERIALI
 	linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM:Keyword:(devm_)?gpio_(request|free|direction|get|set)),
 	Cosmin Tanislav <cosmin.tanislav@analog.com>,
 	Cosmin Tanislav <demonsingur@gmail.com>
-Subject: [PATCH v4 02/19] dt-bindings: media: i2c: max96717: add myself as maintainer
-Date: Wed, 18 Jun 2025 12:58:38 +0300
-Message-ID: <20250618095858.2145209-3-demonsingur@gmail.com>
+Subject: [PATCH v4 04/19] dt-bindings: media: i2c: max96717: add support for pinctrl/pinconf
+Date: Wed, 18 Jun 2025 12:58:40 +0300
+Message-ID: <20250618095858.2145209-5-demonsingur@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250618095858.2145209-1-demonsingur@gmail.com>
 References: <20250618095858.2145209-1-demonsingur@gmail.com>
@@ -90,41 +90,136 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Analog Devices is taking responsability for the maintenance of the Maxim
-GMSL2/3 devices.
-Add myself to the maintainers list and to the device tree bindings.
+MAX96717 is capable of configuring various pin properties.
+
+Add pinctrl/pinconf properties to support this usecase.
 
 Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml | 1 +
- MAINTAINERS                                                     | 1 +
- 2 files changed, 2 insertions(+)
+ .../bindings/media/i2c/maxim,max96717.yaml    | 110 ++++++++++++++++++
+ 1 file changed, 110 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
-index d1e8ba6e368e..15ab37702a92 100644
+index 167c3dd50683..5998e2518be9 100644
 --- a/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
 +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
-@@ -9,6 +9,7 @@ title: MAX96717 CSI-2 to GMSL2 Serializer
+@@ -121,6 +121,116 @@ required:
+   - reg
+   - ports
  
- maintainers:
-   - Julien Massot <julien.massot@collabora.com>
-+  - Cosmin Tanislav <cosmin.tanislav@analog.com>
++patternProperties:
++  '-pins$':
++    type: object
++    additionalProperties: false
++
++    properties:
++      function:
++        enum: [gpio, rclkout]
++
++      pins: true
++      drive-open-drain: true
++      drive-push-pull: true
++      bias-disable: true
++      output-disable: true
++      output-enable: true
++      output-low: true
++      output-high: true
++      input-enable: true
++
++      slew-rate:
++        description: |
++          Slew rate.
++          0 - Fastest
++          1 - Fast
++          2 - Slow
++          3 - Slowest
++        maximum: 3
++
++      bias-pull-up:
++        oneOf:
++          - type: boolean
++            description: Enable regular 40kOhm pull-up
++          - enum: [ 40000, 1000000 ]
++            description: Enable either the 40kOhm or the 1MOhm pull-up
++
++      bias-pull-down:
++        oneOf:
++          - type: boolean
++            description: Enable regular 40kOhm pull-down
++          - enum: [ 40000, 1000000 ]
++            description: Enable either the 40kOhm or the 1MOhm pull-down
++
++      maxim,jitter-compensation:
++        type: boolean
++        description: Enables jitter compensation.
++
++      maxim,gmsl-tx:
++        type: boolean
++        description: Enable transmitting pin value to GMSL link.
++
++      maxim,gmsl-rx:
++        type: boolean
++        description: Enable receiving pin value from GMSL link.
++
++      maxim,gmsl-tx-id:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Identifier used while transmitting value to GMSL link.
++          Default value matches the pin number.
++        minimum: 0
++        maximum: 31
++
++      maxim,gmsl-rx-id:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Identifier used while receiving value from GMSL link.
++          Default value matches the pin number.
++        minimum: 0
++        maximum: 31
++
++      maxim,rclkout-clock:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: |
++          Clock value.
++          0 - XTAL / 1 = 25MHz
++          1 - XTAL / 2 = 12.5MHz
++          2 - XTAL / 4 = 6.25MHz
++          3 - Reference PLL output
++        minimum: 0
++        maximum: 3
++
++    required:
++      - pins
++      - function
++
++    allOf:
++      - $ref: /schemas/pinctrl/pincfg-node.yaml#
++      - $ref: /schemas/pinctrl/pinmux-node.yaml#
++
++      - if:
++          properties:
++            function:
++              const: gpio
++        then:
++          properties:
++            pins:
++              items:
++                enum: [mfp0, mfp1, mfp2, mfp3, mfp4, mfp5, mfp6, mfp7,
++                       mfp8, mfp9, mfp10]
++
++      - if:
++          properties:
++            function:
++              const: rclkout
++        then:
++          properties:
++            pins:
++              items:
++                enum: [mfp0, mfp1, mfp2, mfp3, mfp4, mfp7, mfp8]
++
+ additionalProperties: false
  
- description:
-   The MAX96717 serializer converts MIPI CSI-2 D-PHY formatted input
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8f3dc93a569..01363fbcb9b3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14742,6 +14742,7 @@ F:	drivers/media/i2c/max96714.c
- 
- MAX96717 GMSL2 SERIALIZER DRIVER
- M:	Julien Massot <julien.massot@collabora.com>
-+M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/media/i2c/maxim,max96717.yaml
+ allOf:
 -- 
 2.49.0
 
