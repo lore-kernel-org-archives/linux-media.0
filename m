@@ -1,75 +1,83 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808C728153D;
-	Wed, 18 Jun 2025 09:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750238457; cv=fail; b=AW9VjcqE1GJSaKByRKoLdtu9Qb3G6p0ZcKk6rf7ZaI88raWS+5yT7+O53CoAe+jjAf7SrbzOIiEkuc+7ptqpU4BoGyBiWTZR7PA7ZM3aIef7tEYGo408rSic4K/OXWNlEbHQjCZZpLoh1mHbcQGM9T3Vh8zIxG5XrcUQiUAOqEQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750238457; c=relaxed/simple;
-	bh=JZ0uHEpQA6pQa1wDht5Z9EumzBILq1Q3WhDfJT+n0OI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LdaTOOhnTvPctrfBTdZqVym3UrZo+ucKJSiM5Ggih2ydUJAnrGOdJUapBbaMihiE5jocOvWU7x6MHwM/KDy2+44/q1dMlQlNErUN3pnYmBEyj3mzxvHXjml6fooxokakfD9kzAoPTteHRJFnYwWdN1DmeNQIFPpkMvqmWlR5l0M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RvkvteR0; arc=fail smtp.client-ip=40.107.92.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0DF27EFFA;
+	Wed, 18 Jun 2025 09:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750240773; cv=none; b=bTijEZaUaPzN6yKrQYTPG41bMgsotdEL1/BqU9wuOmnRtiq/Z5sGncJAON1F595sYGjh9maMgVliPF/aGN18BAvIU3dwjOLTyIf4I2iDMASV5RA55WYc7yF/dF1xricg8lPuqXQ8kZDtkwV8ivLap5HIwg5ixcqJZdv77YuTm54=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750240773; c=relaxed/simple;
+	bh=520KiWvXrcQtkIK6AxinUL09qyPjmr3U+uJVGVU6oRM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NifrgMgNAtHDz/L40IPsDaKeNhlyJnpBdeJ79osUNQYI6+nFkS2FkbFTcKeYLUKPSkxix5wIZU8KFKaep3n31DYzFsWkuXQk+jLOyMR+lDeDDFUiBtkRXHOQ92gCI2qH1aAkLZvYxlmHM/W2F6WV2O3ZlwSY+Sv6R7gUfAoNCOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GbNgSpEK; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RvkvteR0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LwSd/Vj5bBRyczgGOdMVgZNkopbVfpVPzBQm7Zl4Ts3rvCKQj+qK8XYrn+jeoZgvTJLv2HXHQHfJLNi29T1H3WFr/aPaz4+n0MBe1ws1go8EdCetNMGwILjgTcj6Reb+sCf4XSZAYCsAGYkQfrVz6QcAyVHDJqNuoX8jKOwxWqPoLunJfbO98bnETysYxv9qG8KJhHQHxpGKf266Qp6kHaWHtU2N1g4EI0KBQ4moed+RTwPxwGVQUz1En5KmTe+Bu3tOtJkphoIWQ0Ril94VzdayK/xy4tK/leZgUmHrxbN5th95ctp7nOEkJuI+D1ZT7Gd/BtFi65jyiqzrL4O6Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ko0eO4xxAme9XqDcbUIcPRN+mjUK94RzojBge+h+Cco=;
- b=Uai3sLR7Ctjq301xLSbwE5/lZPk2tfVKjSXpNDMZ63AaKjP4NSoMJmpKhS+vL3gvF+6fLZE+hnL+oPxvNxILchr3+HtZdRALKDUkntaCygSTEl7pOwmPEKA4ymkZFDeMsEvWCS+co0nDsqRLlH4CLPyjEDpg4mdkzthYO/azYrYmHMuILkUjzVzOwCR+FIJ2SpaScOscSKLK/XTjhySIpWKP2yhXHcmGlK7Fx6XIzRWYDrt6lNTGBiPIY8S7+Ca6VdQCkyk2nfXHsuBNJcBQCEa05k7KK8VY1dcAasgUwBYLALb5nXTdzxYZ2gjUpAFKHWwGpLonEW5ppDC0yaE+wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ko0eO4xxAme9XqDcbUIcPRN+mjUK94RzojBge+h+Cco=;
- b=RvkvteR0CKai2659pwwtEGsbwXqg5/KvB7FTf9/qbq+Pgx+9SkW7jbkZgomydnVUQSZN+eeJkaEyRVDxgaEjt3nNqKt/bN7L5e/teYtT2sTzyqm11sHFndM6Q8P+4CRBZUB1M4oA68aiS9Sj1Qa3Nzh5bqDuE+C1soSwQis2W0Y=
-Received: from BL1PR13CA0250.namprd13.prod.outlook.com (2603:10b6:208:2ba::15)
- by SJ2PR12MB7941.namprd12.prod.outlook.com (2603:10b6:a03:4d3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.28; Wed, 18 Jun
- 2025 09:20:47 +0000
-Received: from BN3PEPF0000B374.namprd21.prod.outlook.com
- (2603:10b6:208:2ba:cafe::2c) by BL1PR13CA0250.outlook.office365.com
- (2603:10b6:208:2ba::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.6 via Frontend Transport; Wed,
- 18 Jun 2025 09:20:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B374.mail.protection.outlook.com (10.167.243.171) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8880.0 via Frontend Transport; Wed, 18 Jun 2025 09:20:47 +0000
-Received: from 555e2b870847.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 18 Jun
- 2025 04:20:42 -0500
-From: Bin Du <Bin.Du@amd.com>
-To: <mchehab@kernel.org>, <hverkuil@xs4all.nl>,
-	<laurent.pinchart+renesas@ideasonboard.com>, <bryan.odonoghue@linaro.org>,
-	<sakari.ailus@linux.intel.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	<linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <pratap.nirujogi@amd.com>, <benjamin.chan@amd.com>, <king.li@amd.com>,
-	<gjorgji.rosikopulos@amd.com>, <Phil.Jawich@amd.com>,
-	<Dominic.Antony@amd.com>, <Svetoslav.Stoilov@amd.com>, <bin.du@amd.com>, "Bin
- Du" <Bin.Du@amd.com>
-Subject: [PATCH v2 7/8] media: platform: amd: isp4 debug fs logging and  more descriptive errors
-Date: Wed, 18 Jun 2025 17:19:58 +0800
-Message-ID: <20250618091959.68293-8-Bin.Du@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250618091959.68293-1-Bin.Du@amd.com>
-References: <20250618091959.68293-1-Bin.Du@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GbNgSpEK"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6088d856c6eso11906761a12.0;
+        Wed, 18 Jun 2025 02:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750240769; x=1750845569; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nb8kcE8Vj7pHO8AvIl8n8fa9esDGC6u2N5gjLDQTFag=;
+        b=GbNgSpEKwplQHncZrftdhmCoAPb6aiF5Nvd4t2aDpleY/HaWlVpP3bDZokLC3JtN4p
+         7r7t4OWrdF0BAYBSx9J3odRggfZX8Xb09prcBQ9x3D6zc4cBPbjfxBYEYUb+9U5x59WV
+         gzDcxOatICktzpPnfP+O98j9YNZf0/81uMk4HPgdpW65C8mk74cqDDLjNMNoCiMkN5xf
+         7dbeIoIvZw0hO+XS81igL1LtRvrW8usURJI7yeSQJWKw68KJtZAg2CXwiPdGfWCe0ltR
+         9AErjZS5IdMUWsq58YQSuOy8cOADAWa7m3xmI+Jq2QtJ05fWs1frQ7NdnfnYMAJlAIKM
+         KPnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750240769; x=1750845569;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nb8kcE8Vj7pHO8AvIl8n8fa9esDGC6u2N5gjLDQTFag=;
+        b=hTD9HyJTPIToRpKe/BPg9lwdIN6cAFatHKwiUZn5hxbO7fgf19mRWFgPMt7sG5iJHv
+         g4Rqrsh0jxy9xozNx4bL5o5NjCC3KzfcRrKKGmUE0ha5vulfb1+c25vjjkWd2M++esGA
+         hJpoNyKHhT6myLmUfF3X0Ubuhb29hPRaH59dx9Peouwdla3KOx9nhZgM+BL1bo6PVrnj
+         xah+I6rtMT7co1l7lFs9XsiXUu660rrb02z9vXrR+EMOARS5i6LuiiPIoVnENUmfl81A
+         zMoiFasXR6c/1P+5IvqcRE4smBBLxaC2o2/tn2dJAHhaxrtF8ik1lQNQ2yyfl05YNyzU
+         8zsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtQC1ISF/XJWa6I3MMcpFvG7TroMwB2AQDbZEV975jQ4k5HJLwS/Vj1JFy72iFLex625ucagiv1RK9@vger.kernel.org, AJvYcCWvoJxqCP4/YcKi+NMGyhEFgNqZSdu52w/nv5VhOG9g1U1mpLjzXY4qYVZBGJlC+Hbs6Wvo4oCFCTaMTGxe@vger.kernel.org, AJvYcCXfb71ZlB62S0fiYlIYfVQBkIJ195vniZBdHt1qKsVU72HTmJRZmU0IGNZquLjt34ED+rA99V8aiKf9Lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyGifFXK61pzWYIbdwCMizN3BcVBmORgdyppDWvhidwB2aM//A
+	UDiSoG0GL5ihe3ry60LCJ/3FNWpdHQ9Is3gIINDcWMrAp2ElYEWp56YR
+X-Gm-Gg: ASbGncv05OXBGK6HRRqZCFKrqFU6s/TNnZ8wNplh+gDuAGfqUu6+vw6KP5Y/MBK6ON5
+	GmRxEQ37qXYlQOiF+y/eBWhsiObxYpGBXEiDFk512sPoG2VYS5fD16y5Z7b7SraQLuvuxoZHjQz
+	Euw57WTpmDX4lTPdOV/Cp1aGO347Q1FN0MYzc0+dAZ80QnbuBkEnLpOHNNpf3d1++OnKmTfU2T4
+	zaHm/R+HPMSPTV4VfuM2hrLd2zZXh6CWcrBFTPqkq/b2J8x3IeZuNP7+yhwfvSHuqcSqnJfmFd/
+	iqK1aPribqJ1JzUtJ/97cD7jKw8rJje0BA0oPvXuvSIllImI1GPYDQ5wFsB12eHaGYYTtDSeKE8
+	=
+X-Google-Smtp-Source: AGHT+IHI0+XDA8Gi5KOVg0qd6P6d4IGRmPoZztS7Ni3ftJtU4X+e7N5hqKY38i8kTJsON2ZOblp4Bg==
+X-Received: by 2002:a50:d507:0:b0:608:f973:1bd8 with SMTP id 4fb4d7f45d1cf-608f9731fc3mr9377973a12.34.1750240769014;
+        Wed, 18 Jun 2025 02:59:29 -0700 (PDT)
+Received: from demon-pc.localdomain ([188.27.131.45])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608b4a93b03sm9384691a12.54.2025.06.18.02.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 02:59:28 -0700 (PDT)
+From: Cosmin Tanislav <demonsingur@gmail.com>
+To: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+	Julien Massot <julien.massot@collabora.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-media@vger.kernel.org (open list:MAXIM GMSL2 SERIALIZERS AND DESERIALIZERS),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
+	linux-staging@lists.linux.dev (open list:STAGING SUBSYSTEM),
+	linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM:Keyword:(devm_)?gpio_(request|free|direction|get|set)),
+	Cosmin Tanislav <cosmin.tanislav@analog.com>,
+	Cosmin Tanislav <demonsingur@gmail.com>
+Subject: [PATCH v4 00/19] media: i2c: add Maxim GMSL2/3 serializer and deserializer drivers
+Date: Wed, 18 Jun 2025 12:58:36 +0300
+Message-ID: <20250618095858.2145209-1-demonsingur@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -77,660 +85,320 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B374:EE_|SJ2PR12MB7941:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73d5785e-e494-469b-6044-08ddae4968ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?bls4WR+RAyBnGBBTcJsME5x6po22FGxK/3LWUif/GuYALMx7mWgygI7lani+?=
- =?us-ascii?Q?8CpKeivh/tPJvmu/3E/Gl34HjovV3/o2451fCnorEW6WUFF+BqjRutYmt94/?=
- =?us-ascii?Q?EfpCTswWdCxAu1B/FZbzEcplQ901K3o3LF64CrJxrL/uyNi+asOchey4//a2?=
- =?us-ascii?Q?AZ/POf1fTTfdnw7oBjU5941qx6xfUw/jUZJtFr1QcqWsOH7j35aYf//Ha32a?=
- =?us-ascii?Q?B2pEsqFiI5Yrg5eP3MYM2Dh3MPu17GmHRi1nM/oTHH510jvG4lt5FZhEfULu?=
- =?us-ascii?Q?z4Nj3XmfDWRuyEc+T3TNlN4Yzdtw/ifprt4oK/t63piYuC7KrytxGRKxdqBW?=
- =?us-ascii?Q?IJ2T7QZqmX3ffgsi4iGWpdJQFsilh0j90wKlcJX29eBDD+gos+goRN9Xfvpm?=
- =?us-ascii?Q?XgiwEAdSXZ8i872lwnweKDm5OuTiTg6pHj4FNdpp6Dw50guuUGcuO3ZbCU8g?=
- =?us-ascii?Q?JwWYRmZyNWr/jFzpdIDuRUPBxAHLCRzaJdLeZgJzkqg0dpiHGyRAoxJZlBa9?=
- =?us-ascii?Q?rd5Z9zdkR3c62UFcTucX5HrFdcYa8v4guBYHONs5O/R1y1tBh909qls5cHHC?=
- =?us-ascii?Q?3bzAd07UulnV29Q9dn0Ukzlo9MW0gK3DnFHlZOfwiRM/OjXAFPZsffPB3hqS?=
- =?us-ascii?Q?QK38LNTVMEiZqDILIoRDSVByAT6f6gdwIlAlIXzA1ZxAZdf45SQYcxM5fUzx?=
- =?us-ascii?Q?owlZbOppW8fTVeItpIUXg5C6dt3046vI6uz0a7oxIch/QRgJifd/pEFlzCDH?=
- =?us-ascii?Q?iJbtq2bO8nll/ny7PGmhLjr2Hy2POKP0vDjzkuM10cXFdicfiV/EUz4i7NJa?=
- =?us-ascii?Q?M5J1paDAYyUGZQb9vqcsaCNxXUQ4B+W2a6YkCIeDfVX/K8V3ZukGe2yecBEw?=
- =?us-ascii?Q?D5LrTRZMaldcf9wGrD9hrIZTystdmjH4Vwos/0rlVJDQFNI9DpM1c2YxDKOU?=
- =?us-ascii?Q?/NNmI0UtlB7/vCvwwZX/Z2WBK4ZMedIseplMwjWpGsA3eTM/8d3dukm4A0xV?=
- =?us-ascii?Q?zhcswvYF+hbReX5J7tlufEVHY88nhepR0QperKIqaIHQnkl4SikmxMqcodzU?=
- =?us-ascii?Q?l0PmiG2ARL/UVPnzWwWEE9PH9454bZTsiis72UuGCjkCxerQ08YxaBeJX+fM?=
- =?us-ascii?Q?p/RSSobCFI/rxxym+11NX6naH1H3Cy/cH3N0UcHTlajSqu5aZgwsa13vxmgJ?=
- =?us-ascii?Q?O1DjFs5/o1ox442754fv/g3bw2JTI6ntem/6RUvDxLNgootQwhxVdfiTS0qB?=
- =?us-ascii?Q?rt9fuhBwiMZIVcCAzq7wH8nisO5aYuyXWlDVRVwxowLhgKvwU7vH7HMY7/UQ?=
- =?us-ascii?Q?IAnCE/dBIQarEzg6BE1ewk+BY9/Qqbs5UQrMO5CiLlnz2BQIK7/4kEQW5b6k?=
- =?us-ascii?Q?jF3xYlR8H46BazEDCH51WwKMTn+dXpHWy7BS7YOWRefrWEsk+Fn/xaCQBuki?=
- =?us-ascii?Q?q772kZM4gvpEtU5w7srZADWUVPoXRf8V9AeFHUkmHkE3HjtBVKE+LgSgWsQ4?=
- =?us-ascii?Q?bFyG37ZXWq1zavxjpCag5+0qfuhT0zk2m5yG?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2025 09:20:47.2408
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73d5785e-e494-469b-6044-08ddae4968ef
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B374.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7941
 
-Add debug fs for isp4 driver and add more detailed descriptive error
-info to some of the log message
+This series adds new drivers for multiple Maxim GMSL2 and GMSL3 devices,
+replacing the few GMSL2 drivers already in upstream, and introducing a
+common framework that can be used to implement such GMSL chips, which
+avoids code duplication while also adding support for previously
+unsupported features.
 
-Signed-off-by: Bin Du <Bin.Du@amd.com>
-Signed-off-by: Svetoslav Stoilov <Svetoslav.Stoilov@amd.com>
----
- drivers/media/platform/amd/isp4/Makefile      |   1 +
- drivers/media/platform/amd/isp4/isp4.c        |   5 +
- drivers/media/platform/amd/isp4/isp4_debug.c  | 272 ++++++++++++++++++
- drivers/media/platform/amd/isp4/isp4_debug.h  |  41 +++
- .../media/platform/amd/isp4/isp4_interface.c  |  38 ++-
- drivers/media/platform/amd/isp4/isp4_subdev.c |  29 +-
- 6 files changed, 366 insertions(+), 20 deletions(-)
- create mode 100644 drivers/media/platform/amd/isp4/isp4_debug.c
- create mode 100644 drivers/media/platform/amd/isp4/isp4_debug.h
+While the normally acceptable and polite way would be to extend the
+current mainline drivers, the choice was made here to add a totally new
+set of drivers. The current drivers support only a small subset of the
+possible features, and only a few devices, so the end result after
+extending them would in any case be essentially fully rewritten, new
+drivers.
 
-diff --git a/drivers/media/platform/amd/isp4/Makefile b/drivers/media/platform/amd/isp4/Makefile
-index 99285fe45b52..99d16ecfb64b 100644
---- a/drivers/media/platform/amd/isp4/Makefile
-+++ b/drivers/media/platform/amd/isp4/Makefile
-@@ -4,6 +4,7 @@
- 
- obj-$(CONFIG_AMD_ISP4) += amd_capture.o
- amd_capture-objs := isp4_subdev.o \
-+			isp4_debug.o \
- 			isp4_phy.o \
- 			isp4_interface.o \
- 			isp4.o	\
-diff --git a/drivers/media/platform/amd/isp4/isp4.c b/drivers/media/platform/amd/isp4/isp4.c
-index 3d971fe2813d..c3d2e52e0201 100644
---- a/drivers/media/platform/amd/isp4/isp4.c
-+++ b/drivers/media/platform/amd/isp4/isp4.c
-@@ -11,6 +11,7 @@
- #include "amdgpu_object.h"
- 
- #include "isp4.h"
-+#include "isp4_debug.h"
- #include "isp4_hw.h"
- 
- #define ISP4_DRV_NAME "amd_isp_capture"
-@@ -352,6 +353,8 @@ static int isp4_capture_probe(struct platform_device *pdev)
- 	pm_runtime_set_suspended(dev);
- 	pm_runtime_enable(dev);
- 
-+	isp_debugfs_create(isp_dev);
-+
- 	return 0;
- 
- err_unreg_video_dev_notifier:
-@@ -369,6 +372,8 @@ static void isp4_capture_remove(struct platform_device *pdev)
- {
- 	struct isp4_device *isp_dev = platform_get_drvdata(pdev);
- 
-+	isp_debugfs_remove(isp_dev);
-+
- 	v4l2_async_nf_unregister(&isp_dev->notifier);
- 	v4l2_async_nf_cleanup(&isp_dev->notifier);
- 	v4l2_device_unregister_subdev(&isp_dev->isp_sdev.sdev);
-diff --git a/drivers/media/platform/amd/isp4/isp4_debug.c b/drivers/media/platform/amd/isp4/isp4_debug.c
-new file mode 100644
-index 000000000000..549c36614306
---- /dev/null
-+++ b/drivers/media/platform/amd/isp4/isp4_debug.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2025 Advanced Micro Devices, Inc.
-+ */
-+
-+#include "isp4.h"
-+#include "isp4_debug.h"
-+#include "isp4_hw.h"
-+#include "isp4_interface.h"
-+
-+#define ISP4DBG_FW_LOG_RINGBUF_SIZE (2 * 1024 * 1024)
-+#define ISP4DBG_MACRO_2_STR(X) #X
-+#define ISP4DBG_MAX_ONE_TIME_LOG_LEN 510
-+
-+#ifdef CONFIG_DEBUG_FS
-+
-+void isp_debugfs_create(struct isp4_device *isp_dev)
-+{
-+	isp_dev->isp_sdev.debugfs_dir = debugfs_create_dir("amd_isp", NULL);
-+	debugfs_create_bool("fw_log_enable", 0644,
-+			    isp_dev->isp_sdev.debugfs_dir,
-+			    &isp_dev->isp_sdev.enable_fw_log);
-+	isp_dev->isp_sdev.fw_log_output =
-+		devm_kzalloc(&isp_dev->pdev->dev,
-+			     ISP4DBG_FW_LOG_RINGBUF_SIZE + 32,
-+			     GFP_KERNEL);
-+}
-+
-+void isp_debugfs_remove(struct isp4_device *isp_dev)
-+{
-+	debugfs_remove_recursive(isp_dev->isp_sdev.debugfs_dir);
-+	isp_dev->isp_sdev.debugfs_dir = NULL;
-+}
-+
-+static u32 isp_fw_fill_rb_log(struct isp4_subdev *isp, u8 *sys, u32 rb_size)
-+{
-+	struct isp4_interface *ispif = &isp->ispif;
-+	struct device *dev = isp->dev;
-+	u8 *buf = isp->fw_log_output;
-+	u32 rd_ptr, wr_ptr;
-+	u32 total_cnt = 0;
-+	u32 offset = 0;
-+	u32 cnt;
-+
-+	if (!sys || rb_size == 0)
-+		return 0;
-+
-+	mutex_lock(&ispif->isp4if_mutex);
-+
-+	rd_ptr = isp4hw_rreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_RPTR0);
-+	wr_ptr = isp4hw_rreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_WPTR0);
-+
-+	do {
-+		if (wr_ptr > rd_ptr)
-+			cnt = wr_ptr - rd_ptr;
-+		else if (wr_ptr < rd_ptr)
-+			cnt = rb_size - rd_ptr;
-+		else
-+			goto unlock_and_quit;
-+
-+		if (cnt > rb_size) {
-+			dev_err(dev, "fail bad fw log size %u\n", cnt);
-+			goto unlock_and_quit;
-+		}
-+
-+		memcpy(buf + offset, (u8 *)(sys + rd_ptr), cnt);
-+
-+		offset += cnt;
-+		total_cnt += cnt;
-+		rd_ptr = (rd_ptr + cnt) % rb_size;
-+	} while (rd_ptr < wr_ptr);
-+
-+	isp4hw_wreg(ISP4_GET_ISP_REG_BASE(isp), ISP_LOG_RB_RPTR0, rd_ptr);
-+
-+unlock_and_quit:
-+	mutex_unlock(&ispif->isp4if_mutex);
-+	return total_cnt;
-+}
-+
-+void isp_fw_log_print(struct isp4_subdev *isp)
-+{
-+	struct isp4_interface *ispif = &isp->ispif;
-+	char *fw_log_buf = isp->fw_log_output;
-+	u32 cnt;
-+
-+	if (!isp->enable_fw_log || !fw_log_buf)
-+		return;
-+
-+	cnt = isp_fw_fill_rb_log(isp, ispif->fw_log_buf->sys_addr,
-+				 ispif->fw_log_buf->mem_size);
-+
-+	if (cnt) {
-+		char *line_end;
-+		char temp_ch;
-+		char *str;
-+		char *end;
-+
-+		str = (char *)fw_log_buf;
-+		end = ((char *)fw_log_buf + cnt);
-+		fw_log_buf[cnt] = 0;
-+
-+		while (str < end) {
-+			line_end = strchr(str, 0x0A);
-+			if ((line_end && (str + ISP4DBG_MAX_ONE_TIME_LOG_LEN) >= line_end) ||
-+			    (!line_end && (str + ISP4DBG_MAX_ONE_TIME_LOG_LEN) >= end)) {
-+				if (line_end)
-+					*line_end = 0;
-+
-+				if (*str != '\0')
-+					dev_dbg(isp->dev,
-+						"%s", str);
-+
-+				if (line_end) {
-+					*line_end = 0x0A;
-+					str = line_end + 1;
-+				} else {
-+					break;
-+				}
-+			} else {
-+				u32 tmp_len = ISP4DBG_MAX_ONE_TIME_LOG_LEN;
-+
-+				temp_ch = str[tmp_len];
-+				str[tmp_len] = 0;
-+				dev_dbg(isp->dev, "%s", str);
-+				str[tmp_len] = temp_ch;
-+				str = &str[tmp_len];
-+			}
-+		}
-+	}
-+}
-+#endif
-+
-+char *isp4dbg_get_buf_src_str(u32 src)
-+{
-+	switch (src) {
-+	case BUFFER_SOURCE_STREAM:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_SOURCE_STREAM);
-+	default:
-+		return "Unknown buf source";
-+	}
-+}
-+
-+char *isp4dbg_get_buf_done_str(u32 status)
-+{
-+	switch (status) {
-+	case BUFFER_STATUS_INVALID:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_INVALID);
-+	case BUFFER_STATUS_SKIPPED:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_SKIPPED);
-+	case BUFFER_STATUS_EXIST:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_EXIST);
-+	case BUFFER_STATUS_DONE:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_DONE);
-+	case BUFFER_STATUS_LACK:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_LACK);
-+	case BUFFER_STATUS_DIRTY:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_DIRTY);
-+	case BUFFER_STATUS_MAX:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_STATUS_MAX);
-+	default:
-+		return "Unknown Buf Done Status";
-+	}
-+};
-+
-+char *isp4dbg_get_img_fmt_str(int fmt /* enum isp4fw_image_format * */)
-+{
-+	switch (fmt) {
-+	case IMAGE_FORMAT_NV12:
-+		return "NV12";
-+	case IMAGE_FORMAT_YUV422INTERLEAVED:
-+		return "YUV422INTERLEAVED";
-+	default:
-+		return "unknown fmt";
-+	}
-+}
-+
-+void isp4dbg_show_bufmeta_info(struct device *dev, char *pre,
-+			       void *in, void *orig_buf)
-+{
-+	struct isp4fw_buffer_meta_info *p;
-+	struct isp4if_img_buf_info *orig;
-+
-+	if (!in)
-+		return;
-+
-+	if (!pre)
-+		pre = "";
-+
-+	p = (struct isp4fw_buffer_meta_info *)in;
-+	orig = (struct isp4if_img_buf_info *)orig_buf;
-+
-+	dev_dbg(dev, "%s(%s) en:%d,stat:%s(%u),src:%s\n", pre,
-+		isp4dbg_get_img_fmt_str(p->image_prop.image_format),
-+		p->enabled, isp4dbg_get_buf_done_str(p->status), p->status,
-+		isp4dbg_get_buf_src_str(p->source));
-+
-+	dev_dbg(dev, "%p,0x%llx(%u) %p,0x%llx(%u) %p,0x%llx(%u)\n",
-+		orig->planes[0].sys_addr, orig->planes[0].mc_addr,
-+		orig->planes[0].len, orig->planes[1].sys_addr,
-+		orig->planes[1].mc_addr, orig->planes[1].len,
-+		orig->planes[2].sys_addr, orig->planes[2].mc_addr,
-+		orig->planes[2].len);
-+}
-+
-+char *isp4dbg_get_buf_type(u32 type)
-+{
-+	/* enum isp4fw_buffer_type */
-+	switch (type) {
-+	case BUFFER_TYPE_PREVIEW:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_PREVIEW);
-+	case BUFFER_TYPE_META_INFO:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_META_INFO);
-+	case BUFFER_TYPE_MEM_POOL:
-+		return ISP4DBG_MACRO_2_STR(BUFFER_TYPE_MEM_POOL);
-+	default:
-+		return "unknown type";
-+	}
-+}
-+
-+char *isp4dbg_get_cmd_str(u32 cmd)
-+{
-+	switch (cmd) {
-+	case CMD_ID_START_STREAM:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_START_STREAM);
-+	case CMD_ID_STOP_STREAM:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_STOP_STREAM);
-+	case CMD_ID_SEND_BUFFER:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SEND_BUFFER);
-+	case CMD_ID_SET_STREAM_CONFIG:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SET_STREAM_CONFIG);
-+	case CMD_ID_SET_OUT_CHAN_PROP:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_SET_OUT_CHAN_PROP);
-+	case CMD_ID_ENABLE_OUT_CHAN:
-+		return ISP4DBG_MACRO_2_STR(CMD_ID_ENABLE_OUT_CHAN);
-+	default:
-+		return "unknown cmd";
-+	};
-+}
-+
-+char *isp4dbg_get_resp_str(u32 cmd)
-+{
-+	switch (cmd) {
-+	case RESP_ID_CMD_DONE:
-+		return ISP4DBG_MACRO_2_STR(RESP_ID_CMD_DONE);
-+	case RESP_ID_NOTI_FRAME_DONE:
-+		return ISP4DBG_MACRO_2_STR(RESP_ID_NOTI_FRAME_DONE);
-+	default:
-+		return "unknown respid";
-+	};
-+}
-+
-+char *isp4dbg_get_if_stream_str(u32 stream /* enum fw_cmd_resp_stream_id */)
-+{
-+	switch (stream) {
-+	case ISP4IF_STREAM_ID_GLOBAL:
-+		return "STREAM_GLOBAL";
-+	case ISP4IF_STREAM_ID_1:
-+		return "STREAM1";
-+	default:
-+		return "unknown streamID";
-+	}
-+}
-+
-+char *isp4dbg_get_out_ch_str(int ch /* enum isp4fw_pipe_out_ch */)
-+{
-+	switch ((enum isp4fw_pipe_out_ch)ch) {
-+	case ISP_PIPE_OUT_CH_PREVIEW:
-+		return "prev";
-+	default:
-+		return "unknown channel";
-+	}
-+}
-diff --git a/drivers/media/platform/amd/isp4/isp4_debug.h b/drivers/media/platform/amd/isp4/isp4_debug.h
-new file mode 100644
-index 000000000000..acf99bf129ae
---- /dev/null
-+++ b/drivers/media/platform/amd/isp4/isp4_debug.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2025 Advanced Micro Devices, Inc.
-+ */
-+
-+#ifndef _ISP4_DEBUG_H_
-+#define _ISP4_DEBUG_H_
-+
-+#include <linux/printk.h>
-+#include <linux/dev_printk.h>
-+
-+#include "isp4_subdev.h"
-+
-+#ifdef CONFIG_DEBUG_FS
-+struct isp4_device;
-+
-+void isp_debugfs_create(struct isp4_device *isp_dev);
-+void isp_debugfs_remove(struct isp4_device *isp_dev);
-+void isp_fw_log_print(struct isp4_subdev *isp);
-+
-+#else
-+
-+/*to avoid checkpatch warning*/
-+#define isp_debugfs_create(cam) cam
-+#define isp_debugfs_remove(cam) cam
-+#define isp_fw_log_print(isp) isp
-+
-+#endif /* CONFIG_DEBUG_FS */
-+
-+void isp4dbg_show_bufmeta_info(struct device *dev, char *pre, void *p,
-+			       void *orig_buf /* struct sys_img_buf_handle* */);
-+char *isp4dbg_get_img_fmt_str(int fmt /* enum _image_format_t * */);
-+char *isp4dbg_get_out_ch_str(int ch /* enum _isp_pipe_out_ch_t */);
-+char *isp4dbg_get_cmd_str(u32 cmd);
-+char *isp4dbg_get_buf_type(u32 type);/* enum _buffer_type_t */
-+char *isp4dbg_get_resp_str(u32 resp);
-+char *isp4dbg_get_buf_src_str(u32 src);
-+char *isp4dbg_get_buf_done_str(u32 status);
-+char *isp4dbg_get_if_stream_str(u32 stream);
-+
-+#endif
-diff --git a/drivers/media/platform/amd/isp4/isp4_interface.c b/drivers/media/platform/amd/isp4/isp4_interface.c
-index 0e1eb22a0de5..b79b0f2a4776 100644
---- a/drivers/media/platform/amd/isp4/isp4_interface.c
-+++ b/drivers/media/platform/amd/isp4/isp4_interface.c
-@@ -7,6 +7,7 @@
- 
- #include "amdgpu_object.h"
- 
-+#include "isp4_debug.h"
- #include "isp4_fw_cmd_resp.h"
- #include "isp4_hw.h"
- #include "isp4_hw_reg.h"
-@@ -392,7 +393,8 @@ static int isp4if_insert_isp_fw_cmd(struct isp4_interface *ispif,
- 	len = rb_config->val_size;
- 
- 	if (isp4if_is_cmdq_rb_full(ispif, stream)) {
--		dev_err(dev, "fail no cmdslot (%d)\n", stream);
-+		dev_err(dev, "fail no cmdslot %s(%d)\n",
-+			isp4dbg_get_if_stream_str(stream), stream);
- 		return -EINVAL;
- 	}
- 
-@@ -400,13 +402,15 @@ static int isp4if_insert_isp_fw_cmd(struct isp4_interface *ispif,
- 	rd_ptr = isp4hw_rreg(ispif->mmio, rreg);
- 
- 	if (rd_ptr > len) {
--		dev_err(dev, "fail (%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, rd_ptr, len, wr_ptr);
- 		return -EINVAL;
- 	}
- 
- 	if (wr_ptr > len) {
--		dev_err(dev, "fail (%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, wr_ptr, len, rd_ptr);
- 		return -EINVAL;
- 	}
-@@ -498,7 +502,9 @@ static int isp4if_send_fw_cmd(struct isp4_interface *ispif,
- 			}
- 			rd_ptr = isp4hw_rreg(ispif->mmio, rreg);
- 			wr_ptr = isp4hw_rreg(ispif->mmio, wreg);
--			dev_err(dev, "fail to get cmdq slot,stream (%d), rd %u, wr %u\n",
-+			dev_err(dev,
-+				"failed to get free cmdq slot, stream %s(%d),rd %u, wr %u\n",
-+				isp4dbg_get_if_stream_str(stream),
- 				stream, rd_ptr, wr_ptr);
- 			return -ETIMEDOUT;
- 		}
-@@ -550,8 +556,8 @@ static int isp4if_send_fw_cmd(struct isp4_interface *ispif,
- 
- 	ret = isp4if_insert_isp_fw_cmd(ispif, stream, &cmd);
- 	if (ret) {
--		dev_err(dev, "fail for insert_isp_fw_cmd camId (0x%08x)\n",
--			cmd_id);
-+		dev_err(dev, "fail for insert_isp_fw_cmd camId %s(0x%08x)\n",
-+			isp4dbg_get_cmd_str(cmd_id), cmd_id);
- 		if (cmd_ele) {
- 			isp4if_rm_cmd_from_cmdq(ispif, cmd_ele->seq_num,
- 						cmd_ele->cmd_id);
-@@ -780,13 +786,15 @@ int isp4if_f2h_resp(struct isp4_interface *ispif,
- 	wr_ptr_dbg = wr_ptr;
- 
- 	if (rd_ptr > len) {
--		dev_err(dev, "fail (%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),rd_ptr %u(should<=%u),wr_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, rd_ptr, len, wr_ptr);
- 		return -EINVAL;
- 	}
- 
- 	if (wr_ptr > len) {
--		dev_err(dev, "fail (%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+		dev_err(dev, "fail %s(%u),wr_ptr %u(should<=%u), rd_ptr %u\n",
-+			isp4dbg_get_if_stream_str(stream),
- 			stream, wr_ptr, len, rd_ptr);
- 		return -EINVAL;
- 	}
-@@ -801,7 +809,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -827,7 +836,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -849,7 +859,8 @@ int isp4if_f2h_resp(struct isp4_interface *ispif,
- 				isp4hw_wreg(GET_ISP4IF_REG_BASE(ispif),
- 					    rreg, rd_ptr);
- 			} else {
--				dev_err(dev, "(%u),rd %u(should<=%u),wr %u\n",
-+				dev_err(dev, "%s(%u),rd %u(should<=%u),wr %u\n",
-+					isp4dbg_get_if_stream_str(stream),
- 					stream, rd_ptr, len, wr_ptr);
- 				return -EINVAL;
- 			}
-@@ -866,9 +877,10 @@ int isp4if_f2h_resp(struct isp4_interface *ispif,
- 			checksum, response->resp_check_sum,
- 			rd_ptr_dbg, wr_ptr_dbg);
- 
--		dev_err(dev, "(%u), seqNo %u, resp_id (0x%x)\n",
--			stream,
-+		dev_err(dev, "%s(%u), seqNo %u, resp_id %s(0x%x)\n",
-+			isp4dbg_get_if_stream_str(stream), stream,
- 			response->resp_seq_num,
-+			isp4dbg_get_resp_str(response->resp_id),
- 			response->resp_id);
- 
- 		return -EINVAL;
-diff --git a/drivers/media/platform/amd/isp4/isp4_subdev.c b/drivers/media/platform/amd/isp4/isp4_subdev.c
-index d93cdb9dc477..e2084030c79d 100644
---- a/drivers/media/platform/amd/isp4/isp4_subdev.c
-+++ b/drivers/media/platform/amd/isp4/isp4_subdev.c
-@@ -7,6 +7,7 @@
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- 
-+#include "isp4_debug.h"
- #include "isp4_fw_cmd_resp.h"
- #include "isp4_hw.h"
- #include "isp4_interface.h"
-@@ -305,7 +306,9 @@ static int isp4sd_setup_output(struct isp4_subdev *isp_subdev,
- 		return -EINVAL;
- 	}
- 
--	dev_dbg(dev, "channel: w:h=%u:%u,lp:%u,cp%u\n",
-+	dev_dbg(dev, "channel:%s,fmt %s,w:h=%u:%u,lp:%u,cp%u\n",
-+		isp4dbg_get_out_ch_str(cmd_ch_prop.ch),
-+		isp4dbg_get_img_fmt_str(cmd_ch_prop.image_prop.image_format),
- 		cmd_ch_prop.image_prop.width, cmd_ch_prop.image_prop.height,
- 		cmd_ch_prop.image_prop.luma_pitch,
- 		cmd_ch_prop.image_prop.chroma_pitch);
-@@ -328,6 +331,9 @@ static int isp4sd_setup_output(struct isp4_subdev *isp_subdev,
- 		return ret;
- 	}
- 
-+	dev_dbg(dev, "enable channel %s\n",
-+		isp4dbg_get_out_ch_str(cmd_ch_en.ch));
-+
- 	if (!sensor_info->start_stream_cmd_sent) {
- 		ret = isp4sd_kickoff_stream(isp_subdev, out_prop->width,
- 					    out_prop->height);
-@@ -490,8 +496,9 @@ static void isp4sd_fw_resp_cmd_done(struct isp4_subdev *isp_subdev,
- 		isp4if_rm_cmd_from_cmdq(ispif, para->cmd_seq_num, para->cmd_id);
- 	struct device *dev = isp_subdev->dev;
- 
--	dev_dbg(dev, "stream %d,cmd (0x%08x)(%d),seq %u, ele %p\n",
-+	dev_dbg(dev, "stream %d,cmd %s(0x%08x)(%d),seq %u, ele %p\n",
- 		stream_id,
-+		isp4dbg_get_cmd_str(para->cmd_id),
- 		para->cmd_id, para->cmd_status, para->cmd_seq_num,
- 		ele);
- 
-@@ -548,8 +555,9 @@ isp4sd_preview_done(struct isp4_subdev *isp_subdev,
- 			pcb->preview.status = ISP4VID_BUF_DONE_STATUS_SUCCESS;
- 		}
- 	} else if (meta->preview.enabled) {
--		dev_err(dev, "fail bad preview status %u\n",
--			meta->preview.status);
-+		dev_err(dev, "fail bad preview status %u(%s)\n",
-+			meta->preview.status,
-+			isp4dbg_get_buf_done_str(meta->preview.status));
- 	}
- 
- 	return prev;
-@@ -609,14 +617,18 @@ static void isp4sd_fw_resp_frame_done(struct isp4_subdev *isp_subdev,
- 	pcb.poc = meta->poc;
- 	pcb.cam_id = 0;
- 
--	dev_dbg(dev, "ts:%llu,streamId:%d,poc:%u,preview_en:%u,(%i)\n",
-+	dev_dbg(dev, "ts:%llu,streamId:%d,poc:%u,preview_en:%u,%s(%i)\n",
- 		ktime_get_ns(), stream_id, meta->poc,
- 		meta->preview.enabled,
-+		isp4dbg_get_buf_done_str(meta->preview.status),
- 		meta->preview.status);
- 
- 	prev = isp4sd_preview_done(isp_subdev, meta, &pcb);
--	if (pcb.preview.status != ISP4VID_BUF_DONE_STATUS_ABSENT)
-+	if (pcb.preview.status != ISP4VID_BUF_DONE_STATUS_ABSENT) {
-+		isp4dbg_show_bufmeta_info(dev, "prev", &meta->preview,
-+					  &pcb.preview.buf);
- 		isp4vid_notify(&isp_subdev->isp_vdev, &pcb);
-+	}
- 
- 	isp4if_dealloc_buffer_node(prev);
- 
-@@ -637,6 +649,8 @@ static void isp4sd_fw_resp_func(struct isp4_subdev *isp_subdev,
- 	if (ispif->status < ISP4IF_STATUS_FW_RUNNING)
- 		return;
- 
-+	isp_fw_log_print(isp_subdev);
-+
- 	while (true) {
- 		s32 ret;
- 
-@@ -654,7 +668,8 @@ static void isp4sd_fw_resp_func(struct isp4_subdev *isp_subdev,
- 						  &resp.param.frame_done);
- 			break;
- 		default:
--			dev_err(dev, "-><- fail respid (0x%x)\n",
-+			dev_err(dev, "-><- fail respid %s(0x%x)\n",
-+				isp4dbg_get_resp_str(resp.resp_id),
- 				resp.resp_id);
- 			break;
- 		}
+This series depends on support for internal pads, for which a patch has
+been added.
+
+The previous version is at:
+https://lore.kernel.org/lkml/20250512212832.3674722-1-demonsingur@gmail.com
+
+The following deserializers are supported:
+ * MAX96712 (already exists in staging)
+ * MAX96714 (already exists)
+ * MAX96714F (already exists)
+ * MAX96714R (GMSL2)
+ * MAX96716 (GMSL2)
+ * MAX96724 (already exists as part of existing MAX96712 driver)
+ * MAX96724F (GMSL2)
+ * MAX96724R (GMSL2)
+ * MAX9296A (GMSL2)
+ * MAX96792A (GMSL3)
+
+The following serializers are supported:
+ * MAX96717 (already exists)
+ * MAX9295A (GMSL2)
+ * MAX96793 (GMSL3)
+
+Known backward compatibility breakages:
+ * No default routing. Default routing has been intentionally ommitted
+   as the devices support quite complex routing and it would be
+   unfeasible to provide sane defaults for multi-link deserialziers.
+   It is expected that userspace programs would set appropritate
+   routing.
+
+The following list enumerates new features that are supported by the
+common framework and their respective chip-specific drivers:
+ * Full Streams API support. Most deserializers have support for more
+   than one link, and more than one PHY. Streams support allows
+   configuration of routing between these links and PHYs.
+
+ * .get_frame_desc() support. Both the serializers and deserializers
+   implement this to query and provide frame descriptor data. This is
+   used in features explained in-depth below.
+
+ * .get_mbus_config() support. The deserializers implement this to allow
+   upstream devices to query the link frequency of its pads.
+
+ * Address translation with I2C ATR for the serializers.
+
+ * I2C ATR translation - some deserializers cannot do muxing since I2C
+   communication channel masking is not available per-link, and the only
+   other way to select links is to turn them off, causing link resets.
+   For such cases, I2C ATR is used to change the address of the
+   serializers at probe time.
+
+ * Automatic GMSL link version negotiation between GMSL3, GMSL2 6Gbps, GMSL2
+   3Gbps.
+
+ * Automatic stream id selection for deserializers which need serializers to
+   stream on unique stream ids.
+
+ * Automatic VC remapping on the deserializers. VCs are picked so that
+   if they were unique on the sink pad, they will end up as unique on
+   the source pad they are routed to too, prioritizing using the same
+   VC ID as the sink pad, to facilitate the possibility of using tunnel
+   mode.
+
+ * Automatic pixel mode / tunnel mode selection. Tunnel mode is used
+   when VC IDs do not need to be changed and all hardware supports
+   tunnel mode, otherwise, pixel mode is used. The serializers are
+   automatically switched between the two by using a private API.
+
+ * Automatic double mode selection. In pixel mode, double mode can be
+   used to pack two pixels into a single data unit, optimizing bandwidth
+   usage. The serializers are automatically set up to support the double
+   modes determined by the deserializers using a private API.
+
+ * Automatic data padding. In pixel mode, if the data being transferred
+   uses two different BPPs, data needs to be padded. The serializers
+   automatically set this up depending on the configured double mode
+   settings and incoming data types.
+
+ * Logging. Both the deserializers and serializers implement the V4L2
+   .log_status() ops to allow debugging of the internal state and
+   important chip status registers.
+
+ * PHY modes. Deserializer chips commonly have more than a single PHY.
+   The firmware ports are parsed to determine the modes in which to
+   configure the PHYs (2x4, 4x2, 1x4+2x2, 2x2+1x4, and variations using
+   fewer lanes).
+
+ * Serializer pinctrl. Serializers implement pinctrl to allow setting
+   configs which would otherwise be inaccessible through GPIO: TX/RX via
+   GMSL link, pull-up & pull-down (with strength), open-drain &
+   push-pull, slew rate, RCLK pin selection.
+
+ * TPG with selectable formats, resolutions and framerates for both
+   serializers and deserializers.
+
+The drivers have been tested on the following hardware combinations, but
+further testing is welcome to ensure no / minimal breakage:
+ * Raspberry Pi 5 + MAX9296A + 2xMAX96717 + 2xIMX219
+ * Raspberry Pi 5 + MAX96714 + 1xMAX96717 + 1xIMX219
+ * Raspberry Pi 5 + MAX96716A + 2xMAX96717 + 2xIMX219
+ * Raspberry Pi 5 + MAX96712 + 4xMAX96717 + 4xIMX219
+ * Raspberry Pi 5 + MAX96724 + 4xMAX96717 + 4xIMX219
+ * Raspberry Pi 5 + MAX96792A + 1xMAX96793 + 1xMAX96717 + 2xIMX219
+ * Raspberry Pi 5 + MAX96792A + 2xMAX96717 + 2xIMX219
+ * Renesas V4H + MAX96712 + 2xMAX96717 + 2xIMX219
+
+Analog Devices is taking responsibility for the maintenance of these
+drivers and common framework, and plans to add support for new
+broad-market chips on top of them.
+
+Special thanks go to Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+for testing the drivers, helping debug and coming up with ideas /
+implementations for various features.
+
+V4:
+ * max_des: fix infinite version loop
+ * max_des: fix pipe link id when there are more pipes than links
+ * max_des: implement setting pipe link
+ * max_des: do not pass routing to phy update
+ * max_des: move GMSL version strings to max_serdes
+ * max_des: split finding existing VC remap from adding a new one
+ * max_des: add tracking for in-use pipes
+ * max_des: skip unused pipes when finding / setting pixel/tunnel mode
+ * max_des: simplify remap code
+ * max_des: split set_pipe_phy() into set_pipe_tunnel_phy()
+
+ * max_ser: clean up i2c_xlates printing
+ * max_ser: fix changing serializer address
+ * max_ser: move non-continuous mode check into max96717 driver
+
+ * max96724: use regmap_set_bits for STREAM_SEL_ALL
+ * max96724: match surrounding indent for MAX96724_PHY1_ALT_CLOCK
+ * max96724: fix setting invalid PHY to 1 when PHY 0 is in 4-lane mode
+ * max96724: remove support for setting pipe phy from max96712
+ * max96724: fix setting double mode on pipes 4-7
+ * max96724: drop powerdown gpios
+
+ * max96717: use gpio_chip's set_rv
+
+ * max9296a: switch versions to unsigned int
+ * max9296a: remove parantheses from MAX9296A_MIPI_PHY18/20
+ * max9296a: fix printing of PHY packet counts
+ * max9296a: fix phy_hw_ids size
+
+ * remove usage of cammel case in defines
+ * move field_get/prep to max_serdes.h
+ * rework stream id setup
+ * rework tunnel/pixel mode finding
+ * rework bpps retrieval
+ * pass whole subdev state around
+ * add helper for retrieving a route's hw components / frame desc
+ * update pipe enable based on active routes
+ * add support for tunnel-only chips and VC remaps in tunnel mode
+ * simplify max_get_streams_masks()
+ * add support for TPG
+
+V3:
+ * dt-bindings: drop reflow text patches
+
+ * dt-bindings: max96717: move pinctrl configuration into main file
+ * dt-bindings: max96717: allow a single level of pins configuration
+ * dt-bindings: max96717: use regex for matching pins nodes
+ * dt-bindings: max96717: drop extra allOf in pinctrl configuration
+ * dt-bindings: max96717: fix i2c-atr channel name regex
+ * dt-bindings: max96717: limit pinctrl functions to gpio / rclkout
+ * dt-bindings: max96717: limit pins for gpio / rclkout
+ * dt-bindings: max96717: add description for bias-pull-up/down
+ * dt-bindings: max96717: require pins and function properties
+ * dt-bindings: max96717: turn single compatible strings into an enum
+
+ * dt-bindings: max9296a: include indices in port descriptions
+ * dt-bindings: max9296a: remove property-less schema from input ports
+ * dt-bindings: max9296a: use ATR for MAX96716A too, removing MUX entirely
+
+ * dt-bindings: max96712: include indices in port descriptions
+ * dt-bindings: max96712: deprecate enable-gpios in favor of powerdown-gpios
+ * dt-bindings: max96712: switch from MUX to ATR
+
+ * dt-bindings: max96714: add support for MAX96714R
+
+ * max_des: fix POC NULL check
+ * max_des: remove index var in POC enable
+ * max_des: fix writing empty remaps
+ * max_des: skip mode setting in tunnel mode
+ * max_des: remove a duplicate source->sd NULL check
+ * max_des: set pipe tunnel mode even for disabled links
+
+ * max_ser: apply TX ID changes irrespective of serializer ID
+
+ * max9296a: fix typo in BACKTOP22
+ * max9296a: make register macros more consistent
+ * max9296a: switch MAX96716 from MUX to ATR
+ * max9296a: deduplicate max9296a_phy_id() logic
+ * max9296a: use proper PHY id in remaps
+ * max9296a: fix DPLL reset clear
+ * max9296a: limit MAX96714F to GMSL2 3Gbps
+ * max9296a: add support for MAX96714R
+ * max9296a: do not write GMSL3 link select registers in GMSL2 devices
+ * max9296a: use field_prep when setting RX_RATE
+ * max9296a: simplify setting SEL_STREAM for MAX96714
+ * max9296a: max96716_set_pipe_phy -> max96716a_set_pipe_phy
+ * max9296a: fix off-by-one in lane polarity when using
+   polarity_on_physical_lanes
+
+ * max96724: fix typo in BACKTOP22
+ * max96724: switch from MUX to ATR
+ * max96724: add support for powerdown GPIO
+ * max96724: remove support for tunneling from MAX96712
+ * max96724: only set tunnel-related bits when in tunnel mode
+ * max96724: add support for MAX96724F/R
+ * max96724: oneshot reset links after link selection
+
+ * remove GMSL2 version defaults, set all supported versions explicitly
+ * reorder GMSL versions to start from 0
+ * add support for GMSL2 3Gbps
+ * support GMSL version finding for devices using MUX / GATE
+ * add support for deserializers which don't have individual control
+   of each link's GMSL version
+ * add support for deserializers that need unique stream ids across all
+   serializers
+ * select_link_version -> set_link_version
+ * select_resets_link -> use_atr
+
+V2:
+ * add missing compatible for MAX96717F
+ * fix embarrassing dt-bindings mistakes
+ * move MAX9296A/MAX96716/MAX96792A to a separate file as they have two
+   links / PHYs, and adding those conditionally seems impossible
+
+Cosmin Tanislav (18):
+  dt-bindings: media: i2c: max96717: add myself as maintainer
+  dt-bindings: media: i2c: max96717: add support for I2C ATR
+  dt-bindings: media: i2c: max96717: add support for pinctrl/pinconf
+  dt-bindings: media: i2c: max96717: add support for MAX9295A
+  dt-bindings: media: i2c: max96717: add support for MAX96793
+  dt-bindings: media: i2c: max96712: add myself as maintainer
+  dt-bindings: media: i2c: max96712: use pattern properties for ports
+  dt-bindings: media: i2c: max96712: add support for I2C ATR
+  dt-bindings: media: i2c: max96712: add support for POC supplies
+  dt-bindings: media: i2c: max96712: add support for MAX96724F/R
+  dt-bindings: media: i2c: max96714: add myself as maintainer
+  dt-bindings: media: i2c: max96714: add support for MAX96714R
+  dt-bindings: media: i2c: add MAX9296A, MAX96716A, MAX96792A
+  media: i2c: add Maxim GMSL2/3 serializer and deserializer drivers
+  arm64: defconfig: disable deprecated MAX96712 driver
+  staging: media: remove MAX96712 driver
+  media: i2c: remove MAX96717 driver
+  media: i2c: remove MAX96714 driver
+
+Sakari Ailus (1):
+  media: mc: Add INTERNAL pad flag
+
+ .../bindings/media/i2c/maxim,max9296a.yaml    |  242 ++
+ .../bindings/media/i2c/maxim,max96712.yaml    |   70 +-
+ .../bindings/media/i2c/maxim,max96714.yaml    |    6 +-
+ .../bindings/media/i2c/maxim,max96717.yaml    |  160 +-
+ .../media/mediactl/media-types.rst            |    8 +
+ MAINTAINERS                                   |   13 +-
+ arch/arm64/configs/defconfig                  |    1 -
+ drivers/media/i2c/Kconfig                     |   34 +-
+ drivers/media/i2c/Makefile                    |    3 +-
+ drivers/media/i2c/max96714.c                  | 1024 ------
+ drivers/media/i2c/max96717.c                  | 1103 ------
+ drivers/media/i2c/maxim-serdes/Kconfig        |   53 +
+ drivers/media/i2c/maxim-serdes/Makefile       |    6 +
+ drivers/media/i2c/maxim-serdes/max9296a.c     | 1338 +++++++
+ drivers/media/i2c/maxim-serdes/max96717.c     | 1647 +++++++++
+ drivers/media/i2c/maxim-serdes/max96724.c     | 1155 ++++++
+ drivers/media/i2c/maxim-serdes/max_des.c      | 3108 +++++++++++++++++
+ drivers/media/i2c/maxim-serdes/max_des.h      |  152 +
+ drivers/media/i2c/maxim-serdes/max_ser.c      | 2032 +++++++++++
+ drivers/media/i2c/maxim-serdes/max_ser.h      |  144 +
+ drivers/media/i2c/maxim-serdes/max_serdes.c   |  415 +++
+ drivers/media/i2c/maxim-serdes/max_serdes.h   |  166 +
+ drivers/media/mc/mc-entity.c                  |   10 +-
+ drivers/staging/media/Kconfig                 |    2 -
+ drivers/staging/media/Makefile                |    1 -
+ drivers/staging/media/max96712/Kconfig        |   14 -
+ drivers/staging/media/max96712/Makefile       |    2 -
+ drivers/staging/media/max96712/max96712.c     |  487 ---
+ include/uapi/linux/media.h                    |    1 +
+ 29 files changed, 10702 insertions(+), 2695 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/maxim,max9296a.yaml
+ delete mode 100644 drivers/media/i2c/max96714.c
+ delete mode 100644 drivers/media/i2c/max96717.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/Kconfig
+ create mode 100644 drivers/media/i2c/maxim-serdes/Makefile
+ create mode 100644 drivers/media/i2c/maxim-serdes/max9296a.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max96717.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max96724.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_des.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_des.h
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_ser.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_ser.h
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_serdes.c
+ create mode 100644 drivers/media/i2c/maxim-serdes/max_serdes.h
+ delete mode 100644 drivers/staging/media/max96712/Kconfig
+ delete mode 100644 drivers/staging/media/max96712/Makefile
+ delete mode 100644 drivers/staging/media/max96712/max96712.c
+
 -- 
-2.34.1
+2.49.0
 
