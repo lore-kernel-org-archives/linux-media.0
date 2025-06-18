@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516692F0C5B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8F42F1982;
 	Wed, 18 Jun 2025 15:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750261850; cv=none; b=RK/t1NXoXwZGja2LB+mQ/GUVzvRQCTuvCAlAYb69q0P7l9ivckhtJHrrfOylshc+VLljhzwfIs4K/8HIKo01Lrpj+pZSghPam2z3sGMXvk4sIb5bPrmjuZlbr1lijTN3WaglPkkIWI7FBGoODHuiaMMM4NKAN6h6/YXrWMjAebg=
+	t=1750261850; cv=none; b=SLomo+Deqbklr/fyVj+2g6mYciUQVgnBLbjvN2ujVkeqFzoCfqPSTGGwvcWrkTXiVCKCkipJ8Nf+myHPTTmzqfmLNEG5mmuYHaVpKsl7SXhGQJULOebOCdFRlliSuwYqwtY51SO8HS38kdgjKgZgaoLOX7kpoD6HDpMFR0gapL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750261850; c=relaxed/simple;
-	bh=5BRFtk/5jIDcMryMPGQHwW1SEx1AjjpWVEcTh5JdPRs=;
+	bh=rZujrf8cJQS+I89btYoSUMkKofWIINtOzhrn5MbArYQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iTc6eb8aAoto9dR/gMfYiRkXWxak8ExdTTDmGnf43dLi/OJE70HjhBL1ybMEdaRh0gC0T8UpIkCQVDz6vBGL/i72RWeAA5GaOU/elg9kQeZGm0w0lK6WRBsStLLDyEetOqD8pVzC1oYv5HWa66YI9sbIxdcGQGn2BDN9XWuJJQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fN9N1dg2; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=EFnCdHk/6AyQOCPE1xuUjNnIGO5uXh2BoDTdGVF03uFD7UuCi0mBgn8F6aqjZxQn1Rrzbv9CPQKmY/jWTBr77g+AlzJaNgA3NtCxSQROptNwUJvO9V8x3qpOt3HcdwzkE42PyPHMC4Y+/6AthE7BLvJA8VAUGHs3l1H2f+7gzyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TqtK1aCE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fN9N1dg2"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C30A3C4CEF0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TqtK1aCE"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0005AC4CEFC;
 	Wed, 18 Jun 2025 15:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750261849;
-	bh=5BRFtk/5jIDcMryMPGQHwW1SEx1AjjpWVEcTh5JdPRs=;
+	s=k20201202; t=1750261850;
+	bh=rZujrf8cJQS+I89btYoSUMkKofWIINtOzhrn5MbArYQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fN9N1dg2WRhOHTDiBAvXH4xAdRt3EKsr18j5yWvDUqxlGrDps32DgjO2VEB25j/4k
-	 YIAXPLvqgNw3pVdv8usGVJcMcRlz9O8hRARK6Xjl1AcdqLMQl0pLGgtw1Op4CFwq+9
-	 EIWn2Noddsn8OdnyUAtDoJJkn/1um8yAIZ8dcaKbQL4ZG9Bk8JIUXNVAuTu8+k5aL5
-	 V1T4o01HKnRx49n7ShO/U/mrzpHSULiZmy35QORvrA9fnvuKHAhTWaUanSOMPtjQ6H
-	 20a2APn7RuspRCLW2CJkz8L4vn4T3a7PiKTlUDh2NFj+KemUhs6lH6lM5kU38TlCOi
-	 SCT0d7l7wJLBg==
+	b=TqtK1aCE4tV9SmBCEd+oJZ0P0+f7cgth2F2mBswKO+Ob5zK2957jPgAKhi5G+br3c
+	 3JF/x3w1OJECjIGQVcB32GR48y3pQogPGTBMfvyfZ4qGe9rF8uxUSnm7pTRN0cQHlx
+	 vZPM3Q3ift0ruO/6e6TDit6hjpnFXlbJ0DdnksEE8ZDdGDCsbFyajiehTyv5nNEZfm
+	 XR7uHRgOaVfuM6/SMTUHq4sTGeuD58dE2AzOD6u7sJfDPfnKJQDYNLP+ZfGiFCZzJD
+	 EgxRvUA6Ap3K3CDkwnvhhnfJUdtVAcopTiPROrXokGRzpm07LcuFQrnJFJe2ikgm2p
+	 S4aeGP5XaNfRA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E70C7115D;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8435C7115A;
 	Wed, 18 Jun 2025 15:50:49 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Wed, 18 Jun 2025 17:38:05 +0200
-Subject: [PATCH v9 10/13] arm64: dts: rockchip: add the vip node to px30
+Date: Wed, 18 Jun 2025 17:38:08 +0200
+Subject: [PATCH v9 13/13] arm64: dts: rockchip: enable vicap dvp on
+ wolfvision pf5 io expander
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -40,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v9-10-ace1e5cc4a82@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v9-13-ace1e5cc4a82@collabora.com>
 References: <20240220-rk3568-vicap-v9-0-ace1e5cc4a82@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v9-0-ace1e5cc4a82@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -67,14 +68,13 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-rockchip@lists.infradead.org, 
  Michael Riesch <michael.riesch@collabora.com>, 
- Michael Riesch <michael.riesch@collabora.com>, 
- Mehdi Djait <mehdi.djait@bootlin.com>
+ Michael Riesch <michael.riesch@collabora.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750261092; l=1272;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750261092; l=1661;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=bPZJ1Uc+vxwNAO8V6hB3CEnLbtHLJAdH+/IeDgKwqBQ=;
- b=oWREpMDoRNlWONc6fEHyVeWWuaBG5sMYdKCA5y41CurdpynwdjnMsOjezOyrvfm0TPXUfzatw
- 0V4Rjuv8fKNAT4MwGqbXoYDnzzd4q3KX9cRLYi1hn3dysb7ucxSYGZg
+ bh=tkvGHWW1RXCremqXv1+qTo26zNWU0UHQFUaztf+p/DI=;
+ b=XqyCIQ3Brf1VeGWUXB+ZXIaeF0HDCkqFjyzkAVTcbxsYQT6o+KVZ7DSahoLdPWniN9fuO2SrZ
+ aAma1XwO2PBBwfkRWmUvBr2IFBmfUSJ6KrDj5usbF8U0wbYcjf3xD5N
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -82,41 +82,56 @@ X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
 X-Original-From: Michael Riesch <michael.riesch@collabora.com>
 Reply-To: michael.riesch@collabora.com
 
-From: Mehdi Djait <mehdi.djait@bootlin.com>
+From: Michael Riesch <michael.riesch@collabora.com>
 
-Add the device tree node for the PX30 Video Input Processor (VIP).
+The Digital Video Port (DVP, the 16-bit variant) of the RK3568 VICAP
+is broken out to the PF5 mainboard expansion header.
+Enable it in the device tree overlay for the WolfVision PF5 IO
+Expander board.
 
-Signed-off-by: Mehdi Djait <mehdi.djait@bootlin.com>
-[added cosmetic changes]
 Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+Reviewed-by: Gerald Loacker <gerald.loacker@wolfvision.net>
+Tested-by: Gerald Loacker <gerald.loacker@wolfvision.net>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- arch/arm64/boot/dts/rockchip/px30.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../rockchip/rk3568-wolfvision-pf5-io-expander.dtso  | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index feabdadfa440..7b890620a6a0 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -1288,6 +1288,18 @@ isp_mmu: iommu@ff4a8000 {
- 		#iommu-cells = <0>;
- 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
+index 048933de2943..8cfce71dd318 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
++++ b/arch/arm64/boot/dts/rockchip/rk3568-wolfvision-pf5-io-expander.dtso
+@@ -11,6 +11,7 @@
+ #include <dt-bindings/clock/rk3568-cru.h>
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/media/video-interfaces.h>
+ #include <dt-bindings/pinctrl/rockchip.h>
  
-+	cif: video-capture@ff490000 {
-+		compatible = "rockchip,px30-vip";
-+		reg = <0x0 0xff490000 0x0 0x200>;
-+		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru ACLK_CIF>, <&cru HCLK_CIF>, <&cru PCLK_CIF>;
-+		clock-names = "aclk", "hclk", "pclk";
-+		power-domains = <&power PX30_PD_VI>;
-+		resets = <&cru SRST_CIF_A>, <&cru SRST_CIF_H>, <&cru SRST_CIF_PCLKIN>;
-+		reset-names = "axi", "ahb", "pclkin";
-+		status = "disabled";
-+	};
+ &{/} {
+@@ -134,3 +135,22 @@ &usb2phy0_host {
+ 	phy-supply = <&usb_host_vbus>;
+ 	status = "okay";
+ };
 +
- 	qos_gmac: qos@ff518000 {
- 		compatible = "rockchip,px30-qos", "syscon";
- 		reg = <0x0 0xff518000 0x0 0x20>;
++&vicap {
++	pinctrl-names = "default";
++	pinctrl-0 = <&cif_clk &cif_dvp_clk &cif_dvp_bus16>;
++	status = "okay";
++};
++
++&vicap_dvp {
++	vicap_dvp_input: endpoint {
++		bus-type = <MEDIA_BUS_TYPE_BT656>;
++		bus-width = <16>;
++		pclk-sample = <MEDIA_PCLK_SAMPLE_DUAL_EDGE>;
++		rockchip,dvp-clk-delay = <10>;
++	};
++};
++
++&vicap_mmu {
++	status = "okay";
++};
 
 -- 
 2.39.5
