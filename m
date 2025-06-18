@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8042EF9BF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05842EFD8C;
 	Wed, 18 Jun 2025 15:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750261849; cv=none; b=ozijGR2fEdBqERR0zwCLkombDu4rCke3INpvwHA2H1r8LYbN+CBdgGP2V6cIZdtL2aOQHwXsiHgi5BNq/Mh6aBPXTU6FpJhNp2F1veg++lAqodUQqXzEdeEiT0YuCNYTARYrKk7BPDHIqocbiw8Iu2ThHJx3/JL+79GiagF7+Dk=
+	t=1750261849; cv=none; b=bJ7YB0pXRvtqMHkzr7I3WFYnC8TgbfKfQNW5k6iXPaogND1tRG+O+WZqWqSTW1LSaj4iEEIL+x9L3Whd+ijyj5som9LLaALSw6db/Gvxzrbs4SgNnOUQDQDeXLOK+RjOJInHyZV8zEnPbF4XAbJBBQYkGy7Q/dqbdAGyIO18jt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750261849; c=relaxed/simple;
-	bh=5KExE/a9Q5139VGfZuVdC9eksdAfhi4wcXUYZTaTHMY=;
+	bh=bNWsJ0LOg9DIBsE//6R6xZ06+qIFlsIgPAi/PchqQkQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C9UxzxDLUB+cIxabcAvL0Ug2ITpaALy1yQyP2YPNGwPIY9TrZUvU/c0ctmTW9I2ogFzc/CoBASGAQKgxaeaqWU8Ef1Ke565J+LIpCSsZ5Iiji0DEMy/o/OGrBOPxMmuVg5zzBo9QBDYBSEI8gZP/0EQ7wniDwg8TDb3/Zv/lGnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vnnvkror; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ezsAQe8KqD0rrYSfFbDTE+WwMA/tnfUI9N73yAnYM6TTeNpxyviT1Tbr+GWo1DwCgjFBq73mLTFo0sEr+DZmNEAGqPpa3rYHFHNVEZHlDonLg0RMaF3pfMhYvxru/Sp2SkNmigbk9uXb5XdWzWs+CFBwMu0k1mCzYDQd/KWwGVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRJqQXqd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vnnvkror"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DA50C4CEF0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRJqQXqd"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55E75C4CEFA;
 	Wed, 18 Jun 2025 15:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1750261849;
-	bh=5KExE/a9Q5139VGfZuVdC9eksdAfhi4wcXUYZTaTHMY=;
+	bh=bNWsJ0LOg9DIBsE//6R6xZ06+qIFlsIgPAi/PchqQkQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=VnnvkrorQFK3mXs+HSXfKGDyYJbGKJ7yYxRnCko8oGdkDPWbcLu7MIkPioTkY9fUb
-	 rfPtNzJurFg47sIJNJ9zohYBqlRlGbA6QaBdCCU1Unx8Bo+PpZKckjgBWn6ck4MEak
-	 DeN8SpHFRYjhO2ma/5Pv4sD7oNjOyFcqU8UsKqGVri+f+zIcyXLuGO1hckv1c9Zrhk
-	 rkJaHJSr0mEPGrH2zEU7shk58kNAAMe2U/3iuE94XD2u5oF5g9fUvs+hQkQnn4HIfX
-	 utACnLLXMdFxyCt0RBNcrwoMQ7OlA9n5l+ApzLuh0xKaJYD+Ue/Zdf95JJ77By9j+j
-	 6M6It1rWWtnWw==
+	b=kRJqQXqdElcMEnBv6zSC7zK88qctw2fW+VgygigcfX617LP1v+dLEn6OF9JIViAkd
+	 XEUMWCq74KwU44hF8ZZ3L128h++ZuNLCHgAKyuaEZVJ0FoOG8XvDpluN4jUQs2mPNJ
+	 6j4FPd5Dvl9SKGeHdRdHr/TbXVUA5aoCWaxrzIFJ9RpLEW75ykN4bee7cac/UZw9u4
+	 XB83sZQwufXFYGpd8rqeb/fBrelyHSDs6VHrR13zL5ayr1onSsIpguADCGH6vYHUam
+	 9rdB5KOPweBm2Aw4u5VDdWVEHcKdZSkI8TcON2FsxTA+mF6pKm5QbGSDUJJ4trCnUX
+	 IxUiy48mEaH+g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07857C7115A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C24DC7115A;
 	Wed, 18 Jun 2025 15:50:49 +0000 (UTC)
 From: Michael Riesch via B4 Relay <devnull+michael.riesch.collabora.com@kernel.org>
-Date: Wed, 18 Jun 2025 17:37:56 +0200
-Subject: [PATCH v9 01/13] Documentation: admin-guide: media: add rockchip
- camera interface
+Date: Wed, 18 Jun 2025 17:38:00 +0200
+Subject: [PATCH v9 05/13] media: dt-bindings: add rockchip rk3568 mipi
+ csi-2 receiver
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-rk3568-vicap-v9-1-ace1e5cc4a82@collabora.com>
+Message-Id: <20240220-rk3568-vicap-v9-5-ace1e5cc4a82@collabora.com>
 References: <20240220-rk3568-vicap-v9-0-ace1e5cc4a82@collabora.com>
 In-Reply-To: <20240220-rk3568-vicap-v9-0-ace1e5cc4a82@collabora.com>
 To: Mehdi Djait <mehdi.djait@linux.intel.com>, 
@@ -70,11 +70,11 @@ Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org,
  Michael Riesch <michael.riesch@collabora.com>, 
  Michael Riesch <michael.riesch@collabora.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750261092; l=7244;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750261092; l=5193;
  i=michael.riesch@collabora.com; s=20250410; h=from:subject:message-id;
- bh=De2ZqDoGqxy4X0NVqii93qVcOSvje8952uRKR12Z/dk=;
- b=r22nKLIF69dCbcNPByqSLsedxvKBj6W92ZcJSUIUEe+REBQ5pJO4r2SZDe3v5NxwfWTW/Pnse
- +DXttugUBw2Bzp6xYIDtlz/joUYAgDUuz8MuEFDMrUPILXqYFCcHKqD
+ bh=5B8UxIV3L2shnuudpnrxNIQSRl+BhIKUni8/bfirEng=;
+ b=FmQtaXpTXZCdOBGb7BewIf+Zju60OpokLELmM8RSGAlqzA/BI6EpR6qMn24xqbtLahPZePON8
+ EdlyMrLDkKVDX+bIkQth6yg06q+B/d3MPxIDItzjckfxfZxrsm8Mnrh
 X-Developer-Key: i=michael.riesch@collabora.com; a=ed25519;
  pk=+MWX1fffLFZtTPG/I6XdYm/+OSvpRE8D9evQaWbiN04=
 X-Endpoint-Received: by B4 Relay for michael.riesch@collabora.com/20250410
@@ -84,166 +84,182 @@ Reply-To: michael.riesch@collabora.com
 
 From: Michael Riesch <michael.riesch@collabora.com>
 
-Add a document that describes the different variants of the Rockchip
-Camera Interface (CIF), their hardware layout, as well as their
-representation in the media controller centric rkcif device driver,
-which is located under drivers/media/platform/rockchip/rkcif.
+Add documentation for the Rockchip RK3568 MIPI CSI-2 Receiver.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 Signed-off-by: Michael Riesch <michael.riesch@collabora.com>
 ---
- .../admin-guide/media/rkcif-rk3568-vicap.dot       | 21 ++++++
- Documentation/admin-guide/media/rkcif.rst          | 83 ++++++++++++++++++++++
- Documentation/admin-guide/media/v4l-drivers.rst    |  1 +
- MAINTAINERS                                        |  7 ++
- 4 files changed, 112 insertions(+)
+ .../bindings/media/rockchip,rk3568-mipi-csi.yaml   | 144 +++++++++++++++++++++
+ MAINTAINERS                                        |   6 +
+ 2 files changed, 150 insertions(+)
 
-diff --git a/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
+diff --git a/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi.yaml b/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi.yaml
 new file mode 100644
-index 000000000000..02340135a2ac
+index 000000000000..5c4c348e995c
 --- /dev/null
-+++ b/Documentation/admin-guide/media/rkcif-rk3568-vicap.dot
-@@ -0,0 +1,21 @@
-+digraph board {
-+        rankdir=TB
-+        n00000001 [label="{{<port0> 0} | rkcif-dvp0\n/dev/v4l-subdev0 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n00000001:port1 -> n00000004
-+        n00000004 [label="rkcif-dvp0-id0\n/dev/video0", shape=box, style=filled, fillcolor=yellow]
-+        n0000000a [label="{{<port0> 0} | rkcif-mipi0\n/dev/v4l-subdev1 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n0000000a:port1 -> n0000000d
-+        n0000000a:port1 -> n00000013 [style=dashed]
-+        n0000000a:port1 -> n00000019 [style=dashed]
-+        n0000000a:port1 -> n0000001f [style=dashed]
-+        n0000000d [label="rkcif-mipi0-id0\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
-+        n00000013 [label="rkcif-mipi0-id1\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
-+        n00000019 [label="rkcif-mipi0-id2\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
-+        n0000001f [label="rkcif-mipi0-id3\n/dev/video4", shape=box, style=filled, fillcolor=yellow]
-+        n00000025 [label="{{} | it6801 2-0048\n/dev/v4l-subdev2 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n00000025:port0 -> n00000001:port0
-+        n00000029 [label="{{<port0> 0} | rockchip-mipi-csi fdfb0000.csi\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n00000029:port1 -> n0000000a:port0
-+        n0000002e [label="{{} | imx415 4-001a\n/dev/v4l-subdev4 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-+        n0000002e:port0 -> n00000029:port0
-+}
-diff --git a/Documentation/admin-guide/media/rkcif.rst b/Documentation/admin-guide/media/rkcif.rst
-new file mode 100644
-index 000000000000..f35f644a54a0
---- /dev/null
-+++ b/Documentation/admin-guide/media/rkcif.rst
-@@ -0,0 +1,83 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi.yaml
+@@ -0,0 +1,144 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/rockchip,rk3568-mipi-csi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+=========================================
-+Rockchip Camera Interface (CIF)
-+=========================================
++title: Rockchip RK3568 MIPI CSI-2 Receiver
 +
-+Introduction
-+============
++maintainers:
++  - Michael Riesch <michael.riesch@collabora.com>
 +
-+The Rockchip Camera Interface (CIF) is featured in many Rockchip SoCs in
-+different variants.
-+The different variants are combinations of common building blocks, such as
++description:
++  The Rockchip RK3568 MIPI CSI-2 Receiver is a CSI-2 bridge with one input port
++  and one output port. It receives the data with the help of an external
++  MIPI PHY (C-PHY or D-PHY) and passes it to the Rockchip RK3568 Video Capture
++  (VICAP) block.
 +
-+* INTERFACE blocks of different types, namely
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - rockchip,rk3588-mipi-csi
++          - const: rockchip,rk3568-mipi-csi
++      - const: rockchip,rk3568-mipi-csi
 +
-+  * the Digital Video Port (DVP, a parallel data interface)
-+  * the interface block for the MIPI CSI-2 receiver
++  reg:
++    maxItems: 1
 +
-+* CROP units
++  interrupts:
++    items:
++      - description: Interrupt that signals changes in CSI2HOST_ERR1.
++      - description: Interrupt that signals changes in CSI2HOST_ERR2.
 +
-+* MIPI CSI-2 receiver (not available on all variants): This unit is referred
-+  to as MIPI CSI HOST in the Rockchip documentation.
-+  Technically, it is a separate hardware block, but it is strongly coupled to
-+  the CIF and therefore included here.
++  interrupt-names:
++    items:
++      - const: irq1
++      - const: irq2
 +
-+* MUX units (not available on all variants) that pass the video data to an
-+  image signal processor (ISP)
++  clocks:
++    maxItems: 1
 +
-+* SCALE units (not available on all variants)
++  phys:
++    maxItems: 1
++    description: MIPI C-PHY or D-PHY.
 +
-+* DMA engines that transfer video data into system memory using a
-+  double-buffering mechanism called ping-pong mode
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
 +
-+* Support for four streams per INTERFACE block (not available on all
-+  variants), e.g., for MIPI CSI-2 Virtual Channels (VCs)
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: Input port node. Connect to e.g., a MIPI CSI-2 image sensor.
 +
-+This document describes the different variants of the CIF, their hardware
-+layout, as well as their representation in the media controller centric rkcif
-+device driver, which is located under drivers/media/platform/rockchip/rkcif.
++        properties:
++          endpoint:
++            $ref: video-interfaces.yaml#
++            unevaluatedProperties: false
 +
-+Variants
-+========
++            properties:
++              bus-type:
++                enum: [1, 4]
 +
-+Rockchip PX30 Video Input Processor (VIP)
-+-----------------------------------------
++              data-lanes:
++                minItems: 1
++                maxItems: 4
 +
-+The PX30 Video Input Processor (VIP) features a digital video port that accepts
-+parallel video data or BT.656.
-+Since these protocols do not feature multiple streams, the VIP has one DMA
-+engine that transfers the input video data into system memory.
++            required:
++              - bus-type
++              - data-lanes
 +
-+The rkcif driver represents this hardware variant by exposing one V4L2 subdevice
-+(the DVP INTERFACE/CROP block) and one V4L2 device (the DVP DMA engine).
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Output port connected to a RK3568 VICAP port.
 +
-+Rockchip RK3568 Video Capture (VICAP)
-+-------------------------------------
++    required:
++      - port@0
++      - port@1
 +
-+The RK3568 Video Capture (VICAP) unit features a digital video port and a MIPI
-+CSI-2 receiver that can receive video data independently.
-+The DVP accepts parallel video data, BT.656 and BT.1120.
-+Since the BT.1120 protocol may feature more than one stream, the RK3568 VICAP
-+DVP features four DMA engines that can capture different streams.
-+Similarly, the RK3568 VICAP MIPI CSI-2 receiver features four DMA engines to
-+handle different Virtual Channels (VCs).
++  power-domains:
++    maxItems: 1
 +
-+The rkcif driver represents this hardware variant by exposing up to three V4L2
-+subdevices:
++  resets:
++    maxItems: 1
 +
-+* rkcif-dvp0: INTERFACE/CROP block for the DVP
-+* rockchip-mipi-csi fdfb0000.csi: MIPI CSI-2 receiver
-+* rkcif-mipi0: INTERFACE/CROP block for the MIPI CSI-2 receiver
++required:
++  - compatible
++  - reg
++  - clocks
++  - phys
++  - ports
++  - power-domains
++  - resets
 +
-+and up to five V4L2 devices:
++additionalProperties: false
 +
-+* rkcif-dvp0-id0: The support for multiple streams on the DVP is not yet
-+  implemented, as it is hard to find test hardware. Thus, this video device
-+  represents the first DMA engine of the RK3568 DVP.
-+* rkcif-mipi0-id[0...3]: The four DMA engines of the RK3568 MIPI CSI-2
-+  receiver. Each DMA engine can capture a certain MIPI CSI-2 Virtual Channel.
++examples:
++  - |
++    #include <dt-bindings/clock/rk3568-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/media/video-interfaces.h>
++    #include <dt-bindings/power/rk3568-power.h>
 +
-+.. kernel-figure:: rkcif-rk3568-vicap.dot
-+    :alt:   Topology of the RK3568 Video Capture (VICAP) unit
-+    :align: center
-diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-index 3bac5165b134..694fad685ff5 100644
---- a/Documentation/admin-guide/media/v4l-drivers.rst
-+++ b/Documentation/admin-guide/media/v4l-drivers.rst
-@@ -25,6 +25,7 @@ Video4Linux (V4L) driver-specific documentation
- 	qcom_camss
- 	raspberrypi-pisp-be
- 	rcar-fdp1
-+	rkcif
- 	rkisp1
- 	raspberrypi-rp1-cfe
- 	saa7134
++    soc {
++        interrupt-parent = <&gic>;
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        csi: csi@fdfb0000 {
++            compatible = "rockchip,rk3568-mipi-csi";
++            reg = <0x0 0xfdfb0000 0x0 0x10000>;
++            interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH 0>,
++                         <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
++            interrupt-names = "irq1", "irq2";
++            clocks = <&cru PCLK_CSI2HOST1>;
++            phys = <&csi_dphy>;
++            power-domains = <&power RK3568_PD_VI>;
++            resets = <&cru SRST_P_CSI2HOST1>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi_in: port@0 {
++                    reg = <0>;
++
++                    csi_input: endpoint {
++                        bus-type = <MEDIA_BUS_TYPE_CSI2_DPHY>;
++                        data-lanes = <1 2 3 4>;
++                        remote-endpoint = <&imx415_output>;
++                    };
++                };
++
++                csi_out: port@1 {
++                    reg = <1>;
++
++                    csi_output: endpoint {
++                        remote-endpoint = <&vicap_mipi_input>;
++                    };
++                };
++            };
++        };
++    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a92290fffa16..9df8ec775951 100644
+index c6f56bbcdd1c..159ed29e196a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -21422,6 +21422,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/can/rockchip,rk3568v2-canfd.yaml
- F:	drivers/net/can/rockchip/
+@@ -21457,6 +21457,12 @@ F:	Documentation/userspace-api/media/v4l/metafmt-rkisp1.rst
+ F:	drivers/media/platform/rockchip/rkisp1
+ F:	include/uapi/linux/rkisp1-config.h
  
-+ROCKCHIP CAMERA INTERFACE (RKCIF) DRIVER
-+M:	Mehdi Djait <mehdi.djait@linux.intel.com>
++ROCKCHIP MIPI CSI-2 RECEIVER DRIVER
 +M:	Michael Riesch <michael.riesch@collabora.com>
 +L:	linux-media@vger.kernel.org
 +S:	Maintained
-+F:	Documentation/admin-guide/media/rkcif*
++F:	Documentation/devicetree/bindings/media/rockchip,rk3568-mipi-csi.yaml
 +
- ROCKCHIP CRYPTO DRIVERS
- M:	Corentin Labbe <clabbe@baylibre.com>
- L:	linux-crypto@vger.kernel.org
+ ROCKCHIP RK3568 RANDOM NUMBER GENERATOR SUPPORT
+ M:	Daniel Golle <daniel@makrotopia.org>
+ M:	Aurelien Jarno <aurelien@aurel32.net>
 
 -- 
 2.39.5
