@@ -1,71 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D5F1E3DE8;
-	Thu, 19 Jun 2025 09:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129433085D7
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 09:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750325934; cv=none; b=tVLg8ShEulIlNvKqPP/SJ1tTJYA382DoECzeqTbFn/jko0wpt1ISOwgq1/xycKPgsW0SNmQElZ+Hi6H0A2WWjlUo4uHklXeE8vaSPch+k2voWarU+aL2VlKmH+pxoP0F470lENCPHSeHwg5LRbuSwo/iSgLCmDkQJFA1mMtguuo=
+	t=1750326754; cv=none; b=tuJqtpx6D6lb6i5+pnJ4FgNgMmSakmjL1Qwnya318rBJONaNd+ZDSJHsjkChLu77rAsnZ2AwAjtr/6o5PeVW+SQWXJiBsgLNC14jzlx/cSk6vHsRmhvVoZY7HqyHr5sTS9k3c2xoYhodsfyRGGx+HGA8HYPd2rfK0fPWlweT+nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750325934; c=relaxed/simple;
-	bh=tmPwogviHT2zinOSdzIGFje8vEkoX+6eWwlv0xTMK60=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nqZau5sa4UwjUj83AVnuKST1WCcKmXhOwdFG9Rvp/fdK5b0eKZYPJIL8UQT89f9TQQv5f5yn1sYUj1q6xVbBQ80jzZlSNFkDWKJSpFXRsa0/8l/2zKPrrwY7IywMF84XbtBPVcjxbR1hjQxeJWgxb9MdSqPfoDwCQ/9y+T+5DKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrrfDgS6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750326754; c=relaxed/simple;
+	bh=BbYqJoFgHwK6lo5QGRrrQZ9+MqkTojvmSjePVT6xDJw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mtdQ/GYjJda1UV91uLzkWxs6qBLQ25K5Ko29OIwbUyOjIjxQN6OBDFu966byeWDoCJCTXQzJpoFYRlfxuTIzvGIvKD/ChCMfstvHZvQGU3YtjE1nTveK+MtF2FhT1X0+dbNTldO3Ewuy7fXiaB0sZXJamK77UrbdlR5f2VcQzZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VqXdw/er; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrrfDgS6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2221EC4CEEA;
-	Thu, 19 Jun 2025 09:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750325934;
-	bh=tmPwogviHT2zinOSdzIGFje8vEkoX+6eWwlv0xTMK60=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lrrfDgS6itvAmIkOVw23+q0nuVf2a2Jh2D+eFdQX8yBKxFtfwn//XfFogywS7IY0o
-	 WHn8qI7YgUg4g3gjdEBEZeDZymnkY9HRhzN9H4O+DdRwl4UaDa+HEdZsf524DsQGTs
-	 NSmkhCips6XOKaqbj5yqsfcH35fretoxGA4LCDyFnGkOCYoJ3zMcGMIKXQJNUw1T7U
-	 /818820O1TY3iPxKtPXu2GWWec42I0dwu4j2E0FNRBuPxbZjQUE+ORVGjlsDXenGsN
-	 MA9KJZPXLxQmaPIXG019HFxfmCq4Ni/Qg9pzJWM7/1VUhK5l0joxsiYj+Nmc2zFTgt
-	 RwAieXvGd7Zxw==
-Date: Thu, 19 Jun 2025 10:38:49 +0100
-From: Lee Jones <lee@kernel.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Richard Leitner <richard.leitner@linux.dev>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 03/10] media: v4l2-flash: fix flash_timeout
- comment
-Message-ID: <20250619093849.GA587864@google.com>
-References: <20250617-ov9282-flash-strobe-v5-3-9762da74d065@linux.dev>
- <175032584928.604443.15779695084855330292.b4-ty@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VqXdw/er"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750326753; x=1781862753;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BbYqJoFgHwK6lo5QGRrrQZ9+MqkTojvmSjePVT6xDJw=;
+  b=VqXdw/erOuhk9seahxucL3QTaIz1vhQ8Fplu9S4Hk3IBqhKCC+d5dYpw
+   U04CmL4ZbguUs/zOaZzdCtjjae3i43JtQ5pRd/aOydQhvlnHeD2sHfZws
+   AxP88P5eYrlmhihZt7+DxRf49iG4NDk/M+Mij3OkDGbu00f6dCOMvGgJH
+   GPfrSkeYDFWrgprbibvGf37ahtFi9/51t0TcG7oz4v1Ej4G3w3W+LEYsG
+   iHbLq3adUDk/V/NXBAwUWHMksUEFXe4iQ8CO1ZV4hQ59jcxA2yZXfeDVa
+   vCQ+shRXQJqQi/KMa3LmS7htb4T/5frtaGe+b7Dnwg1y4WPnNr+HE8RuN
+   A==;
+X-CSE-ConnectionGUID: Phgrk1f0T/+xoz6J8+zpSQ==
+X-CSE-MsgGUID: Wx07emGNTfGorhcgZSq+ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="40185104"
+X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
+   d="scan'208";a="40185104"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 02:52:32 -0700
+X-CSE-ConnectionGUID: IKi3B+csSBC9ZQsivi8vYg==
+X-CSE-MsgGUID: zQp5F8yQSdaX0CXTRiL5/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
+   d="scan'208";a="150037995"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 02:52:31 -0700
+Received: from punajuuri.localdomain (unknown [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 05DA9120323;
+	Thu, 19 Jun 2025 12:52:28 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1uSBwZ-0088SO-32;
+	Thu, 19 Jun 2025 12:52:27 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-media@vger.kernel.org
+Cc: Hans Verkuil <hans@jjverkuil.nl>,
+	laurent.pinchart@ideasonboard.com
+Subject: [PATCH v2 1/3] media: v4l2-ctrls: Don't reset handler's error in v4l2_ctrl_handler_free()
+Date: Thu, 19 Jun 2025 12:52:25 +0300
+Message-Id: <20250619095227.1939114-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250619095227.1939114-1-sakari.ailus@linux.intel.com>
+References: <20250619095227.1939114-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <175032584928.604443.15779695084855330292.b4-ty@kernel.org>
 
-On Thu, 19 Jun 2025, Lee Jones wrote:
+It's a common pattern in drivers to free the control handler's resources
+and then return the handler's error code on drivers' error handling paths.
+Alas, the v4l2_ctrl_handler_free() function also zeroes the error field,
+effectively indicating successful return to the caller.
 
-> On Tue, 17 Jun 2025 09:31:37 +0200, Richard Leitner wrote:
-> > The comment for the flash_timeout setter mentioned it is the "flash
-> > duration". Fix this by changing it to "flash timeout".
-> > 
-> > 
-> 
-> Applied, thanks!
-> 
-> [03/10] media: v4l2-flash: fix flash_timeout comment
->         commit: 6012ce6b30567aa8ec8dc5b648b7841f9f74ca7c
+There's no apparent need to touch the error field while releasing the
+control handler's resources and cleaning up stale pointers. Not touching
+the handler's error field is a more certain way to address this problem
+than changing all the users, in which case the pattern would be likely to
+re-emerge in new drivers.
 
-I fixed the erroneous subject line on application.
+Do just that, don't touch the control handler's error field in
+v4l2_ctrl_handler_free().
 
+Fixes: 0996517cf8ea ("V4L/DVB: v4l2: Add new control handling framework")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls-core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+index 90d25329661e..932aedc26049 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+@@ -1661,7 +1661,6 @@ void v4l2_ctrl_handler_free(struct v4l2_ctrl_handler *hdl)
+ 	kvfree(hdl->buckets);
+ 	hdl->buckets = NULL;
+ 	hdl->cached = NULL;
+-	hdl->error = 0;
+ 	mutex_unlock(hdl->lock);
+ 	mutex_destroy(&hdl->_lock);
+ }
 -- 
-Lee Jones [李琼斯]
+2.39.5
+
