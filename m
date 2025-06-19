@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477FB25A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428FE25A2D1
 	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334364; cv=none; b=PeJQbCwrvbbUzFglpwf70Qn04gscDFA1BDvWW1DohHlR6hMYwzGT5Qee7R9NsQPCPwgW/yjV/l5hC4MKVnAawv7FN3lrQsdeqWG2ZLhgMqhcxuaqmyyitBFYF0oc+iVpt4kaRYDlFyUwbxIjBJebloU4YfRxDzXfgCr0WFUGXjI=
+	t=1750334365; cv=none; b=brUb1Ot35y7Wd5T6b5pNv3Bi6GlSAemDORzg8F293S10VeKRW3CDYutFp56DG59bJdkguAMerppaEsDyAQaOFSHIO084cj4OPiOUa9xV098+szUWk9oK62pLkJ4yCVDaEYtj5h1qlcfXUkhtyT8pxhI7c9QbOhkYFbvbOu2fPiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334364; c=relaxed/simple;
-	bh=5OYUvWhOv0sy1erUTugtFvfm5MLAQyRQDD8AlH4Npc8=;
+	s=arc-20240116; t=1750334365; c=relaxed/simple;
+	bh=fVP0ZFN1gX3DZ8wy3Q9u+dynZkzaIwgA4dosUBaQ1dU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IzqFTJyvhefS2Rt6lHNGB+jJUUyvgGRwCbR65Mod0yTwDgY2J82LMdoc8fVoGo6IjzhflHjvoWQqW9WWnib446T5RBhjrqHVS/bdAMwlbSPOXUBOtUXl5JnY466yYWCrFbTKaG+sd7akmXtFzG4lUTkOBBtGlNLbplr6A96OJVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mk7T/5tp; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=h1s4OifofkJu1oS2yUaFhE8uY5JxMtH+VwdHcJvUF4B/HomSIXikNFDNweE0BQ/7nHspd4kNnFfeTJG0CHsyo0lzZ6d08/NTiN4tmD0O44wdlHnRpE4/n9TEte3+gJz1cxEFN1k6/RtryiNwSeHI4BBwRC1c/13dobNNblVuheU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=igccHDfe; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mk7T/5tp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="igccHDfe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1750334363; x=1781870363;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5OYUvWhOv0sy1erUTugtFvfm5MLAQyRQDD8AlH4Npc8=;
-  b=Mk7T/5tpJB0uHFnsgzvBIcnJdKYuB03CMJ/9p2FEMHFTa8OIcvXSRALB
-   WQf4dQRSF4FC/Qc+/6MWFx7aXx/zyEMFTxT5AGrizYPsGrRTg2B+aeiyI
-   W+AOMzrRMF0cNyrTpuB5/ByjU72GxohFVpnJPIqXqk//ySt/RaRhkWRy/
-   kU8iVkD4ed3U5j4gaopBU/fzM5s3V/kqGbNgeHbaOMan7FvVdrtFlXGX9
-   d28azMI77Hm104tkLRkqHDojDjVYACAbdry0HfEo7vLXR1bT/qVNx20zQ
-   w+8rFLWQdpIVvOhbCA9RH0ziK2ZiwaZhwKibWS1r12rQfWH44TPKYXJcK
-   A==;
-X-CSE-ConnectionGUID: kgt+jNXVRCmHzXbCqq4pxQ==
-X-CSE-MsgGUID: 3YZcrlWLTxacphma6QfvQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386760"
+  bh=fVP0ZFN1gX3DZ8wy3Q9u+dynZkzaIwgA4dosUBaQ1dU=;
+  b=igccHDfeLxcOC31/QaisfeDmuOgf+1Cwf+6+6YONllK+qWHVeJHa+GIq
+   KvJMe5a2Fps8W+58GW+gsNNNmiHq2UZOTQ0OKjShmcWqn0qb/bD0oE3NR
+   M//VbqxqDyyDzH7/pLk1n2+KrE7xB1EgYFQXP68v/3bJJ4LLCV0pWbdYU
+   b/FlTZmJO3A9hPVe/eixR7jKMfwbfk8dh4G8opIylFgg3E6ADlnpWOWv0
+   1Xr/uAIWpkGMHMOG50DEpsoTcJO2N9+NCGzxqRECJKsEQ9/okodhMZn2z
+   o8j6AK26bnzwAEPBYuJ7TE51JmZZU583Ua7O2WB3zZDh4yBiToWqmCof+
+   w==;
+X-CSE-ConnectionGUID: ngfv0NslRU+iltA6C8J+FQ==
+X-CSE-MsgGUID: HdNZlZJuR1+Qb5yffiCkCQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386723"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="56386760"
+   d="scan'208";a="56386723"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:13 -0700
-X-CSE-ConnectionGUID: OH3Rn/O7THGRuK4BxEWB0g==
-X-CSE-MsgGUID: rP+DDjVIQbu2qJvw/iqJdQ==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:12 -0700
+X-CSE-ConnectionGUID: Mb1k/rABT9S4IP1kcWQMPA==
+X-CSE-MsgGUID: GyC0dET+RKy/xd2U+6yvgg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="154908461"
+   d="scan'208";a="154908454"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:06 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:05 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 54D3D123267;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 40BA512323D;
 	Thu, 19 Jun 2025 14:58:37 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDuf-008ALc-12;
+	id 1uSDuf-008AL7-0l;
 	Thu, 19 Jun 2025 14:58:37 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 50/64] media: ov2740: Add support for G_SELECTION IOCTL
-Date: Thu, 19 Jun 2025 14:58:22 +0300
-Message-Id: <20250619115836.1946016-51-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 44/64] media: uapi: Add controls for sub-sampling configuration
+Date: Thu, 19 Jun 2025 14:58:16 +0300
+Message-Id: <20250619115836.1946016-45-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,73 +95,99 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for the G_SELECTION IOCTL in the ov2740 driver.
+Sub-sampling is a way to decrease the data rates after the pixel array by
+systematically discarding some samples, either vertically or horizontally
+or both. Add two controls for the purpose and document them. The
+sub-sampling configuration is taken into account in the compose rectangle.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 ---
- drivers/media/i2c/ov2740.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../media/drivers/camera-sensor.rst              | 16 +++++++++++++---
+ .../userspace-api/media/v4l/ext-ctrls-camera.rst | 11 +++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c        |  2 ++
+ include/uapi/linux/v4l2-controls.h               |  2 ++
+ 4 files changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 00319eacf89e..2480813113cb 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -24,6 +24,11 @@
- #define OV2740_DATA_LANES		2
- #define OV2740_RGB_DEPTH		10
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index ef1f51862980..b0ad0d778396 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -120,8 +120,8 @@ values programmed by the register sequences. The default values of these
+ controls shall be 0 (disabled). Especially these controls shall not be inverted,
+ independently of the sensor's mounting rotation.
  
-+#define OV2740_DUMMY_LINES_PRE		8U
-+#define OV2740_DUMMY_LINES_POST		8U
-+#define OV2740_ACTIVE_WIDTH		1932U
-+#define OV2740_ACTIVE_HEIGHT		1092U
-+
- #define OV2740_REG_CHIP_ID		0x300a
- #define OV2740_CHIP_ID			0x2740
+-Binning
+--------
++Binning and sub-sampling
++------------------------
  
-@@ -1155,6 +1160,35 @@ static int ov2740_set_format(struct v4l2_subdev *sd,
- 				   fmt->pad, fmt->stream);
- }
+ Binning has traditionally been configured using :ref:`the compose selection
+ rectangle <v4l2-selection-targets-table>`. The :ref:`V4L2_CID_BINNING
+@@ -130,7 +130,17 @@ users should use it when it's available. Drivers supporting the control shall
+ also support the compose rectangle, albeit the rectangle may be read-only when
+ the control is present.
  
-+static int ov2740_get_selection(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state,
-+				struct v4l2_subdev_selection *sel)
-+{
-+	if (sel->stream != OV2740_STREAM_PIXEL ||
-+	    sel->pad != OV2740_PAD_SOURCE)
-+		return -EINVAL;
+-Binning isn't affected by flipping.
++Sub-sampling is often supported as part of a camera sensor's binning
++functionality and performed after the binning operation. Sub-sampling typically
++produces quality-wise worse results than binning. Sub-sampling factors are
++independent horizontally and vertically and they are controlled using two
++controls, :ref:`V4L2_CID_SUBSAMPLING_HORIZONTAL and
++V4L2_CID_SUBSAMPLING_VERTICAL <v4l2-cid-camera-sensor-subsampling>`. In
++sub-sampling, the image size before sub-sampling is horizontally and vertically
++divided by the respective sub-sampling factors. Drivers supporting the control shall
++also reflect the sub-sampling configuration in the compose rectangle.
 +
-+	switch (sel->target) {
-+	case V4L2_SEL_TGT_NATIVE_SIZE:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		sel->r.top = 0;
-+		sel->r.left = 0;
-+		sel->r.width = OV2740_ACTIVE_WIDTH;
-+		sel->r.height = OV2740_DUMMY_LINES_PRE + OV2740_ACTIVE_HEIGHT +
-+			OV2740_DUMMY_LINES_POST;
-+		return 0;
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+		sel->r.top = OV2740_DUMMY_LINES_PRE;
-+		sel->r.left = 0;
-+		sel->r.width = OV2740_ACTIVE_WIDTH;
-+		sel->r.height = OV2740_ACTIVE_HEIGHT;
-+		return 0;
-+	}
++Binning and sub-sampling aren't affected by flipping.
+ 
+ .. _media_using_camera_sensor_drivers_embedded_data:
+ 
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+index 18b484ff5d75..577b73045bee 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+@@ -701,3 +701,14 @@ enum v4l2_scene_mode -
+ 
+ For instance, a value of ``0x0001000300020003`` indicates binning by 3
+ (horizontally) * 3/2 (vertically).
 +
-+	return -EINVAL;
-+}
++.. _v4l2-cid-camera-sensor-subsampling:
 +
- static int ov2740_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
-@@ -1268,6 +1302,7 @@ static const struct v4l2_subdev_video_ops ov2740_video_ops = {
- static const struct v4l2_subdev_pad_ops ov2740_pad_ops = {
- 	.get_fmt = v4l2_subdev_get_fmt,
- 	.set_fmt = ov2740_set_format,
-+	.get_selection = ov2740_get_selection,
- 	.enum_mbus_code = ov2740_enum_mbus_code,
- 	.enum_frame_size = ov2740_enum_frame_size,
- 	.enable_streams = ov2740_enable_streams,
++``V4L2_CID_SUBSAMPLING_HORIZONTAL`` and ``V4L2_CID_SUBSAMPLING_VERTICAL``
++(integer)
++
++    Horizontal and vertical subsampling factors.
++
++    Sub-sampling is used to downscale an image, horizontally and vertically, by
++    discarding a part of the image data. Typically sub-sampling produces lower
++    quality images than binning.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 5e1c28850e87..9f8816bfffbe 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1088,6 +1088,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_CAMERA_SENSOR_ROTATION:	return "Camera Sensor Rotation";
+ 	case V4L2_CID_HDR_SENSOR_MODE:		return "HDR Sensor Mode";
+ 	case V4L2_CID_BINNING_FACTORS:		return "Binning Factors";
++	case V4L2_CID_SUBSAMPLING_HORIZONTAL:	return "Sub-Sampling Factor, Horizontal";
++	case V4L2_CID_SUBSAMPLING_VERTICAL:	return "Sub-Sampling Factor, Vertical";
+ 
+ 	/* FM Radio Modulator controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 630850d237ad..61d82e250480 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1096,6 +1096,8 @@ enum v4l2_auto_focus_range {
+ 
+ #define V4L2_CID_HDR_SENSOR_MODE		(V4L2_CID_CAMERA_CLASS_BASE+36)
+ #define V4L2_CID_BINNING_FACTORS		(V4L2_CID_CAMERA_CLASS_BASE+37)
++#define V4L2_CID_SUBSAMPLING_HORIZONTAL		(V4L2_CID_CAMERA_CLASS_BASE+38)
++#define V4L2_CID_SUBSAMPLING_VERTICAL		(V4L2_CID_CAMERA_CLASS_BASE+39)
+ 
+ /* FM Modulator class control IDs */
+ 
 -- 
 2.39.5
 
