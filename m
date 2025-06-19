@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B3D2561AF
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBCC2561DD
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334353; cv=none; b=o0hXubUOxVvF8mdQzXK8vLfU0WcYrU9bbt3lMcE87MoE/vTA4Zw6B/mKrgyWKBocPSeAdXLfUbiIcsY9vdYIQQQjOUl7IO1DvijR6etGgTZ/L+mr/o1isjJvPWJpgWIGaZDo/SNX7W+IxPlOWfkK8MZthiSA66Nqwr6ccuZyc3k=
+	t=1750334354; cv=none; b=uWZgJr4X/SIfrZSHveLaivdEDXSE6BbFSrSKdN/6LcLWOmbfZkWOHtDr6hTFOUy/sOgnVy0Y/gXn9iz/u54D1/Vja/VAbnwvw//WCUvl0l8cqFJpmLIQAwS95IAcuMkuH01P/NMYMO4mSNSZYbZQ9LzxHqVQkwR+2+UOz7ZQsJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334353; c=relaxed/simple;
-	bh=QV5VIQ2BQMpkIUxrc7xvZVhD3jKa+ZfnZyq6k2YrCAg=;
+	s=arc-20240116; t=1750334354; c=relaxed/simple;
+	bh=t9z5XUBV9d/Mnl0I+EAgmtXn34wQG1D/vXxQXvRG87Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OYk/hKe03hGa/FPcI3J7rHNp30QHul21hn+kqGcjG3g4UIBdc+Pn5UnKtJPXGwpSYqd0ltFmOxVovD1oDWdTemPiBCD5uuYAnVF4vOhsH2KSlWj9JmkBm7udw2akJwbbeLsJI0AwV5PBskaURKCsCQzKAq6c0bPXHgw7ul3dlO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Igaod+qV; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=ZFCePCt/4FVweIjJgAIGISl4TaHGWxBuBiymVrODs/8GF96L8eXnb7hJfckDy3rZaTalDQ6I/M/mDOUiTqmSYCA3389M0uICOdKdoPIW42kJO4jOLWYB/vXb7O0wkWKDmbHOk6u5SuIi/IP50ulaJrC/853d+0GgW5/UcPmXPiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sfas3f+D; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Igaod+qV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sfas3f+D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750334352; x=1781870352;
+  t=1750334353; x=1781870353;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QV5VIQ2BQMpkIUxrc7xvZVhD3jKa+ZfnZyq6k2YrCAg=;
-  b=Igaod+qVWI46wu34neIe1QuDr47kyOOhhE1mvV55eMXFWgd1Syw9bXwo
-   yK5gItWx3DUTcNWdLhSHLGjTcWnQmnGgefw3PQO89b0k4J2DxnLptF9/U
-   r3Wn3KFQD0mWVJ8LG0oNORTjBocd+e0sw//kxxhWHtQUw+x5o00YIvcZq
-   ZHoc3zaK7ZIuKu1TxraaVGPGkv2IK5mfpacilivM6LugqjTbeitMzO9Ey
-   odmArvGOAA0K4na/+TbP3N+2lE8yq7hxne/FlHSytCvZ9IX+6gM3R+sAb
-   z7YTU14LxNvL283za/eS5EbSEc0xMQ3eVQRdXAXHBmt/2hO1xIoc+qyzY
-   A==;
-X-CSE-ConnectionGUID: 5e72x6HZQFmBha21P0OqNw==
-X-CSE-MsgGUID: DmN07iO4RtiFzoHgnG7zGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386471"
+  bh=t9z5XUBV9d/Mnl0I+EAgmtXn34wQG1D/vXxQXvRG87Q=;
+  b=Sfas3f+D1NminnSlF2DZTKZrRGrcppKSK6HOsDRuLJAim7A8YgX9NANK
+   WDgz6oZNBqBH2g8O4o3KldPOGvgmgpCCVwC66ooWUi1CqGGdc9fnoGCbj
+   qFp20MnauohtAd53dw+229yreQQ02AsJiyb+DBHGa5AhnPqSB2HZJ4rog
+   G8wpwni7gNN99HDVZx31A9vzGL/fnZ/Zvn+7/FPCoaQRHcxvpnUDBF1HP
+   AfX3+80T+j/Mm+XXeRGdxSh7qFUZzaf9BuUK4EE+ta/QOZk6kZ3NCSB7v
+   dk3blu012CWqSLD/uqRxO6TdysYM1bNGCrcYqsEzyukcckUfXGy3NSIhI
+   Q==;
+X-CSE-ConnectionGUID: YFqiipMCTUe3z5bRn3QpIg==
+X-CSE-MsgGUID: TRNa41EzQ+iG/ByJHd7RBw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386495"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="56386471"
+   d="scan'208";a="56386495"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:05 -0700
-X-CSE-ConnectionGUID: 0rN04ZZaRCmZ9k3DJqNatw==
-X-CSE-MsgGUID: OCjZOJu2Qp+K710TPuxdYw==
+X-CSE-ConnectionGUID: w3wGM+vfRM2OZPyr7SmBBg==
+X-CSE-MsgGUID: 2XrhXz7ZSrygeCn2DbNMcw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="154908311"
+   d="scan'208";a="154908325"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:57 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:58 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 0D83812214D;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1F4D8122443;
 	Thu, 19 Jun 2025 14:58:37 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDuf-008AJp-04;
+	id 1uSDuf-008AKJ-0K;
 	Thu, 19 Jun 2025 14:58:37 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 28/64] media: ccs: Remove ccs_get_crop_compose helper
-Date: Thu, 19 Jun 2025 14:58:00 +0300
-Message-Id: <20250619115836.1946016-29-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 34/64] media: Documentation: Rework embedded data documentation
+Date: Thu, 19 Jun 2025 14:58:06 +0300
+Message-Id: <20250619115836.1946016-35-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,341 +95,44 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As it's now easier to obtain the necessary information on crop and compose
-rectangles after moving to sub-device state, remove the
-ccs_get_crop_compose helper.
-
-Also remove the comp arguments of the compose goodness calculators and
-make related local variables and function arguments const where
-applicable.
+Rework embedded data documentation by removing the reference to the pixel
+data stream. The specific documentation of the embedded data interface
+will be elsewhere, in the near future either CCS or common raw camera
+sensor model documentation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 164 ++++++++++++++-----------------
- 1 file changed, 72 insertions(+), 92 deletions(-)
+ .../userspace-api/media/drivers/camera-sensor.rst   | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 5c53651f82df..0f0588e0c2da 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -2228,24 +2228,6 @@ static int ccs_get_format(struct v4l2_subdev *subdev,
- 	return rval;
- }
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index d9589ad80204..16dfa6d841c1 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -124,13 +124,12 @@ the sensor configuration for the captured frame back to the host. While CSI-2 is
+ the most common data interface used by such sensors, embedded data can be
+ available on other interfaces as well.
  
--static void ccs_get_crop_compose(struct v4l2_subdev *subdev,
--				 struct v4l2_subdev_state *sd_state,
--				 struct v4l2_rect **crops,
--				 struct v4l2_rect **comps)
--{
--	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	unsigned int i;
--
--	if (crops)
--		for (i = 0; i < subdev->entity.num_pads; i++)
--			crops[i] =
--				v4l2_subdev_state_get_crop(sd_state, i,
--							   CCS_STREAM_PIXEL);
--	if (comps)
--		*comps = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
--						       CCS_STREAM_PIXEL);
--}
--
- /* Changes require propagation only on sink pad. */
- static void ccs_propagate(struct v4l2_subdev *subdev,
- 			  struct v4l2_subdev_state *sd_state, int which,
-@@ -2253,15 +2235,17 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect *comp, *crops[CCS_PADS];
-+	struct v4l2_rect *comp, *crop;
- 	struct v4l2_mbus_framefmt *fmt;
+-Such sensors expose two internal sink pads (pads that have both the
+-``MEDIA_PAD_FL_SINK <MEDIA-PAD-FL-SINK>`` and ``MEDIA_PAD_FL_INTERNAL
+-<MEDIA-PAD-FL-INTERNAL>`` flags set) to model the source of the image and
+-embedded data streams. Both of these pads produces a single stream, and the
+-sub-device routes those streams to the external (source) pad. If the sub-device
+-driver supports disabling embedded data, this can be done by disabling the
+-embedded data route via the ``VIDIOC_SUBDEV_S_ROUTING`` IOCTL.
++Embedded data support is indicated by the presence of an internal sink pad (pad
++that has both the ``MEDIA_PAD_FL_SINK <MEDIA-PAD-FL-SINK>`` and
++``MEDIA_PAD_FL_INTERNAL <MEDIA-PAD-FL-INTERNAL>`` flags set) with a metadata
++format to model the embedded data stream. If the sub-device driver supports
++disabling embedded data, this can be done by disabling the embedded data route
++via the ``VIDIOC_SUBDEV_S_ROUTING`` IOCTL.
  
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
--
-+	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
-+					     CCS_STREAM_PIXEL);
- 	switch (target) {
- 	case V4L2_SEL_TGT_CROP:
--		comp->width = crops[CCS_PAD_SINK]->width;
--		comp->height = crops[CCS_PAD_SINK]->height;
-+		crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SINK,
-+						  CCS_STREAM_PIXEL);
-+		comp->width = crop->width;
-+		comp->height = crop->height;
- 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 			if (ssd == sensor->scaler) {
- 				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
-@@ -2275,13 +2259,15 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 		}
- 		fallthrough;
- 	case V4L2_SEL_TGT_COMPOSE:
--		*crops[CCS_PAD_SRC] = *comp;
-+		crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SRC,
-+						  CCS_STREAM_PIXEL);
-+		*crop = *comp;
- 		fmt = v4l2_subdev_state_get_format(sd_state, CCS_PAD_SRC,
- 						   CCS_STREAM_PIXEL);
- 		fmt->width = comp->width;
- 		fmt->height = comp->height;
- 		if (which == V4L2_SUBDEV_FORMAT_ACTIVE && ssd == sensor->src)
--			sensor->src_src = *crops[CCS_PAD_SRC];
-+			sensor->src_src = *crop;
- 		break;
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -2430,7 +2416,7 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect *crops[CCS_PADS];
-+	struct v4l2_rect *crop;
- 
- 	if (ssd == sensor->src && fmt->pad == CCS_PAD_META)
- 		return ccs_get_format(subdev, sd_state, fmt);
-@@ -2472,12 +2458,13 @@ static int ccs_set_format(struct v4l2_subdev *subdev,
- 		      CCS_LIM(sensor, MIN_Y_OUTPUT_SIZE),
- 		      CCS_LIM(sensor, MAX_Y_OUTPUT_SIZE));
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, NULL);
-+	crop = v4l2_subdev_state_get_crop(sd_state, ssd->sink_pad,
-+					  CCS_STREAM_PIXEL);
- 
--	crops[ssd->sink_pad]->left = 0;
--	crops[ssd->sink_pad]->top = 0;
--	crops[ssd->sink_pad]->width = fmt->format.width;
--	crops[ssd->sink_pad]->height = fmt->format.height;
-+	crop->left = 0;
-+	crop->top = 0;
-+	crop->width = fmt->format.width;
-+	crop->height = fmt->format.height;
- 	ccs_propagate(subdev, sd_state, fmt->which, V4L2_SEL_TGT_CROP);
- 
- 	mutex_unlock(&sensor->mutex);
-@@ -2532,26 +2519,23 @@ static int scaling_goodness(struct v4l2_subdev *subdev, int w, int ask_w,
- static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- 				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_selection *sel,
--				   struct v4l2_rect **crops,
--				   struct v4l2_rect *comp)
-+				   const struct v4l2_rect *sink_crop)
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	unsigned int i;
- 	unsigned int binh = 1, binv = 1;
--	int best = scaling_goodness(
--		subdev,
--		crops[CCS_PAD_SINK]->width, sel->r.width,
--		crops[CCS_PAD_SINK]->height, sel->r.height, sel->flags);
-+	int best = scaling_goodness(subdev, sink_crop->width, sel->r.width,
-+				    sink_crop->height, sel->r.height,
-+				    sel->flags);
- 
- 	for (i = 0; i < sensor->nbinning_subtypes; i++) {
--		int this = scaling_goodness(
--			subdev,
--			crops[CCS_PAD_SINK]->width
--			/ sensor->binning_subtypes[i].horizontal,
--			sel->r.width,
--			crops[CCS_PAD_SINK]->height
--			/ sensor->binning_subtypes[i].vertical,
--			sel->r.height, sel->flags);
-+		int this = scaling_goodness(subdev,
-+					    sink_crop->width
-+					    / sensor->binning_subtypes[i].horizontal,
-+					    sel->r.width,
-+					    sink_crop->height
-+					    / sensor->binning_subtypes[i].vertical,
-+					    sel->r.height, sel->flags);
- 
- 		if (this > best) {
- 			binh = sensor->binning_subtypes[i].horizontal;
-@@ -2564,8 +2548,8 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- 		sensor->binning_horizontal = binh;
- 	}
- 
--	sel->r.width = (crops[CCS_PAD_SINK]->width / binh) & ~1;
--	sel->r.height = (crops[CCS_PAD_SINK]->height / binv) & ~1;
-+	sel->r.width = (sink_crop->width / binh) & ~1;
-+	sel->r.height = (sink_crop->height / binv) & ~1;
- }
- 
- /*
-@@ -2580,8 +2564,7 @@ static void ccs_set_compose_binner(struct v4l2_subdev *subdev,
- static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 				   struct v4l2_subdev_state *sd_state,
- 				   struct v4l2_subdev_selection *sel,
--				   struct v4l2_rect **crops,
--				   struct v4l2_rect *comp)
-+				   const struct v4l2_rect *sink_crop)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(subdev);
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
-@@ -2593,17 +2576,12 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 	unsigned int i;
- 	int best = INT_MIN;
- 
--	sel->r.width = min_t(unsigned int, sel->r.width,
--			     crops[CCS_PAD_SINK]->width);
--	sel->r.height = min_t(unsigned int, sel->r.height,
--			      crops[CCS_PAD_SINK]->height);
--
--	a = crops[CCS_PAD_SINK]->width
--		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.width;
--	b = crops[CCS_PAD_SINK]->height
--		* CCS_LIM(sensor, SCALER_N_MIN) / sel->r.height;
--	max_m = crops[CCS_PAD_SINK]->width
--		* CCS_LIM(sensor, SCALER_N_MIN)
-+	sel->r.width = min_t(unsigned int, sel->r.width, sink_crop->width);
-+	sel->r.height = min_t(unsigned int, sel->r.height, sink_crop->height);
-+
-+	a = sink_crop->width * CCS_LIM(sensor, SCALER_N_MIN) / sel->r.width;
-+	b = sink_crop->height * CCS_LIM(sensor, SCALER_N_MIN) / sel->r.height;
-+	max_m = sink_crop->width * CCS_LIM(sensor, SCALER_N_MIN)
- 		/ CCS_LIM(sensor, MIN_X_OUTPUT_SIZE);
- 
- 	a = clamp(a, CCS_LIM(sensor, SCALER_M_MIN),
-@@ -2634,14 +2612,12 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 	}
- 
- 	for (i = 0; i < ntry; i++) {
--		int this = scaling_goodness(
--			subdev,
--			crops[CCS_PAD_SINK]->width
--			/ try[i] * CCS_LIM(sensor, SCALER_N_MIN),
--			sel->r.width,
--			crops[CCS_PAD_SINK]->height,
--			sel->r.height,
--			sel->flags);
-+		int this = scaling_goodness(subdev,
-+					    sink_crop->width
-+					    / try[i]
-+					    * CCS_LIM(sensor, SCALER_N_MIN),
-+					    sel->r.width, sink_crop->height,
-+					    sel->r.height, sel->flags);
- 
- 		dev_dbg(&client->dev, "trying factor %u (%u)\n", try[i], i);
- 
-@@ -2656,12 +2632,10 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 			continue;
- 
- 		this = scaling_goodness(
--			subdev, crops[CCS_PAD_SINK]->width
--			/ try[i]
-+			subdev, sink_crop->width / try[i]
- 			* CCS_LIM(sensor, SCALER_N_MIN),
- 			sel->r.width,
--			crops[CCS_PAD_SINK]->height
--			/ try[i]
-+			sink_crop->height / try[i]
- 			* CCS_LIM(sensor, SCALER_N_MIN),
- 			sel->r.height,
- 			sel->flags);
-@@ -2673,18 +2647,13 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 		}
- 	}
- 
--	sel->r.width =
--		(crops[CCS_PAD_SINK]->width
--		 / scale_m
--		 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
-+	sel->r.width = (sink_crop->width / scale_m
-+			* CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
- 	if (mode == SMIAPP_SCALING_MODE_BOTH)
--		sel->r.height =
--			(crops[CCS_PAD_SINK]->height
--			 / scale_m
--			 * CCS_LIM(sensor, SCALER_N_MIN))
--			& ~1;
-+		sel->r.height = (sink_crop->height / scale_m
-+				 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
- 	else
--		sel->r.height = crops[CCS_PAD_SINK]->height;
-+		sel->r.height = sink_crop->height;
- 
- 	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
- 		sensor->scale_m = scale_m;
-@@ -2698,17 +2667,21 @@ static int ccs_set_compose(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect *comp, *crops[CCS_PADS];
-+	const struct v4l2_rect *sink_crop;
-+	struct v4l2_rect *comp;
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
-+	sink_crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SINK,
-+					       CCS_STREAM_PIXEL);
-+	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
-+					     CCS_STREAM_PIXEL);
- 
- 	sel->r.top = 0;
- 	sel->r.left = 0;
- 
- 	if (ssd == sensor->binner)
--		ccs_set_compose_binner(subdev, sd_state, sel, crops, comp);
-+		ccs_set_compose_binner(subdev, sd_state, sel, sink_crop);
- 	else
--		ccs_set_compose_scaler(subdev, sd_state, sel, crops, comp);
-+		ccs_set_compose_scaler(subdev, sd_state, sel, sink_crop);
- 
- 	*comp = sel->r;
- 	ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_COMPOSE);
-@@ -2769,9 +2742,13 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect src_size = { 0 }, *crops[CCS_PADS], *comp;
-+	struct v4l2_rect src_size = { 0 }, *crop;
-+	const struct v4l2_rect *comp;
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
-+	crop = v4l2_subdev_state_get_crop(sd_state, sel->pad,
-+					  CCS_STREAM_PIXEL);
-+	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
-+					     CCS_STREAM_PIXEL);
- 
- 	if (sel->pad == ssd->sink_pad) {
- 		struct v4l2_mbus_framefmt *mfmt =
-@@ -2795,7 +2772,7 @@ static int ccs_set_crop(struct v4l2_subdev *subdev,
- 	sel->r.left = min_t(int, sel->r.left, src_size.width - sel->r.width);
- 	sel->r.top = min_t(int, sel->r.top, src_size.height - sel->r.height);
- 
--	*crops[sel->pad] = sel->r;
-+	*crop = sel->r;
- 
- 	if (ssd != sensor->pixel_array && sel->pad == CCS_PAD_SINK)
- 		ccs_propagate(subdev, sd_state, sel->which, V4L2_SEL_TGT_CROP);
-@@ -2820,14 +2797,17 @@ static int ccs_get_selection(struct v4l2_subdev *subdev,
- {
- 	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
--	struct v4l2_rect *comp, *crops[CCS_PADS];
-+	const struct v4l2_rect *crop, *comp;
- 	int ret;
- 
- 	ret = ccs_sel_supported(subdev, sel);
- 	if (ret)
- 		return ret;
- 
--	ccs_get_crop_compose(subdev, sd_state, crops, &comp);
-+	crop = v4l2_subdev_state_get_crop(sd_state, sel->pad,
-+					  CCS_STREAM_PIXEL);
-+	comp = v4l2_subdev_state_get_compose(sd_state, ssd->sink_pad,
-+					     CCS_STREAM_PIXEL);
- 
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
-@@ -2849,7 +2829,7 @@ static int ccs_get_selection(struct v4l2_subdev *subdev,
- 		break;
- 	case V4L2_SEL_TGT_CROP:
- 	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
--		sel->r = *crops[sel->pad];
-+		sel->r = *crop;
- 		break;
- 	case V4L2_SEL_TGT_COMPOSE:
- 		sel->r = *comp;
+ In general, changing the embedded data layout from the driver-configured values
+ is not supported. The height of the metadata is device-specific and the width
 -- 
 2.39.5
 
