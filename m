@@ -1,54 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B22F22E403
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E23253F1A
 	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334345; cv=none; b=oLt1O2/fajA+iEIXMUGPtf5rNn7yr5yuZozU1goGZCM9/xpZz7GYB4TGSjCxtUVhu3GVoiIVnEoZHdh8x8/esZiYgewMOm4F+EHMWj/VNL+Jljva2rRVib6Y1jo7d2Jxq2iMtpLlI7gw58uW4TPRZwTUEbD04S1PLNplpRAqtZc=
+	t=1750334345; cv=none; b=W4biMyHH0ez32VSBJe4L5fhQ/3IphvgxQRcHYVoBM/T4zgFJXIaSyc3t2UajaFsSZkHiVBIwYpvfatWIg8Jbk3r6fTLEFBDm+8PgkwxwB6yVVA9BxZ97Y9ePkCnIyPIga+s6sWJjCWHZp08E9j+pAMVrs0+sd0NctBlQHVCTMSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750334345; c=relaxed/simple;
-	bh=oBLxByXXnQN+dWuYE91kF4fz9oGaJthT6ajeU9V8Vuc=;
+	bh=hREbc8iM8UbRLKsTfBg5/GDydBwc0j2g6sxpfLcdhXw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=inQr3z3ro/QMzz2V4ZFt/x+DgbSiytbbEyXXQMs1TvEiq42PUblYmZ4Qs9Gp8dI3FOkmXWK8wftWNJsPpkLP/MYXsGiR+PEuanlIscRshHVhiLVj71n8wN6kIYWc0XwLLRrLazGyXXizOvhmIhFMKH6NVoK3T6XJGLkMZWbs6vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aL4T/aJL; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=nztdjn7oqbl+L+v3NeNhoupHs9rwpd+ggR7lwkJNvY/JgOuKShDhTRewlv3VZGXpXkIYlCslizb9JP2ck5cfA0BYEBP0QZg0oIvoICo9+5eIaHxv7ff7VdUmUCPFvud60QsGLNy7g/5yoCS4fHor/zfyqPif/ZXSozi5inso+/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=enp4kwrz; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aL4T/aJL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="enp4kwrz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1750334344; x=1781870344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oBLxByXXnQN+dWuYE91kF4fz9oGaJthT6ajeU9V8Vuc=;
-  b=aL4T/aJLvSLe3iTpt2juZLq4+7R3zDB0q+hZ88pB4pTFrY0wzvnVTzHr
-   zmgwiNts2QP1TfRy1Q3EP0r275v0RYUD4d1nH1zqvxLMhOPbBJp448o4V
-   bcrNlJcVHhRTmOpoAjV3gxi9HXk/rYAxEH/353GUoTwZKAWUFszfFvmIN
-   yz8APjmUEQ1yo3B27SoDx9voqnUtio+wZLEBwl/cFL9Jvyscu+CGFg2hn
-   0CgD8pUdG4EqNVV+jDpMiP0VnY5Ne9xxukcPf9Gm5kIXWyUmUXUmhcxcj
-   gXeOtGZ7TlGrl2Wc0p8LrHzLYQTbIE97ShLSvIWKZk1G50SUzngWC2dlb
-   Q==;
-X-CSE-ConnectionGUID: OpS1kqpgSEuZm0Ems7JZ0w==
-X-CSE-MsgGUID: gq2swcQ6S+SvlL4JQFugsQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64015054"
+  bh=hREbc8iM8UbRLKsTfBg5/GDydBwc0j2g6sxpfLcdhXw=;
+  b=enp4kwrzCCZ7U+0f3kIHYf8abJdjTbC0SU3xpgrW577lRfv24OO+u3ex
+   ZUKZ8x/lc2az+ZJMRPMUWkE+RtsAZ7B4TfuBQ5LtpF1RSNVuGvr9/wu/M
+   Izb99+q5+YNo7e/rH1Ntm12EStlCck8Eg+CkFhG9xDPShSVXkfCf5ltgs
+   JSW9DU/B3o8Jm+5qX3TUp9qinEa4eTITiBkVEp6sxRgP/d492tFJIg8fV
+   t/jw7LBOXPRgRtzlKMRgKOchUK5UbwpK/okPSNld94xhP/Ngvk5q7/NSX
+   4wXemlZe8m9fYXUunv1gymcL7lD14Ilp4GsxRFB41KwrAhbfXsR8/e72S
+   w==;
+X-CSE-ConnectionGUID: BcA/cPe8QFe5yBkSkI9iwA==
+X-CSE-MsgGUID: qxzC0G4EQ3ybwrJ2/t0k/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386356"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="64015054"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:03 -0700
-X-CSE-ConnectionGUID: OL19yaoFTL+uSPRrUGFRmg==
-X-CSE-MsgGUID: vMoteRtKQWyDtG+HQySKRA==
+   d="scan'208";a="56386356"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:03 -0700
+X-CSE-ConnectionGUID: 4lSkuxj2Qceey4gi6voB1A==
+X-CSE-MsgGUID: bd7mMBnjSzqGFdh4HZionQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="155192287"
+   d="scan'208";a="154908274"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:57 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:57 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D6D43120B03;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id EED87121576;
 	Thu, 19 Jun 2025 14:58:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDue-008AIr-2k;
+	id 1uSDue-008AJQ-34;
 	Thu, 19 Jun 2025 14:58:36 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 16/64] media: uapi: Add new media bus codes for generic raw formats
-Date: Thu, 19 Jun 2025 14:57:48 +0300
-Message-Id: <20250619115836.1946016-17-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 23/64] media: Documentation: Document embedded data guidelines for camera sensors
+Date: Thu, 19 Jun 2025 14:57:55 +0300
+Message-Id: <20250619115836.1946016-24-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,89 +95,44 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add new media bus codes for generic raw formats that are not specific to
-the colour filter array but that simply specify the bit depth. The layout
-(packing) of the data is interface specific.
-
-The rest of the properties of the format are specified with controls in
-the image source.
+Document how embedded data support should be implemented for camera
+sensors, and when and how CCS embedded data layout should be referenced.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Julien Massot <julien.massot@collabora.com>
 ---
- .../media/v4l/subdev-formats.rst              | 40 +++++++++++++++++++
- include/uapi/linux/media-bus-format.h         | 10 +++++
- 2 files changed, 50 insertions(+)
+ .../media/drivers/camera-sensor.rst           | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 9ef1bc22ad9c..c06d8c83e2b8 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -3434,6 +3434,46 @@ organization is given as an example for the first pixel only.
- 
-     \endgroup
- 
-+Generic raw formats on serial interfaces
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+index 9f68d24dfe0b..450e5940c6e7 100644
+--- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
++++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
+@@ -115,3 +115,24 @@ register programming sequences shall initialize the :ref:`V4L2_CID_HFLIP
+ values programmed by the register sequences. The default values of these
+ controls shall be 0 (disabled). Especially these controls shall not be inverted,
+ independently of the sensor's mounting rotation.
 +
-+Those formats transfer (largely) unprocessed raw pixel data typically from raw
-+camera sensors using Bayer and other Colour Filter Arrays (CFAs) on serial
-+interfaces. The packing of the data on the bus is determined by the hardware,
-+however the bit depth is still specific to the format.
++Embedded data
++-------------
 +
-+The colour components and the native pixel order are determined by the
-+``V4L2_CID_COLOUR_PATTERN`` control. Whether or not flipping controls
-+(``V4L2_CID_HFLIP`` and ``V4L2_CID_VFLIP``) affect the pattern is conveyed via
-+the ``V4L2_CID_COLOUR_PATTERN_MODIFY`` control.
++Many sensors, mostly raw sensors, support embedded data which is used to convey
++the sensor configuration for the captured frame back to the host. While CSI-2 is
++the most common data interface used by such sensors, embedded data can be
++available on other interfaces as well.
 +
-+.. tabularcolumns:: |p{2.0cm}|p{4.0cm}|p{11.3cm}|
++Such sensors expose two internal sink pads (pads that have both the
++``MEDIA_PAD_FL_SINK <MEDIA-PAD-FL-SINK>`` and ``MEDIA_PAD_FL_INTERNAL
++<MEDIA-PAD-FL-INTERNAL>`` flags set) to model the source of the image and
++embedded data streams. Both of these pads produces a single stream, and the
++sub-device routes those streams to the external (source) pad. If the sub-device
++driver supports disabling embedded data, this can be done by disabling the
++embedded data route via the ``VIDIOC_SUBDEV_S_ROUTING`` IOCTL.
 +
-+.. cssclass:: longtable
-+
-+.. flat-table:: Generic raw formats on serial buses
-+    :header-rows:  1
-+    :stub-columns: 0
-+    :widths:       1 1
-+
-+    * - Format name
-+      - Bit depth
-+    * - MEDIA_BUS_FMT_RAW_8
-+      - 8
-+    * - MEDIA_BUS_FMT_RAW_10
-+      - 10
-+    * - MEDIA_BUS_FMT_RAW_12
-+      - 12
-+    * - MEDIA_BUS_FMT_RAW_14
-+      - 14
-+    * - MEDIA_BUS_FMT_RAW_16
-+      - 16
-+    * - MEDIA_BUS_FMT_RAW_20
-+      - 20
-+    * - MEDIA_BUS_FMT_RAW_24
-+      - 24
-+    * - MEDIA_BUS_FMT_RAW_28
-+      - 28
- 
- Packed YUV Formats
- ^^^^^^^^^^^^^^^^^^
-diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
-index ff62056feed5..3abae4c77c6d 100644
---- a/include/uapi/linux/media-bus-format.h
-+++ b/include/uapi/linux/media-bus-format.h
-@@ -185,4 +185,14 @@
- #define MEDIA_BUS_FMT_META_20			0x8006
- #define MEDIA_BUS_FMT_META_24			0x8007
- 
-+/* Generic (CFA independent) pixel data formats. Next is 0xa009. */
-+#define MEDIA_BUS_FMT_RAW_8			0xa001
-+#define MEDIA_BUS_FMT_RAW_10			0xa002
-+#define MEDIA_BUS_FMT_RAW_12			0xa003
-+#define MEDIA_BUS_FMT_RAW_14			0xa004
-+#define MEDIA_BUS_FMT_RAW_16			0xa005
-+#define MEDIA_BUS_FMT_RAW_20			0xa006
-+#define MEDIA_BUS_FMT_RAW_24			0xa007
-+#define MEDIA_BUS_FMT_RAW_28			0xa008
-+
- #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
++In general, changing the embedded data layout from the driver-configured values
++is not supported. The height of the metadata is device-specific and the width
++is that (or less of that) of the image width, as configured on the pixel data
++stream.
 -- 
 2.39.5
 
