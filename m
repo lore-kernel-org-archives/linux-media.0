@@ -1,151 +1,162 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763101A238D
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 14:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71ECF21578D
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 14:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750342557; cv=none; b=CqH/loKYOx4caY9PM/o9FNJ9E3cZ102PBvq0Qxm2011hXQ3aAnGx049LYfUZTyE5JzcScSf5E9MS0KDJrAcPPJRiW8ikYkiETNVSvxNCfDXCl9h7i8qYjm2jOkoPkwENODg7G/RIlyRoKkFO+uuEWcFwuv7XXIIFV3VJkSM3B6A=
+	t=1750342823; cv=none; b=nn/VqBkDQT1/g15Mt12pDTMvguz09a2ks7iXTMpxEGPh3cVmoX66cfPcdFoET2WkHtv19l/C9INVBuoPO7/rOr8qHJKXntQuBYV85DQOXkcOBhNYoQ96ZVD6XDH7b2zFzEyxw9C0ZFe0noApaxOGC9qED/8uMdBmI7SxX9mD6N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750342557; c=relaxed/simple;
-	bh=knLYWQ27zCT+ViwPhg6hd+SJEgUOFLCYXupd/PjMF/I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F6M9OiQ3wowBxIeA6ezKjUBrL3TyCrBuOCq52+KblbkCXQEq8lHnh/4DtrELisdlNbAVhJq4KZDefp8i/mrONQ93nlP0DJEh9xEQsqYvR6e5LVKJR5hPQ+PjBtOI+MWkdHhV34c/ltxBQDkzMsY+UOWlfAklBvXE6zeJGaRb+Pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=umTX0kjo; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1750342823; c=relaxed/simple;
+	bh=WZPx7ODDYg/ByFlphyOaKQFhw4U4+yp1fk/ASZyLIfU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=LDkJyloe0toikzm+ZEzBqftqAnk1oiifXYTo1QGsGknOMcn/yLXoR6eDC1mk+9Y091x6K8y4Y2iKWV/VpHna3XcSlSyCdaOBbi8vWGL4tdgj2NvWx65s9j7lICEujuc00ezuOsw78BRReZq+T38lFR0KRm9Zl+oKkzcsLjxngQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=WdFM46zd; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="umTX0kjo"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A567E107;
-	Thu, 19 Jun 2025 16:15:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1750342539;
-	bh=knLYWQ27zCT+ViwPhg6hd+SJEgUOFLCYXupd/PjMF/I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=umTX0kjobAtFJj9iVk8RgNlMD/mvgPFZlEQkMUBPdAnslHjMEwH/DSxM6dppxNX4I
-	 d/sIThKQR+67ynvIIrp1ouPa2BStOFKdyJfWyviBYvgfprlG7CAEmirNY+kVuIef6T
-	 /xXtp01JmDvddBPt35o1KkcmfimuEZ54Sh5iYwj0=
-Date: Thu, 19 Jun 2025 17:15:35 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-media@vger.kernel.org, bingbu.cao@linux.intel.com,
-	stanislaw.gruszka@linux.intel.com, tian.shu.qiu@intel.com,
-	tomi.valkeinen@ideasonboard.com
-Subject: Re: [PATCH 01/13] media: ipu6: Use correct pads for xlate_streams()
-Message-ID: <20250619141535.GN22102@pendragon.ideasonboard.com>
-References: <20250619081546.1582969-1-sakari.ailus@linux.intel.com>
- <20250619081546.1582969-2-sakari.ailus@linux.intel.com>
- <20250619132704.GC32166@pendragon.ideasonboard.com>
- <aFQWvHY1i4rPJXg1@kekkonen.localdomain>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="WdFM46zd"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55JC8JEg005565
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 14:20:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=dfqfdFFd6hO
+	LjkI/bPWzqK0d9oMs23nZkoNASRLLL/I=; b=WdFM46zdwxrkoUsDJN4nz21Bjft
+	prspGVpPp20Erp9z+3zC6WJdQZtEfKHpicfUE8Qdr0+Lh9RIKDI7c1LW1M+MJxby
+	UcjPvSoPjZPnhg0132BAmrlOGBXwSfgn3DCqY9U7cpDuBt4jG9QGXwIxVR0pfJ5c
+	Dpig6pYAcUpNXRzzRcFUPnrpcDEe64PxqKyHthB+YPa6oMnMCPfVIPQ2iQM3cSCZ
+	taoeVTQcCHBxTX1WHJGE+8igxBkS6t15SHBl/7EJ/uoiY3Y/5QB73mCHaHuCVdb/
+	H2ykimBeviu4ZNQYMBGGGa5v3ecRq2BhEgW2rKKmIsXnT22m2yJgLVvyz7w==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47c0rvkdx2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 14:20:20 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4a57fea76beso16297031cf.0
+        for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 07:20:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750342819; x=1750947619;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dfqfdFFd6hOLjkI/bPWzqK0d9oMs23nZkoNASRLLL/I=;
+        b=I05652XU1pYyreqcd4BNW+xqxLRWrKt9E1IDB8SrGEDHB+E4bEdWazbit8ABlYi/+A
+         kZUf3mzxVNl/mIutcXwNT1oH6sVK2AIHt3nw2KzX+AfreCesJbqmubyZWDsn7W/AA93o
+         /83PBdUVED4aVo/xhCOtJUNWwhjE1h27LmaQL5FK0XnTYMAGtuAR/GjyjIDOivBngGlk
+         Vl2hTaI3Fx4Va2/aLMg0ugucaltiu4ktpLQ722mPm1v9HDTvAe6g2IkHo0V3f9xbzZyu
+         lqcCC6Xcd+K/Vr/nuQUzmgTpKRweE1fL7eYadRaCU4LBf7N20JRoHAZKbJ5erUlm/1/j
+         V4Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCVGXUf9WSYCpGt6Njg1/exKr13hrpI0oYZO2mfPJTBEU8+vrbVU1Aorrrw4avlBnKCt7Ei3MKrl6h3xFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO06NAFQ2LR/4pg9mgGHoO8eDMmdooldAO/1CXVOyX4wJWOML5
+	1TT8ai3FwWgSWt6ab9PkGJdba5kWLHSevmj3DbnU8VF0ZrQLRDC4/XlioH2QFTJRg2YepGJ8v03
+	HRo2xn1MHPqcCsoWWE0L2UJjHWITDMHXq4Z+sbb77nKLyfAF8VKxy2NAuqPsM8F1T3w==
+X-Gm-Gg: ASbGncvm5yWKaQpVILwxo+83d+wkK3AwDIAhuvOxPo9syEg6UeyYPJUpruzOLgcU8lN
+	YfVlAur2qJqXcLFavQovgm1uQULZJGPq914m3gnCiUO6xeMIrq1MDr31xctyaS/ii+AnzAHG6Ld
+	RLzEJVcua6Fehq2VWxwbSppJzed+t8Dl1yFZN653taIEDXTNazgqWysb8qHzU3H+IKa5M39izWE
+	4j0xPIfrEO4diVt0ezY73aXfWvxXsvzZqYlG7KYdZz6UJMr3SfzWmRwlV7brRXotUte1asN02TQ
+	xnTgbh5m/1vjcZjhc6dBGPqf+MLA6xftkYK6Gjqi2iWfhhC960ysh9ksn9WgZ3DPjU0kjuXY3Fj
+	+
+X-Received: by 2002:a05:622a:591:b0:4a7:1402:3b1 with SMTP id d75a77b69052e-4a73c47e3a7mr346420201cf.11.1750342819392;
+        Thu, 19 Jun 2025 07:20:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHdJppoZFl8YSzXvJDqaJK5WG1HWlRETG+EOAiS59sJAnQr7pWnlM2Sj2e4t4GQwlmTMLXwew==
+X-Received: by 2002:a05:622a:591:b0:4a7:1402:3b1 with SMTP id d75a77b69052e-4a73c47e3a7mr346419541cf.11.1750342818704;
+        Thu, 19 Jun 2025 07:20:18 -0700 (PDT)
+Received: from trex.. (132.red-79-144-190.dynamicip.rima-tde.net. [79.144.190.132])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a58963561csm7254312f8f.47.2025.06.19.07.20.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 07:20:18 -0700 (PDT)
+From: Jorge Ramirez-Ortiz <jorge.ramirez@oss.qualcomm.com>
+To: jorge.ramirez@oss.qualcomm.com, quic_vgarodia@quicinc.com,
+        quic_dikshita@quicinc.com, bryan.odonoghue@linaro.org,
+        mchehab@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        stanimir.k.varbanov@gmail.com
+Cc: linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 2/7] media: venus: helpers: add IS_VPU() and IS_HFI() macros
+Date: Thu, 19 Jun 2025 16:20:07 +0200
+Message-Id: <20250619142012.1768981-3-jorge.ramirez@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250619142012.1768981-1-jorge.ramirez@oss.qualcomm.com>
+References: <20250613140402.3619465-1-jorge.ramirez@oss.qualcomm.com>
+ <20250619142012.1768981-1-jorge.ramirez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aFQWvHY1i4rPJXg1@kekkonen.localdomain>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE5MDExOCBTYWx0ZWRfX8SVsNv43MtTU
+ K8y0VJhbBcY11JjEQmE3FB9HjpT31PnNR3CS4ysAy4z+RsdV1nUxfg9bKnXKOh7nZTEsBr7zYru
+ 7t7rpgaJ25hOM0yww2hs5BAxAMyfyJf7Hyn+jag0Z0go+VcxwWNMvhZEkHRqtl1fGYJvdfgn5dP
+ VOC5ojIBosEnL4BgPH/2wc1zaRCK3rTceVkGZJBCtoaKheXBkpz/ox83Vmc5LH/qEdgbKarjCxc
+ 630eGV5es2JFRT0/t2qdbgEP4/ojUNPE6UesepoYa5rpUu+mbmo6bSsxJBMJWgLflXBTrWT7Lpr
+ gv8fXGZmjeh5OhTp0+MBfEzbYEmcKUphgZM1vx7ac1qEMGDWLNl++pw7Spn2Zy0F+JjZvHybjlK
+ jPODdNOesyWXzjBIDSgDCmTVIEFbxsAtNWH7iOXizvwxfKB8M87rFmNtkMyoXUsPCnRgGaqE
+X-Proofpoint-GUID: iE6BuySbxIgFZuF8qX71tNPPjC-RXgd9
+X-Authority-Analysis: v=2.4 cv=btJMBFai c=1 sm=1 tr=0 ts=68541ca4 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=wjE3nLva0YkvARyJ+Gfmxg==:17
+ a=6IFa9wvqVegA:10 a=EUspDBNiAAAA:8 a=dpeIgEAchGqUyyyY_AAA:9
+ a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-ORIG-GUID: iE6BuySbxIgFZuF8qX71tNPPjC-RXgd9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-19_05,2025-06-18_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 malwarescore=0 spamscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506190118
 
-On Thu, Jun 19, 2025 at 01:55:08PM +0000, Sakari Ailus wrote:
-> On Thu, Jun 19, 2025 at 04:27:04PM +0300, Laurent Pinchart wrote:
-> > Hi Sakari,
-> > 
-> > Thank you for the patch.
-> 
-> Thanks for the review!
-> 
-> > On Thu, Jun 19, 2025 at 11:15:34AM +0300, Sakari Ailus wrote:
-> > > The arguments to v4l2_subdev_state_xlate_streams() were incorrect, the
-> > 
-> > s/were/are/
-> > 
-> > > source pads was used as the sink pad and the source pad was a constant
-> > 
-> > s/pads was/pad is/
-> > s/pad was/pad is/
-> > 
-> > Are you sure though ? Unless I misread the code, you replace
-> > 
-> > pad0 = CSI2_PAD_SRC
-> > pad1 = CSI2_PAD_SINK
-> > 
-> > with
-> > 
-> > pad0 = pad
-> > pad1 = CSI2_PAD_SINK
-> > 
-> > This seems to be a correct fix, but I don't see where "the source pad
-> > was used as the sink pad".
-> 
-> Right, I'll reword it for v2.
-> 
-> > > (rather than the actual source pad). Fix these.
-> > > 
-> > > Fixes: 3a5c59ad926b ("media: ipu6: Rework CSI-2 sub-device streaming control")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > ---
-> > >  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> > > index da8581a37e22..6030bd23b4b9 100644
-> > > --- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> > > +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
-> > > @@ -354,9 +354,9 @@ static int ipu6_isys_csi2_enable_streams(struct v4l2_subdev *sd,
-> > >  	remote_pad = media_pad_remote_pad_first(&sd->entity.pads[CSI2_PAD_SINK]);
-> > >  	remote_sd = media_entity_to_v4l2_subdev(remote_pad->entity);
-> > >  
-> > > -	sink_streams = v4l2_subdev_state_xlate_streams(state, CSI2_PAD_SRC,
-> > > -						       CSI2_PAD_SINK,
-> > > -						       &streams_mask);
-> > > +	sink_streams =
-> > > +		v4l2_subdev_state_xlate_streams(state, pad, CSI2_PAD_SINK,
-> > > +						&streams_mask);
-> > 
-> > This is one of the cases where I'd write
-> > 
-> > 	sink_streams = v4l2_subdev_state_xlate_streams(state, pad, CSI2_PAD_SINK,
-> > 						       &streams_mask);
-> > 
-> > even if it goes to 81 columns.
-> 
-> The limit is still 80, not 81.
+Introduce IS_VPU(core, ...) and IS_HFI(core, ...) macros that abstract
+over multiple version checks for VPU and HFI.
 
-The global limit is 100 for the kernel. There's somehow of a consensus
-in the media subsystem to keep it closer to 80, with different people
-have different sensitivities. We occasionally go over 80, and that's
-usually left as a driver maintainer decision.
+They reuse existing IS_<TYPE>(core) definitions.
 
-> Either way, a number of the new functions in the V4L2 subdev KAPI have very
-> long names, I'll post patches to shorten them later on.
+Allowing up to 4 versions is a fair compromise. Any more would justify an
+interface.
 
-As long as the name remains equally readable and understandable, and all
-functions use the same conventions, I'm fine with that.
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez@oss.qualcomm.com>
+---
+ drivers/media/platform/qcom/venus/core.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-> > >  
-> > >  	ret = ipu6_isys_csi2_calc_timing(csi2, &timing, CSI2_ACCINV);
-> > >  	if (ret)
-> > > @@ -384,9 +384,9 @@ static int ipu6_isys_csi2_disable_streams(struct v4l2_subdev *sd,
-> > >  	struct media_pad *remote_pad;
-> > >  	u64 sink_streams;
-> > >  
-> > > -	sink_streams = v4l2_subdev_state_xlate_streams(state, CSI2_PAD_SRC,
-> > > -						       CSI2_PAD_SINK,
-> > > -						       &streams_mask);
-> > > +	sink_streams =
-> > > +		v4l2_subdev_state_xlate_streams(state, pad, CSI2_PAD_SINK,
-> > > +						&streams_mask);
-> > 
-> > Same here.
-> > 
-> > >  
-> > >  	remote_pad = media_pad_remote_pad_first(&sd->entity.pads[CSI2_PAD_SINK]);
-> > >  	remote_sd = media_entity_to_v4l2_subdev(remote_pad->entity);
-
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index b412e0c5515a..b9de27dc3493 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -528,6 +528,29 @@ struct venus_inst {
+ #define IS_IRIS2(core)		((core)->res->vpu_version == VPU_VERSION_IRIS2)
+ #define IS_IRIS2_1(core)	((core)->res->vpu_version == VPU_VERSION_IRIS2_1)
+ 
++#define IS_VPU_MATCH(core, type)	IS_##type(core)
++#define IS_VERSION_MATCH(core, type)	IS_##type(core)
++
++/* Limit this to 4 versions. Use a helper if >4 versions share logic. */
++#define MATCH_1(CMD, core, a) \
++	IS_##CMD##_MATCH(core, a)
++#define MATCH_2(CMD, core, a, b) \
++	(IS_##CMD##_MATCH(core, a) || IS_##CMD##_MATCH(core, b))
++#define MATCH_3(CMD, core, a, b, c) \
++	(IS_##CMD##_MATCH(core, a) || IS_##CMD##_MATCH(core, b) || \
++	IS_##CMD##_MATCH(core, c))
++#define MATCH_4(CMD, core, a, b, c, d) \
++	(IS_##CMD##_MATCH(core, a) || IS_##CMD##_MATCH(core, b) || \
++	IS_##CMD##_MATCH(core, c) || IS_##CMD##_MATCH(core, d))
++
++#define GET_MACRO(_1, _2, _3, _4, NAME, ...) NAME /* _1-_4 are ignored */
++#define IS_DISPATCH(CMD, core, ...) \
++	(GET_MACRO(__VA_ARGS__, MATCH_4, MATCH_3, MATCH_2, MATCH_1)( \
++		CMD, core, __VA_ARGS__))
++
++#define IS_VPU(core, ...)	IS_DISPATCH(VPU, core, __VA_ARGS__)
++#define IS_HFI(core, ...)	IS_DISPATCH(VERSION, core, __VA_ARGS__)
++
+ #define ctrl_to_inst(ctrl)	\
+ 	container_of((ctrl)->handler, struct venus_inst, ctrl_handler)
+ 
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
