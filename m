@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDB9254853
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB87254867
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334341; cv=none; b=N+GYW5aHgu8QrFui/zZpHZiuxNsF2toF7xkH5bkbz1O8vK8vRx9RkiiwFor/9rcB/A1QBeGQR40NjcWkHoGsvSr5Z6JvL5VWNHynzkaN6OFxcmU6mfCJEVd7ADkr6L6MLHEeaRUg0w5w+ssCACMYwGAWOd0gv5GBFhAKcHlFnIE=
+	t=1750334341; cv=none; b=rwfke6y/dpoxjc3q1ojL6E41UolaV3ESVW4840lYoC7Q6ELfHG5Lav1Ut0exH7uvl0lTUt9UM+w14TVr7SefhCD49CkqBoiYwsbgBQnCnDewPCmHSWtsYrETDBgwyZVG0xysQ9uXY9DINsqLlo5eBj48MR4dRLgvpFqPS7wV/RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750334341; c=relaxed/simple;
-	bh=bZFKR5PHTtb57KD4xzhh0KUz98AehZfFp9lB3rp7Gqo=;
+	bh=YEuhaaFEk5OMASU+jztmttoamsjBqQl55qm5TLE2J80=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ulr/Q/H9vOmeCbNda8SxSE268bj8dfZslBQO6eKhSMOf9VoUYAKJskYvTlk1x3YnKbQtIpdecjTMMsMBnP1Q7lTYLQyVhXmDGp8ekdMPc0lP2blmZkaTb/53bFCzt3AKiJtK9qKtsnyWntOoDPT5ZbBaq2nVZp2r43tykB1Hp4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mmmH8N65; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=bURAkLL4fUdPahth8VVqi9Bwpgx92CEeR16lpHmOn/Jqn8gJIJ+eJ6KIpvh9mgxQtoAdOFPkSOAcvlruM0lf9JblgYcb+mjd1trgc6nJKmUf1S8PwmBIjjSG7LbX86s2+bnZyBGaMDgOWW5B6fE6A/He43BiN9VzkdYvDzVIGks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j+NgbWRA; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mmmH8N65"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+NgbWRA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1750334340; x=1781870340;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bZFKR5PHTtb57KD4xzhh0KUz98AehZfFp9lB3rp7Gqo=;
-  b=mmmH8N6590GMg+CnNZYFOK8nuwVj1utkNoiIhOIIgj8c3ETVdtUnqGJy
-   i5DJt3JtJyrICJ566XVyZCBL8tOyQdZJtC8yla/jXHjcqYU31L6VhabR+
-   Ze4t5O1qn01U3Rq7jLk3LwnXoyPbZTjFdhf7gOey9mqsFGI5LmsT1Mkok
-   EFlhV7AaqGSvnrj4CRBtGOiOdD5hV/lZYLPz+zh1PIhczGJI9j3w/cMrI
-   VHw5wh+ZA74qHqwvSJeBoIv57Lo5ofAgfTgdWx41Sa24SENlQi0gdlHBE
-   UEYJNcbu3WE6WrTNuAsvC91tQvTccMODFKcO5v78pjX0SGTaz/XJpmqlt
-   Q==;
-X-CSE-ConnectionGUID: c68x366VSEm9D+CYR0qSJA==
-X-CSE-MsgGUID: /e/NTqZAQOWARa/jCCyBsw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64014949"
+  bh=YEuhaaFEk5OMASU+jztmttoamsjBqQl55qm5TLE2J80=;
+  b=j+NgbWRAh9i9otkqm4Yu2tc376nvJ11C34I+/MryyxIBTmNUkflMMd4f
+   1ZFTeGgAo+GZ5bMtplR+FX/KXj36vulSdl3qQbjEyQlzpDpwAoECCeRsA
+   vnwm7wvTxebMmMkRMQUTm6/0gm/QYnyZ4uJL7z3veLVtDIvepdaY3+DSo
+   oRGzrGcdMz2vrhChFbz+8EcTMMrVDzVOnoeHUI0fddAmQBJMHYbL3DeCj
+   SzPfRDvVqBfrx40nBjoc8x9WR3EmeP+s95H57ghkSzzb8MJLMMyDOk3jq
+   pmGof1ISNpd0qJwhaAQfNi5JIy5LrrqMvdFhuAMvC7BxnEfwvIMr4TPxT
+   g==;
+X-CSE-ConnectionGUID: p1U+pfj2QF+00/E/FOFCNw==
+X-CSE-MsgGUID: U4xpU84VQLeyFbLB1jA7+g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64014968"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="64014949"
+   d="scan'208";a="64014968"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
   by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:56 -0700
-X-CSE-ConnectionGUID: 2SxncfA1Q1u664JbtdRuEw==
-X-CSE-MsgGUID: 4fQytYdsRSyX61obU55E0Q==
+X-CSE-ConnectionGUID: pQLZAR5KTfyvyUKzzHoLcQ==
+X-CSE-MsgGUID: RkYp5u2wQIeRxFe5Kl8NuA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="155192225"
+   d="scan'208";a="155192235"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
   by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:49 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id C23D91207E8;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id CB957120AFC;
 	Thu, 19 Jun 2025 14:58:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDue-008AIN-2T;
+	id 1uSDue-008AIc-2b;
 	Thu, 19 Jun 2025 14:58:36 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 10/64] media: ccs: Track streaming state
-Date: Thu, 19 Jun 2025 14:57:42 +0300
-Message-Id: <20250619115836.1946016-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 13/64] media: mc: Add INTERNAL pad flag
+Date: Thu, 19 Jun 2025 14:57:45 +0300
+Message-Id: <20250619115836.1946016-14-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,87 +95,104 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With enable_streams and disable_streams, the driver for a device where
-streams are not independently started and stopped needs to maintain state
-information on streams that have been requested to be started. Do that
-now.
+Internal sink pads will be used as routing endpoints in V4L2 [GS]_ROUTING
+IOCTLs, to indicate that the stream begins in the entity. Internal sink
+pads are pads that have both SINK and INTERNAL flags set.
 
-In the future, a helper function in the framework is a desirable way to do
-this instead.
+Also prevent creating links to pads that have been flagged as internal and
+initialising SOURCE pads with INTERNAL flag set.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Julien Massot <julien.massot@collabora.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 13 ++++++++++---
- drivers/media/i2c/ccs/ccs.h      |  2 +-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ .../userspace-api/media/mediactl/media-types.rst  |  9 +++++++++
+ drivers/media/mc/mc-entity.c                      | 15 ++++++++++++---
+ include/uapi/linux/media.h                        |  1 +
+ 3 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 56c9f7124b2a..bd7d2a8d23dd 100644
---- a/drivers/media/i2c/ccs/ccs-core.c
-+++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -1763,6 +1763,11 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 	if (pad != CCS_PAD_SRC)
- 		return -EINVAL;
+diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+index 6332e8395263..200c37a1da26 100644
+--- a/Documentation/userspace-api/media/mediactl/media-types.rst
++++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+ .. _MEDIA-PAD-FL-SINK:
+ .. _MEDIA-PAD-FL-SOURCE:
+ .. _MEDIA-PAD-FL-MUST-CONNECT:
++.. _MEDIA-PAD-FL-INTERNAL:
  
-+	if (sensor->streaming) {
-+		sensor->streaming |= streams_mask;
-+		return 0;
-+	}
+ .. flat-table:: Media pad flags
+     :header-rows:  0
+@@ -381,6 +382,14 @@ Types and flags used to represent the media graph elements
+ 	  enabled links even when this flag isn't set; the absence of the flag
+ 	  doesn't imply there is none.
+ 
++    *  -  ``MEDIA_PAD_FL_INTERNAL``
++       -  The internal flag indicates an internal pad that has no external
++	  connections. As they are internal to entities, internal pads shall not
++	  be connected with links.
 +
- 	rval = ccs_pm_get_init(sensor);
- 	if (rval)
- 		return rval;
-@@ -1884,7 +1889,7 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
++	  The internal flag may currently be present only in a sink pad where it
++	  indicates that the :ref:``stream <media-glossary-stream>`` originates
++	  from within the entity.
  
- 	rval = ccs_write(sensor, MODE_SELECT, CCS_MODE_SELECT_STREAMING);
+ One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+ must be set for every pad.
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 045590905582..04d69f042a0e 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -209,11 +209,16 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
+ 		mutex_lock(&mdev->graph_mutex);
  
--	sensor->streaming = true;
-+	sensor->streaming |= streams_mask;
- 
- 	return 0;
- 
-@@ -1906,6 +1911,10 @@ static int ccs_disable_streams(struct v4l2_subdev *subdev,
- 	if (pad != CCS_PAD_SRC)
- 		return -EINVAL;
- 
-+	sensor->streaming &= ~streams_mask;
-+	if (sensor->streaming)
-+		return 0;
+ 	media_entity_for_each_pad(entity, iter) {
++		const u32 pad_flags = iter->flags & (MEDIA_PAD_FL_SINK |
++						     MEDIA_PAD_FL_SOURCE |
++						     MEDIA_PAD_FL_INTERNAL);
 +
- 	rval = ccs_write(sensor, MODE_SELECT, CCS_MODE_SELECT_SOFTWARE_STANDBY);
- 	if (rval)
- 		return rval;
-@@ -1914,7 +1923,6 @@ static int ccs_disable_streams(struct v4l2_subdev *subdev,
- 	if (rval)
- 		dev_err(&client->dev, "post_streamoff quirks failed\n");
+ 		iter->entity = entity;
+ 		iter->index = i++;
  
--	sensor->streaming = false;
- 	pm_runtime_mark_last_busy(&client->dev);
- 	pm_runtime_put_autosuspend(&client->dev);
+-		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
+-					     MEDIA_PAD_FL_SOURCE)) != 1) {
++		if (pad_flags != MEDIA_PAD_FL_SINK &&
++		    pad_flags != (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL) &&
++		    pad_flags != MEDIA_PAD_FL_SOURCE) {
+ 			ret = -EINVAL;
+ 			break;
+ 		}
+@@ -1118,7 +1123,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
  
-@@ -3519,7 +3527,6 @@ static int ccs_probe(struct i2c_client *client)
- 		goto out_cleanup;
- 	}
+ 	for (i = 0; i < entity->num_pads; i++) {
+ 		if ((entity->pads[i].flags &
+-		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
++		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
++		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
+ 			continue;
  
--	sensor->streaming = false;
- 	sensor->dev_init_done = true;
- 	sensor->handler_setup_needed = true;
+ 		if (entity->pads[i].sig_type == sig_type)
+@@ -1148,6 +1154,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
+ 		return -EINVAL;
+ 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
+ 		return -EINVAL;
++	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL) ||
++	    WARN_ON(sink->pads[sink_pad].flags & MEDIA_PAD_FL_INTERNAL))
++		return -EINVAL;
  
-diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 0726c4687f0f..518482758da6 100644
---- a/drivers/media/i2c/ccs/ccs.h
-+++ b/drivers/media/i2c/ccs/ccs.h
-@@ -238,7 +238,7 @@ struct ccs_sensor {
- 	u16 image_start; /* image data start line */
- 	u16 visible_pixel_start; /* start pixel of the visible image */
+ 	link = media_add_link(&source->links);
+ 	if (link == NULL)
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 1c80b1d6bbaf..80cfd12a43fc 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -208,6 +208,7 @@ struct media_entity_desc {
+ #define MEDIA_PAD_FL_SINK			(1U << 0)
+ #define MEDIA_PAD_FL_SOURCE			(1U << 1)
+ #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
++#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
  
--	bool streaming;
-+	u8 streaming;
- 	bool dev_init_done;
- 	bool handler_setup_needed;
- 	u8 compressed_min_bpp;
+ struct media_pad_desc {
+ 	__u32 entity;		/* entity ID */
 -- 
 2.39.5
 
