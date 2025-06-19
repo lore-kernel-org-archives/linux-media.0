@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604E0253931
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF75B253954
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334334; cv=none; b=H7JV3PK9w0gaDC3wzunWxGlU53wYKj9yGqo4CM5fYBiadTgOkXO6CyC+nfKR8CUZXtzaQfVPqHlwu9zydGB3gcZi5rh9Oy6gRYms9QesQ4IKd/IbybSzcyA2hhxuJLfYPC7Vx6+VCvcIfit2hsCgg7qR/iPKc0anbXU4ceNLl2Y=
+	t=1750334336; cv=none; b=W9GhQplxmOgifIHghmrAjjnjwgk8mzW4AOT7i6VAWJiNSkSErzGBITikER+wsWThb/AoTOiDCgOd5y/b+ci7w0psYsz3CzRYPtaSiGzCnJ4dru1albStS8LsgNFk+zopmHnS5IslGvYlm6+oFHBdbZGaqOtX7bFsoZ8lVMcpMlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334334; c=relaxed/simple;
-	bh=Ql0Ar48fUr7s0LCXkUXgc9qzdow56mxGEk8MaYQDmgo=;
+	s=arc-20240116; t=1750334336; c=relaxed/simple;
+	bh=QCAYOh8WejGGbjffcyXfJJ7X625BFp/qYjJ6R/zkhvg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A3nq3AmeVgaHLafCnyVplQIY9g0oQSmZLl58ywfQsSOnMx4nflsM1UvK1R2NPZXTZBd0eTHySZHDYIBoDYnep6dw1yUBYNEONCSFIOipcTC3D68vKbX9EQ4Ei0PTCS+ISwj9Tw9RGoN32dtgpMuanRxO9rs+VRCd0A3qCQ2m42c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MNXOtZsa; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=TBhu3okNiJ5bo2G7pnR7OGnXXnyqSQ4DlqMRgW6LhBhdaXf3b0Lfmyf/qthj6/FsmxxGwHqalrDb/R/TH6eUV3uOfaFLpRu3gvq4u5BxWKDNZZu6ofJ4hWT542H92vAct9iApFD8DbhAUknvYUtPOlD3Fvs+roMBWttJqzzyw/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EU8wXs0j; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MNXOtZsa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EU8wXs0j"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750334334; x=1781870334;
+  t=1750334335; x=1781870335;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ql0Ar48fUr7s0LCXkUXgc9qzdow56mxGEk8MaYQDmgo=;
-  b=MNXOtZsa2qor6BtErh6cM5O2Bl3bXlmDI+R6NNkTKlsDi8owgkGeixmx
-   Ymam9yg035lNNcajFx54aMdXbsFlWCq5L15usXQDzsnwJFAyiItWhn+Tk
-   m6kD4+V28OEg7Ry8gcLPx6mNcN6CJT3gQsXui5aAvtPKPjIMwVOT1yDWl
-   fj1g7sxv4dBv1G6ElG1lJjt70rrU+Z/PU8O3pIJv17yU7bFRRrZYu+oos
-   jmfTBrt8TYlPU81qyzgLSLj5etuQj871zU+o3kgui9RKzzWxafRlF1EqB
-   XqlHOSe3cF1jGoVcjsG70Xbqu+vDal//Oka1Ch0pVP2f4rhAYzH9ffzN9
-   A==;
-X-CSE-ConnectionGUID: 1eC0/qJnRrehy6p6mIoPeQ==
-X-CSE-MsgGUID: UKS+AhlYT72AbYkA0YRHQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64014781"
+  bh=QCAYOh8WejGGbjffcyXfJJ7X625BFp/qYjJ6R/zkhvg=;
+  b=EU8wXs0jCWIozclF4VxFCflZODwz1WSOVqHVEvEl9TDC2qKMcG6WGpb4
+   27Xy9DccfijJKKg+sGGabYZmf/3ny8+r7k9d31JymF6uzclc+snbOTg4j
+   E605Nalvv4zCQWrSldtIDchl11GRAgpX37qYvV2kQwLlrUgDFGq3OdA0Z
+   +Y2EgK0Ztiq6fmDNruefEHMqGXte5FpFaO+E8NwqQfaWVY2Kj62Wy1u7T
+   kfvuoDftxOXPTxihf/3QFojFlbcvSLPr7R0Hvim+7hgZ+rTHRhJMlbJO5
+   RKc8yAKH7PdF4YiixbQQVjYA2L9OaHmspG6wShEFMuqbPIzLDsdVonhWf
+   w==;
+X-CSE-ConnectionGUID: bHmWaWkMT06/g+gnNktrkA==
+X-CSE-MsgGUID: jfbtnB5pRFWKIzY51XMh/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64014842"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="64014781"
+   d="scan'208";a="64014842"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:47 -0700
-X-CSE-ConnectionGUID: Zdbb5XggTSuy7TJgYDP2Kw==
-X-CSE-MsgGUID: FTxb9s02SqqnaoSOotf31g==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:55 -0700
+X-CSE-ConnectionGUID: /7PQnIeLTvS8imzB9QKPMw==
+X-CSE-MsgGUID: /3jcepZGSjWUKy4yD0M5JQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="155192137"
+   d="scan'208";a="155192202"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:40 -0700
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:49 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id A91CB1203A5;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id BAD7012072A;
 	Thu, 19 Jun 2025 14:58:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDue-008AHn-28;
+	id 1uSDue-008AID-2N;
 	Thu, 19 Jun 2025 14:58:36 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 03/64] media: Documentation: Clean up figure titles
-Date: Thu, 19 Jun 2025 14:57:35 +0300
-Message-Id: <20250619115836.1946016-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 08/64] media: Documentation: Refer to internal pads in metadata documentation
+Date: Thu, 19 Jun 2025 14:57:40 +0300
+Message-Id: <20250619115836.1946016-9-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,91 +95,37 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove DocBook (?) conversion leftovers from figure titles, including
-obsolete numbering and highlighting. This aligns these titles with others.
+Metadata is intended to be used with internal pads when it comes to the
+source of the data. Document this.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/userspace-api/media/v4l/dev-raw-vbi.rst    | 6 +++---
- Documentation/userspace-api/media/v4l/dev-subdev.rst     | 6 +++---
- Documentation/userspace-api/media/v4l/subdev-formats.rst | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ Documentation/userspace-api/media/v4l/metafmt-generic.rst | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst b/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
-index 2bec20d87928..1f7bb8fd15e7 100644
---- a/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-raw-vbi.rst
-@@ -221,7 +221,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
-     :alt:   vbi_hsync.svg
-     :align: center
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-generic.rst b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+index 78ab56b21682..90a1bc2ea15e 100644
+--- a/Documentation/userspace-api/media/v4l/metafmt-generic.rst
++++ b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+@@ -7,12 +7,17 @@ V4L2_META_FMT_GENERIC_8 ('MET8'), V4L2_META_FMT_GENERIC_CSI2_10 ('MC1A'), V4L2_M
  
--    **Figure 4.1. Line synchronization**
-+    Line synchronization
+ Generic line-based metadata formats
  
- .. _vbi-525:
++.. _v4l2-format-generic-meta:
  
-@@ -229,7 +229,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
-     :alt:   vbi_525.svg
-     :align: center
+ Description
+ ===========
  
--    **Figure 4.2. ITU-R 525 line numbering (M/NTSC and M/PAL)**
-+    ITU-R 525 line numbering (M/NTSC and M/PAL)
+ These generic line-based metadata formats define the memory layout of the data
+-without defining the format or meaning of the metadata itself.
++without defining the format or meaning of the metadata itself. These formats may
++only be used with a Media Controller pipeline where the more specific metadata
++layout is reported by an :ref:`V4L2_CID_METADATA_LAYOUT control
++<image_source_control_metadata_layout>` of the source sub-device. See also
++:ref:`source routes <subdev-routing>`.
  
- .. _vbi-625:
+ .. _v4l2-meta-fmt-generic-8:
  
-@@ -237,7 +237,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
-     :alt:   vbi_625.svg
-     :align: center
- 
--    **Figure 4.3. ITU-R 625 line numbering**
-+    ITU-R 625 line numbering
- 
- Remember the VBI image format depends on the selected video standard,
- therefore the application must choose a new standard or query the
-diff --git a/Documentation/userspace-api/media/v4l/dev-subdev.rst b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-index 225a45fef994..24a69c419dfe 100644
---- a/Documentation/userspace-api/media/v4l/dev-subdev.rst
-+++ b/Documentation/userspace-api/media/v4l/dev-subdev.rst
-@@ -459,7 +459,7 @@ selection will refer to the sink pad format dimensions instead.
-     :alt:   subdev-image-processing-crop.svg
-     :align: center
- 
--    **Figure 4.5. Image processing in subdevs: simple crop example**
-+    Image processing in subdevs: simple crop example
- 
- In the above example, the subdev supports cropping on its sink pad. To
- configure it, the user sets the media bus format on the subdev's sink
-@@ -476,7 +476,7 @@ pad.
-     :alt:   subdev-image-processing-scaling-multi-source.svg
-     :align: center
- 
--    **Figure 4.6. Image processing in subdevs: scaling with multiple sources**
-+    Image processing in subdevs: scaling with multiple sources
- 
- In this example, the subdev is capable of first cropping, then scaling
- and finally cropping for two source pads individually from the resulting
-@@ -492,7 +492,7 @@ an area at location specified by the source crop rectangle from it.
-     :alt:    subdev-image-processing-full.svg
-     :align:  center
- 
--    **Figure 4.7. Image processing in subdevs: scaling and composition with multiple sinks and sources**
-+    Image processing in subdevs: scaling and composition with multiple sinks and sources
- 
- The subdev driver supports two sink pads and two source pads. The images
- from both of the sink pads are individually cropped, then scaled and
-diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-index 2a94371448dc..9ef1bc22ad9c 100644
---- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
-+++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
-@@ -2631,7 +2631,7 @@ be named ``MEDIA_BUS_FMT_SRGGB10_2X8_PADHI_LE``.
-     :alt:    bayer.svg
-     :align:  center
- 
--    **Figure 4.8 Bayer Patterns**
-+    Bayer Patterns
- 
- The following table lists existing packed Bayer formats. The data
- organization is given as an example for the first pixel only.
 -- 
 2.39.5
 
