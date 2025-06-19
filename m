@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5402580EE
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06D3258CE5
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334358; cv=none; b=N7SF60dJl7LHegmAdwhCK+P+G/D9pw4K60ds/bSV66bJtKbryFB0ZLa/lw9ypGbIpn9dkGGwkLpoyJnb1yEp/9GiJ1b59htrtE8IBhTMeAPc477tI9l5QJYbzaFL7TKVVd9ew9TNQ0sZ3MJzCaxhh96/U/QISzooUTjK5/fTYBQ=
+	t=1750334360; cv=none; b=GJ6pQPisUIBEYmBGbX8AkoVrDepxJh6eAoOtUSCDNLm1M+vRZ1yuF+FPEu7pz2BS7ACayjBqQkWP82uQJ2o2jbHk+OfbR46QDCCEZr9ZlQTyPNV14YUbtqjZaM2K5fRfxuF7NuDh0JznfsMouB9mnr+dgItwbUQ9koMHWHgCxUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334358; c=relaxed/simple;
-	bh=1Y6NpuHBiPRMA32nmzfssh2fA0N0J8J+jX+e3RQZux0=;
+	s=arc-20240116; t=1750334360; c=relaxed/simple;
+	bh=oLnIlyKVD8OKCosMBd+8nKDVOFm9dWPn4A3KHDfXKVI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=snVc1vl1j8KSncc98TCtjAfHMpCvuNoH5+EFVfRBaAsFKWvBTB9S3JJACzpcYSeM1jluwtWRRL2dKdsLY9Nxgkzmp6KB/0CRe01SqdvU0XMsJ+m4v8oCZmTQEGViJ4IQjE/eHP7FVqz/dwkSY7UvM7oXkjHNr2UaBeyVc+hWmxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4DxPkp1; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=U9u9uN4PbB2Ap8TjYHOi9oaXFR4JANHrZKM+1dUKf30Kp5exHRGbfQzq9lz+fK8NiOTZNdyUPIGeeHKQ2QzQyZqfLOqRwxeQnKqBupmmc8qzLodBHxGppGKIjCGJMkbhkeG3/ZMvmz91yTBY4Psvqb/VzLT2H/qvMuH/s7R7ViM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B9cqSQ69; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4DxPkp1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B9cqSQ69"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750334357; x=1781870357;
+  t=1750334360; x=1781870360;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1Y6NpuHBiPRMA32nmzfssh2fA0N0J8J+jX+e3RQZux0=;
-  b=Q4DxPkp1GDdjfJDJabKmMQcgiYd8V9mw5TIZwoZR68D3xW+7+mQ7mcmZ
-   k0ep6bAq9aT681EH6DnBaOT8+LlcSz/kulOpwhRqpzy2/BTFYLIWymxGm
-   UJPHm7fjx5A70sqnEs2xVkMqX4686U/lcPK22/CmJ14LwsFgvLiqygEEy
-   WifM4dOxABBr1g4g0z9/jS6RvIQlti8BVwGmG9eXhwRYDVJToTsBOa2Ak
-   r8mvA+83AYlvFsL7jqfsvr0BFy7AMqHqoJUxU6q4tGC1wZTQuoHCgRu/d
-   Uf8mTP2MImAtA+GTTpF250l+am5FrfsiQKgd4lctAk1lJ5p7nb1a+7vqa
-   g==;
-X-CSE-ConnectionGUID: IWAsk1/zTlmaGPC0CJqz7g==
-X-CSE-MsgGUID: cJrXbmGERPyYlbW2sA7fYQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386626"
+  bh=oLnIlyKVD8OKCosMBd+8nKDVOFm9dWPn4A3KHDfXKVI=;
+  b=B9cqSQ69lI0l78MasYW4enRTQAKUlNFpBh+lp1ci7a2mJaoOuxp3QYYD
+   tI9BE/pH/yTExR2pOVlVt9xXhb1BsVJ2jWXCySktbOXbsLJrboP4Z8dky
+   DoicVJvK/iYnooKhXwOfrjQvhKdetpwu1Wv/5yrpezAmA27qPh4MHUftP
+   jGGIxn8bbPMpbN2f+q7eCvdK9BRhaOsI/FciUg6mec0aZh8daY2E//J7u
+   CoH6FFwTCqGo5M2PFtHG6boe0CUBKVW2apO2Do3WyoQamqciWMR1IXplM
+   2mukm7cbSmkrtMpBnL/u7ojlXJbdKDrWnFHk7PcTSLeqQYFWuEhnvVaQU
+   w==;
+X-CSE-ConnectionGUID: t1nocecaSAmhvJsXug2maQ==
+X-CSE-MsgGUID: SJaEkSxkQ8KW19LDz09nIw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386652"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="56386626"
+   d="scan'208";a="56386652"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:12 -0700
-X-CSE-ConnectionGUID: wutttzAuRA6yCrYc0mxBmw==
-X-CSE-MsgGUID: d5oKXO4OT6qjNARvWO75kg==
+X-CSE-ConnectionGUID: gW3f6zllTyus6phHsYI+VQ==
+X-CSE-MsgGUID: WZmfaaBASCSk3TOyWQSUuQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="154908429"
+   d="scan'208";a="154908434"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
   by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:05 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 292A41230D0;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 39DD012321E;
 	Thu, 19 Jun 2025 14:58:37 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDuf-008AKY-0S;
+	id 1uSDuf-008AKx-0g;
 	Thu, 19 Jun 2025 14:58:37 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 37/64] media: uapi: Documentation: Improve column width hints for examples
-Date: Thu, 19 Jun 2025 14:58:09 +0300
-Message-Id: <20250619115836.1946016-38-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 42/64] media: uapi: Add MIPI CCS configuration model
+Date: Thu, 19 Jun 2025 14:58:14 +0300
+Message-Id: <20250619115836.1946016-43-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,53 +95,43 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use less arbitrary widths for the columns in metadata layout examples.
+Add a configuration model for MIPI CCS sensors and refer to the CCS driver
+documentation from it. If more drivers start implementing the CCS model
+the documentation should be split into two but that appears to be unlikely
+at the moment.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/userspace-api/media/v4l/metafmt-generic.rst | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../userspace-api/media/v4l/subdev-config-model.rst         | 6 ++++++
+ include/uapi/linux/v4l2-controls.h                          | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/v4l/metafmt-generic.rst b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
-index 90a1bc2ea15e..e8824b5a65d6 100644
---- a/Documentation/userspace-api/media/v4l/metafmt-generic.rst
-+++ b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
-@@ -76,7 +76,7 @@ This format is little endian.
- **Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
- Each cell is one byte. "M" denotes a byte of metadata and "x" a byte of padding.
+diff --git a/Documentation/userspace-api/media/v4l/subdev-config-model.rst b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+index c1b9b74cbcef..ee59bf3c5761 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-config-model.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-config-model.rst
+@@ -242,3 +242,9 @@ space may obtain the size of the embedded data once the image data size on the
+ source pad has been configured.
  
--.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|
-+.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|
+ Also see :ref:`media_using_camera_sensor_drivers_embedded_data`.
++
++MIPI Camera Command Set (CCS) model
++-----------------------------------
++
++The MIPI Camera Command Set configuration model is implemented by the :ref:`CCS
++driver <media-ccs-uapi>`.
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 23112f256da1..762751588439 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1249,6 +1249,7 @@ enum v4l2_jpeg_chroma_subsampling {
+ #define V4L2_CID_CONFIG_MODEL			(V4L2_CID_IMAGE_PROC_CLASS_BASE + 6)
  
- .. flat-table:: Sample 4x2 Metadata Frame
-     :header-rows:  0
-@@ -120,7 +120,7 @@ This format is little endian.
- **Byte Order Of V4L2_META_FMT_GENERIC_CSI2_12.**
- Each cell is one byte. "M" denotes a byte of metadata and "x" a byte of padding.
+ #define V4L2_CONFIG_MODEL_COMMON_RAW_SENSOR	(1U << 0)
++#define V4L2_CONFIG_MODEL_MIPI_CCS		(1U << 1)
  
--.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
-+.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|
- 
- .. flat-table:: Sample 4x2 Metadata Frame
-     :header-rows:  0
-@@ -161,7 +161,7 @@ This format is little endian.
- **Byte Order Of V4L2_META_FMT_GENERIC_CSI2_14.**
- Each cell is one byte. "M" denotes a byte of metadata and "x" a byte of padding.
- 
--.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{.8cm}|
-+.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|p{1.8cm}|p{1.8cm}|
- 
- .. flat-table:: Sample 4x2 Metadata Frame
-     :header-rows:  0
-@@ -257,7 +257,7 @@ This format is little endian.
- **Byte Order Of V4L2_META_FMT_GENERIC_CSI2_20.**
- Each cell is one byte. "M" denotes a byte of metadata and "x" a byte of padding.
- 
--.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
-+.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.8cm}
- 
- .. flat-table:: Sample 4x2 Metadata Frame
-     :header-rows:  0
+ /*  DV-class control IDs defined by V4L2 */
+ #define V4L2_CID_DV_CLASS_BASE			(V4L2_CTRL_CLASS_DV | 0x900)
 -- 
 2.39.5
 
