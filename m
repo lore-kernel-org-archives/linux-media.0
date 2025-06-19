@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB87254867
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B22F22E403
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334341; cv=none; b=rwfke6y/dpoxjc3q1ojL6E41UolaV3ESVW4840lYoC7Q6ELfHG5Lav1Ut0exH7uvl0lTUt9UM+w14TVr7SefhCD49CkqBoiYwsbgBQnCnDewPCmHSWtsYrETDBgwyZVG0xysQ9uXY9DINsqLlo5eBj48MR4dRLgvpFqPS7wV/RE=
+	t=1750334345; cv=none; b=oLt1O2/fajA+iEIXMUGPtf5rNn7yr5yuZozU1goGZCM9/xpZz7GYB4TGSjCxtUVhu3GVoiIVnEoZHdh8x8/esZiYgewMOm4F+EHMWj/VNL+Jljva2rRVib6Y1jo7d2Jxq2iMtpLlI7gw58uW4TPRZwTUEbD04S1PLNplpRAqtZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750334341; c=relaxed/simple;
-	bh=YEuhaaFEk5OMASU+jztmttoamsjBqQl55qm5TLE2J80=;
+	s=arc-20240116; t=1750334345; c=relaxed/simple;
+	bh=oBLxByXXnQN+dWuYE91kF4fz9oGaJthT6ajeU9V8Vuc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bURAkLL4fUdPahth8VVqi9Bwpgx92CEeR16lpHmOn/Jqn8gJIJ+eJ6KIpvh9mgxQtoAdOFPkSOAcvlruM0lf9JblgYcb+mjd1trgc6nJKmUf1S8PwmBIjjSG7LbX86s2+bnZyBGaMDgOWW5B6fE6A/He43BiN9VzkdYvDzVIGks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j+NgbWRA; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=inQr3z3ro/QMzz2V4ZFt/x+DgbSiytbbEyXXQMs1TvEiq42PUblYmZ4Qs9Gp8dI3FOkmXWK8wftWNJsPpkLP/MYXsGiR+PEuanlIscRshHVhiLVj71n8wN6kIYWc0XwLLRrLazGyXXizOvhmIhFMKH6NVoK3T6XJGLkMZWbs6vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aL4T/aJL; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+NgbWRA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aL4T/aJL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750334340; x=1781870340;
+  t=1750334344; x=1781870344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YEuhaaFEk5OMASU+jztmttoamsjBqQl55qm5TLE2J80=;
-  b=j+NgbWRAh9i9otkqm4Yu2tc376nvJ11C34I+/MryyxIBTmNUkflMMd4f
-   1ZFTeGgAo+GZ5bMtplR+FX/KXj36vulSdl3qQbjEyQlzpDpwAoECCeRsA
-   vnwm7wvTxebMmMkRMQUTm6/0gm/QYnyZ4uJL7z3veLVtDIvepdaY3+DSo
-   oRGzrGcdMz2vrhChFbz+8EcTMMrVDzVOnoeHUI0fddAmQBJMHYbL3DeCj
-   SzPfRDvVqBfrx40nBjoc8x9WR3EmeP+s95H57ghkSzzb8MJLMMyDOk3jq
-   pmGof1ISNpd0qJwhaAQfNi5JIy5LrrqMvdFhuAMvC7BxnEfwvIMr4TPxT
-   g==;
-X-CSE-ConnectionGUID: p1U+pfj2QF+00/E/FOFCNw==
-X-CSE-MsgGUID: U4xpU84VQLeyFbLB1jA7+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64014968"
+  bh=oBLxByXXnQN+dWuYE91kF4fz9oGaJthT6ajeU9V8Vuc=;
+  b=aL4T/aJLvSLe3iTpt2juZLq4+7R3zDB0q+hZ88pB4pTFrY0wzvnVTzHr
+   zmgwiNts2QP1TfRy1Q3EP0r275v0RYUD4d1nH1zqvxLMhOPbBJp448o4V
+   bcrNlJcVHhRTmOpoAjV3gxi9HXk/rYAxEH/353GUoTwZKAWUFszfFvmIN
+   yz8APjmUEQ1yo3B27SoDx9voqnUtio+wZLEBwl/cFL9Jvyscu+CGFg2hn
+   0CgD8pUdG4EqNVV+jDpMiP0VnY5Ne9xxukcPf9Gm5kIXWyUmUXUmhcxcj
+   gXeOtGZ7TlGrl2Wc0p8LrHzLYQTbIE97ShLSvIWKZk1G50SUzngWC2dlb
+   Q==;
+X-CSE-ConnectionGUID: OpS1kqpgSEuZm0Ems7JZ0w==
+X-CSE-MsgGUID: gq2swcQ6S+SvlL4JQFugsQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="64015054"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="64014968"
+   d="scan'208";a="64015054"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:56 -0700
-X-CSE-ConnectionGUID: pQLZAR5KTfyvyUKzzHoLcQ==
-X-CSE-MsgGUID: RkYp5u2wQIeRxFe5Kl8NuA==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:03 -0700
+X-CSE-ConnectionGUID: OL19yaoFTL+uSPRrUGFRmg==
+X-CSE-MsgGUID: vMoteRtKQWyDtG+HQySKRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="155192235"
+   d="scan'208";a="155192287"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:49 -0700
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:57 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id CB957120AFC;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id D6D43120B03;
 	Thu, 19 Jun 2025 14:58:36 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDue-008AIc-2b;
+	id 1uSDue-008AIr-2k;
 	Thu, 19 Jun 2025 14:58:36 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 13/64] media: mc: Add INTERNAL pad flag
-Date: Thu, 19 Jun 2025 14:57:45 +0300
-Message-Id: <20250619115836.1946016-14-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 16/64] media: uapi: Add new media bus codes for generic raw formats
+Date: Thu, 19 Jun 2025 14:57:48 +0300
+Message-Id: <20250619115836.1946016-17-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,104 +95,89 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Internal sink pads will be used as routing endpoints in V4L2 [GS]_ROUTING
-IOCTLs, to indicate that the stream begins in the entity. Internal sink
-pads are pads that have both SINK and INTERNAL flags set.
+Add new media bus codes for generic raw formats that are not specific to
+the colour filter array but that simply specify the bit depth. The layout
+(packing) of the data is interface specific.
 
-Also prevent creating links to pads that have been flagged as internal and
-initialising SOURCE pads with INTERNAL flag set.
+The rest of the properties of the format are specified with controls in
+the image source.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/mediactl/media-types.rst  |  9 +++++++++
- drivers/media/mc/mc-entity.c                      | 15 ++++++++++++---
- include/uapi/linux/media.h                        |  1 +
- 3 files changed, 22 insertions(+), 3 deletions(-)
+ .../media/v4l/subdev-formats.rst              | 40 +++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         | 10 +++++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
-index 6332e8395263..200c37a1da26 100644
---- a/Documentation/userspace-api/media/mediactl/media-types.rst
-+++ b/Documentation/userspace-api/media/mediactl/media-types.rst
-@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
- .. _MEDIA-PAD-FL-SINK:
- .. _MEDIA-PAD-FL-SOURCE:
- .. _MEDIA-PAD-FL-MUST-CONNECT:
-+.. _MEDIA-PAD-FL-INTERNAL:
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index 9ef1bc22ad9c..c06d8c83e2b8 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -3434,6 +3434,46 @@ organization is given as an example for the first pixel only.
  
- .. flat-table:: Media pad flags
-     :header-rows:  0
-@@ -381,6 +382,14 @@ Types and flags used to represent the media graph elements
- 	  enabled links even when this flag isn't set; the absence of the flag
- 	  doesn't imply there is none.
+     \endgroup
  
-+    *  -  ``MEDIA_PAD_FL_INTERNAL``
-+       -  The internal flag indicates an internal pad that has no external
-+	  connections. As they are internal to entities, internal pads shall not
-+	  be connected with links.
++Generic raw formats on serial interfaces
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+	  The internal flag may currently be present only in a sink pad where it
-+	  indicates that the :ref:``stream <media-glossary-stream>`` originates
-+	  from within the entity.
- 
- One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
- must be set for every pad.
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 045590905582..04d69f042a0e 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -209,11 +209,16 @@ int media_entity_pads_init(struct media_entity *entity, u16 num_pads,
- 		mutex_lock(&mdev->graph_mutex);
- 
- 	media_entity_for_each_pad(entity, iter) {
-+		const u32 pad_flags = iter->flags & (MEDIA_PAD_FL_SINK |
-+						     MEDIA_PAD_FL_SOURCE |
-+						     MEDIA_PAD_FL_INTERNAL);
++Those formats transfer (largely) unprocessed raw pixel data typically from raw
++camera sensors using Bayer and other Colour Filter Arrays (CFAs) on serial
++interfaces. The packing of the data on the bus is determined by the hardware,
++however the bit depth is still specific to the format.
 +
- 		iter->entity = entity;
- 		iter->index = i++;
++The colour components and the native pixel order are determined by the
++``V4L2_CID_COLOUR_PATTERN`` control. Whether or not flipping controls
++(``V4L2_CID_HFLIP`` and ``V4L2_CID_VFLIP``) affect the pattern is conveyed via
++the ``V4L2_CID_COLOUR_PATTERN_MODIFY`` control.
++
++.. tabularcolumns:: |p{2.0cm}|p{4.0cm}|p{11.3cm}|
++
++.. cssclass:: longtable
++
++.. flat-table:: Generic raw formats on serial buses
++    :header-rows:  1
++    :stub-columns: 0
++    :widths:       1 1
++
++    * - Format name
++      - Bit depth
++    * - MEDIA_BUS_FMT_RAW_8
++      - 8
++    * - MEDIA_BUS_FMT_RAW_10
++      - 10
++    * - MEDIA_BUS_FMT_RAW_12
++      - 12
++    * - MEDIA_BUS_FMT_RAW_14
++      - 14
++    * - MEDIA_BUS_FMT_RAW_16
++      - 16
++    * - MEDIA_BUS_FMT_RAW_20
++      - 20
++    * - MEDIA_BUS_FMT_RAW_24
++      - 24
++    * - MEDIA_BUS_FMT_RAW_28
++      - 28
  
--		if (hweight32(iter->flags & (MEDIA_PAD_FL_SINK |
--					     MEDIA_PAD_FL_SOURCE)) != 1) {
-+		if (pad_flags != MEDIA_PAD_FL_SINK &&
-+		    pad_flags != (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL) &&
-+		    pad_flags != MEDIA_PAD_FL_SOURCE) {
- 			ret = -EINVAL;
- 			break;
- 		}
-@@ -1118,7 +1123,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
+ Packed YUV Formats
+ ^^^^^^^^^^^^^^^^^^
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index ff62056feed5..3abae4c77c6d 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -185,4 +185,14 @@
+ #define MEDIA_BUS_FMT_META_20			0x8006
+ #define MEDIA_BUS_FMT_META_24			0x8007
  
- 	for (i = 0; i < entity->num_pads; i++) {
- 		if ((entity->pads[i].flags &
--		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
-+		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
-+		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
- 			continue;
- 
- 		if (entity->pads[i].sig_type == sig_type)
-@@ -1148,6 +1154,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
- 		return -EINVAL;
- 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
- 		return -EINVAL;
-+	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL) ||
-+	    WARN_ON(sink->pads[sink_pad].flags & MEDIA_PAD_FL_INTERNAL))
-+		return -EINVAL;
- 
- 	link = media_add_link(&source->links);
- 	if (link == NULL)
-diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
-index 1c80b1d6bbaf..80cfd12a43fc 100644
---- a/include/uapi/linux/media.h
-+++ b/include/uapi/linux/media.h
-@@ -208,6 +208,7 @@ struct media_entity_desc {
- #define MEDIA_PAD_FL_SINK			(1U << 0)
- #define MEDIA_PAD_FL_SOURCE			(1U << 1)
- #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
-+#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
- 
- struct media_pad_desc {
- 	__u32 entity;		/* entity ID */
++/* Generic (CFA independent) pixel data formats. Next is 0xa009. */
++#define MEDIA_BUS_FMT_RAW_8			0xa001
++#define MEDIA_BUS_FMT_RAW_10			0xa002
++#define MEDIA_BUS_FMT_RAW_12			0xa003
++#define MEDIA_BUS_FMT_RAW_14			0xa004
++#define MEDIA_BUS_FMT_RAW_16			0xa005
++#define MEDIA_BUS_FMT_RAW_20			0xa006
++#define MEDIA_BUS_FMT_RAW_24			0xa007
++#define MEDIA_BUS_FMT_RAW_28			0xa008
++
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
 -- 
 2.39.5
 
