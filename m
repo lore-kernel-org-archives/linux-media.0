@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C702550AF
-	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3AD255227
+	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334347; cv=none; b=HekL4J+MxXEMbzRh0GE0B9nwOohlmZlGQTUVPnQFv+fZEg62kOMQpLhiCfbBubzW84iumjm3aRmJip0d8VV58cc/O5Mw05Iq72ZOt8TprJ3HUtPwVA+9Qj4aE2mL8D3nW/16KlbtvGTXn7XhuBI1Io/x5qUVlCcqH6JqgSj0BS8=
+	t=1750334347; cv=none; b=RzkHJly6jrR7Y1GWnQIhTW+bi7+fNBVO1nB3OTQIIcj7Ee7QjsX4dz5RhMRXe/XgG0eDlMwbkVXEbNRo2jIHhOKv8x6e2i0xF7UZNTP+GrkiXnlpiKymUgckKYCFV42XiEx0QfPzesrZK9N39stAjB+ikUVpJ6iJzpTl+ZUNehk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750334347; c=relaxed/simple;
-	bh=4B34YzZ95h/41o2CE+Zf5uwZLURDiSCQwAxCF1LyazU=;
+	bh=2+mprGsAMw65HRjF87EpzkyLTP6VNAEEx1mKiGshaVA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p7NIKg/3K/naHuSjRa6UKcP+M06OIIRy1eHVyjd4kC8C8a1fyl1+EFIN94A4qdfqWfGInnb0AWbJD5fLQFpH/Z2H1i8NKvO7bj3RJzwRu1f9v61s3S/7185hPjrOcWHYaECgX1eJhSl0cdmf1+2mBMXYVyY1Y98y1OeeHtaXH6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vp3B9G8k; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=iCjgm3jiOavYVmQGPOAdsIHnU6GeIC77EJlpc8NB2OCCqiWvcyM1ebf0AZkkxcSjpzqmA1sGZceqaYQxdOgkGnuBPUI5CDAkwLSCxKS7+qeqnBmAkGujfCzxf5n3pM0MvR9WQr6YN1m8OAD/pIl8zzA5M6i3YP/0J4X6r3LYRXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dc76TrMM; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vp3B9G8k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dc76TrMM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1750334346; x=1781870346;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4B34YzZ95h/41o2CE+Zf5uwZLURDiSCQwAxCF1LyazU=;
-  b=Vp3B9G8kV2YVDL0tAkKL7XLoA2tD9at9YB5+nQ4Op0mjJH0khPI+Fvn7
-   DxogwwiU5AJdGzqPdxXm9kogAf9P2OugmJxnROShsqPSaA0b0eGKU6LwI
-   rVx7mUTuJCvw3cSpyIzSFPEdluuGtRkGrKXjeDN2OYIppQ9tE1Ma3u+yY
-   pFK/dFmWV8OwnvHG5c43ilf7C2pSSsXvbZa/BGLdx3bXRBB7eLAdI/6gy
-   ubcp9u+/2XzDoK0PQI1ONdqFif/4pqPNHszM4zU60dPibbjvNl3YmyCGm
-   14rIdUYCu39LdRWkV2rRWmiRU8jY6c43DHd3VbVoz5MzZr/oLCA3LYJ6n
+  bh=2+mprGsAMw65HRjF87EpzkyLTP6VNAEEx1mKiGshaVA=;
+  b=Dc76TrMMX0VXCZHm7sQnHaFeG334jy9vJL3NFapSh+NfQaM3wNekPUDh
+   PDeyj6kgYkjoX9mMALD+yqoCVd/v79RrVI5xTKq4Kgj1vbxTMz5i78BRq
+   ba7Wvml3qVV7mt/E79ZkQFcFb+5dk+kf1FZBdRdFX4Lok2Dr/7klBvWLQ
+   cKHCrvaGw7pTG7MOsLcut5jaFj95PBX0oGrv6E0T0SYqlw92dro0LHhjq
+   tZi429iHN1oJSENfwIMDyZ8B7s8CKwWtOFpsgcBhJzEIytC7ZOKlAmfYZ
+   pPDqU2+F+brw/ttew5kqk8rxkgKBScc60x34T6UA3Q+0us+BMBNKhf0dr
    w==;
-X-CSE-ConnectionGUID: riPFbAotQ0CBgU0XBnsODA==
-X-CSE-MsgGUID: zktojkBvSWukX6pZAgA62Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386368"
+X-CSE-ConnectionGUID: a3YCzMcIQT6Lrym6M10CxA==
+X-CSE-MsgGUID: igYNFTU+QFWSLDGGhuZcJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386376"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="56386368"
+   d="scan'208";a="56386376"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
   by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:03 -0700
-X-CSE-ConnectionGUID: t/yW4IbvQJuN1UeFlXTaZw==
-X-CSE-MsgGUID: +kRzPVMKQQ+JzyDVMJ3YTg==
+X-CSE-ConnectionGUID: ddljn+x1TxWFvzADqgTAvA==
+X-CSE-MsgGUID: aZynokQ+TEO3oWF6TWTJhA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="154908279"
+   d="scan'208";a="154908277"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
   by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:57 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id E42951211BE;
-	Thu, 19 Jun 2025 14:58:36 +0300 (EEST)
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 012D8121607;
+	Thu, 19 Jun 2025 14:58:37 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDue-008AJB-2w;
+	id 1uSDue-008AJa-39;
 	Thu, 19 Jun 2025 14:58:36 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 20/64] media: Documentation: Document raw mbus codes and CFA for cameras
-Date: Thu, 19 Jun 2025 14:57:52 +0300
-Message-Id: <20250619115836.1946016-21-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 25/64] media: Documentation: Document non-CCS use of CCS embedded data layout
+Date: Thu, 19 Jun 2025 14:57:57 +0300
+Message-Id: <20250619115836.1946016-26-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,62 +95,37 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document the use of raw mbus codes for camera sensors and how the
-V4L2_CID_COLOR_PATTERN and V4L2_CID_COLOR_PATTERN_FLIP controls are used
-to convey the color filter array pattern on UAPI.
+The CCS embedded data layout has multiple aspects (packing, encoding and
+the rest, including register addresses and semantics). Explicitly allow
+non-compliant embedded data to use the two former to reduce redundant
+documentation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../userspace-api/media/drivers/camera-sensor.rst   | 13 +++++++++++++
- .../media/v4l/ext-ctrls-image-source.rst            |  4 ++++
- 2 files changed, 17 insertions(+)
+ .../userspace-api/media/drivers/camera-sensor.rst    | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/Documentation/userspace-api/media/drivers/camera-sensor.rst b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-index 919a50e8b9d9..9f68d24dfe0b 100644
+index 450e5940c6e7..d9589ad80204 100644
 --- a/Documentation/userspace-api/media/drivers/camera-sensor.rst
 +++ b/Documentation/userspace-api/media/drivers/camera-sensor.rst
-@@ -37,6 +37,19 @@ format set on a source pad at the end of the device's internal pipeline.
- 
- Most sensor drivers are implemented this way.
- 
-+V4L2_CID_COLOR_PATTERN, raw mbus formats, flipping and cropping
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -136,3 +136,15 @@ In general, changing the embedded data layout from the driver-configured values
+ is not supported. The height of the metadata is device-specific and the width
+ is that (or less of that) of the image width, as configured on the pixel data
+ stream.
 +
-+For raw image data originating from camera sensors, specific :ref:`raw mbus
-+codes MEDIA_BUS_FMT_RAW_x (where 'x' is the bit depth)
-+<v4l2-mbus-pixelcode-generic-raw>` are used as Color Filter Array (CFA) agnostic
-+raw formats. The ``V4L2_CID_COLOR_PATTERN <image-source-control-color-pattern>``
-+control in the same sub-device defines the native color pattern of the
-+device. Flipping may further affect the readout pattern as indicated by the
-+``V4L2_CID_COLOR_PATTERN_FLIP <image-source-control-color-pattern-flip>``
-+control. Further on, cropping also has an effect on the pattern if cropped
-+amount is not divisible by the size of the pattern, horizontally and vertically.
++CCS and non-CCS embedded data layout
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
- Frame interval configuration
- ----------------------------
- 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-index 43a62a85afb8..3cb7ee1b0aed 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-@@ -93,6 +93,8 @@ Image Source Control IDs
-     is reported as being (say) 128, then a value of 192 would represent
-     a gain of exactly 1.5.
- 
-+.. _image-source-control-color-pattern:
-+
- ``V4L2_CID_COLOR_PATTERN (integer)``
-     This control determines the color components and native pixel order in the
-     sensor's CFA (Color Filter Array) when used in conjunction with
-@@ -132,6 +134,8 @@ Image Source Control IDs
-         red, green pixels.
-       - 3
- 
-+.. _image-source-control-color-pattern-flip:
-+
- ``V4L2_CID_COLOR_PATTERN_FLIP (bitmask)``
-     Whether the horizontal or vertical flipping controls (V4L2_CID_HFLIP and
-     V4L2_CID_VFLIP) have an effect on the pixel order of the output color
++Embedded data which is fully compliant with CCS definitions uses ``CCS embedded
++data layout <media-metadata-layout-ccs>`` (level 3) for :ref:`the metadata
++layout control <image_source_control_metadata_layout>`. Device-specific embedded
++data compliant with either MIPI CCS embedded data levels 1 or 2 only shall not
++use CCS embedded data mbus code, but may refer to CCS embedded data
++documentation with the level of conformance specified and omit documenting these
++aspects of the layout. The rest of the device-specific embedded data layout is
++documented in the context of the data layout itself.
 -- 
 2.39.5
 
