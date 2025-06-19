@@ -1,54 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97682571B6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88772571C2
 	for <linux-media@vger.kernel.org>; Thu, 19 Jun 2025 11:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750334355; cv=none; b=dWFt/w9lPzqD5cqtvg5RPwhpJBruJ9WnMERLJc3WhmAeOv3aU+omeOiiz4AZILyZGAUkUtjlJse5C2U4L0ZL2A9RvqZt3pD6ZpNtyUkJBii3+yCASQ65fQ6shNND3nh/l+sqPtlmfp4cgzXGH0ujDm1gzU8kY7Xx845FOAyG6vM=
+	t=1750334355; cv=none; b=bB5IckfuS06VIjqOCd80lo8nfscfm25sECi80kMthLTWCYck2Z49ru+EV+WrNfZLrKJcLU5DysGGlwrknfBco8jYLrYzMwMfT6eHVa389DnubMiuTwEtSXMRA4N6hHCOpRXp1WSbGaxsAQxO8z+MrmByHAkI3FlaHzLXSGszhQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750334355; c=relaxed/simple;
-	bh=WkpEZHg4NaXKOXNE6dRq+y0fCPoqcOcy3byOFkSIL6I=;
+	bh=Pnxb5TAOrp6Du+wWL6x4R3RF7AIz+Y9RsI0zGnUqofo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=vGbmMKyT2wG15Bddbu8nYoi/HGRg5k449XXA4DoTI8L92xOOnvbXJ2l5YE11jTOZgepPR3K3PNuXY+8sH+yo4I95eAcqfK32zbOHp0xZoAY7f2DpyEdG2cs83X90FDrsWzpV74SJOCbkhsYP+hpOlhsDIMSe9LVUcIaA1Nkpazo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kOCvTP6O; arc=none smtp.client-ip=198.175.65.14
+	 MIME-Version; b=gzR24uhkNI6nEr+OzAgtoaFc8mFBzNhNo1EQyroBjMUuEB0aNTtYZRi+cfBD/HY3j6okcVQHhILWa0L+Dhc8FHCG6Fc3IIaP+ofYN+mbfLMsDYJJJpBDg45KoyRXUdzN7bk0Jrf19bVZRyWfnmpJhMBMRp0tqNx5CZfh5f93MOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=njrdok2W; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOCvTP6O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="njrdok2W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1750334354; x=1781870354;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WkpEZHg4NaXKOXNE6dRq+y0fCPoqcOcy3byOFkSIL6I=;
-  b=kOCvTP6OO+3FJA6nnZkO5z1NPVtcWUWpSO78VuLkdSu9DI8u3561Ww8b
-   WIzGglqHNtyKMjEmLvPTw9zJP52FReAgN8Ec7MNY8k7aqfQisNOGQLAfd
-   opfLYrD6DZhQbR3AynFBhM7ylvGcCuatHkSC4dHdYRR/5KkOyWrT2xm0l
-   4UXFb5sD8LToXIu39iAns6VKmUB1QZKemJNtcW7HgBWMGTz+ZFAqb6eVx
-   jmQkNjovsoywV1ajRGZ20QfC1mthKEsxQLenuxLuSZJ5GnkEWLS0lYWn3
-   zBjJhDuX3utc1ivlo3EZlU4TPEV/qLXOD2I4Xq9TWaH+ak3Ia1VVkY3Ih
-   g==;
-X-CSE-ConnectionGUID: A7sL00nJSdSiSg2Zh2om8A==
-X-CSE-MsgGUID: Qv66a5StQ4yzVtLTXOrv8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386499"
+  bh=Pnxb5TAOrp6Du+wWL6x4R3RF7AIz+Y9RsI0zGnUqofo=;
+  b=njrdok2WXiAtnFGH6eVPs+WtrFC25xeFeAoxfTcu4cPrwEKT9opiKY9P
+   2dwmRBiCrg+2WNF4MyrDyNLtV1TArFy/Pby0bY8gkvnH02jK8db/5PWPr
+   yBVMC9/Xy39Nqy1quDoccQpD1XrDYJyRb6+UP5M/AcqU8bsFgY2Ukkehy
+   JawOUGeZe0K6J408/2MX2tK8araYrgE7SaStmHmokvqNytoJrX8BCt77T
+   TGVN5PgHiXkGdJHaTh9R9WJOgzt/EyV2bmPJs6AydSVezpjC9yU7fAVFZ
+   R2JPaTjmDbrr6didMbZSJVIJCm0548yZYkJy26Mem2neMT81VuZP9FsqI
+   A==;
+X-CSE-ConnectionGUID: PvgytS0ZRpSJZ696Su/A2g==
+X-CSE-MsgGUID: 40KG2/xYQNGxs5l39IwbyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11468"; a="56386513"
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="56386499"
+   d="scan'208";a="56386513"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:05 -0700
-X-CSE-ConnectionGUID: cFANBX1NTSG9OVVDLlBeQA==
-X-CSE-MsgGUID: P8QFF+uFQN6QDJp/jqRFcA==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:59:06 -0700
+X-CSE-ConnectionGUID: obYHZuA4Q+KyB6kehxJo1w==
+X-CSE-MsgGUID: /Y/3KLQTS1mrIknpI/hbBA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,248,1744095600"; 
-   d="scan'208";a="154908327"
+   d="scan'208";a="154908334"
 Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.167])
   by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 04:58:58 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1780B122166;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 1CC45122334;
 	Thu, 19 Jun 2025 14:58:37 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uSDuf-008AK4-0C;
+	id 1uSDuf-008AKE-0I;
 	Thu, 19 Jun 2025 14:58:37 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -81,9 +81,9 @@ Cc: hans@jjverkuil.nl,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
 	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v10 31/64] media: ccs: Compute scaling configuration from sub-device state
-Date: Thu, 19 Jun 2025 14:58:03 +0300
-Message-Id: <20250619115836.1946016-32-sakari.ailus@linux.intel.com>
+Subject: [PATCH v10 33/64] media: ccs: Detemine emb_data_ctrl register from sub-device state
+Date: Thu, 19 Jun 2025 14:58:05 +0300
+Message-Id: <20250619115836.1946016-34-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
 References: <20250619115836.1946016-1-sakari.ailus@linux.intel.com>
@@ -95,152 +95,183 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compute scaling configuration from sub-device state instead of storing it
-to the driver's device context struct.
+Determine the value to write to emb_data_ctrl register from sub-device
+state.
+
+This also moves up the embedded data definitions. There are no changes to
+the definitions themselves.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/ccs/ccs-core.c | 59 ++++++++++++++++++++++----------
- drivers/media/i2c/ccs/ccs.h      |  3 --
- 2 files changed, 40 insertions(+), 22 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 118 ++++++++++++++++---------------
+ drivers/media/i2c/ccs/ccs.h      |   2 -
+ 2 files changed, 62 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
-index 1eb63956ef1f..7b451684e1ed 100644
+index 1193cde1c98c..87a1614a020b 100644
 --- a/drivers/media/i2c/ccs/ccs-core.c
 +++ b/drivers/media/i2c/ccs/ccs-core.c
-@@ -531,19 +531,51 @@ ccs_get_binning(struct ccs_sensor *sensor, u8 *binning_mode, u8 *binh, u8 *binv)
- 	*binv = sink_crop->height / sink_comp->height;
+@@ -1869,6 +1869,57 @@ static int ccs_pm_get_init(struct ccs_sensor *sensor)
+ 	return rval;
  }
  
-+static void ccs_get_scaling(struct ccs_sensor *sensor, u8 *scaling_mode,
-+			    u8 *scale_m)
++#define CCS_EMBEDDED_CODE_DEPTH(depth, half_depth)			\
++	depth,								\
++	CCS_EMB_DATA_CAPABILITY_TWO_BYTES_PER_RAW##depth,		\
++	CCS_EMB_DATA_CAPABILITY_NO_ONE_BYTE_PER_RAW##depth,		\
++	CCS_EMB_DATA_CTRL_RAW##half_depth##_PACKING_FOR_RAW##depth,	\
++	MEDIA_BUS_FMT_META_##half_depth,				\
++	MEDIA_BUS_FMT_META_##depth,					\
++
++static const struct ccs_embedded_code {
++	u8 depth;
++	u8 cap_two_bytes_per_sample;
++	u8 cap_no_legacy;
++	u8 ctrl;
++	u32 code_two_bytes;
++	u32 code_legacy;
++} ccs_embedded_codes[] = {
++	{ CCS_EMBEDDED_CODE_DEPTH(16, 8) },
++	{ CCS_EMBEDDED_CODE_DEPTH(20, 10) },
++	{ CCS_EMBEDDED_CODE_DEPTH(24, 12) },
++};
++
++static const struct ccs_embedded_code *ccs_embedded_code(unsigned int bpp)
 +{
-+	struct v4l2_subdev_state *state =
-+		v4l2_subdev_get_locked_active_state(&sensor->scaler->sd);
-+	const struct v4l2_rect *sink_crop =
-+		v4l2_subdev_state_get_crop(state, CCS_PAD_SINK,
-+					   CCS_STREAM_PIXEL);
-+	const struct v4l2_rect *sink_comp =
-+		v4l2_subdev_state_get_compose(state, CCS_PAD_SINK,
-+					      CCS_STREAM_PIXEL);
++	unsigned int i;
 +
-+	*scale_m = sink_crop->width * CCS_LIM(sensor, SCALER_N_MIN) /
-+		sink_comp->width;
++	for (i = 0; i < ARRAY_SIZE(ccs_embedded_codes); i++)
++		if (ccs_embedded_codes[i].depth == bpp)
++			return ccs_embedded_codes + i;
 +
-+	if (!scaling_mode)
-+		return;
++	WARN_ON(1);
 +
-+	if (sink_crop->width == sink_comp->width)
-+		*scaling_mode = CCS_SCALING_MODE_NO_SCALING;
-+	else if (sink_crop->height == sink_comp->height)
-+		*scaling_mode = CCS_SCALING_MODE_HORIZONTAL;
-+	else
-+		*scaling_mode = SMIAPP_SCALING_MODE_BOTH;
++	return ccs_embedded_codes;
 +}
 +
- static int ccs_pll_update(struct ccs_sensor *sensor)
- {
- 	struct ccs_pll *pll = &sensor->pll;
- 	u8 binh, binv;
-+	u8 scale_m;
- 	int rval;
- 
- 	ccs_get_binning(sensor, NULL, &binh, &binv);
- 
-+	if (sensor->scaler)
-+		ccs_get_scaling(sensor, NULL, &scale_m);
-+	else
-+		scale_m = CCS_LIM(sensor, SCALER_N_MIN);
++static u32
++ccs_default_embedded_code(struct ccs_sensor *sensor,
++			  const struct ccs_embedded_code *embedded_code)
++{
++	if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
++	    BIT(embedded_code->cap_two_bytes_per_sample))
++		return embedded_code->code_two_bytes;
 +
- 	pll->binning_horizontal = binh;
- 	pll->binning_vertical = binv;
- 	pll->link_freq =
- 		sensor->link_freq->qmenu_int[sensor->link_freq->val];
--	pll->scale_m = sensor->scale_m;
-+	pll->scale_m = scale_m;
- 	pll->bits_per_pixel = sensor->csi_format->compressed;
- 
- 	rval = ccs_pll_try(sensor, pll);
-@@ -1203,7 +1235,7 @@ static int ccs_get_mbus_formats(struct ccs_sensor *sensor)
- 	/* Figure out which BPP values can be used with which formats. */
- 	pll->binning_horizontal = 1;
- 	pll->binning_vertical = 1;
--	pll->scale_m = sensor->scale_m;
-+	pll->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
- 
- 	for (i = 0; i < ARRAY_SIZE(ccs_csi_data_formats); i++) {
- 		sensor->compressed_min_bpp =
-@@ -1948,11 +1980,15 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
- 	/* Scaling */
- 	if (CCS_LIM(sensor, SCALING_CAPABILITY)
- 	    != CCS_SCALING_CAPABILITY_NONE) {
--		rval = ccs_write(sensor, SCALING_MODE, sensor->scaling_mode);
-+		u8 scaling_mode, scale_m;
++	if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
++	      BIT(embedded_code->cap_no_legacy)))
++		return embedded_code->code_legacy;
 +
-+		ccs_get_scaling(sensor, &scaling_mode, &scale_m);
++	WARN_ON(1);
 +
-+		rval = ccs_write(sensor, SCALING_MODE, scaling_mode);
- 		if (rval < 0)
- 			goto err_pm_put;
++	return embedded_code->code_legacy;
++}
++
+ static int ccs_enable_streams(struct v4l2_subdev *subdev,
+ 			      struct v4l2_subdev_state *state, u32 pad,
+ 			      u64 streams_mask)
+@@ -2003,7 +2054,16 @@ static int ccs_enable_streams(struct v4l2_subdev *subdev,
  
--		rval = ccs_write(sensor, SCALE_M, sensor->scale_m);
-+		rval = ccs_write(sensor, SCALE_M, scale_m);
+ 	/* Configure embedded data */
+ 	if (sensor->csi_format->compressed >= 16) {
+-		rval = ccs_write(sensor, EMB_DATA_CTRL, sensor->emb_data_ctrl);
++		const struct ccs_embedded_code *embedded_code =
++			ccs_embedded_code(sensor->csi_format->compressed);
++		const struct v4l2_mbus_framefmt *meta_out_fmt =
++			v4l2_subdev_state_get_format(src_state, CCS_PAD_SRC,
++						     CCS_STREAM_META);
++
++		rval = ccs_write(sensor, EMB_DATA_CTRL,
++				 meta_out_fmt->code ==
++				 embedded_code->code_legacy ?
++				 0 : embedded_code->ctrl);
  		if (rval < 0)
  			goto err_pm_put;
  	}
-@@ -2261,7 +2297,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 			  struct v4l2_subdev_state *sd_state, int which,
- 			  int target)
- {
--	struct ccs_sensor *sensor = to_ccs_sensor(subdev);
- 	struct ccs_subdev *ssd = to_ccs_subdev(subdev);
- 	struct v4l2_rect *comp, *crop;
- 	struct v4l2_mbus_framefmt *fmt;
-@@ -2274,13 +2309,6 @@ static void ccs_propagate(struct v4l2_subdev *subdev,
- 						  CCS_STREAM_PIXEL);
- 		comp->width = crop->width;
- 		comp->height = crop->height;
--		if (which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--			if (ssd == sensor->scaler) {
--				sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
--				sensor->scaling_mode =
--					CCS_SCALING_MODE_NO_SCALING;
--			}
--		}
- 		fallthrough;
- 	case V4L2_SEL_TGT_COMPOSE:
- 		crop = v4l2_subdev_state_get_crop(sd_state, CCS_PAD_SRC,
-@@ -2665,11 +2693,6 @@ static void ccs_set_compose_scaler(struct v4l2_subdev *subdev,
- 				 * CCS_LIM(sensor, SCALER_N_MIN)) & ~1;
- 	else
- 		sel->r.height = sink_crop->height;
--
--	if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
--		sensor->scale_m = scale_m;
--		sensor->scaling_mode = mode;
--	}
+@@ -2127,57 +2187,6 @@ static const struct ccs_csi_data_format
+ 	return sensor->csi_format;
  }
- /* We're only called on source pads. This function sets scaling. */
- static int ccs_set_compose(struct v4l2_subdev *subdev,
-@@ -3784,8 +3807,6 @@ static int ccs_probe(struct i2c_client *client)
- 	sensor->pixel_array = &sensor->ssds[sensor->ssds_used];
- 	sensor->ssds_used++;
  
--	sensor->scale_m = CCS_LIM(sensor, SCALER_N_MIN);
+-#define CCS_EMBEDDED_CODE_DEPTH(depth, half_depth)			\
+-	depth,								\
+-	CCS_EMB_DATA_CAPABILITY_TWO_BYTES_PER_RAW##depth,		\
+-	CCS_EMB_DATA_CAPABILITY_NO_ONE_BYTE_PER_RAW##depth,		\
+-	CCS_EMB_DATA_CTRL_RAW##half_depth##_PACKING_FOR_RAW##depth,	\
+-	MEDIA_BUS_FMT_META_##half_depth,				\
+-	MEDIA_BUS_FMT_META_##depth,					\
 -
- 	/* prepare PLL configuration input values */
- 	sensor->pll.bus_type = CCS_PLL_BUS_TYPE_CSI2_DPHY;
- 	sensor->pll.csi2.lanes = sensor->hwcfg.lanes;
+-static const struct ccs_embedded_code {
+-	u8 depth;
+-	u8 cap_two_bytes_per_sample;
+-	u8 cap_no_legacy;
+-	u8 ctrl;
+-	u32 code_two_bytes;
+-	u32 code_legacy;
+-} ccs_embedded_codes[] = {
+-	{ CCS_EMBEDDED_CODE_DEPTH(16, 8) },
+-	{ CCS_EMBEDDED_CODE_DEPTH(20, 10) },
+-	{ CCS_EMBEDDED_CODE_DEPTH(24, 12) },
+-};
+-
+-static const struct ccs_embedded_code *ccs_embedded_code(unsigned int bpp)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(ccs_embedded_codes); i++)
+-		if (ccs_embedded_codes[i].depth == bpp)
+-			return ccs_embedded_codes + i;
+-
+-	WARN_ON(1);
+-
+-	return ccs_embedded_codes;
+-}
+-
+-static u32
+-ccs_default_embedded_code(struct ccs_sensor *sensor,
+-			  const struct ccs_embedded_code *embedded_code)
+-{
+-	if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+-	    BIT(embedded_code->cap_two_bytes_per_sample))
+-		return embedded_code->code_two_bytes;
+-
+-	if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+-	      BIT(embedded_code->cap_no_legacy)))
+-		return embedded_code->code_legacy;
+-
+-	WARN_ON(1);
+-
+-	return embedded_code->code_legacy;
+-}
+-
+ static int ccs_enum_mbus_code(struct v4l2_subdev *subdev,
+ 			      struct v4l2_subdev_state *sd_state,
+ 			      struct v4l2_subdev_mbus_code_enum *code)
+@@ -2429,16 +2438,13 @@ static int ccs_set_format_meta(struct v4l2_subdev *subdev,
+ 
+ 		if (!(CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+ 		      BIT(embedded_code->cap_no_legacy)) &&
+-		    code == embedded_code->code_legacy) {
++		    code == embedded_code->code_legacy)
+ 			meta_fmt->code = embedded_code->code_legacy;
+-			sensor->emb_data_ctrl = 0;
+-		}
+ 
+ 		if (CCS_LIM(sensor, EMB_DATA_CAPABILITY) &
+ 		    BIT(embedded_code->cap_two_bytes_per_sample) &&
+ 		    code == embedded_code->code_two_bytes) {
+ 			meta_fmt->code = embedded_code->code_two_bytes;
+-			sensor->emb_data_ctrl = embedded_code->ctrl;
+ 			meta_fmt->width <<= 1;
+ 		}
+ 
 diff --git a/drivers/media/i2c/ccs/ccs.h b/drivers/media/i2c/ccs/ccs.h
-index 9671883e4885..3fddbe267409 100644
+index 3fddbe267409..27d38cf927ac 100644
 --- a/drivers/media/i2c/ccs/ccs.h
 +++ b/drivers/media/i2c/ccs/ccs.h
-@@ -238,9 +238,6 @@ struct ccs_sensor {
+@@ -236,8 +236,6 @@ struct ccs_sensor {
+ 	int default_pixel_order;
+ 	struct ccs_data_container sdata, mdata;
  
- 	u8 emb_data_ctrl;
- 
--	u8 scale_m;
--	u8 scaling_mode;
+-	u8 emb_data_ctrl;
 -
  	u8 frame_skip;
  	u16 embedded_start; /* embedded data start line */
