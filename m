@@ -1,40 +1,38 @@
 Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9FB2E6128;
-	Fri, 20 Jun 2025 16:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA46136988
+	for <linux-media@vger.kernel.org>; Fri, 20 Jun 2025 16:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750437959; cv=none; b=SMfJWVjtixc4F8CfFLY6vU1ZvxzBYyVBvNOdpLxHoeoW3rpYVInNxOdbqn033HvIrpnct1HY7HHob9VgArFoxPcFhnzvOdlknke7nUoQ0ameAga4t7cu71Q6RID9qwmByRWCXPC/FqqWxXhrldLRKPuaQokqvvmNaxPVNJFibis=
+	t=1750438289; cv=none; b=fp8TfYzfUTWQqlELH2kZLZ4P+5BBTpd8HFQ3OecXEtQACL/iyCy/rS6k3t69x/BAIwh66+OTdGYg4ttGqZIU8YifCgl35xBU0scqlcapNFMp7yFkyC+5VM6Tnl1hXgimZhOpHyzYDem7rVachm9758yt7pmeIgUxtVRTWjeHhjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750437959; c=relaxed/simple;
-	bh=sjdmo97wxzVageV1Bufk8NEDqg1zSfP/KUea3gQa6p0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J89lbMFm9+5AqRA91kU1Ke+c9sDmzBLwPDzJNVieyg931fFXFZ6hKWoaVteoYNAIQmtBDGQSy6V5ccRnFS5Blv6n5WgOJFnyYo4gqKfnOgcrchzmuoEgNID9W7+V/cxdJCqr3k7nPACWXgqa3UV5SfU1ZkQ74Raa0iXZW3izjb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=sVSHuI/2; arc=none smtp.client-ip=88.97.38.141
+	s=arc-20240116; t=1750438289; c=relaxed/simple;
+	bh=MsvgK3MxLra4OxsysFSmIA+an/hcclMfZzhPyShu60I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=slp5y/FS9IbQ4jb1XRw2Qj1YOzLNT1c3oQkBshf4fwtkXpWPp0mKJFgrVRxR3luOOnZhGYJ46VMnvU+G9AhsE06xM9W4AaXsxWn+AHs9lMhoGC2QL0Kcpt/UbWCPxsK4UsXVCLCdGGQe84qdRCQiq3k/sPL9qVlHMKqPiRAVt3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=B8eoMTo7; arc=none smtp.client-ip=88.97.38.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="sVSHuI/2"
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="B8eoMTo7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1750437955; bh=sjdmo97wxzVageV1Bufk8NEDqg1zSfP/KUea3gQa6p0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sVSHuI/2iOlGwjCEICyCER15kqdK+hPh4oqmD5PXI3+uRAISiB7X74TSqxU5cua6B
-	 3kpC1eJf+P2ZCJEumR5R5/PR2fuNsS2bQPfJnRE5ngsxXnpN+kE+T14gJeaoZCw+ob
-	 klFdIIBYHqJ8lrUBAto5t/VbB6fXdDRvF5/Hf29eER+NTwWDlLOrXMevLszISc2C0j
-	 unhLnMBZFWMOG6Q4nq+GVettaEZB2OxXBEl29blcOMlgC4tOVBTM6wbJuagS6dJspJ
-	 /R+micm6++S5HCDw8Iu6hyNvtvixXCZbXveYteXGLAuoYyC5s35fkk+ZHNJDPZ6f8b
-	 5mbg0yJpOHfNw==
+	t=1750437813; bh=MsvgK3MxLra4OxsysFSmIA+an/hcclMfZzhPyShu60I=;
+	h=Date:From:To:Cc:Subject:From;
+	b=B8eoMTo7YNsQYRruV+Z7qOokoLihDcBt2YxgReqKyRx0r6+qsd6hmKlZoZVyEqYwz
+	 OBwa//dz3nzfNDB6rDcO1uN1Cu6WNF8MkvW3DGJVKZ6v1Cf3Tw4PUj5uHOfkcSZP5a
+	 ZCDlc9USorNhEIuii5Wf7TPznwb8RpwKKsqQcmT/Sc+MvYxtXvuKjlHy13XFH5ajzX
+	 ofvL/EdFLCjznE7FfPVsAoyL5maoAS95tOXRJUohQM8m92+r4ZnB9Qd+EjCTtWDH3X
+	 /qj/6558ZDPNWUqM/7f9Rt5EJ+7P2DYnfAdUpXMOv2Te6TntJIP2Ggn3NQbz6MrObI
+	 jCN8a3ingeD4A==
 Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 983C6100741; Fri, 20 Jun 2025 17:45:55 +0100 (BST)
-Date: Fri, 20 Jun 2025 17:45:55 +0100
+	id 27D2F100740; Fri, 20 Jun 2025 17:43:33 +0100 (BST)
+Date: Fri, 20 Jun 2025 17:43:33 +0100
 From: Sean Young <sean@mess.org>
-To: Cosmin Tanislav <demonsingur@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] media: rc: ir-spi: allocate buffer dynamically
-Message-ID: <aFWQQwbvMLvB5-EH@gofer.mess.org>
-References: <20250613112210.22731-1-demonsingur@gmail.com>
+To: linux-media@vger.kernel.org
+Cc: Cosmin Tanislav <demonsingur@gmail.com>
+Subject: [GIT PULL FOR v6.17] ir-spi fixes
+Message-ID: <aFWPtUtfTDHCFfyO@gofer.mess.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -43,44 +41,27 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613112210.22731-1-demonsingur@gmail.com>
 
-On Fri, Jun 13, 2025 at 02:21:50PM +0300, Cosmin Tanislav wrote:
-> Replace the static transmit buffer with a dynamically allocated one,
-> removing the limit imposed on the number of pulses to transmit.
-> 
-> Add a check to constrain the carrier frequency inside
-> ir_spi_set_tx_carrier().
-> 
-> Switch to u64 arithmetic to ir_spi_tx() when calculating the number
-> of pulses to transmit.
+The following changes since commit 803b9eabc649c778986449eb0596e5ffeb7a8aed:
 
-Looks good, I've created a PR to have it merged.
+  media: v4l2-ctrls: Fix H264 SEPARATE_COLOUR_PLANE check (2025-06-20 13:20:17 +0200)
 
-Sean
+are available in the Git repository at:
 
-> 
-> V5:
->  * add separate patch to solve overflow issues in ir_spi_tx()
->  * avoid overflow in carrier frequency constraint
-> 
-> V4:
->  * add separate patch to constrain the carrier frequency
-> 
-> V3:
->  * move the allocation to be done per-TX operation
-> 
-> V2:
->  * use devm_krealloc_array
-> 
-> Cosmin Tanislav (3):
->   media: rc: ir-spi: allocate buffer dynamically
->   media: rc: ir-spi: constrain carrier frequency
->   media: rc: ir-spi: avoid overflow in multiplication
-> 
->  drivers/media/rc/ir-spi.c | 40 +++++++++++++++++++++++++--------------
->  1 file changed, 26 insertions(+), 14 deletions(-)
-> 
-> -- 
-> 2.49.0
-> 
+  https://gitlab.freedesktop.org/linux-media/users/seanyoung tags/v6.17a
+
+for you to fetch changes up to bc864b287498135cafc29bc6250f41d88a41a0ea:
+
+  media: rc: ir-spi: avoid overflow in multiplication (2025-06-20 15:23:01 +0100)
+
+----------------------------------------------------------------
+v6.17a
+
+----------------------------------------------------------------
+Cosmin Tanislav (3):
+      media: rc: ir-spi: allocate buffer dynamically
+      media: rc: ir-spi: constrain carrier frequency
+      media: rc: ir-spi: avoid overflow in multiplication
+
+ drivers/media/rc/ir-spi.c | 40 ++++++++++++++++++++++++++--------------
+ 1 file changed, 26 insertions(+), 14 deletions(-)
