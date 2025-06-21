@@ -1,143 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7691D90C8;
-	Sat, 21 Jun 2025 08:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E63E1459F6;
+	Sat, 21 Jun 2025 09:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750494456; cv=none; b=WcFNCzw9Txp0xsWUKZRuYEOHu+HsHnUqwKwAGU4y8d4dOR8cXLaTFBCwfnEwKoAp/RvwejwpIufvzvnrxo2SicmXWY1ol/lliiFXy5HNfyV9ovVYRf0Z5+jwvm9io8aBYwr88eSz/5cM6nQpFhwCGWoO/lYamTC42iV3aLNAg3c=
+	t=1750498691; cv=none; b=HIuhKL8M1ipHVGc27UuJyL7EeWghjXN55h/D7o1U5LJ4Yj+oKJlFFeskh4x/xu5mOAPlxfuB+2DGvvxgw6axG+2/f9h0ByIumVaJsDOP2YaEbasEPIP9Qe9HjxJCm4tGQ1aTYbXhPgINUPP4MynhNKPVgCfgFpOrDuMuW35U57Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750494456; c=relaxed/simple;
-	bh=/5Hpg8KrlY0TtZYD1tpvh5iwJBB1TL1dxEhLbAG56c8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R9InRJWBRH8Dio6WX69FtC1iB+1DFtWFXLc+4UHlUhEvN4WBnFvwHDHqfVUG5H4kYBkq78tRayTWQtTScpov4jxA6VS8CvluJWEwzqcY3yzt7TIJdMb/XG2lWDua9o5nNPouNH2dQjtOsjRhjcSkCgWqZoeDFIas/gb42uhcPTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usDfD9E2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750498691; c=relaxed/simple;
+	bh=qcWmP9y2oaDcX0hejMQU1XLtrocO4/dhpgjNfgryp/c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Syb2chjDV/WzqJ34vsXtqtFjdcdV7n6iHQQ9Wfe22fOHRubyaQykdG0+O1OzuFpI6yGun4qWSWAZE0Jr1kXgzX27Ml0jxduH62qNq8wu9qZCYadLtj0DZLIE5au/Zi9tYtDq93H0+XDxvWzYDonvtkdwx3pEetUERY84nvsPra4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQ3cMKG0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usDfD9E2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2FEC4CEE7;
-	Sat, 21 Jun 2025 08:27:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQ3cMKG0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C7767C4CEF1;
+	Sat, 21 Jun 2025 09:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750494455;
-	bh=/5Hpg8KrlY0TtZYD1tpvh5iwJBB1TL1dxEhLbAG56c8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=usDfD9E2xVNS/Meq1PMjJm2qPUwWu8ckqBOKU72acrvskCMZox+CM3x9M8cpL5WhF
-	 oWbRoZgLyVBOvEirbfqDFpQmLAww16ag/JbXan2qFLulRkgInqJ3XkSV01z8Y6vl5Q
-	 h0wE4YQw2fmZJ9CV/83052JnRHmli2uWD6DgSxZlcoeVqPuMJdx0gGWOI0CclttHBj
-	 Ln5KoEDkiRWSKTTLnJJZ0V4AOWO0/u84p9tSzyvtr03Gyqvn8gm58dfGAFbvbPZofA
-	 BclNWkXkOcWSzFeokKrp/khMVZ/Qjy54gmHRJPVVeZ2pR1oEjk6Rxb2ClmXOTzAKRc
-	 ZthnAyPxq7sWQ==
-Message-ID: <e18649fb-a6f1-4fe8-8973-3348435f02ad@kernel.org>
-Date: Sat, 21 Jun 2025 10:27:25 +0200
+	s=k20201202; t=1750498690;
+	bh=qcWmP9y2oaDcX0hejMQU1XLtrocO4/dhpgjNfgryp/c=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=OQ3cMKG0KdyKtXJl5EMaDezn3MNDYM6+SliUjxfELGsZXNylnF8V8zgFbfUnXiamm
+	 yhGRwrPTmhpCbqSSHjibkB9JKMZUmJRrRieHm41BNNaVgCa41RkPqaIJ1wUVT8CdpA
+	 ccuefinpS+VFrbNqhAd6wVfIhbvzNJ7AbqF7wmpUEzq9qNhrHma+0ocjlr3FgWEjn/
+	 HGrR1yw/jgDjkjuSaicvaJKtFRsQ2Sh60iaURVA8e8dA6FcD5hTCtWw1w0h6D0EGhx
+	 7SWZbZEwXjMW3QpEVy4vRUAae/Sg99a4xIB/R8bb0x6SiajMmAl0ySwf2LyKDqnAZl
+	 kpbiDXlyPDbTg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1B8FC7115C;
+	Sat, 21 Jun 2025 09:38:10 +0000 (UTC)
+From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
+Date: Sat, 21 Jun 2025 11:37:26 +0200
+Subject: [PATCH RESEND v4 2/5] media: i2c: imx214: Prepare for variable
+ clock frequency
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 41/55] media: i2c: ov8865: Use the v4l2 helper for
- obtaining the clock
-To: Sakari Ailus <sakari.ailus@iki.fi>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Mehdi Djait <mehdi.djait@linux.intel.com>, sakari.ailus@linux.intel.com,
- akinobu.mita@gmail.com, stanislaw.gruszka@linux.intel.com,
- hdegoede@redhat.com, arnd@arndb.de, alain.volmat@foss.st.com,
- andrzej.hajda@intel.com, benjamin.mugnier@foss.st.com,
- dave.stevenson@raspberrypi.com, hverkuil@xs4all.nl,
- jacopo.mondi@ideasonboard.com, jonas@kwiboo.se,
- kieran.bingham@ideasonboard.com, khalasa@piap.pl,
- prabhakar.csengg@gmail.com, mani@kernel.org, m.felsch@pengutronix.de,
- martink@posteo.de, mattwmajewski@gmail.com, matthias.fend@emfend.at,
- mchehab@kernel.org, michael.riesch@collabora.com, naush@raspberrypi.com,
- nicholas@rothemail.net, nicolas.dufresne@collabora.com,
- paul.elder@ideasonboard.com, dan.scally@ideasonboard.com, pavel@kernel.org,
- petrcvekcz@gmail.com, rashanmu@gmail.com, ribalda@chromium.org,
- rmfrfs@gmail.com, zhengsq@rock-chips.com, slongerbeam@gmail.com,
- sylvain.petinot@foss.st.com, s.nawrocki@samsung.com,
- tomi.valkeinen@ideasonboard.com, umang.jain@ideasonboard.com,
- zhi.mao@mediatek.com, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org
-References: <cover.1750352394.git.mehdi.djait@linux.intel.com>
- <273d77cc78cbe9fd144f96e68407f0f7b41d3895.1750352394.git.mehdi.djait@linux.intel.com>
- <20250619215744.GS22102@pendragon.ideasonboard.com>
- <20250619215951.GA32257@pendragon.ideasonboard.com>
- <aFZmPOqYz0Rgv5H0@valkosipuli.retiisi.eu>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <aFZmPOqYz0Rgv5H0@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250621-imx214_ccs_pll-v4-2-12178e5eb989@apitzsch.eu>
+References: <20250621-imx214_ccs_pll-v4-0-12178e5eb989@apitzsch.eu>
+In-Reply-To: <20250621-imx214_ccs_pll-v4-0-12178e5eb989@apitzsch.eu>
+To: Ricardo Ribalda <ribalda@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ devicetree@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>, 
+ Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750498689; l=3752;
+ i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
+ bh=Kdqt0JW5KAKlP5M0PrifLxHpTT1jIrEYH5jMhF/ZZZU=;
+ b=JFrj2VB0N5v95posrBw4+sv+622FBn0TnaONmOdX5+dil3q3E6lj0hNLW/MTe3R+/Gthz8N7l
+ S+Dg52NBaScDy8DVFqVA7VRItmmUf/57c2+tzB02pnKrN9AJgpS0WtW
+X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
+ pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
+X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
+ auth_id=142
+X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Reply-To: git@apitzsch.eu
 
-Hi,
+From: André Apitzsch <git@apitzsch.eu>
 
-On 21-Jun-25 9:58 AM, Sakari Ailus wrote:
-> Hi Laurent,
-> 
-> On Fri, Jun 20, 2025 at 12:59:51AM +0300, Laurent Pinchart wrote:
->> On Fri, Jun 20, 2025 at 12:57:46AM +0300, Laurent Pinchart wrote:
->>> Hi Mehdi,
->>>
->>> Thank you for the patch.
->>>
->>> On Thu, Jun 19, 2025 at 07:59:34PM +0200, Mehdi Djait wrote:
->>>> devm_clk_get() fails on ACPI-based platforms, where firmware does not
->>>> provide a direct reference to the clock producer.
->>>>
->>>> Replace devm_clk_get() with the new v4l2 helper
->>>> devm_v4l2_sensor_clk_get() that works on both DT- and ACPI-based
->>>> platforms to retrieve a reference to the clock producer from firmware.
->>>>
->>>> Signed-off-by: Mehdi Djait <mehdi.djait@linux.intel.com>
->>>
->>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->>>
->>>>
->>>> diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
->>>> index 95ffe7536aa6..5cc278c3e169 100644
->>>> --- a/drivers/media/i2c/ov8865.c
->>>> +++ b/drivers/media/i2c/ov8865.c
->>>> @@ -2956,7 +2956,6 @@ static int ov8865_probe(struct i2c_client *client)
->>>>  	struct ov8865_sensor *sensor;
->>>>  	struct v4l2_subdev *subdev;
->>>>  	struct media_pad *pad;
->>>> -	unsigned int rate = 0;
->>>>  	unsigned int i;
->>>>  	int ret;
->>>>  
->>>> @@ -3019,39 +3018,14 @@ static int ov8865_probe(struct i2c_client *client)
->>>>  
->>>>  	/* External Clock */
->>>>  
->>>> -	sensor->extclk = devm_clk_get(dev, NULL);
->>>> -	if (PTR_ERR(sensor->extclk) == -ENOENT) {
->>>> -		dev_info(dev, "no external clock found, continuing...\n");
->>>> -		sensor->extclk = NULL;
->>>> -	} else if (IS_ERR(sensor->extclk)) {
->>>> +	sensor->extclk = devm_v4l2_sensor_clk_get(dev, NULL);
->>>> +	if (IS_ERR(sensor->extclk)) {
->>>>  		dev_err(dev, "failed to get external clock\n");
->>>>  		ret = PTR_ERR(sensor->extclk);
->>
->> Actually, I'd take this as an opportunity to write
->>
->>  		ret = dev_err_probe(dev, PTR_ERR(sensor->extclk),
->> 				    "failed to get external clock\n");
-> 
-> Wouldn't printing this kind of a message fit for devm_v4l2_sensor_clk_get()
-> and consequently be removed from drivers?
+Move clock frequency related parameters out of the constant register
+sequences, such that the hard coded external clock frequency can be
+replaced by a variable in the upcoming patches.
 
-+1 to that suggestion having the helper always log an error on errors
-and then being able to just directly return an error without needing
-to log would be great.
+Acked-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
+---
+ drivers/media/i2c/imx214.c | 54 ++++++++++++++++++++++++++--------------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
-Note the helper really should use dev_err_probe() for these errors,
-so that if devm_clk_get() ever starts returning -EPROBE_DEFER that
-will be handled properly.
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 0199195dcb7d12dc2ff253fe3eb77ddbcd0812a9..c564c9ca82488dddd6b8f549749042ae44363c0d 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -299,16 +299,6 @@ static const struct cci_reg_sequence mode_4096x2304[] = {
+ 	{ IMX214_REG_DIG_CROP_WIDTH, 4096 },
+ 	{ IMX214_REG_DIG_CROP_HEIGHT, 2304 },
+ 
+-	{ IMX214_REG_VTPXCK_DIV, 5 },
+-	{ IMX214_REG_VTSYCK_DIV, 2 },
+-	{ IMX214_REG_PREPLLCK_VT_DIV, 3 },
+-	{ IMX214_REG_PLL_VT_MPY, 150 },
+-	{ IMX214_REG_OPPXCK_DIV, 10 },
+-	{ IMX214_REG_OPSYCK_DIV, 1 },
+-	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
+-
+-	{ IMX214_REG_REQ_LINK_BIT_RATE, IMX214_LINK_BIT_RATE_MBPS(4800) },
+-
+ 	{ CCI_REG8(0x3A03), 0x09 },
+ 	{ CCI_REG8(0x3A04), 0x50 },
+ 	{ CCI_REG8(0x3A05), 0x01 },
+@@ -362,16 +352,6 @@ static const struct cci_reg_sequence mode_1920x1080[] = {
+ 	{ IMX214_REG_DIG_CROP_WIDTH, 1920 },
+ 	{ IMX214_REG_DIG_CROP_HEIGHT, 1080 },
+ 
+-	{ IMX214_REG_VTPXCK_DIV, 5 },
+-	{ IMX214_REG_VTSYCK_DIV, 2 },
+-	{ IMX214_REG_PREPLLCK_VT_DIV, 3 },
+-	{ IMX214_REG_PLL_VT_MPY, 150 },
+-	{ IMX214_REG_OPPXCK_DIV, 10 },
+-	{ IMX214_REG_OPSYCK_DIV, 1 },
+-	{ IMX214_REG_PLL_MULT_DRIV, IMX214_PLL_SINGLE },
+-
+-	{ IMX214_REG_REQ_LINK_BIT_RATE, IMX214_LINK_BIT_RATE_MBPS(4800) },
+-
+ 	{ CCI_REG8(0x3A03), 0x04 },
+ 	{ CCI_REG8(0x3A04), 0xF8 },
+ 	{ CCI_REG8(0x3A05), 0x02 },
+@@ -405,9 +385,6 @@ static const struct cci_reg_sequence mode_table_common[] = {
+ 	/* ATR setting */
+ 	{ IMX214_REG_ATR_FAST_MOVE, 2 },
+ 
+-	/* external clock setting */
+-	{ IMX214_REG_EXCK_FREQ, IMX214_EXCK_FREQ(IMX214_DEFAULT_CLK_FREQ / 1000000) },
+-
+ 	/* global setting */
+ 	/* basic config */
+ 	{ IMX214_REG_MASK_CORR_FRAMES, IMX214_CORR_FRAMES_MASK },
+@@ -777,6 +754,24 @@ static int imx214_entity_init_state(struct v4l2_subdev *subdev,
+ 	return 0;
+ }
+ 
++static int imx214_configure_pll(struct imx214 *imx214)
++{
++	int ret = 0;
++
++	cci_write(imx214->regmap, IMX214_REG_VTPXCK_DIV, 5, &ret);
++	cci_write(imx214->regmap, IMX214_REG_VTSYCK_DIV, 2, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PREPLLCK_VT_DIV, 3, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PLL_VT_MPY, 150, &ret);
++	cci_write(imx214->regmap, IMX214_REG_OPPXCK_DIV, 10, &ret);
++	cci_write(imx214->regmap, IMX214_REG_OPSYCK_DIV, 1, &ret);
++	cci_write(imx214->regmap, IMX214_REG_PLL_MULT_DRIV,
++		  IMX214_PLL_SINGLE, &ret);
++	cci_write(imx214->regmap, IMX214_REG_EXCK_FREQ,
++		  IMX214_EXCK_FREQ(IMX214_DEFAULT_CLK_FREQ / 1000000), &ret);
++
++	return ret;
++}
++
+ static int imx214_update_digital_gain(struct imx214 *imx214, u32 val)
+ {
+ 	int ret = 0;
+@@ -1020,6 +1015,19 @@ static int imx214_start_streaming(struct imx214 *imx214)
+ 		return ret;
+ 	}
+ 
++	ret = imx214_configure_pll(imx214);
++	if (ret) {
++		dev_err(imx214->dev, "failed to configure PLL: %d\n", ret);
++		return ret;
++	}
++
++	ret = cci_write(imx214->regmap, IMX214_REG_REQ_LINK_BIT_RATE,
++			IMX214_LINK_BIT_RATE_MBPS(4800), NULL);
++	if (ret) {
++		dev_err(imx214->dev, "failed to configure link bit rate\n");
++		return ret;
++	}
++
+ 	ret = cci_write(imx214->regmap, IMX214_REG_CSI_LANE_MODE,
+ 			IMX214_CSI_4_LANE_MODE, NULL);
+ 	if (ret) {
 
-Otherwise this looks good to me. Mehdi thank you for your work on this!
-
-Regards,
-
-Hans
+-- 
+2.50.0
 
 
