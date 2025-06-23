@@ -1,102 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A4D1DFDBB
-	for <linux-media@vger.kernel.org>; Mon, 23 Jun 2025 06:28:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E94D78F51;
+	Mon, 23 Jun 2025 06:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750660084; cv=none; b=PbX9FAhRlSA2pd+Z3neiNmv6b7KL970EeuimhbsbXY5Qaap5ZhBhCQvwvCkpjCmlVx3RLCV9x1l6Lcl5lQEy62V4AJBPEyuZ075HfBbcNMEP9kPQHJScKxOb9Qc2Eas1ZkSrEtIUU7304bsEoG0fZXOIP+e0yMM6Zf8WJekiKBs=
+	t=1750661274; cv=none; b=MIMlgNtIGg6YxgR1RZ9AnYyXSBWNVpMMq+3B3XS6PP1fFu9UdMFImTAEwGYHWJAvStn3ugC/YYeyIr3C3DcSRW77n+JKMN6YNNc3iJ+Fz8gb44bKH3p/DjXx2QE5lg+wUj5DcGiMmxzB9NGRrA6GXj/aKUVuUwBi1tvFtuK2tog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750660084; c=relaxed/simple;
-	bh=Zo+6A93bSvTi7hSgiDBFNsvOyQjuD7cefsM4X8tXF6c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FlwKvYFwJIWWLDBMTo5FVn89k4SLOj1nmfKMpSF0H0kMwpkaYZ4MylBuImzwGH0N8uECOR3F6+PFXNe4jutI0KupALOECKQok1yUM0XSDSjN7OW7/0EzEhZEeXTa380wQcBNIDYaeMiVhsI+grNRwkkq1xxw0Or/uoJQ0UwrSuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JWn09SFr; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1750661274; c=relaxed/simple;
+	bh=YS5QfchkXQuDpizebXwc+i/GQO/Ujou+O/e0qMENePo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MS9PPdbRoZ0DeP0k4A5DMlOxwHdzCp/mJKUgfw8xURLLduoytzQpqFYgrKv3mtfZ4boHR8Ruv3PhXJRcEuIOHe7JRnksFV3d8TbibN9RzhFnqgMz+0XRLlGecdDrf5EKNfJOrE+WM3hMJ9g6pZfhyH1hvY0dgZo594u/HDvkM4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SwPXFBpd; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JWn09SFr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SwPXFBpd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750660083; x=1782196083;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Zo+6A93bSvTi7hSgiDBFNsvOyQjuD7cefsM4X8tXF6c=;
-  b=JWn09SFr1vgOB3X6BU+Uc8LWIJuJW2opSGXJ2ZI0mp2HdReTA8VMOCaQ
-   6anCYGNC1vKzYjAuNwlRUSm+OLsmx9Oy9e9vc5Es0NByTqqzIl3MO1EHz
-   AzWqHY5UQPxgXJf66FvpwtyabKieCuBVWCZpUTu7iLHb4YWQgVCtUbMyv
-   mLbHEnyYWEsFmk4b+WhoKwPxaiKwkiQDxPD3j3eTXSyN0MAv947NwxDse
-   tQRjZuLbkC+aw4f+rjpaAwoZf+mbd/MXOYYscrNkBEmCCySqOkKCoin3K
-   +Ee0Jwqxzks2KGBDoU/miEODdhMX8DmwSuMA/cdn5Lo6dty8LJ5KsFwyb
-   A==;
-X-CSE-ConnectionGUID: ymXOmXnBR8qYP6vNi8rjvg==
-X-CSE-MsgGUID: dcw85ouSTq+SpdbpHVWYpw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="52985213"
+  t=1750661273; x=1782197273;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YS5QfchkXQuDpizebXwc+i/GQO/Ujou+O/e0qMENePo=;
+  b=SwPXFBpdFwt+CSnBgkBnprVADEbNvKzDB8vyxuue6b2yjBAmNT4PKd0n
+   w44dyr2LC6dqkrX+2ybT/ZKccu/A6N6QqkNHLskiGL7xtSF+xZul/Z7zR
+   AOZLG376z8PtvuNw9NjYy82JkNelJYjp0bvbiwv8aVrIo6aA147jRCYVB
+   bR/sBqgoGvCvZUJqpCMuEDMNcbQMC9npVFWzLzqOGeRU0FyDEpZKdbG+I
+   qCK46NlYG78GO9x2z1gOc3WCohQfM35q1ySwZ7pIjMXT7XjjBPxZtys3W
+   Q5smpqjuLlB01MFmne2+hBLBR14G8U+cOS0Iicf4GW3WnzFAVcxb/izZF
+   g==;
+X-CSE-ConnectionGUID: gbDNnaQtQEmlN66WmkcECg==
+X-CSE-MsgGUID: 2uslWLd3RD6SB8WsMuZW1Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="52991727"
 X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="52985213"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:27:59 -0700
-X-CSE-ConnectionGUID: PmoUKEn4QSu8NzuXZRMSjA==
-X-CSE-MsgGUID: QmMhHf91R1CpHAvkkWNPzg==
+   d="scan'208";a="52991727"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:47:52 -0700
+X-CSE-ConnectionGUID: mNrnjtrWSK6xeohGlUJjsw==
+X-CSE-MsgGUID: Pz/9sXzLRiW91MMh1pUT1Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="175106230"
+   d="scan'208";a="150924944"
 Received: from abityuts-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.8])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:27:57 -0700
-Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id E57CE1203EB;
-	Mon, 23 Jun 2025 09:27:54 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uTaeo-009ZoO-2g;
-	Mon, 23 Jun 2025 09:27:54 +0300
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:47:48 -0700
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 9431E1201F7;
+	Mon, 23 Jun 2025 09:47:44 +0300 (EEST)
+Date: Mon, 23 Jun 2025 06:47:44 +0000
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-media@vger.kernel.org
-Cc: Hans Verkuil <hans@jjverkuil.nl>,
-	laurent.pinchart@ideasonboard.com
-Subject: [PATCH v3 0/3] Control handler free changes
-Date: Mon, 23 Jun 2025 09:27:51 +0300
-Message-Id: <20250623062754.2282598-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.5
+To: Olivier Benjamin <olivier.benjamin@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+	imx@lists.linux.dev, ~diederik/pine64-discuss@lists.sr.ht,
+	Dragan Simic <dsimic@manjaro.org>, Ondrej Jirman <megi@xff.cz>
+Subject: Re: [PATCH v4 0/4] Describe the cameras in the PinePhone Pro dts
+Message-ID: <aFj4kAXEhrR4Wbnz@kekkonen.localdomain>
+References: <20250620-camera-v4-0-0201a8ed5fae@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250620-camera-v4-0-0201a8ed5fae@bootlin.com>
 
-Hi folks,
+Hi Olivier,
 
-This set changes the control handler's error code handing when the handler
-is free and documents it.
+On Fri, Jun 20, 2025 at 05:21:31PM +0200, Olivier Benjamin wrote:
+> This series adds support for the Pine64 PinePhone Pro's rear and front
+> cameras in Device Tree.
+> This is based on some of Ondrej Jirman's patches hosted in his tree at
+> https://codeberg.org/megi/linux, but I have also fully reviewed and
+> re-written the code from the RK3399 datasheet, the PinePhone Pro
+> schematic, and the IMX258-0AQH5 software reference manual.
+> 
+> I have tested these changes on my PinePhone Pro and am able to take
+> photos from both cameras using libcamera's cam.
+> 
+> This series has raised a question about the proper label name for the
+> front/user camera and rear/world camera for phones.
+> This series is using "ucam" and "wcam", which is used in a few other
+> Rockship DTBs:
+>  - arch/arm64/boot/dts/rockchip/px30-evb.dts
+>  - rk3399-gru-scarlet.dtsi
+> 
+> Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
 
-since v2:
+Thanks for the patches.
 
-- Note in the 2nd patch v4l2_ctrl_handler_free() returns 0 if hdl is NULL, also
-  avoid NULL pointer dereference in the same case.
-
-- Only Documentation/ changes left in 3rd patch.
-
-since v1:
-
-- Added the Fixes: / Cc: stable tags.
-
-- Added two patches to return the handler's error and document the error
-  isn't changed when the handler is freed.
-
-Sakari Ailus (3):
-  media: v4l2-ctrls: Don't reset handler's error in
-    v4l2_ctrl_handler_free()
-  media: v4l2-ctrls: Return the handler's error in
-    v4l2_ctrl_handler_free()
-  media: Documentation: Document new v4l2_ctrl_handler_free() behaviour
-
- Documentation/driver-api/media/v4l2-controls.rst |  9 +++------
- drivers/media/v4l2-core/v4l2-ctrls-core.c        | 12 ++++++++----
- include/media/v4l2-ctrls.h                       |  4 +++-
- 3 files changed, 14 insertions(+), 11 deletions(-)
+I've picked the first two in the set, presumably the rest will be merged
+via another tree?
 
 -- 
-2.39.5
+Regards,
 
+Sakari Ailus
