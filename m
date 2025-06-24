@@ -1,132 +1,110 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43945280CC8
-	for <linux-media@vger.kernel.org>; Tue, 24 Jun 2025 11:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A64E1F3B9E;
+	Tue, 24 Jun 2025 11:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750765096; cv=none; b=D1U+mgTzxstuS9ZM08EkJ3Y3PKWnqv1r0EwO2l7uN0kGCKvaOpsqOmQXimD77hGniP+/6sNF5z6z1c+Y2zNQ9AiqXLMSoGKbbv7AxaH6ybA75HvNpX9Emq74nM+4xjhYhER1m5pcDI2lE2nnZ5RzGEGjhRtNWbQgEzg0zgJJoxs=
+	t=1750765299; cv=none; b=eTcG4E3lxGEIUNm2j/Kx+GSjZDqcmYLZx6Rb9OB+oWyx6wzeRlB+dw7536FW+ssxtoo/7ctsO+5OJ2wTAeJ7cA6qTrw53rp9x+XlJ06QbJyKupPBTMc0F7nM+r1mtUi4xHHkDBo2BYMQGQOfPWRJ22ZpCgq4sH/W56bxpdSvfrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750765096; c=relaxed/simple;
-	bh=RISdn8se4eZFI/7bIwlWhVghSpmypcU6lLVYr6WWbOw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ft120BOreGNpWmFivp6sqY5a3amJVTylFYMJ8HOhYZPO+CCnQEryWb9We1QlUz0p+SfmEk6A4uHJea2qKFOHV2WYuw6z1Hnj3fmO7+KDWog1sxkJz/3+G5Ze1Ir+eNGOQCZP1ZdGxJH8YA/aCDJK3in7rTzKuWtP+Lis8s24SAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wK46u2wt; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1750765299; c=relaxed/simple;
+	bh=NyT19WJz3csCD+zRyZdYmeDeFltXBvUQbAN/8+hmzIs=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=m6/wdfGtgsUrvdxXwS2TnJG6tkD4PWMKoN96eg0aOTf6D5TXU3A7F7DvzniUdWqkj2TW6ce1fSISF5DFMbC4H6liODM0hDytzIq1WBFbLOOKgAFMQbdFNq4an6D3GGpVKP71MjASF/VdaglJq6X/FJVLk+5SyvD82SgQly8dMjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AIE9HlWi; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wK46u2wt"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-553d27801b4so438799e87.3
-        for <linux-media@vger.kernel.org>; Tue, 24 Jun 2025 04:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750765092; x=1751369892; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KU9iU+hQX85DLrN6RqDyNPoBwm/rVTmxBoMbBcJ2tl8=;
-        b=wK46u2wtaCqvt57dtXkO+/EEQYDN49UbedbMXfSoF9IYAF+GYULdjQBA5Z9MqwUGIH
-         wkkJsvDeMbInNwlHb+NqY7ze7vn7iq1uPoMfV12cChhrZO7QIH2YCOjFbDoMkcPs4i/W
-         5nTHMsDnHp6yNUQUqcUMnqSbKdaT9CvDqFDpNXUIzQKBNQOqyE0NDCFNVFrmagqhWrTK
-         nxEKuL1acyIIgKXbRAise/kEMUOmUjhpzitZ13Z8HWbRu8+mJUltBdUbNF5hH6k8FXUa
-         mjTxROPJBB986rEvsm1qErm8Yzr/cuFMBnU/hEuO6mlnecBEOP4oQM1AETsuloe0h149
-         KCXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750765092; x=1751369892;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KU9iU+hQX85DLrN6RqDyNPoBwm/rVTmxBoMbBcJ2tl8=;
-        b=W2Qfz9EaQEd4KJGda5y4+1HTeFRcEZDvcGJhQgUVUnLZJHO3NZaHeBEx2Ws+YMnEie
-         1A6r2Qk62PyLQ568LqNX73L3t6K0jkMJrs34iHGAbvxHdWr/fIng+BWJoUDMTfPbDpld
-         vf/RNp2ExkV7o3HrcOtaHplW3MmIp3WTflfFnwxf1lM2s79rxGTYcWl0jxONIM3ggttT
-         sUSB1EvTt9LpdMak0fn/inF3Ub4jgLa0afMNDG1n6eEC1kEn8P3PDlE5iZiJtbCdpIoL
-         5uqHDL1yrGFMdHeMzlUFOvUtdcT8oP4OleHMpT5TuO75rEbj5kJTjaS8Qg1vV+Ms+Ff8
-         ngKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBsUbWPK8bnP/rO2iS2RiAywCfVNuI2WYgzbBWN/en7i1es3YzXdOG05TDfcyanC4BnAX31udY1hzbfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYPL4Aec2SF/EMz8dh1N12yER22v4hnSQbwMf1KJ++H9QMdodK
-	x1z52HluIItoTrjZEndqzWsNSo8MaQYF307JKnCuzX9OlIhEUeNFZOFMteDluJ3/QeT5IHl7GLW
-	lgRZb
-X-Gm-Gg: ASbGncuV5uv5FdzHic6G43N8CEK6+K4gwICvxMbHyvCGGUuGI+UsLvq+tIZkUOBxfDj
-	Nd5pbuHXvaAeeUNsYSt+exOHxWr5RlIsgL4CF+8d+8iasmLTnw4CVVwdqbIetWmJu/YbKDfNGvp
-	KtjLB11V8s99DmAiO/CShFZTpEaVWuZ62ZN28Ut68MbUGygXSc7yl3ZRa10evQIv/OJKb/G8FkJ
-	vcnOeI68Ea0LtRuUZE5h/Pw+WWA7eJnfqHUj7z862bPnBCqqdzsKzFNndz4k3+/QXYaq9FkOpmH
-	Wr0/gDcC/v6ijxUPbmT7ffS7vz2HUwH9Do3HWbvHEWkLqMTAaoMKA5uJlIcqcaPbaBRCjfrSD2D
-	Ns7JdrMa2EOBrQxmaHpnmCZNDh5p7XJ9IwjnZSETe
-X-Google-Smtp-Source: AGHT+IGLkRpAYMw1Gi9clpkFUqiOhmtR7IOar5rMOl6DHsBt9ot2NgeuSSchmngJj28KpJ8ax3YpSg==
-X-Received: by 2002:a05:6512:110b:b0:553:af02:78e4 with SMTP id 2adb3069b0e04-553e3bbced5mr1755843e87.5.1750765092396;
-        Tue, 24 Jun 2025 04:38:12 -0700 (PDT)
-Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-553e41bbde6sm1805161e87.136.2025.06.24.04.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jun 2025 04:38:12 -0700 (PDT)
-Message-ID: <fff77f71-e21b-43b9-9da5-6cf819add970@linaro.org>
-Date: Tue, 24 Jun 2025 14:38:02 +0300
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AIE9HlWi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750765298; x=1782301298;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=NyT19WJz3csCD+zRyZdYmeDeFltXBvUQbAN/8+hmzIs=;
+  b=AIE9HlWigfdjNMpvORnBWYOikSnc6/WYDnRH73EZPzlPi5Bx9RETavcU
+   ZV47n6aWrNh0OZPh1WA1ORW8Gsp+S61FiKcN4EybpSRmq02enMPad1xwv
+   /NUsu3vVoEgktorsbu+OxS30cm/cNRhokUI1CiEKZ6ijVTDNSJhEw/9Zb
+   Wd74gsrbSogBw62G8r2D/7kaxgCMCa2Al+VEkV+VyZRV1NzbuiXK/q7wv
+   msxUHAzk3B/0lLmIpdHGeeWrGwZMmGx+4RCp+28eEwhBKNzEMpmrrR53c
+   JEjcQ/OanHI3bMznJCjIMT+wVcNXPqOu/Zg+i3cJdW/sJ9CnVoSwekzCT
+   Q==;
+X-CSE-ConnectionGUID: SK2qQLyCRzeYmrfqClRrDg==
+X-CSE-MsgGUID: 4+umT142RMOH7lVt1md9Zw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="56784860"
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="56784860"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 04:41:37 -0700
+X-CSE-ConnectionGUID: UZIvjacZSsakFowSsv5+DA==
+X-CSE-MsgGUID: dIYqNFaFQ0eVtzNL3n/Pjg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="182773755"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.16])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 04:41:35 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 24 Jun 2025 14:41:33 +0300 (EEST)
+To: Hans de Goede <hansg@kernel.org>, 
+    Sakari Ailus <sakari.ailus@linux.intel.com>
+cc: Daniel Scally <dan.scally@ideasonboard.com>, 
+    Hans de Goede <hdegoede@redhat.com>, Daniel Scally <djrscally@gmail.com>, 
+    linux-media@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] platform/x86: int3472: Add board data for Dell
+ 7212
+In-Reply-To: <c5ec1707-5007-4417-bc54-303924598a1e@kernel.org>
+Message-ID: <a26ae32c-e5b2-08b7-bc47-6a84881502f4@linux.intel.com>
+References: <20250520-djrscally-ov5670-v2-0-104ae895aecf@ideasonboard.com> <20250520-djrscally-ov5670-v2-2-104ae895aecf@ideasonboard.com> <aFlXSrZH1f4BbB3M@kekkonen.localdomain> <c5ec1707-5007-4417-bc54-303924598a1e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: media: qcom,x1e80100-camss: Sort
- interconnects alphabetically
-Content-Language: ru-RU
-To: Krzysztof Kozlowski <krzk@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-media@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250624094253.57441-1-vladimir.zapolskiy@linaro.org>
- <20250624094253.57441-2-vladimir.zapolskiy@linaro.org>
- <aa56b956-95f3-484d-8afa-058925b95bfd@kernel.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <aa56b956-95f3-484d-8afa-058925b95bfd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="8323328-1235260601-1750765293=:943"
 
-On 6/24/25 13:10, Krzysztof Kozlowski wrote:
-> On 24/06/2025 11:42, Vladimir Zapolskiy wrote:
->> Sort the entries of interconnect and interconnect-names lists in the
->> alphabetical order of values in the latter property.
-> 
-> We do not sort these entries alphabetically and you did not explain why
-> you are doing this.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I did it, because I assume that the preference is to sort all named
-values alphanumerically.
+--8323328-1235260601-1750765293=:943
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Since my assumption is incorrect, I kindly ask to let me know, which
-properties should have values sorted by alphanumerical order of
-${property}-names values and which are not, there should be a method
-to distinguish such different properties.
+On Mon, 23 Jun 2025, Hans de Goede wrote:
 
-Below is a list of the most popular properties which are coupled with
-"-names" suffixed properties:
+> Hi,
+>=20
+> On 23-Jun-25 15:31, Sakari Ailus wrote:
+> > On Tue, May 20, 2025 at 02:17:45PM +0100, Daniel Scally wrote:
+> >> The Dell 7212 Rugged Extreme Tablet pairs an OV5670 sensor with the
+> >> Intel IPU3 ISP. The sensor is powered by a TPS68470 PMIC, and so we
+> >> need some board data to describe how to configure the GPIOs and
+> >> regulators to run the sensor.
+> >>
+> >> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> >=20
+> > I earlier missed this wasn't for the media tree...
+> >=20
+> > Hans: can I pick this (with your ack) or can you?
+>=20
+> pdx86 is maintained by Ilpo now (with me as backup), so that is
+> more of a question for Ilpo. FWIW I'm fine with routing this
+> through either git tree.
+>=20
+> > I the latter case, you can add:
+> >=20
+> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-clock
-clock-output
-dma
-gpio-line
-interconnect
-interrupt
-io-channel
-iommu
-mbox
-memory-region
-nvmem-cell
-nvmem
-phy
-pinctrl
-power-domain
-pwm
-reg
-reset
+I'm fine with taking it in through the media tree.
 
-Thank you in advance.
+Acked-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
--- 
-Best wishes,
-Vladimir
+I was wondering last week what to do with it as it looked independent and=
+=20
+the submitter didn't specify any preference in the coverletter. I'd have=20
+soon asked myself.
+
+--=20
+ i.
+
+--8323328-1235260601-1750765293=:943--
