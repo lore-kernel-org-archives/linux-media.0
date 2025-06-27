@@ -1,140 +1,90 @@
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A1929824B;
-	Fri, 27 Jun 2025 10:18:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F0829DB79;
+	Fri, 27 Jun 2025 11:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751019532; cv=none; b=grMMBxQ8pKjvXsWhMvzc2uFCAavGtxrXN5qCN5L/d8t0GjArYAlaLSd3ZAGQd7UQYkbt9mJ5HY78MkGdZDQoPbpjUOZcT6ovfmy1Qj8E+lPTramTorr8YalQHnArxdkgnDajxtIuBBbSzwl4adWTYEaJsbI19XghkB5Z3v17PAs=
+	t=1751022075; cv=none; b=ufUu+PPtoAP+bIzjKhdkpnQ675a6HWoTJwTpqjzR031kHF7aStmhuyMuSneYLB27f8Ku4TjPaNOmfxiRDQBEAUzGcH5Haqofc5XtFigy7IH10OffpTBm5hPaxNnIUeXnQ0gbn43PEnACLq2okfE7Sbf8/Osywp5yAgdy9yfibq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751019532; c=relaxed/simple;
-	bh=kM3TXzNybCjTjgZN0qMiw5dJGyngY0bp3+js19Cq5Hw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SYpv18r6IGRHWAHJvdH64zQXFCFcHsCnbaR/S8XsNjgD96zI+dEfgPxpmmeTB7JjLSNv7L6ggx08G7C93MLR8cwMF8w/9Eq8tUQAg76/UwilxUfEvFe/x1JxR6xiJQ69AnEaPLq7JR9cYy2b68BrLe9S7Apo6WrPHKfYKqybE9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=jSnTASSp; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1751022075; c=relaxed/simple;
+	bh=c+o4o1W5LrCSv6enfzhJpCZAcCcaLrGjYkQH30oj5Sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N/A5jT9IsoSOF8S2iL2IxCsXXZ2VdZzN8K8UXRvj2eJTFXJLm41ACafE+mnfwPQnOntLxK3l0kKtJkNUk0AOKd7nxlIV2BW8gNrQrTxge/NlwcDnJTksVMsmo5MFtYW9+hvfPuWDUHy3dNUUBW+OIHVr84wjOyJb1erJG0wKyO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCOKEq9n; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="jSnTASSp"
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55R9hWB5006538;
-	Fri, 27 Jun 2025 12:18:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	JT/oZIZ3g44uQwFbSBm3mpKN5NBsBXZqXoDPZXCZ6qI=; b=jSnTASSp2oBQkLw2
-	Qztvz8e1Qcq6x2XtbPu46cXqFGcZVewFDLTPfYdWrK+EmKBpLAXq5vHLcY0shDlV
-	06M7TVBh5kBSOU1ffW6b54hqFfLjxiiUDfGAk7n5PBP2OQnu3+p0Krlqq27dYfJ2
-	ufGczDWmxh3DaJ7oV7la4zPl6Z6OE9x3mRghUpzj9hXlJazoIYx4BZa/15hapccW
-	37D2a84ioyvi3WwzycdcbG59eONlrCH9c6A1r1VLgD3UucFgNZXUn/q/E5eCaZ4G
-	BRk1Z/dmdw8HTvOuDXkSdKvq6xckNLe7l0Wl9/BiTJZFMEHwUkxVyffuO1im/veP
-	nW8oGw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47e7ppr59e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Jun 2025 12:18:32 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1D30A4005B;
-	Fri, 27 Jun 2025 12:17:09 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AC6FABE10A9;
-	Fri, 27 Jun 2025 12:16:13 +0200 (CEST)
-Received: from [10.48.86.185] (10.48.86.185) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 27 Jun
- 2025 12:16:12 +0200
-Message-ID: <813dda8d-7871-46ca-bf22-4e231be4cbf1@foss.st.com>
-Date: Fri, 27 Jun 2025 12:16:12 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCOKEq9n"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751022074; x=1782558074;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c+o4o1W5LrCSv6enfzhJpCZAcCcaLrGjYkQH30oj5Sw=;
+  b=eCOKEq9nfS4EjC27rmVOVPE0ZG/FXQTMn5fms9EkoHZCqLwOyj9FgXDD
+   Ckt5sU82FTfH8ZA4HKLkF4POspOKZJdFqgDeoprNW209Ltnp7uImNZphm
+   ApHuoza4ZChrrfnnXna1STisZ1y8Y5fGZScOsRhwjOQc0frmmhcPQszXV
+   pnnTCnEmJDJ3VDmm2ETgWX6DhtDmak6TriLHu2RnuZH0ldR+QvoV+S3kq
+   9B3I+U/gwXw4lqqtPGB6ljsryiLhCLNQiF76uYv4aWJmICAz87CGfFnou
+   mjJm7S+9LwdsXsTg7iwXlncSLQ/ntbD4XwhQKAmfafdms0nKvT3fGe4kZ
+   w==;
+X-CSE-ConnectionGUID: ngCoP4f4QZuyC0M2+PSkhw==
+X-CSE-MsgGUID: QclRRHSyTpmA+JK2bZobWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11476"; a="52565518"
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="52565518"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 04:01:13 -0700
+X-CSE-ConnectionGUID: MI9ObuygSn6Tx29iN1mzMg==
+X-CSE-MsgGUID: bUThnTU3Sj+M4+waK9dyGg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,270,1744095600"; 
+   d="scan'208";a="152957137"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 04:01:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uV6pO-0000000ASU7-3Cng;
+	Fri, 27 Jun 2025 14:01:06 +0300
+Date: Fri, 27 Jun 2025 14:01:06 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
+Cc: andy@kernel.org, hdegoede@redhat.com, mchehab@kernel.org,
+	sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	skhan@linuxfoundation.com, dan.carpenter@linaro.org,
+	Hans de Goede <hansg@kernel.org>
+Subject: Re: [PATCH v5] staging: media: atomisp: remove debug sysfs
+ attributes active_bo and free_bo
+Message-ID: <aF558plEWPpTw78F@smile.fi.intel.com>
+References: <20250627100604.29061-1-abdelrahmanfekry375@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] i2c: stm32f7: unmap DMA mapped buffer
-To: Alain Volmat <alain.volmat@foss.st.com>
-CC: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Andi Shyti
-	<andi.shyti@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Sumit Semwal
-	<sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?=
-	<christian.koenig@amd.com>,
-        M'boumba Cedric Madianga
-	<cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "Pierre-Yves
- MORDRET" <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-References: <20250616-i2c-upstream-v1-0-42d3d5374e65@foss.st.com>
- <20250616-i2c-upstream-v1-2-42d3d5374e65@foss.st.com>
- <20250626090301.GC348766@gnbcxd0016.gnb.st.com>
-Content-Language: en-US
-From: Clement LE GOFFIC <clement.legoffic@foss.st.com>
-In-Reply-To: <20250626090301.GC348766@gnbcxd0016.gnb.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_03,2025-06-26_05,2025-03-28_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627100604.29061-1-abdelrahmanfekry375@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 6/26/25 11:03, Alain Volmat wrote:
-> Hi Clément,
+On Fri, Jun 27, 2025 at 01:06:04PM +0300, Abdelrahman Fekry wrote:
+> The sysfs attributes active_bo and free_bo expose internal buffer
+> state used only for debugging purposes. These are not part of
+> any standard kernel ABI, and need to be removed before this
+> driver may be moved out of drivers/staging.
 > 
-> thanks for the patch.
-> 
-> On Mon, Jun 16, 2025 at 10:53:55AM +0200, Clément Le Goffic wrote:
->> Fix an issue where the mapped DMA buffer was not unmapped.
->>
->> Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
->> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
->> ---
->>   drivers/i2c/busses/i2c-stm32f7.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
->> index 973a3a8c6d4a..a05cac5ee9db 100644
->> --- a/drivers/i2c/busses/i2c-stm32f7.c
->> +++ b/drivers/i2c/busses/i2c-stm32f7.c
->> @@ -1622,6 +1622,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
->>   		if (i2c_dev->use_dma) {
->>   			stm32f7_i2c_disable_dma_req(i2c_dev);
->>   			dmaengine_terminate_async(dma->chan_using);
->> +			dma_unmap_single(i2c_dev->dev, dma->dma_buf, dma->dma_len,
->> +					 dma->dma_data_dir);
->>   		}
->>   		f7_msg->result = -ENXIO;
->>   	}
->> @@ -1642,6 +1644,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
->>   				dev_dbg(i2c_dev->dev, "<%s>: Timed out\n", __func__);
->>   				stm32f7_i2c_disable_dma_req(i2c_dev);
->>   				dmaengine_terminate_async(dma->chan_using);
->> +				dma_unmap_single(i2c_dev->dev, dma->dma_buf, dma->dma_len,
->> +						 dma->dma_data_dir);
->>   				f7_msg->result = -ETIMEDOUT;
->>   			}
->>   		}
->>
-> 
-> Sounds good to me, however there might be an additional place to fix
-> within the function stm32f7_i2c_handle_isr_errs:
-> Could you also take care of the unmap in the error ITs handling ?
+> - Remove active_bo and free_bo attributes
+> - Remove group registration calls form hmm_init() and hmm_cleanup()
 
-Ack
-> 
-> Regards,
-> Alain
-> 
->> -- 
->> 2.43.0
->>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
