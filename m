@@ -1,64 +1,64 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BC51D5CDE
-	for <linux-media@vger.kernel.org>; Fri, 27 Jun 2025 16:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF112EA72C
+	for <linux-media@vger.kernel.org>; Fri, 27 Jun 2025 17:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751041920; cv=none; b=bMBTtzyRgkum1qjc9BZSZUQxrH/z7nS9hK7TVLw86xD436omcdu+49ipiR00PV6uPlaIkjDdTbqVJWWji0pdWkzCcQ+LK+w7G/bCtbK0S2uo2HFBincgMOCRGiOL64B03CbQGnY37c/UvKXmnBKKNLUT39ci58O0SvQvBj7FAeY=
+	t=1751043685; cv=none; b=iH75DI7v+6lbJZz1dzFRPxIb2IL7Apw7c/J3XJkLYYVUNhLmo595QaLG9JLWbJM5BLDhgB/AZQdgmKRBnbadwStlBqwF12UpAgdcrM1BpGDIW82ZWxSA0BldYjrk1mqZ+UyNutIAffTJKC16sZrz01lN+SdvAAWmB8W6ORQY0Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751041920; c=relaxed/simple;
-	bh=2aKPijUb3QIgGtXpLIncOT7+Mp6HTomzuFIkAXZ6ITQ=;
+	s=arc-20240116; t=1751043685; c=relaxed/simple;
+	bh=lHbO0UGT1K01ZQwT9cq1DDJpCnVz2zT/PIhuDzJDkf8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tJSAcReGguIi+noqDK8HjqcbLkWEpN5jmgQ9UCgkJ2Kq0ITSVzFCmQb1jo1SWayX237ra5GfGNyTaVEMEgNuy5Em7tYewTBmsfNKn7UqL/YsIdZEOPxKe8cl56r3A/+smXsknPmTbik2Da0y7YcTft5JFtZPdhlYj+ODKvKfMM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GCgxnjsx; arc=none smtp.client-ip=209.85.128.41
+	 In-Reply-To:Content-Type; b=HC0Ixz1RqzYmGoaBMpclpwmyH8LnBlva7huduqdCKP49lYx3bUMigLM+2eRCA0zazhuB46mv2bZTVOC1t4zwhnB+Ibu8EIS5AH5/XH+ny34lzro3DMWqTC0OWtULXeQEvu+zZFVaerYscmkxeyuWCrfcPuWzhIYS8oZvbBO8RdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CukjMR3S; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GCgxnjsx"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-453398e90e9so626255e9.1
-        for <linux-media@vger.kernel.org>; Fri, 27 Jun 2025 09:31:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CukjMR3S"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4531e146a24so13149635e9.0
+        for <linux-media@vger.kernel.org>; Fri, 27 Jun 2025 10:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751041916; x=1751646716; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=linaro.org; s=google; t=1751043682; x=1751648482; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b2cPm3js68sdrcbLc8BpXjVvreewHklz7Uoe+S4MGck=;
-        b=GCgxnjsxYIOYb3nWKBhwQkNOnR5nmtb1hJfB1l/1XwAI+Isj4z85xSv2sR/vZWuo2h
-         mQuydtvQZkGgL0Y9MjuW4bewIk3xBt/CLCoyZA4xhRAQDujnhuXAzn+F378JCmV+H6U6
-         ajdI2cBG7hxoRKWgm5paFNPyVcXdjCr1/Q4j+452C5RKEoHYNNhmZpieW4GgCDDjfDGs
-         3hIesvPy+1+ZwaabnH0Q88qXZFVFerCjFZlwZWD8EoQYtLcdw+xcgquuw6H6czJoNxcR
-         tLBqAy9Mh+gjUONE0tBc8HbWRLSdK4Tyxbu3rUW9NMlIgrYweQ/DhvrtMZdDTWAs0vtM
-         +IIQ==
+        bh=2YpSie4wuvd5wd6ByN3oROE5g8OLzPqoz+ipBhoImJk=;
+        b=CukjMR3SQS1jrKnXBHHbRB/qeYMYnEjJuZPu3Go6j6K5473CN8aZ1kVgfQow1wPUYh
+         pwc2JN00wifpK7t+WEEiPufRuoiFQbYwGQkeGj+fhtO/rFwxcgnc+4OBJRTnFiXyXwfA
+         OC+gVjTkkLk+acBmlFKgAFb1bfL/nMdJGN/bGHPlR3/qShNOs4ntEjpAVo46C7KGxzy8
+         E7BB3HP0l0RKr/EjOI0+rBbIeejYch1ia2YUcgbMWUWUzLJTzj05ZisX3nXnc6mx2QtB
+         15lmxJbhhYCMBWM2gImhWE/HIkgTMs50+JcVeSNHvdKYNdb6WL5uFZAg4uzj8JK+oYfr
+         fItw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751041916; x=1751646716;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=1e100.net; s=20230601; t=1751043682; x=1751648482;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2cPm3js68sdrcbLc8BpXjVvreewHklz7Uoe+S4MGck=;
-        b=tMwk1uIMRf2dha3UQp2Yc01/fZpyp3OY6cMxKSj+0DXe8RjM0QNo3VNzpiA2PyjxsI
-         Yej9xIX9uRPETA4e01tLqg1tiMKWVr18GnNMW6jOjqaYYimEEE7pdSe9n+74C4sXQYLp
-         kAFa8s5MV/KxWqJsVPNZ81zugiXI4dPqSg7A/yvP5nlas3L2iC9ljMvhEUAJraNew6zX
-         rsduOd0+iJLUyor2JZO9D7kg1P9SeryDBZRJ6zNxztUmRvrwHXqxN77m+JBDUXM+nKDp
-         yalPi1xsY9XCuG1tas6xmPHQn0SqKFjeJLu+uKXZWCiXeuEhh/6QHuM4tuP3r+ENmUcO
-         ob3w==
-X-Gm-Message-State: AOJu0YwtBfI9gF2v6zW7jcWYF3UocHqwZqqc6dWUkwVIBfYXaSCTJIZs
-	Pf1rU6tX58FvP6RUoPdbtpgKKdRC4wjRnvAXs9RzMijh5k+wJB3ZnadnBIFvKs9F4ps=
-X-Gm-Gg: ASbGncu6HMTTng8pWbv8oBVIARqDEJZp2OgoOXZEzT49he0P0GJqiDAWF7xN3cOZUkK
-	PvATPN+CXqCbs/u4GaGvaQzV465fbqMNMJp6YPg84T9OKVMRxMuUa/PUvUeoYmyxWDUsM+L5nWl
-	12xOA7TIBmL2B6Q2GJhjk+N4nNqWSxQaPCL/Y9lc+0BczDiga0AmcKrvF+jAGFHCNgDWw9h3UUO
-	QBA80pBte31yu8Jss3j+0EtNc3IYpjDUyibXxIVAt8K+AIR/PAvni6a5eQXyeKV/7vH6nUUITDv
-	Eqs07sjbQVlz1fA5TKoez9pqrQi7eakkGrWz6AnVLNpamcIpqUTaneNO1pzoQuM9oV/YYc4mXDK
-	2SMe8+SN6GDc67E6PNvvk97owqbs=
-X-Google-Smtp-Source: AGHT+IGcrhSInexhP9+glXgd5+9IZfwvB+FowKiaT032v77elhBzd1dbReORt/pjYxik8VzqpRI8Mg==
-X-Received: by 2002:a05:6000:2183:b0:3a6:d967:380c with SMTP id ffacd0b85a97d-3a8fe5b1d42mr3260611f8f.36.1751041916428;
-        Fri, 27 Jun 2025 09:31:56 -0700 (PDT)
+        bh=2YpSie4wuvd5wd6ByN3oROE5g8OLzPqoz+ipBhoImJk=;
+        b=s7MWGvI8KpawqWYOFGb+N/4Tik7loKmPLa3ElvaVJKdGXdrAhTpr2zmbSFm/C2qKpw
+         c41DCJ/payjmsLyZTkefUDBY+afiKLo7aqsLKpawpy4+Q55zaD6Gqmtnl5Xs7PFdf2lN
+         VJAdvwIDvq/RY0t5tl7EamFbn9497UVWrbaHzy49x2alqCkXMohL35tvhwrXrEA0Ked6
+         roT3rq8QhEDHzWw5eG5JAtgPuxwE1SIHZW9s0zQ/cm9ilZ71U59CkZuoCzjlEj3pzowb
+         a/nbxazmPShZ8VLc3tSjjElN+BmWPQCe5awIIoN766Zki0yCurLUQDuECasC4S5EGOHm
+         DzdQ==
+X-Gm-Message-State: AOJu0YwPiTZp3Jga+EpjKyrW73IyBKwY1YB54FPHruw6w/TxNYa2tQPt
+	H0SUe9O4/GgHmMD9UN3xrcFFqhuCGBESbHLUZLp/hj5GV6cxb6xaiWhMCmcEGUl0BYs=
+X-Gm-Gg: ASbGnctSpzSYMEXMRSKMfV1rcpuPjqwHzIL4ZfG7tzYZq4vJjrrQPqNjkDwlQIDSMVf
+	7HbKu8v5ekfII/PYxU3mb2iM+SZ7lsKDgiB81QkyyBB+J9OX/t7gEomGzJUpNRi+/iitskA9vM2
+	USKxxKP5tkBG4SNXv2BIkrmhcDfS3BkqXz+UszVnoFvNjstDy32qpLNaflPJTnE5rIKKqNDS9TO
+	yv0vrfzx6p1ntirecdJLjm4DEJQXgSKeWtqFMRuYXKG8P6TwmoiAH1D2ewcu5wVs6mlsbF0GxmA
+	0eyPNwbMmpdSIC0QhWOuSiskQbkcObrAhNLjvny4mgWxSFCNaYKdoi6B7tiumNWvrhWVpmi5jhz
+	XQ4H5SSSymqh9MDjaTnFaGp+q38QZXlnwnhsS9Q==
+X-Google-Smtp-Source: AGHT+IGJE/lVWrUbPn9cVPurqMto/Wq/31An/pK5gHn7R5YbeaOLrBXTzFVGUl2kOUkfpHa5GTpd2A==
+X-Received: by 2002:a05:600c:35c2:b0:441:ac58:ead5 with SMTP id 5b1f17b1804b1-4538ee96560mr49860365e9.31.1751043681643;
+        Fri, 27 Jun 2025 10:01:21 -0700 (PDT)
 Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a88c80b5aesm3080728f8f.44.2025.06.27.09.31.55
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e5f923sm3090516f8f.89.2025.06.27.10.01.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 09:31:55 -0700 (PDT)
-Message-ID: <5dcc3dc3-ba12-4d66-88e9-5e06bb707135@linaro.org>
-Date: Fri, 27 Jun 2025 17:31:54 +0100
+        Fri, 27 Jun 2025 10:01:21 -0700 (PDT)
+Message-ID: <0bcabd65-e9d1-40dc-ad84-87ed53b44755@linaro.org>
+Date: Fri, 27 Jun 2025 18:01:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,8 +66,8 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] media: dt-bindings: add non-pixel property in iris
- schema
+Subject: Re: [PATCH v3 2/5] media: iris: register and configure non-pixel node
+ as platform device
 To: Vikash Garodia <quic_vgarodia@quicinc.com>,
  Dikshita Agarwal <quic_dikshita@quicinc.com>,
  Abhinav Kumar <abhinav.kumar@linux.dev>,
@@ -76,155 +76,128 @@ To: Vikash Garodia <quic_vgarodia@quicinc.com>,
 Cc: linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250627-video_cb-v3-0-51e18c0ffbce@quicinc.com>
- <20250627-video_cb-v3-1-51e18c0ffbce@quicinc.com>
-Content-Language: en-US
+ <20250627-video_cb-v3-2-51e18c0ffbce@quicinc.com>
 From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20250627-video_cb-v3-1-51e18c0ffbce@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20250627-video_cb-v3-2-51e18c0ffbce@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 27/06/2025 16:48, Vikash Garodia wrote:
-> Existing definition limits the IOVA to an addressable range of 4GiB, and
-> even within that range, some of the space is used by IO registers,
-> thereby limiting the available IOVA to even lesser. Video hardware is
-> designed to emit different stream-ID for pixel and non-pixel buffers,
-> thereby introduce a non-pixel sub node to handle non-pixel stream-ID.
-> 
-> With this, both iris and non-pixel device can have IOVA range of 0-4GiB
-> individually. Certain video usecases like higher video concurrency needs
-> IOVA higher than 4GiB.
-> 
-> Add reference to the reserve-memory schema, which defines reserved IOVA
-> regions that are *excluded* from addressable range. Video hardware
-> generates different stream IDs based on the predefined range of IOVA
-> addresses. Thereby IOVA addresses for firmware and data buffers need to
-> be non overlapping. For ex. 0x0-0x25800000 address range is reserved for
-> firmware stream-ID, while non-pixel (bitstream) stream-ID can be
-> generated by hardware only when bitstream buffers IOVA address is from
-> 0x25800000-0xe0000000.
-> Non-pixel stream-ID can now be part of the new sub-node, hence iommus in
-> iris node can have either 1 entry for pixel stream-id or 2 entries for
-> pixel and non-pixel stream-ids.
+> Register "non_pixel" child node as a platform device, and configure its
+> DMA via of_dma_configure(). This ensures proper IOMMU attachment and DMA
+> setup for the "non_pixel" device.
+> All non pixel memory, i.e bitstream buffers, HFI queues and internal
+> buffers related to bitstream processing, would be managed by non_pixel
+> device.
 > 
 > Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 > ---
->   .../bindings/media/qcom,sm8550-iris.yaml           | 40 ++++++++++++++++++++--
->   1 file changed, 38 insertions(+), 2 deletions(-)
+>   drivers/media/platform/qcom/iris/iris_core.h  |  2 ++
+>   drivers/media/platform/qcom/iris/iris_probe.c | 50 ++++++++++++++++++++++++++-
+>   2 files changed, 51 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
-> index c79bf2101812d83b99704f38b7348a9f728dff44..4dda2c9ca1293baa7aee3b9ee10aff38d280fe05 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml
-> @@ -65,10 +65,31 @@ properties:
->         - const: core
+> diff --git a/drivers/media/platform/qcom/iris/iris_core.h b/drivers/media/platform/qcom/iris/iris_core.h
+> index aeeac32a1f6d9a9fa7027e8e3db4d95f021c552e..757efd16870876bd2b1d5b1e4103b2d2326b5f49 100644
+> --- a/drivers/media/platform/qcom/iris/iris_core.h
+> +++ b/drivers/media/platform/qcom/iris/iris_core.h
+> @@ -65,6 +65,7 @@ struct icc_info {
+>    * @sys_error_handler: a delayed work for handling system fatal error
+>    * @instances: a list_head of all instances
+>    * @inst_fw_caps: an array of supported instance capabilities
+> + * @np_dev: device to represent non pixel node
+>    */
 >   
->     iommus:
-> +    minItems: 1
->       maxItems: 2
+>   struct iris_core {
+> @@ -105,6 +106,7 @@ struct iris_core {
+>   	struct delayed_work			sys_error_handler;
+>   	struct list_head			instances;
+>   	struct platform_inst_fw_cap		inst_fw_caps[INST_FW_CAP_MAX];
+> +	struct device				*np_dev;
+>   };
 >   
->     dma-coherent: true
+>   int iris_core_init(struct iris_core *core);
+> diff --git a/drivers/media/platform/qcom/iris/iris_probe.c b/drivers/media/platform/qcom/iris/iris_probe.c
+> index 9a7ce142f7007ffcda0bd422c1983f2374bb0d92..8fe87e30bd40f3c67ec41305c7d73520fbc9db7b 100644
+> --- a/drivers/media/platform/qcom/iris/iris_probe.c
+> +++ b/drivers/media/platform/qcom/iris/iris_probe.c
+> @@ -6,6 +6,8 @@
+>   #include <linux/clk.h>
+>   #include <linux/interconnect.h>
+>   #include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+>   #include <linux/pm_domain.h>
+>   #include <linux/pm_opp.h>
+>   #include <linux/pm_runtime.h>
+> @@ -127,6 +129,46 @@ static int iris_init_resets(struct iris_core *core)
+>   				     core->iris_platform_data->controller_rst_tbl_size);
+>   }
 >   
-> +  non-pixel:
-> +    type: object
-> +    additionalProperties: false
+> +static int iris_init_non_pixel_node(struct iris_core *core)
+> +{
+> +	struct platform_device_info info;
+> +	struct platform_device *pdev;
+> +	struct device_node *np_node;
+> +	int ret;
 > +
-> +    description:
-> +      Non pixel context bank is needed when video hardware have distinct iommus
-> +      for non pixel buffers. Non pixel buffers are mainly compressed and
-> +      internal buffers.
-
-You do a better job in the cover letter of describing what this is, why 
-its needed etc.
-
-Not asking for this verbatim but its clearer:
-
-"All non pixel buffers, i.e bitstream, HFI queues
-and internal buffers related to bitstream processing, would be managed
-by this non_pixel device."
-
-Where does the term "non-pixel" come from if its a meaningful name wrt 
-to the firmware then non-pixel is fine but, consider a name such as 
-"out-of-band" or "oob"
-
-out-of-band is a common term as is "sideband" but sideband I think has a 
-different meaning, really this non-data/non-pixel data stuff is out-of-band.
-
-At least for the way the language pack I have installed in my brain 
-right now, "oob" or "out-of-band" is a more intuitive name. Its really 
-up to you though the main point would be to enumerate the description 
-here with some of the detail you've put into the cover letter.
-
+> +	np_node = of_get_child_by_name(core->dev->of_node, "non_pixel");
+> +	if (!np_node)
+> +		return 0;
 > +
-> +    properties:
-> +      iommus:
-> +        maxItems: 1
+> +	memset(&info, 0, sizeof(info));
+> +	info.fwnode = &np_node->fwnode;
+> +	info.parent = core->dev;
+> +	info.name = np_node->name;
+> +	info.dma_mask = DMA_BIT_MASK(32);
 > +
-> +      memory-region:
-> +        maxItems: 1
+> +	pdev = platform_device_register_full(&info);
+> +	if (IS_ERR(pdev)) {
+> +		of_node_put(np_node);
+> +		return PTR_ERR(pdev);
+> +	}
+> +	pdev->dev.of_node = np_node;
 > +
-> +    required:
-> +      - iommus
-> +      - memory-region
+> +	ret = of_dma_configure(&pdev->dev, np_node, true);
+> +	if (ret)
+> +		goto err_unregister;
 > +
->     operating-points-v2: true
-
->     opp-table:
-> @@ -86,6 +107,7 @@ required:
+> +	core->np_dev = &pdev->dev;
+> +
+> +	of_node_put(np_node);
+> +
+> +	return 0;
+> +
+> +err_unregister:
+> +	platform_device_unregister(pdev);
+> +	of_node_put(np_node);
+> +	return ret;
+> +}
+> +
+>   static int iris_init_resources(struct iris_core *core)
+>   {
+>   	int ret;
+> @@ -143,7 +185,11 @@ static int iris_init_resources(struct iris_core *core)
+>   	if (ret)
+>   		return ret;
 >   
->   allOf:
->     - $ref: qcom,venus-common.yaml#
-> +  - $ref: /schemas/reserved-memory/reserved-memory.yaml
->     - if:
->         properties:
->           compatible:
-> @@ -117,6 +139,16 @@ examples:
->       #include <dt-bindings/power/qcom-rpmpd.h>
->       #include <dt-bindings/power/qcom,rpmhpd.h>
->   
-> +    reserved-memory {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
+> -	return iris_init_resets(core);
+> +	ret = iris_init_resets(core);
+> +	if (ret)
+> +		return ret;
 > +
-> +      iris_resv: reservation-iris {
-> +        iommu-addresses = <&iris_non_pixel 0x0 0x0 0x0 0x25800000>,
-> +                          <&iris_non_pixel 0x0 0xe0000000 0x0 0x20000000>;
-> +      };
-> +    };
-
-iris_oob would be less text in the end.
-
+> +	return iris_init_non_pixel_node(core);
+>   }
+>   
+>   static int iris_register_video_device(struct iris_core *core)
+> @@ -188,6 +234,8 @@ static void iris_remove(struct platform_device *pdev)
+>   
+>   	iris_core_deinit(core);
+>   
+> +	platform_device_unregister(to_platform_device(core->np_dev));
 > +
->       video-codec@aa00000 {
->           compatible = "qcom,sm8550-iris";
->           reg = <0x0aa00000 0xf0000>;
-> @@ -144,12 +176,16 @@ examples:
->           resets = <&gcc GCC_VIDEO_AXI0_CLK_ARES>;
->           reset-names = "bus";
+>   	video_unregister_device(core->vdev_dec);
 >   
-> -        iommus = <&apps_smmu 0x1940 0x0000>,
-> -                 <&apps_smmu 0x1947 0x0000>;
-> +        iommus = <&apps_smmu 0x1947 0x0000>;
->           dma-coherent;
->   
->           operating-points-v2 = <&iris_opp_table>;
->   
-> +        iris_non_pixel: non-pixel {
-> +            iommus = <&apps_smmu 0x1940 0x0000>;
-> +            memory-region = <&iris_resv>;
-> +        };
-> +
->           iris_opp_table: opp-table {
->               compatible = "operating-points-v2";
->   
+>   	v4l2_device_unregister(&core->v4l2_dev);
 > 
-
-So I was trying to think of a way to catch you out with an ABI break 
-but, I don't see how you add minItems: 1 to the iommus declaration above 
-so dts prior to this change should still be valid.
-
-I think this adds up but, consider oob instead of non-pixel.
-
 Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
----
-bod
