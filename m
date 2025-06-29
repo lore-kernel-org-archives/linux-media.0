@@ -1,60 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E2721CC56
-	for <linux-media@vger.kernel.org>; Sun, 29 Jun 2025 14:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84662230BC3;
+	Sun, 29 Jun 2025 14:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751207821; cv=none; b=sqq3IK0GxL+hlQiDDZms/N4egrIyIXIfZ9eUMmA677dQ8bhJQttk8s9+vpAuygh8zgSGnICm+NtXd8qp01Bm+eIYna6zjnuFSPU5dNVtHHXzncQlNlHq9yS0J634UreArTlyBJnq/CsEj3Q9XQ6uxS63rUuiNsbqqATTx5TEF3E=
+	t=1751208574; cv=none; b=QAsALJIREUyqCy0vP6OwSzG4hqA6ekXkomWI8HMyctyEB7H/4cQUOnviVx59BV8eRv7UWUMIDA1+KTQA68+C1r9bekYLJsiCljo5V1bn5WGf9TQtK4vdtes5KIqXahE/uDC1m1qTCmyDAPSvGXpcR19S9Y9iRbBpVLhSmkTuLko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751207821; c=relaxed/simple;
-	bh=83vxe8vquls1BKpFrh/gXN7tGsnJGbKVuvEnECNIa58=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ZdOKkEKXYCWCEP7xgFl17LoUK1UaYKnX09tLxh6wzSBbBVd6k+fLtcvQaN7m0l+at6vl5AE4psTWJwIShTJ7Lmxq0jBioz8679VUAKDTtknlwdgo6Kf47D+k7UeThG6DKVdHRUy1vhwC+iHRgBU4jIBGgjA7gZX4TtcQ3NJY5C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B985C4CEEB;
-	Sun, 29 Jun 2025 14:37:00 +0000 (UTC)
-Message-ID: <b92bf074-911f-4922-9878-485a1979cd40@nxsw.ie>
-Date: Sun, 29 Jun 2025 15:36:58 +0100
+	s=arc-20240116; t=1751208574; c=relaxed/simple;
+	bh=8RBuwyFX+i6bHp5zzF84JTuvvkCicfyrsCbN+9DU7Sg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=pN+YJu3/P245WGNzXnUdlV9eZfdegMLBv+4Gkc/p+oU5JkBa13tLwgd+hFRRVKDE16VRP+PPeuYr3YePLINgyscVpD7KEYeplHtfWIaD+3HH1VkEjbIENf9eWkX4dykqabBAFeCwRpDXCX6uACcJBnYQhrQP1bhEuF5LWtZV+Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rXAdziQs; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rXAdziQs"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42E9CC4CEF1;
+	Sun, 29 Jun 2025 14:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751208574;
+	bh=8RBuwyFX+i6bHp5zzF84JTuvvkCicfyrsCbN+9DU7Sg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=rXAdziQs+YggUp3QD0cOrUjnmrz0D4N2nvdkuiqFZSkAeN8OecVuWLLoNZQHx1Cdn
+	 zCpqQmivSlGLXf8pR0syIBa9u1o0hVo9rhvQNlMps3ub0GzvSDuividIbUiMOJbpzR
+	 t01sPjMlRFL3Tk+oGTSW828bSIoZ6yoVQC+V4fS/cEoCKIKE/a8CQ24EtitR4dFo5w
+	 3iWiRo3oqhnzRcG+HUJiLzz32m4bdD2AuSd5CRDr1RCeZtIPAtpJyyDxv8kcArRTOZ
+	 qSbfnVX8IaxoRmz7D40tylWEQnWl0iRWx4vOVC/SC8HeErRRB5XyEerFMRC4U9ju1n
+	 xT7zPsV5LZD0g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1F0C83027;
+	Sun, 29 Jun 2025 14:49:34 +0000 (UTC)
+From: =?utf-8?q?Andr=C3=A9_Apitzsch_via_B4_Relay?= <devnull+git.apitzsch.eu@kernel.org>
+Date: Sun, 29 Jun 2025 16:49:21 +0200
+Subject: [PATCH 2/5] media: i2c: imx214: Drop dev argument from
+ imx214_parse_fwnode()
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] media: ov02c10: Don't include linux/version.h
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
-References: <7W8Gb6ShUKt2UvdZkAKqjzGHFyXU-2Sq-EOl8VSOmnHINBQYvunZol0u_AfiHEqXm93u-rqiuzPHlLMhd97eow==@protonmail.internalid>
- <20250628141520.297264-1-sakari.ailus@linux.intel.com>
-From: Bryan O'Donoghue <bod.linux@nxsw.ie>
-Content-Language: en-US
-In-Reply-To: <20250628141520.297264-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250629-imx214_fixes-v1-2-873eb94ad635@apitzsch.eu>
+References: <20250629-imx214_fixes-v1-0-873eb94ad635@apitzsch.eu>
+In-Reply-To: <20250629-imx214_fixes-v1-0-873eb94ad635@apitzsch.eu>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Ricardo Ribalda <ribalda@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751208572; l=1136;
+ i=git@apitzsch.eu; s=20240325; h=from:subject:message-id;
+ bh=H8sbCYlOjaNz8MFSGRXI5+CWm2oj7b1ROZKZiNJw/+w=;
+ b=EwHc5RkncTt1il5EMiaBdzTUq8h+sx9f1TwoYqosEzn6OZBYIkW//FTQ34PCkCHngr7JRVZbO
+ u2pkNwFoWASAZITq5EHYyKlv9q3/QYXmrfq2mfTd7+iSW/EJkk/lOCr
+X-Developer-Key: i=git@apitzsch.eu; a=ed25519;
+ pk=wxovcZRfvNYBMcTw4QFFtNEP4qv39gnBfnfyImXZxiU=
+X-Endpoint-Received: by B4 Relay for git@apitzsch.eu/20240325 with
+ auth_id=142
+X-Original-From: =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Reply-To: git@apitzsch.eu
 
-On 28/06/2025 15:15, Sakari Ailus wrote:
-> linux/version.h isn't needed by the driver, don't include it.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->   drivers/media/i2c/ov02c10.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/ov02c10.c b/drivers/media/i2c/ov02c10.c
-> index 089a4fd9627c..594bfb02da0f 100644
-> --- a/drivers/media/i2c/ov02c10.c
-> +++ b/drivers/media/i2c/ov02c10.c
-> @@ -9,7 +9,6 @@
->   #include <linux/module.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/regmap.h>
-> -#include <linux/version.h>
->   #include <media/v4l2-cci.h>
->   #include <media/v4l2-ctrls.h>
->   #include <media/v4l2-device.h>
-> --
-> 2.39.5
-> 
-> 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: André Apitzsch <git@apitzsch.eu>
+
+The device can be accessed from struct imx214.
+
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
+---
+ drivers/media/i2c/imx214.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 8e9b5c9c93b0888f3d6be857168711edaf050db3..d9193bafa3cbb8fec2679200c38d30077d1b11bd 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -1324,10 +1324,11 @@ static int imx214_identify_module(struct imx214 *imx214)
+ 	return 0;
+ }
+ 
+-static int imx214_parse_fwnode(struct device *dev, struct imx214 *imx214)
++static int imx214_parse_fwnode(struct imx214 *imx214)
+ {
+ 	struct v4l2_fwnode_endpoint *bus_cfg = &imx214->bus_cfg;
+ 	struct fwnode_handle *endpoint;
++	struct device *dev = imx214->dev;
+ 	unsigned int i;
+ 	int ret;
+ 
+@@ -1415,7 +1416,7 @@ static int imx214_probe(struct i2c_client *client)
+ 		return dev_err_probe(dev, PTR_ERR(imx214->regmap),
+ 				     "failed to initialize CCI\n");
+ 
+-	ret = imx214_parse_fwnode(dev, imx214);
++	ret = imx214_parse_fwnode(imx214);
+ 	if (ret)
+ 		return ret;
+ 
+
+-- 
+2.50.0
+
+
