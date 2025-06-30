@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FBF28B4EB;
-	Mon, 30 Jun 2025 12:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A53C26CE0A;
+	Mon, 30 Jun 2025 13:06:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751288349; cv=none; b=Kxwn7Rbzm0Ra8LU0mhcPAJdQgPJN+mAGxbxgvAxT+c66hrYUW8rzUEgDe1dSOqjTGdc10+9X4BRIVXn984m96AbaJCBWSWGeHblR0t5dNvqgP+xYkSXQ2K/St7KGiSAUnAOSgW7uqoj9GcH+6w3XnSxNHsK/1FrzUG6xKOgC3mg=
+	t=1751288791; cv=none; b=PFk7b0bbwvk9mCS2HcyxIXBPW9N0Q0r+b+5KSdChQI7hqH1w4P0da4EW66VoNqvMiNHDf3tmLrW7QOzlTI5aMwqVBsdt9i3SgIk3J7y5EGHCBjS0WWXS9qIYLSfH+KXSxu9pCjHm8kndBNsWbZN1qdacXuBQ8uE2tZZfqziAamc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751288349; c=relaxed/simple;
-	bh=ySzpaPXJOjpCF8AV/n8QxRqh+v6VeNRTl6MDFLOEpGE=;
+	s=arc-20240116; t=1751288791; c=relaxed/simple;
+	bh=+lcYT3Qsyi5zoHaSuGNHweYKALQqdJG5Jboo6FTA39A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PFYghQn7LMBq8AgN+4Kv/waFG8JEVYCCqKW5UeDeYxkvPcbEhs8ZnBlxtpnmkBeVnwyXGfc2H0vVEeSVzrkt3E/bpcQYJxBS/ZX3dsrKbU/VfrAa9mrkdxeMpqQma4HQSU4d70/Ko8aBoyhCEDC0XRkHgaTFLMuo9RrjKgVXoBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kG/566Ax; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=nmJ/AEmHR3MPZs25iAy7nm1iZLNHa+gvTCKWJD+qYnMo6twa9vb97yYXyod9t9SZHBE7BeXn03Qdnv09wK6+QA+T0cic5T6vW1H/kPLslzk3T9VyitXgJfJ8P0bXOH2u5g4eLJeDKEexPJzKNvl1HdV8Mec22UMLYon1o6okC3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d71zoHgN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kG/566Ax"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5DDC4CEE3;
-	Mon, 30 Jun 2025 12:59:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d71zoHgN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8DBC4CEE3;
+	Mon, 30 Jun 2025 13:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751288348;
-	bh=ySzpaPXJOjpCF8AV/n8QxRqh+v6VeNRTl6MDFLOEpGE=;
+	s=k20201202; t=1751288790;
+	bh=+lcYT3Qsyi5zoHaSuGNHweYKALQqdJG5Jboo6FTA39A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kG/566AxKhap6V3M8HaXJ8DE6tu8lXe2U9vyH1YQUQq1N1+OSGRznZA98pNdHHIiB
-	 vI/JGAMziCnFktuGjQGmyi2qCh1W9wBLcjYbg2HP/oCzWNTlyV7JxORKxeHbZdS3tU
-	 4zYUVk0sjmDt/Zrbs3VIaQ1ZcJXgRshfDfglRqsvxmF747ic2rr2NUWuvWvqeTEQqY
-	 IfN3oVk4VnlHY9UNltgotVH+Cm8+LDjHo0of7rmxaBVo1I6ydzOFmXBOfPp8gv81gQ
-	 Ymd6KcXi8CO8oQIskpp/PJt7NDWXWrACKlnhUsju0hXKU2bHczuDW4/jp1fq3Eht3x
-	 KxwtbSoV5AT+Q==
-Message-ID: <c97af8e7-5c11-45f4-838c-d934b0a379c1@kernel.org>
-Date: Mon, 30 Jun 2025 14:59:05 +0200
+	b=d71zoHgNy/pl9vjL0hhHZWmHnTsNmwLJuVF7hIncktBn+EtUCY+of2fUtbdLlnmpe
+	 kWGaplFqYlQBjDkMJX2VH2wyg9vde8Kpmh47s3MbvVOCb+v8LHNzSjUJ8EYfWZzcRp
+	 w9GZytrkbnhLzTkacvEepDpeB0e9oyW52xKXLicLHXFDYHdVGZQadRlHSfFoNZgmIc
+	 cms9p8RFQ5Jh71f7A8vrkabwcPMxSTdv9OSjJCS16D4RzLFwEj5m527TB6L8OcGTMp
+	 /AxOJ0Qbsu2VZvBuJKddT8giO3Hz9AOVLuM3dxEnMpkhx84815P+z+O5e5ZCSJmQl1
+	 Y8IMnXUBJ5vQw==
+Message-ID: <128433cb-b8c0-47cb-8cc8-0c625d3984f8@kernel.org>
+Date: Mon, 30 Jun 2025 15:06:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -35,119 +35,59 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] media: uvcvideo: Split uvc_stop_streaming()
-To: Hans Verkuil <hverkuil@xs4all.nl>, Ricardo Ribalda
- <ribalda@chromium.org>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Hans de Goede <hdegoede@redhat.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2 8/9] media: core: export v4l2_compat_translate_cmd()
+To: Ricardo Ribalda <ribalda@chromium.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250616-uvc-fop-v4-0-250286570ee7@chromium.org>
- <20250616-uvc-fop-v4-3-250286570ee7@chromium.org>
- <04e10cfa-f1b1-4327-b0ca-c66f8450d42f@xs4all.nl>
+References: <20250602-uvc-grannular-invert-v2-0-c871934ad880@chromium.org>
+ <20250602-uvc-grannular-invert-v2-8-c871934ad880@chromium.org>
 Content-Language: en-US, nl
 From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <04e10cfa-f1b1-4327-b0ca-c66f8450d42f@xs4all.nl>
+In-Reply-To: <20250602-uvc-grannular-invert-v2-8-c871934ad880@chromium.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi all,
+Hi All,
 
-On 17-Jun-25 11:27 AM, Hans Verkuil wrote:
-> On 16/06/2025 17:24, Ricardo Ribalda wrote:
->> uvc_stop_streaming() is used for meta and video nodes. Split the function
->> in two to avoid confusion.
->>
->> Use this opportunity to rename uvc_start_streaming() to
->> uvc_start_streaming_video(), as it is only called by the video nodes.
->>
->> Reviewed-by: Hans de Goede <hansg@kernel.org>
->> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->> ---
->>  drivers/media/usb/uvc/uvc_queue.c | 22 +++++++++++++++-------
->>  1 file changed, 15 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
->> index 8f9737ac729546683ca48f5e71ce3dfacbae2926..3f357c2d48cfd258c26f0342007d1d12f1e01007 100644
->> --- a/drivers/media/usb/uvc/uvc_queue.c
->> +++ b/drivers/media/usb/uvc/uvc_queue.c
->> @@ -167,7 +167,7 @@ static void uvc_buffer_finish(struct vb2_buffer *vb)
->>  		uvc_video_clock_update(stream, vbuf, buf);
->>  }
->>  
->> -static int uvc_start_streaming(struct vb2_queue *vq, unsigned int count)
->> +static int uvc_start_streaming_video(struct vb2_queue *vq, unsigned int count)
->>  {
->>  	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
->>  	struct uvc_streaming *stream = uvc_queue_to_stream(queue);
->> @@ -186,14 +186,22 @@ static int uvc_start_streaming(struct vb2_queue *vq, unsigned int count)
->>  	return ret;
->>  }
->>  
->> -static void uvc_stop_streaming(struct vb2_queue *vq)
->> +static void uvc_stop_streaming_video(struct vb2_queue *vq)
->>  {
->>  	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
->>  
->>  	lockdep_assert_irqs_enabled();
->>  
->> -	if (vq->type != V4L2_BUF_TYPE_META_CAPTURE)
->> -		uvc_video_stop_streaming(uvc_queue_to_stream(queue));
->> +	uvc_video_stop_streaming(uvc_queue_to_stream(queue));
->> +
->> +	uvc_queue_return_buffers(queue, UVC_BUF_STATE_ERROR);
->> +}
->> +
->> +static void uvc_stop_streaming_meta(struct vb2_queue *vq)
->> +{
->> +	struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
->> +
->> +	lockdep_assert_irqs_enabled();
->>  
->>  	uvc_queue_return_buffers(queue, UVC_BUF_STATE_ERROR);
->>  }
->> @@ -203,15 +211,15 @@ static const struct vb2_ops uvc_queue_qops = {
->>  	.buf_prepare = uvc_buffer_prepare,
->>  	.buf_queue = uvc_buffer_queue,
->>  	.buf_finish = uvc_buffer_finish,
->> -	.start_streaming = uvc_start_streaming,
->> -	.stop_streaming = uvc_stop_streaming,
->> +	.start_streaming = uvc_start_streaming_video,
->> +	.stop_streaming = uvc_stop_streaming_video,
->>  };
->>  
->>  static const struct vb2_ops uvc_meta_queue_qops = {
->>  	.queue_setup = uvc_queue_setup,
->>  	.buf_prepare = uvc_buffer_prepare,
->>  	.buf_queue = uvc_buffer_queue,
->> -	.stop_streaming = uvc_stop_streaming,
->> +	.stop_streaming = uvc_stop_streaming_meta,
->>  };
+On 2-Jun-25 3:06 PM, Ricardo Ribalda wrote:
+> v4l2_compat_translate_cmd() can be useful for drivers to convert between
+> the VIDIOC_*32 and VIDIOC_ defines.
 > 
-> I think there should be a comment stating that the metadata stream
-> expects that video is streaming, it does not start streaming by itself.
+> The VIDIOC_*32 defines are not accessible by the drivers, they live in
+> v4l2-compat-ioctl32.c.
 > 
-> Something like:
-> 
-> 	/*
-> 	 * .start_streaming is not provided here. Metadata relies on
-> 	 * video streaming being active. If video isn't streaming, then
-> 	 * no metadata will arrive either.
-> 	 */
-> 
-> It's unexpected that there is no start_streaming for metadata, so a
-> comment wouldn't hurt.
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-I've added this comment while merging this series and I've now pushed
-the entire series to uvc.git/for-next .
+Hans Verkuil with newer versions of patches 1-4 now merged
+through other patch-series patches 5-9 are now ready for
+merging.
 
-BTW it seems that both uvc.git/next and uvc.git/for-next are in
-use now?  With uvc.git/next seemingly following media-commiters/next ?
-
-I thought we had agreed to only use uvc.git/for-next ?
+This will require merging this core patch through the UVC
+tree, may I please have your ack for this?
 
 Regards,
 
 Hans
 
 
+
+> ---
+>  drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+> index 8c07400bd280dea5d2e66e2759658c423bcd3866..ced4892b42597d605887b7c6a14373e3922f7bc6 100644
+> --- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+> +++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+> @@ -929,6 +929,7 @@ unsigned int v4l2_compat_translate_cmd(unsigned int cmd)
+>  	}
+>  	return cmd;
+>  }
+> +EXPORT_SYMBOL_GPL(v4l2_compat_translate_cmd);
+>  
+>  int v4l2_compat_get_user(void __user *arg, void *parg, unsigned int cmd)
+>  {
+> 
 
