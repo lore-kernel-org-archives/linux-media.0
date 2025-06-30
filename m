@@ -1,149 +1,188 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084D22405E5;
-	Mon, 30 Jun 2025 07:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EE54A01;
+	Mon, 30 Jun 2025 08:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751270314; cv=none; b=hD3o4s3ZloB71JqHwwNAXpNAjzGv+DyLMYiHJ1FRiFUWuL6cQlNTE7mmyHmVAc7P42xicMvgpMofcK6nKRbTy+eNAT6dUE6XnzVNws5W24iTJtnc+HnnkWBwNBVaalcgau+ijN3MHsS+kX3y3b0Hj5n/rlogMjI4NJIaZrNBqMM=
+	t=1751271822; cv=none; b=uik2hTTdEUbMIofQJZ1bsPwSONgzHt292vZNBIvQ/czfVMRiev7LvA5gCjT+gkWp+GMqqhYB5H/HEpq1ommRbObQuxdANQUvJquuZ8TKzJpwjmDLdBy5PTVte1UxYsQELtoPrBctQX+N8nJk1UyMD5x/5BcbwKXflXb8slT3olY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751270314; c=relaxed/simple;
-	bh=ZZMTRhA3Q5vK75m9Bm+TXk1PAEHuycK5wPjmcJ/x21c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=tZkPHq0DgGvWs+Btlsvxt9+xbfB3ZYtyeg1XB8FP13N1Do4yy7md+hGNq8pOLzrpt4/XdxA/S6iTEPHTbZsK8jr3+xVDn3s2KaxxCh8ECa4iDXH4rqvycSiQz4KmK+7QswWxOzY0g7BMqy352hYbbXX2R7IAzWJqsShSWWNDgA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JXXodVTJ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1751271822; c=relaxed/simple;
+	bh=cXUNp9MnIeeBtbqrhr7CXj8lPcvnwGlKcnzokzRWvAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dNBtJjm8OKHwxrf9nI2Y35kl0aviWmnr1VAypbACIjMW5nc29s0OxqNpH19pLEaSmU4pXbO+oImg1QxJIcgE2+p7Gfz4QZr+0sATCx1uNaarhFssbMbM90qhM7vZXSCLMQLJEUQWJlkIhX4pjYf/WmvSbyQrvis6C6iiWA0bTKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=p3xZUkRH; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JXXodVTJ"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55U4ph3T015659;
-	Mon, 30 Jun 2025 07:58:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	2GI5N/15siM0TnE6K77k2Bo0tTxSu+QdEjI1bUxwSYo=; b=JXXodVTJK1hctFbR
-	Q05TETF0RdiCdNTlb3yPDaDj7fvLcyfJzbvOriAmB+JvkHnsGchWiOqXfeontZDg
-	4a2odNY9jadEfDn7QM+gTEknf1qhcizITH+wAp2p6THaJ5sJTr2t32cWuGyjiqL5
-	UhaCh2xas9RxQsaB3bNu4R2QJa+GbabJa11JpJ7HTdQp+nQpyN+ppFwwPGRGoOiZ
-	oIGgHkIAM81Bujr+4u4KlrcbJgCLvf/7h/xdhFJONMxrkYzPVvYrENEmbdQZ4Tcx
-	GehoINsvg9LMciv82wfUMFJofzVwEHukCW6eaHPQIGUuXV7/PHw70OjH9nx6Esog
-	zas7uQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47kkwrre94-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 07:58:27 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55U7wQ3M004652
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 07:58:26 GMT
-Received: from [10.204.100.69] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 30 Jun
- 2025 00:58:23 -0700
-Message-ID: <4b7b1406-a730-a0eb-1787-63cce6817ba0@quicinc.com>
-Date: Mon, 30 Jun 2025 13:28:20 +0530
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="p3xZUkRH"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 6F16C6BE;
+	Mon, 30 Jun 2025 10:23:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1751271797;
+	bh=cXUNp9MnIeeBtbqrhr7CXj8lPcvnwGlKcnzokzRWvAs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p3xZUkRHrBjB6g4qDBCqjfk5L7Q+CGaKtAwu2cSmSFbknHAhVyGdBas/HbcPRW88L
+	 tH+w+kXX63VwZ3Nwp5Wz0yLow10xhkhYAxVwzL7ohxLqgxk2QiE1i4fNdI0BAYALfT
+	 opL6jnh5OLq0Qe9czqOZjMJghGI72ocIUDiKJ+54=
+Date: Mon, 30 Jun 2025 11:23:13 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Christoph Hellwig <hch@lst.de>, Alan Stern <stern@rowland.harvard.edu>,
+	Xu Yang <xu.yang_2@nxp.com>, ezequiel@vanguardiasur.com.ar,
+	mchehab@kernel.org, hdegoede@redhat.com, gregkh@linuxfoundation.org,
+	mingo@kernel.org, tglx@linutronix.de,
+	andriy.shevchenko@linux.intel.com, viro@zeniv.linux.org.uk,
+	thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
+ free API
+Message-ID: <20250630082313.GB23516@pendragon.ideasonboard.com>
+References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
+ <20250627101939.3649295-2-xu.yang_2@nxp.com>
+ <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
+ <20250629233924.GC20732@pendragon.ideasonboard.com>
+ <CANiDSCswzMouJrRn2A3EAbGzHTf88q_qQ=DC_KX7dbf_LJzqBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 5/5] media: iris: configure DMA device for vb2 queue on
- OUTPUT plane
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dikshita Agarwal
-	<quic_dikshita@quicinc.com>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        "Mauro
- Carvalho Chehab" <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250627-video_cb-v3-0-51e18c0ffbce@quicinc.com>
- <20250627-video_cb-v3-5-51e18c0ffbce@quicinc.com>
- <d8a1fdd4-0056-480f-ade1-318a34d27204@linaro.org>
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <d8a1fdd4-0056-480f-ade1-318a34d27204@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=XeCJzJ55 c=1 sm=1 tr=0 ts=686243a3 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=P-IC7800AAAA:8
- a=COk6AnOGAAAA:8 a=OXM8fBZ5ErSyUVfw0poA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=d3PnA9EDa4IxuAV0gXij:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDA2NSBTYWx0ZWRfX1BzwmhAllKIG
- sauQ7sM7Gc0vGXqNU6xC8v8Tj0rEYd5X8eJ2fXVVdK6psDhHzIuD3cN2lbwfZO4xrB+78p63i6q
- Ub+rv6r/WX9nIx+0TxhngB4E/PhpWDhhYil03HBoDHIIvA7RbVvfpbjzS05XB+d8CBgPz67T1iA
- zHrOhg8hWjZ7jYoh7BHbP7UcsBRNRW93pW93Wa7c7KksFEmzNd9YXDL5kJ5UFAB4cTXDAbrXuMR
- WiYxIX4mqA3zhGsHjNyP6txlPNz2+jR2qZTsiOX2M2vN08ttlHZS7W3f/9gvyoXMU8YNxPi2Yov
- DHuCQJDPeBntbH5qdAB7oNRSxO+iQ4XkFZKIoD0SbjwP70OMdD8ZBrH+BXODWXPuTBB0nbQ3z9/
- jhmH+4q3MJiRlkaRTRhJiSxZBm99uGMUwY439eiVa4LNGmCvTJssYeQ4GBb/wfkxphCFkGbH
-X-Proofpoint-GUID: upn4LHC0jnaVAxEpG6vyIwUPjp3jdoDp
-X-Proofpoint-ORIG-GUID: upn4LHC0jnaVAxEpG6vyIwUPjp3jdoDp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_01,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2506300065
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANiDSCswzMouJrRn2A3EAbGzHTf88q_qQ=DC_KX7dbf_LJzqBg@mail.gmail.com>
 
-
-
-On 6/27/2025 10:38 PM, Bryan O'Donoghue wrote:
-> On 27/06/2025 16:48, Vikash Garodia wrote:
->> While setting up the vb2 queues, assign "non_pixel" device to manage
->> OUTPUT plane buffers i.e bitstream buffers incase of decoder. It prefers
->> the non_pixel device(np_dev) when available, falling back to core->dev
->> otherwise.
->>
->> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
->> ---
->>   drivers/media/platform/qcom/iris/iris_vb2.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/media/platform/qcom/iris/iris_vb2.c
->> b/drivers/media/platform/qcom/iris/iris_vb2.c
->> index
->> cdf11feb590b5cb7804db3fcde7282fb1f9f1a1e..01cc337970400d48063c558c1ac039539dbcbaba 100644
->> --- a/drivers/media/platform/qcom/iris/iris_vb2.c
->> +++ b/drivers/media/platform/qcom/iris/iris_vb2.c
->> @@ -159,6 +159,10 @@ int iris_vb2_queue_setup(struct vb2_queue *q,
->>       *num_planes = 1;
->>       sizes[0] = f->fmt.pix_mp.plane_fmt[0].sizeimage;
->>   +    if (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT ||
->> +        q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
->> +        q->dev = core->np_dev ? core->np_dev : core->dev;
->> +
->>   unlock:
->>       mutex_unlock(&inst->lock);
->>  
+On Mon, Jun 30, 2025 at 08:48:23AM +0200, Ricardo Ribalda wrote:
+> On Mon, 30 Jun 2025 at 01:39, Laurent Pinchart wrote:
+> > On Fri, Jun 27, 2025 at 10:23:36AM -0400, Alan Stern wrote:
+> > > On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
+> > > > This will add usb_alloc_noncoherent() and usb_free_noncoherent()
+> > > > functions to support alloc and free buffer in a dma-noncoherent way.
+> > > >
+> > > > To explicit manage the memory ownership for the kernel and device,
+> > > > this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
+> > > > and call it at proper time.  The management requires the user save
+> > > > sg_table returned by usb_alloc_noncoherent() to urb->sgt.
+> > > >
+> > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > > ---
+> > > >  drivers/usb/core/hcd.c | 30 ++++++++++++++++
+> > > >  drivers/usb/core/usb.c | 80 ++++++++++++++++++++++++++++++++++++++++++
+> > > >  include/linux/usb.h    |  9 +++++
+> > > >  3 files changed, 119 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > > > index c22de97432a0..5fa00d32afb8 100644
+> > > > --- a/drivers/usb/core/hcd.c
+> > > > +++ b/drivers/usb/core/hcd.c
+> > > > @@ -1496,6 +1496,34 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(usb_hcd_map_urb_for_dma);
+> > > >
+> > > > +static void usb_dma_noncoherent_sync_for_cpu(struct usb_hcd *hcd,
+> > > > +                                        struct urb *urb)
+> > > > +{
+> > > > +   enum dma_data_direction dir;
+> > > > +
+> > > > +   if (!urb->sgt)
+> > > > +           return;
+> > > > +
+> > > > +   dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> > >
+> > > Are the following operations really necessary if the direction is OUT?
+> > > There are no bidirectional URBs, and an OUT transfer never modifies the
+> > > contents of the transfer buffer so the buffer contents will be the same
+> > > after the URB completes as they were when the URB was submitted.
+> >
+> > The arch part of dma_sync_sgtable_for_cpu(DMA_TO_DEVICE) is a no-op on
+> > all architectures but microblaze, mips, parisc and powerpc (at least in
+> > some configurations of those architectures).
+> >
+> > The IOMMU DMA mapping backend calls into the arch-specific code, and
+> > also handles swiotlb, which is a no-op for DMA_TO_DEVICE. There's also
+> > some IOMMU-related arch-specific handling for sparc.
+> >
+> > I think dma_sync_sgtable_for_cpu() should be called for the
+> > DMA_TO_DEVICE direction, to ensure proper operation in those uncommon
+> > but real cases where platforms need to perform some operation. It has a
+> > non-zero cost on other platforms, as the CPU will need to go through a
+> > few function calls to end up in no-ops and then go back up the call
+> > stack.
+> >
+> > invalidate_kernel_vmap_range() may not be needed. I don't recall why it
+> > was added. The call was introduced in
+> >
+> > commit 20e1dbf2bbe2431072571000ed31dfef09359c08
+> > Author: Ricardo Ribalda <ribalda@chromium.org>
+> > Date:   Sat Mar 13 00:55:20 2021 +0100
+> >
+> >     media: uvcvideo: Use dma_alloc_noncontiguous API
+> >
+> > Ricardo, do we need to invalidate the vmap range in the DMA_TO_DEVICE
+> > case ?
 > 
-> q->dev = core->dev;
+> That change came from Christoph
+> https://lore.kernel.org/linux-media/20210128150955.GA30563@lst.de/
 > 
-> if (thing || thing_else)
->     q->dev = core->np_dev;
-when IF condition is not met, q->dev assignment would be unnecessary i.e for
-plane types other than V4L2_BUF_TYPE_VIDEO_OUTPUT. Refer [1] for the dev
-assignment to queue.
+> """
+> 
+> Given that we vmap the addresses this also needs
+> flush_kernel_vmap_range / invalidate_kernel_vmap_range calls for
+> VIVT architectures.
+> 
+> """
 
+Thank you, I looked for such a discussion in the list archive yesterday
+but somehow missed it.
+
+Christoph, you mentioned
+
+  Right now we don't have a proper state machine for the
+  *_kernel_vmap_range, but we should probably add one once usage of this
+  grows.
+
+Has there been any progress on that front ?
+
+> > > > +   invalidate_kernel_vmap_range(urb->transfer_buffer,
+> > > > +                                urb->transfer_buffer_length);
+> > > > +   dma_sync_sgtable_for_cpu(hcd->self.sysdev, urb->sgt, dir);
+> >
+> > In the DMA_FROM_DEVICE case, shouldn't the vmap range should be
+> > invalidated after calling dma_sync_sgtable_for_cpu() ? Otherwise I think
+> > speculative reads coming between invalidation and dma sync could result
+> > in data corruption.
+> >
+> > > > +}
+> > >
+> > > This entire routine should be inserted at the appropriate place in
+> > > usb_hcd_unmap_urb_for_dma() instead of being standalone.
+> > >
+> > > > +static void usb_dma_noncoherent_sync_for_device(struct usb_hcd *hcd,
+> > > > +                                           struct urb *urb)
+> > > > +{
+> > > > +   enum dma_data_direction dir;
+> > > > +
+> > > > +   if (!urb->sgt)
+> > > > +           return;
+> > > > +
+> > > > +   dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> > > > +   flush_kernel_vmap_range(urb->transfer_buffer,
+> > > > +                           urb->transfer_buffer_length);
+> > > > +   dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
+> > > > +}
+> > >
+> > > Likewise, this code belongs inside usb_hcd_map_urb_for_dma().
+> > >
+> > > Also, the material that this routine replaces in the uvc and stk1160
+> > > drivers do not call flush_kernel_vmap_range().  Why did you add that
+> > > here?  Was this omission a bug in those drivers?
+> > >
+> > > Alan Stern
+
+-- 
 Regards,
-Vikash
 
-[1]
-https://elixir.bootlin.com/linux/v6.15.3/source/drivers/media/platform/qcom/iris/iris_vidc.c#L106
-> 
-> ---
-> bod
+Laurent Pinchart
