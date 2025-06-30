@@ -1,303 +1,261 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2643226165;
-	Mon, 30 Jun 2025 08:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C043D1865FA
+	for <linux-media@vger.kernel.org>; Mon, 30 Jun 2025 08:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751272548; cv=none; b=VnKHnleQOBj7ZiqIuWDzbXvAwHtHDakc/9PUJ9AIu0HB8weX+i6tuzC9ly43U/hdcKz0ozGmARLtHx1rBOA+prjpqLdiWyavmPrSo9M8vBGTlHXLjFcdMCyMq7qMSI59+8/9udb2djZ+ficvEfMltsYIxW18V/oHvQwc5AX1d+I=
+	t=1751272705; cv=none; b=kNvbYKM2IoHdqHL8+a/LMUZWLctBeyh1w/bgP9ENaPggRHP3zRzZzZhzbJAeQGUyTbJKWGtAu1jcQw1jY/pekhQnN3O1GBAcTe7GNpaZOfyavSS1vztA798EHavUcDYKAOKAEgYTO8V2EVUZfK0R66/C/l++4x1xoGuMGJYBdxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751272548; c=relaxed/simple;
-	bh=Pb8HJ471aqOcZe2ewCJBa4HubsqOuoiKPklFjxSLp/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OwhTpOAPVTRw9FC/HK0OAlpzhagqliJ7/lrbDyMpF309OgvFLJOzFYnmNU1qaMOdDLa18N6M+EC1G4Igk7s3Q11qeFVxGoeL7Z5rubWbck458X/a+cVENk49AW8q4OmFIlOguheP0pSkOOCs3P7u/MoS1q7Pd2lFDBzHViA8vmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=JKcCOSo+; arc=none smtp.client-ip=213.167.242.64
+	s=arc-20240116; t=1751272705; c=relaxed/simple;
+	bh=QMuAolj25aOcaiORODcZbplq3XBM54zEMvGNYFUkjEo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pIpnlwPyJvx+rlNwdp4aiVB9hjhc2UoVPXnaN5329+9zaGuXM7rrTigJK/VqzrlouxT2viiLZEzgz3r/Uqu+BBqjJvWANZYgfxkaWbpkYjT4IS3WeMLPsMSabl+tepggRngq49nK2Uiv8WpV7e/QQlG5Am3FRuADn793PqhsFqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=FmxcZu5E; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JKcCOSo+"
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id D8AAF6BE;
-	Mon, 30 Jun 2025 10:35:22 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FmxcZu5E"
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D03B9EFF;
+	Mon, 30 Jun 2025 10:38:00 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1751272523;
-	bh=Pb8HJ471aqOcZe2ewCJBa4HubsqOuoiKPklFjxSLp/U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JKcCOSo+cwUx9poxNlqs4DGrbNCXBZaz2O219ud9nTwTvXH/eute7KRzNKn3JAaZo
-	 4N471DvD7OdYOC3Ex1b9MXymlYKvrP7la99f3LF19kUN96JevmnbLyFW9vSbw2ct2y
-	 eJRyGlYNKWezQnh3So3ujeextefNec1ww5ED0Aag=
-Date: Mon, 30 Jun 2025 11:35:19 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Daniel Scally <dan.scally@ideasonboard.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com,
-	jacopo.mondi@ideasonboard.com, nayden.kanchev@arm.com,
-	robh+dt@kernel.org, mchehab@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v10 07/17] media: mali-c55: Add Mali-C55 ISP driver
-Message-ID: <20250630083519.GC24861@pendragon.ideasonboard.com>
-References: <20250624-c55-v10-0-54f3d4196990@ideasonboard.com>
- <20250624-c55-v10-7-54f3d4196990@ideasonboard.com>
- <cee962ce-3719-4ae7-9849-548a95d98e99@linux.intel.com>
- <20250629183547.GF6260@pendragon.ideasonboard.com>
- <aGI+y4sOlPAQMzWI@svinhufvud>
+	s=mail; t=1751272681;
+	bh=QMuAolj25aOcaiORODcZbplq3XBM54zEMvGNYFUkjEo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FmxcZu5E0VTjIaXucepG5+gxJWM2TIYPbPI2H8WQDwaZZxQuNBmyTFiXjVIpagjZA
+	 2N0zdZDhLUPma7tV3JvOYDkuMX1Z4b6tAb8CKbeuuZ5pdpKtWb4CDuYHL9G+qm/xtf
+	 oqsjOX0trjdaydH9EtV0TGlAhEtTIuwidJbZ3b04=
+Message-ID: <86fd22ee-8d90-4189-ba4f-32ae60ccdd90@ideasonboard.com>
+Date: Mon, 30 Jun 2025 09:38:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aGI+y4sOlPAQMzWI@svinhufvud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] media: mc: entity: Add pipeline_started/stopped
+ ops
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-media@vger.kernel.org
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, jacopo.mondi@ideasonboard.com
+References: <20250624-media-jobs-v2-0-8e649b069a96@ideasonboard.com>
+ <20250624-media-jobs-v2-1-8e649b069a96@ideasonboard.com>
+ <d89e87ed-aa92-4ad1-8cd8-0ede62451eb2@linux.intel.com>
+Content-Language: en-US
+From: Dan Scally <dan.scally@ideasonboard.com>
+Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <d89e87ed-aa92-4ad1-8cd8-0ede62451eb2@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 30, 2025 at 10:37:47AM +0300, Sakari Ailus wrote:
-> On Sun, Jun 29, 2025 at 09:35:47PM +0300, Laurent Pinchart wrote:
-> > On Sat, Jun 28, 2025 at 11:06:54PM +0300, Sakari Ailus wrote:
-> > > On 6/24/25 13:21, Daniel Scally wrote:
-> > 
-> > [snip]
-> > 
-> > > > diff --git a/drivers/media/platform/arm/mali-c55/mali-c55-isp.c b/drivers/media/platform/arm/mali-c55/mali-c55-isp.c
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..20d4d16c75fbf0d5519ecadb5ed1d080bdae05de
-> > > > --- /dev/null
-> > > > +++ b/drivers/media/platform/arm/mali-c55/mali-c55-isp.c
-> > > > @@ -0,0 +1,656 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +/*
-> > > > + * ARM Mali-C55 ISP Driver - Image signal processor
-> > > > + *
-> > > > + * Copyright (C) 2024 Ideas on Board Oy
-> > > 
-> > > It's 2025 already.
-> > > 
-> > > > + */
-> > > > +
-> > > > +#include <linux/delay.h>
-> > > > +#include <linux/iopoll.h>
-> > > > +#include <linux/property.h>
-> > > > +#include <linux/string.h>
-> > > > +
-> > > > +#include <linux/media/arm/mali-c55-config.h>
-> > > 
-> > > If this is a UAPI header, please include uapi in the path, too.
-> > > 
-> > > Earlier such headers have been under include/uapi/linux, I don't object 
-> > > putting new ones elsewhere in principle though. Just check with Hans and 
-> > > Laurent, too... I don't have an opinion yet really.
-> > 
-> > With each new media header we add to include/uapi/linux/, I wish
-> > stronger and stronger that we had created include/uapi/linux/media/. We
-> > don't have to do it now, my regret will just grow stronger :-)
-> 
-> I'm fine with using include/uapi/linux/media/.
-> 
-> > > > +/* NOT const because the default needs to be filled in at runtime */
-> > > > +static struct v4l2_ctrl_config mali_c55_isp_v4l2_custom_ctrls[] = {
-> > > > +	{
-> > > > +		.ops = &mali_c55_isp_ctrl_ops,
-> > > > +		.id = V4L2_CID_MALI_C55_CAPABILITIES,
-> > > > +		.name = "Mali-C55 ISP Capabilities",
-> > > > +		.type = V4L2_CTRL_TYPE_BITMASK,
-> > > > +		.min = 0,
-> > > > +		.max = MALI_C55_GPS_PONG_FITTED |
-> > > > +		       MALI_C55_GPS_WDR_FITTED |
-> > > > +		       MALI_C55_GPS_COMPRESSION_FITTED |
-> > > > +		       MALI_C55_GPS_TEMPER_FITTED |
-> > > > +		       MALI_C55_GPS_SINTER_LITE_FITTED |
-> > > > +		       MALI_C55_GPS_SINTER_FITTED |
-> > > > +		       MALI_C55_GPS_IRIDIX_LTM_FITTED |
-> > > > +		       MALI_C55_GPS_IRIDIX_GTM_FITTED |
-> > > > +		       MALI_C55_GPS_CNR_FITTED |
-> > > > +		       MALI_C55_GPS_FRSCALER_FITTED |
-> > > > +		       MALI_C55_GPS_DS_PIPE_FITTED,
-> > > > +		.def = 0,
-> > > > +	},
-> > > > +};
-> > > > +
-> > > > +static int mali_c55_isp_init_controls(struct mali_c55 *mali_c55)
-> > > > +{
-> > > > +	struct v4l2_ctrl_handler *handler = &mali_c55->isp.handler;
-> > > > +	struct v4l2_ctrl *capabilities;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = v4l2_ctrl_handler_init(handler, 1);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	mali_c55_isp_v4l2_custom_ctrls[0].def = mali_c55->capabilities;
-> > > 
-> > > The capabilities here are still specific to a device, not global, in 
-> > > principle at least. Can you move it here, as a local variable?
-> > > 
-> > > > +
-> > > > +	capabilities = v4l2_ctrl_new_custom(handler,
-> > > > +					    &mali_c55_isp_v4l2_custom_ctrls[0],
-> > > > +					    NULL);
-> > > > +	if (capabilities)
-> > > > +		capabilities->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> > > > +
-> > > > +	if (handler->error) {
-> > > > +		dev_err(mali_c55->dev, "failed to register capabilities control\n");
-> > > > +		v4l2_ctrl_handler_free(handler);
-> > > > +		return handler->error;
-> > > 
-> > > v4l2_ctrl_handler_free() will return the error soon, presumably sooner 
-> > > than the above code makes it to upstream. Before that, this pattern 
-> > > won't work as v4l2_ctrl_handler_free() also resets the handler's error 
-> > > field. :-)
-> > > 
-> > > > diff --git a/drivers/media/platform/arm/mali-c55/mali-c55-registers.h b/drivers/media/platform/arm/mali-c55/mali-c55-registers.h
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..36a81be0191a15da91809dd2da5d279716f6d725
-> > > > --- /dev/null
-> > > > +++ b/drivers/media/platform/arm/mali-c55/mali-c55-registers.h
-> > > > @@ -0,0 +1,318 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +/*
-> > > > + * ARM Mali-C55 ISP Driver - Register definitions
-> > > > + *
-> > > > + * Copyright (C) 2024 Ideas on Board Oy
-> > > > + */
-> > > > +
-> > > > +#ifndef _MALI_C55_REGISTERS_H
-> > > > +#define _MALI_C55_REGISTERS_H
-> > > > +
-> > > > +#include <linux/bits.h>
-> > > > +
-> > > > +/* ISP Common 0x00000 - 0x000ff */
-> > > > +
-> > > > +#define MALI_C55_REG_API				0x00000
-> > > > +#define MALI_C55_REG_PRODUCT				0x00004
-> > > > +#define MALI_C55_REG_VERSION				0x00008
-> > > > +#define MALI_C55_REG_REVISION				0x0000c
-> > > > +#define MALI_C55_REG_PULSE_MODE				0x0003c
-> > > > +#define MALI_C55_REG_INPUT_MODE_REQUEST			0x0009c
-> > > > +#define MALI_C55_INPUT_SAFE_STOP			0x00
-> > > > +#define MALI_C55_INPUT_SAFE_START			0x01
-> > > > +#define MALI_C55_REG_MODE_STATUS			0x000a0
-> > > > +#define MALI_C55_REG_INTERRUPT_MASK_VECTOR		0x00030
-> > > > +#define MALI_C55_INTERRUPT_MASK_ALL			GENMASK(31, 0)
-> > > > +
-> > > > +#define MALI_C55_REG_GLOBAL_MONITOR			0x00050
-> > > > +
-> > > > +#define MALI_C55_REG_GEN_VIDEO				0x00080
-> > > > +#define MALI_C55_REG_GEN_VIDEO_ON_MASK			BIT(0)
-> > > > +#define MALI_C55_REG_GEN_VIDEO_MULTI_MASK		BIT(1)
-> > > > +#define MALI_C55_REG_GEN_PREFETCH_MASK			GENMASK(31, 16)
-> > > > +
-> > > > +#define MALI_C55_REG_MCU_CONFIG				0x00020
-> > > > +#define MALI_C55_REG_MCU_CONFIG_OVERRIDE_MASK		BIT(0)
-> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_MASK		BIT(1)
-> > > > +#define MALI_C55_MCU_CONFIG_WRITE(x)			((x) << 1)
-> > > 
-> > > Is x unsigned?
-> > 
-> > Does it matter ? The reason why the BIT() macro uses (UL(1) << (nr))
-> > instead of (1 << (nr)) is (if I'm not mistaken) to avoid incorrect
-> > handling of bit 31. As long as x doesn't take negative values and
-> > doesn't extend to bit 31, it should be fine.
-> 
-> For that reason exactly. If you're unsure, maybe at least cast it as
-> unsigned?
+Morning Sakari
 
-The MCU_CONFIG_WRITE field is on bit long, so there's no practical
-issue. I also don't expect the driver to pass a negative value. We could
-still add an unsigned cast if there's a general rule that all register
-fields must be cast to unsigned. This isn't done in the vast majority of
-drivers though.
+On 29/06/2025 08:50, Sakari Ailus wrote:
+> Hi Kieran,
+>
+> Thanks for the update.
+>
+> On 6/24/25 10:59, Daniel Scally wrote:
+>> Add two new members to struct media_entity_operations, along with new
+>> functions in media-entity.c to traverse a media pipeline and call the
+>> new operations. The new functions are intended to be used to signal
+>> to a media pipeline that it has fully started, with the entity ops
+>> allowing drivers to define some action to be taken when those
+>> conditions are met.
+>>
+>> The combination of the new functions and operations allows drivers
+>> which are part of a multi-driver pipeline to delay actually starting
+>> streaming until all of the conditions for streaming succcessfully are
+>> met across all drivers.
+>>
+>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+>> ---
+>> Changes in v2:
+>>
+>>     - Refactored media_pipeline_started() such that the cleanup
+>>       function for media_pipeline_entity_iter is unconditionally
+>>       called
+>>     - Avoided using media_entity_call() helper for operation that
+>>       has return type void to avoid compiler warnings
+>> ---
+>>   drivers/media/mc/mc-entity.c | 46 ++++++++++++++++++++++++++++++++++++++++++++
+>>   include/media/media-entity.h | 24 +++++++++++++++++++++++
+>>   2 files changed, 70 insertions(+)
+>>
+>> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+>> index 045590905582054c46656e20463271b1f93fa6b4..d3443537d4304e12cb015630101efba22375c011 100644
+>> --- a/drivers/media/mc/mc-entity.c
+>> +++ b/drivers/media/mc/mc-entity.c
+>> @@ -1053,6 +1053,52 @@ __media_pipeline_entity_iter_next(struct media_pipeline *pipe,
+>>   }
+>>   EXPORT_SYMBOL_GPL(__media_pipeline_entity_iter_next);
+>>   +int media_pipeline_started(struct media_pipeline *pipe)
+>> +{
+>> +    struct media_pipeline_entity_iter iter;
+>> +    struct media_entity *entity;
+>> +    int ret;
+>> +
+>> +    ret = media_pipeline_entity_iter_init(pipe, &iter);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    media_pipeline_for_each_entity(pipe, &iter, entity) {
+>> +        ret = media_entity_call(entity, pipeline_started);
+>> +        if (ret && ret != -ENOIOCTLCMD)
+>> +            break;
+>> +    }
+>> +
+>> +    media_pipeline_entity_iter_cleanup(&iter);
+>> +
+>> +    ret = ret == -ENOIOCTLCMD ? 0 : ret;
+>> +    if (ret)
+>> +        media_pipeline_stopped(pipe);
+>> +
+>> +    return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(media_pipeline_started);
+>> +
+>> +int media_pipeline_stopped(struct media_pipeline *pipe)
+>> +{
+>> +    struct media_pipeline_entity_iter iter;
+>> +    struct media_entity *entity;
+>> +    int ret;
+>> +
+>> +    ret = media_pipeline_entity_iter_init(pipe, &iter);
+>
+> What is the caller supposed to do if an error happens here?
 
-> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_PING		BIT(1)
-> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_PONG		0x00
-> > > > +#define MALI_C55_REG_MULTI_CONTEXT_MODE_MASK		BIT(8)
-> > > > +#define MALI_C55_REG_PING_PONG_READ			0x00024
-> > > > +#define MALI_C55_REG_PING_PONG_READ_MASK		BIT(2)
-> > > > +#define MALI_C55_INTERRUPT_BIT(x)			BIT(x)
-> > > > +
-> > > > +#define MALI_C55_REG_GLOBAL_PARAMETER_STATUS		0x00068
-> > > > +#define MALI_C55_GPS_PONG_FITTED			BIT(0)
-> > > > +#define MALI_C55_GPS_WDR_FITTED				BIT(1)
-> > > > +#define MALI_C55_GPS_COMPRESSION_FITTED			BIT(2)
-> > > > +#define MALI_C55_GPS_TEMPER_FITTED			BIT(3)
-> > > > +#define MALI_C55_GPS_SINTER_LITE_FITTED			BIT(4)
-> > > > +#define MALI_C55_GPS_SINTER_FITTED			BIT(5)
-> > > > +#define MALI_C55_GPS_IRIDIX_LTM_FITTED			BIT(6)
-> > > > +#define MALI_C55_GPS_IRIDIX_GTM_FITTED			BIT(7)
-> > > > +#define MALI_C55_GPS_CNR_FITTED				BIT(8)
-> > > > +#define MALI_C55_GPS_FRSCALER_FITTED			BIT(9)
-> > > > +#define MALI_C55_GPS_DS_PIPE_FITTED			BIT(10)
-> > > > +
-> > > > +#define MALI_C55_REG_BLANKING				0x00084
-> > > > +#define MALI_C55_REG_HBLANK_MASK			GENMASK(15, 0)
-> > > > +#define MALI_C55_REG_VBLANK_MASK			GENMASK(31, 16)
-> > > > +#define MALI_C55_VBLANK(x)				((x) << 16)
-> > > 
-> > > Same question for the bit shifts left elsewhere in the header.
-> > > 
-> > > > +
-> > > > +#define MALI_C55_REG_HC_START				0x00088
-> > > > +#define MALI_C55_HC_START(h)				(((h) & 0xffff) << 16)
-> > > > +#define MALI_C55_REG_HC_SIZE				0x0008c
-> > > > +#define MALI_C55_HC_SIZE(h)				((h) & 0xffff)
-> > > > +#define MALI_C55_REG_VC_START_SIZE			0x00094
-> > > > +#define MALI_C55_VC_START(v)				((v) & 0xffff)
-> > > > +#define MALI_C55_VC_SIZE(v)				(((v) & 0xffff) << 16)
-> > > > +
-> > > > +/* Ping/Pong Configuration Space */
-> > > > +#define MALI_C55_REG_BASE_ADDR				0x18e88
-> > > > +#define MALI_C55_REG_BYPASS_0				0x18eac
-> > > > +#define MALI_C55_REG_BYPASS_0_VIDEO_TEST		BIT(0)
-> > > > +#define MALI_C55_REG_BYPASS_0_INPUT_FMT			BIT(1)
-> > > > +#define MALI_C55_REG_BYPASS_0_DECOMPANDER		BIT(2)
-> > > > +#define MALI_C55_REG_BYPASS_0_SENSOR_OFFSET_WDR		BIT(3)
-> > > > +#define MALI_C55_REG_BYPASS_0_GAIN_WDR			BIT(4)
-> > > > +#define MALI_C55_REG_BYPASS_0_FRAME_STITCH		BIT(5)
-> > > > +#define MALI_C55_REG_BYPASS_1				0x18eb0
-> > > > +#define MALI_C55_REG_BYPASS_1_DIGI_GAIN			BIT(0)
-> > > > +#define MALI_C55_REG_BYPASS_1_FE_SENSOR_OFFS		BIT(1)
-> > > > +#define MALI_C55_REG_BYPASS_1_FE_SQRT			BIT(2)
-> > > > +#define MALI_C55_REG_BYPASS_1_RAW_FE			BIT(3)
-> > > > +#define MALI_C55_REG_BYPASS_2				0x18eb8
-> > > > +#define MALI_C55_REG_BYPASS_2_SINTER			BIT(0)
-> > > > +#define MALI_C55_REG_BYPASS_2_TEMPER			BIT(1)
-> > > > +#define MALI_C55_REG_BYPASS_3				0x18ebc
-> > > > +#define MALI_C55_REG_BYPASS_3_SQUARE_BE			BIT(0)
-> > > > +#define MALI_C55_REG_BYPASS_3_SENSOR_OFFSET_PRE_SH	BIT(1)
-> > > > +#define MALI_C55_REG_BYPASS_3_MESH_SHADING		BIT(3)
-> > > > +#define MALI_C55_REG_BYPASS_3_WHITE_BALANCE		BIT(4)
-> > > > +#define MALI_C55_REG_BYPASS_3_IRIDIX			BIT(5)
-> > > > +#define MALI_C55_REG_BYPASS_3_IRIDIX_GAIN		BIT(6)
-> > > > +#define MALI_C55_REG_BYPASS_4				0x18ec0
-> > > > +#define MALI_C55_REG_BYPASS_4_DEMOSAIC_RGB		BIT(1)
-> > > > +#define MALI_C55_REG_BYPASS_4_PF_CORRECTION		BIT(3)
-> > > > +#define MALI_C55_REG_BYPASS_4_CCM			BIT(4)
-> > > > +#define MALI_C55_REG_BYPASS_4_CNR			BIT(5)
-> > > > +#define MALI_C55_REG_FR_BYPASS				0x18ec4
-> > > > +#define MALI_C55_REG_DS_BYPASS				0x18ec8
-> > > > +#define MALI_C55_BYPASS_CROP				BIT(0)
-> > > > +#define MALI_C55_BYPASS_SCALER				BIT(1)
-> > > > +#define MALI_C55_BYPASS_GAMMA_RGB			BIT(2)
-> > > > +#define MALI_C55_BYPASS_SHARPEN				BIT(3)
-> > > > +#define MALI_C55_BYPASS_CS_CONV				BIT(4)
-> > > > +#define MALI_C55_REG_ISP_RAW_BYPASS			0x18ecc
-> > > > +#define MALI_C55_ISP_RAW_BYPASS_BYPASS_MASK		BIT(0)
-> > > > +#define MALI_C55_ISP_RAW_BYPASS_FR_BYPASS_MASK		GENMASK(9, 8)
-> > > > +#define MALI_C55_ISP_RAW_BYPASS_RAW_FR_BYPASS		(2 << 8)
-> > > > +#define MALI_C55_ISP_RAW_BYPASS_RGB_FR_BYPASS		(1 << 8)
-> > > 
-> > > BIT() or make these unsigned.
-> > 
-> > It's a 2 bits field, BIT() isn't appropriate.
-> 
-> That leaves us with the other alternative, doesn't it?
 
-Absolutely, although unsigned is unnecessary in this case as we're not
-approaching bit 31.
+My expectation would be that they would still stop streaming, just slightly later. The intention 
+behind the helpers is to allow drivers to delay any _actual_ start until all of the video devices in 
+a pipeline have called .start_streaming() and to stop all of them as soon as any one of them calls 
+.stop_streaming()...if this failed then the others would continue streaming, but my expectation 
+would be that userspace would be sequentially stopping them all anyway.
 
--- 
-Regards,
 
-Laurent Pinchart
+> Could we keep the pipeline iteration around for this in struct media_pipeline?
+
+
+Probably...and init it in __media_pipeline_start()
+
+>
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    media_pipeline_for_each_entity(pipe, &iter, entity)
+>> +        if (entity->ops && entity->ops->pipeline_stopped)
+>> +            entity->ops->pipeline_stopped(entity);
+>> +
+>> +    media_pipeline_entity_iter_cleanup(&iter);
+>> +
+>> +    return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(media_pipeline_stopped);
+>> +
+>>   /* -----------------------------------------------------------------------------
+>>    * Links management
+>>    */
+>> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+>> index 64cf590b11343f68a456c5870ca2f32917c122f9..e858326b95cba6612a123f715af6ea7130a86e15 100644
+>> --- a/include/media/media-entity.h
+>> +++ b/include/media/media-entity.h
+>> @@ -269,6 +269,10 @@ struct media_pad {
+>>    *            media_entity_has_pad_interdep().
+>>    *            Optional: If the operation isn't implemented all pads
+>>    *            will be considered as interdependent.
+>> + * @pipeline_started:    Notify this entity that the pipeline it is a part of has
+>> + *            been started
+>> + * @pipeline_stopped:    Notify this entity that the pipeline it is a part of has
+>> + *            been stopped
+>>    *
+>>    * .. note::
+>>    *
+>> @@ -284,6 +288,8 @@ struct media_entity_operations {
+>>       int (*link_validate)(struct media_link *link);
+>>       bool (*has_pad_interdep)(struct media_entity *entity, unsigned int pad0,
+>>                    unsigned int pad1);
+>> +    int (*pipeline_started)(struct media_entity *entity);
+>> +    void (*pipeline_stopped)(struct media_entity *entity);
+>>   };
+>>     /**
+>> @@ -1261,6 +1267,24 @@ __media_pipeline_entity_iter_next(struct media_pipeline *pipe,
+>>            entity != NULL;                            \
+>>            entity = __media_pipeline_entity_iter_next((pipe), iter, entity))
+>>   +/**
+>> + * media_pipeline_started - Inform entities in a pipeline that it has started
+>> + * @pipe:    The pipeline
+>> + *
+>> + * Iterate on all entities in a media pipeline and call their pipeline_started
+>> + * member of media_entity_operations.
+>> + */
+>> +int media_pipeline_started(struct media_pipeline *pipe);
+>> +
+>> +/**
+>> + * media_pipeline_stopped - Inform entities in a pipeline that it has stopped
+>> + * @pipe:    The pipeline
+>> + *
+>> + * Iterate on all entities in a media pipeline and call their pipeline_stopped
+>> + * member of media_entity_operations.
+>
+> Could you also document the return values for both of the functions, please?
+
+Ack
+
+
+Thanks
+
+Dan
+
+>
+>> + */
+>> +int media_pipeline_stopped(struct media_pipeline *pipe);
+>> +
+>>   /**
+>>    * media_pipeline_alloc_start - Mark a pipeline as streaming
+>>    * @pad: Starting pad
+>>
+>
