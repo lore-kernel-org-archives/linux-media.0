@@ -1,242 +1,303 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010062.outbound.protection.outlook.com [52.101.84.62])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C940924166A;
-	Mon, 30 Jun 2025 08:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751271828; cv=fail; b=OhrE73zQbGLKQuJYyPqAEVQZWZ0k4wbRdVEtWDnqPTuhCtgtpKyM3COtGnirbRfblZuBy9CrL3A/dx9l37s8wKUkfvTunzyf+VUXndaPwDlEMhcrsAzG6wsOuu48SObAjSiTYFcm0N4LkCmrNMJo3pTLGN/GJa0KfercEr0gceU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751271828; c=relaxed/simple;
-	bh=MHiRt6BRvQdBs9Yuo5AoH7riwn7uHaTxFzABCw64uh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=PP963qFhGjTV7kKY9P6w/SnPukJvuY8dPEHz1Irgi1thCGxXE8s8T6ICDoDvR7AYuJPTJSy8GgjR5Cj5UYfrdwxqiFA+yDK2Ypf65bg988N7+W2oLU3VmlwWxk44XTgUJXZlksPatm8k+epiLIpUe0Z/gTI41LfyzbliX7z2+4o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=IZZPY6+6; arc=fail smtp.client-ip=52.101.84.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2643226165;
+	Mon, 30 Jun 2025 08:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751272548; cv=none; b=VnKHnleQOBj7ZiqIuWDzbXvAwHtHDakc/9PUJ9AIu0HB8weX+i6tuzC9ly43U/hdcKz0ozGmARLtHx1rBOA+prjpqLdiWyavmPrSo9M8vBGTlHXLjFcdMCyMq7qMSI59+8/9udb2djZ+ficvEfMltsYIxW18V/oHvQwc5AX1d+I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751272548; c=relaxed/simple;
+	bh=Pb8HJ471aqOcZe2ewCJBa4HubsqOuoiKPklFjxSLp/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OwhTpOAPVTRw9FC/HK0OAlpzhagqliJ7/lrbDyMpF309OgvFLJOzFYnmNU1qaMOdDLa18N6M+EC1G4Igk7s3Q11qeFVxGoeL7Z5rubWbck458X/a+cVENk49AW8q4OmFIlOguheP0pSkOOCs3P7u/MoS1q7Pd2lFDBzHViA8vmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=JKcCOSo+; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="IZZPY6+6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ttj/6Y2DzA5CmMI/uqz2TV9w5onmuEkoawHbncpfCiy2BL1KarIqo3hdX4m394e3QRDC60fza9EoB3IaskW5gEDJzOmBbK7tGuQG/prUVytP76jNBKeugQ1Io8IuV4KBIdzAko5PL5L8k9hCEyjXD9XzTNcp/aWZqy/Nlyw4bNmNHSQv98uzYvJDDsKo/GnVlHpMz7sZyraLzUjOKBfnHY30tBIS3COgmlz2fTZJts1SwSz8slmdRXIA/XIVE/1zg/Gj8fj25PMJk/gupHzSIC19sdVq+A0nEwCHRbdab+Stf7mc1cFhsVDOtKswj2Y+LvmCzALS3obLuUN958B7BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=odOa7NBnUIPKua65+OUbpJ4xD7sDqXygvxXU/cZcJxA=;
- b=zCzEcIB5bSHNCljG4+M0mDt5GrXiQCqRmuzXtYKi4ILTy+XxRryOj+jfd26pWl1BlgAjT4hpQ7MdPZ024SOdobLxR460loMEH+4zIDLzFIE5gCwsND9w5MMfzrutv5xCv15SU5PnZ+1l+DqXkZFMm18LWws9Khpt1qQpP5NiLwkUWiplXrhp7DeecvEH51iE4HrjoSorBdGkyLqSrPynsG/enwMWtwgxxrBN0b3MFcld2GDTz6wkawGbnQSKimGMkCAYYguqjHQJ6iznoByze6mDQevOY+Snf1XK2F1zICfhePlPYgjdXReq0t0O5qxl6v4KIXMrMbRFzSdlSAcoQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=odOa7NBnUIPKua65+OUbpJ4xD7sDqXygvxXU/cZcJxA=;
- b=IZZPY6+6bDuMsNTCeJG5R82qqRMS/NoBjTjBYPlxvqgZvsYZ5gB/03YrvPs/zpSiDipSiZx8bQgpIhH/sbnJND4bJI9LB3BtAYFeVl5Vi6GCq/His6E6tKs1WvXZ6zPplaFXfeLDjW7KmRI1BljaagTAgwB/vOlhk03CPiFYDZExlAPMmB6J6wnZcHoKsXgvRdgiDv71PJJGXNm5C7UB4ZIdV8XC9XdVII6T/2xuD/n2fE6hZBP7951rfAaFPY5D4YH29gCvxrDUH9th9a/h2u4trH90voUU+MOx/MN4amUXnr7U2h93xL/+B+rFJDk1b/rHcI0qP9We2da2iB+81w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by VI2PR04MB10192.eurprd04.prod.outlook.com (2603:10a6:800:229::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.25; Mon, 30 Jun
- 2025 08:23:42 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8880.027; Mon, 30 Jun 2025
- 08:23:42 +0000
-Date: Mon, 30 Jun 2025 16:18:51 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: ezequiel@vanguardiasur.com.ar, mchehab@kernel.org, 
-	laurent.pinchart@ideasonboard.com, hdegoede@redhat.com, gregkh@linuxfoundation.org, 
-	mingo@kernel.org, tglx@linutronix.de, andriy.shevchenko@linux.intel.com, 
-	viro@zeniv.linux.org.uk, thomas.weissschuh@linutronix.de, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v2 1/3] usb: core: add dma-noncoherent buffer alloc and
- free API
-Message-ID: <wddmyx4lccthln7mbngkd4zbh6y7mwetdba5e7ob6u4xevecmj@zopp65eqbeuu>
-References: <20250627101939.3649295-1-xu.yang_2@nxp.com>
- <20250627101939.3649295-2-xu.yang_2@nxp.com>
- <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c4f505f-d684-4643-bf77-89d97e01a9f2@rowland.harvard.edu>
-X-ClientProxiedBy: MA0PR01CA0087.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ae::17) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="JKcCOSo+"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id D8AAF6BE;
+	Mon, 30 Jun 2025 10:35:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1751272523;
+	bh=Pb8HJ471aqOcZe2ewCJBa4HubsqOuoiKPklFjxSLp/U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JKcCOSo+cwUx9poxNlqs4DGrbNCXBZaz2O219ud9nTwTvXH/eute7KRzNKn3JAaZo
+	 4N471DvD7OdYOC3Ex1b9MXymlYKvrP7la99f3LF19kUN96JevmnbLyFW9vSbw2ct2y
+	 eJRyGlYNKWezQnh3So3ujeextefNec1ww5ED0Aag=
+Date: Mon, 30 Jun 2025 11:35:19 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Daniel Scally <dan.scally@ideasonboard.com>,
+	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, Anthony.McGivern@arm.com,
+	jacopo.mondi@ideasonboard.com, nayden.kanchev@arm.com,
+	robh+dt@kernel.org, mchehab@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v10 07/17] media: mali-c55: Add Mali-C55 ISP driver
+Message-ID: <20250630083519.GC24861@pendragon.ideasonboard.com>
+References: <20250624-c55-v10-0-54f3d4196990@ideasonboard.com>
+ <20250624-c55-v10-7-54f3d4196990@ideasonboard.com>
+ <cee962ce-3719-4ae7-9849-548a95d98e99@linux.intel.com>
+ <20250629183547.GF6260@pendragon.ideasonboard.com>
+ <aGI+y4sOlPAQMzWI@svinhufvud>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI2PR04MB10192:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6e4ed2a6-0ef6-4ff9-5cbf-08ddb7af6c6b
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|1800799024|366016|52116014|19092799006|7416014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?3dyuPMmDKwoSEAQ/UMInNfAC1+9MD6Un+/pSmeWCkZVp6G4zv8g+IRdrsQdL?=
- =?us-ascii?Q?lm2/OpR3STqdoYXykWuVvEg4/fJX6QljkHv7ZqGghJ7v8vDZ/7dhRKCC4Pj5?=
- =?us-ascii?Q?XX/HiY4k6w4urazLCpq68ewfMp5JNThd4VwJFub14Jjl4CEgAdFGII9oeG8H?=
- =?us-ascii?Q?J5YErmuuQVPgL0ggm5nmpxJwu+YLWn7+TUow9koQ8LEhPTMZAXeuefSaAize?=
- =?us-ascii?Q?WhEHChUEZLfGoEOVObeOjioT4Z/abu/3fQeV1DaQp31x3zMO4sJs8HkwnKRn?=
- =?us-ascii?Q?p6WRpCWsKYW3f9C6iN1RKEjWEhxHPQKYUzL98YaecishYCF+PSjjXQKbgCAB?=
- =?us-ascii?Q?cbPCbQAzFrtawqyDZcSKNt7DaIi/3K2BSZlbSvTXtdQiKNqn/yC/elmva410?=
- =?us-ascii?Q?BJ9uQF9PoKdrffpYaOW2xBN5BuL6jlz/A6Oou8nSsYIY4vPRwAcSZE6hByq1?=
- =?us-ascii?Q?EH3G55A7DtcksNLl1Fn0Wq9K2aXlCIqahHIDSAwIt/VWILCtaWvzWm8V87dw?=
- =?us-ascii?Q?io1BG4s7oLtC6D02tH4Hjb+aHqxMeIPsK5XkO7s/yNIZ1k8tkAwpOqSjpVjy?=
- =?us-ascii?Q?MSZyzuIEvT8ez735/VLUqkC1D2VFYoKAGNpCPg16R5ibpcEzAQHnBKsS8HL9?=
- =?us-ascii?Q?f7IZaA8YpYT8hqEDI+xw7AN8G27y5R9p5YNS29dei+aVe2QvPehp4hba70PI?=
- =?us-ascii?Q?NnTt8rQwkaDMXD+beEYBQejKi0zmXJj2Db3U7UoVCNrSUl2D6zU04QpF0aEa?=
- =?us-ascii?Q?XCIJPgMdshjxhRemrrRU9SO4/xGjFGQq94g5RCxnI9lO/2+z2XJoh2B4N/1G?=
- =?us-ascii?Q?KNK0T5eQR1SU93sbdickzJOYoCnpbwfH11OkmLG50gGmrGxT3jC/peWvvsgU?=
- =?us-ascii?Q?Z4hztiSTeKMX2JiymUiNZcJpCZ8pk3XBfc5N+GlYyrs2QW0m1YWkdAUTfvPz?=
- =?us-ascii?Q?Ik7SLgTw9SsBvA9QQHaJ2uNZVmvMWJBOfOCeN/P4D3ir7I3tKaPxfcsHDoEb?=
- =?us-ascii?Q?4uBaBNm+Kk5IOO3NSDYJYSroL8bRSTyR5JePs33DkAKKLyDPC5vHaMxspDCb?=
- =?us-ascii?Q?AGqLwFqJckOYq1/ixB+bhrXBYZAa9uOTvVZ0Cia+hwUB7CpGt6+aaFTclNX/?=
- =?us-ascii?Q?J8Om/+6fuVLBoFDTBAvh4HDW9h3zvyPF5Eczji0gLPlhQj59Bl/jfM/D2jTK?=
- =?us-ascii?Q?7045qbpNert19lyQgWvEMDlb0/nyuApMg/N7tEyR/pt7r9Ixc8pVAr0dy1p6?=
- =?us-ascii?Q?VdDETIcQH7EdhFvz6p5CtaLY8iAZOhjhj4gkLvuPLprNobLjnUIDo41Ro9qV?=
- =?us-ascii?Q?DuDu+PqAxoj5h5F69FBruauzTRFGoIEydJ3tP2MahcoS/I+3RKlT/Knwjw7z?=
- =?us-ascii?Q?I5JLxR3CKCe6jpGGQsgZyr08cHGj4EEIMI1esy9b74v/areAy1qgMWNZzYGX?=
- =?us-ascii?Q?BHS9/pmrxlSvgHcb8ztJ+za4FdslYjmgOiQ8AOniYmFBLpYF6muM9jYSbFBR?=
- =?us-ascii?Q?Aio1DugFm7JfFHg=3D?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(19092799006)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?us-ascii?Q?vzWkJpWfDERskYLVUnEkteojrdtde3/tNr6m/uMIZlhZWdhDjaVMoiCoq7qv?=
- =?us-ascii?Q?wik8Vv3tE+NkGK07mMUQiOhDIw2eFI6r7r5ViqpeFCdFGD1QW7kp6MsOBYf1?=
- =?us-ascii?Q?29EYsRB3ZtkZQ63+iZgcsvc2ZCdtWpZZAkos0doCyAhkwGEY6E+9ydCahJdT?=
- =?us-ascii?Q?hzTFicSAaSDk+FYA/cACPzV49jC6Wd0FmsgXeBRckosG2QVRO9rD9WrH/Ysp?=
- =?us-ascii?Q?cYSJn0oxNZ/nIkPWIyits8GrrmSyBOVlwOfIAy5pAR98DKxiqzhMiLq5kOcm?=
- =?us-ascii?Q?Fe7WiIjeE6trLYdymZTcGyMlilZad+TxAO2Y9GB2XQvFqI9mImeFenOqCU3j?=
- =?us-ascii?Q?ieZ7O2+piDpCGpl1qHgc+MTV2yM2dUh60q8HGoWSM3SLNJ7AH0Zb7aXmZS0r?=
- =?us-ascii?Q?dBCrK4gWpHXy82sJutR+EPOzeqdSvbsUANeZqkq+a7FPXSn8phTF5G6iSkwT?=
- =?us-ascii?Q?EIMT7qnuIBZ/uUEyATvb324GK/gQh323BAWHZwveYG7GPujndqWaIU7s+DrK?=
- =?us-ascii?Q?TA47YM/xL3TTlN5lZHA42ZF1AMcxfyr0xfkWLjq8E60I35l6DBfZ82qjRDbS?=
- =?us-ascii?Q?RGHmdZq0td4EC6/yKTyl1nMJY1U+uXGUmGR42HaMfvxz2srVUkwNB9LbNNAi?=
- =?us-ascii?Q?2hjGJPSc/+czrGmHVDX5zariCDSBsNsu6jiqXAx0vUgPbyG1AMi8IKG1xYCL?=
- =?us-ascii?Q?xnuFUSWfW+63mMge65vyeQZJeWUTO9KDXkc5q6U9JHKNpf2wL+a8hBKtCKBY?=
- =?us-ascii?Q?LL3TlLzVMLO8mQWUX97ehFYYGGN1cYEPWea5Ufe/r1apnK30K9bLC3RA3SdF?=
- =?us-ascii?Q?uCQutKVyeTsC/0kNDwlR4KkXT/YA8jIXDCYDR/iqc0eN820ig5ILAg/nP/TT?=
- =?us-ascii?Q?uz702qFbGppmOLSD/Mnyqc2m4rWnOPDX/AcCDX5k45Tf4yoabMHIEEO3QrL/?=
- =?us-ascii?Q?/kpYEGQQBO0I1iIgnrHqDxc/NmR2J6m0ryPpPfti3Y30UPGq27IZZrB9Zrju?=
- =?us-ascii?Q?Ao39GY13GLeU6zA6/GfFMVxbpUV4ygivu6guD6VZsfCPcF0O2EpGo1u/0YzB?=
- =?us-ascii?Q?c6THcxXNtG/grz1nSRJ0k0C8xLUH7WPI9jAsvozwpi2gH0sTbj/D2F5lmvBa?=
- =?us-ascii?Q?whqb0hi/1WLCOLv5/KLzZoAFNgumYQcJlMZQ0iP2Y+AOYaNtQr/2ilBKuNpH?=
- =?us-ascii?Q?+Burix+iAwPwWfed4IAukd4ST2Kb+eIb6dV6nXSusCxSkerN59XScZXNJUGg?=
- =?us-ascii?Q?UpzOW3ZDkoxocqcupGkQrlmCik4arNjLPE0nilz7vUmbh0FtDsa7VgyPVxzL?=
- =?us-ascii?Q?P31zKK/uOeJQnMVL1xO73N+odB3hU/Xj9wm7cx0/etevATVhqc7Wu4mFfPkm?=
- =?us-ascii?Q?0hpdjGqcdU2vuPM/DHlIvCayEcEN5UIYkwsofJnb13km6vWS93uBFX39JA5A?=
- =?us-ascii?Q?ZfF81SmX508LezZt5EVsrkkEfc3OBLlx2dNIxjlhEawszXscTah/5e1hoDFc?=
- =?us-ascii?Q?lpwmJ4b8TRn1caknKSmkRhLGVy/GA4mz8lKbnrSV7MVUrlnDBnC29E+UWkx8?=
- =?us-ascii?Q?Mk1asz7IO2vJESUygfdl/5bKl8W2FbDuyPkTSgdM?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e4ed2a6-0ef6-4ff9-5cbf-08ddb7af6c6b
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 08:23:42.4252
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3kJdG4q/5aewk0RJACOD+qhzmER3eVQKYMzj4Ey1ZBJI9NOW6BQQ9b7QqBd8tGwQ4mj/k5IhHxO2AzuuBp+qJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10192
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aGI+y4sOlPAQMzWI@svinhufvud>
 
-Hi Alan,
-
-On Fri, Jun 27, 2025 at 10:23:36AM -0400, Alan Stern wrote:
-> On Fri, Jun 27, 2025 at 06:19:37PM +0800, Xu Yang wrote:
-> > This will add usb_alloc_noncoherent() and usb_free_noncoherent()
-> > functions to support alloc and free buffer in a dma-noncoherent way.
+On Mon, Jun 30, 2025 at 10:37:47AM +0300, Sakari Ailus wrote:
+> On Sun, Jun 29, 2025 at 09:35:47PM +0300, Laurent Pinchart wrote:
+> > On Sat, Jun 28, 2025 at 11:06:54PM +0300, Sakari Ailus wrote:
+> > > On 6/24/25 13:21, Daniel Scally wrote:
 > > 
-> > To explicit manage the memory ownership for the kernel and device,
-> > this will also add usb_dma_noncoherent_sync_for_cpu/device() functions
-> > and call it at proper time.  The management requires the user save
-> > sg_table returned by usb_alloc_noncoherent() to urb->sgt.
+> > [snip]
 > > 
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > ---
-> >  drivers/usb/core/hcd.c | 30 ++++++++++++++++
-> >  drivers/usb/core/usb.c | 80 ++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/usb.h    |  9 +++++
-> >  3 files changed, 119 insertions(+)
+> > > > diff --git a/drivers/media/platform/arm/mali-c55/mali-c55-isp.c b/drivers/media/platform/arm/mali-c55/mali-c55-isp.c
+> > > > new file mode 100644
+> > > > index 0000000000000000000000000000000000000000..20d4d16c75fbf0d5519ecadb5ed1d080bdae05de
+> > > > --- /dev/null
+> > > > +++ b/drivers/media/platform/arm/mali-c55/mali-c55-isp.c
+> > > > @@ -0,0 +1,656 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +/*
+> > > > + * ARM Mali-C55 ISP Driver - Image signal processor
+> > > > + *
+> > > > + * Copyright (C) 2024 Ideas on Board Oy
+> > > 
+> > > It's 2025 already.
+> > > 
+> > > > + */
+> > > > +
+> > > > +#include <linux/delay.h>
+> > > > +#include <linux/iopoll.h>
+> > > > +#include <linux/property.h>
+> > > > +#include <linux/string.h>
+> > > > +
+> > > > +#include <linux/media/arm/mali-c55-config.h>
+> > > 
+> > > If this is a UAPI header, please include uapi in the path, too.
+> > > 
+> > > Earlier such headers have been under include/uapi/linux, I don't object 
+> > > putting new ones elsewhere in principle though. Just check with Hans and 
+> > > Laurent, too... I don't have an opinion yet really.
 > > 
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index c22de97432a0..5fa00d32afb8 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -1496,6 +1496,34 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> >  }
-> >  EXPORT_SYMBOL_GPL(usb_hcd_map_urb_for_dma);
-> >  
-> > +static void usb_dma_noncoherent_sync_for_cpu(struct usb_hcd *hcd,
-> > +					     struct urb *urb)
-> > +{
-> > +	enum dma_data_direction dir;
-> > +
-> > +	if (!urb->sgt)
-> > +		return;
-> > +
-> > +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> > With each new media header we add to include/uapi/linux/, I wish
+> > stronger and stronger that we had created include/uapi/linux/media/. We
+> > don't have to do it now, my regret will just grow stronger :-)
 > 
-> Are the following operations really necessary if the direction is OUT?  
-> There are no bidirectional URBs, and an OUT transfer never modifies the 
-> contents of the transfer buffer so the buffer contents will be the same 
-> after the URB completes as they were when the URB was submitted.
-
-According to Laurent's reply email, it may be needed for some archs.
-
+> I'm fine with using include/uapi/linux/media/.
 > 
-> > +	invalidate_kernel_vmap_range(urb->transfer_buffer,
-> > +				     urb->transfer_buffer_length);
-> > +	dma_sync_sgtable_for_cpu(hcd->self.sysdev, urb->sgt, dir);
-> > +}
+> > > > +/* NOT const because the default needs to be filled in at runtime */
+> > > > +static struct v4l2_ctrl_config mali_c55_isp_v4l2_custom_ctrls[] = {
+> > > > +	{
+> > > > +		.ops = &mali_c55_isp_ctrl_ops,
+> > > > +		.id = V4L2_CID_MALI_C55_CAPABILITIES,
+> > > > +		.name = "Mali-C55 ISP Capabilities",
+> > > > +		.type = V4L2_CTRL_TYPE_BITMASK,
+> > > > +		.min = 0,
+> > > > +		.max = MALI_C55_GPS_PONG_FITTED |
+> > > > +		       MALI_C55_GPS_WDR_FITTED |
+> > > > +		       MALI_C55_GPS_COMPRESSION_FITTED |
+> > > > +		       MALI_C55_GPS_TEMPER_FITTED |
+> > > > +		       MALI_C55_GPS_SINTER_LITE_FITTED |
+> > > > +		       MALI_C55_GPS_SINTER_FITTED |
+> > > > +		       MALI_C55_GPS_IRIDIX_LTM_FITTED |
+> > > > +		       MALI_C55_GPS_IRIDIX_GTM_FITTED |
+> > > > +		       MALI_C55_GPS_CNR_FITTED |
+> > > > +		       MALI_C55_GPS_FRSCALER_FITTED |
+> > > > +		       MALI_C55_GPS_DS_PIPE_FITTED,
+> > > > +		.def = 0,
+> > > > +	},
+> > > > +};
+> > > > +
+> > > > +static int mali_c55_isp_init_controls(struct mali_c55 *mali_c55)
+> > > > +{
+> > > > +	struct v4l2_ctrl_handler *handler = &mali_c55->isp.handler;
+> > > > +	struct v4l2_ctrl *capabilities;
+> > > > +	int ret;
+> > > > +
+> > > > +	ret = v4l2_ctrl_handler_init(handler, 1);
+> > > > +	if (ret)
+> > > > +		return ret;
+> > > > +
+> > > > +	mali_c55_isp_v4l2_custom_ctrls[0].def = mali_c55->capabilities;
+> > > 
+> > > The capabilities here are still specific to a device, not global, in 
+> > > principle at least. Can you move it here, as a local variable?
+> > > 
+> > > > +
+> > > > +	capabilities = v4l2_ctrl_new_custom(handler,
+> > > > +					    &mali_c55_isp_v4l2_custom_ctrls[0],
+> > > > +					    NULL);
+> > > > +	if (capabilities)
+> > > > +		capabilities->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > > > +
+> > > > +	if (handler->error) {
+> > > > +		dev_err(mali_c55->dev, "failed to register capabilities control\n");
+> > > > +		v4l2_ctrl_handler_free(handler);
+> > > > +		return handler->error;
+> > > 
+> > > v4l2_ctrl_handler_free() will return the error soon, presumably sooner 
+> > > than the above code makes it to upstream. Before that, this pattern 
+> > > won't work as v4l2_ctrl_handler_free() also resets the handler's error 
+> > > field. :-)
+> > > 
+> > > > diff --git a/drivers/media/platform/arm/mali-c55/mali-c55-registers.h b/drivers/media/platform/arm/mali-c55/mali-c55-registers.h
+> > > > new file mode 100644
+> > > > index 0000000000000000000000000000000000000000..36a81be0191a15da91809dd2da5d279716f6d725
+> > > > --- /dev/null
+> > > > +++ b/drivers/media/platform/arm/mali-c55/mali-c55-registers.h
+> > > > @@ -0,0 +1,318 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +/*
+> > > > + * ARM Mali-C55 ISP Driver - Register definitions
+> > > > + *
+> > > > + * Copyright (C) 2024 Ideas on Board Oy
+> > > > + */
+> > > > +
+> > > > +#ifndef _MALI_C55_REGISTERS_H
+> > > > +#define _MALI_C55_REGISTERS_H
+> > > > +
+> > > > +#include <linux/bits.h>
+> > > > +
+> > > > +/* ISP Common 0x00000 - 0x000ff */
+> > > > +
+> > > > +#define MALI_C55_REG_API				0x00000
+> > > > +#define MALI_C55_REG_PRODUCT				0x00004
+> > > > +#define MALI_C55_REG_VERSION				0x00008
+> > > > +#define MALI_C55_REG_REVISION				0x0000c
+> > > > +#define MALI_C55_REG_PULSE_MODE				0x0003c
+> > > > +#define MALI_C55_REG_INPUT_MODE_REQUEST			0x0009c
+> > > > +#define MALI_C55_INPUT_SAFE_STOP			0x00
+> > > > +#define MALI_C55_INPUT_SAFE_START			0x01
+> > > > +#define MALI_C55_REG_MODE_STATUS			0x000a0
+> > > > +#define MALI_C55_REG_INTERRUPT_MASK_VECTOR		0x00030
+> > > > +#define MALI_C55_INTERRUPT_MASK_ALL			GENMASK(31, 0)
+> > > > +
+> > > > +#define MALI_C55_REG_GLOBAL_MONITOR			0x00050
+> > > > +
+> > > > +#define MALI_C55_REG_GEN_VIDEO				0x00080
+> > > > +#define MALI_C55_REG_GEN_VIDEO_ON_MASK			BIT(0)
+> > > > +#define MALI_C55_REG_GEN_VIDEO_MULTI_MASK		BIT(1)
+> > > > +#define MALI_C55_REG_GEN_PREFETCH_MASK			GENMASK(31, 16)
+> > > > +
+> > > > +#define MALI_C55_REG_MCU_CONFIG				0x00020
+> > > > +#define MALI_C55_REG_MCU_CONFIG_OVERRIDE_MASK		BIT(0)
+> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_MASK		BIT(1)
+> > > > +#define MALI_C55_MCU_CONFIG_WRITE(x)			((x) << 1)
+> > > 
+> > > Is x unsigned?
+> > 
+> > Does it matter ? The reason why the BIT() macro uses (UL(1) << (nr))
+> > instead of (1 << (nr)) is (if I'm not mistaken) to avoid incorrect
+> > handling of bit 31. As long as x doesn't take negative values and
+> > doesn't extend to bit 31, it should be fine.
 > 
-> This entire routine should be inserted at the appropriate place in 
-> usb_hcd_unmap_urb_for_dma() instead of being standalone.
+> For that reason exactly. If you're unsure, maybe at least cast it as
+> unsigned?
 
-Okay.
+The MCU_CONFIG_WRITE field is on bit long, so there's no practical
+issue. I also don't expect the driver to pass a negative value. We could
+still add an unsigned cast if there's a general rule that all register
+fields must be cast to unsigned. This isn't done in the vast majority of
+drivers though.
 
+> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_PING		BIT(1)
+> > > > +#define MALI_C55_REG_MCU_CONFIG_WRITE_PONG		0x00
+> > > > +#define MALI_C55_REG_MULTI_CONTEXT_MODE_MASK		BIT(8)
+> > > > +#define MALI_C55_REG_PING_PONG_READ			0x00024
+> > > > +#define MALI_C55_REG_PING_PONG_READ_MASK		BIT(2)
+> > > > +#define MALI_C55_INTERRUPT_BIT(x)			BIT(x)
+> > > > +
+> > > > +#define MALI_C55_REG_GLOBAL_PARAMETER_STATUS		0x00068
+> > > > +#define MALI_C55_GPS_PONG_FITTED			BIT(0)
+> > > > +#define MALI_C55_GPS_WDR_FITTED				BIT(1)
+> > > > +#define MALI_C55_GPS_COMPRESSION_FITTED			BIT(2)
+> > > > +#define MALI_C55_GPS_TEMPER_FITTED			BIT(3)
+> > > > +#define MALI_C55_GPS_SINTER_LITE_FITTED			BIT(4)
+> > > > +#define MALI_C55_GPS_SINTER_FITTED			BIT(5)
+> > > > +#define MALI_C55_GPS_IRIDIX_LTM_FITTED			BIT(6)
+> > > > +#define MALI_C55_GPS_IRIDIX_GTM_FITTED			BIT(7)
+> > > > +#define MALI_C55_GPS_CNR_FITTED				BIT(8)
+> > > > +#define MALI_C55_GPS_FRSCALER_FITTED			BIT(9)
+> > > > +#define MALI_C55_GPS_DS_PIPE_FITTED			BIT(10)
+> > > > +
+> > > > +#define MALI_C55_REG_BLANKING				0x00084
+> > > > +#define MALI_C55_REG_HBLANK_MASK			GENMASK(15, 0)
+> > > > +#define MALI_C55_REG_VBLANK_MASK			GENMASK(31, 16)
+> > > > +#define MALI_C55_VBLANK(x)				((x) << 16)
+> > > 
+> > > Same question for the bit shifts left elsewhere in the header.
+> > > 
+> > > > +
+> > > > +#define MALI_C55_REG_HC_START				0x00088
+> > > > +#define MALI_C55_HC_START(h)				(((h) & 0xffff) << 16)
+> > > > +#define MALI_C55_REG_HC_SIZE				0x0008c
+> > > > +#define MALI_C55_HC_SIZE(h)				((h) & 0xffff)
+> > > > +#define MALI_C55_REG_VC_START_SIZE			0x00094
+> > > > +#define MALI_C55_VC_START(v)				((v) & 0xffff)
+> > > > +#define MALI_C55_VC_SIZE(v)				(((v) & 0xffff) << 16)
+> > > > +
+> > > > +/* Ping/Pong Configuration Space */
+> > > > +#define MALI_C55_REG_BASE_ADDR				0x18e88
+> > > > +#define MALI_C55_REG_BYPASS_0				0x18eac
+> > > > +#define MALI_C55_REG_BYPASS_0_VIDEO_TEST		BIT(0)
+> > > > +#define MALI_C55_REG_BYPASS_0_INPUT_FMT			BIT(1)
+> > > > +#define MALI_C55_REG_BYPASS_0_DECOMPANDER		BIT(2)
+> > > > +#define MALI_C55_REG_BYPASS_0_SENSOR_OFFSET_WDR		BIT(3)
+> > > > +#define MALI_C55_REG_BYPASS_0_GAIN_WDR			BIT(4)
+> > > > +#define MALI_C55_REG_BYPASS_0_FRAME_STITCH		BIT(5)
+> > > > +#define MALI_C55_REG_BYPASS_1				0x18eb0
+> > > > +#define MALI_C55_REG_BYPASS_1_DIGI_GAIN			BIT(0)
+> > > > +#define MALI_C55_REG_BYPASS_1_FE_SENSOR_OFFS		BIT(1)
+> > > > +#define MALI_C55_REG_BYPASS_1_FE_SQRT			BIT(2)
+> > > > +#define MALI_C55_REG_BYPASS_1_RAW_FE			BIT(3)
+> > > > +#define MALI_C55_REG_BYPASS_2				0x18eb8
+> > > > +#define MALI_C55_REG_BYPASS_2_SINTER			BIT(0)
+> > > > +#define MALI_C55_REG_BYPASS_2_TEMPER			BIT(1)
+> > > > +#define MALI_C55_REG_BYPASS_3				0x18ebc
+> > > > +#define MALI_C55_REG_BYPASS_3_SQUARE_BE			BIT(0)
+> > > > +#define MALI_C55_REG_BYPASS_3_SENSOR_OFFSET_PRE_SH	BIT(1)
+> > > > +#define MALI_C55_REG_BYPASS_3_MESH_SHADING		BIT(3)
+> > > > +#define MALI_C55_REG_BYPASS_3_WHITE_BALANCE		BIT(4)
+> > > > +#define MALI_C55_REG_BYPASS_3_IRIDIX			BIT(5)
+> > > > +#define MALI_C55_REG_BYPASS_3_IRIDIX_GAIN		BIT(6)
+> > > > +#define MALI_C55_REG_BYPASS_4				0x18ec0
+> > > > +#define MALI_C55_REG_BYPASS_4_DEMOSAIC_RGB		BIT(1)
+> > > > +#define MALI_C55_REG_BYPASS_4_PF_CORRECTION		BIT(3)
+> > > > +#define MALI_C55_REG_BYPASS_4_CCM			BIT(4)
+> > > > +#define MALI_C55_REG_BYPASS_4_CNR			BIT(5)
+> > > > +#define MALI_C55_REG_FR_BYPASS				0x18ec4
+> > > > +#define MALI_C55_REG_DS_BYPASS				0x18ec8
+> > > > +#define MALI_C55_BYPASS_CROP				BIT(0)
+> > > > +#define MALI_C55_BYPASS_SCALER				BIT(1)
+> > > > +#define MALI_C55_BYPASS_GAMMA_RGB			BIT(2)
+> > > > +#define MALI_C55_BYPASS_SHARPEN				BIT(3)
+> > > > +#define MALI_C55_BYPASS_CS_CONV				BIT(4)
+> > > > +#define MALI_C55_REG_ISP_RAW_BYPASS			0x18ecc
+> > > > +#define MALI_C55_ISP_RAW_BYPASS_BYPASS_MASK		BIT(0)
+> > > > +#define MALI_C55_ISP_RAW_BYPASS_FR_BYPASS_MASK		GENMASK(9, 8)
+> > > > +#define MALI_C55_ISP_RAW_BYPASS_RAW_FR_BYPASS		(2 << 8)
+> > > > +#define MALI_C55_ISP_RAW_BYPASS_RGB_FR_BYPASS		(1 << 8)
+> > > 
+> > > BIT() or make these unsigned.
+> > 
+> > It's a 2 bits field, BIT() isn't appropriate.
 > 
-> > +static void usb_dma_noncoherent_sync_for_device(struct usb_hcd *hcd,
-> > +						struct urb *urb)
-> > +{
-> > +	enum dma_data_direction dir;
-> > +
-> > +	if (!urb->sgt)
-> > +		return;
-> > +
-> > +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-> > +	flush_kernel_vmap_range(urb->transfer_buffer,
-> > +				urb->transfer_buffer_length);
-> > +	dma_sync_sgtable_for_device(hcd->self.sysdev, urb->sgt, dir);
-> > +}
-> 
-> Likewise, this code belongs inside usb_hcd_map_urb_for_dma().
+> That leaves us with the other alternative, doesn't it?
 
-Okay.
+Absolutely, although unsigned is unnecessary in this case as we're not
+approaching bit 31.
 
-> 
-> Also, the material that this routine replaces in the uvc and stk1160 
-> drivers do not call flush_kernel_vmap_range().  Why did you add that 
-> here?  Was this omission a bug in those drivers?
+-- 
+Regards,
 
-According to dma-api.rst:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/tree/Documentation/core-api/dma-api.rst?h=linux-6.15.y#n664
-
-"Once a non-contiguous allocation is mapped using this function, the
-flush_kernel_vmap_range() and invalidate_kernel_vmap_range() APIs must
-be used to manage the coherency between the kernel mapping, the device
-and user space mappings (if any)."
-
-Possibly the uvc and stk1160 missed calling it, but since they won't be
-the only user of the USB core, so we'd better call these APIs.
-
-Thanks,
-Xu Yang
-
-> 
-> Alan Stern
+Laurent Pinchart
