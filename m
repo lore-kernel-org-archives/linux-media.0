@@ -1,62 +1,64 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC82372605
-	for <linux-media@vger.kernel.org>; Tue,  1 Jul 2025 06:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B36D1E51FB
+	for <linux-media@vger.kernel.org>; Tue,  1 Jul 2025 06:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751352327; cv=none; b=uSIZoQVrsH6o1Eq8axu8eC+GRpY5MbK6pnWE0sGxGaSVQpLfhBDifpaKdb8kwtSKeoJQrA2Xuo8PUuqfjOsqqO9sykDaqKSXNYxYyPDw/XC+E52jCjcTcSZXhDmeXvQi8xkGkRK6FfPizplgDLp2HviGm1N9W5F0xAPedLainwU=
+	t=1751352329; cv=none; b=BwMhc6z2duA/J7L9RvsRDRVJ5V6qpqL/AifOOFTAXLMckIWhLQFEfR+akQVrqsx+SZ234hijmZuob1fPrc64gd57wfYnNkrUnNd85VKl4Wu73ojNozDiDllERBCpv95SB8DVXtLerWYIwWTgjrr95jLa/WZmQEI0tnVsXP4oYRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751352327; c=relaxed/simple;
-	bh=tOJOXRdK/ryHyP8Dn27ldM3nIhR+TjE6xNNG4EiYLzA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DWHl3tg0Z/U3L4kBLumUb57MjzhLi1IyLbiRq0LiTHxCsJdx3FtrrB4NPB47CDpbKkgARf+ZM0UOLFVXJaoLKEXlZNLoNd303pYvgt11lmbNW+fMfSnbblMyU/ph8vHNGUtZkfh3rF1FcGkDXWRLKMPJ8+Qa/LZ+ZB+3EWbJIC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NOqvjnd2; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1751352329; c=relaxed/simple;
+	bh=yqUXUVprqc4Kpn+kWKnhx6hx/ZsxT0W1igC+YxtmoeU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=pr3VDFaexa7dYbe7gvvrTQnKti7Qyid+Uv5aaeYTVezhx0KIi5Bk2x/NHJS7bzxXavTnbAyHTouVE7xXY7LClN1s9MECopZqhNWXFyb9OfV+Ts/LfS7eIcAnS569ZP5H7U5BzDKStsm0AnzDuaxa46b/Mrns7UbMUT/4GMWNvIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SQ4I4m+6; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NOqvjnd2"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-553b82f3767so3280286e87.3
-        for <linux-media@vger.kernel.org>; Mon, 30 Jun 2025 23:45:25 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SQ4I4m+6"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-553b3316160so3283447e87.2
+        for <linux-media@vger.kernel.org>; Mon, 30 Jun 2025 23:45:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1751352324; x=1751957124; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=InMRKcJ50unLTb5CVsAxGeAjYB3oV9wwcmedmgo5w5M=;
-        b=NOqvjnd2xKeqn0HHCBpAs2wg0gYUphcNZMNn4V7iOiKJvODTw/jhMe6Q0HEzA+AFS9
-         nrW1SIrlG7TwhvUef9rJpkHA4jo0yEX76nn3FVGGLQ8BFkxE1l29HMsWv4n8Q8zLmk0D
-         kL3BH/i4rAjoU6COikplRl/5rbW4JGxUILQ30=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751352324; x=1751957124;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=chromium.org; s=google; t=1751352325; x=1751957125; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=InMRKcJ50unLTb5CVsAxGeAjYB3oV9wwcmedmgo5w5M=;
-        b=G/W9IeUxoyfUBKmg8/5AT0iKvsXRG6UF3q3OIWLEgSUZRi246g6oj8o6044JSkUIx8
-         XDA+GMn9iqckZjB9CK/ZFYmr3exuiIFJUdtKW/cUI9VRFt9+QBjSgkkoq99oIVahoMsy
-         bjZvZ8w67gKR5Wuo+ny+J0VLlA0wCEMARFrEXyY/vdIpukp87hr8OhUmLQ+eWDTTVnEG
-         /xO3SOP+Ewn+/VZSfkb0eSwluGXgTkqb6BvdTTZ+2HtE7LuKglaIkJzmlQ7OhHVJ9hW3
-         w1sNt+8DrzhQ4IxpFZu0ouydGjSwJV+tIk7CQZIgfNwDlQmm7Z3xoEQ22Y73W4z9DYcG
-         b36g==
-X-Gm-Message-State: AOJu0YwH0yBM4CBF4mWifCne+K4+D6m5bEqIymZd/Bst/397kPAP4dmh
-	HpKkXcTiURa1IOxqKcfJOMzIiPdnfSlekxUD4XZy2bFGjN6d87a3hKZ2J2MUClZryXYfV8G2RPh
-	LDVe4fA==
-X-Gm-Gg: ASbGncsd/e/Nux+T8JG0MArbgB8+8LjHZqVmbmeqnwCHDjzF+ewF1aGvl7M3XsduLk+
-	9jsEpFlILEYmNBLBT3F225hRXy9ITr0s1JpJP0Nf/0UB8yn01NDBU5am3zL1kHk8of71GuX3ixD
-	5oA/f1J5leks8xIGmhAxopl+nNz7mRpqXzQZPIHor0Vqb7t9Dqvvmrq3c9h3Bagoe68TVA/GS56
-	zUuo/iW1Sc5mo7gs1CvrjLiRMQv/ndc61yyAIsnRTrUr1BKAcMbQF6vEXHSLx3GqKbvgYFdAUkr
-	krVHxqB/nCM9JFTMRfCdYkRScB/BM0bV2WYnVYhfSFgIUpGJovNEsLpmUzBjEsTTSw2ajbF7lgD
-	rVjYyVqy7VmYUHO9ESPK13q3XNjeDVkipS2SO94wZnIq1mCXL8D4L
-X-Google-Smtp-Source: AGHT+IEwAUtBMHtxo7zLfmi7VRr95b7DWNnA3oYoEc2VN/wYz2whDToc5FnjOck0R8fPlmIA96OuAQ==
-X-Received: by 2002:a05:6512:3e2a:b0:540:2fd2:6c87 with SMTP id 2adb3069b0e04-5550b87ca2dmr5835228e87.16.1751352323861;
-        Mon, 30 Jun 2025 23:45:23 -0700 (PDT)
+        bh=XrE6GNKbVHGpnk0TTosO+XCb4jgeJmiva3zLbz/vTGo=;
+        b=SQ4I4m+62UjAXXXbkoJ0BDJxo4teoFxgg2PHJ0GiP+3Y5TFdFKqwGnaaX7r7zs+ZI0
+         WoWo/1FEUI4n1qjIIK4/q4XSXkxqHzlyhpFPVZQx2JsGQmFKAPKd8CEkiGFbY3a0ICsK
+         +i2aKOtX5vJUOhwKb0ag0iYZXNUYkQl6KC/ZE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751352325; x=1751957125;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XrE6GNKbVHGpnk0TTosO+XCb4jgeJmiva3zLbz/vTGo=;
+        b=Pb9YnzEMabCxtG3Akcjqen0t/3sDzMfb7h7jRLNVe1JIQsGQlThoiuESMZexmNoULU
+         Td/4JyFbAceM3X6PJVJAByhc6zcNPqScR3RIAFu5jHc8Q1mlaatKugPkradZMY+Gz5d4
+         cppNilvBvLg5AJJZyKjFPGpAemNkOz4EyuX9Ej5VktDR16rPNiIjOVqx/4UR53cHvE1G
+         3hqdPEgRz/RTWImHu8FQAXrWQT3Ec2ercoaM8PTanKJk8oEEtDFBN/4oa/lELTDHP2CY
+         tCJ0fK2gdQJXuCESqmaSNyZOpycDaN+RoDW9U/p/4fd/G6iO3xLx7YFQ24+g+zl8o2JL
+         TukQ==
+X-Gm-Message-State: AOJu0YwGVBMqkeE40xRWix270fBMNSDJexQ6KkXvHsAURqfuLy1vTl2G
+	EVL8RdRWqykUPysURJPKhf+HbtsGgquI8c3OQIWEsA/VoHSWPcQMfAw5ghr7AUmpcBcQ5tYSN8G
+	gGBxjKw==
+X-Gm-Gg: ASbGnct6FrqWWNZwTJOi7l8KhbmVUt/Wqitd4qf2ElWelYFmw5itO3cQ6frLkR8KTHz
+	hwF+ekqxiC+ygEGqIdP3owR4VpWlHRQMH75M2Mt37JDyXnBD9vdmYyMsjwo8v9Jkc06eAz7CzX7
+	O1y2WrJv1vZL7fft9EVkuZ+luliaOfTFvn6uc5+NA/4C7B0pC8vksnzx81/xtv4n9ZnBrFffzTM
+	KKxgXDXOP9Jlxu/pQz/EgAiOsBsqxhtWsMd3Xb2Z2419lI1kVeqqaKwME5vn72gGahdjwp+SvQx
+	6JAO/N8qSnLchPQjSUOahbrPIA5K59vTd6vSeq3uF9nllnI1uZz0Nyor6pyEjWVkmTWQiV2T3tv
+	4wQieZiqPFiHN5944k4Wdc+O78W+Oc3wPN/cNH9CdJ/2m9hMl5v37
+X-Google-Smtp-Source: AGHT+IHY76y/ZDISkpxUl6amnEu/t94jj6fApWTdAJWcSYw0wJUfwh4U1PILUm61fBldVaiwf60NWw==
+X-Received: by 2002:a05:6512:3d22:b0:553:2e59:a104 with SMTP id 2adb3069b0e04-5550b8cfec0mr5233484e87.37.1751352324890;
+        Mon, 30 Jun 2025 23:45:24 -0700 (PDT)
 Received: from ribalda.c.googlers.com (166.141.88.34.bc.googleusercontent.com. [34.88.141.166])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1704836e87.248.2025.06.30.23.45.23
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5550b2f162dsm1704836e87.248.2025.06.30.23.45.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 23:45:23 -0700 (PDT)
+        Mon, 30 Jun 2025 23:45:24 -0700 (PDT)
 From: Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v4 0/7] media: uvcvideo: Invert granular PM logic + PM fix
-Date: Tue, 01 Jul 2025 06:45:12 +0000
-Message-Id: <20250701-uvc-grannular-invert-v4-0-8003b9b89f68@chromium.org>
+Date: Tue, 01 Jul 2025 06:45:14 +0000
+Subject: [PATCH v4 2/7] media: uvcvideo: Handle locks in
+ uvc_queue_return_buffers
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -65,82 +67,100 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPiDY2gC/4XNTQrCMBCG4atI1kby02jiynuIi3SStgFNZdoGp
- fTupt0oYnH5fjDPjKTzGHxHjpuRoE+hC23MUWw3BBoba0+Dy00EE4opoemQgNZoYxyuFmmIyWN
- PubFOFqCMNJzk0zv6KjwW9nzJ3YSub/G5fEl8Xv+AiVNGHeNK88oACHWCBttbGG67Fmsym0m8n
- T0TK47IDugDN7KwTmv2w5EfjmQrjsyOLZ2CUkGhysOXM03TC2MEnxxLAQAA
-X-Change-ID: 20250528-uvc-grannular-invert-19ad34c59391
+Message-Id: <20250701-uvc-grannular-invert-v4-2-8003b9b89f68@chromium.org>
+References: <20250701-uvc-grannular-invert-v4-0-8003b9b89f68@chromium.org>
+In-Reply-To: <20250701-uvc-grannular-invert-v4-0-8003b9b89f68@chromium.org>
 To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
  Mauro Carvalho Chehab <mchehab@kernel.org>, 
  Hans Verkuil <hverkuil@xs4all.nl>, Hans de Goede <hansg@kernel.org>, 
  Hans de Goede <hansg@kernel.org>
 Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Ricardo Ribalda <ribalda@chromium.org>, Hans Verkuil <hans@jjverkuil.nl>, 
- Hans Verkuil <hans@hverkuil.nl>
+ Ricardo Ribalda <ribalda@chromium.org>
 X-Mailer: b4 0.14.2
 
-It makes more sense to have a list of the ioctls that need power than
-the other way around. This patchset takes care of this.
+Most of the calls to uvc_queue_return_buffers() wrap the call with
+spin_lock_irq()/spin_unlock_irq().
 
-It also fixes one error in the PM logic introduced in a recent patchset.
+Rename uvc_queue_return_buffers to __uvc_queue_return_buffers to
+indicate that this is the version that does not handle locks and create
+a new version of the function that handles the lock.
 
-To support CI I have included patches that are in uvc/for-next but not
-in media-committer:
-media: uvcvideo: Remove stream->is_streaming field
-media: uvcvideo: Split uvc_stop_streaming()
-media: uvcvideo: Handle locks in uvc_queue_return_buffers
-media: uvcvideo: Use vb2 ioctl and fop helpers
-Do not review them again.
-
+Reviewed-by: Hans de Goede <hansg@kernel.org>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Link: https://lore.kernel.org/r/20250616-uvc-fop-v4-2-250286570ee7@chromium.org
+Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Hans de Goede <hansg@kernel.org>
 ---
-Changes in v4:
-- CTRL_MAP DO need the device powered. Thanks Laurent
-- CodeStyle
-- use EXPORT_SYMBOL_GPL
-- Link to v3: https://lore.kernel.org/r/20250630-uvc-grannular-invert-v3-0-abd5cb5c45b7@chromium.org
+ drivers/media/usb/uvc/uvc_queue.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-Changes in v3:
-- Rebase
-- Merge Invert PM patch with add support for compat ioctls
-- Export different core function
-- Inline the pm_ioctl patch
-- Fix typo in comment
-- Link to v2: https://lore.kernel.org/r/20250602-uvc-grannular-invert-v2-0-c871934ad880@chromium.org
+diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
+index 72c5494dee9f46ff61072e7d293bfaddda40e615..8f9737ac729546683ca48f5e71ce3dfacbae2926 100644
+--- a/drivers/media/usb/uvc/uvc_queue.c
++++ b/drivers/media/usb/uvc/uvc_queue.c
+@@ -42,13 +42,15 @@ static inline struct uvc_buffer *uvc_vbuf_to_buffer(struct vb2_v4l2_buffer *buf)
+  *
+  * This function must be called with the queue spinlock held.
+  */
+-static void uvc_queue_return_buffers(struct uvc_video_queue *queue,
+-			       enum uvc_buffer_state state)
++static void __uvc_queue_return_buffers(struct uvc_video_queue *queue,
++				       enum uvc_buffer_state state)
+ {
+ 	enum vb2_buffer_state vb2_state = state == UVC_BUF_STATE_ERROR
+ 					? VB2_BUF_STATE_ERROR
+ 					: VB2_BUF_STATE_QUEUED;
+ 
++	lockdep_assert_held(&queue->irqlock);
++
+ 	while (!list_empty(&queue->irqqueue)) {
+ 		struct uvc_buffer *buf = list_first_entry(&queue->irqqueue,
+ 							  struct uvc_buffer,
+@@ -59,6 +61,14 @@ static void uvc_queue_return_buffers(struct uvc_video_queue *queue,
+ 	}
+ }
+ 
++static void uvc_queue_return_buffers(struct uvc_video_queue *queue,
++				     enum uvc_buffer_state state)
++{
++	spin_lock_irq(&queue->irqlock);
++	__uvc_queue_return_buffers(queue, state);
++	spin_unlock_irq(&queue->irqlock);
++}
++
+ /* -----------------------------------------------------------------------------
+  * videobuf2 queue operations
+  */
+@@ -171,9 +181,7 @@ static int uvc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	if (ret == 0)
+ 		return 0;
+ 
+-	spin_lock_irq(&queue->irqlock);
+ 	uvc_queue_return_buffers(queue, UVC_BUF_STATE_QUEUED);
+-	spin_unlock_irq(&queue->irqlock);
+ 
+ 	return ret;
+ }
+@@ -187,9 +195,7 @@ static void uvc_stop_streaming(struct vb2_queue *vq)
+ 	if (vq->type != V4L2_BUF_TYPE_META_CAPTURE)
+ 		uvc_video_stop_streaming(uvc_queue_to_stream(queue));
+ 
+-	spin_lock_irq(&queue->irqlock);
+ 	uvc_queue_return_buffers(queue, UVC_BUF_STATE_ERROR);
+-	spin_unlock_irq(&queue->irqlock);
+ }
+ 
+ static const struct vb2_ops uvc_queue_qops = {
+@@ -263,7 +269,7 @@ void uvc_queue_cancel(struct uvc_video_queue *queue, int disconnect)
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&queue->irqlock, flags);
+-	uvc_queue_return_buffers(queue, UVC_BUF_STATE_ERROR);
++	__uvc_queue_return_buffers(queue, UVC_BUF_STATE_ERROR);
+ 	/*
+ 	 * This must be protected by the irqlock spinlock to avoid race
+ 	 * conditions between uvc_buffer_queue and the disconnection event that
 
-Changes in v2. Thanks HdG:
-- Rebase fop
-- CodeStyle
-- Refactor SEND_INITIAL to avoid lis_del()
-- Squash "invert PM logic" and "unless is needed"
-- Link to v1: https://lore.kernel.org/r/20250528-uvc-grannular-invert-v1-0-d01581f9cc25@chromium.org
-
----
-Hans Verkuil (1):
-      media: uvcvideo: Use vb2 ioctl and fop helpers
-
-Ricardo Ribalda (6):
-      media: uvcvideo: Handle locks in uvc_queue_return_buffers
-      media: uvcvideo: Split uvc_stop_streaming()
-      media: uvcvideo: Remove stream->is_streaming field
-      media: uvcvideo: Turn on the camera if V4L2_EVENT_SUB_FL_SEND_INITIAL
-      media: core: export v4l2_translate_cmd
-      media: uvcvideo: uvc_v4l2_unlocked_ioctl: Invert PM logic
-
- drivers/media/usb/uvc/uvc_ctrl.c     |  10 +-
- drivers/media/usb/uvc/uvc_driver.c   |  37 +---
- drivers/media/usb/uvc/uvc_metadata.c |   8 +-
- drivers/media/usb/uvc/uvc_queue.c    | 199 +++++---------------
- drivers/media/usb/uvc/uvc_v4l2.c     | 345 +++++------------------------------
- drivers/media/usb/uvc/uvcvideo.h     |  37 +---
- drivers/media/v4l2-core/v4l2-ioctl.c |   5 +-
- include/media/v4l2-ioctl.h           |   1 +
- 8 files changed, 112 insertions(+), 530 deletions(-)
----
-base-commit: 35392e855abf7d02ad3b061cbc75c7c7c37f0577
-change-id: 20250528-uvc-grannular-invert-19ad34c59391
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.50.0.727.gbf7dc18ff4-goog
 
