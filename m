@@ -1,78 +1,63 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFBB33DF;
-	Thu,  3 Jul 2025 16:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860CC288C92;
+	Thu,  3 Jul 2025 17:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751560468; cv=none; b=PjZikFYRe+8F1HFOfV02LbQYPCPZe7mNQctA49t9nyTtg/OMs/6J+tLrBi7oWvmAiiP56zuKW+ZwAnqWihSR5Zrhphc4tJCmrdoFikve6CFjiA5YunwL5GSL/ps6IG8DTCRh1Cme6WD3ixWzMfv1YjXiCJywiBQHstC1xRAnWNE=
+	t=1751563235; cv=none; b=c42cFGz4N9KxXCzrxVlbeIrzsotxOo4LtmDcd50DT+bRe0t6s7Cp2RIQLhFB/woudHUOj5JkG9X2yse+mGkRnorK4AYuM9ZloIIzdlxzazs6j/fLYFQW2JzFJM2nyI8h/ttEif5amE1D2mj7S88eUqK9NqdcB+BK5xwjBPO/M9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751560468; c=relaxed/simple;
-	bh=VKwdBc7nBeYzyYiWahHZprHF+d0zFQMTpiieOfjnnbs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rvq+/1PhPUtOVaFZLO82MjLMz6VEMr8sy+qXK6sY0cAzPHwq1CQRvVEPbluB9pe6zZl+4QerqdrQkf1Y6tmGTzGsYCZLm8o+AWRepYzxx1KXHC9jsXnZpm3uU5QTiv2OwGymqFjEEAYYwK9M+iY+WKIS558oMHkyfqHRUfwapN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EXPVsx5V; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751563235; c=relaxed/simple;
+	bh=gLsVm9VLVkvtCHAE1H7CqlePzzxacqvoy2x0zTVoIw4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KfTqn1dLCNXrUELHeiBMJJ5HIfU/G90vHulVIbz7nW7+fkfmWqa+yjo7lZn3c0wYxGd/KUsb2LMiXpE67eJ1yMcXrIC4WDfJjTI0wU3ycWz+qAxdT01RQ40eDQfrApMWsT5a8sR4WY39Wh4ei5/jHPmEFd+K4OBdxQrUYHZzirU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pfyMaTrP; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EXPVsx5V"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45368313a7bso10715e9.3;
-        Thu, 03 Jul 2025 09:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751560465; x=1752165265; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Srec9QR/GmFsR6ZG7Q56odxAHiKleEbcbPmhdL22Zbg=;
-        b=EXPVsx5VfeCrg97nqSbI++jMAMKP5Mp/UckTqBjSAKf1kWBrXCNFFBQHXMojH3LNyq
-         BIfACPEQHAIuvlnlBmrY/K0ryFL9qgDoc1/aET5OrpeXyCaBk5LbzLVSn5to3mabqnOe
-         CbA/j0x7EAwOJ2JYjuz9M0bsRdeMFA8R7LgSW7IeLYWwteXCSnnm8Dm3YeZOEhBu+aP5
-         zaNACtuEam/aAzDlLQzTh0eTYt/E1ouotHbjFow/BrPjtAhP23madwY9JtLKoS7Krva2
-         CrNrkjT6fpDd3h2ibWNTiIaDe6FfaQMYSmXK6v+gLxqVUyoewUyaGdand0jiCkfE95tO
-         DU1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751560465; x=1752165265;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Srec9QR/GmFsR6ZG7Q56odxAHiKleEbcbPmhdL22Zbg=;
-        b=wFHSZzN0IgoVGvadGlarQpRYGq/vf1Q4RWknFjpD6GLIovYERqzuo6DKk2h0OgUmxr
-         bYQsv3eVjXrv9QuOXH7QK2Y6P32cDlQ0KQX+mTwDVBMpP1aP2otzbOgX7e/R0Z7CihNM
-         gU+2ub/y5e7CsGu5dNGtgAgcSppH6TY+7BDHTWXgKzLV6UOv4PjGowdkmjhTW3fVnXWw
-         DhiOW9fCn3UZWoEbztIQmYkvw7dM+fo7acqwgcZ1GItOSE8scgMCpeK+V10J34HIhXzu
-         bVNCLo1LOP0BVbEOp0G6h8ldMYGRWR4TW2ZmZnUcYPCcEY3cBc1UB/vcOtp/vhFmcXvn
-         KpPA==
-X-Forwarded-Encrypted: i=1; AJvYcCWign8V0TXrq9Z1U2k87hBvC8n2ONAeYcf6S7rWq6f4hDdC6haY5GztPjKap/39AWc177GIM/0G7neb7E4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyntFURCkl31t1PLczGg/2gfYp3+yrq93C5s9X/uFw/fM+NchcN
-	1nTZbDJFmpWrOv4uqus5jUsSqitbJkvMGVI45tc6R20Vf3KK1lN8W0UkjtQiARwi
-X-Gm-Gg: ASbGncsviv6lFpiNXTE7Onp8SKNrfwYLJL5hAa48NfHWmT9UjMUPT1a/aFwvL83xj5v
-	qbG7u7nn/FkLPMZj++vOqiBFRwxT8P/ZU0bxcUebOwccIPO2sZQhs4ApQaG5AyqBH0kjIzT06hD
-	To0C1p6M6FCZvCyjPrb7N0sjwKDKwZFPjk5MYcebbXuGVkBAlibeQvXwO8CY7l1A4DSjews1rSa
-	FZ9wHEI/JZz2pKk71usysayoDiNEm/6IQsDqfzWmSU4LKIv3bLUM5VtCq27SFOlYZAvUSZnBBo5
-	5aNv+pw8OO+xyIuATpuGc+2SECkKVwGAUI/B5aNHc20j1HOO48xmGAFJ0+L6lN9LkdN1bDLmMCF
-	DcxK0jORAZVCzFnAvFChI
-X-Google-Smtp-Source: AGHT+IF1gdEMbWmckU8zZNqNOEiPSgfYqKdroPQU+DWQMNKxl4cBvFKaJ1cKNO2FmfxqEFvic+P0nQ==
-X-Received: by 2002:a05:600c:a30a:b0:453:9b3:5b70 with SMTP id 5b1f17b1804b1-454a373583cmr21491165e9.8.1751560463966;
-        Thu, 03 Jul 2025 09:34:23 -0700 (PDT)
-Received: from localhost.localdomain ([102.42.87.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454b168673asm2153235e9.26.2025.07.03.09.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 09:34:23 -0700 (PDT)
-From: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-To: hansg@kernel.org,
-	mchehab@kernel.org,
-	sakari.ailus@linux.intel.org,
-	andy@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-Subject: [PATCH] staging: media: atomisp: Remove custom sysfs attributes from atomisp_drvfs.c
-Date: Thu,  3 Jul 2025 19:33:50 +0300
-Message-Id: <20250703163350.5163-1-abdelrahmanfekry375@gmail.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pfyMaTrP"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 563BRh7d008506;
+	Thu, 3 Jul 2025 17:20:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	gLTPSOK+OzAjHEPchAvZu+FQELwARKXWJASIQkIYZ2w=; b=pfyMaTrPWVpsTdEK
+	VVxW/NAdXqNOGV/AsQyZ43tZRg4fMBFtl329ScBhgP55OA0D7KlNa7/wXM2B9C20
+	cRchf9ZZmz3IMjXGZJ2YuLyw7lDmOvcJ+AAB4gK9uu06tTbR8KmrOfhhftSMeigz
+	nG3wnt4biDbr+9Ym8chFJkJ9jKNdFMvD4IzZSnAwsI2z1y9iZvflBIjq94pAlepJ
+	8cznNXpXyhnISkDOvElP9Mri0KqPZkj8fL3k4/jICTUIA9QRn5P36hi2TqpAXPsX
+	9GwGLypIX8y9LGkRt8uQNXw236SxILV2EifOcWcdZgr2xxHujn3FDqy6rnxxnGBX
+	+6lQyA==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j63khgr6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Jul 2025 17:20:17 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 563HK8dH027255
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 3 Jul 2025 17:20:08 GMT
+Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Thu, 3 Jul 2025 10:20:02 -0700
+From: Vikram Sharma <quic_vikramsa@quicinc.com>
+To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
+        <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <cros-qcom-dts-watchers@chromium.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <quic_vikramsa@quicinc.com>,
+        <quic_svankada@quicinc.com>, <linux-media@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 1/9] media: qcom: camss: Rename camss-csid-780.c to camss-csid-gen3.c
+Date: Thu, 3 Jul 2025 22:49:30 +0530
+Message-ID: <20250703171938.3606998-2-quic_vikramsa@quicinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250703171938.3606998-1-quic_vikramsa@quicinc.com>
+References: <20250703171938.3606998-1-quic_vikramsa@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -80,179 +65,206 @@ List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=ZKfXmW7b c=1 sm=1 tr=0 ts=6866bbd1 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=WaFXn7faHerf0vuhdFYA:9
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAzMDE0NCBTYWx0ZWRfXzin6qEKIEnUH
+ pVsfE8uoXcLz35HWFzQBCgo94tmQc+qHhD7o3CTDNKQXmSFof850u+QxXcHJKt0F6fk7MJPkaS7
+ 9CbkGUnBk1dmSLgfHwl0tXRbcnS1siqYRk221UtoUgasVgcWfXR35588ocgib1BSIxkqctwZqh6
+ mxM29S7zSpxTSR7c7U8fBqLmxkuPtN7SgdEAP5FEcIh+921h+3crcpYzPqi6upzzWMRYerQ0gof
+ UJUiyE1yg/F4uAybghuQHzEXYo8zwmnc600Wi5ITsM0IN2b3zAMaFTrcnKONGPlTeTqKEsZKmTi
+ UAi9Qkc+0QqdMwndci/1+BkcgN10wjQxAfKVTCVW3AevZXXt/+bSFaYzzQWHjC74LqRfilMi9Lw
+ ifxaQrDivpBYNwXIIwoSwVOD8dyCcda82+/gJK5YagNNobpj0EV1hhnfgf6m2+yYQIz7xhiv
+X-Proofpoint-ORIG-GUID: 65T7UWsW7dsxZglDFL35ieNyT8Q8DXzE
+X-Proofpoint-GUID: 65T7UWsW7dsxZglDFL35ieNyT8Q8DXzE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-03_04,2025-07-02_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 clxscore=1011 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507030144
 
-Continue the process of atomisp driver cleanup as dicussed with hans
-and andy in [1].
+Rename the file camss-csid-780.c to camss-csid-gen3.c to enable
+reuse of CSID logic across multiple SoCs.
 
-Tackle TODO item "Remove custom sysfs files created by atomisp_drvfs.c":
-- Removing dbglvl, dbgfun, and dbgopt sysfs attributes
-- Eliminating their show/store handler functions
-- Deleting the attribute group definitions
-- Preserving dbg_attr_groups[] as an empty array for compatibility
+The SA8775P SoC includes CSID 690, which is functionally very
+similar to CSID 780, with only minor differences in register
+bitfields. This rename prepares the codebase for supporting
+additional SoCs without duplicating CSID logic.
 
-[1]: https://lore.kernel.org/all/836dc6b6-2821-47fc-8f24-0838f979af76@kernel.org/
-
-Suggested-by: Hans de Goede <hansg@kernel.org>
-Signed-off-by: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
+Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
 ---
- .../staging/media/atomisp/pci/atomisp_drvfs.c | 138 ------------------
- 1 file changed, 138 deletions(-)
+ drivers/media/platform/qcom/camss/Makefile             |  2 +-
+ .../qcom/camss/{camss-csid-780.c => camss-csid-gen3.c} |  8 +++++---
+ .../qcom/camss/{camss-csid-780.h => camss-csid-gen3.h} |  9 +++++----
+ drivers/media/platform/qcom/camss/camss-csid.h         |  2 +-
+ drivers/media/platform/qcom/camss/camss.c              | 10 +++++-----
+ 5 files changed, 17 insertions(+), 14 deletions(-)
+ rename drivers/media/platform/qcom/camss/{camss-csid-780.c => camss-csid-gen3.c} (98%)
+ rename drivers/media/platform/qcom/camss/{camss-csid-780.h => camss-csid-gen3.h} (84%)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-index 31c82c3c0d33..c25fd3ff003d 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_drvfs.c
-@@ -1,9 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--/*
-- * Support for atomisp driver sysfs interface
-- *
-- * Copyright (c) 2014 Intel Corporation. All Rights Reserved.
-- */
-
- #include <linux/device.h>
- #include <linux/err.h>
-@@ -16,140 +11,7 @@
- #include "hmm/hmm.h"
- #include "ia_css_debug.h"
-
--#define OPTION_BIN_LIST			BIT(0)
--#define OPTION_BIN_RUN			BIT(1)
--#define OPTION_VALID			(OPTION_BIN_LIST | OPTION_BIN_RUN)
--
--/*
-- * dbgopt: iunit debug option:
-- *        bit 0: binary list
-- *        bit 1: running binary
-- *        bit 2: memory statistic
-- */
--static unsigned int dbgopt = OPTION_BIN_LIST;
--
--static inline int iunit_dump_dbgopt(struct atomisp_device *isp,
--				    unsigned int opt)
--{
--	int ret = 0;
--
--	if (opt & OPTION_VALID) {
--		if (opt & OPTION_BIN_LIST) {
--			ret = atomisp_css_dump_blob_infor(isp);
--			if (ret) {
--				dev_err(isp->dev, "%s dump blob infor err[ret:%d]\n",
--					__func__, ret);
--				goto opt_err;
--			}
--		}
--
--		if (opt & OPTION_BIN_RUN) {
--			if (isp->asd.streaming) {
--				atomisp_css_dump_sp_raw_copy_linecount(true);
--				atomisp_css_debug_dump_isp_binary();
--			} else {
--				ret = -EPERM;
--				dev_err(isp->dev, "%s dump running bin err[ret:%d]\n",
--					__func__, ret);
--				goto opt_err;
--			}
--		}
--	} else {
--		ret = -EINVAL;
--		dev_err(isp->dev, "%s dump nothing[ret=%d]\n", __func__, ret);
--	}
--
--opt_err:
--	return ret;
--}
--
--static ssize_t dbglvl_show(struct device *dev, struct device_attribute *attr,
--			   char *buf)
--{
--	unsigned int dbglvl = ia_css_debug_get_dtrace_level();
--
--	return sysfs_emit(buf, "dtrace level:%u\n", dbglvl);
--}
--
--static ssize_t dbglvl_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t size)
--{
--	unsigned int dbglvl;
--	int ret;
--
--	ret = kstrtouint(buf, 10, &dbglvl);
--	if (ret)
--		return ret;
--
--	if (dbglvl < 1 || dbglvl > 9)
--		return -ERANGE;
--
--	ia_css_debug_set_dtrace_level(dbglvl);
--	return size;
--}
--static DEVICE_ATTR_RW(dbglvl);
--
--static ssize_t dbgfun_show(struct device *dev, struct device_attribute *attr,
--			   char *buf)
--{
--	unsigned int dbgfun = atomisp_get_css_dbgfunc();
--
--	return sysfs_emit(buf, "dbgfun opt:%u\n", dbgfun);
--}
--
--static ssize_t dbgfun_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t size)
--{
--	struct atomisp_device *isp = dev_get_drvdata(dev);
--	unsigned int opt;
--	int ret;
--
--	ret = kstrtouint(buf, 10, &opt);
--	if (ret)
--		return ret;
--
--	return atomisp_set_css_dbgfunc(isp, opt);
--}
--static DEVICE_ATTR_RW(dbgfun);
--
--static ssize_t dbgopt_show(struct device *dev, struct device_attribute *attr,
--			   char *buf)
--{
--	return sysfs_emit(buf, "option:0x%x\n", dbgopt);
--}
--
--static ssize_t dbgopt_store(struct device *dev, struct device_attribute *attr,
--			    const char *buf, size_t size)
--{
--	struct atomisp_device *isp = dev_get_drvdata(dev);
--	unsigned int opt;
--	int ret;
--
--	ret = kstrtouint(buf, 10, &opt);
--	if (ret)
--		return ret;
--
--	dbgopt = opt;
--	ret = iunit_dump_dbgopt(isp, dbgopt);
--	if (ret)
--		return ret;
--
--	return size;
--}
--static DEVICE_ATTR_RW(dbgopt);
--
--static struct attribute *dbg_attrs[] = {
--	&dev_attr_dbglvl.attr,
--	&dev_attr_dbgfun.attr,
--	&dev_attr_dbgopt.attr,
--	NULL
--};
--
--static const struct attribute_group dbg_attr_group = {
--	.attrs = dbg_attrs,
--};
-
- const struct attribute_group *dbg_attr_groups[] = {
--	&dbg_attr_group,
- 	NULL
- };
---
+diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+index d26a9c24a430..ee869e69521a 100644
+--- a/drivers/media/platform/qcom/camss/Makefile
++++ b/drivers/media/platform/qcom/camss/Makefile
+@@ -8,7 +8,7 @@ qcom-camss-objs += \
+ 		camss-csid-4-7.o \
+ 		camss-csid-680.o \
+ 		camss-csid-gen2.o \
+-		camss-csid-780.o \
++		camss-csid-gen3.o \
+ 		camss-csiphy-2ph-1-0.o \
+ 		camss-csiphy-3ph-1-0.o \
+ 		camss-csiphy.o \
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-780.c b/drivers/media/platform/qcom/camss/camss-csid-gen3.c
+similarity index 98%
+rename from drivers/media/platform/qcom/camss/camss-csid-780.c
+rename to drivers/media/platform/qcom/camss/camss-csid-gen3.c
+index 4c720d177731..0941152ec301 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-780.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen3.c
+@@ -4,6 +4,8 @@
+  *
+  * Copyright (c) 2024 Qualcomm Technologies, Inc.
+  */
++
++
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+@@ -13,7 +15,7 @@
+ 
+ #include "camss.h"
+ #include "camss-csid.h"
+-#include "camss-csid-780.h"
++#include "camss-csid-gen3.h"
+ 
+ #define CSID_IO_PATH_CFG0(csid)		(0x4 * (csid))
+ #define		OUTPUT_IFE_EN			0x100
+@@ -259,7 +261,7 @@ static irqreturn_t csid_isr(int irq, void *dev)
+ 
+ 			if (buf_done_val & BIT(BUF_DONE_IRQ_STATUS_RDI_OFFSET + i)) {
+ 				/*
+-				 * For Titan 780, bus done and RUP IRQ have been moved to
++				 * For Titan Gen3, bus done and RUP IRQ have been moved to
+ 				 * CSID from VFE. Once CSID received bus done, need notify
+ 				 * VFE of this event. Trigger VFE to handle bus done process.
+ 				 */
+@@ -325,7 +327,7 @@ static void csid_subdev_init(struct csid_device *csid)
+ 	csid->testgen.nmodes = CSID_PAYLOAD_MODE_DISABLED;
+ }
+ 
+-const struct csid_hw_ops csid_ops_780 = {
++const struct csid_hw_ops csid_ops_gen3 = {
+ 	.configure_stream = csid_configure_stream,
+ 	.configure_testgen_pattern = csid_configure_testgen_pattern,
+ 	.hw_version = csid_hw_version,
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-780.h b/drivers/media/platform/qcom/camss/camss-csid-gen3.h
+similarity index 84%
+rename from drivers/media/platform/qcom/camss/camss-csid-780.h
+rename to drivers/media/platform/qcom/camss/camss-csid-gen3.h
+index a990c66a60ff..e6298042ae74 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-780.h
++++ b/drivers/media/platform/qcom/camss/camss-csid-gen3.h
+@@ -1,13 +1,13 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * camss-csid-780.h
++ * camss-csid-gen3.h
+  *
+  * Qualcomm MSM Camera Subsystem - CSID (CSI Decoder) Module Generation 3
+  *
+  * Copyright (c) 2024 Qualcomm Technologies, Inc.
+  */
+-#ifndef __QC_MSM_CAMSS_CSID_780_H__
+-#define __QC_MSM_CAMSS_CSID_780_H__
++#ifndef __QC_MSM_CAMSS_CSID_GEN3_H__
++#define __QC_MSM_CAMSS_CSID_GEN3_H__
+ 
+ #define DECODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
+ #define DECODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
+@@ -18,8 +18,9 @@
+ #define DECODE_FORMAT_UNCOMPRESSED_24_BIT	0x7
+ #define DECODE_FORMAT_PAYLOAD_ONLY		0xf
+ 
++
+ #define PLAIN_FORMAT_PLAIN8	0x0 /* supports DPCM, UNCOMPRESSED_6/8_BIT */
+ #define PLAIN_FORMAT_PLAIN16	0x1 /* supports DPCM, UNCOMPRESSED_10/16_BIT */
+ #define PLAIN_FORMAT_PLAIN32	0x2 /* supports UNCOMPRESSED_20_BIT */
+ 
+-#endif /* __QC_MSM_CAMSS_CSID_780_H__ */
++#endif /* __QC_MSM_CAMSS_CSID_GEN3_H__ */
+diff --git a/drivers/media/platform/qcom/camss/camss-csid.h b/drivers/media/platform/qcom/camss/camss-csid.h
+index 9dc826d8c8f6..62273ca9f199 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid.h
++++ b/drivers/media/platform/qcom/camss/camss-csid.h
+@@ -215,7 +215,7 @@ extern const struct csid_hw_ops csid_ops_4_1;
+ extern const struct csid_hw_ops csid_ops_4_7;
+ extern const struct csid_hw_ops csid_ops_680;
+ extern const struct csid_hw_ops csid_ops_gen2;
+-extern const struct csid_hw_ops csid_ops_780;
++extern const struct csid_hw_ops csid_ops_gen3;
+ 
+ /*
+  * csid_is_lite - Check if CSID is CSID lite.
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 06f42875702f..1431e08dc04a 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -2285,7 +2285,7 @@ static const struct camss_subdev_resources csid_res_8550[] = {
+ 		.csid = {
+ 			.is_lite = false,
+ 			.parent_dev_ops = &vfe_parent_dev_ops,
+-			.hw_ops = &csid_ops_780,
++			.hw_ops = &csid_ops_gen3,
+ 			.formats = &csid_formats_gen2
+ 		}
+ 	},
+@@ -2300,7 +2300,7 @@ static const struct camss_subdev_resources csid_res_8550[] = {
+ 		.csid = {
+ 			.is_lite = false,
+ 			.parent_dev_ops = &vfe_parent_dev_ops,
+-			.hw_ops = &csid_ops_780,
++			.hw_ops = &csid_ops_gen3,
+ 			.formats = &csid_formats_gen2
+ 		}
+ 	},
+@@ -2315,7 +2315,7 @@ static const struct camss_subdev_resources csid_res_8550[] = {
+ 		.csid = {
+ 			.is_lite = false,
+ 			.parent_dev_ops = &vfe_parent_dev_ops,
+-			.hw_ops = &csid_ops_780,
++			.hw_ops = &csid_ops_gen3,
+ 			.formats = &csid_formats_gen2
+ 		}
+ 	},
+@@ -2330,7 +2330,7 @@ static const struct camss_subdev_resources csid_res_8550[] = {
+ 		.csid = {
+ 			.is_lite = true,
+ 			.parent_dev_ops = &vfe_parent_dev_ops,
+-			.hw_ops = &csid_ops_780,
++			.hw_ops = &csid_ops_gen3,
+ 			.formats = &csid_formats_gen2
+ 		}
+ 	},
+@@ -2345,7 +2345,7 @@ static const struct camss_subdev_resources csid_res_8550[] = {
+ 		.csid = {
+ 			.is_lite = true,
+ 			.parent_dev_ops = &vfe_parent_dev_ops,
+-			.hw_ops = &csid_ops_780,
++			.hw_ops = &csid_ops_gen3,
+ 			.formats = &csid_formats_gen2
+ 		}
+ 	}
+-- 
 2.25.1
 
