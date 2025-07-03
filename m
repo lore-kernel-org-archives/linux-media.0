@@ -1,153 +1,238 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3366228A3E2;
-	Thu,  3 Jul 2025 18:33:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6092550CC;
+	Thu,  3 Jul 2025 18:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751567593; cv=none; b=ZSnCxJ5OuRLeq154Gur+yqeBBl0B3fDGzVj1DhWJIfP3VJ7vjf2/2wJVlT1F8Vrdd0Gzh2ovzunfT9eoJNOex6MyBt8mxnn+W0ScRXPKR6qPu21b5OxCyAwe+qO9sz28VDENV0c7NHRvtRN66xe87qDIR/JfsO4jxMo5CYk/vms=
+	t=1751567694; cv=none; b=LAB9LBgLnH/MNPST4W8wUGf7g+qJQxnVGevmOoLWbYcGU7Jbq753tCHQMyD0jJhKPP+Jt/p6hr5vPk0elRm2t64z9+YPls7QhM587ZJaPWRgkARGKthCepSsR+U/Q2K2SgpG78HBX9XGAvS24JSDKFqYPrwhIiyrs0oRinPzhz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751567593; c=relaxed/simple;
-	bh=lnATMb/XmCNNMy1igSdCLxsZP2Vd/a/i5coedasJ6Ec=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RiFznfOxZn+ZcrMocce+s2D9803ISFSvahxuJshF2ubWiAL5iRHbkiOhAR2vlGONqMgToDHCJNJbXNW56FuFudtVhfqJOL4HzW5Rl2B1/MvEIXQ7+iPdEN7ozh9IQIKtT1wxeZUjhNpxD1RtvqiJK1Q+VnlWJ91dgqMu02cL9/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qwwzqZjc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751567694; c=relaxed/simple;
+	bh=RRV+u9Hko+m6t8X+HuwNkzXuN7jsP4l7v37QCY/1Nw4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Yw5wQ5xjQdekrltIFIQLC63mZQT7GBR4ugOY9wCaDWrpE7VCV78h2vNXN1WbnA5+rr3gwVKpu0ZzW8jvpJoaER/z9iEOjOXH7dLb2lb/uxjGo7FHpaK854vaBITQg0SdSCnHXfZvxvnWwnMAJoh79Rmz3uDLQVhsQoZ734vUlAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qv4CLC1x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qwwzqZjc"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C0AAAC4AF09;
-	Thu,  3 Jul 2025 18:33:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qv4CLC1x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12DFC4CEED;
+	Thu,  3 Jul 2025 18:34:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751567592;
-	bh=lnATMb/XmCNNMy1igSdCLxsZP2Vd/a/i5coedasJ6Ec=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=qwwzqZjcKtOl8/553fhUXtGV5cSS+O56najS82u0rLCWI5zFaQwv7KxGgmdECxS3U
-	 s2dkH5ydHtL1Xrb/O4ydhNxlIcwhLzhYLJEK75Yudxr95MZRHdFMyT/FH9aUq9OYtZ
-	 Lj4Gc4ESm9tQ1RCKRSeY1bmk/iF/oZbLqowhr0TVgrcBPr3mO3xtn/yXtcB6Yhy3nX
-	 y4mbGrRkH7p8JaNBQ/TAhSYiX5iVSecnD78N1MfwLRCfWx/CTGTRCiZG3+d05TPVlk
-	 OhIMHdeNtrbFiHQBTfgXD3J1C3AYtEEohNsePKJiThhvWfLsAZoJn7yGtefFj2E0sR
-	 /35+V/uFd7Edg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF646C83F0A;
-	Thu,  3 Jul 2025 18:33:12 +0000 (UTC)
-From: Frank Li via B4 Relay <devnull+Frank.Li.nxp.com@kernel.org>
-Date: Thu, 03 Jul 2025 14:33:08 -0400
-Subject: [PATCH v2 3/4] arm64: dts: imx8: add parallel CSI node
+	s=k20201202; t=1751567694;
+	bh=RRV+u9Hko+m6t8X+HuwNkzXuN7jsP4l7v37QCY/1Nw4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Qv4CLC1xO16Yq73n+g0aRe9Q9w1XiLePSWeulybvjM3wVbdsPkp0Qnl8H8dRStt4x
+	 LqEVY/+EePwOB/PSEFAKRdzBjtH9L0Mb8TjMBDwC6iEy5YjsApqr+4Ud/Hd/rsuMUO
+	 9ZR0FpEaNiHWArH5766R91atckLoPtuqd5GYxQn0cK/p4c0tvASxVmtc2ErloSbSUK
+	 5IgFLZlh4VfT1sxqH283NvSrjf1BHM2V5YuInmdRkvlfTUCIgwITOLWwrNb1+gjBxw
+	 ZBJoifgXipkAiyf7d2zhGyOmXthHda3W4jKyP+Jwb/eFBvtbva7+Q9bG8iA3MCg80/
+	 e2NQ46vAnN5/g==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ming Qian <ming.qian@nxp.com>,
+	Zhou Peng <eagle.zhou@nxp.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc: linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: [PATCH] media: Use of_reserved_mem_region_to_resource() for "memory-region"
+Date: Thu,  3 Jul 2025 13:34:50 -0500
+Message-ID: <20250703183451.2074066-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250703-imx8qxp_pcam-v2-3-188be85f06f1@nxp.com>
-References: <20250703-imx8qxp_pcam-v2-0-188be85f06f1@nxp.com>
-In-Reply-To: <20250703-imx8qxp_pcam-v2-0-188be85f06f1@nxp.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Rui Miguel Silva <rmfrfs@gmail.com>, 
- Martin Kepplinger <martink@posteo.de>, Purism Kernel Team <kernel@puri.sm>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-media@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751567591; l=2229;
- i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
- bh=egvyIYm9Ny7RwG4VqCUmjTBkLSU8NimkbRJ5GJUfMCg=;
- b=0DiK8tKXGe724gjHRzMZk45Ar6ghYBLBifnXK2kF2u5SRCj3q649yBEdL/Rg9kJnjnsrMYMyP
- KvscQ92k649AaIVhdfok6kql5Di1O3TLWV46TiUjkLyRHXO0YE1oDIc
-X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
- pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
-X-Endpoint-Received: by B4 Relay for Frank.Li@nxp.com/20240130 with
- auth_id=121
-X-Original-From: Frank Li <Frank.Li@nxp.com>
-Reply-To: Frank.Li@nxp.com
+Content-Transfer-Encoding: 8bit
 
-From: Frank Li <Frank.Li@nxp.com>
+Use the newly added of_reserved_mem_region_to_resource() function to
+handle "memory-region" properties.
 
-Add parallel CSI nodes.
-
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
-changes in v2
-- update compatible string to match binding's change
----
- arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi    | 13 +++++++++++
- arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi | 27 +++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+ drivers/media/platform/amphion/vpu_core.c     | 40 +++++--------------
+ .../media/platform/qcom/iris/iris_firmware.c  | 18 +++------
+ drivers/media/platform/qcom/venus/firmware.c  | 19 +++------
+ 3 files changed, 21 insertions(+), 56 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-index 2cf0f7208350a416d77b11140279d2f66f41498f..1f7bf9efdbca266fbda82d2bc84acd9a27ed0bd1 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-img.dtsi
-@@ -224,6 +224,19 @@ irqsteer_parallel: irqsteer@58260000 {
- 		status = "disabled";
- 	};
+diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
+index da00f5fc0e5d..168f0514851e 100644
+--- a/drivers/media/platform/amphion/vpu_core.c
++++ b/drivers/media/platform/amphion/vpu_core.c
+@@ -10,7 +10,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
++#include <linux/of_reserved_mem.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+@@ -542,47 +542,30 @@ const struct vpu_core_resources *vpu_get_resource(struct vpu_inst *inst)
  
-+	parallel_csi: csi@58261000 {
-+		compatible = "fsl,imx8qxp-pcif";
-+		reg = <0x58261000 0x1000>;
-+		clocks = <&pi0_pxl_lpcg IMX_LPCG_CLK_0>,
-+			 <&pi0_ipg_lpcg IMX_LPCG_CLK_4>;
-+		clock-names = "pixel", "ipg";
-+		assigned-clocks = <&clk IMX_SC_R_PI_0 IMX_SC_PM_CLK_PER>;
-+		assigned-clock-parents = <&clk IMX_SC_R_PI_0_PLL IMX_SC_PM_CLK_PLL>;
-+		assigned-clock-rates = <160000000>;
-+		power-domains = <&pd IMX_SC_R_PI_0>;
-+		status = "disabled";
-+	};
-+
- 	pi0_ipg_lpcg: clock-controller@58263004 {
- 		compatible = "fsl,imx8qxp-lpcg";
- 		reg = <0x58263004 0x4>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi
-index 50015f8dd4e43b507c879479e7320cb58ec8bf74..60aa43c45d15c8b0c2c425be52ed79458d8c96b9 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-ss-img.dtsi
-@@ -62,6 +62,14 @@ isi_in_2: endpoint {
- 				remote-endpoint = <&mipi_csi0_out>;
- 			};
- 		};
-+
-+		port@4 {
-+			reg = <4>;
-+
-+			isi_in_4: endpoint {
-+				remote-endpoint = <&parallel_csi_out>;
-+			};
-+		};
- 	};
- };
+ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ {
+-	struct device_node *node;
+ 	struct resource res;
+ 	int ret;
  
-@@ -94,3 +102,22 @@ &jpegenc {
- &mipi_csi_1 {
- 	status = "disabled";
- };
+-	if (of_count_phandle_with_args(np, "memory-region", NULL) < 2) {
+-		dev_err(core->dev, "need 2 memory-region for boot and rpc\n");
+-		return -ENODEV;
++	ret = of_reserved_mem_region_to_resource(np, 0, &res);
++	if (ret) {
++		dev_err(core->dev, "Cannot get boot-region\n");
++		return ret;
+ 	}
+ 
+-	node = of_parse_phandle(np, "memory-region", 0);
+-	if (!node) {
+-		dev_err(core->dev, "boot-region of_parse_phandle error\n");
+-		return -ENODEV;
+-	}
+-	if (of_address_to_resource(node, 0, &res)) {
+-		dev_err(core->dev, "boot-region of_address_to_resource error\n");
+-		of_node_put(node);
+-		return -EINVAL;
+-	}
+ 	core->fw.phys = res.start;
+ 	core->fw.length = resource_size(&res);
+ 
+-	of_node_put(node);
+-
+-	node = of_parse_phandle(np, "memory-region", 1);
+-	if (!node) {
+-		dev_err(core->dev, "rpc-region of_parse_phandle error\n");
+-		return -ENODEV;
+-	}
+-	if (of_address_to_resource(node, 0, &res)) {
+-		dev_err(core->dev, "rpc-region of_address_to_resource error\n");
+-		of_node_put(node);
+-		return -EINVAL;
++	ret = of_reserved_mem_region_to_resource(np, 1, &res);
++	if (ret) {
++		dev_err(core->dev, "Cannot get rpc-region\n");
++		return ret;
+ 	}
 +
-+&parallel_csi {
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+
-+			parallel_csi_out: endpoint {
-+				remote-endpoint = <&isi_in_4>;
-+			};
-+		};
-+	};
-+};
-
+ 	core->rpc.phys = res.start;
+ 	core->rpc.length = resource_size(&res);
+ 
+ 	if (core->rpc.length < core->res->rpc_size + core->res->fwlog_size) {
+ 		dev_err(core->dev, "the rpc-region <%pad, 0x%x> is not enough\n",
+ 			&core->rpc.phys, core->rpc.length);
+-		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -594,7 +577,6 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	if (ret != VPU_CORE_MEMORY_UNCACHED) {
+ 		dev_err(core->dev, "rpc region<%pad, 0x%x> isn't uncached\n",
+ 			&core->rpc.phys, core->rpc.length);
+-		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -606,8 +588,6 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	core->act.length = core->rpc.length - core->res->rpc_size - core->log.length;
+ 	core->rpc.length = core->res->rpc_size;
+ 
+-	of_node_put(node);
+-
+ 	return 0;
+ }
+ 
+diff --git a/drivers/media/platform/qcom/iris/iris_firmware.c b/drivers/media/platform/qcom/iris/iris_firmware.c
+index f1b5cd56db32..40448429ba97 100644
+--- a/drivers/media/platform/qcom/iris/iris_firmware.c
++++ b/drivers/media/platform/qcom/iris/iris_firmware.c
+@@ -19,8 +19,7 @@ static int iris_load_fw_to_memory(struct iris_core *core, const char *fw_name)
+ 	u32 pas_id = core->iris_platform_data->pas_id;
+ 	const struct firmware *firmware = NULL;
+ 	struct device *dev = core->dev;
+-	struct reserved_mem *rmem;
+-	struct device_node *node;
++	struct resource res;
+ 	phys_addr_t mem_phys;
+ 	size_t res_size;
+ 	ssize_t fw_size;
+@@ -30,17 +29,12 @@ static int iris_load_fw_to_memory(struct iris_core *core, const char *fw_name)
+ 	if (strlen(fw_name) >= MAX_FIRMWARE_NAME_SIZE - 4)
+ 		return -EINVAL;
+ 
+-	node = of_parse_phandle(dev->of_node, "memory-region", 0);
+-	if (!node)
+-		return -EINVAL;
+-
+-	rmem = of_reserved_mem_lookup(node);
+-	of_node_put(node);
+-	if (!rmem)
+-		return -EINVAL;
++	ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
++	if (ret)
++		return ret;
+ 
+-	mem_phys = rmem->base;
+-	res_size = rmem->size;
++	mem_phys = res.start;
++	res_size = resource_size(&res);
+ 
+ 	ret = request_firmware(&firmware, fw_name, dev);
+ 	if (ret)
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index 66a18830e66d..37c0fd52333e 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -9,7 +9,6 @@
+ #include <linux/iommu.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/platform_device.h>
+ #include <linux/of_device.h>
+@@ -83,8 +82,7 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+ 			 phys_addr_t *mem_phys, size_t *mem_size)
+ {
+ 	const struct firmware *mdt;
+-	struct reserved_mem *rmem;
+-	struct device_node *node;
++	struct resource res;
+ 	struct device *dev;
+ 	ssize_t fw_size;
+ 	void *mem_va;
+@@ -94,15 +92,8 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+ 	*mem_size = 0;
+ 
+ 	dev = core->dev;
+-	node = of_parse_phandle(dev->of_node, "memory-region", 0);
+-	if (!node) {
+-		dev_err(dev, "no memory-region specified\n");
+-		return -EINVAL;
+-	}
+-
+-	rmem = of_reserved_mem_lookup(node);
+-	of_node_put(node);
+-	if (!rmem) {
++	ret = of_reserved_mem_region_to_resource(dev->of_node, 0, &res);
++	if (ret) {
+ 		dev_err(dev, "failed to lookup reserved memory-region\n");
+ 		return -EINVAL;
+ 	}
+@@ -117,8 +108,8 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+ 		goto err_release_fw;
+ 	}
+ 
+-	*mem_phys = rmem->base;
+-	*mem_size = rmem->size;
++	*mem_phys = res.start;
++	*mem_size = resource_size(&res);
+ 
+ 	if (*mem_size < fw_size || fw_size > VENUS_FW_MEM_SIZE) {
+ 		ret = -EINVAL;
 -- 
-2.34.1
-
+2.47.2
 
