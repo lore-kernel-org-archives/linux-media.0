@@ -1,226 +1,130 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A512F271A71;
-	Fri,  4 Jul 2025 07:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F202DE711;
+	Fri,  4 Jul 2025 07:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751613082; cv=none; b=bmlX81ZQcx6Wxn+1m1g9xejkEt/5DTK3Ad3anQFcdYASrBLRnOaEH+8nFF116Nqt963rzoiZD01KaGAQPcaX2nnstPiBW5O2QzFVFHOponwm2oLJaJJ+J2odLQc7mbUiF+Vz7ptIiNSxH8rnoR2FLwJ2nGYbBErhEqrv37D5svI=
+	t=1751613704; cv=none; b=a/SAzKYm6TRSp+Lp/ci5swBQO/AaSk8het5FodZDyqVHZHI/6WZBuktQQ5X4ao1BF7XOiVXGpEAJwqnbD0mlBh/a7igVCjybHXCt3uEd0SFTQY7XAIZNnakWcZHX5GhciJlYok5qgk8A8d/ldYMyywsjy0Ct2HeZJinCIlJa0bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751613082; c=relaxed/simple;
-	bh=u1t9kgo32n46P3lCiA/YsRG69hKIm2B9bRzkw/n0hCc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PzYlSYD0q6+2ingtuGxAktyNYRGD2+5iRnEQi3ZdPtBubc0Q3lJzuMIxm4RHYbCAVc/c4VH4dKtcTr5r+8SvEG2vLyZvVHwcgWvl/YQngA/orNzGCxBnVWhoGh8S0TUJ/SEHJ2xG5t/WC44fWvrFly276zTZNd+bhAwZjO02F8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VrV1onED; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1751613704; c=relaxed/simple;
+	bh=06S78qqyEqdmUukCsirR1LdLIQkq9s7UQ/UCoyVj07o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BT/c5483LD6uvQGZVrxIHb5151To/DhRCdFnA0q4e1UKC5zL7R8f3lvUwSXwOmhJ/wxfz0+iQTVUw3/jd8EYMDBLeLEh6YwE3yLU/UFyR5fCIyMMTmHUYZl094+voWh3s1gV5Kb9ZmFBr3mUTsqs+1U8qrfo2IYM1rjpqg2r9iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Lj1cVQSN; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VrV1onED"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1751613078;
-	bh=u1t9kgo32n46P3lCiA/YsRG69hKIm2B9bRzkw/n0hCc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=VrV1onEDAPBj1gXtmoDisI701xglCoEK1T4zryC7ADJ75bTtZGaIAJCx4Y+zBoPs9
-	 jM2f/d/caI78n4W2MpPqQao8YaRoUF7u30y0XWeTUEDxLcBtmqmPRMGR2ST4oDCJu+
-	 Qx6XV7KY1/PubEW2Ziu6FYhvT5UhsTk+aXN8llhNT+E67Ib9Wug3a8gxAQe8iyLJx6
-	 tIcOVLsKDZ8XcymS+x2gdF32VGkyCvLqBB1epj+7AvtkVbnqQFHINFE/8SvYN0tDMH
-	 hyzc0M3q8/ZRbKrqC64M/xogbPmQeeNgeV7X/3VYKjRNVS/7aJk6Sgjm1Ztl1SbsLF
-	 Qt9f/pWZD7hsw==
-Received: from 2a01cb0892f2d600c8f85cf092d4af51.ipv6.abo.wanadoo.fr (2a01cb0892f2d600C8F85cF092d4Af51.ipv6.abo.wanadoo.fr [IPv6:2a01:cb08:92f2:d600:c8f8:5cf0:92d4:af51])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: jmassot)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B028B17E0EB8;
-	Fri,  4 Jul 2025 09:11:17 +0200 (CEST)
-Message-ID: <f2f39aad24dc000bd1066ade7a7a38a072a00664.camel@collabora.com>
-Subject: Re: [PATCH v5 00/24] media: i2c: add Maxim GMSL2/3 serializer and
- deserializer drivers
-From: Julien Massot <julien.massot@collabora.com>
-To: Cosmin Tanislav <demonsingur@gmail.com>, Cosmin Tanislav	
- <cosmin.tanislav@analog.com>, Tomi Valkeinen	
- <tomi.valkeinen+renesas@ideasonboard.com>, Mauro Carvalho Chehab	
- <mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Niklas
- =?ISO-8859-1?Q?S=F6derlund?=	 <niklas.soderlund@ragnatech.se>, Sakari Ailus
- <sakari.ailus@linux.intel.com>,  Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>
-Cc: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-staging@lists.linux.dev, linux-gpio@vger.kernel.org
-Date: Fri, 04 Jul 2025 09:11:16 +0200
-In-Reply-To: <cbf8d7bd-24a4-4dc1-8d9f-bbc4bee45d8d@gmail.com>
-References: <20250702132104.1537926-1-demonsingur@gmail.com>
-	 <5e1b26637706f6eac92acbbb3d5a7dafa0c2c232.camel@collabora.com>
-	 <d4052ab3-9cd1-45e8-81b0-b6512822e646@gmail.com>
-	 <c661e7f3faec269f73d6240fbe7b84e3bc97157a.camel@collabora.com>
-	 <cbf8d7bd-24a4-4dc1-8d9f-bbc4bee45d8d@gmail.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Lj1cVQSN"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5646vD3i001269;
+	Fri, 4 Jul 2025 07:21:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	kj3UvZDaaEd44madwolm+J7acoHUkXfwYpEDAT7kvYg=; b=Lj1cVQSNB4iUPuL1
+	RoohlYcsjV2/tNuoOmgqMYnQlOTVYY1NX+Sa1agTqgdpzW/QcZjjfrTMBMLmoVF0
+	dwPW1W+kEFngZRL+oleXtGkh7l4ODctsrzVPsAGF/Zg4mjaxB9FJAjY4LxbSGcNl
+	xVPC/eMykARsXRCcX6UVbQQq2rKtzTIzj9gzlqSJIs0s25Eiq1vnQ28QzcILiYD1
+	d1etSnbuGnvyYTnj+vKTb3WMtWU7NQsBGkUHFmp6c83ReA7HKpOZoorUFqBfwdjq
+	+nyUp/WAQQzhOaEWNay9ebztGZ5dDCHeOUe7mIO8E9fD0yLQBlw7bkntizrjLr/5
+	ZTHHPA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47j8s9twmm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 04 Jul 2025 07:21:35 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5647LVLg016602
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 4 Jul 2025 07:21:31 GMT
+Received: from [10.231.216.119] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 4 Jul
+ 2025 00:21:29 -0700
+Message-ID: <f87b6127-a416-45fe-8b17-bd32574e20a3@quicinc.com>
+Date: Fri, 4 Jul 2025 15:21:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] media: venus: pm_helpers: use opp-table for the
+ frequency
+To: Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Dikshita Agarwal
+	<quic_dikshita@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC: <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20250612-use_freq_with_opp_table-v2-1-42b03648fba8@quicinc.com>
+Content-Language: en-US
+From: Renjiang Han <quic_renjiang@quicinc.com>
+In-Reply-To: <20250612-use_freq_with_opp_table-v2-1-42b03648fba8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=H/Pbw/Yi c=1 sm=1 tr=0 ts=68678102 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=KKAkSRfTAAAA:8 a=0vmTT26_tZ8tbevn3XcA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-ORIG-GUID: iiM4z8_dKIaURjm9MXCVnUvcdcxyAayl
+X-Proofpoint-GUID: iiM4z8_dKIaURjm9MXCVnUvcdcxyAayl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA0MDA1NiBTYWx0ZWRfX612GRSC3cZdH
+ Co06Vu+KRS2Wu7EWbHzhaW1/naX3DFxmGNZFzfaiUynWerSdvafIYZDx1R98Vv7qEZeDHTRgExk
+ IXIvxLHqon83/3icgdGxlxd9z85HeCzFh8pEtTruKXXRXIQqHc4fQflzZHI/3hqXXhHWv5j/QgU
+ anj0OewQqoo6AWnGjEzumDHfJl6mqbodEjOfr8qrg6NYT/4pZkMfE5TIX0JUbOKjxOXvFpCnshY
+ O5Q/UcZMrdplPvpyDu56sQyiTMp7WyZYEaNaxnGDEplCMgZo/CnRJH7M4gvcR3p21OXs5eNknjs
+ pj0ti1R4euwYC1/jc6jc7SCu1kEq+6n6PiO9T6NuPtDZoBYIAJTGsSi85+D2MS7X1YkS5MBIfrd
+ NiOcUV+04f70BpP6u22VMAnoA524CuxqwjDrW1xZdDyAq27+7fVi3Zy+Amofc3xLLbZngHks
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-04_02,2025-07-02_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=924
+ priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 bulkscore=0 phishscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507040056
 
-On Thu, 2025-07-03 at 17:46 +0300, Cosmin Tanislav wrote:
->=20
->=20
-> On 7/3/25 4:54 PM, Julien Massot wrote:
-> > On Thu, 2025-07-03 at 15:17 +0300, Cosmin Tanislav wrote:
-> > >=20
-> > >=20
-> > > On 7/3/25 3:07 PM, Julien Massot wrote:
-> > > > Hi Cosmin,
-> > > >=20
-> > > > On Wed, 2025-07-02 at 16:20 +0300, Cosmin Tanislav wrote:
-> > > > > This series adds new drivers for multiple Maxim GMSL2 and GMSL3 d=
-evices,
-> > > > > replacing the few GMSL2 drivers already in upstream, and introduc=
-ing a
-> > > > > common framework that can be used to implement such GMSL chips, w=
-hich
-> > > > > avoids code duplication while also adding support for previously
-> > > > > unsupported features.
-> > > > >=20
-> > > > > While the normally acceptable and polite way would be to extend t=
-he
-> > > > > current mainline drivers, the choice was made here to add a total=
-ly new
-> > > > > set of drivers. The current drivers support only a small subset o=
-f the
-> > > > > possible features, and only a few devices, so the end result afte=
-r
-> > > > > extending them would in any case be essentially fully rewritten, =
-new
-> > > > > drivers.
-> > > > >=20
-> > > > Thanks for your work,
-> > > > The common framework will help a lot to drive new GMSL chips, and m=
-ost of the
-> > > > features are covered.
-> > > >=20
-> > > > > This series depends on support for internal pads, for which a pat=
-ch has
-> > > > > been added.
-> > > > >=20
-> > > > > The previous version is at:
-> > > > > https://lore.kernel.org/lkml/20250618095858.2145209-1-demonsingur=
-@gmail.com
-> > > > >=20
-> > > > > The following deserializers are supported:
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96712 (already exists in staging)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96714 (already exists)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96714F (already exists)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96714R (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96716 (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96724 (already exists as part of existing =
-MAX96712 driver)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96724F (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96724R (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX9296A (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96792A (GMSL3)
-> > > > >=20
-> > > > > The following serializers are supported:
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96717 (already exists)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX9295A (GMSL2)
-> > > > > =C2=A0=C2=A0=C2=A0* MAX96793 (GMSL3)
-> > > > >=20
-> > > > > Known backward compatibility breakages:
-> > > > > =C2=A0=C2=A0=C2=A0* No default routing. Default routing has been =
-intentionally ommitted
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 as the devices support quite complex rou=
-ting and it would be
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 unfeasible to provide sane defaults for =
-multi-link deserialziers.
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 It is expected that userspace programs w=
-ould set appropritate
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 routing.
-> > > > >=20
-> > > > This part is the most annoying one: at the moment, there is no way =
-to set the routing except
-> > > > by
-> > > > manually enabling a boolean within the kernel source.
-> > > > You can't guess what routing the user really wants, but please at l=
-east provide a default
-> > > > routing
-> > > > table that allows using your drivers =E2=80=94 for example, the dev=
-ice's default routing.
-> > > >=20
-> > >=20
-> > > It's a very delicate issue... I'll try to see if I can do that.
-> > > It would be great if we could enable the streams API globally since i=
-t's
-> > > been merged since Jan 15 2023. It's been over two years.
-> > >=20
-> > >=20
-> > > Thanks,
-> > >=20
-> > > >=20
-> > > >=20
-> > > > > The following list enumerates new features that are supported by =
-the
-> > > > > common framework and their respective chip-specific drivers:
-> > > > > =C2=A0=C2=A0=C2=A0* Full Streams API support. Most deserializers =
-have support for more
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 than one link, and more than one PHY. St=
-reams support allows
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 configuration of routing between these l=
-inks and PHYs.
-> > > > >=20
-> > > > > =C2=A0=C2=A0=C2=A0* .get_frame_desc() support. Both the serialize=
-rs and deserializers
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 implement this to query and provide fram=
-e descriptor data. This is
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0 used in features explained in-depth belo=
-w.
-> > > >=20
-> > > > So are almost all the sensor drivers incompatible?
-> > > >=20
-> > >=20
-> > > Yes, sensor drivers need to have .get_frame_desc() implemented... It'=
-s
-> > > not a huge feat and it's the only way this type of bridge could work
-> > > properly.
-> > >=20
-> > > Alternatively, we could add a fallback that bases its decision on the
-> > > stream format, but I'd prefer if we didn't and we would just implemen=
-t
-> > > .get_frame_desc(). After this series is merged I can submit my patche=
-s
-> > > for imx219.
-> > There is already one pending on the mailing list
-> > "media: i2c: imx219: Report streams using frame descriptors"
-> > I guess it's fine if we require the sensor to implement this function.
-> >=20
-> > But I had to do it for vgxy61.
-> >=20
-> > Btw I tested:
-> > TI AM62x + max96716 + 1 x max96717f + stvg5661 (tunnel mode)
-> > With special lanes mapping and polarities.
-> >=20
-> > And I had to:
-> >=20
-> > - Apply pending patches for j721e to support the enable_stream API inst=
-ead of s_stream
-> > - Enable the experimental v4l2_subdev_enable_streams_api
-> > - Add get_frame_desc to the sensor driver
->=20
-> Did it work without issues with those changes?
->=20
-Yes :)
-btw you can add:
-Tested-by: Julien Massot <julien.massot@collabora.com>
->=20
-> If that's the case then I think all I can do to make it is easier is to
-> add default routing. I'm not a fan of each driver having its own
-> get_frame_desc() fallback, especially when it's a very small change to
-> do to the sensor drivers.
-Ok for me.
 
-Ragards,
---=20
-Julien
+On 6/12/2025 10:23 AM, Renjiang Han wrote:
+> Some platforms (such as qcs615 and sc7180) use the same core but have
+> different frequency tables. Using the opp-table allows us to separate
+> the core description from the frequency data and supports the use of
+> fallback compatibles.
+>
+> Reviewed-by: Vikash Garodia<quic_vgarodia@quicinc.com>
+> Reviewed-by: Bryan O'Donoghue<bryan.odonoghue@linaro.org>
+> Signed-off-by: Renjiang Han<quic_renjiang@quicinc.com>
+> ---
+> video core in QCS615 is same as that in SC7180, while the clock frequency
+> corners are different. In such cases, the clock frequencies are better
+> represented in DT than static table in video driver. The patch make use
+> of OPP table in DT to choose the frequency corner to scale.
+>
+> Note:
+> Earlier discussion was concluded in [1] where it was agreed to rely on
+> opp-table for QCS615.
+>
+> [1]https://lore.kernel.org/linux-arm-msm/c9b83c8b-68d1-43bc-99d6-d2d2b9e445f4@oss.qualcomm.com/
+> ---
+> Changes in v2:
+> - 1. Update message based on the review comment.
+> - Link to v1:https://lore.kernel.org/r/20250610-use_freq_with_opp_table-v1-1-7339d690fd1a@quicinc.com
+> ---
+>   drivers/media/platform/qcom/venus/pm_helpers.c | 58 +++++++++++++++-----------
+>   1 file changed, 34 insertions(+), 24 deletions(-)
+I’d appreciate any thoughts you might have on this.
+
+-- 
+Best Regards,
+Renjiang
+
