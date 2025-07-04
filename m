@@ -1,119 +1,181 @@
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567F52F94A4;
-	Fri,  4 Jul 2025 15:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.97.38.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEDF4501A;
+	Fri,  4 Jul 2025 15:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751642795; cv=none; b=kho35o4mXPgPkJOg1q1Z9EXX1ASz6LhhquX6Kx54V9Zm3XAtHcEOp7yz2euQipq3mrMBltbNaN8ct1NuRrn5Wyq/gmCrD+v2nJdR0O9vRol+v3kgz6EACn795FuRSqha4TFcRlkH6SvGYK+sMn11Mddbyb4EABj+fvqeurJqMfE=
+	t=1751643672; cv=none; b=rTBGM8Eykv7OWsre5vGoLToCzbig0FZ0eFDHHGk8m2NHWMF+QrLsqjOsWT1lOC/Xsh3TAh3YVLKsvO10xTaLdn2WjtwHYblOo+urtTPxYhwGCaWsBQszbpyo3NXVAtcWHUn9UsPc/2NVs2ZFMllK+fRe+ePXfbMwxL2KSxS7iSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751642795; c=relaxed/simple;
-	bh=fw+3kHpH71x1Y/Yo4BaIBNzC5KdPfbmT9z0yHAtrnEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F2yDJU4XJYmo5VtvdVovBN8S8qzAWtqQajQ6QD57Kp4pwxFcMv28fHd6YNBUQco1LOGzRORDJSn8zWSAsVmHqbDAx5KX5PkstvBwaKuwysRCLP1tb9B0iaJWHKUYV4i2LpwkXzNuJOaxvLFXl6UKHmOGCEhFE6elf2ua8F5K0ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=OZN6bha/; arc=none smtp.client-ip=88.97.38.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1751643672; c=relaxed/simple;
+	bh=Im8I+7hlGniAQNwn5GxMLcoY1pxk5HJSJUp96zBoC2Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X5r/zTKLmZMhwhnjiaBDOg+9QnKZB6EFjpuhBCx/n493/JJcTBaV3DuqAXedXQIw+qa77kepsOMGeDofWWwoVzNvvS3jZr6zmMHc3nSaRM3793LPy65uLEx5tXkl70ORPRF5DJg6CMwSSdmbe9OIWLBnZTPo8sYtsjGUP32dAMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WXGmh2nE; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="OZN6bha/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1751642202; bh=fw+3kHpH71x1Y/Yo4BaIBNzC5KdPfbmT9z0yHAtrnEg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OZN6bha/FAxDe4H3fOtXJMB05O6PSsOIO8iLAT0AKWh6sAQ6HB3DJiCrUOfFJq89K
-	 JlEVcbJXJWChT72to/oZT3GU/laMbw/fzI0RLjd8Hy4W+YhrBNIcS7FBMyf1Br408n
-	 D+vIYlKlKvQaBNxdLEYY206FNUOmF3WpRVHBHZ1vmtW+7G5wC/1YrvfLV23GVAUdqp
-	 B/az+zmd5IfyH8fsuSPeJ7Tso4Nt+VLxtIvSJqcA5OjODsIW08BHHuUVTWKUjj/mSP
-	 J09uIe2u1xXvKRqvzYMMRCl9G9OAJjjyA8Iaelz6sx05RL8u10fivwd9m8ceR6d7VY
-	 +wjycNZVop6Vg==
-Received: by gofer.mess.org (Postfix, from userid 1000)
-	id 34B531003B9; Fri,  4 Jul 2025 16:16:42 +0100 (BST)
-Date: Fri, 4 Jul 2025 16:16:42 +0100
-From: Sean Young <sean@mess.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Tommaso Merciai <tomm.merciai@gmail.com>,
-	Martin Hecht <mhecht73@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Umang Jain <umang.jain@ideasonboard.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Michael Riesch <michael.riesch@collabora.com>,
-	Mikhail Rudenko <mike.rudenko@gmail.com>,
-	Steve Longerbeam <slongerbeam@gmail.com>,
-	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-	Nicholas Roth <nicholas@rothemail.net>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	Matt Ranostay <matt@ranostay.sg>,
-	Nas Chung <nas.chung@chipsnmedia.com>,
-	Jackson Lee <jackson.lee@chipsnmedia.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Matthias Fend <matthias.fend@emfend.at>,
-	Marco Felsch <m.felsch@pengutronix.de>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-	Ricardo Ribalda <ribalda@chromium.org>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 41/80] media: Remove redundant
- pm_runtime_mark_last_busy() calls
-Message-ID: <aGfwWkZg48T1tooH@gofer.mess.org>
-References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
- <20250704075431.3220262-1-sakari.ailus@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WXGmh2nE"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2349f096605so14984095ad.3;
+        Fri, 04 Jul 2025 08:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751643670; x=1752248470; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OedcBPFbzsQsV/0/v5ae1F3cwXPOlb49ooocQIKNZl4=;
+        b=WXGmh2nEwVgJIHhfCSWRWrPYtxzk/xdpg/f7sd7nF00o7EfKzz/t70twFUlNS0mu/e
+         o3nF6famN3ruflcIVTON6eDt3u9RSG0tcl4Qp4+QAu+ywUm+LX768UbbBDyVOm27o0wt
+         4w9BNjoV4iSUjw+cNSjqCiFmllts6Rkkmo1u9o7EJAVPLh6v60hqZwsTOa8qFtSxR8eL
+         4/6iUpaSTwt9kd5MK2jkZEqpOteb3mMJSzEykY4VOi30k34TIlI5xI594OxCNKLBYvCi
+         TLgcSU4hNjSUEM1vJVDUAuhx6snWWb473R79eTc/jnb8MTaO4BPe035AMGWxKEVZp6qn
+         4nQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751643670; x=1752248470;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OedcBPFbzsQsV/0/v5ae1F3cwXPOlb49ooocQIKNZl4=;
+        b=KDOLi6Ae3vh/X8X83sIxTcOdtcqss/nZsxOqm62tYeeOrVsM6kyHBXwlbB12CGMvmq
+         3w1cSIg9raWRb/LKxApalOaGAy6tPPrv+M0irKM7W0Nk4Dyv3uKOqRn6QBYcymfQlZFh
+         3N6qAz43kZxvzlAIQJq+CxmVt93g82ED+Mi+rki4Ir/z+JrsU1NStVOAm+V+yc9WHnH4
+         X5UkuksZk0OMV3PPWUYUvGpO/oePIxgYFPUh9okylcfPvn1kPmI/cn3+05r0OT1wyIW7
+         P5oaOqpisBnaM9Dm2XTf54POS7iW+poWvr4UMfH3hnhXMWNJOdRMFZOLi9ZHfDjTs1jx
+         g4iw==
+X-Forwarded-Encrypted: i=1; AJvYcCX78UdA1PM0Q7BRsnj5UNueseTCnGQAcJs79WzlW9n3YecTtSugFZJumt6b2N5GZUDFaEtW1Db5GI3Khuo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6hhq1kCKHNN4kKiTtwQ/VXEo2tJS6U41bTh229pbiQeAJyAvH
+	LHFnplj84OVmo8FTfir94+TNNMCqqyApr2uikAkwpTa8lnTtUgE4F+kS
+X-Gm-Gg: ASbGnctrStmiCL00cu+iRwScpHFNwPbtlOjb4rYxisNPfv95lUZpKrnK6yL0xc1HlYY
+	O0x61IXYi8und3vRuYv9fa4hdNJYvg7/B6FlOEnlKcVGf+I8CK0iUhgxTwtWqyTcAKJdawtq2hh
+	jfgXNKzzHwtxRF7m9GAzYewSNmgilQoq5SF/7ljKBgMcyzgPn2lTnnL3a5pXmfHn6xkCgtbV0DC
+	1wke24p3Se2QmOzTxpWAVGwALheoM/d9gO74/G/VLoWCiCXbF4IidaYnlray8tfJPv8xu7S66ld
+	bBm10FQYid6XTcEoyvevV0GTUrSAl2PjkeXkWUz9TpGQeap3RH/cWBkDPzGIhq+Q6JtvQvIXAa8
+	e8hNjzB3WxyhbKfjL1oU1iCuf5ENNVKCaRlELgmCGQWWsboZofQ==
+X-Google-Smtp-Source: AGHT+IG1TDVx9zaBJ67Uj+KJrT++joFV5lUfwhoIBw0a6RJIPN4Mg//ySNPgrJ9HLqu6bkHlyCZM1w==
+X-Received: by 2002:a17:902:f682:b0:234:b422:7120 with SMTP id d9443c01a7336-23c8746d75bmr34272925ad.9.1751643669593;
+        Fri, 04 Jul 2025 08:41:09 -0700 (PDT)
+Received: from DESKTOP-RD0GVCL.localdomain (124-218-195-161.cm.dynamic.apol.com.tw. [124.218.195.161])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c8431a4b6sm21912375ad.29.2025.07.04.08.41.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jul 2025 08:41:08 -0700 (PDT)
+From: LiangCheng Wang <zaq14760@gmail.com>
+Subject: [PATCH v8 0/3] staging: media: atomisp: indentation cleanup per
+ directory
+Date: Fri, 04 Jul 2025 23:40:51 +0800
+Message-Id: <20250704-new_atomisp-v8-0-2a8560cbd9be@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250704075431.3220262-1-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAP2Z2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyLHQUlJIzE
+ vPSU3UzU4B8JSMDI1MDcwMT3bzU8vjEkvzczOIC3VRz4zQTc8M0YwNzCyWgjoKi1LTMCrBp0bG
+ 1tQAqBeK0XQAAAA==
+X-Change-ID: 20250704-new_atomisp-e73f471f3078
+To: Andy Shevchenko <andy@kernel.org>, Hans de Goede <hansg@kernel.org>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sakari Ailus <sakari.ailus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-staging@lists.linux.dev, LiangCheng Wang <zaq14760@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751643666; l=3949;
+ i=zaq14760@gmail.com; h=from:subject:message-id;
+ bh=Im8I+7hlGniAQNwn5GxMLcoY1pxk5HJSJUp96zBoC2Y=;
+ b=7Fs8CESTiTtc3P9HHWidgMqselOticjAAk5NbwihSCq27lVxaK+8mJ/UFthtNl9QL4+1adfpN
+ DHLAq81vczqCQaXIx39XSBWWwqwKLzwQbLuJcnYe0ktQoayc3Gv6BoA
+X-Developer-Key: i=zaq14760@gmail.com; a=ed25519;
+ pk=/x4391DbJ19fFQI7t33HWt3lsHfYPl2I2ax8C+Vxr+M=
 
-On Fri, Jul 04, 2025 at 10:54:31AM +0300, Sakari Ailus wrote:
-> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
-> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
-> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
-> pm_runtime_mark_last_busy().
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
- 
-...
+This patch series focuses on cleaning up indentation (spaces, tabs) in the
+AtomISP driver under drivers/staging/media/atomisp/pci/isp/kernels/.
 
->  diff --git a/drivers/media/rc/gpio-ir-recv.c b/drivers/media/rc/gpio-ir-recv.c
-> index bf6d8fa983bf..161f8919022c 100644
-> --- a/drivers/media/rc/gpio-ir-recv.c
-> +++ b/drivers/media/rc/gpio-ir-recv.c
-> @@ -49,7 +49,6 @@ static irqreturn_t gpio_ir_recv_irq(int irq, void *dev_id)
->  		ir_raw_event_store_edge(gpio_dev->rcdev, val == 1);
->  
->  	if (pmdev) {
-> -		pm_runtime_mark_last_busy(pmdev);
->  		pm_runtime_put_autosuspend(pmdev);
->  	}
+Following previous discussions, this version:
+- Applies only indentation-related changes
+- Touches a limited number of files to keep the series reviewable
+- Splits patches by subdirectory to improve traceability and clarity
+- Does not include any clang-format output or automated rewrites
+- Leaves all non-indentation checkpatch.pl warnings or errors untouched
 
-No need for braces any more - as Laurent already pointed out.
+There is no functional logic change.
 
-Reviewed-by: Sean Young <sean@mess.org>
+---
+Changes in v8:
+- Reorganized cleanup by subdirectory (one commit per directory)
+- Focused only on indentation fixes (spaces, tabs)
+- Removed all clang-format involvement
+- No functional changes
+- Link to v7: https://lore.kernel.org/all/20250629113050.58138-1-zaq14760@gmail.com/
 
+Changes in v7:
+- Split previous monolithic patch into multiple smaller patches
+- Applied clang-format to entire driver excluding i2c directory
+- Fixed checkpatch.pl-reported ERRORs (parentheses in macros, unnecessary return parentheses, zero-initialized globals, spaces after unary minus)
+- Left WARNINGS untouched for future cleanup
+- No functional logic changes
+- Link to v6: https://lore.kernel.org/r/20250627-bar-v6-1-b22b5ea3ced0@gmail.com
 
-Sean
+Changes in v6:
+- Applied clang-format across the entire AtomISP driver
+- Fixed all checkpatch.pl-reported ERRORs
+- Added explanation of tooling and scope
+- No functional logic modified
+- Moved 'Suggested-by' and 'Link' tags above Signed-off-by
+- Link to v5: https://lore.kernel.org/r/20250625-bar-v5-1-db960608b607@gmail.com
+
+Changes in v5:
+- Replaced space-based indentation with tabs in output_1.0 directory
+- Used checkpatch.pl and grep to identify formatting issues
+- No functional changes made
+- This patch is now focused solely on tab/space issues
+- Link to v4: https://lore.kernel.org/r/20250624-bar-v4-1-9f9f9ae9f868@gmail.com
+
+Changes in v4:
+- Moved assignment operator '=' to the same line for static struct definitions
+- Remove unnecessary line breaks in function definitions
+- Update commit message to reflect all the coding style fixes
+- Link to v3: https://lore.kernel.org/r/20250622-bar-v3-1-4cc91ef01c3a@gmail.com
+
+Changes in v3:
+- Removed extra spaces between type and asterisk (e.g., `*to`) in function
+  declarations, as pointed out by Andy Shevchenko
+- Update commit message to reflect all the coding style fixes
+- Link to v2: https://lore.kernel.org/r/20250621-bar-v2-1-4e6cfc779614@gmail.com
+
+Changes in v2:
+- Fix patch subject prefix to "staging: media: atomisp:" to comply with media CI style.
+- No other functional changes.
+- Link to v1: https://lore.kernel.org/r/20250621-bar-v1-1-5a3e7004462c@gmail.com
+
+Thanks for your previous feedback.
+
+Best regards,  
+LiangCheng Wang <zaq14760@gmail.com>
+
+Signed-off-by: LiangCheng Wang <zaq14760@gmail.com>
+
+---
+LiangCheng Wang (3):
+      staging: media: atomisp: fix indentation in aa
+      staging: media: atomisp: fix indentation in anr
+      staging: media: atomisp: fix indentation in bh
+
+ .../pci/isp/kernels/aa/aa_2/ia_css_aa2_types.h     |  2 +-
+ .../pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.c  | 29 +++++++++-------------
+ .../pci/isp/kernels/anr/anr_1.0/ia_css_anr.host.h  | 17 ++++++-------
+ .../pci/isp/kernels/anr/anr_1.0/ia_css_anr_types.h |  4 +--
+ .../pci/isp/kernels/anr/anr_2/ia_css_anr2.host.c   | 12 ++++-----
+ .../pci/isp/kernels/anr/anr_2/ia_css_anr2.host.h   | 11 ++++----
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh.host.c       | 18 ++++++--------
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh.host.h       | 12 ++++-----
+ .../pci/isp/kernels/bh/bh_2/ia_css_bh_types.h      | 14 +++++------
+ 9 files changed, 52 insertions(+), 67 deletions(-)
+---
+base-commit: 4c06e63b92038fadb566b652ec3ec04e228931e8
+change-id: 20250704-new_atomisp-e73f471f3078
+
+Best regards,
+-- 
+LiangCheng Wang <zaq14760@gmail.com>
+
