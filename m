@@ -1,97 +1,194 @@
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98C127F759;
-	Fri,  4 Jul 2025 07:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=58.251.27.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EBF1F5838
+	for <linux-media@vger.kernel.org>; Fri,  4 Jul 2025 07:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751614059; cv=none; b=nPyCIzPdC9IV/9rs9pE2v7Jd741Nk79c3dMjTwRhQdbxfUgVmh6bkTGRa4Qkv0KDCmzfSPJAvsW/yaak0RihtLudFHwcFQwUkVDq/MhGq3I6RZ4DfMBGtCf5s+xXYaRxyZ9Mqfue5WCnuzUUzSHY+X2Bm9lX7WUmKPDXdqTHhtI=
+	t=1751614644; cv=none; b=ZcvDaCfMRFWKNkiZKpI23bwg9EBBXGFM2grihgOOWXT2/5hkhH78OZbzH/tOiM6XUBAJ2XZY1iDa4B/wcNTGum/5fdGu9hUv3F6zAtxEI8fQr7da+ZsBO34K6VmVElhBdpuCReh3uqby5X7IfQZD2rEurQlVucU91KKdLxeQg4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751614059; c=relaxed/simple;
-	bh=yVFYo6Kk/6Zc9eHOlHEVJQtvOkaea4d9X8jdBYc1rs8=;
-	h=Date:Message-ID:Mime-Version:From:To:Cc:Subject:Content-Type; b=J6Gyxw+SBu/c6FzF+5JUg+IrYo2EYMJuzGYoclSJo459lRh+0/K2mC4PumyTPjSsUgw4AuDIjDZu5yRfHuZBtm/5O790WZbN6c7n3H1UsAR2VYD4Aw44NzzUX+YsBItMlK2G7oECYiDvy7AfWXsacP6sWeqDur7gFwB2P76ghjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=58.251.27.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mxde.zte.com.cn (unknown [10.35.20.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxct.zte.com.cn (FangMail) with ESMTPS id 4bYQ6R5g88zCh12;
-	Fri,  4 Jul 2025 15:21:19 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mxde.zte.com.cn (FangMail) with ESMTPS id 4bYQ6H6fKFzBRHKj;
-	Fri,  4 Jul 2025 15:21:11 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4bYQ644Mftz8R044;
-	Fri,  4 Jul 2025 15:21:00 +0800 (CST)
-Received: from xaxapp04.zte.com.cn ([10.99.98.157])
-	by mse-fl1.zte.com.cn with SMTP id 5647KiW8090359;
-	Fri, 4 Jul 2025 15:20:44 +0800 (+08)
-	(envelope-from jiang.peng9@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid31;
-	Fri, 4 Jul 2025 15:20:47 +0800 (CST)
-Date: Fri, 4 Jul 2025 15:20:47 +0800 (CST)
-X-Zmail-TransId: 2af9686780cf5ce-2beb8
-X-Mailer: Zmail v1.0
-Message-ID: <20250704152047205U11FdEih1MxrmcmAz0Xpp@zte.com.cn>
+	s=arc-20240116; t=1751614644; c=relaxed/simple;
+	bh=Ao6eVQZ6KMseJg02tWLT3+BSILzZm/PlIiE+rzjnR8U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UQ8R8NFz3NKV0/PB5RpSTJ5EsDiD0r+ZQHvBF/35hTbf2v4RAEkOA2YjyHp6z9f6eh02gz8FYJcy0ULCmvvHsnT5oikyszIr9kf9ceBn1bTqhPhuAXj8dv/eG8IY/5gcWc9dZdQlDVJxYOe61r/41KZ3/bVbOme3nGv9TdnEWjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=StikYP4J; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="StikYP4J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1751614643; x=1783150643;
+  h=date:from:to:cc:subject:message-id;
+  bh=Ao6eVQZ6KMseJg02tWLT3+BSILzZm/PlIiE+rzjnR8U=;
+  b=StikYP4JyUNF44gM7f3kblk30Nu5ZYgtUwiNjbgGLf/N7T7HWIZHhCJ5
+   fvDek47WcK8sPMYwekMV8tviELHjzhGNYjXa+1W9e1xHzuxkYZNnC4qfb
+   +/x+UUX7cSXP8g8ofcc+hxSD+PJUyzdSBdROkpGxFk4NtabKMUlQoONv6
+   MdO6bc5NHVoeqHf/bZsA362G913vA+tyz78HBoW03vnHgIIcy9UDplj99
+   sJIMGjP7aakntptLreK1oLuPALyCMV3aFDo3GYXKzj8lDH+ZKXMbJxsFp
+   xujRn+G2I9zQBPFaPvt2MacS8ib1do/TeivwX51KEVpiRt/f5qNirvUTP
+   g==;
+X-CSE-ConnectionGUID: 4Zw4Gz8jRxq3evEXvXp5UA==
+X-CSE-MsgGUID: HEGGzz2YSf6za1xYNYZTZw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11483"; a="57619927"
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="57619927"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 00:37:22 -0700
+X-CSE-ConnectionGUID: uK5Bi17RSOKL2GY4OnDAew==
+X-CSE-MsgGUID: eEqtQkTHRrSjq4g8vXYCug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,286,1744095600"; 
+   d="scan'208";a="185530649"
+Received: from lkp-server01.sh.intel.com (HELO 0b2900756c14) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Jul 2025 00:37:22 -0700
+Received: from kbuild by 0b2900756c14 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uXaz1-0003SF-2f;
+	Fri, 04 Jul 2025 07:37:19 +0000
+Date: Fri, 04 Jul 2025 15:36:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-media@vger.kernel.org
+Subject: [linuxtv-media-pending:next] BUILD SUCCESS
+ c26e8dcd9d4e86d788c5bf7a5dd0ea70a95ab067
+Message-ID: <202507041523.59PQ0gCB-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <jiang.peng9@zte.com.cn>
-To: <jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>
-Cc: <mst@redhat.com>, <eperezma@redhat.com>, <sumit.semwal@linaro.org>,
-        <christian.koenig@amd.com>, <virtualization@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linaro-mm-sig@lists.linaro.org>,
-        <xu.xin16@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSB2aXJ0aW86IEFkZCBtaXNzaW5nIGtlcm5lbGRvYyBmb3IgdmlydGlvX2RtYV9idWZfYXR0YWNo?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 5647KiW8090359
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 686780EE.000/4bYQ6R5g88zCh12
 
-From: Peng Jiang <jiang.peng9@zte.com.cn>
+tree/branch: https://git.linuxtv.org/media-ci/media-pending.git next
+branch HEAD: c26e8dcd9d4e86d788c5bf7a5dd0ea70a95ab067  media: qcom: camss: Remove extraneous -supply postfix on supply names
 
-Add kerneldoc for 'virtio_dma_buf_attach' function to fix W=1 warnings:
+elapsed time: 1088m
 
-drivers/virtio/virtio_dma_buf.c:41 function parameter 'dma_buf' not described in 'virtio_dma_buf_attach'
-drivers/virtio/virtio_dma_buf.c:41 function parameter 'attach' not described in 'virtio_dma_buf_attach'
+configs tested: 117
+configs skipped: 4
 
-Signed-off-by: Peng Jiang <jiang.peng9@zte.com.cn>
----
- drivers/virtio/virtio_dma_buf.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/virtio/virtio_dma_buf.c b/drivers/virtio/virtio_dma_buf.c
-index 3fe1d03b0645..18d261ba5197 100644
---- a/drivers/virtio/virtio_dma_buf.c
-+++ b/drivers/virtio/virtio_dma_buf.c
-@@ -35,7 +35,16 @@ struct dma_buf *virtio_dma_buf_export
- EXPORT_SYMBOL(virtio_dma_buf_export);
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                      axs103_smp_defconfig    gcc-15.1.0
+arc                   randconfig-001-20250703    gcc-11.5.0
+arc                   randconfig-002-20250703    gcc-12.4.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-15.1.0
+arm                          pxa3xx_defconfig    clang-21
+arm                   randconfig-001-20250703    clang-21
+arm                   randconfig-002-20250703    gcc-8.5.0
+arm                   randconfig-003-20250703    clang-17
+arm                   randconfig-004-20250703    clang-21
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250703    clang-21
+arm64                 randconfig-002-20250703    gcc-14.3.0
+arm64                 randconfig-003-20250703    clang-21
+arm64                 randconfig-004-20250703    gcc-8.5.0
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20250703    gcc-14.3.0
+csky                  randconfig-002-20250703    gcc-12.4.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250703    clang-21
+hexagon               randconfig-002-20250703    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250703    clang-20
+i386        buildonly-randconfig-002-20250703    gcc-12
+i386        buildonly-randconfig-003-20250703    gcc-12
+i386        buildonly-randconfig-004-20250703    clang-20
+i386        buildonly-randconfig-005-20250703    gcc-12
+i386        buildonly-randconfig-006-20250703    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-21
+loongarch             randconfig-001-20250703    clang-18
+loongarch             randconfig-002-20250703    clang-18
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                          eyeq5_defconfig    gcc-15.1.0
+mips                        omega2p_defconfig    clang-21
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250703    gcc-8.5.0
+nios2                 randconfig-002-20250703    gcc-8.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250703    gcc-8.5.0
+parisc                randconfig-002-20250703    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-21
+powerpc                      ppc64e_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20250703    gcc-10.5.0
+powerpc               randconfig-002-20250703    clang-21
+powerpc               randconfig-003-20250703    gcc-8.5.0
+powerpc64             randconfig-001-20250703    clang-18
+powerpc64             randconfig-002-20250703    clang-21
+powerpc64             randconfig-003-20250703    gcc-14.3.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                 randconfig-001-20250703    gcc-13.4.0
+riscv                 randconfig-002-20250703    gcc-14.3.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+s390                  randconfig-001-20250703    gcc-12.4.0
+s390                  randconfig-002-20250703    clang-21
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                    randconfig-001-20250703    gcc-9.3.0
+sh                    randconfig-002-20250703    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250703    gcc-8.5.0
+sparc                 randconfig-002-20250703    gcc-13.4.0
+sparc64               randconfig-001-20250703    gcc-8.5.0
+sparc64               randconfig-002-20250703    clang-20
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250703    gcc-12
+um                    randconfig-002-20250703    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250703    gcc-11
+x86_64      buildonly-randconfig-002-20250703    gcc-12
+x86_64      buildonly-randconfig-003-20250703    clang-20
+x86_64      buildonly-randconfig-004-20250703    clang-20
+x86_64      buildonly-randconfig-005-20250703    gcc-12
+x86_64      buildonly-randconfig-006-20250703    gcc-12
+x86_64                              defconfig    gcc-11
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250703    gcc-14.3.0
+xtensa                randconfig-002-20250703    gcc-8.5.0
 
- /**
-- * virtio_dma_buf_attach - mandatory attach callback for virtio dma-bufs
-+ * virtio_dma_buf_attach - Mandatory attach callback for virtio dma-bufs
-+ * @dma_buf: Pointer to the shared dma-buf structure
-+ * @attach: Pointer to the newly created attachment metadata
-+ *
-+ * Description: Implements the standard dma-buf attach operation for virtio devices.
-+ *              Retrieves virtio-specific operations through container_of macro,
-+ *              then invokes device-specific attach callback if present.
-+ *              This enables virtio devices to participate in dma-buf sharing.
-+ *
-+ * Return: 0 on success, error code on failure
-  */
- int virtio_dma_buf_attach(struct dma_buf *dma_buf,
-                          struct dma_buf_attachment *attach)
--- 
-2.25.1
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
