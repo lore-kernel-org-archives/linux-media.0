@@ -1,182 +1,204 @@
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B8B2D9EF9;
-	Fri,  4 Jul 2025 08:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735BC2EBDF6;
+	Fri,  4 Jul 2025 08:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751618527; cv=none; b=OgUqthUMNHH+caZ9FfrCYBtDpJfrxcKvIIfWFTy18KB4NzudTubEuPk2BCMWqG28rzQLs4/U38cYWB3xH770ZlLguJaeIUWtHgcgCrHzDho5/ES+KENVNWAngQ8+mwYIfinxpTKDrAGq/u2D9E4mnzeb52YRSBGqvjEh4baVcYY=
+	t=1751619399; cv=none; b=Jp5fmnJciI4CUWPcpd+5DItLUbjX7uaee3dRzQMajYjqE+FJISCS1jaPEB5WKYG4y2DdpVTOy2m9foj8FLGdLcu0A3YMWs4qcl4eV6ryTFV/zxLcNJzR4NRJ61ia+6hBJRe5Ddwzz+Cc5YDAgiUUJbBJJMYiWmcgOTMm5DFSPZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751618527; c=relaxed/simple;
-	bh=JtRZgEk/47Q54uH9yyaZ7ezdBd3g0rPBT+KWyBunC9w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=S+KgUY0CT896CL7NBWZgh1svX3khT8z0oamW/FSwQxzXIBdB7XftUXgpV+6c9nJ8qKag27IUa8LR3GZfxnORJN3GS2rgZTRocTPBevJO7lYQwHZC5gUGCXLlsZ+1A1/pmbmftPmuQGnYWWd4cSwX0bVcDPdqHuB4eleumvQY7Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=I1qgQ10f; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1751619399; c=relaxed/simple;
+	bh=y1j/5Cpk8bPb641kRnAZ7hwtcYIwzQznPTALWGJ9fVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IfT8b+mUqrZX5T2iiHUdyXFbCbfTeWXnzZ252G7EtDKK/S+rHs+wePyaFRD5CsHQGj6ZR5A+ExwIqiDJnKMhLCaVimwN72APhMn+t1B/+EYWAsqIYIbjw93rGFbPm0jtWpz5wjHL5TJ7d1qbY7Ss0kRmQ1ZU002duXRu9Ox/BFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=C/+JdCFc; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="I1qgQ10f"
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5647ZrNT028655;
-	Fri, 4 Jul 2025 10:41:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	eago0RZdyrerOdy6yEfqaUqyo2OFIpdQliz92NLH9S8=; b=I1qgQ10fN3ww2k8s
-	Sdp3ZBe1GoA1iUJwC5Er7fn95fXqvWOrJdbXmVCQrFZ0Y10eIJKspdKrwmCBDjNn
-	kQRqBqaiT40/OsieTsuLq7cS6NC7Wwvfeqxxx7lhBCP2PyxsTlw4HqHXzoTdgygw
-	sUAAUssurpuVGl6/uKt/aRQw/nmhe3ODFIlw2x7/w4pjUv8NDoo4Nst4K14Ff2Gh
-	2taGJBoigEwq70MispjCnDBHMgqIuWJDN0z5qU5sTI5QLSe3u3kst9wEpPDR5kvE
-	FlDwv7A1iuBf8RSve3+WQsu+w/M1KRwwFgv6aDMlmyvnYzUHKumCJmSAzC/KcEf7
-	w0ae6g==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47jsy59k3x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Jul 2025 10:41:46 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 99C2840051;
-	Fri,  4 Jul 2025 10:40:31 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 022ED483149;
-	Fri,  4 Jul 2025 10:39:38 +0200 (CEST)
-Received: from localhost (10.48.86.185) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 4 Jul
- 2025 10:39:37 +0200
-From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Date: Fri, 4 Jul 2025 10:39:15 +0200
-Subject: [PATCH v4 2/3] i2c: stm32f7: unmap DMA mapped buffer
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="C/+JdCFc"
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id E1409667;
+	Fri,  4 Jul 2025 10:56:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1751619369;
+	bh=y1j/5Cpk8bPb641kRnAZ7hwtcYIwzQznPTALWGJ9fVk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C/+JdCFcyFuFUjl0QTjLej9Xh05699NjSblVGkEA7NTpLykJbK7wfxC4CUjBACvZU
+	 vcOGW37478l7BW/3U6xRbSAt7++pBYugym6uc+1NYHApNY6oCyads4kSY9QdMAFwUi
+	 D2owJvVj3WhBx3sQowso2QN7Oy4LeQlR1UdwX6KY=
+Date: Fri, 4 Jul 2025 11:56:04 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Tommaso Merciai <tomm.merciai@gmail.com>,
+	Martin Hecht <mhecht73@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Michael Riesch <michael.riesch@collabora.com>,
+	Mikhail Rudenko <mike.rudenko@gmail.com>,
+	Steve Longerbeam <slongerbeam@gmail.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Nicholas Roth <nicholas@rothemail.net>,
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Matt Ranostay <matt@ranostay.sg>,
+	Nas Chung <nas.chung@chipsnmedia.com>,
+	Jackson Lee <jackson.lee@chipsnmedia.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>, Sean Young <sean@mess.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Matthias Fend <matthias.fend@emfend.at>,
+	Marco Felsch <m.felsch@pengutronix.de>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Ricardo Ribalda <ribalda@chromium.org>, linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 41/80] media: Remove redundant
+ pm_runtime_mark_last_busy() calls
+Message-ID: <20250704085604.GC14736@pendragon.ideasonboard.com>
+References: <20250704075225.3212486-1-sakari.ailus@linux.intel.com>
+ <20250704075431.3220262-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20250704-i2c-upstream-v4-2-84a095a2c728@foss.st.com>
-References: <20250704-i2c-upstream-v4-0-84a095a2c728@foss.st.com>
-In-Reply-To: <20250704-i2c-upstream-v4-0-84a095a2c728@foss.st.com>
-To: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat
-	<alain.volmat@foss.st.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        "Maxime
- Coquelin" <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "M'boumba Cedric
- Madianga" <cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-CC: Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?=
-	<clement.legoffic@foss.st.com>
-X-Mailer: b4 0.15-dev-7616d
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-04_03,2025-07-02_04,2025-03-28_01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250704075431.3220262-1-sakari.ailus@linux.intel.com>
 
-Before each I2C transfer using DMA, the I2C buffer is DMA'pped to make
-sure the memory buffer is DMA'able. This is handle in the function
-`stm32_i2c_prep_dma_xfer()`.
-If the transfer fails for any reason the I2C buffer must be unmap.
-Use the dma_callback to factorize the code and fix this issue.
+Hi Sakari,
 
-Note that the `stm32f7_i2c_dma_callback()` is now called in case of DMA
-transfer success and error and that the `complete()` on the dma_complete
-completion structure is done inconditionnally in case of transfer
-success or error as well as the `dmaengine_terminate_async()`.
-This is allowed as a `complete()` in case transfer error has no effect
-as well as a `dmaengine_terminate_async()` on a transfer success.
+On Fri, Jul 04, 2025 at 10:54:31AM +0300, Sakari Ailus wrote:
+> pm_runtime_put_autosuspend(), pm_runtime_put_sync_autosuspend(),
+> pm_runtime_autosuspend() and pm_request_autosuspend() now include a call
+> to pm_runtime_mark_last_busy(). Remove the now-reduntant explicit call to
+> pm_runtime_mark_last_busy().
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+> The cover letter of the set can be found here
+> <URL:https://lore.kernel.org/linux-pm/20250704075225.3212486-1-sakari.ailus@linux.intel.com>.
+> 
+> In brief, this patch depends on PM runtime patches adding marking the last
+> busy timestamp in autosuspend related functions. The patches are here, on
+> rc2:
+> 
+>         git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+>                 pm-runtime-6.17-rc1
+> 
+>  drivers/media/i2c/alvium-csi2.c                          | 1 -
+>  drivers/media/i2c/ccs/ccs-core.c                         | 4 ----
+>  drivers/media/i2c/dw9768.c                               | 1 -
+>  drivers/media/i2c/gc0308.c                               | 3 ---
+>  drivers/media/i2c/gc2145.c                               | 3 ---
+>  drivers/media/i2c/imx219.c                               | 2 --
+>  drivers/media/i2c/imx283.c                               | 3 ---
+>  drivers/media/i2c/imx290.c                               | 3 ---
+>  drivers/media/i2c/imx296.c                               | 1 -
+>  drivers/media/i2c/imx415.c                               | 1 -
+>  drivers/media/i2c/mt9m114.c                              | 6 ------
+>  drivers/media/i2c/ov4689.c                               | 3 ---
+>  drivers/media/i2c/ov5640.c                               | 4 ----
+>  drivers/media/i2c/ov5645.c                               | 3 ---
+>  drivers/media/i2c/ov64a40.c                              | 4 ----
+>  drivers/media/i2c/ov8858.c                               | 2 --
+>  drivers/media/i2c/st-mipid02.c                           | 2 --
+>  drivers/media/i2c/tc358746.c                             | 5 -----
+>  drivers/media/i2c/thp7312.c                              | 4 ----
+>  drivers/media/i2c/vd55g1.c                               | 4 ----
+>  drivers/media/i2c/vd56g3.c                               | 4 ----
+>  drivers/media/i2c/video-i2c.c                            | 4 ----
+>  drivers/media/platform/chips-media/wave5/wave5-vpu-dec.c | 4 ----
+>  drivers/media/platform/chips-media/wave5/wave5-vpu-enc.c | 5 -----
+>  drivers/media/platform/nvidia/tegra-vde/h264.c           | 2 --
+>  drivers/media/platform/qcom/iris/iris_hfi_queue.c        | 1 -
+>  drivers/media/platform/raspberrypi/pisp_be/pisp_be.c     | 2 --
+>  drivers/media/platform/verisilicon/hantro_drv.c          | 1 -
+>  drivers/media/rc/gpio-ir-recv.c                          | 1 -
+>  29 files changed, 83 deletions(-)
 
-Also fix the unneeded cast and remove not more needed variables.
+[snip]
 
-Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
-Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+> diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+> index 487bcabb4a19..3316639b695e 100644
+> --- a/drivers/media/i2c/ccs/ccs-core.c
+> +++ b/drivers/media/i2c/ccs/ccs-core.c
+> @@ -788,7 +788,6 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+>  	}
+>  
+>  	if (pm_status > 0) {
+> -		pm_runtime_mark_last_busy(&client->dev);
+>  		pm_runtime_put_autosuspend(&client->dev);
+>  	}
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 817d081460c2..73a7b8894c0d 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -739,10 +739,11 @@ static void stm32f7_i2c_disable_dma_req(struct stm32f7_i2c_dev *i2c_dev)
- 
- static void stm32f7_i2c_dma_callback(void *arg)
- {
--	struct stm32f7_i2c_dev *i2c_dev = (struct stm32f7_i2c_dev *)arg;
-+	struct stm32f7_i2c_dev *i2c_dev = arg;
- 	struct stm32_i2c_dma *dma = i2c_dev->dma;
- 
- 	stm32f7_i2c_disable_dma_req(i2c_dev);
-+	dmaengine_terminate_async(dma->chan_using);
- 	dma_unmap_single(i2c_dev->dev, dma->dma_buf, dma->dma_len,
- 			 dma->dma_data_dir);
- 	complete(&dma->dma_complete);
-@@ -1510,7 +1511,6 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
- 	u16 addr = f7_msg->addr;
- 	void __iomem *base = i2c_dev->base;
- 	struct device *dev = i2c_dev->dev;
--	struct stm32_i2c_dma *dma = i2c_dev->dma;
- 
- 	/* Bus error */
- 	if (status & STM32F7_I2C_ISR_BERR) {
-@@ -1551,10 +1551,8 @@ static irqreturn_t stm32f7_i2c_handle_isr_errs(struct stm32f7_i2c_dev *i2c_dev,
- 	}
- 
- 	/* Disable dma */
--	if (i2c_dev->use_dma) {
--		stm32f7_i2c_disable_dma_req(i2c_dev);
--		dmaengine_terminate_async(dma->chan_using);
--	}
-+	if (i2c_dev->use_dma)
-+		stm32f7_i2c_dma_callback(i2c_dev);
- 
- 	i2c_dev->master_mode = false;
- 	complete(&i2c_dev->complete);
-@@ -1600,7 +1598,6 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = data;
- 	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
--	struct stm32_i2c_dma *dma = i2c_dev->dma;
- 	void __iomem *base = i2c_dev->base;
- 	u32 status, mask;
- 	int ret;
-@@ -1619,10 +1616,8 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 		dev_dbg(i2c_dev->dev, "<%s>: Receive NACK (addr %x)\n",
- 			__func__, f7_msg->addr);
- 		writel_relaxed(STM32F7_I2C_ICR_NACKCF, base + STM32F7_I2C_ICR);
--		if (i2c_dev->use_dma) {
--			stm32f7_i2c_disable_dma_req(i2c_dev);
--			dmaengine_terminate_async(dma->chan_using);
--		}
-+		if (i2c_dev->use_dma)
-+			stm32f7_i2c_dma_callback(i2c_dev);
- 		f7_msg->result = -ENXIO;
- 	}
- 
-@@ -1640,8 +1635,7 @@ static irqreturn_t stm32f7_i2c_isr_event_thread(int irq, void *data)
- 			ret = wait_for_completion_timeout(&i2c_dev->dma->dma_complete, HZ);
- 			if (!ret) {
- 				dev_dbg(i2c_dev->dev, "<%s>: Timed out\n", __func__);
--				stm32f7_i2c_disable_dma_req(i2c_dev);
--				dmaengine_terminate_async(dma->chan_using);
-+				stm32f7_i2c_dma_callback(i2c_dev);
- 				f7_msg->result = -ETIMEDOUT;
- 			}
- 		}
+You can now drop the curly braces.
+
+>  
+
+[snip]
+
+> diff --git a/drivers/media/i2c/ov64a40.c b/drivers/media/i2c/ov64a40.c
+> index a5da4fe47e0b..15912ecb8d26 100644
+> --- a/drivers/media/i2c/ov64a40.c
+> +++ b/drivers/media/i2c/ov64a40.c
+
+[snip]
+
+> @@ -3330,7 +3328,6 @@ static int ov64a40_set_ctrl(struct v4l2_ctrl *ctrl)
+>  	}
+>  
+>  	if (pm_status > 0) {
+> -		pm_runtime_mark_last_busy(ov64a40->dev);
+>  		pm_runtime_put_autosuspend(ov64a40->dev);
+>  	}
+
+Same here.
+
+>  
+
+[snip]
+
+> diff --git a/drivers/media/rc/gpio-ir-recv.c b/drivers/media/rc/gpio-ir-recv.c
+> index bf6d8fa983bf..161f8919022c 100644
+> --- a/drivers/media/rc/gpio-ir-recv.c
+> +++ b/drivers/media/rc/gpio-ir-recv.c
+> @@ -49,7 +49,6 @@ static irqreturn_t gpio_ir_recv_irq(int irq, void *dev_id)
+>  		ir_raw_event_store_edge(gpio_dev->rcdev, val == 1);
+>  
+>  	if (pmdev) {
+> -		pm_runtime_mark_last_busy(pmdev);
+>  		pm_runtime_put_autosuspend(pmdev);
+>  	}
+
+And here too.
+
+With that,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  
 
 -- 
-2.43.0
+Regards,
 
+Laurent Pinchart
