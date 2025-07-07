@@ -1,151 +1,405 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68E6299952
-	for <linux-media@vger.kernel.org>; Mon,  7 Jul 2025 13:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751893851; cv=none; b=gAE7zjfmGUiKuHTkgtBZkYwkWjXQN0sKDzTCjvflBGBpH8XOHMZ3qZ7OE/1jhkXTPAE0DAuC0npnGgqWa99/E5wOfRxO+0KQ8WeB9qdaT8ASpXS3A02WUp6+3qb0IF1FCWYK7tlIfhd7LYSLU/E141dJ7FEwPwqWFcF252RRG0Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751893851; c=relaxed/simple;
-	bh=T2e37E+d/+lUzdWBKT7ClU2tmNtETnO9/Zor50pUvEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6BVREhOiDttrm2G377WChu1wsTJDeQhNHlV3Z7W9apVatC5tujWhaWJpjPCYwlqsdz55zPAnPzvTudY5UsdYrrL2qWGXxR+dsoSYyZPJboPv9bmqsDwE/+J6v+KZIPN1GNTEGqGgbIXK2tvXGXg5S3PGC919mkXniURI4HZXzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DnULwCO6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C6F28F94E
+	for <linux-media@vger.kernel.org>; Mon,  7 Jul 2025 13:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751894061; cv=fail; b=LWPWb+HXdjdSE1jeF+odJmFhFy/fMp06sWYR/XjXZq2AgvFK3jfH30Tv6hnzQmPZJX7j5ozDvAE4XLYj33Noh0R5QjpREhk/Vn+a4ldlZSDvUL6FCg7XgUo3GK2GGpM+pvm4iWdEe48HWffEiAu9Y8CL7SgpRPL8Xt+yfLwJB+8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751894061; c=relaxed/simple;
+	bh=PMDpcF/bHNOzjG7Ms7qeg79T34W23wWF9D2qOgDD3xI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=QU21SbTsBtJT9faqjhMQLt7FycnImuWJHLODaz/17iCUS7UiKLTioLjAoCc2zRzNMEqZ4DibGjoWWA8IshlY42+Z5vAb0rsdW4n/kfG2lcvaJ/1be9q7zeLt9HHNyGr4BaMwa/M2RxaPcuXtaWvx7dtzRI4z473lvHvgv6PQ8vU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=GnXTMEIn; arc=fail smtp.client-ip=40.107.220.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DnULwCO6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751893847;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XEurCXj6cd5Czu7Fsl+l7GrfZnKLx/Ef+aDXjk7dI/Y=;
-	b=DnULwCO6he/Uh80N4noxlGcrHTL8qv5YT9uO+oLIj3IfW4PUI/4GcW2ULUzkCWGfHTQsf0
-	QQ06xmkPF9N9/t4lxGVDtag++kO+RNRzskwlRWIiC1K3Gr4rOBvI/YQIN8+IGYP0p0e3SL
-	FKElSdJtMXesHHYtUXEz1s15m5+184Q=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-uKbNPKM_NPO45CFAWYpQTw-1; Mon, 07 Jul 2025 09:10:46 -0400
-X-MC-Unique: uKbNPKM_NPO45CFAWYpQTw-1
-X-Mimecast-MFC-AGG-ID: uKbNPKM_NPO45CFAWYpQTw_1751893845
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a823b5320cso55949501cf.0
-        for <linux-media@vger.kernel.org>; Mon, 07 Jul 2025 06:10:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751893845; x=1752498645;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XEurCXj6cd5Czu7Fsl+l7GrfZnKLx/Ef+aDXjk7dI/Y=;
-        b=LPeNhcXSyS9YDRYwOZ/U9GheREzwEuQgfzgwc1AZeV65DjBB9sy3z6xz4WzLVcK74o
-         TIdNRsGevUUCK9RZKMV1R91wMAeSrhXiMy4f7GDoqiLmH4AZE2Eaj79ljLfPio5evCjJ
-         VozDLBvP19N38iesA8l52F5Kfmu+Lx4mOIMtiYZf9EYGHnUOpWnElYRXCn6jXWzyw5bR
-         ESYg9j4t9/DGAakgJ/0iEb1/rYtX7KL+TDgmC3PwPdtl7SVE1GorMJIkaKPeV5DA78uw
-         A764zqUO09eWJWtfMEsZzvG7HRgD3S1QGCYE6wEFegVnRhRwJyND5L9GvNxw+UFIUas3
-         jKDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXSsH9JF3gpi7kzqPJGrTVjfI3iPzGmxepC1/lbWmsEWx7TePBvuVkVpvm0GhpgPQp6w0BExUCT5NWXYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP4GQoeR2kX3D8CCx4sFkr+6vmuvIhJICM9NN0T8zjAkgjX+jo
-	6bvTx+k/gGu7sgOuFeE9p9ubiPXBZseU3/9dbsSgep4c0HRusk+Gn/5xdPHq6/K3d5zRAhrbB/w
-	Jm5IIwPOJdTDnS3lxAguLVoVREjh3vR6yhFXgSMo6MJaASHINecFRcScVSoGtElwc
-X-Gm-Gg: ASbGnct2Y5QxYzRfPaKXLnyDNfTz+TWjLeYqWnAUQBphpgm2GO6JMQfwdFolercJXoD
-	X8lfG2IReLgIRthXETKQxE5A1IxJJZFyH/f1PxahIe5GzTj6fVgeeU05r9+A+7vtGWRAkmntEmC
-	T6582PEPF+9lElIzcc+N3foQQBeGiPNItEMNvL7Nm1c0KUqRVMoKwDTeIYKc3UkOf+fVyzUQ+LR
-	I4cy5CNtohXvfsH4tR3tsv7/MyTbm6lAej/Cyb1wg5DvqN8q1C8tCbSvz3cAagIHu4SGvIlPaN+
-	HCdKrnFMwTBPHKHVFT5nKD7ITVhqL5CjKoqidJN8OJIQ8rPOYAyvgQ==
-X-Received: by 2002:a05:6214:2269:b0:6fb:597f:b4d0 with SMTP id 6a1803df08f44-702c6d0e528mr171252576d6.6.1751893845178;
-        Mon, 07 Jul 2025 06:10:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHES3tBHX5kljzjo+zsdbXDUJb6DU8frN39bUwjA5eUGrwKv9iaI5DG5u57DeA1U5hMj2i4tA==
-X-Received: by 2002:a05:6214:2269:b0:6fb:597f:b4d0 with SMTP id 6a1803df08f44-702c6d0e528mr171251906d6.6.1751893844672;
-        Mon, 07 Jul 2025 06:10:44 -0700 (PDT)
-Received: from jkangas-thinkpadp1gen3.rmtuswa.csb ([2601:1c2:4301:5e20:98fe:4ecb:4f14:576b])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-702c4cc771esm57828126d6.6.2025.07.07.06.10.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 06:10:44 -0700 (PDT)
-Date: Mon, 7 Jul 2025 06:10:41 -0700
-From: Jared Kangas <jkangas@redhat.com>
-To: sumit.semwal@linaro.org, benjamin.gaignard@collabora.com,
-	Brian.Starkey@arm.com, jstultz@google.com, tjmercier@google.com,
-	christian.koenig@amd.com
-Cc: mripard@kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] dma-buf: heaps: Use constant name for CMA heap
-Message-ID: <aGvHUTC7Kbe9lru3@jkangas-thinkpadp1gen3.rmtuswa.csb>
-References: <20250610131231.1724627-1-jkangas@redhat.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="GnXTMEIn"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=psyiUuxg7InYUBdwUzTyGNE7HuiNjUF1tVlgcA5SwgH6+yP6ETHN9IB7F1vza1j2RVHLSSCEuFNTXP0Eq/NGYg1KzOUtxrB+fM3o0SQmuLPmF7MmmiOX8o/Xx1K8asVvEG1wqlxV8Rl/3ydLEnzsoXLwJG0O3r734q/fFqKeFI9OGm/JPnXEuTdV0GkfWuVcWFABMrpO2EwpXMoITHkN7WFobaCMYP7AKYsTv4zRWlX3oNzOuaUT8FiCFLn49nn6aV40IAwCTptuh5ULb2hhCtjpSSwD3GvXa/zQ3CHlZ9IKAAHv9QG6zJM+EZf/qKxPfASKwWBmMsevKn+thLpCLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=atx8pNMMInjioVy8UnzGEp+CWOEmfQP/mlALUMglkEc=;
+ b=qJaLm5T7VcH352X/RQ55b7LUx+NYVtvq8QInMN5EnIoclaMYglCSijmFElZt1BXfp9QdV2zQMxePD/Rct0rqjY1p1i9Ed+FkHosY81IYp9ETa1o+Z0H3yHDvee75lLLJCIe+GpXdc/vpEUujZWTC/WAXmS8Df4n36cHbBXxfjKQPd1FR/VW8X6XfPwrrc0RkMghKHHCOKds2gDz6XgOBWpvEPzwMDbwCjmwEvnfKBcArtEMU40YEfpL2MXypVj+1pX0LkaTN88ew0IKddBh4poRqoydjWCA09FkqhrgKisZ/aAkZTpQlE+UP35udbEFdgZMVX2tfw/9Ulgx98PvrjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=atx8pNMMInjioVy8UnzGEp+CWOEmfQP/mlALUMglkEc=;
+ b=GnXTMEInBk+4b7TSGbyExEZz8bcYLRc3xkdfphzy8K7UdLTIko9nfbaHB+v4B3vdFh+6x0by1qp/XHFbxLqfcQnvQVXfBSBBuqznwb3oQjajM0nXG8lyVjh8SPKAdZgbh/tqXm1h6v6xVL06lg0juB0MZopTbz3CR5mRzLjSJgU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SN7PR12MB7022.namprd12.prod.outlook.com (2603:10b6:806:261::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.25; Mon, 7 Jul
+ 2025 13:14:14 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%5]) with mapi id 15.20.8901.024; Mon, 7 Jul 2025
+ 13:14:14 +0000
+Message-ID: <5f24f0e1-7d61-4a1a-bfea-b17fa7af4be1@amd.com>
+Date: Mon, 7 Jul 2025 15:14:11 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dma-buf: Take a breath during dma-fence-chain subtests
+To: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>,
+ Nitin Gote <nitin.r.gote@intel.com>, intel-gfx@lists.freedesktop.org,
+ chris.p.wilson@intel.com, Sumit Semwal <sumit.semwal@linaro.org>,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20250226155534.1099538-1-nitin.r.gote@intel.com>
+ <Z8Bf9HRqOg7B3W79@ashyti-mobl2.lan>
+ <76445047-a5e8-4590-8e61-5570bd051b13@amd.com>
+ <2191571.OBFZWjSADL@jkrzyszt-mobl2.ger.corp.intel.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <2191571.OBFZWjSADL@jkrzyszt-mobl2.ger.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0072.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::11) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250610131231.1724627-1-jkangas@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SN7PR12MB7022:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba4eec61-f407-4071-4d1f-08ddbd582b6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dmxaeEJCQUphTkVUbXUvUTNDYnlKWHJ1UnFuKzRDYjVxZktINHVpdGcvcXJs?=
+ =?utf-8?B?TUw1ekhSTndRekMzc2E5YlJqNllkOVFTT0Q1TzgzRVFvVXMxR3BETFZwYytY?=
+ =?utf-8?B?Y1M3SFZwQyt4NGV4TTVxWlRhZHpGMWU3LzdtTldyQ0xwZEE0Ulp4YURhZGky?=
+ =?utf-8?B?cTdTcDR2eDRxMjNCeHJaRG9GZDVvWVZzaEd6SVNpTW5NSXZMeVpMRjY1bi93?=
+ =?utf-8?B?VDJ3S0JjMFdsZ01FL3NTVGlQNkg5bkpWRkQvU3NpejRMUGxuY2M0cXhBenVD?=
+ =?utf-8?B?enVVejI3ckc4SWJBR2VqaWJ1T0JrSzU4K2ZaL3czbFlGcGp5MHZwY3M4aWZ2?=
+ =?utf-8?B?Z3UwUmxkd0YvRXR0c2VETVppc1JFWERUMTA2anI1a1A2Nnd0ZU03YW9CdlA2?=
+ =?utf-8?B?RmVVcU5JOGVudS84djJsVUwvc295blBVMHV1STF4NW5MOGhFd3EvWGFvcmQw?=
+ =?utf-8?B?eW80djNoanR0QjZoZ2U4ZURIZGNvODl3NUxnOW5mZDdKVDVBaFk0OGVyZ055?=
+ =?utf-8?B?bDBXYStIM3o4cEk0R1g4cHZicDl0dXM5RW8wQVkvZFZMR3lnUldvb3VwRjk3?=
+ =?utf-8?B?bmNjc2w4b1FMVDhmNE5TS1NpSkVpaCtPK3AzcElDeVp2R2llditVV200OEhy?=
+ =?utf-8?B?RTdXRjUvSi80ZlNKd1JpTGlueUVMbi91clJVSzBFeW1odHNQbkJTeEdNY2Ux?=
+ =?utf-8?B?eVl0NXVLTmdaWkZqS01Ua3NteGNBNG14L05lL2tvcWFpREd5M0toS1J1aUw3?=
+ =?utf-8?B?Y1FJd1d0VWFFeGkwSUt5RXJKY2o4SEFpSWQ0VWhXMnhkanhjQkMwS3lBWDh6?=
+ =?utf-8?B?bkhScnhneG90ZEcwc3E5QldUMnJqczZvUlh6c3RHaWh6aXJ5SE5Lc0svdGEy?=
+ =?utf-8?B?b05yYmlUWW5wUW42dUxGV3FxVWtaakdsTmppZHd4eFo0TWNMMW82WHhYeUZD?=
+ =?utf-8?B?UFdOT29BbHlVeU43SWJHcXUzVkM0eXRMbEtNaWdUSExRRUJOVEE5VlRJaWZB?=
+ =?utf-8?B?SUUzenRXb01pVzlETG5lS2duYmlvaTRaRlNhUEFTNjcraXR4LzRrU0JqSHQv?=
+ =?utf-8?B?aHR6bTRlUFgrZlVtWTJJY05KK2I3QkdnU21WS3RzMVIzS3FXVGgzMGpRakZF?=
+ =?utf-8?B?cEorb0RaVVFaZ3R2SW8vUVVETGhSVGdmQXVNYmd6WEVadUxIYU41U2NvTVdw?=
+ =?utf-8?B?OHhCMUF5VWVsOUNHRmJYUDJGNkFucGUzZCtZYWRmaEZZL29kMkQ0RG5Ya2Q1?=
+ =?utf-8?B?TndKSWZXamhjaXk1bms2aFFjakZNV1g5UEQzVTc2NVdEMDBjeEF3M0ZVeVZo?=
+ =?utf-8?B?MnBiMk03bm1VSTltS3JqNFhuWVRENzBUS3RSbDVsdS9ZL2RWclNteHl6TnBi?=
+ =?utf-8?B?K2pDNWEzcHNWTUQ1V2dyd1NHVG1BbjdvQVgwRFRqZTBkZnNpSDdGdEJWY0FP?=
+ =?utf-8?B?Q3phQzlKajMzdkJYUWZwZmR2ME44NjE0SDN6TExuVHJsS1VNRmZLSEZieXhW?=
+ =?utf-8?B?ZlNlY2N3bHBnVzhqSlpoTGJtSngvVXNiRmdlZUJEYVlXWTNBL1dqdC95OUND?=
+ =?utf-8?B?YjZZYndtSmxNWW9ydzk4Mm52djNpVVVqcmNCTDgyM3dpaHY3cnM0R0l4TUpZ?=
+ =?utf-8?B?V1hKZ2xJL3cxU1g4UXh5b1BmaTQxb0JFZVR4a1NMN3FlaGpJM1RNYkVzblRq?=
+ =?utf-8?B?aDc3OElCZEZsMktYNXR6akdYMnNxdTdRRXZ6N0QzUjJkWnA3VGlOTjk2S0dR?=
+ =?utf-8?B?MlBxY1VaMzJUdDJlLzI1WHdjVktnMVBrdGsrelZ3UzhKZ2ZWb2JiZTl5Nlly?=
+ =?utf-8?B?RHcyZ2FwUmNyZXlSbEFKM2hzNmttUFpFQ3BEaGFOWkZLV2JjKzF3T1JVdTdW?=
+ =?utf-8?B?ZVREaktKM1loSEQ0Q0ZjNGtxcEJnMS90RVI1eml6SW9VekR5VlFsd3NZVWto?=
+ =?utf-8?Q?fq9uP8LC6tw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?V3p3WGV6eXV6UTZNTlR3ZXh0VGZ6c3VpSFVkbHF2YStuQnVhajJia2RzQnd2?=
+ =?utf-8?B?VkszcUVCVHhnK0QxSWFtdFZZbkMrUE5tWWd1TnJCZ3FJZUJZNDlCRll2c1pX?=
+ =?utf-8?B?ZW9BeldZLzZvczdCUFlZczhTTU1hRUg2UTIwNnhlNlRDK0lWOWkycGlOK1RK?=
+ =?utf-8?B?ZCtwcmVvWG1OZDJ6cmk1aldaOTdrbnhKM0haREd2S3JOQkVuemp3aDVaNlZv?=
+ =?utf-8?B?UW5ralRHTTdGektaeFUxazIzdmp4elpLam5zeHlrc2dkNi9KNnVQKzBPVEd0?=
+ =?utf-8?B?Mk10NnhwTFptejdJL2FHbm02VSsxMmVaMStJWnFQTDRjNEJYcTlNYitORktW?=
+ =?utf-8?B?TzRaMUUzSGZtc0VxN3J5cXhkR3BmZzEzcDdDWVNsM1ZwSXZZZmZ2ZkRDVFY1?=
+ =?utf-8?B?ZkJIcWlBVHZ4aVJldlplVWhhajk5clMyeEl6Y3ZLRVZ2SnNTUEV3eWxvNGN0?=
+ =?utf-8?B?d2U2dWpGUnJmaVpqZTNkT2p5SWFxRzlxZk8vZUhmUmJiV0t4NWVQSktIYmdX?=
+ =?utf-8?B?RkYyUHgzaUZVTGpZQXZ6OStiaGFxVVVBWGNCNzl2YkQ1eDN5UjA4VEdyZGVy?=
+ =?utf-8?B?dlk2RkNCc2pqWkhNSGhtV2QraitUeVIwYm1CQWJFMWl0TndpK1oyWkdCd3A5?=
+ =?utf-8?B?Y0lxbzh2VWczeG9nc1lSeUU3UXdmS0tlNGhOeDJDNmFYTkp4RHljalpER3FJ?=
+ =?utf-8?B?OGRlYXNPcFJYbTQzNzh6VGNidTRwdXZnZ1V1QUJZWEN3KzhsTUU1RFdBcklk?=
+ =?utf-8?B?ZHd4dmtSK3JTNFl1ZU1sV0NQakRrSTVnU0NOdnc2TitSTGZnNVM3WHdsUFlx?=
+ =?utf-8?B?aS81WCtLa3ZoVHpYd29SL2YvWjJ2RTNiVU1jUnpNbENabExvUHZFd0NpdEgv?=
+ =?utf-8?B?TFkzaWdGZjNWanhmZVRBeWxGOGFoRjBsdGJPd1l5SFZqZ3dkM0xsODhvQnhV?=
+ =?utf-8?B?RXhkWWVZTU5SQkNIRkNtK091anAxRWZuU05tWkNlbHpZMk1mVUs0aDMvUDRi?=
+ =?utf-8?B?ZXBEVzJ1bTJhNHowTDQwTXFmSWhHSGpwVlZDQjN6RFltVXU1Y1VpMjRWZ3RQ?=
+ =?utf-8?B?eGJVeC8xVjVhcHJtRVUwM2NTZHZyY2dWdlVSTUFZa004Y0M0UVkyWmowZkNn?=
+ =?utf-8?B?Tk5TbTh1VitqV3pUaEVOZzlReEJXaDAwaUNPbkZoeWdSN2xxbGJQdzhMNzhG?=
+ =?utf-8?B?Q2FtdDlVS2JDRElpcUhTSDlZaUtyOEpiNTFJdmpmK1NqaC9pc0ZiakdTZVdm?=
+ =?utf-8?B?QXRtUDhvZHlNVzFmR3FlMGMxWUZqc1FRUmRnVDNITDBTTzdKQmdZNmxkN2pp?=
+ =?utf-8?B?dncrMVRZU3hTbWdSV0hwQnhLZDBrVkh1N285L1A2Z0lFMFhEc3ptOFBYTVow?=
+ =?utf-8?B?TWg5ZFE2TXczb0FXN1lXcVhaRkZyK1poT3gxV1Z5TnVKdDBaSCtKTHB2ZGtZ?=
+ =?utf-8?B?YWxHaFZKZ1RZZ2g1MC9reGFYODVYTmZkWWY5MlVEai9yb1VhVkJNMmh6Q2Jz?=
+ =?utf-8?B?Y2ZEM21DRGNCR1QzZlQyZWx6cDB3bDJiQzBsUE5iMUN1QkVBTEY1Y0hzWVpn?=
+ =?utf-8?B?UDB3MjBYREtxZXUwRkhhcko3NStIODZ4LzRHVVBPeFB5UWVUK0RJdlNBYndp?=
+ =?utf-8?B?a3dJZTRmaFhnNXN4WW01VzFoZTBRSzFtQzZ5VmZ5VkdyM0JXUU04WSszVXpq?=
+ =?utf-8?B?MTR4TUJJQkNqR1NlbXpWMFVSVlVTUEZ4OFduMVBXeGVteFQvSUxuWWVlS1ZT?=
+ =?utf-8?B?RU9ybDhEMXNiQ1lxYkxCU0xsVGVsUE0vQnBldklYN0l1enB0RUxrOVQ5WnhJ?=
+ =?utf-8?B?NWdGL3J1V2RZSndLdGQwWVA1eTdSYnZNdEdaR1hLVzR4VUdIQ1JqRU9Xdnk4?=
+ =?utf-8?B?WXNVWGdRaFJ0MTZnd3ZaSVlMWktlQStheHNOYmVZdXFENWhENytKMjdKb2xu?=
+ =?utf-8?B?YjhEeU5VV0tUSjg1ZU5obDJVeVhZOVNlSWxzWTlmL0wyTm8vM3ZxSGdmQjlI?=
+ =?utf-8?B?YTFiYkRaWDN6VnBUZHBxb29jMHFvdzl0OEIrTnlvMHl2YW9ldno3M3Z5YjVV?=
+ =?utf-8?B?VEhYRGM0WWJRQ1NZeHBDUFhpclRwck5wMlVxaWpxWkpnWmxBQlU3bVNEUm9Q?=
+ =?utf-8?Q?0lz7B8PrwBmJQOGLdHIgDO76J?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba4eec61-f407-4071-4d1f-08ddbd582b6e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2025 13:14:14.1207
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5tg2WHPXVw7amC9R1aHaMiN7yDiMf82AyvBqcHpLW6Ez0yP8kJRYXA6U9Qsjt3hp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7022
 
-On Tue, Jun 10, 2025 at 06:12:28AM -0700, Jared Kangas wrote:
-> Hi all,
+On 07.07.25 14:25, Janusz Krzysztofik wrote:
+> Hi Christian,
 > 
-> This patch series is based on a previous discussion around CMA heap
-> naming. [1] The heap's name depends on the device name, which is
-> generally "reserved", "linux,cma", or "default-pool", but could be any
-> arbitrary name given to the default CMA area in the devicetree. For a
-> consistent userspace interface, the series introduces a constant name
-> for the CMA heap, and for backwards compatibility, an additional Kconfig
-> that controls the creation of a legacy-named heap with the same CMA
-> backing.
-> 
-> The ideas to handle backwards compatibility in [1] are to either use a
-> symlink or add a heap node with a duplicate minor. However, I assume
-> that we don't want to create symlinks in /dev from module initcalls, and
-> attempting to duplicate minors would cause device_create() to fail.
-> Because of these drawbacks, after brainstorming with Maxime Ripard, I
-> went with creating a new node in devtmpfs with its own minor. This
-> admittedly makes it a little unclear that the old and new nodes are
-> backed by the same heap when both are present. The only approach that I
-> think would provide total clarity on this in userspace is symlinking,
-> which seemed like a fairly involved solution for devtmpfs, but if I'm
-> wrong on this, please let me know.
-> 
-> Changelog:
-> 
-> v4:
->   - Fix ERR_PTR() usage for negative return value.
-> 
-> v3:
->   - Extract documentation markup fix to separate patch.
->   - Adjust DEFAULT_CMA_NAME per discussion in [2].
->   - Warn if the legacy heap name and the default heap name are the same.
->   - Fix DMABUF_HEAPS_CMA_LEGACY prompt.
->   - Touch up commit log wording.
-> 
-> v2:
->   - Use tabs instead of spaces for large vertical alignment.
-> 
-> [1]: https://lore.kernel.org/all/f6412229-4606-41ad-8c05-7bbba2eb6e08@ti.com/
-> [2]: https://lore.kernel.org/all/CANDhNCroe6ZBtN_o=c71kzFFaWK-fF5rCdnr9P5h1sgPOWSGSw@mail.gmail.com/
-> 
-> Jared Kangas (3):
->   Documentation: dma-buf: heaps: Fix code markup
->   dma-buf: heaps: Parameterize heap name in __add_cma_heap()
->   dma-buf: heaps: Give default CMA heap a fixed name
-> 
->  Documentation/userspace-api/dma-buf-heaps.rst | 11 +++---
->  drivers/dma-buf/heaps/Kconfig                 | 10 ++++++
->  drivers/dma-buf/heaps/cma_heap.c              | 36 +++++++++++++++----
->  3 files changed, 46 insertions(+), 11 deletions(-)
-> 
-> -- 
-> 2.49.0
-> 
+> I've taken over that old issue and have a few questions to you.
 
-Hi Sumit,
+Thanks a lot for that, something really fishy seems to be going on here.
 
-Just wanted to check in on this since discussion has died down this
-iteration: what's the status on this series? If there's anything I can
-do to help, I'm happy to lend a hand.
+> On Thursday, 27 February 2025 15:11:39 CEST Christian König wrote:
+...
+>> Question is why is the test taking 26 (busy?) seconds to complete? That 
+> sounds really long even for a very old CPU.
+> 
+> The failing test case operates on a dma fence chain built of 4096 dma fences.   
+> Am I right that a single dma_fence_signal() call may result in up to 4096 
+> levels of nested sub-calls to dma_fence_chain_cb()?
 
-Thanks,
-Jared
+No, that could only happen if the test case is broken.
+
+See the test is to make sure that we don't overflow the kernel stack with many elements when enable_signaling is called.
+
+The callback is always only installed on the first unsignaled fence. So when the last fence is signaled the dma_fence_chain_cb function it is called exactly once, installs itself on the second to last fence, waits for that one to signal and so on.
+
+
+What could be is that test case calls enable_signaling on each of the 4096 dma_fence_chain elements individually and so each of the elements registers a dma_fence_chain_cb function, but then the test case would be rather broken and should probably be fixed.
+
+> The test case signals 
+> each fence of the chain in a loop, starting from the last one.  Then,  
+> dma_fence_chain_cb() is called 4096 * (4096 + 1) / 2 (an arithmetic series) ~= 
+> 8.4 milion times, isn't it?
+
+When the test case indeed enables signaling on all 4096 elements then yes.
+
+> 
+> On most powerful gen12 machines used in CI, that test case takes slightly less 
+> than 3s, on low end few years old machines -- ~ 10s.  Should we be surprised 
+> that it takes over 20s on the least powerful one (gen3 PineView Atom)?  And, 
+> while reproducing the issue, I've never seen any unrecoverable deadlocks.  It 
+> just takes time to complete the loop.
+> 
+> Does that address your doubts?
+
+No, not really.
+
+> Assuming the commit message will be extended and provide the above 
+> explanation, I can still imagine a few ways of "fixing" that issue.  We can 
+> just limit the chain length and still execute all those dma_fence_signal() 
+> calls without taking a breath, but why?  Or we can somehow measure expected 
+> processing speed before running the exercise and limit the chain size 
+> accordingly at runtime, which in turn seems an overcomplication to me.  Or, we 
+> can agree that there is no point in avoiding that process being potentially 
+> swapped out from the CPU and take the approach proposed by Nitin, perhaps 
+> limited to this particular problematic test case.  And, I can see 
+> cond_resched() still used in recent patches.
+> 
+> Would any of those options be acceptable for you?
+
+No, if the test case really does what you describe here then the test is just broken and should potentially be fixed instead.
+
+There is no reason to test enabling signaling each of the element in a loop. So there should be something like 4096 calls to the dma_fence_chain_cb function each jumping to the next unsignaled fence and re-installing the callback.
+
+Regards,
+Christian.
+
+> 
+> Thanks,
+> Janusz
+> 
+>>
+>> Do we maybe have an udelay() here which should have been an usleep() or 
+> similar?
+>>
+>> Regards,
+>> Christian.
+>>
+>>>
+>>> Andi
+>>>
+>>>> ---
+>>>> Hi,
+>>>>
+>>>> For reviewer reference, adding here watchdog issue seen on old machines
+>>>> during dma-fence-chain subtests testing. This log is retrieved from 
+> device
+>>>> pstore log while testing dam-buf@all-tests:
+>>>>
+>>>> dma-buf: Running dma_fence_chain
+>>>> Panic#1 Part7
+>>>> <6> sizeof(dma_fence_chain)=184
+>>>> <6> dma-buf: Running dma_fence_chain/sanitycheck
+>>>> <6> dma-buf: Running dma_fence_chain/find_seqno
+>>>> <6> dma-buf: Running dma_fence_chain/find_signaled
+>>>> <6> dma-buf: Running dma_fence_chain/find_out_of_order
+>>>> <6> dma-buf: Running dma_fence_chain/find_gap
+>>>> <6> dma-buf: Running dma_fence_chain/find_race
+>>>> <6> Completed 4095 cycles
+>>>> <6> dma-buf: Running dma_fence_chain/signal_forward
+>>>> <6> dma-buf: Running dma_fence_chain/signal_backward
+>>>> <6> dma-buf: Running dma_fence_chain/wait_forward
+>>>> <6> dma-buf: Running dma_fence_chain/wait_backward
+>>>> <0> watchdog: BUG: soft lockup - CPU#2 stuck for 26s! [dmabuf:2263]
+>>>> Panic#1 Part6
+>>>> <4> irq event stamp: 415735
+>>>> <4> hardirqs last  enabled at (415734): [<ffffffff813d3a1b>] 
+> handle_softirqs+0xab/0x4d0
+>>>> <4> hardirqs last disabled at (415735): [<ffffffff827c7e31>] 
+> sysvec_apic_timer_interrupt+0x11/0xc0
+>>>> <4> softirqs last  enabled at (415728): [<ffffffff813d3f8f>] 
+> __irq_exit_rcu+0x13f/0x160
+>>>> <4> softirqs last disabled at (415733): [<ffffffff813d3f8f>] 
+> __irq_exit_rcu+0x13f/0x160
+>>>> <4> CPU: 2 UID: 0 PID: 2263 Comm: dmabuf Not tainted 6.14.0-rc2-drm-
+> next_483-g7b91683e7de7+ #1
+>>>> <4> Hardware name: Intel corporation NUC6CAYS/NUC6CAYB, BIOS 
+> AYAPLCEL.86A.0056.2018.0926.1100 09/26/2018
+>>>> <4> RIP: 0010:handle_softirqs+0xb1/0x4d0
+>>>> <4> RSP: 0018:ffffc90000154f60 EFLAGS: 00000246
+>>>> <4> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+>>>> <4> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>>>> <4> RBP: ffffc90000154fb8 R08: 0000000000000000 R09: 0000000000000000
+>>>> <4> R10: 0000000000000000 R11: 0000000000000000 R12: 000000000000000a
+>>>> <4> R13: 0000000000000200 R14: 0000000000000200 R15: 0000000000400100
+>>>> <4> FS:  000077521c5cd940(0000) GS:ffff888277900000(0000) 
+> knlGS:0000000000000000
+>>>> Panic#1 Part5
+>>>> <4> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> <4> CR2: 00005dbfee8c00c4 CR3: 0000000133d38000 CR4: 00000000003526f0
+>>>> <4> Call Trace:
+>>>> <4>  <IRQ>
+>>>> <4>  ? show_regs+0x6c/0x80
+>>>> <4>  ? watchdog_timer_fn+0x247/0x2d0
+>>>> <4>  ? __pfx_watchdog_timer_fn+0x10/0x10
+>>>> <4>  ? __hrtimer_run_queues+0x1d0/0x420
+>>>> <4>  ? hrtimer_interrupt+0x116/0x290
+>>>> <4>  ? __sysvec_apic_timer_interrupt+0x70/0x1e0
+>>>> <4>  ? sysvec_apic_timer_interrupt+0x47/0xc0
+>>>> <4>  ? asm_sysvec_apic_timer_interrupt+0x1b/0x20
+>>>> <4>  ? handle_softirqs+0xb1/0x4d0
+>>>> <4>  __irq_exit_rcu+0x13f/0x160
+>>>> <4>  irq_exit_rcu+0xe/0x20
+>>>> <4>  sysvec_irq_work+0xa0/0xc0
+>>>> <4>  </IRQ>
+>>>> <4>  <TASK>
+>>>> <4>  asm_sysvec_irq_work+0x1b/0x20
+>>>> <4> RIP: 0010:_raw_spin_unlock_irqrestore+0x57/0x80
+>>>> <4> RSP: 0018:ffffc9000292b8f0 EFLAGS: 00000246
+>>>> <4> RAX: 0000000000000000 RBX: ffff88810f235480 RCX: 0000000000000000
+>>>> <4> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>>>> <4> RBP: ffffc9000292b900 R08: 0000000000000000 R09: 0000000000000000
+>>>> <4> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000246
+>>>> <4> R13: 0000000000000000 R14: 0000000000000246 R15: 000000000003828c
+>>>> Panic#1 Part4
+>>>> <4> dma_fence_signal+0x49/0xb0
+>>>> <4> wait_backward+0xf8/0x140 [dmabuf_selftests]
+>>>> <4> __subtests+0x75/0x1f0 [dmabuf_selftests]
+>>>> <4> dma_fence_chain+0x94/0xe0 [dmabuf_selftests]
+>>>> <4> st_init+0x6a/0xff0 [dmabuf_selftests]
+>>>> <4> ? __pfx_st_init+0x10/0x10 [dmabuf_selftests]
+>>>> <4> do_one_initcall+0x79/0x400
+>>>> <4> do_init_module+0x97/0x2a0
+>>>> <4> load_module+0x2c23/0x2f60
+>>>> <4> init_module_from_file+0x97/0xe0
+>>>> <4> ? init_module_from_file+0x97/0xe0
+>>>> <4> idempotent_init_module+0x134/0x350
+>>>> <4> __x64_sys_finit_module+0x77/0x100
+>>>> <4> x64_sys_call+0x1f37/0x2650
+>>>> <4> do_syscall_64+0x91/0x180
+>>>> <4> ? trace_hardirqs_off+0x5d/0xe0
+>>>> <4> ? syscall_exit_to_user_mode+0x95/0x260
+>>>> <4> ? do_syscall_64+0x9d/0x180
+>>>> <4> ? do_syscall_64+0x9d/0x180
+>>>> <4> ? irqentry_exit+0x77/0xb0
+>>>> <4> ? sysvec_apic_timer_interrupt+0x57/0xc0
+>>>> <4> entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>>> <4> RIP: 0033:0x77521e72725d
+>>>>
+>>>>
+>>>>  drivers/dma-buf/st-dma-fence-chain.c | 14 +++++++++++---
+>>>>  1 file changed, 11 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/dma-buf/st-dma-fence-chain.c b/drivers/dma-buf/st-
+> dma-fence-chain.c
+>>>> index ed4b323886e4..328a66ed59e5 100644
+>>>> --- a/drivers/dma-buf/st-dma-fence-chain.c
+>>>> +++ b/drivers/dma-buf/st-dma-fence-chain.c
+>>>> @@ -505,6 +505,7 @@ static int signal_forward(void *arg)
+>>>>  
+>>>>  	for (i = 0; i < fc.chain_length; i++) {
+>>>>  		dma_fence_signal(fc.fences[i]);
+>>>> +		cond_resched();
+>>>>  
+>>>>  		if (!dma_fence_is_signaled(fc.chains[i])) {
+>>>>  			pr_err("chain[%d] not signaled!\n", i);
+>>>> @@ -537,6 +538,7 @@ static int signal_backward(void *arg)
+>>>>  
+>>>>  	for (i = fc.chain_length; i--; ) {
+>>>>  		dma_fence_signal(fc.fences[i]);
+>>>> +		cond_resched();
+>>>>  
+>>>>  		if (i > 0 && dma_fence_is_signaled(fc.chains[i])) {
+>>>>  			pr_err("chain[%d] is signaled!\n", i);
+>>>> @@ -587,8 +589,10 @@ static int wait_forward(void *arg)
+>>>>  	get_task_struct(tsk);
+>>>>  	yield_to(tsk, true);
+>>>>  
+>>>> -	for (i = 0; i < fc.chain_length; i++)
+>>>> +	for (i = 0; i < fc.chain_length; i++) {
+>>>>  		dma_fence_signal(fc.fences[i]);
+>>>> +		cond_resched();
+>>>> +	}
+>>>>  
+>>>>  	err = kthread_stop_put(tsk);
+>>>>  
+>>>> @@ -616,8 +620,10 @@ static int wait_backward(void *arg)
+>>>>  	get_task_struct(tsk);
+>>>>  	yield_to(tsk, true);
+>>>>  
+>>>> -	for (i = fc.chain_length; i--; )
+>>>> +	for (i = fc.chain_length; i--; ) {
+>>>>  		dma_fence_signal(fc.fences[i]);
+>>>> +		cond_resched();
+>>>> +	}
+>>>>  
+>>>>  	err = kthread_stop_put(tsk);
+>>>>  
+>>>> @@ -663,8 +669,10 @@ static int wait_random(void *arg)
+>>>>  	get_task_struct(tsk);
+>>>>  	yield_to(tsk, true);
+>>>>  
+>>>> -	for (i = 0; i < fc.chain_length; i++)
+>>>> +	for (i = 0; i < fc.chain_length; i++) {
+>>>>  		dma_fence_signal(fc.fences[i]);
+>>>> +		cond_resched();
+>>>> +	}
+>>>>  
+>>>>  	err = kthread_stop_put(tsk);
+>>>>  
+>>
+>>
+> 
+> 
+> 
+> 
 
