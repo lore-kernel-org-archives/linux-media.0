@@ -1,34 +1,35 @@
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38932DAFCE;
-	Tue,  8 Jul 2025 10:41:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5D72DBF5C;
+	Tue,  8 Jul 2025 10:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751971282; cv=none; b=KBUaoMLymPOLqCbKy+dITtHmyHdUWuxh8FjBpLFWMRU7HTeOE5dRREgQuIjmMs5gSJMsuNOv18VnytmuzhZjga2bIMfpffJ/GZm00bEmnw2at1cjpjiT5x2rijYwz3VdPWH7Fs+Gjarmg/KANnNiFt6qZb4Nu3YzyeKprdhjPAk=
+	t=1751971283; cv=none; b=sWjc8r2X3eeb1CzRTpSFuubC7VwJRap4ZyCglHOKpl1JgkEAQED5e5Z6XZEjjRg1NzT8DY29oyc7v1YF0XKuQezoa6xT6nASeqjo8erWJc0888P/0E4uGp5oQthobPEwMnMWUDdH+xGCxdlUKJBVpaZF7yGrOsTAkJMGpStLQYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751971282; c=relaxed/simple;
-	bh=XwAActjfS4nOKs1fzm6HK5dbJXzBj0DHHjKJDlSxOY0=;
+	s=arc-20240116; t=1751971283; c=relaxed/simple;
+	bh=R9qA7MNyVAfsHNo8l+6aisRM80FK3G5ZFSPJzZsHil4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uSvfpivAm3B3xoikiyvIL3jPu7ETQw7rBg8pykVF0Q23nvLwm/JrWSgdxqRw4ofKH92NzXqYOZwq+QzHJPgqch+gIe7hIkmF0SEID/NYeUmjIFJ7O7WWta2zuqDRY77ETRDnLFU6nhdyOtH2HxdhYU/bOdzWUCY6okL4mf7clb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=SSNGuGeB; arc=none smtp.client-ip=213.167.242.64
+	 In-Reply-To:To:Cc; b=X6sZ3A56gHM2fBrNspX3lPYnJc+YfifNtN6E1Qii3nNRzXJ4nBTSMO+1jGb8R+Jn9/xNQRAl/u1EFdOvK10rEe+JMTBWq5I8SfvilGU6ftRuHWTYFBE6Ya7z+qt7QJkVUwyJ4KUUNlRJP9oD6OhwAdzxuoYeVz6HSzIixxohgK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=ilKdzPcm; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SSNGuGeB"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ilKdzPcm"
 Received: from [192.168.0.172] (mob-5-90-136-241.net.vodafone.it [5.90.136.241])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 136BA1BAF;
-	Tue,  8 Jul 2025 12:40:40 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1D31A2A6E;
+	Tue,  8 Jul 2025 12:40:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1751971240;
-	bh=XwAActjfS4nOKs1fzm6HK5dbJXzBj0DHHjKJDlSxOY0=;
+	s=mail; t=1751971242;
+	bh=R9qA7MNyVAfsHNo8l+6aisRM80FK3G5ZFSPJzZsHil4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=SSNGuGeBEc8QrUmlMEAFY/5QS+GwdIqLi3O70eJ1fWhihs+skEEYDyjF7Oxr4HvLW
-	 0tbhbj7WdZmPtuGUX8wMsLkKrZ7JVIayOFvYaBtNMSiwnTJQd0tnbkpKKrcBTCtnq2
-	 hW8io2ES6+qrlgHkEundmllfPJ58mayPfN+/3sqs=
+	b=ilKdzPcmTmIYXwrIX6eiXQDtEKAv7UPq2wpU2iXfbPY22ioovVWN/pe8VUj/dIPNe
+	 LFol441MfnOrP9c6OhNGr20IEhztp1GHRa3u2L69QHzBBPi0+3IcIhxv/ODuKGTP40
+	 zTDLZyyVGsFa8z6eO/Wm3UrKq5uwP+c6ICqSkJVg=
 From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Tue, 08 Jul 2025 12:40:49 +0200
-Subject: [PATCH 2/8] media: uapi: Convert RkISP1 to V4L2 extensible params
+Date: Tue, 08 Jul 2025 12:40:51 +0200
+Subject: [PATCH 4/8] media: Documentation: uapi: Add V4L2 extensible
+ parameters
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250708-extensible-parameters-validation-v1-2-9fc27c9c728c@ideasonboard.com>
+Message-Id: <20250708-extensible-parameters-validation-v1-4-9fc27c9c728c@ideasonboard.com>
 References: <20250708-extensible-parameters-validation-v1-0-9fc27c9c728c@ideasonboard.com>
 In-Reply-To: <20250708-extensible-parameters-validation-v1-0-9fc27c9c728c@ideasonboard.com>
 To: Dafna Hirschfeld <dafna@fastmail.com>, 
@@ -49,162 +50,153 @@ Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
  linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
  Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6501;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5898;
  i=jacopo.mondi@ideasonboard.com; h=from:subject:message-id;
- bh=XwAActjfS4nOKs1fzm6HK5dbJXzBj0DHHjKJDlSxOY0=;
- b=owEBbQKS/ZANAwAKAXI0Bo8WoVY8AcsmYgBobPXA/XSVnScdHok55ezv/agTY1NJfgWShsoZK
- 0YmMzPByPWJAjMEAAEKAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaGz1wAAKCRByNAaPFqFW
- PHdUEACAatG5wcPTQUMVpaHoum7Uzwq9fPyF+p83SKUDIquu+077MBZBsjYhZ2Znu/7tE2FYwbi
- os/fZpfv3hpCTkYzrXqP7qoFxufqG75vW0lRiwhLghhDWOLH0QClzpAVY7d3hfXx392n5Cfu2+C
- neFZHrOEoAv0plURe49HSEsMgaXZyzM8Tt+8Wka9EfHPdSmBylZh87EBIBoMaby9h9ATwSwBfjZ
- zo1xoi/GsLwIOWRmqZTiSMCdsucd5G+V4ReAeyWcDjrwE+dVkB6ABOoPpNgvRdlfDMRoH7NNt9D
- 46sLGBEx9vIK4y1wUk8S8IEJ0iRkR/KMp0L84wVs3B16BgPxJ1t+ZpCSWm1ny+2z0XggI8ktMcs
- y3iLi029VTVS15gzTm3usKKr7Mb1MVkV79yjCEc60EopvepSO/Krbs5hz1VOK0JbmdSD+qtpYlq
- wusHf2ewiCarn0InTvsPvrIbTZ04FRK7LACukkmoveR7eYNtEdZLg4NMBxX0I7yrjSD//25b9yv
- GnNCI0JbIN0XKdaS3uEzupQuMOqfrW1WIZVlFEEfoO7pIVlY0wrkAqME9IFCjv9RMIHhpuEWvYj
- fGqZWbtKriR4bgJadLxpoPduuVKpI30u3J0JmhWaZddr5NBskh2AfDRDnQfbNnfp+JbVTcQ3US9
- CoAZQB2TOKMpEBQ==
+ bh=R9qA7MNyVAfsHNo8l+6aisRM80FK3G5ZFSPJzZsHil4=;
+ b=owEBbQKS/ZANAwAKAXI0Bo8WoVY8AcsmYgBobPXAinzzJaS2OSx2ymAzRAGd0xgVImUWJeK3w
+ fR20Mi7/x6JAjMEAAEKAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaGz1wAAKCRByNAaPFqFW
+ PNzXEAChWjmh+edQ/l61iAp0yuf0mK6venOuMoyyilHNi+DtiQANVJqeGwue4dYevFQq89Cf6t/
+ e7XEjkYAVncQFCIQJMpW0G2/a1FWfZy4PXI+UyXI27IGrbzOMJsuJH7L4IQcuDd8BL5t7Q/nBci
+ BRiC67dVrSDKdGGVY9SHh0EX+6rFY5/wBi81KvUarku0TksfQSuiNUTwHQ1pf6Czzd6Fx8hLR20
+ QJDiavfMNbrxHUrEJEJMIS8Z6xLMxs0zKAbPXktxS8/SHvQxpX7Nq6BELJ4DPOe+NNyAytXz1Re
+ a9AEgwdKGYjvoNKJbWP6mLCEVvpijtBoBpPqNBG75WrT4d/AJVyWkyvI1xsGmEOGnOW7w7rxkM0
+ 6bKIbveGj63YRY9nGkTpC/niCQoG9ZjrGuSEeD0m+FKz0LXovjd5cIvu98jXKhCrvJ6XCmEN6XR
+ OFI4N9fxTrnsFTlx75Pj4jcinFOi0LxVSyzJW3D6khl7ikgs3g6BY/4nimTYr3IxLUqLXSZtDf3
+ +jKUMF9CNQ05NMAWxTi74C1n6DT3KXSqQeLsOIogkPES0RTAGYOtk0Er10CaFp1uQw0k8GDjLbp
+ AkhwqvgIRO2VpT6Veyw8K1aVs7x8yBp4z6j/IgwYCmXjvMLCCW+lLpE9U0mxMah6s9VbIr1y9Nl
+ VS5GHXJinAorLvw==
 X-Developer-Key: i=jacopo.mondi@ideasonboard.com; a=openpgp;
  fpr=72392EDC88144A65C701EA9BA5826A2587AD026B
 
-With the introduction of common types for extensible parameters
-format, convert the rkisp1-config.h header to use the new types.
-
-Factor-out the documentation that is now part of the common header
-and only keep the driver-specific on in place.
-
-The conversion to use common types doesn't impact userspace as the
-new types are either identical to the ones already existing in the
-RkISP1 uAPI or are 1-to-1 type convertible.
+Add documentation for extensible parameters format to the V4L2
+userspace API documentation.
 
 Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
 ---
- include/uapi/linux/rkisp1-config.h | 60 ++++++++++++--------------------------
- 1 file changed, 18 insertions(+), 42 deletions(-)
+ .../media/v4l/extensible-parameters.rst            | 89 ++++++++++++++++++++++
+ .../userspace-api/media/v4l/meta-formats.rst       |  1 +
+ MAINTAINERS                                        |  1 +
+ 3 files changed, 91 insertions(+)
 
-diff --git a/include/uapi/linux/rkisp1-config.h b/include/uapi/linux/rkisp1-config.h
-index 3b060ea6eed71b87d79abc8401eae4e9c9f5323a..fe58ff1aed15b0497a9a9fa9a0bfa1ede3889d3e 100644
---- a/include/uapi/linux/rkisp1-config.h
-+++ b/include/uapi/linux/rkisp1-config.h
-@@ -7,8 +7,12 @@
- #ifndef _UAPI_RKISP1_CONFIG_H
- #define _UAPI_RKISP1_CONFIG_H
- 
-+#include <linux/build_bug.h>
- #include <linux/types.h>
- 
-+#define _UAPI_V4L2_EXTENSIBLE_PARAMS_GUARD_
-+#include <linux/media/v4l2-extensible-params.h>
+diff --git a/Documentation/userspace-api/media/v4l/extensible-parameters.rst b/Documentation/userspace-api/media/v4l/extensible-parameters.rst
+new file mode 100644
+index 0000000000000000000000000000000000000000..254d4087ae0448d3e545d8533c36d154967e202a
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/extensible-parameters.rst
+@@ -0,0 +1,89 @@
++.. SPDX-License-Identifier: GFDL-1.1-no-invariants-or-later
 +
- /* Defect Pixel Cluster Detection */
- #define RKISP1_CIF_ISP_MODULE_DPCC		(1U << 0)
- /* Black Level Subtraction */
-@@ -1165,19 +1169,14 @@ enum rkisp1_ext_params_block_type {
- #define RKISP1_CID_SUPPORTED_PARAMS_BLOCKS	(V4L2_CID_USER_RKISP1_BASE + 0x01)
- 
- /**
-- * struct rkisp1_ext_params_block_header - RkISP1 extensible parameters block
-- *					   header
-+ * rkisp1_ext_params_block_header - RkISP1 extensible parameters block header
-  *
-  * This structure represents the common part of all the ISP configuration
-- * blocks. Each parameters block shall embed an instance of this structure type
-- * as its first member, followed by the block-specific configuration data. The
-- * driver inspects this common header to discern the block type and its size and
-- * properly handle the block content by casting it to the correct block-specific
-- * type.
-+ * blocks and is identical to :c:type:`v4l2_params_block`.
-  *
-- * The @type field is one of the values enumerated by
-+ * The type field is one of the values enumerated by
-  * :c:type:`rkisp1_ext_params_block_type` and specifies how the data should be
-- * interpreted by the driver. The @size field specifies the size of the
-+ * interpreted by the driver. The size field specifies the size of the
-  * parameters block and is used by the driver for validation purposes.
-  *
-  * The @flags field is a bitmask of per-block flags RKISP1_EXT_PARAMS_FL_*.
-@@ -1193,14 +1192,14 @@ enum rkisp1_ext_params_block_type {
-  * If a new configuration of an ISP block has to be applied userspace shall
-  * fully populate the ISP block configuration and omit setting the
-  * RKISP1_EXT_PARAMS_FL_BLOCK_ENABLE and RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE bits
-- * in the @flags field.
-+ * in the flags field.
-  *
-  * Setting both the RKISP1_EXT_PARAMS_FL_BLOCK_ENABLE and
-- * RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE bits in the @flags field is not allowed
-+ * RKISP1_EXT_PARAMS_FL_BLOCK_DISABLE bits in the flags field is not allowed
-  * and not accepted by the driver.
-  *
-  * Userspace is responsible for correctly populating the parameters block header
-- * fields (@type, @flags and @size) and the block-specific parameters.
-+ * fields (type, flags and size) and the block-specific parameters.
-  *
-  * For example:
-  *
-@@ -1220,17 +1219,8 @@ enum rkisp1_ext_params_block_type {
-  *		bls->config.fixed_val.gb = blackLevelGreenB_;
-  *		bls->config.fixed_val.b = blackLevelBlue_;
-  *	}
-- *
-- * @type: The parameters block type, see
-- *	  :c:type:`rkisp1_ext_params_block_type`
-- * @flags: A bitmask of block flags
-- * @size: Size (in bytes) of the parameters block, including this header
-  */
--struct rkisp1_ext_params_block_header {
--	__u16 type;
--	__u16 flags;
--	__u32 size;
--};
-+#define rkisp1_ext_params_block_header v4l2_params_block
- 
- /**
-  * struct rkisp1_ext_params_bls_config - RkISP1 extensible params BLS config
-@@ -1594,21 +1584,7 @@ enum rksip1_ext_param_buffer_version {
- /**
-  * struct rkisp1_ext_params_cfg - RkISP1 extensible parameters configuration
-  *
-- * This struct contains the configuration parameters of the RkISP1 ISP
-- * algorithms, serialized by userspace into a data buffer. Each configuration
-- * parameter block is represented by a block-specific structure which contains a
-- * :c:type:`rkisp1_ext_params_block_header` entry as first member. Userspace
-- * populates the @data buffer with configuration parameters for the blocks that
-- * it intends to configure. As a consequence, the data buffer effective size
-- * changes according to the number of ISP blocks that userspace intends to
-- * configure and is set by userspace in the @data_size field.
-- *
-- * The parameters buffer is versioned by the @version field to allow modifying
-- * and extending its definition. Userspace shall populate the @version field to
-- * inform the driver about the version it intends to use. The driver will parse
-- * and handle the @data buffer according to the data layout specific to the
-- * indicated version and return an error if the desired version is not
-- * supported.
-+ * This is the driver-specific implementation of :c:type:`v4l2_params_buffer`.
-  *
-  * Currently the single RKISP1_EXT_PARAM_BUFFER_V1 version is supported.
-  * When a new format version will be added, a mechanism for userspace to query
-@@ -1624,11 +1600,6 @@ enum rksip1_ext_param_buffer_version {
-  * the maximum value represents the blocks supported by the kernel driver,
-  * independently of the device instance.
-  *
-- * For each ISP block that userspace wants to configure, a block-specific
-- * structure is appended to the @data buffer, one after the other without gaps
-- * in between nor overlaps. Userspace shall populate the @data_size field with
-- * the effective size, in bytes, of the @data buffer.
-- *
-  * The expected memory layout of the parameters buffer is::
-  *
-  *	+-------------------- struct rkisp1_ext_params_cfg -------------------+
-@@ -1678,4 +1649,9 @@ struct rkisp1_ext_params_cfg {
- 	__u8 data[RKISP1_EXT_PARAMS_MAX_SIZE];
- };
- 
-+/* Make sure the header is type-convertible to the generic v4l2 params one */
-+static_assert((sizeof(struct rkisp1_ext_params_cfg) -
-+	       RKISP1_EXT_PARAMS_MAX_SIZE) ==
-+	      sizeof(struct v4l2_params_buffer));
++.. _extensible-parameters:
 +
- #endif /* _UAPI_RKISP1_CONFIG_H */
++**********************************
++ V4L2 extensible parameters format
++**********************************
++
++ISP configuration
++=================
++
++ISP configuration parameters are computed by userspace and programmed into a
++*parameters buffer* which is queued to the ISP driver on a per-frame basis. The
++layout of the *parameters buffer* generally reflects the ISP peripheral
++registers layout and is, for this reason, platform specific.
++
++The ISP configuration parameters are passed to the ISP driver through a metadata
++output video node, using the :c:type:`v4l2_meta_format` interface. Each ISP
++driver defines a metadata format that implements the configuration parameters
++layout.
++
++Metadata output formats that describe ISP configuration parameters are most of
++the time realized by implementing C structures that reflect the registers layout
++and gets populated by userspace before queueing the buffer to the ISP. Each
++C structure usually corresponds to one ISP *processing block*, with each block
++implementing one of the ISP supported features.
++
++The uAPI/ABI problem
++--------------------
++
++By defining a metadata output format that described the configuration parameters
++layout, driver developers make them part of the Linux kernel ABI. As it
++sometimes happens for most peripherals in Linux, ISP drivers development is
++often an iterative process, where sometimes not all the hardware features are
++supported in the very first driver version that lands in the kernel, and some
++parts of the interface have to later be modified for bug-fixes or improvements.
++
++If any later bug-fix/improvement requires changes to the metadata output format,
++this is considered an ABI-breakage that is strictly forbidden by the Linux
++kernel policies. For this reason, each new iteration of an ISP driver support
++would require defining a new metadata output format, implying drivers have to be
++made ready to handle several different formats.
++
++A new set of metadata output formats has then to be defined, with the design
++goals of being:
++
++- Extensible: new features can be added later on without breaking the existing
++  interface
++- Versioned: different versions of the interface can be defined without
++  breaking the existing interface
++
++The extensible parameters format
++================================
++
++Extensible configuration formats are realized by a defining a single C structure
++that contains a few control parameters and a binary buffer where userspace
++programs a variable number of *ISP block configuration* data.
++
++The generic :c:type:`v4l2_params_buffer` defines a base type that each driver
++shall extend with a type-convertible implementation
++
++Each *ISP block configuration* is identified by an header and contains the
++parameters for that specific block.
++
++The generic :c:type:`v4l2_params_block` defines a base type that each driver can
++re-use as it is or extend appropriately.
++
++Userspace applications program in the control buffer only the parameters of the
++ISP whose configuration has changed for the next frame. The ISP driver parses
++the configuration parameters and apply them to the hardware register.
++
++Any further development that happens after the ISP driver has been merged in
++Linux and which requires supporting new ISP features can be implemented by
++adding new block definitions without invalidating the existing ones. Similarly,
++any change to the existing ISP configuration blocks can be handled by versioning
++them, again without invalidating the existing ones.
++
++Implementations
++---------------
++
++ISP drivers that define an extensible parameters metadata output format:
++
++- :ref:`RkISP1 <v4l2-meta-fmt-rk-isp1-ext-params>`
++- :ref:`Amlogic C3 ISP <v4l2-meta-fmt-c3isp-params>`
++
++V4L2 extensible parameters uAPI data types
++==========================================
++
++.. kernel-doc:: include/uapi/linux/media/v4l2-extensible-params.h
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index bb6876cfc271e1a0543eee4209d6251e1a6a73cc..58eb3c9c962bee008eee27d9c16678213c47baa9 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -12,6 +12,7 @@ These formats are used for the :ref:`metadata` interface only.
+ .. toctree::
+     :maxdepth: 1
+ 
++    extensible-parameters
+     metafmt-c3-isp
+     metafmt-d4xx
+     metafmt-generic
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 49a9329e5fe8874bdbaca13946ea28bd80134cb3..beecac86991d988c48d31366ba5201b09ef25715 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25972,6 +25972,7 @@ V4L2 EXTENSIBLE PARAMETERS FORMAT
+ M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
++F:	Documentation/userspace-api/media/v4l/extensible-parameters.rst
+ F:	include/uapi/linux/media/v4l2-extensible-params.h
+ 
+ VF610 NAND DRIVER
 
 -- 
 2.49.0
