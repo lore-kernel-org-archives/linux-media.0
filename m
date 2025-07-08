@@ -1,116 +1,144 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978A62DCF7B;
-	Tue,  8 Jul 2025 10:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350212D8782;
+	Tue,  8 Jul 2025 10:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751971291; cv=none; b=Ngkx6Rm5qVJiU92j2j9N3aBNIxM0kgaEgjZicLl0OLv3oocBFSLYqZm+DoZKMCF0skIrLXF2hwDb7MPtESPKmVkiPp6d++1VLcDXKrvvje9XkKqI6iMpV3r/AZP2Wll8rzpq3Gyxbd5EmZmQgkB2inJ9393Tm/tXsN+3a0waDmo=
+	t=1751971384; cv=none; b=rv0KuQA1y0QtuMex9gb/wZ7Qcu9x6lURd3uT/ccO/IBG2lN+x7xJC0mj7YPjPOBNlaDCZk0iHlVraM8GtCH/Q5viJ32zrPDk+mD/TC1l8MW3Aps/eR6ZIkf+IFnvpVkGMcL/7A4E9ynV7A6TlkSLUyfqVzIrkn5Mv4jzBGQLKKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751971291; c=relaxed/simple;
-	bh=BFyCUyrT0Ujus6OGYnAmCl/GqNuIEDJQSk8MQCzrzmo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qXXQUozpsxp3QOGqzGtByh8rUytcmN4yVjsJCYmtBvU4EBNp/BkeoIAx8dhegcix/7pnEXXAbLj/FzuX69E6uwxC3aJI/Nc/2X4IIc+SkLFTfkQOTUeCHq0DNocytc8VWmM25eiN5KXRPTjdloIKRTJU/Ku/1WNxE8N4CLvW9fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=d3XtUyRT; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1751971384; c=relaxed/simple;
+	bh=oN+fy0ubU+8kdVeO6DwfR0VBM2qjezli7gMfiG8nvPM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Thodq4cntPGafEMkgX4ulDVMEqhEGkkWPcZVxTPHIRFB+jGc8loD3WNKzaacpUpzTeMiLMwYiIS5jMP23aZocq3AZyvPsahrZO6m+Z9yhayqJciiS+fikQfk+6tZyrcDElhsWOHA0NdtN/1bZGmKmeLtEbazMKQ0iB1jwFIc5TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjTc/oVx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="d3XtUyRT"
-Received: from [192.168.0.172] (mob-5-90-136-241.net.vodafone.it [5.90.136.241])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA1625514;
-	Tue,  8 Jul 2025 12:40:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1751971248;
-	bh=BFyCUyrT0Ujus6OGYnAmCl/GqNuIEDJQSk8MQCzrzmo=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=d3XtUyRTSlBKWAyEZ9OacY8yb4d0nb/GR0r/dn4FJISgW805syFgLnohyEdJHgtXX
-	 jlUsiqut9xE15NX35R+Zf5Vz8SGJaVRCpgk/MhfDwt5i1HpdyoO7dQR9DUVffljJhc
-	 wHQ9Z6HI6oJzu3rZ9q3Ltlna7D8kJTFSoxtsHTEg=
-From: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Date: Tue, 08 Jul 2025 12:40:55 +0200
-Subject: [PATCH 8/8] media: Documentation: kapi: Add v4l2 extensible
- parameters
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjTc/oVx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 814E1C4CEED;
+	Tue,  8 Jul 2025 10:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751971383;
+	bh=oN+fy0ubU+8kdVeO6DwfR0VBM2qjezli7gMfiG8nvPM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LjTc/oVx5zozVj3nwKzFATO7WZOQ4dceXoBaG0YJAUNesywHoGWFOf3tka/pWH3GQ
+	 J+qDbX52QiSIaLRQF0mrFFF6iGelCtF/BsQbQ4a0L3y+7Xw6zW3Oz1bK1P+KjUW1CX
+	 c0AvvaqnzIiGlkJQBOCksqkjbWeKTeqSu3YwvSgDhhwgfN3Q/sWZrjNg6NaZzAmCHv
+	 cSipAUdpgZbjC28XfnCqrxvKTAwQGnyHzaacSteoAhJ2Z6ZIUWFgi9VrTqyLFuR00s
+	 repjd0m3GL1wQL/tdb2rT4643HYUdGK89XlOqPbYpN5t4rW2lQPN5wVJG0/aJTCQD1
+	 hTWIYw/VWsexQ==
+Message-ID: <ca6d8433-6ce7-46a9-8c16-11845f87402b@kernel.org>
+Date: Tue, 8 Jul 2025 12:42:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] media: i2c: add ov2735 image sensor driver
+To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+ sakari.ailus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+ krzk+dt@kernel.org
+Cc: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>,
+ =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>,
+ Hans de Goede <hansg@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>,
+ Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
+ Matthias Fend <matthias.fend@emfend.at>,
+ Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+ Jingjing Xiong <jingjing.xiong@intel.com>,
+ Sylvain Petinot <sylvain.petinot@foss.st.com>,
+ Dongcheng Yan <dongcheng.yan@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250708102604.29261-1-hardevsinh.palaniya@siliconsignals.io>
+ <20250708102604.29261-3-hardevsinh.palaniya@siliconsignals.io>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250708102604.29261-3-hardevsinh.palaniya@siliconsignals.io>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250708-extensible-parameters-validation-v1-8-9fc27c9c728c@ideasonboard.com>
-References: <20250708-extensible-parameters-validation-v1-0-9fc27c9c728c@ideasonboard.com>
-In-Reply-To: <20250708-extensible-parameters-validation-v1-0-9fc27c9c728c@ideasonboard.com>
-To: Dafna Hirschfeld <dafna@fastmail.com>, 
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
- Keke Li <keke.li@amlogic.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Heiko Stuebner <heiko@sntech.de>, Dan Scally <dan.scally@ideasonboard.com>, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-rockchip@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1789;
- i=jacopo.mondi@ideasonboard.com; h=from:subject:message-id;
- bh=BFyCUyrT0Ujus6OGYnAmCl/GqNuIEDJQSk8MQCzrzmo=;
- b=owEBbQKS/ZANAwAKAXI0Bo8WoVY8AcsmYgBobPXAuvdLqG+nFbVdQsYLUYtlT4MhvtXvbD/G1
- q23FH7dlnyJAjMEAAEKAB0WIQS1xD1IgJogio9YOMByNAaPFqFWPAUCaGz1wAAKCRByNAaPFqFW
- PNa1EACWDCbdXUMrjjZ3dwSewW2dqOeAYL+/NTASuFxXjqj3O/wzLkc137vzxllzAQOK5ULUVMM
- DO9MIafzKqFzZz/9JKFFw9ASfu+XFeJItR8JvwCED6TZKBBlIlqrespYcbB8b3I7GNuZnkkTot2
- aRqwBe/bOaWMTT4xSxeBNkFfJy+e8aeymuK44B3fEDmSdNz1BGsXo3Dtu9AGSCBJLestNjs8+P4
- apT06q3Yd3enoWtZxPnAWhR3KB2dWrA9qnaMswAK5mImZCB1fYZWMRqiOGkR3gkOsWf76r5c3Po
- EIGWv/fx9jYDkA5ke5K6Tr+SwDwbAm2pbA3YAAdYyJaXD7Z51p3Lm5SndFnuipA3b9pmNDnP7oO
- yOkz+yrbKIdXAMtDvpf4SgvJBcBSB/3V8NEzYwe/fC4hlaRd8GCov0rHoLd3FFlEv0vrni8aGVV
- On/NLU5egtXOJzaXdvK7zNCUb4FcZg4sLFKyUHAtyPTj4XmD2hR2GSlySmQ2nV/2fOxiwnIKSfE
- IzkD+GvQ9bWqgxZFU8laNBYixXaUl+7HrjGNj4CW8j4EaeRfn8/iY/6Z+cAL5mdAWC9IMXOSWbQ
- IKsfxABSHl62egk0pZ7BjsFmO5XLnbi0qyAijE3ZLRGobRb4GdEXZfJMwX3zii34SRNO0HZrVkd
- MMS0qSER9ycIf8Q==
-X-Developer-Key: i=jacopo.mondi@ideasonboard.com; a=openpgp;
- fpr=72392EDC88144A65C701EA9BA5826A2587AD026B
 
-Add to the driver-api documentation the v4l2-params.h types and
-helpers documentation.
+On 08/07/2025 12:25, Hardevsinh Palaniya wrote:
+> +
+> +static const struct v4l2_subdev_ops ov2735_subdev_ops = {
+> +	.video = &ov2735_video_ops,
+> +	.pad = &ov2735_pad_ops,
+> +};
+> +
+> +static const struct v4l2_subdev_internal_ops ov2735_internal_ops = {
+> +	.init_state = ov2735_init_state,
+> +};
+> +
+> +static int ov2735_power_on(struct device *dev)
+> +{
+> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+> +	struct ov2735 *ov2735 = to_ov2735(sd);
+> +	unsigned long delay_us;
+> +	int ret;
+> +
+> +	gpiod_set_value_cansleep(ov2735->pwdn_gpio, 0);
 
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
----
- Documentation/driver-api/media/v4l2-core.rst   | 1 +
- Documentation/driver-api/media/v4l2-params.rst | 5 +++++
- MAINTAINERS                                    | 1 +
- 3 files changed, 7 insertions(+)
+So you power up here...
 
-diff --git a/Documentation/driver-api/media/v4l2-core.rst b/Documentation/driver-api/media/v4l2-core.rst
-index ad987c34ad2a8460bb95e97adc4d850d624e0b81..2d7793298c6a2046bdd59b185a411e092b659d52 100644
---- a/Documentation/driver-api/media/v4l2-core.rst
-+++ b/Documentation/driver-api/media/v4l2-core.rst
-@@ -27,3 +27,4 @@ Video4Linux devices
-     v4l2-common
-     v4l2-tveeprom
-     v4l2-jpeg
-+    v4l2-params
-diff --git a/Documentation/driver-api/media/v4l2-params.rst b/Documentation/driver-api/media/v4l2-params.rst
-new file mode 100644
-index 0000000000000000000000000000000000000000..8d2a5f004d21dfc3a81255cabbc6b7cce588db71
---- /dev/null
-+++ b/Documentation/driver-api/media/v4l2-params.rst
-@@ -0,0 +1,5 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+V4L2 extensible parameters kAPI
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+.. kernel-doc:: include/media/v4l2-params.h
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3d9a8e06c59eb08360d1e8eea85e450a15ee95af..f03c10092a891a06052484b691409f0c459de87d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -25972,6 +25972,7 @@ V4L2 EXTENSIBLE PARAMETERS FORMAT
- M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
-+F:	Documentation/driver-api/media/v4l2-params.rst
- F:	Documentation/userspace-api/media/v4l/extensible-parameters.rst
- F:	drivers/media/v4l2-core/v4l2-params.c
- F:	include/media/v4l2-params.h
+> +	fsleep(3000);
+> +
+> +	ret = regulator_bulk_enable(ARRAY_SIZE(ov2735_supply_name),
+> +				    ov2735->supplies);
+> +	if (ret) {
+> +		dev_err(ov2735->dev, "failed to enable regulators\n");
+> +		return ret;
+> +	}
+> +
+> +	gpiod_set_value_cansleep(ov2735->pwdn_gpio, 1);
 
--- 
-2.49.0
+And here you power down your device. This makes no sense... unless this
+is not a power down GPIO.
 
+
+Best regards,
+Krzysztof
