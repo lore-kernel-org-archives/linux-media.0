@@ -1,49 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F73BE46;
-	Tue,  8 Jul 2025 17:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6115F9E8;
+	Tue,  8 Jul 2025 17:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751994494; cv=none; b=kskhSZ9FbvuZulwm6C+GQFnNnaVWMDHuyLEq72AWMeITT5hGmFohewg++GhCoVzeWtjTI8JypK8AP8zin5MaA+fewWaBFEmIyuQ0q58B1c7CWNpSI2RslCAzxkwvGcczBr7mAB97W/t/C7Qqr2HLMgAmYzKMDJ9nPv8mR4JU0xo=
+	t=1751994964; cv=none; b=tIxu5iD8HaVKh/fRbXXoGvp62HrqMgR6WPH9FJT0fTiomgrFFJAxxiVFJh3M8AfY7Az47EiKy5Y2kHeGeH8ph54CKa/5Djku8ip8ghRbaeyGf7UwAXsP8xx53EWfbXcFcEuJtRYhVFZ1Xlnzb+UF1DOpm5IzQEBUxiKEOqYMB+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751994494; c=relaxed/simple;
-	bh=kIfjTg5LWXVTDttNhk5OvreN6YGzkggbjxzFHKAfhV0=;
+	s=arc-20240116; t=1751994964; c=relaxed/simple;
+	bh=oPxuCNoSxUQ+b8uXTmL/LOlmEoU1tSZIe+IvYpZDa8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BVU6crRmiX4Z/R/m0fv6FqmWvJI8xBRIgeCON+v0tv/MDJOCSQnL7wcfbSIQdkP+Q/p/AoQro4DpZPKTeQb/ZxOnpfvAoZ4SzrBzlUVyVFnClG66dS1kAbp0j6gV/7+uITH/H+vLNEDbFJyoi4TJ3YJywcYdG/+O7DdWcr00SrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jGg12qPF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=jCcHtEuevFK25EfkxhXCwgd+yl79ioF6WSzF/DvPmxRtktJVLm/+uFb8KP+KTyL08Hwi9sTIEwvNK7fvnhJQdmzorVw+DfyxLjzs3hdz5msqDlGqs+x7lYYCwnijpbhpsEbnIOXrhkHayqnRPJcgMVD9wBmPleHp0RbHWAC3g3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HltkWToj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jGg12qPF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F08EC4CEED;
-	Tue,  8 Jul 2025 17:08:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HltkWToj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2C6C4CEED;
+	Tue,  8 Jul 2025 17:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751994493;
-	bh=kIfjTg5LWXVTDttNhk5OvreN6YGzkggbjxzFHKAfhV0=;
+	s=k20201202; t=1751994964;
+	bh=oPxuCNoSxUQ+b8uXTmL/LOlmEoU1tSZIe+IvYpZDa8M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jGg12qPFoH2eBehoY8Xxvnpz2e32pDK9NGOxqyR5bl/B3HQjMnUzk6O86XbysgWTG
-	 o9QtE1p3TQuwWwl3o5uYYPlJW6BOu9SebDQ7I7lgVnacdZSAvAbzJRPujeT1vUUgOw
-	 zcHkSav5iYAOJbBkGjVmEbsmT82c0z+bd2gODCdpTunXtK+BoZeDn3H+g9G5Hn+eZQ
-	 Z/u78fcGj7w1+1aOZ3Me+BEeNNfqtmxrsTumc0a8oE8Bgxc5BzXfD6d8e6a0CchhCp
-	 6zyZopWZii8LogBVTNomzZYczQhaCTTve4BY9jVKKIkvQ90vKQuR4kVcH9n350CR+G
-	 j3YRIJ49Jt8zA==
-Date: Tue, 8 Jul 2025 12:08:12 -0500
+	b=HltkWTojIJI9h36Gf8tmykgdvHzadVkH/W2wil4AP7Tg6oLn0kxNchvTP8ynmfm10
+	 yFFbxmO8M0CeUhkZgpGmRfceEHFh0cfFieOD70WMc5fLtdINn+yzjjRhevqeS7t7mA
+	 r+Lep6bpA2SlfBCTmQRUK+xJNEJ/1+Lw4Ot662uD725X59CLU4guzi/IIqfIH4LFab
+	 lWSLQ/f/2UshcN/NX8LDA3L/gNpkw4d3qQvWXExG+CfgPbfRnv03IL8GSAZEkCD0rx
+	 QNgfzhhfJCEXWJO3Fe4ngxSAjPSrgfdSBfsXOkf9aT1FQ3nS4D9gWOi2FwZXJqJt11
+	 +eTZGPfg2RFUg==
+Date: Tue, 8 Jul 2025 12:16:02 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: linux-kernel@vger.kernel.org,
+To: Paul Kocialkowski <paulk@sys-base.io>
+Cc: linux-sunxi@lists.linux.dev, Stephen Boyd <sboyd@kernel.org>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	devicetree@vger.kernel.org,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Yong Deng <yong.deng@magewell.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	linux-clk@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-media@vger.kernel.org,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	linux-arm-msm@vger.kernel.org,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Stefan Schmidt <stefan.schmidt@linaro.org>,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: Re: [PATCH] dt-bindings: media: qcom,sm8550-iris: Add X1E80100
- compatible
-Message-ID: <175199449206.639410.14178643503954926234.robh@kernel.org>
-References: <20250704-x1e-iris-v1-1-c3137d979e43@linaro.org>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 1/9] dt-bindings: media: sun6i-a31-csi: Add optional
+ interconnect properties
+Message-ID: <175199495940.648604.8324168473122471061.robh@kernel.org>
+References: <20250704154628.3468793-1-paulk@sys-base.io>
+ <20250704154628.3468793-2-paulk@sys-base.io>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -52,19 +54,17 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704-x1e-iris-v1-1-c3137d979e43@linaro.org>
+In-Reply-To: <20250704154628.3468793-2-paulk@sys-base.io>
 
 
-On Fri, 04 Jul 2025 15:38:41 +0200, Stephan Gerhold wrote:
-> Iris in X1E80100 is pretty much identical to SM8550. We can use the same
-> firmware image and the same definitions in the driver, so just add
-> qcom,x1e80100-iris to the existing list with qcom,sm8550-iris as fallback
-> compatible.
+On Fri, 04 Jul 2025 17:46:18 +0200, Paul Kocialkowski wrote:
+> An interconnect can be attached to the sun6i-a31-csi device, which is
+> useful to attach the dma memory offset. Add related properties.
 > 
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+> Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
 > ---
->  Documentation/devicetree/bindings/media/qcom,sm8550-iris.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  .../devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml  | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
