@@ -1,38 +1,38 @@
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47A02E1737;
-	Tue,  8 Jul 2025 15:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E522E1749;
+	Tue,  8 Jul 2025 15:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751988009; cv=none; b=bLBwXvmz0yfehYdmouunD00Uzlb0Xhb0kFZde1EPVcS3lefzXilvF/8basLVy7Y9soAKdKm9vC1hUmjyLNQvqR3ZEQP4IhPP7/ELTih5qYWyRZii5ozz3oDgzVLoIFwBeZLOYHGys7euBiYxP8dMkptDVKxl3bKZkB+mN1mGtU0=
+	t=1751988009; cv=none; b=H+8a6Ru++pmV6mkBWkaeo6mw4howfGyTDTfbL632m7oSZugb/3tOVuXSne47XS8QnUkmMsPFoaBULd1qhFBW5Dod1wo49VijgkyPmfcLa3xTPdRAEAw3W1BIHtug9T0hP3PCvTb+0n3Q8MBPYs5LOFHJUYhefVPZQV8gNZQ5RQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751988009; c=relaxed/simple;
-	bh=ze7OLjPjKlCigqfxtOMOBTAvSdypPLUcg8IPJNuCXok=;
+	bh=IYkfgzyTm1r3u/AVPZFB0sE58bGEguRbyPcffVUmwi8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XJhKO9SoiHZ6onmhFkC9CVwzh5RP1BPOJ4GFvT/gNuZAr0ntaRLOU7SLB1DT8iI7sWzXA5ybEIRcCtrUmRretkJbJysPouVh8PjiHgFw9/LSarpO1KjI8gCPpkGtas/5v2FH6ul6UdbuYGluRA/yf7kzcNLF+h/9rDCx3DH0VWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OdhIK7Pz; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version; b=HtpetZUVe9vbfXIGh8467/zJfyh9bhHapGBiKbCm340k118hHnnB5yCGKOLJ2dnJajwd2gpGnlLZ9RJx/NHJjByw8LNZ5tva2enOC4sD7gZ0RFEKjPQNoIa++35sVK4ZQYmQUpNGJ8Voa+sxMgksO8drLGTabrxhrZRjStxG1ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=njgFWMNb; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OdhIK7Pz"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="njgFWMNb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1751988003;
-	bh=ze7OLjPjKlCigqfxtOMOBTAvSdypPLUcg8IPJNuCXok=;
+	s=mail; t=1751988000;
+	bh=IYkfgzyTm1r3u/AVPZFB0sE58bGEguRbyPcffVUmwi8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OdhIK7Pz/UHZ80L44/N/Ybx16oF2OBCdV7sphvazjxz3V/q4qQZFhc2n/P2l2nU6E
-	 +/TWt/8/TbgUwct/ABArVnrGHhSerIYHuiBOGK/gcTbMx/1txXf/JMD5UgM87Kviuc
-	 wgDrMOS6Kn5aVLxcotNqQIg+HOwTkmUN5+/WmhJDKzv+mdlot3YnywNHyaUx2wAHfg
-	 nK/e0Nat5OK/NH7GlzaCqQDq3eNVddMwolY7MKSEWbXKKaiFoL/L7daK3UQg1tbw3Z
-	 UyKBAps98hYhbtzyBJXAhKp0Tx5TyxMzJfXZ8ZkLtH+82mk5EwX3Ryc3r1rhQly6Dy
-	 pH00PwY+qrctw==
+	b=njgFWMNbXIyfqcettUYApYXbBkRRw91GNoGXSFInPopzwZjwqy5YVQZRWxBt7fsBR
+	 PAA1d6BXwttumnnRDOYoA62RBgUQHatIwY5Z5VCc/eu7ceiYXioecZg2kK/fQUDfQ6
+	 cxo1ScXpURaIND+5Y7CjVGhCw6v1twi/+1/xEB00g7JkFJ1Jm8Q7U8OUq3My0VLzGJ
+	 Yw6ISvrhp1sIjMR3vQcuoNiO2sVwN7eb4dhef6fdIeYxuLn3wpeoQ3nqjN6YqY47Gl
+	 f6aMTs5aFY0mTzFwj83YuNauBEpQBhoWMH/j8tgfpX1jKnACIvVWBq1aSxsyfdD/hK
+	 0mYMgXH0X+75w==
 Received: from trenzalore.hitronhub.home (unknown [23.233.251.139])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: detlev)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7034A17E11ED;
-	Tue,  8 Jul 2025 17:20:02 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id EC5DF17E1045;
+	Tue,  8 Jul 2025 17:19:58 +0200 (CEST)
 From: Detlev Casanova <detlev.casanova@collabora.com>
 To: linux-kernel@vger.kernel.org
 Cc: Detlev Casanova <detlev.casanova@collabora.com>,
@@ -44,9 +44,9 @@ Cc: Detlev Casanova <detlev.casanova@collabora.com>,
 	kernel@collabora.com,
 	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
 	Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH 05/12] media: rkvdec: Add per variant configuration
-Date: Tue,  8 Jul 2025 11:19:38 -0400
-Message-ID: <20250708151946.374349-6-detlev.casanova@collabora.com>
+Subject: [PATCH 03/12] media: rkvdec: Use structs to represent the HW RPS
+Date: Tue,  8 Jul 2025 11:19:36 -0400
+Message-ID: <20250708151946.374349-4-detlev.casanova@collabora.com>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250708151946.374349-1-detlev.casanova@collabora.com>
 References: <20250708151946.374349-1-detlev.casanova@collabora.com>
@@ -58,178 +58,168 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is to prepare for adding different variants of the decoder and
-support specific formats and ops.
+This is in preparation to add support for other variants of the decoder.
+
+Moving to struct representation is mainly to prepare for multicore
+support that is present in e.g. rk3588.
 
 Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 ---
- .../media/platform/rockchip/rkvdec/rkvdec.c   | 50 ++++++++++++-------
- .../media/platform/rockchip/rkvdec/rkvdec.h   |  6 +++
- 2 files changed, 39 insertions(+), 17 deletions(-)
+ .../platform/rockchip/rkvdec/rkvdec-h264.c    | 97 ++++++++++++++++---
+ 1 file changed, 86 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.c b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-index c3f35a02d7fdb..3496216d99c18 100644
---- a/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-+++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.c
-@@ -286,13 +286,14 @@ static const struct rkvdec_coded_fmt_desc rkvdec_coded_fmts[] = {
+diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec-h264.c b/drivers/media/platform/rockchip/rkvdec/rkvdec-h264.c
+index cfe849cc93cb3..355d63aef7ea4 100644
+--- a/drivers/media/platform/rockchip/rkvdec/rkvdec-h264.c
++++ b/drivers/media/platform/rockchip/rkvdec/rkvdec-h264.c
+@@ -19,7 +19,6 @@ extern const s8 rkvdec_h264_cabac_table[4][464][2];
+ 
+ /* Size with u32 units. */
+ #define RKV_CABAC_INIT_BUFFER_SIZE	(3680 + 128)
+-#define RKV_RPS_SIZE			((128 + 128) / 4)
+ #define RKV_ERROR_INFO_SIZE		(256 * 144 * 4)
+ 
+ #define RKVDEC_NUM_REFLIST		3
+@@ -34,6 +33,40 @@ struct rkvdec_sps_pps_packet {
+ 	u32 info[8];
  };
  
- static const struct rkvdec_coded_fmt_desc *
--rkvdec_find_coded_fmt_desc(u32 fourcc)
-+rkvdec_find_coded_fmt_desc(struct rkvdec_ctx *ctx, u32 fourcc)
- {
-+	struct rkvdec_config *cfg = ctx->dev->config;
- 	unsigned int i;
- 
--	for (i = 0; i < ARRAY_SIZE(rkvdec_coded_fmts); i++) {
--		if (rkvdec_coded_fmts[i].fourcc == fourcc)
--			return &rkvdec_coded_fmts[i];
-+	for (i = 0; i < cfg->coded_fmts_num; i++) {
-+		if (cfg->coded_fmts[i].fourcc == fourcc)
-+			return &cfg->coded_fmts[i];
- 	}
- 
- 	return NULL;
-@@ -300,9 +301,10 @@ rkvdec_find_coded_fmt_desc(u32 fourcc)
- 
- static void rkvdec_reset_coded_fmt(struct rkvdec_ctx *ctx)
- {
-+	struct rkvdec_config *cfg = ctx->dev->config;
- 	struct v4l2_format *f = &ctx->coded_fmt;
- 
--	ctx->coded_fmt_desc = &rkvdec_coded_fmts[0];
-+	ctx->coded_fmt_desc = &cfg->coded_fmts[0];
- 	rkvdec_reset_fmt(ctx, f, ctx->coded_fmt_desc->fourcc);
- 
- 	f->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-@@ -316,12 +318,13 @@ static void rkvdec_reset_coded_fmt(struct rkvdec_ctx *ctx)
- static int rkvdec_enum_framesizes(struct file *file, void *priv,
- 				  struct v4l2_frmsizeenum *fsize)
- {
-+	struct rkvdec_ctx *ctx = fh_to_rkvdec_ctx(priv);
- 	const struct rkvdec_coded_fmt_desc *fmt;
- 
- 	if (fsize->index != 0)
- 		return -EINVAL;
- 
--	fmt = rkvdec_find_coded_fmt_desc(fsize->pixel_format);
-+	fmt = rkvdec_find_coded_fmt_desc(ctx, fsize->pixel_format);
- 	if (!fmt)
- 		return -EINVAL;
- 
-@@ -388,12 +391,13 @@ static int rkvdec_try_output_fmt(struct file *file, void *priv,
- {
- 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
- 	struct rkvdec_ctx *ctx = fh_to_rkvdec_ctx(priv);
-+	struct rkvdec_config *cfg = ctx->dev->config;
- 	const struct rkvdec_coded_fmt_desc *desc;
- 
--	desc = rkvdec_find_coded_fmt_desc(pix_mp->pixelformat);
-+	desc = rkvdec_find_coded_fmt_desc(ctx, pix_mp->pixelformat);
- 	if (!desc) {
--		pix_mp->pixelformat = rkvdec_coded_fmts[0].fourcc;
--		desc = &rkvdec_coded_fmts[0];
-+		pix_mp->pixelformat = cfg->coded_fmts[0].fourcc;
-+		desc = &cfg->coded_fmts[0];
- 	}
- 
- 	v4l2_apply_frmsize_constraints(&pix_mp->width,
-@@ -470,7 +474,7 @@ static int rkvdec_s_output_fmt(struct file *file, void *priv,
- 	if (ret)
- 		return ret;
- 
--	desc = rkvdec_find_coded_fmt_desc(f->fmt.pix_mp.pixelformat);
-+	desc = rkvdec_find_coded_fmt_desc(ctx, f->fmt.pix_mp.pixelformat);
- 	if (!desc)
- 		return -EINVAL;
- 	ctx->coded_fmt_desc = desc;
-@@ -522,10 +526,13 @@ static int rkvdec_g_capture_fmt(struct file *file, void *priv,
- static int rkvdec_enum_output_fmt(struct file *file, void *priv,
- 				  struct v4l2_fmtdesc *f)
- {
--	if (f->index >= ARRAY_SIZE(rkvdec_coded_fmts))
-+	struct rkvdec_ctx *ctx = fh_to_rkvdec_ctx(priv);
-+	struct rkvdec_config *cfg = ctx->dev->config;
++struct rkvdec_rps_entry {
++	u32 dpb_info0:          5;
++	u32 bottom_flag0:       1;
++	u32 view_index_off0:    1;
++	u32 dpb_info1:          5;
++	u32 bottom_flag1:       1;
++	u32 view_index_off1:    1;
++	u32 dpb_info2:          5;
++	u32 bottom_flag2:       1;
++	u32 view_index_off2:    1;
++	u32 dpb_info3:          5;
++	u32 bottom_flag3:       1;
++	u32 view_index_off3:    1;
++	u32 dpb_info4:          5;
++	u32 bottom_flag4:       1;
++	u32 view_index_off4:    1;
++	u32 dpb_info5:          5;
++	u32 bottom_flag5:       1;
++	u32 view_index_off5:    1;
++	u32 dpb_info6:          5;
++	u32 bottom_flag6:       1;
++	u32 view_index_off6:    1;
++	u32 dpb_info7:          5;
++	u32 bottom_flag7:       1;
++	u32 view_index_off7:    1;
++} __packed;
 +
-+	if (f->index >= cfg->coded_fmts_num)
- 		return -EINVAL;
- 
--	f->pixelformat = rkvdec_coded_fmts[f->index].fourcc;
-+	f->pixelformat = cfg->coded_fmts[f->index].fourcc;
- 	return 0;
- }
- 
-@@ -895,16 +902,17 @@ static int rkvdec_add_ctrls(struct rkvdec_ctx *ctx,
- 
- static int rkvdec_init_ctrls(struct rkvdec_ctx *ctx)
- {
-+	struct rkvdec_config *cfg = ctx->dev->config;
- 	unsigned int i, nctrls = 0;
- 	int ret;
- 
--	for (i = 0; i < ARRAY_SIZE(rkvdec_coded_fmts); i++)
--		nctrls += rkvdec_coded_fmts[i].ctrls->num_ctrls;
-+	for (i = 0; i < cfg->coded_fmts_num; i++)
-+		nctrls += cfg->coded_fmts[i].ctrls->num_ctrls;
- 
- 	v4l2_ctrl_handler_init(&ctx->ctrl_hdl, nctrls);
- 
--	for (i = 0; i < ARRAY_SIZE(rkvdec_coded_fmts); i++) {
--		ret = rkvdec_add_ctrls(ctx, rkvdec_coded_fmts[i].ctrls);
-+	for (i = 0; i < cfg->coded_fmts_num; i++) {
-+		ret = rkvdec_add_ctrls(ctx, cfg->coded_fmts[i].ctrls);
- 		if (ret)
- 			goto err_free_handler;
- 	}
-@@ -1119,8 +1127,13 @@ static void rkvdec_watchdog_func(struct work_struct *work)
++struct rkvdec_rps {
++	u16 frame_num[16];
++	u32 reserved0;
++	struct rkvdec_rps_entry entries[12];
++	u32 reserved1[66];
++} __packed;
++
+ struct rkvdec_ps_field {
+ 	u16 offset;
+ 	u8 len;
+@@ -94,7 +127,7 @@ struct rkvdec_ps_field {
+ struct rkvdec_h264_priv_tbl {
+ 	s8 cabac_table[4][464][2];
+ 	struct rkvdec_h264_scaling_list scaling_list;
+-	u32 rps[RKV_RPS_SIZE];
++	struct rkvdec_rps rps;
+ 	struct rkvdec_sps_pps_packet param_set[256];
+ 	u8 err_info[RKV_ERROR_INFO_SIZE];
+ };
+@@ -260,20 +293,64 @@ static void lookup_ref_buf_idx(struct rkvdec_ctx *ctx,
  	}
  }
  
-+const struct rkvdec_config config_rkvdec = {
-+	.coded_fmts = (struct rkvdec_coded_fmt_desc *)rkvdec_coded_fmts,
-+	.coded_fmts_num = ARRAY_SIZE(rkvdec_coded_fmts),
-+};
++static void set_dpb_info(struct rkvdec_rps_entry *entries,
++			 u8 reflist,
++			 u8 refnum,
++			 u8 info,
++			 bool bottom)
++{
++	struct rkvdec_rps_entry *entry = &entries[(reflist * 4) + refnum / 8];
++	u8 idx = refnum % 8;
 +
- static const struct of_device_id of_rkvdec_match[] = {
--	{ .compatible = "rockchip,rk3399-vdec" },
-+	{ .compatible = "rockchip,rk3399-vdec", .data = &config_rkvdec },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, of_rkvdec_match);
-@@ -1144,6 +1157,9 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	mutex_init(&rkvdec->vdev_lock);
- 	INIT_DELAYED_WORK(&rkvdec->watchdog_work, rkvdec_watchdog_func);
- 
-+	rkvdec->config =
-+		(struct rkvdec_config *)of_device_get_match_data(rkvdec->dev);
++	switch (idx) {
++	case 0:
++		entry->dpb_info0 = info;
++		entry->bottom_flag0 = bottom;
++		break;
++	case 1:
++		entry->dpb_info1 = info;
++		entry->bottom_flag1 = bottom;
++		break;
++	case 2:
++		entry->dpb_info2 = info;
++		entry->bottom_flag2 = bottom;
++		break;
++	case 3:
++		entry->dpb_info3 = info;
++		entry->bottom_flag3 = bottom;
++		break;
++	case 4:
++		entry->dpb_info4 = info;
++		entry->bottom_flag4 = bottom;
++		break;
++	case 5:
++		entry->dpb_info5 = info;
++		entry->bottom_flag5 = bottom;
++		break;
++	case 6:
++		entry->dpb_info6 = info;
++		entry->bottom_flag6 = bottom;
++		break;
++	case 7:
++		entry->dpb_info7 = info;
++		entry->bottom_flag7 = bottom;
++		break;
++	}
++}
 +
- 	rkvdec->clocks = devm_kcalloc(&pdev->dev, ARRAY_SIZE(rkvdec_clk_names),
- 				      sizeof(*rkvdec->clocks), GFP_KERNEL);
- 	if (!rkvdec->clocks)
-diff --git a/drivers/media/platform/rockchip/rkvdec/rkvdec.h b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-index 3451c4bf7cb75..14717c646c665 100644
---- a/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-+++ b/drivers/media/platform/rockchip/rkvdec/rkvdec.h
-@@ -100,6 +100,11 @@ struct rkvdec_coded_fmt_desc {
- 	u32 subsystem_flags;
- };
+ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+-			    struct v4l2_h264_reflist_builder *builder,
+-			    struct rkvdec_h264_run *run)
++		     struct v4l2_h264_reflist_builder *builder,
++		     struct rkvdec_h264_run *run)
+ {
+ 	const struct v4l2_ctrl_h264_decode_params *dec_params = run->decode_params;
+ 	const struct v4l2_h264_dpb_entry *dpb = dec_params->dpb;
+ 	struct rkvdec_h264_ctx *h264_ctx = ctx->priv;
+ 	struct rkvdec_h264_priv_tbl *priv_tbl = h264_ctx->priv_tbl.cpu;
  
-+struct rkvdec_config {
-+	struct rkvdec_coded_fmt_desc *coded_fmts;
-+	size_t coded_fmts_num;
-+};
-+
- struct rkvdec_dev {
- 	struct v4l2_device v4l2_dev;
- 	struct media_device mdev;
-@@ -111,6 +116,7 @@ struct rkvdec_dev {
- 	struct mutex vdev_lock; /* serializes ioctls */
- 	struct delayed_work watchdog_work;
- 	struct iommu_domain *empty_domain;
-+	struct rkvdec_config *config;
- };
+-	u32 *hw_rps = priv_tbl->rps;
++	struct rkvdec_rps *hw_rps = &priv_tbl->rps;
+ 	u32 i, j;
+-	u16 *p = (u16 *)hw_rps;
  
- struct rkvdec_ctx {
+-	memset(hw_rps, 0, sizeof(priv_tbl->rps));
++	memset(hw_rps, 0, sizeof(*hw_rps));
+ 
+ 	/*
+ 	 * Assign an invalid pic_num if DPB entry at that position is inactive.
+@@ -285,7 +362,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
+ 			continue;
+ 
+-		p[i] = builder->refs[i].frame_num;
++		hw_rps->frame_num[i] = builder->refs[i].frame_num;
+ 	}
+ 
+ 	for (j = 0; j < RKVDEC_NUM_REFLIST; j++) {
+@@ -312,9 +389,7 @@ static void assemble_hw_rps(struct rkvdec_ctx *ctx,
+ 			dpb_valid = run->ref_buf[ref->index] != NULL;
+ 			bottom = ref->fields == V4L2_H264_BOTTOM_FIELD_REF;
+ 
+-			set_ps_field(hw_rps, DPB_INFO(i, j),
+-				     ref->index | dpb_valid << 4);
+-			set_ps_field(hw_rps, BOTTOM_FLAG(i, j), bottom);
++			set_dpb_info(hw_rps->entries, j, i, ref->index | (dpb_valid << 4), bottom);
+ 		}
+ 	}
+ }
 -- 
 2.50.0
 
