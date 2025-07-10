@@ -1,54 +1,53 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31861203710
-	for <linux-media@vger.kernel.org>; Thu, 10 Jul 2025 07:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457F9289344
+	for <linux-media@vger.kernel.org>; Thu, 10 Jul 2025 07:32:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752132729; cv=none; b=fl78OwjF76tPMd2a34OLh6q+6FV/OkTTQEpGBdoNzME5nQ8I3fMG4NwgqAiO4iHK8RHO2vSnvSqYyc339hhHggjRsjOQfXTsZLDCpPxJMUc3Aql+kGr/rb7IJ1ZF1MUXW7UWMUIGO0gfeiASg9w0pNWPtv+l7p9ZGqOVjYgjVp0=
+	t=1752132730; cv=none; b=SVMEzJYiElferRC5SunkGHRFf3NrLcDVpqKReTm/ACWmKGgha/7ff3IHla+wdgeg+BhRZIvdejF2LR/Td83VOQIhPUnh6STqfzP+Q9g4KO4lXUmPrrULPZ8gkj8LmiugPIKB4/zjoVaP5gCPy/cNqbGs2dEiU8z2isSQK6LYbPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752132729; c=relaxed/simple;
-	bh=CqCWsjoR+3QFL1zj9gnUPF7TjRLGpJwc96S3l85SP9U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ErWc2+a46nBRq8Wf3WfxljmPo2k8tgKS8oQRQ55LmvwUjVxKrPl+Jv9cRRq5mTllXR6iE4q02WVq8eiTImu4pGNPYhOtgP8hFJgv4XYM7F5M3yyb6dhzC7MCxrpWiypKxFL+T/OzwJ6p2Zik6Al9jetAxR18yYDHD27DRmxI4N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9XhtiON; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1752132730; c=relaxed/simple;
+	bh=Y2hy6wcKWQmxK8f8qHVGPHWVjcj42/MUdAhEmM5LoZk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XhAJF6HccUQ9Oovox6Vo6u7ZfLUCsa6X8KFrPDAHzToFR18nDDU+Pwh7PZCGKrusPfCHlr8kqHS0oNz4rYkxxKp1uYSEYY6tTRf2WPmy/kQ6BHirXkr+Mxp/rgyuXv6yCh2MBXxNmew71PYDYReFdP3OXoGX811zmLUGRLJ9b2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lmb0rccu; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9XhtiON"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lmb0rccu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752132727; x=1783668727;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CqCWsjoR+3QFL1zj9gnUPF7TjRLGpJwc96S3l85SP9U=;
-  b=M9XhtiONYN2/enD/uKsAzUOO9ogIvJt7g4K8/9VgJfKWtiVABPypKgUy
-   m4suCPISmBysdAHsd3wxLsNweQna268wioXqWGphfPAqD0KDVmvDvn1J1
-   JtH9vGK154YACPWUGan6wg8L7uIvCCve1uMnJy+LlVB3NaOyQ5VGKEKPe
-   gOaiVtRP3zr5sbRB0jH+Y6mycIGqEoq13ckWh9aydyaCKbbA6hkTynRa1
-   CnrLY18OGilkFITCCypWwcRyAwU6uWmmH63X45omE/Yh5tOLf6L1ZwbqJ
-   V+iCh9K4m1zHfkA4k1zbsE+9CuH9eZzeVB6KKaGu6ymnxaAexDLsm3KFM
+  t=1752132730; x=1783668730;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Y2hy6wcKWQmxK8f8qHVGPHWVjcj42/MUdAhEmM5LoZk=;
+  b=lmb0rccukCF887NV1ymkmMykzhGq9Xj9lHeNSHGRqbfEYCTsYLzYk3QK
+   bGy5ubgbFeiFLM311mK+Sko48EIeJnmFc3Nswzpf1CH0WTws1myWeAF2j
+   b5Qbo1wnuPHgKifEIPnznD/JLtggGmp6s5djY5m+Wp0Tgd9D9B8glvDsJ
+   Mz9JY03I4SAvhYTZ6dlCUmm1MGN9lwwsvyHS1vbJGaTgehMzTuQzZo5km
+   y0KPr73TCtGMgldXRikELdzp9KSqLM7Wiaj8O7tjxlKohiEff0ah4MRTw
+   xhme3NyYp3+XO/K4cYtlW0TsK+MVKu3pukXPc8gQcdCIGKEonIEwH9DEu
    g==;
-X-CSE-ConnectionGUID: v7l/f7deTAu8a4e+5wAbhg==
-X-CSE-MsgGUID: Ar2zrTVjRKOK6OtImbtW7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="54258394"
+X-CSE-ConnectionGUID: sg3qz3EuT+Sc0epORyEURQ==
+X-CSE-MsgGUID: 8saNr5scQt2zS6GpjrJM9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11489"; a="54258396"
 X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="54258394"
+   d="scan'208";a="54258396"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
   by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 00:32:06 -0700
-X-CSE-ConnectionGUID: sOK2Aj8BTZmkeermJ8f34g==
-X-CSE-MsgGUID: W5AB3fMnS6qmTL8u4CdaBw==
+X-CSE-ConnectionGUID: qXXe7TfgRke+O2booGMwng==
+X-CSE-MsgGUID: aYgQyivMQ2KbiV7Pz7nm9g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,300,1744095600"; 
-   d="scan'208";a="186998387"
+   d="scan'208";a="186998390"
 Received: from opintica-mobl1 (HELO kekkonen.fi.intel.com) ([10.245.244.54])
   by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2025 00:32:05 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8A37F120B20;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 899B81207A2;
 	Thu, 10 Jul 2025 10:32:01 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1uZllB-0045vD-2c;
+	id 1uZllB-0045v6-2P;
 	Thu, 10 Jul 2025 10:32:01 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -57,12 +56,10 @@ Cc: laurent.pinchart@ideasonboard.com,
 	bingbu.cao@linux.intel.com,
 	tian.shu.qiu@intel.com,
 	tomi.valkeinen@ideasonboard.com
-Subject: [PATCH v2 2/2] media: v4l2-subdev: Add debug prints to v4l2_subdev_collect_streams()
-Date: Thu, 10 Jul 2025 10:32:01 +0300
-Message-Id: <20250710073201.976056-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 0/2] Add debug prints to help working with streams
+Date: Thu, 10 Jul 2025 10:31:59 +0300
+Message-Id: <20250710073201.976056-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250710073201.976056-1-sakari.ailus@linux.intel.com>
-References: <20250710073201.976056-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -71,41 +68,24 @@ List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Print streams found by v4l2_subdev_collect_streams() at debug level. This
-could be useful in debugging drivers, userspace programs or the framework
-itself.
+Hi folks,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/v4l2-core/v4l2-subdev.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+These two patches add debug prints to help working with streams. They were
+previously a part of my MC streaming control set
+<20250619081546.1582969-1-sakari.ailus@linux.intel.com>.
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 7b1a67a52efa..4fd25fea3b58 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -2233,6 +2233,9 @@ static void v4l2_subdev_collect_streams(struct v4l2_subdev *sd,
- 		*found_streams = BIT_ULL(0);
- 		*enabled_streams =
- 			(sd->enabled_pads & BIT_ULL(pad)) ? BIT_ULL(0) : 0;
-+		dev_dbg(sd->dev,
-+			"collect_streams: sub-device \"%s\" does not support streams\n",
-+			sd->entity.name);
- 		return;
- 	}
- 
-@@ -2250,6 +2253,10 @@ static void v4l2_subdev_collect_streams(struct v4l2_subdev *sd,
- 		if (cfg->enabled)
- 			*enabled_streams |= BIT_ULL(cfg->stream);
- 	}
-+
-+	dev_dbg(sd->dev,
-+		"collect_streams: \"%s\":%u: found %#llx enabled %#llx\n",
-+		sd->entity.name, pad, *found_streams, *enabled_streams);
- }
- 
- static void v4l2_subdev_set_streams_enabled(struct v4l2_subdev *sd,
+since v1:
+
+- Align debug print formatting with the rest of the framework.
+
+Sakari Ailus (2):
+  media: v4l2-subdev: Print early in
+    v4l2_subdev_{enable,disable}_streams()
+  media: v4l2-subdev: Add debug prints to v4l2_subdev_collect_streams()
+
+ drivers/media/v4l2-core/v4l2-subdev.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
 -- 
 2.39.5
 
