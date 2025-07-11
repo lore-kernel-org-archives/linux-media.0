@@ -1,53 +1,54 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FFD5217666;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CAF2236EE;
 	Fri, 11 Jul 2025 08:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752222930; cv=none; b=i4ABLhuxNH97z+RAmWNZGEqaDxynUFisJRIaqycmMp6DCOAXU4vb16r4Q0MhO+cCgrlou/GCAfBsDY/Auz41wUNG4dXKl9AhYQni8lb2ZSuGHg1FAhvpEwPTf2s0KtgFpQyDq2/HU8Qvpe2Kym2RB+8stE9jcnO0WieEEc//5P8=
+	t=1752222931; cv=none; b=kXVHREDw6dhx0eYyz0DA0JswD/l9M5V5cXTvhj7H+kbhVlgTugpqrw4PLpI2rD9A20NCoxJssWokOoCXmJvUw6T9YfHa/r1fkkNveeaxdamgvi2mCuCGDeEUjR1c1/gbV1Sge4iEW2yFgkHcTCZMZH7mAZVlSl6gHC+WYOMMgwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752222930; c=relaxed/simple;
-	bh=7RpGLnNVm3S5xqCmvY9JYfO7lJVdnU431C/IzafVPTM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HS6ih7Sc//JghDznIetxlovCwonGbZXsdqxlmk+LjaVjuTjkxmjMKrJf1OXn7iWJZsGCh/qK95186EX4mUxGILe3mPxmyHHNlLcMqNiHHIYr2xlAaRbIylGFiRWGdD4V3B+MT9SwyUrXHpHJvg70FAm8jD7p5+5F5A5rAjKPL+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mBm1HIo4; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1752222931; c=relaxed/simple;
+	bh=CiWdSLMB0pykKtgdfG/uGy929icGP6FHRbKJYHqktc4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Lg8sUVc9OB4nFdwWn29GHA58Z1DBMfG8JOlqJHHAyBcGJzPoGEtWoRanLJb2T9fftiqgOV0UzG1sDEqdkEe6UsKzwNNg71iwRaMyPCwAOIWA6psY1NQDYkgCdzMvniq6xK+oemJ23nxOPEf8NTo3ClRiAxBFrB+fSPgs58VMG7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SkJhf3Wo; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mBm1HIo4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SkJhf3Wo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752222929; x=1783758929;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7RpGLnNVm3S5xqCmvY9JYfO7lJVdnU431C/IzafVPTM=;
-  b=mBm1HIo44OeQhGSPDHYFddjCvpOBGI7VrliaNfnQvEYqeHWjsllQVfsG
-   q0zeO3AjUhaHbrwMkeKmHGC08qTQPOSn8Vjvc0GYXy1e6Z7uL22iIuzbG
-   svaXSy14da5eejREc1Cikg5YLjpmLyO2tgS6iXT8KTlri0sn5/ZNfT68k
-   ONy3UryBPpa82JxxQYTvVJe6eVJALrYukRl50FxHMforxwHz09WCjCoHN
-   ZAyrO7NBe33mKwzaqP9dxno+YCy1dXS2BgbueZRMqXkJgp6wi8gw6VaZp
-   a429aQ11MmEL6YwJOIm5bW8rvk1qJQsuigCLHEa+AFiiTxKSEKg/akb5U
-   A==;
-X-CSE-ConnectionGUID: CZuW4xEdRM+2ooSvo34ejw==
-X-CSE-MsgGUID: WSIho0LWQyWdKqiTFwTi5Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="71965140"
+  t=1752222930; x=1783758930;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CiWdSLMB0pykKtgdfG/uGy929icGP6FHRbKJYHqktc4=;
+  b=SkJhf3WoYqng4CqB2iIsaitV31FvaLpHbpOY1Ey/RszgwHqEF4Qs79B5
+   9q4WqKcXdSbWHvzK7Ys8xhPR+CJcsal/hHhdo89LXT6gtGLLsBaZzjz6V
+   GKxQ3Ag6bYGkKBxrwQQtg04IujnhB1uEBeui1qkbXua57dV6y/b+wJTxG
+   4BG0CLDCjqA8temVaAT3V44B+qQipmOZW7ibJtfjZlSdGStVoy3CtJVwH
+   EZm+4nRZAjivDxgxaN+60q3kieNOJUXr4UvhlKWt+va9YKLbPFXpm0Blu
+   juYewEyVzBGnffbuLCacii2jVCfAVWouqMcYfQW7insL7ffpTKZ2Ner1a
+   Q==;
+X-CSE-ConnectionGUID: m5uqNhPFQXqBadgmgWbSow==
+X-CSE-MsgGUID: J4Z1SQ+uSQCeMKFoZ668pg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11490"; a="71965148"
 X-IronPort-AV: E=Sophos;i="6.16,303,1744095600"; 
-   d="scan'208";a="71965140"
+   d="scan'208";a="71965148"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2025 01:34:20 -0700
-X-CSE-ConnectionGUID: 7ypfUzS4T7GOz2EpQ1B23g==
-X-CSE-MsgGUID: IEJl/VM5Roun6+4YdwDKcg==
+X-CSE-ConnectionGUID: CbbR8Er6R4+umGU1uRosEw==
+X-CSE-MsgGUID: xnrY3u0dQN2jhrY4pvWKFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,303,1744095600"; 
-   d="scan'208";a="156097096"
+   d="scan'208";a="156097094"
 Received: from ettammin-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.248])
   by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2025 01:34:17 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id D9A71120665;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id DF66112090D;
 	Fri, 11 Jul 2025 11:34:13 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1ua9Cv-006VrP-1u;
+	id 1ua9Cv-006Vre-2F;
 	Fri, 11 Jul 2025 11:34:13 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -60,83 +61,136 @@ Cc: linux-media@vger.kernel.org,
 	Amardeep Rai <amardeep.rai@intel.com>,
 	Kannappan R <r.kannappan@intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH v2 0/4] eUSB2 support
-Date: Fri, 11 Jul 2025 11:34:09 +0300
-Message-Id: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 4/4] media: uvcvideo: eUSB2 double isochronous bandwidth support
+Date: Fri, 11 Jul 2025 11:34:13 +0300
+Message-Id: <20250711083413.1552423-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
+References: <20250711083413.1552423-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This series adds support for eUSB2 Double Isochronous IN Bandwidth to the
-UVC and xHCI drivers specified in 'USB 2.0 Double Isochronous IN
-Bandwidth' ECN. In short, it adds support for new integrated USB2 webcams
-that can send twice the data compared to conventional USB2 webcams.
+From: Tao Q Tao <tao.q.tao@intel.com>
 
-These devices are identified by the device descriptor bcdUSB 0x0220 value.
-They have an additional eUSB2 Isochronous Endpoint Companion Descriptor,
-and a zero max packet size in regular isoc endpoint descriptor. Support
-for parsing that new descriptor was added in commit
+Use usb_endpoint_max_isoc_bpi() from the USB framework to find the maximum
+bytes per interval for the endpoint. Consequently this adds eUSB2
+isochronous mode and SuperSpeedPlus Isochronous Endpoint Compaion support
+where larger bpi values are possible.
 
-c749f058b437 ("USB: core: Add eUSB2 descriptor and parsing in USB core")
+Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
+Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
+Signed-off-by: Tao Q Tao <tao.q.tao@intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Co-developed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/media/usb/uvc/uvc_driver.c |  4 ++--
+ drivers/media/usb/uvc/uvc_video.c  | 24 +++---------------------
+ drivers/media/usb/uvc/uvcvideo.h   |  4 +---
+ 3 files changed, 6 insertions(+), 26 deletions(-)
 
-This series adds support to UVC, USB core, and xHCI to identify eUSB2
-double isoc devices, and allow and set proper max packet, iso frame desc
-sizes, bytes per interval, and other values in URBs and xHCI endpoint
-contexts needed to support the double data rates for eUSB2 double isoc
-devices.
-
-v1 can be found here
-<URL:https://lore.kernel.org/linux-usb/20250616093730.2569328-2-mathias.nyman@linux.intel.com/>.
-
-since v1:
-
-- Introduce uvc_endpoint_max_isoc_bpi() to obtain maximum bytes per interval
-  value for an endpoint, in a new patch (3rd). This code has been slightly
-  reworked from the instance in the UVC driver, adding support for
-  SuperSpeedPlus Isochronous Endpoint Companion besides the USB 2.0 Double
-  Isochronous In Bandwidth ECN.
-
-- Use uvc_endpoint_max_isoc_bpi() in the UVC driver instead of open-coding
-  eUSB2 Double Isochronous In Bandwidth ECNsupport there.
-
-- Use u32 for maximum bpi and related information in the UVC driver -- the
-  value could be larger than a 16-bit type can hold.
-
-- Assume max in usb_submit_urb() is a natural number as
-  usb_endpoint_maxp() returns only natural numbers (2nd patch).
-
-- Fixed endianness issues in usb_submit_urb() (2nd patch).
-
-- Move the comment on eUSB2 double isoc bw endpoints in
-  xhci_get_endpoint_max_burst() to a better location and remove an
-  unneeded else clause in the same function (1st patch).
-
-Rai, Amardeep (3):
-  xhci: Add host support for eUSB2 double isochronous bandwidth devices
-  USB: core: support eUSB2 double bandwidth large isoc URB frames
-  USB: Add a function to obtain USB version independent maximum bpi
-    value
-
-Tao Q Tao (1):
-  media: uvcvideo: eUSB2 double isochronous bandwidth support
-
- drivers/media/usb/uvc/uvc_driver.c |  4 +-
- drivers/media/usb/uvc/uvc_video.c  | 24 ++----------
- drivers/media/usb/uvc/uvcvideo.h   |  4 +-
- drivers/usb/core/urb.c             | 18 +++++++--
- drivers/usb/host/xhci-caps.h       |  2 +
- drivers/usb/host/xhci-mem.c        | 60 ++++++++++++++++++++++++------
- drivers/usb/host/xhci-ring.c       |  6 +--
- drivers/usb/host/xhci.c            | 16 +++++++-
- drivers/usb/host/xhci.h            | 20 ++++++++++
- include/linux/usb.h                | 22 +++++++++++
- 10 files changed, 130 insertions(+), 46 deletions(-)
-
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index da24a655ab68..fde0bc95622c 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -536,7 +536,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 	unsigned int nformats = 0, nframes = 0, nintervals = 0;
+ 	unsigned int size, i, n, p;
+ 	u32 *interval;
+-	u16 psize;
++	u32 psize;
+ 	int ret = -EINVAL;
+ 
+ 	if (intf->cur_altsetting->desc.bInterfaceSubClass
+@@ -772,7 +772,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 				streaming->header.bEndpointAddress);
+ 		if (ep == NULL)
+ 			continue;
+-		psize = uvc_endpoint_max_bpi(dev->udev, ep);
++		psize = usb_endpoint_max_isoc_bpi(dev->udev, ep);
+ 		if (psize > streaming->maxpsize)
+ 			streaming->maxpsize = psize;
+ 	}
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index e3567aeb0007..9f65cdbc1a1c 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1895,24 +1895,6 @@ static void uvc_video_stop_transfer(struct uvc_streaming *stream,
+ 		uvc_free_urb_buffers(stream);
+ }
+ 
+-/*
+- * Compute the maximum number of bytes per interval for an endpoint.
+- */
+-u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
+-{
+-	u16 psize;
+-
+-	switch (dev->speed) {
+-	case USB_SPEED_SUPER:
+-	case USB_SPEED_SUPER_PLUS:
+-		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
+-	default:
+-		psize = usb_endpoint_maxp(&ep->desc);
+-		psize *= usb_endpoint_maxp_mult(&ep->desc);
+-		return psize;
+-	}
+-}
+-
+ /*
+  * Initialize isochronous URBs and allocate transfer buffers. The packet size
+  * is given by the endpoint.
+@@ -1923,10 +1905,10 @@ static int uvc_init_video_isoc(struct uvc_streaming *stream,
+ 	struct urb *urb;
+ 	struct uvc_urb *uvc_urb;
+ 	unsigned int npackets, i;
+-	u16 psize;
++	u32 psize;
+ 	u32 size;
+ 
+-	psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
++	psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
+ 	size = stream->ctrl.dwMaxVideoFrameSize;
+ 
+ 	npackets = uvc_alloc_urb_buffers(stream, size, psize, gfp_flags);
+@@ -2067,7 +2049,7 @@ static int uvc_video_start_transfer(struct uvc_streaming *stream,
+ 				continue;
+ 
+ 			/* Check if the bandwidth is high enough. */
+-			psize = uvc_endpoint_max_bpi(stream->dev->udev, ep);
++			psize = usb_endpoint_max_isoc_bpi(stream->dev->udev, ep);
+ 			if (psize >= bandwidth && psize < best_psize) {
+ 				altsetting = alts->desc.bAlternateSetting;
+ 				best_psize = psize;
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index b9f8eb62ba1d..a77ba76e033a 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -450,7 +450,7 @@ struct uvc_streaming {
+ 
+ 	struct usb_interface *intf;
+ 	int intfnum;
+-	u16 maxpsize;
++	u32 maxpsize;
+ 
+ 	struct uvc_streaming_header header;
+ 	enum v4l2_buf_type type;
+@@ -818,8 +818,6 @@ void uvc_ctrl_cleanup_fh(struct uvc_fh *handle);
+ /* Utility functions */
+ struct usb_host_endpoint *uvc_find_endpoint(struct usb_host_interface *alts,
+ 					    u8 epaddr);
+-u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep);
+-
+ /* Quirks support */
+ void uvc_video_decode_isight(struct uvc_urb *uvc_urb,
+ 			     struct uvc_buffer *buf,
 -- 
 2.39.5
 
