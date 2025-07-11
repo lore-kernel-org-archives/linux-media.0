@@ -1,44 +1,46 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC242D23A8;
-	Fri, 11 Jul 2025 13:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1185D2D8772;
+	Fri, 11 Jul 2025 13:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752239554; cv=none; b=jiC6v7kIH8n2JE36ownvwP5eRl7hywoEVp9WDYOVu63u2xdXACg+icF5hWTZpG5BkYTWT9UKjvqpYqdl3mDHBNLKu6+9lc9WqJnqTcfqgKZ7MBLSe78IxkqsHDx0tbzzcIZluOd7f2rLleS8TbhiJ1AcWm+Lm+Li162oFNHXxY0=
+	t=1752239558; cv=none; b=He7QPiJNHVGLmXE90E+7BX5ei8mprTnyjoOYg9MvN0+n+VQvdfS1rJebmezAblIwn0TOI0YZEcwYoh7EIZhHb+v1rQPDWC8MB8lMm2Qgk3Fw8xfdc7xPXwbtnGWcnn6LDCyHI9oB+dX+VlZm8Rhua+4zEsEa1jA0eG8iS+xR8Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752239554; c=relaxed/simple;
-	bh=buj/9LK9WnRrx9la+Ug00s901rQX5MS5V6pK1tKyVPQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gk7MLDGnSH41vFu8bA4u026RwlwC0QdYzWEnn0i0FLQb81OHsW4jHhpMM3t+aL7MxJyApv0/H+8NgjCyRoN2W/SYECPZzVVqOaF2uLC5chy7pPZxUrMNBQowJkzloaF4+myu020MZtsA9+NWNmAsY2C/P1KRJahlN4cVwnCNkqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AMR4YYqP; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1752239558; c=relaxed/simple;
+	bh=INIiCPRzBX8DD1XxVEBsBqd5ZSo7UdE2Mszw4qWRrt0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fuwVgAVBFKVBdqB7j5OT5kNvUAHnHZxMYnOruSH2hF/gLFwhNh8cc/eRaVZPFxklDAK9h1UMydn/kTNGZPPLZNW3S/xzlKihSlq7LVr/hAozmkd2UmWhzFS6DKVFWv0xK2fAH7Cx97aLKG8PJSzThHANPT54gletHwdapmFLZp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=naUzYY80; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AMR4YYqP"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="naUzYY80"
 Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56BBLP7A018809;
-	Fri, 11 Jul 2025 13:12:10 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56BAUdOr018284;
+	Fri, 11 Jul 2025 13:12:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=Bl1nSPn5YlRo3UiVoA8IR2
-	c/9+m0L+tOtQINu67XSlc=; b=AMR4YYqPLwOQ8HgTlUj3ND+N0gEkDIHDwD9Yrn
-	qHaXaNrlto0oegBiwBBkGkEvdrSKhLQS9wYTWeH7OF7K9eTacrKi+y2YEUbW2L8J
-	rIXF9vTM/9T4Z+Q+8ktlR2+c5NDwldI0Forrgu7j6mr+/9QujPdMv2IY67FaeTeL
-	rG0TKAROVIqlM1xH4oX6BNW4KbVDVXUyd5zGDxRueFfTmX4rKMIagUReGhGPsRPE
-	mdYQNOmGs4grFYk+FWFwJE73niPHxZ6E66/uU3hlg3viZOk+cfCUtdhikn9gOkc8
-	2HKlL47XM+ef9ZQFoodxLUSpze9hzWhF4u5c2/C3jreyq2Zw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47tkf32j5h-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	BTefLwab6y4wKK3qCZuwcJtFI1zo2uWgrNN0F8ExCsQ=; b=naUzYY80kqdodNDH
+	y1yy2KviwL1HHy65MEXieMA0FbGDRJ6TqWSTn6Y+QsipmI/uxYahmliTBZQHXcbc
+	7EhsoZZ4jVFIpY+32nlyhqWy2NLY8gSN4eas2y3633UadzZAFGAyxJZr/Cv6ty7O
+	sJkFVr2+lcViW2H53PfJsaDcKStg6iw72B1xnISdzdn7uok9jnHPTdFNgPxJzPEz
+	uerj23/LNzERYpsWIUe6YrHuZN5i6k1AXTqLtgTOioTyQ/nb6Nl3XuywWRUtyDH4
+	gY0ytOloyJwtVxufMkc4Pk2TeLfQVts2PTcBX1W8X9ByU8a2i8FUivrXqvl0d4hP
+	vQQ2iw==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47tkf32j63-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Jul 2025 13:12:10 +0000 (GMT)
+	Fri, 11 Jul 2025 13:12:26 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56BDC9j2019978
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56BDCPf4008868
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Jul 2025 13:12:09 GMT
+	Fri, 11 Jul 2025 13:12:25 GMT
 Received: from hu-vikramsa-hyd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Fri, 11 Jul 2025 06:12:03 -0700
+ 15.2.1748.10; Fri, 11 Jul 2025 06:12:20 -0700
 From: Vikram Sharma <quic_vikramsa@quicinc.com>
 To: <rfoss@kernel.org>, <todor.too@gmail.com>, <bryan.odonoghue@linaro.org>,
         <mchehab@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
@@ -50,10 +52,12 @@ CC: <linux-arm-kernel@lists.infradead.org>, <quic_vikramsa@quicinc.com>,
         <quic_svankada@quicinc.com>, <linux-media@vger.kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 0/7] qcom: qcs8300: Add qcs8300 camss support
-Date: Fri, 11 Jul 2025 18:41:27 +0530
-Message-ID: <20250711131134.215382-1-quic_vikramsa@quicinc.com>
+Subject: [PATCH v2 3/7] media: qcom: camss: Add qcs8300 compatible
+Date: Fri, 11 Jul 2025 18:41:30 +0530
+Message-ID: <20250711131134.215382-4-quic_vikramsa@quicinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250711131134.215382-1-quic_vikramsa@quicinc.com>
+References: <20250711131134.215382-1-quic_vikramsa@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
@@ -66,19 +70,19 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzExMDA5MyBTYWx0ZWRfX4AlnZ+BefChF
- qO4LfICsTapvG8UfsT67gJ0kC/Ksm8hSs6sJk2z4SLX8R1MSIrx66qCW1HZpRLr6cytVTcRj/nx
- CaW+JEXHK3weHAFz8BLgQAQg7lkUULZtnI6Mol8NQ1RdIhdvLlh4gqV/ZalbzW+kcaS4sHzkE3w
- d/a6kxz4qsw4pkXhWnwgNmwWet6j5ROSBGbpMpFUfIsVUhmXpsE01AzbtdjqZ//3LtBEHAXh9fJ
- tYFKuOjkbuuY17EpAmYYlaynX5xvLhS3N5+/p44q/FnE2BHXXoQD+pCjymA+kZ3CskSs9QtSDco
- cU0CNSOs+c55R/HNNfDF/bNgxZVLSO29om/evhTeeX5vb7tDPHSWnovIKe7KQwT2g0QaKpv8mMQ
- Oe6cI9lkgXHWzXU0cFmZyTlDV+KcEhD4R5S0cRFdIBOCa4Vh9rXh5M+2ZQ0lDUF8Vu6vSG1V
-X-Proofpoint-GUID: Lm_SF-pIGKVbL7LD6FApfTwYH86JsB5X
-X-Authority-Analysis: v=2.4 cv=Xuf6OUF9 c=1 sm=1 tr=0 ts=68710daa cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzExMDA5MyBTYWx0ZWRfX2AhmSbWPz4TN
+ z3ZyLpFnHmLn5o9PWvq8bxPRf2LjRp5ZDQMJrkubeR6PgWi6LJhGaae+hwv8SqGUWMtOCDJ83oU
+ Y6RctfdH85F1i4GSzkcfRqqBoSnZXyQD3k7j49wKucioj8xdRnwX4WAliTH7eHj6dxzQ9jyweii
+ QYW0wbEG2goqCgXy8QsgLC+jK1A45I5Ji+YTnSdYCl2YlfXYsdXiLRbJ01MkTTNwKjqmsyyQMXL
+ eRaw1KqAtY6fBYC12aOW874UdE3sZ6/8+oE7W33pyDrx/m36ZTeClOjS1i81PCd1Ti+GY0X8Szg
+ DgTeJgxcqBVIgkrwOQs7yeCwmmX+GeQNrL1zXjSVncQz39OXmR9aVK4g5J72Rr9UTUVm8+SNvH1
+ cYyzohd1DUjmFs6fQaCYWMCq4TWj/Un62FvqC4phYL2plDKhyioHwjwQTiUdGj0z941GMHXy
+X-Proofpoint-GUID: z3pSdBP2adka-nl_0HXe-kVW1G3YYUmM
+X-Authority-Analysis: v=2.4 cv=Xuf6OUF9 c=1 sm=1 tr=0 ts=68710dba cx=c_pps
  a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8
- a=EUspDBNiAAAA:8 a=vOnZBVaixI17Gw8aOCoA:9 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: Lm_SF-pIGKVbL7LD6FApfTwYH86JsB5X
+ a=GEpy-HfZoHoA:10 a=Wb1JkmetP80A:10 a=COk6AnOGAAAA:8 a=R4QheEYGlDiWUf2spAAA:9
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: z3pSdBP2adka-nl_0HXe-kVW1G3YYUmM
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
  definitions=2025-07-11_03,2025-07-09_01,2025-03-28_01
@@ -89,82 +93,75 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
  definitions=main-2507110093
 
-From: Vikram Sharma <vikramsa@qti.qualcomm.com>
+Add CAMSS_8300 enum, QCS8300 compatible and qcs8300 camss driver
+private data, the private data just include some basic information
+for now, later changes will enumerate with csiphy, tpg, csid and
+vfe resources.
 
-QCS8300 is a Qualcomm SoC. This series adds bindings and devicetree
-and driver changes to bring up CSIPHY, TPG, CSID, VFE/RDI interfaces
-in QCS8300.
+Signed-off-by: Vikram Sharma <quic_vikramsa@quicinc.com>
+---
+ drivers/media/platform/qcom/camss/camss.c | 21 +++++++++++++++++++++
+ drivers/media/platform/qcom/camss/camss.h |  1 +
+ 2 files changed, 22 insertions(+)
 
-QCS8300 provides
-- 2 x VFE, 3 RDI per VFE
-- 5 x VFE Lite, 6 RDI per VFE
-- 2 x CSID
-- 5 x CSID Lite
-- 3 x TPG
-- 3 x CSIPHY
-
-Changes compared to v1:
-- Changed the order for register entries in bindings - Krzysztof
-- Changed the naming for interrupts for consistency - Krzysztof
-- Combined separate series for driver and dtsi into one.
-- Rebased on top of latest version of sa8775p camss patches.
-- Link to v1:
-  Driver: https://lore.kernel.org/all/20250214095611.2498950-1-quic_vikramsa@quicinc.com
-  DTSI: https://lore.kernel.org/all/20250214094747.2483058-1-quic_vikramsa@quicinc.com  
-
-Dependencies:
-https://lore.kernel.org/all/20250703171938.3606998-1-quic_vikramsa@quicinc.com
-
-Driver side changes for TPG will be submitted as a separate series which will be
-rebased on top of these patches.
-TPG Patches:
-https://lore.kernel.org/all/20250211-sa8775p_tpg-v1-0-3f76c5f8431f@quicinc.com/
-https://lore.kernel.org/all/20250217-qcs8300_tpg-v1-1-6e0f4dd3ad1f@quicinc.com/ 
-
-Tested with following commands:
-- media-ctl -d /dev/media0 --reset
-- yavta --no-query -w '0x009f0903 0' /dev/v4l-subdev0
-- media-ctl -d /dev/media0 -V '"msm_tpg0":0[fmt:SRGGB10/1920x1080
-  field:none]'
-- media-ctl -d /dev/media0 -V '"msm_csid0":0[fmt:SRGGB10/1920x1080
-  field:none]'
-- media-ctl -d /dev/media0 -V '"msm_vfe0_rdi0":0[fmt:SRGGB10/1920x1080
-  field:none]'
-- media-ctl -d /dev/media0 -l '"msm_tpg0":1->"msm_csid0":0[1]'
-- media-ctl -d /dev/media0 -l '"msm_csid0":1->"msm_vfe0_rdi0":0[1]'
-- yavta --no-query -w '0x009f0903 9' /dev/v4l-subdev0
-- yavta -B capture-mplane -n 5 -f SRGGB10P -s 1920x1080 /dev/video0
-  --capture=7
-
-Used following tools for the sanity check of these changes.
-- make CHECK_DTBS=y W=1 qcom/qcs8300-ride.dtb
-- make DT_CHECKER_FLAGS=-m W=1
-DT_SCHEMA_FILES=media/qcom,qcs8300-camss.yaml dt_binding_check
-- Smatch: make CHECK="smatch --full-path" M=drivers/media/platform/qcom/camss/
-- Sparse: make C=2 M=drivers/media/platform/qcom/camss/
-- make -j32
-- checkpatch.pl
-
-Vikram Sharma (7):
-  media: dt-bindings: Add qcom,qcs8300-camss compatible
-  arm64: dts: qcom: qcs8300: Add support for camss
-  media: qcom: camss: Add qcs8300 compatible
-  media: qcom: camss: enable csid 690 for qcs8300
-  media: qcom: camss: enable vfe 690 for qcs8300
-  media: qcom: camss: Add support for CSIPHY QCS8300
-  media: qcom: camss: Enumerate resources for QCS8300
-
- .../bindings/media/qcom,qcs8300-camss.yaml    | 336 +++++++++++++++
- arch/arm64/boot/dts/qcom/qcs8300.dtsi         | 171 ++++++++
- .../platform/qcom/camss/camss-csid-gen3.c     |   5 +-
- .../qcom/camss/camss-csiphy-3ph-1-0.c         |   2 +
- .../platform/qcom/camss/camss-vfe-gen3.c      |   4 +-
- drivers/media/platform/qcom/camss/camss-vfe.c |   2 +
- drivers/media/platform/qcom/camss/camss.c     | 401 ++++++++++++++++++
- drivers/media/platform/qcom/camss/camss.h     |   1 +
- 8 files changed, 919 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/qcom,qcs8300-camss.yaml
-
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index 6f5b70bcf488..5211367b535d 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -2898,6 +2898,19 @@ static const struct camss_subdev_resources vfe_res_8775p[] = {
+ 	},
+ };
+ 
++static const struct resources_icc icc_res_qcs8300[] = {
++	{
++		.name = "ahb",
++		.icc_bw_tbl.avg = 38400,
++		.icc_bw_tbl.peak = 76800,
++	},
++	{
++		.name = "hf_0",
++		.icc_bw_tbl.avg = 2097152,
++		.icc_bw_tbl.peak = 2097152,
++	},
++};
++
+ static const struct resources_icc icc_res_sa8775p[] = {
+ 	{
+ 		.name = "ahb",
+@@ -4180,6 +4193,13 @@ static const struct camss_resources msm8996_resources = {
+ 	.link_entities = camss_link_entities
+ };
+ 
++static const struct camss_resources qcs8300_resources = {
++	.version = CAMSS_8300,
++	.pd_name = "top",
++	.icc_res = icc_res_qcs8300,
++	.icc_path_num = ARRAY_SIZE(icc_res_qcs8300),
++	.link_entities = camss_link_entities
++};
+ 
+ static const struct camss_resources sa8775p_resources = {
+ 	.version = CAMSS_8775P,
+@@ -4308,6 +4328,7 @@ static const struct of_device_id camss_dt_match[] = {
+ 	{ .compatible = "qcom,msm8916-camss", .data = &msm8916_resources },
+ 	{ .compatible = "qcom,msm8953-camss", .data = &msm8953_resources },
+ 	{ .compatible = "qcom,msm8996-camss", .data = &msm8996_resources },
++	{ .compatible = "qcom,qcs8300-camss", .data = &qcs8300_resources },
+ 	{ .compatible = "qcom,sa8775p-camss", .data = &sa8775p_resources },
+ 	{ .compatible = "qcom,sc7280-camss", .data = &sc7280_resources },
+ 	{ .compatible = "qcom,sc8280xp-camss", .data = &sc8280xp_resources },
+diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+index 345479f6feba..b5600a8b2c4b 100644
+--- a/drivers/media/platform/qcom/camss/camss.h
++++ b/drivers/media/platform/qcom/camss/camss.h
+@@ -84,6 +84,7 @@ enum camss_version {
+ 	CAMSS_8x96,
+ 	CAMSS_8250,
+ 	CAMSS_8280XP,
++	CAMSS_8300,
+ 	CAMSS_845,
+ 	CAMSS_8550,
+ 	CAMSS_8775P,
 -- 
 2.25.1
 
