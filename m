@@ -1,236 +1,99 @@
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A7625A640;
-	Mon, 14 Jul 2025 15:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84311259CA0;
+	Mon, 14 Jul 2025 15:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752505645; cv=none; b=eDhsL6fkEby9m5fxTtSL0yX5zNk/2rv5ZVlfPpRy1hheObyo4QphZWcFD60zGglBvE/VFY/wOFjkfmo6nsRlhp9SyZfFZV65bTFRXEi3pQdyRjc85bEtsxZPWhFs76Lzdm9W2RPsrS4T53qTdeRGQ5TX7i025EpgVaVzabWxySM=
+	t=1752505702; cv=none; b=RcUqXfyuO3UIpYSflj14xkixPkRzVcSdOtY8HOSXeVUZGwdT0GqJK9ywUh/8ucZGN1tKuntv+4YTOTEgAGm4xTyCQkwG1pWiMSMVFfTBNH8eBIze6zCZ0KXlUxStSRfyLwGOd6uGOuEImoPtfwxqDjQAvdtFhA13aYZr0YsWdTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752505645; c=relaxed/simple;
-	bh=gnnIsYI0vNT48MJLYko6Y7wwtbQ725ILEob/XY0pCCg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Unn0JUsQR8ez+qW6PUDvmL4n5sjfYxP3vkBX5z0iHnNlzjzVdSQF20Tk7/CEfozu6pladRu4dGZrn33bXMChbg+sjuLFF96PPhfO7byHLh9+ARiesnkvrWodQyAdp3GJCjdRFF2O8S+0gIkXJBxh0gM1ZPHM7G7F3LRZcIPZZDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=OYtCOTTj; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+	s=arc-20240116; t=1752505702; c=relaxed/simple;
+	bh=pm1kFbFPyW13GRr3apbRou0GauefSTkU75vCZ5hpLZY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nl+77kKShCA8xkEZvEHCHkaMCxEyBzHyORZIYMbllvJ0I1irUH0CmT2/oC99th/o7rUymeMd3URI8k220jtxdfLhiQijrorb5gJgrX2ldz7JfMHdSP3Yg9XF912ojvzkQMZcecHtJ0iZmL6/aHRDexMJK+ld0WWR+43WuoxoKcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=bspY621b; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=bspY621b; arc=none smtp.client-ip=178.79.152.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OYtCOTTj"
-Received: from [127.0.1.1] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 87BD15553;
-	Mon, 14 Jul 2025 17:06:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1752505586;
-	bh=gnnIsYI0vNT48MJLYko6Y7wwtbQ725ILEob/XY0pCCg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=OYtCOTTjneQTHfqtBoY0E8+dkrleW6a7ZWjFN0WzR6hHOvuQk3v810q3PNl6UCen5
-	 eP0qqApzbIpuwLAiRGk/rhQfrSiHN5nQMsRC+Jqnl/v8m2OaVuLuLiUREDXOTREr3d
-	 kSjAMQfEE+E0JhK4KEC08znVbPcXsvUfJKJH9gt8=
-From: Daniel Scally <dan.scally@ideasonboard.com>
-Date: Mon, 14 Jul 2025 16:06:45 +0100
-Subject: [PATCH v11 19/19] Documentation: mali-c55: Document the mali-c55
- parameter setting
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="bspY621b";
+	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="bspY621b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1752505139; bh=pm1kFbFPyW13GRr3apbRou0GauefSTkU75vCZ5hpLZY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bspY621batrJ0gWabtq4zBNa3xRXyHyzG6r6K/OXMQs8yYuOC2vRlBgcUOy9sM8Jb
+	 E0uMow+5XJlRUFF2mJr9FMaNrBEq6c3jU0gq2ml2jUxgSkjbNTa/EvfAs7dRb9IhIg
+	 uE33OqWst1GKKzCnbKnDNC9T71Q36A+wKq8tQLnPoX1n01E3OQcxue8ntDQU3EOS9o
+	 rgCDTbTpioeIcwW1th7xfnFzRBWtf3zNW8lYNw2qZC3FlXM10GksX23hQt4rlyzSkb
+	 TYuQjVR/eNPSFchLYJxmzVId2/CbWOrDWL1B+8suZEG8IRmdhPVfr/9kUObfFrT93S
+	 W+DjEU5I+NV+Q==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+	by mail.mleia.com (Postfix) with ESMTP id 1F5523C8846;
+	Mon, 14 Jul 2025 14:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+	t=1752505139; bh=pm1kFbFPyW13GRr3apbRou0GauefSTkU75vCZ5hpLZY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bspY621batrJ0gWabtq4zBNa3xRXyHyzG6r6K/OXMQs8yYuOC2vRlBgcUOy9sM8Jb
+	 E0uMow+5XJlRUFF2mJr9FMaNrBEq6c3jU0gq2ml2jUxgSkjbNTa/EvfAs7dRb9IhIg
+	 uE33OqWst1GKKzCnbKnDNC9T71Q36A+wKq8tQLnPoX1n01E3OQcxue8ntDQU3EOS9o
+	 rgCDTbTpioeIcwW1th7xfnFzRBWtf3zNW8lYNw2qZC3FlXM10GksX23hQt4rlyzSkb
+	 TYuQjVR/eNPSFchLYJxmzVId2/CbWOrDWL1B+8suZEG8IRmdhPVfr/9kUObfFrT93S
+	 W+DjEU5I+NV+Q==
+Message-ID: <a7f64b31-4767-4281-b452-a2bc5351d745@mleia.com>
+Date: Mon, 14 Jul 2025 17:58:57 +0300
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] phy: qcom-mipi-csi2: Add a CSI2 MIPI D-PHY driver
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Bryan O'Donoghue <bod@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-media@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250710-x1e-csi2-phy-v1-0-74acbb5b162b@linaro.org>
+ <20250710-x1e-csi2-phy-v1-2-74acbb5b162b@linaro.org>
+ <11b573d5-ce4d-476c-b94c-216d427cd838@linaro.org>
+ <08261aa4-689b-4d6b-bfd2-221c1976d254@linaro.org>
+From: Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <08261aa4-689b-4d6b-bfd2-221c1976d254@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250714-c55-v11-19-bc20e460e42a@ideasonboard.com>
-References: <20250714-c55-v11-0-bc20e460e42a@ideasonboard.com>
-In-Reply-To: <20250714-c55-v11-0-bc20e460e42a@ideasonboard.com>
-To: linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-Cc: Anthony.McGivern@arm.com, jacopo.mondi@ideasonboard.com, 
- nayden.kanchev@arm.com, robh+dt@kernel.org, mchehab@kernel.org, 
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
- jerome.forissier@linaro.org, kieran.bingham@ideasonboard.com, 
- laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, 
- Sakari Ailus <sakari.ailus@linux.intel.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6137;
- i=dan.scally@ideasonboard.com; h=from:subject:message-id;
- bh=gnnIsYI0vNT48MJLYko6Y7wwtbQ725ILEob/XY0pCCg=;
- b=owEBbQKS/ZANAwAKAchJV3psRXUyAcsmYgBodR0DEqDwC9LpataxJm9CPT3z2A6qU2OG8ZUO8
- +OvoHBECKKJAjMEAAEKAB0WIQQqyuwyDnZdb+mxmm/ISVd6bEV1MgUCaHUdAwAKCRDISVd6bEV1
- Moo1D/4qboYi8h8jx1Gn6wHvlMw/QYIeeTfsaeHubj96dICr+M2VaXh9+/6qwLyv0xda35s2wFk
- Q6CQCjW4W45KCyjt6/MGlWLcbR89OGJ0A0N5NPjPyHL6n35hflP/a9pRRahCzgpeK1+HJY18mWx
- 6jwBEkSYUWGXueDZDYOLQTuz5JTL5O0yu9KnYQCcTX2i7NQbfCT4KUkaGe3YlTOFu+3hWKXg0IZ
- M8luGFhn15Qe1gfr8PXRBGIbGsHrqGIJCM2jzNJYjePOReeVYYasPahkJN9s/nFcsiysERpqpUs
- nTY0aofB7CWAuzL1g4LnnCfthlW3TsypxKlVM3ANw3NVh/A1nPVIEvuuY2gx6O+u+YJ5+g/owmP
- FqQ/01Vk5S9lgxO8QJ0nEVyUALtFj1dvUJqRqdDrhdoffM2ZD5eMRcitJdgM/IrYv96oj+/kl9z
- 6SRv3n3u8k59qu4Ag39roDXZelIOwBlpyuOpzLnrifg42QsU10tuWqKpt43ezYxjqgugayqHQZB
- zQGRYBt/f/rlk7K+L2lHOBQ+xlPPXaJH3xN38WdKekkT4ez5lKbXl6tBoPcW90cpbGf+YhEi5ba
- cV7oBUnc/0hHbXkKV6tRnNvKdu2jh3NB4MDw2AALWpIdMc4N5Qc3JHngFeo6SV4sOrXp+DxFkpd
- g5ZjjncYsiVShcw==
-X-Developer-Key: i=dan.scally@ideasonboard.com; a=openpgp;
- fpr=EEC699ACA1B7CB5D31330C0BBD501C2A3546CCF6
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20250714_145859_151169_935C6CCA 
+X-CRM114-Status: UNSURE (   9.41  )
+X-CRM114-Notice: Please train this message. 
 
-Document the mali-c55 parameter setting by expanding the relevant
-pages in both admin-guide/ and userspace-api/.
+On 7/14/25 17:43, Bryan O'Donoghue wrote:
+> On 14/07/2025 15:16, Vladimir Zapolskiy wrote:
+>>> +#define DEBUG
+>>
+>> Still under debugging?..
+> 
+> oops thanks.
+> 
+>> Well, the phy should be a multimedia device, and this driver is not
+>> the one, thus you can not use it to connect sensors and put the IP
+>> into a media pipeline.
+> Ah no, I don't agree.
+> Please see my previous email.
+> 
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Acked-by: Nayden Kanchev  <nayden.kanchev@arm.com>
-Co-developed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
----
-Changes in v11:
+I believe there is very little room to disagree...
 
-	- Updated the documentation to account for the use of the
-	  V4L2 extensible params
+This proposed device node scheme does not solve the known and already
+discussed technical issue expectedly, namely there is no given way
+to describe a combo mode hardware configuration, when two independant
+sensors are wired to the same CSIPHY. This is an unsolvable problem
+with this design.
 
-Changes in v10:
+Sensors are conneced to CSIPHY IP blocks, CSIPHY is connected to CSID.
 
-	- None
-
-Changes in v9:
-
-	- None
-
-Changes in v8:
-
-	- None
-
-Changes in v7:
-
-	- None
-
-Changes in v7:
-
-	- None
-
-Changes in v6:
-
-	- Minor rewording
-
-Changes in v5:
-
-	- New patch
----
- Documentation/admin-guide/media/mali-c55.rst       | 19 ++++++-
- .../media/v4l/metafmt-arm-mali-c55.rst             | 66 +++++++++++++++++++++-
- 2 files changed, 80 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/admin-guide/media/mali-c55.rst b/Documentation/admin-guide/media/mali-c55.rst
-index 7eaeac63ddf713730fac266d81866539310cc7e2..dbed5179d5f84fb69465beee9281ac9fb572a37f 100644
---- a/Documentation/admin-guide/media/mali-c55.rst
-+++ b/Documentation/admin-guide/media/mali-c55.rst
-@@ -387,9 +387,24 @@ the processing flow the statistics can be drawn from::
-                        +-------------+   |    +-------------+
-                                          +-->  AWB-1
- 
--At present all statistics are drawn from the 0th tap point for each algorithm;
-+By default all statistics are drawn from the 0th tap point for each algorithm;
- I.E. AEXP statistics from AEXP-0 (A), AWB statistics from AWB-0 and AF
--statistics from AF-0. In the future this will be configurable.
-+statistics from AF-0. This is configurable for AEXP and AWB statsistics through
-+programming the ISP's parameters.
-+
-+.. _mali-c55-3a-params:
-+
-+Programming ISP Parameters
-+==========================
-+
-+The ISP can be programmed with various parameters from userspace to apply to the
-+hardware before and during video stream. This allows userspace to dynamically
-+change values such as black level, white balance and lens shading gains and so
-+on.
-+
-+The buffer format and how to populate it are described by the
-+:ref:`V4L2_META_FMT_MALI_C55_PARAMS <v4l2-meta-fmt-mali-c55-params>` format,
-+which should be set as the data format for the `mali-c55 3a params` video node.
- 
- References
- ==========
-diff --git a/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst b/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
-index 186e0deb9ece70ab1d2b22bb5ccb69196264a793..f21f4f8cff49874821cea7d9ad8d6a41e57d6ff8 100644
---- a/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
-+++ b/Documentation/userspace-api/media/v4l/metafmt-arm-mali-c55.rst
-@@ -1,10 +1,11 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
-+.. _v4l2-meta-fmt-mali-c55-params:
- .. _v4l2-meta-fmt-mali-c55-3a-stats:
- 
--*************************************
--V4L2_META_FMT_MALI_C55_STATS ('C55S')
--*************************************
-+*****************************************************************************
-+V4L2_META_FMT_MALI_C55_STATS ('C55S'), V4L2_META_FMT_MALI_C55_PARAMS ('C55P')
-+*****************************************************************************
- 
- 3A Statistics
- =============
-@@ -23,6 +24,65 @@ of the C structure :c:type:`mali_c55_stats_buffer` defined in
- 
- For details of the statistics see :c:type:`mali_c55_stats_buffer`.
- 
-+Configuration Parameters
-+========================
-+
-+The configuration parameters are passed to the
-+:ref:`mali-c55 3a params <mali-c55-3a-params>` metadata output video node, using
-+the :c:type:`v4l2_meta_format` interface. Rather than a single struct containing
-+sub-structs for each configurable area of the ISP, parameters for the Mali-C55
-+use the V4L2 extensible parameters system, through which groups of parameters
-+are defined as distinct structs or "blocks" which may be added to the data
-+member of :c:type:`v4l2_params_buffer`. Userspace is responsible for populating
-+the data member with the blocks that need to be configured by the driver, but
-+need not populate it with **all** the blocks, or indeed with any at all if there
-+are no configuration changes to make. Populated blocks **must** be consecutive
-+in the buffer. To assist both userspace and the driver in identifying the
-+blocks each block-specific struct embeds :c:type:`v4l2_params_block_header` as
-+its first member and userspace must populate the type member with a value from
-+:c:type:`mali_c55_param_block_type`. Once the blocks have been populated
-+into the data buffer, the combined size of all populated blocks shall be set in
-+the data_size member of :c:type:`v4l2_params_buffer`. For example:
-+
-+.. code-block:: c
-+
-+	struct v4l2_params_buffer *params =
-+		(struct v4l2_params_buffer *)buffer;
-+
-+	params->version = MALI_C55_PARAM_BUFFER_V1;
-+	params->data_size = 0;
-+
-+	void *data = (void *)params->data;
-+
-+	struct mali_c55_params_awb_gains *gains =
-+		(struct mali_c55_params_awb_gains *)data;
-+
-+	gains->header.type = MALI_C55_PARAM_BLOCK_AWB_GAINS;
-+	gains->header.flags |= V4L2_PARAMS_FL_BLOCK_ENABLE;
-+	gains->header.size = sizeof(struct mali_c55_params_awb_gains);
-+
-+	gains->gain00 = 256;
-+	gains->gain00 = 256;
-+	gains->gain00 = 256;
-+	gains->gain00 = 256;
-+
-+	data += sizeof(struct mali_c55_params_awb_gains);
-+	params->data_size += sizeof(struct mali_c55_params_awb_gains);
-+
-+	struct mali_c55_params_sensor_off_preshading *blc =
-+		(struct mali_c55_params_sensor_off_preshading *)data;
-+
-+	blc->header.type = MALI_C55_PARAM_BLOCK_SENSOR_OFFS;
-+	blc->header.flags |= V4L2_PARAMS_FL_BLOCK_ENABLE;
-+	blc->header.size = sizeof(struct mali_c55_params_sensor_off_preshading);
-+
-+	blc->chan00 = 51200;
-+	blc->chan01 = 51200;
-+	blc->chan10 = 51200;
-+	blc->chan11 = 51200;
-+
-+	params->total_size += sizeof(struct mali_c55_params_sensor_off_preshading);
-+
- Arm Mali-C55 uAPI data types
- ============================
- 
-
--- 
-2.34.1
-
+--
+Best wishes,
+Vladimir
