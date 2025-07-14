@@ -1,113 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fortysixandtwo.eu (fortysixandtwo.eu [212.227.65.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5432E36E5;
-	Mon, 14 Jul 2025 13:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1438224DCE6;
+	Mon, 14 Jul 2025 13:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.65.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752499870; cv=none; b=Lf4myGrF10XM3zdv7ezv43MnBlrlmu8s7+TDjX6OebyXCD+Jm1XMOrLx/CMJh+VHWaI1FvqjRAiYTVJOfuiFGsGWNn6Yu5AflUAAcWIILMLBcWH0nHyQFr7aw0dkoqnYbZuj77+97qc296ml2QOQeFkW4YrczmH3EtPNW4M4YBE=
+	t=1752499897; cv=none; b=vFTa8DKR3mN4bEw71IPX5pwcNcXaM/9CxxHClrDxu/WKUOV/Fl8OIaJnocD0mkD/NXRU/lb1JlyjB2h/TK5t5qA5d53KF1ulRj1w7MBbwsGzrkZhB2dDuSka/6ZWJ75I/A6dFIHbEc6PFnT/Vb/I9Dxc2Eb2GeLPKyvwJ9KhjSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752499870; c=relaxed/simple;
-	bh=YkRnsX/tnvbZ3o3AEuquJmvgf1eoPe1aSLUVprvpuh0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZuX5C5ziwx4yXovXtj0yvx0vwGoCs8czuVab6kP7RRgO/Ynu9Ri2Bcb5J8mdIJCQrUp46r9hmRGWcMZe1PK5iPJOgttCTunBKLDzuY6xuOrNhrVIZGysNwidyR49xiOwPzXKck/YAyQLQg6nnqXhkID/FkCBWK5KVWlKl0K0tTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqTALYUi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752499897; c=relaxed/simple;
+	bh=xclahf+ZrUjjFua4GD4Fh4LfsEARiipy40GzZkFcGCs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o+d5ZEPu0D0WfAhFRTaotZHFV9atuvovQwjw/nBfBvZH43R6zUA4hSf8N8tAg2d6aeOGq7zzY38fe0cv6ZG5AYiflseywQyp74VYoXILikQDUumFmk69H2RjXv0/gM9QYqarIJi/Q6Bndu35QsWcikc3UbeshAOIOtvIKY1HCUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fortysixandtwo.eu; spf=pass smtp.mailfrom=fortysixandtwo.eu; dkim=pass (4096-bit key) header.d=fortysixandtwo.eu header.i=@fortysixandtwo.eu header.b=C91aBkc9; arc=none smtp.client-ip=212.227.65.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fortysixandtwo.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fortysixandtwo.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqTALYUi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3133DC4CEED;
-	Mon, 14 Jul 2025 13:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752499870;
-	bh=YkRnsX/tnvbZ3o3AEuquJmvgf1eoPe1aSLUVprvpuh0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BqTALYUi1bmxjRdcMoInbUbbODAaFAcMAMF05bc9xSg2bnN2DunFcAqP2YaITGlwQ
-	 zuFqauoz8khrkj/sknJLqETl7VCJH0Lvrss29Sxaj2hTWZm2uubO2gFlR7QdEy79Id
-	 7648ZvprDr6QEULxGzR28yCeoqOsRZir5pPgFvRlce4pyHmod5dGM07py1UDkiqZdV
-	 3Ws/JIQPhW6eQHGz2s4tnea00/0Y5aj6RNDMKdmN+cVPmIJN5lddgtMD/EK9EGpQMM
-	 Xw7A1bSyNcf95OhLMDXPjiY3oX5JP+ejOW35uCdfMikc74mnJC39AX6664vndNUFHb
-	 u2V2WQeCdg1Qw==
-Message-ID: <e9c2bec9-4320-480c-89c1-514c995cf387@kernel.org>
-Date: Mon, 14 Jul 2025 15:31:04 +0200
+	dkim=pass (4096-bit key) header.d=fortysixandtwo.eu header.i=@fortysixandtwo.eu header.b="C91aBkc9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fortysixandtwo.eu;
+	s=mail; t=1752499361;
+	bh=xclahf+ZrUjjFua4GD4Fh4LfsEARiipy40GzZkFcGCs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=C91aBkc9q2zpVX1u5FFhU/0bdzw7FDyJPygmuntKK00sko/1JizUU1FUe6Gd2sK/9
+	 mdKLbSiRji0n+pwuC1LCB01CpOuf0nq8Ytg5DXmDqyyHSz5hTUzyQXBFATuquuPS5F
+	 U5TDVA+Y2JbJmBZsL3pivwED5r3Mi1592HUfLkfvCbaB+ZbjBeDnuRwTP+oGqKgzR8
+	 8l+HN9p0DXaC1+GFEgJNhI/STZLXwuUlC5aeCTI2Nha7NTJpUJmuzq3qHZpDKFoU7D
+	 Ju4AJQQFcjWdxGLRbH8fbwiYyjQtASnLkjQ0fO57FeHR0Bhbgb2pv92FJdJHyDXitf
+	 l4gk9QVQhnNheH9Y1G/soVBcsIynKHUhsX/BrcQmya/xvqoZUFN5CbyzpeYMkz24jw
+	 ekcZ2WCFNNN5JeuUetmnCVGA4nUkU5PfswYb0kE5qcooO+2NzKx/oHgHJqLgyX7a1z
+	 DGfMNilL01mlS7qZl+j69eV6jIMzOrvmHTe0Zth1Y/wC2NtJrQghD07AbiMVu8qG4S
+	 TkMRxhIARG5sT11iuzbf23fwrFRhS4ReyaK3ar/bdbx7KmNmIe6k3/KrpDpdDQ0plt
+	 eAYEuGj9793kVnQoikO3c4ahfLDyWXV6IGdaWdpO4QGYYKlfPptE8gaJr5ZYFt6vUI
+	 1DyqlOCd+dnbazR/9YnQAVAY=
+Received: from localhost (unknown [89.234.162.240])
+	by fortysixandtwo.eu (Postfix) with UTF8SMTPSA id A1DE72E742;
+	Mon, 14 Jul 2025 15:22:41 +0200 (CEST)
+From: Evangelos Ribeiro Tzaras <devrtz@fortysixandtwo.eu>
+To: andy@kernel.org,
+	hansg@kernel.org,
+	mchehab@kernel.org,
+	sakari.ailus@linux.intel.com,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev
+Cc: ~lkcamp/patches@lists.sr.ht,
+	koike@igalia.com,
+	Evangelos Ribeiro Tzaras <devrtz@fortysixandtwo.eu>
+Subject: [PATCH] media: atomisp: put trailing statement on it's own line
+Date: Mon, 14 Jul 2025 15:22:16 +0200
+Message-ID: <20250714132221.4611-1-devrtz@fortysixandtwo.eu>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/12] media: uvcvideo: Make uvc_alloc_entity non
- static
-To: Ricardo Ribalda <ribalda@chromium.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil
- <hverkuil@xs4all.nl>, Sakari Ailus <sakari.ailus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
-Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20250605-uvc-orientation-v2-0-5710f9d030aa@chromium.org>
- <20250605-uvc-orientation-v2-7-5710f9d030aa@chromium.org>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <20250605-uvc-orientation-v2-7-5710f9d030aa@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Fix checkpatch error "ERROR: trailing statements should be on next line"
+in ia_css_formats.host.c:47.
 
-On 5-Jun-25 19:53, Ricardo Ribalda wrote:
-> The function is useful for other compilation units.
-> 
-> This is just a refactor patch, no new functionality is added.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Signed-off-by: Evangelos Ribeiro Tzaras <devrtz@fortysixandtwo.eu>
+---
 
-Thanks, patch looks good to me:
+Hey, this is my first patch
+(done as part of a workshop at DebConf25),
+I appreciate any feedback, thanks!
+---
+ .../atomisp/pci/isp/kernels/fc/fc_1.0/ia_css_formats.host.c    | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reviewed-by: Hans de Goede <hansg@kernel.org>
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 4 ++--
->  drivers/media/usb/uvc/uvcvideo.h   | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index da24a655ab68cc0957762f2b67387677c22224d1..bcc97f71fa1703aea1119469fb32659c17d9409a 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -792,8 +792,8 @@ static const u8 uvc_media_transport_input_guid[16] =
->  	UVC_GUID_UVC_MEDIA_TRANSPORT_INPUT;
->  static const u8 uvc_processing_guid[16] = UVC_GUID_UVC_PROCESSING;
->  
-> -static struct uvc_entity *uvc_alloc_entity(u16 type, u16 id,
-> -		unsigned int num_pads, unsigned int extra_size)
-> +struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
-> +				    unsigned int extra_size)
->  {
->  	struct uvc_entity *entity;
->  	unsigned int num_inputs;
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index b9f8eb62ba1d82ea7788cf6c10cc838a429dbc9e..dc23d8a97340dc4615d4182232d395106e6d9ed5 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -684,6 +684,8 @@ do {									\
->   */
->  
->  struct uvc_entity *uvc_entity_by_id(struct uvc_device *dev, int id);
-> +struct uvc_entity *uvc_alloc_entity(u16 type, u16 id, unsigned int num_pads,
-> +				    unsigned int extra_size);
->  
->  /* Video buffers queue management. */
->  int uvc_queue_init(struct uvc_video_queue *queue, enum v4l2_buf_type type);
-> 
+diff --git a/drivers/staging/media/atomisp/pci/isp/kernels/fc/fc_1.0/ia_css_formats.host.c b/drivers/staging/media/atomisp/pci/isp/kernels/fc/fc_1.0/ia_css_formats.host.c
+index bae1ca2cd505..9a4f9cc40bfa 100644
+--- a/drivers/staging/media/atomisp/pci/isp/kernels/fc/fc_1.0/ia_css_formats.host.c
++++ b/drivers/staging/media/atomisp/pci/isp/kernels/fc/fc_1.0/ia_css_formats.host.c
+@@ -44,7 +44,8 @@ ia_css_formats_dump(
+     const struct sh_css_isp_formats_params *formats,
+     unsigned int level)
+ {
+-	if (!formats) return;
++	if (!formats)
++		return;
+ 	ia_css_debug_dtrace(level, "\t%-32s = %d\n",
+ 			    "video_full_range_flag", formats->video_full_range_flag);
+ }
+-- 
+2.50.0
 
