@@ -1,106 +1,360 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B282E5B06;
-	Tue, 15 Jul 2025 13:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACA82E3382;
+	Tue, 15 Jul 2025 13:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752585852; cv=none; b=ElyShK543CIBMcyJUhpNMUdMOyY6ebuG+HTk7v24pbVUoWjDpw5tTTvDsZfI+0qVlI4GXxPa60FkoOla56awtkcq9kZACuzihYhNx0r712HG81Q99b9LaeXJ70wq9dcmI7Xnt6IFSKZMLPFl7NdHndWso4im9GiFygOQ1KWeRPE=
+	t=1752585896; cv=none; b=EKRvLLATM0+33kd2aLkmRBlearUQioiqOntO+zgYq1f59kQXzcUKxUFwM9memy0q4ZzPO5ntzr4l5WJjiL8KXfvW76aGJ2+p70J6O5A4LzdpzfaWkb9uEcLyhsYuCm/uSPUMygzPHp2fRkmX1BEw9qAu84EPDwZJmHXEO1iJuhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752585852; c=relaxed/simple;
-	bh=hJs2Tx12AhStRuVCGZs1ahFFxS9sjYhF28qp/H8h42Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H6d2htuudNypqCS15vMoScomm7XB3ETxQgU4FdZEaGnQ0EJqK7K334QaTePh/phCcyJZ5HXyPj1FBY7HkGnlx3Xh5dpcTHE9WWlydWswmobs6i+O/y7SGXlH++aferkGr9j34w2qKOB9oSsferZ6J3DNM2KoMRfIN+CalfBE+4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3hrbTAd; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752585896; c=relaxed/simple;
+	bh=JJduVbsTrD4UwIdCLXwCmMALGCtioinwKQGoVV9+j3s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EuoR4vxO8c6DdG8HeSgtzxge89YQffYbrHrJ6ab6qzefZgOdrmpHXPVtiKeWGkkIRPDmCCX85Rb2hrBLaYGdHBpo2ItUUxZ24j1QELiKz835qLx5NSjCkwVanJ5ZZESaN9DZI6vhIqBf2Dv+1IOzgWjS1Y6R803GnjMnwqF2Qk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hEAEwkvY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3hrbTAd"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-32b4876dfecso65278351fa.1;
-        Tue, 15 Jul 2025 06:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752585849; x=1753190649; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=puBkZe6ZLP/QGTaKOMgF9k4UNRq2jZxxdkE9m753KvA=;
-        b=W3hrbTAdetq9OnVfXCUQegBshcKRgEtF4wRL9D0pheIV6r/2/DbXrF0gOMcZxTFKw8
-         1d51EcmahvWQcHhddnkYmCdFPF/GiVv2wQkFVYDgFdKPoQiF+0ELKAGbBXvkm30fkbJ+
-         tIImGdlAKJT6FIZvkheGk++590SXB/on8yI4UN8LhycJIl5fgKnK2bQAVn9SYhLE0P2f
-         aPTrwjoaVROPOogXs8B5/gbouEJW6TWczEcrers4O56yhabTwuKqiC+lXI6y9K6mmnCe
-         cMMjHw+lg2LUDu6tIkHbAOJ/ENPouCQrPxoWal5Mi07PF/apceWOwyhRU8YJyOCmfJgi
-         0FBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752585849; x=1753190649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=puBkZe6ZLP/QGTaKOMgF9k4UNRq2jZxxdkE9m753KvA=;
-        b=g/N1NRtOj6zlK0V2EIcbOOPpczdgJUVl+oueb2498bDmGgw3LmsXenmJ1f/j3vJWy4
-         Xu6xp9ApeoBgUTfjPLzDujX2xfZRFxF5mgwol3PVN3DFsjvcwwaKreQv5MnarbKc5OMs
-         MM5bGA4fVSHnuLRc7g/zzHi2bWbduz/yt5s+2uVbrweShuK2qteN+Y8JA1HB0012CZFk
-         5ou/ZVOnj7RAuyqmisxfc3fLOSK+HY2Q1zcwy2Lwl/eE8hY0BquZgZcrColICwy/tUxB
-         szX+Y2T+Pp/Zvnh6O3W94BAnzomQymS1FUMF9q6iaRpmi9+j6mD8/QfHUIqZlC2G5QfX
-         cPbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUX1kw5HjTaszHdCCHA5tSNszNo2XTzlUjItDtC8OMwhj+U3keq0deaDBwD8Wb5yAxUFZCtlW2B01LCjOw=@vger.kernel.org, AJvYcCWQCfB0UzFk/TDBHk8uaJdlFRpXWdWoZBrYxOr2zOT/w3KRQmMR+ZGHvY+HwmsA7p0AEABkcf3Jcy8URK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPW+rlCSiHygZdFdR0pKRSYx0hCnAXx1BX2wbM6Jv5O8rCbHNW
-	/tW/0sYNGZoeytk/dlOTINoKE8Nzsd0hlr3vC6QlzSIBc64Y3Azj0n/Zx8FnF4NHFzL0WxPIL2U
-	Qmpsw4DVHo/KCCDebeyGDZGf28RYoPRo=
-X-Gm-Gg: ASbGncvvxNFWZ3yRqhjkBsXGYp5+xWkUQlm7d5/+93Q+v7FP356CGsrcWai5ZvDLBEi
-	11PNxQfkPszmTttf3n3VkWNrkshEmno/tHeelHvtvUmHyAK5wKbdq+5GdlWBAbUM4cHg73JEdqJ
-	S5fudZtRpuWy0hp7Z+Ir+b100+9diPbE+sWmzQbKglNm3dUca7xnyiaR2SKfCxLNxDq7bs53Lyn
-	7GHVIJsYQ==
-X-Google-Smtp-Source: AGHT+IHyhgM9GTkj6ufKA4ysSb28NiNtRNmpxfHePlNkbW+SDylrwHOU1wSPErQE40fSVHRPCwqv5mVSW0wvtXQD2qo=
-X-Received: by 2002:a2e:a984:0:b0:329:136e:300f with SMTP id
- 38308e7fff4ca-330811fd7ddmr10104531fa.13.1752585848880; Tue, 15 Jul 2025
- 06:24:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hEAEwkvY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BA0C4CEE3;
+	Tue, 15 Jul 2025 13:24:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752585896;
+	bh=JJduVbsTrD4UwIdCLXwCmMALGCtioinwKQGoVV9+j3s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hEAEwkvYOQAtr1LDcsQW0FA9TI8DpYZhn8SB9IdvXVp26vsimyR7rHqNgjgd2M9mF
+	 qoEMCAkp6zRXIRDui4y6EYQ4NzaGxVpdlwGT8wGxwjbHVmLnK0PVAxlb2WUXiRU2Us
+	 r7HfPKhRwpR3Bf6hwflWZmEbybS7d1GW8sv2wCtc=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Bert Karwatzki <spasswolf@web.de>,
+	Mario Limonciello <superm1@kernel.org>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Anusha Srivatsa <asrivats@redhat.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: [PATCH 6.6 049/109] drm/framebuffer: Acquire internal references on GEM handles
+Date: Tue, 15 Jul 2025 15:13:05 +0200
+Message-ID: <20250715130800.838187407@linuxfoundation.org>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250715130758.864940641@linuxfoundation.org>
+References: <20250715130758.864940641@linuxfoundation.org>
+User-Agent: quilt/0.68
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250715121839.12987-1-shjy180909@gmail.com> <PN3P287MB1829790FCBF0CFF1F06585728B57A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
-In-Reply-To: <PN3P287MB1829790FCBF0CFF1F06585728B57A@PN3P287MB1829.INDP287.PROD.OUTLOOK.COM>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 15 Jul 2025 16:23:31 +0300
-X-Gm-Features: Ac12FXw4aZaN7rnjjlU4zPnr7LEkkyd1A8yPGqxz66xL1FgOMiNDSbYD9CZrEbs
-Message-ID: <CAHp75VcxKhz_+Kb4Y1qdrYKLrSBEEC0n77ptddSe4TVVtk18-g@mail.gmail.com>
-Subject: Re: [PATCH] media: atomisp: fix trailing block comment style
-To: Tarang Raval <tarang.raval@siliconsignals.io>
-Cc: Michelle Jin <shjy180909@gmail.com>, "andy@kernel.org" <andy@kernel.org>, 
-	"hansg@kernel.org" <hansg@kernel.org>, "mchehab@kernel.org" <mchehab@kernel.org>, 
-	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>, 
-	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>, 
-	"lkcamp/patches@lists.sr.ht" <lkcamp/patches@lists.sr.ht>, "koike@igalia.com" <koike@igalia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 15, 2025 at 4:11=E2=80=AFPM Tarang Raval
-<tarang.raval@siliconsignals.io> wrote:
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
-...
+------------------
 
-> >         /* Sensor driver fills ch_id with the id
-> > -          of the virtual channel. */
-> > +        * of the virtual channel.
-> > +        */
->
-> Preferred line length is 80 columns, so I guess.
+From: Thomas Zimmermann <tzimmermann@suse.de>
 
-Yes.
+commit f6bfc9afc7510cb5e6fbe0a17c507917b0120280 upstream.
 
-> you can write it in a single line.
+Acquire GEM handles in drm_framebuffer_init() and release them in
+the corresponding drm_framebuffer_cleanup(). Ties the handle's
+lifetime to the framebuffer. Not all GEM buffer objects have GEM
+handles. If not set, no refcounting takes place. This is the case
+for some fbdev emulation. This is not a problem as these GEM objects
+do not use dma-bufs and drivers will not release them while fbdev
+emulation is running. Framebuffer flags keep a bit per color plane
+of which the framebuffer holds a GEM handle reference.
 
-/*
- * Also note that the correct
- * multi-line comment style is
- * in this example (with wider lines, of course).
- */
+As all drivers use drm_framebuffer_init(), they will now all hold
+dma-buf references as fixed in commit 5307dce878d4 ("drm/gem: Acquire
+references on GEM handles for framebuffers").
 
---=20
-With Best Regards,
-Andy Shevchenko
+In the GEM framebuffer helpers, restore the original ref counting
+on buffer objects. As the helpers for handle refcounting are now
+no longer called from outside the DRM core, unexport the symbols.
+
+v3:
+- don't mix internal flags with mode flags (Christian)
+v2:
+- track framebuffer handle refs by flag
+- drop gma500 cleanup (Christian)
+
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: 5307dce878d4 ("drm/gem: Acquire references on GEM handles for framebuffers")
+Reported-by: Bert Karwatzki <spasswolf@web.de>
+Closes: https://lore.kernel.org/dri-devel/20250703115915.3096-1-spasswolf@web.de/
+Tested-by: Bert Karwatzki <spasswolf@web.de>
+Tested-by: Mario Limonciello <superm1@kernel.org>
+Tested-by: Borislav Petkov (AMD) <bp@alien8.de>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Anusha Srivatsa <asrivats@redhat.com>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: "Christian König" <christian.koenig@amd.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Link: https://lore.kernel.org/r/20250707131224.249496-1-tzimmermann@suse.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/gpu/drm/drm_framebuffer.c            |   31 ++++++++++++++++++++--
+ drivers/gpu/drm/drm_gem.c                    |   38 +++++++++++++++++----------
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c |   16 ++++-------
+ drivers/gpu/drm/drm_internal.h               |    2 -
+ include/drm/drm_framebuffer.h                |    7 ++++
+ 5 files changed, 68 insertions(+), 26 deletions(-)
+
+--- a/drivers/gpu/drm/drm_framebuffer.c
++++ b/drivers/gpu/drm/drm_framebuffer.c
+@@ -844,11 +844,23 @@ void drm_framebuffer_free(struct kref *k
+ int drm_framebuffer_init(struct drm_device *dev, struct drm_framebuffer *fb,
+ 			 const struct drm_framebuffer_funcs *funcs)
+ {
++	unsigned int i;
+ 	int ret;
++	bool exists;
+ 
+ 	if (WARN_ON_ONCE(fb->dev != dev || !fb->format))
+ 		return -EINVAL;
+ 
++	for (i = 0; i < fb->format->num_planes; i++) {
++		if (drm_WARN_ON_ONCE(dev, fb->internal_flags & DRM_FRAMEBUFFER_HAS_HANDLE_REF(i)))
++			fb->internal_flags &= ~DRM_FRAMEBUFFER_HAS_HANDLE_REF(i);
++		if (fb->obj[i]) {
++			exists = drm_gem_object_handle_get_if_exists_unlocked(fb->obj[i]);
++			if (exists)
++				fb->internal_flags |= DRM_FRAMEBUFFER_HAS_HANDLE_REF(i);
++		}
++	}
++
+ 	INIT_LIST_HEAD(&fb->filp_head);
+ 
+ 	fb->funcs = funcs;
+@@ -857,7 +869,7 @@ int drm_framebuffer_init(struct drm_devi
+ 	ret = __drm_mode_object_add(dev, &fb->base, DRM_MODE_OBJECT_FB,
+ 				    false, drm_framebuffer_free);
+ 	if (ret)
+-		goto out;
++		goto err;
+ 
+ 	mutex_lock(&dev->mode_config.fb_lock);
+ 	dev->mode_config.num_fb++;
+@@ -865,7 +877,16 @@ int drm_framebuffer_init(struct drm_devi
+ 	mutex_unlock(&dev->mode_config.fb_lock);
+ 
+ 	drm_mode_object_register(dev, &fb->base);
+-out:
++
++	return 0;
++
++err:
++	for (i = 0; i < fb->format->num_planes; i++) {
++		if (fb->internal_flags & DRM_FRAMEBUFFER_HAS_HANDLE_REF(i)) {
++			drm_gem_object_handle_put_unlocked(fb->obj[i]);
++			fb->internal_flags &= ~DRM_FRAMEBUFFER_HAS_HANDLE_REF(i);
++		}
++	}
+ 	return ret;
+ }
+ EXPORT_SYMBOL(drm_framebuffer_init);
+@@ -942,6 +963,12 @@ EXPORT_SYMBOL(drm_framebuffer_unregister
+ void drm_framebuffer_cleanup(struct drm_framebuffer *fb)
+ {
+ 	struct drm_device *dev = fb->dev;
++	unsigned int i;
++
++	for (i = 0; i < fb->format->num_planes; i++) {
++		if (fb->internal_flags & DRM_FRAMEBUFFER_HAS_HANDLE_REF(i))
++			drm_gem_object_handle_put_unlocked(fb->obj[i]);
++	}
+ 
+ 	mutex_lock(&dev->mode_config.fb_lock);
+ 	list_del(&fb->head);
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -197,23 +197,34 @@ static void drm_gem_object_handle_get(st
+ }
+ 
+ /**
+- * drm_gem_object_handle_get_unlocked - acquire reference on user-space handles
++ * drm_gem_object_handle_get_if_exists_unlocked - acquire reference on user-space handle, if any
+  * @obj: GEM object
+  *
+- * Acquires a reference on the GEM buffer object's handle. Required
+- * to keep the GEM object alive. Call drm_gem_object_handle_put_unlocked()
+- * to release the reference.
++ * Acquires a reference on the GEM buffer object's handle. Required to keep
++ * the GEM object alive. Call drm_gem_object_handle_put_if_exists_unlocked()
++ * to release the reference. Does nothing if the buffer object has no handle.
++ *
++ * Returns:
++ * True if a handle exists, or false otherwise
+  */
+-void drm_gem_object_handle_get_unlocked(struct drm_gem_object *obj)
++bool drm_gem_object_handle_get_if_exists_unlocked(struct drm_gem_object *obj)
+ {
+ 	struct drm_device *dev = obj->dev;
+ 
+ 	guard(mutex)(&dev->object_name_lock);
+ 
+-	drm_WARN_ON(dev, !obj->handle_count); /* first ref taken in create-tail helper */
++	/*
++	 * First ref taken during GEM object creation, if any. Some
++	 * drivers set up internal framebuffers with GEM objects that
++	 * do not have a GEM handle. Hence, this counter can be zero.
++	 */
++	if (!obj->handle_count)
++		return false;
++
+ 	drm_gem_object_handle_get(obj);
++
++	return true;
+ }
+-EXPORT_SYMBOL(drm_gem_object_handle_get_unlocked);
+ 
+ /**
+  * drm_gem_object_handle_free - release resources bound to userspace handles
+@@ -246,7 +257,7 @@ static void drm_gem_object_exported_dma_
+ }
+ 
+ /**
+- * drm_gem_object_handle_put_unlocked - releases reference on user-space handles
++ * drm_gem_object_handle_put_unlocked - releases reference on user-space handle
+  * @obj: GEM object
+  *
+  * Releases a reference on the GEM buffer object's handle. Possibly releases
+@@ -257,14 +268,14 @@ void drm_gem_object_handle_put_unlocked(
+ 	struct drm_device *dev = obj->dev;
+ 	bool final = false;
+ 
+-	if (WARN_ON(READ_ONCE(obj->handle_count) == 0))
++	if (drm_WARN_ON(dev, READ_ONCE(obj->handle_count) == 0))
+ 		return;
+ 
+ 	/*
+-	* Must bump handle count first as this may be the last
+-	* ref, in which case the object would disappear before we
+-	* checked for a name
+-	*/
++	 * Must bump handle count first as this may be the last
++	 * ref, in which case the object would disappear before
++	 * we checked for a name.
++	 */
+ 
+ 	mutex_lock(&dev->object_name_lock);
+ 	if (--obj->handle_count == 0) {
+@@ -277,7 +288,6 @@ void drm_gem_object_handle_put_unlocked(
+ 	if (final)
+ 		drm_gem_object_put(obj);
+ }
+-EXPORT_SYMBOL(drm_gem_object_handle_put_unlocked);
+ 
+ /*
+  * Called at device or object close to release the file's
+--- a/drivers/gpu/drm/drm_gem_framebuffer_helper.c
++++ b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
+@@ -99,7 +99,7 @@ void drm_gem_fb_destroy(struct drm_frame
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < fb->format->num_planes; i++)
+-		drm_gem_object_handle_put_unlocked(fb->obj[i]);
++		drm_gem_object_put(fb->obj[i]);
+ 
+ 	drm_framebuffer_cleanup(fb);
+ 	kfree(fb);
+@@ -182,10 +182,8 @@ int drm_gem_fb_init_with_funcs(struct dr
+ 		if (!objs[i]) {
+ 			drm_dbg_kms(dev, "Failed to lookup GEM object\n");
+ 			ret = -ENOENT;
+-			goto err_gem_object_handle_put_unlocked;
++			goto err_gem_object_put;
+ 		}
+-		drm_gem_object_handle_get_unlocked(objs[i]);
+-		drm_gem_object_put(objs[i]);
+ 
+ 		min_size = (height - 1) * mode_cmd->pitches[i]
+ 			 + drm_format_info_min_pitch(info, i, width)
+@@ -195,22 +193,22 @@ int drm_gem_fb_init_with_funcs(struct dr
+ 			drm_dbg_kms(dev,
+ 				    "GEM object size (%zu) smaller than minimum size (%u) for plane %d\n",
+ 				    objs[i]->size, min_size, i);
+-			drm_gem_object_handle_put_unlocked(objs[i]);
++			drm_gem_object_put(objs[i]);
+ 			ret = -EINVAL;
+-			goto err_gem_object_handle_put_unlocked;
++			goto err_gem_object_put;
+ 		}
+ 	}
+ 
+ 	ret = drm_gem_fb_init(dev, fb, mode_cmd, objs, i, funcs);
+ 	if (ret)
+-		goto err_gem_object_handle_put_unlocked;
++		goto err_gem_object_put;
+ 
+ 	return 0;
+ 
+-err_gem_object_handle_put_unlocked:
++err_gem_object_put:
+ 	while (i > 0) {
+ 		--i;
+-		drm_gem_object_handle_put_unlocked(objs[i]);
++		drm_gem_object_put(objs[i]);
+ 	}
+ 	return ret;
+ }
+--- a/drivers/gpu/drm/drm_internal.h
++++ b/drivers/gpu/drm/drm_internal.h
+@@ -155,7 +155,7 @@ void drm_sysfs_lease_event(struct drm_de
+ 
+ /* drm_gem.c */
+ int drm_gem_init(struct drm_device *dev);
+-void drm_gem_object_handle_get_unlocked(struct drm_gem_object *obj);
++bool drm_gem_object_handle_get_if_exists_unlocked(struct drm_gem_object *obj);
+ void drm_gem_object_handle_put_unlocked(struct drm_gem_object *obj);
+ int drm_gem_handle_create_tail(struct drm_file *file_priv,
+ 			       struct drm_gem_object *obj,
+--- a/include/drm/drm_framebuffer.h
++++ b/include/drm/drm_framebuffer.h
+@@ -23,6 +23,7 @@
+ #ifndef __DRM_FRAMEBUFFER_H__
+ #define __DRM_FRAMEBUFFER_H__
+ 
++#include <linux/bits.h>
+ #include <linux/ctype.h>
+ #include <linux/list.h>
+ #include <linux/sched.h>
+@@ -100,6 +101,8 @@ struct drm_framebuffer_funcs {
+ 		     unsigned num_clips);
+ };
+ 
++#define DRM_FRAMEBUFFER_HAS_HANDLE_REF(_i)	BIT(0u + (_i))
++
+ /**
+  * struct drm_framebuffer - frame buffer object
+  *
+@@ -189,6 +192,10 @@ struct drm_framebuffer {
+ 	 */
+ 	int flags;
+ 	/**
++	 * @internal_flags: Framebuffer flags like DRM_FRAMEBUFFER_HAS_HANDLE_REF.
++	 */
++	unsigned int internal_flags;
++	/**
+ 	 * @hot_x: X coordinate of the cursor hotspot. Used by the legacy cursor
+ 	 * IOCTL when the driver supports cursor through a DRM_PLANE_TYPE_CURSOR
+ 	 * universal plane.
+
+
