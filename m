@@ -1,489 +1,223 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F74A2F50B7;
-	Wed, 16 Jul 2025 14:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0F72620FC;
+	Wed, 16 Jul 2025 14:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752677184; cv=none; b=jBAKa5+Pzm3hGzw0F1BR1DI3oQjuh1Pa2zukIjpJjbRj6fYfPkLsjA/gvBjgLbPsVdwFb27pymPV9Hh+QBVUq/DVfHVOUo245uNSfwTW/LM3ksdKbQpFy4MY2BGVhA6Co+vg+mktqO+WwUB7M//GiHRgAhRQClegy3ztMFULm7o=
+	t=1752677801; cv=none; b=D4R4EQjUVbF2+qLqLmfF841ZPBSL7dVk/ZktGqRlz6lRR+UQQmqWZHzP5vrMtcRRgO4GWCm2+NbPEYD1JNb+eIjQVvQfjz7XN6L9uftT7O4qUyVTze/psardLBg37LD7xc5xDof9VYz2+IKJ3rCWQZT6FSKe4s5R/E6489do5bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752677184; c=relaxed/simple;
-	bh=EwQuVRRqhzSFkyoipJzJdDpUARFU3jeQp88V2KcXOH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gGKhm3CMFqGQLuZ5fklPGjVcox+2eyrHlfBlDIQuZ7jQSr9zjhCksBHXKqm29nEA4gYbTWzHbXAuRZLnWW+aDZemw6dqQ2+HoDdYc+TeykZ6nNwJPA2q+2xX6fb8l6i0faARHkXKu0Ls9/iSHf7SuMxiyFUYJDx9Bh/cjQjImvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iCa2Q3dJ; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1752677801; c=relaxed/simple;
+	bh=1fGqfl8gwUqcjJ8uV+gLWVR1xYR+HZMQLK7G0YW2xmw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=M8QuQLBVaazg8hefMs/PhqKQaDUfPnsaO6X5DSLXPjASEiioB7ycNB33s0scOVXCIefCtPumtBNpwGC26XwiNgocwKupy4NEo+aC5AI7PWfTdBuf29CZbjeJp7wOHi8POxN1YgFEF4X/UgaMyPk08CbOy4lgY+vu26DE3D6oaTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bncmJ7hQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iCa2Q3dJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752677183; x=1784213183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EwQuVRRqhzSFkyoipJzJdDpUARFU3jeQp88V2KcXOH4=;
-  b=iCa2Q3dJSleEwVwE8mKKe+rccg8rIT9HkRvpLllkdXhQurjNq1CufJCy
-   StoWPNaentvsSkW+Q9pHgm6I8CTYgWzQ90pxiKcjrsVfcA10nvQBzI/9P
-   yOTN8DoBzf5kTqy6i9XMkmC2hqFrxKXMb8GWqPDY9HgsUmrzhv8JNbZzw
-   7NGMT2DFBqGqNrELsNhFfDwbHGTeUGtiC7IN72GEIboXl4jJpQZ4s+0VV
-   prbB1p1ZpJ0R/AfxDOJuGJCYAW5/wMijjSAvKxDtu8jG2g7+oIkp6QyWa
-   TeIjQrnwP/nUvPfjVrnZDF4IDl8y05y1RX305myb+nzqEA/BVhl2vq+qp
-   A==;
-X-CSE-ConnectionGUID: gFbO7haIQfO8ZfVngfLhzw==
-X-CSE-MsgGUID: 8K+Y8CyYQ8+xVaC57GOtBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58694687"
-X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
-   d="scan'208";a="58694687"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 07:46:22 -0700
-X-CSE-ConnectionGUID: JBFIvyIjR3CiO8xAoc+pfA==
-X-CSE-MsgGUID: E8hpjauJQmu3Iz0MBHv2+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,316,1744095600"; 
-   d="scan'208";a="161829674"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 07:46:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uc3Oe-0000000Fy0H-2ivG;
-	Wed, 16 Jul 2025 17:46:12 +0300
-Date: Wed, 16 Jul 2025 17:46:12 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-Cc: sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-	krzk+dt@kernel.org,
-	Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Hans de Goede <hansg@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>,
-	Sylvain Petinot <sylvain.petinot@foss.st.com>,
-	Matthias Fend <matthias.fend@emfend.at>,
-	Dongcheng Yan <dongcheng.yan@intel.com>,
-	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-	Heimir Thor Sverrisson <heimir.sverrisson@gmail.com>,
-	Jingjing Xiong <jingjing.xiong@intel.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] media: i2c: add ov2735 image sensor driver
-Message-ID: <aHe7NFJz6aCUqZXL@smile.fi.intel.com>
-References: <20250716134426.8348-1-hardevsinh.palaniya@siliconsignals.io>
- <20250716134426.8348-3-hardevsinh.palaniya@siliconsignals.io>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bncmJ7hQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 86064C4CEF0;
+	Wed, 16 Jul 2025 14:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752677800;
+	bh=1fGqfl8gwUqcjJ8uV+gLWVR1xYR+HZMQLK7G0YW2xmw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=bncmJ7hQaXxnxRV2KKiAWSdSO45VMkKHFWbH/wXoAMJJdStm+tAneNC0EcdLAIqB7
+	 gQMcbgpMcP+u4jIgm+Ny+vVNWr8iH71NhngTJigm/v5iu6Z2ZG+ur7nkLLSLU2+EAK
+	 F8X/pJPNv8fhrqhFoDNTbYcFy/Pwn9/MtOSZtK37k8MsiUtL6WWqo7The9OpIX/MEd
+	 ziHLxN0ZPI+tCWpPig9Au7dsXKo7+j1k7QrkmjGj9v/nO/u6rxDrlu0iNX/6dgCS7U
+	 Kro1tyLSRdFGySNhM2GqAYuhgianswe+IpJWX1al16wOW7ci/LIdAfhE/iupfmga08
+	 xMIYr3LF68efw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EDE1C83F27;
+	Wed, 16 Jul 2025 14:56:40 +0000 (UTC)
+From: Yassine Ouaissa via B4 Relay <devnull+yassine.ouaissa.allegrodvt.com@kernel.org>
+Date: Wed, 16 Jul 2025 14:55:50 +0000
+Subject: [PATCH v4 1/4] media: allegro-dvt: Move the current driver to a
+ subdirectory
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250716134426.8348-3-hardevsinh.palaniya@siliconsignals.io>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250716-allegro_dvt_al300_dec_driver-v4-1-f87c01c9f7b5@allegrodvt.com>
+References: <20250716-allegro_dvt_al300_dec_driver-v4-0-f87c01c9f7b5@allegrodvt.com>
+In-Reply-To: <20250716-allegro_dvt_al300_dec_driver-v4-0-f87c01c9f7b5@allegrodvt.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Michael Tretter <m.tretter@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Yassine OUAISSA <yassine.ouaissa@allegrodvt.com>, 
+ Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7230;
+ i=yassine.ouaissa@allegrodvt.com; h=from:subject:message-id;
+ bh=B974m7NaO60OA1FxT6PmboG1hsMU5NiM9ascFl0th1E=;
+ b=owGbwMvMwCV2oHftXqU9jLMZT6slMWSU71361LW62D94J+/G16Wr/09NM/E4Obv9mPgOl1SJz
+ va909wsO0pZGMS4GGTFFFk+GCx99oWtxmdGC9t8mDmsTCBDGLg4BWAib4UZGa74C7M7lMr7qv5U
+ 7kt4P+GmlV4YZ8g8VTaTw11tVuUWqQz/87IW8n5ZPzP3eD2nriHb+eNbKmWvXNx/2VJP9FVzrdB
+ TfgA=
+X-Developer-Key: i=yassine.ouaissa@allegrodvt.com; a=openpgp;
+ fpr=B0CE218FC8E89064DAED6179042F935CFB3AD0CC
+X-Endpoint-Received: by B4 Relay for yassine.ouaissa@allegrodvt.com/default
+ with auth_id=423
+X-Original-From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+Reply-To: yassine.ouaissa@allegrodvt.com
 
-On Wed, Jul 16, 2025 at 07:14:17PM +0530, Hardevsinh Palaniya wrote:
-> Add a v4l2 subdevice driver for the Omnivision OV2735 sensor.
-> 
-> The Omnivision OV2735 is a 1/2.7-Inch CMOS image sensor with an
-> active array size of 1920 x 1080.
-> 
-> The following features are supported:
-> - Manual exposure an gain control support
-> - vblank/hblank control support
-> - Test pattern support control
-> - Supported resolution: 1920 x 1080 @ 30fps (SGRBG10)
+From: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
 
-...
+In preparation for the upcoming driver update, we need to relocate the
+current driver.
+This will help ensure a clean transition and avoid any potential
+conflicts with the new driver.
+This patch is crucial for keeping our directory organized and
+facilitating a smooth integration of the new driver.
 
-> +static int ov2735_page_access(struct ov2735 *ov2735,
-> +			      u32 reg, void *val, int *err, bool is_read)
-> +{
-> +	u8 page = (reg >> CCI_REG_PRIVATE_SHIFT) & 0xff;
-> +	u32 addr = reg & ~CCI_REG_PRIVATE_MASK;
-> +	int ret = 0;
-> +
-> +	if (err && *err)
-> +		return *err;
-> +
-> +	mutex_lock(&ov2735->page_lock);
-> +
-> +	/* Perform page access before read/write */
-> +	if (ov2735->current_page != page) {
-> +		ret = cci_write(ov2735->cci, OV2735_REG_PAGE_SELECT, page, &ret);
-> +		if (ret)
-> +			goto err_mutex_unlock;
-> +		ov2735->current_page = page;
-> +	}
-> +
-> +	if (is_read)
-> +		ret = cci_read(ov2735->cci, addr, (u64 *)val, err);
-> +	else
-> +		ret = cci_write(ov2735->cci, addr, *(u64 *)val, err);
-> +
-> +err_mutex_unlock:
+Signed-off-by: Yassine Ouaissa <yassine.ouaissa@allegrodvt.com>
+---
+ MAINTAINERS                                             |  2 +-
+ drivers/media/platform/allegro-dvt/Kconfig              | 16 +---------------
+ drivers/media/platform/allegro-dvt/Makefile             |  5 +----
+ drivers/media/platform/allegro-dvt/zynqmp/Kconfig       | 17 +++++++++++++++++
+ drivers/media/platform/allegro-dvt/zynqmp/Makefile      |  6 ++++++
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-core.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.c    |  0
+ .../platform/allegro-dvt/{ => zynqmp}/allegro-mail.h    |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-h264.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-hevc.h  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.c  |  0
+ .../media/platform/allegro-dvt/{ => zynqmp}/nal-rbsp.h  |  0
+ 14 files changed, 26 insertions(+), 20 deletions(-)
 
-> +	if (ret && err)
-
-Why do you need to check for ret != 0?
-
-> +		*err = ret;
-> +
-> +	mutex_unlock(&ov2735->page_lock);
-> +	return ret;
-> +}
-
-...
-
-> +{
-> +	struct ov2735_pll_parameters *pll_parameters;
-> +	u8 pll_ctrl;
-> +	u8 pll_outdiv;
-> +	int ret = 0;
-> +
-> +	pll_parameters = &pll_configs[ov2735->link_freq_index];
-> +
-> +	/* BIT[7]: pll_clk_sel, BIT[6:2]: pll_nc, BIT[1:0]: pll_mc */
-> +	pll_ctrl = ((pll_parameters->pll_nc << 2) |
-> +		    (pll_parameters->pll_mc)) & OV2735_REG_PLL_ENABLE;
-
-Not sure why here are the parentheses. Perhaps you wanted to show the 0 shift?
-
-		    (pll_parameters->pll_mc << 0)) & OV2735_REG_PLL_ENABLE;
-
-> +	pll_outdiv = pll_parameters->pll_outdiv;
-> +
-> +	ov2735_write(ov2735, OV2735_REG_PLL_CTRL, pll_ctrl, &ret);
-> +	ov2735_write(ov2735, OV2735_REG_PLL_OUTDIV, pll_outdiv, &ret);
-> +
-> +	return ret;
-> +}
-
-...
-
-> +static int ov2735_get_selection(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *sd_state,
-> +				struct v4l2_subdev_selection *sel)
-> +{
-> +	switch (sel->target) {
-
-> +	case V4L2_SEL_TGT_CROP: {
-> +		sel->r = *v4l2_subdev_state_get_crop(sd_state, 0);
-> +		return 0;
-> +	}
-
-Why {} ?
-
-> +	case V4L2_SEL_TGT_NATIVE_SIZE:
-> +		sel->r = ov2735_native_area;
-> +		return 0;
-
-> +
-
-This blank line is inconsistent with the rest.
-
-> +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> +		sel->r = ov2735_active_area;
-> +		return 0;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-
-...
-
-> +static int ov2735_init_state(struct v4l2_subdev *sd,
-> +			     struct v4l2_subdev_state *state)
-> +{
-> +	struct v4l2_subdev_format fmt = {
-> +		.which = V4L2_SUBDEV_FORMAT_TRY,
-
-> +		.pad = 0,
-
-It's zeroed by default.
-
-> +		.format = {
-> +			.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-> +			.width = supported_modes[0].width,
-> +			.height = supported_modes[0].height,
-> +		},
-> +	};
-
-> +	ov2735_set_pad_format(sd, state, &fmt);
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static int ov2735_power_on(struct device *dev)
-> +{
-> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> +	struct ov2735 *ov2735 = to_ov2735(sd);
-> +	int ret;
-> +
-> +	gpiod_set_value_cansleep(ov2735->enable_gpio, 0);
-> +	/* Ensure device is inactive (PWDN high) before enabling power rails.
-> +	 * As per datasheet, the PWDN pin (named 'enable_gpio' here) should be
-> +	 * pulled low only after all power rails are stable.
-> +	 */
-
-/*
- * Use correct multi-line style
- * for the comments. Here is an
- * example.
- *.
-
-> +	fsleep(3000);
-
-Here and everywhere else consider using
-
-	fsleep(3 * USEC_PER_MSEC);
-
-which will hint the user what is the units of the value
-(i.e. 3ms in this case).
-
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(ov2735_supply_name),
-> +				    ov2735->supplies);
-> +	if (ret) {
-> +		dev_err(ov2735->dev, "failed to enable regulators\n");
-> +		return ret;
-> +	}
-> +
-> +	gpiod_set_value_cansleep(ov2735->enable_gpio, 1);
-> +	/* T4: Delay from PWDN pulling low to RSTB pulling high. */
-> +	fsleep(4000);
-> +
-> +	ret = clk_prepare_enable(ov2735->xclk);
-> +	if (ret) {
-> +		dev_err(ov2735->dev, "failed to enable clock\n");
-> +		goto err_regulator_off;
-> +	}
-> +
-> +	gpiod_set_value_cansleep(ov2735->reset_gpio, 0);
-> +	/* T5: Delay from RSTB pulling high to first I2C command. */
-> +	fsleep(5000);
-> +
-> +	return 0;
-> +
-> +err_regulator_off:
-> +	regulator_bulk_disable(ARRAY_SIZE(ov2735_supply_name), ov2735->supplies);
-> +	return ret;
-> +}
-
-...
-
-> +static int ov2735_parse_endpoint(struct ov2735 *ov2735)
-> +{
-> +	struct fwnode_handle *fwnode;
-> +	struct v4l2_fwnode_endpoint bus_cfg = {
-> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
-> +	};
-> +	struct fwnode_handle *ep;
-> +	unsigned long link_freq_bitmap;
-> +	int ret;
-
-> +	fwnode = dev_fwnode(ov2735->dev);
-
-This one can be combined with the definition:
-
-	struct fwnode_handle *fwnode;= dev_fwnode(ov2735->dev);
-
-> +	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
-> +	if (!ep)
-> +		return dev_err_probe(ov2735->dev,
-> +				     -ENXIO, "Failed to get next endpoint\n");
-
-There is a room for the return code on the previous line.
-
-> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-> +	fwnode_handle_put(ep);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != 2) {
-> +		ret = dev_err_probe(ov2735->dev,
-> +				    -EINVAL, "only 2 data lanes are supported\n");
-
-Ditto.
-
-> +		goto error_out;
-> +	}
-> +
-> +	ret = v4l2_link_freq_to_bitmap(ov2735->dev, bus_cfg.link_frequencies,
-> +				       bus_cfg.nr_of_link_frequencies,
-> +				       link_freq_menu_items,
-> +				       ARRAY_SIZE(link_freq_menu_items),
-> +				       &link_freq_bitmap);
-> +	if (ret) {
-> +		ret = dev_err_probe(ov2735->dev,
-> +				    -EINVAL, "only 420MHz frequency is available\n");
-
-Ditto.
-
-> +		goto error_out;
-> +	}
-> +
-> +	ov2735->link_freq_index = __ffs(link_freq_bitmap);
-> +
-> +error_out:
-> +	v4l2_fwnode_endpoint_free(&bus_cfg);
-> +
-> +	return ret;
-> +};
-
-...
-
-> +static int ov2735_probe(struct i2c_client *client)
-> +{
-> +	struct ov2735 *ov2735;
-> +	unsigned int xclk_freq;
-> +	int ret;
-> +
-> +	ov2735 = devm_kzalloc(&client->dev, sizeof(*ov2735), GFP_KERNEL);
-> +	if (!ov2735)
-> +		return -ENOMEM;
-
-> +	ov2735->client = client;
-
-I have found no used of this. Seems a dead field in the structure.
-
-> +	ov2735->dev = &client->dev;
-> +
-> +	v4l2_i2c_subdev_init(&ov2735->sd, client, &ov2735_subdev_ops);
-> +	ov2735->sd.internal_ops = &ov2735_internal_ops;
-> +
-> +	ov2735->cci = devm_cci_regmap_init_i2c(client, 8);
-> +	if (IS_ERR(ov2735->cci))
-> +		return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->cci),
-> +				     "failed to initialize CCI\n");
-> +
-> +	/* Set Current page to 0 */
-> +	ov2735->current_page = 0;
-> +
-> +	ret = devm_mutex_init(ov2735->dev, &ov2735->page_lock);
-
-> +		if (ret)
-> +			return dev_err_probe(ov2735->dev, ret,
-> +					     "Failed to initialize lock\n");
-
-Wrong indentation.
-
-> +	/* Get system clock (xvclk) */
-> +	ov2735->xclk = devm_v4l2_sensor_clk_get(ov2735->dev, NULL);
-> +	if (IS_ERR(ov2735->xclk))
-> +		return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->xclk),
-> +				     "failed to get xclk\n");
-> +
-> +	xclk_freq = clk_get_rate(ov2735->xclk);
-> +	if (xclk_freq != OV2735_XCLK_FREQ)
-> +		return dev_err_probe(ov2735->dev, -EINVAL,
-> +				     "xclk frequency not supported: %d Hz\n",
-
-Please, revisit all printf() specifiers. Are you sure that xclk_freq can ever
-be negative?
-
-> +				     xclk_freq);
-> +
-> +	ret = ov2735_get_regulators(ov2735);
-> +	if (ret)
-> +		return dev_err_probe(ov2735->dev, ret, "failed to get regulators\n");
-> +
-> +	ret = ov2735_parse_endpoint(ov2735);
-> +	if (ret)
-> +		return dev_err_probe(ov2735->dev, ret,
-> +				     "failed to parse endpoint configuration\n");
-> +
-> +	ov2735->reset_gpio = devm_gpiod_get_optional(ov2735->dev,
-> +						     "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(ov2735->reset_gpio))
-> +		return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->reset_gpio),
-> +				     "failed to get reset GPIO\n");
-> +
-> +	ov2735->enable_gpio = devm_gpiod_get_optional(ov2735->dev,
-> +						      "enable", GPIOD_OUT_LOW);
-> +	if (IS_ERR(ov2735->enable_gpio))
-> +		return dev_err_probe(ov2735->dev, PTR_ERR(ov2735->enable_gpio),
-> +				     "failed to get enable GPIO\n");
-> +
-> +	ret = ov2735_power_on(ov2735->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ov2735_identify_module(ov2735);
-> +	if (ret)
-> +		goto error_power_off;
-> +
-> +	ret = ov2735_init_controls(ov2735);
-> +	if (ret)
-> +		goto error_power_off;
-> +
-> +	/* Initialize subdev */
-> +	ov2735->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	ov2735->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> +	ov2735->pad.flags = MEDIA_PAD_FL_SOURCE;
-> +
-> +	ret = media_entity_pads_init(&ov2735->sd.entity, 1, &ov2735->pad);
-> +	if (ret) {
-> +		dev_err_probe(ov2735->dev, ret, "failed to init entity pads\n");
-> +		goto error_handler_free;
-> +	}
-> +
-> +	ov2735->sd.state_lock = ov2735->handler.lock;
-> +	ret = v4l2_subdev_init_finalize(&ov2735->sd);
-> +	if (ret) {
-> +		dev_err_probe(ov2735->dev, ret, "subdev init error\n");
-> +		goto error_media_entity;
-> +	}
-> +
-> +	devm_pm_runtime_set_active_enabled(ov2735->dev);
-> +	devm_pm_runtime_get_noresume(ov2735->dev);
-> +
-> +	ret = v4l2_async_register_subdev_sensor(&ov2735->sd);
-> +	if (ret) {
-> +		dev_err_probe(ov2735->dev, ret,
-> +			      "failed to register ov2735 sub-device\n");
-> +		goto error_subdev_cleanup;
-> +	}
-> +
-> +	return 0;
-> +
-> +error_subdev_cleanup:
-> +	v4l2_subdev_cleanup(&ov2735->sd);
-> +
-> +error_media_entity:
-> +	media_entity_cleanup(&ov2735->sd.entity);
-> +
-> +error_handler_free:
-> +	v4l2_ctrl_handler_free(ov2735->sd.ctrl_handler);
-> +
-> +error_power_off:
-> +	ov2735_power_off(ov2735->dev);
-> +
-> +	return ret;
-> +}
-
-...
-
-> +static void ov2735_remove(struct i2c_client *client)
-> +{
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct ov2735 *ov2735 = to_ov2735(sd);
-> +
-> +	v4l2_async_unregister_subdev(sd);
-> +	v4l2_subdev_cleanup(&ov2735->sd);
-> +	media_entity_cleanup(&sd->entity);
-> +	v4l2_ctrl_handler_free(ov2735->sd.ctrl_handler);
-> +}
-
-You can even wrap all of them to be managed resources, but since the order
-looks okay to me it's up to you.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 60bba48f5479a025f9da3eaf9dbacb67a194df07..2cea337bd426f203a8dd8f5f2689f8091137175e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -817,7 +817,7 @@ R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/media/allegro,al5e.yaml
+-F:	drivers/media/platform/allegro-dvt/
++F:	drivers/media/platform/allegro-dvt/zynqmp
+ 
+ ALLIED VISION ALVIUM CAMERA DRIVER
+ M:	Tommaso Merciai <tomm.merciai@gmail.com>
+diff --git a/drivers/media/platform/allegro-dvt/Kconfig b/drivers/media/platform/allegro-dvt/Kconfig
+index 2182e1277568a407f51a23ea437811c50b1183c8..e9008614c27b9490d1cd29fab887977a1918ede4 100644
+--- a/drivers/media/platform/allegro-dvt/Kconfig
++++ b/drivers/media/platform/allegro-dvt/Kconfig
+@@ -2,18 +2,4 @@
+ 
+ comment "Allegro DVT media platform drivers"
+ 
+-config VIDEO_ALLEGRO_DVT
+-	tristate "Allegro DVT Video IP Core"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV
+-	depends on ARCH_ZYNQMP || COMPILE_TEST
+-	select V4L2_MEM2MEM_DEV
+-	select VIDEOBUF2_DMA_CONTIG
+-	select REGMAP_MMIO
+-	help
+-	  Support for the encoder video IP core by Allegro DVT. This core is
+-	  found for example on the Xilinx ZynqMP SoC in the EV family and is
+-	  called VCU in the reference manual.
+-
+-	  To compile this driver as a module, choose M here: the module
+-	  will be called allegro.
++source "drivers/media/platform/allegro-dvt/zynqmp/Kconfig"
+diff --git a/drivers/media/platform/allegro-dvt/Makefile b/drivers/media/platform/allegro-dvt/Makefile
+index 66108a3037747020d549bc0a427881e0667a3f0a..d2aa6875edcf7760901996aac4d5ac98282cce20 100644
+--- a/drivers/media/platform/allegro-dvt/Makefile
++++ b/drivers/media/platform/allegro-dvt/Makefile
+@@ -1,6 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-allegro-objs := allegro-core.o allegro-mail.o
+-allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
+-
+-obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
++obj-y += zynqmp/
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Kconfig b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..0a0a697c420da47f87f05153a2dbfbe5d3ccf988
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config VIDEO_ALLEGRO_DVT
++	tristate "Allegro DVT Video IP Core for ZynqMP"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV
++	depends on ARCH_ZYNQMP || COMPILE_TEST
++	select V4L2_MEM2MEM_DEV
++	select VIDEOBUF2_DMA_CONTIG
++	select REGMAP_MMIO
++	help
++	  Support for the encoder video IP core by Allegro DVT. This core is
++	  found for example on the Xilinx ZynqMP SoC in the EV family and is
++	  called VCU in the reference manual.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called allegro.
+diff --git a/drivers/media/platform/allegro-dvt/zynqmp/Makefile b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..66108a3037747020d549bc0a427881e0667a3f0a
+--- /dev/null
++++ b/drivers/media/platform/allegro-dvt/zynqmp/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++
++allegro-objs := allegro-core.o allegro-mail.o
++allegro-objs += nal-rbsp.o nal-h264.o nal-hevc.o
++
++obj-$(CONFIG_VIDEO_ALLEGRO_DVT) += allegro.o
+diff --git a/drivers/media/platform/allegro-dvt/allegro-core.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-core.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-core.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.c b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.c
+diff --git a/drivers/media/platform/allegro-dvt/allegro-mail.h b/drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/allegro-mail.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/allegro-mail.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-h264.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-h264.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-h264.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-hevc.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-hevc.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-hevc.h
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.c b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.c
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.c
+diff --git a/drivers/media/platform/allegro-dvt/nal-rbsp.h b/drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
+similarity index 100%
+rename from drivers/media/platform/allegro-dvt/nal-rbsp.h
+rename to drivers/media/platform/allegro-dvt/zynqmp/nal-rbsp.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.30.2
 
 
