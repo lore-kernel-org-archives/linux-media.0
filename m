@@ -1,138 +1,152 @@
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85462857F1;
-	Thu, 17 Jul 2025 09:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC313289E2D
+	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 09:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752743351; cv=none; b=LVo2/YYJJAWM4BTWSJkSl3zEytsWMs9dqLeo8rFhzG3tiA/yqgFKKU6TeJSofFKWdEOyU8N76F36sL0+2gAQtfz5Cj1HYC8tdgr9tMvJOo49VW2h+FedgTJ5wjTy81Y9kHs7COeka/oqlX6ChFYqqvjE2kENakMo1Q2sXaIVrJo=
+	t=1752744589; cv=none; b=PIAkX4lwmUZm4dODuqj/Kq4podPU2gfcPrmHtel3uabIiv3Fvxli63UA6Qog63sXVrm+iA3FkGh/No/Ih36XkMwhdTmOGnYuBQuEoX/Al9SBdoiRibObeMoGhiZsgbYKGuMiNVUTkes8rvv2j9nGD/VOYfGMQ7ap3RRY7DffW9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752743351; c=relaxed/simple;
-	bh=56k7pgXu/6RXbw34cQljJuZ2loHQMVMEiqAlC/Fne4A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E7xqzYDknmqZ4NkzLlPTXQS/GGff+llHiMPxX6b0dZToeGn4EkhhdVskQpDSbq8NfqEBZAhOzxKZqfq9AK5mXL1BpiJyCMgOVOxlwvLuL6a/4NstnMfzH1baOPWhXnKgORSl2h2ieougOhqrc3LVff+r5mJhKwT9C0reo7yAcao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id AB776C3E4DE7;
-	Thu, 17 Jul 2025 11:00:57 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl AB776C3E4DE7
-From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To: Dafna Hirschfeld <dafna@fastmail.com>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Heiko Stuebner <heiko@sntech.de>
-Cc: Paul Elder <paul.elder@ideasonboard.com>, Jacopo Mondi
- <jacopo.mondi@ideasonboard.com>, Ondrej Jirman <megi@xff.cz>,
- linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: FYI: i.MX8MP ISP (RKISP1) MI registers corruption
-Sender: khalasa@piap.pl
-Date: Thu, 17 Jul 2025 11:00:57 +0200
-Message-ID: <m3h5zbxkc6.fsf@t19.piap.pl>
+	s=arc-20240116; t=1752744589; c=relaxed/simple;
+	bh=rE8yPB6Hlg97Oq+SrHdkqJj1+cV5XZjvYUEm665XVng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i2qw19W4TzT9+BwjuAj7T29PGbIhuxFqLTf+J5NABu87JP0HYNyprHuwAbuh3o3cETUhnWpXeq1izrrTpOX9VPDFRMRsPKM4qTdk6rJ84uhu0Hyt7N6r/rJcwmhCZyRy+2GhmjRB5xSlFLspI3pI6AdbklkFon8c+gYdbtiArl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Cn99rS2j; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cn99rS2j"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4555f89b236so6722535e9.1
+        for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 02:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1752744586; x=1753349386; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7FBx9zx+OFnX0Zhf5hV0yDLTiVa32uci/a89Y9S0gZ0=;
+        b=Cn99rS2jIBr6NglP8WfDbkEpX02MNGNdVZZLeoHQbCQex+Bw88q+qO93DonVWrZVat
+         0+t85Irtog+9DE7+3g09ql1zdgF7Gz8rN9wOYMbz5Y8Q1t2qjMtThpFyeBlftN1oF1pD
+         qbZvRkhbOrFEI7AOZrIUBeTV1OzUIdbbpu4I4i/nluzmy8/+D3EvUxgxNqFag6NI1Kzi
+         5U7tvJD1yq+u0thJKFf5K7RFDk1pW35ttTubCw1NAInXEggr8WiEajDnFewEZjTu+q1X
+         Sf80xOqo2jjZMGTSWRRJVrX7c47Mfq+1BW4wdhe2DXflYJWv24VGBTClQkgQnvFFqRr8
+         kQ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752744586; x=1753349386;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7FBx9zx+OFnX0Zhf5hV0yDLTiVa32uci/a89Y9S0gZ0=;
+        b=v18bP/MxfRjfzBqGqBBaDYJhKCAoEukrXuH2iI5qXCoUU7Ph6pJXKenD+AA4jqUQkY
+         P0fJse8b5JpAobMBFmpFkJFRlX8uXFReumJdvzsXn8qWDTOl8HnC4HIoFSE7figT+ewf
+         upEOqEJSTGKOi/GfhufnKKBQGsBkhFly25y/JyZVIWFTz2jTdvOUEMEJC/3mV2rNGykA
+         NaYObG4BMzFAb5yW+woS/402kbJ4MH3nzDvoy52N9B3VJW1UKcnMl71FYGMb1DvKKvti
+         8lArvQM1zLfraU3D9uazs7Ie7jETuszSvIctbWMxpK7B2IAoi691j8Azrdet7J3jm6hs
+         1Nvg==
+X-Forwarded-Encrypted: i=1; AJvYcCWloS6XPuiJ1Uv4bKtoDh6F8qcWICRsAc28ZW1xxfQxZ5zNznlnk9NAWrYk6rK9BTsO35Pd1Pn3Ib9Hew==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywht5uQRIMhEcHEQVN6PfM0AgC5sn+CVTiWMRPm+ZpsZ2o+GN2M
+	KF3n8MO/t6RcLocR/94bC4HpNGaOCI2sZr1CQa6e95AsPyShwkCsjMPcEfZ3F+pq/4k=
+X-Gm-Gg: ASbGncsKr/uyRr/tuVZW6lK9jEJ5vt5mj1zzpir0DytgAsK340fmgtkGkb1fOmgVUg7
+	b7LHHapzdVgVqzrB22OxNzkBHFKUgv1ApUJdaNS6wF4mTSQUWL+ZypyDUD6uEyHAG1B58HWYesF
+	zuiYQ52zRDRBlPPbys2O/bSZd6GlZTQH0ydoHN/G6F9teZYqs3HDSrgY8PAsFHzRJb9M2NCckx7
+	DApgXyz+RscH/OYeEYDxL/YWbCVaD+y8lr+eB97tJNzoJV+CAwiXbblOeCeuO0Ji2e/yDzD3phN
+	tzxbVd5k9fubJQ4Rw4g4Tv/LiUzj4dgHlkF1DPopo9vb1TuGYDx4L8gLRKH3TiwFFUDJOCz2shC
+	kBTzygOUif7w78x0DFEhMvgEV9InWdadYe5adjoyNuD4DngVdLW11R4Zay5GdLbJf8uvRLwg0ZA
+	==
+X-Google-Smtp-Source: AGHT+IF47FsmRKbHX/rLmLQrUaYE+xdPrz7LbZ3X35FNDExHDUvsBvp/qgkII3tTDlHgd2onvoADnw==
+X-Received: by 2002:a05:600c:4f4d:b0:456:1006:5418 with SMTP id 5b1f17b1804b1-45631b21429mr44285585e9.13.1752744585978;
+        Thu, 17 Jul 2025 02:29:45 -0700 (PDT)
+Received: from [192.168.0.35] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45634f8cc6esm16924625e9.26.2025.07.17.02.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 02:29:45 -0700 (PDT)
+Message-ID: <8ac6f365-205a-4140-98b1-847f54ce08af@linaro.org>
+Date: Thu, 17 Jul 2025 10:29:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 3/7] media: venus: Add support for AR50_LITE video core
+To: Jorge Ramirez <jorge.ramirez@oss.qualcomm.com>
+Cc: quic_vgarodia@quicinc.com, quic_dikshita@quicinc.com, krzk+dt@kernel.org,
+ konradybcio@kernel.org, mchehab@kernel.org, andersson@kernel.org,
+ conor+dt@kernel.org, amit.kucheria@oss.qualcomm.com,
+ linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250715204749.2189875-1-jorge.ramirez@oss.qualcomm.com>
+ <20250715204749.2189875-4-jorge.ramirez@oss.qualcomm.com>
+ <4734edd5-8224-4caa-8844-c38dabc6b6c0@linaro.org> <aHij+NHG5xbM1paO@trex>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Content-Language: en-US
+In-Reply-To: <aHij+NHG5xbM1paO@trex>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 17/07/2025 08:19, Jorge Ramirez wrote:
+>>> --- a/drivers/media/platform/qcom/venus/helpers.c
+>>> +++ b/drivers/media/platform/qcom/venus/helpers.c
+>>> @@ -230,6 +230,24 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *inst)
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(venus_helper_alloc_dpb_bufs);
+>>> +void venus_helper_prepare_eos_data(struct venus_inst *inst,
+>>> +				   struct hfi_frame_data *data)
+>>> +{
+>>> +	struct venus_core *core = inst->core;
+>>> +
+>>> +	data->buffer_type = HFI_BUFFER_INPUT;
+>>> +	data->flags = HFI_BUFFERFLAG_EOS;
+>>> +
+>>> +	if (IS_V6(core) && is_fw_rev_or_older(core, 1, 0, 87))
+>>> +		return;
+>>> +
+>>> +	if (IS_V4(core) && is_lite(core) && is_fw_rev_or_older(core, 6, 0, 53))
+>>> +		data->alloc_len = 1;
+>>> +
+>>> +	data->device_addr = 0xdeadb000;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(venus_helper_prepare_eos_data);
+>> This function doesn't appear to have alot to do with AR50_LITE as it
+>> pertains to IS_V6() and IS_V4().
+>>
+>> This I think should be a separate patch with its own commit log to describe
+>> the quite complex logic of version numbers going on here.
+> Let me give it some background:
+> 
+> According to the HFI specification, EOS (End-of-Stream) buffers must
+> have 'valid' addresses. While the firmware currently appears to make no
+> use of the EOS buffer contents, allocating and mapping them would have
+> been a better driver choice IMO. Hoever this one has better performance
+> which is probably the reason why it has stayed.
+> 
+> The firmware then does perform operations involving the buffer's size
+> and length fields, and enforces boundary checks accordingly. On the
+> AR50_LITE platform, an earlier firmware version lacked a check on
+> alloc_len, leading to a division-by-zero scenario.
+> 
+> This has been addressed, and we plan to release firmware version 6.0.54,
+> which includes the necessary boundary check for alloc_len.
+> 
+> I should probaly replace IS_V4(core) && is_lite(core) with
+> IS_AR50_LITE() instead of trying to give it the appearence of a design
+> feature.
+> 
+> seems the sensible thing to do, right?
 
-there is a well-known issue in i.MX8MP ISP (Image Signal Processor)
-implementation, resulting in a corruption on accesses to ISP MI (memory
-interface) registers.
+I'll stipulate to all of that.
 
-The "reference" (NXP) VVCam driver simply does the operations twice
-(i.e., reads twice with the first result discarded, and writes twice).
-This fixes the problem on most accesses, but the problems still persist.
+I know I'm being pedantic but, the title and subject of this patch is 
+"AR50_LITE" does stuff.
 
-It appears that it occurs only after certain system reboots. E.g. after
-a boot the problems are present consistently, I can stop and restart the
-camera application and they are still there, until the next boot. On the
-next boot they can be gone for good. The problems show themselves maybe
-in 5% or 10% of boots.
+As traveler from a mirror-universe - I would read the commit log here, 
+look at this function and be none the wiser what was going on.
 
-########### READ operations ###########
-I have performed some tests and it appears that, at least in read case,
-the corruption is caused by flipping bits in register address.
+The EOS check is a fundamental HFI capability which is why I again 
+reiterate it deserves its own commit log with the above explanation - 
+word-for-word would be fine from my POV, to explain what is going on.
 
-For example: I'm reading (in userspace, 32-bit transfers) 0x32E21478
-(mi_mp_y_base_ad_shd) a million times. I get the following results (the
-first 5 are valid):
-value 0x3C300000 count 184163
-value 0x3C3C0000 count 220357
-value 0x3C0C0000 count 203534
-value 0x3C180000 count 202677
-value 0x3C240000 count 189240
-value          0 count 23
-value 0x1E2200E0 count 1 <<<< looks like register 32E21578
-value 0x1E0A00E0 count 1 <<<< looks like register 32E21578
-value 0x1E1000E0 count 1 <<<< looks like register 32E21578
-value 0x1E1600E0 count 2 <<<< looks like register 32E21578
-value 0x12B95456 count 1 <<<< looks like register 32E2153C
+Long live the Empire!
 
-Apparently, the data can come from any MI register.
-
-A possible partial workaround involves doing a "ldp wzr, %w0, [%x1]"
-operation (this is good for xxx4 and xxxC registers). The first 32 bits
-(from xxx0 or xxx8) are corrupted and ignored (in wzr register), but the
-real data (xxx4 or xxxC) going to %w0 is ok.
-
-Another one is "ldp xzr, %x0, [%x1]" and is needed for xxx8 registers.
-The first transfer (xxx0 and xxx4) if corrupted, then xxx8 and xxxC is
-valid (in %x0).
-
-Unfortunately, the above doesn't work for xxx0, they can be corrupted
-anyway. Tried 128-bit %v0 transfers, too. ATM I'm doing multiple reads
-and pick the most frequent value.
-
-Current values of the ISP MI registers for reference (all-zero rows not
-shown):
-               xx0      xx4      xx8      xxC
-          -----------------------------------
-32E21400:   7A2001       20 3C180000   1FA400
-32E21410:        0        0        0 3C200000
-32E21420:    FD200        0        0        0
-32E21430:        0        0        0 B105488E
-32E21470:        0    10001 3C0C0000   1FA400
-32E21480:        0        0 3C140000    FD200
-32E214F0:        0        0        1       3C
-32E21500:        0        0        0        2 <<< corrupted write?
-32E21530:        0        0        0 12B95456 <<< corrupted write
-32E21540:        0        0        0  2000000
-32E21550:      780        0        0      332
-32E21560:        0      780      438   1FA400
-32E21570:        0 1E1E00EF 1E2200E0        0
-
-
-########### WRITE operations ###########
-My current strategy is doing verify after write, then rinse and repeat
-until success. This appears to have a side effect, though: the data can
-go to a register different that requested. This manifests itself visibly
-in registers which are usually 0 (like the 0x32E2153C above). Not very
-frequent, though (but it's dangerous: certain registers contain RAM
-addresses for video buffers and I guess ISP can corrupt large areas of
-memory this way).
-
-
-I wonder why it only occurs only after certain reboots.
-It also appears (will have to verify) than on another identical(?)
-device these problems don't show up at all. I'm still investigating.
-
-The camera is a custom board using a Compulab UCM IMX8M PLUS module.
-I guess I could try replicating this issue on a Hummingboard i.MX8MP
-board.
-
-
-I wonder if Rockchip ISP blocks (using a very similar ISP, which in both
-cases comes from VeriSilicon) are free of these issues.
-
-
-Any ideas maybe?
---=20
-Krzysztof "Chris" Ha=C5=82asa
-
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+---
+bod
