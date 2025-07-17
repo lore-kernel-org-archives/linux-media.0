@@ -1,1033 +1,1077 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AA2230981
-	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 12:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F315263F28
+	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 12:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752756011; cv=none; b=Qs9YxXqcohfvINVREbZvpNNt6zyb7xUz+sppYhAfgWViKHnJ4ysG5fzH15eQRdjDreC3bcaPnD8U6D6K4LwwZ9uDlwc/XMGBoXmQSoGhmy2fDhmBOJ2/QWslNqhVVxj2zj3nJTjNcoMtY/d7uN9CkNdeqYEYlso24Cr53WEH5kw=
+	t=1752756170; cv=none; b=N+LEiS1WSYeo0IF/c8UZilGdS7B74YYlmD91NJPXExXnf+OQSdqD+rX780oRyBlh6ymH93yDvDPWx4NqIZuDDM76NYdwB12xsdX6mr1m3RPtZn8S2+FzyTEeSdAwe3C1u8C7ms9DWkLixyfNV9Kh9HL6HNXDcb/mSb9I1x5xdgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752756011; c=relaxed/simple;
-	bh=UwOhSOTngCD4g9mHxxTckLKQ7nqK80F23AMaCNz2JqI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NZXMMc8IxXn2ELSlG8izFUZZ/QkRTsM9idfeSkh2WNXWwCZh3USa8nVEuo6j1V7rTelF4kaixPySYsaF4iVEuMGcAvm4m/NWfRgcXqxpOTwnIDt9qlwETd4gdKYSlmI2mfZwfRSWVhs/W3gGEPXmppQD5dATcGxbfr60kGhAb5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NZ4p4ueP; arc=none smtp.client-ip=209.85.167.52
+	s=arc-20240116; t=1752756170; c=relaxed/simple;
+	bh=OZYUXAYzaRzvYvMUS71g1+eKsdGQGkgm3EOyIA1/yzs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=in3vyn+IW5Oo2ThT6O0ICLbPiGMTLhp99c/b84SDBWQ6QnLuO1mEhYKuje39AldheZhAuunD4ZcbMuZvZodsYajPTfB+NtusyQvB/+Q/Ql8Nqy1EsrrEUyjjfuKxIHRN7uqtbmMBzT02GCFE2Ex8aF65cdWWehwAxqerjC2WeRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DPyNOge+; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NZ4p4ueP"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-553aba2f99eso167348e87.3
-        for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 05:40:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DPyNOge+"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a54700a463so524310f8f.1
+        for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 05:42:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752756005; x=1753360805; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DXVkAcYLPAPVOMdlnbPKzxmdtFFIc0QiHO27s80bhQ0=;
-        b=NZ4p4uePFZprGqrG+xB071dk7gLKI6EIYn2JSqX2ISjzzKhWqj7Sf6uex680YeMKgn
-         N4vVP0Y0kMgX7oHlezBOzNDyWtLecYTi+rJuN+WD5GiSedQqq82Sa5o4ZiXM2ckgsWu2
-         Ur0Cvrzoc4eQHHboplWQFToNQ02Q9/tfCuScnnuH2m3cl6byn1AV6quWEfnLH4/sj9RP
-         5OoVF3kHHRckWmHNTgmsku6N4yx16ZEhhA40vZj460Xefo1JC+ynGXV0RLrSbUVIBa9M
-         FaE0lJs1SSk3R9eZJd9PKMlh7uaXH2sJeyqGkCrt9o+L0Ay2BFZnP7qdXZqRKwpuaI7s
-         szdA==
+        d=linaro.org; s=google; t=1752756166; x=1753360966; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dfoA6CywfL7tG4Hi/bgag6f/cRVej422YcCYw2Pdqgk=;
+        b=DPyNOge+nuUqSKGxPbmX1S8boemP4ojaSCQLyRWGr8mqAVpuJ+RWPzYiz3mmWXBNir
+         E64ZnpEOzLSga0SDr+vY+wmgvtzRiNyoOYerHVC3E+MXj9rLP6f5US/NB0Z2P58k8+T1
+         1KWtgG9hsbPW+lU1yNay8CR/mxSLd+h3iGcPvVKiihuHECfxl0vT49t7pVHyguImZ78G
+         j1dnL1kytvOWBFdtM1NYCU9fY2ybAsIaOLrGOa+rYilTHXHLkNKRgxSSHfsBZoOc3EI3
+         q03r9kcGCeFmeKGtYN9ZRjhGQF1nvemMLWPrW7Q/jlXITnaCZ8DScW9HkS79ZkSLP6OX
+         cfVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752756005; x=1753360805;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DXVkAcYLPAPVOMdlnbPKzxmdtFFIc0QiHO27s80bhQ0=;
-        b=P5SBMtBCduOCrHUo2H4vaODTV/OAd8+5m6LSeBm9yqwe1CnJ9dKqruXowxEV9pAhI6
-         Vf7j4u4rJBaNIuABH6mDWB7NpPSxZrt/q0PPZ723f/WsZrvJn1hWALitQmUDKfVNja4r
-         TudwdDT6vSD8iimnJoV9zbp6wDxZ6OF4zo/iI8AAOg0uB5YTjqMqsh+2CkzGRE5iKeba
-         NJ/DgX4g0zQm+1CbRj4egvEsfLI0tAUnGDOoaQeXU7n7JYC924bvnt0SH3EDLM0qi1eu
-         5q3z125d209q2i+DfEm6F23diZeLZix0K2itCoUtPxCiTb9onr4wqF9SHfCBLoZo4XOA
-         wnqg==
-X-Gm-Message-State: AOJu0Yx3gu4I7XC4vpOtfzG4bqBtSGOomzXWt5me0eccJwFUljmACCoa
-	kw2ITV8YrSReRvC3G7rG9RMbpZxSHP3Rv7CERb9eX0b9wGPDJgKo9bUvH2rrf+pbNi8=
-X-Gm-Gg: ASbGncs44a2ijbjO0lvwij3RYV7X8hvmtvv+ofeEQdPpIm0NnmiMIj5QK1T6sjVOgso
-	yPMqBxT1eoKq2+5YzjCkuRFUzd5Y4XY9JBYXv5X/gqFJhYVYI5Eg1khZNTI1GB322LO5x2Ezjzy
-	iRU0vi7lGTMVnEXV4FcUOS7Wr77qEPBlSyWECWkoRuzk6uf13qQ6i4zX4KZR8njMeSdVq+tFymD
-	VPkRGRkltReR+EAh4lgvAGYCqPQmI2nUAerat965HO9Q89neNUkozfJQChcPe99c/i07cFMz/P7
-	sdX1c4CksKLKncNWPYsUqQHM3xP8XgA+A3OMtTWFZYkH3yUOPOCir//unHS8XtyKNuBuXxaxdt6
-	UWS/YFQk9v3SueHc/Kpjxa7p/wE/TC85BfKsOG84gcS5YZj4pl84isonEI06I+xE/BXU4u4dtW+
-	sFs2MkGelw
-X-Google-Smtp-Source: AGHT+IEZo7ZveLsk78tSgl4Cpf65tJRVQnGEGzD/0SJ+wXeBPMr4Y1bu0KO/GAS+/ZuchRStTS09Bg==
-X-Received: by 2002:a05:651c:4ca:b0:32b:75f0:cfaf with SMTP id 38308e7fff4ca-3308e0e51bfmr8000581fa.0.1752756005361;
-        Thu, 17 Jul 2025 05:40:05 -0700 (PDT)
-Received: from localhost.localdomain (88-112-128-43.elisa-laajakaista.fi. [88.112.128.43])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-32fab8ed701sm24624871fa.90.2025.07.17.05.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 05:40:04 -0700 (PDT)
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Hans Verkuil <hverkuil@kernel.org>
-Cc: linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH 2/2] media: i2c: Add OmniVision OV6211 image sensor driver
-Date: Thu, 17 Jul 2025 15:40:01 +0300
-Message-ID: <20250717124001.108486-3-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250717124001.108486-1-vladimir.zapolskiy@linaro.org>
-References: <20250717124001.108486-1-vladimir.zapolskiy@linaro.org>
+        d=1e100.net; s=20230601; t=1752756166; x=1753360966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dfoA6CywfL7tG4Hi/bgag6f/cRVej422YcCYw2Pdqgk=;
+        b=oHLf7j5qR3mmXd17/DxsQBx2+5UcGfEuQ019/u0FfDB02QrNcooU6X47b2ozWtDBHe
+         1ROcFsWlXoo3p3HJP2yUz9ZWUxUEInwIyY15enlPeEMBYaEGSyPwKpb4pTw8AJBTnd6G
+         6E8wXdq2flMQBIvHToyln3gMbSaHjVW2u8l7TSkTG9wQaIm2xp+FxslMjTcbDjEKJzxL
+         NNppxmqXRAgmxJYyg0WKgQc6OOkyUL8WWUkcGaVWebCM4D3naFK4LKttUixbshi3wyzL
+         EdaPL+SxhLWTKWffjNYPt+oAvTLanl3Nfq4c2b4Vm/lK1FPjcH1tWHgu0DBBQ1ZxdPXv
+         +OKg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0MYnb/KpTC3Ih7It/OucZB8lQVT99Kjq/kc5M5SUUJvHSoxoVZk6mGdixGzbgtiYDfCjooZ/pox2gnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPyi7PebuypVg2PX5LG6XG96ERWVJbCA/74nQ1Dgq4ezMY7rd8
+	4ed4qnL8fVijomFarQCb/lQ5cpuEG6MF1WlLb33jaE90MEN4gr87TmMjbHjyiNhGhl0=
+X-Gm-Gg: ASbGncs1yxOZjeg9ulQrxPNbdVJdtiQ9/Wzwqp5xXDxAO04GDlbD8M2iT4tgB0PzPar
+	Mz71Sn5W/GqvVc5ZztMzwJmvkYFPsdLtBQhABAr71JDSS0KCR6AHzLlsKus02SgQWbBUP2hSVgU
+	ok/B+vMfG23OhbI5n6TtIgGKUs59LUH6YRQitUNe2IAPJMoxtjZlSnenf5zM+xLh0MYyI/bhppI
+	51rI6MBC9AGmymyg2OAEMu944odMoH/slqVVY1TiCyn/8E0KIt3GvAgg+O+f2nk9J90s1yXqfoi
+	SwpcYIwxAVmFVm5MnVklUf2sOVK7s7P+eXIqGq4+GUd6LWEbqe3vp0FLJr8b7nuYYfNuzk+3145
+	n80txWaoRjuHSSVakGi12UGx6KvbsvUF8Jd41V2O3xB4B9KwdI6fF97bRsPlys2ob
+X-Google-Smtp-Source: AGHT+IFAl89+Tn6OBsv93yBwtKsVuwUbefA6Wy0uaJhgwTaR9IGAJphqoInS9YufOHvjO9qfvAbX5Q==
+X-Received: by 2002:a05:6000:4006:b0:3b6:d0d:79c1 with SMTP id ffacd0b85a97d-3b6139d3907mr2789762f8f.10.1752756165663;
+        Thu, 17 Jul 2025 05:42:45 -0700 (PDT)
+Received: from [192.168.0.34] (188-141-3-146.dynamic.upc.ie. [188.141.3.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e1e332sm20788187f8f.79.2025.07.17.05.42.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 05:42:45 -0700 (PDT)
+Message-ID: <6d43915b-756f-4ab3-accf-e0a5422db479@linaro.org>
+Date: Thu, 17 Jul 2025 13:42:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] media: qcom: camss: Add support for TPG common
+To: Wenmeng Liu <quic_wenmliu@quicinc.com>, Robert Foss <rfoss@kernel.org>,
+ Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+References: <20250717-lemans_tpg-v2-0-a2538659349c@quicinc.com>
+ <20250717-lemans_tpg-v2-1-a2538659349c@quicinc.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20250717-lemans_tpg-v2-1-a2538659349c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-OmniVision OV6211 is a monochrome image sensor, which produces frames in
-8/10-bit raw output format and supports 400x400, 200x200 and 100x100
-output image resolution modes.
+On 17/07/2025 04:20, Wenmeng Liu wrote:
+> Add support for TPG common, unlike CSID TPG, this TPG can
+> be seen as a combination of CSIPHY and sensor.
+> 
+> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
+> ---
+>   drivers/media/platform/qcom/camss/Makefile    |   1 +
+>   drivers/media/platform/qcom/camss/camss-tpg.c | 737 ++++++++++++++++++++++++++
+>   drivers/media/platform/qcom/camss/camss-tpg.h | 130 +++++
+>   drivers/media/platform/qcom/camss/camss.h     |   5 +
+>   4 files changed, 873 insertions(+)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/Makefile b/drivers/media/platform/qcom/camss/Makefile
+> index 76845a456c459538b8e9f782dd58e3b59aff3ef1..e4cf3033b8798cf0ffeff85409ae4ed3559879c1 100644
+> --- a/drivers/media/platform/qcom/camss/Makefile
+> +++ b/drivers/media/platform/qcom/camss/Makefile
+> @@ -24,5 +24,6 @@ qcom-camss-objs += \
+>   		camss-vfe.o \
+>   		camss-video.o \
+>   		camss-format.o \
+> +		camss-tpg.o \
+>   
+>   obj-$(CONFIG_VIDEO_QCOM_CAMSS) += qcom-camss.o
+> diff --git a/drivers/media/platform/qcom/camss/camss-tpg.c b/drivers/media/platform/qcom/camss/camss-tpg.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3ef5b6dcdf2f7e8bbe442667d0fdf64ee30e2923
+> --- /dev/null
+> +++ b/drivers/media/platform/qcom/camss/camss-tpg.c
+> @@ -0,0 +1,737 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * camss-tpg.c
+> + *
+> + * Qualcomm MSM Camera Subsystem - TPG Module
+> + *
+> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <media/media-entity.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#include "camss-tpg.h"
+> +#include "camss.h"
+> +
+> +const char * const testgen_payload_modes[] = {
+> +	"Disabled",
+> +	"Incrementing",
+> +	"Alternating 0x55/0xAA",
+> +	NULL,
+> +	NULL,
+> +	"Pseudo-random Data",
+> +	"User Specified",
+> +	NULL,
+> +	NULL,
+> +	"Color bars",
+> +	NULL
+> +};
 
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+This looks a bit strange.
+
+What at the NULLs about ?
+
+> +
+> +static const struct tpg_format_info formats_gen1[] = {
+> +	{
+> +		MEDIA_BUS_FMT_SBGGR8_1X8,
+> +		DATA_TYPE_RAW_8BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGBRG8_1X8,
+> +		DATA_TYPE_RAW_8BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGRBG8_1X8,
+> +		DATA_TYPE_RAW_8BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SRGGB8_1X8,
+> +		DATA_TYPE_RAW_8BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SBGGR10_1X10,
+> +		DATA_TYPE_RAW_10BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGBRG10_1X10,
+> +		DATA_TYPE_RAW_10BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGRBG10_1X10,
+> +		DATA_TYPE_RAW_10BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SRGGB10_1X10,
+> +		DATA_TYPE_RAW_10BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SBGGR12_1X12,
+> +		DATA_TYPE_RAW_12BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGBRG12_1X12,
+> +		DATA_TYPE_RAW_12BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SGRBG12_1X12,
+> +		DATA_TYPE_RAW_12BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_SRGGB12_1X12,
+> +		DATA_TYPE_RAW_12BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_12_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_Y8_1X8,
+> +		DATA_TYPE_RAW_8BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_8_BIT,
+> +	},
+> +	{
+> +		MEDIA_BUS_FMT_Y10_1X10,
+> +		DATA_TYPE_RAW_10BIT,
+> +		ENCODE_FORMAT_UNCOMPRESSED_10_BIT,
+> +	},
+> +};
+> +
+> +const struct tpg_formats tpg_formats_gen1 = {
+> +	.nformats = ARRAY_SIZE(formats_gen1),
+> +	.formats = formats_gen1
+> +};
+> +
+> +const struct tpg_format_info *tpg_get_fmt_entry(const struct tpg_format_info *formats,
+> +						unsigned int nformats,
+> +						u32 code)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < nformats; i++)
+> +		if (code == formats[i].code)
+> +			return &formats[i];
+> +
+> +	WARN(1, "Unknown format\n");
+> +
+> +	return &formats[0];
+> +}
+> +
+> +/*
+> + * tpg_set_clock_rates - Calculate and set clock rates on tpg module
+> + * @tpg: tpg device
+> + */
+> +static int tpg_set_clock_rates(struct tpg_device *tpg)
+> +{
+> +	struct device *dev = tpg->camss->dev;
+> +	int i, j;
+> +	int ret;
+> +
+> +	for (i = 0; i < tpg->nclocks; i++) {
+> +		struct camss_clock *clock = &tpg->clock[i];
+> +		u64 min_rate = 0;
+> +		long round_rate;
+> +
+> +		camss_add_clock_margin(&min_rate);
+
+Which clock is it we are setting here i.e. do we really need to care 
+about the rate at all ?
+
+> +
+> +		for (j = 0; j < clock->nfreqs; j++)
+> +			if (min_rate < clock->freq[j])
+> +				break;
+
+multi-line should be bracketed
+
+for () {
+     if(x)
+         break;
+}
+
+> +
+> +		if (j == clock->nfreqs) {
+> +			dev_err(dev,
+> +				"clock is too high for TPG\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		/* if clock is not available */
+> +		/* set highest possible tpg clock rate */
+> +		if (min_rate == 0)
+> +			j = clock->nfreqs - 1;
+
+This makes sense for a CSIPHY where the pixel rate changes but, does it 
+make sense for the TPG ?
+
+> +
+> +		round_rate = clk_round_rate(clock->clk, clock->freq[j]);
+> +		if (round_rate < 0) {
+> +			dev_err(dev, "clk round rate failed: %ld\n",
+> +				round_rate);
+> +			return -EINVAL;
+> +		}
+> +
+> +		tpg->timer_clk_rate = round_rate;
+> +
+> +		ret = clk_set_rate(clock->clk, tpg->timer_clk_rate);
+> +		if (ret < 0) {
+> +			dev_err(dev, "clk set rate failed: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_set_power - Power on/off tpg module
+> + * @sd: tpg V4L2 subdevice
+> + * @on: Requested power state
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +static int tpg_set_power(struct v4l2_subdev *sd, int on)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	struct device *dev = tpg->camss->dev;
+> +
+> +	if (on) {
+> +		int ret;
+> +
+> +		ret = pm_runtime_resume_and_get(dev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = tpg_set_clock_rates(tpg);
+> +		if (ret < 0) {
+> +			pm_runtime_put_sync(dev);
+> +			return ret;
+> +		}
+> +
+> +		ret = camss_enable_clocks(tpg->nclocks, tpg->clock, dev);
+> +		if (ret < 0) {
+> +			pm_runtime_put_sync(dev);
+> +			return ret;
+> +		}
+> +
+> +		enable_irq(tpg->irq);
+
+Do we need an IRQ for the TPG ?
+
+What's the use-case for it ? I'm not necessarily asking to drop this 
+just to understand if it is really useful.
+
+> +
+> +		tpg->res->hw_ops->reset(tpg);
+> +
+> +		tpg->res->hw_ops->hw_version(tpg);
+> +	} else {
+> +		disable_irq(tpg->irq);
+> +
+> +		camss_disable_clocks(tpg->nclocks, tpg->clock);
+> +
+> +		pm_runtime_put_sync(dev);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_set_stream - Enable/disable streaming on tpg module
+> + * @sd: tpg V4L2 subdevice
+> + * @enable: Requested streaming state
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +static int tpg_set_stream(struct v4l2_subdev *sd, int enable)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	int ret = 0;
+> +
+> +	if (enable) {
+> +		ret = v4l2_ctrl_handler_setup(&tpg->ctrls);
+> +		if (ret < 0) {
+> +			dev_err(tpg->camss->dev,
+> +				"could not sync v4l2 controls: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	tpg->res->hw_ops->configure_stream(tpg, enable);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * __tpg_get_format - Get pointer to format structure
+> + * @tpg: tpg device
+> + * @cfg: V4L2 subdev pad configuration
+> + * @pad: pad from which format is requested
+> + * @which: TRY or ACTIVE format
+> + *
+> + * Return pointer to TRY or ACTIVE format structure
+> + */
+> +static struct v4l2_mbus_framefmt *
+> +__tpg_get_format(struct tpg_device *tpg,
+> +		 struct v4l2_subdev_state *sd_state,
+> +		 unsigned int pad,
+> +		 enum v4l2_subdev_format_whence which)
+> +{
+> +	if (which == V4L2_SUBDEV_FORMAT_TRY)
+> +		return v4l2_subdev_state_get_format(sd_state,
+> +						    pad);
+> +
+> +	return &tpg->fmt[pad];
+> +}
+> +
+> +/*
+> + * tpg_try_format - Handle try format by pad subdev method
+> + * @tpg: tpg device
+> + * @cfg: V4L2 subdev pad configuration
+> + * @pad: pad on which format is requested
+> + * @fmt: pointer to v4l2 format structure
+> + * @which: wanted subdev format
+> + */
+> +static void tpg_try_format(struct tpg_device *tpg,
+> +			   struct v4l2_subdev_state *sd_state,
+> +			   unsigned int pad,
+> +			   struct v4l2_mbus_framefmt *fmt,
+> +			   enum v4l2_subdev_format_whence which)
+> +{
+> +	unsigned int i;
+> +
+> +	switch (pad) {
+> +	case MSM_TPG_PAD_SINK:
+> +		/* Test generator is enabled, set format on source */
+> +		/* pad to allow test generator usage */
+> +
+> +		for (i = 0; i < tpg->res->formats->nformats; i++)
+> +			if (tpg->res->formats->formats[i].code == fmt->code)
+> +				break;
+> +
+> +		/* If not found, use SBGGR8 as default */
+> +		if (i >= tpg->res->formats->nformats)
+> +			fmt->code = MEDIA_BUS_FMT_SBGGR8_1X8;
+
+If not found why set a default at all ?
+
+> +
+> +		fmt->width = clamp_t(u32, fmt->width, 1, 8191);
+> +		fmt->height = clamp_t(u32, fmt->height, 1, 8191);
+> +
+> +		fmt->field = V4L2_FIELD_NONE;
+> +		fmt->colorspace = V4L2_COLORSPACE_SRGB;
+> +
+> +		break;
+> +	case MSM_TPG_PAD_SRC:
+> +		/* Set and return a format same as sink pad */
+> +
+> +		*fmt = *__tpg_get_format(tpg, sd_state,
+> +					 MSM_TPG_PAD_SINK,
+> +					 which);
+> +
+> +		break;
+> +	}
+> +}
+> +
+> +/*
+> + * tpg_enum_mbus_code - Handle format enumeration
+> + * @sd: tpg V4L2 subdevice
+> + * @cfg: V4L2 subdev pad configuration
+> + * @code: pointer to v4l2_subdev_mbus_code_enum structure
+> + * return -EINVAL or zero on success
+> + */
+> +static int tpg_enum_mbus_code(struct v4l2_subdev *sd,
+> +			      struct v4l2_subdev_state *sd_state,
+> +			      struct v4l2_subdev_mbus_code_enum *code)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	struct v4l2_mbus_framefmt *format;
+> +
+> +	if (code->pad == MSM_TPG_PAD_SINK) {
+> +		if (code->index >= tpg->res->formats->nformats)
+> +			return -EINVAL;
+> +
+> +		code->code = tpg->res->formats->formats[code->index].code;
+> +	} else {
+> +		if (code->index > 0)
+> +			return -EINVAL;
+> +
+> +		format = __tpg_get_format(tpg, sd_state,
+> +					  MSM_TPG_PAD_SINK,
+> +					  code->which);
+> +
+> +		code->code = format->code;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_enum_frame_size - Handle frame size enumeration
+> + * @sd: tpg V4L2 subdevice
+> + * @cfg: V4L2 subdev pad configuration
+> + * @fse: pointer to v4l2_subdev_frame_size_enum structure
+> + * return -EINVAL or zero on success
+> + */
+> +static int tpg_enum_frame_size(struct v4l2_subdev *sd,
+> +			       struct v4l2_subdev_state *sd_state,
+> +			       struct v4l2_subdev_frame_size_enum *fse)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	struct v4l2_mbus_framefmt format;
+> +
+> +	if (fse->index != 0)
+> +		return -EINVAL;
+
+What is this test about and how does the index != 0 come to pass ?
+
+> +
+> +	format.code = fse->code;
+> +	format.width = 1;
+> +	format.height = 1;
+> +	tpg_try_format(tpg, sd_state, fse->pad, &format, fse->which);
+> +	fse->min_width = format.width;
+> +	fse->min_height = format.height;
+> +
+> +	if (format.code != fse->code)
+> +		return -EINVAL;
+
+Is EINVAL the right return value here ?
+
+> +
+> +	format.code = fse->code;
+> +	format.width = -1;
+> +	format.height = -1;
+> +	tpg_try_format(tpg, sd_state, fse->pad, &format, fse->which);
+> +	fse->max_width = format.width;
+> +	fse->max_height = format.height;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_get_format - Handle get format by pads subdev method
+> + * @sd: tpg V4L2 subdevice
+> + * @cfg: V4L2 subdev pad configuration
+> + * @fmt: pointer to v4l2 subdev format structure
+> + *
+> + * Return -EINVAL or zero on success
+> + */
+> +static int tpg_get_format(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *sd_state,
+> +			  struct v4l2_subdev_format *fmt)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	struct v4l2_mbus_framefmt *format;
+> +
+> +	format = __tpg_get_format(tpg, sd_state, fmt->pad, fmt->which);
+> +	if (!format)
+> +		return -EINVAL;
+> +
+> +	fmt->format = *format;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_set_format - Handle set format by pads subdev method
+> + * @sd: tpg V4L2 subdevice
+> + * @cfg: V4L2 subdev pad configuration
+> + * @fmt: pointer to v4l2 subdev format structure
+> + *
+> + * Return -EINVAL or zero on success
+> + */
+> +static int tpg_set_format(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_state *sd_state,
+> +			  struct v4l2_subdev_format *fmt)
+> +{
+> +	struct tpg_device *tpg = v4l2_get_subdevdata(sd);
+> +	struct v4l2_mbus_framefmt *format;
+> +
+> +	format = __tpg_get_format(tpg, sd_state, fmt->pad, fmt->which);
+> +	if (!format)
+> +		return -EINVAL;
+> +
+> +	tpg_try_format(tpg, sd_state, fmt->pad, &fmt->format,
+> +		       fmt->which);
+> +	*format = fmt->format;
+> +
+> +	if (fmt->pad == MSM_TPG_PAD_SINK) {
+> +		format = __tpg_get_format(tpg, sd_state,
+> +					  MSM_TPG_PAD_SRC,
+> +					  fmt->which);
+> +
+> +		*format = fmt->format;
+> +		tpg_try_format(tpg, sd_state, MSM_TPG_PAD_SRC,
+> +			       format,
+> +			       fmt->which);
+> +	}
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_init_formats - Initialize formats on all pads
+> + * @sd: tpg V4L2 subdevice
+> + * @fh: V4L2 subdev file handle
+> + *
+> + * Initialize all pad formats with default values.
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +static int tpg_init_formats(struct v4l2_subdev *sd,
+> +			    struct v4l2_subdev_fh *fh)
+> +{
+> +	struct v4l2_subdev_format format = {
+> +		.pad = MSM_TPG_PAD_SINK,
+> +		.which = fh ? V4L2_SUBDEV_FORMAT_TRY :
+> +			      V4L2_SUBDEV_FORMAT_ACTIVE,
+> +		.format = {
+> +			.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+> +			.width = 1920,
+> +			.height = 1080
+> +		}
+> +	};
+> +
+> +	return tpg_set_format(sd, fh ? fh->state : NULL, &format);
+> +}
+> +
+> +/*
+> + * tpg_set_test_pattern - Set test generator's pattern mode
+> + * @tpg: TPG device
+> + * @value: desired test pattern mode
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +static int tpg_set_test_pattern(struct tpg_device *tpg, s32 value)
+> +{
+> +	return tpg->res->hw_ops->configure_testgen_pattern(tpg, value);
+> +}
+> +
+> +/*
+> + * tpg_s_ctrl - Handle set control subdev method
+> + * @ctrl: pointer to v4l2 control structure
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +static int tpg_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct tpg_device *tpg = container_of(ctrl->handler,
+> +					      struct tpg_device, ctrls);
+> +	int ret = -EINVAL;
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_TEST_PATTERN:
+> +		ret = tpg_set_test_pattern(tpg, ctrl->val);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops tpg_ctrl_ops = {
+> +	.s_ctrl = tpg_s_ctrl,
+> +};
+> +
+> +/*
+> + * msm_tpg_subdev_init - Initialize tpg device structure and resources
+> + * @tpg: tpg device
+> + * @res: tpg module resources table
+> + * @id: tpg module id
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +int msm_tpg_subdev_init(struct camss *camss,
+> +			struct tpg_device *tpg,
+> +			const struct camss_subdev_resources *res, u8 id)
+> +{
+> +	struct device *dev = camss->dev;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	int i, j;
+> +	int ret;
+
+Reverse Christmas tree your declarations please.
+
+> +
+> +	tpg->camss = camss;
+> +	tpg->id = id;
+> +	tpg->res = &res->tpg;
+> +	tpg->res->hw_ops->subdev_init(tpg);
+> +
+> +	/* Memory */
+> +	tpg->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
+> +	if (IS_ERR(tpg->base))
+> +		return PTR_ERR(tpg->base);
+> +
+> +	/* Interrupt */
+> +	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	tpg->irq = ret;
+> +	snprintf(tpg->irq_name, sizeof(tpg->irq_name), "%s_%s%d",
+> +		 dev_name(dev), MSM_TPG_NAME, tpg->id);
+> +
+> +	ret = devm_request_irq(dev, tpg->irq, tpg->res->hw_ops->isr,
+> +			       IRQF_TRIGGER_RISING | IRQF_NO_AUTOEN,
+> +			       tpg->irq_name, tpg);
+> +	if (ret < 0) {
+> +		dev_err(dev, "request_irq failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Clocks */
+> +	tpg->nclocks = 0;
+> +	while (res->clock[tpg->nclocks])
+> +		tpg->nclocks++;
+> +
+> +	tpg->clock = devm_kcalloc(dev,
+> +				  tpg->nclocks, sizeof(*tpg->clock),
+> +				  GFP_KERNEL);
+> +	if (!tpg->clock)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < tpg->nclocks; i++) {
+> +		struct camss_clock *clock = &tpg->clock[i];
+> +
+> +		clock->clk = devm_clk_get(dev, res->clock[i]);
+> +		if (IS_ERR(clock->clk))
+> +			return PTR_ERR(clock->clk);
+> +
+> +		clock->name = res->clock[i];
+> +
+> +		clock->nfreqs = 0;
+> +		while (res->clock_rate[i][clock->nfreqs])
+> +			clock->nfreqs++;
+> +
+> +		if (!clock->nfreqs) {
+> +			clock->freq = NULL;
+> +			continue;
+> +		}
+> +
+> +		clock->freq = devm_kcalloc(dev,
+> +					   clock->nfreqs,
+> +					   sizeof(*clock->freq),
+> +					   GFP_KERNEL);
+> +		if (!clock->freq)
+> +			return -ENOMEM;
+> +
+> +		for (j = 0; j < clock->nfreqs; j++)
+> +			clock->freq[j] = res->clock_rate[i][j];
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * tpg_link_setup - Setup tpg connections
+> + * @entity: Pointer to media entity structure
+> + * @local: Pointer to local pad
+> + * @remote: Pointer to remote pad
+> + * @flags: Link flags
+> + *
+> + * Rreturn 0 on success
+> + */
+> +static int tpg_link_setup(struct media_entity *entity,
+> +			  const struct media_pad *local,
+> +			  const struct media_pad *remote, u32 flags)
+> +{
+> +	if (flags & MEDIA_LNK_FL_ENABLED)
+> +		if (media_pad_remote_pad_first(local))
+> +			return -EBUSY;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_core_ops tpg_core_ops = {
+> +	.s_power = tpg_set_power,
+> +};
+> +
+> +static const struct v4l2_subdev_video_ops tpg_video_ops = {
+> +	.s_stream = tpg_set_stream,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops tpg_pad_ops = {
+> +	.enum_mbus_code = tpg_enum_mbus_code,
+> +	.enum_frame_size = tpg_enum_frame_size,
+> +	.get_fmt = tpg_get_format,
+> +	.set_fmt = tpg_set_format,
+> +};
+> +
+> +static const struct v4l2_subdev_ops tpg_v4l2_ops = {
+> +	.core = &tpg_core_ops,
+> +	.video = &tpg_video_ops,
+> +	.pad = &tpg_pad_ops,
+> +};
+> +
+> +static const struct v4l2_subdev_internal_ops tpg_v4l2_internal_ops = {
+> +	.open = tpg_init_formats,
+> +};
+> +
+> +static const struct media_entity_operations tpg_media_ops = {
+> +	.link_setup = tpg_link_setup,
+> +	.link_validate = v4l2_subdev_link_validate,
+> +};
+> +
+> +/*
+> + * msm_tpg_register_entity - Register subdev node for tpg module
+> + * @tpg: tpg device
+> + * @v4l2_dev: V4L2 device
+> + *
+> + * Return 0 on success or a negative error code otherwise
+> + */
+> +int msm_tpg_register_entity(struct tpg_device *tpg,
+> +			    struct v4l2_device *v4l2_dev)
+> +{
+> +	struct v4l2_subdev *sd = &tpg->subdev;
+> +	struct media_pad *pads = tpg->pads;
+> +	struct device *dev = tpg->camss->dev;
+> +	int ret;
+> +
+> +	v4l2_subdev_init(sd, &tpg_v4l2_ops);
+> +	sd->internal_ops = &tpg_v4l2_internal_ops;
+> +	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> +		     V4L2_SUBDEV_FL_HAS_EVENTS;
+> +	snprintf(sd->name, ARRAY_SIZE(sd->name), "%s%d",
+> +		 MSM_TPG_NAME, tpg->id);
+> +	v4l2_set_subdevdata(sd, tpg);
+> +
+> +	ret = v4l2_ctrl_handler_init(&tpg->ctrls, 1);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to init ctrl handler: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	tpg->testgen_mode = v4l2_ctrl_new_std_menu_items(&tpg->ctrls,
+> +							 &tpg_ctrl_ops, V4L2_CID_TEST_PATTERN,
+> +							 tpg->testgen.nmodes, 0, 0,
+> +							 tpg->testgen.modes);
+> +
+> +	if (tpg->ctrls.error) {
+> +		dev_err(dev, "Failed to init ctrl: %d\n", tpg->ctrls.error);
+> +		ret = tpg->ctrls.error;
+> +		goto free_ctrl;
+> +	}
+> +
+> +	tpg->subdev.ctrl_handler = &tpg->ctrls;
+> +
+> +	ret = tpg_init_formats(sd, NULL);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to init format: %d\n", ret);
+> +		goto free_ctrl;
+> +	}
+> +
+> +	pads[MSM_TPG_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+> +	pads[MSM_TPG_PAD_SRC].flags = MEDIA_PAD_FL_SOURCE;
+> +
+> +	sd->entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
+> +	sd->entity.ops = &tpg_media_ops;
+> +	ret = media_entity_pads_init(&sd->entity, MSM_TPG_PADS_NUM, pads);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to init media entity: %d\n", ret);
+> +		goto free_ctrl;
+> +	}
+> +
+> +	ret = v4l2_device_register_subdev(v4l2_dev, sd);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to register subdev: %d\n", ret);
+> +		media_entity_cleanup(&sd->entity);
+> +		goto free_ctrl;
+> +	}
+> +
+> +	return 0;
+> +
+> +free_ctrl:
+> +	v4l2_ctrl_handler_free(&tpg->ctrls);
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * msm_tpg_unregister_entity - Unregister tpg module subdev node
+> + * @tpg: tpg device
+> + */
+> +void msm_tpg_unregister_entity(struct tpg_device *tpg)
+> +{
+> +	v4l2_device_unregister_subdev(&tpg->subdev);
+> +	media_entity_cleanup(&tpg->subdev.entity);
+> +	v4l2_ctrl_handler_free(&tpg->ctrls);
+> +}
+> diff --git a/drivers/media/platform/qcom/camss/camss-tpg.h b/drivers/media/platform/qcom/camss/camss-tpg.h
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..63fdb090481cf1297890e3cd50191f4bc103fc95
+> --- /dev/null
+> +++ b/drivers/media/platform/qcom/camss/camss-tpg.h
+> @@ -0,0 +1,130 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * camss-tpg.h
+> + *
+> + * Qualcomm MSM Camera Subsystem - TPG Module
+> + *
+> + * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#ifndef QC_MSM_CAMSS_TPG_H
+> +#define QC_MSM_CAMSS_TPG_H
+> +
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <media/media-entity.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-mediabus.h>
+> +#include <media/v4l2-subdev.h>
+> +
+> +#define MSM_TPG_PAD_SINK 0
+> +#define MSM_TPG_PAD_SRC 1
+> +#define MSM_TPG_PADS_NUM 2
+> +
+> +#define DATA_TYPE_RAW_8BIT		0x2a
+> +#define DATA_TYPE_RAW_10BIT		0x2b
+> +#define DATA_TYPE_RAW_12BIT		0x2c
+> +
+> +#define ENCODE_FORMAT_UNCOMPRESSED_8_BIT	0x1
+> +#define ENCODE_FORMAT_UNCOMPRESSED_10_BIT	0x2
+> +#define ENCODE_FORMAT_UNCOMPRESSED_12_BIT	0x3
+> +#define ENCODE_FORMAT_UNCOMPRESSED_14_BIT	0x4
+> +#define ENCODE_FORMAT_UNCOMPRESSED_16_BIT	0x5
+> +#define ENCODE_FORMAT_UNCOMPRESSED_20_BIT	0x6
+> +#define ENCODE_FORMAT_UNCOMPRESSED_24_BIT	0x7
+> +
+> +#define MSM_TPG_NAME "msm_tpg"
+> +
+> +enum tpg_testgen_mode {
+> +	TPG_PAYLOAD_MODE_DISABLED = 0,
+> +	TPG_PAYLOAD_MODE_INCREMENTING = 1,
+> +	TPG_PAYLOAD_MODE_ALTERNATING_55_AA = 2,
+> +	TPG_PAYLOAD_MODE_RANDOM = 5,
+> +	TPG_PAYLOAD_MODE_USER_SPECIFIED = 6,
+> +	TPG_PAYLOAD_MODE_COLOR_BARS = 9,
+> +	TPG_PAYLOAD_MODE_NUM_SUPPORTED_GEN1 = 9, /* excluding disabled */
+> +};
+> +
+> +struct tpg_testgen_config {
+> +	enum tpg_testgen_mode mode;
+> +	const char * const*modes;
+> +	u8 nmodes;
+> +};
+> +
+> +struct tpg_format_info {
+> +	u32 code;
+> +	u8 data_type;
+> +	u8 encode_format;
+> +};
+> +
+> +struct tpg_formats {
+> +	unsigned int nformats;
+> +	const struct tpg_format_info *formats;
+> +};
+> +
+> +struct tpg_device;
+> +
+> +struct tpg_hw_ops {
+> +	void (*configure_stream)(struct tpg_device *tpg, u8 enable);
+> +
+> +	int (*configure_testgen_pattern)(struct tpg_device *tpg, s32 val);
+> +
+> +	u32 (*hw_version)(struct tpg_device *tpg);
+> +
+> +	irqreturn_t (*isr)(int irq, void *dev);
+> +
+> +	int (*reset)(struct tpg_device *tpg);
+> +
+> +	void (*subdev_init)(struct tpg_device *tpg);
+> +};
+> +
+> +struct tpg_subdev_resources {
+> +	u8 lane_cnt;
+> +	u8 vc_cnt;
+> +	const struct tpg_formats *formats;
+> +	const struct tpg_hw_ops *hw_ops;
+> +};
+> +
+> +struct tpg_device {
+> +	struct camss *camss;
+> +	u8 id;
+> +	struct v4l2_subdev subdev;
+> +	struct media_pad pads[MSM_TPG_PADS_NUM];
+> +	void __iomem *base;
+> +	void __iomem *base_clk_mux;
+
+clk_mux ?
+
+Can you please go through this list and remove anything that isn't being 
+used, don't just copy/paste existing code/structures.
+
+
+> +	u32 irq;
+> +	char irq_name[30];
+> +	struct camss_clock *clock;
+> +	int nclocks;
+> +	u32 timer_clk_rate;
+> +	struct tpg_testgen_config testgen;
+> +	struct v4l2_mbus_framefmt fmt[MSM_TPG_PADS_NUM];
+> +	struct v4l2_ctrl_handler ctrls;
+> +	struct v4l2_ctrl *testgen_mode;
+> +	const struct tpg_subdev_resources *res;
+> +	const struct tpg_format *formats;
+> +	unsigned int nformats;
+> +};
+> +
+> +struct camss_subdev_resources;
+> +
+> +const struct tpg_format_info *tpg_get_fmt_entry(const struct tpg_format_info *formats,
+> +						unsigned int nformats,
+> +						u32 code);
+> +
+> +int msm_tpg_subdev_init(struct camss *camss,
+> +			struct tpg_device *tpg,
+> +			const struct camss_subdev_resources *res, u8 id);
+> +
+> +int msm_tpg_register_entity(struct tpg_device *tpg,
+> +			    struct v4l2_device *v4l2_dev);
+> +
+> +void msm_tpg_unregister_entity(struct tpg_device *tpg);
+> +
+> +extern const char * const testgen_payload_modes[];
+> +
+> +extern const struct tpg_formats tpg_formats_gen1;
+> +
+> +extern const struct tpg_hw_ops tpg_ops_gen1;
+> +
+> +#endif /* QC_MSM_CAMSS_TPG_H */
+> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/platform/qcom/camss/camss.h
+> index b5600a8b2c4b3972633d42938feec9265b44dec5..99392e3bada80a8736b2c317308e510e5a7c66ea 100644
+> --- a/drivers/media/platform/qcom/camss/camss.h
+> +++ b/drivers/media/platform/qcom/camss/camss.h
+> @@ -21,6 +21,7 @@
+>   #include "camss-csid.h"
+>   #include "camss-csiphy.h"
+>   #include "camss-ispif.h"
+> +#include "camss-tpg.h"
+>   #include "camss-vfe.h"
+>   #include "camss-format.h"
+>   
+> @@ -51,6 +52,7 @@ struct camss_subdev_resources {
+>   	char *interrupt[CAMSS_RES_MAX];
+>   	union {
+>   		struct csiphy_subdev_resources csiphy;
+> +		struct tpg_subdev_resources tpg;
+>   		struct csid_subdev_resources csid;
+>   		struct vfe_subdev_resources vfe;
+>   	};
+> @@ -100,6 +102,7 @@ struct camss_resources {
+>   	enum camss_version version;
+>   	const char *pd_name;
+>   	const struct camss_subdev_resources *csiphy_res;
+> +	const struct camss_subdev_resources *tpg_res;
+>   	const struct camss_subdev_resources *csid_res;
+>   	const struct camss_subdev_resources *ispif_res;
+>   	const struct camss_subdev_resources *vfe_res;
+> @@ -107,6 +110,7 @@ struct camss_resources {
+>   	const struct resources_icc *icc_res;
+>   	const unsigned int icc_path_num;
+>   	const unsigned int csiphy_num;
+> +	const unsigned int tpg_num;
+>   	const unsigned int csid_num;
+>   	const unsigned int vfe_num;
+>   	int (*link_entities)(struct camss *camss);
+> @@ -118,6 +122,7 @@ struct camss {
+>   	struct media_device media_dev;
+>   	struct device *dev;
+>   	struct csiphy_device *csiphy;
+> +	struct tpg_device *tpg;
+>   	struct csid_device *csid;
+>   	struct ispif_device *ispif;
+>   	struct vfe_device *vfe;
+> 
 ---
- MAINTAINERS                |   8 +
- drivers/media/i2c/Kconfig  |   9 +
- drivers/media/i2c/Makefile |   1 +
- drivers/media/i2c/ov6211.c | 877 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 895 insertions(+)
- create mode 100644 drivers/media/i2c/ov6211.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1ef99240a57e..364914ca2d45 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18433,6 +18433,14 @@ S:	Maintained
- T:	git git://linuxtv.org/media.git
- F:	drivers/media/i2c/ov5695.c
- 
-+OMNIVISION OV6211 SENSOR DRIVER
-+M:	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+T:	git git://linuxtv.org/media_tree.git
-+F:	Documentation/devicetree/bindings/media/i2c/ovti,ov6211.yaml
-+F:	drivers/media/i2c/ov6211.c
-+
- OMNIVISION OV64A40 SENSOR DRIVER
- M:	Jacopo Mondi <jacopo.mondi@ideasonboard.com>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 6237fe804a5c..2c54753e1b25 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -542,6 +542,15 @@ config VIDEO_OV5695
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ov5695.
- 
-+config VIDEO_OV6211
-+	tristate "OmniVision OV6211 sensor support"
-+	help
-+	  This is a Video4Linux2 sensor driver for the OmniVision
-+	  OV6211 camera.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called ov6211.
-+
- config VIDEO_OV64A40
- 	tristate "OmniVision OV64A40 sensor support"
- 	select V4L2_CCI_I2C
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 5873d29433ee..03814fc8e2f7 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -103,6 +103,7 @@ obj-$(CONFIG_VIDEO_OV5670) += ov5670.o
- obj-$(CONFIG_VIDEO_OV5675) += ov5675.o
- obj-$(CONFIG_VIDEO_OV5693) += ov5693.o
- obj-$(CONFIG_VIDEO_OV5695) += ov5695.o
-+obj-$(CONFIG_VIDEO_OV6211) += ov6211.o
- obj-$(CONFIG_VIDEO_OV64A40) += ov64a40.o
- obj-$(CONFIG_VIDEO_OV6650) += ov6650.o
- obj-$(CONFIG_VIDEO_OV7251) += ov7251.o
-diff --git a/drivers/media/i2c/ov6211.c b/drivers/media/i2c/ov6211.c
-new file mode 100644
-index 000000000000..f2a9daf40896
---- /dev/null
-+++ b/drivers/media/i2c/ov6211.c
-@@ -0,0 +1,877 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2024-2025 Linaro Ltd
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/unaligned.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+
-+#define OV6211_REG_VALUE_08BIT		1
-+#define OV6211_REG_VALUE_16BIT		2
-+#define OV6211_REG_VALUE_24BIT		3
-+
-+#define OV6211_LINK_FREQ_240MHZ		240000000ULL
-+#define OV6211_MCLK_FREQ_24MHZ		24000000
-+#define OV6211_DATA_LANES		1
-+
-+#define OV6211_REG_CHIP_ID		0x300a
-+#define OV6211_CHIP_ID			0x6710
-+
-+#define OV6211_REG_MODE_SELECT		0x0100
-+#define OV6211_MODE_STANDBY		0x00
-+#define OV6211_MODE_STREAMING		0x01
-+
-+/* Exposure controls from sensor */
-+#define OV6211_REG_EXPOSURE		0x3500
-+#define OV6211_EXPOSURE_MIN		1
-+#define OV6211_EXPOSURE_MAX_MARGIN	4
-+#define OV6211_EXPOSURE_STEP		1
-+#define OV6211_EXPOSURE_DEFAULT		210
-+
-+/* Analogue gain controls from sensor */
-+#define OV6211_REG_ANALOGUE_GAIN	0x350a
-+#define OV6211_ANALOGUE_GAIN_MIN	1
-+#define OV6211_ANALOGUE_GAIN_MAX	0x3ff
-+#define OV6211_ANALOGUE_GAIN_STEP	1
-+#define OV6211_ANALOGUE_GAIN_DEFAULT	0xa0
-+
-+#define to_ov6211(_sd)			container_of(_sd, struct ov6211, sd)
-+
-+struct ov6211_reg {
-+	u16 address;
-+	u8 val;
-+};
-+
-+struct ov6211_reg_list {
-+	const struct ov6211_reg *regs;
-+	u32 num_of_regs;
-+};
-+
-+struct ov6211_mode {
-+	/* Frame width in pixels */
-+	u32 width;
-+
-+	/* Frame height in pixels */
-+	u32 height;
-+
-+	/* Horizontal timining size */
-+	u32 hts;
-+
-+	/* Default vertical timining size */
-+	u32 vts;
-+
-+	/* Sensor register settings for this resolution */
-+	const struct ov6211_reg_list reg_list;
-+};
-+
-+static const s64 link_freq_menu_items[] = {
-+	OV6211_LINK_FREQ_240MHZ,
-+};
-+
-+static const struct ov6211_reg mode_400x400_regs[] = {
-+	{ 0x0103, 0x01 },
-+	{ 0x0100, 0x00 },
-+	{ 0x3005, 0x08 },
-+	{ 0x3013, 0x12 },
-+	{ 0x3014, 0x04 },
-+	{ 0x3016, 0x10 },
-+	{ 0x3017, 0x00 },
-+	{ 0x3018, 0x00 },
-+	{ 0x301a, 0x00 },
-+	{ 0x301b, 0x00 },
-+	{ 0x301c, 0x00 },
-+	{ 0x3037, 0xf0 },
-+	{ 0x3080, 0x01 },
-+	{ 0x3081, 0x00 },
-+	{ 0x3082, 0x01 },
-+	{ 0x3098, 0x04 },
-+	{ 0x3099, 0x28 },
-+	{ 0x309a, 0x06 },
-+	{ 0x309b, 0x04 },
-+	{ 0x309c, 0x00 },
-+	{ 0x309d, 0x00 },
-+	{ 0x309e, 0x01 },
-+	{ 0x309f, 0x00 },
-+	{ 0x30b0, 0x08 },
-+	{ 0x30b1, 0x02 },
-+	{ 0x30b2, 0x00 },
-+	{ 0x30b3, 0x28 },
-+	{ 0x30b4, 0x02 },
-+	{ 0x30b5, 0x00 },
-+	{ 0x3106, 0xd9 },
-+	{ 0x3500, 0x00 },
-+	{ 0x3501, 0x0d },
-+	{ 0x3502, 0x20 },
-+	{ 0x3503, 0x07 },
-+	{ 0x3509, 0x10 },
-+	{ 0x350b, 0xa0 },
-+	{ 0x3600, 0xfc },
-+	{ 0x3620, 0xb7 },
-+	{ 0x3621, 0x05 },
-+	{ 0x3626, 0x31 },
-+	{ 0x3627, 0x40 },
-+	{ 0x3632, 0xa3 },
-+	{ 0x3633, 0x34 },
-+	{ 0x3634, 0x40 },
-+	{ 0x3636, 0x00 },
-+	{ 0x3660, 0x80 },
-+	{ 0x3662, 0x03 },
-+	{ 0x3664, 0xf0 },
-+	{ 0x366a, 0x10 },
-+	{ 0x366b, 0x06 },
-+	{ 0x3680, 0xf4 },
-+	{ 0x3681, 0x50 },
-+	{ 0x3682, 0x00 },
-+	{ 0x3708, 0x20 },
-+	{ 0x3709, 0x40 },
-+	{ 0x370d, 0x03 },
-+	{ 0x373b, 0x02 },
-+	{ 0x373c, 0x08 },
-+	{ 0x3742, 0x00 },
-+	{ 0x3744, 0x16 },
-+	{ 0x3745, 0x08 },
-+	{ 0x3781, 0xfc },
-+	{ 0x3788, 0x00 },
-+	{ 0x3800, 0x00 },
-+	{ 0x3801, 0x04 },
-+	{ 0x3802, 0x00 },
-+	{ 0x3803, 0x04 },
-+	{ 0x3804, 0x01 },
-+	{ 0x3805, 0x9b },
-+	{ 0x3806, 0x01 },
-+	{ 0x3807, 0x9b },
-+	{ 0x3808, 0x01 },
-+	{ 0x3809, 0x90 },
-+	{ 0x380a, 0x01 },
-+	{ 0x380b, 0x90 },
-+	{ 0x380c, 0x05 },
-+	{ 0x380d, 0xf2 },
-+	{ 0x380e, 0x01 },
-+	{ 0x380f, 0xb6 },
-+	{ 0x3810, 0x00 },
-+	{ 0x3811, 0x04 },
-+	{ 0x3812, 0x00 },
-+	{ 0x3813, 0x04 },
-+	{ 0x3814, 0x11 },
-+	{ 0x3815, 0x11 },
-+	{ 0x3820, 0x00 },
-+	{ 0x3821, 0x00 },
-+	{ 0x382b, 0xfa },
-+	{ 0x382f, 0x04 },
-+	{ 0x3832, 0x00 },
-+	{ 0x3833, 0x05 },
-+	{ 0x3834, 0x00 },
-+	{ 0x3835, 0x05 },
-+	{ 0x3882, 0x04 },
-+	{ 0x3883, 0x00 },
-+	{ 0x38a4, 0x10 },
-+	{ 0x38a5, 0x00 },
-+	{ 0x38b1, 0x03 },
-+	{ 0x3b80, 0x00 },
-+	{ 0x3b81, 0xff },
-+	{ 0x3b82, 0x10 },
-+	{ 0x3b83, 0x00 },
-+	{ 0x3b84, 0x08 },
-+	{ 0x3b85, 0x00 },
-+	{ 0x3b86, 0x01 },
-+	{ 0x3b87, 0x00 },
-+	{ 0x3b88, 0x00 },
-+	{ 0x3b89, 0x00 },
-+	{ 0x3b8a, 0x00 },
-+	{ 0x3b8b, 0x05 },
-+	{ 0x3b8c, 0x00 },
-+	{ 0x3b8d, 0x00 },
-+	{ 0x3b8e, 0x01 },
-+	{ 0x3b8f, 0xb2 },
-+	{ 0x3b94, 0x05 },
-+	{ 0x3b95, 0xf2 },
-+	{ 0x3b96, 0xc0 },
-+	{ 0x4004, 0x04 },
-+	{ 0x404e, 0x01 },
-+	{ 0x4801, 0x0f },
-+	{ 0x4806, 0x0f },
-+	{ 0x4837, 0x43 },
-+	{ 0x5a08, 0x00 },
-+	{ 0x5a01, 0x00 },
-+	{ 0x5a03, 0x00 },
-+	{ 0x5a04, 0x10 },
-+	{ 0x5a05, 0xa0 },
-+	{ 0x5a06, 0x0c },
-+	{ 0x5a07, 0x78 },
-+};
-+
-+static const struct ov6211_mode supported_modes[] = {
-+	{
-+		.width = 400,
-+		.height = 400,
-+		.hts = 1522,
-+		.vts = 438,
-+		.reg_list = {
-+			.regs = mode_400x400_regs,
-+			.num_of_regs = ARRAY_SIZE(mode_400x400_regs),
-+		},
-+	},
-+};
-+
-+struct ov6211 {
-+	struct clk *xvclk;
-+	struct gpio_desc *reset_gpio;
-+	struct regulator *avdd;
-+	struct regulator *dovdd;
-+	struct regulator *dvdd;
-+
-+	struct v4l2_subdev sd;
-+	struct media_pad pad;
-+	struct v4l2_ctrl_handler ctrl_handler;
-+
-+	/* V4L2 Controls */
-+	struct v4l2_ctrl *link_freq;
-+	struct v4l2_ctrl *exposure;
-+
-+	/* Current mode */
-+	const struct ov6211_mode *cur_mode;
-+
-+	/* To serialize asynchronous callbacks */
-+	struct mutex mutex;
-+};
-+
-+static int ov6211_read_reg(struct ov6211 *ov6211, u16 reg, u16 len, u32 *val)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	u8 addr_buf[2], data_buf[4] = { 0 };
-+	struct i2c_msg msgs[2];
-+	int ret;
-+
-+	if (len > 4)
-+		return -EINVAL;
-+
-+	put_unaligned_be16(reg, addr_buf);
-+	msgs[0].addr = client->addr;
-+	msgs[0].flags = 0;
-+	msgs[0].len = sizeof(addr_buf);
-+	msgs[0].buf = addr_buf;
-+	msgs[1].addr = client->addr;
-+	msgs[1].flags = I2C_M_RD;
-+	msgs[1].len = len;
-+	msgs[1].buf = &data_buf[4 - len];
-+
-+	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-+	if (ret != ARRAY_SIZE(msgs))
-+		return -EIO;
-+
-+	*val = get_unaligned_be32(data_buf);
-+
-+	return 0;
-+}
-+
-+static int ov6211_write_reg(struct ov6211 *ov6211, u16 reg, u16 len, u32 val)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	u8 buf[6];
-+
-+	if (len > 4)
-+		return -EINVAL;
-+
-+	put_unaligned_be16(reg, buf);
-+	put_unaligned_be32(val << 8 * (4 - len), buf + 2);
-+	if (i2c_master_send(client, buf, len + 2) != len + 2)
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int ov6211_write_reg_list(struct ov6211 *ov6211,
-+				 const struct ov6211_reg_list *r_list)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = 0; i < r_list->num_of_regs; i++) {
-+		ret = ov6211_write_reg(ov6211, r_list->regs[i].address, 1,
-+				       r_list->regs[i].val);
-+		if (ret) {
-+			dev_err_ratelimited(&client->dev,
-+					    "failed to write reg 0x%4.4x. error = %d\n",
-+					    r_list->regs[i].address, ret);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int ov6211_set_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct ov6211 *ov6211 = container_of(ctrl->handler, struct ov6211,
-+					     ctrl_handler);
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	int ret;
-+
-+	/* V4L2 controls values will be applied only when power is already up */
-+	if (!pm_runtime_get_if_in_use(&client->dev))
-+		return 0;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_ANALOGUE_GAIN:
-+		ret = ov6211_write_reg(ov6211, OV6211_REG_ANALOGUE_GAIN,
-+				       OV6211_REG_VALUE_16BIT, ctrl->val);
-+		break;
-+	case V4L2_CID_EXPOSURE:
-+		ret = ov6211_write_reg(ov6211, OV6211_REG_EXPOSURE,
-+				       OV6211_REG_VALUE_24BIT, ctrl->val << 4);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	pm_runtime_put(&client->dev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_ctrl_ops ov6211_ctrl_ops = {
-+	.s_ctrl = ov6211_set_ctrl,
-+};
-+
-+static int ov6211_init_controls(struct ov6211 *ov6211)
-+{
-+	struct v4l2_ctrl_handler *ctrl_hdlr;
-+	s64 exposure_max;
-+	int ret;
-+
-+	ctrl_hdlr = &ov6211->ctrl_handler;
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 3);
-+	if (ret)
-+		return ret;
-+
-+	ctrl_hdlr->lock = &ov6211->mutex;
-+
-+	ov6211->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr, &ov6211_ctrl_ops,
-+					V4L2_CID_LINK_FREQ,
-+					ARRAY_SIZE(link_freq_menu_items) - 1,
-+					0, link_freq_menu_items);
-+	if (ov6211->link_freq)
-+		ov6211->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-+
-+	v4l2_ctrl_new_std(ctrl_hdlr, &ov6211_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-+			  OV6211_ANALOGUE_GAIN_MIN, OV6211_ANALOGUE_GAIN_MAX,
-+			  OV6211_ANALOGUE_GAIN_STEP,
-+			  OV6211_ANALOGUE_GAIN_DEFAULT);
-+
-+	exposure_max = (ov6211->cur_mode->vts - OV6211_EXPOSURE_MAX_MARGIN);
-+	ov6211->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &ov6211_ctrl_ops,
-+					     V4L2_CID_EXPOSURE,
-+					     OV6211_EXPOSURE_MIN, exposure_max,
-+					     OV6211_EXPOSURE_STEP,
-+					     OV6211_EXPOSURE_DEFAULT);
-+
-+	if (ctrl_hdlr->error)
-+		return ctrl_hdlr->error;
-+
-+	ov6211->sd.ctrl_handler = ctrl_hdlr;
-+
-+	return 0;
-+}
-+
-+static void ov6211_update_pad_format(const struct ov6211_mode *mode,
-+				     struct v4l2_mbus_framefmt *fmt)
-+{
-+	fmt->width = mode->width;
-+	fmt->height = mode->height;
-+	fmt->code = MEDIA_BUS_FMT_Y8_1X8;
-+	fmt->field = V4L2_FIELD_NONE;
-+}
-+
-+static int ov6211_start_streaming(struct ov6211 *ov6211)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	const struct ov6211_reg_list *reg_list;
-+	int ret;
-+
-+	reg_list = &ov6211->cur_mode->reg_list;
-+	ret = ov6211_write_reg_list(ov6211, reg_list);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to set mode\n");
-+		return ret;
-+	}
-+
-+	ret = __v4l2_ctrl_handler_setup(ov6211->sd.ctrl_handler);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov6211_write_reg(ov6211, OV6211_REG_MODE_SELECT,
-+			       OV6211_REG_VALUE_08BIT,
-+			       OV6211_MODE_STREAMING);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to start streaming\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ov6211_stop_streaming(struct ov6211 *ov6211)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+
-+	if (ov6211_write_reg(ov6211, OV6211_REG_MODE_SELECT,
-+			     OV6211_REG_VALUE_08BIT, OV6211_MODE_STANDBY))
-+		dev_err(&client->dev, "failed to stop streaming\n");
-+}
-+
-+static int ov6211_set_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+	struct i2c_client *client = v4l2_get_subdevdata(sd);
-+	int ret = 0;
-+
-+	mutex_lock(&ov6211->mutex);
-+
-+	if (enable) {
-+		ret = pm_runtime_resume_and_get(&client->dev);
-+		if (ret) {
-+			mutex_unlock(&ov6211->mutex);
-+			return ret;
-+		}
-+
-+		ret = ov6211_start_streaming(ov6211);
-+		if (!ret) {
-+			mutex_unlock(&ov6211->mutex);
-+			return 0;
-+		}
-+	}
-+
-+	ov6211_stop_streaming(ov6211);
-+	pm_runtime_put(&client->dev);
-+
-+	mutex_unlock(&ov6211->mutex);
-+
-+	return ret;
-+}
-+
-+static int ov6211_set_format(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *sd_state,
-+			     struct v4l2_subdev_format *fmt)
-+{
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+	const struct ov6211_mode *mode;
-+
-+	mode = v4l2_find_nearest_size(supported_modes,
-+				      ARRAY_SIZE(supported_modes),
-+				      width, height,
-+				      fmt->format.width,
-+				      fmt->format.height);
-+
-+	mutex_lock(&ov6211->mutex);
-+
-+	ov6211_update_pad_format(mode, &fmt->format);
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-+		*v4l2_subdev_state_get_format(sd_state, fmt->pad) = fmt->format;
-+	else
-+		ov6211->cur_mode = mode;
-+
-+	mutex_unlock(&ov6211->mutex);
-+
-+	return 0;
-+}
-+
-+static int ov6211_get_format(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *sd_state,
-+			     struct v4l2_subdev_format *fmt)
-+{
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+
-+	mutex_lock(&ov6211->mutex);
-+
-+	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-+		fmt->format = *v4l2_subdev_state_get_format(sd_state, fmt->pad);
-+	else
-+		ov6211_update_pad_format(ov6211->cur_mode, &fmt->format);
-+
-+	mutex_unlock(&ov6211->mutex);
-+
-+	return 0;
-+}
-+
-+static int ov6211_enum_mbus_code(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *sd_state,
-+				 struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	if (code->index > 0)
-+		return -EINVAL;
-+
-+	code->code = MEDIA_BUS_FMT_Y8_1X8;
-+
-+	return 0;
-+}
-+
-+static int ov6211_enum_frame_size(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_frame_size_enum *fse)
-+{
-+	if (fse->index >= ARRAY_SIZE(supported_modes))
-+		return -EINVAL;
-+
-+	if (fse->code != MEDIA_BUS_FMT_Y8_1X8)
-+		return -EINVAL;
-+
-+	fse->min_width = supported_modes[fse->index].width;
-+	fse->max_width = fse->min_width;
-+	fse->min_height = supported_modes[fse->index].height;
-+	fse->max_height = fse->min_height;
-+
-+	return 0;
-+}
-+
-+static int ov6211_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
-+{
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+
-+	mutex_lock(&ov6211->mutex);
-+
-+	ov6211_update_pad_format(&supported_modes[0],
-+				 v4l2_subdev_state_get_format(fh->state, 0));
-+
-+	mutex_unlock(&ov6211->mutex);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_subdev_video_ops ov6211_video_ops = {
-+	.s_stream = ov6211_set_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops ov6211_pad_ops = {
-+	.set_fmt = ov6211_set_format,
-+	.get_fmt = ov6211_get_format,
-+	.enum_mbus_code = ov6211_enum_mbus_code,
-+	.enum_frame_size = ov6211_enum_frame_size,
-+};
-+
-+static const struct v4l2_subdev_ops ov6211_subdev_ops = {
-+	.video = &ov6211_video_ops,
-+	.pad = &ov6211_pad_ops,
-+};
-+
-+static const struct media_entity_operations ov6211_subdev_entity_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+static const struct v4l2_subdev_internal_ops ov6211_internal_ops = {
-+	.open = ov6211_open,
-+};
-+
-+static int ov6211_identify_module(struct ov6211 *ov6211)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	int ret;
-+	u32 val;
-+
-+	ret = ov6211_read_reg(ov6211, OV6211_REG_CHIP_ID,
-+			      OV6211_REG_VALUE_16BIT, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val != OV6211_CHIP_ID) {
-+		dev_err(&client->dev, "chip id mismatch: %x!=%x\n",
-+			OV6211_CHIP_ID, val);
-+		return -ENXIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ov6211_check_hwcfg(struct ov6211 *ov6211)
-+{
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov6211->sd);
-+	struct device *dev = &client->dev;
-+	struct fwnode_handle *fwnode = dev_fwnode(dev), *ep;
-+	struct v4l2_fwnode_endpoint bus_cfg = {
-+		.bus_type = V4L2_MBUS_CSI2_DPHY
-+	};
-+	int ret;
-+
-+	if (!fwnode)
-+		return -ENXIO;
-+
-+	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
-+	if (!ep)
-+		return -ENXIO;
-+
-+	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-+	fwnode_handle_put(ep);
-+	if (ret)
-+		return ret;
-+
-+	if (bus_cfg.bus.mipi_csi2.num_data_lanes &&
-+	    bus_cfg.bus.mipi_csi2.num_data_lanes != OV6211_DATA_LANES) {
-+		dev_err(dev, "Invalid number of data lanes: %u\n",
-+			bus_cfg.bus.mipi_csi2.num_data_lanes);
-+		ret = -EINVAL;
-+		goto check_hwcfg_error;
-+	}
-+
-+	if (!bus_cfg.nr_of_link_frequencies) {
-+		dev_err(dev, "link-frequency property is not found\n");
-+		ret = -EINVAL;
-+		goto check_hwcfg_error;
-+	}
-+
-+	if (bus_cfg.nr_of_link_frequencies != 1 ||
-+	    bus_cfg.link_frequencies[0] != link_freq_menu_items[0]) {
-+		dev_err(dev, "Unsupported link-frequency property is found\n");
-+		ret = -EINVAL;
-+		goto check_hwcfg_error;
-+	}
-+
-+check_hwcfg_error:
-+	v4l2_fwnode_endpoint_free(&bus_cfg);
-+
-+	return ret;
-+}
-+
-+static int ov6211_power_on(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+	int ret;
-+
-+	if (ov6211->avdd) {
-+		ret = regulator_enable(ov6211->avdd);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (ov6211->dovdd) {
-+		ret = regulator_enable(ov6211->dovdd);
-+		if (ret)
-+			goto avdd_disable;
-+	}
-+
-+	if (ov6211->dvdd) {
-+		ret = regulator_enable(ov6211->dvdd);
-+		if (ret)
-+			goto dovdd_disable;
-+	}
-+
-+	gpiod_set_value_cansleep(ov6211->reset_gpio, 0);
-+	usleep_range(10 * USEC_PER_MSEC, 15 * USEC_PER_MSEC);
-+
-+	ret = clk_prepare_enable(ov6211->xvclk);
-+	if (ret)
-+		goto dvdd_disable;
-+
-+	return 0;
-+
-+dvdd_disable:
-+	if (ov6211->dvdd)
-+		regulator_disable(ov6211->dvdd);
-+dovdd_disable:
-+	if (ov6211->dovdd)
-+		regulator_disable(ov6211->dovdd);
-+avdd_disable:
-+	if (ov6211->avdd)
-+		regulator_disable(ov6211->avdd);
-+
-+	return ret;
-+}
-+
-+static int ov6211_power_off(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+
-+	clk_disable_unprepare(ov6211->xvclk);
-+
-+	gpiod_set_value_cansleep(ov6211->reset_gpio, 1);
-+
-+	if (ov6211->dvdd)
-+		regulator_disable(ov6211->dvdd);
-+
-+	if (ov6211->dovdd)
-+		regulator_disable(ov6211->dovdd);
-+
-+	if (ov6211->avdd)
-+		regulator_disable(ov6211->avdd);
-+
-+	return 0;
-+}
-+
-+static void ov6211_remove(struct i2c_client *client)
-+{
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct ov6211 *ov6211 = to_ov6211(sd);
-+
-+	v4l2_async_unregister_subdev(sd);
-+	media_entity_cleanup(&sd->entity);
-+	v4l2_ctrl_handler_free(sd->ctrl_handler);
-+	pm_runtime_disable(&client->dev);
-+	mutex_destroy(&ov6211->mutex);
-+}
-+
-+static int ov6211_probe(struct i2c_client *client)
-+{
-+	struct ov6211 *ov6211;
-+	unsigned long freq;
-+	int ret;
-+
-+	ov6211 = devm_kzalloc(&client->dev, sizeof(*ov6211), GFP_KERNEL);
-+	if (!ov6211)
-+		return -ENOMEM;
-+
-+	v4l2_i2c_subdev_init(&ov6211->sd, client, &ov6211_subdev_ops);
-+
-+	ov6211->xvclk = devm_clk_get_optional(&client->dev, NULL);
-+	if (IS_ERR(ov6211->xvclk)) {
-+		ret = PTR_ERR(ov6211->xvclk);
-+		dev_err(&client->dev, "failed to get XVCLK clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	freq = clk_get_rate(ov6211->xvclk);
-+	if (freq && freq != OV6211_MCLK_FREQ_24MHZ)
-+		return dev_err_probe(&client->dev, -EINVAL,
-+				"XVCLK clock frequency %lu is not supported\n",
-+				freq);
-+
-+	ret = ov6211_check_hwcfg(ov6211);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to check HW configuration: %d",
-+			ret);
-+		return ret;
-+	}
-+
-+	ov6211->reset_gpio = devm_gpiod_get_optional(&client->dev, "reset",
-+						     GPIOD_OUT_HIGH);
-+	if (IS_ERR(ov6211->reset_gpio)) {
-+		dev_err(&client->dev, "cannot get reset GPIO\n");
-+		return PTR_ERR(ov6211->reset_gpio);
-+	}
-+
-+	ov6211->avdd = devm_regulator_get_optional(&client->dev, "avdd");
-+	if (IS_ERR(ov6211->avdd)) {
-+		ret = PTR_ERR(ov6211->avdd);
-+		if (ret != -ENODEV) {
-+			dev_err_probe(&client->dev, ret,
-+				      "Failed to get 'avdd' regulator\n");
-+			return ret;
-+		}
-+
-+		ov6211->avdd = NULL;
-+	}
-+
-+	ov6211->dovdd = devm_regulator_get_optional(&client->dev, "dovdd");
-+	if (IS_ERR(ov6211->dovdd)) {
-+		ret = PTR_ERR(ov6211->dovdd);
-+		if (ret != -ENODEV) {
-+			dev_err_probe(&client->dev, ret,
-+				      "Failed to get 'dovdd' regulator\n");
-+			return ret;
-+		}
-+
-+		ov6211->dovdd = NULL;
-+	}
-+
-+	ov6211->dvdd = devm_regulator_get_optional(&client->dev, "dvdd");
-+	if (IS_ERR(ov6211->dvdd)) {
-+		ret = PTR_ERR(ov6211->dvdd);
-+		if (ret != -ENODEV) {
-+			dev_err_probe(&client->dev, ret,
-+				      "Failed to get 'dvdd' regulator\n");
-+			return ret;
-+		}
-+
-+		ov6211->dvdd = NULL;
-+	}
-+
-+	/* The sensor must be powered on to read the CHIP_ID register */
-+	ret = ov6211_power_on(&client->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = ov6211_identify_module(ov6211);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to find sensor: %d\n", ret);
-+		goto power_off;
-+	}
-+
-+	mutex_init(&ov6211->mutex);
-+	ov6211->cur_mode = &supported_modes[0];
-+	ret = ov6211_init_controls(ov6211);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to init controls: %d\n", ret);
-+		goto probe_error_v4l2_ctrl_handler_free;
-+	}
-+
-+	ov6211->sd.internal_ops = &ov6211_internal_ops;
-+	ov6211->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	ov6211->sd.entity.ops = &ov6211_subdev_entity_ops;
-+	ov6211->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-+	ov6211->pad.flags = MEDIA_PAD_FL_SOURCE;
-+	ret = media_entity_pads_init(&ov6211->sd.entity, 1, &ov6211->pad);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to init entity pads: %d\n", ret);
-+		goto probe_error_v4l2_ctrl_handler_free;
-+	}
-+
-+	ret = v4l2_async_register_subdev_sensor(&ov6211->sd);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "failed to register V4L2 subdev: %d\n",
-+			ret);
-+		goto probe_error_media_entity_cleanup;
-+	}
-+
-+	/* Enable runtime PM and turn off the device */
-+	pm_runtime_set_active(&client->dev);
-+	pm_runtime_enable(&client->dev);
-+	pm_runtime_idle(&client->dev);
-+
-+	return 0;
-+
-+probe_error_media_entity_cleanup:
-+	media_entity_cleanup(&ov6211->sd.entity);
-+
-+probe_error_v4l2_ctrl_handler_free:
-+	v4l2_ctrl_handler_free(ov6211->sd.ctrl_handler);
-+	mutex_destroy(&ov6211->mutex);
-+
-+power_off:
-+	ov6211_power_off(&client->dev);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops ov6211_pm_ops = {
-+	SET_RUNTIME_PM_OPS(ov6211_power_off, ov6211_power_on, NULL)
-+};
-+
-+static const struct of_device_id ov6211_of_match[] = {
-+	{ .compatible = "ovti,ov6211" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ov6211_of_match);
-+
-+static struct i2c_driver ov6211_i2c_driver = {
-+	.driver = {
-+		.name = "ov6211",
-+		.pm = &ov6211_pm_ops,
-+		.of_match_table = ov6211_of_match,
-+	},
-+	.probe = ov6211_probe,
-+	.remove = ov6211_remove,
-+};
-+
-+module_i2c_driver(ov6211_i2c_driver);
-+
-+MODULE_AUTHOR("Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>");
-+MODULE_DESCRIPTION("OmniVision OV6211 sensor driver");
-+MODULE_LICENSE("GPL");
--- 
-2.49.0
-
+bod
