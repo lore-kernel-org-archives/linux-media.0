@@ -1,136 +1,232 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821261F92A;
-	Thu, 17 Jul 2025 12:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F039230981
+	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 12:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752756189; cv=none; b=J8WZ41FWW4YN7JP6z+t3EOUNaaW6tYZMY4H8hOc8JBcScGuIfYgoKhWBGGVFkJRD1WBFTPzd7HzWddtgxVdbyKP8+Ej9s963MghboGzDzuhiWn1f7Me8c1cUUsafkZVo17AlYm3h0GaHfaydb20pVNXW/BIYTDSZFsdj9BfaPIY=
+	t=1752756243; cv=none; b=Jfo+/25HCrOxq+OHlA/FPr5h21LGEemxykCvbVJAa//1hj1mq3WZmeXW+dfV2JT9MsnZL5RatrVB7h2ThM8UokzOCoBppXBO1SYl5xRnJh3QqF/3cKck0s1xfzzaDmiPcn45JKAFVbQsPG2s2nALESEBoC5xLYkZvAZwTMtXS8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752756189; c=relaxed/simple;
-	bh=COcQw/nm6DgVQsv6NohuIht1Jtb3N9YHU6/YJbBS1ck=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eiIystI/nhu2A9KZd2LxxOZW3q70dxorc1/CoN3EUUVxQU6rBeArcxc9t06tuiPT+Om8YsEfaKt3Wqw3b0Q3MzJrZwFcJAx4RyV7xpcMrt6GqCcjRq5+KWbUJe5Br2sRjmp50eLwST9BDBpwcG/KUgER7RIQfpYylsnrICc7A2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FouS25H9; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752756243; c=relaxed/simple;
+	bh=5YAxCO/nMYADZpzMqGP2RXDVPA7L+CQdVDyQ3ZY2adk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kDI4fU2QEFmeXidr9LwLjbSPP/hzTgyP6Kv2wD103cE6FzMTwZLtOg+g5E2NZcKbBdpeNO6aYRCiSrFY5mFLKFjbNqjrximCNWF9c33fFdyOYx3SpsGh9jNczAGfmAhh6JKC19/KKykrlnHlAxH6NeT2FCHSNlA+3LpssC/fZPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pTt8Rb9z; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FouS25H9"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b60565d5f4so109306f8f.0;
-        Thu, 17 Jul 2025 05:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752756185; x=1753360985; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d40bmhYnCHJ8YDHvaQ0Txhm8cZhbp1/LzycBNKupukg=;
-        b=FouS25H9x1SFkvLpj3i+AkbZt6LYkzI1HVCqm0POQWSD8LFDRYEPc9ZikoYVJU4Ef4
-         8zZsmBEAIP1rjObymfADV6CH9Vvps4sC0g/wENQhCOO10Le79xxeK1dTSLprYMDKUprk
-         /nxSSJJmzR0O16Q2NmpO4I6ZTQ1DpFtwniXJToq6pkNvjICBbhUtA5wcw0aVOODLhdV0
-         vn9Az5iYhbvQpqqNzvp+nKB/ry5PyAl/DfKP/gYX2nJoyaxMkUxPigPzJ29HBXMtLUN+
-         q1mEtxckWnQNqf6B5NrxjcH/l0xkP6IsHOYX0m+DMy0/a9fm9COYoCymndzfZE3FE2IY
-         hWSQ==
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pTt8Rb9z"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56HCQED5032260
+	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 12:44:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	sUDmYSo/2gAHIWN9kLymQe78KUXt7QSmAlIV3oGhIAI=; b=pTt8Rb9zNeXZG6Sy
+	KQcI5r471XwizWu6JdYX4qXjjjByUqsIk0MVI0SsidylXCAmEBDlHsPWrcsYxw4L
+	M8HaVl6Pf2xA2ydGA3DERMU0YIiGJIJoIZWzjt7S02eBGiDgrsw8oPK+TXj00ob9
+	RIStiH7ihlkw6QFTkIEclVz8F/XNG1WNoeRQlBwhHoEVV14rr6o98IeavR+Ojtv8
+	Dh57Q592knzLyxLN1ARN+/0oFBGKkUSCj1QJU/lfW7PrsEbBjjxy2p0WGJwURnu3
+	Yy00pdTjoW+ukPoPjXX/MH/ThzA2LM2LbsDENMvI0PseAQAn+CH/SW9GbBHn4Qol
+	TEUjYA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47ug387s7t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 12:44:01 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7e2ced79f97so17467085a.3
+        for <linux-media@vger.kernel.org>; Thu, 17 Jul 2025 05:44:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752756185; x=1753360985;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d40bmhYnCHJ8YDHvaQ0Txhm8cZhbp1/LzycBNKupukg=;
-        b=fDyHxS65l6lhifVaMw7O+qIQ93GjKsdamKIU+J0XKLUIOAg224jxKDZSQ+Fu+pSk1F
-         CUzfCiGk5b6NYGJUKj3sv7cyDP3Ysir5touiZ8I+myWmmQUykgUmLuuK5JHHB2nuh7Eb
-         +OoDGUXjl2Fu+xX0Kat3z9wfrHXPDzG3n80nGOTJb/gs1S5LvMdrXFKfU4PIDpZHpGQn
-         O36lunBTtYMh2Ds/ri0sV3m60lc/xMaOUc8sYUpFwBmWvOU/rV06TbcbKlgt+TNMw8Nn
-         e2r6eVJ+y1rff/NbbeHxNyfrfsV62YRPXRSthulZDvGS5ej5nMx7UkShtFOEDHr8syMY
-         0TEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVb4SFPurIaCMDAPYtGVtV9JcBobRN4g1xMUa/j56z2UV9xr7RCQ9yVnqjgdkILpTPQvbJsy6CcWGuJ3A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgfHM64eS6E5V1fE0ppf+5APVbRk/rXM2H0inuzZ62bNa0VhXX
-	kb/HTYuZvfEjn/9qMLC54U+MuSP0lFRfr6QR2STqpsLvJMbZa/dYBaD3
-X-Gm-Gg: ASbGnctr3vK31ziAtWh/WdVK3m02d5W/uVx3103f3hCxxn0kKZDzqeBAAaQEGsQmR8B
-	iKv5/9rPNJPhk9zrPznAlo4kDi/9BtQKf0LqeufkC2n1L3RVT8jtRK2Cro/A+OisFehqgHt0IY1
-	CUgKKwKzMpNdxQCDDsILwzrrq85ZcdhzrLgO1r6g/cgZ8BLy6Zb1GABNmVdWTP5/nhZcGzpvLKk
-	EA5D5J4o5h4b2fp7tRx8glf3DSpk8Tchx7RMyZrakBnGx7A6mcp3sf3KdBUxa8TzAlFItqJ3VUr
-	q8xH88nJntCq6wTaa/slBe17jEnTCUk/HvuBxyo5QhHlzJTh+YZSqpSu0jUzeYowcO7inKA2oWd
-	7Id3YeyZcZTpgXrdT+T+vC/Ui7NbAgVWRBCFiJAIG8+VUACKwqAox6VCi6H4V
-X-Google-Smtp-Source: AGHT+IFRlywe4tl9dYYqcWEYvjS6es1ezgBsDewHP6wfjpW6IO7HrqdyJCKLgzPhHOHXTcX8BEw3wA==
-X-Received: by 2002:a05:6000:18ab:b0:3a5:7875:576 with SMTP id ffacd0b85a97d-3b60dd4a802mr2670732f8f.1.1752756184266;
-        Thu, 17 Jul 2025 05:43:04 -0700 (PDT)
-Received: from localhost.localdomain ([154.182.204.213])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8dc3a62sm20506454f8f.40.2025.07.17.05.43.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 05:43:03 -0700 (PDT)
-From: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-To: hansg@kernel.org,
-	mchehab@kernel.org,
-	sakari.ailus@linux.intel.com,
-	andy@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	dan.carpenter@linaro.org,
-	Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
-Subject: [PATCH v3] staging: media: atomisp: add missing mutex lock in atomisp_s_fmt_cap
-Date: Thu, 17 Jul 2025 15:42:34 +0300
-Message-Id: <20250717124234.24572-1-abdelrahmanfekry375@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1752756240; x=1753361040;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sUDmYSo/2gAHIWN9kLymQe78KUXt7QSmAlIV3oGhIAI=;
+        b=u6xK5B2OToYP+lonCYzIBbqWYO+Pza6k7yWkxHBNVf1tNN0KPR36Modpwca1FYWm9i
+         Cil2/cf/5nJnGBeMsoIhhOdJFi7G11HRgauycvcEGoxEVoS3ClsUp+XdAyfveRENMIK2
+         gtkusKpAPDMTV5Jipsd7758DbMH8QXJK7ULFtzUjlUWuk0qzEYoDZIKMm04qC/RmIcoG
+         vsZKnnjnkOjLbBXRjvVqwxnNiFX+nuPbSFa9zckg0S31YNBkKBLqscz61s5AcG76obcE
+         cNRe5IVtgRBR0t2Irlt73TuQgMcClFfr0/a3myUvuT+P8qeDZNIo1q7xqsW3tEcZtJjO
+         ScEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEzgHWY/MfLCfLRjs5Yf93za91YI4TcdgJe+1ML9sZtMYPOfuBFzu/dwn2LPsJj3Q3qDW4p1dB/+ZzjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylprcpdEMMF8y6Ubwb41jrZR+rQDAGkX8h+IZgzRy5gwr8z6Ir
+	DS0PwXaWdXVJFPz2BKLbbjAn8C5VAEkGgi/OCjlRUf17zD7MrB5Bqbsgrtjzu+NHN677S0CuoH/
+	N5zEqRS75fy8pt/TOddih5YJ00f129qf3KvXPtqokUxk5WcJn+202w3aw8WJLOSLSjg==
+X-Gm-Gg: ASbGnctcccqAROyfXudzJmXOmyig3qb5ZqqahHH0O1WhD8ibUB16MPEEcJTUt/vei7B
+	dzIBertUx+u/wMOpQtNQuUIRYqQhVCosS7Fsrf4cvyykQnudHdWHNhrZ9x+VbQ7d0/T2DsBI2z/
+	gzg3djeR7mo6PLSGBsIhnw72TF3+L/cRKBAUcM5scwgs9nktItqQD3dp1z/YqawXU628YjC4ooL
+	uSSU5IZYYpvoBUWeV7UyyROvaj/5lD77PNKijONkf8F794lvm5y0+ss6wZPKgmAM3vwjsHeO5sn
+	XyoPYgPqJtC+VJ5nfBzKfwqz2CRVCfLkROb1KIed4EQc+eX2QjoNv4wdK/pl2LBAmtAC7V4aQ/Z
+	KbGsK1W8/b9gFHqslNF5C
+X-Received: by 2002:a05:620a:6292:b0:7e1:a4c7:a819 with SMTP id af79cd13be357-7e342b3eda3mr314827485a.11.1752756240234;
+        Thu, 17 Jul 2025 05:44:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHIsNr1DByBgmz9jCsvLegVhBR9mMg9jsyGYW5hHWVKe01fezGk+016s93Nf4grEADzp6dblQ==
+X-Received: by 2002:a05:620a:6292:b0:7e1:a4c7:a819 with SMTP id af79cd13be357-7e342b3eda3mr314825985a.11.1752756239751;
+        Thu, 17 Jul 2025 05:43:59 -0700 (PDT)
+Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-611d8d54112sm9140441a12.1.2025.07.17.05.43.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jul 2025 05:43:59 -0700 (PDT)
+Message-ID: <449ac3c3-1f6a-4e69-899d-c4e4577714a4@oss.qualcomm.com>
+Date: Thu, 17 Jul 2025 14:43:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] media: qcom: camss: Add support for TPG common
+To: Wenmeng Liu <quic_wenmliu@quicinc.com>, Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20250717-lemans_tpg-v2-0-a2538659349c@quicinc.com>
+ <20250717-lemans_tpg-v2-1-a2538659349c@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250717-lemans_tpg-v2-1-a2538659349c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE3MDExMSBTYWx0ZWRfXy2twiMPxedIg
+ YNfIaEFQuOk5lP4I2/+TfwPMmjrurwvR9DDJDXuVldRgXNs6W7OED0QKMtr21GZy2qZDGUqdeBy
+ VRow6yWcY96I75Hh3HO+ymwBRZTyBgthSzkFNj5kc1wjpF57pK5C43IXvI+s1aXoDg7WScaw9o5
+ jBjIUdBefb+RSpcUHmALel5NnACVHfCBRAKlq6mYfyMmC/DUbhk80ORt/cmCteKSdOULuH0pML5
+ /CCdr3EJiCspG7LgTHX5N+mgHU+6kEQU/lI/3ynFUewF873kb8MgQylAY9onr2NhNRtcU3h/K+a
+ El9cgpU+w+h7qQTmEJRKqprywDeOv3IxU2KtiN2j+QqyO0HpA1XgHJTjeMENAFJ6O9HUMpm8x3/
+ 0/UoB0U7wYljzdE9f8GHFCdbwnIlqYVHJro6aNgYES0F1PNuDshONU8NksxvsUEbB+WQT8sa
+X-Proofpoint-GUID: Ll0RjKGcGQzVnwK9ywuOvtOh821fcN9e
+X-Authority-Analysis: v=2.4 cv=SZT3duRu c=1 sm=1 tr=0 ts=6878f011 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=5dRrolKJAAAA:8 a=COk6AnOGAAAA:8
+ a=DwyGLw2fmc7FY8CNMSkA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+ a=y3-2bcJ53AEkEa81XYCb:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: Ll0RjKGcGQzVnwK9ywuOvtOh821fcN9e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-17_01,2025-07-17_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 mlxlogscore=999 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ phishscore=0 spamscore=0 suspectscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2507170111
 
-The function atomisp_set_fmt() modifies shared device state and expects
-callers to hold the isp->mutex for synchronization. While most internal
-callers correctly lock the mutex before invoking atomisp_set_fmt(), the
-V4L2 ioctl handler atomisp_s_fmt_cap() does not.
+On 7/17/25 5:20 AM, Wenmeng Liu wrote:
+> Add support for TPG common, unlike CSID TPG, this TPG can
+> be seen as a combination of CSIPHY and sensor.
+> 
+> Signed-off-by: Wenmeng Liu <quic_wenmliu@quicinc.com>
+> ---
 
-This results in an unsafe execution path for VIDIOC_S_FMT ioctls
-(e.g. via v4l2-ctl), where shared structures such as pipe->pix and
-pipe->frame_info may be modified concurrently without proper protection.
+[...]
 
-- Fix this by explicitly locking isp->mutex in atomisp_s_fmt_cap().
+> +++ b/drivers/media/platform/qcom/camss/camss-tpg.c
+> @@ -0,0 +1,737 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * camss-tpg.c
 
-Fixes: 4bdab80981ca ("media: atomisp: Make it possible to call atomisp_set_fmt() without a file handle")
-Signed-off-by: Abdelrahman Fekry <abdelrahmanfekry375@gmail.com>
----
-v3:
-- Use guard(mutex) as suggested by Dan Carpenter and Andy Shevchenko
-- Remove extra blank line after variable declaration
-- Fix include order as requested by Andy Shevchenko
+I think the filename is redundant, especially since it may change in
+the future
 
-v2: https://lore.kernel.org/all/20250717013003.20936-1-abdelrahmanfekry375@gmail.com/
-- Add Fixes tag
-- use cleanup.h micros instead of explicitly calling mutex_lock/unlock
+[...]
 
-v1: https://lore.kernel.org/all/20250716014225.15279-1-abdelrahmanfekry375@gmail.com/
----
- drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+> +const struct tpg_format_info *tpg_get_fmt_entry(const struct tpg_format_info *formats,
+> +						unsigned int nformats,
+> +						u32 code)
+> +{
+> +	unsigned int i;
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-index bb8b2f2213b0..2690c05afff3 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
-@@ -7,6 +7,7 @@
-  * Copyright (c) 2010 Silicon Hive www.siliconhive.com.
-  */
- 
-+#include <linux/cleanup.h>
- #include <linux/delay.h>
- #include <linux/pci.h>
- 
-@@ -416,7 +417,9 @@ static int atomisp_s_fmt_cap(struct file *file, void *fh,
- 			     struct v4l2_format *f)
- {
- 	struct video_device *vdev = video_devdata(file);
-+	struct atomisp_device *isp = video_get_drvdata(vdev);
- 
-+	guard(mutex)(&isp->mutex);
- 	return atomisp_set_fmt(vdev, f);
- }
- 
--- 
-2.25.1
+https://staticthinking.wordpress.com/2022/06/01/unsigned-int-i-is-stupid/
 
+> +
+> +	for (i = 0; i < nformats; i++)
+> +		if (code == formats[i].code)
+> +			return &formats[i];
+> +
+> +	WARN(1, "Unknown format\n");
+> +
+> +	return &formats[0];
+
+Err.. that doesn't seem right, neither WARN (which usually signifies
+some sort of a critical condition or hw failure), nor returning a format
+different to the one the user requested
+
+We should probably return some kind of -EOPNOTSUPP
+
+> +}
+> +
+> +/*
+> + * tpg_set_clock_rates - Calculate and set clock rates on tpg module
+> + * @tpg: tpg device
+> + */
+> +static int tpg_set_clock_rates(struct tpg_device *tpg)
+> +{
+> +	struct device *dev = tpg->camss->dev;
+> +	int i, j;
+> +	int ret;
+> +
+> +	for (i = 0; i < tpg->nclocks; i++) {
+> +		struct camss_clock *clock = &tpg->clock[i];
+> +		u64 min_rate = 0;
+> +		long round_rate;
+> +
+> +		camss_add_clock_margin(&min_rate);
+> +
+> +		for (j = 0; j < clock->nfreqs; j++)
+> +			if (min_rate < clock->freq[j])
+> +				break;
+> +
+> +		if (j == clock->nfreqs) {
+> +			dev_err(dev,
+> +				"clock is too high for TPG\n");
+
+I really insist you don't have to break this line
+
+It would probably be useful to print the rates (the one that's too
+high and the maximum)
+
+> +			return -EINVAL;
+> +		}
+> +
+> +		/* if clock is not available */
+> +		/* set highest possible tpg clock rate */
+> +		if (min_rate == 0)
+> +			j = clock->nfreqs - 1;
+
+Well, you never assign anything nonzero to min_rate..
+
+[...]
+
+> +static void tpg_try_format(struct tpg_device *tpg,
+> +			   struct v4l2_subdev_state *sd_state,
+> +			   unsigned int pad,
+> +			   struct v4l2_mbus_framefmt *fmt,
+> +			   enum v4l2_subdev_format_whence which)
+> +{
+> +	unsigned int i;
+> +
+> +	switch (pad) {
+> +	case MSM_TPG_PAD_SINK:
+> +		/* Test generator is enabled, set format on source */
+> +		/* pad to allow test generator usage */
+
+This is a very strange way to write multiline comments
+
+[...]
+
+> +	/* Memory */
+> +	tpg->base = devm_platform_ioremap_resource_byname(pdev, res->reg[0]);
+> +	if (IS_ERR(tpg->base))
+> +		return PTR_ERR(tpg->base);
+> +
+> +	/* Interrupt */
+> +	ret = platform_get_irq_byname(pdev, res->interrupt[0]);
+> +	if (ret < 0)
+> +		return ret;
+
+The comments are unnecessary
+
+Konrad
