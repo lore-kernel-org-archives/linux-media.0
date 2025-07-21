@@ -1,134 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2DC2877F5;
-	Mon, 21 Jul 2025 10:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F6123507E;
+	Mon, 21 Jul 2025 10:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753094321; cv=none; b=b3N24wy1xLSOGAcCBWpyEj5jAXVF7q/ZSWDcENS4kM0qwzyxySi+EtKBBeUSr9RumpABSe4B6V1aUAMz/BSbM9GTpvSlKsZBfsUPGBg+0pi21qLHhX9XfsuKp83Q+t9zuVljwzFZlK6YmsxUzajOs1JOadH/feeHg+5OHHaL78Q=
+	t=1753094364; cv=none; b=nB5QcwjakMllpE/W5o4ICtoi9qHTZ4w9y98yVQHD+7IhZ4PliHjLZ34S6jHv3ExzxRUAnRrdcpNNJD8LAhOsyJsYUSX5PTKtkd5W2jsZNTjdwI6TN3Ei9x2RvB+wLjXM94+YJ2vFVwNdO2ZSLO7q6FV7uvJZzqZJ0PgUP+jySfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753094321; c=relaxed/simple;
-	bh=b3BUzd5cXJbCKdreEUnq8PGiM1/tFuKiB7Qk0nwPZGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=focohPP1kxX7Z5NeqRa9Rbv5+r/Cg4ZIPJSVZcl8LHKbDuCyQ/lgoK92hI90LG0/qdZvLuhWoNfpn8vpFHMMIONlYteyF7oZ6zdGJ+SqcnRo+a0wc0f1RArbPsmC3G08MatDdGt7/j//VTb8mRZbQYLCs4M3dYzhM5Yysy8pMTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H7PabAcf; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1753094364; c=relaxed/simple;
+	bh=pK2ks1hK8M8X85NH5G2hAwzrVRwYcsTt9WfT/99n9KM=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mcoeu3u2KjMUvQ570opH1IgfaMkzP1s5cuWDt1TETKDwWU6JWff9kn/oYgOfcSYzb3te+nyAzqu4sh72G7HON/oMpOZWK4CTURyCR4U0ObLN+ZvJgi0zCKLymEzoo9L69xNFHBpUdxn9u+xtx15QHow6NKNQhYwmZNHP8aNUx6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=XfJIkTm6; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H7PabAcf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753094320; x=1784630320;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b3BUzd5cXJbCKdreEUnq8PGiM1/tFuKiB7Qk0nwPZGk=;
-  b=H7PabAcfEPo9astY8BkLaCYGntZoEl1UgwElR5BMBRZ7mYrbpk0vUqSt
-   80GxVg02KBxZkrjrz96YVrPlf99ZdyJ1rwxbZ3BzCdvVRa40r+SGlQvMK
-   zcdqjkHdgvl6KM4zqAX/GbWy8Ums3x/UEIX1Ss0xYxbjShP6sGxy/WdDr
-   g03ognpzF8LxhstPDafyv8ARzQ0WEY2DgHzxnPGd7KdGzCY8ro7icaC0X
-   MOl1Q4tdRwywH1BYWJ6RX2GpA4TM1s1wH37zUZ652wLY/uqfC2Cs18VFk
-   yA3SWhsStaZNK+PERXNvNO0sHU/uNv0izt/s0o2C1sxDX4jkdRK6PodGt
-   w==;
-X-CSE-ConnectionGUID: Kl5oEtLrQLCblDVEWsOuPg==
-X-CSE-MsgGUID: t813He2pTnWwvbdQ33RpHQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="59117259"
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="59117259"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 03:38:39 -0700
-X-CSE-ConnectionGUID: 19iTBh0xQ0OdWgVOkZaL7A==
-X-CSE-MsgGUID: Cr9SPju9Sv++0pQMRMCzSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="162839888"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.244.62])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 03:38:37 -0700
-Date: Mon, 21 Jul 2025 12:38:28 +0200
-From: Mehdi Djait <mehdi.djait@linux.intel.com>
-To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Kieran Bingham <kieran.bingham@ideasonboard.com>, Hans Verkuil <hverkuil@kernel.org>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Rob Herring <robh@kernel.org>, linux-media@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: i2c: Add OmniVision OV6211 image sensor driver
-Message-ID: <6w5vwjdhs2mbidaadzkkwx32rr6fkfqgrjlvbu7kvcre34rmn2@qifmnxaertxo>
-References: <20250717124001.108486-1-vladimir.zapolskiy@linaro.org>
- <20250717124001.108486-3-vladimir.zapolskiy@linaro.org>
- <175276139540.560048.14744394485094549778@ping.linuxembedded.co.uk>
- <CAPY8ntCiKFFdfepqW0ms_0dhCtJJCwJoT=bxmJ5i0K254i6fkA@mail.gmail.com>
- <7bb16a20-166a-477d-a103-a00fe83ecb66@linaro.org>
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="XfJIkTm6"
+X-UUID: f3a66692661e11f08b7dc59d57013e23-20250721
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From; bh=PENGVBez1iKQo8DG6bSJoSPkqHuz4q03TiXxtDwZ8BQ=;
+	b=XfJIkTm6/2/lRz0Hm3egDzVp+lroibM3ntOHt1SaCRYzPQVYOINfRjbLLdiazDGV6Q8jIzw+5FJzeE5BavqjNdeyvyro+/PRHKPBDrUTTk9yCsIGQKUZGqb77h8/xIA93WbwWuaneam4wj2MVskjfX451/vR1KNhkyH3pEXSN+s=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.2,REQID:d03c1f9a-abb9-4030-bc7d-50258704e759,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:9eb4ff7,CLOUDID:5a86ab84-a7ec-4748-8ac1-dca5703e241f,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
+	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
+	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: f3a66692661e11f08b7dc59d57013e23-20250721
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+	(envelope-from <kyrie.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 8160814; Mon, 21 Jul 2025 18:39:17 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.39; Mon, 21 Jul 2025 18:39:15 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.39 via Frontend Transport; Mon, 21 Jul 2025 18:39:15 +0800
+From: Kyrie Wu <kyrie.wu@mediatek.com>
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>, Mauro Carvalho Chehab
+	<mchehab@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Kyrie Wu <kyrie.wu@mediatek.com>,
+	<linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>
+Subject: [PATCH v1 2/8] media: mediatek: vcodec: add decoder compatible to support MT8189
+Date: Mon, 21 Jul 2025 18:38:58 +0800
+Message-ID: <20250721103905.5393-3-kyrie.wu@mediatek.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20250721103905.5393-1-kyrie.wu@mediatek.com>
+References: <20250721103905.5393-1-kyrie.wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-media@vger.kernel.org
 List-Id: <linux-media.vger.kernel.org>
 List-Subscribe: <mailto:linux-media+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-media+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bb16a20-166a-477d-a103-a00fe83ecb66@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hi Vladimir,
+MT8189 is pure single core architecture. Support its compatible and
+use `mtk_vdec_single_core_pdata` to initialize platform data.
 
-Thank you for the patch,
+Signed-off-by: Kyrie Wu <kyrie.wu@mediatek.com>
+---
+ .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c   | 6 ++++++
+ .../platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h   | 1 +
+ 2 files changed, 7 insertions(+)
 
-On Fri, Jul 18, 2025 at 06:27:54PM +0300, Vladimir Zapolskiy wrote:
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+index fabf969bc8a9..e7b6b108f4fb 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.c
+@@ -348,6 +348,8 @@ static void mtk_vcodec_dec_get_chip_name(struct mtk_vcodec_dec_dev *vdec_dev)
+ 		vdec_dev->chip_name = MTK_VDEC_MT8188;
+ 	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8196-vcodec-dec"))
+ 		vdec_dev->chip_name = MTK_VDEC_MT8196;
++	else if (of_device_is_compatible(dev->of_node, "mediatek,mt8189-vcodec-dec"))
++		vdec_dev->chip_name = MTK_VDEC_MT8189;
+ 	else
+ 		vdec_dev->chip_name = MTK_VDEC_INVAL;
+ }
+@@ -575,6 +577,10 @@ static const struct of_device_id mtk_vcodec_match[] = {
+ 		.compatible = "mediatek,mt8196-vcodec-dec",
+ 		.data = &mtk_lat_sig_core_pdata,
+ 	},
++	{
++		.compatible = "mediatek,mt8189-vcodec-dec",
++		.data = &mtk_vdec_single_core_pdata,
++	},
+ 	{},
+ };
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+index 6bdde600a167..856d12aa84d8 100644
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_drv.h
+@@ -25,6 +25,7 @@ enum mtk_vcodec_dec_chip_name {
+ 	MTK_VDEC_MT8183 = 8183,
+ 	MTK_VDEC_MT8186 = 8186,
+ 	MTK_VDEC_MT8188 = 8188,
++	MTK_VDEC_MT8189 = 8189,
+ 	MTK_VDEC_MT8192 = 8192,
+ 	MTK_VDEC_MT8195 = 8195,
+ 	MTK_VDEC_MT8196 = 8196,
+-- 
+2.46.0
 
-[..]
-
-> > > > +
-> > > > +       ov6211->xvclk = devm_clk_get_optional(&client->dev, NULL);
-> > > > +       if (IS_ERR(ov6211->xvclk)) {
-> > > > +               ret = PTR_ERR(ov6211->xvclk);
-> > > > +               dev_err(&client->dev, "failed to get XVCLK clock: %d\n", ret);
-> > > > +               return ret;
-> > > > +       }
-> > > > +
-> > > > +       freq = clk_get_rate(ov6211->xvclk);
-> > > > +       if (freq && freq != OV6211_MCLK_FREQ_24MHZ)
-> > > > +               return dev_err_probe(&client->dev, -EINVAL,
-> > > > +                               "XVCLK clock frequency %lu is not supported\n",
-> > > > +                               freq);
-> > 
-> > This would be nicer to make use of the cleanups that have just been
-> > implemented in
-> > https://lore.kernel.org/linux-media/cover.1750942967.git.mehdi.djait@linux.intel.com/
-> > and
-> > https://lore.kernel.org/linux-media/20250710174808.5361-1-laurent.pinchart@ideasonboard.com/T/
-> > 
-> 
-> Actually I've already checked it before publishing the code, as a summary:
-> 
-> 1. to my understanding the introduced API is still under review, I didn't
-> find it in media/master or linux-next,
-> 
-
-It has already been reviewed but yes still not in the media tree.
-Too late for 6.17 but it will be in the media tree soon.
-
-> 2. the only needed change to get support of the new helper is to replace
-> the single line of devm_clk_get_optional() with devm_v4l2_sensor_clk_get(),
-> no more than that,
-> 
-
-Correct.
-
-> 3. the internal complexity of devm_v4l2_sensor_clk_get() seems excessive
-> right over here, what's worse I can not test devm_v4l2_sensor_clk_get()
-> in this driver on any ACPI platform...
-> 
-
-You don't need to test it on a ACPI-based platform to use the helper, if
-it works for your DT-based platform that's enough.
-
-> To sum up and to minimize the overall complexity, I'd rather prefer to
-> stick to devm_clk_get_optional() at the moment, the switch to the new
-> proposed API can be done, when it's ready.
-> 
-> -- 
-> Best wishes,
-> Vladimir
-
---
-Kind Regards
-Mehdi Djait
